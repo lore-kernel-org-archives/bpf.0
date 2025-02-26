@@ -1,140 +1,213 @@
-Received: from dediextern.your-server.de (dediextern.your-server.de [85.10.215.232])
+Received: from AS8PR04CU009.outbound.protection.outlook.com (mail-westeuropeazolkn19011038.outbound.protection.outlook.com [52.103.33.38])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33999239097;
-	Wed, 26 Feb 2025 19:29:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.10.215.232
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740598158; cv=none; b=NY5WxDT3Cno1u58CpjIsWHyee3E4XDAS0wYNzvfeQAdVQR6KswkSyqucm/VjMU8i5YzDHwv3ANRRGXF4F3pi0y23+ZalCcG2UZgtfD6LF9S3ZQg11MXWDKCTHfnyTpYjvHhLZqJBEcSHsuIbdWmWuYoBmhtQCnMCHMWXhZgA/Zo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740598158; c=relaxed/simple;
-	bh=2ZUteOkaSTwBrgPlfemqClgy+FPwyulmg41Bi4EpecI=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:From:Subject:
-	 In-Reply-To:Content-Type; b=ujHWqN7wb/E+xUoesthdCzeJlGH/DdVhLaf/3xlQrriD9VZih2WJvnYvLU62PF4wRVJG7vulGlOdnlrGahoLgajn7adeusPx+sYk79zN9oSLHfkZR9lpliRvyDBPtcfo+spwGoM+Pe/TMeKtC76HUAiYSz9W7fsrKTdWoh9MQ9k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hetzner-cloud.de; spf=pass smtp.mailfrom=hetzner-cloud.de; arc=none smtp.client-ip=85.10.215.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hetzner-cloud.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hetzner-cloud.de
-Received: from sslproxy03.your-server.de ([88.198.220.132])
-	by dediextern.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <marcus.wichelmann@hetzner-cloud.de>)
-	id 1tnN5b-0002zp-CB; Wed, 26 Feb 2025 20:29:03 +0100
-Received: from [2a0d:3344:1523:1f10:f118:b2d4:edbb:54af]
-	by sslproxy03.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <marcus.wichelmann@hetzner-cloud.de>)
-	id 1tnN5b-000453-03;
-	Wed, 26 Feb 2025 20:29:03 +0100
-Message-ID: <0ec1f766-a0be-42ed-b505-0fc94205f724@hetzner-cloud.de>
-Date: Wed, 26 Feb 2025 20:29:01 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73F2424290B;
+	Wed, 26 Feb 2025 19:30:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.103.33.38
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1740598234; cv=fail; b=V96QpxAcaJe4Y832g+FzcofhOCxVPe39z87HqFoace+XlufjSbJeq5RYFBY4MCb8A1N3lJqweFiKBbg1tdkPjgQ3Bow1IVi17qwmELg0ojMiZwYVALCdIiukE3c8U0lh8IjtpkXzADjn9E5FZZPcAaO2Xlc6KSYmaZc2tbj4KiU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1740598234; c=relaxed/simple;
+	bh=HmwH+cN60yxalTr1BHqponBP6iClfhXvpgjEJetVV3c=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=mshw+D7T/AZRAS2Bg/gFQ4Yl+Hq57lxPF7KLh1z6O8KYzadwwS2FRG1l1Dlcvjwr6QQAuHKZQACImmVqulijtpOdouq+BqzE3jlCGQc3z4sHK3wem9eUMLIEpdR69Cdtt1i+3EqWPPkY5eT55BO2ebPwUG2qKDxeYXF1aVU1Jl4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=szxj+6MX; arc=fail smtp.client-ip=52.103.33.38
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="szxj+6MX"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=nzGjAAbWYiMpUoMa8MTe25EK+Ec5RG89udStaDGrBLqYXdLYxgUejIBvUtzUDYBnnte7ui/UXSmYClD0v/c8F6Stxd2k9MbO4nDp85pzpVtqAw0gyK5IHBjmGVN1jJCQpVp+zzzIRSkpzEPwh6lGDtZyRXJYGH8puRy0OFkdgPmk1wRFfuOD+ssnsn20m+wEncm8Ii8Ea8bSDSPbEmtdCdihxNfDRvEGf/vNR8XxRANO4tiOGUt53IC8mGagoF9mH3y926HJRPgMu9mc6fUFx6l0nvMITwe6FSSj/13jw9V8xWic6Y7zcIyLTScVzB8mOq1w6tLN4oBAWJrdo/q6ug==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=gm7boR8lK/4PKwHNHfZm/xsiGobHGR94qtaOr9lLJdA=;
+ b=NQuN6U0Cyxlct+JxUc/+7zUg1T3Q9E/ISRcxA/qUiK7k5mgT/uP5mkChTJmm8HV3HiJpJ82GQWBJc8JsS8AY47f6/47xEV20bLQlodZpuOij/jRx2PTXJ3EIZcbJUt4nvJRtWRQmLVFtt5T47c73YQ5W1Wz5uFQAGUs6cGr/FNPsvIQemUwe+rOVqhukl1H2gyfcp+35gY2Dva6r+hTtki9vLfDKlmtCKsWJ39hh4jFRsT6Gc2xODJdvKLpceYDq7X240T393DZS8UkB78QP+d1yhlaM/3qpTuRI5Jm+DImwn8Y8r9ySHRtw6Np1KrLnIRPpOdjNauP2Mh8N3NafVw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=gm7boR8lK/4PKwHNHfZm/xsiGobHGR94qtaOr9lLJdA=;
+ b=szxj+6MXJZ5aaXT0xQgHSuA0pb0z30C011Poy/gKoNT6MNOUf0eEz2YHiWVQugM4hJzwJf0cqp0HjeZQZ7s/JAmgnXq1BVuvv4ClamzWslXbbKxMSb5YRZUl9Iw9S18zZ3b7fACcLFm7bBWIquDtu9IxUKe52sUAvgkVc5Uwa+STukRpx9Chg7wFg5BGwDDUcTrMgTWhAknS7u0r8MrwwIvLgQh0JlA/o34JQiLspnOu4Igrlfy9rTwDQ9Qx7wte8vswS22Vm0R4V967A14wcb5W2h8DszKtSpfa2+9FIhWl2oHmfNBwM3Y0C+AvTeUe1busmtWNZTOoXrEsIev/Mw==
+Received: from AM6PR03MB5080.eurprd03.prod.outlook.com (2603:10a6:20b:90::20)
+ by DBBPR03MB7451.eurprd03.prod.outlook.com (2603:10a6:10:20e::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8489.19; Wed, 26 Feb
+ 2025 19:30:29 +0000
+Received: from AM6PR03MB5080.eurprd03.prod.outlook.com
+ ([fe80::a16:9eb8:6868:f6d8]) by AM6PR03MB5080.eurprd03.prod.outlook.com
+ ([fe80::a16:9eb8:6868:f6d8%5]) with mapi id 15.20.8466.016; Wed, 26 Feb 2025
+ 19:30:29 +0000
+From: Juntong Deng <juntong.deng@outlook.com>
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	john.fastabend@gmail.com,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	memxor@gmail.com,
+	tj@kernel.org,
+	void@manifault.com,
+	arighi@nvidia.com,
+	changwoo@igalia.com
+Cc: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH sched_ext/for-6.15 v3 1/5] bpf: Add struct_ops context information to struct bpf_prog_aux
+Date: Wed, 26 Feb 2025 19:28:16 +0000
+Message-ID:
+ <AM6PR03MB50804BE76B752350307B6B4C99C22@AM6PR03MB5080.eurprd03.prod.outlook.com>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <AM6PR03MB50806070E3D56208DDB8131699C22@AM6PR03MB5080.eurprd03.prod.outlook.com>
+References: <AM6PR03MB50806070E3D56208DDB8131699C22@AM6PR03MB5080.eurprd03.prod.outlook.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: LO4P123CA0349.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:18d::12) To AM6PR03MB5080.eurprd03.prod.outlook.com
+ (2603:10a6:20b:90::20)
+X-Microsoft-Original-Message-ID:
+ <20250226192820.156545-1-juntong.deng@outlook.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Stanislav Fomichev <stfomichev@gmail.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- willemdebruijn.kernel@gmail.com, jasowang@redhat.com, andrew+netdev@lunn.ch,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, andrii@kernel.org, eddyz87@gmail.com, mykolal@fb.com,
- ast@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
- yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
- hawk@kernel.org
-References: <20250224152909.3911544-1-marcus.wichelmann@hetzner-cloud.de>
- <20250224152909.3911544-6-marcus.wichelmann@hetzner-cloud.de>
- <Z7yo3VfHofK-W7EY@mini-arch>
- <165bbf6e-ca06-4eac-a9a2-2033314aa027@hetzner-cloud.de>
- <Z79k0vKn39XsZ-j7@mini-arch>
-Content-Language: en-US
-From: Marcus Wichelmann <marcus.wichelmann@hetzner-cloud.de>
-Autocrypt: addr=marcus.wichelmann@hetzner-cloud.de; keydata=
- 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
- wySmewx3h/yfMh0aFxHhvLPxrO2IEQ==
-Subject: Re: [PATCH bpf-next v3 5/6] selftests/bpf: add test for XDP metadata
- support in tun driver
-In-Reply-To: <Z79k0vKn39XsZ-j7@mini-arch>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: marcus.wichelmann@hetzner-cloud.de
-X-Virus-Scanned: Clear (ClamAV 1.0.7/27561/Wed Feb 26 10:36:26 2025)
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM6PR03MB5080:EE_|DBBPR03MB7451:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6f0328c8-1ef5-4599-c14f-08dd569c0715
+X-Microsoft-Antispam:
+	BCL:0;ARA:14566002|461199028|15080799006|19110799003|8060799006|5072599009|440099028|3412199025|41001999003;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?Vf4h5OspN3Y2I73Q9XXpnPGUdRjduGfHZ4yOS73mlcnCjxrZTT7/i+YzFT38?=
+ =?us-ascii?Q?4idseEWUz+iJtDiRdu40MV7c2N3qKxm+B2Mao1+bD+G5hdED7Rxzw2mkgPXq?=
+ =?us-ascii?Q?G82vvDY5i8cWIuQ0p/yxpKtE6ptgolYPYmb1lXtudQXZdIp7Zdyle03H6ET+?=
+ =?us-ascii?Q?KEFavtGo6ruf8wdcbj/44uCEZ8IPy2E2pLMEM1CT29Bc4/2qklYaNz7lSm48?=
+ =?us-ascii?Q?ujvCaZPjxx219EJLcWbrJF7PeAA4UozA70b2sAmngtsLYRDxMRPOfT8u+L7N?=
+ =?us-ascii?Q?2YktAEFFmb8QPW3CHi5/dIsgCS3/lgAznjfAM2Kq24kgtSYu3bh1HKVtGV18?=
+ =?us-ascii?Q?iSZd7wu7GAB6qNKrntDxWqAL+44Y9flHsJOfEFbn+jkz1SswTcDs/gXdFmk3?=
+ =?us-ascii?Q?oSF+t5QTlhUEJopqhODWWXV5y1KwoH4NvVS0lW9kT36D9OthpJrrW/j+wQwM?=
+ =?us-ascii?Q?LHOIMZwY1dlPK8UZFZTfr7IJQoz/KzaXSzYF7wMbvcb3cxZmZAeN31QWAYry?=
+ =?us-ascii?Q?wZaNMwNUoTt2yRB6DcrPhQWmxqG4C3YDszjS9oVK+VKomZSYfqDCuoKFnYw4?=
+ =?us-ascii?Q?4tVKaBk0QbTGS4MKRJNN1UdTPZ1LjJKCiaHB4q8DCn6AlwzCL7iQSyWpoBFi?=
+ =?us-ascii?Q?r76DzVhjIdG9AWHcTcBOQqQ/jlMYSIW89rZuAosvV5NO5YCpn7+ytTucihKT?=
+ =?us-ascii?Q?zshkYCRrPaemd/bXWFQaVMUvMV2UhPQtxLljPBFeYSE38HaqDNYwP8Z45dLp?=
+ =?us-ascii?Q?f9KQSCxYWJ0y/WBFIN9An5RohFZ8pYHhfaGmRxy3mrAbWCToAIpb11RlWf4q?=
+ =?us-ascii?Q?o498cet6nBj5bX1KT7Ucb766SogAzf0vZGFAvIh7Z24JNGeTQ8YlKVdZ/Aa/?=
+ =?us-ascii?Q?PDwNFeMokxRWf5NLmOQ1EWkX5S67ujeRv/8CMUqqNTryvhPUCtHEEjg0GGhG?=
+ =?us-ascii?Q?Mw97xKXX6ZV6YTY2BUdHN6mdRGJj32MWf1SIXKRIexSo3CgDETkyWqPsZ8/5?=
+ =?us-ascii?Q?fNnnAFgiXfNMRYlLuwaOPMUUbfTh931cB69Yrp2SzZ3BXkHn7wGt1tLjFWGa?=
+ =?us-ascii?Q?Hv6JU7y/Bbj6xSEffXsWdTYCHsl0uQ=3D=3D?=
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?wsHj9jf0F2y+EgTtuR/le/cQl/78bDxQnLUicSL89kvs55DVvzhyD9Oy38PN?=
+ =?us-ascii?Q?h0n1JR3iUrYBdwwOtSkHBi9Lh+WUFnKc8P4hbmqmPOdxZqBW5Z3Os01knRWK?=
+ =?us-ascii?Q?aST7j9NCv2Ryx0gYO7S/gO7G7KC97PNSvr7nsCHxEsqe010s4FGvw3fwPWeJ?=
+ =?us-ascii?Q?IGgHqPhaaH/p3g+cXQZMHhd7y11OHfaVFjCmHQUqCUjqrzzu4OrL4ILASStX?=
+ =?us-ascii?Q?UJk/XcGw5g+Pe5el5YQ/OQZR1bt0RzEywPm9P+nk6tqeaT/ic1PoLlQVIIXB?=
+ =?us-ascii?Q?HNUx4tkctUJWUofih7LH2weCGHd5IxEcK7EQLwV9ThwoeAAiCOBRhUTXkAdf?=
+ =?us-ascii?Q?BGc3JXHYcrUee1z9aRhtMuvwA1JBYPg6N+IyPtthN0f79SODEe2OXFrCxE/z?=
+ =?us-ascii?Q?touuChTazZBYYvd2c2evWt+R/gY84q/PlFkQkHz02oVdjFlWeBH33TOh7qJ7?=
+ =?us-ascii?Q?qzsZikMIUJJmHqp2nToa6kNRTtOVW4GubMH2FFLAJXTvhQIfNPzu7o7QQC1G?=
+ =?us-ascii?Q?r1FoJ0l1m7+P4Fnfm13L2kKRd1wMlA9GhSlBPffhQQGZS2pdJoj6GQdVjhk9?=
+ =?us-ascii?Q?37ZBd+v0ahM1w78pmSPmz9+h/g2rZ/S7aNRKUMAbCT4zScxxUsLOqsghK1Rs?=
+ =?us-ascii?Q?Wowl17Oqr2bZyA9yjSqnO0oKSA0jHxQTuGsbZQVVG643t6G9zVgI43uCfWz2?=
+ =?us-ascii?Q?RvvsGx3pps/fp8oCrRGPR6OGO+HHjQkkNc++0EiC60/g4yRpJBlChFeWedLW?=
+ =?us-ascii?Q?zO074ODtya5FNfaApHel5zbsiCJFI4rewBpxO6WSMGaOFL1sr0FqjyCgDiSN?=
+ =?us-ascii?Q?lt7GtbVdTar7tw/z2SZBtRKecQPRpi5LJZL+6JwUHUCeeZp6lMymjIFmJQX1?=
+ =?us-ascii?Q?/MJVLQspPl4f5UMTQQjPRGfNziw/naXKFG79YNYHtiD3E+6j9TEAwreb8fNG?=
+ =?us-ascii?Q?rEZK1mdN5ohnavEkGfZHnP8YNJVv6uKsZb0O+YBjFybYAA4LTuPBm4RYMHuB?=
+ =?us-ascii?Q?eVaLq1UX68o3uSkqoUqMcRdpke4PPxrDGo2A/PHD6XJqCvRX7eVbBTS1eEO3?=
+ =?us-ascii?Q?FMg7ZpYG7qAMDwzfhO8/ffInL8i0LGs17nzW4soFOEX5QXWJrENBtpU2fceE?=
+ =?us-ascii?Q?zPIv9uXTwgVdEIxQ/7FHB435Ky5sG0KBHEvb/DMraJDGD9bqO6Z2pmaCddEe?=
+ =?us-ascii?Q?gg/iP+Nl87ilPJO4cTxTIosj6bWNJquvLJhEtlg50jAQL9n8V2b+jWRm/R1E?=
+ =?us-ascii?Q?rNJn0ESl/FsVRa8ISwU6?=
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6f0328c8-1ef5-4599-c14f-08dd569c0715
+X-MS-Exchange-CrossTenant-AuthSource: AM6PR03MB5080.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Feb 2025 19:30:29.3926
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+	00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR03MB7451
 
+This patch adds struct_ops context information to struct bpf_prog_aux.
 
-Am 26.02.25 um 20:00 schrieb Stanislav Fomichev:
-> On 02/26, Marcus Wichelmann wrote:
->> Am 24.02.25 um 18:14 schrieb Stanislav Fomichev:
->>> On 02/24, Marcus Wichelmann wrote:
->>>> [...]
->>>> +void test_xdp_context_tuntap(void)
->>>
->>> tap0 is already used by lwt tests, so there is a chance this new test
->>> will clash with it? Should we run your new test in a net namespace
->>> to be safe? Bastien recently added a change where you can make
->>> your test run in a net ns by naming the function test_ns_xxx.
->>>
->>
->> Ah, cool, I didn't know of that feature.
->>
->> For reference, you probably mean this one?
->> commit c047e0e0e435 ("selftests/bpf: Optionally open a dedicated namespace to run test in it")
-> 
-> Yes.
->   
->> As long as the tests are not run in parallel, the test function SHOULD
->> clean up well enough behind itself that no conflicts should occur.
->> But having that bit of extra safety won't hurt.
-> 
-> The test you're adding is gonna be running in parallel with most of the
-> other test cases. If you want it to be executed in a serial fashion
-> (which I don't think you do, running in parallel in a ns is a better
-> option), the function as to be called serial_test_xxx.
-> 
+This context information will be used in the kfunc filter.
 
-Ah, I didn't know parallel execution is opt-out. Then I must have been
-lucky that it didn't cause issues.
+Currently the added context information includes struct_ops member
+offset and a pointer to struct bpf_struct_ops.
 
-Added it in the V4 patch series that I'll send in a bit.
+Signed-off-by: Juntong Deng <juntong.deng@outlook.com>
+Acked-by: Alexei Starovoitov <ast@kernel.org>
+---
+ include/linux/bpf.h   | 2 ++
+ kernel/bpf/verifier.c | 8 ++++++--
+ 2 files changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index f3f50e29d639..e06348a59dcf 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1503,6 +1503,7 @@ struct bpf_prog_aux {
+ 	u32 real_func_cnt; /* includes hidden progs, only used for JIT and freeing progs */
+ 	u32 func_idx; /* 0 for non-func prog, the index in func array for func prog */
+ 	u32 attach_btf_id; /* in-kernel BTF type id to attach to */
++	u32 attach_st_ops_member_off;
+ 	u32 ctx_arg_info_size;
+ 	u32 max_rdonly_access;
+ 	u32 max_rdwr_access;
+@@ -1547,6 +1548,7 @@ struct bpf_prog_aux {
+ #endif
+ 	struct bpf_ksym ksym;
+ 	const struct bpf_prog_ops *ops;
++	const struct bpf_struct_ops *st_ops;
+ 	struct bpf_map **used_maps;
+ 	struct mutex used_maps_mutex; /* mutex for used_maps and used_map_cnt */
+ 	struct btf_mod_pair *used_btfs;
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 9971c03adfd5..2dee3fd190a4 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -22384,7 +22384,7 @@ static int check_struct_ops_btf_id(struct bpf_verifier_env *env)
+ 	const struct bpf_struct_ops *st_ops;
+ 	const struct btf_member *member;
+ 	struct bpf_prog *prog = env->prog;
+-	u32 btf_id, member_idx;
++	u32 btf_id, member_idx, member_off;
+ 	struct btf *btf;
+ 	const char *mname;
+ 	int err;
+@@ -22435,7 +22435,8 @@ static int check_struct_ops_btf_id(struct bpf_verifier_env *env)
+ 		return -EINVAL;
+ 	}
+ 
+-	err = bpf_struct_ops_supported(st_ops, __btf_member_bit_offset(t, member) / 8);
++	member_off = __btf_member_bit_offset(t, member) / 8;
++	err = bpf_struct_ops_supported(st_ops, member_off);
+ 	if (err) {
+ 		verbose(env, "attach to unsupported member %s of struct %s\n",
+ 			mname, st_ops->name);
+@@ -22463,6 +22464,9 @@ static int check_struct_ops_btf_id(struct bpf_verifier_env *env)
+ 	prog->aux->ctx_arg_info_size =
+ 		st_ops_desc->arg_info[member_idx].cnt;
+ 
++	prog->aux->st_ops = st_ops;
++	prog->aux->attach_st_ops_member_off = member_off;
++
+ 	prog->aux->attach_func_proto = func_proto;
+ 	prog->aux->attach_func_name = mname;
+ 	env->ops = st_ops->verifier_ops;
+-- 
+2.39.5
+
