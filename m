@@ -1,218 +1,157 @@
-Received: from szxga07-in.huawei.com (szxga07-in.huawei.com [45.249.212.35])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA15420E31F;
-	Wed, 26 Feb 2025 11:11:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.35
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 258D2212FB0;
+	Wed, 26 Feb 2025 11:12:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740568279; cv=none; b=pLS6gTZMcSIFMWSBIgdUrlwW2KdxlYkNQlD/IsXV3mXbv5ZMCi1Di+ZRHsUNDtg0+gQwsesjO4t9vCphLadcF4hjapVtKl3BuRMGwuJR6a0bsaMrqYzNmbjomXMOzOnuBoM8U5EN8e/V6nSOtHloMH5lFlRFb+8FE+czQfEaPZc=
+	t=1740568369; cv=none; b=aFzV4IPfAgEV/WKuETn+dZJDFEelfUUpzoLYUMoXGHdN/A97rqT8UT+vV8xG95kbYuFoMzXdSM5GBGH1D6+DM+l44glOqWBVEqzk/NeyMO6ntV0A4mwFQAvKPOyiFXAAibf1HKRM/0Vm1sQGa4So5vf9vLPj7fb+dqfA2KTFiJE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740568279; c=relaxed/simple;
-	bh=wWD2tZa/klVgH2MM/wWGbtZUpbPR49qn1Dj9rD0e90A=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=mX0axvOuRp16npmmQAjpENozuDAlM7peD7vkq4c2H9NV4N5deOkKntv8TQ/1+ZGWUyVer6qTzA5DURVstyPlLYavwjmHJL0MS2gmbO/FultRg9KLXxlu6s+kEM2jxeA8JEG8bMdS/SzYJyStWai14dz528rk9q2nJSvZPGlJS5U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.35
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.88.163])
-	by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4Z2s9y354mzJ1Fl;
-	Wed, 26 Feb 2025 19:07:02 +0800 (CST)
-Received: from dggpemf200006.china.huawei.com (unknown [7.185.36.61])
-	by mail.maildlp.com (Postfix) with ESMTPS id BEBBB18001B;
-	Wed, 26 Feb 2025 19:11:06 +0800 (CST)
-Received: from localhost.localdomain (10.90.30.45) by
- dggpemf200006.china.huawei.com (7.185.36.61) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Wed, 26 Feb 2025 19:11:06 +0800
-From: Yunsheng Lin <linyunsheng@huawei.com>
-To: <davem@davemloft.net>, <kuba@kernel.org>, <pabeni@redhat.com>
-CC: <zhangkun09@huawei.com>, <liuyonglong@huawei.com>,
-	<fanghaiqing@huawei.com>, Yunsheng Lin <linyunsheng@huawei.com>, Alexander
- Lobakin <aleksander.lobakin@intel.com>, Robin Murphy <robin.murphy@arm.com>,
-	Alexander Duyck <alexander.duyck@gmail.com>, Andrew Morton
-	<akpm@linux-foundation.org>, Gaurav Batra <gbatra@linux.ibm.com>, Matthew
- Rosato <mjrosato@linux.ibm.com>, IOMMU <iommu@lists.linux.dev>, MM
-	<linux-mm@kvack.org>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
-	<daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, John
- Fastabend <john.fastabend@gmail.com>, Matthias Brugger
-	<matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
-	<angelogioacchino.delregno@collabora.com>, <netdev@vger.kernel.org>,
-	<intel-wired-lan@lists.osuosl.org>, <bpf@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-mediatek@lists.infradead.org>
-Subject: [PATCH net-next v10 0/4] fix the DMA API misuse problem for page_pool
-Date: Wed, 26 Feb 2025 19:03:35 +0800
-Message-ID: <20250226110340.2671366-1-linyunsheng@huawei.com>
-X-Mailer: git-send-email 2.30.0
+	s=arc-20240116; t=1740568369; c=relaxed/simple;
+	bh=0UlUDFrQTjxR5+TiaNCyX/ilCZ98LfsN6ADmFlOi+lI=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ji8kQ+POMFghXJOununu4Sf93J3EPS46uRlEbSA4jOokQ7Sd9/L4fwccnQ4rLJNJNZXbccWVBJuUIb4u4CJix4MkFEGWHVhqx6p7v03x8jP9nLsLkXXLEJHrwpBVuOznuzYO4MUlIczpq7oaQZ/O1joeJ3vNSi4yqKuEC702Ysk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DVdemwKX; arc=none smtp.client-ip=209.85.218.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DVdemwKX"
+Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-abb7520028bso898635266b.3;
+        Wed, 26 Feb 2025 03:12:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1740568366; x=1741173166; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=HSX1gchtdLPsHJVZW3liHqT5F/QQ11+VlmXYOeh0zFY=;
+        b=DVdemwKXeW/W/sQLj2J/v2CRufUJI+LzzODfgBMy2rZ5YmMGooPiQUY8NoKEansU5K
+         PImt+I4aXKB0Slmc+dkZrCURbu+0F5uZnL2jkf0x7ltGsM83gK44KXKVIbSXUIh9DPFH
+         IeA/cBO/MI3jGJYHT02MN3Vnr0o9rbtw2MDuMzFZC9XLHj/Q9JfrLWW+PEYiu/7zshiy
+         Umn/x4rpj7DvaSSpV3LI+BZLXsyLBRto50s158x8weF8cQT6o1hJ5U7w9TlNtDbJl/ND
+         FybW2INDbh1cfrzPjK/SKARZ3gTFXtLocbdQDNxWVI+X4gNnnV08J/Fmr9A6Nv92BwFO
+         g6Gw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740568366; x=1741173166;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HSX1gchtdLPsHJVZW3liHqT5F/QQ11+VlmXYOeh0zFY=;
+        b=UKEZbfl84vuzIdAKewf0J2cZ1cJUdMqstGWl7X4zXgkDs7IQd4ZJQXB+Xw8l3KhFBA
+         I8tQPhriFx6YSk0SqGvdGLxrtyVHTlWsW7vkuf+e3md/TvY9aie4MHT3diY6XowOPHE7
+         AE3XToU1u7p0M3UanHkGkDLWwyoSfOeCfL+yN3JGDKEhF1kig3XkwjmHcpICubenwVDT
+         b7OIVQ6JrLJikYFnwkQ2aDKYo/nYmlIc/oK6ZV0VykaKR1Uqjj2Nsz5+V+mqUPnh8g5b
+         Y7fUqStAEPY2EQYBBScyP27jsLSvDy+VCyO+2N2xbTRvkx5V7D0tNLJPcOiMeqXOAXvP
+         fvSw==
+X-Forwarded-Encrypted: i=1; AJvYcCUJk9tHUJP9RaNXYzpKZOgFUYmSpImsfBREAJ8LDCfvmeJtbKMYa4uzgW1qHGbgen6dN6+dW1861PsMvB6j@vger.kernel.org, AJvYcCWfJ0Ci/g7ZXbdVo/JewzRVhMbefcT3lRSvgxlm3TOOd4OTdzNmCTOM1/BGZSCYLyQddKc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzDThznxkNgF5qnLrXihcgNSdY+L498hD4dOb7fDDE0nmGOJkr/
+	rIK/xUji/F8mU9jolxNOOs7xa4aSwLouvVJUDLvPIq2Jqf551RMu
+X-Gm-Gg: ASbGncug2qv3B6cpQQ1v1bhsq/HwlpfXaHvLVAlexcoPPyiklLscYZanjk3tYj7d80L
+	6aFJj4J1AOPkB6N+aU5dWm/dnv0hKvgFu06Ag4nN/KmdmRES+Y4VbIVNfSHuF3k5eoWK9qDoth5
+	BUZCmpA7I+73deJc2y2c+L4cK6qHU3FuGLhq1oE7fsTBu98rzoNp4di8pEQ6AWuIdm/Tj9WJRJX
+	huax4TQPAYfRpGbCw04hOWnY6IQtYu1juo2i3I+oEruSM0fK/JmlVorQCR27vcPEk45O3hkOlMk
+	03iqijwI91Vh
+X-Google-Smtp-Source: AGHT+IFuag5Hh8iCN/4J2NNLM8BFpJbCM7MdvAPaAId6Hc9uWb70DG+3MrrwrflsCiucQcaMVkjZxA==
+X-Received: by 2002:a17:907:72d4:b0:ab7:b6cb:b633 with SMTP id a640c23a62f3a-abeeee40310mr343858566b.34.1740568366130;
+        Wed, 26 Feb 2025 03:12:46 -0800 (PST)
+Received: from krava ([173.38.220.53])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-abed1cd5629sm305686566b.8.2025.02.26.03.12.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Feb 2025 03:12:45 -0800 (PST)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Wed, 26 Feb 2025 12:12:43 +0100
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Tao Chen <chen.dylane@linux.dev>, ast@kernel.org, daniel@iogearbox.net,
+	andrii@kernel.org, eddyz87@gmail.com, haoluo@google.com,
+	qmo@kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+	chen.dylane@gmail.com
+Subject: Re: [PATCH bpf-next v8 4/5] libbpf: Init kprobe prog
+ expected_attach_type for kfunc probe
+Message-ID: <Z773KxMF0N1nEFsH@krava>
+References: <20250224165912.599068-1-chen.dylane@linux.dev>
+ <20250224165912.599068-5-chen.dylane@linux.dev>
+ <CAEf4BzYz9_0Po-JLU+Z4kB7L5snuh2KFSTO0X9KK00GKSq91Sw@mail.gmail.com>
+ <d25b468f-0a84-45c9-b48e-9fd3b9f65b54@linux.dev>
+ <CAEf4BzY85DmfwRruD4tnTj+UiRTk64k1N5vO69cdL1T7H+QTXw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemf200006.china.huawei.com (7.185.36.61)
+In-Reply-To: <CAEf4BzY85DmfwRruD4tnTj+UiRTk64k1N5vO69cdL1T7H+QTXw@mail.gmail.com>
 
-This patchset fix the dma API misuse problem as below:
-Networking driver with page_pool support may hand over page
-still with dma mapping to network stack and try to reuse that
-page after network stack is done with it and passes it back
-to page_pool to avoid the penalty of dma mapping/unmapping.
-With all the caching in the network stack, some pages may be
-held in the network stack without returning to the page_pool
-soon enough, and with VF disable causing the driver unbound,
-the page_pool does not stop the driver from doing it's
-unbounding work, instead page_pool uses workqueue to check
-if there is some pages coming back from the network stack
-periodically, if there is any, it will do the dma unmmapping
-related cleanup work.
+On Tue, Feb 25, 2025 at 09:04:58AM -0800, Andrii Nakryiko wrote:
+> On Mon, Feb 24, 2025 at 9:44 PM Tao Chen <chen.dylane@linux.dev> wrote:
+> >
+> > 在 2025/2/25 09:15, Andrii Nakryiko 写道:
+> > > On Mon, Feb 24, 2025 at 9:03 AM Tao Chen <chen.dylane@linux.dev> wrote:
+> > >>
+> > >> Kprobe prog type kfuncs like bpf_session_is_return and
+> > >> bpf_session_cookie will check the expected_attach_type,
+> > >> so init the expected_attach_type here.
+> > >>
+> > >> Signed-off-by: Tao Chen <chen.dylane@linux.dev>
+> > >> ---
+> > >>   tools/lib/bpf/libbpf_probes.c | 1 +
+> > >>   1 file changed, 1 insertion(+)
+> > >>
+> > >> diff --git a/tools/lib/bpf/libbpf_probes.c b/tools/lib/bpf/libbpf_probes.c
+> > >> index 8efebc18a215..bb5b457ddc80 100644
+> > >> --- a/tools/lib/bpf/libbpf_probes.c
+> > >> +++ b/tools/lib/bpf/libbpf_probes.c
+> > >> @@ -126,6 +126,7 @@ static int probe_prog_load(enum bpf_prog_type prog_type,
+> > >>                  break;
+> > >>          case BPF_PROG_TYPE_KPROBE:
+> > >>                  opts.kern_version = get_kernel_version();
+> > >> +               opts.expected_attach_type = BPF_TRACE_KPROBE_SESSION;
+> > >
+> > > so KPROBE_SESSION is relative recent feature, if we unconditionally
+> > > specify this, we'll regress some feature probes for old kernels where
+> > > KPROBE_SESSION isn't supported, no?
+> > >
+> >
+> > Yeah, maybe we can detect the kernel version first, will fix it.
+> 
+> Hold on. I think the entire probing API is kind of unfortunately
+> inadequate. Just the fact that we randomly pick some specific
+> expected_attach_type to do helpers/kfunc compatibility detection is
+> telling. expected_attach_type can change a set of available helpers,
+> and yet it's not even an input parameter for either
+> libbpf_probe_bpf_helper() or kfunc variant you are trying to add.
 
-As mentioned in [1], attempting DMA unmaps after the driver
-has already unbound may leak resources or at worst corrupt
-memory. Fundamentally, the page pool code cannot allow DMA
-mappings to outlive the driver they belong to.
+could we use the libbpf_probe_bpf_kfunc opts argument and
+allow to specify and override expected_attach_type?
 
-By using the 'struct page_pool_item' referenced by page->pp_item,
-page_pool is not only able to keep track of the inflight page to
-do dma unmmaping if some pages are still handled in networking
-stack when page_pool_destroy() is called, and networking stack is
-also able to find the page_pool owning the page when returning
-pages back into page_pool:
-1. When a page is added to the page_pool, an item is deleted from
-   pool->hold_items and set the 'pp_netmem' pointing to that page
-   and set item->state and item->pp_netmem accordingly in order to
-   keep track of that page, refill from pool->release_items when
-   pool->hold_items is empty or use the item from pool->slow_items
-   when fast items run out.
-2. When a page is released from the page_pool, it is able to tell
-   which page_pool this page belongs to by masking off the lower
-   bits of the pointer to page_pool_item *item, as the 'struct
-   page_pool_item_block' is stored in the top of a struct page.
-   And after clearing the pp_item->state', the item for the
-   released page is added back to pool->release_items so that it
-   can be reused for new pages or just free it when it is from the
-   pool->slow_items.
-3. When page_pool_destroy() is called, item->state is used to tell
-   if a specific item is being used/dma mapped or not by scanning
-   all the item blocks in pool->item_blocks, then item->netmem can
-   be used to do the dma unmmaping if the corresponding inflight
-   page is dma mapped.
+jirka
 
-From the below performance data, the overhead is not so obvious
-due to performance variations in arm64 server and less than 1
-ns in x86 server for time_bench_page_pool01_fast_path() and
-time_bench_page_pool02_ptr_ring, and there is about 10~20ns
-overhead for time_bench_page_pool03_slow(), see more detail in
-[2].
-
-arm64 server:
-Before this patchset:
-              fast_path              ptr_ring            slow
-1.         31.171 ns               60.980 ns          164.917 ns
-2.         28.824 ns               60.891 ns          170.241 ns
-3.         14.236 ns               60.583 ns          164.355 ns
-
-With patchset:
-6.         26.163 ns               53.781 ns          189.450 ns
-7.         26.189 ns               53.798 ns          189.466 ns
-
-X86 server:
-| Test name  |Cycles |   1-5 |    | Nanosec |    1-5 |        |      % |
-| (tasklet_*)|Before | After |diff|  Before |  After |   diff | change |
-|------------+-------+-------+----+---------+--------+--------+--------|
-| fast_path  |    19 |    19 |   0|   5.399 |  5.492 |  0.093 |    1.7 |
-| ptr_ring   |    54 |    57 |   3|  15.090 | 15.849 |  0.759 |    5.0 |
-| slow       |   238 |   284 |  46|  66.134 | 78.909 | 12.775 |   19.3 |
-
-And about 16 bytes of memory is also needed for each page_pool owned
-page to fix the dma API misuse problem
-
-1. https://lore.kernel.org/lkml/8067f204-1380-4d37-8ffd-007fc6f26738@kernel.org/T/
-2. https://lore.kernel.org/all/f558df7a-d983-4fc5-8358-faf251994d23@kernel.org/
-
-CC: Alexander Lobakin <aleksander.lobakin@intel.com>
-CC: Robin Murphy <robin.murphy@arm.com>
-CC: Alexander Duyck <alexander.duyck@gmail.com>
-CC: Andrew Morton <akpm@linux-foundation.org>
-CC: Gaurav Batra <gbatra@linux.ibm.com>
-CC: Matthew Rosato <mjrosato@linux.ibm.com>
-CC: IOMMU <iommu@lists.linux.dev>
-CC: MM <linux-mm@kvack.org>
-
-Change log:
-V10:
-  1. Add nl API to dump item memory usage.
-  2. Use __acquires() and __releases() to avoid 'context imbalance'
-     warning.
-
-V9.
-  1. Drop the fix of a possible time window problem for NPAI recycling.
-  2. Add design description for the fix in patch 2.
-
-V8:
-  1. Drop last 3 patch as it causes observable performance degradation
-     for x86 system.
-  2. Remove rcu read lock in page_pool_napi_local().
-  3. Renaming item function more consistently.
-
-V7:
-  1. Fix a used-after-free bug reported by KASAN as mentioned by Jakub.
-  2. Fix the 'netmem' variable not setting up correctly bug as mentioned
-     by Simon.
-
-V6:
-  1. Repost based on latest net-next.
-  2. Rename page_pool_to_pp() to page_pool_get_pp().
-
-V5:
-  1. Support unlimit inflight pages.
-  2. Add some optimization to avoid the overhead of fixing bug.
-
-V4:
-  1. use scanning to do the unmapping
-  2. spilt dma sync skipping into separate patch
-
-V3:
-  1. Target net-next tree instead of net tree.
-  2. Narrow the rcu lock as the discussion in v2.
-  3. Check the ummapping cnt against the inflight cnt.
-
-V2:
-  1. Add a item_full stat.
-  2. Use container_of() for page_pool_to_pp().
-
-Yunsheng Lin (4):
-  page_pool: introduce page_pool_get_pp() API
-  page_pool: fix IOMMU crash when driver has already unbound
-  page_pool: support unlimited number of inflight pages
-  page_pool: skip dma sync operation for inflight pages
-
- Documentation/netlink/specs/netdev.yaml       |  16 +
- drivers/net/ethernet/freescale/fec_main.c     |   8 +-
- .../ethernet/google/gve/gve_buffer_mgmt_dqo.c |   2 +-
- drivers/net/ethernet/intel/iavf/iavf_txrx.c   |   6 +-
- drivers/net/ethernet/intel/idpf/idpf_txrx.c   |  14 +-
- drivers/net/ethernet/intel/libeth/rx.c        |   2 +-
- .../net/ethernet/mellanox/mlx5/core/en/xdp.c  |   3 +-
- drivers/net/netdevsim/netdev.c                |   6 +-
- drivers/net/wireless/mediatek/mt76/mt76.h     |   2 +-
- include/linux/mm_types.h                      |   2 +-
- include/linux/skbuff.h                        |   1 +
- include/net/libeth/rx.h                       |   3 +-
- include/net/netmem.h                          |  31 +-
- include/net/page_pool/helpers.h               |  15 +
- include/net/page_pool/memory_provider.h       |   2 +-
- include/net/page_pool/types.h                 |  46 +-
- include/uapi/linux/netdev.h                   |   2 +
- net/core/devmem.c                             |   6 +-
- net/core/netmem_priv.h                        |   5 +-
- net/core/page_pool.c                          | 423 ++++++++++++++++--
- net/core/page_pool_priv.h                     |  12 +-
- net/core/page_pool_user.c                     |  39 +-
- tools/net/ynl/samples/page-pool.c             |  11 +
- 23 files changed, 570 insertions(+), 87 deletions(-)
-
--- 
-2.33.0
-
+> 
+> Basically, I'm questioning the validity of even adding this API to
+> libbpf. It feels like this kind of detection is simple enough for
+> application to do on its own.
+> 
+> >
+> > +               if (opts.kern_version >= KERNEL_VERSION(6, 12, 0))
+> > +                       opts.expected_attach_type =BPF_TRACE_KPROBE_SESSION;
+> 
+> no, we shouldn't hard-code kernel version for feature detection (but
+> also see above, I'm not sure this API should be added in the first
+> place)
+> 
+> >
+> > > pw-bot: cr
+> > >
+> > >>                  break;
+> > >>          case BPF_PROG_TYPE_LIRC_MODE2:
+> > >>                  opts.expected_attach_type = BPF_LIRC_MODE2;
+> > >> --
+> > >> 2.43.0
+> > >>
+> >
+> >
+> > --
+> > Best Regards
+> > Tao Chen
