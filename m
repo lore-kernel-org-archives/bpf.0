@@ -1,192 +1,140 @@
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05olkn2059.outbound.protection.outlook.com [40.92.89.59])
+Received: from dediextern.your-server.de (dediextern.your-server.de [85.10.215.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EDDA239584;
-	Wed, 26 Feb 2025 19:26:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.92.89.59
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740598012; cv=fail; b=agEqTlpxX7J3mAaNgPcvDhipZpm/gSdCrk/gbyvXdw+oj0TZcy8Q6/B/jizPx3PkQX0X+t+0jI7ohZxbpoE60wYMx6wkCig6s+dAJqFycXhaQcC1VmiwT1wE9h2pAByhfpZoyPzkDG/9PDTznalN+74VYsSU5N/EdiRFm3dI1hA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740598012; c=relaxed/simple;
-	bh=Af9KTY2bExxs4GsOcM16opUp7zlHZT0TBATRehA06S4=;
-	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=uGDG6FX14KXwvJDqk7WRWS1z2Md29N4nUbQ40ChkxVSrmVf/fwYfMAng+S3979IWojFApM+/eCdYa7c6Gm1JFfLJlRrCFjnTLjbDX0FN5YU7sGAoxOKMXerVh1EulMXjO8bVgmsfXB+/Tuv1YhAjk9FgYIdhLhYJSGbqFRiWP9A=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=aTYn7R6q; arc=fail smtp.client-ip=40.92.89.59
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="aTYn7R6q"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=SMOX+VFyGFYsIxmEW15mTe9UO4gMQQMfZaELRnWCsByVFxTNskbt1OX3bDiF73RhXyawoiazDk9Wk2n7RUWPtQZZJ01lvPMq03MiTehspCembHSYOXiBrhHT2dfQeF/8uihYx8m0vgOAdmrtPYTbum1Wc4JZpuG8P+W9e0B4YymsZYwG+sO+bYTZws+kjEiBLqBUJEt5jXbfpk6UvC2vMR3XyiEAX7I9Q+S4tv/91YIGJQtgqpwhn0VZjIEooRJCdxM4haLTKuEWiYengoqtp1vM2Q0U5pRN6gu7uppKbwm6w0arJZSuDrF5wtNJ2QcqsW+a5KXZ4Q1j7nc50oJ4EA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=C28T4Wv1JyXpYIkC39fL5mg3ytRJMXEGoQd7uVrioBw=;
- b=GycJ3YLq+JjTQ0YblrPC848DRNpqgjeTokU4CyOIQQa1PQ/H0uz9TDKYDc696mNntFcC5kr6lQNz7fisv9xZYH3qTAjSKNHgFNUQcK8omRzj9418vQwm7Onf2xWtj0boqZlECiZZBOGLL26RKHZZEKDsn6+hnQvOXaFIi2D6Hs5+KXKK4ML2Zgbz/grsiQHQp3QzeMd6jBdwDjLyROmMVR46IniU2bMNWe0i1F9cJCHnWntYS4UhIDJgwuceFfBdNMsO2H/OF1lrgcxGy2eS2OHOXYIsPQygPw9V2gq9r5IbIESbZ8oacrxd7k3/TNsonWZwEkLa6bNBWDLHaUen+A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=C28T4Wv1JyXpYIkC39fL5mg3ytRJMXEGoQd7uVrioBw=;
- b=aTYn7R6qoBT2cDxZa7q1ez8CgLCPE5XhhAYWXPH+3Y5ch0CApn01jnARZXDZ3O4cq1952g5p55bAUpf9sjv3IR3Ycg1AUuqj1OAmyhuSMwk4JdsVoHeOZy8kbB+sxWonHeAZE8YvFxSFLSF1lO4UrQMQrAWgLg17ILs7Go5R9X7WImbHa4JlVSe3odJnSMZ9JB9F3YVmAyWs+aS9VahKp+gbfykErchCk9a9m4ANp9reuKQuTGZxn/EVWzVA69O8cwFLq9RVWr+4z10vBBAH5A9B7+qqgwMWr4h9UAfgacv7noVVGJYfDlr2VZtgEGOmyiv9MluFaiN9OnHQZjEVhQ==
-Received: from AM6PR03MB5080.eurprd03.prod.outlook.com (2603:10a6:20b:90::20)
- by AS8PR03MB8858.eurprd03.prod.outlook.com (2603:10a6:20b:536::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8489.19; Wed, 26 Feb
- 2025 19:26:48 +0000
-Received: from AM6PR03MB5080.eurprd03.prod.outlook.com
- ([fe80::a16:9eb8:6868:f6d8]) by AM6PR03MB5080.eurprd03.prod.outlook.com
- ([fe80::a16:9eb8:6868:f6d8%5]) with mapi id 15.20.8466.016; Wed, 26 Feb 2025
- 19:26:47 +0000
-From: Juntong Deng <juntong.deng@outlook.com>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	john.fastabend@gmail.com,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	memxor@gmail.com,
-	tj@kernel.org,
-	void@manifault.com,
-	arighi@nvidia.com,
-	changwoo@igalia.com
-Cc: bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH sched_ext/for-6.15 v3 0/5] bpf, sched_ext: Make kfunc filters support struct_ops context to reduce runtime overhead
-Date: Wed, 26 Feb 2025 19:24:44 +0000
-Message-ID:
- <AM6PR03MB50806070E3D56208DDB8131699C22@AM6PR03MB5080.eurprd03.prod.outlook.com>
-X-Mailer: git-send-email 2.39.5
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: LNXP123CA0024.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:d2::36) To AM6PR03MB5080.eurprd03.prod.outlook.com
- (2603:10a6:20b:90::20)
-X-Microsoft-Original-Message-ID:
- <20250226192444.156274-1-juntong.deng@outlook.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33999239097;
+	Wed, 26 Feb 2025 19:29:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.10.215.232
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1740598158; cv=none; b=NY5WxDT3Cno1u58CpjIsWHyee3E4XDAS0wYNzvfeQAdVQR6KswkSyqucm/VjMU8i5YzDHwv3ANRRGXF4F3pi0y23+ZalCcG2UZgtfD6LF9S3ZQg11MXWDKCTHfnyTpYjvHhLZqJBEcSHsuIbdWmWuYoBmhtQCnMCHMWXhZgA/Zo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1740598158; c=relaxed/simple;
+	bh=2ZUteOkaSTwBrgPlfemqClgy+FPwyulmg41Bi4EpecI=;
+	h=Message-ID:Date:MIME-Version:To:Cc:References:From:Subject:
+	 In-Reply-To:Content-Type; b=ujHWqN7wb/E+xUoesthdCzeJlGH/DdVhLaf/3xlQrriD9VZih2WJvnYvLU62PF4wRVJG7vulGlOdnlrGahoLgajn7adeusPx+sYk79zN9oSLHfkZR9lpliRvyDBPtcfo+spwGoM+Pe/TMeKtC76HUAiYSz9W7fsrKTdWoh9MQ9k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hetzner-cloud.de; spf=pass smtp.mailfrom=hetzner-cloud.de; arc=none smtp.client-ip=85.10.215.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hetzner-cloud.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hetzner-cloud.de
+Received: from sslproxy03.your-server.de ([88.198.220.132])
+	by dediextern.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <marcus.wichelmann@hetzner-cloud.de>)
+	id 1tnN5b-0002zp-CB; Wed, 26 Feb 2025 20:29:03 +0100
+Received: from [2a0d:3344:1523:1f10:f118:b2d4:edbb:54af]
+	by sslproxy03.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <marcus.wichelmann@hetzner-cloud.de>)
+	id 1tnN5b-000453-03;
+	Wed, 26 Feb 2025 20:29:03 +0100
+Message-ID: <0ec1f766-a0be-42ed-b505-0fc94205f724@hetzner-cloud.de>
+Date: Wed, 26 Feb 2025 20:29:01 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM6PR03MB5080:EE_|AS8PR03MB8858:EE_
-X-MS-Office365-Filtering-Correlation-Id: d0791d99-c7be-4a37-0288-08dd569b8323
-X-Microsoft-Antispam:
-	BCL:0;ARA:14566002|461199028|8060799006|15080799006|19110799003|5062599005|5072599009|1602099012|440099028|4302099013|3412199025|10035399004;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?5awweJ53a6DAfij8e/h/Q8P1SQ2SVB49I6wQGOLej5Qg4PqaqG6Un8qBZp20?=
- =?us-ascii?Q?+sNutNucUwVF1Zr5XHWmuLN7fJaP/tDkfsL+zRuBug3WgZS0nDPEEeGZ0hBl?=
- =?us-ascii?Q?xvTzp3p4M56tjd6AogVMM6t2U/dAxJlJEkxtorXYgNnmXTMB2h/pZALkGQl/?=
- =?us-ascii?Q?L2XDHvdFv+1C8ImWDdhci2OPgk7vuIr9tAkB6Xym/qp6momqCLXmptMqEtsH?=
- =?us-ascii?Q?YqS+2iPXDK0sivmGhjUex0YdOQF/F2oXQimcyFszlmyD8d6FAncAf/lNooBW?=
- =?us-ascii?Q?occNATpU3UHO9Waya2xP5au7pG/O4QrV1U64gaXR3M7722TD44+1HjCVZbMB?=
- =?us-ascii?Q?lhz3yaz5s3u9GVhsJIHlEPR7pIJSTpf53AxbA8MwxojTqWjmU8z1o2aoZku0?=
- =?us-ascii?Q?d6tSmi6qjPgVENLlHeaqj0nfBW/HrfhENWDIwR9/nLZU0RYzZDM3Of6fjYDw?=
- =?us-ascii?Q?THaFrmv8gcufQOm4OKVkqVTJ7mDboddd3s8g3iRRizIOhmbYeVOeTRzFe7Jv?=
- =?us-ascii?Q?UIgiQ5LX2yF3XsGw9Amqa5R6s4lHrpNisTLhJm11j7ZpAJkhwFK9+rB1exwT?=
- =?us-ascii?Q?wAt6tb37Lz2uoM8y1MIesfpAL6p3dADkWppZRuC6oHHQ8HYqf8UGlT+41SlY?=
- =?us-ascii?Q?nd+dj0w/eTU5meYhGuRRrmx22QQgqCZXlw9bN73c88/DBD5mAf//Qn2a9ABS?=
- =?us-ascii?Q?7+pgFBzfcSciPnX9Wjy3kK+anGK+eZQjSgsNn94fAvh+RnnphOw8A5m+2kYc?=
- =?us-ascii?Q?Eb0HgrWP3tBvbV8yydnXHaZ9vQu4H4fj8fmp6hNp8jooiuy+z6hiBhuZt1YM?=
- =?us-ascii?Q?EvXWTVO1L5lQyKIWDFTIl0LEGzF15SZquAjArcG79vzGpy6vrfT7vzY4fR2L?=
- =?us-ascii?Q?DUioOZouxy1w38mUiEZg0a6K2r0S15CK26KqLtO+tXzsXaFELGhBIggaHT4O?=
- =?us-ascii?Q?V2e9whjaj1lpNt3UoMalgmy440S2yFwuiz27d5htn69qLZIQ3opuG37G7yu5?=
- =?us-ascii?Q?OD2Hd7QwtxMdAm3YjIVhuwp3u480w3SYiCgyWTGUXEtMdTSp9gas3vZJtv6p?=
- =?us-ascii?Q?FFQmaOjEeCNmyPLzYV4oIqMPDx0xf2Ox4rGStf2/rDu56GmYrkNFM4HMcsXE?=
- =?us-ascii?Q?lnlshnuIp4AFfOL6ZwtnkZF65RyIob0CSjSC5eqj7bhjR1RqNRUlAezX2Cbf?=
- =?us-ascii?Q?FynK0OlSuNgapNNt?=
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?k0M57NJ0RcBszJ/73ZT3EmmS+2t0RM9cAajQUd3ONUYlPG73psA9WSjPXm9Q?=
- =?us-ascii?Q?KagjmKDjoa/ggRiLqP5CpiTMH1+Twxe6R15gIwfXtw9Os2+DY/V33JrnnAYG?=
- =?us-ascii?Q?j2oCiopCdYWgE6QDoxvA0Q8NxnASp5rSX9NRYHLAPUuvY5JBy1mM3QqqQk+J?=
- =?us-ascii?Q?UcF9wLVo6sXQEnYC3crouil7YbVmD7xLWbSgYRWOT1vBZqgvbKkD+0pLjK3s?=
- =?us-ascii?Q?SglW4Ith9V9HdajMSHq6lbI2szi5STbVsdQFAhXvsKXEpY7ZqAugPYYB4IT9?=
- =?us-ascii?Q?ApWE6lFGusamCGpPgB5qqtsX9s6/qLQ4Jnc2c+Ppwr1wwRQSi78dHNDSfSml?=
- =?us-ascii?Q?XeBLnc3EdvXzJElZdwu8lkUp4J2WrrkL28x7shRn7w/1U7eKYT+w3lxWyst4?=
- =?us-ascii?Q?ZoEDDEvldQnZrE2F2Mtvq95rbyH75sfrlfW/EcR5bUKfb9yvNq+thjdb3h9g?=
- =?us-ascii?Q?lshptSnZEwcKAlsCW5DoYkwSpbrR6wQgIKWYIcx16LU3oicldDxtGMfH8hy+?=
- =?us-ascii?Q?U1uZe+LFwsxS0sr3R4veAnBx+vuiEe/ObFoFWHIqQn0ZchQyVeuq/ZeHAL+z?=
- =?us-ascii?Q?B0CLRyBQteXxCaSH549+jiJ0w4+EISn383WrJ1+1QsyGJ4X82OI3dhfvbAmq?=
- =?us-ascii?Q?W4UKYlp25SQ0Ujy2Kt8LbC9x9HmRQxJOWie0kRxOFu6pEXtrxCNa6ql1VVeF?=
- =?us-ascii?Q?kkw/wj0Xiv+TrWLgZLbxhxBKn0Sn9+SLjpbqgh8wKuIVzOtu1mu3Yj1VhQZu?=
- =?us-ascii?Q?0x9qQIhKuvFveyfElH8YFTBi3rIKegG9MZDFnMZRBoSLYFst21k76mPXx+PO?=
- =?us-ascii?Q?CFERaILvbr+isCJUPQQh/aWm1jXDEDyRG1tm51Ug4n6F01IoqDonXnPZmfob?=
- =?us-ascii?Q?bK9tIz320K6+UOtc7LSdcfrHICIKuK5cwh2px0tBhidrV6WO9UN2T0BP121b?=
- =?us-ascii?Q?M+n4dZvQXn23UjDrBg6FVLWGS4h5H27em6E+00jyeZm7y1ss8hi7iC9gCwTt?=
- =?us-ascii?Q?NWqilb0QyrsDiILZSKLxquTZpfJUBOlmFhwJRFqgUeiWwEOmeXIbX8+zwq0d?=
- =?us-ascii?Q?slRQiDhTMMipw7GLJd4rqkgtQIyFKlcl0RXNB6IYxL7Q/s9mbcNGxlEmw8bl?=
- =?us-ascii?Q?CbQ8Vrq1rwJTiCoMDkANzoUY04JgMwriQKh97NXcHDznspPuwpqsy7vf3DFW?=
- =?us-ascii?Q?ILJ+mEeVyPNHiKyNe9UDQy55EAJAJd8eusEnh70102jBMmlqguwon1R3Av4M?=
- =?us-ascii?Q?QJlLOGDsEEZ5Ojluuduq?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d0791d99-c7be-4a37-0288-08dd569b8323
-X-MS-Exchange-CrossTenant-AuthSource: AM6PR03MB5080.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Feb 2025 19:26:47.8477
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
-	00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR03MB8858
+User-Agent: Mozilla Thunderbird
+To: Stanislav Fomichev <stfomichev@gmail.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ willemdebruijn.kernel@gmail.com, jasowang@redhat.com, andrew+netdev@lunn.ch,
+ davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, andrii@kernel.org, eddyz87@gmail.com, mykolal@fb.com,
+ ast@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
+ yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+ sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
+ hawk@kernel.org
+References: <20250224152909.3911544-1-marcus.wichelmann@hetzner-cloud.de>
+ <20250224152909.3911544-6-marcus.wichelmann@hetzner-cloud.de>
+ <Z7yo3VfHofK-W7EY@mini-arch>
+ <165bbf6e-ca06-4eac-a9a2-2033314aa027@hetzner-cloud.de>
+ <Z79k0vKn39XsZ-j7@mini-arch>
+Content-Language: en-US
+From: Marcus Wichelmann <marcus.wichelmann@hetzner-cloud.de>
+Autocrypt: addr=marcus.wichelmann@hetzner-cloud.de; keydata=
+ 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
+ wySmewx3h/yfMh0aFxHhvLPxrO2IEQ==
+Subject: Re: [PATCH bpf-next v3 5/6] selftests/bpf: add test for XDP metadata
+ support in tun driver
+In-Reply-To: <Z79k0vKn39XsZ-j7@mini-arch>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: marcus.wichelmann@hetzner-cloud.de
+X-Virus-Scanned: Clear (ClamAV 1.0.7/27561/Wed Feb 26 10:36:26 2025)
 
-This patch series makes kfunc filters support the use of struct_ops
-context information to reduce SCX runtime overhead.
 
-After improving kfunc filters, SCX no longer needs the mask-based
-runtime kfuncs call restriction, so this patch removes the mask-based
-runtime restriction and updates the corresponding test case.
+Am 26.02.25 um 20:00 schrieb Stanislav Fomichev:
+> On 02/26, Marcus Wichelmann wrote:
+>> Am 24.02.25 um 18:14 schrieb Stanislav Fomichev:
+>>> On 02/24, Marcus Wichelmann wrote:
+>>>> [...]
+>>>> +void test_xdp_context_tuntap(void)
+>>>
+>>> tap0 is already used by lwt tests, so there is a chance this new test
+>>> will clash with it? Should we run your new test in a net namespace
+>>> to be safe? Bastien recently added a change where you can make
+>>> your test run in a net ns by naming the function test_ns_xxx.
+>>>
+>>
+>> Ah, cool, I didn't know of that feature.
+>>
+>> For reference, you probably mean this one?
+>> commit c047e0e0e435 ("selftests/bpf: Optionally open a dedicated namespace to run test in it")
+> 
+> Yes.
+>   
+>> As long as the tests are not run in parallel, the test function SHOULD
+>> clean up well enough behind itself that no conflicts should occur.
+>> But having that bit of extra safety won't hurt.
+> 
+> The test you're adding is gonna be running in parallel with most of the
+> other test cases. If you want it to be executed in a serial fashion
+> (which I don't think you do, running in parallel in a ns is a better
+> option), the function as to be called serial_test_xxx.
+> 
 
-I added *st_ops as part of the context information to avoid kfuncs being
-incorrectly blocked when used in non-SCX scenarios where the member
-offsets would have a different meaning.
+Ah, I didn't know parallel execution is opt-out. Then I must have been
+lucky that it didn't cause issues.
 
-Signed-off-by: Juntong Deng <juntong.deng@outlook.com>
----
-v2 -> v3:
-* Change scx_kfunc_ids_ops_context to the more descriptive
-  scx_kfunc_ids_ops_context_sensitive
-  
-* Change the target to sched_ext/for-6.15
-
-* Remove RFC tag
-
-* v2 link: https://lore.kernel.org/bpf/AM6PR03MB5080855B90C3FE9B6C4243B099FE2@AM6PR03MB5080.eurprd03.prod.outlook.com/T/#u
-
-v1 -> v2:
-* Use completely new design in filtering
-
-* v1 link: https://lore.kernel.org/bpf/AM6PR03MB5080261D024B49D26F3FFF0099F72@AM6PR03MB5080.eurprd03.prod.outlook.com/T/#u
-
-Juntong Deng (5):
-  bpf: Add struct_ops context information to struct bpf_prog_aux
-  sched_ext: Declare context-sensitive kfunc groups that can be used by
-    different SCX operations
-  sched_ext: Add scx_kfunc_ids_ops_context_sensitive for unified
-    filtering of context-sensitive SCX kfuncs
-  sched_ext: Removed mask-based runtime restrictions on calling kfuncs
-    in different contexts
-  selftests/sched_ext: Update enq_select_cpu_fails to adapt to
-    struct_ops context filter
-
- include/linux/bpf.h                           |   2 +
- include/linux/sched/ext.h                     |  24 --
- kernel/bpf/verifier.c                         |   8 +-
- kernel/sched/ext.c                            | 385 ++++++++----------
- kernel/sched/ext_idle.c                       |  13 +-
- .../sched_ext/enq_select_cpu_fails.c          |  37 +-
- 6 files changed, 194 insertions(+), 275 deletions(-)
-
--- 
-2.39.5
-
+Added it in the V4 patch series that I'll send in a bit.
