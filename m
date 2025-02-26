@@ -1,177 +1,145 @@
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from dediextern.your-server.de (dediextern.your-server.de [85.10.215.232])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAD3121B1B5;
-	Wed, 26 Feb 2025 17:30:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A78918DB2E;
+	Wed, 26 Feb 2025 17:39:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.10.215.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740591033; cv=none; b=gkbkm/gYTuixfluhUB11jCKfZRRPAWwABAE8JvMNvdwqtrb7aLJSdABXOiIJUgd3GNJZvNn8lb0sSpKf9RzuyQNma7hzhHbR6XTLCwvy7F+1PlGrcU0kNzzR1QQUnV4NADrjWpLFR1HkWP87BaM3Z6p8RgI19cc/VxvP+7s4/aA=
+	t=1740591566; cv=none; b=J3Sqj1sXshj85XqF+vTHcaqDEyuzL2IiXSNUQmWFkqBd2XuilCPU2jvrgJxBxiZN6mU7eA9Ip4zk8TxjyOd+7EqZzEKeC9Ap0P56gNrh9Mi0MOEBng5SJKFkA2f50Ro0uarZ73HPddyo33yFiIGU5NUft4p0FPE5Y/ZIDWvdVQg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740591033; c=relaxed/simple;
-	bh=W+8mDNDJZwCYE7aOSphfX0nQzEuh/auhF9/CmRXBCSI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PHJW4qMYWKQWRC94fTbQF6fl+hsPp6PNIER8RRJWXA7p+Y9JrFw3pTKzyAaNwaQjRVa5lI9Ql/HI5cxvlPzpguYQ0QWPWiMZUyeGOEvNnVSsj2XleUVU5boaPCwLynbrldwKDQjKTW6Z1X2ElBttTkTBrPbQsvEyVfCdnanDWDU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dsNbOEu6; arc=none smtp.client-ip=209.85.221.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dsNbOEu6"
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-38f403edb4eso4241638f8f.3;
-        Wed, 26 Feb 2025 09:30:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740591030; x=1741195830; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=W+8mDNDJZwCYE7aOSphfX0nQzEuh/auhF9/CmRXBCSI=;
-        b=dsNbOEu6RVCS4Vw+XwRh1p0HELuKI67VLwuZ3DxPei3dE0HmijahWvQAEiLq3yyypm
-         iP04A1tzW3La2G3BVwAljybcWdFWKKab6mCy8Qe+G0NIpYC7aowoGv3+RlBTuiR1Vk3+
-         U+0h72TmzEMmO5qww4jq4WY5PUfcyfMm9xunlFmFaXFjDBdeMza8b4HPC35kmBN1jtP0
-         isGzMhRK1rhepvp7V+pUt3LG60X0vcHQ2jtoLSJijFLW9/VcsX/JaowPkiqpcd84hkaB
-         mpl2igeJMzN/IAex94oKk4VNlfhsgoZv4ptahiXkk1ZKU2FOIn5ON79D17g8suL32SoJ
-         8W8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740591030; x=1741195830;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=W+8mDNDJZwCYE7aOSphfX0nQzEuh/auhF9/CmRXBCSI=;
-        b=JKQ7UvwL37aFkcRpjXVFvFlcXFyL02DMxT22a1oIF09Kh6wy8/y1XkcCbs58UrotYZ
-         D67t0Zgosc96kYdad0TK+2Dk6vH4KUXM0BwsULsNOuavRzimvVTBM9Et6FnHX6ZQ4E7w
-         4TaIYIzVP3szstDbnqgBzq2gwOi7oWSqXY/5UkMaaah4MYQcolhveu7ta9C5gS7MocaI
-         GhTtWmv6cvGx7I2bB6xrfpB72oA2SzPcocLs+F14D7n0wPj9z9uWxr+rHepWA15mYlfq
-         0Cn74I/deZLb7NXP9aoqo+vX5816H7P5icHNBZiCLpCAPxxMyDfoG6grJAw0AZh6dbXe
-         Y22A==
-X-Forwarded-Encrypted: i=1; AJvYcCWERMxv9d7kUOSEiOL1Rzkcw5OqXbZ4Tydby90eEOr74HBxX9CGCt7Y0SW+3axzpI832pIeMbE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxx6JtR7NOTmFBLmNlERSDzmlYO+Fa54TzDmirCQ5lmrd6f+bXn
-	pRvqYBpsLGiWLDYZvpKSOi+8GL1XcZ/V8dR7EMglKPqPr0vhsrp97aXduU3Ajjqv046aATQvsx2
-	bCaZJ8NumFC9VdyBg7oAg30MPhyE=
-X-Gm-Gg: ASbGncvHvqDELr2QYlUN9VgO5h2OUphcNrP8gmMlmxsHkF2LDYa6aaaCnXQ2mP1isRp
-	TEFQI2rP08rvJoKlWUv2Yw4XUMDrTeJD3OmSKfFgpbrYZKRGx7eo7ckmWsH4TVkElLWC22h8b5L
-	EpOLibDpf74Z0yDDZ80Wd83OU=
-X-Google-Smtp-Source: AGHT+IGEjG4QXZW3khJ9pJWOBa/Y+jo71vJ+/93A1uk75nHWtmHXzhPzZiXUGjMRdCrsPfaN3qc7s+v/rucD7ehgcog=
-X-Received: by 2002:a5d:5983:0:b0:38f:4d20:4a0a with SMTP id
- ffacd0b85a97d-390cc609d0fmr7100943f8f.28.1740591029923; Wed, 26 Feb 2025
- 09:30:29 -0800 (PST)
+	s=arc-20240116; t=1740591566; c=relaxed/simple;
+	bh=0Mdmv9+AoSpYnGPn3KxQqNGKuQfF0N0dh3bYqefhap0=;
+	h=Message-ID:Date:MIME-Version:To:Cc:References:From:Subject:
+	 In-Reply-To:Content-Type; b=m/fLhkGrqy0s1h6uf26SHonOnFYT6kWS6xYXmqAQY+agdakbaS60f9+Oo+QEJWnM0n9JICSJljYfFZ8im7I3m9Lj4OiVPiIomsopnJcKPy7K25CXazKJnM2RLUE1joOX7lRCbOHRlIv5OVXXCRa5ls6fagXJCHBhFmuL3ZiiBSQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hetzner-cloud.de; spf=pass smtp.mailfrom=hetzner-cloud.de; arc=none smtp.client-ip=85.10.215.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hetzner-cloud.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hetzner-cloud.de
+Received: from sslproxy03.your-server.de ([88.198.220.132])
+	by dediextern.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <marcus.wichelmann@hetzner-cloud.de>)
+	id 1tnLND-000M9O-Nq; Wed, 26 Feb 2025 18:39:07 +0100
+Received: from [2a0d:3344:1523:1f10:f118:b2d4:edbb:54af]
+	by sslproxy03.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <marcus.wichelmann@hetzner-cloud.de>)
+	id 1tnLND-0004cR-1G;
+	Wed, 26 Feb 2025 18:39:07 +0100
+Message-ID: <a05ba835-b109-46c9-ac3c-ddf8a3e48fcf@hetzner-cloud.de>
+Date: Wed, 26 Feb 2025 18:39:06 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250220134503.835224-1-maciej.fijalkowski@intel.com>
- <CAADnVQKYkwV1jc3aLwWqzgP7TKaPvq_NjpwvYdOXOgDQ3QZfeA@mail.gmail.com> <Z73TS/tjk9okSqlC@boxer>
-In-Reply-To: <Z73TS/tjk9okSqlC@boxer>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Wed, 26 Feb 2025 09:30:18 -0800
-X-Gm-Features: AQ5f1JpQtap0tuew6P2Heurpjvuf24ejI9hIjLoPl8xun3nE45XvegWs-UvTRd4
-Message-ID: <CAADnVQ++0o-YoFR=yUcbJvaLX2rmWjC2LHjc3yyCp+bkgWGn1Q@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 0/3] bpf: introduce skb refcount kfuncs
-To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>, Jakub Kicinski <kuba@kernel.org>
-Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Network Development <netdev@vger.kernel.org>, "Karlsson, Magnus" <magnus.karlsson@intel.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Amery Hung <ameryhung@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+Cc: jasowang@redhat.com, andrew+netdev@lunn.ch, davem@davemloft.net,
+ edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, andrii@kernel.org,
+ eddyz87@gmail.com, mykolal@fb.com, ast@kernel.org, daniel@iogearbox.net,
+ martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
+ john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
+ haoluo@google.com, jolsa@kernel.org, shuah@kernel.org, hawk@kernel.org
+References: <20250224152909.3911544-1-marcus.wichelmann@hetzner-cloud.de>
+ <20250224152909.3911544-5-marcus.wichelmann@hetzner-cloud.de>
+ <efcc6e11-2d3a-489e-80bc-cbc3f72f7afa@hetzner-cloud.de>
+ <67be0aa61e400_25ccfc29426@willemb.c.googlers.com.notmuch>
+Content-Language: en-US
+From: Marcus Wichelmann <marcus.wichelmann@hetzner-cloud.de>
+Autocrypt: addr=marcus.wichelmann@hetzner-cloud.de; keydata=
+ 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
+ wySmewx3h/yfMh0aFxHhvLPxrO2IEQ==
+Subject: Re: [PATCH bpf-next v3 4/6] selftests/bpf: refactor
+ xdp_context_functional test and bpf program
+In-Reply-To: <67be0aa61e400_25ccfc29426@willemb.c.googlers.com.notmuch>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: marcus.wichelmann@hetzner-cloud.de
+X-Virus-Scanned: Clear (ClamAV 1.0.7/27561/Wed Feb 26 10:36:26 2025)
 
-On Tue, Feb 25, 2025 at 6:27=E2=80=AFAM Maciej Fijalkowski
-<maciej.fijalkowski@intel.com> wrote:
->
-> On Fri, Feb 21, 2025 at 05:55:57PM -0800, Alexei Starovoitov wrote:
-> > On Thu, Feb 20, 2025 at 5:45=E2=80=AFAM Maciej Fijalkowski
-> > <maciej.fijalkowski@intel.com> wrote:
-> > >
-> > > Hi!
-> > >
-> > > This patchset provides what is needed for storing skbs as kptrs in bp=
-f
-> > > maps. We start with necessary kernel change as discussed at [0] with
-> > > Martin, then next patch adds kfuncs for handling skb refcount and on =
-top
-> > > of that a test case is added where one program stores skbs and then n=
-ext
-> > > program is able to retrieve them from map.
-> > >
-> > > Martin, regarding the kernel change I decided to go with boolean
-> > > approach instead of what you initially suggested. Let me know if it
-> > > works for you.
-> > >
-> > > Thanks,
-> > > Maciej
-> > >
-> > > [0]: https://lore.kernel.org/bpf/Z0X%2F9PhIhvQwsgfW@boxer/
-> >
-> > Before we go further we need a lot more details on "why" part.
-> > In the old thread I was able to find:
-> >
-> > > On TC egress hook skb is stored in a map ...
-> > > During TC ingress hook on the same interface, the skb that was previo=
-usly
-> > stored in map is retrieved ...
-> >
-> > This is too cryptic. I see several concerns with such use case
-> > including netns crossing, L2/L3 mismatch, skb_scrub.
-> >
-> > I doubt we can make such "skb stash in a map" safe without
-> > restricting the usage, so please provide detailed
-> > description of the use case.
->
-> Hi Alexei,
->
-> We have a system with two nodes: one is a fully fledged Linux system (big=
- node)
-> and the other one a smaller embedded system. The big node runs Linux PTP =
-for
-> time synchronization, the smaller node we have no control over (might run=
- Linux
-> or something else). The problem is that we would like to use the Tx times=
-tamps
-> from the small node in the Linux PTP application on the big node. When a =
-packet
-> is sent out from the big node it arrives at the small node that send it o=
-ut one
-> of its interfaces. It then replies with another packet back to the big no=
-de
-> with the Tx timestamp in it.
->
-> Our current PoC for attacking this is to store the skb in a map (using th=
-is
-> patch set) when it is sent out from the big node then retrieve it from th=
-e map
-> when the reply from the small node is received. We then take the timestam=
-p from
-> the packet and put it in the skb and send it up to the socket error queue=
- so
-> that Linux PTP works out of the box.
+Am 25.02.25 um 19:23 schrieb Willem de Bruijn:
+> Marcus Wichelmann wrote:
+>> Am 24.02.25 um 16:29 schrieb Marcus Wichelmann:
+>>> [...]
+>>> +	/* By default, Linux sends IPv6 multicast listener reports which
+>>> +	 * interfere with this test. Set the IFF_NOARP flag to ensure
+>>> +	 * silence on the interface.
+>>> +	 */
+>>> +	SYS(close, "ip link set dev " RX_NAME " arp off");
+>>>    	SYS(close, "ip link set dev " RX_NAME " up");
+>>
+>> Hm, setting the NOARP flag seems to have not been sufficient to fix the flaky
+>> test:
+>> https://github.com/kernel-patches/bpf/actions/runs/13507111620/job/37739614229
+>>
+>> I was not able to reproduce it locally or with my own CI runs unfortunately, but
+>> I'll try something else in the next patch version which should definitely stop
+>> IPv6 multicast listener report packets from messing with the tests.
+> 
+> You probably want to pass nodad to any ip -6 addr add.
+> 
+> This is a common option you'll find in tools/testing/selftests/net.
+> 
+> RFC 3810 section 5.2.13 says
+> 
+> "
+>     For stateless autoconfiguration, as defined in [RFC2462], a node is
+>     required to join several IPv6 multicast groups, in order to perform
+>     Duplicate Address Detection (DAD).
+> "
 
-This sounds like you're actually xmit-ing the skb out of the big node
-and storing it in a map via simple refcnt++.
-That may work in some setups, but in general is not quite correct
-from networking stack pov.
-You need to skb_clone() it and keep the clone, so only cloned skb
-can go into the socket error queue and up to user space.
-xmit-ing the same skb and sending to user space
-is going to cause issues.
+I'm not explicitly adding an IPv6 address, but this rather comes from the IPv6
+link-local address being automatically assigned.
+This can be avoided by setting addrgenmode=none, either using "ip link" or by
+setting the corresponding sysctl.
 
-Cleaner design would probably involve bpf_clone_redirect()
-and may be some form of bpf-qdisc where packet is waiting in the queue
-until its hwtimestamp is adjusted and its released from the queue
-into user space.
+But I think I'll add a filter for all non test related packets to the XDP program
+instead.
+I like this solution more, as it should be easier to grasp, very reliable and also
+solves this for all tests in just one place.
 
-What happens when small node doesn't send that timestamped packet?
-The map will eventually overflow, right?
-Overall it feels that stashing skb-s in a map isn't the right approach.
-
-> Note that for the purpose of setting skb->hwtstamp and sending it up to t=
-he
-> error queue we are adding a kfunc (bpf_tx_tstamp) responsible for it, whi=
-ch is
-> not included in this set, so I understand it is not obvious what we achie=
-ved
-> with the current form of this patch set being discussed.
->
-> We did not consider the restrictions that should be implemented from netn=
-s POV,
-> so that is a good point. How would you see this being fixed?
->
+Thanks!
