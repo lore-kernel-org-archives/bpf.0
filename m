@@ -1,115 +1,117 @@
-Received: from dediextern.your-server.de (dediextern.your-server.de [85.10.215.232])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAE9919CC3E;
-	Wed, 26 Feb 2025 15:57:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.10.215.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 963C221D587
+	for <bpf@vger.kernel.org>; Wed, 26 Feb 2025 15:57:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740585429; cv=none; b=RO5shzWP/puReFOWtzwxJXaZOAcsuRafmUuG7sIx7HcaqSGZ5Pei6mg+so5I6kB/uoNrxhUBirvs+Ae0IY/1iD+j2YBhOoffU6v+2ypwuIfy1N+rhiRD649LhkL97NG86sp8yWKm6sehoJSK7sBAw/+WsYSl06RZ2A2TXQXDT8A=
+	t=1740585458; cv=none; b=djzFZvZNmWecferGuEkQL6ljgk7j2tGAk6AnbxstIlwkZ7dPlmpLRh8QVotRqf03QoSZpcPEdeFALT7q41gFAwy8FAIHRBeoJHFFRLSk9Jii8wY9MrBZZAKuWS0sNIYc1zTtw7wMPapjano3GplZkdul4KjipaDaeWmFqypRAvo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740585429; c=relaxed/simple;
-	bh=GKMzlZ2maRtkgC5P94Kko9bp/n+VqxMprs5WYnSKGPA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Y6OCmHV/MFEtC2f7VhS1aMzAJkPFlxJWZSgSxREVc5TuUmPlSVa6Qhl/82JxTgEgJWNpIJ9ZNF6HF6XMnWm0sqo2jj7bEftKEfuVJzRdkQ7RrJQar2e4DqnXaQA/S0fxseqmP0ZjbrlP9KsQGKo9yJhIlg6FoZbjG0QlCqPL0tg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hetzner-cloud.de; spf=pass smtp.mailfrom=hetzner-cloud.de; arc=none smtp.client-ip=85.10.215.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hetzner-cloud.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hetzner-cloud.de
-Received: from sslproxy07.your-server.de ([78.47.199.104])
-	by dediextern.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <marcus.wichelmann@hetzner-cloud.de>)
-	id 1tnJm0-000Fvw-Fh; Wed, 26 Feb 2025 16:56:36 +0100
-Received: from [2a0d:3344:1523:1f10:f118:b2d4:edbb:54af]
-	by sslproxy07.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <marcus.wichelmann@hetzner-cloud.de>)
-	id 1tnJm0-000FGH-0e;
-	Wed, 26 Feb 2025 16:56:36 +0100
-Message-ID: <9c00cff3-92a8-492a-b059-7d8c66c23daf@hetzner-cloud.de>
-Date: Wed, 26 Feb 2025 16:56:35 +0100
+	s=arc-20240116; t=1740585458; c=relaxed/simple;
+	bh=59VdEI2rBy+d1m76/S0g6/tGo0P+zWBuf7eI9U8rZZs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Y53cAO2miIVnbPi8cQqulRt8JvQ+Td9fZ0qGAkO0qAbIt7hfSdS7K+jfq/qtz2HogbSSjtyhtYlvj8EcrZqLW1wu9siTjuRgeBtO7SVPxOlzrNZ6PLnVqJV6dW7PwDsF4E/O+AIHJa2pr1kQoiKIe3ioNaFEAdrvNvSdciRa1YQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=Kw+PK3Nq; arc=none smtp.client-ip=209.85.128.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="Kw+PK3Nq"
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-6f7031ea11cso63716277b3.2
+        for <bpf@vger.kernel.org>; Wed, 26 Feb 2025 07:57:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1740585455; x=1741190255; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DTEZRC0guY0i44I90elxKU5uA+fxPCt+MgWlS+WCEoA=;
+        b=Kw+PK3Nq5ApoUIG3Qg8sE25sguWY12zUcofUmZQtWeTE1SVgm9njf22w2fzAtVrpQB
+         P1EOxpV7by5gDTWc8Ji6R0/VEv08M1hHo7qDcaKN2xhVQnX1SSat007Etq0wv/ahfNp1
+         iJknVUDTgBCrCOi12uqOZ55BxxiuUL3enUpYmKxGPLf7jLmnL3HrIJIxqyJRkaKk9U/f
+         9GmkJao0UiOPbhnPbm7t9nk7nFITJuBW6cfJG4R9UzRdoMAhgzRSRxu9FQqR3hU2wKdN
+         fO1EustKcH2Bt9nJ1VRbNeVwCfD0j1id6veeC4L9sGFK+srpTROGSDwDrXauGAaudCC7
+         tTBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740585455; x=1741190255;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DTEZRC0guY0i44I90elxKU5uA+fxPCt+MgWlS+WCEoA=;
+        b=Zpm1I/92QLsYMARqpr8SlsZh3vGeK4FJrOi+FJmu0PIOkdXxUDYcirj5RqB+LfJA4R
+         +uzrOCQmv9r0fYKjk7J9W0MGqCIEHQJIPUK+WW/lO8Ui0dh38yBWDCzimqrl/vfTBmdQ
+         WiBJmulkx55CJhJK/R9bFDgwPidbWLJcDxI8naH1vQCif60yVKmkSd6YNVyqwd2OXlWl
+         CENmnnI0xxpJawRARcb+jKma6mYXq9poE4IRHoP+8AZDX/bd7gyGOROn+GgZZfAcFnQC
+         cjkrhGeAomdDtR9RTcXMmmBWU0Og0kYdK1ImJLzUkFn8YP24NKgFSMi3LTagYLN/Z4gx
+         8xeA==
+X-Forwarded-Encrypted: i=1; AJvYcCWvxM2K+xOVGHJ7Btlh5OYWncP8yzAyr3BDiSK+ORgmHbnSF8I17xheRiIV2nveeUGQME0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxeJ8/ikeN1NvfYWi1Mo2VCZEcgUvVsfVVmLGhfPyt2MA723E85
+	1VdaK5xoUQ0rfBPwUsDNdNnV8F+vXGCuvi2IeHYmfFpj4fLD44KxsDRqivzHzG6HVwaA4WCpo00
+	n6nXQVZhYI4IeIHk/7t0unOtxx0U12PAcHBja
+X-Gm-Gg: ASbGnctTgtKtfRGbej/L6HWJSfrInufMIxQzD9PKv3FxPTcMUui9VVf99fxN7RGViLx
+	bNs58jX9P89QM3jlLXmFXNEDO2mp0jIrEW7TcMnZLxa3u2fHojR74m9bANLOEnm3ghTh6CyrsHk
+	aVv3dDSyo=
+X-Google-Smtp-Source: AGHT+IFH+gpBtOHXZppIp2fl84NjvsbIRPhAR0sJm1rizuyRz60NgJJh8Zs6NY0f9cGV/7yczMUYu/Jph3y1o7+NVnY=
+X-Received: by 2002:a05:690c:6303:b0:6ee:66d2:e738 with SMTP id
+ 00721157ae682-6fd21dd21d0mr42627597b3.2.1740585455503; Wed, 26 Feb 2025
+ 07:57:35 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v3 4/6] selftests/bpf: refactor
- xdp_context_functional test and bpf program
-To: Stanislav Fomichev <stfomichev@gmail.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- willemdebruijn.kernel@gmail.com, jasowang@redhat.com, andrew+netdev@lunn.ch,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, andrii@kernel.org, eddyz87@gmail.com, mykolal@fb.com,
- ast@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
- yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
- hawk@kernel.org
-References: <20250224152909.3911544-1-marcus.wichelmann@hetzner-cloud.de>
- <20250224152909.3911544-5-marcus.wichelmann@hetzner-cloud.de>
- <Z7yof3pafRsMwBrf@mini-arch>
-Content-Language: en-US
-From: Marcus Wichelmann <marcus.wichelmann@hetzner-cloud.de>
-Autocrypt: addr=marcus.wichelmann@hetzner-cloud.de; keydata=
- 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
- wySmewx3h/yfMh0aFxHhvLPxrO2IEQ==
-In-Reply-To: <Z7yof3pafRsMwBrf@mini-arch>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: marcus.wichelmann@hetzner-cloud.de
-X-Virus-Scanned: Clear (ClamAV 1.0.7/27561/Wed Feb 26 10:36:26 2025)
+References: <20250226003055.1654837-1-bboscaccy@linux.microsoft.com>
+ <20250226003055.1654837-2-bboscaccy@linux.microsoft.com> <CAPhsuW7=uALYiLfKfApvSG0V+RV+M20w5x3myTZVLNRyYnBFnQ@mail.gmail.com>
+In-Reply-To: <CAPhsuW7=uALYiLfKfApvSG0V+RV+M20w5x3myTZVLNRyYnBFnQ@mail.gmail.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Wed, 26 Feb 2025 10:57:24 -0500
+X-Gm-Features: AQ5f1JoD9duQ0JL_CjsyBWKC0ngLOXb9NPe6dh7dHIluAww-shddRwfboF0WYfQ
+Message-ID: <CAHC9VhS8ST6ODB2pFJTMK4qu8FdM2J=6qEbB=XGxo2ZAZgo1Aw@mail.gmail.com>
+Subject: Re: [PATCH 1/1] security: Propagate universal pointer data in bpf hooks
+To: Song Liu <song@kernel.org>
+Cc: Blaise Boscaccy <bboscaccy@linux.microsoft.com>, James Morris <jmorris@namei.org>, 
+	"Serge E. Hallyn" <serge@hallyn.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Yonghong Song <yonghong.song@linux.dev>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Stephen Smalley <stephen.smalley.work@gmail.com>, 
+	Ondrej Mosnacek <omosnace@redhat.com>, linux-security-module@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, selinux@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Am 24.02.25 um 18:12 schrieb Stanislav Fomichev:
-> On 02/24, Marcus Wichelmann wrote:
-> [..]
-> 
->> +int send_test_packet(int ifindex)
-> 
-> nit: static? same for assert_test_result below
-> 
+On Wed, Feb 26, 2025 at 2:06=E2=80=AFAM Song Liu <song@kernel.org> wrote:
+> On Tue, Feb 25, 2025 at 4:31=E2=80=AFPM Blaise Boscaccy
+> <bboscaccy@linux.microsoft.com> wrote:
+> >
+> > Certain bpf syscall subcommands are available for usage from both
+> > userspace and the kernel. LSM modules or eBPF gatekeeper programs may
+> > need to take a different course of action depending on whether or not
+> > a BPF syscall originated from the kernel or userspace.
+> >
+> > Additionally, some of the bpf_attr struct fields contain pointers to
+> > arbitrary memory. Currently the functionality to determine whether or
+> > not a pointer refers to kernel memory or userspace memory is exposed
+> > to the bpf verifier, but that information is missing from various LSM
+> > hooks.
+> >
+> > Here we augment the LSM hooks to provide this data, by simply passing
+> > the corresponding universal pointer in any hook that contains already
+> > contains a bpf_attr struct that corresponds to a subcommand that may
+> > be called from the kernel.
+>
+> I think this information is useful for LSM hooks.
 
-Yeah why not. Will change it.
+I've only looked at it quickly, but so far it seems reasonable.  I'm
+going to take a closer look today.
 
-Thanks!
+> Question: Do we need a full bpfptr_t for these hooks, or just a boolean
+> "is_kernel or not"?
+
+I may be misunderstanding the patch, but what if we swapped the
+existing 'union bpf_attr' parameter for a 'bpfptr_t' parameter?  That
+would allow for both kernel and usermode pointers, complete with a
+'is_kernel' flag; or am I missing something (likely)?
+
+--=20
+paul-moore.com
