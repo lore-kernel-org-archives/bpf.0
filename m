@@ -1,26 +1,26 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 972311F5846;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0920215769;
 	Thu, 27 Feb 2025 18:57:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740682659; cv=none; b=fHJSv8T6TxGKYoLNwM8ibrSxnjQr+gX5A0F8nDNfFd+bQYc88uzxR2jhNKeS4tPIz89f0tfKodW5v7GsYaaxi0IcEHKt3zhCDdLUiE79JfMroE3uT31jM/NT02WF2grH/PNVgyIuPYSaRbcVLA/Mqi169zUKZzV2f2Xv9srcti0=
+	t=1740682659; cv=none; b=ZyTsvGAKv4VxSf1LF65JQexLNanbdbvoUGfgMjbRzvDNsjFXki0QL+fftO/yPLHddxUiLvjPvTyz4EJY+9YECcGTEIE0UC2b7vtxAgAmYHqTW9dDg+axU0yRwEzI7sXgi2/p61FL6OZ9CSzlywwFnsNROAPdZX0ChfLAsjHoqbE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1740682659; c=relaxed/simple;
-	bh=DagFqMIJa8uuRMJxA+VJIa494CtgGToE2XAYGJaRNkk=;
+	bh=75NhAFRF+JLlYAINhq+WwIi22Lhv7jwxXtxpD0YdsMY=;
 	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type; b=gu3p3XCpTUdL/Xl9Qf4Rhj8B6/ucZeUw9Uro1ZgTWTP+IMHRxK2qydMCfHX0DV86lTUrSpU6oSCFPDp40/veCKKT1oLeogrGqFcfzR7SNKgYCTEBhjUS5zTQJdwSQEhKB3dCdG5ui+p06D+xHNQE9E0lz08VYmIaR2/T127GK6U=
+	 Content-Type; b=rZ5nwDUGRkK0g2bCO9PXiluNYa4H7jlm6froCp5Qz9FhyVA3hR4gCQk0r8lO5PmlvCktYbk4KT5dwUM1ZQKZigHeHuw1WGw/GXta5jXN+09Lpw4F8u4nJdd/uhnPsvVPt3JbdmQWQmeOM1pMCn9PY9PCbmzav9I/X2UwN2GGNi8=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C7CDC4CEE8;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EF77C4CEE4;
 	Thu, 27 Feb 2025 18:57:39 +0000 (UTC)
 Received: from rostedt by gandalf with local (Exim 4.98)
 	(envelope-from <rostedt@goodmis.org>)
-	id 1tnj5S-00000009nRZ-41PN;
-	Thu, 27 Feb 2025 13:58:22 -0500
-Message-ID: <20250227185822.810321199@goodmis.org>
+	id 1tnj5T-00000009nSX-1GYc;
+	Thu, 27 Feb 2025 13:58:23 -0500
+Message-ID: <20250227185823.154996172@goodmis.org>
 User-Agent: quilt/0.68
-Date: Thu, 27 Feb 2025 13:58:06 -0500
+Date: Thu, 27 Feb 2025 13:58:08 -0500
 From: Steven Rostedt <rostedt@goodmis.org>
 To: linux-kernel@vger.kernel.org,
  linux-trace-kernel@vger.kernel.org,
@@ -36,7 +36,7 @@ Cc: Masami Hiramatsu <mhiramat@kernel.org>,
  Guo Ren <guoren@kernel.org>,
  Donglin Peng <dolinux.peng@gmail.com>,
  Zheng Yejian <zhengyejian@huaweicloud.com>
-Subject: [PATCH v4 2/4] ftrace: Add support for function argument to graph tracer
+Subject: [PATCH v4 4/4] ftrace: Add arguments to function tracer
 References: <20250227185804.639525399@goodmis.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -48,128 +48,53 @@ Content-Type: text/plain; charset=UTF-8
 
 From: Sven Schnelle <svens@linux.ibm.com>
 
-Wire up the code to print function arguments in the function graph
-tracer. This functionality can be enabled/disabled during runtime with
-options/funcgraph-args.
+Wire up the code to print function arguments in the function tracer.
+This functionality can be enabled/disabled during runtime with
+options/func-args.
 
-Example usage:
-
-6)              | dummy_xmit [dummy](skb = 0x8887c100, dev = 0x872ca000) {
-6)              |   consume_skb(skb = 0x8887c100) {
-6)              |     skb_release_head_state(skb = 0x8887c100) {
-6)  0.178 us    |       sock_wfree(skb = 0x8887c100)
-6)  0.627 us    |     }
+        ping-689     [004] b....    77.170220: dummy_xmit(skb = 0x82904800, dev = 0x882d0000) <-dev_hard_start_xmit
 
 Reviewed-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 Co-developed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 Signed-off-by: Sven Schnelle <svens@linux.ibm.com>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- kernel/trace/Kconfig                 |   6 ++
- kernel/trace/trace.h                 |   1 +
- kernel/trace/trace_entries.h         |   7 +-
- kernel/trace/trace_functions_graph.c | 145 +++++++++++++++++++++------
- 4 files changed, 124 insertions(+), 35 deletions(-)
+ kernel/trace/trace.c              | 14 ++++++++--
+ kernel/trace/trace.h              |  4 ++-
+ kernel/trace/trace_entries.h      |  5 ++--
+ kernel/trace/trace_functions.c    | 46 +++++++++++++++++++++++++++----
+ kernel/trace/trace_irqsoff.c      | 12 ++++++--
+ kernel/trace/trace_output.c       | 18 ++++++++++--
+ kernel/trace/trace_sched_wakeup.c |  4 +--
+ 7 files changed, 85 insertions(+), 18 deletions(-)
 
-diff --git a/kernel/trace/Kconfig b/kernel/trace/Kconfig
-index 60412c1012ef..033fba0633cf 100644
---- a/kernel/trace/Kconfig
-+++ b/kernel/trace/Kconfig
-@@ -268,6 +268,12 @@ config FUNCTION_TRACE_ARGS
- 	depends on HAVE_FUNCTION_ARG_ACCESS_API
- 	depends on DEBUG_INFO_BTF
- 	default y
-+	help
-+	  If supported with function argument access API and BTF, then
-+	  the function tracer and function graph tracer will support printing
-+	  of function arguments. This feature is off by default, and can be
-+	  enabled via the trace option func-args (for the function tracer) and
-+	  funcgraph-args (for the function graph tracer)
+diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+index 0e6d517e74e0..cb13c88abfd6 100644
+--- a/kernel/trace/trace.c
++++ b/kernel/trace/trace.c
+@@ -2878,13 +2878,16 @@ trace_buffer_unlock_commit_nostack(struct trace_buffer *buffer,
  
- config DYNAMIC_FTRACE
- 	bool "enable/disable function tracing dynamically"
-diff --git a/kernel/trace/trace.h b/kernel/trace/trace.h
-index 9c21ba45b7af..6963cd83b6da 100644
---- a/kernel/trace/trace.h
-+++ b/kernel/trace/trace.h
-@@ -897,6 +897,7 @@ static __always_inline bool ftrace_hash_empty(struct ftrace_hash *hash)
- #define TRACE_GRAPH_PRINT_RETVAL        0x800
- #define TRACE_GRAPH_PRINT_RETVAL_HEX    0x1000
- #define TRACE_GRAPH_PRINT_RETADDR       0x2000
-+#define TRACE_GRAPH_ARGS		0x4000
- #define TRACE_GRAPH_PRINT_FILL_SHIFT	28
- #define TRACE_GRAPH_PRINT_FILL_MASK	(0x3 << TRACE_GRAPH_PRINT_FILL_SHIFT)
- 
-diff --git a/kernel/trace/trace_entries.h b/kernel/trace/trace_entries.h
-index fbfb396905a6..77a8ba3bc1e3 100644
---- a/kernel/trace/trace_entries.h
-+++ b/kernel/trace/trace_entries.h
-@@ -72,17 +72,18 @@ FTRACE_ENTRY_REG(function, ftrace_entry,
- );
- 
- /* Function call entry */
--FTRACE_ENTRY_PACKED(funcgraph_entry, ftrace_graph_ent_entry,
-+FTRACE_ENTRY(funcgraph_entry, ftrace_graph_ent_entry,
- 
- 	TRACE_GRAPH_ENT,
- 
- 	F_STRUCT(
- 		__field_struct(	struct ftrace_graph_ent,	graph_ent	)
- 		__field_packed(	unsigned long,	graph_ent,	func		)
--		__field_packed(	int,		graph_ent,	depth		)
-+		__field_packed(	unsigned long,	graph_ent,	depth		)
-+		__dynamic_array(unsigned long,	args				)
- 	),
- 
--	F_printk("--> %ps (%d)", (void *)__entry->func, __entry->depth)
-+	F_printk("--> %ps (%lu)", (void *)__entry->func, __entry->depth)
- );
- 
- #ifdef CONFIG_FUNCTION_GRAPH_RETADDR
-diff --git a/kernel/trace/trace_functions_graph.c b/kernel/trace/trace_functions_graph.c
-index 136c750b0b4d..5049fe25ceef 100644
---- a/kernel/trace/trace_functions_graph.c
-+++ b/kernel/trace/trace_functions_graph.c
-@@ -70,6 +70,10 @@ static struct tracer_opt trace_opts[] = {
- #ifdef CONFIG_FUNCTION_GRAPH_RETADDR
- 	/* Display function return address ? */
- 	{ TRACER_OPT(funcgraph-retaddr, TRACE_GRAPH_PRINT_RETADDR) },
-+#endif
-+#ifdef CONFIG_FUNCTION_TRACE_ARGS
-+	/* Display function arguments ? */
-+	{ TRACER_OPT(funcgraph-args, TRACE_GRAPH_ARGS) },
- #endif
- 	/* Include sleep time (scheduled out) between entry and return */
- 	{ TRACER_OPT(sleep-time, TRACE_GRAPH_SLEEP_TIME) },
-@@ -110,25 +114,43 @@ static void
- print_graph_duration(struct trace_array *tr, unsigned long long duration,
- 		     struct trace_seq *s, u32 flags);
- 
--int __trace_graph_entry(struct trace_array *tr,
--				struct ftrace_graph_ent *trace,
--				unsigned int trace_ctx)
-+static int __graph_entry(struct trace_array *tr, struct ftrace_graph_ent *trace,
-+			 unsigned int trace_ctx, struct ftrace_regs *fregs)
+ void
+ trace_function(struct trace_array *tr, unsigned long ip, unsigned long
+-	       parent_ip, unsigned int trace_ctx)
++	       parent_ip, unsigned int trace_ctx, struct ftrace_regs *fregs)
  {
- 	struct ring_buffer_event *event;
  	struct trace_buffer *buffer = tr->array_buffer.buffer;
- 	struct ftrace_graph_ent_entry *entry;
-+	int size;
+ 	struct ring_buffer_event *event;
+ 	struct ftrace_entry *entry;
++	int size = sizeof(*entry);
  
--	event = trace_buffer_lock_reserve(buffer, TRACE_GRAPH_ENT,
--					  sizeof(*entry), trace_ctx);
-+	/* If fregs is defined, add FTRACE_REGS_MAX_ARGS long size words */
-+	size = sizeof(*entry) + (FTRACE_REGS_MAX_ARGS * !!fregs * sizeof(long));
+-	event = __trace_buffer_lock_reserve(buffer, TRACE_FN, sizeof(*entry),
++	size += FTRACE_REGS_MAX_ARGS * !!fregs * sizeof(long);
 +
-+	event = trace_buffer_lock_reserve(buffer, TRACE_GRAPH_ENT, size, trace_ctx);
++	event = __trace_buffer_lock_reserve(buffer, TRACE_FN, size,
+ 					    trace_ctx);
  	if (!event)
- 		return 0;
--	entry	= ring_buffer_event_data(event);
--	entry->graph_ent			= *trace;
-+
-+	entry = ring_buffer_event_data(event);
-+	entry->graph_ent = *trace;
-+
+ 		return;
+@@ -2892,6 +2895,13 @@ trace_function(struct trace_array *tr, unsigned long ip, unsigned long
+ 	entry->ip			= ip;
+ 	entry->parent_ip		= parent_ip;
+ 
 +#ifdef CONFIG_HAVE_FUNCTION_ARG_ACCESS_API
 +	if (fregs) {
 +		for (int i = 0; i < FTRACE_REGS_MAX_ARGS; i++)
@@ -177,252 +102,261 @@ index 136c750b0b4d..5049fe25ceef 100644
 +	}
 +#endif
 +
- 	trace_buffer_unlock_commit_nostack(buffer, event);
+ 	if (static_branch_unlikely(&trace_function_exports_enabled))
+ 		ftrace_exports(event, TRACE_EXPORT_FUNCTION);
+ 	__buffer_unlock_commit(buffer, event);
+diff --git a/kernel/trace/trace.h b/kernel/trace/trace.h
+index 6963cd83b6da..32da87f45010 100644
+--- a/kernel/trace/trace.h
++++ b/kernel/trace/trace.h
+@@ -21,6 +21,7 @@
+ #include <linux/workqueue.h>
+ #include <linux/ctype.h>
+ #include <linux/once_lite.h>
++#include <linux/ftrace_regs.h>
  
- 	return 1;
- }
+ #include "pid_list.h"
  
-+int __trace_graph_entry(struct trace_array *tr,
-+				struct ftrace_graph_ent *trace,
-+				unsigned int trace_ctx)
-+{
-+	return __graph_entry(tr, trace, trace_ctx, NULL);
-+}
-+
- #ifdef CONFIG_FUNCTION_GRAPH_RETADDR
- int __trace_graph_retaddr_entry(struct trace_array *tr,
- 				struct ftrace_graph_ent *trace,
-@@ -174,9 +196,9 @@ struct fgraph_times {
- 	unsigned long long		sleeptime; /* may be optional! */
+@@ -697,7 +698,8 @@ unsigned long trace_total_entries(struct trace_array *tr);
+ void trace_function(struct trace_array *tr,
+ 		    unsigned long ip,
+ 		    unsigned long parent_ip,
+-		    unsigned int trace_ctx);
++		    unsigned int trace_ctx,
++		    struct ftrace_regs *regs);
+ void trace_graph_function(struct trace_array *tr,
+ 		    unsigned long ip,
+ 		    unsigned long parent_ip,
+diff --git a/kernel/trace/trace_entries.h b/kernel/trace/trace_entries.h
+index 77a8ba3bc1e3..ee40d4e6ad1c 100644
+--- a/kernel/trace/trace_entries.h
++++ b/kernel/trace/trace_entries.h
+@@ -61,8 +61,9 @@ FTRACE_ENTRY_REG(function, ftrace_entry,
+ 	TRACE_FN,
+ 
+ 	F_STRUCT(
+-		__field_fn(	unsigned long,	ip		)
+-		__field_fn(	unsigned long,	parent_ip	)
++		__field_fn(	unsigned long,		ip		)
++		__field_fn(	unsigned long,		parent_ip	)
++		__dynamic_array( unsigned long,		args		)
+ 	),
+ 
+ 	F_printk(" %ps <-- %ps",
+diff --git a/kernel/trace/trace_functions.c b/kernel/trace/trace_functions.c
+index df56f9b76010..98ccf3f00c51 100644
+--- a/kernel/trace/trace_functions.c
++++ b/kernel/trace/trace_functions.c
+@@ -25,6 +25,9 @@ static void
+ function_trace_call(unsigned long ip, unsigned long parent_ip,
+ 		    struct ftrace_ops *op, struct ftrace_regs *fregs);
+ static void
++function_args_trace_call(unsigned long ip, unsigned long parent_ip,
++			 struct ftrace_ops *op, struct ftrace_regs *fregs);
++static void
+ function_stack_trace_call(unsigned long ip, unsigned long parent_ip,
+ 			  struct ftrace_ops *op, struct ftrace_regs *fregs);
+ static void
+@@ -42,9 +45,10 @@ enum {
+ 	TRACE_FUNC_NO_OPTS		= 0x0, /* No flags set. */
+ 	TRACE_FUNC_OPT_STACK		= 0x1,
+ 	TRACE_FUNC_OPT_NO_REPEATS	= 0x2,
++	TRACE_FUNC_OPT_ARGS		= 0x4,
+ 
+ 	/* Update this to next highest bit. */
+-	TRACE_FUNC_OPT_HIGHEST_BIT	= 0x4
++	TRACE_FUNC_OPT_HIGHEST_BIT	= 0x8
  };
  
--int trace_graph_entry(struct ftrace_graph_ent *trace,
--		      struct fgraph_ops *gops,
--		      struct ftrace_regs *fregs)
-+static int graph_entry(struct ftrace_graph_ent *trace,
-+		       struct fgraph_ops *gops,
-+		       struct ftrace_regs *fregs)
- {
- 	unsigned long *task_var = fgraph_get_task_var(gops);
- 	struct trace_array *tr = gops->private;
-@@ -246,7 +268,7 @@ int trace_graph_entry(struct ftrace_graph_ent *trace,
- 			unsigned long retaddr = ftrace_graph_top_ret_addr(current);
- 			ret = __trace_graph_retaddr_entry(tr, trace, trace_ctx, retaddr);
- 		} else {
--			ret = __trace_graph_entry(tr, trace, trace_ctx);
-+			ret = __graph_entry(tr, trace, trace_ctx, fregs);
- 		}
+ #define TRACE_FUNC_OPT_MASK	(TRACE_FUNC_OPT_HIGHEST_BIT - 1)
+@@ -114,6 +118,8 @@ static ftrace_func_t select_trace_function(u32 flags_val)
+ 	switch (flags_val & TRACE_FUNC_OPT_MASK) {
+ 	case TRACE_FUNC_NO_OPTS:
+ 		return function_trace_call;
++	case TRACE_FUNC_OPT_ARGS:
++		return function_args_trace_call;
+ 	case TRACE_FUNC_OPT_STACK:
+ 		return function_stack_trace_call;
+ 	case TRACE_FUNC_OPT_NO_REPEATS:
+@@ -220,7 +226,34 @@ function_trace_call(unsigned long ip, unsigned long parent_ip,
+ 
+ 	data = this_cpu_ptr(tr->array_buffer.data);
+ 	if (!atomic_read(&data->disabled))
+-		trace_function(tr, ip, parent_ip, trace_ctx);
++		trace_function(tr, ip, parent_ip, trace_ctx, NULL);
++
++	ftrace_test_recursion_unlock(bit);
++}
++
++static void
++function_args_trace_call(unsigned long ip, unsigned long parent_ip,
++			 struct ftrace_ops *op, struct ftrace_regs *fregs)
++{
++	struct trace_array *tr = op->private;
++	struct trace_array_cpu *data;
++	unsigned int trace_ctx;
++	int bit;
++	int cpu;
++
++	if (unlikely(!tr->function_enabled))
++		return;
++
++	bit = ftrace_test_recursion_trylock(ip, parent_ip);
++	if (bit < 0)
++		return;
++
++	trace_ctx = tracing_gen_ctx();
++
++	cpu = smp_processor_id();
++	data = per_cpu_ptr(tr->array_buffer.data, cpu);
++	if (!atomic_read(&data->disabled))
++		trace_function(tr, ip, parent_ip, trace_ctx, fregs);
+ 
+ 	ftrace_test_recursion_unlock(bit);
+ }
+@@ -270,7 +303,7 @@ function_stack_trace_call(unsigned long ip, unsigned long parent_ip,
+ 
+ 	if (likely(disabled == 1)) {
+ 		trace_ctx = tracing_gen_ctx_flags(flags);
+-		trace_function(tr, ip, parent_ip, trace_ctx);
++		trace_function(tr, ip, parent_ip, trace_ctx, NULL);
+ #ifdef CONFIG_UNWINDER_FRAME_POINTER
+ 		if (ftrace_pids_enabled(op))
+ 			skip++;
+@@ -349,7 +382,7 @@ function_no_repeats_trace_call(unsigned long ip, unsigned long parent_ip,
+ 	trace_ctx = tracing_gen_ctx_dec();
+ 	process_repeats(tr, ip, parent_ip, last_info, trace_ctx);
+ 
+-	trace_function(tr, ip, parent_ip, trace_ctx);
++	trace_function(tr, ip, parent_ip, trace_ctx, NULL);
+ 
+ out:
+ 	ftrace_test_recursion_unlock(bit);
+@@ -389,7 +422,7 @@ function_stack_no_repeats_trace_call(unsigned long ip, unsigned long parent_ip,
+ 		trace_ctx = tracing_gen_ctx_flags(flags);
+ 		process_repeats(tr, ip, parent_ip, last_info, trace_ctx);
+ 
+-		trace_function(tr, ip, parent_ip, trace_ctx);
++		trace_function(tr, ip, parent_ip, trace_ctx, NULL);
+ 		__trace_stack(tr, trace_ctx, STACK_SKIP);
  	}
- 	preempt_enable_notrace();
-@@ -254,6 +276,20 @@ int trace_graph_entry(struct ftrace_graph_ent *trace,
- 	return ret;
+ 
+@@ -403,6 +436,9 @@ static struct tracer_opt func_opts[] = {
+ 	{ TRACER_OPT(func_stack_trace, TRACE_FUNC_OPT_STACK) },
+ #endif
+ 	{ TRACER_OPT(func-no-repeats, TRACE_FUNC_OPT_NO_REPEATS) },
++#ifdef CONFIG_FUNCTION_TRACE_ARGS
++	{ TRACER_OPT(func-args, TRACE_FUNC_OPT_ARGS) },
++#endif
+ 	{ } /* Always set a last empty entry */
+ };
+ 
+diff --git a/kernel/trace/trace_irqsoff.c b/kernel/trace/trace_irqsoff.c
+index 7294ad676379..c8bfa7310a91 100644
+--- a/kernel/trace/trace_irqsoff.c
++++ b/kernel/trace/trace_irqsoff.c
+@@ -150,7 +150,7 @@ irqsoff_tracer_call(unsigned long ip, unsigned long parent_ip,
+ 
+ 	trace_ctx = tracing_gen_ctx_flags(flags);
+ 
+-	trace_function(tr, ip, parent_ip, trace_ctx);
++	trace_function(tr, ip, parent_ip, trace_ctx, fregs);
+ 
+ 	atomic_dec(&data->disabled);
+ }
+@@ -295,11 +295,17 @@ __trace_function(struct trace_array *tr,
+ 	if (is_graph(tr))
+ 		trace_graph_function(tr, ip, parent_ip, trace_ctx);
+ 	else
+-		trace_function(tr, ip, parent_ip, trace_ctx);
++		trace_function(tr, ip, parent_ip, trace_ctx, NULL);
  }
  
-+int trace_graph_entry(struct ftrace_graph_ent *trace,
-+		      struct fgraph_ops *gops,
-+		      struct ftrace_regs *fregs)
-+{
-+	return graph_entry(trace, gops, NULL);
-+}
-+
-+static int trace_graph_entry_args(struct ftrace_graph_ent *trace,
-+				  struct fgraph_ops *gops,
-+				  struct ftrace_regs *fregs)
-+{
-+	return graph_entry(trace, gops, fregs);
-+}
-+
- static void
- __trace_graph_function(struct trace_array *tr,
- 		unsigned long ip, unsigned int trace_ctx)
-@@ -418,7 +454,10 @@ static int graph_trace_init(struct trace_array *tr)
- {
- 	int ret;
- 
--	tr->gops->entryfunc = trace_graph_entry;
-+	if (tracer_flags_is_set(TRACE_GRAPH_ARGS))
-+		tr->gops->entryfunc = trace_graph_entry_args;
-+	else
-+		tr->gops->entryfunc = trace_graph_entry;
- 
- 	if (tracing_thresh)
- 		tr->gops->retfunc = trace_graph_thresh_return;
-@@ -775,7 +814,7 @@ static void print_graph_retaddr(struct trace_seq *s, struct fgraph_retaddr_ent_e
- 
- static void print_graph_retval(struct trace_seq *s, struct ftrace_graph_ent_entry *entry,
- 				struct ftrace_graph_ret *graph_ret, void *func,
--				u32 opt_flags, u32 trace_flags)
-+				u32 opt_flags, u32 trace_flags, int args_size)
- {
- 	unsigned long err_code = 0;
- 	unsigned long retval = 0;
-@@ -809,7 +848,14 @@ static void print_graph_retval(struct trace_seq *s, struct ftrace_graph_ent_entr
- 		if (entry->ent.type != TRACE_GRAPH_RETADDR_ENT)
- 			print_retaddr = false;
- 
--		trace_seq_printf(s, "%ps();", func);
-+		trace_seq_printf(s, "%ps", func);
-+
-+		if (args_size >= FTRACE_REGS_MAX_ARGS * sizeof(long)) {
-+			print_function_args(s, entry->args, (unsigned long)func);
-+			trace_seq_putc(s, ';');
-+		} else
-+			trace_seq_puts(s, "();");
-+
- 		if (print_retval || print_retaddr)
- 			trace_seq_puts(s, " /*");
- 		else
-@@ -836,7 +882,8 @@ static void print_graph_retval(struct trace_seq *s, struct ftrace_graph_ent_entr
- 
  #else
+-#define __trace_function trace_function
++static inline void
++__trace_function(struct trace_array *tr,
++		 unsigned long ip, unsigned long parent_ip,
++		 unsigned int trace_ctx)
++{
++	return trace_function(tr, ip, parent_ip, trace_ctx, NULL);
++}
  
--#define print_graph_retval(_seq, _ent, _ret, _func, _opt_flags, _trace_flags) do {} while (0)
-+#define print_graph_retval(_seq, _ent, _ret, _func, _opt_flags, _trace_flags, args_size) \
-+	do {} while (0)
- 
- #endif
- 
-@@ -852,10 +899,14 @@ print_graph_entry_leaf(struct trace_iterator *iter,
- 	struct ftrace_graph_ret *graph_ret;
- 	struct ftrace_graph_ent *call;
- 	unsigned long long duration;
-+	unsigned long ret_func;
- 	unsigned long func;
-+	int args_size;
- 	int cpu = iter->cpu;
- 	int i;
- 
-+	args_size = iter->ent_size - offsetof(struct ftrace_graph_ent_entry, args);
-+
- 	graph_ret = &ret_entry->ret;
- 	call = &entry->graph_ent;
- 	duration = ret_entry->rettime - ret_entry->calltime;
-@@ -887,16 +938,25 @@ print_graph_entry_leaf(struct trace_iterator *iter,
- 	for (i = 0; i < call->depth * TRACE_GRAPH_INDENT; i++)
- 		trace_seq_putc(s, ' ');
- 
-+	ret_func = graph_ret->func + iter->tr->text_delta;
-+
- 	/*
- 	 * Write out the function return value or return address
- 	 */
- 	if (flags & (__TRACE_GRAPH_PRINT_RETVAL | __TRACE_GRAPH_PRINT_RETADDR)) {
- 		print_graph_retval(s, entry, graph_ret,
- 				   (void *)graph_ret->func + iter->tr->text_delta,
--				   flags, tr->trace_flags);
-+				   flags, tr->trace_flags, args_size);
- 	} else {
--		trace_seq_printf(s, "%ps();\n", (void *)func);
-+		trace_seq_printf(s, "%ps", (void *)ret_func);
-+
-+		if (args_size >= FTRACE_REGS_MAX_ARGS * sizeof(long)) {
-+			print_function_args(s, entry->args, ret_func);
-+			trace_seq_putc(s, ';');
-+		} else
-+			trace_seq_puts(s, "();");
- 	}
-+	trace_seq_printf(s, "\n");
- 
- 	print_graph_irq(iter, graph_ret->func, TRACE_GRAPH_RET,
- 			cpu, iter->ent->pid, flags);
-@@ -913,6 +973,7 @@ print_graph_entry_nested(struct trace_iterator *iter,
- 	struct fgraph_data *data = iter->private;
- 	struct trace_array *tr = iter->tr;
- 	unsigned long func;
-+	int args_size;
- 	int i;
- 
- 	if (data) {
-@@ -937,7 +998,17 @@ print_graph_entry_nested(struct trace_iterator *iter,
- 
- 	func = call->func + iter->tr->text_delta;
- 
--	trace_seq_printf(s, "%ps() {", (void *)func);
-+	trace_seq_printf(s, "%ps", (void *)func);
-+
-+	args_size = iter->ent_size - offsetof(struct ftrace_graph_ent_entry, args);
-+
-+	if (args_size >= FTRACE_REGS_MAX_ARGS * sizeof(long))
-+		print_function_args(s, entry->args, func);
-+	else
-+		trace_seq_puts(s, "()");
-+
-+	trace_seq_puts(s, " {");
-+
- 	if (flags & __TRACE_GRAPH_PRINT_RETADDR  &&
- 		entry->ent.type == TRACE_GRAPH_RETADDR_ENT)
- 		print_graph_retaddr(s, (struct fgraph_retaddr_ent_entry *)entry,
-@@ -1107,21 +1178,38 @@ print_graph_entry(struct ftrace_graph_ent_entry *field, struct trace_seq *s,
- 			struct trace_iterator *iter, u32 flags)
+ static enum print_line_t irqsoff_print_line(struct trace_iterator *iter)
  {
- 	struct fgraph_data *data = iter->private;
--	struct ftrace_graph_ent *call = &field->graph_ent;
-+	struct ftrace_graph_ent *call;
- 	struct ftrace_graph_ret_entry *leaf_ret;
- 	static enum print_line_t ret;
- 	int cpu = iter->cpu;
-+	/*
-+	 * print_graph_entry() may consume the current event,
-+	 * thus @field may become invalid, so we need to save it.
-+	 * sizeof(struct ftrace_graph_ent_entry) is very small,
-+	 * it can be safely saved at the stack.
-+	 */
-+	struct ftrace_graph_ent_entry *entry;
-+	u8 save_buf[sizeof(*entry) + FTRACE_REGS_MAX_ARGS * sizeof(long)];
-+
-+	/* The ent_size is expected to be as big as the entry */
-+	if (iter->ent_size > sizeof(save_buf))
-+		iter->ent_size = sizeof(save_buf);
-+
-+	entry = (void *)save_buf;
-+	memcpy(entry, field, iter->ent_size);
-+
-+	call = &entry->graph_ent;
+diff --git a/kernel/trace/trace_output.c b/kernel/trace/trace_output.c
+index 4b721cd4f21d..b51ee9373773 100644
+--- a/kernel/trace/trace_output.c
++++ b/kernel/trace/trace_output.c
+@@ -1090,12 +1090,15 @@ enum print_line_t trace_nop_print(struct trace_iterator *iter, int flags,
+ }
  
- 	if (check_irq_entry(iter, flags, call->func, call->depth))
- 		return TRACE_TYPE_HANDLED;
+ static void print_fn_trace(struct trace_seq *s, unsigned long ip,
+-			   unsigned long parent_ip, long delta, int flags)
++			   unsigned long parent_ip, long delta,
++			   unsigned long *args, int flags)
+ {
+ 	ip += delta;
+ 	parent_ip += delta;
  
- 	print_graph_prologue(iter, s, TRACE_GRAPH_ENT, call->func, flags);
+ 	seq_print_ip_sym(s, ip, flags);
++	if (args)
++		print_function_args(s, args, ip);
  
--	leaf_ret = get_return_for_leaf(iter, field);
-+	leaf_ret = get_return_for_leaf(iter, entry);
- 	if (leaf_ret)
--		ret = print_graph_entry_leaf(iter, field, leaf_ret, s, flags);
-+		ret = print_graph_entry_leaf(iter, entry, leaf_ret, s, flags);
+ 	if ((flags & TRACE_ITER_PRINT_PARENT) && parent_ip) {
+ 		trace_seq_puts(s, " <-");
+@@ -1109,10 +1112,19 @@ static enum print_line_t trace_fn_trace(struct trace_iterator *iter, int flags,
+ {
+ 	struct ftrace_entry *field;
+ 	struct trace_seq *s = &iter->seq;
++	unsigned long *args;
++	int args_size;
+ 
+ 	trace_assign_type(field, iter->ent);
+ 
+-	print_fn_trace(s, field->ip, field->parent_ip, iter->tr->text_delta, flags);
++	args_size = iter->ent_size - offsetof(struct ftrace_entry, args);
++	if (args_size >= FTRACE_REGS_MAX_ARGS * sizeof(long))
++		args = field->args;
++	else
++		args = NULL;
++
++	print_fn_trace(s, field->ip, field->parent_ip, iter->tr->text_delta,
++		       args, flags);
+ 	trace_seq_putc(s, '\n');
+ 
+ 	return trace_handle_return(s);
+@@ -1785,7 +1797,7 @@ trace_func_repeats_print(struct trace_iterator *iter, int flags,
+ 
+ 	trace_assign_type(field, iter->ent);
+ 
+-	print_fn_trace(s, field->ip, field->parent_ip, iter->tr->text_delta, flags);
++	print_fn_trace(s, field->ip, field->parent_ip, iter->tr->text_delta, NULL, flags);
+ 	trace_seq_printf(s, " (repeats: %u, last_ts:", field->count);
+ 	trace_print_time(s, iter,
+ 			 iter->ts - FUNC_REPEATS_GET_DELTA_TS(field));
+diff --git a/kernel/trace/trace_sched_wakeup.c b/kernel/trace/trace_sched_wakeup.c
+index af30586f1aea..c9ba4259e03e 100644
+--- a/kernel/trace/trace_sched_wakeup.c
++++ b/kernel/trace/trace_sched_wakeup.c
+@@ -242,7 +242,7 @@ wakeup_tracer_call(unsigned long ip, unsigned long parent_ip,
+ 		return;
+ 
+ 	local_irq_save(flags);
+-	trace_function(tr, ip, parent_ip, trace_ctx);
++	trace_function(tr, ip, parent_ip, trace_ctx, fregs);
+ 	local_irq_restore(flags);
+ 
+ 	atomic_dec(&data->disabled);
+@@ -327,7 +327,7 @@ __trace_function(struct trace_array *tr,
+ 	if (is_graph(tr))
+ 		trace_graph_function(tr, ip, parent_ip, trace_ctx);
  	else
--		ret = print_graph_entry_nested(iter, field, s, cpu, flags);
-+		ret = print_graph_entry_nested(iter, entry, s, cpu, flags);
+-		trace_function(tr, ip, parent_ip, trace_ctx);
++		trace_function(tr, ip, parent_ip, trace_ctx, NULL);
+ }
  
- 	if (data) {
- 		/*
-@@ -1195,7 +1283,8 @@ print_graph_return(struct ftrace_graph_ret_entry *retentry, struct trace_seq *s,
- 	 * funcgraph-retval option is enabled.
- 	 */
- 	if (flags & __TRACE_GRAPH_PRINT_RETVAL) {
--		print_graph_retval(s, NULL, trace, (void *)func, flags, tr->trace_flags);
-+		print_graph_retval(s, NULL, trace, (void *)func, flags,
-+				   tr->trace_flags, 0);
- 	} else {
- 		/*
- 		 * If the return function does not have a matching entry,
-@@ -1323,16 +1412,8 @@ print_graph_function_flags(struct trace_iterator *iter, u32 flags)
- 
- 	switch (entry->type) {
- 	case TRACE_GRAPH_ENT: {
--		/*
--		 * print_graph_entry() may consume the current event,
--		 * thus @field may become invalid, so we need to save it.
--		 * sizeof(struct ftrace_graph_ent_entry) is very small,
--		 * it can be safely saved at the stack.
--		 */
--		struct ftrace_graph_ent_entry saved;
- 		trace_assign_type(field, entry);
--		saved = *field;
--		return print_graph_entry(&saved, s, iter, flags);
-+		return print_graph_entry(field, s, iter, flags);
- 	}
- #ifdef CONFIG_FUNCTION_GRAPH_RETADDR
- 	case TRACE_GRAPH_RETADDR_ENT: {
+ static int wakeup_flag_changed(struct trace_array *tr, u32 mask, int set)
 -- 
 2.47.2
 
