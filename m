@@ -1,64 +1,57 @@
-Received: from dediextern.your-server.de (dediextern.your-server.de [85.10.215.232])
+Received: from out-184.mta0.migadu.com (out-184.mta0.migadu.com [91.218.175.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7177239567;
-	Thu, 27 Feb 2025 14:23:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.10.215.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFA77234989
+	for <bpf@vger.kernel.org>; Thu, 27 Feb 2025 14:27:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740666236; cv=none; b=A1MNZbhSo+5g7ivtkA10D//kDYMbuXwDQw7CsYvwPf5NSnV7fBdYoI1WInW9RqtOuMHvzG8XeIpkQykLWatsiW/vQBlIBgXsUMc0NHvKKsyYi2LhLxb9Omt6dDnn9b/PF426GvXHYv8G8NG5TOWXIXHlvJpwfRbof7rwWjzPnq8=
+	t=1740666434; cv=none; b=VLVvzGn9Sn7BHryopHgauN8NPDkoNvRrgKy6A9RFuAfmhydWR3T8H5AUinKQ2D0UVU3FC8DUQ419mw/HWJ2+SGaY2DWzHhjdaw7mGtERD0FajuuT3oLt/WsyfVdVRaxHB/RTAf/8h75XCfQBA7De0VypFQbm6b/zfD+d5cOXDSY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740666236; c=relaxed/simple;
-	bh=qC+O84zaeakKvJa/K/Zy1OpKonRpZDvdEqAINLz/dUI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=sJB/FT+3F1WHjVwawVd3D7JxPfWGvjaz2Ei09DVYhB/kZRF5ubCUKvn1BQk45q5Z2LcQib0yW770w3WZXHCStt1cD9airxRbbSsfOMt675TPG6Hb2uOy+vs3RVe6p8CwoXMvVqNSYw0OACIcShdNQMXWqkpyfKqghGGCnt89L70=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hetzner-cloud.de; spf=pass smtp.mailfrom=hetzner-cloud.de; arc=none smtp.client-ip=85.10.215.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hetzner-cloud.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hetzner-cloud.de
-Received: from sslproxy02.your-server.de ([78.47.166.47])
-	by dediextern.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <marcus.wichelmann@hetzner-cloud.de>)
-	id 1tnenW-0005Ea-4q; Thu, 27 Feb 2025 15:23:34 +0100
-Received: from [78.47.5.107] (helo=sdn-nic-test01..)
-	by sslproxy02.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <marcus.wichelmann@hetzner-cloud.de>)
-	id 1tnenW-000B1d-15;
-	Thu, 27 Feb 2025 15:23:33 +0100
-From: Marcus Wichelmann <marcus.wichelmann@hetzner-cloud.de>
-To: netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Cc: willemdebruijn.kernel@gmail.com,
-	jasowang@redhat.com,
-	andrew+netdev@lunn.ch,
+	s=arc-20240116; t=1740666434; c=relaxed/simple;
+	bh=3Q/8NY2SrIgt2b3sV8RIf9HNevVZp7vM9NtNBn8vW18=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Xyk6/POd7eRWUcilviffoSlruv8DnkOgURLA1OrIBFDOyk/SXWYIwPmkBbe7PXKYp9oexCQRcKP2nRdxChPQZzkWXjJvmMl0lxj4wn1/cqg+DF3mykua3UOqSSthmJ48lcIW7ocWg8873oAXRuUjGHzK4kxdKE9G2rB//GTzaRE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=fT7O/9qk; arc=none smtp.client-ip=91.218.175.184
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="fT7O/9qk"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1740666429;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Vs9vXYTdcS8F45fqup/G8Nl4E6Z/Osp2FFL8xUBkHDY=;
+	b=fT7O/9qkV2csontrbjal4dBrdUn2fuA/E51mpyGMTGKF5TQBNR0BVOPH9FiLGXpBx/T+gl
+	N5d4jh4RrSJIqLFHQBTOLWIwcSq5OqKhJn/9QKo3v4y/uCGg1EcHKwaBMNz+PfGR7rvdRB
+	JML78qqhpaBOV+xCUkQq+dXdM7ZmAvE=
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: bpf@vger.kernel.org
+Cc: john.fastabend@gmail.com,
 	davem@davemloft.net,
-	edumazet@google.com,
 	kuba@kernel.org,
-	pabeni@redhat.com,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	mykolal@fb.com,
 	ast@kernel.org,
 	daniel@iogearbox.net,
-	andrii@kernel.org,
 	martin.lau@linux.dev,
-	eddyz87@gmail.com,
 	song@kernel.org,
 	yonghong.song@linux.dev,
-	john.fastabend@gmail.com,
 	kpsingh@kernel.org,
 	sdf@fomichev.me,
 	haoluo@google.com,
 	jolsa@kernel.org,
-	mykolal@fb.com,
 	shuah@kernel.org,
 	hawk@kernel.org,
-	marcus.wichelmann@hetzner-cloud.de
-Subject: [PATCH bpf-next v4 5/6] selftests/bpf: add test for XDP metadata support in tun driver
-Date: Thu, 27 Feb 2025 14:23:29 +0000
-Message-ID: <20250227142330.1605996-6-marcus.wichelmann@hetzner-cloud.de>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250227142330.1605996-1-marcus.wichelmann@hetzner-cloud.de>
-References: <20250227142330.1605996-1-marcus.wichelmann@hetzner-cloud.de>
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	mrpre@163.com,
+	Jiayuan Chen <jiayuan.chen@linux.dev>
+Subject: [PATCH bpf-next v1 0/3] Optimize bpf selftest to increase CI success rate
+Date: Thu, 27 Feb 2025 22:26:43 +0800
+Message-ID: <20250227142646.59711-1-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -66,102 +59,30 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: marcus.wichelmann@hetzner-cloud.de
-X-Virus-Scanned: Clear (ClamAV 1.0.7/27562/Thu Feb 27 10:48:50 2025)
+X-Migadu-Flow: FLOW_OUT
 
-Add a selftest that creates a tap device, attaches XDP and TC programs,
-writes a packet with a test payload into the tap device and checks the
-test result. This test ensures that the XDP metadata support in the tun
-driver is enabled and that the metadata size is correctly passed to the
-skb.
+1. Optimized some static bound port selftests to avoid port occupation
+when running test_progs -j.
+2. Optimized the retry logic for test_maps.
 
-See the previous commit ("selftests/bpf: refactor xdp_context_functional
-test and bpf program") for details about the test design.
+Some Failed CI:
+https://github.com/kernel-patches/bpf/actions/runs/13275542359/job/37064974076
+https://github.com/kernel-patches/bpf/actions/runs/13549227497/job/37868926343
+https://github.com/kernel-patches/bpf/actions/runs/13548089029/job/37865812030
+https://github.com/kernel-patches/bpf/actions/runs/13553536268/job/37883329296
+(Perhaps it's due to the large number of pull requests requiring CI runs?)
 
-The test runs in its own network namespace using the feature introduced
-with commit c047e0e0e435 ("selftests/bpf: Optionally open a dedicated
-namespace to run test in it"). This provides some extra safety against
-conflicting interface names.
+Jiayuan Chen (3):
+  selftests/bpf: Allow auto port binding for cgroup connect
+  selftests/bpf: Allow auto port binding for bpf nf
+  selftests/bpf: Fixes for test_maps test
 
-Signed-off-by: Marcus Wichelmann <marcus.wichelmann@hetzner-cloud.de>
----
- .../bpf/prog_tests/xdp_context_test_run.c     | 59 +++++++++++++++++++
- 1 file changed, 59 insertions(+)
+ tools/testing/selftests/bpf/prog_tests/bpf_nf.c     |  9 ++++++---
+ .../testing/selftests/bpf/prog_tests/cgroup_v1v2.c  | 13 +++++++++----
+ .../testing/selftests/bpf/progs/connect4_dropper.c  |  4 +++-
+ tools/testing/selftests/bpf/test_maps.c             |  9 +++++----
+ 4 files changed, 23 insertions(+), 12 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_context_test_run.c b/tools/testing/selftests/bpf/prog_tests/xdp_context_test_run.c
-index 78ca01edb050..ce3e82cc69d1 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp_context_test_run.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_context_test_run.c
-@@ -8,6 +8,7 @@
- #define TX_NAME "veth1"
- #define TX_NETNS "xdp_context_tx"
- #define RX_NETNS "xdp_context_rx"
-+#define TAP_NAME "tap0"
- 
- #define TEST_PAYLOAD_LEN 32
- static const __u8 test_payload[TEST_PAYLOAD_LEN] = {
-@@ -255,3 +256,61 @@ void test_xdp_context_veth(void)
- 	netns_free(tx_ns);
- }
- 
-+void test_ns_xdp_context_tuntap(void)
-+{
-+	LIBBPF_OPTS(bpf_tc_hook, tc_hook, .attach_point = BPF_TC_INGRESS);
-+	LIBBPF_OPTS(bpf_tc_opts, tc_opts, .handle = 1, .priority = 1);
-+	struct test_xdp_meta *skel = NULL;
-+	__u8 packet[sizeof(struct ethhdr) + TEST_PAYLOAD_LEN];
-+	int tap_fd = -1;
-+	int tap_ifindex;
-+	int ret;
-+
-+	tap_fd = open_tuntap(TAP_NAME, true);
-+	if (!ASSERT_GE(tap_fd, 0, "open_tuntap"))
-+		goto close;
-+
-+	SYS(close, "ip link set dev " TAP_NAME " up");
-+
-+	skel = test_xdp_meta__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open and load skeleton"))
-+		goto close;
-+
-+	tap_ifindex = if_nametoindex(TAP_NAME);
-+	if (!ASSERT_GE(tap_ifindex, 0, "if_nametoindex"))
-+		goto close;
-+
-+	tc_hook.ifindex = tap_ifindex;
-+	ret = bpf_tc_hook_create(&tc_hook);
-+	if (!ASSERT_OK(ret, "bpf_tc_hook_create"))
-+		goto close;
-+
-+	tc_opts.prog_fd = bpf_program__fd(skel->progs.ing_cls);
-+	ret = bpf_tc_attach(&tc_hook, &tc_opts);
-+	if (!ASSERT_OK(ret, "bpf_tc_attach"))
-+		goto close;
-+
-+	ret = bpf_xdp_attach(tap_ifindex, bpf_program__fd(skel->progs.ing_xdp),
-+			     0, NULL);
-+	if (!ASSERT_GE(ret, 0, "bpf_xdp_attach"))
-+		goto close;
-+
-+	/* The ethernet header is not relevant for this test and doesn't need to
-+	 * be meaningful.
-+	 */
-+	struct ethhdr eth = { 0 };
-+
-+	memcpy(packet, &eth, sizeof(eth));
-+	memcpy(packet + sizeof(eth), test_payload, TEST_PAYLOAD_LEN);
-+
-+	ret = write(tap_fd, packet, sizeof(packet));
-+	if (!ASSERT_EQ(ret, sizeof(packet), "write packet"))
-+		goto close;
-+
-+	assert_test_result(skel);
-+
-+close:
-+	if (tap_fd >= 0)
-+		close(tap_fd);
-+	test_xdp_meta__destroy(skel);
-+}
 -- 
-2.43.0
+2.47.1
 
