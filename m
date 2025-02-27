@@ -1,123 +1,112 @@
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
+Received: from dediextern.your-server.de (dediextern.your-server.de [85.10.215.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81C8C17BA6;
-	Thu, 27 Feb 2025 14:08:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7678727003D;
+	Thu, 27 Feb 2025 14:23:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.10.215.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740665316; cv=none; b=d7woGY6S0FJ7pAsOwPXtVl9Btsb4tvBqtaqm8q2n8mD6Hab27gt7AM2bzJgSgxeQ0bzpkB7xAzb72983iqXCURZC/oD5BG9K/qZxPfih5UuvzwY5kOEEmlr5w3yL3GPvTtF0zRoutMFuc+a2bX/LlLpEnlkJBA1JEPG3xLJTLVY=
+	t=1740666229; cv=none; b=Ymwc3y4lig8HU+cgRJnHvW7AiIcBYEruHAPhrlCVSLE+KJaiaUI5UwuVaBbSpzL7mJKS4b0jDERuZIlDPNnvFQQ2KtGnW2pWGhGGw15hNd4cAUHTn9BFsFFAm6b6vwUvBu6xdQ4XmyuwVLjmsFexDIW+X3chOzTJv60vIcgkEm4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740665316; c=relaxed/simple;
-	bh=gJt/cFfZaH6Og4HX/5kUVO/gZHEEtlmW+8JOgkIHyxA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=c+QWwySepANb6gpi0nDV0Ckwc/RgujnocrW/fZgCBSuQTYRe9YtQg5arOAjyDo5S9R3vnAWwhZt9NwneVmWKRujD6JU1BLiV08IhNSZYqxWoBZri2teepXPsLZJ6ulsN6bhRG2vN7UY2NTC9akLJ3HsokCXeQWhbVmi6HMoUcd8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=HIaGtyJj; arc=none smtp.client-ip=217.70.183.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="HIaGtyJj"
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 7D07644170;
-	Thu, 27 Feb 2025 14:08:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1740665310;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=A24/2SZcuFtlVpRIfutvUh+D2wAns2FOkWmIRd/eu00=;
-	b=HIaGtyJjCcdFHCsdHuTqqIwZ5469kZcxDprgdjd1XVJj9GagN++Yzw+l2Y1ZVLt/7Jim0L
-	qsm7Fs/sNe8uv6rHR6eAWlqdxlUTU25UhfPyWh69QBoYK7Pr3IK027/wpm+J7xn2ANpcYz
-	NaJw2EICUzBOUKjw5Zo4FA5XnZys5VXW9MUSIIIkeL/f+LEEE/oBbzcDLCN/Rx77asfAly
-	yK/1u/V+r5vugk8T+3m9SDFUJ1tv/EvOS4kcYdAC6Z+TaX1L7hRJanpHd+ajYtMSFvbwcE
-	+0K5jRwXRzWspBsjJT9eGDQ4vwRXeHnDlkDxHzKVsE51vtovX0F3p6A7BABvvw==
-From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
-Date: Thu, 27 Feb 2025 15:08:23 +0100
-Subject: [PATCH] bpf/selftests: test_select_reuseport_kern: remove unused
- header
+	s=arc-20240116; t=1740666229; c=relaxed/simple;
+	bh=FXTWjU43vw0zfWOyrcsBYNI3pvYkwvFmrv/IKcr3Wi4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=TVKsubcDCrZYoFOsGux/R/Cka2sCsi0BXUel7lOKdi/ObYJwZNzoEVgIIFW0L53W9Qwu3rph7JDSEdVVeFjykVSRU4wi+zpIganGCrWZRdJFSJ2EC8h9dp3e+ylMXF2YxqwLzL0SKDMHrEddPHp5lH99mvYYmvrOP8Og8oMGgDc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hetzner-cloud.de; spf=pass smtp.mailfrom=hetzner-cloud.de; arc=none smtp.client-ip=85.10.215.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hetzner-cloud.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hetzner-cloud.de
+Received: from sslproxy02.your-server.de ([78.47.166.47])
+	by dediextern.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <marcus.wichelmann@hetzner-cloud.de>)
+	id 1tnenW-0005Ec-9i; Thu, 27 Feb 2025 15:23:34 +0100
+Received: from [78.47.5.107] (helo=sdn-nic-test01..)
+	by sslproxy02.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <marcus.wichelmann@hetzner-cloud.de>)
+	id 1tnenW-000B1d-1R;
+	Thu, 27 Feb 2025 15:23:34 +0100
+From: Marcus Wichelmann <marcus.wichelmann@hetzner-cloud.de>
+To: netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Cc: willemdebruijn.kernel@gmail.com,
+	jasowang@redhat.com,
+	andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	john.fastabend@gmail.com,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	mykolal@fb.com,
+	shuah@kernel.org,
+	hawk@kernel.org,
+	marcus.wichelmann@hetzner-cloud.de,
+	Willem de Bruijn <willemb@google.com>
+Subject: [PATCH bpf-next v4 6/6] selftests/bpf: fix file descriptor assertion in open_tuntap helper
+Date: Thu, 27 Feb 2025 14:23:30 +0000
+Message-ID: <20250227142330.1605996-7-marcus.wichelmann@hetzner-cloud.de>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20250227142330.1605996-1-marcus.wichelmann@hetzner-cloud.de>
+References: <20250227142330.1605996-1-marcus.wichelmann@hetzner-cloud.de>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250227-remove_wrong_header-v1-1-bc94eb4e2f73@bootlin.com>
-X-B4-Tracking: v=1; b=H4sIANZxwGcC/x3MSwqAMAxF0a1IxhZq8IdbERGxT83AVlJQQdy7x
- eEZ3PtQhAoiddlDilOiBJ9Q5BnN2+RXGHHJxJYry9wYxR5OjJcGv44bJgc1lh23ratLtiWl8lA
- scv/XfnjfDwMl6ORlAAAA
-X-Change-ID: 20250227-remove_wrong_header-02d288d64204
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, 
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, 
- Shuah Khan <shuah@kernel.org>
-Cc: ebpf@linuxfoundation.org, 
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- Bastien Curutchet <bastien.curutchet@bootlin.com>, bpf@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
- =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
-X-Mailer: b4 0.14.2
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdekjeeiiecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephfffufggtgfgkffvvefosehtkeertdertdejnecuhfhrohhmpeetlhgvgihishcunfhothhhohhrroculdgvuefrhfcuhfhouhhnuggrthhiohhnmdcuoegrlhgvgihishdrlhhothhhohhrvgessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepueehfeevfeeggfegueeuueehveevteefjeduieeigeefgffhiedvleeuhffhhfelnecuffhomhgrihhnpegsohhothhlihhnrdgtohhmnecukfhppeeltddrkeelrdduieefrdduvdejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepledtrdekledrudeifedruddvjedphhgvlhhopegludelvddrudeikedrtddrvddungdpmhgrihhlfhhrohhmpegrlhgvgihishdrlhhothhhohhrvgessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepvddupdhrtghpthhtoheplhhinhhugidqkhhsvghlfhhtvghsthesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehsohhngheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohephhgrohhluhhosehgohhoghhlvgdrtghomhdprhgtphhtthhopegurghnihgvlhesihhoghgvr
- ghrsghogidrnhgvthdprhgtphhtthhopehsughfsehfohhmihgthhgvvhdrmhgvpdhrtghpthhtohepvggsphhfsehlihhnuhigfhhouhhnuggrthhiohhnrdhorhhgpdhrtghpthhtohepmhgrrhhtihhnrdhlrghusehlihhnuhigrdguvghvpdhrtghpthhtohepmhihkhholhgrlhesfhgsrdgtohhm
-X-GND-Sasl: alexis.lothore@bootlin.com
+X-Authenticated-Sender: marcus.wichelmann@hetzner-cloud.de
+X-Virus-Scanned: Clear (ClamAV 1.0.7/27562/Thu Feb 27 10:48:50 2025)
 
-test_select_reuseport_kern.c is currently including <stdlib.h>, but it
-does not use any definition from there.
+The open_tuntap helper function uses open() to get a file descriptor for
+/dev/net/tun.
 
-Remove stdlib.h inclusion from test_select_reuseport_kern.c
+The open(2) manpage writes this about its return value:
 
-Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
+  On success, open(), openat(), and creat() return the new file
+  descriptor (a nonnegative integer).  On error, -1 is returned and
+  errno is set to indicate the error.
+
+This means that the fd > 0 assertion in the open_tuntap helper is
+incorrect and should rather check for fd >= 0.
+
+When running the BPF selftests locally, this incorrect assertion was not
+an issue, but the BPF kernel-patches CI failed because of this:
+
+  open_tuntap:FAIL:open(/dev/net/tun) unexpected open(/dev/net/tun):
+  actual 0 <= expected 0
+
+Signed-off-by: Marcus Wichelmann <marcus.wichelmann@hetzner-cloud.de>
+Reviewed-by: Willem de Bruijn <willemb@google.com>
 ---
-I stumbled upon this specific header include while trying to build selftests on
-the current bpf-next_base branch, which ended with this error:
+ tools/testing/selftests/bpf/network_helpers.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-[...]
-  CLNG-BPF [test_progs-cpuv4] test_select_reuseport_kern.bpf.o
-In file included from progs/test_select_reuseport_kern.c:4:
-/usr/include/bits/floatn.h:83:52: error: unsupported machine mode
-'__TC__'
-   83 | typedef _Complex float __cfloat128 __attribute__ ((__mode__
-(__TC__)));
-      |                                                    ^
-/usr/include/bits/floatn.h:97:9: error: __float128 is not supported on
-this target
-   97 | typedef __float128 _Float128;
-
-The exact error (unknown TC mode) is likely rather due to some issues in
-my local build, in which I am actually cross-compiling selftests  (for
-ARM64 from a x86_64 host, but not through vmtests.sh), and I still have
-to sort out some other issues. But I guess it is not really right anyway
-to include stdlib.h from an ebpf program, especially if it is not used,
-so I am still proposing this small change.
----
- tools/testing/selftests/bpf/progs/test_select_reuseport_kern.c | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/tools/testing/selftests/bpf/progs/test_select_reuseport_kern.c b/tools/testing/selftests/bpf/progs/test_select_reuseport_kern.c
-index 5eb25c6ad75b1a9c61f22e978d817d3dc88b3a2f..a5be3267dbb01372c84bb468e3a48eae69ac5329 100644
---- a/tools/testing/selftests/bpf/progs/test_select_reuseport_kern.c
-+++ b/tools/testing/selftests/bpf/progs/test_select_reuseport_kern.c
-@@ -1,7 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- /* Copyright (c) 2018 Facebook */
+diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
+index e1cfa1b37754..9b59bfd5d912 100644
+--- a/tools/testing/selftests/bpf/network_helpers.c
++++ b/tools/testing/selftests/bpf/network_helpers.c
+@@ -571,7 +571,7 @@ int open_tuntap(const char *dev_name, bool need_mac)
+ 	struct ifreq ifr;
+ 	int fd = open("/dev/net/tun", O_RDWR);
  
--#include <stdlib.h>
- #include <linux/in.h>
- #include <linux/ip.h>
- #include <linux/ipv6.h>
-
----
-base-commit: 072c40912477ebac2ef98cd0b1532ba9bebda20a
-change-id: 20250227-remove_wrong_header-02d288d64204
-
-Best regards,
+-	if (!ASSERT_GT(fd, 0, "open(/dev/net/tun)"))
++	if (!ASSERT_GE(fd, 0, "open(/dev/net/tun)"))
+ 		return -1;
+ 
+ 	ifr.ifr_flags = IFF_NO_PI | (need_mac ? IFF_TAP : IFF_TUN);
 -- 
-Alexis Lothoré, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.43.0
 
