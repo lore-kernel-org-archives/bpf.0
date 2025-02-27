@@ -1,16 +1,16 @@
 Received: from dediextern.your-server.de (dediextern.your-server.de [85.10.215.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7678727003D;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C689522FF44;
 	Thu, 27 Feb 2025 14:23:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.10.215.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740666229; cv=none; b=Ymwc3y4lig8HU+cgRJnHvW7AiIcBYEruHAPhrlCVSLE+KJaiaUI5UwuVaBbSpzL7mJKS4b0jDERuZIlDPNnvFQQ2KtGnW2pWGhGGw15hNd4cAUHTn9BFsFFAm6b6vwUvBu6xdQ4XmyuwVLjmsFexDIW+X3chOzTJv60vIcgkEm4=
+	t=1740666230; cv=none; b=h59bi6RgXv5hEhAWzW49F35ZpHzBVtu/bD4hlnDeY6llsj9d6Yz/SyDeddlKzbJLmCDoTIwiwj0bP/ESShRQfZjEUDj5xnWQ00GSGo1dwn8GkR5HcqnT431y8mrjV31TNfRftoZHSwZildugj0o6O6NKQy7as+mgxStHz+6ogzI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740666229; c=relaxed/simple;
-	bh=FXTWjU43vw0zfWOyrcsBYNI3pvYkwvFmrv/IKcr3Wi4=;
+	s=arc-20240116; t=1740666230; c=relaxed/simple;
+	bh=O1jqIhih0khqRmLUd7meOzR1XpmI7T4vdcXWxTYYyCs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=TVKsubcDCrZYoFOsGux/R/Cka2sCsi0BXUel7lOKdi/ObYJwZNzoEVgIIFW0L53W9Qwu3rph7JDSEdVVeFjykVSRU4wi+zpIganGCrWZRdJFSJ2EC8h9dp3e+ylMXF2YxqwLzL0SKDMHrEddPHp5lH99mvYYmvrOP8Og8oMGgDc=
+	 MIME-Version; b=fhwqZQjj4OHqjdHvIfpnDiAHA+ISUJaWRJewVWyLL/APM982K7F7cX8Rhph1gIdRXWXmIYBPX9pj6DiQaGqIcq29YRhisAHt0zBEH+VbbcEIRFvjEglA1/QOsuhBOGZLQcUEwsDGfo5PAbUdQ1NZg1QIJPtQeGQCeU8KAvV9ItY=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hetzner-cloud.de; spf=pass smtp.mailfrom=hetzner-cloud.de; arc=none smtp.client-ip=85.10.215.232
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hetzner-cloud.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hetzner-cloud.de
@@ -18,13 +18,13 @@ Received: from sslproxy02.your-server.de ([78.47.166.47])
 	by dediextern.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <marcus.wichelmann@hetzner-cloud.de>)
-	id 1tnenW-0005Ec-9i; Thu, 27 Feb 2025 15:23:34 +0100
+	id 1tnenV-0005ES-NL; Thu, 27 Feb 2025 15:23:33 +0100
 Received: from [78.47.5.107] (helo=sdn-nic-test01..)
 	by sslproxy02.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <marcus.wichelmann@hetzner-cloud.de>)
-	id 1tnenW-000B1d-1R;
-	Thu, 27 Feb 2025 15:23:34 +0100
+	id 1tnenV-000B1d-2m;
+	Thu, 27 Feb 2025 15:23:33 +0100
 From: Marcus Wichelmann <marcus.wichelmann@hetzner-cloud.de>
 To: netdev@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
@@ -52,11 +52,10 @@ Cc: willemdebruijn.kernel@gmail.com,
 	mykolal@fb.com,
 	shuah@kernel.org,
 	hawk@kernel.org,
-	marcus.wichelmann@hetzner-cloud.de,
-	Willem de Bruijn <willemb@google.com>
-Subject: [PATCH bpf-next v4 6/6] selftests/bpf: fix file descriptor assertion in open_tuntap helper
-Date: Thu, 27 Feb 2025 14:23:30 +0000
-Message-ID: <20250227142330.1605996-7-marcus.wichelmann@hetzner-cloud.de>
+	marcus.wichelmann@hetzner-cloud.de
+Subject: [PATCH bpf-next v4 1/6] net: tun: enable XDP metadata support
+Date: Thu, 27 Feb 2025 14:23:25 +0000
+Message-ID: <20250227142330.1605996-2-marcus.wichelmann@hetzner-cloud.de>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250227142330.1605996-1-marcus.wichelmann@hetzner-cloud.de>
 References: <20250227142330.1605996-1-marcus.wichelmann@hetzner-cloud.de>
@@ -70,43 +69,69 @@ Content-Transfer-Encoding: 8bit
 X-Authenticated-Sender: marcus.wichelmann@hetzner-cloud.de
 X-Virus-Scanned: Clear (ClamAV 1.0.7/27562/Thu Feb 27 10:48:50 2025)
 
-The open_tuntap helper function uses open() to get a file descriptor for
-/dev/net/tun.
+Enable the support for the bpf_xdp_adjust_meta helper function for XDP
+buffers initialized by the tun driver. This allows to reserve a metadata
+area that is useful to pass any information from one XDP program to
+another one, for example when using tail-calls.
 
-The open(2) manpage writes this about its return value:
+Whether this helper function can be used in an XDP program depends on
+how the xdp_buff was initialized. Most net drivers initialize the
+xdp_buff in a way, that allows bpf_xdp_adjust_meta to be used. In case
+of the tun driver, this is currently not the case.
 
-  On success, open(), openat(), and creat() return the new file
-  descriptor (a nonnegative integer).  On error, -1 is returned and
-  errno is set to indicate the error.
+There are two code paths in the tun driver that lead to a
+bpf_prog_run_xdp and where metadata support should be enabled:
 
-This means that the fd > 0 assertion in the open_tuntap helper is
-incorrect and should rather check for fd >= 0.
+1. tun_build_skb, which is called by tun_get_user and is used when
+   writing packets from userspace into the device. In this case, the
+   xdp_buff created in tun_build_skb has no support for
+   bpf_xdp_adjust_meta and calls of that helper function result in
+   ENOTSUPP.
 
-When running the BPF selftests locally, this incorrect assertion was not
-an issue, but the BPF kernel-patches CI failed because of this:
+   For this code path, it's sufficient to set the meta_valid argument of
+   the xdp_prepare_buff call. The reserved headroom is large enough
+   already.
 
-  open_tuntap:FAIL:open(/dev/net/tun) unexpected open(/dev/net/tun):
-  actual 0 <= expected 0
+2. tun_xdp_one, which is called by tun_sendmsg which again is called by
+   other drivers (e.g. vhost_net). When the TUN_MSG_PTR mode is used,
+   another driver may pass a batch of xdp_buffs to the tun driver. In
+   this case, that other driver is the one initializing the xdp_buff.
+
+   See commit 043d222f93ab ("tuntap: accept an array of XDP buffs
+   through sendmsg()") for details.
+
+   For now, the vhost_net driver is the only one using TUN_MSG_PTR and
+   it already initializes the xdp_buffs with metadata support and
+   sufficient headroom. But the tun driver disables it again, so the
+   xdp_set_data_meta_invalid call has to be removed.
 
 Signed-off-by: Marcus Wichelmann <marcus.wichelmann@hetzner-cloud.de>
-Reviewed-by: Willem de Bruijn <willemb@google.com>
+Acked-by: Jason Wang <jasowang@redhat.com>
 ---
- tools/testing/selftests/bpf/network_helpers.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/tun.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
-index e1cfa1b37754..9b59bfd5d912 100644
---- a/tools/testing/selftests/bpf/network_helpers.c
-+++ b/tools/testing/selftests/bpf/network_helpers.c
-@@ -571,7 +571,7 @@ int open_tuntap(const char *dev_name, bool need_mac)
- 	struct ifreq ifr;
- 	int fd = open("/dev/net/tun", O_RDWR);
+diff --git a/drivers/net/tun.c b/drivers/net/tun.c
+index acf96f262488..4ec8fbd93c8d 100644
+--- a/drivers/net/tun.c
++++ b/drivers/net/tun.c
+@@ -1709,7 +1709,7 @@ static struct sk_buff *tun_build_skb(struct tun_struct *tun,
+ 		u32 act;
  
--	if (!ASSERT_GT(fd, 0, "open(/dev/net/tun)"))
-+	if (!ASSERT_GE(fd, 0, "open(/dev/net/tun)"))
- 		return -1;
+ 		xdp_init_buff(&xdp, buflen, &tfile->xdp_rxq);
+-		xdp_prepare_buff(&xdp, buf, pad, len, false);
++		xdp_prepare_buff(&xdp, buf, pad, len, true);
  
- 	ifr.ifr_flags = IFF_NO_PI | (need_mac ? IFF_TAP : IFF_TUN);
+ 		act = bpf_prog_run_xdp(xdp_prog, &xdp);
+ 		if (act == XDP_REDIRECT || act == XDP_TX) {
+@@ -2467,7 +2467,6 @@ static int tun_xdp_one(struct tun_struct *tun,
+ 		}
+ 
+ 		xdp_init_buff(xdp, buflen, &tfile->xdp_rxq);
+-		xdp_set_data_meta_invalid(xdp);
+ 
+ 		act = bpf_prog_run_xdp(xdp_prog, xdp);
+ 		ret = tun_xdp_act(tun, xdp_prog, xdp, act);
 -- 
 2.43.0
 
