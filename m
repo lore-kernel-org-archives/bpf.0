@@ -1,184 +1,235 @@
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EDCB26BDBA
-	for <bpf@vger.kernel.org>; Thu, 27 Feb 2025 18:50:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7932E1DF270;
+	Thu, 27 Feb 2025 18:57:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740682243; cv=none; b=n2UQYYVwn6Dg2t/92mvHiCb+eUKsLkHktg/q5yPJKko64V+IX9woeobkzY4Su7aNZiiFmm2xtJQ3DgPcR0ZsVQ8B7CS/1MWaY7/qqH0ufz4gjWNrZd3l9B7BgVrwqwP+Ydp2iAVd1lL7JbvvzWuAULyR9ux/R5LevcksbvbFwQo=
+	t=1740682659; cv=none; b=Bo0hY0Ku26sBcH8qWi6P70IF943bqEfROsXXoPU5RWl7Jykly+oOpI9Gn47e8RGIYSwF0IZs7iInkwQ0mM2bwKp+1LmSnoYFXWsjoVI7QfEHhjPQkBQvzt49pPzCYHDSwJ8lN7HO7seRH3BxTH7UXY38hLT09V4sMnzEVcnYtW4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740682243; c=relaxed/simple;
-	bh=JVrLUQPdhierVvVB9T39WHViYQpGOg8iWAODC6R6k+E=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Ik5/tEiBGGMOmrBaPo8UPdecorP04RAc79YRlNT/M2GN4apFsJCchcHIeY+7DYbsufiq7Y4PzvmLFwazcBvcAtz1cyrp1cDOAh2RvGp6105ZZN0jOlMQONU7AmrG+HuN4FljMGpzu4bR8wHqfRtogHlibNCWSBqEdi3KFrxpldM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com; spf=pass smtp.mailfrom=fastly.com; dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b=gGxxcLWA; arc=none smtp.client-ip=209.85.214.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fastly.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b="gGxxcLWA"
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-22114b800f7so27470135ad.2
-        for <bpf@vger.kernel.org>; Thu, 27 Feb 2025 10:50:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fastly.com; s=google; t=1740682240; x=1741287040; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=DooASBqDq2Su1Kjlyvffy6QfBZOl14ihxJCQdnbxEeA=;
-        b=gGxxcLWAmZIeoFkDDobLo7IW7coKQZyLvDksPGpine7sgAU30GRRMh/tldAtfYoY82
-         R30AtGtY6WoERneexwCWmRuoayVDBEFDabzGQfz7R0MjYC2f5+uzkNO0rxq88K2S611T
-         1E/padxbqJ7Wsw9uDmEAt9IfD7cywysEaUzX0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740682240; x=1741287040;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DooASBqDq2Su1Kjlyvffy6QfBZOl14ihxJCQdnbxEeA=;
-        b=tTFa3Io0XPS9XGL7lMyxuiREpF/4ekxZwn8y7A4tkwr5jdv86MxCMenlS7prsT/q9V
-         /lEd5vmXtcdAUcxPBxShuNUp9yUHEKn8jBxclbgrhqp/Ft8C3LPZfsImDkmOuIxRuRol
-         604TtifCVBo2RXaFY5mWtRzbL1OyjuOsZK3TIZgSnDagJTqShtiB5unwurFp6hzyX359
-         X7bTuko7JKyEwvjChYe+gPtJH+iTieHzf+WyCTlhb/K0Nklg6r74tHy/qFHv5jU57+10
-         fFrAn6Xu3W5d0UbKQO9h+nPyRqxrw1Ufm8LytsWXiDshQEhIoy2kFFVxEnaFgsH29sLZ
-         xzUg==
-X-Forwarded-Encrypted: i=1; AJvYcCVmFfumDj5wCPvpatmvDq4FxxOg9dHsMKRBg5gapIkrMcrgeP7vLAdkzFK8cXxElKe1r6A=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxWTEtbXIt6x/goHz7SfIkRFQme12FxhrzRFfDBaCwubH/z+Dec
-	euin33drHZAT4GPxOxak9y5ai1DVhPWbWsm7UCec6Aw/L6oklN9V3CQg5VhG+HA=
-X-Gm-Gg: ASbGnctY9yrAnkEsKSPSXxm9s9wyHQ1VWZrCsPqjM24zfPC6AzO/S1xJrwXqu+ebxTn
-	WNbmpcDRiyUXSI/FsgKSFJTApdoRzx5Aip66jGUbeHMoyic2G3ZIez7MGhi3TGjag7iJL/55WRV
-	df0RJN8q8X3vurceokQuMLhQrgxzHFg8v+5ZYigkgry/E9D02zTL0uCGVtOraOQvpXF838VmVRW
-	/e01bULr3mJHAbASgtPUyNSodQvDOzRR/QFk8wiQi1YT1q18MyRrYZfdzHOpVeVoeASVJlXJRPQ
-	WEjU2uT14sfZ4ytxYhs0NzsQKKkjIYJadw==
-X-Google-Smtp-Source: AGHT+IFA0MRx4/wAs809zakde3f4qVOiG47vG98z/6mWwQFds5bqMOu206vyHM1cjUG7RCAYoliRcg==
-X-Received: by 2002:a17:902:d510:b0:220:f140:f7be with SMTP id d9443c01a7336-2236924e3f6mr3183985ad.41.1740682240355;
-        Thu, 27 Feb 2025 10:50:40 -0800 (PST)
-Received: from localhost.localdomain ([2620:11a:c019:0:65e:3115:2f58:c5fd])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22350503eb9sm18275985ad.193.2025.02.27.10.50.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Feb 2025 10:50:39 -0800 (PST)
-From: Joe Damato <jdamato@fastly.com>
-To: netdev@vger.kernel.org
-Cc: mkarsten@uwaterloo.ca,
-	gerhard@engleder-embedded.com,
-	jasowang@redhat.com,
-	xuanzhuo@linux.alibaba.com,
-	kuba@kernel.org,
-	mst@redhat.com,
-	leiyang@redhat.com,
-	Joe Damato <jdamato@fastly.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	bpf@vger.kernel.org (open list:XDP (eXpress Data Path):Keyword:(?:\b|_)xdp(?:\b|_)),
-	Daniel Borkmann <daniel@iogearbox.net>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	=?UTF-8?q?Eugenio=20P=C3=A9rez?= <eperezma@redhat.com>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	linux-kernel@vger.kernel.org (open list),
-	Paolo Abeni <pabeni@redhat.com>,
-	virtualization@lists.linux.dev (open list:VIRTIO CORE AND NET DRIVERS)
-Subject: [PATCH net-next v5 0/4] virtio-net: Link queues to NAPIs
-Date: Thu, 27 Feb 2025 18:50:10 +0000
-Message-ID: <20250227185017.206785-1-jdamato@fastly.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1740682659; c=relaxed/simple;
+	bh=paaSvuzzeab+BNr+24HUJmmcO64QfoDa/kc7p0Dsw2k=;
+	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
+	 Content-Type; b=T8oLil/SCRtxu2eMeJ58iNmkYLZHMHCeUeK++U/6MhDU0AZ7AEm5k+JHk4GlI0aMxAtmhz+EFcmqV7dLVBMC1o2fiLh30EuQOpJnn6WaOV9SNZEIeVm9iEf8XaY2jw/uYfV6dqu4pSt0oLo4ddT3Fi+/iEZr11a35EKNTYWChNI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01818C4CEE5;
+	Thu, 27 Feb 2025 18:57:38 +0000 (UTC)
+Received: from rostedt by gandalf with local (Exim 4.98)
+	(envelope-from <rostedt@goodmis.org>)
+	id 1tnj5S-00000009nR4-3JIn;
+	Thu, 27 Feb 2025 13:58:22 -0500
+Message-ID: <20250227185822.639418500@goodmis.org>
+User-Agent: quilt/0.68
+Date: Thu, 27 Feb 2025 13:58:05 -0500
+From: Steven Rostedt <rostedt@goodmis.org>
+To: linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org,
+ bpf@vger.kernel.org
+Cc: Masami Hiramatsu <mhiramat@kernel.org>,
+ Mark Rutland <mark.rutland@arm.com>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Sven Schnelle <svens@linux.ibm.com>,
+ Paul Walmsley <paul.walmsley@sifive.com>,
+ Palmer Dabbelt <palmer@dabbelt.com>,
+ Albert Ou <aou@eecs.berkeley.edu>,
+ Guo Ren <guoren@kernel.org>,
+ Donglin Peng <dolinux.peng@gmail.com>,
+ Zheng Yejian <zhengyejian@huaweicloud.com>
+Subject: [PATCH v4 1/4] ftrace: Add print_function_args()
+References: <20250227185804.639525399@goodmis.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
 
-Greetings:
+From: Sven Schnelle <svens@linux.ibm.com>
 
-Welcome to v5. Patches 1, 2, and 4 have no functional changes only
-updated tags. Patch 3 was refactored as requested by Jason. See the
-changelog below and the commit message for details.
+Add a function to decode argument types with the help of BTF. Will
+be used to display arguments in the function and function graph
+tracer.
 
-Jakub recently commented [1] that I should not hold this series on
-virtio-net linking queues to NAPIs behind other important work that is
-on-going and suggested I re-spin, so here we are :)
+It can only handle simply arguments and up to FTRACE_REGS_MAX_ARGS number
+of arguments. When it hits a max, it will print ", ...":
 
-As per the discussion on the v3 [2], now both RX and TX NAPIs use the
-API to link queues to NAPIs. Since TX-only NAPIs don't have a NAPI ID,
-commit 6597e8d35851 ("netdev-genl: Elide napi_id when not present") now
-correctly elides the TX-only NAPIs (instead of printing zero) when the
-queues and NAPIs are linked.
+   page_to_skb(vi=0xffff8d53842dc980, rq=0xffff8d53843a0800, page=0xfffffc2e04337c00, offset=6160, len=64, truesize=1536, ...)
 
-As per the discussion on the v4 [3], patch 3 has been refactored to hold
-RTNL only in the specific locations which need it as Jason requested.
+And if it hits an argument that is not recognized, it will print the raw
+value and the type of argument it is:
 
-See the commit message of patch 3 for an example of how to get the NAPI
-to queue mapping information.
+   make_vfsuid(idmap=0xffffffff87f99db8, fs_userns=0xffffffff87e543c0, kuid=0x0 (STRUCT))
+   __pti_set_user_pgtbl(pgdp=0xffff8d5384ab47f8, pgd=0x110e74067 (STRUCT))
 
-See the commit message of patch 4 for an example of how NAPI IDs are
-persistent despite queue count changes.
+Reviewed-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Co-developed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Signed-off-by: Sven Schnelle <svens@linux.ibm.com>
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+---
+ include/linux/ftrace_regs.h |  5 +++
+ kernel/trace/Kconfig        |  6 +++
+ kernel/trace/trace_output.c | 85 +++++++++++++++++++++++++++++++++++++
+ kernel/trace/trace_output.h |  9 ++++
+ 4 files changed, 105 insertions(+)
 
-Thanks,
-Joe
-
-[1]: https://lore.kernel.org/netdev/20250221142650.3c74dcac@kernel.org/
-[2]: https://lore.kernel.org/netdev/20250127142400.24eca319@kernel.org/
-[3]: https://lore.kernel.org/netdev/CACGkMEv=ejJnOWDnAu7eULLvrqXjkMkTL4cbi-uCTUhCpKN_GA@mail.gmail.com/
-
-v5:
-  - Patch 1 added Acked-by's from Michael and Jason. Added Tested-by
-    from Lei. No functional changes.
-  - Patch 2 added Acked-by's from Michael and Jason. Added Tested-by
-    from Lei. No functional changes.
-  - Patch 3:
-    - Refactored as Jason requested, eliminating the
-      virtnet_queue_set_napi helper entirely, and explicitly holding
-      RTNL in the 3 locations where needed (refill_work, freeze, and
-      restore).
-    - Commit message updated to outline the known paths at the time the
-      commit was written.
-  - Patch 4 added Acked-by from Michael. Added Tested-by from Lei. No
-    functional changes.
-
-v4: https://lore.kernel.org/lkml/20250225020455.212895-1-jdamato@fastly.com/
-  - Dropped Jakub's patch (previously patch 1).
-  - Significant refactor from v3 affecting patches 1-3.
-  - Patch 4 added tags from Jason and Gerhard.
-
-rfcv3: https://lore.kernel.org/netdev/20250121191047.269844-1-jdamato@fastly.com/
-  - patch 3:
-    - Removed the xdp checks completely, as Gerhard Engleder pointed
-      out, they are likely not necessary.
-
-  - patch 4:
-    - Added Xuan Zhuo's Reviewed-by.
-
-v2: https://lore.kernel.org/netdev/20250116055302.14308-1-jdamato@fastly.com/
-  - patch 1:
-    - New in the v2 from Jakub.
-
-  - patch 2:
-    - Previously patch 1, unchanged from v1.
-    - Added Gerhard Engleder's Reviewed-by.
-    - Added Lei Yang's Tested-by.
-
-  - patch 3:
-    - Introduced virtnet_napi_disable to eliminate duplicated code
-      in virtnet_xdp_set, virtnet_rx_pause, virtnet_disable_queue_pair,
-      refill_work as suggested by Jason Wang.
-    - As a result of the above refactor, dropped Reviewed-by and
-      Tested-by from patch 3.
-
-  - patch 4:
-    - New in v2. Adds persistent NAPI configuration. See commit message
-      for more details.
-
-v1: https://lore.kernel.org/netdev/20250110202605.429475-1-jdamato@fastly.com/
-
-Joe Damato (4):
-  virtio-net: Refactor napi_enable paths
-  virtio-net: Refactor napi_disable paths
-  virtio-net: Map NAPIs to queues
-  virtio_net: Use persistent NAPI config
-
- drivers/net/virtio_net.c | 95 ++++++++++++++++++++++++++++------------
- 1 file changed, 67 insertions(+), 28 deletions(-)
-
-
-base-commit: 7fe0353606d77a32c4c7f2814833dd1c043ebdd2
+diff --git a/include/linux/ftrace_regs.h b/include/linux/ftrace_regs.h
+index bbc1873ca6b8..15627ceea9bc 100644
+--- a/include/linux/ftrace_regs.h
++++ b/include/linux/ftrace_regs.h
+@@ -35,4 +35,9 @@ struct ftrace_regs;
+ 
+ #endif /* HAVE_ARCH_FTRACE_REGS */
+ 
++/* This can be overridden by the architectures */
++#ifndef FTRACE_REGS_MAX_ARGS
++# define FTRACE_REGS_MAX_ARGS	6
++#endif
++
+ #endif /* _LINUX_FTRACE_REGS_H */
+diff --git a/kernel/trace/Kconfig b/kernel/trace/Kconfig
+index d570b8b9c0a9..60412c1012ef 100644
+--- a/kernel/trace/Kconfig
++++ b/kernel/trace/Kconfig
+@@ -263,6 +263,12 @@ config FUNCTION_GRAPH_RETADDR
+ 	  the function is called. This feature is off by default, and you can
+ 	  enable it via the trace option funcgraph-retaddr.
+ 
++config FUNCTION_TRACE_ARGS
++       bool
++	depends on HAVE_FUNCTION_ARG_ACCESS_API
++	depends on DEBUG_INFO_BTF
++	default y
++
+ config DYNAMIC_FTRACE
+ 	bool "enable/disable function tracing dynamically"
+ 	depends on FUNCTION_TRACER
+diff --git a/kernel/trace/trace_output.c b/kernel/trace/trace_output.c
+index 03d56f711ad1..4b721cd4f21d 100644
+--- a/kernel/trace/trace_output.c
++++ b/kernel/trace/trace_output.c
+@@ -12,8 +12,11 @@
+ #include <linux/sched/clock.h>
+ #include <linux/sched/mm.h>
+ #include <linux/idr.h>
++#include <linux/btf.h>
++#include <linux/bpf.h>
+ 
+ #include "trace_output.h"
++#include "trace_btf.h"
+ 
+ /* must be a power of 2 */
+ #define EVENT_HASHSIZE	128
+@@ -684,6 +687,88 @@ int trace_print_lat_context(struct trace_iterator *iter)
+ 	return !trace_seq_has_overflowed(s);
+ }
+ 
++#ifdef CONFIG_FUNCTION_TRACE_ARGS
++void print_function_args(struct trace_seq *s, unsigned long *args,
++			 unsigned long func)
++{
++	const struct btf_param *param;
++	const struct btf_type *t;
++	const char *param_name;
++	char name[KSYM_NAME_LEN];
++	unsigned long arg;
++	struct btf *btf;
++	s32 tid, nr = 0;
++	int a, p, x;
++
++	trace_seq_printf(s, "(");
++
++	if (!args)
++		goto out;
++	if (lookup_symbol_name(func, name))
++		goto out;
++
++	/* TODO: Pass module name here too */
++	t = btf_find_func_proto(name, &btf);
++	if (IS_ERR_OR_NULL(t))
++		goto out;
++
++	param = btf_get_func_param(t, &nr);
++	if (!param)
++		goto out_put;
++
++	for (a = 0, p = 0; p < nr; a++, p++) {
++		if (p)
++			trace_seq_puts(s, ", ");
++
++		/* This only prints what the arch allows (6 args by default) */
++		if (a == FTRACE_REGS_MAX_ARGS) {
++			trace_seq_puts(s, "...");
++			break;
++		}
++
++		arg = args[a];
++
++		param_name = btf_name_by_offset(btf, param[p].name_off);
++		if (param_name)
++			trace_seq_printf(s, "%s=", param_name);
++		t = btf_type_skip_modifiers(btf, param[p].type, &tid);
++
++		switch (t ? BTF_INFO_KIND(t->info) : BTF_KIND_UNKN) {
++		case BTF_KIND_UNKN:
++			trace_seq_putc(s, '?');
++			/* Still print unknown type values */
++			fallthrough;
++		case BTF_KIND_PTR:
++			trace_seq_printf(s, "0x%lx", arg);
++			break;
++		case BTF_KIND_INT:
++			trace_seq_printf(s, "%ld", arg);
++			break;
++		case BTF_KIND_ENUM:
++			trace_seq_printf(s, "%ld", arg);
++			break;
++		default:
++			/* This does not handle complex arguments */
++			trace_seq_printf(s, "(%s)[0x%lx", btf_type_str(t), arg);
++			for (x = sizeof(long); x < t->size; x += sizeof(long)) {
++				trace_seq_putc(s, ':');
++				if (++a == FTRACE_REGS_MAX_ARGS) {
++					trace_seq_puts(s, "...]");
++					goto out_put;
++				}
++				trace_seq_printf(s, "0x%lx", args[a]);
++			}
++			trace_seq_putc(s, ']');
++			break;
++		}
++	}
++out_put:
++	btf_put(btf);
++out:
++	trace_seq_printf(s, ")");
++}
++#endif
++
+ /**
+  * ftrace_find_event - find a registered event
+  * @type: the type of event to look for
+diff --git a/kernel/trace/trace_output.h b/kernel/trace/trace_output.h
+index dca40f1f1da4..2e305364f2a9 100644
+--- a/kernel/trace/trace_output.h
++++ b/kernel/trace/trace_output.h
+@@ -41,5 +41,14 @@ extern struct rw_semaphore trace_event_sem;
+ #define SEQ_PUT_HEX_FIELD(s, x)				\
+ 	trace_seq_putmem_hex(s, &(x), sizeof(x))
+ 
++#ifdef CONFIG_FUNCTION_TRACE_ARGS
++void print_function_args(struct trace_seq *s, unsigned long *args,
++			 unsigned long func);
++#else
++static inline void print_function_args(struct trace_seq *s, unsigned long *args,
++				       unsigned long func) {
++	trace_seq_puts(s, "()");
++}
++#endif
+ #endif
+ 
 -- 
-2.45.2
+2.47.2
+
 
