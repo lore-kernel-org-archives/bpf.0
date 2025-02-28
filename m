@@ -1,127 +1,139 @@
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5244E1D9346;
-	Fri, 28 Feb 2025 23:00:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4D111CAA64;
+	Fri, 28 Feb 2025 23:06:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740783653; cv=none; b=DqK32KgBN6q6iA9euoFW88d3f5Ge7yOLAE3Z4b/Seqph5EAvVssiuPN/P5k8mDTQVp03dlP5Iyumk70/Q2niAQ0n82mHa6t3PuhWjugTVJT/C67zTvKCHObATJnVNj/epS0AqIrlztC6LoiAvNXVt4cY7qQwkYW3Dj3meBnfHwA=
+	t=1740784007; cv=none; b=kZdwfD2U2s/9E8zPRtlYeyWNgPrsFIpVPlDKdp8dxr0gDiu/jeNAd8mzIQipLgN4r5ezl7HxMy9RQNqDHyf9+rAzLv9XqClNCGgNe00UVV2G6VrP3u5G2GmNntVXfXjntLTYXFiLl0sKaE5VGEdDo45awR1aD9SE79/c5yf2ibo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740783653; c=relaxed/simple;
-	bh=8RG2zJ8ZSWvpFH5aWI1BbUFsc54DW/KQffx2NzNXFrU=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RMWb42xRNZkDRT8RfNnQlk4xuqzmtmjnZE8jt/aFYmjhbFXaKwFV8NV/QUIVpfLMCWPulIVftUK1wBYf4NpCmBkrxnuFh3Yrovyi3LUoCJ4bZJ7rAUwjyefGWB2DA6pjR2JBtuQy1+OpERY7on7fAZnGegbav7dnJHWYODYFxT0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hB9MvK7b; arc=none smtp.client-ip=209.85.128.50
+	s=arc-20240116; t=1740784007; c=relaxed/simple;
+	bh=ha9Lqc9uu2OiYFwfdXlhHPoBzpGPSxKHTionUtjg+QU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=lUg20qtfOJc82A9quiVzLgpjuu1OmMVFlYuz6UzCMpeXq1Fw6qTpswwczz3PcuP5RuB4RGB7HRA4PVzUuPFlQMuHMveAiSL8PAM5xSh2e8xxV697rdAIhDJaQDPtTvEyNTTTSOPtvZDXAwQmF8i81CouVJjgNTpmSX33Y/Jf+nQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=H3OgbYOC; arc=none smtp.client-ip=209.85.221.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hB9MvK7b"
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4399ee18a57so17144495e9.1;
-        Fri, 28 Feb 2025 15:00:51 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H3OgbYOC"
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-38f1e8efe82so3094115f8f.0;
+        Fri, 28 Feb 2025 15:06:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740783649; x=1741388449; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=9mPdgDUvvU1Eb/kClux6e7e+YhMrhzs3u+muZdJdG7Q=;
-        b=hB9MvK7b/Ghs3VXaFZelBdcLAAxrxZY4/rFDhTc5FbcORIxbTFuwWDNhaka+FCV8U9
-         eGgPwkTSV0bXpw7gzlfY6a4WSTLIDnmsXTP3slD1NsVHUWXLbOXUwZfT1P6uQUlvdCkX
-         tpTwr02gR2cpJ+IMgxcaA/uj7nGYopMohwud4hfnCyC8cWNLrDL7U5p/sJOC+F2b1wnQ
-         mNrwX32vMSnEnDh5aTYxZYOyoBkl/3/e6cDffXBQ1JQYDnifoDYdXB1IyLiTrf2FuZPX
-         4GA3nDAHE5Gkp6SzP36DpqJ1YJOoQFf19+885h3n9S4gFXrmb9cooB45JhELdS67VKBZ
-         s2Pw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740783649; x=1741388449;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1740784004; x=1741388804; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=9mPdgDUvvU1Eb/kClux6e7e+YhMrhzs3u+muZdJdG7Q=;
-        b=Rm8iZdhxxDZJRt93IF2K4oxB36sOkaG/kkdYte+hCqgxKXAoQYtGNQNbXhYid54a3G
-         jvOp+BZ1ulsuLei5rBOJoBSuRZEGTti0wBHOZ2CIT9uWno9uMRmsng5ZbsqVH8Xe6+yj
-         L1nV5Bl99LeKMctZ9P8XIFfGIyvMHixaQoHS9Q0BVluMcNP4FkWRi7kjD44qZAWCgUaC
-         3OKE529IviTp1MljELdbmjVlxl8E58f7IrZyi/yMYIq7obCNTlFQuI4Lz8z60kvZUIyJ
-         VUrM0B+05IfgbX6gsX/8gN6X/5WWy2dQsEyOrz7SwU2OWhczRtyLCs6dHxXibTpISyVR
-         W4qQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV7W8wMYbKKXiSo1UICqv8hHSdn3P/AtdgTaLknAQpVO8qn9/h6Q4V9PCjhI5DiSt3vBkAILiEY4uiK6Wr6bjSA9Rxq@vger.kernel.org, AJvYcCXJuXxgFbnXrSEkc8aieorVjeEud2cz/olU78aYJ6D3LrVDvho/OyHsR6ZSV/JNoXVxDr+N5EHkYVTb5X8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz1BCjavBXWOqyivz4EWF8OAvaBId9IPlFRqhHUKgdmhUDOT+Pm
-	ca/cysjhuxzAbIJST9GBPoWECrTFpfu7tSodZ0OouuatKeYt/rTY
-X-Gm-Gg: ASbGnctrZkw/7i2JvMMp7B+ABa8r8HtViCjJ10tSxyiQKyFDzbVWvrmOSCfdkS2jC8X
-	7uoCw4S08UGb363sd3lWJD08LD3t5OPLPxbhawHRYRLKb9HCCVyDPUUB3BLwF+5rdVSfMOvgW3n
-	wZmom90oAYw8cKm2e56crziOz7s9BviiSJ9WMj3u111BmKzJt7QqVx9jQ54QAjDebvAcXwUdM5V
-	EeK8F/o96wV/wZCJozRr8DS5UVu0qGDDpvUm2UVsErslQltbcXgcnKWk/HJxbufKrvddlQA7uSZ
-	uSXZz3Z7ln4MY/rEbX+lQIxJG0Kowi13
-X-Google-Smtp-Source: AGHT+IEVo5FUkeVcDQoQ+qCzYLuUrxT4Sg2n8KhR+YouwK4EuUE5NKj95diSlMmvhGTkHqQp9CTfFg==
-X-Received: by 2002:a05:600c:198f:b0:439:9434:4f3b with SMTP id 5b1f17b1804b1-43ba625f4e9mr44233465e9.8.1740783649546;
-        Fri, 28 Feb 2025 15:00:49 -0800 (PST)
-Received: from krava (85-193-35-41.rib.o2.cz. [85.193.35.41])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43bad347823sm17046455e9.0.2025.02.28.15.00.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Feb 2025 15:00:47 -0800 (PST)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Sat, 1 Mar 2025 00:00:44 +0100
-To: Oleg Nesterov <oleg@redhat.com>, Peter Zijlstra <peterz@infradead.org>,
-	Andrii Nakryiko <andrii@kernel.org>
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, x86@kernel.org,
-	Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Hao Luo <haoluo@google.com>, Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Alan Maguire <alan.maguire@oracle.com>,
-	David Laight <David.Laight@aculab.com>,
-	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas@t-8ch.de>
-Subject: Re: [PATCH RFCv2 12/18] uprobes/x86: Add support to optimize uprobes
-Message-ID: <Z8JAHHM4xqEQA2f3@krava>
-References: <20250224140151.667679-1-jolsa@kernel.org>
- <20250224140151.667679-13-jolsa@kernel.org>
+        bh=QcXFzlXi0nNGqFNVWBVnchEgBVXyNmXQMOEcMJisjfs=;
+        b=H3OgbYOCnCfazkiERITtxDZ/Dko4s03h77OEtoNcUjGydcZt19qSoOzwOmcqAV4u7y
+         4WQvtpHeno7qW1NwYvcbpzyxXVzIVnU9AWWltRd4+LM7hs7qDeMW8WpNO7PEPoQr+t1x
+         p/+DJ+rPcYevWYOV+o1wQyVefnW6mxkPbO0m+WAKpgeKRrRChwBA9j/Vq7H3fZjSsabd
+         Dt05QBYYjXNsfkweNZwutyE5UvVi+I/iqzYhNfbTgMhjF21vSQzRZgwjB08/wOQTdzdd
+         5Fj2iOu2CsP94QxTf3RwbC+lxkWnUhKdQsMqhlFy5eqZA1s0s2fBrS1PZZ70U7wfErVk
+         U45w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740784004; x=1741388804;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QcXFzlXi0nNGqFNVWBVnchEgBVXyNmXQMOEcMJisjfs=;
+        b=XM6ozCKVOHLR3PLasHmhgOObfb6+Ds3ucJQJha8BvoXNDX4CcIYoHElHSRYl8SBhjG
+         t31XQq9UOjeqx02JO5CZn4Jg2HYQg8EkSFvpdVDI7HNRdWOwNIUa3tkm7mGFCCmzRZjk
+         Zg7orHOKYDWDx1nG+QN6+ShykvlZBadhFe8yOocEiQC8toGHvCc7rJ8oyb/0uFN524vS
+         pKhTV1t/AzWuFhnV4SVrrf1jZKRS5O8cZMHwRp2Pt5mGYchWpSKTiZjkx6CSOq7p7cnd
+         4pF6e2D5L/WrI3arGF650pHcyB/YQQrmRtkriDjec/+o8IAKQ0lY11aUyOjZSBbsk9KC
+         Lijw==
+X-Forwarded-Encrypted: i=1; AJvYcCUw16btX+vinpTnD8DwqS6ayWD22ALN/WJjqYSbT1sLxoPybSeyiCPJsMCpeRtq9Liln+8=@vger.kernel.org, AJvYcCXdGDGF++me8V5cucq0OjE4xQKTq5f+AABPyliBZvN59MLe/ChQ/Y/7p589vT/oBVWcvTFdkz9FVaAaEEk5@vger.kernel.org
+X-Gm-Message-State: AOJu0YyQg7q9iQomJhN3M9k6ShVzHfUwM+1dL8E6/U1tyat1cKu+4Mea
+	EeZk/Ze3QDtJ4MN3Eo0JekoYm/xOAu7Ue4VvN9CB7tyALVATL4YJauTatFMwdwyM8tCCz3r7FSA
+	bD9WaiRZPBTpgmnzz2rlXzh0aMkU=
+X-Gm-Gg: ASbGnctqRLYV7QWyjkR8RqNQF6AheUFcHlgvfQ1H29zp6ew4rb6cV/ifCMAo2eed2S2
+	C1yAY1HpUD5QQ5+HAuEqjoA4QsbI2r7L48Sj5a4Svyx8GMMZAICPRxAkNub21xEqFHiQSLtYQ3v
+	MkSDeGsQ9+rULkRijKNIlrc5dgrIj7tK4FIELUv+GbQ10kIc10gG68hfnweg==
+X-Google-Smtp-Source: AGHT+IGQBscwxZSd8a5RobKJ9o7dODcG2nH0kmu6hVFa9SDrJeh8zV30kK7XWJkB6dCJwG+sNLbB2sJAwsjkJicieBs=
+X-Received: by 2002:a5d:47c3:0:b0:38d:d371:e01d with SMTP id
+ ffacd0b85a97d-390eca25f7fmr4821747f8f.49.1740784003714; Fri, 28 Feb 2025
+ 15:06:43 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250224140151.667679-13-jolsa@kernel.org>
+References: <AM6PR03MB50806070E3D56208DDB8131699C22@AM6PR03MB5080.eurprd03.prod.outlook.com>
+ <AM6PR03MB5080648369E8A4508220133E99C22@AM6PR03MB5080.eurprd03.prod.outlook.com>
+ <Z8DKSgzZB5HZgYN8@slm.duckdns.org> <AM6PR03MB5080C1F0E0F10BCE67101F6F99CD2@AM6PR03MB5080.eurprd03.prod.outlook.com>
+ <Z8DZ9pqlWim8EIwk@slm.duckdns.org> <CAADnVQ+bXk3qTekjVZ7NU0TpCh4zNg1GNFL-zdW++f2=t_BT8Q@mail.gmail.com>
+ <Z8IrGagRhkHlUejz@slm.duckdns.org>
+In-Reply-To: <Z8IrGagRhkHlUejz@slm.duckdns.org>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Fri, 28 Feb 2025 15:06:32 -0800
+X-Gm-Features: AQ5f1Jqncos-iHCLYHCuP9wYmyWCo0iBWXaI2EA8M47pPRENSjJX80JHhbSCMDs
+Message-ID: <CAADnVQLkzX8dN9+Uk34idgxcD1rK639hnd8aZsz=0HJibpAwag@mail.gmail.com>
+Subject: Re: [PATCH sched_ext/for-6.15 v3 3/5] sched_ext: Add
+ scx_kfunc_ids_ops_context_sensitive for unified filtering of
+ context-sensitive SCX kfuncs
+To: Tejun Heo <tj@kernel.org>
+Cc: Juntong Deng <juntong.deng@outlook.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Eddy Z <eddyz87@gmail.com>, 
+	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, David Vernet <void@manifault.com>, Andrea Righi <arighi@nvidia.com>, 
+	Changwoo Min <changwoo@igalia.com>, bpf <bpf@vger.kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Feb 24, 2025 at 03:01:44PM +0100, Jiri Olsa wrote:
+On Fri, Feb 28, 2025 at 1:31=E2=80=AFPM Tejun Heo <tj@kernel.org> wrote:
+>
+> Hello,
+>
+> On Thu, Feb 27, 2025 at 06:34:37PM -0800, Alexei Starovoitov wrote:
+> > > Hmm... would that mean a non-sched_ext bpf prog would be able to call=
+ e.g.
+> > > scx_bpf_dsq_insert()?
+> >
+> > Not as far as I can tell.
+> > scx_kfunc_ids_unlocked[] doesn't include scx_bpf_dsq_insert.
+> > It's part of scx_kfunc_ids_enqueue_dispatch[].
+> >
+> > So this bit in patch 3 enables it:
+> > +       if ((flags & SCX_OPS_KF_ENQUEUE) &&
+> > +           btf_id_set8_contains(&scx_kfunc_ids_enqueue_dispatch, kfunc=
+_id))
+> >
+> > and in patch 2:
+> > +       [SCX_OP_IDX(enqueue)]                   =3D SCX_OPS_KF_ENQUEUE,
+> >
+> > So scx_bpf_dsq_insert() kfunc can only be called out
+> > of enqueue() sched-ext hook.
+> >
+> > So the restriction is still the same. afaict.
+>
+> Hmm... maybe I'm missing something:
+>
+>   static int scx_kfunc_ids_ops_context_sensitive_filter(const struct bpf_=
+prog *prog, u32 kfunc_id)
+>   {
+>          u32 moff, flags;
+>
+>          // allow non-context sensitive kfuncs
+>          if (!btf_id_set8_contains(&scx_kfunc_ids_ops_context_sensitive, =
+kfunc_id))
+>                  return 0;
+>
+>          // allow unlocked to be called form all SYSCALL progs
+>          if (prog->type =3D=3D BPF_PROG_TYPE_SYSCALL &&
+>              btf_id_set8_contains(&scx_kfunc_ids_unlocked, kfunc_id))
+>                  return 0;
+>
+>          // *** HERE, allow if the prog is not SCX ***
+>          if (prog->type =3D=3D BPF_PROG_TYPE_STRUCT_OPS &&
+>              prog->aux->st_ops !=3D &bpf_sched_ext_ops)
 
-SNIP
+Ohh. You're right. My bad.
+Here it probably needs
+&& !!btf_id_set8_contains(&scx_kfunc_ids_ops_context_sensitive
 
-> @@ -1523,15 +1698,23 @@ arch_uretprobe_hijack_return_addr(unsigned long trampoline_vaddr, struct pt_regs
->  {
->  	int rasize = sizeof_long(regs), nleft;
->  	unsigned long orig_ret_vaddr = 0; /* clear high bits for 32-bit apps */
-> +	unsigned long off = 0;
-> +
-> +	/*
-> +	 * Optimized uprobe goes through uprobe trampoline which adds 4 8-byte
-> +	 * values on stack, check uprobe_trampoline_entry for details.
-> +	 */
-> +	if (!swbp)
-> +		off = 4*8;
-
-ok, now when I started to add the missing register modifications in uprobe syscall,
-I realized we will modify the regs->sp appropriately already in the uprobe syscall
-(before the code above is hit)
-
-so we don't need this code and we can get rid of the swbp flag and patch#7 completely
-
-jirka
-
->  
-> -	if (copy_from_user(&orig_ret_vaddr, (void __user *)regs->sp, rasize))
-> +	if (copy_from_user(&orig_ret_vaddr, (void __user *)regs->sp + off, rasize))
->  		return -1;
->  
->  	/* check whether address has been already hijacked */
->  	if (orig_ret_vaddr == trampoline_vaddr)
->  		return orig_ret_vaddr;
->  
-> -	nleft = copy_to_user((void __user *)regs->sp, &trampoline_vaddr, rasize);
-> +	nleft = copy_to_user((void __user *)regs->sp + off, &trampoline_vaddr, rasize);
->  	if (likely(!nleft)) {
->  		if (shstk_update_last_frame(trampoline_vaddr)) {
->  			force_sig(SIGSEGV);
-
-SNIP
+since later scx_kfunc_set_ops_context_sensitive
+is registered for all of struct-ops.
