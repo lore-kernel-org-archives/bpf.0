@@ -1,189 +1,127 @@
-Received: from szxga07-in.huawei.com (szxga07-in.huawei.com [45.249.212.35])
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A09A81C3BFC;
-	Fri, 28 Feb 2025 07:09:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.35
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 143401FAC31;
+	Fri, 28 Feb 2025 08:13:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740726572; cv=none; b=rrYrVPy0jZRHBEzc3s70hMkyUnJ38nD7x4Fx+/eUVVpqlF/8HorZg7qz+i8MtB01OzmmeH9aWiU6vVCHS7sIn5LRYeECrbvsh0j2wMH5lruFRl4cTkA5QeFWKGTfsUh/nDe4THLBbEcaIda1UITJ0W247uczYVMI1GtgCv3CBSA=
+	t=1740730438; cv=none; b=egqH4ZSUDzNLqq8uIbmyvvEGqNTql2rA2ruLCyuaeavnySIerA4oT5Tpx2si7kGO3mjAm6bz/WvW7TBfkMAUrivq2ebxB8oi9z4HoYeAI4epmvU32A+sd71iGTCYVtk5OzTwXfl2zcBRfiNGYttgNatxqbjKBBXP+S6Wn2pyp5s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740726572; c=relaxed/simple;
-	bh=/AG9C+GuRVVRU1SYPxtaBTpy7cUYfyIbB8AtLTkLcHg=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=owIWvOMpCmpMqx8+3jT0xHKEtSg9j/OKVyO6MQg3iW7mGefXTyj9DfJaA0AL5F08SgAph8hZ6GXARKRDQhvnDFXNd0YhDBroxgIS+5M1hh5J/zqScgMSTRBdY5NPi/rRUF0pHJz5DlVesPDADwoKF2ajYWxZtEmwCIE3SF8X5Nc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.35
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.88.214])
-	by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4Z3zk44nz7z1dyjr;
-	Fri, 28 Feb 2025 15:05:16 +0800 (CST)
-Received: from dggemv712-chm.china.huawei.com (unknown [10.1.198.32])
-	by mail.maildlp.com (Postfix) with ESMTPS id 5424B1A016C;
-	Fri, 28 Feb 2025 15:09:23 +0800 (CST)
-Received: from kwepemn200003.china.huawei.com (7.202.194.126) by
- dggemv712-chm.china.huawei.com (10.1.198.32) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Fri, 28 Feb 2025 15:09:23 +0800
-Received: from localhost.localdomain (10.175.101.6) by
- kwepemn200003.china.huawei.com (7.202.194.126) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Fri, 28 Feb 2025 15:09:21 +0800
-From: zhangmingyi <zhangmingyi5@huawei.com>
-To: <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
-	<martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
-	<john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@google.com>,
-	<haoluo@google.com>, <jolsa@kernel.org>
-CC: <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>, <yanan@huawei.com>,
-	<wuchangye@huawei.com>, <xiesongyang@huawei.com>, <liuxin350@huawei.com>,
-	<liwei883@huawei.com>, <tianmuyang@huawei.com>, <zhangmingyi5@huawei.com>
-Subject: [PATCH bpf-next v3 1/2] Introduced to support the ULP to get or set sockets
-Date: Fri, 28 Feb 2025 15:06:27 +0800
-Message-ID: <20250228070628.3219087-2-zhangmingyi5@huawei.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20250228070628.3219087-1-zhangmingyi5@huawei.com>
-References: <20250228070628.3219087-1-zhangmingyi5@huawei.com>
+	s=arc-20240116; t=1740730438; c=relaxed/simple;
+	bh=gmnwQui9PGhphy1y6k6f2iaJFn2c2puVe6UIWtj8VYo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=KuRA/5ITP5kWCShwB1Jpt3Ev0HbVOew4pKQoXSWovZrEG2PGPbnQUgNowlqDeT0qt+7lu4X3Mz2pYGMB6TvdppGAOEdSO08rFfZp31i7BM+ICzobRQ0TjpYT9k3cCajgk4bBH1irDPTg0BK7db3oeQhj93tEpC3KDSICCgC0zSI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=YG6m990c; arc=none smtp.client-ip=217.70.183.200
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="YG6m990c"
+Received: by mail.gandi.net (Postfix) with ESMTPSA id C392A44353;
+	Fri, 28 Feb 2025 08:13:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1740730434;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=TEsscNcctrVv+Wd6MiI3V0IKsPpsSuvjyar8nUANyzI=;
+	b=YG6m990c3xRVuAPzyMnCvpX5uogvwB6Ai6PK1HCQ9b1E0XlgiiXbx/mFZ+40g9DDucT2vt
+	+ItDWwjcHppgEhY+jOIe5gylFUQgTNIF5dij2fC9WIr+qjIBblM0Li6JiYo5I6uCBugJzp
+	BbR8DPATJkLQ08N3rmMflaLksyRnyXVUa4BAbRK7aOTRB0qTqZwBKSDSU25NYvIB4ftxYD
+	waGv0FyZRJ+er++kvKY4Uy1pyz/0KWtxkZseXfmzZjysHm1ly9GnV7YOjPEaIWZP0nWPwk
+	kFuwzcSbT4bMZUiwdol32JKftDlG25Rb0B3zWbPwtLW0Mapeg9odRmlMgMr0+A==
+Message-ID: <436b87f7-b5b2-4b5e-8979-47d123783b35@bootlin.com>
+Date: Fri, 28 Feb 2025 09:13:52 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemn200003.china.huawei.com (7.202.194.126)
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next 01/10] selftests/bpf: test_tunnel: Add
+ generic_attach* helpers
+To: Stanislav Fomichev <stfomichev@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
+ Shuah Khan <shuah@kernel.org>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Alexis Lothore <alexis.lothore@bootlin.com>, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20250227-tunnels-v1-0-33df5c30aa04@bootlin.com>
+ <20250227-tunnels-v1-1-33df5c30aa04@bootlin.com> <Z8DiX8MmJWvO5Ws2@mini-arch>
+Content-Language: en-US
+From: Bastien Curutchet <bastien.curutchet@bootlin.com>
+In-Reply-To: <Z8DiX8MmJWvO5Ws2@mini-arch>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdekleekjecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvvehfhfgjtgfgsehtjeertddtvdejnecuhfhrohhmpeeurghsthhivghnucevuhhruhhttghhvghtuceosggrshhtihgvnhdrtghurhhuthgthhgvthessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhephfehgefgteffkeehveeuvdekvddvueefgeejvefgleevveevteffveefgfehieejnecukfhppeeltddrkeelrdduieefrdduvdejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepledtrdekledrudeifedruddvjedphhgvlhhopegludelvddrudeikedrtddrudegngdpmhgrihhlfhhrohhmpegsrghsthhivghnrdgtuhhruhhttghhvghtsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopedvtddprhgtphhtthhopehsthhfohhmihgthhgvvhesghhmrghilhdrtghomhdprhgtphhtthhopegrshhtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghnihgvlhesihhoghgvrghrsghogidrnhgvthdprhgtphhtthhopegrnhgurhhiiheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepmhgrrhhtihhnrdhlrghusehlihhnuhigrdguvghvpdhrt
+ ghpthhtohepvgguugihiiekjeesghhmrghilhdrtghomhdprhgtphhtthhopehsohhngheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohephihonhhghhhonhhgrdhsohhngheslhhinhhugidruggvvh
+X-GND-Sasl: bastien.curutchet@bootlin.com
 
-From: Mingyi Zhang <zhangmingyi5@huawei.com>
+Hi Stanislav,
 
-Note that tcp_getsockopt and tcp_setsockopt support TCP_ULP, while
-bpf_getsockopt and bpf_setsockopt do not support TCP_ULP.
-I think we can add the handling of this case.
+On 2/27/25 11:08 PM, Stanislav Fomichev wrote:
+> On 02/27, Bastien Curutchet (eBPF Foundation) wrote:
+>> A fair amount of code duplication is present among tests to attach BPF
+>> programs.
+>>
+>> Create generic_attach* helpers that attach BPF programs to a given
+>> interface.
+>> Use ASSERT_OK_FD() instead of ASSERT_GE() to check fd's validity.
+>> Use these helpers in all the available tests.
+>>
+>> Signed-off-by: Bastien Curutchet (eBPF Foundation) <bastien.curutchet@bootlin.com>
+>> ---
+>>   .../testing/selftests/bpf/prog_tests/test_tunnel.c | 128 ++++++++++-----------
+>>   1 file changed, 62 insertions(+), 66 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/bpf/prog_tests/test_tunnel.c b/tools/testing/selftests/bpf/prog_tests/test_tunnel.c
+>> index cec746e77cd3abdf561cfc2422fa0a934fc481cd..27a8c8caa87e4c6b39b2b26c2aa9860b131a70a9 100644
+>> --- a/tools/testing/selftests/bpf/prog_tests/test_tunnel.c
+>> +++ b/tools/testing/selftests/bpf/prog_tests/test_tunnel.c
+>> @@ -397,6 +397,56 @@ static int attach_tc_prog(struct bpf_tc_hook *hook, int igr_fd, int egr_fd)
+>>   	return 0;
+>>   }
+>>   
+>> +static int generic_attach(const char *dev, int igr_fd, int egr_fd)
+>> +{
+>> +	DECLARE_LIBBPF_OPTS(bpf_tc_hook, tc_hook, .attach_point = BPF_TC_INGRESS);
+> 
+> nit: .attach_point = BPF_TC_INGRESS is a bit confusing to me here
+> (because we later attach both ingress and egress progs); mostly
+> because the way attach_tc_prog is written I think. Can we move
+> tc_hook definition to attach_tc_prog and make it
+> .attach_point=BPF_TC_INGRESS|BPF_TC_EGRESS? And then we can make
+> attach_tc_prog accept ifindex instead of tc_hook.
+> 
+> int attach_tc_prog(int ifindex, igr_fd, egr_fd)
+> {
+> 	DECLARE_LIBBPF_OPTS(bpf_tc_hook, tc_hook, .attach_point = BPF_TC_INGRESS|BPF_TC_EGRESS);
+> 
+> 	bpf_tc_hook_create(&tc_hook);
+> 	if (igr_fd >= 0) {
+> 		tc_hook.attach_point = BPF_TC_INGRESS;
+> 		...
+> 	}
+> 	if (egr_fd >= 0) {
+> 		tc_hook.attach_point = BPF_TC_EGRESS;
+> 		...
+> 	}
+> }
+> 
+> Or is it just me?
 
-We want call bpf_setsockopt to replace the kernel module in the TCP_ULP
-case. The purpose is to customize the behavior in connect and sendmsg.
-We have an open source community project kmesh (kmesh.net). Based on
-this, we refer to some processes of tcp fastopen to implement delayed
-connet and perform HTTP DNAT when sendmsg.In this case, we need to parse
-HTTP packets in the bpf program and set TCP_ULP for the specified socket.
+I agree with you, it will be better this way. I'll do it in V2.
 
-Signed-off-by: Mingyi Zhang <zhangmingyi5@huawei.com>
-Signed-off-by: Xin Liu <liuxin350@huawei.com>
----
- include/net/tcp.h   |  2 +-
- net/core/filter.c   |  1 +
- net/ipv4/tcp.c      |  2 +-
- net/ipv4/tcp_ulp.c  | 28 +++++++++++++++-------------
- net/mptcp/subflow.c |  2 +-
- 5 files changed, 19 insertions(+), 16 deletions(-)
 
-diff --git a/include/net/tcp.h b/include/net/tcp.h
-index e9b37b76e894..f26e92099b86 100644
---- a/include/net/tcp.h
-+++ b/include/net/tcp.h
-@@ -2582,7 +2582,7 @@ struct tcp_ulp_ops {
- };
- int tcp_register_ulp(struct tcp_ulp_ops *type);
- void tcp_unregister_ulp(struct tcp_ulp_ops *type);
--int tcp_set_ulp(struct sock *sk, const char *name);
-+int tcp_set_ulp(struct sock *sk, const char *name, bool load);
- void tcp_get_available_ulp(char *buf, size_t len);
- void tcp_cleanup_ulp(struct sock *sk);
- void tcp_update_ulp(struct sock *sk, struct proto *p,
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 713d6f454df3..bdb5c43d6fb0 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -5380,6 +5380,7 @@ static int sol_tcp_sockopt(struct sock *sk, int optname,
- 	case TCP_CONGESTION:
- 		return sol_tcp_sockopt_congestion(sk, optval, optlen, getopt);
- 	case TCP_SAVED_SYN:
-+	case TCP_ULP:
- 		if (*optlen < 1)
- 			return -EINVAL;
- 		break;
-diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-index 0d704bda6c41..88ccd0e211f9 100644
---- a/net/ipv4/tcp.c
-+++ b/net/ipv4/tcp.c
-@@ -3744,7 +3744,7 @@ int do_tcp_setsockopt(struct sock *sk, int level, int optname,
- 		name[val] = 0;
- 
- 		sockopt_lock_sock(sk);
--		err = tcp_set_ulp(sk, name);
-+		err = tcp_set_ulp(sk, name, !has_current_bpf_ctx());
- 		sockopt_release_sock(sk);
- 		return err;
- 	}
-diff --git a/net/ipv4/tcp_ulp.c b/net/ipv4/tcp_ulp.c
-index 2aa442128630..9e828d4c2932 100644
---- a/net/ipv4/tcp_ulp.c
-+++ b/net/ipv4/tcp_ulp.c
-@@ -33,10 +33,7 @@ static struct tcp_ulp_ops *tcp_ulp_find(const char *name)
- 
- static const struct tcp_ulp_ops *__tcp_ulp_find_autoload(const char *name)
- {
--	const struct tcp_ulp_ops *ulp = NULL;
--
--	rcu_read_lock();
--	ulp = tcp_ulp_find(name);
-+	const struct tcp_ulp_ops *ulp = tcp_ulp_find(name);
- 
- #ifdef CONFIG_MODULES
- 	if (!ulp && capable(CAP_NET_ADMIN)) {
-@@ -46,10 +43,6 @@ static const struct tcp_ulp_ops *__tcp_ulp_find_autoload(const char *name)
- 		ulp = tcp_ulp_find(name);
- 	}
- #endif
--	if (!ulp || !try_module_get(ulp->owner))
--		ulp = NULL;
--
--	rcu_read_unlock();
- 	return ulp;
- }
- 
-@@ -154,15 +147,24 @@ static int __tcp_set_ulp(struct sock *sk, const struct tcp_ulp_ops *ulp_ops)
- 	return err;
- }
- 
--int tcp_set_ulp(struct sock *sk, const char *name)
-+int tcp_set_ulp(struct sock *sk, const char *name, bool load)
- {
- 	const struct tcp_ulp_ops *ulp_ops;
-+	int err = 0;
- 
- 	sock_owned_by_me(sk);
- 
--	ulp_ops = __tcp_ulp_find_autoload(name);
--	if (!ulp_ops)
--		return -ENOENT;
-+	rcu_read_lock();
-+	if (!load)
-+		ulp_ops = tcp_ulp_find(name);
-+	else
-+		ulp_ops = __tcp_ulp_find_autoload(name);
-+
-+	if (!ulp_ops || !try_module_get(ulp_ops->owner))
-+		err = -ENOENT;
-+	rcu_read_unlock();
- 
--	return __tcp_set_ulp(sk, ulp_ops);
-+	if (!err)
-+		err = __tcp_set_ulp(sk, ulp_ops);
-+	return err;
- }
-diff --git a/net/mptcp/subflow.c b/net/mptcp/subflow.c
-index fd021cf8286e..fb936d280b83 100644
---- a/net/mptcp/subflow.c
-+++ b/net/mptcp/subflow.c
-@@ -1776,7 +1776,7 @@ int mptcp_subflow_create_socket(struct sock *sk, unsigned short family,
- 	sf->sk->sk_net_refcnt = 1;
- 	get_net_track(net, &sf->sk->ns_tracker, GFP_KERNEL);
- 	sock_inuse_add(net, 1);
--	err = tcp_set_ulp(sf->sk, "mptcp");
-+	err = tcp_set_ulp(sf->sk, "mptcp", true);
- 	if (err)
- 		goto err_free;
- 
--- 
-2.43.0
-
+Best regards,
+Bastien
