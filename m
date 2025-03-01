@@ -1,125 +1,105 @@
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 259968F7D
-	for <bpf@vger.kernel.org>; Sat,  1 Mar 2025 00:02:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ECC2A935
+	for <bpf@vger.kernel.org>; Sat,  1 Mar 2025 00:03:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740787338; cv=none; b=d7FtXVOPW37I2mv3fCPdf6zy5Z2dutVTBnAZL2dKOKY9vPe1IKrOUyGYytS8c/J1MnRpZMJaz3wp1Mte0BRmp6JzMN1rv6D66ZqCHp32tEfnM8+RM/j7mWErl4x6epHMRD+SyDGy9BtatTB0VU0YJj9/9vugGAxFrMhAmZ2ZIIo=
+	t=1740787419; cv=none; b=LRDDwMf13oQT3mpg1fl2ABP/WqgMzqfdItN5bBlg/6xrToqM/kKrKxnWje5oszClZEEuP9zjIdJJ1vKa1Qu3rXgZ//NaG2Y3CXYxrfff7vLcmCitDq5Ya22udGQhhq+P0rG2sBuVD/NHTqCmbyS58UX4noCQRu5Xd/JYD9egZv8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740787338; c=relaxed/simple;
-	bh=Lm4viNS9jwfLfzS56hnv533rHZTR8IK56cgoJU17C4A=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=F/ywhmlF235mZ17huY4CWzDfXkiKsd5j1BsuRPBRU1S61J4CyB6SXBrG8j2STwKzkjW32zisUioEG+mMIS3GDAHo4QcS+72j0FEa5+87DyheuBKbR7ShmBBSV/GBe0VDYTpZQqq+OfqQFbwk8y/IJ7gkvxR6SJNXIsilT+gSq1k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KwHQTiDR; arc=none smtp.client-ip=209.85.214.174
+	s=arc-20240116; t=1740787419; c=relaxed/simple;
+	bh=++evnjTV4JelVSAN3mL90dHw8fpasns7R1AKyI6HypU=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=OxiGR86ozBqAxysvba2kQgtwCQ2d7Itkzccdl6HHVuj8svFqRu4nkSq7mZhacjGVBtRmyKzBkyJ9Z3h31XD2Pit7B0dH1wceDwlnDXaw9AriHIXXPjSjxiWjhWgzbb7PEQN1oYmOSpmmKaM4IdsbdBsZMW5BTXXgY1XOjtoVUX4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gq8mEuT0; arc=none smtp.client-ip=209.85.214.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KwHQTiDR"
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2230c74c8b6so6554095ad.0
-        for <bpf@vger.kernel.org>; Fri, 28 Feb 2025 16:02:16 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gq8mEuT0"
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-22339936bbfso41758215ad.1
+        for <bpf@vger.kernel.org>; Fri, 28 Feb 2025 16:03:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740787336; x=1741392136; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sRDOSr0U5aPeieQz4ZJr7W8hqZ0x548srBPd1IK4uoI=;
-        b=KwHQTiDR6UqQzyBkLGo02XJOHlk2Ly8rHvgMwEjYW8HeewY4DqA+u5NrdNqAxHOy/C
-         rh7SLWovUhrz/kRdfogfyLlNZQFXL1rEUUIeKTjQPGIMCOWOGi9/cYbnbh3YBBrdsg2V
-         MjI9X8myiRDYba746pKyiToUBaubuawaG2ZLPlp/73tprRZXp6HJbbDUFyKGa4K8qAfp
-         pDlU1erRv38Bm/fNixS/LFpKox4agKiMCCb5/2wFqbjhIv2I0OOq7jFmAgFefSwzqtHN
-         zH53jcfj96XIynUlHDogQlJ4ZdO9fdx2tIwEYyF3puXucOZmAl7rS/hM4DnFEygRlTdb
-         t/oA==
+        d=gmail.com; s=20230601; t=1740787418; x=1741392218; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=85zx5W6intt/CvnbJWBwkycIcKOJ3flENeqlWGyFoX0=;
+        b=gq8mEuT0dgBrBrykbSYGb4XR5wvOzClA8hIPgRnjhBUr0p6shkZSDbZZPZ0UZTiM1O
+         R+KctqLIptlmRrGh/MaRkA1xtOU3IOG1xbUsoIFlnXPkJY3Op2uhwZzGLA3b2R5Pc50q
+         fW6fzSpsRhMAKq8S82gIYI/+IhvqWz6s5qGWK0AU12KQD8s/joUMJHGCbNsv9krFa2x5
+         dIvRmDprECZut1qq9zBfXdP8GcoOxeRx+PgyszOEk88EZ2vrTOEj51XM8yyuk4xVsV2I
+         hep1qrGifB/DtpHvGiygsqqPdl49UvZkI4JJ7h7R6gkSjcNs7z8NR8eMnuNu8Tr7R0cg
+         agjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740787336; x=1741392136;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sRDOSr0U5aPeieQz4ZJr7W8hqZ0x548srBPd1IK4uoI=;
-        b=wTTBEU2o6aFIJ+05SrYN4tZiYMAFlbBbQfZCaL5eiCCTAE8MeoCzT8h2P5ZK37ko6F
-         dvJ9NS56YXFeyTL1Dsu3bQUpOivyC0zqQ8LLPIh7VuYf2SfMSNmfmKOhHz4J0qu3uubR
-         f/7E23z/bXhgb/tTFNZQ4Ifq4tY7BA8w0EIQbcfRXGAF0T1qdKveo85ZIQZ7DTFcbwT+
-         8D+s7vctCxzTsf/LtjmjI0SjkKBrfYBER11sB/hqP0pHvAxEVl0NPqaYgQJOB2aGcG4f
-         I2Dmh6Io9ObIqCmG1cjNJwGd7wdHU5YC3b6O2qKolaYkaOEZWmWuOnznccCoWOCpUIdF
-         1yEw==
-X-Gm-Message-State: AOJu0Yx+FFoCuBh996PgHG+k/1PxBR+YdkBL9BOo1pgyMpPocCOX806H
-	+8h42eLDHQSw2FNVs1eFKYp39ZA5kztqckgsf49mOsW5PAU+F8Ei6mPnTA==
-X-Gm-Gg: ASbGncsuuOUOreXSP7xh/qkRjoYGabqrPjoLX/PH39KCN3euVFhxedXk3CxtZrvTLJ3
-	spIGj8hjatJpat2OOs4+aTBsEY8exhfgUQBdiVt2D4H2SjUSZEzhdv9IGJWLSYF7EdX+btlMijF
-	udcOKKh70Dntzv9KRsAsyvYGRSzF2o5/n6gGv2lunaFefypBtSTF3922oU2qxliEI8ZYjwz+D13
-	YT5/jQd4OqdJREm+vDOfbOJcEops2x5pNDBdVEymzvwLpTBAwnKsUTFePofJEcUuoUT78ja7Ys5
-	OIRYPE9KLgCgGcQwtLhnW5ArmQ5oDLdCRqjQli+K
-X-Google-Smtp-Source: AGHT+IEQu5rQWp1WFv2cZao+zs3sKaNamyJO5/gts5u/DD9JM4C91+1DU52Mr6HePsdoZzEL88ad5g==
-X-Received: by 2002:a05:6a00:1395:b0:736:34a2:8a18 with SMTP id d2e1a72fcca58-73634a28a41mr1491473b3a.24.1740787334680;
-        Fri, 28 Feb 2025 16:02:14 -0800 (PST)
-Received: from honey-badger.. ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-aee7dedf5a8sm3993425a12.70.2025.02.28.16.02.13
+        d=1e100.net; s=20230601; t=1740787418; x=1741392218;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=85zx5W6intt/CvnbJWBwkycIcKOJ3flENeqlWGyFoX0=;
+        b=bOWQhyLQTYMNuPZ5roxNn46E856/JHmLTjjPsbevndGaqtY4Fs1tCzmfchq6Mnwlm6
+         AUdoLSN3c6ViQInxxF//DcZrgAVo9KaQ4Ms0DBKK4tuR918UMprB4Va6LtfU1QQJOhUM
+         ioizm8d2R/rGo4y+EHWskGeAm59/sk2LMK+dudkFGuHSIoKoLZ2dnoMDgTZeCN1TYQNk
+         PSNgvxm07RBJjZzx0YxMngtXE/3gida4MSBE1DiqaSZn8hAy5fdxxRAMJ1syYVzTtE+u
+         ZJzfZVwy/MNu04XHH/Tm+LdWHaTphd//Q5LVu/QXK6fqtwCj8R2NRVP/T8mRP6xKfpHl
+         +I5w==
+X-Forwarded-Encrypted: i=1; AJvYcCVRaCQydn4BqWSHFU2aUMufcKn8rkAmPD2paJE2YViDBAJm6nbHmSOjVY+nKyidorsKthc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyB+gAjlzIJuiGf6HEAY5bx49ofduPNl6WXfGSV8QE1l5ANS2HT
+	slPxbKTpLxp3SVof5ipXH7ZKRwqsR7CXIAmtmSgXWge2stalLdmr
+X-Gm-Gg: ASbGncuXAKjdoCRD3NSD0v1vio+0RHHvmPCY+0LTnk3vPp6OKrsg9on0lLAbwNoWln7
+	tVe25Yz7uDY7PyvAP1HabHDB6dluO/NRWywF+tb+TYW32OQfgNC69guWtkPsZdLTANJjkK86pex
+	VSExwETTLAl4Tp1fwRNyB3Kb3RAoF6SGF9nTGiNMqAgjxNgHStJEbB1AG4yZECueEChQDkWKZTU
+	pqfLm7yOpmPEh3Kf72RitQrK0KttW4S6lGP0EqCbvJzhGkvVw5Jpf3irM1h061VdTsiLnd4EopL
+	XDAGwJM5gC62/R43Rdl6DSnIFajt3JIYrMNY3MfHPw==
+X-Google-Smtp-Source: AGHT+IHePxYcn/qu17nTcGS7R33QgECk9zGRbZmWhicWsuGch7lxGnYzCAyt3IywE6Pw7lShoM0bRA==
+X-Received: by 2002:a05:6a00:92a2:b0:730:7d3f:8c70 with SMTP id d2e1a72fcca58-734ac42cad0mr7348346b3a.21.1740787417799;
+        Fri, 28 Feb 2025 16:03:37 -0800 (PST)
+Received: from [192.168.0.235] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-aee7de19c14sm4003797a12.20.2025.02.28.16.03.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Feb 2025 16:02:14 -0800 (PST)
+        Fri, 28 Feb 2025 16:03:37 -0800 (PST)
+Message-ID: <d8375327d6b697e0bac6f837c8d595a629133317.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v1 0/3] veristat: @files-list.txt notation for
+ object files list
 From: Eduard Zingerman <eddyz87@gmail.com>
-To: bpf@vger.kernel.org,
+To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, bpf@vger.kernel.org, 
 	ast@kernel.org
-Cc: andrii@kernel.org,
-	daniel@iogearbox.net,
-	martin.lau@linux.dev,
-	kernel-team@fb.com,
-	yonghong.song@linux.dev,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Subject: [PATCH bpf-next v2 2/3] veristat: strerror expects positive number (errno)
-Date: Fri, 28 Feb 2025 16:01:46 -0800
-Message-ID: <20250301000147.1583999-3-eddyz87@gmail.com>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250301000147.1583999-1-eddyz87@gmail.com>
-References: <20250301000147.1583999-1-eddyz87@gmail.com>
+Cc: andrii@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev, 
+	kernel-team@fb.com, yonghong.song@linux.dev
+Date: Fri, 28 Feb 2025 16:03:33 -0800
+In-Reply-To: <3ee39a16-bc54-4820-984a-0add2b5b5f86@gmail.com>
+References: <20250228191220.1488438-1-eddyz87@gmail.com>
+	 <3ee39a16-bc54-4820-984a-0add2b5b5f86@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.54.3 (3.54.3-1.fc41) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Before:
+On Fri, 2025-02-28 at 23:33 +0000, Mykyta Yatsenko wrote:
+> On 28/02/2025 19:12, Eduard Zingerman wrote:
+> > A few small veristat improvements:
+> > - It is possible to hit command line parameters number limit,
+> >    e.g. when running veristat for all object files generated for
+> >    test_progs. This patch-set adds an option to read objects files list
+> >    from a file.
+> > - Correct usage of strerror() function.
+> > - Avoid printing log lines to CSV output.
+> >=20
+> > Eduard Zingerman (3):
+> >    veristat: @files-list.txt notation for object files list
+> >    veristat: strerror expects positive number (errno)
+> >    veristat: report program type guess results to sdterr
+> >=20
+> >   tools/testing/selftests/bpf/veristat.c | 70 +++++++++++++++++++++----=
+-
+> >   1 file changed, 57 insertions(+), 13 deletions(-)
+> Patch set looks good to me.
+> Acked-by: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+>=20
 
-  ./veristat -G @foobar iters.bpf.o
-  Failed to open presets in 'foobar': Unknown error -2
-  ...
-
-After:
-
-  ./veristat -G @foobar iters.bpf.o
-  Failed to open presets in 'foobar': No such file or directory
-  ...
-
-Acked-by: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
----
- tools/testing/selftests/bpf/veristat.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/veristat.c b/tools/testing/selftests/bpf/veristat.c
-index 8bc462299290..41dfcb6f5690 100644
---- a/tools/testing/selftests/bpf/veristat.c
-+++ b/tools/testing/selftests/bpf/veristat.c
-@@ -660,7 +660,7 @@ static int append_filter_file(const char *path)
- 	f = fopen(path, "r");
- 	if (!f) {
- 		err = -errno;
--		fprintf(stderr, "Failed to open filters in '%s': %s\n", path, strerror(err));
-+		fprintf(stderr, "Failed to open filters in '%s': %s\n", path, strerror(-err));
- 		return err;
- 	}
- 
-@@ -1422,7 +1422,7 @@ static int append_var_preset_file(const char *filename)
- 	f = fopen(filename, "rt");
- 	if (!f) {
- 		err = -errno;
--		fprintf(stderr, "Failed to open presets in '%s': %s\n", filename, strerror(err));
-+		fprintf(stderr, "Failed to open presets in '%s': %s\n", filename, strerror(-err));
- 		return -EINVAL;
- 	}
- 
--- 
-2.48.1
+Thank you for taking a look!
 
