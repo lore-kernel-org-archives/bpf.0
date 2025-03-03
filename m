@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B60C1DFE1;
-	Mon,  3 Mar 2025 22:29:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D3B4212B2F;
+	Mon,  3 Mar 2025 22:39:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741040999; cv=none; b=gtaNRKCVW/YSIgd69sfvv3HvvobdMnwfzxrzAaYEVRUZGynKj+UbfAWh13vEhtaLRdxI8PHjOksL5OmsTJ9ATAPDVwiMtg4/HguM5eZCumvVaEIU37xqwmAOcMyorBZiSzThrU+czr8Nt8KMV7dCB0kYzburGj5FZ3NT1nPdWQs=
+	t=1741041598; cv=none; b=JxsSwsYQ2BpPHrEzUKFdrX9778wd2KZaigwlmvJtm5i0q2Aht3QCBJ3tbSRXCKQxm9NxErSJ0Mgyv17nA8OFbN6baZpPEuaIUT2g77uJwLGJLcvM0SzYNVL79sD2xIhYJjzhSet97wNHi0fko3rvkR3yxOcpRQnNhOw7eSDuM9A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741040999; c=relaxed/simple;
-	bh=bkKPQ1+aiG1teab/DAAAQme9s+I+A36ytQ7sln9PR8o=;
+	s=arc-20240116; t=1741041598; c=relaxed/simple;
+	bh=dNjQ+Gtua5eX7r+UCvQQi9mBxp6eDZm379eQznEbG7s=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=lfv+MoshvUA9/XYYZDtAQiAfP0wu5N/45B0fOSB5F1GVFSzjaIXhj1HTOZ+qF95wm508t62/w0D6cWkuHOLlXD0/Jjm5CkrR/H89SYY+4x/N8L6GxKmFuk1GZYN46wvMWUgpF3M2aCOPlHv75wx05bk8Ht07qoDLvv7pClvBbNg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uSYAPZZ2; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=g2yYEPn4eo1UgYjTqo/qAQJqzXhMaEn0cczEIIjSDiUgsvE8rqSn6zxFv/P/N621LLEo64+X1prQPu0dSvxIVoaZV0UPyAwS8cjvATvxftLemyK+A3/bsp02KapdRUupRQF11P4/Ui9IQ3WY3qpZOGdK8GD1/jvYh4WrPNUe3/8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A90lqZc0; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uSYAPZZ2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB408C4CED6;
-	Mon,  3 Mar 2025 22:29:58 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A90lqZc0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE49BC4CEE6;
+	Mon,  3 Mar 2025 22:39:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741040998;
-	bh=bkKPQ1+aiG1teab/DAAAQme9s+I+A36ytQ7sln9PR8o=;
+	s=k20201202; t=1741041597;
+	bh=dNjQ+Gtua5eX7r+UCvQQi9mBxp6eDZm379eQznEbG7s=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=uSYAPZZ28oBsjc2EOl6zT8rCHAt7gxktN7etVU93yhYRI4+QrdXVUfw1RnNINiYNo
-	 Yk1BTdAiEOH2t/XDNlApeKeIPq7Na6ak08AcR0C//+q6S1uRDgNCNyHsS4kfT4Fk6b
-	 4mGQ+HOBNZdvhvPh4H6OsvN2IGRfeCS5lMnGXYU+jYlAkXfnhqJIoxGr0xTfaU3+CT
-	 SrzZC2q94rIbg07HMIbB50MgL5lBA24HrvtMKHi13vDfn0WU6E712rMhsRKnF6F1ns
-	 K2/TZz2FCE0wyPZTu6B6g8FycHXVcp0T0Jg5EYRNhdsePLqwP01K52I+FITZtpOZuq
-	 FSMljipK3/aGg==
+	b=A90lqZc0bnnS9p0MLFJrL/aFLHvI1TNPZAdcoSleQJNMFQg3lDM/vvJnOEGOTbMAV
+	 hC4SnArUMZAr2Ji99DoGq2YRGavcsm370Y8M28glJyqsq3VjjhDSNjRWwRaNXKbIDW
+	 2wuYzgYwLGSe3wTi9ZRwIiS6Kikd41rOuTAPVuhKOeKSO38613oq0viBtssAj1Twg1
+	 S70rQ7oFPEVwab4RKBPJdmJGvBwP+46iSTImhO4ai2L/57Ei6wUcYZ6S/4D/Vjzqnf
+	 Ym13PB33q6BSHumNBsTIPIi6mBk8g53Pc1HFocnKHWqm01PKO7g2WMWD4i5B2y6hv7
+	 w9Am9unPN8FZw==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id ADE2B3809A8F;
-	Mon,  3 Mar 2025 22:30:32 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id AE8B53809A8F;
+	Mon,  3 Mar 2025 22:40:31 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -37,60 +37,41 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v2 00/10] selftests/bpf: Migrate test_tunnel.sh to
- test_progs
+Subject: Re: [PATCH net v2] xsk: fix __xsk_generic_xmit() error code when cq is
+ full
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <174104103150.3737563.4806214679115746999.git-patchwork-notify@kernel.org>
-Date: Mon, 03 Mar 2025 22:30:31 +0000
-References: <20250303-tunnels-v2-0-8329f38f0678@bootlin.com>
-In-Reply-To: <20250303-tunnels-v2-0-8329f38f0678@bootlin.com>
-To: Bastien Curutchet (eBPF Foundation) <bastien.curutchet@bootlin.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
- shuah@kernel.org, thomas.petazzoni@bootlin.com, alexis.lothore@bootlin.com,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
+ <174104163051.3740022.6320098625451049670.git-patchwork-notify@kernel.org>
+Date: Mon, 03 Mar 2025 22:40:30 +0000
+References: <20250227081052.4096337-1-wangliang74@huawei.com>
+In-Reply-To: <20250227081052.4096337-1-wangliang74@huawei.com>
+To: Wang Liang <wangliang74@huawei.com>
+Cc: bjorn@kernel.org, magnus.karlsson@intel.com, maciej.fijalkowski@intel.com,
+ jonathan.lemon@gmail.com, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, ast@kernel.org,
+ daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
+ yuehaibing@huawei.com, zhangchangzhong@huawei.com, netdev@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org
 
 Hello:
 
-This series was applied to bpf/bpf-next.git (master)
+This patch was applied to bpf/bpf.git (master)
 by Martin KaFai Lau <martin.lau@kernel.org>:
 
-On Mon, 03 Mar 2025 09:22:48 +0100 you wrote:
-> Hi all,
+On Thu, 27 Feb 2025 16:10:52 +0800 you wrote:
+> When the cq reservation is failed, the error code is not set which is
+> initialized to zero in __xsk_generic_xmit(). That means the packet is not
+> send successfully but sendto() return ok.
 > 
-> This patch series continues the work to migrate the *.sh tests into
-> prog_tests framework.
-> 
-> The test_tunnel.sh script has already been partly migrated to
-> test_progs in prog_tests/test_tunnel.c so I add my work to it.
+> Considering the impact on uapi, return -EAGAIN is a good idea. The cq is
+> full usually because it is not released in time, try to send msg again is
+> appropriate.
 > 
 > [...]
 
 Here is the summary with links:
-  - [bpf-next,v2,01/10] selftests/bpf: test_tunnel: Add generic_attach* helpers
-    https://git.kernel.org/bpf/bpf-next/c/6829f3c51baf
-  - [bpf-next,v2,02/10] selftests/bpf: test_tunnel: Add ping helpers
-    https://git.kernel.org/bpf/bpf-next/c/7289e59a7667
-  - [bpf-next,v2,03/10] selftests/bpf: test_tunnel: Move gre tunnel test to test_progs
-    https://git.kernel.org/bpf/bpf-next/c/08d20eaa0727
-  - [bpf-next,v2,04/10] selftests/bpf: test_tunnel: Move ip6gre tunnel test to test_progs
-    https://git.kernel.org/bpf/bpf-next/c/1ea01a806e4c
-  - [bpf-next,v2,05/10] selftests/bpf: test_tunnel: Move erspan tunnel tests to test_progs
-    https://git.kernel.org/bpf/bpf-next/c/0ecd1e9d3237
-  - [bpf-next,v2,06/10] selftests/bpf: test_tunnel: Move ip6erspan tunnel test to test_progs
-    https://git.kernel.org/bpf/bpf-next/c/cae41f74b778
-  - [bpf-next,v2,07/10] selftests/bpf: test_tunnel: Move geneve tunnel test to test_progs
-    https://git.kernel.org/bpf/bpf-next/c/d89542d2534f
-  - [bpf-next,v2,08/10] selftests/bpf: test_tunnel: Move ip6geneve tunnel test to test_progs
-    https://git.kernel.org/bpf/bpf-next/c/8d8609430576
-  - [bpf-next,v2,09/10] selftests/bpf: test_tunnel: Move ip6tnl tunnel tests to test_progs
-    https://git.kernel.org/bpf/bpf-next/c/680a75248df7
-  - [bpf-next,v2,10/10] selftests/bpf: test_tunnel: Remove test_tunnel.sh
-    https://git.kernel.org/bpf/bpf-next/c/c8d6d78cea6e
+  - [net,v2] xsk: fix __xsk_generic_xmit() error code when cq is full
+    https://git.kernel.org/bpf/bpf/c/6ccf6adb05d0
 
 You are awesome, thank you!
 -- 
