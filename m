@@ -1,39 +1,39 @@
 Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AAA515A868;
-	Mon,  3 Mar 2025 08:22:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 683C11E1A31;
+	Mon,  3 Mar 2025 08:22:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740990178; cv=none; b=V8wi/9Od3q9Y5tVdVVwq6w2AQev4FP3vCEvx0Gvt41A2IovNVXg+sa9RjQjBcRM576/dXd2vfxNdYnxDVtO/+BuBlHWJPjocJmwy7ZBhevHhrxp2yoYtm41Xf7j5lo52DFRDme2ritDUu9+XX83ZuG0JixqmkGYfuZCKp+gPRCU=
+	t=1740990179; cv=none; b=SvBO03R83FISriQYYu3p0qm/j5GvCRRqiZ8YfDA8kn/6RuxiMgK00RuFLfUyHT+MzSp2om/j7uwcJVjzcbFzR6OCqLW5hda/mN/EHfRLLiz41lqYFZ5i+Fn/BeGkti5XgZst1MhLjfvQ08btpmQAVe6c9E13Wx8sLtNhV/Bek3Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740990178; c=relaxed/simple;
-	bh=nmk4QgfUGcR5FpFsSenlW1rMZoO9PahipOHh+z34D/A=;
+	s=arc-20240116; t=1740990179; c=relaxed/simple;
+	bh=SlnvAOHpi/pigx7YABM7JMAnlE//LI35JeQHXO5R1kI=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=VRM9cJkXjlFA+X7Dibmpy7imPfXqCVUHx40cOjvXzP6PVKyqvW/FZb0z/+hDIPplEzOaVDC2W8iENDg9h4WqGtZM9blwUoJi7UjeqYKcX88VDX+9rfroI3CKzM62QrdeH+RkxGc18+SS2l8KEaDPcancymeDW1snA7AUB3i5oAg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Rx2ydca+; arc=none smtp.client-ip=217.70.183.200
+	 In-Reply-To:To:Cc; b=L1Wmyf/vPG/Jh70+94pK2F+cNkOmlfLHfBs6K2II8UxGTFx/np8IJo/BtYCfSLrxiPK1CHgtdJsYh64ga3mGAGwMVHNE/6yCuA1a7LGMcX2TIty8CxZArUMKJhkx8JTet7AV6Lc2jCqUcgQoe+0cKrYisorEoIxzF7KCZIUmW7M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=ZKs/LwAl; arc=none smtp.client-ip=217.70.183.200
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Rx2ydca+"
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 9AB9D4435C;
-	Mon,  3 Mar 2025 08:22:52 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="ZKs/LwAl"
+Received: by mail.gandi.net (Postfix) with ESMTPSA id E10F644356;
+	Mon,  3 Mar 2025 08:22:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1740990173;
+	t=1740990175;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=hIjFxsz9ZhDoEdo6JHTWR9bLwZgDcKJH7nfN265P1fk=;
-	b=Rx2ydca+DgdZnvLrUd5xe2QzHpOJV2XG/xH32Mi6XLU9TULKirTGKrEDgb1pWMEnCaE8gQ
-	TEcyXaew30IKzW3ckttsHSH/5qRX8vSzMSbvFEu+Sbpu0TZBB5sBUAdU2rR2MFTiOuCj8Z
-	yuetX1B80+vdFUkV7meKBlv7XHp/pxq51SLJK8By1xcE4m5s/Ax/wR/IIhqpaNz9lmQab8
-	+k7Aps1MTXGSLtP36AAz5LqmoQTf9NvfRGPOHtsth+HrTKigJcwUTR8markJ/+roKmr+S3
-	YLcimONzPTBQPlURx4sBeXtycFirhzc2TA3eXC3kcSKr3Vyf/8+yNVk1L245mQ==
+	bh=/YIngI9G2c/hKVLTMkw3ZOdP1a1zwEvSGl7sOER1cJU=;
+	b=ZKs/LwAl76Ug7dNzvHDU1KU5wzAlrbaretyVZ7AZzi7Oh1qFr8EScd531iCrWa1bpOqXW+
+	D/PEi1kgSg64bKkW/JQTNdSYyQ3g2FNM21h6deLfA25DJkzt6iY8CNZLU6AyhmSdgU2YGj
+	IIF64OsMaUFjp6gxR83oPQYszXFZ7sCd21PtqWdhBJ3/srj28BE9L2nhQeCQe/Iiq4Rx23
+	YeWNZLSt4tYFf+XtgH/QlwW+grlj2BXNboWJeN1RaGhW++Is4LSNcxbhqGLN9b82qw2bUD
+	6zVi5Z4IDg7hwkDUhfJtlHYCAqWNU8oZxkkfjHm0iweZRjqguEQuNUpb16aN5w==
 From: "Bastien Curutchet (eBPF Foundation)" <bastien.curutchet@bootlin.com>
-Date: Mon, 03 Mar 2025 09:22:49 +0100
-Subject: [PATCH bpf-next v2 01/10] selftests/bpf: test_tunnel: Add
- generic_attach* helpers
+Date: Mon, 03 Mar 2025 09:22:51 +0100
+Subject: [PATCH bpf-next v2 03/10] selftests/bpf: test_tunnel: Move gre
+ tunnel test to test_progs
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -42,7 +42,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250303-tunnels-v2-1-8329f38f0678@bootlin.com>
+Message-Id: <20250303-tunnels-v2-3-8329f38f0678@bootlin.com>
 References: <20250303-tunnels-v2-0-8329f38f0678@bootlin.com>
 In-Reply-To: <20250303-tunnels-v2-0-8329f38f0678@bootlin.com>
 To: Alexei Starovoitov <ast@kernel.org>, 
@@ -61,298 +61,278 @@ Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
 X-Mailer: b4 0.14.2
 X-GND-State: clean
 X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdelkeeifecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephfffufggtgfgkfhfjgfvvefosehtjeertdertdejnecuhfhrohhmpedfuegrshhtihgvnhcuvehurhhuthgthhgvthculdgvuefrhfcuhfhouhhnuggrthhiohhnmddfuceosggrshhtihgvnhdrtghurhhuthgthhgvthessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepgeefudfhuedttdeiffetffeljeffkeevveeiuddtgeejleeftdejgedtjedttdfhnecukfhppeeltddrkeelrdduieefrdduvdejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepledtrdekledrudeifedruddvjedphhgvlhhopegludelvddrudeikedrtddrudegngdpmhgrihhlfhhrohhmpegsrghsthhivghnrdgtuhhruhhttghhvghtsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopedvtddprhgtphhtthhopehlihhnuhigqdhkshgvlhhfthgvshhtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhhuhgrhheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepjhhohhhnrdhfrghsthgrsggvnhgusehgmhgrihhlrdgtohhmpdhrtghpthhtohepvgguugihiiekjeesghhmr
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdelkeeifecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephfffufggtgfgkfhfjgfvvefosehtjeertdertdejnecuhfhrohhmpedfuegrshhtihgvnhcuvehurhhuthgthhgvthculdgvuefrhfcuhfhouhhnuggrthhiohhnmddfuceosggrshhtihgvnhdrtghurhhuthgthhgvthessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepgeefudfhuedttdeiffetffeljeffkeevveeiuddtgeejleeftdejgedtjedttdfhnecukfhppeeltddrkeelrdduieefrdduvdejnecuvehluhhsthgvrhfuihiivgepvdenucfrrghrrghmpehinhgvthepledtrdekledrudeifedruddvjedphhgvlhhopegludelvddrudeikedrtddrudegngdpmhgrihhlfhhrohhmpegsrghsthhivghnrdgtuhhruhhttghhvghtsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopedvtddprhgtphhtthhopehlihhnuhigqdhkshgvlhhfthgvshhtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhhuhgrhheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepjhhohhhnrdhfrghsthgrsggvnhgusehgmhgrihhlrdgtohhmpdhrtghpthhtohepvgguugihiiekjeesghhmr
  ghilhdrtghomhdprhgtphhtthhopehsohhngheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghstheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepmhihkhholhgrlhesfhgsrdgtohhmpdhrtghpthhtoheprghnughrihhisehkvghrnhgvlhdrohhrgh
 X-GND-Sasl: bastien.curutchet@bootlin.com
 
-A fair amount of code duplication is present among tests to attach BPF
-programs.
+gre tunnels are tested in the test_tunnel.sh but not in the test_progs
+framework.
 
-Create generic_attach* helpers that attach BPF programs to a given
-interface.
-Use ASSERT_OK_FD() instead of ASSERT_GE() to check fd's validity.
-Use these helpers in all the available tests.
+Add a new test in test_progs to test gre tunnels. It uses the same
+network topology and the same BPF programs than the script.
+Remove test_gre() and test_gre_no_tunnel_key() from the script.
 
+Acked-by: Stanislav Fomichev <sdf@fomichev.me>
 Signed-off-by: Bastien Curutchet (eBPF Foundation) <bastien.curutchet@bootlin.com>
 ---
-Changes in v2:
- - Move tc_hook definition to attach_tc_prog()
----
- .../testing/selftests/bpf/prog_tests/test_tunnel.c | 140 ++++++++++-----------
- 1 file changed, 66 insertions(+), 74 deletions(-)
+ .../testing/selftests/bpf/prog_tests/test_tunnel.c | 97 ++++++++++++++++++++++
+ tools/testing/selftests/bpf/test_tunnel.sh         | 79 ------------------
+ 2 files changed, 97 insertions(+), 79 deletions(-)
 
 diff --git a/tools/testing/selftests/bpf/prog_tests/test_tunnel.c b/tools/testing/selftests/bpf/prog_tests/test_tunnel.c
-index cec746e77cd3abdf561cfc2422fa0a934fc481cd..cc03a4440182cfff94f8421c3f5362aaf470086d 100644
+index 09e674c147bb31e239476b66eb5f57fc2b447cd9..79b0b1cd85657fa509dd297410de7dd3b4203a90 100644
 --- a/tools/testing/selftests/bpf/prog_tests/test_tunnel.c
 +++ b/tools/testing/selftests/bpf/prog_tests/test_tunnel.c
-@@ -364,32 +364,34 @@ static int test_ping(int family, const char *addr)
+@@ -98,6 +98,9 @@
+ #define XFRM_SPI_IN_TO_OUT 0x1
+ #define XFRM_SPI_OUT_TO_IN 0x2
+ 
++#define GRE_TUNL_DEV0 "gre00"
++#define GRE_TUNL_DEV1 "gre11"
++
+ #define PING_ARGS "-i 0.01 -c 3 -w 10 -q"
+ 
+ static int config_device(void)
+@@ -216,6 +219,18 @@ static int set_ipip_encap(const char *ipproto, const char *type)
  	return -1;
  }
  
--static int attach_tc_prog(struct bpf_tc_hook *hook, int igr_fd, int egr_fd)
-+static int attach_tc_prog(int ifindex, int igr_fd, int egr_fd)
++static int set_ipv4_addr(const char *dev0, const char *dev1)
++{
++	SYS(fail, "ip -n at_ns0 link set dev %s up", dev0);
++	SYS(fail, "ip -n at_ns0 addr add dev %s %s/24", dev0, IP4_ADDR_TUNL_DEV0);
++	SYS(fail, "ip link set dev %s up", dev1);
++	SYS(fail, "ip addr add dev %s %s/24", dev1, IP4_ADDR_TUNL_DEV1);
++
++	return 0;
++fail:
++	return 1;
++}
++
+ static int add_ipip_tunnel(enum ipip_encap encap)
  {
-+	DECLARE_LIBBPF_OPTS(bpf_tc_hook, hook, .ifindex = ifindex,
-+			    .attach_point = BPF_TC_INGRESS | BPF_TC_EGRESS);
- 	DECLARE_LIBBPF_OPTS(bpf_tc_opts, opts1, .handle = 1,
- 			    .priority = 1, .prog_fd = igr_fd);
- 	DECLARE_LIBBPF_OPTS(bpf_tc_opts, opts2, .handle = 1,
- 			    .priority = 1, .prog_fd = egr_fd);
- 	int ret;
- 
--	ret = bpf_tc_hook_create(hook);
-+	ret = bpf_tc_hook_create(&hook);
- 	if (!ASSERT_OK(ret, "create tc hook"))
- 		return ret;
- 
- 	if (igr_fd >= 0) {
--		hook->attach_point = BPF_TC_INGRESS;
--		ret = bpf_tc_attach(hook, &opts1);
-+		hook.attach_point = BPF_TC_INGRESS;
-+		ret = bpf_tc_attach(&hook, &opts1);
- 		if (!ASSERT_OK(ret, "bpf_tc_attach")) {
--			bpf_tc_hook_destroy(hook);
-+			bpf_tc_hook_destroy(&hook);
- 			return ret;
- 		}
- 	}
- 
- 	if (egr_fd >= 0) {
--		hook->attach_point = BPF_TC_EGRESS;
--		ret = bpf_tc_attach(hook, &opts2);
-+		hook.attach_point = BPF_TC_EGRESS;
-+		ret = bpf_tc_attach(&hook, &opts2);
- 		if (!ASSERT_OK(ret, "bpf_tc_attach")) {
--			bpf_tc_hook_destroy(hook);
-+			bpf_tc_hook_destroy(&hook);
- 			return ret;
- 		}
- 	}
-@@ -397,6 +399,50 @@ static int attach_tc_prog(struct bpf_tc_hook *hook, int igr_fd, int egr_fd)
- 	return 0;
+ 	int err;
+@@ -356,6 +371,31 @@ static void delete_xfrm_tunnel(void)
+ 		   IP4_ADDR1_VETH1, IP4_ADDR_VETH0, XFRM_SPI_OUT_TO_IN);
  }
  
-+static int generic_attach(const char *dev, int igr_fd, int egr_fd)
++static int add_ipv4_tunnel(const char *dev0, const char *dev1,
++			   const char *type, const char *opt)
 +{
-+	int ifindex;
-+
-+	if (!ASSERT_OK_FD(igr_fd, "check ingress fd"))
-+		return -1;
-+	if (!ASSERT_OK_FD(egr_fd, "check egress fd"))
++	if (!type || !opt || !dev0 || !dev1)
 +		return -1;
 +
-+	ifindex = if_nametoindex(dev);
-+	if (!ASSERT_NEQ(ifindex, 0, "get ifindex"))
-+		return -1;
++	SYS(fail, "ip -n at_ns0 link add dev %s type %s %s local %s remote %s",
++	    dev0, type, opt, IP4_ADDR_VETH0, IP4_ADDR1_VETH1);
 +
-+	return attach_tc_prog(ifindex, igr_fd, egr_fd);
++	SYS(fail, "ip link add dev %s type %s external", dev1, type);
++
++	return set_ipv4_addr(dev0, dev1);
++fail:
++	return -1;
 +}
 +
-+static int generic_attach_igr(const char *dev, int igr_fd)
++static void delete_tunnel(const char *dev0, const char *dev1)
 +{
-+	int ifindex;
++	if (!dev0 || !dev1)
++		return;
 +
-+	if (!ASSERT_OK_FD(igr_fd, "check ingress fd"))
-+		return -1;
-+
-+	ifindex = if_nametoindex(dev);
-+	if (!ASSERT_NEQ(ifindex, 0, "get ifindex"))
-+		return -1;
-+
-+	return attach_tc_prog(ifindex, igr_fd, -1);
++	SYS_NOFAIL("ip netns exec at_ns0 ip link delete dev %s", dev0);
++	SYS_NOFAIL("ip link delete dev %s", dev1);
 +}
 +
-+static int generic_attach_egr(const char *dev, int egr_fd)
-+{
-+	int ifindex;
-+
-+	if (!ASSERT_OK_FD(egr_fd, "check egress fd"))
-+		return -1;
-+
-+	ifindex = if_nametoindex(dev);
-+	if (!ASSERT_NEQ(ifindex, 0, "get ifindex"))
-+		return -1;
-+
-+	return attach_tc_prog(ifindex, -1, egr_fd);
-+}
-+
- static void test_vxlan_tunnel(void)
+ static int test_ping(int family, const char *addr)
  {
- 	struct test_tunnel_kern *skel = NULL;
-@@ -404,11 +450,9 @@ static void test_vxlan_tunnel(void)
- 	int local_ip_map_fd = -1;
- 	int set_src_prog_fd, get_src_prog_fd;
- 	int set_dst_prog_fd;
--	int key = 0, ifindex = -1;
-+	int key = 0;
- 	uint local_ip;
- 	int err;
--	DECLARE_LIBBPF_OPTS(bpf_tc_hook, tc_hook,
--			    .attach_point = BPF_TC_INGRESS);
+ 	SYS(fail, "%s %s %s > /dev/null", ping_command(family), PING_ARGS, addr);
+@@ -677,6 +717,59 @@ static void test_xfrm_tunnel(void)
+ 		test_tunnel_kern__destroy(skel);
+ }
  
- 	/* add vxlan tunnel */
- 	err = add_vxlan_tunnel();
-@@ -419,42 +463,22 @@ static void test_vxlan_tunnel(void)
- 	skel = test_tunnel_kern__open_and_load();
- 	if (!ASSERT_OK_PTR(skel, "test_tunnel_kern__open_and_load"))
- 		goto done;
--	ifindex = if_nametoindex(VXLAN_TUNL_DEV1);
--	if (!ASSERT_NEQ(ifindex, 0, "vxlan11 ifindex"))
--		goto done;
--	tc_hook.ifindex = ifindex;
- 	get_src_prog_fd = bpf_program__fd(skel->progs.vxlan_get_tunnel_src);
- 	set_src_prog_fd = bpf_program__fd(skel->progs.vxlan_set_tunnel_src);
--	if (!ASSERT_GE(get_src_prog_fd, 0, "bpf_program__fd"))
--		goto done;
--	if (!ASSERT_GE(set_src_prog_fd, 0, "bpf_program__fd"))
--		goto done;
--	if (attach_tc_prog(&tc_hook, get_src_prog_fd, set_src_prog_fd))
-+	if (generic_attach(VXLAN_TUNL_DEV1, get_src_prog_fd, set_src_prog_fd))
- 		goto done;
- 
- 	/* load and attach bpf prog to veth dev tc hook point */
--	ifindex = if_nametoindex("veth1");
--	if (!ASSERT_NEQ(ifindex, 0, "veth1 ifindex"))
--		goto done;
--	tc_hook.ifindex = ifindex;
- 	set_dst_prog_fd = bpf_program__fd(skel->progs.veth_set_outer_dst);
--	if (!ASSERT_GE(set_dst_prog_fd, 0, "bpf_program__fd"))
--		goto done;
--	if (attach_tc_prog(&tc_hook, set_dst_prog_fd, -1))
-+	if (generic_attach_igr("veth1", set_dst_prog_fd))
- 		goto done;
- 
- 	/* load and attach prog set_md to tunnel dev tc hook point at_ns0 */
- 	nstoken = open_netns("at_ns0");
- 	if (!ASSERT_OK_PTR(nstoken, "setns src"))
- 		goto done;
--	ifindex = if_nametoindex(VXLAN_TUNL_DEV0);
--	if (!ASSERT_NEQ(ifindex, 0, "vxlan00 ifindex"))
--		goto done;
--	tc_hook.ifindex = ifindex;
- 	set_dst_prog_fd = bpf_program__fd(skel->progs.vxlan_set_tunnel_dst);
--	if (!ASSERT_GE(set_dst_prog_fd, 0, "bpf_program__fd"))
--		goto done;
--	if (attach_tc_prog(&tc_hook, -1, set_dst_prog_fd))
-+	if (generic_attach_egr(VXLAN_TUNL_DEV0, set_dst_prog_fd))
- 		goto done;
- 	close_netns(nstoken);
- 
-@@ -488,11 +512,9 @@ static void test_ip6vxlan_tunnel(void)
- 	int local_ip_map_fd = -1;
- 	int set_src_prog_fd, get_src_prog_fd;
- 	int set_dst_prog_fd;
--	int key = 0, ifindex = -1;
-+	int key = 0;
- 	uint local_ip;
- 	int err;
--	DECLARE_LIBBPF_OPTS(bpf_tc_hook, tc_hook,
--			    .attach_point = BPF_TC_INGRESS);
- 
- 	/* add vxlan tunnel */
- 	err = add_ip6vxlan_tunnel();
-@@ -503,31 +525,17 @@ static void test_ip6vxlan_tunnel(void)
- 	skel = test_tunnel_kern__open_and_load();
- 	if (!ASSERT_OK_PTR(skel, "test_tunnel_kern__open_and_load"))
- 		goto done;
--	ifindex = if_nametoindex(IP6VXLAN_TUNL_DEV1);
--	if (!ASSERT_NEQ(ifindex, 0, "ip6vxlan11 ifindex"))
--		goto done;
--	tc_hook.ifindex = ifindex;
- 	get_src_prog_fd = bpf_program__fd(skel->progs.ip6vxlan_get_tunnel_src);
- 	set_src_prog_fd = bpf_program__fd(skel->progs.ip6vxlan_set_tunnel_src);
--	if (!ASSERT_GE(set_src_prog_fd, 0, "bpf_program__fd"))
--		goto done;
--	if (!ASSERT_GE(get_src_prog_fd, 0, "bpf_program__fd"))
--		goto done;
--	if (attach_tc_prog(&tc_hook, get_src_prog_fd, set_src_prog_fd))
-+	if (generic_attach(IP6VXLAN_TUNL_DEV1, get_src_prog_fd, set_src_prog_fd))
- 		goto done;
- 
- 	/* load and attach prog set_md to tunnel dev tc hook point at_ns0 */
- 	nstoken = open_netns("at_ns0");
- 	if (!ASSERT_OK_PTR(nstoken, "setns src"))
- 		goto done;
--	ifindex = if_nametoindex(IP6VXLAN_TUNL_DEV0);
--	if (!ASSERT_NEQ(ifindex, 0, "ip6vxlan00 ifindex"))
--		goto done;
--	tc_hook.ifindex = ifindex;
- 	set_dst_prog_fd = bpf_program__fd(skel->progs.ip6vxlan_set_tunnel_dst);
--	if (!ASSERT_GE(set_dst_prog_fd, 0, "bpf_program__fd"))
--		goto done;
--	if (attach_tc_prog(&tc_hook, -1, set_dst_prog_fd))
-+	if (generic_attach_egr(IP6VXLAN_TUNL_DEV0, set_dst_prog_fd))
- 		goto done;
- 	close_netns(nstoken);
- 
-@@ -559,10 +567,7 @@ static void test_ipip_tunnel(enum ipip_encap encap)
- 	struct test_tunnel_kern *skel = NULL;
- 	struct nstoken *nstoken;
- 	int set_src_prog_fd, get_src_prog_fd;
--	int ifindex = -1;
- 	int err;
--	DECLARE_LIBBPF_OPTS(bpf_tc_hook, tc_hook,
--			    .attach_point = BPF_TC_INGRESS);
- 
- 	/* add ipip tunnel */
- 	err = add_ipip_tunnel(encap);
-@@ -573,10 +578,6 @@ static void test_ipip_tunnel(enum ipip_encap encap)
- 	skel = test_tunnel_kern__open_and_load();
- 	if (!ASSERT_OK_PTR(skel, "test_tunnel_kern__open_and_load"))
- 		goto done;
--	ifindex = if_nametoindex(IPIP_TUNL_DEV1);
--	if (!ASSERT_NEQ(ifindex, 0, "ipip11 ifindex"))
--		goto done;
--	tc_hook.ifindex = ifindex;
- 
- 	switch (encap) {
- 	case FOU:
-@@ -598,11 +599,7 @@ static void test_ipip_tunnel(enum ipip_encap encap)
- 			skel->progs.ipip_set_tunnel);
- 	}
- 
--	if (!ASSERT_GE(set_src_prog_fd, 0, "bpf_program__fd"))
--		goto done;
--	if (!ASSERT_GE(get_src_prog_fd, 0, "bpf_program__fd"))
--		goto done;
--	if (attach_tc_prog(&tc_hook, get_src_prog_fd, set_src_prog_fd))
-+	if (generic_attach(IPIP_TUNL_DEV1, get_src_prog_fd, set_src_prog_fd))
- 		goto done;
- 
- 	/* ping from root namespace test */
-@@ -628,8 +625,6 @@ static void test_ipip_tunnel(enum ipip_encap encap)
- 
- static void test_xfrm_tunnel(void)
- {
--	DECLARE_LIBBPF_OPTS(bpf_tc_hook, tc_hook,
--			    .attach_point = BPF_TC_INGRESS);
- 	LIBBPF_OPTS(bpf_xdp_attach_opts, opts);
- 	struct test_tunnel_kern *skel = NULL;
- 	struct nstoken *nstoken;
-@@ -646,19 +641,16 @@ static void test_xfrm_tunnel(void)
- 	if (!ASSERT_OK_PTR(skel, "test_tunnel_kern__open_and_load"))
- 		goto done;
- 
--	ifindex = if_nametoindex("veth1");
--	if (!ASSERT_NEQ(ifindex, 0, "veth1 ifindex"))
--		goto done;
- 
- 	/* attach tc prog to tunnel dev */
--	tc_hook.ifindex = ifindex;
- 	tc_prog_fd = bpf_program__fd(skel->progs.xfrm_get_state);
--	if (!ASSERT_GE(tc_prog_fd, 0, "bpf_program__fd"))
--		goto done;
--	if (attach_tc_prog(&tc_hook, tc_prog_fd, -1))
-+	if (generic_attach_igr("veth1", tc_prog_fd))
- 		goto done;
- 
- 	/* attach xdp prog to tunnel dev */
-+	ifindex = if_nametoindex("veth1");
-+	if (!ASSERT_NEQ(ifindex, 0, "veth1 ifindex"))
++enum gre_test {
++	GRE,
++	GRE_NOKEY,
++	GRETAP,
++	GRETAP_NOKEY,
++};
++
++static void test_gre_tunnel(enum gre_test test)
++{
++	struct test_tunnel_kern *skel;
++	int set_fd, get_fd;
++	int err;
++
++	skel = test_tunnel_kern__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "test_tunnel_kern__open_and_load"))
++		return;
++
++	switch (test) {
++	case GRE:
++		err = add_ipv4_tunnel(GRE_TUNL_DEV0, GRE_TUNL_DEV1, "gre", "seq");
++		set_fd = bpf_program__fd(skel->progs.gre_set_tunnel_no_key);
++		get_fd = bpf_program__fd(skel->progs.gre_get_tunnel);
++		break;
++	case GRE_NOKEY:
++		err = add_ipv4_tunnel(GRE_TUNL_DEV0, GRE_TUNL_DEV1, "gre", "seq key 2");
++		set_fd = bpf_program__fd(skel->progs.gre_set_tunnel);
++		get_fd = bpf_program__fd(skel->progs.gre_get_tunnel);
++		break;
++	case GRETAP:
++		err = add_ipv4_tunnel(GRE_TUNL_DEV0, GRE_TUNL_DEV1, "gretap", "seq");
++		set_fd = bpf_program__fd(skel->progs.gre_set_tunnel_no_key);
++		get_fd = bpf_program__fd(skel->progs.gre_get_tunnel);
++		break;
++	case GRETAP_NOKEY:
++		err = add_ipv4_tunnel(GRE_TUNL_DEV0, GRE_TUNL_DEV1, "gretap", "seq key 2");
++		set_fd = bpf_program__fd(skel->progs.gre_set_tunnel);
++		get_fd = bpf_program__fd(skel->progs.gre_get_tunnel);
++		break;
++	}
++	if (!ASSERT_OK(err, "add tunnel"))
 +		goto done;
- 	xdp_prog_fd = bpf_program__fd(skel->progs.xfrm_get_state_xdp);
- 	if (!ASSERT_GE(xdp_prog_fd, 0, "bpf_program__fd"))
- 		goto done;
++
++	if (generic_attach(GRE_TUNL_DEV1, get_fd, set_fd))
++		goto done;
++
++	ping_dev0();
++	ping_dev1();
++
++done:
++	delete_tunnel(GRE_TUNL_DEV0, GRE_TUNL_DEV1);
++	test_tunnel_kern__destroy(skel);
++}
++
+ #define RUN_TEST(name, ...)						\
+ 	({								\
+ 		if (test__start_subtest(#name)) {			\
+@@ -694,6 +787,10 @@ static void *test_tunnel_run_tests(void *arg)
+ 	RUN_TEST(ipip_tunnel, FOU);
+ 	RUN_TEST(ipip_tunnel, GUE);
+ 	RUN_TEST(xfrm_tunnel);
++	RUN_TEST(gre_tunnel, GRE);
++	RUN_TEST(gre_tunnel, GRE_NOKEY);
++	RUN_TEST(gre_tunnel, GRETAP);
++	RUN_TEST(gre_tunnel, GRETAP_NOKEY);
+ 
+ 	return NULL;
+ }
+diff --git a/tools/testing/selftests/bpf/test_tunnel.sh b/tools/testing/selftests/bpf/test_tunnel.sh
+index d9661b9988ba907e023ef9bc58d96a0155f58326..48ac9cb2092f6aa34aa59b3b0c51465390965707 100755
+--- a/tools/testing/selftests/bpf/test_tunnel.sh
++++ b/tools/testing/selftests/bpf/test_tunnel.sh
+@@ -64,26 +64,6 @@ config_device()
+ 	ip addr add dev veth1 172.16.1.200/24
+ }
+ 
+-add_gre_tunnel()
+-{
+-	tun_key=
+-	if [ -n "$1" ]; then
+-		tun_key="key $1"
+-	fi
+-
+-	# at_ns0 namespace
+-	ip netns exec at_ns0 \
+-        ip link add dev $DEV_NS type $TYPE seq $tun_key \
+-		local 172.16.1.100 remote 172.16.1.200
+-	ip netns exec at_ns0 ip link set dev $DEV_NS up
+-	ip netns exec at_ns0 ip addr add dev $DEV_NS 10.1.1.100/24
+-
+-	# root namespace
+-	ip link add dev $DEV type $TYPE $tun_key external
+-	ip link set dev $DEV up
+-	ip addr add dev $DEV 10.1.1.200/24
+-}
+-
+ add_ip6gretap_tunnel()
+ {
+ 
+@@ -234,54 +214,6 @@ add_ip6tnl_tunnel()
+ 	ip link set dev $DEV up
+ }
+ 
+-test_gre()
+-{
+-	TYPE=gretap
+-	DEV_NS=gretap00
+-	DEV=gretap11
+-	ret=0
+-
+-	check $TYPE
+-	config_device
+-	add_gre_tunnel 2
+-	attach_bpf $DEV gre_set_tunnel gre_get_tunnel
+-	ping $PING_ARG 10.1.1.100
+-	check_err $?
+-	ip netns exec at_ns0 ping $PING_ARG 10.1.1.200
+-	check_err $?
+-	cleanup
+-
+-        if [ $ret -ne 0 ]; then
+-                echo -e ${RED}"FAIL: $TYPE"${NC}
+-                return 1
+-        fi
+-        echo -e ${GREEN}"PASS: $TYPE"${NC}
+-}
+-
+-test_gre_no_tunnel_key()
+-{
+-	TYPE=gre
+-	DEV_NS=gre00
+-	DEV=gre11
+-	ret=0
+-
+-	check $TYPE
+-	config_device
+-	add_gre_tunnel
+-	attach_bpf $DEV gre_set_tunnel_no_key gre_get_tunnel
+-	ping $PING_ARG 10.1.1.100
+-	check_err $?
+-	ip netns exec at_ns0 ping $PING_ARG 10.1.1.200
+-	check_err $?
+-	cleanup
+-
+-        if [ $ret -ne 0 ]; then
+-                echo -e ${RED}"FAIL: $TYPE"${NC}
+-                return 1
+-        fi
+-        echo -e ${GREEN}"PASS: $TYPE"${NC}
+-}
+-
+ test_ip6gre()
+ {
+ 	TYPE=ip6gre
+@@ -538,8 +470,6 @@ cleanup()
+ 	ip link del ipip11 2> /dev/null
+ 	ip link del ipip6tnl11 2> /dev/null
+ 	ip link del ip6ip6tnl11 2> /dev/null
+-	ip link del gretap11 2> /dev/null
+-	ip link del gre11 2> /dev/null
+ 	ip link del ip6gre11 2> /dev/null
+ 	ip link del ip6gretap11 2> /dev/null
+ 	ip link del geneve11 2> /dev/null
+@@ -567,7 +497,6 @@ check()
+ 
+ enable_debug()
+ {
+-	echo 'file ip_gre.c +p' > /sys/kernel/debug/dynamic_debug/control
+ 	echo 'file ip6_gre.c +p' > /sys/kernel/debug/dynamic_debug/control
+ 	echo 'file geneve.c +p' > /sys/kernel/debug/dynamic_debug/control
+ 	echo 'file ipip.c +p' > /sys/kernel/debug/dynamic_debug/control
+@@ -584,14 +513,6 @@ bpf_tunnel_test()
+ {
+ 	local errors=0
+ 
+-	echo "Testing GRE tunnel..."
+-	test_gre
+-	errors=$(( $errors + $? ))
+-
+-	echo "Testing GRE tunnel (without tunnel keys)..."
+-	test_gre_no_tunnel_key
+-	errors=$(( $errors + $? ))
+-
+ 	echo "Testing IP6GRE tunnel..."
+ 	test_ip6gre
+ 	errors=$(( $errors + $? ))
 
 -- 
 2.48.1
