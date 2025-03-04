@@ -1,135 +1,87 @@
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 669FB1FC7C9
-	for <bpf@vger.kernel.org>; Tue,  4 Mar 2025 14:04:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8174720DD4C;
+	Tue,  4 Mar 2025 14:55:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741097087; cv=none; b=fjBntOrKZkCZScRqH6QPPSeGTYVjXfj7d2gQxeSgoxkLgKtn9MNn5tsFCTHo40wdPR0yQuljO7Ktz6+YMTVps1Yv9XctrUZ2Kn5ruRZzp+7kQ6n1OGzzvZD8sONWGnvor7Yh50QY8hxTWmj1RRwu3fvJbSvAfgQMoF+x85Ry74M=
+	t=1741100106; cv=none; b=A7YpTux/m9z2ePfWVY14hGIVKMHir1zKw8WrFZge+ZfAYVz8atXP6lfbvBnoQbuq7sptSN/EdypSUK1L6IFTMplWaDqErbqC5OCxPUginW1uE/yPDauNqBFtW+a54BvMw/TDxgrdTQczJ76zMBbTRrB2oq3GDnj8zH7b1glZvlc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741097087; c=relaxed/simple;
-	bh=rkt7VZy7BGfcGTwKZ7bzSxMmTIONRYTfNErmGhE2edg=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=l7EPsPfYHN2X4/TnmXiQI4k2O2gk7hVJYSGUrKt08cep0lmhxjF0JbICntMiqxSKpn/+oOsD4otjdXHujYryAkPFm80VNvdQQgOxQls//EeXPb5gFQkwZZkR+b0oNeQGtsWg2ykWgAB95FCgV/gFREUpdQ1JlYak/rbTskGUjZc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.216])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Z6cqh6cBmz4f3m7P
-	for <bpf@vger.kernel.org>; Tue,  4 Mar 2025 22:04:16 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.112])
-	by mail.maildlp.com (Postfix) with ESMTP id 77D921A187C
-	for <bpf@vger.kernel.org>; Tue,  4 Mar 2025 22:04:40 +0800 (CST)
-Received: from [10.174.176.117] (unknown [10.174.176.117])
-	by APP1 (Coremail) with SMTP id cCh0CgAXyHh0CMdnBg3RFQ--.48593S2;
-	Tue, 04 Mar 2025 22:04:40 +0800 (CST)
-Subject: Re: [PATCH 1/2] bpf: add kfunc for populating cpumask bits
-To: Emil Tsalapatis <emil@etsalapatis.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, martin.lau@linux.de, eddyz87@gmail.com,
- yonghong.song@linux.dev
-References: <20250228003321.1409285-1-emil@etsalapatis.com>
- <20250228003321.1409285-2-emil@etsalapatis.com>
- <9c51ec81-d7e3-679e-055d-8f82a73766ef@huaweicloud.com>
- <CABFh=a7U8ut-YE1kc=P60sqrG4ySXMcXKewpoKzAvpQoQz8pgg@mail.gmail.com>
-From: Hou Tao <houtao@huaweicloud.com>
-Message-ID: <c6725ecc-ffb5-9626-ca4f-146ab80b2070@huaweicloud.com>
-Date: Tue, 4 Mar 2025 22:04:36 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+	s=arc-20240116; t=1741100106; c=relaxed/simple;
+	bh=6sXLqOGwJPjjQ1mrwjcKafFgt74IfGmcKaUYu1Vea1Y=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
+	 MIME-Version:Content-Type; b=KpuRLzJFAPlZRIH3Nx2wc+6QXQPteO3vUu6lM7GqxkdQiItrqakn0C90Zca2p0nLTC6F6xiVuVpyfEzLig4XaN5jjwlk1UAML97D9zptJ74INCTQDYVPO0dRlntNYfuduEGCxmoSLvsUOvxekfhApOzzLW+e06afy7uXANb38X4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=HsBac2XW; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="HsBac2XW"
+Received: from [127.0.0.1] ([76.133.66.138])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 524Eqsmu2303478
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+	Tue, 4 Mar 2025 06:52:55 -0800
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 524Eqsmu2303478
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2025021701; t=1741099977;
+	bh=6sXLqOGwJPjjQ1mrwjcKafFgt74IfGmcKaUYu1Vea1Y=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+	b=HsBac2XWWG8JTb5veE6LuaAtOLLvQu+vBFWgoKJItDg2FR2nOr9Ue8lryfQJFNb5X
+	 ojvI2P5MCIyrjDnZDpX41nGdlho2yRe4glo+hru+12GUQ7NBtdvcBedZZUsuJAWMmd
+	 N1yfFPWJ9WTY4SudzJVAuXk+ooFW+J2KOOkX3rNtdkndtmyJKXCfOOPoNoEFrEvYyS
+	 l+SyUMQ+mbWmrFpz4qKD1NBiUxnxzQF3eOYkhvJKEwllwoiSYqGIWHFHl+eS6oQqxV
+	 mHa7p//gFjY/UXuPZ99CFf8KpquSyK6rWISD0Qpt03vNg4h+TUDKnvTetXzksGMPfD
+	 /cUCOphcQnqWw==
+Date: Tue, 04 Mar 2025 06:52:53 -0800
+From: "H. Peter Anvin" <hpa@zytor.com>
+To: Peter Zijlstra <peterz@infradead.org>,
+        Menglong Dong <menglong8.dong@gmail.com>
+CC: rostedt@goodmis.org, mark.rutland@arm.com, alexei.starovoitov@gmail.com,
+        catalin.marinas@arm.com, will@kernel.org, mhiramat@kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
+        eddyz87@gmail.com, yonghong.song@linux.dev, john.fastabend@gmail.com,
+        kpsingh@kernel.org, sdf@fomichev.me, jolsa@kernel.org,
+        davem@davemloft.net, dsahern@kernel.org,
+        mathieu.desnoyers@efficios.com, nathan@kernel.org,
+        nick.desaulniers+lkml@gmail.com, morbo@google.com,
+        samitolvanen@google.com, kees@kernel.org, dongml2@chinatelecom.cn,
+        akpm@linux-foundation.org, riel@surriel.com, rppt@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v4 1/4] x86/ibt: factor out cfi and fineibt offset
+User-Agent: K-9 Mail for Android
+In-Reply-To: <20250304094220.GC11590@noisy.programming.kicks-ass.net>
+References: <20250303132837.498938-1-dongml2@chinatelecom.cn> <20250303132837.498938-2-dongml2@chinatelecom.cn> <20250303165454.GB11590@noisy.programming.kicks-ass.net> <CADxym3aVtKx_mh7aZyZfk27gEiA_TX6VSAvtK+YDNBtuk_HigA@mail.gmail.com> <20250304053853.GA7099@noisy.programming.kicks-ass.net> <20250304061635.GA29480@noisy.programming.kicks-ass.net> <CADxym3bS_6jpGC3vLAAyD20GsR+QZofQw0_GgKT8nN3c-HqG-g@mail.gmail.com> <20250304094220.GC11590@noisy.programming.kicks-ass.net>
+Message-ID: <6F9EF5C3-4CAE-4C5E-B70E-F73462AC7CA0@zytor.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <CABFh=a7U8ut-YE1kc=P60sqrG4ySXMcXKewpoKzAvpQoQz8pgg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-CM-TRANSID:cCh0CgAXyHh0CMdnBg3RFQ--.48593S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxWry7Wr4xXF43uF43KFWkXrb_yoW5Jw4kpr
-	1UGFWYkrW0qwn7Ww42q3WUXr15t34kKwn293ZrCry2kF9Fqwn3Jr18XF1UW345Crn7Cr1U
-	Ar90qFWS9w15ZFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUkEb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AF
-	wI0_JF0_Jw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
-	xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43
-	MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
-	0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWU
-	JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07UK2N
-	tUUUUU=
-X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Hi,
-
-On 3/4/2025 11:18 AM, Emil Tsalapatis wrote:
-> Hi,
+On March 4, 2025 1:42:20 AM PST, Peter Zijlstra <peterz@infradead=2Eorg> wr=
+ote:
+>On Tue, Mar 04, 2025 at 03:47:45PM +0800, Menglong Dong wrote:
+>> We don't have to select FUNCTION_ALIGNMENT_32B, so the
+>> worst case is to increase ~2=2E2%=2E
+>>=20
+>> What do you think?
 >
-> On Fri, Feb 28, 2025 at 7:56 PM Hou Tao <houtao@huaweicloud.com> wrote:
->> Hi,
->>
->> On 2/28/2025 8:33 AM, Emil Tsalapatis wrote:
->>> Add a helper kfunc that sets the bitmap of a bpf_cpumask from BPF
->>> memory.
->>>
->>> Signed-off-by: Emil Tsalapatis (Meta) <emil@etsalapatis.com>
->>> ---
->>>  kernel/bpf/cpumask.c | 21 +++++++++++++++++++++
->>>  1 file changed, 21 insertions(+)
->>>
->>> diff --git a/kernel/bpf/cpumask.c b/kernel/bpf/cpumask.c
->>> index cfa1c18e3a48..a13839b3595f 100644
->>> --- a/kernel/bpf/cpumask.c
->>> +++ b/kernel/bpf/cpumask.c
->>> @@ -420,6 +420,26 @@ __bpf_kfunc u32 bpf_cpumask_weight(const struct cpumask *cpumask)
->>>       return cpumask_weight(cpumask);
->>>  }
->>>
->>> +/**
->>> + * bpf_cpumask_fill() - Populate the CPU mask from the contents of
->>> + * a BPF memory region.
->>> + *
->>> + * @cpumask: The cpumask being populated.
->>> + * @src: The BPF memory holding the bit pattern.
->>> + * @src__sz: Length of the BPF memory region in bytes.
->>> + *
->>> + */
->>> +__bpf_kfunc int bpf_cpumask_fill(struct cpumask *cpumask, void *src, size_t src__sz)
->>> +{
->>> +     /* The memory region must be large enough to populate the entire CPU mask. */
->>> +     if (src__sz < BITS_TO_BYTES(nr_cpu_ids))
->>> +             return -EACCES;
->>> +
->>> +     bitmap_copy(cpumask_bits(cpumask), src, nr_cpu_ids);
->> Should we use src__sz < bitmap_size(nr_cpu_ids) instead ? Because in
->> bitmap_copy(), it assumes the size of src should be bitmap_size(nr_cpu_ids).
-> This is a great catch, thank you. Comparing with
-> BITS_TO_BYTES(nr_cpu_ids) allows byte-aligned
-> masks through, even though bitmap_copy assumes all masks are long-aligned.
+>Well, since I don't understand what you need this for at all, I'm firmly
+>on the side of not doing this=2E
+>
+>What actual problem is being solved with this meta data nonsense? Why is
+>it worth blowing up our I$ footprint over=2E
+>
+>Also note, that if you're going to be explaining this, start from
+>scratch, as I have absolutely 0 clues about BPF and such=2E
 
-Er, the long-aligned assumption raises another problem. Do we need to
-make the src pointer be long-aligned because bitmap_copy() may use "*dst
-= *src" to dereference the src pointer ? Or would it be better to use
-memcpy() to copy the cpumask directly ?
->>> +
->>> +     return 0;
->>> +}
->>> +
->>>  __bpf_kfunc_end_defs();
->>>
->>>  BTF_KFUNCS_START(cpumask_kfunc_btf_ids)
->>> @@ -448,6 +468,7 @@ BTF_ID_FLAGS(func, bpf_cpumask_copy, KF_RCU)
->>>  BTF_ID_FLAGS(func, bpf_cpumask_any_distribute, KF_RCU)
->>>  BTF_ID_FLAGS(func, bpf_cpumask_any_and_distribute, KF_RCU)
->>>  BTF_ID_FLAGS(func, bpf_cpumask_weight, KF_RCU)
->>> +BTF_ID_FLAGS(func, bpf_cpumask_fill, KF_RCU)
->>>  BTF_KFUNCS_END(cpumask_kfunc_btf_ids)
->>>
->>>  static const struct btf_kfunc_id_set cpumask_kfunc_set = {
-
+I would appreciate such information as well=2E The idea seems dubious on t=
+he surface=2E
