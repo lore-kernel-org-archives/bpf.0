@@ -1,61 +1,61 @@
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88A14277014
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50AC52641E2
 	for <bpf@vger.kernel.org>; Tue,  4 Mar 2025 19:50:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741117851; cv=none; b=uGKb4DN2OHqrT5+r8y84zciDO78KY4r0IUsBWkSEAOxUPmHSiTVmJch5bEWJp3jFMPGtGeIlIPhatALKj1TNmE/Cpijb+N3iIGJtlhd0T2UuZHJgjm3qFl4UtbBzKw+MEcI+LkOy/9KsO8aHyXTkqy8VO9v1qCHo3t7gcfwOVWY=
+	t=1741117851; cv=none; b=MAcgmI1/1UTppGyTgn30/U4saz8i8yH2LU2NmDwnzeOE/9XvOSy84atLkAfwOhSYsN8oG6nfpFLw5O0+9On7fwbHIofd81n/0TGtPn+os9JkdcJbZm9VHOhc5yhzLql44S6OTvz+CtxdB2wVtC3K6zdwP4raJKckzuV1lRnhN2Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1741117851; c=relaxed/simple;
-	bh=qEUktmFq7253ft5UPF1WvaUI5JlhIdxA16646y/NyF0=;
+	bh=AXfGSJsA0eV1ViGZEzHOcjONmQQvegpB97yILykbinw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=uzdlryQgSFlSnDY6X4+MaxI7I5RaSpsxyck6gPQ+e6DxCIHeb043I+ihVjITtLcNl236s6TS+XdblOEsuYIIhqPlaLZvVX8SzjISMTCAAS+dVzXUcMfq6FUxGlcRXhRITcDG6TztrGUchjGEkwbI2gZ4N9AxHsiWA0zPSkhSjEk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=h+w9SidD; arc=none smtp.client-ip=209.85.214.170
+	 MIME-Version; b=m/6u2bxozG8qIBgTdQHvaTGICfx7EZn+3HrN4aAIMba8AG1fMxVoJPxTU6dol8dURGFQHUNhu+dfbgFFBWZIL5iPLemNva0H7MvWY8VRgvfup4n9sj49c93Jy8weE/LTeIHWagXHMqn4Bz9PjxQ1PiGTVpDbaWzGLecu01I+cr0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DUj0ngUx; arc=none smtp.client-ip=209.85.214.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h+w9SidD"
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-223a3c035c9so2190655ad.1
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DUj0ngUx"
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2234e5347e2so123850525ad.1
         for <bpf@vger.kernel.org>; Tue, 04 Mar 2025 11:50:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741117849; x=1741722649; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1741117848; x=1741722648; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=A4nG2iiCEmAjlOutLQpTlL0aZbg0LAeEeL0fYo3LNvo=;
-        b=h+w9SidDfPYk5gEkOSygTpJTXzWonVkAuV/pHCiLFZe3+TzCqMD+6Aszd/r8bImLCc
-         iVlmKZRv4YEoMWqg4QPg+IPHjVnIrIQBv/9yhrYlWA1WYoV3x7e6XrDW8YgsADa+2Tj9
-         2GJsICQhEBEEwhT2aim0DCT1wPCQoMu6gSH1yqGwGrsQV4n4J+hcb+mkePmho6F+lYGv
-         ZIkw/Ec0idhPx70jOGpHQW/uD4h+ve0LPKU8rH24MkdgV1WDKZ9ehTksbMUaNQzntyYS
-         T6Ih9i/VUv9W9C2sHWMAyN6yO8MXSI6CQQKQeQbM3hsUSrQtAW74i3+Biruv+rbOzHIa
-         wxmA==
+        bh=+yVJzsYOCbAgaVgXKT7N0XRKjy8C1iCoGDBhKidKGI0=;
+        b=DUj0ngUx6MmtVzVz4lQac6c8bRkI189WtzYPIdATBpgXjgKfWYNGMgAofRKaVbKHzZ
+         nTL64yQ97RJyUe7nEZxu+Uun2v6Wl+OqMy9XtP4b3zNaeOlQ1Z2AWPl8hV2jOffAM2CD
+         PZaxg8X5b2zLMBv/2E/atKA4CkA65PcwAjXX4kedeob0uOsxZvfqWohygeoSbjMeZ4UU
+         hJCxqwxZd85HJvY5w4CaFVkeyW1Y5xynysTi/O3cKXgg6S+tsg5MWBPv3tDM2KJTmlC5
+         VQkKA8N80r5cUSVDMnG+SpJXl5D4kTsSkYhSM+CiVHxPWlJ7H4DPjkPjUfEyWNbkkeCg
+         Fi2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741117849; x=1741722649;
+        d=1e100.net; s=20230601; t=1741117848; x=1741722648;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=A4nG2iiCEmAjlOutLQpTlL0aZbg0LAeEeL0fYo3LNvo=;
-        b=dRakVpvU5EJYvljvuiuilBay9a0tAqqEizgihm640VC91RDZhSGSY2dVIuf0l3aXXi
-         kwVrs2t4sSMzBE1dD6J6lRe0jepxQ6w3ZnhOErl9C1RiUauvpoNOISrpkDwLxBjPORcA
-         xd75k4hAi8ApzsMRdfsGzoIzNsDpoPlofMQ5nov/IkUH2OVLgJrPs2QnnIX0J9SO2QeH
-         rzL9aTirb7BXnhZyJMjdKGK2EqbyYL8taYpXcQ+1MuJDfArVFEQ01QQVziOH8poVYl4V
-         VD617CQ24l21r6iJscCsQf3TmRjDS4rDPbZSZtCb4zfJQIqQd4AWxShDSmhQRwYZKa+u
-         ghZw==
-X-Gm-Message-State: AOJu0YyCliENwD6iVZ9YmFsBONBVdAQKtN0dZ2deU10LnduhU/tMt6Px
-	5nNlixfj4cghrnmFVgbVigPhh5MhsCWAfCHCb9PMpL9jCz6Bjuht6JAAIA==
-X-Gm-Gg: ASbGncsLxpmUktPnWxdM5uCAlRIZmBUJdheuqgRujpJVC0sDkCjG7Y/K5Sgzx6LDaFu
-	/oqYZOmNbRVuoqTFCok+sZmEZZ/3hH6L9W5+R905eyhqCJlDka9b/4t4yiag5HWTgSauAMEHWXA
-	YgHcwFwHTMRKqGABMiqg5/M3szNBTBic/iClaaZqyvAT5T5POfC7zwY6DFfrthjQqWHv53YUqyk
-	gOXsoFV7ro8U5vn1Nrf3SzGfV6ZAn3n+nyxmYl14ZRSs+sOA1D9KFuS5pq0SdAJKtAJYvuxcDDR
-	DRN20sZR/D2laVooKUxpzcBEe/PSIHhXzHgDynHw
-X-Google-Smtp-Source: AGHT+IE4+LKmtRYrFhf5UlegmF/q7Nwb8cRSUw7XjA+bN1wgXZpVSMkLrl9r+2uybWnEWjDJdMY9qw==
-X-Received: by 2002:a17:902:dac4:b0:215:ba2b:cd55 with SMTP id d9443c01a7336-223f1d019a2mr5445245ad.2.1741117848510;
-        Tue, 04 Mar 2025 11:50:48 -0800 (PST)
+        bh=+yVJzsYOCbAgaVgXKT7N0XRKjy8C1iCoGDBhKidKGI0=;
+        b=tqXE21Gh+ZB9EOO4/sP5qOl8MMrNjjreFWVfKcdN91stmFvf9MYe45csuHSPCetQsN
+         Cw1hexAegPeZ7xwjKJBWa4XviyUUso1gh8dlgjvuST+d13zaaqwin5CHeosDEVjO+VRB
+         wWLjyjwPL4YWWR+SzedJio5ao6WRaE3hykUeOkA+I2a8EXwa5queJP0U553QCSxJJ8ul
+         R5U+WcWrkTfbr8NBC8P0A8CggHcPp1Bb/ovyONAIhTdilwYnIyFGF2u+L9s3u6JQRghp
+         yYZzH3iRrg9zAZPQvBuwU2XhbCobjcqkELUFsdIPG1Bl3i8Q5KcuYM7VKEmqZQxB2Ha0
+         E1CA==
+X-Gm-Message-State: AOJu0YyANN88ds2al8PZdFZmfS+b3bsXpBm6WSPS/6koUKvVxCOFijZx
+	7hLfD1g+IAts1pTwQtmIsOBdX+n8zQcV4mDeriOtqQDVh8PSdvmxPl09qA==
+X-Gm-Gg: ASbGnctGQ/zdXcDt7qf72Xtb3jW8PY2zBx4Ft2zNymWh8y66RWERt7r5Saz0NctFgpU
+	2QN/Yt36UYSwA4amQXiIY9WnI1e7JHvIWZNsIaVHgP8xAGCr2DAdeMGO4fJQWqS40Y6UHrByjju
+	ylrdQXSpQvfzA079ZCjJue762sNok5P46r216wH4l682jnLmNrOhs1ghRPJY5E8b+trusFFM16g
+	6zSAPA7Oa5hv7b1/aY0fMJqCqB4XYbn+boTxwOfR38iuvifjCSkuR9cKoLjug3fQEfnjotkcibK
+	pRWE1LwfcIP7TUwY9aSx9pp8lzVYV6gMnGeoyMqk
+X-Google-Smtp-Source: AGHT+IHDN2x4xIC9Fgv1gzRSCxu/CX6Jc3K4w2jeUcFF7dD5ARWhGOP2R7HCn8ZkIOVYWhuMUvPmDg==
+X-Received: by 2002:a17:902:e74a:b0:223:2675:74d5 with SMTP id d9443c01a7336-223f1c7fde2mr7706865ad.15.1741117846761;
+        Tue, 04 Mar 2025 11:50:46 -0800 (PST)
 Received: from honey-badger.. ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-223504c5bc6sm98560925ad.126.2025.03.04.11.50.47
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-223504c5bc6sm98560925ad.126.2025.03.04.11.50.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Mar 2025 11:50:48 -0800 (PST)
+        Tue, 04 Mar 2025 11:50:46 -0800 (PST)
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org
@@ -66,9 +66,9 @@ Cc: andrii@kernel.org,
 	yonghong.song@linux.dev,
 	tj@kernel.org,
 	Eduard Zingerman <eddyz87@gmail.com>
-Subject: [PATCH bpf-next v3 5/5] selftests/bpf: test cases for compute_live_registers()
-Date: Tue,  4 Mar 2025 11:50:24 -0800
-Message-ID: <20250304195024.2478889-6-eddyz87@gmail.com>
+Subject: [PATCH bpf-next v3 3/5] bpf: simple DFA-based live registers analysis
+Date: Tue,  4 Mar 2025 11:50:22 -0800
+Message-ID: <20250304195024.2478889-4-eddyz87@gmail.com>
 X-Mailer: git-send-email 2.48.1
 In-Reply-To: <20250304195024.2478889-1-eddyz87@gmail.com>
 References: <20250304195024.2478889-1-eddyz87@gmail.com>
@@ -80,564 +80,504 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Cover instructions from each kind:
-- assignment
-- arithmetic
-- store/load
-- endian conversion
-- atomics
-- branches, conditional branches, may_goto, calls
-- LD_ABS/LD_IND
-- address_space_cast
+Compute may-live registers before each instruction in the program.
+The register is live before the instruction I if it is read by I or
+some instruction S following I during program execution and is not
+overwritten between I and S.
+
+This information would be used in the next patch as a hint in
+func_states_equal().
+
+Use a simple algorithm described in [1] to compute this information:
+- define the following:
+  - I.use : a set of all registers read by instruction I;
+  - I.def : a set of all registers written by instruction I;
+  - I.in  : a set of all registers that may be alive before I execution;
+  - I.out : a set of all registers that may be alive after I execution;
+  - I.successors : a set of instructions S that might immediately
+                   follow I for some program execution;
+- associate separate empty sets 'I.in' and 'I.out' with each instruction;
+- visit each instruction in a postorder and update corresponding
+  'I.in' and 'I.out' sets as follows:
+
+      I.out = U [S.in for S in I.successors]
+      I.in  = (I.out / I.def) U I.use
+
+  (where U stands for set union, / stands for set difference)
+- repeat the computation while I.{in,out} changes for any instruction.
+
+On implementation side keep things as simple, as possible:
+- check_cfg() already marks instructions EXPLORED in post-order,
+  modify it to save the index of each EXPLORED instruction in a vector;
+- represent I.{in,out,use,def} as bitmasks;
+- don't split the program into basic blocks and don't maintain the
+  work queue, instead:
+  - do fixed-point computation by visiting each instruction;
+  - maintain a simple 'changed' flag if I.{in,out} for any instruction
+    change;
+  Measurements show that even such simplistic implementation does not
+  add measurable verification time overhead (for selftests, at-least).
+
+Note on check_cfg() ex_insn_beg/ex_done change:
+To avoid out of bounds access to env->cfg.insn_postorder array,
+it should be guaranteed that instruction transitions to EXPLORED state
+only once. Previously this was not the fact for incorrect programs
+with direct calls to exception callbacks.
+
+The 'align' selftest needs adjustment to skip computed insn/live
+registers printout. Otherwise it matches lines from the live registers
+printout.
+
+[1] https://en.wikipedia.org/wiki/Live-variable_analysis
 
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- .../bpf/prog_tests/compute_live_registers.c   |   9 +
- tools/testing/selftests/bpf/progs/bpf_misc.h  |  17 +
- .../bpf/progs/compute_live_registers.c        | 424 ++++++++++++++++++
- .../selftests/bpf/progs/verifier_gotol.c      |   6 +-
- .../bpf/progs/verifier_iterating_callbacks.c  |   6 +-
- .../bpf/progs/verifier_load_acquire.c         |   7 +-
- 6 files changed, 455 insertions(+), 14 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/compute_live_registers.c
- create mode 100644 tools/testing/selftests/bpf/progs/compute_live_registers.c
+ include/linux/bpf_verifier.h                  |   6 +
+ kernel/bpf/verifier.c                         | 320 +++++++++++++++++-
+ .../testing/selftests/bpf/prog_tests/align.c  |  11 +-
+ 3 files changed, 330 insertions(+), 7 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/compute_live_registers.c b/tools/testing/selftests/bpf/prog_tests/compute_live_registers.c
-new file mode 100644
-index 000000000000..285f20241fe1
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/compute_live_registers.c
-@@ -0,0 +1,9 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include "compute_live_registers.skel.h"
-+#include "test_progs.h"
-+
-+void test_compute_live_registers(void)
-+{
-+	RUN_TESTS(compute_live_registers);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/bpf_misc.h b/tools/testing/selftests/bpf/progs/bpf_misc.h
-index 34f555da546f..13a2e22f5465 100644
---- a/tools/testing/selftests/bpf/progs/bpf_misc.h
-+++ b/tools/testing/selftests/bpf/progs/bpf_misc.h
-@@ -213,4 +213,21 @@
- #define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
- #endif
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index d338f2a96bba..d6cfc4ee6820 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -591,6 +591,8 @@ struct bpf_insn_aux_data {
+ 	 * accepts callback function as a parameter.
+ 	 */
+ 	bool calls_callback;
++	/* registers alive before this instruction. */
++	u16 live_regs_before;
+ };
  
-+#if (defined(__TARGET_ARCH_arm64) || defined(__TARGET_ARCH_x86) ||	\
-+     (defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64) ||		\
-+     defined(__TARGET_ARCH_arm) || defined(__TARGET_ARCH_s390) ||	\
-+     defined(__TARGET_ARCH_loongarch)) &&				\
-+	__clang_major__ >= 18
-+#define CAN_USE_GOTOL
-+#endif
-+
-+#if _clang_major__ >= 18
-+#define CAN_USE_BPF_ST
-+#endif
-+
-+#if __clang_major__ >= 18 && defined(ENABLE_ATOMICS_TESTS) && \
-+	(defined(__TARGET_ARCH_arm64) || defined(__TARGET_ARCH_x86))
-+#define CAN_USE_LOAD_ACQ_STORE_REL
-+#endif
-+
- #endif
-diff --git a/tools/testing/selftests/bpf/progs/compute_live_registers.c b/tools/testing/selftests/bpf/progs/compute_live_registers.c
-new file mode 100644
-index 000000000000..14df92949e81
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/compute_live_registers.c
-@@ -0,0 +1,424 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include "../../../include/linux/filter.h"
-+#include "bpf_arena_common.h"
-+#include "bpf_misc.h"
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, __u64);
-+} test_map SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARENA);
-+	__uint(map_flags, BPF_F_MMAPABLE);
-+	__uint(max_entries, 1);
-+} arena SEC(".maps");
-+
-+SEC("socket")
-+__log_level(2)
-+__msg(" 0: .......... (b7) r0 = 42")
-+__msg(" 1: 0......... (bf) r1 = r0")
-+__msg(" 2: .1........ (bf) r2 = r1")
-+__msg(" 3: ..2....... (bf) r3 = r2")
-+__msg(" 4: ...3...... (bf) r4 = r3")
-+__msg(" 5: ....4..... (bf) r5 = r4")
-+__msg(" 6: .....5.... (bf) r6 = r5")
-+__msg(" 7: ......6... (bf) r7 = r6")
-+__msg(" 8: .......7.. (bf) r8 = r7")
-+__msg(" 9: ........8. (bf) r9 = r8")
-+__msg("10: .........9 (bf) r0 = r9")
-+__msg("11: 0......... (95) exit")
-+__naked void assign_chain(void)
-+{
-+	asm volatile (
-+		"r0 = 42;"
-+		"r1 = r0;"
-+		"r2 = r1;"
-+		"r3 = r2;"
-+		"r4 = r3;"
-+		"r5 = r4;"
-+		"r6 = r5;"
-+		"r7 = r6;"
-+		"r8 = r7;"
-+		"r9 = r8;"
-+		"r0 = r9;"
-+		"exit;"
-+		::: __clobber_all);
-+}
-+
-+SEC("socket")
-+__log_level(2)
-+__msg("0: .......... (b7) r1 = 7")
-+__msg("1: .1........ (07) r1 += 7")
-+__msg("2: .......... (b7) r2 = 7")
-+__msg("3: ..2....... (b7) r3 = 42")
-+__msg("4: ..23...... (0f) r2 += r3")
-+__msg("5: .......... (b7) r0 = 0")
-+__msg("6: 0......... (95) exit")
-+__naked void arithmetics(void)
-+{
-+	asm volatile (
-+		"r1 = 7;"
-+		"r1 += 7;"
-+		"r2 = 7;"
-+		"r3 = 42;"
-+		"r2 += r3;"
-+		"r0 = 0;"
-+		"exit;"
-+		::: __clobber_all);
-+}
-+
-+#ifdef CAN_USE_BPF_ST
-+SEC("socket")
-+__log_level(2)
-+__msg("  1: .1........ (07) r1 += -8")
-+__msg("  2: .1........ (7a) *(u64 *)(r1 +0) = 7")
-+__msg("  3: .1........ (b7) r2 = 42")
-+__msg("  4: .12....... (7b) *(u64 *)(r1 +0) = r2")
-+__msg("  5: .12....... (7b) *(u64 *)(r1 +0) = r2")
-+__msg("  6: .......... (b7) r0 = 0")
-+__naked void store(void)
-+{
-+	asm volatile (
-+		"r1 = r10;"
-+		"r1 += -8;"
-+		"*(u64 *)(r1 +0) = 7;"
-+		"r2 = 42;"
-+		"*(u64 *)(r1 +0) = r2;"
-+		"*(u64 *)(r1 +0) = r2;"
-+		"r0 = 0;"
-+		"exit;"
-+		::: __clobber_all);
-+}
-+#endif
-+
-+SEC("socket")
-+__log_level(2)
-+__msg("1: ....4..... (07) r4 += -8")
-+__msg("2: ....4..... (79) r5 = *(u64 *)(r4 +0)")
-+__msg("3: ....45.... (07) r4 += -8")
-+__naked void load(void)
-+{
-+	asm volatile (
-+		"r4 = r10;"
-+		"r4 += -8;"
-+		"r5 = *(u64 *)(r4 +0);"
-+		"r4 += -8;"
-+		"r0 = r5;"
-+		"exit;"
-+		::: __clobber_all);
-+}
-+
-+SEC("socket")
-+__log_level(2)
-+__msg("0: .1........ (61) r2 = *(u32 *)(r1 +0)")
-+__msg("1: ..2....... (d4) r2 = le64 r2")
-+__msg("2: ..2....... (bf) r0 = r2")
-+__naked void endian(void)
-+{
-+	asm volatile (
-+		"r2 = *(u32 *)(r1 +0);"
-+		"r2 = le64 r2;"
-+		"r0 = r2;"
-+		"exit;"
-+		::: __clobber_all);
-+}
-+
-+SEC("socket")
-+__log_level(2)
-+__msg(" 8: 0......... (b7) r1 = 1")
-+__msg(" 9: 01........ (db) r1 = atomic64_fetch_add((u64 *)(r0 +0), r1)")
-+__msg("10: 01........ (c3) lock *(u32 *)(r0 +0) += r1")
-+__msg("11: 01........ (db) r1 = atomic64_xchg((u64 *)(r0 +0), r1)")
-+__msg("12: 01........ (bf) r2 = r0")
-+__msg("13: .12....... (bf) r0 = r1")
-+__msg("14: 012....... (db) r0 = atomic64_cmpxchg((u64 *)(r2 +0), r0, r1)")
-+__naked void atomic(void)
-+{
-+	asm volatile (
-+		"r2 = r10;"
-+		"r2 += -8;"
-+		"r1 = 0;"
-+		"*(u64 *)(r2 +0) = r1;"
-+		"r1 = %[test_map] ll;"
-+		"call %[bpf_map_lookup_elem];"
-+		"if r0 == 0 goto 1f;"
-+		"r1 = 1;"
-+		"r1 = atomic_fetch_add((u64 *)(r0 +0), r1);"
-+		".8byte %[add_nofetch];" /* same as "lock *(u32 *)(r0 +0) += r1;" */
-+		"r1 = xchg_64(r0 + 0, r1);"
-+		"r2 = r0;"
-+		"r0 = r1;"
-+		"r0 = cmpxchg_64(r2 + 0, r0, r1);"
-+		"1: exit;"
-+		:
-+		: __imm(bpf_map_lookup_elem),
-+		  __imm_addr(test_map),
-+		  __imm_insn(add_nofetch, BPF_ATOMIC_OP(BPF_W, BPF_ADD, BPF_REG_0, BPF_REG_1, 0))
-+		: __clobber_all);
-+}
-+
-+#ifdef CAN_USE_LOAD_ACQ_STORE_REL
-+
-+SEC("socket")
-+__log_level(2)
-+__msg("2: .12....... (db) store_release((u64 *)(r2 -8), r1)")
-+__msg("3: .......... (bf) r3 = r10")
-+__msg("4: ...3...... (db) r4 = load_acquire((u64 *)(r3 -8))")
-+__naked void atomic_load_acq_store_rel(void)
-+{
-+	asm volatile (
-+		"r1 = 42;"
-+		"r2 = r10;"
-+		".8byte %[store_release_insn];" /* store_release((u64 *)(r2 - 8), r1); */
-+		"r3 = r10;"
-+		".8byte %[load_acquire_insn];" /* r4 = load_acquire((u64 *)(r3 + 0)); */
-+		"r0 = r4;"
-+		"exit;"
-+		:
-+		: __imm_insn(store_release_insn,
-+			     BPF_ATOMIC_OP(BPF_DW, BPF_STORE_REL, BPF_REG_2, BPF_REG_1, -8)),
-+		  __imm_insn(load_acquire_insn,
-+			     BPF_ATOMIC_OP(BPF_DW, BPF_LOAD_ACQ, BPF_REG_4, BPF_REG_3, -8))
-+		: __clobber_all);
-+}
-+
-+#endif /* CAN_USE_LOAD_ACQ_STORE_REL */
-+
-+SEC("socket")
-+__log_level(2)
-+__msg("4: .12....7.. (85) call bpf_trace_printk#6")
-+__msg("5: 0......7.. (0f) r0 += r7")
-+__naked void regular_call(void)
-+{
-+	asm volatile (
-+		"r7 = 1;"
-+		"r1 = r10;"
-+		"r1 += -8;"
-+		"r2 = 1;"
-+		"call %[bpf_trace_printk];"
-+		"r0 += r7;"
-+		"exit;"
-+		:
-+		: __imm(bpf_trace_printk)
-+		: __clobber_all);
-+}
-+
-+SEC("socket")
-+__log_level(2)
-+__msg("2: 012....... (25) if r1 > 0x7 goto pc+1")
-+__msg("3: ..2....... (bf) r0 = r2")
-+__naked void if1(void)
-+{
-+	asm volatile (
-+		"r0 = 1;"
-+		"r2 = 2;"
-+		"if r1 > 0x7 goto +1;"
-+		"r0 = r2;"
-+		"exit;"
-+		::: __clobber_all);
-+}
-+
-+SEC("socket")
-+__log_level(2)
-+__msg("3: 0123...... (2d) if r1 > r3 goto pc+1")
-+__msg("4: ..2....... (bf) r0 = r2")
-+__naked void if2(void)
-+{
-+	asm volatile (
-+		"r0 = 1;"
-+		"r2 = 2;"
-+		"r3 = 7;"
-+		"if r1 > r3 goto +1;"
-+		"r0 = r2;"
-+		"exit;"
-+		::: __clobber_all);
-+}
-+
-+SEC("socket")
-+__log_level(2)
-+__msg("0: .......... (b7) r1 = 0")
-+__msg("1: .1........ (b7) r2 = 7")
-+__msg("2: .12....... (25) if r1 > 0x7 goto pc+4")
-+__msg("3: .12....... (07) r1 += 1")
-+__msg("4: .12....... (27) r2 *= 2")
-+__msg("5: .12....... (05) goto pc+0")
-+__msg("6: .12....... (05) goto pc-5")
-+__msg("7: .......... (b7) r0 = 0")
-+__msg("8: 0......... (95) exit")
-+__naked void loop(void)
-+{
-+	asm volatile (
-+		"r1 = 0;"
-+		"r2 = 7;"
-+		"if r1 > 0x7 goto +4;"
-+		"r1 += 1;"
-+		"r2 *= 2;"
-+		"goto +0;"
-+		"goto -5;"
-+		"r0 = 0;"
-+		"exit;"
-+		:
-+		: __imm(bpf_trace_printk)
-+		: __clobber_all);
-+}
-+
-+#ifdef CAN_USE_GOTOL
-+SEC("socket")
-+__log_level(2)
-+__msg("2: .123...... (25) if r1 > 0x7 goto pc+2")
-+__msg("3: ..2....... (bf) r0 = r2")
-+__msg("4: 0......... (06) gotol pc+1")
-+__msg("5: ...3...... (bf) r0 = r3")
-+__msg("6: 0......... (95) exit")
-+__naked void gotol(void)
-+{
-+	asm volatile (
-+		"r2 = 42;"
-+		"r3 = 24;"
-+		"if r1 > 0x7 goto +2;"
-+		"r0 = r2;"
-+		"gotol +1;"
-+		"r0 = r3;"
-+		"exit;"
-+		:
-+		: __imm(bpf_trace_printk)
-+		: __clobber_all);
-+}
-+#endif
-+
-+SEC("socket")
-+__log_level(2)
-+__msg("0: 0......... (b7) r1 = 1")
-+__msg("1: 01........ (e5) may_goto pc+1")
-+__msg("2: 0......... (05) goto pc-3")
-+__msg("3: .1........ (bf) r0 = r1")
-+__msg("4: 0......... (95) exit")
-+__naked void may_goto(void)
-+{
-+	asm volatile (
-+	"1: r1 = 1;"
-+	".8byte %[may_goto];"
-+	"goto 1b;"
-+	"r0 = r1;"
-+	"exit;"
-+	:
-+	: __imm(bpf_get_smp_processor_id),
-+	  __imm_insn(may_goto, BPF_RAW_INSN(BPF_JMP | BPF_JCOND, 0, 0, +1 /* offset */, 0))
-+	: __clobber_all);
-+}
-+
-+SEC("socket")
-+__log_level(2)
-+__msg("1: 0......... (18) r2 = 0x7")
-+__msg("3: 0.2....... (0f) r0 += r2")
-+__naked void ldimm64(void)
-+{
-+	asm volatile (
-+		"r0 = 0;"
-+		"r2 = 0x7 ll;"
-+		"r0 += r2;"
-+		"exit;"
-+		:
-+		:: __clobber_all);
-+}
-+
-+/* No rules specific for LD_ABS/LD_IND, default behaviour kicks in */
-+SEC("socket")
-+__log_level(2)
-+__msg("2: 0123456789 (30) r0 = *(u8 *)skb[42]")
-+__msg("3: 012.456789 (0f) r7 += r0")
-+__msg("4: 012.456789 (b7) r3 = 42")
-+__msg("5: 0123456789 (50) r0 = *(u8 *)skb[r3 + 0]")
-+__msg("6: 0......7.. (0f) r7 += r0")
-+__naked void ldabs(void)
-+{
-+	asm volatile (
-+		"r6 = r1;"
-+		"r7 = 0;"
-+		"r0 = *(u8 *)skb[42];"
-+		"r7 += r0;"
-+		"r3 = 42;"
-+		".8byte %[ld_ind];" /* same as "r0 = *(u8 *)skb[r3];" */
-+		"r7 += r0;"
-+		"r0 = r7;"
-+		"exit;"
-+		:
-+		: __imm_insn(ld_ind, BPF_LD_IND(BPF_B, BPF_REG_3, 0))
-+		: __clobber_all);
-+}
-+
-+
-+#ifdef __BPF_FEATURE_ADDR_SPACE_CAST
-+SEC("?fentry.s/" SYS_PREFIX "sys_getpgid")
-+__log_level(2)
-+__msg(" 6: .12345.... (85) call bpf_arena_alloc_pages")
-+__msg(" 7: 0......... (bf) r1 = addr_space_cast(r0, 0, 1)")
-+__msg(" 8: .1........ (b7) r2 = 42")
-+__naked void addr_space_cast(void)
-+{
-+	asm volatile (
-+		"r1 = %[arena] ll;"
-+		"r2 = 0;"
-+		"r3 = 1;"
-+		"r4 = 0;"
-+		"r5 = 0;"
-+		"call %[bpf_arena_alloc_pages];"
-+		"r1 = addr_space_cast(r0, 0, 1);"
-+		"r2 = 42;"
-+		"*(u64 *)(r1 +0) = r2;"
-+		"r0 = 0;"
-+		"exit;"
-+		:
-+		: __imm(bpf_arena_alloc_pages),
-+		  __imm_addr(arena)
-+		: __clobber_all);
-+}
-+#endif
-+
-+static __used __naked int aux1(void)
-+{
-+	asm volatile (
-+		"r0 = r1;"
-+		"r0 += r2;"
-+		"exit;"
-+		::: __clobber_all);
-+}
-+
-+SEC("socket")
-+__log_level(2)
-+__msg("0: ....45.... (b7) r1 = 1")
-+__msg("1: .1..45.... (b7) r2 = 2")
-+__msg("2: .12.45.... (b7) r3 = 3")
-+/* Conservative liveness for subprog parameters. */
-+__msg("3: .12345.... (85) call pc+2")
-+__msg("4: .......... (b7) r0 = 0")
-+__msg("5: 0......... (95) exit")
-+__msg("6: .12....... (bf) r0 = r1")
-+__msg("7: 0.2....... (0f) r0 += r2")
-+/* Conservative liveness for subprog return value. */
-+__msg("8: 0......... (95) exit")
-+__naked void subprog1(void)
-+{
-+	asm volatile (
-+		"r1 = 1;"
-+		"r2 = 2;"
-+		"r3 = 3;"
-+		"call aux1;"
-+		"r0 = 0;"
-+		"exit;"
-+		::: __clobber_all);
-+}
-+
-+/* to retain debug info for BTF generation */
-+void kfunc_root(void)
-+{
-+	bpf_arena_alloc_pages(0, 0, 0, 0, 0);
-+}
-+
-+char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/verifier_gotol.c b/tools/testing/selftests/bpf/progs/verifier_gotol.c
-index 05a329ee45ee..d5d8f24df394 100644
---- a/tools/testing/selftests/bpf/progs/verifier_gotol.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_gotol.c
-@@ -4,11 +4,7 @@
- #include <bpf/bpf_helpers.h>
- #include "bpf_misc.h"
+ #define MAX_USED_MAPS 64 /* max number of maps accessed by one eBPF program */
+@@ -748,7 +750,11 @@ struct bpf_verifier_env {
+ 	struct {
+ 		int *insn_state;
+ 		int *insn_stack;
++		/* vector of instruction indexes sorted in post-order */
++		int *insn_postorder;
+ 		int cur_stack;
++		/* current position in the insn_postorder vector */
++		int cur_postorder;
+ 	} cfg;
+ 	struct backtrack_state bt;
+ 	struct bpf_insn_hist_entry *insn_hist;
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 5cc1b6ed0e92..b434251979b1 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -17402,9 +17402,8 @@ static int visit_insn(int t, struct bpf_verifier_env *env)
+ static int check_cfg(struct bpf_verifier_env *env)
+ {
+ 	int insn_cnt = env->prog->len;
+-	int *insn_stack, *insn_state;
++	int *insn_stack, *insn_state, *insn_postorder;
+ 	int ex_insn_beg, i, ret = 0;
+-	bool ex_done = false;
  
--#if (defined(__TARGET_ARCH_arm64) || defined(__TARGET_ARCH_x86) || \
--	(defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64) || \
--	defined(__TARGET_ARCH_arm) || defined(__TARGET_ARCH_s390) || \
--	defined(__TARGET_ARCH_loongarch)) && \
--	__clang_major__ >= 18
-+#ifdef CAN_USE_GOTOL
+ 	insn_state = env->cfg.insn_state = kvcalloc(insn_cnt, sizeof(int), GFP_KERNEL);
+ 	if (!insn_state)
+@@ -17416,6 +17415,17 @@ static int check_cfg(struct bpf_verifier_env *env)
+ 		return -ENOMEM;
+ 	}
  
- SEC("socket")
- __description("gotol, small_imm")
-diff --git a/tools/testing/selftests/bpf/progs/verifier_iterating_callbacks.c b/tools/testing/selftests/bpf/progs/verifier_iterating_callbacks.c
-index e54bb5385bc1..75dd922e4e9f 100644
---- a/tools/testing/selftests/bpf/progs/verifier_iterating_callbacks.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_iterating_callbacks.c
-@@ -407,11 +407,7 @@ l0_%=:	call %[bpf_jiffies64];		\
- 	: __clobber_all);
- }
++	insn_postorder = env->cfg.insn_postorder = kvcalloc(insn_cnt, sizeof(int), GFP_KERNEL);
++	if (!insn_postorder) {
++		kvfree(insn_state);
++		kvfree(insn_stack);
++		return -ENOMEM;
++	}
++
++	ex_insn_beg = env->exception_callback_subprog
++		      ? env->subprog_info[env->exception_callback_subprog].start
++		      : 0;
++
+ 	insn_state[0] = DISCOVERED; /* mark 1st insn as discovered */
+ 	insn_stack[0] = 0; /* 0 is the first instruction */
+ 	env->cfg.cur_stack = 1;
+@@ -17429,6 +17439,7 @@ static int check_cfg(struct bpf_verifier_env *env)
+ 		case DONE_EXPLORING:
+ 			insn_state[t] = EXPLORED;
+ 			env->cfg.cur_stack--;
++			insn_postorder[env->cfg.cur_postorder++] = t;
+ 			break;
+ 		case KEEP_EXPLORING:
+ 			break;
+@@ -17447,13 +17458,10 @@ static int check_cfg(struct bpf_verifier_env *env)
+ 		goto err_free;
+ 	}
  
--#if (defined(__TARGET_ARCH_arm64) || defined(__TARGET_ARCH_x86) || \
--	(defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64) || \
--	defined(__TARGET_ARCH_arm) || defined(__TARGET_ARCH_s390) || \
--	defined(__TARGET_ARCH_loongarch)) && \
--	__clang_major__ >= 18
-+#ifdef CAN_USE_GOTOL
- SEC("socket")
- __success __retval(0)
- __naked void gotol_and_may_goto(void)
-diff --git a/tools/testing/selftests/bpf/progs/verifier_load_acquire.c b/tools/testing/selftests/bpf/progs/verifier_load_acquire.c
-index ff308f24d745..608097453832 100644
---- a/tools/testing/selftests/bpf/progs/verifier_load_acquire.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_load_acquire.c
-@@ -6,8 +6,7 @@
- #include "../../../include/linux/filter.h"
- #include "bpf_misc.h"
+-	if (env->exception_callback_subprog && !ex_done) {
+-		ex_insn_beg = env->subprog_info[env->exception_callback_subprog].start;
+-
++	if (ex_insn_beg && insn_state[ex_insn_beg] != EXPLORED) {
+ 		insn_state[ex_insn_beg] = DISCOVERED;
+ 		insn_stack[0] = ex_insn_beg;
+ 		env->cfg.cur_stack = 1;
+-		ex_done = true;
+ 		goto walk_cfg;
+ 	}
  
--#if __clang_major__ >= 18 && defined(ENABLE_ATOMICS_TESTS) && \
--	(defined(__TARGET_ARCH_arm64) || defined(__TARGET_ARCH_x86))
-+#ifdef CAN_USE_LOAD_ACQ_STORE_REL
- 
- SEC("socket")
- __description("load-acquire, 8-bit")
-@@ -182,7 +181,7 @@ __naked void load_acquire_from_sock_pointer(void)
- 	: __clobber_all);
- }
- 
--#else
-+#else /* CAN_USE_LOAD_ACQ_STORE_REL */
- 
- SEC("socket")
- __description("Clang version < 18, ENABLE_ATOMICS_TESTS not defined, and/or JIT doesn't support load-acquire, use a dummy test")
-@@ -192,6 +191,6 @@ int dummy_test(void)
+@@ -23379,6 +23387,301 @@ static int process_fd_array(struct bpf_verifier_env *env, union bpf_attr *attr,
  	return 0;
  }
  
--#endif
-+#endif /* CAN_USE_LOAD_ACQ_STORE_REL */
++static bool can_fallthrough(struct bpf_insn *insn)
++{
++	u8 class = BPF_CLASS(insn->code);
++	u8 opcode = BPF_OP(insn->code);
++
++	if (class != BPF_JMP && class != BPF_JMP32)
++		return true;
++
++	if (opcode == BPF_EXIT || opcode == BPF_JA)
++		return false;
++
++	return true;
++}
++
++static bool can_jump(struct bpf_insn *insn)
++{
++	u8 class = BPF_CLASS(insn->code);
++	u8 opcode = BPF_OP(insn->code);
++
++	if (class != BPF_JMP && class != BPF_JMP32)
++		return false;
++
++	switch (opcode) {
++	case BPF_JA:
++	case BPF_JEQ:
++	case BPF_JNE:
++	case BPF_JLT:
++	case BPF_JLE:
++	case BPF_JGT:
++	case BPF_JGE:
++	case BPF_JSGT:
++	case BPF_JSGE:
++	case BPF_JSLT:
++	case BPF_JSLE:
++	case BPF_JCOND:
++		return true;
++	}
++
++	return false;
++}
++
++static int insn_successors(struct bpf_prog *prog, u32 idx, u32 succ[2])
++{
++	struct bpf_insn *insn = &prog->insnsi[idx];
++	int i = 0, insn_sz;
++	u32 dst;
++
++	insn_sz = bpf_is_ldimm64(insn) ? 2 : 1;
++	if (can_fallthrough(insn) && idx + 1 < prog->len)
++		succ[i++] = idx + insn_sz;
++
++	if (can_jump(insn)) {
++		dst = idx + jmp_offset(insn) + 1;
++		if (i == 0 || succ[0] != dst)
++			succ[i++] = dst;
++	}
++
++	return i;
++}
++
++/* Each field is a register bitmask */
++struct insn_live_regs {
++	u16 use;	/* registers read by instruction */
++	u16 def;	/* registers written by instruction */
++	u16 in;		/* registers that may be alive before instruction */
++	u16 out;	/* registers that may be alive after instruction */
++};
++
++/* Bitmask with 1s for all caller saved registers */
++#define ALL_CALLER_SAVED_REGS ((1u << CALLER_SAVED_REGS) - 1)
++
++/* Compute info->{use,def} fields for the instruction */
++static void compute_insn_live_regs(struct bpf_verifier_env *env,
++				   struct bpf_insn *insn,
++				   struct insn_live_regs *info)
++{
++	struct call_summary cs;
++	u8 class = BPF_CLASS(insn->code);
++	u8 code = BPF_OP(insn->code);
++	u8 mode = BPF_MODE(insn->code);
++	u16 src = BIT(insn->src_reg);
++	u16 dst = BIT(insn->dst_reg);
++	u16 r0  = BIT(0);
++	u16 def = 0;
++	u16 use = 0xffff;
++
++	switch (class) {
++	case BPF_LD:
++		switch (mode) {
++		case BPF_IMM:
++			if (BPF_SIZE(insn->code) == BPF_DW) {
++				def = dst;
++				use = 0;
++			}
++			break;
++		case BPF_LD | BPF_ABS:
++		case BPF_LD | BPF_IND:
++			/* stick with defaults */
++			break;
++		}
++		break;
++	case BPF_LDX:
++		switch (mode) {
++		case BPF_MEM:
++		case BPF_MEMSX:
++			def = dst;
++			use = src;
++			break;
++		}
++		break;
++	case BPF_ST:
++		switch (mode) {
++		case BPF_MEM:
++			def = 0;
++			use = dst;
++			break;
++		}
++		break;
++	case BPF_STX:
++		switch (mode) {
++		case BPF_MEM:
++			def = 0;
++			use = dst | src;
++			break;
++		case BPF_ATOMIC:
++			switch (insn->imm) {
++			case BPF_CMPXCHG:
++				use = r0 | dst | src;
++				def = r0;
++				break;
++			case BPF_LOAD_ACQ:
++				def = dst;
++				use = src;
++				break;
++			case BPF_STORE_REL:
++				def = 0;
++				use = dst | src;
++				break;
++			default:
++				use = dst | src;
++				if (insn->imm & BPF_FETCH)
++					def = src;
++				else
++					def = 0;
++			}
++			break;
++		}
++		break;
++	case BPF_ALU:
++	case BPF_ALU64:
++		switch (code) {
++		case BPF_END:
++			use = dst;
++			def = dst;
++			break;
++		case BPF_MOV:
++			def = dst;
++			if (BPF_SRC(insn->code) == BPF_K)
++				use = 0;
++			else
++				use = src;
++			break;
++		default:
++			def = dst;
++			if (BPF_SRC(insn->code) == BPF_K)
++				use = dst;
++			else
++				use = dst | src;
++		}
++		break;
++	case BPF_JMP:
++	case BPF_JMP32:
++		switch (code) {
++		case BPF_JA:
++			def = 0;
++			use = 0;
++			break;
++		case BPF_EXIT:
++			def = 0;
++			use = r0;
++			break;
++		case BPF_CALL:
++			def = ALL_CALLER_SAVED_REGS;
++			use = def & ~BIT(BPF_REG_0);
++			if (get_call_summary(env, insn, &cs))
++				use = GENMASK(cs.num_params, 1);
++			break;
++		default:
++			def = 0;
++			if (BPF_SRC(insn->code) == BPF_K)
++				use = dst;
++			else
++				use = dst | src;
++		}
++		break;
++	}
++
++	info->def = def;
++	info->use = use;
++}
++
++/* Compute may-live registers after each instruction in the program.
++ * The register is live after the instruction I if it is read by some
++ * instruction S following I during program execution and is not
++ * overwritten between I and S.
++ *
++ * Store result in env->insn_aux_data[i].live_regs.
++ */
++static int compute_live_registers(struct bpf_verifier_env *env)
++{
++	struct bpf_insn_aux_data *insn_aux = env->insn_aux_data;
++	struct bpf_insn *insns = env->prog->insnsi;
++	struct insn_live_regs *state;
++	int insn_cnt = env->prog->len;
++	int err = 0, i, j;
++	bool changed;
++
++	/* Use the following algorithm:
++	 * - define the following:
++	 *   - I.use : a set of all registers read by instruction I;
++	 *   - I.def : a set of all registers written by instruction I;
++	 *   - I.in  : a set of all registers that may be alive before I execution;
++	 *   - I.out : a set of all registers that may be alive after I execution;
++	 *   - insn_successors(I): a set of instructions S that might immediately
++	 *                         follow I for some program execution;
++	 * - associate separate empty sets 'I.in' and 'I.out' with each instruction;
++	 * - visit each instruction in a postorder and update
++	 *   state[i].in, state[i].out as follows:
++	 *
++	 *       state[i].out = U [state[s].in for S in insn_successors(i)]
++	 *       state[i].in  = (state[i].out / state[i].def) U state[i].use
++	 *
++	 *   (where U stands for set union, / stands for set difference)
++	 * - repeat the computation while {in,out} fields changes for
++	 *   any instruction.
++	 */
++	state = kvcalloc(insn_cnt, sizeof(*state), GFP_KERNEL);
++	if (!state) {
++		err = -ENOMEM;
++		goto out;
++	}
++
++	for (i = 0; i < insn_cnt; ++i)
++		compute_insn_live_regs(env, &insns[i], &state[i]);
++
++	changed = true;
++	while (changed) {
++		changed = false;
++		for (i = 0; i < env->cfg.cur_postorder; ++i) {
++			int insn_idx = env->cfg.insn_postorder[i];
++			struct insn_live_regs *live = &state[insn_idx];
++			int succ_num;
++			u32 succ[2];
++			u16 new_out = 0;
++			u16 new_in = 0;
++
++			succ_num = insn_successors(env->prog, insn_idx, succ);
++			for (int s = 0; s < succ_num; ++s)
++				new_out |= state[succ[s]].in;
++			new_in = (new_out & ~live->def) | live->use;
++			if (new_out != live->out || new_in != live->in) {
++				live->in = new_in;
++				live->out = new_out;
++				changed = true;
++			}
++		}
++	}
++
++	for (i = 0; i < insn_cnt; ++i)
++		insn_aux[i].live_regs_before = state[i].in;
++
++	if (env->log.level & BPF_LOG_LEVEL2) {
++		verbose(env, "Live regs before insn:\n");
++		for (i = 0; i < insn_cnt; ++i) {
++			verbose(env, "%3d: ", i);
++			for (j = BPF_REG_0; j < BPF_REG_10; ++j)
++				if (insn_aux[i].live_regs_before & BIT(j))
++					verbose(env, "%d", j);
++				else
++					verbose(env, ".");
++			verbose(env, " ");
++			verbose_insn(env, &insns[i]);
++			if (bpf_is_ldimm64(&insns[i]))
++				i++;
++		}
++	}
++
++out:
++	kvfree(state);
++	kvfree(env->cfg.insn_postorder);
++	env->cfg.insn_postorder = NULL;
++	env->cfg.cur_postorder = 0;
++	return err;
++}
++
+ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr, __u32 uattr_size)
+ {
+ 	u64 start_time = ktime_get_ns();
+@@ -23500,6 +23803,10 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr, __u3
+ 	if (ret)
+ 		goto skip_full_check;
  
- char _license[] SEC("license") = "GPL";
++	ret = compute_live_registers(env);
++	if (ret < 0)
++		goto skip_full_check;
++
+ 	ret = mark_fastcall_patterns(env);
+ 	if (ret < 0)
+ 		goto skip_full_check;
+@@ -23638,6 +23945,7 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr, __u3
+ 	vfree(env->insn_aux_data);
+ 	kvfree(env->insn_hist);
+ err_free_env:
++	kvfree(env->cfg.insn_postorder);
+ 	kvfree(env);
+ 	return ret;
+ }
+diff --git a/tools/testing/selftests/bpf/prog_tests/align.c b/tools/testing/selftests/bpf/prog_tests/align.c
+index 4ebd0da898f5..1d53a8561ee2 100644
+--- a/tools/testing/selftests/bpf/prog_tests/align.c
++++ b/tools/testing/selftests/bpf/prog_tests/align.c
+@@ -610,9 +610,11 @@ static int do_test_single(struct bpf_align_test *test)
+ 		.log_size = sizeof(bpf_vlog),
+ 		.log_level = 2,
+ 	);
++	const char *main_pass_start = "0: R1=ctx() R10=fp0";
+ 	const char *line_ptr;
+ 	int cur_line = -1;
+ 	int prog_len, i;
++	char *start;
+ 	int fd_prog;
+ 	int ret;
+ 
+@@ -632,7 +634,13 @@ static int do_test_single(struct bpf_align_test *test)
+ 		ret = 0;
+ 		/* We make a local copy so that we can strtok() it */
+ 		strncpy(bpf_vlog_copy, bpf_vlog, sizeof(bpf_vlog_copy));
+-		line_ptr = strtok(bpf_vlog_copy, "\n");
++		start = strstr(bpf_vlog_copy, main_pass_start);
++		if (!start) {
++			ret = 1;
++			printf("Can't find initial line '%s'\n", main_pass_start);
++			goto out;
++		}
++		line_ptr = strtok(start, "\n");
+ 		for (i = 0; i < MAX_MATCHES; i++) {
+ 			struct bpf_reg_match m = test->matches[i];
+ 			const char *p;
+@@ -682,6 +690,7 @@ static int do_test_single(struct bpf_align_test *test)
+ 				break;
+ 			}
+ 		}
++out:
+ 		if (fd_prog >= 0)
+ 			close(fd_prog);
+ 	}
 -- 
 2.48.1
 
