@@ -1,60 +1,62 @@
-Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
+Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76ED91A5BB2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82F9D1FC0F3
 	for <bpf@vger.kernel.org>; Wed,  5 Mar 2025 21:12:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.53
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741209168; cv=none; b=cRBQkdqJ3ZLAR+RUYtRSMuiw/9H2MpjoGXB0+jHqUy2NR0293nGAk95Jt5XGgD9cZBjimFAcFsXvRJOEQB2l3CeIMsHSzIkM2Ei16Y2FVXOp690tpafr/4MvkvBxLQpxuci8pX7a3V2MZudKNzAxRt6ckr/gJiZZsqQ2Rnj/nhs=
+	t=1741209168; cv=none; b=kNT+6LFXYJa8ebf/pi678TTbIl5ThAumhoBoLdBL/YJ20MRDObpOPqeYjL1DUPyV0+wx3lfRSzxyaGc+B7NVffzGhkaLCuBQB9S/eWkvvevoZgHqYwzhdSyAsvCC49n9pnFIUGHd+CfpbbcTw0RPGaUfVomhaT2CYsGvQ3HQXWk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1741209168; c=relaxed/simple;
-	bh=8cgxl6h/4OJkrPKmNXfngR/2mZnj9ySkIPRN2VAgCf8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=U7g4EfmW5xTDoNsaq5v0w84t4Vkcq6UzbyAAHyMYGwahtP0YBY60bi3Rib3AgJRSmUhFIcfNFdJgjMlYrc/CXJ8YvzUrIPR3IiyM+reQEavDhQ7m2ErhrNxm8UN7oUfprYU9y4JvC86Lz/qJNSSQ7pcqT3N4cEpKGn9P0MmGMG4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=W6k4M6yD; arc=none smtp.client-ip=209.85.219.53
+	bh=Q+M7ITeliy4I1QVtUflC9vsSCW+e19xHlw6fwckMuPE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=MqXVojq5OfVwc4FruO3ZLnvJdO2r6vQga17bX9QfJ2A3lW4gnxkUHiRM6xxchUw0SPzaa3qGVuC11/uDYn4RdqpVprf4X8ZwRBUkk5QU2FEUtcuGB+PHTmfJuHlMU6IcL+pwmmsXDUSvXqJQhMdxQJhqmfbWZ8AyOgRazbQlPOM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=NUMv7UA+; arc=none smtp.client-ip=209.85.160.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="W6k4M6yD"
-Received: by mail-qv1-f53.google.com with SMTP id 6a1803df08f44-6e89c11fd8fso112456d6.0
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="NUMv7UA+"
+Received: by mail-qt1-f173.google.com with SMTP id d75a77b69052e-471fe5e0a80so65282021cf.1
         for <bpf@vger.kernel.org>; Wed, 05 Mar 2025 13:12:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1741209165; x=1741813965; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=v9ZqzupBJqgWh4c4fBt8kR8hBipkk9pB46wcDOSAliw=;
-        b=W6k4M6yDnZJTitXi5k7UNaPhAr4PjITroFh3SoAa1PVwQvRDhdShW9I5V/lXCY2rAL
-         nzvMWPsOKubBmJmcGAYqcPeFGEVm0b2IDyYIgwfX+uUMFT16SF8imSR/FkDJVgEydqwN
-         RwZGNbd5tTG0Eoj8S3APzQ8UHgWIJ/f35/xn2fF9yAOQVIkzG3s/x5J/qBSc53yH4eT2
-         PPiXym2k+wKotPAViZPAFFVXURfAMYfMqtIN+6cfzqMb6k7eu729lHhQ0pBbUdQWpcgc
-         2Vu1sAJtrxE30xvZMwVSd2q23ZuSXMb+/CsLvOAihUjqyTKtDWO60Tvq/4qNYbAHxNWr
-         vALg==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ptvDvINcrJ+IHiQEaD0ERRof30Fe7KxAOaVsuQI4KFQ=;
+        b=NUMv7UA+xcSyM40O5bb3CsLUrToa6SlAmgdeVwZUKz1iW+2T19WWHC4mk3DsjOjT2V
+         NDYRbBCpE9Qu8qgQKD6Zk1+2iBmPtzBsFDRWKS6vNA19Rylnq93wHF2dmU5QGvH5+19P
+         2mXrwzWyaZ6CDnExZECzuTZv0+ohqB6iFCK3dw7F5HzoHXpfwO+reIgboAZlyLBVTgQZ
+         gjjI9CCFFsLfHu4RT703B48i+OCoIaKLa3IJgxobEDoqsGKVvasjq8/KXmTJpYoivjYq
+         220WiT/6MbUPuvc3yPHWUpjuaBcp1WwRhDs/+kmQjqcKtNzynIxJaVBdk0gliC00D/Af
+         iILA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20230601; t=1741209165; x=1741813965;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=v9ZqzupBJqgWh4c4fBt8kR8hBipkk9pB46wcDOSAliw=;
-        b=C428Tb4A3LtpHTyx8Dtjfh7SYUKFuXRmuVsqsCP/Mn53Fn46HiaTdFMNaHy+/MK9zY
-         9B4DvbuG8Pw7w7xqcPq3F4t6A9UJMSDBjQM2Br1LU3jNIlodeAgAKnzQ8q+Fp8pNg2gL
-         KksYsAohwM8Gw/myvzdXms4ehm5jxHTsbYEFBCXF6i7KdniWlIFtLKjANvDcgH35zPJu
-         OtR5XE3E4HjfaEN5CyCPf/SzV/uBi4HWny0mO9ldJ+Il6F+s8fl1k305IdkiPiU3NAEB
-         AO7H4D2WdtCqB2gJgVcDLPX2uXOzr2s+mePO2s0vQ9B/DdFWvH0ZYIrnjp++8flxEkpF
-         cQpQ==
-X-Gm-Message-State: AOJu0YyDld4HIeSTncD+TNjhqHhKoilusmnabir4LXBAWZlf90Abc6Qq
-	iKGn5LfJTiQb1OGPkh2MznSkWZhZ+b54weS0goL7JW1by97emiWi6Od6zxmkH2u7QEIHb/o9rTx
-	8y1jEPw==
-X-Gm-Gg: ASbGnctLQB7hRk9xnbIW5m/yr2GgCzGQFFgAc8/Fp8TwpnWrCHYfCx1YBTAWSqMzDOV
-	BEVMDlSnK7xVFf7IJA1sY1VJCjlhznFZJ0zdzD72gcaAUIlqew1fjPa5/vaUrpSYx5NVTpZ0fc1
-	yxolkKg7MJTtUumPnOcAa84Pt6261DjkUWfzdkFOZXg3OnKE/ayBp6rvWA76MMYr4RdbeEiiYXg
-	hBxvC3J9ZLU/47itqkHYyv9ikTq4ysNQhQYONO12JPzuAT3VA91Po7J5b5Ug2hs8p5gm7hvRunn
-	4gM10qra4OaLUL1QkZ1kAlr1tIiM/KKew5mMubj0Sg==
-X-Google-Smtp-Source: AGHT+IHwOJsx9Yjw2GSeGC1q0B86IbZN+l7pVh2QBSsYNQ6ElmnuC6PxqNToJtIdSjXX2CpWZEgSQA==
-X-Received: by 2002:a05:6214:11aa:b0:6e8:f2d2:f123 with SMTP id 6a1803df08f44-6e8f2d2f16bmr20615726d6.13.1741209163848;
-        Wed, 05 Mar 2025 13:12:43 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ptvDvINcrJ+IHiQEaD0ERRof30Fe7KxAOaVsuQI4KFQ=;
+        b=bvKL2UNa8Z2KK2QCqkkooB56idzXKbvAikh4nX8vdpiaSBJne/li/pFX5xThBbT/8T
+         Ly7PI/X97rHz0AS95LnG1uEYi7Q0KGvIDFBmNyET2zvTYX9IkrvpDTjSJ8Rnq3QJ7I/O
+         4le6xblS9My8rHDlJsiZLcQup/Nn/uBDROujQ8Uj5O+DMe4Ebppu6nRibNAq1fzyEcgK
+         vpcUmTFdM5iYGvWzMjqO12PrzslOTuybnivqcy6mkOUSE2QhrliUcbx0f989QXFksZsd
+         lLJuwg+twTBofL1iDvw0G3J3m9FvbPbHIEQEeI6nvy8zOmAdsuGqktcrS0okN/zowG/w
+         FG5w==
+X-Gm-Message-State: AOJu0YynZ/4f9KMxt7RASFZh7CzlSk3UYO2YQD2m+L3xTtAPipk7teoh
+	4Z6AXuLJxk/RnlR3tzBld+K9ODq0T0gbGrI4An4RQXvGVQHZkwn5lbXslXyEWcPKD+CYBcCfy5F
+	mjXipXQ==
+X-Gm-Gg: ASbGncvlYqLvreUuo7C9t73rXogZjXOvl0nwWqj9KjJjI4m5NtaGyGHRPf+/VgMSVuF
+	KKiZcZzPXbtKg8CfoScxl+G3t47ybIty+3v4VsBULEOubezz/bSyKgFOJX8usJA5fZfDY+wIgOh
+	1owt1Y/Bed6zVWASA4bG6SOPmM/+zTa6JynWaoRivylBebxRVAaAiL9GRZeIn/uQ/FD9RssJ1lO
+	KhYZ2fzQ83BIONODjnNSZLaaqlvaOwPWZA1pR7WyLe8GLd0r0rLr5H3zva1n/w/7F7on4BcDK/X
+	wXspvApctYoCuFMdYoRjgi0CFX5PMZTPz+a9yNlong==
+X-Google-Smtp-Source: AGHT+IGIJzAfmdUgm6mfcadFHWNecCdZ9FN/zoctgiLHLQU/A7heuBDNkp5cAto614rUR61sndhfdg==
+X-Received: by 2002:ac8:5750:0:b0:471:f08e:d661 with SMTP id d75a77b69052e-4750b4411fdmr80338271cf.13.1741209165241;
+        Wed, 05 Mar 2025 13:12:45 -0800 (PST)
 Received: from boreas.. ([140.174.215.88])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-474eced9880sm43726851cf.17.2025.03.05.13.12.39
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-474eced9880sm43726851cf.17.2025.03.05.13.12.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Mar 2025 13:12:43 -0800 (PST)
+        Wed, 05 Mar 2025 13:12:44 -0800 (PST)
 From: Emil Tsalapatis <emil@etsalapatis.com>
 To: bpf@vger.kernel.org
 Cc: ast@kernel.org,
@@ -67,10 +69,12 @@ Cc: ast@kernel.org,
 	memxor@gmail.com,
 	houtao@huaweicloud.com,
 	Emil Tsalapatis <emil@etsalapatis.com>
-Subject: [PATCH v4 0/3] bpf: introduce helper for populating bpf_cpumask
-Date: Wed,  5 Mar 2025 16:12:32 -0500
-Message-ID: <20250305211235.368399-1-emil@etsalapatis.com>
+Subject: [PATCH v4 2/3] selftests: bpf: add bpf_cpumask_fill selftests
+Date: Wed,  5 Mar 2025 16:12:34 -0500
+Message-ID: <20250305211235.368399-3-emil@etsalapatis.com>
 X-Mailer: git-send-email 2.47.1
+In-Reply-To: <20250305211235.368399-1-emil@etsalapatis.com>
+References: <20250305211235.368399-1-emil@etsalapatis.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -79,60 +83,190 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Some BPF programs like scx schedulers have their own internal CPU mask types, 
-mask types, which they must transform into struct bpf_cpumask instances
-before passing them to scheduling-related kfuncs. There is currently no
-way to efficiently populate the bitfield of a bpf_cpumask from BPF memory, 
-and programs must use multiple bpf_cpumask_[set, clear] calls to do so. 
-Introduce a kfunc helper to populate the bitfield of a bpf_cpumask from valid 
-BPF memory with a single call.
-
-Changelog :
------------
-v3->v4
-v3: https://lore.kernel.org/bpf/20250305161327.203396-1-emil@etsalapatis.com/
-
-	* Removed new tests from tools/selftests/bpf/prog_tests/cpumask.c because
-they were being run twice.
-
-Addressed feedback by Alexei Starovoitov:
-	* Added missing return value in function kdoc
-	* Added an additional patch fixing some missing kdoc fields in
-	kernel/bpf/cpumask.c
-
-Addressed feedback by Tejun Heo:
-	* Renamed the kfunc to bpf_cpumask_populate to avoid confusion
-	w/ bitmap_fill()
-
-v2->v3
-v2: https://lore.kernel.org/bpf/20250305021020.1004858-1-emil@etsalapatis.com/
-
-Addressed feedback by Alexei Starovoitov:
-	* Added back patch descriptions dropped from v1->v2
-	* Elide the alignment check for archs with efficient
-	  unaligned accesses
-
-v1->v2
-v1: https://lore.kernel.org/bpf/20250228003321.1409285-1-emil@etsalapatis.com/
-
-Addressed feedback by Hou Tao:
-	* Add check that the input buffer is aligned to sizeof(long)
-	* Adjust input buffer size check to use bitmap_size()
-	* Add selftest for checking the bit pattern of the bpf_cpumask
-	* Moved all selftests into existing files
+Add selftests for the bpf_cpumask_fill helper that sets a bpf_cpumask to
+a bit pattern provided by a BPF program.
 
 Signed-off-by: Emil Tsalapatis (Meta) <emil@etsalapatis.com>
-
-Emil Tsalapatis (3):
-  bpf: add kfunc for populating cpumask bits
-  selftests: bpf: add bpf_cpumask_fill selftests
-  bpf: fix missing kdoc string fields in cpumask.c
-
- kernel/bpf/cpumask.c                          |  53 ++++++++
+---
  .../selftests/bpf/progs/cpumask_failure.c     |  38 ++++++
  .../selftests/bpf/progs/cpumask_success.c     | 114 ++++++++++++++++++
- 3 files changed, 205 insertions(+)
+ 2 files changed, 152 insertions(+)
 
+diff --git a/tools/testing/selftests/bpf/progs/cpumask_failure.c b/tools/testing/selftests/bpf/progs/cpumask_failure.c
+index b40b52548ffb..8a2fd596c8a3 100644
+--- a/tools/testing/selftests/bpf/progs/cpumask_failure.c
++++ b/tools/testing/selftests/bpf/progs/cpumask_failure.c
+@@ -222,3 +222,41 @@ int BPF_PROG(test_invalid_nested_array, struct task_struct *task, u64 clone_flag
+ 
+ 	return 0;
+ }
++
++SEC("tp_btf/task_newtask")
++__failure __msg("type=scalar expected=fp")
++int BPF_PROG(test_populate_invalid_destination, struct task_struct *task, u64 clone_flags)
++{
++	struct bpf_cpumask *invalid = (struct bpf_cpumask *)0x123456;
++	u64 bits;
++	int ret;
++
++	ret = bpf_cpumask_populate((struct cpumask *)invalid, &bits, sizeof(bits));
++	if (!ret)
++		err = 2;
++
++	return 0;
++}
++
++SEC("tp_btf/task_newtask")
++__failure __msg("leads to invalid memory access")
++int BPF_PROG(test_populate_invalid_source, struct task_struct *task, u64 clone_flags)
++{
++	void *garbage = (void *)0x123456;
++	struct bpf_cpumask *local;
++	int ret;
++
++	local = create_cpumask();
++	if (!local) {
++		err = 1;
++		return 0;
++	}
++
++	ret = bpf_cpumask_populate((struct cpumask *)local, garbage, 8);
++	if (!ret)
++		err = 2;
++
++	bpf_cpumask_release(local);
++
++	return 0;
++}
+diff --git a/tools/testing/selftests/bpf/progs/cpumask_success.c b/tools/testing/selftests/bpf/progs/cpumask_success.c
+index 80ee469b0b60..5dc0fe9940dc 100644
+--- a/tools/testing/selftests/bpf/progs/cpumask_success.c
++++ b/tools/testing/selftests/bpf/progs/cpumask_success.c
+@@ -757,6 +757,7 @@ int BPF_PROG(test_refcount_null_tracking, struct task_struct *task, u64 clone_fl
+ 	mask1 = bpf_cpumask_create();
+ 	mask2 = bpf_cpumask_create();
+ 
++
+ 	if (!mask1 || !mask2)
+ 		goto free_masks_return;
+ 
+@@ -770,3 +771,116 @@ int BPF_PROG(test_refcount_null_tracking, struct task_struct *task, u64 clone_fl
+ 		bpf_cpumask_release(mask2);
+ 	return 0;
+ }
++
++SEC("tp_btf/task_newtask")
++__success
++int BPF_PROG(test_populate_reject_small_mask, struct task_struct *task, u64 clone_flags)
++{
++	struct bpf_cpumask *local;
++	u8 toofewbits;
++	int ret;
++
++	local = create_cpumask();
++	if (!local)
++		return 0;
++
++	/* The kfunc should prevent this operation */
++	ret = bpf_cpumask_populate((struct cpumask *)local, &toofewbits, sizeof(toofewbits));
++	if (ret != -EACCES)
++		err = 2;
++
++	bpf_cpumask_release(local);
++
++	return 0;
++}
++
++/* Mask is guaranteed to be large enough for bpf_cpumask_t. */
++#define CPUMASK_TEST_MASKLEN (sizeof(cpumask_t))
++
++/* Add an extra word for the test_populate_reject_unaligned test. */
++u64 bits[CPUMASK_TEST_MASKLEN / 8 + 1];
++extern bool CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS __kconfig __weak;
++
++SEC("tp_btf/task_newtask")
++__success
++int BPF_PROG(test_populate_reject_unaligned, struct task_struct *task, u64 clone_flags)
++{
++	struct bpf_cpumask *mask;
++	char *src;
++	int ret;
++
++	/* Skip if unaligned accesses are fine for this arch.  */
++	if (CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS)
++		return 0;
++
++	mask = bpf_cpumask_create();
++	if (!mask) {
++		err = 1;
++		return 0;
++	}
++
++	/* Misalign the source array by a byte. */
++	src = &((char *)bits)[1];
++
++	ret = bpf_cpumask_populate((struct cpumask *)mask, src, CPUMASK_TEST_MASKLEN);
++	if (ret != -EINVAL)
++		err = 2;
++
++	bpf_cpumask_release(mask);
++
++	return 0;
++}
++
++
++SEC("tp_btf/task_newtask")
++__success
++int BPF_PROG(test_populate, struct task_struct *task, u64 clone_flags)
++{
++	struct bpf_cpumask *mask;
++	bool bit;
++	int ret;
++	int i;
++
++	/* Set only odd bits. */
++	__builtin_memset(bits, 0xaa, CPUMASK_TEST_MASKLEN);
++
++	mask = bpf_cpumask_create();
++	if (!mask) {
++		err = 1;
++		return 0;
++	}
++
++	/* Pass the entire bits array, the kfunc will only copy the valid bits. */
++	ret = bpf_cpumask_populate((struct cpumask *)mask, bits, CPUMASK_TEST_MASKLEN);
++	if (ret) {
++		err = 2;
++		goto out;
++	}
++
++	/*
++	 * Test is there to appease the verifier. We cannot directly
++	 * access NR_CPUS, the upper bound for nr_cpus, so we infer
++	 * it from the size of cpumask_t.
++	 */
++	if (nr_cpus < 0 || nr_cpus >= CPUMASK_TEST_MASKLEN * 8) {
++		err = 3;
++		goto out;
++	}
++
++	bpf_for(i, 0, nr_cpus) {
++		/* Odd-numbered bits should be set, even ones unset. */
++		bit = bpf_cpumask_test_cpu(i, (const struct cpumask *)mask);
++		if (bit == (i % 2 != 0))
++			continue;
++
++		err = 4;
++		break;
++	}
++
++out:
++	bpf_cpumask_release(mask);
++
++	return 0;
++}
++
++#undef CPUMASK_TEST_MASKLEN
 -- 
 2.47.1
 
