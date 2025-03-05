@@ -1,15 +1,16 @@
 Received: from dediextern.your-server.de (dediextern.your-server.de [85.10.215.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04D50257AF9;
-	Wed,  5 Mar 2025 21:35:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CBB52580F7;
+	Wed,  5 Mar 2025 21:35:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.10.215.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741210520; cv=none; b=DcSpauviVClv8GcCkOtj97LHMyp5OHPRHmWeMnXDInnQpHMk2w3lLF2en5F7eeN00iRGCj1ob5d2/A7hfS9rCnC7Q8+7wEMmvTg5VSKGK+2cOH4+zjYBT+Kpg573/ReMHNmDgxrEqI+M43t9T2i9Iu1eg3EQdIUMccmDNi8UqqU=
+	t=1741210521; cv=none; b=SI0Nnghe/3IxJ1OOYzrGzAMuXdJ/aidH7psee+UICFEuQdyWutdfI7x/lNzobntZxWvr2AitfQjDtYudQ+jQKw8hAFWJJKlzCmTz8XfrrYXQAkpLIdNdi5Z+Mx2FZcjPgIaBchq7hqux8lWHNY1yX6vJOOlOb0dHP/ZKO7H4XKQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741210520; c=relaxed/simple;
-	bh=ysJbOV8K+yOBK93YQxRBRFYQFpznMzwFl1VkpZNmKvI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GCeQ/mlOpwmRmuO2LW63W8mdJANVwfqPEAhHyzWyv1j8sO61JpwGfzzPnqOKxC3q6wxCHbjqdgddlDB2EGIgRNKhoUmdJHrlTAY3B0CC06jPCJzfG3DY8gTp7y+xzdCmRQDnXg0DjrZbH5wdFSvb+bJ7M22Wczmo0B9lsAd5bsY=
+	s=arc-20240116; t=1741210521; c=relaxed/simple;
+	bh=SqEnaK+MvxXR6Rdu8s12RiSEt6JOkLY1YRco0lsyCv0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=YtMutx7uxFsLmugVehgOK/iYfVW/sGMkV00+gcReorGjdBSM7sICD8hWyuiIfTptZ+tOsJAyrU6EJPye+TGawUCtRZa2peCvTvj+d3OndYLVEUo7WdIcojQYOau8tSvgjsy4kyrdjnf/iana3gTMTFFaB4E8fsajI9LuW8rRqKI=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hetzner-cloud.de; spf=pass smtp.mailfrom=hetzner-cloud.de; arc=none smtp.client-ip=85.10.215.232
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hetzner-cloud.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hetzner-cloud.de
@@ -17,13 +18,13 @@ Received: from sslproxy06.your-server.de ([78.46.172.3])
 	by dediextern.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <marcus.wichelmann@hetzner-cloud.de>)
-	id 1tpwO2-000K1D-QC; Wed, 05 Mar 2025 22:34:43 +0100
+	id 1tpwO3-000K1K-50; Wed, 05 Mar 2025 22:34:43 +0100
 Received: from [78.47.5.107] (helo=sdn-nic-test01..)
 	by sslproxy06.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <marcus.wichelmann@hetzner-cloud.de>)
-	id 1tpwO1-000MHO-2g;
-	Wed, 05 Mar 2025 22:34:42 +0100
+	id 1tpwO2-000MHO-0a;
+	Wed, 05 Mar 2025 22:34:43 +0100
 From: Marcus Wichelmann <marcus.wichelmann@hetzner-cloud.de>
 To: netdev@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
@@ -52,10 +53,12 @@ Cc: willemdebruijn.kernel@gmail.com,
 	shuah@kernel.org,
 	hawk@kernel.org,
 	marcus.wichelmann@hetzner-cloud.de
-Subject: [PATCH bpf-next v5 0/6] XDP metadata support for tun driver
-Date: Wed,  5 Mar 2025 21:34:32 +0000
-Message-ID: <20250305213438.3863922-1-marcus.wichelmann@hetzner-cloud.de>
+Subject: [PATCH bpf-next v5 3/6] selftests/bpf: move open_tuntap to network helpers
+Date: Wed,  5 Mar 2025 21:34:35 +0000
+Message-ID: <20250305213438.3863922-4-marcus.wichelmann@hetzner-cloud.de>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20250305213438.3863922-1-marcus.wichelmann@hetzner-cloud.de>
+References: <20250305213438.3863922-1-marcus.wichelmann@hetzner-cloud.de>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -66,71 +69,125 @@ Content-Transfer-Encoding: 8bit
 X-Authenticated-Sender: marcus.wichelmann@hetzner-cloud.de
 X-Virus-Scanned: Clear (ClamAV 1.0.7/27568/Wed Mar  5 10:48:48 2025)
 
-Hi all,
+To test the XDP metadata functionality of the tun driver, it's necessary
+to create a new tap device first. A helper function for this already
+exists in lwt_helpers.h. Move it to the common network helpers header,
+so it can be reused in other tests.
 
-this v5 of the patch series is very similar to v4, but rebased onto the
-bpf-next/net branch instead of bpf-next/master.
-Because the commit c047e0e0e435 ("selftests/bpf: Optionally open a
-dedicated namespace to run test in it") is not yet included in this branch,
-I changed the xdp_context_tuntap test to manually create a namespace to run
-the test in.
-
-Not so successful pipeline: https://github.com/kernel-patches/bpf/actions/runs/13682405154
-
-The CI pipeline failed because of veristat changes in seemingly unrelated
-eBPF programs. I don't think this has to do with the changes from this
-patch series, but if it does, please let me know what I may have to do
-different to make the CI pass.
-
+Signed-off-by: Marcus Wichelmann <marcus.wichelmann@hetzner-cloud.de>
 ---
+ tools/testing/selftests/bpf/network_helpers.c | 28 ++++++++++++++++++
+ tools/testing/selftests/bpf/network_helpers.h |  3 ++
+ .../selftests/bpf/prog_tests/lwt_helpers.h    | 29 -------------------
+ 3 files changed, 31 insertions(+), 29 deletions(-)
 
-v5:
-- rebase onto bpf-next/net
-- resolve rebase conflicts
-- change xdp_context_tuntap test to manually create and open a network
-  namespace using netns_new
-
-v4: https://lore.kernel.org/bpf/20250227142330.1605996-1-marcus.wichelmann@hetzner-cloud.de/
-- strip unrelated changes from the selftest patches
-- extend commit message for "selftests/bpf: refactor xdp_context_functional
-  test and bpf program"
-- the NOARP flag was not effective to prevent other packets from
-  interfering with the tests, add a filter to the XDP program instead
-- run xdp_context_tuntap in a separate namespace to avoid conflicts with
-  other tests
-
-v3: https://lore.kernel.org/bpf/20250224152909.3911544-1-marcus.wichelmann@hetzner-cloud.de/
-- change the condition to handle xdp_buffs without metadata support, as
-  suggested by Willem de Bruijn <willemb@google.com>
-- add clarifying comment why that condition is needed
-- set NOARP flag in selftests to ensure that the kernel does not send
-  packets on the test interfaces that may interfere with the tests
-
-v2: https://lore.kernel.org/bpf/20250217172308.3291739-1-marcus.wichelmann@hetzner-cloud.de/
-- submit against bpf-next subtree
-- split commits and improved commit messages
-- remove redundant metasize check and add clarifying comment instead
-- use max() instead of ternary operator
-- add selftest for metadata support in the tun driver
-
-v1: https://lore.kernel.org/all/20250130171614.1657224-1-marcus.wichelmann@hetzner-cloud.de/
-
-Marcus Wichelmann (6):
-  net: tun: enable XDP metadata support
-  net: tun: enable transfer of XDP metadata to skb
-  selftests/bpf: move open_tuntap to network helpers
-  selftests/bpf: refactor xdp_context_functional test and bpf program
-  selftests/bpf: add test for XDP metadata support in tun driver
-  selftests/bpf: fix file descriptor assertion in open_tuntap helper
-
- drivers/net/tun.c                             |  28 +++-
- tools/testing/selftests/bpf/network_helpers.c |  28 ++++
- tools/testing/selftests/bpf/network_helpers.h |   3 +
- .../selftests/bpf/prog_tests/lwt_helpers.h    |  29 ----
- .../bpf/prog_tests/xdp_context_test_run.c     | 145 +++++++++++++++++-
- .../selftests/bpf/progs/test_xdp_meta.c       |  53 +++++--
- 6 files changed, 230 insertions(+), 56 deletions(-)
-
+diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
+index 80844a5fb1fe..fcee2c4a637a 100644
+--- a/tools/testing/selftests/bpf/network_helpers.c
++++ b/tools/testing/selftests/bpf/network_helpers.c
+@@ -548,6 +548,34 @@ void close_netns(struct nstoken *token)
+ 	free(token);
+ }
+ 
++int open_tuntap(const char *dev_name, bool need_mac)
++{
++	int err = 0;
++	struct ifreq ifr;
++	int fd = open("/dev/net/tun", O_RDWR);
++
++	if (!ASSERT_GT(fd, 0, "open(/dev/net/tun)"))
++		return -1;
++
++	ifr.ifr_flags = IFF_NO_PI | (need_mac ? IFF_TAP : IFF_TUN);
++	strncpy(ifr.ifr_name, dev_name, IFNAMSIZ - 1);
++	ifr.ifr_name[IFNAMSIZ - 1] = '\0';
++
++	err = ioctl(fd, TUNSETIFF, &ifr);
++	if (!ASSERT_OK(err, "ioctl(TUNSETIFF)")) {
++		close(fd);
++		return -1;
++	}
++
++	err = fcntl(fd, F_SETFL, O_NONBLOCK);
++	if (!ASSERT_OK(err, "fcntl(O_NONBLOCK)")) {
++		close(fd);
++		return -1;
++	}
++
++	return fd;
++}
++
+ int get_socket_local_port(int sock_fd)
+ {
+ 	struct sockaddr_storage addr;
+diff --git a/tools/testing/selftests/bpf/network_helpers.h b/tools/testing/selftests/bpf/network_helpers.h
+index ebec8a8d6f81..9235976d0c50 100644
+--- a/tools/testing/selftests/bpf/network_helpers.h
++++ b/tools/testing/selftests/bpf/network_helpers.h
+@@ -8,6 +8,7 @@
+ typedef __u16 __sum16;
+ #include <linux/if_ether.h>
+ #include <linux/if_packet.h>
++#include <linux/if_tun.h>
+ #include <linux/ip.h>
+ #include <linux/ipv6.h>
+ #include <linux/ethtool.h>
+@@ -85,6 +86,8 @@ int get_socket_local_port(int sock_fd);
+ int get_hw_ring_size(char *ifname, struct ethtool_ringparam *ring_param);
+ int set_hw_ring_size(char *ifname, struct ethtool_ringparam *ring_param);
+ 
++int open_tuntap(const char *dev_name, bool need_mac);
++
+ struct nstoken;
+ /**
+  * open_netns() - Switch to specified network namespace by name.
+diff --git a/tools/testing/selftests/bpf/prog_tests/lwt_helpers.h b/tools/testing/selftests/bpf/prog_tests/lwt_helpers.h
+index fb1eb8c67361..ccec0fcdabc1 100644
+--- a/tools/testing/selftests/bpf/prog_tests/lwt_helpers.h
++++ b/tools/testing/selftests/bpf/prog_tests/lwt_helpers.h
+@@ -5,7 +5,6 @@
+ 
+ #include <time.h>
+ #include <net/if.h>
+-#include <linux/if_tun.h>
+ #include <linux/icmp.h>
+ 
+ #include "test_progs.h"
+@@ -37,34 +36,6 @@ static inline int netns_delete(void)
+ 	return system("ip netns del " NETNS ">/dev/null 2>&1");
+ }
+ 
+-static int open_tuntap(const char *dev_name, bool need_mac)
+-{
+-	int err = 0;
+-	struct ifreq ifr;
+-	int fd = open("/dev/net/tun", O_RDWR);
+-
+-	if (!ASSERT_GT(fd, 0, "open(/dev/net/tun)"))
+-		return -1;
+-
+-	ifr.ifr_flags = IFF_NO_PI | (need_mac ? IFF_TAP : IFF_TUN);
+-	strncpy(ifr.ifr_name, dev_name, IFNAMSIZ - 1);
+-	ifr.ifr_name[IFNAMSIZ - 1] = '\0';
+-
+-	err = ioctl(fd, TUNSETIFF, &ifr);
+-	if (!ASSERT_OK(err, "ioctl(TUNSETIFF)")) {
+-		close(fd);
+-		return -1;
+-	}
+-
+-	err = fcntl(fd, F_SETFL, O_NONBLOCK);
+-	if (!ASSERT_OK(err, "fcntl(O_NONBLOCK)")) {
+-		close(fd);
+-		return -1;
+-	}
+-
+-	return fd;
+-}
+-
+ #define ICMP_PAYLOAD_SIZE     100
+ 
+ /* Match an ICMP packet with payload len ICMP_PAYLOAD_SIZE */
 -- 
 2.43.0
 
