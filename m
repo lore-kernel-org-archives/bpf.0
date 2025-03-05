@@ -1,119 +1,126 @@
-Received: from mx11lb.world4you.com (mx11lb.world4you.com [81.19.149.121])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A85BC2566D0;
-	Wed,  5 Mar 2025 19:56:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=81.19.149.121
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7D1F253F01
+	for <bpf@vger.kernel.org>; Wed,  5 Mar 2025 20:12:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741204573; cv=none; b=qoc2sLc3KZi4LQ+XiVOvd497Y9pWr0x+N99EEI5xwMFYIDR1631vosDhq2Xt6Env+8oWPPzIpxutlous/3/B/B+4bU8vKwPsyTCc785tNzZo7FeuzrCrhMzpzJKb1ZdPCNVoOR8P/MoCmggFctQOFfLXtqaIWNkcXsv9rTQdwzw=
+	t=1741205579; cv=none; b=E5uFYwdHoFV0eUmpU2YoEzQbnbNWcU68aUvraH3bS5JltzoyxcgVxSSfuwQWKxoGWoNPKGqhNhjO+FxQI8oQTIm7xioNIK0X6pOmTqQ07gWd2pjc7jHJzg64RWVThaAGC57iX6Rp2bzNs4sEzCEhUAWX68q1xULN81/5YoX4PG8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741204573; c=relaxed/simple;
-	bh=WYEC+ArfSwlKN3FeDLKk0TQMOhpIceugzbJo5Kd8ysc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HOXDGoKO3wFoPPW2tFyXpRI/TqTETtWJ7579ZLzZn4xwBSXlo8IaHb1+rQW98z3iaJfbxBDOc04Ilro2rBfx1vBscGkucTPpoUasQ3ir7kW2daScV360EdUAUpQvS5xLVwrwomA2MM0jvWq1+x20KRbdX/keP5LAvQYYdGYX+q4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=engleder-embedded.com; spf=pass smtp.mailfrom=engleder-embedded.com; dkim=pass (1024-bit key) header.d=engleder-embedded.com header.i=@engleder-embedded.com header.b=RI+/h5ml; arc=none smtp.client-ip=81.19.149.121
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=engleder-embedded.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=engleder-embedded.com
+	s=arc-20240116; t=1741205579; c=relaxed/simple;
+	bh=zNu+uO+qVUH2lHjGc7UpYzRsUdmyNBFYkU3NKGrAkMw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=qMTGeGza8E9/lpmjU9pOkHGu7Nucjk0bIHXUKVG9+TwSfS9kfdNnHFxHpQgy44SxcxtO2jzv3z4SnHFocYjY4u82q6pZMEIwXaobe3njU9i2huzFvx52x3HaiXkAO3Sk/fBrQ9ubWqfsPFZvBWDn+jO4enjpXFtfcjSISnyKBtA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=PV6p5hz8; arc=none smtp.client-ip=209.85.219.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=engleder-embedded.com header.i=@engleder-embedded.com header.b="RI+/h5ml"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=engleder-embedded.com; s=dkim11; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=x0KQuzyFQUEThFLdYlVvZUJ1cH4hBNZAmoJdDiFksag=; b=RI+/h5mlwDs65E0J/YyCgTt05p
-	a//6ia9q7THHUJjoOvsmkpQr52QzRjnYVtgNBGH+dTSvVXju2HjaUP30mnI4VLvlMfrNn9FnnhTmr
-	+tv+B9/4GtcBM88IRfc6S0l7fbJXX/wnygN3l0PkoOx7ZlndkhxJAnvKBkjWP4Ckx3yk=;
-Received: from [80.121.79.4] (helo=[10.0.0.160])
-	by mx11lb.world4you.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.97.1)
-	(envelope-from <gerhard@engleder-embedded.com>)
-	id 1tpuDg-000000006hj-2m9f;
-	Wed, 05 Mar 2025 20:15:53 +0100
-Message-ID: <c0adcf60-4fb5-411f-84ef-e409cecf8a75@engleder-embedded.com>
-Date: Wed, 5 Mar 2025 20:15:51 +0100
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="PV6p5hz8"
+Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-e549be93d5eso7721820276.1
+        for <bpf@vger.kernel.org>; Wed, 05 Mar 2025 12:12:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1741205577; x=1741810377; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=20bCxuGfaDVAOpC3W+MtKdxzg/x4LtoR169fsBOSxiQ=;
+        b=PV6p5hz8QrMFrM47dGnoPz1YwgyU82UYK5Kmu04FwnzTrDH4creMEB21e9+BqTaTBm
+         2tml2F3kDrKZ9Os1fGqrnSvIh7xHTSarCHECwjCUvQZw4vAQr4RXQbbpqY90dA/eAFQl
+         tp7BktFTuEHnEaDgfT25PSRLH2kiKL41BGR0J0yKbfxJALYPD2nNE0aW9n95QuEdPaje
+         jEcO5xxEa2Ro/EhA10NfRKGLTDcVNz/71bsyyDYVJW1pnmIlu32pZHq3QywQ7hdnJ6XS
+         MBUf9cduaVdehx5/dp9HNgo+5JZgpxzKYgm38Vg8Kr8LS2PuAWKK/1904Z0QFXWl7KGJ
+         q7Dg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741205577; x=1741810377;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=20bCxuGfaDVAOpC3W+MtKdxzg/x4LtoR169fsBOSxiQ=;
+        b=HxXY0bkmvMy1KalQWJK9195RcGGEdB52KQwMVloWovfCfKANqQuUcPAd2fNZ9gdEEG
+         rsSfhckIZzry41TB+Al0Z4nWFjEZkweBP0/+LBJ2dh9tLYARzSM1GqEn7+yH5Z1EfGcE
+         RneIvKYgJnrZoL2NthQJndTF/PDNHovkKSyyqKr2kgxoGUtSNbkMR2BsqhBLl8psL5xh
+         g45X3xyNUpMOho6y5R01QyNFCV1506yzfZQZqb5qywaPfBJsHNkAzcFY1EyaWwj5Ux4n
+         8ia1PqdTRr2XnhH4RWSlHf/Uws32Il06YwC1NoG7sGGOFhUyS7GgrEIJppRwarcbTzo3
+         HxbA==
+X-Forwarded-Encrypted: i=1; AJvYcCVP2W6jAV8ObieaQn9v20loQ/NnQlu27xhnmxcJ/yMl2Y0bxiLJZDafqFTwWE353h0zEEM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzhZHf3BqufvuPs3WWR+2+u8k3g5S177GLvJebc2bWBSNv+uz4x
+	/r6kohA/mCceeJCYEccB/S/4me+qlld7SDF2HhWRoaz31bikMOG2zAF0lywQeMaQVSjInvjLEZp
+	6qO92i/F2Yv8PWN03k8XllzWA4QXhU0FFVG45
+X-Gm-Gg: ASbGncuUcKTL2XRI9p2Xic2oCz5dedvhZt7nP+XzE25/bNQ93zCPi1id+TXhD6eqAZt
+	zZ6Gl5NQRhOX7MRubzO6RuGFeXpuNJvyJQ/WlI7Su3gxykAPB/bEUkWYogHWjJeYilrR4n5nwhW
+	5COLgmxrm1REDFdOX+fbjLD3CXyA==
+X-Google-Smtp-Source: AGHT+IFb1lQWxZfA+3Fj3IIMOvkgMjpy++obS3VPsP4HPWlePPjHMEfo/RAlFL+2ENHWUfAYeV2u1UeTQGpoYyph5bM=
+X-Received: by 2002:a05:6902:161b:b0:e5d:d2ce:a40a with SMTP id
+ 3f1490d57ef6-e611e30582dmr6534407276.34.1741205576740; Wed, 05 Mar 2025
+ 12:12:56 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH iwl-net] igc: Fix XSK queue NAPI ID mapping
-To: Joe Damato <jdamato@fastly.com>
-Cc: vitaly.lifshits@intel.com, avigailx.dahan@intel.com,
- anthony.l.nguyen@intel.com, stable@vger.kernel.org,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>,
- Przemek Kitszel <przemyslaw.kitszel@intel.com>,
- Andrew Lunn <andrew+netdev@lunn.ch>, Eric Dumazet <edumazet@google.com>,
- Paolo Abeni <pabeni@redhat.com>,
- "open list:XDP (eXpress Data Path)" <bpf@vger.kernel.org>,
- "moderated list:INTEL ETHERNET DRIVERS" <intel-wired-lan@lists.osuosl.org>,
- open list <linux-kernel@vger.kernel.org>, netdev@vger.kernel.org
-References: <20250305180901.128286-1-jdamato@fastly.com>
-Content-Language: en-US
-From: Gerhard Engleder <gerhard@engleder-embedded.com>
-In-Reply-To: <20250305180901.128286-1-jdamato@fastly.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AV-Do-Run: Yes
+References: <20250304203123.3935371-1-bboscaccy@linux.microsoft.com>
+ <20250304203123.3935371-3-bboscaccy@linux.microsoft.com> <CAHC9VhS5Gnj98K4fBCq3hDXjmj1Zt9WWqoOiTrwH85CDSTGEYA@mail.gmail.com>
+ <877c54jmjl.fsf@microsoft.com> <CAHC9VhQO_CVeg0sU_prvQ_Z8c9pSB02K3E5s84pngYN1RcxXGQ@mail.gmail.com>
+ <CAPhsuW6RrUiXaQe1HBYOvwUx2GFaA-RKx22955A2StsP2erTeA@mail.gmail.com>
+ <CAHC9VhQ1BHXfQSxMMbFtGDb2yVtBvuLD0b34=eSrCAKEtFq=OQ@mail.gmail.com> <CAADnVQJL77xLR+E18re88XwX0kSfkx_5O3=f8YQ1rVdVkf8-hQ@mail.gmail.com>
+In-Reply-To: <CAADnVQJL77xLR+E18re88XwX0kSfkx_5O3=f8YQ1rVdVkf8-hQ@mail.gmail.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Wed, 5 Mar 2025 15:12:44 -0500
+X-Gm-Features: AQ5f1Jp_oXF4bydH-aIRtYZmN6RTF7YwHfbbSgRNBrjTiC_WlFGzFQqTRg_361Q
+Message-ID: <CAHC9VhR5NmSU+eanprCk-osSMZnZ+ODwLJKWuqd8e1qDobim7A@mail.gmail.com>
+Subject: Re: [PATCH v4 bpf-next 2/2] selftests/bpf: Add is_kernel parameter to
+ LSM/bpf test programs
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Song Liu <song@kernel.org>, Blaise Boscaccy <bboscaccy@linux.microsoft.com>, 
+	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Stephen Smalley <stephen.smalley.work@gmail.com>, Ondrej Mosnacek <omosnace@redhat.com>, 
+	LSM List <linux-security-module@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	bpf <bpf@vger.kernel.org>, selinux@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 05.03.25 19:09, Joe Damato wrote:
-> In commit b65969856d4f ("igc: Link queues to NAPI instances"), the XSK
-> queues were incorrectly unmapped from their NAPI instances. After
-> discussion on the mailing list and the introduction of a test to codify
-> the expected behavior, we can see that the unmapping causes the
-> check_xsk test to fail:
-> 
-> NETIF=enp86s0 ./tools/testing/selftests/drivers/net/queues.py
-> 
-> [...]
->    # Check|     ksft_eq(q.get('xsk', None), {},
->    # Check failed None != {} xsk attr on queue we configured
->    not ok 4 queues.check_xsk
-> 
-> After this commit, the test passes:
-> 
->    ok 4 queues.check_xsk
-> 
-> Note that the test itself is only in net-next, so I tested this change
-> by applying it to my local net-next tree, booting, and running the test.
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: b65969856d4f ("igc: Link queues to NAPI instances")
-> Signed-off-by: Joe Damato <jdamato@fastly.com>
-> ---
->   drivers/net/ethernet/intel/igc/igc_xdp.c | 2 --
->   1 file changed, 2 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/intel/igc/igc_xdp.c b/drivers/net/ethernet/intel/igc/igc_xdp.c
-> index 13bbd3346e01..869815f48ac1 100644
-> --- a/drivers/net/ethernet/intel/igc/igc_xdp.c
-> +++ b/drivers/net/ethernet/intel/igc/igc_xdp.c
-> @@ -86,7 +86,6 @@ static int igc_xdp_enable_pool(struct igc_adapter *adapter,
->   		napi_disable(napi);
->   	}
->   
-> -	igc_set_queue_napi(adapter, queue_id, NULL);
->   	set_bit(IGC_RING_FLAG_AF_XDP_ZC, &rx_ring->flags);
->   	set_bit(IGC_RING_FLAG_AF_XDP_ZC, &tx_ring->flags);
->   
-> @@ -136,7 +135,6 @@ static int igc_xdp_disable_pool(struct igc_adapter *adapter, u16 queue_id)
->   	xsk_pool_dma_unmap(pool, IGC_RX_DMA_ATTR);
->   	clear_bit(IGC_RING_FLAG_AF_XDP_ZC, &rx_ring->flags);
->   	clear_bit(IGC_RING_FLAG_AF_XDP_ZC, &tx_ring->flags);
-> -	igc_set_queue_napi(adapter, queue_id, napi);
->   
->   	if (needs_reset) {
->   		napi_enable(napi);
-> 
-> base-commit: 3c9231ea6497dfc50ac0ef69fff484da27d0df66
+On Wed, Mar 5, 2025 at 12:08=E2=80=AFPM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+> On Wed, Mar 5, 2025 at 8:12=E2=80=AFAM Paul Moore <paul@paul-moore.com> w=
+rote:
+> > On Tue, Mar 4, 2025 at 10:32=E2=80=AFPM Song Liu <song@kernel.org> wrot=
+e:
+> > > On Tue, Mar 4, 2025 at 6:14=E2=80=AFPM Paul Moore <paul@paul-moore.co=
+m> wrote:
+> > > > On Tue, Mar 4, 2025 at 8:26=E2=80=AFPM Blaise Boscaccy
+> > > > <bboscaccy@linux.microsoft.com> wrote:
+> > > > > Paul Moore <paul@paul-moore.com> writes:
+> > > > > > On Tue, Mar 4, 2025 at 3:31=E2=80=AFPM Blaise Boscaccy
+> > > > > > <bboscaccy@linux.microsoft.com> wrote:
+> >
+> > ...
+> >
+> > > Do we need this in the LSM tree before the upcoming merge window?
+> > > If not, we would prefer to carry it in bpf-next.
+> >
+> > As long as we can send this up to Linus during the upcoming merge
+> > window I'll be happy; if you feel strongly and want to take it via the
+> > BPF tree, that's fine by me.  I'm currently helping someone draft a
+> > patchset to implement the LSM/SELinux access control LSM callbacks for
+> > the BPF tokens and I'm also working on a fix for the LSM framework
+> > initialization code, both efforts may land in a development tree
+> > during the next dev cycle and may cause a merge conflict with Blaise's
+> > changes.  Not that a merge conflict is a terrible thing that we can't
+> > work around, but if we can avoid it I'd be much happier :)
+> >
+> > Please do make the /is_kernel/kernel/ change I mentioned in patch 1/2,
+> > and feel free to keep my ACK from this patchset revision.
+>
+> My preference is to go via bpf-next, since changes are bigger
+> on bpf side than on lsm side.
 
-igc_set_queue_napi() could be made static as it only used within
-igc_main.c after this change.
+Fine by me, the patch has my ACK already.
 
-Reviewed-by: Gerhard Engleder <gerhard@engleder-embedded.com>
+--=20
+paul-moore.com
