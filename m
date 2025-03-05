@@ -1,250 +1,119 @@
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx11lb.world4you.com (mx11lb.world4you.com [81.19.149.121])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46B4125334C
-	for <bpf@vger.kernel.org>; Wed,  5 Mar 2025 19:49:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A85BC2566D0;
+	Wed,  5 Mar 2025 19:56:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=81.19.149.121
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741204200; cv=none; b=kIqpm2lmzFq1yye8fsN5fSm1sj0qLouLG2vNnYgKtyTJgiYIm6kA1K0HoYgb8nL/wBDhU7sujQBiFcigglr0VP54ABpC8emCudXaI5H/Emx9ekaeNwOuA7mo8EyK+uh1JaFqEG+EV/MX63yW4kwHtFsFp4AuFhOT/lDyjzE46lc=
+	t=1741204573; cv=none; b=qoc2sLc3KZi4LQ+XiVOvd497Y9pWr0x+N99EEI5xwMFYIDR1631vosDhq2Xt6Env+8oWPPzIpxutlous/3/B/B+4bU8vKwPsyTCc785tNzZo7FeuzrCrhMzpzJKb1ZdPCNVoOR8P/MoCmggFctQOFfLXtqaIWNkcXsv9rTQdwzw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741204200; c=relaxed/simple;
-	bh=dZ/84hCQihC+Ypd2ZYjVPssrKGcWtViu3i2JxL7LG0k=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=vE0Rtq5RONdoe8ewO4HL2Bn8pa4pnbzAF5+kST8wFrJGEdHZjIYE3LzVg7Yrr+DmHwBW9il74TFymoc1ltVPdTUBle6CCCHBcKvm84tYoKY8zmkR5X4aZuDVonDgxA049dNIQtntwF45gdp/CATA+Pr23QMPla2e2KBtLhZ4jNM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WZ9QakO5; arc=none smtp.client-ip=209.85.218.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1741204573; c=relaxed/simple;
+	bh=WYEC+ArfSwlKN3FeDLKk0TQMOhpIceugzbJo5Kd8ysc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HOXDGoKO3wFoPPW2tFyXpRI/TqTETtWJ7579ZLzZn4xwBSXlo8IaHb1+rQW98z3iaJfbxBDOc04Ilro2rBfx1vBscGkucTPpoUasQ3ir7kW2daScV360EdUAUpQvS5xLVwrwomA2MM0jvWq1+x20KRbdX/keP5LAvQYYdGYX+q4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=engleder-embedded.com; spf=pass smtp.mailfrom=engleder-embedded.com; dkim=pass (1024-bit key) header.d=engleder-embedded.com header.i=@engleder-embedded.com header.b=RI+/h5ml; arc=none smtp.client-ip=81.19.149.121
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=engleder-embedded.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=engleder-embedded.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WZ9QakO5"
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-abf6f3b836aso645982066b.3
-        for <bpf@vger.kernel.org>; Wed, 05 Mar 2025 11:49:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741204196; x=1741808996; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KO2YJoHjn82OMdZzIe7tciRRk4plbnuDr6FNsdZoOD4=;
-        b=WZ9QakO57S8d8kXvxmP9wy+vEVCSWaya0zUI86osS1BXYZRJ8I8aRkd/DE45tlcMCA
-         hrxdXs2lFS5z/9ndc7Vgv/f24Au6wsv41j3VYJ/rZCw9JGXPQEzZMuYPuAbo6dMUjKTD
-         WzZvqwxhX4WJ5L4zIcpE/63aMN5Emw0IGxm2Dbz9ktj8cW7a6ZyhxpXtZVm+0Dny9EUj
-         mHIeFbQp9ZLjXuEbbamMd3t9SYx4L8XH+HGSl7XXXqe3sxYFeFEwlsrwGxmbWOe2jH3O
-         s/EOlc7VCARgZmxs20RwaofNImq9FxUB7y5grhJUfQcci5mMOOiRb97yuQFs+FnHnQr0
-         4ThQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741204196; x=1741808996;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KO2YJoHjn82OMdZzIe7tciRRk4plbnuDr6FNsdZoOD4=;
-        b=EMay5MvmanXKhnLxIGixjw2VLzpOLFuvOu7vdtr3GVCRlUd1atVs0rZugmLdREGtVT
-         jBRyacwmid5q4Z8ePkpne9cP3d62nnAayU5MV5BvxM1NeNFU76gDysIdEva8FGGj7lDV
-         KO8B1dCBrPxGI2gDDDn3g1eVdd9senlxCDYVTPVgRYrEEkbEdEb6VyjHLu6b7LMG+zsN
-         vnrGc9enNIyty3HtEz0j7oA7eGpdWjwQSbE3ThCl7DthiIAZS6K0+nV7sYPDugqJtzM9
-         S9BVN+xf8ZGDRoBr9sWKmijTnD1tEHpaTZ70NAOM5vv4tqCNmaoGnLcaeTgcireqdT/I
-         tfDw==
-X-Gm-Message-State: AOJu0YzS7Endn2AVbuKJLt0MuxvwKh0QEXNMnzT//lLvdv7IB96cvhsd
-	n/5Hlt1tko5vp9UiUbMQixIyDA4LIIAakx2nxUWlPB+TE490gveIdk2zWw==
-X-Gm-Gg: ASbGncv+ZWvlTtsOGusr7XaIFQ5bGe4omydM90Ht9pHjtS41ZqMOt0iWmpK0JeL7iLe
-	W5wTzFXrUVaKxcBml+TJhNuuA1H2u2RSK+z6u2drZmGvy5lzvfGz+dssFRE6xHqoAVOyhdjxpNp
-	nY2QEkxmk4U+KBxCM7w31cqjPfhrupPSyrViMhWImnYi41obvgVX1xUOG32kqjXgQ73zMx9oB4Z
-	Zsa2lgK2jGQWNsLJwHSA5dyCkghAHEj61kCj/1nu81/ls2VEpz0NN63HopTcpKnN//f3/ivsZlt
-	QbsV904SebWo8bhsIuyYPWPE9djscZJ7fppi2bvX0UAyFXZ2mZgrwSrT9NA=
-X-Google-Smtp-Source: AGHT+IGPkTH5ayoxigT0tl6qNeVZiPvMa0oN1qDS2d9a1+vYBqmm6SE39lozLV4BpEAWPx8LqUCIWw==
-X-Received: by 2002:a17:906:6a09:b0:ac1:ff43:82ae with SMTP id a640c23a62f3a-ac20d97c81cmr488633966b.2.1741204196217;
-        Wed, 05 Mar 2025 11:49:56 -0800 (PST)
-Received: from msi-laptop.thefacebook.com ([2620:10d:c092:500::6:4624])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ac1daea1cd2sm481584066b.181.2025.03.05.11.49.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Mar 2025 11:49:55 -0800 (PST)
-From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-To: bpf@vger.kernel.org,
-	ast@kernel.org,
-	andrii@kernel.org,
-	daniel@iogearbox.net,
-	kafai@meta.com,
-	kernel-team@meta.com,
-	eddyz87@gmail.com
-Cc: Mykyta Yatsenko <yatsenko@meta.com>
-Subject: [PATCH bpf-next v2 4/4] selftests/bpf: test freplace from user namespace
-Date: Wed,  5 Mar 2025 19:49:42 +0000
-Message-ID: <20250305194942.123191-5-mykyta.yatsenko5@gmail.com>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250305194942.123191-1-mykyta.yatsenko5@gmail.com>
-References: <20250305194942.123191-1-mykyta.yatsenko5@gmail.com>
+	dkim=pass (1024-bit key) header.d=engleder-embedded.com header.i=@engleder-embedded.com header.b="RI+/h5ml"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=engleder-embedded.com; s=dkim11; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=x0KQuzyFQUEThFLdYlVvZUJ1cH4hBNZAmoJdDiFksag=; b=RI+/h5mlwDs65E0J/YyCgTt05p
+	a//6ia9q7THHUJjoOvsmkpQr52QzRjnYVtgNBGH+dTSvVXju2HjaUP30mnI4VLvlMfrNn9FnnhTmr
+	+tv+B9/4GtcBM88IRfc6S0l7fbJXX/wnygN3l0PkoOx7ZlndkhxJAnvKBkjWP4Ckx3yk=;
+Received: from [80.121.79.4] (helo=[10.0.0.160])
+	by mx11lb.world4you.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.97.1)
+	(envelope-from <gerhard@engleder-embedded.com>)
+	id 1tpuDg-000000006hj-2m9f;
+	Wed, 05 Mar 2025 20:15:53 +0100
+Message-ID: <c0adcf60-4fb5-411f-84ef-e409cecf8a75@engleder-embedded.com>
+Date: Wed, 5 Mar 2025 20:15:51 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH iwl-net] igc: Fix XSK queue NAPI ID mapping
+To: Joe Damato <jdamato@fastly.com>
+Cc: vitaly.lifshits@intel.com, avigailx.dahan@intel.com,
+ anthony.l.nguyen@intel.com, stable@vger.kernel.org,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+ Andrew Lunn <andrew+netdev@lunn.ch>, Eric Dumazet <edumazet@google.com>,
+ Paolo Abeni <pabeni@redhat.com>,
+ "open list:XDP (eXpress Data Path)" <bpf@vger.kernel.org>,
+ "moderated list:INTEL ETHERNET DRIVERS" <intel-wired-lan@lists.osuosl.org>,
+ open list <linux-kernel@vger.kernel.org>, netdev@vger.kernel.org
+References: <20250305180901.128286-1-jdamato@fastly.com>
+Content-Language: en-US
+From: Gerhard Engleder <gerhard@engleder-embedded.com>
+In-Reply-To: <20250305180901.128286-1-jdamato@fastly.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AV-Do-Run: Yes
 
-From: Mykyta Yatsenko <yatsenko@meta.com>
+On 05.03.25 19:09, Joe Damato wrote:
+> In commit b65969856d4f ("igc: Link queues to NAPI instances"), the XSK
+> queues were incorrectly unmapped from their NAPI instances. After
+> discussion on the mailing list and the introduction of a test to codify
+> the expected behavior, we can see that the unmapping causes the
+> check_xsk test to fail:
+> 
+> NETIF=enp86s0 ./tools/testing/selftests/drivers/net/queues.py
+> 
+> [...]
+>    # Check|     ksft_eq(q.get('xsk', None), {},
+>    # Check failed None != {} xsk attr on queue we configured
+>    not ok 4 queues.check_xsk
+> 
+> After this commit, the test passes:
+> 
+>    ok 4 queues.check_xsk
+> 
+> Note that the test itself is only in net-next, so I tested this change
+> by applying it to my local net-next tree, booting, and running the test.
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: b65969856d4f ("igc: Link queues to NAPI instances")
+> Signed-off-by: Joe Damato <jdamato@fastly.com>
+> ---
+>   drivers/net/ethernet/intel/igc/igc_xdp.c | 2 --
+>   1 file changed, 2 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/intel/igc/igc_xdp.c b/drivers/net/ethernet/intel/igc/igc_xdp.c
+> index 13bbd3346e01..869815f48ac1 100644
+> --- a/drivers/net/ethernet/intel/igc/igc_xdp.c
+> +++ b/drivers/net/ethernet/intel/igc/igc_xdp.c
+> @@ -86,7 +86,6 @@ static int igc_xdp_enable_pool(struct igc_adapter *adapter,
+>   		napi_disable(napi);
+>   	}
+>   
+> -	igc_set_queue_napi(adapter, queue_id, NULL);
+>   	set_bit(IGC_RING_FLAG_AF_XDP_ZC, &rx_ring->flags);
+>   	set_bit(IGC_RING_FLAG_AF_XDP_ZC, &tx_ring->flags);
+>   
+> @@ -136,7 +135,6 @@ static int igc_xdp_disable_pool(struct igc_adapter *adapter, u16 queue_id)
+>   	xsk_pool_dma_unmap(pool, IGC_RX_DMA_ATTR);
+>   	clear_bit(IGC_RING_FLAG_AF_XDP_ZC, &rx_ring->flags);
+>   	clear_bit(IGC_RING_FLAG_AF_XDP_ZC, &tx_ring->flags);
+> -	igc_set_queue_napi(adapter, queue_id, napi);
+>   
+>   	if (needs_reset) {
+>   		napi_enable(napi);
+> 
+> base-commit: 3c9231ea6497dfc50ac0ef69fff484da27d0df66
 
-Add selftests to verify that it is possible to load freplace program
-from user namespace if BPF token is initialized by bpf_object__prepare
-before calling bpf_program__set_attach_target.
-Negative test is added as well.
+igc_set_queue_napi() could be made static as it only used within
+igc_main.c after this change.
 
-Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
----
- .../testing/selftests/bpf/prog_tests/token.c  | 94 +++++++++++++++++++
- .../selftests/bpf/progs/priv_freplace_prog.c  | 13 +++
- tools/testing/selftests/bpf/progs/priv_prog.c |  2 +-
- 3 files changed, 108 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/bpf/progs/priv_freplace_prog.c
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/token.c b/tools/testing/selftests/bpf/prog_tests/token.c
-index c3ab9b6fb069..00ebfc36f202 100644
---- a/tools/testing/selftests/bpf/prog_tests/token.c
-+++ b/tools/testing/selftests/bpf/prog_tests/token.c
-@@ -19,6 +19,7 @@
- #include "priv_prog.skel.h"
- #include "dummy_st_ops_success.skel.h"
- #include "token_lsm.skel.h"
-+#include "priv_freplace_prog.skel.h"
- 
- static inline int sys_mount(const char *dev_name, const char *dir_name,
- 			    const char *type, unsigned long flags,
-@@ -788,6 +789,83 @@ static int userns_obj_priv_prog(int mnt_fd, struct token_lsm *lsm_skel)
- 	return 0;
- }
- 
-+static int userns_obj_priv_freplace_setup(int mnt_fd, struct priv_freplace_prog **fr_skel,
-+					  struct priv_prog **skel, int *tgt_fd)
-+{
-+	LIBBPF_OPTS(bpf_object_open_opts, opts);
-+	int err;
-+	char buf[256];
-+
-+	/* use bpf_token_path to provide BPF FS path */
-+	snprintf(buf, sizeof(buf), "/proc/self/fd/%d", mnt_fd);
-+	opts.bpf_token_path = buf;
-+	*skel = priv_prog__open_opts(&opts);
-+	if (!ASSERT_OK_PTR(*skel, "priv_prog__open_opts"))
-+		return -EINVAL;
-+	err = priv_prog__load(*skel);
-+	if (!ASSERT_OK(err, "priv_prog__load"))
-+		return -EINVAL;
-+
-+	*fr_skel = priv_freplace_prog__open_opts(&opts);
-+	if (!ASSERT_OK_PTR(*skel, "priv_freplace_prog__open_opts"))
-+		return -EINVAL;
-+
-+	*tgt_fd = bpf_program__fd((*skel)->progs.kprobe_prog);
-+	return 0;
-+}
-+
-+/* Verify that freplace works from user namespace, because bpf token is loaded
-+ * in bpf_object__prepare
-+ */
-+static int userns_obj_priv_freplace_prog(int mnt_fd, struct token_lsm *lsm_skel)
-+{
-+	struct priv_freplace_prog *fr_skel = NULL;
-+	struct priv_prog *skel = NULL;
-+	int err, tgt_fd;
-+
-+	err = userns_obj_priv_freplace_setup(mnt_fd, &fr_skel, &skel, &tgt_fd);
-+	if (!ASSERT_OK(err, "setup"))
-+		goto out;
-+
-+	err = bpf_object__prepare(fr_skel->obj);
-+	if (!ASSERT_OK(err, "freplace__prepare"))
-+		goto out;
-+
-+	err = bpf_program__set_attach_target(fr_skel->progs.new_kprobe_prog, tgt_fd, "kprobe_prog");
-+	if (!ASSERT_OK(err, "set_attach_target"))
-+		goto out;
-+
-+	err = priv_freplace_prog__load(fr_skel);
-+	ASSERT_OK(err, "priv_freplace_prog__load");
-+out:
-+	priv_freplace_prog__destroy(fr_skel);
-+	priv_prog__destroy(skel);
-+	return err;
-+}
-+
-+/* Verify that replace fails to set attach target from user namespace without bpf token */
-+static int userns_obj_priv_freplace_prog_fail(int mnt_fd, struct token_lsm *lsm_skel)
-+{
-+	struct priv_freplace_prog *fr_skel = NULL;
-+	struct priv_prog *skel = NULL;
-+	int err, tgt_fd;
-+
-+	err = userns_obj_priv_freplace_setup(mnt_fd, &fr_skel, &skel, &tgt_fd);
-+	if (!ASSERT_OK(err, "setup"))
-+		goto out;
-+
-+	err = bpf_program__set_attach_target(fr_skel->progs.new_kprobe_prog, tgt_fd, "kprobe_prog");
-+	if (ASSERT_ERR(err, "attach fails"))
-+		err = 0;
-+	else
-+		err = -EINVAL;
-+
-+out:
-+	priv_freplace_prog__destroy(fr_skel);
-+	priv_prog__destroy(skel);
-+	return err;
-+}
-+
- /* this test is called with BPF FS that doesn't delegate BPF_BTF_LOAD command,
-  * which should cause struct_ops application to fail, as BTF won't be uploaded
-  * into the kernel, even if STRUCT_OPS programs themselves are allowed
-@@ -1010,6 +1088,22 @@ void test_token(void)
- 
- 		subtest_userns(&opts, userns_obj_priv_prog);
- 	}
-+	if (test__start_subtest("obj_priv_freplace_prog")) {
-+		struct bpffs_opts opts = {
-+			.cmds = bit(BPF_BTF_LOAD) | bit(BPF_PROG_LOAD),
-+			.progs = bit(BPF_PROG_TYPE_KPROBE) | bit(BPF_PROG_TYPE_EXT),
-+			.attachs = ~0ULL,
-+		};
-+		subtest_userns(&opts, userns_obj_priv_freplace_prog);
-+	}
-+	if (test__start_subtest("obj_priv_freplace_prog_fail")) {
-+		struct bpffs_opts opts = {
-+			.cmds = bit(BPF_BTF_LOAD) | bit(BPF_PROG_LOAD),
-+			.progs = bit(BPF_PROG_TYPE_KPROBE) | bit(BPF_PROG_TYPE_EXT),
-+			.attachs = ~0ULL,
-+		};
-+		subtest_userns(&opts, userns_obj_priv_freplace_prog_fail);
-+	}
- 	if (test__start_subtest("obj_priv_btf_fail")) {
- 		struct bpffs_opts opts = {
- 			/* disallow BTF loading */
-diff --git a/tools/testing/selftests/bpf/progs/priv_freplace_prog.c b/tools/testing/selftests/bpf/progs/priv_freplace_prog.c
-new file mode 100644
-index 000000000000..c9ab81988624
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/priv_freplace_prog.c
-@@ -0,0 +1,13 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2025 Meta Platforms, Inc. and affiliates. */
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+
-+char _license[] SEC("license") = "GPL";
-+
-+SEC("freplace/kprobe_prog")
-+int new_kprobe_prog(struct pt_regs *ctx)
-+{
-+	return 1;
-+}
-diff --git a/tools/testing/selftests/bpf/progs/priv_prog.c b/tools/testing/selftests/bpf/progs/priv_prog.c
-index 3c7b2b618c8a..bc3ccd4906b3 100644
---- a/tools/testing/selftests/bpf/progs/priv_prog.c
-+++ b/tools/testing/selftests/bpf/progs/priv_prog.c
-@@ -7,7 +7,7 @@
- char _license[] SEC("license") = "GPL";
- 
- SEC("kprobe")
--int kprobe_prog(void *ctx)
-+int kprobe_prog(struct pt_regs *ctx)
- {
- 	return 1;
- }
--- 
-2.48.1
-
+Reviewed-by: Gerhard Engleder <gerhard@engleder-embedded.com>
