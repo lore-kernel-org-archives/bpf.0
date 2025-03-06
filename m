@@ -1,171 +1,137 @@
-Received: from mout.perfora.net (mout.perfora.net [74.208.4.197])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E11718C337
-	for <bpf@vger.kernel.org>; Thu,  6 Mar 2025 04:21:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.208.4.197
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.5])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20B7E7E9;
+	Thu,  6 Mar 2025 05:07:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741234919; cv=none; b=B8S7jmXAp9DuzRVSuPUCiS8aA8vOC2qEyD2vGHH6/vz9nyhda69dnNsPGz+7R1ZD0aiAeKVaUzNYTHEjniqUmppJu9Rj9E+/Lt53rEKmKaDwBqpOrxGtOiLU2xf3VXyZetdrikOjE8mnBlBMklEYiBf+GEXhaLkfBM50JbFSn1s=
+	t=1741237632; cv=none; b=EWE8AZZ5NrnX074Evqe/HM44UMVjn6JJ/cyugd5c6qOEIv/O36Nh/dmTTe4qmv0noE77jikIeB49dWTbl+rA8X8pVGTHUlauj4g1pk8QelHLLUkhKZV4IRzbKvu2htah749SjWU6tUp3OpRKJWSu8sZitJ2iQc3p7YR8Gzk/JaQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741234919; c=relaxed/simple;
-	bh=k1oeK3pvC1DWhYVUI/+gn5QuO8FyTWbVSdIBCg4KbDs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=elSiLSj6EnsOXxHMP+OjRZaJuAWtStGo3TxmSoKdObxRHSuRiFRgfj2XEmLNmXlV/LJMn7QDMsWSvofa0d86nUyU65vLxYYvjLgP+xGwU9JptiPH/sAYMJb9qYIQ028V2UTNnE7cLkmrISTxaJ2mxfIcFd7VZPJp3EtUmGj+70E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jordanrome.com; spf=pass smtp.mailfrom=jordanrome.com; dkim=pass (2048-bit key) header.d=jordanrome.com header.i=linux@jordanrome.com header.b=e52ri+gM; arc=none smtp.client-ip=74.208.4.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jordanrome.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jordanrome.com
+	s=arc-20240116; t=1741237632; c=relaxed/simple;
+	bh=/PPhRFzrpmFZp2JOVjBtoaRYAfck4wy1OA0abEzrkPM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XLp8pvq/4/NwMrXX/TzN7FcZe0PHRXFa3TebdBQnGDYkZIspcnSkqxagXTjZRAiycN/E5gJ9z5VGM4iJCvII+cSxOKJ9E8eCYYHIdyhxOBqsCer3JVDl8J8aYxY9PN1n8LgNfVah+5lt+hU4hid+Inrox4fJ5a2Qf3sOSPjoawU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=PnZqaQi3; arc=none smtp.client-ip=220.197.31.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=jordanrome.com header.i=linux@jordanrome.com header.b="e52ri+gM"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jordanrome.com;
-	s=s1-ionos; t=1741234913; x=1741839713; i=linux@jordanrome.com;
-	bh=YSzjZsGurb7cFOuiOUaXQeLPSDmqRR5nIL4MOGPXFvk=;
-	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
-	 MIME-Version:Content-Transfer-Encoding:cc:
-	 content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=e52ri+gMktIGTg6bFPaw+ktAcQ6GXL8GQx9q5K5QwAA7cUMk+qwThZD7BohnSxsv
-	 CKDKaiZ0UjRcLgFFKbdle5YJH59laHNH/grXYjYOP/qoCOvMlQJLyYajEb9Mtk1jR
-	 CIMzYgaB1reL957hh07Tq9zHJJ9WdjvMhi6mC8CPtggil6JBwlODtY2k80L/CC0/P
-	 MSyCfFxXQNaVykr+TW/QTnLZBXGDAotqzdFte2sNkChZ/Trbn7dOtgGFFz9DGNa3R
-	 sU2q4arL4NM2Ho1inGM9xgp/OSqzDDhoBmxPmqWqi27/5qnqpSoW5m/ynf9n370ZV
-	 50YiRODfUh7bGpck4g==
-X-UI-Sender-Class: 55c96926-9e95-11ee-ae09-1f7a4046a0f6
-Received: from localhost ([69.171.251.4]) by mrelay.perfora.net (mreueus003
- [74.208.5.2]) with ESMTPSA (Nemesis) id 0Lmae5-1tHFbj14pX-00ZLyd; Thu, 06 Mar
- 2025 05:08:04 +0100
-From: Jordan Rome <linux@jordanrome.com>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Kernel Team <kernel-team@fb.com>
-Subject: [bpf-next v2] bpf: adjust btf load error logging
-Date: Wed,  5 Mar 2025 20:07:56 -0800
-Message-ID: <20250306040756.3191271-1-linux@jordanrome.com>
-X-Mailer: git-send-email 2.43.5
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="PnZqaQi3"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=Date:From:Subject:Message-ID:MIME-Version:
+	Content-Type; bh=/p/yIsR0VNJP/SLkOWHis+551OQIlaMtljBwiPLa3rc=;
+	b=PnZqaQi3qQzw/vDpzioNDuo4P+rfjiJdZfzZSsSwax/k+cup0oaomQzGcmBLIT
+	D6sRen8XTYPDJCp8Ovy7EaJLibvBWrAeSekJ0cb/ZrSg5RJPLR4sZp8zojiGiIA3
+	YrWvnGPux8Cpv9ZCegRYU3lCycgv1BbEICa9slzjzTMEc=
+Received: from osx (unknown [])
+	by gzga-smtp-mtada-g0-0 (Coremail) with SMTP id _____wAnIKM8LclnR8xMQw--.53729S2;
+	Thu, 06 Mar 2025 13:06:05 +0800 (CST)
+Date: Thu, 6 Mar 2025 13:06:04 +0800
+From: Jiayuan Chen <mrpre@163.com>
+To: Cong Wang <xiyou.wangcong@gmail.com>, dongchenchen2@huawei.com
+Cc: Dong Chenchen <dongchenchen2@huawei.com>, edumazet@google.com, 
+	kuniyu@amazon.com, pabeni@redhat.com, willemb@google.com, john.fastabend@gmail.com, 
+	jakub@cloudflare.com, davem@davemloft.net, kuba@kernel.org, horms@kernel.org, 
+	daniel@iogearbox.net, netdev@vger.kernel.org, bpf@vger.kernel.org, 
+	zhangchangzhong@huawei.com, weiyongjun1@huawei.com
+Subject: Re: [PATCH net] bpf, sockmap: Restore sk_prot ops when psock is
+ removed from sockmap
+Message-ID: <3jmiqsl2betwyceyrwwuc5hb4amh2olbdgwfhijkmyk3avp42g@f3jdm7wz7pno>
+References: <20250305140234.2082644-1-dongchenchen2@huawei.com>
+ <Z8iUG8aTF9Kww09z@pop-os.localdomain>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:MStJzM0ffWVcN6c+22nRn701o15dKeSObrQBKUAZfxP5MsT7ZXC
- QJwZOj+H/N6ELprX8Wlt1lhjqfKZfrMv0T+j3/Ep+QVvVeJ2chEnUediigdyA4Z8qq/sVYv
- mCQf9e1wcb5VRNrz3j76vcnSYwVTZppaN8u26w1qQYkoItZoO6KhTkeyRj5Hqah8lZzCzWQ
- WCBlqRoMJdP7ruwnFO9tg==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:HSE4WlpFLHs=;fUgF6sOvURvpXud7Gcvj+yDiPEe
- R6LMdK+7NDSI91khPoxoDfqBWtRlVBzU2u1cdrSv+qKHs9xyqXqYOGLC9aCguCy+fwRRl4K3X
- /WCehBGvKaAiMIRoYDWpg2FtoNP7hyIotYUPUIHoJl05TluL8UFyposzbgObNaqWHxiqZRCGQ
- EklnDY4YFIV+1TbJ/ikNuU+JVdHCVXjdfXwlTkMckyVmTivyt4DMLYlc5tqDvaINxkiXy5f6T
- mVSOZDfZosI6U0qGxbFxfDJHltLd5i84tzgqkY3TMddpBL+UutMLuGoqHevilfCAmOo7W+cOn
- oEKBtOt4JhCm+qemzSYwZpv7OTIqA7pXszs45Yc7CLRbPIIemz9UjF8ADVzAld2uSRqlR3fkH
- WK/QGGoQqLjLa15UGJHRnM9LyzdMan4OlPkkhpF33CyK44I+TK1lsGdv10QuwoCtQytMbMlIb
- tiMEJPLP4fabqD7XxxcGp9GR+wi/JqRpSu6HWw7nlfH36rz2wvbil0cdEcgCDOuJLj5CV3ua+
- AUuwgHT9ZGkcqPOX1qvAlhd4jLEMt3ZmcaJaNxe1ckJQ+ot8svSuLzJW3dOHc9AUHMuzKj9sn
- wJc2cliI6q7xR9P1XmntQsLHcamW8vth6uBul8pzkGKwf40dUZ8lMmpSjVh4p+WqMuerCSJ8r
- fEe1Q+G8UNihcBH886Ab1lNJWLyuwI3YhPW+QACXNpf0ieZeq1Sm+3g6Sy+76JZiJQwtz2/Db
- xsksuDCBqMD2T2MsNp5cYSBkpY9xbk/41WUayg3qAVZPx8WOJ/XjgDRtY2+lgET5lXy7GdI9o
- lC7jPvsWXin84YfzBT172xIgFOd9wwqT+FviqaBSKLdpiOxvpHkjUxCzYcDt8Pe9KlAETez05
- QjZmVC9DGvZZYkPD/lyucXJjh9jyENhhKxseSq9AGa3/6DU9BgLKU8GehyNPglfYuXW0JM4WQ
- I2YPhpTz/0hkQC0oUf523HFBuPFParN2APGSZCrZajWy31s71egS9nTcnS5Muv/ryZatjmDHW
- RF4jEi55i+V5WAtdcFDLuvaXgyDMGbDmp9M3Z8quVrqNEkGMzalA9jk8hptRfPJBzhCHXy8kA
- eHYftkgX6SfjgmH9UZjqajGCVDyGZhnuoHo5UB/RM8kyIT+KDK+As2mwbNwHdPodKAhcOW9lR
- BT03nMqJq9GXxTYBFheO7XDOz1tLTo+mDqu1G47JTt2QrNR6YwRnKPUNo6Mo0jl4xRpHldGI0
- MjfiBBJFb80YoakAI3jg2rPXeyUuTFgN+OpJwAv0/Z9/XXRGrziHWjRyjZIS4Ue6O4pGxKyB6
- 2ShoIc7CSBoJtARh49FLewq85w8NxPh6cFsnbBM5qyEa+0=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Z8iUG8aTF9Kww09z@pop-os.localdomain>
+X-CM-TRANSID:_____wAnIKM8LclnR8xMQw--.53729S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxGFW7Cry5AF15AFyxuryxAFb_yoW5WF4rpa
+	95Ka15A3WDJrW2vws3Jw4kXw18Kan3JF1YkF97Xry7Jw4xur1fWr47JayIvF1vyr93C348
+	X39rW3ykXay3ua7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UZ6pQUUUUU=
+X-CM-SenderInfo: xpus2vi6rwjhhfrp/xtbBDwwIp2fJIobgPwAAs5
 
-For kernels where btf is not mandatory
-we don't need to log btf loading errors
-if a log buf is not provided and the
-log_level is 0. This is unneeded noise.
+On Wed, Mar 05, 2025 at 10:12:43AM +0800, Cong Wang wrote:
+> On Wed, Mar 05, 2025 at 10:02:34PM +0800, Dong Chenchen wrote:
+> > WARNING: CPU: 0 PID: 6558 at net/core/sock_map.c:1703 sock_map_close+0x3c4/0x480
+> > Modules linked in:
+> > CPU: 0 UID: 0 PID: 6558 Comm: syz-executor.14 Not tainted 6.14.0-rc5+ #238
+> > RIP: 0010:sock_map_close+0x3c4/0x480
+> > Call Trace:
+> >  <TASK>
+> >  inet_release+0x144/0x280
+> >  __sock_release+0xb8/0x270
+> >  sock_close+0x1e/0x30
+> >  __fput+0x3c6/0xb30
+> >  __fput_sync+0x7b/0x90
+> >  __x64_sys_close+0x90/0x120
+> >  do_syscall_64+0x5d/0x170
+> >  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+> > 
+> > The root cause is:
+> > sock_hash_update_common
+> >   sock_map_unref
+> >     sock_map_del_link
+> >       psock->psock_update_sk_prot(sk, psock, false);
+> > 	//false won't restore proto
+> >     sk_psock_put
+> >        rcu_assign_sk_user_data(sk, NULL);
+> > inet_release
+> >   sk->sk_prot->close
+> >     sock_map_close
+> >       WARN(sk->sk_prot->close == sock_map_close)
+> > 
+> > When psock is removed from sockmap, sock_map_del_link() still set
+> > sk->sk_prot to bpf proto instead of restore it (for incorrect restore
+> > value). sock release will triger warning of sock_map_close() for
+> > recurse after psock drop.
+> 
+> But sk_psock_drop() restores it with sk_psock_restore_proto() after the
+> psock reference count goes to zero. So how could the above happen?
+> 
+> By the way, it would be perfect if you could add a test case for it 
+> together with this patch (a followup patch is fine too).
+> 
+> Thanks!
+I also have the same question as Cong, and I'll describe it in more detail
+here:
 
-Signed-off-by: Jordan Rome <linux@jordanrome.com>
-=2D--
- tools/lib/bpf/btf.c             | 11 ++++++-----
- tools/lib/bpf/libbpf.c          |  3 ++-
- tools/lib/bpf/libbpf_internal.h |  2 +-
- 3 files changed, 9 insertions(+), 7 deletions(-)
+'psock->saved_close' is always tcp_close (if your socket is TCP) and will
+not change regardless of whether restore is executed or not. So when
+entering the function sock_map_close() and encountering
+WARN_ON_ONCE(saved_close == sock_map_close), 'saved_close' can only come
+from 'saved_close = READ_ONCE(sk->sk_prot)->close'. This means we obtain 
+sock through psock = sk_psock(sk) and then enter the branch code after
+judging it to be null.
+'''
+sock_map_close()
+{
+	psock = sk_psock(sk);
+	if (likely(psock)) {
+		saved_close = psock->saved_close;
+	} else {
+		saved_close = READ_ONCE(sk->sk_prot)->close;
+	}
+	WARN_ON_ONCE(saved_close == sock_map_close);
+}
+'''
+However, before psock becomes null, we have actually successfully executed
+the restore:
+'''
+void sk_psock_drop(struct sock *sk, struct sk_psock *psock)
+{
+    write_lock_bh(&sk->sk_callback_lock);
+    sk_psock_restore_proto(sk, psock); // restore correctly
+    rcu_assign_sk_user_data(sk, NULL); // set psock null
+   ...
+}
+'''
 
-diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-index eea99c766a20..64af279c36d9 100644
-=2D-- a/tools/lib/bpf/btf.c
-+++ b/tools/lib/bpf/btf.c
-@@ -1379,7 +1379,7 @@ static void *btf_get_raw_data(const struct btf *btf,=
- __u32 *size, bool swap_endi
+Passing false to psock_update_sk_prot may be problematic, but it shouldn't
+cause the issue described in the commit message.
+It may be necessary to provide more information on how sockmap is used to
+determine the issue. :)
 
- int btf_load_into_kernel(struct btf *btf,
- 			 char *log_buf, size_t log_sz, __u32 log_level,
--			 int token_fd)
-+			 int token_fd, bool btf_mandatory)
- {
- 	LIBBPF_OPTS(bpf_btf_load_opts, opts);
- 	__u32 buf_sz =3D 0, raw_size;
-@@ -1436,7 +1436,7 @@ int btf_load_into_kernel(struct btf *btf,
- 	btf->fd =3D bpf_btf_load(raw_data, raw_size, &opts);
- 	if (btf->fd < 0) {
- 		/* time to turn on verbose mode and try again */
--		if (log_level =3D=3D 0) {
-+		if (log_level =3D=3D 0 && btf_mandatory) {
- 			log_level =3D 1;
- 			goto retry_load;
- 		}
-@@ -1447,10 +1447,11 @@ int btf_load_into_kernel(struct btf *btf,
- 			goto retry_load;
-
- 		err =3D -errno;
--		pr_warn("BTF loading error: %s\n", errstr(err));
- 		/* don't print out contents of custom log_buf */
--		if (!log_buf && buf[0])
-+		if (!log_buf && buf[0]) {
-+			pr_warn("BTF loading error: %s\n", errstr(err));
- 			pr_warn("-- BEGIN BTF LOAD LOG ---\n%s\n-- END BTF LOAD LOG --\n", buf=
-);
-+		}
- 	}
-
- done:
-@@ -1460,7 +1461,7 @@ int btf_load_into_kernel(struct btf *btf,
-
- int btf__load_into_kernel(struct btf *btf)
- {
--	return btf_load_into_kernel(btf, NULL, 0, 0, 0);
-+	return btf_load_into_kernel(btf, NULL, 0, 0, 0, true);
- }
-
- int btf__fd(const struct btf *btf)
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 8e32286854ef..2cb3f067a12e 100644
-=2D-- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -3604,9 +3604,10 @@ static int bpf_object__sanitize_and_load_btf(struct=
- bpf_object *obj)
- 		 */
- 		btf__set_fd(kern_btf, 0);
- 	} else {
-+		btf_mandatory =3D kernel_needs_btf(obj);
- 		/* currently BPF_BTF_LOAD only supports log_level 1 */
- 		err =3D btf_load_into_kernel(kern_btf, obj->log_buf, obj->log_size,
--					   obj->log_level ? 1 : 0, obj->token_fd);
-+					   obj->log_level ? 1 : 0, obj->token_fd, btf_mandatory);
- 	}
- 	if (sanitize) {
- 		if (!err) {
-diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_intern=
-al.h
-index de498e2dd6b0..f1de2ba462c3 100644
-=2D-- a/tools/lib/bpf/libbpf_internal.h
-+++ b/tools/lib/bpf/libbpf_internal.h
-@@ -408,7 +408,7 @@ int libbpf__load_raw_btf(const char *raw_types, size_t=
- types_len,
- 			 int token_fd);
- int btf_load_into_kernel(struct btf *btf,
- 			 char *log_buf, size_t log_sz, __u32 log_level,
--			 int token_fd);
-+			 int token_fd, bool btf_mandatory);
-
- struct btf *btf_get_from_fd(int btf_fd, struct btf *base_btf);
- void btf_get_kernel_prefix_kind(enum bpf_attach_type attach_type,
-=2D-
-2.43.5
+Thanks.
 
