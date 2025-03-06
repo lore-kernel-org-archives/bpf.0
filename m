@@ -1,122 +1,178 @@
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92A0A21D3E7;
-	Thu,  6 Mar 2025 16:28:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A59D24169B;
+	Thu,  6 Mar 2025 16:28:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741278486; cv=none; b=sTzv2aFwv5rowEn00cauGoDnuYovzE8AlnKezS5q7WKtP0boBAqyxttJcSTlg/ArcYpSILjvdqSSlxovYM862rUpZLEUN1NFwxPujiB+tLWrlCrFqotoyYCgiXrfN7wzhmRqfF9MVIMOI6pV9qhugvVtLcaDX6k6SE4Tu5R/Q4g=
+	t=1741278489; cv=none; b=rxEC6YOouXNYaOBjbhtNG4RcN2XeHwWZjvuuIkScDUiHX3gbpSH5rUPOrC3L30nr4eitSQNs8g7rJskB3b0uie/JBPNZVWSbPCWS5JVSYHPQu/1M4qkwYqqUzV5/FIvW+VTAzL/Hsy4DgO3YQRMIC7q7y+MhrMKH5tudWubxhGA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741278486; c=relaxed/simple;
-	bh=RieI6T8+GnLltjFdq+B3y0WTT5CK4xQkz/PyogGNpso=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=oaDwyM9oGuHU9cx/RPDwK9TIN0xk5C9CU9Nyji62vaO3jQrHb1sblDHpypTecixH8x61uQrnaUm4jUqqB458SJlWjYYoPnSGepJ2hrVOk9qaCu3+D0u1Q0ck30TnI3Lx2/ySWgg4c328CKu3mlwNodOYk+zKXK+CqN+Gq9GUpK4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
+	s=arc-20240116; t=1741278489; c=relaxed/simple;
+	bh=Qq1cropLpjjfwJogO3hvfUuoIiyYZmalJxfQDmrzPKo=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=d9kpZzOqss5ln/wzOrNsqw16zQEHeu906XtaCD+j861ZbjEfN17bsaXGBdHMoZCWOjJb4IBvKeUrchYsN2/H44hBM/W4BSdpwpo4zLMqL6gt3elgZA2AWLzgWlHpDGy+/Hki1Cn1lQl27g3rhnHOEVWx2I76MIBonaj+uoqZSDc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ngXGqIxt; arc=none smtp.client-ip=209.85.216.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-aaec111762bso168363766b.2;
-        Thu, 06 Mar 2025 08:28:04 -0800 (PST)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ngXGqIxt"
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-2ff69365e1dso1373747a91.3;
+        Thu, 06 Mar 2025 08:28:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1741278487; x=1741883287; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dVzC5eNDjiMbvhvqlOK1r/73KNx64ddnKPcxwil96xE=;
+        b=ngXGqIxt1qZdGMNKLgTzsFd7FveVzn2qCzDCvfuZgnjszpFrR1/bGL57+6bRgG/Zi4
+         QFKU8zFZisfuuL+NmEL4JyRzNpNWFLaj0LDVClrKoYzTnvoj29q9SVAngmEwSdV7WREg
+         z9OHgHPKy7WwgQdKpfjFOM3fb6fGuAs9vgh1ujltlA12axClNYBRcJsiDVHq+ij7IUZC
+         mY0RiazFvmBqLzv7oZ9VOSTwRMCl7jba2ftmIL8+22WLiE1BsDql5XbMJD9k/exXB2q+
+         5FJA2Gi8DaSXOESBKKT5MwWKnAkQYejNXbG+xl+CUuz2pBMU9K4axXng1EBm43vKjvy8
+         BaGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741278483; x=1741883283;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zWz3562ixpgOjZyLkTmlCW12K3CVuT3pKkHg+iSiURk=;
-        b=ky+gxJFj8A1EZWesaz7LmEXiy3Al80geBNWoJl0bsAtXOFcrVY7PkPEmloofxUBVJi
-         +fPuzvfRiNXotoUwBJCXGbCl02zUsIig+gs2KMPeG+0ai2+SdeZCm7rU2Kk3KJJ+vPfO
-         6AcB1sSj6dT0XEaaLUpu0/k5GnVGU0qrpieCaHOSJG2vaHQsPbxtPTbKAyGpwNxKbouv
-         fi5OEXtDMsH4zLWKK6UhPaC0PFcyY/y4lMTtpg8zV6oW9xBHI4e2Y/aCHQY7ZK7TgpDV
-         GwdaCWzq9FHr6K+bS1GPUAx7mhvFoaL9iFsdpvQFCxmBiBCLBKEdYZ2DdH7Tk1dL2R+P
-         4jJg==
-X-Forwarded-Encrypted: i=1; AJvYcCWvRY/CRnBGZeh/YFxJt7jewuPuOGirVbmKwvFZ3u2iMH/A591uEx5RomtPrYp3s37d2i0=@vger.kernel.org, AJvYcCXl7I1Zz0TbJCHdrLOt0Duwhyb8IROImD9JpIrdk07bks5sc4VzndG2ENPohH9HU65/vDy7CLUG3XyG1Qjj@vger.kernel.org
-X-Gm-Message-State: AOJu0YwxMy1gcpiGHB2BBqJWDQFyP9GbDORSvqPwP4J2C5sTjSadhv6G
-	mMnW3RznsSfcm+fjIgoqxmgqWw8Bx7szonI6EcQPvjo/qH+fKPdP
-X-Gm-Gg: ASbGncu4ffDkAbLF01e4AuSp6/VDieSSjBIA190UEo0ACccl/oZrSzPHhE6W3i1mtX3
-	QuToHbN5cDOuYsTKtG0bW8Xgdx0EB60d80c+/CWYgTU8W4cka0bZ82JjlxB+1+/q3UoM22ia7Od
-	fPhW7gOk6MR2N+L9N+5+0Tcou5J4wH444ARKL9C6pIhhatjkZEWTRYkaU608X/U8iXAUTQsylYa
-	nD92WFPfCI3T1xIl3ZIfVQwphoJR1xKo1BTB4NsDBalh+uRj/vHSQV81gEqN4v/5C+FycakAHpT
-	FiRc4w0hYKfjeN9I3L6o6tLWDHyV7CzMIF7+
-X-Google-Smtp-Source: AGHT+IEJV2JOj1YXcWKWdKaU/xsu6mOtDGDJCcjrKsMH1t7e24mfeW+ZSvxc5C6UG8THTxQ2XKEKFg==
-X-Received: by 2002:a17:906:6290:b0:ac1:d878:f87d with SMTP id a640c23a62f3a-ac20db04e4bmr917411066b.56.1741278482515;
-        Thu, 06 Mar 2025 08:28:02 -0800 (PST)
-Received: from localhost ([2a03:2880:30ff:70::])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ac23973a74bsm115734966b.123.2025.03.06.08.28.01
+        d=1e100.net; s=20230601; t=1741278487; x=1741883287;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dVzC5eNDjiMbvhvqlOK1r/73KNx64ddnKPcxwil96xE=;
+        b=ZCCAEENeGJow3teoLeE068f/n7bUBVZ9MVac/ErZyAGti64OFTuxDGK9vfSUi3U+rP
+         WfpNu6RV+a53kcQd/L5XbxpJg6OZwAsaxYaHxAJ45QxByeHrVg4HKkDZsBZsysuJNs8P
+         bv56H4s4VlQFJAmWFTBVTe4hOPcplrtFQomQ3WibNsCy/nfwail89xwVhyatVYMHUjLp
+         gs/xuWMw6o2F9F4sfj7OaEviVAehLUSsEiDmTnDGKWgKyu/prItm9mqXWkxbKFpSsbZr
+         rHPHqznK2vIzVu1FTW1C8ThKHopM2Ixp0/OuWWXsq5Hf/hMoA80IjQDixntPy79h8JgG
+         uHFw==
+X-Forwarded-Encrypted: i=1; AJvYcCUYj4Z0C20mWIEkzBOF5SZoAiVm6v92sbYbJfQHvgN8ka+pSJLjhJP5mL3A3tq7IHTQBBTG3Z3LN8q/zb8=@vger.kernel.org, AJvYcCVanSNHZCN69k6Lpc5UgOTY011ywoXys6+vQ73C9JnumEqhJrELWyRKMztZXIchlfI7lKIwPPNqDXzRWYM=@vger.kernel.org, AJvYcCWHkMCeNdSG9DX3ebNRwgNt6afs/PsOwUZqCcvHhyVSE2IkRWJACkcOfGeF9Z7+5t3eZBcFUC1z@vger.kernel.org, AJvYcCWQSA0Bg+/xQMY9ao5y769wfObadxJYlcgqGorAyHvBE0gkhIx/WKPNDIA4Uw99e/NDtMT22Pz9Afh60L61@vger.kernel.org, AJvYcCXHHyNGjYy6Sp4l4X2vuwvP4Hqi733P5PyiF6ud/RxSTAHM1Jpv5GbkpS8H1wu7V0gyPis2I/aqZkaRHfwldQg=@vger.kernel.org, AJvYcCXW3htD9NmasCUzd54uW9EKScI3PxoDQQPbFSDgEF2EyLWc8r2uw/mLgBNPkhu04ljBtFc=@vger.kernel.org, AJvYcCXeX+A0dPxnp/IOREP6aNkp9ixrqPn2LLOZ0Y7iJgExEEX285RNwkv3fXdLu7TvNnJDlgih9dWBeuwzv/Nb@vger.kernel.org
+X-Gm-Message-State: AOJu0YzUIzQFo/LUXwjp+swDGGHSL+2GDE2KUwhYXP5zsqPL4/lRyidP
+	0QFLmqAFIVMAwuf9iZxU2vSu2NcHEjxxyFfc4n0cFV2LzFOoj4ku
+X-Gm-Gg: ASbGncse/DjEZIpU0YuwsDwQ9KqZLSoKI9MOVXZYc2edAfn0xixGim6BKXHv62oNBFP
+	qMgFteqtPJNuWr18KrQ+hh7EczaLahiNEGIDL4zzOa0ePBqAInx+CkP9pYg+VxwRlinfjFyFkam
+	+Z23g115Vokzo8hRZk4mPALmrwPbp/Q7ZPZLspOgcrrWefsn+FFpn+tJAgeUHXhsCEqZj4dyaAK
+	7b08ldPUYG3ae/zdWlyx5lJPXjth77TpRx2nz5z31ZvZ134OM6tL8J/3tpWxMwsHYfDShb4ybTP
+	LMK4Y/7u0F6KlsoBSQJASzepuLLlmIKiYCx2qCZBWJbeI4voEAYIpN2N/CrBpd4uY4wVy6Z8FQI
+	=
+X-Google-Smtp-Source: AGHT+IG1hUiIY04WmIWjSTraivZtBZJVGW/maYZ4w8gjs57Y/NbYWELqgVEzi3PK9/fk5EW05X3DDQ==
+X-Received: by 2002:a17:90a:c108:b0:2ff:5357:1c7e with SMTP id 98e67ed59e1d1-2ff53571ccbmr8979955a91.20.1741278486674;
+        Thu, 06 Mar 2025 08:28:06 -0800 (PST)
+Received: from visitorckw-System-Product-Name.. ([140.113.216.168])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2ff693e75bfsm1464298a91.33.2025.03.06.08.27.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Mar 2025 08:28:01 -0800 (PST)
-From: Breno Leitao <leitao@debian.org>
-Date: Thu, 06 Mar 2025 08:27:51 -0800
-Subject: [PATCH] block: Name the RQF flags enum
+        Thu, 06 Mar 2025 08:28:06 -0800 (PST)
+From: Kuan-Wei Chiu <visitorckw@gmail.com>
+To: tglx@linutronix.de,
+	mingo@redhat.com,
+	bp@alien8.de,
+	dave.hansen@linux.intel.com,
+	x86@kernel.org,
+	jk@ozlabs.org,
+	joel@jms.id.au,
+	eajames@linux.ibm.com,
+	andrzej.hajda@intel.com,
+	neil.armstrong@linaro.org,
+	rfoss@kernel.org,
+	maarten.lankhorst@linux.intel.com,
+	mripard@kernel.org,
+	tzimmermann@suse.de,
+	airlied@gmail.com,
+	simona@ffwll.ch,
+	dmitry.torokhov@gmail.com,
+	mchehab@kernel.org,
+	awalls@md.metrocast.net,
+	hverkuil@xs4all.nl,
+	miquel.raynal@bootlin.com,
+	richard@nod.at,
+	vigneshr@ti.com,
+	louis.peens@corigine.com,
+	andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	parthiban.veerasooran@microchip.com,
+	arend.vanspriel@broadcom.com,
+	johannes@sipsolutions.net,
+	gregkh@linuxfoundation.org,
+	jirislaby@kernel.org,
+	yury.norov@gmail.com,
+	akpm@linux-foundation.org
+Cc: hpa@zytor.com,
+	alistair@popple.id.au,
+	linux@rasmusvillemoes.dk,
+	Laurent.pinchart@ideasonboard.com,
+	jonas@kwiboo.se,
+	jernej.skrabec@gmail.com,
+	kuba@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-fsi@lists.ozlabs.org,
+	dri-devel@lists.freedesktop.org,
+	linux-input@vger.kernel.org,
+	linux-media@vger.kernel.org,
+	linux-mtd@lists.infradead.org,
+	oss-drivers@corigine.com,
+	netdev@vger.kernel.org,
+	linux-wireless@vger.kernel.org,
+	brcm80211@lists.linux.dev,
+	brcm80211-dev-list.pdl@broadcom.com,
+	linux-serial@vger.kernel.org,
+	bpf@vger.kernel.org,
+	jserv@ccns.ncku.edu.tw,
+	Kuan-Wei Chiu <visitorckw@gmail.com>,
+	Yu-Chun Lin <eleanor15x@gmail.com>
+Subject: [PATCH v3 13/16] fsi: i2cr: Replace open-coded parity calculation with parity32()
+Date: Fri,  7 Mar 2025 00:25:38 +0800
+Message-Id: <20250306162541.2633025-14-visitorckw@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20250306162541.2633025-1-visitorckw@gmail.com>
+References: <20250306162541.2633025-1-visitorckw@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250306-rqf_flags-v1-1-bbd64918b406@debian.org>
-X-B4-Tracking: v=1; b=H4sIAAbNyWcC/x3MUQqAIBAFwKss7zvBjIK8SkRYrrUQVgoRhHcPm
- gPMi8xJOMPSi8S3ZDkiLNUVYdlcXFmJhyUYbVrd6E6lK0xhd2tWvfOzq72Z2QRUhDNxkOe/hrG
- UDyo4NfhbAAAA
-X-Change-ID: 20250306-rqf_flags-9adba1d2be2f
-To: Jens Axboe <axboe@kernel.dk>
-Cc: linux-block@vger.kernel.org, linux-kernel@vger.kernel.org, 
- bpf@vger.kernel.org, kernel-team@meta.com, 
- Yonghong Song <yonghong.song@linux.dev>, Breno Leitao <leitao@debian.org>
-X-Mailer: b4 0.15-dev-42535
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1399; i=leitao@debian.org;
- h=from:subject:message-id; bh=RieI6T8+GnLltjFdq+B3y0WTT5CK4xQkz/PyogGNpso=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBnyc0QW/hz0BGrRvx8XmUY7nab78lXrA0HoGbbN
- Jh8nRxPDEKJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCZ8nNEAAKCRA1o5Of/Hh3
- bdo4EACQnyP8l8apbcsGVhMgcyjKLgdrM9fPbwprHvM2TtW2qrmIm8Cy/g+R4EhQvNJ3erB0prR
- XyxKI4A91hNfQ5b/cEADyIwv8iXP5djZNhex+09TZLdCJuy7ujCz9DDuu6hf25wgPEHhHhXadBJ
- 9e7VxmRPEwFQZKO/miEAjkxPg9G5fMYxK9vHrKr+xYOqpg1gAVfHyhsTq/rZgR43YjG7h5idpR8
- 5FEGM2by5b/LQAL7H0cRTL1i5OXEBobjf5t16fA9d1ibijRhKVglbuvYr/XS/1qOxVf+bbwGwVp
- 1aukJqRge6lZOzdL0/LwrWQpDr1V2pT+55ayVDlkJ/v7EA3VEmhgQ/CV0yJ/4RSAbIx4712cQGq
- gMYNwGaK2s+5QLk6jwD6qYsYpwNZ22+U5Bqs2ZWvz4l2D28rbD9F3JPEGS+K2V+dfXGVRdWGJxt
- 9UKWf7nq09QIrkcxzOhNeGTmsNQTxbMGfn4DocdPQmnJqKnoAnWQ8ydIeNvlHtKWNWTFKdpeR/Z
- 29POjUD/cqUCJQUmXy1yR2UzAGUX5ZzU1RPDiyBFya5Ou5X1Fc/j8FGFLYImdu3Qp+1cvUK8DMN
- ArhsS2+GBBstUsrkbZ1xRXsxFaQXScsOh+r607Vz2ZPrW3IBXNuf+NeM2x71dIsc2oJQe0l6+JU
- CfBlPbHTIsQdxBw==
-X-Developer-Key: i=leitao@debian.org; a=openpgp;
- fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
+Content-Transfer-Encoding: 8bit
 
-Commit 5f89154e8e9e3445f9b59 ("block: Use enum to define RQF_x bit
-indexes") converted the RQF flags to an anonymous enum, which was
-a beneficial change. This patch goes one step further by naming the enum
-as "rqf_flags".
+Refactor parity calculations to use the standard parity32() helper.
+This change eliminates redundant implementations and improves code
+efficiency.
 
-This naming enables exporting these flags to BPF clients, eliminating
-the need to duplicate these flags in BPF code. Instead, BPF clients can
-now access the same kernel-side values through CO:RE (Compile Once, Run
-Everywhere), as shown in this example:
-
-    rqf_stats = bpf_core_enum_value(enum rqf_flags, __RQF_STATS)
-
-Suggested-by: Yonghong Song <yonghong.song@linux.dev>
-Signed-off-by: Breno Leitao <leitao@debian.org>
+Co-developed-by: Yu-Chun Lin <eleanor15x@gmail.com>
+Signed-off-by: Yu-Chun Lin <eleanor15x@gmail.com>
+Signed-off-by: Kuan-Wei Chiu <visitorckw@gmail.com>
 ---
- include/linux/blk-mq.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Changes in v3:
+- Change parity ^= parity32(v) to parity != parity32(v).
 
-diff --git a/include/linux/blk-mq.h b/include/linux/blk-mq.h
-index fa2a76cc2f73d..71f4f0cc3dac6 100644
---- a/include/linux/blk-mq.h
-+++ b/include/linux/blk-mq.h
-@@ -28,7 +28,7 @@ typedef enum rq_end_io_ret (rq_end_io_fn)(struct request *, blk_status_t);
- typedef __u32 __bitwise req_flags_t;
+ drivers/fsi/fsi-master-i2cr.c | 10 ++--------
+ 1 file changed, 2 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/fsi/fsi-master-i2cr.c b/drivers/fsi/fsi-master-i2cr.c
+index 40f1f4d231e5..46511236bbca 100644
+--- a/drivers/fsi/fsi-master-i2cr.c
++++ b/drivers/fsi/fsi-master-i2cr.c
+@@ -1,6 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /* Copyright (C) IBM Corporation 2023 */
  
- /* Keep rqf_name[] in sync with the definitions below */
--enum {
-+enum rqf_flags {
- 	/* drive already may have started this one */
- 	__RQF_STARTED,
- 	/* request for flush sequence */
-
----
-base-commit: c42048cee22435a6ea0de68cc02231cf359ca8b2
-change-id: 20250306-rqf_flags-9adba1d2be2f
-
-Best regards,
++#include <linux/bitops.h>
+ #include <linux/device.h>
+ #include <linux/fsi.h>
+ #include <linux/i2c.h>
+@@ -38,14 +39,7 @@ static const u8 i2cr_cfam[] = {
+ 
+ static bool i2cr_check_parity32(u32 v, bool parity)
+ {
+-	u32 i;
+-
+-	for (i = 0; i < 32; ++i) {
+-		if (v & (1u << i))
+-			parity = !parity;
+-	}
+-
+-	return parity;
++	return parity != parity32(v);
+ }
+ 
+ static bool i2cr_check_parity64(u64 v)
 -- 
-Breno Leitao <leitao@debian.org>
+2.34.1
 
