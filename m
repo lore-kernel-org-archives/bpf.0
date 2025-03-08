@@ -1,27 +1,28 @@
 Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1309A1C6FED
-	for <bpf@vger.kernel.org>; Sat,  8 Mar 2025 13:39:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C16671C84B7
+	for <bpf@vger.kernel.org>; Sat,  8 Mar 2025 13:39:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741441157; cv=none; b=UwS800y78zyhLWfZh5QOzvRex/CsBPhvs2Ld7DjWM7MWfZU2JWNXy8dkm2R8Sok9S/X9dd7ukkO4yQloX387+lz27Eb0yCeKzN0p5qKE0F1zoCuVzxyHUHcOpSVJCRDTkbnaV9L3MYKrleFgkkYEFCI1W/ImB3NVI0Lcm+DLWUU=
+	t=1741441158; cv=none; b=CLT0Sy2B1gPejk+VlPuJOw+gJM9MqxyR84/DkJtdZF5ifVNRXAwSg6hWuceVkIB5TmZ8vukKiKOB/r7oXcqWI1OdE3yZ+y6PqrYYyUz27o7DmksK7kxQEuzeLRJXTqPmKJjijTlT/NtzuRp5aSjH1xXmNSQcDpO4FJX8KCZS6PI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741441157; c=relaxed/simple;
-	bh=v3iW8C83mYC7j1QkyleEzH8asJ9feXIubUtMbx+pBMs=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=W8dlRJOhpWwsGesk6LbIw85b9R6wNPeCKC2CKiaUM83iOXHNG/VSWOm2fyjZeTYbD18dF/ZTwBDYWn3lXEEaCXwrf7U/ciFZP3c2XChMw5JlZlI6LA1iKq13lz4h6/POIwyuMbYdI+bReNXAXvAm0m/gRb/1MtScqsg+MKaY60Y=
+	s=arc-20240116; t=1741441158; c=relaxed/simple;
+	bh=NA0d4ivkGss2moSgpe5rrOFcE68pJGUX2H+mhizGOXo=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=u1akzo+oCajvhsQuwQXrywENy6T4sA9rTtOZZ2CDoYXX4LL/bUzk6KoHizv8mfXdPl1SrQ8SU04uHnjaqRfNs745TAASmqnoKhj8HiBBThWW1PITipGuvOp+8xU08m3W08nOICgdZp8WEmke5T9kGxkw4fPX41O9Jx2B9Zfoy4E=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.216])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Z944K6fZVz4f3mHH
-	for <bpf@vger.kernel.org>; Sat,  8 Mar 2025 21:38:41 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.163.235])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Z944M1XCCz4f3m7Z
+	for <bpf@vger.kernel.org>; Sat,  8 Mar 2025 21:38:43 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id 9CD0A1A1587
-	for <bpf@vger.kernel.org>; Sat,  8 Mar 2025 21:39:05 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id E20D81A058E
+	for <bpf@vger.kernel.org>; Sat,  8 Mar 2025 21:39:06 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.124.27])
-	by APP4 (Coremail) with SMTP id gCh0CgDnSl91SMxn+YeeFw--.42876S4;
-	Sat, 08 Mar 2025 21:39:03 +0800 (CST)
+	by APP4 (Coremail) with SMTP id gCh0CgDnSl91SMxn+YeeFw--.42876S6;
+	Sat, 08 Mar 2025 21:39:06 +0800 (CST)
 From: Hou Tao <houtao@huaweicloud.com>
 To: bpf@vger.kernel.org
 Cc: Martin KaFai Lau <martin.lau@linux.dev>,
@@ -40,10 +41,12 @@ Cc: Martin KaFai Lau <martin.lau@linux.dev>,
 	Zvi Effron <zeffron@riotgames.com>,
 	Cody Haas <chaas@riotgames.com>,
 	houtao1@huawei.com
-Subject: [PATCH bpf-next v2 0/6] bpf: Support atomic update for htab of maps
-Date: Sat,  8 Mar 2025 21:51:04 +0800
-Message-Id: <20250308135110.953269-1-houtao@huaweicloud.com>
+Subject: [PATCH bpf-next v2 2/6] bpf: Rename __htab_percpu_map_update_elem to htab_map_update_elem_in_place
+Date: Sat,  8 Mar 2025 21:51:06 +0800
+Message-Id: <20250308135110.953269-3-houtao@huaweicloud.com>
 X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20250308135110.953269-1-houtao@huaweicloud.com>
+References: <20250308135110.953269-1-houtao@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -51,64 +54,99 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgDnSl91SMxn+YeeFw--.42876S4
-X-Coremail-Antispam: 1UD129KBjvJXoW7ZF4DZr1UWw1xuw4fKF47CFg_yoW8ArWUpa
-	yI9F43Kr18tFnFqw1fGw42ga1rJ3Z7tw18C3ZFqr15C348tryxXr1xKF4a9r93A34ruryF
-	vr13trZxW34kZrDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUvFb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
-	0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-	0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAa
-	w2AFwI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
-	Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a
-	6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
-	kF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AK
-	xVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvj
-	xUIa0PDUUUU
+X-CM-TRANSID:gCh0CgDnSl91SMxn+YeeFw--.42876S6
+X-Coremail-Antispam: 1UD129KBjvJXoWxJw4kZw1kKF1kAF43JF43Wrg_yoW5GFyxpF
+	WrWFyIkr4IqFs0g3yrtw4agrW5Arn5Xw10ka4DKa4Fyr9Fgrn7Ar17JFZ2yr15Cr4UZr4r
+	tF9FqFy2yayxurUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUPFb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUXw
+	A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+	WxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+	GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx
+	0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWU
+	JVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7AKxV
+	W8ZVWrXwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E
+	14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIx
+	kGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAF
+	wI0_Cr0_Gr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJV
+	W8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUIID7
+	DUUUU
 X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
 
 From: Hou Tao <houtao1@huawei.com>
 
-Hi,
+Rename __htab_percpu_map_update_elem to htab_map_update_elem_in_place,
+and add a new percpu argument for the helper to support in-place update
+for both per-cpu htab and htab of maps.
 
-The motivation for the patch set comes from the question raised by Cody
-Haas [1]. When trying to concurrently lookup and update an existing
-element in a htab of maps, the lookup procedure may return -ENOENT
-unexpectedly. The first revision of the patch set tried to resolve the
-problem by making the insertion of the new element and the deletion of
-the old element being atomic from the perspective of the lookup process.
-While the solution would benefit all hash maps, it does not fully
-resolved the problem due to the immediate reuse issue. Therefore, in v2
-of the patch set, it only fixes the problem for fd htab.
+Signed-off-by: Hou Tao <houtao1@huawei.com>
+---
+ kernel/bpf/hashtab.c | 17 ++++++++---------
+ 1 file changed, 8 insertions(+), 9 deletions(-)
 
-Please see individual patches for details. Comments are always welcome.
-
-v2:
-  * only support atomic update for fd htab
-
-v1: https://lore.kernel.org/bpf/20250204082848.13471-1-hotforest@gmail.com
-
-[1]: https://lore.kernel.org/xdp-newbies/CAH7f-ULFTwKdoH_t2SFc5rWCVYLEg-14d1fBYWH2eekudsnTRg@mail.gmail.com/
-
-Hou Tao (6):
-  bpf: Factor out htab_elem_value helper()
-  bpf: Rename __htab_percpu_map_update_elem to
-    htab_map_update_elem_in_place
-  bpf: Support atomic update for htab of maps
-  bpf: Add is_fd_htab() helper
-  bpf: Don't allocate per-cpu extra_elems for fd htab
-  selftests/bpf: Add test case for atomic update of fd htab
-
- kernel/bpf/hashtab.c                          | 148 +++++++-------
- .../selftests/bpf/prog_tests/fd_htab_lookup.c | 192 ++++++++++++++++++
- .../selftests/bpf/progs/fd_htab_lookup.c      |  25 +++
- 3 files changed, 289 insertions(+), 76 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/fd_htab_lookup.c
- create mode 100644 tools/testing/selftests/bpf/progs/fd_htab_lookup.c
-
+diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+index 0df86845c8472..8d78a518cf820 100644
+--- a/kernel/bpf/hashtab.c
++++ b/kernel/bpf/hashtab.c
+@@ -1289,12 +1289,12 @@ static long htab_lru_map_update_elem(struct bpf_map *map, void *key, void *value
+ 	return ret;
+ }
+ 
+-static long __htab_percpu_map_update_elem(struct bpf_map *map, void *key,
++static long htab_map_update_elem_in_place(struct bpf_map *map, void *key,
+ 					  void *value, u64 map_flags,
+-					  bool onallcpus)
++					  bool percpu, bool onallcpus)
+ {
+ 	struct bpf_htab *htab = container_of(map, struct bpf_htab, map);
+-	struct htab_elem *l_new = NULL, *l_old;
++	struct htab_elem *l_new, *l_old;
+ 	struct hlist_nulls_head *head;
+ 	unsigned long flags;
+ 	struct bucket *b;
+@@ -1326,19 +1326,18 @@ static long __htab_percpu_map_update_elem(struct bpf_map *map, void *key,
+ 		goto err;
+ 
+ 	if (l_old) {
+-		/* per-cpu hash map can update value in-place */
++		/* Update value in-place */
+ 		pcpu_copy_value(htab, htab_elem_get_ptr(l_old, key_size),
+ 				value, onallcpus);
+ 	} else {
+ 		l_new = alloc_htab_elem(htab, key, value, key_size,
+-					hash, true, onallcpus, NULL);
++					hash, percpu, onallcpus, NULL);
+ 		if (IS_ERR(l_new)) {
+ 			ret = PTR_ERR(l_new);
+ 			goto err;
+ 		}
+ 		hlist_nulls_add_head_rcu(&l_new->hash_node, head);
+ 	}
+-	ret = 0;
+ err:
+ 	htab_unlock_bucket(htab, b, hash, flags);
+ 	return ret;
+@@ -1417,7 +1416,7 @@ static long __htab_lru_percpu_map_update_elem(struct bpf_map *map, void *key,
+ static long htab_percpu_map_update_elem(struct bpf_map *map, void *key,
+ 					void *value, u64 map_flags)
+ {
+-	return __htab_percpu_map_update_elem(map, key, value, map_flags, false);
++	return htab_map_update_elem_in_place(map, key, value, map_flags, true, false);
+ }
+ 
+ static long htab_lru_percpu_map_update_elem(struct bpf_map *map, void *key,
+@@ -2442,8 +2441,8 @@ int bpf_percpu_hash_update(struct bpf_map *map, void *key, void *value,
+ 		ret = __htab_lru_percpu_map_update_elem(map, key, value,
+ 							map_flags, true);
+ 	else
+-		ret = __htab_percpu_map_update_elem(map, key, value, map_flags,
+-						    true);
++		ret = htab_map_update_elem_in_place(map, key, value, map_flags,
++						    true, true);
+ 	rcu_read_unlock();
+ 
+ 	return ret;
 -- 
 2.29.2
 
