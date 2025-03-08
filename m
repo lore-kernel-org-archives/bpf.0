@@ -1,28 +1,28 @@
 Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2E861C9DE5
-	for <bpf@vger.kernel.org>; Sat,  8 Mar 2025 13:39:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 778C31D4356
+	for <bpf@vger.kernel.org>; Sat,  8 Mar 2025 13:39:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741441159; cv=none; b=K919W3hGThDqdyMkPmlz4R7E+s1qRbe2vRckH4ce7xRYsuNtzs07NzQ0fTWbGFNDNPSiJEWZ8KFO0KT49DGcyR1L8fE9xPpkGD0+BgHnlh+/7mzVYfdDP1Btj5m5O8v5sdYOtCI0RpodxCN1QB30AkLMuEvncR8V31NPhm2GIrA=
+	t=1741441160; cv=none; b=Ey91gQZrO3TO+R2K9c/V2on1OCMBgz+2uPcjK7FOEW46RSKwN4cHxfN2skLGuOZb0eT5aCYCuHcU50IVsoqySkhN8y2S8JCZjns3+KaIB/CGOwKUUbI9xG6f+82Z9yR9m6BNd8cVcpetmZXvVFmY9+Oy9T3ggj0gMUOifWUCbMM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741441159; c=relaxed/simple;
-	bh=euqcHyUpq+wNGA6ZhacV2+AvFCj/uPCw35Q7fC+it0s=;
+	s=arc-20240116; t=1741441160; c=relaxed/simple;
+	bh=PSvj8NYvKDkdKdSd3BU+wXtKc18r/YYLWvDRWjE9no8=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=QJ2jzGgjVfdC9tao9k1fN40Pk4CprPQnuoxTDQ49ca9lIPAIs1A0sBMoBVABOV6c8yMl4ffOuwluXg+g3yb0QoCs1KQhMZrUpJFVP+IPBZ4ul+jywTTFbxboLpba11vOufxoFlZPBgF/Iu7saeNWJc41miOE+NJqaDjjG2wnv+A=
+	 MIME-Version; b=ClQ2RV/FQ/uC8i66MoiVjIJoF6UbF9K/6aEUwjFUoAc1g+FZxD5aHAWn7hHkOusmoWwKV3aaQlObH8WJWOfbjZij67LosEtASaZxL4lLav+IPitO7E9fQMGYrqBCnFi7bdhsbactlgeiIeR0I90W2S0TKjXzPMGcajSTmkLwRu0=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
 Received: from mail.maildlp.com (unknown [172.19.163.235])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4Z944N0LFSz4f3jcp
-	for <bpf@vger.kernel.org>; Sat,  8 Mar 2025 21:38:44 +0800 (CST)
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4Z944Q4F3Qz4f3jd9
+	for <bpf@vger.kernel.org>; Sat,  8 Mar 2025 21:38:46 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id 4A0B91A06DC
-	for <bpf@vger.kernel.org>; Sat,  8 Mar 2025 21:39:06 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id CE58E1A058E
+	for <bpf@vger.kernel.org>; Sat,  8 Mar 2025 21:39:08 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.124.27])
-	by APP4 (Coremail) with SMTP id gCh0CgDnSl91SMxn+YeeFw--.42876S5;
-	Sat, 08 Mar 2025 21:39:06 +0800 (CST)
+	by APP4 (Coremail) with SMTP id gCh0CgDnSl91SMxn+YeeFw--.42876S9;
+	Sat, 08 Mar 2025 21:39:08 +0800 (CST)
 From: Hou Tao <houtao@huaweicloud.com>
 To: bpf@vger.kernel.org
 Cc: Martin KaFai Lau <martin.lau@linux.dev>,
@@ -41,9 +41,9 @@ Cc: Martin KaFai Lau <martin.lau@linux.dev>,
 	Zvi Effron <zeffron@riotgames.com>,
 	Cody Haas <chaas@riotgames.com>,
 	houtao1@huawei.com
-Subject: [PATCH bpf-next v2 1/6] bpf: Factor out htab_elem_value helper()
-Date: Sat,  8 Mar 2025 21:51:05 +0800
-Message-Id: <20250308135110.953269-2-houtao@huaweicloud.com>
+Subject: [PATCH bpf-next v2 5/6] bpf: Don't allocate per-cpu extra_elems for fd htab
+Date: Sat,  8 Mar 2025 21:51:09 +0800
+Message-Id: <20250308135110.953269-6-houtao@huaweicloud.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20250308135110.953269-1-houtao@huaweicloud.com>
 References: <20250308135110.953269-1-houtao@huaweicloud.com>
@@ -54,276 +54,76 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgDnSl91SMxn+YeeFw--.42876S5
-X-Coremail-Antispam: 1UD129KBjvJXoW3XrWfKFyfWrW3Aw4UXw48Xrb_yoWftw4DpF
-	WrWw1xCw48Zr4qq3y5tw40ka95J34Utr1jkas8ta4FkFn8Gr9xJ3WxAF9FgrZ8AF1vyrn5
-	trWvqaySqayxCrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUPYb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUGw
-	A2048vs2IY020Ec7CjxVAFwI0_Gr0_Xr1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-	WxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-	GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx
-	0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWU
-	JVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7AKxV
-	W8ZVWrXwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E
-	14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIx
-	kGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAF
-	wI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r
-	4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jqYL9U
-	UUUU=
+X-CM-TRANSID:gCh0CgDnSl91SMxn+YeeFw--.42876S9
+X-Coremail-Antispam: 1UD129KBjvJXoW7tr18tr4rAFWfCw4UWF1Dtrb_yoW8ZryDpF
+	4xGF129r1rXrs2gws8JanFkrWYvr1xtFyUCa90q34Fva4UZws2gr17Aa1I9FyFkryxtw1f
+	XrySva4Svay8ZrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUPvb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
+	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
+	rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
+	AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E
+	14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7
+	xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Y
+	z7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2
+	AFwI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAq
+	x4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6r
+	W5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF
+	7I0E14v26r4UJVWxJr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14
+	v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuY
+	vjxUI-eODUUUU
 X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
 
 From: Hou Tao <houtao1@huawei.com>
 
-All hash maps store map key and map value together. The relative offset
-of the map value compared to the map key is round_up(key_size, 8).
-Therefore, factor out a common helper htab_elem_value() to calculate the
-address of the map value instead of duplicating the logic.
+The update of element in fd htab is in-place now, therefore, there is no
+need to allocate per-cpu extra_elems, just remove it.
 
 Signed-off-by: Hou Tao <houtao1@huawei.com>
 ---
- kernel/bpf/hashtab.c | 64 +++++++++++++++++++++-----------------------
- 1 file changed, 30 insertions(+), 34 deletions(-)
+ kernel/bpf/hashtab.c | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
 
 diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-index c308300fc72f6..0df86845c8472 100644
+index d0c10a899beb8..36236d806bac7 100644
 --- a/kernel/bpf/hashtab.c
 +++ b/kernel/bpf/hashtab.c
-@@ -195,20 +195,25 @@ static bool htab_is_percpu(const struct bpf_htab *htab)
- 		htab->map.map_type == BPF_MAP_TYPE_LRU_PERCPU_HASH;
+@@ -226,9 +226,13 @@ static struct htab_elem *get_htab_elem(struct bpf_htab *htab, int i)
+ 	return (struct htab_elem *) (htab->elems + i * (u64)htab->elem_size);
  }
  
-+static inline void *htab_elem_value(struct htab_elem *l, u32 key_size)
-+{
-+	return l->key + round_up(key_size, 8);
-+}
-+
- static inline void htab_elem_set_ptr(struct htab_elem *l, u32 key_size,
- 				     void __percpu *pptr)
++/* Both percpu and fd htab support in-place update, so no need for
++ * extra elem. LRU itself can remove the least used element, so
++ * there is no need for an extra elem during map_update.
++ */
+ static bool htab_has_extra_elems(struct bpf_htab *htab)
  {
--	*(void __percpu **)(l->key + roundup(key_size, 8)) = pptr;
-+	*(void __percpu **)htab_elem_value(l, key_size) = pptr;
+-	return !htab_is_percpu(htab) && !htab_is_lru(htab);
++	return !htab_is_percpu(htab) && !htab_is_lru(htab) && !is_fd_htab(htab);
  }
  
- static inline void __percpu *htab_elem_get_ptr(struct htab_elem *l, u32 key_size)
+ static void htab_free_prealloced_timers_and_wq(struct bpf_htab *htab)
+@@ -484,8 +488,6 @@ static struct bpf_map *htab_map_alloc(union bpf_attr *attr)
  {
--	return *(void __percpu **)(l->key + roundup(key_size, 8));
-+	return *(void __percpu **)htab_elem_value(l, key_size);
- }
+ 	bool percpu = (attr->map_type == BPF_MAP_TYPE_PERCPU_HASH ||
+ 		       attr->map_type == BPF_MAP_TYPE_LRU_PERCPU_HASH);
+-	bool lru = (attr->map_type == BPF_MAP_TYPE_LRU_HASH ||
+-		    attr->map_type == BPF_MAP_TYPE_LRU_PERCPU_HASH);
+ 	/* percpu_lru means each cpu has its own LRU list.
+ 	 * it is different from BPF_MAP_TYPE_PERCPU_HASH where
+ 	 * the map's value itself is percpu.  percpu_lru has
+@@ -591,10 +593,7 @@ static struct bpf_map *htab_map_alloc(union bpf_attr *attr)
+ 		if (err)
+ 			goto free_map_locked;
  
- static void *fd_htab_map_get_ptr(const struct bpf_map *map, struct htab_elem *l)
- {
--	return *(void **)(l->key + roundup(map->key_size, 8));
-+	return *(void **)htab_elem_value(l, map->key_size);
- }
- 
- static struct htab_elem *get_htab_elem(struct bpf_htab *htab, int i)
-@@ -235,10 +240,10 @@ static void htab_free_prealloced_timers_and_wq(struct bpf_htab *htab)
- 		elem = get_htab_elem(htab, i);
- 		if (btf_record_has_field(htab->map.record, BPF_TIMER))
- 			bpf_obj_free_timer(htab->map.record,
--					   elem->key + round_up(htab->map.key_size, 8));
-+					   htab_elem_value(elem, htab->map.key_size));
- 		if (btf_record_has_field(htab->map.record, BPF_WORKQUEUE))
- 			bpf_obj_free_workqueue(htab->map.record,
--					       elem->key + round_up(htab->map.key_size, 8));
-+					       htab_elem_value(elem, htab->map.key_size));
- 		cond_resched();
- 	}
- }
-@@ -265,7 +270,8 @@ static void htab_free_prealloced_fields(struct bpf_htab *htab)
- 				cond_resched();
- 			}
- 		} else {
--			bpf_obj_free_fields(htab->map.record, elem->key + round_up(htab->map.key_size, 8));
-+			bpf_obj_free_fields(htab->map.record,
-+					    htab_elem_value(elem, htab->map.key_size));
- 			cond_resched();
- 		}
- 		cond_resched();
-@@ -704,7 +710,7 @@ static void *htab_map_lookup_elem(struct bpf_map *map, void *key)
- 	struct htab_elem *l = __htab_map_lookup_elem(map, key);
- 
- 	if (l)
--		return l->key + round_up(map->key_size, 8);
-+		return htab_elem_value(l, map->key_size);
- 
- 	return NULL;
- }
-@@ -743,7 +749,7 @@ static __always_inline void *__htab_lru_map_lookup_elem(struct bpf_map *map,
- 	if (l) {
- 		if (mark)
- 			bpf_lru_node_set_ref(&l->lru_node);
--		return l->key + round_up(map->key_size, 8);
-+		return htab_elem_value(l, map->key_size);
- 	}
- 
- 	return NULL;
-@@ -794,7 +800,7 @@ static void check_and_free_fields(struct bpf_htab *htab,
- 		for_each_possible_cpu(cpu)
- 			bpf_obj_free_fields(htab->map.record, per_cpu_ptr(pptr, cpu));
- 	} else {
--		void *map_value = elem->key + round_up(htab->map.key_size, 8);
-+		void *map_value = htab_elem_value(elem, htab->map.key_size);
- 
- 		bpf_obj_free_fields(htab->map.record, map_value);
- 	}
-@@ -1070,11 +1076,9 @@ static struct htab_elem *alloc_htab_elem(struct bpf_htab *htab, void *key,
- 			htab_elem_set_ptr(l_new, key_size, pptr);
- 	} else if (fd_htab_map_needs_adjust(htab)) {
- 		size = round_up(size, 8);
--		memcpy(l_new->key + round_up(key_size, 8), value, size);
-+		memcpy(htab_elem_value(l_new, key_size), value, size);
- 	} else {
--		copy_map_value(&htab->map,
--			       l_new->key + round_up(key_size, 8),
--			       value);
-+		copy_map_value(&htab->map, htab_elem_value(l_new, key_size), value);
- 	}
- 
- 	l_new->hash = hash;
-@@ -1137,7 +1141,7 @@ static long htab_map_update_elem(struct bpf_map *map, void *key, void *value,
- 		if (l_old) {
- 			/* grab the element lock and update value in place */
- 			copy_map_value_locked(map,
--					      l_old->key + round_up(key_size, 8),
-+					      htab_elem_value(l_old, key_size),
- 					      value, false);
- 			return 0;
- 		}
-@@ -1165,7 +1169,7 @@ static long htab_map_update_elem(struct bpf_map *map, void *key, void *value,
- 		 * and update element in place
- 		 */
- 		copy_map_value_locked(map,
--				      l_old->key + round_up(key_size, 8),
-+				      htab_elem_value(l_old, key_size),
- 				      value, false);
- 		ret = 0;
- 		goto err;
-@@ -1251,8 +1255,7 @@ static long htab_lru_map_update_elem(struct bpf_map *map, void *key, void *value
- 	l_new = prealloc_lru_pop(htab, key, hash);
- 	if (!l_new)
- 		return -ENOMEM;
--	copy_map_value(&htab->map,
--		       l_new->key + round_up(map->key_size, 8), value);
-+	copy_map_value(&htab->map, htab_elem_value(l_new, map->key_size), value);
- 
- 	ret = htab_lock_bucket(htab, b, hash, &flags);
- 	if (ret)
-@@ -1531,10 +1534,10 @@ static void htab_free_malloced_timers_and_wq(struct bpf_htab *htab)
- 			/* We only free timer on uref dropping to zero */
- 			if (btf_record_has_field(htab->map.record, BPF_TIMER))
- 				bpf_obj_free_timer(htab->map.record,
--						   l->key + round_up(htab->map.key_size, 8));
-+						   htab_elem_value(l, htab->map.key_size));
- 			if (btf_record_has_field(htab->map.record, BPF_WORKQUEUE))
- 				bpf_obj_free_workqueue(htab->map.record,
--						       l->key + round_up(htab->map.key_size, 8));
-+						       htab_elem_value(l, htab->map.key_size));
- 		}
- 		cond_resched_rcu();
- 	}
-@@ -1650,15 +1653,12 @@ static int __htab_map_lookup_and_delete_elem(struct bpf_map *map, void *key,
- 			off += roundup_value_size;
- 		}
- 	} else {
--		u32 roundup_key_size = round_up(map->key_size, 8);
-+		void *src = htab_elem_value(l, map->key_size);
- 
- 		if (flags & BPF_F_LOCK)
--			copy_map_value_locked(map, value, l->key +
--					      roundup_key_size,
--					      true);
-+			copy_map_value_locked(map, value, src, true);
- 		else
--			copy_map_value(map, value, l->key +
--				       roundup_key_size);
-+			copy_map_value(map, value, src);
- 		/* Zeroing special fields in the temp buffer */
- 		check_and_init_map_value(map, value);
- 	}
-@@ -1715,12 +1715,12 @@ __htab_map_lookup_and_delete_batch(struct bpf_map *map,
- 				   bool is_percpu)
- {
- 	struct bpf_htab *htab = container_of(map, struct bpf_htab, map);
--	u32 bucket_cnt, total, key_size, value_size, roundup_key_size;
- 	void *keys = NULL, *values = NULL, *value, *dst_key, *dst_val;
- 	void __user *uvalues = u64_to_user_ptr(attr->batch.values);
- 	void __user *ukeys = u64_to_user_ptr(attr->batch.keys);
- 	void __user *ubatch = u64_to_user_ptr(attr->batch.in_batch);
- 	u32 batch, max_count, size, bucket_size, map_id;
-+	u32 bucket_cnt, total, key_size, value_size;
- 	struct htab_elem *node_to_free = NULL;
- 	u64 elem_map_flags, map_flags;
- 	struct hlist_nulls_head *head;
-@@ -1755,7 +1755,6 @@ __htab_map_lookup_and_delete_batch(struct bpf_map *map,
- 		return -ENOENT;
- 
- 	key_size = htab->map.key_size;
--	roundup_key_size = round_up(htab->map.key_size, 8);
- 	value_size = htab->map.value_size;
- 	size = round_up(value_size, 8);
- 	if (is_percpu)
-@@ -1847,7 +1846,7 @@ __htab_map_lookup_and_delete_batch(struct bpf_map *map,
- 				off += size;
- 			}
- 		} else {
--			value = l->key + roundup_key_size;
-+			value = htab_elem_value(l, key_size);
- 			if (map->map_type == BPF_MAP_TYPE_HASH_OF_MAPS) {
- 				struct bpf_map **inner_map = value;
- 
-@@ -2098,11 +2097,11 @@ static void *bpf_hash_map_seq_next(struct seq_file *seq, void *v, loff_t *pos)
- static int __bpf_hash_map_seq_show(struct seq_file *seq, struct htab_elem *elem)
- {
- 	struct bpf_iter_seq_hash_map_info *info = seq->private;
--	u32 roundup_key_size, roundup_value_size;
- 	struct bpf_iter__bpf_map_elem ctx = {};
- 	struct bpf_map *map = info->map;
- 	struct bpf_iter_meta meta;
- 	int ret = 0, off = 0, cpu;
-+	u32 roundup_value_size;
- 	struct bpf_prog *prog;
- 	void __percpu *pptr;
- 
-@@ -2112,10 +2111,9 @@ static int __bpf_hash_map_seq_show(struct seq_file *seq, struct htab_elem *elem)
- 		ctx.meta = &meta;
- 		ctx.map = info->map;
- 		if (elem) {
--			roundup_key_size = round_up(map->key_size, 8);
- 			ctx.key = elem->key;
- 			if (!info->percpu_value_buf) {
--				ctx.value = elem->key + roundup_key_size;
-+				ctx.value = htab_elem_value(elem, map->key_size);
- 			} else {
- 				roundup_value_size = round_up(map->value_size, 8);
- 				pptr = htab_elem_get_ptr(elem, map->key_size);
-@@ -2200,7 +2198,6 @@ static long bpf_for_each_hash_elem(struct bpf_map *map, bpf_callback_t callback_
- 	struct hlist_nulls_head *head;
- 	struct hlist_nulls_node *n;
- 	struct htab_elem *elem;
--	u32 roundup_key_size;
- 	int i, num_elems = 0;
- 	void __percpu *pptr;
- 	struct bucket *b;
-@@ -2215,7 +2212,6 @@ static long bpf_for_each_hash_elem(struct bpf_map *map, bpf_callback_t callback_
- 
- 	is_percpu = htab_is_percpu(htab);
- 
--	roundup_key_size = round_up(map->key_size, 8);
- 	/* migration has been disabled, so percpu value prepared here will be
- 	 * the same as the one seen by the bpf program with
- 	 * bpf_map_lookup_elem().
-@@ -2231,7 +2227,7 @@ static long bpf_for_each_hash_elem(struct bpf_map *map, bpf_callback_t callback_
- 				pptr = htab_elem_get_ptr(elem, map->key_size);
- 				val = this_cpu_ptr(pptr);
- 			} else {
--				val = elem->key + roundup_key_size;
-+				val = htab_elem_value(elem, map->key_size);
- 			}
- 			num_elems++;
- 			ret = callback_fn((u64)(long)map, (u64)(long)key,
+-		if (!percpu && !lru) {
+-			/* lru itself can remove the least used element, so
+-			 * there is no need for an extra elem during map_update.
+-			 */
++		if (htab_has_extra_elems(htab)) {
+ 			err = alloc_extra_elems(htab);
+ 			if (err)
+ 				goto free_prealloc;
 -- 
 2.29.2
 
