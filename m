@@ -1,39 +1,67 @@
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14A9825C6F9;
-	Tue, 11 Mar 2025 18:20:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B957A78F5D
+	for <bpf@vger.kernel.org>; Tue, 11 Mar 2025 18:22:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741717205; cv=none; b=Pp4In3mDCiOsJVFFpYXFqyr/Vc4hZqBxMwu6lZCL8GtAYJMZpLSgPeNGAKekkD4k71a6ZD/xEPjdZLPLeGj11dlGHmYgX9bB5xISCvEEEo/gqzzLgPA5EgHGIfRkCSe8cWU5N+OT9AEyybWyzKjTES8YegtO0VpqCI69kNC2RKI=
+	t=1741717328; cv=none; b=fEhCgQtk3syIRgoc+ykwjCdeVKdKrk/lEtrkRrMzHOfkxki1SuSc9FI4DtzVDHr6pgRaeqFHrv0GzS/sogsjJPFNF5j04tVxqczyJRbGvzCRrmkNJghA0wL7/6asWCQG6HK2ohkRA/9QqEIKdz+5P5wmr+3DXUUNgELwy/JKRs8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741717205; c=relaxed/simple;
-	bh=lrA7X7dr/o7Vl9yRSzzERDbxoLlxULn4YSC2YPrCtWQ=;
+	s=arc-20240116; t=1741717328; c=relaxed/simple;
+	bh=XtwLOWUPqClcg9RHRqlsJGXMqVtcJbLYqzn8ctYTOGc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nDeDYYVzEADmVnn++oUOeVGiIOG7JpAP+BFvvpA2DpBdutLAZjaDhCmxL8/5woBnqFzHSpysp8b2QrvXcqfrzBWFtMHWz/MKUCTLp6clb/VZ8S+0/qAhhwLG/PccnDML5rPg3ePkRE+JXnt7E3yPXfqGtH+hbpcbvhJTtQYgVk4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-	by localhost (Postfix) with ESMTP id 4ZC1Xf6JvGz9sgH;
-	Tue, 11 Mar 2025 18:51:30 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fvDIzXamRURc; Tue, 11 Mar 2025 18:51:30 +0100 (CET)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-	by pegase2.c-s.fr (Postfix) with ESMTP id 4ZC1Xf5CWCz9sVm;
-	Tue, 11 Mar 2025 18:51:30 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 9A2E28B768;
-	Tue, 11 Mar 2025 18:51:30 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-	with ESMTP id 175KqGxnGV_Y; Tue, 11 Mar 2025 18:51:30 +0100 (CET)
-Received: from [192.168.235.99] (unknown [192.168.235.99])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 3AF2D8B763;
-	Tue, 11 Mar 2025 18:51:29 +0100 (CET)
-Message-ID: <61e746ca-456f-4824-9678-85399b450bce@csgroup.eu>
-Date: Tue, 11 Mar 2025 18:51:28 +0100
+	 In-Reply-To:Content-Type; b=La2lUh51ActF0CtIQd+wRB8aodNcbUzTbKZ3Cx4FjsU3JxGh97AnnHGLOvQ2Gf97sHde5jSa8i0EfygrS8MRT+UqUIMOL4EGj18yt6CmPUmHUF40OZ0VRut8bbfEI5rSNWgwyU3gZ6Jdm+mBfZdpMwNEJw31Tf8PZfYQqBpdViI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=tCYlv2qs; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="tCYlv2qs"
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 52BCSgJL029343;
+	Tue, 11 Mar 2025 18:21:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=RX8nJ8
+	yzU85wl/nOAPc76CDZxqQZhMQgaSaY1DpIVEM=; b=tCYlv2qsxa4+MK4nbeMbA+
+	LV7sFHw7SbLsgK/AGjbGCOyJmeW5wKSpovJPY5E36ZCJPD522LVMal1XNo3sbSRz
+	GJOGCrOJVTPoNi2QKOPCiWPLdQstTtXebgKj0RFNeTUbGzj3S04oIk01EzDEoyHV
+	4lKwUfFh4Muar76i6AeGUb04baTz7Zv9g7HS2gkiOtJq+5SSPMKnJD9oLhXNsZlu
+	mas92sqsdC5mfeXf76Eq7qk5JKMRR36PvtSfjDkaJdD6R59u22eM97i+LrxaXE7B
+	ragpFbb7LscJMh9tkKSnnekE9r2G5QrHBBN1fAF1kHaWHzxuKt6gChbgpp0BvFLA
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 45an7bj13u-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 11 Mar 2025 18:21:50 +0000 (GMT)
+Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 52BIBvmJ015149;
+	Tue, 11 Mar 2025 18:21:50 GMT
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 45an7bj13r-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 11 Mar 2025 18:21:50 +0000 (GMT)
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 52BGjOLh022294;
+	Tue, 11 Mar 2025 18:21:48 GMT
+Received: from smtprelay04.dal12v.mail.ibm.com ([172.16.1.6])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 45917ndpm6-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 11 Mar 2025 18:21:48 +0000
+Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
+	by smtprelay04.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 52BILmT33212020
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 11 Mar 2025 18:21:48 GMT
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 2EE035805A;
+	Tue, 11 Mar 2025 18:21:48 +0000 (GMT)
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 5422A58051;
+	Tue, 11 Mar 2025 18:21:45 +0000 (GMT)
+Received: from [9.61.250.110] (unknown [9.61.250.110])
+	by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 11 Mar 2025 18:21:44 +0000 (GMT)
+Message-ID: <714157d1-dd6a-4ed9-8177-b8cf1bdee0f6@linux.ibm.com>
+Date: Tue, 11 Mar 2025 23:51:43 +0530
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -41,122 +69,68 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] powerpc, bpf: Inline bpf_get_smp_processor_id()
-To: Saket Kumar Bhaskar <skb99@linux.ibm.com>, bpf@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Cc: ast@kernel.org, hbathini@linux.ibm.com, andrii@kernel.org,
- daniel@iogearbox.net, martin.lau@linux.dev, eddyz87@gmail.com,
- song@kernel.org, yonghong.song@linux.dev, john.fastabend@gmail.com,
- kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
- naveen@kernel.org, maddy@linux.ibm.com, mpe@ellerman.id.au, npiggin@gmail.com
-References: <20250311160955.825647-1-skb99@linux.ibm.com>
- <20250311160955.825647-3-skb99@linux.ibm.com>
-Content-Language: fr-FR
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
-In-Reply-To: <20250311160955.825647-3-skb99@linux.ibm.com>
+Subject: Re: [PATCH bpf-next v1] selftests/bpf: Fix arena_spin_lock
+ compilation on PowerPC
+Content-Language: en-GB
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@kernel.org>,
+        Eduard Zingerman <eddyz87@gmail.com>, kkd@meta.com,
+        kernel-team@meta.com
+References: <20250311154244.3775505-1-memxor@gmail.com>
+ <CAP01T7622-6+e4K_O+AH978Jbp=M8HBe5ho2H4yS4FoTJ8=COQ@mail.gmail.com>
+From: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
+In-Reply-To: <CAP01T7622-6+e4K_O+AH978Jbp=M8HBe5ho2H4yS4FoTJ8=COQ@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 0V-qdygJbxkeuiuq0l3PXWSncvx-VtNc
+X-Proofpoint-ORIG-GUID: dJBGG4Rg4eP4SoIiXA6yCW37ilgNp0jp
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1093,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-03-11_04,2025-03-11_02,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ mlxlogscore=981 phishscore=0 adultscore=0 bulkscore=0 lowpriorityscore=0
+ clxscore=1011 malwarescore=0 mlxscore=0 impostorscore=0 spamscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2502100000 definitions=main-2503110111
+
+On 11/03/25 9:13 pm, Kumar Kartikeya Dwivedi wrote:
+> On Tue, 11 Mar 2025 at 16:42, Kumar Kartikeya Dwivedi <memxor@gmail.com> wrote:
+>> Venkat reported a compilation error for BPF selftests on PowerPC [0].
+>> The crux of the error is the following message:
+>>    In file included from progs/arena_spin_lock.c:7:
+>>    /root/bpf-next/tools/testing/selftests/bpf/bpf_arena_spin_lock.h:122:8:
+>>    error: member reference base type '__attribute__((address_space(1)))
+>>    u32' (aka '__attribute__((address_space(1))) unsigned int') is not a
+>>    structure or union
+>>       122 |         old = atomic_read(&lock->val);
+>>
+>> This is because PowerPC overrides the qspinlock type changing the
+>> lock->val member's type from atomic_t to u32.
+>>
+>> To remedy this, import the asm-generic version in the arena spin lock
+>> header, name it __qspinlock (since it's aliased to arena_spinlock_t, the
+>> actual name hardly matters), and adjust the selftest to not depend on
+>> the type in vmlinux.h.
+>>
+>>    [0]: https://lore.kernel.org/bpf/7bc80a3b-d708-4735-aa3b-6a8c21720f9d@linux.ibm.com
+>>
+>> Fixes: 0201027a026c ("selftests/bpf: Introduce arena spin lock")
+>> Reported-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
+>> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+>> ---
+
+Built the kernel by applying this patch on bpf-next. And selftests/bpf 
+compiles successfully.
+
+Please add below tag.
 
 
+Tested-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
 
-Le 11/03/2025 à 17:09, Saket Kumar Bhaskar a écrit :
-> [Vous ne recevez pas souvent de courriers de skb99@linux.ibm.com. Découvrez pourquoi ceci est important à https://aka.ms/LearnAboutSenderIdentification ]
-> 
-> Inline the calls to bpf_get_smp_processor_id() in the powerpc bpf jit.
-> 
-> powerpc saves the Logical processor number (paca_index) in paca.
-> 
-> Here is how the powerpc JITed assembly changes after this commit:
-> 
-> Before:
-> 
-> cpu = bpf_get_smp_processor_id();
-> 
-> addis 12, 2, -517
-> addi 12, 12, -29456
-> mtctr 12
-> bctrl
-> mr      8, 3
-> 
-> After:
-> 
-> cpu = bpf_get_smp_processor_id();
-> 
-> lhz 8, 8(13)
-> 
-> To evaluate the performance improvements introduced by this change,
-> the benchmark described in [1] was employed.
-> 
-> +---------------+-------------------+-------------------+--------------+
-> |      Name     |      Before       |        After      |   % change   |
-> |---------------+-------------------+-------------------+--------------|
-> | glob-arr-inc  | 41.580 ± 0.034M/s | 54.137 ± 0.019M/s |   + 30.20%   |
-> | arr-inc       | 39.592 ± 0.055M/s | 54.000 ± 0.026M/s |   + 36.39%   |
-> | hash-inc      | 25.873 ± 0.012M/s | 26.334 ± 0.058M/s |   + 1.78%    |
-> +---------------+-------------------+-------------------+--------------+
-> 
-
-Nice improvement.
-
-I see that bpf_get_current_task() could be inlined as well, on PPC32 it 
-is in r2, on PPC64 it is in paca.
-
-> [1] https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgithub.com%2Fanakryiko%2Flinux%2Fcommit%2F8dec900975ef&data=05%7C02%7Cchristophe.leroy%40csgroup.eu%7C1d1f40ce41344cf1ecf508dd60b73ae0%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C638773062267813839%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=T%2BG206FHtW7hhFT1%2BXxRwN7pc%2BRzu8SiMlZ5njIlhB8%3D&reserved=0
-> 
-> Signed-off-by: Saket Kumar Bhaskar <skb99@linux.ibm.com>
-> ---
->   arch/powerpc/net/bpf_jit_comp.c   | 10 ++++++++++
->   arch/powerpc/net/bpf_jit_comp64.c |  5 +++++
->   2 files changed, 15 insertions(+)
-> 
-> diff --git a/arch/powerpc/net/bpf_jit_comp.c b/arch/powerpc/net/bpf_jit_comp.c
-> index 3d4bd45a9a22..4b79b2d95469 100644
-> --- a/arch/powerpc/net/bpf_jit_comp.c
-> +++ b/arch/powerpc/net/bpf_jit_comp.c
-> @@ -445,6 +445,16 @@ bool bpf_jit_supports_percpu_insn(void)
->          return true;
->   }
-> 
-> +bool bpf_jit_inlines_helper_call(s32 imm)
-> +{
-> +       switch (imm) {
-> +       case BPF_FUNC_get_smp_processor_id:
-> +               return true;
-> +       default:
-> +               return false;
-> +       }
-> +}
-
-What about PPC32 ?
-
-
-> +
->   void *arch_alloc_bpf_trampoline(unsigned int size)
->   {
->          return bpf_prog_pack_alloc(size, bpf_jit_fill_ill_insns);
-> diff --git a/arch/powerpc/net/bpf_jit_comp64.c b/arch/powerpc/net/bpf_jit_comp64.c
-> index 06f06770ceea..a8de12c026da 100644
-> --- a/arch/powerpc/net/bpf_jit_comp64.c
-> +++ b/arch/powerpc/net/bpf_jit_comp64.c
-> @@ -1087,6 +1087,11 @@ int bpf_jit_build_body(struct bpf_prog *fp, u32 *image, u32 *fimage, struct code
->                  case BPF_JMP | BPF_CALL:
->                          ctx->seen |= SEEN_FUNC;
-> 
-> +                       if (insn[i].src_reg == 0 && imm == BPF_FUNC_get_smp_processor_id) {
-
-Please use BPF_REG_0 instead of just 0.
-
-> +                               EMIT(PPC_RAW_LHZ(bpf_to_ppc(BPF_REG_0), _R13, offsetof(struct paca_struct, paca_index)));
-
-Can just use 'src_reg' instead of 'bpf_to_ppc(BPF_REG_0)'
-
-> +                               break;
-> +                       }
-> +
->                          ret = bpf_jit_get_func_addr(fp, &insn[i], extra_pass,
->                                                      &func_addr, &func_addr_fixed);
->                          if (ret < 0)
-> --
-> 2.43.5
-> 
-
+> Venkat, please help test, as CI and I don't have access to a PowerPC machine.
+>
+> Thanks!
