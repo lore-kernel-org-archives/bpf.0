@@ -1,39 +1,39 @@
 Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78C201EE013;
-	Thu, 13 Mar 2025 10:48:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF92F2E3395;
+	Thu, 13 Mar 2025 10:48:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741862896; cv=none; b=rUI/u0LFgrCMbiSGgkyVqjLp6Nr97MuNtvMWVaQHwsTVeBh+XqSWknOH4Yp1QWMSxFyNyQUY9I6q0uKAKstOrLcxq5HHOZroUwo6GAY4SvcX12vLN52OLPX7FmmSaF/rxOYQaLGBG//c6j99SVgKziF/iiU2X5QvNRDTEqIZfp0=
+	t=1741862897; cv=none; b=LJS1YUXRvZCBx3Bi3UDc3QZM0QXBMNi4QBdkAY7VqNJp3AYoC4Jm/mtsShfrdrqjYvpH5nyb55agJvxE9rcZX4W68BYDOikduBI5ghoCmpdM19mOGv8M+YHseOL8jiiU8QvX0d0aZXU9oF7JIdff7H5pSkGr0IM+yF2ge+KtzOA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741862896; c=relaxed/simple;
-	bh=jIrgB+Of8GjIDCFndWRj81685Oli/mbEm6qoFYFa2yY=;
+	s=arc-20240116; t=1741862897; c=relaxed/simple;
+	bh=2BAgdhTG0MyMOE9u/1Mw7bOTtC21diLYJhKhPYbeD2Q=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=CRkr5mfRQ6s7EYnIbO3jXynRyRTleBXFEK9s9AMWLg9WyKd+FwwY/YggDtCRZyZOfI9pBySd3MAHQw4pFAO1Bk14KkqWEyJ2+eMmuKPWyv0+jGvOLcyLrLbaZXOwKk3DK4ujG5vssMyVRHkmI4WLpY1or5hU9Jl7CIc7uegqjho=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=YjttR443; arc=none smtp.client-ip=217.70.183.200
+	 In-Reply-To:To:Cc; b=IWNw3UHNmqQyiUw1Yl4AvN+yUoJTAO7tnT4O8SSsUAx9b5YaXFk9gOARHjLvprZ3UwzHKUcO0LEPGM4MqzY9HltcLLzhLRIVwqu8ITq848XmAWYEtNmemzvTMM3BfUb5IgGbGeO9oH0ZGUCQIz8KHsFpyVUb8heivEYv0brRS8Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=jeeKNE+f; arc=none smtp.client-ip=217.70.183.200
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="YjttR443"
-Received: by mail.gandi.net (Postfix) with ESMTPSA id BDA6C43C67;
-	Thu, 13 Mar 2025 10:48:04 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="jeeKNE+f"
+Received: by mail.gandi.net (Postfix) with ESMTPSA id D329A4419B;
+	Thu, 13 Mar 2025 10:48:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1741862886;
+	t=1741862893;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=rmVbak8eK+3pmfHwySA9orkO+49ATky8BJ/0nzXmFQg=;
-	b=YjttR4436+6VI8Zi9jf0L/AYsu6A5MtafcwfFwiThEihasOzpr7+dn8Oq/xtsgBguiGEZb
-	fEz6DTM7ts/VAp94pwUcLCfkTDUyVqcTzjVZ5CKXAWB7a4J4HGYmh4rpdERmindLqcm0+s
-	O3y2cReKQqBRsM2esGD1SwzK31WP3n9rkO74qOBheWUXkjxrzW/fRv9hrz8t+Qn3DOh9Hi
-	vnirruk7cN11aPwvG9UblAzMmHG2jEMXdcat3966q/P9fN8kOqsH3XBOH4P0pra9nQlePw
-	+9i4/2EIOhv3S0f0HO5IrihSlvfWcPSfek6AxEexiCXnP94oOLgDunZI1CxsIA==
+	bh=RVlTbFyV5N/5xHl61rKIDqd8rD7gE6oj6RfqqWCHsKk=;
+	b=jeeKNE+fRwqsaUC2yMN5elP5M8g6G07RcTZphdmuPzJ36zeyeMAfsWzd1QxdbROpMuff5u
+	WXzl/ARtLzQ1juENVudcaEq71Z58NMVB3vKcxBL494Byyxt9sxwVBT3i8yzmd9ZUQhmC3E
+	E1F1vimcNjgsFQcyvLmm3FeOhqEOLXLOU1/qECABfz+xJKlczfG26adcOtfBWbFWUxIdKA
+	nbJN8DMnYoBO7cEP0Q62wpn63VDDRYmIWAR2OY/2Oz3U+5QYYCkKLWIC92z5MF3i5x+xUF
+	UDnIGpwxDntjzlGrYkxlbrYrcEVRsrabV6wiap1CCT5+w7C+m7Y6op6m4ERElg==
 From: "Bastien Curutchet (eBPF Foundation)" <bastien.curutchet@bootlin.com>
-Date: Thu, 13 Mar 2025 11:47:59 +0100
-Subject: [PATCH 01/13] selftests/bpf: test_xsk: Initialize bitmap before
- use
+Date: Thu, 13 Mar 2025 11:48:04 +0100
+Subject: [PATCH 06/13] selftests/bpf: test_xsk: Don't exit immediately when
+ gettimeofday fails
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -42,7 +42,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250313-xsk-v1-1-7374729a93b9@bootlin.com>
+Message-Id: <20250313-xsk-v1-6-7374729a93b9@bootlin.com>
 References: <20250313-xsk-v1-0-7374729a93b9@bootlin.com>
 In-Reply-To: <20250313-xsk-v1-0-7374729a93b9@bootlin.com>
 To: =?utf-8?q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@kernel.org>, 
@@ -67,41 +67,58 @@ Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
 X-Mailer: b4 0.14.2
 X-GND-State: clean
 X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduvdejjeehucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhfffugggtgffkfhgjvfevofesthejredtredtjeenucfhrhhomhepfdeurghsthhivghnucevuhhruhhttghhvghtucdlvgeurffhucfhohhunhgurghtihhonhdmfdcuoegsrghsthhivghnrdgtuhhruhhttghhvghtsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeegfeduhfeutddtieffteffleejffekveeviedutdegjeelfedtjeegtdejtddthfenucfkphepvdgrtddumegtsgduleemkedvheefmeguuddttdemfhelvgdumeeftgejudemjeeitdgtmedutggsrgenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemtggsudelmeekvdehfeemugdutddtmehflegvudemfegtjedumeejiedttgemudgtsggrpdhhvghlohepfhgvughorhgrrdhhohhmvgdpmhgrihhlfhhrohhmpegsrghsthhivghnrdgtuhhruhhttghhvghtsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopedvkedprhgtphhtthhopegvugguhiiikeejsehgmhgrihhlrdgtohhmpdhrtghpthhtoheprghlvgigihhsrdhlohhthhhorhgvsegsohhothhlihhnrdgtohhmpdhrtghpt
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduvdejjeehucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhfffugggtgffkfhgjvfevofesthejredtredtjeenucfhrhhomhepfdeurghsthhivghnucevuhhruhhttghhvghtucdlvgeurffhucfhohhunhgurghtihhonhdmfdcuoegsrghsthhivghnrdgtuhhruhhttghhvghtsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeegfeduhfeutddtieffteffleejffekveeviedutdegjeelfedtjeegtdejtddthfenucfkphepvdgrtddumegtsgduleemkedvheefmeguuddttdemfhelvgdumeeftgejudemjeeitdgtmedutggsrgenucevlhhushhtvghrufhiiigvpeegnecurfgrrhgrmhepihhnvghtpedvrgdtudemtggsudelmeekvdehfeemugdutddtmehflegvudemfegtjedumeejiedttgemudgtsggrpdhhvghlohepfhgvughorhgrrdhhohhmvgdpmhgrihhlfhhrohhmpegsrghsthhivghnrdgtuhhruhhttghhvghtsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopedvkedprhgtphhtthhopegvugguhiiikeejsehgmhgrihhlrdgtohhmpdhrtghpthhtoheprghlvgigihhsrdhlohhthhhorhgvsegsohhothhlihhnrdgtohhmpdhrtghpt
  hhtohepshhhuhgrhheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepmhihkhholhgrlhesfhgsrdgtohhmpdhrtghpthhtohephihonhhghhhonhhgrdhsohhngheslhhinhhugidruggvvhdprhgtphhtthhopehmrghgnhhushdrkhgrrhhlshhsohhnsehinhhtvghlrdgtohhmpdhrtghpthhtohepmhgrrhhtihhnrdhlrghusehlihhnuhigrdguvghvpdhrtghpthhtohepsggrshhtihgvnhdrtghurhhuthgthhgvthessghoohhtlhhinhdrtghomh
 X-GND-Sasl: bastien.curutchet@bootlin.com
 
-bitmap is used before being initialized.
+exit_on_error() is called when gettimeofday() fails. This exits the
+program immediately and can lead to memory leaks.
 
-Initialize it to zero before using it.
+Return TEST_FAILURE instead of calling exit_on_error()
 
 Signed-off-by: Bastien Curutchet (eBPF Foundation) <bastien.curutchet@bootlin.com>
 ---
- tools/testing/selftests/bpf/xskxceiver.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ tools/testing/selftests/bpf/xskxceiver.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/tools/testing/selftests/bpf/xskxceiver.c b/tools/testing/selftests/bpf/xskxceiver.c
-index 11f047b8af75262b4bd5490ccedda00db4a639d2..3585c5afe9842b59fbd50256e5bc83a58a0ee38f 100644
+index e2c136fc23ce40ff485de78dac18a4d8ba73353d..5b96f6860ff98de3c6160a1b94ae865a12121382 100644
 --- a/tools/testing/selftests/bpf/xskxceiver.c
 +++ b/tools/testing/selftests/bpf/xskxceiver.c
-@@ -1265,6 +1265,8 @@ static int receive_pkts(struct test_spec *test)
- 	u32 sock_num = 0;
- 	int res, ret;
+@@ -1290,7 +1290,7 @@ static int receive_pkts(struct test_spec *test)
  
-+	bitmap_zero(bitmap, test->nb_sockets);
-+
  	ret = gettimeofday(&tv_now, NULL);
  	if (ret)
- 		exit_with_error(errno);
-@@ -1455,6 +1457,8 @@ static int send_pkts(struct test_spec *test, struct ifobject *ifobject)
- 	DECLARE_BITMAP(bitmap, test->nb_sockets);
- 	u32 i, ret;
+-		exit_with_error(errno);
++		return TEST_FAILURE;
  
-+	bitmap_zero(bitmap, test->nb_sockets);
-+
- 	while (!(all_packets_sent(test, bitmap))) {
- 		for (i = 0; i < test->nb_sockets; i++) {
- 			struct pkt_stream *pkt_stream;
+ 	timeradd(&tv_now, &tv_timeout, &tv_end);
+ 
+@@ -1306,7 +1306,7 @@ static int receive_pkts(struct test_spec *test)
+ 
+ 		ret = gettimeofday(&tv_now, NULL);
+ 		if (ret)
+-			exit_with_error(errno);
++			return TEST_FAILURE;
+ 
+ 		if (timercmp(&tv_now, &tv_end, >)) {
+ 			print_msg("ERROR: [%s] Receive loop timed out\n", __func__);
+@@ -1449,13 +1449,13 @@ static int wait_for_tx_completion(struct xsk_socket_info *xsk)
+ 
+ 	ret = gettimeofday(&tv_now, NULL);
+ 	if (ret)
+-		exit_with_error(errno);
++		return TEST_FAILURE;
+ 	timeradd(&tv_now, &tv_timeout, &tv_end);
+ 
+ 	while (xsk->outstanding_tx) {
+ 		ret = gettimeofday(&tv_now, NULL);
+ 		if (ret)
+-			exit_with_error(errno);
++			return TEST_FAILURE;
+ 		if (timercmp(&tv_now, &tv_end, >)) {
+ 			print_msg("ERROR: [%s] Transmission loop timed out\n", __func__);
+ 			return TEST_FAILURE;
 
 -- 
 2.48.1
