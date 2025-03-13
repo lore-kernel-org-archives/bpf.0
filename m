@@ -1,47 +1,47 @@
-Received: from mx-rz-2.rrze.uni-erlangen.de (mx-rz-2.rrze.uni-erlangen.de [131.188.11.21])
+Received: from mx-rz-1.rrze.uni-erlangen.de (mx-rz-1.rrze.uni-erlangen.de [131.188.11.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A8F22AC17;
-	Thu, 13 Mar 2025 17:40:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=131.188.11.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B277815747C;
+	Thu, 13 Mar 2025 17:42:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=131.188.11.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741887647; cv=none; b=HkNBJz/u/HttkUIMi9U/An8cSWbuGropaKgfbcpYgY0g4XLQcwPmA9TXm73e1EImQ+BA+4q0Af3qu1PaKdW468qUuozy7MmUzBi1CjyHXxTfPL81F82el6NJpXsa1t3vqpRuA5FO10GnZNtRMXF6A+27qpYNhAlOIVamMK/UHfI=
+	t=1741887730; cv=none; b=Ebuhm+ZA7M3hW2IsdeOg853QdQ0KOToWQhYduveSLyUsLFkmZ3Ib9ITOM66VaZEbLzqWfuvgCHc3q4obUJbK+AjXvos3rksrRpGogI3F10PDf9rA+W4TBLiAhD7/1ulYrZ4K/ZQH76+kU+GVrvwwsq2L3yogh4fhTwxkuWDuMcE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741887647; c=relaxed/simple;
-	bh=NljnDF1ptI8MrArLGgxOOOg/fv6JfCGSuFKXFaJkvrs=;
+	s=arc-20240116; t=1741887730; c=relaxed/simple;
+	bh=cFZ6yFJEG8TCc3cBurMPQE5BgGuPdhUz8PZr5ZkTOoQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=AzLFnPzTLMYSBoRkRZB4EQMWSGKFsvQRf321qoHUuZ028tcJNInBJj9b0mro2W8/vVsLmCCMMzB38o80ZhkY0Q1xKIo33wmXlu7b3ji1r+7YdVubAL57lvG09Us+b95ayrunKoB+yORI0hrzoVtZlBLkb7fPK+z9SWs2nJgCHi0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fau.de; spf=pass smtp.mailfrom=fau.de; dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.b=KDraUYEZ; arc=none smtp.client-ip=131.188.11.21
+	 MIME-Version; b=ciL/Wz7kY8oXxjp6nc2sdItnOiXtlQ6ZNIKAzST+iB1mXVgEtQMmEu5VwGR/KohJCRQcuibHclSQnlqWpyLNvmDhlYpYR982iIVrsk8hDTBJPu/8cBuapwloaGEyc+AxJc2l9dWs4dvk9lxu6XD514tVGIfdyfyh1fYqqavBGOw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fau.de; spf=pass smtp.mailfrom=fau.de; dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.b=EylAawIJ; arc=none smtp.client-ip=131.188.11.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fau.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fau.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.b="KDraUYEZ"
+	dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.b="EylAawIJ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fau.de; s=fau-2021;
-	t=1741887218; bh=Y1DOnX2JqDlvXo0v4abKlFrNsrTuBn8d3h80W5GVeMU=;
+	t=1741887726; bh=eMpJM2PKQtP17t8uQ4Fmv85P+FTVTembdLIzGgtaCOo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From:To:CC:
 	 Subject;
-	b=KDraUYEZj08wYyGge2yYQeZ08Io6+NhgHBGqTQx2ngYoKH8jyIFaHHHGik/5wAEYd
-	 Tbvu+DW3X41M9iLKxr+opECPLEUmDQFuiNEO4+4KXIE2KSMLCLDfO8VSzGTcCSGPLD
-	 ouJsaeixrgyp3yLBfbAVXQT1nNqLaXOOHF9nlrNM30VFyKwpfZpTIwCisvnm3Q4U87
-	 olRR3K2Q40ADXPUi3t28pYwx4EpnpNCEs7qWiF/0xqZfrhCAMhCgBwzQcQ1MGX9K0X
-	 M56j9ejKEmRPybwJBP2hXsYBrIVR9FvuUAtwfPeVHWs16OhYjqLJWR+26DVfBmSSB3
-	 QryxQ08M3+Y+g==
+	b=EylAawIJnVf2ZcpVODV6h7Cd6tFaTJITSYF/0JlrK6IuiFs4dZwU8e6ejgLrdKXOn
+	 euzixyFk9vMVgJLXqQkBS/tnOhGibnLs6oSecZMI6DZqgCu9NVAZsSf7FCgOXaBOzm
+	 FVfd9YYuOqrwESybNB0MM4HHzXpSWiUv+fIRPeSc6jBOR5V9CFsdz/6Mx0n3sZXK3F
+	 9JBY6oY/BkjKfOOMdrtMut4pv6qH4Z1gsCNoHwSXKB9P6mKyI8jYX2b4rO/eLkSGiW
+	 M5lPEWLkxcTNQZYNfXCFVw+BXW2cJIBPA22v9QKHFKspLI1cPxRJKY/S4tC9mVpZdz
+	 iLFLKHdsBxhFg==
 Received: from mx-rz-smart.rrze.uni-erlangen.de (mx-rz-smart.rrze.uni-erlangen.de [IPv6:2001:638:a000:1025::1e])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-rz-2.rrze.uni-erlangen.de (Postfix) with ESMTPS id 4ZDF356DzbzPkPP;
-	Thu, 13 Mar 2025 18:33:37 +0100 (CET)
-X-Virus-Scanned: amavisd-new at boeck2.rrze.uni-erlangen.de (RRZE)
+	by mx-rz-1.rrze.uni-erlangen.de (Postfix) with ESMTPS id 4ZDFDt2Yhrz8sYr;
+	Thu, 13 Mar 2025 18:42:06 +0100 (CET)
+X-Virus-Scanned: amavisd-new at boeck5.rrze.uni-erlangen.de (RRZE)
 X-RRZE-Flag: Not-Spam
 X-RRZE-Submit-IP: 2001:9e8:3614:2b00:7ee6:68e5:4447:ba92
 Received: from luis-tp.fritz.box (unknown [IPv6:2001:9e8:3614:2b00:7ee6:68e5:4447:ba92])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	(Authenticated sender: U2FsdGVkX1+CRvjFnd3baUo54DHPURixEK/pOHcbyc0=)
-	by smtp-auth.uni-erlangen.de (Postfix) with ESMTPSA id 4ZDF320p7kzPjt6;
-	Thu, 13 Mar 2025 18:33:34 +0100 (CET)
+	(Authenticated sender: U2FsdGVkX1+yE2bMaADTi8fDRnpWeMZ6kPDMqZKHwD4=)
+	by smtp-auth.uni-erlangen.de (Postfix) with ESMTPSA id 4ZDFDp5vZnz8ssF;
+	Thu, 13 Mar 2025 18:42:02 +0100 (CET)
 From: Luis Gerhorst <luis.gerhorst@fau.de>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -84,9 +84,9 @@ To: Alexei Starovoitov <ast@kernel.org>,
 	Tiezhu Yang <yangtiezhu@loongson.cn>
 Cc: Maximilian Ott <ott@cs.fau.de>,
 	Milan Stephan <milan.stephan@fau.de>
-Subject: [PATCH bpf-next 04/11] bpf, arm64, powerpc: Add bpf_jit_bypass_spec_v1/v4()
-Date: Thu, 13 Mar 2025 18:33:26 +0100
-Message-ID: <20250313173326.1106442-1-luis.gerhorst@fau.de>
+Subject: [PATCH bpf-next 06/11] bpf: Rename sanitize_stack_spill to nospec_result
+Date: Thu, 13 Mar 2025 18:41:44 +0100
+Message-ID: <20250313174149.1113165-1-luis.gerhorst@fau.de>
 X-Mailer: git-send-email 2.48.1
 In-Reply-To: <20250313172127.1098195-1-luis.gerhorst@fau.de>
 References: <20250313172127.1098195-1-luis.gerhorst@fau.de>
@@ -96,198 +96,56 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-JITs can set bpf_jit_bypass_spec_v1/v4() if they want the verifier to
-skip analysis/patching for the respective vulnerability. For v4, this
-will reduce the number of barriers the verifier inserts. For v1, it
-allows more programs to be accepted.
-
-The primary motivation for this is to not regress unpriv BPF's
-performance on ARM64 in a future commit where BPF_NOSPEC is also used
-against Spectre v1.
-
-This has the user-visible change that v1-induced rejections on
-non-vulnerable PowerPC CPUs are avoided.
-
-For now, this does not change the semantics of BPF_NOSPEC. It is still a
-v4-only barrier and must not be implemented if bypass_spec_v4 is always
-true for the arch. Changing it to a v1 AND v4-barrier is done in a
-future commit.
-
-As an alternative to bypass_spec_v1/v4, one could introduce NOSPEC_V1
-AND NOSPEC_V4 instructions and allow backends to skip their lowering as
-suggested by commit f5e81d111750 ("bpf: Introduce BPF nospec instruction
-for mitigating Spectre v4"). Adding bpf_jit_bypass_spec_v1/v4() was
-found to be preferrable for the following reason:
-
-* bypass_spec_v1/v4 benefits non-vulnerable CPUs: Always performing the
-  same analysis (not taking into account whether the current CPU is
-  vulnerable), needlessly restricts users of CPUs that are not
-  vulnerable. The only usecase for this would be portability-testing,
-  but this can later be added easily when needed by allowing users to
-  force bypass_spec_v1/v4 to false.
-
-* Portability is still acceptable: Directly disabling the analysis
-  instead of skipping the lowering of BPF_NOSPEC(_V1/V4) might allow
-  programs on non-vulnerable CPUs to be accepted while the program will
-  be rejected on vulnerable CPUs. With the fallback to speculation
-  barriers for Spectre v1 implemented in a future commit, this will only
-  affect programs that do variable stack-accesses or are very complex.
-
-For PowerPC, the SEC_FTR checking in bpf_jit_bypass_spec_v4() is based
-on the check that was previously located in the BPF_NOSPEC case.
-
-For LoongArch, it would likely be safe to set both
-bpf_jit_bypass_spec_v1() and _v4() according to
-commit a6f6a95f2580 ("LoongArch, bpf: Fix jit to skip speculation
-barrier opcode"). This is omitted here as I am unable to do any testing
-for LoongArch.
+This is made to clarify that this flag will cause a nospec to be added
+after this insn and can therefore be relied upon to reduce speculative
+path analysis.
 
 Signed-off-by: Luis Gerhorst <luis.gerhorst@fau.de>
 Cc: Henriette Herzog <henriette.herzog@rub.de>
 Cc: Maximilian Ott <ott@cs.fau.de>
 Cc: Milan Stephan <milan.stephan@fau.de>
 ---
- arch/arm64/net/bpf_jit_comp.c     | 21 ++++++++++++---------
- arch/powerpc/net/bpf_jit_comp64.c | 21 +++++++++++++++++----
- include/linux/bpf.h               | 11 +++++++++--
- kernel/bpf/core.c                 | 15 +++++++++++++++
- 4 files changed, 53 insertions(+), 15 deletions(-)
+ include/linux/bpf_verifier.h | 2 +-
+ kernel/bpf/verifier.c        | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
-index 70d7c89d3ac9..0f617b55866e 100644
---- a/arch/arm64/net/bpf_jit_comp.c
-+++ b/arch/arm64/net/bpf_jit_comp.c
-@@ -1583,15 +1583,7 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index d6cfc4ee6820..da586dd4703e 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -563,7 +563,7 @@ struct bpf_insn_aux_data {
+ 	u64 map_key_state; /* constant (32 bit) key tracking for maps */
+ 	int ctx_field_size; /* the ctx field size for load insn, maybe 0 */
+ 	u32 seen; /* this insn was processed by the verifier at env->pass_cnt */
+-	bool sanitize_stack_spill; /* subject to Spectre v4 sanitation */
++	bool nospec_result; /* result is unsafe under speculation, nospec must follow */
+ 	bool zext_dst; /* this insn zero extends dst reg */
+ 	bool needs_zext; /* alu op needs to clear upper bits */
+ 	bool storage_get_func_atomic; /* bpf_*_storage_get() with atomic memory alloc */
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index eb65038682b0..4c1ed31d86af 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -5007,7 +5007,7 @@ static int check_stack_write_fixed_off(struct bpf_verifier_env *env,
+ 		}
  
- 	/* speculation barrier */
- 	case BPF_ST | BPF_NOSPEC:
--		/*
--		 * Nothing required here.
--		 *
--		 * In case of arm64, we rely on the firmware mitigation of
--		 * Speculative Store Bypass as controlled via the ssbd kernel
--		 * parameter. Whenever the mitigation is enabled, it works
--		 * for all of the kernel code with no need to provide any
--		 * additional instructions.
--		 */
-+		/* See bpf_jit_bypass_spec_v4() */
- 		break;
+ 		if (sanitize)
+-			env->insn_aux_data[insn_idx].sanitize_stack_spill = true;
++			env->insn_aux_data[insn_idx].nospec_result = true;
+ 	}
  
- 	/* ST: *(size *)(dst + off) = imm */
-@@ -2762,6 +2754,17 @@ bool bpf_jit_supports_percpu_insn(void)
- 	return true;
- }
+ 	err = destroy_if_dynptr_stack_slot(env, state, spi);
+@@ -20719,7 +20719,7 @@ static int convert_ctx_accesses(struct bpf_verifier_env *env)
+ 		}
  
-+bool bpf_jit_bypass_spec_v4(void)
-+{
-+	/* In case of arm64, we rely on the firmware mitigation of Speculative
-+	 * Store Bypass as controlled via the ssbd kernel parameter. Whenever
-+	 * the mitigation is enabled, it works for all of the kernel code with
-+	 * no need to provide any additional instructions. Therefore, skip
-+	 * inserting nospec insns against Spectre v4.
-+	 */
-+	return true;
-+}
-+
- bool bpf_jit_inlines_helper_call(s32 imm)
- {
- 	switch (imm) {
-diff --git a/arch/powerpc/net/bpf_jit_comp64.c b/arch/powerpc/net/bpf_jit_comp64.c
-index 233703b06d7c..b5339c541283 100644
---- a/arch/powerpc/net/bpf_jit_comp64.c
-+++ b/arch/powerpc/net/bpf_jit_comp64.c
-@@ -363,6 +363,23 @@ static int bpf_jit_emit_tail_call(u32 *image, struct codegen_context *ctx, u32 o
- 	return 0;
- }
- 
-+bool bpf_jit_bypass_spec_v1(void)
-+{
-+#if defined(CONFIG_PPC_E500) || defined(CONFIG_PPC_BOOK3S_64)
-+	return !(security_ftr_enabled(SEC_FTR_FAVOUR_SECURITY) &&
-+		 security_ftr_enabled(SEC_FTR_BNDS_CHK_SPEC_BAR));
-+#else
-+	return true;
-+#endif
-+}
-+
-+bool bpf_jit_bypass_spec_v4(void)
-+{
-+	return !(security_ftr_enabled(SEC_FTR_FAVOUR_SECURITY) &&
-+		 security_ftr_enabled(SEC_FTR_STF_BARRIER) &&
-+		 stf_barrier_type_get() != STF_BARRIER_NONE);
-+}
-+
- /*
-  * We spill into the redzone always, even if the bpf program has its own stackframe.
-  * Offsets hardcoded based on BPF_PPC_STACK_SAVE -- see bpf_jit_stack_local()
-@@ -785,10 +802,6 @@ int bpf_jit_build_body(struct bpf_prog *fp, u32 *image, u32 *fimage, struct code
- 		 * BPF_ST NOSPEC (speculation barrier)
- 		 */
- 		case BPF_ST | BPF_NOSPEC:
--			if (!security_ftr_enabled(SEC_FTR_FAVOUR_SECURITY) ||
--					!security_ftr_enabled(SEC_FTR_STF_BARRIER))
--				break;
--
- 			switch (stf_barrier) {
- 			case STF_BARRIER_EIEIO:
- 				EMIT(PPC_RAW_EIEIO() | 0x02000000);
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 7d55553de3fc..9a21e356e04e 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -2439,14 +2439,21 @@ static inline bool bpf_allow_uninit_stack(const struct bpf_token *token)
- 	return bpf_token_capable(token, CAP_PERFMON);
- }
- 
-+bool bpf_jit_bypass_spec_v1(void);
-+bool bpf_jit_bypass_spec_v4(void);
-+
- static inline bool bpf_bypass_spec_v1(const struct bpf_token *token)
- {
--	return cpu_mitigations_off() || bpf_token_capable(token, CAP_PERFMON);
-+	return bpf_jit_bypass_spec_v1() ||
-+		cpu_mitigations_off() ||
-+		bpf_token_capable(token, CAP_PERFMON);
- }
- 
- static inline bool bpf_bypass_spec_v4(const struct bpf_token *token)
- {
--	return cpu_mitigations_off() || bpf_token_capable(token, CAP_PERFMON);
-+	return bpf_jit_bypass_spec_v4() ||
-+		cpu_mitigations_off() ||
-+		bpf_token_capable(token, CAP_PERFMON);
- }
- 
- int bpf_map_new_fd(struct bpf_map *map, int flags);
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 62cb9557ad3b..a3e434851614 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -3024,6 +3024,21 @@ bool __weak bpf_jit_needs_zext(void)
- 	return false;
- }
- 
-+/* By default, enable the verifier's mitigations against Spectre v1 and v4 for
-+ * all archs. The value returned must not change at runtime as there is
-+ * currently no support for reloading programs that were loaded without
-+ * mitigations.
-+ */
-+bool __weak bpf_jit_bypass_spec_v1(void)
-+{
-+	return false;
-+}
-+
-+bool __weak bpf_jit_bypass_spec_v4(void)
-+{
-+	return false;
-+}
-+
- /* Return true if the JIT inlines the call to the helper corresponding to
-  * the imm.
-  *
+ 		if (type == BPF_WRITE &&
+-		    env->insn_aux_data[i + delta].sanitize_stack_spill) {
++		    env->insn_aux_data[i + delta].nospec_result) {
+ 			struct bpf_insn patch[] = {
+ 				*insn,
+ 				BPF_ST_NOSPEC(),
 -- 
 2.48.1
 
