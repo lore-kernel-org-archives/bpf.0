@@ -1,39 +1,39 @@
 Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F2D7267384;
-	Thu, 13 Mar 2025 10:48:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90670267B05;
+	Thu, 13 Mar 2025 10:48:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741862902; cv=none; b=XRUl0gkzvThgcuGZzQXHPgdvgZ6lxndkNh/7MsoZGw6iYzLfS698r2jOGSsUpvzJ15+0zVqQ/5+IyG6N5djhAibwF/RiR1bnjGAnxj3gnhcrc3cvwdlW5O3wg9dm/mJPpE9BbxHu+tMg3JQjZ/WX3VA+RhgehBOeX8qdLeKv1W0=
+	t=1741862906; cv=none; b=JJd6VRSyoQW/VHbIawMgz8CeLgWHOHAb7ENq+HoxFbe2C0w/zTxb9pFJmuQbbyDO0DTe3+huUDM/iGthUczQl2542AhzHAt+PchgsdeF6B+YDBeQ/60u1MYMpTEdebQlb+yugJPKaBpu8Lue31nfYegko4LaDgWFD+dT/Ilm6Ng=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741862902; c=relaxed/simple;
-	bh=DfVK2eP/rEHIQ/LHV+vTsRtjG/dV4FNr0mLMdEZA1Lc=;
+	s=arc-20240116; t=1741862906; c=relaxed/simple;
+	bh=bn5FpKmiXbwrT2aMVsjwSzkfSMKma+UcIye4K/iLcoc=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=fIFrRYQf/yzhI2sUX/wHkkdBeKXSNdf+Dqz+ACom0z1X49D9/jkBt8oyM1NaVMUKkHHk4Ft61aYx+2POqQbTTHzqL8NareXSMUFrfqO9ABBBCGHsZG4AFqZzdEZI3lIXVaF+Ed+uyRxOxCMo1heUVbCBixD+PNisHx1BrI9NPhE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=IIxum4RC; arc=none smtp.client-ip=217.70.183.200
+	 In-Reply-To:To:Cc; b=jySJDhoHUoeAJQggNV+SaHdgdqxPcIK743UNdq9eBAIaGLsKjSgfCzAR4IB3IgitG/VPSOzptf1V16/j+LxaW1zt/ez9TE9wZIMMQxPQpg5foiPAXRGtPBzxT+9T6ACKXn/Erw4HLWtEjyL1xL/Ob8M9BtYhVntjke3SU5BTjb0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=bPWBE/FG; arc=none smtp.client-ip=217.70.183.200
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="IIxum4RC"
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 4198843216;
-	Thu, 13 Mar 2025 10:48:16 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="bPWBE/FG"
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 92A17441A1;
+	Thu, 13 Mar 2025 10:48:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1741862897;
+	t=1741862900;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=J54YxD2H5zp6wXZtYAdJxT5kos5myQzsnbaVSddZn18=;
-	b=IIxum4RCtV1vNygGWDBMgHUlR3cDdmwTPDYh5mcFkIDt158odDHsn1vwt03RUIxq656rhF
-	FU1bPcZGV4dNoqolRmI4BJ6WHh2/juztIdZUIkPEHsacv6CK4wyESXvyve1UmEqwcV2aa5
-	dLg3JjjjWOaJdCbRzMeOSLMAF03Uyh2da/4M1fTxBHQTf+0AuvR1NNvWVRdB5pK7xBxz0k
-	KW4ZnT8QJOX4WUHQ6HvqjKY+gnvfxPF4hk2KTIl7+IUNSk5TxJ4gB5ajVVfs2/sCDBQ941
-	09hevrQ1hdZYiAPp6pBmU5t5MMLfU1H9gPrm2AJwMIs0lnHAs9+nfiv/H/YDzQ==
+	bh=1R9vn1noreVtGY0NwYCvBtkPGgC6mo1F56uk2WvJ90Y=;
+	b=bPWBE/FGkZ4KHCfIjZiMYJBmut2w/KXlzzKMqPozWa20QwdjpdXMrwN3W4thWwbjPvZNe/
+	o9QaOLU7YCEuvziLYhZhPNFW9osgk/t697pKs6p6aXqV2uaDFTQ2ChPI19ejsvAi6+Psmo
+	8H/8t2IqiaKj99TEbM875NAA189YWWj+/mJRt3sz/0LILvXvr2Gv4WaUmV5cHfTwEg+VSZ
+	OnSYuT6ees/ny1J+ULe79ni859TPVqzcPhUrvCrTuCT4m6mUt2p9vZLa9rq5lAC46RX0Gj
+	wxb2sP+S+2EGsGDU5Thp3WXaPY4zdr4wJbamBahWDhF8+oA8ysiR4D9MJJyd7A==
 From: "Bastien Curutchet (eBPF Foundation)" <bastien.curutchet@bootlin.com>
-Date: Thu, 13 Mar 2025 11:48:07 +0100
-Subject: [PATCH 09/13] selftests/bpf: test_xsk: Don't exit immediately on
- allocation failures
+Date: Thu, 13 Mar 2025 11:48:09 +0100
+Subject: [PATCH 11/13] selftests/bpf: test_xsk: Make kselftest dependency
+ optional
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -42,7 +42,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250313-xsk-v1-9-7374729a93b9@bootlin.com>
+Message-Id: <20250313-xsk-v1-11-7374729a93b9@bootlin.com>
 References: <20250313-xsk-v1-0-7374729a93b9@bootlin.com>
 In-Reply-To: <20250313-xsk-v1-0-7374729a93b9@bootlin.com>
 To: =?utf-8?q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@kernel.org>, 
@@ -71,304 +71,73 @@ X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduvdejjeehucetufdoteggode
  hhtohepshhhuhgrhheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepmhihkhholhgrlhesfhgsrdgtohhmpdhrtghpthhtohephihonhhghhhonhhgrdhsohhngheslhhinhhugidruggvvhdprhgtphhtthhopehmrghgnhhushdrkhgrrhhlshhsohhnsehinhhtvghlrdgtohhmpdhrtghpthhtohepmhgrrhhtihhnrdhlrghusehlihhnuhigrdguvghvpdhrtghpthhtohepsggrshhtihgvnhdrtghurhhuthgthhgvthessghoohhtlhhinhdrtghomh
 X-GND-Sasl: bastien.curutchet@bootlin.com
 
-If any allocation in the pkt_stream_*() helpers fail, exit_on_error() is
-called. This terminates the program immediately and can lead to memory
-leaks.
+test_xsk.c uses the kselftest framework. This isn't compatible with the
+test_progs framework.
 
-Return NULL in case of allocation failure.
-Return TEST_FAILURE when something goes wrong in the packet generation.
+Add a XSK_SELTFEST define that allows to enable/disable the kselftest
+usage.
 
 Signed-off-by: Bastien Curutchet (eBPF Foundation) <bastien.curutchet@bootlin.com>
 ---
- tools/testing/selftests/bpf/xskxceiver.c | 97 +++++++++++++++++++++++---------
- 1 file changed, 71 insertions(+), 26 deletions(-)
+ tools/testing/selftests/bpf/Makefile   |  2 +-
+ tools/testing/selftests/bpf/test_xsk.h | 18 +++++++++++++++++-
+ 2 files changed, 18 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/xskxceiver.c b/tools/testing/selftests/bpf/xskxceiver.c
-index 41c744c627d9b8acffc687f6893a01557e6556c5..5b31c694fb0e104a81369b7ee2e82dc6ee190b4d 100644
---- a/tools/testing/selftests/bpf/xskxceiver.c
-+++ b/tools/testing/selftests/bpf/xskxceiver.c
-@@ -733,7 +733,7 @@ static struct pkt_stream *__pkt_stream_generate(u32 nb_pkts, u32 pkt_len, u32 nb
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index ca14999fe0d832b24536f3a4f956e987c3b53cd8..3cde86a6e9b1ca467de162e0ba9670ad2085b6a6 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -777,7 +777,7 @@ $(OUTPUT)/test_verifier: test_verifier.c verifier/tests.h $(BPFOBJ) | $(OUTPUT)
+ EXTRA_SRC := $(TOOLSDIR)/lib/find_bit.c
+ $(OUTPUT)/xskxceiver: $(EXTRA_SRC) test_xsk.c xskxceiver.c xskxceiver.h $(OUTPUT)/network_helpers.o $(OUTPUT)/xsk.o $(OUTPUT)/xsk_xdp_progs.skel.h $(BPFOBJ) | $(OUTPUT)
+ 	$(call msg,BINARY,,$@)
+-	$(Q)$(CC) $(CFLAGS) $(filter %.a %.o %.c,$^) $(LDLIBS) -o $@
++	$(Q)$(CC) $(CFLAGS) -D XSK_KSELFTEST $(filter %.a %.o %.c,$^) $(LDLIBS) -o $@
  
- 	pkt_stream = __pkt_stream_alloc(nb_pkts);
- 	if (!pkt_stream)
--		exit_with_error(ENOMEM);
-+		return NULL;
+ $(OUTPUT)/xdp_hw_metadata: xdp_hw_metadata.c $(OUTPUT)/network_helpers.o $(OUTPUT)/xsk.o $(OUTPUT)/xdp_hw_metadata.skel.h | $(OUTPUT)
+ 	$(call msg,BINARY,,$@)
+diff --git a/tools/testing/selftests/bpf/test_xsk.h b/tools/testing/selftests/bpf/test_xsk.h
+index 61246013816431dca2f84ce2fec44c5160adbdad..9653687087c122ec5fdb9f23e3343e37c82373f6 100644
+--- a/tools/testing/selftests/bpf/test_xsk.h
++++ b/tools/testing/selftests/bpf/test_xsk.h
+@@ -5,7 +5,6 @@
+ #include <linux/ethtool.h>
+ #include <linux/if_xdp.h>
  
- 	pkt_stream->nb_pkts = nb_pkts;
- 	pkt_stream->max_pkt_len = pkt_len;
-@@ -757,36 +757,51 @@ static struct pkt_stream *pkt_stream_clone(struct pkt_stream *pkt_stream)
- 	return pkt_stream_generate(pkt_stream->nb_pkts, pkt_stream->pkts[0].len);
- }
+-#include "../kselftest.h"
+ #include "xsk.h"
  
--static void pkt_stream_replace(struct test_spec *test, u32 nb_pkts, u32 pkt_len)
-+static int pkt_stream_replace(struct test_spec *test, u32 nb_pkts, u32 pkt_len)
- {
- 	struct pkt_stream *pkt_stream;
+ #ifndef SO_PREFER_BUSY_POLL
+@@ -31,12 +30,29 @@
+ #define SOCK_RECONF_CTR			10
+ #define USLEEP_MAX			10000
  
- 	pkt_stream = pkt_stream_generate(nb_pkts, pkt_len);
-+	if (!pkt_stream)
-+		return -ENOMEM;
- 	test->ifobj_tx->xsk->pkt_stream = pkt_stream;
- 	pkt_stream = pkt_stream_generate(nb_pkts, pkt_len);
-+	if (!pkt_stream)
-+		return -ENOMEM;
- 	test->ifobj_rx->xsk->pkt_stream = pkt_stream;
 +
-+	return 0;
- }
- 
--static void __pkt_stream_replace_half(struct ifobject *ifobj, u32 pkt_len,
-+static int __pkt_stream_replace_half(struct ifobject *ifobj, u32 pkt_len,
- 				      int offset)
- {
- 	struct pkt_stream *pkt_stream;
- 	u32 i;
- 
- 	pkt_stream = pkt_stream_clone(ifobj->xsk->pkt_stream);
-+	if (!pkt_stream)
-+		return -ENOMEM;
++#ifdef XSK_KSELFTEST
++#include "../kselftest.h"
 +
- 	for (i = 1; i < ifobj->xsk->pkt_stream->nb_pkts; i += 2)
- 		pkt_stream_pkt_set(pkt_stream, &pkt_stream->pkts[i], offset, pkt_len);
+ static bool opt_verbose;
+ #define print_msg(x...) ksft_print_msg(x)
+ #define print_verbose(x...) do { if (opt_verbose) ksft_print_msg(x); } while (0)
+ #define skip_reason(x...) ksft_test_result_skip(x)
+ #define fail_reason(x...) ksft_test_result_fail(x)
  
- 	ifobj->xsk->pkt_stream = pkt_stream;
++#else
 +
-+	return 0;
- }
- 
--static void pkt_stream_replace_half(struct test_spec *test, u32 pkt_len, int offset)
-+static int pkt_stream_replace_half(struct test_spec *test, u32 pkt_len, int offset)
- {
--	__pkt_stream_replace_half(test->ifobj_tx, pkt_len, offset);
--	__pkt_stream_replace_half(test->ifobj_rx, pkt_len, offset);
-+	int ret = __pkt_stream_replace_half(test->ifobj_tx, pkt_len, offset);
++void xsk_log(const char *msg, ...);
++void xsk_verbose(const char *msg, ...);
++void xsk_skip(const char *msg);
 +
-+	if (ret)
-+		return ret;
++#define print_msg(x...) xsk_verbose(x)
++#define print_verbose(x...) xsk_verbose(x)
++#define skip_reason(x...) xsk_skip(x)
++#define fail_reason(x...) xsk_log(x)
 +
-+	return __pkt_stream_replace_half(test->ifobj_rx, pkt_len, offset);
- }
- 
--static void pkt_stream_receive_half(struct test_spec *test)
-+static int pkt_stream_receive_half(struct test_spec *test)
- {
- 	struct pkt_stream *pkt_stream = test->ifobj_tx->xsk->pkt_stream;
- 	u32 i;
-@@ -800,14 +815,19 @@ static void pkt_stream_receive_half(struct test_spec *test)
- 
- 	test->ifobj_rx->xsk->pkt_stream = pkt_stream_generate(pkt_stream->nb_pkts,
- 							      pkt_stream->pkts[0].len);
-+	if (!test->ifobj_rx->xsk->pkt_stream)
-+		return -ENOMEM;
++#endif
 +
- 	pkt_stream = test->ifobj_rx->xsk->pkt_stream;
- 	for (i = 1; i < pkt_stream->nb_pkts; i += 2)
- 		pkt_stream->pkts[i].valid = false;
- 
- 	pkt_stream->nb_valid_entries /= 2;
-+
-+	return 0;
- }
- 
--static void pkt_stream_even_odd_sequence(struct test_spec *test)
-+static int pkt_stream_even_odd_sequence(struct test_spec *test)
+ static inline u32 ceil_u32(u32 a, u32 b)
  {
- 	struct pkt_stream *pkt_stream;
- 	u32 i;
-@@ -816,13 +836,19 @@ static void pkt_stream_even_odd_sequence(struct test_spec *test)
- 		pkt_stream = test->ifobj_tx->xsk_arr[i].pkt_stream;
- 		pkt_stream = __pkt_stream_generate(pkt_stream->nb_pkts / 2,
- 						   pkt_stream->pkts[0].len, i, 2);
-+		if (!pkt_stream)
-+			return -ENOMEM;
- 		test->ifobj_tx->xsk_arr[i].pkt_stream = pkt_stream;
- 
- 		pkt_stream = test->ifobj_rx->xsk_arr[i].pkt_stream;
- 		pkt_stream = __pkt_stream_generate(pkt_stream->nb_pkts / 2,
- 						   pkt_stream->pkts[0].len, i, 2);
-+		if (!pkt_stream)
-+			return -ENOMEM;
- 		test->ifobj_rx->xsk_arr[i].pkt_stream = pkt_stream;
- 	}
-+
-+	return 0;
- }
- 
- static void release_even_odd_sequence(struct test_spec *test)
-@@ -881,7 +907,7 @@ static struct pkt_stream *__pkt_stream_generate_custom(struct ifobject *ifobj, s
- 
- 	pkt_stream = __pkt_stream_alloc(nb_frames);
- 	if (!pkt_stream)
--		exit_with_error(ENOMEM);
-+		return NULL;
- 
- 	for (i = 0; i < nb_frames; i++) {
- 		struct pkt *pkt = &pkt_stream->pkts[pkt_nb];
-@@ -924,15 +950,21 @@ static struct pkt_stream *__pkt_stream_generate_custom(struct ifobject *ifobj, s
- 	return pkt_stream;
- }
- 
--static void pkt_stream_generate_custom(struct test_spec *test, struct pkt *pkts, u32 nb_pkts)
-+static int pkt_stream_generate_custom(struct test_spec *test, struct pkt *pkts, u32 nb_pkts)
- {
- 	struct pkt_stream *pkt_stream;
- 
- 	pkt_stream = __pkt_stream_generate_custom(test->ifobj_tx, pkts, nb_pkts, true);
-+	if (!pkt_stream)
-+		return -ENOMEM;
- 	test->ifobj_tx->xsk->pkt_stream = pkt_stream;
- 
- 	pkt_stream = __pkt_stream_generate_custom(test->ifobj_rx, pkts, nb_pkts, false);
-+	if (!pkt_stream)
-+		return -ENOMEM;
- 	test->ifobj_rx->xsk->pkt_stream = pkt_stream;
-+
-+	return 0;
- }
- 
- static void pkt_print_data(u32 *data, u32 cnt)
-@@ -2101,24 +2133,28 @@ static int testapp_stats_rx_dropped(struct test_spec *test)
- 		return TEST_SKIP;
- 	}
- 
--	pkt_stream_replace_half(test, MIN_PKT_SIZE * 4, 0);
-+	if (pkt_stream_replace_half(test, MIN_PKT_SIZE * 4, 0))
-+		return TEST_FAILURE;
- 	test->ifobj_rx->umem->frame_headroom = test->ifobj_rx->umem->frame_size -
- 		XDP_PACKET_HEADROOM - MIN_PKT_SIZE * 3;
--	pkt_stream_receive_half(test);
-+	if (pkt_stream_receive_half(test))
-+		return TEST_FAILURE;
- 	test->ifobj_rx->validation_func = validate_rx_dropped;
- 	return testapp_validate_traffic(test);
- }
- 
- static int testapp_stats_tx_invalid_descs(struct test_spec *test)
- {
--	pkt_stream_replace_half(test, XSK_UMEM__INVALID_FRAME_SIZE, 0);
-+	if (pkt_stream_replace_half(test, XSK_UMEM__INVALID_FRAME_SIZE, 0))
-+		return TEST_FAILURE;
- 	test->ifobj_tx->validation_func = validate_tx_invalid_descs;
- 	return testapp_validate_traffic(test);
- }
- 
- static int testapp_stats_rx_full(struct test_spec *test)
- {
--	pkt_stream_replace(test, DEFAULT_UMEM_BUFFERS + DEFAULT_UMEM_BUFFERS / 2, MIN_PKT_SIZE);
-+	if (pkt_stream_replace(test, DEFAULT_UMEM_BUFFERS + DEFAULT_UMEM_BUFFERS / 2, MIN_PKT_SIZE))
-+		return TEST_FAILURE;
- 	pkt_stream_delete(test->ifobj_rx->xsk->pkt_stream);
- 	test->ifobj_rx->xsk->pkt_stream = pkt_stream_generate(DEFAULT_UMEM_BUFFERS, MIN_PKT_SIZE);
- 
-@@ -2130,7 +2166,8 @@ static int testapp_stats_rx_full(struct test_spec *test)
- 
- static int testapp_stats_fill_empty(struct test_spec *test)
- {
--	pkt_stream_replace(test, DEFAULT_UMEM_BUFFERS + DEFAULT_UMEM_BUFFERS / 2, MIN_PKT_SIZE);
-+	if (pkt_stream_replace(test, DEFAULT_UMEM_BUFFERS + DEFAULT_UMEM_BUFFERS / 2, MIN_PKT_SIZE))
-+		return TEST_FAILURE;
- 	pkt_stream_delete(test->ifobj_rx->xsk->pkt_stream);
- 	test->ifobj_rx->xsk->pkt_stream = pkt_stream_generate(DEFAULT_UMEM_BUFFERS, MIN_PKT_SIZE);
- 
-@@ -2144,7 +2181,8 @@ static int testapp_send_receive_unaligned(struct test_spec *test)
- 	test->ifobj_tx->umem->unaligned_mode = true;
- 	test->ifobj_rx->umem->unaligned_mode = true;
- 	/* Let half of the packets straddle a 4K buffer boundary */
--	pkt_stream_replace_half(test, MIN_PKT_SIZE, -MIN_PKT_SIZE / 2);
-+	if (pkt_stream_replace_half(test, MIN_PKT_SIZE, -MIN_PKT_SIZE / 2))
-+		return TEST_FAILURE;
- 
- 	return testapp_validate_traffic(test);
- }
-@@ -2154,7 +2192,8 @@ static int testapp_send_receive_unaligned_mb(struct test_spec *test)
- 	test->mtu = MAX_ETH_JUMBO_SIZE;
- 	test->ifobj_tx->umem->unaligned_mode = true;
- 	test->ifobj_rx->umem->unaligned_mode = true;
--	pkt_stream_replace(test, DEFAULT_PKT_CNT, MAX_ETH_JUMBO_SIZE);
-+	if (pkt_stream_replace(test, DEFAULT_PKT_CNT, MAX_ETH_JUMBO_SIZE))
-+		return TEST_FAILURE;
- 	return testapp_validate_traffic(test);
- }
- 
-@@ -2162,14 +2201,16 @@ static int testapp_single_pkt(struct test_spec *test)
- {
- 	struct pkt pkts[] = {{0, MIN_PKT_SIZE, 0, true}};
- 
--	pkt_stream_generate_custom(test, pkts, ARRAY_SIZE(pkts));
-+	if (pkt_stream_generate_custom(test, pkts, ARRAY_SIZE(pkts)))
-+		return TEST_FAILURE;
- 	return testapp_validate_traffic(test);
- }
- 
- static int testapp_send_receive_mb(struct test_spec *test)
- {
- 	test->mtu = MAX_ETH_JUMBO_SIZE;
--	pkt_stream_replace(test, DEFAULT_PKT_CNT, MAX_ETH_JUMBO_SIZE);
-+	if (pkt_stream_replace(test, DEFAULT_PKT_CNT, MAX_ETH_JUMBO_SIZE))
-+		return TEST_FAILURE;
- 
- 	return testapp_validate_traffic(test);
- }
-@@ -2210,7 +2251,8 @@ static int testapp_invalid_desc_mb(struct test_spec *test)
- 	}
- 
- 	test->mtu = MAX_ETH_JUMBO_SIZE;
--	pkt_stream_generate_custom(test, pkts, ARRAY_SIZE(pkts));
-+	if (pkt_stream_generate_custom(test, pkts, ARRAY_SIZE(pkts)))
-+		return TEST_FAILURE;
- 	return testapp_validate_traffic(test);
- }
- 
-@@ -2255,7 +2297,8 @@ static int testapp_invalid_desc(struct test_spec *test)
- 		pkts[6].offset += umem_size;
- 	}
- 
--	pkt_stream_generate_custom(test, pkts, ARRAY_SIZE(pkts));
-+	if (pkt_stream_generate_custom(test, pkts, ARRAY_SIZE(pkts)))
-+		return TEST_FAILURE;
- 	return testapp_validate_traffic(test);
- }
- 
-@@ -2267,7 +2310,8 @@ static int testapp_xdp_drop(struct test_spec *test)
- 	test_spec_set_xdp_prog(test, skel_rx->progs.xsk_xdp_drop, skel_tx->progs.xsk_xdp_drop,
- 			       skel_rx->maps.xsk, skel_tx->maps.xsk);
- 
--	pkt_stream_receive_half(test);
-+	if (pkt_stream_receive_half(test))
-+		return TEST_FAILURE;
- 	return testapp_validate_traffic(test);
- }
- 
-@@ -2311,7 +2355,8 @@ static int testapp_xdp_shared_umem(struct test_spec *test)
- 			       skel_tx->progs.xsk_xdp_shared_umem,
- 			       skel_rx->maps.xsk, skel_tx->maps.xsk);
- 
--	pkt_stream_even_odd_sequence(test);
-+	if (pkt_stream_even_odd_sequence(test))
-+		return TEST_FAILURE;
- 
- 	ret = testapp_validate_traffic(test);
- 
-@@ -2339,7 +2384,7 @@ static int testapp_too_many_frags(struct test_spec *test)
- {
- 	struct pkt *pkts;
- 	u32 max_frags, i;
--	int ret;
-+	int ret = TEST_FAILURE;
- 
- 	if (test->mode == TEST_MODE_ZC) {
- 		max_frags = test->ifobj_tx->xdp_zc_max_segs;
-@@ -2384,8 +2429,8 @@ static int testapp_too_many_frags(struct test_spec *test)
- 	pkts[2 * max_frags + 1].len = MIN_PKT_SIZE;
- 	pkts[2 * max_frags + 1].valid = true;
- 
--	pkt_stream_generate_custom(test, pkts, 2 * max_frags + 2);
--	ret = testapp_validate_traffic(test);
-+	if (!pkt_stream_generate_custom(test, pkts, 2 * max_frags + 2))
-+		ret = testapp_validate_traffic(test);
- 
- 	free(pkts);
- 	return ret;
+ 	return (a + b - 1) / b;
 
 -- 
 2.48.1
