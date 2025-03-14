@@ -1,489 +1,227 @@
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2047.outbound.protection.outlook.com [40.107.244.47])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB7691F236B;
-	Fri, 14 Mar 2025 09:49:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.47
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741945788; cv=fail; b=eQbrfIpUcwHeBS2MTKdY9z5VraVEdYmBgM2MzqCH5AREj1mfTpZxH3SM/O4aGl2H89Hy5estlHLfk8LpN908YpdiMfd/gzOrPRaOqrjvpxhEf0xwFFLnEveYpBh1qVK8HUcxUIp7ZUFxHR+tGYtiDRcd6drSr74+0QISbQO8bQQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741945788; c=relaxed/simple;
-	bh=2z2tl6EGi0Fkp+AOarwDWTm6SH+nMXLI4PoENK3cf2s=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=J0whWku3Qr/MG/ofKmFwL9O/Onjapj3RjOHFdTxmaL1Tp2C2nWp5fsYcn9qjfi1xzM4K/cdkJGE/REE0U0IVJ65T4GIgnczIE28AT7GacThiyD7pPimTXMfAMK/2rSnmRDuEB2XxMvsuZSnasMmqLu/YZiJx101iMqm8iFTS4nU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=IkpTlegp; arc=fail smtp.client-ip=40.107.244.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 541641F3B9C
+	for <bpf@vger.kernel.org>; Fri, 14 Mar 2025 10:12:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1741947143; cv=none; b=SHmn46jeW+O/Bsruh1wm5g5+RpHad0u84XccSE6vULGtxkX7cg0+afu+vx3Uhy4lToAJAMceav5RlZMTcTJpi0z8d3veT/SodqdOiKPxLV5awMGsDvB23zVJ5UdFHodL+yQ4PsUty4V9yvtbLE9VqWTFlhn4h/QEUdzQFfms5uc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1741947143; c=relaxed/simple;
+	bh=lgxRxmGH3EqSkqPGLRwmTX5PGlD3rFE5OCI1sheAXjI=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=HAH0iQVjR1NcZcDgDD8amogXFgEsvdP9hqH2X1lC2evss0cVWUzOTOv5e/k5UH9V53Ixv/sGmxNplldwNw32kP6l6ZqYb23RrZ0WK6ALGfacY6MzZO9ZopC6ujC8FT06Yh4yG6CYPWkCs4d4E14QYwLPjAO5IEF1mGD2SzXfA8s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Lo16Sknh; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="IkpTlegp"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=hzklExXiqKrULfeCoh6XOMBHNyNJ+YZ3EtPzL/aQIhV/h7/VcQ3hbK1+/AnT1w5nO9JTmZeB9Ck/CfC8o7ki0Kecw3hU9IBvaD25p91Z4FS2iC0vmfmwhUepuKVbJ2mXbHwJcHPjUqbu8h8wlCQAbJ/LWxQ4zTQGreK7ScJD7Puw8WigrudUdc+wll+lG4GkTFo6KEZZTFUh/G4tXpcxAorx6ZNbKiJZsEzR387pDZsYktVJiFf+Fj8LupzYP0X2lzecsy0KGzQ+AnYuXjP50Q0wFdgRJAkPXQOpn8X2W55sG0iN9Hp5lFyaJX2D4jKrdlhwLMDsVe/b+vp/pTJYQw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lbrcSYpYfXxpoYSv8bqXb1Cw0q/XhBW9hmEoKDk2yz0=;
- b=ZGoW/gwgJkJNoRfgqAer/WaKkVEIBMRlu8UNTf/bIZP7rLMKwXP017mBwVu+wUFFKEBHyAM+GnigsEmWtbcmWstJl/eI9qjUpSNCFRbyVbIOoANj/5BRfNtsSimBYcgPV1gIEO70u9q2khc2rxeeK1GqUwfucQjxz6ZfCu4/NC/2RvmogvRgFuPodR07CWwTTKvJGKRO1RDUZpXVC9nkp2xMtuO+mFGVZi0sbIpxpFLkgH4VNVr3k1rUNVJeBLZSADVas193120ZmmbvDi/Fh87C70UpUtUq1r9PwEZgnud0heWHyuqIu3E2KnY+JnAMe26C/YahjPBPIjGV9QbIGA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lbrcSYpYfXxpoYSv8bqXb1Cw0q/XhBW9hmEoKDk2yz0=;
- b=IkpTlegp+tgCCbQruqeLYPWVpvrBd+engqa6u+YNive8CHs+tsOIMDrsB82jCVxXCOcNJ3fV3AiV0wbAfbuqcL736kd4VV1lqDM5H+I+Zy941CWjjbIw8yjAPysA5lucZLBHb/fDTZ0r38r7xlNdWxQ0Zx2z3iot72iipuoXxQfxTovXRlnlBYZyHJW1+pZs+tx77F9AF6VaO1ElPY6+0XkyYr/t/LT0C7ZT1USK73eGeea0XqdgR3ZhNhH54IQSBtu9OJkN7K9v2Tocw3K/vaC9eUVF2sgzSOPCcxToTL0sxd/IUnL/WT3CJ9QKaOPO00RLcWppdWxSnoWTa8jUww==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CY5PR12MB6405.namprd12.prod.outlook.com (2603:10b6:930:3e::17)
- by CY5PR12MB6431.namprd12.prod.outlook.com (2603:10b6:930:39::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8511.27; Fri, 14 Mar
- 2025 09:49:43 +0000
-Received: from CY5PR12MB6405.namprd12.prod.outlook.com
- ([fe80::2119:c96c:b455:53b5]) by CY5PR12MB6405.namprd12.prod.outlook.com
- ([fe80::2119:c96c:b455:53b5%5]) with mapi id 15.20.8511.031; Fri, 14 Mar 2025
- 09:49:43 +0000
-From: Andrea Righi <arighi@nvidia.com>
-To: Tejun Heo <tj@kernel.org>,
-	David Vernet <void@manifault.com>,
-	Changwoo Min <changwoo@igalia.com>
-Cc: bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 8/8] sched_ext: idle: Deprecate scx_bpf_select_cpu_dfl()
-Date: Fri, 14 Mar 2025 10:45:40 +0100
-Message-ID: <20250314094827.167563-9-arighi@nvidia.com>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250314094827.167563-1-arighi@nvidia.com>
-References: <20250314094827.167563-1-arighi@nvidia.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: MI1P293CA0012.ITAP293.PROD.OUTLOOK.COM
- (2603:10a6:290:2::10) To CY5PR12MB6405.namprd12.prod.outlook.com
- (2603:10b6:930:3e::17)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Lo16Sknh"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1741947140;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=MG96L1nD9BNqKXUr9HdilPzD1EgMIYgZeATyxIiL+XI=;
+	b=Lo16SknhzOJRwgV1muPNjmyDG93kjvpKOxQgaQxc1a6NSPv7rdl5OIvNyGntisqRINH+WC
+	2/XK3noQNx7EklrRGOzScf2CID8ZqQawz5brOqlGPekkYvZiFvUs9+pKplpk4iC5Yg9sFC
+	bxoBxZvbnbizt0axdMI1hRLhIU+fHHU=
+Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com
+ [209.85.167.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-590-pZVOFS86OGCBLhWf23Mmhw-1; Fri, 14 Mar 2025 06:12:19 -0400
+X-MC-Unique: pZVOFS86OGCBLhWf23Mmhw-1
+X-Mimecast-MFC-AGG-ID: pZVOFS86OGCBLhWf23Mmhw_1741947138
+Received: by mail-lf1-f70.google.com with SMTP id 2adb3069b0e04-5495a1c0be4so1201338e87.2
+        for <bpf@vger.kernel.org>; Fri, 14 Mar 2025 03:12:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741947137; x=1742551937;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=MG96L1nD9BNqKXUr9HdilPzD1EgMIYgZeATyxIiL+XI=;
+        b=HxKBokyUyJg60yk5AHf+Bjg15HqpMBa4qsB+uCJyeR8W+l6zNPEQcxihHhsE3kDtPQ
+         ZF6Gb6c6iYkGMVG2PDMP7ik4mAF1LhZ+q1/CirgqjJyswC7I3eNA1wK3draAgd8vEicE
+         RUFc4zpD1nN/FDW2OnjF77HYZKZBMvTE8rL4wg700ZG8CXw/FJw7UHAE9MWfPzDgFPKJ
+         WY+foX1QIwV17oMrgdjwhZkrxbaq9zARkQMwxqBpPMjvQs1KHDoKw+0cCcrWKMZUoOL5
+         wRGQ+RZHl7jtx5BCdPsL7FJhtU1EnGYFkQxlElqtN+UeJMdGY1MU3dbby0ZEeIii/XZj
+         JObg==
+X-Forwarded-Encrypted: i=1; AJvYcCWR9pru36ufcHk7CGaSHApCq99PoYpGpyjWYfHip8jgjWTMrBoY1IX0QYU41tPVx5opR3I=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwuWSzFc9rI5bPFf7n6xeMUeLDLQxme1br7s63GIn0rviu1reIt
+	3UrIBOPoImgsoo0hwCTl1ZLDuVoeICd6v0cC+R4mZhCLxTQszfZSB94H0QygMmk6JEgTQRmGuju
+	z3q8lUdAzc0+lPD4weE+TiaQkq+r6XzEGDpzmvcgVg8FXyXGUdQ==
+X-Gm-Gg: ASbGncu7hMbuQ52NMaiwCcZq3NeuuDBJeiSQdhMdlbyDIok09C3lWrgQGpxOEHh1NrX
+	o1Wz6fiH9Qh6NE6dyV5bwcGJ9gric+chLmpV7VICyRGcasH1jmYo8y8aPH78lp9tHHldEaA5gs5
+	YfRzLrOy9MtaCqJx/OY3UjMxVcRRhcxEXyP+FWMWzkN5eCCTVLnulk2FwuGp/92UhQv6UYBkV3T
+	Et92ktZkThw8xBxGJ2U1/Q7JQVXPCI80W2Lq/4riFCHEjzYlMmPMK+RvxJMA4XTUl6NBH2SmGUa
+	2rqEEOrWc39eX/CpOKqJZsutKR18XEpdpi5NdRyj
+X-Received: by 2002:a05:6512:2826:b0:549:7c64:3bc0 with SMTP id 2adb3069b0e04-549c38f1fb3mr472365e87.29.1741947137556;
+        Fri, 14 Mar 2025 03:12:17 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEAx3kALDA6mOmLxS/XJeBJ/I21XkejnmA65cY5OZtqAXgthxp5EycvrTQUN0iEyVF8q4pJBw==
+X-Received: by 2002:a05:6512:2826:b0:549:7c64:3bc0 with SMTP id 2adb3069b0e04-549c38f1fb3mr472342e87.29.1741947137122;
+        Fri, 14 Mar 2025 03:12:17 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-549ba7a8b11sm482509e87.30.2025.03.14.03.12.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Mar 2025 03:12:15 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+	id 0C33A18FA930; Fri, 14 Mar 2025 11:12:13 +0100 (CET)
+From: =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+Date: Fri, 14 Mar 2025 11:10:20 +0100
+Subject: [PATCH net-next 2/3] page_pool: Turn dma_sync and dma_sync_cpu
+ fields into a bitmap
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY5PR12MB6405:EE_|CY5PR12MB6431:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2c735432-b4d0-4445-b3b9-08dd62dd8bf4
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?1yXPsYRRRFeiKKdKz4jcr4okmkanJedVGj98nO35Op+NCZQWL/73qjJu60TE?=
- =?us-ascii?Q?+dPyyTSosYimC2OhqJTB/pKJHEVzN2VxdeNOEiSKZBF+R6t7V/H1s0iAkfjt?=
- =?us-ascii?Q?antPxzsABil7+r0ehLWnhcaqyLlWZ138DX4P7Q6wSC1SbiE3C8SHX2lHca5y?=
- =?us-ascii?Q?Wu0jZfVbq2VxRS0aNcvuzqy9hqJ9kOos9OChbrRU6IihRsGpZqdLEratG6S+?=
- =?us-ascii?Q?+b0oiCLZ5TfI9ec/jTiQM/YEC3XYXHhIRuCGXBD6MCkSJHR3EzdoOrskXdst?=
- =?us-ascii?Q?G60Unjl+afFzctTsKaC+T/vs/wEzIIklr/h+24qThBJsZezwiiRrrXLIBIIm?=
- =?us-ascii?Q?BunD9H4wOkmWc2KiZHPIMZLhLMszTbOH/OlX2kG34moDeYlAgn9o/H80q3JI?=
- =?us-ascii?Q?sWabEycnpBEuz1zaVDZX09yqCKybb5bMsajVmG+/Vc/kt0Mm1Ov+d5tCfnMg?=
- =?us-ascii?Q?xg/eswKOjXqqdJvNP4ht7TkgWyyg8EDs5ffIxKRTo4WaEkfKifCjKGLzTd9v?=
- =?us-ascii?Q?90wx5srQoN5lx0xIM7DEVmgRhNhSTevitXubRcvi4jqJQDDRjB9aDRMVB1WB?=
- =?us-ascii?Q?GKaG20AjxjtvK2IZANQzGlmk6UO/ORMI2f6/h2FjrfV+fqEo1yIRUeg46Xsp?=
- =?us-ascii?Q?j1awVALBJw0URlm9Ld5BDvXTLhnQ8t6sR8/J1CX9U4wvEcVqn0ImCx+5rwGE?=
- =?us-ascii?Q?u/mywi1L6C1LezuPkb0jAxId0ruoS7lpkf4EXQvipFNAbxnfjyYoZClOWlRq?=
- =?us-ascii?Q?jSDmx6GmCSmAdIhO+dYBUU5BaoU5cIZoPflZgVi3fMVctiRc+NEN+x7/t1hC?=
- =?us-ascii?Q?+8pk4OAANEH+PgtobbgiZ3JlujUe4m5lKR6RUxx2cXT+u/h8bPFL4awJG1zD?=
- =?us-ascii?Q?BJOnQRm+lbVNZhvMiuRLr21ngPPosFzZ6QtETzawKkunWKq31DwDNEOCM+nh?=
- =?us-ascii?Q?JpSXb7ociY0nAGegCxnswxubGoH5qlbdsGO/FRz5H5GY2J8296LoT9OxRdPL?=
- =?us-ascii?Q?KD5ADA7QLCP70g+shDPssHFr81YsKLchvBVZrpJyu6PH0cSMnbkTyjyJO2WZ?=
- =?us-ascii?Q?iQWS8blpBqPXaStsrdquWCYQMpttcEnJ+qcS/7NIeVrYTQGGmDrYauF323G3?=
- =?us-ascii?Q?5bnvCcLmRx5h8HWm7gKUQI6dUmjpW1RpMCW2ZTzV1IXa3BurJ2AfH9BpcwSE?=
- =?us-ascii?Q?sfysFBW4Ua3NvK/Na6qIHB1cnVJ9Z/iSCdCe7U6f3B64YFMVSv88C6QPjIxu?=
- =?us-ascii?Q?uiSPa/JEc3hk+mYvU4jlET4TSB0n5HWKdJw1dXDYJNaaqyHLO/7k/4Yrn6Vx?=
- =?us-ascii?Q?OAuM1DCGA3qZuFFzsbf7pxU6+E6qU6ObBp2brUNCIpsvOC6HpITL3r13OqHJ?=
- =?us-ascii?Q?HzkYJ/DJDcLsMPPjUnPFKqoA0NSP?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR12MB6405.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?zGfmi4pUsbBcI9+mzTesTr37vu4OwYXaq1qLmayQbYNqnaDjDE+lguoD/mA0?=
- =?us-ascii?Q?jFTjXxWvao9PLFhfi/JUgneI34tsKv+/iNexZKUJxACzmCe5TCu//lwqV1vj?=
- =?us-ascii?Q?AO/pGRBoaFXiVFVu6ZR9zQLoMd3GbQDTyfrL6+iHVB2s1Y5lP14MqZFSOX2M?=
- =?us-ascii?Q?nzP7QPQpNBHP9rOB2d0kDJKq1BD1b1XNc4sgD957STX/FboJ0ob749S14czK?=
- =?us-ascii?Q?VqxNeAjBlsH/jFQz23vBBOuNSCJRtPCiPKSsGtqf5HJjJmRinjys//ivpP9+?=
- =?us-ascii?Q?51zib6PbWRbzP0QkKs+MZc5N1GZEmHmqm6aHUhenOb3B5vErAYw2HLYWSraM?=
- =?us-ascii?Q?qDZhdx6BlZTdNtS4Ld3805HH0sYPeCW7f1FGA7oOquLRtKifOlTyGZ99L+0k?=
- =?us-ascii?Q?ZWLkgUV0VS52jZyZAOGy88rsSFjyD8VEoR0xj+O3mp6z6bip+BLQNWJuUFwE?=
- =?us-ascii?Q?tI9fsQFFwkO5Diw8n2WRsCfpMgcD6kNUAzxUjpxEHQDI4ILRoPFMPZBmbXqr?=
- =?us-ascii?Q?MX0+7NMZBYsfs+3iI2J0mIing+qWQ7MN/1mGGT09GfusFaSQQoCSVDY+XqvL?=
- =?us-ascii?Q?lVY00mN548lYfeXH2WogTa1QWuD8U/WdDJ/LPh+cKxoiIHpH22NUUM2hYw4O?=
- =?us-ascii?Q?+AaGbSOOi1cCMSzKWTVqMsNcgpzjP4NOl0T4hfAmhPWcANen88BW08YtI7yL?=
- =?us-ascii?Q?J+iMq7xqLGQvcIoWzHnFgFTGY+K/NJe/cn8ixouanXCZuC3Qw+DXjhnbC4O+?=
- =?us-ascii?Q?SC/l3plooZd8MdEwyYrsjzK/7YSfKgOfBebESr7Hd5wra6awLOIeOfQARsUq?=
- =?us-ascii?Q?7m7EHRcdYX6ku0jGG+vwB2Ymi0XgJvXz+34LS182eF7L/uWMXugWgFZZtbh2?=
- =?us-ascii?Q?+pnfl0kUnl6CneUL9jrSNHWycJn/KIsj0LXCw8GjGKdCyYmcACDJ4psYrXcZ?=
- =?us-ascii?Q?whkvVvx3iwZ/ATRU7NmJBVBzeoxct5n8cF3zoVHgEdr3y7VAnxufmuFA4Hwk?=
- =?us-ascii?Q?gFeCbVC6QRrsa3/3jhdm1lEO69KJKuw4pTW0/piHbDv4+xmmPuRo6FnxUs/x?=
- =?us-ascii?Q?vVmyXBHNmdZ23MHBedIOJZJUtn9j+0N2o8BMZeCAPeUJ6CE2AUTxQzz29CYl?=
- =?us-ascii?Q?Ex3ksYiGpvO2tu3IqSCZTNIyqwDgSdi3egMQmN85Ca504BwmNqIS4o096ubb?=
- =?us-ascii?Q?/Q6YQEzvzq8/sE+Z2gkND5lETRSaJeONB04/CwExeLoUaCYTjBCA3HXzO7Pf?=
- =?us-ascii?Q?JvlWXtycqlHDYhzVVbhND9L0imUQU7tkGrL4gz8sNcNpRDx+jREDTa/Wjmen?=
- =?us-ascii?Q?MckoPTXf7ZQeZdmNJLiptgoNxcskpMJElLucwmEM/MIe2F11P+FHunODbt7A?=
- =?us-ascii?Q?JFe+SQHcUw4mgS6/fE+q+KM+swquwaozaTYJ62R8Q/cWxwXJut4IZAhsUGj3?=
- =?us-ascii?Q?jE4Hcf1x0oJNJbaO4hz4iqq0zk4N3uIung30T4EeTN8xqFzRCiJa0lKAWN+n?=
- =?us-ascii?Q?rTIL+F0IXMroC5Cze53e9fXbR2X8LBzAeU1/rhhVQZ8fSOkwWrSvGbcssSYR?=
- =?us-ascii?Q?3vCMNZDfqOyojw0W1QtPl0TYIbG7Y4L1icWYjYAB?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2c735432-b4d0-4445-b3b9-08dd62dd8bf4
-X-MS-Exchange-CrossTenant-AuthSource: CY5PR12MB6405.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Mar 2025 09:49:43.2788
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 23cq3Td+3Rj8LsD3DIjsTuYCio0A682UbqdOL2DuwO909rNupx6FWtubkDGx4bONAIWY2WEs1nW9HWjiySe+vg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6431
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20250314-page-pool-track-dma-v1-2-c212e57a74c2@redhat.com>
+References: <20250314-page-pool-track-dma-v1-0-c212e57a74c2@redhat.com>
+In-Reply-To: <20250314-page-pool-track-dma-v1-0-c212e57a74c2@redhat.com>
+To: "David S. Miller" <davem@davemloft.net>, 
+ Jakub Kicinski <kuba@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+ Saeed Mahameed <saeedm@nvidia.com>, Leon Romanovsky <leon@kernel.org>, 
+ Tariq Toukan <tariqt@nvidia.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+ Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, 
+ Ilias Apalodimas <ilias.apalodimas@linaro.org>, 
+ Simon Horman <horms@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
+ Mina Almasry <almasrymina@google.com>, 
+ Yonglong Liu <liuyonglong@huawei.com>, 
+ Yunsheng Lin <linyunsheng@huawei.com>, 
+ Pavel Begunkov <asml.silence@gmail.com>, 
+ Matthew Wilcox <willy@infradead.org>
+Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, linux-rdma@vger.kernel.org, 
+ linux-mm@kvack.org, 
+ =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+X-Mailer: b4 0.14.2
 
-With the introduction of scx_bpf_select_cpu_and(), we can deprecate
-scx_bpf_select_cpu_dfl(), as it offers only a subset of features and
-it's also more consistent with other idle-related APIs (returning a
-negative value when no idle CPU is found).
+Change the single-bit booleans for dma_sync into an unsigned long with
+BIT() definitions so that a subsequent patch can write them both with a
+singe WRITE_ONCE() on teardown. Also move the check for the sync_cpu
+side into __page_pool_dma_sync_for_cpu() so it can be disabled for
+non-netmem providers as well.
 
-Therefore, mark scx_bpf_select_cpu_dfl() as deprecated (printing a
-warning when it's used), update all the scheduler examples and
-kselftests to adopt the new API, and ensure backward (source and binary)
-compatibility by providing the necessary macros and hooks.
-
-Support for scx_bpf_select_cpu_dfl() can be maintained until v6.17.
-
-Signed-off-by: Andrea Righi <arighi@nvidia.com>
+Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
 ---
- Documentation/scheduler/sched-ext.rst         | 11 +++---
- kernel/sched/ext.c                            |  3 +-
- kernel/sched/ext_idle.c                       | 18 ++-------
- tools/sched_ext/include/scx/common.bpf.h      |  3 +-
- tools/sched_ext/include/scx/compat.bpf.h      | 37 +++++++++++++++++++
- tools/sched_ext/scx_flatcg.bpf.c              | 12 +++---
- tools/sched_ext/scx_simple.bpf.c              |  9 +++--
- .../sched_ext/enq_select_cpu_fails.bpf.c      | 12 +-----
- .../sched_ext/enq_select_cpu_fails.c          |  2 +-
- tools/testing/selftests/sched_ext/exit.bpf.c  |  6 ++-
- .../sched_ext/select_cpu_dfl_nodispatch.bpf.c | 13 +++----
- .../sched_ext/select_cpu_dfl_nodispatch.c     |  2 +-
- 12 files changed, 73 insertions(+), 55 deletions(-)
+ include/net/page_pool/helpers.h | 6 +++---
+ include/net/page_pool/types.h   | 8 ++++++--
+ net/core/devmem.c               | 3 +--
+ net/core/page_pool.c            | 9 +++++----
+ 4 files changed, 15 insertions(+), 11 deletions(-)
 
-diff --git a/Documentation/scheduler/sched-ext.rst b/Documentation/scheduler/sched-ext.rst
-index 0993e41353db7..7f36f4fcf5f31 100644
---- a/Documentation/scheduler/sched-ext.rst
-+++ b/Documentation/scheduler/sched-ext.rst
-@@ -142,15 +142,14 @@ optional. The following modified excerpt is from
-                        s32 prev_cpu, u64 wake_flags)
-     {
-             s32 cpu;
--            /* Need to initialize or the BPF verifier will reject the program */
--            bool direct = false;
- 
--            cpu = scx_bpf_select_cpu_dfl(p, prev_cpu, wake_flags, &direct);
--
--            if (direct)
-+            cpu = scx_bpf_select_cpu_and(p, prev_cpu, wake_flags, p->cpus_ptr, 0);
-+            if (cpu >= 0)
-                     scx_bpf_dsq_insert(p, SCX_DSQ_LOCAL, SCX_SLICE_DFL, 0);
-+                    return cpu;
-+            }
- 
--            return cpu;
-+            return prev_cpu;
-     }
- 
-     /*
-diff --git a/kernel/sched/ext.c b/kernel/sched/ext.c
-index 343f066c1185d..d82e9d3cbc0dc 100644
---- a/kernel/sched/ext.c
-+++ b/kernel/sched/ext.c
-@@ -464,13 +464,12 @@ struct sched_ext_ops {
- 	 * state. By default, implementing this operation disables the built-in
- 	 * idle CPU tracking and the following helpers become unavailable:
- 	 *
--	 * - scx_bpf_select_cpu_dfl()
- 	 * - scx_bpf_select_cpu_and()
- 	 * - scx_bpf_test_and_clear_cpu_idle()
- 	 * - scx_bpf_pick_idle_cpu()
- 	 *
- 	 * The user also must implement ops.select_cpu() as the default
--	 * implementation relies on scx_bpf_select_cpu_dfl().
-+	 * implementation relies on scx_bpf_select_cpu_and().
- 	 *
- 	 * Specify the %SCX_OPS_KEEP_BUILTIN_IDLE flag to keep the built-in idle
- 	 * tracking.
-diff --git a/kernel/sched/ext_idle.c b/kernel/sched/ext_idle.c
-index c0de7b64771d4..2fc5e7972eed1 100644
---- a/kernel/sched/ext_idle.c
-+++ b/kernel/sched/ext_idle.c
-@@ -872,26 +872,16 @@ __bpf_kfunc int scx_bpf_cpu_node(s32 cpu)
- #endif
- }
- 
--/**
-- * scx_bpf_select_cpu_dfl - The default implementation of ops.select_cpu()
-- * @p: task_struct to select a CPU for
-- * @prev_cpu: CPU @p was on previously
-- * @wake_flags: %SCX_WAKE_* flags
-- * @is_idle: out parameter indicating whether the returned CPU is idle
-- *
-- * Can only be called from ops.select_cpu() if the built-in CPU selection is
-- * enabled - ops.update_idle() is missing or %SCX_OPS_KEEP_BUILTIN_IDLE is set.
-- * @p, @prev_cpu and @wake_flags match ops.select_cpu().
-- *
-- * Returns the picked CPU with *@is_idle indicating whether the picked CPU is
-- * currently idle and thus a good candidate for direct dispatching.
-- */
-+/* Provided for backward binary compatibility, will be removed in v6.17. */
- __bpf_kfunc s32 scx_bpf_select_cpu_dfl(struct task_struct *p, s32 prev_cpu,
- 				       u64 wake_flags, bool *is_idle)
+diff --git a/include/net/page_pool/helpers.h b/include/net/page_pool/helpers.h
+index 582a3d00cbe2315edeb92850b6a42ab21e509e45..7ed32bde4b8944deb7fb22e291e95b8487be681a 100644
+--- a/include/net/page_pool/helpers.h
++++ b/include/net/page_pool/helpers.h
+@@ -443,6 +443,9 @@ static inline void __page_pool_dma_sync_for_cpu(const struct page_pool *pool,
+ 						const dma_addr_t dma_addr,
+ 						u32 offset, u32 dma_sync_size)
  {
- #ifdef CONFIG_SMP
- 	s32 cpu;
- #endif
-+	printk_deferred_once(KERN_WARNING
-+			"sched_ext: scx_bpf_select_cpu_dfl() deprecated in favor of scx_bpf_select_cpu_and()");
++	if (!(READ_ONCE(pool->dma_sync) & PP_DMA_SYNC_CPU))
++		return;
 +
- 	if (!ops_cpu_valid(prev_cpu, NULL))
- 		goto prev_cpu;
+ 	dma_sync_single_range_for_cpu(pool->p.dev, dma_addr,
+ 				      offset + pool->p.offset, dma_sync_size,
+ 				      page_pool_get_dma_dir(pool));
+@@ -473,9 +476,6 @@ page_pool_dma_sync_netmem_for_cpu(const struct page_pool *pool,
+ 				  const netmem_ref netmem, u32 offset,
+ 				  u32 dma_sync_size)
+ {
+-	if (!pool->dma_sync_for_cpu)
+-		return;
+-
+ 	__page_pool_dma_sync_for_cpu(pool,
+ 				     page_pool_get_dma_addr_netmem(netmem),
+ 				     offset, dma_sync_size);
+diff --git a/include/net/page_pool/types.h b/include/net/page_pool/types.h
+index df0d3c1608929605224feb26173135ff37951ef8..fbe34024b20061e8bcd1d4474f6ebfc70992f1eb 100644
+--- a/include/net/page_pool/types.h
++++ b/include/net/page_pool/types.h
+@@ -33,6 +33,10 @@
+ #define PP_FLAG_ALL		(PP_FLAG_DMA_MAP | PP_FLAG_DMA_SYNC_DEV | \
+ 				 PP_FLAG_SYSTEM_POOL | PP_FLAG_ALLOW_UNREADABLE_NETMEM)
  
-diff --git a/tools/sched_ext/include/scx/common.bpf.h b/tools/sched_ext/include/scx/common.bpf.h
-index 6f1da61cf7f17..1eb790eb90d40 100644
---- a/tools/sched_ext/include/scx/common.bpf.h
-+++ b/tools/sched_ext/include/scx/common.bpf.h
-@@ -47,7 +47,8 @@ static inline void ___vmlinux_h_sanity_check___(void)
- }
- 
- s32 scx_bpf_create_dsq(u64 dsq_id, s32 node) __ksym;
--s32 scx_bpf_select_cpu_dfl(struct task_struct *p, s32 prev_cpu, u64 wake_flags, bool *is_idle) __ksym;
-+s32 scx_bpf_select_cpu_dfl(struct task_struct *p,
-+			   s32 prev_cpu, u64 wake_flags, bool *is_idle) __ksym __weak;
- s32 scx_bpf_select_cpu_and(struct task_struct *p, s32 prev_cpu, u64 wake_flags,
- 			   const struct cpumask *cpus_allowed, u64 flags) __ksym __weak;
- void scx_bpf_dsq_insert(struct task_struct *p, u64 dsq_id, u64 slice, u64 enq_flags) __ksym __weak;
-diff --git a/tools/sched_ext/include/scx/compat.bpf.h b/tools/sched_ext/include/scx/compat.bpf.h
-index 9252e1a00556f..f9caa7baf356c 100644
---- a/tools/sched_ext/include/scx/compat.bpf.h
-+++ b/tools/sched_ext/include/scx/compat.bpf.h
-@@ -225,6 +225,43 @@ static inline bool __COMPAT_is_enq_cpu_selected(u64 enq_flags)
- 	 scx_bpf_pick_any_cpu_node(cpus_allowed, node, flags) :			\
- 	 scx_bpf_pick_any_cpu(cpus_allowed, flags))
- 
-+/**
-+ * scx_bpf_select_cpu_dfl - The default implementation of ops.select_cpu().
-+ * We will preserve this compatible helper until v6.17.
-+ *
-+ * @p: task_struct to select a CPU for
-+ * @prev_cpu: CPU @p was on previously
-+ * @wake_flags: %SCX_WAKE_* flags
-+ * @is_idle: out parameter indicating whether the returned CPU is idle
-+ *
-+ * Can only be called from ops.select_cpu() if the built-in CPU selection is
-+ * enabled - ops.update_idle() is missing or %SCX_OPS_KEEP_BUILTIN_IDLE is set.
-+ * @p, @prev_cpu and @wake_flags match ops.select_cpu().
-+ *
-+ * Returns the picked CPU with *@is_idle indicating whether the picked CPU is
-+ * currently idle and thus a good candidate for direct dispatching.
-+ */
-+#define scx_bpf_select_cpu_dfl(p, prev_cpu, wake_flags, is_idle)		\
-+({										\
-+	s32 __cpu;								\
-+										\
-+	if (bpf_ksym_exists(scx_bpf_select_cpu_and)) {				\
-+		__cpu = scx_bpf_select_cpu_and((p), (prev_cpu), (wake_flags),	\
-+					       (p)->cpus_ptr, 0);		\
-+		if (__cpu >= 0) {						\
-+			*(is_idle) = true;					\
-+		} else {							\
-+			*(is_idle) = false;					\
-+			__cpu = (prev_cpu);					\
-+		}								\
-+	} else {								\
-+		__cpu = scx_bpf_select_cpu_dfl((p), (prev_cpu),			\
-+					       (wake_flags), (is_idle));	\
-+	}									\
-+										\
-+	__cpu;									\
-+})
++/* bit values used in pp->dma_sync */
++#define PP_DMA_SYNC_DEV	BIT(0)
++#define PP_DMA_SYNC_CPU	BIT(1)
 +
  /*
-  * Define sched_ext_ops. This may be expanded to define multiple variants for
-  * backward compatibility. See compat.h::SCX_OPS_LOAD/ATTACH().
-diff --git a/tools/sched_ext/scx_flatcg.bpf.c b/tools/sched_ext/scx_flatcg.bpf.c
-index 2c720e3ecad59..0075bff928893 100644
---- a/tools/sched_ext/scx_flatcg.bpf.c
-+++ b/tools/sched_ext/scx_flatcg.bpf.c
-@@ -317,15 +317,12 @@ static void set_bypassed_at(struct task_struct *p, struct fcg_task_ctx *taskc)
- s32 BPF_STRUCT_OPS(fcg_select_cpu, struct task_struct *p, s32 prev_cpu, u64 wake_flags)
- {
- 	struct fcg_task_ctx *taskc;
--	bool is_idle = false;
- 	s32 cpu;
+  * Fast allocation side cache array/stack
+  *
+@@ -175,12 +179,12 @@ struct page_pool {
  
--	cpu = scx_bpf_select_cpu_dfl(p, prev_cpu, wake_flags, &is_idle);
--
- 	taskc = bpf_task_storage_get(&task_ctx, p, 0, 0);
- 	if (!taskc) {
- 		scx_bpf_error("task_ctx lookup failed");
--		return cpu;
-+		return prev_cpu;
- 	}
+ 	bool has_init_callback:1;	/* slow::init_callback is set */
+ 	bool dma_map:1;			/* Perform DMA mapping */
+-	bool dma_sync:1;		/* Perform DMA sync for device */
+-	bool dma_sync_for_cpu:1;	/* Perform DMA sync for cpu */
+ #ifdef CONFIG_PAGE_POOL_STATS
+ 	bool system:1;			/* This is a global percpu pool */
+ #endif
  
- 	/*
-@@ -333,13 +330,16 @@ s32 BPF_STRUCT_OPS(fcg_select_cpu, struct task_struct *p, s32 prev_cpu, u64 wake
- 	 * idle. Follow it and charge the cgroup later in fcg_stopping() after
- 	 * the fact.
++	unsigned long dma_sync;
++
+ 	__cacheline_group_begin_aligned(frag, PAGE_POOL_FRAG_GROUP_ALIGN);
+ 	long frag_users;
+ 	netmem_ref frag_page;
+diff --git a/net/core/devmem.c b/net/core/devmem.c
+index 7c6e0b5b6acb55f376ec725dfb71d1f70a4320c3..16e43752566feb510b3e47fbec2d8da0f26a6adc 100644
+--- a/net/core/devmem.c
++++ b/net/core/devmem.c
+@@ -337,8 +337,7 @@ int mp_dmabuf_devmem_init(struct page_pool *pool)
+ 	/* dma-buf dma addresses do not need and should not be used with
+ 	 * dma_sync_for_cpu/device. Force disable dma_sync.
  	 */
--	if (is_idle) {
-+	cpu = scx_bpf_select_cpu_and(p, prev_cpu, wake_flags, p->cpus_ptr, 0);
-+	if (cpu >= 0) {
- 		set_bypassed_at(p, taskc);
- 		stat_inc(FCG_STAT_LOCAL);
- 		scx_bpf_dsq_insert(p, SCX_DSQ_LOCAL, SCX_SLICE_DFL, 0);
-+
-+		return cpu;
+-	pool->dma_sync = false;
+-	pool->dma_sync_for_cpu = false;
++	pool->dma_sync = 0;
+ 
+ 	if (pool->p.order != 0)
+ 		return -E2BIG;
+diff --git a/net/core/page_pool.c b/net/core/page_pool.c
+index acef1fcd8ddcfd1853a6f2055c1f1820ab248e8d..d51ca4389dd62d8bc266a9a2b792838257173535 100644
+--- a/net/core/page_pool.c
++++ b/net/core/page_pool.c
+@@ -203,7 +203,7 @@ static int page_pool_init(struct page_pool *pool,
+ 	memcpy(&pool->slow, &params->slow, sizeof(pool->slow));
+ 
+ 	pool->cpuid = cpuid;
+-	pool->dma_sync_for_cpu = true;
++	pool->dma_sync = PP_DMA_SYNC_CPU;
+ 
+ 	/* Validate only known flags were used */
+ 	if (pool->slow.flags & ~PP_FLAG_ALL)
+@@ -238,7 +238,7 @@ static int page_pool_init(struct page_pool *pool,
+ 		if (!pool->p.max_len)
+ 			return -EINVAL;
+ 
+-		pool->dma_sync = true;
++		pool->dma_sync |= PP_DMA_SYNC_DEV;
+ 
+ 		/* pool->p.offset has to be set according to the address
+ 		 * offset used by the DMA engine to start copying rx data
+@@ -291,7 +291,7 @@ static int page_pool_init(struct page_pool *pool,
  	}
  
--	return cpu;
-+	return prev_cpu;
+ 	if (pool->mp_ops) {
+-		if (!pool->dma_map || !pool->dma_sync)
++		if (!pool->dma_map || !(pool->dma_sync & PP_DMA_SYNC_DEV))
+ 			return -EOPNOTSUPP;
+ 
+ 		if (WARN_ON(!is_kernel_rodata((unsigned long)pool->mp_ops))) {
+@@ -466,7 +466,8 @@ page_pool_dma_sync_for_device(const struct page_pool *pool,
+ 			      netmem_ref netmem,
+ 			      u32 dma_sync_size)
+ {
+-	if (pool->dma_sync && dma_dev_need_sync(pool->p.dev))
++	if ((READ_ONCE(pool->dma_sync) & PP_DMA_SYNC_DEV) &&
++	    dma_dev_need_sync(pool->p.dev))
+ 		__page_pool_dma_sync_for_device(pool, netmem, dma_sync_size);
  }
  
- void BPF_STRUCT_OPS(fcg_enqueue, struct task_struct *p, u64 enq_flags)
-diff --git a/tools/sched_ext/scx_simple.bpf.c b/tools/sched_ext/scx_simple.bpf.c
-index e6de99dba7db6..0e48b2e46a683 100644
---- a/tools/sched_ext/scx_simple.bpf.c
-+++ b/tools/sched_ext/scx_simple.bpf.c
-@@ -54,16 +54,17 @@ static void stat_inc(u32 idx)
- 
- s32 BPF_STRUCT_OPS(simple_select_cpu, struct task_struct *p, s32 prev_cpu, u64 wake_flags)
- {
--	bool is_idle = false;
- 	s32 cpu;
- 
--	cpu = scx_bpf_select_cpu_dfl(p, prev_cpu, wake_flags, &is_idle);
--	if (is_idle) {
-+	cpu = scx_bpf_select_cpu_and(p, prev_cpu, wake_flags, p->cpus_ptr, 0);
-+	if (cpu >= 0) {
- 		stat_inc(0);	/* count local queueing */
- 		scx_bpf_dsq_insert(p, SCX_DSQ_LOCAL, SCX_SLICE_DFL, 0);
-+
-+		return cpu;
- 	}
- 
--	return cpu;
-+	return prev_cpu;
- }
- 
- void BPF_STRUCT_OPS(simple_enqueue, struct task_struct *p, u64 enq_flags)
-diff --git a/tools/testing/selftests/sched_ext/enq_select_cpu_fails.bpf.c b/tools/testing/selftests/sched_ext/enq_select_cpu_fails.bpf.c
-index a7cf868d5e311..d3c0716aa79c9 100644
---- a/tools/testing/selftests/sched_ext/enq_select_cpu_fails.bpf.c
-+++ b/tools/testing/selftests/sched_ext/enq_select_cpu_fails.bpf.c
-@@ -9,10 +9,6 @@
- 
- char _license[] SEC("license") = "GPL";
- 
--/* Manually specify the signature until the kfunc is added to the scx repo. */
--s32 scx_bpf_select_cpu_dfl(struct task_struct *p, s32 prev_cpu, u64 wake_flags,
--			   bool *found) __ksym;
--
- s32 BPF_STRUCT_OPS(enq_select_cpu_fails_select_cpu, struct task_struct *p,
- 		   s32 prev_cpu, u64 wake_flags)
- {
-@@ -22,14 +18,8 @@ s32 BPF_STRUCT_OPS(enq_select_cpu_fails_select_cpu, struct task_struct *p,
- void BPF_STRUCT_OPS(enq_select_cpu_fails_enqueue, struct task_struct *p,
- 		    u64 enq_flags)
- {
--	/*
--	 * Need to initialize the variable or the verifier will fail to load.
--	 * Improving these semantics is actively being worked on.
--	 */
--	bool found = false;
--
- 	/* Can only call from ops.select_cpu() */
--	scx_bpf_select_cpu_dfl(p, 0, 0, &found);
-+	scx_bpf_select_cpu_and(p, 0, 0, p->cpus_ptr, 0);
- 
- 	scx_bpf_dsq_insert(p, SCX_DSQ_GLOBAL, SCX_SLICE_DFL, enq_flags);
- }
-diff --git a/tools/testing/selftests/sched_ext/enq_select_cpu_fails.c b/tools/testing/selftests/sched_ext/enq_select_cpu_fails.c
-index a80e3a3b3698c..c964444998667 100644
---- a/tools/testing/selftests/sched_ext/enq_select_cpu_fails.c
-+++ b/tools/testing/selftests/sched_ext/enq_select_cpu_fails.c
-@@ -52,7 +52,7 @@ static void cleanup(void *ctx)
- 
- struct scx_test enq_select_cpu_fails = {
- 	.name = "enq_select_cpu_fails",
--	.description = "Verify we fail to call scx_bpf_select_cpu_dfl() "
-+	.description = "Verify we fail to call scx_bpf_select_cpu_and() "
- 		       "from ops.enqueue()",
- 	.setup = setup,
- 	.run = run,
-diff --git a/tools/testing/selftests/sched_ext/exit.bpf.c b/tools/testing/selftests/sched_ext/exit.bpf.c
-index 4bc36182d3ffc..8122421856c1b 100644
---- a/tools/testing/selftests/sched_ext/exit.bpf.c
-+++ b/tools/testing/selftests/sched_ext/exit.bpf.c
-@@ -20,12 +20,14 @@ UEI_DEFINE(uei);
- s32 BPF_STRUCT_OPS(exit_select_cpu, struct task_struct *p,
- 		   s32 prev_cpu, u64 wake_flags)
- {
--	bool found;
-+	s32 cpu;
- 
- 	if (exit_point == EXIT_SELECT_CPU)
- 		EXIT_CLEANLY();
- 
--	return scx_bpf_select_cpu_dfl(p, prev_cpu, wake_flags, &found);
-+	cpu = scx_bpf_select_cpu_and(p, prev_cpu, wake_flags, p->cpus_ptr, 0);
-+
-+	return cpu >= 0 ? cpu : prev_cpu;
- }
- 
- void BPF_STRUCT_OPS(exit_enqueue, struct task_struct *p, u64 enq_flags)
-diff --git a/tools/testing/selftests/sched_ext/select_cpu_dfl_nodispatch.bpf.c b/tools/testing/selftests/sched_ext/select_cpu_dfl_nodispatch.bpf.c
-index 815f1d5d61ac4..4e1b698f710e7 100644
---- a/tools/testing/selftests/sched_ext/select_cpu_dfl_nodispatch.bpf.c
-+++ b/tools/testing/selftests/sched_ext/select_cpu_dfl_nodispatch.bpf.c
-@@ -27,10 +27,6 @@ struct {
- 	__type(value, struct task_ctx);
- } task_ctx_stor SEC(".maps");
- 
--/* Manually specify the signature until the kfunc is added to the scx repo. */
--s32 scx_bpf_select_cpu_dfl(struct task_struct *p, s32 prev_cpu, u64 wake_flags,
--			   bool *found) __ksym;
--
- s32 BPF_STRUCT_OPS(select_cpu_dfl_nodispatch_select_cpu, struct task_struct *p,
- 		   s32 prev_cpu, u64 wake_flags)
- {
-@@ -43,10 +39,13 @@ s32 BPF_STRUCT_OPS(select_cpu_dfl_nodispatch_select_cpu, struct task_struct *p,
- 		return -ESRCH;
- 	}
- 
--	cpu = scx_bpf_select_cpu_dfl(p, prev_cpu, wake_flags,
--				     &tctx->force_local);
-+	cpu = scx_bpf_select_cpu_and(p, prev_cpu, wake_flags, p->cpus_ptr, 0);
-+	if (cpu >= 0) {
-+		tctx->force_local = true;
-+		return cpu;
-+	}
- 
--	return cpu;
-+	return prev_cpu;
- }
- 
- void BPF_STRUCT_OPS(select_cpu_dfl_nodispatch_enqueue, struct task_struct *p,
-diff --git a/tools/testing/selftests/sched_ext/select_cpu_dfl_nodispatch.c b/tools/testing/selftests/sched_ext/select_cpu_dfl_nodispatch.c
-index 9b5d232efb7f6..2f450bb14e8d9 100644
---- a/tools/testing/selftests/sched_ext/select_cpu_dfl_nodispatch.c
-+++ b/tools/testing/selftests/sched_ext/select_cpu_dfl_nodispatch.c
-@@ -66,7 +66,7 @@ static void cleanup(void *ctx)
- 
- struct scx_test select_cpu_dfl_nodispatch = {
- 	.name = "select_cpu_dfl_nodispatch",
--	.description = "Verify behavior of scx_bpf_select_cpu_dfl() in "
-+	.description = "Verify behavior of scx_bpf_select_cpu_and() in "
- 		       "ops.select_cpu()",
- 	.setup = setup,
- 	.run = run,
+
 -- 
 2.48.1
 
