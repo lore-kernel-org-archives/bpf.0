@@ -1,62 +1,62 @@
-Received: from mail-wm1-f68.google.com (mail-wm1-f68.google.com [209.85.128.68])
+Received: from mail-wm1-f66.google.com (mail-wm1-f66.google.com [209.85.128.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DE4B197A8F;
-	Sun, 16 Mar 2025 04:06:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.68
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59F2019ADA2;
+	Sun, 16 Mar 2025 04:06:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742097968; cv=none; b=ACS1noguW14XanDYaihjT0qjXN55x+65LQeKXtsGjDCwW/PgdvINdgAyKKmKwQwZ1TuNSwsSCdew4eTEW28++pFAt7aZWvm9luPLNGrhZ7t+sepo/kj/wFzhqjkH0WuNJjgH7PXd7WWLiF0LqsAk4Jjxyp8JIPyQ+/DemMvm694=
+	t=1742097970; cv=none; b=FiRL9/R8XBdRP6H38cbPbL+DhDt95BcfjCbSzawkApRqUOYTZ3gmajjbUyFmkUSupwOnnFbc0qm7nTkhMnmWOnzVdl6xQ1ggFKRtEmy0hN4zSQ1q97HLieqR5z1/jLwkphLRzL9Wt8VolSE8r1RmQCDTy5bQVTkljp4MP6IYRIU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742097968; c=relaxed/simple;
-	bh=Yp6VTxKtpBDQhUgfKGSHMWzJmZu3deRDpy/hLhkjXfk=;
+	s=arc-20240116; t=1742097970; c=relaxed/simple;
+	bh=SBe9SrR1gqB5bS55WnFfwdHWzM4LavhATA7RzB99U+Y=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=eZyzhXoWYLfUR5TX7XQQjVqLxQgyizh4CH8k50cOTATYX4WeYJe/+8fH6Dy0JeXFYBMutTv4RNfi/bqHYENIER4LeO4BifuJ+EarOuehmPs9YBp9vsdidG1twn5bTOXtWXDmJQVfEEa/T8/6MX2RWMhFoNVraMkthfbmvA5CI/c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Q1L9qma+; arc=none smtp.client-ip=209.85.128.68
+	 MIME-Version; b=MO0NN4YyT0Zn/Br8TuFTiOAI/4oHJnHWR9/c3pBto92/GVn2WGyBQcLaT2r5TIYFn2sQO2d4XOxFmVJksUCkNPfupNYF0/FWgG9fReAah2P/uh+DPEQ1inkHBXIoVKz/qDi6PO94X810MEhdPIgT9yaHrnyR6EQd5YrisSoQ5kI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mZcssJmE; arc=none smtp.client-ip=209.85.128.66
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q1L9qma+"
-Received: by mail-wm1-f68.google.com with SMTP id 5b1f17b1804b1-43cf06eabdaso9865675e9.2;
-        Sat, 15 Mar 2025 21:06:05 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mZcssJmE"
+Received: by mail-wm1-f66.google.com with SMTP id 5b1f17b1804b1-43690d4605dso6607925e9.0;
+        Sat, 15 Mar 2025 21:06:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742097964; x=1742702764; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1742097966; x=1742702766; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=lVJp3+JT7y8+ub6buLRsxOUyy8d6vFpxA5yFbRAEMPI=;
-        b=Q1L9qma+XiAWK6JbYpNLupqgch5MmwFPlE/5TssWPKM+iaNVXZvsSDk0aohkPyZNJ8
-         Vge17l+ncR66vgUQ7d1lA04plvsowEKBFaHxeXBJXycRm8DQ6gaTg666XlIduz4//h+q
-         phC6P7xGb7AjW3TAwqw5+vAl9btpiKNWw+TxhMTfRd1bfZCIjO90IH5jVcccWEqXxjK2
-         utSl01mauvq+KaaJcuNaiB8leAFBXBAlkkrBZPuelGzEdebRNjGeuGp3xeCv5PjB40X+
-         IkMgP5M5Fdz7fCswSAoYHf8QHSVubAEHVVdvh2+ZQc55bgO+hHUs4FxLJinArXFRmJhU
-         PZgQ==
+        bh=elS4VXsAjSZVIDIoCNxyLW7RW0fHjd1SmHmDu6oNDNQ=;
+        b=mZcssJmET5txjquHTJS05NnT9IxD/rQxyTpPFXsAGAM/hF9DAVtZKwK5VHIYOE6/mP
+         H21VuraN9GCcvgUZO8CQJLBgczLNxnkKHKdOhc3alB1S1uBpEDkEzPBOOuBZdgDor6Hq
+         LY3mAOx2WtVMV5QgaHaxJG87GIOLzZY+IUTEZGa0OM35sHD73ZaqsiwNaNdlyPTcDGbT
+         TRPI20t84yESEj5188We/gbVQYw4At4g+4uW+hqPyVAAOOfHAMLUO68eh5ACVR2YLXuM
+         3qJU3nDPuR07VZw+ZpvtxSyK1MCqgdLW7QEiw3zthS2SM5UX+vgMO74Gsk8latjALMD9
+         xNmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742097964; x=1742702764;
+        d=1e100.net; s=20230601; t=1742097966; x=1742702766;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=lVJp3+JT7y8+ub6buLRsxOUyy8d6vFpxA5yFbRAEMPI=;
-        b=uNwp7z8h7WlWVKe+BdMmRz8naKo9ZvaalIehJuKPaCSQoDDxUizFG2hJZ8UGcHoKIq
-         tly6DJALr8b6UcMfBzKUN2iFQ+XWBNTQDcOG+ES+VaVRUvTxyPNP2Lgec8DlPJw3Sjy7
-         Ic3h7wtCpGfnM4qr2lZMZPRc6d7monrDl94indmHw7gRh0d3ot7l6pEP1BYvPM7ntEj8
-         gVOcDAEQ56FGzD898ZP277iR15JJes9zmhPGAJonkd8kX2Oy5zFpv8T5bvxORkyeOKgH
-         FLImy/HIhMfV6m+9d4r3PAcvALZB24VczqZQSqhYFi51rLVD1sO9pyjz3IcnWjA5zxG1
-         tQdA==
-X-Forwarded-Encrypted: i=1; AJvYcCW+lU8c4PGTZAeeso0sfkOIpxpQUkk0PgXv31o1Zb0+AacMX/Jiw9bkQu8l+LtTrZR9xjoM9XPubSpKmRc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwGloP3QrbUh8cKk7Daxy/BoHk0PVCucSEj1iuY/WniXJFvvaOQ
-	nYNHRW13YvXDUITYsuUCWRq2PY4935kk5E/IVzbPFYJceTqOFiPlCFt9rf1hx8A=
-X-Gm-Gg: ASbGncu4BLmAaurCHbRilelIpYsCFb8EL6dpb1SGxQcUU1MiuYAqKWNqQBryKzl4V/X
-	hybbpglGav3mHla/ViBlu2IkXh6I78BpfXe11HjJXEmld8ZQnSADDaDH3A/HQxNq4ZshYLH1yxJ
-	RVaJmX7IA/v0lDAldvComJKGluCjGv676Mb9hJtTcpe3go79eEjtWFIe9owBm+3Oomn/pocwQi8
-	Jxijd5DfmKO2qresJnPhS7qkvMxmU4i7bT8c8dZTWTqrs2rI7fOf/rqvYoJgYmtYQH7uS4V5Uae
-	ie6dVKQ1ZkXPHeh8jf8c3XJTQ39ZTpUfOqA=
-X-Google-Smtp-Source: AGHT+IEqbu6eKdKbUR9hLIUzBRTM7W+fO2MaRKuwN5PjghpeobTfOg76MZ+yqvlOP3B3sgZbmvRoKw==
-X-Received: by 2002:a05:600c:3c89:b0:43c:ea36:9840 with SMTP id 5b1f17b1804b1-43d1ecd7926mr80182815e9.22.1742097964115;
-        Sat, 15 Mar 2025 21:06:04 -0700 (PDT)
-Received: from localhost ([2a03:2880:31ff:70::])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43d25593a94sm21073705e9.3.2025.03.15.21.06.03
+        bh=elS4VXsAjSZVIDIoCNxyLW7RW0fHjd1SmHmDu6oNDNQ=;
+        b=H0Q0XZH6znJfAyqyIKM8ef595MVuiBapxhVvzqx4Pqfs+XHysDCCV64WLJqOa2o5ZT
+         GknR9zDQVmLyPDGPR/EOl9aMr++qOBvYdc9coBB4BYOSqrYhh7jW2mh7aVFvKp0EPmyH
+         diCsM6sxOrAJT64nrUGAmIgVqG0OueTCh+g4Vx+Run3owowAeWBbHaae/ynL6vedd1oY
+         ZJI/ir/DzywPCr0nH3XA7Hr2FGfElg/mSl0lw2QK7gXVBGhVlgeJx1Mgo17F1p0e9PPt
+         PJNUGWbgiC4zTTmK5j8fTKXuZHMoK28WQODZUgK9WpCy7C0l8XkOphQ16ZkOEzCcalBv
+         ihAQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX5/LbSU3foBghE3M3+JkH32Yjkdi9QSk49TCQ/G8OKB+fP71KNEKX5cuGCps12ihfoO+WMeoH5P5qKVbQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyj3TjpSY8SlSqVCmXJeHzbd4tzJ2BAesVgW7MlSrGQvPk05cGL
+	7/NbkISj5jBG6IkOg1EwmOKvt2nFJwBni/LJCqISQR3ucfIWqSvRloqogc2Rz7Q=
+X-Gm-Gg: ASbGnculgdrakAvCcvC53ynG9+uEmV69TQWNLdeQcR0idO2CRtokH5KBh8ZkIaPm5Rk
+	eIVwu4BH+eIjw7A3sM0K26yxuXSsahkAodHOQqjQnpprRSPygRTteF86cAovp5dp8U0NmTb4jfW
+	BFc2yuTI55mZXPiS4mJw9MUXI/FVbV92MWRAoIVbYMC2N8EWw1k7rX3544QKe2cLyJoYWsHXwG0
+	il8TaZDbKP5JNXjMzfS6KmRdwL8UZBNSSPOgD+/h4KSD7WQ9EKZ+cIH6qtpwzKae5C32pV1tJ2E
+	UUYGMg33FaqHhl7s23H3gkVvTXyS+wukeQ==
+X-Google-Smtp-Source: AGHT+IEnbdVB/nE2Pi33KFYYtnULRWUI98TYw/MBJWQBTX6XEUdt0SDKhZrXk7vHOjd1S2LDfZ7qnQ==
+X-Received: by 2002:adf:c790:0:b0:391:41fb:89ff with SMTP id ffacd0b85a97d-3971f60b104mr8750937f8f.27.1742097966388;
+        Sat, 15 Mar 2025 21:06:06 -0700 (PDT)
+Received: from localhost ([2a03:2880:31ff:b::])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-395cb7eb9ccsm11053346f8f.96.2025.03.15.21.06.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 Mar 2025 21:06:03 -0700 (PDT)
+        Sat, 15 Mar 2025 21:06:05 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org
@@ -77,9 +77,9 @@ Cc: Linus Torvalds <torvalds@linux-foundation.org>,
 	linux-arm-kernel@lists.infradead.org,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v4 16/25] rqspinlock: Add macros for rqspinlock usage
-Date: Sat, 15 Mar 2025 21:05:32 -0700
-Message-ID: <20250316040541.108729-17-memxor@gmail.com>
+Subject: [PATCH bpf-next v4 18/25] rqspinlock: Add locktorture support
+Date: Sat, 15 Mar 2025 21:05:34 -0700
+Message-ID: <20250316040541.108729-19-memxor@gmail.com>
 X-Mailer: git-send-email 2.47.1
 In-Reply-To: <20250316040541.108729-1-memxor@gmail.com>
 References: <20250316040541.108729-1-memxor@gmail.com>
@@ -89,122 +89,94 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4185; h=from:subject; bh=Yp6VTxKtpBDQhUgfKGSHMWzJmZu3deRDpy/hLhkjXfk=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBn1k3d7ne1febSzud04+mu0CKRHqx+H8Jq+gCO2ZsR MN8cyy6JAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCZ9ZN3QAKCRBM4MiGSL8RykcmD/ 9gTc/RWOMn5cBBm9fdR7z3Whng8H/b1v47vd75XWWl34N0yLT/YWBxTTQ+sPVZzGGuo6B9xsO7eKc9 SZp8I4okxcB2aM74N8m344h+WeCA3ZDdOAN1PStTNACyJB8JKCSwhxf5/MD4VnGmAAvRd7JcgDsl3T lkua13O2hBIxLJEBPb7jFRav4gDcQhaWZZY8+I8wIj4D2LsynzlcQxPMMg/IOGoojbmx1IZpibvTSS cOab748UkW42TGSTq4cdoSqNEyQkllc5IG3CoplNecSOYw91jN/9/nfpRQLlkeNk4MMkIpW1wkerkH stNypWjI3+zMxxxWOpnatrs1AhcbL9xdZy/yI6HeaBpRLCWE7EP2tyRtxMLNP0xZTzDUbhelU5s2xS ISufWNdpb9hhDr2p7Az4+QCAW0/IGguxT1YSSJ3VIvP0PSGYdPGn7h5UGMmLAsKRteUQPiIinHVfjq jswG4p2GalFrgmjtSAlgCOgfnnBgdFSBZ8KrUhAEDyoSkn3oC7EfkzE4RurRDNaK7Dla53h3swFtN6 ebHJiW8K6xEarRowvHg21BJJhRkrGgUz7TcTos8teOYQ7GScBu5AHx4/hAgO+A+G8EAYCC6p9bLmWT uhQX3Azu8Y8rim3+JoGB/tvJ9vAcTAUH3AyLU5MWGMfUmvqRvuAqdg2eMQjQ==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2633; h=from:subject; bh=SBe9SrR1gqB5bS55WnFfwdHWzM4LavhATA7RzB99U+Y=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBn1k3eNpMeA1g8bEkNbE5LoMw6rWgMD0iqfFTREsw3 1ViDmC2JAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCZ9ZN3gAKCRBM4MiGSL8RyuqtD/ 9/IGQPEqqIYM45Wbzz/zxdRnXzdviyqlrvI07Exouh0vJd+riQkKUn0fvtxOmYGiW0hf+KSPes3ypJ tSGUhUEHoy4KZ6aHeBpDd+Atw6aeLia+nCh/xXga/cb8an5pVO+3oHinEiNot2dfTsznbw2rgqLI/o 18KlBPsGuCz9o9fNDbrrYW89iCAR62qZm/ELBGZ5tUXVLKJTJU5+/FUG2EM+D6yyeWllgXPFCL9B// ySaQANZ8Bhy9vbrVe4wW67L581XJr2ML9um5yEfmYDqkTanYBBHCU+e7kguhEs2Q0bjT9F9AO609C7 uL1NTzcDsH6c0Avd6a/ITdoNp1E4ZvVp6HQqo/pBk6PXgu1gBcudXCyPs+Igx8NV4FiaP31yQ5e01S 9UbxJSSzxs2+fgRnO/i6pqNrO8Mktz8buhxlr5r2gqkDOXqWeWZEDHrj32fD3WgY7j99ENTR9y98bp L0wcKbx1en8AJckwWYMKtSC5TbsAU1rBvKW1jJtjXsifakOYMtf+dASlhIY/fIoefIOQ98NgY3wJDS RwY9kcDNvp8LkYBgR0/kRIpMAkUqpoon7lKnqgV4ZsxKpi8p5BN3ZSvGMbHMrJs+4gaGIeSnBJFaNM 5Lj0WTWrsYOJXYBXA0iaogmJAwZ8UtN5+FNxg+SHFESqpNMmvjruoQOLu8vg==
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=4BBE2A7E06ECF9D5823C61114CE0C88648BF11CA
 Content-Transfer-Encoding: 8bit
 
-Introduce helper macros that wrap around the rqspinlock slow path and
-provide an interface analogous to the raw_spin_lock API. Note that
-in case of error conditions, preemption and IRQ disabling is
-automatically unrolled before returning the error back to the caller.
-
-Ensure that in absence of CONFIG_QUEUED_SPINLOCKS support, we fallback
-to the test-and-set implementation.
-
-Add some comments describing the subtle memory ordering logic during
-unlock, and why it's safe.
+Introduce locktorture support for rqspinlock using the newly added
+macros as the first in-kernel user and consumer. Guard the code with
+CONFIG_BPF_SYSCALL ifdef since rqspinlock is not available otherwise.
 
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- include/asm-generic/rqspinlock.h | 87 ++++++++++++++++++++++++++++++++
- 1 file changed, 87 insertions(+)
+ kernel/locking/locktorture.c | 57 ++++++++++++++++++++++++++++++++++++
+ 1 file changed, 57 insertions(+)
 
-diff --git a/include/asm-generic/rqspinlock.h b/include/asm-generic/rqspinlock.h
-index a837c6b6abd9..23abd0b8d0f9 100644
---- a/include/asm-generic/rqspinlock.h
-+++ b/include/asm-generic/rqspinlock.h
-@@ -153,4 +153,91 @@ static __always_inline void release_held_lock_entry(void)
- 	this_cpu_dec(rqspinlock_held_locks.cnt);
- }
+diff --git a/kernel/locking/locktorture.c b/kernel/locking/locktorture.c
+index cc33470f4de9..ce0362f0a871 100644
+--- a/kernel/locking/locktorture.c
++++ b/kernel/locking/locktorture.c
+@@ -362,6 +362,60 @@ static struct lock_torture_ops raw_spin_lock_irq_ops = {
+ 	.name		= "raw_spin_lock_irq"
+ };
  
-+#ifdef CONFIG_QUEUED_SPINLOCKS
++#ifdef CONFIG_BPF_SYSCALL
 +
-+/**
-+ * res_spin_lock - acquire a queued spinlock
-+ * @lock: Pointer to queued spinlock structure
-+ *
-+ * Return:
-+ * * 0		- Lock was acquired successfully.
-+ * * -EDEADLK	- Lock acquisition failed because of AA/ABBA deadlock.
-+ * * -ETIMEDOUT - Lock acquisition failed because of timeout.
-+ */
-+static __always_inline int res_spin_lock(rqspinlock_t *lock)
++#include <asm/rqspinlock.h>
++static rqspinlock_t rqspinlock;
++
++static int torture_raw_res_spin_write_lock(int tid __maybe_unused)
 +{
-+	int val = 0;
-+
-+	if (likely(atomic_try_cmpxchg_acquire(&lock->val, &val, _Q_LOCKED_VAL))) {
-+		grab_held_lock_entry(lock);
-+		return 0;
-+	}
-+	return resilient_queued_spin_lock_slowpath(lock, val);
++	raw_res_spin_lock(&rqspinlock);
++	return 0;
 +}
 +
-+#else
-+
-+#define res_spin_lock(lock) resilient_tas_spin_lock(lock)
-+
-+#endif /* CONFIG_QUEUED_SPINLOCKS */
-+
-+static __always_inline void res_spin_unlock(rqspinlock_t *lock)
++static void torture_raw_res_spin_write_unlock(int tid __maybe_unused)
 +{
-+	struct rqspinlock_held *rqh = this_cpu_ptr(&rqspinlock_held_locks);
-+
-+	if (unlikely(rqh->cnt > RES_NR_HELD))
-+		goto unlock;
-+	WRITE_ONCE(rqh->locks[rqh->cnt - 1], NULL);
-+unlock:
-+	/*
-+	 * Release barrier, ensures correct ordering. See release_held_lock_entry
-+	 * for details.  Perform release store instead of queued_spin_unlock,
-+	 * since we use this function for test-and-set fallback as well. When we
-+	 * have CONFIG_QUEUED_SPINLOCKS=n, we clear the full 4-byte lockword.
-+	 *
-+	 * Like release_held_lock_entry, we can do the release before the dec.
-+	 * We simply care about not seeing the 'lock' in our table from a remote
-+	 * CPU once the lock has been released, which doesn't rely on the dec.
-+	 *
-+	 * Unlike smp_wmb(), release is not a two way fence, hence it is
-+	 * possible for a inc to move up and reorder with our clearing of the
-+	 * entry. This isn't a problem however, as for a misdiagnosis of ABBA,
-+	 * the remote CPU needs to hold this lock, which won't be released until
-+	 * the store below is done, which would ensure the entry is overwritten
-+	 * to NULL, etc.
-+	 */
-+	smp_store_release(&lock->locked, 0);
-+	this_cpu_dec(rqspinlock_held_locks.cnt);
++	raw_res_spin_unlock(&rqspinlock);
 +}
 +
-+#ifdef CONFIG_QUEUED_SPINLOCKS
-+#define raw_res_spin_lock_init(lock) ({ *(lock) = (rqspinlock_t)__ARCH_SPIN_LOCK_UNLOCKED; })
-+#else
-+#define raw_res_spin_lock_init(lock) ({ *(lock) = (rqspinlock_t){0}; })
++static struct lock_torture_ops raw_res_spin_lock_ops = {
++	.writelock	= torture_raw_res_spin_write_lock,
++	.write_delay	= torture_spin_lock_write_delay,
++	.task_boost     = torture_rt_boost,
++	.writeunlock	= torture_raw_res_spin_write_unlock,
++	.readlock       = NULL,
++	.read_delay     = NULL,
++	.readunlock     = NULL,
++	.name		= "raw_res_spin_lock"
++};
++
++static int torture_raw_res_spin_write_lock_irq(int tid __maybe_unused)
++{
++	unsigned long flags;
++
++	raw_res_spin_lock_irqsave(&rqspinlock, flags);
++	cxt.cur_ops->flags = flags;
++	return 0;
++}
++
++static void torture_raw_res_spin_write_unlock_irq(int tid __maybe_unused)
++{
++	raw_res_spin_unlock_irqrestore(&rqspinlock, cxt.cur_ops->flags);
++}
++
++static struct lock_torture_ops raw_res_spin_lock_irq_ops = {
++	.writelock	= torture_raw_res_spin_write_lock_irq,
++	.write_delay	= torture_spin_lock_write_delay,
++	.task_boost     = torture_rt_boost,
++	.writeunlock	= torture_raw_res_spin_write_unlock_irq,
++	.readlock       = NULL,
++	.read_delay     = NULL,
++	.readunlock     = NULL,
++	.name		= "raw_res_spin_lock_irq"
++};
++
 +#endif
 +
-+#define raw_res_spin_lock(lock)                    \
-+	({                                         \
-+		int __ret;                         \
-+		preempt_disable();                 \
-+		__ret = res_spin_lock(lock);	   \
-+		if (__ret)                         \
-+			preempt_enable();          \
-+		__ret;                             \
-+	})
-+
-+#define raw_res_spin_unlock(lock) ({ res_spin_unlock(lock); preempt_enable(); })
-+
-+#define raw_res_spin_lock_irqsave(lock, flags)    \
-+	({                                        \
-+		int __ret;                        \
-+		local_irq_save(flags);            \
-+		__ret = raw_res_spin_lock(lock);  \
-+		if (__ret)                        \
-+			local_irq_restore(flags); \
-+		__ret;                            \
-+	})
-+
-+#define raw_res_spin_unlock_irqrestore(lock, flags) ({ raw_res_spin_unlock(lock); local_irq_restore(flags); })
-+
- #endif /* __ASM_GENERIC_RQSPINLOCK_H */
+ static DEFINE_RWLOCK(torture_rwlock);
+ 
+ static int torture_rwlock_write_lock(int tid __maybe_unused)
+@@ -1168,6 +1222,9 @@ static int __init lock_torture_init(void)
+ 		&lock_busted_ops,
+ 		&spin_lock_ops, &spin_lock_irq_ops,
+ 		&raw_spin_lock_ops, &raw_spin_lock_irq_ops,
++#ifdef CONFIG_BPF_SYSCALL
++		&raw_res_spin_lock_ops, &raw_res_spin_lock_irq_ops,
++#endif
+ 		&rw_lock_ops, &rw_lock_irq_ops,
+ 		&mutex_lock_ops,
+ 		&ww_mutex_lock_ops,
 -- 
 2.47.1
 
