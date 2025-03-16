@@ -1,62 +1,62 @@
-Received: from mail-wm1-f68.google.com (mail-wm1-f68.google.com [209.85.128.68])
+Received: from mail-wm1-f67.google.com (mail-wm1-f67.google.com [209.85.128.67])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E98A15573A;
-	Sun, 16 Mar 2025 04:05:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.68
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 322091714B4;
+	Sun, 16 Mar 2025 04:05:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.67
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742097953; cv=none; b=DiWsiQKSHsXW5CvSqRPX4v43VqODcEE+P8dufg77Haw9rwiyHeo4bh9i/kXzHQEGO8pQqkGLxD7s2mrA+PNqwf4mMfJQPI7vQc7FlY7VLCV3OqnTXr682zdWJGA5wL9PFW0Vb9nG/Ss7+b4YTpKHlsvJsJe/E/Y8ohnj8bxs7PI=
+	t=1742097956; cv=none; b=Ms8pp4rHiFpIJqWjqRK/c37uJ1YWzy3OwU3GBjTm6wPQaEsRd7p4ECcGr/HWohBXGtL/CcwzuRjL0MBKK7Lp1mo7s2uv8EjJF85iyIgvd0yMhGb5Al97fV+2dHMKlrTPZP6ce+eOGAaKUgJ+IrZPeHRB6SCGuy5toPHu4diA0Vk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742097953; c=relaxed/simple;
-	bh=J879+EgbuyTebrgMR7yNECE6EUzDiFxlkQMxluMZnf4=;
+	s=arc-20240116; t=1742097956; c=relaxed/simple;
+	bh=y9/H+/hm8Whgobd7BHik2UQJXH7cEJPayXzZNcl5svk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=UcFM4GiCc0JadSDugiMlvK7F7pPY24w+K5NNQAwtUojAIksl4hfGsSpxropqz4HJ8ayV8XeenKzYCy/+RYDdGU1IQiTihzW7E0mhryxXVkWeqBmRtPrxdZgEwSsi35ic8t0XHcRcbhEb//jN1B3K7KVJxHtR0BwaJVFU/HdU0j4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=guzslKKp; arc=none smtp.client-ip=209.85.128.68
+	 MIME-Version; b=T3rlmNqDpBzcCcl8P8lqCgARrT4h0IRbR3/cO3+YhTgKm59a7kRjKU575hPditk6oKGL2x7FN3sRGWDDB77gjbA5FxbaVRv7mRcfZPbygLwzqSqyvLeN7MnsfdmJSHfR3dK7rh1hYrczsznQ4Y9QCpb59rR3u0B3H4NFsXh/kkA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GeTLCboX; arc=none smtp.client-ip=209.85.128.67
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="guzslKKp"
-Received: by mail-wm1-f68.google.com with SMTP id 5b1f17b1804b1-43cf257158fso5957155e9.2;
-        Sat, 15 Mar 2025 21:05:51 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GeTLCboX"
+Received: by mail-wm1-f67.google.com with SMTP id 5b1f17b1804b1-43cfe63c592so11225925e9.2;
+        Sat, 15 Mar 2025 21:05:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742097949; x=1742702749; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1742097952; x=1742702752; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=beVjeo/VucQmznYM//yRk+lY9Xj8BUazd5x3dTjfvms=;
-        b=guzslKKpD/S/oyM/P+cmWuUldUn3bf2RKdlHNLZsMCfENb+1ya309XsMmLmLpwKL6q
-         QQpZbAMPDfgLSBznaX3aQ4IOZOGFuggmMq6k3aziK2JFdSrxkcBqxgzIzX0X5+91PQxR
-         e/XpPXK9Onrn4QP07FkreS0JpF5o0GE+yOBLQ8AH2KoOCiGdMyboIJsE8rT8b7MVheaq
-         +xFtsynhyPDHz1cu72CC5q5+pO0NUWUUQB6GuTdAlOTyraERi285q149HOv8mkoVkGp5
-         BGUCcd4ojKwq00XtaX9h4HE7At/xmlHnaIqKfgmtnLTi5kmBUVsqOjDn+hGHaNGi9hrn
-         Sy9A==
+        bh=9VRGS9P+jyMhEgNXbehIAgq9LwV+0ThEZLQ6VCSjK78=;
+        b=GeTLCboX3FrIIr+Y6zZ4avA7EorZ3gRXzKm4yflCDz1brbDk08VIC/LHqPLBI2Ztc/
+         9shAF046wf9pEgNV/Gf0IBrGlHZZ8Yj5Zye9Nv+8o+6LBqrC9GOsp8ut7OSxacJdiBw1
+         Sgahu6x5LZzxLw2G+GwCTbHnD0O4ghe5CeRhAwknPbEvdTvjCiUXGd2MBwcmuXc+Ulhd
+         QtKgcHoGD/ouU3RZmu50zXwoixvITEpG2sdRy9sf7dyWaGdGEij2FTUZ/d8X9UcWAE7+
+         KTWGDLP1qWoE1Tqrrj1/J4qUHuXoTnsjdcVWw94gIF87Iycvk1a2WbAroPrPtBnqw18L
+         mOMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742097949; x=1742702749;
+        d=1e100.net; s=20230601; t=1742097952; x=1742702752;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=beVjeo/VucQmznYM//yRk+lY9Xj8BUazd5x3dTjfvms=;
-        b=fcjkPTY0QXo0bXlQGYL5c4HQJOdGDA2k4UUcWRJI1AQTgu9aSWn3AetVztCNLf2988
-         2V0R4sxeGA5sC/PsASM76KDOml/5KziU1UX+iCadJBs8GJhuPMgwF6Ux9l/fngjdhOzW
-         rhVpelmfLyGjmJ0rtjaDOY2Hh91UugrYaQuc/1Rd0lXUHub0W3B2FmJIuIPNTExA2Rme
-         aY+ku9C8iNfaK/WDtu1xcsDU2pfqig2TjTx94lHLrNg6IwZjiFLsZhCnIM4Gqh2uBAcP
-         StL2YhzjtWAWzMnGgA8oHh7/wFon+6rRjeT5Ekf6zcA5jRBjdpY3z3T4ob7Vf+8CLjzz
-         8Jiw==
-X-Forwarded-Encrypted: i=1; AJvYcCU/wIomca8YGLtrOKLJVYTkyBPujesrNNuSNvypFvjOXMddznBpdULY6nXP5GHe4pM1AHJg/HjphrT/GZM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxd2Uflv+KPRvks2A5rz5HXrQzv6ss+zqvdg6GPz830dIgV3QYW
-	BkUjpd6VfnkO/pfwII7UIAGemhaRiQvj/8zkec6nNao8D4dALJua7f1RBY+oIjk=
-X-Gm-Gg: ASbGncs6gJdzNLHcOMcLV9vhWpED2EWaoc27eP1JAXgNUL5S2KrcckpSELQ2v055Qu2
-	+UnrcbUL7YvzNFxnKmGRUZIn1GCx1jhHFMsv4rO8wN8i4YVIQtSYFk+UomDb6iLBpm8SaWQ6R3J
-	CaWWfm2Gnhh4RXzcLuEvKOufmAqlElBYkqcX/eXjt6qLq468AHBUWHHJ1BA9aKfmpt2cU/Jwny/
-	CztWBa1Jb8lA3FMh2rGfbwcLKg9Dvf5i1LPB80OuqjaOgDixZPXGM3Zc1Akb+Py55sg+grb86nQ
-	aYuba9DRb2W3cjZVKZ+9W+INsp7iuEYreg==
-X-Google-Smtp-Source: AGHT+IHr2XBo0Zj7lg7uqlYGSFDV9q6POPhHGxARC6AThdf9jY9aY0L+6DWSNr/0NWU8352lQtntYA==
-X-Received: by 2002:a5d:6da3:0:b0:38d:dd52:1b5d with SMTP id ffacd0b85a97d-3971d03eeb0mr7839110f8f.4.1742097949466;
-        Sat, 15 Mar 2025 21:05:49 -0700 (PDT)
-Received: from localhost ([2a03:2880:31ff:9::])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43d1fe60b91sm67303265e9.31.2025.03.15.21.05.48
+        bh=9VRGS9P+jyMhEgNXbehIAgq9LwV+0ThEZLQ6VCSjK78=;
+        b=XqtQhoJ+OSCD4KlxTj745yNskyp6UZWh109LNgWbYZYTbIiEV/Ylz9hT85myLr130o
+         iaLXVbnMzRxqjIEib5qYetPgbg1IgsNbX4mlqk9N+cXeW9BlTRyEFlNjn1Z5D8t1kdzh
+         TRfun9Wok3RiOSIsXnQuNR7AWSpELLE4YUloS4rMsrgpvWiEGbN9yW7J9/VGex7um6CW
+         oC1FNjFA9HI0fLtvsDl6N0XuOTPV2Jggt2GR7FGxIT4zInUTjm4Kue0iccrAQanzZ6j5
+         BwvFLozYpwBn69cSJDJzOaAA9BmCeSU7G1AuMgBya3G6U9nAZC2yYO9miRxc+qW3PX7f
+         Oqsw==
+X-Forwarded-Encrypted: i=1; AJvYcCU3HmqnaPRcKQ/mHgglPLHLBoAeiVTjT2FgHeXnmYBwxQpuVbs98aRZZHB8Hr/NJwTitRBPJ2aykwufTB8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxAy5arXC/EyCqYCPnCmVubSJMlzHfLihp9ddvxfqi23k0kH305
+	WIrDFyodH7dXAKACkT/BLefUy8XcYeu3AlA8wIJmEx2o7Gg2+VF+QLgROfagfR0=
+X-Gm-Gg: ASbGncv2OAHKFMrIskU1TA3uM2H9lmqfZN4boboaQHXSH6AIF9mzzzYOE1CA5Sj3u6/
+	diUNQ/eFiquqChXUNU+FO4I8JjKeXHjNQhCYIQNoAi6qVj4puu8biS2HGEOW3Tyoo4xHrUKcYfG
+	IKbV6yvN1HSPeqp/aWkWFMEnQBd/KfyETKk2ucs0hIeOiFUR8GzLlIbNUAlGLkmfYekpgcd68SL
+	tP/CiY2mH4OOqAHi1MI1t9Z3wNojgD0QJwZNA9crJPy1DcwBGPgGMuF3A2NLmt5/ass94JUbrCC
+	q0U/rR52BTOEbn46yj/O9FL55AiV2kIZtp4=
+X-Google-Smtp-Source: AGHT+IFz3AnPPrWkJH2W87H/P68UdDnYxlyg4j1YFp+J6rmRetr1S1beo6FRJwr3WTZ5ZKGh7xpY2g==
+X-Received: by 2002:a5d:64e3:0:b0:391:47d8:de25 with SMTP id ffacd0b85a97d-3971ee4421fmr11004162f8f.41.1742097952104;
+        Sat, 15 Mar 2025 21:05:52 -0700 (PDT)
+Received: from localhost ([2a03:2880:31ff:72::])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-395cb318afbsm11186285f8f.72.2025.03.15.21.05.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 Mar 2025 21:05:48 -0700 (PDT)
+        Sat, 15 Mar 2025 21:05:51 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org
@@ -77,9 +77,9 @@ Cc: Barret Rhoden <brho@google.com>,
 	linux-arm-kernel@lists.infradead.org,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v4 05/25] rqspinlock: Add rqspinlock.h header
-Date: Sat, 15 Mar 2025 21:05:21 -0700
-Message-ID: <20250316040541.108729-6-memxor@gmail.com>
+Subject: [PATCH bpf-next v4 07/25] rqspinlock: Add support for timeouts
+Date: Sat, 15 Mar 2025 21:05:23 -0700
+Message-ID: <20250316040541.108729-8-memxor@gmail.com>
 X-Mailer: git-send-email 2.47.1
 In-Reply-To: <20250316040541.108729-1-memxor@gmail.com>
 References: <20250316040541.108729-1-memxor@gmail.com>
@@ -89,72 +89,148 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2286; h=from:subject; bh=J879+EgbuyTebrgMR7yNECE6EUzDiFxlkQMxluMZnf4=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBn1k3b9elCAd3YQ236M81hMVLjSuOppZtbhch+VA6/ +rsNVFWJAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCZ9ZN2wAKCRBM4MiGSL8RyshkEA CCv98+4lY1p9/sFVO0M2tPH7eTtOTASKJhakQbPqh1VQV36TyCzSaQMxrKctCpN8C7owWTC01bHGqc uI+Z9UudyPSj0Cm7RYxCrP93Lb3Uayvcj3YxfZ4ECgMrBwLS3EOpGMhRJd60Dcb6XFtUQOMUQvrve4 cuGnRz6yfsa+vQNLSW1t0H2BODbKRzlFEu1WGD42YiEzjN4knrh/owAlZ1Av8cUPJpxMNzueQASucb eGyQ18wsYNVZjVcc/wp4dif0cQLiLc7c+6E9bxeuTzbgRHtAxzROq9WCxfhDOPYLlZe5m/aFW2HojL 7ilY58wpGW0Rhs3XUzv4sGUT9tj3GcDBl0dm7dPpLB4d0JrX4YkowIj4b/07SIASKj3ovG7wFW+o0m 5qe+QjTAhKQ1RgSIfkCaRVQGQBhPFqBL5Zf1/JTJ1VmHf0uuxx8/7CvgRM+p5KETo8myeIC5Tt9//M B+5VUrfWUAdSF6KWRzKCTFpqBHuJS6T+4JbZX2he0aHaQZOHxX2qn3lDC6VzuHL5BR5XX5LdizGzBV f/EiK7VPNweuCM6BurIbBqvfKkiq86dQe15jvoRriwpQuGOlaOaeUayhNQDPOQpAlufShTTNKO/MiT z5CdzlZbqINK5Uj9m28uAQkGmSkxfPYss0RS+pN4X5EuZINLNuJyoxi2UMzA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4618; h=from:subject; bh=y9/H+/hm8Whgobd7BHik2UQJXH7cEJPayXzZNcl5svk=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBn1k3c971BRmRrbtZ27c2Isb9sJ77Is1kCbCdZsV6t 1TF9L6+JAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCZ9ZN3AAKCRBM4MiGSL8RysI2EA CWS2QokbV6D30J2uxyFyVfcIaONPfZhICR7q5XYFdtmvsNs0zVjHot9yAnnznptXBAiSS+cpG5Aawg z2RsgVOs+pD0nZva8ZR6I0u3fDlBkTQkxzWXNevfnkDzWf6uUiNYOYliNQaW5nWk7Xw7ZhjvCiKRPX 5A+tArW1n6UuDrD81t1KOunXMvupCUoGslJanF+8gDOt4ww2O9a2OMUAEYlDam8nqkz9cM0CzCd7lj QMx+mD23eRdYJPFBaZ0DwuFWjSBsFEv1inLqSt9M2aRZyPyhN91AjHkP7RVP+M9mho4L+KwU5R0cXs ze0x9jqRuyREct7IZSep7fJflgyK3LtyZ98G5SfXEQFt45kdMIOrFHPRuBnQm4E6sCs4aJuA0iCmAf dZlv2k2m5XIg3dN0guZFl2s1WPD8cB9W0MpgJTmOTnOl4cdR5tCYbuQwVZ8AuFNtt9E5raXpwdig8A 3cVwVvesOvJ3R3L0nMCpCVvkK2xGt3HgFD3qTNJiFpVZ1DYfR37iPcxY/fvZQlkrC//giZDQ8bcvxJ GzzbGGJVJzdeQQcjyz/aBTh+kag7lpu9O1tyMEIIWMI7H0OfiLPjxnjWKbSoAZGBcrjRyr2gPN67vS 42Su7CQ/jdGZQj58ck+gkVIG4s5JTH4rC9is1NwbNmozjCDyE+65OdLS++Gg==
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=4BBE2A7E06ECF9D5823C61114CE0C88648BF11CA
 Content-Transfer-Encoding: 8bit
 
-This header contains the public declarations usable in the rest of the
-kernel for rqspinlock.
+Introduce policy macro RES_CHECK_TIMEOUT which can be used to detect
+when the timeout has expired for the slow path to return an error. It
+depends on being passed two variables initialized to 0: ts, ret. The
+'ts' parameter is of type rqspinlock_timeout.
 
-Let's also type alias qspinlock to rqspinlock_t to ensure consistent use
-of the new lock type. We want to remove dependence on the qspinlock type
-in later patches as we need to provide a test-and-set fallback, hence
-begin abstracting away from now onwards.
+This macro resolves to the (ret) expression so that it can be used in
+statements like smp_cond_load_acquire to break the waiting loop
+condition.
+
+The 'spin' member is used to amortize the cost of checking time by
+dispatching to the implementation every 64k iterations. The
+'timeout_end' member is used to keep track of the timestamp that denotes
+the end of the waiting period. The 'ret' parameter denotes the status of
+the timeout, and can be checked in the slow path to detect timeouts
+after waiting loops.
+
+The 'duration' member is used to store the timeout duration for each
+waiting loop. The default timeout value defined in the header
+(RES_DEF_TIMEOUT) is 0.25 seconds.
+
+This macro will be used as a condition for waiting loops in the slow
+path.  Since each waiting loop applies a fresh timeout using the same
+rqspinlock_timeout, we add a new RES_RESET_TIMEOUT as well to ensure the
+values can be easily reinitialized to the default state.
 
 Reviewed-by: Barret Rhoden <brho@google.com>
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- include/asm-generic/rqspinlock.h | 19 +++++++++++++++++++
- kernel/bpf/rqspinlock.c          |  3 ++-
- 2 files changed, 21 insertions(+), 1 deletion(-)
- create mode 100644 include/asm-generic/rqspinlock.h
+ include/asm-generic/rqspinlock.h |  6 +++++
+ kernel/bpf/rqspinlock.c          | 45 ++++++++++++++++++++++++++++++++
+ 2 files changed, 51 insertions(+)
 
 diff --git a/include/asm-generic/rqspinlock.h b/include/asm-generic/rqspinlock.h
-new file mode 100644
-index 000000000000..22f8094d0550
---- /dev/null
+index 22f8094d0550..5dd4dd8aee69 100644
+--- a/include/asm-generic/rqspinlock.h
 +++ b/include/asm-generic/rqspinlock.h
-@@ -0,0 +1,19 @@
-+/* SPDX-License-Identifier: GPL-2.0-or-later */
+@@ -10,10 +10,16 @@
+ #define __ASM_GENERIC_RQSPINLOCK_H
+ 
+ #include <linux/types.h>
++#include <vdso/time64.h>
+ 
+ struct qspinlock;
+ typedef struct qspinlock rqspinlock_t;
+ 
+ extern void resilient_queued_spin_lock_slowpath(rqspinlock_t *lock, u32 val);
+ 
 +/*
-+ * Resilient Queued Spin Lock
-+ *
-+ * (C) Copyright 2024-2025 Meta Platforms, Inc. and affiliates.
-+ *
-+ * Authors: Kumar Kartikeya Dwivedi <memxor@gmail.com>
++ * Default timeout for waiting loops is 0.25 seconds
 + */
-+#ifndef __ASM_GENERIC_RQSPINLOCK_H
-+#define __ASM_GENERIC_RQSPINLOCK_H
++#define RES_DEF_TIMEOUT (NSEC_PER_SEC / 4)
 +
-+#include <linux/types.h>
-+
-+struct qspinlock;
-+typedef struct qspinlock rqspinlock_t;
-+
-+extern void resilient_queued_spin_lock_slowpath(rqspinlock_t *lock, u32 val);
-+
-+#endif /* __ASM_GENERIC_RQSPINLOCK_H */
+ #endif /* __ASM_GENERIC_RQSPINLOCK_H */
 diff --git a/kernel/bpf/rqspinlock.c b/kernel/bpf/rqspinlock.c
-index 762108cb0f38..93e31633c2aa 100644
+index c2646cffc59e..0d8964b4d44a 100644
 --- a/kernel/bpf/rqspinlock.c
 +++ b/kernel/bpf/rqspinlock.c
-@@ -23,6 +23,7 @@
- #include <asm/byteorder.h>
+@@ -6,9 +6,11 @@
+  * (C) Copyright 2013-2014,2018 Red Hat, Inc.
+  * (C) Copyright 2015 Intel Corp.
+  * (C) Copyright 2015 Hewlett-Packard Enterprise Development LP
++ * (C) Copyright 2024-2025 Meta Platforms, Inc. and affiliates.
+  *
+  * Authors: Waiman Long <longman@redhat.com>
+  *          Peter Zijlstra <peterz@infradead.org>
++ *          Kumar Kartikeya Dwivedi <memxor@gmail.com>
+  */
+ 
+ #include <linux/smp.h>
+@@ -22,6 +24,7 @@
  #include <asm/qspinlock.h>
  #include <trace/events/lock.h>
-+#include <asm/rqspinlock.h>
+ #include <asm/rqspinlock.h>
++#include <linux/timekeeping.h>
  
  /*
   * Include queued spinlock definitions and statistics code
-@@ -127,7 +128,7 @@ static __always_inline u32  __pv_wait_head_or_lock(struct qspinlock *lock,
-  * contended             :    (*,x,y) +--> (*,0,0) ---> (*,0,1) -'  :
-  *   queue               :         ^--'                             :
-  */
--void __lockfunc resilient_queued_spin_lock_slowpath(struct qspinlock *lock, u32 val)
-+void __lockfunc resilient_queued_spin_lock_slowpath(rqspinlock_t *lock, u32 val)
+@@ -68,6 +71,45 @@
+ 
+ #include "../locking/mcs_spinlock.h"
+ 
++struct rqspinlock_timeout {
++	u64 timeout_end;
++	u64 duration;
++	u16 spin;
++};
++
++static noinline int check_timeout(struct rqspinlock_timeout *ts)
++{
++	u64 time = ktime_get_mono_fast_ns();
++
++	if (!ts->timeout_end) {
++		ts->timeout_end = time + ts->duration;
++		return 0;
++	}
++
++	if (time > ts->timeout_end)
++		return -ETIMEDOUT;
++
++	return 0;
++}
++
++#define RES_CHECK_TIMEOUT(ts, ret)                    \
++	({                                            \
++		if (!(ts).spin++)                     \
++			(ret) = check_timeout(&(ts)); \
++		(ret);                                \
++	})
++
++/*
++ * Initialize the 'spin' member.
++ */
++#define RES_INIT_TIMEOUT(ts) ({ (ts).spin = 1; })
++
++/*
++ * We only need to reset 'timeout_end', 'spin' will just wrap around as necessary.
++ * Duration is defined for each spin attempt, so set it here.
++ */
++#define RES_RESET_TIMEOUT(ts, _duration) ({ (ts).timeout_end = 0; (ts).duration = _duration; })
++
+ /*
+  * Per-CPU queue node structures; we can never have more than 4 nested
+  * contexts: task, softirq, hardirq, nmi.
+@@ -100,11 +142,14 @@ static DEFINE_PER_CPU_ALIGNED(struct qnode, rqnodes[_Q_MAX_NODES]);
+ void __lockfunc resilient_queued_spin_lock_slowpath(rqspinlock_t *lock, u32 val)
  {
  	struct mcs_spinlock *prev, *next, *node;
++	struct rqspinlock_timeout ts;
  	u32 old, tail;
+ 	int idx;
+ 
+ 	BUILD_BUG_ON(CONFIG_NR_CPUS >= (1U << _Q_TAIL_CPU_BITS));
+ 
++	RES_INIT_TIMEOUT(ts);
++
+ 	/*
+ 	 * Wait for in-progress pending->locked hand-overs with a bounded
+ 	 * number of spins so that we guarantee forward progress.
 -- 
 2.47.1
 
