@@ -1,217 +1,143 @@
-Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
+Received: from smtpbgsg1.qq.com (smtpbgsg1.qq.com [54.254.200.92])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBD781A0728;
-	Sun, 16 Mar 2025 22:46:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.38
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CE3C84D34;
+	Mon, 17 Mar 2025 01:15:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.254.200.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742165176; cv=none; b=s1I5Vo2+lhhNVbSzc4AfAAv9OkSbmYWEv4z+Gy215GdhnsU/82lGE+i/mmmU/Z87zwvTl2vSz+EnUQkJRzQK/7PqD/Jy+jJylDat6s1dUB72YcM3pKRIrNK5jzsePo8D9hDG8iUaMHjECSj+CS5v+Q6nI84gODsUE8ULTk/35Yg=
+	t=1742174166; cv=none; b=CHh+mEM/ao1rTTwsjTqWWutypr9+y+gm3AZBtESAlW/C1mQtBulVGSTXn9hBJCVbIIGigEyLn25KDL9Ew3hB4wMyIkRbqe/WFVoMO1D8hyBocWE/NN83wP3NC3JZAJJb1k4brsDM48GKgO1zqap+J9VI5iP4Gtact5w/GQMfROk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742165176; c=relaxed/simple;
-	bh=0Vuf4A7KemEmnxE1amJ/cuggcFCMtABwslfDy2lyxls=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=j0AITSBEYf+Gx24MaWoj0Ls45gniJkbbKvBUz1WLpgC0y91iS2lAbmAA5rGSEYO2CVIsJ5zKh7OWnEWsKoX6Vxl5c1LUzcbhvsuUbBPTBsE+HO9TKVhD2Tw7kGZqnZYHnQRTeH3RmsOfgTcx496Z5AJweFa7Jfk/htEaSKzHTDE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=aQOdWHZD; arc=none smtp.client-ip=185.226.149.38
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
+	s=arc-20240116; t=1742174166; c=relaxed/simple;
+	bh=f8ylXnYjAovcWV1hNoHapa560iwl0vQ8IUpRdomoX/o=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=B3J20qEhjzVGecG1hRCCgt91kJJGFlwvp7nbV+yHKGjtXnFhdCfnmUrOeDTtXXB6bu+8NDD9IJdFHMDXVrCw1310cm7XxvSrS2YfgFkzwl/uvvWmFC/TAwtynotOnCN37y7JtrhK6Q7AJrllzBCXuP8xZ+16dWfbKJh+WwV1S0E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=deepin.org; spf=pass smtp.mailfrom=deepin.org; dkim=pass (1024-bit key) header.d=deepin.org header.i=@deepin.org header.b=Ab7GDiXT; arc=none smtp.client-ip=54.254.200.92
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=deepin.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=deepin.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="aQOdWHZD"
-Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
-	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.93)
-	(envelope-from <mhal@rbox.co>)
-	id 1ttwkE-00CYQb-Fz; Sun, 16 Mar 2025 23:46:10 +0100
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
-	s=selector1; h=Cc:To:In-Reply-To:References:Message-Id:
-	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From;
-	bh=Ju1FMTCjLE06/FL0/l7ykej6UKINCh4tTv7Js5hjLtQ=; b=aQOdWHZDgzVbdI2DzUXvS+cZzr
-	uKm0rSnpFbjeClXOTir8h3uGMpDFMDFtj4Mdua1Yfmt3rX0e1PbtkdPNBZQkiVO+fw5G5n+fOqk6j
-	yhFPSUq1sKW/3UnlFfZgXj9OEBtZgJdazlvidi9Rpd16BNBTQnOfhUojTiCisGb08WMMW1C/betba
-	Qp6uD0M+SDmU5J0RQ6tKgQdZmfXfidbgAcS7EOAmYXM+WIkcUFFHsBkSyRsXYCgWMH6ljCE5zQ5MR
-	eHOlj48kk3aA0w1mwKE0cNfht84TixosaQvZEpREFspXFvLO5mbHd3Y4BZOv5+uImlLKQ6HyybSSV
-	d9YiacmA==;
-Received: from [10.9.9.74] (helo=submission03.runbox)
-	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
-	(envelope-from <mhal@rbox.co>)
-	id 1ttwkE-0000fn-4V; Sun, 16 Mar 2025 23:46:10 +0100
-Received: by submission03.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.93)
-	id 1ttwjq-00AYw2-Eh; Sun, 16 Mar 2025 23:45:46 +0100
-From: Michal Luczaj <mhal@rbox.co>
-Date: Sun, 16 Mar 2025 23:45:07 +0100
-Subject: [PATCH net v3 2/3] selftest/bpf: Add test for AF_VSOCK connect()
- racing sockmap update
+	dkim=pass (1024-bit key) header.d=deepin.org header.i=@deepin.org header.b="Ab7GDiXT"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=deepin.org;
+	s=ukjg2408; t=1742174127;
+	bh=hq7yTqJjEJZI2dh88leRFyAcAEXTLAjjYen6xx/Xhl4=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version;
+	b=Ab7GDiXT1mD9p2zh1wG2yySVGSDYjIyaBZ5H7iBxG4GGJmScXO5JWvwNLU8M89sPK
+	 STZCzhjiXA0PKN8ymbkz9PEXgpxib4YbPik2F+1FR7nwSXbk0vulEOOVsTTcGVujfB
+	 q6USYSjIOxCb/8nYMk2s3gsKwZCHofXiz0vqAKlw=
+X-QQ-mid: bizesmtp90t1742174118tyldrwni
+X-QQ-Originating-IP: tL/PX2nb+gKddWUQBMRfqZdfZaw04/DM23EMBI9yowI=
+Received: from localhost.localdomain ( [113.57.152.160])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Mon, 17 Mar 2025 09:15:16 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 17978949113820821780
+From: Chen Linxuan <chenlinxuan@deepin.org>
+To: Andrii Nakryiko <andrii@kernel.org>,
+	Sasha Levin <sashal@kernel.org>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Chen Linxuan <chenlinxuan@deepin.org>,
+	Alexey Dobriyan <adobriyan@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	"Peter Zijlstra (Intel)" <peterz@infradead.org>
+Cc: Yi Lai <yi1.lai@intel.com>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	stable@vger.kernel.org,
+	Andrew Morton <akpm@linux-foundation.org>,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: [PATCH stable 5.15 v2] lib/buildid: Handle memfd_secret() files in build_id_parse()
+Date: Mon, 17 Mar 2025 09:13:40 +0800
+Message-ID: <C20998946B822F0F+20250317011339.119224-3-chenlinxuan@deepin.org>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250316-vsock-trans-signal-race-v3-2-17a6862277c9@rbox.co>
-References: <20250316-vsock-trans-signal-race-v3-0-17a6862277c9@rbox.co>
-In-Reply-To: <20250316-vsock-trans-signal-race-v3-0-17a6862277c9@rbox.co>
-To: Stefano Garzarella <sgarzare@redhat.com>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Simon Horman <horms@kernel.org>, "Michael S. Tsirkin" <mst@redhat.com>, 
- Bobby Eshleman <bobby.eshleman@bytedance.com>, 
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
- Mykola Lysenko <mykolal@fb.com>, Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, 
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, 
- virtualization@lists.linux.dev, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Michal Luczaj <mhal@rbox.co>
-X-Mailer: b4 0.14.2
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:deepin.org:qybglogicsvrgz:qybglogicsvrgz7a-0
+X-QQ-XMAILINFO: OHTF91J1Rz8hHy5JQijd6SoVpHeuOYSZow0R5p8dM10iTln+yPA/Hjv7
+	J8zMoBx/5phAmHPvG1WzBNPSLWIu0/PQmgETadlZHLYCWUsCyBm8BgqA7h1xsBag3/fgP6X
+	rBdeROc3WMgw+ckRr319LMvViSynYoCVSXK9S8/qW7cp0DB5lKjmoQWUnO5QuMA+wuvFpnn
+	3JvLKyr63Ly0iSK+cJqnnJxKUcNnsi+VPT8NBjWkgr1nUq0nJdQKWrL3QhuymxZ9BiW4Yhl
+	qE4aoH9m9UyZtodkZGlfma9Dq2f/ZSildpxz5MYGTHDi9V4iYTNyauvBOLMj8rHTKXnGEy/
+	p7CdRIUALhB6Ua6HAc2FCmSDSU4qmoPcZthm7vItMqAiX2liiafU2OlJjCXXsNbiVqTu/EK
+	eR/p3JV8hPxr4kaYYaJKyUESIdkl/y8QDolSrgemonM/ZzUErNd/FaHYDCq6jHPHCGUoLkl
+	jaE7lz0Zn8EYDBlRz3OxZcEtZ7l2JiACNh6uCBuK8onrb/EgCYptdY/utjZYG+H+m+lvEap
+	CmlDoK/ktu5U8+wluw90sNIaMFkce/m9U1iQbB1+QqChS3ipsBoVP38V23W/yq7w8TNYklz
+	TPy8ISmDUIDeh2wnPhvDAe638z4NUdvTpncXOXMl7BLcETm3yd2UtfFWeDIO8zSUphqUXhH
+	25lq8sOIQn4A4hlPRBgFRsqvw780Fp3+N+75CVLdCF28BubqaNqfzDw2LvyJq3FWtSmHEee
+	mH4M+0ITzFe3LlAG0MlEXcME6OsdVvdeLWN7dVIuoDrq6etlB9XXURhL53LsbFznjY5V8x1
+	MPwIGbC9+Ym3LdqH4UBS8PxOEcHs4Q+MVszc8k0jyMoz8k8NRBvfOP+NaBluTvV6SQzs5yH
+	0EcaDbW/QUmecpUfQd2OWWb0r/9SHEh8yqyTHkFEYpVzGNzMFMCSSSyU7JospkiOlH+5/Jd
+	FPCxH78oEqV+JgHXIN01loZU+
+X-QQ-XMRINFO: OWPUhxQsoeAVDbp3OJHYyFg=
+X-QQ-RECHKSPAM: 0
 
-Racing signal-interrupted connect() and sockmap update may result in an
-unconnected (and missing vsock transport) socket in a sockmap.
+[ Upstream commit 5ac9b4e935dfc6af41eee2ddc21deb5c36507a9f ]
 
-Test spends 2 seconds attempting to reach WARN_ON_ONCE().
+>From memfd_secret(2) manpage:
 
-connect
-  / state = SS_CONNECTED /
-                                sock_map_update_elem
-  if signal_pending
-    state = SS_UNCONNECTED
+  The memory areas backing the file created with memfd_secret(2) are
+  visible only to the processes that have access to the file descriptor.
+  The memory region is removed from the kernel page tables and only the
+  page tables of the processes holding the file descriptor map the
+  corresponding physical memory. (Thus, the pages in the region can't be
+  accessed by the kernel itself, so that, for example, pointers to the
+  region can't be passed to system calls.)
 
-connect
-  transport = NULL
-                                vsock_bpf_recvmsg
-                                  WARN_ON_ONCE(!vsk->transport)
+We need to handle this special case gracefully in build ID fetching
+code. Return -EFAULT whenever secretmem file is passed to build_id_parse()
+family of APIs. Original report and repro can be found in [0].
 
-Signed-off-by: Michal Luczaj <mhal@rbox.co>
+  [0] https://lore.kernel.org/bpf/ZwyG8Uro%2FSyTXAni@ly-workstation/
+
+Fixes: de3ec364c3c3 ("lib/buildid: add single folio-based file reader abstraction")
+Reported-by: Yi Lai <yi1.lai@intel.com>
+Suggested-by: Shakeel Butt <shakeel.butt@linux.dev>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Acked-by: Shakeel Butt <shakeel.butt@linux.dev>
+Link: https://lore.kernel.org/bpf/20241017175431.6183-A-hca@linux.ibm.com
+Link: https://lore.kernel.org/bpf/20241017174713.2157873-1-andrii@kernel.org
+[ Chen Linxuan: backport same logic without folio-based changes ]
+Cc: stable@vger.kernel.org
+Fixes: 88a16a130933 ("perf: Add build id data in mmap2 event")
+Signed-off-by: Chen Linxuan <chenlinxuan@deepin.org>
 ---
- .../selftests/bpf/prog_tests/sockmap_basic.c       | 97 ++++++++++++++++++++++
- 1 file changed, 97 insertions(+)
+v1 -> v2: use vma_is_secretmem() instead of directly checking
+          vma->vm_file->f_op == &secretmem_fops
+---
+ lib/buildid.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-index 1e3e4392dcca0e1722c1982ecc649a80c27443b2..d9cd20d1fbc25cc56d37f06522c5b805004fa884 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-@@ -3,6 +3,7 @@
- #include <error.h>
- #include <netinet/tcp.h>
- #include <sys/epoll.h>
-+#include <linux/time64.h>
+diff --git a/lib/buildid.c b/lib/buildid.c
+index 9fc46366597e..34315d09b544 100644
+--- a/lib/buildid.c
++++ b/lib/buildid.c
+@@ -5,6 +5,7 @@
+ #include <linux/elf.h>
+ #include <linux/kernel.h>
+ #include <linux/pagemap.h>
++#include <linux/secretmem.h>
  
- #include "test_progs.h"
- #include "test_skmsg_load_helpers.skel.h"
-@@ -1042,6 +1043,100 @@ static void test_sockmap_vsock_unconnected(void)
- 	xclose(map);
- }
+ #define BUILD_ID 3
  
-+#define CONNECT_SIGNAL_RACE_TIMEOUT 2 /* seconds */
+@@ -157,6 +158,10 @@ int build_id_parse(struct vm_area_struct *vma, unsigned char *build_id,
+ 	if (!vma->vm_file)
+ 		return -EINVAL;
+ 
++	/* reject secretmem */
++	if (vma_is_secretmem(vma))
++		return -EFAULT;
 +
-+static void sig_handler(int signum)
-+{
-+	/* nop */
-+}
-+
-+static void connect_signal_racer_cleanup(void *map)
-+{
-+	xclose(*(int *)map);
-+}
-+
-+static void *connect_signal_racer(void *arg)
-+{
-+	int map;
-+
-+	map = bpf_map_create(BPF_MAP_TYPE_SOCKMAP, NULL, sizeof(int),
-+			     sizeof(int), 1, NULL);
-+	if (!ASSERT_OK_FD(map, "bpf_map_create"))
-+		return NULL;
-+
-+	pthread_cleanup_push(connect_signal_racer_cleanup, &map);
-+
-+	for (;;) {
-+		int c = *(int *)arg;
-+		int zero = 0;
-+
-+		(void)bpf_map_update_elem(map, &zero, &c, BPF_ANY);
-+
-+		if (kill(0, SIGUSR1)) {
-+			FAIL_ERRNO("kill");
-+			break;
-+		}
-+
-+		if ((recv(c, NULL, 0, MSG_DONTWAIT) < 0) && errno == ENODEV) {
-+			FAIL_ERRNO("recv");
-+			break;
-+		}
-+	}
-+
-+	pthread_cleanup_pop(1);
-+
-+	return NULL;
-+}
-+
-+static void test_sockmap_vsock_connect_signal_race(void)
-+{
-+	struct sockaddr_vm addr, bad_addr;
-+	socklen_t alen = sizeof(addr);
-+	sighandler_t orig_handler;
-+	pthread_t thread;
-+	int s, c, p;
-+	__u64 tout;
-+
-+	orig_handler = signal(SIGUSR1, sig_handler);
-+	if (!ASSERT_NEQ(orig_handler, SIG_ERR, "signal handler setup"))
-+		return;
-+
-+	s = socket_loopback(AF_VSOCK, SOCK_SEQPACKET | SOCK_NONBLOCK);
-+	if (s < 0)
-+		goto restore;
-+
-+	if (xgetsockname(s, (struct sockaddr *)&addr, &alen))
-+		goto close;
-+
-+	bad_addr = addr;
-+	bad_addr.svm_cid = 0x42424242; /* non-existing */
-+
-+	if (xpthread_create(&thread, 0, connect_signal_racer, &c))
-+		goto close;
-+
-+	tout = get_time_ns() + CONNECT_SIGNAL_RACE_TIMEOUT * NSEC_PER_SEC;
-+	do {
-+		c = xsocket(AF_VSOCK, SOCK_SEQPACKET, 0);
-+		if (c < 0)
-+			break;
-+
-+		if (connect(c, (struct sockaddr *)&addr, alen) && errno == EINTR)
-+			(void)connect(c, (struct sockaddr *)&bad_addr, alen);
-+
-+		xclose(c);
-+		p = accept(s, NULL, NULL);
-+		if (p >= 0)
-+			xclose(p);
-+	} while (get_time_ns() < tout);
-+
-+	ASSERT_OK(pthread_cancel(thread), "pthread_cancel");
-+	xpthread_join(thread, NULL);
-+close:
-+	xclose(s);
-+restore:
-+	ASSERT_NEQ(signal(SIGUSR1, orig_handler), SIG_ERR, "handler restore");
-+}
-+
- void test_sockmap_basic(void)
- {
- 	if (test__start_subtest("sockmap create_update_free"))
-@@ -1108,4 +1203,6 @@ void test_sockmap_basic(void)
- 		test_sockmap_skb_verdict_vsock_poll();
- 	if (test__start_subtest("sockmap vsock unconnected"))
- 		test_sockmap_vsock_unconnected();
-+	if (test__start_subtest("sockmap vsock connect signal race"))
-+		test_sockmap_vsock_connect_signal_race();
- }
-
+ 	page = find_get_page(vma->vm_file->f_mapping, 0);
+ 	if (!page)
+ 		return -EFAULT;	/* page not mapped */
 -- 
 2.48.1
 
