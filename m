@@ -1,146 +1,162 @@
-Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1564A230272;
-	Mon, 17 Mar 2025 09:53:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.38
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE97F22FACE
+	for <bpf@vger.kernel.org>; Mon, 17 Mar 2025 09:59:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742205183; cv=none; b=Z1s+7lJwsRXZInGYQ2Kp4R+SFrtBmaz+B5OVTIz7nJllEW/J4TOnvO1+nQjxtZc2EwPK+u0+mDM+mcXdflTsD1rrGESe1DjJLG7ryja02lOrV5XpODBCCqcJebGOjD46d+A533sqpx8UFYcr4lRKpIdzJ1DrDFHim/bvGpJiubQ=
+	t=1742205544; cv=none; b=PeCbbtUVQslH1Ws7cWsfKwHPUGYe52RPfspjWP3hutYAzWxG1qdUl3tn1x1I0IP2i/LfnZi2FdVIOl95YC3jPuKQPwElqrpKoRbQG4a61XVBtPKCGD+R1ha9OvjoUxVTaA2nWe3dCB9GNAvmGiM9cCNGbBRzZ07UUKoOAB90/28=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742205183; c=relaxed/simple;
-	bh=3tj+sd1hBSK0PpyiKGpyyTMF/4GJvPBwbGnV9vwWXd0=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=orr2OZ9L8PWvJxhAddnmSkiADZ3W/W1rZyxQc5eDSrwn33TGsWbeU+hhtqoN97UO0UcuiL/CW5tuwSg7HEEJtwsb1PDQWSdGfvd1o6cNIu7/47BkcT69poEFFD6TheOrs9RuVcJ4+j6a7YxZSWYi+oaoaYXG5lXWZ+UDmx0x9js=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=HhbaFGun; arc=none smtp.client-ip=185.226.149.38
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
+	s=arc-20240116; t=1742205544; c=relaxed/simple;
+	bh=TYjYZ6duWQEdEQWm/c38bFEvw3rW3V3w1NhWv6sQFB8=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SXGr6Rkm3TPhRNNYW+853+aagbvigdi6cZMpA9YnkWutPq1SwOMwL7wCa1OKkz0n9oRgG5GfmQ4cW5FTCvmKnp+BmgjVytSqbRd5lWsMcsffAyMkGGGgnKdMG5Ni4R6RvoUt5utXzowfQAfpwDLqmTgbqOYo6xGLhSJ2Dh+rFjo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ixx0EbL2; arc=none smtp.client-ip=209.85.208.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="HhbaFGun"
-Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
-	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.93)
-	(envelope-from <mhal@rbox.co>)
-	id 1tu79W-00Dmy8-8L; Mon, 17 Mar 2025 10:52:58 +0100
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
-	s=selector1; h=Cc:To:In-Reply-To:References:Message-Id:
-	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From;
-	bh=bxiMFSV63H5IMVOHX04yoU+77ubhpH+TthNc1KSiRUY=; b=HhbaFGun6t3z7GgB0kuVz5pl4F
-	222dyubEa2BnbPJCZ6HOTiIf2rmBp7eTUz8X3Yc96PXpUshypqtNg+gO6qGDy8kZkg8eKzlqBKokp
-	IaWOGZCNMKBnXKGd+MMqZ5AutUXXXf/BexI6Iiuz29YxajHJw7dNtJl+Q2sI1iuiKaS9ynzWVJFRH
-	FNEnktz5u1Qn0l1VmS+cwNoZH0jVTl44B0Nr1XU8aITiQdw3xmp3vtGwE7l4uglDQz/l1885DU6jA
-	iKu1XagdqCDIPf/44MER5G/G/pUK/K/AkvwCQHsBGmsBpANZX9iGyTdCAyQU8qin+vX9MWDeukYvz
-	gu2BYcnQ==;
-Received: from [10.9.9.74] (helo=submission03.runbox)
-	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
-	(envelope-from <mhal@rbox.co>)
-	id 1tu79Q-0007ox-7D; Mon, 17 Mar 2025 10:52:52 +0100
-Received: by submission03.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.93)
-	id 1tu796-00DI8D-4b; Mon, 17 Mar 2025 10:52:32 +0100
-From: Michal Luczaj <mhal@rbox.co>
-Date: Mon, 17 Mar 2025 10:52:23 +0100
-Subject: [PATCH net v4 1/3] vsock/bpf: Fix EINTR connect() racing sockmap
- update
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ixx0EbL2"
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-5e5cd420781so8121090a12.2
+        for <bpf@vger.kernel.org>; Mon, 17 Mar 2025 02:59:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1742205541; x=1742810341; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=w4/z2F9vBJNQcvx8fdIH3GaTI+MVNeoWIgSjM7ZKZiQ=;
+        b=ixx0EbL2Ao2KAVAY/hJFZcF5bbphGJsxur2cwV98V3uSBxI5KzUsH6IrwfJSeNxPtU
+         QeS5TqBhwPd7d0hU2g7eogxa4I8C64oNg8oMnFce2T/hF/JrYXm4RPedmn/zvrldjkmq
+         bvT8WWDOB1zrTC8cUocII/WoeIRk7vKthnaqpvqAjTklp5+38Tq1zqV/ksZQJPlQE5UB
+         207vkikxbhYgzGZmdNgszRVzILEf0zZnwuohpTDqyK98LNfGwU33WsjgQDTeaFRJEjbi
+         xSqzr7oSi9fRpoorgqbGvJ2NmjY2FFk9QQbdc6ovcsDLFmKCUe7rE4luTz3+VO9bLLvu
+         0ygQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742205541; x=1742810341;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=w4/z2F9vBJNQcvx8fdIH3GaTI+MVNeoWIgSjM7ZKZiQ=;
+        b=dUgHPllXjLhIs0pEKnCwywVyo8Gc5f+FKVMQm8/2PM+AACDDXzjrmFrOeIgxM+Xc+A
+         jW/agm1Hp5ktYodteiuKKGoZmb+W6IiUmgoLVftGf6RbO0i5OjVAC+4ssVt2zamTP/7M
+         ogzBNsj7WEetxHxAnFRKGY8b2u89CUQdiIY5XqwyFugnWTtMoJiHONOB0pyai6bm4PCf
+         enrdAtgLudwEw8YFXZcDSizP1vqwvdEiE0ZuxRq/4dQ7pFEpKIzMqMM+ioUNAuvqOkCa
+         OQiYdv4RUZuqlJSO/nCI6K+bvg1mY5G54i3Ax5tAQxWcESvcgujmWKd0qLgmtfoRbm48
+         RwGQ==
+X-Gm-Message-State: AOJu0Yw3jX8t18k40UMvxp+HkEUjZpmdxjD2+dF+l+w3kXSFYXnFZLJd
+	qP0rhQ/s2YZuOscER/mVcITtZAH4V6g7oZdPlaKF5jOxIAV7wU+c
+X-Gm-Gg: ASbGncvUOqYJo++4ZBJ5Ya29X3//my7py0UoD/rpLfC+Ajb8qQei7nD+/VaI0KX5jnc
+	2eIfLlWKS+6+ivQMzSlxpRg2zN2uuhuvM3ssgHzYPNr/WPp8c88ONT3CoUItNCGYt65T3GVg1TM
+	vmAn5s4st1Lizv2XOl9bNbvhj1uRt2KPvHx/2CmQNDZf4yiQrfOkp27mdIGvZwWlzIlbN55LobZ
+	KDVx0mdRmwdkkcyAr+E1N5TWe3wiE8elzqpE1XKtUlhBs2o8RRuToLMYrmSvbf7iAvhTHYUt0P4
+	H98XWH/eCdQJVwRvZaHfD0TKIqBLSFo=
+X-Google-Smtp-Source: AGHT+IG9sd/cC3DxQS9XltPitiHGdfdEHjLi+6/2OIw2PfRNtX86vsiUEdyHxXzNvQAePWbnWD58vg==
+X-Received: by 2002:a17:907:7290:b0:ac3:2d47:f6af with SMTP id a640c23a62f3a-ac3301fe762mr1153074966b.20.1742205540830;
+        Mon, 17 Mar 2025 02:59:00 -0700 (PDT)
+Received: from krava ([173.38.220.45])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ac3149cf22dsm630891166b.111.2025.03.17.02.58.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Mar 2025 02:59:00 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Mon, 17 Mar 2025 10:58:58 +0100
+To: Emil Tsalapatis <emil@etsalapatis.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+	andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com,
+	yonghong.song@linux.dev, tj@kernel.org, memxor@gmail.com
+Subject: Re: [PATCH] bpf: make perf_event_read_output accessible from BPF
+ core when available
+Message-ID: <Z9fyYuJgQ-D8q87E@krava>
+References: <20250316180103.12386-1-emil@etsalapatis.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250317-vsock-trans-signal-race-v4-1-fc8837f3f1d4@rbox.co>
-References: <20250317-vsock-trans-signal-race-v4-0-fc8837f3f1d4@rbox.co>
-In-Reply-To: <20250317-vsock-trans-signal-race-v4-0-fc8837f3f1d4@rbox.co>
-To: Stefano Garzarella <sgarzare@redhat.com>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Simon Horman <horms@kernel.org>, "Michael S. Tsirkin" <mst@redhat.com>, 
- Bobby Eshleman <bobby.eshleman@bytedance.com>, 
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
- Mykola Lysenko <mykolal@fb.com>, Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, 
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, 
- virtualization@lists.linux.dev, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Michal Luczaj <mhal@rbox.co>
-X-Mailer: b4 0.14.2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250316180103.12386-1-emil@etsalapatis.com>
 
-Signal delivery during connect() may result in a disconnect of an already
-TCP_ESTABLISHED socket. Problem is that such established socket might have
-been placed in a sockmap before the connection was closed. We end up with a
-SS_UNCONNECTED vsock in a sockmap. And this, combined with the ability to
-reassign (unconnected) vsock's transport to NULL, breaks the sockmap
-contract. As manifested by WARN_ON_ONCE.
+On Sun, Mar 16, 2025 at 02:01:03PM -0400, Emil Tsalapatis wrote:
+> The perf_event_read_event_output helper is currently only available to
+> tracing protrams, but is useful for other BPF programs like sched_ext
+> schedulers. When the helper is available, provide its bpf_func_proto
+> directly from the bpf core.
 
-connect
-  / state = SS_CONNECTED /
-                                sock_map_update_elem
-  if signal_pending
-    state = SS_UNCONNECTED
+please add bpf-next to the subject, otherwise lgtm
 
-connect
-  transport = NULL
-                                vsock_bpf_recvmsg
-                                  WARN_ON_ONCE(!vsk->transport)
+Acked-by: Jiri Olsa <jolsa@kernel.org>
 
-Ensure the socket does not stay in sockmap.
+jirka
 
-WARNING: CPU: 8 PID: 1228 at net/vmw_vsock/vsock_bpf.c:97 vsock_bpf_recvmsg+0xb43/0xe00
-CPU: 8 UID: 0 PID: 1228 Comm: a.out Not tainted 6.14.0-rc5+
-RIP: 0010:vsock_bpf_recvmsg+0xb43/0xe00
- sock_recvmsg+0x1b2/0x220
- __sys_recvfrom+0x190/0x270
- __x64_sys_recvfrom+0xdc/0x1b0
- do_syscall_64+0x93/0x1b0
- entry_SYSCALL_64_after_hwframe+0x76/0x7e
 
-Fixes: 634f1a7110b4 ("vsock: support sockmap")
-Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
-Signed-off-by: Michal Luczaj <mhal@rbox.co>
----
- net/vmw_vsock/af_vsock.c  | 10 +++++++++-
- net/vmw_vsock/vsock_bpf.c |  1 +
- 2 files changed, 10 insertions(+), 1 deletion(-)
-
-diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
-index 7e3db87ae4333cf63327ec105ca99253569bb9fe..81b1b8e9c946a646778367ab78ca180cef75ef72 100644
---- a/net/vmw_vsock/af_vsock.c
-+++ b/net/vmw_vsock/af_vsock.c
-@@ -1579,7 +1579,15 @@ static int vsock_connect(struct socket *sock, struct sockaddr *addr,
- 
- 		if (signal_pending(current)) {
- 			err = sock_intr_errno(timeout);
--			sk->sk_state = sk->sk_state == TCP_ESTABLISHED ? TCP_CLOSING : TCP_CLOSE;
-+			if (sk->sk_state == TCP_ESTABLISHED) {
-+				/* Might have raced with a sockmap update. */
-+				if (sk->sk_prot->unhash)
-+					sk->sk_prot->unhash(sk);
-+
-+				sk->sk_state = TCP_CLOSING;
-+			} else {
-+				sk->sk_state = TCP_CLOSE;
-+			}
- 			sock->state = SS_UNCONNECTED;
- 			vsock_transport_cancel_pkt(vsk);
- 			vsock_remove_connected(vsk);
-diff --git a/net/vmw_vsock/vsock_bpf.c b/net/vmw_vsock/vsock_bpf.c
-index 07b96d56f3a577af71021b1b8132743554996c4f..c68fdaf09046b68254dac3ea70ffbe73dfa45cef 100644
---- a/net/vmw_vsock/vsock_bpf.c
-+++ b/net/vmw_vsock/vsock_bpf.c
-@@ -127,6 +127,7 @@ static void vsock_bpf_rebuild_protos(struct proto *prot, const struct proto *bas
- {
- 	*prot        = *base;
- 	prot->close  = sock_map_close;
-+	prot->unhash = sock_map_unhash;
- 	prot->recvmsg = vsock_bpf_recvmsg;
- 	prot->sock_is_readable = sk_msg_is_readable;
- }
-
--- 
-2.48.1
-
+> 
+> Signed-off-by: Emil Tsalapatis (Meta) <emil@etsalapatis.com>
+> ---
+>  include/linux/bpf.h      | 2 ++
+>  kernel/bpf/core.c        | 5 +++++
+>  kernel/bpf/helpers.c     | 2 ++
+>  kernel/trace/bpf_trace.c | 5 +++++
+>  4 files changed, 14 insertions(+)
+> 
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index 0d7b70124d81..973a88d9b52b 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -2059,6 +2059,8 @@ int bpf_prog_calc_tag(struct bpf_prog *fp);
+>  const struct bpf_func_proto *bpf_get_trace_printk_proto(void);
+>  const struct bpf_func_proto *bpf_get_trace_vprintk_proto(void);
+>  
+> +const struct bpf_func_proto *bpf_get_perf_event_read_value_proto(void);
+> +
+>  typedef unsigned long (*bpf_ctx_copy_t)(void *dst, const void *src,
+>  					unsigned long off, unsigned long len);
+>  typedef u32 (*bpf_convert_ctx_access_t)(enum bpf_access_type type,
+> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> index 62cb9557ad3b..ba6b6118cf50 100644
+> --- a/kernel/bpf/core.c
+> +++ b/kernel/bpf/core.c
+> @@ -2972,6 +2972,11 @@ const struct bpf_func_proto * __weak bpf_get_trace_vprintk_proto(void)
+>  	return NULL;
+>  }
+>  
+> +const struct bpf_func_proto * __weak bpf_get_perf_event_read_value_proto(void)
+> +{
+> +	return NULL;
+> +}
+> +
+>  u64 __weak
+>  bpf_event_output(struct bpf_map *map, u64 flags, void *meta, u64 meta_size,
+>  		 void *ctx, u64 ctx_size, bpf_ctx_copy_t ctx_copy)
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index 5449756ba102..ddaa41a70676 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+> @@ -2056,6 +2056,8 @@ bpf_base_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+>  		return &bpf_task_pt_regs_proto;
+>  	case BPF_FUNC_trace_vprintk:
+>  		return bpf_get_trace_vprintk_proto();
+> +	case BPF_FUNC_perf_event_read_value:
+> +		return bpf_get_perf_event_read_value_proto();
+>  	default:
+>  		return NULL;
+>  	}
+> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> index 13bef2462e94..6b07fa7081d9 100644
+> --- a/kernel/trace/bpf_trace.c
+> +++ b/kernel/trace/bpf_trace.c
+> @@ -607,6 +607,11 @@ static const struct bpf_func_proto bpf_perf_event_read_value_proto = {
+>  	.arg4_type	= ARG_CONST_SIZE,
+>  };
+>  
+> +const struct bpf_func_proto *bpf_get_perf_event_read_value_proto(void)
+> +{
+> +	return &bpf_perf_event_read_value_proto;
+> +}
+> +
+>  static __always_inline u64
+>  __bpf_perf_event_output(struct pt_regs *regs, struct bpf_map *map,
+>  			u64 flags, struct perf_raw_record *raw,
+> -- 
+> 2.47.1
+> 
+> 
