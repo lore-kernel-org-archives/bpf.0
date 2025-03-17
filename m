@@ -1,48 +1,50 @@
 Received: from fllvem-ot03.ext.ti.com (fllvem-ot03.ext.ti.com [198.47.19.245])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 248902356B4;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 248272356B2;
 	Mon, 17 Mar 2025 10:16:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.245
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742206596; cv=none; b=qI5LNtBLoGyRMU2eOVBGyLL3FZ+unVOcze1yyULUDXKRNYvMBv0B6DuIJtbPfm7CR3ZC2bePICX3NRlPPIg7J4SMGma5igVYWjGMsoTbC89IZmTt7z6tTZgRTujmUGGDmSnkIwdf+mRaDkWD4syyuQo6QMkZ6lrdbWojJF95F7M=
+	t=1742206596; cv=none; b=GYQu/4jqLxYFMTTt2uA81XmoZ0VhwJzjljEYvrNk7wN4m5B8O7E+axwTi0O9uQaGyEnzkfekkYM4oS/sH4fCASWs6mGBJcm5b3ds7M5ZVJNftE218tYdxMsrBnm+0g88CG7xNU9Zx7nP0ast4K4tSrb5GV1wgb2ukPe7xyFQ8Rs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1742206596; c=relaxed/simple;
-	bh=IUObPNRR4NQzu31kLweJs0iKm+Tw8gF+37su5fyiEFE=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ooC75wjjiB+rrfoSmIi+W3jgu1YY4paqyUC6dqEwK93/dm3/mHRhaGGKefcRpq8hZw8kjyrqLIOZfRuJwNccx/H9h3AEUeZN6ros9tOSEFbF3U7ZLK4KIJ73OG4ouF/YlI0MIFrNDca4JE/n3d/tLjbIrrY8NQmGFRGQr3Q+w9M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=rT/d7l02; arc=none smtp.client-ip=198.47.19.245
+	bh=S0GYBPYA7v9UVdWEygHJSQYpaSclunqfmwnymxYze50=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=i9jmkLIgHavYZm7QAalgxTCFdTlR49rL5+XgdpYozVPM0RoqajF1FyVMV7qAp8NyupE7Q3U34FGAt1/KFQQZjiWrhmg38sr5VAuDEnlQ4Wq23u38tNNcmn16HseIgJYOdR6jbMRFvyK5lFIpywSAPTIgObYC1a4DeVx4YoCmp3s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=l7TxtPXe; arc=none smtp.client-ip=198.47.19.245
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="rT/d7l02"
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-	by fllvem-ot03.ext.ti.com (8.15.2/8.15.2) with ESMTPS id 52HAFwoe2248052
-	(version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-	Mon, 17 Mar 2025 05:15:58 -0500
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="l7TxtPXe"
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+	by fllvem-ot03.ext.ti.com (8.15.2/8.15.2) with ESMTPS id 52HAG7sZ2248072
+	(version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 17 Mar 2025 05:16:07 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1742206558;
-	bh=CdL/+PjoujWaXbjx9Z6DltuQ+LmtMfq1I7St4x1lKEY=;
-	h=From:To:CC:Subject:Date;
-	b=rT/d7l02DwVXTVZQuvKIJ+3ad/PDz83E7BSa7gcBKo2nU+yI6hfuzsSCmCXOBOHmm
-	 bDtR3pUj15YvCnsyAkveGhBN9+SZihUJzJs7P+p/P0agV9U3MYU35+qnaCGFiwddjx
-	 XXyx9LwyDVSf4SCr3Hx3grzS7ijrmraDOyvt4vSU=
-Received: from DLEE107.ent.ti.com (dlee107.ent.ti.com [157.170.170.37])
-	by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTP id 52HAFwEU076244;
-	Mon, 17 Mar 2025 05:15:58 -0500
-Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+	s=ti-com-17Q1; t=1742206567;
+	bh=BH5+4XXFN9MnV7T9lfahZWTvXJLBFXDIHb5Miv6+HGM=;
+	h=From:To:CC:Subject:Date:In-Reply-To:References;
+	b=l7TxtPXeVecfVCEodrxntREiLHgSdZQK7Qrm4CXmNynRdIs26O95TkRCtZ/ceRyPn
+	 SyWNGAo5RLOKe0hlU1yz29Gkwc99Kfu12NqbOrs+co4EiZkh1Ro9qhQf5vnhj0rlW2
+	 BseF7gIlJHU76s1fdsjO80QSA0cEjkmUP+MO1npY=
+Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
+	by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 52HAG7e6000531
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Mon, 17 Mar 2025 05:16:07 -0500
+Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE103.ent.ti.com
+ (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 17
- Mar 2025 05:15:57 -0500
-Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+ Mar 2025 05:16:06 -0500
+Received: from fllvsmtp7.itg.ti.com (10.64.40.31) by DLEE101.ent.ti.com
+ (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Mon, 17 Mar 2025 05:15:57 -0500
+ Frontend Transport; Mon, 17 Mar 2025 05:16:06 -0500
 Received: from lelv0854.itg.ti.com (lelv0854.itg.ti.com [10.181.64.140])
-	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 52HAFvM6036212;
-	Mon, 17 Mar 2025 05:15:57 -0500
+	by fllvsmtp7.itg.ti.com (8.15.2/8.15.2) with ESMTP id 52HAG6Is075321;
+	Mon, 17 Mar 2025 05:16:06 -0500
 Received: from localhost (meghana-pc.dhcp.ti.com [10.24.69.13] (may be forged))
-	by lelv0854.itg.ti.com (8.14.7/8.14.7) with ESMTP id 52HAFugA019281;
-	Mon, 17 Mar 2025 05:15:57 -0500
+	by lelv0854.itg.ti.com (8.14.7/8.14.7) with ESMTP id 52HAG5Lj019302;
+	Mon, 17 Mar 2025 05:16:06 -0500
 From: Meghana Malladi <m-malladi@ti.com>
 To: <pabeni@redhat.com>, <kuba@kernel.org>, <edumazet@google.com>,
         <davem@davemloft.net>, <andrew+netdev@lunn.ch>
@@ -55,10 +57,12 @@ CC: <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <ast@kernel.org>, <srk@ti.com>, Vignesh Raghavendra
 	<vigneshr@ti.com>,
         Roger Quadros <rogerq@kernel.org>, <danishanwar@ti.com>
-Subject: [PATCH net-next 0/3] Bug fixes from XDP and perout series
-Date: Mon, 17 Mar 2025 15:45:47 +0530
-Message-ID: <20250317101551.1005706-1-m-malladi@ti.com>
+Subject: [PATCH net-next 3/3] net: ti: icss-iep: Fix possible NULL pointer dereference for perout request
+Date: Mon, 17 Mar 2025 15:45:50 +0530
+Message-ID: <20250317101551.1005706-4-m-malladi@ti.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20250317101551.1005706-1-m-malladi@ti.com>
+References: <20250317101551.1005706-1-m-malladi@ti.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -69,26 +73,32 @@ Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 
-This patch series consists of bug fixes from the features which recently
-got merged into net-next, and haven't been merged to net tree yet.
+Whenever there is a perout request from the user application,
+kernel receives req structure containing the configuration info
+for that req. Add NULL pointer handling for perout request if
+that req struct points to NULL.
 
-Patch 2/3 and 3/3 are bug fixes reported by Dan Carpenter
-<dan.carpenter@linaro.org> using Smatch static checker.
+Fixes: e5b456a14215 ("net: ti: icss-iep: Add pwidth configuration for perout signal")
+Signed-off-by: Meghana Malladi <m-malladi@ti.com>
+---
+ drivers/net/ethernet/ti/icssg/icss_iep.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Meghana Malladi (3):
-  net: ti: prueth: Fix kernel warning while bringing down network
-    interface
-  net: ti: prueth: Fix possible NULL pointer dereference inside
-    emac_xmit_xdp_frame()
-  net: ti: icss-iep: Fix possible NULL pointer dereference for perout
-    request
-
- drivers/net/ethernet/ti/icssg/icss_iep.c     | 4 ++++
- drivers/net/ethernet/ti/icssg/icssg_common.c | 9 ++++-----
- 2 files changed, 8 insertions(+), 5 deletions(-)
-
-
-base-commit: bfc6c67ec2d64d0ca4e5cc3e1ac84298a10b8d62
+diff --git a/drivers/net/ethernet/ti/icssg/icss_iep.c b/drivers/net/ethernet/ti/icssg/icss_iep.c
+index b4a34c57b7b4..aeebdc4c121e 100644
+--- a/drivers/net/ethernet/ti/icssg/icss_iep.c
++++ b/drivers/net/ethernet/ti/icssg/icss_iep.c
+@@ -498,6 +498,10 @@ static int icss_iep_perout_enable(struct icss_iep *iep,
+ {
+ 	int ret = 0;
+ 
++	/* Return error if the req is NULL */
++	if (!req)
++		return -EINVAL;
++
+ 	/* Reject requests with unsupported flags */
+ 	if (req->flags & ~(PTP_PEROUT_DUTY_CYCLE |
+ 			  PTP_PEROUT_PHASE))
 -- 
 2.43.0
 
