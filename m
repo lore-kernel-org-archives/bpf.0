@@ -1,62 +1,62 @@
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DAE220E33A
-	for <bpf@vger.kernel.org>; Tue, 18 Mar 2025 14:30:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C151020E00A
+	for <bpf@vger.kernel.org>; Tue, 18 Mar 2025 14:30:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742308202; cv=none; b=g55kGX3YliUYafYp6c9fdJWlZIWx15n3mFf1V8QDEtUg0fsgKeuvwESwolXExnL8CtLUlbyDsXIE2rPDKF8ABFb+C1j+3cJSHCn725WS5+UHtm3wlfzP4zpv1GbE79NTQpNhk0U/T30SSt6zrhY8rZOY+E1KA5Bx1lGxurqK+PY=
+	t=1742308207; cv=none; b=FvpUTBGewSJ65nQuL1pPulfixhjGfmV4gAVpT61VV8GdbCsqDUELcCxxCvyGQ0y8ZvcAuXom+PXjwIeaMOIi6djJzYO22X1BtGuY8XFoq2JO5X8PJEjm3u7uyQSDLbd6eftjPoeCrfn723qRaMoD5AfKkQ1DJFA8Nttwl23EavM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742308202; c=relaxed/simple;
-	bh=B9tx1zLKvJBZT9nmOTQldDd8niiTgAWsc+9N9iasq+A=;
+	s=arc-20240116; t=1742308207; c=relaxed/simple;
+	bh=HhnFCRvJd1R/ArCA8jejW8R6TOTaQM+a5n1G3HvVsPM=;
 	h=From:To:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=c9nikJ1byW4n84mSkCTprHpGhStxGUeh13Z579h2KfHD/8pduaNiV645hbu9kofv+kt4MiIFGSmUpXtJ07fdnYvqT82i5rOHz46qKXFMc4cp9pA+jIDbVkmXEmXA6vzLNISvxiNSn6I+f8eMUi9USNGcSE7EACs4oY38/ZJxZv0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com; spf=pass smtp.mailfrom=isovalent.com; dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b=iSC19qDk; arc=none smtp.client-ip=209.85.221.42
+	 MIME-Version; b=XM7GrZjSvwftX2x0Uo1F7c5qAG67m7mzKKj5pRaRbaCUl+b4NP6KHkJdf+TbRVIUfIoUJys14NLH0jBsQ9xeSpTBDae5KZ0FJXOqBu6CZiY7sUWqRWGSYtxH7nBDGPS26PjGkqGdNp0YaPQFqd1DmojBKKjRUH5yskThaineocQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com; spf=pass smtp.mailfrom=isovalent.com; dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b=e/4Wr6FB; arc=none smtp.client-ip=209.85.128.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=isovalent.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b="iSC19qDk"
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-39141ffa9fcso4923231f8f.0
-        for <bpf@vger.kernel.org>; Tue, 18 Mar 2025 07:29:59 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b="e/4Wr6FB"
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-43cf05f0c3eso25240085e9.0
+        for <bpf@vger.kernel.org>; Tue, 18 Mar 2025 07:30:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent.com; s=google; t=1742308198; x=1742912998; darn=vger.kernel.org;
+        d=isovalent.com; s=google; t=1742308200; x=1742913000; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=2111fFDp3wOq8Kh+y3PKWKWjYpgdItLQ7Fr50XOregU=;
-        b=iSC19qDkAxEr4OHsqcUfDrHtjvziIURFkq69nHg6K5Ef5qtMoC3QfCaa0bv2YF+6f9
-         vUQPpa8Ma9mLsuFG5CPeefOUtnljOMOMz4MdAIoYfdly9mpGAHcZNyC22pIDBphRGm84
-         ompXBF1lVwHR/8KKY7sR8lFSHGmJG+xR8fr95n94U12VIzpsItDvP2GzBiVZmv5x5LY6
-         GjqzXbWhWSSzILga/PoCFUszyjhtqAPI46++fUaggTXi+LaJkBBZl4RGhqXz7/f/lSFJ
-         G/hJq4hIo2RScxA0+70rF895YaqILSlcuJN18WAG4EBkqCll753qde8FoI0GsVWS+poP
-         W4rA==
+        bh=/UZzeYYkzQK7t58AqMuKshbn3e7tI+uy8ybJOS+AN14=;
+        b=e/4Wr6FBOv8q612nw5t5Z/+JMXGqSeTY3Njx0lt9M0Nr8WNA6aYOec201alkU6gSPK
+         1/t9g4S6j2IQFz9R5vqt/by2SS/warn+Ua7RGdqHIPE10OyUKAxQR6op260WbAIChu0f
+         4Z+G1bpMsi4tz6Pz9KUSPTw68Il5dhq5NYCh6wiYeZXmKjdZL3ii0takHWaKXCaxqVzD
+         aOMoX9/ayuif1faltjIJvo+pLNjpOz5+UjJxTzrAdWdpvyWgOIO0d8X9LDd6xUy4cAz6
+         mUhXx/nvxJLwoZmPh4oI3KTzxm3uQRLkMRjYCyCoKGdglPP+IdD/iBESAofhr4ZwK77o
+         JD9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742308198; x=1742912998;
+        d=1e100.net; s=20230601; t=1742308200; x=1742913000;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=2111fFDp3wOq8Kh+y3PKWKWjYpgdItLQ7Fr50XOregU=;
-        b=GsrWtlVwn/a/QmrYVEYIALjFo2cGVBDZtzYvLWzipiPnd71YMdckiel43ncJMOBxSA
-         jE/0KgLo5yHWEYBiTJNM9a5FXgaOVwJjmxFhOt6+7jGFU8ZEIt8V7t+pfOeX+p2mJP4y
-         K4iNEIXxzysWPBQVqmqGVCLI6dplZ/QnAQ/OUiT/Vf48uNsp/Py95bY4DkDjlOX3h9lq
-         MkW0sGLEUL3T2v7WlaUbzhR/L4CFhcpMZleOgKzInKFrUOsEl8vNCe1YEjLGBiseS1ka
-         7X+5UDF/CVL/v+c9OcvLD17NL8B0Q+0Tv0803WtTZsy4zYxBlQNVTLloJ0L0mcndMn/I
-         Q3gQ==
-X-Gm-Message-State: AOJu0YwdAoKiRMG/zrdlXVg18S7GZz/P8xNuv1L0zlR2oRYILZXCQZ79
-	CHJ9SXwq44h2pYx/hhxdip+nOmi7bEccgKvxFW9/qg9Yodmf5ClcVga8LNl4osA1ewJA8pPASJ7
-	I
-X-Gm-Gg: ASbGnct12Z1VW8AAokHO38wXkBZdn2ltYG3oN5k8AOARgtrrjHo/wHQQe7BY0MvQV+N
-	VACFGELfXPsX2cZCzX7exrcKLvz8xY6nNK1mbD/S766oiw6bOdvQctwQKwweclf/rnB6ytii9Dc
-	exsYbtcklYDc4G+cJVSMuCxbMjPjtMzqzeFh+qUBK+kULyU6GN8ZPsyZYV8QCKtO9N1eZmT0MUF
-	3vn9V/BuPFvs0Y2Ntk2ULRVyOxItIjSaFtrivH9MfOW87EqjXn7p1QcYGgtscf+nD+18n4x/PlQ
-	7wi2VSvHBEzI9bwYumta/Uk7fRLkC37cf6ZitLLCOlVMFcMT60ZDYCyNxQ==
-X-Google-Smtp-Source: AGHT+IGRjf45Oey7gwQkektzZEfB8tYdBD843D/sljyUUX1yD+G3sk7QKQ4fRj6944tMXyatu0HBLg==
-X-Received: by 2002:a05:6000:1a8c:b0:391:48d4:bd02 with SMTP id ffacd0b85a97d-3996b47c944mr4072789f8f.29.1742308197933;
-        Tue, 18 Mar 2025 07:29:57 -0700 (PDT)
+        bh=/UZzeYYkzQK7t58AqMuKshbn3e7tI+uy8ybJOS+AN14=;
+        b=FNgTEclldbM39sIHFopTfjkFjO+XpI1uD50rsisohHFofUm6bY+bs5QuGj60pNFsP6
+         Hl6SH+aVs98T1/WOabusy8PY+R7xfXi8OJb9R4FdvXBZJwIGNSfPDgyeOaK+Ngwn9V+Q
+         v5Q9qEVPIxqGQMBRX0YgJdHayjTwDMMkttsP5Ga2+GYpdLC/c8aXOgFLbpd8W34emWaB
+         qCSTNnC2BOrnu51IKEIfvV9r45Ffkq1DT7JqbsIXXN4kQn+VfJzkkWBrpmzg/N/NO7i/
+         X316cNeEVxxvVfTvvejvDRFpvgWEEgQG2A2voGd0fohCmabTeSH/37CyLsi1rx8L3Z4q
+         +/VA==
+X-Gm-Message-State: AOJu0YxL6MoLzR7lsUiqPZTEGCvVR+SprJJtft+wixr+t0Ug8F5s5xdU
+	qLus5TlqHuzLUbwK5e4BSve2qwTlqPfLjqoyrjZiH6rGznuA1hpsy3CMDagwQ5ty1ufa4YD6RRt
+	e
+X-Gm-Gg: ASbGncuRuZIN2HKvJmDjOwMxbNptMk3RQiYmNv5kymIkyPA91iaXOvVEy+OQ51/sLxi
+	NCGgIoyDFOOz17KnWPmNUnYYYNSckaBGh4Sy3IqSpBW+K+nzaA93Hka0k2EIlctS3wtrxUetmCn
+	0Cp2Gy16eUX3K0velaW7sJiy08djCYSB/IUY11m9zgOlnNqMgd3Tp1E0KpL/9oRKHwuyYEl/2HZ
+	xt1WYlwqWpiAxGxbBwVVU9amNMP1WE2TrkS0J4Z/x40i2McTcD1WRJLv+Brkn7R0WqPCzWNeuZ+
+	k5hSBzgfpBIxpiI4VyGCXenLc2UOS8aM8OzIq6VXGAxQG8Ez8juwOQadaA==
+X-Google-Smtp-Source: AGHT+IFt4xpzL2AYapNS7T8S3DB13XBZUl9DNgRa4dhnK2In5fb4T/gM5P503uruP0hR4VcLiPlt7Q==
+X-Received: by 2002:a05:600c:470d:b0:43d:17f1:2640 with SMTP id 5b1f17b1804b1-43d3ba0753bmr20634595e9.26.1742308199724;
+        Tue, 18 Mar 2025 07:29:59 -0700 (PDT)
 Received: from localhost.localdomain ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-395cb40cdd0sm18348071f8f.77.2025.03.18.07.29.56
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-395cb40cdd0sm18348071f8f.77.2025.03.18.07.29.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Mar 2025 07:29:57 -0700 (PDT)
+        Tue, 18 Mar 2025 07:29:59 -0700 (PDT)
 From: Anton Protopopov <aspsk@isovalent.com>
 To: bpf@vger.kernel.org,
 	Andrii Nakryiko <andrii@kernel.org>,
@@ -66,9 +66,9 @@ To: bpf@vger.kernel.org,
 	Quentin Monnet <qmo@kernel.org>,
 	Anton Protopopov <aspsk@isovalent.com>,
 	Alexei Starovoitov <ast@kernel.org>
-Subject: [RFC PATCH bpf-next 12/14] libbpf: BPF Static Keys support
-Date: Tue, 18 Mar 2025 14:33:16 +0000
-Message-Id: <20250318143318.656785-13-aspsk@isovalent.com>
+Subject: [RFC PATCH bpf-next 14/14] selftests/bpf: Add tests for BPF static calls
+Date: Tue, 18 Mar 2025 14:33:18 +0000
+Message-Id: <20250318143318.656785-15-aspsk@isovalent.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20250318143318.656785-1-aspsk@isovalent.com>
 References: <20250318143318.656785-1-aspsk@isovalent.com>
@@ -80,706 +80,519 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Introduce the DEFINE_STATIC_KEY() and bpf_static_branch_{unlikely,likely}
-macros to mimic Linux Kernel Static Keys API in BPF.
-
-Example of usage would be as follows:
-
-    DEFINE_STATIC_KEY(key);
-
-    void prog(void)
-    {
-            if (bpf_static_branch_unlikely(key))
-                    /* rarely used code */
-            else
-                    /* default hot path code */
-    }
-
-or, using the likely variant:
-
-    void prog(void)
-    {
-            if (bpf_static_branch_likely(key))
-                    /* default hot path code */
-            else
-                    /* rarely used code */
-    }
-
-The "unlikely" version of macro compiles in the code where the
-else-branch (key is off) is fall-through, the "likely" macro
-prioritises the if-branch.
-
-Both macros push an entry in the new ".static_keys" section, which
-contains the following information:
-
-               32 bits                   32 bits           64 bits
-    offset of jump instruction | offset of jump target |    flags
-
-The corresponding ".rel.static_keys" relocations table entry contains
-the static key name. This information is enough to construct corresponding
-INSN_SET maps.
-
-NOTE. This is an RFC version of the patch. The main design flow of it
-is what to do when a static key is used in a noinline function and/or
-in two BPF programs. Consider the following example:
-
-    DEFINE_STATIC_KEY(key);
-
-    static __noinline foo()
-    {
-            if (bpf_static_key_unlikely(&key)) {
-                /* do something special */
-            }
-            ...
-    }
-
-    SEC("xdp")
-    int prog1(ctx) {
-        foo();
-        ...
-    }
-
-    SEC("xdp")
-    int prog2(ctx) {
-        foo();
-        ...
-    }
-
-The problem here is that when such an ELF object is parsed and loaded
-by libbpf, then, from the kernel point of view, two programs are
-loaded: prog1 + a copy of "foo", then prog2 + a copy of "foo".
-However, the static key "key" can only be used in one program (and,
-of course, it will point to different instructions in both cases, as
-prog1/prog2 have different sizes + there might be more relocations).
-The solution is to actually create private copies of the key "key"
-per "load object". This automatically allows to reuse the "same"
-static key for multiple programs.
-
-From the uAPI perspective, the bpf_static_key_update() system call
-only operates on a particular "atomic" object -- a map representing
-the static key. However, there should be a way to toggle all the keys
-derived from the "key" (this should looks more natural for a user,
-as from the C perspective there is only one object).
-So, the following changes to the API should be
-
-  * when libbpf opens an object, it replaces "key" with private per-prog
-    instances "prog1_key", "prog2_key", etc. Then these static keys can be
-    already set individually by the bpf syscall
-
-  * for "wrapper API", either introduce a helper which takes a skeleton and key
-    name, or just generate a helper in the generated skeleton (does this introduce
-    new API as well?)
-
-Some other bugs included in this patch (as before the libbpf API is
-discussed, this might be painful to re-implement this patch +
-selftests). One obvious bug is that gen-loader is not supported.
-Another one related to fd_array. Namely, in order to pass static
-keys on load, they should be placed in fd_array, and fd_array_cnt
-must be set. The current code in libbpf creates an fd_array which
-is shared between all the programs in the ELF object, which doesn't
-work if fd_array_cnt is set to non-zero, as all maps/btfs in
-fd_array[0,...,fd_array_cnt-1] are bound to the program. So instead,
-loader should create private copy of fd_array per bpf_prog_load.
+Add self-tests to test new BPF_STATIC_BRANCH_JA jump instructions
+and the BPF_STATIC_KEY_UPDATE syscall.
 
 Signed-off-by: Anton Protopopov <aspsk@isovalent.com>
 ---
- tools/lib/bpf/bpf_helpers.h     |  55 +++++
- tools/lib/bpf/libbpf.c          | 362 +++++++++++++++++++++++++++++++-
- tools/lib/bpf/libbpf_internal.h |   3 +
- tools/lib/bpf/linker.c          |   6 +-
- 4 files changed, 423 insertions(+), 3 deletions(-)
+ .../bpf/prog_tests/bpf_static_keys.c          | 359 ++++++++++++++++++
+ .../selftests/bpf/progs/bpf_static_keys.c     | 131 +++++++
+ 2 files changed, 490 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/bpf_static_keys.c
+ create mode 100644 tools/testing/selftests/bpf/progs/bpf_static_keys.c
 
-diff --git a/tools/lib/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_helpers.h
-index a50773d4616e..c66f579d3ddf 100644
---- a/tools/lib/bpf/bpf_helpers.h
-+++ b/tools/lib/bpf/bpf_helpers.h
-@@ -429,4 +429,59 @@ extern void bpf_iter_num_destroy(struct bpf_iter_num *it) __weak __ksym;
- )
- #endif /* bpf_repeat */
- 
-+#define DEFINE_STATIC_KEY(NAME)									\
-+	struct {										\
-+		__uint(type, BPF_MAP_TYPE_INSN_SET);						\
-+		__type(key, __u32);								\
-+		__type(value, __u32);								\
-+		__uint(map_extra, BPF_F_STATIC_KEY);						\
-+	} NAME SEC(".maps")
+diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_static_keys.c b/tools/testing/selftests/bpf/prog_tests/bpf_static_keys.c
+new file mode 100644
+index 000000000000..3f105d36743b
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/bpf_static_keys.c
+@@ -0,0 +1,359 @@
++// SPDX-License-Identifier: GPL-2.0
 +
-+static __always_inline int __bpf_static_branch_nop(void *static_key)
-+{
-+	asm goto("1:\n\t"
-+		"gotol_or_nop %l[l_yes]\n\t"
-+		".pushsection .static_keys, \"aw\"\n\t"
-+		".balign 8\n\t"
-+		".long 1b - .\n\t"
-+		".long %l[l_yes] - .\n\t"
-+		".quad %c0 - .\n\t"
-+		".popsection\n\t"
-+		:: "i" (static_key)
-+		:: l_yes);
-+	return 0;
-+l_yes:
-+	return 1;
-+}
++#include <test_progs.h>
 +
-+static __always_inline int __bpf_static_branch_jump(void *static_key)
-+{
-+	asm goto("1:\n\t"
-+		"nop_or_gotol %l[l_yes]\n\t"
-+		".pushsection .static_keys, \"aw\"\n\t"
-+		".balign 8\n\t"
-+		".long 1b - .\n\t"
-+		".long %l[l_yes] - .\n\t"
-+		".quad %c0 - . + 1\n\t"
-+		".popsection\n\t"
-+		:: "i" (static_key)
-+		:: l_yes);
-+	return 0;
-+l_yes:
-+	return 1;
-+}
++#include <sys/syscall.h>
++#include <bpf/bpf.h>
 +
-+/*
-+ * The bpf_static_branch_{unlikely,likely} macros provide a way to utilize BPF
-+ * Static Keys in BPF programs in exactly the same manner this is done in the
-+ * Linux Kernel.  The "unlikely" macro compiles in the code where the else-branch
-+ * (key is off) is prioritized, the "likely" macro prioritises the if-branch.
-+ */
++#include "bpf_static_keys.skel.h"
 +
-+#define bpf_static_branch_unlikely(static_key) \
-+	unlikely(__bpf_static_branch_nop(static_key))
++#define VAL_ON	7
++#define VAL_OFF	3
 +
-+#define bpf_static_branch_likely(static_key) \
-+	likely(!__bpf_static_branch_jump(static_key))
-+
- #endif
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 6b85060f07b3..fdf00bc32366 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -422,6 +422,17 @@ struct bpf_sec_def {
- 	libbpf_prog_attach_fn_t prog_attach_fn;
- };
- 
-+struct static_key_insn {
-+	__u32 insn_offset;
-+	__u32 jump_target;
++enum {
++	OFF,
++	ON
 +};
 +
-+struct static_key {
-+	struct bpf_map *map;
-+	struct static_key_insn *insns;
-+	__u32 insns_cnt;
++static int _bpf_prog_load(struct bpf_insn *insns, __u32 insn_cnt)
++{
++	return bpf_prog_load(BPF_PROG_TYPE_XDP, NULL, "GPL", insns, insn_cnt, NULL);
++}
++
++static int _bpf_static_key_update(int map_fd, __u32 on)
++{
++	LIBBPF_OPTS(bpf_static_key_update_opts, opts);
++
++	opts.on = on;
++
++	return bpf_static_key_update(map_fd, &opts);
++}
++
++#define BPF_JMP32_OR_NOP(IMM, OFF)				\
++	((struct bpf_insn) {					\
++		.code  = BPF_JMP32 | BPF_JA | BPF_K,		\
++		.dst_reg = 0,					\
++		.src_reg = BPF_STATIC_BRANCH_JA,		\
++		.off   = OFF,					\
++		.imm   = IMM })
++
++#define BPF_JMP_OR_NOP(IMM, OFF)				\
++	((struct bpf_insn) {					\
++		.code  = BPF_JMP | BPF_JA | BPF_K,		\
++		.dst_reg = 0,					\
++		.src_reg = BPF_STATIC_BRANCH_JA,		\
++		.off   = OFF,					\
++		.imm   = IMM })
++
++#define BPF_NOP_OR_JMP32(IMM, OFF)				\
++	((struct bpf_insn) {					\
++		.code  = BPF_JMP32 | BPF_JA | BPF_K,		\
++		.dst_reg = 0,					\
++		.src_reg = BPF_STATIC_BRANCH_JA |		\
++			   BPF_STATIC_BRANCH_NOP,		\
++		.off   = OFF,					\
++		.imm   = IMM })
++
++#define BPF_NOP_OR_JMP(IMM, OFF)				\
++	((struct bpf_insn) {					\
++		.code  = BPF_JMP | BPF_JA | BPF_K,		\
++		.dst_reg = 0,					\
++		.src_reg = BPF_STATIC_BRANCH_JA |		\
++			   BPF_STATIC_BRANCH_NOP,		\
++		.off   = OFF,					\
++		.imm   = IMM })
++
++static const struct bpf_insn insns0[] = {
++	BPF_JMP_OR_NOP(0, 1),
++	BPF_NOP_OR_JMP(0, 1),
++	BPF_JMP32_OR_NOP(1, 0),
++	BPF_NOP_OR_JMP32(1, 0),
 +};
 +
- /*
-  * bpf_prog should be a better name but it has been used in
-  * linux/filter.h.
-@@ -494,6 +505,9 @@ struct bpf_program {
- 	__u32 line_info_rec_size;
- 	__u32 line_info_cnt;
- 	__u32 prog_flags;
-+
-+	struct static_key *static_keys;
-+	__u32 static_keys_cnt;
- };
- 
- struct bpf_struct_ops {
-@@ -523,6 +537,7 @@ struct bpf_struct_ops {
- #define STRUCT_OPS_SEC ".struct_ops"
- #define STRUCT_OPS_LINK_SEC ".struct_ops.link"
- #define ARENA_SEC ".addr_space.1"
-+#define STATIC_KEYS_SEC ".static_keys"
- 
- enum libbpf_map_type {
- 	LIBBPF_MAP_UNSPEC,
-@@ -656,6 +671,7 @@ struct elf_state {
- 	Elf64_Ehdr *ehdr;
- 	Elf_Data *symbols;
- 	Elf_Data *arena_data;
-+	Elf_Data *static_keys_data;
- 	size_t shstrndx; /* section index for section name strings */
- 	size_t strtabidx;
- 	struct elf_sec_desc *secs;
-@@ -666,6 +682,7 @@ struct elf_state {
- 	int symbols_shndx;
- 	bool has_st_ops;
- 	int arena_data_shndx;
-+	int static_keys_data_shndx;
- };
- 
- struct usdt_manager;
-@@ -763,6 +780,7 @@ void bpf_program__unload(struct bpf_program *prog)
- 
- 	zfree(&prog->func_info);
- 	zfree(&prog->line_info);
-+	zfree(&prog->static_keys);
- }
- 
- static void bpf_program__exit(struct bpf_program *prog)
-@@ -1895,6 +1913,213 @@ static char *internal_map_name(struct bpf_object *obj, const char *real_name)
- 	return strdup(map_name);
- }
- 
-+struct static_keys_table_entry {
-+	__u32 insn_offset;
-+	__u32 jump_target;
-+	union {
-+		__u64 map_ptr;	/* map_ptr is always zero, as it is relocated */
-+		__u64 flags;	/* so we can reuse it to store flags */
++/* Lower-level selftests for the gotol_or_nop/nop_or_gotol instructions */
++static void check_insn(void)
++{
++	struct bpf_insn insns[] = {
++		{}, /* we will substitute this by insn0[i], i=0,1,2,3 */
++		BPF_JMP_IMM(BPF_JA, 0, 0, 1),
++		BPF_JMP_IMM(BPF_JA, 0, 0, -2),
++		BPF_MOV64_IMM(BPF_REG_0, 0),
++		BPF_EXIT_INSN(),
 +	};
-+};
-+
-+static struct bpf_program *shndx_to_prog(struct bpf_object *obj,
-+					 size_t sec_idx,
-+					 struct static_keys_table_entry *entry)
-+{
-+	__u32 insn_offset = entry->insn_offset / 8;
-+	__u32 jump_target = entry->jump_target / 8;
-+	struct bpf_program *prog;
-+	size_t i;
-+
-+	for (i = 0; i < obj->nr_programs; i++) {
-+		prog = &obj->programs[i];
-+		if (prog->sec_idx != sec_idx)
-+			continue;
-+
-+		if (insn_offset < prog->sec_insn_off ||
-+		    insn_offset >= prog->sec_insn_off + prog->sec_insn_cnt)
-+			continue;
-+
-+		if (jump_target < prog->sec_insn_off ||
-+		    jump_target >= prog->sec_insn_off + prog->sec_insn_cnt) {
-+			pr_warn("static key: offset %u is in boundaries, target %u is not\n",
-+				insn_offset, jump_target);
-+			return NULL;
-+		}
-+
-+		return prog;
-+	}
-+
-+	return NULL;
-+}
-+
-+static struct bpf_program *find_prog_for_jump_entry(struct bpf_object *obj,
-+						    int nrels,
-+						    Elf_Data *relo_data,
-+						    __u32 entry_offset,
-+						    struct static_keys_table_entry *entry)
-+{
-+	struct bpf_program *prog;
-+	Elf64_Rel *rel;
-+	Elf64_Sym *sym;
++	bool stop = false;
++	int prog_fd[4];
 +	int i;
 +
-+	for (i = 0; i < nrels; i++) {
-+		rel = elf_rel_by_idx(relo_data, i);
-+		if (!rel) {
-+			pr_warn("static key: relo #%d: failed to get ELF relo\n", i);
-+			return ERR_PTR(-LIBBPF_ERRNO__FORMAT);
-+		}
-+
-+		if ((__u32)rel->r_offset != entry_offset)
-+			continue;
-+
-+		sym = elf_sym_by_idx(obj, ELF64_R_SYM(rel->r_info));
-+		if (!sym) {
-+			pr_warn("static key: .maps relo #%d: symbol %zx not found\n",
-+				i, (size_t)ELF64_R_SYM(rel->r_info));
-+			return ERR_PTR(-LIBBPF_ERRNO__FORMAT);
-+		}
-+
-+		prog = shndx_to_prog(obj, sym->st_shndx, entry);
-+		if (!prog) {
-+			pr_warn("static key: .maps relo #%d: program %zx not found\n",
-+				i, (size_t)sym->st_shndx);
-+			return ERR_PTR(-LIBBPF_ERRNO__FORMAT);
-+		}
-+		return prog;
-+	}
-+	return ERR_PTR(-LIBBPF_ERRNO__FORMAT);
-+}
-+
-+static struct bpf_map *find_map_for_jump_entry(struct bpf_object *obj,
-+					       int nrels,
-+					       Elf_Data *relo_data,
-+					       __u32 entry_offset)
-+{
-+	struct bpf_map *map;
-+	const char *name;
-+	Elf64_Rel *rel;
-+	Elf64_Sym *sym;
-+	int i;
-+
-+	for (i = 0; i < nrels; i++) {
-+		rel = elf_rel_by_idx(relo_data, i);
-+		if (!rel) {
-+			pr_warn("static key: relo #%d: failed to get ELF relo\n", i);
-+			return NULL;
-+		}
-+
-+		if ((__u32)rel->r_offset != entry_offset)
-+			continue;
-+
-+		sym = elf_sym_by_idx(obj, ELF64_R_SYM(rel->r_info));
-+		if (!sym) {
-+			pr_warn(".maps relo #%d: symbol %zx not found\n",
-+				i, (size_t)ELF64_R_SYM(rel->r_info));
-+			return NULL;
-+		}
-+
-+		name = elf_sym_str(obj, sym->st_name) ?: "<?>";
-+		if (!name || !strcmp(name, "")) {
-+			pr_warn(".maps relo #%d: symbol name is zero or empty\n", i);
-+			return NULL;
-+		}
-+
-+		map = bpf_object__find_map_by_name(obj, name);
-+		if (!map)
-+			return NULL;
-+		return map;
-+	}
-+	return NULL;
-+}
-+
-+static struct static_key *find_static_key(struct bpf_program *prog, struct bpf_map *map)
-+{
-+	__u32 i;
-+
-+	for (i = 0; i < prog->static_keys_cnt; i++)
-+		if (prog->static_keys[i].map == map)
-+			return &prog->static_keys[i];
-+
-+	return NULL;
-+}
-+
-+static int add_static_key_insn(struct bpf_program *prog,
-+			       struct static_keys_table_entry *entry,
-+			       struct bpf_map *map)
-+{
-+	struct static_key_insn *insn;
-+	struct static_key *key;
-+	void *x;
-+
-+	key = find_static_key(prog, map);
-+	if (!key) {
-+		__u32 size_old = prog->static_keys_cnt * sizeof(*key);
-+
-+		x = realloc(prog->static_keys, size_old + sizeof(*key));
-+		if (!x)
-+			return -ENOMEM;
-+
-+		prog->static_keys = x;
-+		prog->static_keys_cnt += 1;
-+
-+		key = x + size_old;
-+		key->map = map;
-+		key->insns = NULL;
-+		key->insns_cnt = 0;
++	for (i = 0; i < 4; i++) {
++		insns[0] = insns0[i];
++		prog_fd[i] = _bpf_prog_load(insns, ARRAY_SIZE(insns));
++		if (!ASSERT_GE(prog_fd[i], 0, "correct program"))
++			stop = true;
 +	}
 +
-+	x = realloc(key->insns, (key->insns_cnt + 1) * sizeof(key->insns[0]));
-+	if (!x)
-+		return -ENOMEM;
++	for (i = 0; i < 4; i++)
++		close(prog_fd[i]);
 +
-+	key->insns = x;
-+	insn = &key->insns[key->insns_cnt++];
-+	insn->insn_offset = (entry->insn_offset / 8) - prog->sec_insn_off;
-+	insn->jump_target = (entry->jump_target / 8) - prog->sec_insn_off;
-+	key->map->def.max_entries += 1;
++	if (stop)
++		return;
++
++	/* load should fail: incorrect SRC */
++	for (i = 0; i < 4; i++) {
++		insns[0] = insns0[i];
++		insns[0].src_reg |= 4;
++		prog_fd[i] = _bpf_prog_load(insns, ARRAY_SIZE(insns));
++		if (!ASSERT_EQ(prog_fd[i], -EINVAL, "incorrect src"))
++			return;
++	}
++
++	/* load should fail: incorrect DST */
++	for (i = 0; i < 4; i++) {
++		insns[0] = insns0[i];
++		insns[0].dst_reg = i + 1; /* non-zero */
++		prog_fd[i] = _bpf_prog_load(insns, ARRAY_SIZE(insns));
++		if (!ASSERT_EQ(prog_fd[i], -EINVAL, "incorrect dst"))
++			return;
++	}
++
++	/* load should fail: both off and imm are set */
++	for (i = 0; i < 4; i++) {
++		insns[0] = insns0[i];
++		insns[0].imm = insns[0].off = insns0[i].imm ?: insns0[i].off;
++		prog_fd[i] = _bpf_prog_load(insns, ARRAY_SIZE(insns));
++		if (!ASSERT_EQ(prog_fd[i], -EINVAL, "incorrect imm/off"))
++			return;
++	}
++
++	/* load should fail: offset is incorrect */
++	for (i = 0; i < 4; i++) {
++		insns[0] = insns0[i];
++
++		if (insns0[i].imm)
++			insns[0].imm = -2;
++		else
++			insns[0].off = -2;
++		prog_fd[i] = _bpf_prog_load(insns, ARRAY_SIZE(insns));
++		if (!ASSERT_EQ(prog_fd[i], -EINVAL, "incorrect imm/off"))
++			return;
++
++		if (insns0[i].imm)
++			insns[0].imm = 42;
++		else
++			insns[0].off = 42;
++		prog_fd[i] = _bpf_prog_load(insns, ARRAY_SIZE(insns));
++		if (!ASSERT_EQ(prog_fd[i], -EINVAL, "incorrect imm/off"))
++			return;
++
++		/* 0 is not allowed */
++		insns[0].imm = insns[0].off = 0;
++		prog_fd[i] = _bpf_prog_load(insns, ARRAY_SIZE(insns));
++		if (!ASSERT_EQ(prog_fd[i], -EINVAL, "incorrect imm/off"))
++			return;
++	}
++
++	/* incorrect field is used */
++	for (i = 0; i < 4; i++) {
++		int tmp;
++
++		insns[0] = insns0[i];
++
++		tmp = insns[0].imm;
++		insns[0].imm = insns[0].off;
++		insns[0].off = tmp;
++
++		prog_fd[i] = _bpf_prog_load(insns, ARRAY_SIZE(insns));
++		if (!ASSERT_EQ(prog_fd[i], -EINVAL, "incorrect field"))
++			return;
++	}
++}
++
++static void trigger_prog(void)
++{
++	usleep(1);
++}
++
++static void __check_one_key(struct bpf_static_keys *skel,
++			    struct bpf_map *key,
++			    int val_off,
++			    int val_on)
++{
++	int map_fd;
++	int ret;
++
++	map_fd = bpf_map__fd(key);
++	if (!ASSERT_GT(map_fd, 0, "key"))
++		return;
++
++	ret = _bpf_static_key_update(map_fd, ON);
++	if (!ASSERT_EQ(ret, 0, "_bpf_static_key_update(ON)"))
++		return;
++	skel->bss->ret_user = 0;
++	trigger_prog();
++	if (!ASSERT_EQ(skel->bss->ret_user, val_on, "skel->bss->ret_user"))
++		return;
++
++	_bpf_static_key_update(map_fd, OFF);
++	skel->bss->ret_user = 0;
++	trigger_prog();
++	if (!ASSERT_EQ(skel->bss->ret_user, val_off, "skel->bss->ret_user"))
++		return;
++}
++
++static void check_one_key(struct bpf_static_keys *skel, struct bpf_program *prog, struct bpf_map *key)
++{
++	struct bpf_link *link;
++
++	link = bpf_program__attach(prog);
++	if (!ASSERT_OK_PTR(link, "link"))
++		return;
++
++	__check_one_key(skel, key, VAL_OFF, VAL_ON);
++
++	bpf_link__destroy(link);
++}
++
++static void check_one_key_multiple(struct bpf_static_keys *skel, struct bpf_map *key)
++{
++	struct bpf_link *link;
++
++	link = bpf_program__attach(skel->progs.check_one_key_multiple);
++	if (!ASSERT_OK_PTR(link, "link"))
++		return;
++
++	__check_one_key(skel, key, VAL_OFF * 3, VAL_ON * 3);
++
++	bpf_link__destroy(link);
++}
++
++static void check_one_key_long_jump(struct bpf_static_keys *skel, struct bpf_map *key)
++{
++	struct bpf_link *link;
++
++	link = bpf_program__attach(skel->progs.check_one_key_long_jump);
++	if (!ASSERT_OK_PTR(link, "link"))
++		return;
++
++	__check_one_key(skel, key, 1000, 2000);
++
++	bpf_link__destroy(link);
++}
++
++static void __check_multiple_keys(struct bpf_static_keys *skel,
++				  struct bpf_map *key1,
++				  struct bpf_map *key2,
++				  int val_off_off,
++				  int val_off_on,
++				  int val_on_off,
++				  int val_on_on)
++{
++	int map_fd1, map_fd2;
++	int ret;
++
++	map_fd1 = bpf_map__fd(key1);
++	if (!ASSERT_GT(map_fd1, 0, "key1"))
++		return;
++
++	map_fd2 = bpf_map__fd(key2);
++	if (!ASSERT_GT(map_fd2, 0, "key2"))
++		return;
++
++	ret = _bpf_static_key_update(map_fd1, OFF);
++	if (!ASSERT_EQ(ret, 0, "_bpf_static_key_update(key1, OFF)"))
++		return;
++	ret = _bpf_static_key_update(map_fd2, OFF);
++	if (!ASSERT_EQ(ret, 0, "_bpf_static_key_update(key2, OFF)"))
++		return;
++	skel->bss->ret_user = 0;
++	trigger_prog();
++	if (!ASSERT_EQ(skel->bss->ret_user, val_off_off, "skel->bss->ret_user"))
++		return;
++
++	ret = _bpf_static_key_update(map_fd1, ON);
++	if (!ASSERT_EQ(ret, 0, "_bpf_static_key_update(key1, ON)"))
++		return;
++	ret = _bpf_static_key_update(map_fd2, OFF);
++	if (!ASSERT_EQ(ret, 0, "_bpf_static_key_update(key2, OFF)"))
++		return;
++	skel->bss->ret_user = 0;
++	trigger_prog();
++	if (!ASSERT_EQ(skel->bss->ret_user, val_off_on, "skel->bss->ret_user"))
++		return;
++
++	ret = _bpf_static_key_update(map_fd1, OFF);
++	if (!ASSERT_EQ(ret, 0, "_bpf_static_key_update(key1, OFF)"))
++		return;
++	ret = _bpf_static_key_update(map_fd2, ON);
++	if (!ASSERT_EQ(ret, 0, "_bpf_static_key_update(key2, ON)"))
++		return;
++	skel->bss->ret_user = 0;
++	trigger_prog();
++	if (!ASSERT_EQ(skel->bss->ret_user, val_on_off, "skel->bss->ret_user"))
++		return;
++
++	ret = _bpf_static_key_update(map_fd1, ON);
++	if (!ASSERT_EQ(ret, 0, "_bpf_static_key_update(key1, ON)"))
++		return;
++	ret = _bpf_static_key_update(map_fd2, ON);
++	if (!ASSERT_EQ(ret, 0, "_bpf_static_key_update(key2, ON)"))
++		return;
++	skel->bss->ret_user = 0;
++	trigger_prog();
++	if (!ASSERT_EQ(skel->bss->ret_user, val_on_on, "skel->bss->ret_user"))
++		return;
++}
++
++static void check_multiple_keys(struct bpf_static_keys *skel,
++				struct bpf_map *key1,
++				struct bpf_map *key2)
++{
++	struct bpf_link *link;
++
++	link = bpf_program__attach(skel->progs.check_multiple_keys);
++	if (!ASSERT_OK_PTR(link, "link"))
++		return;
++
++	__check_multiple_keys(skel, key1, key2, 0, 3, 30, 33);
++
++	bpf_link__destroy(link);
++}
++
++static void check_bpf_to_bpf_call(struct bpf_static_keys *skel,
++				  struct bpf_map *key1,
++				  struct bpf_map *key2)
++{
++	struct bpf_link *link;
++
++	link = bpf_program__attach(skel->progs.check_bpf_to_bpf_call);
++	if (!ASSERT_OK_PTR(link, "link"))
++		return;
++
++	__check_multiple_keys(skel, key1, key2, 0, 303, 3030, 3333);
++
++	bpf_link__destroy(link);
++}
++
++static void check_syscall(void)
++{
++	struct bpf_static_keys *skel;
++
++	skel = bpf_static_keys__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "bpf_static_keys__open_and_load"))
++		return;
++
++	check_one_key(skel, skel->progs.check_one_key_likely, skel->maps.key1);
++	check_one_key(skel, skel->progs.check_one_key_unlikely, skel->maps.key2);
++	check_one_key_multiple(skel, skel->maps.key3);
++	check_one_key_long_jump(skel, skel->maps.key4);
++	check_multiple_keys(skel, skel->maps.key5, skel->maps.key6);
++
++	bpf_static_keys__destroy(skel);
++}
++
++void test_bpf_static_keys(void)
++{
++	if (test__start_subtest("check_insn"))
++		check_insn();
++
++	if (test__start_subtest("check_syscall"))
++		check_syscall();
++}
+diff --git a/tools/testing/selftests/bpf/progs/bpf_static_keys.c b/tools/testing/selftests/bpf/progs/bpf_static_keys.c
+new file mode 100644
+index 000000000000..79272de8e682
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/bpf_static_keys.c
+@@ -0,0 +1,131 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++#include "bpf_misc.h"
++
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__uint(max_entries, 1);
++	__type(key, u32);
++	__type(value, u32);
++} just_map SEC(".maps");
++
++int ret_user;
++
++#define VAL_ON	7
++#define VAL_OFF	3
++
++DEFINE_STATIC_KEY(key1);
++
++SEC("fentry/" SYS_PREFIX "sys_nanosleep")
++int check_one_key_likely(void *ctx)
++{
++	if (bpf_static_branch_likely(&key1))
++		ret_user += VAL_ON;
++	else
++		ret_user += VAL_OFF;
 +
 +	return 0;
 +}
 +
-+static int
-+bpf_object__collect_static_keys_relos(struct bpf_object *obj,
-+				      Elf64_Shdr *shdr,
-+				      Elf_Data *relo_data)
++DEFINE_STATIC_KEY(key2);
++
++SEC("fentry/" SYS_PREFIX "sys_nanosleep")
++int check_one_key_unlikely(void *ctx)
 +{
-+	Elf_Data *data = obj->efile.static_keys_data;
-+	int nrels = shdr->sh_size / shdr->sh_entsize;
-+	struct static_keys_table_entry *entries;
-+	size_t i;
-+	int err;
++	if (bpf_static_branch_unlikely(&key2))
++		ret_user += VAL_ON;
++	else
++		ret_user += VAL_OFF;
 +
-+	if (!data)
-+		return 0;
++	return 0;
++}
 +
-+	entries = (void *)data->d_buf;
-+	for (i = 0; i < data->d_size / sizeof(struct static_keys_table_entry); i++) {
-+		__u32 entry_offset = i * sizeof(struct static_keys_table_entry);
-+		struct bpf_program *prog;
-+		struct bpf_map *map;
++DEFINE_STATIC_KEY(key3);
 +
-+		prog = find_prog_for_jump_entry(obj, nrels, relo_data, entry_offset, &entries[i]);
-+		if (IS_ERR(prog))
-+			return PTR_ERR(prog);
++SEC("fentry/" SYS_PREFIX "sys_nanosleep")
++int check_one_key_multiple(void *ctx)
++{
++	if (bpf_static_branch_likely(&key3))
++		ret_user += VAL_ON;
++	else
++		ret_user += VAL_OFF;
 +
-+		map = find_map_for_jump_entry(obj, nrels, relo_data,
-+				entry_offset + offsetof(struct static_keys_table_entry, map_ptr));
-+		if (!map)
-+			return -EINVAL;
++	bpf_printk("%lu\n", bpf_jiffies64());
 +
-+		err = add_static_key_insn(prog, &entries[i], map);
-+		if (err)
-+			return err;
++	if (bpf_static_branch_unlikely(&key3))
++		ret_user += VAL_ON;
++	else
++		ret_user += VAL_OFF;
++
++	bpf_printk("%lu\n", bpf_jiffies64());
++
++	if (bpf_static_branch_likely(&key3))
++		ret_user += VAL_ON;
++	else
++		ret_user += VAL_OFF;
++
++	return 0;
++}
++
++static __always_inline int big_chunk_of_code(volatile int *x)
++{
++	#pragma clang loop unroll_count(256)
++	for (int i = 0; i < 256; i++)
++		*x += 1;
++
++	return *x;
++}
++
++DEFINE_STATIC_KEY(key4);
++
++SEC("fentry/" SYS_PREFIX "sys_nanosleep")
++int check_one_key_long_jump(void *ctx)
++{
++	int x;
++
++	if (bpf_static_branch_unlikely(&key4)) {
++		x = 1744;
++		big_chunk_of_code(&x);
++		ret_user = x;
++	} else {
++		x = 744;
++		big_chunk_of_code(&x);
++		ret_user = x;
 +	}
 +
 +	return 0;
 +}
 +
- static int
- map_fill_btf_type_info(struct bpf_object *obj, struct bpf_map *map);
- 
-@@ -3951,6 +4176,9 @@ static int bpf_object__elf_collect(struct bpf_object *obj)
- 			} else if (strcmp(name, ARENA_SEC) == 0) {
- 				obj->efile.arena_data = data;
- 				obj->efile.arena_data_shndx = idx;
-+			} else if (strcmp(name, STATIC_KEYS_SEC) == 0) {
-+				obj->efile.static_keys_data = data;
-+				obj->efile.static_keys_data_shndx = idx;
- 			} else {
- 				pr_info("elf: skipping unrecognized data section(%d) %s\n",
- 					idx, name);
-@@ -3968,7 +4196,8 @@ static int bpf_object__elf_collect(struct bpf_object *obj)
- 			    strcmp(name, ".rel" STRUCT_OPS_LINK_SEC) &&
- 			    strcmp(name, ".rel?" STRUCT_OPS_SEC) &&
- 			    strcmp(name, ".rel?" STRUCT_OPS_LINK_SEC) &&
--			    strcmp(name, ".rel" MAPS_ELF_SEC)) {
-+			    strcmp(name, ".rel" MAPS_ELF_SEC) &&
-+			    strcmp(name, ".rel" STATIC_KEYS_SEC)) {
- 				pr_info("elf: skipping relo section(%d) %s for section(%d) %s\n",
- 					idx, name, targ_sec_idx,
- 					elf_sec_name(obj, elf_sec_by_idx(obj, targ_sec_idx)) ?: "<?>");
-@@ -5200,6 +5429,69 @@ bpf_object__populate_internal_map(struct bpf_object *obj, struct bpf_map *map)
- 	return 0;
- }
- 
-+static struct static_key *
-+bpf_object__find_static_key(struct bpf_object *obj, struct bpf_map *map)
++DEFINE_STATIC_KEY(key5);
++DEFINE_STATIC_KEY(key6);
++
++SEC("fentry/" SYS_PREFIX "sys_nanosleep")
++int check_multiple_keys(void *ctx)
 +{
-+	struct static_key *key = NULL;
-+	int i;
++	__u64 j = bpf_jiffies64();
 +
-+	for (i = 0; i < obj->nr_programs; i++) {
-+		key = find_static_key(&obj->programs[i], map);
-+		if (key)
-+			return key;
-+	}
++	if (bpf_static_branch_likely(&key5))
++		ret_user += 1;
++	if (bpf_static_branch_unlikely(&key6))
++		ret_user += 10;
 +
-+	return NULL;
-+}
++	bpf_printk("%lu\n", j);
 +
-+static int bpf_object__init_static_key_map(struct bpf_object *obj,
-+					   struct bpf_map *map)
-+{
-+	struct static_key *key;
-+	__u32 map_key;
-+	int err;
-+	int i;
++	if (bpf_static_branch_unlikely(&key5))
++		ret_user += 1;
++	if (bpf_static_branch_likely(&key6))
++		ret_user += 10;
 +
-+	if (obj->gen_loader) {
-+		pr_warn("not supported: obj->gen_loader ^ static keys\n");
-+		return libbpf_err(-ENOTSUP);
-+	}
++	bpf_printk("%lu\n", bpf_jiffies64());
 +
-+	key = bpf_object__find_static_key(obj, map);
-+	if (!key) {
-+		pr_warn("map '%s': static key is not used by any program\n",
-+			bpf_map__name(map));
-+		return libbpf_err(-EINVAL);
-+	}
-+
-+	if (key->insns_cnt != map->def.max_entries) {
-+		pr_warn("map '%s': static key #entries and max_entries differ: %d != %d\n",
-+			bpf_map__name(map), key->insns_cnt, map->def.max_entries);
-+		return libbpf_err(-EINVAL);
-+	}
-+
-+	for (i = 0; i < key->insns_cnt; i++) {
-+		map_key = key->insns[i].insn_offset;
-+		err = bpf_map_update_elem(map->fd, &i, &map_key, 0);
-+		if (err) {
-+			err = -errno;
-+			pr_warn("map '%s': failed to set initial contents: %s\n",
-+				bpf_map__name(map), errstr(err));
-+			return err;
-+		}
-+	}
-+
-+	err = bpf_map_freeze(map->fd);
-+	if (err) {
-+		err = -errno;
-+		pr_warn("map '%s': failed to freeze as read-only: %s\n",
-+			bpf_map__name(map), errstr(err));
-+		return err;
-+	}
++	if (bpf_static_branch_likely(&key5))
++		ret_user += 1;
++	if (bpf_static_branch_unlikely(&key6))
++		ret_user += 10;
 +
 +	return 0;
 +}
 +
- static void bpf_map__destroy(struct bpf_map *map);
- 
- static int bpf_object__create_map(struct bpf_object *obj, struct bpf_map *map, bool is_inner)
-@@ -5520,6 +5812,12 @@ bpf_object__create_maps(struct bpf_object *obj)
- 					memcpy(map->mmaped, obj->arena_data, obj->arena_data_sz);
- 					zfree(&obj->arena_data);
- 				}
-+			} else if (map->def.type == BPF_MAP_TYPE_INSN_SET) {
-+				if (map->map_extra & BPF_F_STATIC_KEY) {
-+					err = bpf_object__init_static_key_map(obj, map);
-+					if (err < 0)
-+						goto err_out;
-+				}
- 			}
- 			if (map->init_slots_sz && map->def.type != BPF_MAP_TYPE_PROG_ARRAY) {
- 				err = init_map_in_map_slots(obj, map);
-@@ -6344,10 +6642,43 @@ static struct reloc_desc *find_prog_insn_relo(const struct bpf_program *prog, si
- 		       sizeof(*prog->reloc_desc), cmp_relo_by_insn_idx);
- }
- 
-+static int append_subprog_static_keys(struct bpf_program *main_prog,
-+				      struct bpf_program *subprog)
-+{
-+	size_t main_size = main_prog->static_keys_cnt * sizeof(struct static_key);
-+	size_t subprog_size = subprog->static_keys_cnt * sizeof(struct static_key);
-+	struct static_key *key;
-+	void *new_keys;
-+	int i, j;
-+
-+	if (!subprog->static_keys_cnt)
-+		return 0;
-+
-+	new_keys = realloc(main_prog->static_keys, subprog_size + main_size);
-+	if (!new_keys)
-+		return -ENOMEM;
-+
-+	memcpy(new_keys + main_size, subprog->static_keys, subprog_size);
-+
-+	for (i = 0; i < subprog->static_keys_cnt; i++) {
-+		key = new_keys + main_size + i * sizeof(struct static_key);
-+		for (j = 0; j < key->insns_cnt; j++) {
-+			key->insns[j].insn_offset += subprog->sub_insn_off;
-+			key->insns[j].jump_target += subprog->sub_insn_off;
-+		}
-+	}
-+
-+	main_prog->static_keys = new_keys;
-+	main_prog->static_keys_cnt += subprog->static_keys_cnt;
-+
-+	return 0;
-+}
-+
- static int append_subprog_relos(struct bpf_program *main_prog, struct bpf_program *subprog)
- {
- 	int new_cnt = main_prog->nr_reloc + subprog->nr_reloc;
- 	struct reloc_desc *relos;
-+	int err;
- 	int i;
- 
- 	if (main_prog == subprog)
-@@ -6370,6 +6701,11 @@ static int append_subprog_relos(struct bpf_program *main_prog, struct bpf_progra
- 	 */
- 	main_prog->reloc_desc = relos;
- 	main_prog->nr_reloc = new_cnt;
-+
-+	err = append_subprog_static_keys(main_prog, subprog);
-+	if (err)
-+		return err;
-+
- 	return 0;
- }
- 
-@@ -7337,6 +7673,8 @@ static int bpf_object__collect_relos(struct bpf_object *obj)
- 			err = bpf_object__collect_st_ops_relos(obj, shdr, data);
- 		else if (idx == obj->efile.btf_maps_shndx)
- 			err = bpf_object__collect_map_relos(obj, shdr, data);
-+		else if (idx == obj->efile.static_keys_data_shndx)
-+			err = bpf_object__collect_static_keys_relos(obj, shdr, data);
- 		else
- 			err = bpf_object__collect_prog_relos(obj, shdr, data);
- 		if (err)
-@@ -7461,6 +7799,7 @@ static int libbpf_prepare_prog_load(struct bpf_program *prog,
- 		opts->attach_btf_obj_fd = btf_obj_fd;
- 		opts->attach_btf_id = btf_type_id;
- 	}
-+
- 	return 0;
- }
- 
-@@ -7551,6 +7890,27 @@ static int bpf_object_load_prog(struct bpf_object *obj, struct bpf_program *prog
- 		return 0;
- 	}
- 
-+	if (obj->fd_array_cnt) {
-+		pr_warn("not supported: fd_array was already present\n");
-+		return -ENOTSUP;
-+	} else if (prog->static_keys_cnt) {
-+		int i, fd, *fd_array;
-+
-+		fd_array = calloc(prog->static_keys_cnt, sizeof(int));
-+		if (!fd_array)
-+			return -ENOMEM;
-+
-+		for (i = 0; i < prog->static_keys_cnt; i++) {
-+			fd = prog->static_keys[i].map->fd;
-+			if (fd < 0)
-+				return -EINVAL;
-+			fd_array[i] = fd;
-+		}
-+
-+		load_attr.fd_array = fd_array;
-+		load_attr.fd_array_cnt = prog->static_keys_cnt;
-+	}
-+
- retry_load:
- 	/* if log_level is zero, we don't request logs initially even if
- 	 * custom log_buf is specified; if the program load fails, then we'll
-diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
-index 76669c73dcd1..0235e85832c2 100644
---- a/tools/lib/bpf/libbpf_internal.h
-+++ b/tools/lib/bpf/libbpf_internal.h
-@@ -56,6 +56,9 @@
- #ifndef R_BPF_64_ABS32
- #define R_BPF_64_ABS32 3
- #endif
-+#ifndef R_BPF_64_NODYLD32
-+#define R_BPF_64_NODYLD32 4
-+#endif
- #ifndef R_BPF_64_32
- #define R_BPF_64_32 10
- #endif
-diff --git a/tools/lib/bpf/linker.c b/tools/lib/bpf/linker.c
-index 800e0ef09c37..4bcf122d053c 100644
---- a/tools/lib/bpf/linker.c
-+++ b/tools/lib/bpf/linker.c
-@@ -28,6 +28,7 @@
- #include "str_error.h"
- 
- #define BTF_EXTERN_SEC ".extern"
-+#define STATIC_KEYS_REL_SEC ".rel.static_keys"
- 
- struct src_sec {
- 	const char *sec_name;
-@@ -1037,7 +1038,8 @@ static int linker_sanity_check_elf_relos(struct src_obj *obj, struct src_sec *se
- 		size_t sym_type = ELF64_R_TYPE(relo->r_info);
- 
- 		if (sym_type != R_BPF_64_64 && sym_type != R_BPF_64_32 &&
--		    sym_type != R_BPF_64_ABS64 && sym_type != R_BPF_64_ABS32) {
-+		    sym_type != R_BPF_64_ABS64 && sym_type != R_BPF_64_ABS32 &&
-+		    sym_type != R_BPF_64_NODYLD32 && strcmp(sec->sec_name, STATIC_KEYS_REL_SEC)) {
- 			pr_warn("ELF relo #%d in section #%zu has unexpected type %zu in %s\n",
- 				i, sec->sec_idx, sym_type, obj->filename);
- 			return -EINVAL;
-@@ -2272,7 +2274,7 @@ static int linker_append_elf_relos(struct bpf_linker *linker, struct src_obj *ob
- 						insn->imm += sec->dst_off / sizeof(struct bpf_insn);
- 					else
- 						insn->imm += sec->dst_off;
--				} else {
-+				} else if (strcmp(src_sec->sec_name, STATIC_KEYS_REL_SEC)) {
- 					pr_warn("relocation against STT_SECTION in non-exec section is not supported!\n");
- 					return -EINVAL;
- 				}
++char _license[] SEC("license") = "GPL";
 -- 
 2.34.1
 
