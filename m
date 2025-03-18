@@ -1,62 +1,62 @@
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C674320E00A
-	for <bpf@vger.kernel.org>; Tue, 18 Mar 2025 14:29:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7194720E6E2
+	for <bpf@vger.kernel.org>; Tue, 18 Mar 2025 14:30:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742308200; cv=none; b=dAnJF0MHoLlgsiSeHrWyrRk7omdYHfs2KFvlfR+ewUcsr8n6K8Jqu9mJ2w4TL557JPqTAK10rXcKf8G8iVECZnike/qbqhDXP0NtCNwXk315b8Dl5QgjdlmqHdCoMpFqBghcSoe8/mzXC+GopIrnZoa1VDsKTr5MBSAKRhNZGPQ=
+	t=1742308202; cv=none; b=KgwTS7GZsuqJIzN0d91rn9SlCOOQfE4+iFwgNwUgyNVpW1O6lJr3K/27lf8nCK3o+0x/NDlYKt1SNYNsq+ZSfdNL1BXPCOGBqvc17dMTbYBLrvNNpPkHMkdTRJy/Rc6N8KRhEcaj2wof0RulthXWd1DkgiWbBa4JhfABjiZ01sA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742308200; c=relaxed/simple;
-	bh=Plh4uXcXwwi0W1hxJ0CzKsRLvLtSkFJDakUgMqwcx1g=;
+	s=arc-20240116; t=1742308202; c=relaxed/simple;
+	bh=zQ7/dHBZljjlgHP/3vaiICniOeYTB53FFv8JxKhUBgs=;
 	h=From:To:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=CtnGdCY2ox4oS7W1kW3gZSoR0G9jAar+2uMuSvT0EFrnPCDlS7RGUVvtyqzI/OTno0A6feO5zyq/aQiCX2g+EYMWCV+3KnXJoSZ9ONHUm5GeVFvv9UoW6AWo6cxVgbQ5ErCk/EgDI8MCSdT0sUMgpD45jZ/WOTUeVE1XcFum5RE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com; spf=pass smtp.mailfrom=isovalent.com; dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b=TmPVlFkd; arc=none smtp.client-ip=209.85.221.54
+	 MIME-Version; b=Xbz0y96Kj/p/6VtgQhnvYiQPzH94JWG366K8Bc16cfHlfnfHYZTr8cefeB2pbH/MIyxw4z5lL25atDWn3LDRs9nnElPQEYj2MLMgKTisKQT8pXAkJrAeHMpsW7F24JujOiCBTBQEJJ0AUmQ1PpTj5kLYiQYJDbN71JkUe37mLuc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com; spf=pass smtp.mailfrom=isovalent.com; dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b=iY2hQICM; arc=none smtp.client-ip=209.85.221.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=isovalent.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b="TmPVlFkd"
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-39104c1cbbdso3276938f8f.3
-        for <bpf@vger.kernel.org>; Tue, 18 Mar 2025 07:29:58 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b="iY2hQICM"
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-39141ffa9fcso4923244f8f.0
+        for <bpf@vger.kernel.org>; Tue, 18 Mar 2025 07:30:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent.com; s=google; t=1742308197; x=1742912997; darn=vger.kernel.org;
+        d=isovalent.com; s=google; t=1742308199; x=1742912999; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=eLTCxvK6gGz2vRybKBKe1olf4mufnbfTYMfiXcuyDVU=;
-        b=TmPVlFkdvffew3u8xstc2o97EfuF1UCLIaHF40XoqAYWKlPLWoK89Ke4NJSfXpMDdt
-         GRh7buJ6mOkbQIz/E31XfSpQZkJ1uXwbrMmBoYMMsmdmuSOJJftT/OULJR7TValn8uam
-         4hlnK1lbqQHKhPy19RwE4kEwiQujWmlB7pZdZxikBsIRqvNG0gXB5PZ9zPjfvIvnKaki
-         O0OaBACJ+HRI046I52jillwo/Ph5eaSPPN4lZdBBwCQk2sjzC18SI7LAumufoTYEr6ek
-         6kXhEMA5ItHSm/+SxJ5bnwLyoE78smEIcHPmVjjSxnVMQn+bJrkXuw+AMUruGZGkKXXc
-         HLfg==
+        bh=3ADSED4e0MGV34JcG66p/mu9LelpGe5lW/3uFuggSmI=;
+        b=iY2hQICMsZKG9Xx1WxkW6pp5hc3oTnPPajXy7ljQLafbuymM/ngMRmGPPT5J7dltCl
+         kBy0qIxcmL5YOilP1zCkd+2lRrWYXHdSQ3GdJckPElfc+YTOIWbXdKmPVsFSMGG1vALY
+         POW/C8jlVS2Z/sulnxK3iNtfp7dMRWJCMpsgW/TuFkBMPlSmy73G41C+khEDxOvV3cNp
+         Khd3Hcr8rwHIRyerORmHL/rZkRKtuLdTxEV/FKGIyPTqAEzfOABxC5+ME4qO3qt7N/Cg
+         g2XrjpVpUA0VJvjUNMl3rRO/ZgVifb5fO4SGQS6ICtlu1Aykv5daqERCKQsXEyD/VHgz
+         vBrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742308197; x=1742912997;
+        d=1e100.net; s=20230601; t=1742308199; x=1742912999;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=eLTCxvK6gGz2vRybKBKe1olf4mufnbfTYMfiXcuyDVU=;
-        b=OIZYY6Al0o2fJSQHmQrsVsXN5wKjpnx/sxtFYx2Cmbbca2gPJWURE4FrS/HHn00uF2
-         A0TZ5KhMxvyys7hO2/I+nUvVnpq8/lDw8SM915UDkp5sTfFCSNVSwrQnCi0yXQk14jFn
-         dqsf8/wXOmP+ulNzAKa7XaYFpfucrOJCQXEnKUmrrCxoifhgYb7tldUeooRdPL8zZY1w
-         eeF8ZjVepfJMMKl85RNCQcggVCCnxCsGfSu+cLMwWgtliajvY6Zm7l723gvfOSLWLSq/
-         9VhehsGJKFtVRAwzeDtpyFmYvXM9wnZF2/GTfE+EHJqotg/+XBW461NE8aMZeHT+sgU1
-         LVlw==
-X-Gm-Message-State: AOJu0Yxc92xsGL6l6ctakgHUKeyo2Fnfdm2r0UL6+WlJWsfTmbgpBWF5
-	SaN5XANYtWdCtEiJNolbDTtgoELSWjFRjSpX3SyGIdVuoTr+oIKig8FQgk077w8UB/uHltLYk02
-	8
-X-Gm-Gg: ASbGncvUVfMDbYbIsBGuUQae84cAQNhcAatUXYfS1tNixW9/Eauq3AOtY9FvPMIupLC
-	WnIUbC5KkAomGe+ep9FlMgfEuvEKfWaU3lfMLpx3RmllW57Md2y2Rjvn950eaSPS7Z1ckvgK4mm
-	xcB6VLhFF/0kWlvequd/k2QaLHgeV2W9B8c5/R4ItkzMpdYUsvYkQO8QQ4lSaFviPMhFGqpczBX
-	bY68rZoYB/kRkHyGIn+bax4x2nBRuDhuAkB4dv+RcuXIacQEPEkqiBFdN78icEVSY6BBCdWc1AQ
-	sJcLMw38FckC3Xaz0pcGEdfXocGc5AF3XKJ1emS3/cJRtL1rZ8Z/LRW/2g==
-X-Google-Smtp-Source: AGHT+IEUXDflq0sUHBuXlU4pARL7PO58L4hyO9yw68ro0APDXJTcPif7iclmTWRbeZrXMuDvkx51uQ==
-X-Received: by 2002:a5d:47c5:0:b0:391:39fb:59c8 with SMTP id ffacd0b85a97d-3971dae9542mr19436157f8f.25.1742308196660;
-        Tue, 18 Mar 2025 07:29:56 -0700 (PDT)
+        bh=3ADSED4e0MGV34JcG66p/mu9LelpGe5lW/3uFuggSmI=;
+        b=V+xO9T1gMXTe+X8rRCMvV4HXU72ZJoD8jGaGITLzvzPQZSiyKshA2glFce0FuZYDZw
+         d/6/nLxe/OYLwH9yIHe80VNMwlGGZgZRW1sjnfAUSC/xFMEpBsXYegbK4gBfW35sTo5p
+         7YruwMm9SLeX/T00vWrnrKfWg8NP+lUL+VxLHGhWSc4oNVa0gAfZMBQgXXFkkYyNCfkh
+         KwVXgNRjtkCESB2N2iulWTvYzLM8ADMCUJD8rejGBSwtZznVtuWqzd2adTLLMUsHtc+e
+         gqXd70yIEqI9TXfhM2twW3/XCNd3jK9BU55tBSxgKpipbghSnhRg1JyxD7hYDbf9XVCU
+         kTiQ==
+X-Gm-Message-State: AOJu0Yx235EpSAThzx5uhSk7ZsKro1gMOtBsYpMz2SpJsZ6haEnzma5T
+	h9HD6hFmi4MLeMMF6Wu5Qei/r/1MNE+bVm7DdtTbQrQtd98A4aH8C3TDi17ib9dCY8RC+CCXkgF
+	t
+X-Gm-Gg: ASbGncuV/h1hhcyYX8AE2KrZszen1lv8UXraMfHobhDhR4vvTe1+ZRP4Uhr2DB7Op6j
+	ivdj5ppM8HWVi9EMfRNABqARG7+S2LYNISoDYEhCZjtTZ/k+YDtpj4WKCaJVNc9JnQxNFZ4k4WR
+	emv1GTn1GlwhDajZoPWwWcEUaEYOnumS1fWPaDWfL7Q+8a2qLBmYqdmWzZQSiAEOBIoD0bfu1Ka
+	3zj4d13Iz6smnBb9TmsuuoG32Cms8Ww/Zs6z22sY/5GJn8an93am9TXajHFiUr/Ij8c6UP6s+hq
+	Eaibt5etMedX+iutWYmdWeF2KCo3tOS5uNL1ejMcPKQGeLISAOC2bXbDXKuJNDIEjkaS
+X-Google-Smtp-Source: AGHT+IHTqI2z7IL/JkPcvMGEwa8E480nMFZuxi69XNDGYWjVjbSyc0ZhlVWD+/4qDRX01M23gwNX5Q==
+X-Received: by 2002:a5d:47c7:0:b0:391:4835:d888 with SMTP id ffacd0b85a97d-3996b49910dmr3741716f8f.42.1742308198684;
+        Tue, 18 Mar 2025 07:29:58 -0700 (PDT)
 Received: from localhost.localdomain ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-395cb40cdd0sm18348071f8f.77.2025.03.18.07.29.56
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-395cb40cdd0sm18348071f8f.77.2025.03.18.07.29.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Mar 2025 07:29:56 -0700 (PDT)
+        Tue, 18 Mar 2025 07:29:58 -0700 (PDT)
 From: Anton Protopopov <aspsk@isovalent.com>
 To: bpf@vger.kernel.org,
 	Andrii Nakryiko <andrii@kernel.org>,
@@ -66,9 +66,9 @@ To: bpf@vger.kernel.org,
 	Quentin Monnet <qmo@kernel.org>,
 	Anton Protopopov <aspsk@isovalent.com>,
 	Alexei Starovoitov <ast@kernel.org>
-Subject: [RFC PATCH bpf-next 11/14] selftests/bpf: remove likely/unlikely definitions
-Date: Tue, 18 Mar 2025 14:33:15 +0000
-Message-Id: <20250318143318.656785-12-aspsk@isovalent.com>
+Subject: [RFC PATCH bpf-next 13/14] libbpf: Add bpf_static_key_update() API
+Date: Tue, 18 Mar 2025 14:33:17 +0000
+Message-Id: <20250318143318.656785-14-aspsk@isovalent.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20250318143318.656785-1-aspsk@isovalent.com>
 References: <20250318143318.656785-1-aspsk@isovalent.com>
@@ -80,49 +80,81 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Now likely/unlikely macros are defined in tools/lib/bpf/bpf_helpers.h
-and thus can be removed from selftests.
+Add low-level wrapper API for BPF_STATIC_KEY_UPDATE
+command in bpf() syscall.
 
 Signed-off-by: Anton Protopopov <aspsk@isovalent.com>
 ---
- tools/testing/selftests/bpf/bpf_arena_spin_lock.h | 8 --------
- tools/testing/selftests/bpf/progs/iters.c         | 4 ----
- 2 files changed, 12 deletions(-)
+ tools/lib/bpf/bpf.c      | 17 +++++++++++++++++
+ tools/lib/bpf/bpf.h      | 19 +++++++++++++++++++
+ tools/lib/bpf/libbpf.map |  1 +
+ 3 files changed, 37 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/bpf_arena_spin_lock.h b/tools/testing/selftests/bpf/bpf_arena_spin_lock.h
-index d60d899dd9da..4e29c31c4ef8 100644
---- a/tools/testing/selftests/bpf/bpf_arena_spin_lock.h
-+++ b/tools/testing/selftests/bpf/bpf_arena_spin_lock.h
-@@ -95,14 +95,6 @@ struct arena_qnode {
- #define _Q_LOCKED_VAL		(1U << _Q_LOCKED_OFFSET)
- #define _Q_PENDING_VAL		(1U << _Q_PENDING_OFFSET)
+diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
+index a9c3e33d0f8a..330d9523fc2b 100644
+--- a/tools/lib/bpf/bpf.c
++++ b/tools/lib/bpf/bpf.c
+@@ -1331,3 +1331,20 @@ int bpf_token_create(int bpffs_fd, struct bpf_token_create_opts *opts)
+ 	fd = sys_bpf_fd(BPF_TOKEN_CREATE, &attr, attr_sz);
+ 	return libbpf_err_errno(fd);
+ }
++
++int bpf_static_key_update(int map_fd, struct bpf_static_key_update_opts *opts)
++{
++	const size_t attr_sz = offsetofend(union bpf_attr, static_key);
++	union bpf_attr attr;
++	int ret;
++
++	if (!OPTS_VALID(opts, bpf_static_key_update_opts))
++		return libbpf_err(-EINVAL);
++
++	memset(&attr, 0, attr_sz);
++	attr.static_key.map_fd = map_fd;
++	attr.static_key.on = OPTS_GET(opts, on, 0);
++
++	ret = sys_bpf(BPF_STATIC_KEY_UPDATE, &attr, attr_sz);
++	return libbpf_err_errno(ret);
++}
+diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
+index 777627d33d25..c76abfda85f8 100644
+--- a/tools/lib/bpf/bpf.h
++++ b/tools/lib/bpf/bpf.h
+@@ -704,6 +704,25 @@ struct bpf_token_create_opts {
+ LIBBPF_API int bpf_token_create(int bpffs_fd,
+ 				struct bpf_token_create_opts *opts);
  
--#ifndef likely
--#define likely(x) __builtin_expect(!!(x), 1)
--#endif
--
--#ifndef unlikely
--#define unlikely(x) __builtin_expect(!!(x), 0)
--#endif
--
- struct arena_qnode __arena qnodes[_Q_MAX_CPUS][_Q_MAX_NODES];
- 
- static inline u32 encode_tail(int cpu, int idx)
-diff --git a/tools/testing/selftests/bpf/progs/iters.c b/tools/testing/selftests/bpf/progs/iters.c
-index 1b9a908f2607..76adf4a8f2da 100644
---- a/tools/testing/selftests/bpf/progs/iters.c
-+++ b/tools/testing/selftests/bpf/progs/iters.c
-@@ -7,10 +7,6 @@
- #include "bpf_misc.h"
- #include "bpf_compiler.h"
- 
--#ifndef unlikely
--#define unlikely(x)	__builtin_expect(!!(x), 0)
--#endif
--
- static volatile int zero = 0;
- 
- int my_pid;
++struct bpf_static_key_update_opts {
++	size_t sz; /* size of this struct for forward/backward compatibility */
++	__u32 on;
++	size_t :0;
++};
++#define bpf_static_key_update_opts__last_field on
++
++/**
++ * @brief **bpf_static_key_update()** updates the value of a static key
++ *
++ * @param map_fd FD for the static key.
++ * @param opts optional BPF token creation options, can be NULL
++ *
++ * @return 0 on success; negative error code, otherwise (errno
++ * is also set to the error code)
++ */
++LIBBPF_API int bpf_static_key_update(int map_fd,
++				     struct bpf_static_key_update_opts *opts);
++
+ #ifdef __cplusplus
+ } /* extern "C" */
+ #endif
+diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+index d8b71f22f197..fc8f01d5804a 100644
+--- a/tools/lib/bpf/libbpf.map
++++ b/tools/lib/bpf/libbpf.map
+@@ -439,4 +439,5 @@ LIBBPF_1.6.0 {
+ 		bpf_object__prepare;
+ 		btf__add_decl_attr;
+ 		btf__add_type_attr;
++		bpf_static_key_update;
+ } LIBBPF_1.5.0;
 -- 
 2.34.1
 
