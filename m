@@ -1,62 +1,62 @@
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B173520E319
-	for <bpf@vger.kernel.org>; Tue, 18 Mar 2025 14:29:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 052BA20CCFB
+	for <bpf@vger.kernel.org>; Tue, 18 Mar 2025 14:29:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742308196; cv=none; b=J1wX5AkVzV2N5W+NwMYGVYVpr0rT4aXCn8Z+OztPPIX+eGuPHZndLxkaySEXvLeJ4lgZwL3t5PIjNIfbJdk56p60YxBhRHRZ26oFR2/Vu70TBs1NLdDDjmVV1k9xSzOxSvoC6Lb9pcGqrx08yKXMb/rpYz2FhAoKe3h/UBIwnMs=
+	t=1742308197; cv=none; b=Z/Ch2+N8XIhLiC/TcDWgu1QrZUs9yy8cspxbhJaRz8QRHC/vNnCqbajkP5RkhD4L06+iriltUeXTPDdpOTwrNATKpQUehOdua83A7Xxa/gt3atSYJI29QOfvBb/YUIUmLhhGo1HZC2I1z3h/7i43o+w0WrWD9h5nu24iiM7GSN8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742308196; c=relaxed/simple;
-	bh=e+ALpF+2hjxlZnhSlSyqW9N4MXf/9gZ8sklCqIPN97w=;
+	s=arc-20240116; t=1742308197; c=relaxed/simple;
+	bh=YTk8cmNwLt9BXcSx7rLGpMI0X5tLpVzeMW01kmmHMkw=;
 	h=From:To:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=ly/nclI3Exy8HS8tuiSYmZFdMDyv+m1alXfL/ZeEXzb7DUsMd2RP3DgFU+JGmCfjI2Zcmsdbo6Jywbxndn2O2SMXuW+2b+NUPTQQin4F2Iws9ruh3Kt+kBREAE77WEM305gwm0mh+rA1y4q1vSVXn+rklQBpRv1el3DStrqrRrQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com; spf=pass smtp.mailfrom=isovalent.com; dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b=TA42wgJz; arc=none smtp.client-ip=209.85.221.49
+	 MIME-Version; b=IJMNcox1oUJhloXHn4B5ipPj8rMbOA9etlvKfTXO0VCy3V1LSDetiWi/e5nO7zikiIEUOntis9r+ntcvGo+HO7gkJf0k8pFsVVocKwFWRGGGAhjcrTDXSWKNfrOYjxIgF3/1DIwz2IOEOqNXCY+SIx5VfvUi4ckKpe3yCaHUp6I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com; spf=pass smtp.mailfrom=isovalent.com; dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b=MWjlwcJE; arc=none smtp.client-ip=209.85.221.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=isovalent.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b="TA42wgJz"
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-38a25d4b9d4so3112535f8f.0
-        for <bpf@vger.kernel.org>; Tue, 18 Mar 2025 07:29:54 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b="MWjlwcJE"
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-399676b7c41so1412185f8f.3
+        for <bpf@vger.kernel.org>; Tue, 18 Mar 2025 07:29:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent.com; s=google; t=1742308193; x=1742912993; darn=vger.kernel.org;
+        d=isovalent.com; s=google; t=1742308190; x=1742912990; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=5yIHhOTBmXRFrcEBcM58B53THvexekzxpRQQqRcX9Ak=;
-        b=TA42wgJzX7ypqSx/Qb028ZkKda7+oBpk1RGCKmfheg7/QTwMaUmsEiV9RTh2/zqajk
-         jEhu4er6jUEPfQNQdt3gnTo6cN6vaAeo3EHAhahYz2e6SUAI//KUEhAGYv1Sd6L8mkaI
-         YoYSCydeZMTE3wcbwAUSSigNKnJOglAFVE2VLxjjtHGFQY/0lATKolqdRkjYlSAQaYEM
-         4YGwIOQBC0a7qPXmeH3b+R9xVs+tWKo7+evObba6/58VfGt1JJ3Vqi8OW3Js02SIiYQZ
-         9vSI22ALk6r2uywbQRxI+kgdzuCmeCX/0eEdCOcBJOHiKFjPdVhP1j31c2YqUS17zff0
-         Xy6g==
+        bh=HyEbH1w6A9VIpcgZdoHugiV2nHQoH/REc15nWJRp/Ho=;
+        b=MWjlwcJEIZORB1ce7tEdW6wKNQFo/PYtNsYvO6EGSI3g8hNqVNA3eqv8aV9Agt3AEV
+         BSpTH5AwY4D/AwHhEvAcH6Vi/nS5aQTMGfq4NdUdLsc4fnybBCR6D/hc14p1UkItS3ST
+         jK6zjE3vhXSVHQDblluQMMl6XEWTRNoBHyjddyzDxDIQm61/CwI37aOB0M+9/7wtipDx
+         Snt1mS9vkzJ8hcmJMU56iIwVInATTwYfZv+qyUBF23LqPpbYeNzTaHINtOLCRGMAFu3w
+         WtwSg5/0Oy20IL3qO3laduSgufi5ij2QG7cZSuQTJqF2E0Gc707rLsMYpz+yfZ1s63oN
+         czZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742308193; x=1742912993;
+        d=1e100.net; s=20230601; t=1742308190; x=1742912990;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=5yIHhOTBmXRFrcEBcM58B53THvexekzxpRQQqRcX9Ak=;
-        b=ALeHAgFs6GPhfUXbMe84Ifwai3AiTDg1KX2bP40G3YucXlhJgF5QQJ1mRb9W3Adi62
-         eP0a2youDsuDwVm7aJBt0zOJqql5NuVPKFDiTOaf4hyyfrfRnco4Yt6ZnH/XVAIiy6L3
-         MHYrbQsctJItyk+x/GqsUjRhy2aEaXukEWixTcsYhZct2ekryX3RJknpW814dDN0fdP8
-         SbeEQUzawD0SWTEWI2Oz3Noc3KiTP5wNcxHENeRZzSpUNhV3JYeVGiWKTQmO67ORUn+I
-         JF5my0TF27TaScAnz5BACP2HZ5gXsgg4bNe5BXBPL76XXWJQfYQ65W6MYT441VZPvcvA
-         bynQ==
-X-Gm-Message-State: AOJu0YxMPx3MsB9s1T51TkBFnGekDEZc8y6ElU8Wtv8Vv5K8/p1LrVNp
-	BFD5L0OKkOhfKO4bRx7DvTgqday7gNjO4GDyRXSGAOqrN+tD2G5vo5hfRpVFWAAlstkac27LXM3
-	i
-X-Gm-Gg: ASbGncv/liWz32B4DJcNNLxWq+i04BE++AuE43KvZRy0aEqxjcwS/TNZDseovFvYv5l
-	vdZ49UFx1Kmmer6HsgvxK1SklEu+mqVWS29zQtSKyRcMFDoy1Ez+WrUtx7yaY66jKu6pmEYHB9B
-	dktWANe7DFZjiuyGPNnp7UZ9OjgJuic1gFQUhCzf3+AXze50Tvlws3RXW6AHQJV7Fm1od8kBpHz
-	xNbAZjgXq/YH5C2nLncnDXBJu1Jxy9qUuG1Ud9coacbu0CFkvD7bl5eP4S+n1TcNey1ggI0nMBZ
-	4oQlUfH7OyjnZsSyvzkX6SEUd2/qGFy3Uqu30sKflzbn5cC9zDvqxRWqnw==
-X-Google-Smtp-Source: AGHT+IHYMG2egFUNdE6zvkl7TxShiH7lmG39OaweczGcpB3O2EReaIlbM/AReMpyIhHQLBz4gEMhvg==
-X-Received: by 2002:a5d:5f47:0:b0:391:2e0f:efec with SMTP id ffacd0b85a97d-3971ddd6136mr19123323f8f.7.1742308191988;
-        Tue, 18 Mar 2025 07:29:51 -0700 (PDT)
+        bh=HyEbH1w6A9VIpcgZdoHugiV2nHQoH/REc15nWJRp/Ho=;
+        b=rMuGmXHjORA6CUKDBRl4l2O7xw/XQ7+a3ofsi20dqTzGN9jXls6A1Mf2vFgbiEIn30
+         DptNbChsIGH9rLuBCAfiuF8tGIDTi4Olpi/KKrj2gYMhCGJ61fGF8BIRo5JMlA00RdcQ
+         VNtBH8baRSuzdxsmgQeAlLKd69DhbDUghBzoICx0t6oIqOTj/wXkhZCEKAL3+G6osGDR
+         G28h27cC08haMJpe4dLD6g34F+aYD5S7ydZqWomSASxGgYcUCCi+wK52+UD2Xg8kIZic
+         s+PDLLT8jb0ySYTWjm09FkdvFa2ZkQaTxxR9DrtJh8AUJWpnsIa1c2NV6wcyh3fRHkn8
+         D1cA==
+X-Gm-Message-State: AOJu0YwIhIswFB7oWRbaR9ggiSFcVS9HuFr62kH5eLn46lT8wU4ES0OI
+	rJMb0WkYEZ87ckJ9Y6B0lwqfRh6DtUPp7Lval/6ieo/TCc2VQbK743HLQ0fFtJVH5uStRFe7SM3
+	R
+X-Gm-Gg: ASbGnct6rmbVzTyOLmYRdoqQjK3Ir9s3tz0iiVOo4DFzQETfxFc02F6QUsBlNB98+hI
+	iB5sba9dHZ0W57dfSgi+v/SwsXQl6YtQ/9K+cJFhcpXh35QPyRKVMQXEqk69k6bFouvPfp1jmv5
+	lXW796MVbKzOT/cGDyJ3yJ0LOSbt7+R6ZUjzlKCH8wOE2Td07CvfWIIC5rPVxQkSFJy10fpx/Ee
+	DZThS5kyg7vYrsK47OuT0BamIW6V1NU1xP+IsbNi2lTHkjWCQZBoKZV03GfoTC/sCENX+0dGJSQ
+	vwkDoBf8rt58mgZ2L4T5gyMxBG0bxGMAF5W4agZXGNKXbbyIfl8Ng8E2lw==
+X-Google-Smtp-Source: AGHT+IEBc2DXszWUK7Wx6L8YOfJbIGv1CsNj3ZZTNfgAU6t0FxewgwqAdY2eyE+E+QH5Gg+cfLT4EA==
+X-Received: by 2002:a05:6000:4027:b0:38d:d7a4:d447 with SMTP id ffacd0b85a97d-3971f9e4866mr18141561f8f.34.1742308189947;
+        Tue, 18 Mar 2025 07:29:49 -0700 (PDT)
 Received: from localhost.localdomain ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-395cb40cdd0sm18348071f8f.77.2025.03.18.07.29.51
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-395cb40cdd0sm18348071f8f.77.2025.03.18.07.29.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Mar 2025 07:29:51 -0700 (PDT)
+        Tue, 18 Mar 2025 07:29:49 -0700 (PDT)
 From: Anton Protopopov <aspsk@isovalent.com>
 To: bpf@vger.kernel.org,
 	Andrii Nakryiko <andrii@kernel.org>,
@@ -66,9 +66,9 @@ To: bpf@vger.kernel.org,
 	Quentin Monnet <qmo@kernel.org>,
 	Anton Protopopov <aspsk@isovalent.com>,
 	Alexei Starovoitov <ast@kernel.org>
-Subject: [RFC PATCH bpf-next 06/14] bpf: add BPF_STATIC_KEY_UPDATE syscall
-Date: Tue, 18 Mar 2025 14:33:10 +0000
-Message-Id: <20250318143318.656785-7-aspsk@isovalent.com>
+Subject: [RFC PATCH bpf-next 04/14] bpf: add support for an extended JA instruction
+Date: Tue, 18 Mar 2025 14:33:08 +0000
+Message-Id: <20250318143318.656785-5-aspsk@isovalent.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20250318143318.656785-1-aspsk@isovalent.com>
 References: <20250318143318.656785-1-aspsk@isovalent.com>
@@ -80,418 +80,191 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add a new bpf system call, BPF_STATIC_KEY_UPDATE, which allows users
-to update static keys in BPF. Namely, this system call is executed as
+Add support for a new version of JA instruction, a static branch JA. Such
+instructions may either jump to the specified offset or act as nops. To
+distinguish such instructions from normal JA the BPF_STATIC_BRANCH_JA flag
+should be set for the SRC register.
 
-    bpf(BPF_STATIC_KEY_UPDATE, attrs={map_fd, on})
+By default on program load such instructions are jitted as a normal JA.
+However, if the BPF_STATIC_BRANCH_NOP flag is set in the SRC register,
+then the instruction is jitted to a NOP.
 
-where map_fd is a BPF static key, i.e., a map of type BPF_MAP_TYPE_INSN_SET
-which points to one or more goto_or_nop/nop_or_goto instructions. The "on"
-parameter is a boolean value to set this key on or off. if it is true/false,
-then goto_or_nop/nop_or_goto instructions controlled by the key are jitted to
-jump/nop, correspondingly.
+In order to generate BPF_STATIC_BRANCH_JA instructions using llvm two new
+instructions will be added:
 
-To implement this for a particular architecture, re-define the weak
-bpf_arch_poke_static_branch() function in the corresponding bpf_jit_comp.c
+	asm volatile goto ("nop_or_gotol %l[label]" :::: label);
+
+will generate the BPF_STATIC_BRANCH_JA|BPF_STATIC_BRANCH_NOP instuction and
+
+	asm volatile goto ("gotol_or_nop %l[label]" :::: label);
+
+will generate a BPF_STATIC_BRANCH_JA instruction, without an extra bit set.
+The reason for adding two instructions is that both are required to implement
+static keys functionality for BPF, namely, to distinguish between likely and
+unlikely branches.
+
+The verifier logic is extended to check both possible paths: jump and nop.
 
 Signed-off-by: Anton Protopopov <aspsk@isovalent.com>
 ---
- include/linux/bpf.h            |  16 +++++
- include/uapi/linux/bpf.h       |  27 +++++++
- kernel/bpf/bpf_insn_set.c      | 124 +++++++++++++++++++++++++++++++--
- kernel/bpf/core.c              |   5 ++
- kernel/bpf/syscall.c           |  27 +++++++
- tools/include/uapi/linux/bpf.h |  27 +++++++
- 6 files changed, 220 insertions(+), 6 deletions(-)
+ arch/x86/net/bpf_jit_comp.c    | 19 +++++++++++++--
+ include/uapi/linux/bpf.h       | 10 ++++++++
+ kernel/bpf/verifier.c          | 43 +++++++++++++++++++++++++++-------
+ tools/include/uapi/linux/bpf.h | 10 ++++++++
+ 4 files changed, 71 insertions(+), 11 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 0b5f4d4745ee..42ddd2b61866 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -3561,8 +3561,24 @@ void bpf_insn_set_adjust(struct bpf_map *map, u32 off, u32 len);
- void bpf_insn_set_adjust_after_remove(struct bpf_map *map, u32 off, u32 len);
- 
- struct bpf_insn_ptr {
-+	void *jitted_ip;
-+	u32 jitted_off;
-+	u32 jitted_len;
-+	int jitted_jump_offset;
-+
- 	u32 orig_xlated_off;
- 	u32 xlated_off;
-+	bool inverse_ja_or_nop;
- };
- 
-+void bpf_prog_update_insn_ptr(struct bpf_prog *prog,
-+			      u32 xlated_off,
-+			      u32 jitted_off,
-+			      u32 jitted_len,
-+			      int jitted_jump_offset,
-+			      void *jitted_ip);
-+
-+int bpf_static_key_set(struct bpf_map *map, bool on);
-+int bpf_arch_poke_static_branch(struct bpf_insn_ptr *ptr, bool on);
-+
- #endif /* _LINUX_BPF_H */
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 57e0fd636a27..7c4954f93d44 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -906,6 +906,19 @@ union bpf_iter_link_info {
-  *		A new file descriptor (a nonnegative integer), or -1 if an
-  *		error occurred (in which case, *errno* is set appropriately).
-  *
-+ * BPF_STATIC_KEY_UPDATE
-+ *	Description
-+ *		Turn a static key on/off: update jitted code for the specified
-+ *		jump instructions controlled by the *map_fd* static key.
-+ *		Depending on the type of instruction (goto_or_nop/nop_or_goto)
-+ *		and the *on* parameter the binary code of each instruction is
-+ *		set to either jump or nop.
-+ *
-+ *	Return
-+ *		Returns zero on success. On error, -1 is returned and *errno*
-+ *		is set appropriately.
-+ *
-+ *
-  * NOTES
-  *	eBPF objects (maps and programs) can be shared between processes.
-  *
-@@ -961,6 +974,7 @@ enum bpf_cmd {
- 	BPF_LINK_DETACH,
- 	BPF_PROG_BIND_MAP,
- 	BPF_TOKEN_CREATE,
-+	BPF_STATIC_KEY_UPDATE,
- 	__MAX_BPF_CMD,
- };
- 
-@@ -1853,6 +1867,11 @@ union bpf_attr {
- 		__u32		bpffs_fd;
- 	} token_create;
- 
-+	struct { /* struct used by BPF_STATIC_KEY_UPDATE command */
-+		__u32		map_fd;
-+		__u32		on;
-+	} static_key;
-+
- } __attribute__((aligned(8)));
- 
- /* The description below is an attempt at providing documentation to eBPF
-@@ -7551,4 +7570,12 @@ enum bpf_kfunc_flags {
- 	BPF_F_PAD_ZEROS = (1ULL << 0),
- };
- 
-+/*
-+ * Flags to control creation of BPF Instruction Sets
-+ *     - BPF_F_STATIC_KEY: Map will be used as a Static Key.
-+ */
-+enum bpf_insn_set_flags {
-+	BPF_F_STATIC_KEY = (1ULL << 0),
-+};
-+
- #endif /* _UAPI__LINUX_BPF_H__ */
-diff --git a/kernel/bpf/bpf_insn_set.c b/kernel/bpf/bpf_insn_set.c
-index e788dd7109b1..40df7bfcd0be 100644
---- a/kernel/bpf/bpf_insn_set.c
-+++ b/kernel/bpf/bpf_insn_set.c
-@@ -33,7 +33,8 @@ static int insn_set_alloc_check(union bpf_attr *attr)
- 	if (attr->max_entries == 0 ||
- 	    attr->key_size != 4 ||
- 	    attr->value_size != 4 ||
--	    attr->map_flags != 0)
-+	    attr->map_flags != 0 ||
-+	    attr->map_extra & ~BPF_F_STATIC_KEY)
- 		return -EINVAL;
- 
- 	if (attr->max_entries > MAX_ISET_ENTRIES)
-@@ -176,6 +177,30 @@ static inline bool is_frozen(struct bpf_map *map)
- 	return ret;
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index d3491cc0898b..5856ac1aab80 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -1482,6 +1482,15 @@ static void emit_priv_frame_ptr(u8 **pprog, void __percpu *priv_frame_ptr)
+ 	*pprog = prog;
  }
  
-+static bool is_static_key(const struct bpf_map *map)
-+{
-+	if (map->map_type != BPF_MAP_TYPE_INSN_SET)
-+		return false;
-+
-+	if (!(map->map_extra & BPF_F_STATIC_KEY))
-+		return false;
-+
-+	return true;
-+}
-+
-+static bool is_ja_or_nop(const struct bpf_insn *insn)
++static bool is_static_ja_nop(const struct bpf_insn *insn)
 +{
 +	u8 code = insn->code;
 +
 +	return (code == (BPF_JMP | BPF_JA) || code == (BPF_JMP32 | BPF_JA)) &&
-+		(insn->src_reg & BPF_STATIC_BRANCH_JA);
++	       (insn->src_reg & BPF_STATIC_BRANCH_JA) &&
++	       (insn->src_reg & BPF_STATIC_BRANCH_NOP);
 +}
 +
-+static bool is_inverse_ja_or_nop(const struct bpf_insn *insn)
-+{
-+	return insn->src_reg & BPF_STATIC_BRANCH_NOP;
-+}
-+
- static inline bool valid_offsets(const struct bpf_insn_set *insn_set,
- 				 const struct bpf_prog *prog)
- {
-@@ -188,16 +213,17 @@ static inline bool valid_offsets(const struct bpf_insn_set *insn_set,
- 		if (off >= prog->len)
- 			return false;
+ #define INSN_SZ_DIFF (((addrs[i] - addrs[i - 1]) - (prog - temp)))
  
--		if (off > 0) {
--			if (prog->insnsi[off-1].code == (BPF_LD | BPF_DW | BPF_IMM))
--				return false;
--		}
-+		if (off > 0 && prog->insnsi[off-1].code == (BPF_LD | BPF_DW | BPF_IMM))
-+			return false;
- 
- 		if (i > 0) {
- 			prev_off = insn_set->ptrs[i-1].orig_xlated_off;
- 			if (off <= prev_off)
- 				return false;
- 		}
-+
-+		if (is_static_key(&insn_set->map) && !is_ja_or_nop(&prog->insnsi[off]))
-+			return false;
- 	}
- 
- 	return true;
-@@ -206,6 +232,7 @@ static inline bool valid_offsets(const struct bpf_insn_set *insn_set,
- int bpf_insn_set_init(struct bpf_map *map, const struct bpf_prog *prog)
- {
- 	struct bpf_insn_set *insn_set = cast_insn_set(map);
-+	const struct bpf_insn *insn;
- 	int i;
- 
- 	if (!is_frozen(map))
-@@ -228,11 +255,16 @@ int bpf_insn_set_init(struct bpf_map *map, const struct bpf_prog *prog)
- 	/*
- 	 * Reset all the map indexes to the original values.  This is needed,
- 	 * e.g., when a replay of verification with different log level should
--	 * be performed.
-+	 * be performed
- 	 */
- 	for (i = 0; i < map->max_entries; i++)
- 		insn_set->ptrs[i].xlated_off = insn_set->ptrs[i].orig_xlated_off;
- 
-+	for (i = 0; i < map->max_entries; i++) {
-+		insn = &prog->insnsi[insn_set->ptrs[i].xlated_off];
-+		insn_set->ptrs[i].inverse_ja_or_nop = is_inverse_ja_or_nop(insn);
-+	}
-+
- 	return 0;
- }
- 
-@@ -286,3 +318,83 @@ void bpf_insn_set_adjust_after_remove(struct bpf_map *map, u32 off, u32 len)
- 			insn_set->ptrs[i].xlated_off -= len;
- 	}
- }
-+
-+static struct bpf_insn_ptr *insn_ptr_by_offset(struct bpf_prog *prog, u32 xlated_off)
-+{
-+	struct bpf_insn_set *insn_set;
-+	struct bpf_map *map;
-+	int i, j;
-+
-+	for (i = 0; i < prog->aux->used_map_cnt; i++) {
-+		map = prog->aux->used_maps[i];
-+		if (!is_static_key(map))
-+			continue;
-+
-+		insn_set = cast_insn_set(map);
-+		for (j = 0; j < map->max_entries; j++) {
-+			if (insn_set->ptrs[j].xlated_off == xlated_off)
-+				return &insn_set->ptrs[j];
-+		}
-+	}
-+
-+	return NULL;
-+}
-+
-+void bpf_prog_update_insn_ptr(struct bpf_prog *prog,
-+			      u32 xlated_off,
-+			      u32 jitted_off,
-+			      u32 jitted_len,
-+			      int jitted_jump_offset,
-+			      void *jitted_ip)
-+{
-+	struct bpf_insn_ptr *ptr;
-+
-+	ptr = insn_ptr_by_offset(prog, xlated_off);
-+	if (ptr) {
-+		ptr->jitted_ip = jitted_ip;
-+		ptr->jitted_off = jitted_off;
-+		ptr->jitted_len = jitted_len;
-+		ptr->jitted_jump_offset = jitted_jump_offset;
-+	}
-+}
-+
-+static int check_state(struct bpf_insn_set *insn_set)
-+{
-+	int ret = 0;
-+
-+	mutex_lock(&insn_set->state_mutex);
-+	if (insn_set->state == INSN_SET_STATE_FREE)
-+		ret = -EINVAL;
-+	if (insn_set->state == INSN_SET_STATE_INIT)
-+		ret = -EBUSY;
-+	mutex_unlock(&insn_set->state_mutex);
-+
-+	return ret;
-+}
-+
-+int bpf_static_key_set(struct bpf_map *map, bool on)
-+{
-+	struct bpf_insn_set *insn_set = cast_insn_set(map);
-+	struct bpf_insn_ptr *ptr;
-+	int ret = 0;
-+	int i;
-+
-+	if (!is_static_key(map))
-+		return -EINVAL;
-+
-+	ret = check_state(insn_set);
-+	if (ret)
-+		return ret;
-+
-+	for (i = 0; i < map->max_entries && ret == 0; i++) {
-+		ptr = &insn_set->ptrs[i];
-+		if (ptr->xlated_off == INSN_DELETED)
-+			continue;
-+
-+		ret = bpf_arch_poke_static_branch(ptr, on ^ ptr->inverse_ja_or_nop);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	return ret;
-+}
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 62cb9557ad3b..5c3afbae8ab0 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -3173,6 +3173,11 @@ static int __init bpf_global_ma_init(void)
- late_initcall(bpf_global_ma_init);
- #endif
- 
-+int __weak bpf_arch_poke_static_branch(struct bpf_insn_ptr *ptr, bool on)
-+{
-+	return -EOPNOTSUPP;
-+}
-+
- DEFINE_STATIC_KEY_FALSE(bpf_stats_enabled_key);
- EXPORT_SYMBOL(bpf_stats_enabled_key);
- 
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index c417bf5eed74..af9d46aea93a 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -1346,6 +1346,7 @@ static int map_create(union bpf_attr *attr, bool kernel)
- 
- 	if (attr->map_type != BPF_MAP_TYPE_BLOOM_FILTER &&
- 	    attr->map_type != BPF_MAP_TYPE_ARENA &&
-+	    attr->map_type != BPF_MAP_TYPE_INSN_SET &&
- 	    attr->map_extra != 0)
- 		return -EINVAL;
- 
-@@ -1691,6 +1692,29 @@ static int map_lookup_elem(union bpf_attr *attr)
- 	return err;
- }
- 
-+#define BPF_STATIC_KEY_UPDATE_LAST_FIELD static_key.on
-+
-+static int bpf_static_key_update(const union bpf_attr *attr)
-+{
-+	bool on = attr->static_key.on & 1;
-+	struct bpf_map *map;
-+	int ret;
-+
-+	if (CHECK_ATTR(BPF_STATIC_KEY_UPDATE))
-+		return -EINVAL;
-+
-+	if (attr->static_key.on & ~1)
-+		return -EINVAL;
-+
-+	map = bpf_map_get(attr->static_key.map_fd);
-+	if (IS_ERR(map))
-+		return PTR_ERR(map);
-+
-+	ret = bpf_static_key_set(map, on);
-+
-+	bpf_map_put(map);
-+	return ret;
-+}
- 
- #define BPF_MAP_UPDATE_ELEM_LAST_FIELD flags
- 
-@@ -5908,6 +5932,9 @@ static int __sys_bpf(enum bpf_cmd cmd, bpfptr_t uattr, unsigned int size)
- 	case BPF_TOKEN_CREATE:
- 		err = token_create(&attr);
- 		break;
-+	case BPF_STATIC_KEY_UPDATE:
-+		err = bpf_static_key_update(&attr);
-+		break;
- 	default:
- 		err = -EINVAL;
- 		break;
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 57e0fd636a27..7c4954f93d44 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -906,6 +906,19 @@ union bpf_iter_link_info {
-  *		A new file descriptor (a nonnegative integer), or -1 if an
-  *		error occurred (in which case, *errno* is set appropriately).
-  *
-+ * BPF_STATIC_KEY_UPDATE
-+ *	Description
-+ *		Turn a static key on/off: update jitted code for the specified
-+ *		jump instructions controlled by the *map_fd* static key.
-+ *		Depending on the type of instruction (goto_or_nop/nop_or_goto)
-+ *		and the *on* parameter the binary code of each instruction is
-+ *		set to either jump or nop.
-+ *
-+ *	Return
-+ *		Returns zero on success. On error, -1 is returned and *errno*
-+ *		is set appropriately.
-+ *
-+ *
-  * NOTES
-  *	eBPF objects (maps and programs) can be shared between processes.
-  *
-@@ -961,6 +974,7 @@ enum bpf_cmd {
- 	BPF_LINK_DETACH,
- 	BPF_PROG_BIND_MAP,
- 	BPF_TOKEN_CREATE,
-+	BPF_STATIC_KEY_UPDATE,
- 	__MAX_BPF_CMD,
+ #define __LOAD_TCC_PTR(off)			\
+@@ -2519,9 +2528,15 @@ st:			if (is_imm8(insn->off))
+ 					}
+ 					emit_nops(&prog, INSN_SZ_DIFF - 2);
+ 				}
+-				EMIT2(0xEB, jmp_offset);
++				if (is_static_ja_nop(insn))
++					emit_nops(&prog, 2);
++				else
++					EMIT2(0xEB, jmp_offset);
+ 			} else if (is_simm32(jmp_offset)) {
+-				EMIT1_off32(0xE9, jmp_offset);
++				if (is_static_ja_nop(insn))
++					emit_nops(&prog, 5);
++				else
++					EMIT1_off32(0xE9, jmp_offset);
+ 			} else {
+ 				pr_err("jmp gen bug %llx\n", jmp_offset);
+ 				return -EFAULT;
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index b8e588ed6406..57e0fd636a27 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -1462,6 +1462,16 @@ struct bpf_stack_build_id {
+ 	};
  };
  
-@@ -1853,6 +1867,11 @@ union bpf_attr {
- 		__u32		bpffs_fd;
- 	} token_create;
- 
-+	struct { /* struct used by BPF_STATIC_KEY_UPDATE command */
-+		__u32		map_fd;
-+		__u32		on;
-+	} static_key;
-+
- } __attribute__((aligned(8)));
- 
- /* The description below is an attempt at providing documentation to eBPF
-@@ -7551,4 +7570,12 @@ enum bpf_kfunc_flags {
- 	BPF_F_PAD_ZEROS = (1ULL << 0),
- };
- 
-+/*
-+ * Flags to control creation of BPF Instruction Sets
-+ *     - BPF_F_STATIC_KEY: Map will be used as a Static Key.
-+ */
-+enum bpf_insn_set_flags {
-+	BPF_F_STATIC_KEY = (1ULL << 0),
++/* Flags for JA insn, passed in SRC_REG */
++enum {
++	BPF_STATIC_BRANCH_JA  = 1 << 0,
++	BPF_STATIC_BRANCH_NOP = 1 << 1,
 +};
 +
- #endif /* _UAPI__LINUX_BPF_H__ */
++#define BPF_STATIC_BRANCH_MASK (BPF_STATIC_BRANCH_JA | \
++				BPF_STATIC_BRANCH_NOP)
++
++
+ #define BPF_OBJ_NAME_LEN 16U
+ 
+ union bpf_attr {
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 6554f7aea0d8..0860ef57d5af 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -17374,14 +17374,24 @@ static int visit_insn(int t, struct bpf_verifier_env *env)
+ 		else
+ 			off = insn->imm;
+ 
+-		/* unconditional jump with single edge */
+-		ret = push_insn(t, t + off + 1, FALLTHROUGH, env);
+-		if (ret)
+-			return ret;
++		if (insn->src_reg & BPF_STATIC_BRANCH_JA) {
++			/* static branch - jump with two edges */
++			mark_prune_point(env, t);
+ 
+-		mark_prune_point(env, t + off + 1);
+-		mark_jmp_point(env, t + off + 1);
++			ret = push_insn(t, t + 1, FALLTHROUGH, env);
++			if (ret)
++				return ret;
++
++			ret = push_insn(t, t + off + 1, BRANCH, env);
++		} else {
++			/* unconditional jump with single edge */
++			ret = push_insn(t, t + off + 1, FALLTHROUGH, env);
++			if (ret)
++				return ret;
+ 
++			mark_prune_point(env, t + off + 1);
++			mark_jmp_point(env, t + off + 1);
++		}
+ 		return ret;
+ 
+ 	default:
+@@ -19414,8 +19424,11 @@ static int do_check(struct bpf_verifier_env *env)
+ 
+ 				mark_reg_scratched(env, BPF_REG_0);
+ 			} else if (opcode == BPF_JA) {
++				struct bpf_verifier_state *other_branch;
++				u32 jmp_offset;
++
+ 				if (BPF_SRC(insn->code) != BPF_K ||
+-				    insn->src_reg != BPF_REG_0 ||
++				    (insn->src_reg & ~BPF_STATIC_BRANCH_MASK) ||
+ 				    insn->dst_reg != BPF_REG_0 ||
+ 				    (class == BPF_JMP && insn->imm != 0) ||
+ 				    (class == BPF_JMP32 && insn->off != 0)) {
+@@ -19424,9 +19437,21 @@ static int do_check(struct bpf_verifier_env *env)
+ 				}
+ 
+ 				if (class == BPF_JMP)
+-					env->insn_idx += insn->off + 1;
++					jmp_offset = insn->off + 1;
+ 				else
+-					env->insn_idx += insn->imm + 1;
++					jmp_offset = insn->imm + 1;
++
++				/* Staic branch can either jump to +off or +0 */
++				if (insn->src_reg & BPF_STATIC_BRANCH_JA) {
++					other_branch = push_stack(env, env->insn_idx + jmp_offset,
++							env->insn_idx, false);
++					if (!other_branch)
++						return -EFAULT;
++
++					jmp_offset = 1;
++				}
++
++				env->insn_idx += jmp_offset;
+ 				continue;
+ 
+ 			} else if (opcode == BPF_EXIT) {
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index b8e588ed6406..57e0fd636a27 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -1462,6 +1462,16 @@ struct bpf_stack_build_id {
+ 	};
+ };
+ 
++/* Flags for JA insn, passed in SRC_REG */
++enum {
++	BPF_STATIC_BRANCH_JA  = 1 << 0,
++	BPF_STATIC_BRANCH_NOP = 1 << 1,
++};
++
++#define BPF_STATIC_BRANCH_MASK (BPF_STATIC_BRANCH_JA | \
++				BPF_STATIC_BRANCH_NOP)
++
++
+ #define BPF_OBJ_NAME_LEN 16U
+ 
+ union bpf_attr {
 -- 
 2.34.1
 
