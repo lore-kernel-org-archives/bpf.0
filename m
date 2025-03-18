@@ -1,156 +1,255 @@
-Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB9B9157487
-	for <bpf@vger.kernel.org>; Tue, 18 Mar 2025 03:07:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5942A256D;
+	Tue, 18 Mar 2025 03:08:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742267287; cv=none; b=nfgEWQ/ukl4sMrEo08M+W4/eDV5SX4jPr4HZdgpf44kc33R5NTjQarAtCtiJmGYDIMo/eOJkHq3DS+hmHUzNTzass4N7LJv6/Iu5uqGwQ/dx0/3bcvp9b6Bf3pCehZQk2/FfwSwIULo0JtcW5D2Gc9Wj/t4S6YahkBfMw5kZqUs=
+	t=1742267307; cv=none; b=gT1PcKG6XVO6qz9o+7rk7Orf/GtSUdJVasMuoMzhXmO8mDuuFI6Hjq+9Poowx2n/YLDl1vqI/wZhUBYW2cnbpiI/AQ0zI4rgrcl/+Kh5RwQHzIKNlYhL5SKhnh/D2D4gk+z+kkrdUzUwN7nDgN7Tht66hVXmdcwitBsXfzwrM24=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742267287; c=relaxed/simple;
-	bh=NZjyXIhJOne8kO0CoVnIYfiDrmx7Cum0n5x9KYOa8/g=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=qCgCL9kM8oBLdRrlxXKk5OZqiq0/Gc0Jmh8JNY/lafgfV+36NMhZcMGzwJXpLXu0Mx74rzzVnNzy8CE8U5eH3pzsK2p6DVkxs3wo38qgzxnRqHKNvqRnt5Uah0b6RLOS80ooAPHA0/oqI9la81/wrGqsPAIChiudd1fJZpSf5Hw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=oUIpNQFq; arc=none smtp.client-ip=209.85.219.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	s=arc-20240116; t=1742267307; c=relaxed/simple;
+	bh=mZb4gGibpU2oh1wiiTc5PYRcKxE1KxFqGSNffOEkWPA=;
+	h=From:To:Subject:Date:Message-Id:MIME-Version:Content-Type; b=ndwiTy8wy3qgN4YVo5uGUwLrui1Ak8wQ6VX/ebmeUoG65A4olKHsiMNaefDb9db0Cz/u8s1Jhb2Rh5AlUXqg6B2wa71ulU2ZhwV3CH8cBKSMGSRNzjTev0k6zVh/bE7l0Tx38EIk7PfSBn5qT7eZA1Go+N7qd52TfiX5VzylCKI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kR3K16w1; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="oUIpNQFq"
-Received: by mail-qv1-f47.google.com with SMTP id 6a1803df08f44-6e17d3e92d9so35930076d6.1
-        for <bpf@vger.kernel.org>; Mon, 17 Mar 2025 20:07:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1742267277; x=1742872077; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=3xMQ/EAqrnjEoXW8vv/E/KWSWd2ZuawXqZWw59r5W3Y=;
-        b=oUIpNQFqMJbKadctqqjjbFb8OH4RQMjTQ3nrwaDBXmgEFqO2UTlzSTDoBqcKIarbPD
-         +tepk9BizVudyTW1MlKlgtq1T+fH8SzEEylMkh+yISpvuMQR2Ut1TR3jiuX7SJqcAj55
-         qNmoMFLNB71EbJnHgPuHGdRdp3yiK3Tukrb+4/tcz8Kj8jpdumdxKL+/aoKg87aRXO2r
-         nU9ynx08lIVBllNNQFNB5zA4sXAiDLKLBOjaBI66DLznDIpq1QM83tE8uJPFMbwmi4xo
-         dOdHG42Gkd+u6UsBuyQTS3gAZK/GQXM6jKNwj+hXj1VNZ6HNdIWX0X8hAd97FB+7MY+7
-         1x1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742267277; x=1742872077;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3xMQ/EAqrnjEoXW8vv/E/KWSWd2ZuawXqZWw59r5W3Y=;
-        b=Q6AGMKLURMCxZnVX5b2lO2yM6Kf5gnVQgbfprykHgQTLAsA/9kevNRF8rAcKTrOrOz
-         EnJGsysZnBNgmauD/rntoLTycxR6HEk+1UlhvvWIXfsOOHHPqPpaQcevzMTqzlwawMNV
-         VUB6xm2LS0brnNkktV4oWtXjlEZ5lnEKpNZKQTdwAe5y41amC7lK6uZDzalBAC26BG4f
-         0CWfqbewxPxPkPGnQApR+MbOzsqULKf3kmKOB4/tiKVcWNR3GTUtj/iIjiWSlZe7dF8+
-         VFjfceS0vy6QkLfkheYRtIfcH06rtQZtvlE/BAzm3T3Gemh4x40qoDWMLOF1fjdeHPKT
-         FDrw==
-X-Gm-Message-State: AOJu0YxkHpIIN13swKCGbEvRQ4Gb4yKjti7GGmyDBUGacrH6a1hmZL8P
-	6aKcOOHPqhByP/Avgx5yONlY4GJX63faVL1QzTKRepaz40auHlv04hAMCD4wXKvYJGFKtz7e4cM
-	urr61Zg==
-X-Gm-Gg: ASbGncsFYkkqJnYINRZCiuIUanVmQSbmPUAtXKw14Uyu+HHA0F68qFlF2TbUKHn+X8E
-	c+Bx3wfzGwryZNXzT2Whk6kKIxlxjffc9T6EvD9TVHv2cP5+4+gAYct5eWHdT90NT7vt/T/uoOW
-	ybOyAhfCuyqwjGmQv+DSrzaskvbRiPoIx1vxlL1/urxvoSh6eDHxrp6NR/VtqNB02SPRjuNw5jd
-	uQTs9nvjrJHJXNt20Djqw2HhA3d2ISSwUga+dsGEPxQ6NpR3wxDP9DOifEZ7W7JBuYmF4AijG5E
-	wxNZ/2D5lFDC1Wjgh0L3gAL/JfYL8NoWbsID+0O9amPBmxpjIvy7
-X-Google-Smtp-Source: AGHT+IHjKgeYIvD5IfjVK5zeUivnnRKsR9jlxgcXl6Ot4ioSJnjZx3SzdHXznmZVvW5WnqmMMeHNAQ==
-X-Received: by 2002:ad4:5ba4:0:b0:6e8:fcc9:a29c with SMTP id 6a1803df08f44-6eaeaa642b6mr209377526d6.19.1742267277188;
-        Mon, 17 Mar 2025 20:07:57 -0700 (PDT)
-Received: from boreas.. ([140.174.215.88])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6eb1f7039a3sm2656616d6.69.2025.03.17.20.07.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Mar 2025 20:07:56 -0700 (PDT)
-From: Emil Tsalapatis <emil@etsalapatis.com>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	yonghong.song@linux.dev,
-	tj@kernel.org,
-	memxor@gmail.com,
-	jolsa@kernel.org,
-	Emil Tsalapatis <emil@etsalapatis.com>
-Subject: [PATCH bpf-next v2] bpf: make perf_event_read_output accessible from BPF core when available
-Date: Mon, 17 Mar 2025 23:07:53 -0400
-Message-ID: <20250318030753.10949-1-emil@etsalapatis.com>
-X-Mailer: git-send-email 2.47.1
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kR3K16w1"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1742267305; x=1773803305;
+  h=from:to:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=mZb4gGibpU2oh1wiiTc5PYRcKxE1KxFqGSNffOEkWPA=;
+  b=kR3K16w1D518RqVlmURf9llEo2WFznIgizWp5KSU+aeaLrYSM+em+66i
+   7gz4gY3H44/w+U9VlsiD4qGFOXRO4CWnKOKYwsDqZYpgV9BFIUT7htnsU
+   k2xdSuUpNiwe4Gg6GnINcND99MhGhnk5QAD/Trt6uZdWG3dNe2mkUsewl
+   Q6TDURqhVxy3r+SWiiKZ6HtwMV61Tx2i08fFLmtUkgrI6lBO9Emsvz+m+
+   lbkdhv8pFdxUurHzyhWcgpwWTq3T5wGLjqCM8brkJAVUiWsLhuTSbCi6C
+   J0EJ5ORVwD6RExuqXHRqwlG02pbnubM67KoGWhtkoRAEDJj+U0hIauh3e
+   g==;
+X-CSE-ConnectionGUID: dwqxwszQRzKYC9W9SN7XhA==
+X-CSE-MsgGUID: cpog2rDUQGaP9H6TRf2Itw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11376"; a="54382852"
+X-IronPort-AV: E=Sophos;i="6.14,255,1736841600"; 
+   d="scan'208";a="54382852"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2025 20:08:24 -0700
+X-CSE-ConnectionGUID: cFxf1nJsQJmsFDpdqZETfw==
+X-CSE-MsgGUID: YwY2hTclSOCfwiFps5SVcw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,255,1736841600"; 
+   d="scan'208";a="126313685"
+Received: from mohdfai2-ilbpg12-1.png.intel.com ([10.88.227.73])
+  by fmviesa003.fm.intel.com with ESMTP; 17 Mar 2025 20:08:16 -0700
+From: Faizal Rahim <faizal.abdul.rahim@linux.intel.com>
+To: Tony Nguyen <anthony.l.nguyen@intel.com>,
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Simon Horman <horms@kernel.org>,
+	Vladimir Oltean <vladimir.oltean@nxp.com>,
+	Russell King <linux@armlinux.org.uk>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Furong Xu <0x1207@gmail.com>,
+	Choong Yong Liang <yong.liang.choong@linux.intel.com>,
+	Russell King <rmk+kernel@armlinux.org.uk>,
+	Hariprasad Kelam <hkelam@marvell.com>,
+	Xiaolei Wang <xiaolei.wang@windriver.com>,
+	Suraj Jaiswal <quic_jsuraj@quicinc.com>,
+	Kory Maincent <kory.maincent@bootlin.com>,
+	Gal Pressman <gal@nvidia.com>,
+	Jesper Nilsson <jesper.nilsson@axis.com>,
+	linux-arm-kernel@lists.infradead.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	intel-wired-lan@lists.osuosl.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	Chwee-Lin Choong <chwee.lin.choong@intel.com>,
+	Vinicius Costa Gomes <vinicius.gomes@intel.com>,
+	Faizal Rahim <faizal.abdul.rahim@linux.intel.com>,
+	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+	Serge Semin <fancer.lancer@gmail.com>
+Subject: [PATCH iwl-next v10 00/14] igc: Add support for Frame Preemption feature in IGC
+Date: Mon, 17 Mar 2025 23:07:28 -0400
+Message-Id: <20250318030742.2567080-1-faizal.abdul.rahim@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-The perf_event_read_event_output helper is currently only available to
-tracing protrams, but is useful for other BPF programs like sched_ext
-schedulers. When the helper is available, provide its bpf_func_proto
-directly from the bpf core.
+Introduces support for the FPE feature in the IGC driver.
 
-Signed-off-by: Emil Tsalapatis (Meta) <emil@etsalapatis.com>
-Acked-by: Jiri Olsa <jolsa@kernel.org>
----
- include/linux/bpf.h      | 2 ++
- kernel/bpf/core.c        | 5 +++++
- kernel/bpf/helpers.c     | 2 ++
- kernel/trace/bpf_trace.c | 5 +++++
- 4 files changed, 14 insertions(+)
+The patches aligns with the upstream FPE API:
+https://patchwork.kernel.org/project/netdevbpf/cover/20230220122343.1156614-1-vladimir.oltean@nxp.com/
+https://patchwork.kernel.org/project/netdevbpf/cover/20230119122705.73054-1-vladimir.oltean@nxp.com/
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 0d7b70124d81..973a88d9b52b 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -2059,6 +2059,8 @@ int bpf_prog_calc_tag(struct bpf_prog *fp);
- const struct bpf_func_proto *bpf_get_trace_printk_proto(void);
- const struct bpf_func_proto *bpf_get_trace_vprintk_proto(void);
- 
-+const struct bpf_func_proto *bpf_get_perf_event_read_value_proto(void);
-+
- typedef unsigned long (*bpf_ctx_copy_t)(void *dst, const void *src,
- 					unsigned long off, unsigned long len);
- typedef u32 (*bpf_convert_ctx_access_t)(enum bpf_access_type type,
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 62cb9557ad3b..ba6b6118cf50 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -2972,6 +2972,11 @@ const struct bpf_func_proto * __weak bpf_get_trace_vprintk_proto(void)
- 	return NULL;
- }
- 
-+const struct bpf_func_proto * __weak bpf_get_perf_event_read_value_proto(void)
-+{
-+	return NULL;
-+}
-+
- u64 __weak
- bpf_event_output(struct bpf_map *map, u64 flags, void *meta, u64 meta_size,
- 		 void *ctx, u64 ctx_size, bpf_ctx_copy_t ctx_copy)
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 5449756ba102..ddaa41a70676 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -2056,6 +2056,8 @@ bpf_base_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- 		return &bpf_task_pt_regs_proto;
- 	case BPF_FUNC_trace_vprintk:
- 		return bpf_get_trace_vprintk_proto();
-+	case BPF_FUNC_perf_event_read_value:
-+		return bpf_get_perf_event_read_value_proto();
- 	default:
- 		return NULL;
- 	}
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 13bef2462e94..6b07fa7081d9 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -607,6 +607,11 @@ static const struct bpf_func_proto bpf_perf_event_read_value_proto = {
- 	.arg4_type	= ARG_CONST_SIZE,
- };
- 
-+const struct bpf_func_proto *bpf_get_perf_event_read_value_proto(void)
-+{
-+	return &bpf_perf_event_read_value_proto;
-+}
-+
- static __always_inline u64
- __bpf_perf_event_output(struct pt_regs *regs, struct bpf_map *map,
- 			u64 flags, struct perf_raw_record *raw,
--- 
-2.47.1
+It builds upon earlier work:
+https://patchwork.kernel.org/project/netdevbpf/cover/20220520011538.1098888-1-vinicius.gomes@intel.com/
+
+The patch series adds the following functionalities to the IGC driver:
+a) Configure FPE using `ethtool --set-mm`.
+b) Display FPE settings via `ethtool --show-mm`.
+c) View FPE statistics using `ethtool --include-statistics --show-mm'.
+e) Block setting preemptible tc in taprio since it is not supported yet.
+   Existing code already blocks it in mqprio.
+
+Tested:
+Enabled CONFIG_PROVE_LOCKING, CONFIG_DEBUG_ATOMIC_SLEEP, CONFIG_DMA_API_DEBUG, and CONFIG_KASAN
+1) selftests
+2) netdev down/up cycles
+3) suspend/resume cycles
+4) fpe verification
+
+No bugs or unusual dmesg logs were observed.
+Ran 1), 2) and 3) with and without the patch series, compared dmesg and selftest logs — no differences found.
+
+Change Log:
+v10:
+- Add  Vladimir Reviewed-by for patch 2, 3, 6, 8, 10-14
+- Add Fu Rong Reviewed-by for patch 3
+- Fix compilation error in intel lkp-test, snippet of error:
+  "aarch64-linux-ld: drivers/net/ethernet/intel/igc/igc_main.o: in function `igc_clean_tx_irq':
+  drivers/net/ethernet/intel/igc/igc_main.c:3157:(.text+0xec44): undefined reference to `ethtool_mmsv_event_handle"
+  which randomize .config options (CONFIG_IGC=y, disable CONFIG_ETHTOOL_NETLINK).
+  config -> https://download.01.org/0day-ci/archive/20250314/202503141646.6yybVfAe-lkp@intel.com/config
+  Fix at patch 2 and 10 by adding "depends on ETHTOOL_NETLINK" in stmmac and igc Kconfig.
+
+v8 -> v9:
+- Add Vladimir and Fu Rong Reviewed-by, patch 1
+- Remove Faizal Co-developed-by for patch 2
+- Remove code that reset verification state when link is down, patch 2 (Vladimir)
+- Refactor TX buffer and RX buffer magic constants with macro for each field. patch 5-9 (Vladimir)
+- s/Rest adapter/Adapter reset/ in commit description, patch 10 (Vladimir)
+- Replace igc_fpe_is_verify_or_response() and igc_fpe_lp_event_status() with igc_fpe_handle_mpacket(), patch 10 (Vladimir)
+- Comments on separate lines from code in igc_fpe_get_supported_frag_size(), patch 11 (Vladimir)
+- Remove mistakenly added igc_fpe_get_supported_frag_size(), patch 10 (Vladimir)
+- Remove max limit 256 of tx-min-size changes, patch 11 (Vladimir)
+
+v7 -> v8:
+- Reject SMD-V and SMD-R if the payload contains non-zero values (Vladimir, Chwee Lin)
+- Move resetting verification state when link is down to a new patch 3/11 (Vladimir)
+- Move frag_size related handling outside of spin_lock_irq_save(), patch 1/11 (Vladimir)
+- Renamed IGC_PRMEXPRCNT to IGC_PRMEXCPRCNT, to align with i226 SW User Manual, patch 11/11 (Chwee Lin)
+- Use IGC_PRMEXPRCNT_OOO_SMDC for frame smd errors instead of frame assembly errors, 11/11 (Chwee Lin)
+
+v6 -> v7:
+- Squash the cpu param to the prev line (Przemek Kitszel)
+- Use igc_ prefix for fpe_t (Przemek Kitszel)
+- Move new ops to different line in igc_ethtool_ops (Przemek Kitszel)
+- Documentation for igc_enable_empty_addr_recv (): rx -> Rx (Przemek Kitszel)
+- Documentation for igc_enable_empty_addr_recv (): s/IGC/the driver/ (Przemek Kitszel)
+- Change preferred style of init, from { }, to {} (Przemek Kitszel)
+- Remove inclusion of umbrella header <linux/kernel.h> in igc_tsn.c (Przemek Kitszel)
+- End enum with "," in igc_txd_popts_type (Przemek Kitszel)
+- Remove unnecessary braces in igc_fpe_is_verify_or_response() (Przemek Kitszel)
+
+v5 -> v6:
+- Added Tested-by: Furong Xu for patch 1/9 (Vladimir, Furong Xu)
+- Updated logic in ethtool_mmsv_link_state_handle() (Vladimir, Furong Xu)
+- Swap sequence of function call in stmmac_set_mm() (Furong Xu)
+- Log an error if igc_enable_empty_addr_recv() fails (Vladimir)
+- Move the patch ".. Block setting preemptible traffic .." before ".. Add support to get MAC Merge data .." (Vladimir)
+- Move mmsv function kernel-doc from .h to .c file (Vladimir)
+
+v4 -> v5:
+- Remove "igc: Add support for preemptible traffic class in taprio" patch (Vladimir)
+- Add a new patch "igc: Block setting preemptible traffic classes in taprio" (Vladimir)
+- Add kernel-doc for mmsv api (Vladimir)
+- olininfo_status to use host byte order (Simon)
+- status_error should host byte type (Simon)
+- Some code was misplaced in the wrong patch (Vladimir)
+- Mix of tabs and spaces in patch description (Vladimir)
+- Created igc_is_pmac_enabled() to reduce code repetition (Vladimir)
+
+v3 -> v4:
+- Fix compilation warnings introduced by this patch series
+
+v2 -> v3:
+- Implement configure_tx() mmsv callback (Vladimir)
+- Use static_branch_inc() and static_branch_dec() (Vladimir)
+- Add adapter->fpe.mmsv.pmac_enabled as extra check (Vladimir)
+- Remove unnecessary error check in igc_fpe_init_tx_descriptor() (Vladimir)
+- Additional places to use FIELD_PREP() instead of manual bit manipulation (Vladimir)
+- IGC_TXD_POPTS_SMD_V and IGC_TXD_POPTS_SMD_R type change to enum (Vladimir)
+- Remove unnecessary netif_running() check in igc_fpe_xmit_frame (Vladimir)
+- Rate limit print in igc_fpe_send_mpacket (Vladimir)
+
+v1 -> v2:
+- Extract the stmmac verification logic into a common library (Vladimir)
+- igc to use common library for verification (Vladimir)
+- Fix syntax for kernel-doc to use "Return:" (Vladimir)
+- Use FIELD_GET instead of manual bit masking (Vladimir)
+- Don't assign 0 to statistics counter in igc_ethtool_get_mm_stats() (Vladimir)
+- Use pmac-enabled as a condition to allow MAC address value 0 (Vladimir)
+- Define macro register value in increasing value order (Vladimir)
+- Fix tx-min-frag-size handling for igc (Vladimir)
+- Handle link state changes with verification in igc (Vladimir)
+- Add static key for fast path code (Vladimir)
+- rx_min_frag_size get from constant (Vladimir)
+
+v1: https://patchwork.kernel.org/project/netdevbpf/cover/20241216064720.931522-1-faizal.abdul.rahim@linux.intel.com/
+v2: https://patchwork.kernel.org/project/netdevbpf/cover/20250205100524.1138523-1-faizal.abdul.rahim@linux.intel.com/
+v3: https://patchwork.kernel.org/project/netdevbpf/cover/20250207165649.2245320-1-faizal.abdul.rahim@linux.intel.com/
+v4: https://patchwork.kernel.org/project/netdevbpf/cover/20250210070207.2615418-1-faizal.abdul.rahim@linux.intel.com/
+v5: https://patchwork.kernel.org/project/netdevbpf/cover/20250220025349.3007793-1-faizal.abdul.rahim@linux.intel.com/
+v6: https://patchwork.kernel.org/project/netdevbpf/cover/20250227140158.2129988-1-faizal.abdul.rahim@linux.intel.com/
+v7: https://patchwork.kernel.org/project/netdevbpf/cover/20250303102658.3580232-1-faizal.abdul.rahim@linux.intel.com/
+v8: https://patchwork.kernel.org/project/netdevbpf/cover/20250305130026.642219-1-faizal.abdul.rahim@linux.intel.com/
+v9: https://patchwork.kernel.org/project/netdevbpf/cover/20250309104648.3895551-1-faizal.abdul.rahim@linux.intel.com/
+
+Faizal Rahim (13):
+  net: stmmac: move frag_size handling out of spin_lock
+  net: ethtool: mm: reset verification status when link is down
+  igc: rename xdp_get_tx_ring() for non-xdp usage
+  igc: rename I225_RXPBSIZE_DEFAULT and I225_TXPBSIZE_DEFAULT
+  igc: use FIELD_PREP and GENMASK for existing TX packet buffer size
+  igc: optimize TX packet buffer utilization for TSN mode
+  igc: use FIELD_PREP and GENMASK for existing RX packet buffer size
+  igc: set the RX packet buffer size for TSN mode
+  igc: add support for frame preemption verification
+  igc: add support to set tx-min-frag-size
+  igc: block setting preemptible traffic class in taprio
+  igc: add support to get MAC Merge data via ethtool
+  igc: add support to get frame preemption statistics via ethtool
+
+Vladimir Oltean (1):
+  net: ethtool: mm: extract stmmac verification logic into common
+    library
+
+ drivers/net/ethernet/intel/Kconfig            |   1 +
+ drivers/net/ethernet/intel/igc/igc.h          |  15 +-
+ drivers/net/ethernet/intel/igc/igc_base.h     |   1 +
+ drivers/net/ethernet/intel/igc/igc_defines.h  |  55 +++-
+ drivers/net/ethernet/intel/igc/igc_ethtool.c  |  80 +++++
+ drivers/net/ethernet/intel/igc/igc_main.c     |  69 ++++-
+ drivers/net/ethernet/intel/igc/igc_regs.h     |  16 +
+ drivers/net/ethernet/intel/igc/igc_tsn.c      | 207 ++++++++++++-
+ drivers/net/ethernet/intel/igc/igc_tsn.h      |  52 ++++
+ drivers/net/ethernet/stmicro/stmmac/Kconfig   |   1 +
+ drivers/net/ethernet/stmicro/stmmac/stmmac.h  |  16 +-
+ .../ethernet/stmicro/stmmac/stmmac_ethtool.c  |  41 +--
+ .../net/ethernet/stmicro/stmmac/stmmac_fpe.c  | 174 +++--------
+ .../net/ethernet/stmicro/stmmac/stmmac_fpe.h  |   5 -
+ .../net/ethernet/stmicro/stmmac/stmmac_main.c |   8 +-
+ include/linux/ethtool.h                       |  73 +++++
+ net/ethtool/mm.c                              | 279 +++++++++++++++++-
+ 17 files changed, 872 insertions(+), 221 deletions(-)
+
+--
+2.34.1
 
