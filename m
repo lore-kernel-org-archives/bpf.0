@@ -1,62 +1,62 @@
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 052BA20CCFB
-	for <bpf@vger.kernel.org>; Tue, 18 Mar 2025 14:29:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E58D20E00A
+	for <bpf@vger.kernel.org>; Tue, 18 Mar 2025 14:29:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742308197; cv=none; b=Z/Ch2+N8XIhLiC/TcDWgu1QrZUs9yy8cspxbhJaRz8QRHC/vNnCqbajkP5RkhD4L06+iriltUeXTPDdpOTwrNATKpQUehOdua83A7Xxa/gt3atSYJI29QOfvBb/YUIUmLhhGo1HZC2I1z3h/7i43o+w0WrWD9h5nu24iiM7GSN8=
+	t=1742308198; cv=none; b=LzwLgEAFBIs/RIHPZrBrirBOYPPD6ygri3oFT7Qv+uvSlFgdlQ7e0BE0xXIlOBX9X2ivTvoEUm83osDo3Va8PYpUSBCruJzZ54cOw5f2fQK/lwikUAfS42g/COZnNvJAvnr8WAGcZTnpQ2O3/LqcXZsvibl6WRfLLrQlBq0oWrA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742308197; c=relaxed/simple;
-	bh=YTk8cmNwLt9BXcSx7rLGpMI0X5tLpVzeMW01kmmHMkw=;
+	s=arc-20240116; t=1742308198; c=relaxed/simple;
+	bh=xTWLMGwZ+J2UJ54zkK4f/1GRnNBoqipWfS/8bDr/aWY=;
 	h=From:To:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=IJMNcox1oUJhloXHn4B5ipPj8rMbOA9etlvKfTXO0VCy3V1LSDetiWi/e5nO7zikiIEUOntis9r+ntcvGo+HO7gkJf0k8pFsVVocKwFWRGGGAhjcrTDXSWKNfrOYjxIgF3/1DIwz2IOEOqNXCY+SIx5VfvUi4ckKpe3yCaHUp6I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com; spf=pass smtp.mailfrom=isovalent.com; dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b=MWjlwcJE; arc=none smtp.client-ip=209.85.221.45
+	 MIME-Version; b=fKldtqdJcK1koo2GfsrZWwe96gjXN36+jkfO+kHIK9OxV6ezZCleZu/CmE1x5fB7G6eZZ6g7T44xF5HkoS/quZpZbfXQazzXTrdU7hVLWpSwlDu7Db1BffauC5BNuVqNrnOb8xn052XJouAvxADOxrKgOrIixv65N4ZtLbnpAis=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com; spf=pass smtp.mailfrom=isovalent.com; dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b=YtOPIWmF; arc=none smtp.client-ip=209.85.128.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=isovalent.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b="MWjlwcJE"
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-399676b7c41so1412185f8f.3
-        for <bpf@vger.kernel.org>; Tue, 18 Mar 2025 07:29:51 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b="YtOPIWmF"
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-43cf0d787eeso35974895e9.3
+        for <bpf@vger.kernel.org>; Tue, 18 Mar 2025 07:29:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent.com; s=google; t=1742308190; x=1742912990; darn=vger.kernel.org;
+        d=isovalent.com; s=google; t=1742308194; x=1742912994; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=HyEbH1w6A9VIpcgZdoHugiV2nHQoH/REc15nWJRp/Ho=;
-        b=MWjlwcJEIZORB1ce7tEdW6wKNQFo/PYtNsYvO6EGSI3g8hNqVNA3eqv8aV9Agt3AEV
-         BSpTH5AwY4D/AwHhEvAcH6Vi/nS5aQTMGfq4NdUdLsc4fnybBCR6D/hc14p1UkItS3ST
-         jK6zjE3vhXSVHQDblluQMMl6XEWTRNoBHyjddyzDxDIQm61/CwI37aOB0M+9/7wtipDx
-         Snt1mS9vkzJ8hcmJMU56iIwVInATTwYfZv+qyUBF23LqPpbYeNzTaHINtOLCRGMAFu3w
-         WtwSg5/0Oy20IL3qO3laduSgufi5ij2QG7cZSuQTJqF2E0Gc707rLsMYpz+yfZ1s63oN
-         czZQ==
+        bh=5x/Zdr28U7rm8LeTlmCEIcnCk+qjtX3EDdKLOo1AFXY=;
+        b=YtOPIWmF6xBPscu7xsdUTTi1oJ1PlFwKIhx+QixBwlvFXLBJtq8eR56jL+G+lN3/3N
+         orTMPfgdm0QzOKOg0CAupqTSbMvGAZ6Cq5BM9x/mv+q2wRpggcUWvMMy9w6IQdAxqneG
+         82vGi8NVrBVSDZ2cbpf1JLLAjYFMNDPJSPLK1binIoOWZbiRwYLbE2Ho/T/n3/UyIkvS
+         H+btze+MLVs1PvXWUpSU7Qwevqy0N0aXpvwN2HMf1FwrkVgQHbqwmAhkotbfYTxwXn+8
+         F3nIZoYk+JUjXxdvJlaV4t5mHoatvoF2ZPtb1SvoBEjJIRl6eEu5Q5cLin5VWXYFE56v
+         F6vA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742308190; x=1742912990;
+        d=1e100.net; s=20230601; t=1742308194; x=1742912994;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=HyEbH1w6A9VIpcgZdoHugiV2nHQoH/REc15nWJRp/Ho=;
-        b=rMuGmXHjORA6CUKDBRl4l2O7xw/XQ7+a3ofsi20dqTzGN9jXls6A1Mf2vFgbiEIn30
-         DptNbChsIGH9rLuBCAfiuF8tGIDTi4Olpi/KKrj2gYMhCGJ61fGF8BIRo5JMlA00RdcQ
-         VNtBH8baRSuzdxsmgQeAlLKd69DhbDUghBzoICx0t6oIqOTj/wXkhZCEKAL3+G6osGDR
-         G28h27cC08haMJpe4dLD6g34F+aYD5S7ydZqWomSASxGgYcUCCi+wK52+UD2Xg8kIZic
-         s+PDLLT8jb0ySYTWjm09FkdvFa2ZkQaTxxR9DrtJh8AUJWpnsIa1c2NV6wcyh3fRHkn8
-         D1cA==
-X-Gm-Message-State: AOJu0YwIhIswFB7oWRbaR9ggiSFcVS9HuFr62kH5eLn46lT8wU4ES0OI
-	rJMb0WkYEZ87ckJ9Y6B0lwqfRh6DtUPp7Lval/6ieo/TCc2VQbK743HLQ0fFtJVH5uStRFe7SM3
-	R
-X-Gm-Gg: ASbGnct6rmbVzTyOLmYRdoqQjK3Ir9s3tz0iiVOo4DFzQETfxFc02F6QUsBlNB98+hI
-	iB5sba9dHZ0W57dfSgi+v/SwsXQl6YtQ/9K+cJFhcpXh35QPyRKVMQXEqk69k6bFouvPfp1jmv5
-	lXW796MVbKzOT/cGDyJ3yJ0LOSbt7+R6ZUjzlKCH8wOE2Td07CvfWIIC5rPVxQkSFJy10fpx/Ee
-	DZThS5kyg7vYrsK47OuT0BamIW6V1NU1xP+IsbNi2lTHkjWCQZBoKZV03GfoTC/sCENX+0dGJSQ
-	vwkDoBf8rt58mgZ2L4T5gyMxBG0bxGMAF5W4agZXGNKXbbyIfl8Ng8E2lw==
-X-Google-Smtp-Source: AGHT+IEBc2DXszWUK7Wx6L8YOfJbIGv1CsNj3ZZTNfgAU6t0FxewgwqAdY2eyE+E+QH5Gg+cfLT4EA==
-X-Received: by 2002:a05:6000:4027:b0:38d:d7a4:d447 with SMTP id ffacd0b85a97d-3971f9e4866mr18141561f8f.34.1742308189947;
-        Tue, 18 Mar 2025 07:29:49 -0700 (PDT)
+        bh=5x/Zdr28U7rm8LeTlmCEIcnCk+qjtX3EDdKLOo1AFXY=;
+        b=O5RVJFXnIuhconeYDvYyzWTniedOeAQo/5wz0ko3QFm3S4tuxD0lpjEHC7YY4E28kj
+         ibEjfq6G5S+DGn62kK0YvJIH+a48/rrOxloJHXBtn2qRGXLYbJXIAPpAFMS5mKHpwhUK
+         jkfi7Uk+dE29AllMlUWfZkl7AHN6oZj5KWLT9HtP8ARkbX/3tS7NkcPG6zB/zhlwGnlX
+         dE2o0JQv9Hed8GzFp5BRm+lk3OTXPib2AmsMTEDxtnpkznlV7I3jp7CEpPU3M1JTqN7G
+         yxWPtiFFpN6URJD8GQCtKKpBk7ZOuesydmVqTEQk5bKMUJb/yEQ4OuoufwqMnrQMecor
+         2Apw==
+X-Gm-Message-State: AOJu0YydsnSA3VGmhXuSuli6PsKhVAwoTYSHFADtgtGUBkDCp+epA3sP
+	leEKu+o1UwCgDm3dtsTgWgYo/khtP5IoZGh5uBvcAsEQkcxC6aNtix9L7modYO9LyoJ55LQQXHT
+	B
+X-Gm-Gg: ASbGncu5DrfTLr8QFjQzE8B6x2Ax/Da92CsACE14U8iehtyujUq5NP034aMhACAywNo
+	vuKCEsmfLsH9JrnS73psNVbc+kvIHmGG1BLyqNNDKJ41bWovdG/YDDAc0q2spioOsvWwNnw/Mgl
+	e7yGInsIoxz26kjmSrUE8TLeuPcm3JVl48rc5DDcLdzKk1hg5GsCV3K0hyeEbwfY8LdcIiu0qMu
+	kMDXW/cdsWcfioGzQpDr+ES34eh3YxgvqBcEcVHuCNGCAhzW0o7odFdazDbuRlYG+Mxoa4GYEDi
+	9qgX0ERLXcebtBw9ipl5a7p55ie9oXEjhppcwCt+04p4Ae07IGk1A/OzcQ==
+X-Google-Smtp-Source: AGHT+IFa/zYy9gev8ciPJk+pRnAUSQgYVlQeFbZJgzbUqwgGg4pG8F7bChHyI/Rve0Xt7xnPlyGK0Q==
+X-Received: by 2002:a05:600c:1e07:b0:43c:f689:88ce with SMTP id 5b1f17b1804b1-43d3b9d446bmr25661575e9.20.1742308193956;
+        Tue, 18 Mar 2025 07:29:53 -0700 (PDT)
 Received: from localhost.localdomain ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-395cb40cdd0sm18348071f8f.77.2025.03.18.07.29.49
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-395cb40cdd0sm18348071f8f.77.2025.03.18.07.29.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Mar 2025 07:29:49 -0700 (PDT)
+        Tue, 18 Mar 2025 07:29:53 -0700 (PDT)
 From: Anton Protopopov <aspsk@isovalent.com>
 To: bpf@vger.kernel.org,
 	Andrii Nakryiko <andrii@kernel.org>,
@@ -66,9 +66,9 @@ To: bpf@vger.kernel.org,
 	Quentin Monnet <qmo@kernel.org>,
 	Anton Protopopov <aspsk@isovalent.com>,
 	Alexei Starovoitov <ast@kernel.org>
-Subject: [RFC PATCH bpf-next 04/14] bpf: add support for an extended JA instruction
-Date: Tue, 18 Mar 2025 14:33:08 +0000
-Message-Id: <20250318143318.656785-5-aspsk@isovalent.com>
+Subject: [RFC PATCH bpf-next 08/14] bpf, x86: implement static key support
+Date: Tue, 18 Mar 2025 14:33:12 +0000
+Message-Id: <20250318143318.656785-9-aspsk@isovalent.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20250318143318.656785-1-aspsk@isovalent.com>
 References: <20250318143318.656785-1-aspsk@isovalent.com>
@@ -80,191 +80,90 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add support for a new version of JA instruction, a static branch JA. Such
-instructions may either jump to the specified offset or act as nops. To
-distinguish such instructions from normal JA the BPF_STATIC_BRANCH_JA flag
-should be set for the SRC register.
-
-By default on program load such instructions are jitted as a normal JA.
-However, if the BPF_STATIC_BRANCH_NOP flag is set in the SRC register,
-then the instruction is jitted to a NOP.
-
-In order to generate BPF_STATIC_BRANCH_JA instructions using llvm two new
-instructions will be added:
-
-	asm volatile goto ("nop_or_gotol %l[label]" :::: label);
-
-will generate the BPF_STATIC_BRANCH_JA|BPF_STATIC_BRANCH_NOP instuction and
-
-	asm volatile goto ("gotol_or_nop %l[label]" :::: label);
-
-will generate a BPF_STATIC_BRANCH_JA instruction, without an extra bit set.
-The reason for adding two instructions is that both are required to implement
-static keys functionality for BPF, namely, to distinguish between likely and
-unlikely branches.
-
-The verifier logic is extended to check both possible paths: jump and nop.
+Implement bpf_arch_poke_static_branch() for x86. Namely, during each
+JIT loop, save IP values and sizes of jump instructions pointed by
+static keys. Then use the text_poke_bp() to toggle jumps/nops.
 
 Signed-off-by: Anton Protopopov <aspsk@isovalent.com>
 ---
- arch/x86/net/bpf_jit_comp.c    | 19 +++++++++++++--
- include/uapi/linux/bpf.h       | 10 ++++++++
- kernel/bpf/verifier.c          | 43 +++++++++++++++++++++++++++-------
- tools/include/uapi/linux/bpf.h | 10 ++++++++
- 4 files changed, 71 insertions(+), 11 deletions(-)
+ arch/x86/net/bpf_jit_comp.c | 46 +++++++++++++++++++++++++++++++++++++
+ 1 file changed, 46 insertions(+)
 
 diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index d3491cc0898b..5856ac1aab80 100644
+index 5856ac1aab80..31cadded820b 100644
 --- a/arch/x86/net/bpf_jit_comp.c
 +++ b/arch/x86/net/bpf_jit_comp.c
-@@ -1482,6 +1482,15 @@ static void emit_priv_frame_ptr(u8 **pprog, void __percpu *priv_frame_ptr)
- 	*pprog = prog;
- }
+@@ -1569,6 +1569,8 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image, u8 *rw_image
+ 		const s32 imm32 = insn->imm;
+ 		u32 dst_reg = insn->dst_reg;
+ 		u32 src_reg = insn->src_reg;
++		int adjust_off = 0;
++		int abs_xlated_off;
+ 		u8 b2 = 0, b3 = 0;
+ 		u8 *start_of_ldx;
+ 		s64 jmp_offset;
+@@ -1724,6 +1726,7 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image, u8 *rw_image
+ 			emit_mov_imm64(&prog, dst_reg, insn[1].imm, insn[0].imm);
+ 			insn++;
+ 			i++;
++			adjust_off = 1;
+ 			break;
  
-+static bool is_static_ja_nop(const struct bpf_insn *insn)
-+{
-+	u8 code = insn->code;
-+
-+	return (code == (BPF_JMP | BPF_JA) || code == (BPF_JMP32 | BPF_JA)) &&
-+	       (insn->src_reg & BPF_STATIC_BRANCH_JA) &&
-+	       (insn->src_reg & BPF_STATIC_BRANCH_NOP);
-+}
-+
- #define INSN_SZ_DIFF (((addrs[i] - addrs[i - 1]) - (prog - temp)))
- 
- #define __LOAD_TCC_PTR(off)			\
-@@ -2519,9 +2528,15 @@ st:			if (is_imm8(insn->off))
- 					}
- 					emit_nops(&prog, INSN_SZ_DIFF - 2);
- 				}
--				EMIT2(0xEB, jmp_offset);
-+				if (is_static_ja_nop(insn))
-+					emit_nops(&prog, 2);
-+				else
-+					EMIT2(0xEB, jmp_offset);
- 			} else if (is_simm32(jmp_offset)) {
--				EMIT1_off32(0xE9, jmp_offset);
-+				if (is_static_ja_nop(insn))
-+					emit_nops(&prog, 5);
-+				else
-+					EMIT1_off32(0xE9, jmp_offset);
- 			} else {
- 				pr_err("jmp gen bug %llx\n", jmp_offset);
+ 			/* dst %= src, dst /= src, dst %= imm32, dst /= imm32 */
+@@ -2595,6 +2598,14 @@ st:			if (is_imm8(insn->off))
  				return -EFAULT;
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index b8e588ed6406..57e0fd636a27 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -1462,6 +1462,16 @@ struct bpf_stack_build_id {
- 	};
- };
- 
-+/* Flags for JA insn, passed in SRC_REG */
-+enum {
-+	BPF_STATIC_BRANCH_JA  = 1 << 0,
-+	BPF_STATIC_BRANCH_NOP = 1 << 1,
-+};
+ 			}
+ 			memcpy(rw_image + proglen, temp, ilen);
 +
-+#define BPF_STATIC_BRANCH_MASK (BPF_STATIC_BRANCH_JA | \
-+				BPF_STATIC_BRANCH_NOP)
++			/*
++			 * Static keys need to know how the xlated code
++			 * of static ja instructions maps to jited code
++			 */
++			abs_xlated_off = bpf_prog->aux->subprog_start + i - 1 - adjust_off;
++			bpf_prog_update_insn_ptr(bpf_prog, abs_xlated_off, proglen, ilen,
++						 jmp_offset, image + proglen);
+ 		}
+ 		proglen += ilen;
+ 		addrs[i] = proglen;
+@@ -3880,3 +3891,38 @@ bool bpf_jit_supports_timed_may_goto(void)
+ {
+ 	return true;
+ }
 +
++int bpf_arch_poke_static_branch(struct bpf_insn_ptr *ptr, bool on)
++{
++	int jmp_offset = ptr->jitted_jump_offset;
++	void *ip = ptr->jitted_ip;
++	u32 len = ptr->jitted_len;
++	u8 op[5];
 +
- #define BPF_OBJ_NAME_LEN 16U
- 
- union bpf_attr {
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 6554f7aea0d8..0860ef57d5af 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -17374,14 +17374,24 @@ static int visit_insn(int t, struct bpf_verifier_env *env)
- 		else
- 			off = insn->imm;
- 
--		/* unconditional jump with single edge */
--		ret = push_insn(t, t + off + 1, FALLTHROUGH, env);
--		if (ret)
--			return ret;
-+		if (insn->src_reg & BPF_STATIC_BRANCH_JA) {
-+			/* static branch - jump with two edges */
-+			mark_prune_point(env, t);
- 
--		mark_prune_point(env, t + off + 1);
--		mark_jmp_point(env, t + off + 1);
-+			ret = push_insn(t, t + 1, FALLTHROUGH, env);
-+			if (ret)
-+				return ret;
++	if (WARN_ON_ONCE(!ip))
++		return -EINVAL;
 +
-+			ret = push_insn(t, t + off + 1, BRANCH, env);
++	if (WARN_ON_ONCE(is_imm8(jmp_offset) && len != 2))
++		return -EINVAL;
++
++	if (WARN_ON_ONCE(!is_imm8(jmp_offset) && len != 5))
++		return -EINVAL;
++
++	if (on) {
++		if (len == 2) {
++			op[0] = 0xEB;
++			op[1] = jmp_offset;
 +		} else {
-+			/* unconditional jump with single edge */
-+			ret = push_insn(t, t + off + 1, FALLTHROUGH, env);
-+			if (ret)
-+				return ret;
- 
-+			mark_prune_point(env, t + off + 1);
-+			mark_jmp_point(env, t + off + 1);
++			op[0] = 0xE9;
++			memcpy(&op[1], &jmp_offset, 4);
 +		}
- 		return ret;
- 
- 	default:
-@@ -19414,8 +19424,11 @@ static int do_check(struct bpf_verifier_env *env)
- 
- 				mark_reg_scratched(env, BPF_REG_0);
- 			} else if (opcode == BPF_JA) {
-+				struct bpf_verifier_state *other_branch;
-+				u32 jmp_offset;
++	} else {
++		memcpy(op, x86_nops[len], len);
++	}
 +
- 				if (BPF_SRC(insn->code) != BPF_K ||
--				    insn->src_reg != BPF_REG_0 ||
-+				    (insn->src_reg & ~BPF_STATIC_BRANCH_MASK) ||
- 				    insn->dst_reg != BPF_REG_0 ||
- 				    (class == BPF_JMP && insn->imm != 0) ||
- 				    (class == BPF_JMP32 && insn->off != 0)) {
-@@ -19424,9 +19437,21 @@ static int do_check(struct bpf_verifier_env *env)
- 				}
- 
- 				if (class == BPF_JMP)
--					env->insn_idx += insn->off + 1;
-+					jmp_offset = insn->off + 1;
- 				else
--					env->insn_idx += insn->imm + 1;
-+					jmp_offset = insn->imm + 1;
++	mutex_lock(&text_mutex);
++	text_poke_bp(ip, op, len, NULL);
++	mutex_unlock(&text_mutex);
 +
-+				/* Staic branch can either jump to +off or +0 */
-+				if (insn->src_reg & BPF_STATIC_BRANCH_JA) {
-+					other_branch = push_stack(env, env->insn_idx + jmp_offset,
-+							env->insn_idx, false);
-+					if (!other_branch)
-+						return -EFAULT;
-+
-+					jmp_offset = 1;
-+				}
-+
-+				env->insn_idx += jmp_offset;
- 				continue;
- 
- 			} else if (opcode == BPF_EXIT) {
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index b8e588ed6406..57e0fd636a27 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -1462,6 +1462,16 @@ struct bpf_stack_build_id {
- 	};
- };
- 
-+/* Flags for JA insn, passed in SRC_REG */
-+enum {
-+	BPF_STATIC_BRANCH_JA  = 1 << 0,
-+	BPF_STATIC_BRANCH_NOP = 1 << 1,
-+};
-+
-+#define BPF_STATIC_BRANCH_MASK (BPF_STATIC_BRANCH_JA | \
-+				BPF_STATIC_BRANCH_NOP)
-+
-+
- #define BPF_OBJ_NAME_LEN 16U
- 
- union bpf_attr {
++	return 0;
++}
 -- 
 2.34.1
 
