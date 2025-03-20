@@ -1,62 +1,62 @@
 Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7368215162
-	for <bpf@vger.kernel.org>; Thu, 20 Mar 2025 21:41:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 196F322170A
+	for <bpf@vger.kernel.org>; Thu, 20 Mar 2025 21:41:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742506873; cv=none; b=aLSxztK9TYvVbacxjw8U9D26hRBfyvVOXdQHW0mtqT3DLp2CCxhsLq4Z/ylMva5BZeP01bm/jeOe8YciVoEyTG9errs9r8BN3DWEQYgNj2QW2vusX6ys3IPDWCfMZTdeM5/id87ZwtjxO+cHxjtFozwLMhbyjq9fptJjXFXnUtY=
+	t=1742506873; cv=none; b=anrPANAmSdz5+r/OsyDefOuYlTWKPm5S/4q8zHORxCbqpFa988TIiHXolGVtX64zfr3LIn+jFfBSAgXNUKU81ueKPokoHkaDSHs61M50j6oo4YyI9WPQcFzUywikNgvpw5msqpnBuqZ68MsPZG2KNFKrqkK3hgbgrrbi0V28ty0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1742506873; c=relaxed/simple;
-	bh=qjTIdPEHNHLm74yJdYyKm06tYPxaU4hKntQf7ax/m2A=;
+	bh=kyPOx8CHFrW1aXtiSXucDSto5ZMuATFzfCjcH2K8kwQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fdvz9e2lVVY+2hHuUlKUmkxPZCIDDvekNuG0PrF7FTYBMAoucPa8PIJ9vFyhlM6l3U+c228LPIsHShuDO6dzAclxoCdV+P4JlnrPzjJ07YvBhcPwr/pQ5myC4f/cOnYesYq/bIsCDK5WXoWKhnFgKlBOOK0Nlt3jc4Xu6z8yg1k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LycZMZjf; arc=none smtp.client-ip=209.85.214.175
+	 MIME-Version; b=mF7ep4oiWrCSrSPt0bdwqYxKWALgnkco7u1mD41KgP3u54xNsJEGwa+orCLa31NmEyl63rupdG8RsynujR9OUhl1quj5RFCgItPwy2OCEdTHWujcXyfTs4rc1fhgfrlaz0Ga7Pp30wuV/NWE2lX/Gw7NhRVDtGoeNNP3UGBgFEU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ACpt6snz; arc=none smtp.client-ip=209.85.214.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LycZMZjf"
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-224191d92e4so26285805ad.3
-        for <bpf@vger.kernel.org>; Thu, 20 Mar 2025 14:41:11 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ACpt6snz"
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2255003f4c6so25455485ad.0
+        for <bpf@vger.kernel.org>; Thu, 20 Mar 2025 14:41:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742506871; x=1743111671; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1742506869; x=1743111669; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Xn2/jHm0OsAiNawS5f76arsuUPd0oMd4W9sk8yrRJt8=;
-        b=LycZMZjfAzRn9EgaYJayY5XQmfCBBt8xWvxf4D2/a3szb6DRkYC5OjRz8Z5quSHKVf
-         ABU9TgentMRh/3ej1WgQ/H/PRPqkfCZt92L6LtByvJg9zBPPgoPC8HguNWMQiaBPJu/+
-         BO0Pf9rM2oVPrOTErFj24tV3Ji8uK+6C4ELaCIU1obroOkVwAQe+tcemKGGmlfcAnZXI
-         VYkeT+x71y6ErZvO+VXpFDYu1dTdZ4qARsWa53in//Bg9gOSSKqP9EejwLgHYrT7lhq8
-         vyxpBCcriE0XBxUp8DiL3a8evmVztO+7ptqKXCYLtyKV/FqxYKObXxx7qdEzdzCK/AAl
-         iBuw==
+        bh=C/fZ234dAZVGtQaAGmz3CCq6broya7oHFZGYXayYrKE=;
+        b=ACpt6snz5H0Zf9YVZTscO62qI5iP7bpKHIpByjfOi+UgIKgN7lPP7MF671hoAN2i5z
+         UQt0/tJYzbQ+s5LyMHsnVjpqePW2c8HHHWh1RDFBCafLDsoBkWXsdXfQHr1KIbHmOUUm
+         1fo8AOF3BT3DhFPPgp6ZUGk5I4wQxYqJL5vo84puGqmIBg62NISVsuNM6yTDNsCRmMoH
+         7t0pDq3jhUIEvob2d4qdELIUx/8V/5f1YE44+GW9ty5KmNN6pJNPGoMgSMTiLTPX/eRi
+         YCeG0p/a7u8ajRr13RP34igy5AQIgGBdPuFHBTWhNB1Ne2UqIXhHLGlIz0u6+5FSwk2E
+         kZ4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742506871; x=1743111671;
+        d=1e100.net; s=20230601; t=1742506869; x=1743111669;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Xn2/jHm0OsAiNawS5f76arsuUPd0oMd4W9sk8yrRJt8=;
-        b=dGAFkqLe+r5VuB4RW8IrgEA+tp9FnQ5lG+kYvQtvkqHvXMxqGC4WOMxFyC/rrJvcrR
-         9m/77gYlJB38YSlPPAU4DHTqncOZaytuY49JndwrS1hS9Cg3OOg92wh4sGkwmwsisBVM
-         iyAXGqyx5mAKRyeZdFXScQ1fjgjB7/qJXwaBlYHWH/zRtlrhJ6fhgvXRZdHaMOD4ikBa
-         6ye8GQgoZQ3+97TPrbDBbKEl5NLgR2Efx628o5HxQ4F3E1r+tz/Vlsh1FPapl/1ktL5R
-         jm1/U2f0NhX66xtPUcG+xVl3IB69lVITBl1IeqRA4/JAohxhrO8gV3C9IZ1WEBvcavBx
-         c2Vg==
-X-Gm-Message-State: AOJu0YwxZmZGaUaESM2TUs3qmPnoY/C2m+V+bBUtHHBARJiv3rNbhh7D
-	7iYlggAyaxqiYBr2x39oM/zswzd6rng8mnicjh8+6J/XOiWdPBIEnHRS+W0RwfA=
-X-Gm-Gg: ASbGncsAzbOmA+Zo0SG/3/kGJeblP5TlShGSSX4A+xqD/RLQQPwCaB3dGyhFGVErjZj
-	rAr5X+k6cnEPZOPrMGw7kUNjwbsrBa0hha/UnMsWkqSLmRHIV8XUR266Mxv8GWnGhGp+CbS2stU
-	+YB8PMpxL+uCT3lVPeuAzwsGhz5YlmSLtuD1OltSA8mP+9c6mMQLHjg/DHvzEsWmnXD2dXchFmF
-	VoAjrh150Wpq24jnC0yKArk0XuW+jg6KqQZJ2hrpfF1/7W5kmCf8khEqWUGNbF2xGsC16LXi63E
-	DAoO85K40gTosAoZPxR5KCNbRiZDnUkweT+59sxqZFdIohQcjAwKtl5TVbd7tmWOpnTHnomCKmz
-	VDI6Wun9K1B0QqzwlYFQ=
-X-Google-Smtp-Source: AGHT+IG/RF1JsUl3zVyEjxRL9QMETxDHwkURIDwoIwyXsnfueihlVoh7Wlq/4RTytKZyOMKDcdaqUQ==
-X-Received: by 2002:a05:6a21:3381:b0:1f5:7ba7:69d8 with SMTP id adf61e73a8af0-1fe42f74fdbmr1710022637.15.1742506870858;
-        Thu, 20 Mar 2025 14:41:10 -0700 (PDT)
+        bh=C/fZ234dAZVGtQaAGmz3CCq6broya7oHFZGYXayYrKE=;
+        b=MNlDkn0Brtnj6ZQ1PszlrV0oN2aWoUcSCecx6X5wehRtVx9O0UbO/trtDZ0xJB+H4l
+         EaHhqL+p89dJp5FyHpeSUTHUItMeabHYDDOVm0DNcUSYTHbv0WlM83+otw+pBAcKmbhj
+         swWtqXBudyNka2lOkDGxLBE7ioaZA+ClmlrSbMNBwLUTt2WUV5ffxq3ft9zudJYY5Qlx
+         +22DbOcRuGgeL69fRJJqVck56wcjNFwRc8qPVrpZxeNHyWvdgj+qx83fd4SwMtmYn6Ow
+         ILCBPs4cfON+d9+LM5mlZe1j4AEJqHS6Kdk5WaN9Hb4kFympS1INziz2v2NeGtwFooZI
+         aX3A==
+X-Gm-Message-State: AOJu0YzhM9c5VhAwtLHRCkvozLMZbCLJzAwpjEgDHCXaxmFiDuXoaJHD
+	e2yxVDZLFX1maxfsxSYKaBanV9lY2AXWFP67inU9bmAq7D7ifMaR1ylQnwHnNdg=
+X-Gm-Gg: ASbGncvpRLU1MdLO0Z2Fw4iNmqJ34RKxP5UQ0aXtIcd1afTmkeLh5wxXmXF9Aps37Jk
+	+qjVvPLvoej5UWEe4aahFUx1MbnlxAPuh5TLQppwr2B7kM7mgE4Oj0nbCOEYGH68LfsxWtLrqUV
+	uUuG39SkYOFRgiTSYpmpWeio7ionfcto8oTjqacRld1PXlJO2klxRGSmX8QKbjmO78Th3x14MGk
+	01rugdP35/vnqaroh2Ati557+AJdf52T7eh+970rYWnsuvTiSxKXGTzbW8MNyofx6qQL/irYKT+
+	Ik+D4x12ewql0WZjb5edWAOfnKfzq01yelhOwJogMoB2A9kbCKDxS3j5nNCdf8ezIlxZorWUzvB
+	0ZtNcVF7YCLzw65XlZLg=
+X-Google-Smtp-Source: AGHT+IEGvAh7x1l6fy1jAu9NeGDkvQMj0FU+hMYVhM+DhHkrtxY+diE9R3S3dt9b54d/U2k8pXSTRg==
+X-Received: by 2002:a05:6a21:6b04:b0:1fd:f8dc:833e with SMTP id adf61e73a8af0-1fe4300f7e7mr1791508637.30.1742506869016;
+        Thu, 20 Mar 2025 14:41:09 -0700 (PDT)
 Received: from localhost.localdomain (c-76-146-13-146.hsd1.wa.comcast.net. [76.146.13.146])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7390618e59esm321135b3a.170.2025.03.20.14.41.10
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7390618e59esm321135b3a.170.2025.03.20.14.41.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Mar 2025 14:41:10 -0700 (PDT)
+        Thu, 20 Mar 2025 14:41:08 -0700 (PDT)
 From: Amery Hung <ameryhung@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
@@ -65,9 +65,9 @@ Cc: daniel@iogearbox.net,
 	martin.lau@kernel.org,
 	ameryhung@gmail.com,
 	kernel-team@meta.com
-Subject: [RFC PATCH 4/4] selftests/bpf: Test changing KV store value layout
-Date: Thu, 20 Mar 2025 14:40:58 -0700
-Message-ID: <20250320214058.2946857-5-ameryhung@gmail.com>
+Subject: [RFC PATCH 2/4] selftests/bpf: Implement basic uptr KV store
+Date: Thu, 20 Mar 2025 14:40:56 -0700
+Message-ID: <20250320214058.2946857-3-ameryhung@gmail.com>
 X-Mailer: git-send-email 2.47.1
 In-Reply-To: <20250320214058.2946857-1-ameryhung@gmail.com>
 References: <20250320214058.2946857-1-ameryhung@gmail.com>
@@ -79,221 +79,560 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-While it is not the most ideal way I imagine how the KV store to be
-used. The test tries to show upgrading a bpf program with a change in
-the definition of a structure. If using a structure for the value, while
-adding a new member is easy, it is less clear how removing or changing
-member layout would work.
+The uptr KV store is a dynamically resizable key-value store that aims to
+make rolling out bpf programs with map value layout changes easier by
+hiding the layout from bpf program. It is built on top of existing bpf
+features with both user space and bpf API. To support usage in bpf
+programs on hot paths, only simple APIs such as get/put/delete are
+provided in bpf, and space managing API are available in user space API.
+
+To use uptr KV store, the user space program first needs to call
+kv_store_init() to allocate memory and setup uptrs in the
+task_local_storage of a given process. It will return a pointer to
+"struct kv_store" on success, which will be used as a token to access the
+KV store in other APIs. Secondly, it needs to initialize all key-value
+pairs with kv_store_put(). Then, both bpf and user space program can start
+their normal operation.
+
+In the bpf program, the API is designed to minimize map lookups.
+Therefore, the bpf program needs to first lookup the task_local_storage.
+Then, all bpf API will take the map value as the first argument, and
+these API do not incur additional map lookups.
+
+A simple way of using KV store to allow easy bpf program rollout is to use
+multiple key-value pairs where the values are primitive datatypes instead
+of a structure. This way, adding/deleting fields are just adding/deleting
+keys without moving data. The following is an example of how this would
+work.
+
+  user space: kv_store_init()
+  user space: kv_store_put({key1, key2, key3})
+
+  prog_v1: kv_store_get/put({key1, key2, key3})
+
+  user space: kv_store_delete{key1}
+  user space: kv_store_add{key4}
+  user space: kv_store_set_map_reuse(prog_v2.data_map)
+
+  prog_v2: kv_store_get/put({key2, key3, key4})
+
+At the core of the KV store are metadata and data. To access the value
+stored in the data, the metadata is first queried using an integer key.
+The metadata is an array of metadata containing the offset and size of
+the values. Both metadata and data are stored in uptr regions in the
+task_local_storage.
+
+Note that, it is also possible to support string keys by replacing the
+backing storage of metadata with an hashmap. However, the additional map
+lookup per API may suggest higher performance overhead.
 
 Signed-off-by: Amery Hung <ameryhung@gmail.com>
 ---
- .../bpf/prog_tests/test_uptr_kv_store.c       | 77 +++++++++++++++++++
- .../selftests/bpf/progs/test_uptr_kv_store.c  |  9 +++
- .../bpf/progs/test_uptr_kv_store_v1.c         | 46 +++++++++++
- .../selftests/bpf/test_uptr_kv_store_common.h | 13 ++++
- 4 files changed, 145 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/test_uptr_kv_store_v1.c
+ .../selftests/bpf/prog_tests/uptr_kv_store.c  | 282 ++++++++++++++++++
+ .../selftests/bpf/prog_tests/uptr_kv_store.h  |  22 ++
+ .../selftests/bpf/progs/uptr_kv_store.h       | 120 ++++++++
+ .../selftests/bpf/uptr_kv_store_common.h      |  47 +++
+ 4 files changed, 471 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/uptr_kv_store.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/uptr_kv_store.h
+ create mode 100644 tools/testing/selftests/bpf/progs/uptr_kv_store.h
+ create mode 100644 tools/testing/selftests/bpf/uptr_kv_store_common.h
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_uptr_kv_store.c b/tools/testing/selftests/bpf/prog_tests/test_uptr_kv_store.c
-index 2075b8e47972..2e86bb08b26e 100644
---- a/tools/testing/selftests/bpf/prog_tests/test_uptr_kv_store.c
-+++ b/tools/testing/selftests/bpf/prog_tests/test_uptr_kv_store.c
-@@ -3,6 +3,7 @@
- #include "uptr_kv_store.h"
- #include "test_uptr_kv_store_common.h"
- #include "test_uptr_kv_store.skel.h"
-+#include "test_uptr_kv_store_v1.skel.h"
- 
- static void test_uptr_kv_store_basic(void)
- {
-@@ -70,8 +71,84 @@ static void test_uptr_kv_store_basic(void)
- 	kv_store_close(kvs);
- }
- 
-+static void test_uptr_kv_store_change_value(void)
+diff --git a/tools/testing/selftests/bpf/prog_tests/uptr_kv_store.c b/tools/testing/selftests/bpf/prog_tests/uptr_kv_store.c
+new file mode 100644
+index 000000000000..18328b1d5a9a
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/uptr_kv_store.c
+@@ -0,0 +1,282 @@
++#include <errno.h>
++#include <stdlib.h>
++#include <string.h>
++
++#include <sys/mman.h>
++#include <linux/err.h>
++#include <bpf/bpf.h>
++#include <bpf/libbpf.h>
++
++#include "task_local_storage_helpers.h"
++#include "uptr_kv_store.h"
++
++struct kv_store {
++	int data_map_fd;
++	int task_fd;
++	int page_cnt;
++	char *data_map_pin_path;
++	struct kv_store_data_map_value data;
++};
++
++static struct kv_store_page *__kv_store_add_page(struct kv_store *kvs)
 +{
-+	int err, pid;
-+	struct test_uptr_kv_store_v1 *skel_v1;
-+	struct test_uptr_kv_store *skel;
-+	struct test_struct_v1 val_v1;
-+	struct test_struct val, *val_p;
-+	struct kv_store *kvs = NULL;
++	struct kv_store_page *p;
 +
-+	skel = test_uptr_kv_store__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "skel_open_and_load"))
-+		return;
++	if (kvs->page_cnt > KVS_MAX_PAGE_ENTRIES)
++		return ERR_PTR(-ENOSPC);
 +
-+	skel->bss->target_pid = -1;
-+	err = test_uptr_kv_store__attach(skel);
-+	if (!ASSERT_OK(err, "skel_attach"))
-+		return;
++	p = mmap(NULL, sizeof(struct kv_store_page), PROT_READ | PROT_WRITE,
++		 MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
 +
-+	pid = sys_gettid();
-+	kvs = kv_store_init(pid, skel->maps.data_map, "/sys/fs/bpf/kv_store_data_map");
++	if (p == MAP_FAILED)
++		return ERR_PTR(-ENOMEM);
 +
-+	/* update key 0 to test_struct in user space */
-+	val.a = 1;
-+	val.b = 2;
-+	err = kv_store_put(kvs, 0, &val, sizeof(val));
-+	ASSERT_OK(err, "kv_store_put struct val");
-+	val_p = kv_store_get(kvs, 0);
-+	ASSERT_OK_PTR(val_p, "kv_store_get struct val");
-+	ASSERT_EQ(val_p->a, val.a, "user space: check get val.a == put val.a");
-+	ASSERT_EQ(val_p->b, val.b, "user space: check get val.b == put val.b");
++	kvs->data.pages[kvs->page_cnt].page = p;
++	kvs->page_cnt++;
 +
-+	/* lookup test_struct at key 0 in test_uptr_kv_store */
-+	skel->bss->test_key = 0;
-+	skel->bss->test_op = KVS_STRUCT_GET;
-+	skel->bss->target_pid = pid;
-+	sys_gettid();
-+	skel->bss->target_pid = -1;
-+	ASSERT_EQ(skel->bss->test_struct_val.a, val.a, "bpf: check get val.a == put val.a");
-+	ASSERT_EQ(skel->bss->test_struct_val.b, val.b, "bpf: check get val.b == put val.b");
-+
-+	/* add a new field to test_struct */
-+	err = kv_store_update_value_size(kvs, 0, sizeof(val_v1));
-+	ASSERT_OK(err, "kv_store_update_value_size");
-+
-+	/* rollout a new version */
-+	skel_v1 = test_uptr_kv_store_v1__open();
-+	if (!ASSERT_OK_PTR(skel, "skel_open v1"))
-+		goto out;
-+
-+	kv_store_data_map_set_reuse(kvs, skel_v1->maps.data_map);
-+
-+	err = test_uptr_kv_store_v1__load(skel_v1);
-+	if (!ASSERT_OK(err, "skel_load v1"))
-+		goto out;
-+
-+	skel_v1->bss->target_pid = -1;
-+	err = test_uptr_kv_store_v1__attach(skel_v1);
-+	if (!ASSERT_OK(err, "skel_attach v1"))
-+		goto out;
-+
-+	/* lookup struct_key_0 in test_uptr_kv_store */
-+	skel_v1->bss->test_key = 0;
-+	skel_v1->bss->test_op = KVS_STRUCT_GET;
-+	skel_v1->bss->target_pid = pid;
-+	sys_gettid();
-+	skel_v1->bss->target_pid = -1;
-+
-+	ASSERT_EQ(skel_v1->bss->test_struct_val.a, val.a, "bpf: check get val_v1.a == put val.a");
-+	ASSERT_EQ(skel_v1->bss->test_struct_val.b, val.b, "bpf: check get val_v1.b == put val.b");
-+
-+out:
-+	kv_store_close(kvs);
++	return p;
 +}
 +
- void test_uptr_kv_store(void)
- {
- 	if (test__start_subtest("uptr_kv_store_basic"))
- 		test_uptr_kv_store_basic();
-+	if (test__start_subtest("uptr_kv_store_change_value"))
-+		test_uptr_kv_store_change_value();
- }
-diff --git a/tools/testing/selftests/bpf/progs/test_uptr_kv_store.c b/tools/testing/selftests/bpf/progs/test_uptr_kv_store.c
-index b358cb7fb616..2ed993ab4b01 100644
---- a/tools/testing/selftests/bpf/progs/test_uptr_kv_store.c
-+++ b/tools/testing/selftests/bpf/progs/test_uptr_kv_store.c
-@@ -8,6 +8,7 @@ pid_t target_pid = 0;
- int test_op;
- int test_key;
- int test_int_val;
-+struct test_struct test_struct_val;
- 
- SEC("tp_btf/sys_enter")
- int on_enter(__u64 *ctx)
-@@ -28,6 +29,14 @@ int on_enter(__u64 *ctx)
- 	case KVS_INT_GET:
- 		kv_store_get(data, test_key, &test_int_val, 4);
- 		break;
-+	case KVS_STRUCT_PUT:
-+		kv_store_put(data, test_key, &test_struct_val,
-+			     sizeof(test_struct_val));
-+		break;
-+	case KVS_STRUCT_GET:
-+		kv_store_get(data, test_key, &test_struct_val,
-+			     sizeof(test_struct_val));
-+		break;
- 	}
- 
- 	return 0;
-diff --git a/tools/testing/selftests/bpf/progs/test_uptr_kv_store_v1.c b/tools/testing/selftests/bpf/progs/test_uptr_kv_store_v1.c
-new file mode 100644
-index 000000000000..e3dd11e7d11b
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_uptr_kv_store_v1.c
-@@ -0,0 +1,46 @@
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+
-+#include "uptr_kv_store.h"
-+#include "test_uptr_kv_store_common.h"
-+
-+pid_t target_pid = 0;
-+int test_op;
-+int test_key;
-+int test_int_val;
-+struct test_struct_v1 test_struct_val;
-+
-+SEC("tp_btf/sys_enter")
-+int on_enter(__u64 *ctx)
++static void __kv_store_del_page(struct kv_store *kvs)
 +{
-+	struct kv_store_data_map_value *data;
-+	struct task_struct *task;
++	struct kv_store_page *p;
 +
-+	task = bpf_get_current_task_btf();
-+	if (task->pid != target_pid)
++	p = kvs->data.pages[kvs->page_cnt - 1].page;
++	kvs->data.pages[kvs->page_cnt - 1].page = NULL;
++	kvs->page_cnt--;
++	munmap(p, sizeof(*p));
++}
++
++static struct kv_store_meta *kvs_store_get_meta(struct kv_store *kvs, int key)
++{
++	return key < KVS_MAX_VAL_ENTRIES ? &kvs->data.metas->meta[key] : NULL;
++}
++
++void kv_store_close(struct kv_store *kvs)
++{
++	int i;
++
++	munmap(kvs->data.metas, sizeof(struct kv_store_metas));
++
++	for (i = 0; i < kvs->page_cnt; i++)
++		__kv_store_del_page(kvs);
++
++	if (kvs->data_map_pin_path)
++		unlink(kvs->data_map_pin_path);
++
++	free(kvs);
++}
++
++struct kv_store *kv_store_init(int pid, struct bpf_map *data_map, const char *pin_path)
++{
++	struct kv_store_page *p;
++	struct kv_store *kvs;
++	int err;
++
++	kvs = calloc(1, sizeof(*kvs));
++	if (!kvs) {
++		errno = -ENOMEM;
++		return NULL;
++	}
++
++	kvs->data.metas = mmap(NULL, sizeof(struct kv_store_page),
++			       PROT_READ | PROT_WRITE,
++			       MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
++
++	if (kvs->data.metas == MAP_FAILED) {
++		errno = -ENOMEM;
++		return NULL;
++	}
++
++	p = __kv_store_add_page(kvs);
++	if (IS_ERR(p)) {
++		errno = PTR_ERR(p);
++		goto err;
++	}
++
++	kvs->data_map_fd = bpf_map__fd(data_map);
++	if (!kvs->data_map_fd) {
++		errno = -ENOENT;
++		goto err;
++	}
++
++	kvs->task_fd = sys_pidfd_open(pid, 0);
++	if (!kvs->task_fd) {
++		errno = -ESRCH;
++		goto err;
++	}
++
++	err = bpf_map_update_elem(kvs->data_map_fd, &kvs->task_fd, &kvs->data, 0);
++	if (err) {
++		errno = err;
++		goto err;
++	}
++
++	kvs->data_map_pin_path = strdup(pin_path);
++	if (!kvs->data_map_pin_path)
++		goto err;
++
++	err = bpf_map__pin(data_map, kvs->data_map_pin_path);
++	if (err) {
++		errno = err;
++		goto err;
++	}
++
++	return kvs;
++err:
++	kv_store_close(kvs);
++	return NULL;
++}
++
++int kv_store_data_map_set_reuse(struct kv_store *kvs, struct bpf_map *data_map)
++{
++	return bpf_map__reuse_fd(data_map, kvs->data_map_fd);
++}
++
++void *kv_store_get(struct kv_store *kvs, int key)
++{
++	struct kv_store_meta *meta;
++	struct kv_store_page *p;
++
++	meta = kvs_store_get_meta(kvs, key);
++	if (!meta || !meta->init)
++		return NULL;
++
++	p = kvs->data.pages[meta->page_idx].page;
++
++	return p->data + meta->page_off;
++}
++
++static int linear_off(const struct kv_store_meta *meta)
++{
++	if (!meta->init)
++		return KVS_MAX_PAGE_ENTRIES * KVS_MAX_VAL_SIZE;
++
++	return meta->page_idx * KVS_MAX_VAL_SIZE + meta->page_off;
++}
++
++static int comp_meta(const void *m1, const void *m2)
++{
++	struct kv_store_meta *meta1 = (struct kv_store_meta *)m1;
++	struct kv_store_meta *meta2 = (struct kv_store_meta *)m2;
++	int off1, off2;
++
++	off1 = linear_off(meta1);
++	off2 = linear_off(meta2);
++
++	if (off1 > off2)
++		return 1;
++	else if (off1 < off2)
++		return -1;
++	else
 +		return 0;
++}
 +
-+	data = bpf_task_storage_get(&data_map, task, 0, 0);
++static int kv_store_find_next_slot(struct kv_store *kvs, int size, struct kv_store_meta *meta)
++{
++	struct kv_store_meta metas[KVS_MAX_VAL_ENTRIES];
++	int i, err, off, next_off = 0;
++	struct kv_store_page *p;
 +
-+	switch (test_op) {
-+	case KVS_INT_PUT:
-+		kv_store_put(data, test_key, &test_int_val, 4);
-+		break;
-+	case KVS_INT_GET:
-+		kv_store_get(data, test_key, &test_int_val, 4);
-+		break;
-+	case KVS_STRUCT_PUT:
-+		kv_store_put(data, test_key, &test_struct_val,
-+			     sizeof(test_struct_val));
-+		break;
-+	case KVS_STRUCT_GET:
-+		kv_store_get(data, test_key, &test_struct_val,
-+			     sizeof(test_struct_val));
-+		break;
++	memcpy(metas, kvs->data.metas, sizeof(struct kv_store_meta) * KVS_MAX_VAL_ENTRIES);
++
++	qsort(metas, KVS_MAX_VAL_ENTRIES, sizeof(struct kv_store_meta), comp_meta);
++
++	for (i = 0; i < KVS_MAX_VAL_ENTRIES; i++) {
++		off = linear_off(&metas[i]);
++		if (off - next_off >= size &&
++		    next_off / PAGE_SIZE == (next_off + size - 1) / PAGE_SIZE) {
++			break;
++		}
++		next_off = off + metas[i].size;
++	}
++
++	meta->page_idx = next_off / PAGE_SIZE;
++	meta->page_off = next_off % PAGE_SIZE;
++	meta->size = size;
++
++	if (meta->page_idx >= kvs->page_cnt) {
++		p = __kv_store_add_page(kvs);
++		if (!p)
++			return -ENOMEM;
++
++		err = bpf_map_update_elem(kvs->data_map_fd, &kvs->task_fd, &kvs->data, 0);
++		if (err) {
++			__kv_store_del_page(kvs);
++			return err;
++		}
 +	}
 +
 +	return 0;
 +}
 +
-+char _license[] SEC("license") = "GPL";
++int kv_store_put(struct kv_store *kvs, int key, void *val, unsigned int val_size)
++{
++	struct kv_store_meta *meta;
++	struct kv_store_page *p;
++	int err;
 +
-diff --git a/tools/testing/selftests/bpf/test_uptr_kv_store_common.h b/tools/testing/selftests/bpf/test_uptr_kv_store_common.h
-index ff7d010ed08f..db91e862789f 100644
---- a/tools/testing/selftests/bpf/test_uptr_kv_store_common.h
-+++ b/tools/testing/selftests/bpf/test_uptr_kv_store_common.h
-@@ -4,6 +4,19 @@
- enum test_kvs_op {
- 	KVS_INT_GET,
- 	KVS_INT_PUT,
-+	KVS_STRUCT_GET,
-+	KVS_STRUCT_PUT,
++	meta = kvs_store_get_meta(kvs, key);
++	if (!meta)
++		return -ENOENT;
++
++	if (!meta->init) {
++		if (val_size > KVS_MAX_VAL_SIZE)
++			return -E2BIG;
++
++		err = kv_store_find_next_slot(kvs, val_size, meta);
++		if (err)
++			return err;
++	}
++
++	p = kvs->data.pages[meta->page_idx].page;
++	val_size = val_size < meta->size ? val_size : meta->size;
++	memcpy((char *)p->data + meta->page_off, val, val_size);
++	meta->init = 1;
++	return 0;
++}
++
++void kv_store_delete(struct kv_store *kvs, int key)
++{
++	struct kv_store_meta *meta;
++	struct kv_store_page *p;
++
++	meta = kvs_store_get_meta(kvs, key);
++	if (!meta)
++		return;
++
++	p = kvs->data.pages[meta->page_idx].page;
++	memset(p->data + meta->page_off, 0, meta->size);
++	memset(meta, 0, sizeof(*meta));
++}
++
++int kv_store_update_value_size(struct kv_store *kvs, int key, unsigned int val_size)
++{
++	struct kv_store_meta *meta, new_meta;
++	struct kv_store_page *old_p, *new_p;
++	int err;
++
++	if (val_size > KVS_MAX_VAL_SIZE)
++		return -E2BIG;
++
++	meta = kvs_store_get_meta(kvs, key);
++	if (!meta || !meta->init)
++		return -ENOENT;
++
++	if (val_size <= meta->size) {
++		meta->size = val_size;
++		return 0;
++	}
++
++	err = kv_store_find_next_slot(kvs, val_size, &new_meta);
++	if (err)
++		return -ENOSPC;
++
++	old_p = kvs->data.pages[meta->page_idx].page;
++	new_p = kvs->data.pages[new_meta.page_idx].page;
++
++	memcpy(new_p->data + new_meta.page_off,
++	       old_p->data + meta->page_off, meta->size);
++
++	return 0;
++}
+diff --git a/tools/testing/selftests/bpf/prog_tests/uptr_kv_store.h b/tools/testing/selftests/bpf/prog_tests/uptr_kv_store.h
+new file mode 100644
+index 000000000000..a1da3e6e2de3
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/uptr_kv_store.h
+@@ -0,0 +1,22 @@
++#ifndef _UPTR_KV_STORE_H
++#define _UPTR_KV_STORE_H
++
++#include "uptr_kv_store_common.h"
++
++struct kv_store;
++
++void kv_store_close(struct kv_store *kvs);
++
++struct kv_store *kv_store_init(int pid, struct bpf_map *data_map, const char *pin_path);
++
++int kv_store_data_map_set_reuse(struct kv_store *kvs, struct bpf_map *data_map);
++
++void *kv_store_get(struct kv_store *kvs, int key);
++
++int kv_store_put(struct kv_store *kvs, int key, void *val, unsigned int val_size);
++
++void kv_store_delete(struct kv_store *kvs, int key);
++
++int kv_store_update_value_size(struct kv_store *kvs, int key, unsigned int val_size);
++
++#endif
+diff --git a/tools/testing/selftests/bpf/progs/uptr_kv_store.h b/tools/testing/selftests/bpf/progs/uptr_kv_store.h
+new file mode 100644
+index 000000000000..9109073a4933
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/uptr_kv_store.h
+@@ -0,0 +1,120 @@
++#ifndef _UPTR_KV_STORE_H
++#define _UPTR_KV_STORE_H
++
++#include <errno.h>
++#include <string.h>
++#include <bpf/bpf_helpers.h>
++
++#include "uptr_kv_store_common.h"
++
++struct {
++	__uint(type, BPF_MAP_TYPE_TASK_STORAGE);
++	__uint(map_flags, BPF_F_NO_PREALLOC);
++	__type(key, int);
++	__type(value, struct kv_store_data_map_value);
++} data_map SEC(".maps");
++
++static int bpf_dynptr_from_kv_store(struct kv_store_data_map_value *data, int key,
++				    unsigned int val_size, struct bpf_dynptr *ptr,
++				    struct kv_store_meta **meta)
++{
++	struct kv_store_page *p = NULL;
++	u16 _key = 0;
++
++	if (!data || !data->metas)
++		return -ENOENT;
++
++	/* workaround. llvm generates memory access with unbound key with the following code:
++	 * if (key >= KVS_MAX_VAL_ENTRIES)
++	 *         return -ENOENT;
++	 *
++	 * ; *meta = &data->metas->meta[key]; @ uptr_kv_store.h:37
++	 * 62: (bc) w2 = w2                      ; frame1: R2_w=scalar(id=3,smin=0,smax=umax=0xffffffff,smax32=1023,var_off=(0x0; 0xffffffff))
++	 * 63: (67) r2 <<= 32                    ; frame1: R2_w=scalar(smax=0x3ff00000000,umax=0xffffffff00000000,smin32=0,smax32=umax32=0,var_off=(0x0; 0xffffffff00000000))
++	 * 64: (c7) r2 s>>= 32                   ; frame1: R2_w=scalar(smin=0xffffffff80000000,smax=smax32=1023)
++	 * 65: (67) r2 <<= 2                     ; frame1: R2_w=scalar(smax=0x7ffffffffffffffc,umax=0xfffffffffffffffc,smax32=0x7ffffffc,umax32=0xfffffffc,var_off=(0x0; 0xfffffffffffffffc))
++	 * 66: (0f) r6 += r2
++	 * math between mem pointer and register with unbounded min value is not allowed
++	 */
++	_key += key;
++	if (_key >= KVS_MAX_VAL_ENTRIES)
++		return -ENOENT;
++
++	*meta = &data->metas->meta[_key];
++	if (!(*meta)->init)
++		return -ENOENT;
++
++	/* workaround for variable offset uptr access:
++	 * p = data->pages[meta->page_idx].page;
++	 */
++	switch((*meta)->page_idx) {
++	case 0: p = data->pages[0].page; break;
++	case 1: p = data->pages[1].page; break;
++	case 2: p = data->pages[2].page; break;
++	case 3: p = data->pages[3].page; break;
++	case 4: p = data->pages[4].page; break;
++	case 5: p = data->pages[5].page; break;
++	case 6: p = data->pages[6].page; break;
++	case 7: p = data->pages[7].page; break;
++	}
++
++	if (!p)
++		return -ENOENT;
++
++	val_size = val_size < (*meta)->size ? val_size : (*meta)->size;
++
++	if ((*meta)->page_off >= KVS_MAX_VAL_SIZE)
++		return -EINVAL;
++
++	return bpf_dynptr_from_mem(p->data, KVS_MAX_VAL_SIZE, 0, ptr);
++}
++
++__attribute__((unused))
++static int kv_store_put(struct kv_store_data_map_value *data, int key,
++			void *val, unsigned int val_size)
++{
++	struct kv_store_meta *meta;
++	struct bpf_dynptr ptr;
++	int err;
++
++	err = bpf_dynptr_from_kv_store(data, key, val_size, &ptr, &meta);
++	if (err)
++		return err;
++
++	return bpf_dynptr_write(&ptr, meta->page_off, val, val_size, 0);
++}
++
++__attribute__((unused))
++static int kv_store_get(struct kv_store_data_map_value *data, int key,
++			void *val, unsigned int val_size)
++{
++	struct kv_store_meta *meta;
++	struct bpf_dynptr ptr;
++	int err;
++
++	err = bpf_dynptr_from_kv_store(data, key, val_size, &ptr, &meta);
++	if (err)
++		return err;
++
++	return bpf_dynptr_read(val, val_size, &ptr, meta->page_off, 0);
++}
++
++__attribute__((unused))
++static int kv_store_delete(struct kv_store_data_map_value *data, int key)
++{
++	struct kv_store_meta *meta;
++	u16 _key = 0;
++
++	if (!data || !data->metas)
++		return -ENOENT;
++
++	_key += key;
++	if (_key >= KVS_MAX_VAL_ENTRIES)
++		return -ENOENT;
++
++	meta = &data->metas->meta[_key];
++	meta->init = 0;
++	return 0;
++}
++
++#endif
+diff --git a/tools/testing/selftests/bpf/uptr_kv_store_common.h b/tools/testing/selftests/bpf/uptr_kv_store_common.h
+new file mode 100644
+index 000000000000..af69cd0b32da
+--- /dev/null
++++ b/tools/testing/selftests/bpf/uptr_kv_store_common.h
+@@ -0,0 +1,47 @@
++#ifndef _UPTR_KV_STORE_COMMON_H
++#define _UPTR_KV_STORE_COMMON_H
++
++#define PAGE_SIZE		4096
++#define KVS_MAX_KEY_SIZE 	32
++#define KVS_MAX_VAL_SIZE 	PAGE_SIZE
++#define KVS_MAX_VAL_ENTRIES 	1024
++
++#define KVS_VALUE_INFO_PAGE_IDX_BIT	3
++#define KVS_VALUE_INFO_PAGE_OFF_BIT	12
++#define KVS_VALUE_INFO_VAL_SIZE_BIT	12
++
++#define KVS_MAX_PAGE_ENTRIES	(1 << KVS_VALUE_INFO_PAGE_IDX_BIT)
++
++#ifdef __BPF__
++struct kv_store_page *dummy_page;
++struct kv_store_metas *dummy_metas;
++#else
++#define __uptr
++#define __kptr
++#endif
++
++struct kv_store_meta {
++	__u32 page_idx:KVS_VALUE_INFO_PAGE_IDX_BIT;
++	__u32 page_off:KVS_VALUE_INFO_PAGE_OFF_BIT;
++	__u32 size:KVS_VALUE_INFO_VAL_SIZE_BIT;
++	__u32 init:1;
 +};
 +
-+struct test_struct {
-+	int a;
-+	int b;
++struct kv_store_metas {
++	struct kv_store_meta meta[KVS_MAX_VAL_ENTRIES];
 +};
 +
-+struct test_struct_v1 {
-+	int a;
-+	int b;
-+	int c;
- };
- 
- #endif
++struct kv_store_page_entry {
++	struct kv_store_page __uptr *page;
++};
++
++struct kv_store_data_map_value {
++	struct kv_store_metas __uptr *metas;
++	struct kv_store_page_entry pages[KVS_MAX_PAGE_ENTRIES];
++};
++
++struct kv_store_page {
++	char data[KVS_MAX_VAL_SIZE];
++};
++
++#endif
 -- 
 2.47.1
 
