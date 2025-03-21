@@ -1,49 +1,49 @@
 Received: from fllvem-ot03.ext.ti.com (fllvem-ot03.ext.ti.com [198.47.19.245])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28D501EDA09;
-	Fri, 21 Mar 2025 08:13:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7B401EFFB0;
+	Fri, 21 Mar 2025 08:13:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.245
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742544833; cv=none; b=aUHNGPgHzG0rqEydy/qRMFVgEml1hYhH2U9RbuiCFkhU9IzVAfkPE2aXZroF3lxIAAfPPADVwSpHUUrGN75IderKgpkGB1MB/6F7vPgJOxyrek4sAVXDkblurx5gct/1Q2lLfFmDKZ5SEQLUDo6PURlkxVwq3Ol/QhJZSghYX/4=
+	t=1742544837; cv=none; b=Txta0gbh5WjAmBvs/z95LuHY5QvO/HPqYbXKPYxKc8ff7p/iLffDeXupNDZVETcgHXD6VmP7EBZIuT8OZeY98NeAflitr6GbY+wBIoQBndk0lbp2FQaPJDVjPJSavWAPx0jbxuv/rfxAj88lhQ77HyzbwJFmCPQBIus06xlTTw0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742544833; c=relaxed/simple;
-	bh=D2+cCOWtLcEvLKxVSFf9heXiSUGe2NPH5rv9YtThxxs=;
+	s=arc-20240116; t=1742544837; c=relaxed/simple;
+	bh=iQ3f1Uo9PBRmeOIRNc3lzhLy3Ycu/Zb+R/wdm0l71M4=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ZZxmII1vjg2ybQ1rlr9wkyTEcSMPOTkaN7RSADi3cT7gZFVbKPCgqSDlxqTjfEW/TCyveJ8PoZxNWPc0rYSD7R1P24o+5Af3iJqTOFr698e6vteq50iZrdQ9Z1WgaauSQmwH+/JqphZgZeUx+CJBkb8WlvGTDHaohEhLnF2hHBM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=jesHHUWw; arc=none smtp.client-ip=198.47.19.245
+	 MIME-Version:Content-Type; b=PAxe9tgTcpcp2PeJvrEKFmyl7ej/bSAoOXNyPbh+4FqpFazo7/UL9rh/eGwXCctnALbzcO2P+Y9a6hzj9wQP+zHP/fCNFOL4TJ86jdbHDW4kCGsv3YsW88x6t2IPGP5/SY01dN52b/f4BQLyQ4n+Y0F00Y1cK42V4WMBd8rnWQU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=Ss5XFq8L; arc=none smtp.client-ip=198.47.19.245
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="jesHHUWw"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="Ss5XFq8L"
 Received: from lelv0266.itg.ti.com ([10.180.67.225])
-	by fllvem-ot03.ext.ti.com (8.15.2/8.15.2) with ESMTPS id 52L8DMhl262195
+	by fllvem-ot03.ext.ti.com (8.15.2/8.15.2) with ESMTPS id 52L8DSub262220
 	(version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-	Fri, 21 Mar 2025 03:13:22 -0500
+	Fri, 21 Mar 2025 03:13:28 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1742544802;
-	bh=HPcqz3zgaVT4xyh7yJnKcfMahOu64DyRAGZO/Z934DQ=;
+	s=ti-com-17Q1; t=1742544808;
+	bh=zBkFyFej/LjUcEirj4ZJVbw1Q5NfS6rUgggc1XPBP10=;
 	h=From:To:CC:Subject:Date:In-Reply-To:References;
-	b=jesHHUWwO0kkYw46DL4xIzHw1Rq0bd1607wbjLnfQUW4iPx4uRbMHsIZrR+o6qMcG
-	 nNTzKSQbhcCSSuockmSKqjgC+i7BDsntcM90x/0+9D53OiHYmbLyuXhHhnX1/15qay
-	 Ys67aI8lk4Q9cDDElvF39pjasjSMLF73miHdiZ0U=
-Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
-	by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTP id 52L8DMbS127576;
-	Fri, 21 Mar 2025 03:13:22 -0500
-Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Fri, 21
- Mar 2025 03:13:21 -0500
-Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DLEE107.ent.ti.com
+	b=Ss5XFq8LA0mUPPXeTRbGotDm6AdtwmosmwCG78Ii6kaD27XwhznnIYw8cVOGAJai0
+	 R41m/8h7bQYy2ZkQEDEZtHOKNDy27ikNZDCJpob/7VBZC8HcsbNAeT6gze6wdXOtQY
+	 51FxIdjWVmhBi2M+vQM5DI493skyDJclkwtYuZ2k=
+Received: from DLEE107.ent.ti.com (dlee107.ent.ti.com [157.170.170.37])
+	by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTP id 52L8DSl1127629;
+	Fri, 21 Mar 2025 03:13:28 -0500
+Received: from DLEE105.ent.ti.com (157.170.170.35) by DLEE107.ent.ti.com
  (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Fri, 21
+ Mar 2025 03:13:28 -0500
+Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Fri, 21 Mar 2025 03:13:21 -0500
+ Frontend Transport; Fri, 21 Mar 2025 03:13:28 -0500
 Received: from lelv0854.itg.ti.com (lelv0854.itg.ti.com [10.181.64.140])
-	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 52L8DL5R130181;
-	Fri, 21 Mar 2025 03:13:21 -0500
+	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 52L8DShA130300;
+	Fri, 21 Mar 2025 03:13:28 -0500
 Received: from localhost (meghana-pc.dhcp.ti.com [10.24.69.13] (may be forged))
-	by lelv0854.itg.ti.com (8.14.7/8.14.7) with ESMTP id 52L8DKvx032428;
-	Fri, 21 Mar 2025 03:13:21 -0500
+	by lelv0854.itg.ti.com (8.14.7/8.14.7) with ESMTP id 52L8DQSt032443;
+	Fri, 21 Mar 2025 03:13:27 -0500
 From: Meghana Malladi <m-malladi@ti.com>
 To: <pabeni@redhat.com>, <kuba@kernel.org>, <edumazet@google.com>,
         <davem@davemloft.net>, <andrew+netdev@lunn.ch>
@@ -56,9 +56,9 @@ CC: <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <ast@kernel.org>, <srk@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
         Roger
  Quadros <rogerq@kernel.org>, <danishanwar@ti.com>
-Subject: [PATCH net-next v2 1/3] net: ti: prueth: Fix kernel warning while bringing down network interface
-Date: Fri, 21 Mar 2025 13:43:11 +0530
-Message-ID: <20250321081313.37112-2-m-malladi@ti.com>
+Subject: [PATCH net-next v2 3/3] net: ti: icss-iep: Fix possible NULL pointer dereference for perout request
+Date: Fri, 21 Mar 2025 13:43:13 +0530
+Message-ID: <20250321081313.37112-4-m-malladi@ti.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250321081313.37112-1-m-malladi@ti.com>
 References: <20250321081313.37112-1-m-malladi@ti.com>
@@ -72,45 +72,37 @@ Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 
-During network interface initialization, the NIC driver needs to register
-its Rx queue with the XDP, to ensure the incoming XDP buffer carries a
-pointer reference to this info and is stored inside xdp_rxq_info.
+Whenever there is a perout request from the user application,
+kernel receives req structure containing the configuration info
+for that req. Add NULL pointer handling for perout request if
+that req struct points to NULL.
 
-While this struct isn't tied to XDP prog, if there are any changes in
-Rx queue, the NIC driver needs to stop the Rx queue by unregistering
-with XDP before purging and reallocating memory. Drop page_pool destroy
-during Rx channel reset as this is already handled by XDP during
-xdp_rxq_info_unreg (Rx queue unregister), failing to do will cause the
-following warning:
-
-warning logs: https://gist.github.com/MeghanaMalladiTI/eb627e5dc8de24e42d7d46572c13e576
-
-Fixes: 46eeb90f03e0 ("net: ti: icssg-prueth: Use page_pool API for RX buffer allocation")
+Fixes: e5b456a14215 ("net: ti: icss-iep: Add pwidth configuration for perout signal")
 Signed-off-by: Meghana Malladi <m-malladi@ti.com>
 Reviewed-by: Simon Horman <horms@kernel.org>
 ---
 
 Changes from v1(v2-v1):
-- Included more trace logs for the warning
 - Collected RB tag from Simon Horman <horms@kernel.org>
 
- drivers/net/ethernet/ti/icssg/icssg_common.c | 3 ---
- 1 file changed, 3 deletions(-)
+ drivers/net/ethernet/ti/icssg/icss_iep.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/net/ethernet/ti/icssg/icssg_common.c b/drivers/net/ethernet/ti/icssg/icssg_common.c
-index df5da7a98abf..afa01c22dee8 100644
---- a/drivers/net/ethernet/ti/icssg/icssg_common.c
-+++ b/drivers/net/ethernet/ti/icssg/icssg_common.c
-@@ -1216,9 +1216,6 @@ void prueth_reset_rx_chan(struct prueth_rx_chn *chn,
- 					  prueth_rx_cleanup, !!i);
- 	if (disable)
- 		k3_udma_glue_disable_rx_chn(chn->rx_chn);
--
--	page_pool_destroy(chn->pg_pool);
--	chn->pg_pool = NULL;
- }
- EXPORT_SYMBOL_GPL(prueth_reset_rx_chan);
+diff --git a/drivers/net/ethernet/ti/icssg/icss_iep.c b/drivers/net/ethernet/ti/icssg/icss_iep.c
+index b4a34c57b7b4..aeebdc4c121e 100644
+--- a/drivers/net/ethernet/ti/icssg/icss_iep.c
++++ b/drivers/net/ethernet/ti/icssg/icss_iep.c
+@@ -498,6 +498,10 @@ static int icss_iep_perout_enable(struct icss_iep *iep,
+ {
+ 	int ret = 0;
  
++	/* Return error if the req is NULL */
++	if (!req)
++		return -EINVAL;
++
+ 	/* Reject requests with unsupported flags */
+ 	if (req->flags & ~(PTP_PEROUT_DUTY_CYCLE |
+ 			  PTP_PEROUT_PHASE))
 -- 
 2.43.0
 
