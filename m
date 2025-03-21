@@ -1,335 +1,479 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 392171C5F37;
-	Fri, 21 Mar 2025 01:23:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BA07208A7;
+	Fri, 21 Mar 2025 02:35:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742520188; cv=none; b=ggshF9OvUCXNx1FstQ1gxHrzTG7GUl13e1Z8uMl0f51cDipSddPZYy/uMp2A5RDinPrzpOO4UkMOg5uLAfkznSUepH/VyfmUhLdRltOxp0jrrjxISdGXWVZ51IVak4P3mNPXU6EjjPtIKoSYzkV5Y58vzrTPOd3mOQ8fXfPclrU=
+	t=1742524516; cv=none; b=TjtDpQ+1bnWgAJCKVlSdKGImoBZq1UcyzSGh4aOEI0/Yjb6c9xf+Xt9fygCUFC2IGNJ77wDlOnWa7Iv4MM5InRIEfs3UmIaYBuqwy7RvXWxDYEk3mDOOGJQmxWu4YcTIC+ejJGjVqDWlI4q35xZW/yh4Zw8fucf7z7tLGj6NZSw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742520188; c=relaxed/simple;
-	bh=YFq/vy9ty//7bbhsTW5Cj4Myq4fj6yOx2jp89I4jJWU=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=sd5Vt//wsxEQcFUAa32fMiKTONq67/1aZFIIoSU/53HuujGiqW4IcCbvcLGFRu9F44tMoEnfhL1NxjDY0fSaGNoAAILmg5IHK/MJczSsu2/h8LwRhKzSSp//6vlhtTDnHhtCPcbAZxxX7HSxKYd12hGuvV1xqJf0MOxHI5zaH9c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ehYk+Hnn; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1742524516; c=relaxed/simple;
+	bh=oHagghy2/pwm8Cyf6jd0apltjLRKTgr5nJTYDhZLMG4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=HSi1iZbFCn0sGjVATSxSxxrYhpMMEeuwnakRznM6nQ8cy98EDA9SNVlyWHuv7mf51vKHxYj1MLsZjIM8eClE2MY4u+w10JuSFIj71s/xBJMHKiVo1kfPC94kHH1FQdrgivI8zvZUd8739rkKSmO3JwZfPYDSQqV506hWmpauNXY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nIejCNug; arc=none smtp.client-ip=209.85.128.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ehYk+Hnn"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1742520187; x=1774056187;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=YFq/vy9ty//7bbhsTW5Cj4Myq4fj6yOx2jp89I4jJWU=;
-  b=ehYk+HnnzqqI227WO2yhed9UOo+W7P1BWbC8MTEizG1AnkWZUnl2r7+g
-   xJAw286gi5Un2U26g8sTI662+XSp7uARVggxmjgIUtYUPpHXG+dzda9FH
-   0xjU3AfccAQlIpXzfY304LPE56+RsdBSChNhtLCTPihVw5KCy0nkKSzib
-   0vLaQvamF8repbhLr0fq1xlMLcvNSbTYG7pBBO6jh/MpfOjAg3Y1y1ipU
-   LbkBJuvYtTinC4NcIdjWqhlORYJRqLBN5Ly6MvPd2rxKt9upMQCvxBt+s
-   Zx8et243AKpp1v5y/Ob0Dku0PMu1JAqvE3zXKLDXlV/tSanaBU9zUdMKa
-   w==;
-X-CSE-ConnectionGUID: Sc+q54rYT2KC6GvwNB7ECQ==
-X-CSE-MsgGUID: C5mGT3IASjqycqLeN6Y6hg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11379"; a="43658373"
-X-IronPort-AV: E=Sophos;i="6.14,263,1736841600"; 
-   d="scan'208";a="43658373"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2025 18:23:06 -0700
-X-CSE-ConnectionGUID: CqEeL4T2Q3uC1fawGodYrg==
-X-CSE-MsgGUID: 4TU0nz+OT8S6kS6wo/1eSg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,263,1736841600"; 
-   d="scan'208";a="123777077"
-Received: from brc05.iind.intel.com (HELO brc05..) ([10.190.162.156])
-  by orviesa007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2025 18:23:02 -0700
-From: Tushar Vyavahare <tushar.vyavahare@intel.com>
-To: bpf@vger.kernel.org
-Cc: netdev@vger.kernel.org,
-	bjorn@kernel.org,
-	magnus.karlsson@intel.com,
-	maciej.fijalkowski@intel.com,
-	jonathan.lemon@gmail.com,
-	davem@davemloft.net,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	tirthendu.sarkar@intel.com,
-	tushar.vyavahare@intel.com
-Subject: [PATCH bpf-next v4 2/2] selftests/xsk: Add tail adjustment tests and support check
-Date: Fri, 21 Mar 2025 00:54:19 +0000
-Message-Id: <20250321005419.684036-3-tushar.vyavahare@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250321005419.684036-1-tushar.vyavahare@intel.com>
-References: <20250321005419.684036-1-tushar.vyavahare@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nIejCNug"
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-6f7031ea11cso16537097b3.2;
+        Thu, 20 Mar 2025 19:35:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1742524512; x=1743129312; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nIO3+oZxNc1wARDGJqFxjSosYj/vgSipW8/EbabkP4A=;
+        b=nIejCNug5rJekWNvj3s7QOUJYM2MBYCM2gLhboRkiYWnG4bEcKgsDQyGwaefjFTkLW
+         E8Syla/x05p8K5F8f+sIpgr6r91IovZtxKdFcQe2yas/DzPhAvOIjogu/F3lCTi3evXO
+         q+kPFADpOt1FpJAsAWQ9kiRyauyNSPmdRYaR7CUNwZkNXI/z/4qCgaTbYyZ/CkAqxg/B
+         Yd6UDTD++JGJHfgLRiGfxJvUq27bLf+LtsFpakgy+xl9RXIdc0kMmCQblh2LKFgHz77M
+         Wvh802sAjDwcP4bSjBHuyaDIfyXQd0Ec+VCcQ3wkvNCe0WkvWlodeiXEq22t22sqWZ7X
+         FzBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742524512; x=1743129312;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nIO3+oZxNc1wARDGJqFxjSosYj/vgSipW8/EbabkP4A=;
+        b=p+7jz01GESVmVkrbWdqXElOQVJ3q4K3GJqDTdbbQwaTIpc5lBqtJgZbXBibNT+4GVh
+         OGZwYdcg9rDzX9p5WQwV52mEIAFIBimhxFh8Gi3UjzBThAOFqIQLnWzBFVzEuMAHejD9
+         +k1urZmt2zNoPIgOgdco9KNEz+VvPgaO19Ssej80iuga+F1UABWODzENZERNWrGGQpAD
+         Pgsph+Xpu1D3ZnHH1JOpLbQDR+++okKEYRAbtgfrbhYzTcEmX/hMUy5wbBA6DpEXSZSv
+         UJF2RULhi5/79MNGOseqVGtDWVRGjLI2pmFtuK7amWJHuxdOvr9lVnjN2m9q+HO19RN2
+         EZsA==
+X-Forwarded-Encrypted: i=1; AJvYcCUBI1kGxWlX9hGhfGsh+tIWUqw31tV1WriYaRAcC22pVDZP1iZrt+8nGn9TOo1pwmcbqQKi1VZYSOEt4CoT@vger.kernel.org, AJvYcCUbxmV9cNybD7mF37kOT93fUreGQ1ycy2QacRrugH/Pt5LzIL+aYhbRgeE+48bMZ+XIntc=@vger.kernel.org, AJvYcCXJqXJdBwl2u9hCaDJ16IHDi8ZpnNH+kDEXKg02W9xob+ia9BD23eTM9kNbxZI8pS2QmrpRt9bzKCb87uAfgi3zog==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwKUHZuUsuCLksXzfGt+r9mlBYqgey/7KlwxG3A4A1w2RSXgivZ
+	wQNoIVzh2nL6JdfLLgi20DFRNSIyQx4rUUBngXVWOp5ABMCCACmgaAfLGE6d729Ga8gk7odKALL
+	o3OAfxiACLjV/KEluc6IYYa4dN8Y=
+X-Gm-Gg: ASbGncusn9Rc8ZQqBieiyUVQdSRD2pkp2PtMNPi6ychUjQ4UQOGG+c8JTkaplUGK3ok
+	6TAGTCLY121dcxpLI1h/dqWhBgklye5oYiBw5IAGIKK560S8ZIMr1mFaUmgSNlf2fHDKMByLbNo
+	SnXhIqNTxQw0+q2ye3BYrxIoHtN4hmW0Zz9kJ7dA==
+X-Google-Smtp-Source: AGHT+IHWGvEVBBp3TZosyEjSm7Lk9SlaY8jV4A2Tup8xNehmCrHGqSuaKwjYEV/uwqPIVxQno8vi4z+iTi8uBMOAdNQ=
+X-Received: by 2002:a05:690c:498e:b0:6fb:33e1:2e66 with SMTP id
+ 00721157ae682-700bac63784mr22019577b3.14.1742524511951; Thu, 20 Mar 2025
+ 19:35:11 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250317180834.1862079-1-namhyung@kernel.org>
+In-Reply-To: <20250317180834.1862079-1-namhyung@kernel.org>
+From: Howard Chu <howardchu95@gmail.com>
+Date: Thu, 20 Mar 2025 19:35:01 -0700
+X-Gm-Features: AQ5f1JoZphdio9VwjeRwoyhs41tTXrx0Mhg-l-hNUaHpli34QRvGiMvbK5ui74U
+Message-ID: <CAH0uvojj=-BE93VeuxK1LWEEBkYXT_BsRAf17gb-34jFRwnDww@mail.gmail.com>
+Subject: Re: [PATCH v2] perf trace: Implement syscall summary in BPF
+To: Namhyung Kim <namhyung@kernel.org>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>, Ian Rogers <irogers@google.com>, 
+	Kan Liang <kan.liang@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Ingo Molnar <mingo@kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	linux-perf-users@vger.kernel.org, bpf@vger.kernel.org, 
+	Song Liu <song@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Introduce tail adjustment functionality in xskxceiver using
-bpf_xdp_adjust_tail(). Add `xsk_xdp_adjust_tail` to modify packet sizes
-and drop unmodified packets. Implement `is_adjust_tail_supported` to check
-helper availability. Develop packet resizing tests, including shrinking
-and growing scenarios, with functions for both single-buffer and
-multi-buffer cases. Update the test framework to handle various scenarios
-and adjust MTU settings. These changes enhance the testing of packet tail
-adjustments, improving AF_XDP framework reliability.
+Hello again Namhyung,
 
-Signed-off-by: Tushar Vyavahare <tushar.vyavahare@intel.com>
----
- .../selftests/bpf/progs/xsk_xdp_progs.c       |  50 +++++++++
- tools/testing/selftests/bpf/xsk_xdp_common.h  |   1 +
- tools/testing/selftests/bpf/xskxceiver.c      | 105 +++++++++++++++++-
- tools/testing/selftests/bpf/xskxceiver.h      |   2 +
- 4 files changed, 156 insertions(+), 2 deletions(-)
+As funny as it sounds, I have too much homework this week. I had to
+break the review into two parts. Sorry.
 
-diff --git a/tools/testing/selftests/bpf/progs/xsk_xdp_progs.c b/tools/testing/selftests/bpf/progs/xsk_xdp_progs.c
-index ccde6a4c6319..683306db8594 100644
---- a/tools/testing/selftests/bpf/progs/xsk_xdp_progs.c
-+++ b/tools/testing/selftests/bpf/progs/xsk_xdp_progs.c
-@@ -4,6 +4,8 @@
- #include <linux/bpf.h>
- #include <bpf/bpf_helpers.h>
- #include <linux/if_ether.h>
-+#include <linux/ip.h>
-+#include <linux/errno.h>
- #include "xsk_xdp_common.h"
- 
- struct {
-@@ -14,6 +16,7 @@ struct {
- } xsk SEC(".maps");
- 
- static unsigned int idx;
-+int adjust_value = 0;
- int count = 0;
- 
- SEC("xdp.frags") int xsk_def_prog(struct xdp_md *xdp)
-@@ -70,4 +73,51 @@ SEC("xdp") int xsk_xdp_shared_umem(struct xdp_md *xdp)
- 	return bpf_redirect_map(&xsk, idx, XDP_DROP);
- }
- 
-+SEC("xdp.frags") int xsk_xdp_adjust_tail(struct xdp_md *xdp)
-+{
-+	__u32 buff_len, curr_buff_len;
-+	int ret;
+1) Maybe just '--bpf-summary' instead?
+
+First of all, is '-s --bpf-summary' is it ergonomic? Why not drop the
+-s and just --bpf-summary since the option has 'summary' in its name.
+Another reason being,
+sudo ./perf trace -S --bpf-summary --summary-mode=3Dtotal -- sleep 1
+sudo ./perf trace -s --bpf-summary --summary-mode=3Dtotal -- sleep 1
+are the same (-S will emit no output to stdout).
+
+2) Anomaly observed when playing around
+
+sudo ./perf trace -s --bpf-summary --summary-mode=3Dtotal -- sleep 1
+this gave me 10000 events
+
+sudo ./perf trace -as --bpf-summary --summary-mode=3Dtotal -- sleep 1
+while this gave me 1000 events
+
+I guess it's something to do with the lost events?
+
+3) Wrong stddev values
+Please compare these two outputs
+
+perf $ sudo ./perf trace -as --summary-mode=3Dtotal -- sleep 1
+
+ Summary of events:
+
+ total, 11290 events
+
+   syscall            calls  errors  total       min       avg
+max       stddev
+                                     (msec)    (msec)    (msec)
+(msec)        (%)
+   --------------- --------  ------ -------- --------- ---------
+---------     ------
+   mq_open              214     71 16073.976     0.000    75.112
+250.120      9.91%
+   futex               1296    195 11592.060     0.000     8.944
+907.590     13.59%
+   epoll_wait           479      0  4262.456     0.000     8.899
+496.568     20.34%
+   poll                 241      0  2545.090     0.000    10.561
+607.894     33.33%
+   ppoll                330      0  1713.676     0.000     5.193
+410.143     26.45%
+   migrate_pages         45      0  1031.915     0.000    22.931
+147.830     20.70%
+   clock_nanosleep        2      0  1000.106     0.000   500.053
+1000.106    100.00%
+   swapoff              340      0   909.827     0.000     2.676
+50.117     22.76%
+   pselect6               5      0   604.816     0.000   120.963
+604.808    100.00%
+   readlinkat            26      3   501.205     0.000    19.277
+499.998     99.75%
+
+perf $ sudo ./perf trace -as --bpf-summary --summary-mode=3Dtotal -- sleep =
+1
+
+ Summary of events:
+
+ total, 880 events
+
+   syscall            calls  errors  total       min       avg
+max       stddev
+                                     (msec)    (msec)    (msec)
+(msec)        (%)
+   --------------- --------  ------ -------- --------- ---------
+---------     ------
+   futex                219     46  2326.400     0.001    10.623
+243.028    337.77%
+   mq_open               19      8  2001.347     0.003   105.334
+250.356    117.26%
+   poll                   6      1  1002.512     0.002   167.085
+1002.496    223.60%
+   clock_nanosleep        1      0  1000.147  1000.147  1000.147
+1000.147      0.00%
+   swapoff               43      0   953.251     0.001    22.169
+50.390    112.37%
+   migrate_pages         43      0   933.727     0.004    21.715
+49.149    106.68%
+   ppoll                 32      0   838.035     0.002    26.189
+331.222    252.10%
+   epoll_pwait            5      0   499.578     0.001    99.916
+499.565    199.99%
+   nanosleep              1      0    10.149    10.149    10.149
+10.149      0.00%
+   epoll_wait            10      0     3.449     0.003     0.345
+0.815     88.02%
+   readlinkat            25      3     1.424     0.006     0.057
+0.080     41.76%
+   recvmsg               61      0     1.326     0.016     0.022
+0.052     21.71%
+   execve                 6      5     1.100     0.002     0.183
+1.078    218.21%
+
+I would say stddev here is a little off. The reason is:
+
+On Mon, Mar 17, 2025 at 11:08=E2=80=AFAM Namhyung Kim <namhyung@kernel.org>=
+ wrote:
+>
+> When -s/--summary option is used, it doesn't need (augmented) arguments
+> of syscalls.  Let's skip the augmentation and load another small BPF
+> program to collect the statistics in the kernel instead of copying the
+> data to the ring-buffer to calculate the stats in userspace.  This will
+> be much more light-weight than the existing approach and remove any lost
+> events.
+>
+> Let's add a new option --bpf-summary to control this behavior.  I cannot
+> make it default because there's no way to get e_machine in the BPF which
+> is needed for detecting different ABIs like 32-bit compat mode.
+>
+> No functional changes intended except for no more LOST events. :)
+>
+>   $ sudo perf trace -as --bpf-summary --summary-mode=3Dtotal -- sleep 1
+>
+>    Summary of events:
+>
+>    total, 2824 events
+>
+>      syscall            calls  errors  total       min       avg       ma=
+x       stddev
+>                                        (msec)    (msec)    (msec)    (mse=
+c)        (%)
+>      --------------- --------  ------ -------- --------- --------- ------=
+---     ------
+>      futex                372     18  4373.773     0.000    11.757   997.=
+715    660.42%
+>      poll                 241      0  2757.963     0.000    11.444   997.=
+758    580.34%
+>      epoll_wait           161      0  2460.854     0.000    15.285   325.=
+189    260.73%
+>      ppoll                 19      0  1298.652     0.000    68.350   667.=
+172    281.46%
+>      clock_nanosleep        1      0  1000.093     0.000  1000.093  1000.=
+093      0.00%
+>      epoll_pwait           16      0   192.787     0.000    12.049   173.=
+994    348.73%
+>      nanosleep              6      0    50.926     0.000     8.488    10.=
+210     43.96%
+>      ...
+>
+> Cc: Howard Chu <howardchu95@gmail.com>
+> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+> ---
+> v2)
+>  * rebased on top of Ian's e_machine changes
+>  * add --bpf-summary option
+>  * support per-thread summary
+>  * add stddev calculation  (Howard)
+<SNIP>
+> +static double rel_stddev(struct syscall_stats *stat)
+> +{
+> +       double variance, average;
+> +
+> +       if (stat->count < 2)
+> +               return 0;
+> +
+> +       average =3D (double)stat->total_time / stat->count;
+> +
+> +       variance =3D stat->squared_sum;
+> +       variance -=3D (stat->total_time * stat->total_time) / stat->count=
+;
+> +       variance /=3D stat->count;
+
+isn't it 'variance /=3D stat->count - 1' because we used Bessel's
+correction? (Link:
+https://en.wikipedia.org/wiki/Bessel%27s_correction), that is to use n
+- 1 instead of n, this is what's done in stat.c.
+
+ *       (\Sum n_i^2) - ((\Sum n_i)^2)/n
+ * s^2 =3D -------------------------------
+ *                  n - 1
+
+and the lines down here are unfortunately incorrect
++ variance =3D stat->squared_sum;
++ variance -=3D (stat->total_time * stat->total_time) / stat->count;
++ variance /=3D stat->count;
 +
-+	buff_len = bpf_xdp_get_buff_len(xdp);
-+	if (buff_len == 0)
-+		return XDP_DROP;
-+
-+	ret = bpf_xdp_adjust_tail(xdp, adjust_value);
-+	if (ret < 0) {
-+		/* Handle unsupported cases */
-+		if (ret == -EOPNOTSUPP) {
-+			/* Set adjust_value to -EOPNOTSUPP to indicate to userspace that this case
-+			 * is unsupported
-+			 */
-+			adjust_value = -EOPNOTSUPP;
-+			return bpf_redirect_map(&xsk, 0, XDP_DROP);
-+		}
-+
-+		return XDP_DROP;
-+	}
-+
-+	curr_buff_len = bpf_xdp_get_buff_len(xdp);
-+	if (curr_buff_len != buff_len + adjust_value)
-+		return XDP_DROP;
-+
-+	if (curr_buff_len > buff_len) {
-+		__u32 *pkt_data = (void *)(long)xdp->data;
-+		__u32 len, words_to_end, seq_num;
-+
-+		len = curr_buff_len - PKT_HDR_ALIGN;
-+		words_to_end = len / sizeof(*pkt_data) - 1;
-+		seq_num = words_to_end;
-+
-+		/* Convert sequence number to network byte order. Store this in the last 4 bytes of
-+		 * the packet. Use 'adjust_value' to determine the position at the end of the
-+		 * packet for storing the sequence number.
-+		 */
-+		seq_num = __constant_htonl(words_to_end);
-+		bpf_xdp_store_bytes(xdp, curr_buff_len - sizeof(seq_num), &seq_num,
-+				    sizeof(seq_num));
-+	}
-+
-+	return bpf_redirect_map(&xsk, 0, XDP_DROP);
-+}
-+
- char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/xsk_xdp_common.h b/tools/testing/selftests/bpf/xsk_xdp_common.h
-index 5a6f36f07383..45810ff552da 100644
---- a/tools/testing/selftests/bpf/xsk_xdp_common.h
-+++ b/tools/testing/selftests/bpf/xsk_xdp_common.h
-@@ -4,6 +4,7 @@
- #define XSK_XDP_COMMON_H_
- 
- #define MAX_SOCKETS 2
-+#define PKT_HDR_ALIGN (sizeof(struct ethhdr) + 2) /* Just to align the data in the packet */
- 
- struct xdp_info {
- 	__u64 count;
-diff --git a/tools/testing/selftests/bpf/xskxceiver.c b/tools/testing/selftests/bpf/xskxceiver.c
-index d60ee6a31c09..0ced4026ee44 100644
---- a/tools/testing/selftests/bpf/xskxceiver.c
-+++ b/tools/testing/selftests/bpf/xskxceiver.c
-@@ -524,6 +524,8 @@ static void __test_spec_init(struct test_spec *test, struct ifobject *ifobj_tx,
- 	test->nb_sockets = 1;
- 	test->fail = false;
- 	test->set_ring = false;
-+	test->adjust_tail = false;
-+	test->adjust_tail_support = false;
- 	test->mtu = MAX_ETH_PKT_SIZE;
- 	test->xdp_prog_rx = ifobj_rx->xdp_progs->progs.xsk_def_prog;
- 	test->xskmap_rx = ifobj_rx->xdp_progs->maps.xsk;
-@@ -992,6 +994,31 @@ static bool is_metadata_correct(struct pkt *pkt, void *buffer, u64 addr)
- 	return true;
- }
- 
-+static bool is_adjust_tail_supported(struct xsk_xdp_progs *skel_rx)
-+{
-+	struct bpf_map *data_map;
-+	int adjust_value = 0;
-+	int key = 0;
-+	int ret;
-+
-+	data_map = bpf_object__find_map_by_name(skel_rx->obj, "xsk_xdp_.bss");
-+	if (!data_map || !bpf_map__is_internal(data_map)) {
-+		ksft_print_msg("Error: could not find bss section of XDP program\n");
-+		exit_with_error(errno);
-+	}
-+
-+	ret = bpf_map_lookup_elem(bpf_map__fd(data_map), &key, &adjust_value);
-+	if (ret) {
-+		ksft_print_msg("Error: bpf_map_lookup_elem failed with error %d\n", ret);
-+		exit_with_error(errno);
-+	}
-+
-+	/* Set the 'adjust_value' variable to -EOPNOTSUPP in the XDP program if the adjust_tail
-+	 * helper is not supported. Skip the adjust_tail test case in this scenario.
-+	 */
-+	return adjust_value != -EOPNOTSUPP;
-+}
-+
- static bool is_frag_valid(struct xsk_umem_info *umem, u64 addr, u32 len, u32 expected_pkt_nb,
- 			  u32 bytes_processed)
++ return 100 * sqrt(variance) / average;
+
+variance /=3D stat->count - 1; will get you variance, but I think we
+need variance mean.
+Link: https://en.wikipedia.org/wiki/Standard_deviation#Relationship_between=
+_standard_deviation_and_mean
+
+it holds that:
+variance(mean) =3D variance / N
+
+so you are losing a '/ stat->count'
+
+And with all due respect, although it makes total sense in
+engineering, mathematically, I find variance =3D stat->squared_sum,
+variance -=3D ... these accumulated calculations on variable 'variance'
+a little weird... because readers may find difficult to determine at
+which point it becomes the actual 'variance'
+
+with clarity in mind:
+
+diff --git a/tools/perf/util/bpf-trace-summary.c
+b/tools/perf/util/bpf-trace-summary.c
+index 5ae9feca244d..a435b4037082 100644
+--- a/tools/perf/util/bpf-trace-summary.c
++++ b/tools/perf/util/bpf-trace-summary.c
+@@ -62,18 +62,18 @@ struct syscall_node {
+
+ static double rel_stddev(struct syscall_stats *stat)
  {
-@@ -1768,8 +1795,13 @@ static void *worker_testapp_validate_rx(void *arg)
- 
- 	if (!err && ifobject->validation_func)
- 		err = ifobject->validation_func(ifobject);
--	if (err)
--		report_failure(test);
-+
-+	if (err) {
-+		if (test->adjust_tail && !is_adjust_tail_supported(ifobject->xdp_progs))
-+			test->adjust_tail_support = false;
-+		else
-+			report_failure(test);
-+	}
- 
- 	pthread_exit(NULL);
- }
-@@ -2516,6 +2548,71 @@ static int testapp_hw_sw_max_ring_size(struct test_spec *test)
- 	return testapp_validate_traffic(test);
- }
- 
-+static int testapp_xdp_adjust_tail(struct test_spec *test, int adjust_value)
-+{
-+	struct xsk_xdp_progs *skel_rx = test->ifobj_rx->xdp_progs;
-+	struct xsk_xdp_progs *skel_tx = test->ifobj_tx->xdp_progs;
-+
-+	test_spec_set_xdp_prog(test, skel_rx->progs.xsk_xdp_adjust_tail,
-+			       skel_tx->progs.xsk_xdp_adjust_tail,
-+			       skel_rx->maps.xsk, skel_tx->maps.xsk);
-+
-+	skel_rx->bss->adjust_value = adjust_value;
-+
-+	return testapp_validate_traffic(test);
-+}
-+
-+static int testapp_adjust_tail(struct test_spec *test, u32 value, u32 pkt_len)
-+{
-+	int ret;
-+
-+	test->adjust_tail_support = true;
-+	test->adjust_tail = true;
-+	test->total_steps = 1;
-+
-+	pkt_stream_replace_ifobject(test->ifobj_tx, DEFAULT_BATCH_SIZE, pkt_len);
-+	pkt_stream_replace_ifobject(test->ifobj_rx, DEFAULT_BATCH_SIZE, pkt_len + value);
-+
-+	ret = testapp_xdp_adjust_tail(test, value);
-+	if (ret)
-+		return ret;
-+
-+	if (!test->adjust_tail_support) {
-+		ksft_test_result_skip("%s %sResize pkt with bpf_xdp_adjust_tail() not supported\n",
-+				      mode_string(test), busy_poll_string(test));
-+		return TEST_SKIP;
-+	}
-+
-+	return 0;
-+}
-+
-+static int testapp_adjust_tail_shrink(struct test_spec *test)
-+{
-+	/* Shrink by 4 bytes for testing purpose */
-+	return testapp_adjust_tail(test, -4, MIN_PKT_SIZE * 2);
-+}
-+
-+static int testapp_adjust_tail_shrink_mb(struct test_spec *test)
-+{
-+	test->mtu = MAX_ETH_JUMBO_SIZE;
-+	/* Shrink by the frag size */
-+	return testapp_adjust_tail(test, -XSK_UMEM__MAX_FRAME_SIZE, XSK_UMEM__LARGE_FRAME_SIZE * 2);
-+}
-+
-+static int testapp_adjust_tail_grow(struct test_spec *test)
-+{
-+	/* Grow by 4 bytes for testing purpose */
-+	return testapp_adjust_tail(test, 4, MIN_PKT_SIZE * 2);
-+}
-+
-+static int testapp_adjust_tail_grow_mb(struct test_spec *test)
-+{
-+	test->mtu = MAX_ETH_JUMBO_SIZE;
-+	/* Grow by (frag_size - last_frag_Size) - 1 to stay inside the last fragment */
-+	return testapp_adjust_tail(test, (XSK_UMEM__MAX_FRAME_SIZE / 2) - 1,
-+				   XSK_UMEM__LARGE_FRAME_SIZE * 2);
-+}
-+
- static void run_pkt_test(struct test_spec *test)
- {
- 	int ret;
-@@ -2622,6 +2719,10 @@ static const struct test_spec tests[] = {
- 	{.name = "TOO_MANY_FRAGS", .test_func = testapp_too_many_frags},
- 	{.name = "HW_SW_MIN_RING_SIZE", .test_func = testapp_hw_sw_min_ring_size},
- 	{.name = "HW_SW_MAX_RING_SIZE", .test_func = testapp_hw_sw_max_ring_size},
-+	{.name = "XDP_ADJUST_TAIL_SHRINK", .test_func = testapp_adjust_tail_shrink},
-+	{.name = "XDP_ADJUST_TAIL_SHRINK_MULTI_BUFF", .test_func = testapp_adjust_tail_shrink_mb},
-+	{.name = "XDP_ADJUST_TAIL_GROW", .test_func = testapp_adjust_tail_grow},
-+	{.name = "XDP_ADJUST_TAIL_GROW_MULTI_BUFF", .test_func = testapp_adjust_tail_grow_mb},
- 	};
- 
- static void print_tests(void)
-diff --git a/tools/testing/selftests/bpf/xskxceiver.h b/tools/testing/selftests/bpf/xskxceiver.h
-index e46e823f6a1a..67fc44b2813b 100644
---- a/tools/testing/selftests/bpf/xskxceiver.h
-+++ b/tools/testing/selftests/bpf/xskxceiver.h
-@@ -173,6 +173,8 @@ struct test_spec {
- 	u16 nb_sockets;
- 	bool fail;
- 	bool set_ring;
-+	bool adjust_tail;
-+	bool adjust_tail_support;
- 	enum test_mode mode;
- 	char name[MAX_TEST_NAME_SIZE];
- };
--- 
-2.34.1
+-       double variance, average;
++       double variance, average, squared_total;
 
+        if (stat->count < 2)
+                return 0;
+
+        average =3D (double)stat->total_time / stat->count;
+
+-       variance =3D stat->squared_sum;
+-       variance -=3D (stat->total_time * stat->total_time) / stat->count;
+-       variance /=3D stat->count;
++       squared_total =3D stat->total_time * stat->total_time;
++       variance =3D (stat->squared_sum - squared_total / stat->count) /
+(stat->count - 1);
++       stddev_mean =3D sqrt(variance / stat->count);
+
+-       return 100 * sqrt(variance) / average;
++       return 100 * stddev_mean / average;
+ }
+
+btw I haven't checked the legal range for stddev_mean, so I can be wrong.
+<SNIP>
+> +static int update_total_stats(struct hashmap *hash, struct syscall_key *=
+map_key,
+> +                             struct syscall_stats *map_data)
+> +{
+> +       struct syscall_data *data;
+> +       struct syscall_stats *stat;
+> +
+> +       if (!hashmap__find(hash, map_key, &data)) {
+> +               data =3D zalloc(sizeof(*data));
+> +               if (data =3D=3D NULL)
+> +                       return -ENOMEM;
+> +
+> +               data->nodes =3D zalloc(sizeof(*data->nodes));
+> +               if (data->nodes =3D=3D NULL) {
+> +                       free(data);
+> +                       return -ENOMEM;
+> +               }
+> +
+> +               data->nr_nodes =3D 1;
+> +               data->key =3D map_key->nr;
+> +               data->nodes->syscall_nr =3D data->key;
+Wow, aggressive. I guess you want it to behave like a single value
+when it is SYSCALL_AGGR_CPU, and an array when it is
+SYSCALL_AGGR_THREAD. Do you mind adding a comment about it?
+
+so it's
+
+(cpu, syscall_nr) -> data -> {node}
+(tid, syscall_nr) -> data -> [node1, node2, node3]
+
+
+> +
+> +               if (hashmap__add(hash, data->key, data) < 0) {
+> +                       free(data->nodes);
+> +                       free(data);
+> +                       return -ENOMEM;
+> +               }
+> +       }
+> +
+> +       /* update total stats for this syscall */
+> +       data->nr_events +=3D map_data->count;
+> +       data->total_time +=3D map_data->total_time;
+> +
+> +       /* This is sum of the same syscall from different CPUs */
+> +       stat =3D &data->nodes->stats;
+> +
+> +       stat->total_time +=3D map_data->total_time;
+> +       stat->squared_sum +=3D map_data->squared_sum;
+> +       stat->count +=3D map_data->count;
+> +       stat->error +=3D map_data->error;
+> +
+> +       if (stat->max_time < map_data->max_time)
+> +               stat->max_time =3D map_data->max_time;
+> +       if (stat->min_time > map_data->min_time)
+> +               stat->min_time =3D map_data->min_time;
+> +
+> +       return 0;
+> +}
+> +
+> +static int print_total_stats(struct syscall_data **data, int nr_data, FI=
+LE *fp)
+> +{
+> +       int printed =3D 0;
+> +       int nr_events =3D 0;
+> +
+> +       for (int i =3D 0; i < nr_data; i++)
+> +               nr_events +=3D data[i]->nr_events;
+> +
+> +       printed +=3D fprintf(fp, " total, %d events\n\n", nr_events);
+> +
+> +       printed +=3D fprintf(fp, "   syscall            calls  errors  to=
+tal       min       avg       max       stddev\n");
+> +       printed +=3D fprintf(fp, "                                     (m=
+sec)    (msec)    (msec)    (msec)        (%%)\n");
+> +       printed +=3D fprintf(fp, "   --------------- --------  ------ ---=
+----- --------- --------- ---------     ------\n");
+> +
+> +       for (int i =3D 0; i < nr_data; i++)
+> +               printed +=3D print_common_stats(data[i], fp);
+> +
+> +       printed +=3D fprintf(fp, "\n\n");
+> +       return printed;
+> +}
+> +
+> +int trace_print_bpf_summary(FILE *fp)
+> +{
+> +       struct bpf_map *map =3D skel->maps.syscall_stats_map;
+> +       struct syscall_key *prev_key, key;
+> +       struct syscall_data **data =3D NULL;
+> +       struct hashmap schash;
+> +       struct hashmap_entry *entry;
+> +       int nr_data =3D 0;
+> +       int printed =3D 0;
+> +       int i;
+> +       size_t bkt;
+> +
+> +       hashmap__init(&schash, sc_node_hash, sc_node_equal, /*ctx=3D*/NUL=
+L);
+> +
+> +       printed =3D fprintf(fp, "\n Summary of events:\n\n");
+> +
+> +       /* get stats from the bpf map */
+> +       prev_key =3D NULL;
+> +       while (!bpf_map__get_next_key(map, prev_key, &key, sizeof(key))) =
+{
+> +               struct syscall_stats stat;
+> +
+> +               if (!bpf_map__lookup_elem(map, &key, sizeof(key), &stat, =
+sizeof(stat), 0)) {
+> +                       if (skel->rodata->aggr_mode =3D=3D SYSCALL_AGGR_T=
+HREAD)
+> +                               update_thread_stats(&schash, &key, &stat)=
+;
+> +                       else
+> +                               update_total_stats(&schash, &key, &stat);
+> +               }
+> +
+> +               prev_key =3D &key;
+> +       }
+> +
+> +       nr_data =3D hashmap__size(&schash);
+> +       data =3D calloc(nr_data, sizeof(*data));
+> +       if (data =3D=3D NULL)
+> +               goto out;
+> +
+> +       i =3D 0;
+> +       hashmap__for_each_entry(&schash, entry, bkt)
+> +               data[i++] =3D entry->pvalue;
+> +
+> +       qsort(data, nr_data, sizeof(*data), datacmp);
+
+Here syscall_data is sorted for AGGR_THREAD and AGGR_CPU, meaning the
+thread who has the higher total syscall period will be printed first.
+This is an awesome side effect but it is not the behavior of 'sudo
+./perf trace -as -- sleep 1' without the --bpf-summary option. If it
+is not too trivial, maybe consider documenting this behavior? But it
+may be too verbose so Idk.
+
+sudo ./perf trace -as -- sleep 1
+
+ ClientModuleMan (4956), 16 events, 0.1%
+
+   syscall            calls  errors  total       min       avg
+max       stddev
+                                     (msec)    (msec)    (msec)
+(msec)        (%)
+   --------------- --------  ------ -------- --------- ---------
+---------     ------
+   futex                  8      4   750.234     0.000    93.779
+250.105     48.79%
+
+
+ CHTTPClientThre (15720), 16 events, 0.1%
+
+   syscall            calls  errors  total       min       avg
+max       stddev
+                                     (msec)    (msec)    (msec)
+(msec)        (%)
+   --------------- --------  ------ -------- --------- ---------
+---------     ------
+   futex                  8      4  1000.425     0.000   125.053
+750.317     75.59%
+
+The order is random for the command above.
+
+Thanks,
+Howard
