@@ -1,229 +1,103 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02C7E29408
-	for <bpf@vger.kernel.org>; Tue, 25 Mar 2025 15:46:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED6D42561B8
+	for <bpf@vger.kernel.org>; Tue, 25 Mar 2025 16:07:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742917606; cv=none; b=gTY8qzBO6vpKeAylwR2xsg8t4CbG1odYrluPZ0SJKK7qqO4/Qccpboj7jOcWT3LiAeZKGFK/m7z/1GZ4+b+1XTqHn4Hrfy8GrKc8xHSQj8ljkKhvXj7gUfG8ZFIUw/eSlw9HjlK54qqof+uWvFU8Deerttjmrb4TiWMl/yqzxeM=
+	t=1742918835; cv=none; b=NBLAtKIbmDXPKXMzDYMnDPN8jGiBlC8JV/lTuJXpQX1zgZjbZAogfbE2AoUU+2TnADXzZ21R8LROVRCQUL8t1Hq2CgLzF8CyKKCrvmbxbq1gqcb/M7KUqfgBDvqUviXDvpR8ciw4sF03GNW+VUhRoGZzAg4qTw8AKtUx0tusp5w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742917606; c=relaxed/simple;
-	bh=+wrwZMqC093Z7gZ1xPNJ6NEXrS+qn3tLIr9ngcSDPyU=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=DAiTLT+3DO8Io8bBHpIhaob4xOU6+uBeVh6KJ9F382tKYPfQfEaTiGAVGbfE1FxIz219GUrZroHlcXv10AezHeMJ/mh17ABFa6mYVjZJYIaIrZMAZNir1SkQK0V3VLZYG8Qk0QqTKwus1gTIb39Ht8jonqghhqEXkEr5BvWsl9E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=BsBaq/Hr; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="BsBaq/Hr"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1742917603;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=7qelpf0cr1Bxyx5yCbHo7HXz9cxxZ6ghzCl2hi3M+JE=;
-	b=BsBaq/HrHAP/NHNgkrEAlTtpi3PXxI/qkriefpEZCNsFA1sSbSQcGaEuQIes0Nuzt/YvIL
-	01rrqB5w62M/86cr7fzCyZ39pzWE/lLNh7gqFY8DMEsuv6RAtf71UlLMONh7T6Gmn0qLE7
-	J17EtiDzzo6N54mwHANNJsXRIWIhEnA=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-471-r7jhvEPxOjWTGjRVM5t9Nw-1; Tue, 25 Mar 2025 11:46:41 -0400
-X-MC-Unique: r7jhvEPxOjWTGjRVM5t9Nw-1
-X-Mimecast-MFC-AGG-ID: r7jhvEPxOjWTGjRVM5t9Nw_1742917601
-Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-ac27f00a8a5so443547666b.3
-        for <bpf@vger.kernel.org>; Tue, 25 Mar 2025 08:46:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742917600; x=1743522400;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7qelpf0cr1Bxyx5yCbHo7HXz9cxxZ6ghzCl2hi3M+JE=;
-        b=mB21n5rsKkqcceCJR7ShUQEKFXFC++o7IqOqtGdPW0P0DLEscumZYlibJRZpbi5Qu8
-         1wrBhstx+keEfnHGTNuD6voiOv2OyrbCE+Yz6DVoQov1B4YShmpIin477iPk77lhtcQ2
-         P75kXESnpANMxA1yBsgiGFz6ms4zNM32PH57STNcVyVPO1+A/Qip/SisQRcrR9dvmdyT
-         +uW/76iFdax/HdIpFWkFAvdLW8QgB/PKYaouHFwhPH3So+4UvEDJ2aHEUMgxgBGGJRrV
-         NiynT2E2QFhVOTHUbz8M9VUpapJQNxxOkHM8m1Eqyf9TrVEqip9e4lnvSM5U3IuwwCbS
-         mxsA==
-X-Forwarded-Encrypted: i=1; AJvYcCWuPNPOzb+IpxmxBND2+2DL4zp233toZuANMt/L1hOsx403XRiLGspq1YWLEdwsbAI0ns8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzNzisLBBQSFm/BnJmA3oWV9/R6V07j23RmLeCI5Pgd7pEbWTPF
-	OP1vELuBD/4G1ttDZEDioCTR43+V44lSP5/EejyBCiqKb+Vqvm/ILRfbMVOEVXKteRjxbFgZbuq
-	YjJxRk5T2K5kYnUugLLumq0JkGBssobk4LfMVDpRN5ZBVeyGt42zNTfddGg==
-X-Gm-Gg: ASbGncvu+Q0fukJkydA4CsgSr2tN6GpMvqMKgoGLj/AHATHCadzoSKcSAnlLbs3ZPFm
-	DtWchwRvYBOaHITqaNPpPSjMYsLPHUExcH3bDYQWhH5QGXeI+s2ofgtsMt2NRkFaZVThBvCYVty
-	5/R52fdEiL5oaUUJk0P1/pDyXnFvPyIeef76Mo+ca+uocT6BsSFVCJXhcJr+IxdoOLWsyAXNnoe
-	w9Py0fzNy36yAwwmCzE8xqjaEQ3yfBltEtByTBI5j/KvgB2YTb1p6EX7BXPRRX/rwb6PYPy04pm
-	k5LtkPgak4N/1/s3+ZvpIqat2wMrUPLPdGVMRTqa
-X-Received: by 2002:a17:906:c109:b0:ac6:cea2:6c7 with SMTP id a640c23a62f3a-ac6cea2122dmr209869066b.42.1742917600048;
-        Tue, 25 Mar 2025 08:46:40 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGOdJXWY+OX6Pisfk0vOr5e4GyVLnFPg79bwnTUB2L/Or27l1la/vuNBO9tmBFaSgYvASXEiA==
-X-Received: by 2002:a17:906:c109:b0:ac6:cea2:6c7 with SMTP id a640c23a62f3a-ac6cea2122dmr209865166b.42.1742917599597;
-        Tue, 25 Mar 2025 08:46:39 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ac3ef8675a9sm876497966b.28.2025.03.25.08.46.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Mar 2025 08:46:38 -0700 (PDT)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-	id C8DC518FC8BA; Tue, 25 Mar 2025 16:46:36 +0100 (CET)
-From: =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-Date: Tue, 25 Mar 2025 16:45:43 +0100
-Subject: [PATCH net-next v2 2/3] page_pool: Turn dma_sync and dma_sync_cpu
- fields into a bitmap
+	s=arc-20240116; t=1742918835; c=relaxed/simple;
+	bh=EgK9+MZTh47IL/MKT6n9CWy7R0px1MQ9zq07hA4ND4g=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=tvBekPT3+WzrdCYQpr1F815Bq5qVD7wRc6ieQprehzYpbijH4Dk+3Lt/WIFR0tUEfoWkkB+Y+9WkqXKu6a6O0wfnwF8uYtwNIgtMOqNH8KIVDNZPWL7BAfBqSZbqitLnSNsbPFrgE+/9GjvzHNQNjoYo88R4zkVES+7LRYMEVkk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [36.112.165.186])
+	by gateway (Coremail) with SMTP id _____8Axz3Or1OJn6OylAA--.15761S3;
+	Wed, 26 Mar 2025 00:07:07 +0800 (CST)
+Received: from [192.168.100.199] (unknown [36.112.165.186])
+	by front1 (Coremail) with SMTP id qMiowMCx_cap1OJnksZfAA--.24298S3;
+	Wed, 26 Mar 2025 00:07:06 +0800 (CST)
+Message-ID: <d4870294-86c2-c458-3b2d-b581afcd9fa9@loongson.cn>
+Date: Wed, 26 Mar 2025 00:07:08 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20250325-page-pool-track-dma-v2-2-113ebc1946f3@redhat.com>
-References: <20250325-page-pool-track-dma-v2-0-113ebc1946f3@redhat.com>
-In-Reply-To: <20250325-page-pool-track-dma-v2-0-113ebc1946f3@redhat.com>
-To: "David S. Miller" <davem@davemloft.net>, 
- Jakub Kicinski <kuba@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>, 
- Saeed Mahameed <saeedm@nvidia.com>, Leon Romanovsky <leon@kernel.org>, 
- Tariq Toukan <tariqt@nvidia.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
- Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, 
- Ilias Apalodimas <ilias.apalodimas@linaro.org>, 
- Simon Horman <horms@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
- Mina Almasry <almasrymina@google.com>, 
- Yonglong Liu <liuyonglong@huawei.com>, 
- Yunsheng Lin <linyunsheng@huawei.com>, 
- Pavel Begunkov <asml.silence@gmail.com>, 
- Matthew Wilcox <willy@infradead.org>
-Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, linux-rdma@vger.kernel.org, 
- linux-mm@kvack.org, 
- =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-X-Mailer: b4 0.14.2
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH] LoongArch: BPF: Don't override subprog's return value
+Content-Language: en-US
+To: Hengqi Chen <hengqi.chen@gmail.com>, loongarch@lists.linux.dev,
+ bpf@vger.kernel.org
+Cc: chenhuacai@kernel.org, john.fastabend@gmail.com
+References: <20250325141046.38347-1-hengqi.chen@gmail.com>
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+In-Reply-To: <20250325141046.38347-1-hengqi.chen@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:qMiowMCx_cap1OJnksZfAA--.24298S3
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj93XoW7tFyDZrW3tF1rXrWfJr1DArc_yoW8Cry7p3
+	9rCas8AF4vgr45XF17t3yfXFy0gFsxGrWa9a4jyrW0vrn0v34fXr48Ka45XFW5Cw4rury8
+	Xr4vvw1SvF4kAagCm3ZEXasCq-sJn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+	Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I
+	8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AK
+	xVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzV
+	AYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E
+	14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIx
+	kGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAF
+	wI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r
+	4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8j-e5UU
+	UUU==
 
-Change the single-bit booleans for dma_sync into an unsigned long with
-BIT() definitions so that a subsequent patch can write them both with a
-singe WRITE_ONCE() on teardown. Also move the check for the sync_cpu
-side into __page_pool_dma_sync_for_cpu() so it can be disabled for
-non-netmem providers as well.
+On 3/25/25 22:10, Hengqi Chen wrote:
+> The verifier test `calls: div by 0 in subprog` triggers a panic at the
+> ld.bu instruction. The ld.bu insn is trying to load byte from memory
+> address returned by the subprog. The subprog actually set the correct
+> address at the a5 register (dedicated register for BPF return values).
+> But at commit 73c359d1d356 ("LoongArch: BPF: Sign-extend return values")
+> we also sign extended a5 to the a0 register (return value in LoongArch).
+> For function call insn, we later propagate the a0 register back to a5
+> register. This is right for native calls but wrong for bpf2bpf calls
+> which expect zero-extended return value in a5 register. So only move a0
+> to a5 for native calls (i.e. non-BPF_PSEUDO_CALL).
+> 
+> Fixes: 73c359d1d356 ("LoongArch: BPF: Sign-extend return values")
+> Signed-off-by: Hengqi Chen <hengqi.chen@gmail.com>
+> ---
+>   arch/loongarch/net/bpf_jit.c | 4 +++-
+>   1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
+> index a06bf89fed67..73ff1a657aa5 100644
+> --- a/arch/loongarch/net/bpf_jit.c
+> +++ b/arch/loongarch/net/bpf_jit.c
+> @@ -907,7 +907,9 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
+>   
+>   		move_addr(ctx, t1, func_addr);
+>   		emit_insn(ctx, jirl, LOONGARCH_GPR_RA, t1, 0);
+> -		move_reg(ctx, regmap[BPF_REG_0], LOONGARCH_GPR_A0);
+> +
+> +		if (insn->src_reg != BPF_PSEUDO_CALL)
+> +			move_reg(ctx, regmap[BPF_REG_0], LOONGARCH_GPR_A0);
+>   		break;
+>   
+>   	/* tail call */
 
-Reviewed-by: Mina Almasry <almasrymina@google.com>
-Tested-by: Yonglong Liu <liuyonglong@huawei.com>
-Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
----
- include/net/page_pool/helpers.h | 6 +++---
- include/net/page_pool/types.h   | 8 ++++++--
- net/core/devmem.c               | 3 +--
- net/core/page_pool.c            | 9 +++++----
- 4 files changed, 15 insertions(+), 11 deletions(-)
+In my opinion, it is better to give a test case and show the test
+result without and with this change.
 
-diff --git a/include/net/page_pool/helpers.h b/include/net/page_pool/helpers.h
-index 582a3d00cbe2315edeb92850b6a42ab21e509e45..7ed32bde4b8944deb7fb22e291e95b8487be681a 100644
---- a/include/net/page_pool/helpers.h
-+++ b/include/net/page_pool/helpers.h
-@@ -443,6 +443,9 @@ static inline void __page_pool_dma_sync_for_cpu(const struct page_pool *pool,
- 						const dma_addr_t dma_addr,
- 						u32 offset, u32 dma_sync_size)
- {
-+	if (!(READ_ONCE(pool->dma_sync) & PP_DMA_SYNC_CPU))
-+		return;
-+
- 	dma_sync_single_range_for_cpu(pool->p.dev, dma_addr,
- 				      offset + pool->p.offset, dma_sync_size,
- 				      page_pool_get_dma_dir(pool));
-@@ -473,9 +476,6 @@ page_pool_dma_sync_netmem_for_cpu(const struct page_pool *pool,
- 				  const netmem_ref netmem, u32 offset,
- 				  u32 dma_sync_size)
- {
--	if (!pool->dma_sync_for_cpu)
--		return;
--
- 	__page_pool_dma_sync_for_cpu(pool,
- 				     page_pool_get_dma_addr_netmem(netmem),
- 				     offset, dma_sync_size);
-diff --git a/include/net/page_pool/types.h b/include/net/page_pool/types.h
-index df0d3c1608929605224feb26173135ff37951ef8..fbe34024b20061e8bcd1d4474f6ebfc70992f1eb 100644
---- a/include/net/page_pool/types.h
-+++ b/include/net/page_pool/types.h
-@@ -33,6 +33,10 @@
- #define PP_FLAG_ALL		(PP_FLAG_DMA_MAP | PP_FLAG_DMA_SYNC_DEV | \
- 				 PP_FLAG_SYSTEM_POOL | PP_FLAG_ALLOW_UNREADABLE_NETMEM)
- 
-+/* bit values used in pp->dma_sync */
-+#define PP_DMA_SYNC_DEV	BIT(0)
-+#define PP_DMA_SYNC_CPU	BIT(1)
-+
- /*
-  * Fast allocation side cache array/stack
-  *
-@@ -175,12 +179,12 @@ struct page_pool {
- 
- 	bool has_init_callback:1;	/* slow::init_callback is set */
- 	bool dma_map:1;			/* Perform DMA mapping */
--	bool dma_sync:1;		/* Perform DMA sync for device */
--	bool dma_sync_for_cpu:1;	/* Perform DMA sync for cpu */
- #ifdef CONFIG_PAGE_POOL_STATS
- 	bool system:1;			/* This is a global percpu pool */
- #endif
- 
-+	unsigned long dma_sync;
-+
- 	__cacheline_group_begin_aligned(frag, PAGE_POOL_FRAG_GROUP_ALIGN);
- 	long frag_users;
- 	netmem_ref frag_page;
-diff --git a/net/core/devmem.c b/net/core/devmem.c
-index 6802e82a4d03b6030f6df50ae3661f81e40bc101..955d392d707b12fe784747aa2040ce1a882a64db 100644
---- a/net/core/devmem.c
-+++ b/net/core/devmem.c
-@@ -340,8 +340,7 @@ int mp_dmabuf_devmem_init(struct page_pool *pool)
- 	/* dma-buf dma addresses do not need and should not be used with
- 	 * dma_sync_for_cpu/device. Force disable dma_sync.
- 	 */
--	pool->dma_sync = false;
--	pool->dma_sync_for_cpu = false;
-+	pool->dma_sync = 0;
- 
- 	if (pool->p.order != 0)
- 		return -E2BIG;
-diff --git a/net/core/page_pool.c b/net/core/page_pool.c
-index acef1fcd8ddcfd1853a6f2055c1f1820ab248e8d..d51ca4389dd62d8bc266a9a2b792838257173535 100644
---- a/net/core/page_pool.c
-+++ b/net/core/page_pool.c
-@@ -203,7 +203,7 @@ static int page_pool_init(struct page_pool *pool,
- 	memcpy(&pool->slow, &params->slow, sizeof(pool->slow));
- 
- 	pool->cpuid = cpuid;
--	pool->dma_sync_for_cpu = true;
-+	pool->dma_sync = PP_DMA_SYNC_CPU;
- 
- 	/* Validate only known flags were used */
- 	if (pool->slow.flags & ~PP_FLAG_ALL)
-@@ -238,7 +238,7 @@ static int page_pool_init(struct page_pool *pool,
- 		if (!pool->p.max_len)
- 			return -EINVAL;
- 
--		pool->dma_sync = true;
-+		pool->dma_sync |= PP_DMA_SYNC_DEV;
- 
- 		/* pool->p.offset has to be set according to the address
- 		 * offset used by the DMA engine to start copying rx data
-@@ -291,7 +291,7 @@ static int page_pool_init(struct page_pool *pool,
- 	}
- 
- 	if (pool->mp_ops) {
--		if (!pool->dma_map || !pool->dma_sync)
-+		if (!pool->dma_map || !(pool->dma_sync & PP_DMA_SYNC_DEV))
- 			return -EOPNOTSUPP;
- 
- 		if (WARN_ON(!is_kernel_rodata((unsigned long)pool->mp_ops))) {
-@@ -466,7 +466,8 @@ page_pool_dma_sync_for_device(const struct page_pool *pool,
- 			      netmem_ref netmem,
- 			      u32 dma_sync_size)
- {
--	if (pool->dma_sync && dma_dev_need_sync(pool->p.dev))
-+	if ((READ_ONCE(pool->dma_sync) & PP_DMA_SYNC_DEV) &&
-+	    dma_dev_need_sync(pool->p.dev))
- 		__page_pool_dma_sync_for_device(pool, netmem, dma_sync_size);
- }
- 
+The test case should be put in the commit message at least and then
+added into tools/testing/selftests/bpf or lib/test_bpf.c if not exist.
 
--- 
-2.48.1
+Thanks,
+Tiezhu
 
