@@ -1,318 +1,145 @@
-Received: from relay.smtp-ext.broadcom.com (relay.smtp-ext.broadcom.com [192.19.144.205])
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A906F1C84B2;
-	Tue, 25 Mar 2025 19:31:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.19.144.205
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85A0B19ABD4;
+	Tue, 25 Mar 2025 19:47:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742931097; cv=none; b=plmF1KfldYjB3DfisRPMaJV8hX/w+dljIVzE8I0Q3KFQ4LNm6ZPoDizaZze0g/4J0wDmxs3cDw0zcI6ZX3dtHaCIxePcyLH0H18+m1Y2ld41ispx+9M0HNZq7c6o6zSf+yQz8bk51HiB8jeafTFFHeZ02Q2lzTjE1vM9WaGyRy4=
+	t=1742932066; cv=none; b=SPBCxHYGTFJDsJuxke/a+nhPLdzzw0O2K0qB2VPErv6T1LVKvU05yVpSeeDs4k88mmGKkwVTrgs3D2FjPm2vwb8fWUSTWgsuEnK+erQk5iiy4MefiNwy5eKqDqdOod03NnIIDFGgjZnHDPULQ+nDVrvpQ5lMYvYIXV/pLbcST8Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742931097; c=relaxed/simple;
-	bh=MEudjr4gVzSBHE7H0/Txhb+YvNrNq/8FQz6k3HL6/lc=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=HYLJS78m2fkRb2B+nDTk1NnQ4KxsEuChVoPDBTxeb3uXa2B9zwrC/TPU+WOXkcgSMttmvZgsADKuddr17Ze3p98mDQNMFmk9A6dhNNn/ngwUiBURI708fytStRQMGNRA7q1qRDwLvJp7AAwTXN9ZF+3xNTld5C6vXphHfqFOvRU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=E3hYGRBy; arc=none smtp.client-ip=192.19.144.205
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
+	s=arc-20240116; t=1742932066; c=relaxed/simple;
+	bh=FQrF/wafsCwtQ5RHtBLJtng6uuJETqkLf6oOWt6uk9A=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ZOmKyxxzZDc4fAJ6QMrrVbwN+K/r5xeSJcn5yxbIwfqgHrqvSPqbZCPSksg+bGpCNP777kOfa20WFjq3GsYXrhpV+Ia5BiBfhn/m7a5Qp7xWx0MvlbR+/jcgj2IPv6Fyy+yB0SSq1MvrbFa6T4ZAwo4qD0WW1R3Vm0d3Hfyu1m4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=kdM3Nj1M; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="E3hYGRBy"
-Received: from mail-lvn-it-01.broadcom.com (mail-lvn-it-01.lvn.broadcom.net [10.36.132.253])
-	by relay.smtp-ext.broadcom.com (Postfix) with ESMTP id 5C513C0000FF;
-	Tue, 25 Mar 2025 12:22:25 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 relay.smtp-ext.broadcom.com 5C513C0000FF
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=broadcom.com;
-	s=dkimrelay; t=1742930545;
-	bh=MEudjr4gVzSBHE7H0/Txhb+YvNrNq/8FQz6k3HL6/lc=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=E3hYGRByBACEC/La4lYEsqdpdDrDFtiVdFFfdN3gE6euzTjN1oYTBbgu8wA2fOSrL
-	 y+AZwMBH2ivBE71Vt/1LbGInWl51sqf3jCEtzWFJMftU9dJz63LS08gzrPXnvXd8pf
-	 PgBE5hwhfcN5qeNPZdrHuUehnLBumglXyxxj0GYw=
-Received: from stbirv-lnx-1.igp.broadcom.net (stbirv-lnx-1.igp.broadcom.net [10.67.48.32])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail-lvn-it-01.broadcom.com (Postfix) with ESMTPSA id C943718000530;
-	Tue, 25 Mar 2025 12:22:24 -0700 (PDT)
-From: Florian Fainelli <florian.fainelli@broadcom.com>
-To: stable@vger.kernel.org
-Cc: Felix Huettner <felix.huettner@mail.schwarz>,
-	Luca Czesla <luca.czesla@mail.schwarz>,
-	Eric Dumazet <edumazet@google.com>,
-	Simon Horman <simon.horman@corigine.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Carlos Soto <carlos.soto@broadcom.com>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Pravin B Shelar <pshelar@ovn.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <kafai@fb.com>,
-	Song Liu <songliubraving@fb.com>,
-	Yonghong Song <yhs@fb.com>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Sasha Levin <sashal@kernel.org>,
-	Willem de Bruijn <willemb@google.com>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Breno Leitao <leitao@debian.org>,
-	=?UTF-8?q?Beno=C3=AEt=20Monin?= <benoit.monin@gmx.fr>,
-	Yan Zhai <yan@cloudflare.com>,
-	Joe Stringer <joestringer@nicira.com>,
-	Andy Zhou <azhou@nicira.com>,
-	Justin Pettit <jpettit@nicira.com>,
-	Thomas Graf <tgraf@suug.ch>,
-	netdev@vger.kernel.org (open list:NETWORKING [GENERAL]),
-	linux-kernel@vger.kernel.org (open list),
-	dev@openvswitch.org (open list:OPENVSWITCH),
-	bpf@vger.kernel.org (open list:BPF (Safe dynamic programs and tools))
-Subject: [PATCH stable 5.4 v2 1/2] net: openvswitch: fix race on port output
-Date: Tue, 25 Mar 2025 12:22:19 -0700
-Message-Id: <20250325192220.1849902-2-florian.fainelli@broadcom.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250325192220.1849902-1-florian.fainelli@broadcom.com>
-References: <20250325192220.1849902-1-florian.fainelli@broadcom.com>
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="kdM3Nj1M"
+Received: from [IPV6:2601:646:8083:1982:248d:9102:5b8a:6e6c] ([IPv6:2601:646:8083:1982:248d:9102:5b8a:6e6c])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 52PJhUIl603946
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+	Tue, 25 Mar 2025 12:43:32 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 52PJhUIl603946
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2025032001; t=1742931824;
+	bh=UJj21FC15p3nVLzkicX5dgxkBEi54nR03XqBTpnd5V4=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=kdM3Nj1MybR90X09rU1nRONRJ2jg1AtjqKoXLnxsg2cojdKgyvQq1sB0dmO1P9B7e
+	 Oh0GOCPxLEaRXZFe7o1Sfjp8n54w75H5iN/HAzeysNqCT9wYOr7jEP2Dae4W47cuTE
+	 IJENwVV1LUrY+RUTP8SIu8IuTBsqVtESVxKjQe2igsVqYUE9/vC+W48eqqzXH+7yPQ
+	 lLYCfriDAqV0glFFkq5y8djhKy78jC5zQ7rOCh2GQVPUddqvu2o3Kp1cuthMCi7rCc
+	 T1rY4JTt0lRSRGlEjcanOa/VKXXmOhoSIUQpV16G1iV32q6fHAz8KlUXWCNdcW9vny
+	 jM4Umn7OoVMWA==
+Message-ID: <eec0dfd7-5e4f-4a08-928c-b7714dbc4a17@zytor.com>
+Date: Tue, 25 Mar 2025 12:43:25 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 00/16] Introduce and use generic parity16/32/64 helper
+To: Kuan-Wei Chiu <visitorckw@gmail.com>, Yury Norov <yury.norov@gmail.com>
+Cc: David Laight <david.laight.linux@gmail.com>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        Laurent.pinchart@ideasonboard.com, airlied@gmail.com,
+        akpm@linux-foundation.org, alistair@popple.id.au,
+        andrew+netdev@lunn.ch, andrzej.hajda@intel.com,
+        arend.vanspriel@broadcom.com, awalls@md.metrocast.net, bp@alien8.de,
+        bpf@vger.kernel.org, brcm80211-dev-list.pdl@broadcom.com,
+        brcm80211@lists.linux.dev, dave.hansen@linux.intel.com,
+        davem@davemloft.net, dmitry.torokhov@gmail.com,
+        dri-devel@lists.freedesktop.org, eajames@linux.ibm.com,
+        edumazet@google.com, eleanor15x@gmail.com, gregkh@linuxfoundation.org,
+        hverkuil@xs4all.nl, jernej.skrabec@gmail.com, jirislaby@kernel.org,
+        jk@ozlabs.org, joel@jms.id.au, johannes@sipsolutions.net,
+        jonas@kwiboo.se, jserv@ccns.ncku.edu.tw, kuba@kernel.org,
+        linux-fsi@lists.ozlabs.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-serial@vger.kernel.org,
+        linux-wireless@vger.kernel.org, linux@rasmusvillemoes.dk,
+        louis.peens@corigine.com, maarten.lankhorst@linux.intel.com,
+        mchehab@kernel.org, mingo@redhat.com, miquel.raynal@bootlin.com,
+        mripard@kernel.org, neil.armstrong@linaro.org, netdev@vger.kernel.org,
+        oss-drivers@corigine.com, pabeni@redhat.com,
+        parthiban.veerasooran@microchip.com, rfoss@kernel.org, richard@nod.at,
+        simona@ffwll.ch, tglx@linutronix.de, tzimmermann@suse.de,
+        vigneshr@ti.com, x86@kernel.org
+References: <efc2ee9d-5382-457f-b471-f3c44b81a190@citrix.com>
+ <5A790652-1B22-4D13-AAC5-5D9931E90903@zytor.com>
+ <20250307195310.58abff8c@pumpkin>
+ <EB85C3C1-8A0D-4CB9-B501-BFEABDF3E977@zytor.com>
+ <Z824SgB9Dt5zdWYc@visitorckw-System-Product-Name> <Z9CyuowYsZyez36c@thinkpad>
+ <80771542-476C-493E-858A-D2AF6A355CC1@zytor.com> <Z9GtcNJie8TRKywZ@thinkpad>
+ <Z9G2Tyypb3iLoBjn@visitorckw-System-Product-Name>
+ <Z9KMKwnZXA2mkD2s@visitorckw-System-Product-Name>
+ <Z+AlyB461xwMxMtG@visitorckw-System-Product-Name>
+Content-Language: en-US
+From: "H. Peter Anvin" <hpa@zytor.com>
+In-Reply-To: <Z+AlyB461xwMxMtG@visitorckw-System-Product-Name>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-From: Felix Huettner <felix.huettner@mail.schwarz>
+On 3/23/25 08:16, Kuan-Wei Chiu wrote:
+> 
+> Interface 3: Multiple Functions
+> Description: bool parity_odd8/16/32/64()
+> Pros: No need for explicit casting; easy to integrate
+>        architecture-specific optimizations; except for parity8(), all
+>        functions are one-liners with no significant code duplication
+> Cons: More functions may increase maintenance burden
+> Opinions: Only I support this approach
+> 
 
-[ Upstream commit 066b86787fa3d97b7aefb5ac0a99a22dad2d15f8 ]
+OK, so I responded to this but I can't find my reply or any of the 
+followups, so let me go again:
 
-assume the following setup on a single machine:
-1. An openvswitch instance with one bridge and default flows
-2. two network namespaces "server" and "client"
-3. two ovs interfaces "server" and "client" on the bridge
-4. for each ovs interface a veth pair with a matching name and 32 rx and
-   tx queues
-5. move the ends of the veth pairs to the respective network namespaces
-6. assign ip addresses to each of the veth ends in the namespaces (needs
-   to be the same subnet)
-7. start some http server on the server network namespace
-8. test if a client in the client namespace can reach the http server
+I prefer this option, because:
 
-when following the actions below the host has a chance of getting a cpu
-stuck in a infinite loop:
-1. send a large amount of parallel requests to the http server (around
-   3000 curls should work)
-2. in parallel delete the network namespace (do not delete interfaces or
-   stop the server, just kill the namespace)
+a. Virtually all uses of parity is done in contexts where the sizes of 
+the items for which parity is to be taken are well-defined, but it is 
+*really* easy for integer promotion to cause a value to be extended to 
+32 bits unnecessarily (sign or zero extend, although for parity it 
+doesn't make any difference -- if the compiler realizes it.)
 
-there is a low chance that this will cause the below kernel cpu stuck
-message. If this does not happen just retry.
-Below there is also the output of bpftrace for the functions mentioned
-in the output.
+b. It makes it easier to add arch-specific implementations, notably 
+using __builtin_parity on architectures where that is known to generate 
+good code.
 
-The series of events happening here is:
-1. the network namespace is deleted calling
-   `unregister_netdevice_many_notify` somewhere in the process
-2. this sets first `NETREG_UNREGISTERING` on both ends of the veth and
-   then runs `synchronize_net`
-3. it then calls `call_netdevice_notifiers` with `NETDEV_UNREGISTER`
-4. this is then handled by `dp_device_event` which calls
-   `ovs_netdev_detach_dev` (if a vport is found, which is the case for
-   the veth interface attached to ovs)
-5. this removes the rx_handlers of the device but does not prevent
-   packages to be sent to the device
-6. `dp_device_event` then queues the vport deletion to work in
-   background as a ovs_lock is needed that we do not hold in the
-   unregistration path
-7. `unregister_netdevice_many_notify` continues to call
-   `netdev_unregister_kobject` which sets `real_num_tx_queues` to 0
-8. port deletion continues (but details are not relevant for this issue)
-9. at some future point the background task deletes the vport
+c. For architectures where only *some* parity implementations are 
+fast/practical, the generic fallbacks will either naturally synthesize 
+them from components via shift-xor, or they can be defined to use a 
+larger version; the function prototype acts like a cast.
 
-If after 7. but before 9. a packet is send to the ovs vport (which is
-not deleted at this point in time) which forwards it to the
-`dev_queue_xmit` flow even though the device is unregistering.
-In `skb_tx_hash` (which is called in the `dev_queue_xmit`) path there is
-a while loop (if the packet has a rx_queue recorded) that is infinite if
-`dev->real_num_tx_queues` is zero.
+d. If there is a reason in the future to add a generic version, it is 
+really easy to do using the size-specific functions as components; this 
+is something we do literally all over the place, using a pattern so 
+common that it, itself, probably should be macroized:
 
-To prevent this from happening we update `do_output` to handle devices
-without carrier the same as if the device is not found (which would
-be the code path after 9. is done).
-
-Additionally we now produce a warning in `skb_tx_hash` if we will hit
-the infinite loop.
-
-bpftrace (first word is function name):
-
-__dev_queue_xmit server: real_num_tx_queues: 1, cpu: 2, pid: 28024, tid: 28024, skb_addr: 0xffff9edb6f207000, reg_state: 1
-netdev_core_pick_tx server: addr: 0xffff9f0a46d4a000 real_num_tx_queues: 1, cpu: 2, pid: 28024, tid: 28024, skb_addr: 0xffff9edb6f207000, reg_state: 1
-dp_device_event server: real_num_tx_queues: 1 cpu 9, pid: 21024, tid: 21024, event 2, reg_state: 1
-synchronize_rcu_expedited: cpu 9, pid: 21024, tid: 21024
-synchronize_rcu_expedited: cpu 9, pid: 21024, tid: 21024
-synchronize_rcu_expedited: cpu 9, pid: 21024, tid: 21024
-synchronize_rcu_expedited: cpu 9, pid: 21024, tid: 21024
-dp_device_event server: real_num_tx_queues: 1 cpu 9, pid: 21024, tid: 21024, event 6, reg_state: 2
-ovs_netdev_detach_dev server: real_num_tx_queues: 1 cpu 9, pid: 21024, tid: 21024, reg_state: 2
-netdev_rx_handler_unregister server: real_num_tx_queues: 1, cpu: 9, pid: 21024, tid: 21024, reg_state: 2
-synchronize_rcu_expedited: cpu 9, pid: 21024, tid: 21024
-netdev_rx_handler_unregister ret server: real_num_tx_queues: 1, cpu: 9, pid: 21024, tid: 21024, reg_state: 2
-dp_device_event server: real_num_tx_queues: 1 cpu 9, pid: 21024, tid: 21024, event 27, reg_state: 2
-dp_device_event server: real_num_tx_queues: 1 cpu 9, pid: 21024, tid: 21024, event 22, reg_state: 2
-dp_device_event server: real_num_tx_queues: 1 cpu 9, pid: 21024, tid: 21024, event 18, reg_state: 2
-netdev_unregister_kobject: real_num_tx_queues: 1, cpu: 9, pid: 21024, tid: 21024
-synchronize_rcu_expedited: cpu 9, pid: 21024, tid: 21024
-ovs_vport_send server: real_num_tx_queues: 0, cpu: 2, pid: 28024, tid: 28024, skb_addr: 0xffff9edb6f207000, reg_state: 2
-__dev_queue_xmit server: real_num_tx_queues: 0, cpu: 2, pid: 28024, tid: 28024, skb_addr: 0xffff9edb6f207000, reg_state: 2
-netdev_core_pick_tx server: addr: 0xffff9f0a46d4a000 real_num_tx_queues: 0, cpu: 2, pid: 28024, tid: 28024, skb_addr: 0xffff9edb6f207000, reg_state: 2
-broken device server: real_num_tx_queues: 0, cpu: 2, pid: 28024, tid: 28024
-ovs_dp_detach_port server: real_num_tx_queues: 0 cpu 9, pid: 9124, tid: 9124, reg_state: 2
-synchronize_rcu_expedited: cpu 9, pid: 33604, tid: 33604
-
-stuck message:
-
-watchdog: BUG: soft lockup - CPU#5 stuck for 26s! [curl:1929279]
-Modules linked in: veth pktgen bridge stp llc ip_set_hash_net nft_counter xt_set nft_compat nf_tables ip_set_hash_ip ip_set nfnetlink_cttimeout nfnetlink openvswitch nsh nf_conncount nf_nat nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 tls binfmt_misc nls_iso8859_1 input_leds joydev serio_raw dm_multipath scsi_dh_rdac scsi_dh_emc scsi_dh_alua sch_fq_codel drm efi_pstore virtio_rng ip_tables x_tables autofs4 btrfs blake2b_generic zstd_compress raid10 raid456 async_raid6_recov async_memcpy async_pq async_xor async_tx xor raid6_pq libcrc32c raid1 raid0 multipath linear hid_generic usbhid hid crct10dif_pclmul crc32_pclmul ghash_clmulni_intel aesni_intel virtio_net ahci net_failover crypto_simd cryptd psmouse libahci virtio_blk failover
-CPU: 5 PID: 1929279 Comm: curl Not tainted 5.15.0-67-generic #74-Ubuntu
-Hardware name: OpenStack Foundation OpenStack Nova, BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
-RIP: 0010:netdev_pick_tx+0xf1/0x320
-Code: 00 00 8d 48 ff 0f b7 c1 66 39 ca 0f 86 e9 01 00 00 45 0f b7 ff 41 39 c7 0f 87 5b 01 00 00 44 29 f8 41 39 c7 0f 87 4f 01 00 00 <eb> f2 0f 1f 44 00 00 49 8b 94 24 28 04 00 00 48 85 d2 0f 84 53 01
-RSP: 0018:ffffb78b40298820 EFLAGS: 00000246
-RAX: 0000000000000000 RBX: ffff9c8773adc2e0 RCX: 000000000000083f
-RDX: 0000000000000000 RSI: ffff9c8773adc2e0 RDI: ffff9c870a25e000
-RBP: ffffb78b40298858 R08: 0000000000000001 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000000 R12: ffff9c870a25e000
-R13: ffff9c870a25e000 R14: ffff9c87fe043480 R15: 0000000000000000
-FS:  00007f7b80008f00(0000) GS:ffff9c8e5f740000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f7b80f6a0b0 CR3: 0000000329d66000 CR4: 0000000000350ee0
-Call Trace:
- <IRQ>
- netdev_core_pick_tx+0xa4/0xb0
- __dev_queue_xmit+0xf8/0x510
- ? __bpf_prog_exit+0x1e/0x30
- dev_queue_xmit+0x10/0x20
- ovs_vport_send+0xad/0x170 [openvswitch]
- do_output+0x59/0x180 [openvswitch]
- do_execute_actions+0xa80/0xaa0 [openvswitch]
- ? kfree+0x1/0x250
- ? kfree+0x1/0x250
- ? kprobe_perf_func+0x4f/0x2b0
- ? flow_lookup.constprop.0+0x5c/0x110 [openvswitch]
- ovs_execute_actions+0x4c/0x120 [openvswitch]
- ovs_dp_process_packet+0xa1/0x200 [openvswitch]
- ? ovs_ct_update_key.isra.0+0xa8/0x120 [openvswitch]
- ? ovs_ct_fill_key+0x1d/0x30 [openvswitch]
- ? ovs_flow_key_extract+0x2db/0x350 [openvswitch]
- ovs_vport_receive+0x77/0xd0 [openvswitch]
- ? __htab_map_lookup_elem+0x4e/0x60
- ? bpf_prog_680e8aff8547aec1_kfree+0x3b/0x714
- ? trace_call_bpf+0xc8/0x150
- ? kfree+0x1/0x250
- ? kfree+0x1/0x250
- ? kprobe_perf_func+0x4f/0x2b0
- ? kprobe_perf_func+0x4f/0x2b0
- ? __mod_memcg_lruvec_state+0x63/0xe0
- netdev_port_receive+0xc4/0x180 [openvswitch]
- ? netdev_port_receive+0x180/0x180 [openvswitch]
- netdev_frame_hook+0x1f/0x40 [openvswitch]
- __netif_receive_skb_core.constprop.0+0x23d/0xf00
- __netif_receive_skb_one_core+0x3f/0xa0
- __netif_receive_skb+0x15/0x60
- process_backlog+0x9e/0x170
- __napi_poll+0x33/0x180
- net_rx_action+0x126/0x280
- ? ttwu_do_activate+0x72/0xf0
- __do_softirq+0xd9/0x2e7
- ? rcu_report_exp_cpu_mult+0x1b0/0x1b0
- do_softirq+0x7d/0xb0
- </IRQ>
- <TASK>
- __local_bh_enable_ip+0x54/0x60
- ip_finish_output2+0x191/0x460
- __ip_finish_output+0xb7/0x180
- ip_finish_output+0x2e/0xc0
- ip_output+0x78/0x100
- ? __ip_finish_output+0x180/0x180
- ip_local_out+0x5e/0x70
- __ip_queue_xmit+0x184/0x440
- ? tcp_syn_options+0x1f9/0x300
- ip_queue_xmit+0x15/0x20
- __tcp_transmit_skb+0x910/0x9c0
- ? __mod_memcg_state+0x44/0xa0
- tcp_connect+0x437/0x4e0
- ? ktime_get_with_offset+0x60/0xf0
- tcp_v4_connect+0x436/0x530
- __inet_stream_connect+0xd4/0x3a0
- ? kprobe_perf_func+0x4f/0x2b0
- ? aa_sk_perm+0x43/0x1c0
- inet_stream_connect+0x3b/0x60
- __sys_connect_file+0x63/0x70
- __sys_connect+0xa6/0xd0
- ? setfl+0x108/0x170
- ? do_fcntl+0xe8/0x5a0
- __x64_sys_connect+0x18/0x20
- do_syscall_64+0x5c/0xc0
- ? __x64_sys_fcntl+0xa9/0xd0
- ? exit_to_user_mode_prepare+0x37/0xb0
- ? syscall_exit_to_user_mode+0x27/0x50
- ? do_syscall_64+0x69/0xc0
- ? __sys_setsockopt+0xea/0x1e0
- ? exit_to_user_mode_prepare+0x37/0xb0
- ? syscall_exit_to_user_mode+0x27/0x50
- ? __x64_sys_setsockopt+0x1f/0x30
- ? do_syscall_64+0x69/0xc0
- ? irqentry_exit+0x1d/0x30
- ? exc_page_fault+0x89/0x170
- entry_SYSCALL_64_after_hwframe+0x61/0xcb
-RIP: 0033:0x7f7b8101c6a7
-Code: 64 89 01 48 83 c8 ff c3 66 2e 0f 1f 84 00 00 00 00 00 90 f3 0f 1e fa 64 8b 04 25 18 00 00 00 85 c0 75 10 b8 2a 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 51 c3 48 83 ec 18 89 54 24 0c 48 89 34 24 89
-RSP: 002b:00007ffffd6b2198 EFLAGS: 00000246 ORIG_RAX: 000000000000002a
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f7b8101c6a7
-RDX: 0000000000000010 RSI: 00007ffffd6b2360 RDI: 0000000000000005
-RBP: 0000561f1370d560 R08: 00002795ad21d1ac R09: 0030312e302e302e
-R10: 00007ffffd73f080 R11: 0000000000000246 R12: 0000561f1370c410
-R13: 0000000000000000 R14: 0000000000000005 R15: 0000000000000000
- </TASK>
-
-Fixes: 7f8a436eaa2c ("openvswitch: Add conntrack action")
-Co-developed-by: Luca Czesla <luca.czesla@mail.schwarz>
-Signed-off-by: Luca Czesla <luca.czesla@mail.schwarz>
-Signed-off-by: Felix Huettner <felix.huettner@mail.schwarz>
-Reviewed-by: Eric Dumazet <edumazet@google.com>
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
-Link: https://lore.kernel.org/r/ZC0pBXBAgh7c76CA@kernel-bug-kernel-bug
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Carlos Soto <carlos.soto@broadcom.com>
-Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
----
- net/core/dev.c            | 1 +
- net/openvswitch/actions.c | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/net/core/dev.c b/net/core/dev.c
-index b75c9bebd5c6..d9fe65f14af5 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -2802,6 +2802,7 @@ static u16 skb_tx_hash(const struct net_device *dev,
- 	}
- 
- 	if (skb_rx_queue_recorded(skb)) {
-+		BUILD_BUG_ON_INVALID(qcount == 0);
- 		hash = skb_get_rx_queue(skb);
- 		if (hash >= qoffset)
- 			hash -= qoffset;
-diff --git a/net/openvswitch/actions.c b/net/openvswitch/actions.c
-index 7cef078304c3..aec20faadfcc 100644
---- a/net/openvswitch/actions.c
-+++ b/net/openvswitch/actions.c
-@@ -920,7 +920,7 @@ static void do_output(struct datapath *dp, struct sk_buff *skb, int out_port,
- {
- 	struct vport *vport = ovs_vport_rcu(dp, out_port);
- 
--	if (likely(vport)) {
-+	if (likely(vport && netif_carrier_ok(vport->dev))) {
- 		u16 mru = OVS_CB(skb)->mru;
- 		u32 cutlen = OVS_CB(skb)->cutlen;
- 
--- 
-2.34.1
-
+#define parity(x) 				\
+({						\
+	typeof(x) __x = (x);			\
+	bool __y;				\
+	switch (sizeof(__x)) {			\
+		case 1:				\
+			__y = parity8(__x);	\
+			break;			\
+		case 2:				\
+			__y = parity16(__x);	\
+			break;			\
+		case 4:				\
+			__y = parity32(__x);	\
+			break;			\
+		case 8:				\
+			__y = parity64(__x);	\
+			break;			\
+		default:			\
+			BUILD_BUG();		\
+			break;			\
+	}					\
+	__y;					\
+})
+				
