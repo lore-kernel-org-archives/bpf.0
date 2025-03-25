@@ -1,72 +1,35 @@
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 273F0254AF2
-	for <bpf@vger.kernel.org>; Tue, 25 Mar 2025 14:11:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BD6125A64C;
+	Tue, 25 Mar 2025 14:59:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742911875; cv=none; b=kRU/qwOkzJtZbUTmyXkQ4saWpN16BGC++ClrHCKSiMN6+crWYWqPOmj7dJalei/2Huoh6Uet4e06WDMfHKf1Mk7XRaNFE4l3IxvD2WludFGkq0xuAJdWw+zkxFHSNfXsvKEH7qPeObcFsclKfgoQ7B/QYCBMkurO0jt2SpsSEmo=
+	t=1742914798; cv=none; b=UcB7Sdnd2Olca/5zhPtIxlxRhvSjX31aDMaewkebPMkroe0UXf92tTc99LIu2srd8vUzsovVq0Tyum+VGAXozzHLBW4mEgccpU1Zk5u4ynTQqlDemDxIYbDP/eTbdZqGHcmU5K4MujLLV7TKpeNyGkIOn6SbE8Sonavk88akJ28=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742911875; c=relaxed/simple;
-	bh=m5Rf71rIgy5GkGGzXBi5Ik4Xt/g0V0ssPzWjnP0LN/c=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=PRsTz7MyoIDjMXtdcgGH6hXjvUky4b9NL7wr1gC0CBlLcXDOV8RHML/tE2c0K5F4mG1cmviPMzgAa4BdjmJf7gnJWfkCEcI0e99G+STs9uR7oAriG2thsKMx1f4E7aqbxKLcWOwn2nGyLGDmSUcWoy8gzIaVvD3GVnC+8CR1p3o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=U8NIPyTB; arc=none smtp.client-ip=209.85.216.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1742914798; c=relaxed/simple;
+	bh=FOiz7ZeLamPZDkQ2/GXp+1IpWI81RSd0aYdQbPeigyA=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=nq6Q3NqwjPh6j9DUervlOlokT4la+Oa4stIbq/xzocW5gsLCtduAqZ6IOY5SG3B1JNwDT6ihMbSbesQ8Wg6ceNa0Np2lcnBfQll2BCjADOMSlR/6iVuUdDkjcB/ynoAn/xL8GuERV0QkNN07dFocak/vXQvNrnYbPLnCbXjIKT4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JGNMIH/e; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U8NIPyTB"
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-2ff6cf448b8so13040177a91.3
-        for <bpf@vger.kernel.org>; Tue, 25 Mar 2025 07:11:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742911873; x=1743516673; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=oyT+32LK+A27PsW6quCOsG6ro+lQiaS6tL1T9+kWwRw=;
-        b=U8NIPyTBhLTJ9fh24aHhkKHJvo3P5hV+pa8oNBDEWOCRnHARj6+4wqcqu+3pYYNfN7
-         +tpNIkuqns+aerS2DwXrE7Tf3wM8K81wmQ9+EgLq31JWgZgJkSGRyw1KyH1R0Din81w1
-         Q9HTTemv3TCqKYcNGmiTAHoKibM47T2fF34ZhcJAajMKPx9vmxX9l6wORDm1x8/2ysm9
-         pooFSpu2xDP71PfxYiJkd1enW73ZBcphBJT8V/rwKkFcwa8ak2HXNCM3N2V0rA8cvkyo
-         mHy0uDmmAJ8tZdzNBYI+pXyE3sC6sIeP4iDsEgEq04IRpHuZylgyeNi4O4rkwm31Nwvp
-         CydA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742911873; x=1743516673;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oyT+32LK+A27PsW6quCOsG6ro+lQiaS6tL1T9+kWwRw=;
-        b=ZQePsWboVxOS9Vy5mOYeOhQbt1KfBYzEQZIvnr9xqheaCyNfso0xOPNk6fWh6sL6r0
-         oJtywVHAVYUQDCwYGpMP2RO5A8GKLqgbl0huwVBEcD4LcickP1wtIihsXnxdGMLGZLpo
-         vuHyV3Pw9SNlLJ9ycJWsVByBFcn64AxFud5lYUYWuoV/KqWWsX3LiLrwBpPKFc1i3uxV
-         rMW5EYszsGp85XCkrRj1qAmB7Ug3BcwfBBHetlvEJ6YMlA51emeIuy9026A0R4dh2n9i
-         l4u0JC5cdzpu2cTnWwKBdfJsz2iqOOymgycQuxUBUllClt2Dy/B31Q8RlbKVPtB1z5g+
-         EtvQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUY5oFP5F+dl8ViQcI7GjwK0o9w94k9h99MKGLW3bviy2Z4K4nAv8D2+mfE/zNMgKr/kHI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyeP1BOSuocq/JElFOR05tkyiE+LdIPR+jA5UUw8Bya8I0dB1V0
-	AuoM2B5dEJm/JFJykPZEqcZwDqx9o9tC3gZ6CNcV1y+drAHbtLaH
-X-Gm-Gg: ASbGncuyQz7pVcRhrfpDK0Ey5SGFve1U38vunV91rPf42X2L3A7t/DKnJKuldyVBCOg
-	KJHNL4UezoJIJ8ST5FVi70XDJY/xTfz3BEs7Zz5CZHIj74XAfnn5Yw/YXRZ/J5AInT/B8xs1PND
-	Qfu8dyMCNkdERNfWNOYMCi4OJ7xxeBOsxW+IPd2Ouc+47tg5o69pyh+THnDkZEOfIwyyRpxVcDZ
-	A5cZovXJo8o4x853c8hzSf7Mi+jvlRN39aGGD5nyZEhI4ZbrDll2cIJdRKJZQHxFNqvlQPdql2t
-	tmVRRxY1NrpDHCb0MwQUl5tBf+f5rScRBi6uDzMY9Ln04nY9NqtgBzt9OsZvcPrW6TR0MNPo4sB
-	x0dj2
-X-Google-Smtp-Source: AGHT+IHKVKtahgG1m7Tdx6vHXjWe+CS9GOWBxJwwA8IFIs2F6eJ/pV/0atMx/qpIbWs2P/FAtiNZXw==
-X-Received: by 2002:a17:90b:4a8d:b0:2ee:e945:5355 with SMTP id 98e67ed59e1d1-3030feb1386mr24995855a91.19.1742911873106;
-        Tue, 25 Mar 2025 07:11:13 -0700 (PDT)
-Received: from localhost.localdomain ([14.22.11.162])
-        by smtp.googlemail.com with ESMTPSA id d9443c01a7336-22780f4a670sm90556965ad.86.2025.03.25.07.11.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Mar 2025 07:11:12 -0700 (PDT)
-From: Hengqi Chen <hengqi.chen@gmail.com>
-To: loongarch@lists.linux.dev,
-	bpf@vger.kernel.org
-Cc: chenhuacai@kernel.org,
-	yangtiezhu@loongson.cn,
-	john.fastabend@gmail.com,
-	Hengqi Chen <hengqi.chen@gmail.com>
-Subject: [PATCH] LoongArch: BPF: Don't override subprog's return value
-Date: Tue, 25 Mar 2025 14:10:46 +0000
-Message-ID: <20250325141046.38347-1-hengqi.chen@gmail.com>
-X-Mailer: git-send-email 2.43.5
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JGNMIH/e"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1926C4CEEA;
+	Tue, 25 Mar 2025 14:59:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1742914797;
+	bh=FOiz7ZeLamPZDkQ2/GXp+1IpWI81RSd0aYdQbPeigyA=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=JGNMIH/eR0aUyF7cDBaDZMD6BWeQj0zBp/0/82sfQxfKGIZ/znoyKocaLrAE0Jqis
+	 93Ycsz0mZABCdqcK4A1MJjUwmsGXAXFsBXWGKo50HFe6w7ZFGLcjoLCtXZt3B4e+Gg
+	 sHa63b63Iqr3Y11hEFLOSHMyp8MtEZHDhrOBVGfeEFTvtNqVPWT/qeg6j2fNUlCtvX
+	 pfoIF7Lr/TUMeerc6OGB3LWxSNL1YNUHF3oEA/eENCuM7jLd838qfnNtgZ1ixQYj97
+	 MfoW1wx7dZ6f8q6oXywL7YRAyNeGl6mcbaPjQPVHMj+3o3LXiQ0Z3T06efiQJjzhpG
+	 VN7f19AxVDNGA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 34798380CFE7;
+	Tue, 25 Mar 2025 15:00:35 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -74,39 +37,45 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net] vmxnet3: unregister xdp rxq info in the reset path
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <174291483401.606159.9447299840832813987.git-patchwork-notify@kernel.org>
+Date: Tue, 25 Mar 2025 15:00:34 +0000
+References: <20250320045522.57892-1-sankararaman.jayaraman@broadcom.com>
+In-Reply-To: <20250320045522.57892-1-sankararaman.jayaraman@broadcom.com>
+To: Sankararaman Jayaraman <sankararaman.jayaraman@broadcom.com>
+Cc: netdev@vger.kernel.org, ronak.doshi@broadcom.com,
+ bcm-kernel-feedback-list@broadcom.com, andrew+netdev@lunn.ch,
+ davem@davemloft.net, u9012063@gmail.com, kuba@kernel.org,
+ edumazet@google.com, pabeni@redhat.com, ast@kernel.org,
+ alexandr.lobakin@intel.com, alexanderduyck@fb.com, bpf@vger.kernel.org,
+ daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com
 
-The verifier test `calls: div by 0 in subprog` triggers a panic at the
-ld.bu instruction. The ld.bu insn is trying to load byte from memory
-address returned by the subprog. The subprog actually set the correct
-address at the a5 register (dedicated register for BPF return values).
-But at commit 73c359d1d356 ("LoongArch: BPF: Sign-extend return values")
-we also sign extended a5 to the a0 register (return value in LoongArch).
-For function call insn, we later propagate the a0 register back to a5
-register. This is right for native calls but wrong for bpf2bpf calls
-which expect zero-extended return value in a5 register. So only move a0
-to a5 for native calls (i.e. non-BPF_PSEUDO_CALL).
+Hello:
 
-Fixes: 73c359d1d356 ("LoongArch: BPF: Sign-extend return values")
-Signed-off-by: Hengqi Chen <hengqi.chen@gmail.com>
----
- arch/loongarch/net/bpf_jit.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+This patch was applied to netdev/net.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
-index a06bf89fed67..73ff1a657aa5 100644
---- a/arch/loongarch/net/bpf_jit.c
-+++ b/arch/loongarch/net/bpf_jit.c
-@@ -907,7 +907,9 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
- 
- 		move_addr(ctx, t1, func_addr);
- 		emit_insn(ctx, jirl, LOONGARCH_GPR_RA, t1, 0);
--		move_reg(ctx, regmap[BPF_REG_0], LOONGARCH_GPR_A0);
-+
-+		if (insn->src_reg != BPF_PSEUDO_CALL)
-+			move_reg(ctx, regmap[BPF_REG_0], LOONGARCH_GPR_A0);
- 		break;
- 
- 	/* tail call */
+On Thu, 20 Mar 2025 10:25:22 +0530 you wrote:
+> vmxnet3 does not unregister xdp rxq info in the
+> vmxnet3_reset_work() code path as vmxnet3_rq_destroy()
+> is not invoked in this code path. So, we get below message with a
+> backtrace.
+> 
+> Missing unregister, handled but fix driver
+> WARNING: CPU:48 PID: 500 at net/core/xdp.c:182
+> __xdp_rxq_info_reg+0x93/0xf0
+> 
+> [...]
+
+Here is the summary with links:
+  - [net] vmxnet3: unregister xdp rxq info in the reset path
+    https://git.kernel.org/netdev/net/c/0dd765fae295
+
+You are awesome, thank you!
 -- 
-2.43.5
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
