@@ -1,48 +1,42 @@
 Received: from relay.smtp-ext.broadcom.com (relay.smtp-ext.broadcom.com [192.19.144.205])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CBC51F3FC2;
-	Tue, 25 Mar 2025 19:22:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34FED1EE7B1;
+	Tue, 25 Mar 2025 19:22:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.19.144.205
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742930571; cv=none; b=KFdykJxhjS2whOfGcWsYFronqQrJqnDAqrF024h2iceb4h/76ZRQKUg20mYd3koFBZzyyCOMwVGvAaIhQ+a5JrQ+Cdn6hE3GBcqRxTIcrUwnaCahp1x34o4h15y+MDvSFBlZTDyFHEN9b30/e1T/PP+WNcEY1BgIDXQ26EYzJwE=
+	t=1742930571; cv=none; b=Hjt4x98HxHZ83PMFo8poq6tAScPoMCN03kBZiuUccxnpAjNAe1nnVAtu9Knl4Qa25DkJ91W+4FoXE5/KX1SatH7/zofF/sI/cM7ghhIqZc4xmBcw6nkfvqGPKydefeOa83R+dWVeqt2daNqUEPkeVb/Oe5pNfNTT+XCdOA63Cl0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1742930571; c=relaxed/simple;
-	bh=kkvOio4ji9d9lxGqGA/GaudcwgwMaItK1/qm1HsZzDk=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=joepB1qVm1VFTjG4w0O8vLbQDiP8feRhHAh4Kf+Q9C8KAf59UcGX9G3SxbqNf++73Ft3QFwxug8tptOS3kAZVK6aPzJRkV6+UQzhlUk3SZlyH+e1bpiGFObJVrBEVuCV99C3Ac7qq1D5JB+ZFmmG+M9lmzTc85qR6xU8Fn2mZdc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=sIM+3z2Z; arc=none smtp.client-ip=192.19.144.205
+	bh=m/dB6ooePQO+780W0u+LM/RXcUN7Ax8U357sB5EC7uc=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=fGcDSfGWjHFOQUf91CFfXu7JwjAStRvhVqsNyD3yjRGObJC2BpzB2TP0jf7gNJfxNLqsHARCZAPSnm/z2bXNZPjsCJYUTXbNjRJ4uUHBXWFwgwXQOaoGot0+nhOBnkGojNvIAfIx+UpxBUuCAdNJQHjxXSAA/HhTcMGQEc/neek=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=qslzw++u; arc=none smtp.client-ip=192.19.144.205
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="sIM+3z2Z"
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="qslzw++u"
 Received: from mail-lvn-it-01.broadcom.com (mail-lvn-it-01.lvn.broadcom.net [10.36.132.253])
-	by relay.smtp-ext.broadcom.com (Postfix) with ESMTP id 20512C0003F1;
-	Tue, 25 Mar 2025 12:22:49 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 relay.smtp-ext.broadcom.com 20512C0003F1
+	by relay.smtp-ext.broadcom.com (Postfix) with ESMTP id 62904C0003E2;
+	Tue, 25 Mar 2025 12:22:48 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 relay.smtp-ext.broadcom.com 62904C0003E2
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=broadcom.com;
-	s=dkimrelay; t=1742930569;
-	bh=kkvOio4ji9d9lxGqGA/GaudcwgwMaItK1/qm1HsZzDk=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=sIM+3z2Zj23wxjrlTpUlq9RKtbqb0oCW/6fSxGJm0k/n1aPVVN/f5bILW0WkQw15a
-	 8va5A18Wysf+YiGrYoyEWZxJUMy+rXy/SrAvsmashHZCYAfv8Vgh+S1q+VilzoYSvo
-	 ZSbVC7+V22CLygunnCDBGsyLDV/FDv2Ggtv+1hbU=
+	s=dkimrelay; t=1742930568;
+	bh=m/dB6ooePQO+780W0u+LM/RXcUN7Ax8U357sB5EC7uc=;
+	h=From:To:Cc:Subject:Date:From;
+	b=qslzw++uyqmWCMzWBNSa+ycCpBdFKPCCdc2tyMkfKP2f0WMDQQdJiTy14cq9sx1ll
+	 OLOXE2l4AibXv8Q+JbOGKaUxlgxQh2v/FoZnkicm6L+W5gTvrjar1qhD4GJyx/4eWq
+	 6Ei+3VtDghZMLLsbLljIJTP1jOfKtczMs3EQPG9U=
 Received: from stbirv-lnx-1.igp.broadcom.net (stbirv-lnx-1.igp.broadcom.net [10.67.48.32])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail-lvn-it-01.broadcom.com (Postfix) with ESMTPSA id 89858180004FC;
-	Tue, 25 Mar 2025 12:22:48 -0700 (PDT)
+	by mail-lvn-it-01.broadcom.com (Postfix) with ESMTPSA id DA07D18000530;
+	Tue, 25 Mar 2025 12:22:47 -0700 (PDT)
 From: Florian Fainelli <florian.fainelli@broadcom.com>
 To: stable@vger.kernel.org
-Cc: Ilya Maximets <i.maximets@ovn.org>,
-	Friedrich Weber <f.weber@proxmox.com>,
-	Aaron Conole <aconole@redhat.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Sasha Levin <sashal@kernel.org>,
-	Carlos Soto <carlos.soto@broadcom.com>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
+Cc: Florian Fainelli <florian.fainelli@broadcom.com>,
 	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
 	Pravin B Shelar <pshelar@ovn.org>,
 	Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -52,6 +46,7 @@ Cc: Ilya Maximets <i.maximets@ovn.org>,
 	Yonghong Song <yhs@fb.com>,
 	John Fastabend <john.fastabend@gmail.com>,
 	KP Singh <kpsingh@kernel.org>,
+	Sasha Levin <sashal@kernel.org>,
 	Eric Dumazet <edumazet@google.com>,
 	Willem de Bruijn <willemb@google.com>,
 	Jesper Dangaard Brouer <hawk@kernel.org>,
@@ -68,12 +63,10 @@ Cc: Ilya Maximets <i.maximets@ovn.org>,
 	linux-kernel@vger.kernel.org (open list),
 	dev@openvswitch.org (open list:OPENVSWITCH),
 	bpf@vger.kernel.org (open list:BPF (Safe dynamic programs and tools))
-Subject: [PATCH stable 5.15 v2 2/2] openvswitch: fix lockup on tx to unregistering netdev with carrier
-Date: Tue, 25 Mar 2025 12:22:46 -0700
-Message-Id: <20250325192246.1849981-3-florian.fainelli@broadcom.com>
+Subject: [PATCH stable 5.15 v2 0/2] openvswitch port output fixes
+Date: Tue, 25 Mar 2025 12:22:44 -0700
+Message-Id: <20250325192246.1849981-1-florian.fainelli@broadcom.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250325192246.1849981-1-florian.fainelli@broadcom.com>
-References: <20250325192246.1849981-1-florian.fainelli@broadcom.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -82,79 +75,24 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Ilya Maximets <i.maximets@ovn.org>
+This patch series contains some missing openvswitch port output fixes
+for the stable 5.15 kernel.
 
-[ Upstream commit 82f433e8dd0629e16681edf6039d094b5518d8ed ]
+Changes in v2:
 
-Commit in a fixes tag attempted to fix the issue in the following
-sequence of calls:
+- use BUILD_BUG_ON_INVALID rather than DEBUG_NET_WARN_ON_ONCE which does
+  not exist in Linux 5.15
 
-    do_output
-    -> ovs_vport_send
-       -> dev_queue_xmit
-          -> __dev_queue_xmit
-             -> netdev_core_pick_tx
-                -> skb_tx_hash
+Felix Huettner (1):
+  net: openvswitch: fix race on port output
 
-When device is unregistering, the 'dev->real_num_tx_queues' goes to
-zero and the 'while (unlikely(hash >= qcount))' loop inside the
-'skb_tx_hash' becomes infinite, locking up the core forever.
+Ilya Maximets (1):
+  openvswitch: fix lockup on tx to unregistering netdev with carrier
 
-But unfortunately, checking just the carrier status is not enough to
-fix the issue, because some devices may still be in unregistering
-state while reporting carrier status OK.
-
-One example of such device is a net/dummy.  It sets carrier ON
-on start, but it doesn't implement .ndo_stop to set the carrier off.
-And it makes sense, because dummy doesn't really have a carrier.
-Therefore, while this device is unregistering, it's still easy to hit
-the infinite loop in the skb_tx_hash() from the OVS datapath.  There
-might be other drivers that do the same, but dummy by itself is
-important for the OVS ecosystem, because it is frequently used as a
-packet sink for tcpdump while debugging OVS deployments.  And when the
-issue is hit, the only way to recover is to reboot.
-
-Fix that by also checking if the device is running.  The running
-state is handled by the net core during unregistering, so it covers
-unregistering case better, and we don't really need to send packets
-to devices that are not running anyway.
-
-While only checking the running state might be enough, the carrier
-check is preserved.  The running and the carrier states seem disjoined
-throughout the code and different drivers.  And other core functions
-like __dev_direct_xmit() check both before attempting to transmit
-a packet.  So, it seems safer to check both flags in OVS as well.
-
-Fixes: 066b86787fa3 ("net: openvswitch: fix race on port output")
-Reported-by: Friedrich Weber <f.weber@proxmox.com>
-Closes: https://mail.openvswitch.org/pipermail/ovs-discuss/2025-January/053423.html
-Signed-off-by: Ilya Maximets <i.maximets@ovn.org>
-Tested-by: Friedrich Weber <f.weber@proxmox.com>
-Reviewed-by: Aaron Conole <aconole@redhat.com>
-Link: https://patch.msgid.link/20250109122225.4034688-1-i.maximets@ovn.org
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
-Signed-off-by: Carlos Soto <carlos.soto@broadcom.com>
-Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
----
+ net/core/dev.c            | 1 +
  net/openvswitch/actions.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ 2 files changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/net/openvswitch/actions.c b/net/openvswitch/actions.c
-index 9b07e2172c94..1f05fa85d295 100644
---- a/net/openvswitch/actions.c
-+++ b/net/openvswitch/actions.c
-@@ -913,7 +913,9 @@ static void do_output(struct datapath *dp, struct sk_buff *skb, int out_port,
- {
- 	struct vport *vport = ovs_vport_rcu(dp, out_port);
- 
--	if (likely(vport && netif_carrier_ok(vport->dev))) {
-+	if (likely(vport &&
-+		   netif_running(vport->dev) &&
-+		   netif_carrier_ok(vport->dev))) {
- 		u16 mru = OVS_CB(skb)->mru;
- 		u32 cutlen = OVS_CB(skb)->cutlen;
- 
 -- 
 2.34.1
 
