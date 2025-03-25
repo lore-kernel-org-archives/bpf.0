@@ -1,317 +1,257 @@
-Received: from relay.smtp-ext.broadcom.com (relay.smtp-ext.broadcom.com [192.19.144.207])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C22AE1EB1B3;
-	Tue, 25 Mar 2025 19:23:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.19.144.207
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742930601; cv=none; b=QiQCjCYNzq0usYpgVeNFJfvqFUik03E9cjBcbIi+PZYGxdrJumnh9ySVSmyJaQoUFIdnpOcayiglLZ5XGoLqzjYhymi986ngh05iEhWnn5L2Pscroj75jG0pGDkzWNQ5RPZk9SqckbabH+hsX2ng8jQ3/ioeFIGwCxISaj63LKY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742930601; c=relaxed/simple;
-	bh=c1H604qLBSLunzYgcAaVP2lIVauhD26jv/xeri4ExA8=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=qa3XPCyUCQHvehcSWzQRNupsR2/2cmcAgYFrNczeRPGI03CW8Xa7K1b4qFJlOIjECrktUStCVDcyYqh390cYUg7TMRBQYCLCVq4gGQoTMNA2+Jfcu5dgQBh3Jg76wc01QlEVo9TxRbuuMcIWsap4luenajr9PCfzmlnJkvw39/4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=P/nBj/gm; arc=none smtp.client-ip=192.19.144.207
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 942E71EA7C7;
+	Tue, 25 Mar 2025 19:24:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1742930697; cv=fail; b=sYQ/nlNzRUo9aNA0xC7OE0Ona0EyZpXmU6uxqTkNhSlh4CP5mHm3jm2aJpPMnp32qrdLfmrZpg6wWJHn9N60tgH4ibmG0z/Z3KhVfuE9z4hWJEcqyo0PS0wpP53SRN5qFMZCM3tlcAT2GYtApZvX/1H1ABKppjtRsNog6wJHMVA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1742930697; c=relaxed/simple;
+	bh=3xsz5Gx3BJS7S8m/eM6qmHntPMpSOqWFMWXvCv3iRO8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=kH7s2NUcQcS3sT8xe04cmJEf9tlw3WyXYH0tFZ+3MvrFNEl3IBhpYG1D38uDRlZbLwYeQnSM7lV/WnujxzO2+FDHr9q7IRdpsSwgMrgE6TUFl+9S6Z4b4yY0q2e09+RG4cRwNb0/32167jFBlwCE9tanRd/CUa94YVV1epZ+qig=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=jrdq2tHQ; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=ljT5YVPm; arc=fail smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="P/nBj/gm"
-Received: from mail-lvn-it-01.broadcom.com (mail-lvn-it-01.lvn.broadcom.net [10.36.132.253])
-	by relay.smtp-ext.broadcom.com (Postfix) with ESMTP id B7A32C00282F;
-	Tue, 25 Mar 2025 12:23:18 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 relay.smtp-ext.broadcom.com B7A32C00282F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=broadcom.com;
-	s=dkimrelay; t=1742930598;
-	bh=c1H604qLBSLunzYgcAaVP2lIVauhD26jv/xeri4ExA8=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=P/nBj/gmkMSTdcEKOFMZZYilTklv7bLjj9A/dHkn5T3whatHaBTWflISBETApNazj
-	 dEQo/Wopeu8jYcs31yltAQdN2QF9vqbwBf3rWUFrvTdPaXLr3Npmxk6PJOCsq0n3J8
-	 /0nedV1WpemBCLHDamSW/y6ouDGYpMOxN66tPFGw=
-Received: from stbirv-lnx-1.igp.broadcom.net (stbirv-lnx-1.igp.broadcom.net [10.67.48.32])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail-lvn-it-01.broadcom.com (Postfix) with ESMTPSA id 36CE01800053F;
-	Tue, 25 Mar 2025 12:22:48 -0700 (PDT)
-From: Florian Fainelli <florian.fainelli@broadcom.com>
-To: stable@vger.kernel.org
-Cc: Felix Huettner <felix.huettner@mail.schwarz>,
-	Luca Czesla <luca.czesla@mail.schwarz>,
-	Eric Dumazet <edumazet@google.com>,
-	Simon Horman <simon.horman@corigine.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Carlos Soto <carlos.soto@broadcom.com>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Pravin B Shelar <pshelar@ovn.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <kafai@fb.com>,
-	Song Liu <songliubraving@fb.com>,
-	Yonghong Song <yhs@fb.com>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Sasha Levin <sashal@kernel.org>,
-	Willem de Bruijn <willemb@google.com>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	Breno Leitao <leitao@debian.org>,
-	Yan Zhai <yan@cloudflare.com>,
-	=?UTF-8?q?Beno=C3=AEt=20Monin?= <benoit.monin@gmx.fr>,
-	Joe Stringer <joestringer@nicira.com>,
-	Justin Pettit <jpettit@nicira.com>,
-	Andy Zhou <azhou@nicira.com>,
-	netdev@vger.kernel.org (open list:NETWORKING [GENERAL]),
-	linux-kernel@vger.kernel.org (open list),
-	dev@openvswitch.org (open list:OPENVSWITCH),
-	bpf@vger.kernel.org (open list:BPF (Safe dynamic programs and tools))
-Subject: [PATCH stable 5.15 v2 1/2] net: openvswitch: fix race on port output
-Date: Tue, 25 Mar 2025 12:22:45 -0700
-Message-Id: <20250325192246.1849981-2-florian.fainelli@broadcom.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250325192246.1849981-1-florian.fainelli@broadcom.com>
-References: <20250325192246.1849981-1-florian.fainelli@broadcom.com>
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="jrdq2tHQ";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="ljT5YVPm"
+Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 52PJMwnJ020296;
+	Tue, 25 Mar 2025 19:23:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=corp-2023-11-20; bh=kb2FKXJWcj0rPaG9CV
+	DjKRJvpUNE9pPyvVcWO8xHaN0=; b=jrdq2tHQADdQo0QLDXTeOLdEcJ3fY5QKJb
+	/DQyyAlhmI+S6Lm42lK48gYwG/RGt9pdHdY7l/2aUCbpgOhvlMw+OgFfvmqmMYuz
+	HbhTzTM1NVNG+L/RoAVOoTz3usEEEao+BmnKPqu/42stNpoeYlK9HIITfxe25aK3
+	o+EJHBJeHLU9JAVKbMiStrfD9JPq84JmWBcgbN4tYld/9hkaGt4Xjbo5kk2NWI56
+	YdunAxZnru8mUXgBQ5wK3nF/dwcit/olhaGvwN49FxrowQkchlJsSF3N5hiInsJK
+	W1p5gZBSdyk2pI5dY2pAm0KePQT5PgUC5TY1VrP6/lHDH2+SFnQQ==
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 45hn8b8553-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 25 Mar 2025 19:23:53 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 52PIJ7D8008240;
+	Tue, 25 Mar 2025 19:23:52 GMT
+Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2048.outbound.protection.outlook.com [104.47.58.48])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 45jj6uk3ek-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 25 Mar 2025 19:23:52 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=kN9K+lBv0X2i57LxALytpgy3R5PGRkbgusi+E14cVsI+KpaOYxLis0QFwzqz6i2dkDYZfHc8lNsddQQcG+jPA1ZILpNNfjPv0nou+cMfhoeigXZoWjNldFiqKHg37hnNOWDAm0C6BhS1BivHvwvho9YuIFN+fk1OQ274UrZ93Kn/FChXeCQYDRTuKOFTZyqgWsEGXmHOM2EXLLpqmG4a7yYQdUcc0ThIDlozBAlPdrIrCCj2PuC0pYxyqb5eVNBD1GcuE1LvJaELM8D/Fr5Iqnd2hlggpbWXZ8OltmKZC4Ya4n810w850CaQanngmHCh6gv/ao/dktsHF6sCO4Rtxw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=kb2FKXJWcj0rPaG9CVDjKRJvpUNE9pPyvVcWO8xHaN0=;
+ b=gFJkabS7szCqDUJPCnJ8XfJmsDUZPz2NFgUaN+fRiq4rcNjxUy6th0vaDJB7B0vxHmudGX7jLNOC4rfWvOhFy0z+5t1/whjBJDVxWJ+A55pNJVF9HrrCJgEAZbRNJO8+riBAUZ/nlqbFvqfP+9AbaYfZUaWymzZsZqHYKoHtVperGcrT8dgiysCqa34z8aWcvjRzT5thTaOIcrWuZt1YNJ/yjDWm67Hx2BP7hkUsmWEzh0f4hnZ7WDcpulO+5E+ZK0IMn5fIyFM37GJL5rVnzPHEDRpj4TQgC8aeZ3fDfOCBokulWH8XmQbbF3JewkzfZBaB1dI45ALCK1OR705dUQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=kb2FKXJWcj0rPaG9CVDjKRJvpUNE9pPyvVcWO8xHaN0=;
+ b=ljT5YVPmfy/gNaOttPiq3n/NHEYdTG2w2jWXfMls7WA8CXCt5ZId1giKIIQYcjf1xSdMeWGWEOoIGYD3dERXbZyOsrHw5c9WmDJO/i/ov/WctIS3PYYRsAa54Ve2z3FrjE8+tCxfJJOa3Iv/nFGDlXXmVaCj64rKPUtSgVT2Ycs=
+Received: from PH0PR10MB5777.namprd10.prod.outlook.com (2603:10b6:510:128::16)
+ by SJ0PR10MB5744.namprd10.prod.outlook.com (2603:10b6:a03:3ef::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8534.42; Tue, 25 Mar
+ 2025 19:23:48 +0000
+Received: from PH0PR10MB5777.namprd10.prod.outlook.com
+ ([fe80::75a8:21cc:f343:f68c]) by PH0PR10MB5777.namprd10.prod.outlook.com
+ ([fe80::75a8:21cc:f343:f68c%7]) with mapi id 15.20.8534.040; Tue, 25 Mar 2025
+ 19:23:47 +0000
+Date: Tue, 25 Mar 2025 15:23:39 -0400
+From: "Liam R. Howlett" <Liam.Howlett@oracle.com>
+To: David Hildenbrand <david@redhat.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, guoren@kernel.org, arnd@arndb.de,
+        gregkh@linuxfoundation.org, torvalds@linux-foundation.org,
+        paul.walmsley@sifive.com, palmer@dabbelt.com, anup@brainfault.org,
+        atishp@atishpatra.org, oleg@redhat.com, kees@kernel.org,
+        tglx@linutronix.de, will@kernel.org, mark.rutland@arm.com,
+        brauner@kernel.org, akpm@linux-foundation.org, rostedt@goodmis.org,
+        edumazet@google.com, unicorn_wang@outlook.com, inochiama@outlook.com,
+        gaohan@iscas.ac.cn, shihua@iscas.ac.cn, jiawei@iscas.ac.cn,
+        wuwei2016@iscas.ac.cn, drew@pdp7.com,
+        prabhakar.mahadev-lad.rj@bp.renesas.com, ctsai390@andestech.com,
+        wefu@redhat.com, kuba@kernel.org, pabeni@redhat.com,
+        josef@toxicpanda.com, dsterba@suse.com, mingo@redhat.com,
+        boqun.feng@gmail.com, xiao.w.wang@intel.com,
+        qingfang.deng@siflower.com.cn, leobras@redhat.com, jszhang@kernel.org,
+        conor.dooley@microchip.com, samuel.holland@sifive.com,
+        yongxuan.wang@sifive.com, luxu.kernel@bytedance.com,
+        ruanjinjie@huawei.com, cuiyunhui@bytedance.com,
+        wangkefeng.wang@huawei.com, qiaozhe@iscas.ac.cn, ardb@kernel.org,
+        ast@kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, kvm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-mm@kvack.org,
+        linux-crypto@vger.kernel.org, bpf@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, maple-tree@lists.infradead.org,
+        linux-trace-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-atm-general@lists.sourceforge.net, linux-btrfs@vger.kernel.org,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+        linux-nfs@vger.kernel.org, linux-sctp@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-media@vger.kernel.org
+Subject: Re: [RFC PATCH V3 00/43] rv64ilp32_abi: Build CONFIG_64BIT
+ kernel-self with ILP32 ABI
+Message-ID: <svu4xdeo7a7ve3vorvgbkjxzrqmqk5oztgtfpbg556wjw4x7vc@yg4esoipmt7g>
+Mail-Followup-To: "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
+	David Hildenbrand <david@redhat.com>, Peter Zijlstra <peterz@infradead.org>, guoren@kernel.org, 
+	arnd@arndb.de, gregkh@linuxfoundation.org, torvalds@linux-foundation.org, 
+	paul.walmsley@sifive.com, palmer@dabbelt.com, anup@brainfault.org, atishp@atishpatra.org, 
+	oleg@redhat.com, kees@kernel.org, tglx@linutronix.de, will@kernel.org, 
+	mark.rutland@arm.com, brauner@kernel.org, akpm@linux-foundation.org, 
+	rostedt@goodmis.org, edumazet@google.com, unicorn_wang@outlook.com, 
+	inochiama@outlook.com, gaohan@iscas.ac.cn, shihua@iscas.ac.cn, jiawei@iscas.ac.cn, 
+	wuwei2016@iscas.ac.cn, drew@pdp7.com, prabhakar.mahadev-lad.rj@bp.renesas.com, 
+	ctsai390@andestech.com, wefu@redhat.com, kuba@kernel.org, pabeni@redhat.com, 
+	josef@toxicpanda.com, dsterba@suse.com, mingo@redhat.com, boqun.feng@gmail.com, 
+	xiao.w.wang@intel.com, qingfang.deng@siflower.com.cn, leobras@redhat.com, 
+	jszhang@kernel.org, conor.dooley@microchip.com, samuel.holland@sifive.com, 
+	yongxuan.wang@sifive.com, luxu.kernel@bytedance.com, ruanjinjie@huawei.com, 
+	cuiyunhui@bytedance.com, wangkefeng.wang@huawei.com, qiaozhe@iscas.ac.cn, ardb@kernel.org, 
+	ast@kernel.org, linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, 
+	kvm@vger.kernel.org, kvm-riscv@lists.infradead.org, linux-mm@kvack.org, 
+	linux-crypto@vger.kernel.org, bpf@vger.kernel.org, linux-input@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, linux-serial@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, maple-tree@lists.infradead.org, 
+	linux-trace-kernel@vger.kernel.org, netdev@vger.kernel.org, linux-atm-general@lists.sourceforge.net, 
+	linux-btrfs@vger.kernel.org, netfilter-devel@vger.kernel.org, coreteam@netfilter.org, 
+	linux-nfs@vger.kernel.org, linux-sctp@vger.kernel.org, linux-usb@vger.kernel.org, 
+	linux-media@vger.kernel.org
+References: <20250325121624.523258-1-guoren@kernel.org>
+ <20250325122640.GK36322@noisy.programming.kicks-ass.net>
+ <0e1d8823-620f-420c-86a5-35495ccbd10f@redhat.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0e1d8823-620f-420c-86a5-35495ccbd10f@redhat.com>
+User-Agent: NeoMutt/20240425
+X-ClientProxiedBy: BL1PR13CA0008.namprd13.prod.outlook.com
+ (2603:10b6:208:256::13) To PH0PR10MB5777.namprd10.prod.outlook.com
+ (2603:10b6:510:128::16)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR10MB5777:EE_|SJ0PR10MB5744:EE_
+X-MS-Office365-Filtering-Correlation-Id: d8670433-3a6b-4eaf-b92d-08dd6bd290fe
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|7416014|366016|376014|1800799024|7053199007;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?09EQf/jAtvZmfBkE9Hju9xGtT0+8CQaYXfxsPVm4saOg48RrcfwfQFy5HOPw?=
+ =?us-ascii?Q?N6CM8O/u2GB3hRVz78Lt7TV0dU8PznNimSpdvwlnfxGd3glTxV50XL1WR7oV?=
+ =?us-ascii?Q?thiyOVMqplVVvyf5QrMvbzSHU816bmrrtRx9tb1tjlKzYb1+oFtdRngPJIMQ?=
+ =?us-ascii?Q?+qMr1VSaKw7xX9sKfKiEq9/sqj1GRFvHpAvWFK/7jZLzycn40IzCVjQQkasR?=
+ =?us-ascii?Q?RVfD1mB6NmnOy4SCoi+zBBfwJDYlFoNicM5qN8c2LHN1Qb67c75pppnSLC2r?=
+ =?us-ascii?Q?KjJv5vhcvhcCm82b748XdFcqb2ZrHtgX9iBAecI/7hu+bSKiOpPCJcfith3K?=
+ =?us-ascii?Q?eisQbbY7d/U6dnz5Nru4cPpjdx1UPPypX7dTEcGQqt9ZQmTVs8bJjYe6K1VJ?=
+ =?us-ascii?Q?zA/CavcyQLzj/yd22K/A79KV1lAYEGLqB+rRF2DS4kY8tON+KHmKDWRHFIU0?=
+ =?us-ascii?Q?Y56rQHHa+8v6jnJXfieKmBKzThf/9EAQH+kM8jpFPyugcR+k6/0WByeH5O90?=
+ =?us-ascii?Q?IWlhR9Pwvr1x3BID/s1aRMCV7lzYf70Cv9nrLXlD5vDvVWsHI9VovYDWKvZG?=
+ =?us-ascii?Q?XE6Gdl1TvNj5ycvlN4y923sFLg3jj6Sicj86nTbl+9vPKaNkiE5Mk2ViYfkc?=
+ =?us-ascii?Q?iG6gDJcsFS4XID4nrmBvQpN+WvQ2g5FZaRXNErRbVNhLJrGDkzpN1RYwxUjz?=
+ =?us-ascii?Q?1/A8AzMmZvS3kS+vPSB2iNdjcqhteahZ/9ZfG2OXgoeiuqnVlOKvHWxV2CrX?=
+ =?us-ascii?Q?CWBaWaFp8xC+Qj7YMp7hy0G4S0ybncVQ0julds6ACpYt2Rs/4Q8jUXbzw0Iz?=
+ =?us-ascii?Q?bQqrn9CJo/CbOir6bz7e9cMRbgz9adwTYlW7DojA0eDbCQ2G1paL+yfyFVqN?=
+ =?us-ascii?Q?foQ35VQaD3LRi81Tc8BQOWvSDmdFLXeWccmodfd9qa9rqfiEGRNPeK/So0c6?=
+ =?us-ascii?Q?Kufs6iFoBb+Ph19agK2LP9xTkTziXFvib07by9YUsj6p0GQitlurDAUWbB8g?=
+ =?us-ascii?Q?wJuYf5wSVyeMPzk60Bj0iQMun1K1/MRXyYK1C7hN15/XAtEahNEW02qozxjg?=
+ =?us-ascii?Q?naj9OD/XS/Cre5wl60dzDlMs1Wi0kpotr8BiErM+gO1LECKows7RTVmJQMl4?=
+ =?us-ascii?Q?+HcUvO4FAbzsNha+qKHhx2WcRiKvmAMtUaqk3yRSVgqSn8Y8YwsZk1CRW46c?=
+ =?us-ascii?Q?Euz61IAcccGgAk2N3bamdQU6N813EUzSXp8eoW0Pii2gnED/ryWDNBc9+/nl?=
+ =?us-ascii?Q?3uwWNe+hl4lmIpfI3jQ+rB1zBmE1lWulBlJ9s2YaqJYX//bzPexUhmrq6zPy?=
+ =?us-ascii?Q?ziA7ZM44I99OmZkikSftCPj4+Oaop0A50iPYx5cO8aZEudn5CCbpGKR6L057?=
+ =?us-ascii?Q?dH/nfpsyji4jgcRBny5CSnlXpeR3?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB5777.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(366016)(376014)(1800799024)(7053199007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?111Kg08n+4/ITDNNLU86UN8ZNCNtbQIJI0FOZWJImbee2qFQpCUsY0DVzrdF?=
+ =?us-ascii?Q?3ep4AezwdTIjuAEMd4KjPEC6z8A7UNBMgLX2uOvd86BbftPleC46fwBWhCDC?=
+ =?us-ascii?Q?MLNqB/rsOUwjnAJxYNJHdJE5I3YutunBYeFnGB+s4Ywl7SxTXbrhqN0rYscN?=
+ =?us-ascii?Q?vQF+tbJ853A/COGsbh+DNe2UK/wDS8onehUqJWN+gtsHYtsPSFhJG0at92rf?=
+ =?us-ascii?Q?Z1za/wv41mTiH2Dhzhw+FQXd7K3dHfwfSLhnQf9ImHFH/PEUVmCMUJXtF+PT?=
+ =?us-ascii?Q?PKGQ9f1pN2SmQiz4SBu0cYN5emNcyeXGpeIe3cqaBAYK2GvH94KjJKVZbu7c?=
+ =?us-ascii?Q?xVUoQqDi7HjeAaWn0z+0RwtNcLCnqGfYou7GZsjTT0+3wLI5BLWiE+ezfNdC?=
+ =?us-ascii?Q?MWLQpc1MQAQTgqeKKq+FUbH3ZwBwgNKMnpfIJ7ivvtP+Lbt9F2GWRawa/nKe?=
+ =?us-ascii?Q?/gWnbDWfFUFWmIZPClcdhJcUQd88SrI4VZQHpFCiFMGFhksJRGdIqR+1luEV?=
+ =?us-ascii?Q?G+vx6L3rA1Adib+beauhJJWx5I1eirOLMnH9zhvOAlhSIpcGx1bMdiX25LHt?=
+ =?us-ascii?Q?k+8YYimYeBWKwRRbatYoNBm7i/uSjc5lkSp1BjupgVYVytcndujsCGUCAd23?=
+ =?us-ascii?Q?uNXblQl354nhJuWzE2+1vZIGf1XdD92zoz5bye7kgdgGaO9pegb1ulOiI6qH?=
+ =?us-ascii?Q?eUzbbEvgqPUKK0Ra5oEVGId9Qsak2a5gFerHhkfS4ZVwsSxpZdzos9OZAOLq?=
+ =?us-ascii?Q?CjmAaJ6awPPnnPFvP86dLUcHdKoLvomXWtS7pGTEvgcd/vyNcOtd5Jh7ofaR?=
+ =?us-ascii?Q?kdF9wY4YH+4C4E7xn9n0H+ClJ1bc+KEa/P7fDtH6Xf4nzC8QfF9IhUIriZQa?=
+ =?us-ascii?Q?0QYP4frZTSyHOmGQ+oFUZrs/AAxGYN8yXS6fmqTKCsZrJijcoqM3AhgpJu1a?=
+ =?us-ascii?Q?8XFbikqRfP8nifLEYMJwdocaF1JURBDks0SJDRycR6dIRMDoQ3XwczL0hiVx?=
+ =?us-ascii?Q?4lPUrRxmnjmaxmoCl/MvVWvuFTmrQbacN2bX/qSNctrLkjE5zXUV4buqFf0Z?=
+ =?us-ascii?Q?ItavshaUd9cJSzKDxFwTTPKnzpcDCyc5TE7ffOeKAWER/7ETRffOQ7Srfgk5?=
+ =?us-ascii?Q?49CwyxXxMYyKYoiJjP64exXfu3eHZAHFWxuYHJOjk8+N3RetqLbPJgeU2h4Y?=
+ =?us-ascii?Q?9b03IP+nOhctRAlLxIZTxAp2TNqJOqy4KimlY64l9QGQJwDnZH1HETYu7Td4?=
+ =?us-ascii?Q?JxNAv5a55Tf5F3T41tbM0buUYgnuq3f5VvJSqLkJRjj5Qks6U5+SjjxGCeeW?=
+ =?us-ascii?Q?mxYpLGQOtmX0drn5HJr5qFnceGsV1nFW8+SeHoubn+N+NnizlttLnMAE6DS2?=
+ =?us-ascii?Q?xLi6locEjX/x7VQicKDS+Oileq5CpZAbGCQpyfvQNf1oRRVRawYi2STx4kCh?=
+ =?us-ascii?Q?1WGXBMkxXdW6i63mTYqu+VlflJT7IzY706M7Qr2hITj1G2bOMQIbX9JtWqSn?=
+ =?us-ascii?Q?pcJNBFW8Js7eoxdPQQNQD7LKDH80/4cmGYqpc75ciavY5jiO3b0DY4l2EYOI?=
+ =?us-ascii?Q?tyukeVWvJXyzh/PD+7I/q+ZcvpYR2SFEE6dKkZpn?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	SUJDSJgpB+C8Ijx7kipRCFJlZ9g+mqlov1BQEKLYwUT8mebubjFNqW7F/4u637Nh5xNVSUkQ8vzNhRr0JdyHy3y0sNXbf5aU8LfwR7u0AK7lZMhJ3ZDUHvP/tgMFm+rFsvLesFloca7SY7zspOhuhxdy9glgO/bRGM6LyaewZZMpih5eYqZTRKC9ogyKvGM93MOnvvcvsr/qBrllrVZKO0ZJMK/m5dzDZ/8jYaHgfoXH7m8/tGfjdfpeclIbYoAkHlbmpVufO++w6pD1YSTOcUARAzQlnZIjetv40VQ/TnjpwyJ/jnLDQJyVb5IeGo2zlZYzhI2MkoasekX8GtgP/tKcynBlExfWRaL1xBQFknSRV+4EoW/yxnTC+5fxwJ5yMCGUbsMJzJh58Vm/jYvKwchsEmLTpzdd0XiGfGtmbzcDXukveY4oKb0QDZMgE2sy2ABDYwLMq+v5jQ+t5wipTm/hagLAOn+liRRS2QdxT7IF/rYfDFyVC6OCOe3a0QGRjPHRtSrRWUaH7NuF6lNgglJfyvPHmRLfOyH2V83kRROuc5oAPoIZ3pKoq/XkTAkEyp8fAvqjntq1vkYkRJdS2crMwn/4kxEb5Jrt1G0/yCE=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d8670433-3a6b-4eaf-b92d-08dd6bd290fe
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB5777.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Mar 2025 19:23:47.8322
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 6+D4B1Ku05Fl325cql5y1h3R4Tp1gYkkfQx41g+6JduVZIzUTRpcQslfqwjBt2BIhzLUVYpJSQ29vy1zPjAQyw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR10MB5744
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1093,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-03-25_08,2025-03-25_02,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 mlxlogscore=999 adultscore=0
+ phishscore=0 suspectscore=0 malwarescore=0 spamscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2502280000
+ definitions=main-2503250131
+X-Proofpoint-GUID: NBcLF-M2ys9gfQOGFZ7I8lCw8SmvW81K
+X-Proofpoint-ORIG-GUID: NBcLF-M2ys9gfQOGFZ7I8lCw8SmvW81K
 
-From: Felix Huettner <felix.huettner@mail.schwarz>
+* David Hildenbrand <david@redhat.com> [250325 14:52]:
+> On 25.03.25 13:26, Peter Zijlstra wrote:
+> > On Tue, Mar 25, 2025 at 08:15:41AM -0400, guoren@kernel.org wrote:
+> > > From: "Guo Ren (Alibaba DAMO Academy)" <guoren@kernel.org>
+> > > 
+> > > Since 2001, the CONFIG_64BIT kernel has been built with the LP64 ABI,
+> > > but this patchset allows the CONFIG_64BIT kernel to use an ILP32 ABI
+> > 
+> > I'm thinking you're going to be finding a metric ton of assumptions
+> > about 'unsigned long' being 64bit when 64BIT=y throughout the kernel.
+> > 
+> > I know of a couple of places where 64BIT will result in different math
+> > such that a 32bit 'unsigned long' will trivially overflow.
+> > 
+> > Please, don't do this. This adds a significant maintenance burden on all
+> > of us.
+> > 
+> 
+> Fully agreed.
 
-[ Upstream commit 066b86787fa3d97b7aefb5ac0a99a22dad2d15f8 ]
+I would go further and say I do not want this to go in.
 
-assume the following setup on a single machine:
-1. An openvswitch instance with one bridge and default flows
-2. two network namespaces "server" and "client"
-3. two ovs interfaces "server" and "client" on the bridge
-4. for each ovs interface a veth pair with a matching name and 32 rx and
-   tx queues
-5. move the ends of the veth pairs to the respective network namespaces
-6. assign ip addresses to each of the veth ends in the namespaces (needs
-   to be the same subnet)
-7. start some http server on the server network namespace
-8. test if a client in the client namespace can reach the http server
+The open ended maintenance burden is not worth extending hardware life
+of a board with 16mb of ram (If I understand your 2023 LPC slides
+correctly).
 
-when following the actions below the host has a chance of getting a cpu
-stuck in a infinite loop:
-1. send a large amount of parallel requests to the http server (around
-   3000 curls should work)
-2. in parallel delete the network namespace (do not delete interfaces or
-   stop the server, just kill the namespace)
-
-there is a low chance that this will cause the below kernel cpu stuck
-message. If this does not happen just retry.
-Below there is also the output of bpftrace for the functions mentioned
-in the output.
-
-The series of events happening here is:
-1. the network namespace is deleted calling
-   `unregister_netdevice_many_notify` somewhere in the process
-2. this sets first `NETREG_UNREGISTERING` on both ends of the veth and
-   then runs `synchronize_net`
-3. it then calls `call_netdevice_notifiers` with `NETDEV_UNREGISTER`
-4. this is then handled by `dp_device_event` which calls
-   `ovs_netdev_detach_dev` (if a vport is found, which is the case for
-   the veth interface attached to ovs)
-5. this removes the rx_handlers of the device but does not prevent
-   packages to be sent to the device
-6. `dp_device_event` then queues the vport deletion to work in
-   background as a ovs_lock is needed that we do not hold in the
-   unregistration path
-7. `unregister_netdevice_many_notify` continues to call
-   `netdev_unregister_kobject` which sets `real_num_tx_queues` to 0
-8. port deletion continues (but details are not relevant for this issue)
-9. at some future point the background task deletes the vport
-
-If after 7. but before 9. a packet is send to the ovs vport (which is
-not deleted at this point in time) which forwards it to the
-`dev_queue_xmit` flow even though the device is unregistering.
-In `skb_tx_hash` (which is called in the `dev_queue_xmit`) path there is
-a while loop (if the packet has a rx_queue recorded) that is infinite if
-`dev->real_num_tx_queues` is zero.
-
-To prevent this from happening we update `do_output` to handle devices
-without carrier the same as if the device is not found (which would
-be the code path after 9. is done).
-
-Additionally we now produce a warning in `skb_tx_hash` if we will hit
-the infinite loop.
-
-bpftrace (first word is function name):
-
-__dev_queue_xmit server: real_num_tx_queues: 1, cpu: 2, pid: 28024, tid: 28024, skb_addr: 0xffff9edb6f207000, reg_state: 1
-netdev_core_pick_tx server: addr: 0xffff9f0a46d4a000 real_num_tx_queues: 1, cpu: 2, pid: 28024, tid: 28024, skb_addr: 0xffff9edb6f207000, reg_state: 1
-dp_device_event server: real_num_tx_queues: 1 cpu 9, pid: 21024, tid: 21024, event 2, reg_state: 1
-synchronize_rcu_expedited: cpu 9, pid: 21024, tid: 21024
-synchronize_rcu_expedited: cpu 9, pid: 21024, tid: 21024
-synchronize_rcu_expedited: cpu 9, pid: 21024, tid: 21024
-synchronize_rcu_expedited: cpu 9, pid: 21024, tid: 21024
-dp_device_event server: real_num_tx_queues: 1 cpu 9, pid: 21024, tid: 21024, event 6, reg_state: 2
-ovs_netdev_detach_dev server: real_num_tx_queues: 1 cpu 9, pid: 21024, tid: 21024, reg_state: 2
-netdev_rx_handler_unregister server: real_num_tx_queues: 1, cpu: 9, pid: 21024, tid: 21024, reg_state: 2
-synchronize_rcu_expedited: cpu 9, pid: 21024, tid: 21024
-netdev_rx_handler_unregister ret server: real_num_tx_queues: 1, cpu: 9, pid: 21024, tid: 21024, reg_state: 2
-dp_device_event server: real_num_tx_queues: 1 cpu 9, pid: 21024, tid: 21024, event 27, reg_state: 2
-dp_device_event server: real_num_tx_queues: 1 cpu 9, pid: 21024, tid: 21024, event 22, reg_state: 2
-dp_device_event server: real_num_tx_queues: 1 cpu 9, pid: 21024, tid: 21024, event 18, reg_state: 2
-netdev_unregister_kobject: real_num_tx_queues: 1, cpu: 9, pid: 21024, tid: 21024
-synchronize_rcu_expedited: cpu 9, pid: 21024, tid: 21024
-ovs_vport_send server: real_num_tx_queues: 0, cpu: 2, pid: 28024, tid: 28024, skb_addr: 0xffff9edb6f207000, reg_state: 2
-__dev_queue_xmit server: real_num_tx_queues: 0, cpu: 2, pid: 28024, tid: 28024, skb_addr: 0xffff9edb6f207000, reg_state: 2
-netdev_core_pick_tx server: addr: 0xffff9f0a46d4a000 real_num_tx_queues: 0, cpu: 2, pid: 28024, tid: 28024, skb_addr: 0xffff9edb6f207000, reg_state: 2
-broken device server: real_num_tx_queues: 0, cpu: 2, pid: 28024, tid: 28024
-ovs_dp_detach_port server: real_num_tx_queues: 0 cpu 9, pid: 9124, tid: 9124, reg_state: 2
-synchronize_rcu_expedited: cpu 9, pid: 33604, tid: 33604
-
-stuck message:
-
-watchdog: BUG: soft lockup - CPU#5 stuck for 26s! [curl:1929279]
-Modules linked in: veth pktgen bridge stp llc ip_set_hash_net nft_counter xt_set nft_compat nf_tables ip_set_hash_ip ip_set nfnetlink_cttimeout nfnetlink openvswitch nsh nf_conncount nf_nat nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 tls binfmt_misc nls_iso8859_1 input_leds joydev serio_raw dm_multipath scsi_dh_rdac scsi_dh_emc scsi_dh_alua sch_fq_codel drm efi_pstore virtio_rng ip_tables x_tables autofs4 btrfs blake2b_generic zstd_compress raid10 raid456 async_raid6_recov async_memcpy async_pq async_xor async_tx xor raid6_pq libcrc32c raid1 raid0 multipath linear hid_generic usbhid hid crct10dif_pclmul crc32_pclmul ghash_clmulni_intel aesni_intel virtio_net ahci net_failover crypto_simd cryptd psmouse libahci virtio_blk failover
-CPU: 5 PID: 1929279 Comm: curl Not tainted 5.15.0-67-generic #74-Ubuntu
-Hardware name: OpenStack Foundation OpenStack Nova, BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
-RIP: 0010:netdev_pick_tx+0xf1/0x320
-Code: 00 00 8d 48 ff 0f b7 c1 66 39 ca 0f 86 e9 01 00 00 45 0f b7 ff 41 39 c7 0f 87 5b 01 00 00 44 29 f8 41 39 c7 0f 87 4f 01 00 00 <eb> f2 0f 1f 44 00 00 49 8b 94 24 28 04 00 00 48 85 d2 0f 84 53 01
-RSP: 0018:ffffb78b40298820 EFLAGS: 00000246
-RAX: 0000000000000000 RBX: ffff9c8773adc2e0 RCX: 000000000000083f
-RDX: 0000000000000000 RSI: ffff9c8773adc2e0 RDI: ffff9c870a25e000
-RBP: ffffb78b40298858 R08: 0000000000000001 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000000 R12: ffff9c870a25e000
-R13: ffff9c870a25e000 R14: ffff9c87fe043480 R15: 0000000000000000
-FS:  00007f7b80008f00(0000) GS:ffff9c8e5f740000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f7b80f6a0b0 CR3: 0000000329d66000 CR4: 0000000000350ee0
-Call Trace:
- <IRQ>
- netdev_core_pick_tx+0xa4/0xb0
- __dev_queue_xmit+0xf8/0x510
- ? __bpf_prog_exit+0x1e/0x30
- dev_queue_xmit+0x10/0x20
- ovs_vport_send+0xad/0x170 [openvswitch]
- do_output+0x59/0x180 [openvswitch]
- do_execute_actions+0xa80/0xaa0 [openvswitch]
- ? kfree+0x1/0x250
- ? kfree+0x1/0x250
- ? kprobe_perf_func+0x4f/0x2b0
- ? flow_lookup.constprop.0+0x5c/0x110 [openvswitch]
- ovs_execute_actions+0x4c/0x120 [openvswitch]
- ovs_dp_process_packet+0xa1/0x200 [openvswitch]
- ? ovs_ct_update_key.isra.0+0xa8/0x120 [openvswitch]
- ? ovs_ct_fill_key+0x1d/0x30 [openvswitch]
- ? ovs_flow_key_extract+0x2db/0x350 [openvswitch]
- ovs_vport_receive+0x77/0xd0 [openvswitch]
- ? __htab_map_lookup_elem+0x4e/0x60
- ? bpf_prog_680e8aff8547aec1_kfree+0x3b/0x714
- ? trace_call_bpf+0xc8/0x150
- ? kfree+0x1/0x250
- ? kfree+0x1/0x250
- ? kprobe_perf_func+0x4f/0x2b0
- ? kprobe_perf_func+0x4f/0x2b0
- ? __mod_memcg_lruvec_state+0x63/0xe0
- netdev_port_receive+0xc4/0x180 [openvswitch]
- ? netdev_port_receive+0x180/0x180 [openvswitch]
- netdev_frame_hook+0x1f/0x40 [openvswitch]
- __netif_receive_skb_core.constprop.0+0x23d/0xf00
- __netif_receive_skb_one_core+0x3f/0xa0
- __netif_receive_skb+0x15/0x60
- process_backlog+0x9e/0x170
- __napi_poll+0x33/0x180
- net_rx_action+0x126/0x280
- ? ttwu_do_activate+0x72/0xf0
- __do_softirq+0xd9/0x2e7
- ? rcu_report_exp_cpu_mult+0x1b0/0x1b0
- do_softirq+0x7d/0xb0
- </IRQ>
- <TASK>
- __local_bh_enable_ip+0x54/0x60
- ip_finish_output2+0x191/0x460
- __ip_finish_output+0xb7/0x180
- ip_finish_output+0x2e/0xc0
- ip_output+0x78/0x100
- ? __ip_finish_output+0x180/0x180
- ip_local_out+0x5e/0x70
- __ip_queue_xmit+0x184/0x440
- ? tcp_syn_options+0x1f9/0x300
- ip_queue_xmit+0x15/0x20
- __tcp_transmit_skb+0x910/0x9c0
- ? __mod_memcg_state+0x44/0xa0
- tcp_connect+0x437/0x4e0
- ? ktime_get_with_offset+0x60/0xf0
- tcp_v4_connect+0x436/0x530
- __inet_stream_connect+0xd4/0x3a0
- ? kprobe_perf_func+0x4f/0x2b0
- ? aa_sk_perm+0x43/0x1c0
- inet_stream_connect+0x3b/0x60
- __sys_connect_file+0x63/0x70
- __sys_connect+0xa6/0xd0
- ? setfl+0x108/0x170
- ? do_fcntl+0xe8/0x5a0
- __x64_sys_connect+0x18/0x20
- do_syscall_64+0x5c/0xc0
- ? __x64_sys_fcntl+0xa9/0xd0
- ? exit_to_user_mode_prepare+0x37/0xb0
- ? syscall_exit_to_user_mode+0x27/0x50
- ? do_syscall_64+0x69/0xc0
- ? __sys_setsockopt+0xea/0x1e0
- ? exit_to_user_mode_prepare+0x37/0xb0
- ? syscall_exit_to_user_mode+0x27/0x50
- ? __x64_sys_setsockopt+0x1f/0x30
- ? do_syscall_64+0x69/0xc0
- ? irqentry_exit+0x1d/0x30
- ? exc_page_fault+0x89/0x170
- entry_SYSCALL_64_after_hwframe+0x61/0xcb
-RIP: 0033:0x7f7b8101c6a7
-Code: 64 89 01 48 83 c8 ff c3 66 2e 0f 1f 84 00 00 00 00 00 90 f3 0f 1e fa 64 8b 04 25 18 00 00 00 85 c0 75 10 b8 2a 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 51 c3 48 83 ec 18 89 54 24 0c 48 89 34 24 89
-RSP: 002b:00007ffffd6b2198 EFLAGS: 00000246 ORIG_RAX: 000000000000002a
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f7b8101c6a7
-RDX: 0000000000000010 RSI: 00007ffffd6b2360 RDI: 0000000000000005
-RBP: 0000561f1370d560 R08: 00002795ad21d1ac R09: 0030312e302e302e
-R10: 00007ffffd73f080 R11: 0000000000000246 R12: 0000561f1370c410
-R13: 0000000000000000 R14: 0000000000000005 R15: 0000000000000000
- </TASK>
-
-Fixes: 7f8a436eaa2c ("openvswitch: Add conntrack action")
-Co-developed-by: Luca Czesla <luca.czesla@mail.schwarz>
-Signed-off-by: Luca Czesla <luca.czesla@mail.schwarz>
-Signed-off-by: Felix Huettner <felix.huettner@mail.schwarz>
-Reviewed-by: Eric Dumazet <edumazet@google.com>
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
-Link: https://lore.kernel.org/r/ZC0pBXBAgh7c76CA@kernel-bug-kernel-bug
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Carlos Soto <carlos.soto@broadcom.com>
-Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
----
- net/core/dev.c            | 1 +
- net/openvswitch/actions.c | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/net/core/dev.c b/net/core/dev.c
-index 81f9fd0c5830..2f7bd1fe5851 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -3231,6 +3231,7 @@ static u16 skb_tx_hash(const struct net_device *dev,
- 	}
- 
- 	if (skb_rx_queue_recorded(skb)) {
-+		BUILD_BUG_ON_INVALID(qcount == 0);
- 		hash = skb_get_rx_queue(skb);
- 		if (hash >= qoffset)
- 			hash -= qoffset;
-diff --git a/net/openvswitch/actions.c b/net/openvswitch/actions.c
-index 85af0e9e0ac6..9b07e2172c94 100644
---- a/net/openvswitch/actions.c
-+++ b/net/openvswitch/actions.c
-@@ -913,7 +913,7 @@ static void do_output(struct datapath *dp, struct sk_buff *skb, int out_port,
- {
- 	struct vport *vport = ovs_vport_rcu(dp, out_port);
- 
--	if (likely(vport)) {
-+	if (likely(vport && netif_carrier_ok(vport->dev))) {
- 		u16 mru = OVS_CB(skb)->mru;
- 		u32 cutlen = OVS_CB(skb)->cutlen;
- 
--- 
-2.34.1
-
+Thank you,
+Liam
