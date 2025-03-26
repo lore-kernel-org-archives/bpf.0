@@ -1,38 +1,38 @@
-Received: from relay.smtp-ext.broadcom.com (relay.smtp-ext.broadcom.com [192.19.144.205])
+Received: from relay.smtp-ext.broadcom.com (relay.smtp-ext.broadcom.com [192.19.144.207])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B03E1F4611;
-	Wed, 26 Mar 2025 15:58:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.19.144.205
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1812E1F471D;
+	Wed, 26 Mar 2025 15:58:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.19.144.207
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743004725; cv=none; b=AOvKIJ4fj4Mdva/M09dodKoWUelSECF6t7hsyWqLGEK0EQ2p9sKuyviK3NLvd6/ExpVlWSJOr5qto6dqCWgtvpRTriIP9roEa59pEhvdFF2v7Tttym50gE/Z9zed/csLR+Ln0sO6WIJQx+1DG+Rjrl5x/a06CoYuLzDDfKKhGJU=
+	t=1743004732; cv=none; b=XwkDxlvmfzmzBkl7Xu2J8eTVFQMtbKuwpjkUMZgUHMwP1n3+HwXNOaEb6TdDp+dnjxxmb0VbPsfy/zr8tRgzOhULN++55wnYQI2qilnVFaY73/LLj5f79iJN62EoGL73sqM9xzM7e52ClC4gXcBrVtdFowbdgrpgqUs6vBdGr6s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743004725; c=relaxed/simple;
-	bh=MEudjr4gVzSBHE7H0/Txhb+YvNrNq/8FQz6k3HL6/lc=;
+	s=arc-20240116; t=1743004732; c=relaxed/simple;
+	bh=c1H604qLBSLunzYgcAaVP2lIVauhD26jv/xeri4ExA8=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Qq7WItjhnmnSyNo/aNevPc0gjvNJx/wv4SkN1aQnZceRC7zVF8ChfzKwbViVIVhb4Poq/sNhRcKdsTnaFE3DoqBlyT4bkBdzt6+/3ueXj4dJhJ6T1xjOCxiq9FWF+ima6QZ6kLsZfrtK0bobsTDNFrE8PumxdMBHNJORfRXFfJ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=j/5jR4SN; arc=none smtp.client-ip=192.19.144.205
+	 MIME-Version; b=qydFhSfTdO2uKfyKIT4DtNBxVZBGgqKOhcA8AoC13AiI77vc0eBtpirzNbxRG8JDx+5ZhXBG8PhjFefLxnlAnU0UhKY7cuvDeykYgN46oLvIWybYjKVg/OOY4RSZ6qx57G+yCDbq6V3yybEGsI3dw4GOwu+JkVeIH73qtoqpNyw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=qii1ZjiH; arc=none smtp.client-ip=192.19.144.207
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="j/5jR4SN"
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="qii1ZjiH"
 Received: from mail-acc-it-01.broadcom.com (mail-acc-it-01.acc.broadcom.net [10.35.36.83])
-	by relay.smtp-ext.broadcom.com (Postfix) with ESMTP id 5F597C0000EC;
-	Wed, 26 Mar 2025 08:58:42 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 relay.smtp-ext.broadcom.com 5F597C0000EC
+	by relay.smtp-ext.broadcom.com (Postfix) with ESMTP id F326AC003AC4;
+	Wed, 26 Mar 2025 08:58:48 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 relay.smtp-ext.broadcom.com F326AC003AC4
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=broadcom.com;
-	s=dkimrelay; t=1743004722;
-	bh=MEudjr4gVzSBHE7H0/Txhb+YvNrNq/8FQz6k3HL6/lc=;
+	s=dkimrelay; t=1743004729;
+	bh=c1H604qLBSLunzYgcAaVP2lIVauhD26jv/xeri4ExA8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=j/5jR4SNUHxUAAUsJnIFThcFUpBoNZsP5LMiKQvCbzrQ8nf2R4D2htGxubs9MKVTX
-	 ZEE+s5H4mKdAmJtYOjN18Im2tgYxXAGhQX9644UeW7fxnv0N0rV6Ti4CueZriQc7fV
-	 ZnJcBpkTEpupEMoHGNL+AUPq//rWZ+5tR62tdm3E=
+	b=qii1ZjiHgYjr2JWu+agp+Fa2G+eu9RkUdgZa0WklO4ig1OuFTLXVSi4AFkQDxK/Sr
+	 Xej7Ao+vHMjRNgRw6gFMK91Bz/Mz2kQDCluzS6SP12kpiN/2oyG9EPi/ZmAzTGO1Nl
+	 m/RomIQprjWSi0KMxYZLRG8s1xDOVGNkwGNhxm2U=
 Received: from stbirv-lnx-1.igp.broadcom.net (stbirv-lnx-1.igp.broadcom.net [10.67.48.32])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail-acc-it-01.broadcom.com (Postfix) with ESMTPSA id E520E4002F45;
-	Wed, 26 Mar 2025 11:58:09 -0400 (EDT)
+	by mail-acc-it-01.broadcom.com (Postfix) with ESMTPSA id 708FF4002F45;
+	Wed, 26 Mar 2025 11:58:46 -0400 (EDT)
 From: Florian Fainelli <florian.fainelli@broadcom.com>
 To: stable@vger.kernel.org
 Cc: Felix Huettner <felix.huettner@mail.schwarz>,
@@ -56,22 +56,21 @@ Cc: Felix Huettner <felix.huettner@mail.schwarz>,
 	Willem de Bruijn <willemb@google.com>,
 	Paolo Abeni <pabeni@redhat.com>,
 	Breno Leitao <leitao@debian.org>,
-	=?UTF-8?q?Beno=C3=AEt=20Monin?= <benoit.monin@gmx.fr>,
 	Yan Zhai <yan@cloudflare.com>,
-	Joe Stringer <joestringer@nicira.com>,
-	Andy Zhou <azhou@nicira.com>,
-	Justin Pettit <jpettit@nicira.com>,
+	=?UTF-8?q?Beno=C3=AEt=20Monin?= <benoit.monin@gmx.fr>,
 	Thomas Graf <tgraf@suug.ch>,
+	Justin Pettit <jpettit@nicira.com>,
+	Andy Zhou <azhou@nicira.com>,
 	netdev@vger.kernel.org (open list:NETWORKING [GENERAL]),
 	linux-kernel@vger.kernel.org (open list),
 	dev@openvswitch.org (open list:OPENVSWITCH),
 	bpf@vger.kernel.org (open list:BPF (Safe dynamic programs and tools))
-Subject: [PATCH stable 5.4 v3 1/2] net: openvswitch: fix race on port output
-Date: Wed, 26 Mar 2025 08:57:59 -0700
-Message-Id: <20250326155800.4133904-2-florian.fainelli@broadcom.com>
+Subject: [PATCH stable 5.10 v3 1/2] net: openvswitch: fix race on port output
+Date: Wed, 26 Mar 2025 08:58:40 -0700
+Message-Id: <20250326155841.4133945-2-florian.fainelli@broadcom.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250326155800.4133904-1-florian.fainelli@broadcom.com>
-References: <20250326155800.4133904-1-florian.fainelli@broadcom.com>
+In-Reply-To: <20250326155841.4133945-1-florian.fainelli@broadcom.com>
+References: <20250326155841.4133945-1-florian.fainelli@broadcom.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -289,10 +288,10 @@ Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
  2 files changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/net/core/dev.c b/net/core/dev.c
-index b75c9bebd5c6..d9fe65f14af5 100644
+index 81f9fd0c5830..2f7bd1fe5851 100644
 --- a/net/core/dev.c
 +++ b/net/core/dev.c
-@@ -2802,6 +2802,7 @@ static u16 skb_tx_hash(const struct net_device *dev,
+@@ -3231,6 +3231,7 @@ static u16 skb_tx_hash(const struct net_device *dev,
  	}
  
  	if (skb_rx_queue_recorded(skb)) {
@@ -301,10 +300,10 @@ index b75c9bebd5c6..d9fe65f14af5 100644
  		if (hash >= qoffset)
  			hash -= qoffset;
 diff --git a/net/openvswitch/actions.c b/net/openvswitch/actions.c
-index 7cef078304c3..aec20faadfcc 100644
+index 85af0e9e0ac6..9b07e2172c94 100644
 --- a/net/openvswitch/actions.c
 +++ b/net/openvswitch/actions.c
-@@ -920,7 +920,7 @@ static void do_output(struct datapath *dp, struct sk_buff *skb, int out_port,
+@@ -913,7 +913,7 @@ static void do_output(struct datapath *dp, struct sk_buff *skb, int out_port,
  {
  	struct vport *vport = ovs_vport_rcu(dp, out_port);
  
