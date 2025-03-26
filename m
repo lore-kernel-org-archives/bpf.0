@@ -1,102 +1,108 @@
-Received: from relay.smtp-ext.broadcom.com (relay.smtp-ext.broadcom.com [192.19.166.228])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D14CB1E5218;
-	Wed, 26 Mar 2025 16:08:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.19.166.228
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E9AA158D80
+	for <bpf@vger.kernel.org>; Wed, 26 Mar 2025 16:15:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743005284; cv=none; b=T52yBvZIPTfTpdSPithyCTL6gJVoHnoGWMQNzu56Im2G0nxt6Yhz8+r8Q404fbz+bbv4OeAhS7Qw1ZkjFgfKRsmWjmPiz5R69883oaFcDoUblMn8NvXwVBB9bIep+QOGCNk5OleL71d+vLEaF3MoTGOZbnC4Ab+w4RRXX2HnTWY=
+	t=1743005760; cv=none; b=ZTBP048OTnnM3OqaiGk9vBmqfvsNMofoPyEUWdP9zUNy1pDPu28vP6anAvNspKCRnAbhvwtg6Mz+DDXT75rhuQZRfIwO06sjSruyvFmOwSyw25JJN0csgDk+UryW8JhSH0xhCjXEQ5yUsafKkN9TmJkj03A/MCgczGJ3dULyEmw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743005284; c=relaxed/simple;
-	bh=yEOuG5slLf2Bs5mYTsF93aba5cxTjjJSx2dwLNCgnkI=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=sPnhfzEc0ubWFzyKLWforctcaBh3Z4QzdTKNVs62gJgCv4CSBhMRvniR63YHXzgqbkygrlBLfx6MyK4m3YI/bNfkylcwBhs9+oQb5oESjllHmrrLVHuO4od4dkccrbcS9tGyGot0BCNsCEEedGiKneDgX3Eks/auKSZ8RLPcHmI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=O5G6ouAo; arc=none smtp.client-ip=192.19.166.228
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
+	s=arc-20240116; t=1743005760; c=relaxed/simple;
+	bh=gHhkC74FYzw/gXxj96d5znm7fPsEAOAP8f680R7SsXA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Content-Type; b=MgtPg3qzXWzxr5DLTUknixaQJsOnrAYCeKIi6g+KX8WRWebLnXRPjUvmXC43ERuXbSzhm5VITdom5Rf/Bu2i/wDYR2mqn/IFqSo2CCsf+/vMJscNptJDEc00HqmtA0+DV4dPiTZgSNk82f9W+N1TQxk8WJ0JvBlvhJyntDVm+NM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jRsAfEPt; arc=none smtp.client-ip=209.85.221.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="O5G6ouAo"
-Received: from mail-acc-it-01.broadcom.com (mail-acc-it-01.acc.broadcom.net [10.35.36.83])
-	by relay.smtp-ext.broadcom.com (Postfix) with ESMTP id 7BD73C000548;
-	Wed, 26 Mar 2025 08:58:46 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 relay.smtp-ext.broadcom.com 7BD73C000548
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=broadcom.com;
-	s=dkimrelay; t=1743004726;
-	bh=yEOuG5slLf2Bs5mYTsF93aba5cxTjjJSx2dwLNCgnkI=;
-	h=From:To:Cc:Subject:Date:From;
-	b=O5G6ouAorN9KBLqUaElb424mKCJiKtCtC1kKj8MMqqNlohakr+yAzT5Hi+JqPhwzb
-	 RAbx0EbKJRgdAEEmOdI4PHidmqOm3sa3Oujw5d5UMIZ7hamM2j3WSsXWu55gpHF+P3
-	 TsSqqwlReixwilrjEZFWjpW9Z6O0wC1OWsQoAUu0=
-Received: from stbirv-lnx-1.igp.broadcom.net (stbirv-lnx-1.igp.broadcom.net [10.67.48.32])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail-acc-it-01.broadcom.com (Postfix) with ESMTPSA id DCE8B4002F44;
-	Wed, 26 Mar 2025 11:58:43 -0400 (EDT)
-From: Florian Fainelli <florian.fainelli@broadcom.com>
-To: stable@vger.kernel.org
-Cc: Florian Fainelli <florian.fainelli@broadcom.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Pravin B Shelar <pshelar@ovn.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <kafai@fb.com>,
-	Song Liu <songliubraving@fb.com>,
-	Yonghong Song <yhs@fb.com>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Sasha Levin <sashal@kernel.org>,
-	Eric Dumazet <edumazet@google.com>,
-	Willem de Bruijn <willemb@google.com>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Breno Leitao <leitao@debian.org>,
-	Felix Huettner <felix.huettner@mail.schwarz>,
-	Yan Zhai <yan@cloudflare.com>,
-	=?UTF-8?q?Beno=C3=AEt=20Monin?= <benoit.monin@gmx.fr>,
-	Thomas Graf <tgraf@suug.ch>,
-	Justin Pettit <jpettit@nicira.com>,
-	Andy Zhou <azhou@nicira.com>,
-	Simon Horman <simon.horman@corigine.com>,
-	Luca Czesla <luca.czesla@mail.schwarz>,
-	netdev@vger.kernel.org (open list:NETWORKING [GENERAL]),
-	linux-kernel@vger.kernel.org (open list),
-	dev@openvswitch.org (open list:OPENVSWITCH),
-	bpf@vger.kernel.org (open list:BPF (Safe dynamic programs and tools))
-Subject: [PATCH stable 5.10 v3 0/2] openvswitch port output fixes
-Date: Wed, 26 Mar 2025 08:58:39 -0700
-Message-Id: <20250326155841.4133945-1-florian.fainelli@broadcom.com>
-X-Mailer: git-send-email 2.34.1
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jRsAfEPt"
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-39ac9aea656so1836299f8f.3
+        for <bpf@vger.kernel.org>; Wed, 26 Mar 2025 09:15:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1743005757; x=1743610557; darn=vger.kernel.org;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/fF58Ag1wphZzn6pMqlzMhuHlw+JS4kycZnZ4uyMNWo=;
+        b=jRsAfEPtWNh9qkQy3ao2At3GCZ3eXqFVMJQR3/HVtQL34SJ+j8/NVdT/Y3LeByxnrZ
+         lVjYC9ljs9Vw/NygDkyodGzt96VAyVvntureum0DyXg9LKriiERtCG1HzQEPSoUmYkOz
+         0ciMjstKVjZMJUW36BRQms8ylsHu+tCJ9QuA+hB806nwdV8s6TwsO+6DCC2E3+KRBAHd
+         v4XZFIZxBPCgF0xhEjDQcAfuBO/80LeqUBQf14M1ckEbZag9YaFdvWfdqQE3MMkIlWAI
+         AFrmjCHUX8l+S3BSPm/SEt7+ruP3mPuslfJcUDtxJnt8o31S1a5oXN4Fcw2zUpspR4VK
+         g1bw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1743005757; x=1743610557;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/fF58Ag1wphZzn6pMqlzMhuHlw+JS4kycZnZ4uyMNWo=;
+        b=lW0ZHs5TbBoOXLrGP5iRbAulylJOiftS37IFQZAxo8CUzL1audg+ewZfIR9tdaqqUp
+         In4byL2gb4Z0uvF3+pBpshlEp36dWrOYOZm3mlWhdy8kskNaNcGEVvMvyuujmSYIhRFl
+         fdeoO1qj4r1hibfKjfuuA5kdv2OrUo1CGi0XjpfUcs8Zc/tPjvyxEXmBA6bvH41pSJcX
+         O+YjrGzUc4vMLzSuaoeSqr+8oUj4zXJ6Gvq3LwYqR4UAs85FYn90ix+xUq2WNFw9QMYB
+         6FrFkTO/9mxfaln5JIv462AVQOt8/y9U8bENrO8riP+JOJhXc5uc98qWQPJFpuw8QF0i
+         GWXw==
+X-Forwarded-Encrypted: i=1; AJvYcCWNTtJfOs9C/jtY+5LdO1Z4clyuX+8IFMGGXY2tc/rH525wftaKrhCkfi5X2E2LkCGCMyA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YytF7so/TAKtYGgJS2YtY8zvuveW+SBs/g7ZKS9Cdx0Bac68xNs
+	4L72HdQ79eRlFeDLG4NCs8yAqIoa9ZMPjIWuGfB/kcpxvnEDkCGi3L2/0vXyGbKKlc8zT2qeChu
+	/+heIRv5l3dKMIu/nQtH3L3q1MV8=
+X-Gm-Gg: ASbGncu6wZLNce3xitSRHKDNAvY8Rc13R3kdrHTqebHttc/ckqXw/AyFd8NL5t6s6cB
+	LtbSthtBJnE41Y45wFVSJ+O6fYoA9OwnrNKmtRmW+TfSAH97p9XhkZRmlBdXTSlqZ1pOe13AV/D
+	w4LNmLhDDEPJQbsKjDbkEaraOQ
+X-Google-Smtp-Source: AGHT+IER9kfdQW5+Pn9luuFIOejvnMqs+wW91dXCrH3q9YlG6wZRhXKWkpaamHwFIT2O7Q28L6XXmLU51RwOS6vIg3I=
+X-Received: by 2002:a5d:5886:0:b0:391:3406:b4e2 with SMTP id
+ ffacd0b85a97d-3997f940d74mr17043728f8f.49.1743005756652; Wed, 26 Mar 2025
+ 09:15:56 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <CAADnVQ+=x31Rcjh6-qX1C+d2q0LBRCH=1gPqfKOaMXYx_fkQjw@mail.gmail.com>
+In-Reply-To: <CAADnVQ+=x31Rcjh6-qX1C+d2q0LBRCH=1gPqfKOaMXYx_fkQjw@mail.gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Wed, 26 Mar 2025 12:15:44 -0400
+X-Gm-Features: AQ5f1JohkDRRRSCrvZoHTh5TBlQk9mNw7PfwquS3T_Q4qM-QMvtggO1IlqDxCnI
+Message-ID: <CAADnVQKfkGxudNUkcPJgwe3nTZ=xohnRshx9kLZBTmR_E1DFEg@mail.gmail.com>
+Subject: Re: [LSF/MM/BPF TOPIC] Reentrant kmalloc usable from any context
+To: lsf-pc <lsf-pc@lists.linux-foundation.org>, linux-mm <linux-mm@kvack.org>, 
+	bpf <bpf@vger.kernel.org>, Vlastimil Babka <vbabka@suse.cz>, 
+	Sebastian Sewior <bigeasy@linutronix.de>, Michal Hocko <mhocko@suse.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Dan Williams <dan.j.williams@intel.com>, 
+	Hou Tao <houtao1@huawei.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-This patch series contains some missing openvswitch port output fixes
-for the stable 5.10 kernel.
+On Thu, Mar 20, 2025 at 11:32=E2=80=AFPM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> A year ago Vlastimil kicked off a discussion:
+> "What's next for the SLUB allocator"
+> https://lwn.net/Articles/974138/
+>
+> One of the proposed goals was to adopt slub allocator to use cases
+> where bespoke allocators are currently used either due to
+> performance requirements or context restrictions.
+> bpf_mem_alloc, kretprobe's objpool, mempool were mentioned
+> as initial targets. netpoll should probably be on that list too.
+>
+> Performance might be addressed by sheaves
+> while context restrictions are more difficult to solve.
+> bpf, kretprobe, netpool don't know the context where they
+> might be called. Currently bpf, kretprobe handler preallocate.
+> Preallocated pools pin memory to one subsystem make it
+> unavailable to the rest of the kernel.
+> This has to be fixed. mm subsystem needs to own, share,
+> distribute the memory.
+>
+> Agenda for the discussion:
+> - discuss and agree on problem statement
+>   what is being solved, why, requirements of the solution
+> - discuss pros and cons of the existing design that we
+>   made a bunch of progress on
+> - brainstorm next steps
 
-Changes in v3:
-
-- correct SHA reference in the second patch
-
-Changes in v2:
-
-- use BUILD_BUG_ON_INVALID rather than DEBUG_NET_WARN_ON_ONCE which does
-  not exist in Linux 5.10
-
-Felix Huettner (1):
-  net: openvswitch: fix race on port output
-
-Ilya Maximets (1):
-  openvswitch: fix lockup on tx to unregistering netdev with carrier
-
- net/core/dev.c            | 1 +
- net/openvswitch/actions.c | 4 +++-
- 2 files changed, 4 insertions(+), 1 deletion(-)
-
--- 
-2.34.1
-
+Here are the slides from the talk:
+https://github.com/4ast/docs/blob/main/Reentrant%20kmalloc.pdf
