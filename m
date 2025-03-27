@@ -1,89 +1,108 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D9B41624C2;
-	Thu, 27 Mar 2025 20:57:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60D611D515B
+	for <bpf@vger.kernel.org>; Thu, 27 Mar 2025 21:06:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743109023; cv=none; b=BUzsbPonVCSfdM7HU3hucoY3AOI++MvHRpwK6CerwcKn8Ghs4z0YP1JbeBjCQRkKmp71y5iHYo23GvVzK+NQd7eq7jgefJ7dKfGVZas8oOuHfXZ/fMgnVTNtsieHUhWrr8lVK+/O5CPKAvRpcGFe1O9kgxppcLeQkmc8fwxLxlY=
+	t=1743109595; cv=none; b=SqpQ8amRVZ2epV47/cJ72zHcuvad5EFeqr/V1yQOKi0pxiTzXCQOyebm9KEbEkG3hfWPKF1xDbO7NUzQ8v/oSeKeqkqg7OWmp5xcVrLTcUyyVbQ+sjg9nZ/2Z6Str4Wj1yZk+SyMrPnYBckFXvDBC7nUBEmoul74QVES4WpFCQ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743109023; c=relaxed/simple;
-	bh=k965J4r67f9gDf6M03ogXhOMMMJERpqaXsXopGkUyrI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IFnJt6KPjaILho5BkbSAeq8bAihkCKL5tdi+IzHydjgf+Iq9Rd1/0B9a1JOIjpCoPj1lcTa2zZ5ELaEA4Hn5HKRObfYpqK2NKDlK5SCLtLF08HI2bqIZu0gpC95pFNJXCPi3olTdFlx6P0bY2HqvFgrtusl0Tv4daWkZBMc2Udw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IobFMYmC; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1743109595; c=relaxed/simple;
+	bh=LR8O84X19vwUusxXF/OJHU/VeV01+Vst0QbDordKscM=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=JKFUupqfUScPWAnipwsuKce3T2qYDVHbQjBimkiYmfrrKRaaN1SCkYFScLy9JYG0yS3K9+Y2lQjrutZo6JMsEqHdUbC7sfUyOFBsr2gobitD3MpFPhK2Z3Z5844U79UK8bdc7c7MfQgyv/lRH06/MzcGuZGqY95q5i1FteRj/YM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SfcTz3zO; arc=none smtp.client-ip=209.85.216.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IobFMYmC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43E2DC4CEDD;
-	Thu, 27 Mar 2025 20:56:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743109023;
-	bh=k965J4r67f9gDf6M03ogXhOMMMJERpqaXsXopGkUyrI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=IobFMYmCjS6A956MvZWr9OlF1ezNb0xk5tv0RvQp3a8buZqkAwy7PoL6jMs9ZYQFe
-	 El7w1LBGuK7aG3IaVSRYH7QXt+shX4uil8KxhjfEgJJEPhtF5xzZAFcJLcjaSUcnCE
-	 qqXumV7+9j5utajJqflF93JPEFLD5oxVPo9BJIS2GjBkQDlMal4f4wpobPFES1B5iM
-	 ujUVmGMJa20BojdeiZO8WO2jWq91eIeaD2zMzvZNvsLdjUZJ2IRZb33YRMt0eMWXox
-	 SvS/ZeDvuVuAvJGak4rV8ZAHO5+ADFYI3pYWj/3PyF9n5kEPBJJnDG4MgZN+ioSK+u
-	 AdF7ElJfOAoIw==
-Date: Thu, 27 Mar 2025 21:56:57 +0100
-From: Ingo Molnar <mingo@kernel.org>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Eric Dumazet <edumazet@google.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H . Peter Anvin" <hpa@zytor.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	linux-kernel <linux-kernel@vger.kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Masami Hiramatsu <mhiramat@kernel.org>, x86@kernel.org,
-	bpf@vger.kernel.org, Eric Dumazet <eric.dumazet@gmail.com>,
-	Greg Thelen <gthelen@google.com>,
-	Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH] x86/alternatives: remove false sharing in
- poke_int3_handler()
-Message-ID: <Z-W7mRAkMfFyJ6sE@gmail.com>
-References: <Z-B_R737uM31m6_K@gmail.com>
- <CANn89i+fmyJ8p=vBpwBy38yhVMCJv8XjrTkrXSUnSGedboCM_Q@mail.gmail.com>
- <Z-EGvjhkg6llyX24@gmail.com>
- <CANn89iL8o0UZTpomaT1oaMxRTBv1YdaXZGwXQn3H0dDO81UyGA@mail.gmail.com>
- <CANn89iKwPpV7v=EnK2ac5KjHSef64eyVwUST=q=+oFaqTB95sQ@mail.gmail.com>
- <20250324113304.GB14944@noisy.programming.kicks-ass.net>
- <Z-JsJruueRgLQ8st@gmail.com>
- <20250325103047.GH36322@noisy.programming.kicks-ass.net>
- <Z-KS7H6666PZ3eKv@gmail.com>
- <20250325123119.GL36322@noisy.programming.kicks-ass.net>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SfcTz3zO"
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-3011737dda0so1869892a91.1
+        for <bpf@vger.kernel.org>; Thu, 27 Mar 2025 14:06:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1743109594; x=1743714394; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=PuvJ7lfcvzjq39HUXfQVM5oPfpGstYAva51vhqcTrtM=;
+        b=SfcTz3zOKNSDO7BC/7/5+R9HHZ1/tEZQ7/QALPVQHgz/0jF4xO5zBcoAJ6favjnqMO
+         xWl7GOWZQHPx917hMgI/h8FVmy9njumQJclx/LeYQJ4WEeka8GMKFaE61buodpSzoes3
+         oxyYLCcUqMDLU2kZoGePJNAOW/a75yo5fxNNPgMZ5ARmmSC4c9LwJ6Q3WptLcGSJ0uQD
+         Bw72JXHIUsf8qF9rhNBXrp9cWLQ4w1R8BiEofUzElR5s6H+WFHjUtzZ2YQdJTJGvsNP8
+         i4U1I0LiINDTlxoaasDk7J7ghyP0vV+Gnn7F/xJe1ZSAPFfhOwiR14D44wFhyNEjgihJ
+         ndVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1743109594; x=1743714394;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=PuvJ7lfcvzjq39HUXfQVM5oPfpGstYAva51vhqcTrtM=;
+        b=KZX3s301jXtPmtb4uw/IlyDVV2USqqneKMts5dy4u8g/mEyx+Gvddc7hxhd8z/pwBX
+         xIBmRBr3SrwyKnvAVMQYViJLcRUlhOiB7PxBHpXI+9Dm115d8fvKiM2zIhWdBYCHqQWB
+         jg0tp9lP1URuQ185aHRKB5i5nDE5BZ1GOALfmZMrXM/9EBWUfVNJBA/qGIqQaw5KnXCV
+         EQt6CKMoQsyumVV9cODtOyNxyIMhnrPaJtxot/ZdZvxdWiD9QnTUmo2jLD43IvyHH+xB
+         XTR0DFwhYcGliGLbzMe19m0HmrYi0InaD1137qdcejDjTKwunvlHyaLUWm4XBgG8oKSL
+         kKnw==
+X-Forwarded-Encrypted: i=1; AJvYcCUBh3RPwoRenfYTEvwt36v+waBzZ0w+4G7jHJwQ4q+HckVwEaDoEZ55zU6otrJA9Euh4lg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxsQVCcn00EMS5C4ehwgBvql6huppc92MPJlYFc7ddG+O1qypm8
+	wDX0xOuvTbQlnxAwvH9oBNHRxF18gBnfs0T0UDZdkqSoX5OGI8ns
+X-Gm-Gg: ASbGncvUPFuEqewmpoH/Nm1QaANeyDvOkzqFHU5g+a/BwkNgSWRgZjmcGMFdXAq+qFw
+	87CCNVVNDcQzd3eewIE0mZoUAZQQnCcp1wjSwSufLmnn9ZuwhJ0kd0s11VDjU7w8eXNhCw7xafO
+	E1eraT/1MOlc7C3dqu2zRom4dQ557cwauOtWEZpUtVN2O6VPNqYixy52dbDLaaLtuXGrqfP9hN4
+	5WIiXDZmlXneTjdytMGd+S8s8y78RwPsUH7e1EQoKBgfE9BEa/0QA96GDCCGKUWJvfLO0mnsE3T
+	lmkklTk4qtC7t1EswIWS5bGWkOOr5/QX7pqrm+E9
+X-Google-Smtp-Source: AGHT+IF0p3hvI6DIiE8zVW6Samj8C/pLUkZL6nlFZDoO3C1NpdymL5hhSLPI715HnuDShc/AUnKO+w==
+X-Received: by 2002:a17:90b:39cc:b0:2ff:5e4e:864 with SMTP id 98e67ed59e1d1-303a85c8f86mr7925574a91.25.1743109593431;
+        Thu, 27 Mar 2025 14:06:33 -0700 (PDT)
+Received: from [192.168.0.56] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2291eec5cc9sm4598695ad.7.2025.03.27.14.06.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Mar 2025 14:06:33 -0700 (PDT)
+Message-ID: <6a4bdba643dae8f5dd791949d6b76c03d26f194e.camel@gmail.com>
+Subject: Re: [PATCH bpf-next] libbpf: add getters for BTF.ext func and line
+ info
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, bpf@vger.kernel.org, 
+	ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net, kafai@meta.com, 
+	kernel-team@meta.com
+Cc: Mykyta Yatsenko <yatsenko@meta.com>
+Date: Thu, 27 Mar 2025 14:06:28 -0700
+In-Reply-To: <20250326180714.44954-1-mykyta.yatsenko5@gmail.com>
+References: <20250326180714.44954-1-mykyta.yatsenko5@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.54.3 (3.54.3-1.fc41) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250325123119.GL36322@noisy.programming.kicks-ass.net>
 
+On Wed, 2025-03-26 at 18:07 +0000, Mykyta Yatsenko wrote:
 
-* Peter Zijlstra <peterz@infradead.org> wrote:
+[...]
 
-> On Tue, Mar 25, 2025 at 12:26:36PM +0100, Ingo Molnar wrote:
-> 
-> > Yeah, so I do know what #BP is, but what the heck disambiguates the two 
-> > meanings of _bp and why do we have the above jungle of an inconsistent 
-> > namespace? :-)
-> > 
-> > Picking _int3 would neatly solve all of that.
-> 
-> Sure; the most obvious case where BP would make sense, the trap entry
-> point, we already use int3 so yeah, make it int3 throughout.
+> @@ -940,6 +940,14 @@ LIBBPF_API int bpf_program__set_log_level(struct bpf=
+_program *prog, __u32 log_le
+>  LIBBPF_API const char *bpf_program__log_buf(const struct bpf_program *pr=
+og, size_t *log_size);
+>  LIBBPF_API int bpf_program__set_log_buf(struct bpf_program *prog, char *=
+log_buf, size_t log_size);
+> =20
+> +LIBBPF_API void *bpf_program__func_info(struct bpf_program *prog);
 
-Okay - I just sent out a series to do this. Found a few other things to 
-fix/improve along the way:
+I don't like `void *` being returned here, but alternatives are ugly.
+Maybe add a comment listing possible return types?
 
-	https://lore.kernel.org/r/20250327205355.378659-1-mingo@kernel.org
+> +LIBBPF_API __u32 bpf_program__func_info_cnt(struct bpf_program *prog);
+> +LIBBPF_API __u32 bpf_program__func_info_rec_size(struct bpf_program *pro=
+g);
+> +
+> +LIBBPF_API void *bpf_program__line_info(struct bpf_program *prog);
+> +LIBBPF_API __u32 bpf_program__line_info_cnt(struct bpf_program *prog);
+> +LIBBPF_API __u32 bpf_program__line_info_rec_size(struct bpf_program *pro=
+g);
+> +
 
-Thanks,
+[...]
 
-	Ingo
