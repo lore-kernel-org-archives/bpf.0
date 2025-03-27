@@ -1,28 +1,28 @@
 Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFBD5204F7F
-	for <bpf@vger.kernel.org>; Thu, 27 Mar 2025 08:23:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B59AD204F83
+	for <bpf@vger.kernel.org>; Thu, 27 Mar 2025 08:23:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743063786; cv=none; b=WenKj9HEGoJdikBg0lSXB9ctbldM4ak81Ay7IobhvJq9symrqBGiJE46u/KJmyKhQjtinEz+cvvH4MIi57bywGbEOSebsShaNXF1W4H6f35+Xr8t1LAgFbTLJnonp2EaI8pi9MhKqss/BFBqr3GvAiicKyg++wu5bbvzYVwb0BM=
+	t=1743063787; cv=none; b=rbPEzTiEaN02CS/GPH3vPIQ7LmJZTumR2L1NP6IXnBFgdvwUkAeeoq+EKarvf7lKtq0WWJBxIAab47uqKMt5LupvG08SAj3dKuesZbFJAyEuss+gJSKtDGv1Wjaf9grU2pPItkr2XYfgOUZdGKrGDXYktJcXPju5qVdq+Y2wftA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743063786; c=relaxed/simple;
-	bh=6NmuHmprQGQyMyd6DhwXoJJEJPrriVBTKeim9p4R4E0=;
+	s=arc-20240116; t=1743063787; c=relaxed/simple;
+	bh=QJJDTnwYgISQUbuzvnXJLr4lJHAYz6U+kC/Yj9Hi6E8=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=eOg3sM7t9XpKsovgv6R6CiUwTx1Fsb+p07Kggjy3PXAHcZDmMqmOqmRUAJix/32Tex5rPWQzhOw8MHPC6ewGhZrgkeJ6a+aAEtsWA+wmhhHwQ8TPO4fj74UVMeBLC+fM5XddXJFnOcH0iDfKF7XEplbsH3a9Ji7dXcLuPicq5NQ=
+	 MIME-Version; b=VA/zdYJSstsdrJKjPJDhlm4w/HjA9zd20Ym2Q7wC1R8fJE3iLwlijTrUcVn838NLZ9KQCAqC1Lw/r1SIYNIu2yxxzAON2p0n2fjg5NqT6F/AIh+a6oc5LAhw2RYinalsXW5uZ+dY8k5QzexQnYqYnlF2WhleLyL8FfRDihDv4HE=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
 Received: from mail.maildlp.com (unknown [172.19.93.142])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4ZNc8m5DQTz4f3jXm
-	for <bpf@vger.kernel.org>; Thu, 27 Mar 2025 16:22:32 +0800 (CST)
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4ZNc8p3Bz9z4f3jXm
+	for <bpf@vger.kernel.org>; Thu, 27 Mar 2025 16:22:34 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id AD7EE1A0AD5
-	for <bpf@vger.kernel.org>; Thu, 27 Mar 2025 16:22:55 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id 6877B1A0EC9
+	for <bpf@vger.kernel.org>; Thu, 27 Mar 2025 16:22:57 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.124.27])
-	by APP4 (Coremail) with SMTP id gCh0CgAXe1_XCuVnluzSHg--.7420S12;
-	Thu, 27 Mar 2025 16:22:55 +0800 (CST)
+	by APP4 (Coremail) with SMTP id gCh0CgAXe1_XCuVnluzSHg--.7420S15;
+	Thu, 27 Mar 2025 16:22:57 +0800 (CST)
 From: Hou Tao <houtao@huaweicloud.com>
 To: bpf@vger.kernel.org
 Cc: Martin KaFai Lau <martin.lau@linux.dev>,
@@ -38,9 +38,9 @@ Cc: Martin KaFai Lau <martin.lau@linux.dev>,
 	Jiri Olsa <jolsa@kernel.org>,
 	John Fastabend <john.fastabend@gmail.com>,
 	houtao1@huawei.com
-Subject: [PATCH bpf-next v3 08/16] bpf: Handle bpf_dynptr in bpf syscall when it is used as output
-Date: Thu, 27 Mar 2025 16:34:47 +0800
-Message-Id: <20250327083455.848708-9-houtao@huaweicloud.com>
+Subject: [PATCH bpf-next v3 11/16] bpf: Support get_next_key operation for dynptr key in hash map
+Date: Thu, 27 Mar 2025 16:34:50 +0800
+Message-Id: <20250327083455.848708-12-houtao@huaweicloud.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20250327083455.848708-1-houtao@huaweicloud.com>
 References: <20250327083455.848708-1-houtao@huaweicloud.com>
@@ -51,10 +51,10 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgAXe1_XCuVnluzSHg--.7420S12
-X-Coremail-Antispam: 1UD129KBjvJXoW3WF1fuF1DAr4fAF1rJw1fWFg_yoW7KF15pF
-	48G3sxZr4Fqr43JFZ8X3Wjv3yrtrn7Ww1UGas3Ka4rWF9xWr90vr1xKFW09ryYvFyDCr12
-	vws2qr98ZrWxJrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID:gCh0CgAXe1_XCuVnluzSHg--.7420S15
+X-Coremail-Antispam: 1UD129KBjvJXoWxXF1UXryxGw4DJr4kXFW8Zwb_yoWrKF1fpF
+	18Ga97Xw40kF4DtF45Wan2vw43Kr1Igw109FykGas7KFnFgr97Zw18tFW0kryYyFZrJr4f
+	tr4jqa45uws5JrUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
 	9KBjDU0xBIdaVrnRJUUUPvb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
 	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
 	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
@@ -65,191 +65,156 @@ X-Coremail-Antispam: 1UD129KBjvJXoW3WF1fuF1DAr4fAF1rJw1fWFg_yoW7KF15pF
 	z7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2
 	AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAq
 	x4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r
-	43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF
+	43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Gr0_Xr1lIxAIcVC0I7IYx2IY6xkF
 	7I0E14v26r4UJVWxJr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14
-	v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuY
+	v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuY
 	vjxUF9NVUUUUU
 X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
 
 From: Hou Tao <houtao1@huawei.com>
 
-For get_next_key operation, unext_key is used as an output argument.
-When there is dynptr in map key, unext_key will also be used as an input
-argument, because the userspace application needs to pre-allocate a
-buffer for each variable-length part in the map key and save the
-length and the address of these buffers in bpf_dynptr objects.
-
-To support get_next_key op for map with dynptr key, map_get_next_key()
-first calls bpf_copy_from_dynptr_ukey() to construct a map key in which
-each bpf_dynptr_kern object has the same size as the corresponding
-bpf_dynptr object. It then calls ->map_get_next_key() to get the
-next_key, and finally calls bpf_copy_to_dynptr_ukey() to copy both the
-non-dynptr part and dynptr part in the map key to unext_key.
+It firstly passed the key_record to htab_map_hash() and
+lookup_nulls_eleme_raw() to find the target key, then it uses
+htab_copy_dynptr_key() helper to copy from the target key to the next
+key used for output.
 
 Signed-off-by: Hou Tao <houtao1@huawei.com>
 ---
- kernel/bpf/syscall.c | 89 ++++++++++++++++++++++++++++++++++++--------
- 1 file changed, 74 insertions(+), 15 deletions(-)
+ kernel/bpf/hashtab.c | 56 ++++++++++++++++++++++++++++++--------------
+ 1 file changed, 38 insertions(+), 18 deletions(-)
 
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index d6dbcea3c30cb..40c3d85b06bae 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -1664,7 +1664,7 @@ int __weak bpf_stackmap_copy(struct bpf_map *map, void *key, void *value)
- 	return -ENOTSUPP;
+diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+index 028542c2b4237..2c3017086e4ab 100644
+--- a/kernel/bpf/hashtab.c
++++ b/kernel/bpf/hashtab.c
+@@ -923,7 +923,8 @@ static bool htab_lru_map_delete_node(void *arg, struct bpf_lru_node *node)
+ 	return l == tgt_l;
  }
  
--static void *bpf_copy_from_dynptr_ukey(const struct bpf_map *map, bpfptr_t ukey)
-+static void *bpf_copy_from_dynptr_ukey(const struct bpf_map *map, bpfptr_t ukey, bool copy_data)
+-static int htab_copy_dynptr_key(struct bpf_htab *htab, void *dst_key, const void *key, u32 key_size)
++static int htab_copy_dynptr_key(struct bpf_htab *htab, void *dst_key, const void *key, u32 key_size,
++				bool copy_in)
  {
- 	const struct btf_record *record;
- 	const struct btf_field *field;
-@@ -1672,7 +1672,6 @@ static void *bpf_copy_from_dynptr_ukey(const struct bpf_map *map, bpfptr_t ukey)
- 	void *key, *new_key, *kdata;
- 	unsigned int key_size, size;
- 	struct bpf_dynptr *uptr;
--	bpfptr_t udata;
- 	unsigned int i;
- 	int err;
+ 	const struct btf_record *rec = htab->map.key_record;
+ 	struct bpf_dynptr_kern *dst_kptr;
+@@ -948,22 +949,32 @@ static int htab_copy_dynptr_key(struct bpf_htab *htab, void *dst_key, const void
  
-@@ -1687,6 +1686,7 @@ static void *bpf_copy_from_dynptr_ukey(const struct bpf_map *map, bpfptr_t ukey)
- 		field = &record->fields[i];
+ 		/* Doesn't support nullified dynptr in map key */
+ 		kptr = key + field->offset;
+-		if (!kptr->data) {
++		if (copy_in && !kptr->data) {
+ 			err = -EINVAL;
+ 			goto out;
+ 		}
+ 		len = __bpf_dynptr_size(kptr);
+ 		data = __bpf_dynptr_data(kptr, len);
+ 
+-		dst_data = bpf_mem_alloc(&htab->dynptr_ma, len);
+-		if (!dst_data) {
+-			err = -ENOMEM;
+-			goto out;
+-		}
++		dst_kptr = dst_key + field->offset;
++		if (copy_in) {
++			dst_data = bpf_mem_alloc(&htab->dynptr_ma, len);
++			if (!dst_data) {
++				err = -ENOMEM;
++				goto out;
++			}
++			bpf_dynptr_init(dst_kptr, dst_data, BPF_DYNPTR_TYPE_LOCAL, 0, len);
++		} else {
++			dst_data = __bpf_dynptr_data_rw(dst_kptr, len);
++			if (!dst_data) {
++				err = -ENOSPC;
++				goto out;
++			}
+ 
++			if (__bpf_dynptr_size(dst_kptr) > len)
++				bpf_dynptr_set_size(dst_kptr, len);
++		}
+ 		memcpy(dst_data, data, len);
+-		dst_kptr = dst_key + field->offset;
+-		bpf_dynptr_init(dst_kptr, dst_data, BPF_DYNPTR_TYPE_LOCAL, 0, len);
+ 
+ 		offset = field->offset + field->size;
+ 	}
+@@ -974,7 +985,7 @@ static int htab_copy_dynptr_key(struct bpf_htab *htab, void *dst_key, const void
+ 	return 0;
+ 
+ out:
+-	while (i-- > 0) {
++	while (copy_in && i-- > 0) {
+ 		field = &rec->fields[i];
  		if (field->type != BPF_DYNPTR)
  			continue;
-+
- 		uptr = key + field->offset;
- 		if (!uptr->size || uptr->reserved) {
- 			err = -EINVAL;
-@@ -1717,10 +1717,14 @@ static void *bpf_copy_from_dynptr_ukey(const struct bpf_map *map, bpfptr_t ukey)
- 
- 		uptr = key + field->offset;
- 		size = uptr->size;
--		udata = make_bpfptr((u64)(uintptr_t)uptr->data, bpfptr_is_kernel(ukey));
--		if (copy_from_bpfptr(kdata, udata, size)) {
--			err = -EFAULT;
--			goto free_key;
-+		if (copy_data) {
-+			bpfptr_t udata = make_bpfptr((u64)(uintptr_t)uptr->data,
-+						     bpfptr_is_kernel(ukey));
-+
-+			if (copy_from_bpfptr(kdata, udata, size)) {
-+				err = -EFAULT;
-+				goto free_key;
-+			}
- 		}
- 		kptr = (struct bpf_dynptr_kern *)uptr;
- 		bpf_dynptr_init(kptr, kdata, BPF_DYNPTR_TYPE_LOCAL, 0, size);
-@@ -1737,7 +1741,7 @@ static void *bpf_copy_from_dynptr_ukey(const struct bpf_map *map, bpfptr_t ukey)
- static void *__bpf_copy_key(const struct bpf_map *map, void __user *ukey)
- {
- 	if (bpf_map_has_dynptr_key(map))
--		return bpf_copy_from_dynptr_ukey(map, USER_BPFPTR(ukey));
-+		return bpf_copy_from_dynptr_ukey(map, USER_BPFPTR(ukey), true);
- 
- 	if (map->key_size)
- 		return vmemdup_user(ukey, map->key_size);
-@@ -1751,7 +1755,7 @@ static void *__bpf_copy_key(const struct bpf_map *map, void __user *ukey)
- static void *___bpf_copy_key(const struct bpf_map *map, bpfptr_t ukey)
- {
- 	if (bpf_map_has_dynptr_key(map))
--		return bpf_copy_from_dynptr_ukey(map, ukey);
-+		return bpf_copy_from_dynptr_ukey(map, ukey, true);
- 
- 	if (map->key_size)
- 		return kvmemdup_bpfptr(ukey, map->key_size);
-@@ -1762,6 +1766,51 @@ static void *___bpf_copy_key(const struct bpf_map *map, bpfptr_t ukey)
- 	return NULL;
+@@ -985,10 +996,22 @@ static int htab_copy_dynptr_key(struct bpf_htab *htab, void *dst_key, const void
+ 	return err;
  }
  
-+static int bpf_copy_to_dynptr_ukey(const struct bpf_map *map,
-+				   void __user *ukey, void *key)
++static inline int htab_copy_next_key(struct bpf_htab *htab, void *next_key, const void *key,
++				     u32 key_size)
 +{
-+	struct bpf_dynptr __user *uptr;
-+	struct bpf_dynptr_kern *kptr;
-+	struct btf_record *record;
-+	unsigned int i, offset;
-+
-+	offset = 0;
-+	record = map->key_record;
-+	for (i = 0; i < record->cnt; i++) {
-+		struct btf_field *field;
-+		unsigned int size;
-+		void *udata;
-+
-+		field = &record->fields[i];
-+		if (field->type != BPF_DYNPTR)
-+			continue;
-+
-+		/* Any no-dynptr part before the dynptr ? */
-+		if (offset < field->offset &&
-+		    copy_to_user(ukey + offset, key + offset, field->offset - offset))
-+			return -EFAULT;
-+
-+		/* dynptr part */
-+		uptr = ukey + field->offset;
-+		if (copy_from_user(&udata, &uptr->data, sizeof(udata)))
-+			return -EFAULT;
-+
-+		kptr = key + field->offset;
-+		size = __bpf_dynptr_size(kptr);
-+		if (copy_to_user((void __user *)udata, __bpf_dynptr_data(kptr, size), size) ||
-+		    put_user(size, &uptr->size) || put_user(0, &uptr->reserved))
-+			return -EFAULT;
-+
-+		offset = field->offset + field->size;
++	if (!bpf_map_has_dynptr_key(&htab->map)) {
++		memcpy(next_key, key, key_size);
++		return 0;
 +	}
 +
-+	if (offset < map->key_size &&
-+	    copy_to_user(ukey + offset, key + offset, map->key_size - offset))
-+		return -EFAULT;
-+
-+	return 0;
++	return htab_copy_dynptr_key(htab, next_key, key, key_size, false);
 +}
 +
- /* last field in 'union bpf_attr' used by this command */
- #define BPF_MAP_LOOKUP_ELEM_LAST_FIELD flags
+ /* Called from syscall */
+ static int htab_map_get_next_key(struct bpf_map *map, void *key, void *next_key)
+ {
+ 	struct bpf_htab *htab = container_of(map, struct bpf_htab, map);
++	const struct btf_record *key_record = map->key_record;
+ 	struct hlist_nulls_head *head;
+ 	struct htab_elem *l, *next_l;
+ 	u32 hash, key_size;
+@@ -1001,13 +1024,12 @@ static int htab_map_get_next_key(struct bpf_map *map, void *key, void *next_key)
+ 	if (!key)
+ 		goto find_first_elem;
  
-@@ -1964,10 +2013,19 @@ static int map_get_next_key(union bpf_attr *attr)
- 		key = NULL;
+-	hash = htab_map_hash(key, key_size, htab->hashrnd, NULL);
++	hash = htab_map_hash(key, key_size, htab->hashrnd, key_record);
+ 
+ 	head = select_bucket(htab, hash);
+ 
+ 	/* lookup the key */
+-	l = lookup_nulls_elem_raw(head, hash, key, key_size, htab->n_buckets, NULL);
+-
++	l = lookup_nulls_elem_raw(head, hash, key, key_size, htab->n_buckets, key_record);
+ 	if (!l)
+ 		goto find_first_elem;
+ 
+@@ -1017,8 +1039,7 @@ static int htab_map_get_next_key(struct bpf_map *map, void *key, void *next_key)
+ 
+ 	if (next_l) {
+ 		/* if next elem in this hash list is non-zero, just return it */
+-		memcpy(next_key, next_l->key, key_size);
+-		return 0;
++		return htab_copy_next_key(htab, next_key, next_l->key, key_size);
  	}
  
--	err = -ENOMEM;
--	next_key = kvmalloc(map->key_size, GFP_USER);
--	if (!next_key)
-+	if (bpf_map_has_dynptr_key(map))
-+		next_key = bpf_copy_from_dynptr_ukey(map, USER_BPFPTR(unext_key), false);
-+	else
-+		next_key = kvmalloc(map->key_size, GFP_USER);
-+	if (IS_ERR_OR_NULL(next_key)) {
-+		if (!next_key) {
-+			err = -ENOMEM;
-+		} else {
-+			err = PTR_ERR(next_key);
-+			next_key = NULL;
-+		}
- 		goto free_key;
-+	}
+ 	/* no more elements in this hash list, go to the next bucket */
+@@ -1035,8 +1056,7 @@ static int htab_map_get_next_key(struct bpf_map *map, void *key, void *next_key)
+ 					  struct htab_elem, hash_node);
+ 		if (next_l) {
+ 			/* if it's not empty, just return it */
+-			memcpy(next_key, next_l->key, key_size);
+-			return 0;
++			return htab_copy_next_key(htab, next_key, next_l->key, key_size);
+ 		}
+ 	}
  
- 	if (bpf_map_is_offloaded(map)) {
- 		err = bpf_map_offload_get_next_key(map, key, next_key);
-@@ -1981,12 +2039,13 @@ static int map_get_next_key(union bpf_attr *attr)
- 	if (err)
- 		goto free_next_key;
+@@ -1216,7 +1236,7 @@ static struct htab_elem *alloc_htab_elem(struct bpf_htab *htab, void *key,
+ 	if (bpf_map_has_dynptr_key(&htab->map)) {
+ 		int copy_err;
  
--	err = -EFAULT;
--	if (copy_to_user(unext_key, next_key, map->key_size) != 0)
-+	if (bpf_map_has_dynptr_key(map))
-+		err = bpf_copy_to_dynptr_ukey(map, unext_key, next_key);
-+	else
-+		err = copy_to_user(unext_key, next_key, map->key_size) ? -EFAULT : 0;
-+	if (err)
- 		goto free_next_key;
- 
--	err = 0;
--
- free_next_key:
- 	kvfree(next_key);
- free_key:
+-		copy_err = htab_copy_dynptr_key(htab, l_new->key, key, key_size);
++		copy_err = htab_copy_dynptr_key(htab, l_new->key, key, key_size, true);
+ 		if (copy_err) {
+ 			bpf_mem_cache_free(&htab->ma, l_new);
+ 			l_new = ERR_PTR(copy_err);
 -- 
 2.29.2
 
