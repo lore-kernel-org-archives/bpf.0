@@ -1,125 +1,123 @@
-Received: from fllvem-ot03.ext.ti.com (fllvem-ot03.ext.ti.com [198.47.19.245])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8ED121018A;
-	Fri, 28 Mar 2025 10:25:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.245
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0AFA213221
+	for <bpf@vger.kernel.org>; Fri, 28 Mar 2025 11:20:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743157507; cv=none; b=eJgC3DUmd/sk/Z2Aa14TDLbaEnAPhSbnJEnS367liqPMBLI97H/22Qne0Lxuugn6C4MAOCgZPjegnKDneg5Az7oU0VjKKOBPlJH/E2qJuzdTauC+vWJMz8mujDVyCUf0UOXfbQBO4RDWc1xMAlgeM8dSvVsajVtiieBXBAuCOjs=
+	t=1743160825; cv=none; b=ir2bIxXPeuoYgtRYPW8G23oJ6sNGzncebDtjg5XCX00aO7ChE+cQEQ+/IOqYVRQkVOpdzcFwit21gndExGQCbrRVcFKqEymwXR9aXYgHEwfdSj3b6WrnOYCD6tY6sqtdAi2QEiUrSKgBjcr3V20qm3kBnpoIxwS2bC3pORaFxOQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743157507; c=relaxed/simple;
-	bh=eBxOFKShgRogUBGzNBkigdXiTEF2/l+d7oANavRdgRE=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=bN9gnqifL+dG4Cu0nBdq+KBsDI7r/Mc2EBBWmPC2UqBWmfl6xPngcvs2RWDuyf7hTPxhFiNewQsLNhfOYrBjopPOphgtTAoebJYbc2e2SDaVzarjpToekFT+X42oAABcSPrvRoGpBPF5HSsY7yRZ0xHC1ef4o1Ip7yFjdXQueHI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=CTqGd2zy; arc=none smtp.client-ip=198.47.19.245
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+	s=arc-20240116; t=1743160825; c=relaxed/simple;
+	bh=AGQAVNzeZWIutjsf8vmQB6eAcv49DEkuAYtLpgz/A8c=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=AmYX3yfCpuQXucaNFHXMo7znP09KgM1k6HsWC5SN1EBg5ciPJjJ0Ag/ANynAiCPcnxNlsHdQHsReMmVVKyGitK37uPQ/f/SKlDyARJwWvm+169yo4CJ14FIo5AgHjTwkIH0LgYaFeASjD+Qj3BI0zO7oUVUPLcKNehNRGJG1cEg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=NioVTezr; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="CTqGd2zy"
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-	by fllvem-ot03.ext.ti.com (8.15.2/8.15.2) with ESMTPS id 52SAOE3g2096882
-	(version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-	Fri, 28 Mar 2025 05:24:14 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1743157454;
-	bh=/2fyyslEH42du+dba92RsnS5u2wD2cNErCJYqvVHUdY=;
-	h=From:To:CC:Subject:Date:In-Reply-To:References;
-	b=CTqGd2zy5ZqBynCWQyzVJo1o/DmKcCtjbnX3UT7Qz6vX3aqUY+Mk9eNc6IOxo/JD4
-	 ZWm0GpkBv65zGg8+mylN/PuSxope1AoQsBreMyr9X5YogCzdPtuhMgLMF9MVOLWKOC
-	 ywva6nKg62zgYGMyTARjUO8BwBYXpQWjt7HYdVM0=
-Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
-	by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTP id 52SAOESF079362;
-	Fri, 28 Mar 2025 05:24:14 -0500
-Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Fri, 28
- Mar 2025 05:24:14 -0500
-Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Fri, 28 Mar 2025 05:24:13 -0500
-Received: from fllv0122.itg.ti.com (fllv0122.itg.ti.com [10.247.120.72])
-	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 52SAODhZ101879;
-	Fri, 28 Mar 2025 05:24:13 -0500
-Received: from localhost (meghana-pc.dhcp.ti.com [10.24.69.13] (may be forged))
-	by fllv0122.itg.ti.com (8.14.7/8.14.7) with ESMTP id 52SAOCgn024937;
-	Fri, 28 Mar 2025 05:24:13 -0500
-From: Meghana Malladi <m-malladi@ti.com>
-To: <dan.carpenter@linaro.org>, <pabeni@redhat.com>, <kuba@kernel.org>,
-        <edumazet@google.com>, <davem@davemloft.net>, <andrew+netdev@lunn.ch>
-CC: <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <namcao@linutronix.de>, <javier.carrasco.cruz@gmail.com>,
-        <diogo.ivo@siemens.com>, <horms@kernel.org>,
-        <jacob.e.keller@intel.com>, <m-malladi@ti.com>,
-        <john.fastabend@gmail.com>, <hawk@kernel.org>, <daniel@iogearbox.net>,
-        <ast@kernel.org>, <srk@ti.com>, Vignesh Raghavendra
-	<vigneshr@ti.com>,
-        Roger Quadros <rogerq@kernel.org>, <danishanwar@ti.com>
-Subject: [PATCH net v3 2/3] net: ti: icssg-prueth: Fix possible NULL pointer dereference inside emac_xmit_xdp_frame()
-Date: Fri, 28 Mar 2025 15:54:02 +0530
-Message-ID: <20250328102403.2626974-3-m-malladi@ti.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250328102403.2626974-1-m-malladi@ti.com>
-References: <20250328102403.2626974-1-m-malladi@ti.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NioVTezr"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1743160822;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=xADjDk9zc1bw1YBgWMpS4QPMZR6DTQ8CJRDpLqIGwyc=;
+	b=NioVTezrX2nTWCgSlE2JjGpjk6O1Fo4Y/+dlZWqXQOHWqGABQD+WpYiz79aNPsBl211EXW
+	fnp+V3JRI1S61hihg8Y3LdMiDVkoZyumfw/TxwG0r//JQDzWWLUghkDxLL6c1hZBnOIVHF
+	aCg/Mg1b9b9E8v8bFiEhW6XEPeBw9LM=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-355-Zsu-eqOHMDimhbLtm9WlpA-1; Fri, 28 Mar 2025 07:20:21 -0400
+X-MC-Unique: Zsu-eqOHMDimhbLtm9WlpA-1
+X-Mimecast-MFC-AGG-ID: Zsu-eqOHMDimhbLtm9WlpA_1743160820
+Received: by mail-ed1-f69.google.com with SMTP id 4fb4d7f45d1cf-5e6136633b1so1824565a12.0
+        for <bpf@vger.kernel.org>; Fri, 28 Mar 2025 04:20:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1743160820; x=1743765620;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xADjDk9zc1bw1YBgWMpS4QPMZR6DTQ8CJRDpLqIGwyc=;
+        b=qk2ehJEBwdBZ4CiY4x+HUZvhn5ktCTR1LaGvZa/AwmJ24+vKvfobrIjlq+nTgSgF1Y
+         xey2b9cWB03wYdL1jf6Kf/mYTZ0m1GknvFOzfq4sOuYen0AqTe9C0NYek76VuvR8VT/V
+         Szo+0F+gCIcPadNq1f5SKQZZuX76M8njCBFC8dTsxwYQo2hsq08lTHDkk4qxCH6BFuxP
+         jxxdo3TDoCTeKtEC3J1FIMtBjyP3zoDy9R1CoZtBManAN1XDZCep+YzhNvmOTfmgreOf
+         EZcIU4ZcESeXd/ElCzb+Yz142dbtvDPQRc2US6LOXbwxv9VhE1H6uuCCEGOJG1Wql5zV
+         Aw2A==
+X-Forwarded-Encrypted: i=1; AJvYcCVCZup1lDLXAPlLS0LECdbzG/Zyf9s6vjABC1BxTZHzvizkAkcptWWQzOsgtjW2pLlpdoI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxqNJo2EogGa1DhUdHIVATWQCHg0WCxsuCtZXwlB9XWM3dsCabl
+	TOgfSWpXzfiwKYTnYkI0PJVa361DK+mK9fg6SmJp+wp9aX+5wpAxod+Ow/WN6gQlTKiCFzqwLDP
+	69RA5huKn1FkQlRyPy83B6o+sMCgfFXJSCyUBCw4lmlxbw3gVSg==
+X-Gm-Gg: ASbGnctuN8jKXiLUC2Jl2BHMd9YjLmOBFTBWOLV+O9gKlqBO1DCn1F0y/aPPvP50vHQ
+	DHe+K2sv07IMeLjBnzGzw9cujW481WOUSDakVyHGlwbjOUtkuuQ0E+wGGXlpDo2wvXxqfFhhCuD
+	bmCstvOtdQer95zB/H/trsY0KkE0yZeHJQs6gUC6DAttS4ihxq81IVWds5zvZOaQlrqGRxBEE4h
+	wXgTdshFrRXNYqiIXX/avrp+WmUEGul6QBKoPpgYKGbYZwr5rfelJJqs83WRxdk9QqqZAvZx1Vl
+	Xt/7ks1DPVT+qzdj5opk+bcsvIUehGbK7n4cnsuS
+X-Received: by 2002:a05:6402:1ed4:b0:5ed:837:e3db with SMTP id 4fb4d7f45d1cf-5ed8f2099b0mr5968667a12.32.1743160820367;
+        Fri, 28 Mar 2025 04:20:20 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEZK5Nv8BYjsY2nT5mHNKK8N9+Tgsi5w7rURbNEpTt3wAIOPFbmvEnvl96t0hGLvCjO+tk/7A==
+X-Received: by 2002:a05:6402:1ed4:b0:5ed:837:e3db with SMTP id 4fb4d7f45d1cf-5ed8f2099b0mr5968629a12.32.1743160819905;
+        Fri, 28 Mar 2025 04:20:19 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5edc16d3629sm1220781a12.23.2025.03.28.04.20.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Mar 2025 04:20:18 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+	id 4DF8C18FCDB5; Fri, 28 Mar 2025 12:20:17 +0100 (CET)
+From: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: "David S. Miller" <davem@davemloft.net>, Jesper Dangaard Brouer
+ <hawk@kernel.org>, Saeed Mahameed <saeedm@nvidia.com>, Leon Romanovsky
+ <leon@kernel.org>, Tariq Toukan <tariqt@nvidia.com>, Andrew Lunn
+ <andrew+netdev@lunn.ch>, Eric Dumazet <edumazet@google.com>, Paolo Abeni
+ <pabeni@redhat.com>, Ilias Apalodimas <ilias.apalodimas@linaro.org>, Simon
+ Horman <horms@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, Mina
+ Almasry <almasrymina@google.com>, Yonglong Liu <liuyonglong@huawei.com>,
+ Yunsheng Lin <linyunsheng@huawei.com>, Pavel Begunkov
+ <asml.silence@gmail.com>, Matthew Wilcox <willy@infradead.org>,
+ netdev@vger.kernel.org, bpf@vger.kernel.org, linux-rdma@vger.kernel.org,
+ linux-mm@kvack.org, Qiuling Ren <qren@redhat.com>, Yuying Ma
+ <yuma@redhat.com>
+Subject: Re: [PATCH net-next v4 0/3] Fix late DMA unmap crash for page pool
+In-Reply-To: <20250327124803.41feffed@kernel.org>
+References: <20250327-page-pool-track-dma-v4-0-b380dc6706d0@redhat.com>
+ <20250327124803.41feffed@kernel.org>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date: Fri, 28 Mar 2025 12:20:17 +0100
+Message-ID: <87bjtlpfke.fsf@toke.dk>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-There is an error check inside emac_xmit_xdp_frame() function which
-is called when the driver wants to transmit XDP frame, to check if
-the allocated tx descriptor is NULL, if true to exit and return
-ICSSG_XDP_CONSUMED implying failure in transmission.
+Jakub Kicinski <kuba@kernel.org> writes:
 
-In this case trying to free a descriptor which is NULL will result
-in kernel crash due to NULL pointer dereference. Fix this error handling
-and increase netdev tx_dropped stats in the caller of this function
-if the function returns ICSSG_XDP_CONSUMED.
+> On Thu, 27 Mar 2025 11:44:10 +0100 Toke H=C3=B8iland-J=C3=B8rgensen wrote:
+>> This series fixes the late dma_unmap crash for page pool first reported
+>> by Yonglong Liu in [0]. It is an alternative approach to the one
+>> submitted by Yunsheng Lin, most recently in [1]. The first two commits
+>> are small refactors of the page pool code, in preparation of the main
+>> change in patch 3. See the commit message of patch 3 for the details.
+>
+> We see a crash and an UAF on:
+>
+> [   18.574787] RIP: 0010:page_pool_put_unrefed_netmem (net/core/page_pool=
+.c:465 net/core/page_pool.c:808 net/core/page_pool.c:866)=20
+> [   18.575880] napi_pp_put_page (net/core/skbuff.c:998)=20
+> [   18.575912] skb_release_data (./include/linux/skbuff_ref.h:40 ./includ=
+e/linux/skbuff_ref.h:56 net/core/skbuff.c:1079)=20
+> [   18.575944] consume_skb (net/core/skbuff.c:1165 net/core/skbuff.c:1396=
+ net/core/skbuff.c:1390)=20
+>
+> You should be able to repro with ping test over netdevsim
 
-Fixes: 62aa3246f462 ("net: ti: icssg-prueth: Add XDP support")
-Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
-Closes: https://lore.kernel.org/all/70d8dd76-0c76-42fc-8611-9884937c82f5@stanley.mountain/
-Signed-off-by: Meghana Malladi <m-malladi@ti.com>
-Reviewed-by: Simon Horman <horms@kernel.org>
----
+Alright, I'll take a look, thanks for the pointer.
 
-Changes from v2(v3-v2):
-- Add Reported-by tag and link to the bug reported by Dan Carpenter <dan.carpenter@linaro.org>
-
- drivers/net/ethernet/ti/icssg/icssg_common.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/net/ethernet/ti/icssg/icssg_common.c b/drivers/net/ethernet/ti/icssg/icssg_common.c
-index 3c0ea9044e18..15c092a923d7 100644
---- a/drivers/net/ethernet/ti/icssg/icssg_common.c
-+++ b/drivers/net/ethernet/ti/icssg/icssg_common.c
-@@ -583,7 +583,7 @@ u32 emac_xmit_xdp_frame(struct prueth_emac *emac,
- 	first_desc = k3_cppi_desc_pool_alloc(tx_chn->desc_pool);
- 	if (!first_desc) {
- 		netdev_dbg(ndev, "xdp tx: failed to allocate descriptor\n");
--		goto drop_free_descs;	/* drop */
-+		return ICSSG_XDP_CONSUMED;	/* drop */
- 	}
- 
- 	if (page) { /* already DMA mapped by page_pool */
-@@ -671,8 +671,10 @@ static u32 emac_run_xdp(struct prueth_emac *emac, struct xdp_buff *xdp,
- 
- 		q_idx = smp_processor_id() % emac->tx_ch_num;
- 		result = emac_xmit_xdp_frame(emac, xdpf, page, q_idx);
--		if (result == ICSSG_XDP_CONSUMED)
-+		if (result == ICSSG_XDP_CONSUMED) {
-+			ndev->stats.tx_dropped++;
- 			goto drop;
-+		}
- 
- 		dev_sw_netstats_rx_add(ndev, xdpf->len);
- 		return result;
--- 
-2.43.0
+-Toke
 
