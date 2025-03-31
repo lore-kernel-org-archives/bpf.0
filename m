@@ -1,75 +1,137 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EE63FBF6;
-	Mon, 31 Mar 2025 08:11:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 298B215624D;
+	Mon, 31 Mar 2025 08:24:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743408709; cv=none; b=YXPkelO0CasmCe9VejghUyt51b0MA+nBMukpCYPe2g7PDumxtNSZj0dF2MUnVNzDPYGirJy89H81a9FdoDaxppE/g7sBcFqRmpnTrsh9IzNl5kNIE2/8qeq4FNs+IgrI0LxlDx2l0tTv9T3ywgMVcfQ0UY+HkvHrs6wcLwXV7us=
+	t=1743409454; cv=none; b=NvxnjxFZkujXxJj4T043/f+JkekR4VRwz9E0GkdljnxIwA/FjUeBXcLxK+q/hKd4xNPy8Ri7EazyV2VlT0iWmfkoBXMQh06S7Faq+uowv+OA1yEANneonkU7dWT2ZhCkjaM25MnuWYh+KLpA7hL/7TCrMEtAvt7dN8KwZC56hGE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743408709; c=relaxed/simple;
-	bh=uQhYal9UwEqjXNAo1smgmNLLoGPn4qMCTT/QmCnFELg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NMknmygRppNdG2Jyz3RDSpGMy7vrR9hhna9soPzwUg+7/Td4gSYf1l0uK5tztMI9uIK7kLq069HrLp+uWqtVkHRjjxP2yhDmnmq83R6HMR5UCN220ZekMUcK8+phWcdAanwjrraTBYAK3gISkOxnZX2TbtOiLIZEH0PhBfCGq8I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=4fK++R/3; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=yP8dsOUQ; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	s=arc-20240116; t=1743409454; c=relaxed/simple;
+	bh=MlzZP2PcWDZrFa9hDnXv30fqYMM04NkLvN5K6Ig/4KA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=exGMydajc7kaCtwk5Oy+QFAR2wOShgW/Q1+m3uC+iWvj39z0eW1zMljZ9XrOVDf3cnDfY1034rtzFKEThammFXytTUs+jv5UVbUaNe4NL5wlOd9IOp8HJixs5tk/vvtOWUufC1pYoQ3tEQtgaJIuzUwhcbxOmdpOzMw0nqzvfsI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=m3OGyhoJ; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="4fK++R/3";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="yP8dsOUQ"
-Date: Mon, 31 Mar 2025 10:11:43 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1743408704;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=RrTBk4l8xgKnE0zLzA8TtC6W0ocP3bb6+3R/hmfaxoM=;
-	b=4fK++R/3BR88LnWzrXmxsmE6tRPOFK4URrpxLet7uTeZxcRBA8zrzWWWfNPgVk+fbnWETh
-	zQ281DRJecqNlHNTFMRJQtBU2Xw+a+IM5mcTCsrUiz1nw7gAqfENyiml6EvBGohafCmiOb
-	11CpIy1cpF6sJxd3lIxrmgB6w/4LowtLk9EvPRNa4EH8XCv41V/aMT80Pn6DjnD2kaVrn3
-	qE/0bEogJpTYMbivPgE3og7DXOvg0SiGc9jLe0iZC4YpkjbKwKeotg5lWk6JmIvbjxt33y
-	U+G6Q0hZmc2liG6jm+rmxozaAofzybBYVR4Uknxw8BYXsaZZ3KmPkDrzaVXEBg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1743408704;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=RrTBk4l8xgKnE0zLzA8TtC6W0ocP3bb6+3R/hmfaxoM=;
-	b=yP8dsOUQucE4FGkVS5oIQDiSZ4KbEWzFXD0givLvid9ZDyd/7Xk2+0IdW6tA3BuegnfJ3q
-	YkJzBx44aAkD+dAg==
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, bpf@vger.kernel.org,
-	daniel@iogearbox.net, andrii@kernel.org, martin.lau@kernel.org,
-	akpm@linux-foundation.org, peterz@infradead.org, vbabka@suse.cz,
-	rostedt@goodmis.org, shakeel.butt@linux.dev, mhocko@suse.com,
-	linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH mm] mm/page_alloc: Avoid second trylock of zone->lock
-Message-ID: <20250331081143.cPXjY7PZ@linutronix.de>
-References: <20250331002809.94758-1-alexei.starovoitov@gmail.com>
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="m3OGyhoJ"
+Received: from terminus.zytor.com (terminus.zytor.com [IPv6:2607:7c80:54:3:0:0:0:136])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 52V8Mp093171319
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
+	Mon, 31 Mar 2025 01:23:16 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 52V8Mp093171319
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2025032001; t=1743409398;
+	bh=XaAm3SgdeuQpqxiLf3TgiBnvvEMb/sqRjazcaLW8DyU=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=m3OGyhoJNr0Zsep5p1ViUs89IdqwpoEtbWuo2OsC8y9JAzzZbZXvjUjaRqzx5AUYK
+	 lJcmsGoVuGakNOlQ489XYhpn7UoCG2qfRQMcP3vMYw+NnWAKYOXHRdzMSDVDxQLIJJ
+	 kKOmdnvGQYVe7ioNqEmxq2m51haFE/snyyuHDZ7lhQTKPP3O+McTy73wS5FrEXpbEA
+	 GSpcgMRq/tDS9ikpfmvoHA9qWJyh5e7k4bNtkTdyO72QoWkxhdrF5ZM+BjwqxGvb8o
+	 Fxagag3lgbW6Apcxom4HGKuHb9Jh6FSWSc4zA4lH3CcX3khjRVDzEBBBmSENC1+wB9
+	 70W8KGHT8R63g==
+From: "Xin Li (Intel)" <xin@zytor.com>
+To: linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, virtualization@lists.linux.dev,
+        linux-edac@vger.kernel.org, kvm@vger.kernel.org,
+        xen-devel@lists.xenproject.org, linux-ide@vger.kernel.org,
+        linux-pm@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev
+Cc: tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        jgross@suse.com, andrew.cooper3@citrix.com, peterz@infradead.org,
+        acme@kernel.org, namhyung@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        irogers@google.com, adrian.hunter@intel.com, kan.liang@linux.intel.com,
+        wei.liu@kernel.org, ajay.kaher@broadcom.com,
+        alexey.amakhalov@broadcom.com, bcm-kernel-feedback-list@broadcom.com,
+        tony.luck@intel.com, pbonzini@redhat.com, vkuznets@redhat.com,
+        seanjc@google.com, luto@kernel.org, boris.ostrovsky@oracle.com,
+        kys@microsoft.com, haiyangz@microsoft.com, decui@microsoft.com
+Subject: [RFC PATCH v1 09/15] x86/opcode: Add immediate form MSR instructions to x86-opcode-map
+Date: Mon, 31 Mar 2025 01:22:45 -0700
+Message-ID: <20250331082251.3171276-10-xin@zytor.com>
+X-Mailer: git-send-email 2.49.0
+In-Reply-To: <20250331082251.3171276-1-xin@zytor.com>
+References: <20250331082251.3171276-1-xin@zytor.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250331002809.94758-1-alexei.starovoitov@gmail.com>
+Content-Transfer-Encoding: 8bit
 
-On 2025-03-30 17:28:09 [-0700], Alexei Starovoitov wrote:
-> From: Alexei Starovoitov <ast@kernel.org>
-> 
-> spin_trylock followed by spin_lock will cause extra write cache
-> access. If the lock is contended it may cause unnecessary cache
-> line bouncing and will execute redundant irq restore/save pair.
-> Therefore, check alloc/fpi_flags first and use spin_trylock or
-> spin_lock.
-> 
-> Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
-> Fixes: 97769a53f117 ("mm, bpf: Introduce try_alloc_pages() for opportunistic page allocation")
-> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Add the instruction opcodes used by the immediate form WRMSRNS/RDMSR
+to x86-opcode-map.
 
-Reviewed-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Signed-off-by: Xin Li (Intel) <xin@zytor.com>
+---
+ arch/x86/lib/x86-opcode-map.txt       | 5 +++--
+ tools/arch/x86/lib/x86-opcode-map.txt | 5 +++--
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
-Sebastian
+diff --git a/arch/x86/lib/x86-opcode-map.txt b/arch/x86/lib/x86-opcode-map.txt
+index caedb3ef6688..e64f52321d6d 100644
+--- a/arch/x86/lib/x86-opcode-map.txt
++++ b/arch/x86/lib/x86-opcode-map.txt
+@@ -839,7 +839,7 @@ f1: MOVBE My,Gy | MOVBE Mw,Gw (66) | CRC32 Gd,Ey (F2) | CRC32 Gd,Ew (66&F2)
+ f2: ANDN Gy,By,Ey (v)
+ f3: Grp17 (1A)
+ f5: BZHI Gy,Ey,By (v) | PEXT Gy,By,Ey (F3),(v) | PDEP Gy,By,Ey (F2),(v) | WRUSSD/Q My,Gy (66)
+-f6: ADCX Gy,Ey (66) | ADOX Gy,Ey (F3) | MULX By,Gy,rDX,Ey (F2),(v) | WRSSD/Q My,Gy
++f6: ADCX Gy,Ey (66) | ADOX Gy,Ey (F3) | MULX By,Gy,rDX,Ey (F2),(v) | WRSSD/Q My,Gy | RDMSR Rq,Gq (F2),(11B) | WRMSRNS Gq,Rq (F3),(11B)
+ f7: BEXTR Gy,Ey,By (v) | SHLX Gy,Ey,By (66),(v) | SARX Gy,Ey,By (F3),(v) | SHRX Gy,Ey,By (F2),(v)
+ f8: MOVDIR64B Gv,Mdqq (66) | ENQCMD Gv,Mdqq (F2) | ENQCMDS Gv,Mdqq (F3) | URDMSR Rq,Gq (F2),(11B) | UWRMSR Gq,Rq (F3),(11B)
+ f9: MOVDIRI My,Gy
+@@ -1014,7 +1014,7 @@ f1: CRC32 Gy,Ey (es) | CRC32 Gy,Ey (66),(es) | INVVPID Gy,Mdq (F3),(ev)
+ f2: INVPCID Gy,Mdq (F3),(ev)
+ f4: TZCNT Gv,Ev (es) | TZCNT Gv,Ev (66),(es)
+ f5: LZCNT Gv,Ev (es) | LZCNT Gv,Ev (66),(es)
+-f6: Grp3_1 Eb (1A),(ev)
++f6: Grp3_1 Eb (1A),(ev) | RDMSR Rq,Gq (F2),(11B),(ev) | WRMSRNS Gq,Rq (F3),(11B),(ev)
+ f7: Grp3_2 Ev (1A),(es)
+ f8: MOVDIR64B Gv,Mdqq (66),(ev) | ENQCMD Gv,Mdqq (F2),(ev) | ENQCMDS Gv,Mdqq (F3),(ev) | URDMSR Rq,Gq (F2),(11B),(ev) | UWRMSR Gq,Rq (F3),(11B),(ev)
+ f9: MOVDIRI My,Gy (ev)
+@@ -1103,6 +1103,7 @@ EndTable
+ Table: VEX map 7
+ Referrer:
+ AVXcode: 7
++f6: RDMSR Rq,Id (F2),(v1),(11B) | WRMSRNS Id,Rq (F3),(v1),(11B)
+ f8: URDMSR Rq,Id (F2),(v1),(11B) | UWRMSR Id,Rq (F3),(v1),(11B)
+ EndTable
+ 
+diff --git a/tools/arch/x86/lib/x86-opcode-map.txt b/tools/arch/x86/lib/x86-opcode-map.txt
+index caedb3ef6688..e64f52321d6d 100644
+--- a/tools/arch/x86/lib/x86-opcode-map.txt
++++ b/tools/arch/x86/lib/x86-opcode-map.txt
+@@ -839,7 +839,7 @@ f1: MOVBE My,Gy | MOVBE Mw,Gw (66) | CRC32 Gd,Ey (F2) | CRC32 Gd,Ew (66&F2)
+ f2: ANDN Gy,By,Ey (v)
+ f3: Grp17 (1A)
+ f5: BZHI Gy,Ey,By (v) | PEXT Gy,By,Ey (F3),(v) | PDEP Gy,By,Ey (F2),(v) | WRUSSD/Q My,Gy (66)
+-f6: ADCX Gy,Ey (66) | ADOX Gy,Ey (F3) | MULX By,Gy,rDX,Ey (F2),(v) | WRSSD/Q My,Gy
++f6: ADCX Gy,Ey (66) | ADOX Gy,Ey (F3) | MULX By,Gy,rDX,Ey (F2),(v) | WRSSD/Q My,Gy | RDMSR Rq,Gq (F2),(11B) | WRMSRNS Gq,Rq (F3),(11B)
+ f7: BEXTR Gy,Ey,By (v) | SHLX Gy,Ey,By (66),(v) | SARX Gy,Ey,By (F3),(v) | SHRX Gy,Ey,By (F2),(v)
+ f8: MOVDIR64B Gv,Mdqq (66) | ENQCMD Gv,Mdqq (F2) | ENQCMDS Gv,Mdqq (F3) | URDMSR Rq,Gq (F2),(11B) | UWRMSR Gq,Rq (F3),(11B)
+ f9: MOVDIRI My,Gy
+@@ -1014,7 +1014,7 @@ f1: CRC32 Gy,Ey (es) | CRC32 Gy,Ey (66),(es) | INVVPID Gy,Mdq (F3),(ev)
+ f2: INVPCID Gy,Mdq (F3),(ev)
+ f4: TZCNT Gv,Ev (es) | TZCNT Gv,Ev (66),(es)
+ f5: LZCNT Gv,Ev (es) | LZCNT Gv,Ev (66),(es)
+-f6: Grp3_1 Eb (1A),(ev)
++f6: Grp3_1 Eb (1A),(ev) | RDMSR Rq,Gq (F2),(11B),(ev) | WRMSRNS Gq,Rq (F3),(11B),(ev)
+ f7: Grp3_2 Ev (1A),(es)
+ f8: MOVDIR64B Gv,Mdqq (66),(ev) | ENQCMD Gv,Mdqq (F2),(ev) | ENQCMDS Gv,Mdqq (F3),(ev) | URDMSR Rq,Gq (F2),(11B),(ev) | UWRMSR Gq,Rq (F3),(11B),(ev)
+ f9: MOVDIRI My,Gy (ev)
+@@ -1103,6 +1103,7 @@ EndTable
+ Table: VEX map 7
+ Referrer:
+ AVXcode: 7
++f6: RDMSR Rq,Id (F2),(v1),(11B) | WRMSRNS Id,Rq (F3),(v1),(11B)
+ f8: URDMSR Rq,Id (F2),(v1),(11B) | UWRMSR Id,Rq (F3),(v1),(11B)
+ EndTable
+ 
+-- 
+2.49.0
+
