@@ -1,71 +1,67 @@
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB64B18C011
-	for <bpf@vger.kernel.org>; Mon, 31 Mar 2025 20:31:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B695B1BBBFD
+	for <bpf@vger.kernel.org>; Mon, 31 Mar 2025 20:31:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743453121; cv=none; b=NEWH2b5f96TxtLxo5VAl2t7K8i7Bd/SdGEvR6/wAAFszr65wW8hdPY/xUfROmXCBtxEgQFWOdj3geRYf+sByN6gUfZ29UVXKQr7DhFmRLauSkii6ZEenfEUfQ4ViWpujKDNWNLa3F7SzB9em3ii69aiwGvnyVA1XqrLhD5kcrDA=
+	t=1743453123; cv=none; b=fzDh4+Ib7uwO6fswwBZPoxMABmlItHnaABNuoZetCFFtqnC4wP7uZOSPVGz257eLzl46Ccb/RiBJyHrOjvikYDi1nO4xHx3OSI3OrHftNICmae5bHvNCf26TKnSjvyvqrg0YyIpImnsbDXqWKybB/IjGN1CS9Rmyee5hhl1OQD0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743453121; c=relaxed/simple;
-	bh=Wu07E+Y5i4mLlE+UakbdmEzWOpcAUc9uQ591upu/OnA=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=YsMnXjUdhQjfHr41LA2ClET0mmQN7k74GM/3hjQweMtCMivK6e9/nTbc/BiOrpQeui8NDl9Xznl5j6js7JYDnlZYmzAikhHvFNKzrXDwB2e23pClekpdiuvEOPWs3boslJ9XzYe471GItPU7NADbAiDGG/5LAuUycMXSQI3bEoY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=btYP6HTD; arc=none smtp.client-ip=209.85.208.44
+	s=arc-20240116; t=1743453123; c=relaxed/simple;
+	bh=e+tQBoVL5aWGWRUYMR6blPrf6R3rHEia843Z2DpupCc=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=q8XY0yQ7s3eAynXJrjU8v3ctPQnqrB4uXLoVHv1CYNoF4jeiDMor6VFkLsixi0UrELY8WcfHE9Gbe9m3mDV/n8xMRcDx1jIOwP1LNtJurWSgMlO1r00mwlPVKFGMTFveVAoowQ1hQfkbhUhyevyihWqu4pSoOTR1vf5jPrg7VVE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hS0sgY50; arc=none smtp.client-ip=209.85.208.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="btYP6HTD"
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-5e5e0caa151so9147244a12.0
-        for <bpf@vger.kernel.org>; Mon, 31 Mar 2025 13:31:59 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hS0sgY50"
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-5e6167d0536so5015104a12.1
+        for <bpf@vger.kernel.org>; Mon, 31 Mar 2025 13:31:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1743453118; x=1744057918; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=c6mPXaH0REzFw0L8CGzgEE4fixiOdRKweEDSQ5Mwu6g=;
-        b=btYP6HTDBKQ2An0xxLEFGCgPzn4IZfSZ+Nz3JAxO7NL09tqGUCnsoxfFadLMhnWVAK
-         dYXXvkURqwqNd/NKX8+EFS907eazjSFQxnYyYJNIleMYS1zy/GGl1G+1e2tiyIwqemi0
-         c4GW7IPWNynomZfleJ55FzkqS6Dx3W/KYiixh2QJdrWiu+QpWKfVzq5712Oe33DCzI0d
-         xGQpeIv9pn+Y6pyLqSfEjZLYohrmTXSMJKjxdTbB1x10+32iNKePCMu8uuOz1QlG2+LF
-         X8bPfVcE6ri6dUeBHiPxgv9YZoQgra9K8KrK4FyG4sNVynhW70rUPhKMDojKkoKcGZ/1
-         zk2w==
+        d=gmail.com; s=20230601; t=1743453117; x=1744057917; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=BG5ukwjAqIGFXmvef5IUOdwrnpl+xmUgyjg6IDS2ivQ=;
+        b=hS0sgY50SyRf/SYj61HP8WGecWsh+OxpIoub2X1Wld2Ej9iKAJRVSKLeZemSd3iNsr
+         txaPc4HcDqkjpTxC0gTsEmNOL7UDYtR/UD/k4Vbp24AfYbDYeHGtdkO5VIMUFW+aE8iJ
+         jjCMx5I2eDzCpYkooayTWGCuAuFgX5K5CnMAxK4a+Bcf9/OUIDXpVlpQVMMMV87hliOC
+         yhySysVfQh76vvDEi3+dlEVWyjLmSTEGswpmrzi5QAyfXNqZOUqwvESBbfTtw941F1hj
+         bXjOgQOTgvtIYIp32zxojI7qG0REezxJmMtrPF+O6Z3FPsyZP6KPkwqIsGTnK+ODWtyW
+         8kkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743453118; x=1744057918;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=c6mPXaH0REzFw0L8CGzgEE4fixiOdRKweEDSQ5Mwu6g=;
-        b=E5o23zVYnLdLi8VcA31NKAj5yXp9GVEW/VPgLRItbc2UEU0Kee7yZ0TjoW+H8cSkdl
-         En0zU/8ceeaXVlvnpBGFnmsSKwswCwNDkA3uPkIphKffPFAbIPSYQm/UhITXlo2TFw9i
-         ExOgpmpiblrJb2NU8U9IoLchsad6MLszkPZvVrRArp6gdzyzv73SmS0YxEi2eshaP690
-         6bxFdd+oYXfEo140t+TkxbGSKI4xcfJ+MyXL8yONGP6s6DHsBdkpqDitetpC296e3z2A
-         jMz6nqmskzsD6EwZDDunrkatLcJ3mfnPPVipr26hGo4Kb3meJMcJ4P0l+OFARYSZRUJF
-         3NHw==
-X-Gm-Message-State: AOJu0Yx0mGcQtHVZ+kNDVOa3uXpUtCUeNejibVA1/Zl4KzUgz9Pv2vKR
-	mzu1AHOXY4C7qlYaknFxrgYg4Fr8W4O/PS1CoZ6rmxy9CJQWMUswSqFqEA==
-X-Gm-Gg: ASbGnct6PupxZXCL8eJM0tSQUFC3roHTNakJFMGvKtgnQo6S+l3jT4o8KfXbIlsbTzP
-	X40I5sg4oBBFlpVd9MgGu7WAhDzBnWdc80IsMHRZGMT8u8rOrLYVx+2q8p/EfgCUt/SsA+n7gaR
-	r8p/EB5n1a/xe2Teg9ecs/lE2KzJ1WAWV2bA8eeJB38R35mMYDueCY8HeJrR8D7z9EehbsPoEkT
-	bpbIvyC2Ga2W4WxNCB2zPAb8dbn/lyQb682V4i7a8gWMqLFdbMwQ76qnmYiREL8Xw9wAKqgNLYa
-	y1QhtQSeNcBuMg7ND0Fufdyr9EjYOXUKD1iaY0FQUKLphvQkeYmWw2RWKYOyYlGU
-X-Google-Smtp-Source: AGHT+IFywBuh66UPW3QVZUAhY9nO0kvQ54Jw029DM0LgEc4UvWyXTGbeF+Oh4QJmkl1oK+jqFm4u3w==
-X-Received: by 2002:a05:6402:5112:b0:5e6:17e6:9510 with SMTP id 4fb4d7f45d1cf-5edfcbe92b8mr7526171a12.6.1743453117573;
-        Mon, 31 Mar 2025 13:31:57 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1743453117; x=1744057917;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BG5ukwjAqIGFXmvef5IUOdwrnpl+xmUgyjg6IDS2ivQ=;
+        b=VIA/O+YEnQe59iwNXtISQYKAmOmZpwyXzmO2sLxQBnV0nAuOg8hb9qVCwPTMWsyH/6
+         mCoOgq3IWm4FIMWtJYQEaOYl0+wuUQ9ZIQFUKOxHsd9J56iIbyGA1k0nGRqHLXnutZmM
+         WJCHs7m51RTgAc0S5hI0E/CeNgRqOHfUnmNPrxOeUasCLuDaCRwHWiTCyRhV1Ch2OsWJ
+         9VBLkAYQC5HSKrpYjkYEkD21vwNm+M47jnt5S7L1oL+52uBqrk4NEbyfZRKuo3lICoYE
+         C9iJSM7lp1puNY36lMHGddcIWCYhn0RZJMjhIUwaAZOuwLd8yzCs0zvF9Bub6tk8M/CT
+         8T3Q==
+X-Gm-Message-State: AOJu0Yz3DMeh6gufbkRVRBv5VEWqvgnVtQB5Px6MJ1XLwhfRTYj7ygBy
+	rirt/aOZerk/UYEKsDuD2HYIfF6YxlGnhb+MszxFSbsHAEj/qyX+I4LIkg==
+X-Gm-Gg: ASbGncvJYYWo26WCez2h5rEGLbhWvpHP4LwF+WvXGtxNXEdOp1LbGUhdawLRycA8BdG
+	15/qbS0I+DA6hWFb8vdcY5JSMDHpTTirjJE62Sd2i91+h49yOqyvnml8lHYqnid6izzO+uSH7cS
+	sl2eNInjRcLg7tCe+tnbzBDBHmXxnKFtE8IRgE2ANq4IPHeDRY5lf/qfGgiR5KkbTSQ7tGC2p0D
+	QJ7Y1h84+w2wXffOet38Uh58wH5zQ2aJJZw23bT7oGkWKOk/gsGeNwMNkI4w5w5nug3Qk7PFMtB
+	UIaBzZLM1FHT/hfAMqQ/Q5hdg3PjV28UcbAd0LbKe8vqOCZxoGOJ6qYAvP6hTXVP
+X-Google-Smtp-Source: AGHT+IHn31uet7Rxh3TUEMXPSKpat3xoqxC7ZQLsEQz6b/p5gNSUeSOv/AiFv+diLsPWoAafJ7vBCw==
+X-Received: by 2002:a05:6402:84f:b0:5ee:497:89fd with SMTP id 4fb4d7f45d1cf-5f02b38ad17mr356105a12.34.1743453116348;
+        Mon, 31 Mar 2025 13:31:56 -0700 (PDT)
 Received: from localhost.localdomain ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5edc16aae2fsm6030589a12.4.2025.03.31.13.31.57
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5edc16aae2fsm6030589a12.4.2025.03.31.13.31.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Mar 2025 13:31:57 -0700 (PDT)
+        Mon, 31 Mar 2025 13:31:56 -0700 (PDT)
 From: Anton Protopopov <a.s.protopopov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Andrii Nakryiko <andrii@kernel.org>,
 	Anton Protopopov <a.s.protopopov@gmail.com>
-Subject: [PATCH bpf-next 2/2] libbpf: add likely/unlikely macros and use them in selftests
-Date: Mon, 31 Mar 2025 20:36:18 +0000
-Message-Id: <20250331203618.1973691-3-a.s.protopopov@gmail.com>
+Subject: [PATCH v2 bpf-next 0/2] likely/unlikely for bpf_helpers and a small comment fix
+Date: Mon, 31 Mar 2025 20:36:16 +0000
+Message-Id: <20250331203618.1973691-1-a.s.protopopov@gmail.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250331203618.1973691-1-a.s.protopopov@gmail.com>
-References: <20250331203618.1973691-1-a.s.protopopov@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -74,63 +70,24 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-A few selftests and, more importantly, consequent changes to the
-bpf_helpers.h file, use likely/unlikely macros, so define them here
-and remove duplicate definitions from existing selftests.
+These two commits fix a comment describing bpf_attr in <linux/bpf.h>
+and add likely/unlikely macros to <bph/bpf_helpers.h> to be consumed
+by selftests and, later, by the static_branch_likely/unlikely macros.
 
-Signed-off-by: Anton Protopopov <a.s.protopopov@gmail.com>
----
+v1 -> v2:
+  * squash libbpf and selftests fixes into one patch (Andrii)
+
+Anton Protopopov (2):
+  bpf: fix a comment describing bpf_attr
+  libbpf: add likely/unlikely macros and use them in selftests
+
+ include/uapi/linux/bpf.h                          | 2 +-
+ tools/include/uapi/linux/bpf.h                    | 2 +-
  tools/lib/bpf/bpf_helpers.h                       | 8 ++++++++
  tools/testing/selftests/bpf/bpf_arena_spin_lock.h | 3 ---
  tools/testing/selftests/bpf/progs/iters.c         | 2 --
- 3 files changed, 8 insertions(+), 5 deletions(-)
+ 5 files changed, 10 insertions(+), 7 deletions(-)
 
-diff --git a/tools/lib/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_helpers.h
-index 686824b8b413..a50773d4616e 100644
---- a/tools/lib/bpf/bpf_helpers.h
-+++ b/tools/lib/bpf/bpf_helpers.h
-@@ -15,6 +15,14 @@
- #define __array(name, val) typeof(val) *name[]
- #define __ulong(name, val) enum { ___bpf_concat(__unique_value, __COUNTER__) = val } name
- 
-+#ifndef likely
-+#define likely(x)      (__builtin_expect(!!(x), 1))
-+#endif
-+
-+#ifndef unlikely
-+#define unlikely(x)    (__builtin_expect(!!(x), 0))
-+#endif
-+
- /*
-  * Helper macro to place programs, maps, license in
-  * different sections in elf_bpf file. Section names
-diff --git a/tools/testing/selftests/bpf/bpf_arena_spin_lock.h b/tools/testing/selftests/bpf/bpf_arena_spin_lock.h
-index fb8dc0768999..4e29c31c4ef8 100644
---- a/tools/testing/selftests/bpf/bpf_arena_spin_lock.h
-+++ b/tools/testing/selftests/bpf/bpf_arena_spin_lock.h
-@@ -95,9 +95,6 @@ struct arena_qnode {
- #define _Q_LOCKED_VAL		(1U << _Q_LOCKED_OFFSET)
- #define _Q_PENDING_VAL		(1U << _Q_PENDING_OFFSET)
- 
--#define likely(x) __builtin_expect(!!(x), 1)
--#define unlikely(x) __builtin_expect(!!(x), 0)
--
- struct arena_qnode __arena qnodes[_Q_MAX_CPUS][_Q_MAX_NODES];
- 
- static inline u32 encode_tail(int cpu, int idx)
-diff --git a/tools/testing/selftests/bpf/progs/iters.c b/tools/testing/selftests/bpf/progs/iters.c
-index 427b72954b87..76adf4a8f2da 100644
---- a/tools/testing/selftests/bpf/progs/iters.c
-+++ b/tools/testing/selftests/bpf/progs/iters.c
-@@ -7,8 +7,6 @@
- #include "bpf_misc.h"
- #include "bpf_compiler.h"
- 
--#define unlikely(x)	__builtin_expect(!!(x), 0)
--
- static volatile int zero = 0;
- 
- int my_pid;
 -- 
 2.34.1
 
