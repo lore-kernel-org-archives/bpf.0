@@ -1,715 +1,287 @@
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 726321EE02A;
-	Tue,  1 Apr 2025 09:25:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D25391C7006
+	for <bpf@vger.kernel.org>; Tue,  1 Apr 2025 09:27:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743499513; cv=none; b=MmR18lTxxd9i4ubFmwGbUwy+uQ8rruEpuljQVPq87KR1GCvf2E78k7OqZAs5a8eaV9qAGzSntJlHb+r8uHDONksbXQBmc9r5rBezeU2DtSRHWFnegRFCzC5sTw1AQb/rxQ4X58jtkBIVp+sLtwsdf8x7fUspY4snHhdjtQtsq+4=
+	t=1743499653; cv=none; b=IBOfBAxZKlBIscSghyefHYXwrInwHxFjnS2aByZQhrHisdLS+ER6vdrpmclFTzY7OlU0QqDz0pAIJ90suNjwLz1oucmIndI75Gr5YcadxgNskZXBWvXv6fZO4Eu2XdlgkqaGmrzadBtaQBK7x5LKEAMeIajUYCatzgfzTcEkRL8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743499513; c=relaxed/simple;
-	bh=Ee+3/vv6YNLjTsRLFzFQWXb8E6VicH4prpMykF4AtaA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=iRJQgTeF5VpfyX7ejvM0mV5GZ2KneyooWB+6HyIPYtgmrjBBw4/sn4c+3A86jwPZNT+mU7VfCdhACTAQmXEUxW52pAjBPoCuvOTd98a2LfJhBEVgi41ZJMDQRssoBso4LasllrpSH7H3VXu44DASVEr4q2P1cHgU9e9PGuNgnLE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=oiQ11p5G; arc=none smtp.client-ip=205.220.177.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+	s=arc-20240116; t=1743499653; c=relaxed/simple;
+	bh=tBaUVOmuwlUC0F0gAM0GQcCY9DRAAjxRSbfYpkziV60=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=S1qHlJPRKkDrOeFplh0V0meJCVhJUsCmicwLEYCkoyhsmGl6ENcdl5XT54ovSZ9ZexYM5TVh4f73RcHpzymFbsWvPIVJ3wA20IHaeyY2wS8ZzbBgmawbZWcOjFO1ko+5QKamoDoozjSiaZKQSj8d/h/ix4mSIO4IHFJI6mOteU4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=e6JtnoDW; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="oiQ11p5G"
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5318BuC0029401;
-	Tue, 1 Apr 2025 09:24:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=corp-2023-11-20; bh=ZTtvM
-	Te6IxDhLDTVoxyTFSukX5JM6F8D7UBy2mZ/zc8=; b=oiQ11p5GOEubet6kdfCP5
-	IgTQBTmLag/V3susH1Vfo3PDkQYYCVBdwFPhFPQJL+Tx/4FY8fX6fb0OIb2vCEO+
-	xdY5Y9awQ9SxT/RZzu8c0kq7b44B7f15BsGzWSQwV0dW8nigRdKYrB2pMyIMNqYE
-	uo4rtqwjvSHsj4dRVpT8rXCb36VI72wPBFwkSGDW4ImjpwPCKU9Zdeg6yRZ6XSuL
-	NS5Jvm01DHzRryzpy/dk1e/7IMc58H7yTkPWKxXblVzI08IDAIaFA+PIfAIg7/bW
-	0y4OSYxiDgYGZY0Hd7SvOJyWCn7jg40xT0DXvMp6UTAl0rhhcX5zYC4FUrQJ8OVc
-	w==
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 45p7n26kt7-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 01 Apr 2025 09:24:44 +0000 (GMT)
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 5317c01j032694;
-	Tue, 1 Apr 2025 09:24:43 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 45p7a9363v-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 01 Apr 2025 09:24:43 +0000
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 5319OcHd008831;
-	Tue, 1 Apr 2025 09:24:42 GMT
-Received: from bpf.uk.oracle.com (dhcp-10-154-53-231.vpn.oracle.com [10.154.53.231])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 45p7a93603-2;
-	Tue, 01 Apr 2025 09:24:42 +0000
-From: Alan Maguire <alan.maguire@oracle.com>
-To: acme@kernel.org
-Cc: ihor.solodrai@linux.dev, yonghong.song@linux.dev, dwarves@vger.kernel.org,
-        ast@kernel.org, andrii@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, song@kernel.org, eddyz87@gmail.com,
-        olsajiri@gmail.com, Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH v2 dwarves 1/2] dwarves: Add github actions to build, test
-Date: Tue,  1 Apr 2025 10:24:34 +0100
-Message-ID: <20250401092435.1619617-2-alan.maguire@oracle.com>
-X-Mailer: git-send-email 2.43.5
-In-Reply-To: <20250401092435.1619617-1-alan.maguire@oracle.com>
-References: <20250401092435.1619617-1-alan.maguire@oracle.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="e6JtnoDW"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1743499651;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=DD6/BKzSTAkniyKROx0SYrtrdsrFKedUxdUETO2d2g0=;
+	b=e6JtnoDWf9QSMpoGDgI5ScHm9n59NEFa0e9xe5LeAjZD68qjQjoJNG3Gnt1rmsgC226fr8
+	QHRKF0W6b5pJrLctmdLs2DPlG4l1/2dS+MD0HWwJ9IrELkEx7T08k2BCS6Q0ohQigj2PU0
+	dpveuHdsQX0uOP39GCRARaqiWJ5sb/w=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-591-8jzyfdULM_qk5w6qkMXwbw-1; Tue, 01 Apr 2025 05:27:29 -0400
+X-MC-Unique: 8jzyfdULM_qk5w6qkMXwbw-1
+X-Mimecast-MFC-AGG-ID: 8jzyfdULM_qk5w6qkMXwbw_1743499649
+Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-ac7791ecb7bso136262566b.0
+        for <bpf@vger.kernel.org>; Tue, 01 Apr 2025 02:27:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1743499649; x=1744104449;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DD6/BKzSTAkniyKROx0SYrtrdsrFKedUxdUETO2d2g0=;
+        b=YWH/1eu0eORemTPNj6tuLfL489I42yJWEmiKBZLg/qatym+gc+Zfky9nCPBJNx2As7
+         dPL3Ijc2ybrxDLnZCyB7nHE4482c6Phnq1VBc44/OFO7X/9C26B5znbQIK30fyQbW2qo
+         kGmPQgTtWApWxCBnK8Qz+mlzBNRve/9VL+5dt5NXUS7P0tKkphQ2qA7I56Mj1G3bQbUM
+         haNa39rGJJ2gb0OxgQnBozDRYxAcV1rOIeK2bv1FjRJUEtmE4jh+VYS+oEBtgWTOT/Le
+         2lP91KmsnuniEy9Y2504yQJZHyThsV8tKW5vcTLnRNA6x1sBFFHBF0sIDArDYK8VX9TC
+         pJnw==
+X-Forwarded-Encrypted: i=1; AJvYcCWr9XVl2GJc7eMjdtQrsal3M/8Dpn7PQYshU8T6gYAF2oSZMJ99hVS90XaHy5ijNCjHLXU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxZVtJ66GyxYuHmv+VRi6fbsmi0FZi8HNIXpGz4KJ/qrtqpFxqM
+	lizZtYviySqhuSwdkXomyYdfkeip9qIqdztpEQ3SfXEfKGIFtxjqlS8WB39H+8B8qm8JKVTK0S1
+	9d6ayKNzqX20Wm1MaS4/aDRrYT1dwAkv6/Mt+1Z6h26tNaKebEw==
+X-Gm-Gg: ASbGncsLze1s9iz6rQUfeHJTYIpxrb1duJ5FWuq4c61G6oag8IY+Nu5p7F6RNUuwvfI
+	kFiKGZ/Fd00CVgu7rq3I028xLXdaHScZcKiDMDCZP+ZTn+20tgxmZj2CCmOeP2tYiOW0wTg+kV9
+	7rFRVUUyKMmOfqWUzyVLjnQ68tthWCT3ApOHc+meC+G8qh+Ccg1ARQUw+zXDFPy9eWV9S1wruQd
+	3/x/90gPKVMXyasDpGh+NtYeb040K9s4AGSFyaNZRzl2+zbc+krGAb0u6puPdBbgSWyU6GE6DLc
+	0FTOTSBNX69EfYuYnhiS4NM6Oubn23AfqlmCltjO
+X-Received: by 2002:a17:906:c155:b0:ac7:3028:6d67 with SMTP id a640c23a62f3a-ac73681fcd8mr1141183166b.16.1743499648525;
+        Tue, 01 Apr 2025 02:27:28 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFrOYPNeSxQLyXxsP5j/BwzEGjjbGLErMD6rGLT5p4OaReguQc12bEx3/JNXtoHEWBebbAVKg==
+X-Received: by 2002:a17:906:c155:b0:ac7:3028:6d67 with SMTP id a640c23a62f3a-ac73681fcd8mr1141179266b.16.1743499648091;
+        Tue, 01 Apr 2025 02:27:28 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ac71927b190sm734107966b.45.2025.04.01.02.27.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Apr 2025 02:27:27 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+	id 85E0F18FD269; Tue, 01 Apr 2025 11:27:26 +0200 (CEST)
+From: =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+Date: Tue, 01 Apr 2025 11:27:18 +0200
+Subject: [PATCH net-next v6 1/2] page_pool: Move pp_magic check into helper
+ functions
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1095,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-04-01_03,2025-03-27_02,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 phishscore=0
- suspectscore=0 mlxscore=0 malwarescore=0 spamscore=0 bulkscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2502280000 definitions=main-2504010061
-X-Proofpoint-ORIG-GUID: Ad1aOsTczmug29Wc7P2RpY4xMVD-XCYI
-X-Proofpoint-GUID: Ad1aOsTczmug29Wc7P2RpY4xMVD-XCYI
+Message-Id: <20250401-page-pool-track-dma-v6-1-8b83474870d4@redhat.com>
+References: <20250401-page-pool-track-dma-v6-0-8b83474870d4@redhat.com>
+In-Reply-To: <20250401-page-pool-track-dma-v6-0-8b83474870d4@redhat.com>
+To: "David S. Miller" <davem@davemloft.net>, 
+ Jakub Kicinski <kuba@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+ Saeed Mahameed <saeedm@nvidia.com>, Leon Romanovsky <leon@kernel.org>, 
+ Tariq Toukan <tariqt@nvidia.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+ Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, 
+ Ilias Apalodimas <ilias.apalodimas@linaro.org>, 
+ Simon Horman <horms@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
+ Mina Almasry <almasrymina@google.com>, 
+ Yonglong Liu <liuyonglong@huawei.com>, 
+ Yunsheng Lin <linyunsheng@huawei.com>, 
+ Pavel Begunkov <asml.silence@gmail.com>, 
+ Matthew Wilcox <willy@infradead.org>
+Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, linux-rdma@vger.kernel.org, 
+ linux-mm@kvack.org, 
+ =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+X-Mailer: b4 0.14.2
 
-Borrowing heavily from libbpf github actions, add workflows to
+Since we are about to stash some more information into the pp_magic
+field, let's move the magic signature checks into a pair of helper
+functions so it can be changed in one place.
 
-- build dwarves for gcc, LLVM
-
-- build dwarves for x86_64/aarch64 and use it to build a Linux
-  kernel including BTF generation; then run dwarves selftests
-  using generated vmlinux
-
-These workflows trigger on all pushes.  This will allow both
-developers working on dwarves to push a branch to their github
-repo and test, and also for maintainer pushes from git.kernel.org
-pahole repo to trigger tests.
-
-The build/test workflows can also be run as bash scripts locally,
-as is described in the toplevel README.
-
-Similar to libbpf, additional workflows for coverity etc
-are triggered for pushes to master/next.
-
-Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+Reviewed-by: Mina Almasry <almasrymina@google.com>
+Tested-by: Yonglong Liu <liuyonglong@huawei.com>
+Acked-by: Jesper Dangaard Brouer <hawk@kernel.org>
+Reviewed-by: Ilias Apalodimas <ilias.apalodimas@linaro.org>
+Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
 ---
- .github/scripts/build-debian.sh  | 92 ++++++++++++++++++++++++++++++++
- .github/scripts/build-kernel.sh  | 35 ++++++++++++
- .github/scripts/build-pahole.sh  | 17 ++++++
- .github/scripts/run-selftests.sh | 15 ++++++
- .github/scripts/travis_wait.bash | 61 +++++++++++++++++++++
- .github/workflows/build.yml      | 34 ++++++++++++
- .github/workflows/codeql.yml     | 53 ++++++++++++++++++
- .github/workflows/coverity.yml   | 33 ++++++++++++
- .github/workflows/lint.yml       | 20 +++++++
- .github/workflows/ondemand.yml   | 31 +++++++++++
- .github/workflows/test.yml       | 36 +++++++++++++
- .github/workflows/vmtest.yml     | 62 +++++++++++++++++++++
- README                           | 18 +++++++
- 13 files changed, 507 insertions(+)
- create mode 100755 .github/scripts/build-debian.sh
- create mode 100755 .github/scripts/build-kernel.sh
- create mode 100755 .github/scripts/build-pahole.sh
- create mode 100755 .github/scripts/run-selftests.sh
- create mode 100755 .github/scripts/travis_wait.bash
- create mode 100644 .github/workflows/build.yml
- create mode 100644 .github/workflows/codeql.yml
- create mode 100644 .github/workflows/coverity.yml
- create mode 100644 .github/workflows/lint.yml
- create mode 100644 .github/workflows/ondemand.yml
- create mode 100644 .github/workflows/test.yml
- create mode 100644 .github/workflows/vmtest.yml
+ drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c |  4 ++--
+ include/net/page_pool/types.h                    | 18 ++++++++++++++++++
+ mm/page_alloc.c                                  |  9 +++------
+ net/core/netmem_priv.h                           |  5 +++++
+ net/core/skbuff.c                                | 16 ++--------------
+ net/core/xdp.c                                   |  4 ++--
+ 6 files changed, 32 insertions(+), 24 deletions(-)
 
-diff --git a/.github/scripts/build-debian.sh b/.github/scripts/build-debian.sh
-new file mode 100755
-index 0000000..5a0789a
---- /dev/null
-+++ b/.github/scripts/build-debian.sh
-@@ -0,0 +1,92 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0-only
-+#
-+# Copyright (c) 2025, Oracle and/or its affiliates.
-+#
-+
-+PHASES=(${@:-SETUP RUN CLEANUP})
-+DEBIAN_RELEASE="${DEBIAN_RELEASE:-testing}"
-+CONT_NAME="${CONT_NAME:-dwarves-debian-$DEBIAN_RELEASE}"
-+ENV_VARS="${ENV_VARS:-}"
-+DOCKER_RUN="${DOCKER_RUN:-docker run}"
-+REPO_ROOT="${REPO_ROOT:-$PWD}"
-+ADDITIONAL_DEPS=(pkgconf)
-+EXTRA_CFLAGS=""
-+EXTRA_LDFLAGS=""
-+
-+function info() {
-+    echo -e "\033[33;1m$1\033[0m"
-+}
-+
-+function error() {
-+    echo -e "\033[31;1m$1\033[0m"
-+}
-+
-+function docker_exec() {
-+    docker exec $ENV_VARS $CONT_NAME "$@"
-+}
-+
-+set -eu
-+
-+source "$(dirname $0)/travis_wait.bash"
-+
-+for phase in "${PHASES[@]}"; do
-+    case $phase in
-+        SETUP)
-+            info "Setup phase"
-+            info "Using Debian $DEBIAN_RELEASE"
-+
-+            docker --version
-+
-+            docker pull debian:$DEBIAN_RELEASE
-+            info "Starting container $CONT_NAME"
-+            $DOCKER_RUN -v $REPO_ROOT:/build:rw \
-+                        -w /build --privileged=true --name $CONT_NAME \
-+                        -dit --net=host debian:$DEBIAN_RELEASE /bin/bash
-+            echo -e "::group::Build Env Setup"
-+
-+            docker_exec apt-get -y update
-+            docker_exec apt-get -y install aptitude
-+            docker_exec aptitude -y install make cmake libz-dev libelf-dev libdw-dev git
-+            docker_exec aptitude -y install "${ADDITIONAL_DEPS[@]}"
-+            echo -e "::endgroup::"
-+            ;;
-+        RUN|RUN_CLANG|RUN_CLANG16|RUN_GCC12)
-+            CC="cc"
-+            if [[ "$phase" =~ "RUN_CLANG(\d+)(_ASAN)?" ]]; then
-+                ENV_VARS="-e CC=clang-${BASH_REMATCH[1]} -e CXX=clang++-${BASH_REMATCH[1]}"
-+                CC="clang-${BASH_REMATCH[1]}"
-+            elif [[ "$phase" = *"CLANG"* ]]; then
-+                ENV_VARS="-e CC=clang -e CXX=clang++"
-+                CC="clang"
-+            elif [[ "$phase" =~ "RUN_GCC(\d+)(_ASAN)?" ]]; then
-+                ENV_VARS="-e CC=gcc-${BASH_REMATCH[1]} -e CXX=g++-${BASH_REMATCH[1]}"
-+                CC="gcc-${BASH_REMATCH[1]}"
-+            fi
-+            if [[ "$CC" != "cc" ]]; then
-+                docker_exec aptitude -y install "$CC"
-+            else
-+                docker_exec aptitude -y install gcc
-+            fi
-+	    git config --global --add safe.directory $REPO_ROOT
-+	    pushd $REPO_ROOT
-+	    git submodule update --init
-+	    popd
-+            docker_exec mkdir build install
-+            docker_exec ${CC} --version
-+            info "build"
-+            docker_exec cmake -DGIT_SUBMODULE=OFF .
-+	    docker_exec make -j$((4*$(nproc)))
-+            info "install"
-+            docker_exec make DESTDIR=../install install
-+            ;;
-+        CLEANUP)
-+            info "Cleanup phase"
-+            docker stop $CONT_NAME
-+            docker rm -f $CONT_NAME
-+            ;;
-+        *)
-+            echo >&2 "Unknown phase '$phase'"
-+            exit 1
-+    esac
-+done
-diff --git a/.github/scripts/build-kernel.sh b/.github/scripts/build-kernel.sh
-new file mode 100755
-index 0000000..41a3cf8
---- /dev/null
-+++ b/.github/scripts/build-kernel.sh
-@@ -0,0 +1,35 @@
-+#!/usr/bin/bash
-+# SPDX-License-Identifier: GPL-2.0-only
-+#
-+# Copyright (c) 2025, Oracle and/or its affiliates.
-+#
-+
-+GITHUB_WORKSPACE=${GITHUB_WORKSPACE:-$(dirname $0)/../..}
-+INPUTS_ARCH=${INPUTS_ARCH:-$(uname -m)}
-+REPO=${REPO:-https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git}
-+REPO_BRANCH=${REPO_BRANCH:-master}
-+REPO_TARGET=${GITHUB_WORKSPACE}/.kernel
-+
-+export PATH=${GITHUB_WORKSPACE}/install/usr/local/bin:${PATH}
-+export PAHOLE=${GITHUB_WORKSPACE}/install/usr/local/bin/pahole
-+
-+which pahole
-+$PAHOLE --version
-+
-+if [[ ! -d $REPO_TARGET ]]; then
-+	git clone $REPO $REPO_TARGET
-+fi
-+cd $REPO_TARGET
-+git checkout $REPO_BRANCH
-+
-+cat tools/testing/selftests/bpf/config \
-+    tools/testing/selftests/bpf/config.${INPUTS_ARCH} > .config
-+# this file might or might not exist depending on kernel version
-+if [[ -f tools/testing/selftests/bpf/config.vm ]]; then
-+	cat tools/testing/selftests/bpf/config.vm >> .config
-+fi
-+make olddefconfig && make prepare
-+grep PAHOLE .config
-+grep _BTF .config
-+make -j $((4*$(nproc))) all
-+
-diff --git a/.github/scripts/build-pahole.sh b/.github/scripts/build-pahole.sh
-new file mode 100755
-index 0000000..64f9eea
---- /dev/null
-+++ b/.github/scripts/build-pahole.sh
-@@ -0,0 +1,17 @@
-+#!/usr/bin/bash
-+# SPDX-License-Identifier: GPL-2.0-only
-+#
-+# Copyright (c) 2025, Oracle and/or its affiliates.
-+#
-+
-+GITHUB_WORKSPACE=${GITHUB_WORKSPACE:-$(dirname $0)/../..}
-+cd $GITHUB_WORKSPACE
-+git config --global --add safe.directory $GITHUB_WORKSPACE
-+git submodule update --init
-+mkdir -p build
-+cd build
-+pwd
-+cmake -DGIT_SUBMODULE=OFF -DBUILD_SHARED_LIBS=OFF ..
-+make -j$((4*$(nproc))) all
-+make DESTDIR=../install install
-+
-diff --git a/.github/scripts/run-selftests.sh b/.github/scripts/run-selftests.sh
-new file mode 100755
-index 0000000..f9ba24e
---- /dev/null
-+++ b/.github/scripts/run-selftests.sh
-@@ -0,0 +1,15 @@
-+#!/usr/bin/bash
-+# SPDX-License-Identifier: GPL-2.0-only
-+#
-+# Copyright (c) 2025, Oracle and/or its affiliates.
-+#
-+
-+GITHUB_WORKSPACE=${GITHUB_WORKSPACE:-$(pwd)}
-+VMLINUX=${GITHUB_WORKSPACE}/.kernel/vmlinux
-+SELFTESTS=${GITHUB_WORKSPACE}/tests
-+cd $SELFTESTS
-+export PATH=${GITHUB_WORKSPACE}/install/usr/local/bin:${PATH}
-+which pahole
-+pahole --version
-+vmlinux=$VMLINUX ./tests
-+
-diff --git a/.github/scripts/travis_wait.bash b/.github/scripts/travis_wait.bash
-new file mode 100755
-index 0000000..acf6ad1
---- /dev/null
-+++ b/.github/scripts/travis_wait.bash
-@@ -0,0 +1,61 @@
-+# This was borrowed from https://github.com/travis-ci/travis-build/tree/master/lib/travis/build/bash
-+# to get around https://github.com/travis-ci/travis-ci/issues/9979. It should probably be removed
-+# as soon as Travis CI has started to provide an easy way to export the functions to bash scripts.
-+
-+travis_jigger() {
-+  local cmd_pid="${1}"
-+  shift
-+  local timeout="${1}"
-+  shift
-+  local count=0
-+
-+  echo -e "\\n"
-+
-+  while [[ "${count}" -lt "${timeout}" ]]; do
-+    count="$((count + 1))"
-+    echo -ne "Still running (${count} of ${timeout}): ${*}\\r"
-+    sleep 60
-+  done
-+
-+  echo -e "\\n${ANSI_RED}Timeout (${timeout} minutes) reached. Terminating \"${*}\"${ANSI_RESET}\\n"
-+  kill -9 "${cmd_pid}"
-+}
-+
-+travis_wait() {
-+  local timeout="${1}"
-+
-+  if [[ "${timeout}" =~ ^[0-9]+$ ]]; then
-+    shift
-+  else
-+    timeout=20
-+  fi
-+
-+  local cmd=("${@}")
-+  local log_file="travis_wait_${$}.log"
-+
-+  "${cmd[@]}" &>"${log_file}" &
-+  local cmd_pid="${!}"
-+
-+  travis_jigger "${!}" "${timeout}" "${cmd[@]}" &
-+  local jigger_pid="${!}"
-+  local result
-+
-+  {
-+    set +e
-+    wait "${cmd_pid}" 2>/dev/null
-+    result="${?}"
-+    ps -p"${jigger_pid}" &>/dev/null && kill "${jigger_pid}"
-+    set -e
-+  }
-+
-+  if [[ "${result}" -eq 0 ]]; then
-+    echo -e "\\n${ANSI_GREEN}The command ${cmd[*]} exited with ${result}.${ANSI_RESET}"
-+  else
-+    echo -e "\\n${ANSI_RED}The command ${cmd[*]} exited with ${result}.${ANSI_RESET}"
-+  fi
-+
-+  echo -e "\\n${ANSI_GREEN}Log:${ANSI_RESET}\\n"
-+  cat "${log_file}"
-+
-+  return "${result}"
-+}
-diff --git a/.github/workflows/build.yml b/.github/workflows/build.yml
-new file mode 100644
-index 0000000..25a395f
---- /dev/null
-+++ b/.github/workflows/build.yml
-@@ -0,0 +1,34 @@
-+name: dwarves-build
-+
-+on:
-+  pull_request:
-+  push:
-+  schedule:
-+    - cron:  '0 18 * * *'
-+
-+concurrency:
-+  group: ci-build-${{ github.head_ref }}
-+  cancel-in-progress: true
-+
-+jobs:
-+
-+  debian:
-+    runs-on: ubuntu-latest
-+    name: Debian Build (${{ matrix.name }})
-+    strategy:
-+      fail-fast: false
-+      matrix:
-+        include:
-+          - name: default
-+            target: RUN
-+          - name: gcc-12
-+            target: RUN_GCC12
-+          - name: clang
-+            target: RUN_CLANG
-+    steps:
-+      - uses: actions/checkout@v4
-+        name: Checkout
-+      - name: setup
-+        shell: bash
-+        run: ./.github/scripts/build-debian.sh SETUP ${{ matrix.target }}
-+
-diff --git a/.github/workflows/codeql.yml b/.github/workflows/codeql.yml
-new file mode 100644
-index 0000000..a140be1
---- /dev/null
-+++ b/.github/workflows/codeql.yml
-@@ -0,0 +1,53 @@
-+---
-+# vi: ts=2 sw=2 et:
-+
-+name: "CodeQL"
-+
-+on:
-+  push:
-+    branches:
-+      - master
-+  pull_request:
-+    branches:
-+      - master
-+      - next
-+
-+permissions:
-+  contents: read
-+
-+jobs:
-+  analyze:
-+    name: Analyze
-+    runs-on: ubuntu-latest
-+    concurrency:
-+      group: ${{ github.workflow }}-${{ matrix.language }}-${{ github.ref }}
-+      cancel-in-progress: true
-+    permissions:
-+      actions: read
-+      security-events: write
-+
-+    strategy:
-+      fail-fast: false
-+      matrix:
-+        language: ['cpp', 'python']
-+
-+    steps:
-+      - name: Checkout repository
-+        uses: actions/checkout@v4
-+
-+      - name: Initialize CodeQL
-+        uses: github/codeql-action/init@v2
-+        with:
-+          languages: ${{ matrix.language }}
-+          queries: +security-extended,security-and-quality
-+
-+      - name: Setup
-+        uses: ./.github/actions/setup
-+
-+      - name: Build
-+        run: |
-+          source /tmp/ci_setup
-+          make -C ./src
-+
-+      - name: Perform CodeQL Analysis
-+        uses: github/codeql-action/analyze@v2
-diff --git a/.github/workflows/coverity.yml b/.github/workflows/coverity.yml
-new file mode 100644
-index 0000000..97a04d4
---- /dev/null
-+++ b/.github/workflows/coverity.yml
-@@ -0,0 +1,33 @@
-+name: dwarves-ci-coverity
-+
-+on:
-+  push:
-+    branches:
-+      - master
-+      - next
-+  schedule:
-+    - cron:  '0 18 * * *'
-+
-+jobs:
-+  coverity:
-+    runs-on: ubuntu-latest
-+    name: Coverity
-+    env:
-+      COVERITY_SCAN_TOKEN: ${{ secrets.COVERITY_SCAN_TOKEN }}
-+    steps:
-+      - uses: actions/checkout@v4
-+      - uses: ./.github/actions/setup
-+      - name: Run coverity
-+        if: ${{ env.COVERITY_SCAN_TOKEN }}
-+        run: |
-+          source /tmp/ci_setup
-+          export COVERITY_SCAN_NOTIFICATION_EMAIL="${AUTHOR_EMAIL}"
-+          export COVERITY_SCAN_BRANCH_PATTERN=${GITHUB_REF##refs/*/}
-+          export TRAVIS_BRANCH=${COVERITY_SCAN_BRANCH_PATTERN}
-+          scripts/coverity.sh
-+        env:
-+          COVERITY_SCAN_PROJECT_NAME: dwarves
-+          COVERITY_SCAN_BUILD_COMMAND_PREPEND: 'cmake .'
-+          COVERITY_SCAN_BUILD_COMMAND: 'make'
-+      - name: SCM log
-+        run: cat /home/runner/work/dwarves/cov-int/scm_log.txt
-diff --git a/.github/workflows/lint.yml b/.github/workflows/lint.yml
-new file mode 100644
-index 0000000..ca13052
---- /dev/null
-+++ b/.github/workflows/lint.yml
-@@ -0,0 +1,20 @@
-+name: "lint"
-+
-+on:
-+  pull_request:
-+  push:
-+    branches:
-+      - master
-+      - next
-+
-+jobs:
-+  shellcheck:
-+    name: ShellCheck
-+    runs-on: ubuntu-latest
-+    steps:
-+      - name: Checkout repository
-+        uses: actions/checkout@v4
-+      - name: Run ShellCheck
-+        uses: ludeeus/action-shellcheck@master
-+        env:
-+          SHELLCHECK_OPTS: --severity=error
-diff --git a/.github/workflows/ondemand.yml b/.github/workflows/ondemand.yml
-new file mode 100644
-index 0000000..5f3034f
---- /dev/null
-+++ b/.github/workflows/ondemand.yml
-@@ -0,0 +1,31 @@
-+name: ondemand
-+
-+on:
-+  workflow_dispatch:
-+    inputs:
-+      arch:
-+        default: 'x86_64'
-+        required: true
-+      llvm-version:
-+        default: '18'
-+        required: true
-+      kernel:
-+        default: 'LATEST'
-+        required: true
-+      pahole:
-+        default: "master"
-+        required: true
-+      runs-on:
-+        default: 'ubuntu-24.04'
-+        required: true
-+
-+jobs:
-+  vmtest:
-+    name: ${{ inputs.kernel }} kernel llvm-${{ inputs.llvm-version }} pahole@${{ inputs.pahole }}
-+    uses: ./.github/workflows/vmtest.yml
-+    with:
-+      runs_on: ${{ inputs.runs-on }}
-+      kernel: ${{ inputs.kernel }}
-+      arch: ${{ inputs.arch }}
-+      llvm-version: ${{ inputs.llvm-version }}
-+      pahole: ${{ inputs.pahole }}
-diff --git a/.github/workflows/test.yml b/.github/workflows/test.yml
-new file mode 100644
-index 0000000..f11ebfe
---- /dev/null
-+++ b/.github/workflows/test.yml
-@@ -0,0 +1,36 @@
-+name: dwarves-ci
-+
-+on:
-+  pull_request:
-+  push:
-+  schedule:
-+    - cron:  '0 18 * * *'
-+
-+concurrency:
-+  group: ci-test-${{ github.head_ref }}
-+  cancel-in-progress: true
-+
-+jobs:
-+  vmtest:
-+    strategy:
-+      fail-fast: false
-+      matrix:
-+        include:
-+          - kernel: 'LATEST'
-+            runs_on: 'ubuntu-24.04'
-+            arch: 'x86_64'
-+            llvm-version: '18'
-+            pahole: 'master'
-+          - kernel: 'LATEST'
-+            runs_on: 'ubuntu-24.04-arm'
-+            arch: 'aarch64'
-+            llvm-version: '18'
-+            pahole: 'tmp.master'
-+    name: Linux ${{ matrix.kernel }}
-+    uses: ./.github/workflows/vmtest.yml
-+    with:
-+      runs_on: ${{ matrix.runs_on }}
-+      kernel: ${{ matrix.kernel }}
-+      arch: ${{ matrix.arch }}
-+      llvm-version: ${{ matrix.llvm-version }}
-+      pahole: ${{ matrix.pahole }}
-diff --git a/.github/workflows/vmtest.yml b/.github/workflows/vmtest.yml
-new file mode 100644
-index 0000000..0f66eed
---- /dev/null
-+++ b/.github/workflows/vmtest.yml
-@@ -0,0 +1,62 @@
-+name: 'Build kernel run selftests via vmtest'
-+
-+on:
-+  workflow_call:
-+    inputs:
-+      runs_on:
-+        required: true
-+        default: 'ubuntu-24.04'
-+        type: string
-+      arch:
-+        description: 'what arch to test'
-+        required: true
-+        default: 'x86_64'
-+        type: string
-+      kernel:
-+        description: 'kernel version or LATEST'
-+        required: true
-+        default: 'LATEST'
-+        type: string
-+      pahole:
-+        description: 'pahole rev or branch'
-+        required: false
-+        default: 'master'
-+        type: string
-+      llvm-version:
-+        description: 'llvm version'
-+        required: false
-+        default: '18'
-+        type: string
-+jobs:
-+  vmtest:
-+    name: pahole@${{ inputs.arch }}
-+    runs-on: ${{ inputs.runs_on }}
-+    steps:
-+
-+      - uses: actions/checkout@v4
-+
-+      - name: Setup environment
-+        uses: libbpf/ci/setup-build-env@v3
-+        with:
-+          pahole: ${{ inputs.pahole }}
-+          arch: ${{ inputs.arch }}
-+          llvm-version: ${{ inputs.llvm-version }}
-+
-+      - name: Build,install current pahole
-+        shell: bash
-+        run: .github/scripts/build-pahole.sh
-+
-+      - name: Get kernel source
-+        uses: libbpf/ci/get-linux-source@v3
-+        with:
-+          repo: 'https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git'
-+          dest: '${{ github.workspace }}/.kernel'
-+
-+      - name: Configure, build kernel with current pahole
-+        shell: bash
-+        run: .github/scripts/build-kernel.sh
-+
-+      - name: Run selftests
-+        shell: bash
-+        run: .github/scripts/run-selftests.sh
-+
-diff --git a/README b/README
-index 7ee3b87..a938266 100644
---- a/README
-+++ b/README
-@@ -21,3 +21,21 @@ cmake Options:
- You may need to update the libbpf git submodule:
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c b/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
+index f803e1c93590068d3a7829b0683be4af019266d1..5ce1b463b7a8dd7969e391618658d66f6e836cc1 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
+@@ -707,8 +707,8 @@ static void mlx5e_free_xdpsq_desc(struct mlx5e_xdpsq *sq,
+ 				xdpi = mlx5e_xdpi_fifo_pop(xdpi_fifo);
+ 				page = xdpi.page.page;
  
- git submodule update --init --recursive
+-				/* No need to check ((page->pp_magic & ~0x3UL) == PP_SIGNATURE)
+-				 * as we know this is a page_pool page.
++				/* No need to check page_pool_page_is_pp() as we
++				 * know this is a page_pool page.
+ 				 */
+ 				page_pool_recycle_direct(page->pp, page);
+ 			} while (++n < num);
+diff --git a/include/net/page_pool/types.h b/include/net/page_pool/types.h
+index 36eb57d73abc6cfc601e700ca08be20fb8281055..df0d3c1608929605224feb26173135ff37951ef8 100644
+--- a/include/net/page_pool/types.h
++++ b/include/net/page_pool/types.h
+@@ -54,6 +54,14 @@ struct pp_alloc_cache {
+ 	netmem_ref cache[PP_ALLOC_CACHE_SIZE];
+ };
+ 
++/* Mask used for checking in page_pool_page_is_pp() below. page->pp_magic is
++ * OR'ed with PP_SIGNATURE after the allocation in order to preserve bit 0 for
++ * the head page of compound page and bit 1 for pfmemalloc page.
++ * page_is_pfmemalloc() is checked in __page_pool_put_page() to avoid recycling
++ * the pfmemalloc page.
++ */
++#define PP_MAGIC_MASK ~0x3UL
 +
-+Testing:
+ /**
+  * struct page_pool_params - page pool parameters
+  * @fast:	params accessed frequently on hotpath
+@@ -264,6 +272,11 @@ void page_pool_destroy(struct page_pool *pool);
+ void page_pool_use_xdp_mem(struct page_pool *pool, void (*disconnect)(void *),
+ 			   const struct xdp_mem_info *mem);
+ void page_pool_put_netmem_bulk(netmem_ref *data, u32 count);
 +
-+Tests are available in the tests subdirectory and should be run prior to
-+submitting patches.  Patches that add functionality should add to tests
-+here also.  Tests can be run by
++static inline bool page_pool_page_is_pp(struct page *page)
++{
++	return (page->pp_magic & PP_MAGIC_MASK) == PP_SIGNATURE;
++}
+ #else
+ static inline void page_pool_destroy(struct page_pool *pool)
+ {
+@@ -278,6 +291,11 @@ static inline void page_pool_use_xdp_mem(struct page_pool *pool,
+ static inline void page_pool_put_netmem_bulk(netmem_ref *data, u32 count)
+ {
+ }
 +
-+- running the scripts directly using a pre-existing vmlinux binary; i.e.
-+	cd tests ; vmlinux=/path/2/vmlinux ./tests
-+  (the vmlinux binary must contain DWARF to be converted to BTF)
++static inline bool page_pool_page_is_pp(struct page *page)
++{
++	return false;
++}
+ #endif
+ 
+ void page_pool_put_unrefed_netmem(struct page_pool *pool, netmem_ref netmem,
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index 542d25f77be80304b731411ffd29b276ee13be0c..3535ee76afe946cbb042ecbce603bdbedc9233b9 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -55,6 +55,7 @@
+ #include <linux/delayacct.h>
+ #include <linux/cacheinfo.h>
+ #include <linux/pgalloc_tag.h>
++#include <net/page_pool/types.h>
+ #include <asm/div64.h>
+ #include "internal.h"
+ #include "shuffle.h"
+@@ -872,9 +873,7 @@ static inline bool page_expected_state(struct page *page,
+ #ifdef CONFIG_MEMCG
+ 			page->memcg_data |
+ #endif
+-#ifdef CONFIG_PAGE_POOL
+-			((page->pp_magic & ~0x3UL) == PP_SIGNATURE) |
+-#endif
++			page_pool_page_is_pp(page) |
+ 			(page->flags & check_flags)))
+ 		return false;
+ 
+@@ -901,10 +900,8 @@ static const char *page_bad_reason(struct page *page, unsigned long flags)
+ 	if (unlikely(page->memcg_data))
+ 		bad_reason = "page still charged to cgroup";
+ #endif
+-#ifdef CONFIG_PAGE_POOL
+-	if (unlikely((page->pp_magic & ~0x3UL) == PP_SIGNATURE))
++	if (unlikely(page_pool_page_is_pp(page)))
+ 		bad_reason = "page_pool leak";
+-#endif
+ 	return bad_reason;
+ }
+ 
+diff --git a/net/core/netmem_priv.h b/net/core/netmem_priv.h
+index 7eadb8393e002fd1cc2cef8a313d2ea7df76f301..f33162fd281c23e109273ba09950c5d0a2829bc9 100644
+--- a/net/core/netmem_priv.h
++++ b/net/core/netmem_priv.h
+@@ -18,6 +18,11 @@ static inline void netmem_clear_pp_magic(netmem_ref netmem)
+ 	__netmem_clear_lsb(netmem)->pp_magic = 0;
+ }
+ 
++static inline bool netmem_is_pp(netmem_ref netmem)
++{
++	return (netmem_get_pp_magic(netmem) & PP_MAGIC_MASK) == PP_SIGNATURE;
++}
 +
-+- running the tests via local scripts in .github/scripts; i.e.
-+	bash .github/scripts/build-pahole.sh; \
-+	bash .github/scripts/build-kernel.sh; \
-+	bash .github/scripts/run-selftests.sh
-+- via GitHub actions: push a branch to a GitHub repo; actions will be
-+  triggered for build and test matching the above steps.  See the "Actions"
-+  tab in the github repo for info on job pass/fail and logs.
+ static inline void netmem_set_pp(netmem_ref netmem, struct page_pool *pool)
+ {
+ 	__netmem_clear_lsb(netmem)->pp = pool;
+diff --git a/net/core/skbuff.c b/net/core/skbuff.c
+index 6cbf77bc61fce74c934628fd74b3a2cb7809e464..74a2d886a35b518d55b6d3cafcb8442212f9beee 100644
+--- a/net/core/skbuff.c
++++ b/net/core/skbuff.c
+@@ -893,11 +893,6 @@ static void skb_clone_fraglist(struct sk_buff *skb)
+ 		skb_get(list);
+ }
+ 
+-static bool is_pp_netmem(netmem_ref netmem)
+-{
+-	return (netmem_get_pp_magic(netmem) & ~0x3UL) == PP_SIGNATURE;
+-}
+-
+ int skb_pp_cow_data(struct page_pool *pool, struct sk_buff **pskb,
+ 		    unsigned int headroom)
+ {
+@@ -995,14 +990,7 @@ bool napi_pp_put_page(netmem_ref netmem)
+ {
+ 	netmem = netmem_compound_head(netmem);
+ 
+-	/* page->pp_magic is OR'ed with PP_SIGNATURE after the allocation
+-	 * in order to preserve any existing bits, such as bit 0 for the
+-	 * head page of compound page and bit 1 for pfmemalloc page, so
+-	 * mask those bits for freeing side when doing below checking,
+-	 * and page_is_pfmemalloc() is checked in __page_pool_put_page()
+-	 * to avoid recycling the pfmemalloc page.
+-	 */
+-	if (unlikely(!is_pp_netmem(netmem)))
++	if (unlikely(!netmem_is_pp(netmem)))
+ 		return false;
+ 
+ 	page_pool_put_full_netmem(netmem_get_pp(netmem), netmem, false);
+@@ -1042,7 +1030,7 @@ static int skb_pp_frag_ref(struct sk_buff *skb)
+ 
+ 	for (i = 0; i < shinfo->nr_frags; i++) {
+ 		head_netmem = netmem_compound_head(shinfo->frags[i].netmem);
+-		if (likely(is_pp_netmem(head_netmem)))
++		if (likely(netmem_is_pp(head_netmem)))
+ 			page_pool_ref_netmem(head_netmem);
+ 		else
+ 			page_ref_inc(netmem_to_page(head_netmem));
+diff --git a/net/core/xdp.c b/net/core/xdp.c
+index f86eedad586a77eb63a96a85aa6d068d3e94f077..0ba73943c6eed873b3d1c681b3b9a802b590f2d9 100644
+--- a/net/core/xdp.c
++++ b/net/core/xdp.c
+@@ -437,8 +437,8 @@ void __xdp_return(netmem_ref netmem, enum xdp_mem_type mem_type,
+ 		netmem = netmem_compound_head(netmem);
+ 		if (napi_direct && xdp_return_frame_no_direct())
+ 			napi_direct = false;
+-		/* No need to check ((page->pp_magic & ~0x3UL) == PP_SIGNATURE)
+-		 * as mem->type knows this a page_pool page
++		/* No need to check netmem_is_pp() as mem->type knows this a
++		 * page_pool page
+ 		 */
+ 		page_pool_put_full_netmem(netmem_get_pp(netmem), netmem,
+ 					  napi_direct);
+
 -- 
-2.43.5
+2.48.1
 
