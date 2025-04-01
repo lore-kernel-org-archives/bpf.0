@@ -1,28 +1,28 @@
 Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA0F51DD0F2
-	for <bpf@vger.kernel.org>; Tue,  1 Apr 2025 06:10:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4BAD1372
+	for <bpf@vger.kernel.org>; Tue,  1 Apr 2025 06:10:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743487859; cv=none; b=q5P9iYegRcwQkuFPWkXT3bsCvnadvC0cNSKbwJYqeWwNnchBVYoDC4VhP6TzhbQ/CQCQngt5paMAYo1q6l4etOQVmp0QjP8JqAmHj1CqUhmcXwewvR7fRi5tCNTMVq/v3XAlTrw+nPeGUQ371h4O2kGGWiPy7b7bH0RL64IkVls=
+	t=1743487860; cv=none; b=Tt+cQxyzosGMXMKGNN7Q5Ucf2z/3EYqK5hmy0EmoMVoQZmb3VAHH9SBNg0pFmkFwtxcGuKtTChkL/KhfxXHOrrkGQdBuDmCsCGQdxDz6v68aUiagqZ2SbtzfEhX7+sZHZgQf7+rquRBa6i/1ZivISQXh4B4eyPEMdWlv8naljXI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743487859; c=relaxed/simple;
-	bh=crJsJwuLaBAyQ8onE0w6NkkHnmQVqvbCiO6rc/x/SLI=;
+	s=arc-20240116; t=1743487860; c=relaxed/simple;
+	bh=qB+jqCRnvk42qN14gOkTjAPQ7Qt1Dg8uyi4MMC04b3k=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=nMNHBppU/JyCfdeP1WO2P+N36gFjoD7Y3KuMYa41prdPg/cKBfebDdu9dZFeeM5+QXsOi7FmEavAChnCOgGyAJH7UupoU8zD2IA2/ZHoBrQHbENzF6npZGoV5aTOq+AxJ/AWjUQmh0Jo24ot62+g6UxKbot6iqUw7P+gYfNJOFw=
+	 MIME-Version; b=RTgPkj6AeocV1GuHQPu5zl/qFA1y1zmfTdZG6XGqQGFAXBzQEHjbkhAuvB9QSx0chXUTL4pc5hDlOSyuJyCbexsAhEb3NDn8xnYuGe8k76ZR/984a6xQEZwqSqSNJovToGDNQaGlNHBGsXdxS2VnyVMULKCJFa98z/oD9a8TpeI=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
 Received: from mail.maildlp.com (unknown [172.19.163.235])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4ZRd066wWGz4f3jkw
-	for <bpf@vger.kernel.org>; Tue,  1 Apr 2025 14:10:30 +0800 (CST)
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4ZRd012xc7z4f3m7d
+	for <bpf@vger.kernel.org>; Tue,  1 Apr 2025 14:10:25 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id B5BDF1A0D34
-	for <bpf@vger.kernel.org>; Tue,  1 Apr 2025 14:10:48 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id 1590B1A0EC2
+	for <bpf@vger.kernel.org>; Tue,  1 Apr 2025 14:10:50 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.124.27])
-	by APP4 (Coremail) with SMTP id gCh0CgDXOl9ig+tnpa6yIA--.16784S7;
-	Tue, 01 Apr 2025 14:10:48 +0800 (CST)
+	by APP4 (Coremail) with SMTP id gCh0CgDXOl9ig+tnpa6yIA--.16784S9;
+	Tue, 01 Apr 2025 14:10:49 +0800 (CST)
 From: Hou Tao <houtao@huaweicloud.com>
 To: bpf@vger.kernel.org
 Cc: Martin KaFai Lau <martin.lau@linux.dev>,
@@ -41,9 +41,9 @@ Cc: Martin KaFai Lau <martin.lau@linux.dev>,
 	Zvi Effron <zeffron@riotgames.com>,
 	Cody Haas <chaas@riotgames.com>,
 	houtao1@huawei.com
-Subject: [PATCH bpf-next v3 3/6] bpf: Support atomic update for htab of maps
-Date: Tue,  1 Apr 2025 14:22:47 +0800
-Message-Id: <20250401062250.543403-4-houtao@huaweicloud.com>
+Subject: [PATCH bpf-next v3 5/6] bpf: Don't allocate per-cpu extra_elems for fd htab
+Date: Tue,  1 Apr 2025 14:22:49 +0800
+Message-Id: <20250401062250.543403-6-houtao@huaweicloud.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20250401062250.543403-1-houtao@huaweicloud.com>
 References: <20250401062250.543403-1-houtao@huaweicloud.com>
@@ -54,183 +54,77 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgDXOl9ig+tnpa6yIA--.16784S7
-X-Coremail-Antispam: 1UD129KBjvJXoWxtF4rXrWkXF45AF47tr1kZrb_yoW7Kr1xpF
-	WFgF1xKw4kGa1Yqw4rJw4v9rW5Arn5G3yUCa4kKFyFyr15Wrn7Zr1xAas2yryrCF1kArsY
-	qrZFqw1ayayrCFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUP2b4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUWw
-	A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-	W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
-	Ij6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
-	Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI
-	0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG
-	67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MI
-	IYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E
-	14v26F4j6r4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr
-	0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU04x
-	RDUUUUU==
+X-CM-TRANSID:gCh0CgDXOl9ig+tnpa6yIA--.16784S9
+X-Coremail-Antispam: 1UD129KBjvJXoW7tr18tr4fGFyDGF1kAF45trb_yoW8ZFyDpF
+	4xGr129r1rXr1vgws8JanFkryYvr1xtFyUCrZ0q34FyF1jvrn7Kr17Aa1IvFyYkryxtw1f
+	Xryava4Fv3y8ZrDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUPvb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
+	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
+	rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
+	AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E
+	14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7
+	xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Y
+	z7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2
+	AFwI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAq
+	x4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6r
+	W5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF
+	7I0E14v26r4UJVWxJr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14
+	v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuY
+	vjxUI-eODUUUU
 X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
 
 From: Hou Tao <houtao1@huawei.com>
 
-As reported by Cody Haas [1], when there is concurrent map lookup and
-map update operation in an existing element for htab of maps, the map
-lookup procedure may return -ENOENT unexpectedly.
-
-The root cause is twofold:
-
-1) the update of existing element involves two separated list operation
-In htab_map_update_elem(), it first inserts the new element at the head
-of list, then it deletes the old element. Therefore, it is possible a
-lookup operation has already iterated to the middle of the list when a
-concurrent update operation begins, and the lookup operation will fail
-to find the target element.
-
-2) the immediate reuse of htab element.
-It is more subtle. Even through the lookup operation finds the old
-element, it is possible that the target element has been removed by a
-concurrent update operation, and the element has been reused immediately
-by other update operation which runs on the same CPU as the previous
-update operation, and the element is inserted into the same bucket list.
-After these steps above, when the lookup operation tries to compare the
-key in the old element with the expected key, the match will fail
-because the key in the old element have been overwritten by other update
-operation.
-
-The two-step update process is relatively straightforward to address.
-The more challenging aspect is the immediate reuse. As Alexei pointed
-out:
-
- So since 2022 both prealloc and no_prealloc reuse elements.
- We can consider a new flag for the hash map like F_REUSE_AFTER_RCU_GP
- that will use _rcu() flavor of freeing into bpf_ma,
- but it has to have a strong reason.
-
-Given that htab of maps doesn't support special field in value and
-directly stores the inner map pointer in htab_element, just do in-place
-update for htab of maps instead of attempting to address the immediate
-reuse issue.
-
-[1]: https://lore.kernel.org/xdp-newbies/CAH7f-ULFTwKdoH_t2SFc5rWCVYLEg-14d1fBYWH2eekudsnTRg@mail.gmail.com/
+The update of element in fd htab is in-place now, therefore, there is no
+need to allocate per-cpu extra_elems, just remove it.
 
 Acked-by: Andrii Nakryiko <andrii@kernel.org>
 Signed-off-by: Hou Tao <houtao1@huawei.com>
 ---
- kernel/bpf/hashtab.c | 44 +++++++++++++++++++++-----------------------
- 1 file changed, 21 insertions(+), 23 deletions(-)
+ kernel/bpf/hashtab.c | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
 
 diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-index 9778e9871d86..4879c79dd677 100644
+index 097992efef05..2e18d7e50d9b 100644
 --- a/kernel/bpf/hashtab.c
 +++ b/kernel/bpf/hashtab.c
-@@ -1076,10 +1076,9 @@ static long htab_map_update_elem(struct bpf_map *map, void *key, void *value,
- 				 u64 map_flags)
- {
- 	struct bpf_htab *htab = container_of(map, struct bpf_htab, map);
--	struct htab_elem *l_new = NULL, *l_old;
-+	struct htab_elem *l_new, *l_old;
- 	struct hlist_nulls_head *head;
- 	unsigned long flags;
--	void *old_map_ptr;
- 	struct bucket *b;
- 	u32 key_size, hash;
- 	int ret;
-@@ -1160,24 +1159,14 @@ static long htab_map_update_elem(struct bpf_map *map, void *key, void *value,
- 		hlist_nulls_del_rcu(&l_old->hash_node);
- 
- 		/* l_old has already been stashed in htab->extra_elems, free
--		 * its special fields before it is available for reuse. Also
--		 * save the old map pointer in htab of maps before unlock
--		 * and release it after unlock.
-+		 * its special fields before it is available for reuse.
- 		 */
--		old_map_ptr = NULL;
--		if (htab_is_prealloc(htab)) {
--			if (map->ops->map_fd_put_ptr)
--				old_map_ptr = fd_htab_map_get_ptr(map, l_old);
-+		if (htab_is_prealloc(htab))
- 			check_and_free_fields(htab, l_old);
--		}
- 	}
- 	htab_unlock_bucket(b, flags);
--	if (l_old) {
--		if (old_map_ptr)
--			map->ops->map_fd_put_ptr(map, old_map_ptr, true);
--		if (!htab_is_prealloc(htab))
--			free_htab_elem(htab, l_old);
--	}
-+	if (l_old && !htab_is_prealloc(htab))
-+		free_htab_elem(htab, l_old);
- 	return 0;
- err:
- 	htab_unlock_bucket(b, flags);
-@@ -1265,6 +1254,7 @@ static long htab_map_update_elem_in_place(struct bpf_map *map, void *key,
- 	struct bpf_htab *htab = container_of(map, struct bpf_htab, map);
- 	struct htab_elem *l_new, *l_old;
- 	struct hlist_nulls_head *head;
-+	void *old_map_ptr = NULL;
- 	unsigned long flags;
- 	struct bucket *b;
- 	u32 key_size, hash;
-@@ -1296,8 +1286,15 @@ static long htab_map_update_elem_in_place(struct bpf_map *map, void *key,
- 
- 	if (l_old) {
- 		/* Update value in-place */
--		pcpu_copy_value(htab, htab_elem_get_ptr(l_old, key_size),
--				value, onallcpus);
-+		if (percpu) {
-+			pcpu_copy_value(htab, htab_elem_get_ptr(l_old, key_size),
-+					value, onallcpus);
-+		} else {
-+			void **inner_map_pptr = htab_elem_value(l_old, key_size);
-+
-+			old_map_ptr = *inner_map_pptr;
-+			WRITE_ONCE(*inner_map_pptr, *(void **)value);
-+		}
- 	} else {
- 		l_new = alloc_htab_elem(htab, key, value, key_size,
- 					hash, percpu, onallcpus, NULL);
-@@ -1309,6 +1306,8 @@ static long htab_map_update_elem_in_place(struct bpf_map *map, void *key,
- 	}
- err:
- 	htab_unlock_bucket(b, flags);
-+	if (old_map_ptr)
-+		map->ops->map_fd_put_ptr(map, old_map_ptr, true);
- 	return ret;
+@@ -206,9 +206,13 @@ static struct htab_elem *get_htab_elem(struct bpf_htab *htab, int i)
+ 	return (struct htab_elem *) (htab->elems + i * (u64)htab->elem_size);
  }
  
-@@ -2531,24 +2530,23 @@ int bpf_fd_htab_map_lookup_elem(struct bpf_map *map, void *key, u32 *value)
- 	return ret;
++/* Both percpu and fd htab support in-place update, so no need for
++ * extra elem. LRU itself can remove the least used element, so
++ * there is no need for an extra elem during map_update.
++ */
+ static bool htab_has_extra_elems(struct bpf_htab *htab)
+ {
+-	return !htab_is_percpu(htab) && !htab_is_lru(htab);
++	return !htab_is_percpu(htab) && !htab_is_lru(htab) && !is_fd_htab(htab);
  }
  
--/* only called from syscall */
-+/* Only called from syscall */
- int bpf_fd_htab_map_update_elem(struct bpf_map *map, struct file *map_file,
- 				void *key, void *value, u64 map_flags)
+ static void htab_free_prealloced_timers_and_wq(struct bpf_htab *htab)
+@@ -464,8 +468,6 @@ static struct bpf_map *htab_map_alloc(union bpf_attr *attr)
  {
- 	void *ptr;
- 	int ret;
--	u32 ufd = *(u32 *)value;
+ 	bool percpu = (attr->map_type == BPF_MAP_TYPE_PERCPU_HASH ||
+ 		       attr->map_type == BPF_MAP_TYPE_LRU_PERCPU_HASH);
+-	bool lru = (attr->map_type == BPF_MAP_TYPE_LRU_HASH ||
+-		    attr->map_type == BPF_MAP_TYPE_LRU_PERCPU_HASH);
+ 	/* percpu_lru means each cpu has its own LRU list.
+ 	 * it is different from BPF_MAP_TYPE_PERCPU_HASH where
+ 	 * the map's value itself is percpu.  percpu_lru has
+@@ -560,10 +562,7 @@ static struct bpf_map *htab_map_alloc(union bpf_attr *attr)
+ 		if (err)
+ 			goto free_map_locked;
  
--	ptr = map->ops->map_fd_get_ptr(map, map_file, ufd);
-+	ptr = map->ops->map_fd_get_ptr(map, map_file, *(int *)value);
- 	if (IS_ERR(ptr))
- 		return PTR_ERR(ptr);
- 
- 	/* The htab bucket lock is always held during update operations in fd
- 	 * htab map, and the following rcu_read_lock() is only used to avoid
--	 * the WARN_ON_ONCE in htab_map_update_elem().
-+	 * the WARN_ON_ONCE in htab_map_update_elem_in_place().
- 	 */
- 	rcu_read_lock();
--	ret = htab_map_update_elem(map, key, &ptr, map_flags);
-+	ret = htab_map_update_elem_in_place(map, key, &ptr, map_flags, false, false);
- 	rcu_read_unlock();
- 	if (ret)
- 		map->ops->map_fd_put_ptr(map, ptr, false);
+-		if (!percpu && !lru) {
+-			/* lru itself can remove the least used element, so
+-			 * there is no need for an extra elem during map_update.
+-			 */
++		if (htab_has_extra_elems(htab)) {
+ 			err = alloc_extra_elems(htab);
+ 			if (err)
+ 				goto free_prealloc;
 -- 
 2.29.2
 
