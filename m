@@ -1,170 +1,227 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61EC21EF081
-	for <bpf@vger.kernel.org>; Tue,  1 Apr 2025 09:27:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 552911624D5;
+	Tue,  1 Apr 2025 09:33:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.255
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743499663; cv=none; b=iUCwid4YBJ03VCU/YO3j/uqMFbvxc5GL1sGUYLk5ZttPgpOmukqTSfi0wJnNWWOUGbD7TIEuAzauE4uj9QwjJtXogBoJ7YSO2PzCQ1Vqm6bK4r5udk7zJyU/V2CiZNHjZDn3NpkvD1/jtJM35ZVaUpD8T/uk1xVgk86ZyIeqSuE=
+	t=1743500025; cv=none; b=gaZv8hwk7SeS9v66Bm5EDJ8w/44wd2hmvbXUXyyC5xtG6BRp6fe0CElqav2FQIKmvyjUNGAgpMdjiVGHb7lpqa4AYqZhq7FCnVygP0YLin+VjqxiwaAGMojKhVUY7nIwe5Bn3HhvNbGon2S2RzCnB/WneuQvUw69s8ivCtHWuI0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743499663; c=relaxed/simple;
-	bh=RVh2BP0zNXztVGW8aRee7AQCaUaVGwZPjcv6NQH5Dtg=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=KinF9qDdNMYtCCTn91ilySLm+of1WEpXxrjWF/QDkXTVrG3a6vEETxfOUj/DmBaqqTKjlsX2FzLX7h1Cb9IZmlL+F5EzYKPu1/5vyyj1GgVJkxCVGZtTI8FpOil7haC6dxteAGVqgxIs6bGWZSJXCvcMvvfKQbc+A0qdDeI2rEQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ZcTsZy1i; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZcTsZy1i"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1743499657;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=1ZiwmWlfT5msBPwsaS4TsFciafSUxtrnbKJoha2W67Q=;
-	b=ZcTsZy1iiEXV0aD5Iirkcx09+Bh4V+wmFb0Kgmf2k5XAzbbwJE0qRPnjyIGr/8eStCqMKz
-	VMBtW8fxwwZjDV6ZMd9y3PDj8cT9G8EMxW1amvE+NmPoP6cACktc1t5fgGW2b2oiGBlm5u
-	C7MIIDJJ9BS+Zwp3/cOJkUIa9V1iKuw=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-326-DaMO6H4KNwOmw6HP1uqYcw-1; Tue, 01 Apr 2025 05:27:30 -0400
-X-MC-Unique: DaMO6H4KNwOmw6HP1uqYcw-1
-X-Mimecast-MFC-AGG-ID: DaMO6H4KNwOmw6HP1uqYcw_1743499650
-Received: by mail-ed1-f72.google.com with SMTP id 4fb4d7f45d1cf-5e72c1bf151so5718964a12.3
-        for <bpf@vger.kernel.org>; Tue, 01 Apr 2025 02:27:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743499649; x=1744104449;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1ZiwmWlfT5msBPwsaS4TsFciafSUxtrnbKJoha2W67Q=;
-        b=Lw1grBUWvt95UoLrzRLIedky34DaajcyarSx4YAgz1AwTQjGZfXzfl+YV/LVDiP9Lo
-         TSzkfw8+ZrvqjMR+UPa+B5sQwNrosDN0jLzX38aPaipGT+zOAXAEHDl2UcdsyJgQT3Oz
-         jJD/eNjGeLt2oahJLDjd2sSJGHJ1ocuW+Z8Z0ab6Kcv59nqCfVmpG1tOfGPSgWiRs5sZ
-         e8IjKokuLe7q5Kp+vK3pjk6/yvknzvnDSTFl+F/CBkahay77yiDFNrTgfAbjmh3eswEE
-         ADtb2UxIybddbZPT6eB21NX42WWcE/GQCO3vaJBBysYAEtxt+ZeuW6AI5CuNomHFyTEK
-         ZNrw==
-X-Forwarded-Encrypted: i=1; AJvYcCXz3weKAEWJEtER249vmku2TybryCvwN3l0rfDs6tmaPhjLiMtZEufswLC8wZ7EdcO5RBE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyq0LcKf/VpSx22/1WhJ7PMn89NoutH+2gHZwacAfj2TRrQbih3
-	AptGYpkQ7U4pylMdlwNQjrRHlN6dQClzZH8kP4l50gmAjy8Fu9JmlV1tE6pqvWXgkqyw9LJ2avo
-	QO1KjJFHdbKN1imChzuPOFeoWUg5+t2R9lMtnghQMyD2jJXR/MQ==
-X-Gm-Gg: ASbGnct5MCktfj2MMN3z7vRurCCJHGPrHsj7uOewSru3+7HLOxM8vhSDCd9OqVgg5BZ
-	DrLTvAl8DmAg0qlSwd8PIt49vtziwNxGR1vbfWsxiQ8mwo9odNxDh1g5vYyTEvKTQ+o7yrhab/9
-	SAvigcKWoFGEB3Zwn7pSSF64VFqIkU1QCy5i/9IdFtSu0DGXRbkbNkXGdYsm+3zZroY880rn0Hy
-	StDh6Xfvr1ERLXkA1EAA8ReqI0fJMRtWPP/ulB8pj9TtuSxqHQof2xnPqUfSWPVx4FPidYzFKYW
-	4LQ1x3EIubTP
-X-Received: by 2002:a05:6402:278f:b0:5e1:8604:9a2d with SMTP id 4fb4d7f45d1cf-5edfcc04fd5mr9820814a12.4.1743499649604;
-        Tue, 01 Apr 2025 02:27:29 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHUGsT6plXzO/A1LVcdoXRQcUcCcBW0zBrJ/EkRGpYDjtXu+hVn+0Ib/LtdHGE/4da71LQe5w==
-X-Received: by 2002:a05:6402:278f:b0:5e1:8604:9a2d with SMTP id 4fb4d7f45d1cf-5edfcc04fd5mr9820775a12.4.1743499648927;
-        Tue, 01 Apr 2025 02:27:28 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5edc16aae2fsm6755282a12.4.2025.04.01.02.27.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Apr 2025 02:27:27 -0700 (PDT)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-	id 81DF318FD267; Tue, 01 Apr 2025 11:27:26 +0200 (CEST)
-From: =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-Subject: [PATCH net-next v6 0/2] Fix late DMA unmap crash for page pool
-Date: Tue, 01 Apr 2025 11:27:17 +0200
-Message-Id: <20250401-page-pool-track-dma-v6-0-8b83474870d4@redhat.com>
+	s=arc-20240116; t=1743500025; c=relaxed/simple;
+	bh=jPe2NtHiYqWwzbQU/mfy1WhcfYq0+olPLKklzEkcNjQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=u9en4OHSseFTyR13sBQmRKPKJvzCdRDmpxVDWIkdjUrEjIhv6RDRjzNzveNOC/kvoxqReM+jq7eWJy4efUBdkC7ozc4C7S6g/QW9J6Z7qpq5A4sxWxiB/L9PAHd1I/hfIend2QXUqvOp1uGx4tlfSnv4GoJr/6L0aZ70wuiQ/pY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.255
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.88.194])
+	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4ZRjTw1vpgz1d0sR;
+	Tue,  1 Apr 2025 17:33:08 +0800 (CST)
+Received: from kwepemg200005.china.huawei.com (unknown [7.202.181.32])
+	by mail.maildlp.com (Postfix) with ESMTPS id 93C9F140203;
+	Tue,  1 Apr 2025 17:33:38 +0800 (CST)
+Received: from [10.174.176.70] (10.174.176.70) by
+ kwepemg200005.china.huawei.com (7.202.181.32) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Tue, 1 Apr 2025 17:33:37 +0800
+Message-ID: <ffc84696-f9c6-4869-9f1e-7faf45d99060@huawei.com>
+Date: Tue, 1 Apr 2025 17:33:35 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net] xsk: correct tx_ring_empty_descs count statistics
+To: Magnus Karlsson <magnus.karlsson@gmail.com>
+CC: Stanislav Fomichev <stfomichev@gmail.com>, <bjorn@kernel.org>,
+	<magnus.karlsson@intel.com>, <maciej.fijalkowski@intel.com>,
+	<jonathan.lemon@gmail.com>, <davem@davemloft.net>, <edumazet@google.com>,
+	<kuba@kernel.org>, <pabeni@redhat.com>, <horms@kernel.org>, <ast@kernel.org>,
+	<daniel@iogearbox.net>, <hawk@kernel.org>, <john.fastabend@gmail.com>,
+	<yuehaibing@huawei.com>, <zhangchangzhong@huawei.com>,
+	<netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>
+References: <20250329061548.1357925-1-wangliang74@huawei.com>
+ <Z-qzLyGKskaqgFh5@mini-arch> <Z-sRF0G43HpGiGwH@mini-arch>
+ <0d1b689c-c0ef-460a-9969-ff5aebbb8fac@huawei.com>
+ <CAJ8uoz1JxhXFkzW8n_Dud8SR-4zE7gim5vS_UZHELiA7d0k+wQ@mail.gmail.com>
+ <ed10eea2-0bf2-4747-b519-f9b9089e434e@huawei.com>
+ <CAJ8uoz2QXNN4so-EgR8sU8A86E_AeYx1w_b+BSVeCgzr1kaR+g@mail.gmail.com>
+From: Wang Liang <wangliang74@huawei.com>
+In-Reply-To: <CAJ8uoz2QXNN4so-EgR8sU8A86E_AeYx1w_b+BSVeCgzr1kaR+g@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAHWx62cC/23NwU7EIBAG4FfZcBYzzACtnnwP44GFqSW6paGkW
- bPpu0saDzXl+M+f/5uHWDhHXsTr5SEyr3GJaarBPl2EH930yTKGmgUCGiAFcnb1Nqf0LUt2/ku
- Gm5NAhKTJaQss6nLOPMT7rr6LiYuc+F7ER23GuJSUf/Z3q9r7P1k35VVJkB4Vsulcpz2+ZQ6jK
- 88+3XZwxQOCpo1gRZQivnr1ou1AJ4SOiG0jVJGetdWgLIPzJ0Qfka6N6IpcqYfgbQc2wAkxR6R
- vI6YixgCgG2xPLvxDtm37BdksqQjVAQAA
-X-Change-ID: 20250310-page-pool-track-dma-0332343a460e
-To: "David S. Miller" <davem@davemloft.net>, 
- Jakub Kicinski <kuba@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>, 
- Saeed Mahameed <saeedm@nvidia.com>, Leon Romanovsky <leon@kernel.org>, 
- Tariq Toukan <tariqt@nvidia.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
- Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, 
- Ilias Apalodimas <ilias.apalodimas@linaro.org>, 
- Simon Horman <horms@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
- Mina Almasry <almasrymina@google.com>, 
- Yonglong Liu <liuyonglong@huawei.com>, 
- Yunsheng Lin <linyunsheng@huawei.com>, 
- Pavel Begunkov <asml.silence@gmail.com>, 
- Matthew Wilcox <willy@infradead.org>
-Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, linux-rdma@vger.kernel.org, 
- linux-mm@kvack.org, 
- =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>, 
- Qiuling Ren <qren@redhat.com>, Yuying Ma <yuma@redhat.com>
-X-Mailer: b4 0.14.2
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemg200005.china.huawei.com (7.202.181.32)
 
-This series fixes the late dma_unmap crash for page pool first reported
-by Yonglong Liu in [0]. It is an alternative approach to the one
-submitted by Yunsheng Lin, most recently in [1]. The first commit just
-wraps some tests in a helper function, in preparation of the main change
-in patch 2. See the commit message of patch 2 for the details.
 
--Toke
+在 2025/4/1 16:12, Magnus Karlsson 写道:
+> On Tue, 1 Apr 2025 at 09:44, Wang Liang <wangliang74@huawei.com> wrote:
+>>
+>> 在 2025/4/1 14:57, Magnus Karlsson 写道:
+>>> On Tue, 1 Apr 2025 at 04:36, Wang Liang <wangliang74@huawei.com> wrote:
+>>>> 在 2025/4/1 6:03, Stanislav Fomichev 写道:
+>>>>> On 03/31, Stanislav Fomichev wrote:
+>>>>>> On 03/29, Wang Liang wrote:
+>>>>>>> The tx_ring_empty_descs count may be incorrect, when set the XDP_TX_RING
+>>>>>>> option but do not reserve tx ring. Because xsk_poll() try to wakeup the
+>>>>>>> driver by calling xsk_generic_xmit() for non-zero-copy mode. So the
+>>>>>>> tx_ring_empty_descs count increases once the xsk_poll()is called:
+>>>>>>>
+>>>>>>>      xsk_poll
+>>>>>>>        xsk_generic_xmit
+>>>>>>>          __xsk_generic_xmit
+>>>>>>>            xskq_cons_peek_desc
+>>>>>>>              xskq_cons_read_desc
+>>>>>>>                q->queue_empty_descs++;
+>>> Sorry, but I do not understand how to reproduce this error. So you
+>>> first issue a setsockopt with the XDP_TX_RING option and then you do
+>>> not "reserve tx ring". What does that last "not reserve tx ring" mean?
+>>> No mmap() of that ring, or something else? I guess you have bound the
+>>> socket with a bind()? Some pseudo code on how to reproduce this would
+>>> be helpful. Just want to understand so I can help. Thank you.
+>> Sorry, the last email is garbled, and send again.
+>>
+>> Ok. Some pseudo code like below:
+>>
+>>       fd = socket(AF_XDP, SOCK_RAW, 0);
+>>       setsockopt(fd, SOL_XDP, XDP_UMEM_REG, &mr, sizeof(mr));
+>>
+>>       setsockopt(fd, SOL_XDP, XDP_UMEM_FILL_RING, &fill_size,
+>> sizeof(fill_size));
+>>       setsockopt(fd, SOL_XDP, XDP_UMEM_COMPLETION_RING, &comp_size,
+>> sizeof(comp_size));
+>>       mmap(NULL, off.fr.desc + fill_size * sizeof(__u64), ...,
+>> XDP_UMEM_PGOFF_FILL_RING);
+>>       mmap(NULL, off.cr.desc + comp_size * sizeof(__u64), ...,
+>> XDP_UMEM_PGOFF_COMPLETION_RING);
+>>
+>>       setsockopt(fd, SOL_XDP, XDP_RX_RING, &rx_size, sizeof(rx_size));
+>>       setsockopt(fd, SOL_XDP, XDP_TX_RING, &tx_size, sizeof(tx_size));
+>>       mmap(NULL, off.rx.desc + rx_size * sizeof(struct xdp_desc), ...,
+>> XDP_PGOFF_RX_RING);
+>>       mmap(NULL, off.tx.desc + tx_size * sizeof(struct xdp_desc), ...,
+>> XDP_PGOFF_TX_RING);
+>>
+>>       bind(fd, (struct sockaddr *)&sxdp, sizeof(sxdp));
+>>       bpf_map_update_elem(xsk_map_fd, &queue_id, &fd, 0);
+>>
+>>       while(!global_exit) {
+>>           poll(fds, 1, -1);
+>>           handle_receive_packets(...);
+>>       }
+>>
+>> The xsk is created success, and xs->tx is initialized.
+>>
+>> The "not reserve tx ring" means user app do not update tx ring producer.
+>> Like:
+>>
+>>       xsk_ring_prod__reserve(tx, 1, &tx_idx);
+>>       xsk_ring_prod__tx_desc(tx, tx_idx)->addr = frame;
+>>       xsk_ring_prod__tx_desc(tx, tx_idx)->len = pkg_length;
+>>       xsk_ring_prod__submit(tx, 1);
+>>
+>> These functions (xsk_ring_prod__reserve, etc.) is provided by libxdp.
+>>
+>> The tx->producer is not updated, so the xs->tx->cached_cons and
+>> xs->tx->cached_prod are always zero.
+>>
+>> When receive packets and user app call poll(), xsk_generic_xmit() will be
+>> triggered by xsk_poll(), leading to this issue.
+> Thanks, that really helped. The problem here is that the kernel cannot
+> guess your intent. Since you created a socket with both Rx and Tx, it
+> thinks you will use it for both, so it should increase
+> queue_empty_descs in this case as you did not provide any Tx descs.
+> Your proposed patch will break this. Consider this Tx case with the
+> exact same init code as you have above but with this send loop:
+>
+> while(!global_exit) {
+>         maybe_send_packets(...);
+>         poll(fds, 1, -1);
+> }
+>
+> With your patch, the queue_empty_descs will never be increased in the
+> case when I do not submit any Tx descs, even though we would like it
+> to be so.
+>
+> So in my mind, you have a couple of options:
+>
+> * Create two sockets, one rx only and one tx only and use the
+> SHARED_UMEM mode to bind them to the same netdev and queue id. In your
+> loop above, you would use the Rx socket. This might have the drawback
+> that you need to call poll() twice if you are both sending and
+> receiving in the same loop. But the stats will be the way you want
+> them to be.
+>
+> * Introduce a new variable in user space that you increase every time
+> you do poll() in your loop above. When displaying the statistics, just
+> deduct this variable from the queue_empty_descs that the kernel
+> reports using the XDP_STATISTICS getsockopt().
+>
+> Hope this helps.
 
-[0] https://lore.kernel.org/lkml/8067f204-1380-4d37-8ffd-007fc6f26738@kernel.org/T/
-[1] https://lore.kernel.org/r/20250307092356.638242-1-linyunsheng@huawei.com
 
-Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
----
-Changes in v6:
-- Add READ_ONCE() around both reads of pp->dma_sync
-- Link to v5: https://lore.kernel.org/r/20250328-page-pool-track-dma-v5-0-55002af683ad@redhat.com
+Thank you for the advices.
 
-Changes in v5:
-- Dereferencing pp->p.dev if pp->pma_sync is unset could lead to a
-  crash, so make sure we don't do that.
-- With the change above, patch 2 was just changing a single field, so
-  squash it into patch 3
-- Link to v4: https://lore.kernel.org/r/20250327-page-pool-track-dma-v4-0-b380dc6706d0@redhat.com
+ From user view, queue_empty_descs increases when the app only receive 
+packets and call poll(), it is some confusing.
 
-Changes in v4:
-- Rebase on net-next
-- Collect tags
-- Link to v3: https://lore.kernel.org/r/20250326-page-pool-track-dma-v3-0-8e464016e0ac@redhat.com
+In your Tx case, if user app use sendto() to send packets, the 
+queue_empty_descs will increase. This is reasonably.
 
-Changes in v3:
-- Use a full-width bool for pp->dma_sync instead of a full unsigned
-  long (in patch 2), and leave pp->dma_sync_cpu alone.
+In linux manual, poll() waits for some event on a file descriptor. But 
+in af_xdp, poll() has a side effect of send msg.
 
-- Link to v2: https://lore.kernel.org/r/20250325-page-pool-track-dma-v2-0-113ebc1946f3@redhat.com
+Previous commit 77cd0d7b3f25 ("xsk: add support for need_wakeup flag in 
+AF_XDP rings") add need_wakeup flag. It mainly work in rx process. When 
+the application and driver run on the same core, if the fill ring is 
+empty, the driver can set the need_wakeup flag and return, so the 
+application could be scheduled to produce entries of the fill ring.
 
-Changes in v2:
-- Always leave two bits at the top of pp_magic as zero, instead of one
+The commit df551058f7a3 ("xsk: Fix crash in poll when device does not 
+support ndo_xsk_wakeup") add sendmsg function in xsk_poll(), considering 
+some devices donot define ndo_xsk_wakeup.
 
-- Add an rcu_read_lock() around __page_pool_dma_sync_for_device()
+At present the value of need_wakeup & XDP_WAKEUP_TX is always true, 
+except the mlx5 driver. If the mlx5 driver queued some packets for tx, 
+it may clear XDP_WAKEUP_TX by xsk_clear_tx_need_wakeup(). So when user 
+app use sendto() to send packets, __xsk_sendmsg() will return without 
+calling xsk_generic_xmit().
 
-- Add a comment in poison.h with a reference to the bitmask definition
+So I have a bold suggestion, how about removing xsk_generic_xmit() in 
+xsk_poll()?
 
-- Add a longer description of the logic of the bitmask definitions to
-  the comment in types.h, and a summary of the security implications of
-  using the pp_magic field to the commit message of patch 3
-
-- Collect Mina's Reviewed-by and Yonglong's Tested-by tags
-
-- Link to v1: https://lore.kernel.org/r/20250314-page-pool-track-dma-v1-0-c212e57a74c2@redhat.com
-
----
-Toke Høiland-Jørgensen (2):
-      page_pool: Move pp_magic check into helper functions
-      page_pool: Track DMA-mapped pages and unmap them when destroying the pool
-
- drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c |  4 +-
- include/linux/poison.h                           |  4 ++
- include/net/page_pool/types.h                    | 63 +++++++++++++++++-
- mm/page_alloc.c                                  |  9 +--
- net/core/netmem_priv.h                           | 33 +++++++++-
- net/core/page_pool.c                             | 82 ++++++++++++++++++++----
- net/core/skbuff.c                                | 16 +----
- net/core/xdp.c                                   |  4 +-
- 8 files changed, 176 insertions(+), 39 deletions(-)
----
-base-commit: 1a9239bb4253f9076b5b4b2a1a4e8d7defd77a95
-change-id: 20250310-page-pool-track-dma-0332343a460e
-
+>>>>>>> To avoid this count error, add check for tx descs before send msg in poll.
+>>>>>>>
+>>>>>>> Fixes: df551058f7a3 ("xsk: Fix crash in poll when device does not support ndo_xsk_wakeup")
+>>>>>>> Signed-off-by: Wang Liang <wangliang74@huawei.com>
+>>>>>> Acked-by: Stanislav Fomichev <sdf@fomichev.me>
+>>>>> Hmm, wait, I stumbled upon xskq_has_descs again and it looks only at
+>>>>> cached prod/cons. How is it supposed to work when the actual tx
+>>>>> descriptor is posted? Is there anything besides xskq_cons_peek_desc from
+>>>>> __xsk_generic_xmit that refreshes cached_prod?
+>>>> Yes, you are right!
+>>>>
+>>>> How about using xskq_cons_nb_entries() to check free descriptors?
+>>>>
+>>>> Like this:
+>>>>
+>>>>
+>>>> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+>>>> index e5d104ce7b82..babb7928d335 100644
+>>>> --- a/net/xdp/xsk.c
+>>>> +++ b/net/xdp/xsk.c
+>>>> @@ -993,7 +993,7 @@ static __poll_t xsk_poll(struct file *file, struct
+>>>> socket *sock,
+>>>>            if (pool->cached_need_wakeup) {
+>>>>                    if (xs->zc)
+>>>>                            xsk_wakeup(xs, pool->cached_need_wakeup);
+>>>> -               else if (xs->tx)
+>>>> +               else if (xs->tx && xskq_cons_nb_entries(xs->tx, 1))
+>>>>                            /* Poll needs to drive Tx also in copy mode */
+>>>>                            xsk_generic_xmit(sk);
+>>>>            }
+>>>>
+>>>>
