@@ -1,152 +1,330 @@
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB5F642052;
-	Tue,  1 Apr 2025 05:54:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2CA51372
+	for <bpf@vger.kernel.org>; Tue,  1 Apr 2025 06:10:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743486877; cv=none; b=jqraQH8ZgKJKBr9zzy58IBiG9GLVukZBmmGPUxl0ZCqCbQLD9XeUVL46xVtMVe0cOzbF0P87v5U191qYJ0t+wd2lXQip6uZXMdC5UPCYBF+GieA8wxysWvaSNdpvuabI2hdAMg3wMyZHwTEjcRPOnGnwC1RyxkW/MoG8uxIpnh8=
+	t=1743487858; cv=none; b=jWxxBahAYU8hxp4PmhCrDjyrajMX1z9S4lGb5gfhAnhEA2crlMNFfSAL7Sgq10DTkEoEsE8vnROBTVlp+ZmBSpHucIVoLkgjDoVfvJrc1H+Qus4blp1uqj3CvF8We/YhbSdKJgeVoMu4drncCdRzIV+B3Eq0Z+tIyKsFGTuqvq4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743486877; c=relaxed/simple;
-	bh=muRCcD6CdqjTJbWO6ypcG2B5pstkv7hwz4Gjs5E8a64=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZTXWvadwcBfMAVeIum3PT/KA9ho8/2f8Rc1rBry+jNZZYH5/ejX429sujiVV6JDy9PqvSjx8cQJJY71+ZIafMjV/gkwGpkMbZKCId+XSvN8xqAH4o+VDIRbCURG2G3Anude0/dRCxR9J/bpUufE66VuWdVij4cP2NP5yWed7eNc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=mCuaWYHp; arc=none smtp.client-ip=198.137.202.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="mCuaWYHp"
-Received: from [192.168.7.202] ([71.202.166.45])
-	(authenticated bits=0)
-	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 5315rnna3585174
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Mon, 31 Mar 2025 22:53:50 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 5315rnna3585174
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2025032001; t=1743486833;
-	bh=IsfDg+Xsar+P1dKxOMDHesRyrvTgpQ4ZnItmblKhbNo=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=mCuaWYHpnRlQenAgliGLWATiV5WBBr6xjToONzu4sHItD9CcH/Hn50bDSEPtXNZHr
-	 EmqrAKW9JffJBkWQby7YDNbuh5dAusXyZylpGe//cf2TIpo8U9KQTebtElsvd5V6YU
-	 HF8RdPMDVbhf6+t7dYSnb9ysczMAV1Fx5VJE/67I9mU0mkx81L5F9z8nRvdhiz9hLN
-	 sCK8LNjY5ocO9OXH0mW1yJE2ZnmLSV7SipWK2RChNsbc23C/QGRt/kc29IMVpQqyvo
-	 nZSU48inZXaexf0KV8NOAQgpc90SasTMpL5bfOFSYTA0+0PAcMy4DOrsLjm31CtW80
-	 qxOV8xFK/xmlw==
-Message-ID: <a0254e73-bf7c-4876-b64e-b08e96044666@zytor.com>
-Date: Mon, 31 Mar 2025 22:53:49 -0700
+	s=arc-20240116; t=1743487858; c=relaxed/simple;
+	bh=FbVZn5tes41i4uFQEG1qxNONyuvrUGfUbQTrlPODBiY=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=cRW7+J0lgwyI2nL9jaBFQVDjb6OWq/YThe8nMQQiavTDGsmeqXhYJUIS7RnDtNaHlRfaWK0fQJFDkOo3yJBkf1C68jDs/WEqQ1SwcGo8CtOQpu/8s1r1fO1gfbAqziDcMyIDXjFjqzvnMhfQCsqgrdjfppxj9aw/rPE1DvfHvCY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=none smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.235])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4ZRd054c26z4f3k6M
+	for <bpf@vger.kernel.org>; Tue,  1 Apr 2025 14:10:29 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.128])
+	by mail.maildlp.com (Postfix) with ESMTP id 638931A0D1A
+	for <bpf@vger.kernel.org>; Tue,  1 Apr 2025 14:10:47 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.124.27])
+	by APP4 (Coremail) with SMTP id gCh0CgDXOl9ig+tnpa6yIA--.16784S5;
+	Tue, 01 Apr 2025 14:10:47 +0800 (CST)
+From: Hou Tao <houtao@huaweicloud.com>
+To: bpf@vger.kernel.org
+Cc: Martin KaFai Lau <martin.lau@linux.dev>,
+	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Hao Luo <haoluo@google.com>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Jiri Olsa <jolsa@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	=?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@kernel.org>,
+	Zvi Effron <zeffron@riotgames.com>,
+	Cody Haas <chaas@riotgames.com>,
+	houtao1@huawei.com
+Subject: [PATCH bpf-next v3 1/6] bpf: Factor out htab_elem_value helper()
+Date: Tue,  1 Apr 2025 14:22:45 +0800
+Message-Id: <20250401062250.543403-2-houtao@huaweicloud.com>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20250401062250.543403-1-houtao@huaweicloud.com>
+References: <20250401062250.543403-1-houtao@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v1 01/15] x86/msr: Replace __wrmsr() with
- native_wrmsrl()
-To: "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, virtualization@lists.linux.dev,
-        linux-edac@vger.kernel.org, kvm@vger.kernel.org,
-        xen-devel@lists.xenproject.org, linux-ide@vger.kernel.org,
-        linux-pm@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, jgross@suse.com,
-        andrew.cooper3@citrix.com, peterz@infradead.org, acme@kernel.org,
-        namhyung@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        irogers@google.com, adrian.hunter@intel.com, kan.liang@linux.intel.com,
-        wei.liu@kernel.org, ajay.kaher@broadcom.com,
-        alexey.amakhalov@broadcom.com, bcm-kernel-feedback-list@broadcom.com,
-        tony.luck@intel.com, pbonzini@redhat.com, vkuznets@redhat.com,
-        seanjc@google.com, luto@kernel.org, boris.ostrovsky@oracle.com,
-        kys@microsoft.com, haiyangz@microsoft.com, decui@microsoft.com
-References: <20250331082251.3171276-1-xin@zytor.com>
- <20250331082251.3171276-2-xin@zytor.com> <Z-pruogreCuU66wm@gmail.com>
- <9D15DE81-2E68-4FCD-A133-4963602E18C9@zytor.com>
-Content-Language: en-US
-From: Xin Li <xin@zytor.com>
-Autocrypt: addr=xin@zytor.com; keydata=
- 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
- l75w1xInsg==
-In-Reply-To: <9D15DE81-2E68-4FCD-A133-4963602E18C9@zytor.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:gCh0CgDXOl9ig+tnpa6yIA--.16784S5
+X-Coremail-Antispam: 1UD129KBjvJXoW3XrWfKFyfWrW3Aw4UXw48Xrb_yoWfKryDpF
+	WrWw1xCw48Zr4qq3y5tw40ka95J34Dtr1jkas8ta4FkFn8Jr9xJ3WxAF9FgrZ8AF1vyrn5
+	trWvqaySqay8CrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUPFb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUGw
+	A2048vs2IY020Ec7CjxVAFwI0_Gr0_Xr1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+	W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+	6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
+	Ij6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
+	Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI
+	0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG
+	67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MI
+	IYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E
+	14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJV
+	W8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU3cTm
+	DUUUU
+X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
 
-On 3/31/2025 1:32 PM, H. Peter Anvin wrote:
-> On March 31, 2025 3:17:30 AM PDT, Ingo Molnar <mingo@kernel.org> wrote:
->>
->> * Xin Li (Intel) <xin@zytor.com> wrote:
->>
->>> -	__wrmsr      (MSR_AMD_DBG_EXTN_CFG, val | 3ULL << 3, val >> 32);
->>> +	native_wrmsrl(MSR_AMD_DBG_EXTN_CFG, val | 3ULL << 3);
->>
->> This is an improvement.
->>
->>> -	__wrmsr      (MSR_IA32_PQR_ASSOC, rmid_p, plr->closid);
->>> +	native_wrmsrl(MSR_IA32_PQR_ASSOC, (u64)plr->closid << 32 | rmid_p);
->>
->>> -	__wrmsr      (MSR_IA32_PQR_ASSOC, rmid_p, closid_p);
->>> +	native_wrmsrl(MSR_IA32_PQR_ASSOC, (u64)closid_p << 32 | rmid_p);
->>
->> This is not an improvement.
->>
->> Please provide a native_wrmsrl() API variant where natural [rmid_p, closid_p]
->> high/lo parameters can be used, without the shift-uglification...
->>
->> Thanks,
->>
->> 	Ingo
-> 
-> Directing this question primarily to Ingo, who is more than anyone else the namespace consistency guardian:
-> 
-> On the subject of msr function naming ... *msrl() has always been misleading. The -l suffix usually means 32 bits; sometimes it means the C type "long" (which in the kernel is used instead of size_t/uintptr_t, which might end up being "fun" when 128-bit architectures appear some time this century), but for a fixed 64-but type we normally use -q.
-> 
-> Should we rename the *msrl() functions to *msrq() as part of this overhaul?
-> 
+From: Hou Tao <houtao1@huawei.com>
 
-Per "struct msr" defined in arch/x86/include/asm/shared/msr.h:
+All hash maps store map key and map value together. The relative offset
+of the map value compared to the map key is round_up(key_size, 8).
+Therefore, factor out a common helper htab_elem_value() to calculate the
+address of the map value instead of duplicating the logic.
 
-struct msr {
-         union {
-                 struct {
-                         u32 l;
-                         u32 h;
-                 };
-                 u64 q;
-         };
-};
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
+Signed-off-by: Hou Tao <houtao1@huawei.com>
+---
+ kernel/bpf/hashtab.c | 64 +++++++++++++++++++++-----------------------
+ 1 file changed, 30 insertions(+), 34 deletions(-)
 
-Probably *msrq() is what we want?
-
+diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+index 5a5adc66b8e2..0bebc919bbf7 100644
+--- a/kernel/bpf/hashtab.c
++++ b/kernel/bpf/hashtab.c
+@@ -175,20 +175,25 @@ static bool htab_is_percpu(const struct bpf_htab *htab)
+ 		htab->map.map_type == BPF_MAP_TYPE_LRU_PERCPU_HASH;
+ }
+ 
++static inline void *htab_elem_value(struct htab_elem *l, u32 key_size)
++{
++	return l->key + round_up(key_size, 8);
++}
++
+ static inline void htab_elem_set_ptr(struct htab_elem *l, u32 key_size,
+ 				     void __percpu *pptr)
+ {
+-	*(void __percpu **)(l->key + roundup(key_size, 8)) = pptr;
++	*(void __percpu **)htab_elem_value(l, key_size) = pptr;
+ }
+ 
+ static inline void __percpu *htab_elem_get_ptr(struct htab_elem *l, u32 key_size)
+ {
+-	return *(void __percpu **)(l->key + roundup(key_size, 8));
++	return *(void __percpu **)htab_elem_value(l, key_size);
+ }
+ 
+ static void *fd_htab_map_get_ptr(const struct bpf_map *map, struct htab_elem *l)
+ {
+-	return *(void **)(l->key + roundup(map->key_size, 8));
++	return *(void **)htab_elem_value(l, map->key_size);
+ }
+ 
+ static struct htab_elem *get_htab_elem(struct bpf_htab *htab, int i)
+@@ -215,10 +220,10 @@ static void htab_free_prealloced_timers_and_wq(struct bpf_htab *htab)
+ 		elem = get_htab_elem(htab, i);
+ 		if (btf_record_has_field(htab->map.record, BPF_TIMER))
+ 			bpf_obj_free_timer(htab->map.record,
+-					   elem->key + round_up(htab->map.key_size, 8));
++					   htab_elem_value(elem, htab->map.key_size));
+ 		if (btf_record_has_field(htab->map.record, BPF_WORKQUEUE))
+ 			bpf_obj_free_workqueue(htab->map.record,
+-					       elem->key + round_up(htab->map.key_size, 8));
++					       htab_elem_value(elem, htab->map.key_size));
+ 		cond_resched();
+ 	}
+ }
+@@ -245,7 +250,8 @@ static void htab_free_prealloced_fields(struct bpf_htab *htab)
+ 				cond_resched();
+ 			}
+ 		} else {
+-			bpf_obj_free_fields(htab->map.record, elem->key + round_up(htab->map.key_size, 8));
++			bpf_obj_free_fields(htab->map.record,
++					    htab_elem_value(elem, htab->map.key_size));
+ 			cond_resched();
+ 		}
+ 		cond_resched();
+@@ -670,7 +676,7 @@ static void *htab_map_lookup_elem(struct bpf_map *map, void *key)
+ 	struct htab_elem *l = __htab_map_lookup_elem(map, key);
+ 
+ 	if (l)
+-		return l->key + round_up(map->key_size, 8);
++		return htab_elem_value(l, map->key_size);
+ 
+ 	return NULL;
+ }
+@@ -709,7 +715,7 @@ static __always_inline void *__htab_lru_map_lookup_elem(struct bpf_map *map,
+ 	if (l) {
+ 		if (mark)
+ 			bpf_lru_node_set_ref(&l->lru_node);
+-		return l->key + round_up(map->key_size, 8);
++		return htab_elem_value(l, map->key_size);
+ 	}
+ 
+ 	return NULL;
+@@ -763,7 +769,7 @@ static void check_and_free_fields(struct bpf_htab *htab,
+ 		for_each_possible_cpu(cpu)
+ 			bpf_obj_free_fields(htab->map.record, per_cpu_ptr(pptr, cpu));
+ 	} else {
+-		void *map_value = elem->key + round_up(htab->map.key_size, 8);
++		void *map_value = htab_elem_value(elem, htab->map.key_size);
+ 
+ 		bpf_obj_free_fields(htab->map.record, map_value);
+ 	}
+@@ -1039,11 +1045,9 @@ static struct htab_elem *alloc_htab_elem(struct bpf_htab *htab, void *key,
+ 			htab_elem_set_ptr(l_new, key_size, pptr);
+ 	} else if (fd_htab_map_needs_adjust(htab)) {
+ 		size = round_up(size, 8);
+-		memcpy(l_new->key + round_up(key_size, 8), value, size);
++		memcpy(htab_elem_value(l_new, key_size), value, size);
+ 	} else {
+-		copy_map_value(&htab->map,
+-			       l_new->key + round_up(key_size, 8),
+-			       value);
++		copy_map_value(&htab->map, htab_elem_value(l_new, key_size), value);
+ 	}
+ 
+ 	l_new->hash = hash;
+@@ -1106,7 +1110,7 @@ static long htab_map_update_elem(struct bpf_map *map, void *key, void *value,
+ 		if (l_old) {
+ 			/* grab the element lock and update value in place */
+ 			copy_map_value_locked(map,
+-					      l_old->key + round_up(key_size, 8),
++					      htab_elem_value(l_old, key_size),
+ 					      value, false);
+ 			return 0;
+ 		}
+@@ -1134,7 +1138,7 @@ static long htab_map_update_elem(struct bpf_map *map, void *key, void *value,
+ 		 * and update element in place
+ 		 */
+ 		copy_map_value_locked(map,
+-				      l_old->key + round_up(key_size, 8),
++				      htab_elem_value(l_old, key_size),
+ 				      value, false);
+ 		ret = 0;
+ 		goto err;
+@@ -1220,8 +1224,7 @@ static long htab_lru_map_update_elem(struct bpf_map *map, void *key, void *value
+ 	l_new = prealloc_lru_pop(htab, key, hash);
+ 	if (!l_new)
+ 		return -ENOMEM;
+-	copy_map_value(&htab->map,
+-		       l_new->key + round_up(map->key_size, 8), value);
++	copy_map_value(&htab->map, htab_elem_value(l_new, map->key_size), value);
+ 
+ 	ret = htab_lock_bucket(b, &flags);
+ 	if (ret)
+@@ -1500,10 +1503,10 @@ static void htab_free_malloced_timers_and_wq(struct bpf_htab *htab)
+ 			/* We only free timer on uref dropping to zero */
+ 			if (btf_record_has_field(htab->map.record, BPF_TIMER))
+ 				bpf_obj_free_timer(htab->map.record,
+-						   l->key + round_up(htab->map.key_size, 8));
++						   htab_elem_value(l, htab->map.key_size));
+ 			if (btf_record_has_field(htab->map.record, BPF_WORKQUEUE))
+ 				bpf_obj_free_workqueue(htab->map.record,
+-						       l->key + round_up(htab->map.key_size, 8));
++						       htab_elem_value(l, htab->map.key_size));
+ 		}
+ 		cond_resched_rcu();
+ 	}
+@@ -1615,15 +1618,12 @@ static int __htab_map_lookup_and_delete_elem(struct bpf_map *map, void *key,
+ 			off += roundup_value_size;
+ 		}
+ 	} else {
+-		u32 roundup_key_size = round_up(map->key_size, 8);
++		void *src = htab_elem_value(l, map->key_size);
+ 
+ 		if (flags & BPF_F_LOCK)
+-			copy_map_value_locked(map, value, l->key +
+-					      roundup_key_size,
+-					      true);
++			copy_map_value_locked(map, value, src, true);
+ 		else
+-			copy_map_value(map, value, l->key +
+-				       roundup_key_size);
++			copy_map_value(map, value, src);
+ 		/* Zeroing special fields in the temp buffer */
+ 		check_and_init_map_value(map, value);
+ 	}
+@@ -1680,12 +1680,12 @@ __htab_map_lookup_and_delete_batch(struct bpf_map *map,
+ 				   bool is_percpu)
+ {
+ 	struct bpf_htab *htab = container_of(map, struct bpf_htab, map);
+-	u32 bucket_cnt, total, key_size, value_size, roundup_key_size;
+ 	void *keys = NULL, *values = NULL, *value, *dst_key, *dst_val;
+ 	void __user *uvalues = u64_to_user_ptr(attr->batch.values);
+ 	void __user *ukeys = u64_to_user_ptr(attr->batch.keys);
+ 	void __user *ubatch = u64_to_user_ptr(attr->batch.in_batch);
+ 	u32 batch, max_count, size, bucket_size, map_id;
++	u32 bucket_cnt, total, key_size, value_size;
+ 	struct htab_elem *node_to_free = NULL;
+ 	u64 elem_map_flags, map_flags;
+ 	struct hlist_nulls_head *head;
+@@ -1720,7 +1720,6 @@ __htab_map_lookup_and_delete_batch(struct bpf_map *map,
+ 		return -ENOENT;
+ 
+ 	key_size = htab->map.key_size;
+-	roundup_key_size = round_up(htab->map.key_size, 8);
+ 	value_size = htab->map.value_size;
+ 	size = round_up(value_size, 8);
+ 	if (is_percpu)
+@@ -1812,7 +1811,7 @@ __htab_map_lookup_and_delete_batch(struct bpf_map *map,
+ 				off += size;
+ 			}
+ 		} else {
+-			value = l->key + roundup_key_size;
++			value = htab_elem_value(l, key_size);
+ 			if (map->map_type == BPF_MAP_TYPE_HASH_OF_MAPS) {
+ 				struct bpf_map **inner_map = value;
+ 
+@@ -2063,11 +2062,11 @@ static void *bpf_hash_map_seq_next(struct seq_file *seq, void *v, loff_t *pos)
+ static int __bpf_hash_map_seq_show(struct seq_file *seq, struct htab_elem *elem)
+ {
+ 	struct bpf_iter_seq_hash_map_info *info = seq->private;
+-	u32 roundup_key_size, roundup_value_size;
+ 	struct bpf_iter__bpf_map_elem ctx = {};
+ 	struct bpf_map *map = info->map;
+ 	struct bpf_iter_meta meta;
+ 	int ret = 0, off = 0, cpu;
++	u32 roundup_value_size;
+ 	struct bpf_prog *prog;
+ 	void __percpu *pptr;
+ 
+@@ -2077,10 +2076,9 @@ static int __bpf_hash_map_seq_show(struct seq_file *seq, struct htab_elem *elem)
+ 		ctx.meta = &meta;
+ 		ctx.map = info->map;
+ 		if (elem) {
+-			roundup_key_size = round_up(map->key_size, 8);
+ 			ctx.key = elem->key;
+ 			if (!info->percpu_value_buf) {
+-				ctx.value = elem->key + roundup_key_size;
++				ctx.value = htab_elem_value(elem, map->key_size);
+ 			} else {
+ 				roundup_value_size = round_up(map->value_size, 8);
+ 				pptr = htab_elem_get_ptr(elem, map->key_size);
+@@ -2165,7 +2163,6 @@ static long bpf_for_each_hash_elem(struct bpf_map *map, bpf_callback_t callback_
+ 	struct hlist_nulls_head *head;
+ 	struct hlist_nulls_node *n;
+ 	struct htab_elem *elem;
+-	u32 roundup_key_size;
+ 	int i, num_elems = 0;
+ 	void __percpu *pptr;
+ 	struct bucket *b;
+@@ -2180,7 +2177,6 @@ static long bpf_for_each_hash_elem(struct bpf_map *map, bpf_callback_t callback_
+ 
+ 	is_percpu = htab_is_percpu(htab);
+ 
+-	roundup_key_size = round_up(map->key_size, 8);
+ 	/* migration has been disabled, so percpu value prepared here will be
+ 	 * the same as the one seen by the bpf program with
+ 	 * bpf_map_lookup_elem().
+@@ -2196,7 +2192,7 @@ static long bpf_for_each_hash_elem(struct bpf_map *map, bpf_callback_t callback_
+ 				pptr = htab_elem_get_ptr(elem, map->key_size);
+ 				val = this_cpu_ptr(pptr);
+ 			} else {
+-				val = elem->key + roundup_key_size;
++				val = htab_elem_value(elem, map->key_size);
+ 			}
+ 			num_elems++;
+ 			ret = callback_fn((u64)(long)map, (u64)(long)key,
+-- 
+2.29.2
 
