@@ -1,75 +1,50 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 569FF1A5BB7;
-	Wed,  2 Apr 2025 17:39:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7915E19F461;
+	Wed,  2 Apr 2025 18:09:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743615553; cv=none; b=QPJPgn+lic9BgQQ2Ryi1a/BGriYlxmA0e5vbBnuXFawmGiogWk6JR8Xp/ouueDd5BBbMyXlUWIKRDg/j82hpnqWswGVdkBFsdrG9gwvHm9QP3sz7R9HqYAMxDy9hAJs6XIWmM3hNMb4ciOEhyP9liL6V98P732ZuQDXKsUyjew0=
+	t=1743617369; cv=none; b=qIk6Iop0RBTIFAB88h8ox2yTozRcqb15qqeLr2SmnckuLASCOK8n3FsArP6QmnI3h7elqid5pwQFAGeYRY34PfQWAIZB7rZBT9iMjXm0cBOAHM++YnzSkEQiKu+DK+KP6s0ajwWwgsJwI4yme4VZtrCCiOYTFVxwn7WruwC16tQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743615553; c=relaxed/simple;
-	bh=poj5Uz7hN2nI/ThlVRjgp5nTeEJW9joe9UEDFKvNk3Y=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=enxBVTcH6adqSAXYMl/B9GvwIr4+HfIdiF6YZ4vBujsCLTCnEoBzuSpRdibkNDi5A7lOvqrtRHiaejST881CehwN/b0DcdvMx2F4nvr8PZOdd98IonoQqOaxC7y5klFbCe6/vC0S36qV863MHbXaWaTaLMB1sYkgwZn8pyenEhI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jkmbTN6t; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1743617369; c=relaxed/simple;
+	bh=rNmMO+u09D5zPnq+/pg7RkMy9c5EPySrQWya/Jy4H60=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=kn8nSLod5pxA4rO4fy5OjzmNCfBLkDP4i45mOj9oN8ZwmQYOs5b6fiPxJEIDKGg09YL66OmesKbcmFiWvrgyABSo1Nojh9QUlTNBbKBPWNU6cE8FcwJ8QOG3Rq605lxq1Vk3wmvvLF/9cKfavxVN2PmefX/PvJK/fH27LNHU5uA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YG4y6sUt; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jkmbTN6t"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1743615551; x=1775151551;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=poj5Uz7hN2nI/ThlVRjgp5nTeEJW9joe9UEDFKvNk3Y=;
-  b=jkmbTN6tXv9CVJwYoV4sAgIFT/KbYLvPNmhNdHguJvC5M2DZsbgGlPX+
-   OveylZT/h7Ach7Ib8Nwq0kp1KK9/PyA9h1fecJRZYAc9pMzwJh+nyq8b3
-   OHxy/AiccTi9sVjDpr4BAy6HbnBe5ruNqCDHwiVtcpxuXHZYiT4OLbass
-   9ChlSt69K6rIAVhR88AalrspMaxUwEELJZQiNpVSpuv/q4E/3nG8WAtYH
-   Mdr8GW8Jkus0nYTRdwAmFg+iSCYD1vzwqOSzoZgXozNGpAQeXPygsfUim
-   GhyBrUH47kB6M7I4Spj7mzsGGXFyocZmsxvgd2aGq0SRalUYAnQ4ELfKO
-   A==;
-X-CSE-ConnectionGUID: ZjaaOjjBSiajkdvaFW63Yw==
-X-CSE-MsgGUID: gYyB3UftSPq6zEHnbBjOLA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11392"; a="44257258"
-X-IronPort-AV: E=Sophos;i="6.15,182,1739865600"; 
-   d="scan'208";a="44257258"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2025 10:39:09 -0700
-X-CSE-ConnectionGUID: W2aEGKaXQS+5hhlFnLu8FA==
-X-CSE-MsgGUID: FVAVRICRTPKfyZRShgXojg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,182,1739865600"; 
-   d="scan'208";a="149968772"
-Received: from anguy11-upstream.jf.intel.com ([10.166.9.133])
-  by fmviesa002.fm.intel.com with ESMTP; 02 Apr 2025 10:39:08 -0700
-From: Tony Nguyen <anthony.l.nguyen@intel.com>
-To: davem@davemloft.net,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	edumazet@google.com,
-	andrew+netdev@lunn.ch,
-	netdev@vger.kernel.org
-Cc: Joe Damato <jdamato@fastly.com>,
-	anthony.l.nguyen@intel.com,
-	vitaly.lifshits@intel.com,
-	dima.ruinskiy@intel.com,
-	maciej.fijalkowski@intel.com,
-	magnus.karlsson@intel.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	hawk@kernel.org,
-	john.fastabend@gmail.com,
-	bpf@vger.kernel.org,
-	stable@vger.kernel.org,
-	Gerhard Engleder <gerhard@engleder-embedded.com>,
-	Mor Bar-Gabay <morx.bar.gabay@intel.com>
-Subject: [PATCH net 1/5] igc: Fix XSK queue NAPI ID mapping
-Date: Wed,  2 Apr 2025 10:38:53 -0700
-Message-ID: <20250402173900.1957261-2-anthony.l.nguyen@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YG4y6sUt"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB9B0C4CEDD;
+	Wed,  2 Apr 2025 18:09:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1743617368;
+	bh=rNmMO+u09D5zPnq+/pg7RkMy9c5EPySrQWya/Jy4H60=;
+	h=From:To:Cc:Subject:Date:From;
+	b=YG4y6sUtR4ioGK8k00znOECE6AwnW1jKHtU3d4Yo28ZvmRpHcn9dZNADVqHntSJri
+	 UQeLbECJ0saH0Y62Xrx95BcgTHsGuvTAa0eFkV01Lq8wFZuMdumb8zU+aEHDU7NY0c
+	 rN0lSmFlt8dLaZFaxhr0e3p1I+hqUI8d8COStuGRNgnb3JgbFKRYUuLuvOlbk7Dtl+
+	 6GqUXKzIe22z7+gmSUNiXPl4m0Os7dohc3a705Wh4dq3cgE8kxR2+1PUQfpQCVbX6J
+	 xLQ+EmuLzsBKEabhRgZ45b1ndmLr9D0vrauaE4U79ZSWbOzQtAT87TBJqiOd4me1C0
+	 eiHXf7kQTTTZQ==
+From: Andrii Nakryiko <andrii@kernel.org>
+To: linux-trace-kernel@vger.kernel.org,
+	peterz@infradead.org,
+	mingo@kernel.org
+Cc: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	kernel-team@meta.com,
+	mhocko@kernel.org,
+	rostedt@goodmis.org,
+	oleg@redhat.com,
+	brauner@kernel.org,
+	glider@google.com,
+	mhiramat@kernel.org,
+	mathieu.desnoyers@efficios.com,
+	akpm@linux-foundation.org,
+	Andrii Nakryiko <andrii@kernel.org>
+Subject: [PATCH v2] exit: move and extend sched_process_exit() tracepoint
+Date: Wed,  2 Apr 2025 11:09:25 -0700
+Message-ID: <20250402180925.90914-1-andrii@kernel.org>
 X-Mailer: git-send-email 2.47.1
-In-Reply-To: <20250402173900.1957261-1-anthony.l.nguyen@intel.com>
-References: <20250402173900.1957261-1-anthony.l.nguyen@intel.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -78,88 +53,96 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Joe Damato <jdamato@fastly.com>
+It is useful to be able to access current->mm at task exit to, say,
+record a bunch of VMA information right before the task exits (e.g., for
+stack symbolization reasons when dealing with short-lived processes that
+exit in the middle of profiling session). Currently,
+trace_sched_process_exit() is triggered after exit_mm() which resets
+current->mm to NULL making this tracepoint unsuitable for inspecting
+and recording task's mm_struct-related data when tracing process
+lifetimes.
 
-In commit b65969856d4f ("igc: Link queues to NAPI instances"), the XSK
-queues were incorrectly unmapped from their NAPI instances. After
-discussion on the mailing list and the introduction of a test to codify
-the expected behavior, we can see that the unmapping causes the
-check_xsk test to fail:
+There is a particularly suitable place, though, right after
+taskstats_exit() is called, but before we do exit_mm() and other
+exit_*() resource teardowns. taskstats performs a similar kind of
+accounting that some applications do with BPF, and so co-locating them
+seems like a good fit. So that's where trace_sched_process_exit() is
+moved with this patch.
 
-NETIF=enp86s0 ./tools/testing/selftests/drivers/net/queues.py
+Also, existing trace_sched_process_exit() tracepoint is notoriously
+missing `group_dead` flag that is certainly useful in practice and some
+of our production applications have to work around this. So plumb
+`group_dead` through while at it, to have a richer and more complete
+tracepoint.
 
-[...]
-  # Check|     ksft_eq(q.get('xsk', None), {},
-  # Check failed None != {} xsk attr on queue we configured
-  not ok 4 queues.check_xsk
+Note that we can't use sched_process_template anymore, and so we use
+TRACE_EVENT()-based tracepoint definition. But all the field names and
+order, as well as assign and output logic remain intact. We just add one
+extra field at the end in backwards-compatible way.
 
-After this commit, the test passes:
-
-  ok 4 queues.check_xsk
-
-Note that the test itself is only in net-next, so I tested this change
-by applying it to my local net-next tree, booting, and running the test.
-
-Cc: stable@vger.kernel.org
-Fixes: b65969856d4f ("igc: Link queues to NAPI instances")
-Signed-off-by: Joe Damato <jdamato@fastly.com>
-Reviewed-by: Gerhard Engleder <gerhard@engleder-embedded.com>
-Tested-by: Mor Bar-Gabay <morx.bar.gabay@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- drivers/net/ethernet/intel/igc/igc.h      | 2 --
- drivers/net/ethernet/intel/igc/igc_main.c | 4 ++--
- drivers/net/ethernet/intel/igc/igc_xdp.c  | 2 --
- 3 files changed, 2 insertions(+), 6 deletions(-)
+ include/trace/events/sched.h | 28 +++++++++++++++++++++++++---
+ kernel/exit.c                |  2 +-
+ 2 files changed, 26 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/igc/igc.h b/drivers/net/ethernet/intel/igc/igc.h
-index cd1d7b6c1782..c35cc5cb1185 100644
---- a/drivers/net/ethernet/intel/igc/igc.h
-+++ b/drivers/net/ethernet/intel/igc/igc.h
-@@ -337,8 +337,6 @@ struct igc_adapter {
- 	struct igc_led_classdev *leds;
- };
+diff --git a/include/trace/events/sched.h b/include/trace/events/sched.h
+index 8994e97d86c1..05a14f2b35c3 100644
+--- a/include/trace/events/sched.h
++++ b/include/trace/events/sched.h
+@@ -328,9 +328,31 @@ DEFINE_EVENT(sched_process_template, sched_process_free,
+ /*
+  * Tracepoint for a task exiting:
+  */
+-DEFINE_EVENT(sched_process_template, sched_process_exit,
+-	     TP_PROTO(struct task_struct *p),
+-	     TP_ARGS(p));
++TRACE_EVENT(sched_process_exit,
++
++	TP_PROTO(struct task_struct *p, bool group_dead),
++
++	TP_ARGS(p, group_dead),
++
++	TP_STRUCT__entry(
++		__array(	char,	comm,	TASK_COMM_LEN	)
++		__field(	pid_t,	pid			)
++		__field(	int,	prio			)
++		__field(	bool,	group_dead		)
++	),
++
++	TP_fast_assign(
++		memcpy(__entry->comm, p->comm, TASK_COMM_LEN);
++		__entry->pid		= p->pid;
++		__entry->prio		= p->prio; /* XXX SCHED_DEADLINE */
++		__entry->group_dead	= group_dead;
++	),
++
++	TP_printk("comm=%s pid=%d prio=%d group_dead=%s",
++		  __entry->comm, __entry->pid, __entry->prio,
++		  __entry->group_dead ? "true" : "false"
++	)
++);
  
--void igc_set_queue_napi(struct igc_adapter *adapter, int q_idx,
--			struct napi_struct *napi);
- void igc_up(struct igc_adapter *adapter);
- void igc_down(struct igc_adapter *adapter);
- int igc_open(struct net_device *netdev);
-diff --git a/drivers/net/ethernet/intel/igc/igc_main.c b/drivers/net/ethernet/intel/igc/igc_main.c
-index 491d942cefca..27c99ff59ed4 100644
---- a/drivers/net/ethernet/intel/igc/igc_main.c
-+++ b/drivers/net/ethernet/intel/igc/igc_main.c
-@@ -5022,8 +5022,8 @@ static int igc_sw_init(struct igc_adapter *adapter)
- 	return 0;
- }
+ /*
+  * Tracepoint for waiting on task to unschedule:
+diff --git a/kernel/exit.c b/kernel/exit.c
+index c2e6c7b7779f..4abd307b1586 100644
+--- a/kernel/exit.c
++++ b/kernel/exit.c
+@@ -937,12 +937,12 @@ void __noreturn do_exit(long code)
  
--void igc_set_queue_napi(struct igc_adapter *adapter, int vector,
--			struct napi_struct *napi)
-+static void igc_set_queue_napi(struct igc_adapter *adapter, int vector,
-+			       struct napi_struct *napi)
- {
- 	struct igc_q_vector *q_vector = adapter->q_vector[vector];
+ 	tsk->exit_code = code;
+ 	taskstats_exit(tsk, group_dead);
++	trace_sched_process_exit(tsk, group_dead);
  
-diff --git a/drivers/net/ethernet/intel/igc/igc_xdp.c b/drivers/net/ethernet/intel/igc/igc_xdp.c
-index c538e6b18aad..9eb47b4beb06 100644
---- a/drivers/net/ethernet/intel/igc/igc_xdp.c
-+++ b/drivers/net/ethernet/intel/igc/igc_xdp.c
-@@ -97,7 +97,6 @@ static int igc_xdp_enable_pool(struct igc_adapter *adapter,
- 		napi_disable(napi);
- 	}
+ 	exit_mm();
  
--	igc_set_queue_napi(adapter, queue_id, NULL);
- 	set_bit(IGC_RING_FLAG_AF_XDP_ZC, &rx_ring->flags);
- 	set_bit(IGC_RING_FLAG_AF_XDP_ZC, &tx_ring->flags);
+ 	if (group_dead)
+ 		acct_process();
+-	trace_sched_process_exit(tsk);
  
-@@ -147,7 +146,6 @@ static int igc_xdp_disable_pool(struct igc_adapter *adapter, u16 queue_id)
- 	xsk_pool_dma_unmap(pool, IGC_RX_DMA_ATTR);
- 	clear_bit(IGC_RING_FLAG_AF_XDP_ZC, &rx_ring->flags);
- 	clear_bit(IGC_RING_FLAG_AF_XDP_ZC, &tx_ring->flags);
--	igc_set_queue_napi(adapter, queue_id, napi);
- 
- 	if (needs_reset) {
- 		napi_enable(napi);
+ 	exit_sem(tsk);
+ 	exit_shm(tsk);
 -- 
 2.47.1
 
