@@ -1,85 +1,158 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45A45219A70
-	for <bpf@vger.kernel.org>; Fri,  4 Apr 2025 20:04:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57E7421D599;
+	Fri,  4 Apr 2025 20:33:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743797081; cv=none; b=dJvmbUrJTaCbSwW2YteJdixCf0ofUiqX+k3zr0Csn+wJ5SZEzcmvOwdCqcH1z5j2mOugfA4oYA7ztek18jlUXmzk4VnwnJ/ck9y8lSMx1kgLpN/RkYKPu9F2Iy5E6JkEI9Tg853MBz2ejps/JNXevYfSXqBujT6le/LlDEdkAxQ=
+	t=1743798809; cv=none; b=g+gPbvsBTUvqkg+5KG5kyai/wWN0ZoFm69tmttlV2UBdRv08tvJY8+pjfVLaHSVof+P2KF57QKOdCqzRESMRbAISjQIKpTrXXaAzeIpWEQIKCd8vTvmu0sL3CjVRof9QnMeQuv9BCamE6S3M+X5YbF+pLBk16A+G3g6OoOi+P04=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743797081; c=relaxed/simple;
-	bh=IvhhTUIiW/q5zcRrtTNnMYdCLxAmDvUAWeXeyHuVrZk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=V7ezSXF9nNDk4WfQWSZQVK2PeZAbUmghnKE1wstSRliK7xZ6gCOM0uiqihbJSvXqpf0xEzwunLO3O/gJNzv6VRP+xL9cx1C/eG8bc0hfnym4fAiq02zE1XfdCFCbEDnobHS27zFi6epaSxaQzKunIvBFCjmHQfyzXiqrb/4iJRE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=WpZrk2wO; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1743798809; c=relaxed/simple;
+	bh=jFvO2bJuTG4Ts4CMNjPFuPu6FgOmvIgksnPLagCcOxo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=cv5XJ+9/wvT+WEgqmEb/YZpS4qefHg62UTt9z/NIBi8OSbsPOxlv2hCIkXqKeh+fucMTjy6EdUIDBZmzpyrJkfRa38eW88cLwzxVCemc7H55ryzLvll5Hm9ZwUOk8cZ6EJzZFP7OalrluUHgrtmAw60isfELKe0PglAvBsfS7xQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lzYH5ewG; arc=none smtp.client-ip=209.85.208.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WpZrk2wO"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1743797079;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=IvhhTUIiW/q5zcRrtTNnMYdCLxAmDvUAWeXeyHuVrZk=;
-	b=WpZrk2wOsraCuPF5qNVIask4xGXk+XgkEUOPZ+ID7Dxxa0kGW31tW65SqsP9Clw/fSgGBb
-	Cm3XLW7LHdtHzTCp68m4nztV7FLcnlEUkK/5RxSJ00wE/+KC/t8bX1E20DZmV2aabuJ/Fx
-	bNjo6/Aa/BpYYeSGmQQ13XRCnHWYjHI=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-591-_AB5LUwCNciRrLpL4MbUMw-1; Fri,
- 04 Apr 2025 16:04:34 -0400
-X-MC-Unique: _AB5LUwCNciRrLpL4MbUMw-1
-X-Mimecast-MFC-AGG-ID: _AB5LUwCNciRrLpL4MbUMw_1743797072
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 504C819560B8;
-	Fri,  4 Apr 2025 20:04:32 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.224.144])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id 1B9D71809B74;
-	Fri,  4 Apr 2025 20:04:27 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-	oleg@redhat.com; Fri,  4 Apr 2025 22:03:57 +0200 (CEST)
-Date: Fri, 4 Apr 2025 22:03:52 +0200
-From: Oleg Nesterov <oleg@redhat.com>
-To: Andrii Nakryiko <andrii@kernel.org>
-Cc: linux-trace-kernel@vger.kernel.org, peterz@infradead.org,
-	mingo@kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-	kernel-team@meta.com, rostedt@goodmis.org, mhiramat@kernel.org,
-	bigeasy@linutronix.de, ast@kernel.org
-Subject: Re: [PATCH v2 tip/perf] uprobes: avoid false lockdep splat in uprobe
- timer callback
-Message-ID: <20250404200351.GI3720@redhat.com>
-References: <20250404194848.2109539-1-andrii@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lzYH5ewG"
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-5e5e63162a0so3902327a12.3;
+        Fri, 04 Apr 2025 13:33:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1743798805; x=1744403605; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=h4jie8VsL5jEq4w1LylrEHNeeWtiZI/nPv4l0uBUSy8=;
+        b=lzYH5ewG8AH6jVIVrzTApf5a3BdfwXqDOpThJ9EE5oY8IjwpqiHtBxCwMNZdo98d9b
+         yNVx/M6Q8+JM7H+/XANYLpFL875dXJoGgWTNu16M1TLhhl2Cp7r1zw3pH5kDdWWnvye2
+         oAboifuHjQnoW8wSKX/Gvltk0Y0gfmvHfN95DSFZvv0Na9HCK9DOZKU1wI7dF+xtKzlK
+         wl7QdbkqFSqT1kJBsKGjWF9x8UqlbYeQkYWgG3TdQdMRjPcnyMw7vLHiU5Do+7/R1he3
+         5tQsIKMX3BEQN+UVMB28b9x3ovA7QryVsJ31tRyD7GnsGQvtZVl9mX+FAh296znWsTLF
+         KUAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1743798805; x=1744403605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=h4jie8VsL5jEq4w1LylrEHNeeWtiZI/nPv4l0uBUSy8=;
+        b=I8PADt1OFg3/xKYw6HFBVzzGcJf7b71gSc0u31OV2rMjChHF6wJNqD/YEmg+Wl+GnR
+         W9N5gdkCEyP7NyyrsJlewCmU25HuqnuyNkOfQMrD9LNT9fOoYeNWKANSZb3TxJvJX3JO
+         tpRiFRET1uXemxn2bDoYtrzX3XieXa6s38PyRfQN3T5ovWHtCbPjGRoHs3KJxFPi+fLD
+         76MSRtc2J2B9VLLdLtlx8Msp4YZjbY8L+cEtPdA3298dv9bf7/zx+NGojYj3xBan/L9r
+         BCA0EX+SwzBqMfRdhF7CSdkkYAj7CLqmS4TU0810kxBrbqXkdguoTtXPG7kOzN+qki3T
+         khKw==
+X-Forwarded-Encrypted: i=1; AJvYcCUc2BsuQ/uKJhs4Hhop24toqN8pNTvn0SiuoLbQeDkEh7XiAUETlWTbCog0aA18w0aC1d3DSuY/B9YYcLTdlhddNbSR@vger.kernel.org, AJvYcCWcW2dquioWK6qXKpIc3WdXd+M6zezl8o3WsTEQq7NvOqqUlPe9ytavhu+JJ6g1imlVaqs=@vger.kernel.org, AJvYcCXziZcOCGviQCsDW1kzzRgEYmp73GCVKM1mmZsyoGzolXsM7wQ8UsrtIrXIQ90ORrD6XEpv9Yrbi48hYdFb@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzceag8i/tCKPKk7wmwEzOTxJvOxJkwPMuDD+6/aQsejfUJiP6I
+	8adad8FuKFbJuuXLJ5UjP/1h6YxK8X7ulDVR1VFo+5FdRShqY1jFo4CKWU9ch52z92CaIBlGgVr
+	NteozBNMWkZVTR6zaaAu7gJtsk9g=
+X-Gm-Gg: ASbGncucHADSoY9ebpHN2o351dFFPdR/XQA4DfsTG9Ody9qaHEvLDvolonQWbpPrd/6
+	mKJLf3iJDBJH/ADyBx0tWCoSrhr1brAf535yM0OWWW5Egv0gusmXzXzBAy7N1xFOcyC2AFlylo5
+	Q1yRZy9ER74oPw7B+8xgdWnP15JDDdo5gk0LwxTqPP31N71+Ijn3h0
+X-Google-Smtp-Source: AGHT+IGeJqwUH8uBu4TLo/R6q3donYu47Xzk7fav2vZe9wavylS2grYPXEdbSi+E8TweeLGwkDzhWU2CqNxTaG1C3F8=
+X-Received: by 2002:a17:906:7955:b0:ac3:3fe4:3378 with SMTP id
+ a640c23a62f3a-ac7d181d95cmr515448666b.12.1743798805262; Fri, 04 Apr 2025
+ 13:33:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250404194848.2109539-1-andrii@kernel.org>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+References: <20250320114200.14377-1-jolsa@kernel.org> <20250320114200.14377-9-jolsa@kernel.org>
+In-Reply-To: <20250320114200.14377-9-jolsa@kernel.org>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Fri, 4 Apr 2025 13:33:07 -0700
+X-Gm-Features: ATxdqUHwd-OF88zMZHqc_3Ajvt9DS6mGBtT8fgVDUF8Sb0ZrwKrrJtTbymCwPD4
+Message-ID: <CAEf4Bza=xexa6jixoz7dDY7WSoX3k5Tub231o_6nO_89LB_BjA@mail.gmail.com>
+Subject: Re: [PATCH RFCv3 08/23] uprobes/x86: Add uprobe syscall to speed up uprobe
+To: Jiri Olsa <jolsa@kernel.org>
+Cc: Oleg Nesterov <oleg@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, x86@kernel.org, 
+	Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>, 
+	John Fastabend <john.fastabend@gmail.com>, Hao Luo <haoluo@google.com>, 
+	Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
+	Alan Maguire <alan.maguire@oracle.com>, David Laight <David.Laight@aculab.com>, 
+	=?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas@t-8ch.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 04/04, Andrii Nakryiko wrote:
+On Thu, Mar 20, 2025 at 4:43=E2=80=AFAM Jiri Olsa <jolsa@kernel.org> wrote:
 >
-> Also, point out in the comments more explicitly why we use seqcount
-> despite our reader side being rather simple and never retrying. We favor
-> well-maintained kernel primitive in favor of open-coding our own memory
-> barriers.
+> Adding new uprobe syscall that calls uprobe handlers for given
+> 'breakpoint' address.
 >
-> Link: https://lore.kernel.org/bpf/CAADnVQLLOHZmPO4X_dQ+cTaSDvzdWHzA0qUqQDhLFYL3D6xPxg@mail.gmail.com/
-> Reported-by: Alexei Starovoitov <ast@kernel.org>
-> Suggested-by: Sebastian Siewior <bigeasy@linutronix.de>
-> Fixes: 8622e45b5da1 ("uprobes: Reuse return_instances between multiple uretprobes within task")
-> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+> The idea is that the 'breakpoint' address calls the user space
+> trampoline which executes the uprobe syscall.
+>
+> The syscall handler reads the return address of the initial call
+> to retrieve the original 'breakpoint' address. With this address
+> we find the related uprobe object and call its consumers.
+>
+> Adding the arch_uprobe_trampoline_mapping function that provides
+> uprobe trampoline mapping. This mapping is backed with one global
+> page initialized at __init time and shared by the all the mapping
+> instances.
+>
+> We do not allow to execute uprobe syscall if the caller is not
+> from uprobe trampoline mapping.
+>
+> The uprobe syscall ensures the consumer (bpf program) sees registers
+> values in the state before the trampoline was called.
+>
+> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> ---
+>  arch/x86/entry/syscalls/syscall_64.tbl |   1 +
+>  arch/x86/kernel/uprobes.c              | 134 +++++++++++++++++++++++++
+>  include/linux/syscalls.h               |   2 +
+>  include/linux/uprobes.h                |   1 +
+>  kernel/events/uprobes.c                |  22 ++++
+>  kernel/sys_ni.c                        |   1 +
+>  6 files changed, 161 insertions(+)
+>
 
-LGTM. FWIW,
+[...]
 
-Acked-by: Oleg Nesterov <oleg@redhat.com>
+> +void handle_syscall_uprobe(struct pt_regs *regs, unsigned long bp_vaddr)
+> +{
+> +       struct uprobe *uprobe;
+> +       int is_swbp;
+> +
+> +       rcu_read_lock_trace();
+> +       uprobe =3D find_active_uprobe_rcu(bp_vaddr, &is_swbp);
+> +       if (!uprobe)
+> +               goto unlock;
+> +
+> +       if (!get_utask())
+> +               goto unlock;
+> +
+> +       if (arch_uprobe_ignore(&uprobe->arch, regs))
+> +               goto unlock;
+> +
+> +       handler_chain(uprobe, regs);
+> +
+> + unlock:
+> +       rcu_read_unlock_trace();
 
+we now have `guard(rcu_tasks_trace)();`, let's use that in this
+function, seems like a good fit?
+
+
+> +}
+> +
+>  /*
+>   * Perform required fix-ups and disable singlestep.
+>   * Allow pending signals to take effect.
+> diff --git a/kernel/sys_ni.c b/kernel/sys_ni.c
+> index c00a86931f8c..bf5d05c635ff 100644
+> --- a/kernel/sys_ni.c
+> +++ b/kernel/sys_ni.c
+> @@ -392,3 +392,4 @@ COND_SYSCALL(setuid16);
+>  COND_SYSCALL(rseq);
+>
+>  COND_SYSCALL(uretprobe);
+> +COND_SYSCALL(uprobe);
+> --
+> 2.49.0
+>
