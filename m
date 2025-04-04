@@ -1,183 +1,236 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C572154C0D;
-	Fri,  4 Apr 2025 16:37:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B930101EE
+	for <bpf@vger.kernel.org>; Fri,  4 Apr 2025 17:19:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743784673; cv=none; b=qbAyxi4O96t/De8qgHLmW9uYI/ECmr6Xwx+aU9EHVBlLqNWwJpcuj6bTVD4FxRqqzAR8flRSQO0S5BCOrPV/gTizNwSZELXG3HhGN57YxjAhG2cjjuhjMrwhrcKgwHCUofcMEk0z14uK2DAyheyoTK4wXtLpDNcY1P1SZFE7ZHo=
+	t=1743787168; cv=none; b=OGq6bU8XrYy99+i4YyP6NgE4dLZfWXPDzJdlorQv3PrIVb/2M0lDFYivGm78eC/zWSVPjND9iu9W6Zc4Z3HzkiLgnx4MfrzouzrsKGsqDWnpElJRp/lZyC5nflk4DoVHG94fLAZ5yXgcPMrsWcniRIm+38BaMdV37qMV1rHobo0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743784673; c=relaxed/simple;
-	bh=rRoLnolncHmePR/dDpHsSC2EmhJT64V5SPShOlncaY4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=iSc5twYrtwNVztEFGTyiUs4U6iA3FdVoCkpAVzd2R2I/58XUEB8mqL8mSyS6TNzFhyzyXlsEKm89kJ4iJ60ETAUsu49X70EcFRbo0oW9AvTPmCqZx+pxj9HaoqzPUfY3B3CIVDoQNOeM74NgEo+iO1sBa0DchV5KimCE5kfqU7U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=LaHIuD19; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1743787168; c=relaxed/simple;
+	bh=jrSAu1905NCKUql5l26XKIT0tdjDWCjk+eS5RB2efEE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=qoWF64F9GzPtgMJm7Iu0PwpYJ9TNIy47FLFAywIiOfz/Rof0yVEZ8weiz3cg1gQ/5lq6hEFXmGxHRf7QbQ1sKd4Agu8DWuMjZggVKL0N1af76N2go2FPxIYQiI1DGmYX+WJksjUZQfkFRovzitf04l1LN7WQiXpkzoiTbavkhjk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VYhbvNu3; arc=none smtp.client-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="LaHIuD19"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=ENuoaEgh9uyc2IrxK0yKzzOvrotjm82t0h3DCK6jUY4=; b=LaHIuD19EpkCFrpFSIrSIEHD0P
-	N9cDu5ce0S5pXrwW6qvJ8GAcpcz8guIla1awWlR3swLG4sSKDySwizBQP5MR2sahWu0gvHywsTR5w
-	gjq4f9Z44E2uPuGb0WEOG7XFxvXPTnylCh8CzY/xwTteasBSyURfVVAWnAwwh1Gb2Ij+JLvKwjjBY
-	K+jyLV6ZyTOui78n0pAIyWSS8ylUOeBS2KgXcBat/TUCYz5JfFytMrB+q5SC1+E01OR2sHtDS2glM
-	RMIUafoDtbPJbTCdTjur9D49l++jJT7DyWs8xC1H5wS55heBl7FhrCgPhIDBeXQ+M4VbhnGY37udg
-	Iu7HwVqw==;
-Received: from sslproxy03.your-server.de ([88.198.220.132])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1u0jds-000Loq-0y;
-	Fri, 04 Apr 2025 18:11:40 +0200
-Received: from [178.197.249.21] (helo=[192.168.1.114])
-	by sslproxy03.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1u0jdr-000Hd3-2c;
-	Fri, 04 Apr 2025 18:11:39 +0200
-Message-ID: <584071a3-10df-443a-ad8c-1fa7bc82d821@iogearbox.net>
-Date: Fri, 4 Apr 2025 18:11:39 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VYhbvNu3"
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-223fd89d036so27906495ad.1
+        for <bpf@vger.kernel.org>; Fri, 04 Apr 2025 10:19:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1743787166; x=1744391966; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tXefj7snqlGg3CUh1c0CK4R18FD5uae4w+/wLht38Ok=;
+        b=VYhbvNu3zPo971Wx+LyWaBOb96zcUK1jVumPh+udEmwnCSCjlMHB3Q03fUkQ99h0Gp
+         tETQALi29EWUj03Cf+cBlMorpmQLAh3NnAkPCABiA0Dndudnli0Fh3648EjTYjOdXI59
+         LyWfVPPjnPmhUI+lIJFAiHa+87DSqXFPbJPElKO8CC0B5RgOKwBnyCHLG5bcvYRio3yz
+         DrXKDGNf0aKQSzbvgFk21o+c+qeIgnnBaJqws5qfHF1sWhH4EoOLQrm+hrDe40f/9UCj
+         tB9RSYU2NAWo0vkXqpaYobtENWFi96SKPfN72yVSNoSsXECBfwJorXKXRn+rY5QiRoHl
+         5JuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1743787166; x=1744391966;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tXefj7snqlGg3CUh1c0CK4R18FD5uae4w+/wLht38Ok=;
+        b=bIJeMO3GEeqdVuN3FU7jmclIfz4Q91U3LFDDKqbIk1zuiBFAPgsBV0/vdURfETHgxG
+         1DGJvjBGT9KMDUcQzOYXiLLW0fhSUxUZa8CYdguq8CESvMvLdLecNojRa8i8h5+HhaL/
+         HCfLWPoSkB8XrpUX5D3UGTizrkrnpjh7e6qdcpXmecIqUWZfWr/h1p+rxFRM0aWWjFM1
+         Hjl5imrDu+b575SpDzOXuCH3tu8WPIXLUnOHKuA8SQJRL6SmW3jGZJcLEFLSw0zG0Hkx
+         +DEVwZBQ8mtWErSaEmrgQMHuwlcfbeObwk1MuHHVaujIhjrZJDlc7Qh9V7tJxGSeW+Sj
+         CPkw==
+X-Gm-Message-State: AOJu0YySVOAd0fMIXid3CNPoM2KUN7z628mzVjVo9PUgxoKsXDXTjPLe
+	vkveGBZGOFAdtHVkPp7O7mS9sJFrrtXXCaEyFQozF4hLt0elPlrzbBytP64JfzNFanPOTmJNgou
+	7g3prZZFVCQikFQqhIR/H93ZjSlU=
+X-Gm-Gg: ASbGncv0jX02O8vAcUh4YusVLRQVlFUFywsJKYAyJVHJ+izfutK2VuurT1k7qT/4cQ7
+	/0C3slYtALwrLaHZ0QmLmXW0hCTV1B40MowAOmNuVNGShQ6NwrozUtjtUlm5WiI0g+mvGx0jGhL
+	X4WdzcpOiPyje8KDfgdLhn3jGq3B3qW27Hlar1mFra/w==
+X-Google-Smtp-Source: AGHT+IGW0jd1scy3aP/8jTjK6oeASG0gdsumnwYEyKN7cRSLlGHSakHnttd1F64qYqZdBBsVxRwt8mpRHCxinj7zQOg=
+X-Received: by 2002:a17:903:2407:b0:224:93e:b5d7 with SMTP id
+ d9443c01a7336-22a8a0a3601mr62795195ad.34.1743787166501; Fri, 04 Apr 2025
+ 10:19:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf v2 1/2] bpf: support SKF_NET_OFF and SKF_LL_OFF on skb
- frags
-To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>, bpf@vger.kernel.org
-Cc: netdev@vger.kernel.org, ast@kernel.org, john.fastabend@gmail.com,
- Willem de Bruijn <willemb@google.com>, Matt Moeller
- <moeller.matt@gmail.com>, =?UTF-8?Q?Maciej_=C5=BBenczykowski?=
- <maze@google.com>
-References: <20250404142633.1955847-1-willemdebruijn.kernel@gmail.com>
- <20250404142633.1955847-2-willemdebruijn.kernel@gmail.com>
-Content-Language: en-US
-From: Daniel Borkmann <daniel@iogearbox.net>
-Autocrypt: addr=daniel@iogearbox.net; keydata=
- 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
-In-Reply-To: <20250404142633.1955847-2-willemdebruijn.kernel@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 1.0.7/27598/Fri Apr  4 10:40:10 2025)
+References: <20250403222809.90634-1-mykyta.yatsenko5@gmail.com> <20250403222809.90634-3-mykyta.yatsenko5@gmail.com>
+In-Reply-To: <20250403222809.90634-3-mykyta.yatsenko5@gmail.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Fri, 4 Apr 2025 10:19:13 -0700
+X-Gm-Features: AQ5f1JrzR9r4tpfjSv3TTSCmiNeWqT3f_6iY7eAQhsDWKQdcYrXGgeGVm3P_LE8
+Message-ID: <CAEf4BzZKn-J=e0d0dSU-08XniQiYbgd=LAVNkTMXuDqALNqOhw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v4 2/2] selftests/bpf: add BTF.ext line/func info
+ getter tests
+To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
+	daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com, eddyz87@gmail.com, 
+	Mykyta Yatsenko <yatsenko@meta.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Willem,
-
-On 4/4/25 4:23 PM, Willem de Bruijn wrote:
-[...]
-> v1->v2
->    - introduce bfp_skb_load_helper_convert_offset to avoid open coding
+On Thu, Apr 3, 2025 at 3:28=E2=80=AFPM Mykyta Yatsenko
+<mykyta.yatsenko5@gmail.com> wrote:
+>
+> From: Mykyta Yatsenko <yatsenko@meta.com>
+>
+> Add selftests checking that line and func info retrieved by newly added
+> libbpf APIs are the same as returned by kernel via bpf_prog_get_info_by_f=
+d.
+>
+> Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
 > ---
->   include/linux/filter.h |  3 --
->   kernel/bpf/core.c      | 21 -----------
->   net/core/filter.c      | 80 +++++++++++++++++++++++-------------------
->   3 files changed, 44 insertions(+), 60 deletions(-)
-> 
-> diff --git a/include/linux/filter.h b/include/linux/filter.h
-> index f5cf4d35d83e..708ac7e0cd36 100644
-> --- a/include/linux/filter.h
-> +++ b/include/linux/filter.h
-> @@ -1496,9 +1496,6 @@ static inline u16 bpf_anc_helper(const struct sock_filter *ftest)
->   	}
->   }
->   
-> -void *bpf_internal_load_pointer_neg_helper(const struct sk_buff *skb,
-> -					   int k, unsigned int size);
-> -
->   static inline int bpf_tell_extensions(void)
->   {
->   	return SKF_AD_MAX;
-> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-> index ba6b6118cf50..0e836b5ac9a0 100644
-> --- a/kernel/bpf/core.c
-> +++ b/kernel/bpf/core.c
-> @@ -68,27 +68,6 @@
->   struct bpf_mem_alloc bpf_global_ma;
->   bool bpf_global_ma_set;
->   
-> -/* No hurry in this branch
-> - *
-> - * Exported for the bpf jit load helper.
-> - */
-> -void *bpf_internal_load_pointer_neg_helper(const struct sk_buff *skb, int k, unsigned int size)
-> -{
-> -	u8 *ptr = NULL;
-> -
-> -	if (k >= SKF_NET_OFF) {
-> -		ptr = skb_network_header(skb) + k - SKF_NET_OFF;
-> -	} else if (k >= SKF_LL_OFF) {
-> -		if (unlikely(!skb_mac_header_was_set(skb)))
-> -			return NULL;
-> -		ptr = skb_mac_header(skb) + k - SKF_LL_OFF;
-> -	}
-> -	if (ptr >= skb->head && ptr + size <= skb_tail_pointer(skb))
-> -		return ptr;
-> -
-> -	return NULL;
-> -}
+>  .../selftests/bpf/prog_tests/test_btf_ext.c   | 69 +++++++++++++++++++
+>  .../selftests/bpf/progs/test_btf_ext.c        | 26 +++++++
+>  2 files changed, 95 insertions(+)
+>  create mode 100644 tools/testing/selftests/bpf/prog_tests/test_btf_ext.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/test_btf_ext.c
+>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/test_btf_ext.c b/tool=
+s/testing/selftests/bpf/prog_tests/test_btf_ext.c
+> new file mode 100644
+> index 000000000000..76d3eb520982
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/test_btf_ext.c
+> @@ -0,0 +1,69 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/* Copyright (c) 2025 Meta Platforms Inc. */
+> +#include <test_progs.h>
+> +#include "test_btf_ext.skel.h"
+> +#include "btf_helpers.h"
+> +
+> +static void subtest_line_func_info(void)
+> +{
+> +       struct test_btf_ext *skel;
+> +       struct bpf_prog_info info;
+> +       struct bpf_line_info line_info[128], *libbpf_line_info;
+> +       struct bpf_func_info func_info[128], *libbpf_func_info;
+> +       __u32 info_len =3D sizeof(info), libbbpf_line_info_cnt, libbbpf_f=
+unc_info_cnt;
+> +       int err, fd;
+> +
+> +       skel =3D test_btf_ext__open_and_load();
+> +       if (!ASSERT_OK_PTR(skel, "skel_open_and_load"))
+> +               return;
+> +
+> +       fd =3D bpf_program__fd(skel->progs.global_func);
+> +
+> +       memset(&info, 0, sizeof(info));
+> +       info.line_info =3D ptr_to_u64(&line_info);
+> +       info.nr_line_info =3D sizeof(line_info);
+> +       info.line_info_rec_size =3D sizeof(*line_info);
+> +       err =3D bpf_prog_get_info_by_fd(fd, &info, &info_len);
+> +       if (!ASSERT_OK(err, "prog_line_info"))
+> +               goto out;
+> +
+> +       libbpf_line_info =3D bpf_program__line_info(skel->progs.global_fu=
+nc);
+> +       libbbpf_line_info_cnt =3D bpf_program__line_info_cnt(skel->progs.=
+global_func);
+> +
+> +       memset(&info, 0, sizeof(info));
+> +       info.func_info =3D ptr_to_u64(&func_info);
+> +       info.nr_func_info =3D sizeof(func_info);
+> +       info.func_info_rec_size =3D sizeof(*func_info);
+> +       err =3D bpf_prog_get_info_by_fd(fd, &info, &info_len);
+> +       if (!ASSERT_OK(err, "prog_func_info"))
+> +               goto out;
+> +
+> +       libbpf_func_info =3D bpf_program__func_info(skel->progs.global_fu=
+nc);
+> +       libbbpf_func_info_cnt =3D bpf_program__func_info_cnt(skel->progs.=
+global_func);
+> +
+> +       if (!ASSERT_OK_PTR(libbpf_line_info, "bpf_program__line_info"))
+> +               goto out;
+> +       if (!ASSERT_EQ(libbbpf_line_info_cnt, info.nr_line_info, "line_in=
+fo_cnt"))
+> +               goto out;
+> +       if (!ASSERT_OK_PTR(libbpf_func_info, "bpf_program__func_info"))
+> +               goto out;
+> +       if (!ASSERT_EQ(libbbpf_func_info_cnt, info.nr_func_info, "func_in=
+fo_cnt"))
+> +               goto out;
+> +       /* Skip checks on s390x as it seems to be adding some preamble to=
+ function entry point
+> +        * shifting instruction offsets by 1 byte
+> +        */
+> +#if !defined(__TARGET_ARCH_s390) && !defined (__s390x__)
+> +       ASSERT_MEMEQ(libbpf_line_info, line_info, libbbpf_line_info_cnt *=
+ sizeof(*line_info),
+> +                    "line_info");
+> +       ASSERT_MEMEQ(libbpf_func_info, func_info, libbbpf_func_info_cnt *=
+ sizeof(*func_info),
+> +                    "func_info");
+> +#endif
+> +out:
+> +       test_btf_ext__destroy(skel);
+> +}
+> +
+> +void test_btf_ext(void)
+> +{
+> +       if (test__start_subtest("line_func_info"))
+> +               subtest_line_func_info();
+> +}
+> diff --git a/tools/testing/selftests/bpf/progs/test_btf_ext.c b/tools/tes=
+ting/selftests/bpf/progs/test_btf_ext.c
+> new file mode 100644
+> index 000000000000..e4efcf823f6b
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/test_btf_ext.c
+> @@ -0,0 +1,26 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/* Copyright (c) 2025 Meta Platforms Inc. */
+> +
+> +#include <linux/bpf.h>
+> +#include <bpf/bpf_helpers.h>
+> +#include "bpf_misc.h"
+> +
+> +char _license[] SEC("license") =3D "GPL";
+> +
+> +__noinline static void f0(void)
+> +{
+> +       __u8 a =3D 1;
 
-Wouldn't this break sparc 32bit JIT which still calls into this?
+ok, so this will generate
 
-arch/sparc/net/bpf_jit_asm_32.S :
+       0:       b4 01 00 00 01 00 00 00 w1 =3D 0x1
+       1:       73 1a ff ff 00 00 00 00 *(u8 *)(r10 - 0x1) =3D w1
 
-#define bpf_negative_common(LEN)                        \
-         save    %sp, -SAVE_SZ, %sp;                     \
-         mov     %i0, %o0;                               \
-         mov     r_OFF, %o1;                             \
-         SIGN_EXTEND(%o1);                               \
-         call    bpf_internal_load_pointer_neg_helper;   \
-          mov    (LEN), %o2;                             \
-         mov     %o0, r_TMP;                             \
-         cmp     %o0, 0;                                 \
-         BE_PTR(bpf_error);                              \
-          restore;
+And on s390x (and a bunch of other architectures), verifier will
+inject extra special zero-extension instruction after `w1 =3D 0x1`,
+which shifts all the instruction indices. You can look at how
+bpf_jit_needs_zext() is defined and used in verifier.c, if you are
+curious for details.
 
-Thanks,
-Daniel
+But given the purpose of the test is to make sure that libbpf gives us
+full and correct information, all that zext business is a distraction
+and we should just avoid all this.
+
+So, let's just use full __u64 variables here and be done with this
+(meaning, no s390x exceptions, just simple BPF code that doesn't get
+enhanced or transformed by the verifier).
+
+pw-bot: cr
+
+> +       __u8 b =3D 2;
+> +       __u8 c =3D 3;
+> +
+> +       __sink(a);
+> +       __sink(b);
+> +       __sink(c);
+> +}
+> +
+> +SEC("xdp")
+> +int global_func(struct xdp_md *xdp)
+> +{
+> +       f0();
+> +       return XDP_DROP;
+> +}
+> --
+> 2.49.0
+>
