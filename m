@@ -1,105 +1,136 @@
-Received: from smtp-fw-9106.amazon.com (smtp-fw-9106.amazon.com [207.171.188.206])
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52C7CD2FB;
-	Tue,  8 Apr 2025 00:17:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=207.171.188.206
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73D32610D;
+	Tue,  8 Apr 2025 02:30:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744071428; cv=none; b=eNLS/3oKs3lMTrPsutXT3m8HByrK9plR9do+0qQpwY1Pw0K6uJTaPv52TWBkDlWGUgmMqOb6ruKQ+BFAfrsiahHOgcAeLudhNBFLwa9HC7BlGrcPVgsB7Hekx35ob2l3ZAVnpahrA2nU1BVoZVBq+PsLKHcCJ34hrDOY3quyu7o=
+	t=1744079446; cv=none; b=joZMnRCjCpcPZZLJNHVXvmOwsN97VO++s5r3fHZmXfCVra9TFzytPk+OJ6jGL5/sK92kGc3UzsPSgQzS36vnkxhKr74nsBjVfG13b3WZ+BY6w9D1iEtXd+YhrNAHXJixDN7SnFyxbqdWIPKeoKEEi+cZ75oLiN4Lj4U4y4TTgfo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744071428; c=relaxed/simple;
-	bh=z1sI6zqI2KbmUuNZWR9OauLNqva1J0bVTTZtuwY6uO0=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=b8OJBfwISDViSOfqaxWx0K/jrI/ywpZCRtkcYFfddzYThIJOB/sb9zhygAL2iS3cXwM65Bhi1NcygORf8Q2jXBNXxNW0ZwmGcPMW8kIKUEqTYjaPLt2p18qAcjHzs8UV9pfTjsndj6h/O+BJjxY2hOn+kgNdj2GlBbfazotD+xI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.jp; dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b=kUmsmc4I; arc=none smtp.client-ip=207.171.188.206
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.jp
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="kUmsmc4I"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1744071427; x=1775607427;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=8yOCsx+nkQGqiyaA8CKVjQ4hpZeCm+ILtzKq52dhCgE=;
-  b=kUmsmc4IgiFwHOlxD6Lxujd+JK/V/QIeWkwyo7cL5quJcB5Y2zD3m5wM
-   ulq8b+eCGQnlxqLhf+abOxbcgIRIw0q79x6AQmcU5dsSeuUcdBX3d3nsd
-   TYlou+uFvmWalgZjL5+YdZ68h8Uf2OO8YnS9bZ3V5iNuuQR6ZoXC5g29O
-   0=;
-X-IronPort-AV: E=Sophos;i="6.15,196,1739836800"; 
-   d="scan'208";a="814162670"
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO smtpout.prod.us-west-2.prod.farcaster.email.amazon.dev) ([10.25.36.210])
-  by smtp-border-fw-9106.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2025 00:17:02 +0000
-Received: from EX19MTAUWC002.ant.amazon.com [10.0.21.151:41354]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.25.120:2525] with esmtp (Farcaster)
- id 1a6f8aa9-6343-4351-ae86-e3271abdc5f1; Tue, 8 Apr 2025 00:17:01 +0000 (UTC)
-X-Farcaster-Flow-ID: 1a6f8aa9-6343-4351-ae86-e3271abdc5f1
-Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
- EX19MTAUWC002.ant.amazon.com (10.250.64.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1544.14;
- Tue, 8 Apr 2025 00:17:01 +0000
-Received: from 6c7e67bfbae3.amazon.com (10.106.101.45) by
- EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1544.14;
- Tue, 8 Apr 2025 00:16:58 +0000
-From: Kuniyuki Iwashima <kuniyu@amazon.com>
-To: <jordan@jrife.io>
-CC: <aditi.ghag@isovalent.com>, <bpf@vger.kernel.org>, <daniel@iogearbox.net>,
-	<kuniyu@amazon.com>, <martin.lau@linux.dev>, <netdev@vger.kernel.org>,
-	<willemdebruijn.kernel@gmail.com>
-Subject: Re: [RFC PATCH bpf-next 2/3] bpf: udp: Avoid socket skips and repeats during iteration
-Date: Mon, 7 Apr 2025 17:16:25 -0700
-Message-ID: <20250408001649.5560-1-kuniyu@amazon.com>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <CABi4-ogLNdQw=gLTRZ4aJ8qiQWiovHaO19sx5uz29Es6du8GKg@mail.gmail.com>
-References: <CABi4-ogLNdQw=gLTRZ4aJ8qiQWiovHaO19sx5uz29Es6du8GKg@mail.gmail.com>
+	s=arc-20240116; t=1744079446; c=relaxed/simple;
+	bh=vxSR4qoeAaxo3jAFbr5vM/RG917YaQvN1X3kPh4iQXc=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=naPlFvyKiX2ZSxo/rvLQbcWMpor1RS/SMxY05n2vRR9B92E0CGYN2IY8cc/pdYzN98pcNphytwPKTKlaRRUWf0h7g97x6G4NBGUSkAxzjKlrD92JWwVFS3wQpkPDqOdk8IUsDIcIJJq7L8aJJm68riImQMoTURTfcknTm6AWVVY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.235])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4ZWqmf4Jqjz4f3jtK;
+	Tue,  8 Apr 2025 10:30:10 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.112])
+	by mail.maildlp.com (Postfix) with ESMTP id 8EABF1A058E;
+	Tue,  8 Apr 2025 10:30:28 +0800 (CST)
+Received: from [10.174.176.117] (unknown [10.174.176.117])
+	by APP1 (Coremail) with SMTP id cCh0CgDnS3xBivRnHJvPIg--.58832S2;
+	Tue, 08 Apr 2025 10:30:28 +0800 (CST)
+Subject: Re: [PATCH v2] selftests/bpf: close the file descriptor to avoid
+ resource leaks
+To: Malaya Kumar Rout <malayarout91@gmail.com>, andrii.nakryiko@gmail.com
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
+ Shuah Khan <shuah@kernel.org>, Geliang Tang <geliang@kernel.org>,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <CAE2+fR992BprqDXkZTqi3Mgtq9WErSFvOtxvc16ZT9ufiBLNNQ@mail.gmail.com>
+ <20250407100132.439412-1-malayarout91@gmail.com>
+From: Hou Tao <houtao@huaweicloud.com>
+Message-ID: <92596c82-4a12-3afc-6cb2-21a11bef3739@huaweicloud.com>
+Date: Tue, 8 Apr 2025 10:30:25 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: EX19D042UWA003.ant.amazon.com (10.13.139.44) To
- EX19D004ANA001.ant.amazon.com (10.37.240.138)
+In-Reply-To: <20250407100132.439412-1-malayarout91@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-CM-TRANSID:cCh0CgDnS3xBivRnHJvPIg--.58832S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7uFW7Xw48AF48ArW8JF1fZwb_yoW8Kr47pa
+	48Ga4jkFySvF1YyF17CFWqvFWfurn7Xr45AF4rAr1UZF1xJFWxXr1xKa95Xan8C3yFgrs3
+	ZFyIgFnxZw48Jw7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUU92b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
+	0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7I2V7IY0VAS
+	07AlzVAYIcxG8wCY1x0262kKe7AKxVW8ZVWrXwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4
+	IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1r
+	MI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJV
+	WUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j
+	6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYx
+	BIdaVFxhVjvjDU0xZFpf9x07j7l19UUUUU=
+X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
 
-From: Jordan Rife <jordan@jrife.io>
-Date: Mon, 7 Apr 2025 16:30:46 -0700
-> > We may need to iterate all visited sockets again in this bucket if all
-> > unvisited sockets disappear from the previous iteration.
-> 
-> If the next socket disappears between iterator stop and start, the
-> outer loop would need to keep going until it finds a socket from last
-> time that still exists. In most cases, it seems unlikely that the next
-> socket will disappear between iterator reads, so in general the outer
-> loop would only need to iterate once; the common case should perform
-> the same as before with the offset approach. The worst case indeed
-> would be if all the sockets disappear between reads. Then you'd have
-> to scan through all items in the bucket n_cookies times. Again though,
-> this is hopefully a rare case.
-> 
-> > When the number of the unvisited sockets is small like 1, the duplicated
-> > records will not be rare and rather more often than before ?
-> 
-> Sorry if I'm missing something, but what's the relationship between
-> the number of unvisited sockets and rarity of duplicated records?
 
-Sorry, I misread the code, and s/duplicated/skipped/.
 
-I was thinking that rarity of such unwanted events depends on how
-many unvisited sockets are left before restarting.
+On 4/7/2025 6:01 PM, Malaya Kumar Rout wrote:
+> Static Analyis for bench_htab_mem.c with cppcheck:error
+> tools/testing/selftests/bpf/benchs/bench_htab_mem.c:284:3:
+> error: Resource leak: fd [resourceLeak]
+> tools/testing/selftests/bpf/prog_tests/sk_assign.c:41:3:
+> error: Resource leak: tc [resourceLeak]
+>
+> fix the issue  by closing the file descriptor (fd & tc) when
+> read & fgets operation fails.
+>
+> Signed-off-by: Malaya Kumar Rout <malayarout91@gmail.com>
 
-Let's say batch has 16 sockets and the iterator stopped at 15,
-it's more likely that a single socket disappear.
+Acked-by: Hou Tao <houtao1@huawei.com>
 
-This should be fine given the batch size normally covers the full
-bucket of the hash, and it's unlikely that many sockets are added
-in the bucket between stop and restart.
+It will be better to resend the patch and change the subject prefix to
+"[PATCH RESEND bpf-next v2]" instead of "[PATCH v2]".
+> ---
+>  tools/testing/selftests/bpf/benchs/bench_htab_mem.c | 3 +--
+>  tools/testing/selftests/bpf/prog_tests/sk_assign.c  | 4 +++-
+>  2 files changed, 4 insertions(+), 3 deletions(-)
+>
+> diff --git a/tools/testing/selftests/bpf/benchs/bench_htab_mem.c b/tools/testing/selftests/bpf/benchs/bench_htab_mem.c
+> index 926ee822143e..297e32390cd1 100644
+> --- a/tools/testing/selftests/bpf/benchs/bench_htab_mem.c
+> +++ b/tools/testing/selftests/bpf/benchs/bench_htab_mem.c
+> @@ -279,6 +279,7 @@ static void htab_mem_read_mem_cgrp_file(const char *name, unsigned long *value)
+>  	}
+>  
+>  	got = read(fd, buf, sizeof(buf) - 1);
+> +	close(fd);
+>  	if (got <= 0) {
+>  		*value = 0;
+>  		return;
+> @@ -286,8 +287,6 @@ static void htab_mem_read_mem_cgrp_file(const char *name, unsigned long *value)
+>  	buf[got] = 0;
+>  
+>  	*value = strtoull(buf, NULL, 0);
+> -
+> -	close(fd);
+>  }
+>  
+>  static void htab_mem_measure(struct bench_res *res)
+> diff --git a/tools/testing/selftests/bpf/prog_tests/sk_assign.c b/tools/testing/selftests/bpf/prog_tests/sk_assign.c
+> index 0b9bd1d6f7cc..10a0ab954b8a 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/sk_assign.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/sk_assign.c
+> @@ -37,8 +37,10 @@ configure_stack(void)
+>  	tc = popen("tc -V", "r");
+>  	if (CHECK_FAIL(!tc))
+>  		return false;
+> -	if (CHECK_FAIL(!fgets(tc_version, sizeof(tc_version), tc)))
+> +	if (CHECK_FAIL(!fgets(tc_version, sizeof(tc_version), tc))) {
+> +		pclose(tc);
+>  		return false;
+> +	}
+>  	if (strstr(tc_version, ", libbpf "))
+>  		prog = "test_sk_assign_libbpf.bpf.o";
+>  	else
 
-In the worst case, where vmalloc() fails and the batch does not
-cover full bucket, say the batch size is 16 but the list length
-is 256, if the iterator stops at sk15 and sk16 disappers,
-sk17 ~ sk256 will be skipped in the next iteration.
-
- sk1 -> ... sk15 -> sk16 -> sk17 -> ... -> sk256
