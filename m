@@ -1,46 +1,46 @@
 Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A606920F063;
-	Fri, 11 Apr 2025 11:33:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE675278E4B
+	for <bpf@vger.kernel.org>; Fri, 11 Apr 2025 11:33:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.38
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744371237; cv=none; b=n3UPREHMKux/DK47qI6blv29s0uGu4GU6NM5+61MK0cFHpzOVEWzDlvvISN6g93jBhPFVGIJNZkD9LhOJm1QV0O9daZYRi4qb9ymvynPqHvIp5GOYPtMySpBMYeKaWeV9lifhrQsdwgoVeXfeqhwZZ2y7LOg7GwJkLVwbWhI/C8=
+	t=1744371237; cv=none; b=JhalMOcY06CVUFXASUxEyKnlYD62kezotR6SGfAk8vQqu3zKOGRocGHEZ3zRX2gH73Td3ylYm7/gQg0WZ1Ebag7raYehIcyxTOnC6tOmXtiYX3ImMFfM4RyWmaQ6LCS34xrsvz3MmRcrJJtPIvK4nIonHWD/llnozTVzLwX00hE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1744371237; c=relaxed/simple;
-	bh=5HjaKrb4OSnZq4HKsJZh48cCqPwW7cyhlHLZdAr8QI4=;
+	bh=E3H3zS2asuRS3QQYBtL0a+seiix1UN0LZXZFWCTHeLE=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Vzfv0bdFtWBr469bUYzzsxxmaZHByw1lMwSa+46OINfE6ZoHKXoOIuGq3gGpduWdglu5P0IxQIddsBEr5NB2NsofwpPbrLw5K5+z++8JDJt9yjQMdVBostuIQhlnYuCLwZwLBUmn/xMzNBIjhCzomx4mJRTd7z4gU4HY2SXw9LE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=G4E2swKG; arc=none smtp.client-ip=185.226.149.38
+	 In-Reply-To:To:Cc; b=YFwmnxycZbBlVzmSWO5OIFLGXzhxYt7Y8iu4NKKnboTwNLpaBVRSNgp7t+tZ8PaHcoYfo1eN9ImS68vUycr8Gv2BhDdSch554l/R1KFbzD332+XlXPNHptZYU7ltjPWaOG3VaB7TTAbe16kEcbVQaxYj8m4X15/CXQS8F76xsPE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=JbK1GRZP; arc=none smtp.client-ip=185.226.149.38
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="G4E2swKG"
-Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
+	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="JbK1GRZP"
+Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
 	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
 	(Exim 4.93)
 	(envelope-from <mhal@rbox.co>)
-	id 1u3Cdm-005qKu-MX; Fri, 11 Apr 2025 13:33:46 +0200
+	id 1u3Cdi-005qKi-GG; Fri, 11 Apr 2025 13:33:42 +0200
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
 	s=selector1; h=Cc:To:In-Reply-To:References:Message-Id:
 	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From;
-	bh=bRBtGUHo2mfXsbLumHd/r9ed2RVyNnk36YPXlBUTUBI=; b=G4E2swKGpA+n2ZhxtF2l0a13Ak
-	ucO3c4GWByMiOa9f6x7tgkQ+j7wp+VrYrbCMVonnJfe+wTlwf+J4VRG2vuFL6RBZTV/eSpe3NXWi2
-	qSgHfYCxkKNBDZ/xnVLyXgnCZ3pgCy4ntTdSMd2wJ/Gr2D/7c/dkJmmSFEOcvrbiSDBxPvl2hHnlM
-	m3F+SidVtDRfy2+MoGE+CeodfIJgpeoJcfih6X4kmx/d50N1MfmQ3gMUzOqgW3PhJcFMhzcpiVRwV
-	ikgvs9kJmeyeM6tXzqWJ99M5IZcO+Fc4WM01Yomiuf1ued1aSC7JsCoj1WgjiPMuD0H0X3cEPq429
-	dK/la4pg==;
+	bh=JJUVspd37HPmlTRI3GjkD10mpqCy6PqiwGnE0i9Yrm8=; b=JbK1GRZPF0xsnJzudrDRqfhcej
+	C+GPUoxS9DPFtcuy42/hlroH2XIDnNqZCzqLoZZlkPI+SHIM2EKDcgVxVSHqmVIBoCmq+0Ur2vTps
+	9d8JykNxxQmiuljknMshv8v5uXjlGaNcS4L5TpsDaJc6xr3c9o/AYaTz56skHM3CdKHqJ1uFgS9aW
+	6x60s+nExYom6skpriYJehRzLtSwazn8XvumltittzDF783hBpvgmuvGNnovgiKLDEDq2I7JlSHyh
+	eqVL5AOfS8LQ5A3Ivg6f0z4Tf8+lUryDoSO1hB1rTcZvtETtlKNuXhTC513SYm25RPZ3kPWMlE9Hy
+	uAC4fTAQ==;
 Received: from [10.9.9.73] (helo=submission02.runbox)
-	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
+	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
 	(envelope-from <mhal@rbox.co>)
-	id 1u3Cdg-0005qc-1Q; Fri, 11 Apr 2025 13:33:40 +0200
+	id 1u3Cdh-0007wg-Ld; Fri, 11 Apr 2025 13:33:42 +0200
 Received: by submission02.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim 4.93)
-	id 1u3CdW-00D5Ut-8V; Fri, 11 Apr 2025 13:33:30 +0200
+	id 1u3CdU-00D5Ut-8H; Fri, 11 Apr 2025 13:33:28 +0200
 From: Michal Luczaj <mhal@rbox.co>
-Date: Fri, 11 Apr 2025 13:32:40 +0200
-Subject: [PATCH bpf-next v2 4/9] selftests/bpf: Allow setting BPF_F_INGRESS
- in prog_msg_verdict()
+Date: Fri, 11 Apr 2025 13:32:38 +0200
+Subject: [PATCH bpf-next v2 2/9] selftests/bpf: Add socket_kind_to_str() to
+ socket_helpers
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -49,7 +49,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250411-selftests-sockmap-redir-v2-4-5f9b018d6704@rbox.co>
+Message-Id: <20250411-selftests-sockmap-redir-v2-2-5f9b018d6704@rbox.co>
 References: <20250411-selftests-sockmap-redir-v2-0-5f9b018d6704@rbox.co>
 In-Reply-To: <20250411-selftests-sockmap-redir-v2-0-5f9b018d6704@rbox.co>
 To: Andrii Nakryiko <andrii@kernel.org>, 
@@ -66,48 +66,78 @@ Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
  Jakub Sitnicki <jakub@cloudflare.com>, Michal Luczaj <mhal@rbox.co>
 X-Mailer: b4 0.14.2
 
-Let a selftest set BPF_F_INGRESS for map/hash redirect.
+Add function that returns string representation of socket's domain/type.
 
-In run_tests(), explicitly reset skel->bss->test_ingress to false. Earlier
-tests might have left it flipped.
-
+Suggested-by: Jakub Sitnicki <jakub@cloudflare.com>
 Signed-off-by: Michal Luczaj <mhal@rbox.co>
 ---
- tools/testing/selftests/bpf/prog_tests/sockmap_listen.c | 2 ++
- tools/testing/selftests/bpf/progs/test_sockmap_listen.c | 6 ++++--
- 2 files changed, 6 insertions(+), 2 deletions(-)
+ .../selftests/bpf/prog_tests/socket_helpers.h      | 55 ++++++++++++++++++++++
+ 1 file changed, 55 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
-index 4ee1148d22be3d7f26a5c899542e6a29ca5e7d6c..c8b736f96503829cba51da0f08c545028b48b8c6 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
-@@ -1858,6 +1858,8 @@ static void test_udp_unix_redir(struct test_sockmap_listen *skel, struct bpf_map
- static void run_tests(struct test_sockmap_listen *skel, struct bpf_map *map,
- 		      int family)
- {
-+	skel->bss->test_ingress = false;
+diff --git a/tools/testing/selftests/bpf/prog_tests/socket_helpers.h b/tools/testing/selftests/bpf/prog_tests/socket_helpers.h
+index e505c2f2595a24be9dd5b534deef4793f9a02f77..e02cabcc814e9a6a11d61ad02cf38696fb0f27ff 100644
+--- a/tools/testing/selftests/bpf/prog_tests/socket_helpers.h
++++ b/tools/testing/selftests/bpf/prog_tests/socket_helpers.h
+@@ -410,4 +410,59 @@ static inline int create_socket_pairs(int family, int sotype, int *c0, int *c1,
+ 	return err;
+ }
+ 
++static inline const char *socket_kind_to_str(int sock_fd)
++{
++	socklen_t opt_len;
++	int domain, type;
 +
- 	test_ops(skel, map, family, SOCK_STREAM);
- 	test_ops(skel, map, family, SOCK_DGRAM);
- 	test_redir(skel, map, family, SOCK_STREAM);
-diff --git a/tools/testing/selftests/bpf/progs/test_sockmap_listen.c b/tools/testing/selftests/bpf/progs/test_sockmap_listen.c
-index b7250eb9c30cca8f77675e56529e6b780d76ab2e..5a3504d5dfc32f75f49f969b4935b1c1f3f7c773 100644
---- a/tools/testing/selftests/bpf/progs/test_sockmap_listen.c
-+++ b/tools/testing/selftests/bpf/progs/test_sockmap_listen.c
-@@ -106,9 +106,11 @@ int prog_msg_verdict(struct sk_msg_md *msg)
- 	int verdict;
- 
- 	if (test_sockmap)
--		verdict = bpf_msg_redirect_map(msg, &sock_map, zero, 0);
-+		verdict = bpf_msg_redirect_map(msg, &sock_map, zero,
-+					       test_ingress ? BPF_F_INGRESS : 0);
- 	else
--		verdict = bpf_msg_redirect_hash(msg, &sock_hash, &zero, 0);
-+		verdict = bpf_msg_redirect_hash(msg, &sock_hash, &zero,
-+						test_ingress ? BPF_F_INGRESS : 0);
- 
- 	count = bpf_map_lookup_elem(&verdict_map, &verdict);
- 	if (count)
++	opt_len = sizeof(domain);
++	if (getsockopt(sock_fd, SOL_SOCKET, SO_DOMAIN, &domain, &opt_len))
++		FAIL_ERRNO("getsockopt(SO_DOMAIN)");
++
++	opt_len = sizeof(type);
++	if (getsockopt(sock_fd, SOL_SOCKET, SO_TYPE, &type, &opt_len))
++		FAIL_ERRNO("getsockopt(SO_TYPE)");
++
++	switch (domain) {
++	case AF_INET:
++		switch (type) {
++		case SOCK_STREAM:
++			return "tcp4";
++		case SOCK_DGRAM:
++			return "udp4";
++		}
++		break;
++	case AF_INET6:
++		switch (type) {
++		case SOCK_STREAM:
++			return "tcp6";
++		case SOCK_DGRAM:
++			return "udp6";
++		}
++		break;
++	case AF_UNIX:
++		switch (type) {
++		case SOCK_STREAM:
++			return "u_str";
++		case SOCK_DGRAM:
++			return "u_dgr";
++		case SOCK_SEQPACKET:
++			return "u_seq";
++		}
++		break;
++	case AF_VSOCK:
++		switch (type) {
++		case SOCK_STREAM:
++			return "v_str";
++		case SOCK_DGRAM:
++			return "v_dgr";
++		case SOCK_SEQPACKET:
++			return "v_seq";
++		}
++		break;
++	}
++
++	return "???";
++}
++
+ #endif // __SOCKET_HELPERS__
 
 -- 
 2.49.0
