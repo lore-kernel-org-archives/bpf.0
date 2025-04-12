@@ -1,111 +1,161 @@
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFB4E10F9;
-	Sat, 12 Apr 2025 04:33:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8121C7FD;
+	Sat, 12 Apr 2025 06:24:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744432439; cv=none; b=oivn5F+26FwVaqujP5514cXQN/5pFxX2OmJVAQnvSZTnafh/UWBWPmACVm1vraFVvIaXdKeLZZq9Uasyc+4elXoVyEgVkoPOoyqSjh/aX5pMlBH6JIZxWDV9uYdYHyDrJTk4HD5h4LCLN+n0B3HSvRJMLOfPiIN3a18APxxgpjM=
+	t=1744439071; cv=none; b=P7sojAolIMGRoPWha34oFCWUXRZEKAuqJJSNjIu/iqFbF+S2u4kXEX9zFAgjuQp9asANIyqy5+YILoHoaTMEa9LqQYcrg+ybDZY19hNFRwLEQTQ62coamzjbk1mQrcctEimkrKd3W3mkwhUa6ykt4p0Tqah05twAlUxmA8IkYiY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744432439; c=relaxed/simple;
-	bh=8HY4pXq4/0sgSGqWKzYB0xMabci34z/M8SocsQbtjIc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ekxaLymYCU/zZ+VlpFWKIGNsmIpbV/pbVq5ajS8N84BxahxtBr1lYtTN2JsDxEdNsQfgB/Znp0N0lo73rwWwTok6vv2o4/G0PRt/UCgghhp39ISYS66w6wr5jpOrvyHHgvElv290+3iJ7fVcVVa4MxzvmnASrs0wa6/GxAduHw4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=UmkMzcYF; arc=none smtp.client-ip=198.137.202.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+	s=arc-20240116; t=1744439071; c=relaxed/simple;
+	bh=cASD74BDVecXPscxZX54wCavoipGk0tOYQ7XNeflobo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JVY7C/LRNWTACuOfYhCupl1RGZcFArLg45CKrvoLZdSwHhLR8zfjCGYohTkc5g/UHbJ919MUQcFSCqru2j4lqQu/KQ+6hCLInIrOcU94vk8uvhonQnAON6CiwHWMCiJiR6iVNhF5HVwIT8wSL7+UTGt9b53y4CEEvMaEI7mjWek=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=XD3+sZ7c; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="UmkMzcYF"
-Received: from [192.168.7.202] ([71.202.166.45])
-	(authenticated bits=0)
-	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 53C4WWUM871113
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Fri, 11 Apr 2025 21:32:32 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 53C4WWUM871113
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2025032001; t=1744432355;
-	bh=8HY4pXq4/0sgSGqWKzYB0xMabci34z/M8SocsQbtjIc=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=UmkMzcYFMOohEYDvst/+wSrvJqxBWNM3y8pTlydtS9u0Vr7uRFr3Z3pCuQCca14kO
-	 ACsIUaW4DWSFZQk6os5w5N7c+E5hX8uOXvMG58Zw1ACWcaqL0evKoHrKsjwK2mCmbu
-	 3fbVO1XRm3rPuvtxsvqFa40+ZJdSrPdyFPMsAPCRm9EzVpscdqiU1jHIOYNpql0/Q+
-	 A4rJGWpOKXJ4rM8Ry7S9QSfW5JMyxnLBqri634s7bqAxLMEVGyTj2wxY2EKLJiAwY7
-	 7S3D+HGa8zlLeI3TPeDpXLNu9OHcHMD6lAYjW/h+oxH9TUSCd3g/AuG8/qoXjh0Ibr
-	 awatBQNumv6Tw==
-Message-ID: <fa16949e-7842-45f7-9715-1bdda13b762a@zytor.com>
-Date: Fri, 11 Apr 2025 21:32:32 -0700
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="XD3+sZ7c"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29FF1C4CEE3;
+	Sat, 12 Apr 2025 06:24:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1744439070;
+	bh=cASD74BDVecXPscxZX54wCavoipGk0tOYQ7XNeflobo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=XD3+sZ7c7EsbLbLRCui43vraC6vo6YNdf2XlAHBFk1OGKAwPVluQI2vMB/w0DI7DV
+	 iqGeOJCaoEYxpGSXekdJxZZ0jW+8DFwXxF/KhQr70mdnc3V3N9FNV8jP4eUFxgnYxy
+	 pAE1G+5txJj+Q3LgDTSt/1m0Uw8Yb5QI+kiBES3o=
+Date: Sat, 12 Apr 2025 08:24:27 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Viktor Malik <vmalik@redhat.com>, bpf@vger.kernel.org,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	lmarch2 <2524158037@qq.com>, stable@vger.kernel.org,
+	Shung-Hsi Yu <shung-hsi.yu@suse.com>
+Subject: Re: [PATCH bpf v2] libbpf: Fix buffer overflow in
+ bpf_object__init_prog
+Message-ID: <2025041242-ignore-python-f4ef@gregkh>
+References: <20250410095517.141271-1-vmalik@redhat.com>
+ <CAEf4Bzb2S+1TonOp9UH86r0e6aGG2LEA4kwbQhJWr=9Xju=NEw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v1 10/15] KVM: VMX: Use WRMSRNS or its immediate form
- when available
-To: Jim Mattson <jmattson@google.com>, Sean Christopherson <seanjc@google.com>
-Cc: linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, virtualization@lists.linux.dev,
-        linux-edac@vger.kernel.org, kvm@vger.kernel.org,
-        xen-devel@lists.xenproject.org, linux-ide@vger.kernel.org,
-        linux-pm@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        jgross@suse.com, andrew.cooper3@citrix.com, peterz@infradead.org,
-        acme@kernel.org, namhyung@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        irogers@google.com, adrian.hunter@intel.com, kan.liang@linux.intel.com,
-        wei.liu@kernel.org, ajay.kaher@broadcom.com,
-        bcm-kernel-feedback-list@broadcom.com, tony.luck@intel.com,
-        pbonzini@redhat.com, vkuznets@redhat.com, luto@kernel.org,
-        boris.ostrovsky@oracle.com, kys@microsoft.com, haiyangz@microsoft.com,
-        decui@microsoft.com
-References: <20250331082251.3171276-1-xin@zytor.com>
- <20250331082251.3171276-11-xin@zytor.com> <Z_hTI8ywa3rTxFaz@google.com>
- <CALMp9eRJkzA2YXf1Dfxt3ONP+P9aTA=WPraOPJPJ6C6j677+6Q@mail.gmail.com>
-Content-Language: en-US
-From: Xin Li <xin@zytor.com>
-Autocrypt: addr=xin@zytor.com; keydata=
- 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
- l75w1xInsg==
-In-Reply-To: <CALMp9eRJkzA2YXf1Dfxt3ONP+P9aTA=WPraOPJPJ6C6j677+6Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAEf4Bzb2S+1TonOp9UH86r0e6aGG2LEA4kwbQhJWr=9Xju=NEw@mail.gmail.com>
 
-On 4/11/2025 2:12 PM, Jim Mattson wrote:
-> Surely, any CPU that has WRMSRNS also supports "Virtualize
-> IA32_SPEC_CTRL," right? Shouldn't we be using that feature rather than
-> swapping host and guest values with some form of WRMSR?
+On Fri, Apr 11, 2025 at 09:22:37AM -0700, Andrii Nakryiko wrote:
+> On Thu, Apr 10, 2025 at 2:55 AM Viktor Malik <vmalik@redhat.com> wrote:
+> >
+> > As reported by CVE-2025-29481 [1], it is possible to corrupt a BPF ELF
+> > file such that arbitrary BPF instructions are loaded by libbpf. This can
+> > be done by setting a symbol (BPF program) section offset to a large
+> > (unsigned) number such that <section start + symbol offset> overflows
+> > and points before the section data in the memory.
+> >
+> > Consider the situation below where:
+> > - prog_start = sec_start + symbol_offset    <-- size_t overflow here
+> > - prog_end   = prog_start + prog_size
+> >
+> >     prog_start        sec_start        prog_end        sec_end
+> >         |                |                 |              |
+> >         v                v                 v              v
+> >     .....................|################################|............
+> >
+> > The CVE report in [1] also provides a corrupted BPF ELF which can be
+> > used as a reproducer:
+> >
+> >     $ readelf -S crash
+> >     Section Headers:
+> >       [Nr] Name              Type             Address           Offset
+> >            Size              EntSize          Flags  Link  Info  Align
+> >     ...
+> >       [ 2] uretprobe.mu[...] PROGBITS         0000000000000000  00000040
+> >            0000000000000068  0000000000000000  AX       0     0     8
+> >
+> >     $ readelf -s crash
+> >     Symbol table '.symtab' contains 8 entries:
+> >        Num:    Value          Size Type    Bind   Vis      Ndx Name
+> >     ...
+> >          6: ffffffffffffffb8   104 FUNC    GLOBAL DEFAULT    2 handle_tp
+> >
+> > Here, the handle_tp prog has section offset ffffffffffffffb8, i.e. will
+> > point before the actual memory where section 2 is allocated.
+> >
+> > This is also reported by AddressSanitizer:
+> >
+> >     =================================================================
+> >     ==1232==ERROR: AddressSanitizer: heap-buffer-overflow on address 0x7c7302fe0000 at pc 0x7fc3046e4b77 bp 0x7ffe64677cd0 sp 0x7ffe64677490
+> >     READ of size 104 at 0x7c7302fe0000 thread T0
+> >         #0 0x7fc3046e4b76 in memcpy (/lib64/libasan.so.8+0xe4b76)
+> >         #1 0x00000040df3e in bpf_object__init_prog /src/libbpf/src/libbpf.c:856
+> >         #2 0x00000040df3e in bpf_object__add_programs /src/libbpf/src/libbpf.c:928
+> >         #3 0x00000040df3e in bpf_object__elf_collect /src/libbpf/src/libbpf.c:3930
+> >         #4 0x00000040df3e in bpf_object_open /src/libbpf/src/libbpf.c:8067
+> >         #5 0x00000040f176 in bpf_object__open_file /src/libbpf/src/libbpf.c:8090
+> >         #6 0x000000400c16 in main /poc/poc.c:8
+> >         #7 0x7fc3043d25b4 in __libc_start_call_main (/lib64/libc.so.6+0x35b4)
+> >         #8 0x7fc3043d2667 in __libc_start_main@@GLIBC_2.34 (/lib64/libc.so.6+0x3667)
+> >         #9 0x000000400b34 in _start (/poc/poc+0x400b34)
+> >
+> >     0x7c7302fe0000 is located 64 bytes before 104-byte region [0x7c7302fe0040,0x7c7302fe00a8)
+> >     allocated by thread T0 here:
+> >         #0 0x7fc3046e716b in malloc (/lib64/libasan.so.8+0xe716b)
+> >         #1 0x7fc3045ee600 in __libelf_set_rawdata_wrlock (/lib64/libelf.so.1+0xb600)
+> >         #2 0x7fc3045ef018 in __elf_getdata_rdlock (/lib64/libelf.so.1+0xc018)
+> >         #3 0x00000040642f in elf_sec_data /src/libbpf/src/libbpf.c:3740
+> >
+> > The problem here is that currently, libbpf only checks that the program
+> > end is within the section bounds. There used to be a check
+> > `while (sec_off < sec_sz)` in bpf_object__add_programs, however, it was
+> > removed by commit 6245947c1b3c ("libbpf: Allow gaps in BPF program
+> > sections to support overriden weak functions").
+> >
+> > Put the above condition back to bpf_object__init_prog to make sure that
+> > the program start is also within the bounds of the section to avoid the
+> > potential buffer overflow.
+> >
+> > [1] https://github.com/lmarch2/poc/blob/main/libbpf/libbpf.md
+> >
+> > Reported-by: lmarch2 <2524158037@qq.com>
+> > Cc: stable@vger.kernel.org
+> 
+> Libbpf is packaged and consumed from Github mirror, which is produced
+> from latest bpf-next and bpf trees, so there is no point in
+> backporting fixes like this to stable kernel branches. Please drop the
+> CC: stable in the next revision.
+> 
+> > Fixes: 6245947c1b3c ("libbpf: Allow gaps in BPF program sections to support overriden weak functions")
+> > Link: https://github.com/lmarch2/poc/blob/main/libbpf/libbpf.md
+> > Link: https://www.cve.org/CVERecord?id=CVE-2025-29481
+> 
+> libbpf is meant to load BPF programs under root. It's a
+> highly-privileged operation, and libbpf is not meant, designed, and
+> actually explicitly discouraged from loading untrusted ELF files. As
+> such, this is just a normal bug fix, like lots of others. So let's
+> drop the CVE link as well.
+> 
+> Again, no one in their sane mind should be passing untrusted ELF files
+> into libbpf while running under root. Period.
+> 
+> All production use cases load ELF that they generated and control
+> (usually embedded into their memory through BPF skeleton header). And
+> if that ELF file is corrupted, you have problems somewhere else,
+> libbpf is not a culprit.
 
-Good question, the simple answer is that they are irrelevant.
+Should that context-less CVE be revoked as well?  Who asked for it to be
+issued?
+
+thanks,
+
+greg k-h
