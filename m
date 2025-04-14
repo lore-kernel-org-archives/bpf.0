@@ -1,122 +1,131 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from out-185.mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DB2B27990D;
-	Mon, 14 Apr 2025 16:09:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83FBF27B51A
+	for <bpf@vger.kernel.org>; Mon, 14 Apr 2025 16:12:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.185
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744646975; cv=none; b=HE7XJNZhvjqMPAQdP8FA435kfUvpjEwKCNVqZ6PxSwFK4abjyqNlh+NglsQ/4nKRUJBRaUAi1QHm/PinaOL/BaMKvspUBVeF2+Q2+Bj1mmgzRoIEFSp94JUQ1yn6/e6DzQkS8jm4a75FD9+jxmGnb+4m+MeEofloHCFRvO1WV4M=
+	t=1744647146; cv=none; b=ounKVfuOTM92nH69iyC0Nwj6J4orPhLYkTT1YoKRAlhrGC9BE1D1etlT9ovetmVWX+5HXH5dlz4TK7RQZJBH7l9yWVSayPLmqgFzIBu6VBwpQxeSy0pr0krNmrvVNG3k8sWQOD1CnUxa3pUnrfhYIO9JwkLtXIStojEhkKANK5Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744646975; c=relaxed/simple;
-	bh=o098pNY1KIdzMyd0dCjsn6jbyXgc1lerA3ii2JKfdFw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=O10DVgDxXl/WgqKRiS0lfyzII7G7CUsf8EL54tWCADxz4rGWWdbXWO4JkK9DFAMNrtOYaWFAaufcs/kczhacat1MLQLLSiMDSXkAZGGyAQxbzu6AyWJiq6LjuCphqFQAVrwF6zJHvej5FxNV3QpdNB+GbcmMADdgSp5bfS1d5pU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NVMZrJCr; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1744647146; c=relaxed/simple;
+	bh=1NIHbhj4JVbVzEQGtIVkTUlCLFpsolzH9EvWr+Vpdbc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=AGdaoi3YfxEqRilsaEE9Eyo9GFoCkYy/tIQkgkPjd7u48Ad6a2W/T9d314d7yITiDjEoc+y0XjIyZporDGp1XZOt28Kps/pJaWdHFGM0qY9C0gIopFbYm6Lm+EATcyKIKE/1VN7N/pq7oW4+k7tC5UY2qgMJlTa/VpjEDuWSkkY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=bdX7Cr2k; arc=none smtp.client-ip=91.218.175.185
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NVMZrJCr"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1744646974; x=1776182974;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=o098pNY1KIdzMyd0dCjsn6jbyXgc1lerA3ii2JKfdFw=;
-  b=NVMZrJCr47sW/2QD/HualWcnhfbUl/T45lblRYJGI8fhoJiXEwQgO6ba
-   md2tAQFrl2zY0rl7B1eAFpkbhKLGQiQDwx1q9kXG3eXBMABoXpFHlGhXd
-   9J5JsWKD7hLyMGuVFSDhgix66EVe1pjenIFnlU9b2SjKVS10dA1j9WFFh
-   ZV+MDkQW1dozWEV5WT1LuIPz/S5DEBzC1hiWGCKq07vffGZEwWT2QNSXq
-   qPg04jh+3i9flFoThedDWovXCZmz63AmGENRzWXcfCjWY8bqkc1LMP1Bl
-   HcCsYyiQNrJduYVuffbXLDukr5FVJkMGX66Bi9Pd9rVU+VN1FNL/57wxU
-   g==;
-X-CSE-ConnectionGUID: LUGI8wkKR7yRrXdoAa7r4A==
-X-CSE-MsgGUID: UTknH2NcSR6ySoKDWx3cNg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11403"; a="49782700"
-X-IronPort-AV: E=Sophos;i="6.15,212,1739865600"; 
-   d="scan'208";a="49782700"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2025 09:09:33 -0700
-X-CSE-ConnectionGUID: CnMxJUlmSIiTzbm9YFg+pA==
-X-CSE-MsgGUID: 9cu2Bq3oQ4CxIuDdss/0dw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,212,1739865600"; 
-   d="scan'208";a="130836760"
-Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 14 Apr 2025 09:09:26 -0700
-Received: from kbuild by b207828170a5 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1u4MN9-000ER0-2g;
-	Mon, 14 Apr 2025 16:09:23 +0000
-Date: Tue, 15 Apr 2025 00:08:40 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jiayuan Chen <jiayuan.chen@linux.dev>, bpf@vger.kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, mrpre@163.com,
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="bdX7Cr2k"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1744647142;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=FSEXeuFZmlfGP9mNVsD3X0qCwzG9fRcgpWs1Q82AhS8=;
+	b=bdX7Cr2kmpeX+qcWgXAeUxvneO1FaitPsnLd/0/QIfVz45aScPjBgUDFDvHen5MTkF79S/
+	w1u4TaKJDq9uVakdwd68E3HNJ7TCOaZ31nkfi7zEgau+p34ObwFb4tL/10NtRxbBurf82q
+	AhzchHwIAIT2GpYdc1ZxGYPer5CTVm4=
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: bpf@vger.kernel.org
+Cc: mrpre@163.com,
 	Jiayuan Chen <jiayuan.chen@linux.dev>,
-	Jakub Sitnicki <jakub@cloudflare.com>,
-	Cong Wang <xiyou.wangcong@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
 	Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	John Fastabend <john.fastabend@gmail.com>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
 	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Jakub Sitnicki <jakub@cloudflare.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
 	Masami Hiramatsu <mhiramat@kernel.org>,
 	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	"David S. Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
 	Simon Horman <horms@kernel.org>,
 	Jesper Dangaard Brouer <hawk@kernel.org>,
-	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org,
 	linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next v2] bpf, sockmap: Introduce tracing capability
- for sockmap
-Message-ID: <202504142349.tfXMGMOg-lkp@intel.com>
-References: <20250411091634.336371-1-jiayuan.chen@linux.dev>
+Subject: [PATCH bpf-next v3 2/2] bpf: relocates the BPF net tracepoint definitions
+Date: Tue, 15 Apr 2025 00:11:46 +0800
+Message-ID: <20250414161153.14990-2-jiayuan.chen@linux.dev>
+In-Reply-To: <20250414161153.14990-1-jiayuan.chen@linux.dev>
+References: <20250414161153.14990-1-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250411091634.336371-1-jiayuan.chen@linux.dev>
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Hi Jiayuan,
+This commit relocates the BPF tracepoint definitions for XDP and sockmap
+from the kernel directory to net/bpf.
 
-kernel test robot noticed the following build errors:
+This ensures that these tracepoints are controlled by the CONFIG_NET,
+avoiding unnecessary function definitions when the CONFIG_NET is disabled.
+Additionally, it prevents build failures caused by the use of net module
+functions when CONFIG_NET is not enabled.
 
-[auto build test ERROR on bpf-next/master]
+Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+---
+ kernel/bpf/core.c       | 7 -------
+ net/bpf/Makefile        | 1 +
+ net/bpf/bpf_net_trace.c | 8 ++++++++
+ 3 files changed, 9 insertions(+), 7 deletions(-)
+ create mode 100644 net/bpf/bpf_net_trace.c
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jiayuan-Chen/bpf-sockmap-Introduce-tracing-capability-for-sockmap/20250414-093146
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-patch link:    https://lore.kernel.org/r/20250411091634.336371-1-jiayuan.chen%40linux.dev
-patch subject: [PATCH bpf-next v2] bpf, sockmap: Introduce tracing capability for sockmap
-config: csky-randconfig-001-20250414 (https://download.01.org/0day-ci/archive/20250414/202504142349.tfXMGMOg-lkp@intel.com/config)
-compiler: csky-linux-gcc (GCC) 14.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250414/202504142349.tfXMGMOg-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202504142349.tfXMGMOg-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   csky-linux-ld: kernel/bpf/core.o: in function `trace_event_raw_event_sockmap_redirect':
->> core.c:(.text+0x15e0): undefined reference to `sock_i_ino'
-   csky-linux-ld: kernel/bpf/core.o: in function `trace_event_raw_event_sockmap_strparser':
-   core.c:(.text+0x1684): undefined reference to `sock_i_ino'
->> csky-linux-ld: core.c:(.text+0x1688): undefined reference to `init_net'
->> csky-linux-ld: core.c:(.text+0x16a8): undefined reference to `sock_i_ino'
-   csky-linux-ld: kernel/bpf/core.o: in function `___bpf_prog_run':
-   core.c:(.text+0x1838): undefined reference to `sock_i_ino'
-   csky-linux-ld: core.c:(.text+0x183c): undefined reference to `init_net'
-
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index ba6b6118cf50..54e570f62606 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -3180,10 +3180,3 @@ late_initcall(bpf_global_ma_init);
+ 
+ DEFINE_STATIC_KEY_FALSE(bpf_stats_enabled_key);
+ EXPORT_SYMBOL(bpf_stats_enabled_key);
+-
+-/* All definitions of tracepoints related to BPF. */
+-#define CREATE_TRACE_POINTS
+-#include <linux/bpf_trace.h>
+-
+-EXPORT_TRACEPOINT_SYMBOL_GPL(xdp_exception);
+-EXPORT_TRACEPOINT_SYMBOL_GPL(xdp_bulk_tx);
+diff --git a/net/bpf/Makefile b/net/bpf/Makefile
+index 1ebe270bde23..e95453053159 100644
+--- a/net/bpf/Makefile
++++ b/net/bpf/Makefile
+@@ -1,5 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ obj-$(CONFIG_BPF_SYSCALL)	:= test_run.o
++obj-$(CONFIG_BPF_SYSCALL)	+= bpf_net_trace.o
+ ifeq ($(CONFIG_BPF_JIT),y)
+ obj-$(CONFIG_BPF_SYSCALL)	+= bpf_dummy_struct_ops.o
+ endif
+diff --git a/net/bpf/bpf_net_trace.c b/net/bpf/bpf_net_trace.c
+new file mode 100644
+index 000000000000..e7c0537dbffd
+--- /dev/null
++++ b/net/bpf/bpf_net_trace.c
+@@ -0,0 +1,8 @@
++// SPDX-License-Identifier: GPL-2.0
++
++/* All definitions of net tracepoints related to BPF. */
++#define CREATE_TRACE_POINTS
++#include <linux/bpf_trace.h>
++
++EXPORT_TRACEPOINT_SYMBOL_GPL(xdp_exception);
++EXPORT_TRACEPOINT_SYMBOL_GPL(xdp_bulk_tx);
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.47.1
+
