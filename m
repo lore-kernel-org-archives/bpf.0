@@ -1,363 +1,105 @@
-Received: from out-180.mta0.migadu.com (out-180.mta0.migadu.com [91.218.175.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16AEA2580F9
-	for <bpf@vger.kernel.org>; Mon, 14 Apr 2025 16:12:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69AD519309E;
+	Mon, 14 Apr 2025 16:13:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744647146; cv=none; b=dYMp7rOKUwLDGL1VVAOmv9Y8fYSGUnl3xfpubYGRBQASWMRtc21e5/vw8ixK8+Xo6lyzkhZPcACOG7zK7yzIWAbMt5CvCSM+1tbeRof+Z1NAO7V4BKkQg2Gn+fHfPr02KiPlBcLtPQcdJbGkrN+4jj6L60REdJiQxorevRWsqxU=
+	t=1744647202; cv=none; b=a54aUowY1v9FM6c7YziVFQpwkCB7ElS+bWEu2ENsFAEZiX0AqzFnU6q8rJrG5VvoPgwnyv/xDzUz0oQw9waBTU1ei0a2pzGSNbgqk7Fcsy3BazKLQ2ghuNvndVIW97lfYnmL+TB+6AtlAIBlzpkv1kx7hgtUXmEOB15iRGivJ6E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744647146; c=relaxed/simple;
-	bh=waTV4W4W4Y7WAqy8/VrjgUu6ulw5og4Qi7BkKhrhQGA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=W7iHIE+zRZWycBpr5Y8bkAglfBrZucCgfMFrsZN6Nh88WIINLcWXD2gy9y8ZZTWX9BIYE+lXVwbHWFaZcERtU5wJcDW1XJXQ4M0MUXM/4l6WSsN7a9+LcFlgARCiGMp80FcHc1q+A2JhLYLr5eQzWA3ogPVIA+5Uh33PM6kR47w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=wcS5/gP5; arc=none smtp.client-ip=91.218.175.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1744647202; c=relaxed/simple;
+	bh=sUxHd+bpTrzdWjq7WlLSGLwVwJH8vgpum0twtdz9/4Y=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=kUX+5F5OOPFKUOk4Y11cYtmqV1Vr8/eoGfaz7FhJMKHAp5pHqV9hctKUpnG2ulN8F5mgG8zCkdPdPHf/f2WCvdvEHIQev3AY6qIdOelLt8Y9oUFzfKqxxpjkj4nCKq3dmqZ1ihk/ezRnJWcRgjkAiu3BpaLNl3NTHBWfqM3raDQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JZViMOOq; arc=none smtp.client-ip=209.85.210.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="wcS5/gP5"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1744647130;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=Mpa79OmJSgJ5vTxFFXbdRGzlB9MZL+A6yTIZNihZ5xI=;
-	b=wcS5/gP5FuhLDaJxE+CShM0aNYvbeDwDU/BYWhHbePWcWDuJPGKq+89f9tL6u9UQsw4l0B
-	/mRW2CdnIf8xsWBFYCNwDCjfuz/gyf6sP8ipAF/ldYSzYEk2crbHvdyy42Z9K0SaBCuva7
-	t7oSEatr8KzsQmCu0kzogHHlDjm4eN0=
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-To: bpf@vger.kernel.org
-Cc: mrpre@163.com,
-	Jiayuan Chen <jiayuan.chen@linux.dev>,
-	Jakub Sitnicki <jakub@cloudflare.com>,
-	Cong Wang <xiyou.wangcong@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v3 1/2] bpf, sockmap: Introduce tracing capability for sockmap
-Date: Tue, 15 Apr 2025 00:11:45 +0800
-Message-ID: <20250414161153.14990-1-jiayuan.chen@linux.dev>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JZViMOOq"
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-7359aca7ef2so6849792b3a.2;
+        Mon, 14 Apr 2025 09:13:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1744647199; x=1745251999; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=J6asywJeD+RJxS6sZJ0w92/Q6ch5F+IbPUdLU2Pugfo=;
+        b=JZViMOOqIfR74iGqRgMy+QkbwTebDDp2YpMm6bzoOeUGIemdwVMTw5p4yN6qgiLeVh
+         Gwduq8IkpJrTlmu17YyKhCrytOdPWWaUsAHTGyDwuS7xwMO2Zh1v/0ro10c1X6u4gyzG
+         n/4uSMTrExhiwgj4qnEwRtnbwYbEInFxZ2q9QiTBZGsHAleuC46cxSKnkVAXqmm4wz7p
+         LsbMDYFWddce0FtbB0+pFye50ajSEXBtFtSLgZF6VZYRRQO1qpDizQjWlgJDWpqoW46b
+         9qmIWbg9XAjKuZZzwNTgRX6xmPrhYGuvD4xVndCle9+2URzZtYECTOel2kIFhMYnJLqL
+         eMBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744647199; x=1745251999;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=J6asywJeD+RJxS6sZJ0w92/Q6ch5F+IbPUdLU2Pugfo=;
+        b=X/fWc0QpVdRBw9PlN/Q9PP75vjulBb/90vzQYdp+uIq4QfF6wKPbTbFYrKUxOneBVh
+         Da7DJ09etLss3lKD3CYHKxmIegNjr5cVS6evQ1Qa8jqcorUC4ykq3hggB9opucljeIzQ
+         ueOTdBrPPHu4h05YRa7/Z4qXuBLEh4tu5WNdhyRvtXw67ZDqw0fS+aZhgiNNc66hP+/0
+         wa7y/ePwqH5MPXZ9wvYKpUlH4uzboFxbo7fEiGxr1xkH0UAWVrqEUFR15ciOzS9Dqjat
+         0KDOx7wKHt1fUsxQ+wSptKYf/P4A4lDVIiUHwriE70f6bIRIW2FKnQ2+FDMnstKACc2w
+         bmQw==
+X-Forwarded-Encrypted: i=1; AJvYcCUEd78lKVt2M4WMc7+lpjrfNfUWZzjKCvf+RYf5kvbz8aY+jCJ1MroR9Z0E5JVLAV0pBssJrZNKajDQGW0QCfHwmZZx@vger.kernel.org, AJvYcCV5/d/pZmcfIoKQAwSwJHgzg/lOysYVj9c7exymmB2X6WR4g2ailMFrnopckL8zNWYCo+eUjSpYMy/8aa0V@vger.kernel.org, AJvYcCX1YcdEnFauVHuHPKMCSOPon5WQPRZm51LYYqIMpzvJR4qkKXXsQZA0WISLtn7UN45CDkw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx4GCbdyl9gEvMTRu/b6u6Eu8o3rGZ3cgG9XLd5zF4sWt3SdljY
+	XvHZ3tCV6AoIas6qQRJ6CBbDILAFnv4wPSjtNHH9aJVEqNfU17MyF0JCsYcVCjuOttCyzxWraIC
+	jUyeCnI/wf8+dWFHx1SoYCQ83+u9Hfhpy
+X-Gm-Gg: ASbGncumqr3Qf52C2COblJ6AO3YmbWWKgtg7VchXLOD7an/e/R6YmBpHRlVtm1iFzDl
+	l0ic2moravcTVso/99/Hj62RkpxVVOUcuzA8F5wpTTwfBt5K9xUyTt4EflEnXL0I/C2W9AoFoPV
+	M+Qjm2XC8uCvbieX0m95BhP4QJMLguHM/BGp5w
+X-Google-Smtp-Source: AGHT+IETqZf6Sd1ER2YOsJALw3nB8wrNvKEzh0t48eXEh1r7BUNdArGp9ltJDfCGSd2loT6Yu7zaEpP2o6TwR489dgY=
+X-Received: by 2002:a05:6a00:1152:b0:736:5dc6:a14f with SMTP id
+ d2e1a72fcca58-73bd12dc547mr17692891b3a.23.1744647199314; Mon, 14 Apr 2025
+ 09:13:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+References: <20250414083647.1234007-1-jolsa@kernel.org> <20250414083647.1234007-2-jolsa@kernel.org>
+In-Reply-To: <20250414083647.1234007-2-jolsa@kernel.org>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Mon, 14 Apr 2025 09:13:05 -0700
+X-Gm-Features: ATxdqUE-l2I09rOYVu1-efysb2p8CcbGule9DeMtj1YvurdLfGFRLCJxUpVOrAU
+Message-ID: <CAEf4Bzadf-k7vcDWm40yjpq7P4dYEr5pKTKsgthvWs_GqvoRNA@mail.gmail.com>
+Subject: Re: [PATCHv3 perf/core 2/2] selftests/bpf: Add 5-byte nop uprobe
+ trigger bench
+To: Jiri Olsa <jolsa@kernel.org>
+Cc: Oleg Nesterov <oleg@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Ingo Molnar <mingo@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	x86@kernel.org, Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>, 
+	John Fastabend <john.fastabend@gmail.com>, Hao Luo <haoluo@google.com>, 
+	Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
+	Alan Maguire <alan.maguire@oracle.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Sockmap has the same high-performance forwarding capability as XDP, but
-operates at Layer 7.
+On Mon, Apr 14, 2025 at 1:37=E2=80=AFAM Jiri Olsa <jolsa@kernel.org> wrote:
+>
+> Add 5-byte nop uprobe trigger bench (x86_64 specific) to measure
+> uprobes/uretprobes on top of nop5 instruction.
+>
+> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> ---
+>  tools/testing/selftests/bpf/bench.c           | 12 ++++++
+>  .../selftests/bpf/benchs/bench_trigger.c      | 42 +++++++++++++++++++
+>  .../selftests/bpf/benchs/run_bench_uprobes.sh |  2 +-
+>  3 files changed, 55 insertions(+), 1 deletion(-)
+>
 
-Introduce tracing capability for sockmap, to trace the execution results
-of BPF programs without modifying the programs themselves, similar to
-the existing trace_xdp_redirect{_map}.
+LGTM. Should we land this benchmark patch through the bpf-next tree?
+It won't break anything, just will be slower until patch #1 gets into
+bpf-next as well, which is fine.
 
-It is crucial for debugging sockmap programs, especially in production
-environments.
+Ingo or Peter, any objections to me routing this patch separately
+through bpf-next?
 
-Additionally, the new header file has to be added to bpf_trace.h to
-automatically generate tracepoints.
+But either way:
 
-Test results:
-$ echo "1" > /sys/kernel/tracing/events/sockmap/enable
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
 
-msg/skb:
-'''
-sockmap_redirect: sk=000000000ec02a93, netns=4026531840, inode=318, \
-family=2, protocol=6, prog_id=59, len=8192, type=msg, action=REDIRECT, \
-redirect_type=ingress
-
-sockmap_redirect: sk=00000000d5d9c931, netns=4026531840, inode=64731, \
-family=2, protocol=6, prog_id=91, len=8221, type=skb, action=REDIRECT, \
-redirect_type=egress
-
-sockmap_redirect: sk=00000000106fc281, netns=4026531840, inode=64729, \
-family=2, protocol=6, prog_id=94, len=8192, type=msg, action=PASS, \
-redirect_type=none
-'''
-
-strparser:
-'''
-sockmap_strparser: sk=00000000f15fc1c8, netns=4026531840, inode=52396, \
-family=2, protocol=6, prog_id=143, in_len=1000, full_len=10
-'''
-
-Suggested-by: Jakub Sitnicki <jakub@cloudflare.com>
-Suggested-by: Cong Wang <xiyou.wangcong@gmail.com>
-Suggested-by: Steven Rostedt <rostedt@goodmis.org>
-Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
-
----
-v1 -> v2: Print more valuable information as suggested by the maintainer.
----
- MAINTAINERS                    |   1 +
- include/linux/bpf_trace.h      |   1 +
- include/trace/events/sockmap.h | 158 +++++++++++++++++++++++++++++++++
- net/core/skmsg.c               |   6 ++
- 4 files changed, 166 insertions(+)
- create mode 100644 include/trace/events/sockmap.h
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index a7a1d121a83e..578e16d86853 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -4420,6 +4420,7 @@ L:	netdev@vger.kernel.org
- L:	bpf@vger.kernel.org
- S:	Maintained
- F:	include/linux/skmsg.h
-+F:	include/trace/events/sockmap.h
- F:	net/core/skmsg.c
- F:	net/core/sock_map.c
- F:	net/ipv4/tcp_bpf.c
-diff --git a/include/linux/bpf_trace.h b/include/linux/bpf_trace.h
-index ddf896abcfb6..d559be0a79c5 100644
---- a/include/linux/bpf_trace.h
-+++ b/include/linux/bpf_trace.h
-@@ -3,5 +3,6 @@
- #define __LINUX_BPF_TRACE_H__
- 
- #include <trace/events/xdp.h>
-+#include <trace/events/sockmap.h>
- 
- #endif /* __LINUX_BPF_TRACE_H__ */
-diff --git a/include/trace/events/sockmap.h b/include/trace/events/sockmap.h
-new file mode 100644
-index 000000000000..79784e8d5866
---- /dev/null
-+++ b/include/trace/events/sockmap.h
-@@ -0,0 +1,158 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#undef TRACE_SYSTEM
-+#define TRACE_SYSTEM sockmap
-+
-+#if !defined(_TRACE_SOCKMAP_H) || defined(TRACE_HEADER_MULTI_READ)
-+#define _TRACE_SOCKMAP_H
-+
-+#include <linux/tracepoint.h>
-+#include <linux/bpf.h>
-+#include <linux/skmsg.h>
-+
-+#ifndef __TRACE_SOCKMAP_HELPER_ONCE_ONLY
-+#define __TRACE_SOCKMAP_HELPER_ONCE_ONLY
-+
-+enum sockmap_direct_type {
-+	SOCKMAP_REDIR_NONE	= 0,
-+	SOCKMAP_REDIR_INGRESS,
-+	SOCKMAP_REDIR_EGRESS,
-+};
-+
-+enum sockmap_data_type {
-+	SOCKMAP_MSG		= 0,
-+	SOCKMAP_SKB,
-+};
-+
-+#endif /* end __TRACE_SOCKMAP_HELPER_ONCE_ONLY */
-+
-+TRACE_DEFINE_ENUM(SOCKMAP_MSG);
-+TRACE_DEFINE_ENUM(SOCKMAP_SKB);
-+TRACE_DEFINE_ENUM(SOCKMAP_REDIR_NONE);
-+TRACE_DEFINE_ENUM(SOCKMAP_REDIR_INGRESS);
-+TRACE_DEFINE_ENUM(SOCKMAP_REDIR_EGRESS);
-+
-+TRACE_DEFINE_ENUM(__SK_DROP);
-+TRACE_DEFINE_ENUM(__SK_PASS);
-+TRACE_DEFINE_ENUM(__SK_REDIRECT);
-+TRACE_DEFINE_ENUM(__SK_NONE);
-+
-+#define show_redirect_type(x)					\
-+	__print_symbolic(x,					\
-+		{ SOCKMAP_REDIR_NONE,		"none" },	\
-+		{ SOCKMAP_REDIR_INGRESS,	"ingress" },	\
-+		{ SOCKMAP_REDIR_EGRESS,		"egress" })
-+
-+#define show_act(x)						\
-+	__print_symbolic(x,					\
-+		{ __SK_DROP,			"DROP" },	\
-+		{ __SK_PASS,			"PASS" },	\
-+		{ __SK_REDIRECT,		"REDIRECT" },	\
-+		{ __SK_NONE,			"NONE" })
-+
-+#define show_data_type(x)					\
-+	__print_symbolic(x,					\
-+		{ SOCKMAP_MSG,			"msg" },	\
-+		{ SOCKMAP_SKB,			"skb" })
-+
-+#define trace_sockmap_skmsg_redirect(sk, prog, msg, act)	\
-+	trace_sockmap_redirect((sk), SOCKMAP_MSG, (prog),	\
-+			       (msg)->sg.size, (act),		\
-+			       sk_msg_to_ingress(msg))
-+
-+#define trace_sockmap_skb_redirect(sk, prog, skb, act)		\
-+	trace_sockmap_redirect((sk), SOCKMAP_SKB, (prog),	\
-+			       (skb)->len, (act),		\
-+			       skb_bpf_ingress(skb))
-+
-+#define trace_sockmap_skb_strp_parse(sk, prog, skb, ret)	\
-+	trace_sockmap_strparser((sk), (prog), (skb)->len, (ret))
-+
-+TRACE_EVENT(sockmap_redirect,
-+
-+	TP_PROTO(const struct sock *sk, enum sockmap_data_type type,
-+		 const struct bpf_prog *prog, int len, int act,
-+		 bool ingress),
-+
-+	TP_ARGS(sk, type, prog, len, act, ingress),
-+
-+	TP_STRUCT__entry(
-+		__field(const void *, sk)
-+		__field(unsigned long, ino)
-+		__field(unsigned int, netns_ino)
-+		__field(__u16, family)
-+		__field(__u16, protocol)
-+		__field(int, prog_id)
-+		__field(int, len)
-+		__field(int, act)
-+		__field(enum sockmap_data_type, type)
-+		__field(enum sockmap_direct_type, redir)
-+	),
-+
-+	TP_fast_assign(
-+		/* 'redir' is undefined if action is not REDIRECT */
-+		enum sockmap_direct_type redir = SOCKMAP_REDIR_NONE;
-+
-+		if (act == __SK_REDIRECT) {
-+			if (ingress)
-+				redir = SOCKMAP_REDIR_INGRESS;
-+			else
-+				redir = SOCKMAP_REDIR_EGRESS;
-+		}
-+		__entry->sk		= sk;
-+		__entry->ino		= sock_i_ino((struct sock *)sk);
-+		__entry->netns_ino	= sock_net(sk)->ns.inum;
-+		__entry->type		= type;
-+		__entry->family		= sk->sk_family;
-+		__entry->protocol	= sk->sk_protocol;
-+		__entry->prog_id	= prog->aux->id;
-+		__entry->len		= len;
-+		__entry->act		= act;
-+		__entry->redir		= redir;
-+	),
-+
-+	TP_printk("sk=%p, netns=%u, inode=%lu, family=%u, protocol=%u,"
-+		  " prog_id=%d, len=%d, type=%s, action=%s, redirect_type=%s",
-+		  __entry->sk, __entry->netns_ino, __entry->ino,
-+		  __entry->family, __entry->protocol, __entry->prog_id,
-+		  __entry->len, show_data_type(__entry->type),
-+		  show_act(__entry->act), show_redirect_type(__entry->redir))
-+);
-+
-+TRACE_EVENT(sockmap_strparser,
-+
-+	TP_PROTO(const struct sock *sk, const struct bpf_prog *prog,
-+		 int in_len, int full_len),
-+
-+	TP_ARGS(sk, prog, in_len, full_len),
-+
-+	TP_STRUCT__entry(
-+		__field(const void *, sk)
-+		__field(unsigned long, ino)
-+		__field(unsigned int, netns_ino)
-+		__field(__u16, family)
-+		__field(__u16, protocol)
-+		__field(int, prog_id)
-+		__field(int, in_len)
-+		__field(int, full_len)
-+	),
-+
-+	TP_fast_assign(
-+		__entry->sk		= sk;
-+		__entry->ino		= sock_i_ino((struct sock *)sk);
-+		__entry->netns_ino	= sock_net(sk)->ns.inum;
-+		__entry->family		= sk->sk_family;
-+		__entry->protocol	= sk->sk_protocol;
-+		__entry->prog_id	= prog->aux->id;
-+		__entry->in_len		= in_len;
-+		__entry->full_len	= full_len;
-+	),
-+
-+	TP_printk("sk=%p, netns=%u, inode=%lu, family=%u, protocol=%u,"
-+		  " prog_id=%d, in_len=%d, full_len=%d",
-+		  __entry->sk, __entry->netns_ino, __entry->ino,
-+		  __entry->family, __entry->protocol, __entry->prog_id,
-+		  __entry->in_len, __entry->full_len)
-+);
-+#endif /* _TRACE_SOCKMAP_H */
-+
-+#include <trace/define_trace.h>
-diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-index 276934673066..517596efafa8 100644
---- a/net/core/skmsg.c
-+++ b/net/core/skmsg.c
-@@ -9,6 +9,7 @@
- #include <net/tcp.h>
- #include <net/tls.h>
- #include <trace/events/sock.h>
-+#include <trace/events/sockmap.h>
- 
- static bool sk_msg_try_coalesce_ok(struct sk_msg *msg, int elem_first_coalesce)
- {
-@@ -910,6 +911,7 @@ int sk_psock_msg_verdict(struct sock *sk, struct sk_psock *psock,
- 		sock_hold(psock->sk_redir);
- 	}
- out:
-+	trace_sockmap_skmsg_redirect(sk, prog, msg, ret);
- 	rcu_read_unlock();
- 	return ret;
- }
-@@ -981,6 +983,7 @@ int sk_psock_tls_strp_read(struct sk_psock *psock, struct sk_buff *skb)
- 		ret = bpf_prog_run_pin_on_cpu(prog, skb);
- 		ret = sk_psock_map_verd(ret, skb_bpf_redirect_fetch(skb));
- 		skb->sk = NULL;
-+		trace_sockmap_skb_redirect(psock->sk, prog, skb, ret);
- 	}
- 	sk_psock_tls_verdict_apply(skb, psock, ret);
- 	rcu_read_unlock();
-@@ -1090,6 +1093,7 @@ static void sk_psock_strp_read(struct strparser *strp, struct sk_buff *skb)
- 		skb_bpf_set_strparser(skb);
- 		ret = sk_psock_map_verd(ret, skb_bpf_redirect_fetch(skb));
- 		skb->sk = NULL;
-+		trace_sockmap_skb_redirect(sk, prog, skb, ret);
- 	}
- 	sk_psock_verdict_apply(psock, skb, ret);
- out:
-@@ -1113,6 +1117,7 @@ static int sk_psock_strp_parse(struct strparser *strp, struct sk_buff *skb)
- 		skb->sk = psock->sk;
- 		ret = bpf_prog_run_pin_on_cpu(prog, skb);
- 		skb->sk = NULL;
-+		trace_sockmap_skb_strp_parse(psock->sk, prog, skb, ret);
- 	}
- 	rcu_read_unlock();
- 	return ret;
-@@ -1217,6 +1222,7 @@ static int sk_psock_verdict_recv(struct sock *sk, struct sk_buff *skb)
- 		skb_bpf_redirect_clear(skb);
- 		ret = bpf_prog_run_pin_on_cpu(prog, skb);
- 		ret = sk_psock_map_verd(ret, skb_bpf_redirect_fetch(skb));
-+		trace_sockmap_skb_redirect(psock->sk, prog, skb, ret);
- 	}
- 	ret = sk_psock_verdict_apply(psock, skb, ret);
- 	if (ret < 0)
--- 
-2.47.1
-
+[...]
