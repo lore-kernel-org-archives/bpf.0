@@ -1,102 +1,175 @@
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.5])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20AB328E5F3;
-	Tue, 15 Apr 2025 09:40:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.5
+Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6501728BAAE
+	for <bpf@vger.kernel.org>; Tue, 15 Apr 2025 10:43:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744710056; cv=none; b=ReueItpzl+e6MWlgMKD84sZruxM+zo37pvvB5CgsKPu/N0NlFDV8ftlLDpCk5/ciuy57zulbVg1bqfnLI8bb9ZCVHZVpWvk7ycKgo1VDREpX25YKhwlsHTvTybnlNzbnySyeyMbzaOBRyLl42F2dLL9l36+GQ917Tn2yYWnNgyo=
+	t=1744713811; cv=none; b=coZ4bNb7JOzLK+ksAyi/zoyq0M3PZjJSTuGt4GTA20QIcU7McSafedNRFqtXnF5/WrmfP+CFDPRmqSNpLysmQd5PYm9aNFiUnxtJllmoW3O22WHYu6I2UXSTbyvRFWxFBDC2O1I+MhF27o7vRXUAoCEcrOa2JAELaEvyfFDdWRQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744710056; c=relaxed/simple;
-	bh=2pwZ1qlDG4JfSwKSgm3Af0VqkWqbaKQSew+pT9ECKyM=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=AUKw2H3GUxhMg9hWkL5ayGHpo93TZBg7OobtmRAxjGoGwMsec9D4XmCAKuC3yD/4nz+ToMGOgl4HSUuPkm54WnZFv2bquL0WPROerJvLlVJG3MRcEzygDxkrWSaH3VNUvXgmQzWxwZUuL8wiGsnr/8IguCs1kI7piLaq/Q5v+7g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=Nz+AdkLm; arc=none smtp.client-ip=117.135.210.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1744713811; c=relaxed/simple;
+	bh=4U96eowgfbvaJlzDFToCTa/U5/w4n4+bF3SOKBLWlzQ=;
+	h=MIME-Version:Date:Content-Type:From:Message-ID:Subject:To:Cc:
+	 In-Reply-To:References; b=KreIPyNhtdHzA8YQJ71OB4DaOs404RykBW4UJ4uN1xqH82zPLDGxQZUoOMbrJ6Ba8gxqyogHMLricLkHG6vNFxrZH2Juz2EHqkY6E/Kotnc71/oI/VcPg2k5l7ULgxd/LfVHeFYnkEMmzWbPS0sl6wuc7R6QsSxtOwIYDtlt/1k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=myBOLQ1I; arc=none smtp.client-ip=95.215.58.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="Nz+AdkLm"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=srFyC
-	TLP91LEogQ1QKxiPD2wzCBvVsdcpUotC9gEJ8U=; b=Nz+AdkLmn3GlyPDzkibsX
-	1AYTCJ8KDDwGbMxcI3IaTese4FU2cecoUK0zEIyDgiJ1cs46egVV7rUB4ObxBi1S
-	BBhmMkXq9/aPZ1dzP12C7EM6OCZ3ZOg5j5wgh6asMXv4jox3rXVrBYejTx5ORKU7
-	LBVeoPfrdCOFdf5ib8HW5c=
-Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g0-4 (Coremail) with SMTP id _____wDnT4k_Kf5ncYDjAA--.39887S2;
-	Tue, 15 Apr 2025 17:39:12 +0800 (CST)
-From: Feng Yang <yangfeng59949@163.com>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	hengqi.chen@gmail.com,
-	olsajiri@gmail.com
-Cc: bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v4 bpf-next 0/3] libbpf: Fix event name too long error and add tests
-Date: Tue, 15 Apr 2025 17:39:04 +0800
-Message-Id: <20250415093907.280501-1-yangfeng59949@163.com>
-X-Mailer: git-send-email 2.25.1
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="myBOLQ1I"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wDnT4k_Kf5ncYDjAA--.39887S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7AryUWF4DGrW3CF17CF4DJwb_yoW8AF43pF
-	ZrArn0grs3JF1xXFZ3J3yxZr95Can3JFyktF1ktw15Z3WUZ3yUZ34Iyw45WFnxWrZ29w45
-	Z3WqqF9IgFyjvFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UKzuZUUUUU=
-X-CM-SenderInfo: p1dqww5hqjkmqzuzqiywtou0bp/1tbiTR4weGf+JBHCCQAAs8
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1744713796;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=KqiOn2VInB+Asd2vXJW680IADszcS3SrPzukVOXmi7Y=;
+	b=myBOLQ1IuzYKH87xWhc/cQHLiBf/V0SWXRHYF5e8u9h8qtPF7IM5AeZehFWwhQ5YIaX2G0
+	IohGMKwu7bx4Yt7z1ykpaVZuP2iorfmcnr/utgO5v4SvoTVUDsCy2fXd29SFcq9LR63l/+
+	v8AocLzRN3Mzcleemn8qbI7adr2t/5E=
+Date: Tue, 15 Apr 2025 10:43:13 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: "Jiayuan Chen" <jiayuan.chen@linux.dev>
+Message-ID: <8d7a4c203ef9ac8ac359dcfd6684e8ec074f8e84@linux.dev>
+TLS-Required: No
+Subject: Re: [PATCH net 1/2] net: tls: explicitly disallow disconnect
+To: "Ihor Solodrai" <ihor.solodrai@linux.dev>, "Jakub Kicinski"
+ <kuba@kernel.org>, davem@davemloft.net
+Cc: netdev@vger.kernel.org, edumazet@google.com, pabeni@redhat.com,
+ andrew+netdev@lunn.ch, horms@kernel.org, borisp@nvidia.com,
+ john.fastabend@gmail.com, sd@queasysnail.net, "Jakub Kicinski"
+ <kuba@kernel.org>, syzbot+b4cd76826045a1eb93c1@syzkaller.appspotmail.com,
+ bpf@vger.kernel.org, "Alexei Starovoitov" <ast@kernel.org>
+In-Reply-To: <e0ea9f710fde34bdce42515f8c68722015403ab9@linux.dev>
+References: <20250404180334.3224206-1-kuba@kernel.org>
+ <e0ea9f710fde34bdce42515f8c68722015403ab9@linux.dev>
+X-Migadu-Flow: FLOW_OUT
 
-From: Feng Yang <yangfeng@kylinos.cn>
+April 15, 2025 at 11:16, "Ihor Solodrai" <ihor.solodrai@linux.dev> wrote:
 
-Hi everyone,
 
-This series tries to fix event name too long error and add tests.
 
-When the binary path is excessively long, the generated probe_name in libbpf
-exceeds the kernel's MAX_EVENT_NAME_LEN limit (64 bytes).
-This causes legacy uprobe event attachment to fail with error code -22.
+>=20
+>=20On 4/4/25 11:03 AM, Jakub Kicinski wrote:
+>=20
+>=20>=20
+>=20> syzbot discovered that it can disconnect a TLS socket and then
+> >=20
+>=20>  run into all sort of unexpected corner cases. I have a vague
+> >=20
+>=20>  recollection of Eric pointing this out to us a long time ago.
+> >=20
+>=20>  Supporting disconnect is really hard, for one thing if offload
+> >=20
+>=20>  is enabled we'd need to wait for all packets to be _acked_.
+> >=20
+>=20>  Disconnect is not commonly used, disallow it.
+> >=20
+>=20>  The immediate problem syzbot run into is the warning in the strp,
+> >=20
+>=20>  but that's just the easiest bug to trigger:
+> >=20
+>=20>  WARNING: CPU: 0 PID: 5834 at net/tls/tls_strp.c:486 tls_strp_msg_l=
+oad+0x72e/0xa80 net/tls/tls_strp.c:486
+> >=20
+>=20>  RIP: 0010:tls_strp_msg_load+0x72e/0xa80 net/tls/tls_strp.c:486
+> >=20
+>=20>  Call Trace:
+> >=20
+>=20>  <TASK>
+> >=20
+>=20>  tls_rx_rec_wait+0x280/0xa60 net/tls/tls_sw.c:1363
+> >=20
+>=20>  tls_sw_recvmsg+0x85c/0x1c30 net/tls/tls_sw.c:2043
+> >=20
+>=20>  inet6_recvmsg+0x2c9/0x730 net/ipv6/af_inet6.c:678
+> >=20
+>=20>  sock_recvmsg_nosec net/socket.c:1023 [inline]
+> >=20
+>=20>  sock_recvmsg+0x109/0x280 net/socket.c:1045
+> >=20
+>=20>  __sys_recvfrom+0x202/0x380 net/socket.c:2237
+> >=20
+>=20>  Fixes: 3c4d7559159b ("tls: kernel TLS support")
+> >=20
+>=20>  Reported-by: syzbot+b4cd76826045a1eb93c1@syzkaller.appspotmail.com
+> >=20
+>=20>  Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> >=20
+>=20
+> Hi everyone.
+>=20
+>=20This patch has broken a BPF selftest and as a result BPF CI:
+>=20
+>=20* https://github.com/kernel-patches/bpf/actions/runs/14458537639
+>=20
+>=20* https://github.com/kernel-patches/bpf/actions/runs/14457178732
+>=20
+>=20The test in question is test_sockmap_ktls_disconnect_after_delete
+>=20
+>=20(tools/testing/selftests/bpf/prog_tests/sockmap_ktls.c) [1].
+>=20
+>=20Since the test is about disconnect use-case, and the patch disallows
+>=20
+>=20it, I assume it's appropriate to simply remove the test?
+>=20
+>=20Please let me know. Thanks.
+>=20
+>=20[1] https://web.git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git/t=
+ree/tools/testing/selftests/bpf/prog_tests/sockmap_ktls.c#n28
+>=20
+>=20>=20
+>=20> ---
+> >  net/tls/tls_main.c | 6 ++++++
+> >  1 file changed, 6 insertions(+)
+> >  diff --git a/net/tls/tls_main.c b/net/tls/tls_main.c
+> >  index cb86b0bf9a53..a3ccb3135e51 100644
+> >  --- a/net/tls/tls_main.c
+> >  +++ b/net/tls/tls_main.c
+> >  @@ -852,6 +852,11 @@ static int tls_setsockopt(struct sock *sk, int =
+level, int optname,
+> >  return do_tls_setsockopt(sk, optname, optval, optlen);
+> >  }
+> >=20
+>=20>=20=20
+>=20>  +static int tls_disconnect(struct sock *sk, int flags)
+> >=20
+>=20>  +{
+> >  + return -EOPNOTSUPP;
+> >  +}
+> >  +
+> >  struct tls_context *tls_ctx_create(struct sock *sk)
+> >  {
+> >  struct inet_connection_sock *icsk =3D inet_csk(sk);
+> >=20
+>=20>  @@ -947,6 +952,7 @@ static void build_protos(struct proto prot[TLS=
+_NUM_CONFIG][TLS_NUM_CONFIG],
+> >=20
+>=20>  prot[TLS_BASE][TLS_BASE] =3D *base;
+> >  prot[TLS_BASE][TLS_BASE].setsockopt =3D tls_setsockopt;
+> >  prot[TLS_BASE][TLS_BASE].getsockopt =3D tls_getsockopt;
+> >  + prot[TLS_BASE][TLS_BASE].disconnect =3D tls_disconnect;
+> >  prot[TLS_BASE][TLS_BASE].close =3D tls_sk_proto_close;
+> >=20
+>=20>=20
+>=20>  prot[TLS_SW][TLS_BASE] =3D prot[TLS_BASE][TLS_BASE];
+> >
+>
 
-The fix reorders the fields to place the unique ID before the name.
-This ensures that even if truncation occurs via snprintf, the unique ID
-remains intact, preserving event name uniqueness. Additionally, explicit
-checks with MAX_EVENT_NAME_LEN are added to enforce length constraints.
----
-Changes in v4:
-- add changelog. 
-- gen_uprobe_legacy_event_name and gen_kprobe_legacy_event_name are combined into a function
-- kprobe_test use normal module function. Thanks, Jiri Olsa!
-- Link to v3: https://lore.kernel.org/bpf/20250414093402.384872-1-yangfeng59949@163.com/
+The original selftest patch d1ba1204f2ee was to re-produce the endless
+loop fiexed by 4da6a196f93b.
 
-Changes in v3:
-- add __sync_fetch_and_add(&index) and let snprintf() do the trimming. Thanks, Andrii Nakryiko!
-- add selftests.
-- Link to v2: https://lore.kernel.org/all/20250411080545.319865-1-yangfeng59949@163.com/
-
-Changes in v2:
-- Use basename() and %.32s to fix. Thanks, Hengqi Chen!
-- Link to v1: https://lore.kernel.org/all/20250410052712.206785-1-yangfeng59949@163.com/
-
-Feng Yang (3):
-  libbpf: Fix event name too long error
-  selftests/bpf: Add test for attaching uprobe with long event names
-  selftests/bpf: Add test for attaching kprobe with long event names
-
- tools/lib/bpf/libbpf.c                        | 41 ++++-----
- .../selftests/bpf/prog_tests/attach_probe.c   | 84 +++++++++++++++++++
- .../selftests/bpf/test_kmods/bpf_testmod.c    |  4 +
- 3 files changed, 103 insertions(+), 26 deletions(-)
-
--- 
-2.43.0
-
+sk->sk_prot->unhash
+        tcp_bpf_unhash
+            sk->sk_prot->unhash
+                ...
+It's try to use disconnect to trigger unhash handler.
+I believe we can remove it and use another selftest
+instead later.
