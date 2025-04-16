@@ -1,112 +1,162 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp4.epfl.ch (smtp4.epfl.ch [128.178.224.219])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D0BD219A71
-	for <bpf@vger.kernel.org>; Wed, 16 Apr 2025 13:58:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55C451FCFF0
+	for <bpf@vger.kernel.org>; Wed, 16 Apr 2025 13:58:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=128.178.224.219
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744811924; cv=none; b=LGWF12u9/VRLDWlhMX9BCrdnzjRj/hUrHm7xZFIJQEbIsSZhX5zCCjFn46A+cM/9a5B7JwCh+Cb+gpO1EhcSo27YBgJQ5GIm4ECOVyMR6wlKPZaNvCsINmsFzSvK1LPvMwu+HbQEfxXEicYRqohwGLeEkM1HDJauq1OENCXcv7U=
+	t=1744811935; cv=none; b=VOxbDHqd7TyCOxTEl4mf06Pgf/h+BypV0dVr1yX+XgD3YxpjZjUt5qijxowk80UNezwFIv4nFL8V8omu6wK2+EuKhLkq7wwEQfQJzAIpTRb3HHBa+cxz7SfXHR7UNVLcdNrgjprlbHBnas41nzGHj95Du8dMBaAznRBLrgzSrRc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744811924; c=relaxed/simple;
-	bh=8EM9BruECeiQqpmSu5JthfQXoLeNBFmHqAhot8Jq1Xs=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=Pxn6CjmO901KaBxtMmbuVgsTwwuYSXMQ/DQ0GyZvCMmiyNeZXIRT/tlRrTSqoA4W0TBia1o34uYUtYD8O2A/AUtYkCDdGPQv33x1yZD44ySHwJtEW9KpEU8w1JbMG+A6JnpvEBulG12fRn9gb8PRexEijBBFFvMMNzjXxcLgr2I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=i7I1TT60; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1744811935; c=relaxed/simple;
+	bh=fCCDhGivbuEHRQuVN/+Bh8U1ARAoEEuxeOBM5Ahs5oo=;
+	h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version; b=GwHUy2KHEkHZJwI4CmvEB0XHxw0pQzlO6InHlUGsTsh9cMZtD3NlrxlnaM3yYnR1x758qNpmxYEOZKMJHgz3x1REikuiul2VkGioo6gOk3n3j/gQ0WT46QO/XRuMco5sgFgYGCeCramhJ2ArAoDTTTI67c5zn6eyOxo1j5EqtHM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=epfl.ch; spf=pass smtp.mailfrom=epfl.ch; dkim=pass (1024-bit key) header.d=epfl.ch header.i=@epfl.ch header.b=anyYkwoq; arc=none smtp.client-ip=128.178.224.219
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=epfl.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=epfl.ch
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="i7I1TT60"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1744811922;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=1N10mZ+kpKiQYbX+sNKEw8ESo27Q4EehsQAThfgN6Kc=;
-	b=i7I1TT60u/j+ecRPO+GEwOrlm1ulkxFGUSuIOiUU0nhOWkbp+6vF5HjgZzR9CCh986ETiI
-	9uUpROoQyUXf1QB8CY7oLt7Qu87uDPh1D6NVe2nN//iPAsi89dcupyd2U9T0zmzHcftYYM
-	aEaodRsCGJDoZ1nyB9jTWgYFJHH+gn0=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-650-ajhelcOiMsaBfXBF0LJbtw-1; Wed, 16 Apr 2025 09:58:27 -0400
-X-MC-Unique: ajhelcOiMsaBfXBF0LJbtw-1
-X-Mimecast-MFC-AGG-ID: ajhelcOiMsaBfXBF0LJbtw_1744811906
-Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-ac31adc55e4so546467666b.3
-        for <bpf@vger.kernel.org>; Wed, 16 Apr 2025 06:58:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744811906; x=1745416706;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1N10mZ+kpKiQYbX+sNKEw8ESo27Q4EehsQAThfgN6Kc=;
-        b=QHzbCvo3Cuyof1yf9NSgSb4iDn9V8QYH7N8HSPhLRfzAMjEcJlA/GkhG2rVYp12OP4
-         HDvw8X7bNzfimLy3B5jc5BuQiKUfYc3dTllh15cl59Hsyr6/Y6Ncrg83wDjgm6f6HD7l
-         7IQxW8A8jbwVzKW8mK6uTxE9NBnpm15ssaHFFL1Iqj/5KYl6KOLke7dOixfVfwUhKh2t
-         8WWd+aN1mEOnKOUhh3csoYm7NOVu/0IslhcCiQOwB97iIaHnihJTQ+4W602s7e20zaBp
-         K0VgW9aeSn+Ih0jBWGVTAzm6OuzAvsdCg31kOrFWcqGwJL54XmgB3pYTxZuzJkj3/sf4
-         kzoQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWP6g2D0EVyr2aDHGOmq7drFbA9BN2HOMAzSmV2TWeLHuEIx67u+oWoupF3TqMMazGfL5I=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy0MMhVGGjqSx+bD71VuMZe82PBK09YFnntOTUf1k4BxJFuO5xk
-	qz/PTACOtmvx8MZvI930qi6J9ne3qaziWI2wkSidArjXaJ2yAuXnwHYxFqLIpZMKzKs5qLMGw14
-	e8RegYgwM2St2mbXvTOTLC0xW+RT1uzEuxequm+IZd+bi8AwqrQ==
-X-Gm-Gg: ASbGncsBJk782g/PJRXaiWhmV1ZsU9zDGrVdvHCzaBaTY2j2C2yqGduPyo8GU8z8scv
-	aG7xbwWQ8200IeGXGb9kSXsa3FfNtSePipMlp87dwyIHFBgKiN+Ca1hD6uUF+8QjsK0wQa9CnOC
-	h4jRlWTmDdOsrCaG440mkJylM9PP6D2GXLZ4Di/urF/fZ60ZpJ1XTVriuMez52dXiw4rnduyw3s
-	X1xd001WOXHH5d5XPwU8z/oHtyt/5LdHIgw5u5pNvbFpcXF9AGFVTaB8Sl1XeUCnpztpapCJyrg
-	dV34Y6iSFIRYRGWS9u79YB6lJGvc7mUNZTwJ
-X-Received: by 2002:a17:907:9494:b0:acb:349d:f909 with SMTP id a640c23a62f3a-acb42a50028mr161010866b.31.1744811906200;
-        Wed, 16 Apr 2025 06:58:26 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFzy9DzmjmdBXDssMZ4LwJxwTRh/bRvt8RWJJn9qTge4GJkEWLxrIw1aLgJPYwpUtVRtYJYQA==
-X-Received: by 2002:a17:907:9494:b0:acb:349d:f909 with SMTP id a640c23a62f3a-acb42a50028mr161009266b.31.1744811905828;
-        Wed, 16 Apr 2025 06:58:25 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-acb3d128583sm136615866b.98.2025.04.16.06.58.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Apr 2025 06:58:25 -0700 (PDT)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-	id 31E07199293F; Wed, 16 Apr 2025 15:58:24 +0200 (CEST)
-From: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To: Jakub Kicinski <kuba@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>
-Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, tom@herbertland.com, Eric
- Dumazet <eric.dumazet@gmail.com>, "David S. Miller" <davem@davemloft.net>,
- Paolo Abeni <pabeni@redhat.com>, dsahern@kernel.org,
- makita.toshiaki@lab.ntt.co.jp, kernel-team@cloudflare.com, phil@nwl.cc
-Subject: Re: [PATCH net-next V4 2/2] veth: apply qdisc backpressure on full
- ptr_ring to reduce TX drops
-In-Reply-To: <20250416063813.75fb83dc@kernel.org>
-References: <174472463778.274639.12670590457453196991.stgit@firesoul>
- <174472470529.274639.17026526070544068280.stgit@firesoul>
- <20250416063813.75fb83dc@kernel.org>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date: Wed, 16 Apr 2025 15:58:24 +0200
-Message-ID: <87r01si4xr.fsf@toke.dk>
+	dkim=pass (1024-bit key) header.d=epfl.ch header.i=@epfl.ch header.b="anyYkwoq"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=epfl.ch;
+      s=epfl; t=1744811529;
+      h=From:To:Subject:Date:Message-ID:Content-Type:Content-Transfer-Encoding:MIME-Version;
+      bh=fCCDhGivbuEHRQuVN/+Bh8U1ARAoEEuxeOBM5Ahs5oo=;
+      b=anyYkwoqKugA1U0EijbankiPiA5LIe1bHKVsNVs49m8AuHXRbnHb7p+X7Yx3Nq2bH
+        c43PSZzXyQo8Xi7FKe/u8FX+QqHLFe++uJbjVisy11BN7q779C3Qtr0X/N2pdLReD
+        ji3xBmi4WRoHxHKBaP7L/aZf0VdJ4uKKhiKMPY6/M=
+Received: (qmail 47559 invoked by uid 107); 16 Apr 2025 13:52:09 -0000
+Received: from ax-snat-224-178.epfl.ch (HELO ewa07.intranet.epfl.ch) (192.168.224.178) (TLS, ECDHE-RSA-AES256-GCM-SHA384 (P-256 curve) cipher)
+  by mail.epfl.ch (AngelmatoPhylax SMTP proxy) with ESMTPS; Wed, 16 Apr 2025 15:52:09 +0200
+X-EPFL-Auth: uF5fbAZFBVCgbFaqyfFO9/3Z9du8Em62nbAQCOb3wftJD2wXHLg=
+Received: from ewa07.intranet.epfl.ch (128.178.224.178) by
+ ewa07.intranet.epfl.ch (128.178.224.178) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.44; Wed, 16 Apr 2025 15:52:09 +0200
+Received: from ewa07.intranet.epfl.ch ([fe80::f470:9b62:7382:7f3a]) by
+ ewa07.intranet.epfl.ch ([fe80::f470:9b62:7382:7f3a%4]) with mapi id
+ 15.01.2507.044; Wed, 16 Apr 2025 15:52:09 +0200
+From: Tao Lyu <tao.lyu@epfl.ch>
+To: "bpf@vger.kernel.org" <bpf@vger.kernel.org>
+Subject: A summary of usability issues in the current verifier
+Thread-Topic: A summary of usability issues in the current verifier
+Thread-Index: AQHbrta2R9pFsdf8H0SX+JLfklldsg==
+Date: Wed, 16 Apr 2025 13:52:09 +0000
+Message-ID: <2eb5612b88b04587af00394606021972@epfl.ch>
+Accept-Language: en-US, fr-CH
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
 
-Jakub Kicinski <kuba@kernel.org> writes:
 
-> On Tue, 15 Apr 2025 15:45:05 +0200 Jesper Dangaard Brouer wrote:
->> In production, we're seeing TX drops on veth devices when the ptr_ring
->> fills up. This can occur when NAPI mode is enabled, though it's
->> relatively rare. However, with threaded NAPI - which we use in
->> production - the drops become significantly more frequent.
->
-> It splats:
->
-> [ 5319.025772][ C1] dump_stack_lvl (lib/dump_stack.c:123) 
-> [ 5319.025786][ C1] lockdep_rcu_suspicious (kernel/locking/lockdep.c:6866) 
-> [ 5319.025797][ C1] veth_xdp_rcv (drivers/net/veth.c:907 (discriminator 9)) 
-> [ 5319.025850][ C1] veth_poll (drivers/net/veth.c:977)
+Hi,
 
-I believe the way to silence this one is to use:
+I found the following usability issues; kindly write them here to see if th=
+e community is willing to solve them.
+If yes, I could write patches for them gradually.
 
-rcu_dereference_check(priv->peer, rcu_read_lock_bh_held());
+1. Inaccurate tracking of arithmetic instruction results.
 
-instead of just rcu_dereference()
+There are many inaccurate arithmetic computation results.
+For example, like below:
+r0 should be 0 after `r0 =3D (s16)r3`.
+However, due to the inaccurate range track in eBPF at (coerce_reg_to_size_s=
+x and set_sext64_default_val),
+the lower 16-bit of r0 becomes unknown, leading to false negatives when exi=
+t.
 
--Toke
+func#0 @0
+0: R1=3Dctx() R10=3Dfp0
+0: (b7) r6 =3D -657948387=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 ; R6_w=
+=3D0xffffffffd8c8811d
+1: (94) w6 s%=3D 16=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0 ; R6_w=3Dscalar(smin=3D0,smax=3Dumax=3D0xffffffff,var_off=3D(0x0; 0x=
+ffffffff))
+2: (18) r8 =3D 0xff11000279981800=A0=A0=A0=A0=A0=A0 ; R8_w=3Dmap_ptr(ks=3D4=
+,vs=3D8)
+4: (18) r9 =3D 0x19556057=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 ; R9_w=
+=3D0x19556057
+6: (bf) r3 =3D r10=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0 ; R3_w=3Dfp0 R10=3Dfp0
+7: (bf) r3 =3D r6=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0 ; R3_w=3Dscalar(id=3D1,smin=3D0,smax=3Dumax=3D0xffffffff,var_off=
+=3D(0x0; 0xffffffff)) R6_w=3Dscalar(id=3D1,smin=3D0,smax=3Dumax=3D0xfffffff=
+f,var_off=3D(0x0; 0xffffffff))
+8: (67) r3 <<=3D 38=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0 ; R3_w=3Dscalar(smax=3D0x7fffffc000000000,umax=3D0xffffffc000000000,=
+smin32=3D0,smax32=3Dumax32=3D0,var_off=3D(0x0; 0xffffffc000000000))
+9: (bf) r0 =3D r6=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0 ; R0_w=3Dscalar(id=3D1,smin=3D0,smax=3Dumax=3D0xffffffff,var_off=
+=3D(0x0; 0xffffffff)) R6_w=3Dscalar(id=3D1,smin=3D0,smax=3Dumax=3D0xfffffff=
+f,var_off=3D(0x0; 0xffffffff))
+10: (bc) w0 =3D (s16)w3=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 ; R=
+0_w=3D0 R3_w=3Dscalar(smax=3D0x7fffffc000000000,umax=3D0xffffffc000000000,s=
+min32=3D0,smax32=3Dumax32=3D0,var_off=3D(0x0; 0xffffffc000000000))
+11: (bf) r0 =3D (s16)r3=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 ; R=
+0_w=3Dscalar(smin=3Dsmin32=3D-32768,smax=3Dsmax32=3D32767) R3_w=3Dscalar(sm=
+ax=3D0x7fffffc000000000,umax=3D0xffffffc000000000,smin32=3D0,smax32=3Dumax3=
+2=3D0,var_off=3D(0x0; 0xffffffc000000000))
 
+
+2. Unnecessary atomic instructions operating on private memory (e.g, stack)=
+.
+
+Since atomic instructions are only useful on the shared memory,
+it is unnecessary to allow them on the private memory like stack,
+which was discussed long time ago in this commit:
+https://github.com/torvalds/linux/commit/ca36960211eb228bcbc7aaebfa0d027368=
+a94c60
+
+Moreover, allowing atomic instruction also introduce another usability bugs=
+,
+which was reported here: https://lore.kernel.org/bpf/20231020172941.155388-=
+1-tao.lyu@epfl.ch/
+
+
+3. Inconsistent constraints on instructions involving pointer type transiti=
+ons.
+
+Most bitwise instructions, such as and and xor are disallowed on pointers,
+but negation and bitwise swap are allowed.
+Moreover, negation and bitwise swap are permitted in atomic instructions,
+such as atomic_and and atomic_xor.
+
+
+4. Coarse-grained pointer comparison.
+
+Pointers pointing to the same memory region can infer more pointer range in=
+formation.=20
+For example, comparing two stack pointers (one with a constant range, while=
+ the other with a variable range) can help infer the variable range,
+as shown in the code below.
+
+11: R0=3Dmap_value(map=3Darray_map3,ks=3D4,vs=3D8) R9=3Dctx() R10=3Dfp0 fp-=
+8=3Dmmmmmmmm
+11: (61) r6 =3D *(u32 *)(r0 +0)=A0=A0=A0=A0=A0=A0=A0=A0 ; R0=3Dmap_value(ma=
+p=3Darray_map3,ks=3D4,vs=3D8) R6_w=3Dscalar(smin=3D0,smax=3Dumax=3D0xffffff=
+ff,var_off=3D(0x0; 0xffffffff))
+12: (bf) r1 =3D r10=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0 ; R1_w=3Dfp0 R10=3Dfp0
+13: (0f) r1 +=3D r6
+mark_precise: frame0: last_idx 13 first_idx 11 subseq_idx -1
+mark_precise: frame0: regs=3Dr6 stack=3D before 12: (bf) r1 =3D r10
+mark_precise: frame0: regs=3Dr6 stack=3D before 11: (61) r6 =3D *(u32 *)(r0=
+ +0)
+14: R1_w=3Dfp(smin=3D0,smax=3Dumax=3D0xffffffff,var_off=3D(0x0; 0xffffffff)=
+) R6_w=3Dscalar(smin=3D0,smax=3Dumax=3D0xffffffff,var_off=3D(0x0; 0xfffffff=
+f))
+14: (bf) r2 =3D r10=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0 ; R2_w=3Dfp0 R10=3Dfp0
+15: (07) r2 +=3D -512=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+ ; R2_w=3Dfp-512
+16: (ad) if r1 < r2 goto pc+2=A0=A0=A0=A0=A0=A0=A0=A0 ; R1_w=3Dfp(smin=3D0,=
+smax=3Dumax=3D0xffffffff,var_off=3D(0x0; 0xffffffff)) R2_w=3Dfp-512
+17: (3d) if r1 >=3D r10 goto pc+1=A0=A0=A0=A0=A0=A0 ; R1_w=3Dfp(smin=3D0,sm=
+ax=3Dumax=3D0xffffffff,var_off=3D(0x0; 0xffffffff)) R10=3Dfp0
+18: (71) r3 =3D *(u8 *)(r1 +0)
+invalid unbounded variable-offset read from stack R1=
