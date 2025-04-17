@@ -1,55 +1,55 @@
 Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEF6822D4F3
-	for <bpf@vger.kernel.org>; Thu, 17 Apr 2025 23:08:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B92FF25178E
+	for <bpf@vger.kernel.org>; Thu, 17 Apr 2025 23:08:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744931305; cv=none; b=FPq1ijIwG4BasmuRtrx8+Q7Q4j+5/WkDKYrwGQVURhuRrjXpsZNpFpF9e2vBMAbdE5uyG0TeTZZ3ov1sFgz8N+QGZRe/SYc5/yG3YXQhPXA5+A6EPNCGxxQ/v/JUYCQY7CAdouHgGZvp+ItYixrca4sGdJKQXiGdEKhDqtm0oO8=
+	t=1744931310; cv=none; b=aGejZ2KAqspWZXz8VW55OXyjUTyjgbRoHiWUR6PlqfxFnWSfxs6V8gU1hznVhvXhXeApyyNZz8kWCMOQ426oWSO1wOchRDaZDBOS9atrwClIy2fFomHpFlCd//DtIyK6rN6j4suWWp+1N4aD6zZgaJ9KptMmoHMDN+t8EFN/Jik=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744931305; c=relaxed/simple;
-	bh=WlrESCObcpLxlvArnGyAQPVRYZZxf1CeQ6rfvuHIhQI=;
+	s=arc-20240116; t=1744931310; c=relaxed/simple;
+	bh=dVqTwm6Z5kJPYlgxaTtj66E44vbniBTbV8kGzDOLkSk=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Content-Type; b=ColbxKD8J8h15z4J/xZlAqce6AodA0p3WnmriEvOELh1VU02faBOOJBCjtydWjWKdSLkTj1lDjjE+LKU4tnxsGL2XVIyF4dDVTS0+CHsTG/r4ZEkW/KX7E+31cW1aA7YAMzZHxyX82zc8QVzeN56Voz9mMuJppAehe0qNhih3d8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=CkQ3pIAD; arc=none smtp.client-ip=209.85.214.202
+	 To:Content-Type; b=kvBftINaZXBUK412YitsaZ5ujmugsRbjzEf5hqDUhZbtl2sW34ezIP19OFVJ5LqbWF7RLeNYnPAUkZjLMExW2wtvgLouQq9N5cI/v+KUD0sKSTGNBpi8/Z0iI9vhHGxNwsFKoifm+zGj4pYt5tJV8cFZ3tW5o54MiSo9Gp8hmQs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=DsvI37f8; arc=none smtp.client-ip=209.85.214.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="CkQ3pIAD"
-Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-227ea16b03dso16703575ad.3
-        for <bpf@vger.kernel.org>; Thu, 17 Apr 2025 16:08:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="DsvI37f8"
+Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-225974c6272so9697465ad.1
+        for <bpf@vger.kernel.org>; Thu, 17 Apr 2025 16:08:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1744931303; x=1745536103; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1744931308; x=1745536108; darn=vger.kernel.org;
         h=to:from:subject:message-id:references:mime-version:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=T5IiGvkesbLwU2LRHglyxF2fGjepXBF/Pg+PTt606Ww=;
-        b=CkQ3pIADn3jWQu7qkm9wU0o1PKJ0c0ztlV0p6bspOGprrFb/04SWyl2xIzPLzdZFyd
-         2nm6w9v/kovw7ePwrdlLWY32fFFabqtNY2HV07WXWVKwlcKhlrEd7HsUtuq0cOMnvWVP
-         lDUd3Q9ECOSkfQqfwxCRzS4zb5cvJvKm78eBeTvAwYgtOMMbJju7EBcOkKp70pDTe3Do
-         /z2LZaKRv/ANFeINMm7Dynr3FMTwOJxIKz58Ds5dGuJm5CQH0Ht1N1arYfZQHyDOjLNy
-         l3OtZCweTwZ4bsTc3Hlqwt+ZPd6PqNx72VTssgN7f1WvKQGIiUVP/KY6FAuo+aC0dx45
-         1yRQ==
+        bh=RY1r15pwpCxEu/4KBHv5AIK/eUkuBGzABOfCshTThNM=;
+        b=DsvI37f8sUTX7c704DqOwYYW4c6e8G5CTi3vUnaYskkunDwfiOLfLURtIc8WQepQgV
+         DYqQ4ZiNOWUlhZ8H8uShfPBT6DWH4F3Wm1lNeQmZwteh0cSC9nbxdRjo1R7nfoq1XBGP
+         uv5irtYlKc15In1F7V9gDkWADI7bwT+u4E1HbOZr23epyxdyoM6Bi0qDHV+8XU/XH/ZN
+         4u6laLAg/yWvJq1JnDLieuGEEP1JQQNnUAMS22ss5WJyo2AakYP7TfZG5j2CQFJZC8QA
+         MpI3qraKYr9fKqStkRf8ig9y7gynZM/n+vWX4sa2m33flgi5wByJkqvXmkZsfu8K8W5c
+         pbXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744931303; x=1745536103;
+        d=1e100.net; s=20230601; t=1744931308; x=1745536108;
         h=to:from:subject:message-id:references:mime-version:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=T5IiGvkesbLwU2LRHglyxF2fGjepXBF/Pg+PTt606Ww=;
-        b=m7QiYvMHTvLqzHO4+W5E1ItrMLQEWMUygs+LRXQ54NaQDkjG+HiracHgY8IEoKOOUE
-         BrnTEFffEOMEjSqtN9n5/WWdk0fP92n8Hn+YH4Pd4S42/xrmKh7uocWMHqzDBsIEJN92
-         agL+2ngQdrvz/k++m+09G6CTelVVGOGdB+IM8Bd+1HDTWfaf98c5V3zu0tkOhhYD4FB8
-         v0eXbVsJtFObDOhtFBGAAuTer+ogPLyHXB69jP9jWn8jDOVUKHUtWGLBzTa1AabYUtxi
-         YPSkb2sovkt6tDGmqJlV9MIsUsbh0q7ZS+JmsEQPk+SFx/yKV2plhj6Nfalv6p/539By
-         BPPA==
-X-Forwarded-Encrypted: i=1; AJvYcCUcdL4WE4ZzTowOJwif55zUzx0WcuuWUcmHyMgki2+St9EvkHo5rt4rzbdGJBjUx29GmLk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyjENV1ssniyanHmLPJYfAk1iulpO/kjwHG7scDsuzfMNS3K259
-	ugJLg8lsZUk2TuXzMsWvnOVbRzV1ELlLHl15cTJc+Kcq2lnJe43BlY3xykhazCU1xsWca5iRiz1
-	aJRhqwA==
-X-Google-Smtp-Source: AGHT+IG5F2LOaTgg/mX1XvwpFVLktCGd2m3MhUHdYc74oU2szNJdxzhC36EWYALgHq+zFbkNF9kxs7APIa5a
-X-Received: from plhn17.prod.google.com ([2002:a17:903:1111:b0:21f:3ef1:c029])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:1a6b:b0:223:f408:c3e2
- with SMTP id d9443c01a7336-22c5357f39cmr10467445ad.14.1744931303485; Thu, 17
- Apr 2025 16:08:23 -0700 (PDT)
-Date: Thu, 17 Apr 2025 16:07:35 -0700
+        bh=RY1r15pwpCxEu/4KBHv5AIK/eUkuBGzABOfCshTThNM=;
+        b=wS/8C+xktkUtq46Uw8MmT020fcga+37SyYgxc0hd5wmqXkgDqcpMBowy8J7AUlTxFA
+         k7QAPkuy6GKEgiIZuy2fgq2/yoGTLvtSdSWlYrQQBt1hEQn08/PINl/QHMBJSGZlkfnk
+         5qa7s7R2TfaftDe46VsTt520hgutikBSgaGYKI5au5nCWeRBAe77XebZci3aGT5SX0cL
+         1aPdMLA2VHjTbEAMabUvzh/gc9sZbjx5NqgXqcgX6Vq8vSbbKiCK6gFKX8lOuFpwT6Gj
+         SYH1pos/zeOdOStGIktBM8wE8JAI01sNl08EhoSrkxwGYC98578W3E5CeY3wm4wXIvb8
+         6Tvg==
+X-Forwarded-Encrypted: i=1; AJvYcCUiE7O2OUfMhLJ0I4cbJeKagAH9t70jfugg1Bql1mdw5fPbx1EO3Tt3JPPd/ekOBLtOjZ4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwpocdhBW8ltVyYo6aK+IFEw/6JjgTnM4i9gzWkaJS64uvimpZ5
+	kqeyPBMNkOcyN8oFBdPnrtSOZUJV8YoRzJnZWMOak/QENTi2zbKXfD4okiPmA3JdmKeX0t7cAXR
+	EaEqHMA==
+X-Google-Smtp-Source: AGHT+IF1KynYQjk+qiDtYBRZqtrA+sXYk/Qlh4FVBuUH3NSYZdwIzrbF7KXRZDSOIoNHB1eQbEczvfeazT6E
+X-Received: from plsa23.prod.google.com ([2002:a17:902:b597:b0:227:e456:d436])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:f78a:b0:220:cfb7:56eb
+ with SMTP id d9443c01a7336-22c53f36a0fmr7932675ad.26.1744931307861; Thu, 17
+ Apr 2025 16:08:27 -0700 (PDT)
+Date: Thu, 17 Apr 2025 16:07:37 -0700
 In-Reply-To: <20250417230740.86048-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -59,8 +59,8 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20250417230740.86048-1-irogers@google.com>
 X-Mailer: git-send-email 2.49.0.805.g082f7c87e0-goog
-Message-ID: <20250417230740.86048-15-irogers@google.com>
-Subject: [PATCH v4 14/19] perf build: Remove libiberty support
+Message-ID: <20250417230740.86048-17-irogers@google.com>
+Subject: [PATCH v4 16/19] perf disasm: Remove disasm_bpf
 From: Ian Rogers <irogers@google.com>
 To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
 	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
@@ -80,156 +80,136 @@ To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
 	Song Liu <song@kernel.org>, bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-libiberty is license incompatible with perf and building requires the
-BUILD_NONDISTRO=1 build flag. libiberty is used for
-HAVE_CPLUS_DEMANGLE_SUPPORT. Remove the code to simplify the code base
-as it can't be distributed. Remove the BUILD_NONDISTRO build flag and
-test as they no longer enable/disable support.
+BPF disassembly was handled in here by libbfd. The LLVM and capstone
+disassemblers now support BPF JIT disassembly. As libbfd support was
+removed the functions here no longer did anything remove them and
+associated error values.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/Makefile.config       | 12 ------------
- tools/perf/Makefile.perf         | 11 ++++-------
- tools/perf/tests/make            |  2 --
- tools/perf/util/demangle-cxx.cpp | 13 +------------
- tools/perf/util/symbol-elf.c     | 13 -------------
- 5 files changed, 5 insertions(+), 46 deletions(-)
+ tools/perf/util/Build        |  1 -
+ tools/perf/util/annotate.h   |  1 -
+ tools/perf/util/disasm.c     | 12 +++---------
+ tools/perf/util/disasm_bpf.c | 29 -----------------------------
+ tools/perf/util/disasm_bpf.h | 12 ------------
+ 5 files changed, 3 insertions(+), 52 deletions(-)
+ delete mode 100644 tools/perf/util/disasm_bpf.c
+ delete mode 100644 tools/perf/util/disasm_bpf.h
 
-diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
-index 870451929771..3ed047ffb4f5 100644
---- a/tools/perf/Makefile.config
-+++ b/tools/perf/Makefile.config
-@@ -954,18 +954,6 @@ ifndef NO_DEMANGLE
-     CXXFLAGS += -DHAVE_CXA_DEMANGLE_SUPPORT
-     $(call detected,CONFIG_CXX_DEMANGLE)
-   endif
--  ifdef BUILD_NONDISTRO
--    ifeq ($(filter -liberty,$(EXTLIBS)),)
--      $(call feature_check,cplus-demangle)
--      ifeq ($(feature-cplus-demangle), 1)
--        EXTLIBS += -liberty
--      endif
--    endif
--    ifneq ($(filter -liberty,$(EXTLIBS)),)
--      CFLAGS += -DHAVE_CPLUS_DEMANGLE_SUPPORT
--      CXXFLAGS += -DHAVE_CPLUS_DEMANGLE_SUPPORT
--    endif
--  endif
- endif
+diff --git a/tools/perf/util/Build b/tools/perf/util/Build
+index 861e8ed4ac49..cc22cc8a5aac 100644
+--- a/tools/perf/util/Build
++++ b/tools/perf/util/Build
+@@ -14,7 +14,6 @@ perf-util-y += copyfile.o
+ perf-util-y += ctype.o
+ perf-util-y += db-export.o
+ perf-util-y += disasm.o
+-perf-util-y += disasm_bpf.o
+ perf-util-y += env.o
+ perf-util-y += event.o
+ perf-util-y += evlist.o
+diff --git a/tools/perf/util/annotate.h b/tools/perf/util/annotate.h
+index bbb89b32f398..8b14a90a3a0c 100644
+--- a/tools/perf/util/annotate.h
++++ b/tools/perf/util/annotate.h
+@@ -446,7 +446,6 @@ enum symbol_disassemble_errno {
+ 	__SYMBOL_ANNOTATE_ERRNO__START		= -10000,
  
- ifndef NO_LZMA
-diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
-index fc65537d5821..58982d8d1014 100644
---- a/tools/perf/Makefile.perf
-+++ b/tools/perf/Makefile.perf
-@@ -123,9 +123,6 @@ include ../scripts/utilities.mak
- #
- # Set BUILD_BPF_SKEL to 0 to override BUILD_BPF_SKEL and not build BPF skeletons
- #
--# Define BUILD_NONDISTRO to enable building an linking against libbfd and
--# libiberty distribution license incompatible libraries.
--#
- # Define EXTRA_TESTS to enable building extra tests useful mainly to perf
- # developers, such as:
- #	x86 instruction decoder - new instructions test
-@@ -298,10 +295,10 @@ LIBSYMBOL_DIR   = $(srctree)/tools/lib/symbol/
- LIBPERF_DIR     = $(srctree)/tools/lib/perf/
- DOC_DIR         = $(srctree)/tools/perf/Documentation/
+ 	SYMBOL_ANNOTATE_ERRNO__NO_VMLINUX	= __SYMBOL_ANNOTATE_ERRNO__START,
+-	SYMBOL_ANNOTATE_ERRNO__NO_LIBOPCODES_FOR_BPF,
+ 	SYMBOL_ANNOTATE_ERRNO__ARCH_INIT_CPUID_PARSING,
+ 	SYMBOL_ANNOTATE_ERRNO__ARCH_INIT_REGEXP,
+ 	SYMBOL_ANNOTATE_ERRNO__BPF_INVALID_FILE,
+diff --git a/tools/perf/util/disasm.c b/tools/perf/util/disasm.c
+index 175d9d3b5c97..683eb6aa7b53 100644
+--- a/tools/perf/util/disasm.c
++++ b/tools/perf/util/disasm.c
+@@ -17,7 +17,6 @@
+ #include "capstone.h"
+ #include "debug.h"
+ #include "disasm.h"
+-#include "disasm_bpf.h"
+ #include "dso.h"
+ #include "dwarf-regs.h"
+ #include "env.h"
+@@ -1231,9 +1230,6 @@ int symbol__strerror_disassemble(struct map_symbol *ms, int errnum, char *buf, s
+ 			  "  --vmlinux vmlinux\n", build_id_msg ?: "");
+ 	}
+ 		break;
+-	case SYMBOL_ANNOTATE_ERRNO__NO_LIBOPCODES_FOR_BPF:
+-		scnprintf(buf, buflen, "Please link with binutils's libopcode to enable BPF annotation");
+-		break;
+ 	case SYMBOL_ANNOTATE_ERRNO__ARCH_INIT_REGEXP:
+ 		scnprintf(buf, buflen, "Problems with arch specific instruction name regular expressions.");
+ 		break;
+@@ -1501,11 +1497,9 @@ static int symbol__disassemble_objdump(const char *filename, struct symbol *sym,
+ 	struct child_process objdump_process;
+ 	int err;
  
--# Set FEATURE_TESTS to 'all' so all possible feature checkers are executed.
--# Without this setting the output feature dump file misses some features, for
--# example, liberty. Select all checkers so we won't get an incomplete feature
--# dump file.
-+# Set FEATURE_TESTS to 'all' so all possible feature checkers are
-+# executed.  Without this setting the output feature dump file misses
-+# some features. Select all checkers so we won't get an incomplete
-+# feature dump file.
- ifeq ($(config),1)
- ifdef MAKECMDGOALS
- ifeq ($(filter feature-dump,$(MAKECMDGOALS)),feature-dump)
-diff --git a/tools/perf/tests/make b/tools/perf/tests/make
-index 44d76eacce49..4a1ed20bff7e 100644
---- a/tools/perf/tests/make
-+++ b/tools/perf/tests/make
-@@ -68,7 +68,6 @@ python_perf_so := $(shell $(MAKE) python_perf_target|grep "Target is:"|awk '{pri
- make_clean_all      := clean all
- make_python_perf_so := $(python_perf_so)
- make_debug          := DEBUG=1
--make_nondistro      := BUILD_NONDISTRO=1
- make_extra_tests    := EXTRA_TESTS=1
- make_jevents_all    := JEVENTS_ARCH=all
- make_no_bpf_skel    := BUILD_BPF_SKEL=0
-@@ -139,7 +138,6 @@ MAKE_F := $(MAKE) -f $(MK)
- endif
- run += make_python_perf_so
- run += make_debug
--run += make_nondistro
- run += make_extra_tests
- run += make_jevents_all
- run += make_no_bpf_skel
-diff --git a/tools/perf/util/demangle-cxx.cpp b/tools/perf/util/demangle-cxx.cpp
-index bd657eb37efc..36801ea327a6 100644
---- a/tools/perf/util/demangle-cxx.cpp
-+++ b/tools/perf/util/demangle-cxx.cpp
-@@ -8,13 +8,6 @@
- #include <cxxabi.h>
- #endif
- 
--#if defined(HAVE_CPLUS_DEMANGLE_SUPPORT)
--#ifndef DMGL_PARAMS
--#define DMGL_PARAMS     (1 << 0)  /* Include function args */
--#define DMGL_ANSI       (1 << 1)  /* Include const, volatile, etc */
--#endif
--#endif
+-	if (dso__binary_type(dso) == DSO_BINARY_TYPE__BPF_PROG_INFO)
+-		return symbol__disassemble_bpf(sym, args);
 -
- /*
-  * Demangle C++ function signature
-  *
-@@ -24,11 +17,7 @@ extern "C"
- char *cxx_demangle_sym(const char *str, bool params __maybe_unused,
-                        bool modifiers __maybe_unused)
- {
--#if defined(HAVE_CPLUS_DEMANGLE_SUPPORT)
--        int flags = (params ? DMGL_PARAMS : 0) | (modifiers ? DMGL_ANSI : 0);
--
--        return cplus_demangle(str, flags);
--#elif defined(HAVE_CXA_DEMANGLE_SUPPORT)
-+#if defined(HAVE_CXA_DEMANGLE_SUPPORT)
-         char *output;
-         int status;
+-	if (dso__binary_type(dso) == DSO_BINARY_TYPE__BPF_IMAGE)
+-		return symbol__disassemble_bpf_image(sym, args);
++	if (dso__binary_type(dso) == DSO_BINARY_TYPE__BPF_PROG_INFO ||
++	    dso__binary_type(dso) == DSO_BINARY_TYPE__BPF_IMAGE)
++		return -1;
  
-diff --git a/tools/perf/util/symbol-elf.c b/tools/perf/util/symbol-elf.c
-index 856819bbba59..6e0cf3d2aec5 100644
---- a/tools/perf/util/symbol-elf.c
-+++ b/tools/perf/util/symbol-elf.c
-@@ -28,13 +28,6 @@
- #include <symbol/kallsyms.h>
- #include <internal/lib.h>
- 
--#if defined(HAVE_CPLUS_DEMANGLE_SUPPORT)
--#ifndef DMGL_PARAMS
--#define DMGL_PARAMS     (1 << 0)  /* Include function args */
--#define DMGL_ANSI       (1 << 1)  /* Include const, volatile, etc */
--#endif
--#endif
+ 	err = asprintf(&command,
+ 		 "%s %s%s --start-address=0x%016" PRIx64
+diff --git a/tools/perf/util/disasm_bpf.c b/tools/perf/util/disasm_bpf.c
+deleted file mode 100644
+index a891a0b909a7..000000000000
+--- a/tools/perf/util/disasm_bpf.c
++++ /dev/null
+@@ -1,29 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-only
 -
- #ifndef EM_AARCH64
- #define EM_AARCH64	183  /* ARM 64 bit */
- #endif
-@@ -287,13 +280,7 @@ static bool want_demangle(bool is_kernel_sym)
- char *cxx_demangle_sym(const char *str __maybe_unused, bool params __maybe_unused,
- 		       bool modifiers __maybe_unused)
- {
--#if defined(HAVE_CPLUS_DEMANGLE_SUPPORT)
--	int flags = (params ? DMGL_PARAMS : 0) | (modifiers ? DMGL_ANSI : 0);
+-#include "util/annotate.h"
+-#include "util/disasm_bpf.h"
+-#include "util/symbol.h"
+-#include <linux/zalloc.h>
+-#include <string.h>
 -
--	return cplus_demangle(str, flags);
--#else
- 	return NULL;
--#endif
- }
- #endif /* !HAVE_CXA_DEMANGLE_SUPPORT */
- 
+-int symbol__disassemble_bpf(struct symbol *sym __maybe_unused, struct annotate_args *args __maybe_unused)
+-{
+-	return SYMBOL_ANNOTATE_ERRNO__NO_LIBOPCODES_FOR_BPF;
+-}
+-
+-int symbol__disassemble_bpf_image(struct symbol *sym, struct annotate_args *args)
+-{
+-	struct annotation *notes = symbol__annotation(sym);
+-	struct disasm_line *dl;
+-
+-	args->offset = -1;
+-	args->line = strdup("to be implemented");
+-	args->line_nr = 0;
+-	args->fileloc = NULL;
+-	dl = disasm_line__new(args);
+-	if (dl)
+-		annotation_line__add(&dl->al, &notes->src->source);
+-
+-	zfree(&args->line);
+-	return 0;
+-}
+diff --git a/tools/perf/util/disasm_bpf.h b/tools/perf/util/disasm_bpf.h
+deleted file mode 100644
+index 2ecb19545388..000000000000
+--- a/tools/perf/util/disasm_bpf.h
++++ /dev/null
+@@ -1,12 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-only
+-
+-#ifndef __PERF_DISASM_BPF_H
+-#define __PERF_DISASM_BPF_H
+-
+-struct symbol;
+-struct annotate_args;
+-
+-int symbol__disassemble_bpf(struct symbol *sym, struct annotate_args *args);
+-int symbol__disassemble_bpf_image(struct symbol *sym, struct annotate_args *args);
+-
+-#endif /* __PERF_DISASM_BPF_H */
 -- 
 2.49.0.805.g082f7c87e0-goog
 
