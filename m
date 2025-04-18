@@ -1,46 +1,46 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47BA521B9DF;
-	Fri, 18 Apr 2025 16:38:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49DA121C9E4;
+	Fri, 18 Apr 2025 16:38:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744994323; cv=none; b=Vy26St6BuYQdrNjZiQMYlvgNaB8TDIMaHnyNC9VUQL55evA591TZdIjz+djENhdjRi46PtUZErrSGefuqPDNqMYJwVPdvbfVaMwDhAycwhxzKbRzdXOilIbgR5oqZwSmpbiw23Ofp2HP+eyLsEyiS2nEvXQvH5QjlCMt1oAt4wY=
+	t=1744994324; cv=none; b=g1bkKhfkvhU8giK912Vac5Kyalq/uYnaYqsAA+fwMmMs9k6b03UFyT8zbS0Vscov903rKh8qJFV7pKhuKchXudxcSZq/4EpLZ2xo1vbE/1mJZ3Fg0d5B5XNX4omXWB1RBtyTw7S0R6d5eiEN7qzaQp5uStXlAK2vwlWO7MNggYM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744994323; c=relaxed/simple;
-	bh=y+sPxnK4agLH0GHm8BwfzRpkrP/ygcap9LC/O3MI0PA=;
+	s=arc-20240116; t=1744994324; c=relaxed/simple;
+	bh=xvTfrqyJeGdUJh01MmFw+3A0CfhKK9ZbQSRWV5UJIUk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=sAII6GrsogQdMT/7Z2tWyKviXBS2u5SL67eNQF8P/z+N4TCyoRlPyhO+4pSBU7JzN5mLqinjhnMtRNPcH3KLMsUvZneW/dCweOHBWu56/MQlGpzHAwWyVoPBsIub76eV7asJi3zGKgkcEB4+l6T7sC2WG45uiDBzluFoRsoFkfs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=P5fLkc0D; arc=none smtp.client-ip=192.198.163.12
+	 MIME-Version; b=QDcHBB6gStVU32OWuHOBYE55POuNR5buugZUp85wAcFzvyDNhgeshfL/yYcj12dsUrLFED0SFDQ0DJILeMUkAL6oONMEfOHPVKaHSJ4nHzcUQk7VZpfwTMrvvHPu6OSIXkGdUBuZqZjF4UWKq1yJ6SDr9zCpVRAc6kaGd/VV/JM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TIhqtStF; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="P5fLkc0D"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TIhqtStF"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1744994321; x=1776530321;
+  t=1744994322; x=1776530322;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=y+sPxnK4agLH0GHm8BwfzRpkrP/ygcap9LC/O3MI0PA=;
-  b=P5fLkc0DI10e5Yc28pStZR1pkSkvKyq8OPF4A1N9Y+d41cp/+pC4NjbX
-   2IVWjTqd4d4ekHlYa9aOIQJSJkRvcek/cCjwCZpAz63Pyy4I7cTXer0BM
-   I+DI6OJAvXNzj+C+Z7OCLj+/c3Fb3CIxYoiZoGDTm78tGZuBlxEW+jSxe
-   t5j/AnlxGZOKVRtsRJ+MASfJIP+GXJ0JGLXUzclRRdVh4fvWNa9WPUitZ
-   PDbKH+3YqDUE7EKd8YOfHqIuC5h2hSd+Uy03w5rdtSEgNgjGIyIu0sUI7
-   ywQPM1hewT6lGxI566d9gEWNGO7JwmgDcxn43pM4QTrN3SESQ1o9q85vR
+  bh=xvTfrqyJeGdUJh01MmFw+3A0CfhKK9ZbQSRWV5UJIUk=;
+  b=TIhqtStFoCmP5I6A7jAnO/FG9nB6/U3ttzBf3am6j30P53eU56zgxRh4
+   5Y0qhfLUg/jSlh4uq7+69YpZRPJi7AXHRvwYOV6OijiiVgmPihPcY4iXW
+   CZ6AKGDexz91qOo0u9cweVTnewHHkd8Tj8uWvDaePrypxuptfOkVGRHfB
+   ynJs8YgATl44/5u8EZ93Jj37gkWL6+YzZ7NaLUCOyHAjBiPoiJzU0jTey
+   aw+IgP8CFBAcMH8Vo0YhR2DWivFB2+9gjxPgAtCchyyXsJ01WcvcnwNB+
+   Gn72WJLcoaAkWAEzdZKzRoxFyaKLzX/3WAzDzT9OYgE+3wxXVzY9/x9b0
    g==;
-X-CSE-ConnectionGUID: 6iqjHCHEQsirTBizKMRmjQ==
-X-CSE-MsgGUID: GFeGc52QR9Wn2vKXyExCXQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11407"; a="50454438"
+X-CSE-ConnectionGUID: ZkL4Iz+zSvquYiqShBr/mQ==
+X-CSE-MsgGUID: f/8vPnuWR9Ojymfzt78dVg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11407"; a="50454492"
 X-IronPort-AV: E=Sophos;i="6.15,222,1739865600"; 
-   d="scan'208";a="50454438"
+   d="scan'208";a="50454492"
 Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2025 09:38:36 -0700
-X-CSE-ConnectionGUID: 96tB1Qk/SJi1/Yk4zAg7ZA==
-X-CSE-MsgGUID: +SmQEmMKQgCrp+hp4oK3Eg==
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2025 09:38:37 -0700
+X-CSE-ConnectionGUID: F0uN3wuCQaGeG9NYh2f6kA==
+X-CSE-MsgGUID: Ji2SKYbYSKimjtRwj6n6fg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,222,1739865600"; 
-   d="scan'208";a="130892281"
+   d="scan'208";a="130892289"
 Received: from anguy11-upstream.jf.intel.com ([10.166.9.133])
   by orviesa009.jf.intel.com with ESMTP; 18 Apr 2025 09:38:36 -0700
 From: Tony Nguyen <anthony.l.nguyen@intel.com>
@@ -81,9 +81,9 @@ Cc: Faizal Rahim <faizal.abdul.rahim@linux.intel.com>,
 	0x1207@gmail.com,
 	bpf@vger.kernel.org,
 	Mor Bar-Gabay <morx.bar.gabay@intel.com>
-Subject: [PATCH net-next 09/14] igc: set the RX packet buffer size for TSN mode
-Date: Fri, 18 Apr 2025 09:38:15 -0700
-Message-ID: <20250418163822.3519810-10-anthony.l.nguyen@intel.com>
+Subject: [PATCH net-next 11/14] igc: add support to set tx-min-frag-size
+Date: Fri, 18 Apr 2025 09:38:17 -0700
+Message-ID: <20250418163822.3519810-12-anthony.l.nguyen@intel.com>
 X-Mailer: git-send-email 2.47.1
 In-Reply-To: <20250418163822.3519810-1-anthony.l.nguyen@intel.com>
 References: <20250418163822.3519810-1-anthony.l.nguyen@intel.com>
@@ -97,105 +97,166 @@ Content-Transfer-Encoding: 8bit
 
 From: Faizal Rahim <faizal.abdul.rahim@linux.intel.com>
 
-In preparation for supporting frame preemption, when entering TSN mode,
-set the receive packet buffer to 15KB for the Express MAC, 15KB for
-the Preemptible MAC and 2KB for the BMC.
-
-References:
-I225/I226 SW User Manual, Section 4.7.9, Section 7.1.3.2, Section 8.3.1
-
-The newly introduced macros follow the naming from the i226 SW User Manual
-for easy reference.
+Add support for setting tx-min-frag-size via the set_mm callback in igc.
+If the requested value is unsupported, round it up to the smallest
+supported i226 size (64, 128, 192, 256) and send a netlink message to
+inform the user.
 
 Co-developed-by: Vinicius Costa Gomes <vinicius.gomes@intel.com>
 Signed-off-by: Vinicius Costa Gomes <vinicius.gomes@intel.com>
+Reviewed-by: Vladimir Oltean <vladimir.oltean@nxp.com>
 Signed-off-by: Faizal Rahim <faizal.abdul.rahim@linux.intel.com>
 Tested-by: Mor Bar-Gabay <morx.bar.gabay@intel.com>
 Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
 ---
- drivers/net/ethernet/intel/igc/igc_defines.h |  5 ++++
- drivers/net/ethernet/intel/igc/igc_tsn.c     | 27 ++++++++++++++++++++
- 2 files changed, 32 insertions(+)
+ drivers/net/ethernet/intel/igc/igc.h         |  1 +
+ drivers/net/ethernet/intel/igc/igc_defines.h |  1 +
+ drivers/net/ethernet/intel/igc/igc_ethtool.c |  5 +++
+ drivers/net/ethernet/intel/igc/igc_tsn.c     | 39 ++++++++++++++++++--
+ drivers/net/ethernet/intel/igc/igc_tsn.h     |  1 +
+ 5 files changed, 44 insertions(+), 3 deletions(-)
 
+diff --git a/drivers/net/ethernet/intel/igc/igc.h b/drivers/net/ethernet/intel/igc/igc.h
+index cce537d7dbd3..9bd243f23b46 100644
+--- a/drivers/net/ethernet/intel/igc/igc.h
++++ b/drivers/net/ethernet/intel/igc/igc.h
+@@ -42,6 +42,7 @@ void igc_ethtool_set_ops(struct net_device *);
+ 
+ struct igc_fpe_t {
+ 	struct ethtool_mmsv mmsv;
++	u32 tx_min_frag_size;
+ };
+ 
+ enum igc_mac_filter_type {
 diff --git a/drivers/net/ethernet/intel/igc/igc_defines.h b/drivers/net/ethernet/intel/igc/igc_defines.h
-index 12a16a7acb03..86abd3bafb37 100644
+index 66061b0d6cbf..7189dfc389ad 100644
 --- a/drivers/net/ethernet/intel/igc/igc_defines.h
 +++ b/drivers/net/ethernet/intel/igc/igc_defines.h
-@@ -399,17 +399,22 @@
- /* Mask for RX packet buffer size */
- #define IGC_RXPBSIZE_EXP_MASK		GENMASK(5, 0)
- #define IGC_BMC2OSPBSIZE_MASK		GENMASK(11, 6)
-+#define IGC_RXPBSIZE_BE_MASK		GENMASK(17, 12)
- /* Mask for timestamp in RX buffer */
- #define IGC_RXPBS_CFG_TS_EN_MASK	GENMASK(31, 31)
- /* High-priority RX packet buffer size (KB). Used for Express traffic when preemption is enabled */
- #define IGC_RXPBSIZE_EXP(x)		FIELD_PREP(IGC_RXPBSIZE_EXP_MASK, (x))
- /* BMC to OS packet buffer size in KB */
- #define IGC_BMC2OSPBSIZE(x)		FIELD_PREP(IGC_BMC2OSPBSIZE_MASK, (x))
-+/* Low-priority RX packet buffer size (KB). Used for BE traffic when preemption is enabled */
-+#define IGC_RXPBSIZE_BE(x)		FIELD_PREP(IGC_RXPBSIZE_BE_MASK, (x))
- /* Enable RX packet buffer for timestamp descriptor, saving 16 bytes per packet if set */
- #define IGC_RXPBS_CFG_TS_EN		FIELD_PREP(IGC_RXPBS_CFG_TS_EN_MASK, 1)
- /* Default value following I225/I226 SW User Manual Section 8.3.1 */
- #define IGC_RXPBSIZE_EXP_BMC_DEFAULT ( \
- 	IGC_RXPBSIZE_EXP(34) | IGC_BMC2OSPBSIZE(2))
-+#define IGC_RXPBSIZE_EXP_BMC_BE_TSN ( \
-+	IGC_RXPBSIZE_EXP(15) | IGC_BMC2OSPBSIZE(2) | IGC_RXPBSIZE_BE(15))
+@@ -583,6 +583,7 @@
+ #define IGC_TQAVCTRL_PREEMPT_ENA	0x00000002
+ #define IGC_TQAVCTRL_ENHANCED_QAV	0x00000008
+ #define IGC_TQAVCTRL_FUTSCDDIS		0x00000080
++#define IGC_TQAVCTRL_MIN_FRAG_MASK	0x0000C000
  
- /* Mask for TX packet buffer size */
- #define IGC_TXPB0SIZE_MASK		GENMASK(5, 0)
+ #define IGC_TXQCTL_QUEUE_MODE_LAUNCHT	0x00000001
+ #define IGC_TXQCTL_STRICT_CYCLE		0x00000002
+diff --git a/drivers/net/ethernet/intel/igc/igc_ethtool.c b/drivers/net/ethernet/intel/igc/igc_ethtool.c
+index b64d5c6c1d20..529654ccd83f 100644
+--- a/drivers/net/ethernet/intel/igc/igc_ethtool.c
++++ b/drivers/net/ethernet/intel/igc/igc_ethtool.c
+@@ -1789,6 +1789,11 @@ static int igc_ethtool_set_mm(struct net_device *netdev,
+ 	struct igc_adapter *adapter = netdev_priv(netdev);
+ 	struct igc_fpe_t *fpe = &adapter->fpe;
+ 
++	fpe->tx_min_frag_size = igc_fpe_get_supported_frag_size(cmd->tx_min_frag_size);
++	if (fpe->tx_min_frag_size != cmd->tx_min_frag_size)
++		NL_SET_ERR_MSG_MOD(extack,
++				   "tx-min-frag-size value set is unsupported. Rounded up to supported value (64, 128, 192, 256)");
++
+ 	if (fpe->mmsv.pmac_enabled != cmd->pmac_enabled) {
+ 		if (cmd->pmac_enabled)
+ 			static_branch_inc(&igc_fpe_enabled);
 diff --git a/drivers/net/ethernet/intel/igc/igc_tsn.c b/drivers/net/ethernet/intel/igc/igc_tsn.c
-index 498741d83ca6..2254f255cc3b 100644
+index a3f32cb94469..b23bf0be007d 100644
 --- a/drivers/net/ethernet/intel/igc/igc_tsn.c
 +++ b/drivers/net/ethernet/intel/igc/igc_tsn.c
-@@ -125,6 +125,29 @@ static void igc_tsn_tx_arb(struct igc_adapter *adapter, u16 *queue_per_tc)
- 	wr32(IGC_TXARB, txarb);
+@@ -6,6 +6,13 @@
+ #include "igc_hw.h"
+ #include "igc_tsn.h"
+ 
++#define MIN_MULTPLIER_TX_MIN_FRAG	0
++#define MAX_MULTPLIER_TX_MIN_FRAG	3
++/* Frag size is based on the Section 8.12.2 of the SW User Manual */
++#define TX_MIN_FRAG_SIZE		64
++#define TX_MAX_FRAG_SIZE	(TX_MIN_FRAG_SIZE * \
++				 (MAX_MULTPLIER_TX_MIN_FRAG + 1))
++
+ DEFINE_STATIC_KEY_FALSE(igc_fpe_enabled);
+ 
+ static int igc_fpe_init_smd_frame(struct igc_ring *ring,
+@@ -128,6 +135,7 @@ static const struct ethtool_mmsv_ops igc_mmsv_ops = {
+ 
+ void igc_fpe_init(struct igc_adapter *adapter)
+ {
++	adapter->fpe.tx_min_frag_size = TX_MIN_FRAG_SIZE;
+ 	ethtool_mmsv_init(&adapter->fpe.mmsv, adapter->netdev, &igc_mmsv_ops);
  }
  
-+/**
-+ * igc_tsn_set_rxpbsize - Set the receive packet buffer size
-+ * @adapter: Pointer to the igc_adapter structure
-+ * @rxpbs_exp_bmc_be: Value to set the receive packet buffer size, including
-+ *                    express buffer, BMC buffer, and Best Effort buffer
-+ *
-+ * The IGC_RXPBS register value may include allocations for the Express buffer,
-+ * BMC buffer, Best Effort buffer, and the timestamp descriptor buffer
-+ * (IGC_RXPBS_CFG_TS_EN).
-+ */
-+static void igc_tsn_set_rxpbsize(struct igc_adapter *adapter,
-+				 u32 rxpbs_exp_bmc_be)
+@@ -299,7 +307,7 @@ static int igc_tsn_disable_offload(struct igc_adapter *adapter)
+ 	tqavctrl = rd32(IGC_TQAVCTRL);
+ 	tqavctrl &= ~(IGC_TQAVCTRL_TRANSMIT_MODE_TSN |
+ 		      IGC_TQAVCTRL_ENHANCED_QAV | IGC_TQAVCTRL_FUTSCDDIS |
+-		      IGC_TQAVCTRL_PREEMPT_ENA);
++		      IGC_TQAVCTRL_PREEMPT_ENA | IGC_TQAVCTRL_MIN_FRAG_MASK);
+ 
+ 	wr32(IGC_TQAVCTRL, tqavctrl);
+ 
+@@ -345,12 +353,35 @@ static void igc_tsn_set_retx_qbvfullthreshold(struct igc_adapter *adapter)
+ 	wr32(IGC_RETX_CTL, retxctl);
+ }
+ 
++static u8 igc_fpe_get_frag_size_mult(const struct igc_fpe_t *fpe)
 +{
-+	struct igc_hw *hw = &adapter->hw;
-+	u32 rxpbs = rd32(IGC_RXPBS);
++	u8 mult = (fpe->tx_min_frag_size / TX_MIN_FRAG_SIZE) - 1;
 +
-+	rxpbs &= ~(IGC_RXPBSIZE_EXP_MASK | IGC_BMC2OSPBSIZE_MASK |
-+		   IGC_RXPBSIZE_BE_MASK);
-+	rxpbs |= rxpbs_exp_bmc_be;
-+
-+	wr32(IGC_RXPBS, rxpbs);
++	return clamp_t(u8, mult, MIN_MULTPLIER_TX_MIN_FRAG,
++		       MAX_MULTPLIER_TX_MIN_FRAG);
 +}
 +
- /* Returns the TSN specific registers to their default values after
-  * the adapter is reset.
-  */
-@@ -139,6 +162,8 @@ static int igc_tsn_disable_offload(struct igc_adapter *adapter)
- 	wr32(IGC_TXPBS, IGC_TXPBSIZE_DEFAULT);
- 	wr32(IGC_DTXMXPKTSZ, IGC_DTXMXPKTSZ_DEFAULT);
- 
-+	igc_tsn_set_rxpbsize(adapter, IGC_RXPBSIZE_EXP_BMC_DEFAULT);
++u32 igc_fpe_get_supported_frag_size(u32 frag_size)
++{
++	const u32 supported_sizes[] = {64, 128, 192, 256};
 +
- 	if (igc_is_device_id_i226(hw))
- 		igc_tsn_restore_retx_default(adapter);
- 
-@@ -202,6 +227,8 @@ static int igc_tsn_enable_offload(struct igc_adapter *adapter)
- 	wr32(IGC_DTXMXPKTSZ, IGC_DTXMXPKTSZ_TSN);
- 	wr32(IGC_TXPBS, IGC_TXPBSIZE_TSN);
- 
-+	igc_tsn_set_rxpbsize(adapter, IGC_RXPBSIZE_EXP_BMC_BE_TSN);
++	/* Find the smallest supported size that is >= frag_size */
++	for (int i = 0; i < ARRAY_SIZE(supported_sizes); i++) {
++		if (frag_size <= supported_sizes[i])
++			return supported_sizes[i];
++	}
 +
- 	if (igc_is_device_id_i226(hw))
- 		igc_tsn_set_retx_qbvfullthreshold(adapter);
++	/* Should not happen */
++	return TX_MAX_FRAG_SIZE;
++}
++
+ static int igc_tsn_enable_offload(struct igc_adapter *adapter)
+ {
+ 	struct igc_hw *hw = &adapter->hw;
+ 	u32 tqavctrl, baset_l, baset_h;
+ 	u32 sec, nsec, cycle;
+ 	ktime_t base_time, systim;
++	u32 frag_size_mult;
+ 	int i;
  
+ 	wr32(IGC_TSAUXC, 0);
+@@ -519,13 +550,15 @@ static int igc_tsn_enable_offload(struct igc_adapter *adapter)
+ 	}
+ 
+ 	tqavctrl = rd32(IGC_TQAVCTRL) & ~(IGC_TQAVCTRL_FUTSCDDIS |
+-		   IGC_TQAVCTRL_PREEMPT_ENA);
+-
++		   IGC_TQAVCTRL_PREEMPT_ENA | IGC_TQAVCTRL_MIN_FRAG_MASK);
+ 	tqavctrl |= IGC_TQAVCTRL_TRANSMIT_MODE_TSN | IGC_TQAVCTRL_ENHANCED_QAV;
+ 
+ 	if (adapter->fpe.mmsv.pmac_enabled)
+ 		tqavctrl |= IGC_TQAVCTRL_PREEMPT_ENA;
+ 
++	frag_size_mult = igc_fpe_get_frag_size_mult(&adapter->fpe);
++	tqavctrl |= FIELD_PREP(IGC_TQAVCTRL_MIN_FRAG_MASK, frag_size_mult);
++
+ 	adapter->qbv_count++;
+ 
+ 	cycle = adapter->cycle_time;
+diff --git a/drivers/net/ethernet/intel/igc/igc_tsn.h b/drivers/net/ethernet/intel/igc/igc_tsn.h
+index bb30d15cec76..58fe5f0773d7 100644
+--- a/drivers/net/ethernet/intel/igc/igc_tsn.h
++++ b/drivers/net/ethernet/intel/igc/igc_tsn.h
+@@ -14,6 +14,7 @@ enum igc_txd_popts_type {
+ DECLARE_STATIC_KEY_FALSE(igc_fpe_enabled);
+ 
+ void igc_fpe_init(struct igc_adapter *adapter);
++u32 igc_fpe_get_supported_frag_size(u32 frag_size);
+ int igc_tsn_offload_apply(struct igc_adapter *adapter);
+ int igc_tsn_reset(struct igc_adapter *adapter);
+ void igc_tsn_adjust_txtime_offset(struct igc_adapter *adapter);
 -- 
 2.47.1
 
