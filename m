@@ -1,129 +1,201 @@
-Received: from mout.web.de (mout.web.de [212.227.15.3])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C21CB1D515A;
-	Wed, 23 Apr 2025 08:46:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58D1026A1B9;
+	Wed, 23 Apr 2025 10:11:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745397985; cv=none; b=ai6grKOsWPrCeBRjPTDk0YXttea9aEgrzo8E4ASXUX9wbrzODO3n5cNkXy56lwjHcm7cV5OWMrjOfIUsHyNn8Uw9CpDi8NXib9qWjaUDIfKwjMIWUUS6KfrE78G5URCcl3u0UA+AWsT/k10ihwKFhp6c4LT4cHy+3SWiSTO2DWg=
+	t=1745403092; cv=none; b=D/aThDGJ/6/wgb4FMCVJP6kASqF5u67HhoW6m3G8uuJe7WHIZSo3CsSnjIj66VQ2j8LIXJu0FOK+ACHvrGGdOjpvRa+nehSd3QjiFmdy4jlMBA0+CEl660ubduan36Z+AFXNuxYlkNL+Cg5wyeRF0IIRcsrv4J4Noq/OFIAyl90=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745397985; c=relaxed/simple;
-	bh=ro/RxJwGTo0wu9Wl6SHHN0DVxtsSkTUrvzIFd8ea9W8=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
-	 In-Reply-To:Content-Type; b=Cu4aQ3OBKlJ19WhK4PRprj6wm+7s1Ol+UeCwlRn8c2WgEaDbjFOuzEg0OscwZw3Qi8YBvbgXuxNYYyU469Bz/2ByioVx9Q9Cq9TbEoSZpxy1x+5aT2V8bLTa97zQNb7C+ITVuifKQ/ApQ0Q/sUeITO/Wx1zxfLLO1+d9q2q3Dws=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=m31CpV73; arc=none smtp.client-ip=212.227.15.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+	s=arc-20240116; t=1745403092; c=relaxed/simple;
+	bh=8MEBVIkWewXw+lwjigr+xfdfHVKvIb/W0Jna6yh7/ro=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FSumJkGQoX/IjMwBYMSHsENRcgw6Cd/onTS51o7ix/cNl7EL/lf+Kv1IQuC/hgxnC/r1XYECxOg+mGPNjuizcLqFOERAlvpxwDwdygY7Z+8Db7ZheMYRFul8FjodjvH2TTJD/jaxp9it0Kd2b7m5pKmuJELaC6Mo+RoCURyf//I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I/NsPiYH; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="m31CpV73"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1745397954; x=1746002754; i=markus.elfring@web.de;
-	bh=ro/RxJwGTo0wu9Wl6SHHN0DVxtsSkTUrvzIFd8ea9W8=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
-	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
-	 cc:content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=m31CpV73bHR4520I4Puv9rtSlv5sugGkqpqvqMNvcOdsuzG03tk0B83Qfd4JU/oc
-	 8jSDiaibeLZicz5QTcqrafYIxNCeUjeRbOCLFZw3k/p40yAZqoYxw7HntyLU61S+7
-	 mMexKi29fG0/vwnD3IvdOLkKAYnt90Z01j1K6ik+FOgj6svzd/7qCBlj6L00F7nRd
-	 MZ3ox6MU7Mfbhw8W25jkr4j3UeBIC/zlsMXX0CYrEy1kPJfRA0fJMr/pUDVxdBw0O
-	 fhDeE1RRveI6HLY/u+dQY8/h6Pql2B2VAPtD0x/2cqHNEiihPvxinodME3g8v+HCy
-	 W1AvkHO+mjgKjbMoNg==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.178.29] ([94.31.70.6]) by smtp.web.de (mrweb006
- [213.165.67.108]) with ESMTPSA (Nemesis) id 1MNOVK-1uRwHA2SfC-00Z635; Wed, 23
- Apr 2025 10:45:54 +0200
-Message-ID: <cde757c8-fd15-4538-9bb6-1341cddb38dc@web.de>
-Date: Wed, 23 Apr 2025 10:45:50 +0200
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I/NsPiYH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 480D7C4CEE2;
+	Wed, 23 Apr 2025 10:11:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1745403091;
+	bh=8MEBVIkWewXw+lwjigr+xfdfHVKvIb/W0Jna6yh7/ro=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=I/NsPiYHvoo1IAMVXrqu7tPfgq4gfAZQBbvRfGFCvX72stFxw1bu2WrFfVUthrGPR
+	 gc9nfln249KILmPG27ULPg+iSZOfb/xZHvFwsaMANEhM/VPZU/5o5KbZQXTZEKBmmh
+	 vJsgTGO15AV/GVB4z+czE9HUGVfNpeVIuYN+fgF8NAE/rd4r3FsmZu/Snv/meEzt6p
+	 VQvCw4+gFmiNDoX6LCUgbLgV9d/BA5eSo6xc2Xi+rXrJIhhnXAvuobJDWL+00TQQzI
+	 JF+h9cAfXTzjaS/TtXKOgsdyggHDz6+BTTROTRAhiUDXN0K2oEOxRZfG3nlt+gTrZu
+	 N+vu1ZqcH9Rpw==
+Date: Wed, 23 Apr 2025 12:11:29 +0200
+From: Lorenzo Bianconi <lorenzo@kernel.org>
+To: Stanislav Fomichev <stfomichev@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>, bpf@vger.kernel.org,
+	netdev@vger.kernel.org
+Subject: Re: [PATCH bpf-next] bpf: Allow XDP dev bounded program to perform
+ XDP_REDIRECT into maps
+Message-ID: <aAi80as6PpOeuWJU@lore-desk>
+References: <20250422-xdp-prog-bound-fix-v1-1-0b581fa186fe@kernel.org>
+ <aAgdECkTiP-po7HP@mini-arch>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Jiayuan Chen <jiayuan.chen@linux.dev>, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-Cc: Jiayuan Chen <mrpre@163.com>,
- syzbot+e6e8f6618a2d4b35e4e0@syzkaller.appspotmail.com,
- yonghong.song@linux.dev, LKML <linux-kernel@vger.kernel.org>,
- Alan Maguire <alan.maguire@oracle.com>, Alexei Starovoitov <ast@kernel.org>,
- =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>,
- Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Eduard Zingerman <eddyz87@gmail.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
- KP Singh <kpsingh@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>,
- Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
- Song Liu <song@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>
-References: <20250417044041.252874-2-jiayuan.chen@linux.dev>
-Subject: Re: [PATCH bpf-next 1/2] bpf: Create cgroup storage if needed when
- updating link
-Content-Language: en-GB
-From: Markus Elfring <Markus.Elfring@web.de>
-In-Reply-To: <20250417044041.252874-2-jiayuan.chen@linux.dev>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="zXe39Favfr3JW6LW"
+Content-Disposition: inline
+In-Reply-To: <aAgdECkTiP-po7HP@mini-arch>
+
+
+--zXe39Favfr3JW6LW
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:a2RveycS6Z8tGnyvKpnVd/v0KGJzShQ6CNmwUoLzvk/92Hu16Ed
- 9N4/xd/Yp/DHt4HQkGivemBOhkPCkGgybccwQCiCXbBURE+qwnf5UUvqYMYmlL66jsQQT7W
- K6qeueKbcaZ2b2OAPJJksujM6vNDt0Ggbv7Ts0zgzdglkubs8N1Nk9E8ITiIzZtBH2IhlVz
- BWJgzvtxnRIiejHnXCsyA==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:jqoPEhpswPc=;FpxypifhLUr8GkAl0Q5xtCMCGJA
- 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
- qE4Zb0FQfPGaKSG6dFhqvk=
 
-=E2=80=A6
-> This cause a painc when accessing stroage in bpf_get_local_storage.
+On Apr 22, Stanislav Fomichev wrote:
+> On 04/22, Lorenzo Bianconi wrote:
+> > In the current implementation if the program is bounded to a specific
+> > device, it will not be possible to perform XDP_REDIRECT into a DEVMAP
+> > or CPUMAP even if the program is not attached to the map entry. This
+> > seems in contrast with the explanation available in
+> > bpf_prog_map_compatible routine. Fix the issue taking into account
+> > even the attach program type and allow XDP dev bounded program to
+> > perform XDP_REDIRECT into maps if the attach type is not BPF_XDP_DEVMAP
+> > or BPF_XDP_CPUMAP.
+> >=20
+> > Fixes: 3d76a4d3d4e59 ("bpf: XDP metadata RX kfuncs")
+> > Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+> > ---
+> >  kernel/bpf/core.c | 22 +++++++++++++++++++++-
+> >  1 file changed, 21 insertions(+), 1 deletion(-)
+> >=20
+> > diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> > index ba6b6118cf504041278d05417c4212d57be6fca0..a33175efffc377edbfe2813=
+97017eb467bfbcce9 100644
+> > --- a/kernel/bpf/core.c
+> > +++ b/kernel/bpf/core.c
+> > @@ -2358,6 +2358,26 @@ static unsigned int __bpf_prog_ret0_warn(const v=
+oid *ctx,
+> >  	return 0;
+> >  }
+> > =20
+> > +static bool bpf_prog_dev_bound_map_compatible(struct bpf_map *map,
+> > +					      const struct bpf_prog *prog)
+> > +{
+> > +	if (!bpf_prog_is_dev_bound(prog->aux))
+> > +		return true;
+> > +
+> > +	if (map->map_type =3D=3D BPF_MAP_TYPE_PROG_ARRAY)
+> > +		return false;
+>=20
+> [..]
+>=20
+> > +	if (map->map_type =3D=3D BPF_MAP_TYPE_DEVMAP &&
+> > +	    prog->expected_attach_type !=3D BPF_XDP_DEVMAP)
+> > +		return true;
+> > +
+> > +	if (map->map_type =3D=3D BPF_MAP_TYPE_CPUMAP &&
+> > +	    prog->expected_attach_type !=3D BPF_XDP_CPUMAP)
+> > +		return true;
+>=20
+> Not sure I understand, what does it mean exactly? That it's ok to add
+> a dev-bound program to the dev/cpumap if the program itself is gonna
+> be attached only to the real device? Can you expand more on the specific
+> use-case?
+>=20
+> The existing check makes sure that the dev-bound programs run only in the
+> contexts that have hw descriptors. devmap and cpumap don't satisfy
+> this constraint afaiu.
 
-Please avoid typos in such a change description.
+My use-case is to use a hw-metadata kfunc like bpf_xdp_metadata_rx_timestam=
+p()
+to read hw timestamp from the NIC and then redirect the xdp_buff into a DEV=
+MP
+(please note there are no programs attached to any DEVMAP entries):
 
+extern int bpf_xdp_metadata_rx_timestamp(const struct xdp_md *ctx,
+					 __u64 *timestamp) __ksym;
 
-How do you think about to append parentheses to function names?
+struct {
+	__uint(type, BPF_MAP_TYPE_DEVMAP);
+	__uint(key_size, sizeof(__u32));
+	__uint(value_size, sizeof(struct bpf_devmap_val));
+	__uint(max_entries, 1);
+} dev_map SEC(".maps");
 
-See also:
-https://web.git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tre=
-e/Documentation/process/submitting-patches.rst?h=3Dv6.15-rc3#n94
+SEC("xdp")
+int xdp_meta_redirect(struct xdp_md *ctx)
+{
+	__u64 timestamp;
+
+	...
+	bpf_xdp_metadata_rx_timestamp(ctx, &timestamp);
+	...
+
+	return bpf_redirect_map(&dev_map, ctx->rx_queue_index, XDP_PASS);
+}
+
+According to my understanding this is feasible just if the "xdp_meta_redire=
+ct"
+program is bounded to a device otherwise the program is reject with the fol=
+lowing
+error at load time:
+
+libbpf: prog 'xdp_meta_redirect': BPF program load failed: -EINVAL
+libbpf: prog 'xdp_meta_redirect': -- BEGIN PROG LOAD LOG --
+metadata kfuncs require device-bound program
+processed 0 insns (limit 1000000) max_states_per_insn 0 total_states 0
+peak_states 0 mark_read 0
+-- END PROG LOAD LOG --
+
+in order to fix it:
+
+	...
+	index =3D if_nametoindex(DEV);=20
+	bpf_program__set_ifindex(prog, index);
+	bpf_program__set_flags(prog, BPF_F_XDP_DEV_BOUND_ONLY);
+	...
+
+Doing so the program load still fails for the check in bpf_prog_map_compati=
+ble():
+
+	bool bpf_prog_map_compatible()
+	{
+		...
+		if (bpf_prog_is_dev_bound(aux))
+			return false;
+		...
+
+In other words, a dev-bound XDP program can't interact with a DEVMAP (or
+CPUMAP) even if it is not attached to a map entry.
+I think if the XDP program is just running in the driver NAPI context
+it should be doable to use a hw-metada kfunc and perform a redirect into
+a DEVMAP or CPUMAP, right? Am I missing something?
 
 Regards,
-Markus
+Lorenzo
+
+--zXe39Favfr3JW6LW
+Content-Type: application/pgp-signature; name=signature.asc
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCaAi80AAKCRA6cBh0uS2t
+rMmeAQDEEI0jNhsWJFxXoXuacSfeLdOstC7c5vhwS84h2I81bQEAsJztBvMtypYW
+Fu+dhnwtdTOcNlgEIFmwew9LwbBtEwM=
+=CWgW
+-----END PGP SIGNATURE-----
+
+--zXe39Favfr3JW6LW--
