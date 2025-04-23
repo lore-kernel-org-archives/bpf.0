@@ -1,101 +1,194 @@
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E5B42701DB;
-	Wed, 23 Apr 2025 01:51:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0321B2580E7;
+	Wed, 23 Apr 2025 02:21:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745373110; cv=none; b=AeQczy7dHAcKPdVdH0Cotkb1TlCdJxNwSwoncnQhNtkxDnG5P2fSTA/9apcm2+vFafDiu5GgdtcakEsb0DJ9oZvMqnzooze8R4K1WLYQ+uSlzpvkJe2wyVaq9OfXoUiz/B23rXcQOGniXBW1IHvdWeGW4LT2tg6uP42z2rOL/8k=
+	t=1745374916; cv=none; b=tUR/sgjy0UJQHzF2ZbQEBHF9Bn89MZFgAUkI2dp6LOo7dZi7E8eKQbBgXYK/41W4+9JqRNI1rqXj/9t9DFPezWhmDbTzSEme2NiDEK04UiTbg8VXRNnRIXCpIqOzHZHok9gs4V3Tou45vN6xKEiJBB9Dgi9ILdLRBPPhekquwR8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745373110; c=relaxed/simple;
-	bh=524B77zUmQ8K7a2shf7Mu+7jo//vmdRuMIeZyo4ImCM=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=jYITZtkp+7yaIKxwAbG4LhbrUiT0p58JSaKTRJqHRwDbkJKF9WLG2x5AIUlVUa318MObPBQJh+MMPgv36uPBeETjOatg2wXMS5rXDK1HEZS/r30bj5uxbP95fvwxGsU6q8ngVmnBnLVW0rRfh6PcxOgcBhbpjOXKRYwyXGmFmAM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [10.20.42.62])
-	by gateway (Coremail) with SMTP id _____8CxaWpaRwhoIWLEAA--.65011S3;
-	Wed, 23 Apr 2025 09:50:19 +0800 (CST)
-Received: from [10.20.42.62] (unknown [10.20.42.62])
-	by front1 (Coremail) with SMTP id qMiowMCxrhtYRwhooO2QAA--.47758S3;
-	Wed, 23 Apr 2025 09:50:18 +0800 (CST)
-Subject: Re: BUG: bpf test case fails to run on LoongArch
-To: Tiezhu Yang <yangtiezhu@loongson.cn>, Huacai Chen <chenhuacai@loongson.cn>
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
- loongarch@lists.linux.dev
-References: <32989acf-93ef-b90f-c3ba-2a3c07dee4a3@loongson.cn>
- <8cd87100-88f3-687d-6704-f4fec0ca48b3@loongson.cn>
-From: bibo mao <maobibo@loongson.cn>
-Message-ID: <c9d7be2b-8c2d-bd5e-b32d-37ed4bb693cc@loongson.cn>
-Date: Wed, 23 Apr 2025 09:49:13 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+	s=arc-20240116; t=1745374916; c=relaxed/simple;
+	bh=qK1B6jvfJpjhNVBbGzIkwIUA4t2Sc/jOmyAV02x6m9w=;
+	h=MIME-Version:Date:Content-Type:From:Message-ID:Subject:To:Cc:
+	 In-Reply-To:References; b=B2p7pYgOYE3kz1kDF90HjnKGfLijr58qg5erOXdk9Xu7BC0IHXI2ooRKIArMXZXS6RehZfcQ78JQovoyU8ZSlwKWXQiSwy0o8o7wxoFWOpV6O4rIqp+drTh6qjRPpU0tddKr3pTCOmWXVNMyxMDnQ8kqCY2M0p8eqZ9CnMyPDbU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=LjwjNV18; arc=none smtp.client-ip=91.218.175.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="LjwjNV18"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <8cd87100-88f3-687d-6704-f4fec0ca48b3@loongson.cn>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowMCxrhtYRwhooO2QAA--.47758S3
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
-X-Coremail-Antispam: 1Uk129KBj93XoW7uw1xJry3XF15ZF1ftF4UJrc_yoW8Jw1UpF
-	ZxtryfKw1Yga40qr10qa10yF9YyFsay3y5AryUJ34kGrs5Ar1qqF18Jr1Svr93tryv9rWU
-	A3y0qan0kwnrJFcCm3ZEXasCq-sJn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUU9Yb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-	GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4
-	xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v2
-	6r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67
-	vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v2
-	6r126r1DMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17
-	CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF
-	0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIx
-	AIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIev
-	Ja73UjIFyTuYvjxUrNtxDUUUU
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1745374899;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=NQ0Kggt3gIz3TlRpiFCQVgKvnBoDfQL2jMrv9qB9Iz8=;
+	b=LjwjNV18VzAy7rjmHeaQ/CMcof1vElFdxNyStaN879ELat4cJzDrGvlOokj8RTLUwkij65
+	NGbYcQc2uCyzpa84E3X2brrHTehsLfONlPpTlaaI0LslBHRJWNlebbl+KA+eieSQ8/L88q
+	Gx7RBeG1HCod+06ojg0R7a7Oo7ot8vA=
+Date: Wed, 23 Apr 2025 02:21:37 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: "Jiayuan Chen" <jiayuan.chen@linux.dev>
+Message-ID: <cbb82d78518c251000e8b52e3f3799b0df438210@linux.dev>
+TLS-Required: No
+Subject: Re: [PATCH bpf-next v1 1/2] bpf: Create cgroup storage if needed
+ when updating link
+To: "Martin KaFai Lau" <martin.lau@linux.dev>
+Cc: andrii@kernel.org, alexis.lothore@bootlin.com, mrpre@163.com,
+ syzbot+e6e8f6618a2d4b35e4e0@syzkaller.appspotmail.com, "Alexei
+ Starovoitov" <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>,
+ "Eduard Zingerman" <eddyz87@gmail.com>, "Song Liu" <song@kernel.org>,
+ "Yonghong Song" <yonghong.song@linux.dev>, "John Fastabend"
+ <john.fastabend@gmail.com>, "KP Singh" <kpsingh@kernel.org>, "Stanislav
+ Fomichev" <sdf@fomichev.me>, "Hao Luo" <haoluo@google.com>, "Jiri Olsa"
+ <jolsa@kernel.org>, "Mykola Lysenko" <mykolal@fb.com>, "Shuah Khan"
+ <shuah@kernel.org>, "Alan Maguire" <alan.maguire@oracle.com>,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ bpf@vger.kernel.org
+In-Reply-To: <c6a9b230-f163-4c03-b834-ddcc71c47204@linux.dev>
+References: <20250417044041.252874-1-jiayuan.chen@linux.dev>
+ <20250417044041.252874-2-jiayuan.chen@linux.dev>
+ <c6a9b230-f163-4c03-b834-ddcc71c47204@linux.dev>
+X-Migadu-Flow: FLOW_OUT
+
+April 23, 2025 at 08:13, "Martin KaFai Lau" <martin.lau@linux.dev> wrote:
+
+>=20
+>=20On 4/16/25 9:40 PM, Jiayuan Chen wrote:
+>=20
+>=20>=20
+>=20> when we attach a prog without cgroup_storage map being used,
+> >=20
+>=20>  cgroup_storage in struct bpf_prog_array_item is empty. Then, if we=
+ use
+> >=20
+>=20>  BPF_LINK_UPDATE to replace old prog with a new one that uses the
+> >=20
+>=20>  cgroup_storage map, we miss cgroup_storage being initiated.
+> >=20
+>=20>  This cause a painc when accessing stroage in bpf_get_local_storage=
+.
+> >=20
+>=20>  Reported-by: syzbot+e6e8f6618a2d4b35e4e0@syzkaller.appspotmail.com
+> >=20
+>=20>  Closes: https://lore.kernel.org/all/67fc867e.050a0220.2970f9.03b8.=
+GAE@google.com/T/
+> >=20
+>=20>  Fixes: 0c991ebc8c69 ("bpf: Implement bpf_prog replacement for an a=
+ctive bpf_cgroup_link")
+> >=20
+>=20>  Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+> >=20
+>=20>  ---
+> >=20
+>=20>  kernel/bpf/cgroup.c | 24 +++++++++++++++++++-----
+> >=20
+>=20>  1 file changed, 19 insertions(+), 5 deletions(-)
+> >=20
+>=20>  diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+> >=20
+>=20>  index 84f58f3d028a..cdf0211ddc79 100644
+> >=20
+>=20>  --- a/kernel/bpf/cgroup.c
+> >=20
+>=20>  +++ b/kernel/bpf/cgroup.c
+> >=20
+>=20>  @@ -770,12 +770,14 @@ static int cgroup_bpf_attach(struct cgroup *=
+cgrp,
+> >=20
+>=20>  }
+> >=20
+>=20>  > /* Swap updated BPF program for given link in effective program =
+arrays across
+> >=20
+>=20>  - * all descendant cgroups. This function is guaranteed to succeed=
+.
+> >=20
+>=20>  + * all descendant cgroups.
+> >=20
+>=20>  */
+> >=20
+>=20>  -static void replace_effective_prog(struct cgroup *cgrp,
+> >=20
+>=20>  - enum cgroup_bpf_attach_type atype,
+> >=20
+>=20>  - struct bpf_cgroup_link *link)
+> >=20
+>=20>  +static int replace_effective_prog(struct cgroup *cgrp,
+> >=20
+>=20>  + enum cgroup_bpf_attach_type atype,
+> >=20
+>=20>  + struct bpf_cgroup_link *link)
+> >=20
+>=20>  {
+> >=20
+>=20>  + struct bpf_cgroup_storage *new_storage[MAX_BPF_CGROUP_STORAGE_TY=
+PE] =3D {};
+> >=20
+>=20>  + struct bpf_cgroup_storage *storage[MAX_BPF_CGROUP_STORAGE_TYPE] =
+=3D {};
+> >=20
+>=20>  struct bpf_prog_array_item *item;
+> >=20
+>=20>  struct cgroup_subsys_state *css;
+> >=20
+>=20>  struct bpf_prog_array *progs;
+> >=20
+>=20>  @@ -784,6 +786,10 @@ static void replace_effective_prog(struct cgr=
+oup *cgrp,
+> >=20
+>=20>  struct cgroup *cg;
+> >=20
+>=20>  int pos;
+> >=20
+>=20>  > + if (bpf_cgroup_storages_alloc(storage, new_storage, link->type=
+,
+> >=20
+>=20>  + link->link.prog, cgrp))
+> >=20
+>=20>  + return -ENOMEM;
+> >=20
+>=20>  +
+> >=20
+>=20>  css_for_each_descendant_pre(css, &cgrp->self) {
+> >=20
+>=20>  struct cgroup *desc =3D container_of(css, struct cgroup, self);
+> >=20
+>=20>  > @@ -810,8 +816,11 @@ static void replace_effective_prog(struct c=
+group *cgrp,
+> >=20
+>=20>  desc->bpf.effective[atype],
+> >=20
+>=20>  lockdep_is_held(&cgroup_mutex));
+> >=20
+>=20>  item =3D &progs->items[pos];
+> >=20
+>=20>  + bpf_cgroup_storages_assign(item->cgroup_storage, storage);
+> >=20
+>=20
+> I am still recalling my memory on this older cgroup storage, so I think=
+ it will be faster to ask questions.
+>=20
+>=20What is in the pl->storage (still NULL?), and will the future compute=
+_effective_progs() work?
+>=20
+
+For=20non-link path:
+cgroup_bpf_attach
+	bpf_cgroup_storages_assign(pl->storage, storage); // allocate and set
+	update_effective_progs
+		compute_effective_progs
+			bpf_cgroup_storages_assign(item->cgroup_storage, pl->storage);
 
 
-
-On 2025/4/23 上午9:28, Tiezhu Yang wrote:
-> On 04/21/2025 10:52 AM, bibo mao wrote:
->> Hi,
->>
->> When I run built-in bpf test case with lib/test_bpf.c,
->> it reports such error, I do not know whether it is a problem.
->>
->>  test_bpf: #843 ALU32_RSH_X: all shift values jited:1 239 PASS
->>  test_bpf: #844 ALU32_ARSH_X: all shift values jited:1 237 PASS
->>  test_bpf: #845 ALU64_LSH_X: all shift values with the same register
->>  ------------[ cut here ]------------
->>  kernel BUG at lib/test_bpf.c:794!
-> 
-> This is a known issue I have ever encountered.
-> I guess your GCC version is 14.1, this is a bug of GCC,
-yes, My gcc version is 14.1
-
-> it has been fixed in the higher version, you can update
-> you GCC version (14.2+).
-OK, I will update my gcc. And sorry for the noise.
-
-Regards
-Bibo Mao
-> 
-> $ gcc --version | head -1
-> gcc (GCC) 14.2.1 20241104
-> $ dmesg -t | grep Summary
-> test_bpf: Summary: 1053 PASSED, 0 FAILED, [0/1041 JIT'ed]
-> test_bpf: test_tail_calls: Summary: 10 PASSED, 0 FAILED, [0/10 JIT'ed]
-> test_bpf: test_skb_segment: Summary: 2 PASSED, 0 FAILED
-> test_bpf: Summary: 1053 PASSED, 0 FAILED, [1041/1041 JIT'ed]
-> test_bpf: test_tail_calls: Summary: 10 PASSED, 0 FAILED, [10/10 JIT'ed]
-> test_bpf: test_skb_segment: Summary: 2 PASSED, 0 FAILED
-> 
-> Thanks,
-> Tiezhu
-> 
-
+pl->storage is just as a temporary holder, never freed, and its value wil=
+l
+eventually be assigned to `item->cgroup_storage`.
