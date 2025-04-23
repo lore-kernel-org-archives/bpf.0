@@ -1,115 +1,214 @@
-Received: from lamorak.hansenpartnership.com (lamorak.hansenpartnership.com [198.37.111.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8931B278E44;
-	Wed, 23 Apr 2025 14:12:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.37.111.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18A90149E17;
+	Wed, 23 Apr 2025 14:33:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745417533; cv=none; b=KfUSeVFlVPxw4fR+7zudI8kCjpduJG/OUXnycyLV/zI2EVu1v0nFj38mpXJ6CMSTW2y4YLWHWvISOM6kkPedC1x3lAjiR5JYJNngiB39IY+xqftyCCdkSEGvBZLZvaocZ9F+LWsG7OWt3bw0RFXu5AXDYZJbbA8grphnS8lQ4hI=
+	t=1745418788; cv=none; b=sTxyITN750F9l9qdlDURQci1bkYzlsDefPOA0BNZolvpyJ+TsZVuRgOZ5AD7Epy2PQX06oiPGeVoLWxMi49EvZs197Ne6BFIEak8jBlMpBUYsMJgy+nao/x4f2j8T7Ek3TUrKAcXv0QygWOBQfeancjOgVLdsbAn9EEkyxUhPaA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745417533; c=relaxed/simple;
-	bh=PgSnKh8AEc/BlZebuyDsWHMlwgMJf/opyEbGRKOxu4k=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Trfr7ebanAQOHfb01/Zi39KCVrnbUmBv2FNudIILqKiRn8wWAgjo2ZtAc4QpgBgzFWXASVJSL26NDjQ1rFZnTmNi0M4MWgXE/s3ksrL9p9lCfUPd21aVp+MejCWb3ROSPDYPDJw66mIy5ck477LW9XgsK/aJJC1P2GH2LCif4zs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=sxLeTY3K; arc=none smtp.client-ip=198.37.111.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=HansenPartnership.com
+	s=arc-20240116; t=1745418788; c=relaxed/simple;
+	bh=6Vjv6CNYE2+vsxtYNTmfkhiexYbN+MV07B8fJlrr//g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YyyiIDeEy5yHsvl8SePpjbZpmQGO1tilFWq9vT2DTt8WeAxmEM+zjnfAGA0v39JsmeHWiGvu/2JadnlgPvPOGqm5lt6pUgMiGEzPBCUCdo5Bta05R7UtjLVv7CZnV7IT7GtChsRi5uYm6tooK56YVO+EJef1LzIcSzhmb9RVGaI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iFiWSNm7; arc=none smtp.client-ip=209.85.215.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="sxLeTY3K"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-	d=hansenpartnership.com; s=20151216; t=1745417529;
-	bh=PgSnKh8AEc/BlZebuyDsWHMlwgMJf/opyEbGRKOxu4k=;
-	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-	b=sxLeTY3KdvSkeDFWrUc36f6EQ2ePLTba1rMhxaQlR/Ez6nbr8jlu2hI49MqIzn4g5
-	 cpJDgN2gi5DtPuz3ueKMrlueLgKC7r2aaICWQ46obvjJ1rBZgTTamoF+dBT/yqE/0l
-	 PA8KLQBcl4Yl+yWak5Te+fLRqVzqWgtet8RHJZQc=
-Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4302:c21::a774])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by lamorak.hansenpartnership.com (Postfix) with ESMTPSA id 4031A1C0283;
-	Wed, 23 Apr 2025 10:12:08 -0400 (EDT)
-Message-ID: <2bd95ca78e836db0775da8237792e8448b8eec62.camel@HansenPartnership.com>
-Subject: Re: [PATCH v2 security-next 1/4] security: Hornet LSM
-From: James Bottomley <James.Bottomley@HansenPartnership.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Blaise Boscaccy
-	 <bboscaccy@linux.microsoft.com>
-Cc: Jonathan Corbet <corbet@lwn.net>, David Howells <dhowells@redhat.com>, 
- Herbert Xu <herbert@gondor.apana.org.au>, "David S. Miller"
- <davem@davemloft.net>, Paul Moore <paul@paul-moore.com>, James Morris
- <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, Masahiro Yamada
- <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas
- Schier <nicolas@fjasle.eu>, Shuah Khan <shuah@kernel.org>,
- =?ISO-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>, 
- =?ISO-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>, Nick Desaulniers
- <nick.desaulniers+lkml@gmail.com>,  Bill Wendling <morbo@google.com>,
- Justin Stitt <justinstitt@google.com>, Jarkko Sakkinen <jarkko@kernel.org>,
-  Jan Stancek <jstancek@redhat.com>, Neal Gompa <neal@gompa.dev>, "open
- list:DOCUMENTATION" <linux-doc@vger.kernel.org>, LKML
- <linux-kernel@vger.kernel.org>,  keyrings@vger.kernel.org, Linux Crypto
- Mailing List <linux-crypto@vger.kernel.org>, LSM List
- <linux-security-module@vger.kernel.org>,  Linux Kbuild mailing list
- <linux-kbuild@vger.kernel.org>, "open list:KERNEL SELFTEST FRAMEWORK"
- <linux-kselftest@vger.kernel.org>,  bpf <bpf@vger.kernel.org>,
- clang-built-linux <llvm@lists.linux.dev>, nkapron@google.com,  Matteo Croce
- <teknoraver@meta.com>, Roberto Sassu <roberto.sassu@huawei.com>, Cong Wang
- <xiyou.wangcong@gmail.com>
-Date: Wed, 23 Apr 2025 10:12:07 -0400
-In-Reply-To: <CAADnVQKF+B_YYwOCFsPBbrTBGKe4b22WVJFb8C0PHGmRAjbusQ@mail.gmail.com>
-References: <20250404215527.1563146-1-bboscaccy@linux.microsoft.com>
-	 <20250404215527.1563146-2-bboscaccy@linux.microsoft.com>
-	 <CAADnVQJyNRZVLPj_nzegCyo+BzM1-whbnajotCXu+GW+5-=P6w@mail.gmail.com>
-	 <87semdjxcp.fsf@microsoft.com>
-	 <CAADnVQ+JGfwRgsoe2=EHkXdTyQ8ycn0D9nh1k49am++4oXUPHg@mail.gmail.com>
-	 <87friajmd5.fsf@microsoft.com>
-	 <CAADnVQKb3gPBFz+n+GoudxaTrugVegwMb8=kUfxOea5r2NNfUA@mail.gmail.com>
-	 <87a58hjune.fsf@microsoft.com>
-	 <CAADnVQ+LMAnyT4yV5iuJ=vswgtUu97cHKnvysipc6o7HZfEbUA@mail.gmail.com>
-	 <87y0w0hv2x.fsf@microsoft.com>
-	 <CAADnVQKF+B_YYwOCFsPBbrTBGKe4b22WVJFb8C0PHGmRAjbusQ@mail.gmail.com>
-Autocrypt: addr=James.Bottomley@HansenPartnership.com;
- prefer-encrypt=mutual;
- keydata=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
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.3 
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iFiWSNm7"
+Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-af6a315b491so5727910a12.1;
+        Wed, 23 Apr 2025 07:33:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1745418786; x=1746023586; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=rAOksXM7Eq6BXKV/jMFIbr+hGJwQG+XC86lMB+LClnU=;
+        b=iFiWSNm7+KcUuzMZjRUVktctsFUp4YHNjSKJu3q1n3ylcJjLnF0PUvt3enBQ83U89c
+         YdBnxzqk4hHr/Z6ONprIDaxNqptAdrQ1Y/WTEwucBuBib+nUW+cZ+vrp+eGK9FMT1OeA
+         Z1ySlnrUOig8YVM9rMErwwlg5gjGuMA1hAAvrq7ar3/aOmGJIm3O178Ej52otkjTgQ6n
+         2VzIz0MCvYluRLlfXrHAPoO3A3pivbBZ1dHE7CnNGHHpRZ9jcABFTx0m0D7HJ8OYVnQC
+         OQ1HGeZ/tBQZOwtd6tqpLlTit9DGwebrIAcF/86dwixfOmFqgnnpmziGJ50sxRsX3odp
+         /Ntw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745418786; x=1746023586;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rAOksXM7Eq6BXKV/jMFIbr+hGJwQG+XC86lMB+LClnU=;
+        b=eIKbvb4LR4Z6SKFEAjySm+o5e8uI1GQQ2hJlRftLdJsHSNHko3O8yj59LZz9ZC2mjV
+         RS3pvkvVfA5rvsZaWTWWXr9nGzgf9gLwv1PG543hJjZyHb1OYLtV3lmelwfyyUH3Ht8P
+         Y6hD2/fXFdjaYAE40THKyq2PS2S9XGFKsm/ATZ2hvjzjEHvxmUczWSbEydCmoUkkdp9V
+         1ULl8a7osggZxESJgLHTmn2zDWqP8t8upvK54FeKEGG5j2caK1gFewEo3tU8IIrBRKjn
+         6GRaOqw7wz2Qps76XD8vlJsZxxylpaqj9nhrrm4W5biQeiOGaIsGZvBpXFkIGSDV8fRo
+         jhDw==
+X-Forwarded-Encrypted: i=1; AJvYcCVqJ7UVLR6cxVOUX6MIJyDRNDBoaKC5IP9GUYHKXMDOs5KhuTU7LplgXqHmsKDIXBp6PgS/e6pG@vger.kernel.org, AJvYcCW7euRQZ90SQqK9TJkR3w5lrbihYfDxC1v8x06+QgZQrZu0zvJ8CQtFsukMxhECaE4ggz8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz6Xa28fjuU9JgVC4OAy0VJ3gAZKVeRrUWE2b957Xk3t8Pxef5k
+	l8uxwStjlbYPoGrhYxJzEueWgT8nx9XMm/rZPmM5Y8IXk+sF3FQ=
+X-Gm-Gg: ASbGnctQj47LxMy9wBPXmAPAODQXD1B1fplniIFHWO8desBUnzMINI9Okp4JTExQ6NP
+	FBo/afZhYoIdZstZsy68zBEXTpr0sDlcl3N+p0w5Px4KNhN6ShXvTNSuy2JQAcdWHe28ttTZD7r
+	2ooNtDZ+q6cMVE/vOM8P8UGGZqKroOrqxG8Ef3p9vmIxtq0UdjbpTjbvkfdYQWaadQ6ts1Pw3Jy
+	Wyu5iW3DoAcU1vnBelcKtY/hbhGmYXHk47PhfWlIyo45VNHZBaB96lJvRsWB/AS0ZwWQyut25ja
+	SgnrrI8669zxEgNDNBcNoKRh+muljhige5PvSud+
+X-Google-Smtp-Source: AGHT+IHcEVLy69C0sFAlwfHFc/f1+dw5mLbP02yyW2bRT+1IAb9sNcGDPBjpsKH2tKYj2MTpMd8I/w==
+X-Received: by 2002:a05:6a21:1190:b0:203:ad33:1ae3 with SMTP id adf61e73a8af0-203cbc4bd8bmr29287889637.10.1745418786124;
+        Wed, 23 Apr 2025 07:33:06 -0700 (PDT)
+Received: from localhost ([2601:646:9e00:f56e:123b:cea3:439a:b3e3])
+        by smtp.gmail.com with UTF8SMTPSA id d2e1a72fcca58-73dbfaaf900sm10563475b3a.154.2025.04.23.07.33.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Apr 2025 07:33:05 -0700 (PDT)
+Date: Wed, 23 Apr 2025 07:33:04 -0700
+From: Stanislav Fomichev <stfomichev@gmail.com>
+To: Lorenzo Bianconi <lorenzo@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>, bpf@vger.kernel.org,
+	netdev@vger.kernel.org
+Subject: Re: [PATCH bpf-next] bpf: Allow XDP dev bounded program to perform
+ XDP_REDIRECT into maps
+Message-ID: <aAj6IBZ4hsUS12f4@mini-arch>
+References: <20250422-xdp-prog-bound-fix-v1-1-0b581fa186fe@kernel.org>
+ <aAgdECkTiP-po7HP@mini-arch>
+ <aAi80as6PpOeuWJU@lore-desk>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <aAi80as6PpOeuWJU@lore-desk>
 
-On Mon, 2025-04-21 at 13:12 -0700, Alexei Starovoitov wrote:
-[...]
-> Calling bpf_map_get() and
-> map->ops->map_lookup_elem() from a module is not ok either.
+On 04/23, Lorenzo Bianconi wrote:
+> On Apr 22, Stanislav Fomichev wrote:
+> > On 04/22, Lorenzo Bianconi wrote:
+> > > In the current implementation if the program is bounded to a specific
+> > > device, it will not be possible to perform XDP_REDIRECT into a DEVMAP
+> > > or CPUMAP even if the program is not attached to the map entry. This
+> > > seems in contrast with the explanation available in
+> > > bpf_prog_map_compatible routine. Fix the issue taking into account
+> > > even the attach program type and allow XDP dev bounded program to
+> > > perform XDP_REDIRECT into maps if the attach type is not BPF_XDP_DEVMAP
+> > > or BPF_XDP_CPUMAP.
+> > > 
+> > > Fixes: 3d76a4d3d4e59 ("bpf: XDP metadata RX kfuncs")
+> > > Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+> > > ---
+> > >  kernel/bpf/core.c | 22 +++++++++++++++++++++-
+> > >  1 file changed, 21 insertions(+), 1 deletion(-)
+> > > 
+> > > diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> > > index ba6b6118cf504041278d05417c4212d57be6fca0..a33175efffc377edbfe281397017eb467bfbcce9 100644
+> > > --- a/kernel/bpf/core.c
+> > > +++ b/kernel/bpf/core.c
+> > > @@ -2358,6 +2358,26 @@ static unsigned int __bpf_prog_ret0_warn(const void *ctx,
+> > >  	return 0;
+> > >  }
+> > >  
+> > > +static bool bpf_prog_dev_bound_map_compatible(struct bpf_map *map,
+> > > +					      const struct bpf_prog *prog)
+> > > +{
+> > > +	if (!bpf_prog_is_dev_bound(prog->aux))
+> > > +		return true;
+> > > +
+> > > +	if (map->map_type == BPF_MAP_TYPE_PROG_ARRAY)
+> > > +		return false;
+> > 
+> > [..]
+> > 
+> > > +	if (map->map_type == BPF_MAP_TYPE_DEVMAP &&
+> > > +	    prog->expected_attach_type != BPF_XDP_DEVMAP)
+> > > +		return true;
+> > > +
+> > > +	if (map->map_type == BPF_MAP_TYPE_CPUMAP &&
+> > > +	    prog->expected_attach_type != BPF_XDP_CPUMAP)
+> > > +		return true;
+> > 
+> > Not sure I understand, what does it mean exactly? That it's ok to add
+> > a dev-bound program to the dev/cpumap if the program itself is gonna
+> > be attached only to the real device? Can you expand more on the specific
+> > use-case?
+> > 
+> > The existing check makes sure that the dev-bound programs run only in the
+> > contexts that have hw descriptors. devmap and cpumap don't satisfy
+> > this constraint afaiu.
+> 
+> My use-case is to use a hw-metadata kfunc like bpf_xdp_metadata_rx_timestamp()
+> to read hw timestamp from the NIC and then redirect the xdp_buff into a DEVMP
+> (please note there are no programs attached to any DEVMAP entries):
+> 
+> extern int bpf_xdp_metadata_rx_timestamp(const struct xdp_md *ctx,
+> 					 __u64 *timestamp) __ksym;
+> 
+> struct {
+> 	__uint(type, BPF_MAP_TYPE_DEVMAP);
+> 	__uint(key_size, sizeof(__u32));
+> 	__uint(value_size, sizeof(struct bpf_devmap_val));
+> 	__uint(max_entries, 1);
+> } dev_map SEC(".maps");
+> 
+> SEC("xdp")
+> int xdp_meta_redirect(struct xdp_md *ctx)
+> {
+> 	__u64 timestamp;
+> 
+> 	...
+> 	bpf_xdp_metadata_rx_timestamp(ctx, &timestamp);
+> 	...
+> 
+> 	return bpf_redirect_map(&dev_map, ctx->rx_queue_index, XDP_PASS);
+> }
+> 
+> According to my understanding this is feasible just if the "xdp_meta_redirect"
+> program is bounded to a device otherwise the program is reject with the following
+> error at load time:
+> 
+> libbpf: prog 'xdp_meta_redirect': BPF program load failed: -EINVAL
+> libbpf: prog 'xdp_meta_redirect': -- BEGIN PROG LOAD LOG --
+> metadata kfuncs require device-bound program
+> processed 0 insns (limit 1000000) max_states_per_insn 0 total_states 0
+> peak_states 0 mark_read 0
+> -- END PROG LOAD LOG --
+> 
+> in order to fix it:
+> 
+> 	...
+> 	index = if_nametoindex(DEV); 
+> 	bpf_program__set_ifindex(prog, index);
+> 	bpf_program__set_flags(prog, BPF_F_XDP_DEV_BOUND_ONLY);
+> 	...
+> 
+> Doing so the program load still fails for the check in bpf_prog_map_compatible():
+> 
+> 	bool bpf_prog_map_compatible()
+> 	{
+> 		...
+> 		if (bpf_prog_is_dev_bound(aux))
+> 			return false;
+> 		...
 
-I don't understand this objection.  The program just got passed in to
-bpf_prog_load() as a set of attributes which, for a light skeleton,
-directly contain the code as a blob and have the various BTF
-relocations as a blob in a single element array map.  I think everyone
-agrees that the integrity of the program would be compromised by
-modifications to the relocations, so the security_bpf_prog_load() hook
-can't make an integrity determination without examining both.  If the
-hook can't use the bpf_maps.. APIs directly is there some other API it
-should be using to get the relocations, or are you saying that the
-security_bpf_prog_load() hook isn't fit for purpose and it should be
-called after the bpf core has loaded the relocations so they can be
-provided to the hook as an argument?
+[..]
+ 
+> In other words, a dev-bound XDP program can't interact with a DEVMAP (or
+> CPUMAP) even if it is not attached to a map entry.
+> I think if the XDP program is just running in the driver NAPI context
+> it should be doable to use a hw-metada kfunc and perform a redirect into
+> a DEVMAP or CPUMAP, right? Am I missing something?
 
-The above, by the way, is independent of signing, because it applies to
-any determination that might be made in the security_bpf_prog_load()
-hook regardless of purpose.
+Thanks for the info! Yes, that should work. I wonder if you hit
+bpf_prog_select_runtime->bpf_check_tail_call->bpf_prog_map_compatible
+path? Looks like we should not do bpf_prog_is_dev_bound in that case (the rest
+of the bpf_prog_map_compatible callers should).
 
-Regards,
-
-James
-
+When doing a follow up, can you also extend tools/testing/selftests/bpf/prog_tests/xdp_metadata.c
+to cover these conditions? (redirect to empty map -> nop, adding
+dev-bound program to devmap is einval).
