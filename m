@@ -1,32 +1,32 @@
-Received: from out-176.mta1.migadu.com (out-176.mta1.migadu.com [95.215.58.176])
+Received: from out-189.mta1.migadu.com (out-189.mta1.migadu.com [95.215.58.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 481C81AC44D
-	for <bpf@vger.kernel.org>; Mon, 28 Apr 2025 03:37:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 364EE20B218
+	for <bpf@vger.kernel.org>; Mon, 28 Apr 2025 03:37:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745811430; cv=none; b=R58MAQVn5bjNt3KB/iCHaODTqWEwYzh6TkrqJ4uQXdp4bwbze1YQe3fBuLgNcr66lfwmMsVm8gPJnBNI0U4oYHIzAfsWUrVQEp7CKroIfA0Eoixm1HRJWanQmz7UVrbGrLogp06wkOuDW1GWWAQekzONCTfnwDJwPJnzG5Nt93w=
+	t=1745811433; cv=none; b=WZF3BCmoTBF19sEsAZbATHu/3qJSlSAdcnIGqsQNRQ4Ph0F7L5QNhvPRyYTMIoqsCcpB3kU6Ecf7DMm4K1zoh/QpW3BcK8EbC06xJE5gdbwzv5+hvm86fTgBsxUY8wKT8ZeOprkbG+MGav+HBZ5CI/4riDtMCCmh9xF9SbdwhJY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745811430; c=relaxed/simple;
-	bh=yMb5GqcrV1LWSU+1rW5hRyuHFkaaCjPtgv7KT1ltykU=;
+	s=arc-20240116; t=1745811433; c=relaxed/simple;
+	bh=9m6dGm3hgSNWG+2WOSHP2KyLWYLAjePv7Lo4oUqmktU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=dGcupOO5Vjou9lUWnTeDKh9BCag0ttSM/SV5TOD5GZBXDy0E+e8luKUmQ0sCwZ4X7egcJePg0ZHk54xihff1Z+pN+D0XESoHTZvBI2AWm8gFXRNNe7MQ7GAArF4JX/splvvn7fjOmqhGx7NsqdKO64o0JrnzeiNatBL1aOfRUoE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=c/+BhYCM; arc=none smtp.client-ip=95.215.58.176
+	 MIME-Version; b=JtpHlpWzU6T64mXm0tik5LdzVkHfldp+JVakGb7zD+KrPct2L066eiTOn62Z37CK585Z/F3iENmRWqaU3fuJJJ0FFKNloQ11P0PdSqCHLEUcMAZ1jZRJwUqkbsnEfipG5wzS2cEjAH4DoKepXV9iZFKUggIBgXMkvi1jDPQwYh8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=WoHk90vS; arc=none smtp.client-ip=95.215.58.189
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="c/+BhYCM"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="WoHk90vS"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1745811423;
+	t=1745811429;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=8WtdDCF/fOjk7l1oSxAg6r0dFrFtCENHh8DzkFeOJww=;
-	b=c/+BhYCMrRSBr4yTd5mv7I5T0rvQOkVKbFl9XgTAeowasGX83nsPkgUVRynyVYaolN9nj8
-	Wc3beDU42dsEqeUnOao909cO5CNBY1mhRNOzYIyFs52IGCEiGXH2XiE+X/xtR9CO4B/eMp
-	PeX97/KKF4tPd4+/I2wRyhQiGvbphn8=
+	bh=PMD4alSuF/CQrdJat1BcZoxvyxgjdLtWthYldLJYf1E=;
+	b=WoHk90vSsCT6HqUIwr7zPvav48u2HbF9Fj+LO5seyFrEcCAO/yMDiQn7IpkGImXxA5Cx3W
+	jN5br5GN6WKkrp+RIO/MIO4P0oJHADYQOhd7umOi69q0P/NDHaILQKKI3xxLRvkpkvHRIX
+	Rab1/AQR2q1H72iYJeg+PrWNcLnEGGE=
 From: Roman Gushchin <roman.gushchin@linux.dev>
 To: linux-kernel@vger.kernel.org
 Cc: Andrew Morton <akpm@linux-foundation.org>,
@@ -42,9 +42,9 @@ Cc: Andrew Morton <akpm@linux-foundation.org>,
 	linux-mm@kvack.org,
 	bpf@vger.kernel.org,
 	Roman Gushchin <roman.gushchin@linux.dev>
-Subject: [PATCH rfc 10/12] mm: introduce bpf_out_of_memory() bpf kfunc
-Date: Mon, 28 Apr 2025 03:36:15 +0000
-Message-ID: <20250428033617.3797686-11-roman.gushchin@linux.dev>
+Subject: [PATCH rfc 12/12] bpf: selftests: psi handler test
+Date: Mon, 28 Apr 2025 03:36:17 +0000
+Message-ID: <20250428033617.3797686-13-roman.gushchin@linux.dev>
 In-Reply-To: <20250428033617.3797686-1-roman.gushchin@linux.dev>
 References: <20250428033617.3797686-1-roman.gushchin@linux.dev>
 Precedence: bulk
@@ -56,71 +56,312 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-Introduce bpf_out_of_memory() bpf kfunc, which allows to declare
-an out of memory events and trigger the corresponding kernel OOM
-handling mechanism.
+Add a psi handler test. The test creates a cgroup with two child
+sub-cgroups, sets up memory.high for one of those and puts
+memory hungry processes in each of them.
 
-It takes a trusted memcg pointer (or NULL for system-wide OOMs)
-as an argument, as well as the page order.
-
-Only one OOM can be declared and handled in the system at once,
-so if the function is called in parallel to another OOM handling,
-it bails out with -EBUSY.
-
-The function is declared as sleepable. It guarantees that it won't
-be called from an atomic context. It's required by the OOM handling
-code, which is not guaranteed to work in a non-blocking context.
-
-Handling of a memcg OOM almost always requires taking of the
-css_set_lock spinlock. The fact that bpf_out_of_memory() is sleepable
-also guarantees that it can't be called with acquired css_set_lock,
-so the kernel can't deadlock on it.
+Then it sets up a psi trigger for one of cgroups and waits
+till the process in this cgroup will be killed by the OOM killer.
+To make sure there was indeed an OOM event, it checks the
+corresponding memcg statistics.
 
 Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
 ---
- mm/oom_kill.c | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+ tools/testing/selftests/bpf/prog_tests/psi.c | 234 +++++++++++++++++++
+ tools/testing/selftests/bpf/progs/test_psi.c |  43 ++++
+ 2 files changed, 277 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/psi.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_psi.c
 
-diff --git a/mm/oom_kill.c b/mm/oom_kill.c
-index 2e922e75a9df..246510572e34 100644
---- a/mm/oom_kill.c
-+++ b/mm/oom_kill.c
-@@ -1333,6 +1333,27 @@ __bpf_kfunc int bpf_oom_kill_process(struct oom_control *oc,
- 	return 0;
- }
- 
-+__bpf_kfunc int bpf_out_of_memory(struct mem_cgroup *memcg__nullable, int order)
+diff --git a/tools/testing/selftests/bpf/prog_tests/psi.c b/tools/testing/selftests/bpf/prog_tests/psi.c
+new file mode 100644
+index 000000000000..99d68bc20eee
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/psi.c
+@@ -0,0 +1,234 @@
++// SPDX-License-Identifier: GPL-2.0-only
++#define _GNU_SOURCE
++
++#include <stdio.h>
++#include <fcntl.h>
++#include <unistd.h>
++#include <stdlib.h>
++#include <signal.h>
++#include <sys/stat.h>
++#include <test_progs.h>
++#include <bpf/btf.h>
++#include <bpf/bpf.h>
++#include <errno.h>
++#include <string.h>
++
++#include "cgroup_helpers.h"
++#include "test_psi.skel.h"
++
++struct cgroup_desc {
++	const char *path;
++	int fd;
++	unsigned long long id;
++	int pid;
++	size_t target;
++	size_t high;
++	bool victim;
++	bool psi;
++};
++
++#define MB (1024 * 1024)
++
++static struct cgroup_desc cgroups[] = {
++	{ .path = "/oom_test" },
++	{ .path = "/oom_test/cg1", .target = 100 * MB },
++	{ .path = "/oom_test/cg2", .target = 500 * MB,
++	  .high = 40 * MB, .psi = true, .victim = true },
++};
++
++static int spawn_task(struct cgroup_desc *desc)
 +{
-+	struct oom_control oc = {
-+		.memcg = memcg__nullable,
-+		.order = order,
-+	};
-+	int ret = -EINVAL;
++	char *ptr;
++	int pid;
 +
-+	if (oc.order < 0 || oc.order > MAX_PAGE_ORDER)
-+		goto out;
++	pid = fork();
++	if (pid < 0)
++		return pid;
 +
-+	ret = -EBUSY;
-+	if (mutex_trylock(&oom_lock)) {
-+		ret = out_of_memory(&oc);
-+		mutex_unlock(&oom_lock);
++	if (pid > 0) {
++		/* parent */
++		desc->pid = pid;
++		return 0;
 +	}
 +
-+out:
++	/* child */
++	ptr = (char *)malloc(desc->target);
++	if (!ptr)
++		return -ENOMEM;
++
++	memset(ptr, 'a', desc->target);
++
++	while (1)
++		sleep(1000);
++
++	return 0;
++}
++
++static int setup_psi_alert(struct cgroup_desc *desc)
++{
++	const char *trig = "some 100000 1000000";
++	int fd;
++
++	fd = open_cgroup_file(desc->path, "memory.pressure", O_RDWR);
++	if (fd < 0) {
++		printf("memory.pressure open error: %s\n", strerror(errno));
++		return 1;
++	}
++
++	if (write(fd, trig, strlen(trig) + 1) < 0) {
++		printf("memory.pressure write error: %s\n", strerror(errno));
++		return 1;
++	}
++
++	/* keep fd open, otherwise the psi trigger will be deleted */
++	return 0;
++}
++
++static void setup_environment(void)
++{
++	int i, err;
++
++	err = setup_cgroup_environment();
++	if (!ASSERT_OK(err, "setup_cgroup_environment"))
++		goto cleanup;
++
++	for (i = 0; i < ARRAY_SIZE(cgroups); i++) {
++		cgroups[i].fd = create_and_get_cgroup(cgroups[i].path);
++		if (!ASSERT_GE(cgroups[i].fd, 0, "create_and_get_cgroup"))
++			goto cleanup;
++
++		cgroups[i].id = get_cgroup_id(cgroups[i].path);
++		if (!ASSERT_GT(cgroups[i].id, 0, "get_cgroup_id"))
++			goto cleanup;
++
++		if (i == 0) {
++			/* Freeze the top-level cgroup */
++			err = write_cgroup_file(cgroups[i].path, "cgroup.freeze", "1");
++			if (!ASSERT_OK(err, "freeze cgroup"))
++				goto cleanup;
++		}
++
++		if (!cgroups[i].target) {
++			/* Recursively enable the memory controller */
++			err = write_cgroup_file(cgroups[i].path, "cgroup.subtree_control",
++						"+memory");
++			if (!ASSERT_OK(err, "enable memory controller"))
++				goto cleanup;
++		}
++
++		if (cgroups[i].high) {
++			char buf[256];
++
++			snprintf(buf, sizeof(buf), "%lu", cgroups[i].high);
++			err = write_cgroup_file(cgroups[i].path, "memory.high", buf);
++			if (!ASSERT_OK(err, "set memory.high"))
++				goto cleanup;
++
++			snprintf(buf, sizeof(buf), "0");
++			write_cgroup_file(cgroups[i].path, "memory.swap.max", buf);
++		}
++
++		if (cgroups[i].target) {
++			char buf[256];
++
++			err = spawn_task(&cgroups[i]);
++			if (!ASSERT_OK(err, "spawn task"))
++				goto cleanup;
++
++			snprintf(buf, sizeof(buf), "%d", cgroups[i].pid);
++			err = write_cgroup_file(cgroups[i].path, "cgroup.procs", buf);
++			if (!ASSERT_OK(err, "put child into a cgroup"))
++				goto cleanup;
++		}
++
++		if (cgroups[i].psi) {
++			err = setup_psi_alert(&cgroups[i]);
++			if (!ASSERT_OK(err, "create psi trigger"))
++				goto cleanup;
++		}
++	}
++
++	return;
++
++cleanup:
++	cleanup_cgroup_environment();
++}
++
++static int run_and_wait_for_oom(void)
++{
++	int ret = -1;
++	bool first = true;
++	char buf[4096] = {};
++	size_t size;
++
++	ret = write_cgroup_file(cgroups[0].path, "cgroup.freeze", "0");
++	if (!ASSERT_OK(ret, "freeze cgroup"))
++		return -1;
++
++	for (;;) {
++		int i, status;
++		pid_t pid = wait(&status);
++
++		if (pid == -1) {
++			if (errno == EINTR)
++				continue;
++			/* ECHILD */
++			break;
++		}
++
++		if (!first)
++			continue;
++
++		first = false;
++
++		for (i = 0; i < ARRAY_SIZE(cgroups); i++) {
++			if (!ASSERT_OK(cgroups[i].victim !=
++				       (pid == cgroups[i].pid),
++				       "correct process was killed")) {
++				ret = -1;
++				break;
++			}
++
++			if (!cgroups[i].victim)
++				continue;
++
++			size = read_cgroup_file(cgroups[i].path, "memory.events",
++						buf, sizeof(buf));
++			if (!ASSERT_OK(size <= 0, "read memory.events")) {
++				ret = -1;
++				break;
++			}
++
++			if (!ASSERT_OK(strstr(buf, "oom_kill 1") == NULL,
++				       "oom_kill count check")) {
++				ret = -1;
++				break;
++			}
++		}
++
++		for (i = 0; i < ARRAY_SIZE(cgroups); i++)
++			if (cgroups[i].pid && cgroups[i].pid != pid)
++				kill(cgroups[i].pid, SIGKILL);
++	}
++
 +	return ret;
 +}
 +
- __bpf_kfunc_end_defs();
- 
- __bpf_hook_start();
-@@ -1358,6 +1379,7 @@ static const struct btf_kfunc_id_set bpf_oom_hook_set = {
- 
- BTF_KFUNCS_START(bpf_oom_kfuncs)
- BTF_ID_FLAGS(func, bpf_oom_kill_process, KF_SLEEPABLE | KF_TRUSTED_ARGS)
-+BTF_ID_FLAGS(func, bpf_out_of_memory, KF_SLEEPABLE | KF_TRUSTED_ARGS)
- BTF_KFUNCS_END(bpf_oom_kfuncs)
- 
- static const struct btf_kfunc_id_set bpf_oom_kfunc_set = {
++void test_psi(void)
++{
++	struct test_psi *skel;
++	int err;
++
++	skel = test_psi__open_and_load();
++	err = test_psi__attach(skel);
++	if (!ASSERT_OK(err, "test_psi__attach"))
++		goto cleanup;
++
++	setup_environment();
++
++	run_and_wait_for_oom();
++
++	cleanup_cgroup_environment();
++cleanup:
++	test_psi__destroy(skel);
++}
+diff --git a/tools/testing/selftests/bpf/progs/test_psi.c b/tools/testing/selftests/bpf/progs/test_psi.c
+new file mode 100644
+index 000000000000..8cbc1e0a5b24
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_psi.c
+@@ -0,0 +1,43 @@
++// SPDX-License-Identifier: GPL-2.0-only
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++#include "bpf_misc.h"
++#include "bpf_experimental.h"
++
++char _license[] SEC("license") = "GPL";
++
++struct mem_cgroup *bpf_get_mem_cgroup(struct cgroup_subsys_state *css) __ksym;
++void bpf_put_mem_cgroup(struct mem_cgroup *memcg) __ksym;
++int bpf_out_of_memory(struct mem_cgroup *memcg, int order) __ksym;
++
++SEC("fmod_ret.s/bpf_handle_psi_event")
++int BPF_PROG(test_psi_event, struct psi_trigger *t)
++{
++	struct cgroup *cgroup = NULL;
++	struct mem_cgroup *memcg;
++	u64 cgroup_id;
++
++	if (!t->of || !t->of->kn) {
++		bpf_out_of_memory(NULL, 0);
++		return 1;
++	}
++
++	cgroup_id = t->of->kn->__parent->id;
++	cgroup = bpf_cgroup_from_id(cgroup_id);
++	if (!cgroup)
++		return 0;
++
++	memcg = bpf_get_mem_cgroup(&cgroup->self);
++	if (!memcg) {
++		bpf_cgroup_release(cgroup);
++		return 0;
++	}
++
++	bpf_out_of_memory(memcg, 0);
++
++	bpf_put_mem_cgroup(memcg);
++	bpf_cgroup_release(cgroup);
++
++	return 1;
++}
 -- 
 2.49.0.901.g37484f566f-goog
 
