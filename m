@@ -1,47 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFE802D3F99;
-	Tue, 29 Apr 2025 23:53:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FDED2D3FB4;
+	Tue, 29 Apr 2025 23:53:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745970791; cv=none; b=pPfV28H1q6P1wqbwbKw0CvgQ03S7TwnYRu0Zm10lPgnc17/TFCawaAjV4bSTGVmr1EJ1kmFtcp1tZ/qllfQRN/VhxQmLx79wdr2ZwzEJ4TXwheeC6m/MVtHaOj31KIoBJ1mk9D3nfC8bBTK3xFZPMs3vWFwzSn0lZQXjl2N70i8=
+	t=1745970793; cv=none; b=SkrcRoZ8ItDPzRBp1WUy4rHlxo3G0tr60P7GTc0zgPOg5z8EFEB1pp6ZVjesCQkQEPKdwjZiy0cwlo48DHI1OTAzKonSzATPHAhgxw9AwfT1glF4E/XGC5pqCyER1HQJJ3VQ/LNxGFFnqD1tUOyIm+1N/IFOnadxOxqxbzm2lsw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745970791; c=relaxed/simple;
-	bh=2oz50+X7QDKubf9DkwX20leuuzsNO+Ef9u69G8iUJdo=;
+	s=arc-20240116; t=1745970793; c=relaxed/simple;
+	bh=CfWOt/JjFOfExcRczY+gftfEH2MEXx9odLS3CtWyd/4=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=XMaAi9Yjb48f1DnocPtRWxkYTOp/7JO7ln2E2TdOpQ+thiBomusWOmTGicOPMwzlAi4HrSg7qJgvkq7Al0yekeTMk4Nu7vKJq3sLv6nRucrXg0FECW9vrqthwc5tmKGBDy37ksz75X9ze4p90Kf7uecS55NjzOnNAS7PhUzKzVQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GpmTxcxz; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=fbc2UFvYrRDfY12NcRu2i9ZCGE1LB8zykGmBcOq3IKM5FAhbDuY2F2NOoKCiAcbLLpF+jsAncwXq0oYGYXUffcv9F+MB9ZiVSymLwLs65H7/JE+bT3P6xbNojXwbpYyXgnQ2uXsMM4EAcT9f4ml9JljNM828UtxK9PuSmCi7dvw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=idFuLsQq; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GpmTxcxz"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 474DEC4CEE3;
-	Tue, 29 Apr 2025 23:53:10 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="idFuLsQq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19889C4CEE3;
+	Tue, 29 Apr 2025 23:53:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745970791;
-	bh=2oz50+X7QDKubf9DkwX20leuuzsNO+Ef9u69G8iUJdo=;
+	s=k20201202; t=1745970793;
+	bh=CfWOt/JjFOfExcRczY+gftfEH2MEXx9odLS3CtWyd/4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=GpmTxcxzpAAavpeChUs/pExfjRwHXrfZ7tPdI3WNkHQRVmZ5Ih0B8lgfRY6EP40AW
-	 TC79zJIS+HX7UoGcjWXucw9/7zDGqVbxELMcV7G4L6w5t4pJAAEVoaop+EsPc949nh
-	 ZLsd7RlHCm6l8gC+Uq65A2UEBCM0kveNBOBthRL1edN32aKJ35GiGpM75eegB0cKx9
-	 B5RVSWsqiOq0/E17/1asBcD9QeUCUZIU1FN5fMIbiE3yf66EN+luBAjjyRvu8pdrlA
-	 TusyLbsZknAdAxavAfBnSNXtpuljGmxXma+zf50mytQLurj4MQzx0pLTc22B0/+eaA
-	 upSCtDFM+yTkg==
+	b=idFuLsQqQfwfGKvueEsX38MOzQV3YhguVcidThehp4Wd3BJCDJHIgLWy4pi2s9cnp
+	 fmNsxEX4bD82lEZYQyOSPmvtdaSSAEwT4KJHbDawd34cjxSP5Z4VY+Jb2Ml1BZTrMS
+	 FSFnS3SXD5aoH64gI1DDp5gBMWgc+WPddI2TX+OvpP2B+26RmZCNZskklmiSKmTP1E
+	 ujUW2q54moyjIqJkmVc5gtYh9y8GTfS0EF7oN65a5uQmsDMkbE0PJ49/2Eh82lNQG9
+	 sofD+iLTyquUgBn7CsE9t+wJt6uTjO7QPEf934ILPLXOzA9PEb+xoEyhQGx8Qr/bbV
+	 jdpN9nRGcyrMg==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Jiayuan Chen <jiayuan.chen@linux.dev>,
+Cc: Brandon Kammerdiener <brandon.kammerdiener@intel.com>,
 	Alexei Starovoitov <ast@kernel.org>,
+	Hou Tao <houtao1@huawei.com>,
 	Sasha Levin <sashal@kernel.org>,
-	eddyz87@gmail.com,
 	daniel@iogearbox.net,
-	shuah@kernel.org,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.6 19/21] selftests/bpf: Mitigate sockmap_ktls disconnect_after_delete failure
-Date: Tue, 29 Apr 2025 19:52:31 -0400
-Message-Id: <20250429235233.537828-19-sashal@kernel.org>
+	andrii@kernel.org,
+	bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.6 20/21] bpf: fix possible endless loop in BPF map iteration
+Date: Tue, 29 Apr 2025 19:52:32 -0400
+Message-Id: <20250429235233.537828-20-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250429235233.537828-1-sashal@kernel.org>
 References: <20250429235233.537828-1-sashal@kernel.org>
@@ -56,48 +53,35 @@ X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.6.88
 Content-Transfer-Encoding: 8bit
 
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
+From: Brandon Kammerdiener <brandon.kammerdiener@intel.com>
 
-[ Upstream commit f2858f308131a09e33afb766cd70119b5b900569 ]
+[ Upstream commit 75673fda0c557ae26078177dd14d4857afbf128d ]
 
-"sockmap_ktls disconnect_after_delete" test has been failing on BPF CI
-after recent merges from netdev:
-* https://github.com/kernel-patches/bpf/actions/runs/14458537639
-* https://github.com/kernel-patches/bpf/actions/runs/14457178732
+The _safe variant used here gets the next element before running the callback,
+avoiding the endless loop condition.
 
-It happens because disconnect has been disabled for TLS [1], and it
-renders the test case invalid.
-
-Removing all the test code creates a conflict between bpf and
-bpf-next, so for now only remove the offending assert [2].
-
-The test will be removed later on bpf-next.
-
-[1] https://lore.kernel.org/netdev/20250404180334.3224206-1-kuba@kernel.org/
-[2] https://lore.kernel.org/bpf/cfc371285323e1a3f3b006bfcf74e6cf7ad65258@linux.dev/
-
-Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
-Link: https://lore.kernel.org/bpf/20250416170246.2438524-1-ihor.solodrai@linux.dev
+Signed-off-by: Brandon Kammerdiener <brandon.kammerdiener@intel.com>
+Link: https://lore.kernel.org/r/20250424153246.141677-2-brandon.kammerdiener@intel.com
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Acked-by: Hou Tao <houtao1@huawei.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/bpf/prog_tests/sockmap_ktls.c | 1 -
- 1 file changed, 1 deletion(-)
+ kernel/bpf/hashtab.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_ktls.c b/tools/testing/selftests/bpf/prog_tests/sockmap_ktls.c
-index 2d0796314862a..0a99fd404f6dc 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockmap_ktls.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockmap_ktls.c
-@@ -68,7 +68,6 @@ static void test_sockmap_ktls_disconnect_after_delete(int family, int map)
- 		goto close_cli;
- 
- 	err = disconnect(cli);
--	ASSERT_OK(err, "disconnect");
- 
- close_cli:
- 	close(cli);
+diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+index fc34f72702cc4..8a3eadf17f785 100644
+--- a/kernel/bpf/hashtab.c
++++ b/kernel/bpf/hashtab.c
+@@ -2212,7 +2212,7 @@ static long bpf_for_each_hash_elem(struct bpf_map *map, bpf_callback_t callback_
+ 		b = &htab->buckets[i];
+ 		rcu_read_lock();
+ 		head = &b->head;
+-		hlist_nulls_for_each_entry_rcu(elem, n, head, hash_node) {
++		hlist_nulls_for_each_entry_safe(elem, n, head, hash_node) {
+ 			key = elem->key;
+ 			if (is_percpu) {
+ 				/* current cpu value for percpu map */
 -- 
 2.39.5
 
