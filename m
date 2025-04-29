@@ -1,333 +1,137 @@
-Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D5BC280304
-	for <bpf@vger.kernel.org>; Tue, 29 Apr 2025 23:47:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA79827E7EC;
+	Tue, 29 Apr 2025 23:51:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745970450; cv=none; b=VqjNVEyovjviALub5qXePFRpSbi2XeFvBeaoW9nIgHhRipnxs/tw2HC+RxxPILtFMRnav5jGlfA0t9NrVYu4IjuBYmJa1aNgF5sxpSEcbnWWgrEsWOZ8figIBkZMdzTPPRDwOOWq5tk1OCV54ZqjgJOJpzav11A4VygSQKZUQcU=
+	t=1745970670; cv=none; b=DGKabIruPNbJh/v3zdjnxqayUKX0lV31soRlQdWp0n1fBWkusmjYAGnTc7l/r5tcTlLgJyCbwvR5VFFJPqsyhYLV0jTcPwLNO/UTsj9WmwW+ZrGI+cBPSR/Gba1GTI+k/dzeptPuONGWV9cx/PJU0V5nSNhH7CRa0nUljPbn1Ak=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745970450; c=relaxed/simple;
-	bh=WiN6SJk3AWab7zFnf6f8xMuf1kLWB+L7x2uNVj2xCHs=;
-	h=MIME-Version:Date:Content-Type:From:Message-ID:Subject:To:Cc:
-	 In-Reply-To:References; b=EYevBvYQjlzW4Q9UW3YnytQXMsuD1knF+AEkZzSQRW7QFut1/06SqrDRsoOmHxuCB5Lrg2r4kem3/fiorYxvsmQV1lIu1IOW1fnMuGqK1GglNaGzMJdTskGLzGbtHYpxYWCdrWSaUNyxz/SEixXkMEM6ndwFnQgpddX0l9wryaI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=JWzntBJg; arc=none smtp.client-ip=95.215.58.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1745970670; c=relaxed/simple;
+	bh=uapYm7FVDnBf3dK07aTCMdFghyjz+MJ2/0nrFKN6uq0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=m40wArufD4X2mZV6Ywkv4knHZR9FNJdXeocrL0DZi0z4W7oEhqswnjx2Yo4+LgR26/XW9cFCG3z0C3plv5DFh2xS40gIgzegnc55iY7gTz9Dm99PxefawFu6BZzNX+YLYodr/DYXSUSJMq/Hi5sLKELv7HFi9JWqVTR8Xpp3Z4g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VLnl7glB; arc=none smtp.client-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="JWzntBJg"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VLnl7glB"
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-223fd89d036so83364355ad.1;
+        Tue, 29 Apr 2025 16:51:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1745970668; x=1746575468; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=SWi0iKQPjiK8VNZS+w1eIOJ6efpbQpqRgqiKbA2bPi8=;
+        b=VLnl7glB6jSWZscFYDRWVib54ndYEvHyoY3KG2u57A9UmwGmyP9IPLTPumgvuydTqg
+         jv1M4u3dU4gEyymcUypxVBR+mTdunRYb9aqm4GYXQoAcrkKsRgyVnLUpp8mX0kdXK0F9
+         Et2lu4To2ZEWP5nyDNGLPu5E0xV6S/UhBgkxprlY4jiM9rG3FrazCIMMU94Oi5SBvU0p
+         UVmMDX6GnlMoTgOkZgOh/a4br1UK1S8mg2drUD3gDFSaMiBUL7X/gfp3EDlZximMrtSR
+         tM5cQRpEqggG+Dh/Cn31yUd5MYjoO6AXG1RqTBqpxJP9NqDgzJle2rIQ2YjhIleZGx58
+         NwLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745970668; x=1746575468;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SWi0iKQPjiK8VNZS+w1eIOJ6efpbQpqRgqiKbA2bPi8=;
+        b=ijuRmW5VoRKFhMMEABdbgTa2/7vbbNtX5nCHgmUKqbc618P3zda0CY0sfpQZykMYjb
+         1u4CT29c+zkIKiEKoxuaLl6wVFyu9XYL9PmoWp9RgsN4/paZQICV5z4z0ksO/RtM0l1i
+         1DPd6DEak7AvNSmnkrQlD2EXPiTo6rJk2oFw407olZM6Y8+iTOMIIOpOKvSl2W1aH1VS
+         wY3avVXE2Zb75ChAO68f4vW35q0PnWwJ8+Qklh+diX1leuA5u4LwkQZ5uwl423vcuGBv
+         04H+ADLAHHbala/v1fRSUD/mXHRz4yEPo1i7XSmD7OvNt0YCM20s+WctH0WIx+5oqDgs
+         vQaw==
+X-Forwarded-Encrypted: i=1; AJvYcCW2YcrDUIboQfl27S6MhXQN7dvfh1odEce7UbUAUSC0MAib7IIQukafiKI3SXNq4rT7g5SgYn3ScZpKztLf@vger.kernel.org, AJvYcCWU5jRX7UL9DaR4eD8ehhu+f0hK/UCf4kKxB256dMBjca5Rzav8OmTBhx5syaBGl9E+e1uYatluvg==@vger.kernel.org, AJvYcCWvmAxPU8iC6QNfiO0NfLx1XOA+S9o+TFfMYNF8uaQaKKcviL2gxOOkhQLG9xO0ETVUVLo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzQ8spCxhDyN0O4vkRCHSHxauvvuEzXDyOmsvN2mtF59myVTvG1
+	+BFwB4m6AHEstfKcXHyxRQHhiVqnGRFUhTFRIqpMarJ1Iq5m+n0B
+X-Gm-Gg: ASbGncv+AYPogqmHLIKaxY1xMxJzztFVYf/fXCsZ4d6EFkgRH7lfxFU7wfRAxJwJIwQ
+	LXTgmXFofQ1gYqnsR5Vy/6KYqXuwxqnQ7wiSv+g/4NyzzIXHfJBXwAINoERgetPQco+Fh7JXVXd
+	gt7QNTrUo9CzpeZFj4j78CKolCqx0/XoWJuSLV2qfuidmci/U/JdZ26gXNMMJf1QkrOzI9h4vw+
+	SAekGDCfgCdFERY8fmztpwT6rqtFd19GezUiGWiq+54zugakPWzbC8gZLIpZ/3n4JxvMWGmAq6J
+	pUBYo5++plCBq3uf9uNdquqxcvrLGNzpuPhnkI+cUUgohvxlXOaN9iQG4cwH/7C9Zcc=
+X-Google-Smtp-Source: AGHT+IFAj6/RzPK4X20pnS0N9JEaW3fbDH1N/Pm18wDM03DDlN1B9O+hmXJi+f6vFlhc2cYqcdfalA==
+X-Received: by 2002:a17:903:2287:b0:22c:33b2:e410 with SMTP id d9443c01a7336-22df5764831mr6298515ad.2.1745970668013;
+        Tue, 29 Apr 2025 16:51:08 -0700 (PDT)
+Received: from MacBook-Pro-49.local ([2620:10d:c090:400::5:13f8])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22db4e0cb15sm109577275ad.106.2025.04.29.16.51.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Apr 2025 16:51:07 -0700 (PDT)
+Date: Tue, 29 Apr 2025 16:51:03 -0700
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To: Shakeel Butt <shakeel.butt@linux.dev>
+Cc: Andrew Morton <akpm@linux-foundation.org>, 
+	Johannes Weiner <hannes@cmpxchg.org>, Michal Hocko <mhocko@kernel.org>, 
+	Roman Gushchin <roman.gushchin@linux.dev>, Muchun Song <muchun.song@linux.dev>, 
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>, Vlastimil Babka <vbabka@suse.cz>, linux-mm@kvack.org, 
+	cgroups@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Meta kernel team <kernel-team@meta.com>, bpf@vger.kernel.org
+Subject: Re: [PATCH 1/4] memcg: simplify consume_stock
+Message-ID: <dvyyqubghf67b3qsuoreegqk4qnuuqfkk7plpfhhrck5yeeuic@xbn4c6c7yc42>
+References: <20250429230428.1935619-1-shakeel.butt@linux.dev>
+ <20250429230428.1935619-2-shakeel.butt@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1745970444;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=s7l3FbdVPcG6RCgTPDoLsiddGdPB4VYPhMQrF7+5Tgc=;
-	b=JWzntBJgWoVk0WW+sRQOYkdhJo1BkSibXhMIqapLs5CAKRRQxantYCMWFiYy+mqrYMK7zH
-	CJ782uspQr5Qb/8vZdiUXhZ03/WjlxoV1w7tQDStPKMoC49ho4FqdVLNChr6CZOXWEWy0Q
-	va5rUKnCEA1xuuCpGDFdkcnnx2BnSD0=
-Date: Tue, 29 Apr 2025 23:47:20 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: "Jiayuan Chen" <jiayuan.chen@linux.dev>
-Message-ID: <6cc9ccc1339839559710efe94bbd1d61289bdaaf@linux.dev>
-TLS-Required: No
-Subject: Re: [PATCH bpf-next v1 0/3] bpf, sockmap: Improve performance with
- CPU affinity
-To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-Cc: "bpf" <bpf@vger.kernel.org>, "Jiayuan Chen" <mrpre@163.com>, "Alexei
- Starovoitov" <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>,
- "Andrii Nakryiko" <andrii@kernel.org>, "Martin KaFai Lau"
- <martin.lau@linux.dev>, "Eduard Zingerman" <eddyz87@gmail.com>, "Song
- Liu" <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "John
- Fastabend" <john.fastabend@gmail.com>, "KP Singh" <kpsingh@kernel.org>,
- "Stanislav Fomichev" <sdf@fomichev.me>, "Hao Luo" <haoluo@google.com>,
- "Jiri Olsa" <jolsa@kernel.org>, "Jonathan Corbet" <corbet@lwn.net>,
- "Jakub Sitnicki" <jakub@cloudflare.com>, "David S. Miller"
- <davem@davemloft.net>, "Eric Dumazet" <edumazet@google.com>, "Jakub
- Kicinski" <kuba@kernel.org>, "Paolo Abeni" <pabeni@redhat.com>, "Simon
- Horman" <horms@kernel.org>, "Kuniyuki Iwashima" <kuniyu@amazon.com>,
- "Willem de Bruijn" <willemb@google.com>, "Mykola Lysenko"
- <mykolal@fb.com>, "Shuah Khan" <shuah@kernel.org>, "Jiapeng Chong"
- <jiapeng.chong@linux.alibaba.com>, "open list:DOCUMENTATION"
- <linux-doc@vger.kernel.org>, "LKML" <linux-kernel@vger.kernel.org>,
- "Network Development" <netdev@vger.kernel.org>, "open list:KERNEL
- SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-In-Reply-To: <CAADnVQLiqHUVZQ7MdqAfnUK+01D5fSt6sDR5nzon83w39ZBohA@mail.gmail.com>
-References: <20250428081744.52375-1-jiayuan.chen@linux.dev>
- <CAADnVQLiqHUVZQ7MdqAfnUK+01D5fSt6sDR5nzon83w39ZBohA@mail.gmail.com>
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250429230428.1935619-2-shakeel.butt@linux.dev>
 
-April 30, 2025 at 07:26, "Alexei Starovoitov" <alexei.starovoitov@gmail.c=
-om> wrote:
+On Tue, Apr 29, 2025 at 04:04:25PM -0700, Shakeel Butt wrote:
+> The consume_stock() does not need to check gfp_mask for spinning and can
+> simply trylock the local lock to decide to proceed or fail. No need to
+> spin at all for local lock.
+> 
+> Signed-off-by: Shakeel Butt <shakeel.butt@linux.dev>
+> ---
+>  mm/memcontrol.c | 20 +++++++-------------
+>  1 file changed, 7 insertions(+), 13 deletions(-)
+> 
+> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+> index 650fe4314c39..40d0838d88bc 100644
+> --- a/mm/memcontrol.c
+> +++ b/mm/memcontrol.c
+> @@ -1804,16 +1804,14 @@ static bool obj_stock_flush_required(struct memcg_stock_pcp *stock,
+>   * consume_stock: Try to consume stocked charge on this cpu.
+>   * @memcg: memcg to consume from.
+>   * @nr_pages: how many pages to charge.
+> - * @gfp_mask: allocation mask.
+>   *
+> - * The charges will only happen if @memcg matches the current cpu's memcg
+> - * stock, and at least @nr_pages are available in that stock.  Failure to
+> - * service an allocation will refill the stock.
+> + * Consume the cached charge if enough nr_pages are present otherwise return
+> + * failure. Also return failure for charge request larger than
+> + * MEMCG_CHARGE_BATCH or if the local lock is already taken.
+>   *
+>   * returns true if successful, false otherwise.
+>   */
+> -static bool consume_stock(struct mem_cgroup *memcg, unsigned int nr_pages,
+> -			  gfp_t gfp_mask)
+> +static bool consume_stock(struct mem_cgroup *memcg, unsigned int nr_pages)
+>  {
+>  	struct memcg_stock_pcp *stock;
+>  	uint8_t stock_pages;
+> @@ -1821,12 +1819,8 @@ static bool consume_stock(struct mem_cgroup *memcg, unsigned int nr_pages,
+>  	bool ret = false;
+>  	int i;
+>  
+> -	if (nr_pages > MEMCG_CHARGE_BATCH)
+> -		return ret;
+> -
+> -	if (gfpflags_allow_spinning(gfp_mask))
+> -		local_lock_irqsave(&memcg_stock.stock_lock, flags);
+> -	else if (!local_trylock_irqsave(&memcg_stock.stock_lock, flags))
+> +	if (nr_pages > MEMCG_CHARGE_BATCH ||
+> +	    !local_trylock_irqsave(&memcg_stock.stock_lock, flags))
 
->=20
->=20On Mon, Apr 28, 2025 at 1:18 AM Jiayuan Chen <jiayuan.chen@linux.dev>=
- wrote:
->=20
->=20>=20
->=20> Abstract
-> >=20
->=20>  =3D=3D=3D
-> >=20
->=20>  This patchset improves the performance of sockmap by providing CPU=
- affinity,
-> >=20
->=20>  resulting in a 1-10x increase in throughput.
-> >=20
->=20>  Motivation
-> >=20
->=20>  =3D=3D=3D
-> >=20
->=20>  Traditional user-space reverse proxy:
-> >=20
->=20>  Reserve Proxy
-> >=20
->=20>  _________________
-> >=20
->=20>  client -> | fd1 <-> fd2 | -> server
-> >=20
->=20>  |_________________|
-> >=20
->=20>  Using sockmap for reverse proxy:
-> >=20
->=20>  Reserve Proxy
-> >=20
->=20>  _________________
-> >=20
->=20>  client -> | fd1 <-> fd2 | -> server
-> >=20
->=20>  | |_________________| |
-> >=20
->=20>  | | | |
-> >=20
->=20>  | _________ |
-> >=20
->=20>  | | sockmap | |
-> >=20
->=20>  --> |_________| -->
-> >=20
->=20>  By adding fds to sockmap and using a BPF program, we can quickly f=
-orward
-> >=20
->=20>  data and avoid data copying between user space and kernel space.
-> >=20
->=20>  Mainstream multi-process reverse proxy applications, such as Nginx=
- and
-> >=20
->=20>  HAProxy, support CPU affinity settings, which allow each process t=
-o be
-> >=20
->=20>  pinned to a specific CPU, avoiding conflicts between data plane pr=
-ocesses
-> >=20
->=20>  and other processes, especially in multi-tenant environments.
-> >=20
->=20>  Current Issues
-> >=20
->=20>  =3D=3D=3D
-> >=20
->=20>  The current design of sockmap uses a workqueue to forward ingress_=
-skb and
-> >=20
->=20>  wakes up the workqueue without specifying a CPU
-> >=20
->=20>  (by calling schedule_delayed_work()). In the current implementatio=
-n of
-> >=20
->=20>  schedule_delayed_work, it tends to run the workqueue on the curren=
-t CPU.
-> >=20
->=20>  This approach has a high probability of running on the current CPU=
-, which
-> >=20
->=20>  is the same CPU that handles the net rx soft interrupt, especially=
- for
-> >=20
->=20>  programs that access each other using local interfaces.
-> >=20
->=20>  The loopback driver's transmit interface, loopback_xmit(), directl=
-y calls
-> >=20
->=20>  __netif_rx() on the current CPU, which means that the CPU handling
-> >=20
->=20>  sockmap's workqueue and the client's sending CPU are the same, res=
-ulting
-> >=20
->=20>  in contention.
-> >=20
->=20>  For a TCP flow, if the request or response is very large, the
-> >=20
->=20>  psock->ingress_skb queue can become very long. When the workqueue
-> >=20
->=20>  traverses this queue to forward the data, it can consume a signifi=
-cant
-> >=20
->=20>  amount of CPU time.
-> >=20
->=20>  Solution
-> >=20
->=20>  =3D=3D=3D
-> >=20
->=20>  Configuring RPS on a loopback interface can be useful, but it will=
- trigger
-> >=20
->=20>  additional softirq, and furthermore, it fails to achieve our expec=
-ted
-> >=20
->=20>  effect of CPU isolation from other processes.
-> >=20
->=20>  Instead, we provide a kfunc that allow users to specify the CPU on=
- which
-> >=20
->=20>  the workqueue runs through a BPF program.
-> >=20
->=20>  We can use the existing benchmark to test the performance, which a=
-llows
-> >=20
->=20>  us to evaluate the effectiveness of this optimization.
-> >=20
->=20>  Because we use local interfaces for communication and the client c=
-onsumes
-> >=20
->=20>  a significant amount of CPU when sending data, this prevents the w=
-orkqueue
-> >=20
->=20>  from processing ingress_skb in a timely manner, ultimately causing=
- the
-> >=20
->=20>  server to fail to read data quickly.
-> >=20
->=20>  Without cpu-affinity:
-> >=20
->=20>  ./bench sockmap -c 2 -p 1 -a --rx-verdict-ingress --no-verify
-> >=20
->=20>  Setting up benchmark 'sockmap'...
-> >=20
->=20>  create socket fd c1:14 p1:15 c2:16 p2:17
-> >=20
->=20>  Benchmark 'sockmap' started.
-> >=20
->=20>  Iter 0 ( 36.031us): Send Speed 1143.693 MB/s ... Rcv Speed 109.572=
- MB/s
-> >=20
->=20>  Iter 1 ( 0.608us): Send Speed 1320.550 MB/s ... Rcv Speed 48.103 M=
-B/s
-> >=20
->=20>  Iter 2 ( -5.448us): Send Speed 1314.790 MB/s ... Rcv Speed 47.842 =
-MB/s
-> >=20
->=20>  Iter 3 ( -0.613us): Send Speed 1320.158 MB/s ... Rcv Speed 46.531 =
-MB/s
-> >=20
->=20>  Iter 4 ( -3.441us): Send Speed 1319.375 MB/s ... Rcv Speed 46.662 =
-MB/s
-> >=20
->=20>  Iter 5 ( 3.764us): Send Speed 1166.667 MB/s ... Rcv Speed 42.467 M=
-B/s
-> >=20
->=20>  Iter 6 ( -4.404us): Send Speed 1319.508 MB/s ... Rcv Speed 47.973 =
-MB/s
-> >=20
->=20>  Summary: total trans 7758 MB =C2=B1 1293.506 MB/s
-> >=20
->=20>  Without cpu-affinity(RPS enabled):
-> >=20
->=20>  ./bench sockmap -c 2 -p 1 -a --rx-verdict-ingress --no-verify
-> >=20
->=20>  Setting up benchmark 'sockmap'...
-> >=20
->=20>  create socket fd c1:14 p1:15 c2:16 p2:17
-> >=20
->=20>  Benchmark 'sockmap' started.
-> >=20
->=20>  Iter 0 ( 28.925us): Send Speed 1630.357 MB/s ... Rcv Speed 850.960=
- MB/s
-> >=20
->=20>  Iter 1 ( -2.042us): Send Speed 1644.564 MB/s ... Rcv Speed 822.478=
- MB/s
-> >=20
->=20>  Iter 2 ( 0.754us): Send Speed 1644.297 MB/s ... Rcv Speed 850.787 =
-MB/s
-> >=20
->=20>  Iter 3 ( 0.159us): Send Speed 1644.429 MB/s ... Rcv Speed 850.198 =
-MB/s
-> >=20
->=20>  Iter 4 ( -2.898us): Send Speed 1646.924 MB/s ... Rcv Speed 830.867=
- MB/s
-> >=20
->=20>  Iter 5 ( -0.210us): Send Speed 1649.410 MB/s ... Rcv Speed 824.246=
- MB/s
-> >=20
->=20>  Iter 6 ( -1.448us): Send Speed 1650.723 MB/s ... Rcv Speed 808.256=
- MB/s
-> >=20
->=20>  With cpu-affinity(RPS disabled):
-> >=20
->=20>  ./bench sockmap -c 2 -p 1 -a --rx-verdict-ingress --no-verify --cp=
-u-affinity
-> >=20
->=20>  Setting up benchmark 'sockmap'...
-> >=20
->=20>  create socket fd c1:14 p1:15 c2:16 p2:17
-> >=20
->=20>  Benchmark 'sockmap' started.
-> >=20
->=20>  Iter 0 ( 36.051us): Send Speed 1883.437 MB/s ... Rcv Speed 1865.08=
-7 MB/s
-> >=20
->=20>  Iter 1 ( 1.246us): Send Speed 1900.542 MB/s ... Rcv Speed 1761.737=
- MB/s
-> >=20
->=20>  Iter 2 ( -8.595us): Send Speed 1883.128 MB/s ... Rcv Speed 1860.71=
-4 MB/s
-> >=20
->=20>  Iter 3 ( 7.033us): Send Speed 1890.831 MB/s ... Rcv Speed 1806.684=
- MB/s
-> >=20
->=20>  Iter 4 ( -8.397us): Send Speed 1884.700 MB/s ... Rcv Speed 1973.56=
-8 MB/s
-> >=20
->=20>  Iter 5 ( -1.822us): Send Speed 1894.125 MB/s ... Rcv Speed 1775.04=
-6 MB/s
-> >=20
->=20>  Iter 6 ( 4.936us): Send Speed 1877.597 MB/s ... Rcv Speed 1959.320=
- MB/s
-> >=20
->=20>  Summary: total trans 11328 MB =C2=B1 1888.507 MB/s
-> >=20
->=20
-> This looks to me like an artificial benchmark.
-> Surely perf will be higher when wq is executed on free cpu.
-> In production all cpus likely have work to do, so this whole
-> approach 'lets ask wq to run on that cpu' isn't going to work.
-> Looks like RPS helps. Use that. I think it will scale and work
-> better when the whole server is loaded.
-> pw-bot: cr
->
+I don't think it's a good idea.
+spin_trylock() will fail often enough in PREEMPT_RT.
+Even during normal boot I see preemption between tasks and they
+contend on the same cpu for the same local_lock==spin_lock.
+Making them take slow path is a significant behavior change
+that needs to be carefully considered.
 
-Hi Alexei, you're right for requests coming from a remote host, all CPUs
-are running; in cloud-native scenarios where Sidecars are widely used,
-they access each other through loopback, but for requests accessing each
-other through loopback, the wq (workqueue) will definitely run on the CPU
-where the client is located (based on the implementation of loopback and =
-wq).
-Since the Sidecar itself is bound to a CPU, which means that in actual
-scenarios, the CPU bound to the gateway (reverse proxy) program using soc=
-kmap
-cannot be fully utilized.
-
-Enabling RPS can alleviate the sockmap issue, but it will introduce an ex=
-tra
-software calculation, so from a performance perspective, we still expect =
-to
-have a solution that can achieve the highest performance.
-
-Thanks.
+Also please cc bpf@vger in the future for these kind of changes.
