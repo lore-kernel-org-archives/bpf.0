@@ -1,110 +1,121 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFE332D47AF;
-	Tue, 29 Apr 2025 23:53:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C2262D47AF;
+	Tue, 29 Apr 2025 23:53:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745970795; cv=none; b=elAP9FpyebOCAoxZhFcCSC/md7ourXj5gx9sJN8UJ5O3VAGp8wIAtuF8scXZIloHtH4OfKvOiW5tdiabal4MBAV1wkQusXdM0J3wxH3utVXmwpFmqWVsTlWHxi7crUzsH62Gf6z+Vvzx713OxVwWItx+GQcZLDbNDXDyxvaeVBs=
+	t=1745970799; cv=none; b=iOzZT7oean4fSLhXa/jsbxf5A3ImzJYBWqXq15ARLJoigmWQoiO0FkbXrzImEwN5KEqS62Keg0UnCwlLtE0iS7xVCcKXsleQBILsbKC2aB23t8fAegJRZOgfGfATLR3VAznKBEGZzV4Oq+XQCkAfPzzCjKNLSqujwZ33vzWKSjU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745970795; c=relaxed/simple;
-	bh=vWHYUEi9UcQLIVL8E92xlFKnf+7fdSSjqTckVyZk79I=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=h6mDBkrXdqIS+pn0SqaB9gjAx9OZ/ClIc4hCBGEpmac3SY7YRwW/iZ81otnWQF0LjO4POvDFHYMOhg95BW3SmYNzSuMZW4JyvBLb+h7WZ/gXhJgK1mgn1O8e1QYNX6Li8J0sfzTlj0g5pk/bzuTrgcZX+Mzrqhp9kf3sBdu516k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PRDzEbDr; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1745970799; c=relaxed/simple;
+	bh=POfxadEkvYP12YbI4Fyv1KnzR9RyFXtL2BGRJZ1OFL4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=fiAfnJXr1b94RMEKiAcSXmC7nJkQ73npII3vq/J5yl1pdhlp5gJPQ4mhf/Dy1y5svik6GWTXDz4VxWnjDd76QE+Z/F8eUc1PXaQrVmGmfg+WzBHS1zoFj7rEly7y9Tm1LwW3tvpMPlW+GL8Zpu33SnR5MdT/tzX78HbeNvTr1Oo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Jn96014/; arc=none smtp.client-ip=209.85.221.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PRDzEbDr"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89D68C4CEE3;
-	Tue, 29 Apr 2025 23:53:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745970794;
-	bh=vWHYUEi9UcQLIVL8E92xlFKnf+7fdSSjqTckVyZk79I=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=PRDzEbDrjCTK9cu379h+hlb57NsHFCj40nD5+f7EC7oJVM3FUxNarwKZit0TNxSYi
-	 tXjM/5YlFWls/9rBAx4TDo2hUcjGXaXIGoQxo69gSmnI/mPJnYHi+bmB/vdhEtYW/9
-	 sMe508i7nAEyaqW+MeAtmbn1Sa/BtMGpT1crTwHDbgXmfA81aAl7a7VI2ko0N3Y6rY
-	 n7nKvc+rdoJLFhTceEEc6AQ79T5r8CZ9ZvWjNaewdthDt+98zGxvFYcVwNucuQ9RwR
-	 rMQBrxEEyO7CB5FJorJ6SdN5GS90LAGaipG1+9Cf0qhX3XHJkguJq8tVpaVBmFBSu8
-	 SYr9RxYs8fMtw==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Haoran Jiang <jianghaoran@kylinos.cn>,
-	zhangxi <zhangxi@kylinos.cn>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Sasha Levin <sashal@kernel.org>,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	nathan@kernel.org,
-	bpf@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.6 21/21] samples/bpf: Fix compilation failure for samples/bpf on LoongArch Fedora
-Date: Tue, 29 Apr 2025 19:52:33 -0400
-Message-Id: <20250429235233.537828-21-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250429235233.537828-1-sashal@kernel.org>
-References: <20250429235233.537828-1-sashal@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Jn96014/"
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-39149bccb69so5511379f8f.2;
+        Tue, 29 Apr 2025 16:53:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1745970795; x=1746575595; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=POfxadEkvYP12YbI4Fyv1KnzR9RyFXtL2BGRJZ1OFL4=;
+        b=Jn96014/v3nysw1vEhRSJYmRwAc5RWPJLKdjbMjd0ERie2k1x50sRaggqxsuC6kTFg
+         zYb/CHQVA+Dx3QwO0gDoAGfAjGsI5B2kQgzOk7lFpxm1jY+O+24/MV3NZGAbYcEOwuJM
+         gLYdO11/iwLyCFcX3eJbm0knEW5lEQPptNP33l8euzSNct3bQP6zvsgkKxqfaIRmOhzG
+         DnikxUoStRft0AvkHHAbRfpUCRh7UW6iAua8rFnwr3baNsuPH9fyHtDKKJe7XrFPCfhH
+         7sLbpdmd+cx5JF11DnQgU9w18AXyV32z9qAYMgf2FbVD+83Wp6qUDzeL0gpaMduwRaAk
+         vKGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745970795; x=1746575595;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=POfxadEkvYP12YbI4Fyv1KnzR9RyFXtL2BGRJZ1OFL4=;
+        b=CXHdoqdLDbaJ7iXCQOrcj4PEWgoyNacAzzuaf6gRqBbSaoUCGhQaCLlO5SNMinBFJZ
+         WlYLtRub/ez4vfM7TDrshdTV2U2czGQryCxYD3aw9x4/epxw4doxCEwKpCakmjVefHvu
+         bZZhUaspGhADaCe6IZ0Qj1+LYZ97PHo2aTje4/o8vy/ZxFEwyDgdXNa2OEMiRzjzo/gL
+         rDumlAuFQeCPZDYlW3i25hDLKczQ9jcRRlvEKtj2oh5N1E6Hsl4Uo1keIYfUqrUMVJ2x
+         2A+E+Ze7CGFFnAlWp1iY41YwgUorurlQiL2BGG8enihuQE9FXahyilmMpUQv30P0iTEi
+         V5Jw==
+X-Forwarded-Encrypted: i=1; AJvYcCUDliGNQT+DbSgeqOEpIcpKqNtgRSZ8L+9P1mzaW2Zc867IyRF7c/ANpj8tbUyhDbd95iTauaKAkJCAJqLus36E@vger.kernel.org, AJvYcCVjfK7o/OTOEV6Gp/1+kVB2l1RwgCRaZUTgPuA/YkyU4nbTD+BIUE1cFeNfInDHPAP4dt6WG8cS@vger.kernel.org, AJvYcCWWzHIe0+LMxj3kBpOYZ8lMxZ01rH7KrLJ39xQRZqZJ2fbi1eNc0z01IegtJ4ENuHk9i0PDYY2ue/Rvydne@vger.kernel.org, AJvYcCWwxiDHRCAKuNdIET6bJrR/+EEHTEHBajrCDxCWjNvaJVMhql+IZ9s9C7tWbNn6BjMsWIS+imAsIrM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzF13oab2XP0bcMperZPMlsHBqtepTsGRjReJ5biyuJ876tdCkm
+	J9Fwg83bFHriNpmX0zGP7STOlNM8sRbFOTaFobSgiWqeE+1ioyocyBRfWsOAB2S7/+Qas6wm5o2
+	qUqH5T9nPgOlDmQgPq/iDsZQC6zY=
+X-Gm-Gg: ASbGncsQpBB2IQnu4ZnpknAEiGJTGNxh5hEOEPOIsK0+rwRdAK/KcX/VKPNipwr+m11
+	lDXyi3HwMcRl7Jqn0VpuJ4pe2MbDiwN7hfJAWGa/hEgAG2wid7mdfqarFtl56GOAdxBw/DUWnld
+	v+nVWyj5FRA86njY2Vj4vOekN+AmgcCM6aa1TZZg==
+X-Google-Smtp-Source: AGHT+IHfQ7021Wi0Od483NxBRwOwlGT8tEpRShkiNypqzqZYLsetUGmXm5nnqFTtQjliYCEyubmVfYYLFsJBvNrlXbI=
+X-Received: by 2002:a5d:584a:0:b0:39c:2c38:4599 with SMTP id
+ ffacd0b85a97d-3a08f7a48f6mr963346f8f.48.1745970795091; Tue, 29 Apr 2025
+ 16:53:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.6.88
-Content-Transfer-Encoding: 8bit
+References: <20250428081744.52375-1-jiayuan.chen@linux.dev>
+ <CAADnVQLiqHUVZQ7MdqAfnUK+01D5fSt6sDR5nzon83w39ZBohA@mail.gmail.com> <6cc9ccc1339839559710efe94bbd1d61289bdaaf@linux.dev>
+In-Reply-To: <6cc9ccc1339839559710efe94bbd1d61289bdaaf@linux.dev>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Tue, 29 Apr 2025 16:53:04 -0700
+X-Gm-Features: ATxdqUGehvH5TBOumxUn713AmXG-enA239BN9cFJ0Osp5Y0ndJxOfXZNQviCb_E
+Message-ID: <CAADnVQJWx9NJPGSrTv=WAwp9Zf8eHGNFwpC5BX5CYjMWBcWoAA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1 0/3] bpf, sockmap: Improve performance with
+ CPU affinity
+To: Jiayuan Chen <jiayuan.chen@linux.dev>
+Cc: bpf <bpf@vger.kernel.org>, Jiayuan Chen <mrpre@163.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Jakub Sitnicki <jakub@cloudflare.com>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Kuniyuki Iwashima <kuniyu@amazon.com>, Willem de Bruijn <willemb@google.com>, Mykola Lysenko <mykolal@fb.com>, 
+	Shuah Khan <shuah@kernel.org>, Jiapeng Chong <jiapeng.chong@linux.alibaba.com>, 
+	"open list:DOCUMENTATION" <linux-doc@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Network Development <netdev@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Haoran Jiang <jianghaoran@kylinos.cn>
+On Tue, Apr 29, 2025 at 4:47=E2=80=AFPM Jiayuan Chen <jiayuan.chen@linux.de=
+v> wrote:
+>
+> >
+> > This looks to me like an artificial benchmark.
+> > Surely perf will be higher when wq is executed on free cpu.
+> > In production all cpus likely have work to do, so this whole
+> > approach 'lets ask wq to run on that cpu' isn't going to work.
+> > Looks like RPS helps. Use that. I think it will scale and work
+> > better when the whole server is loaded.
+> > pw-bot: cr
+> >
+>
+> Hi Alexei, you're right for requests coming from a remote host, all CPUs
+> are running; in cloud-native scenarios where Sidecars are widely used,
+> they access each other through loopback, but for requests accessing each
+> other through loopback, the wq (workqueue) will definitely run on the CPU
+> where the client is located (based on the implementation of loopback and =
+wq).
+> Since the Sidecar itself is bound to a CPU, which means that in actual
+> scenarios, the CPU bound to the gateway (reverse proxy) program using soc=
+kmap
+> cannot be fully utilized.
+>
+> Enabling RPS can alleviate the sockmap issue, but it will introduce an ex=
+tra
+> software calculation, so from a performance perspective, we still expect =
+to
+> have a solution that can achieve the highest performance.
 
-[ Upstream commit 548762f05d19c5542db7590bcdfb9be1fb928376 ]
-
-When building the latest samples/bpf on LoongArch Fedora
-
-     make M=samples/bpf
-
-There are compilation errors as follows:
-
-In file included from ./linux/samples/bpf/sockex2_kern.c:2:
-In file included from ./include/uapi/linux/in.h:25:
-In file included from ./include/linux/socket.h:8:
-In file included from ./include/linux/uio.h:9:
-In file included from ./include/linux/thread_info.h:60:
-In file included from ./arch/loongarch/include/asm/thread_info.h:15:
-In file included from ./arch/loongarch/include/asm/processor.h:13:
-In file included from ./arch/loongarch/include/asm/cpu-info.h:11:
-./arch/loongarch/include/asm/loongarch.h:13:10: fatal error: 'larchintrin.h' file not found
-         ^~~~~~~~~~~~~~~
-1 error generated.
-
-larchintrin.h is included in /usr/lib64/clang/14.0.6/include,
-and the header file location is specified at compile time.
-
-Test on LoongArch Fedora:
-https://github.com/fedora-remix-loongarch/releases-info
-
-Signed-off-by: Haoran Jiang <jianghaoran@kylinos.cn>
-Signed-off-by: zhangxi <zhangxi@kylinos.cn>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-Link: https://lore.kernel.org/bpf/20250425095042.838824-1-jianghaoran@kylinos.cn
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- samples/bpf/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
-index 3fa16412db15c..927d72659173e 100644
---- a/samples/bpf/Makefile
-+++ b/samples/bpf/Makefile
-@@ -392,7 +392,7 @@ $(obj)/%.o: $(src)/%.c
- 	@echo "  CLANG-bpf " $@
- 	$(Q)$(CLANG) $(NOSTDINC_FLAGS) $(LINUXINCLUDE) $(BPF_EXTRA_CFLAGS) \
- 		-I$(obj) -I$(srctree)/tools/testing/selftests/bpf/ \
--		-I$(LIBBPF_INCLUDE) \
-+		-I$(LIBBPF_INCLUDE) $(CLANG_SYS_INCLUDES) \
- 		-D__KERNEL__ -D__BPF_TRACING__ -Wno-unused-value -Wno-pointer-sign \
- 		-D__TARGET_ARCH_$(SRCARCH) -Wno-compare-distinct-pointer-types \
- 		-Wno-gnu-variable-sized-type-not-at-end \
--- 
-2.39.5
-
+And I think it's wrong to optimize for performance of one particular setup.
+An API that picks a cpu is difficult to get right.
+Too easy to make performance worse.
