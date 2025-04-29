@@ -1,110 +1,125 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C56CB280330;
-	Tue, 29 Apr 2025 23:53:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9F2B1D7E35;
+	Tue, 29 Apr 2025 23:58:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745970835; cv=none; b=IcPXWJiBo4dpefqnEFCRxgkFoqr1mcw+UHXM47tqzZVpcmvuHGVzSRbJRUsLtMJJ69/g+JUL5jmrQSf+Vybij6N2u8gArVF/rX5acjQ2r9oEe88O5tnRvhE549sZcoy1WGT2aHVEVCWNVpcoU+wD+LS0Sw+5UHx90Xe3ftl3wNk=
+	t=1745971114; cv=none; b=mkWTltIZ3nPEyd3E4Xh4FxWZUkervu4Hv7eA0Db0/EEfl1ZRNGAcWmyDn4yCWoKlTT3n27Q1e0axz+cHuS1IQ0yRyeByT1g6OWa3en7jwmdCSPL+GyS37p27PMVyjqMj/A1EpEJDa0ybmjFHbGpWgrta6F7ujENyQsCovBO9Mbw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745970835; c=relaxed/simple;
-	bh=3maTfG7PXMhhsZXTByIasarqq9svT5JNZYu4B7xjUC8=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Edcv3DpEHDSy1J3enwlM9/bU88qFn7yk1fv/a0NBchaBJ2gGvqZai3QTjMEptSNMXhsLAey/MfzhCXSshJQDCOH/QK0q/LHpNl6oGkaiNCYjrzRhHYlXOOWQpGz46z2wdK74d02suHYsXfN8B8i7FyndLdNPwo3iE3L0KeuY13Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YP2/ffk+; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1745971114; c=relaxed/simple;
+	bh=iqnTYDmiTjRgfK3u/aUrzt5/5Q+gPJ2f+omyQFghhuA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=o0ldEl3qL7nvUnj18moVyRzD8mB0DSYWCghtaCnUWz2v9RJBKhIVbgaX4q7Hcd0yYxWqlF20PvggchQNOhfxGce09fTuvWMaLaBNdmISID/CVM74H8AE/g6CdWMTYINNnNrIXzdJEqVK4h+P6VqfI1SXfHOxBxnegIZE9BeLOrk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mrj/4LtP; arc=none smtp.client-ip=209.85.221.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YP2/ffk+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1C6DC4CEE3;
-	Tue, 29 Apr 2025 23:53:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745970835;
-	bh=3maTfG7PXMhhsZXTByIasarqq9svT5JNZYu4B7xjUC8=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=YP2/ffk+BYJJPqfI/2a53zm1+1i4uXp6CkZCL8mTMB2+bCiiD0Pumy/cUbLL9tCtL
-	 9RQGgRxJHUkbY/9yaOOEJRfecUtWwCg57l3bOvBy7nQFDLNiOPKQr5drTHnbJeu7Be
-	 Nt7QabtZFA12bKrA4qBpbzkBG0eScgV3aX3Hpd9eyKzXW5IREcAwvMNYfqVGqRO/WW
-	 2RE7N+o2pJU68s8qIjjldhNsFjnfm45EYqmYFtwjYd1T2+QAE16H5U5qk5ThUVwy/7
-	 6bVP7A6p+ZO55pJNahymqTaIH3amXbE+CnLg6Jvpg3Pi4nYfIkMAOKi5rV4BA6MOrq
-	 AP4RFSRgRVIyQ==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Haoran Jiang <jianghaoran@kylinos.cn>,
-	zhangxi <zhangxi@kylinos.cn>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Sasha Levin <sashal@kernel.org>,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	nathan@kernel.org,
-	bpf@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.15 7/7] samples/bpf: Fix compilation failure for samples/bpf on LoongArch Fedora
-Date: Tue, 29 Apr 2025 19:53:38 -0400
-Message-Id: <20250429235339.538269-7-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250429235339.538269-1-sashal@kernel.org>
-References: <20250429235339.538269-1-sashal@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mrj/4LtP"
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-39c1efc457bso4844991f8f.2;
+        Tue, 29 Apr 2025 16:58:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1745971111; x=1746575911; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wlOXSV/LS6Wq6Zi28K/GY5AymAcLPtqx1WKW0bjot14=;
+        b=mrj/4LtPC304ulZBqFMmNUUbwiP0G0DsVAF/RH4Kj2DbMv43xKwQpOZ7pM4zt702IX
+         Sgbd0yr0yV6wSzccj5XgXibNQfsJ8KmQK3wjwteDbZr3gvhonS/ocnhOeTRhT9luTeqT
+         Rb1kbUYCu+H6u+wm/ivO6iMYrjbJoq24FBeX7X6QG3y0ZLHrc9w3pV3uhLUktzpsjLe2
+         XVBZjTAI8KJy/G17NzDTbEWB7TpeWZPnvQMgbF0Ex6vy0o3vujn+WlUAo5lOjCVUcUjC
+         /g86gtQj6cLKwjFMcD3wbLVfk8H0XfiDvhCwq+s1U9sa9CyeP194B7bn1nQQ6X/uufV4
+         wd8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745971111; x=1746575911;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wlOXSV/LS6Wq6Zi28K/GY5AymAcLPtqx1WKW0bjot14=;
+        b=pKe+LZN6DlsoxOqAercpIMTvk2aipkQHT+K8p62TOg8LCqUFjXYr0b+ckuw7S9jNVD
+         ReLo231bK8K9xW01Lh8LhnEsaQLO3DxgTajrIEBokm1355IBbmG4yQN3QoORrOdloH7U
+         1d85zwC5gGAj3P98wc57/DXpBRTx9AsXw+H47vNQSlj0lqG6nbitlo2vyXwhU6bZqTpz
+         Hy3F3sLFCTFMO0klpGgcnraXOtndiIPFoKNMOhcdPDR/7Kgf/r8rrdNOCOLfFzDWav3P
+         VEizhmCK7r/vAXRv5xlKNpGCl1eGlJwuuzHSkbvej2dIoxYffmEdqiGbN8/C5TfmANd0
+         T/mQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUG4DKHSS52WFAkgj7N3e3iiCt7qU97xF4iWXTgS38vQ6Ij2TOVOpBDAMAYJui5RQxhybk=@vger.kernel.org, AJvYcCUpiNeemyAzqPiNtF7TtMD12+ygSgwM5jpJuiKUw18B6pkAaMQ+yxfnnS7MnxLyFkqxxytoLYz5FA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxFsjeJSAKhxgKZIEL/HedpepLoL2ZWHnwPL2TIRxb0+Ohmi6MF
+	rdp11k8jH6JE37aoEJD5jfyvHGaVYjkXJGRXO759NSKUKgGyBhs2mK6GpC8aY0IeG+kMCI/SMsW
+	MczdKdZcOlRJQ/NQJkMmk66Uicc4=
+X-Gm-Gg: ASbGnct0c6M4BagOo0vXokydjSwN7CdZJsLb99n314uAlLO4BpSCGU4bJSbmiKVQcP9
+	84QUzYYzFaitoWy6JinhrBKd/MVLMYnou5pgfqecQIZQIWg3R6/yOmlKA3RgH6AOleG3rthYFe1
+	jN7f68jomadzRPnaYiJmlziiJmR7bLSXyxQK+Dhb7vh8eVf8Qy
+X-Google-Smtp-Source: AGHT+IGyHp8MouUJrcf0MLECDO1OlQtEeiMDNr4s8n4KnB0vT3uHxvxC4sUSNMZLjL9sGl8MKGcrJkP70xSXpIGGyuk=
+X-Received: by 2002:a05:6000:1844:b0:39e:e557:7d9 with SMTP id
+ ffacd0b85a97d-3a08ff34cb5mr269882f8f.5.1745971111023; Tue, 29 Apr 2025
+ 16:58:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.15.180
-Content-Transfer-Encoding: 8bit
+References: <20250416-btf_inline-v1-0-e4bd2f8adae5@meta.com>
+ <fcjioco2rdnrupme4gixd4vynh52paudcc7br7smqhmdhdr4js@5uolobs4ycsi>
+ <CAADnVQJ1y1ktKDgORynENQLC73FZ162XXL2qMSshpb2gKXHBjw@mail.gmail.com> <D250DE71-922F-44B3-A123-9AFFBDC8051C@meta.com>
+In-Reply-To: <D250DE71-922F-44B3-A123-9AFFBDC8051C@meta.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Tue, 29 Apr 2025 16:58:19 -0700
+X-Gm-Features: ATxdqUGs0YtR9SphoYkAC395_OdAmP0hUasPd8l7SBgw_omBhzum-NRYB62o-V8
+Message-ID: <CAADnVQLseJTeYWGCU6o7L6Rb_NdymAPfg-_nMuZhwx077YfmKw@mail.gmail.com>
+Subject: Re: [PATCH RFC 0/3] list inline expansions in .BTF.inline
+To: Thierry Treyer <ttreyer@meta.com>
+Cc: Daniel Xu <dxu@dxuuu.xyz>, "dwarves@vger.kernel.org" <dwarves@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Alexei Starovoitov <ast@kernel.org>, Yonghong Song <yhs@meta.com>, 
+	Andrii Nakryiko <andrii@kernel.org>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
+	Song Liu <songliubraving@meta.com>, Alan Maguire <alan.maguire@oracle.com>, 
+	Mykola Lysenko <mykolal@meta.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Haoran Jiang <jianghaoran@kylinos.cn>
+On Tue, Apr 29, 2025 at 12:14=E2=80=AFPM Thierry Treyer <ttreyer@meta.com> =
+wrote:
+>
+> > It looks to me we only need:
+> > - register
+> > - load_from_reg_plus_offset
+> > - constant
+>
+> In that case, we can shorten the list of operators:
+>
+> ### | Operator Name          | Operands[...]
+> ----+------------------------+-------------------------------------------
+>   1 | LOC_SIGNED_CONST_1     |  s8: constant's value
+>   2 | LOC_SIGNED_CONST_2     | s16: constant's value
+>   3 | LOC_SIGNED_CONST_4     | s32: constant's value
+>   4 | LOC_SIGNED_CONST_8     | s64: constant's value
+>   5 | LOC_UNSIGNED_CONST_1   |  u8: constant's value
+>   6 | LOC_UNSIGNED_CONST_2   | u16: constant's value
+>   7 | LOC_UNSIGNED_CONST_4   | u32: constant's value
+>   8 | LOC_UNSIGNED_CONST_8   | u64: constant's value
+>   9 | LOC_REGISTER           |  u8: DWARF register number from the ABI
+>  10 | LOC_REGISTER_OFFSET    |  u8: DWARF register number from the ABI
+>                              | s64: offset added to the register's value
 
-[ Upstream commit 548762f05d19c5542db7590bcdfb9be1fb928376 ]
+Since we want to make the format compat let's use s32 for offset.
+We can even consider s16.
+Since that's typically stack and kernel stack is rarely above 2k.
 
-When building the latest samples/bpf on LoongArch Fedora
+>
+> > register vs register_offset is another artifact of dwarf.
+> > ...
+> > - load_from_reg_plus_offset
+>
+> What is the difference between LOC_REGISTER_OFFSET
+> and load_from_reg_plus_offset?
 
-     make M=samples/bpf
-
-There are compilation errors as follows:
-
-In file included from ./linux/samples/bpf/sockex2_kern.c:2:
-In file included from ./include/uapi/linux/in.h:25:
-In file included from ./include/linux/socket.h:8:
-In file included from ./include/linux/uio.h:9:
-In file included from ./include/linux/thread_info.h:60:
-In file included from ./arch/loongarch/include/asm/thread_info.h:15:
-In file included from ./arch/loongarch/include/asm/processor.h:13:
-In file included from ./arch/loongarch/include/asm/cpu-info.h:11:
-./arch/loongarch/include/asm/loongarch.h:13:10: fatal error: 'larchintrin.h' file not found
-         ^~~~~~~~~~~~~~~
-1 error generated.
-
-larchintrin.h is included in /usr/lib64/clang/14.0.6/include,
-and the header file location is specified at compile time.
-
-Test on LoongArch Fedora:
-https://github.com/fedora-remix-loongarch/releases-info
-
-Signed-off-by: Haoran Jiang <jianghaoran@kylinos.cn>
-Signed-off-by: zhangxi <zhangxi@kylinos.cn>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-Link: https://lore.kernel.org/bpf/20250425095042.838824-1-jianghaoran@kylinos.cn
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- samples/bpf/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
-index e2c9ea65df9fb..9edf83eb2a99d 100644
---- a/samples/bpf/Makefile
-+++ b/samples/bpf/Makefile
-@@ -438,7 +438,7 @@ $(obj)/%.o: $(src)/%.c
- 	@echo "  CLANG-bpf " $@
- 	$(Q)$(CLANG) $(NOSTDINC_FLAGS) $(LINUXINCLUDE) $(BPF_EXTRA_CFLAGS) \
- 		-I$(obj) -I$(srctree)/tools/testing/selftests/bpf/ \
--		-I$(LIBBPF_INCLUDE) \
-+		-I$(LIBBPF_INCLUDE) $(CLANG_SYS_INCLUDES) \
- 		-D__KERNEL__ -D__BPF_TRACING__ -Wno-unused-value -Wno-pointer-sign \
- 		-D__TARGET_ARCH_$(SRCARCH) -Wno-compare-distinct-pointer-types \
- 		-Wno-gnu-variable-sized-type-not-at-end \
--- 
-2.39.5
-
+Just a different name, because LOC_REGISTER_OFFSET is confusing.
+LOC_REGISTER means that the value of the argument is in that register.
+LOC_REGISTER_OFFSET can be interpreted that the argument value
+is in the register plus constant.
+But that's not the case. reg+const is an address in memory when
+value is stored.
+So we need a different name.
+Probably load_from_reg_plus_offset is confusing too.
+How about
+LOC_ADDR_REGISTER_OFFSET
