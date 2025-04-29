@@ -1,44 +1,46 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D5FA2D8180;
-	Tue, 29 Apr 2025 23:53:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C81C32D81A0;
+	Tue, 29 Apr 2025 23:53:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745970816; cv=none; b=U3Yp5aJRJx4YtdMQlBnCw1V8jUq/Xza6orOf/rBnh46XUYPFVxJubZBsp9MDh6puU1LdgMf0biPYQc1N67cDEdxxXxQkJ01wGJhkOE2t4PFaZNdXHAWjSV7v0FIj6rM7aRYj0eGJkqkIceTd3ZeBX0zgbtP2aRLcRF+li7G05r0=
+	t=1745970817; cv=none; b=FcjsWhU9aoZwKz7DIDFYYOz3pBFU3bAjoCgv/vkJ2ldtWZbBgCyMHJBxoq99MwDZs5o6gseJ3d4glXEHBkACC0lts7fVnEnfL1lQ+0Pr7rc4XFa2qhOcgKSXUPzSNxUS6JBgaaq4cxYmKhBgXfzsjihf8I+LrHlZjZXg0iTI5gA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745970816; c=relaxed/simple;
-	bh=JKbRXcJvcvMSucEBBYME5qE9RmdEOPa9o6s6mQCt+50=;
+	s=arc-20240116; t=1745970817; c=relaxed/simple;
+	bh=2lwC8t7cAngkPhM9CWEOePbjKZzinY9vlg4dD5N0xGc=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=aDCW+kshBa6gsuRw2V02lUSzalaWUnoeDMsTXodfKI+aPz+vpEuABw23D4evE83x/DXCTLUZurqqgXMsNZpqbUTRkcW4b66LcSt8e6veBUhgzwHaYN5zF7NWt7AW+cp3Q9KfmSFScgCELhyP030OESiqzG4PASKOtoO6txVjF4o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XQLLAUD2; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=hbJ7RMXCMYU1T6sXoid3SqJdOk7O/2vWhXTuO7PR0KGJwIAF/ACd3Kjo0lLgXhU5FOb/LzBwl2Jz6T/2wBxdwXZ+Nty3/ix7TMkv/rWA8lT7GFYMyUDuUcwZkpzVVRQUyKGOsujDSWMs0waslAjRksNxOKsa86v3MRle8mW67E4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ja55T0ns; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XQLLAUD2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3F4DC4CEEB;
-	Tue, 29 Apr 2025 23:53:34 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ja55T0ns"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7332AC4CEE3;
+	Tue, 29 Apr 2025 23:53:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745970816;
-	bh=JKbRXcJvcvMSucEBBYME5qE9RmdEOPa9o6s6mQCt+50=;
+	s=k20201202; t=1745970817;
+	bh=2lwC8t7cAngkPhM9CWEOePbjKZzinY9vlg4dD5N0xGc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=XQLLAUD22bCRBu0wLtNtPrABmoixRhBeoCDWS5tRrRRuNEa0W4jYF2UiWGivgCP7O
-	 V3t1X7/Ewkj7xZAdB0Vvx0MHCUzjGnWQxeJr0xg6tUzwCnIMyEQ/UMWnOwiYn9KCAS
-	 EhFI5Tvb4DO9+wVA3UFlLf6NvOPomBr0MZsNdl8Vt2piqlkUvzCY08GxHjdEUVUnm7
-	 mwSiI4zEjuvdATm88Ts5klBzgdsBv/A7eVSmC3p/BJR3nU5fciceQQFCnki//S+ZSD
-	 3/UuyTOQqJRiNxUc3MDN5YytcJI52fplKIDbL/eY3bIilCvCXhwVJ7tNsKxWCN1zEK
-	 ZNtObY/72rqVg==
+	b=ja55T0nswkxn8SnXB8nxQ5xmsJYujAPU3voR0n3oUI/bdEJ2/4KTV7sc9oWtMpcMJ
+	 Q1BR6CUyq+OdAahdexN1mtNSytKSDGmkzMzZKroJP3q2sxWuLw2NE3L2Sfb7XGu386
+	 rsxVkMuE1/5G/qQPk/35M4JnApiEjjMRjAD9cYB8H9cr116KATkMQfuX6byBzynARu
+	 sg+MRWCFHYBRZWuF/n/YN4OLGhgF3VHZUC0nK4hzmW3Xh18Y5jU9nb+RUGZgKES0iZ
+	 Hm4rQDA3GV2G4+Pu/Q3gERT/tMgUO9Ll2Z/9c3cHNwL8UNEYwuJYtJLufGnx30vC3y
+	 v2hP24G4c7wUw==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Brandon Kammerdiener <brandon.kammerdiener@intel.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Hou Tao <houtao1@huawei.com>,
+Cc: Haoran Jiang <jianghaoran@kylinos.cn>,
+	zhangxi <zhangxi@kylinos.cn>,
+	Andrii Nakryiko <andrii@kernel.org>,
 	Sasha Levin <sashal@kernel.org>,
+	ast@kernel.org,
 	daniel@iogearbox.net,
-	andrii@kernel.org,
-	bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 09/10] bpf: fix possible endless loop in BPF map iteration
-Date: Tue, 29 Apr 2025 19:53:14 -0400
-Message-Id: <20250429235316.538129-9-sashal@kernel.org>
+	nathan@kernel.org,
+	bpf@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH AUTOSEL 6.1 10/10] samples/bpf: Fix compilation failure for samples/bpf on LoongArch Fedora
+Date: Tue, 29 Apr 2025 19:53:15 -0400
+Message-Id: <20250429235316.538129-10-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250429235316.538129-1-sashal@kernel.org>
 References: <20250429235316.538129-1-sashal@kernel.org>
@@ -53,35 +55,56 @@ X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.1.135
 Content-Transfer-Encoding: 8bit
 
-From: Brandon Kammerdiener <brandon.kammerdiener@intel.com>
+From: Haoran Jiang <jianghaoran@kylinos.cn>
 
-[ Upstream commit 75673fda0c557ae26078177dd14d4857afbf128d ]
+[ Upstream commit 548762f05d19c5542db7590bcdfb9be1fb928376 ]
 
-The _safe variant used here gets the next element before running the callback,
-avoiding the endless loop condition.
+When building the latest samples/bpf on LoongArch Fedora
 
-Signed-off-by: Brandon Kammerdiener <brandon.kammerdiener@intel.com>
-Link: https://lore.kernel.org/r/20250424153246.141677-2-brandon.kammerdiener@intel.com
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Acked-by: Hou Tao <houtao1@huawei.com>
+     make M=samples/bpf
+
+There are compilation errors as follows:
+
+In file included from ./linux/samples/bpf/sockex2_kern.c:2:
+In file included from ./include/uapi/linux/in.h:25:
+In file included from ./include/linux/socket.h:8:
+In file included from ./include/linux/uio.h:9:
+In file included from ./include/linux/thread_info.h:60:
+In file included from ./arch/loongarch/include/asm/thread_info.h:15:
+In file included from ./arch/loongarch/include/asm/processor.h:13:
+In file included from ./arch/loongarch/include/asm/cpu-info.h:11:
+./arch/loongarch/include/asm/loongarch.h:13:10: fatal error: 'larchintrin.h' file not found
+         ^~~~~~~~~~~~~~~
+1 error generated.
+
+larchintrin.h is included in /usr/lib64/clang/14.0.6/include,
+and the header file location is specified at compile time.
+
+Test on LoongArch Fedora:
+https://github.com/fedora-remix-loongarch/releases-info
+
+Signed-off-by: Haoran Jiang <jianghaoran@kylinos.cn>
+Signed-off-by: zhangxi <zhangxi@kylinos.cn>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Link: https://lore.kernel.org/bpf/20250425095042.838824-1-jianghaoran@kylinos.cn
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/bpf/hashtab.c | 2 +-
+ samples/bpf/Makefile | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-index dae9ed02a75be..06bc7f26be06f 100644
---- a/kernel/bpf/hashtab.c
-+++ b/kernel/bpf/hashtab.c
-@@ -2172,7 +2172,7 @@ static int bpf_for_each_hash_elem(struct bpf_map *map, bpf_callback_t callback_f
- 		b = &htab->buckets[i];
- 		rcu_read_lock();
- 		head = &b->head;
--		hlist_nulls_for_each_entry_rcu(elem, n, head, hash_node) {
-+		hlist_nulls_for_each_entry_safe(elem, n, head, hash_node) {
- 			key = elem->key;
- 			if (is_percpu) {
- 				/* current cpu value for percpu map */
+diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
+index 727da3c5879b2..77bf18cfdae7f 100644
+--- a/samples/bpf/Makefile
++++ b/samples/bpf/Makefile
+@@ -434,7 +434,7 @@ $(obj)/%.o: $(src)/%.c
+ 	@echo "  CLANG-bpf " $@
+ 	$(Q)$(CLANG) $(NOSTDINC_FLAGS) $(LINUXINCLUDE) $(BPF_EXTRA_CFLAGS) \
+ 		-I$(obj) -I$(srctree)/tools/testing/selftests/bpf/ \
+-		-I$(LIBBPF_INCLUDE) \
++		-I$(LIBBPF_INCLUDE) $(CLANG_SYS_INCLUDES) \
+ 		-D__KERNEL__ -D__BPF_TRACING__ -Wno-unused-value -Wno-pointer-sign \
+ 		-D__TARGET_ARCH_$(SRCARCH) -Wno-compare-distinct-pointer-types \
+ 		-Wno-gnu-variable-sized-type-not-at-end \
 -- 
 2.39.5
 
