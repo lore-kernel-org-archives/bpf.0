@@ -1,49 +1,50 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8894A256995;
-	Tue, 29 Apr 2025 23:51:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FE792BD92E;
+	Tue, 29 Apr 2025 23:52:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745970682; cv=none; b=pCG2xpqWlRa9UZRs01k3wNcIlTs3k86szQm/N//mcEcwJgidFGhm2QCvWiJn9OQziMhGuSRr0KFXsUEb6AdNrqwZrNAfV5jhRrolnlVGlEnJnB+/QRuErLhXpOqVF82D4He1+Jbd2yB3PiA+lnC8/NE7f/kVaEF7HUfmn50CYKs=
+	t=1745970747; cv=none; b=o3f4j51wXmAwZDZLmuRqG7tzG6Si+eHLHhAQgzc5L97RKSoiBc0ZmzIxHG8XZoLzNuzLfK5fMzhrtc0Eo99rDIcPIcMUSYtyHof3X/yuMbMMUDwmtz/ld4y6yKmudWRVuysBynEQZgBfwd+fzsoR2jcYGPoSCSzEwGbZW1ccDyY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745970682; c=relaxed/simple;
-	bh=ugnFpq/CJSiQpHZT0kH7G9ZFQdagTJgfEfE3JRV6fFs=;
+	s=arc-20240116; t=1745970747; c=relaxed/simple;
+	bh=2oz50+X7QDKubf9DkwX20leuuzsNO+Ef9u69G8iUJdo=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=J6+WAi4m6oTcN0CnHgzQNMQ8AT4csymWcY/pHsuZLNHfz20m+9z8eWckYELSDXnyPRigZ8PNchsrELRVo+ZLgOF5UWV9XRhCta3vQJjTYaWEB8RN5mgsLH9mbWt4BjRHWjdA8HCAnBaVI7cRxrjxIA4cHisltOsp0MkndPaCSdM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KcoAUxiZ; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=aCvy9NKSwNcX859W+606LHEwPcrxBb+EFgHi8koEAa6FXSQ+zyRub4xJ2UpC1NxIVgxh/KW9YKGFAybiMRdwQ0mjGA17gbrMi3g9uy+kptTKsiicVMA917rwlLkt/AIQTlwNxuCSAoK04t+r/VXV3IGNparo8nE3e6c91RuJEuc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MIrNEucn; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KcoAUxiZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD48BC4CEE3;
-	Tue, 29 Apr 2025 23:51:20 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MIrNEucn"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AD57C4CEE3;
+	Tue, 29 Apr 2025 23:52:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745970682;
-	bh=ugnFpq/CJSiQpHZT0kH7G9ZFQdagTJgfEfE3JRV6fFs=;
+	s=k20201202; t=1745970746;
+	bh=2oz50+X7QDKubf9DkwX20leuuzsNO+Ef9u69G8iUJdo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=KcoAUxiZoOPYCuhS6vf9GK0Fw2CVOeI0C03x8dlkOSb23N8uNIEz/wxaSvvP21tj2
-	 ikG3OrxwJPFX/j4rDveqBuawR43z1jpXlrmBW+rkCuQBA/3gnqmILqHXgPh+Ncu+jc
-	 o//749AfFbsNfG5iSa6tEv6vC3gWPwC1YkGOB+NImrj1I0kBnB7k31oogQLDOgmCfV
-	 O3M/nsCnREVIDuf1GcYexcmmljCqWAKZTIHV8qnCv0Gtd9+bp+zr0kyDz1ZPTg5F9G
-	 g6WZA1sc4BnWAtk8+4leMOCPutykXstm7gERnKC4GguEO561ER7bwC5gpEqMwj3kdC
-	 dhs0QgaIvdlIw==
+	b=MIrNEucnEJFIbvfytmtsi7O/ncakSMtj0ZVqeVmimfLxbCYSr/VbGtsAbGmCcS8BM
+	 CenmZS4Tf9nz+YQIpcoEKXXhJQuSdlRqybWxh90zw+w0zep1bSEJIuIHMZh8hTpdZm
+	 RJpniVdY3iEajOsC3VSl9PzdiF3o/wm4M8p96tASRaGj0pcRB+OZ6ZSQHx3HLm/WGj
+	 2tHtDCdCZeOPA6ctVfsXUczOKPA0Ffpp1G+MlQF/OYfr170Bu3I13w/nBL6A2w03ky
+	 NkmjwuId4HNlFFkhmz/evlPrZxVTaueksiUVXOoQMrCijn9u6NCudu8NoX+Ci8LcMq
+	 WtlOJKv/ZAHjg==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Haoran Jiang <jianghaoran@kylinos.cn>,
-	zhangxi <zhangxi@kylinos.cn>,
+Cc: Ihor Solodrai <ihor.solodrai@linux.dev>,
 	Andrii Nakryiko <andrii@kernel.org>,
+	Jiayuan Chen <jiayuan.chen@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
 	Sasha Levin <sashal@kernel.org>,
-	ast@kernel.org,
 	daniel@iogearbox.net,
-	nathan@kernel.org,
+	eddyz87@gmail.com,
+	shuah@kernel.org,
 	bpf@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.14 39/39] samples/bpf: Fix compilation failure for samples/bpf on LoongArch Fedora
-Date: Tue, 29 Apr 2025 19:50:06 -0400
-Message-Id: <20250429235006.536648-39-sashal@kernel.org>
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.12 33/37] selftests/bpf: Mitigate sockmap_ktls disconnect_after_delete failure
+Date: Tue, 29 Apr 2025 19:51:18 -0400
+Message-Id: <20250429235122.537321-33-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250429235006.536648-1-sashal@kernel.org>
-References: <20250429235006.536648-1-sashal@kernel.org>
+In-Reply-To: <20250429235122.537321-1-sashal@kernel.org>
+References: <20250429235122.537321-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -52,59 +53,51 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.14.4
+X-stable-base: Linux 6.12.25
 Content-Transfer-Encoding: 8bit
 
-From: Haoran Jiang <jianghaoran@kylinos.cn>
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
 
-[ Upstream commit 548762f05d19c5542db7590bcdfb9be1fb928376 ]
+[ Upstream commit f2858f308131a09e33afb766cd70119b5b900569 ]
 
-When building the latest samples/bpf on LoongArch Fedora
+"sockmap_ktls disconnect_after_delete" test has been failing on BPF CI
+after recent merges from netdev:
+* https://github.com/kernel-patches/bpf/actions/runs/14458537639
+* https://github.com/kernel-patches/bpf/actions/runs/14457178732
 
-     make M=samples/bpf
+It happens because disconnect has been disabled for TLS [1], and it
+renders the test case invalid.
 
-There are compilation errors as follows:
+Removing all the test code creates a conflict between bpf and
+bpf-next, so for now only remove the offending assert [2].
 
-In file included from ./linux/samples/bpf/sockex2_kern.c:2:
-In file included from ./include/uapi/linux/in.h:25:
-In file included from ./include/linux/socket.h:8:
-In file included from ./include/linux/uio.h:9:
-In file included from ./include/linux/thread_info.h:60:
-In file included from ./arch/loongarch/include/asm/thread_info.h:15:
-In file included from ./arch/loongarch/include/asm/processor.h:13:
-In file included from ./arch/loongarch/include/asm/cpu-info.h:11:
-./arch/loongarch/include/asm/loongarch.h:13:10: fatal error: 'larchintrin.h' file not found
-         ^~~~~~~~~~~~~~~
-1 error generated.
+The test will be removed later on bpf-next.
 
-larchintrin.h is included in /usr/lib64/clang/14.0.6/include,
-and the header file location is specified at compile time.
+[1] https://lore.kernel.org/netdev/20250404180334.3224206-1-kuba@kernel.org/
+[2] https://lore.kernel.org/bpf/cfc371285323e1a3f3b006bfcf74e6cf7ad65258@linux.dev/
 
-Test on LoongArch Fedora:
-https://github.com/fedora-remix-loongarch/releases-info
-
-Signed-off-by: Haoran Jiang <jianghaoran@kylinos.cn>
-Signed-off-by: zhangxi <zhangxi@kylinos.cn>
+Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-Link: https://lore.kernel.org/bpf/20250425095042.838824-1-jianghaoran@kylinos.cn
+Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+Link: https://lore.kernel.org/bpf/20250416170246.2438524-1-ihor.solodrai@linux.dev
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- samples/bpf/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/bpf/prog_tests/sockmap_ktls.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
-index 5b632635e00dd..95a4fa1f1e447 100644
---- a/samples/bpf/Makefile
-+++ b/samples/bpf/Makefile
-@@ -376,7 +376,7 @@ $(obj)/%.o: $(src)/%.c
- 	@echo "  CLANG-bpf " $@
- 	$(Q)$(CLANG) $(NOSTDINC_FLAGS) $(LINUXINCLUDE) $(BPF_EXTRA_CFLAGS) \
- 		-I$(obj) -I$(srctree)/tools/testing/selftests/bpf/ \
--		-I$(LIBBPF_INCLUDE) \
-+		-I$(LIBBPF_INCLUDE) $(CLANG_SYS_INCLUDES) \
- 		-D__KERNEL__ -D__BPF_TRACING__ -Wno-unused-value -Wno-pointer-sign \
- 		-D__TARGET_ARCH_$(SRCARCH) -Wno-compare-distinct-pointer-types \
- 		-Wno-gnu-variable-sized-type-not-at-end \
+diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_ktls.c b/tools/testing/selftests/bpf/prog_tests/sockmap_ktls.c
+index 2d0796314862a..0a99fd404f6dc 100644
+--- a/tools/testing/selftests/bpf/prog_tests/sockmap_ktls.c
++++ b/tools/testing/selftests/bpf/prog_tests/sockmap_ktls.c
+@@ -68,7 +68,6 @@ static void test_sockmap_ktls_disconnect_after_delete(int family, int map)
+ 		goto close_cli;
+ 
+ 	err = disconnect(cli);
+-	ASSERT_OK(err, "disconnect");
+ 
+ close_cli:
+ 	close(cli);
 -- 
 2.39.5
 
