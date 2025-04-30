@@ -1,391 +1,168 @@
-Received: from mx0b-002c1b01.pphosted.com (mx0b-002c1b01.pphosted.com [148.163.155.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4072A1EDA3C;
-	Wed, 30 Apr 2025 19:41:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=148.163.155.12
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746042123; cv=fail; b=M0cE7nZvgH/cWMoZbDg74ZXbY/+VYW0IGzNcmncnk1wxSu+40gFs+xEJD5vtX+3Sj3lBuCwmb36IIWt+mw/KbIUbZXc91YsO7okIgSRwMnkGlM0fe5n/WEugoiWY/X7UhzzJ5FMQDwb+Hars2sOpNGoyAfWeoOYIs7aEB8/tX3M=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746042123; c=relaxed/simple;
-	bh=YbMTc/y+Q6XNZLlIBgiolisCvaQT84Ve40vVEvSrKk0=;
-	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=JwwyBeIjxfI8IzvYfYeQmup5DKMT8bQzPaPhA5SjJh31Tspkke3qVJHb9934WNeyw9lJFnXCpL8sBPXqHvk7lEbJmlG19YvY36HlVM4iicfB5wlGbI0+IYTX477ES4UD/RInFqTYh2OKh5h3gjXfd7fIbSWsDZa0y/5b0yWC5Io=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nutanix.com; spf=pass smtp.mailfrom=nutanix.com; dkim=pass (2048-bit key) header.d=nutanix.com header.i=@nutanix.com header.b=aVE5YBy2; dkim=pass (2048-bit key) header.d=nutanix.com header.i=@nutanix.com header.b=Rqp1EOyo; arc=fail smtp.client-ip=148.163.155.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nutanix.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nutanix.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nutanix.com header.i=@nutanix.com header.b="aVE5YBy2";
-	dkim=pass (2048-bit key) header.d=nutanix.com header.i=@nutanix.com header.b="Rqp1EOyo"
-Received: from pps.filterd (m0127844.ppops.net [127.0.0.1])
-	by mx0b-002c1b01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 53UJ5CZ2010420;
-	Wed, 30 Apr 2025 12:41:20 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nutanix.com; h=
-	cc:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=proofpoint20171006; bh=S9H2AimZ5U2EZ
-	FlpkN5jEDKk5XlaC+DbCNvxR++kT8Q=; b=aVE5YBy2KKsOXTQ/Mzs+2OJ9XCTIT
-	j0G4grRi1B/s/cMzOMFX5wmqzx3uNYoXtU/EhqXynidrOQ5+EmxuN9PZhRO8z27r
-	pxvx6+warwaqt3XOq/PfOYWnVhShr2bEzbfyG0LHak5Hv0gVImBgMCpeMpYUh6/R
-	W0KvrYjOpwzNQsrjla91jUTLpoRVNrKd+qZJq4EBslW6TMYd7NcPaQ636B1aLb3x
-	B2QyWO392bkCpkUsPRmJEVpO4r+gE8KhkZvrJ4c+nbQ4s2YfgoK+tIUYGuhnD8Ej
-	qUgX3zVshZSehGy8miU9AKKogINUPxVn4ba/smaE2D/MKLGIs1tLhlRPg==
-Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2174.outbound.protection.outlook.com [104.47.57.174])
-	by mx0b-002c1b01.pphosted.com (PPS) with ESMTPS id 468y109ydn-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 30 Apr 2025 12:41:20 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=vLaCOnKxzGownQnIkuTKiFTiIHhiYQO4eXm2rDt3hovFrFPthzXNEoiiWp8E+JcToWIGQM6mVhl3TnPhvz/GMQy3N78Lsgk0CAFnHVHJclBJ0i0qTUTNyv5JbjYnOEMhR41kdjKxUKPLOsSu6QJzRjZXflzzYA189yYZQtAIrT4dpaxzuS0XN4RsBveanzsw6vVf7X6bChDQBhYo8yTLJy6qefKGZGrKOshLDIILJ+rtcwbg/tyizqzdXqqR54vzzWfSYDOxEsMkbzFeDj2PFi4keWpvx+selUXgz6J24a1K+jpHyWomXv3nOqbGnrFLq51kOIC/2t1pgEo3hUQctw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=S9H2AimZ5U2EZFlpkN5jEDKk5XlaC+DbCNvxR++kT8Q=;
- b=HAL5WPUqB1NccG9i5qOmXa7opSXs3p3sixM78b9eK2Ct/4QnDiJTQvq3vtlTnuljhggd2GVNqAZqN48hOtBOu7tfy2wo8Zw1eIobjx/TYGBmCBXp7lXzrg1MouAHByT86w2oODLMNNiUf7iHQXrg+sUuAAl2lOVGU+b48dGv4svggrCfLqNWye+VOyJqxMehwa2a3wLHXp5+FiaZH+7r9m1AlXp7bva9kEYyGWwJ8gIvOAEEJT3sWkvvAoTcYotPxp7xmUb28jNVucO/aa0cLxqKDneM+adcCLVWL4Hlk4DjS0Yt67Zerrilo9C6Kz9tiWaW44jtUjMKbgfseCM7Hg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nutanix.com; dmarc=pass action=none header.from=nutanix.com;
- dkim=pass header.d=nutanix.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nutanix.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=S9H2AimZ5U2EZFlpkN5jEDKk5XlaC+DbCNvxR++kT8Q=;
- b=Rqp1EOyoL37zAlBoAYYXcaT1ficXh/1ziZW+Na7uzD200dEHYj2Qg8cBG4Flu0UCyr3ubXsMzXSinqTlLuTNbiLwZ+88FTgSvgcWgi/6R/UrnKBRqvULq1Urr+RsgYuOIDyOm9xMcZdNt1qwnG6EljL/ryXMTpNZxD8hvDxMzBLMuUJjN2eMsrw6+xnpGAr6S+558XtXo+kEcBU4M91TFDdjiigDAKRFYugtib9DF/jsmurrwM84WaJ4CYIAWxXlbZ+2E7gmCWPGIZnD46URT8lV2D73zeDCvi2E6ijTqCKBBB8tBMZ5kI3LiRJfh76r7jsJXeCfh4Ti4NDYKfcfTA==
-Received: from LV8PR02MB10287.namprd02.prod.outlook.com
- (2603:10b6:408:1fa::10) by PH0PR02MB7736.namprd02.prod.outlook.com
- (2603:10b6:510:50::9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8699.19; Wed, 30 Apr
- 2025 19:41:18 +0000
-Received: from LV8PR02MB10287.namprd02.prod.outlook.com
- ([fe80::b769:6234:fd94:5054]) by LV8PR02MB10287.namprd02.prod.outlook.com
- ([fe80::b769:6234:fd94:5054%4]) with mapi id 15.20.8699.012; Wed, 30 Apr 2025
- 19:41:17 +0000
-From: Jon Kohler <jon@nutanix.com>
-To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        Jason Wang <jasowang@redhat.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Simon Horman <horms@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Cc: Jon Kohler <jon@nutanix.com>
-Subject: [PATCH net-next v2] xdp: Add helpers for head length, headroom, and metadata length
-Date: Wed, 30 Apr 2025 13:11:18 -0700
-Message-ID: <20250430201120.1794658-1-jon@nutanix.com>
-X-Mailer: git-send-email 2.43.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: MN2PR13CA0024.namprd13.prod.outlook.com
- (2603:10b6:208:160::37) To LV8PR02MB10287.namprd02.prod.outlook.com
- (2603:10b6:408:1fa::10)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C06761EF09B;
+	Wed, 30 Apr 2025 19:42:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1746042156; cv=none; b=s3RM7aX/lu2c1CHsBb0xVoDC4PxLsVlLbSFrH9y6Oc3dwCCNG26/joNNuGGFWNXoA7OXCMOvF2GDWlJn3A3hTRWDvxrl851qsRfOmPjE8pRaJdnh5ZCuJon/MGqPBrRZccEkEvNxV12TrLADzdelUez1Pw4lGlQfzxaASMbCsAQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1746042156; c=relaxed/simple;
+	bh=m2le8MbqpO1CEE28derdicybxKozm8oIgSSxhBO1DF8=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=DpwArWhNlvBI4UgoDlm0CWJv7eeLGenzwpv26kFaky36LAHgGX4qf+1suXhSL1OVFB1N3XtTGdHzmcD9fxGNgDw9pin3lQcZ4+UpCejsSr6GmBoETqHwzBKPLFh+OkKVb+LfA2Dod4PbTttA6cRuwoV21G/rR9iZgR6UjJEW418=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A76CC4CEE7;
+	Wed, 30 Apr 2025 19:42:24 +0000 (UTC)
+Date: Wed, 30 Apr 2025 15:42:28 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Dave Hansen <dave.hansen@intel.com>
+Cc: Valentin Schneider <vschneid@redhat.com>, linux-kernel@vger.kernel.org,
+ virtualization@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+ loongarch@lists.linux.dev, linux-riscv@lists.infradead.org,
+ linux-perf-users@vger.kernel.org, kvm@vger.kernel.org,
+ linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, rcu@vger.kernel.org,
+ linux-hardening@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ bpf@vger.kernel.org, Juri Lelli <juri.lelli@redhat.com>, Marcelo Tosatti
+ <mtosatti@redhat.com>, Yair Podemsky <ypodemsk@redhat.com>, Josh Poimboeuf
+ <jpoimboe@kernel.org>, Daniel Wagner <dwagner@suse.de>, Petr Tesarik
+ <ptesarik@suse.com>, Nicolas Saenz Julienne <nsaenz@amazon.com>, Frederic
+ Weisbecker <frederic@kernel.org>, "Paul E. McKenney" <paulmck@kernel.org>,
+ Dave Hansen <dave.hansen@linux.intel.com>, Sean Christopherson
+ <seanjc@google.com>, Juergen Gross <jgross@suse.com>, Ajay Kaher
+ <ajay.kaher@broadcom.com>, Alexey Makhalov <alexey.amakhalov@broadcom.com>,
+ Broadcom internal kernel review list
+ <bcm-kernel-feedback-list@broadcom.com>, Russell King
+ <linux@armlinux.org.uk>, Catalin Marinas <catalin.marinas@arm.com>, Will
+ Deacon <will@kernel.org>, Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui
+ <kernel@xen0n.name>, Paul Walmsley <paul.walmsley@sifive.com>, Palmer
+ Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, Alexandre
+ Ghiti <alex@ghiti.fr>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar
+ <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, x86@kernel.org, "H.
+ Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim
+ <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>, Alexander
+ Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa
+ <jolsa@kernel.org>, Ian Rogers <irogers@google.com>, Adrian Hunter
+ <adrian.hunter@intel.com>, "Liang, Kan" <kan.liang@linux.intel.com>, Pawan
+ Gupta <pawan.kumar.gupta@linux.intel.com>, Paolo Bonzini
+ <pbonzini@redhat.com>, Arnd Bergmann <arnd@arndb.de>, Jason Baron
+ <jbaron@akamai.com>, Ard Biesheuvel <ardb@kernel.org>, Luis Chamberlain
+ <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen
+ <samitolvanen@google.com>, Daniel Gomez <da.gomez@samsung.com>, Naveen N
+ Rao <naveen@kernel.org>, Anil S Keshavamurthy
+ <anil.s.keshavamurthy@intel.com>, "David S. Miller" <davem@davemloft.net>,
+ Masami Hiramatsu <mhiramat@kernel.org>, Neeraj Upadhyay
+ <neeraj.upadhyay@kernel.org>, Joel Fernandes <joel@joelfernandes.org>, Josh
+ Triplett <josh@joshtriplett.org>, Boqun Feng <boqun.feng@gmail.com>,
+ Uladzislau Rezki <urezki@gmail.com>, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>, Lai Jiangshan <jiangshanlai@gmail.com>,
+ Zqiang <qiang.zhang1211@gmail.com>, Vincent Guittot
+ <vincent.guittot@linaro.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>,
+ Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, Kees Cook
+ <kees@kernel.org>, Shuah Khan <shuah@kernel.org>, Masahiro Yamada
+ <masahiroy@kernel.org>, Alice Ryhl <aliceryhl@google.com>, Miguel Ojeda
+ <ojeda@kernel.org>, "Mike Rapoport (Microsoft)" <rppt@kernel.org>, Rong Xu
+ <xur@google.com>, Rafael Aquini <aquini@redhat.com>, Song Liu
+ <song@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, Dan Carpenter
+ <dan.carpenter@linaro.org>, Brian Gerst <brgerst@gmail.com>, "Kirill A.
+ Shutemov" <kirill.shutemov@linux.intel.com>, Benjamin Berg
+ <benjamin.berg@intel.com>, Vishal Annapurve <vannapurve@google.com>, Randy
+ Dunlap <rdunlap@infradead.org>, John Stultz <jstultz@google.com>, Tiezhu
+ Yang <yangtiezhu@loongson.cn>
+Subject: Re: [PATCH v5 00/25] context_tracking,x86: Defer some IPIs until a
+ user->kernel transition
+Message-ID: <20250430154228.1d6306b4@gandalf.local.home>
+In-Reply-To: <019f6713-cfbd-466b-8fb5-dcd982cf8644@intel.com>
+References: <20250429113242.998312-1-vschneid@redhat.com>
+	<fefcd1a6-f146-4f3c-b28b-f907e7346ddd@intel.com>
+	<20250430132047.01d48647@gandalf.local.home>
+	<019f6713-cfbd-466b-8fb5-dcd982cf8644@intel.com>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV8PR02MB10287:EE_|PH0PR02MB7736:EE_
-X-MS-Office365-Filtering-Correlation-Id: ae290281-cd3c-47f0-0437-08dd881ef9c2
-x-proofpoint-crosstenant: true
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|376014|7416014|366016|52116014|921020|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?tYUF+sV33/Tb+dJulcvKO5TfcW7KKEMmnuW02Q6M99fjNgollDDX2mdIJB7I?=
- =?us-ascii?Q?ddJR2lsX/LLFFKLfxkklkJVCIGjDGm1GswwaQ9jrI7w8dfIygOGxjG/roUXx?=
- =?us-ascii?Q?eZfIfzSVWUFYiY8LbiC+XFTQNyWvfgkawplZeuTkZ9/mHncRSSbv5AJDHNcn?=
- =?us-ascii?Q?lXDTlXvHuKdazTHLDM4EV9WrZ9qpFOw4NH5hLfJbwFh4tLGyS8R9lRNHCvKS?=
- =?us-ascii?Q?n4eCq0CwpSTMiqItq6roeEj0AeUcITvqthrwA69xBHWc9Yb5CKzGkP48WB+A?=
- =?us-ascii?Q?zZCXjQKuOLPkcvTZ/2Gninx4r+AVpxFig8Na7llArmY13bfpvYePSX75HSUx?=
- =?us-ascii?Q?bbbpQp+dovpls68/MmH5kb4LI2Sh7d1OOQOc0reDD2hpMn4EdAN9LCRMuPZr?=
- =?us-ascii?Q?lcu13xRyaa44/2qnz8cGwroA+4Jq844SyxihKdGaO+lzOvgQYO+k/uWeTffx?=
- =?us-ascii?Q?xED1FMJZUNtxNr6XS9UjY+ytD14y1366dPNbU2pLq3lBlaZgCxCJwUfbIj/p?=
- =?us-ascii?Q?+3nB+Xxq9cLa+Fp8PvTRzome0wrXeplQB3CGZWthH35OpIN8ZZgAUhisSF6u?=
- =?us-ascii?Q?qtfH+NxL59x53Vfax1eCM/ZlZvtqqAgp6ya0tAubjaBBe1PSfCQNptEeaNRh?=
- =?us-ascii?Q?kISpFjM0VCVuGb0g+6k5lB8xYuy4SykSRXyeSHrDIthTbqZKnzLVIqslldZ7?=
- =?us-ascii?Q?m/8lGLxECxgVsK6yXBBkXi8c3UFfA05xFiDIeAZPlDnCFRapNpwcs+PY/Try?=
- =?us-ascii?Q?d28ybpdK2sAMoySGZmBaasPqdGeZXM+eErH/369CZ3uH3P9FZSZXRtmI7BRD?=
- =?us-ascii?Q?uPjcWfEDMDoc7zEJQwa3k884P8VSF3/yzt/m6/uxzPcHTTbZ65LC1/ee+5p4?=
- =?us-ascii?Q?4aXlxJ9XCbNJa+4SvQcbfsBBBrJs/FgHtYCCNVelz1cF/rNldDoM0+HFyrmG?=
- =?us-ascii?Q?jFH5zljzaKMGhLwcnXnWiEyIuYl42PBFJk0qewlv4NznghXJLHhAfkKN/N1e?=
- =?us-ascii?Q?0ukb3UrVT5nw0s5ZMy0Df+/talbKGFUaSCeyof5fBQJauf0ipbIcb2BLRaWd?=
- =?us-ascii?Q?lqb/Zycx9EGoXK1ouILvOuWAsnhNQhM5rr8uSheIGZcSK7T9hUCMaDHA6ZpL?=
- =?us-ascii?Q?ff58xLz32HjrHFNpVQa4Mtcfe1xZsz83d3JtnFbPacVZmxS5YAal6YA12tQk?=
- =?us-ascii?Q?yFKV+Tqb1RqI+SLTxQNFgaGYlHsgtCri2UQRbdCs1o+C4VkPhMHMhFfzUdMW?=
- =?us-ascii?Q?Z7BtbcbpDXlcZszaTzWCTHPQGDr0AkYuyxA1tLKY4wlwOLryofXPUcHHGE1h?=
- =?us-ascii?Q?MWk68q8cccJdwxCgcQJmZRNB6Xh2HF2OAW2ZbVmrPja6V5X0vlHki5F/RqWW?=
- =?us-ascii?Q?gGdDNpvHxaDWVd9nGblgjdAQ8rkYjJWJftq3z72FdD0bI5wtaTSx56oUhOlN?=
- =?us-ascii?Q?ewA9vqsytrLPs7dLWV5hDFLKDNRTSkehzyAVeR5ysJVw/rarMf+0ZG+WR9vv?=
- =?us-ascii?Q?oF6rfrWUTOdLDTs=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV8PR02MB10287.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(366016)(52116014)(921020)(38350700014);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?PBRF9fVhxuyl/BJBLsvceFEpZBN4QKlsKPIwsp+VlTHfeg8QhwmRlq6sgJWF?=
- =?us-ascii?Q?KVge2Xea1t7YOzpx7KMJOCT/ritN3yHQcXB9aRhenGoRlP23Y7P4YHMz/neu?=
- =?us-ascii?Q?6QX+Ir+FizHOCcCrQBSrkynbByTRM1QuV9xa27TPD9jz0R0A4Y69oFxJDLXd?=
- =?us-ascii?Q?EAKBVLRPE2EeXF7M09Ag9ac0dCqXT4EQCVDwDiBiCeeIZTULCaDyiiUNP7U7?=
- =?us-ascii?Q?DbC4divl32HX7QCE8h7n4ZYiJ+47vd47vdp9jchhdSfn19vVf4YM3L8OEUsN?=
- =?us-ascii?Q?YHjzvWHiOZ3yVwBMnYmY0HCuSDB7JTW/JEPwG0y1EDR3DGjoPtXi5XREyIrO?=
- =?us-ascii?Q?3FmEI+g+kah8yKgPYVKzqwLMtYyoTWHVxo6Y6sfNP8wjiuX2grreYiGchUNO?=
- =?us-ascii?Q?XZlPW96hTdYvFFR0qxR95KmeyTnkVM7oU9GurH48/qMum8yl3Z0snKmPV6Gm?=
- =?us-ascii?Q?Ym1Tj/gOMu5hVS/V8/264AWmb3RjNXvDw8hugzU5rZLpzTEnobckvSeoKhBG?=
- =?us-ascii?Q?Dbh+K+PLyssieAKv7IA1xmQ3vBGKB564EvLuolAkTJArKnnPUm+s4aNqH3RG?=
- =?us-ascii?Q?VIPzyD4S34Lcr6X09FornTGZU2KLMUlge0PnjjH2IN97rlKmXz44vWu3/r5T?=
- =?us-ascii?Q?95iN9Cd3W1Ug6Uxs4Gv+ksCPYo3DVKSjqRP54aWdnf38wnodq1tvyzEnYa13?=
- =?us-ascii?Q?U1GE8Othj9U8M+oNJ3NZ5pbD0xzAl1uNFhOOd73Ibh5QaKZf8d9nCTsClIEZ?=
- =?us-ascii?Q?UlpDGVabi0oQCQjIM13+fX0Q3cbEHk0Vxadx0TQXt0GFIusG1KUHkC52sQjk?=
- =?us-ascii?Q?f00w2uqXbkhYEiuPL99KiWd5NaPGn3ADAdSqrEar5BEQkD5A9MHyj7BQWBcz?=
- =?us-ascii?Q?KXtsExbiaUoaZmlqeUimznuEDx8zBS1chpzwvhjiao9tqVuayJorpYg1M63g?=
- =?us-ascii?Q?df4OPEe/a3DStYputgBflxr7BdbpqPxUifJBS4CruEZxtMDeLYh/xVQNAaGU?=
- =?us-ascii?Q?XRCLdrcFvgnoQ4ag6IL3SEscSGZOdHjDSMSI2e539QOdjlhF6jbF4xoU2LlU?=
- =?us-ascii?Q?hWPZQ+3mv+8h5gYvOc/jNAfcOSp2zsZU07VcsBgkPZOk3eryudr+uzJ6/ZNV?=
- =?us-ascii?Q?HSpLcz/2GYBORegPFrIa7H2Z7K+qQJhez+QicfMPUK2FOLYmmKo2OcJ8lHlu?=
- =?us-ascii?Q?WanmVdvk6AywHijwOAA1D19sQtqGoyIcHHyAN//6XVf8z5Upacgz5f0VnxqW?=
- =?us-ascii?Q?JChPPycNk/4QCZVuRSLtvF7Y/kZsPCrmkQr6AGhJVCcez4Fzi1H4hQ0xnQw3?=
- =?us-ascii?Q?8ZuNXkKoslSGV62cqYrwdg6flaneZv5pL6hZ07GYaqOAD/KuVyokyBfMKD9e?=
- =?us-ascii?Q?SX6lBG0hImLLApVN//k/PThIZ5SGTrzcZPU9Dec4OxVNkbtSjF+d9tGuLqCx?=
- =?us-ascii?Q?Ny5y+zPToi+2mYNEVXHFZCtxshjeyRUCzxN6JzR7BPjKQr1tbv1uMLoX1mlL?=
- =?us-ascii?Q?IeEv40JDy1Qtv31ulhicRpKJQjy0XK4N+vyCRi1y1lqReoJ9d17RBH9PN1XO?=
- =?us-ascii?Q?VFhDd3vx9IOvnoh3nRSZQg1eRj8oJgecqirG9WTm6e+ziNbB8yxzqZyono+2?=
- =?us-ascii?Q?/w=3D=3D?=
-X-OriginatorOrg: nutanix.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ae290281-cd3c-47f0-0437-08dd881ef9c2
-X-MS-Exchange-CrossTenant-AuthSource: LV8PR02MB10287.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Apr 2025 19:41:17.9234
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bb047546-786f-4de1-bd75-24e5b6f79043
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: FBvFbdWT1AlsOop8/2XpEosenfCu7XT/tKM8OlANfyVvYaiga6O1S7eMJR7WNjUeCZCi8MEjKi04f0zByeCjnM8bxymCm7z4FnHUopmtAoM=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR02MB7736
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNDMwMDE0NCBTYWx0ZWRfX2E2ppwFQbMs7 Ko04d1QlAdR+LSSBLZI5n5syFkwjHR+S0I/+VUiZOMglhgqk929jQikL2e4rO/6dCYo/O9ca7x0 +KsGEUFz4VH0qLOufWoAag4tn/uvzDiUis1nDNrbI25hp2Xb+m4A1cY7ZN8NK/X3kN3nmR0Xmkf
- diu73vUCZvLl9/9VX107JS/l9ynPM08rSPbP0HQLfkTzQmWcbH6o5IDHJP9w3ILnvxtrf2IRcY2 oVzt+6dizLbC5bTbk6mSJ8xPtxBKVDsxOXSoE3qwyiU/c7odWiqJdbYKA2eZfrV57tfHZ5qZm1B pyMg+ZfCdXPiqQjXkpZ5oJ6tXz0jcFbQIxjKIDc9rnXRsy5sz5W5vdPGhbH075Htc56Jag041CP
- AGfCZ9HrY0NPNTNz+lt3TJO9Q9AI3wnswQ9t0unuxJlMbWyf6frjsRIIcYn00jbZQJ3wIVmm
-X-Authority-Analysis: v=2.4 cv=MNVgmNZl c=1 sm=1 tr=0 ts=68127ce0 cx=c_pps a=dIBsZBmI1wyUZqnlzmwqRg==:117 a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=wKuvFiaSGQ0qltdbU6+NXLB8nM8=:19 a=Ol13hO9ccFRV9qXi2t6ftBPywas=:19 a=xqWC_Br6kY4A:10 a=XR8D0OoHHMoA:10
- a=0kUYKlekyDsA:10 a=VwQbUJbxAAAA:8 a=64Cc0HZtAAAA:8 a=51KnYewcZuRi7D_KieYA:9
-X-Proofpoint-GUID: bySJR8mZlY3hCKvcHvzGtasbWRnI_pja
-X-Proofpoint-ORIG-GUID: bySJR8mZlY3hCKvcHvzGtasbWRnI_pja
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-04-30_06,2025-04-24_02,2025-02-21_01
-X-Proofpoint-Spam-Reason: safe
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Introduce new XDP helpers:
-- xdp_headlen: Similar to skb_headlen
-- xdp_headroom: Similar to skb_headroom
-- xdp_metadata_len: Similar to skb_metadata_len
+On Wed, 30 Apr 2025 11:07:35 -0700
+Dave Hansen <dave.hansen@intel.com> wrote:
 
-Integrate these helpers into tap, tun, and XDP implementation to start.
+> On 4/30/25 10:20, Steven Rostedt wrote:
+> > On Tue, 29 Apr 2025 09:11:57 -0700
+> > Dave Hansen <dave.hansen@intel.com> wrote:
+> >   
+> >> I don't think we should do this series.  
+> > 
+> > Could you provide more rationale for your decision.  
+> 
+> I talked about it a bit in here:
+> 
+> > https://lore.kernel.org/all/408ebd8b-4bfb-4c4f-b118-7fe853c6e897@intel.com/  
 
-No functional changes introduced.
+Hmm, that's easily missed. But thanks for linking it.
 
-Signed-off-by: Jon Kohler <jon@nutanix.com>
----
-v1->v2: Integrate feedback from Willem
-https://patchwork.kernel.org/project/netdevbpf/patch/20250430182921.1704021-1-jon@nutanix.com/
+> 
+> But, basically, this series puts a new onus on the entry code: it can't
+> touch the vmalloc() area ... except the LDT ... and except the PEBS
+> buffers. If anyone touches vmalloc()'d memory (or anything else that
+> eventually gets deferred), they crash. They _only_ crash on these
+> NOHZ_FULL systems.
+> 
+> Putting new restrictions on the entry code is really nasty. Let's say a
+> new hardware feature showed up that touched vmalloc()'d memory in the
+> entry code. Probably, nobody would notice until they got that new
+> hardware and tried to do a NOHZ_FULL workload. It might take years to
+> uncover, once that hardware was out in the wild.
+> 
+> I have a substantial number of gray hairs from dealing with corner cases
+> in the entry code.
+> 
+> You _could_ make it more debuggable. Could you make this work for all
+> tasks, not just NOHZ_FULL? The same logic _should_ apply. It would be
+> inefficient, but would provide good debugging coverage.
+> 
+> I also mentioned this earlier, but PTI could be leveraged here to ensure
+> that the TLB is flushed properly. You could have the rule that anything
+> mapped into the user page table can't have a deferred flush and then do
+> deferred flushes at SWITCH_TO_KERNEL_CR3 time. Yeah, that's in
+> arch-specific assembly, but it's a million times easier to reason about
+> because the window where a deferred-flush allocation might bite you is
+> so small.
+> 
+> Look at the syscall code for instance:
+> 
+> > SYM_CODE_START(entry_SYSCALL_64)
+> >         swapgs
+> >         movq    %rsp, PER_CPU_VAR(cpu_tss_rw + TSS_sp2)
+> >         SWITCH_TO_KERNEL_CR3 scratch_reg=%rsp  
+> 
+> You can _trivially_ audit this and know that swapgs doesn't touch memory
+> and that as long as PER_CPU_VAR()s and the process stack don't have
+> their mappings munged and flushes deferred that this would be correct.
 
- drivers/net/tap.c |  6 +++---
- drivers/net/tun.c | 12 +++++------
- include/net/xdp.h | 54 +++++++++++++++++++++++++++++++++++++++++++----
- net/core/xdp.c    | 12 +++++------
- 4 files changed, 65 insertions(+), 19 deletions(-)
+Hmm, so there is still a path for this?
 
-diff --git a/drivers/net/tap.c b/drivers/net/tap.c
-index d4ece538f1b2..a62fbca4b08f 100644
---- a/drivers/net/tap.c
-+++ b/drivers/net/tap.c
-@@ -1048,7 +1048,7 @@ static int tap_get_user_xdp(struct tap_queue *q, struct xdp_buff *xdp)
- 	struct sk_buff *skb;
- 	int err, depth;
- 
--	if (unlikely(xdp->data_end - xdp->data < ETH_HLEN)) {
-+	if (unlikely(xdp_headlen(xdp) < ETH_HLEN)) {
- 		err = -EINVAL;
- 		goto err;
- 	}
-@@ -1062,8 +1062,8 @@ static int tap_get_user_xdp(struct tap_queue *q, struct xdp_buff *xdp)
- 		goto err;
- 	}
- 
--	skb_reserve(skb, xdp->data - xdp->data_hard_start);
--	skb_put(skb, xdp->data_end - xdp->data);
-+	skb_reserve(skb, xdp_headroom(xdp));
-+	skb_put(skb, xdp_headlen(xdp));
- 
- 	skb_set_network_header(skb, ETH_HLEN);
- 	skb_reset_mac_header(skb);
-diff --git a/drivers/net/tun.c b/drivers/net/tun.c
-index 7babd1e9a378..4c47eed71986 100644
---- a/drivers/net/tun.c
-+++ b/drivers/net/tun.c
-@@ -1567,7 +1567,7 @@ static int tun_xdp_act(struct tun_struct *tun, struct bpf_prog *xdp_prog,
- 			dev_core_stats_rx_dropped_inc(tun->dev);
- 			return err;
- 		}
--		dev_sw_netstats_rx_add(tun->dev, xdp->data_end - xdp->data);
-+		dev_sw_netstats_rx_add(tun->dev, xdp_headlen(xdp));
- 		break;
- 	case XDP_TX:
- 		err = tun_xdp_tx(tun->dev, xdp);
-@@ -1575,7 +1575,7 @@ static int tun_xdp_act(struct tun_struct *tun, struct bpf_prog *xdp_prog,
- 			dev_core_stats_rx_dropped_inc(tun->dev);
- 			return err;
- 		}
--		dev_sw_netstats_rx_add(tun->dev, xdp->data_end - xdp->data);
-+		dev_sw_netstats_rx_add(tun->dev, xdp_headlen(xdp));
- 		break;
- 	case XDP_PASS:
- 		break;
-@@ -2355,7 +2355,7 @@ static int tun_xdp_one(struct tun_struct *tun,
- 		       struct xdp_buff *xdp, int *flush,
- 		       struct tun_page *tpage)
- {
--	unsigned int datasize = xdp->data_end - xdp->data;
-+	unsigned int datasize = xdp_headlen(xdp);
- 	struct tun_xdp_hdr *hdr = xdp->data_hard_start;
- 	struct virtio_net_hdr *gso = &hdr->gso;
- 	struct bpf_prog *xdp_prog;
-@@ -2415,14 +2415,14 @@ static int tun_xdp_one(struct tun_struct *tun,
- 		goto out;
- 	}
- 
--	skb_reserve(skb, xdp->data - xdp->data_hard_start);
--	skb_put(skb, xdp->data_end - xdp->data);
-+	skb_reserve(skb, xdp_headroom(xdp));
-+	skb_put(skb, xdp_headlen(xdp));
- 
- 	/* The externally provided xdp_buff may have no metadata support, which
- 	 * is marked by xdp->data_meta being xdp->data + 1. This will lead to a
- 	 * metasize of -1 and is the reason why the condition checks for > 0.
- 	 */
--	metasize = xdp->data - xdp->data_meta;
-+	metasize = xdp_metadata_len(xdp);
- 	if (metasize > 0)
- 		skb_metadata_set(skb, metasize);
- 
-diff --git a/include/net/xdp.h b/include/net/xdp.h
-index 48efacbaa35d..044345b18305 100644
---- a/include/net/xdp.h
-+++ b/include/net/xdp.h
-@@ -151,10 +151,56 @@ xdp_get_shared_info_from_buff(const struct xdp_buff *xdp)
- 	return (struct skb_shared_info *)xdp_data_hard_end(xdp);
- }
- 
-+/**
-+ * xdp_headlen - Calculate the length of the data in an XDP buffer
-+ * @xdp: Pointer to the XDP buffer structure
-+ *
-+ * Compute the length of the data contained in the XDP buffer. Does not
-+ * include frags, use xdp_get_buff_len() for that instead.
-+ *
-+ * Analogous to skb_headlen().
-+ *
-+ * Return: The length of the data in the XDP buffer in bytes.
-+ */
-+static inline unsigned int xdp_headlen(const struct xdp_buff *xdp)
-+{
-+	return xdp->data_end - xdp->data;
-+}
-+
-+/**
-+ * xdp_headroom - Calculate the headroom available in an XDP buffer
-+ * @xdp: Pointer to the XDP buffer structure
-+ *
-+ * Compute the headroom in an XDP buffer.
-+ *
-+ * Analogous to the skb_headroom().
-+ *
-+ * Return: The size of the headroom in bytes.
-+ */
-+static inline unsigned int xdp_headroom(const struct xdp_buff *xdp)
-+{
-+	return xdp->data - xdp->data_hard_start;
-+}
-+
-+/**
-+ * xdp_metadata_len - Calculate the length of metadata in an XDP buffer
-+ * @xdp: Pointer to the XDP buffer structure
-+ *
-+ * Compute the length of the metadata region in an XDP buffer.
-+ *
-+ * Analogous to skb_metadata_len().
-+ *
-+ * Return: The length of the metadata in bytes.
-+ */
-+static inline unsigned int xdp_metadata_len(const struct xdp_buff *xdp)
-+{
-+	return xdp->data - xdp->data_meta;
-+}
-+
- static __always_inline unsigned int
- xdp_get_buff_len(const struct xdp_buff *xdp)
- {
--	unsigned int len = xdp->data_end - xdp->data;
-+	unsigned int len = xdp_headlen(xdp);
- 	const struct skb_shared_info *sinfo;
- 
- 	if (likely(!xdp_buff_has_frags(xdp)))
-@@ -364,8 +410,8 @@ int xdp_update_frame_from_buff(const struct xdp_buff *xdp,
- 	int metasize, headroom;
- 
- 	/* Assure headroom is available for storing info */
--	headroom = xdp->data - xdp->data_hard_start;
--	metasize = xdp->data - xdp->data_meta;
-+	headroom = xdp_headroom(xdp);
-+	metasize = xdp_metadata_len(xdp);
- 	metasize = metasize > 0 ? metasize : 0;
- 	if (unlikely((headroom - metasize) < sizeof(*xdp_frame)))
- 		return -ENOSPC;
-@@ -377,7 +423,7 @@ int xdp_update_frame_from_buff(const struct xdp_buff *xdp,
- 	}
- 
- 	xdp_frame->data = xdp->data;
--	xdp_frame->len  = xdp->data_end - xdp->data;
-+	xdp_frame->len  = xdp_headlen(xdp);
- 	xdp_frame->headroom = headroom - sizeof(*xdp_frame);
- 	xdp_frame->metasize = metasize;
- 	xdp_frame->frame_sz = xdp->frame_sz;
-diff --git a/net/core/xdp.c b/net/core/xdp.c
-index f86eedad586a..0d56320a7ff9 100644
---- a/net/core/xdp.c
-+++ b/net/core/xdp.c
-@@ -581,8 +581,8 @@ struct xdp_frame *xdp_convert_zc_to_xdp_frame(struct xdp_buff *xdp)
- 
- 	/* Clone into a MEM_TYPE_PAGE_ORDER0 xdp_frame. */
- 	metasize = xdp_data_meta_unsupported(xdp) ? 0 :
--		   xdp->data - xdp->data_meta;
--	totsize = xdp->data_end - xdp->data + metasize;
-+		   xdp_metadata_len(xdp);
-+	totsize = xdp_headlen(xdp) + metasize;
- 
- 	if (sizeof(*xdpf) + totsize > PAGE_SIZE)
- 		return NULL;
-@@ -646,10 +646,10 @@ struct sk_buff *xdp_build_skb_from_buff(const struct xdp_buff *xdp)
- 	if (unlikely(!skb))
- 		return NULL;
- 
--	skb_reserve(skb, xdp->data - xdp->data_hard_start);
--	__skb_put(skb, xdp->data_end - xdp->data);
-+	skb_reserve(skb, xdp_headroom(xdp));
-+	__skb_put(skb, xdp_headlen(xdp));
- 
--	metalen = xdp->data - xdp->data_meta;
-+	metalen = xdp_metadata_len(xdp);
- 	if (metalen > 0)
- 		skb_metadata_set(skb, metalen);
- 
-@@ -763,7 +763,7 @@ struct sk_buff *xdp_build_skb_from_zc(struct xdp_buff *xdp)
- 
- 	memcpy(__skb_put(skb, len), xdp->data_meta, LARGEST_ALIGN(len));
- 
--	metalen = xdp->data - xdp->data_meta;
-+	metalen = xdp_metadata_len(xdp);
- 	if (metalen > 0) {
- 		skb_metadata_set(skb, metalen);
- 		__skb_pull(skb, metalen);
--- 
-2.43.0
+At least if it added more ways to debug it, and some other changes to make
+the locations where vmalloc is dangerous smaller?
 
+> 
+> >> If folks want this functionality, they should get a new CPU that can
+> >> flush the TLB without IPIs.  
+> > 
+> > That's a pretty heavy handed response. I'm not sure that's always a
+> > feasible solution.
+> > 
+> > From my experience in the world, software has always been around to fix the
+> > hardware, not the other way around ;-)  
+> 
+> Both AMD and Intel have hardware to do it. ARM CPUs do it too, I think.
+> You can go buy the Intel hardware off the shelf today.
+
+Sure, but changing CPUs on machines is not always that feasible either.
+
+-- Steve
