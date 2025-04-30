@@ -1,184 +1,131 @@
-Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EFC7190676;
-	Wed, 30 Apr 2025 18:25:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 300C525D1FC
+	for <bpf@vger.kernel.org>; Wed, 30 Apr 2025 18:33:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746037517; cv=none; b=DaQwifFsiH8UGcGNSLgSfEyexoYHdyqVw0hzTUR9HKjJG+MnBSskqQP/ltvtdijRQ/KXXyw5I+8x7EvIoRXxxsDcflglMkMxgkwgQfr284ute1HP3JFmeRxN3Ct1WkyL8WZlFq7Qyc+NWEb/WK/MhbZTC8nhZ2Et1Dz6z4I8XDw=
+	t=1746038041; cv=none; b=ctq/KITfTmRdnKcu9FLxgCKjH1Lr7wway1Qsp7IDnLCmtloRTWk3d9TdeLjTDmjHKNcwimJlWiY+zn7TDSUy9dPBedovS368PhyNvxubkEvKoeC0psbbPv95QRPRT5ZV5KSnx3hVwETslkfLDELnkZbvBOLag9K5FI8VkQKpqHY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746037517; c=relaxed/simple;
-	bh=dntHkSUODIQLMMzWfdC0ZCYDVYeurZEYNyJyydXvyRw=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=sl14xvP/oRxtbLJUmNlfehRO6MJuxkQmySD4v5k9SPm+aJfhj8TBM7gkgRUnbPmb46YVxwAzoRBCz8hiYhA2ZaiIxTb28QTf8Ixo661vPKQxH5XQZJ5d3pGzgTsfY9B5mI54c1IymoWObHzYu+FwagntLA668YRPRiNNzY+Y92Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gTn+/oCN; arc=none smtp.client-ip=209.85.222.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1746038041; c=relaxed/simple;
+	bh=3XmVokB/CifUAMIBnKlc5SdMT9bEBK4AljkT9etnU6Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dMDBLAgkJuaep+I2fdqufdA4KZUNeOPyJdqhvYu0ZAvaQ0aGz2dmf9/W5B3eS+Ke1MGxKYqNji4AFBwkT8e4+tLWKmrxqtUW4RhwuL7YXVrjj/3UejvoWzxdUFN5pdsC+DGhHU8yiO7KbNz3F34MzxkqEaqiqUfYkZ14oSUpEWE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=EVvDZim4; arc=none smtp.client-ip=209.85.218.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gTn+/oCN"
-Received: by mail-qk1-f171.google.com with SMTP id af79cd13be357-7c53b9d66fdso14620285a.3;
-        Wed, 30 Apr 2025 11:25:15 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="EVvDZim4"
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-ac339f53df9so28444166b.1
+        for <bpf@vger.kernel.org>; Wed, 30 Apr 2025 11:33:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746037515; x=1746642315; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PuU9dJ/Di5OmDAwUgi7sluax8cJiERF6LgVjZOwJylI=;
-        b=gTn+/oCNzjLr+nmBrguxMBuw6h7efJyEJ2deGl5IWBqGJJsAr8DpROa7XZn1ray+mG
-         x7Uw9VCvbwm2bavdF95FXr+VXElejFG7j2YsYqjrV5v2t/rPD0jw/stA1ElfFA3NgK6l
-         fPdyxpu67kt5XtNODVMTRu1jqownHqTbJOlTTsQ76NLsr26/ymg03mq5R7hLA+Am3fx5
-         xMeS3HOTax9wOrxJxwZrGqorYlFhinEOG95qr9RRBHee3+1pPvDD+3HVKLX+2qcWeBm6
-         zs6ze/AcTEruusdjTwiv9qepMDDZ/pZjwthpEIr751z0STS8bYsKC3KIH9aCl30Zo+Zp
-         2isQ==
+        d=suse.com; s=google; t=1746038037; x=1746642837; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=uIwuIgznvi17Hp6RFjo5Q2QMaBhu5w5IFRJKWtuqdac=;
+        b=EVvDZim4PHuzY4ldp2os4l6hECzuIMqxehHqU5rkklEnIkri23tE+HShvoLYw3aN1L
+         TuNqUT3PYRqey4/C8PrDmDe5AJ2O8Wff2G4WuDSkzDKKlPLNIKYOLf+BTGrGMBqXsPr8
+         DOjsnGh3OMjPaUYFZS+zjUILgQhRMrHP3ZiBhAQWHWiMARY/OKJpFwfTXeqAM5rmcZGj
+         ItUjeZxK9BSSVqGaVMRuZGB5cly0hE6WIy1y7yGXdAV0bAJY3dmrMk4UrVup6fi73FnL
+         rwnvuibjTDVzoadvxG+L8C1EBqJ6GYNfsl63nPtQ91rRxX8fqC5hlyP36MrXoDO9l3BP
+         cltQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746037515; x=1746642315;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=PuU9dJ/Di5OmDAwUgi7sluax8cJiERF6LgVjZOwJylI=;
-        b=NBkZw6/MyFXoZC9INkCDeBCvzQ8htfwia64+KyN40lbYUYNAzvTBmDayBoqc/9SJ7p
-         bDpGP5HjM75adXAf75iyeb9f2X36NXgjGXPI4bbQ1CBcNCSD7SeXxd+z5j5nSh7Q/jc8
-         RC1bRqSQSjGv1bLQYgHlaBkmKN8fTXCyuFd46lyWqgPwxH6LMDwqPhso7Wmz/SDeDorF
-         warKLDp1cDNjCH62Uz28fv96zcHD8XgKCMWuVwHotBgc8Hkuyh5+8y97vWof7plI4x0a
-         Mqr2Ro7fe8y9N8JEN0Y/HKPs0iwA6dO7WU83DCmgIRk9Hwy1Ydf59n3eUVY417YWOxG2
-         YqrQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVJJ6KocnC41WZLBZni2JTjKDBrSXilz7CaihIzWWyh5auwGuRin77PUuDeCjDuYLaXtXMVcyw6@vger.kernel.org, AJvYcCVT+AampspA74ie5TGk9xJiIly60u1iIbCEqRXbKEWustDm7GJWYUMn6fg0bRBDDqIfOjA=@vger.kernel.org, AJvYcCVus+kmXsSHIOp2rlFIM+7Za3DLYadnAUV/H/XCEV3EDP8FvjJ0EZTaxtg6n+d0YDCILPMcwxEn5HuWXax9@vger.kernel.org
-X-Gm-Message-State: AOJu0YzMo+MAdHUeyUbYPcNYEpV6A1nZfTi5WpvB1RKEfQTBZs5Gf65L
-	/X/oUhPMLBPz46+3BdAkgbtOzPFTJbRcHFxXrPcYtZYMgcrsYfjN
-X-Gm-Gg: ASbGnctXVYX2sQWJuMF51OQzh047BNAI+DcfEsEmgHsQ7yViNmt3ghOXGjCyTWmLuPU
-	g9O1eTo3qbQlGSE58D2sXQOpkLA02OU0ykgCbbogYRK5V2k5RK4Vw0NIYNPuyM4Z298mi4Gu0I5
-	auMP8iIEIbADACcyC0+akkIBHO1esnZisyxFTzOyOKVunnyw8gbigm2knxpZo90IFUuo4TeBoDQ
-	vTRxWH24FD/Xk8u3ZZ99qBAiWilAqKaEe0aWoCXobnKAM8TSq3jCwL49rMp0Ol0mqLjZxYo/nqR
-	CWQ4aVluLxPtCPTgtUCYHeniqV0zEoTP+Oe801CAvCMrjEJciRcr/eAs2fIonfywpIY9nsLpRno
-	zeX3QXXAeX5c54yw4pddLigt8hOdzkYA=
-X-Google-Smtp-Source: AGHT+IEdeBQS0rsgRgLgNnw2i5fBYy2oC7eKu5y/CBRhlsW9hDSYvHIxDh4yZVpXcWMS8fpuh7OTog==
-X-Received: by 2002:a05:620a:17a7:b0:7c5:57b1:1fd1 with SMTP id af79cd13be357-7cac7ea001dmr572603585a.47.1746037514950;
-        Wed, 30 Apr 2025 11:25:14 -0700 (PDT)
-Received: from localhost (141.139.145.34.bc.googleusercontent.com. [34.145.139.141])
-        by smtp.gmail.com with UTF8SMTPSA id af79cd13be357-7c958e7bdfesm887579985a.75.2025.04.30.11.25.14
+        d=1e100.net; s=20230601; t=1746038037; x=1746642837;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uIwuIgznvi17Hp6RFjo5Q2QMaBhu5w5IFRJKWtuqdac=;
+        b=ZoLafPfUFgrpiKRP+IcTm76VoehXd2kKmxwVX0gS5kZiULUnZ/Bb+ozphlWNwAQjov
+         PzqAFojuCJacvk2X/wi+rTEYDN5LVh6rpi3fHL2FQA8gEvdrT0mIfqWW4pqpHiMzcuib
+         FgX0II3HFwurhlmAktPHFpX3Q2spfCbBlK1+uTQhJsC2afOKYhbeCdcNeDaiW9/BwCv0
+         PntjVJpdVjUMENegc/dfDkZ4ORxrWZfw4sybU+E5gGRD6nmuR7fDe1QGImFz7/Lw/8Vz
+         U+bFHsmVYWl9gJk5LNGwtGiUDkHTkjO97cU39RIl0Zbj/tbfojJBtoVLq0l7BTyBkhFz
+         WUFQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUU1SDk6SKCJpeMyn3I8i2KqzKSgIoReh6JMcBx33Ysh+YX8smZUmaulzKWNvx9jSYMtmo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxcK0AmRgcLED0Yt1o7vAHbbrJu3YuNVwML1FN6kDwPjDHtanXX
+	zDDSKfeBF52ZcS4lXh6IWz5hIxLYPygoWs1rY98cItBuPZZFZO6n3YWXLN4D3BA=
+X-Gm-Gg: ASbGncv2plcSUcNnSg0M9ICxMAIscFZ8l5ngnfbhR5+MvALqee82rs3j5gYTsewQ7tc
+	PS4IIc+3X/YpEg2kVxqubV07gc9gsaC2E1oUpZ5H49ebaBbOMuXMIzUzWeI6/J0AO5sC8hdTpgk
+	j01+hlvYYSdrRfp5ymkTHiPGIM/OOaiG7InTJ5K7g6uCbBDA8PQHJ9aDuQRLllwa9sBDoTDfsJW
+	qq852lRr4d1gUvL4lGg4QCtue99VmREfn5tWJN5UURJrIoMrxRZifkImbC1OdF3ebVDjkQozOwn
+	jEnnMuwso3XOK22z0zB/Q5TnXMHxbEalH/lmTLiDMts=
+X-Google-Smtp-Source: AGHT+IG88zM/KKN9CmIYW/jIAN02wv66F1WQldIGaiBbeFZOI1UfS80/b8VS6aqUQAp09ki+ghY4OA==
+X-Received: by 2002:a17:907:72c7:b0:acb:5ec4:e944 with SMTP id a640c23a62f3a-acef425c486mr40305866b.15.1746038037390;
+        Wed, 30 Apr 2025 11:33:57 -0700 (PDT)
+Received: from blackdock.suse.cz ([193.86.92.181])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-acecefedd25sm255311966b.134.2025.04.30.11.33.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Apr 2025 11:25:14 -0700 (PDT)
-Date: Wed, 30 Apr 2025 14:25:13 -0400
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Jon Kohler <jon@nutanix.com>, 
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
- Jason Wang <jasowang@redhat.com>, 
- Andrew Lunn <andrew+netdev@lunn.ch>, 
- "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, 
- Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, 
- Jesper Dangaard Brouer <hawk@kernel.org>, 
- John Fastabend <john.fastabend@gmail.com>, 
- Simon Horman <horms@kernel.org>, 
- netdev@vger.kernel.org, 
- linux-kernel@vger.kernel.org, 
- bpf@vger.kernel.org
-Cc: Jon Kohler <jon@nutanix.com>
-Message-ID: <68126b09c77f7_3080df29453@willemb.c.googlers.com.notmuch>
-In-Reply-To: <20250430182921.1704021-1-jon@nutanix.com>
-References: <20250430182921.1704021-1-jon@nutanix.com>
-Subject: Re: [PATCH net-next] xdp: add xdp_skb_reserve_put helper
+        Wed, 30 Apr 2025 11:33:57 -0700 (PDT)
+Date: Wed, 30 Apr 2025 20:33:55 +0200
+From: Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
+To: Chen Ridong <chenridong@huaweicloud.com>
+Cc: tj@kernel.org, hannes@cmpxchg.org, longman@redhat.com, 
+	roman.gushchin@linux.dev, cgroups@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	bpf@vger.kernel.org, chenridong@huawei.com, wangweiyang2@huawei.com
+Subject: Re: [PATCH v1] cgroup/cpuset: remove kernfs active break
+Message-ID: <kmmrseckjctb4gxcx2rdminrjnq2b4ipf7562nvfd432ld5v5m@2byj5eedkb2o>
+References: <20241220013106.3603227-1-chenridong@huaweicloud.com>
+ <6zxqs3ms52uvgsyryubna64xy5a6zxogssomsgiyhzishwmfbd@lylwjd6cdkli>
+ <6bdac218-a18a-4cb5-b10e-c369d90b502c@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6bdac218-a18a-4cb5-b10e-c369d90b502c@huaweicloud.com>
 
-Jon Kohler wrote:
-> Add helper for calling skb_{put|reserve} to reduce repetitive pattern
-> across various drivers.
+On Fri, Jan 03, 2025 at 10:22:33AM +0800, Chen Ridong <chenridong@huaweicloud.com> wrote:
+> I think the commit 76bb5ab8f6e3 ("cpuset: break kernfs active protection
+> in cpuset_write_resmask()") is causing the warning I observed.
+
+
+I was considering
+bdb2fd7fc56e1 ("kernfs: Skip kernfs_drain_open_files() more aggressively") 
+in conjunction (the warning didn't exist back then).
+
+
+> writing to 'cpuset_write_resmask' cannot avoid concurrent removal of
+> the cgroup directory. Therefore, this could cause the warning.
 > 
-> Plumb into tap and tun to start.
-> 
-> No functional change intended.
-> 
-> Signed-off-by: Jon Kohler <jon@nutanix.com>
-> ---
->  drivers/net/tap.c | 3 +--
->  drivers/net/tun.c | 3 +--
->  include/net/xdp.h | 8 ++++++++
->  net/core/xdp.c    | 3 +--
->  4 files changed, 11 insertions(+), 6 deletions(-)
+> > As I read kernfs_break_active_protection() comment, I don't see cpuset
+> > code violating its conditions:
+> > a) it's broken/unbroken from withing a kernfs file operation handler,
+> > b) it pins the needed struct cpuset independently of kernfs_node (it's
+> >    ok to be removed)
+> > 
+> I am not sure if it is safe to call
+> kernfs_unbreak_active_protection(atomic_inc(&kn->active)); after the
+> 'kn' has been removed. 
 
-Subjective, but I prefer the existing code. I understand what
-skb_reserve and skb_put do. While xdp_skb_reserve_put adds a layer of
-indirection that I'd have to follow.
+Thit'd render the break/unbreak mechanism useless if unbreak cannot be
+safely used. Users of unbreak know that they may get an inactive
+reference. IOW in this part of the race:
 
-Sometimes deduplication makes sense, sometimes the indirection adds
-more mental load than it's worth. In this case the code savings are
-small. As said, subjective. Happy to hear other opinions.
+                                                                         kernfs_unbreak_active_protection
+                                                                         // active = 0x80000002
+    ...
+    kernfs_should_drain_open_files
+    WARN_ON_ONCE(atomic_read(&kn->active) != KN_DEACTIVATED_BIAS);
+                                                                         kernfs_put_active
 
-> 
-> diff --git a/drivers/net/tap.c b/drivers/net/tap.c
-> index d4ece538f1b2..54ce492da5e9 100644
-> --- a/drivers/net/tap.c
-> +++ b/drivers/net/tap.c
-> @@ -1062,8 +1062,7 @@ static int tap_get_user_xdp(struct tap_queue *q, struct xdp_buff *xdp)
->  		goto err;
->  	}
->  
-> -	skb_reserve(skb, xdp->data - xdp->data_hard_start);
-> -	skb_put(skb, xdp->data_end - xdp->data);
-> +	xdp_skb_reserve_put(xdp, skb);
->  
->  	skb_set_network_header(skb, ETH_HLEN);
->  	skb_reset_mac_header(skb);
-> diff --git a/drivers/net/tun.c b/drivers/net/tun.c
-> index 7babd1e9a378..30701ad5c27d 100644
-> --- a/drivers/net/tun.c
-> +++ b/drivers/net/tun.c
-> @@ -2415,8 +2415,7 @@ static int tun_xdp_one(struct tun_struct *tun,
->  		goto out;
->  	}
->  
-> -	skb_reserve(skb, xdp->data - xdp->data_hard_start);
-> -	skb_put(skb, xdp->data_end - xdp->data);
-> +	xdp_skb_reserve_put(xdp, skb);
->  
->  	/* The externally provided xdp_buff may have no metadata support, which
->  	 * is marked by xdp->data_meta being xdp->data + 1. This will lead to a
-> diff --git a/include/net/xdp.h b/include/net/xdp.h
-> index 48efacbaa35d..0e7414472464 100644
-> --- a/include/net/xdp.h
-> +++ b/include/net/xdp.h
-> @@ -345,6 +345,14 @@ struct sk_buff *xdp_build_skb_from_frame(struct xdp_frame *xdpf,
->  					 struct net_device *dev);
->  struct xdp_frame *xdpf_clone(struct xdp_frame *xdpf);
->  
-> +static __always_inline
-> +void xdp_skb_reserve_put(const struct xdp_buff *xdp,
-> +			 struct sk_buff *skb)
-> +{
-> +	skb_reserve(skb, xdp->data - xdp->data_hard_start);
-> +	__skb_put(skb, xdp->data_end - xdp->data);
-> +}
-> +
->  static inline
->  void xdp_convert_frame_to_buff(const struct xdp_frame *frame,
->  			       struct xdp_buff *xdp)
-> diff --git a/net/core/xdp.c b/net/core/xdp.c
-> index f86eedad586a..1fca2aa1d1fe 100644
-> --- a/net/core/xdp.c
-> +++ b/net/core/xdp.c
-> @@ -646,8 +646,7 @@ struct sk_buff *xdp_build_skb_from_buff(const struct xdp_buff *xdp)
->  	if (unlikely(!skb))
->  		return NULL;
->  
-> -	skb_reserve(skb, xdp->data - xdp->data_hard_start);
-> -	__skb_put(skb, xdp->data_end - xdp->data);
-> +	xdp_skb_reserve_put(xdp, skb);
->  
->  	metalen = xdp->data - xdp->data_meta;
->  	if (metalen > 0)
-> -- 
-> 2.43.0
-> 
+the WARN_ON_ONCE seems misplaced if there are expected users of
+inactivated reference.
 
+For your concern about atomic_inc(&kn->active)); after the 'kn' has been
+removed -- that's a different reference tracking (kn->count) and that
+should be enshured by generic VFS due to existence of inode that pins
+inode->i_private form kerfs_init_node().
 
+All in all, the patch makes sense as a code cleanup (the deadlock is
+gone already) but it doesn't tackle any reference underflow (I'm
+bringing this up again because of CVE-2025-21634).
+
+If anything, the warning in kernfs_should_drain_open_files() should be
+reviewed. 
+
+WDYT?
+
+Michal
