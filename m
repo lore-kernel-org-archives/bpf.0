@@ -1,186 +1,139 @@
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0F171D7984;
-	Wed, 30 Apr 2025 16:53:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2139982C60
+	for <bpf@vger.kernel.org>; Wed, 30 Apr 2025 17:20:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746032010; cv=none; b=tCRrLQEPBVKG91S4IYbEPgr/DtBTTG/L2PiAciDWyeyBwZR5DZKqaD9gaeCgihfW4i0rc5Ocdogcstc+iaV+NQl2imOBY99mPXKjCLO6N4NMPG+1ermQbcVyZFEhg2BDzZJopQ7DDpjeL6gSRYtK7V1Nxg0FSqIkZ37mF1leiV8=
+	t=1746033604; cv=none; b=cTp2D8dKfp0JSb0AjOeBWCIOHajjp3vHrBoUdAhDMMoZ5g5fLsQSHjHC+zCghuWpBjyUz6kYLs2DyVzq7vtMN5YoCgDFDxrgwWv3++r7X+2/SUHPmDmwd3xXPYavDG7xfrqSVXPaZOf8d6v4Fo40wQT+kAVsNtFIH9b/QqVqmAc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746032010; c=relaxed/simple;
-	bh=BBMsd/oizy20IUV96EPxJNmvZVs0GIKVqE5EGiMLivc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=dtTx7XYG9NLeeVFdcBjJh4SrW4kUngxg3fLrN+7YgmnN2t4JU3c8RY93tffQSFBb6o+F+vUQmtQzzTAoKLCkWNVpNLyBLJqqBYidUjeipRxSRcXlyD2EVTrTOfkmBp5aK2tncIc4IYr2LiMwImpXRQrsD+O/166jlWOPWMOy0Q4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j5+jhZFo; arc=none smtp.client-ip=209.85.221.43
+	s=arc-20240116; t=1746033604; c=relaxed/simple;
+	bh=4agHAlTJ10wgWbpiJMdV8wG+97KD0OqyVrP8cpo7qH8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SMST3ShUq+ktDoLIeSsl8ZH3Gb4YYKrCXkBnNZdmsDhq/nhm7AuD8qIehvfM2YjqSOW6WXYfLW3iFoArv8PdwmoLVASfzy1iP1X6C1OwvqeqFZiQKW6WPP0gSd0gEBwAsELtH3sQTR2wvFeZjYHMTZyDD4ARreOTXS0ZV14I6Bc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cstYuyrp; arc=none smtp.client-ip=209.85.218.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j5+jhZFo"
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-39c1ef4ae3aso67523f8f.1;
-        Wed, 30 Apr 2025 09:53:28 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cstYuyrp"
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-acb5ec407b1so7290966b.1
+        for <bpf@vger.kernel.org>; Wed, 30 Apr 2025 10:20:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746032007; x=1746636807; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iyqoFwnx1rN119y/EQDLgAAtG+9Od9yyi7V0yRmYe1Y=;
-        b=j5+jhZFo1DiaCKv+6sWRLRfvn+bdSHbxC02gj9bjsob0pP/9GFhw8/33JlZGS/O/cx
-         3sLdfnkLHDX1D/kdvW2tUTYAufC14MELRGdGzxdGooMdR23PcNhd/7zDNL+GVNnhMx1Z
-         3/+5+BBnkzjMDnlPSJBHDbldm/IikqBdVqe86lqQha1Dnol71EpIqMshs+PCK2ItKKiE
-         HujqYIDHWypVsb7kHmCsiLbU/kqhXtZNt3T33Utt03JQP4Ln7giRCPCGl+F/CNkeDrH4
-         jOOGeSlD1U6nZh4rUY95PkIYFA5I6HGoItTCDXsSEY3GzbsWnKDV29nfEBpi5tIMEKR/
-         H6gQ==
+        d=gmail.com; s=20230601; t=1746033601; x=1746638401; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Vgw2UvbxdHasEXeiHFqTQG4znHWsZoNF+TbXCTZy7a4=;
+        b=cstYuyrp30lEHnW4jHS3jCS8njyfBEG83GVIO95HCvv+bE9PH7SI8cIg0H4yiq4VGz
+         +U/mrGNa/IHCfkKmsEfBD6CELu8Fil7CFtQ9TFVLKCbMORihWG7+Pwo1+Mh4BqqERJDg
+         W86EqYGPw8501/aVpiKbvIwHhc5Qk0rQlKzKrp+l4ySOQQ9VKfqGQoKGHIGtp8DzwzuA
+         nIAt0wkSmaN1K07MJ305kzFuYHd9RsR5dHgwWmodtFGbSh9Jfb6Pk4TAxYj3tlu+luwv
+         4G+OBvXiREkCdFSZE7xuPg+evlV1Qc5yQJjdQuMTWB/+yJIktwv2BrLoutW5rK8W7e8E
+         /5TQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746032007; x=1746636807;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iyqoFwnx1rN119y/EQDLgAAtG+9Od9yyi7V0yRmYe1Y=;
-        b=FFHjlgCEqfU5cCPAEV39tUsTIa9KSWb1puzn+NaLTGPaq7MbDdl7JhLsRopjcJ3cBB
-         JdKfWk4AssMkqUACxoF3DH8Kv4n+mL8AcqR5pQWo7/xbWZXhcHgJw2GMW9qlTjv/XyKA
-         XvHJTtVgEZQ+3K4381aUDP0ciu0g/ElePqSkXBnZxikeUB/K2fXv23GnuzbK0TBvlzow
-         2fET6zyjoC99WMeBkfPXH3cvKivmLtVWNa3LubCcQTcz1x1Zlei9Ud+PsRTzgH+aKdxA
-         MkH9eb0ERcl52gAPHoZdjwWaaxJ6Vr7LMA5gXmSxANPxPXBh65vbPtL8xZH2f4DnkHfb
-         w/NQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU2rupEOH1+xPm8eyOReT7gGoBRPNIYhB+yV+qn9xgusjpkdMEQYv+HuYTuulGuupjTsfQ=@vger.kernel.org, AJvYcCUB7XXtMfRJdfw9tU5RXX9dGbXSAc8yHR/eQdCIayYgyWwd+RUFENrp7E1HPWtxIZidM8ONMzkucukuZqgN@vger.kernel.org, AJvYcCV+BwuKtHcygL4Ho7Uw059D6/SsqJfx2NOynYpSwkWgRsvp35zrHZ9U3SSFb9L1zGhC0XFww2Sw@vger.kernel.org, AJvYcCXSkOr64L3kHRgID4O0gloeVd5I53p5js1attL++W0XkU1DU5rdVZh0AM1vTDOBNoEAEH4AJt3g3+vEPhEhHU1fB45L@vger.kernel.org, AJvYcCXyOICrzdowK6K6UaGFFpfNQI6wZOvSolGvYG4Xx1qeD35HIW0necr/fA3VWsBuQcueh7XkLIJKpfoPI+I4MSi3@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy/2TJax06/rkuF5WTzGloPodJ/RdpyGVkfWVyrRcWt41nFz8O/
-	r5UHjWUpKipofo9BJGa9vsRe+DCwO+sPsX934VhuDvHQiyMJsd3LH+KN9H5G8CDw0/zSkzl6C09
-	IqLQadg1j6FHs4KHTs4/5/J71TD0=
-X-Gm-Gg: ASbGnctlze7WOMKhjESb8wCcAj6rGAV5nQTbXzhPCl6Chs4KDbWJWGhVACHlAU/U8V4
-	Eu4dySs/cSX1q+fTHMJFdAZ8Kr+2ZNAYFDnzeFe4twV46BZRUf1xpaQ82gkolrgCYcCyPMY1TcH
-	caLrx+nyD2oMKIkm+nPIXvUuTi45E+c9pMyL8lPg==
-X-Google-Smtp-Source: AGHT+IGktp2atpBKpp4ur5fbFBTf4kR6IH2vBfdClEMDlfV8ktjOsDPmmtEvHUeJRGc4jX1Itzt6phHMVfWVJf1Cjrg=
-X-Received: by 2002:a05:6000:64a:b0:38d:ae1e:2f3c with SMTP id
- ffacd0b85a97d-3a092d0230cmr179055f8f.25.1746032006951; Wed, 30 Apr 2025
- 09:53:26 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1746033601; x=1746638401;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Vgw2UvbxdHasEXeiHFqTQG4znHWsZoNF+TbXCTZy7a4=;
+        b=OqaSLATyaZbM195isdhkVNqDrduNMqM3Dc+OkJsHY6nmSw6a7YCzgxUGkNu2tHVvsJ
+         TOVc6U6T9FZZu8Bofij/DSEbHw74G2tBvNvvIyXS5j8LGoYE1DC3qxXAjL7Gdq/BLpCK
+         rV0tk7v1A+04YIesdJrRwDozO7A7NLebflqR6jChqpo5DVqtB7jIba0gwUq1Bkljj9Se
+         sURYswyJsy/LlNR2j74VZ4TaSLX4qxkq6JtphKH2ZJKpbr+6XuMOdsmVZ4GUz9wbtYWU
+         YDuSGCRl3WUxDPbh2tAt5nvFZqSNWn/lb4fDxVhIvCClXbq/2783ASHdZT59cBJRiLkp
+         Luww==
+X-Forwarded-Encrypted: i=1; AJvYcCVdkAGEcZrxHEgvHOPR6p3zL4c8Qc0CvsHA0+fAdweebOT1j/ihnL0tpe8pihEW4oB1wTA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxq0dcakxjCc3xX8c2WCRnLQibXW+pD4SmDoJ7M+F+5O+poY3og
+	k6JsaI458qyao4esOAP+AeYMZMMmQpL9Wi3RASaVxt82zV/I/aoZ
+X-Gm-Gg: ASbGncvlKlhKrYj1/ueAwN0EbkYw3Rhpis0yumQll7ncOoM9vs4fURJZEdtLcp+yo8N
+	tn6iELcKEmwkfyD766ndDitpUFLeOMSaS6kUlGUztAS7CzP/ltd5PF042gOyUBhsgvgyLVN/d4n
+	f4RGygnQhxTaJZq6kaw+gDPQlhXLqFfM93v+bLl0J1TmZRfHwaGRidnYW1DJpJDJl8Wa9bk8D1a
+	yb38KjFWDw/o1S5o2sab7CZ+EgC1NxP4MXAFJvyyYXch0EQk0ccZaTRc+d5+uzQ1l/BFIbwM+UN
+	iaImcTSnagmhVMuR9vmw5OxvMQ5GPP/IBBifY+8UWTHwhJ5J8vY=
+X-Google-Smtp-Source: AGHT+IFi5jroYyRz6pYmQj8Xdp/C+RiWW9SoWcfbHItkyedW7gNDXv+HvM6BWMidM17EwyD+AJe8rA==
+X-Received: by 2002:a17:907:970a:b0:aca:95e7:ec59 with SMTP id a640c23a62f3a-acee21af132mr359525766b.19.1746033601183;
+        Wed, 30 Apr 2025 10:20:01 -0700 (PDT)
+Received: from mail.gmail.com ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-acec668dd9csm301217166b.96.2025.04.30.10.20.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Apr 2025 10:20:00 -0700 (PDT)
+Date: Wed, 30 Apr 2025 17:24:46 +0000
+From: Anton Protopopov <a.s.protopopov@gmail.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>, bpf <bpf@vger.kernel.org>
+Subject: Re: [PATCH v2 bpf-next] bpf: fix uninitialized values in
+ BPF_{CORE,PROBE}_READ
+Message-ID: <aBJc3hrKnKA8jiM0@mail.gmail.com>
+References: <20250429142241.1943022-1-a.s.protopopov@gmail.com>
+ <CAEf4BzYeKLgqn+yq3Mt+Vv-9t6qmzQqimb31zD=y-Cw474LU5w@mail.gmail.com>
+ <aBJQ6lsZfg8xlM5e@mail.gmail.com>
+ <CAADnVQJV5SMRvt_0YvdRdCys4oBR-x3baqBBmp1mxAeUx=EtJw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250426160027.177173-1-mannkafai@gmail.com> <20250426160027.177173-2-mannkafai@gmail.com>
- <CAADnVQ+DF18nKEf9i1RKEQN+ybH+duu7U-91YZDaa_PiqUx17g@mail.gmail.com>
- <CALqUS-6XtJ0Bb9jiykdC3jAY_OHjGuirj06Kzssjvo7eW_so2A@mail.gmail.com> <f951b81f-1b46-4219-82fd-0839e27ab3f3@linux.dev>
-In-Reply-To: <f951b81f-1b46-4219-82fd-0839e27ab3f3@linux.dev>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Wed, 30 Apr 2025 09:53:15 -0700
-X-Gm-Features: ATxdqUHCM_hgru1Pfc1BqXTKZ-VBkhd7Cw8k1b6R1YPnD0rN_9RdWCr9fvClEug
-Message-ID: <CAADnVQ+FANha0fO_BF+iHJ4iZSCPtDfoUkzR8mMFwOakw8+eCg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 1/4] bpf: Allow get_func_[arg|arg_cnt] helpers in
- raw tracepoint programs
-To: Leon Hwang <leon.hwang@linux.dev>
-Cc: Kafai Wan <mannkafai@gmail.com>, Song Liu <song@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Eduard <eddyz87@gmail.com>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Matt Bobrowski <mattbobrowski@google.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	bpf <bpf@vger.kernel.org>, 
-	linux-trace-kernel <linux-trace-kernel@vger.kernel.org>, 
-	Network Development <netdev@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAADnVQJV5SMRvt_0YvdRdCys4oBR-x3baqBBmp1mxAeUx=EtJw@mail.gmail.com>
 
-On Wed, Apr 30, 2025 at 8:55=E2=80=AFAM Leon Hwang <leon.hwang@linux.dev> w=
-rote:
->
->
->
-> On 2025/4/30 20:43, Kafai Wan wrote:
-> > On Wed, Apr 30, 2025 at 10:46=E2=80=AFAM Alexei Starovoitov
-> > <alexei.starovoitov@gmail.com> wrote:
-> >>
-> >> On Sat, Apr 26, 2025 at 9:00=E2=80=AFAM KaFai Wan <mannkafai@gmail.com=
-> wrote:
-> >>>
->
-> [...]
->
-> >>> @@ -2312,7 +2322,7 @@ void __bpf_trace_run(struct bpf_raw_tp_link *li=
-nk, u64 *args)
-> >>>  #define REPEAT(X, FN, DL, ...)         REPEAT_##X(FN, DL, __VA_ARGS_=
-_)
-> >>>
-> >>>  #define SARG(X)                u64 arg##X
-> >>> -#define COPY(X)                args[X] =3D arg##X
-> >>> +#define COPY(X)                args[X + 1] =3D arg##X
-> >>>
-> >>>  #define __DL_COM       (,)
-> >>>  #define __DL_SEM       (;)
-> >>> @@ -2323,9 +2333,10 @@ void __bpf_trace_run(struct bpf_raw_tp_link *l=
-ink, u64 *args)
-> >>>         void bpf_trace_run##x(struct bpf_raw_tp_link *link,          =
-   \
-> >>>                               REPEAT(x, SARG, __DL_COM, __SEQ_0_11)) =
-   \
-> >>>         {                                                            =
-   \
-> >>> -               u64 args[x];                                         =
-   \
-> >>> +               u64 args[x + 1];                                     =
-   \
-> >>> +               args[0] =3D x;                                       =
-     \
-> >>>                 REPEAT(x, COPY, __DL_SEM, __SEQ_0_11);               =
-   \
-> >>> -               __bpf_trace_run(link, args);                         =
-   \
-> >>> +               __bpf_trace_run(link, args + 1);                     =
-   \
-> >>
-> >> This is neat, but what is this for?
-> >> The program that attaches to a particular raw_tp knows what it is
-> >> attaching to and how many arguments are there,
-> >> so bpf_get_func_arg_cnt() is a 5th wheel.
-> >>
-> >> If the reason is "for completeness" then it's not a good reason
-> >> to penalize performance. Though it's just an extra 8 byte of stack
-> >> and a single store of a constant.
-> >>
-> > If we try to capture all arguments of a specific raw_tp in tracing prog=
-rams,
-> > We first obtain the arguments count from the format file in debugfs or =
-BTF
-> > and pass this count to the BPF program via .bss section or cookie (if
-> > available).
+On 25/04/30 09:34AM, Alexei Starovoitov wrote:
+> On Wed, Apr 30, 2025 at 9:29 AM Anton Protopopov
+> <a.s.protopopov@gmail.com> wrote:
 > >
-> > If we store the count in ctx and get it via get_func_arg_cnt helper in
-> > the BPF program=EF=BC=8C
-> > a) It's easier and more efficient to get the arguments count in the BPF=
- program.
-> > b) It could use a single BPF program to capture arguments for multiple =
-raw_tps,
-> > reduce the number of BPF programs when massive tracing.
+> > On 25/04/30 09:00AM, Andrii Nakryiko wrote:
+> > > On Tue, Apr 29, 2025 at 7:19 AM Anton Protopopov
+> > > <a.s.protopopov@gmail.com> wrote:
+> > > >
+> > > > With the latest LLVM bpf selftests build will fail with
+> > > > the following error message:
+> > > >
+> > > >     progs/profiler.inc.h:710:31: error: default initialization of an object of type 'typeof ((parent_task)->real_cred->uid.val)' (aka 'const unsigned int') leaves the object uninitialized and is incompatible with C++ [-Werror,-Wdefault-const-init-unsafe]
+> > >
+> > > this is BPF-side code, what does C++ have to do with this, I'm confused...
 > >
->
->
-> bpf_get_func_arg() will be very helpful for bpfsnoop[1] when tracing tp_b=
-tf.
->
-> In bpfsnoop, it can generate a small snippet of bpf instructions to use
-> bpf_get_func_arg() for retrieving and filtering arguments. For example,
-> with the netif_receive_skb tracepoint, bpfsnoop can use
-> bpf_get_func_arg() to filter the skb argument using pcap-filter(7)[2] or
-> a custom attribute-based filter. This will allow bpfsnoop to trace
-> multiple tracepoints using a single bpf program code.
+> > This I am not sure about why exactly, but clang (wihout ++) emits this warning
+> > now (try smth like `clang -c -x c - <<<'void foo(void) {const int x;}'`).
+> > When sending patch, I though that CORE* macros also can be used by ++ progs.
+> > For C, maybe, this is a problem with clang that it enables -Wdefault-const-init-unsafe?
+> >
+> > >
+> > > Also, why using __u8[] is suddenly ok, and using the actual type
+> > > isn't? Eventually it all is initialized by bpf_probe_read_kernel(), so
+> > > compiler is wrong or I am misunderstanding something... Can you please
+> > > help me understand this?
+> >
+> > So, when a const sneaks in, one have BPF_CORE_READ expanded into
+> > say smth like this:
+> >
+> >     ({
+> >     typeof(((parent_task)->real_cred->uid.val)) __r;
+> >     BPF_CORE_READ_INTO(&__r, (src), a, ##__VA_ARGS__);
+> >     __r;
+> >     })
+> >
+> > It happens that real_cred is a pointer to const, so __r becomes const,
+> > and thus the warning (if enabled) is legit.
+> >
+> > With __u8 this turns into (let T = typeof(((parent_task)->real_cred->uid.val)))
+> >
+> >     ({
+> >     __u8 __r[sizeof(T)];
+> >     BPF_CORE_READ_INTO(&__r, (src), a, ##__VA_ARGS__);
+> >     * (T *) __r;
+> >     })
+> >
+> > So here we do not care if T is const or not, as __r is not in any case.
+> 
+> The problem with __u8 approach is that it's losing alignment.
+> Have you tried typeof_unqual instead ?
+> Modern gcc and clang support it directly.
 
-I doubt you thought it through end to end.
-When tracepoint prog attaches we have this check:
-        /*
-         * check that program doesn't access arguments beyond what's
-         * available in this tracepoint
-         */
-        if (prog->aux->max_ctx_offset > btp->num_args * sizeof(u64))
-                return -EINVAL;
+Yes, thanks, typeof_unqual should work.
 
-So you cannot have a single bpf prog attached to many tracepoints
-to read many arguments as-is.
-You can hack around that limit with probe_read,
-but the values won't be trusted and you won't be able to pass
-such untrusted pointers into skb and other helpers/kfuncs.
+> For older compilers we have __unqual_typeof() in bpf_atomic.h
+
+Older compilers aren't a problem, as build only fails on modern
+(LLVM added -Wdefault-const-init-unsafe for C just a few days ago).
