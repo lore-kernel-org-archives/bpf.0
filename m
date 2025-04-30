@@ -1,93 +1,185 @@
-Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B88134545
-	for <bpf@vger.kernel.org>; Wed, 30 Apr 2025 02:41:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE9222111;
+	Wed, 30 Apr 2025 02:46:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745980876; cv=none; b=f73XycacsQZEmz6LoWGUmlawYDHqGwT9aTN1oMgshKhi8lshWHLZyg5gZoifLsf8WkbI44hzDbMpfDxFDDueU0sYPeNm2mNlfXY1TCK9zuawkScniFhzF1uZTS4F7w0DlJ77Hrl9rH7UZBJlfmq6r3utsunv3i8IXaI7M1PedyE=
+	t=1745981181; cv=none; b=sjnDZX8icW86Tw4+Cv9v2/9QTVmeCKndGf4URaGBtUWJwdoC6Y33EXY1ow/uy+Dcm1GNqNgULNKhCVX5xv170J2nysD29TX19m1JAGjQyJYitn2ZAUUImMJjrKTJWvapDMzqLqXzxhn5KcytqjIooKYIptfNYbLaKXxIrXuOiek=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745980876; c=relaxed/simple;
-	bh=4ZDKouradC0LYtGluHIGMIOi8zOgxaGIq6EF3UiR4PY=;
+	s=arc-20240116; t=1745981181; c=relaxed/simple;
+	bh=tZj+fajqPvkq+73cH8tXJlYZvR+o5VeoP5VRKaX/kYA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=s1wB4xAUKrWo7gnlqWJhPqkMBc+L09ZWjRFo0M19kVVS/rHKeTLX0ZAk1IHuzxQ+r0r/kK5Vqr5nEiCSHkvkgIjFgIUO13gDwmlLMsRkv8hkOpcc6Suv8SnG8zwVnPPADAxURJGZVci1Kqn/x7ad0eCUK784BYQJM6F1nKqY1Ck=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JyjMzVtN; arc=none smtp.client-ip=209.85.219.44
+	 To:Cc:Content-Type; b=MB+512tmcvm1Sx1W+CWuE5GUFMU/LwbY3TbX6nOPz0eO3GBQA6ml6JIVeSn6jameT+FQSRL6F2tg1Edh7kAzJdQRa8/uOb2LPcfz8P9krYe2l9VxkakdPbuu0KhPVBoI4YyBWxpWyroMLTSL+fjXgG7SLNQVarTcYfkDGXPyUWs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mEePr3LU; arc=none smtp.client-ip=209.85.221.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JyjMzVtN"
-Received: by mail-qv1-f44.google.com with SMTP id 6a1803df08f44-6f0ad74483fso76580676d6.1
-        for <bpf@vger.kernel.org>; Tue, 29 Apr 2025 19:41:15 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mEePr3LU"
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-39ee682e0ddso4613188f8f.1;
+        Tue, 29 Apr 2025 19:46:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1745980874; x=1746585674; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1745981178; x=1746585978; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=4ZDKouradC0LYtGluHIGMIOi8zOgxaGIq6EF3UiR4PY=;
-        b=JyjMzVtNuyh8bUx9eXMLxz9g9d5E6oiwgyrFDTjXseryLeVLiOqk6K2/PmcBGAeOm4
-         xjm+NyitPDwfKVKxMQngCbf/3mGG4YdK6sZvihSl/9dd46Ose/aoPpJYAAcYPib9EiZt
-         8YRoUj9U04jJ8Q7cmC2Z8aVHmszwb+97Ir0jdjNNXTbUeJGDHuq6svN5b1FPgFGdE1IS
-         GdpdhyGudC/N0Z1c3BQSLZiDqF3F1UCElFRlcr414Ps49M21IJqc3Uzr0Oa4Hqk5svO6
-         ckGbIb9RNPI3B3oy6c+hs3jmr3AmU6SDeLEYMlKuCWdwvLl38iVklQ2jF9Cy3hjd/+CV
-         y18g==
+        bh=IRoA1hn+ILrnaL3QGiypq6EmGKcTVkU7YdYU9NCLYKU=;
+        b=mEePr3LU84EtC9YaEi9hNKvUJIOZmFmn/Eo0/UTHWk0urD0ylMheKy1GZ/sStSeRil
+         Wr/Ze2udmPdC2hkMCXgDzIhMbmbaAXYZZsMNy7w8wy+OBBeaxWt1Cr84DBR8ezusVBuU
+         ZLFCNo/1oc/1in46B0jp7vAJILjNTltmXIUu+GCq0ra2fBNb2V/uqddrpZlskeMhuGaL
+         v4FF/dJat/j3W5V3/kYT+cqBZrYyQGZA9tMAWKZmX3BNEBhfS6+kC87bcGLlPDGoemNB
+         AymalL4OzLyFD7OUnLHESJWQpxgcUW1+uP5wJY1uVGRIibjmj8AOFGr5rXJdZtHmx6NX
+         m7PA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745980874; x=1746585674;
+        d=1e100.net; s=20230601; t=1745981178; x=1746585978;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=4ZDKouradC0LYtGluHIGMIOi8zOgxaGIq6EF3UiR4PY=;
-        b=adO6AoHB29A2YaQRfC8OVExi3wb4zAnSgqlVKi0aApRetK1Yr1G2ziU7XXKo+aapPj
-         fACURKc7HozrdNhDgXEs0PaEMKBX+E7sGNSzYejnKOE+a6gl5cKxORFiPcxytcXaCMLZ
-         lM1tkrgEGSdolchCu8a41D3jANRWBgoh8o1Wx9dkmZgUaCL0mkOSzNB/uSGmcTyqzbaR
-         BpVajMe3KWeb5Exjpb/r2m5LPFVyMKfji3UyaCXrk/KidJNk+8Pdt7yRrY2EBSinW6CE
-         jj6ZcLhrwgAd0kErbhp96H3Fj80tCXXOhcyjPB1Zzr+hyLx+kjS5xND/XgsPpz9GXoOq
-         Uw6A==
-X-Forwarded-Encrypted: i=1; AJvYcCWEHWSk/XO8RdOYnHYZ2/QbSLG7hMH/Tz/VoPF4ew5HbzO+R0oXu9dcKDGAXiALEW7hWwc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyqLh5eO+oDi8iYaCBIoBvda2xzLQT4ssZxIgN9PBS5LZCKvP1M
-	vGgxLeSa22CpFCU/d+9VBSLCaT2vlK/V5xjY0Kai+MXe3gjeNOvbex/yE3pwiuYxbJ6HRIfETD5
-	ENo1uzdDGe/XLzY/oIBqy8TQgwqY=
-X-Gm-Gg: ASbGncsJkclYB190mcYg+HK6I5GnP1kY+fqrAKfdE5VZG+h857gqHSOZci01K7sg/dq
-	gX0yIZC6Tb/Zb48TIBA7ycD0NoAd3DzLZT+VnWjywBSuy22OhX8sW8F0YTdz0VnALpW3CGGZ2V2
-	C9AG1l9hSxAv2wOGX+/IOl290=
-X-Google-Smtp-Source: AGHT+IFR1kuojXQFsOpX+8bNLR71d8z097EAwu5UtFx5f83zXV+iieSPFS+Rb443vU8cxFowPZ/S1QlAw7iX0uI5JIM=
-X-Received: by 2002:a05:6214:2a49:b0:6e6:61f1:458a with SMTP id
- 6a1803df08f44-6f4fce68783mr31074286d6.14.1745980874408; Tue, 29 Apr 2025
- 19:41:14 -0700 (PDT)
+        bh=IRoA1hn+ILrnaL3QGiypq6EmGKcTVkU7YdYU9NCLYKU=;
+        b=QIC0HTmi6Oek2SC8mdBKTZhgNvxHTX+myGHy1SAQyukzCYyJktwiFFKdSAyHzsDkac
+         NrnhrMJ5U17KybTaDzN/LQYQd4an2UPEhWnIuB7oeywWlVSfyI+K7AI/eEzKPtV4gi0s
+         yhplMj/HNIAxJYMijcgCVa9KXljez4W5CZ4zve4DY0ZAQgPRUjzG0Fwn06wQaR17C96M
+         KG7DBZAG6EGF4HtbjHaSMZg1REEpG/6L65BY2TQ16CEBepGlL84JHFi0DsxQchN94qR6
+         XTJ0SogE/KxDDdOQ9eAOrvLQ0ULNhvxaKKlcfYaqJ5PNjlH84qA/JLY6NQdoMhTWGcyo
+         HgBQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU9A7LrTxqmLjDqG6bV6iYt/uj3ILLdRLDnsPO50ICpmHUxY3LFPauW+vuQiaTbHxFh+9zjeKNeRSdOZG79@vger.kernel.org, AJvYcCUAMHfQJuGEZB7mxYOdu6Vadi0XK/B1eo+OjDOrf0V8ESkeBjLWSiZoMZbDwALLa3lpCXAk1JEMUnkvNgbbDzEt@vger.kernel.org, AJvYcCUZlK77ziAXzRrY+i/GbiNLWfsIpuagwpFO7xLLhz6Oy2ZGUvaiRHK+Bqghj6LpskFWE6A=@vger.kernel.org, AJvYcCXF5oPIrrV+N3qT/HwrL9y5mnLWFggv+1jh3YhQqllsaSSklTHfkt9M7mZvnU+pgALsaQ4lpKNvz29q+555ueDmK5lq@vger.kernel.org, AJvYcCXTJWr0BEnSX28DlijCVyDsy2dib4Xoen3+inZX5Vclb8NhjNHlAx7o7M/Txk9C7+0M2PvNSC9x@vger.kernel.org
+X-Gm-Message-State: AOJu0YyuIYUPW2sOZtRPKmGs3eB/L0EIVbQrEp6mDK/+4UGIatlqk+cm
+	of36ArkLnoQ/Ly8evwfjrcGBu8qyGE7Ns1oxSjo7Em57Wavq4QNmWM7De2v5D5RPDSruJMIkB4q
+	tLHizz1pDorQ3993cvB5Fx14f83E=
+X-Gm-Gg: ASbGnctKC3FZYpKCl81deylRNJQp/JcqBivd8fVsawLBmGqUGdEEAe9CxJPnBOnHgFG
+	skQBBStPbEkPCZLHEuuEpTbzs2rONk7QTS2WxGlj1291TD3z3lJ2w6n/r5aLbJYvAgd2fFD6vh1
+	PwofZyxQMsEBq0MYyTZESJWCfT14NjOVPt0DlNUw==
+X-Google-Smtp-Source: AGHT+IEseH2I0pUjM+B8W45c5JTdHLZ05e9zXlXFhwq6KjuhDIGYFugjVOnMpqk2DxAdfmZQOfc3MHYNAs8vZ5GnN6A=
+X-Received: by 2002:a5d:64e5:0:b0:391:4bfd:6d5 with SMTP id
+ ffacd0b85a97d-3a08ff5558emr512089f8f.52.1745981177742; Tue, 29 Apr 2025
+ 19:46:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250429024139.34365-1-laoar.shao@gmail.com> <20250429024139.34365-2-laoar.shao@gmail.com>
- <D9J7Y3DKHQJI.2MBF33WKN1BH5@nvidia.com>
-In-Reply-To: <D9J7Y3DKHQJI.2MBF33WKN1BH5@nvidia.com>
-From: Yafang Shao <laoar.shao@gmail.com>
-Date: Wed, 30 Apr 2025 10:40:38 +0800
-X-Gm-Features: ATxdqUF1yw1wIf5mYXnfRMQw6DatmuTyzRPTsWJjtDxso3SFmXlxsOzy5LX4vcs
-Message-ID: <CALOAHbCXSmTMwUNSR=6CBtFRUipFbm-58zX1FDKff55Bv4QbNg@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/4] mm: move hugepage_global_{enabled,always}() to internal.h
-To: Zi Yan <ziy@nvidia.com>
-Cc: akpm@linux-foundation.org, ast@kernel.org, daniel@iogearbox.net, 
-	andrii@kernel.org, bpf@vger.kernel.org, linux-mm@kvack.org
+References: <20250426160027.177173-1-mannkafai@gmail.com> <20250426160027.177173-2-mannkafai@gmail.com>
+In-Reply-To: <20250426160027.177173-2-mannkafai@gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Tue, 29 Apr 2025 19:46:05 -0700
+X-Gm-Features: ATxdqUFMquDKYdhGCyZiHIRKlu07tHBastoNqC0uT60dUlJw9_rSYO-AjZ2fBT4
+Message-ID: <CAADnVQ+DF18nKEf9i1RKEQN+ybH+duu7U-91YZDaa_PiqUx17g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/4] bpf: Allow get_func_[arg|arg_cnt] helpers in
+ raw tracepoint programs
+To: KaFai Wan <mannkafai@gmail.com>
+Cc: Song Liu <song@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Eduard <eddyz87@gmail.com>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Matt Bobrowski <mattbobrowski@google.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	bpf <bpf@vger.kernel.org>, 
+	linux-trace-kernel <linux-trace-kernel@vger.kernel.org>, 
+	Network Development <netdev@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, Leon Hwang <leon.hwang@linux.dev>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Apr 29, 2025 at 11:13=E2=80=AFPM Zi Yan <ziy@nvidia.com> wrote:
+On Sat, Apr 26, 2025 at 9:00=E2=80=AFAM KaFai Wan <mannkafai@gmail.com> wro=
+te:
 >
-> On Mon Apr 28, 2025 at 10:41 PM EDT, Yafang Shao wrote:
-> > The functions hugepage_global_{enabled,always}() are currently only use=
-d in
-> > mm/huge_memory.c, so we can move them to mm/internal.h. They will also =
-be
-> > exposed for BPF hooking in a future change.
+> Adding support to use get_func_[arg|arg_cnt] helpers in raw_tp/tp_btf
+> programs.
 >
-> Why cannot BPF include huge_mm.h instead?
+> We can use get_func_[arg|ret|arg_cnt] helpers in fentry/fexit/fmod_ret
+> programs currently. If we try to use get_func_[arg|arg_cnt] helpers in
+> raw_tp/tp_btf programs, verifier will fail to load the program with:
+>
+> ; __u64 cnt =3D bpf_get_func_arg_cnt(ctx);
+> 3: (85) call bpf_get_func_arg_cnt#185
+> unknown func bpf_get_func_arg_cnt#185
+>
+> Adding get_func_[arg|arg_cnt] helpers in raw_tp_prog_func_proto and
+> tracing_prog_func_proto for raw tracepoint.
+>
+> Adding 1 arg on ctx of raw tracepoint program and make it stores number o=
+f
+> arguments on ctx-8, so it's easy to verify argument index and find
+> argument's position.
+>
+> Signed-off-by: KaFai Wan <mannkafai@gmail.com>
+> ---
+>  kernel/trace/bpf_trace.c | 17 ++++++++++++++---
+>  net/bpf/test_run.c       | 13 +++++--------
+>  2 files changed, 19 insertions(+), 11 deletions(-)
+>
+> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> index 52c432a44aeb..eb4c56013493 100644
+> --- a/kernel/trace/bpf_trace.c
+> +++ b/kernel/trace/bpf_trace.c
+> @@ -1892,6 +1892,10 @@ raw_tp_prog_func_proto(enum bpf_func_id func_id, c=
+onst struct bpf_prog *prog)
+>                 return &bpf_get_stackid_proto_raw_tp;
+>         case BPF_FUNC_get_stack:
+>                 return &bpf_get_stack_proto_raw_tp;
+> +       case BPF_FUNC_get_func_arg:
+> +               return &bpf_get_func_arg_proto;
+> +       case BPF_FUNC_get_func_arg_cnt:
+> +               return &bpf_get_func_arg_cnt_proto;
+>         case BPF_FUNC_get_attach_cookie:
+>                 return &bpf_get_attach_cookie_proto_tracing;
+>         default:
+> @@ -1950,10 +1954,16 @@ tracing_prog_func_proto(enum bpf_func_id func_id,=
+ const struct bpf_prog *prog)
+>         case BPF_FUNC_d_path:
+>                 return &bpf_d_path_proto;
+>         case BPF_FUNC_get_func_arg:
+> +               if (prog->type =3D=3D BPF_PROG_TYPE_TRACING &&
+> +                   prog->expected_attach_type =3D=3D BPF_TRACE_RAW_TP)
+> +                       return &bpf_get_func_arg_proto;
+>                 return bpf_prog_has_trampoline(prog) ? &bpf_get_func_arg_=
+proto : NULL;
+>         case BPF_FUNC_get_func_ret:
+>                 return bpf_prog_has_trampoline(prog) ? &bpf_get_func_ret_=
+proto : NULL;
+>         case BPF_FUNC_get_func_arg_cnt:
+> +               if (prog->type =3D=3D BPF_PROG_TYPE_TRACING &&
+> +                   prog->expected_attach_type =3D=3D BPF_TRACE_RAW_TP)
+> +                       return &bpf_get_func_arg_cnt_proto;
+>                 return bpf_prog_has_trampoline(prog) ? &bpf_get_func_arg_=
+cnt_proto : NULL;
+>         case BPF_FUNC_get_attach_cookie:
+>                 if (prog->type =3D=3D BPF_PROG_TYPE_TRACING &&
+> @@ -2312,7 +2322,7 @@ void __bpf_trace_run(struct bpf_raw_tp_link *link, =
+u64 *args)
+>  #define REPEAT(X, FN, DL, ...)         REPEAT_##X(FN, DL, __VA_ARGS__)
+>
+>  #define SARG(X)                u64 arg##X
+> -#define COPY(X)                args[X] =3D arg##X
+> +#define COPY(X)                args[X + 1] =3D arg##X
+>
+>  #define __DL_COM       (,)
+>  #define __DL_SEM       (;)
+> @@ -2323,9 +2333,10 @@ void __bpf_trace_run(struct bpf_raw_tp_link *link,=
+ u64 *args)
+>         void bpf_trace_run##x(struct bpf_raw_tp_link *link,             \
+>                               REPEAT(x, SARG, __DL_COM, __SEQ_0_11))    \
+>         {                                                               \
+> -               u64 args[x];                                            \
+> +               u64 args[x + 1];                                        \
+> +               args[0] =3D x;                                           =
+ \
+>                 REPEAT(x, COPY, __DL_SEM, __SEQ_0_11);                  \
+> -               __bpf_trace_run(link, args);                            \
+> +               __bpf_trace_run(link, args + 1);                        \
 
-To maintain better code organization, it would be better to separate
-the BPF-related logic into dedicated files. It will prevent overlap
-with other components and improve long-term maintainability.
+This is neat, but what is this for?
+The program that attaches to a particular raw_tp knows what it is
+attaching to and how many arguments are there,
+so bpf_get_func_arg_cnt() is a 5th wheel.
 
---=20
-Regards
-Yafang
+If the reason is "for completeness" then it's not a good reason
+to penalize performance. Though it's just an extra 8 byte of stack
+and a single store of a constant.
+
+pw-bot: cr
