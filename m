@@ -1,209 +1,192 @@
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B1971CDFCE
-	for <bpf@vger.kernel.org>; Wed, 30 Apr 2025 16:16:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 941E5261589
+	for <bpf@vger.kernel.org>; Wed, 30 Apr 2025 16:29:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746029808; cv=none; b=RSrIrcTy6Nf0/2dt8xgsolXXA6yeZWcta1IaYmY3pjNRO9g4CgMZj1r0ak6s6s4rRivEiAvhkZxiQgHl0iFBO1znXgzA059spcNKsh4wGaTHxOBShMPxVKZh+DM9y1CVZyflrtoPmGMk2hI5UGL+prbP3wNH4m8wYHhL4d4s4Sc=
+	t=1746030544; cv=none; b=qFTvWR8k7lrBfBeansVujH+f1HIT9ELeecq/g0w623Uz7eJWcaw1e2o1VlaoEph7+ycPQeLSl4UIE2yQ3pgDq9iFUaMAWtuFH2DmSIOB5/XUnLx0VYStu60rBMrpxZrk7pz6QavGlqRjcvN9imXkhQ0O8/sicDeNlj5/LMOzxe8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746029808; c=relaxed/simple;
-	bh=+KZ9L4C8fdupkJuWJt9x1SC22tDZgcdjSY+Ht9ebt1g=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=emAEgV6vxGntQQ1X62mfloRzeg9sxs6nNk1jwZos1UyQDot1BH3iY8GFxvbkALG/6MnHVxiJOaDlmuniy39EXAAb/YcP1qp4ALqK9oYCjLX2c1ot6E0tzhPjB+ZEvQh9Z8H5838nXMO8d85+rSX7PUhU2nPd5RrYbRS7JVxYFrs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gq1v21Ii; arc=none smtp.client-ip=209.85.221.43
+	s=arc-20240116; t=1746030544; c=relaxed/simple;
+	bh=ZDgC9wfqWIFNan5UahhvXdEw/QwETtkkhkF/4552tJ8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NvmoleF4OKIqglp8PKdNODTiOEzCM4cTDY86uo8KwgVb6mrLfdLoxr2ln1TQXNnnwKPDL6FVAPQveQCFStLWyGsHNqJueShoUZK5iv6WdDGZ6raiGZmEr/U5Lu9bfHtRNS8WhdQ8uOm9rqAgsmw0M+OVC2HKnRuqghS+rl4s7e8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FaLcnkSu; arc=none smtp.client-ip=209.85.218.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gq1v21Ii"
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-39ac9aea656so8563977f8f.3
-        for <bpf@vger.kernel.org>; Wed, 30 Apr 2025 09:16:45 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FaLcnkSu"
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-ac2c663a3daso1490901566b.2
+        for <bpf@vger.kernel.org>; Wed, 30 Apr 2025 09:29:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746029804; x=1746634604; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3590ZTEs1KQBIn7/bUpltm0Rsj0OLuG8mGosQsAgt0M=;
-        b=gq1v21IiV4Jxe0+yQvh6jwEH2AbWno3E5PVl3I0L+3KDTQQNg94hHXrnC9ksQpL+HI
-         B04CXMj0B+lO9PyVjvRbLfKrTvdGX1wrx6PIpwkcLgnw/ZmJD4ECXVbDkPQFAwIHLfFO
-         K4sK0BwZfqBpSaLvO5zMtlqBAD33Fj7nABM5XUoth+4cj9Ax47qDg5SC9SYALRJChd6+
-         HiCvz0wsdY8TRmqLpDz6bhFiW1UzIBpFwFYiG+Six+vYw3tAt5vCaDXY2fkjKFOt/gx7
-         lKAEENcv+Kdy/Pybmj+tzL9KVTZGJCTUuMkicWstQSl1R4YpJINPZgM6fexOv6a3x9Jo
-         87qQ==
+        d=gmail.com; s=20230601; t=1746030541; x=1746635341; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=eJ0SDugrkPYnmzdNv4il7LJQGzJ57K0XWHq85uyqLfs=;
+        b=FaLcnkSuH1xb/ZoMLCKrZ0JT+xEzzO2zG1MACqpRFSEglbm1fcIWoHgYZmHNmW0PVx
+         1jaGNghgZ2kC2zyZVAy3FYb9jcM/u5Su+ApPXlwd6C9pKKAUv+JFuKpqnM23Jw1BYqyn
+         /4tb3uZAmwqIAFaAxqbPf1/0+288OgqLWjdyQykoDYXaevlN/rXC/U/4ymXJY27dm/+e
+         nBOoOpWB6idzeEJCDcoVPsXxrdNoz++6pwrKrdBYTIuaawDVB48ektM2sIeHl/xgWSgA
+         iCCAnVBQR2gaMd715cS7K+PYMh9kXcXnGzulrq9CgXZSPNKC4ZcI2hk4rZrSTBKD3/Cv
+         LFFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746029804; x=1746634604;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3590ZTEs1KQBIn7/bUpltm0Rsj0OLuG8mGosQsAgt0M=;
-        b=M3cJXWTr3NuW035joeBNOROE09huqOi3FWoQNY2GdiiC2iVvau1u0+Lt7o1rDj3Aun
-         TuyHcSFEzoR+EuCQipPmS0735SLtoLy0g+Rhjz0kvJow9enygeze55fr+X+j2xAeFAq0
-         TmFjszb5VGq1yNmEOCmYjKwn4updq10Y4Tb0AQY2QQu/491tGxgmgxuCwjBd5nQIKvKg
-         TfrP2NUsuwxwiuj56dg+Fh4s1m5MepcZyYXPNrlL078D4Rqbo7hIteK0eMx+1QIddPLU
-         R9ZF50NXVmnLFifoTOdR2yEG5gjFyd3ktQzhcaaAUPaGIRrwsJI1HEehK/EGjz99hnvQ
-         IlvA==
-X-Gm-Message-State: AOJu0Yx7Ere1Auo2BKcSy4oTb/hXOCbJcOV/Ae27P7oWztGKjmN/Un7W
-	rBaC8k5dtVDy4HDB1P6Nqd5N/zwz5U99BSpw5B32jokxYCyqL92GnMBhJ2wgkA+pafXdnJjO6cy
-	ftW6Dc2v216hzYqTDXsoBE10VqV4=
-X-Gm-Gg: ASbGncvNDGWZBinT/Oj9gwl2XVAoCHeR1fbH9JfzOYqHAYtYe1mnruCwlq1dL3DqR2H
-	3N98hIKGLhh3ys122CW7hgMvGjQSIYnM90W2PDx2B+s/4QarRPfZEgTVstvaev8by/wq7RyQlzs
-	qTnxDK/Yk31yqKXzx2NQLOiaXjsvR6NPzXW3nlEw==
-X-Google-Smtp-Source: AGHT+IFa3hD6lwquR+V15y8m8bVYpmDiRkw0CRecmk957X0nkqCeaL9RjOVg6KsxGxdhNb7J8rf28XKNzRHVMnQoRmM=
-X-Received: by 2002:a05:6000:184b:b0:39c:2688:612b with SMTP id
- ffacd0b85a97d-3a08f75379fmr3711555f8f.7.1746029804276; Wed, 30 Apr 2025
- 09:16:44 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1746030541; x=1746635341;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=eJ0SDugrkPYnmzdNv4il7LJQGzJ57K0XWHq85uyqLfs=;
+        b=grGJrcdjdzTLV145+gy97yOuyMrkCicps/E5uWhokuCnNKMVF0/GXOAowL9Rd44kgr
+         Jh0hqOkOpS8zjsGlOBqutMgxQ6pEipPIfj+fqYJ2sJBP33vFcvx/NboRxXE+gDQm3vOa
+         0FylLXLhd3gsG8dH4Uu/Wly4tXp3GdiMzwS6pPpwOW83T50KD7O1Qj7b5gOuU1k8i5Sf
+         arog5C0Ud6jYXNbr46hIrse8zfPVd+E3XpPPPdvh8D++8L/wHByURIGIlc3tbYoaJQpd
+         fHcBE7aTL0MtG+OHrrK3vDiDPnj8y79OZNH3haamqB0c9P2bbiuIng41g/6PV44cXkip
+         jcBQ==
+X-Gm-Message-State: AOJu0YxMP2Y4X+sRHOWnDNDDqz0wbEpXm5zOZLu7cjvRIKGwz0zKkGx5
+	Ff1ZeBKDyqSpz/LGJFECBaxaMk14vZZb3HqlY3lBfyt7g4LHMQjuqBgWyg==
+X-Gm-Gg: ASbGnctVfbB+LM4BZ611iwahzYsxhoVNSqrwiHH7sc9xe4v5EVpcSpFgkVQsfUE2lHG
+	l4gY+putXC/suLp8+e47fB19NSys7W9rhgJxqw8t+PSueb7tyv7MEYQwjVQW5HeQCLoF+K/GNlz
+	TfFzhFB+qwwtLGHDS3LhCNBVlqAm0/IYWFFqStRhRSpcf0EX9/yQhU7nKXIXl7Cnq7IDTg7wVom
+	7RTryf48QFaWHevAbzZyxbVJTamWAi4LQUiRVLgNcDU9DPuTaE57R08+tB5q3mKVjh5e0YepT/C
+	K6J9PU8Y6Qg+vk1pklRObEpoWrJSF1efLvoVY9B1nfZFFUnTmAU=
+X-Google-Smtp-Source: AGHT+IF9m825J7//6TPNUna/HRSCeCiAi6+AO/YL1+i7Q7NyI1KcIjefYon6aEWDK5Ol0r2kE28VaQ==
+X-Received: by 2002:a17:907:1b09:b0:aca:f87d:126b with SMTP id a640c23a62f3a-acee241e3c9mr346149266b.35.1746030540642;
+        Wed, 30 Apr 2025 09:29:00 -0700 (PDT)
+Received: from mail.gmail.com ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ace6edb1ac8sm933484166b.182.2025.04.30.09.29.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Apr 2025 09:29:00 -0700 (PDT)
+Date: Wed, 30 Apr 2025 16:33:46 +0000
+From: Anton Protopopov <a.s.protopopov@gmail.com>
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: bpf@vger.kernel.org
+Subject: Re: [PATCH v2 bpf-next] bpf: fix uninitialized values in
+ BPF_{CORE,PROBE}_READ
+Message-ID: <aBJQ6lsZfg8xlM5e@mail.gmail.com>
+References: <20250429142241.1943022-1-a.s.protopopov@gmail.com>
+ <CAEf4BzYeKLgqn+yq3Mt+Vv-9t6qmzQqimb31zD=y-Cw474LU5w@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250429041214.13291-1-piliu@redhat.com> <20250429041214.13291-5-piliu@redhat.com>
- <CAADnVQKTSubuisSBap_J=tgO15fCdtwF-NDY_1HLP_m6o28mhw@mail.gmail.com> <CAF+s44QM55AtGyquKvj0XAzZAjOii7VJYWsGD50iK3+r6GZSmg@mail.gmail.com>
-In-Reply-To: <CAF+s44QM55AtGyquKvj0XAzZAjOii7VJYWsGD50iK3+r6GZSmg@mail.gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Wed, 30 Apr 2025 09:16:32 -0700
-X-Gm-Features: ATxdqUGB48vHpPeEdU_NX4frkjCUrtyGmy_6ByixlEaL_MFEjQG9XKezXmBp5zs
-Message-ID: <CAADnVQKKr7C+eRin=efg5umLumghGfYJst2MwDwpB5bEtt4rSA@mail.gmail.com>
-Subject: Re: [RFCv2 4/7] bpf/kexec: Introduce three bpf kfunc for kexec
-To: Pingfan Liu <piliu@redhat.com>
-Cc: bpf <bpf@vger.kernel.org>, kexec@lists.infradead.org, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jeremy Linton <jeremy.linton@arm.com>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Ard Biesheuvel <ardb@kernel.org>, Simon Horman <horms@kernel.org>, Gerd Hoffmann <kraxel@redhat.com>, 
-	Vitaly Kuznetsov <vkuznets@redhat.com>, Philipp Rudo <prudo@redhat.com>, Viktor Malik <vmalik@redhat.com>, 
-	Jan Hendrik Farr <kernel@jfarr.cc>, Baoquan He <bhe@redhat.com>, Dave Young <dyoung@redhat.com>, 
-	Eric Biederman <ebiederm@xmission.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAEf4BzYeKLgqn+yq3Mt+Vv-9t6qmzQqimb31zD=y-Cw474LU5w@mail.gmail.com>
 
-On Wed, Apr 30, 2025 at 3:47=E2=80=AFAM Pingfan Liu <piliu@redhat.com> wrot=
-e:
->
-> On Wed, Apr 30, 2025 at 8:04=E2=80=AFAM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
+On 25/04/30 09:00AM, Andrii Nakryiko wrote:
+> On Tue, Apr 29, 2025 at 7:19 AM Anton Protopopov
+> <a.s.protopopov@gmail.com> wrote:
 > >
-> > On Mon, Apr 28, 2025 at 9:13=E2=80=AFPM Pingfan Liu <piliu@redhat.com> =
-wrote:
-> >  +__bpf_kfunc struct mem_range_result *bpf_kexec_decompress(char
-> > *image_gz_payload, int image_gz_sz,
-> > > +                       unsigned int expected_decompressed_sz)
-> > > +{
-> > > +       decompress_fn decompressor;
-> > > +       //todo, use flush to cap the memory size used by decompressio=
-n
-> > > +       long (*flush)(void*, unsigned long) =3D NULL;
-> > > +       struct mem_range_result *range;
-> > > +       const char *name;
-> > > +       void *output_buf;
-> > > +       char *input_buf;
-> > > +       int ret;
-> > > +
-> > > +       range =3D kmalloc(sizeof(struct mem_range_result), GFP_KERNEL=
-);
-> > > +       if (!range) {
-> > > +               pr_err("fail to allocate mem_range_result\n");
-> > > +               return NULL;
-> > > +       }
-> > > +       refcount_set(&range->usage, 1);
-> > > +
-> > > +       input_buf =3D vmalloc(image_gz_sz);
-> > > +       if (!input_buf) {
-> > > +               pr_err("fail to allocate input buffer\n");
-> > > +               kfree(range);
-> > > +               return NULL;
-> > > +       }
-> > > +
-> > > +       ret =3D copy_from_kernel_nofault(input_buf, image_gz_payload,=
- image_gz_sz);
-> > > +       if (ret < 0) {
-> > > +               pr_err("Error when copying from 0x%px, size:0x%x\n",
-> > > +                               image_gz_payload, image_gz_sz);
-> > > +               kfree(range);
-> > > +               vfree(input_buf);
-> > > +               return NULL;
-> > > +       }
-> > > +
-> > > +       output_buf =3D vmalloc(expected_decompressed_sz);
-> > > +       if (!output_buf) {
-> > > +               pr_err("fail to allocate output buffer\n");
-> > > +               kfree(range);
-> > > +               vfree(input_buf);
-> > > +               return NULL;
-> > > +       }
-> > > +
-> > > +       decompressor =3D decompress_method(input_buf, image_gz_sz, &n=
-ame);
-> > > +       if (!decompressor) {
-> > > +               pr_err("Can not find decompress method\n");
-> > > +               kfree(range);
-> > > +               vfree(input_buf);
-> > > +               vfree(output_buf);
-> > > +               return NULL;
-> > > +       }
-> > > +       //to do, use flush
-> > > +       ret =3D decompressor(image_gz_payload, image_gz_sz, NULL, NUL=
-L,
-> > > +                               output_buf, NULL, NULL);
-> > > +
-> > > +       /* Update the range map */
-> > > +       if (ret =3D=3D 0) {
-> > > +               range->buf =3D output_buf;
-> > > +               range->size =3D expected_decompressed_sz;
-> > > +               range->status =3D 0;
-> > > +       } else {
-> > > +               pr_err("Decompress error\n");
-> > > +               vfree(output_buf);
-> > > +               kfree(range);
-> > > +               return NULL;
-> > > +       }
-> > > +       pr_info("%s, return range 0x%lx\n", __func__, range);
-> > > +       return range;
-> > > +}
+> > With the latest LLVM bpf selftests build will fail with
+> > the following error message:
 > >
-> > These kfuncs look like generic decompress routines.
-> > They're not related to kexec and probably should be in kernel/bpf/helpe=
-rs.c
-> > or kernel/bpf/compression.c instead of kernel/kexec_pe_image.c.
+> >     progs/profiler.inc.h:710:31: error: default initialization of an object of type 'typeof ((parent_task)->real_cred->uid.val)' (aka 'const unsigned int') leaves the object uninitialized and is incompatible with C++ [-Werror,-Wdefault-const-init-unsafe]
+> 
+> this is BPF-side code, what does C++ have to do with this, I'm confused...
+
+This I am not sure about why exactly, but clang (wihout ++) emits this warning
+now (try smth like `clang -c -x c - <<<'void foo(void) {const int x;}'`).
+When sending patch, I though that CORE* macros also can be used by ++ progs.
+For C, maybe, this is a problem with clang that it enables -Wdefault-const-init-unsafe?
+
+> 
+> Also, why using __u8[] is suddenly ok, and using the actual type
+> isn't? Eventually it all is initialized by bpf_probe_read_kernel(), so
+> compiler is wrong or I am misunderstanding something... Can you please
+> help me understand this?
+
+So, when a const sneaks in, one have BPF_CORE_READ expanded into
+say smth like this:
+
+    ({
+    typeof(((parent_task)->real_cred->uid.val)) __r;
+    BPF_CORE_READ_INTO(&__r, (src), a, ##__VA_ARGS__);
+    __r;
+    })
+
+It happens that real_cred is a pointer to const, so __r becomes const,
+and thus the warning (if enabled) is legit.
+
+With __u8 this turns into (let T = typeof(((parent_task)->real_cred->uid.val)))
+
+    ({
+    __u8 __r[sizeof(T)];
+    BPF_CORE_READ_INTO(&__r, (src), a, ##__VA_ARGS__);
+    * (T *) __r;
+    })
+
+So here we do not care if T is const or not, as __r is not in any case.
+
+
+> 
+> >       710 |         proc_exec_data->parent_uid = BPF_CORE_READ(parent_task, real_cred, uid.val);
+> >           |                                      ^
+> >     tools/testing/selftests/bpf/tools/include/bpf/bpf_core_read.h:520:35: note: expanded from macro 'BPF_CORE_READ'
+> >       520 |         ___type((src), a, ##__VA_ARGS__) __r;                               \
+> >           |                                          ^
 > >
->
-> Thanks for your suggestion. I originally considered using these kfuncs
-> only in kexec context (Later, introducing a dedicated BPF_PROG_TYPE
-> for kexec).
-
-We do not add new prog types anymore.
-They're frozen just like the list of helpers.
-
-> They are placed under a lock so that a malice attack can
-> not exhaust the memory through repeatedly calling to the decompress
-> kfunc.
-
-attack? This is all root only anyway and all memory is counted
-towards memcg.
-Make sure to use GFP_KERNEL_ACCOUNT and something similar
-to bpf_map_get_memcg.
-
-> To generalize these kfunc, I think I can add some boundary control of
-> the memory usage to prevent such attacks.
-
-Don't reinvent the wheel. memcg is the mechanism.
-
-> > They also must be KF_SLEEPABLE.
-> > Please test your patches with all kernel debugs enabled.
-> > Otherwise you would have seen all these "sleeping while atomic"
-> > issues yourself.
+> > Fix this by declaring __r to be an array of __u8 of a proper size.
 > >
->
-> See, I will have all these debug options for the V3 test.
->
-> Appreciate your insight.
->
-> Regards,
->
-> Pingfan
->
+> > Fixes: 792001f4f7aa ("libbpf: Add user-space variants of BPF_CORE_READ() family of macros")
+> > Fixes: a4b09a9ef945 ("libbpf: Add non-CO-RE variants of BPF_CORE_READ() macro family")
+> > Signed-off-by: Anton Protopopov <a.s.protopopov@gmail.com>
+> > ---
+> >  tools/lib/bpf/bpf_core_read.h | 16 ++++++++--------
+> >  1 file changed, 8 insertions(+), 8 deletions(-)
+> >
+> > diff --git a/tools/lib/bpf/bpf_core_read.h b/tools/lib/bpf/bpf_core_read.h
+> > index c0e13cdf9660..b7395b75658c 100644
+> > --- a/tools/lib/bpf/bpf_core_read.h
+> > +++ b/tools/lib/bpf/bpf_core_read.h
+> > @@ -517,9 +517,9 @@ extern void *bpf_rdonly_cast(const void *obj, __u32 btf_id) __ksym __weak;
+> >   * than enough for any practical purpose.
+> >   */
+> >  #define BPF_CORE_READ(src, a, ...) ({                                      \
+> > -       ___type((src), a, ##__VA_ARGS__) __r;                               \
+> > +       __u8 __r[sizeof(___type((src), a, ##__VA_ARGS__))];                 \
+> >         BPF_CORE_READ_INTO(&__r, (src), a, ##__VA_ARGS__);                  \
+> > -       __r;                                                                \
+> > +       *(___type((src), a, ##__VA_ARGS__) *)__r;                           \
+> >  })
+> >
+> >  /*
+> > @@ -533,16 +533,16 @@ extern void *bpf_rdonly_cast(const void *obj, __u32 btf_id) __ksym __weak;
+> >   * input argument.
+> >   */
+> >  #define BPF_CORE_READ_USER(src, a, ...) ({                                 \
+> > -       ___type((src), a, ##__VA_ARGS__) __r;                               \
+> > +       __u8 __r[sizeof(___type((src), a, ##__VA_ARGS__))];                 \
+> >         BPF_CORE_READ_USER_INTO(&__r, (src), a, ##__VA_ARGS__);             \
+> > -       __r;                                                                \
+> > +       *(___type((src), a, ##__VA_ARGS__) *)__r;                           \
+> >  })
+> >
+> >  /* Non-CO-RE variant of BPF_CORE_READ() */
+> >  #define BPF_PROBE_READ(src, a, ...) ({                                     \
+> > -       ___type((src), a, ##__VA_ARGS__) __r;                               \
+> > +       __u8 __r[sizeof(___type((src), a, ##__VA_ARGS__))];                 \
+> >         BPF_PROBE_READ_INTO(&__r, (src), a, ##__VA_ARGS__);                 \
+> > -       __r;                                                                \
+> > +       *(___type((src), a, ##__VA_ARGS__) *)__r;                           \
+> >  })
+> >
+> >  /*
+> > @@ -552,9 +552,9 @@ extern void *bpf_rdonly_cast(const void *obj, __u32 btf_id) __ksym __weak;
+> >   * not restricted to kernel types only.
+> >   */
+> >  #define BPF_PROBE_READ_USER(src, a, ...) ({                                \
+> > -       ___type((src), a, ##__VA_ARGS__) __r;                               \
+> > +       __u8 __r[sizeof(___type((src), a, ##__VA_ARGS__))];                 \
+> >         BPF_PROBE_READ_USER_INTO(&__r, (src), a, ##__VA_ARGS__);            \
+> > -       __r;                                                                \
+> > +       *(___type((src), a, ##__VA_ARGS__) *)__r;                           \
+> >  })
+> >
+> >  #endif
+> > --
+> > 2.34.1
+> >
+> >
