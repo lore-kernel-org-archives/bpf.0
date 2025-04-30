@@ -1,125 +1,166 @@
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9F2B1D7E35;
-	Tue, 29 Apr 2025 23:58:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1B0FCA4B
+	for <bpf@vger.kernel.org>; Wed, 30 Apr 2025 00:04:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745971114; cv=none; b=mkWTltIZ3nPEyd3E4Xh4FxWZUkervu4Hv7eA0Db0/EEfl1ZRNGAcWmyDn4yCWoKlTT3n27Q1e0axz+cHuS1IQ0yRyeByT1g6OWa3en7jwmdCSPL+GyS37p27PMVyjqMj/A1EpEJDa0ybmjFHbGpWgrta6F7ujENyQsCovBO9Mbw=
+	t=1745971454; cv=none; b=p5v3gFcKRdb1qOMBbNGzZz8GIRx/zaik66gDkntyan7PrcXLMRk6XvVWM4XWKbApQ2YcX6uT/ZRB+Ya+Cim0sW0w/nooPh/BbhfcPzWruQZt2VdBQIEIM6ihKlSEyoQ8ffE1VJZp0ljRCw1Y7IDmr+tOfdNExnR6o39ga8IaAZg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745971114; c=relaxed/simple;
-	bh=iqnTYDmiTjRgfK3u/aUrzt5/5Q+gPJ2f+omyQFghhuA=;
+	s=arc-20240116; t=1745971454; c=relaxed/simple;
+	bh=KYb7Sd5tNsj+RMg3B4QlGYieTbuTCHXhuq01IOsRiCg=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=o0ldEl3qL7nvUnj18moVyRzD8mB0DSYWCghtaCnUWz2v9RJBKhIVbgaX4q7Hcd0yYxWqlF20PvggchQNOhfxGce09fTuvWMaLaBNdmISID/CVM74H8AE/g6CdWMTYINNnNrIXzdJEqVK4h+P6VqfI1SXfHOxBxnegIZE9BeLOrk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mrj/4LtP; arc=none smtp.client-ip=209.85.221.41
+	 To:Cc:Content-Type; b=tFV0bk4F0rK3BpI8EMsjZdzTnUuwOtLyR4fnWw/C5gKxYDey9XxZdE9MR/Ubf6Q6W5kYafx2AFTq+24yqioePLq6riuTqyIBxJW399qrcBOeZqnt1JviSM89VtCcU9VatTDOaieMqD1A6zvwjGTHt5Sip7+y+alB3kIetu21LC4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RS5izVsn; arc=none smtp.client-ip=209.85.221.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mrj/4LtP"
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-39c1efc457bso4844991f8f.2;
-        Tue, 29 Apr 2025 16:58:32 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RS5izVsn"
+Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-39c14016868so6879267f8f.1
+        for <bpf@vger.kernel.org>; Tue, 29 Apr 2025 17:04:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1745971111; x=1746575911; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1745971451; x=1746576251; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=wlOXSV/LS6Wq6Zi28K/GY5AymAcLPtqx1WKW0bjot14=;
-        b=mrj/4LtPC304ulZBqFMmNUUbwiP0G0DsVAF/RH4Kj2DbMv43xKwQpOZ7pM4zt702IX
-         Sgbd0yr0yV6wSzccj5XgXibNQfsJ8KmQK3wjwteDbZr3gvhonS/ocnhOeTRhT9luTeqT
-         Rb1kbUYCu+H6u+wm/ivO6iMYrjbJoq24FBeX7X6QG3y0ZLHrc9w3pV3uhLUktzpsjLe2
-         XVBZjTAI8KJy/G17NzDTbEWB7TpeWZPnvQMgbF0Ex6vy0o3vujn+WlUAo5lOjCVUcUjC
-         /g86gtQj6cLKwjFMcD3wbLVfk8H0XfiDvhCwq+s1U9sa9CyeP194B7bn1nQQ6X/uufV4
-         wd8w==
+        bh=U1KeXJR1hOzBjZTqW+K21z7sqJwFRtjxFIgXNhmbOqs=;
+        b=RS5izVsnaM7CBYpUbki1KakaM7SW/2/h/gHHVW3bbtOM+kcEJsNLzGkPr7OqflHAuI
+         L4wYdJaDjsYm2qM7VMk4ZejWR/iGEMq2CDq4gVeEEfy8+p6UoHT1xEwki8/6M/24prLb
+         2idohyyze7CpwvVVYoD6pNE+jQfWCdjSyyv1FhypUGzbagRuIE8HeqoZ+dUmAq5sOiKi
+         kyWBXsqsm7fe/yfWQ5R61CUEmhJwmvSFv7SqtxGNjnv465nTcRdUKZHZu5fU4Bw6JJUz
+         XQLFR0myyf/Jh0kavUB2IufQ5v0dqqsIYU789LObx3BvMDX0KZGWFK6dVQ0jnfmpClVP
+         YtjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745971111; x=1746575911;
+        d=1e100.net; s=20230601; t=1745971451; x=1746576251;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=wlOXSV/LS6Wq6Zi28K/GY5AymAcLPtqx1WKW0bjot14=;
-        b=pKe+LZN6DlsoxOqAercpIMTvk2aipkQHT+K8p62TOg8LCqUFjXYr0b+ckuw7S9jNVD
-         ReLo231bK8K9xW01Lh8LhnEsaQLO3DxgTajrIEBokm1355IBbmG4yQN3QoORrOdloH7U
-         1d85zwC5gGAj3P98wc57/DXpBRTx9AsXw+H47vNQSlj0lqG6nbitlo2vyXwhU6bZqTpz
-         Hy3F3sLFCTFMO0klpGgcnraXOtndiIPFoKNMOhcdPDR/7Kgf/r8rrdNOCOLfFzDWav3P
-         VEizhmCK7r/vAXRv5xlKNpGCl1eGlJwuuzHSkbvej2dIoxYffmEdqiGbN8/C5TfmANd0
-         T/mQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUG4DKHSS52WFAkgj7N3e3iiCt7qU97xF4iWXTgS38vQ6Ij2TOVOpBDAMAYJui5RQxhybk=@vger.kernel.org, AJvYcCUpiNeemyAzqPiNtF7TtMD12+ygSgwM5jpJuiKUw18B6pkAaMQ+yxfnnS7MnxLyFkqxxytoLYz5FA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxFsjeJSAKhxgKZIEL/HedpepLoL2ZWHnwPL2TIRxb0+Ohmi6MF
-	rdp11k8jH6JE37aoEJD5jfyvHGaVYjkXJGRXO759NSKUKgGyBhs2mK6GpC8aY0IeG+kMCI/SMsW
-	MczdKdZcOlRJQ/NQJkMmk66Uicc4=
-X-Gm-Gg: ASbGnct0c6M4BagOo0vXokydjSwN7CdZJsLb99n314uAlLO4BpSCGU4bJSbmiKVQcP9
-	84QUzYYzFaitoWy6JinhrBKd/MVLMYnou5pgfqecQIZQIWg3R6/yOmlKA3RgH6AOleG3rthYFe1
-	jN7f68jomadzRPnaYiJmlziiJmR7bLSXyxQK+Dhb7vh8eVf8Qy
-X-Google-Smtp-Source: AGHT+IGyHp8MouUJrcf0MLECDO1OlQtEeiMDNr4s8n4KnB0vT3uHxvxC4sUSNMZLjL9sGl8MKGcrJkP70xSXpIGGyuk=
-X-Received: by 2002:a05:6000:1844:b0:39e:e557:7d9 with SMTP id
- ffacd0b85a97d-3a08ff34cb5mr269882f8f.5.1745971111023; Tue, 29 Apr 2025
- 16:58:31 -0700 (PDT)
+        bh=U1KeXJR1hOzBjZTqW+K21z7sqJwFRtjxFIgXNhmbOqs=;
+        b=ugbYcjtXRTqKbCpK+bHdkyXeo5cnX63S2/Z9iUxBYX72B1Fs5NYIgQMNMKZHSVcUKQ
+         T/Ma3YLwOtyiy5eTU8fOXY5C/ps2YCnoyO1/7KIIadBStp2HCvDoJwsyaegyRvgId5zz
+         bP7cacsBrNGrASvA4BJplP/3HU90QukwKVy0J1lWNmD63n3tMRcHhcxaqDJrHcifm5xB
+         +zWV1XYhrOK+crF17IY1AUMA5KnkAZYaqcdvgMDV+7JqGcAe8xdQ2Pp4LatAgKZHgUqJ
+         tstqPtL2xON2P1H9/6cTecQaaifSFvC4lM7OFvqF+e0eOyln9M+zazKEWXh4E89Rgll6
+         GnuA==
+X-Gm-Message-State: AOJu0YzZTQOft1oRJuEE4iogRA7EF1shC7vEEmp3ctHt1jiaUzHxt5td
+	KPbJ5NvqzBNL1Zr+8a2xNE+yemlXYaRBXMIzuH8x5Y+RGPB7+jgjlUYfE4hXOVrHaDRkk/qREDp
+	CTSFI5/7tOhjpHZyB4aHUoLO61ck=
+X-Gm-Gg: ASbGnctVj9aQ4+aFhvvqOTx8rCjVKdJnuJeyYFVhzZp/PfU0KifWRgI2eGJGB4AcAcp
+	fNGqVrqo7RDZr9+or+EEDLDdt1GKElhHLUDyL11/wqdyX5Qf0hNpXrihYz/CtltNw2TXzjB+5KS
+	T5532DncybDaBnWk7hICekhJGxOgHk9C2qW+lAAg==
+X-Google-Smtp-Source: AGHT+IEp4MiLtY0qKxS6UrNJvJKT1oFoIU9/fZqZHU+KWT51EHruQ+vwvp7Oizo6pEuXIEHqkQtR0PijT/tOG5eXN8o=
+X-Received: by 2002:a05:6000:2282:b0:39e:f9e8:d07d with SMTP id
+ ffacd0b85a97d-3a08f764d93mr924789f8f.20.1745971451027; Tue, 29 Apr 2025
+ 17:04:11 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250416-btf_inline-v1-0-e4bd2f8adae5@meta.com>
- <fcjioco2rdnrupme4gixd4vynh52paudcc7br7smqhmdhdr4js@5uolobs4ycsi>
- <CAADnVQJ1y1ktKDgORynENQLC73FZ162XXL2qMSshpb2gKXHBjw@mail.gmail.com> <D250DE71-922F-44B3-A123-9AFFBDC8051C@meta.com>
-In-Reply-To: <D250DE71-922F-44B3-A123-9AFFBDC8051C@meta.com>
+References: <20250429041214.13291-1-piliu@redhat.com> <20250429041214.13291-5-piliu@redhat.com>
+In-Reply-To: <20250429041214.13291-5-piliu@redhat.com>
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Tue, 29 Apr 2025 16:58:19 -0700
-X-Gm-Features: ATxdqUGs0YtR9SphoYkAC395_OdAmP0hUasPd8l7SBgw_omBhzum-NRYB62o-V8
-Message-ID: <CAADnVQLseJTeYWGCU6o7L6Rb_NdymAPfg-_nMuZhwx077YfmKw@mail.gmail.com>
-Subject: Re: [PATCH RFC 0/3] list inline expansions in .BTF.inline
-To: Thierry Treyer <ttreyer@meta.com>
-Cc: Daniel Xu <dxu@dxuuu.xyz>, "dwarves@vger.kernel.org" <dwarves@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Alexei Starovoitov <ast@kernel.org>, Yonghong Song <yhs@meta.com>, 
-	Andrii Nakryiko <andrii@kernel.org>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	Song Liu <songliubraving@meta.com>, Alan Maguire <alan.maguire@oracle.com>, 
-	Mykola Lysenko <mykolal@meta.com>
+Date: Tue, 29 Apr 2025 17:03:59 -0700
+X-Gm-Features: ATxdqUFdIYrUp0QWhy9gP5VNKqfBVnewOUvIA7LbeFFyzs8budADNuJnnCReKHU
+Message-ID: <CAADnVQKTSubuisSBap_J=tgO15fCdtwF-NDY_1HLP_m6o28mhw@mail.gmail.com>
+Subject: Re: [RFCv2 4/7] bpf/kexec: Introduce three bpf kfunc for kexec
+To: Pingfan Liu <piliu@redhat.com>
+Cc: bpf <bpf@vger.kernel.org>, kexec@lists.infradead.org, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jeremy Linton <jeremy.linton@arm.com>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Ard Biesheuvel <ardb@kernel.org>, Simon Horman <horms@kernel.org>, Gerd Hoffmann <kraxel@redhat.com>, 
+	Vitaly Kuznetsov <vkuznets@redhat.com>, Philipp Rudo <prudo@redhat.com>, Viktor Malik <vmalik@redhat.com>, 
+	Jan Hendrik Farr <kernel@jfarr.cc>, Baoquan He <bhe@redhat.com>, Dave Young <dyoung@redhat.com>, 
+	Eric Biederman <ebiederm@xmission.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Apr 29, 2025 at 12:14=E2=80=AFPM Thierry Treyer <ttreyer@meta.com> =
-wrote:
->
-> > It looks to me we only need:
-> > - register
-> > - load_from_reg_plus_offset
-> > - constant
->
-> In that case, we can shorten the list of operators:
->
-> ### | Operator Name          | Operands[...]
-> ----+------------------------+-------------------------------------------
->   1 | LOC_SIGNED_CONST_1     |  s8: constant's value
->   2 | LOC_SIGNED_CONST_2     | s16: constant's value
->   3 | LOC_SIGNED_CONST_4     | s32: constant's value
->   4 | LOC_SIGNED_CONST_8     | s64: constant's value
->   5 | LOC_UNSIGNED_CONST_1   |  u8: constant's value
->   6 | LOC_UNSIGNED_CONST_2   | u16: constant's value
->   7 | LOC_UNSIGNED_CONST_4   | u32: constant's value
->   8 | LOC_UNSIGNED_CONST_8   | u64: constant's value
->   9 | LOC_REGISTER           |  u8: DWARF register number from the ABI
->  10 | LOC_REGISTER_OFFSET    |  u8: DWARF register number from the ABI
->                              | s64: offset added to the register's value
+On Mon, Apr 28, 2025 at 9:13=E2=80=AFPM Pingfan Liu <piliu@redhat.com> wrot=
+e:
+ +__bpf_kfunc struct mem_range_result *bpf_kexec_decompress(char
+*image_gz_payload, int image_gz_sz,
+> +                       unsigned int expected_decompressed_sz)
+> +{
+> +       decompress_fn decompressor;
+> +       //todo, use flush to cap the memory size used by decompression
+> +       long (*flush)(void*, unsigned long) =3D NULL;
+> +       struct mem_range_result *range;
+> +       const char *name;
+> +       void *output_buf;
+> +       char *input_buf;
+> +       int ret;
+> +
+> +       range =3D kmalloc(sizeof(struct mem_range_result), GFP_KERNEL);
+> +       if (!range) {
+> +               pr_err("fail to allocate mem_range_result\n");
+> +               return NULL;
+> +       }
+> +       refcount_set(&range->usage, 1);
+> +
+> +       input_buf =3D vmalloc(image_gz_sz);
+> +       if (!input_buf) {
+> +               pr_err("fail to allocate input buffer\n");
+> +               kfree(range);
+> +               return NULL;
+> +       }
+> +
+> +       ret =3D copy_from_kernel_nofault(input_buf, image_gz_payload, ima=
+ge_gz_sz);
+> +       if (ret < 0) {
+> +               pr_err("Error when copying from 0x%px, size:0x%x\n",
+> +                               image_gz_payload, image_gz_sz);
+> +               kfree(range);
+> +               vfree(input_buf);
+> +               return NULL;
+> +       }
+> +
+> +       output_buf =3D vmalloc(expected_decompressed_sz);
+> +       if (!output_buf) {
+> +               pr_err("fail to allocate output buffer\n");
+> +               kfree(range);
+> +               vfree(input_buf);
+> +               return NULL;
+> +       }
+> +
+> +       decompressor =3D decompress_method(input_buf, image_gz_sz, &name)=
+;
+> +       if (!decompressor) {
+> +               pr_err("Can not find decompress method\n");
+> +               kfree(range);
+> +               vfree(input_buf);
+> +               vfree(output_buf);
+> +               return NULL;
+> +       }
+> +       //to do, use flush
+> +       ret =3D decompressor(image_gz_payload, image_gz_sz, NULL, NULL,
+> +                               output_buf, NULL, NULL);
+> +
+> +       /* Update the range map */
+> +       if (ret =3D=3D 0) {
+> +               range->buf =3D output_buf;
+> +               range->size =3D expected_decompressed_sz;
+> +               range->status =3D 0;
+> +       } else {
+> +               pr_err("Decompress error\n");
+> +               vfree(output_buf);
+> +               kfree(range);
+> +               return NULL;
+> +       }
+> +       pr_info("%s, return range 0x%lx\n", __func__, range);
+> +       return range;
+> +}
 
-Since we want to make the format compat let's use s32 for offset.
-We can even consider s16.
-Since that's typically stack and kernel stack is rarely above 2k.
+These kfuncs look like generic decompress routines.
+They're not related to kexec and probably should be in kernel/bpf/helpers.c
+or kernel/bpf/compression.c instead of kernel/kexec_pe_image.c.
 
->
-> > register vs register_offset is another artifact of dwarf.
-> > ...
-> > - load_from_reg_plus_offset
->
-> What is the difference between LOC_REGISTER_OFFSET
-> and load_from_reg_plus_offset?
-
-Just a different name, because LOC_REGISTER_OFFSET is confusing.
-LOC_REGISTER means that the value of the argument is in that register.
-LOC_REGISTER_OFFSET can be interpreted that the argument value
-is in the register plus constant.
-But that's not the case. reg+const is an address in memory when
-value is stored.
-So we need a different name.
-Probably load_from_reg_plus_offset is confusing too.
-How about
-LOC_ADDR_REGISTER_OFFSET
+They also must be KF_SLEEPABLE.
+Please test your patches with all kernel debugs enabled.
+Otherwise you would have seen all these "sleeping while atomic"
+issues yourself.
