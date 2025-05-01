@@ -1,140 +1,101 @@
-Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+Received: from mail-ed1-f67.google.com (mail-ed1-f67.google.com [209.85.208.67])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB3072690EC;
-	Thu,  1 May 2025 22:30:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4764B265CDE;
+	Thu,  1 May 2025 22:30:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.67
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746138634; cv=none; b=GEjbLVoG31PrLmQx9fVNNOX/O6ZVIDcRYWgbFd2WmuLJ89xr9AXSdC9MhhD70kLx/2A0eipUgqUybp+isDMmxrp5y6GtgI4oTB7Z70xXDzh35sVwDg0F4txV6ENUtDleiTgm6Ururimw3w1ciXlhZGNeAku3L5iwDc7Eln5zz4Y=
+	t=1746138650; cv=none; b=RjETlwWxGeJRKRN0p/PwbUn7j/XoFPYr71DErju5xhvf86h0rkIprZ4thHSKz4iag1nFel8fivpWCVC3ySSgCvbW+/9WY+7H974oTTY4BFdF60xu0+DBi7HPOx1j/liI21ngj826YC+7JOqyJQDRGo658db2pk8DnsiFpFdeQQg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746138634; c=relaxed/simple;
-	bh=lO2u3VJCsueg9xV30Z4hy2soY4RgbCxO/T7FbQ+Z+XE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=looUTFLUFtxilBwY6KQySeIb2OBZElJOnTsweGdUV9qL5ZzCzJfX5DcknP4bcDrgxmYwvPX4dLcY7YfzWjfQ6kiBOaCDjK3INKoF59QeVM8eTcaz24u3LvuyVSHmy2LSyvcFpgcwu/E61MegNaHGCw6+CfgJQOqRWza/3ruLTBU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f3FbD09Y; arc=none smtp.client-ip=209.85.215.170
+	s=arc-20240116; t=1746138650; c=relaxed/simple;
+	bh=+DIhbp2zBCUUrZHkv3NTANy3q1+8YPM4ngw/q64EdRc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=om/HAfD3LbZyLtjulE7Oaptdq7PCqD7dA5MxW7hopk+wmlIAdmifBSobDvMeIixklueD3CT+yoMGadAgLV517CLsWCSTBkRFP7I8K0W8Y7+iA2tpO7DI5vvRQLw+eYz1KE0yJ9J0bMdaQjL8mMNJj1sPITs7Ar2RsasUQ9fU84w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fcWCYIsD; arc=none smtp.client-ip=209.85.208.67
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f3FbD09Y"
-Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-b1a1930a922so1041495a12.3;
-        Thu, 01 May 2025 15:30:31 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fcWCYIsD"
+Received: by mail-ed1-f67.google.com with SMTP id 4fb4d7f45d1cf-5f6222c6c4cso2113848a12.1;
+        Thu, 01 May 2025 15:30:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746138631; x=1746743431; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NblxzsqS7O+HCyVf+pNfGGrnJpw2Ljjumz78jhM5b1E=;
-        b=f3FbD09YUYP/Fm+sSa/87nc7u56KWlu3U97QLLe3fiMRsonIRJMLNso/R9ZyEU8Khr
-         VX4yxlD6VrzkeNPu4LSNypqK22MD3Epznrn0e03JwJnrObCaeoAPwdi+9hzBgdhIBDhG
-         5OFW9Nt/kmXObrWN5r6kID1OrdQgP2IGClJr4r1rsFn/25ChwFY/F5rAVzz7ochMFkDv
-         QGhkO4euhes2Nu9tLHm7SRQiqQATJrLLNyyry2uC9YVGa27/9QjW0z8vFhFXoVIaSJUm
-         Cvu75wTTdLHzkRMtOGFMl0U78N94P+Bj/gChkIKeecVbCa9xernUFZyODoKowTyAhrVi
-         ULfQ==
+        d=gmail.com; s=20230601; t=1746138646; x=1746743446; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=+DIhbp2zBCUUrZHkv3NTANy3q1+8YPM4ngw/q64EdRc=;
+        b=fcWCYIsDa9bwTzk1XIV7BvAWcJrZvEG423k6LTJYyyZ9mAFmKq6BukbVElzWJCIN8Q
+         3NGTUCNycLmo1CsAAZuLJIzqpDZKp42mdoYwm0B8QpluHhr9VuvqdRVJCHzacQVLN82j
+         Az0Vp2POhXi1Mi70dTw2BGQjtaLEALSSGB9lNZ1pJ2jGz3JuKTSNLp2r01q/ipBujj7P
+         O9nTINA57tco3p5R3m5AL6GuJpDpucSfZYxloZzUevMlCOHANCYsB0hWFUEle3d4drpI
+         9pX2sxiJnoj1YXHonBCFHaaRhYSpQzR1sFyD0sitTBTfF0FYFPH8zLMX1C60DjG6mi3H
+         I7hA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746138631; x=1746743431;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NblxzsqS7O+HCyVf+pNfGGrnJpw2Ljjumz78jhM5b1E=;
-        b=KMOIpWet6dzdnLZCIHQ8tAWMJiNlGfm+nVdHEXPIPjpthC4FEXYkcAirs1zD5zJCBv
-         9hMRt2EEq1LAhKFfjHwTpKqiXefmCPHosnqB2C9wgUiJwFL/aGT2SAoBSnleo3VM6VSV
-         zh3iUMNvNs5X9v5cuk4JXBwNgS8IgCxl0ux82f6pnRoMhklX2VQEp9exsa14OVjzxn7d
-         zSAxLriEFxglYoo/cyAC+zUPos10wl0iLdLvj+pqVrbBNO4SsNAA7MbBGXQRjymC1vao
-         z/HkJ6mFtJMM+pJ8YKAyhGtiDktL73Mu9mWNM0hTtbi8M9nzyrS46ImLyeVZJyEwiFb0
-         Oh8Q==
-X-Gm-Message-State: AOJu0YzCKWpoIcyuPSCzMwm51/C2lq9wcnBBAC0AbYEUI11NYOI8aXWE
-	DTFlzRpAnck+1mhnoSMQpvuruHoCuv5edQPh2poKrFf2iiOb5Yo/1g3K2A==
-X-Gm-Gg: ASbGncvuH6IVQESHthK8TAZe8dmbO1VXSGbJ3KHLN2NRdro8gy9qvSge5psfYyyJBhu
-	zQjUgLXbjY/Ot6JcRWzmJOiL9GZq++wEo5pPkLM2rjG5FxnuGN5woonBwGmCbSdOhuGGgdbxKCA
-	gGe8tyPsX4o9ASgMUxkPptMjs8SzHRXGG7B475s3vbKe0+vZZgl0iBEEVtaUgEYiEeyqsl4TgRP
-	1p+Td8zw6p1EM0EujKHGK3CO/2ZgH3pXA2m8LUVja6XugIzaT3j4kUhoyfv/9UPmI37Aha3uRHe
-	7RF0t0/KTxiQc02cXrwHy1p0hO6OUdw=
-X-Google-Smtp-Source: AGHT+IE9ZxV4cKuk64Bb8L3jukv3Heh18bEqmNG8QwQthdTGPSCYyS9IxWy76fqsNrWQShq6cL6C1g==
-X-Received: by 2002:a17:90b:2641:b0:30a:3e8e:492c with SMTP id 98e67ed59e1d1-30a4e682ad7mr953478a91.32.1746138630829;
-        Thu, 01 May 2025 15:30:30 -0700 (PDT)
-Received: from localhost ([2a03:2880:ff:d::])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22e10914b21sm1440645ad.178.2025.05.01.15.30.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 May 2025 15:30:30 -0700 (PDT)
-From: Amery Hung <ameryhung@gmail.com>
-To: bpf@vger.kernel.org
-Cc: netdev@vger.kernel.org,
-	alexei.starovoitov@gmail.com,
-	andrii@kernel.org,
-	daniel@iogearbox.net,
-	martin.lau@kernel.org,
-	xiyou.wangcong@gmail.com,
-	kernel-team@meta.com
-Subject: [PATCH bpf-next/net v1 5/5] selftests/bpf: Cleanup bpf qdisc selftests
-Date: Thu,  1 May 2025 15:30:25 -0700
-Message-ID: <20250501223025.569020-6-ameryhung@gmail.com>
-X-Mailer: git-send-email 2.47.1
-In-Reply-To: <20250501223025.569020-1-ameryhung@gmail.com>
-References: <20250501223025.569020-1-ameryhung@gmail.com>
+        d=1e100.net; s=20230601; t=1746138646; x=1746743446;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+DIhbp2zBCUUrZHkv3NTANy3q1+8YPM4ngw/q64EdRc=;
+        b=kCcEUUuN5I8tgOjZ2KHbkWmET6i69posPRCTzHs3jT1cqDehGy6mWadORErSy36biT
+         wM+qAxXtQTG4M9GqEuOtMruDFdtIYvgLJ6UGomyxzLWOAeift1n+zM2MSfkdheiSojTL
+         yXWYjaMllgLy+aoIi2Za8OJV0PFjWiqqzpAnVgTwLN/lfDmrhuEQHLCYKx0iI8KotORA
+         180vQBUpLRu8mU2abMTjtmoHqRw6I5+yeq+FpMzDpbYIMcGCm9REK3Dzo1f/S+dvSOyQ
+         V/z5zQao3CQ65ED3yjNAnYK17Jul623r5EYEksQEMyrBLb1pEmIAd81QHYAacc5Bb17H
+         L7XA==
+X-Forwarded-Encrypted: i=1; AJvYcCVgL9OgeE7EOBRPb+mtvGOk7usONL/wjHN0CyxO8+MXTNcHd7W0+GhyqdiYdBjTbx82Ky9Eya/swRqMiqC2@vger.kernel.org, AJvYcCWRywPUb+wVnEuQpxB5rrgiFjCQyrfG2NTCh0E/oE5us12aMQtiNDq03O8zb1htPPdRimTcPevlLsh9g5PPpLjc@vger.kernel.org, AJvYcCWTy7dRvHr72rNMG+cLnx6vN8eE6kqoYkc1OAnAOt18QXNbB1+xmi3Z8uuJrjf17d7YpOY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyMTY61vudczwkiEGdnvyZQxvX7MH+Iqi3XZUGKgON4XpIs0JfI
+	IL0IuLXV6c1ZjaBOfF4+3aFSkxH2gD1xu0NUXT2KO5ycvLRb8u4RJ7kCFsm8B5OCjO41r82Ef/d
+	fbvGCdy+Sxx/t4YRc7NZGCdFuuFM=
+X-Gm-Gg: ASbGncsF0POxi1iwbJP/+hbB7NPjculur/OBHxtF/G0nMbOZxsTyLJOntoQbUweZTCX
+	CjXe5asBRNXshfTQ6yevmKaGi/Q4He2OGRps+QGDrcan76ZhcclaXX1E/nSmSTOMKGxezU/znsT
+	cb27pZREyeb7+zALpmSiwLIX3W29YFz72vlro7O0pq8eo=
+X-Google-Smtp-Source: AGHT+IG09f2b7Y4uH3A4LEbmPohoiBZ1TPbF2Kj8BdJpyHWDLhgzXkdGcWvLzUMh9kLAyJv+ATRCPXiPJsNUAWmKXHo=
+X-Received: by 2002:a05:6402:5192:b0:5f6:2758:149e with SMTP id
+ 4fb4d7f45d1cf-5fa78014527mr322827a12.11.1746138646330; Thu, 01 May 2025
+ 15:30:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250501073603.1402960-1-luis.gerhorst@fau.de> <20250501073603.1402960-8-luis.gerhorst@fau.de>
+In-Reply-To: <20250501073603.1402960-8-luis.gerhorst@fau.de>
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Date: Fri, 2 May 2025 00:30:09 +0200
+X-Gm-Features: ATxdqUHPJMzTDr7uGCd29q-hTjuCFiE_oOpFxHvXqTdvhmyQK0iMn3qq8We2LrU
+Message-ID: <CAP01T75RR_6mC5fvD-tg+pxR8TEUHpUfU4Lqo0p+EBrkY9BVnw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 07/11] bpf: Rename sanitize_stack_spill to nospec_result
+To: Luis Gerhorst <luis.gerhorst@fau.de>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Puranjay Mohan <puranjay@kernel.org>, 
+	Xu Kuohai <xukuohai@huaweicloud.com>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Hari Bathini <hbathini@linux.ibm.com>, 
+	Christophe Leroy <christophe.leroy@csgroup.eu>, Naveen N Rao <naveen@kernel.org>, 
+	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
+	Nicholas Piggin <npiggin@gmail.com>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
+	Henriette Herzog <henriette.herzog@rub.de>, Saket Kumar Bhaskar <skb99@linux.ibm.com>, 
+	Cupertino Miranda <cupertino.miranda@oracle.com>, Jiayuan Chen <mrpre@163.com>, 
+	Matan Shachnai <m.shachnai@gmail.com>, Dimitar Kanaliev <dimitar.kanaliev@siteground.com>, 
+	Shung-Hsi Yu <shung-hsi.yu@suse.com>, Daniel Xu <dxu@dxuuu.xyz>, bpf@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org, 
+	Maximilian Ott <ott@cs.fau.de>, Milan Stephan <milan.stephan@fau.de>
+Content-Type: text/plain; charset="UTF-8"
 
-Some cleanups:
-- Remove unnecessary kfuncs declaration
-- Use _ns in the test name to run tests in a separate net namespace
+On Thu, 1 May 2025 at 10:02, Luis Gerhorst <luis.gerhorst@fau.de> wrote:
+>
+> This is made to clarify that this flag will cause a nospec to be added
+> after this insn and can therefore be relied upon to reduce speculative
+> path analysis.
+>
+> Signed-off-by: Luis Gerhorst <luis.gerhorst@fau.de>
+> Cc: Henriette Herzog <henriette.herzog@rub.de>
+> Cc: Maximilian Ott <ott@cs.fau.de>
+> Cc: Milan Stephan <milan.stephan@fau.de>
+> ---
 
-Signed-off-by: Amery Hung <ameryhung@gmail.com>
----
- tools/testing/selftests/bpf/prog_tests/bpf_qdisc.c   | 10 +---------
- tools/testing/selftests/bpf/progs/bpf_qdisc_common.h |  6 ------
- 2 files changed, 1 insertion(+), 15 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_qdisc.c b/tools/testing/selftests/bpf/prog_tests/bpf_qdisc.c
-index 8afaf71cfadd..2c10816c2d9e 100644
---- a/tools/testing/selftests/bpf/prog_tests/bpf_qdisc.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_qdisc.c
-@@ -249,14 +249,8 @@ static void test_default_qdisc_attach_to_mq(void)
- 	bpf_qdisc_fifo__destroy(fifo_skel);
- }
- 
--void test_bpf_qdisc(void)
-+void test_ns_bpf_qdisc(void)
- {
--	struct netns_obj *netns;
--
--	netns = netns_new("bpf_qdisc_ns", true);
--	if (!ASSERT_OK_PTR(netns, "netns_new"))
--		return;
--
- 	if (test__start_subtest("fifo"))
- 		test_fifo();
- 	if (test__start_subtest("fq"))
-@@ -267,8 +261,6 @@ void test_bpf_qdisc(void)
- 		test_qdisc_attach_to_non_root();
- 	if (test__start_subtest("incompl_ops"))
- 		test_incompl_ops();
--
--	netns_free(netns);
- }
- 
- void serial_test_bpf_qdisc_default(void)
-diff --git a/tools/testing/selftests/bpf/progs/bpf_qdisc_common.h b/tools/testing/selftests/bpf/progs/bpf_qdisc_common.h
-index 65a2c561c0bb..c495da1c43db 100644
---- a/tools/testing/selftests/bpf/progs/bpf_qdisc_common.h
-+++ b/tools/testing/selftests/bpf/progs/bpf_qdisc_common.h
-@@ -12,12 +12,6 @@
- 
- #define private(name) SEC(".data." #name) __hidden __attribute__((aligned(8)))
- 
--u32 bpf_skb_get_hash(struct sk_buff *p) __ksym;
--void bpf_kfree_skb(struct sk_buff *p) __ksym;
--void bpf_qdisc_skb_drop(struct sk_buff *p, struct bpf_sk_buff_ptr *to_free) __ksym;
--void bpf_qdisc_watchdog_schedule(struct Qdisc *sch, u64 expire, u64 delta_ns) __ksym;
--void bpf_qdisc_bstats_update(struct Qdisc *sch, const struct sk_buff *skb) __ksym;
--
- static struct qdisc_skb_cb *qdisc_skb_cb(const struct sk_buff *skb)
- {
- 	return (struct qdisc_skb_cb *)skb->cb;
--- 
-2.47.1
-
+Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
