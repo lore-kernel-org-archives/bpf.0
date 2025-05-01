@@ -1,101 +1,186 @@
-Received: from mail-ed1-f67.google.com (mail-ed1-f67.google.com [209.85.208.67])
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4764B265CDE;
-	Thu,  1 May 2025 22:30:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.67
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E943C243969
+	for <bpf@vger.kernel.org>; Thu,  1 May 2025 22:31:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746138650; cv=none; b=RjETlwWxGeJRKRN0p/PwbUn7j/XoFPYr71DErju5xhvf86h0rkIprZ4thHSKz4iag1nFel8fivpWCVC3ySSgCvbW+/9WY+7H974oTTY4BFdF60xu0+DBi7HPOx1j/liI21ngj826YC+7JOqyJQDRGo658db2pk8DnsiFpFdeQQg=
+	t=1746138668; cv=none; b=rYKTtHA5xB8UEIZHybh/cb+g1DWPoA6mob+LG/WpZnLmG5Eo7YCl26AjE0xfGmHnGvsLqgBZidORlgaAR04E0O/KHgoUtLbdYrNO5X6SngjXGxNrznTvh3uNak/UOc0L5UBMQyWaKFWY4ApT5PHIcRVbkJcN+SZxUzoRsP5Cuxw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746138650; c=relaxed/simple;
-	bh=+DIhbp2zBCUUrZHkv3NTANy3q1+8YPM4ngw/q64EdRc=;
+	s=arc-20240116; t=1746138668; c=relaxed/simple;
+	bh=5jNJ7PmQ1iM85BfunoQWJC8Wakn+kZkigT1EU1plLbk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=om/HAfD3LbZyLtjulE7Oaptdq7PCqD7dA5MxW7hopk+wmlIAdmifBSobDvMeIixklueD3CT+yoMGadAgLV517CLsWCSTBkRFP7I8K0W8Y7+iA2tpO7DI5vvRQLw+eYz1KE0yJ9J0bMdaQjL8mMNJj1sPITs7Ar2RsasUQ9fU84w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fcWCYIsD; arc=none smtp.client-ip=209.85.208.67
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 To:Cc:Content-Type; b=p3zc64+OrQ899v/BqPV0Iq2eL97lOG9HdrjvybaZoFW3LCLLeMp/tl/PBE9gih6PjoxxoYmrqyZfIcZqSjDn/Q4XvCWGeiEIgwei1kJLZcaYNdCVLWDhTuNk8tcUFuROCMdv2ibBVH5+YWrwhEx3V76i5LzJWM8jPEpjpOSDRec=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=4o2lwDGH; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fcWCYIsD"
-Received: by mail-ed1-f67.google.com with SMTP id 4fb4d7f45d1cf-5f6222c6c4cso2113848a12.1;
-        Thu, 01 May 2025 15:30:47 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="4o2lwDGH"
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-43d5f10e1aaso22925e9.0
+        for <bpf@vger.kernel.org>; Thu, 01 May 2025 15:31:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746138646; x=1746743446; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=+DIhbp2zBCUUrZHkv3NTANy3q1+8YPM4ngw/q64EdRc=;
-        b=fcWCYIsDa9bwTzk1XIV7BvAWcJrZvEG423k6LTJYyyZ9mAFmKq6BukbVElzWJCIN8Q
-         3NGTUCNycLmo1CsAAZuLJIzqpDZKp42mdoYwm0B8QpluHhr9VuvqdRVJCHzacQVLN82j
-         Az0Vp2POhXi1Mi70dTw2BGQjtaLEALSSGB9lNZ1pJ2jGz3JuKTSNLp2r01q/ipBujj7P
-         O9nTINA57tco3p5R3m5AL6GuJpDpucSfZYxloZzUevMlCOHANCYsB0hWFUEle3d4drpI
-         9pX2sxiJnoj1YXHonBCFHaaRhYSpQzR1sFyD0sitTBTfF0FYFPH8zLMX1C60DjG6mi3H
-         I7hA==
+        d=google.com; s=20230601; t=1746138665; x=1746743465; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dvFaLMmnYAhkMr2ts1Qsuk8rmVsiL5MqMz1A00np0Ec=;
+        b=4o2lwDGHESt8qa0XytIneMFHN6s/vQODPWKQw6mFStTcl/luAHrWAQpkzVFsh6Ay1T
+         T/420YyACWf3yUtskamUNL1MGDDjvOrJuFVaGDP2qJS9vke2asQUVDdShwJ3lw20qleS
+         7ExFNgYYOElg0tZSJua8FeaKvGK85izzRoRVbLBMfsKkL8vEvs9ryiTxl3TGS0Wwj3I5
+         arHglnJ1zbqdaHXAnQdnJN6QWNYHye34ombteiMNvIadcc49nRSGB/C5sGDH8b8F5Apg
+         zZzKSzgNvsizfdhgEBqGofIb/qMZn3i+c80eCUY8V8oOxTLAjiJHTAJRq/dKlv5tQkzI
+         cv/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746138646; x=1746743446;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+DIhbp2zBCUUrZHkv3NTANy3q1+8YPM4ngw/q64EdRc=;
-        b=kCcEUUuN5I8tgOjZ2KHbkWmET6i69posPRCTzHs3jT1cqDehGy6mWadORErSy36biT
-         wM+qAxXtQTG4M9GqEuOtMruDFdtIYvgLJ6UGomyxzLWOAeift1n+zM2MSfkdheiSojTL
-         yXWYjaMllgLy+aoIi2Za8OJV0PFjWiqqzpAnVgTwLN/lfDmrhuEQHLCYKx0iI8KotORA
-         180vQBUpLRu8mU2abMTjtmoHqRw6I5+yeq+FpMzDpbYIMcGCm9REK3Dzo1f/S+dvSOyQ
-         V/z5zQao3CQ65ED3yjNAnYK17Jul623r5EYEksQEMyrBLb1pEmIAd81QHYAacc5Bb17H
-         L7XA==
-X-Forwarded-Encrypted: i=1; AJvYcCVgL9OgeE7EOBRPb+mtvGOk7usONL/wjHN0CyxO8+MXTNcHd7W0+GhyqdiYdBjTbx82Ky9Eya/swRqMiqC2@vger.kernel.org, AJvYcCWRywPUb+wVnEuQpxB5rrgiFjCQyrfG2NTCh0E/oE5us12aMQtiNDq03O8zb1htPPdRimTcPevlLsh9g5PPpLjc@vger.kernel.org, AJvYcCWTy7dRvHr72rNMG+cLnx6vN8eE6kqoYkc1OAnAOt18QXNbB1+xmi3Z8uuJrjf17d7YpOY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyMTY61vudczwkiEGdnvyZQxvX7MH+Iqi3XZUGKgON4XpIs0JfI
-	IL0IuLXV6c1ZjaBOfF4+3aFSkxH2gD1xu0NUXT2KO5ycvLRb8u4RJ7kCFsm8B5OCjO41r82Ef/d
-	fbvGCdy+Sxx/t4YRc7NZGCdFuuFM=
-X-Gm-Gg: ASbGncsF0POxi1iwbJP/+hbB7NPjculur/OBHxtF/G0nMbOZxsTyLJOntoQbUweZTCX
-	CjXe5asBRNXshfTQ6yevmKaGi/Q4He2OGRps+QGDrcan76ZhcclaXX1E/nSmSTOMKGxezU/znsT
-	cb27pZREyeb7+zALpmSiwLIX3W29YFz72vlro7O0pq8eo=
-X-Google-Smtp-Source: AGHT+IG09f2b7Y4uH3A4LEbmPohoiBZ1TPbF2Kj8BdJpyHWDLhgzXkdGcWvLzUMh9kLAyJv+ATRCPXiPJsNUAWmKXHo=
-X-Received: by 2002:a05:6402:5192:b0:5f6:2758:149e with SMTP id
- 4fb4d7f45d1cf-5fa78014527mr322827a12.11.1746138646330; Thu, 01 May 2025
- 15:30:46 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1746138665; x=1746743465;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dvFaLMmnYAhkMr2ts1Qsuk8rmVsiL5MqMz1A00np0Ec=;
+        b=VBjg5/eqAJXHenvwEuqwzmS1vBSBPLUVpr4O/Tc1cf122AvMlKzUQcAAShFcuRvI92
+         BTARU115YYmOqVin82G3B1L0Pj7ri3fwjbsc48hvj4W4cV0b0ub5MHQ1OyTf7Gme7Ebq
+         rwLGayUBXP6vnNXF5dM01Ia7aYVqQAsGIerySHcjL5FTfocGGUNcNiKocNTZ4aO15tyg
+         VuojRYGtlIqc5EWhZ3P81m9AlYtiWJUn546zuRlN/hMebpYU2f+AezWypJudyuC76Sfh
+         yeDXKhjhmfmKweRbHPtzvltNtzcc9CMjntEjBoeMDLxXtroUXxEUvbwSxuvqFeWoAfDv
+         eIIg==
+X-Forwarded-Encrypted: i=1; AJvYcCX38+o6L0whVd1S1Q+SjR/I7o4PRAmK8i+cpPR88vnFZAaEnPpyboy7kMSeqmg1Xjo3I0U=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyWnYAiGO7G6PMlNl+innpkyXRDtfDjV44/9QOAHEcRB9NAXp5T
+	5U2V3u3gLEr7u4MYFuXxaD9pQ37UHSxY+U1YVa0NzqicSrQ49HiJg4owml4qvTNC5yXYIfqw6y4
+	rxL2BG9cOq1AIt8/h1QK4vy/pHOTbrbU8CMKS
+X-Gm-Gg: ASbGnctwK3MnPtqC+LHNak83A8Nkc7Cuw04Ho/xo883mb2qhrvA8gMx534yOAelSbnB
+	v3xnWaEbY68Y6AH8NcqfvsQm8byEo2NcVQ9I04EwN6ta1lZKHV02MV4RKyKunPTYbIwmqSC62P5
+	DLLJzrINLCasYWRC/+LlY=
+X-Google-Smtp-Source: AGHT+IHZeQVSjanU+gebjmksvGiFNo+T+ZOurPfQY2zHeFq43o/7AekSmeEL8Kr/40IywT61pNTgxPJ4rqdxiNUNxZw=
+X-Received: by 2002:a05:600c:3544:b0:441:aaa8:312e with SMTP id
+ 5b1f17b1804b1-441b6499e1cmr2235995e9.6.1746138665030; Thu, 01 May 2025
+ 15:31:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250501073603.1402960-1-luis.gerhorst@fau.de> <20250501073603.1402960-8-luis.gerhorst@fau.de>
-In-Reply-To: <20250501073603.1402960-8-luis.gerhorst@fau.de>
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date: Fri, 2 May 2025 00:30:09 +0200
-X-Gm-Features: ATxdqUHPJMzTDr7uGCd29q-hTjuCFiE_oOpFxHvXqTdvhmyQK0iMn3qq8We2LrU
-Message-ID: <CAP01T75RR_6mC5fvD-tg+pxR8TEUHpUfU4Lqo0p+EBrkY9BVnw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 07/11] bpf: Rename sanitize_stack_spill to nospec_result
-To: Luis Gerhorst <luis.gerhorst@fau.de>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Puranjay Mohan <puranjay@kernel.org>, 
-	Xu Kuohai <xukuohai@huaweicloud.com>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Hari Bathini <hbathini@linux.ibm.com>, 
-	Christophe Leroy <christophe.leroy@csgroup.eu>, Naveen N Rao <naveen@kernel.org>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Nicholas Piggin <npiggin@gmail.com>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
-	Henriette Herzog <henriette.herzog@rub.de>, Saket Kumar Bhaskar <skb99@linux.ibm.com>, 
-	Cupertino Miranda <cupertino.miranda@oracle.com>, Jiayuan Chen <mrpre@163.com>, 
-	Matan Shachnai <m.shachnai@gmail.com>, Dimitar Kanaliev <dimitar.kanaliev@siteground.com>, 
-	Shung-Hsi Yu <shung-hsi.yu@suse.com>, Daniel Xu <dxu@dxuuu.xyz>, bpf@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org, 
-	Maximilian Ott <ott@cs.fau.de>, Milan Stephan <milan.stephan@fau.de>
+References: <20250428211536.1651456-1-zhuyifei@google.com> <CAEf4BzZXpWC8nWb4zF37PpDX0Y+Bk9=vw8iL5Ehqcjr-Bw=dNQ@mail.gmail.com>
+ <55e5aab0-6aa7-4b79-908a-5cbfdc7bd7cd@kernel.org>
+In-Reply-To: <55e5aab0-6aa7-4b79-908a-5cbfdc7bd7cd@kernel.org>
+From: YiFei Zhu <zhuyifei@google.com>
+Date: Thu, 1 May 2025 15:30:53 -0700
+X-Gm-Features: ATxdqUG3KM0CyJNPsFvlqNwOATY_iVJ4iA3bVbkViPwufxCqrYOhktkaOa0y1kg
+Message-ID: <CAA-VZPmtxpRCB_o52vuEuGW4UeHgzc+xO+8JMA-2G04P1r3Pug@mail.gmail.com>
+Subject: Re: [PATCH bpf] bpftool: Fix regression of "bpftool cgroup tree"
+ EINVAL on older kernels
+To: Quentin Monnet <qmo@kernel.org>
+Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>, bpf@vger.kernel.org, 
+	Alexei Starovoitov <ast@kernel.org>, Kenta Tada <tadakentaso@gmail.com>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Ian Rogers <irogers@google.com>, Greg Thelen <gthelen@google.com>, 
+	Mahesh Bandewar <maheshb@google.com>, Minh-Anh Nguyen <minhanhdn@google.com>, 
+	Sagarika Sharma <sharmasagarika@google.com>, XuanYao Zhang <xuanyao@google.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, 1 May 2025 at 10:02, Luis Gerhorst <luis.gerhorst@fau.de> wrote:
+On Thu, May 1, 2025 at 1:04=E2=80=AFPM Quentin Monnet <qmo@kernel.org> wrot=
+e:
 >
-> This is made to clarify that this flag will cause a nospec to be added
-> after this insn and can therefore be relied upon to reduce speculative
-> path analysis.
+> 2025-05-01 10:54 UTC-0700 ~ Andrii Nakryiko <andrii.nakryiko@gmail.com>
+> > On Mon, Apr 28, 2025 at 2:15=E2=80=AFPM YiFei Zhu <zhuyifei@google.com>=
+ wrote:
+> >>
+> >> If cgroup_has_attached_progs queries an attach type not supported
+> >> by the running kernel, due to the kernel being older than the bpftool
+> >> build, it would encounter an -EINVAL from BPF_PROG_QUERY syscall.
+> >>
+> >> Prior to commit 98b303c9bf05 ("bpftool: Query only cgroup-related
+> >> attach types"), this EINVAL would be ignored by the function, allowing
+> >> the function to only consider supported attach types. The commit
+> >> changed so that, instead of querying all attach types, only attach
+> >> types from the array `cgroup_attach_types` is queried. The assumption
+> >> is that because these are only cgroup attach types, they should all
+> >> be supported. Unfortunately this assumption may be false when the
+> >> kernel is older than the bpftool build, where the attach types queried
+> >> by bpftool is not yet implemented in the kernel. This would result in
+> >> errors such as:
+> >>
+> >>   $ bpftool cgroup tree
+> >>   CgroupPath
+> >>   ID       AttachType      AttachFlags     Name
+> >>   Error: can't query bpf programs attached to /sys/fs/cgroup: Invalid =
+argument
+> >>
+> >> This patch restores the logic of ignoring EINVAL from prior to that pa=
+tch.
+> >>
+> >> Fixes: 98b303c9bf05 ("bpftool: Query only cgroup-related attach types"=
+)
+> >> Reported-by: Sagarika Sharma <sharmasagarika@google.com>
+> >> Reported-by: Minh-Anh Nguyen <minhanhdn@google.com>
+> >> Signed-off-by: YiFei Zhu <zhuyifei@google.com>
+> >> ---
+> >>  tools/bpf/bpftool/cgroup.c | 2 +-
+> >>  1 file changed, 1 insertion(+), 1 deletion(-)
+> >>
+> >> diff --git a/tools/bpf/bpftool/cgroup.c b/tools/bpf/bpftool/cgroup.c
+> >> index 93b139bfb9880..3f1d6be512151 100644
+> >> --- a/tools/bpf/bpftool/cgroup.c
+> >> +++ b/tools/bpf/bpftool/cgroup.c
+> >> @@ -221,7 +221,7 @@ static int cgroup_has_attached_progs(int cgroup_fd=
+)
+> >>         for (i =3D 0; i < ARRAY_SIZE(cgroup_attach_types); i++) {
+> >>                 int count =3D count_attached_bpf_progs(cgroup_fd, cgro=
+up_attach_types[i]);
+> >>
+> >> -               if (count < 0)
+> >> +               if (count < 0 && errno !=3D EINVAL)
+> >>                         return -1;
+> >
+> > let's maybe change count_attached_bpf_progs() to return error directly
+> > as returned by bpf_prog_query(), instead of translating that to -1 and
+> > then requiring relying on errno?
+> >
+> > so just
+> >
+> > if (ret)
+> >     return ret;
+> >
+> > and then just
+> >
+> > if (count < 0 && count !=3D -EINVAL)
+> >     return /* well whatever, I'd return error probably instead of -1 ag=
+ain */
+> >
+> > Thoughts?
 >
-> Signed-off-by: Luis Gerhorst <luis.gerhorst@fau.de>
-> Cc: Henriette Herzog <henriette.herzog@rub.de>
-> Cc: Maximilian Ott <ott@cs.fau.de>
-> Cc: Milan Stephan <milan.stephan@fau.de>
-> ---
+> It feels maybe slightly less intuitive to me to compare "count" - rather
+> than "errno" - with "-EINVAL", but I don't mind really. It does make
+> sense to check the return code from the function. Looks OK from my side.
 
-Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Hmm. I'm not strongly against it, but consider the current
+cgroup_has_attached_progs. If I see
+
+    int count =3D count_attached_bpf_progs(cgroup_fd, type);
+    if (count < 0 && errno !=3D EINVAL)
+        return -1;
+
+I know "negative is error, error number is propagated though errno".
+If instead, I see
+
+    int count =3D count_attached_bpf_progs(cgroup_fd, type);
+    if (count < 0 && count !=3D -EINVAL)
+        return count;
+
+I know "negative is error, error number is propagated though return
+value". So I would expect the caller to do
+
+    has_attached_progs =3D cgroup_has_attached_progs(cgroup_fd);
+    if (has_attached_progs < 0) {
+        p_err("can't query bpf programs attached to %s: %s",
+              path, strerror(-has_attached_progs));
+
+(strerror(-has_attached_progs) rather than strerror(errno)). While I'm
+fine with such a change, it looks a bit extraneous for what was a
+simple one-line bug fix, and feels like it should be on a separate
+patch and probably on bpf-next and not bpf. Wdyt?
+
+YiFei Zhu
+
+> Thanks,
+> Quentin
