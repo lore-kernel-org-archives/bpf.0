@@ -1,143 +1,108 @@
-Received: from mail-ed1-f67.google.com (mail-ed1-f67.google.com [209.85.208.67])
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E32E3D6A;
-	Thu,  1 May 2025 22:15:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.67
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 322E61D6DBF;
+	Thu,  1 May 2025 22:30:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746137723; cv=none; b=XAVY5IJIQmmNdpQ1Z0JvM69u5GpjKCY0WOqjXdYeHjEOVzWe9OLYMbuR/5ULevqcq0p4jfgjJyEqUqBaIZVBKNJUMtyRC/t+nfMpx3o2GK0En7Ue/SKbWyILSfdqMQrs7MgyXQiuTCBLm3Gdzn4d4ZECPwsVSekq0G/pqPaACC4=
+	t=1746138628; cv=none; b=Td95UENczt2qoyWAgFlQ2+LuxX0XhWBeyl0LlvMEwJpfWOLuHgq0OcygeZMaYhh2eyfIq9KRcc9KHUUopfkLG0JTLt2+rCvSoEhMcvhPjikFpXqb+8jA7sFSe+CGeLIkNY0Nb5YO4uIQN1gIcxST5B4MtIQ5VbGLicIb8OkpkwU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746137723; c=relaxed/simple;
-	bh=hQTMxo2PdZs/kPdpXXgfvr8wVMIXmuEtB3ES2KzMuYs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=nZ+HSnqyYSkntBALwxTT0QLRY3eC7BN/r+W495rp+ngpkJQWs1zdyE4wjxaT1/W+wvH5wbKHYzqP0TUnIM6G/hDojIjfrn2Qz4hUHtp5tjfQaYKg0G0R3FT3WmqAKYW0qpS8y2YudT5/EJ3rM1iZYeVLlq3E+wc2MjlzBPQUuQo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HILAeRP2; arc=none smtp.client-ip=209.85.208.67
+	s=arc-20240116; t=1746138628; c=relaxed/simple;
+	bh=J2xlN2MKg+jZFLM4cidgDunn23asrqY5ojuLidh+RJ4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=RIXyqHI2+WiambfuAnFZ/jrwm2iAqkfCRk8GCKmzc+i3lWxWv0TAa8n8JQEIEza3tWaswSNR2Kpt/vNss1ABePdnoHdH08xUtg7YgAS02ECtTDq5VpR5VJ7WFqG1vQI+QVTMK0Xkcb7a2YdqKxJwZr7rgiiJpqPD1Gc4n4gOiys=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JIfWmsci; arc=none smtp.client-ip=209.85.216.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HILAeRP2"
-Received: by mail-ed1-f67.google.com with SMTP id 4fb4d7f45d1cf-5f4d0da2d2cso2706092a12.3;
-        Thu, 01 May 2025 15:15:21 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JIfWmsci"
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-2ff64550991so1179787a91.0;
+        Thu, 01 May 2025 15:30:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746137720; x=1746742520; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=/7Mfr+YCIEUC+WGMETL1yHxE2lGiThA8SMe4ul3SumM=;
-        b=HILAeRP2bwbSqteB6WEueK9oHL2WC8EEKlyv6T8Rcw4gjtgMeR4IqFrNbYGmn/Cqcl
-         A3+XRTMVURocV2XIradGDo62sKhGPkN/K7WVBrEVBQhb3fvq7GSNlInADagoTRUG9fza
-         J1Qu/3MTkhSTN72A4voU4zYSNlBYR4p+d3P1n+liY9xJMpMMyT6twhvy24BpUai1yXaG
-         EAVgG7UroOsfBw704oKLc1SO2SV50Y2nDU4sufiMoWp4NmfioKyhoJi41HIlSbANbTff
-         NBL2wr8ZeldnsPpc5liNM0k2CaffUw9me3SNwjQEHy1dZt89MSsmVW+64EGK8HLksBR5
-         ST3w==
+        d=gmail.com; s=20230601; t=1746138626; x=1746743426; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=vGJYNqx3x4F1f1Flq8KMEpewuVHohO9K6jvScQ08hq0=;
+        b=JIfWmscivJpBSLRvVhpLP2FujYPnbqKmzoJgra0q+3W/g8Qp6wExYHU7vNh6iVCOmS
+         pcJshcOfP/osHW0+eWg5P0W4AUAZsiua7Wt9GVLWiGYWuXOn+ufNyruh4mE1nXNmzF0p
+         xjpCstXtUiHmpYOF8TzRF/w56e/VOTLNCsRv0l3nSW9KU2BxWyCJRdFvS+uakZ7wwu7m
+         6CxAuzvd1ibn/FLcJpjKjGmdjVf1BUikeuTbaNWAOLA6QaIX8ToPh/tdQZc8BQdmeMz1
+         5Pxl4aaXqDEysnGhSHZWTPo7hEMvN8q1cyh71pK9AIVm0nK19vkawJvtLFD2jnYImh8r
+         zxPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746137720; x=1746742520;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1746138626; x=1746743426;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=/7Mfr+YCIEUC+WGMETL1yHxE2lGiThA8SMe4ul3SumM=;
-        b=ulQd/Y0l35jnOHfPYBVT2t+1SopBdr9Vp1+Cy7uWBkvywhZQkClJV7fwQDFy7iasj1
-         jmfwT1M9CpOO6FwXRNGYTk7a1jh7wnYivhq19SzJBRUgDun11lVuRh5xZV9+AYx34Ewl
-         0kW8GNuYZjVJ+ok5IPMZDQ6rP2+jtSCvEOd6XR2q48T/adkUsS4vxr63ZUBkTU1Alwpu
-         YDQh4zJEzKG4tR2P/l3VyMCICXdHa46AueSkIS82LQP5d14Wk5z6fkHOKgVHOBVoLxrF
-         zfukYjtiFTIuq752WLDItJuvTMn3f6FRK5VLSvFA1xIUrxLj4fFdrImWLbB3oK9nKBMa
-         1Ocg==
-X-Forwarded-Encrypted: i=1; AJvYcCVdQezp62E5x7TC91Y5VYAcGJqfqFOUR0bI0EgoLBJC1ylH2mKnlSDtKBcqI1fYwNz5cVDdqCVfV5ySidZdySe3@vger.kernel.org, AJvYcCWbHb0qPipsOhbtqr6JEQpV1SEv717T1bBHTlbfX5XLOKHemBz2RoiPjhj1OpJa0IJOrP7SKFYEuJfQHJsd@vger.kernel.org, AJvYcCX0g/C7RWs7vzY2EZbXmjAFoJpgiQPLl5aSTf3iiVByTpU2FuMRw2s+kd93fry1rsfgP2Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwUl7T7S3AlqKqT7j/Xy4APK4GXR7JUO1DMZr1ekJWxmsxYhja7
-	735YB6eKZAWPbXAiK2FytScGGO6qq/0wLyBJ1oS3k7A6GvqhhR1q3o8RWqlurOpMIQU+bTejAWA
-	1Vv5MsgjZuEuhSPdr52EM8uXwfTc=
-X-Gm-Gg: ASbGncsPwNUlXxcpjlYRh+lH073Jjx7c5ix8uRs6wqvNfAJK3Jc2QxqDMONNDFVinsq
-	7kzMNum3QzwawPVfNVBSoMkwLYBFaTBJQ3KQNcnqQ8hdyTsMYo1A496MCu/lUjpDPxlXJgKLRPM
-	HC661uMKuA8au9ecMjIbCUVzHOTUH7557R+g+H91QXlo4=
-X-Google-Smtp-Source: AGHT+IHxMI99F+IAtZWxOMYa1RyucSD8miaYHECSOpW4gS3Z55ThRLvG0fNtcGLqM04BGbFYK8mK+bgTTvgVJVDex7k=
-X-Received: by 2002:a05:6402:3591:b0:5f5:7c7e:40e1 with SMTP id
- 4fb4d7f45d1cf-5fa788a2855mr314784a12.24.1746137719499; Thu, 01 May 2025
- 15:15:19 -0700 (PDT)
+        bh=vGJYNqx3x4F1f1Flq8KMEpewuVHohO9K6jvScQ08hq0=;
+        b=kt2PxGtqtLb7fKirlG9iqI95sZrkNek+qUF36hKP74E9EcY9MdfybNLRqqRdljUBj8
+         z2pllPE7ymhHkc+EJEL5/pxTeo0hqVsJoAPRGgdpNwPUGDiwm+mwWrgI4yo8HrKM+g/T
+         L5kgmhjR0IM/p/FvlqUnmkszFo9/kxa9gTt/RWdPvhD8TaNitu2iWjxISFnUNwLPd59s
+         xfCUHK9tZgv/OiwwPRBXdg/QG9CFrryW0n4t5kY86yqVo2Sj1FXA5RpRex5XSqZLSeFF
+         KuNPlF1WgLwGWrzc8ZLRtpcD+Zuk/Bf9iIiuNN48YvczS6ayrbe/AVf1YXS2gh7Pk1D7
+         S7JA==
+X-Gm-Message-State: AOJu0Yy/BjzPXVzmOgjJbw8CW+8o3c57MR7RUEu+u1dQt2AyNn8DHBJ/
+	qtWI9IB59ljrpkS4teQ8SI6mcm31ulEL2ntlAPZ1pMX/tnKaFEDdhYnlOQ==
+X-Gm-Gg: ASbGncvABXeayCBnqiqqrnEyuNkc4EkkZg+1VR5f+Pk1tBn9r0AYSHIYe7c7gFFB0XP
+	xFhXaospt/LsOTD5iNOw9YqmDT0rpAyQz5rtwceoHiscP57gKBbUjnZ6xMqOd6pvJZQ7ynISVfG
+	/CtW9wIMVeyHeFu1sgOtIrT8sxZ3akMOoLQABZYY5vVvwil1zGjoW4BizJelf3OeZPGV8RR3WmF
+	ylxanbkJiipDzgaflkcSNO4Cz1kIR5Jtsq+KwX/gBbxLaWv7fXqMdJkA3q8BRqmOg9IsRD5etUP
+	ff46jhL80ZgWfseVwiH6/iVm2ii2vEU=
+X-Google-Smtp-Source: AGHT+IFoq+QTJSbfNwfFYD/N4bfU29bvNeqEEhS1rCRtIh8hEWh+U+HudWqCQWfCJ0/JFAkFWOOPqw==
+X-Received: by 2002:a17:90b:51c5:b0:2fe:a0ac:5fcc with SMTP id 98e67ed59e1d1-30a4e6b5c59mr849156a91.34.1746138626041;
+        Thu, 01 May 2025 15:30:26 -0700 (PDT)
+Received: from localhost ([2a03:2880:ff:2::])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-30a474768eesm1472074a91.16.2025.05.01.15.30.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 May 2025 15:30:25 -0700 (PDT)
+From: Amery Hung <ameryhung@gmail.com>
+To: bpf@vger.kernel.org
+Cc: netdev@vger.kernel.org,
+	alexei.starovoitov@gmail.com,
+	andrii@kernel.org,
+	daniel@iogearbox.net,
+	martin.lau@kernel.org,
+	xiyou.wangcong@gmail.com,
+	kernel-team@meta.com
+Subject: [PATCH bpf-next/net v1 0/5] Fix bpf qdisc bugs and cleanup
+Date: Thu,  1 May 2025 15:30:20 -0700
+Message-ID: <20250501223025.569020-1-ameryhung@gmail.com>
+X-Mailer: git-send-email 2.47.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250501073603.1402960-1-luis.gerhorst@fau.de> <20250501073603.1402960-6-luis.gerhorst@fau.de>
-In-Reply-To: <20250501073603.1402960-6-luis.gerhorst@fau.de>
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date: Fri, 2 May 2025 00:14:43 +0200
-X-Gm-Features: ATxdqUHQc0v79awdKG4uwMc53xWSprS6fNByWA3pwGc9veJx_oqCH0vQZ7i8uF0
-Message-ID: <CAP01T77v0vdKiqQSOk3X3t2R3xG97x13fXWE8QKF=7zX-8c_PA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 05/11] bpf, arm64, powerpc: Add bpf_jit_bypass_spec_v1/v4()
-To: Luis Gerhorst <luis.gerhorst@fau.de>, Xu Kuohai <xukuohai@huaweicloud.com>, 
-	Puranjay Mohan <puranjay@kernel.org>, Hari Bathini <hbathini@linux.ibm.com>, 
-	Naveen N Rao <naveen@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Nicholas Piggin <npiggin@gmail.com>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
-	Henriette Herzog <henriette.herzog@rub.de>, Saket Kumar Bhaskar <skb99@linux.ibm.com>, 
-	Cupertino Miranda <cupertino.miranda@oracle.com>, Jiayuan Chen <mrpre@163.com>, 
-	Matan Shachnai <m.shachnai@gmail.com>, Dimitar Kanaliev <dimitar.kanaliev@siteground.com>, 
-	Shung-Hsi Yu <shung-hsi.yu@suse.com>, Daniel Xu <dxu@dxuuu.xyz>, bpf@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org, 
-	Maximilian Ott <ott@cs.fau.de>, Milan Stephan <milan.stephan@fau.de>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-On Thu, 1 May 2025 at 09:51, Luis Gerhorst <luis.gerhorst@fau.de> wrote:
->
-> JITs can set bpf_jit_bypass_spec_v1/v4() if they want the verifier to
-> skip analysis/patching for the respective vulnerability. For v4, this
-> will reduce the number of barriers the verifier inserts. For v1, it
-> allows more programs to be accepted.
->
-> The primary motivation for this is to not regress unpriv BPF's
-> performance on ARM64 in a future commit where BPF_NOSPEC is also used
-> against Spectre v1.
->
-> This has the user-visible change that v1-induced rejections on
-> non-vulnerable PowerPC CPUs are avoided.
->
-> For now, this does not change the semantics of BPF_NOSPEC. It is still a
-> v4-only barrier and must not be implemented if bypass_spec_v4 is always
-> true for the arch. Changing it to a v1 AND v4-barrier is done in a
-> future commit.
->
-> As an alternative to bypass_spec_v1/v4, one could introduce NOSPEC_V1
-> AND NOSPEC_V4 instructions and allow backends to skip their lowering as
-> suggested by commit f5e81d111750 ("bpf: Introduce BPF nospec instruction
-> for mitigating Spectre v4"). Adding bpf_jit_bypass_spec_v1/v4() was
-> found to be preferable for the following reason:
->
-> * bypass_spec_v1/v4 benefits non-vulnerable CPUs: Always performing the
->   same analysis (not taking into account whether the current CPU is
->   vulnerable), needlessly restricts users of CPUs that are not
->   vulnerable. The only use case for this would be portability-testing,
->   but this can later be added easily when needed by allowing users to
->   force bypass_spec_v1/v4 to false.
->
-> * Portability is still acceptable: Directly disabling the analysis
->   instead of skipping the lowering of BPF_NOSPEC(_V1/V4) might allow
->   programs on non-vulnerable CPUs to be accepted while the program will
->   be rejected on vulnerable CPUs. With the fallback to speculation
->   barriers for Spectre v1 implemented in a future commit, this will only
->   affect programs that do variable stack-accesses or are very complex.
->
-> For PowerPC, the SEC_FTR checking in bpf_jit_bypass_spec_v4() is based
-> on the check that was previously located in the BPF_NOSPEC case.
->
-> For LoongArch, it would likely be safe to set both
-> bpf_jit_bypass_spec_v1() and _v4() according to
-> commit a6f6a95f2580 ("LoongArch, bpf: Fix jit to skip speculation
-> barrier opcode"). This is omitted here as I am unable to do any testing
-> for LoongArch.
->
-> Signed-off-by: Luis Gerhorst <luis.gerhorst@fau.de>
-> Cc: Henriette Herzog <henriette.herzog@rub.de>
-> Cc: Maximilian Ott <ott@cs.fau.de>
-> Cc: Milan Stephan <milan.stephan@fau.de>
-> ---
+This patchset fixes the following bugs in bpf qdisc and cleanup the
+selftest.
 
-I think this and the next patch should have acks from arm and powerpc experts.
+- A null-pointer dereference can happen in qdisc_watchdog_cancel() if the
+  timer is not initialized when 1) .init is not defined by user so
+  init prologue is not generated. 2) .init fails and qdisc_create()
+  calls .destroy
+
+- bpf qdisc fails to attach to mq/mqprio when being set as the default
+  qdisc due to failed qdisc_lookup() in init prologue
+
+Amery Hung (5):
+  bpf: net_sched: Fix bpf qdisc init prologue when set as default qdisc
+  selftests/bpf: Test setting and creating bpf qdisc as default qdisc
+  bpf: net_sched: Make some Qdisc_ops ops mandatory
+  selftests/bpf: selftests/bpf: Test attaching a bpf qdisc with
+    incomplete operators
+  selftests/bpf: Cleanup bpf qdisc selftests
+
+ net/sched/bpf_qdisc.c                         | 24 ++++-
+ .../selftests/bpf/prog_tests/bpf_qdisc.c      | 95 ++++++++++++++++++-
+ .../selftests/bpf/progs/bpf_qdisc_common.h    |  6 --
+ .../bpf/progs/bpf_qdisc_fail__incompl_ops.c   | 41 ++++++++
+ .../selftests/bpf/progs/bpf_qdisc_fifo.c      |  6 ++
+ .../selftests/bpf/progs/bpf_qdisc_fq.c        |  6 ++
+ 6 files changed, 164 insertions(+), 14 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/bpf_qdisc_fail__incompl_ops.c
+
+-- 
+2.47.1
+
