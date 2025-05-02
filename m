@@ -1,70 +1,116 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED76A126BF1
-	for <bpf@vger.kernel.org>; Fri,  2 May 2025 13:08:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+Received: from pegase1.c-s.fr (pegase1.c-s.fr [93.17.236.30])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CC21DDAB;
+	Fri,  2 May 2025 13:20:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.236.30
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746191286; cv=none; b=tB/n3gWh7p1XWCrb+XEk2qp+qP9G0V0bUr4WM5mb7ue0UNEXRnqq2MqZaSGgyQq75BpPGXdvDiuSa3ClBeitIp9gC7dr54v5nWNbjSKf+SDBI1tIW/I/+70Mb+FPkYxuwizBagL8u4mvJy5p4BodDYx+rvtzawXBP0m+iA2zaio=
+	t=1746192037; cv=none; b=TCIKa0A5L/J5smoDpGhmxJLIGuDMopDvjdh7Rs8Oihc7bJ1RwQ4LgL79ESjhBC6mgImeHReM3ufUiqVwhMZvcBaNP9R8Dm8Ia0kMIl6IqDS14c9wEC++OOfA3/c1NIMNAKugtgKH29zcx54VcpCoQ5QdUP369IQP+1qeJvB1ojc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746191286; c=relaxed/simple;
-	bh=JOO5HGGM6E0ClZz1GNoJDgfzewpSBCPTbDSKUhqXOxg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=doguJ+HWVdRGHszIlQYmwt1nJ4A31YZe0Z2Yz10tzX3TygyTJ56s9kLTLPJTNfwIoRJ+ZjQbo1czj2i1r1OILwYQlbHmRwAiGxD0ArzosL9rk48SYifcrgSM53PpEFjxVlnKaFd5YJpG3T0Ii2rpQEXkkGWC+R3RCzFHnhKVG9Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=NU+Kh4kQ; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="NU+Kh4kQ"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=JOO5HGGM6E0ClZz1GNoJDgfzewpSBCPTbDSKUhqXOxg=; b=NU+Kh4kQNJirBpXbLdTy3gxaTx
-	Cd9qYKSnMuJK1CMobMCwkUEAqhEEqydcRiQEQbx84aChHy08WVTAEp95ijiXCw0iLBuyS7wzkKo/c
-	ZUYZ/XHhrzdkANgtrdJnIwKTRqRWkkNIhwMzBbFNMKIpuOUB4vw+GtYsBUujnPcXczchpBTBodNHQ
-	U2pE5fWakfBhWT39QCZrv/5GnLc6TU9rzUylKV/8Rgi8SQVbtWbE8xnkyEiziPNo4V2yhNKCxUvbE
-	OozZUqJVY3IwI9MZSSjI442eC9BNMl+TTdQDEF2ZLUJN8hEXnHwb06E6HjQhsZkJOUjVdxxi59CsG
-	7cnurz1w==;
-Received: from willy by casper.infradead.org with local (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1uAq6I-00000000Z3b-1Big;
-	Fri, 02 May 2025 13:06:46 +0000
-Date: Fri, 2 May 2025 14:06:46 +0100
-From: Matthew Wilcox <willy@infradead.org>
-To: David Hildenbrand <david@redhat.com>
-Cc: Yafang Shao <laoar.shao@gmail.com>, Zi Yan <ziy@nvidia.com>,
-	Gutierrez Asier <gutierrez.asier@huawei-partners.com>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	akpm@linux-foundation.org, ast@kernel.org, daniel@iogearbox.net,
-	andrii@kernel.org, Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Nico Pache <npache@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>,
-	Dev Jain <dev.jain@arm.com>, bpf@vger.kernel.org,
-	linux-mm@kvack.org, Michal Hocko <mhocko@suse.com>
-Subject: Re: [RFC PATCH 0/4] mm, bpf: BPF based THP adjustment
-Message-ID: <aBTDZpxhaYjiMmiz@casper.infradead.org>
-References: <CALOAHbCNrOqqTV9gZ8PeaS1fcaQJ-CkUcwvFsx6VjHTmaTHjgQ@mail.gmail.com>
- <ygshjrctjzzggrv5kcnn6pg4hrxikoiue5bljvqcazfioa5cij@ijfcv7r4elol>
- <CALOAHbCL-NOEeA1+t=D2F_q7UUi7GvkLDry5=SiehtWs1TKX1Q@mail.gmail.com>
- <20250430174521.GC2020@cmpxchg.org>
- <84DE7C0C-DA49-4E4F-9F66-E07567665A53@nvidia.com>
- <6850ac3f-af96-4cc6-9dd0-926dd3a022c9@huawei-partners.com>
- <CALOAHbDbVOzKy9yZxePZFY8XSOgoLT4S_c=VW8sbbU6v9F-Ong@mail.gmail.com>
- <3006EA5B-3E02-4D82-8626-90735FE8F656@nvidia.com>
- <CALOAHbA6uWTGZ10n3Lk2Jm5xBPC5ob9aw87EHmkvm6__PYJ_5g@mail.gmail.com>
- <4883bdec-f7f2-4350-bf72-f0fa75c9ddd5@redhat.com>
+	s=arc-20240116; t=1746192037; c=relaxed/simple;
+	bh=U6urzpE91xdUZF2TxiVY8gAIcNB1QAGPhG01RWYs0Mg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OqxvLa1DW/mJoio8qJg/PtyGTcUj7eBSUREF9bPBnp+5vyXGMADYlUFN2RbUFFh5p7QhFOlqSih7sbZasf96OxSGVchuhFMDrT2MWKM8TE7SJ1vBT/uE3IN97BXQNNi3f138emHP5F6RZqMIQxAhxpX/EgeKTU6U19PZXR5b0vI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.236.30
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
+Received: from localhost (mailhub3.si.c-s.fr [192.168.12.233])
+	by localhost (Postfix) with ESMTP id 4Zprfq673lz9s36;
+	Fri,  2 May 2025 15:02:11 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase1.c-s.fr ([192.168.12.234])
+	by localhost (pegase1.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Bu1Itk0akfuE; Fri,  2 May 2025 15:02:11 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+	by pegase1.c-s.fr (Postfix) with ESMTP id 4Zprfq5Q81z9s2l;
+	Fri,  2 May 2025 15:02:11 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id B27598B765;
+	Fri,  2 May 2025 15:02:11 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+	with ESMTP id ifS9dlAYK1bu; Fri,  2 May 2025 15:02:11 +0200 (CEST)
+Received: from PO20335.idsi0.si.c-s.fr (unknown [192.168.235.99])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 0C68E8B763;
+	Fri,  2 May 2025 15:02:11 +0200 (CEST)
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
+To: Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	"Liang, Kan" <kan.liang@linux.intel.com>,
+	Leo Yan <leo.yan@arm.com>
+Cc: Christophe Leroy <christophe.leroy@csgroup.eu>,
+	linux-perf-users@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: [PATCH] perf: Completely remove possibility to override MAX_NR_CPUS
+Date: Fri,  2 May 2025 15:02:02 +0200
+Message-ID: <bfa19c0a3a40d10a053a2c7d3219eee2098e3b38.1746190831.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.47.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4883bdec-f7f2-4350-bf72-f0fa75c9ddd5@redhat.com>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1746190923; l=1837; i=christophe.leroy@csgroup.eu; s=20211009; h=from:subject:message-id; bh=U6urzpE91xdUZF2TxiVY8gAIcNB1QAGPhG01RWYs0Mg=; b=AbOUqnFYBy/JIKaV6NPiEHKBx4D/iZtblMJLv+s4PQBQBiCEaWHpczStEz79pf2M6XeENOMBg H7RI8hx/LgpAV7EYtjQqjWWCiORDG/TzKjvtEYyDAqv87WdkNM5buYN
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
 
-On Fri, May 02, 2025 at 03:04:12PM +0200, David Hildenbrand wrote:
-> I mean, READ_ONLY_THP_FOR_FS is still around and still EXPERIMENTAL ...
+Commit 21b8732eb447 ("perf tools: Allow overriding MAX_NR_CPUS at
+compile time") added the capability to override MAX_NR_CPUS. At
+that time it was necessary to reduce the huge amount of RAM used
+by static stats variables.
 
-It's going away RSN.
+But this has been unnecessary since commit 6a1e2c5c2673 ("perf stat:
+Remove a set of shadow stats static variables"), and
+commit e8399d34d568 ("libperf cpumap: Hide/reduce scope of
+MAX_NR_CPUS") broke the build in that case because it failed to
+add the guard around the new definition of MAX_NR_CPUS.
+
+So cleanup things and remove guards completely to officialise it
+is not necessary anymore to override MAX_NR_CPUS.
+
+Link: https://lore.kernel.org/all/8c8553387ebf904a9e5a93eaf643cb01164d9fb3.1736188471.git.christophe.leroy@csgroup.eu/
+Fixes: e8399d34d568 ("libperf cpumap: Hide/reduce scope of MAX_NR_CPUS")
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+ tools/perf/perf.h                        | 2 --
+ tools/perf/util/bpf_skel/kwork_top.bpf.c | 2 --
+ 2 files changed, 4 deletions(-)
+
+diff --git a/tools/perf/perf.h b/tools/perf/perf.h
+index 3cb40965549f..e004178472d9 100644
+--- a/tools/perf/perf.h
++++ b/tools/perf/perf.h
+@@ -2,9 +2,7 @@
+ #ifndef _PERF_PERF_H
+ #define _PERF_PERF_H
+ 
+-#ifndef MAX_NR_CPUS
+ #define MAX_NR_CPUS			4096
+-#endif
+ 
+ enum perf_affinity {
+ 	PERF_AFFINITY_SYS = 0,
+diff --git a/tools/perf/util/bpf_skel/kwork_top.bpf.c b/tools/perf/util/bpf_skel/kwork_top.bpf.c
+index 73e32e063030..6673386302e2 100644
+--- a/tools/perf/util/bpf_skel/kwork_top.bpf.c
++++ b/tools/perf/util/bpf_skel/kwork_top.bpf.c
+@@ -18,9 +18,7 @@ enum kwork_class_type {
+ };
+ 
+ #define MAX_ENTRIES     102400
+-#ifndef MAX_NR_CPUS
+ #define MAX_NR_CPUS     4096
+-#endif
+ #define PF_KTHREAD      0x00200000
+ #define MAX_COMMAND_LEN 16
+ 
+-- 
+2.47.0
+
