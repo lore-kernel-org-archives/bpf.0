@@ -1,47 +1,47 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B1FC3703D1;
-	Mon,  5 May 2025 23:03:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50DC72EC871;
+	Mon,  5 May 2025 23:07:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746486219; cv=none; b=Zqcvevu4TthWHne/DsZ4lUpsN4WlV76Ja1FWCIvWcrhVi7YHi3hHb/TDNTZeIE1XbDiKioJcUt03TSqyDcT+a+P5LwtzAUWkEOvffyr0HNYUJAvDBUdy6EF9uPY+MwyGLPBsTR6WfnaOkAJbN56v4QsWFSxi2xirQTaLB+OHeZg=
+	t=1746486479; cv=none; b=ocHznQvWR0axIwQpYvonWZVp0kldmbwiealLll5Nyt91vT16Y/ZR2XzNvEBpjIGlOHsRzQmLrp0p1a8h8/2veA5LwAycglk3g92CUI8c5m7M66regpp+oYxeD5m6Ka3ApvTni1PhH4qCNDW1ysGCX6ZLb34VATDnVhsVYX42dnQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746486219; c=relaxed/simple;
-	bh=nGvdlCDrWtO7xRo/70W+vOcOv8cOxCWboXoNzYTDJTI=;
+	s=arc-20240116; t=1746486479; c=relaxed/simple;
+	bh=vtKUXitUTPieHzZ6OsMajJLUSV/qo8vzb6BEFkHPvBA=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=ekuGJz+KEV1zCqkT4WdaBEvfMTUX4u5jR1wMAbweYJX4hXYnRj473KV20w5Rdf416oY3ZZ9YC8S1C0edPOWUvP0vG5dPshM/3jQ+pUiMV0sR9vTE+WEbx+wOU4hgvgrz4aSyWV2i2P2LSTK94hvz9d+8kdHAGU+kzie+psEPvy8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=euUTsRuP; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=ktYdnKuJM3f4qluvyPIG/n779kxqwQb1N7+G/b4XLuxNjkXbUw1EAlPhQVgB9b3v+w7CoEVNdkIxvqKKA0wNOuf1pFWn8dPJasdb1Zfrf3tAXIjknXQCAlH0W2yIU2T1boobIewX2L3mDtlC2IFTtw55wQcH6n51/oAkyRomSII=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XAgj5YuO; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="euUTsRuP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2ED57C4CEF1;
-	Mon,  5 May 2025 23:03:37 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XAgj5YuO"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35DE6C4CEEF;
+	Mon,  5 May 2025 23:07:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746486218;
-	bh=nGvdlCDrWtO7xRo/70W+vOcOv8cOxCWboXoNzYTDJTI=;
+	s=k20201202; t=1746486478;
+	bh=vtKUXitUTPieHzZ6OsMajJLUSV/qo8vzb6BEFkHPvBA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=euUTsRuPjt8Rkwe95Tfoal9PSRYLN/7NkGXA2l9pPLR/t6pjsUWQN1qJCKn3qQuc4
-	 4HGvHxLDFFVy8iQ1o/xZqr+LVP4MvqLOLmwFoPfMIqgX/4XaLVtxj1FlXW0b5BrtDH
-	 n6tVN/cWmoiuCIRXXCkW+YuZY8+oGUufAeseS/5ehOmZcr2qBY+P496g8n9mDfJf9n
-	 OGsUDd1tcHHaM+zi9yqH06zheU361JrvPK7OFzLm2nzOPtICCP9Uzr5zCC/2Nhac3Z
-	 YSUxIDq9Nq0WtphKJGzQqwT2lWqQhRyBkdWBWs2AnTITGEllmsao6sebgjLjeOWkyY
-	 V0G7JVIZDRLbA==
+	b=XAgj5YuO6jhzcB4MNSKKpz7xQnA4Ghpp01WLTH+MnjXvHSbwLLZC0oFjfqzOxm/0e
+	 lk7xXJze91N45dicqSltJQqBr0OdJ+107AnOVTD439JeOLrnGoH8QRZySpGkANuXPA
+	 wKmwuvxikp+x5Pz6TaSdqG/QN9LZfMjbLJcU1Vbn1wu3Tm2+UVcrGAOG1YwijRHn8U
+	 5li/Jomq4lKnMdnd53yH4HvHCW3jR+u7H43lLRwk5vOku9ntB56PjCVSmnzUerC3lq
+	 Ksvbva17InhPEoSmPrUknnJU9EeYpxlKBsu3JDAX1vt41u8s1M0wUesmO3n6MT3ylp
+	 U4QpY+D+lDpdg==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Andrii Nakryiko <andrii@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
+Cc: Mykyta Yatsenko <yatsenko@meta.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
 	Sasha Levin <sashal@kernel.org>,
+	ast@kernel.org,
 	daniel@iogearbox.net,
 	bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.6 213/294] libbpf: fix LDX/STX/ST CO-RE relocation size adjustment logic
-Date: Mon,  5 May 2025 18:55:13 -0400
-Message-Id: <20250505225634.2688578-213-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.1 050/212] bpf: Return prog btf_id without capable check
+Date: Mon,  5 May 2025 19:03:42 -0400
+Message-Id: <20250505230624.2692522-50-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250505225634.2688578-1-sashal@kernel.org>
-References: <20250505225634.2688578-1-sashal@kernel.org>
+In-Reply-To: <20250505230624.2692522-1-sashal@kernel.org>
+References: <20250505230624.2692522-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -50,93 +50,48 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.6.89
+X-stable-base: Linux 6.1.136
 Content-Transfer-Encoding: 8bit
 
-From: Andrii Nakryiko <andrii@kernel.org>
+From: Mykyta Yatsenko <yatsenko@meta.com>
 
-[ Upstream commit 06096d19ee3897a7e70922580159607fe315da7a ]
+[ Upstream commit 07651ccda9ff10a8ca427670cdd06ce2c8e4269c ]
 
-Libbpf has a somewhat obscure feature of automatically adjusting the
-"size" of LDX/STX/ST instruction (memory store and load instructions),
-based on originally recorded access size (u8, u16, u32, or u64) and the
-actual size of the field on target kernel. This is meant to facilitate
-using BPF CO-RE on 32-bit architectures (pointers are always 64-bit in
-BPF, but host kernel's BTF will have it as 32-bit type), as well as
-generally supporting safe type changes (unsigned integer type changes
-can be transparently "relocated").
+Return prog's btf_id from bpf_prog_get_info_by_fd regardless of capable
+check. This patch enables scenario, when freplace program, running
+from user namespace, requires to query target prog's btf.
 
-One issue that surfaced only now, 5 years after this logic was
-implemented, is how this all works when dealing with fields that are
-arrays. This isn't all that easy and straightforward to hit (see
-selftests that reproduce this condition), but one of sched_ext BPF
-programs did hit it with innocent looking loop.
-
-Long story short, libbpf used to calculate entire array size, instead of
-making sure to only calculate array's element size. But it's the element
-that is loaded by LDX/STX/ST instructions (1, 2, 4, or 8 bytes), so
-that's what libbpf should check. This patch adjusts the logic for
-arrays and fixed the issue.
-
-Reported-by: Emil Tsalapatis <emil@etsalapatis.com>
+Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
-Link: https://lore.kernel.org/r/20250207014809.1573841-1-andrii@kernel.org
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Acked-by: Yonghong Song <yonghong.song@linux.dev>
+Link: https://lore.kernel.org/bpf/20250317174039.161275-3-mykyta.yatsenko5@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/lib/bpf/relo_core.c | 24 ++++++++++++++++++++----
- 1 file changed, 20 insertions(+), 4 deletions(-)
+ kernel/bpf/syscall.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/lib/bpf/relo_core.c b/tools/lib/bpf/relo_core.c
-index 63a4d5ad12d1a..26cde1b27174b 100644
---- a/tools/lib/bpf/relo_core.c
-+++ b/tools/lib/bpf/relo_core.c
-@@ -683,7 +683,7 @@ static int bpf_core_calc_field_relo(const char *prog_name,
- {
- 	const struct bpf_core_accessor *acc;
- 	const struct btf_type *t;
--	__u32 byte_off, byte_sz, bit_off, bit_sz, field_type_id;
-+	__u32 byte_off, byte_sz, bit_off, bit_sz, field_type_id, elem_id;
- 	const struct btf_member *m;
- 	const struct btf_type *mt;
- 	bool bitfield;
-@@ -706,8 +706,14 @@ static int bpf_core_calc_field_relo(const char *prog_name,
- 	if (!acc->name) {
- 		if (relo->kind == BPF_CORE_FIELD_BYTE_OFFSET) {
- 			*val = spec->bit_offset / 8;
--			/* remember field size for load/store mem size */
--			sz = btf__resolve_size(spec->btf, acc->type_id);
-+			/* remember field size for load/store mem size;
-+			 * note, for arrays we care about individual element
-+			 * sizes, not the overall array size
-+			 */
-+			t = skip_mods_and_typedefs(spec->btf, acc->type_id, &elem_id);
-+			while (btf_is_array(t))
-+				t = skip_mods_and_typedefs(spec->btf, btf_array(t)->type, &elem_id);
-+			sz = btf__resolve_size(spec->btf, elem_id);
- 			if (sz < 0)
- 				return -EINVAL;
- 			*field_sz = sz;
-@@ -767,7 +773,17 @@ static int bpf_core_calc_field_relo(const char *prog_name,
- 	case BPF_CORE_FIELD_BYTE_OFFSET:
- 		*val = byte_off;
- 		if (!bitfield) {
--			*field_sz = byte_sz;
-+			/* remember field size for load/store mem size;
-+			 * note, for arrays we care about individual element
-+			 * sizes, not the overall array size
-+			 */
-+			t = skip_mods_and_typedefs(spec->btf, field_type_id, &elem_id);
-+			while (btf_is_array(t))
-+				t = skip_mods_and_typedefs(spec->btf, btf_array(t)->type, &elem_id);
-+			sz = btf__resolve_size(spec->btf, elem_id);
-+			if (sz < 0)
-+				return -EINVAL;
-+			*field_sz = sz;
- 			*type_id = field_type_id;
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 27fdf1b2fc469..b145f3ef3695e 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -4005,6 +4005,8 @@ static int bpf_prog_get_info_by_fd(struct file *file,
+ 	info.recursion_misses = stats.misses;
+ 
+ 	info.verified_insns = prog->aux->verified_insns;
++	if (prog->aux->btf)
++		info.btf_id = btf_obj_id(prog->aux->btf);
+ 
+ 	if (!bpf_capable()) {
+ 		info.jited_prog_len = 0;
+@@ -4151,8 +4153,6 @@ static int bpf_prog_get_info_by_fd(struct file *file,
  		}
- 		break;
+ 	}
+ 
+-	if (prog->aux->btf)
+-		info.btf_id = btf_obj_id(prog->aux->btf);
+ 	info.attach_btf_id = prog->aux->attach_btf_id;
+ 	if (attach_btf)
+ 		info.attach_btf_obj_id = btf_obj_id(attach_btf);
 -- 
 2.39.5
 
