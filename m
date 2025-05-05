@@ -1,257 +1,196 @@
-Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3DFE3278E8
-	for <bpf@vger.kernel.org>; Mon,  5 May 2025 22:34:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55CEF32DAA0;
+	Mon,  5 May 2025 22:35:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746484487; cv=none; b=cCZXcNHlVqbOtVhDBYV3n5+FBjEVpdStvxlXVTcZ8CVF3dP3+wukLHlFrNvt0y3kp1IALWfWyAYAr+t1dnqk6apMQl1srklfkA5LhgrUlQs7LNGBKf6lV3+abqR2yPcFwJLBCu9nu0HBItOotXqZKmCgWEHOL+xxcUhO34+NQJA=
+	t=1746484526; cv=none; b=SThNHqzK2J84Pu0eVaHHkRJy9Rms4q1jmOM7SC3OtICW0Rm9s03DMcvrKXZfKcePBUG1OA0hhP6naU/h1OAx+6TAxqRGlapJ2ofaHWw0anTKCl3r8NpYzCEuw9iY1dJk28oUT0hN0E7jv3QmkYy2ZUhKEY5Dfldq4RpxGzmW79A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746484487; c=relaxed/simple;
-	bh=XrFF3q8OIdWbIbgL5KEcKR7w3M0aeaM2dGRoWCTQ0Bo=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=EQyveE4P1IKWz1zkQgP9HfK16947omzmlPdF7HneKtEMxlYEGfutlvgMMiHkU5wvHblxBzLK+vVT5hSVevt7IYTeNHEmBZqTEvuhfMojjc0GF/40kv2GzF5TiEBXv84xYQj8RhpfgVdhJHG2q7aglrc9gSpFAUzUVXrZtn4fQis=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--samitolvanen.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=BOEDVx7a; arc=none smtp.client-ip=209.85.210.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--samitolvanen.bounces.google.com
+	s=arc-20240116; t=1746484526; c=relaxed/simple;
+	bh=rPXg2sY7ZfWVK8DP/KT2YWCX2cEprik+eD4oek2lEXE=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=nPlZOplectM9zc7nz4wes3U88m2wQn1EDcmHcxX2zkEVX0ZRlgYNVoyRSQRNyR7fR7Bv5lLyK9EI42eQbLUlOWPTWqBeUajBpWkNV1IqYsEAmxiW5w9J098LmT5UgDyLd7j9vdNaokLqP/ILbAp5P2gnXY5kToIZzFUz0WBJoBM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lcx3CuAx; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="BOEDVx7a"
-Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-73dcce02a5cso2972502b3a.0
-        for <bpf@vger.kernel.org>; Mon, 05 May 2025 15:34:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1746484485; x=1747089285; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=7UG6GYoDYUvSTCJXNbhcTCy+rTclDma5rPa6bv6GcMw=;
-        b=BOEDVx7afTopZwemKnnNK77BZmTnv4adxC7u0Bwj3DRFVvziBcuuywB/DTryIUWQMe
-         5nS6r9wcCL1aD61rrj5N8nkbDje/zpR2NOYoq0fYbErxuRgxZ4Ck6Dh998PaqyC8DHUh
-         1Z2akJ0yj1cGXwdm4LHjzss2dQ15xKis50tiTmfmszSbr05QsEQ+CFaO+j3IR0Wpzvil
-         5HBaKcAD9RVgc0+EDkWs7Bf65ezknRiTbhEJAuVXFHLI6mHalCwj93w7rdGtdZfXyjS6
-         b3JdeYSnceZxul9Xy0hKAvTR3zBDoM4YJhztKaq3xS3INsYxSKzxdtw5WaaSCsNJb1Yr
-         JdzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746484485; x=1747089285;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7UG6GYoDYUvSTCJXNbhcTCy+rTclDma5rPa6bv6GcMw=;
-        b=k2qsz3TLCJqI0dOuGRO0ZCabqfbe7iRE3Hd7C13hlZUdSn+Cbngv/moqJW7mLSx1tf
-         nX37mz0aENQCTdn6sohbmXmO3r7X9J5G6Z35je5iujWzFIy8826LqcrNWdTg+cpZ5Y6L
-         kpubm6xf8FO1byVpinUmikDGnzpUzYVmd/flb92ERQgH5vERGyHYxBWfUEWjFrZhswnx
-         ua3wacaYdfG1CS/TMDEXR2b38Jdd2l+aJMIFT5HqXehLudoYlhKwGgFAOuEb9LL8kAfO
-         paQcA4Sw0NHJpyXDiNEFDsTPtiaDdoV0TbHUBENJxGqzKEDJvubWM4cyATekrLyuGh4n
-         9UcQ==
-X-Gm-Message-State: AOJu0Yx2sDsM65EyQtjIK1deA2vuy0jVDHx/TddneO8WK/lRh6sQWxrW
-	zPyM65dETxBmg4PHYuVE6LRRvv5W2Ld5W8aUwREP3hQMLTKZaSIB3RxixqKiW4r6RPQ+ICkVSnT
-	SVAssAGjQj5PhY92oo5K3lsOsYGECtsFALGw+1iEeighpJ9JxD7vQ0EZgM1Gn4uJabrKVgTwcjk
-	1KiCnPYbA6eamt1CmGfQMdEPUldykfayvQ+CWXg0pbot7OF8pFWJagLcWcdX9L
-X-Google-Smtp-Source: AGHT+IG9/bqquqZo0+5ekAmT9vTMi2AWIW4fPAq3lK8wl6/RiTTEb6BBW0o8BycH8+xREXoGfTl4Z8+v6d38vWKGCxA=
-X-Received: from pgar26.prod.google.com ([2002:a05:6a02:2e9a:b0:af0:e359:c50a])
- (user=samitolvanen job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6a20:43a3:b0:1f5:6c7b:8920 with SMTP id adf61e73a8af0-2118076ae4dmr1028201637.9.1746484484997;
- Mon, 05 May 2025 15:34:44 -0700 (PDT)
-Date: Mon,  5 May 2025 22:34:40 +0000
-In-Reply-To: <20250505223437.3722164-4-samitolvanen@google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lcx3CuAx"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F9EFC4CEEE;
+	Mon,  5 May 2025 22:35:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1746484526;
+	bh=rPXg2sY7ZfWVK8DP/KT2YWCX2cEprik+eD4oek2lEXE=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=lcx3CuAx9kWyuEf2iKhiRmkR2AU9epXvIs6wb49zwtGVQcWH95qSsP3yEIY/3rDkH
+	 N6hDyUP/dua2oFC4cYy1V7XtsyiaN92GQDa9jS4kTPOLYbB8IulRp83sdKeEuQGs0n
+	 GoQ8QTUcl5NXZv2IMcMxJq7bG1LjhPNY2VkTB6rD49A+o5J+zdUFKjWIR82UzP7b+V
+	 Wd0KZkqW/bv9i4mPy8W4W+h9ERwAVCE9zFP+piRP2WW4j0lqUJWiFwcEclRxHBOato
+	 N5nJJvMXAQyiRqoWsKhU8kLP5hJEJ5uRMZ1DncSzHtz1HcpLC1hXad/IZbTbY2dT48
+	 0oHVBzSzOKJCA==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Song Yoong Siang <yoong.siang.song@intel.com>,
+	Avigail Dahan <avigailx.dahan@intel.com>,
+	Tony Nguyen <anthony.l.nguyen@intel.com>,
+	Sasha Levin <sashal@kernel.org>,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	davem@davemloft.net,
+	kuba@kernel.org,
+	hawk@kernel.org,
+	john.fastabend@gmail.com,
+	przemyslaw.kitszel@intel.com,
+	andrew+netdev@lunn.ch,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	netdev@vger.kernel.org,
+	bpf@vger.kernel.org,
+	intel-wired-lan@lists.osuosl.org
+Subject: [PATCH AUTOSEL 6.14 515/642] igc: Avoid unnecessary link down event in XDP_SETUP_PROG process
+Date: Mon,  5 May 2025 18:12:11 -0400
+Message-Id: <20250505221419.2672473-515-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20250505221419.2672473-1-sashal@kernel.org>
+References: <20250505221419.2672473-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20250505223437.3722164-4-samitolvanen@google.com>
-X-Developer-Key: i=samitolvanen@google.com; a=openpgp; fpr=35CCFB63B283D6D3AEB783944CB5F6848BBC56EE
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5846; i=samitolvanen@google.com;
- h=from:subject; bh=7DbjnHH5VAkImXf9y6kWO2Cpd7OKLAKDbR8A6OUcpSo=;
- b=owGbwMvMwCEWxa662nLh8irG02pJDBmSNv+n70wW3Td999qDnluU1h/qaZRrv6XgbvBB9fe9j
- n2HrxUxdJSyMIhxMMiKKbK0fF29dfd3p9RXn4skYOawMoEMYeDiFICJ3PVg+Kcseq1CSHzW1a6c
- rZ4n9e4dPmdvfbpob7XIB/7NkjLOEkcZGdbeDuLtcTvWJBP+IZHFKOjdccWdfaFpL+7dCbLplng aygEA
-X-Mailer: git-send-email 2.49.0.967.g6a0df3ecc3-goog
-Message-ID: <20250505223437.3722164-6-samitolvanen@google.com>
-Subject: [PATCH bpf-next v9 2/2] arm64/cfi,bpf: Support kCFI + BPF on arm64
-From: Sami Tolvanen <samitolvanen@google.com>
-To: bpf@vger.kernel.org, Puranjay Mohan <puranjay@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>
-Cc: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	Maxwell Bland <mbland@motorola.com>, Puranjay Mohan <puranjay12@gmail.com>, 
-	Sami Tolvanen <samitolvanen@google.com>, Dao Huang <huangdao1@oppo.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.14.5
+Content-Transfer-Encoding: 8bit
 
-From: Puranjay Mohan <puranjay12@gmail.com>
+From: Song Yoong Siang <yoong.siang.song@intel.com>
 
-Currently, bpf_dispatcher_*_func() is marked with `__nocfi` therefore
-calling BPF programs from this interface doesn't cause CFI warnings.
+[ Upstream commit be324b790368c1522f07c6bb5654122e07b5e588 ]
 
-When BPF programs are called directly from C: from BPF helpers or
-struct_ops, CFI warnings are generated.
+The igc_close()/igc_open() functions are too drastic for installing a new
+XDP prog because they cause undesirable link down event and device reset.
 
-Implement proper CFI prologues for the BPF programs and callbacks and
-drop __nocfi for arm64. Fix the trampoline generation code to emit kCFI
-prologue when a struct_ops trampoline is being prepared.
+To avoid delays in Ethernet traffic, improve the XDP_SETUP_PROG process by
+using the same sequence as igc_xdp_setup_pool(), which performs only the
+necessary steps, as follows:
+ 1. stop the traffic and clean buffer
+ 2. stop NAPI
+ 3. install the XDP program
+ 4. resume NAPI
+ 5. allocate buffer and resume the traffic
 
-Signed-off-by: Puranjay Mohan <puranjay12@gmail.com>
-Co-developed-by: Maxwell Bland <mbland@motorola.com>
-Signed-off-by: Maxwell Bland <mbland@motorola.com>
-Co-developed-by: Sami Tolvanen <samitolvanen@google.com>
-Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
-Tested-by: Dao Huang <huangdao1@oppo.com>
+This patch has been tested using the 'ip link set xdpdrv' command to attach
+a simple XDP prog that always returns XDP_PASS.
+
+Before this patch, attaching xdp program will cause ptp4l to lose sync for
+few seconds, as shown in ptp4l log below:
+  ptp4l[198.082]: rms    4 max    8 freq   +906 +/-   2 delay    12 +/-   0
+  ptp4l[199.082]: rms    3 max    4 freq   +906 +/-   3 delay    12 +/-   0
+  ptp4l[199.536]: port 1 (enp2s0): link down
+  ptp4l[199.536]: port 1 (enp2s0): SLAVE to FAULTY on FAULT_DETECTED (FT_UNSPECIFIED)
+  ptp4l[199.600]: selected local clock 22abbc.fffe.bb1234 as best master
+  ptp4l[199.600]: port 1 (enp2s0): assuming the grand master role
+  ptp4l[199.600]: port 1 (enp2s0): master state recommended in slave only mode
+  ptp4l[199.600]: port 1 (enp2s0): defaultDS.priority1 probably misconfigured
+  ptp4l[202.266]: port 1 (enp2s0): link up
+  ptp4l[202.300]: port 1 (enp2s0): FAULTY to LISTENING on INIT_COMPLETE
+  ptp4l[205.558]: port 1 (enp2s0): new foreign master 44abbc.fffe.bb2144-1
+  ptp4l[207.558]: selected best master clock 44abbc.fffe.bb2144
+  ptp4l[207.559]: port 1 (enp2s0): LISTENING to UNCALIBRATED on RS_SLAVE
+  ptp4l[208.308]: port 1 (enp2s0): UNCALIBRATED to SLAVE on MASTER_CLOCK_SELECTED
+  ptp4l[208.933]: rms  742 max 1303 freq   -195 +/- 682 delay    12 +/-   0
+  ptp4l[209.933]: rms  178 max  274 freq   +387 +/- 243 delay    12 +/-   0
+
+After this patch, attaching xdp program no longer cause ptp4l to lose sync,
+as shown in ptp4l log below:
+  ptp4l[201.183]: rms    1 max    3 freq   +959 +/-   1 delay     8 +/-   0
+  ptp4l[202.183]: rms    1 max    3 freq   +961 +/-   2 delay     8 +/-   0
+  ptp4l[203.183]: rms    2 max    3 freq   +958 +/-   2 delay     8 +/-   0
+  ptp4l[204.183]: rms    3 max    5 freq   +961 +/-   3 delay     8 +/-   0
+  ptp4l[205.183]: rms    2 max    4 freq   +964 +/-   3 delay     8 +/-   0
+
+Besides, before this patch, attaching xdp program will causes flood ping to
+lose 10 packets, as shown in ping statistics below:
+  --- 169.254.1.2 ping statistics ---
+  100000 packets transmitted, 99990 received, +6 errors, 0.01% packet loss, time 34001ms
+  rtt min/avg/max/mdev = 0.028/0.301/3104.360/13.838 ms, pipe 10, ipg/ewma 0.340/0.243 ms
+
+After this patch, attaching xdp program no longer cause flood ping to loss
+any packets, as shown in ping statistics below:
+  --- 169.254.1.2 ping statistics ---
+  100000 packets transmitted, 100000 received, 0% packet loss, time 32326ms
+  rtt min/avg/max/mdev = 0.027/0.231/19.589/0.155 ms, pipe 2, ipg/ewma 0.323/0.322 ms
+
+On the other hand, this patch has been tested with tools/testing/selftests/
+bpf/xdp_hw_metadata app to make sure AF_XDP zero-copy is working fine with
+XDP Tx and Rx metadata. Below is the result of last packet after received
+10000 UDP packets with interval 1 ms:
+  poll: 1 (0) skip=0 fail=0 redir=10000
+  xsk_ring_cons__peek: 1
+  0x55881c7ef7a8: rx_desc[9999]->addr=8f110 addr=8f110 comp_addr=8f110 EoP
+  rx_hash: 0xFB9BB6A3 with RSS type:0x1
+  HW RX-time:   1733923136269470866 (sec:1733923136.2695) delta to User RX-time sec:0.0000 (43.280 usec)
+  XDP RX-time:   1733923136269482482 (sec:1733923136.2695) delta to User RX-time sec:0.0000 (31.664 usec)
+  No rx_vlan_tci or rx_vlan_proto, err=-95
+  0x55881c7ef7a8: ping-pong with csum=ab19 (want 315b) csum_start=34 csum_offset=6
+  0x55881c7ef7a8: complete tx idx=9999 addr=f010
+  HW TX-complete-time:   1733923136269591637 (sec:1733923136.2696) delta to User TX-complete-time sec:0.0001 (108.571 usec)
+  XDP RX-time:   1733923136269482482 (sec:1733923136.2695) delta to User TX-complete-time sec:0.0002 (217.726 usec)
+  HW RX-time:   1733923136269470866 (sec:1733923136.2695) delta to HW TX-complete-time sec:0.0001 (120.771 usec)
+  0x55881c7ef7a8: complete rx idx=10127 addr=8f110
+
+Signed-off-by: Song Yoong Siang <yoong.siang.song@intel.com>
+Tested-by: Avigail Dahan <avigailx.dahan@intel.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/include/asm/cfi.h    | 23 +++++++++++++++++++++++
- arch/arm64/kernel/alternative.c | 25 +++++++++++++++++++++++++
- arch/arm64/net/bpf_jit_comp.c   | 22 +++++++++++++++++++---
- 3 files changed, 67 insertions(+), 3 deletions(-)
- create mode 100644 arch/arm64/include/asm/cfi.h
+ drivers/net/ethernet/intel/igc/igc_xdp.c | 19 +++++++++++++++----
+ 1 file changed, 15 insertions(+), 4 deletions(-)
 
-diff --git a/arch/arm64/include/asm/cfi.h b/arch/arm64/include/asm/cfi.h
-new file mode 100644
-index 000000000000..670e191f8628
---- /dev/null
-+++ b/arch/arm64/include/asm/cfi.h
-@@ -0,0 +1,23 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _ASM_ARM64_CFI_H
-+#define _ASM_ARM64_CFI_H
-+
-+#ifdef CONFIG_CFI_CLANG
-+#define __bpfcall
-+static inline int cfi_get_offset(void)
-+{
-+	return 4;
-+}
-+#define cfi_get_offset cfi_get_offset
-+extern u32 cfi_bpf_hash;
-+extern u32 cfi_bpf_subprog_hash;
-+extern u32 cfi_get_func_hash(void *func);
-+#else
-+#define cfi_bpf_hash 0U
-+#define cfi_bpf_subprog_hash 0U
-+static inline u32 cfi_get_func_hash(void *func)
-+{
-+	return 0;
-+}
-+#endif /* CONFIG_CFI_CLANG */
-+#endif /* _ASM_ARM64_CFI_H */
-diff --git a/arch/arm64/kernel/alternative.c b/arch/arm64/kernel/alternative.c
-index 8ff6610af496..71c153488dad 100644
---- a/arch/arm64/kernel/alternative.c
-+++ b/arch/arm64/kernel/alternative.c
-@@ -8,11 +8,13 @@
+diff --git a/drivers/net/ethernet/intel/igc/igc_xdp.c b/drivers/net/ethernet/intel/igc/igc_xdp.c
+index 869815f48ac1d..9eb47b4beb062 100644
+--- a/drivers/net/ethernet/intel/igc/igc_xdp.c
++++ b/drivers/net/ethernet/intel/igc/igc_xdp.c
+@@ -14,6 +14,7 @@ int igc_xdp_set_prog(struct igc_adapter *adapter, struct bpf_prog *prog,
+ 	bool if_running = netif_running(dev);
+ 	struct bpf_prog *old_prog;
+ 	bool need_update;
++	unsigned int i;
  
- #define pr_fmt(fmt) "alternatives: " fmt
- 
-+#include <linux/cfi_types.h>
- #include <linux/init.h>
- #include <linux/cpu.h>
- #include <linux/elf.h>
- #include <asm/cacheflush.h>
- #include <asm/alternative.h>
-+#include <asm/cfi.h>
- #include <asm/cpufeature.h>
- #include <asm/insn.h>
- #include <asm/module.h>
-@@ -298,3 +300,26 @@ noinstr void alt_cb_patch_nops(struct alt_instr *alt, __le32 *origptr,
- 		updptr[i] = cpu_to_le32(aarch64_insn_gen_nop());
- }
- EXPORT_SYMBOL(alt_cb_patch_nops);
-+
-+#ifdef CONFIG_CFI_CLANG
-+struct bpf_insn;
-+
-+/* Must match bpf_func_t / DEFINE_BPF_PROG_RUN() */
-+extern unsigned int __bpf_prog_runX(const void *ctx,
-+				    const struct bpf_insn *insn);
-+DEFINE_CFI_TYPE(cfi_bpf_hash, __bpf_prog_runX);
-+
-+/* Must match bpf_callback_t */
-+extern u64 __bpf_callback_fn(u64, u64, u64, u64, u64);
-+DEFINE_CFI_TYPE(cfi_bpf_subprog_hash, __bpf_callback_fn);
-+
-+u32 cfi_get_func_hash(void *func)
-+{
-+	u32 hash;
-+
-+	if (get_kernel_nofault(hash, func - cfi_get_offset()))
-+		return 0;
-+
-+	return hash;
-+}
-+#endif /* CONFIG_CFI_CLANG */
-diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
-index 70d7c89d3ac9..3b3691e88dd5 100644
---- a/arch/arm64/net/bpf_jit_comp.c
-+++ b/arch/arm64/net/bpf_jit_comp.c
-@@ -9,6 +9,7 @@
- 
- #include <linux/bitfield.h>
- #include <linux/bpf.h>
-+#include <linux/cfi.h>
- #include <linux/filter.h>
- #include <linux/memory.h>
- #include <linux/printk.h>
-@@ -164,6 +165,12 @@ static inline void emit_bti(u32 insn, struct jit_ctx *ctx)
- 		emit(insn, ctx);
- }
- 
-+static inline void emit_kcfi(u32 hash, struct jit_ctx *ctx)
-+{
-+	if (IS_ENABLED(CONFIG_CFI_CLANG))
-+		emit(hash, ctx);
-+}
-+
- /*
-  * Kernel addresses in the vmalloc space use at most 48 bits, and the
-  * remaining bits are guaranteed to be 0x1. So we can compose the address
-@@ -474,7 +481,6 @@ static int build_prologue(struct jit_ctx *ctx, bool ebpf_from_cbpf)
- 	const bool is_main_prog = !bpf_is_subprog(prog);
- 	const u8 fp = bpf2a64[BPF_REG_FP];
- 	const u8 arena_vm_base = bpf2a64[ARENA_VM_START];
--	const int idx0 = ctx->idx;
- 	int cur_offset;
- 
- 	/*
-@@ -500,6 +506,9 @@ static int build_prologue(struct jit_ctx *ctx, bool ebpf_from_cbpf)
- 	 *
- 	 */
- 
-+	emit_kcfi(is_main_prog ? cfi_bpf_hash : cfi_bpf_subprog_hash, ctx);
-+	const int idx0 = ctx->idx;
-+
- 	/* bpf function may be invoked by 3 instruction types:
- 	 * 1. bl, attached via freplace to bpf prog via short jump
- 	 * 2. br, attached via freplace to bpf prog via long jump
-@@ -2009,9 +2018,9 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
- 		jit_data->ro_header = ro_header;
+ 	if (dev->mtu > ETH_DATA_LEN) {
+ 		/* For now, the driver doesn't support XDP functionality with
+@@ -24,8 +25,13 @@ int igc_xdp_set_prog(struct igc_adapter *adapter, struct bpf_prog *prog,
  	}
  
--	prog->bpf_func = (void *)ctx.ro_image;
-+	prog->bpf_func = (void *)ctx.ro_image + cfi_get_offset();
- 	prog->jited = 1;
--	prog->jited_len = prog_size;
-+	prog->jited_len = prog_size - cfi_get_offset();
- 
- 	if (!prog->is_func || extra_pass) {
- 		int i;
-@@ -2271,6 +2280,12 @@ static int prepare_trampoline(struct jit_ctx *ctx, struct bpf_tramp_image *im,
- 	/* return address locates above FP */
- 	retaddr_off = stack_size + 8;
- 
-+	if (flags & BPF_TRAMP_F_INDIRECT) {
-+		/*
-+		 * Indirect call for bpf_struct_ops
-+		 */
-+		emit_kcfi(cfi_get_func_hash(func_addr), ctx);
+ 	need_update = !!adapter->xdp_prog != !!prog;
+-	if (if_running && need_update)
+-		igc_close(dev);
++	if (if_running && need_update) {
++		for (i = 0; i < adapter->num_rx_queues; i++) {
++			igc_disable_rx_ring(adapter->rx_ring[i]);
++			igc_disable_tx_ring(adapter->tx_ring[i]);
++			napi_disable(&adapter->rx_ring[i]->q_vector->napi);
++		}
 +	}
- 	/* bpf trampoline may be invoked by 3 instruction types:
- 	 * 1. bl, attached to bpf prog or kernel function via short jump
- 	 * 2. br, attached to bpf prog or kernel function via long jump
-@@ -2790,6 +2805,7 @@ void bpf_jit_free(struct bpf_prog *prog)
- 					   sizeof(jit_data->header->size));
- 			kfree(jit_data);
- 		}
-+		prog->bpf_func -= cfi_get_offset();
- 		hdr = bpf_jit_binary_pack_hdr(prog);
- 		bpf_jit_binary_pack_free(hdr, NULL);
- 		WARN_ON_ONCE(!bpf_prog_kallsyms_verify_off(prog));
+ 
+ 	old_prog = xchg(&adapter->xdp_prog, prog);
+ 	if (old_prog)
+@@ -36,8 +42,13 @@ int igc_xdp_set_prog(struct igc_adapter *adapter, struct bpf_prog *prog,
+ 	else
+ 		xdp_features_clear_redirect_target(dev);
+ 
+-	if (if_running && need_update)
+-		igc_open(dev);
++	if (if_running && need_update) {
++		for (i = 0; i < adapter->num_rx_queues; i++) {
++			napi_enable(&adapter->rx_ring[i]->q_vector->napi);
++			igc_enable_tx_ring(adapter->tx_ring[i]);
++			igc_enable_rx_ring(adapter->rx_ring[i]);
++		}
++	}
+ 
+ 	return 0;
+ }
 -- 
-2.49.0.967.g6a0df3ecc3-goog
+2.39.5
 
