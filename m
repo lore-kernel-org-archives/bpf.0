@@ -1,195 +1,137 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C8C939FE62;
-	Mon,  5 May 2025 23:26:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C72182BD93C;
+	Mon,  5 May 2025 22:47:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746487608; cv=none; b=u9mcmbC+18wNkCDcqkEz/dFMMhgmEk0Lzh+0VtpVGDDsGcwDYlegUNBssAi1Gl93/5vWRGsDmzm/7SQGBtjIF4sJKkBoQk0XpUWNz3cO+ptSFzSEyn7PWkv06IxOCfVA8swEUi9+KnpoSmIjxmK2qEhisKWzemN2gCs1etzGqgg=
+	t=1746485276; cv=none; b=EEaIXN1dkBmPOgPvOXEiP0xLnI9bAc17wLKo+fePpaeDwbqRQxocKe2tn/Jh7KPn+y5feoM1FCoT6ptQ0OY0OcK+RjaLsXTT3Ix0uYOTeJogWw7bkv/sJr2VbQ2lxHyKhQLA3u5UKyfubl0E0pr42Avg2Ff3XT6gDnE+KMNstBQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746487608; c=relaxed/simple;
-	bh=NI1weFRp69aLLX3aQNP5hOOXCfiH/cY1nvFD2lXLJos=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=GjT8RaZooCA2a9+HQBsymyz9YTinoIsHWLWtfKzbX6Q7wvOJwEqs1McSkXNB3FE6nud92PHn9mCnEqhoT1R0EJyYKxAgrajryAUWuKG4Klsu9mLD78QTqtWFRILyHko06uqaT42grQMrBDZpMjOTIbwe5cviMRkzAfEAMb/3baY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qpggm2qF; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1746485276; c=relaxed/simple;
+	bh=AnJiToNCPr/S/WOOBUm3yVZqa2oZ2oRMSRSFdaJ7JeM=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=f6urNId3Cw5JYA+Xju3q7XB8R5XnxDSc5Ye8SCVtxzAxG1TltRKkcjHINgq0LXlMPNAs7TC6aIQAPsHgyzQsUwGWhH2/ryhe2lsJzvX9b0/56Sm4T7sHZZ1iIF/+dSJNW2s8Ji4PdHIsobgdsYB3xaMeY49DRya9D/nEhW7BIUk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G/2eIm1d; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qpggm2qF"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB7EBC4CEED;
-	Mon,  5 May 2025 23:26:46 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G/2eIm1d"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96A3BC4CEF1;
+	Mon,  5 May 2025 22:47:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746487607;
-	bh=NI1weFRp69aLLX3aQNP5hOOXCfiH/cY1nvFD2lXLJos=;
-	h=From:Date:To:cc:Subject:In-Reply-To:References:From;
-	b=qpggm2qFTv2HfZCl2OEOa7+ajxaQ18zXfV/NHSCmP2wAaoh1dGnlQ591oD/KMj6u6
-	 yW279w7wCDpmecW+FOX1fND5TK+a0xIHHpKbZjvfCj14nDC8OAk/aN00hMbLccORJC
-	 NE7Q1kYcAa1/n1Or3h24i3sML8izsaE/DChwZh/ABWpiadIvts4XDxW7xvv2T0SBqx
-	 7UwtSASjoztoTKvaNZiIHUZ4Q86eB20DETPPHtdNCBOnMGf21olqitYWp7fFJi1xY/
-	 VLXx1qa5dp33htO9/OkED0e/8bZGhSqln9B+1U8ARlnEZFh/qLsMDF6CJRLmIsThOy
-	 1bjIaLgu005Rw==
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ij@kernel.org>
-Date: Tue, 6 May 2025 02:26:41 +0300 (EEST)
-To: "Chia-Yu Chang (Nokia)" <chia-yu.chang@nokia-bell-labs.com>
-cc: Paolo Abeni <pabeni@redhat.com>, "horms@kernel.org" <horms@kernel.org>, 
-    "dsahern@kernel.org" <dsahern@kernel.org>, 
-    "kuniyu@amazon.com" <kuniyu@amazon.com>, 
-    "bpf@vger.kernel.org" <bpf@vger.kernel.org>, 
-    "netdev@vger.kernel.org" <netdev@vger.kernel.org>, 
-    "dave.taht@gmail.com" <dave.taht@gmail.com>, 
-    "jhs@mojatatu.com" <jhs@mojatatu.com>, "kuba@kernel.org" <kuba@kernel.org>, 
-    "stephen@networkplumber.org" <stephen@networkplumber.org>, 
-    "xiyou.wangcong@gmail.com" <xiyou.wangcong@gmail.com>, 
-    "jiri@resnulli.us" <jiri@resnulli.us>, 
-    "davem@davemloft.net" <davem@davemloft.net>, 
-    "edumazet@google.com" <edumazet@google.com>, 
-    "andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>, 
-    "donald.hunter@gmail.com" <donald.hunter@gmail.com>, 
-    "ast@fiberby.net" <ast@fiberby.net>, 
-    "liuhangbin@gmail.com" <liuhangbin@gmail.com>, 
-    "shuah@kernel.org" <shuah@kernel.org>, 
-    "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, 
-    "ncardwell@google.com" <ncardwell@google.com>, 
-    "Koen De Schepper (Nokia)" <koen.de_schepper@nokia-bell-labs.com>, 
-    "g.white" <g.white@cablelabs.com>, 
-    "ingemar.s.johansson@ericsson.com" <ingemar.s.johansson@ericsson.com>, 
-    "mirja.kuehlewind@ericsson.com" <mirja.kuehlewind@ericsson.com>, 
-    "cheshire@apple.com" <cheshire@apple.com>, 
-    "rs.ietf@gmx.at" <rs.ietf@gmx.at>, 
-    "Jason_Livingood@comcast.com" <Jason_Livingood@comcast.com>, 
-    vidhi_goel <vidhi_goel@apple.com>
-Subject: RE: [PATCH v5 net-next 10/15] tcp: accecn: AccECN option send
- control
-In-Reply-To:  <PAXPR07MB79845AAB1468B67FE9BD2EDCA38E2@PAXPR07MB7984.eurprd07.prod.outlook.com>
-Message-ID: <9d741b0d-fff8-5565-f6e7-491a1d0928f7@kernel.org>
-References: <20250422153602.54787-1-chia-yu.chang@nokia-bell-labs.com> <20250422153602.54787-11-chia-yu.chang@nokia-bell-labs.com> <0a5c7897-ed95-4198-9896-ddae64335083@redhat.com> 
- <PAXPR07MB79845AAB1468B67FE9BD2EDCA38E2@PAXPR07MB7984.eurprd07.prod.outlook.com>
+	s=k20201202; t=1746485276;
+	bh=AnJiToNCPr/S/WOOBUm3yVZqa2oZ2oRMSRSFdaJ7JeM=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=G/2eIm1dJD2x0BaHTrz5wur0sgDJzyJWisoFLU/T3+OKjuh4/qEWtttstaxGtOH7X
+	 q84By2xbLB/QkgdoWaYfB9kQoK7rQSe+/U3KN+x8ARv16k2/rlfAqu3+HQ8HGg1QmR
+	 kZ0fS5ruu0M2iIi3/7OLALuECZTyIhsdF1RiERDlCT8rRzE+kPHxy5gG5/ic3/Jh19
+	 x9gVaUwi1z3WflTy95bfvEla/m3knLjfjSvJRFzJnv55dsTU9sC40ZC+5vTgOq4j6z
+	 4lE9XRhpbSXsamuLPJXWN3yfCte0kRgpRzhchCK49mCVky3S6c6OqpVX6rkOgh9cHd
+	 I32obbP32M2tQ==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Amery Hung <amery.hung@bytedance.com>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Martin KaFai Lau <martin.lau@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Sasha Levin <sashal@kernel.org>,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.12 249/486] bpf: Search and add kfuncs in struct_ops prologue and epilogue
+Date: Mon,  5 May 2025 18:35:25 -0400
+Message-Id: <20250505223922.2682012-249-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20250505223922.2682012-1-sashal@kernel.org>
+References: <20250505223922.2682012-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323328-1936862257-1746487601=:1002"
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.12.26
+Content-Transfer-Encoding: 8bit
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+From: Amery Hung <amery.hung@bytedance.com>
 
---8323328-1936862257-1746487601=:1002
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+[ Upstream commit d519594ee2445d7cd1ad51f4db4cee58f8213400 ]
 
-On Mon, 5 May 2025, Chia-Yu Chang (Nokia) wrote:
+Currently, add_kfunc_call() is only invoked once before the main
+verification loop. Therefore, the verifier could not find the
+bpf_kfunc_btf_tab of a new kfunc call which is not seen in user defined
+struct_ops operators but introduced in gen_prologue or gen_epilogue
+during do_misc_fixup(). Fix this by searching kfuncs in the patching
+instruction buffer and add them to prog->aux->kfunc_tab.
 
-> > -----Original Message-----
-> > From: Paolo Abeni <pabeni@redhat.com>=20
-> > Sent: Tuesday, April 29, 2025 2:10 PM
-> > To: Chia-Yu Chang (Nokia) <chia-yu.chang@nokia-bell-labs.com>; horms@ke=
-rnel.org; dsahern@kernel.org; kuniyu@amazon.com; bpf@vger.kernel.org; netde=
-v@vger.kernel.org; dave.taht@gmail.com; jhs@mojatatu.com; kuba@kernel.org; =
-stephen@networkplumber.org; xiyou.wangcong@gmail.com; jiri@resnulli.us; dav=
-em@davemloft.net; edumazet@google.com; andrew+netdev@lunn.ch; donald.hunter=
-@gmail.com; ast@fiberby.net; liuhangbin@gmail.com; shuah@kernel.org; linux-=
-kselftest@vger.kernel.org; ij@kernel.org; ncardwell@google.com; Koen De Sch=
-epper (Nokia) <koen.de_schepper@nokia-bell-labs.com>; g.white <g.white@cabl=
-elabs.com>; ingemar.s.johansson@ericsson.com; mirja.kuehlewind@ericsson.com=
-; cheshire@apple.com; rs.ietf@gmx.at; Jason_Livingood@comcast.com; vidhi_go=
-el <vidhi_goel@apple.com>
-> > Subject: Re: [PATCH v5 net-next 10/15] tcp: accecn: AccECN option send =
-control
-> >=20
-> >=20
-> > CAUTION: This is an external email. Please be very careful when clickin=
-g links or opening attachments. See the URL nok.it/ext for additional infor=
-mation.
-> >=20
-> >=20
-> >=20
-> > On 4/22/25 5:35 PM, chia-yu.chang@nokia-bell-labs.com wrote:
-> > > From: Ilpo J=C3=A4rvinen <ij@kernel.org>
-> > >
-> > > Instead of sending the option in every ACK, limit sending to those=20
-> > > ACKs where the option is necessary:
-> > > - Handshake
-> > > - "Change-triggered ACK" + the ACK following it. The
-> > >   2nd ACK is necessary to unambiguously indicate which
-> > >   of the ECN byte counters in increasing. The first
-> > >   ACK has two counters increasing due to the ecnfield
-> > >   edge.
-> > > - ACKs with CE to allow CEP delta validations to take
-> > >   advantage of the option.
-> > > - Force option to be sent every at least once per 2^22
-> > >   bytes. The check is done using the bit edges of the
-> > >   byte counters (avoids need for extra variables).
-> > > - AccECN option beacon to send a few times per RTT even if
-> > >   nothing in the ECN state requires that. The default is 3
-> > >   times per RTT, and its period can be set via
-> > >   sysctl_tcp_ecn_option_beacon.
-> > >
-> > > Signed-off-by: Ilpo J=C3=A4rvinen <ij@kernel.org>
-> > > Co-developed-by: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
-> > > Signed-off-by: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
-> > > ---
-> > >  include/linux/tcp.h        |  3 +++
-> > >  include/net/netns/ipv4.h   |  1 +
-> > >  include/net/tcp.h          |  1 +
-> > >  net/ipv4/sysctl_net_ipv4.c |  9 ++++++++
-> > >  net/ipv4/tcp.c             |  5 ++++-
-> > >  net/ipv4/tcp_input.c       | 36 +++++++++++++++++++++++++++++++-
-> > >  net/ipv4/tcp_ipv4.c        |  1 +
-> > >  net/ipv4/tcp_minisocks.c   |  2 ++
-> > >  net/ipv4/tcp_output.c      | 42 ++++++++++++++++++++++++++++++------=
---
-> > >  9 files changed, 90 insertions(+), 10 deletions(-)
+Signed-off-by: Amery Hung <amery.hung@bytedance.com>
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+Acked-by: Martin KaFai Lau <martin.lau@kernel.org>
+Link: https://lore.kernel.org/r/20250225233545.285481-1-ameryhung@gmail.com
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ kernel/bpf/verifier.c | 25 ++++++++++++++++++++++++-
+ 1 file changed, 24 insertions(+), 1 deletion(-)
 
-> > > diff --git a/net/ipv4/tcp_ipv4.c b/net/ipv4/tcp_ipv4.c index=20
-> > > 3f3e285fc973..2e95dad66fe3 100644
-> > > --- a/net/ipv4/tcp_ipv4.c
-> > > +++ b/net/ipv4/tcp_ipv4.c
-> > > @@ -3451,6 +3451,7 @@ static int __net_init tcp_sk_init(struct net=20
-> > > *net)  {
-> > >       net->ipv4.sysctl_tcp_ecn =3D 2;
-> > >       net->ipv4.sysctl_tcp_ecn_option =3D 2;
-> > > +     net->ipv4.sysctl_tcp_ecn_option_beacon =3D 3;
-> > >       net->ipv4.sysctl_tcp_ecn_fallback =3D 1;
-> >=20
-> > Human readable macros instead of magic numbers could help.
->=20
-> OK, commments will be added here.
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 8656208aa4bbb..294fbafbeba75 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -2987,6 +2987,21 @@ bpf_jit_find_kfunc_model(const struct bpf_prog *prog,
+ 	return res ? &res->func_model : NULL;
+ }
+ 
++static int add_kfunc_in_insns(struct bpf_verifier_env *env,
++			      struct bpf_insn *insn, int cnt)
++{
++	int i, ret;
++
++	for (i = 0; i < cnt; i++, insn++) {
++		if (bpf_pseudo_kfunc_call(insn)) {
++			ret = add_kfunc_call(env, insn->imm, insn->off);
++			if (ret < 0)
++				return ret;
++		}
++	}
++	return 0;
++}
++
+ static int add_subprog_and_kfunc(struct bpf_verifier_env *env)
+ {
+ 	struct bpf_subprog_info *subprog = env->subprog_info;
+@@ -19768,7 +19783,7 @@ static int convert_ctx_accesses(struct bpf_verifier_env *env)
+ {
+ 	struct bpf_subprog_info *subprogs = env->subprog_info;
+ 	const struct bpf_verifier_ops *ops = env->ops;
+-	int i, cnt, size, ctx_field_size, delta = 0, epilogue_cnt = 0;
++	int i, cnt, size, ctx_field_size, ret, delta = 0, epilogue_cnt = 0;
+ 	const int insn_cnt = env->prog->len;
+ 	struct bpf_insn *epilogue_buf = env->epilogue_buf;
+ 	struct bpf_insn *insn_buf = env->insn_buf;
+@@ -19797,6 +19812,10 @@ static int convert_ctx_accesses(struct bpf_verifier_env *env)
+ 				return -ENOMEM;
+ 			env->prog = new_prog;
+ 			delta += cnt - 1;
++
++			ret = add_kfunc_in_insns(env, epilogue_buf, epilogue_cnt - 1);
++			if (ret < 0)
++				return ret;
+ 		}
+ 	}
+ 
+@@ -19817,6 +19836,10 @@ static int convert_ctx_accesses(struct bpf_verifier_env *env)
+ 
+ 			env->prog = new_prog;
+ 			delta += cnt - 1;
++
++			ret = add_kfunc_in_insns(env, insn_buf, cnt - 1);
++			if (ret < 0)
++				return ret;
+ 		}
+ 	}
+ 
+-- 
+2.39.5
 
-Hi,
-
-Using named defines to replace literals would be more useful than comments=
-=20
-(names can be grepped for, do not fall out-of-sync with code, etc.).
-
-> > > @@ -1237,13 +1253,18 @@ static unsigned int=20
-> > > tcp_established_options(struct sock *sk, struct sk_buff *skb
-> > >
-> > >       if (tcp_ecn_mode_accecn(tp) &&
-> > >           sock_net(sk)->ipv4.sysctl_tcp_ecn_option) {
-> > > -             int saving =3D opts->num_sack_blocks > 0 ? 2 : 0;
-> > > -             int remaining =3D MAX_TCP_OPTION_SPACE - size;
-> > > -
-> > > -             opts->ecn_bytes =3D tp->received_ecn_bytes;
-> > > -             size +=3D tcp_options_fit_accecn(opts, tp->accecn_minle=
-n,
-> > > -                                            remaining,
-> > > -                                            saving);
-> > > +             if (sock_net(sk)->ipv4.sysctl_tcp_ecn_option >=3D 2 ||
-> > > +                 tp->accecn_opt_demand ||
-> > > +                 tcp_accecn_option_beacon_check(sk)) {
-> >=20
-> > Why a nested if here and just not expanding the existing one?
->=20
-> Sure, will merge them.
-
-While I don't remember everything that well anymore, this might have been=
-=20
-to reduce code churn in some later patch, so it might be worth to check=20
-it first (that patch might even fall outside of this series now that these=
-=20
-are split into multiple chunks).
-
---=20
- i.
-
---8323328-1936862257-1746487601=:1002--
