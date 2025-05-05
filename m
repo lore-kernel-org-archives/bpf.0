@@ -1,271 +1,124 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC9E43255B3;
-	Mon,  5 May 2025 22:34:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 008B63272B8
+	for <bpf@vger.kernel.org>; Mon,  5 May 2025 22:34:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746484470; cv=none; b=TzaqatbkrmKpuDxXPD4Fa4IGD/KXMlXgq7G9CniiN28XeILsF+cQ6LeiQ1ctlQVbhMCOoDPSOhYDzZcB96/ngyqlisv6K5C1MhxjnJOJA59XTC/03uqOZT9/rpuMEk0kLYX23O7PCC7UNm+HjFIrowFlmU4vnbBWMbzROxfPCDM=
+	t=1746484484; cv=none; b=gWbdgYmGbUGlGkJD79tB17UPcpd3f7SrwHaAy7H6QsKJ90qXHQNbBh4CJZIakmo//mZBJQL5m4FoHK6hy5co4iU70R78BN8MSH3eieGufMo9ooT0h0zuVce3V9HsZzGEpbmW0DmmDrzPwaMldRp/vRjeIEksvfRomBoIQxtCQuY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746484470; c=relaxed/simple;
-	bh=uOgHKiA5D55Iyyjn9p88omrm1ZVMGUUXunLFlvK/boA=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=YEmmijIxnUNQx5aWbhiiHzKLC1hL2y97uZeUL1TYAk9t8NN+ZH3KI3Seu6K9ewk7opm8xN/RA7I2sfn0oUHJpbCmTtVExsKdjwWO+MIE1ZcGEs0BFbc0gppyyy3jrXdyXRvhTmeU36SUPEzgLl5jIWY/GECsoQJ5i5H3fy3kvro=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Wj1mzDKf; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1746484484; c=relaxed/simple;
+	bh=SH63EAa398WjH+FSvuZB2bNoYzHYsiDI+PFpR/dXC1c=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=NXv/giOdgeP8AOyF1IIpG7dj0DOf2O1A3F2WGEZJjfkpJ8Xdd3BdxduaiPKAAiMmHLcZ9R0TzwQa3NA5z+GWZ6jHScGHd5CAg3J8zSEOM+lSSm/nyTrwAyVWrqcSYxI22NtmFE+xHnCc4+RuBrOX14EVKF7h5tSHlr/1xUtRsXM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--samitolvanen.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=yLSHZBcy; arc=none smtp.client-ip=209.85.210.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--samitolvanen.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Wj1mzDKf"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B91D9C4CEE4;
-	Mon,  5 May 2025 22:34:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746484470;
-	bh=uOgHKiA5D55Iyyjn9p88omrm1ZVMGUUXunLFlvK/boA=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Wj1mzDKfwdFwv2YW0bW8TYOnb1GfRdV3fbIt4DPz+6+9VA91jR3mWnvXoP9e8sPbz
-	 8uIy4B+TWcP5JrZVXNIbI19SoP2JKwUL1SxAS216XeUn0vnVPXGO6IzxLHVFty+7mQ
-	 L3dnk05FU2ruUCD7TExWO/ct3S2XYqWzlQdoYuWPcvs+HFUbtoy6uDA3cKRSpxXRC+
-	 R6LVS8L9k/qQBYaolPD+JqQ0oi2VkvkblPIvuKWzkH6XjIsT7PdJf7uNzElrWi2TJe
-	 AppkFGNV1fzBYaT2vh9Dc1j06cDC++sKdjZgoWHgWg4PX8LDvmbqDxHW4Os89JN54Q
-	 vVxNGsRAGpxuQ==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Alexei Lazar <alazar@nvidia.com>,
-	Tariq Toukan <tariqt@nvidia.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Sasha Levin <sashal@kernel.org>,
-	saeedm@nvidia.com,
-	andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	hawk@kernel.org,
-	john.fastabend@gmail.com,
-	dtatulea@nvidia.com,
-	witu@nvidia.com,
-	yorayz@nvidia.com,
-	lkayal@nvidia.com,
-	mbloch@nvidia.com,
-	cratiu@nvidia.com,
-	netdev@vger.kernel.org,
-	linux-rdma@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.14 486/642] net/mlx5: XDP, Enable TX side XDP multi-buffer support
-Date: Mon,  5 May 2025 18:11:42 -0400
-Message-Id: <20250505221419.2672473-486-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250505221419.2672473-1-sashal@kernel.org>
-References: <20250505221419.2672473-1-sashal@kernel.org>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="yLSHZBcy"
+Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-736b5f9279cso4096609b3a.2
+        for <bpf@vger.kernel.org>; Mon, 05 May 2025 15:34:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1746484482; x=1747089282; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=TWzvhiiRA4L8aIs/fr3zNj0LxktuObjcNO5N+h/kMdw=;
+        b=yLSHZBcy35mLUiSTJn5Eg8JzFyAtYwoOtRHWb+LopRyYAJIVc77WJor/t++tW8jzqW
+         bMGV8rZB6pk2kDXtdrUiTC/UrooYnKkybJ6pgUiL865iWpM6EYAVpTRmcUIXIufzq4+u
+         2Gpe56pIXGGU/F+S9bsEcRmXIQAmXCZybyGQ1wD3LWYT2uGXILUpdAdQcOFVDu3CT7Dd
+         VUb4sdKx7lgIi7HjVV/nm/kUKwF335FvjeohrKfUCCfucb0Mlwiazv/OBEk/O3K+mgPY
+         HzUMJxLKNzU3XafZjWmL3xh+2qSET0Ry35oLUofY4X057vMXt6+mDDhAM1ZRaLRynRJz
+         RVfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746484482; x=1747089282;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=TWzvhiiRA4L8aIs/fr3zNj0LxktuObjcNO5N+h/kMdw=;
+        b=TweoCwJEa+kwc1MeIfM4xlUk+D3XKh9UlvJ1PTZMpy9cWfpPa1URX0Z6aFNcUxg1Vf
+         YSf7X70KDAgqOK3dqQtYGgcuc5h/pP6Bj11OdrFq2ZTAKqE6RrZk6p9ssLQRXTpSs/hH
+         /ZmL0FvjWdBWWDHE+ndcJwZew2ixw35gDc3yL273p8MXyJ9iiRjEzoHMIccMYvOfjMH9
+         Scjhrn63sAMl4ovOhSfKU0sDrMZesWGtgg1y7p6UDhFiaB1HQko390/c99UQXU58vCXL
+         XYqUrXWWeQspXaeef51pAZKNiqoSufoTpOvmZNF0tSmJdJgJ/DZv0T2i5BxrxgO7MX8+
+         rdhA==
+X-Gm-Message-State: AOJu0YylXJ9itw4ibjMZpxfNrpF/IzFF0QqZEmrPd/FvsO4o/NOwdZtb
+	2PQcve84nip1RTITCG/3FI7ZpsFihr9uW2tUVoR9Nz8vghrQ4o1AtgO11tJEOP2Ccz9vJW3rPlc
+	ilE0/5mywUkvuoBogZZ+vH7cJQwh80h9BTJBZaK/nxfQvbLt+Xw9t6aWKhsAdGy5GnxXGsVXkGP
+	r2QiFyIqly2UapUblEcQe9RHVKfRjtY3ZSLf/tbxnMjAB0PalzpGMlUy+XZkaX
+X-Google-Smtp-Source: AGHT+IF642o9ekk45BRGQU/RuojIgo/uuLEnnJ/ZVuZMKZbhEi9jlrvemL1lZnmFTIKLhzOuR4KmlcPhROtNl3ltMho=
+X-Received: from pfmu20.prod.google.com ([2002:aa7:8394:0:b0:739:4820:6f18])
+ (user=samitolvanen job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:6a00:2906:b0:736:54c9:df2c with SMTP id d2e1a72fcca58-74091a47893mr1047655b3a.15.1746484482097;
+ Mon, 05 May 2025 15:34:42 -0700 (PDT)
+Date: Mon,  5 May 2025 22:34:38 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.14.5
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+X-Developer-Key: i=samitolvanen@google.com; a=openpgp; fpr=35CCFB63B283D6D3AEB783944CB5F6848BBC56EE
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1751; i=samitolvanen@google.com;
+ h=from:subject; bh=SH63EAa398WjH+FSvuZB2bNoYzHYsiDI+PFpR/dXC1c=;
+ b=owGbwMvMwCEWxa662nLh8irG02pJDBmSNv8OMix4ciD98wGLeXOKxGQ35ixR7L/OY6TF5Hxxz
+ /71mT4WHaUsDGIcDLJiiiwtX1dv3f3dKfXV5yIJmDmsTCBDGLg4BWAivY8ZGVZ5T0zpspOTr7DY
+ PNdEoPa4zO1/oods3sisD7jfw9ZmuZvhn9mJ5Yd9L5w+eazwzY6GvyYyJfMPflvoFFxRv+z3vif STPwA
+X-Mailer: git-send-email 2.49.0.967.g6a0df3ecc3-goog
+Message-ID: <20250505223437.3722164-4-samitolvanen@google.com>
+Subject: [PATCH bpf-next v9 0/2] Support kCFI + BPF on arm64
+From: Sami Tolvanen <samitolvanen@google.com>
+To: bpf@vger.kernel.org, Puranjay Mohan <puranjay@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>
+Cc: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	Maxwell Bland <mbland@motorola.com>, Sami Tolvanen <samitolvanen@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-From: Alexei Lazar <alazar@nvidia.com>
+Hi folks,
 
-[ Upstream commit 1a9304859b3a4119579524c293b902a8927180f3 ]
+These patches add KCFI types to arm64 BPF JIT output. Puranjay and
+Maxwell have been working on this for some time now, but I haven't
+seen any progress since June 2024, so I decided to pick up the latest
+version[1] posted by Maxwell and fix the few remaining issues I
+noticed. I confirmed that with these patches applied, I no longer see
+CFI failures when running BPF self-tests on arm64.
 
-In XDP scenarios, fragmented packets can occur if the MTU is larger
-than the page size, even when the packet size fits within the linear
-part.
-If XDP multi-buffer support is disabled, the fragmented part won't be
-handled in the TX flow, leading to packet drops.
+[1] https://lore.kernel.org/linux-arm-kernel/ptrugmna4xb5o5lo4xislf4rlz7avdmd4pfho5fjwtjj7v422u@iqrwfrbwuxrq/
 
-Since XDP multi-buffer support is always available, this commit removes
-the conditional check for enabling it.
-This ensures that XDP multi-buffer support is always enabled,
-regardless of the `is_xdp_mb` parameter, and guarantees the handling of
-fragmented packets in such scenarios.
+Sami
 
-Signed-off-by: Alexei Lazar <alazar@nvidia.com>
-Signed-off-by: Tariq Toukan <tariqt@nvidia.com>
-Link: https://patch.msgid.link/20250209101716.112774-16-tariqt@nvidia.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/mellanox/mlx5/core/en.h  |  1 -
- .../ethernet/mellanox/mlx5/core/en/params.c   |  1 -
- .../ethernet/mellanox/mlx5/core/en/params.h   |  1 -
- .../mellanox/mlx5/core/en/reporter_tx.c       |  1 -
- .../net/ethernet/mellanox/mlx5/core/en/xdp.c  | 49 ++++++++-----------
- .../net/ethernet/mellanox/mlx5/core/en_main.c | 29 -----------
- 6 files changed, 21 insertions(+), 61 deletions(-)
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en.h b/drivers/net/ethernet/mellanox/mlx5/core/en.h
-index 979fc56205e1f..8f9ec48ecc06d 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en.h
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en.h
-@@ -386,7 +386,6 @@ enum {
- 	MLX5E_SQ_STATE_VLAN_NEED_L2_INLINE,
- 	MLX5E_SQ_STATE_PENDING_XSK_TX,
- 	MLX5E_SQ_STATE_PENDING_TLS_RX_RESYNC,
--	MLX5E_SQ_STATE_XDP_MULTIBUF,
- 	MLX5E_NUM_SQ_STATES, /* Must be kept last */
- };
- 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/params.c b/drivers/net/ethernet/mellanox/mlx5/core/en/params.c
-index 31eb99f09c63c..8c4d710e85675 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en/params.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en/params.c
-@@ -1242,7 +1242,6 @@ void mlx5e_build_xdpsq_param(struct mlx5_core_dev *mdev,
- 	mlx5e_build_sq_param_common(mdev, param);
- 	MLX5_SET(wq, wq, log_wq_sz, params->log_sq_size);
- 	param->is_mpw = MLX5E_GET_PFLAG(params, MLX5E_PFLAG_XDP_TX_MPWQE);
--	param->is_xdp_mb = !mlx5e_rx_is_linear_skb(mdev, params, xsk);
- 	mlx5e_build_tx_cq_param(mdev, params, &param->cqp);
- }
- 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/params.h b/drivers/net/ethernet/mellanox/mlx5/core/en/params.h
-index 3f8986f9d8629..bd5877acc5b1e 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en/params.h
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en/params.h
-@@ -33,7 +33,6 @@ struct mlx5e_sq_param {
- 	struct mlx5_wq_param       wq;
- 	bool                       is_mpw;
- 	bool                       is_tls;
--	bool                       is_xdp_mb;
- 	u16                        stop_room;
- };
- 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/reporter_tx.c b/drivers/net/ethernet/mellanox/mlx5/core/en/reporter_tx.c
-index 09433b91be176..532c7fa94d172 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en/reporter_tx.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en/reporter_tx.c
-@@ -16,7 +16,6 @@ static const char * const sq_sw_state_type_name[] = {
- 	[MLX5E_SQ_STATE_VLAN_NEED_L2_INLINE] = "vlan_need_l2_inline",
- 	[MLX5E_SQ_STATE_PENDING_XSK_TX] = "pending_xsk_tx",
- 	[MLX5E_SQ_STATE_PENDING_TLS_RX_RESYNC] = "pending_tls_rx_resync",
--	[MLX5E_SQ_STATE_XDP_MULTIBUF] = "xdp_multibuf",
- };
- 
- static int mlx5e_wait_for_sq_flush(struct mlx5e_txqsq *sq)
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c b/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
-index 94b2916620873..7a6cc0f4002ea 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
-@@ -546,6 +546,7 @@ mlx5e_xmit_xdp_frame(struct mlx5e_xdpsq *sq, struct mlx5e_xmit_data *xdptxd,
- 	bool inline_ok;
- 	bool linear;
- 	u16 pi;
-+	int i;
- 
- 	struct mlx5e_xdpsq_stats *stats = sq->stats;
- 
-@@ -612,41 +613,33 @@ mlx5e_xmit_xdp_frame(struct mlx5e_xdpsq *sq, struct mlx5e_xmit_data *xdptxd,
- 
- 	cseg->opmod_idx_opcode = cpu_to_be32((sq->pc << 8) | MLX5_OPCODE_SEND);
- 
--	if (test_bit(MLX5E_SQ_STATE_XDP_MULTIBUF, &sq->state)) {
--		int i;
--
--		memset(&cseg->trailer, 0, sizeof(cseg->trailer));
--		memset(eseg, 0, sizeof(*eseg) - sizeof(eseg->trailer));
--
--		eseg->inline_hdr.sz = cpu_to_be16(inline_hdr_sz);
-+	memset(&cseg->trailer, 0, sizeof(cseg->trailer));
-+	memset(eseg, 0, sizeof(*eseg) - sizeof(eseg->trailer));
- 
--		for (i = 0; i < num_frags; i++) {
--			skb_frag_t *frag = &xdptxdf->sinfo->frags[i];
--			dma_addr_t addr;
-+	eseg->inline_hdr.sz = cpu_to_be16(inline_hdr_sz);
- 
--			addr = xdptxdf->dma_arr ? xdptxdf->dma_arr[i] :
--				page_pool_get_dma_addr(skb_frag_page(frag)) +
--				skb_frag_off(frag);
-+	for (i = 0; i < num_frags; i++) {
-+		skb_frag_t *frag = &xdptxdf->sinfo->frags[i];
-+		dma_addr_t addr;
- 
--			dseg->addr = cpu_to_be64(addr);
--			dseg->byte_count = cpu_to_be32(skb_frag_size(frag));
--			dseg->lkey = sq->mkey_be;
--			dseg++;
--		}
-+		addr = xdptxdf->dma_arr ? xdptxdf->dma_arr[i] :
-+			page_pool_get_dma_addr(skb_frag_page(frag)) +
-+			skb_frag_off(frag);
- 
--		cseg->qpn_ds = cpu_to_be32((sq->sqn << 8) | ds_cnt);
-+		dseg->addr = cpu_to_be64(addr);
-+		dseg->byte_count = cpu_to_be32(skb_frag_size(frag));
-+		dseg->lkey = sq->mkey_be;
-+		dseg++;
-+	}
- 
--		sq->db.wqe_info[pi] = (struct mlx5e_xdp_wqe_info) {
--			.num_wqebbs = num_wqebbs,
--			.num_pkts = 1,
--		};
-+	cseg->qpn_ds = cpu_to_be32((sq->sqn << 8) | ds_cnt);
- 
--		sq->pc += num_wqebbs;
--	} else {
--		cseg->fm_ce_se = 0;
-+	sq->db.wqe_info[pi] = (struct mlx5e_xdp_wqe_info) {
-+		.num_wqebbs = num_wqebbs,
-+		.num_pkts = 1,
-+	};
- 
--		sq->pc++;
--	}
-+	sq->pc += num_wqebbs;
- 
- 	xsk_tx_metadata_request(meta, &mlx5e_xsk_tx_metadata_ops, eseg);
- 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-index c748fb07fbd22..1ba133c53fbd9 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-@@ -2023,41 +2023,12 @@ int mlx5e_open_xdpsq(struct mlx5e_channel *c, struct mlx5e_params *params,
- 	csp.min_inline_mode = sq->min_inline_mode;
- 	set_bit(MLX5E_SQ_STATE_ENABLED, &sq->state);
- 
--	if (param->is_xdp_mb)
--		set_bit(MLX5E_SQ_STATE_XDP_MULTIBUF, &sq->state);
--
- 	err = mlx5e_create_sq_rdy(c->mdev, param, &csp, 0, &sq->sqn);
- 	if (err)
- 		goto err_free_xdpsq;
- 
- 	mlx5e_set_xmit_fp(sq, param->is_mpw);
- 
--	if (!param->is_mpw && !test_bit(MLX5E_SQ_STATE_XDP_MULTIBUF, &sq->state)) {
--		unsigned int ds_cnt = MLX5E_TX_WQE_EMPTY_DS_COUNT + 1;
--		unsigned int inline_hdr_sz = 0;
--		int i;
--
--		if (sq->min_inline_mode != MLX5_INLINE_MODE_NONE) {
--			inline_hdr_sz = MLX5E_XDP_MIN_INLINE;
--			ds_cnt++;
--		}
--
--		/* Pre initialize fixed WQE fields */
--		for (i = 0; i < mlx5_wq_cyc_get_size(&sq->wq); i++) {
--			struct mlx5e_tx_wqe      *wqe  = mlx5_wq_cyc_get_wqe(&sq->wq, i);
--			struct mlx5_wqe_ctrl_seg *cseg = &wqe->ctrl;
--			struct mlx5_wqe_eth_seg  *eseg = &wqe->eth;
--
--			sq->db.wqe_info[i] = (struct mlx5e_xdp_wqe_info) {
--				.num_wqebbs = 1,
--				.num_pkts   = 1,
--			};
--
--			cseg->qpn_ds = cpu_to_be32((sq->sqn << 8) | ds_cnt);
--			eseg->inline_hdr.sz = cpu_to_be16(inline_hdr_sz);
--		}
--	}
--
- 	return 0;
- 
- err_free_xdpsq:
+v9:
+- Rebased to bpf-next/master to fix x86 merge conflicts.
+- Fixed checkpatch warnings about Co-developed-by tags and including
+  <asm/cfi.h>.
+- Picked up Tested-by tags.
+
+v8: https://lore.kernel.org/bpf/20250310222942.1988975-4-samitolvanen@google.com/
+- Changed DEFINE_CFI_TYPE to use .4byte to match __CFI_TYPE.
+- Changed cfi_get_func_hash() to again use get_kernel_nofault().
+- Fixed a panic in bpf_jit_free() by resetting prog->bpf_func before
+  calling bpf_jit_binary_pack_hdr().
+
+---
+
+Mark Rutland (1):
+  cfi: add C CFI type macro
+
+Puranjay Mohan (1):
+  arm64/cfi,bpf: Support kCFI + BPF on arm64
+
+ arch/arm64/include/asm/cfi.h    | 23 ++++++++++++++++++++++
+ arch/arm64/kernel/alternative.c | 25 +++++++++++++++++++++++
+ arch/arm64/net/bpf_jit_comp.c   | 22 ++++++++++++++++++---
+ arch/riscv/kernel/cfi.c         | 35 +++------------------------------
+ arch/x86/kernel/alternative.c   | 31 +++--------------------------
+ include/linux/cfi_types.h       | 23 ++++++++++++++++++++++
+ 6 files changed, 96 insertions(+), 63 deletions(-)
+ create mode 100644 arch/arm64/include/asm/cfi.h
+
+
+base-commit: f263336a41da287c5aebd35be8f1e0422e49bc5c
 -- 
-2.39.5
+2.49.0.967.g6a0df3ecc3-goog
 
