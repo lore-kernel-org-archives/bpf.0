@@ -1,44 +1,60 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E29D52D1F44;
-	Mon,  5 May 2025 22:51:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C92792D3F83;
+	Mon,  5 May 2025 22:53:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746485488; cv=none; b=bzm+l0q22r+I+NNj/Bg/XhD7UMmSAABUcGSD6WnMQoAfWTn04iKp05mbCykdQj6zPpscS3bqMBHVXpNy7+jLJ0P0NxT9RoDWLaAiRteVjQTrOHySgLSGZ6trI/9ICvJ4n+XwzM28HR6//ptQIBkAnfyz+L5Wh8d6t45hkDrcwXs=
+	t=1746485598; cv=none; b=bnLNmcqWaNXg6wHPqGhl05o/Yp32JxQpyhe2ZoNWIvR4LjfLPe9k5JcFp6xugNVYWBXV+5fqPOQ943yvdXHtBw+qCcysTh6HV4Dbp/g0TPlVBDr6DVAICitftARKP7NQZCVKwsg3osK+jiyyjmi1efXNbekVVmQQnjpOnaf1XKw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746485488; c=relaxed/simple;
-	bh=nGvdlCDrWtO7xRo/70W+vOcOv8cOxCWboXoNzYTDJTI=;
+	s=arc-20240116; t=1746485598; c=relaxed/simple;
+	bh=ipesMSh3z1/RDiybCFvFCLMGT3b/P+ExHeVnzhzc0D0=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=sdh93xZ300NH5LdktZvKw10GWNyvgDre7+727bQnMhcKr3rkfI9Swe+r0jozBCNzspDgGd30M1Vx6ULrdnv4hjl3jJ3QeAs/CFncts/c3Y5ZmqsjhT3T5L3Md1S6vzI4pyp28z+uQf4oz07HzRYslPeyOlWGHTJhVIdbAWaRSK0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T15R05P5; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=ZijXC8l0HxKmZxsHqw/2ofQZDZRvZr21OKRLEDwMy5GLy/z99Oc3EqfU0k1ERxh38qcDnUwE2RmD3tdIhGIRrNW95cg00j0yQCzY9ISyAqnxb99K4CLogC/rImljyHUgs6dWp3bSBu1OioPN5LmN8ugAqkhDrPpIBrsm8WuSGHA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WtNmvy7R; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T15R05P5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA155C4CEE4;
-	Mon,  5 May 2025 22:51:25 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WtNmvy7R"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A286C4CEE4;
+	Mon,  5 May 2025 22:53:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746485486;
-	bh=nGvdlCDrWtO7xRo/70W+vOcOv8cOxCWboXoNzYTDJTI=;
+	s=k20201202; t=1746485598;
+	bh=ipesMSh3z1/RDiybCFvFCLMGT3b/P+ExHeVnzhzc0D0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=T15R05P5h+jbsXQGHaedQtzOqZOgF7mTdMgDjWhvdx+1n8tqssOQ67d3QjRJWft5W
-	 SUpPz26t1Qbl8iakDqTVh7EdVEmehZXPfHQ1ADk2VpNeI7xXD/3/q8aUJSeFA4Yhi6
-	 rNNRlCxX0ejHpMa/n7TUQ1TyLyYVTrdC82JCTja5jz2keDwkduFb7KDXF61di+y467
-	 gVv9mdSG6oWB15JyDc2XYGrZRmjjgqbTarwvo/uNC5YNmlRV1eEwkNdDxSlYcIxXgA
-	 zMzEzLbswpO3gBBv+zhX7NYYprlVbjQhkJTDea9qnuhYifQblsX1QyY4bzH6I1koy4
-	 6UpqEfSfy9obw==
+	b=WtNmvy7R8TdjUiXqmxPaAU/v7wphPPg1jPNpeYhRkn1YAEdAbp4DX4WD8s8iw+SUC
+	 pbPgleUpSCJL+Stx8FrmmUa3jfd34g9g2wV/GRQgDEfi+wu0O7dIRfYLIDjPbPGnET
+	 aWI/DlJUK+EhpP+eLIwQXV1KnNtUUnfxpoPvEhlNOq3PwapFktcbjNEbcYwXHTfUAh
+	 nWHIylZFgY7/9dqOQ5yuJ6jXhBlKLLgZLicf3cz63dbBZEVAhFvgft/7FdbgTlzwjr
+	 VAr2avtxJMDTWI2owNQdkzokT82C5DvzxCtNCBdTXvMxeMfAx6yvAoxMfRf7Ld/sNP
+	 tl4IU/87sswNQ==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Andrii Nakryiko <andrii@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
+Cc: Alexei Lazar <alazar@nvidia.com>,
+	Tariq Toukan <tariqt@nvidia.com>,
+	Jakub Kicinski <kuba@kernel.org>,
 	Sasha Levin <sashal@kernel.org>,
+	saeedm@nvidia.com,
+	andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	ast@kernel.org,
 	daniel@iogearbox.net,
+	hawk@kernel.org,
+	john.fastabend@gmail.com,
+	dtatulea@nvidia.com,
+	michal.swiatkowski@linux.intel.com,
+	yorayz@nvidia.com,
+	lkayal@nvidia.com,
+	witu@nvidia.com,
+	leitao@debian.org,
+	cratiu@nvidia.com,
+	netdev@vger.kernel.org,
+	linux-rdma@vger.kernel.org,
 	bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.12 341/486] libbpf: fix LDX/STX/ST CO-RE relocation size adjustment logic
-Date: Mon,  5 May 2025 18:36:57 -0400
-Message-Id: <20250505223922.2682012-341-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.12 379/486] net/mlx5: XDP, Enable TX side XDP multi-buffer support
+Date: Mon,  5 May 2025 18:37:35 -0400
+Message-Id: <20250505223922.2682012-379-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250505223922.2682012-1-sashal@kernel.org>
 References: <20250505223922.2682012-1-sashal@kernel.org>
@@ -53,90 +69,204 @@ X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.12.26
 Content-Transfer-Encoding: 8bit
 
-From: Andrii Nakryiko <andrii@kernel.org>
+From: Alexei Lazar <alazar@nvidia.com>
 
-[ Upstream commit 06096d19ee3897a7e70922580159607fe315da7a ]
+[ Upstream commit 1a9304859b3a4119579524c293b902a8927180f3 ]
 
-Libbpf has a somewhat obscure feature of automatically adjusting the
-"size" of LDX/STX/ST instruction (memory store and load instructions),
-based on originally recorded access size (u8, u16, u32, or u64) and the
-actual size of the field on target kernel. This is meant to facilitate
-using BPF CO-RE on 32-bit architectures (pointers are always 64-bit in
-BPF, but host kernel's BTF will have it as 32-bit type), as well as
-generally supporting safe type changes (unsigned integer type changes
-can be transparently "relocated").
+In XDP scenarios, fragmented packets can occur if the MTU is larger
+than the page size, even when the packet size fits within the linear
+part.
+If XDP multi-buffer support is disabled, the fragmented part won't be
+handled in the TX flow, leading to packet drops.
 
-One issue that surfaced only now, 5 years after this logic was
-implemented, is how this all works when dealing with fields that are
-arrays. This isn't all that easy and straightforward to hit (see
-selftests that reproduce this condition), but one of sched_ext BPF
-programs did hit it with innocent looking loop.
+Since XDP multi-buffer support is always available, this commit removes
+the conditional check for enabling it.
+This ensures that XDP multi-buffer support is always enabled,
+regardless of the `is_xdp_mb` parameter, and guarantees the handling of
+fragmented packets in such scenarios.
 
-Long story short, libbpf used to calculate entire array size, instead of
-making sure to only calculate array's element size. But it's the element
-that is loaded by LDX/STX/ST instructions (1, 2, 4, or 8 bytes), so
-that's what libbpf should check. This patch adjusts the logic for
-arrays and fixed the issue.
-
-Reported-by: Emil Tsalapatis <emil@etsalapatis.com>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
-Link: https://lore.kernel.org/r/20250207014809.1573841-1-andrii@kernel.org
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Signed-off-by: Alexei Lazar <alazar@nvidia.com>
+Signed-off-by: Tariq Toukan <tariqt@nvidia.com>
+Link: https://patch.msgid.link/20250209101716.112774-16-tariqt@nvidia.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/lib/bpf/relo_core.c | 24 ++++++++++++++++++++----
- 1 file changed, 20 insertions(+), 4 deletions(-)
+ drivers/net/ethernet/mellanox/mlx5/core/en.h  |  1 -
+ .../ethernet/mellanox/mlx5/core/en/params.c   |  1 -
+ .../ethernet/mellanox/mlx5/core/en/params.h   |  1 -
+ .../mellanox/mlx5/core/en/reporter_tx.c       |  1 -
+ .../net/ethernet/mellanox/mlx5/core/en/xdp.c  | 49 ++++++++-----------
+ .../net/ethernet/mellanox/mlx5/core/en_main.c | 29 -----------
+ 6 files changed, 21 insertions(+), 61 deletions(-)
 
-diff --git a/tools/lib/bpf/relo_core.c b/tools/lib/bpf/relo_core.c
-index 63a4d5ad12d1a..26cde1b27174b 100644
---- a/tools/lib/bpf/relo_core.c
-+++ b/tools/lib/bpf/relo_core.c
-@@ -683,7 +683,7 @@ static int bpf_core_calc_field_relo(const char *prog_name,
- {
- 	const struct bpf_core_accessor *acc;
- 	const struct btf_type *t;
--	__u32 byte_off, byte_sz, bit_off, bit_sz, field_type_id;
-+	__u32 byte_off, byte_sz, bit_off, bit_sz, field_type_id, elem_id;
- 	const struct btf_member *m;
- 	const struct btf_type *mt;
- 	bool bitfield;
-@@ -706,8 +706,14 @@ static int bpf_core_calc_field_relo(const char *prog_name,
- 	if (!acc->name) {
- 		if (relo->kind == BPF_CORE_FIELD_BYTE_OFFSET) {
- 			*val = spec->bit_offset / 8;
--			/* remember field size for load/store mem size */
--			sz = btf__resolve_size(spec->btf, acc->type_id);
-+			/* remember field size for load/store mem size;
-+			 * note, for arrays we care about individual element
-+			 * sizes, not the overall array size
-+			 */
-+			t = skip_mods_and_typedefs(spec->btf, acc->type_id, &elem_id);
-+			while (btf_is_array(t))
-+				t = skip_mods_and_typedefs(spec->btf, btf_array(t)->type, &elem_id);
-+			sz = btf__resolve_size(spec->btf, elem_id);
- 			if (sz < 0)
- 				return -EINVAL;
- 			*field_sz = sz;
-@@ -767,7 +773,17 @@ static int bpf_core_calc_field_relo(const char *prog_name,
- 	case BPF_CORE_FIELD_BYTE_OFFSET:
- 		*val = byte_off;
- 		if (!bitfield) {
--			*field_sz = byte_sz;
-+			/* remember field size for load/store mem size;
-+			 * note, for arrays we care about individual element
-+			 * sizes, not the overall array size
-+			 */
-+			t = skip_mods_and_typedefs(spec->btf, field_type_id, &elem_id);
-+			while (btf_is_array(t))
-+				t = skip_mods_and_typedefs(spec->btf, btf_array(t)->type, &elem_id);
-+			sz = btf__resolve_size(spec->btf, elem_id);
-+			if (sz < 0)
-+				return -EINVAL;
-+			*field_sz = sz;
- 			*type_id = field_type_id;
- 		}
- 		break;
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en.h b/drivers/net/ethernet/mellanox/mlx5/core/en.h
+index 57b7298a0e793..d6266f6a96d6e 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en.h
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en.h
+@@ -385,7 +385,6 @@ enum {
+ 	MLX5E_SQ_STATE_VLAN_NEED_L2_INLINE,
+ 	MLX5E_SQ_STATE_PENDING_XSK_TX,
+ 	MLX5E_SQ_STATE_PENDING_TLS_RX_RESYNC,
+-	MLX5E_SQ_STATE_XDP_MULTIBUF,
+ 	MLX5E_NUM_SQ_STATES, /* Must be kept last */
+ };
+ 
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/params.c b/drivers/net/ethernet/mellanox/mlx5/core/en/params.c
+index 31eb99f09c63c..8c4d710e85675 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en/params.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en/params.c
+@@ -1242,7 +1242,6 @@ void mlx5e_build_xdpsq_param(struct mlx5_core_dev *mdev,
+ 	mlx5e_build_sq_param_common(mdev, param);
+ 	MLX5_SET(wq, wq, log_wq_sz, params->log_sq_size);
+ 	param->is_mpw = MLX5E_GET_PFLAG(params, MLX5E_PFLAG_XDP_TX_MPWQE);
+-	param->is_xdp_mb = !mlx5e_rx_is_linear_skb(mdev, params, xsk);
+ 	mlx5e_build_tx_cq_param(mdev, params, &param->cqp);
+ }
+ 
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/params.h b/drivers/net/ethernet/mellanox/mlx5/core/en/params.h
+index 3f8986f9d8629..bd5877acc5b1e 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en/params.h
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en/params.h
+@@ -33,7 +33,6 @@ struct mlx5e_sq_param {
+ 	struct mlx5_wq_param       wq;
+ 	bool                       is_mpw;
+ 	bool                       is_tls;
+-	bool                       is_xdp_mb;
+ 	u16                        stop_room;
+ };
+ 
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/reporter_tx.c b/drivers/net/ethernet/mellanox/mlx5/core/en/reporter_tx.c
+index 09433b91be176..532c7fa94d172 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en/reporter_tx.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en/reporter_tx.c
+@@ -16,7 +16,6 @@ static const char * const sq_sw_state_type_name[] = {
+ 	[MLX5E_SQ_STATE_VLAN_NEED_L2_INLINE] = "vlan_need_l2_inline",
+ 	[MLX5E_SQ_STATE_PENDING_XSK_TX] = "pending_xsk_tx",
+ 	[MLX5E_SQ_STATE_PENDING_TLS_RX_RESYNC] = "pending_tls_rx_resync",
+-	[MLX5E_SQ_STATE_XDP_MULTIBUF] = "xdp_multibuf",
+ };
+ 
+ static int mlx5e_wait_for_sq_flush(struct mlx5e_txqsq *sq)
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c b/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
+index 4610621a340e5..08ab0999f7b31 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
+@@ -546,6 +546,7 @@ mlx5e_xmit_xdp_frame(struct mlx5e_xdpsq *sq, struct mlx5e_xmit_data *xdptxd,
+ 	bool inline_ok;
+ 	bool linear;
+ 	u16 pi;
++	int i;
+ 
+ 	struct mlx5e_xdpsq_stats *stats = sq->stats;
+ 
+@@ -612,41 +613,33 @@ mlx5e_xmit_xdp_frame(struct mlx5e_xdpsq *sq, struct mlx5e_xmit_data *xdptxd,
+ 
+ 	cseg->opmod_idx_opcode = cpu_to_be32((sq->pc << 8) | MLX5_OPCODE_SEND);
+ 
+-	if (test_bit(MLX5E_SQ_STATE_XDP_MULTIBUF, &sq->state)) {
+-		int i;
+-
+-		memset(&cseg->trailer, 0, sizeof(cseg->trailer));
+-		memset(eseg, 0, sizeof(*eseg) - sizeof(eseg->trailer));
+-
+-		eseg->inline_hdr.sz = cpu_to_be16(inline_hdr_sz);
++	memset(&cseg->trailer, 0, sizeof(cseg->trailer));
++	memset(eseg, 0, sizeof(*eseg) - sizeof(eseg->trailer));
+ 
+-		for (i = 0; i < num_frags; i++) {
+-			skb_frag_t *frag = &xdptxdf->sinfo->frags[i];
+-			dma_addr_t addr;
++	eseg->inline_hdr.sz = cpu_to_be16(inline_hdr_sz);
+ 
+-			addr = xdptxdf->dma_arr ? xdptxdf->dma_arr[i] :
+-				page_pool_get_dma_addr(skb_frag_page(frag)) +
+-				skb_frag_off(frag);
++	for (i = 0; i < num_frags; i++) {
++		skb_frag_t *frag = &xdptxdf->sinfo->frags[i];
++		dma_addr_t addr;
+ 
+-			dseg->addr = cpu_to_be64(addr);
+-			dseg->byte_count = cpu_to_be32(skb_frag_size(frag));
+-			dseg->lkey = sq->mkey_be;
+-			dseg++;
+-		}
++		addr = xdptxdf->dma_arr ? xdptxdf->dma_arr[i] :
++			page_pool_get_dma_addr(skb_frag_page(frag)) +
++			skb_frag_off(frag);
+ 
+-		cseg->qpn_ds = cpu_to_be32((sq->sqn << 8) | ds_cnt);
++		dseg->addr = cpu_to_be64(addr);
++		dseg->byte_count = cpu_to_be32(skb_frag_size(frag));
++		dseg->lkey = sq->mkey_be;
++		dseg++;
++	}
+ 
+-		sq->db.wqe_info[pi] = (struct mlx5e_xdp_wqe_info) {
+-			.num_wqebbs = num_wqebbs,
+-			.num_pkts = 1,
+-		};
++	cseg->qpn_ds = cpu_to_be32((sq->sqn << 8) | ds_cnt);
+ 
+-		sq->pc += num_wqebbs;
+-	} else {
+-		cseg->fm_ce_se = 0;
++	sq->db.wqe_info[pi] = (struct mlx5e_xdp_wqe_info) {
++		.num_wqebbs = num_wqebbs,
++		.num_pkts = 1,
++	};
+ 
+-		sq->pc++;
+-	}
++	sq->pc += num_wqebbs;
+ 
+ 	xsk_tx_metadata_request(meta, &mlx5e_xsk_tx_metadata_ops, eseg);
+ 
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+index 1c087fa1ca269..15ec9750d4be0 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+@@ -2030,41 +2030,12 @@ int mlx5e_open_xdpsq(struct mlx5e_channel *c, struct mlx5e_params *params,
+ 	csp.min_inline_mode = sq->min_inline_mode;
+ 	set_bit(MLX5E_SQ_STATE_ENABLED, &sq->state);
+ 
+-	if (param->is_xdp_mb)
+-		set_bit(MLX5E_SQ_STATE_XDP_MULTIBUF, &sq->state);
+-
+ 	err = mlx5e_create_sq_rdy(c->mdev, param, &csp, 0, &sq->sqn);
+ 	if (err)
+ 		goto err_free_xdpsq;
+ 
+ 	mlx5e_set_xmit_fp(sq, param->is_mpw);
+ 
+-	if (!param->is_mpw && !test_bit(MLX5E_SQ_STATE_XDP_MULTIBUF, &sq->state)) {
+-		unsigned int ds_cnt = MLX5E_TX_WQE_EMPTY_DS_COUNT + 1;
+-		unsigned int inline_hdr_sz = 0;
+-		int i;
+-
+-		if (sq->min_inline_mode != MLX5_INLINE_MODE_NONE) {
+-			inline_hdr_sz = MLX5E_XDP_MIN_INLINE;
+-			ds_cnt++;
+-		}
+-
+-		/* Pre initialize fixed WQE fields */
+-		for (i = 0; i < mlx5_wq_cyc_get_size(&sq->wq); i++) {
+-			struct mlx5e_tx_wqe      *wqe  = mlx5_wq_cyc_get_wqe(&sq->wq, i);
+-			struct mlx5_wqe_ctrl_seg *cseg = &wqe->ctrl;
+-			struct mlx5_wqe_eth_seg  *eseg = &wqe->eth;
+-
+-			sq->db.wqe_info[i] = (struct mlx5e_xdp_wqe_info) {
+-				.num_wqebbs = 1,
+-				.num_pkts   = 1,
+-			};
+-
+-			cseg->qpn_ds = cpu_to_be32((sq->sqn << 8) | ds_cnt);
+-			eseg->inline_hdr.sz = cpu_to_be16(inline_hdr_sz);
+-		}
+-	}
+-
+ 	return 0;
+ 
+ err_free_xdpsq:
 -- 
 2.39.5
 
