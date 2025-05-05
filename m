@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C5A8359DF4;
-	Mon,  5 May 2025 22:42:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4DA235EB97;
+	Mon,  5 May 2025 22:48:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746484969; cv=none; b=hM16aItbwxNDcj0LocMUxa0sFI9tEnYoLVgzG/vNm1z4hvA2gEN8QOp163sSukkDtN7v5zo024Hnfkt04BGw6VNsJ/tQ8Jey8pHv0IHF0X3wevwzNj2Ta7IBGQ8bXX7fHS4D8TNIGwhFO606X3+YYwT224GOno1KWrruBmrOyGs=
+	t=1746485322; cv=none; b=g8uzgkRegW2XKDDLoKbHetaEY4w9kJsuUCFNoywqhNuwDk3ABFO10ZU3xuZML8NGJlKqNaDHP8XQ1p/XdgB6P2tWlClzN4hFLHYuHCWEzrSOFilD/HBFrUF2BXm4GWt9eOAsQVZQeWxNtQBSCG3Cygr2Zg/Xdi0GDYbo85Kvrws=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746484969; c=relaxed/simple;
-	bh=yVGBpTjBCfvZxXBpqe0Kw6YV/IDInWxub7cJTiGyZsc=;
+	s=arc-20240116; t=1746485322; c=relaxed/simple;
+	bh=+kAlWFpPjvZ7Wc+Kh6SVwp/JOzpD4dwJ6NntXTUfaRU=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=N6wPmBHXoKrqa4YbvpMUCYuN9Rh7rB3aZg7iiFo6NMhATLsQSU5xIKBcx4C21r8UmSnE+4cDaVxHNpQtRqaj0Jgl7Z0ryq5tRRrOK3DxkW+lHUtU0KmU/HBzt4OxyDhEbZcmOliTXleWnQk44sko0cmcacXV7kIS2zM8Xv3GqZg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LZDp6su/; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=n8QHhl6ZIvGTun8xDrjKc83XqU6ANB4dPiIXolDj+3vNABd9lcLkc4VZacoBGjyDlu3LV4kWxwvCyQoCjBFzkxi4EexD8SLli/y8YKyD0iQEreb6NIdBzOJwEvgahWUjkiL7U/T9umrn4In/j/rXYFwoiHu/rRMcp2jYpqcUO8g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=me/Emz+n; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LZDp6su/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54BC1C4CEF1;
-	Mon,  5 May 2025 22:42:47 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="me/Emz+n"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EF13C4CEE4;
+	Mon,  5 May 2025 22:48:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746484968;
-	bh=yVGBpTjBCfvZxXBpqe0Kw6YV/IDInWxub7cJTiGyZsc=;
+	s=k20201202; t=1746485321;
+	bh=+kAlWFpPjvZ7Wc+Kh6SVwp/JOzpD4dwJ6NntXTUfaRU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=LZDp6su/4ct4WCWsOjkgjeB0vbVGP2oDZrC8E+TQn8rmj/Mggo4nzmgEQ26tJ3Csh
-	 IHdz5x2phMpXvKRBe5cBjrlydor8XpUEFW3nmpT082WRouqfTJvqfXByW2XcC/mx/L
-	 RwX6zGU/A6rKpXAz7S/9h0Al+pDv9vg8mGhilhhfIU6hQjoxg2EWZtCfD6hBwoem4Z
-	 /U891HtTW5IJE+XhdDCd+oYdOHvVC1MVe3953ABQ5pWbQkNvwzsoUKh7dpR4AB28b4
-	 J/5On5OPEgPASAv4kWp/UOqSmfZ5E7s4tS47SGGe1myI+tss2aoMDfqydRHpIk2PPX
-	 6FudB8Isp8gQA==
+	b=me/Emz+nmToJ9Zbu5hsHxZYgoyWrEYlM7DHUvIvq2UsrBoF9HyvMECjoYPpogzvIZ
+	 u5FJjPu7FKj/1NZdfw949ieA56oxyuVRS/wElk1qQrzJi5M3J5o27YdqdDZqt6HJzY
+	 FKBhiirYceJy8OGbXir82J0/dv7Sxx0bI2ETm7KQKQnBO9XVStj3ZpYwMl1c5QMb5K
+	 cm9d3ztJ1E04brAbiw/3JE9gAyL5A1uTVgXOeM2AISFYsmQxmNUIPH4Iasl9WIcEe6
+	 26xDSGv0HkQ5heMEPJMpa3qEidec7/n3/YDbqgRVYgwILmCdcxlMLf1X/BDmb3Wooy
+	 hJtz+BkxxnVSw==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Mykyta Yatsenko <yatsenko@meta.com>,
+Cc: Nandakumar Edamana <nandakumar@nandakumar.co.in>,
 	Andrii Nakryiko <andrii@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
 	Sasha Levin <sashal@kernel.org>,
 	ast@kernel.org,
 	daniel@iogearbox.net,
+	eddyz87@gmail.com,
 	bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.12 100/486] bpf: Return prog btf_id without capable check
-Date: Mon,  5 May 2025 18:32:56 -0400
-Message-Id: <20250505223922.2682012-100-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.12 266/486] libbpf: Fix out-of-bound read
+Date: Mon,  5 May 2025 18:35:42 -0400
+Message-Id: <20250505223922.2682012-266-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250505223922.2682012-1-sashal@kernel.org>
 References: <20250505223922.2682012-1-sashal@kernel.org>
@@ -53,45 +53,41 @@ X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.12.26
 Content-Transfer-Encoding: 8bit
 
-From: Mykyta Yatsenko <yatsenko@meta.com>
+From: Nandakumar Edamana <nandakumar@nandakumar.co.in>
 
-[ Upstream commit 07651ccda9ff10a8ca427670cdd06ce2c8e4269c ]
+[ Upstream commit 236d3910117e9f97ebf75e511d8bcc950f1a4e5f ]
 
-Return prog's btf_id from bpf_prog_get_info_by_fd regardless of capable
-check. This patch enables scenario, when freplace program, running
-from user namespace, requires to query target prog's btf.
+In `set_kcfg_value_str`, an untrusted string is accessed with the assumption
+that it will be at least two characters long due to the presence of checks for
+opening and closing quotes. But the check for the closing quote
+(value[len - 1] != '"') misses the fact that it could be checking the opening
+quote itself in case of an invalid input that consists of just the opening
+quote.
 
-Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
+This commit adds an explicit check to make sure the string is at least two
+characters long.
+
+Signed-off-by: Nandakumar Edamana <nandakumar@nandakumar.co.in>
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-Acked-by: Yonghong Song <yonghong.song@linux.dev>
-Link: https://lore.kernel.org/bpf/20250317174039.161275-3-mykyta.yatsenko5@gmail.com
+Link: https://lore.kernel.org/bpf/20250221210110.3182084-1-nandakumar@nandakumar.co.in
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/bpf/syscall.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ tools/lib/bpf/libbpf.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 977c084577565..fc048d3c0e69f 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -4606,6 +4606,8 @@ static int bpf_prog_get_info_by_fd(struct file *file,
- 	info.recursion_misses = stats.misses;
- 
- 	info.verified_insns = prog->aux->verified_insns;
-+	if (prog->aux->btf)
-+		info.btf_id = btf_obj_id(prog->aux->btf);
- 
- 	if (!bpf_capable()) {
- 		info.jited_prog_len = 0;
-@@ -4752,8 +4754,6 @@ static int bpf_prog_get_info_by_fd(struct file *file,
- 		}
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 5b45f76059296..a6bbae1e4c6b9 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -2074,7 +2074,7 @@ static int set_kcfg_value_str(struct extern_desc *ext, char *ext_val,
  	}
  
--	if (prog->aux->btf)
--		info.btf_id = btf_obj_id(prog->aux->btf);
- 	info.attach_btf_id = prog->aux->attach_btf_id;
- 	if (attach_btf)
- 		info.attach_btf_obj_id = btf_obj_id(attach_btf);
+ 	len = strlen(value);
+-	if (value[len - 1] != '"') {
++	if (len < 2 || value[len - 1] != '"') {
+ 		pr_warn("extern (kcfg) '%s': invalid string config '%s'\n",
+ 			ext->name, value);
+ 		return -EINVAL;
 -- 
 2.39.5
 
