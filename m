@@ -1,47 +1,55 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59E6537941A;
-	Mon,  5 May 2025 23:11:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B79B3A6F96;
+	Mon,  5 May 2025 23:16:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746486710; cv=none; b=EmDUWgJgb5o58SWAh1GWWolFzAgyOOJ5eZOsf+zyePJk6/7o7dgOE9CbdOP3D6TrLNm/PDKZZY8sTzRWlzEbuYndoSf9kzaaSHkOQvjqwK0mSc2h5WL6DeXYHA5xQGoDLpHjjMSCPPI5ZEdFs+Xfyl6pXGrSdelM4x1NfwUrCeo=
+	t=1746487007; cv=none; b=o0qV59iyGxe403jrj7nwvluRVQor1WFgQzCPBdvI57PHHpFp0yNV4hU59MC4wlP6nEYj9axOmuyUsAPRMylp4M6LsIyKWXe1o+hYHw+w82z5H/x17/JnNQd/6f8eQcDZ49PRkqpCDwpyhH/eaGUi4B3hE857pe3vD9ECgfXkJDQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746486710; c=relaxed/simple;
-	bh=C43Pz/hDzcDNEKIbrxLCPDxsolFRO71goEUky3/G04A=;
+	s=arc-20240116; t=1746487007; c=relaxed/simple;
+	bh=qzo60eq99Q4KeFcPO165fQwMvAIqpbtTaxi/l/uJZ7g=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=UyleawBRtfG9JbiOGoGHzahGO7fWz1PGEaq+hH4GJCu6UHOuS28W83vFkzWVdbmvG11N/po/7IgSo98EPUyyC4RU7pESBiytcrNQEpwj/7MgnGzikwW6RSfFJQxVRKxcKkFJM/xibFTM13d0S92WzEPXZaa4kCCETqrroe5vdyQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FCDoGC7+; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=VLWXNqifq8TqoKA7DWa9qqKOa6AD5p20wlZek+uAAptmW8xL9XshleGIhIsfjxTyBrzrYIdleQmveSXBPXiCTv4uis8JjkiF0ZbjzXvfZVMr7pc/1ndK/kqF8dxfe1W5G8E1aN2UeVEOTiCp2RxNzz99DDlpycI7CqadMzgFk3I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BQrZYJEB; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FCDoGC7+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4EBEC4CEE4;
-	Mon,  5 May 2025 23:11:47 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BQrZYJEB"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E870C4CEED;
+	Mon,  5 May 2025 23:16:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746486708;
-	bh=C43Pz/hDzcDNEKIbrxLCPDxsolFRO71goEUky3/G04A=;
+	s=k20201202; t=1746487006;
+	bh=qzo60eq99Q4KeFcPO165fQwMvAIqpbtTaxi/l/uJZ7g=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=FCDoGC7+HF2d1yZdJiFd+nu0c6d99soE0h6awJSET1IdWdqegQNKbQwIk47Oup/pB
-	 cSOyHy+Rab+W5+XK3lvu6MxerPCPGz/vD/WwjLqOguaquT8j543qHttz695psX+ssu
-	 X5BzQ5vcEUYc7YL910Kq6UbLvRDZQvAH8GHdw0Ej3QYhoX5ZJw7m57sx43/bnlQoWb
-	 88DR9O+3ZsSV6DWKkgnGh08b4dlDvf5TNIJF4vZ8GrusdCSU8s1HXTgQcPp9PNPm8V
-	 eEXjNJBUkBVKDTnbo/8j/Mjq3qF7H15U7TQDLVtTTZoJCryyOrVqVCqW2ItkM12g3j
-	 gjMpcVs1NFv+A==
+	b=BQrZYJEBlFstL68ok+AREMoABLlY2j5s2NmNZJND91UdIsMJ05p6QeewvzEoiiSVy
+	 Zi02+QFnWuoiQiKBiDeQYmMZxhHATQgUbKh1PcaqfnCmj28anIoKUPWoQOfS+xTz6m
+	 CfCeao4pws2tUxoGjQSwDVYZNyY8Q5sXvpP6/+A0gDBKVhicSK7NpoAwU6qOz3w/76
+	 /B2N0Zi1WJio9tbY+poPI34FQwuD8PQBImdAmzvIutqaTgSiVdw9rNJtlnf4ZdDoRc
+	 pDzTGmQTFzkXFHD7a6hXnDUXqBRAQ2jGjVr69uboHrlXLEPzmcRlemZSIQ/DSylPKq
+	 g+WGHNwFoMHGA==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Andrii Nakryiko <andrii@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
+Cc: Jason Xing <kerneljasonxing@gmail.com>,
+	Martin KaFai Lau <martin.lau@kernel.org>,
 	Sasha Levin <sashal@kernel.org>,
+	ast@kernel.org,
 	daniel@iogearbox.net,
-	bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 165/212] libbpf: fix LDX/STX/ST CO-RE relocation size adjustment logic
-Date: Mon,  5 May 2025 19:05:37 -0400
-Message-Id: <20250505230624.2692522-165-sashal@kernel.org>
+	andrii@kernel.org,
+	edumazet@google.com,
+	ncardwell@google.com,
+	davem@davemloft.net,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	martin.lau@linux.dev,
+	dsahern@kernel.org,
+	bpf@vger.kernel.org,
+	netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.15 104/153] bpf: Prevent unsafe access to the sock fields in the BPF timestamping callback
+Date: Mon,  5 May 2025 19:12:31 -0400
+Message-Id: <20250505231320.2695319-104-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250505230624.2692522-1-sashal@kernel.org>
-References: <20250505230624.2692522-1-sashal@kernel.org>
+In-Reply-To: <20250505231320.2695319-1-sashal@kernel.org>
+References: <20250505231320.2695319-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -50,93 +58,150 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.1.136
+X-stable-base: Linux 5.15.181
 Content-Transfer-Encoding: 8bit
 
-From: Andrii Nakryiko <andrii@kernel.org>
+From: Jason Xing <kerneljasonxing@gmail.com>
 
-[ Upstream commit 06096d19ee3897a7e70922580159607fe315da7a ]
+[ Upstream commit fd93eaffb3f977b23bc0a48d4c8616e654fcf133 ]
 
-Libbpf has a somewhat obscure feature of automatically adjusting the
-"size" of LDX/STX/ST instruction (memory store and load instructions),
-based on originally recorded access size (u8, u16, u32, or u64) and the
-actual size of the field on target kernel. This is meant to facilitate
-using BPF CO-RE on 32-bit architectures (pointers are always 64-bit in
-BPF, but host kernel's BTF will have it as 32-bit type), as well as
-generally supporting safe type changes (unsigned integer type changes
-can be transparently "relocated").
+The subsequent patch will implement BPF TX timestamping. It will
+call the sockops BPF program without holding the sock lock.
 
-One issue that surfaced only now, 5 years after this logic was
-implemented, is how this all works when dealing with fields that are
-arrays. This isn't all that easy and straightforward to hit (see
-selftests that reproduce this condition), but one of sched_ext BPF
-programs did hit it with innocent looking loop.
+This breaks the current assumption that all sock ops programs will
+hold the sock lock. The sock's fields of the uapi's bpf_sock_ops
+requires this assumption.
 
-Long story short, libbpf used to calculate entire array size, instead of
-making sure to only calculate array's element size. But it's the element
-that is loaded by LDX/STX/ST instructions (1, 2, 4, or 8 bytes), so
-that's what libbpf should check. This patch adjusts the logic for
-arrays and fixed the issue.
+To address this, a new "u8 is_locked_tcp_sock;" field is added. This
+patch sets it in the current sock_ops callbacks. The "is_fullsock"
+test is then replaced by the "is_locked_tcp_sock" test during
+sock_ops_convert_ctx_access().
 
-Reported-by: Emil Tsalapatis <emil@etsalapatis.com>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
-Link: https://lore.kernel.org/r/20250207014809.1573841-1-andrii@kernel.org
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+The new TX timestamping callbacks added in the subsequent patch will
+not have this set. This will prevent unsafe access from the new
+timestamping callbacks.
+
+Potentially, we could allow read-only access. However, this would
+require identifying which callback is read-safe-only and also requires
+additional BPF instruction rewrites in the covert_ctx. Since the BPF
+program can always read everything from a socket (e.g., by using
+bpf_core_cast), this patch keeps it simple and disables all read
+and write access to any socket fields through the bpf_sock_ops
+UAPI from the new TX timestamping callback.
+
+Moreover, note that some of the fields in bpf_sock_ops are specific
+to tcp_sock, and sock_ops currently only supports tcp_sock. In
+the future, UDP timestamping will be added, which will also break
+this assumption. The same idea used in this patch will be reused.
+Considering that the current sock_ops only supports tcp_sock, the
+variable is named is_locked_"tcp"_sock.
+
+Signed-off-by: Jason Xing <kerneljasonxing@gmail.com>
+Signed-off-by: Martin KaFai Lau <martin.lau@kernel.org>
+Link: https://patch.msgid.link/20250220072940.99994-4-kerneljasonxing@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/lib/bpf/relo_core.c | 24 ++++++++++++++++++++----
- 1 file changed, 20 insertions(+), 4 deletions(-)
+ include/linux/filter.h | 1 +
+ include/net/tcp.h      | 1 +
+ net/core/filter.c      | 8 ++++----
+ net/ipv4/tcp_input.c   | 2 ++
+ net/ipv4/tcp_output.c  | 2 ++
+ 5 files changed, 10 insertions(+), 4 deletions(-)
 
-diff --git a/tools/lib/bpf/relo_core.c b/tools/lib/bpf/relo_core.c
-index c4b0e81ae2931..84f26b36f664c 100644
---- a/tools/lib/bpf/relo_core.c
-+++ b/tools/lib/bpf/relo_core.c
-@@ -683,7 +683,7 @@ static int bpf_core_calc_field_relo(const char *prog_name,
- {
- 	const struct bpf_core_accessor *acc;
- 	const struct btf_type *t;
--	__u32 byte_off, byte_sz, bit_off, bit_sz, field_type_id;
-+	__u32 byte_off, byte_sz, bit_off, bit_sz, field_type_id, elem_id;
- 	const struct btf_member *m;
- 	const struct btf_type *mt;
- 	bool bitfield;
-@@ -706,8 +706,14 @@ static int bpf_core_calc_field_relo(const char *prog_name,
- 	if (!acc->name) {
- 		if (relo->kind == BPF_CORE_FIELD_BYTE_OFFSET) {
- 			*val = spec->bit_offset / 8;
--			/* remember field size for load/store mem size */
--			sz = btf__resolve_size(spec->btf, acc->type_id);
-+			/* remember field size for load/store mem size;
-+			 * note, for arrays we care about individual element
-+			 * sizes, not the overall array size
-+			 */
-+			t = skip_mods_and_typedefs(spec->btf, acc->type_id, &elem_id);
-+			while (btf_is_array(t))
-+				t = skip_mods_and_typedefs(spec->btf, btf_array(t)->type, &elem_id);
-+			sz = btf__resolve_size(spec->btf, elem_id);
- 			if (sz < 0)
- 				return -EINVAL;
- 			*field_sz = sz;
-@@ -767,7 +773,17 @@ static int bpf_core_calc_field_relo(const char *prog_name,
- 	case BPF_CORE_FIELD_BYTE_OFFSET:
- 		*val = byte_off;
- 		if (!bitfield) {
--			*field_sz = byte_sz;
-+			/* remember field size for load/store mem size;
-+			 * note, for arrays we care about individual element
-+			 * sizes, not the overall array size
-+			 */
-+			t = skip_mods_and_typedefs(spec->btf, field_type_id, &elem_id);
-+			while (btf_is_array(t))
-+				t = skip_mods_and_typedefs(spec->btf, btf_array(t)->type, &elem_id);
-+			sz = btf__resolve_size(spec->btf, elem_id);
-+			if (sz < 0)
-+				return -EINVAL;
-+			*field_sz = sz;
- 			*type_id = field_type_id;
- 		}
- 		break;
+diff --git a/include/linux/filter.h b/include/linux/filter.h
+index 7d8294d0d7173..e723b930bac14 100644
+--- a/include/linux/filter.h
++++ b/include/linux/filter.h
+@@ -1327,6 +1327,7 @@ struct bpf_sock_ops_kern {
+ 	void	*skb_data_end;
+ 	u8	op;
+ 	u8	is_fullsock;
++	u8	is_locked_tcp_sock;
+ 	u8	remaining_opt_len;
+ 	u64	temp;			/* temp and everything after is not
+ 					 * initialized to 0 before calling
+diff --git a/include/net/tcp.h b/include/net/tcp.h
+index be91d81d66ab3..577e60ec41b8c 100644
+--- a/include/net/tcp.h
++++ b/include/net/tcp.h
+@@ -2322,6 +2322,7 @@ static inline int tcp_call_bpf(struct sock *sk, int op, u32 nargs, u32 *args)
+ 	memset(&sock_ops, 0, offsetof(struct bpf_sock_ops_kern, temp));
+ 	if (sk_fullsock(sk)) {
+ 		sock_ops.is_fullsock = 1;
++		sock_ops.is_locked_tcp_sock = 1;
+ 		sock_owned_by_me(sk);
+ 	}
+ 
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 9d358fb865e28..983aca1bf833f 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -9640,10 +9640,10 @@ static u32 sock_ops_convert_ctx_access(enum bpf_access_type type,
+ 		}							      \
+ 		*insn++ = BPF_LDX_MEM(BPF_FIELD_SIZEOF(			      \
+ 						struct bpf_sock_ops_kern,     \
+-						is_fullsock),		      \
++						is_locked_tcp_sock),	      \
+ 				      fullsock_reg, si->src_reg,	      \
+ 				      offsetof(struct bpf_sock_ops_kern,      \
+-					       is_fullsock));		      \
++					       is_locked_tcp_sock));	      \
+ 		*insn++ = BPF_JMP_IMM(BPF_JEQ, fullsock_reg, 0, jmp);	      \
+ 		if (si->dst_reg == si->src_reg)				      \
+ 			*insn++ = BPF_LDX_MEM(BPF_DW, reg, si->src_reg,	      \
+@@ -9728,10 +9728,10 @@ static u32 sock_ops_convert_ctx_access(enum bpf_access_type type,
+ 					       temp));			      \
+ 		*insn++ = BPF_LDX_MEM(BPF_FIELD_SIZEOF(			      \
+ 						struct bpf_sock_ops_kern,     \
+-						is_fullsock),		      \
++						is_locked_tcp_sock),	      \
+ 				      reg, si->dst_reg,			      \
+ 				      offsetof(struct bpf_sock_ops_kern,      \
+-					       is_fullsock));		      \
++					       is_locked_tcp_sock));	      \
+ 		*insn++ = BPF_JMP_IMM(BPF_JEQ, reg, 0, 2);		      \
+ 		*insn++ = BPF_LDX_MEM(BPF_FIELD_SIZEOF(			      \
+ 						struct bpf_sock_ops_kern, sk),\
+diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
+index 8859a38b45d5e..0caf1474b9807 100644
+--- a/net/ipv4/tcp_input.c
++++ b/net/ipv4/tcp_input.c
+@@ -168,6 +168,7 @@ static void bpf_skops_parse_hdr(struct sock *sk, struct sk_buff *skb)
+ 	memset(&sock_ops, 0, offsetof(struct bpf_sock_ops_kern, temp));
+ 	sock_ops.op = BPF_SOCK_OPS_PARSE_HDR_OPT_CB;
+ 	sock_ops.is_fullsock = 1;
++	sock_ops.is_locked_tcp_sock = 1;
+ 	sock_ops.sk = sk;
+ 	bpf_skops_init_skb(&sock_ops, skb, tcp_hdrlen(skb));
+ 
+@@ -184,6 +185,7 @@ static void bpf_skops_established(struct sock *sk, int bpf_op,
+ 	memset(&sock_ops, 0, offsetof(struct bpf_sock_ops_kern, temp));
+ 	sock_ops.op = bpf_op;
+ 	sock_ops.is_fullsock = 1;
++	sock_ops.is_locked_tcp_sock = 1;
+ 	sock_ops.sk = sk;
+ 	/* sk with TCP_REPAIR_ON does not have skb in tcp_finish_connect */
+ 	if (skb)
+diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
+index 3a66d0c7d015c..3a819413d3968 100644
+--- a/net/ipv4/tcp_output.c
++++ b/net/ipv4/tcp_output.c
+@@ -507,6 +507,7 @@ static void bpf_skops_hdr_opt_len(struct sock *sk, struct sk_buff *skb,
+ 		sock_owned_by_me(sk);
+ 
+ 		sock_ops.is_fullsock = 1;
++		sock_ops.is_locked_tcp_sock = 1;
+ 		sock_ops.sk = sk;
+ 	}
+ 
+@@ -552,6 +553,7 @@ static void bpf_skops_write_hdr_opt(struct sock *sk, struct sk_buff *skb,
+ 		sock_owned_by_me(sk);
+ 
+ 		sock_ops.is_fullsock = 1;
++		sock_ops.is_locked_tcp_sock = 1;
+ 		sock_ops.sk = sk;
+ 	}
+ 
 -- 
 2.39.5
 
