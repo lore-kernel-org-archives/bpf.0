@@ -1,27 +1,28 @@
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA01322A4FC;
-	Tue,  6 May 2025 06:15:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.2
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.4])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C20FD228CA3;
+	Tue,  6 May 2025 06:15:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746512139; cv=none; b=r1ocGOSsQjHQAt98GyngnIjmuwReOMQCG8WVKap0iN+Lc+7P/pHqGu8BvYTPuqOIHCPxrO7IZY7mVaqX5Vvf74fTBdE/pgiMk4n1jZ1Uh8GGu/9rbZlgRcZZ+Y4BYVec11eF3G6r7GM4lyE05Pt7PbVuTQjV/t9ecFpqICljXBM=
+	t=1746512142; cv=none; b=hJaR7DlLoAa6PWP1BizEjQBSksrh2+eXvZe7Je7AVxNIvddVZAFjRrS1DW4E9zIfjI4+g3qL/kHsUuV4Mr339PGCKvNDIXq028QLkeonVF33EiIuFgwkQrtqnUbWDwjoozBiqV82cm8KR6p4nCPsz3VPeR2PymPoiMHKn+eucbw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746512139; c=relaxed/simple;
-	bh=nw1kahHre1VwEQ37NEjmJ9Mw5nfgc6IkGsb1/bQmEQQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=BoEqwf86OBqQqiFTSHJlQG4HW4Z4MjTnWC4y8lRo4rP0PzkLxukb5tF7cC6ibw6VViQh9elSx6fTDGlTseWYRsCQW67aFQRbBGrstZZEXHoWNTVVh1lTPLsBMQxhTI7oiaMgwrlHeBoRL6iLGwUgxnN6MPLIQGjzM5qT+WcnCuw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=JVMilv+6; arc=none smtp.client-ip=117.135.210.2
+	s=arc-20240116; t=1746512142; c=relaxed/simple;
+	bh=ynWK2J8C2BCh41D4/1FAgDRD2ogIy1eMHChuUtUrGdk=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=SOCZmNaRRqdLHVY+GyYlwPyudhCZHryFASQHjXFFIJkFrWKXTGhp91YuQf68ONVpmUfQ/C6uO9xlz0KXa+DiXqIxF0BC0EDmYMIpQsZ43MF2i8TQ6npToT9y/uW9ri+qPB8EsWFl6YOMpYXbbq3ISmMqQwsWmR6Q2F1o3b30ok8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=Fk8aQTXZ; arc=none smtp.client-ip=220.197.31.4
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="JVMilv+6"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="Fk8aQTXZ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=Ry+u2
-	fa0e/nRAuyUY9cFErGjlXkzFJwMz7cC3AUA+q4=; b=JVMilv+6mMDUxUc2aePFM
-	qsG37i86TxsSymDqQ/KDBk7hPEIhb/dSrR5ARagBM6pR0BQ7m5WV9ejw1ftkffR0
-	aR/dJHyp+TA/2iw93DGBcHX1mfQUCmUPiVIXkkSNN9YRPHPMnfOT5lM/mRP6XREa
-	LEDGGK1riLKYWmf/9qhvBY=
+	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=ZE+bT
+	GstDpcwUv49z0r7w9laeGwplHKajtRxKbtzLOo=; b=Fk8aQTXZ2fLsOrZ1pjma8
+	jznaTrUbhYv214kEj+HiYmi3TO/R0hnYfE+PrR//UXgcqyxnPt1Qp8PE1dwn5rYu
+	YHUFdlqjiEondOYJakEVPL8cInucD1C46Qx/KKMk3/3aNRHFhoaAJRBFXNNybMit
+	CUkA53G3Ojg71nKvmiI5S0=
 Received: from localhost.localdomain (unknown [])
-	by gzsmtp5 (Coremail) with SMTP id QCgvCgBnylfLqBlovwXpBw--.23593S2;
-	Tue, 06 May 2025 14:14:37 +0800 (CST)
+	by gzsmtp5 (Coremail) with SMTP id QCgvCgBnylfLqBlovwXpBw--.23593S4;
+	Tue, 06 May 2025 14:14:38 +0800 (CST)
 From: Feng Yang <yangfeng59949@163.com>
 To: martin.lau@linux.dev,
 	ast@kernel.org,
@@ -45,10 +46,12 @@ Cc: bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-trace-kernel@vger.kernel.org,
 	netdev@vger.kernel.org
-Subject: [PATCH v3 bpf-next 0/2] bpf: Allow some trace helpers for all prog types
-Date: Tue,  6 May 2025 14:14:32 +0800
-Message-Id: <20250506061434.94277-1-yangfeng59949@163.com>
+Subject: [PATCH v3 sched_ext 2/2] sched_ext: Remove bpf_scx_get_func_proto
+Date: Tue,  6 May 2025 14:14:34 +0800
+Message-Id: <20250506061434.94277-3-yangfeng59949@163.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20250506061434.94277-1-yangfeng59949@163.com>
+References: <20250506061434.94277-1-yangfeng59949@163.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -56,46 +59,50 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:QCgvCgBnylfLqBlovwXpBw--.23593S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7tF48Kw4rAFyxJry3Aw4DCFg_yoW8XrWUpF
-	s3Jry3Gr1rtr17AwsxJw4Iq3WrJw4rJw17GwnrJw4rAr1UZryUJryIgr4rWryDXFy2grWr
-	Ar1qqr1UKa4jvaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07ja4E_UUUUU=
-X-CM-SenderInfo: p1dqww5hqjkmqzuzqiywtou0bp/1tbiwg9FeGgZovWwYgAAsE
+X-CM-TRANSID:QCgvCgBnylfLqBlovwXpBw--.23593S4
+X-Coremail-Antispam: 1Uf129KBjvJXoWrtw48Wr4kJr48ZF4kXr4fKrg_yoW8JF1rpF
+	ZxXFsxCr48Gw4agF9xJr4fZF15GwnIq3yxGa90yw1xtr4qvryqqw1UGr4I9a4fJr9rCw12
+	yr1jvFWakr1Iga7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jOqXdUUUUU=
+X-CM-SenderInfo: p1dqww5hqjkmqzuzqiywtou0bp/1tbiTRlFeGgZp3ApAwAAsl
 
 From: Feng Yang <yangfeng@kylinos.cn>
 
-This series allow some trace helpers for all prog types.
+task_storage_{get,delete} has been moved to bpf_base_func_proto.
 
-if it works under NMI and doesn't use any context-dependent things,
-should be fine for any program type. The detailed discussion is in [1].
-
-[1] https://lore.kernel.org/all/CAEf4Bza6gK3dsrTosk6k3oZgtHesNDSrDd8sdeQ-GiS6oJixQg@mail.gmail.com/
-
+Suggested-by: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Signed-off-by: Feng Yang <yangfeng@kylinos.cn>
 ---
-Changes in v3:
-- cgroup_current_func_proto clean.
-- bpf_scx_get_func_proto clean. Thanks, Andrii Nakryiko.
-- Link to v2: https://lore.kernel.org/all/20250427063821.207263-1-yangfeng59949@163.com/
+ kernel/sched/ext.c | 15 +--------------
+ 1 file changed, 1 insertion(+), 14 deletions(-)
 
-Changes in v2:
-- not expose compat probe read APIs to more program types.
-- Remove the prog->sleepable check added for copy_from_user,
-- or the summarization_freplace/might_sleep_with_might_sleep test will fail with the error "program of this type cannot use helper bpf_copy_from_user"
-- Link to v1: https://lore.kernel.org/all/20250425080032.327477-1-yangfeng59949@163.com/
-
-Feng Yang (2):
-  bpf: Allow some trace helpers for all prog types
-  sched_ext: Remove bpf_scx_get_func_proto
-
- include/linux/bpf-cgroup.h |  8 --------
- kernel/bpf/cgroup.c        | 32 -----------------------------
- kernel/bpf/helpers.c       | 42 ++++++++++++++++++++++++++++++++++++++
- kernel/sched/ext.c         | 15 +-------------
- kernel/trace/bpf_trace.c   | 41 ++++---------------------------------
- net/core/filter.c          | 14 -------------
- 6 files changed, 47 insertions(+), 105 deletions(-)
-
+diff --git a/kernel/sched/ext.c b/kernel/sched/ext.c
+index fdbf249d1c68..cc628b009e11 100644
+--- a/kernel/sched/ext.c
++++ b/kernel/sched/ext.c
+@@ -5586,21 +5586,8 @@ static int bpf_scx_btf_struct_access(struct bpf_verifier_log *log,
+ 	return -EACCES;
+ }
+ 
+-static const struct bpf_func_proto *
+-bpf_scx_get_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+-{
+-	switch (func_id) {
+-	case BPF_FUNC_task_storage_get:
+-		return &bpf_task_storage_get_proto;
+-	case BPF_FUNC_task_storage_delete:
+-		return &bpf_task_storage_delete_proto;
+-	default:
+-		return bpf_base_func_proto(func_id, prog);
+-	}
+-}
+-
+ static const struct bpf_verifier_ops bpf_scx_verifier_ops = {
+-	.get_func_proto = bpf_scx_get_func_proto,
++	.get_func_proto = bpf_base_func_proto,
+ 	.is_valid_access = bpf_scx_is_valid_access,
+ 	.btf_struct_access = bpf_scx_btf_struct_access,
+ };
 -- 
 2.43.0
 
