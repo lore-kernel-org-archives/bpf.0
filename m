@@ -1,32 +1,32 @@
-Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
+Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57B34307219;
-	Tue,  6 May 2025 01:59:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EBBC307235
+	for <bpf@vger.kernel.org>; Tue,  6 May 2025 01:59:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746496765; cv=none; b=Ma37iBvCDJF2CdntmpGAQiGsrULwsz89h2HO/KNoy/eoSEFq27L5/ZZFjlTVExdFjcAEw6lWwnNVXJHoNgPBJFwZywopRl4twim8Kd/x/I78LaesWER+glJKKD/kPcaoP3Uexi47G2KiUx6/dejYI1/XJE0Wnlsls1Tn4LLaDvg=
+	t=1746496769; cv=none; b=DRxVlJMI76t3gFcS0Jznwq2wrC+vB2qr7YoFOhrzJdC3K04WBli6kpkZTUY177mb9R46mfKF41CBiXzDaruNANvud3ztydomYjfpzcynFbswnvD/ss883AnLegwVkyj+0ydCcQPWUG/u4ekfMj/KJLjtu+RuxY2anXUyHcTaX8c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746496765; c=relaxed/simple;
-	bh=w67WkSR6GBFb0297iPDQN/LQ40KIXTJ1WJ97gwRtOmE=;
+	s=arc-20240116; t=1746496769; c=relaxed/simple;
+	bh=sGXEJ9UzTKTJ6orUxxf20O42nPHtvGlhnGXRezZo6OY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=AWhxtxCTKd1WT6Vql8CWKXqkXdwqn1kUWEosQn/8RScnZwzAKIyVIUqVn1rqLoGrMRHBhQuqsYHYyGt3znTebcHEBujHe2x3ZghWSFhZ/609Iy5QGPfvLej1wz/gaeEXonls0dYz/ArEzVN7GTh31m0D732nnmjiIaToGtuoOus=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=YQPI7O/p; arc=none smtp.client-ip=91.218.175.172
+	 MIME-Version; b=dy+E11YW2pQCKU3G2OF9z6lcBQMzzKuLiaREdlkweOkqQFvOggPQER80ocUEFX7Da2hAwXz2YPVSpHKjfgW/nbs2T5iseSz4beXNaKkEYprpmKhQjUhqJ1pwgkuB6K9uwvpbQP7uRyTggXaAqeITzVJqvKfTeJ0c8B/2mNWND0E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=mZjVU8Vf; arc=none smtp.client-ip=91.218.175.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="YQPI7O/p"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="mZjVU8Vf"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1746496760;
+	t=1746496765;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=pXz84LoY63sFkcYTvfjl3+K7yK/CPdj2Wms2qb1xZx4=;
-	b=YQPI7O/pssGD5wlAcmeiacL8WUWiPd84Aw9HQvaPTOgQ2vEw5HzvlW+Z2J8fOaa7P7C3xQ
-	+aU0FJ91M5IU5XkvhZLAS9XAsuZ7O+1umTMhgLpOuVR00Wg5jFWFhjFHu0/Rog4hjnXx1X
-	b00oo0z9o28AsHNvfhTy4lbay1MhvVM=
+	bh=rKYIeM0rTydpOKf0DepkQmkMK1bRwSRWPs+8CNcvjiE=;
+	b=mZjVU8VfpLD0DMw0NQOXY3R3xtev2q7dX2YpkrgCAONrABzRUKOcjxPcJ4bmcGYY62Lsp1
+	iSg1QvAft4+GxqBYSMsWXOllhZqsWgln7HbRfz2RvIe6mxTygK3XpOQu697pkIArpMOx+Z
+	TNC8cakKxAnkWyKgmd2yYqnqN6gW6c4=
 From: Martin KaFai Lau <martin.lau@linux.dev>
 To: bpf@vger.kernel.org
 Cc: 'Alexei Starovoitov ' <ast@kernel.org>,
@@ -36,9 +36,9 @@ Cc: 'Alexei Starovoitov ' <ast@kernel.org>,
 	'Amery Hung ' <ameryhung@gmail.com>,
 	netdev@vger.kernel.org,
 	kernel-team@meta.com
-Subject: [PATCH v2 bpf-next 6/8] bpf: Simplify reg0 marking for the list kfuncs that return a bpf_list_node pointer
-Date: Mon,  5 May 2025 18:58:53 -0700
-Message-ID: <20250506015857.817950-7-martin.lau@linux.dev>
+Subject: [PATCH v2 bpf-next 8/8] selftests/bpf: Add test for bpf_list_{front,back}
+Date: Mon,  5 May 2025 18:58:55 -0700
+Message-ID: <20250506015857.817950-9-martin.lau@linux.dev>
 In-Reply-To: <20250506015857.817950-1-martin.lau@linux.dev>
 References: <20250506015857.817950-1-martin.lau@linux.dev>
 Precedence: bulk
@@ -52,48 +52,160 @@ X-Migadu-Flow: FLOW_OUT
 
 From: Martin KaFai Lau <martin.lau@kernel.org>
 
-The next patch will add bpf_list_{front,back} kfuncs to peek the head
-and tail of a list. Both of them will return a 'struct bpf_list_node *'.
+This patch adds the "list_peek" test to use the new
+bpf_list_{front,back} kfunc.
 
-Follow the earlier change for rbtree, this patch checks the
-return btf type is a 'struct bpf_list_node' pointer instead
-of checking each kfuncs individually to decide if
-mark_reg_graph_node should be called. This will make
-the bpf_list_{front,back} kfunc addition easier in
-the later patch.
+The test_{front,back}* tests ensure that the return value
+is a non_own_ref node pointer and requires the spinlock to be held.
 
-Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Suggested-by: Kumar Kartikeya Dwivedi <memxor@gmail.com> # check non_own_ref marking
 Signed-off-by: Martin KaFai Lau <martin.lau@kernel.org>
 ---
- kernel/bpf/verifier.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ .../selftests/bpf/prog_tests/linked_list.c    |   6 +
+ .../selftests/bpf/progs/linked_list_peek.c    | 113 ++++++++++++++++++
+ 2 files changed, 119 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/progs/linked_list_peek.c
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 9093a351b0b3..acb2f44316cc 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -11992,6 +11992,11 @@ static bool is_rbtree_node_type(const struct btf_type *t)
- 	return t == btf_type_by_id(btf_vmlinux, kf_arg_btf_ids[KF_ARG_RB_NODE_ID]);
- }
+diff --git a/tools/testing/selftests/bpf/prog_tests/linked_list.c b/tools/testing/selftests/bpf/prog_tests/linked_list.c
+index 77d07e0a4a55..5266c7022863 100644
+--- a/tools/testing/selftests/bpf/prog_tests/linked_list.c
++++ b/tools/testing/selftests/bpf/prog_tests/linked_list.c
+@@ -7,6 +7,7 @@
  
-+static bool is_list_node_type(const struct btf_type *t)
+ #include "linked_list.skel.h"
+ #include "linked_list_fail.skel.h"
++#include "linked_list_peek.skel.h"
+ 
+ static char log_buf[1024 * 1024];
+ 
+@@ -805,3 +806,8 @@ void test_linked_list(void)
+ 	test_linked_list_success(LIST_IN_LIST, true);
+ 	test_linked_list_success(TEST_ALL, false);
+ }
++
++void test_linked_list_peek(void)
 +{
-+	return t == btf_type_by_id(btf_vmlinux, kf_arg_btf_ids[KF_ARG_LIST_NODE_ID]);
++	RUN_TESTS(linked_list_peek);
++}
+diff --git a/tools/testing/selftests/bpf/progs/linked_list_peek.c b/tools/testing/selftests/bpf/progs/linked_list_peek.c
+new file mode 100644
+index 000000000000..264e81bfb287
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/linked_list_peek.c
+@@ -0,0 +1,113 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2025 Meta Platforms, Inc. and affiliates. */
++
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++#include "bpf_misc.h"
++#include "bpf_experimental.h"
++
++struct node_data {
++	struct bpf_list_node l;
++	int key;
++};
++
++#define private(name) SEC(".data." #name) __hidden __attribute__((aligned(8)))
++private(A) struct bpf_spin_lock glock;
++private(A) struct bpf_list_head ghead __contains(node_data, l);
++
++#define list_entry(ptr, type, member) container_of(ptr, type, member)
++#define NR_NODES 16
++
++int zero = 0;
++
++SEC("syscall")
++__retval(0)
++long list_peek(void *ctx)
++{
++	struct bpf_list_node *l_n;
++	struct node_data *n;
++	int i, err = 0;
++
++	bpf_spin_lock(&glock);
++	l_n = bpf_list_front(&ghead);
++	bpf_spin_unlock(&glock);
++	if (l_n)
++		return __LINE__;
++
++	bpf_spin_lock(&glock);
++	l_n = bpf_list_back(&ghead);
++	bpf_spin_unlock(&glock);
++	if (l_n)
++		return __LINE__;
++
++	for (i = zero; i < NR_NODES && can_loop; i++) {
++		n = bpf_obj_new(typeof(*n));
++		if (!n)
++			return __LINE__;
++		n->key = i;
++		bpf_spin_lock(&glock);
++		bpf_list_push_back(&ghead, &n->l);
++		bpf_spin_unlock(&glock);
++	}
++
++	bpf_spin_lock(&glock);
++
++	l_n = bpf_list_front(&ghead);
++	if (!l_n) {
++		err = __LINE__;
++		goto done;
++	}
++
++	n = list_entry(l_n, struct node_data, l);
++	if (n->key != 0) {
++		err = __LINE__;
++		goto done;
++	}
++
++	l_n = bpf_list_back(&ghead);
++	if (!l_n) {
++		err = __LINE__;
++		goto done;
++	}
++
++	n = list_entry(l_n, struct node_data, l);
++	if (n->key != NR_NODES - 1) {
++		err = __LINE__;
++		goto done;
++	}
++
++done:
++	bpf_spin_unlock(&glock);
++	return err;
 +}
 +
- static bool is_kfunc_arg_callback(struct bpf_verifier_env *env, const struct btf *btf,
- 				  const struct btf_param *arg)
- {
-@@ -13764,8 +13769,7 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 				insn_aux->kptr_struct_meta =
- 					btf_find_struct_meta(meta.arg_btf,
- 							     meta.arg_btf_id);
--			} else if (meta.func_id == special_kfunc_list[KF_bpf_list_pop_front] ||
--				   meta.func_id == special_kfunc_list[KF_bpf_list_pop_back]) {
-+			} else if (is_list_node_type(ptr_type)) {
- 				struct btf_field *field = meta.arg_list_head.field;
- 
- 				mark_reg_graph_node(regs, BPF_REG_0, &field->graph_root);
++#define TEST_FB(op, dolock)					\
++SEC("syscall")							\
++__failure __msg(MSG)						\
++long test_##op##_spinlock_##dolock(void *ctx)			\
++{								\
++	struct bpf_list_node *l_n;				\
++	__u64 jiffies = 0;					\
++								\
++	if (dolock)						\
++		bpf_spin_lock(&glock);				\
++	l_n = bpf_list_##op(&ghead);				\
++	if (l_n)						\
++		jiffies = bpf_jiffies64();			\
++	if (dolock)						\
++		bpf_spin_unlock(&glock);			\
++								\
++	return !!jiffies;					\
++}
++
++#define MSG "call bpf_list_{{(front|back).+}}; R0{{(_w)?}}=ptr_or_null_node_data(id={{[0-9]+}},non_own_ref"
++TEST_FB(front, true)
++TEST_FB(back, true)
++#undef MSG
++
++#define MSG "bpf_spin_lock at off=0 must be held for bpf_list_head"
++TEST_FB(front, false)
++TEST_FB(back, false)
++#undef MSG
++
++char _license[] SEC("license") = "GPL";
 -- 
 2.47.1
 
