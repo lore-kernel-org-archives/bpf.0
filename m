@@ -1,32 +1,32 @@
-Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
+Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FF992DD783
-	for <bpf@vger.kernel.org>; Tue,  6 May 2025 01:59:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3B99307218
+	for <bpf@vger.kernel.org>; Tue,  6 May 2025 01:59:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746496760; cv=none; b=Nw2qSrQ+41RSlBEAda/kuqyTZnDwGZsvoC9tdaW1Ig9vqvQPUp1MrnsSDWvcnlLM7AqER+0sxKSTVwzhZC7dQim+A5scVC8sZYIn9a18QSjRszKKRgHplVY8DGj4q4gLgreNlqNMsBJY9LDWQfyu6HOe3WnpyW6+jFMssQAlsao=
+	t=1746496767; cv=none; b=QQcv/6FGlZBRon2ypBvdmqKqfpCPxm3UbA6Sax6SY6uUUvi6u7uO+oxyetCBE/Oy4UDOMTW6eTCtPkMhJa9okeGTtbq2mDbe9gyugtfIC7z6KYS2hu6LMxBy3+P3/ekydCh3UzEnM/t3BQtWTbbIzYAe39A1COQg16iv9Dotv/I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746496760; c=relaxed/simple;
-	bh=PtUVnOB5q6JFqdHiN0cW5krLKdFfu1RGeUg2Mtbd7qQ=;
+	s=arc-20240116; t=1746496767; c=relaxed/simple;
+	bh=IC2DFeGDnaJV0AsGdsc00/VL8Jg2PXjB4wsUnDx79yI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ZEwC0d5Aik004HWAjn8HXuoU/0oMeYkueaeNMLfnW/v5F1kArykvHkfH3eyVxF9O4maDtvW0CpaUCcFUZTDG8DNe0E4xk0BhYL/VPjRsgxEEHYSsnSanDVmC0EeUpeDEi3pMCu9r4UzZfvZtKYh/4+tjYXIy63gdz91ELQH8EIo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Q9cdxjuc; arc=none smtp.client-ip=91.218.175.172
+	 MIME-Version; b=QEd+Cldf/VkbJ2j9HqqszTqk/hAkeKS5NPUGykjySf95hZEHhGtqGY3yO8maqUqEu4Ax4ZgUwOAhvO6P/FVxOHpPiBSjjS4CeYBgGzHx4DdTavE+ZwBTuaFWr06tFivPMqQxo273KV/MrXDc4NQS8M2+ZPhMY9ahfnrqRIth/DM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=PT90DV6U; arc=none smtp.client-ip=91.218.175.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Q9cdxjuc"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="PT90DV6U"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1746496755;
+	t=1746496763;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=pJGD1avinBgywaR2ZwStYQSNCOH7SnE4tXoeb8pImL8=;
-	b=Q9cdxjucdiyBpyRaqDE/+kernmAum7EIuMOxr9moLk7CH/KX1FVeNNn7rrWjsS+FouclsR
-	vhHx5HtVt/PghE7wswsB/9CabnUC78xtUpb/wU3n1bPklb+Q/9I+f0vb3tO5iOYReoKmpQ
-	V1k1FR4C3nsTcMDDA9MZQNicNnQwpLU=
+	bh=MrSRj6u5dDFn+U6UhyI/q+bYbViTrcuI6lxB/1P47+A=;
+	b=PT90DV6UiUAOrPSb/vjzkz0EBuEM1jfCSJ8oAhe7qLu8k4zUYTx8A1clOdFqquBxLl56OE
+	oj1S/7Lmzwl9AT2md+EvuJOquRUFzGgnvNpvtq6lqgZ4/3fir9X0Lwk5lzAUklCOxtbei/
+	Ej30oyCPMz6VCYn9YZqXdb/t1iIzfsc=
 From: Martin KaFai Lau <martin.lau@linux.dev>
 To: bpf@vger.kernel.org
 Cc: 'Alexei Starovoitov ' <ast@kernel.org>,
@@ -36,9 +36,9 @@ Cc: 'Alexei Starovoitov ' <ast@kernel.org>,
 	'Amery Hung ' <ameryhung@gmail.com>,
 	netdev@vger.kernel.org,
 	kernel-team@meta.com
-Subject: [PATCH v2 bpf-next 4/8] bpf: Allow refcounted bpf_rb_node used in bpf_rbtree_{remove,left,right}
-Date: Mon,  5 May 2025 18:58:51 -0700
-Message-ID: <20250506015857.817950-5-martin.lau@linux.dev>
+Subject: [PATCH v2 bpf-next 7/8] bpf: Add bpf_list_{front,back} kfunc
+Date: Mon,  5 May 2025 18:58:54 -0700
+Message-ID: <20250506015857.817950-8-martin.lau@linux.dev>
 In-Reply-To: <20250506015857.817950-1-martin.lau@linux.dev>
 References: <20250506015857.817950-1-martin.lau@linux.dev>
 Precedence: bulk
@@ -52,150 +52,115 @@ X-Migadu-Flow: FLOW_OUT
 
 From: Martin KaFai Lau <martin.lau@kernel.org>
 
-The bpf_rbtree_{remove,left,right} requires the root's lock to be held.
-They also check the node_internal->owner is still owned by that root
-before proceeding, so it is safe to allow refcounted bpf_rb_node
-pointer to be used in these kfuncs.
+In the kernel fq qdisc implementation, it only needs to look at
+the fields of the first node in a list but does not always
+need to remove it from the list. It is more convenient to have
+a peek kfunc for the list. It works similar to the bpf_rbtree_first().
 
-In a bpf fq implementation which is much closer to the kernel fq,
-https://lore.kernel.org/bpf/20250418224652.105998-13-martin.lau@linux.dev/,
-a networking flow (allocated by bpf_obj_new) can be added to two different
-rbtrees. There are cases that the flow is searched from one rbtree,
-held the refcount of the flow, and then removed from another rbtree:
-
-struct fq_flow {
-	struct bpf_rb_node	fq_node;
-	struct bpf_rb_node	rate_node;
-	struct bpf_refcount	refcount;
-	unsigned long		sk_long;
-};
-
-int bpf_fq_enqueue(...)
-{
-	/* ... */
-
-	bpf_spin_lock(&root->lock);
-	while (can_loop) {
-		/* ... */
-		if (!p)
-			break;
-		gc_f = bpf_rb_entry(p, struct fq_flow, fq_node);
-		if (gc_f->sk_long == sk_long) {
-			f = bpf_refcount_acquire(gc_f);
-			break;
-		}
-		/* ... */
-	}
-	bpf_spin_unlock(&root->lock);
-
-	if (f) {
-		bpf_spin_lock(&q->lock);
-		bpf_rbtree_remove(&q->delayed, &f->rate_node);
-		bpf_spin_unlock(&q->lock);
-	}
-}
-
-bpf_rbtree_{left,right} do not need this change but are relaxed together
-with bpf_rbtree_remove instead of adding extra verifier logic
-to exclude these kfuncs.
-
-To avoid bi-sect failure, this patch also changes the selftests together.
-
-The "rbtree_api_remove_unadded_node" is not expecting verifier's error.
-The test now expects bpf_rbtree_remove(&groot, &m->node) to return NULL.
-The test uses __retval(0) to ensure this NULL return value.
-
-Some of the "only take non-owning..." failure messages are changed also.
+This patch adds bpf_list_{front,back} kfunc. The verifier is changed
+such that the kfunc returning "struct bpf_list_node *" will be
+marked as non-owning. The exception is the KF_ACQUIRE kfunc. The
+net effect is only the new bpf_list_{front,back} kfuncs will
+have its return pointer marked as non-owning.
 
 Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 Signed-off-by: Martin KaFai Lau <martin.lau@kernel.org>
 ---
- kernel/bpf/verifier.c                         |  4 +--
- .../testing/selftests/bpf/progs/rbtree_fail.c | 29 ++++++++++---------
- 2 files changed, 17 insertions(+), 16 deletions(-)
+ kernel/bpf/helpers.c  | 22 ++++++++++++++++++++++
+ kernel/bpf/verifier.c | 12 ++++++++++--
+ 2 files changed, 32 insertions(+), 2 deletions(-)
 
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index 36150d340c16..78cefb41266a 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -2293,6 +2293,26 @@ __bpf_kfunc struct bpf_list_node *bpf_list_pop_back(struct bpf_list_head *head)
+ 	return __bpf_list_del(head, true);
+ }
+ 
++__bpf_kfunc struct bpf_list_node *bpf_list_front(struct bpf_list_head *head)
++{
++	struct list_head *h = (struct list_head *)head;
++
++	if (list_empty(h) || unlikely(!h->next))
++		return NULL;
++
++	return (struct bpf_list_node *)h->next;
++}
++
++__bpf_kfunc struct bpf_list_node *bpf_list_back(struct bpf_list_head *head)
++{
++	struct list_head *h = (struct list_head *)head;
++
++	if (list_empty(h) || unlikely(!h->next))
++		return NULL;
++
++	return (struct bpf_list_node *)h->prev;
++}
++
+ __bpf_kfunc struct bpf_rb_node *bpf_rbtree_remove(struct bpf_rb_root *root,
+ 						  struct bpf_rb_node *node)
+ {
+@@ -3236,6 +3256,8 @@ BTF_ID_FLAGS(func, bpf_list_push_front_impl)
+ BTF_ID_FLAGS(func, bpf_list_push_back_impl)
+ BTF_ID_FLAGS(func, bpf_list_pop_front, KF_ACQUIRE | KF_RET_NULL)
+ BTF_ID_FLAGS(func, bpf_list_pop_back, KF_ACQUIRE | KF_RET_NULL)
++BTF_ID_FLAGS(func, bpf_list_front, KF_RET_NULL)
++BTF_ID_FLAGS(func, bpf_list_back, KF_RET_NULL)
+ BTF_ID_FLAGS(func, bpf_task_acquire, KF_ACQUIRE | KF_RCU | KF_RET_NULL)
+ BTF_ID_FLAGS(func, bpf_task_release, KF_RELEASE)
+ BTF_ID_FLAGS(func, bpf_rbtree_remove, KF_ACQUIRE | KF_RET_NULL)
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 51a17e64a0a9..9093a351b0b3 100644
+index acb2f44316cc..99aa2c890e7b 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -13229,8 +13229,8 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
- 					return -EINVAL;
- 				}
- 			} else {
--				if (!type_is_non_owning_ref(reg->type) || reg->ref_obj_id) {
--					verbose(env, "%s node input must be non-owning ref\n", func_name);
-+				if (!type_is_non_owning_ref(reg->type) && !reg->ref_obj_id) {
-+					verbose(env, "%s can only take non-owning or refcounted bpf_rb_node pointer\n", func_name);
- 					return -EINVAL;
- 				}
- 				if (in_rbtree_lock_required_cb(env)) {
-diff --git a/tools/testing/selftests/bpf/progs/rbtree_fail.c b/tools/testing/selftests/bpf/progs/rbtree_fail.c
-index dbd5eee8e25e..4acb6af2dfe3 100644
---- a/tools/testing/selftests/bpf/progs/rbtree_fail.c
-+++ b/tools/testing/selftests/bpf/progs/rbtree_fail.c
-@@ -69,11 +69,11 @@ long rbtree_api_nolock_first(void *ctx)
+@@ -12079,6 +12079,8 @@ enum special_kfunc_type {
+ 	KF_bpf_list_push_back_impl,
+ 	KF_bpf_list_pop_front,
+ 	KF_bpf_list_pop_back,
++	KF_bpf_list_front,
++	KF_bpf_list_back,
+ 	KF_bpf_cast_to_kern_ctx,
+ 	KF_bpf_rdonly_cast,
+ 	KF_bpf_rcu_read_lock,
+@@ -12124,6 +12126,8 @@ BTF_ID(func, bpf_list_push_front_impl)
+ BTF_ID(func, bpf_list_push_back_impl)
+ BTF_ID(func, bpf_list_pop_front)
+ BTF_ID(func, bpf_list_pop_back)
++BTF_ID(func, bpf_list_front)
++BTF_ID(func, bpf_list_back)
+ BTF_ID(func, bpf_cast_to_kern_ctx)
+ BTF_ID(func, bpf_rdonly_cast)
+ BTF_ID(func, bpf_rbtree_remove)
+@@ -12160,6 +12164,8 @@ BTF_ID(func, bpf_list_push_front_impl)
+ BTF_ID(func, bpf_list_push_back_impl)
+ BTF_ID(func, bpf_list_pop_front)
+ BTF_ID(func, bpf_list_pop_back)
++BTF_ID(func, bpf_list_front)
++BTF_ID(func, bpf_list_back)
+ BTF_ID(func, bpf_cast_to_kern_ctx)
+ BTF_ID(func, bpf_rdonly_cast)
+ BTF_ID(func, bpf_rcu_read_lock)
+@@ -12598,7 +12604,9 @@ static bool is_bpf_list_api_kfunc(u32 btf_id)
+ 	return btf_id == special_kfunc_list[KF_bpf_list_push_front_impl] ||
+ 	       btf_id == special_kfunc_list[KF_bpf_list_push_back_impl] ||
+ 	       btf_id == special_kfunc_list[KF_bpf_list_pop_front] ||
+-	       btf_id == special_kfunc_list[KF_bpf_list_pop_back];
++	       btf_id == special_kfunc_list[KF_bpf_list_pop_back] ||
++	       btf_id == special_kfunc_list[KF_bpf_list_front] ||
++	       btf_id == special_kfunc_list[KF_bpf_list_back];
  }
  
- SEC("?tc")
--__failure __msg("rbtree_remove node input must be non-owning ref")
-+__retval(0)
- long rbtree_api_remove_unadded_node(void *ctx)
- {
- 	struct node_data *n, *m;
--	struct bpf_rb_node *res;
-+	struct bpf_rb_node *res_n, *res_m;
+ static bool is_bpf_rbtree_api_kfunc(u32 btf_id)
+@@ -13903,7 +13911,7 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 			if (is_kfunc_ret_null(&meta))
+ 				regs[BPF_REG_0].id = id;
+ 			regs[BPF_REG_0].ref_obj_id = id;
+-		} else if (is_rbtree_node_type(ptr_type)) {
++		} else if (is_rbtree_node_type(ptr_type) || is_list_node_type(ptr_type)) {
+ 			ref_set_non_owning(env, &regs[BPF_REG_0]);
+ 		}
  
- 	n = bpf_obj_new(typeof(*n));
- 	if (!n)
-@@ -88,19 +88,20 @@ long rbtree_api_remove_unadded_node(void *ctx)
- 	bpf_spin_lock(&glock);
- 	bpf_rbtree_add(&groot, &n->node, less);
- 
--	/* This remove should pass verifier */
--	res = bpf_rbtree_remove(&groot, &n->node);
--	n = container_of(res, struct node_data, node);
-+	res_n = bpf_rbtree_remove(&groot, &n->node);
- 
--	/* This remove shouldn't, m isn't in an rbtree */
--	res = bpf_rbtree_remove(&groot, &m->node);
--	m = container_of(res, struct node_data, node);
-+	res_m = bpf_rbtree_remove(&groot, &m->node);
- 	bpf_spin_unlock(&glock);
- 
--	if (n)
--		bpf_obj_drop(n);
--	if (m)
--		bpf_obj_drop(m);
-+	bpf_obj_drop(m);
-+	if (res_n)
-+		bpf_obj_drop(container_of(res_n, struct node_data, node));
-+	if (res_m) {
-+		bpf_obj_drop(container_of(res_m, struct node_data, node));
-+		/* m was not added to the rbtree */
-+		return 2;
-+	}
-+
- 	return 0;
- }
- 
-@@ -178,7 +179,7 @@ long rbtree_api_use_unchecked_remove_retval(void *ctx)
- }
- 
- SEC("?tc")
--__failure __msg("rbtree_remove node input must be non-owning ref")
-+__failure __msg("bpf_rbtree_remove can only take non-owning or refcounted bpf_rb_node pointer")
- long rbtree_api_add_release_unlock_escape(void *ctx)
- {
- 	struct node_data *n;
-@@ -202,7 +203,7 @@ long rbtree_api_add_release_unlock_escape(void *ctx)
- }
- 
- SEC("?tc")
--__failure __msg("rbtree_remove node input must be non-owning ref")
-+__failure __msg("bpf_rbtree_remove can only take non-owning or refcounted bpf_rb_node pointer")
- long rbtree_api_first_release_unlock_escape(void *ctx)
- {
- 	struct bpf_rb_node *res;
 -- 
 2.47.1
 
