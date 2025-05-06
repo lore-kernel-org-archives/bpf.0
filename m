@@ -1,112 +1,189 @@
-Received: from gardel.0pointer.net (gardel.0pointer.net [85.214.157.71])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DF1627FD5F;
-	Tue,  6 May 2025 12:27:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.214.157.71
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACCF827FD54
+	for <bpf@vger.kernel.org>; Tue,  6 May 2025 12:56:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746534445; cv=none; b=otfILYGVeFoffVvrLywbXBSeRtj8pCovM2JZbrQh1ViU2phPKnfjUW5Ehu1bIzuv+ypuFWxoxDQoyz0lOtfqiYaMOYq8eSs2bIWhALOE82kWoH1xPFkr9+WWJVQUjD4brkayo3e4A1SS1LjjxNvZm8i+MmZkDRXCCqyuLN4hQCs=
+	t=1746536210; cv=none; b=DBRmTVQXMu4o4p++apJ4/ejEGXfQqYwVq+8mG2GbxntNrghgzREvc2yllFVf+T3ZwilkBFton06yITdR8gvbrJr8q/4pTXYoiWgzX4G00Z9delbL6DxphqVqtvXwoSmiNYDZeRblqZAz/E6sr2E/Ydu/MD6tfJwG4MMGXlIVx+c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746534445; c=relaxed/simple;
-	bh=m7SBsfQfLVW4xNj3QrIhN2V3ELt1ceEG+cP+bc5hvNs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nh5Wo4Zb7U0gSlVNWxuGiR/qV1HW1wRYwcm0OBUo3v2wC8smutP2WJ38N5VPWr0rb6k475ow3FtNk34kvcUfk2GDUwMT4zJ7t48c2aWfgzL0GOGmocgCa2/yvJGDJwjOLIBu3GcIP/qtYKsEyaIMKiJu3VdIE4onFO0mXyQgpno=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=poettering.net; spf=pass smtp.mailfrom=poettering.net; arc=none smtp.client-ip=85.214.157.71
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=poettering.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=poettering.net
-Received: from zeta (p200300ea6f02a700ee7fde6810ab8036.dip0.t-ipconnect.de [IPv6:2003:ea:6f02:a700:ee7f:de68:10ab:8036])
+	s=arc-20240116; t=1746536210; c=relaxed/simple;
+	bh=8j2GzBKRF3zjzVNXWvVGmSJCQBsHLzSsvWb4DrvLnLA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=LSeH8UvDy1JnLU6gDBhBrYhLMVAMnigvHILrfCg8U6vUtql0ccO8l71y3q6/C9nXrY0BZy3LIOJeu22iWdc+KkMcVOEy3bQKGzF5kUr3e85PKA9KTp0YZBgRHK2RKnjl5Q+iwQeUFhWsWAI9YeYP4JKq0Zz60G5D4lyu0ulg9bo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=rUKTixUh; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=CpXdeFV7; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=rUKTixUh; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=CpXdeFV7; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="rUKTixUh";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="CpXdeFV7";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="rUKTixUh";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="CpXdeFV7"
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by gardel.0pointer.net (Postfix) with ESMTPSA id 89EC9E802CC;
-	Tue,  6 May 2025 14:17:24 +0200 (CEST)
-Date: Tue, 6 May 2025 14:17:22 +0200
-From: Lennart Poettering <lennart@poettering.net>
-To: Kuniyuki Iwashima <kuniyu@amazon.com>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	=?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-	=?iso-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>,
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	Stephen Smalley <stephen.smalley.work@gmail.com>,
-	Ondrej Mosnacek <omosnace@redhat.com>,
-	Casey Schaufler <casey@schaufler-ca.com>,
-	Christian Brauner <brauner@kernel.org>,
-	Kuniyuki Iwashima <kuni1840@gmail.com>, bpf@vger.kernel.org,
-	netdev@vger.kernel.org, linux-security-module@vger.kernel.org,
-	selinux@vger.kernel.org
-Subject: Re: [PATCH v1 bpf-next 0/5] af_unix: Allow BPF LSM to scrub
- SCM_RIGHTS at sendmsg().
-Message-ID: <aBn90vJ49ymBT3LW@zeta>
-References: <20250505215802.48449-1-kuniyu@amazon.com>
+	by smtp-out1.suse.de (Postfix) with ESMTPS id B831321226;
+	Tue,  6 May 2025 12:56:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1746536206; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=hunScdSIxp8Vg1m4zyx7MIsCc9J0eZolhrA9JPok3M0=;
+	b=rUKTixUhd7ToKR+ybMdrnQsfLIlKJabORXiML9F3t+ZOEKAhmB3XgdtBlkkmG9WesZ7qLX
+	CN31JDL4U+aY6176EFk2+y4lHIhUSHul1+nf+lHvlNKtq4y3j5WribYtWu2FrhaqOIOXKn
+	7mAp5eQ1xdj3+eItKZDyIE/cTJ18H7M=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1746536206;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=hunScdSIxp8Vg1m4zyx7MIsCc9J0eZolhrA9JPok3M0=;
+	b=CpXdeFV7aoRZQ/2m4cofwvJkHaGy1QDhSGWUZYpAvd+x2yZdFjLALXpv0zw7hjpIL9I4dP
+	qiep5aA4K5ObyMDQ==
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=rUKTixUh;
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=CpXdeFV7
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1746536206; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=hunScdSIxp8Vg1m4zyx7MIsCc9J0eZolhrA9JPok3M0=;
+	b=rUKTixUhd7ToKR+ybMdrnQsfLIlKJabORXiML9F3t+ZOEKAhmB3XgdtBlkkmG9WesZ7qLX
+	CN31JDL4U+aY6176EFk2+y4lHIhUSHul1+nf+lHvlNKtq4y3j5WribYtWu2FrhaqOIOXKn
+	7mAp5eQ1xdj3+eItKZDyIE/cTJ18H7M=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1746536206;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=hunScdSIxp8Vg1m4zyx7MIsCc9J0eZolhrA9JPok3M0=;
+	b=CpXdeFV7aoRZQ/2m4cofwvJkHaGy1QDhSGWUZYpAvd+x2yZdFjLALXpv0zw7hjpIL9I4dP
+	qiep5aA4K5ObyMDQ==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 9788713687;
+	Tue,  6 May 2025 12:56:46 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id E1KrJA4HGmh6MgAAD6G6ig
+	(envelope-from <vbabka@suse.cz>); Tue, 06 May 2025 12:56:46 +0000
+Message-ID: <9e19b706-4c3c-4d62-b7f2-5936ca842060@suse.cz>
+Date: Tue, 6 May 2025 14:56:46 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250505215802.48449-1-kuniyu@amazon.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/6] locking/local_lock: Expose dep_map in
+ local_trylock_t.
+Content-Language: en-US
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org,
+ linux-mm@kvack.org
+Cc: harry.yoo@oracle.com, shakeel.butt@linux.dev, mhocko@suse.com,
+ bigeasy@linutronix.de, andrii@kernel.org, memxor@gmail.com,
+ akpm@linux-foundation.org, peterz@infradead.org, rostedt@goodmis.org,
+ hannes@cmpxchg.org, willy@infradead.org
+References: <20250501032718.65476-1-alexei.starovoitov@gmail.com>
+ <20250501032718.65476-3-alexei.starovoitov@gmail.com>
+From: Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20250501032718.65476-3-alexei.starovoitov@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: B831321226
+X-Spam-Level: 
+X-Spamd-Result: default: False [-3.01 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
+	SUSPICIOUS_RECIPS(1.50)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	FREEMAIL_TO(0.00)[gmail.com,vger.kernel.org,kvack.org];
+	ARC_NA(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[14];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	MIME_TRACE(0.00)[0:+];
+	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	FREEMAIL_CC(0.00)[oracle.com,linux.dev,suse.com,linutronix.de,kernel.org,gmail.com,linux-foundation.org,infradead.org,goodmis.org,cmpxchg.org];
+	RCVD_TLS_ALL(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	DNSWL_BLOCKED(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	DKIM_TRACE(0.00)[suse.cz:+];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns]
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Rspamd-Action: no action
+X-Spam-Score: -3.01
+X-Spam-Flag: NO
 
-On Mo, 05.05.25 14:56, Kuniyuki Iwashima (kuniyu@amazon.com) wrote:
+On 5/1/25 05:27, Alexei Starovoitov wrote:
+> From: Alexei Starovoitov <ast@kernel.org>
+> 
+> lockdep_is_held() macro assumes that "struct lockdep_map dep_map;"
+> is a top level field of any lock that participates in LOCKDEP.
+> Make it so for local_trylock_t.
+> 
+> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+> ---
+>  include/linux/local_lock_internal.h | 9 ++++++---
+>  1 file changed, 6 insertions(+), 3 deletions(-)
+> 
+> diff --git a/include/linux/local_lock_internal.h b/include/linux/local_lock_internal.h
+> index bf2bf40d7b18..29df45f95843 100644
+> --- a/include/linux/local_lock_internal.h
+> +++ b/include/linux/local_lock_internal.h
+> @@ -17,7 +17,10 @@ typedef struct {
+>  
+>  /* local_trylock() and local_trylock_irqsave() only work with local_trylock_t */
+>  typedef struct {
+> -	local_lock_t	llock;
+> +#ifdef CONFIG_DEBUG_LOCK_ALLOC
+> +	struct lockdep_map	dep_map;
+> +	struct task_struct	*owner;
+> +#endif
+>  	u8		acquired;
+>  } local_trylock_t;
+>  
+> @@ -31,7 +34,7 @@ typedef struct {
+>  	.owner = NULL,
+>  
+>  # define LOCAL_TRYLOCK_DEBUG_INIT(lockname)		\
+> -	.llock = { LOCAL_LOCK_DEBUG_INIT((lockname).llock) },
+> +	LOCAL_LOCK_DEBUG_INIT(lockname)
+>  
+>  static inline void local_lock_acquire(local_lock_t *l)
+>  {
+> @@ -81,7 +84,7 @@ do {								\
+>  	local_lock_debug_init(lock);				\
+>  } while (0)
+>  
+> -#define __local_trylock_init(lock) __local_lock_init(lock.llock)
+> +#define __local_trylock_init(lock) __local_lock_init((local_lock_t *)lock)
 
-> As long as recvmsg() or recvmmsg() is used with cmsg, it is not
-> possible to avoid receiving file descriptors via SCM_RIGHTS.
->
-> This behaviour has occasionally been flagged as problematic.
->
-> For instance, as noted on the uAPI Group page [0], an untrusted peer
-> could send a file descriptor pointing to a hung NFS mount and then
-> close it.  Once the receiver calls recvmsg() with msg_control, the
-> descriptor is automatically installed, and then the responsibility
-> for the final close() now falls on the receiver, which may result
-> in blocking the process for a long time.
->
-> systemd calls cmsg_close_all() [1] after each recvmsg() to close()
-> unwanted file descriptors sent via SCM_RIGHTS.
->
-> However, this cannot work around the issue because the last fput()
-> could occur on the receiver side once sendmsg() with SCM_RIGHTS
-> succeeds.  Also, even filtering by LSM at recvmsg() does not work
-> for the same reason.
->
-> Thus, we need a better way to filter SCM_RIGHTS on the sender side.
->
-> This series allows BPF LSM to inspect skb at sendmsg() and scrub
-> SCM_RIGHTS fds by kfunc.
+This cast seems unnecessary. Better not hide mistakes when using the
+local_trylock_init() macro.
 
-Frankly, this sounds like a bad idea to me. The number and order of
-the fds passed matters, and if you magically make some fds disappear
-everything becomes a complete mess for most protocols. Hence, making
-fds disappear from a messasge mid-flight is really not a realistic
-option, already for compat. Not for systemd, and not for other tools
-either I am sure.
+>  
+>  #define __spinlock_nested_bh_init(lock)				\
+>  do {								\
 
-I also think it's pointless to enforce this on the receiving side,
-because the deed is done by then. i.e. it doesn't matter if we have to
-close the fd via bpf or in userspace, we still have to wait for it to
-be closed on the receiving side, hence we have to pay. i.e. focus must
-be to refuse the fds on the sender side, instead of allowing this to
-go to the receiver side.
-
-From my perspective this must be enforced on sender side. And more
-importantly, for systemd's usecase it would be a lot more relevant to
-have a simple, dumb boolean per socket instead of the full bpf
-machinery. I mean, as much as I like the lsm-bpf concept it's not
-clear to me that this is the right place to make use of it. I
-personally would really like to see a SO_PASSRIGHTS sockopt, that is
-modelled after SO_PASSCREDS and SO_PASSSEC.
-
-Lennart
-
---
-Lennart Poettering, Berlin
