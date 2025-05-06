@@ -1,32 +1,32 @@
-Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
+Received: from out-183.mta0.migadu.com (out-183.mta0.migadu.com [91.218.175.183])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3B99307218
-	for <bpf@vger.kernel.org>; Tue,  6 May 2025 01:59:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B682C2F8DFA
+	for <bpf@vger.kernel.org>; Tue,  6 May 2025 01:59:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746496767; cv=none; b=QQcv/6FGlZBRon2ypBvdmqKqfpCPxm3UbA6Sax6SY6uUUvi6u7uO+oxyetCBE/Oy4UDOMTW6eTCtPkMhJa9okeGTtbq2mDbe9gyugtfIC7z6KYS2hu6LMxBy3+P3/ekydCh3UzEnM/t3BQtWTbbIzYAe39A1COQg16iv9Dotv/I=
+	t=1746496761; cv=none; b=lwwO1NPnoz+VQF1dPQ2mWl2gqnKDRjRh1vi2Ncfn8Q1qhS3zzAxjkjFWiE++auDDPHblRKWOSE0Pg5d7QEcjisBrqKwh0lWp8pd82FBJEWTz1w5wzi/3zlB10oKi5/AvvxWeh2ngqTEWQha3KmyPH20aTlQQyhzfvoWrktrPnkE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746496767; c=relaxed/simple;
-	bh=IC2DFeGDnaJV0AsGdsc00/VL8Jg2PXjB4wsUnDx79yI=;
+	s=arc-20240116; t=1746496761; c=relaxed/simple;
+	bh=rVMXtcNVZ+35ZH0LH6wv0E2gnu6/mb2uqcoeFLFZ0kU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QEd+Cldf/VkbJ2j9HqqszTqk/hAkeKS5NPUGykjySf95hZEHhGtqGY3yO8maqUqEu4Ax4ZgUwOAhvO6P/FVxOHpPiBSjjS4CeYBgGzHx4DdTavE+ZwBTuaFWr06tFivPMqQxo273KV/MrXDc4NQS8M2+ZPhMY9ahfnrqRIth/DM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=PT90DV6U; arc=none smtp.client-ip=91.218.175.182
+	 MIME-Version; b=A8RNNd4zlp+eK3GLrbqOgsjSAlJtq9mo8O4Dt3fVUUUk+9KIpiDJsf8UrsKtl4jjVbiu5s7XwPX1NWfGu5ignp9zj+axbXN/Ca29H3CZtvm/KCNxHm3oLpl9O9XfEQuA6KZ0KnZGweAccR3ksFrq1JjkC3EKVmyj5IkSfgHUOgU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=n7pOeGLs; arc=none smtp.client-ip=91.218.175.183
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="PT90DV6U"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="n7pOeGLs"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1746496763;
+	t=1746496758;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=MrSRj6u5dDFn+U6UhyI/q+bYbViTrcuI6lxB/1P47+A=;
-	b=PT90DV6UiUAOrPSb/vjzkz0EBuEM1jfCSJ8oAhe7qLu8k4zUYTx8A1clOdFqquBxLl56OE
-	oj1S/7Lmzwl9AT2md+EvuJOquRUFzGgnvNpvtq6lqgZ4/3fir9X0Lwk5lzAUklCOxtbei/
-	Ej30oyCPMz6VCYn9YZqXdb/t1iIzfsc=
+	bh=8rxIMVCBdAGRYBNy9mYJRwNL15xTSbq5/hnlMw2EBes=;
+	b=n7pOeGLsPOoBoAUZILVsYW4W4hl9ocft5Sy33XeLlSgnpX3F2f/Z+DjqV17glfKiwhqojI
+	9lmoT3Klz6QPrGTCH102f8d2AjnduCMsfERN9fUJ2mjHHM2Y4biVI0Gnx9gvNDUBeORovS
+	e9jxL5RXPlrj5psKOglAog268TA99Ng=
 From: Martin KaFai Lau <martin.lau@linux.dev>
 To: bpf@vger.kernel.org
 Cc: 'Alexei Starovoitov ' <ast@kernel.org>,
@@ -36,9 +36,9 @@ Cc: 'Alexei Starovoitov ' <ast@kernel.org>,
 	'Amery Hung ' <ameryhung@gmail.com>,
 	netdev@vger.kernel.org,
 	kernel-team@meta.com
-Subject: [PATCH v2 bpf-next 7/8] bpf: Add bpf_list_{front,back} kfunc
-Date: Mon,  5 May 2025 18:58:54 -0700
-Message-ID: <20250506015857.817950-8-martin.lau@linux.dev>
+Subject: [PATCH v2 bpf-next 5/8] selftests/bpf: Add tests for bpf_rbtree_{root,left,right}
+Date: Mon,  5 May 2025 18:58:52 -0700
+Message-ID: <20250506015857.817950-6-martin.lau@linux.dev>
 In-Reply-To: <20250506015857.817950-1-martin.lau@linux.dev>
 References: <20250506015857.817950-1-martin.lau@linux.dev>
 Precedence: bulk
@@ -52,115 +52,269 @@ X-Migadu-Flow: FLOW_OUT
 
 From: Martin KaFai Lau <martin.lau@kernel.org>
 
-In the kernel fq qdisc implementation, it only needs to look at
-the fields of the first node in a list but does not always
-need to remove it from the list. It is more convenient to have
-a peek kfunc for the list. It works similar to the bpf_rbtree_first().
+This patch has a much simplified rbtree usage from the
+kernel sch_fq qdisc. It has a "struct node_data" which can be
+added to two different rbtrees which are ordered by different keys.
 
-This patch adds bpf_list_{front,back} kfunc. The verifier is changed
-such that the kfunc returning "struct bpf_list_node *" will be
-marked as non-owning. The exception is the KF_ACQUIRE kfunc. The
-net effect is only the new bpf_list_{front,back} kfuncs will
-have its return pointer marked as non-owning.
+The test first populates both rbtrees. Then search for a lookup_key
+from the "groot0" rbtree. Once the lookup_key is found, that node
+refcount is taken. The node is then removed from another "groot1"
+rbtree.
 
-Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+While searching the lookup_key, the test will also try to remove
+all rbnodes in the path leading to the lookup_key.
+
+The test_{root,left,right}_spinlock_true tests ensure that the
+return value of the bpf_rbtree functions is a non_own_ref node pointer.
+This is done by forcing an verifier error by calling a helper
+bpf_jiffies64() while holding the spinlock. The tests then
+check for the verifier message
+"call bpf_rbtree...R0=rcu_ptr_or_null_node..."
+
+The other test_{root,left,right}_spinlock_false tests ensure that
+they must be called with spinlock held.
+
+Suggested-by: Kumar Kartikeya Dwivedi <memxor@gmail.com> # Check non_own_ref marking
 Signed-off-by: Martin KaFai Lau <martin.lau@kernel.org>
 ---
- kernel/bpf/helpers.c  | 22 ++++++++++++++++++++++
- kernel/bpf/verifier.c | 12 ++++++++++--
- 2 files changed, 32 insertions(+), 2 deletions(-)
+ .../testing/selftests/bpf/prog_tests/rbtree.c |   6 +
+ .../selftests/bpf/progs/rbtree_search.c       | 206 ++++++++++++++++++
+ 2 files changed, 212 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/progs/rbtree_search.c
 
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 36150d340c16..78cefb41266a 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -2293,6 +2293,26 @@ __bpf_kfunc struct bpf_list_node *bpf_list_pop_back(struct bpf_list_head *head)
- 	return __bpf_list_del(head, true);
- }
+diff --git a/tools/testing/selftests/bpf/prog_tests/rbtree.c b/tools/testing/selftests/bpf/prog_tests/rbtree.c
+index 9818f06c97c5..d8f3d7a45fe9 100644
+--- a/tools/testing/selftests/bpf/prog_tests/rbtree.c
++++ b/tools/testing/selftests/bpf/prog_tests/rbtree.c
+@@ -8,6 +8,7 @@
+ #include "rbtree_fail.skel.h"
+ #include "rbtree_btf_fail__wrong_node_type.skel.h"
+ #include "rbtree_btf_fail__add_wrong_type.skel.h"
++#include "rbtree_search.skel.h"
  
-+__bpf_kfunc struct bpf_list_node *bpf_list_front(struct bpf_list_head *head)
-+{
-+	struct list_head *h = (struct list_head *)head;
-+
-+	if (list_empty(h) || unlikely(!h->next))
-+		return NULL;
-+
-+	return (struct bpf_list_node *)h->next;
-+}
-+
-+__bpf_kfunc struct bpf_list_node *bpf_list_back(struct bpf_list_head *head)
-+{
-+	struct list_head *h = (struct list_head *)head;
-+
-+	if (list_empty(h) || unlikely(!h->next))
-+		return NULL;
-+
-+	return (struct bpf_list_node *)h->prev;
-+}
-+
- __bpf_kfunc struct bpf_rb_node *bpf_rbtree_remove(struct bpf_rb_root *root,
- 						  struct bpf_rb_node *node)
+ static void test_rbtree_add_nodes(void)
  {
-@@ -3236,6 +3256,8 @@ BTF_ID_FLAGS(func, bpf_list_push_front_impl)
- BTF_ID_FLAGS(func, bpf_list_push_back_impl)
- BTF_ID_FLAGS(func, bpf_list_pop_front, KF_ACQUIRE | KF_RET_NULL)
- BTF_ID_FLAGS(func, bpf_list_pop_back, KF_ACQUIRE | KF_RET_NULL)
-+BTF_ID_FLAGS(func, bpf_list_front, KF_RET_NULL)
-+BTF_ID_FLAGS(func, bpf_list_back, KF_RET_NULL)
- BTF_ID_FLAGS(func, bpf_task_acquire, KF_ACQUIRE | KF_RCU | KF_RET_NULL)
- BTF_ID_FLAGS(func, bpf_task_release, KF_RELEASE)
- BTF_ID_FLAGS(func, bpf_rbtree_remove, KF_ACQUIRE | KF_RET_NULL)
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index acb2f44316cc..99aa2c890e7b 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -12079,6 +12079,8 @@ enum special_kfunc_type {
- 	KF_bpf_list_push_back_impl,
- 	KF_bpf_list_pop_front,
- 	KF_bpf_list_pop_back,
-+	KF_bpf_list_front,
-+	KF_bpf_list_back,
- 	KF_bpf_cast_to_kern_ctx,
- 	KF_bpf_rdonly_cast,
- 	KF_bpf_rcu_read_lock,
-@@ -12124,6 +12126,8 @@ BTF_ID(func, bpf_list_push_front_impl)
- BTF_ID(func, bpf_list_push_back_impl)
- BTF_ID(func, bpf_list_pop_front)
- BTF_ID(func, bpf_list_pop_back)
-+BTF_ID(func, bpf_list_front)
-+BTF_ID(func, bpf_list_back)
- BTF_ID(func, bpf_cast_to_kern_ctx)
- BTF_ID(func, bpf_rdonly_cast)
- BTF_ID(func, bpf_rbtree_remove)
-@@ -12160,6 +12164,8 @@ BTF_ID(func, bpf_list_push_front_impl)
- BTF_ID(func, bpf_list_push_back_impl)
- BTF_ID(func, bpf_list_pop_front)
- BTF_ID(func, bpf_list_pop_back)
-+BTF_ID(func, bpf_list_front)
-+BTF_ID(func, bpf_list_back)
- BTF_ID(func, bpf_cast_to_kern_ctx)
- BTF_ID(func, bpf_rdonly_cast)
- BTF_ID(func, bpf_rcu_read_lock)
-@@ -12598,7 +12604,9 @@ static bool is_bpf_list_api_kfunc(u32 btf_id)
- 	return btf_id == special_kfunc_list[KF_bpf_list_push_front_impl] ||
- 	       btf_id == special_kfunc_list[KF_bpf_list_push_back_impl] ||
- 	       btf_id == special_kfunc_list[KF_bpf_list_pop_front] ||
--	       btf_id == special_kfunc_list[KF_bpf_list_pop_back];
-+	       btf_id == special_kfunc_list[KF_bpf_list_pop_back] ||
-+	       btf_id == special_kfunc_list[KF_bpf_list_front] ||
-+	       btf_id == special_kfunc_list[KF_bpf_list_back];
+@@ -187,3 +188,8 @@ void test_rbtree_fail(void)
+ {
+ 	RUN_TESTS(rbtree_fail);
  }
- 
- static bool is_bpf_rbtree_api_kfunc(u32 btf_id)
-@@ -13903,7 +13911,7 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 			if (is_kfunc_ret_null(&meta))
- 				regs[BPF_REG_0].id = id;
- 			regs[BPF_REG_0].ref_obj_id = id;
--		} else if (is_rbtree_node_type(ptr_type)) {
-+		} else if (is_rbtree_node_type(ptr_type) || is_list_node_type(ptr_type)) {
- 			ref_set_non_owning(env, &regs[BPF_REG_0]);
- 		}
- 
++
++void test_rbtree_search(void)
++{
++	RUN_TESTS(rbtree_search);
++}
+diff --git a/tools/testing/selftests/bpf/progs/rbtree_search.c b/tools/testing/selftests/bpf/progs/rbtree_search.c
+new file mode 100644
+index 000000000000..098ef970fac1
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/rbtree_search.c
+@@ -0,0 +1,206 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2025 Meta Platforms, Inc. and affiliates. */
++
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++#include "bpf_misc.h"
++#include "bpf_experimental.h"
++
++struct node_data {
++	struct bpf_refcount ref;
++	struct bpf_rb_node r0;
++	struct bpf_rb_node r1;
++	int key0;
++	int key1;
++};
++
++#define private(name) SEC(".data." #name) __hidden __attribute__((aligned(8)))
++private(A) struct bpf_spin_lock glock0;
++private(A) struct bpf_rb_root groot0 __contains(node_data, r0);
++
++private(B) struct bpf_spin_lock glock1;
++private(B) struct bpf_rb_root groot1 __contains(node_data, r1);
++
++#define rb_entry(ptr, type, member) container_of(ptr, type, member)
++#define NR_NODES 16
++
++int zero = 0;
++
++static bool less0(struct bpf_rb_node *a, const struct bpf_rb_node *b)
++{
++	struct node_data *node_a;
++	struct node_data *node_b;
++
++	node_a = rb_entry(a, struct node_data, r0);
++	node_b = rb_entry(b, struct node_data, r0);
++
++	return node_a->key0 < node_b->key0;
++}
++
++static bool less1(struct bpf_rb_node *a, const struct bpf_rb_node *b)
++{
++	struct node_data *node_a;
++	struct node_data *node_b;
++
++	node_a = rb_entry(a, struct node_data, r1);
++	node_b = rb_entry(b, struct node_data, r1);
++
++	return node_a->key1 < node_b->key1;
++}
++
++SEC("syscall")
++__retval(0)
++long rbtree_search(void *ctx)
++{
++	struct bpf_rb_node *rb_n, *rb_m, *gc_ns[NR_NODES];
++	long lookup_key = NR_NODES / 2;
++	struct node_data *n, *m;
++	int i, nr_gc = 0;
++
++	for (i = zero; i < NR_NODES && can_loop; i++) {
++		n = bpf_obj_new(typeof(*n));
++		if (!n)
++			return __LINE__;
++
++		m = bpf_refcount_acquire(n);
++
++		n->key0 = i;
++		m->key1 = i;
++
++		bpf_spin_lock(&glock0);
++		bpf_rbtree_add(&groot0, &n->r0, less0);
++		bpf_spin_unlock(&glock0);
++
++		bpf_spin_lock(&glock1);
++		bpf_rbtree_add(&groot1, &m->r1, less1);
++		bpf_spin_unlock(&glock1);
++	}
++
++	n = NULL;
++	bpf_spin_lock(&glock0);
++	rb_n = bpf_rbtree_root(&groot0);
++	while (can_loop) {
++		if (!rb_n) {
++			bpf_spin_unlock(&glock0);
++			return __LINE__;
++		}
++
++		n = rb_entry(rb_n, struct node_data, r0);
++		if (lookup_key == n->key0)
++			break;
++		if (nr_gc < NR_NODES)
++			gc_ns[nr_gc++] = rb_n;
++		if (lookup_key < n->key0)
++			rb_n = bpf_rbtree_left(&groot0, rb_n);
++		else
++			rb_n = bpf_rbtree_right(&groot0, rb_n);
++	}
++
++	if (!n || lookup_key != n->key0) {
++		bpf_spin_unlock(&glock0);
++		return __LINE__;
++	}
++
++	for (i = 0; i < nr_gc; i++) {
++		rb_n = gc_ns[i];
++		gc_ns[i] = bpf_rbtree_remove(&groot0, rb_n);
++	}
++
++	m = bpf_refcount_acquire(n);
++	bpf_spin_unlock(&glock0);
++
++	for (i = 0; i < nr_gc; i++) {
++		rb_n = gc_ns[i];
++		if (rb_n) {
++			n = rb_entry(rb_n, struct node_data, r0);
++			bpf_obj_drop(n);
++		}
++	}
++
++	if (!m)
++		return __LINE__;
++
++	bpf_spin_lock(&glock1);
++	rb_m = bpf_rbtree_remove(&groot1, &m->r1);
++	bpf_spin_unlock(&glock1);
++	bpf_obj_drop(m);
++	if (!rb_m)
++		return __LINE__;
++	bpf_obj_drop(rb_entry(rb_m, struct node_data, r1));
++
++	return 0;
++}
++
++#define TEST_ROOT(dolock)				\
++SEC("syscall")						\
++__failure __msg(MSG)					\
++long test_root_spinlock_##dolock(void *ctx)		\
++{							\
++	struct bpf_rb_node *rb_n;			\
++	__u64 jiffies = 0;				\
++							\
++	if (dolock)					\
++		bpf_spin_lock(&glock0);			\
++	rb_n = bpf_rbtree_root(&groot0);		\
++	if (rb_n)					\
++		jiffies = bpf_jiffies64();		\
++	if (dolock)					\
++		bpf_spin_unlock(&glock0);		\
++							\
++	return !!jiffies;				\
++}
++
++#define TEST_LR(op, dolock)				\
++SEC("syscall")						\
++__failure __msg(MSG)					\
++long test_##op##_spinlock_##dolock(void *ctx)		\
++{							\
++	struct bpf_rb_node *rb_n;			\
++	struct node_data *n;				\
++	__u64 jiffies = 0;				\
++							\
++	bpf_spin_lock(&glock0);				\
++	rb_n = bpf_rbtree_root(&groot0);		\
++	if (!rb_n) {					\
++		bpf_spin_unlock(&glock0);		\
++		return 1;				\
++	}						\
++	n = rb_entry(rb_n, struct node_data, r0);	\
++	n = bpf_refcount_acquire(n);			\
++	bpf_spin_unlock(&glock0);			\
++	if (!n)						\
++		return 1;				\
++							\
++	if (dolock)					\
++		bpf_spin_lock(&glock0);			\
++	rb_n = bpf_rbtree_##op(&groot0, &n->r0);	\
++	if (rb_n)					\
++		jiffies = bpf_jiffies64();		\
++	if (dolock)					\
++		bpf_spin_unlock(&glock0);		\
++							\
++	return !!jiffies;				\
++}
++
++/*
++ * Use a spearate MSG macro instead of passing to TEST_XXX(..., MSG)
++ * to ensure the message itself is not in the bpf prog lineinfo
++ * which the verifier includes in its log.
++ * Otherwise, the test_loader will incorrectly match the prog lineinfo
++ * instead of the log generated by the verifier.
++ */
++#define MSG "call bpf_rbtree_root{{.+}}; R0{{(_w)?}}=rcu_ptr_or_null_node_data(id={{[0-9]+}},non_own_ref"
++TEST_ROOT(true)
++#undef MSG
++#define MSG "call bpf_rbtree_{{(left|right).+}}; R0{{(_w)?}}=rcu_ptr_or_null_node_data(id={{[0-9]+}},non_own_ref"
++TEST_LR(left,  true)
++TEST_LR(right, true)
++#undef MSG
++
++#define MSG "bpf_spin_lock at off=0 must be held for bpf_rb_root"
++TEST_ROOT(false)
++TEST_LR(left, false)
++TEST_LR(right, false)
++#undef MSG
++
++char _license[] SEC("license") = "GPL";
 -- 
 2.47.1
 
