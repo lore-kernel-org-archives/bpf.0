@@ -1,99 +1,98 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F14C2797A5;
-	Mon,  5 May 2025 23:21:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 818F4326BE8;
+	Tue,  6 May 2025 00:24:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746487301; cv=none; b=ssuyKpztii+zZMVg1DlgYMM5+ObwTYN9Uu3doNTsblBSmmz/q7XhmYGCcI4Eovo0iP2NeYx5lE90VZnynW+APKW08lLjylKosNvwu3+L40rqO9mWBu4KQKjLXpUxDW/PsJdVoju87ypz+v7C2Qk4RIB/QRDX7OFrHEofLdrhBDY=
+	t=1746491097; cv=none; b=csYkaNM2Hz7Mkl/5pyxIPh2nT0bzjK4Zpkwd4yyEtyH4+V7byAuDrPpBASXHedSx38rV4zwYVsklI2G/0HOm0lMTHt8fjQo9+nFnwcCMJQqi67euLcdr/jPfqbSxCBdiygRe/JMnmuDlq1QufqB3urD+aZaIb5zdzjfa+uhGmjw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746487301; c=relaxed/simple;
-	bh=7wa+U1T31NJK/tUCaixLIQ5iCyGeLrmTTRl81nmcU0M=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=MLx1UJklsLrlh2sYN4cfy/8qPJjWwXUcuw/gvcuwrwIQqeZv1uxa9z4IXD48f9aWYSk7cWqS12UK8SJXHnbKpJlxsgTeaQSxxEBxKgzxnnHSF5GMZ9dTHjkBjyp42dvkccq5cYROc7z5ewPtGrQBiYMbETIKCzks4IaIXwUI9DA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ekPXbpMi; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1746491097; c=relaxed/simple;
+	bh=alMo7B+Sr/59Du5rvegXFc8Zcs/QVVYNwTJ/hgL1bz8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=PaHD4yvV8wNVCidc8PXh6VuITBFqmA15BJmAUOOVikWlxC6hwv2sK2HMv/MZRWQxiYNXE578iJe33Y/kFlUeBwwRYcrBcqQfrSG6e7ZuejF+5g7sfp8sjaOZld21FMS6VrxcDPMYaBR8/LEQK6qCluDZEmtQsleidF66THToX1I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YIJalOYb; arc=none smtp.client-ip=209.85.221.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ekPXbpMi"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A690C4CEF1;
-	Mon,  5 May 2025 23:21:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746487301;
-	bh=7wa+U1T31NJK/tUCaixLIQ5iCyGeLrmTTRl81nmcU0M=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ekPXbpMi+82v04am7vGk8qItbPRF0Jcm4WINAmZcTJLFqB9q/5vWl7Q6StWwB6OCV
-	 9II1Fenrm7NZbtdiKWH3W9Z+//pwcRbBBDNu6HjZJMOIjscCmsPlg0+fWqY3tMWRPT
-	 zkK5FIZwoTT+2PMFaiz7Yl6rnAsUsB480DFJt1HQXBTmipD0saKqosxcMkc/mrd5JA
-	 F8KQuz19mXczOpllk2VuP6cHXwDXdSWOI3bwIT54SJCHmhL43uNtQXLS3f0AXTGb9T
-	 PSyWT2ur7MUgv/11M+EXPJt32uZygGfrlbevM230cdZo1i08jSumsAH4/uT22TwkPa
-	 wM4gYvLS2AEZA==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Viktor Malik <vmalik@redhat.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Quentin Monnet <qmo@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Sasha Levin <sashal@kernel.org>,
-	daniel@iogearbox.net,
-	bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 108/114] bpftool: Fix readlink usage in get_fd_type
-Date: Mon,  5 May 2025 19:18:11 -0400
-Message-Id: <20250505231817.2697367-108-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250505231817.2697367-1-sashal@kernel.org>
-References: <20250505231817.2697367-1-sashal@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YIJalOYb"
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-3913b539aabso2267308f8f.2;
+        Mon, 05 May 2025 17:24:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1746491092; x=1747095892; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=alMo7B+Sr/59Du5rvegXFc8Zcs/QVVYNwTJ/hgL1bz8=;
+        b=YIJalOYbzRWgk80kCCjkNqfC7uXUYe+sVV24eYXH4eCuTbaLW3Zj55SRfEf6/wFuIw
+         HdTYIEUOVs52rEChr8fNimUd8T+K0uIEGFzJ+OSS8jYikOb7bpqHdGXlqGz536b3A1pf
+         aQk0yrdaUNyS9XT0sruJkg2ps4jJLEhV+hAUIwuzhEBl5DKRfK2RO2L27s4yUW4ihRbJ
+         QDPgcMNToy6aVnEiwg+N+0Ceb+Oh9YhETrPgdumbi8IE+2jC+ildWIpDL0epyevY29Bh
+         RQVj5dyVGwfqEc4ybjJNdFlRQDcwCaty9Ue1Fq79BO8jMJt6XTkiEM1FfDZyuB4kM8qC
+         jl3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746491092; x=1747095892;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=alMo7B+Sr/59Du5rvegXFc8Zcs/QVVYNwTJ/hgL1bz8=;
+        b=sQmiyDWQQNEPVkECMP1FrIBEuvpq2MZBHLc7qKpeNvQ+CZ+MZGb7ahk0BqIoSYZrmi
+         zIQrCSe0b0nOGEZdmHfXxkx+y+ZM8jRf2xQdKmu+litw3U8rc6qbZ2wd2Bi1VbVmppvM
+         om/nIPJkvxLa+elLIw3wmONStqjddLxyxvVRzOa1zCUrGkr/7IVAgr1IQxymcTVJJH05
+         kvfcHqQ61/Vgdad1fdj+R7SXkM1/xXYGl0jCyQPkts4U5KdISn2ImxT8Q2dltLfPDdKi
+         /wMODgL/vYefuVesr7GAs1izHDPcB6Gi5sid9wFZ1F1S5+Erfjvx3CF3Rb0qgEJhiACl
+         fW8A==
+X-Forwarded-Encrypted: i=1; AJvYcCUP/l36bA9+ibx/LrLBGMM4azQnUGPfNFqAK69Uch1p4ZtsKGoPvO0w3sAq1iV5/Tr58ik0nk83rc0d0/o4@vger.kernel.org, AJvYcCVPMLYGNucWvOr/HEnuR1OqxKDQ3I3RgWmXV/83WOb7ksZHmyexSK3VflgBrvOBJJY/sOfJH67rLQtU5ss=@vger.kernel.org, AJvYcCVWHCMrijRj7N0PGthivbT1nRvPT/sHhqVN0/p8Sy9SDaeSDTc4F1zz/tCnZcPaDX6cm6MKwwtud3f+NG9CgdX9@vger.kernel.org, AJvYcCWy5/6b+CD/yTGE+HFqfIL3RbPgkSbCDrDUgOpapPB2RselaafWwtpkS5nUgERA6NTTu6g=@vger.kernel.org, AJvYcCXeY0J1cTHKn7vqHIuf8ywhy3w5izDZKyPCDsADxXLB7QKnhiWKHhBlr8pgi+ytUPwQiwcGA6Kobkwn@vger.kernel.org
+X-Gm-Message-State: AOJu0YyAwAo5wume++6Rp8E4d5SpIAyEobwG1Jzl17EVSIdKoKtbZqZz
+	JcIhbmvootvMEdkLve+iZPfQAk5NhC1cijwn872bxCnIex21Y2IrDeTvdNFUKjPxmDh4+2Gn0jr
+	0oyGMCkCi+715gzetgeWQmZXbGpQ=
+X-Gm-Gg: ASbGncseS/Vjsk/ldQqXoaBo2XViaQjmk1o3PkoDpJLWd8qvdUF/umFe7fs2lui9vsv
+	ziqJ9MOmS2GoQP423yWGXlSHNV2Z7FsvqsbdxYoHCB7vY+sNYbZR2fFdIx3Ig7x98FgOl+6AO+s
+	qQa2NFtX7aCjxSK0M/SbPYB0LP+997ini8YwUFkgBPi2T1iJclEQ==
+X-Google-Smtp-Source: AGHT+IFpisAarDVCqmL4SQ9gwYM4+gMG4oHDBZFnZvyt5pgd5IHINbs0VFd1mFStWTTZZvgPPgIuW+AiPJw4Ajhtqw8=
+X-Received: by 2002:a05:6000:2289:b0:391:4095:49b7 with SMTP id
+ ffacd0b85a97d-3a09fd89e32mr6735387f8f.25.1746491091758; Mon, 05 May 2025
+ 17:24:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.10.237
-Content-Transfer-Encoding: 8bit
+References: <20250504224149.1033867-1-tjmercier@google.com>
+ <20250504224149.1033867-3-tjmercier@google.com> <26ca8ddf-0d78-462f-a47d-a1128b2e058f@amd.com>
+ <CABdmKX2iNk22h-KxUr4yvZO80yeRRjMfoC7yjiZ-aR_f1k402g@mail.gmail.com>
+ <ec43f447-095e-4baf-8610-8279b565f162@amd.com> <CABdmKX2Tpv8vpDDZ+wcdrWuijfC1wkNhJQxVSC9trPkzBLN4tA@mail.gmail.com>
+In-Reply-To: <CABdmKX2Tpv8vpDDZ+wcdrWuijfC1wkNhJQxVSC9trPkzBLN4tA@mail.gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Mon, 5 May 2025 17:24:40 -0700
+X-Gm-Features: ATxdqUHDB7Y3bq86ORp3ezfiMZIn0_EShKe0qk7UMyPGPboNnGF9l2fKY3gc3nw
+Message-ID: <CAADnVQLqv-ZpoQEhk2UwvSZorSLcjgF7qLD76oHguH5-GcSXxA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/6] bpf: Add dmabuf iterator
+To: "T.J. Mercier" <tjmercier@google.com>
+Cc: =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Song Liu <song@kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+	linaro-mm-sig@lists.linaro.org, 
+	"open list:DOCUMENTATION" <linux-doc@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, android-mm@google.com, simona@ffwll.ch, 
+	Jonathan Corbet <corbet@lwn.net>, Eduard <eddyz87@gmail.com>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Jiri Olsa <jolsa@kernel.org>, 
+	Mykola Lysenko <mykolal@fb.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Viktor Malik <vmalik@redhat.com>
+On Mon, May 5, 2025 at 10:08=E2=80=AFAM T.J. Mercier <tjmercier@google.com>=
+ wrote:
+>
+>
+> Sounds good, will do. Thanks.
 
-[ Upstream commit 0053f7d39d491b6138d7c526876d13885cbb65f1 ]
-
-The `readlink(path, buf, sizeof(buf))` call reads at most sizeof(buf)
-bytes and *does not* append null-terminator to buf. With respect to
-that, fix two pieces in get_fd_type:
-
-1. Change the truncation check to contain sizeof(buf) rather than
-   sizeof(path).
-2. Append null-terminator to buf.
-
-Reported by Coverity.
-
-Signed-off-by: Viktor Malik <vmalik@redhat.com>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-Reviewed-by: Quentin Monnet <qmo@kernel.org>
-Link: https://lore.kernel.org/bpf/20250129071857.75182-1-vmalik@redhat.com
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- tools/bpf/bpftool/common.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/tools/bpf/bpftool/common.c b/tools/bpf/bpftool/common.c
-index eefa2b34e641a..33065b17900fa 100644
---- a/tools/bpf/bpftool/common.c
-+++ b/tools/bpf/bpftool/common.c
-@@ -311,10 +311,11 @@ int get_fd_type(int fd)
- 		p_err("can't read link type: %s", strerror(errno));
- 		return -1;
- 	}
--	if (n == sizeof(path)) {
-+	if (n == sizeof(buf)) {
- 		p_err("can't read link type: path too long!");
- 		return -1;
- 	}
-+	buf[n] = '\0';
- 
- 	if (strstr(buf, "bpf-map"))
- 		return BPF_OBJ_MAP;
--- 
-2.39.5
-
+looks like the majority of the code will be touching various bpf bits,
+so let's route the first 5 patches via bpf-next.
+When you respin, please mention [PATCH bpf-next] in the subject,
+so that CI can pick it up.
