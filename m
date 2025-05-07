@@ -1,187 +1,136 @@
-Received: from m16.mail.126.com (m16.mail.126.com [220.197.31.8])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36C5878F5D;
-	Wed,  7 May 2025 01:17:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.8
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 227D913D521
+	for <bpf@vger.kernel.org>; Wed,  7 May 2025 01:25:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746580678; cv=none; b=ZVDVj+WqetCDyzrUN+PcjHmDXwHbFAZqnl8TK6P0lmbRCMmccuOiqWCX8g3/sE+5DTWN9KCE1p+eLR5i1qtU6jaOtb3FG4J9Z8okUgfIKgdgneEiSUOlaBxCbNsv7izx+88iZ9wy6nBNdwn5m1Ls/MJ/3Os676feuUSaaxQBSzE=
+	t=1746581107; cv=none; b=WqV/6ldPVUkfKdlTls1PlSrm0cW2F6wQpCwdL6k63D34NMSiBe9vFjuGJU8jWc6MyJf6rMskrScS57qJL3tskGq0+dsWL92wv+EQquIU+r6Vz5uAc4+aPqTKrA5z6ejYVnSY+sC6D/DK1BrcBOBmTcNQZHt1hj9GeBxuKvXUij0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746580678; c=relaxed/simple;
-	bh=sRTYYXi+q6YFmn2CM84PAr5Xq+GZZ+uf1kwrPa8hsxQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=qr5QcBLFxR5QF4GKLu1MdXBBSFdDPpqzDi6tIkm2WgLSnrqOQZqbqEw6bdtZjQgTSgVroXiPLZquXpQ1FbsedHIj0XBxXWOtcPVHdI6cCDa7jfcwxOIlTAUDzU0ge8vu/enZSmQDyR921cA97qs8i5yqOWurJXFiizVSppuNPKc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=126.com; spf=pass smtp.mailfrom=126.com; dkim=pass (1024-bit key) header.d=126.com header.i=@126.com header.b=BwjSrewc; arc=none smtp.client-ip=220.197.31.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=126.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=126.com
+	s=arc-20240116; t=1746581107; c=relaxed/simple;
+	bh=Uw/Uz41Zuo8BCaefCcz1CSlOspozER9fMrBhmNSzCOg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=n6xMu6wIn0622ZF5wJrW6bo281Vl65I2sKs+H9GAAKuIuj4hosaiXaV8g8T6OF29h3c8257GJ08Sv5ny1BXuWcSqgUpaxzYDIi4pgxU95OKCaQqBrrcGF0oFbJLLO2lHm5ATd78uhhtQ/JwY72gE3lw+CcfuAqlNfbJvxN4fQC8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FWdUrwPB; arc=none smtp.client-ip=209.85.221.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=126.com header.i=@126.com header.b="BwjSrewc"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=dfDAl
-	NI7Mtaa7Np1mFi7q1dvflRvIlHpBBi3IZLBURw=; b=BwjSrewc35f/WCXjZKAg/
-	iHn2LToVJW6fdPOUw1ijtdxCl4pS3E+1oMZDM0JyY9M6QqG4PU82CioSyI82+2Lo
-	Xad0avGIBAoq6vlT2JNJD3RKEn36uWaJECQhoPab+9HZiWiC5sHr9276AreI/3mu
-	Cgw2lxPkN1vIXQjJl6yyvc=
-Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g1-3 (Coremail) with SMTP id _____wD3P8x2tBpocz5dBw--.62210S3;
-	Wed, 07 May 2025 09:16:41 +0800 (CST)
-From: Honglei Wang <jameshongleiwang@126.com>
-To: tj@kernel.org,
-	void@manifault.com,
-	arighi@nvidia.com,
-	changwoo@igalia.com
-Cc: mingo@redhat.com,
-	peterz@infradead.org,
-	juri.lelli@redhat.com,
-	vincent.guittot@linaro.org,
-	dietmar.eggemann@arm.com,
-	rostedt@goodmis.org,
-	bsegall@google.com,
-	mgorman@suse.de,
-	vschneid@redhat.com,
-	joshdon@google.com,
-	brho@google.com,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	jameshongleiwang@126.com
-Subject: [RESEND PATCH v2 1/2] sched_ext: change the variable name for slice refill event
-Date: Wed,  7 May 2025 09:16:36 +0800
-Message-Id: <20250507011637.77589-2-jameshongleiwang@126.com>
-X-Mailer: git-send-email 2.39.5 (Apple Git-154)
-In-Reply-To: <20250507011637.77589-1-jameshongleiwang@126.com>
-References: <20250507011637.77589-1-jameshongleiwang@126.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FWdUrwPB"
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-39c1efbefc6so4674776f8f.1
+        for <bpf@vger.kernel.org>; Tue, 06 May 2025 18:25:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1746581104; x=1747185904; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=STcJ7cz88Z2GYQxLWSGzIPgdGXpEDCNdJoPcyOyCD+8=;
+        b=FWdUrwPBksdMKIM6kyZeUiNJ47In/5u4JeqR9fxTJscCDgpgJbZ+OXztAvsPcK80Qn
+         v8ldLfJRlubDWht+9nTNQZX2yejXh2Np58tYlRFNIDdOqR5WKkvh5mNLVandM5XEqtTB
+         sI1CO6my4qRNcaHmHV/VS6OqSa29ojitQy+h8/2+ZH18+tuhXKC3gXOGjQk7aA7toVBV
+         Fb9jBu27NQlAbrJzwGvhOMZkhyOjkQGRWjpIrDPj1etdywlyhmWMmWopouzZ67Q1q5vt
+         BGbpAAO0RZ5K07DXr/oFiaaKNBL3//UaMHRT4NpgSVon2KV71wHGgmhnSqOHDv9mIhKr
+         D+1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746581104; x=1747185904;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=STcJ7cz88Z2GYQxLWSGzIPgdGXpEDCNdJoPcyOyCD+8=;
+        b=DTstV+kz78MkE2BUs/vcXdRvHowCuW6F9ANxW9dxzvJit0KtIIOb6Xujkh5eeZra7v
+         yNUziXKYR7hr5lwcqMMwsjfCCqXZ3ibUVvBi0TlAQQewPjzz75jAdOjjLhvNd9H0rjzX
+         FpnptvSHc7R8BwSEJblwRbowqEhXZjBKCZIE7t1M2jTAC12Xb3XM4JI0zBojmfzFftNQ
+         uomk6sZfOCm7dbNP0/rkzu0LrWY9hxezt7RleQsYVY/2ovb0z2dQtLRuZKw85+LdC7Td
+         fQQrJpxMm+CyFAFpdZovqSAKqXE+isNQvWPj5+NG6brruBXdX2jNHyEF+U59x2Zx2UPX
+         krpQ==
+X-Gm-Message-State: AOJu0YxFvm8xb/1emdVMrodUKuxtAtJ9cIysyF6dnjcosphieK//Zkf1
+	69SUjz40QLr7jGh7sZCguQN91ADlhSTTL6JDrhw+LUlY69CChpxzRXVn16SZrX3NY5YqhqsOLoZ
+	q/r5Ayz/Zwf1zWwz38R4/TNoJTF8=
+X-Gm-Gg: ASbGnctrNealQ4mY/YlyPcHwsi4eJ867s/H9cow0jxFFGj1JFvw+fticN77/bL1JmX3
+	cCDR8OCN0wL8tpxIEwZHL5n04hxLtt3je3fa9GvoDk9EquI7Wo/+5kX5CjukTY0bly9jsPLDlMq
+	QwjmJmiKpTKAHxUjwCWhJ/wXPokOmEmmB5lQBWxfzAkMyomfr6m49fnNw1CeiH
+X-Google-Smtp-Source: AGHT+IHkoZ+Uikl8UNLNFXXkUd0sWJcwO0/V6CvxNZWDBj0cTPFA02cryoDJ6aRf/DIBJ07uKI9aRdP9aP7QiPp03NA=
+X-Received: by 2002:a05:6000:4310:b0:3a0:82d2:2c98 with SMTP id
+ ffacd0b85a97d-3a0b4a17fcamr910372f8f.52.1746581104064; Tue, 06 May 2025
+ 18:25:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wD3P8x2tBpocz5dBw--.62210S3
-X-Coremail-Antispam: 1Uf129KBjvJXoW3Gr4DXrW8Aw4Dtw4fAF1rtFb_yoW7Zr45p3
-	W5G345tr48t3y2vrWFqF4ku3WaqrWFqw1qkF95W393ZF1jgwnYyFyYyr4aqFyYgrsYkF1S
-	kw4UKF43ArZY9rDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UjYLkUUUUU=
-X-CM-SenderInfo: 5mdpv2pkrqwzphlzt0bj6rjloofrz/1tbiYBVGrWgatD0D8gAEsQ
+References: <20250501032718.65476-1-alexei.starovoitov@gmail.com>
+ <20250501032718.65476-2-alexei.starovoitov@gmail.com> <441a3e7d-2000-47d2-ba13-6841eb392fe1@suse.cz>
+In-Reply-To: <441a3e7d-2000-47d2-ba13-6841eb392fe1@suse.cz>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Tue, 6 May 2025 18:24:52 -0700
+X-Gm-Features: ATxdqUE9LUw8lzsx8O5N9t-1arB5zxC0xrTbbBGJL1asY3vebdctTxb8M560wk0
+Message-ID: <CAADnVQJS+sBks2qZ9tNt1hR375w+68GfZuTF+LoSveXR1hO2bQ@mail.gmail.com>
+Subject: Re: [PATCH 1/6] mm: Rename try_alloc_pages() to alloc_pages_nolock()
+To: Vlastimil Babka <vbabka@suse.cz>
+Cc: bpf <bpf@vger.kernel.org>, linux-mm <linux-mm@kvack.org>, 
+	Harry Yoo <harry.yoo@oracle.com>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Michal Hocko <mhocko@suse.com>, Sebastian Sewior <bigeasy@linutronix.de>, 
+	Andrii Nakryiko <andrii@kernel.org>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Steven Rostedt <rostedt@goodmis.org>, Johannes Weiner <hannes@cmpxchg.org>, 
+	Matthew Wilcox <willy@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-SCX_EV_ENQ_SLICE_DFL gives the impression that the event only occurs
-when the tasks were enqueued, which seems not accurate. What it actually
-means is the refilling with defalt slice, and this can occur either when
-enqueue or pick_task. Let's change the variable to
-SCX_EV_REFILL_SLICE_DFL.
+On Tue, May 6, 2025 at 1:26=E2=80=AFAM Vlastimil Babka <vbabka@suse.cz> wro=
+te:
+>
+> On 5/1/25 05:27, Alexei Starovoitov wrote:
+> > From: Alexei Starovoitov <ast@kernel.org>
+> >
+> > The "try_" prefix is confusing, since it made people believe
+> > that try_alloc_pages() is analogous to spin_trylock() and
+> > NULL return means EAGAIN. This is not the case. If it returns
+> > NULL there is no reason to call it again. It will most likely
+> > return NULL again. Hence rename it to alloc_pages_nolock()
+> > to make it symmetrical to free_pages_nolock() and document that
+> > NULL means ENOMEM.
+> >
+> > Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+>
+> Acked-by: Vlastimil Babka <vbabka@suse.cz>
+>
+> > @@ -7378,20 +7378,21 @@ static bool __free_unaccepted(struct page *page=
+)
+> >  #endif /* CONFIG_UNACCEPTED_MEMORY */
+> >
+> >  /**
+> > - * try_alloc_pages - opportunistic reentrant allocation from any conte=
+xt
+> > + * alloc_pages_nolock - opportunistic reentrant allocation from any co=
+ntext
+> >   * @nid: node to allocate from
+> >   * @order: allocation order size
+> >   *
+> >   * Allocates pages of a given order from the given node. This is safe =
+to
+> >   * call from any context (from atomic, NMI, and also reentrant
+> > - * allocator -> tracepoint -> try_alloc_pages_noprof).
+> > + * allocator -> tracepoint -> alloc_pages_nolock_noprof).
+> >   * Allocation is best effort and to be expected to fail easily so nobo=
+dy should
+> >   * rely on the success. Failures are not reported via warn_alloc().
+> >   * See always fail conditions below.
+> >   *
+> > - * Return: allocated page or NULL on failure.
+> > + * Return: allocated page or NULL on failure. NULL does not mean EBUSY=
+ or EAGAIN.
+> > + * It means ENOMEM. There is no reason to call it again and expect !NU=
+LL.
+>
+> Should we explain that the "ENOMEM" doesn't necessarily mean the system i=
+s
+> out of memory, but also that the calling context might be simply unlucky
+> (preempted someone with the lock) and retrying in the same context can't
+> help it?
 
-Signed-off-by: Honglei Wang <jameshongleiwang@126.com>
----
-v2:
-- refine the comments base on Andrea's suggestion.
----
- kernel/sched/ext.c             | 22 +++++++++++-----------
- tools/sched_ext/scx_qmap.bpf.c |  4 ++--
- 2 files changed, 13 insertions(+), 13 deletions(-)
-
-diff --git a/kernel/sched/ext.c b/kernel/sched/ext.c
-index 66bcd40a28ca..2a091ea23328 100644
---- a/kernel/sched/ext.c
-+++ b/kernel/sched/ext.c
-@@ -1517,10 +1517,10 @@ struct scx_event_stats {
- 	s64		SCX_EV_ENQ_SKIP_MIGRATION_DISABLED;
- 
- 	/*
--	 * The total number of tasks enqueued (or pick_task-ed) with a
--	 * default time slice (SCX_SLICE_DFL).
-+	 * Total number of times a task's time slice was refilled with the
-+	 * default value (SCX_SLICE_DFL).
- 	 */
--	s64		SCX_EV_ENQ_SLICE_DFL;
-+	s64		SCX_EV_REFILL_SLICE_DFL;
- 
- 	/*
- 	 * The total duration of bypass modes in nanoseconds.
-@@ -2197,7 +2197,7 @@ static void do_enqueue_task(struct rq *rq, struct task_struct *p, u64 enq_flags,
- 	 */
- 	touch_core_sched(rq, p);
- 	p->scx.slice = SCX_SLICE_DFL;
--	__scx_add_event(SCX_EV_ENQ_SLICE_DFL, 1);
-+	__scx_add_event(SCX_EV_REFILL_SLICE_DFL, 1);
- local_norefill:
- 	dispatch_enqueue(&rq->scx.local_dsq, p, enq_flags);
- 	return;
-@@ -2205,7 +2205,7 @@ static void do_enqueue_task(struct rq *rq, struct task_struct *p, u64 enq_flags,
- global:
- 	touch_core_sched(rq, p);	/* see the comment in local: */
- 	p->scx.slice = SCX_SLICE_DFL;
--	__scx_add_event(SCX_EV_ENQ_SLICE_DFL, 1);
-+	__scx_add_event(SCX_EV_REFILL_SLICE_DFL, 1);
- 	dispatch_enqueue(find_global_dsq(p), p, enq_flags);
- }
- 
-@@ -3296,7 +3296,7 @@ static struct task_struct *pick_task_scx(struct rq *rq)
- 		p = prev;
- 		if (!p->scx.slice) {
- 			p->scx.slice = SCX_SLICE_DFL;
--			__scx_add_event(SCX_EV_ENQ_SLICE_DFL, 1);
-+			__scx_add_event(SCX_EV_REFILL_SLICE_DFL, 1);
- 		}
- 	} else {
- 		p = first_local_task(rq);
-@@ -3313,7 +3313,7 @@ static struct task_struct *pick_task_scx(struct rq *rq)
- 				scx_warned_zero_slice = true;
- 			}
- 			p->scx.slice = SCX_SLICE_DFL;
--			__scx_add_event(SCX_EV_ENQ_SLICE_DFL, 1);
-+			__scx_add_event(SCX_EV_REFILL_SLICE_DFL, 1);
- 		}
- 	}
- 
-@@ -3399,7 +3399,7 @@ static int select_task_rq_scx(struct task_struct *p, int prev_cpu, int wake_flag
- 		if (cpu >= 0) {
- 			p->scx.slice = SCX_SLICE_DFL;
- 			p->scx.ddsp_dsq_id = SCX_DSQ_LOCAL;
--			__scx_add_event(SCX_EV_ENQ_SLICE_DFL, 1);
-+			__scx_add_event(SCX_EV_REFILL_SLICE_DFL, 1);
- 		} else {
- 			cpu = prev_cpu;
- 		}
-@@ -4413,7 +4413,7 @@ static ssize_t scx_attr_events_show(struct kobject *kobj,
- 	at += scx_attr_event_show(buf, at, &events, SCX_EV_DISPATCH_KEEP_LAST);
- 	at += scx_attr_event_show(buf, at, &events, SCX_EV_ENQ_SKIP_EXITING);
- 	at += scx_attr_event_show(buf, at, &events, SCX_EV_ENQ_SKIP_MIGRATION_DISABLED);
--	at += scx_attr_event_show(buf, at, &events, SCX_EV_ENQ_SLICE_DFL);
-+	at += scx_attr_event_show(buf, at, &events, SCX_EV_REFILL_SLICE_DFL);
- 	at += scx_attr_event_show(buf, at, &events, SCX_EV_BYPASS_DURATION);
- 	at += scx_attr_event_show(buf, at, &events, SCX_EV_BYPASS_DISPATCH);
- 	at += scx_attr_event_show(buf, at, &events, SCX_EV_BYPASS_ACTIVATE);
-@@ -5148,7 +5148,7 @@ static void scx_dump_state(struct scx_exit_info *ei, size_t dump_len)
- 	scx_dump_event(s, &events, SCX_EV_DISPATCH_KEEP_LAST);
- 	scx_dump_event(s, &events, SCX_EV_ENQ_SKIP_EXITING);
- 	scx_dump_event(s, &events, SCX_EV_ENQ_SKIP_MIGRATION_DISABLED);
--	scx_dump_event(s, &events, SCX_EV_ENQ_SLICE_DFL);
-+	scx_dump_event(s, &events, SCX_EV_REFILL_SLICE_DFL);
- 	scx_dump_event(s, &events, SCX_EV_BYPASS_DURATION);
- 	scx_dump_event(s, &events, SCX_EV_BYPASS_DISPATCH);
- 	scx_dump_event(s, &events, SCX_EV_BYPASS_ACTIVATE);
-@@ -7313,7 +7313,7 @@ __bpf_kfunc void scx_bpf_events(struct scx_event_stats *events,
- 		scx_agg_event(&e_sys, e_cpu, SCX_EV_DISPATCH_KEEP_LAST);
- 		scx_agg_event(&e_sys, e_cpu, SCX_EV_ENQ_SKIP_EXITING);
- 		scx_agg_event(&e_sys, e_cpu, SCX_EV_ENQ_SKIP_MIGRATION_DISABLED);
--		scx_agg_event(&e_sys, e_cpu, SCX_EV_ENQ_SLICE_DFL);
-+		scx_agg_event(&e_sys, e_cpu, SCX_EV_REFILL_SLICE_DFL);
- 		scx_agg_event(&e_sys, e_cpu, SCX_EV_BYPASS_DURATION);
- 		scx_agg_event(&e_sys, e_cpu, SCX_EV_BYPASS_DISPATCH);
- 		scx_agg_event(&e_sys, e_cpu, SCX_EV_BYPASS_ACTIVATE);
-diff --git a/tools/sched_ext/scx_qmap.bpf.c b/tools/sched_ext/scx_qmap.bpf.c
-index 26c40ca4f36c..c3cd9a17d48e 100644
---- a/tools/sched_ext/scx_qmap.bpf.c
-+++ b/tools/sched_ext/scx_qmap.bpf.c
-@@ -784,8 +784,8 @@ static int monitor_timerfn(void *map, int *key, struct bpf_timer *timer)
- 		   scx_read_event(&events, SCX_EV_DISPATCH_KEEP_LAST));
- 	bpf_printk("%35s: %lld", "SCX_EV_ENQ_SKIP_EXITING",
- 		   scx_read_event(&events, SCX_EV_ENQ_SKIP_EXITING));
--	bpf_printk("%35s: %lld", "SCX_EV_ENQ_SLICE_DFL",
--		   scx_read_event(&events, SCX_EV_ENQ_SLICE_DFL));
-+	bpf_printk("%35s: %lld", "SCX_EV_REFILL_SLICE_DFL",
-+		   scx_read_event(&events, SCX_EV_REFILL_SLICE_DFL));
- 	bpf_printk("%35s: %lld", "SCX_EV_BYPASS_DURATION",
- 		   scx_read_event(&events, SCX_EV_BYPASS_DURATION));
- 	bpf_printk("%35s: %lld", "SCX_EV_BYPASS_DISPATCH",
--- 
-2.45.2
-
+Technically correct, but it opens the door for "retry" thinking:
+"I called it and got unlucky, maybe I should retry once.. I promise
+I won't loop forever".
+So I really think the doc should say "ENOMEM. no reason to retry" like abov=
+e.
