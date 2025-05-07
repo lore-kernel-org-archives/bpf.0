@@ -1,61 +1,61 @@
-Received: from mail-wm1-f65.google.com (mail-wm1-f65.google.com [209.85.128.65])
+Received: from mail-wr1-f67.google.com (mail-wr1-f67.google.com [209.85.221.67])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 256711D5ABA
-	for <bpf@vger.kernel.org>; Wed,  7 May 2025 17:17:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B64A01D5ABA
+	for <bpf@vger.kernel.org>; Wed,  7 May 2025 17:17:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.67
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746638251; cv=none; b=FOo7lcSStEKOGc8G6k3nfJ+lUCHc4doI1UNmBRG5P+P/lpweKPRsIrzn5R+BsQ3xI/CH6XZcPpBuMdakO/IQWLd2ECERQUY9soWFuBnvtWfYv3/LgMjIbgUO3+K0fozsAx8zLCBMa+fVcgsVOB74JwAad8Sj9xiE8KnaZP35RU8=
+	t=1746638254; cv=none; b=moIRaG6U9Gyr1MN6juYM5n8otNRrX7SLDaZ19O93GmiptTZ4PdjKmWm7DSfn+1pNo9nh7taXnCnUtQlAJAyTqBQ9U45sY4zVquPmBjqfmqBXFnSL9jm1KyQx0G0Rm5h0ctBrUxWZjqlGRKjtIGgNWQpaUGl6N7CU3g4EoFKmkAI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746638251; c=relaxed/simple;
-	bh=DWV8ZGsHPhKlA+TgWcoKqRbcf5R+lRXXqBukLoj/ZMQ=;
+	s=arc-20240116; t=1746638254; c=relaxed/simple;
+	bh=zJdgrVS4WPKNsMv/n923x4hX2eFFZRCXrz7VowKS1cU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=dezBnYT5qrR9R7KAY3uYkGj9VZWkiXnMZERiZDWoLgj4s1rPEUlpRxoJxhECrelVYluQZe1F0cHnU0qpSthcBsErJHcxUuAdBpo8zYR/EC8Ze1786My79MsxGJeOxYG9a7Q3i6WsSb4PZO/o1reNVG0P+cQSuJk5Hex7Q28X5+Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FQVKcn/9; arc=none smtp.client-ip=209.85.128.65
+	 MIME-Version; b=pc0NLXrEt20aHfeZDsXtacxR2obXWKxhFG7MgbcP2INdBQSZ+WhUdtcWWSHTYxUp12nzF3I1MJ0pidRxf1wx4UUu3npB03nwRoYTx3yOe/VuiC3UxZTgKC7QjZ/w2Oy4mutq6y6XJZByjh4pq4FbtBREm3QQ0bNiscBbbQHGurw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CYRbwkUN; arc=none smtp.client-ip=209.85.221.67
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FQVKcn/9"
-Received: by mail-wm1-f65.google.com with SMTP id 5b1f17b1804b1-43ce70f9afbso1422045e9.0
-        for <bpf@vger.kernel.org>; Wed, 07 May 2025 10:17:29 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CYRbwkUN"
+Received: by mail-wr1-f67.google.com with SMTP id ffacd0b85a97d-39ee5a5bb66so78674f8f.3
+        for <bpf@vger.kernel.org>; Wed, 07 May 2025 10:17:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746638248; x=1747243048; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1746638251; x=1747243051; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=cyR670O+3W2tzkq8C2esM8ZLt9R9ed5zpjVzo2eaXdo=;
-        b=FQVKcn/9TDp1La/mQ9H4hEELCei4cAwHrBaLOMFPUhrGdnDCtGFEVIC1EjcZJn6LQu
-         6SxcqLbA1rW7zhsz3g27sE+PbN+s4lS52gYJfaf7sNndHURvEzYn/lbWgLfANHQlKMM2
-         1e79fHWpFB9fqWxXocX7ZoAv2Xdf5UWVB78PW0UG4clia+pFQDGEGTc25iTjuNy+tXC9
-         cp4Ecp94tmyxPZCvwvPVuOB0Fen8n7kx6iBPaMCJu3P2U6QHiLpUEdIl/3FWe4P29AiG
-         zZ+jvp3ZQ8w8t7lxjrB87xRQVmoegI+c08jZiRyIruZJbekZJAoulGITfUGKC7cdg4zZ
-         ilCA==
+        bh=Kf2a/uhJsacZ2V037A5YffZ38/QWJBiN/SKNkr4IUpg=;
+        b=CYRbwkUNwVhnuErnprN7MMoaefL3gHVtix1lmSlaBiK+BnaDLLBKyNiCbKLDRK2OrA
+         TxBgP8wXco+3we1qMsgPTJLo/rwQR7Nnn+lLdicxW+UO5dOVTt1PrLbbQTG1lOZ5yU1B
+         0/dhRtEpCUrb2Vx4n95ZrHoMUgaS/qU5hIe3jVOWuWn0lzLS40R/GCNlZiCX58GTMJWa
+         ftsDwqgOyMENuUmDFoHz2UxHL3uDJIh2kb2VwIWckgVZviknRHjF6Nqt1aGknVEapxcd
+         lR4Q4bLKqvkYulleBXSfN/SOD0oPkiefGcQg30LeBjN0ZggjAx0LZtbDNkRb8deanVya
+         A0GQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746638248; x=1747243048;
+        d=1e100.net; s=20230601; t=1746638251; x=1747243051;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=cyR670O+3W2tzkq8C2esM8ZLt9R9ed5zpjVzo2eaXdo=;
-        b=nslXAWE7Od2OLyi9FEa2YGGQ6lTdFk75gabjDIXI77LEpJ/etk87Au3NgM/KpX3FCX
-         ap+wt6s20u4xCCEOqKIQWdsL8OZVtoBTjTgIkhqJkb89LTHJxAIO6KTUgiZKZ/uCBCs3
-         Ejg3x1wZ8rfAi5ZZLT9bsw/7+KgizEIhlaxLRHNrRm1y/wUk14NiBA2Jb0kTPT9GismU
-         ZStI/pPoKyFI0dftUevzx2wCaT3eUBlvqb3gdEVdFlKlsYucLY7SloGdwPBFLjIpR2oz
-         R/1N2E4c3jx7GjjsO+Xypm0vshQK3tBbedRpqytlDVyWsSOEyasTIf73W6AVbt6kLhgt
-         +9JA==
-X-Gm-Message-State: AOJu0YwCKHFQulhgGmz3T9MTPmvO7/2+cE6RMiWz84vHTGveMlhjmKG3
-	1buB5xbaAy594GEBkp9QLuhnprfXPRkuG9rtg610BH5HJ0SxtImQejtL05y8bIo=
-X-Gm-Gg: ASbGnctVF8Q/pNSXRArbN5usuFTr4pHxN2q6Hkfcnf3QRzRZKQw8Ypw4ZUEwMd01VbK
-	m4HvU29oY2XmCikJW394mOYWbfntpdRMn9OvrIWSq4LylH2tn4Mmf/Hvv5UDqU6PQWk0BsX3FnU
-	LgHNHMngTA340UAvqQYm3OhPrqLTtkWY5XAP9knbtYj/13MhP53JY9PL1o+MMx+K04H+Fdergpc
-	6X8klMleHWefLYkIvOGD+AK2ffNzBmqokf9P9WyRiv23beJDuThfPOfOptrSBGW4HDP3jIzAr8r
-	aXkCIuR7Fpn7jlf7F7gP5mHK9PQ=
-X-Google-Smtp-Source: AGHT+IEui8zduakqx/I02VE8jagxy9sBLScf2douhzZqNrAOs01Ai0NMPX71r/YeszhC+JnWgtsEDQ==
-X-Received: by 2002:a05:600c:35c8:b0:43c:e70d:44f0 with SMTP id 5b1f17b1804b1-442d02f4211mr3630745e9.19.1746638247871;
-        Wed, 07 May 2025 10:17:27 -0700 (PDT)
-Received: from localhost ([2a03:2880:31ff::])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-441d15df749sm42967755e9.1.2025.05.07.10.17.27
+        bh=Kf2a/uhJsacZ2V037A5YffZ38/QWJBiN/SKNkr4IUpg=;
+        b=hTDajahIHGYbCn5ykzluAs8PDwGT/5+tE5lPsRpWOS0A0U3wX3Gc6WHyiZmV6wplfK
+         ke/KjZ/l1M3X6X9Xw2MY9Ftbtuj7KJNOsAFFp+vIECVI15GLr9Z0gjriYFrDHMA/9m0k
+         rBr2/bp/Q9EvZu3xstNVRUGyD8aj7NtwCpEqfCA/c9oC3rBCLzp932AHn1StsQQlmYk9
+         CDxebSiZWj8xMaXjZJtzHTHp+Fl6koUn2dEW1qEubRKSlPQGEdGFaA4YVDrnhDfPYXBU
+         JVIJjvwJate2PZXvuVFudemDflNMFGkmKdDvTcdYOcrgnQWRf3jaN6Wxdw4d6b4dF5nI
+         Oinw==
+X-Gm-Message-State: AOJu0YzVygFRFhjUW8Te1PXIWXISZ5HvLlSKqqlIrpzYZJuweqikXcxo
+	MfdvWtknrJWh09rCqnzTBNVEjEzYJGfmYJtNdN9kYCGBXbaLqVbpH+oXf7v4nGw=
+X-Gm-Gg: ASbGnctDeoRFUezBCC3seO4uECDET1sflccPjoSdbhvunRTFQXaFEUR4klQ+QaU9km2
+	m0rEriKYWsjp96MdU+ewGs1VC4Bmrq/Nv/SuQuxefxVt/wEB7BLZ2+rJ3B0i73+0j82fclUsWWm
+	xcuzfmSWrpQ2Wv2YBVE+68uEjebVAGqAGcCFwZv17NgQkgw/ocKgpweCesw5C+4L99Tjzosl//F
+	IWF5fGsy7WRwoNKRnDc1ekKmbJ/llhkbfBZ/fXDLM+DtsGHUNruO0a2sEdKGY37WVrG5Ke0jYqj
+	tffjqjKBB4x7X2BCp6pNBoyIL2PJvc10OR3Xiz3/FA==
+X-Google-Smtp-Source: AGHT+IEJAyCSGnhvI8XzzZ9OGEleyAixKULwqS1EZj0RMt4zr3fIvRlxl/vRnGAZ4/5Yhm8PvRWBbw==
+X-Received: by 2002:a5d:64e8:0:b0:3a0:7d82:d454 with SMTP id ffacd0b85a97d-3a0b49ac335mr3501732f8f.20.1746638250767;
+        Wed, 07 May 2025 10:17:30 -0700 (PDT)
+Received: from localhost ([2a03:2880:31ff:4b::])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-442cd350cebsm7391735e9.17.2025.05.07.10.17.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 May 2025 10:17:27 -0700 (PDT)
+        Wed, 07 May 2025 10:17:29 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -68,9 +68,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Matt Bobrowski <mattbobrowski@google.com>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 04/11] bpf: Add function to find program from stack trace
-Date: Wed,  7 May 2025 10:17:13 -0700
-Message-ID: <20250507171720.1958296-5-memxor@gmail.com>
+Subject: [PATCH bpf-next v1 06/11] bpf: Report may_goto timeout to BPF stderr
+Date: Wed,  7 May 2025 10:17:15 -0700
+Message-ID: <20250507171720.1958296-7-memxor@gmail.com>
 X-Mailer: git-send-email 2.47.1
 In-Reply-To: <20250507171720.1958296-1-memxor@gmail.com>
 References: <20250507171720.1958296-1-memxor@gmail.com>
@@ -80,91 +80,119 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2862; h=from:subject; bh=DWV8ZGsHPhKlA+TgWcoKqRbcf5R+lRXXqBukLoj/ZMQ=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBoG5WJed8+5XHFGD3Bh0ChvnCt3P1udPliNry4seDE /a5vkZaJAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCaBuViQAKCRBM4MiGSL8RyiL2D/ 9I9GKF8CSLXr3xgeJzVrZdEB8ZO5UYXKq8YojbXP7hYJpC4pOnpXEmGmt5wsTMxQzfy3IUeZhUehbv VDo4T6ChO9PzSt1ABwkvX7H6//QnbL2z8xq2YtViGaK36FR7uQfo0qhpCPZNI8l5p7EeR7uecDyX3j 22ENCcrncpPx1ag9eyV3C2EKl+mM3uI/2k0ST0Wtve11H/xALKiMjweiuO4wKyhvf6EQ4KQlx89vtB 1aTRKYnd8ywjvj7HqbOgxz3il0yIp8rWyWrgwEEYv/Cx8rl8GqhKplx6TdNDMFCNZC38rrsNstW/JN WNfAEntXNH56ijQ1kRVBZAXYF0JtpcYoeB1OZeih2w3Xjx/nBTYJMnju3JwnT1YxN/+AxZYr9dYKyA WOH2E7hCdoAOGDLTR5PqUcJAJ7qPJM4kFbIlUnLmb66jCTCrAPnxuEFq8QoXmAY8NeQ2e0Uqa+/N33 UiCKrhPBYliG3R+EeE9uNojYQqX+dBvJLKSeYRMzQ4j9vEywiMRzrQAWPUkzgU+Et4v71hUFCu0rkN KhzASaYcvVOt7jxUz5N0Mi4d5FyiIfAGjkZgopAl6B1bkDTDn4l/BPdp/reJiVIQE9md40suMngIrB nYC3K5h9aQ0oIpSztffOdVZ1hrwAixXmG9QkZsOjBFMzLJwTHkfHZJUfQBeg==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4162; h=from:subject; bh=zJdgrVS4WPKNsMv/n923x4hX2eFFZRCXrz7VowKS1cU=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBoG5WJrmQvCTYcr+T8H1y4EmzIdyl5yRYjnD55kIc+ qlFS+f6JAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCaBuViQAKCRBM4MiGSL8RypQBEA CsuikSSENz7m44Q70Ty5hKOCg0VL7ckz1M7hVUAy4oFSQyeEntrVX/MvNYkL/rlb+x3gBpFgvumIHX 87OOs+TWQTkC8d3bJq90Q0kqOJ3UQR0Gwe64qIRGF+lS+ESciR8j1EP609OfzF9BIpmkOB2ifAQcP0 uoy42BHHiDmTEJrzpAEdD4218YEAFYzHHLgcJbjahtoEW9P4DI8P033IONa0oVRTVZAEMqeAiCpEnQ iMAjuQwhJJX8OvFymNl1jzcPCDi7z5IKFc7L1DyKDg5i5sTQMpB6ibFSJEUH8rFSU9d8nRRthtj6Ae 8cbqIsWMbChR8hzd5XhDfTdRN5EacWb6JpJe30EWewjzBnMAuQczb610BA57go566Dqzq/cun+SxTb wwlQRf1DdV6SMSZG3RUhZ0J3iPvpOfWqh7ERfbTJXuFDJQwsa+C4rirki1WLsD0AKBZvtRhvdqMCst Jl7Yh5muVGWVShqugpbPZcuOfKgnqM7Kcrl+s/59uXuxrVETkhCMYiPu8tpeL8uJ9VHimdHTIMt74p x5ggIQGwkc2d70mz41o0ov4TmmuRsAGJWWhXoc25AjvfUW8xZKJoJ1JTujWjcxT4sDXQ9kJoVeDDW2 8fiuM1tz6t3a7w5LcJOkVhl1FSnDyYghqhEA2fM+bxaHqMYemE0ZHPPxsT3w==
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=4BBE2A7E06ECF9D5823C61114CE0C88648BF11CA
 Content-Transfer-Encoding: 8bit
 
-In preparation of figuring out the closest program that led to the
-current point in the kernel, implement a function that scans through the
-stack trace and finds out the closest BPF program when walking down the
-stack trace.
-
-Special care needs to be taken to skip over kernel and BPF subprog
-frames. We basically scan until we find a BPF main prog frame. The
-assumption is that if a program calls into us transitively, we'll
-hit it along the way. If not, we end up returning NULL.
-
-Contextually the function will be used in places where we know the
-program may have called into us.
-
-Due to reliance on arch_bpf_stack_walk(), this function only works on
-x86 with CONFIG_UNWINDER_ORC, arm64, and s390. Remove the warning from
-arch_bpf_stack_walk as well since we call it outside bpf_throw()
-context.
+Begin reporting may_goto timeouts to BPF program's stderr stream.
+Make sure that we don't end up spamming too many errors if the
+program keeps failing repeatedly and filling up the stream, hence
+emit at most 512 error messages from the kernel for a given stream.
 
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- arch/x86/net/bpf_jit_comp.c |  1 -
- include/linux/bpf.h         |  1 +
- kernel/bpf/core.c           | 26 ++++++++++++++++++++++++++
- 3 files changed, 27 insertions(+), 1 deletion(-)
+ include/linux/bpf.h | 21 ++++++++++++++-------
+ kernel/bpf/core.c   | 17 ++++++++++++++++-
+ kernel/bpf/stream.c |  5 +++++
+ 3 files changed, 35 insertions(+), 8 deletions(-)
 
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index 9e5fe2ba858f..17693ee6bb1a 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -3791,7 +3791,6 @@ void arch_bpf_stack_walk(bool (*consume_fn)(void *cookie, u64 ip, u64 sp, u64 bp
- 	}
- 	return;
- #endif
--	WARN(1, "verification of programs using bpf_throw should have failed\n");
- }
- 
- void bpf_arch_poke_desc_update(struct bpf_jit_poke_descriptor *poke,
 diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index f12a0bf536c0..b57d8a1a7758 100644
+index 46ce05aad0ed..daf95333be78 100644
 --- a/include/linux/bpf.h
 +++ b/include/linux/bpf.h
-@@ -3645,5 +3645,6 @@ static inline bool bpf_is_subprog(const struct bpf_prog *prog)
- }
+@@ -1667,6 +1667,7 @@ struct bpf_prog_aux {
+ 		struct rcu_head	rcu;
+ 	};
+ 	struct bpf_stream stream[2];
++	atomic_t stream_error_cnt;
+ };
  
- int bpf_prog_get_file_line(struct bpf_prog *prog, unsigned long ip, const char **filep, const char **linep);
-+struct bpf_prog *bpf_prog_find_from_stack(void);
+ struct bpf_prog {
+@@ -3589,6 +3590,8 @@ void bpf_bprintf_cleanup(struct bpf_bprintf_data *data);
+ int bpf_try_get_buffers(struct bpf_bprintf_buffers **bufs);
+ void bpf_put_buffers(void);
  
- #endif /* _LINUX_BPF_H */
++#define BPF_PROG_STREAM_ERROR_CNT 512
++
+ void bpf_prog_stream_init(struct bpf_prog *prog);
+ void bpf_prog_stream_free(struct bpf_prog *prog);
+ 
+@@ -3600,16 +3603,20 @@ int bpf_stream_stage_commit(struct bpf_stream_stage *ss, struct bpf_prog *prog,
+ 			    enum bpf_stream_id stream_id);
+ int bpf_stream_stage_dump_stack(struct bpf_stream_stage *ss);
+ 
++bool bpf_prog_stream_error_limit(struct bpf_prog *prog);
++
+ #define bpf_stream_printk(...) bpf_stream_stage_printk(&__ss, __VA_ARGS__)
+ #define bpf_stream_dump_stack() bpf_stream_stage_dump_stack(&__ss)
+ 
+-#define bpf_stream_stage(prog, stream_id, expr)                  \
+-	({                                                       \
+-		struct bpf_stream_stage __ss;                    \
+-		bpf_stream_stage_init(&__ss);                    \
+-		(expr);                                          \
+-		bpf_stream_stage_commit(&__ss, prog, stream_id); \
+-		bpf_stream_stage_free(&__ss);                    \
++#define bpf_stream_stage(prog, stream_id, expr)                          \
++	({                                                               \
++		struct bpf_stream_stage __ss;                            \
++		if (!bpf_prog_stream_error_limit(prog)) {                \
++			bpf_stream_stage_init(&__ss);                    \
++			(expr);                                          \
++			bpf_stream_stage_commit(&__ss, prog, stream_id); \
++			bpf_stream_stage_free(&__ss);                    \
++		}                                                        \
+ 	})
+ 
+ #ifdef CONFIG_BPF_LSM
 diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index df1bae084abd..dcb665bff22f 100644
+index dcb665bff22f..d21c304fe829 100644
 --- a/kernel/bpf/core.c
 +++ b/kernel/bpf/core.c
-@@ -3244,3 +3244,29 @@ int bpf_prog_get_file_line(struct bpf_prog *prog, unsigned long ip, const char *
- 		*linep += 1;
- 	return BPF_LINE_INFO_LINE_NUM(linfo[idx].line_col);
+@@ -3156,6 +3156,19 @@ u64 __weak arch_bpf_timed_may_goto(void)
+ 	return 0;
  }
-+
-+struct walk_stack_ctx {
-+	struct bpf_prog *prog;
-+};
-+
-+static bool find_from_stack_cb(void *cookie, u64 ip, u64 sp, u64 bp)
+ 
++static noinline void bpf_prog_report_may_goto_violation(void)
 +{
-+	struct walk_stack_ctx *ctxp = cookie;
 +	struct bpf_prog *prog;
 +
-+	if (!is_bpf_text_address(ip))
-+		return true;
-+	prog = bpf_prog_ksym_find(ip);
-+	if (bpf_is_subprog(prog))
-+		return true;
-+	ctxp->prog = prog;
-+	return false;
++	prog = bpf_prog_find_from_stack();
++	if (!prog)
++		return;
++	bpf_stream_stage(prog, BPF_STDERR, ({
++		bpf_stream_printk("ERROR: Timeout detected for may_goto instruction\n");
++		bpf_stream_dump_stack();
++	}));
 +}
 +
-+struct bpf_prog *bpf_prog_find_from_stack(void)
-+{
-+	struct walk_stack_ctx ctx = {};
+ u64 bpf_check_timed_may_goto(struct bpf_timed_may_goto *p)
+ {
+ 	u64 time = ktime_get_mono_fast_ns();
+@@ -3166,8 +3179,10 @@ u64 bpf_check_timed_may_goto(struct bpf_timed_may_goto *p)
+ 		return BPF_MAX_TIMED_LOOPS;
+ 	}
+ 	/* Check if we've exhausted our time slice, and zero count. */
+-	if (time - p->timestamp >= (NSEC_PER_SEC / 4))
++	if (unlikely(time - p->timestamp >= (NSEC_PER_SEC / 4))) {
++		bpf_prog_report_may_goto_violation();
+ 		return 0;
++	}
+ 	/* Refresh the count for the stack frame. */
+ 	return BPF_MAX_TIMED_LOOPS;
+ }
+diff --git a/kernel/bpf/stream.c b/kernel/bpf/stream.c
+index a921fb1de319..eaf0574866b1 100644
+--- a/kernel/bpf/stream.c
++++ b/kernel/bpf/stream.c
+@@ -539,3 +539,8 @@ int bpf_stream_stage_dump_stack(struct bpf_stream_stage *ss)
+ 	ret = ret ?: ctx.err;
+ 	return ret ?: bpf_stream_stage_printk(ss, "\n");
+ }
 +
-+	arch_bpf_stack_walk(find_from_stack_cb, &ctx);
-+	return ctx.prog;
++bool bpf_prog_stream_error_limit(struct bpf_prog *prog)
++{
++	return atomic_fetch_add(1, &prog->aux->stream_error_cnt) >= BPF_PROG_STREAM_ERROR_CNT;
 +}
 -- 
 2.47.1
