@@ -1,168 +1,82 @@
-Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F158CBA38;
-	Wed,  7 May 2025 02:26:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.46
+Received: from m16.mail.126.com (m16.mail.126.com [220.197.31.8])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2AB3E1A0BF1;
+	Wed,  7 May 2025 02:48:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746584812; cv=none; b=FBHV+Yfb9VIWzvZnVHkj0h9RUVWCHjrbDna4wLdt742zbPxMfGZxnaR/8O3B0e6rs56Qsedkb87yB2gGcI8s3+WhtsK5rLCGzjp9ckiMPx7LpXcUZidQkvSph03Fz3JximSqX60ziRxszFC9oXcT7+HK9aFuOD5KKMNBqQ3aCBY=
+	t=1746586132; cv=none; b=RJ9qWS6evw7Dj/aIseuFto/akvn56biAAU+PTqPiTPZtKDzmvjH9/9AhxFzH80XomnnVmBX2knEyi1yeOAnWXiQxznpumOzZCBKNAXrxz8w7neafSDHglpvrz+OGXbbsX/8tKR/Fb2NR79o8TMcuHUU8te1Zs2x325k93X2bKSM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746584812; c=relaxed/simple;
-	bh=T9tRu5SD300+EflneLEIAzFh5F8Y1bienABnSapwQeE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KyrNFcy/JdLOHbp5o3GIjqfjkutHdQsEiB25ILSVubTjrlLm7Wdu5XgCNmZC6Q707gQN4bryOMemHg2L+vXFGX6m14/K1qBI7W2aaKqS1yyx8U2h7r5gFE2+5RO7+WkpViE6Um9oxF0Yfsshxp2jvw893GfneWqZWFVegX4kK8E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fWDR+lM8; arc=none smtp.client-ip=209.85.219.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1746586132; c=relaxed/simple;
+	bh=ppY350V0+svbZzHsEZdQVGX9rPhPSs3KzB/WqLIZM4s=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=YpkWoAkBWAMzsHp8XvAGIrhPbez75Ojl15RZs3xJUDulDn+BWqNFtSGori2fvKOWCmvHRZb57zIxkQBQEyjftM3kNmHuqQOv/ysAwnHDi2s1ysV8FHc2EU4Ot/Bw2sGnyylF+KQ6uXOqC6sghtIBz9i3n69vXN/GAiV0ZiV5R+U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=126.com; spf=pass smtp.mailfrom=126.com; dkim=pass (1024-bit key) header.d=126.com header.i=@126.com header.b=Tluk4+OC; arc=none smtp.client-ip=220.197.31.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=126.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=126.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fWDR+lM8"
-Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-6e8fb83e137so61329116d6.0;
-        Tue, 06 May 2025 19:26:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746584810; x=1747189610; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qpWGvheQhS+DNg7fxr9VaJH2DOJjS8jMhgJEonuQaUs=;
-        b=fWDR+lM8PncwLl1kEWKgIMMUjFQoA1LLJOj+MnlDW3WUvLnkKc5QIEcV9EN7oxa1mS
-         hzbpa3wwiH8H2eLPaRRUrMjS/yJtSMde3J1QQ/jQdNAeLWVzePPRY9v0POAM7uRG89EX
-         EFbLavNYfKGvXdV0QCL3YEJmuiGCjCCB/CKSRzXmnyNMYYA1OL4/m3oeKOIRLH5d3MpF
-         FURLIE5osbGeBt5ndubEOnNe/pz+8sg9XVfFeeh+cOooQfw2ldG2rquJF2M874ryMLsJ
-         qYjsAXN4iLGgpsACK0u1ImRH4ZPFb0Ah2nwS85XUeWjXYZbhw30tIvTgZEmkWkbz8BOJ
-         flwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746584810; x=1747189610;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qpWGvheQhS+DNg7fxr9VaJH2DOJjS8jMhgJEonuQaUs=;
-        b=k9y4I3wnPQd4RbBxt1tpXPo96XolpcT2e1ZyH3MUATfd5wao8F/OfvlUPHBl9htNej
-         VEK7F5LqxLqplm0fD5s5RhB2am9f3NApH8+srDp+yniLaQmzWNIdaJmHMOE7Q6x/8KcQ
-         zog/AMCUqWMU/wdC3AVlH1RyYugTLpty41JTH/s1u8/scHaRXWSE3++i7mnLpSONk0G1
-         lCcmXtDhCI2bVtpDfvZnPjkDQ5e4H0bopvoEbILYtQcJlgNV+l/WjaSEoH+5FdZDWjqI
-         WL3YfdjNfv4feDySSr9byq85GcgLhoP8fxO1dY3W6JZaNobsCb89DvMYENYdcRrf+2S8
-         yRrA==
-X-Forwarded-Encrypted: i=1; AJvYcCVLm+JT4xoz6jwAYuexDETHpdyMd9nMZdTCThH2PV8dMgjIocnSJR9CXIlk0gQcS5mJF1fZh7BTkqZhoHnojdTxSQ==@vger.kernel.org, AJvYcCW+OvnQu0uSiyy0IGBQMEcKeYi7A3tXqWXWWy2aINhY214slb+HPtZ6ZECs/vKo6PvfQ/w=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxrqdBu8/dZzaVvuVr0Ovflfq45XydBElko/imGUla/FgVruDmg
-	iRdTnu3qzxa8o1ElCH5DQMLU8u3T6LQFvvsL+TxlTK8DzlGWVPZVqWCAjf9VxMOoERlOEnVV040
-	+8zec5DAVyr1azXPoDduPf8R8j8w=
-X-Gm-Gg: ASbGnct8wKMSrs8K7twDRKtSN7LAlJukSX7DPh4b1WmvKAf7ENQeBZl7DCm5wMqmloq
-	iliKAyfBZOZQG9pSGfuYzQTfFF2KzEN3P32gUwebgt/zVufFHEPyNiLTRQ2/pUI/lb6uX/ZKiFP
-	1uafs/MftnO0Z05lNpaLC1ix8=
-X-Google-Smtp-Source: AGHT+IHck3whkXJkexNBhCky/liPLCcdzr0pwds9wgG7c8v/oMOnB4eS5sc35Hf3le2ntF8Tk3v3wdgBdYwpEm3QHKY=
-X-Received: by 2002:a05:6214:f05:b0:6f5:436:9e46 with SMTP id
- 6a1803df08f44-6f5429fc37amr26406666d6.15.1746584809795; Tue, 06 May 2025
- 19:26:49 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=126.com header.i=@126.com header.b="Tluk4+OC"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=qtPcl
+	/B2RSB8VuMPGCmuJwljszoHk1RGRMG3a7CDqtA=; b=Tluk4+OC26c85N2rS+k00
+	JGakQM5vZdOENIAQnRIGAidFpzQnETRE2Vyk+KJa3R0sqBFWNbwlPJW2GSH/eyOs
+	w30MBLcHXXNuOJdtDof3o70T4Yv3r35WEKrQfJh//bnbQ+uUsVoFLNJ0IfCk5Wax
+	LW+A3GLh/yVlh70zW9LLsU=
+Received: from localhost.localdomain (unknown [])
+	by gzga-smtp-mtada-g1-3 (Coremail) with SMTP id _____wD3P8x2tBpocz5dBw--.62210S2;
+	Wed, 07 May 2025 09:16:39 +0800 (CST)
+From: Honglei Wang <jameshongleiwang@126.com>
+To: tj@kernel.org,
+	void@manifault.com,
+	arighi@nvidia.com,
+	changwoo@igalia.com
+Cc: mingo@redhat.com,
+	peterz@infradead.org,
+	juri.lelli@redhat.com,
+	vincent.guittot@linaro.org,
+	dietmar.eggemann@arm.com,
+	rostedt@goodmis.org,
+	bsegall@google.com,
+	mgorman@suse.de,
+	vschneid@redhat.com,
+	joshdon@google.com,
+	brho@google.com,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	jameshongleiwang@126.com
+Subject: [RESEND PATCH v2 0/2] sched_ext: rename var for slice refill event and add helper
+Date: Wed,  7 May 2025 09:16:35 +0800
+Message-Id: <20250507011637.77589-1-jameshongleiwang@126.com>
+X-Mailer: git-send-email 2.39.5 (Apple Git-154)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250506135727.3977467-1-jolsa@kernel.org> <20250506135727.3977467-3-jolsa@kernel.org>
-In-Reply-To: <20250506135727.3977467-3-jolsa@kernel.org>
-From: Yafang Shao <laoar.shao@gmail.com>
-Date: Wed, 7 May 2025 10:26:13 +0800
-X-Gm-Features: ATxdqUGqu4CSpwD4XlH84XS6zttaYkOi3zAYlyMUh_MeHJm9kLB5LYfq_ultkUw
-Message-ID: <CALOAHbAWHz_64QHXEaiRk1xaCQDU77b7EwY3dpkPrSyNYxcayw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 2/3] selftests/bpf: Add link info test for
- ref_ctr_offset retrieval
-To: Jiri Olsa <jolsa@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org, linux-perf-users@vger.kernel.org, 
-	Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>, 
-	John Fastabend <john.fastabend@gmail.com>, Hao Luo <haoluo@google.com>, 
-	Quentin Monnet <qmo@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wD3P8x2tBpocz5dBw--.62210S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrKw48Xr18GF4fuF4rJFy5Arb_yoWxZFgEqF
+	93uFZ3JanrZFyUGFWayF15Jr97KFW8Jrs5JF4UKrsFyr43trsrKr1kKrWkXr10gay2ywnr
+	KrnYyFy8uwnxujkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUUyE_tUUUUU==
+X-CM-SenderInfo: 5mdpv2pkrqwzphlzt0bj6rjloofrz/1tbiYBVGrWgatD0D8gACsW
 
-On Tue, May 6, 2025 at 9:57=E2=80=AFPM Jiri Olsa <jolsa@kernel.org> wrote:
->
-> Adding link info test for ref_ctr_offset retrieval for both
-> uprobe and uretprobe probes.
->
-> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+SCX_EV_ENQ_SLICE_DFL gives the impression that the event only occurs
+when the tasks were enqueued, which seems not accurate. So rename the
+variable to SCX_EV_REFILL_SLICE_DFL.
 
-LGTM
-Acked-by: Yafang Shao <laoar.shao@gmail.com>
+The slice refilling with default slice always come with event
+statistics together, add a helper routine to make it cleaner.
 
-> ---
->  .../selftests/bpf/prog_tests/fill_link_info.c  | 18 ++++++++++++++++--
->  1 file changed, 16 insertions(+), 2 deletions(-)
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/fill_link_info.c b/to=
-ols/testing/selftests/bpf/prog_tests/fill_link_info.c
-> index e59af2aa6601..e40114620751 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/fill_link_info.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/fill_link_info.c
-> @@ -37,6 +37,7 @@ static noinline void uprobe_func(void)
->  static int verify_perf_link_info(int fd, enum bpf_perf_event_type type, =
-long addr,
->                                  ssize_t offset, ssize_t entry_offset)
->  {
-> +       ssize_t ref_ctr_offset =3D entry_offset /* ref_ctr_offset for upr=
-obes */;
->         struct bpf_link_info info;
->         __u32 len =3D sizeof(info);
->         char buf[PATH_MAX];
-> @@ -97,6 +98,7 @@ static int verify_perf_link_info(int fd, enum bpf_perf_=
-event_type type, long add
->         case BPF_PERF_EVENT_UPROBE:
->         case BPF_PERF_EVENT_URETPROBE:
->                 ASSERT_EQ(info.perf_event.uprobe.offset, offset, "uprobe_=
-offset");
-> +               ASSERT_EQ(info.perf_event.uprobe.ref_ctr_offset, ref_ctr_=
-offset, "uprobe_ref_ctr_offset");
->
->                 ASSERT_EQ(info.perf_event.uprobe.name_len, strlen(UPROBE_=
-FILE) + 1,
->                                   "name_len");
-> @@ -241,20 +243,32 @@ static void test_uprobe_fill_link_info(struct test_=
-fill_link_info *skel,
->                 .retprobe =3D type =3D=3D BPF_PERF_EVENT_URETPROBE,
->                 .bpf_cookie =3D PERF_EVENT_COOKIE,
->         );
-> +       const char *sema[1] =3D {
-> +               "uprobe_link_info_sema_1",
-> +       };
-> +       __u64 *ref_ctr_offset;
->         struct bpf_link *link;
->         int link_fd, err;
->
-> +       err =3D elf_resolve_syms_offsets("/proc/self/exe", 1, sema,
-> +                                      (unsigned long **) &ref_ctr_offset=
-, STT_OBJECT);
-> +       if (!ASSERT_OK(err, "elf_resolve_syms_offsets_object"))
-> +               return;
-> +
-> +       opts.ref_ctr_offset =3D *ref_ctr_offset;
->         link =3D bpf_program__attach_uprobe_opts(skel->progs.uprobe_run,
->                                                0, /* self pid */
->                                                UPROBE_FILE, uprobe_offset=
-,
->                                                &opts);
->         if (!ASSERT_OK_PTR(link, "attach_uprobe"))
-> -               return;
-> +               goto out;
->
->         link_fd =3D bpf_link__fd(link);
-> -       err =3D verify_perf_link_info(link_fd, type, 0, uprobe_offset, 0)=
-;
-> +       err =3D verify_perf_link_info(link_fd, type, 0, uprobe_offset, *r=
-ef_ctr_offset);
->         ASSERT_OK(err, "verify_perf_link_info");
->         bpf_link__destroy(link);
-> +out:
-> +       free(ref_ctr_offset);
->  }
->
->  static int verify_kmulti_link_info(int fd, bool retprobe, bool has_cooki=
-es)
-> --
-> 2.49.0
->
+Changes in v2:
+Refine the comments base on Andrea's suggestion.
 
+Honglei Wang (2):
+  sched_ext: change the variable name for slice refill event
+  sched_ext: add helper for refill task with default slice
 
---=20
-Regards
-Yafang
+ kernel/sched/ext.c             | 36 +++++++++++++++++-----------------
+ tools/sched_ext/scx_qmap.bpf.c |  4 ++--
+ 2 files changed, 20 insertions(+), 20 deletions(-)
+
+-- 
+2.45.2
+
