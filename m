@@ -1,195 +1,165 @@
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDC2F2356B1
-	for <bpf@vger.kernel.org>; Fri,  9 May 2025 16:39:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 909B5F9C1
+	for <bpf@vger.kernel.org>; Fri,  9 May 2025 16:51:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746808787; cv=none; b=jsfalPrzZwCU26gCpaOy/8y0wmxr8VOO7miYhFUgTI2Bfr8aLC4AvWggk0nksh0qi/gxXoKh6HIkigQRRxWZzD9hdEtoqJERiorLirNRqSyH9OSXiS+ffE0k/qpOGCy1YFOs/lxj7uhtmkrHloI57VntWRgF/Ixq+ovLrJw9BAI=
+	t=1746809477; cv=none; b=UqV4F6EDh+OSSh2WaChHS6S4OLqhyoRhlQeaQtme65QWhsVgOT2Dqyx51Z2p3N0EOrnfhcnk7CMv7xMcRijgYqyYFC5z2GuTZxtVfO1eXt4a7SdIyoQdHgVMjdOlald+3cTVthiSgP+70kXeSZcc/7+nLhaZPBLpg+ZFPU1MMFA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746808787; c=relaxed/simple;
-	bh=px8lI6B1ic6OxgBYu4jqru0N7vvIJfN3VpsoThmsm+Q=;
+	s=arc-20240116; t=1746809477; c=relaxed/simple;
+	bh=E1aKUNVu5gOmNFnC1DhtiPE0HgYTSz1URgkQlc+nzj8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CE/5AAmx6A2qxe7XfWEkxuZIUj/mP5V3DbY53FEEgpX2FU9aZzYZwl8hMW2Uyzxo5Sz/IbI3H2qAwpocI6y06dMDUYIEnmLDfIJFq2/rdwwuDqeoPfKH0NYBWeaK2SAgsVEc8HcAKbf5DjagPTJS2SWMNlyhPHy0BajltF+TPB4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HuLSLMh4; arc=none smtp.client-ip=209.85.221.49
+	 To:Cc:Content-Type; b=B8oVoREaZQlBvYSkjqaxcFARuQPeCmV9PryWeSp0HpPELu8Y2axkFNfeGuaTzF+JMp1b2v3YJEC9RHn4pS8DAoUNm9+VMiCQ65+yx4e5s+KS1dS5TgRDY7XeGAFDDcbQKMTv4HaZSzM8CrVDIWdK/+xxvsdlcjUHeXrVchLUAvA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KsrO3R38; arc=none smtp.client-ip=209.85.128.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HuLSLMh4"
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-3995ff6b066so1317220f8f.3
-        for <bpf@vger.kernel.org>; Fri, 09 May 2025 09:39:45 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KsrO3R38"
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-43d04dc73b7so24659885e9.3
+        for <bpf@vger.kernel.org>; Fri, 09 May 2025 09:51:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746808784; x=1747413584; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1746809474; x=1747414274; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=uTaeGmXdrgzLK5TSft/2X4dPURBFf84KN2PZogtx3UU=;
-        b=HuLSLMh4eLY2SGI4eH0e2m7scf4xRRrLKET2GEfhb99t9UtV+DgBZwx9ujxcNd0QC1
-         hFVtFD/4YYpTtqrVS7HYl2g8z0wA3IXMCrNKPxVucQ1GtmMELLE1pPqIlNRjJzUE9UYA
-         MZMUnMbSB5Yr3wD6d5OS2qt336P1g9iPuBRY/iXJ5ph2yexEPkzNWHMoG91JbiLIN3qG
-         A5rq6lob/AkqF1IYekbNDpegIucyN8omnSOLOy7uPgcfIzpSa3mYSLoMCxyeoXHoWsqp
-         kMSYfeGJuQB4QucNMNhiiL1GnIUFwc34VM3P3MN//2+ETemDPn23MoOx1auvc7uyBona
-         73wg==
+        bh=GVH46qfX+JOXsh2TaIe0nMV6RT+fa3rQegZmUAwilms=;
+        b=KsrO3R38qCqCnXerhve9m2bnyuO5+VYc5zs+7m30m7D9iVf0S8vZLdZNQrej9H1QNf
+         qBFOe7sI+FRFcxfmDzbMqz61qArcMlJs8KVbnoypvLnXJuMqGaC4cKltwqGQo10GK+UG
+         75ffF1K8RtmN1Dy5HOP61DV+ylzEfE8iMxZ+j4JvCoAzHEdJCAproZYBSL3nw2vhKYiV
+         2veG5ue/nqLHo+6+HqTxM4H1NO2XTvZ7e1hMa8uXUHb90huyj5Q5YVrTmDF1rcvgAj0P
+         F6JRyoOuES2G2Ko16CBpG8vYBDxeZlWHXiyaITDhVFpbxxZIHLkaKJyD/I+Fr3UQENu3
+         wW+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746808784; x=1747413584;
+        d=1e100.net; s=20230601; t=1746809474; x=1747414274;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=uTaeGmXdrgzLK5TSft/2X4dPURBFf84KN2PZogtx3UU=;
-        b=fxz0d7rmeutqTyeHn8wjcokqfVuXUP3OhVnXTdSRm/VIPEvzi5/Kf3Sd90eFg4ff8k
-         btPAcrZH6UKgCuYyzpqNlznp0sRlAd2oVvW+4ITqHzIgLXLUCjIizCGj4otNnN9jfkbz
-         IMjQJsIHx1XPUIX4Wyya7ucSj/ySpSkmttnjhoR4mSKMbNv3iIuwpUvqoqILi7ebDWI8
-         z/LH24wZ9oVhZPcUyVirmvQ2HDuQ6v3zHqCUbNGRbYrZCbN2vvg+ovro758KFjMnzLRM
-         TnIN1C2ZbPh7ETYUAKYCG4PE1wOxDReIb4huxqgm1DhEz4b9y5SfgYAQOphMxIXBvBnV
-         SRZQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVIZS9ug9Ik4mzlfr6ap+sdbte2guDa0fjKqsP3bQmM8BHPSV3ijvxzWBj2y/OHq46JbO8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw91wNb6dh7opno5xJJMKjGVELjStYyqDV+CASNKsHc15Vc0Fw5
-	XyC9Jsnl0Ao3nm/F/f4GMmNqJ4u8fs4i1tlFZrg/AhOXCdggrPfjOkowt9wH5/S9g/VktXrLrjE
-	IDBUoQnvYof34fI3LuDa6JXye1y8=
-X-Gm-Gg: ASbGncsw9PA2h2WhgWvpsGTcdm+o9rGVeypvSiZA0XOjfjpsKZUO6CR+w8T++DCxL2q
-	IM3tsf6WnYaQKlWSfR4Fstxx8hkaq0diJr+MuRdp5SoC7/S2ZJFgwyjX+Vid3hfH/8I4R2L2Ys7
-	xalOlMKSqEYaOYaef3t8D22pzv2mMwZS/zFeOZP27OflXFV4vx
-X-Google-Smtp-Source: AGHT+IHAnglJGL5lczgcbsrr3wk8yFvvytSgrb02vhAqLF4zDdwTY8LHHmqYXYldaQmzOT4nBwBaf82WOoAk6qX4oVE=
-X-Received: by 2002:a05:6000:40df:b0:390:f394:6271 with SMTP id
- ffacd0b85a97d-3a1f64d8170mr3255075f8f.43.1746808783891; Fri, 09 May 2025
- 09:39:43 -0700 (PDT)
+        bh=GVH46qfX+JOXsh2TaIe0nMV6RT+fa3rQegZmUAwilms=;
+        b=i6JByFyYwJWYFZFOEElHFtEd3BWiAz9xIz2SNhydLrZ4vTSL17sRXuwrnaiBoKiQMB
+         uGJoRp2/h8LOWfVf+gUS3UQLRU3qlwddergv+MxrwwzDIOCn69aRAWz1zV4hfRMZ0Crr
+         d5DoAxOTfNpwOr95r+xON/8ABDmKSo/Zrf8m9fdbF66GJBHjcuwS0/rgemTON7wn0jKs
+         69AZId7SMv3cIHxFO/7u/w2AhY6cKTtn7jAW9v/TIE9R4Y+GEFM3xoEAiE1n9xJD/nIW
+         TpwVxD1oeTnhuPxzxh97rZqGQHI/6OqRMY96JMhnEPp/h5CNynr7xjQGHtcANYVRI1KP
+         JYRw==
+X-Forwarded-Encrypted: i=1; AJvYcCUY7X/3wRldSeu8jxwLwESfGSBhvVPiXBlLpmL6ncSQ3JNDFaCqgNdNnrQlitfGwdT9rWs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwMegll3ymbte8UpTe9QypINjJ+vBjNyc2DJcBDcxYq/YP4j1cC
+	AbE4BE+pV2uqrnbkfkJN2dgxzC5Y73vvduWCDE5XJ1k98VBFqfstZgvYwXMaAxLwyquf+SzpWCj
+	bk6J1wDWAF+B+GlySUe+u0e8OI/k=
+X-Gm-Gg: ASbGncv1SHn7KcgP3jIoYZVZoKnO/xRX1WN1cIegdkexZ1SqL5WgR+yUuSNnaYwGO50
+	R8eKn86CXMZ8mV5bF3ja7ha/L1s4zdBsbveZFOUTBD0yt5zlOggqcOQm+jYs4hasXNrs5CeG0og
+	T9iH1Gw1bQQcJHgJWoK9pBM7Hq7kJx18s8uKQSDw==
+X-Google-Smtp-Source: AGHT+IGwCAOJDZOrrbPl/TxzoTpsmOFpOHEBSjd2Vi5/PiwqwTJNUE9cJ1+5M9N2kd6NILhzjcR5eMe8Ot5o+9PGkvY=
+X-Received: by 2002:a05:6000:2289:b0:391:3406:b4e2 with SMTP id
+ ffacd0b85a97d-3a1f64ab40emr3219771f8f.49.1746809473686; Fri, 09 May 2025
+ 09:51:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1746598898.git.vmalik@redhat.com> <19913411da8c08170d959207e28262efc0a5d813.1746598898.git.vmalik@redhat.com>
- <aBx8Zjux0bSgtV04@google.com>
-In-Reply-To: <aBx8Zjux0bSgtV04@google.com>
+References: <20250508113804.304665-1-iii@linux.ibm.com> <CAADnVQ+kGcRrLOaA5ic6cYG+1vHJm0bBD1GRfUaYpaOGa3Vx0g@mail.gmail.com>
+ <15bf9a71b8185006c8d19a3aefb331a2765629c5.camel@linux.ibm.com>
+In-Reply-To: <15bf9a71b8185006c8d19a3aefb331a2765629c5.camel@linux.ibm.com>
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Fri, 9 May 2025 09:39:32 -0700
-X-Gm-Features: AX0GCFvmAdEr_vd55Lpb-nY1Pf_4PNLhg_X7zftmHqtt4lrV7cDqCtePDcDYEro
-Message-ID: <CAADnVQ+pru+0cTbk-YXpAb4SdZeS+NL2TjLAXcrQya0RxBjFpg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v4 3/4] bpf: Add kfuncs for read-only string operations
-To: Matt Bobrowski <mattbobrowski@google.com>
-Cc: Viktor Malik <vmalik@redhat.com>, bpf <bpf@vger.kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>
+Date: Fri, 9 May 2025 09:51:02 -0700
+X-Gm-Features: AX0GCFtCJdYMbzVyljbd5Q_1G15HFkBpun-o8GSncsn3WLxjH7j-UDFynFt2RX0
+Message-ID: <CAADnVQL6Q+QRv3_JwEd26biwGpFYcwD_=BjBJWLAtpgOP9CKRw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] selftests/bpf: Fix "expression result unused" warnings
+To: Ilya Leoshkevich <iii@linux.ibm.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>, 
+	Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
+	Alexander Gordeev <agordeev@linux.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, May 8, 2025 at 2:42=E2=80=AFAM Matt Bobrowski <mattbobrowski@google=
-.com> wrote:
+On Thu, May 8, 2025 at 12:21=E2=80=AFPM Ilya Leoshkevich <iii@linux.ibm.com=
+> wrote:
 >
-> On Wed, May 07, 2025 at 08:40:38AM +0200, Viktor Malik wrote:
-> > String operations are commonly used so this exposes the most common one=
-s
-> > to BPF programs. For now, we limit ourselves to operations which do not
-> > copy memory around.
+> On Thu, 2025-05-08 at 11:38 -0700, Alexei Starovoitov wrote:
+> > On Thu, May 8, 2025 at 4:38=E2=80=AFAM Ilya Leoshkevich <iii@linux.ibm.=
+com>
+> > wrote:
+> > >
+> > > clang-21 complains about unused expressions in a few progs.
+> > > Fix by explicitly casting the respective expressions to void.
 > >
-> > Unfortunately, most in-kernel implementations assume that strings are
-> > %NUL-terminated, which is not necessarily true, and therefore we cannot
-> > use them directly in the BPF context. Instead, we open-code them using
-> > __get_kernel_nofault instead of plain dereference to make them safe and
-> > limit the strings length to XATTR_SIZE_MAX to make sure the functions
-> > terminate. When __get_kernel_nofault fails, functions return -EFAULT.
-> > Similarly, when the size bound is reached, the functions return -E2BIG.
+> > ...
+> > >         if (val & _Q_LOCKED_MASK)
+> > > -               smp_cond_load_acquire_label(&lock->locked, !VAL,
+> > > release_err);
+> > > +               (void)smp_cond_load_acquire_label(&lock->locked,
+> > > !VAL, release_err);
+> >
+> > Hmm. I'm on clang-21 too and I don't see them.
+> > What warnings do you see ?
 >
-> Curious, why was XATTR_SIZE_MAX chosen as the upper bounds here? Just
-> an arbitrary value that felt large enough?
+> In file included from progs/arena_spin_lock.c:7:
+> progs/bpf_arena_spin_lock.h:305:1756: error: expression result unused
+> [-Werror,-Wunused-value]
+>   305 |   ({ typeof(_Generic((*&lock->locked), char: (char)0, unsigned
+> char : (unsigned char)0, signed char : (signed char)0, unsigned short :
+> (unsigned short)0, signed short : (signed short)0, unsigned int :
+> (unsigned int)0, signed int : (signed int)0, unsigned long : (unsigned
+> long)0, signed long : (signed long)0, unsigned long long : (unsigned
+> long long)0, signed long long : (signed long long)0, default:
+> (typeof(*&lock->locked))0)) __val =3D ({ typeof(&lock->locked) __ptr =3D
+> (&lock->locked); typeof(_Generic((*(&lock->locked)), char: (char)0,
+> unsigned char : (unsigned char)0, signed char : (signed char)0,
+> unsigned short : (unsigned short)0, signed short : (signed short)0,
+> unsigned int : (unsigned int)0, signed int : (signed int)0, unsigned
+> long : (unsigned long)0, signed long : (signed long)0, unsigned long
+> long : (unsigned long long)0, signed long long : (signed long long)0,
+> default: (typeof(*(&lock->locked)))0)) VAL; for (;;) { VAL =3D
+> (typeof(_Generic((*(&lock->locked)), char: (char)0, unsigned char :
+> (unsigned char)0, signed char : (signed char)0, unsigned short :
+> (unsigned short)0, signed short : (signed short)0, unsigned int :
+> (unsigned int)0, signed int : (signed int)0, unsigned long : (unsigned
+> long)0, signed long : (signed long)0, unsigned long long : (unsigned
+> long long)0, signed long long : (signed long long)0, default:
+> (typeof(*(&lock->locked)))0)))(*(volatile typeof(*__ptr) *)&(*__ptr));
+> if (!VAL) break; ({ __label__ l_break, l_continue; asm volatile
+> goto("may_goto %l[l_break]" :::: l_break); goto l_continue; l_break:
+> goto release_err; l_continue:; }); ({}); } (typeof(*(&lock-
+> >locked)))VAL; }); ({ ({ if (!CONFIG_X86_64) ({ unsigned long __val;
+> __sync_fetch_and_add(&__val, 0); }); else asm volatile("" :::
+> "memory"); }); }); (typeof(*(&lock->locked)))__val; });
+>       |
+> ^                         ~~~~~
+> 1 error generated.
+
+hmm. The error is impossible to read.
+
+Kumar,
+
+Do you see a way to silence it differently ?
+
+Without adding (void)...
+
+Things like:
+-       bpf_obj_new(..
++       (void)bpf_obj_new(..
+
+are good to fix, and if we could annotate
+bpf_obj_new_impl kfunc with __must_check we would have done it,
+
+but
+-               arch_mcs_spin_lock...
++               (void)arch_mcs_spin_lock...
+
+is odd.
+
+> It started today.
+> Here is the full compiler version:
 >
-> > At the moment, strings can be passed to the kfuncs in three forms:
-> > - string literals (i.e. pointers to read-only maps)
-> > - global variables (i.e. pointers to read-write maps)
-> > - stack-allocated buffers
-> >
-> > Note that currently, it is not possible to pass strings from the BPF
-> > program context (like function args) as the verifier doesn't treat them
-> > as neither PTR_TO_MEM nor PTR_TO_BTF_ID.
-> >
-> > Suggested-by: Alexei Starovoitov <ast@kernel.org>
-> > Signed-off-by: Viktor Malik <vmalik@redhat.com>
-> > ---
-> >  kernel/bpf/helpers.c | 440 +++++++++++++++++++++++++++++++++++++++++++
-> >  1 file changed, 440 insertions(+)
-> >
-> > diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-> > index e3a2662f4e33..8fb7c2ca7ac0 100644
-> > --- a/kernel/bpf/helpers.c
-> > +++ b/kernel/bpf/helpers.c
-> > @@ -23,6 +23,7 @@
-> >  #include <linux/btf_ids.h>
-> >  #include <linux/bpf_mem_alloc.h>
-> >  #include <linux/kasan.h>
-> > +#include <linux/uaccess.h>
-> >
-> >  #include "../../lib/kstrtox.h"
-> >
-> > @@ -3194,6 +3195,433 @@ __bpf_kfunc void bpf_local_irq_restore(unsigned=
- long *flags__irq_flag)
-> >       local_irq_restore(*flags__irq_flag);
-> >  }
-> >
-> > +/* Kfuncs for string operations.
-> > + *
-> > + * Since strings are not necessarily %NUL-terminated, we cannot direct=
-ly call
-> > + * in-kernel implementations. Instead, we open-code the implementation=
-s using
-> > + * __get_kernel_nofault instead of plain dereference to make them safe=
-.
-> > + */
+> $ clang-21 --version
+> Debian clang version 21.0.0 (++20250501112544+75d1cceb9486-
+> 1~exp1~20250501112558.1422)
+> Target: s390x-unknown-linux-gnu
+> Thread model: posix
+> InstalledDir: /usr/lib/llvm-21/bin
 >
-> Returning an -EFAULT error code for supplied arguments which are
-> deemed to be invalid is just a very weird semantic IMO. As a BPF
-> program author, I totally wouldn't expect a BPF kfunc to return
-> -EINVAL if I had supplied it something that it couldn't quite possibly
-> handle to begin with. Look at the prior art, being pre-existing BPF
-> kfuncs, and you'll see how they handle invalidly supplied arguments. I
-> totally understand that attempting to dereference a NULL-pointer would
-> ultimately result in a fault being raised, so it may feel rather
-> natural to also report an -EFAULT error code upon doing some
-> NULL-pointer checks that hold true, but from an API usability POV it
-> just seems awkward and wrong.
-
-I mostly agree with the above.
-
-On the first look, all the checks like:
-+       if (!s || !accept)
-+               return ERR_PTR(-EFAULT);
-
-looks like a premature optimization, since
-__get_kernel_nofault() will handle it just fine.
-
-But there is a different reason to do it and the error code
-should probably be different.
-
-Consider that copy_from_kernel_nofault() has the following check
-that is meaningful on several architectures including x86:
-        if (!copy_from_kernel_nofault_allowed(src, size))
-                return -ERANGE;
-
-It's there to avoid accidentally reading user addresses and
-NULL is one such user address.
-
-Doing it for every pointer inside the loop will hurt performance,
-but doing it once in the beginning maybe ok?
-If we want to optimize it we can introduce the helper:
-
-static bool copy_maybe_allowed(const void *ptr)
-{
-#ifdef CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
-  if ((unsigned long)ptr < TASK_SIZE)
-     return false;
-#else
-  if (!ptr)
-     return false;
-#endif
-  return true;
-}
-
-and modify above as:
-  if (!copy_maybe_allowed(s) || !copy_maybe_allowed(accept))
-    return ERR_PTR(-ERANGE);
-
-bikeshed: shorter/better name for helper..
+> Best regards,
+> Ilya
