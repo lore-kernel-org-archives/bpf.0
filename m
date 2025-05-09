@@ -1,26 +1,26 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2340223C8D5;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAA3323F299;
 	Fri,  9 May 2025 16:51:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746809500; cv=none; b=P+YP9kbsSOUwBNab4mOzsd1G81h4ct66Zs6lZMtj/p2wbgW38ArKYd2wHMYx7/vJLjW2zh/kbzxMVg9yLNupc/ci6kjHKKTk3YKeKTxJ3X606DJkSi5+oDUWyC3bT4z7PoK16aF4R4WkmERJTzPRYEzMn2Ru/dm+CqpSumcakjE=
+	t=1746809500; cv=none; b=pUogpEwpQ7P/xNqYWWUtdESOIT+aHiGazp5PXS1bT1FgnNI/nZdPSjksvoIY3VHo3SOUFJU8IiGEMSp59eHSW+8PwfQFhfBazaBBaMfIixS1bV4pO2i76zDud/eM+dlCi849octGxuyU/9CmPcmF/hkhKC+jYGH3MOL76Fps6EE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1746809500; c=relaxed/simple;
-	bh=nFgF+ACnRcNWWOr1gv5eFabQhi240pk46GZke2cBQLU=;
+	bh=6DE7KZOXrlLO0p0yUtPCwZQ+NilkphXCklG8RJnYqCw=;
 	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type; b=I0/sAiFOlFCIiQ/1DBbly2/AmUjukt9eOj0FXae6mv7sYsRPQpZ9zOfZ+NiyRLhYymL+5bQWAQ7Z8uy3flimQUt8/6ZVbkYi/sC7+zLKq7IwBB6f1sttDOaXexkdzqChsuVUlPNipu+K+z90HzWhu6Pdey5upURIx6nBnOqZPCM=
+	 Content-Type; b=h9FPeI+Qf8ggLPeWmWfsBaqNgQfCoBFhittW6h2HD+PuB6/xqxO/o/OLHXdk0rHMCEKbpKuEEtNvi+3oSEdQ6Q2wXCMkHUAzPUkuej3AgTFjO+cAAzs5//UxdiCbbXzB1BLRHrejMpTy27O08W9pOdk744rHPFPpikPnj7Dj9hQ=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA8E1C4CEFA;
-	Fri,  9 May 2025 16:51:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 827E9C19421;
+	Fri,  9 May 2025 16:51:40 +0000 (UTC)
 Received: from rostedt by gandalf with local (Exim 4.98.2)
 	(envelope-from <rostedt@goodmis.org>)
-	id 1uDQx1-00000002gIj-2YPz;
-	Fri, 09 May 2025 12:51:55 -0400
-Message-ID: <20250509165155.459900954@goodmis.org>
+	id 1uDQx2-00000002gKj-1DBk;
+	Fri, 09 May 2025 12:51:56 -0400
+Message-ID: <20250509165156.135430576@goodmis.org>
 User-Agent: quilt/0.68
-Date: Fri, 09 May 2025 12:45:35 -0400
+Date: Fri, 09 May 2025 12:45:39 -0400
 From: Steven Rostedt <rostedt@goodmis.org>
 To: linux-kernel@vger.kernel.org,
  linux-trace-kernel@vger.kernel.org,
@@ -33,7 +33,8 @@ Cc: Masami Hiramatsu <mhiramat@kernel.org>,
  Ingo Molnar <mingo@kernel.org>,
  Jiri Olsa <jolsa@kernel.org>,
  Namhyung Kim <namhyung@kernel.org>
-Subject: [PATCH v8 11/18] unwind deferred: Use bitmask to determine which callbacks to call
+Subject: [PATCH v8 15/18] perf: Have get_perf_callchain() return NULL if crosstask and user are
+ set
 References: <20250509164524.448387100@goodmis.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -43,186 +44,51 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 
-From: Steven Rostedt <rostedt@goodmis.org>
+From: Josh Poimboeuf <jpoimboe@kernel.org>
 
-In order to know which registered callback requested a stacktrace for when
-the task goes back to user space, add a bitmask for all registered
-tracers. The bitmask is the size of log, which means that on a 32 bit
-machine, it can have at most 32 registered tracers, and on 64 bit, it can
-have at most 64 registered tracers. This should not be an issue as there
-should not be more than 10 (unless BPF can abuse this?).
+get_perf_callchain() doesn't support cross-task unwinding for user space
+stacks, have it return NULL if both the crosstask and user arguments are
+set.
 
-When a tracer registers with unwind_deferred_init() it will get a bit
-number assigned to it. When a tracer requests a stacktrace, it will have
-its bit set within the task_struct. When the task returns back to user
-space, it will call the callbacks for all the registered tracers where
-their bits are set in the task's mask.
-
-When a tracer is removed by the unwind_deferred_cancel() all current tasks
-will clear the associated bit, just in case another tracer gets registered
-immediately afterward and then gets their callback called unexpectedly.
-
+Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- include/linux/sched.h           |  1 +
- include/linux/unwind_deferred.h |  1 +
- kernel/unwind/deferred.c        | 46 ++++++++++++++++++++++++++++-----
- 3 files changed, 41 insertions(+), 7 deletions(-)
+ kernel/events/callchain.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/include/linux/sched.h b/include/linux/sched.h
-index a1e1c07cadfb..d3ee0c5405d6 100644
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -1649,6 +1649,7 @@ struct task_struct {
+diff --git a/kernel/events/callchain.c b/kernel/events/callchain.c
+index b0f5bd228cd8..abf258913ab6 100644
+--- a/kernel/events/callchain.c
++++ b/kernel/events/callchain.c
+@@ -224,6 +224,10 @@ get_perf_callchain(struct pt_regs *regs, bool kernel, bool user,
+ 	struct perf_callchain_entry_ctx ctx;
+ 	int rctx, start_entry_idx;
  
- #ifdef CONFIG_UNWIND_USER
- 	struct unwind_task_info		unwind_info;
-+	unsigned long			unwind_mask;
- #endif
- 
- 	/* CPU-specific state of this task: */
-diff --git a/include/linux/unwind_deferred.h b/include/linux/unwind_deferred.h
-index a384eef719a3..1789c3624723 100644
---- a/include/linux/unwind_deferred.h
-+++ b/include/linux/unwind_deferred.h
-@@ -13,6 +13,7 @@ typedef void (*unwind_callback_t)(struct unwind_work *work, struct unwind_stackt
- struct unwind_work {
- 	struct list_head		list;
- 	unwind_callback_t		func;
-+	int				bit;
- };
- 
- #ifdef CONFIG_UNWIND_USER
-diff --git a/kernel/unwind/deferred.c b/kernel/unwind/deferred.c
-index 238cd97079ec..7ae0bec5b36a 100644
---- a/kernel/unwind/deferred.c
-+++ b/kernel/unwind/deferred.c
-@@ -16,6 +16,7 @@
- /* Guards adding to and reading the list of callbacks */
- static DEFINE_MUTEX(callback_mutex);
- static LIST_HEAD(callbacks);
-+static unsigned long unwind_mask;
- 
- /*
-  * Read the task context timestamp, if this is the first caller then
-@@ -106,6 +107,7 @@ static void unwind_deferred_task_work(struct callback_head *head)
- 	struct unwind_stacktrace trace;
- 	struct unwind_work *work;
- 	u64 timestamp;
-+	struct task_struct *task = current;
- 
- 	if (WARN_ON_ONCE(!info->pending))
- 		return;
-@@ -133,7 +135,10 @@ static void unwind_deferred_task_work(struct callback_head *head)
- 
- 	guard(mutex)(&callback_mutex);
- 	list_for_each_entry(work, &callbacks, list) {
--		work->func(work, &trace, timestamp);
-+		if (task->unwind_mask & (1UL << work->bit)) {
-+			work->func(work, &trace, timestamp);
-+			clear_bit(work->bit, &current->unwind_mask);
-+		}
- 	}
- }
- 
-@@ -159,9 +164,12 @@ static int unwind_deferred_request_nmi(struct unwind_work *work, u64 *timestamp)
- 		inited_timestamp = true;
- 	}
- 
--	if (info->pending)
-+	if (current->unwind_mask & (1UL << work->bit))
- 		return 1;
- 
-+	if (info->pending)
-+		goto out;
++	/* crosstask is not supported for user stacks */
++	if (crosstask && user)
++		return NULL;
 +
- 	ret = task_work_add(current, &info->work, TWA_NMI_CURRENT);
- 	if (ret) {
- 		/*
-@@ -175,8 +183,8 @@ static int unwind_deferred_request_nmi(struct unwind_work *work, u64 *timestamp)
- 	}
+ 	entry = get_callchain_entry(&rctx);
+ 	if (!entry)
+ 		return NULL;
+@@ -249,9 +253,6 @@ get_perf_callchain(struct pt_regs *regs, bool kernel, bool user,
+ 		}
  
- 	info->pending = 1;
+ 		if (regs) {
+-			if (crosstask)
+-				goto exit_put;
 -
--	return 0;
-+out:
-+	return test_and_set_bit(work->bit, &current->unwind_mask);
- }
+ 			if (add_mark)
+ 				perf_callchain_store_context(&ctx, PERF_CONTEXT_USER);
  
- /**
-@@ -223,14 +231,18 @@ int unwind_deferred_request(struct unwind_work *work, u64 *timestamp)
- 
- 	*timestamp = get_timestamp(info);
- 
-+	/* This is already queued */
-+	if (current->unwind_mask & (1UL << work->bit))
-+		return 1;
-+
- 	/* callback already pending? */
- 	pending = READ_ONCE(info->pending);
- 	if (pending)
--		return 1;
-+		goto out;
- 
- 	/* Claim the work unless an NMI just now swooped in to do so. */
- 	if (!try_cmpxchg(&info->pending, &pending, 1))
--		return 1;
-+		goto out;
- 
- 	/* The work has been claimed, now schedule it. */
- 	ret = task_work_add(current, &info->work, TWA_RESUME);
-@@ -239,16 +251,27 @@ int unwind_deferred_request(struct unwind_work *work, u64 *timestamp)
- 		return ret;
+@@ -261,7 +262,6 @@ get_perf_callchain(struct pt_regs *regs, bool kernel, bool user,
+ 		}
  	}
  
--	return 0;
-+ out:
-+	return test_and_set_bit(work->bit, &current->unwind_mask);
- }
+-exit_put:
+ 	put_callchain_entry(rctx);
  
- void unwind_deferred_cancel(struct unwind_work *work)
- {
-+	struct task_struct *g, *t;
-+
- 	if (!work)
- 		return;
- 
- 	guard(mutex)(&callback_mutex);
- 	list_del(&work->list);
-+
-+	clear_bit(work->bit, &unwind_mask);
-+
-+	guard(rcu)();
-+	/* Clear this bit from all threads */
-+	for_each_process_thread(g, t) {
-+		clear_bit(work->bit, &t->unwind_mask);
-+	}
- }
- 
- int unwind_deferred_init(struct unwind_work *work, unwind_callback_t func)
-@@ -256,6 +279,14 @@ int unwind_deferred_init(struct unwind_work *work, unwind_callback_t func)
- 	memset(work, 0, sizeof(*work));
- 
- 	guard(mutex)(&callback_mutex);
-+
-+	/* See if there's a bit in the mask available */
-+	if (unwind_mask == ~0UL)
-+		return -EBUSY;
-+
-+	work->bit = ffz(unwind_mask);
-+	unwind_mask |= 1UL << work->bit;
-+
- 	list_add(&work->list, &callbacks);
- 	work->func = func;
- 	return 0;
-@@ -267,6 +298,7 @@ void unwind_task_init(struct task_struct *task)
- 
- 	memset(info, 0, sizeof(*info));
- 	init_task_work(&info->work, unwind_deferred_task_work);
-+	task->unwind_mask = 0;
- }
- 
- void unwind_task_free(struct task_struct *task)
+ 	return entry;
 -- 
 2.47.2
 
