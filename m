@@ -1,353 +1,154 @@
-Received: from out-184.mta0.migadu.com (out-184.mta0.migadu.com [91.218.175.184])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C9DE1D7985
-	for <bpf@vger.kernel.org>; Fri,  9 May 2025 04:09:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.184
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C682C267B71;
+	Fri,  9 May 2025 05:21:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746763786; cv=none; b=sIoKt9V2/t4l7DoumjAaKrHr6+d1PE7ZeDvmSPNUxwPMpqIAVThq21tMIu/jKi8tr5OpOehOsLPiWRUcInugmE+CcVspXFHIQubsc+4LeCfW66rjaUa34JLW924yj3ftiEnYOchLzjCoBiVz3ta+2wUZqBBtJ7jnMKL3UTXhtfk=
+	t=1746768101; cv=none; b=D7x/ooC49+WNkApW8Fh4spMerwiDOXS9eCfoQCjLL9j6q9hsXSjevniThqCZE06LZBNqE0yf058FNmPiW9vmyJBoMojFABW1ngsBQ8i5AmsCLMKsZNUpd9JFAk0px/roUkLu7cyDmBx5Ab2hoMRcJHutDuSlEOcf2tWjFQBZ/NQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746763786; c=relaxed/simple;
-	bh=U8tu7TvyGpslS1Ul8KqeUrYJPXljvl7GJOijYZYA7eY=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=ugmWQ9CxkiKj7yEnGl2BLAOQ2W81Le0S9i6R/td/CfNNMzJ63XhCF37StPCXFVXHLsRvebZxlSwZ7Fi6om0ESMdR3Qe6dmkjDRbngXmTh5hC3ZoM04ksCddewFSlSLMvvgynIIgvEt1m7kMS3UTQgdqFdsc0vWYBGo7TmF6cawY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=VS4D/GqY; arc=none smtp.client-ip=91.218.175.184
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1746768101; c=relaxed/simple;
+	bh=XDQx+8VYOUEPIuOCdctljQaYABm4TqTedFKRdIDwZQM=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=plYhg/j/EBuksxH7RgXBRqSSG3AJvXp98bgAvYUTfrGh0b1AvpHBBerIBk9uaiGUwqoIl1pPZEHwjPTgHGbI8KOaNl0tabNYbFrOYlBSQb5ue0SKLgQ4IXxG9ciUS96WfkA871qJUtPbvNqvovAVaF7ldND9GoNWb1lszlh4oKk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VDrlgzL7; arc=none smtp.client-ip=209.85.210.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="VS4D/GqY"
-Message-ID: <33a03235-638d-4c63-811d-ec44872654b3@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1746763771;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=mb2yXO5JaOh2uZBrDGHn676qmR7x19a9F2q44TBG8MM=;
-	b=VS4D/GqYTemKVtHz+SaJePbFCWPbdr8SZ460H6R+4Iu1lCiTJED1ftR/CcHukyn838WQzz
-	8y01LnpctQh1Ol3h+ZU2UmonODgdRaOB+GHAuJa/lNpsukfWGHf2fZgEfytuDtupJCT2QV
-	OD7AcaD1ihSDjTWUJSSZE4RwiMrEFpw=
-Date: Thu, 8 May 2025 21:09:25 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VDrlgzL7"
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-7406c6dd2b1so2714201b3a.0;
+        Thu, 08 May 2025 22:21:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1746768099; x=1747372899; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=ARSX7//TY0Fs/M//egZhiAwhSvwSj71QYEmAXvKrqh0=;
+        b=VDrlgzL7fU9WCxYZCN7IZxSMTnCUpXSFxI/zR7XE409ObaeXQOTgy8q+F1ZjSpSQaK
+         GM4U0XPLMQaxXnQ6fTHBnQ/6h9JaUMiUcENSfAcM5IuQ0pFxZ8Vv7qfRaF+D40NmxFEF
+         DASvswaxn0HfZsqHN+7o0QElfcHHGPT02j4FUq9ZmaGEL7tFI1VJNmlJdtKlW6trYqFm
+         zNAjd3MwyAMHHKnPvB/UCPZ48OpzGYwlSbf5lG2hdFty6XKZA+pbZ0aPsouwJlewW/qR
+         UluJ894Q88Z/mVNYJbzwhRnE+1Wk8WpKNx8EHQMb+0mZlYuCUq3ORImNLBmIgesqECo/
+         1Vdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746768099; x=1747372899;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ARSX7//TY0Fs/M//egZhiAwhSvwSj71QYEmAXvKrqh0=;
+        b=ZiTeUOwJFA3NskGZMXMA35hqH8eBUhSAY8r0DQFePAnPu57Ipa45Anr5Er45d8x9Uy
+         0M6VgFPsDmRmAabr/hBNdll3DfoNj5DbcaGQZpp5QdRH2i/wkZXSFtkG4BlBI9Q4Zhb8
+         kbOkbFs0J1P/iNdth6EjCbhndQtmGM8AhVYe/EJZsZpA5d7t2JVO2dXIQuVEZFZszfc4
+         bgcCj6E3V1td1tir0AFIfcTiaXIB7Eqnq2JO3KiuGUKA6QfJbtBYRace7kGQM5RI0F/d
+         23fHVRkPEd2jmzit5xBNDxdWNcti5emMO1pvGYfJeQ0nZ5k/P59SMT5UxCQ4uqyjYW0w
+         EC0Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVxWmPgbFMeWoDOCYCIIkYJaYo20KsMLakX8z2EkuXWGkecGPSZS2l6qaiKKXqybH+pPSs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwcRZaz8yTAGHo5DrSuJK7CH+B8SmE247RNpr8fS4zSxXIRox5+
+	wn/DqdGL+4guwQaiCbAog/zljVT6JbXIcnaoT+xeRfueCQurBPME
+X-Gm-Gg: ASbGncu6hZ+oJhMPl0bEJUhpb3k10nd3/J05UiqCVEx7ARzOnueQeP7sM0dJgl5HBRt
+	JpXdMhDt3GUZyUkFXK3FwkeZjEryLc4wDnNCUEW5yUn13qgkQ6WYMdsyX4lx4ZMnvW9uGZwIFoc
+	MnlyrBcZXHu4lNtQFW8Qbzyw9TZrBJj/pqkRgkyct0OJQZtpxan86MtpDzoBLqRAEsFhnOVGdob
+	H2bS1lGTZ59i808Ut1krLEHuDfzBLsoXi8Fhlsf6agPwf3QS84Dg8rqdaHElyMI8d0IHFEIVk2l
+	ChkCYFYHD+Wz3Evl6Eq0aK5VhY8/YDrlDSNa9NjabA80/m86Ymj+aKTy9GokXktw6Qv4qlDlRQY
+	3eKbOWtk=
+X-Google-Smtp-Source: AGHT+IFYAcf0T5s6HjYlj/QuNYl0jIoDTjdrzQsmCDNbYyXYiuXaBG99vttbUgOXq2qhMv73bv5R3Q==
+X-Received: by 2002:a05:6a21:a4c1:b0:1fe:8f7c:c8e with SMTP id adf61e73a8af0-215ab637034mr2941836637.15.1746768098871;
+        Thu, 08 May 2025 22:21:38 -0700 (PDT)
+Received: from kodidev-ubuntu (69-172-146-21.cable.teksavvy.com. [69.172.146.21])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-74237a3c600sm949103b3a.134.2025.05.08.22.21.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 May 2025 22:21:38 -0700 (PDT)
+From: Tony Ambardar <tony.ambardar@gmail.com>
+X-Google-Original-From: Tony Ambardar <Tony.Ambardar@gmail.com>
+Date: Thu, 8 May 2025 22:21:35 -0700
+To: Alexis =?iso-8859-1?Q?Lothor=E9?= <alexis.lothore@bootlin.com>
+Cc: dwarves@vger.kernel.org, bpf@vger.kernel.org,
+	Alan Maguire <alan.maguire@oracle.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>
+Subject: Re: [PATCH dwarves v2] dwarf_loader: Fix skipped encoding of
+ function BTF on 32-bit systems
+Message-ID: <aB2Q3ylln95YFTCD@kodidev-ubuntu>
+References: <Z/+HZ3w2KmbK5OAi@kodidev-ubuntu>
+ <20250502070318.1561924-1-tony.ambardar@gmail.com>
+ <D9QOFW6WEIT0.2AJBVJINZRRBV@bootlin.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v5 07/17] bpf: Support new 32bit offset jmp
- instruction
-Content-Language: en-GB
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-To: "Lai, Yi" <yi1.lai@linux.intel.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- bpf@vger.kernel.org, Daniel Borkmann <daniel@iogearbox.net>,
- Martin KaFai Lau <martin.lau@kernel.org>,
- David Faust <david.faust@oracle.com>,
- "Jose E . Marchesi" <jose.marchesi@oracle.com>, kernel-team@fb.com,
- Eduard Zingerman <eddyz87@gmail.com>, yi1.lai@intel.com
-References: <20230728011143.3710005-1-yonghong.song@linux.dev>
- <20230728011231.3716103-1-yonghong.song@linux.dev>
- <Z/8q3xzpU59CIYQE@ly-workstation>
- <763cbfb4-b1a0-4752-8428-749bb12e2103@linux.dev>
-In-Reply-To: <763cbfb4-b1a0-4752-8428-749bb12e2103@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+In-Reply-To: <D9QOFW6WEIT0.2AJBVJINZRRBV@bootlin.com>
 
+Hi Alexis,
 
-
-On 5/7/25 1:06 PM, Yonghong Song wrote:
->
->
-> On 4/15/25 11:58 AM, Lai, Yi wrote:
->> Hi Yonghong Song,
->>
->> Greetings!
->>
->> I used Syzkaller and found that there is WARNING in 
->> __mark_chain_precision in linux-next tag - next-20250414.
->
-> Thanks, Yi. I will investigate this soon.
-
-I did some investigation. The source code looks like below:
-
-+__used __naked static void hack_sub(void)
-+{
-+       asm volatile ("                                 \
-+        r2 = 2314885393468386424 ll; \
-+        gotol +0; \
-+        if r2 <= r10 goto -1; \
-+        if r1 >= -1835016 goto +0; \
-+        if r2 <= 8 goto +0; \
-+        if r3 <= 0 goto +0; \
-+        call 44; \
-+        exit; \
-+       "      :
-+       :
-+       : __clobber_all);
-+}
-+
-+SEC("cgroup/sock_create")
-+__description("HACK")
-+__success __retval(0)
-+__naked void hack(void)
-+{
-+       asm volatile ("                                 \
-+        r3 = 0 ll; \
-+        call hack_sub; \
-+        exit; \
-+       "      :
-+       :
-+       : __clobber_all);
-+}
-
-The verification failure:
-
-0: R1=ctx() R10=fp0
-; asm volatile ("                                 \ @ verifier_movsx.c:352
-0: (18) r3 = 0x0                      ; R3_w=0
-2: (85) call pc+1
-caller:
-  R10=fp0
-callee:
-  frame1: R1=ctx() R3_w=0 R10=fp0
-4: frame1: R1=ctx() R3_w=0 R10=fp0
-; asm volatile ("                                 \ @ verifier_movsx.c:333
-4: (18) r2 = 0x20202000256c6c78       ; frame1: R2_w=0x20202000256c6c78
-6: (06) gotol pc+0
-7: (bd) if r2 <= r10 goto pc-1        ; frame1: R2_w=0x20202000256c6c78 R10=fp0
-8: (35) if r1 >= 0xffe3fff8 goto pc+0         ; frame1: R1=ctx()
-9: (b5) if r2 <= 0x8 goto pc+0
-mark_precise: frame1: last_idx 9 first_idx 0 subseq_idx -1
-mark_precise: frame1: regs=r2 stack= before 8: (35) if r1 >= 0xffe3fff8 goto pc+0
-mark_precise: frame1: regs=r2 stack= before 7: (bd) if r2 <= r10 goto pc-1
-mark_precise: frame1: regs=r2,r10 stack= before 6: (06) gotol pc+0
-mark_precise: frame1: regs=r2,r10 stack= before 4: (18) r2 = 0x20202000256c6c78
-mark_precise: frame1: regs=r10 stack= before 2: (85) call pc+1
-BUG regs 400
-processed 7 insns (limit 1000000) max_states_per_insn 0 total_states 0 peak_states 0 mark_read 0
-
-The verification failure happens below (line 4301 and 4302)
-
-  4294                                 /* static subprog call instruction, which
-  4295                                  * means that we are exiting current subprog,
-  4296                                  * so only r1-r5 could be still requested as
-  4297                                  * precise, r0 and r6-r10 or any stack slot in
-  4298                                  * the current frame should be zero by now
-  4299                                  */
-  4300                                 if (bt_reg_mask(bt) & ~BPF_REGMASK_ARGS) {
-  4301                                         verbose(env, "BUG regs %x\n", bt_reg_mask(bt));
-  4302                                         WARN_ONCE(1, "verifier backtracking bug");
-  4303                                         return -EFAULT;
-  4304                                 }
-
-So the failure reason is due to r10 is used during comparisons.
-So verifier does the right thing. Maybe you should remove WARN_ONCE
-("verifier backtracking bug")? Do we actually hit backtracking bug
-due to verifier implementation?
-
-
->
->>
->> After bisection and the first bad commit is:
->> "
->> 4cd58e9af8b9 bpf: Support new 32bit offset jmp instruction
->> "
->>
->> All detailed into can be found at:
->> https://github.com/laifryiee/syzkaller_logs/tree/main/250415_203801___mark_chain_precision 
->>
->> Syzkaller repro code:
->> https://github.com/laifryiee/syzkaller_logs/tree/main/250415_203801___mark_chain_precision/repro.c 
->>
->> Syzkaller repro syscall steps:
->> https://github.com/laifryiee/syzkaller_logs/tree/main/250415_203801___mark_chain_precision/repro.prog 
->>
->> Syzkaller report:
->> https://github.com/laifryiee/syzkaller_logs/tree/main/250415_203801___mark_chain_precision/repro.report 
->>
->> Kconfig(make olddefconfig):
->> https://github.com/laifryiee/syzkaller_logs/tree/main/250415_203801___mark_chain_precision/kconfig_origin 
->>
->> Bisect info:
->> https://github.com/laifryiee/syzkaller_logs/tree/main/250415_203801___mark_chain_precision/bisect_info.log 
->>
->> bzImage:
->> https://github.com/laifryiee/syzkaller_logs/raw/refs/heads/main/250415_203801___mark_chain_precision/bzImage_8ffd015db85fea3e15a77027fda6c02ced4d2444 
->>
->> Issue dmesg:
->> https://github.com/laifryiee/syzkaller_logs/blob/main/250415_203801___mark_chain_precision/8ffd015db85fea3e15a77027fda6c02ced4d2444_dmesg.log 
->>
->>
->> "
->> [   51.167546] ------------[ cut here ]------------
->> [   51.167803] verifier backtracking bug
->> [   51.167867] WARNING: CPU: 1 PID: 672 at kernel/bpf/verifier.c:4302 
->> __mark_chain_precision+0x35d3/0x37b0
->> [   51.168496] Modules linked in:
->> [   51.168684] CPU: 1 UID: 0 PID: 672 Comm: repro Not tainted 
->> 6.15.0-rc2-8ffd015db85f #1 PREEMPT(voluntary)
->> [   51.169127] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), 
->> BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.o4
->> [   51.169980] RIP: 0010:__mark_chain_precision+0x35d3/0x37b0
->> [   51.170255] Code: 06 31 ff 89 de e8 cd 0b e0 ff 84 db 0f 85 a7 e5 
->> ff ff e8 90 11 e0 ff 48 c7 c7 a0 cb f4 85 c6 05 f
->> [   51.171108] RSP: 0018:ffff8880115ff2d8 EFLAGS: 00010296
->> [   51.171424] RAX: 0000000000000000 RBX: 0000000000000000 RCX: 
->> ffffffff81470f72
->> [   51.171759] RDX: ffff88801f422540 RSI: ffffffff81470f7f RDI: 
->> 0000000000000001
->> [   51.172112] RBP: ffff8880115ff428 R08: 0000000000000001 R09: 
->> ffffed100d8a5941
->> [   51.172443] R10: 0000000000000000 R11: ffff88801f423398 R12: 
->> 0000000000000400
->> [   51.172769] R13: dffffc0000000000 R14: 0000000000000002 R15: 
->> ffff88801f720000
->> [   51.173152] FS:  00007f8a0a0b1600(0000) GS:ffff8880e3684000(0000) 
->> knlGS:0000000000000000
->> [   51.173563] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->> [   51.173861] CR2: 0000000000402010 CR3: 000000001179a006 CR4: 
->> 0000000000770ef0
->> [   51.174244] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 
->> 0000000000000000
->> [   51.174614] DR3: 0000000000000000 DR6: 00000000ffff07f0 DR7: 
->> 0000000000000400
->> [   51.174995] PKRU: 55555554
->> [   51.175151] Call Trace:
->> [   51.175302]  <TASK>
->> [   51.175439]  ? __lock_acquire+0x381/0x2260
->> [   51.175675]  ? __pfx___sanitizer_cov_trace_const_cmp4+0x10/0x10
->> [   51.176006]  ? __pfx___mark_chain_precision+0x10/0x10
->> [   51.176326]  ? mark_reg_read+0x1e4/0x340
->> [   51.176558]  ? __check_reg_arg+0x1c8/0x440
->> [   51.176802]  ? kasan_quarantine_put+0xa2/0x200
->> [   51.177068]  check_cond_jmp_op+0x2692/0x65f0
->> [   51.177335]  ? krealloc_noprof+0xe5/0x330
->> [   51.177569]  ? krealloc_noprof+0x190/0x330
->> [   51.177790]  ? __pfx_check_cond_jmp_op+0x10/0x10
->> [   51.178060]  ? push_insn_history+0x1d0/0x6d0
->> [   51.178308]  do_check_common+0x9134/0xd570
->> [   51.178532]  ? ns_capable+0xec/0x130
->> [   51.178748]  ? bpf_base_func_proto+0x7e/0xbe0
->> [   51.179025]  ? __sanitizer_cov_trace_const_cmp1+0x1e/0x30
->> [   51.179319]  ? __pfx_do_check_common+0x10/0x10
->> [   51.179540]  ? __pfx_mark_fastcall_pattern_for_call+0x10/0x10
->> [   51.179864]  ? bpf_check+0x89b9/0xd880
->> [   51.180072]  ? kvfree+0x32/0x40
->> [   51.180237]  bpf_check+0x9c27/0xd880
->> [   51.180450]  ? rcu_is_watching+0x19/0xc0
->> [   51.180680]  ? __lock_acquire+0x380/0x2260
->> [   51.180900]  ? __pfx_bpf_check+0x10/0x10
->> [   51.181099]  ? __lock_acquire+0x410/0x2260
->> [   51.181355]  ? __this_cpu_preempt_check+0x21/0x30
->> [   51.181673]  ? seqcount_lockdep_reader_access.constprop.0+0xb4/0xd0
->> [   51.181989]  ? __sanitizer_cov_trace_cmp4+0x1a/0x20
->> [   51.182229]  ? __sanitizer_cov_trace_const_cmp1+0x1e/0x30
->> [   51.182510]  ? bpf_obj_name_cpy+0x152/0x1b0
->> [   51.182765]  bpf_prog_load+0x14d7/0x2600
->> [   51.182970]  ? __pfx_bpf_prog_load+0x10/0x10
->> [   51.183193]  ? __might_fault+0x14a/0x1b0
->> [   51.183435]  ? __this_cpu_preempt_check+0x21/0x30
->> [   51.183670]  ? lock_release+0x14f/0x2c0
->> [   51.183876]  ? __might_fault+0xf1/0x1b0
->> [   51.184074]  __sys_bpf+0x18ac/0x5c10
->> [   51.184279]  ? __pfx___sys_bpf+0x10/0x10
->> [   51.184502]  ? __lock_acquire+0x410/0x2260
->> [   51.184725]  ? __sanitizer_cov_trace_cmp4+0x1a/0x20
->> [   51.184960]  ? ktime_get_coarse_real_ts64+0xb6/0x100
->> [   51.185253]  ? __audit_syscall_entry+0x39c/0x500
->> [   51.185507]  __x64_sys_bpf+0x7d/0xc0
->> [   51.185718]  ? syscall_trace_enter+0x14d/0x280
->> [   51.185945]  x64_sys_call+0x204a/0x2150
->> [   51.186182]  do_syscall_64+0x6d/0x150
->> [   51.186395]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
->> [   51.186654] RIP: 0033:0x7f8a09e3ee5d
->> [   51.186869] Code: ff c3 66 2e 0f 1f 84 00 00 00 00 00 90 f3 0f 1e 
->> fa 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 8
->> [   51.187767] RSP: 002b:00007fff00100bb8 EFLAGS: 00000246 ORIG_RAX: 
->> 0000000000000141
->> [   51.188152] RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 
->> 00007f8a09e3ee5d
->> [   51.188527] RDX: 0000000000000090 RSI: 00000000200009c0 RDI: 
->> 0000000000000005
->> [   51.188895] RBP: 00007fff00100bc0 R08: 0000000000000000 R09: 
->> 0000000000000001
->> [   51.189263] R10: 00000000ffffffff R11: 0000000000000246 R12: 
->> 00007fff00100cd8
->> [   51.189657] R13: 0000000000401146 R14: 0000000000403e08 R15: 
->> 00007f8a0a0fa000
->> [   51.190071]  </TASK>
->> [   51.190197] irq event stamp: 3113
->> [   51.190380] hardirqs last  enabled at (3121): [<ffffffff8165d8c5>] 
->> __up_console_sem+0x95/0xb0
->> [   51.190797] hardirqs last disabled at (3128): [<ffffffff8165d8aa>] 
->> __up_console_sem+0x7a/0xb0
->> [   51.191214] softirqs last  enabled at (2600): [<ffffffff8149050e>] 
->> __irq_exit_rcu+0x10e/0x170
->> [   51.191656] softirqs last disabled at (2589): [<ffffffff8149050e>] 
->> __irq_exit_rcu+0x10e/0x170
->> [   51.192093] ---[ end trace 0000000000000000 ]---
->> "
->>
->> Hope this cound be insightful to you.
->>
->> Regards,
->> Yi Lai
->>
->> ---
->>
->> If you don't need the following environment to reproduce the problem 
->> or if you
->> already have one reproduced environment, please ignore the following 
->> information.
->>
->> How to reproduce:
->> git clone https://gitlab.com/xupengfe/repro_vm_env.git
->> cd repro_vm_env
->> tar -xvf repro_vm_env.tar.gz
->> cd repro_vm_env; ./start3.sh  // it needs qemu-system-x86_64 and I 
->> used v7.1.0
->>    // start3.sh will load 
->> bzImage_2241ab53cbb5cdb08a6b2d4688feb13971058f65 v6.2-rc5 kernel
->>    // You could change the bzImage_xxx as you want
->>    // Maybe you need to remove line "-drive 
->> if=pflash,format=raw,readonly=on,file=./OVMF_CODE.fd \" for different 
->> qemu version
->> You could use below command to log in, there is no password for root.
->> ssh -p 10023 root@localhost
->>
->> After login vm(virtual machine) successfully, you could transfer 
->> reproduced
->> binary to the vm by below way, and reproduce the problem in vm:
->> gcc -pthread -o repro repro.c
->> scp -P 10023 repro root@localhost:/root/
->>
->> Get the bzImage for target kernel:
->> Please use target kconfig and copy it to kernel_src/.config
->> make olddefconfig
->> make -jx bzImage           //x should equal or less than cpu num your 
->> pc has
->>
->> Fill the bzImage file into above start3.sh to load the target kernel 
->> in vm.
->>
->>
->> Tips:
->> If you already have qemu-system-x86_64, please ignore below info.
->> If you want to install qemu v7.1.0 version:
->> git clone https://github.com/qemu/qemu.git
->> cd qemu
->> git checkout -f v7.1.0
->> mkdir build
->> cd build
->> yum install -y ninja-build.x86_64
->> yum -y install libslirp-devel.x86_64
->> ../configure --target-list=x86_64-softmmu --enable-kvm --enable-vnc 
->> --enable-gtk --enable-sdl --enable-usb-redir --enable-slirp
->> make
->> make install
->>
+On Thu, May 08, 2025 at 11:38:06AM +0200, Alexis Lothor� wrote:
+> Hello,
+> 
+> On Fri May 2, 2025 at 9:03 AM CEST, Tony Ambardar wrote:
+> > I encountered an issue building BTF kernels for 32-bit armhf, where many
+> > functions are missing in BTF data:
+> 
 > [...]
->
+> 
+> > Fixes: a53c58158b76 ("dwarf_loader: Mark functions that do not use expected registers for params")
+> > Signed-off-by: Tony Ambardar <tony.ambardar@gmail.com>
+> 
+> I encountered some issues with pahole 1.30 when trying to generate BTF data
+> for functions having some __int128 values ([1]), and have been redirected
+> here by Tony. I gave a try to the patch below and confirm that it fixes my
+> issue: BTF data is now properly generated for my target function, so:
+> 
+> Tested-by: Alexis Lothor� <alexis.lothore@bootlin.com>
+> 
 
+Glad that resolved your issue, and thank you for the extra testing data
+point.
+
+> While at it, to follow-up on Alan's request for more testing, I did the
+> following:
+> - build kernel and bpf selftests with pahole 1.30, extract BTF raw data
+>   with bpftool
+> - repeat with pahole 1.30 + Tony's patch
+> - I build my kernel for arm64, it is based on bpf-next_base and I use a
+>   defconfig very close to the one used in BPF CI (so based on
+>   tools/testing/selftests/bpf/config*)
+> 
+
+Nice! I notice bootlin has worked on several BPF testing contributions,
+and was wondering if your build is some new standard buildroot/yocto
+config tailored for BPF testing, and what archs it might support? Reason
+for asking is I have a large stack of WIP patches for enabling use of
+test_progs across 64/32-bit archs and cross-compilation, and I'm keen to
+see other examples of configs, root images, etc. (especially for 32-bit)
+At the moment I'm targeting 32-bit armhf support to make progress..
+
+> I observe the following when comparing the resulting BTF data with/without
+> Tony's patch:
+> - There is no difference on vmlinux BTF data
+> - For bpf_testmod.ko, there is a slight shift in the first BTF ID (first ID
+>   is 46 with pristine pahole, 47 with patched pahole), which in turns makes
+>   a lot of noise in the diff, but the actual diff seems to be about two new
+>   BTF entries related to my custom function now being properly detected
+>   (BTF_KIND_FUNC and BTF_KIND_FUNC_PROTO)
+> 
+
+Right, I noticed the same skew and it does make checking equivalence more
+complicated.
+
+> Alexis
+> 
+> [1] https://lore.kernel.org/bpf/D9Q73OTLEOU4.LNAO9K4POETM@bootlin.com/
+> 
+> -- 
+> Alexis Lothor�, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+> 
+Thanks again,
+Tony
