@@ -1,20 +1,20 @@
-Received: from 69-171-232-180.mail-mxout.facebook.com (69-171-232-180.mail-mxout.facebook.com [69.171.232.180])
+Received: from 66-220-144-179.mail-mxout.facebook.com (66-220-144-179.mail-mxout.facebook.com [66.220.144.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E27D5288CC
-	for <bpf@vger.kernel.org>; Sun, 11 May 2025 16:28:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0AD543169
+	for <bpf@vger.kernel.org>; Sun, 11 May 2025 18:27:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746980898; cv=none; b=AcozVoCjHaKAbA8XJK89WvdlQfTGvgfRPPJY7DbDmnQc3WzaE5fF2W/eeShWiYXB3LAfNzZ/zkmXReL5BtlPBMbq3uUH5yekBolKivzW16aoUM4MP5BE4F7MJSSQyru3l8G4FdcbHM1oS2V4aSQ54h2qWVX90VxEHzeKJkQ8SUA=
+	t=1746988081; cv=none; b=SHtPyHGuWzWlXM46Qi6NHW2b73nNpGWhg3SOvkP+1hGYsBfW5jWcwwTakf0hy28EwCsGVQs0BQlC9rmM2b/4MKgdNuri/6S/qoeZFZrIoK0QiMMwdyQYrZEAHwdBw5UEWd7RthGnRdrT0gNn3OFiWyBlH7nrEo4PJCpPZEGUc9k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746980898; c=relaxed/simple;
-	bh=MLwluYfczZA2goP7Kf+fXN0EzYAU6cmYekyG4rp36PY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=i72aSYGWLTwK6B/X3eJPfF0LLYZmSeg5aa7DeZI5TRdn3IAenbM7V/1xFbporjAggMBudqUl16GSnEPILG3/gZSY4WVwG2lNz9UYKaGt/SujWlseEjwivShHm4P74qgGQHXiMPnGZslNt5ZzwMV4ewAwY/bj6GWNGSLuz5gTZLA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.180
+	s=arc-20240116; t=1746988081; c=relaxed/simple;
+	bh=bEomkCCMpJXvHwazxgoA2bpzuNNpboY38Nj9nDNkx3I=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=fGgS5Av51Qpwym4tZEy41Alz4BQHKKEG2Ol1fx2VRDmP+f0yvLNfUkBK30MGTuoyjqSdYOsWwWTTc/k4Ro/61FvW6+/T/sM2ANWhcez8HZUwEYGZ4l3A6NpQJ33Cg+VMoG9iKdOLk9T+8MJD/5aDlvpxt0dgkrOihyPbzHf83zs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id CD0D974BC042; Sun, 11 May 2025 09:27:58 -0700 (PDT)
+	id 85B0374F5F0F; Sun, 11 May 2025 11:27:44 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -22,9 +22,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	kernel-team@fb.com,
 	Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf-next 1/2] bpf: Do not include r10 in precision backtracking bookkeeping
-Date: Sun, 11 May 2025 09:27:58 -0700
-Message-ID: <20250511162758.281071-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next 1/2] bpf: Warn with new bpf_unreachable() kfunc maybe due to uninitialized var
+Date: Sun, 11 May 2025 11:27:44 -0700
+Message-ID: <20250511182744.1806792-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.47.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -32,157 +32,138 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-Yi Lai reported an issue ([1]) where the following warning appears
-in kernel dmesg:
-  [   60.643604] verifier backtracking bug
-  [   60.643635] WARNING: CPU: 10 PID: 2315 at kernel/bpf/verifier.c:4302=
- __mark_chain_precision+0x3a6c/0x3e10
-  [   60.648428] Modules linked in: bpf_testmod(OE)
-  [   60.650471] CPU: 10 UID: 0 PID: 2315 Comm: test_progs Tainted: G    =
-       OE       6.15.0-rc4-gef11287f8289-dirty #327 PREEMPT(full)
-  [   60.654385] Tainted: [O]=3DOOT_MODULE, [E]=3DUNSIGNED_MODULE
-  [   60.656682] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), B=
-IOS rel-1.14.0-0-g155821a1990b-prebuilt.qemu.org 04/01/2014
-  [   60.660475] RIP: 0010:__mark_chain_precision+0x3a6c/0x3e10
-  [   60.662814] Code: 5a 30 84 89 ea e8 c4 d9 01 00 80 3d 3e 7d d8 04 00=
- 0f 85 60 fa ff ff c6 05 31 7d d8 04
-                       01 48 c7 c7 00 58 30 84 e8 c4 06 a5 ff <0f> 0b e9 =
-46 fa ff ff 48 ...
-  [   60.668720] RSP: 0018:ffff888116cc7298 EFLAGS: 00010246
-  [   60.671075] RAX: 54d70e82dfd31900 RBX: ffff888115b65e20 RCX: 0000000=
-000000000
-  [   60.673659] RDX: 0000000000000001 RSI: 0000000000000004 RDI: 0000000=
-0ffffffff
-  [   60.676241] RBP: 0000000000000400 R08: ffff8881f6f23bd3 R09: 1ffff11=
-03ede477a
-  [   60.678787] R10: dffffc0000000000 R11: ffffed103ede477b R12: ffff888=
-115b60ae8
-  [   60.681420] R13: 1ffff11022b6cbc4 R14: 00000000fffffff2 R15: 0000000=
-000000001
-  [   60.684030] FS:  00007fc2aedd80c0(0000) GS:ffff88826fa8a000(0000) kn=
-lGS:0000000000000000
-  [   60.686837] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-  [   60.689027] CR2: 000056325369e000 CR3: 000000011088b002 CR4: 0000000=
-000370ef0
-  [   60.691623] Call Trace:
-  [   60.692821]  <TASK>
-  [   60.693960]  ? __pfx_verbose+0x10/0x10
-  [   60.695656]  ? __pfx_disasm_kfunc_name+0x10/0x10
-  [   60.697495]  check_cond_jmp_op+0x16f7/0x39b0
-  [   60.699237]  do_check+0x58fa/0xab10
-  ...
+Marc Su=C3=B1=C3=A9 (Isovalent, part of Cisco) reported an issue where an
+uninitialized variable caused generating bpf prog binary code not
+working as expected. The reproducer is in [1] where the flags
+=E2=80=9C-Wall -Werror=E2=80=9D are enabled, but there is no warning and =
+compiler
+may take advantage of uninit variable to do aggressive optimization.
 
-Further analysis shows the warning is at line 4302 as below:
+In llvm internals, uninitialized variable usage may generate
+'unreachable' IR insn and these 'unreachable' IR insns may indicate
+uninit var impact on code optimization. With clang21 patch [2],
+those 'unreachable' IR insn are converted to func bpf_unreachable().
 
-  4294                         /* static subprog call instruction, which
-  4295                          * means that we are exiting current subpr=
-og,
-  4296                          * so only r1-r5 could be still requested =
-as
-  4297                          * precise, r0 and r6-r10 or any stack slo=
-t in
-  4298                          * the current frame should be zero by now
-  4299                          */
-  4300                         if (bt_reg_mask(bt) & ~BPF_REGMASK_ARGS) {
-  4301                                 verbose(env, "BUG regs %x\n", bt_r=
-eg_mask(bt));
-  4302                                 WARN_ONCE(1, "verifier backtrackin=
-g bug");
-  4303                                 return -EFAULT;
-  4304                         }
+In kernel, a new kfunc bpf_unreachable() is added. If this kfunc
+(generated by [2]) is the last insn in the main prog or a subprog,
+the verifier will suggest the verification failure may be due to
+uninitialized var, so user can check their source code to find the
+root cause.
 
-With the below test (also in the next patch):
-  __used __naked static void __bpf_jmp_r10(void)
-  {
-	asm volatile (
-	"r2 =3D 2314885393468386424 ll;"
-	"goto +0;"
-	"if r2 <=3D r10 goto +3;"
-	"if r1 >=3D -1835016 goto +0;"
-	"if r2 <=3D 8 goto +0;"
-	"if r3 <=3D 0 goto +0;"
-	"exit;"
-	::: __clobber_all);
-  }
+Without this patch, the verifier will output
+  last insn is not an exit or jmp
+and user will not know what is the potential root cause and
+it will take more time to debug this verification failure.
 
-  SEC("?raw_tp")
-  __naked void bpf_jmp_r10(void)
-  {
-	asm volatile (
-	"r3 =3D 0 ll;"
-	"call __bpf_jmp_r10;"
-	"r0 =3D 0;"
-	"exit;"
-	::: __clobber_all);
-  }
+  [1] https://github.com/msune/clang_bpf/blob/main/Makefile#L3
+  [2] https://github.com/llvm/llvm-project/pull/131731
 
-The following is the verifier failure log:
-  0: (18) r3 =3D 0x0                      ; R3_w=3D0
-  2: (85) call pc+2
-  caller:
-   R10=3Dfp0
-  callee:
-   frame1: R1=3Dctx() R3_w=3D0 R10=3Dfp0
-  5: frame1: R1=3Dctx() R3_w=3D0 R10=3Dfp0
-  ; asm volatile ("                                 \ @ verifier_precisio=
-n.c:184
-  5: (18) r2 =3D 0x20202000256c6c78       ; frame1: R2_w=3D0x20202000256c=
-6c78
-  7: (05) goto pc+0
-  8: (bd) if r2 <=3D r10 goto pc+3        ; frame1: R2_w=3D0x20202000256c=
-6c78 R10=3Dfp0
-  9: (35) if r1 >=3D 0xffe3fff8 goto pc+0         ; frame1: R1=3Dctx()
-  10: (b5) if r2 <=3D 0x8 goto pc+0
-  mark_precise: frame1: last_idx 10 first_idx 0 subseq_idx -1
-  mark_precise: frame1: regs=3Dr2 stack=3D before 9: (35) if r1 >=3D 0xff=
-e3fff8 goto pc+0
-  mark_precise: frame1: regs=3Dr2 stack=3D before 8: (bd) if r2 <=3D r10 =
-goto pc+3
-  mark_precise: frame1: regs=3Dr2,r10 stack=3D before 7: (05) goto pc+0
-  mark_precise: frame1: regs=3Dr2,r10 stack=3D before 5: (18) r2 =3D 0x20=
-202000256c6c78
-  mark_precise: frame1: regs=3Dr10 stack=3D before 2: (85) call pc+2
-  BUG regs 400
-
-The main failure reason is due to r10 in precision backtracking bookkeepi=
-ng.
-Actually r10 is always precise and there is no need to add it the precisi=
-on
-backtracking bookkeeping.
-
-This patch fixed the problem by not adding r10 to prevision backtracking =
-bookkeeping.
-
-  [1] https://lore.kernel.org/bpf/Z%2F8q3xzpU59CIYQE@ly-workstation/
-
-Reported by: Yi Lai <yi1.lai@linux.intel.com>
-Fixes: 407958a0e980 ("bpf: encapsulate precision backtracking bookkeeping=
-")
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- kernel/bpf/verifier.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ kernel/bpf/helpers.c  |  5 +++++
+ kernel/bpf/verifier.c | 17 ++++++++++++++++-
+ 2 files changed, 21 insertions(+), 1 deletion(-)
 
+In order to compile kernel successfully with the above [2], the following
+change is needed due to clang21 changes:
+
+  --- a/Makefile
+  +++ b/Makefile
+  @@ -852,7 +852,7 @@ endif
+   endif # may-sync-config
+   endif # need-config
+=20
+  -KBUILD_CFLAGS  +=3D -fno-delete-null-pointer-checks
+  +KBUILD_CFLAGS  +=3D -fno-delete-null-pointer-checks -Wno-default-const=
+-init-field-unsafe
+
+  --- a/scripts/Makefile.extrawarn
+  +++ b/scripts/Makefile.extrawarn
+  @@ -19,6 +19,7 @@ KBUILD_CFLAGS +=3D $(call cc-disable-warning, frame-a=
+ddress)
+   KBUILD_CFLAGS +=3D $(call cc-disable-warning, address-of-packed-member=
+)
+   KBUILD_CFLAGS +=3D -Wmissing-declarations
+   KBUILD_CFLAGS +=3D -Wmissing-prototypes
+  +KBUILD_CFLAGS +=3D -Wno-default-const-init-var-unsafe
+
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index fed53da75025..6048d7e19d4c 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -3283,6 +3283,10 @@ __bpf_kfunc void bpf_local_irq_restore(unsigned lo=
+ng *flags__irq_flag)
+ 	local_irq_restore(*flags__irq_flag);
+ }
+=20
++__bpf_kfunc void bpf_unreachable(void)
++{
++}
++
+ __bpf_kfunc_end_defs();
+=20
+ BTF_KFUNCS_START(generic_btf_ids)
+@@ -3388,6 +3392,7 @@ BTF_ID_FLAGS(func, bpf_iter_kmem_cache_next, KF_ITE=
+R_NEXT | KF_RET_NULL | KF_SLE
+ BTF_ID_FLAGS(func, bpf_iter_kmem_cache_destroy, KF_ITER_DESTROY | KF_SLE=
+EPABLE)
+ BTF_ID_FLAGS(func, bpf_local_irq_save)
+ BTF_ID_FLAGS(func, bpf_local_irq_restore)
++BTF_ID_FLAGS(func, bpf_unreachable)
+ BTF_KFUNCS_END(common_btf_ids)
+=20
+ static const struct btf_kfunc_id_set common_kfunc_set =3D {
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 28f5a7899bd6..1cb4d80d15c1 100644
+index 28f5a7899bd6..d26aec0a90d0 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -4413,8 +4413,10 @@ static int backtrack_insn(struct bpf_verifier_env =
-*env, int idx, int subseq_idx,
- 			 * before it would be equally necessary to
- 			 * propagate it to dreg.
- 			 */
--			bt_set_reg(bt, dreg);
--			bt_set_reg(bt, sreg);
-+			if (dreg !=3D BPF_REG_FP)
-+				bt_set_reg(bt, dreg);
-+			if (sreg !=3D BPF_REG_FP)
-+				bt_set_reg(bt, sreg);
- 		} else if (BPF_SRC(insn->code) =3D=3D BPF_K) {
- 			 /* dreg <cond> K
- 			  * Only dreg still needs precision before
+@@ -206,6 +206,7 @@ static int ref_set_non_owning(struct bpf_verifier_env=
+ *env,
+ static void specialize_kfunc(struct bpf_verifier_env *env,
+ 			     u32 func_id, u16 offset, unsigned long *addr);
+ static bool is_trusted_reg(const struct bpf_reg_state *reg);
++static void verbose_insn(struct bpf_verifier_env *env, struct bpf_insn *=
+insn);
+=20
+ static bool bpf_map_ptr_poisoned(const struct bpf_insn_aux_data *aux)
+ {
+@@ -3398,7 +3399,10 @@ static int check_subprogs(struct bpf_verifier_env =
+*env)
+ 	int i, subprog_start, subprog_end, off, cur_subprog =3D 0;
+ 	struct bpf_subprog_info *subprog =3D env->subprog_info;
+ 	struct bpf_insn *insn =3D env->prog->insnsi;
++	bool is_bpf_unreachable =3D false;
+ 	int insn_cnt =3D env->prog->len;
++	const struct btf_type *t;
++	const char *tname;
+=20
+ 	/* now check that all jumps are within the same subprog */
+ 	subprog_start =3D subprog[cur_subprog].start;
+@@ -3433,7 +3437,18 @@ static int check_subprogs(struct bpf_verifier_env =
+*env)
+ 			if (code !=3D (BPF_JMP | BPF_EXIT) &&
+ 			    code !=3D (BPF_JMP32 | BPF_JA) &&
+ 			    code !=3D (BPF_JMP | BPF_JA)) {
+-				verbose(env, "last insn is not an exit or jmp\n");
++				verbose_insn(env, &insn[i]);
++				if (btf_vmlinux && insn[i].code =3D=3D (BPF_CALL | BPF_JMP) &&
++				    insn[i].src_reg =3D=3D BPF_PSEUDO_KFUNC_CALL) {
++					t =3D btf_type_by_id(btf_vmlinux, insn[i].imm);
++					tname =3D btf_name_by_offset(btf_vmlinux, t->name_off);
++					if (strcmp(tname, "bpf_unreachable") =3D=3D 0)
++						is_bpf_unreachable =3D true;
++				}
++				if (is_bpf_unreachable)
++					verbose(env, "last insn is bpf_unreachable, due to uninitialized va=
+r?\n");
++				else
++					verbose(env, "last insn is not an exit or jmp\n");
+ 				return -EINVAL;
+ 			}
+ 			subprog_start =3D subprog_end;
 --=20
 2.47.1
 
