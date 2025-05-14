@@ -1,46 +1,46 @@
 Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18A60183CB0
-	for <bpf@vger.kernel.org>; Wed, 14 May 2025 22:16:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA54C20010C
+	for <bpf@vger.kernel.org>; Wed, 14 May 2025 22:16:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.38
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747260988; cv=none; b=DmGA0C7DEzhlTISCYjLq4waSeB4OABI4gPwkGxRBYbwQGlJ/F7dvRTGkKebgy2R6gydG/ayO+/tZ7pw2WRbOmpjjArwAvDDZ2UjNY18DWVV3OH+cpUTk+2p2EufcZf462QPRLWqYW/AMJW9IFpLRU/C0sDE+D/N0gs1vpgvaKBI=
+	t=1747260988; cv=none; b=kY82CELBsD4oTpPH9BlCAYwkTTup/oaWWDWj8RZK5RBoRDQt7B0ioIl4KVilTT/M84S3UK+ANwj4ubanh14jYniaixhbXG+0DilqHejCD+5z7l5+FuxnR37ieJq03f0S+8f1S2BBodioNrYfIcpOejPtBNU9r4fi0IdIuqAhp20=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1747260988; c=relaxed/simple;
-	bh=ZsyvH9DIWeaFMfPnZooNrPBXpUdpw8lz+3vNzKJrMOw=;
+	bh=8KERzOWdSrZs8kSwJdKHRZwEAinPslc0Smuxbo46QIg=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=KIjRYJVz/hGY4O02Z/K1srtdRaJJ/voCFUyAJE0Vbo08JCzzEuiukk+gbvFk2RfAdEgvCXeaDaLRNrOIeAojVVdGGHiW4585Lt71Jtt9LJyc6IlDbbG1J5mmUz9r4P7UaFgr6Uxq8d2DM5SKaOtoTU7wn5Um6u0pEi92+J5ZI7Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=RCE7JJPa; arc=none smtp.client-ip=185.226.149.38
+	 In-Reply-To:To:Cc; b=famGjaRo+/DB9idqXHu5Qe/wmVPPrJAdVqScXz2j1c9Grf/Pla5Z94usxtWP7JGn13IkPtyH5dozDNouvsjmlKBiPMFowwRNN6uAGZ5CWXP9deFtnbtTZpsILeQkERRuZPgaqfZJ2HP7iUw1PAmy5D6kX6qwLnO8Ppe3ZzerYAI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=HrXbSvj8; arc=none smtp.client-ip=185.226.149.38
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="RCE7JJPa"
+	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="HrXbSvj8"
 Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
 	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
 	(Exim 4.93)
 	(envelope-from <mhal@rbox.co>)
-	id 1uFKOg-001k8R-Eo; Thu, 15 May 2025 00:16:18 +0200
+	id 1uFKOl-001k90-Ra; Thu, 15 May 2025 00:16:23 +0200
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
 	s=selector2; h=Cc:To:In-Reply-To:References:Message-Id:
 	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From;
-	bh=HY7Xi8OzdrnVquA1jOAiIn6f3FOUOBUfyJUv25gTw1Q=; b=RCE7JJPatJsjcKYqWo0PpekN6x
-	Bj9XutplDaWgLFSbpRfBBSf8AYdWZzh7YVQbjaq+Sar5PY5ceggHWGdD8pyGmOE92/MKNbyiRz6nE
-	DnfVy2Y1AovkaoA8qrDe7WEGf6ReyXQX0x1eS8fTUVdQsR1Rz2FvhzlFhmQC+DNayyWuH0ev+Bf1/
-	saGu37sRMdbvLaF95IdRwH/7N/KJ3PzXazomliPZXhaUAt4l4z4x9zOxdL9WcZPqw9PQzasCZ6Xq5
-	h4bVKI71vRe5xCB39OIsZ5+6ET0dbKmCoqcjn2HCPobmx+kXwTvC4NybcvOBVO6wv8W6JLIh+SLlQ
-	bdSdQ3iw==;
+	bh=xvhM4tbojY9tDkQHmJNrLd25j/vmeCNoOANSmjk4XqY=; b=HrXbSvj83fKZ1zxaxaAsVUVMyN
+	RNMmnp0yapE7aKb0wT0mwAMZozSex40He2ZKAqTzQyd8EgcLGT+iILMiWC4/wejnRqdYkx0sZUgWL
+	+xpNKGJbRQ1JAiTYOo8uoNuan0MMdsuGYSTQvbJHAAq+Hz6gT0Sv2dDZMqSE1rWnazUV+1PeuK7H2
+	5n+atxSNSo2VLymoaEKOW7ddbOQnbLeKly2dBM895iR48vwGF1JCof4QXJFPCX7nAxjMZW/COviqL
+	Wfmi+Xzlds2DmhM0CI+I3l/gyoDIfWAGqcumcMFKotfU6FlKw2THHUh7xHYT6LdGFHk5fyHmnFqI6
+	XGoQO/iQ==;
 Received: from [10.9.9.73] (helo=submission02.runbox)
 	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
 	(envelope-from <mhal@rbox.co>)
-	id 1uFKOg-0004JU-4x; Thu, 15 May 2025 00:16:18 +0200
+	id 1uFKOl-0004Ja-H5; Thu, 15 May 2025 00:16:23 +0200
 Received: by submission02.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim 4.93)
-	id 1uFKOQ-005bJ3-A1; Thu, 15 May 2025 00:16:02 +0200
+	id 1uFKOO-005bJ3-E1; Thu, 15 May 2025 00:16:00 +0200
 From: Michal Luczaj <mhal@rbox.co>
-Date: Thu, 15 May 2025 00:15:31 +0200
-Subject: [PATCH bpf-next v3 8/8] selftests/bpf: sockmap_listen cleanup:
- Drop af_inet SOCK_DGRAM redir tests
+Date: Thu, 15 May 2025 00:15:29 +0200
+Subject: [PATCH bpf-next v3 6/8] selftests/bpf: sockmap_listen cleanup:
+ Drop af_vsock redir tests
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -49,7 +49,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250515-selftests-sockmap-redir-v3-8-a1ea723f7e7e@rbox.co>
+Message-Id: <20250515-selftests-sockmap-redir-v3-6-a1ea723f7e7e@rbox.co>
 References: <20250515-selftests-sockmap-redir-v3-0-a1ea723f7e7e@rbox.co>
 In-Reply-To: <20250515-selftests-sockmap-redir-v3-0-a1ea723f7e7e@rbox.co>
 To: Andrii Nakryiko <andrii@kernel.org>, 
@@ -70,117 +70,94 @@ Remove tests covered by sockmap_redir.
 Acked-by: John Fastabend <john.fastabend@gmail.com>
 Signed-off-by: Michal Luczaj <mhal@rbox.co>
 ---
- .../selftests/bpf/prog_tests/sockmap_listen.c      | 126 ---------------------
- 1 file changed, 126 deletions(-)
+ .../selftests/bpf/prog_tests/sockmap_listen.c      | 112 ---------------------
+ 1 file changed, 112 deletions(-)
 
 diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
-index 4f38dd7d23daf3aee83793be49748916d26d93b7..1d98eee7a2c3a711950ade30959e3bbf8c78e13d 100644
+index 4ee1148d22be3d7f26a5c899542e6a29ca5e7d6c..f0ad548bdf09d1c5ffdcedfbba11c304b19490c0 100644
 --- a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
 +++ b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
-@@ -1366,69 +1366,6 @@ static void test_redir(struct test_sockmap_listen *skel, struct bpf_map *map,
- 	}
+@@ -1487,116 +1487,6 @@ static void test_unix_redir(struct test_sockmap_listen *skel, struct bpf_map *ma
+ 	unix_skb_redir_to_connected(skel, map, sotype);
  }
  
--static void pairs_redir_to_connected(int cli0, int peer0, int cli1, int peer1,
--				     int sock_mapfd, int nop_mapfd,
--				     int verd_mapfd, enum redir_mode mode,
--				     int send_flags)
+-/* Returns two connected loopback vsock sockets */
+-static int vsock_socketpair_connectible(int sotype, int *v0, int *v1)
+-{
+-	return create_pair(AF_VSOCK, sotype | SOCK_NONBLOCK, v0, v1);
+-}
+-
+-static void vsock_unix_redir_connectible(int sock_mapfd, int verd_mapfd,
+-					 enum redir_mode mode, int sotype)
 -{
 -	const char *log_prefix = redir_mode_str(mode);
+-	char a = 'a', b = 'b';
+-	int u0, u1, v0, v1;
+-	int sfd[2];
 -	unsigned int pass;
 -	int err, n;
 -	u32 key;
--	char b;
 -
 -	zero_verdict_count(verd_mapfd);
 -
--	err = add_to_sockmap(sock_mapfd, peer0, peer1);
--	if (err)
+-	if (socketpair(AF_UNIX, SOCK_STREAM | SOCK_NONBLOCK, 0, sfd))
 -		return;
 -
--	if (nop_mapfd >= 0) {
--		err = add_to_sockmap(nop_mapfd, cli0, cli1);
--		if (err)
--			return;
+-	u0 = sfd[0];
+-	u1 = sfd[1];
+-
+-	err = vsock_socketpair_connectible(sotype, &v0, &v1);
+-	if (err) {
+-		FAIL("vsock_socketpair_connectible() failed");
+-		goto close_uds;
 -	}
 -
--	/* Last byte is OOB data when send_flags has MSG_OOB bit set */
--	n = xsend(cli1, "ab", 2, send_flags);
--	if (n >= 0 && n < 2)
--		FAIL("%s: incomplete send", log_prefix);
--	if (n < 2)
--		return;
+-	err = add_to_sockmap(sock_mapfd, u0, v0);
+-	if (err) {
+-		FAIL("add_to_sockmap failed");
+-		goto close_vsock;
+-	}
+-
+-	n = write(v1, &a, sizeof(a));
+-	if (n < 0)
+-		FAIL_ERRNO("%s: write", log_prefix);
+-	if (n == 0)
+-		FAIL("%s: incomplete write", log_prefix);
+-	if (n < 1)
+-		goto out;
+-
+-	n = xrecv_nonblock(mode == REDIR_INGRESS ? u0 : u1, &b, sizeof(b), 0);
+-	if (n < 0)
+-		FAIL("%s: recv() err, errno=%d", log_prefix, errno);
+-	if (n == 0)
+-		FAIL("%s: incomplete recv", log_prefix);
+-	if (b != a)
+-		FAIL("%s: vsock socket map failed, %c != %c", log_prefix, a, b);
 -
 -	key = SK_PASS;
 -	err = xbpf_map_lookup_elem(verd_mapfd, &key, &pass);
 -	if (err)
--		return;
+-		goto out;
 -	if (pass != 1)
 -		FAIL("%s: want pass count 1, have %d", log_prefix, pass);
+-out:
+-	key = 0;
+-	bpf_map_delete_elem(sock_mapfd, &key);
+-	key = 1;
+-	bpf_map_delete_elem(sock_mapfd, &key);
 -
--	n = recv_timeout(mode == REDIR_INGRESS ? peer0 : cli0, &b, 1, 0, IO_TIMEOUT_SEC);
--	if (n < 0)
--		FAIL_ERRNO("%s: recv_timeout", log_prefix);
--	if (n == 0)
--		FAIL("%s: incomplete recv", log_prefix);
+-close_vsock:
+-	close(v0);
+-	close(v1);
 -
--	if (send_flags & MSG_OOB) {
--		/* Check that we can't read OOB while in sockmap */
--		errno = 0;
--		n = recv(peer1, &b, 1, MSG_OOB | MSG_DONTWAIT);
--		if (n != -1 || errno != EOPNOTSUPP)
--			FAIL("%s: recv(MSG_OOB): expected EOPNOTSUPP: retval=%d errno=%d",
--			     log_prefix, n, errno);
--
--		/* Remove peer1 from sockmap */
--		xbpf_map_delete_elem(sock_mapfd, &(int){ 1 });
--
--		/* Check that OOB was dropped on redirect */
--		errno = 0;
--		n = recv(peer1, &b, 1, MSG_OOB | MSG_DONTWAIT);
--		if (n != -1 || errno != EINVAL)
--			FAIL("%s: recv(MSG_OOB): expected EINVAL: retval=%d errno=%d",
--			     log_prefix, n, errno);
--	}
+-close_uds:
+-	close(u0);
+-	close(u1);
 -}
 -
- static void test_reuseport(struct test_sockmap_listen *skel,
- 			   struct bpf_map *map, int family, int sotype)
- {
-@@ -1469,68 +1406,6 @@ static void test_reuseport(struct test_sockmap_listen *skel,
- 	}
- }
- 
--static int inet_socketpair(int family, int type, int *s, int *c)
--{
--	return create_pair(family, type | SOCK_NONBLOCK, s, c);
--}
--
--static void udp_redir_to_connected(int family, int sock_mapfd, int verd_mapfd,
--				   enum redir_mode mode)
--{
--	int c0, c1, p0, p1;
--	int err;
--
--	err = inet_socketpair(family, SOCK_DGRAM, &p0, &c0);
--	if (err)
--		return;
--	err = inet_socketpair(family, SOCK_DGRAM, &p1, &c1);
--	if (err)
--		goto close_cli0;
--
--	pairs_redir_to_connected(c0, p0, c1, p1, sock_mapfd, -1, verd_mapfd,
--				 mode, NO_FLAGS);
--
--	xclose(c1);
--	xclose(p1);
--close_cli0:
--	xclose(c0);
--	xclose(p0);
--}
--
--static void udp_skb_redir_to_connected(struct test_sockmap_listen *skel,
--				       struct bpf_map *inner_map, int family)
+-static void vsock_unix_skb_redir_connectible(struct test_sockmap_listen *skel,
+-					     struct bpf_map *inner_map,
+-					     int sotype)
 -{
 -	int verdict = bpf_program__fd(skel->progs.prog_skb_verdict);
 -	int verdict_map = bpf_map__fd(skel->maps.verdict_map);
@@ -192,38 +169,46 @@ index 4f38dd7d23daf3aee83793be49748916d26d93b7..1d98eee7a2c3a711950ade30959e3bbf
 -		return;
 -
 -	skel->bss->test_ingress = false;
--	udp_redir_to_connected(family, sock_map, verdict_map, REDIR_EGRESS);
+-	vsock_unix_redir_connectible(sock_map, verdict_map, REDIR_EGRESS, sotype);
 -	skel->bss->test_ingress = true;
--	udp_redir_to_connected(family, sock_map, verdict_map, REDIR_INGRESS);
+-	vsock_unix_redir_connectible(sock_map, verdict_map, REDIR_INGRESS, sotype);
 -
 -	xbpf_prog_detach2(verdict, sock_map, BPF_SK_SKB_VERDICT);
 -}
 -
--static void test_udp_redir(struct test_sockmap_listen *skel, struct bpf_map *map,
--			   int family)
+-static void test_vsock_redir(struct test_sockmap_listen *skel, struct bpf_map *map)
 -{
 -	const char *family_name, *map_name;
 -	char s[MAX_TEST_NAME];
 -
--	family_name = family_str(family);
+-	family_name = family_str(AF_VSOCK);
 -	map_name = map_type_str(map);
 -	snprintf(s, sizeof(s), "%s %s %s", map_name, family_name, __func__);
 -	if (!test__start_subtest(s))
 -		return;
--	udp_skb_redir_to_connected(skel, map, family);
+-
+-	vsock_unix_skb_redir_connectible(skel, map, SOCK_STREAM);
+-	vsock_unix_skb_redir_connectible(skel, map, SOCK_SEQPACKET);
 -}
 -
- static void run_tests(struct test_sockmap_listen *skel, struct bpf_map *map,
- 		      int family)
+ static void test_reuseport(struct test_sockmap_listen *skel,
+ 			   struct bpf_map *map, int family, int sotype)
  {
-@@ -1539,7 +1414,6 @@ static void run_tests(struct test_sockmap_listen *skel, struct bpf_map *map,
- 	test_redir(skel, map, family, SOCK_STREAM);
- 	test_reuseport(skel, map, family, SOCK_STREAM);
- 	test_reuseport(skel, map, family, SOCK_DGRAM);
--	test_udp_redir(skel, map, family);
- }
+@@ -1882,14 +1772,12 @@ void serial_test_sockmap_listen(void)
+ 	run_tests(skel, skel->maps.sock_map, AF_INET6);
+ 	test_unix_redir(skel, skel->maps.sock_map, SOCK_DGRAM);
+ 	test_unix_redir(skel, skel->maps.sock_map, SOCK_STREAM);
+-	test_vsock_redir(skel, skel->maps.sock_map);
  
- void serial_test_sockmap_listen(void)
+ 	skel->bss->test_sockmap = false;
+ 	run_tests(skel, skel->maps.sock_hash, AF_INET);
+ 	run_tests(skel, skel->maps.sock_hash, AF_INET6);
+ 	test_unix_redir(skel, skel->maps.sock_hash, SOCK_DGRAM);
+ 	test_unix_redir(skel, skel->maps.sock_hash, SOCK_STREAM);
+-	test_vsock_redir(skel, skel->maps.sock_hash);
+ 
+ 	test_sockmap_listen__destroy(skel);
+ }
 
 -- 
 2.49.0
