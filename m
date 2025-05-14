@@ -1,155 +1,77 @@
-Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 148A92253A8
-	for <bpf@vger.kernel.org>; Wed, 14 May 2025 22:16:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10F81282E1;
+	Wed, 14 May 2025 22:39:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747260991; cv=none; b=PUDaaSn9y+gzN05kDiEeF3vwofm8tYtmWY6mkqABUDcvosZmpIvklzFZlc2ORKaWyOLp3ib5XKrEhYBwAvHoyJV8f70u4cPoY0/RKlnIV5T1MjmsMzWRvDNx4IPNnoXakXGOt3u8/ek3Gkn4TPfy1XcgjISEMnxH4ec9CVETJDQ=
+	t=1747262395; cv=none; b=GL0dvZKs7s+vIXmAeXETJz8Btx3lwtOYTunELJxjrHepa4d3hfgJidYYl0NQ+Oy0NkdCzN3i/7ZHMVH/EIEfwRd1Rcw5fjGfYVnEAqJVxYoIM1+/XscEp1yBOATKZbKpWRlQibNTWBZ1JDqZzp29FItFIJReP7lN1PBt1XAJWd4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747260991; c=relaxed/simple;
-	bh=AWk9Ca73id5F9YQWEPEIhc+mFJs28UXN1ReaPw4guow=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ALNMoZcX0k+nm6XveDEaIP1w5q0zjWb96yzy0ajFQDb8004pexwK+UMR7xh7rQ328fzy3V46tWb7Qu3PNIk4wR0SKN36HmjjhLDvMs2IJnOHDqYJnxHDL4DNEVOu2mCiY4xhdc0zvEZa69+Ni4Nt+mHVq6DOpeDHbh291GwEfjM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=cht9WUif; arc=none smtp.client-ip=185.226.149.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
+	s=arc-20240116; t=1747262395; c=relaxed/simple;
+	bh=Ra5qxq65oR2e3oclUNAR+dZR6VfUdIyw6lil2iX8efU=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=gaIPc3wG8e+Hxo6Ftv+1IF2XrZB2iOQVjWbZHxTy9QAer4JikQ/nBhDUoT+0Hea0ksWc3vnOb1eabm6nhb77GJfhn1CCqCii9esfu8zlMCfz926u5TTeUSzlG0YyqaesohNMoz+BgH5Ym91JqB7u+uLUOhDLvIIuTXuufwoBY/M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PoqMG9pW; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="cht9WUif"
-Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
-	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.93)
-	(envelope-from <mhal@rbox.co>)
-	id 1uFKOk-001vfP-71; Thu, 15 May 2025 00:16:22 +0200
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
-	s=selector2; h=Cc:To:In-Reply-To:References:Message-Id:
-	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From;
-	bh=UbCVgwxpRFnpFZpXah8Lt7X+QYdpyqNgSqr+wPpYtPk=; b=cht9WUifGa0X8aAJ6An+SP07zu
-	DUPWUug0oVB9ikoJn8A6bqspOAtUkB+Y0VuycJzgnla9gyavB6yVm6TPme+SJcDpbwySTIkAMrS2I
-	vetY2jFnsmlTk42EWZRvIWN+CB8hZlh7xSGJK1Y3MIMLncdvoHIPWDvo3dZksC6TwgkrkwOJn0F0z
-	IDPO/fn7Nv48EZvbSCKk85iCrQ4LbLziYbOYiOJ5h8iXp0hHMrvUL2TfVZb91RqHtnjVRQjXI5m6k
-	A6wfQSyYwRA3/kqoFUPub4s9JoaoXlk1yqkeWLVRSsYmazAIh+C5Tj3L+UTcCExj6+oXh2FNAwU/B
-	9hzFOTJA==;
-Received: from [10.9.9.73] (helo=submission02.runbox)
-	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
-	(envelope-from <mhal@rbox.co>)
-	id 1uFKOj-0008AM-S3; Thu, 15 May 2025 00:16:22 +0200
-Received: by submission02.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.93)
-	id 1uFKOM-005bJ3-Kf; Thu, 15 May 2025 00:15:58 +0200
-From: Michal Luczaj <mhal@rbox.co>
-Date: Thu, 15 May 2025 00:15:27 +0200
-Subject: [PATCH bpf-next v3 4/8] selftests/bpf: Introduce verdict programs
- for sockmap_redir
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PoqMG9pW"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EE7EC4CEE3;
+	Wed, 14 May 2025 22:39:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1747262394;
+	bh=Ra5qxq65oR2e3oclUNAR+dZR6VfUdIyw6lil2iX8efU=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=PoqMG9pWvGyH73TQmC+ZhqD9eBU/PDL7D4Y5w2RVJebl9TA3wVmnuYqsPlpezTdax
+	 4A1WbpAniMl2YckFXmMb8gSN5YgWsLUFTngmkKyu2xBEYL+qverQFAzRuVsmSTNrkz
+	 h6IeS6U4Wi8OyjyUatPe/Dd3zPva54hmI0G91cT+9ciSuVX9QW/moK+p3vcPAIe7/w
+	 5Yb9cGXxEx3Wx3EQE7XXgv4TL1PFp8z+G9OzfLOSojy8wJ+edWnb1upTXIsi/R0vW2
+	 PcXCDZeApTjZ7O5+Jov6I2bVvXSCuAtU0MtPWvYUsAubD+rNIx+i5gGz74rn6Mtl2t
+	 Rrld7ntXzhh6g==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EB5B5380AA66;
+	Wed, 14 May 2025 22:40:32 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250515-selftests-sockmap-redir-v3-4-a1ea723f7e7e@rbox.co>
-References: <20250515-selftests-sockmap-redir-v3-0-a1ea723f7e7e@rbox.co>
-In-Reply-To: <20250515-selftests-sockmap-redir-v3-0-a1ea723f7e7e@rbox.co>
-To: Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>, 
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, 
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Jakub Sitnicki <jakub@cloudflare.com>, 
- Michal Luczaj <mhal@rbox.co>, Jiayuan Chen <mrpre@163.com>
-X-Mailer: b4 0.14.2
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v1 bpf-next] selftest: bpf: Relax TCPOPT_WINDOW validation in
+ test_tcp_custom_syncookie.c.
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <174726243176.2534141.9628048963449437170.git-patchwork-notify@kernel.org>
+Date: Wed, 14 May 2025 22:40:31 +0000
+References: <20250514214021.85187-1-kuniyu@amazon.com>
+In-Reply-To: <20250514214021.85187-1-kuniyu@amazon.com>
+To: Kuniyuki Iwashima <kuniyu@amazon.com>
+Cc: andrii@kernel.org, eddyz87@gmail.com, mykolal@fb.com,
+ martin.lau@linux.dev, edumazet@google.com, kuba@kernel.org,
+ kuni1840@gmail.com, bpf@vger.kernel.org, netdev@vger.kernel.org
 
-Instead of piggybacking on test_sockmap_listen, introduce
-test_sockmap_redir especially for sockmap redirection tests.
+Hello:
 
-Suggested-by: Jiayuan Chen <mrpre@163.com>
-Acked-by: John Fastabend <john.fastabend@gmail.com>
-Signed-off-by: Michal Luczaj <mhal@rbox.co>
----
- .../selftests/bpf/progs/test_sockmap_redir.c       | 68 ++++++++++++++++++++++
- 1 file changed, 68 insertions(+)
+This patch was applied to bpf/bpf-next.git (master)
+by Martin KaFai Lau <martin.lau@kernel.org>:
 
-diff --git a/tools/testing/selftests/bpf/progs/test_sockmap_redir.c b/tools/testing/selftests/bpf/progs/test_sockmap_redir.c
-new file mode 100644
-index 0000000000000000000000000000000000000000..34d9f4f2f0a2e638c6e05cfa9f19971bd36c11ea
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_sockmap_redir.c
-@@ -0,0 +1,68 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
-+
-+SEC(".maps") struct {
-+	__uint(type, BPF_MAP_TYPE_SOCKMAP);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, __u64);
-+} nop_map, sock_map;
-+
-+SEC(".maps") struct {
-+	__uint(type, BPF_MAP_TYPE_SOCKHASH);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, __u64);
-+} nop_hash, sock_hash;
-+
-+SEC(".maps") struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 2);
-+	__type(key, int);
-+	__type(value, unsigned int);
-+} verdict_map;
-+
-+/* Set by user space */
-+int redirect_type;
-+int redirect_flags;
-+
-+#define redirect_map(__data)                                                   \
-+	_Generic((__data),                                                     \
-+		 struct __sk_buff * : bpf_sk_redirect_map,                     \
-+		 struct sk_msg_md * : bpf_msg_redirect_map                     \
-+	)((__data), &sock_map, (__u32){0}, redirect_flags)
-+
-+#define redirect_hash(__data)                                                  \
-+	_Generic((__data),                                                     \
-+		 struct __sk_buff * : bpf_sk_redirect_hash,                    \
-+		 struct sk_msg_md * : bpf_msg_redirect_hash                    \
-+	)((__data), &sock_hash, &(__u32){0}, redirect_flags)
-+
-+#define DEFINE_PROG(__type, __param)                                           \
-+SEC("sk_" XSTR(__type))                                                        \
-+int prog_ ## __type ## _verdict(__param data)                                  \
-+{                                                                              \
-+	unsigned int *count;                                                   \
-+	int verdict;                                                           \
-+									       \
-+	if (redirect_type == BPF_MAP_TYPE_SOCKMAP)                             \
-+		verdict = redirect_map(data);                                  \
-+	else if (redirect_type == BPF_MAP_TYPE_SOCKHASH)                       \
-+		verdict = redirect_hash(data);                                 \
-+	else                                                                   \
-+		verdict = redirect_type - __MAX_BPF_MAP_TYPE;                  \
-+									       \
-+	count = bpf_map_lookup_elem(&verdict_map, &verdict);                   \
-+	if (count)                                                             \
-+		(*count)++;                                                    \
-+									       \
-+	return verdict;                                                        \
-+}
-+
-+DEFINE_PROG(skb, struct __sk_buff *);
-+DEFINE_PROG(msg, struct sk_msg_md *);
-+
-+char _license[] SEC("license") = "GPL";
+On Wed, 14 May 2025 14:40:20 -0700 you wrote:
+> The custom syncookie test expects TCPOPT_WINDOW to be 7 based on the
+> kernel’s behaviour at the time, but the upcoming series [0] will bump
+> it to 10.
+> 
+> Let's relax the test to allow any valid TCPOPT_WINDOW value in the
+> range 1–14.
+> 
+> [...]
 
+Here is the summary with links:
+  - [v1,bpf-next] selftest: bpf: Relax TCPOPT_WINDOW validation in test_tcp_custom_syncookie.c.
+    https://git.kernel.org/bpf/bpf-next/c/4dd372de3fde
+
+You are awesome, thank you!
 -- 
-2.49.0
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
