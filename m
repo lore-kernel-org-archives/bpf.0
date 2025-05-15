@@ -1,99 +1,89 @@
-Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F22A6B664;
-	Thu, 15 May 2025 21:39:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6C521E5B68;
+	Thu, 15 May 2025 21:42:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747345161; cv=none; b=oootb+nwpUnoaCZ23xcu573MYQUnj5AePZBB2TT2RWEzHz/6y5TLlgJPMlVv7Qi/ynEeMAEFaMac2WB4VxBN0GNtmiFqAno+qjcB+mkzbdum1Y9A3EiTgKwwt18jKab9dZH3NSToE2qfk967vk9FdT3hCFmOfOk4FQzAUeus+0Y=
+	t=1747345340; cv=none; b=ngITEB+XLvUsFUVmxmoKnANn5AiTIOCxP8LkgxypWYo8dyX7IMqmE4Jch5qYVwccNXJ83VoXHhhRvj5nZ3wOSvsOrVPp1DpFakcESd7L1kUE7uRJHFwtl/3VDJghHu28k6nkBZhOwt1sfHY2yhwnvL3XlHc9NtiLdZYE8Icmx+s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747345161; c=relaxed/simple;
-	bh=XLjz8gJZUesCCRUYEuMqFQ7rRJFtNdWciD6tOyLP8lA=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=P58j90c/QJD5+9UugGYVLoAYWKKRSGm1lKgPR3oPJTP6T+R/5GXf42saq0etQVmayJ4x63w08FqPDj9Nn5JnD0iRGhK/wmhBA8Cd5sVftzoMLqkuOWFq/iOhxkLtGec+Dkrk5RYjD9cVlVUOZ0YQdLR0NfZhoiYio9cGmQsofLA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BZe7E/ib; arc=none smtp.client-ip=209.85.215.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1747345340; c=relaxed/simple;
+	bh=z9irnXGnBvQrp/d6U5i09UQ0eP4PPoB4jFvCw3GG5Eo=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=G5IgTQiLjaQkikyREpJ/i/T4wB/Ug7js1fRf1YOxuKYllvE8loY0to1bMfzV7Js5iTbfXgd0Uz2Ki6kkZpgL91guJ0bcpQHRNpygdMZH8dfsUBDKBcVAnhwFQbW7/RPYTFtx1lNg6rDLB1ye9Ryb6VLrnVyz6bxU49U3hTrk+j4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UQh6mxHc; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BZe7E/ib"
-Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-af51596da56so1117423a12.0;
-        Thu, 15 May 2025 14:39:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1747345157; x=1747949957; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=XLjz8gJZUesCCRUYEuMqFQ7rRJFtNdWciD6tOyLP8lA=;
-        b=BZe7E/ibYEBmPljafi7O4N1aT19AWNoWtJ90IeE/McSb22jLe73p7p5eUHcqO629XI
-         CUyPhmghUYmRW9gJ83NgR/Xr6dztOMUdn+RgXNzxZwdBImlkGvWtnP5VjqEm+3MRQ7LX
-         cCv61Y8iyW9EkpaaqvywqdDF6E02M/YwOQwQftr5aKlh5UaKJRhZyJQiyqjZMpcwVNhG
-         TmHYT1+EOUJ72KXyge4e2MEJ3Jqzm2VUX9Ca4FSKJouRrBd0farQU2vpkEsa9S6KKVtp
-         AILPuObJTnBWe06YmNiESeUBAjtJcQfYTmi1g11TsWRyZVoUd40oezcPtXRaWQtDMvtJ
-         PC/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747345157; x=1747949957;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XLjz8gJZUesCCRUYEuMqFQ7rRJFtNdWciD6tOyLP8lA=;
-        b=QCnOE4ALKSYNEm4VseCYnpNObX1UvJ+SRRcihDNNBGJl4P5GSgPrif1s0yvG+D1Evr
-         5X1x2nxCZXLp4/0bvNIYh6vq9C+R6NcAT0vb3G0k55iRFwgvZqSHSNuR1NYKQAYhcr4b
-         5GRpY0LYA29vnt5AuRAOl7GGunkm1VkW9tpDcFDmlhNtfcQSXq4MiZiexmmczdey6SBu
-         7f7Q12TmK8hcAGtk0oXeAvRwaf+DHWfxk6SZDTNdpaYzC9G4nYQairx5iEav9P/IBS2h
-         HfXpXgoNdaQyEE+gr3QRu31Ucn66+RriF2Gf2dw4K2mluYJvvnYRla9jx6c3iuaOkcCW
-         Xi9Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVPdkA8rIfWtYviunlj99Dbuga7/Eq9A/zfK606jdYU9a3LOftS8mibo20L1pjzbcNxuBRyQj8STWlZGw0HRoFg@vger.kernel.org, AJvYcCVxFnJvCWI93NTYuF2MzPiCklQrCMgAFWOKO9ZiHhH6OOINagvHGRWrrAmRE8FJsU0CSyY=@vger.kernel.org, AJvYcCW0eo++fcTsFtuAViVT9CSQB6M8OP51vDmBEOAFkDfpjPPucOydEkB0XaaFsxF8s4LLkY7855FaodzW8gAf@vger.kernel.org
-X-Gm-Message-State: AOJu0YxTel6LycI/tfEisiSn6DN12RsL1A4Ru3ISf9MR6lAADaijGLKr
-	0f+3xLaQOlLfhkwLZc30PBeQnFUgZwNTSblaKzHhHioDYJhePdDXyAv+
-X-Gm-Gg: ASbGncsvF96Pxj5SwsGdjlFf8RaSvoesmhf0w6nR2VDNhgNZppEYMqfSydGezk4SSvF
-	MfmrZhvVjGuHjqq1Vyle9sqjALk47Qg8fnVOB8EZijbOECjEsK0/7ccoD2F9yCAjXjGeT7WPNpO
-	keoWPHKgUyQeyiZG9udZPRj4dWQPci0XpjPfhVc9cszUT858zr6HbMgpB2DwpKtZMdfnY/mMRsO
-	WEhS/GnTFm/mJRjkIg3CsF6yP4tnhp2IGGSoFk15hL+G/hfhIBxCeUSEjh7U6Eup7IMfZHBW/ni
-	JWj2udMqBlESGvCpKryqazUuoUuMUwlxZCEXE89p61Ao9Ig=
-X-Google-Smtp-Source: AGHT+IFJqucu55xwtaxuHQzfFV/gJjZGnpp0tvXJvbw+T1Fs0ayZCl8h/rq1RQyoE1z30b0ZtoMYgg==
-X-Received: by 2002:a17:90b:184d:b0:2ee:e317:69ab with SMTP id 98e67ed59e1d1-30e7d2fda18mr1694038a91.0.1747345157045;
-        Thu, 15 May 2025 14:39:17 -0700 (PDT)
-Received: from [192.168.0.56] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b26eaf700e6sm371106a12.29.2025.05.15.14.39.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 May 2025 14:39:16 -0700 (PDT)
-Message-ID: <73abd7d20395a02b6664ea5ceacb46c530da3b2e.camel@gmail.com>
-Subject: Re: [REGRESSION] bpf verifier slowdown due to vrealloc() change
- since 6.15-rc6
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Kees Cook <kees@kernel.org>
-Cc: Shung-Hsi Yu <shung-hsi.yu@suse.com>, bpf@vger.kernel.org, 
-	linux-mm@kvack.org, Andrii Nakryiko <andrii@kernel.org>, Ihor Solodrai	
- <ihor.solodrai@linux.dev>, Andrew Morton <akpm@linux-foundation.org>,
- Michal Hocko <mhocko@suse.com>, Vlastimil Babka <vbabka@suse.cz>,
- Uladzislau Rezki <urezki@gmail.com>, 	linux-kernel@vger.kernel.org,
- linux-hardening@vger.kernel.org, 	regressions@lists.linux.dev, Greg
- Kroah-Hartman <gregkh@linuxfoundation.org>,  Alexei Starovoitov	
- <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Pawan Gupta	
- <pawan.kumar.gupta@linux.intel.com>
-Date: Thu, 15 May 2025 14:39:14 -0700
-In-Reply-To: <202505151435.ECC98E09@keescook>
-References: 
-	<20250515-bpf-verifier-slowdown-vwo2meju4cgp2su5ckj@6gi6ssxbnfqg>
-	 <202505150845.0F9E154@keescook>
-	 <c36245a48149a12180ec710c65d317a12cdfa020.camel@gmail.com>
-	 <202505151435.ECC98E09@keescook>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.54.3 (3.54.3-1.fc41) 
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UQh6mxHc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F700C4CEF0;
+	Thu, 15 May 2025 21:42:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1747345340;
+	bh=z9irnXGnBvQrp/d6U5i09UQ0eP4PPoB4jFvCw3GG5Eo=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=UQh6mxHcqeXKhPT1dyh1SA70xwHpyVoZt0LW0sfH4nslVfzHj/5A0ecGaTQhmgEla
+	 8xvFiuw+WqpvQIXI9o28bXFhgG/pkytvThEZdHBX6/bnkodzWVfW4Ym9V7Wco2UNAQ
+	 9XKQ6aq7c16cv1dYri1r/LD7Rc5//T7ewhaT6hofazb2L18p1NO0JIdRU8xEQQ7qLg
+	 VghxvS44eolPCz95bUMzFRStPDNGu6SfqAgXxrlIQk/sV+3zH52l3hxgVH1ukMh396
+	 rhw1uKT1VVCNewzyT9tSYSr9nlgvimQCmZKqj/MqmnYVroWg9xp2zmdH8XSnmYwOwf
+	 EwxX30bzsVCQQ==
+From: Kees Cook <kees@kernel.org>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Kees Cook <kees@kernel.org>,
+	Shung-Hsi Yu <shung-hsi.yu@suse.com>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	linux-mm@kvack.org,
+	Erhard Furtner <erhard_f@mailbox.org>,
+	Danilo Krummrich <dakr@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-hardening@vger.kernel.org
+Subject: [PATCH 1/2] mm: vmalloc: Actually use the in-place vrealloc region
+Date: Thu, 15 May 2025 14:42:15 -0700
+Message-Id: <20250515214217.619685-1-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20250515214020.work.519-kees@kernel.org>
+References: <20250515214020.work.519-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1153; i=kees@kernel.org; h=from:subject; bh=z9irnXGnBvQrp/d6U5i09UQ0eP4PPoB4jFvCw3GG5Eo=; b=owGbwMvMwCVmps19z/KJym7G02pJDBlq8dun79rx688HA96MI6Yvt5nG6022C/q6d2GEvJvK2 yPs8woDOkpZGMS4GGTFFFmC7NzjXDzetoe7z1WEmcPKBDKEgYtTACbSrsvI8Dq8eW+R9P5/5V8k 5h7rmm2nfaLoUmRj2+Ldpn88GBI/KDD8D+ozsv6UVmDQuj7qyrqO7+93/bh8/7FV53W974kRTqw MfAA=
+X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 
-On Thu, 2025-05-15 at 14:36 -0700, Kees Cook wrote:
+The refactoring to not build a new vmalloc region only actually worked
+when shrinking. Actually return the resized area when it grows. Ugh.
 
-[...]
+Reported-by: Shung-Hsi Yu <shung-hsi.yu@suse.com>
+Closes: https://lore.kernel.org/all/20250515-bpf-verifier-slowdown-vwo2meju4cgp2su5ckj@6gi6ssxbnfqg
+Tested-by: Eduard Zingerman <eddyz87@gmail.com>
+Tested-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Fixes: a0309faf1cb0 ("mm: vmalloc: support more granular vrealloc() sizing")
+Signed-off-by: Kees Cook <kees@kernel.org>
+---
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Uladzislau Rezki <urezki@gmail.com>
+Cc: <linux-mm@kvack.org>
+---
+ mm/vmalloc.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-> Well that's pretty definitive! Thank you! I'll send out a properly
-> formatted patch. May I add your Tested-by?
-
-Sure, thank you.
+diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+index 2d7511654831..74bd00fd734d 100644
+--- a/mm/vmalloc.c
++++ b/mm/vmalloc.c
+@@ -4111,6 +4111,7 @@ void *vrealloc_noprof(const void *p, size_t size, gfp_t flags)
+ 		if (want_init_on_alloc(flags))
+ 			memset((void *)p + old_size, 0, size - old_size);
+ 		vm->requested_size = size;
++		return (void *)p;
+ 	}
+ 
+ 	/* TODO: Grow the vm_area, i.e. allocate and map additional pages. */
+-- 
+2.34.1
 
