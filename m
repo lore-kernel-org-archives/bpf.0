@@ -1,111 +1,124 @@
-Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-181.mta0.migadu.com (out-181.mta0.migadu.com [91.218.175.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0D921FF7DC;
-	Fri, 16 May 2025 06:32:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92E6D221FD4
+	for <bpf@vger.kernel.org>; Fri, 16 May 2025 06:49:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747377176; cv=none; b=Rf5hyJ4MHik0Ky87cH5XoPhG1uwIsbK97tMXmOV8u+M9eljuiFcNzhV0dDHh+1jeSb8QoF77oNHOLCli8H6paOHmE0S7/YczoNss+W+tYd2dpsNC73qkyBNJ39vQEuNM0k19z0Abmzg3mhF3imm34N2pbLnzN19KrFc2LuYbREA=
+	t=1747378174; cv=none; b=T+SeJx7JPjkHWGB8/40JJJs3QlxJXmiQsbrTFVQzfor7UvS399hgkupnSFLvQVb4bXs8ZlrZjAP0NfD528L8TRP3qWuo6KoaqBbfAsHmWxl+Q9lk0C4LWcmQnZbnOAXhi0A3CRnYJWpKOthtodZBBeh+lo/NI+1A8CeOgBReo/g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747377176; c=relaxed/simple;
-	bh=NtEGmOTZqNuMiz2OCMtuAQv0Feqa6Dit7H5OY+B8VmM=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZMYQPpnKCM3t0sSUkK6EMRTsIt4nQLOyBLpKnhOk1OZdVMIV3VrZj70rQSnUu9qF2wJw6LQ6+fBpaXymSNPn6d+jURd0eNMtyuexoNMi2r/5a5rHxvJwbj6F/egzeeuijJ+38J3pDZPk7u9m9/jNAsW7ieAIQAvUt7rfTk1fs8I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Wqr4JEkB; arc=none smtp.client-ip=209.85.167.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1747378174; c=relaxed/simple;
+	bh=sg+sQl+gHXroJGyjSMpwjQg6chV+GnJCGvWkX8PFwZg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=nOCHKRXkveIs8lKpxCmnK/Z2YD8GjgnW8w46oFVbEqNzZpBbzRET61trXAVIY65xMX8v0b9qJuAyPtlIshynpPPzDNccJp4Lg34TplJYsc82HSBSq9p5htRuRGcaIWCtQ9u62RHU4htb3ZYQ/zlFsrykpEeo645nkJTIf118/vs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=wABxfM9x; arc=none smtp.client-ip=91.218.175.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Wqr4JEkB"
-Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-550d09d4daaso1669835e87.2;
-        Thu, 15 May 2025 23:32:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1747377173; x=1747981973; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=KUJKtPVwdVcpqXmFstCnFFaHnVm1C/pmwz6nmZZHgzI=;
-        b=Wqr4JEkBgQvfK/neI+C1bIzjlWhCLxhRUmlxm8ixsHSQ61qJ9Ku+U69mbPyA1MAqdW
-         DFmBoRjKdR6XucjBQMsGHaw0mRXsl7JHVG2MOnSBm3gehOIGbitrBYLRFAx8TmZFf/Xx
-         OvdTMpDnumb6AR/InivmA1Nd3/28lj3k2c57454Vc6MbGNGiu9/HzQupPQewhFrIH+Ky
-         VEE3XH3Obf9u6pg+okOatnVWxSEz8pbE+xB77J/60fcWrb75PciaNLaqYVsSs2Fp4uzO
-         ID7Gk3ChFDF+dWAxteBhaNxHShnY303uDiUiKy7LhO9uVF3jrGeWj9akLZU4DVdTqXQk
-         kwMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747377173; x=1747981973;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KUJKtPVwdVcpqXmFstCnFFaHnVm1C/pmwz6nmZZHgzI=;
-        b=GhW/7g5D0luU25JvO3IJSYXEHmXo8nRpEqRaboYWRS9oAFm+Ekd5WIM7H8O0xoeASS
-         Pi/LO0GgsqwNAUPFOmQ04Cux91VRp3vaaQj4PqZygmHsNO+ayB0w7mM18Ie8bhK+Yj0G
-         GjAwGFfuydD3ecw85wA/kaF0BTCD8JCNtmKHgc9naAvAa8jOj/aRKhxhri9qWfr+NeDM
-         rNzFh8mWTPJQcmc+2o6FlMujjAMdzjVGsnmoTVVK/SaC3VXdQy4huGF/bJfsjzyozEb0
-         hD+P46fY3nGG+uET87aitFVrJ39WgMZHdNxfWiy6dlPfm9N0OXB1ltqOqWSS6y67UKJP
-         88EA==
-X-Forwarded-Encrypted: i=1; AJvYcCUEG3ZuHSN4vEFmbr6AOKVVrEkv0XdT0wrPk2Eh1dt+GLYYb/SwmzZiI2U66ifhgDwMb0C621knmG2sllkQ5af7@vger.kernel.org, AJvYcCVjJz2/375EyI+jINf9FuBcmcVmwXwdiX3D3/FI7caCgQRjxdx5GbCYf8++hWCt4vsXO1g=@vger.kernel.org, AJvYcCWG7KygT2JqvUX6VMMDAoFgrCCGImT+SKiYNXb62Ic1tfg4MuwGwbOuaI39K/W7lc+//0QAwkW0wZP3naEL@vger.kernel.org
-X-Gm-Message-State: AOJu0YzvIZZ4kD2ngrBWmyvCs2fQMmt/Xm2rIE+GgynfDJntzfTtTXW4
-	GEVtJIXaf4QANJEdN9PDeqkX/9jEvayrqZbAKs8HPSm5Va214mNQ8lsF
-X-Gm-Gg: ASbGncusXpTSnj2hvnR1Ao5DPckkYofLYXTIakgmOnNFc/ViesgZdr/5Dm2NnreAjem
-	YL8c//xsx8taDZw+8LP9Lgde2BokGld1igwzFENB3CY2qzcFUVSh2H4CGXnLAMWIJt5PfERCKc5
-	8m9se6XkGT714OLfE4ow053zjqVEiho8cscIPXTXnnwe+mlLpsq5+jaUPyPJVpyTTP9NUiLmJSO
-	Xeaic5y5s5hZdIYK9hiMo+e0UIZUaUWf/nNQ2L/6Pf35Y1g/p3iS/LMowkl+E6cjIBdhtUA7nkj
-	OuzyYuwyCgtZkCaT3A==
-X-Google-Smtp-Source: AGHT+IFRP/vXmfI6lHLwDlzDmnD+1TtQ98Hefzc+j7BWdek+k9pG/xT4EAPbSUkky9UNn9GYhdpyww==
-X-Received: by 2002:a05:6512:6501:b0:550:e147:8165 with SMTP id 2adb3069b0e04-550e71d0bf3mr569220e87.24.1747377172352;
-        Thu, 15 May 2025 23:32:52 -0700 (PDT)
-Received: from pc636 ([2001:9b1:d5a0:a500::800])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-550e703c2f3sm275344e87.214.2025.05.15.23.32.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 May 2025 23:32:51 -0700 (PDT)
-From: Uladzislau Rezki <urezki@gmail.com>
-X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
-Date: Fri, 16 May 2025 08:32:49 +0200
-To: Kees Cook <kees@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Shung-Hsi Yu <shung-hsi.yu@suse.com>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Erhard Furtner <erhard_f@mailbox.org>,
-	Danilo Krummrich <dakr@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org, bpf@vger.kernel.org,
-	linux-hardening@vger.kernel.org
-Subject: Re: [PATCH 0/2] mm: vmalloc: Actually use the in-place vrealloc
- region
-Message-ID: <aCbcEWR9RbjFjXV9@pc636>
-References: <20250515214020.work.519-kees@kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="wABxfM9x"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1747378169;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=IzHgteX+DiRHg0P96tNBM3iI8xKb/ZAbEXKlmYyzoHo=;
+	b=wABxfM9xp6FgM9v7ejZlbjDnAnjdGnnbgbCx0VXaexVniB7dq1QHA/LwEkFWZ2av2p6uch
+	Y7ipUI4zAY5p+Gx5upGd0zVpPwPO7iKgevbaZ/Asg1fGjb5XE2IlI2TQDykpYvV6YNXEk/
+	YbXBrcuLYceHt0ut41nZtsrfUbe3YS8=
+From: Shakeel Butt <shakeel.butt@linux.dev>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Johannes Weiner <hannes@cmpxchg.org>,
+	Michal Hocko <mhocko@kernel.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Muchun Song <muchun.song@linux.dev>,
+	Vlastimil Babka <vbabka@suse.cz>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Harry Yoo <harry.yoo@oracle.com>,
+	Yosry Ahmed <yosry.ahmed@linux.dev>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	bpf@vger.kernel.org,
+	linux-mm@kvack.org,
+	cgroups@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Meta kernel team <kernel-team@meta.com>
+Subject: [PATCH 1/5] memcg: disable kmem charging in nmi for unsupported arch
+Date: Thu, 15 May 2025 23:49:08 -0700
+Message-ID: <20250516064912.1515065-2-shakeel.butt@linux.dev>
+In-Reply-To: <20250516064912.1515065-1-shakeel.butt@linux.dev>
+References: <20250516064912.1515065-1-shakeel.butt@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250515214020.work.519-kees@kernel.org>
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Thu, May 15, 2025 at 02:42:14PM -0700, Kees Cook wrote:
-> Hi,
-> 
-> This fixes a performance regression[1] with vrealloc(). This needs to
-> get into v6.15, which is where the regression originates, and then it'll
-> get backport to the -stable releases as well.
-> 
-> Thanks!
-> 
-> -Kees
-> 
-> [1] https://lore.kernel.org/lkml/20250515-bpf-verifier-slowdown-vwo2meju4cgp2su5ckj@6gi6ssxbnfqg/
-> 
-> Kees Cook (2):
->   mm: vmalloc: Actually use the in-place vrealloc region
->   mm: vmalloc: Only zero-init on vrealloc shrink
-> 
->  mm/vmalloc.c | 13 ++++++++-----
->  1 file changed, 8 insertions(+), 5 deletions(-)
-> 
-Looks good to me both.
+The memcg accounting and stats uses this_cpu* and atomic* ops. There are
+archs which define CONFIG_HAVE_NMI but does not define
+CONFIG_ARCH_HAS_NMI_SAFE_THIS_CPU_OPS and ARCH_HAVE_NMI_SAFE_CMPXCHG, so
+memcg accounting for such archs in nmi context is not possible to
+support. Let's just disable memcg accounting in nmi context for such
+archs.
 
-Reviewed-by: "Uladzislau Rezki (Sony)" <urezki@gmail.com>
+Signed-off-by: Shakeel Butt <shakeel.butt@linux.dev>
+---
+ include/linux/memcontrol.h |  5 +++++
+ mm/memcontrol.c            | 15 +++++++++++++++
+ 2 files changed, 20 insertions(+)
 
---
-Uladzislau Rezki
+diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
+index f7848f73f41c..53920528821f 100644
+--- a/include/linux/memcontrol.h
++++ b/include/linux/memcontrol.h
+@@ -62,6 +62,11 @@ struct mem_cgroup_reclaim_cookie {
+ 
+ #ifdef CONFIG_MEMCG
+ 
++#if defined(CONFIG_ARCH_HAS_NMI_SAFE_THIS_CPU_OPS) || \
++	!defined(CONFIG_HAVE_NMI) || defined(ARCH_HAVE_NMI_SAFE_CMPXCHG)
++#define MEMCG_SUPPORTS_NMI_CHARGING
++#endif
++
+ #define MEM_CGROUP_ID_SHIFT	16
+ 
+ struct mem_cgroup_id {
+diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+index e17b698f6243..dface07f69bb 100644
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -2647,11 +2647,26 @@ static struct obj_cgroup *current_objcg_update(void)
+ 	return objcg;
+ }
+ 
++#ifdef MEMCG_SUPPORTS_NMI_CHARGING
++static inline bool nmi_charging_allowed(void)
++{
++	return true;
++}
++#else
++static inline bool nmi_charging_allowed(void)
++{
++	return false;
++}
++#endif
++
+ __always_inline struct obj_cgroup *current_obj_cgroup(void)
+ {
+ 	struct mem_cgroup *memcg;
+ 	struct obj_cgroup *objcg;
+ 
++	if (in_nmi() && !nmi_charging_allowed())
++		return NULL;
++
+ 	if (in_task()) {
+ 		memcg = current->active_memcg;
+ 		if (unlikely(memcg))
+-- 
+2.47.1
+
