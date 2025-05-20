@@ -1,138 +1,135 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3E801C3306;
-	Tue, 20 May 2025 09:47:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78CB2261568
+	for <bpf@vger.kernel.org>; Tue, 20 May 2025 09:49:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747734450; cv=none; b=DcfAPu+LjT80bsMEudVBMKEcmEFIykAbbMNG9wY18eIof+Clyo/4aES9ysrkSOpg301aWVrm+oCeGZX21PjlT8EeTzjic7zI1Vj/kgmYRXvV/Ug0AtW/Ne/xwSmgwKDSE32JWXW1YPjmOc2G+TkBghEuv8dhkZ5I0fmLJ82KhY0=
+	t=1747734600; cv=none; b=BJe3pkrv5oovkn60v2QXdowk0Mis5+Zibod1B5h4uh+YWMVBY7luRjxyJIEluWwWSX8YrQGBcbcBToPLuT5JIYeW31Pk3Xj3JIls5s9auQ0DUYXfGwIgywGMlDzG/jwAWeu4xHGw1uLSDsA5locA9SSEh/iW6/MWUZ1+L1Z5Kxw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747734450; c=relaxed/simple;
-	bh=st5ZN9t4lGCsmTwBzj6GkRzehVqb+AvIjSrgYKxmT1c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PZHV0QvyxE0v1RZEbye/yk+12fqQBvOldL+oVxkWTvyerGGVqo9CDhwJzVlErAbUhKw3zWi4DTht6tQLOBEkdih5mIi7bDGoUrYbumNItHp8qqzNgJfPvHbR3WHEfdF4l8XSI1VcUTk2Q35RAA8RB1hJHkLnMlXJ3u4c6x1C07g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=CYyDJVWg; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1747734600; c=relaxed/simple;
+	bh=zmMeJiDDZWaauBVCwiIbfO5yDwZo3DooABBxbFXHDdY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=grx+EveGsHpIGWDuZqOPKOPw9CEQ3l3TUfjhhMugDOP68U7Efqgo7pgHMDSabW3YsZ5cKwEiOZxPODncKCGB8COuLKMTs3E1EGKOVmrlg9+RoaHWuVgr8yRJ+pHGHdHrbyCpB8Sa3GFlOhTSc/r5xBHFayju7S8SK1FVS7v3gxU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=O81hku0v; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="CYyDJVWg"
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 54K9F6SC008002;
-	Tue, 20 May 2025 09:47:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=pp1; bh=eYsshfL6ZUO0WplOFcK3FPi+KTAn+c
-	nW/kMDuLwfRGY=; b=CYyDJVWgOkoVyl/0wxvxQC9k/uaTksD+i5VxFboBhblXmd
-	57GPEmxFZezvrC0/PuK3i3RqrBq0V6lL4pG5qphQsr1GdG4Rzvt7XAPY0kfi0lJf
-	LCGlnBg5sI9mNT7kCFz2iG9nGD49zIl4lvWUUkzGKmT2WZOXs23IDX5InPzncOUF
-	zUzzTjBDO/AcZsLYM+yR/UzopLF50fp8lLd4vUO6vDGnECYi9YBspylhVdNsFQ4i
-	ir6/u7WB5Xh74LaSHwTQMobbGDlwUvtnM6WSNpS7zQX4FeDoY/bPufIyBJ9uu6mQ
-	g3NFJl4bjzYpwq0qrUtJRkmLorGWUNNva91GMQPw==
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 46rpxkr53u-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 20 May 2025 09:47:09 +0000 (GMT)
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 54K87Gga015958;
-	Tue, 20 May 2025 09:47:09 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 46q7g2aw0w-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 20 May 2025 09:47:08 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 54K9l7T140370652
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 20 May 2025 09:47:07 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 48F9E2013E;
-	Tue, 20 May 2025 09:47:07 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 1B0BF20140;
-	Tue, 20 May 2025 09:47:07 +0000 (GMT)
-Received: from osiris (unknown [9.152.212.133])
-	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Tue, 20 May 2025 09:47:07 +0000 (GMT)
-Date: Tue, 20 May 2025 11:47:05 +0200
-From: Heiko Carstens <hca@linux.ibm.com>
-To: Ihor Solodrai <ihor.solodrai@linux.dev>,
-        Ilya Leoshkevich <iii@linux.ibm.com>
-Cc: linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: Re: [bug?] s390: kernel panic on specification exception: 0006
-Message-ID: <20250520094705.7932Bc3-hca@linux.ibm.com>
-References: <4f3768be36e0298be4ceebd4fdd3e96dd4fbdc04@linux.dev>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="O81hku0v"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1747734597;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=aKVK+uAlT4VzaC9oAx0YIHTOnxhoJDuCN0nhLSXNB60=;
+	b=O81hku0vozDSd0vx5MrGGGu4I9sBNeLDddnul+OCTTTQZemvHGvQI9LD+6XRCBoNz/MjwN
+	AUNtL+bUx6DxqKbBmR5kVmYOOWGg4HsKd+S12s091OKOLFYGYVXJO2oyBXp73j+j07SnEt
+	RfkHfPQSGcRH3NX9fk9K2+eKz3FUp+c=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-5-2Aa4xmZjMWW4K_gUsvebAQ-1; Tue, 20 May 2025 05:49:55 -0400
+X-MC-Unique: 2Aa4xmZjMWW4K_gUsvebAQ-1
+X-Mimecast-MFC-AGG-ID: 2Aa4xmZjMWW4K_gUsvebAQ_1747734595
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-3a367b3bc13so1148059f8f.3
+        for <bpf@vger.kernel.org>; Tue, 20 May 2025 02:49:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747734595; x=1748339395;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=aKVK+uAlT4VzaC9oAx0YIHTOnxhoJDuCN0nhLSXNB60=;
+        b=PiHS+7p5ViiTecRBakn/wdDli68qjEG1HAZBHyOM6+Jchu9VdpjmnolQf3R1HMOZGy
+         eErI1Dg24G6UQXgVvXuMkRTEGfLlA6NKqBzZyKjDV6bGeKLtR1oV+SXKO3fM5ybPDT+i
+         ihPyBkUUyjaso/wVKRKApIU4dax/D5Gv0h5x1rlpzmj8Ze2n0rzexT6qj7cDrPG0QdLD
+         CX7r5XiBgg1qLxzifuxuWZ0e59P2RR4a5qWCFXe5L+wgQ6WxlT0WIewoXjMGyf0fVjwH
+         oRGcoifhdafNWhuDxsfsf71Pwc/jcLcRfyE2xeMPBnPvzS84Okuu3Q1mfbO9vMIvNjC9
+         i6sw==
+X-Forwarded-Encrypted: i=1; AJvYcCXT2OgWD05ivRkpm5klsvYn94CRDT+8zFahCLYvsKRSbWTT+1sOaMJUnzz0qsXbm6g18cg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzp8QJHmjM6j+wRnIWq5wf890bvd7s4kre3QX9oF65Zx5HSuWP5
+	s3j0Z+Hg/zFv/TP+ObnO78505XRuaC9x/8Ly82wfMXQHvWr+HwHqgJls0QLingNs37QaVoeou2Q
+	R+Bn5z3DvLLSsyys2XbGob67ha/DMVQCNYY9u2ZjayY9U9vno+2ZVHA==
+X-Gm-Gg: ASbGnctmotEn/Fci+dpRXw+zJudOe2WnEBDiu63STghZUxYAPSw3ePzqbx76UugIa9T
+	dkz6gwN8zVIh2R1nNw/r593fhanumhK+EHkOaf2OZRS1jFrzo8TVIFPADQQOOWHf+FUlPBShazF
+	zmF7/JhgTjEw8iqIPlUHpWhJMLECmXsC67Z2QZwP5XZ0xLzk165bRsjsGC17gU3ss9PYNKamkFG
+	qxwpWjvRX0xnX5xLninOLPpbr+ugl1mF1jLeTtF03BYzrFoS7qNmY42saLWaKk4YC2UB2CYlUDQ
+	BVsys42oFjiT4d6QHgW+MMfNRna4S8J5UTkagTzdL+PKIddo6EHruOVMhiY=
+X-Received: by 2002:a5d:6a49:0:b0:3a3:5cca:a56a with SMTP id ffacd0b85a97d-3a35ccaa7ccmr9872991f8f.32.1747734594720;
+        Tue, 20 May 2025 02:49:54 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IERZPLs4JlsuZmumP5YHPtj9qIckLqLuPz2NZ0FOXcdTy6ANbEKQ9dbQymmsaS/IsilI+AwLw==
+X-Received: by 2002:a5d:6a49:0:b0:3a3:5cca:a56a with SMTP id ffacd0b85a97d-3a35ccaa7ccmr9872974f8f.32.1747734594291;
+        Tue, 20 May 2025 02:49:54 -0700 (PDT)
+Received: from ?IPV6:2a0d:3344:244f:5710:ef42:9a8d:40c2:f2db? ([2a0d:3344:244f:5710:ef42:9a8d:40c2:f2db])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a35ca88a13sm15601908f8f.74.2025.05.20.02.49.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 May 2025 02:49:53 -0700 (PDT)
+Message-ID: <6ce5f200-aacc-4b01-b3b6-b2dbe543248d@redhat.com>
+Date: Tue, 20 May 2025 11:49:51 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4f3768be36e0298be4ceebd4fdd3e96dd4fbdc04@linux.dev>
-X-TM-AS-GCONF: 00
-X-Authority-Analysis: v=2.4 cv=EM8G00ZC c=1 sm=1 tr=0 ts=682c4f9d cx=c_pps a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17 a=kj9zAlcOel0A:10 a=dt9VzEwgFbYA:10 a=NEAV23lmAAAA:8 a=VuaLrmb_DCXaSyQ9aWYA:9 a=CjuIK1q_8ugA:10
-X-Proofpoint-GUID: ndqHY9jSY1soiqAi2mGLACUJw-m9cHwz
-X-Proofpoint-ORIG-GUID: ndqHY9jSY1soiqAi2mGLACUJw-m9cHwz
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTIwMDA3OSBTYWx0ZWRfXxOPtJFTQoQvW e5KbT4Np1rwke1MB6rgJTtatfakliBYkpfvaJi2385BgGpRd6h8Xim+p+djCjHOHwRlMNL8kIeY yESFxPnWzLoCVaxjmkk1f/T/SmhhmtU174L38r9o+9Ot6pwHSkyaneoAzZRJ/t0YWRY7Kczhqs2
- UsIEkAQ2MYlREfkE9Q6Xl+Fp1r9dBSUdm2yDD2TMeL1rT96PI4sLnQqFvLrLKdnAVEfjweahAaA Cp2A3s0V/JFZB9fHUeKsq2W528I/dG3Nw7QGW6Qnbm6E/RIa2sf7s5jGCjlhb64cVMK794JwbYQ 6olsJ9YAaJqyEIfifwlJWihEayxKkvyVByLiHLhQ8yUGF19z9HVZPiVZVisRVpcu3iX6qgTjFqZ
- wjDF36U5TQia8mrAElLSNAUXrVjRdvfN4IqJHImsDwwRC7r8nBo8CdxCbWlEZKjXw4W0lYBt
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-05-20_04,2025-05-16_03,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 impostorscore=0
- mlxscore=0 lowpriorityscore=0 mlxlogscore=999 spamscore=0
- priorityscore=1501 suspectscore=0 adultscore=0 phishscore=0 clxscore=1011
- malwarescore=0 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505070000
- definitions=main-2505200079
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v7 net-next 10/15] tcp: accecn: AccECN option send control
+To: chia-yu.chang@nokia-bell-labs.com, linux-doc@vger.kernel.org,
+ corbet@lwn.net, horms@kernel.org, dsahern@kernel.org, kuniyu@amazon.com,
+ bpf@vger.kernel.org, netdev@vger.kernel.org, dave.taht@gmail.com,
+ jhs@mojatatu.com, kuba@kernel.org, stephen@networkplumber.org,
+ xiyou.wangcong@gmail.com, jiri@resnulli.us, davem@davemloft.net,
+ edumazet@google.com, andrew+netdev@lunn.ch, donald.hunter@gmail.com,
+ ast@fiberby.net, liuhangbin@gmail.com, shuah@kernel.org,
+ linux-kselftest@vger.kernel.org, ij@kernel.org, ncardwell@google.com,
+ koen.de_schepper@nokia-bell-labs.com, g.white@cablelabs.com,
+ ingemar.s.johansson@ericsson.com, mirja.kuehlewind@ericsson.com,
+ cheshire@apple.com, rs.ietf@gmx.at, Jason_Livingood@comcast.com,
+ vidhi_goel@apple.com
+References: <20250514135642.11203-1-chia-yu.chang@nokia-bell-labs.com>
+ <20250514135642.11203-11-chia-yu.chang@nokia-bell-labs.com>
+Content-Language: en-US
+From: Paolo Abeni <pabeni@redhat.com>
+In-Reply-To: <20250514135642.11203-11-chia-yu.chang@nokia-bell-labs.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-[full quote, and adding Ilya]
+On 5/14/25 3:56 PM, chia-yu.chang@nokia-bell-labs.com wrote:
+> @@ -6450,8 +6480,12 @@ static bool tcp_validate_incoming(struct sock *sk, struct sk_buff *skb,
+>  	 * RFC 5961 4.2 : Send a challenge ack
+>  	 */
+>  	if (th->syn) {
+> -		if (tcp_ecn_mode_accecn(tp))
+> +		if (tcp_ecn_mode_accecn(tp)) {
+> +			u8 opt_demand = max_t(u8, 1, tp->accecn_opt_demand);
+> +
+>  			accecn_reflector = true;
+> +			tp->accecn_opt_demand = opt_demand;
 
-On Thu, May 15, 2025 at 07:04:20PM +0000, Ihor Solodrai wrote:
-> Hi everyone.
-> 
-> Stumbled on the following while testing unrelated changes to BPF CI scripts:
-> 
->     #353     select_reuseport:OK
->     specification exception: 0006 ilc:2 [#1]SMP
->     Modules linked in: bpf_testmod(OE) [last unloaded: bpf_test_modorder_x(OE)]
->     CPU: 0 UID: 0 PID: 108 Comm: new_name Tainted: G           OE       6.15.0-rc4-g169491540638-dirty #1 NONE
->     Tainted: [O]=OOT_MODULE, [E]=UNSIGNED_MODULE
->     Hardware name: IBM 8561 LT1 400 (KVM/Linux)
->     Krnl PSW : 0404e00180000000 000001e43ac595e4 (hrtimer_interrupt+0x4/0x2a0)
->                R:0 T:1 IO:0 EX:0 Key:0 M:1 W:0 P:0 AS:3 CC:2 PM:0 RI:0 EA:3
->     Krnl GPRS: 7fffffffffffffff 000001e43ac595e0 00000000fff8f200 000001e43c52a0c0
->                00000164c50740d8 0000000000000000 0000000000000000 0000000000000000
->                0000000000000000 0000000000000000 000001643afabe00 0000000000000000
->                000003ff9fbadf98 000001e43b747550 000001e43ab12774 00000000fffdfe68
->     Krnl Code:#000001e43ac595e0: 67756573		mxd	%f7,1395(%r5,%r6)
->               >000001e43ac595e4: 743d696e		unknown
->                000001e43ac595e8: 73303031		unknown
->                000001e43ac595ec: 61652c64		unknown
->                000001e43ac595f0: 65627567		unknown
->                000001e43ac595f4: 2d74		ddr	%f7,%f4
->                000001e43ac595f6: 68726561		ld	%f7,1377(%r2,%r6)
->                000001e43ac595fa: 64733d6f		unknown
->     Call Trace:
->      [<000001e43ac595e4>] hrtimer_interrupt+0x4/0x2a0
->      [<000001e43ab128ca>] do_irq_async+0x5a/0x78
->      [<000001e43b65f694>] do_ext_irq+0xac/0x168
->      [<000001e43b66ae90>] ext_int_handler+0xc8/0xf8
->     Last Breaking-Event-Address:
->      [<000001e43ab08a9e>] clock_comparator_work+0x2e/0x30
->     Kernel panic - not syncing: Fatal exception in interrupt
-> 
-> This is on the current tip of bpf-next (9325d53fe9ad).
-> 
-> Job: https://github.com/kernel-patches/vmtest/actions/runs/15051985809/job/42309244372
-> You can download full logs from there.
-> 
-> It only happened once so far, didn't repeat on restart.
+There is similar code to update accecn_opt_demand above, possibly worth
+an helper.
 
-Looks like the text section, which contains the hrtimer_interrupt
-function, got corrupted, and an ASCII string was written there.
-The hexdump above with the corrupted code translates to the following
-ASCII text: "guest=ins001ae,debug-threads=o".
+> @@ -1237,12 +1253,16 @@ static unsigned int tcp_established_options(struct sock *sk, struct sk_buff *skb
+>  	}
+>  
+>  	if (tcp_ecn_mode_accecn(tp) &&
+> -	    sock_net(sk)->ipv4.sysctl_tcp_ecn_option) {
+> +	    sock_net(sk)->ipv4.sysctl_tcp_ecn_option &&
+> +	    (sock_net(sk)->ipv4.sysctl_tcp_ecn_option >= TCP_ECN_OPTION_FULL ||
+> +	     tp->accecn_opt_demand ||
+> +	     tcp_accecn_option_beacon_check(sk))) {
+>  		int saving = opts->num_sack_blocks > 0 ? 2 : 0;
+>  		int remaining = MAX_TCP_OPTION_SPACE - size;
+>  
+>  		opts->ecn_bytes = tp->received_ecn_bytes;
+> -		size += tcp_options_fit_accecn(opts, tp->accecn_minlen,
+> +		size += tcp_options_fit_accecn(opts,
+> +					       tp->accecn_minlen,
+>  					       remaining,
+>  					       saving);
 
-Does that ring a bell?
+Please avoid unneeded white-space only changes.
+
+/P
+
+
