@@ -1,77 +1,62 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38238241696;
-	Tue, 20 May 2025 16:06:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FA71258CC0;
+	Tue, 20 May 2025 16:28:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747757174; cv=none; b=DXbwuC5tyRuvSHpUwkG5o9dp1bc37cVg9B0TnjMR0ZfbK9ghtNriPWfWl3fjI45w/AApFM5UpVFw/JjzoEKdCQk3r+KbzuA8ry1HLNqS7bU9K4zJMRwkK7pHkGBd1OOpG50R3kUYoFUuvtRVDk5HjqWJifRIbBOdUiOevCifSQk=
+	t=1747758502; cv=none; b=OSBlyobcJ1JTrHwxRPs/ZxEaImYa0iWsgUMOSMqJ2t4Vo2m+rNOKmC+xKedOVDl/U1Sq/umddHon9Pz7zh3P3fdhFAEUwRuBnkvtvyr4svTtYbAipnJNFJIdNOqvzpGl8W3miQslmTiXqIdQqzjFQdPMRaqmx15cTsXQtWDhync=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747757174; c=relaxed/simple;
-	bh=LwPbqoIXOVyP2aQDPKPm6hmyDnm8quZTF2z+BUwu33w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JPRcya/+75xXSZ8ZfgCOCw4CRonc92Jei31jpXQyEJCBXRVqxwkz16HcksjRw8mFmSiDmcahJtaaHacVvUuSxfb7WZ2MRTBfJRD1hoIq2HTFIUzn7DxX5CCCMp05f2olkH25EHmkEnyuv2SfoG9F0ttlzGJf/vfNs5+pLTqQw0E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Pdgs6/FI; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Pdgs6/FI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C252C4CEE9;
-	Tue, 20 May 2025 16:06:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747757173;
-	bh=LwPbqoIXOVyP2aQDPKPm6hmyDnm8quZTF2z+BUwu33w=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Pdgs6/FIlZFOYSnMfFOajMq74ngEqAh6X37JSbg+2aZQuFBKu1sbR5fhBqs/913t3
-	 AwGvai69zatfsOl/9eQ4Vz2u3B/rE3eHDhLDIkZbBEcZSy3w+NlqMIU6cMdSYyoRxu
-	 C+NaBH4GcohDC1pIQv3AIHLU/jY4wN9r0D4UN2+kwkJ/Dhhhy3Cng1L0Gh4wXSyxZl
-	 Zo0mtMiVhfaJV37T9GlA7XRetK+vukjVPBX83GusCB/+VdqK1CZ0CwvhOv3Q+UFrXw
-	 7JdN0j73CAHmOxvqI4WF/p7wy0G0g1AO4Spma/GUAhoEniv8F8RLqPbBGewkyoC88Q
-	 PKi8HawOmrwNg==
-Date: Tue, 20 May 2025 09:06:10 -0700
-From: Kees Cook <kees@kernel.org>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Shung-Hsi Yu <shung-hsi.yu@suse.com>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Erhard Furtner <erhard_f@mailbox.org>,
-	Danilo Krummrich <dakr@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org, bpf@vger.kernel.org,
-	linux-hardening@vger.kernel.org
-Subject: Re: [PATCH 0/2] mm: vmalloc: Actually use the in-place vrealloc
- region
-Message-ID: <202505200904.474938A8B5@keescook>
-References: <20250515214020.work.519-kees@kernel.org>
- <202505191217.B047E005F2@keescook>
- <20250519170607.b8d9c23bb928935d19b333fa@linux-foundation.org>
+	s=arc-20240116; t=1747758502; c=relaxed/simple;
+	bh=3h7pzFFp1arnliL6WNRF7D9w/8BVZFQJvxDtegXhXXc=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Bl76TdSmiA866CDQDwFGPbIUDfWH7AwHgpObgTEuNvmUrKPgsiyBR2aG8CNQW4GsbUmBd6HU080p+9u3FajGpzimMOOiR65iKcg4OOpF5bXNQQ8HauFUZY/cAqzRmnpDV8KGf0sBiAhfngydZbdZ3Vwg3N/8n8qfST6enJj7VtU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3E82C4CEE9;
+	Tue, 20 May 2025 16:28:19 +0000 (UTC)
+Date: Tue, 20 May 2025 12:29:00 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Ingo Molnar <mingo@kernel.org>
+Cc: Namhyung Kim <namhyung@kernel.org>, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org, x86@kernel.org,
+ Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>, Josh Poimboeuf <jpoimboe@kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>, Jiri Olsa <jolsa@kernel.org>, Thomas
+ Gleixner <tglx@linutronix.de>, Borislav Petkov <bp@alien8.de>, Dave Hansen
+ <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>, Andrii
+ Nakryiko <andrii@kernel.org>, "Jose E. Marchesi" <jemarch@gnu.org>, Indu
+ Bhagat <indu.bhagat@oracle.com>
+Subject: Re: [PATCH v9 00/13] unwind_user: x86: Deferred unwinding
+ infrastructure
+Message-ID: <20250520122900.42fc5b92@gandalf.local.home>
+In-Reply-To: <20250520115721.7a4307a2@gandalf.local.home>
+References: <20250513223435.636200356@goodmis.org>
+	<20250514132720.6b16880c@gandalf.local.home>
+	<aCfMzJ-zN0JKKTjO@google.com>
+	<20250519113339.027c2a68@batman.local.home>
+	<aCxM_BizulyIVcdb@gmail.com>
+	<20250520115721.7a4307a2@gandalf.local.home>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250519170607.b8d9c23bb928935d19b333fa@linux-foundation.org>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Mon, May 19, 2025 at 05:06:07PM -0700, Andrew Morton wrote:
-> On Mon, 19 May 2025 12:18:42 -0700 Kees Cook <kees@kernel.org> wrote:
-> 
-> > On Thu, May 15, 2025 at 02:42:14PM -0700, Kees Cook wrote:
-> > > This fixes a performance regression[1] with vrealloc(). This needs to
-> > > get into v6.15, which is where the regression originates, and then it'll
-> > > get backport to the -stable releases as well.
-> 
-> No -stable backporting will be needed?
+On Tue, 20 May 2025 11:57:21 -0400
+Steven Rostedt <rostedt@goodmis.org> wrote:
 
-I think it will, since the vrealloc patches were backported
-automatically, e.g. in v6.14.y: 0b391a520b4e ("mm: vmalloc: support more
-granular vrealloc() sizing")
+> For 6.16, I would just like to get the common infrastructure in the kernel
+> so there's no dependency on different tracers. This patch set adds the
+> changes but does not enable it yet. This way, perf, ftrace and BPF can all
+> work to build on top of the changes without needing to share code.
 
-> > Andrew, can you get these to Linus this week?
-> 
-> Sure.
+Another thing that would work for me is not to push it this merge window,
+but if you could make a separate branch based on top of v6.15 when it is
+released, that has this code, where other subsystems could work on top of
+that, would be great!
 
-Thanks!
-
--- 
-Kees Cook
+-- Steve
