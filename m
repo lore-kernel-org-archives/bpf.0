@@ -1,195 +1,201 @@
-Received: from 69-171-232-180.mail-mxout.facebook.com (69-171-232-180.mail-mxout.facebook.com [69.171.232.180])
+Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9874E22DA1E
-	for <bpf@vger.kernel.org>; Wed, 21 May 2025 03:21:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02E0722F3A8
+	for <bpf@vger.kernel.org>; Wed, 21 May 2025 03:53:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747797674; cv=none; b=gKCbmLPAR8V1C8rdj9jKaVUmoWqPF6mBjHTYu5TYMMNDPDKPBQyhVUSMsTn62M8y8z66vabP9KzpuVM/FYl6aQSdOtllHrCUzR0sazZejPIMDQeZcj4PjmfgVXOf71y3wbwZ0nKU7f+ZoXxXBSAf5qzsswAheCJLGrLVdwYEP/M=
+	t=1747799610; cv=none; b=ggWz1YIkaIMHh44rneP4xB/OzROXe3PbghkHCjPXMMloMliHRFkWjMqbnrT9LHUKUz+4KeEoy8wLN1MQ3GRwAApfgzS1ageD2la94zuwfdZ3TqtbUq55cIkHRdlf4CnUSbUwXC4n2v9Gk3umkEDay7wAmLJ8doiinvMbBpLJq2U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747797674; c=relaxed/simple;
-	bh=1d1TQcT9MI8zCazNhjQSrTGynne2JeAE7oy5/3ffBKI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=roU5wiQ9fOBVvta4lmSc7fHIv1cYanhCRMP+hRrMGF6EGSR2aHQTn0LKVXcaBUvsGVum5AkRiqOyJVf/eviQMWQvcghYqPal/Ozy5mps/GTazpGV7i9n8HwlWSvvEZTUW2uUcB5hTGbNiUY/TPDW8KcS6aIhniEpfTuR/dB0Fac=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
-Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id EB2937E53FC2; Tue, 20 May 2025 20:20:57 -0700 (PDT)
-From: Yonghong Song <yonghong.song@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	kernel-team@fb.com,
-	Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf-next v4 2/3] bpf: Warn with bpf_unreachable() kfunc maybe due to uninitialized variable
-Date: Tue, 20 May 2025 20:20:57 -0700
-Message-ID: <20250521032057.1016838-1-yonghong.song@linux.dev>
-X-Mailer: git-send-email 2.47.1
-In-Reply-To: <20250521032047.1015381-1-yonghong.song@linux.dev>
-References: <20250521032047.1015381-1-yonghong.song@linux.dev>
+	s=arc-20240116; t=1747799610; c=relaxed/simple;
+	bh=uoDEMrNtNl3uiTS1SuiY9P3+mVnaJbzCqQ63YQEBwVM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=WJBPB6lwr+ApG2HFbY9C+/kEnQCaGz7+ssWMPa593jSn+5+wXayzt9+iFB6m/ApidR0hJnfX9egYgBC3XdEO8GCILtuc3ZvC9XGbPKWEY8kbjWx5r3WA/bYrFawLapOggnUnaKqI6z6E/4S+a5/sHzZo/f1h9givk6t/sjELeIk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GN3WaTEq; arc=none smtp.client-ip=209.85.219.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GN3WaTEq"
+Received: by mail-qv1-f50.google.com with SMTP id 6a1803df08f44-6f8d4375aa5so22089666d6.0
+        for <bpf@vger.kernel.org>; Tue, 20 May 2025 20:53:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1747799608; x=1748404408; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uoDEMrNtNl3uiTS1SuiY9P3+mVnaJbzCqQ63YQEBwVM=;
+        b=GN3WaTEqvdV2PZ8zIU3mcfKdH4bwr2vTxf39jKoovEqbeaewZQZHHKfagYy8PWtE9o
+         qY9ltFCxSHojVFR0H8HDa454aTEOMd9zgTe7h5YML49fJ9YsD7VDhYcprQswB7zFUXbi
+         rLEJD9NEOTqZeht5ApTpGMClUuyXAXTSU7SQxFDmRBrAv1dbQIa2erRPgu7M+MxBD+KD
+         DsIQjObZQ8IJ2iXOTIqWzOH/quPIotLLPvK9MJlwMBEburQU6LANfNHs15PMEM1BK/wS
+         gL1tF7sKrY7gVjyXiLuc78nRyteuDfRSOG0AVL9CKPgXv/80hh5Vyjmc7MrvxVqJS4oo
+         6MMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747799608; x=1748404408;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=uoDEMrNtNl3uiTS1SuiY9P3+mVnaJbzCqQ63YQEBwVM=;
+        b=llBy9IS/A9guqpDH2doKrue054ZCdbUZDj+jsYhdqY1qioLxUrlXcWEZ1SpW0rwYQY
+         EjJ7yvdoRESyFW+IRWCyq49VCE1VJAwTyaYMmWU3mYmw4X/AWzTXrrOYWmTHm7iGKRjF
+         Y0OJcFiaG7uMZ1rRiGUl4l6lc77hc82aWPdcTm+pnR7pBOJiYKVPutxZ4Mofn2wIctSE
+         HQll5sUL8Y7SYhN1VkcHu6E/OaIoCSsRUdLFOrTCAgAVOmOAMYM3yW29GIKsGtbxSU0j
+         shPY4s5+WJEKs09BdYT5JujVa/qFGQ+lWBjqwR6wNcBKC1AB+XeMZN7VgF+t7CtP2Az5
+         vJfA==
+X-Forwarded-Encrypted: i=1; AJvYcCVfzxlgwZDgV1jnn7in0YPEJiBN/uWWfFCEUyMn7TjNp4YNlsn5UQEcspSVaj2yYbVTZg8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzyvnvpoLk1tpVwCy6CnNvJ44ow89r7gN523tJLsWO9wBtgP4Nr
+	ny1FPFaVGBef8Nm1s1B2yokulA/FxFVn0MaeNnKQjR9AcywJVYwwO7b6dLXCuz62L/wvpiXJ/3l
+	UcWBlAJCX9BPlvytas/OblgiXbqofI/0=
+X-Gm-Gg: ASbGncvfEXd0wALzBNWDO+QobfdbPDzj2gzve74M1VMv3S/h3YJlnXRPhYzNobF+6h4
+	DBSPD/q4G0jSyss1rwz0s1MLdWjagzDubQ51SPipBsFZGTJ0JQuCl95tZ9J8aTBR1iGeN7BgGIP
+	YzQoOJnQXPgJTuUBoCW0IG61L/6p6Xn65dFQ==
+X-Google-Smtp-Source: AGHT+IFcQlxq0eUE8N8L1qHNgjaGjhBVw5YFAczWuK8oG9DqiErGcQ/iSHjYgzACN2Xb04quJyUiQ7jCrQ/jgv7zepk=
+X-Received: by 2002:ad4:4ee4:0:b0:6f8:a825:adea with SMTP id
+ 6a1803df08f44-6f8b088bd2fmr357041056d6.15.1747799607817; Tue, 20 May 2025
+ 20:53:27 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+References: <20250520060504.20251-1-laoar.shao@gmail.com> <746e8123-2332-41c8-851b-787cb8c144a1@redhat.com>
+ <c77698ed-7257-46d5-951e-1da3c74cd36a@lucifer.local> <CALOAHbCZRDuMtc=MpiR1FWpURZAVrHWQmDV08ySsiPekxU2KcA@mail.gmail.com>
+ <849decad-ab38-4a1a-8532-f518a108d8c6@lucifer.local>
+In-Reply-To: <849decad-ab38-4a1a-8532-f518a108d8c6@lucifer.local>
+From: Yafang Shao <laoar.shao@gmail.com>
+Date: Wed, 21 May 2025 11:52:51 +0800
+X-Gm-Features: AX0GCFsQiqwqPYpFbmkGryZtx4RlrFVoaExvt1HQ3km2SfRmfgGlGLfR69VDGME
+Message-ID: <CALOAHbCFTSKr4yvGKhjK9tA0peBNusFpJ=NoT4tnCzEe2p-oEw@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 0/5] mm, bpf: BPF based THP adjustment
+To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Cc: David Hildenbrand <david@redhat.com>, akpm@linux-foundation.org, ziy@nvidia.com, 
+	baolin.wang@linux.alibaba.com, Liam.Howlett@oracle.com, npache@redhat.com, 
+	ryan.roberts@arm.com, dev.jain@arm.com, hannes@cmpxchg.org, 
+	usamaarif642@gmail.com, gutierrez.asier@huawei-partners.com, 
+	willy@infradead.org, ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
+	bpf@vger.kernel.org, linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Marc Su=C3=B1=C3=A9 (Isovalent, part of Cisco) reported an issue where an
-uninitialized variable caused generating bpf prog binary code not
-working as expected. The reproducer is in [1] where the flags
-=E2=80=9C-Wall -Werror=E2=80=9D are enabled, but there is no warning as t=
-he compiler
-takes advantage of uninitialized variable to do aggressive optimization.
-The optimized code looks like below:
+On Tue, May 20, 2025 at 9:45=E2=80=AFPM Lorenzo Stoakes
+<lorenzo.stoakes@oracle.com> wrote:
+>
+> On Tue, May 20, 2025 at 08:06:21PM +0800, Yafang Shao wrote:
+> > On Tue, May 20, 2025 at 5:49=E2=80=AFPM Lorenzo Stoakes
+> > <lorenzo.stoakes@oracle.com> wrote:
+> > >
+> > > On Tue, May 20, 2025 at 11:43:11AM +0200, David Hildenbrand wrote:
+> > > > > Conclusion
+> > > > > ----------
+> > > > >
+> > > > > Introducing a new "bpf" mode for BPF-based per-task THP adjustmen=
+ts is the
+> > > > > most effective solution for our requirements. This approach repre=
+sents a
+> > > > > small but meaningful step toward making THP truly usable=E2=80=94=
+and manageable=E2=80=94in
+> > > > > production environments.
+> > > > A new "bpf" mode sounds way too special.
+> > > >
+> > > > We currently have:
+> > > >
+> > > > never -> never
+> > > > madvise -> MADV_HUGEPAGE, except PR_SET_THP_DISABLE
+> > > > always -> always, except PR_SET_THP_DISABLE and MADV_NOHUGEPAGE
+> > > >
+> > > > Whatever new mode we add, it should honor PR_SET_THP_DISABLE +
+> > > > MADV_NOHUGEPAGE.
+> > > >
+> > > > So, if we want another way to enable things, it would live between =
+"never"
+> > > > and "madvise".
+> > > >
+> > > > I'm wondering how we could make that generic: likely we want this n=
+ew
+> > > > mechanism to *not* be triggerable by the process itself (madvise).
+> > > >
+> > > > I am not convinced bpf is the answer here ...
+> > >
+> > > Agreed.
+> > >
+> > > I am also very concerned with us inserting BPF bits here - are we not=
+ then
+> > > ensuring that we cannot in any way move towards a future where we
+> > > 'automagically' determine what to do?
+> > >
+> > > I don't know what is claimed about BPF, but it strikes me that we're
+> > > establishing a permanent uABI (uAPI?) if we do that and essentially
+> > > promising that THP will continue to operate in a fashion similar to h=
+ow it
+> > > does now.
+> > >
+> > > While BPF is a wonderful technology, I thik we have to be very very c=
+areful
+> > > about inserting it in places that consist of -implementation details-=
+ that
+> > > we in mm already are planning to move away from.
+> > >
+> > > It's one thing adding BPF in the oomk (simple interface, unlikely to
+> > > change, doesn't really constrain us) or the scheduler (again the hook=
+s are
+> > > by nature reasonably stable), it's quite another sticking it in the h=
+eart
+> > > of a part of mm that is undergoing _constant_ change, partly as evide=
+nced
+> > > by the sheer number of series related to THP that are currently on-li=
+st.
+> > >
+> > > So while BPF may be the best solution for your needs _right now_, we =
+need
+> > > be concerned with how things affect the kernel in the future.
+> > >
+> > > I think we really do have to tread very carefully here.
+> >
+> > I totally agree with you that the key point here is how to define the
+> > API. As I replied to David, I believe we have two fundamental
+> > principles to adjust the THP policies:
+> > 1. Selective Benefit: Some tasks benefit from THP, while others do not.
+> > 2. Conditional Safety: THP allocation is safe under certain conditions
+> > but not others.
+> >
+> > Therefore, I believe we can define these APIs based on the established
+> > principles - everything else constitutes implementation details, even
+> > if core MM internals need to change.
+>
+> But if we're looking to make the concept of THP go away, we really need t=
+o
+> go further than this.
+>
+> The second we have 'bpf program that figures out whether THP should be
+> used' we are permanently tied to the idea of THP on/off being a thing.
+>
+> I mean any future stuff that makes THP more automagic will probably invol=
+ve
+> having new modes for the legacy THP
+> /sys/kernel/mm/transparent_hugepage/enabled and
+> /sys/kernel/mm/transparent_hugepage/hugepages-xxkB/enabled
+>
+> But if people are super reliant on this stuff it's potentially really
+> limiting.
+>
+> I think you said in another post here that you were toying with the notio=
+n
+> of exposing somehow the madvise() interface and having that be the 'stabl=
+e
+> API' of sorts?
 
-      ; {
-           0:       bf 16 00 00 00 00 00 00 r6 =3D r1
-      ;       bpf_printk("Start");
-           1:       18 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 r1 =3D=
- 0x0 ll
-                    0000000000000008:  R_BPF_64_64  .rodata
-           3:       b4 02 00 00 06 00 00 00 w2 =3D 0x6
-           4:       85 00 00 00 06 00 00 00 call 0x6
-      ; DEFINE_FUNC_CTX_POINTER(data)
-           5:       61 61 4c 00 00 00 00 00 w1 =3D *(u32 *)(r6 + 0x4c)
-      ;       bpf_printk("pre ipv6_hdrlen_offset");
-           6:       18 01 00 00 06 00 00 00 00 00 00 00 00 00 00 00 r1 =3D=
- 0x6 ll
-                    0000000000000030:  R_BPF_64_64  .rodata
-           8:       b4 02 00 00 17 00 00 00 w2 =3D 0x17
-           9:       85 00 00 00 06 00 00 00 call 0x6
-      <END>
+Yes, I have a BPF program that hooks into madvise() to selectively
+enforce THP policies=E2=80=94allowing it for certain tasks while blocking i=
+t
+for others. However, this violates the semantic guarantee of
+madvise(). For instance, if a user sees THP configured in madvise
+mode, they=E2=80=99d expect madvise() to reliably enable it. But with this =
+BPF
+logic, such calls might silently fail, creating inconsistency. This is
+why we propose introducing a dedicated BPF-controlled mode, or
+alternatively extending the semantics of the existing "never" mode.
 
-The verifier will report the following failure:
-  9: (85) call bpf_trace_printk#6
-  last insn is not an exit or jmp
-
-The above verifier log does not give a clear hint about how to fix
-the problem and user may take quite some time to figure out that
-the issue is due to compiler taking advantage of uninitialized variable.
-
-In llvm internals, uninitialized variable usage may generate
-'unreachable' IR insn and these 'unreachable' IR insns may indicate
-uninitialized variable impact on code optimization. So far, llvm
-BPF backend ignores 'unreachable' IR hence the above code is generated.
-With clang21 patch [2], those 'unreachable' IR insn are converted
-to func bpf_unreachable(). In order to maintain proper control flow
-graph for bpf progs, [2] also adds an 'exit' insn after bpf_unreachable()
-if bpf_unreachable() is the last insn in the function.
-The new code looks like:
-
-      ; {
-           0:       bf 16 00 00 00 00 00 00 r6 =3D r1
-      ;       bpf_printk("Start");
-           1:       18 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 r1 =3D=
- 0x0 ll
-                    0000000000000008:  R_BPF_64_64  .rodata
-           3:       b4 02 00 00 06 00 00 00 w2 =3D 0x6
-           4:       85 00 00 00 06 00 00 00 call 0x6
-      ; DEFINE_FUNC_CTX_POINTER(data)
-           5:       61 61 4c 00 00 00 00 00 w1 =3D *(u32 *)(r6 + 0x4c)
-      ;       bpf_printk("pre ipv6_hdrlen_offset");
-           6:       18 01 00 00 06 00 00 00 00 00 00 00 00 00 00 00 r1 =3D=
- 0x6 ll
-                    0000000000000030:  R_BPF_64_64  .rodata
-           8:       b4 02 00 00 17 00 00 00 w2 =3D 0x17
-           9:       85 00 00 00 06 00 00 00 call 0x6
-          10:       85 10 00 00 ff ff ff ff call -0x1
-                    0000000000000050:  R_BPF_64_32  bpf_unreachable
-          11:       95 00 00 00 00 00 00 00 exit
-      <END>
-
-In kernel, a new kfunc bpf_unreachable() is added. During insn
-verification, any hit with bpf_unreachable() will result in
-verification failure. The kernel is able to provide better
-log message for debugging.
-
-With llvm patch [2] and without this patch (no bpf_unreachable()
-kfunc for existing kernel), e.g., for old kernels, the verifier
-outputs
-  10: <invalid kfunc call>
-  kfunc 'bpf_unreachable' is referenced but wasn't resolved
-Basically, kernel does not support bpf_unreachable() kfunc.
-This still didn't give clear signals about possible reason.
-
-With llvm patch [2] and with this patch, the verifier outputs
-  10: (85) call bpf_unreachable#74479
-  unexpected bpf_unreachable() due to uninitialized variable?
-It gives much better hints for verification failure.
-
-  [1] https://github.com/msune/clang_bpf/blob/main/Makefile#L3
-  [2] https://github.com/llvm/llvm-project/pull/131731
-
-Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
----
- kernel/bpf/helpers.c  | 5 +++++
- kernel/bpf/verifier.c | 5 +++++
- 2 files changed, 10 insertions(+)
-
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index c1113b74e1e2..4852c36b1c51 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -3273,6 +3273,10 @@ __bpf_kfunc void bpf_local_irq_restore(unsigned lo=
-ng *flags__irq_flag)
- 	local_irq_restore(*flags__irq_flag);
- }
-=20
-+__bpf_kfunc void bpf_unreachable(void)
-+{
-+}
-+
- __bpf_kfunc_end_defs();
-=20
- BTF_KFUNCS_START(generic_btf_ids)
-@@ -3386,6 +3390,7 @@ BTF_ID_FLAGS(func, bpf_copy_from_user_dynptr, KF_SL=
-EEPABLE)
- BTF_ID_FLAGS(func, bpf_copy_from_user_str_dynptr, KF_SLEEPABLE)
- BTF_ID_FLAGS(func, bpf_copy_from_user_task_dynptr, KF_SLEEPABLE | KF_TRU=
-STED_ARGS)
- BTF_ID_FLAGS(func, bpf_copy_from_user_task_str_dynptr, KF_SLEEPABLE | KF=
-_TRUSTED_ARGS)
-+BTF_ID_FLAGS(func, bpf_unreachable)
- BTF_KFUNCS_END(common_btf_ids)
-=20
- static const struct btf_kfunc_id_set common_kfunc_set =3D {
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 7be97a8419f8..b5be9ff34c60 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -12105,6 +12105,7 @@ enum special_kfunc_type {
- 	KF_bpf_res_spin_unlock,
- 	KF_bpf_res_spin_lock_irqsave,
- 	KF_bpf_res_spin_unlock_irqrestore,
-+	KF_bpf_unreachable,
- };
-=20
- BTF_ID_LIST(special_kfunc_list)
-@@ -12170,6 +12171,7 @@ BTF_ID(func, bpf_res_spin_lock)
- BTF_ID(func, bpf_res_spin_unlock)
- BTF_ID(func, bpf_res_spin_lock_irqsave)
- BTF_ID(func, bpf_res_spin_unlock_irqrestore)
-+BTF_ID(func, bpf_unreachable)
-=20
- static bool is_kfunc_ret_null(struct bpf_kfunc_call_arg_meta *meta)
- {
-@@ -13638,6 +13640,9 @@ static int check_kfunc_call(struct bpf_verifier_e=
-nv *env, struct bpf_insn *insn,
- 			return err;
- 		}
- 		__mark_btf_func_reg_size(env, regs, BPF_REG_0, sizeof(u32));
-+	} else if (!insn->off && insn->imm =3D=3D special_kfunc_list[KF_bpf_unr=
-eachable]) {
-+		verbose(env, "unexpected bpf_unreachable() due to uninitialized variab=
-le?\n");
-+		return -EFAULT;
- 	}
-=20
- 	if (is_kfunc_destructive(&meta) && !capable(CAP_SYS_BOOT)) {
 --=20
-2.47.1
-
+Regards
+Yafang
