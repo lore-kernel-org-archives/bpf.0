@@ -1,141 +1,124 @@
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBAB721B9C2
-	for <bpf@vger.kernel.org>; Fri, 23 May 2025 01:12:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+Received: from invmail4.hynix.com (exvmail4.hynix.com [166.125.252.92])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A54B422154F;
+	Fri, 23 May 2025 03:26:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.125.252.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747962760; cv=none; b=Xc0q/b3q1q855Ms1xPS7eUWBtrB0cASDG2DxKLPbjlr+RX05EdSVyJgAEZApjcqmUHNwP3cis693O7uSsaI1PXPTEQtLDdMpyom6ZOD2KUM+aBKtvvGQpuX58WDEnnWiDcrfPSBmYmfNB6xaRp2T7SCWMIVXAiqL7/WkR/6NGwo=
+	t=1747970786; cv=none; b=heiywxgJpvEBzHVhmtGoFmDxg8eK78WiY4Jxop5sQ4P8H+lZGUqFPFpMIImTcpnEsglZBzkIR49enq5pI1p53HFr8u99J0rUqlfrnDoaBe9QMXbU3/xMme7JRVT4lO6lmEH44WjFnODzo9GsOmHTpyzUBmCm1cUkhioCbrwe5tk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747962760; c=relaxed/simple;
-	bh=UShqzNCz201Czk0sQEQ1QBEug+XK2KMiwoF7N3Xe6X8=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=W4uPx/1ZITh4uGTZ5vtTxR0T1EKZk3Piw9frl8KZuhZs9U2gUjfZdBUZNHW7lh3xsgdGTUdvKN6b8ZrOqU7m4q7de0+Ok1JDaf5luIEmKRgHRKLT4dIRizC5XJA4gjUWV3G8p7q/lohQOkMBfmxAtYQjCR9Cvmr1StZYeOVwPg4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LCGSbkHF; arc=none smtp.client-ip=209.85.214.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LCGSbkHF"
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2321c38a948so63149215ad.2
-        for <bpf@vger.kernel.org>; Thu, 22 May 2025 18:12:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1747962758; x=1748567558; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=YpXANfhf2Ct5qfaU6DfTxP1onXasslWBJgjezcxCNm0=;
-        b=LCGSbkHFNGLBQINLNNN054nF4s7tcKBszj2o0cJSOPscmUhHu3liu5VBPwj/8xP3Qw
-         ZyWjBLg/lkD9gfqWFrxMYg7dPmEQdnVPQawL/eRyv1jvpx/IiiKkRZdIFRtVjydE0E5Y
-         cLk5eTg7mzHMqBtsR+XXcY/2nYgwvrT3E7VE75iD/IcXkUtVGONz3x4ApDGrstMGGUsm
-         DInabBEfkxnXCGH6x1KwEM7tNfjZlm0UIe3YOvwyBlmaNgtiDjvHKqMflVEG3t5K7Wvi
-         4DeHT3OO9jXM+9ZFndvLkxEfFFHMRz1i8/k+Ss1V6t4cGNTSFBQXZBdoRy032M+A4qij
-         a+5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747962758; x=1748567558;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YpXANfhf2Ct5qfaU6DfTxP1onXasslWBJgjezcxCNm0=;
-        b=GZW7Q5taTuHkNNqY0CkCZQEKk9hnacGszvrXefg1h496FKFfFf+vsswXyH+5KJUnWR
-         /leT5GIgvdB2JpYcPvpB4jIJFrv86pZHm80wbHKOcnUaAeU3ys82mW9a7x+f25Tn7uTr
-         3+uyN9auNdc2nFMY4Gy2QM1i+/TKyOO5VveiT8xvIOKQu1J1SpLouL62QzudTGh1tQAL
-         zgiYoJ9iiDtmemymXg4d9IiR8vcaibpGE0wxIro2i5HbL2O+rikpzjNHIf6AjG6e+XIM
-         wwgEWJ1b0PMJJdBpzxls+dG/ris1eBSdfDkDgb8X2kRKokNskYfmK93sCplC07ptseYz
-         BChQ==
-X-Gm-Message-State: AOJu0YzwRcZxTjNrsXEXAaVjXco4GcrLJUUtGnf45hZyiFuoUEhxKGiQ
-	2QdLUIEmyaUhjNYQOrfQmCq5MdXzl7xUezv9h4eHXn7AMaFFxrQ+RCp1Q1rC7A==
-X-Gm-Gg: ASbGncuf4pVcOGOVmF6ERyUtVoINfigsiBcKhBjKeebJq0xwDlBA21F7wTi78Fov62R
-	l1cq/S/MPC8Yatjd9I5kfDA/JQ9yiC+3wuxUAOwXGntykRW9apO4cqiihsGKnm11QUyH+T3u1ik
-	rOtQ4GEE+ltdUkIR8AYadZIt+V9ujtSeXZH9YsAa+9Nrk2WXbf86CzikJdZF/22dfM+jnwaxQFZ
-	KkrhLZV840TRmsGx/zRYTDZeA8DV0/bnGz3AH5C0NAswXQFtuoFzhMejtUFlnYd+SPVl9+hFg2E
-	pswb1M5MSEsz8OEb+fpKm9OKkT7yjihA+pKgDj1GwTqU9XOGG4aSy19DhMK4ukXoJ1LpCIPiuPw
-	2Fn4XtupUWVJIII+i557TpKcvj0oc
-X-Google-Smtp-Source: AGHT+IG4lbyy/yitsHbJP14sckD4kOu4XYQSyZkEDub2xpqKUrjnE3mqiForYTJpGD7WQGSWuHdbKg==
-X-Received: by 2002:a17:902:f78c:b0:21f:85ee:f2df with SMTP id d9443c01a7336-231de35f324mr404838505ad.15.1747962757958;
-        Thu, 22 May 2025 18:12:37 -0700 (PDT)
-Received: from kodidev-ubuntu (69-172-146-21.cable.teksavvy.com. [69.172.146.21])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-231d4e971cdsm114336375ad.134.2025.05.22.18.12.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 May 2025 18:12:37 -0700 (PDT)
-From: Tony Ambardar <tony.ambardar@gmail.com>
-X-Google-Original-From: Tony Ambardar <Tony.Ambardar@gmail.com>
-Date: Thu, 22 May 2025 18:12:35 -0700
-To: Alan Maguire <alan.maguire@oracle.com>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>
-Subject: Re: [PATCH bpf-next v1] libbpf: Fix inheritance of BTF pointer size
-Message-ID: <aC/Lg58N87NA1/Mb@kodidev-ubuntu>
-References: <20250522062116.1885601-1-tony.ambardar@gmail.com>
- <2160a4ad-b09c-4dfb-98c8-5d3b78a6788a@oracle.com>
+	s=arc-20240116; t=1747970786; c=relaxed/simple;
+	bh=Nlu+Ye/l2MvdjyqvtqV9kAfumkCJ+PGw/5U4NmeTbnI=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=JxITAFQYUcB3pms/aobcDOncSKi3Orn3PPG2220jQuVv/m/5tdta225KzvZfiQ2iJzFhpjzjGO1cYmRkqW/s8q6z/18uLOOmUXS5M5DHAO1NnFIaUdKLlWhSEDT/602j4m12jA+Pn2oVNWTpJKCc/BQUXrXdGfNivJ5kYXuvweY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com; spf=pass smtp.mailfrom=sk.com; arc=none smtp.client-ip=166.125.252.92
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sk.com
+X-AuditID: a67dfc5b-681ff7000002311f-93-682feadc559e
+From: Byungchul Park <byungchul@sk.com>
+To: willy@infradead.org,
+	netdev@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org,
+	kernel_team@skhynix.com,
+	kuba@kernel.org,
+	almasrymina@google.com,
+	ilias.apalodimas@linaro.org,
+	harry.yoo@oracle.com,
+	hawk@kernel.org,
+	akpm@linux-foundation.org,
+	davem@davemloft.net,
+	john.fastabend@gmail.com,
+	andrew+netdev@lunn.ch,
+	asml.silence@gmail.com,
+	toke@redhat.com,
+	tariqt@nvidia.com,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	saeedm@nvidia.com,
+	leon@kernel.org,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	david@redhat.com,
+	lorenzo.stoakes@oracle.com,
+	Liam.Howlett@oracle.com,
+	vbabka@suse.cz,
+	rppt@kernel.org,
+	surenb@google.com,
+	mhocko@suse.com,
+	horms@kernel.org,
+	linux-rdma@vger.kernel.org,
+	bpf@vger.kernel.org,
+	vishal.moola@gmail.com
+Subject: [PATCH 04/18] page_pool: rename __page_pool_alloc_page_order() to __page_pool_alloc_large_netmem()
+Date: Fri, 23 May 2025 12:25:55 +0900
+Message-Id: <20250523032609.16334-5-byungchul@sk.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20250523032609.16334-1-byungchul@sk.com>
+References: <20250523032609.16334-1-byungchul@sk.com>
+X-Brightmail-Tracker: H4sIAAAAAAAAAzWRa0hTcRjG++9cN1wcpubRqHQQhpE3NN5IQoLgCBFRfVLBRh7dck7ZdM0i
+	cCWUokvKMGzSJO9KR5bpNDFbXivIvMQ0rxP9YKnkmnkLc1bffjzvj4cHXhqTdeMBtEqTxWs1
+	CrWclOCSJa+KExOLYcpws5EBs9BIQsO6AWpmbASY61sQ/Nz4SoGru4+E5xVrGJg/5eHgFjYx
+	mO91UjBdvYBDx71WDJwP+kkoytvC4I6tVgSDLSYCSjarMGjNnaFguN1MwlTjDgEL9iIcBsrq
+	cJg2xUKv5QCsffiOoFtoFcFaYTkJj4YsJMzlTSMYeufE4anRhEDodBCwtW4mY4O45roxEddW
+	NklxFms297I2hCtwDGGctT6f5KyrDylu4ksHyfU/2cK5NptLxBXdXSa5H/PjOLfSOUpyQvMo
+	zn20dFOcy3r4IhMviUnm1So9rw07c1Wi7Bx/Rma+EhtWBAHLRatUARLTLBPFln7eJv6za6NK
+	5GGSCWYdjg3Mwz5MBOty9uEFSEJjzDLBzpu3diWa9mbS2PrK4x4HZ46yPaaxPV/KRLNC4RT5
+	t/MI29DUtZeLmZNs8ZR7L5ftOq9HxilPJ8u4Kba068W/Qf7s21oHXoykFrSvHslUGn26QqWO
+	ClXmaFSG0GsZ6Va0+9vq29sJNrQ6eNmOGBrJvaQ2SZhSRij0upx0O2JpTO4j7VkIVcqkyYqc
+	m7w2I0mbreZ1dnSQxuV+0si1G8kyJlWRxafxfCav/X8V0eKAXFSumlopOyX+3Ra0Ebjfe8d2
+	ATk7kyszBphFd5whvillRnXOWDLpXfKtpFmTEnx6ueHXfaMk+lhmzxUUsmR357YyhedTNX3q
+	REVkSKR/WbTemDp7KDwBgn3fP666lTh7fdyvP+aNSZgLbF/otyb5xAXF6ehhp29N/mjppZGz
+	hBzXKRURIZhWp/gD/TS9x9cCAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAAzWRa0hTcRyG+++cnZ0NB6cldtDoMqhMUTNTfqKUfaj+BGUQFQiiI09tqVM3
+	tZmEmnYTNW+h2KSZ9ykd867ZEO+WYGiWmqkslLDS8pa6rNTo28vzPrxfXpqQlZK2tEodyWnU
+	ihA5JSEl57wSncZmXJSHvz1DoOcrKahY0UHpZKMQ9MZ6BIurH0Sw0NFNQWHBMgH6/iQSlvg1
+	Aqa6zCKYKJkmoeVeAwHmhz0UpCZZCLjdWCaA9vxeIbypTxNC9loxAQ3xkyIYbNZTMF75RwjT
+	bakk9OaVkzCR5gNdBhtYfv0VQQffIIDllHwKsgYMFHxKmkAw0G4m4XFCGgLeNCwEy4qe8pHj
+	2vIRAW7K+yjChuooXFPmgJOHBwhcbXxA4er5TBEee9dC4Z5cC4mbGhcEODVxlsI/pkZJPGca
+	onDh5+8CzNcOkbjP0CE6v91P4h3EhaiiOY3LsUCJ0jT6hAqvE+vmeJ6IR/OiZCSmWeYou7Ba
+	LNjMFHOQHR5eJTazNePKLpi7yWQkoQlmVshO6S0bEk3vYIJZY5HjpkMy+9nOtJEtX8q4s3zK
+	OPVvcw9bUdW6xcWMB5s+vrTFZRvOi7ejonQkMaBtRmStUkeHKlQh7s7aYGWMWqVzvhIWWo02
+	7iu59SujES0Onm5DDI3kVlL7UBelTKiI1saEtiGWJuTW0s5pZ6VMGqSIuclpwgI0USGctg3Z
+	0aR8p/TMZS5QxlxTRHLBHBfOaf63AlpsG48cDQ1xLd6De8ubs+5eai+wmuHKogyPiu08j/ih
+	Kt99z0+0Zth0vUzw6L7jdP/3RXXsyVdefWfdHL/g6c6U9at1Hq0a46Fd2X76WNON3f3+ONne
+	VJNz4fhg3E/fsH4sXgrgn/p71p6yqKYUmW4RprCciHFH9ZjOfP2Abf779Vz/IjmpVSpcHQiN
+	VvEXrVITMboCAAA=
+X-CFilter-Loop: Reflected
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2160a4ad-b09c-4dfb-98c8-5d3b78a6788a@oracle.com>
 
-On Thu, May 22, 2025 at 09:48:30AM +0100, Alan Maguire wrote:
-> On 22/05/2025 07:21, Tony Ambardar wrote:
-> > Update btf_new_empty() to copy the pointer size from a provided base BTF.
-> > This ensures split BTF works properly and fixes test failures seen on
-> > 32-bit targets:
-> > 
-> >   root@qemu-armhf:/usr/libexec/kselftests-bpf# ./test_progs -a btf_split
-> >   __test_btf_split:PASS:empty_main_btf 0 nsec
-> >   __test_btf_split:PASS:main_ptr_sz 0 nsec
-> >   __test_btf_split:PASS:empty_split_btf 0 nsec
-> >   __test_btf_split:FAIL:inherit_ptr_sz unexpected inherit_ptr_sz: actual 4 != expected 8
-> >   [...]
-> >   #41/1    btf_split/single_split:FAIL
-> > 
-> > Fixes: ba451366bf44 ("libbpf: Implement basic split BTF support")
-> > Signed-off-by: Tony Ambardar <tony.ambardar@gmail.com>
-> 
-> Great catch! Nit: should we use the btf_ptr_sz(base_btf) helper here?
-> That would cover the edge case where base BTF does not have ptr_sz set,
-> as in the absence of a base pointer size this will then determine the
-> pointer size from the BTF itself. The reason I ask is it seems like the
-> BTF raw parsing codepath may not set the pointer size, and we will use
-> that raw parsing to parse vmlinux BTF from /sys/kernel/btf/vmlinux (ELF
-> parsing uses the ELF class to set pointer size so we are good there I think)
-> 
-> Reviewed-by: Alan Maguire <alan.maguire@oracle.com>
-> 
+Now that __page_pool_alloc_page_order() uses netmem alloc/put APIs, not
+page alloc/put APIs, rename it to __page_pool_alloc_large_netmem() to
+reflect what it does.
 
-I tried to keep simple copy semantics consistent with inheritance &
-heuristics working as expected, so that edge case should have been OK.
-However, looking more closely after Andrii's prompting, I don't think the
-original code really works... (see next email).
+Signed-off-by: Byungchul Park <byungchul@sk.com>
+---
+ net/core/page_pool.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Regarding raw parsing, let me circle back since it's been a while I was
-deep in that source.
+diff --git a/net/core/page_pool.c b/net/core/page_pool.c
+index 2680d38d3daf..147cefe7a031 100644
+--- a/net/core/page_pool.c
++++ b/net/core/page_pool.c
+@@ -518,7 +518,7 @@ static bool page_pool_dma_map(struct page_pool *pool, netmem_ref netmem, gfp_t g
+ 	return false;
+ }
+ 
+-static netmem_ref __page_pool_alloc_page_order(struct page_pool *pool,
++static netmem_ref __page_pool_alloc_large_netmem(struct page_pool *pool,
+ 						 gfp_t gfp)
+ {
+ 	netmem_ref netmem;
+@@ -555,7 +555,7 @@ static noinline netmem_ref __page_pool_alloc_pages_slow(struct page_pool *pool,
+ 
+ 	/* Don't support bulk alloc for high-order pages */
+ 	if (unlikely(pp_order))
+-		return __page_pool_alloc_page_order(pool, gfp);
++		return __page_pool_alloc_large_netmem(pool, gfp);
+ 
+ 	/* Unnecessary as alloc cache is empty, but guarantees zero count */
+ 	if (unlikely(pool->alloc.count > 0))
+-- 
+2.17.1
 
-Thanks,
-Tony
-
-> > ---
-> >  tools/lib/bpf/btf.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-> > index 8d0d0b645a75..b1977888b35e 100644
-> > --- a/tools/lib/bpf/btf.c
-> > +++ b/tools/lib/bpf/btf.c
-> > @@ -995,6 +995,7 @@ static struct btf *btf_new_empty(struct btf *base_btf)
-> >  
-> >  	if (base_btf) {
-> >  		btf->base_btf = base_btf;
-> > +		btf->ptr_sz = base_btf->ptr_sz;
-> >  		btf->start_id = btf__type_cnt(base_btf);
-> >  		btf->start_str_off = base_btf->hdr->str_len + base_btf->start_str_off;
-> >  		btf->swapped_endian = base_btf->swapped_endian;
-> 
