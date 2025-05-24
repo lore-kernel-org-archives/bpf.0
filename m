@@ -1,59 +1,61 @@
-Received: from mail-wr1-f68.google.com (mail-wr1-f68.google.com [209.85.221.68])
+Received: from mail-wm1-f65.google.com (mail-wm1-f65.google.com [209.85.128.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5CCE1C32
-	for <bpf@vger.kernel.org>; Sat, 24 May 2025 01:18:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.68
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5879F1D54E2
+	for <bpf@vger.kernel.org>; Sat, 24 May 2025 01:18:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748049534; cv=none; b=X8AlT7QIN1hCTZqFo7hjnlzaZrho+fPt0BcX1OZxxvIkWNRPWdT6AhvT0NvGD0L8Zu8ZRdBeUZgpUE5Qy3VreROdw+1LsIqsB3VqQZTis4AhLn9HqW4PlmTF3i6HlWUSM0hAdkaLkfKCTojVw5GhkCK+CZth7q44hHqQXvysVng=
+	t=1748049537; cv=none; b=WTvWcWpm5oBxN2BGv7/dgfr2mUrZfaB1r/a/KSk8afgxB8wdykHYAaiN9XDTNyaH3XRnCpUN20ALRdt4POOziDP/PDp27gZM71gGxQi4FQLPtLR+kVuK2CoGJvUf8TuwhM6UxRpmfXjEiWY7Fj8XxrCNclKDjeSqjuJAFAGJ2m0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748049534; c=relaxed/simple;
-	bh=mFVh+IfKx+j5X6wGFpluJ0mKmIWFm0XU8LD6EkwHziU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=d11GIIei4DjFzDPhFkRFslJiChALg91bwqIJuM78BaX9wJaRHCgCebBJl3IkW7H3gioOaYeiiDyqVXsBvhKcpLX4J+djbTM4wp6kAuiD+RkSKXNLE4KGopsB0HxSwjJhmY58YEKC9mHNyKbxT1mMaXPhbFKq5CpmmaojuNJajVw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KDUbeTqs; arc=none smtp.client-ip=209.85.221.68
+	s=arc-20240116; t=1748049537; c=relaxed/simple;
+	bh=/6L3r1xmOdJP+yGpa0V66rM9IfogiFtUktqgRZHh9yI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=XrvtGXEmn+HEbf+oVsytIEc7eUueambuwYkIv/huHa1kXCl3LaJdV1jli2Ws8ZwnZvCO1WUMArjrGGwXqmPsX3qW3pfFTljp2UuCNkO2XE8wjtAAtCtIh5sg25Qf9mNoRBw6z6gQBcceEoW2cZOAVoj9CTMy9EZ2efVCukQKf54=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kO5OZVjd; arc=none smtp.client-ip=209.85.128.65
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KDUbeTqs"
-Received: by mail-wr1-f68.google.com with SMTP id ffacd0b85a97d-3a37a243388so390134f8f.1
-        for <bpf@vger.kernel.org>; Fri, 23 May 2025 18:18:52 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kO5OZVjd"
+Received: by mail-wm1-f65.google.com with SMTP id 5b1f17b1804b1-445b11306abso1918795e9.3
+        for <bpf@vger.kernel.org>; Fri, 23 May 2025 18:18:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1748049531; x=1748654331; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=iflPHyOsOhLpmPWf4fxmKLNjHEwQh6+/Ugt9VZLwaUE=;
-        b=KDUbeTqsghHdKpm5wQ3/KH23+q2sN61I7IM2xtEulieE/sVHt1OVeLY0T3HUsA6Zgr
-         3eF3A8fRfabbbtJ5Lqi7IJxtbrPaiZVPAqVzVBPddThVhZS9/BZSfZ4p/9wJhhsJqQ52
-         0byNaG+68wNQ5yO9BuhasXspc0lfs9quNpBZDvrtKXi/b9Jo91OrRxVcC6y6mik4Ei2f
-         YVg30NyOHTEUAvQhDd2GEZVmbGpWGZ4NYZkBnBy4hbmPULeeZvJr0umgS5zjx+euEwNx
-         q7dIYYlJzEOQmCi18rbkherFJtPFGqMpSa7g++Tbqi3jX62DbV+gnQMDLOY6ka0exR9i
-         FLxg==
+        d=gmail.com; s=20230601; t=1748049533; x=1748654333; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lALgs0ACfF2VTgby+7pCdVrSH/XNByO5/cUwtTAe4Ag=;
+        b=kO5OZVjdHtLm2HFAKxtHDwzqLPRcQuH+1A8t42nT4lYp/r0QMFw6z2zaE5dTvSJdsm
+         zoX+eGHUDB+K26nazoQ5+IjeIkunQgKkuCHGtlVOHS/xII5aXTML2XF+ksHWpDbhL3iq
+         dwWDo0Jp/MJxz3wZWNZZklUrF+ogHbKDGevdzb9qCbcIn3+x2NtPizTtV1PV/TrAVXXv
+         ACOmPrbmKlWsLya5zmECRpT0vU17WvelKhyJ6PnIiOggtyPB4BBJhtdV+ghFhI69jWwc
+         L9tpuMlqhlH9vvOdXKI8+MT5T2gikYCl/aXnxA9Q8/DkaHV5maR78cSeEH8zNiCp4Prq
+         Gy9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748049531; x=1748654331;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iflPHyOsOhLpmPWf4fxmKLNjHEwQh6+/Ugt9VZLwaUE=;
-        b=pRwj20M9iZ0Vvpgz7dnkuKLm2nWzx3u/5jmH3WuQIrUT6mnHH0CWb9/a+FIrvvDRKG
-         Niut/M8b+c7Q3NUiQAX21picoqqK380yfFLxGf+dBbCFvJIM9Ch2hnkMnlKXs8gjPhdE
-         AMdgKVZzibHrfcg7Bi9+oaAvI/XX86a3i4G2Pr8PO3m8tLvGqBDPT9g6D/xetWEkA9Ya
-         4Z1taCngDAFn8UWGpx3JVhwmrIRx1FihJjXPlp6BqOSoChBHEoh838lzPKln16BS74oQ
-         YaRgao4DqYk9+gO1fDJfIqVTw6i3Br62v3pzrFwjvZ9Y7eHIrOnL3UYtXekFZm3j+C40
-         Bn+w==
-X-Gm-Message-State: AOJu0Yyn/HIooX2AJJS/Y1BtEG8d+r1PT6QXw+W0JMYYnC0YCJHq5DvT
-	WA6XAZrC8Yg94SjmQvkm/PnE27c7N3Tbfic3l0v/edoFlOs/VkIjnnPXEn/6XKyb+1g=
-X-Gm-Gg: ASbGncu1VvJ7oXYeH+b2MCXCd0Ov5Q/ZFOft/O4Lei4u/Cpj9U/ybKMgkYWAu5+d4fR
-	LdCnheb8GUSBDPKw9E41yPFuFFhGqYhZANIzfo3EcZP8MumSiFv9pfSQ+n9zslElVT+OFXo/61T
-	jIZpNwytP2t/WmZ6CYPKiS8i0xR0oovFVEOkMhBSTmuxKDqDgP7yteVCyAUXhXnisreqd0QKlef
-	Z6hoAI5jFg2SydFqtJwdcqBRIntnl1boPHRfV9bPbWY5d9+60jOxHK++rg8VC5B3vUeIYqvQBHk
-	N9omIuWGo3NKSTXTg5gAr8Jicxaf2Umh1va4PE0n
-X-Google-Smtp-Source: AGHT+IGGQ3XnBiA+vgTS+Xofjf5xz9uD5P0pK631nOUUQQKCA8Nmjuzgjk6Jqa46CwTtNomm/qOwkg==
-X-Received: by 2002:a05:6000:2481:b0:3a3:712e:c4c9 with SMTP id ffacd0b85a97d-3a4cb499875mr1075471f8f.52.1748049530775;
-        Fri, 23 May 2025 18:18:50 -0700 (PDT)
-Received: from localhost ([2a03:2880:31ff:4::])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-447f1ef032esm166384995e9.9.2025.05.23.18.18.49
+        d=1e100.net; s=20230601; t=1748049533; x=1748654333;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lALgs0ACfF2VTgby+7pCdVrSH/XNByO5/cUwtTAe4Ag=;
+        b=l7/e9AsP+Oq9C82XmEYWibjXn9uw+wvaIDI6u5zv+OwQKWaL7EGdvX7XZ/z/Ak60ou
+         KN2rjJdoni1RVWD0LQaTdxL6EhM8iOuFv7Q61IZLxP34nYZGZgXb+jfbcqj6BEcEGOD/
+         3E362zrdyOjXQCjiaxLGAtEwU42yDbl8Tmzxeb/F3ZnO9KSuUQ6Yaz/nabdIpb9APmGI
+         kDg4Xln0FAz9c9XUp0aZO8AgHdzbkKSl48yVZa95LmHxAsYF36om4BPA3rv85ZfryODa
+         hbFIDWAMV0y4NN9T/3WspILeX/efNgGZ2huxUfJ4Ef+FxJFm2OVkoIeXvzFd1+bCfKGo
+         1hAQ==
+X-Gm-Message-State: AOJu0Yyi6qXB54w1Zfh0sH6G7ELSgh8rHhTkntInAbFhbEtPR0xIXCNA
+	LIrxgzquNpun2HsJcmSKKVekU1PHfAxJbww+mIWNWtqgm5Np2iRnaI/ChG/iG0CaQVI=
+X-Gm-Gg: ASbGncvWHi5ZtdVeR5xMsk+JSmmf4pHbnDyriztmwV+LE154fh/nCbYuJ5IqEFvzS8Q
+	VHoWczIBxRKBTURUlLLj0PWvBzWAZRjtL6HiqWRk63Z+DNtAQ5E86IuvadD1b04xpcZdx7ZXTvd
+	S28YxZzTQjEkAytFtpnBmfoxeA0okiOyAj2nFrU1PC2O/SOtYuFtcf2WcfARLratsYco6rDW7Nh
+	oc0k1bbBKrEkqaoRJHv2bTpVC5sLc4e6cn4S/5Insr4zg0ueDqecd08eJYzRIdAXtXdjo+v+UqO
+	C4YEPG5r/W5p6CGVpdQdv4vzAbIzWjn9+uNzqbYcTA==
+X-Google-Smtp-Source: AGHT+IHpYPT3DgVdUvE+zbqrYdA0NYJahz2uxOVG5h7xzzMpZEVSzYOK2crLlG/eK4K+//4DRF2Vmg==
+X-Received: by 2002:a05:600c:6089:b0:444:c28f:e81a with SMTP id 5b1f17b1804b1-44c94c246b9mr7826145e9.27.1748049533250;
+        Fri, 23 May 2025 18:18:53 -0700 (PDT)
+Received: from localhost ([2a03:2880:31ff:74::])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-447f7bae847sm155529925e9.36.2025.05.23.18.18.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 May 2025 18:18:50 -0700 (PDT)
+        Fri, 23 May 2025 18:18:52 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -66,166 +68,107 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Matt Bobrowski <mattbobrowski@google.com>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v2 00/11] BPF Standard Streams
-Date: Fri, 23 May 2025 18:18:38 -0700
-Message-ID: <20250524011849.681425-1-memxor@gmail.com>
+Subject: [PATCH bpf-next v2 02/11] bpf: Add function to extract program source info
+Date: Fri, 23 May 2025 18:18:40 -0700
+Message-ID: <20250524011849.681425-3-memxor@gmail.com>
 X-Mailer: git-send-email 2.47.1
+In-Reply-To: <20250524011849.681425-1-memxor@gmail.com>
+References: <20250524011849.681425-1-memxor@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6536; h=from:subject; bh=mFVh+IfKx+j5X6wGFpluJ0mKmIWFm0XU8LD6EkwHziU=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBoMR3Okb91HLXEHocPoz/EdF9CgNwuHDSfS7uEUgS+ fppkkSmJAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCaDEdzgAKCRBM4MiGSL8RyrymD/ 0degBfKbnYymfNA5ewk0HUatym/Hagwig8R4H0TUKggdQ0u9QmIEl9loQPl+zvZNbLHndnVbiB6Nwp C3QNIZNh9KaOBfHJC55VLyqMQ2yAf14iHdM8OAjOdz1hLMUIWNKaM2zZ2WCkmW8vdRYxSJPzTupaTv +xzJWburcZE2uXu2At8IMnsvPgCrC1/j0XDLyhoT+XwU6CQ1nhCv6wk8jJ2ZD8x5e/rV7s/CtN+IiT Q2XU/SAv1GKw3QDiKl+2e9gWQONC0L+k2KG32OSyNt6Zw89Tq8saxsxgNDCo+JF2kuxCudenJk+iHV YXKPl/tasc9PYzsL6qM9B4+wa9lJR/i0WzoICbeZT9T4QN6N6dUA3OQA6vWSwDiniw4X8lSXyMjCtV teH/KGLighdv7V7t4YM1CToTnPnAjfiN8by8hF/nLlukgWkgcu458QlDVdlAetqDlgKT/n4FvsAi9U ZSMUBBRjUdemiIO62hjNVXScNGfYAVyrVMKco5RAafLXTWwWrA44YPkk1vQKzReS22ekUqnC23i8J+ Cxddsq/hrtBxQoYfSvvQpIu4NewRi+aKIcRqotEGvbAfOPExPGk20T7m13UQM3IQanijAWD0R7gt7g R+L7/69UlEUNEx7XKqguzQXeGjvtFR86uBzSPOOv7KsFZ1+7wkAWseC4w81A==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2817; h=from:subject; bh=/6L3r1xmOdJP+yGpa0V66rM9IfogiFtUktqgRZHh9yI=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBoMR3Ovf9kn+3pyrDSnofkvjiIlQcBI6DCMv5J67Vb eIpQxXiJAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCaDEdzgAKCRBM4MiGSL8RyitLD/ sEMLPYcKji+ghS0qeJyVrekOKAkT5k6M4coWUu//LWs4ThxV+04PQJ6qFEYAI3Oz9FH0avp/HThNYY LxDC8muaTGtL82hmWYP5rRikY7wnM+fTYD8oDR+0MuTlGhuymz1zLg8MfX6qt2W0WXREipXynWXW89 8ZDrg8vO3gRzLJzrRn/qiqjbyOQxwFOtrcp7QW+M4VrPqMEQPDo0AUemDFIUtRyshyd3A+1sNE45F5 UkHTMVEZEHVL+wJVR8yC+GkyXulRnIH/pqE7VqkV41TbwCv95O7Mtn9hJ6CBh7jKDtS+AoI3uBHKRe DRF9CxXwJsJeb7cM8Eba65tBzoF9+0uBJBT/hOaNrJVG6ce5/Yvv7bzyQpi0FTkcghWjOza5SvoIRR jHYAwFv0eFFsAZvmDqdk0Kxx6rxPYlOvyUhvXIiuDx7Howi8zbTqO2g8Duaz1oi9NG6/irEqbFWgfW QgzitDxZJ+UHDWratx9hH7ANltYF2NPD8BEK4K3Zdy2oErOkwSGYiXYtGb9sQKYJmaukanHggF248p 4M7gkJ+zHPB2hXwIBheUzVoEYh4oIj89Oxt4C2Fm7e67iPoSOHUmgC/QBnK/Hh7H4TARI4zu3YqExp 9tlw3k1j/KhQ+PCYxMy3K4TUq8vnjoBZyGnc57XAC1WUpLbYq3XiqLJErU6Q==
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=4BBE2A7E06ECF9D5823C61114CE0C88648BF11CA
 Content-Transfer-Encoding: 8bit
 
-This set introduces a standard output interface with two streams, namely
-stdout and stderr, for BPF programs. The idea is that these streams will
-be written to by BPF programs and the kernel, and serve as standard
-interfaces for informing user space of any BPF runtime violations. Users
-can also utilize them for printing normal messages for debugging usage,
-as is the case with bpf_printk() and trace pipe interface.
+Prepare a function for use in future patches that can extract the file
+info, line info, and the source line number for a given BPF program
+provided it's program counter.
 
-BPF programs and the kernel can use these streams to output messages.
-User space can dump these messages using bpftool.
+Only the basename of the file path is provided, given it can be
+excessively long in some cases.
 
-The stream interface itself is implemented using a lockless list, so
-that we can queue messages from any context. Every printk statement into
-the stream leads to memory allocation. Allocation itself relies on
-try_alloc_pages() to construct a bespoke bump allocator to carve out
-elements. If this fails, we finally give up and drop the message.
+This will be used in later patches to print source info to the BPF
+stream. The source line number is indicated by the return value, and the
+file and line info are provided through out parameters.
 
-See commit logs for more details.
+Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+---
+ include/linux/bpf.h |  2 ++
+ kernel/bpf/core.c   | 49 +++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 51 insertions(+)
 
-Two scenarios are covered:
- - Deadlocks and timeouts in rqspinlock.
- - Timeouts for may_goto.
-
-In each we provide the stack trace and source information for the
-offending BPF programs. Both the C source line and the file and line
-numbers are printed. The output format is as follows:
-
-ERROR: AA or ABBA deadlock detected for bpf_res_spin_lock
-Attempted lock   = 0xff11000108f3a5e0
-Total held locks = 1
-Held lock[ 0] = 0xff11000108f3a5e0
-CPU: 48 UID: 0 PID: 786 Comm: test_progs
-Call trace:
-bpf_stream_stage_dump_stack+0xb0/0xd0
-bpf_prog_report_rqspinlock_violation+0x10b/0x130
-bpf_res_spin_lock+0x8c/0xa0
-bpf_prog_3699ea119d1f6ed8_foo+0xe5/0x140
-  if (!bpf_res_spin_lock(&v2->lock)) @ stream_bpftool.c:62
-bpf_prog_9b324ec4a1b2a5c0_stream_bpftool_dump_prog_stream+0x7e/0x2d0
-  foo(stream); @ stream_bpftool.c:93
-bpf_prog_test_run_syscall+0x102/0x240
-__sys_bpf+0xd68/0x2bf0
-__x64_sys_bpf+0x1e/0x30
-do_syscall_64+0x68/0x140
-entry_SYSCALL_64_after_hwframe+0x76/0x7e
-
-ERROR: Timeout detected for may_goto instruction
-CPU: 48 UID: 0 PID: 786 Comm: test_progs
-Call trace:
-bpf_stream_stage_dump_stack+0xb0/0xd0
-bpf_prog_report_may_goto_violation+0x6a/0x90
-bpf_check_timed_may_goto+0x4d/0xa0
-arch_bpf_timed_may_goto+0x21/0x40
-bpf_prog_3699ea119d1f6ed8_foo+0x12f/0x140
-  while (can_loop) @ stream_bpftool.c:71
-bpf_prog_9b324ec4a1b2a5c0_stream_bpftool_dump_prog_stream+0x7e/0x2d0
-  foo(stream); @ stream_bpftool.c:93
-bpf_prog_test_run_syscall+0x102/0x240
-__sys_bpf+0xd68/0x2bf0
-__x64_sys_bpf+0x1e/0x30
-do_syscall_64+0x68/0x140
-entry_SYSCALL_64_after_hwframe+0x76/0x7e
-
-Changelog:
-----------
-v1 -> v2
-v1: https://lore.kernel.org/bpf/20250507171720.1958296-1-memxor@gmail.com
-
- * Drop arena page fault prints, will be done as follow up. (Alexei)
- * Defer Andrii's request to reuse code and Alan's suggestion of error
-   counts to follow up.
- * Drop bpf_dynptr_from_mem_slice patch.
- * Drop some acks due to heavy reworking.
- * Fix KASAN splat in bpf_prog_get_file_line. (Eduard)
- * Collapse bpf_prog_ksym_find and is_bpf_text_address into single
-   call. (Eduard)
- * Add missing RCU read lock in bpf_prog_ksym_find.
- * Fix incorrect error handling in dump_stack_cb.
- * Simplify libbpf macro. (Eduard, Andrii)
- * Introduce bpf_prog_stream_read() libbpf API. (Eduard, Alexei, Andrii)
- * Drop BPF prog from the bpftool, use libbpf API.
- * Rework selftests.
-
-RFC v1 -> v1
-RFC v1: https://lore.kernel.org/bpf/20250414161443.1146103-1-memxor@gmail.com
-
- * Rebase on bpf-next/master.
- * Change output in dump_stack to also print source line. (Alexei)
- * Simplify API to single pop() operation. (Eduard, Alexei)
- * Add kdoc for bpf_dynptr_from_mem_slice.
- * Fix -EINVAL returned from prog_dump_stream. (Eduard)
- * Split dump_stack() patch into multiple commits.
- * Add macro wrapping stream staging API.
- * Change bpftool command from dump to tracelog. (Quentin)
- * Add bpftool documentation and bash completion. (Quentin)
- * Change license of bpftool to Dual BSD/GPL.
- * Simplify memory allocator. (Alexei)
-   * No overflow into second page.
-   * Remove bpf_mem_alloc() fallback.
- * Symlink bpftool BPF program and exercise as selftest. (Eduard)
- * Verify output after dumping from ringbuf. (Eduard)
- * More failure cases to check API invariants.
- * Remove patches for dynptr lifetime fixes (split into separate set).
- * Limit maximum error messages, and add stream capacity. (Eduard)
-
-Kumar Kartikeya Dwivedi (11):
-  bpf: Introduce BPF standard streams
-  bpf: Add function to extract program source info
-  bpf: Add function to find program from stack trace
-  bpf: Hold RCU read lock in bpf_prog_ksym_find
-  bpf: Add dump_stack() analogue to print to BPF stderr
-  bpf: Report may_goto timeout to BPF stderr
-  bpf: Report rqspinlock deadlocks/timeout to BPF stderr
-  libbpf: Add bpf_stream_printk() macro
-  libbpf: Introduce bpf_prog_stream_read() API
-  bpftool: Add support for dumping streams
-  selftests/bpf: Add tests for prog streams
-
- arch/x86/net/bpf_jit_comp.c                   |   1 -
- include/linux/bpf.h                           |  85 ++-
- include/uapi/linux/bpf.h                      |  19 +
- kernel/bpf/Makefile                           |   2 +-
- kernel/bpf/core.c                             | 112 +++-
- kernel/bpf/helpers.c                          |  26 +-
- kernel/bpf/rqspinlock.c                       |  22 +
- kernel/bpf/stream.c                           | 544 ++++++++++++++++++
- kernel/bpf/syscall.c                          |  27 +-
- kernel/bpf/verifier.c                         |   5 +-
- .../bpftool/Documentation/bpftool-prog.rst    |   7 +
- tools/bpf/bpftool/bash-completion/bpftool     |  16 +-
- tools/bpf/bpftool/prog.c                      |  50 +-
- tools/include/uapi/linux/bpf.h                |  19 +
- tools/lib/bpf/bpf.c                           |  16 +
- tools/lib/bpf/bpf.h                           |  15 +
- tools/lib/bpf/bpf_helpers.h                   |  16 +
- tools/lib/bpf/libbpf.map                      |   1 +
- .../testing/selftests/bpf/prog_tests/stream.c | 110 ++++
- tools/testing/selftests/bpf/progs/stream.c    |  75 +++
- .../testing/selftests/bpf/progs/stream_fail.c |  17 +
- 21 files changed, 1159 insertions(+), 26 deletions(-)
- create mode 100644 kernel/bpf/stream.c
- create mode 100644 tools/testing/selftests/bpf/prog_tests/stream.c
- create mode 100644 tools/testing/selftests/bpf/progs/stream.c
- create mode 100644 tools/testing/selftests/bpf/progs/stream_fail.c
-
-
-base-commit: 079e5c56a5c41d285068939ff7b0041ab10386fa
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index d298746f4dcc..4eb4f06f7219 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -3659,4 +3659,6 @@ static inline bool bpf_is_subprog(const struct bpf_prog *prog)
+ 	return prog->aux->func_idx != 0;
+ }
+ 
++int bpf_prog_get_file_line(struct bpf_prog *prog, unsigned long ip, const char **filep, const char **linep);
++
+ #endif /* _LINUX_BPF_H */
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 22c278c008ce..7e7fef095bca 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -3204,3 +3204,52 @@ EXPORT_SYMBOL(bpf_stats_enabled_key);
+ 
+ EXPORT_TRACEPOINT_SYMBOL_GPL(xdp_exception);
+ EXPORT_TRACEPOINT_SYMBOL_GPL(xdp_bulk_tx);
++
++#ifdef CONFIG_BPF_SYSCALL
++
++int bpf_prog_get_file_line(struct bpf_prog *prog, unsigned long ip, const char **filep, const char **linep)
++{
++	int idx = -1, insn_start, insn_end, len;
++	struct bpf_line_info *linfo;
++	void **jited_linfo;
++	struct btf *btf;
++
++	btf = prog->aux->btf;
++	linfo = prog->aux->linfo;
++	jited_linfo = prog->aux->jited_linfo;
++
++	if (!btf || !linfo || !prog->aux->jited_linfo)
++		return -EINVAL;
++	len = prog->aux->func ? prog->aux->func[prog->aux->func_idx]->len : prog->len;
++
++	linfo = &prog->aux->linfo[prog->aux->linfo_idx];
++	jited_linfo = &prog->aux->jited_linfo[prog->aux->linfo_idx];
++
++	insn_start = linfo[0].insn_off;
++	insn_end = insn_start + len;
++
++	for (int i = 0; i < prog->aux->nr_linfo &&
++	     linfo[i].insn_off >= insn_start && linfo[i].insn_off < insn_end; i++) {
++		if (jited_linfo[i] >= (void *)ip)
++			break;
++		idx = i;
++	}
++
++	if (idx == -1)
++		return -ENOENT;
++
++	/* Get base component of the file path. */
++	*filep = btf_name_by_offset(btf, linfo[idx].file_name_off);
++	if (!*filep)
++		return -ENOENT;
++	*filep = kbasename(*filep);
++	/* Obtain the source line, and strip whitespace in prefix. */
++	*linep = btf_name_by_offset(btf, linfo[idx].line_off);
++	if (!*linep)
++		return -ENOENT;
++	while (isspace(**linep))
++		*linep += 1;
++	return BPF_LINE_INFO_LINE_NUM(linfo[idx].line_col);
++}
++
++#endif
 -- 
 2.47.1
 
