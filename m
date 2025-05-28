@@ -1,317 +1,127 @@
-Received: from mail-pl1-f194.google.com (mail-pl1-f194.google.com [209.85.214.194])
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 270811F3BA9;
-	Wed, 28 May 2025 03:49:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 367151F4CB8
+	for <bpf@vger.kernel.org>; Wed, 28 May 2025 03:49:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748404187; cv=none; b=Vnhtz+4k6Gc0oy9P3xFf6/c29l8cIXvUNKQlohoZJt7FdsS1AcSVA1ns9zoCslQ+gUnH6Hw3ubU1qpYr2zbC5z7OP3JDFtEw8kPybsJqedKnzCYByXmdNIUe3XznqeQJ3suVJuPU6KaynG8p4jsUyCFUt2xE4Q89T5CnWMDvBRU=
+	t=1748404188; cv=none; b=fB2rBWC4XDfPR1lFUl4Ym2lDgh+usFop2Rt++2G3WiQHHA1CH2gMQB1aOq7ggq504XEMHXO/z98dtdPDD27hNn1525QAjUWGePz1KybXKp/oqvw1O3SpdRsq5+tx7uQPGkn4hBkYWFKuM7BXRiOLdRjtKf+9cDONsDXD7KbDlQ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748404187; c=relaxed/simple;
-	bh=id6lILaKdgBMWZnpVnlNqUcvsPute9DuoXqlXPJA44M=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=MRhuOg7R2DaJ9TmBierJoEF9Iu1baqHYZkyHXi+w9YEKmh91FsUBnGYC0ggoZxIOuI3pKG0rrr0eGmuDFYOP0ru9cFvHPzEnZv7s+ATdUw/kzCkDL6cd+Rd5woRvOs3rE6CFJFv+fnjteqful98M8SVtckm5pLfYXKflWsKJ1ms=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=O4UobeVk; arc=none smtp.client-ip=209.85.214.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1748404188; c=relaxed/simple;
+	bh=djgdSAqo0lPl/HQxOwsgy/FVp3+EiXLFi0SERa4skTM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=AiN8SnJPXhQfcwso4wPoK97NAFClybN8ePRFtdoMUbJRJFnNJRC1TkiBUEBm8QREpSILqX3Zo6b1TKKJhqOTsEQZYj3vwX2MqnxwpC6eCrUhTz3yluokLGugS8DCA1mY8HBhAHY3lulVG0BMSMmV5FuS98pT5GtRZ1OaPaxPL7k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=B9CNlKvl; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="O4UobeVk"
-Received: by mail-pl1-f194.google.com with SMTP id d9443c01a7336-234c5b57557so4023365ad.3;
-        Tue, 27 May 2025 20:49:45 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="B9CNlKvl"
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2348ac8e0b4so74685ad.1
+        for <bpf@vger.kernel.org>; Tue, 27 May 2025 20:49:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1748404185; x=1749008985; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=google.com; s=20230601; t=1748404186; x=1749008986; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=4y9BozBA9c7G/gYDE1RLJDCqW9V05vfoBze499QJjhM=;
-        b=O4UobeVkNlZhQoGr1n4S9Yqb9XmBbR9BYo9cmADT7dHko4B93HkST0yrSTdTridsze
-         gh8j3ZVC0XVc6CbRFZ4T9aN9XHP3McMJnwbCRSaSwqLznKUNMuFHNoRro90r0SfzGjCJ
-         2TdYduJXW/CI6Hoy0gTieOevIF8Ux6APGra8EoHQZML6et3bNpTeRm1rCHkFVOlXnLmU
-         M6mI5dYX99HzuK+rkzyM67gHUtgDw8Vq5OCKHIZzxzpD4fFH5nv5nddZJn9XJq/nR2Jf
-         drlcj2yUkeFqh36aJeJw2vZ10//bUW+XeYYNb7sDLsWsfWpnHN0g6noBgq9S/ochS6rS
-         kFmA==
+        bh=tIZ917XmidCIU+2XIPpmQyQty1mwxL1YD04GjAwgej4=;
+        b=B9CNlKvl41Kxuc113WpagkzE9M+sDe/xnaBs2VeARYd+Zgyp82c9VM+ydGEpb0hFd7
+         vmxq6Cnbjbrgym1zVKbmRjvkOdW32JHbkDUmrlS9rNf1JYkQPwCVWmGlO6/e0O9NklEf
+         38JHk+QSsSqpH6we38dBTAmwjzrMIByMCBDXjNNR2ctpB/mT6H7QRLlx/+c+Fd/T1qY9
+         VWnPPGENMMW/SCR4eyj8OHoV8rh4AKVR7LgzvNTQTwgZ+bsOaIWj4JHyrfboCI3KLL+o
+         dGwNhsedWm6V9dOssnqKT1hmTOh+XITf9j9BsHyZZecBvrD3YEysWmi1Fkmwgk2K50zl
+         yQsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748404185; x=1749008985;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1748404186; x=1749008986;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=4y9BozBA9c7G/gYDE1RLJDCqW9V05vfoBze499QJjhM=;
-        b=boeFxjf/zM1/eZ8BIJ1MuLBXPLjsZpYf2KW4wIBG2E4QFtO31xr5RBcXRPN0Wcs6kU
-         k3RDJvty93CJ7aIFOIuS3UTsizkiElcAFbfI6LS+r9fNHQHJXI5v8nQ9pt9gm030ilf1
-         KCfvfeESOiTJDutfyMAWbOrgtQfi0VhZ3N4IdTlR71zeSu1fQ28viwQCPZl+a4s3q79c
-         eKkRqXgon6MHOTN9HhGffI4qya8SqIx8UyeknnLT4AWOkCyu2nzeNwMA9aOlkZ40kJK/
-         bMLWchOfQyaFP6LSXcZaRCnQvlmX5tqTMqBTBfANptpP7eTfMCYHPSKZSbdg6EviiDOz
-         TCyA==
-X-Forwarded-Encrypted: i=1; AJvYcCXtZN0O6FS/bOuKE4dxcuZwYr0sXuGRtG/21lYgyXL+GBZqrzyQDJow9FX2CZqjTFDHrm72ECU/yv9sDLs=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzv8RSpRMh7QvouV8rbFkNjL72VBq86mtf5XD/hvpIQrX1zyNYC
-	dO7tfy2bvkywvEtxycHbWayVzySHQnpGy3bPWBPLwLybzuTPUBBO4f4t
-X-Gm-Gg: ASbGncv+KMSzWe/6uuuXCtmCRJOWPEFiNBCXILkWBmct6+Jc5EvfFO3+FoPVDWoCO6T
-	VKbVxV2czqn5XGvKCGqe9YorXmy9NopEJJDHLzSxh7QKGw1hTalyJBSE3fqfbwYqpnUgjSHF5W4
-	em9hmEJ0xc7J6tMJkaRGxaQHGkgxxvyxuV6dcTKz0MkgDNuHCIY4q36x47bErPtm06NrW3XwRb+
-	CMUclYrkrZj1mr6ot4gVsR7wZTgpWAuaminsmQv6mSbb3ISguNEcAkVK/EysQuCgWc7dGGDASnM
-	q4U4z9ZhO4Nv45m6iGg0YDhM75ZzuID+JH04XPuXjfXQCzenwNv1Rvfu5JzVYIqtCNYL7hJ9dH6
-	ENtY=
-X-Google-Smtp-Source: AGHT+IHgMrvnRk4C4QBdIIOR03RXWg25Wd0c+6j2FeK13WU7gMN5nz5BZ9oiNEdlJQNbPpve9T5v4g==
-X-Received: by 2002:a17:903:40c5:b0:234:9fed:ccb2 with SMTP id d9443c01a7336-2349fedce43mr78841355ad.29.1748404185208;
-        Tue, 27 May 2025 20:49:45 -0700 (PDT)
-Received: from localhost.localdomain ([43.129.244.20])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-234d35ac417sm2074505ad.169.2025.05.27.20.49.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 May 2025 20:49:44 -0700 (PDT)
-From: Menglong Dong <menglong8.dong@gmail.com>
-X-Google-Original-From: Menglong Dong <dongml2@chinatelecom.cn>
-To: alexei.starovoitov@gmail.com,
-	rostedt@goodmis.org,
-	jolsa@kernel.org
-Cc: bpf@vger.kernel.org,
-	Menglong Dong <dongml2@chinatelecom.cn>,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next 04/25] bpf: make kfunc_md support global trampoline link
-Date: Wed, 28 May 2025 11:46:51 +0800
-Message-Id: <20250528034712.138701-5-dongml2@chinatelecom.cn>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250528034712.138701-1-dongml2@chinatelecom.cn>
-References: <20250528034712.138701-1-dongml2@chinatelecom.cn>
+        bh=tIZ917XmidCIU+2XIPpmQyQty1mwxL1YD04GjAwgej4=;
+        b=NcQF6OLlF0FgOAxtEGCg5k7Jvp36dKm1oKmR8rf6z29m6CRGaewL4GxgpxpTnsgaCe
+         FAGl6KvTOOLQoFmytXxYcAAnLcM/3zao+G6QmFo2HIu0dHNBcJm+hN9Otg1r7T0miJOz
+         NNvHFe2mQKwHimhN9jzJkDUzH7kq1jk81M2RcrB/PTL9RVSn6FrSN1d0gtDupVAB9l0I
+         y7uuunoNjkVwTmVwtFH2m7anzwzMwLGqH2iwhCNMUe7TYfrVkdf2oRNV8ghYP4BgGRvS
+         dzETpns5bXbxQhYM52vPMu/u8kR2ZUeCXJxFlbEIMfedJyPhbNKJ4eRUrkfUvz58ELHD
+         0elw==
+X-Forwarded-Encrypted: i=1; AJvYcCW5kno1heDHUKsfOBOVYGEw+uL4dUPT9TOv3gEFL0DMNWg5E86j606pFRpaf4PhxhgpjA0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxqxXqqGbupnna3rCjVZLCXf2zoTJE3eDzYejMs+bRXy7QRgx9A
+	qyjCfK7ujWj1BQtQBxXZfE6gj8ZNIjW8gMue7Lr3asMFyO+qpVScGm3F84XDijM6ZF5HXMzfOzQ
+	M7R0w/qZmbEGjW08PLpAletsNLmRA1aQNzPl2gpMU
+X-Gm-Gg: ASbGncsobV2HyGURe9iqX5lP9AQLKHe3BCT477hvR4kqVjK7WyS7IcHypKbsMof81Bl
+	3KCfGP0oavaBbo+lP8/mQWaiE6BLlibiZSyBbqENF06Zkece0JRgFIIwMBR/TZRkJ2gt4m2b7tO
+	Te8H+zx/RcVufResOtbem7UiY/UK4XXs3X/ailfXkL3RAy
+X-Google-Smtp-Source: AGHT+IE0LA2hqEVRyMO5ehQLuMQWJISVX52TwhBqaChHomSUcjr9ODU+fXdJxaZJ3LyPuCydsHtGJxM8rzUNEZb9LPE=
+X-Received: by 2002:a17:902:e5c1:b0:234:a734:4ab6 with SMTP id
+ d9443c01a7336-234c55ab4efmr1948105ad.26.1748404186143; Tue, 27 May 2025
+ 20:49:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250520205920.2134829-1-anthony.l.nguyen@intel.com>
+ <20250520205920.2134829-2-anthony.l.nguyen@intel.com> <20250527185749.5053f557@kernel.org>
+In-Reply-To: <20250527185749.5053f557@kernel.org>
+From: Mina Almasry <almasrymina@google.com>
+Date: Tue, 27 May 2025 20:49:33 -0700
+X-Gm-Features: AX0GCFvTxVjd0Vo8S2abHdtE47I2E4xaEIIdVVQqhBxVl76iI_vqc-Ts1BrIJUw
+Message-ID: <CAHS8izPope_UOF7saHHxaJSgqHWJWZvEKmp=0x6sB2OJAghqUw@mail.gmail.com>
+Subject: Re: [PATCH net-next 01/16] libeth: convert to netmem
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Tony Nguyen <anthony.l.nguyen@intel.com>, davem@davemloft.net, pabeni@redhat.com, 
+	edumazet@google.com, andrew+netdev@lunn.ch, netdev@vger.kernel.org, 
+	Alexander Lobakin <aleksander.lobakin@intel.com>, maciej.fijalkowski@intel.com, 
+	magnus.karlsson@intel.com, michal.kubiak@intel.com, 
+	przemyslaw.kitszel@intel.com, ast@kernel.org, daniel@iogearbox.net, 
+	hawk@kernel.org, john.fastabend@gmail.com, horms@kernel.org, 
+	bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Introduce the struct kfunc_md_tramp_prog for BPF_PROG_TYPE_TRACING, and
-add the field "bpf_progs" to struct kfunc_md. These filed will be used
-in the next patch of bpf global trampoline.
+On Tue, May 27, 2025 at 6:57=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> wr=
+ote:
+> > -     dst =3D page_address(hdr->page) + hdr->offset + hdr->page->pp->p.=
+offset;
+> > -     src =3D page_address(buf->page) + buf->offset + buf->page->pp->p.=
+offset;
+> > -     memcpy(dst, src, LARGEST_ALIGN(copy));
+> > +     hdr_page =3D __netmem_to_page(hdr->netmem);
+> > +     buf_page =3D __netmem_to_page(buf->netmem);
+> > +     dst =3D page_address(hdr_page) + hdr->offset + hdr_page->pp->p.of=
+fset;
+> > +     src =3D page_address(buf_page) + buf->offset + buf_page->pp->p.of=
+fset;
+> >
+> > +     memcpy(dst, src, LARGEST_ALIGN(copy));
+> >       buf->offset +=3D copy;
+> >
+> >       return copy;
+> > @@ -3302,11 +3306,12 @@ static u32 idpf_rx_hsplit_wa(const struct libet=
+h_fqe *hdr,
+> >   */
+> >  struct sk_buff *idpf_rx_build_skb(const struct libeth_fqe *buf, u32 si=
+ze)
+> >  {
+> > -     u32 hr =3D buf->page->pp->p.offset;
+> > +     struct page *buf_page =3D __netmem_to_page(buf->netmem);
+> > +     u32 hr =3D buf_page->pp->p.offset;
+> >       struct sk_buff *skb;
+> >       void *va;
+> >
+> > -     va =3D page_address(buf->page) + buf->offset;
+> > +     va =3D page_address(buf_page) + buf->offset;
+> >       prefetch(va + hr);
+>
+> If you don't want to have to validate the low bit during netmem -> page
+> conversions - you need to clearly maintain the separation between
+> the two in the driver. These __netmem_to_page() calls are too much of
+> a liability.
 
-And the KFUNC_MD_FL_TRACING_ORIGIN is introduced to indicate that origin
-call is needed on this function.
+Would it make sense to add a DEBUG_NET_WARN_ON_ONCE to
+__netmem_to_page to catch misuse in a driver independent way? Or is
+that not good enough because there may be latent issues only hit in
+production where the debug is disabled.
 
-Add the function kfunc_md_bpf_link and kfunc_md_bpf_unlink to add or
-remove bpf prog to kfunc_md. Meanwhile, introduce kunfc_md_bpf_ips() to
-get all the kernel functions in kfunc_mds that contains bpf progs.
-
-The KFUNC_MD_FL_BPF_REMOVING indicate that a removing operation is in
-progress, and we shouldn't return it if "bpf_prog_cnt<=1" in
-kunfc_md_bpf_ips().
-
-Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
----
- include/linux/kfunc_md.h |  17 ++++++
- kernel/trace/kfunc_md.c  | 118 +++++++++++++++++++++++++++++++++++++++
- 2 files changed, 135 insertions(+)
-
-diff --git a/include/linux/kfunc_md.h b/include/linux/kfunc_md.h
-index 21c0b879cc03..f1b1012eeab2 100644
---- a/include/linux/kfunc_md.h
-+++ b/include/linux/kfunc_md.h
-@@ -3,12 +3,21 @@
- #define _LINUX_KFUNC_MD_H
- 
- #define KFUNC_MD_FL_DEAD		(1 << 0) /* the md shouldn't be reused */
-+#define KFUNC_MD_FL_TRACING_ORIGIN	(1 << 1)
-+#define KFUNC_MD_FL_BPF_REMOVING	(1 << 2)
- 
- #ifndef __ASSEMBLER__
- 
- #include <linux/kernel.h>
- #include <linux/bpf.h>
- 
-+struct kfunc_md_tramp_prog {
-+	struct kfunc_md_tramp_prog *next;
-+	struct bpf_prog *prog;
-+	u64 cookie;
-+	struct rcu_head rcu;
-+};
-+
- struct kfunc_md_array;
- 
- struct kfunc_md {
-@@ -19,6 +28,7 @@ struct kfunc_md {
- 	struct rcu_head rcu;
- #endif
- 	unsigned long func;
-+	struct kfunc_md_tramp_prog *bpf_progs[BPF_TRAMP_MAX];
- #ifdef CONFIG_FUNCTION_METADATA
- 	/* the array is used for the fast mode */
- 	struct kfunc_md_array *array;
-@@ -26,6 +36,7 @@ struct kfunc_md {
- 	struct percpu_ref pcref;
- 	u32 flags;
- 	u16 users;
-+	u8 bpf_prog_cnt;
- 	u8 nr_args;
- };
- 
-@@ -40,5 +51,11 @@ void kfunc_md_exit(struct kfunc_md *md);
- void kfunc_md_enter(struct kfunc_md *md);
- bool kfunc_md_arch_support(int *insn, int *data);
- 
-+int kfunc_md_bpf_ips(void ***ips);
-+
-+int kfunc_md_bpf_unlink(struct kfunc_md *md, struct bpf_prog *prog, int type);
-+int kfunc_md_bpf_link(struct kfunc_md *md, struct bpf_prog *prog, int type,
-+		      u64 cookie);
-+
- #endif
- #endif
-diff --git a/kernel/trace/kfunc_md.c b/kernel/trace/kfunc_md.c
-index 9571081f6560..ebb4e46d482d 100644
---- a/kernel/trace/kfunc_md.c
-+++ b/kernel/trace/kfunc_md.c
-@@ -131,6 +131,23 @@ static bool kfunc_md_fast(void)
- {
- 	return static_branch_likely(&kfunc_md_use_padding);
- }
-+
-+static int kfunc_md_hash_bpf_ips(void **ips)
-+{
-+	struct hlist_head *head;
-+	struct kfunc_md *md;
-+	int c = 0, i;
-+
-+	for (i = 0; i < (1 << KFUNC_MD_HASH_BITS); i++) {
-+		head = &kfunc_md_table[i];
-+		hlist_for_each_entry(md, head, hash) {
-+			if (md->bpf_prog_cnt > !!(md->flags & KFUNC_MD_FL_BPF_REMOVING))
-+				ips[c++] = (void *)md->func;
-+		}
-+	}
-+
-+	return c;
-+}
- #else
- 
- static void kfunc_md_hash_put(struct kfunc_md *md)
-@@ -148,6 +165,11 @@ static struct kfunc_md *kfunc_md_hash_create(unsigned long ip, int nr_args)
- }
- 
- #define kfunc_md_fast() 1
-+
-+static int kfunc_md_hash_bpf_ips(void **ips)
-+{
-+	return 0;
-+}
- #endif /* CONFIG_FUNCTION_METADATA_PADDING */
- 
- #ifdef CONFIG_FUNCTION_METADATA
-@@ -442,6 +464,19 @@ static struct kfunc_md *kfunc_md_fast_create(unsigned long ip, int nr_args)
- 
- 	return md;
- }
-+
-+static int kfunc_md_fast_bpf_ips(void **ips)
-+{
-+	struct kfunc_md *md;
-+	int i, c = 0;
-+
-+	for (i = 0; i < kfunc_mds->kfunc_md_count; i++) {
-+		md = &kfunc_mds->mds[i];
-+		if (md->users && md->bpf_prog_cnt > !!(md->flags & KFUNC_MD_FL_BPF_REMOVING))
-+			ips[c++] = (void *)md->func;
-+	}
-+	return c;
-+}
- #else
- 
- static void kfunc_md_fast_put(struct kfunc_md *md)
-@@ -458,6 +493,10 @@ static struct kfunc_md *kfunc_md_fast_create(unsigned long ip, int nr_args)
- 	return NULL;
- }
- 
-+static int kfunc_md_fast_bpf_ips(void **ips)
-+{
-+	return 0;
-+}
- #endif /* !CONFIG_FUNCTION_METADATA */
- 
- void kfunc_md_enter(struct kfunc_md *md)
-@@ -547,6 +586,85 @@ struct kfunc_md *kfunc_md_create(unsigned long ip, int nr_args)
- }
- EXPORT_SYMBOL_GPL(kfunc_md_create);
- 
-+int kfunc_md_bpf_ips(void ***ips)
-+{
-+	void **tmp;
-+	int c;
-+
-+	c = atomic_read(&kfunc_mds->kfunc_md_used);
-+	if (!c)
-+		return 0;
-+
-+	tmp = kmalloc_array(c, sizeof(*tmp), GFP_KERNEL);
-+	if (!tmp)
-+		return -ENOMEM;
-+
-+	rcu_read_lock();
-+	c = CALL(kfunc_md_fast_bpf_ips, kfunc_md_hash_bpf_ips, int, tmp);
-+	rcu_read_unlock();
-+
-+	*ips = tmp;
-+
-+	return c;
-+}
-+
-+int kfunc_md_bpf_link(struct kfunc_md *md, struct bpf_prog *prog, int type,
-+		      u64 cookie)
-+{
-+	struct kfunc_md_tramp_prog *tramp_prog, **last;
-+
-+	tramp_prog = md->bpf_progs[type];
-+	/* check if the prog is already linked */
-+	while (tramp_prog) {
-+		if (tramp_prog->prog == prog)
-+			return -EEXIST;
-+		tramp_prog = tramp_prog->next;
-+	}
-+
-+	tramp_prog = kmalloc(sizeof(*tramp_prog), GFP_KERNEL);
-+	if (!tramp_prog)
-+		return -ENOMEM;
-+
-+	tramp_prog->prog = prog;
-+	tramp_prog->cookie = cookie;
-+	tramp_prog->next = NULL;
-+
-+	/* add the new prog to the list tail */
-+	last = &md->bpf_progs[type];
-+	while (*last)
-+		last = &(*last)->next;
-+	*last = tramp_prog;
-+
-+	md->bpf_prog_cnt++;
-+	if (type == BPF_TRAMP_FEXIT || type == BPF_TRAMP_MODIFY_RETURN)
-+		md->flags |= KFUNC_MD_FL_TRACING_ORIGIN;
-+
-+	return 0;
-+}
-+
-+int kfunc_md_bpf_unlink(struct kfunc_md *md, struct bpf_prog *prog, int type)
-+{
-+	struct kfunc_md_tramp_prog *cur, **prev;
-+
-+	prev = &md->bpf_progs[type];
-+	while (*prev && (*prev)->prog != prog)
-+		prev = &(*prev)->next;
-+
-+	cur = *prev;
-+	if (!cur)
-+		return -EINVAL;
-+
-+	*prev = cur->next;
-+	kfree_rcu(cur, rcu);
-+	md->bpf_prog_cnt--;
-+
-+	if (!md->bpf_progs[BPF_TRAMP_FEXIT] &&
-+	    !md->bpf_progs[BPF_TRAMP_MODIFY_RETURN])
-+		md->flags &= ~KFUNC_MD_FL_TRACING_ORIGIN;
-+
-+	return 0;
-+}
-+
- bool __weak kfunc_md_arch_support(int *insn, int *data)
- {
- 	return false;
--- 
-2.39.5
-
+--=20
+Thanks,
+Mina
