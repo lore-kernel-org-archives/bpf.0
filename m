@@ -1,144 +1,94 @@
-Received: from mail-ej1-f65.google.com (mail-ej1-f65.google.com [209.85.218.65])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D66B714F104
-	for <bpf@vger.kernel.org>; Wed, 28 May 2025 00:31:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93CF11E4B2
+	for <bpf@vger.kernel.org>; Wed, 28 May 2025 00:33:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748392293; cv=none; b=t0am1j2Z5bsttTN1KY0izY8QZMCOqfbSxZIwFhXfJOEfwrcbs1KViqaBs27MhYhUbPs1vZAJ/7altmJz3edYEy9NYpBTd/eaem/MjK86iV/86W6EkLHQu7yJe/jn5ggwMdUBGKXf1VvIFDCrAgtGohIXQWLmv+RPTOyeR3Jcblw=
+	t=1748392429; cv=none; b=HS9z+BfQXRnPZRZhnA0IITz4gsURqSexIUDeNvdJ/x2NNRkN5AcbWqPnpAR5XX081senC3Y8pduLcFLVcLK475KegOSMA/uf7XFVJVsDeqN2++5K+vsH7i8bd7wbnZknohXVpdtDYF5iHOinqzL4L/kJb++BoydF0MMuWajUNEA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748392293; c=relaxed/simple;
-	bh=sIwrDz8fL+1+iMWDruPgc/PC1BA5rhRcPcc4UmZRwQ0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=NQQKgc+LdEUSRF7VkiIsTBRTCR+f+4DtKj6T3lw4EOX8DBywt5v7A7yxePI7yGl8tnbcoVokMcIftnojQ+aywDp+LGSa324U9yF5gwN6ozH1vKf3k6DNpY8eN5YXalQ6vY2DXSMNnObCGFPYvQHJ/r0N/GsNhQoVfBZGHK/9Tec=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M6RoY0rk; arc=none smtp.client-ip=209.85.218.65
+	s=arc-20240116; t=1748392429; c=relaxed/simple;
+	bh=lA6fQGdxEJbVnfvsaXlTsHNwkM1GhUlJAKKY/vQ7g2M=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=kWyasenZWYHejzM+TFnHX7nzUczhbLjc+FlNwxRBOy+EKVjudhXpSr6HUC2IDHlxGbya2PbslxJWfkWvasghUmeXFWVpslkRDaL62iTsKtoyaeDhREFnZ3EUdC7FMzmdkZI7X78NbfDX0uSRNVL/8hANzjtm72vL8on6+pYFJsA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GjOuat6P; arc=none smtp.client-ip=209.85.214.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M6RoY0rk"
-Received: by mail-ej1-f65.google.com with SMTP id a640c23a62f3a-ac2bb7ca40bso719892066b.3
-        for <bpf@vger.kernel.org>; Tue, 27 May 2025 17:31:31 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GjOuat6P"
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-23476a0a7c0so2783335ad.1
+        for <bpf@vger.kernel.org>; Tue, 27 May 2025 17:33:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1748392290; x=1748997090; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=XAfQxSVIBgnfPax8NLqlIkCY7+S7suu1JpzKn67TpZg=;
-        b=M6RoY0rkGUxUrLTa43U9z2foek8trmntyLep1T08UNgDL9kEs7lhP2OBa7GlECap5g
-         i/nX5iMcXU+sp7DvNC/uq8jp+LxRGKnnEe22EpinGnusII1VTC4Rf0EdbnAivalhcsg0
-         0fuHyoVofsWcnPSQfOHSXuh38y97tHSfWKWaBDthZ0Wh11pYuiOdcufrNg0RDCBMcPVQ
-         vbBXRkHHnKFkaT+WZiDbA4rxfZs5BA6asmKx9RumRKm/LfjTImuM0ISkZggHVwVnxjdU
-         V3mGztQ9OPeSjmE3ditQPxq5YVtyngi2jgtlILGe7oHIt8086aGUSH1wwnq4Oa9Fwbv4
-         RX7g==
+        d=gmail.com; s=20230601; t=1748392428; x=1748997228; darn=vger.kernel.org;
+        h=mime-version:user-agent:message-id:date:references:in-reply-to
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=lA6fQGdxEJbVnfvsaXlTsHNwkM1GhUlJAKKY/vQ7g2M=;
+        b=GjOuat6Pd/pNDnMn+dArCmQIdoLiaQKm1Evdc/Dfsv2J5belmACLF8dXy3b29Xheeq
+         tbi97qgrAYzrURm4r3FxxRs2YzfJ2ybe+IMR4BdVMvnc0eKMQ2jlfpyf4NXMiHRPUUgF
+         5shx1/QHlzBWKMKoCX2O7lU7Qn6NrhNuvpkO4hI0B1zyW9TTM9CE3OBM5NhERTtfy5MX
+         Utb1PhCTldFTvPtUN+EzFU5/os+RjN3rOLBk4gIGB56R2PA/oq3SsKnBQwRm6muxMZ1Z
+         z4tY86SelXrC+dBUaI+ird3I2oZdUjwKbEDfsj1XreAN1Ew7rd4xdnVF7aw2iwIMOd5B
+         i33g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748392290; x=1748997090;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XAfQxSVIBgnfPax8NLqlIkCY7+S7suu1JpzKn67TpZg=;
-        b=Ig400JX3If6LSwaaErxK4NVTPERldxocyNz7rFUXX+Cq7GvGfoA9FeEoX+qWctovtA
-         41YK4xZAHrLvB9z1TTZih0ukx+1g0cuBSq7R4qg5bBPvr3QdTU2BvHEwbazK3vr13wGQ
-         2CCAIeeJJGTrxcZn+4W+3oYsIrwlXKQddAkUlCpktmmHed4/w3ZdUlx0fZeOBZj9HipQ
-         1s+TNyIx1qh7KIVQ7kIcGtuhOeqdTHFivuPwEakr6hi+sI46+RyXa2bAsKmFGpCU9gmn
-         Qro1I+B+Uc+mDiaI6Y+u2Te/tq3EUEYJEXHonQQgft6MYqqGq8qDzbiLaIXT/DmpI7Ya
-         /2RQ==
-X-Gm-Message-State: AOJu0YxdionDGgvg8TXhHiJ1HrorurXnfv3FOPTcpxdClITLlxi+gNc2
-	+GixgC+sQmGb2anatjFnjvVrrdif6QozOaTUqcsy8BZSriE9VetjiVkcbdcrFicPBxp/QPnllqG
-	AIpqS3hTIN6E6byLpF/MplsiPqZVAAuc=
-X-Gm-Gg: ASbGncv/dZ0ywZevLFfmyQ/yJ0Bug6ee9KDgGPAVB8RtgLnA9ncqG8fWre0SxsOCmaV
-	Nn2wVvheJhBkKRoZWBzFmDh89qt2qiNum6WiyORX6uRGklfr3/6Jl7Qv4tj5dM+wVfj0FXYYVej
-	DYk795yUF+HNyh13F6BIygfg22bckl1UXxXYQVkQEwntkaUFmNyj64KeSaD1HzvQ+Dxp8=
-X-Google-Smtp-Source: AGHT+IEasdva7KyAoV5ftz+MTZ8Pt8oY8CKTW1T8k/BVt/Yu45h9UGNXpgKFrEqS7PKqJ8p1diKnASa6p7JSDzoDeg8=
-X-Received: by 2002:a17:907:3f13:b0:ad8:9645:797a with SMTP id
- a640c23a62f3a-ad8a1f0d4e1mr9034366b.15.1748392289980; Tue, 27 May 2025
- 17:31:29 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1748392428; x=1748997228;
+        h=mime-version:user-agent:message-id:date:references:in-reply-to
+         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lA6fQGdxEJbVnfvsaXlTsHNwkM1GhUlJAKKY/vQ7g2M=;
+        b=X06tUXoL1OyAwX5ewpB4LMemYbCNTNInzSc9fSQmuq3iv7YvcHdl0xaXIKnw0F/e1F
+         TTUyj/irH6lwCFoPRTPXKMD2uA3pLw0c92def3a+XuIitL8nxGe6obzdnJDY66hIxNpU
+         9cNjLjT8z0300DbarNyS1+4v2o7x+BGrAtTw4BLUbI1Rx8F5cGxAlHIG1442GIqQmyvP
+         KH311mf+1TwLjQ1drYk1R1G2b7qLSJ66PB0qSKTbUGmzMUFXAUt1Wa10xAvXUNdoZAVE
+         QbKmu9IYQc5YO/hwz151hk40t0wxgSmG6fz/IzTOkvIza5VsocSDsH46wDa1gVXO7C4w
+         AHeg==
+X-Gm-Message-State: AOJu0Yz3qm3UV20j3b6VnU6fU9jxzKhdMoucCCspnod5HeAjbtMGIoFw
+	BSHVSCLYRgHYrPJO5dWHFMtlJcDwaTduwGOH17iM57+QmxQ/qdxDnfE2
+X-Gm-Gg: ASbGnct2zKejkUbLSo3Muzah+hGzO+ce+Ep8EcStnHfr90jW2UEXkmku6kry8E3tBZD
+	RbcQkQDxkF61LDyRUqcwzZnQ1DtM8B++CCJ2t1yUwzSH5fgvrWdbqVuXPl+SUR4z2pszOHlkQY1
+	jFB7aMf0pP2m2FVIpeRR008REpsKHVCloSIgZHiftnHBuTotgVjs4NLANXho6Els/G6e/vT1MFc
+	ALKTrFjS/oKGXWdPWj+fQL2fqOytGTkUEFgcXwJEEw/2vErBR0UrbTgV6DGfntazd5n40v2Ty6U
+	dK/1asieJ9XIqyVWkI0bvSJI3hxYbwVhjmBOsUj78ItB7hgjuFfYRGI=
+X-Google-Smtp-Source: AGHT+IEHh+2MfwdEMQka5LR6NBcZvDCz1XpQk+0lNIdEbPU7Gsi8FSGSKJsBhKLPBSs1svMEYXHgbQ==
+X-Received: by 2002:a17:902:cf08:b0:231:c3c1:babb with SMTP id d9443c01a7336-234b74d46d5mr36600025ad.18.1748392427685;
+        Tue, 27 May 2025 17:33:47 -0700 (PDT)
+Received: from ezingerman-mba ([2620:10d:c090:500::7:461c])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-234d358f167sm127765ad.130.2025.05.27.17.33.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 May 2025 17:33:47 -0700 (PDT)
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: bpf@vger.kernel.org,  Alexei Starovoitov <ast@kernel.org>,  Andrii
+ Nakryiko <andrii@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>,
+  Martin KaFai Lau <martin.lau@kernel.org>,  Emil Tsalapatis
+ <emil@etsalapatis.com>,  Barret Rhoden <brho@google.com>,  Matt Bobrowski
+ <mattbobrowski@google.com>,  kkd@meta.com,  kernel-team@meta.com
+Subject: Re: [PATCH bpf-next v2 04/11] bpf: Hold RCU read lock in
+ bpf_prog_ksym_find
+In-Reply-To: <CAP01T76h+=QCerjcJZy_LE6UgF6Gu1mmfLbi10OJjDRK=JrrpA@mail.gmail.com>
+	(Kumar Kartikeya Dwivedi's message of "Wed, 28 May 2025 02:27:37
+	+0200")
+References: <20250524011849.681425-1-memxor@gmail.com>
+	<20250524011849.681425-5-memxor@gmail.com>
+	<CAP01T76sCLH8qCrEqr=oYLW3CpbZA-+ifbA3DOCXT93Lk0LN5Q@mail.gmail.com>
+	<m2o6vd4ml8.fsf@gmail.com>
+	<CAP01T76h+=QCerjcJZy_LE6UgF6Gu1mmfLbi10OJjDRK=JrrpA@mail.gmail.com>
+Date: Tue, 27 May 2025 17:33:45 -0700
+Message-ID: <m25xhl4lqu.fsf@gmail.com>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250524011849.681425-1-memxor@gmail.com> <20250524011849.681425-2-memxor@gmail.com>
- <m2cybt62gp.fsf@gmail.com> <CAP01T77zkuR1MGOmBXCnsjjQPezLHfz0RRayfqDYZ0_h0Z4X9g@mail.gmail.com>
- <m2bjrd4m84.fsf@gmail.com>
-In-Reply-To: <m2bjrd4m84.fsf@gmail.com>
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date: Wed, 28 May 2025 02:30:53 +0200
-X-Gm-Features: AX0GCFtf-OCPBmR4OnYmhNr3pb7dk_2rvHCW99RF1vEU_f2hMYaA8SfB7hQlO1k
-Message-ID: <CAP01T75kzNAVOS65C8O8zzMEnkw=DLW3+0WN6AFWBtHdxw2sXg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 01/11] bpf: Introduce BPF standard streams
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Martin KaFai Lau <martin.lau@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, 
-	Barret Rhoden <brho@google.com>, Matt Bobrowski <mattbobrowski@google.com>, kkd@meta.com, 
-	kernel-team@meta.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 
-On Wed, 28 May 2025 at 02:23, Eduard Zingerman <eddyz87@gmail.com> wrote:
->
-> Kumar Kartikeya Dwivedi <memxor@gmail.com> writes:
->
-> [...]
->
-> >> > diff --git a/kernel/bpf/stream.c b/kernel/bpf/stream.c
-> >> > new file mode 100644
-> >> > index 000000000000..b9e6f7a43b1b
-> >> > --- /dev/null
-> >> > +++ b/kernel/bpf/stream.c
-> >>
-> >> [...]
-> >>
-> >> > +int bpf_stream_stage_commit(struct bpf_stream_stage *ss, struct bpf_prog *prog,
-> >> > +                         enum bpf_stream_id stream_id)
-> >> > +{
-> >> > +     struct llist_node *list, *head, *tail;
-> >> > +     struct bpf_stream *stream;
-> >> > +     int ret;
-> >> > +
-> >> > +     stream = bpf_stream_get(stream_id, prog->aux);
-> >> > +     if (!stream)
-> >> > +             return -EINVAL;
-> >> > +
-> >> > +     ret = bpf_stream_consume_capacity(stream, ss->len);
-> >> > +     if (ret)
-> >> > +             return ret;
-> >> > +
-> >> > +     list = llist_del_all(&ss->log);
-> >> > +     head = list;
-> >> > +
-> >> > +     if (!list)
-> >> > +             return 0;
-> >> > +     while (llist_next(list)) {
-> >> > +             tail = llist_next(list);
-> >> > +             list = tail;
-> >> > +     }
-> >> > +     llist_add_batch(head, tail, &stream->log);
-> >>
-> >> If `llist_next(list) == NULL` at entry `tail` is never assigned?
-> >
-> > The assumption is llist_del_all being non-NULL means llist_next is
-> > going to return a non-NULL value at least once.
-> > Does that address your concern?
->
-> Sorry, maybe I don't understand something.
-> Suppose that at entry ss->log is a list with a single element:
->
->  ss->log -> 0xAA: { .next = NULL; ... payload ... }
->
-> then:
-> - list == 0xAA;
-> - llist_next(list) == 0x0;
-> - loop body never executes.
->
-> What do I miss?
+Kumar Kartikeya Dwivedi <memxor@gmail.com> writes:
 
-Right, I see.
-We need to do head = tail = list above.
-Then it's equivalent to a single element llist_add.
+[...]
 
->
->
-> >> > +     return 0;
-> >> > +}
->
-> [...]
+> Alternatively, we can add WARN_ON_ONCE(rcu_read_lock_held()) as a requirement.
+
+I think this is a good option.
+
+[...]
