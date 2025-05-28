@@ -1,128 +1,135 @@
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 630623D544
-	for <bpf@vger.kernel.org>; Wed, 28 May 2025 02:28:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+Received: from invmail4.hynix.com (exvmail4.skhynix.com [166.125.252.92])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA5B91C862F;
+	Wed, 28 May 2025 02:29:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.125.252.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748399337; cv=none; b=mDzQOT0dzy1bwI12a8+oMdko1Jqw64dbsIwsz2isubPJ/p9P2lVb+86bXILXpl3ob4yGIKnHfmRE/6CK+eJShWsOM9WCrpFPnMkoPoSIPUUWL54gQvEs9QiWNw5ugQorF/zycjxf8OmoaS9/EUE/qom5PIKwfKUJMYYL/zBELfQ=
+	t=1748399367; cv=none; b=mXHrba6IsNiOMA0O3ITJhI5E3sj3kipSkqZKMoNQ/CJteupB0qDuDPBxkWT+fZH8+aK/YHmSEP9TMyzkQx8mG2tl1Y4pPPi4cLVXoYQmI+VanjPh8tEnbkolzOmMhIwTj430G7j/oKFFCgk4VdMiLLWd0/Peh/sPJkSZZx2IkCg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748399337; c=relaxed/simple;
-	bh=OOfLUdkGKq1aH7sedKst34tJOTzg/fl11tB8zmH2no8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=h/4dGSSFBt2TZtbl347ge4hUt6/26zp4UJ0zB2JdaSDi/rkDRwZ978BCLblGBl/lar0F0Sth35BZ6UlbqBkrZS+Aa3LAn0BWIiRiqshDozF8fNCTtRVym9q4VRdU0Baev0OhpMY6E70hmarb1PX4/LZ8LqPHrrTpsVm/2aqqXns=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.93.142])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4b6YMy2CwVzYQtpn
-	for <bpf@vger.kernel.org>; Wed, 28 May 2025 10:28:46 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.75])
-	by mail.maildlp.com (Postfix) with ESMTP id 6CFB41A07BB
-	for <bpf@vger.kernel.org>; Wed, 28 May 2025 10:28:45 +0800 (CST)
-Received: from [10.67.111.192] (unknown [10.67.111.192])
-	by APP2 (Coremail) with SMTP id Syh0CgCXoWTadDZoq5N+Ng--.64358S2;
-	Wed, 28 May 2025 10:28:43 +0800 (CST)
-Message-ID: <82d65377-2d00-4d1d-8312-c5a85c129c9b@huaweicloud.com>
-Date: Wed, 28 May 2025 10:28:42 +0800
+	s=arc-20240116; t=1748399367; c=relaxed/simple;
+	bh=tBde3LU+2rZfI2yUYys643X8X47mUeuMIdg6rbr6seA=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=dtCPQ4PIUyagn1uB7BxCslr8BZBCmf318e/XLJFpJa584+6KQqkoGE3AGJ92j78Psf47cx0Pya5Gq3SUS1EGTRTfhc1hnpQKx4kDlYppXAv6oLVmvuGkwEbD2ZGh3i76tcSw//62R72vZ349HH6w0SszI8dgJhLoXt+NjoEL1f4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com; spf=pass smtp.mailfrom=sk.com; arc=none smtp.client-ip=166.125.252.92
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sk.com
+X-AuditID: a67dfc5b-669ff7000002311f-69-68367501a16e
+From: Byungchul Park <byungchul@sk.com>
+To: willy@infradead.org,
+	netdev@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org,
+	kernel_team@skhynix.com,
+	kuba@kernel.org,
+	almasrymina@google.com,
+	ilias.apalodimas@linaro.org,
+	harry.yoo@oracle.com,
+	hawk@kernel.org,
+	akpm@linux-foundation.org,
+	davem@davemloft.net,
+	john.fastabend@gmail.com,
+	andrew+netdev@lunn.ch,
+	asml.silence@gmail.com,
+	toke@redhat.com,
+	tariqt@nvidia.com,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	saeedm@nvidia.com,
+	leon@kernel.org,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	david@redhat.com,
+	lorenzo.stoakes@oracle.com,
+	Liam.Howlett@oracle.com,
+	vbabka@suse.cz,
+	rppt@kernel.org,
+	surenb@google.com,
+	mhocko@suse.com,
+	horms@kernel.org,
+	linux-rdma@vger.kernel.org,
+	bpf@vger.kernel.org,
+	vishal.moola@gmail.com
+Subject: [PATCH v2 08/16] page_pool: rename __page_pool_release_page_dma() to __page_pool_release_netmem_dma()
+Date: Wed, 28 May 2025 11:29:03 +0900
+Message-Id: <20250528022911.73453-9-byungchul@sk.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20250528022911.73453-1-byungchul@sk.com>
+References: <20250528022911.73453-1-byungchul@sk.com>
+X-Brightmail-Tracker: H4sIAAAAAAAAAzWRXUhTYRzGfXfenR2Hg8OMOhVlTSoQ0ozSfxCmQvBGXRTdJZlTT23mpm1+
+	zCKwkiLLKVpkNnMl2dyE2fychNi0NFOyibbKVGYWRR/MpakzzSXePfyeh9/Nw1DSTryBUaqz
+	eI1ani6jxVj8I+jhTkF2lGKX3i4Gg7WOBsusDh6PtwrBYG5G8Hvugwi8Xd00VD+YocDwugDD
+	tHWegskXbhGM1XzG8PRaCwXu4h4aigp8FFxuNQlgoFkvhFvzjyhoyR8XwWCbgYbRuiUhfHYU
+	YXhZUYthTB8LL4xrYebVdwRd1hYBzNyspKHMaaRhomAMgbPTjeHeJT0Ca7tLCL5ZAx27lTTW
+	vhMQe8VHETHaskmDKYwUupwUsZmv08Q2VSoiI8NPadJT7sPE3uoVkKIrP2nimXyPya/2IZpY
+	G4cw6TN2iYjXtvkoe0K8P5VPV+bwmoiYJLGid75fmKmX6IYveal8NC8uRIEMx+7hBqs7qNXs
+	vl+D/Zlmd3Au19x/voaN5Lzu7mUuZij2p5CbNPgE/iKYVXO3f9QJCxHDYHYbNzyU5ccSdi83
+	Om6hV5whnKXe72eYQDaKez6S4sfS5cmvG1bkV3LsnIj70jmLV/bruWcmFy5BEiMKMCOpUp2j
+	kivT94Qr8tRKXXhKhsqGlq+tubiQ0IqmBo47EMsgWZCE1O9VSIXyHG2eyoE4hpKtkVw+EKWQ
+	SlLleed5TcYpTXY6r3WgjQyWrZPsnslNlbJn5Fn8WZ7P5DWrrYAJ3JCPDm1hPclxyfsEuRe+
+	mpc8A1N/D6dQpoOWI8ZB+5tjE7r40MXok/FNxVVtNzNPLwQ9GdnuvFvS01/aUjY6raq0iBq5
+	+A9pcWl/2iLCY2TR59CmfYWN3ESAD3vupKZVjV5VxfYm9FWFJnYYdMXjIW+bkt5XxgYnihfX
+	fiv/1OAabpdhrUIeGUZptPJ/SK0e+dYCAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAAzWRa0hTcRyG+5/bjrPBaUmd7D6LSugGab/ookHgn4IIihQhaujJLedam4oW
+	wVIpsra00qymzcLljWZLdKaYTNOsdcHS1mWpq42CvNRMdAvKEX17ed6H98vLklILFckq1ZmC
+	Vi1XyRgxJd67NX8tyopVbBj2bQGTtZ6BuqkcuDtkp8FU24RgYvqDCPxdPQzcqZwkwfSygIJf
+	1gAJ3m6PCAYtPgrazjWT4Ln0hAFDQZCEPHs1AZ3lvTS8ajLScDVQRUKzfkgErx+aGPhU/4cG
+	n8NAQe+NGgoGjfHQbZ4Hk8++I+iyNhMwebGcgSt9ZgY+Fwwi6Ov0UHDzjBGBtd1FQ3DKxMTL
+	cGPNOwK33HCLsNmWhR9UR+NCVx+JbbXnGWz7eVmEPw60MfhJWZDCLXY/gQ35owz+4X1P4bH2
+	fgbf+TpOYGtjP4Wd5i7RvjnJ4m2pgkqZLWjX7zgiVjwNPKc1RknOwBk/qUcBcSEKY3luE++p
+	sFChzHCreJdrmgzlCG4j7/f0zHAxS3KjNO81BYlQMZdT8yUj9XQhYlmKW8kP9GeGsISL4T8N
+	1TH/NpfydQ0dZEgJ42L5xx9TQlg6o4xdsKIiJDajWbUoQqnOzpArVTHrdOmKXLUyZ13K8Qwb
+	mnnPcvp3sR1NvE5wII5FstkS3BCjkNLybF1uhgPxLCmLkOTFxSqkklR57klBe/ywNksl6Bxo
+	IUvJ5kt2JwpHpFyaPFNIFwSNoP3fEmxYpB5d1nrTdk3oDO7hKPny1cVxx1ISxl/8WLzmYNC0
+	eWf4g8I3o7d9394sqzIs6Xilr3i01HnCvoBI1FSmnijaM2fTSFL4l8RTNKuJan07RSbHdS46
+	Gmk+NtUanhRd7pZcJfl718/6Sn/2R6wfD+zffujWgVFTWbVzeAVR6r52pSTxvs0po3QK+cZo
+	UquT/wUpO1o2uQIAAA==
+X-CFilter-Loop: Reflected
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next] bpf, arm64: Remove unused-but-set function and
- variable.
-Content-Language: en-US
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
-Cc: daniel@iogearbox.net, andrii@kernel.org, martin.lau@kernel.org,
- alexis.lothore@bootlin.com, kernel-team@fb.com
-References: <20250528002704.21197-1-alexei.starovoitov@gmail.com>
-From: Xu Kuohai <xukuohai@huaweicloud.com>
-In-Reply-To: <20250528002704.21197-1-alexei.starovoitov@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:Syh0CgCXoWTadDZoq5N+Ng--.64358S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxJr13XFWfCFWUAF43ZryfXrb_yoW8tFWUpw
-	43AwnxCr40qrWkWa4vqa1UAr15KF4DXr429FWUGFWFga90vryDWF1rKa1fCrWYy3yqka1r
-	JF4Y9rn0yw1qv37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUylb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAK
-	I48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7
-	xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xII
-	jxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw2
-	0EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x02
-	67AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUwxhLUUUUU
-X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
 
-On 5/28/2025 8:27 AM, Alexei Starovoitov wrote:
-> From: Alexei Starovoitov <ast@kernel.org>
-> 
-> Remove unused-but-set function and variable to fix the build warning:
->     arch/arm64/net/bpf_jit_comp.c: In function 'arch_bpf_trampoline_size':
->>> arch/arm64/net/bpf_jit_comp.c:2547:6: warning: variable 'nregs' set but not used [-Wunused-but-set-variable]
->      2547 |  int nregs, ret;
->           |      ^~~~~
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202505280643.h0qYcSCM-lkp@intel.com/
-> Fixes: 9014cf56f13d ("bpf, arm64: Support up to 12 function arguments")
-> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-> ---
->   arch/arm64/net/bpf_jit_comp.c | 21 ++-------------------
->   1 file changed, 2 insertions(+), 19 deletions(-)
-> 
-> diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
-> index b5c3ab623536..14d4c6ac4ca0 100644
-> --- a/arch/arm64/net/bpf_jit_comp.c
-> +++ b/arch/arm64/net/bpf_jit_comp.c
-> @@ -2520,21 +2520,6 @@ static int prepare_trampoline(struct jit_ctx *ctx, struct bpf_tramp_image *im,
->   	return ctx->idx;
->   }
->   
-> -static int btf_func_model_nregs(const struct btf_func_model *m)
-> -{
-> -	int nregs = m->nr_args;
-> -	int i;
-> -
-> -	/* extra registers needed for struct argument */
-> -	for (i = 0; i < MAX_BPF_FUNC_ARGS; i++) {
-> -		/* The arg_size is at most 16 bytes, enforced by the verifier. */
-> -		if (m->arg_flags[i] & BTF_FMODEL_STRUCT_ARG)
-> -			nregs += (m->arg_size[i] + 7) / 8 - 1;
-> -	}
-> -
-> -	return nregs;
-> -}
-> -
->   int arch_bpf_trampoline_size(const struct btf_func_model *m, u32 flags,
->   			     struct bpf_tramp_links *tlinks, void *func_addr)
->   {
-> @@ -2543,10 +2528,8 @@ int arch_bpf_trampoline_size(const struct btf_func_model *m, u32 flags,
->   		.idx = 0,
->   	};
->   	struct bpf_tramp_image im;
-> -	struct arg_aux  aaux;
-> -	int nregs, ret;
-> -
-> -	nregs = btf_func_model_nregs(m);
-> +	struct arg_aux aaux;
-> +	int ret;
->   
->   	ret = calc_arg_aux(m, &aaux);
->   	if (ret < 0)
+Now that __page_pool_release_page_dma() is for releasing netmem, not
+struct page, rename it to __page_pool_release_netmem_dma() to reflect
+what it does.
 
-Oops, sorry for not noticing that nregs is set but not used.
+Signed-off-by: Byungchul Park <byungchul@sk.com>
+---
+ net/core/page_pool.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-Now that the number of regs for both struct and non-struct
-args is calculated in calc_arg_aux(), we can safely drop
-btf_func_model_nregs().
-
-Acked-by: Xu Kuohai <xukuohai@huawei.com>
+diff --git a/net/core/page_pool.c b/net/core/page_pool.c
+index fb487013ef00..af889671df23 100644
+--- a/net/core/page_pool.c
++++ b/net/core/page_pool.c
+@@ -674,8 +674,8 @@ void page_pool_clear_pp_info(netmem_ref netmem)
+ 	netmem_set_pp(netmem, NULL);
+ }
+ 
+-static __always_inline void __page_pool_release_page_dma(struct page_pool *pool,
+-							 netmem_ref netmem)
++static __always_inline void __page_pool_release_netmem_dma(struct page_pool *pool,
++							   netmem_ref netmem)
+ {
+ 	struct page *old, *page = netmem_to_page(netmem);
+ 	unsigned long id;
+@@ -722,7 +722,7 @@ static void page_pool_return_netmem(struct page_pool *pool, netmem_ref netmem)
+ 	if (static_branch_unlikely(&page_pool_mem_providers) && pool->mp_ops)
+ 		put = pool->mp_ops->release_netmem(pool, netmem);
+ 	else
+-		__page_pool_release_page_dma(pool, netmem);
++		__page_pool_release_netmem_dma(pool, netmem);
+ 
+ 	/* This may be the last page returned, releasing the pool, so
+ 	 * it is not safe to reference pool afterwards.
+@@ -1140,7 +1140,7 @@ static void page_pool_scrub(struct page_pool *pool)
+ 		}
+ 
+ 		xa_for_each(&pool->dma_mapped, id, ptr)
+-			__page_pool_release_page_dma(pool, page_to_netmem(ptr));
++			__page_pool_release_netmem_dma(pool, page_to_netmem((struct page *)ptr));
+ 	}
+ 
+ 	/* No more consumers should exist, but producers could still
+-- 
+2.17.1
 
