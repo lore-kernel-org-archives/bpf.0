@@ -1,170 +1,104 @@
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE4F528DF18
-	for <bpf@vger.kernel.org>; Wed, 28 May 2025 16:59:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31E7D1F461A
+	for <bpf@vger.kernel.org>; Wed, 28 May 2025 17:04:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748451570; cv=none; b=C2BUytoG9dKWXxM/FXvxkSaVvTDZ56qm1snLyAyaeH1WQfz6HVBbsES+uRdoFq2pzaloJCsjM60pfqCmMglxy/46ebGE2eNlODWfpgiIR3PrOhCLdqt1PGGOi1pFgZqmMJICK7q4xrBLDYYcablYJGRhb/92EYaN7i6UsOWKNs0=
+	t=1748451881; cv=none; b=JY9fUdMu7axqD5zzQSPqmHXIqk6TrHtj5Bt40Jo8V6hTA2nQX45ykc5QTQ8h5kqfw3ZSEhOaZAWnFvAV1I6dCjO8gEDdPP6+dpRnGTcyg6qU/ifFqTAhCeAc7S9IKqZBlcIVUzh6Bw+fXASkFFhRqE1g8tprGyDjqJHIAvbcobY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748451570; c=relaxed/simple;
-	bh=fhxfhD2VJr7N/NFA3EsShcZyUJOLpTJhxWDJrIillnI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=u/q8jQ5VOMfDjB39nyvTgMzZcLNh3+PbfQ412YC1h4rMK/35HUYe6V4Nf4JkLWZiNDJiD0ZQAfIvI/5gCYmRq0Y6cwY9aazD25iDe0svZSVMKTPjsw8RpJ+K7blGhIZlfY/Rgdbwfcgsgu3U2/uKBFcRbQ+eKU/HeF2ccVz2duU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=3Yj1XlCb; arc=none smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1748451881; c=relaxed/simple;
+	bh=e3ueJiQl9dSgrfPGUEFBV+g47IT2qbb0RhAhaKlQWto=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=JJMuV0oHPmlWS7rBk4ynJrzxY9wWTIObz9Rh5jBrRZADb0Tft+XTy+jLJLmWN9TmASqcQGOXt4ILm0UegRMGwAvvHFk13CRc5XAkpKwMaCXpsfOqgb80HHz03dx6MEBmi7EGjZ6TGskFXOAFVaEuoWc+X7fpBltNj0ro0b077Cw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Gd7CSwr3; arc=none smtp.client-ip=209.85.216.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="3Yj1XlCb"
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2348ac8e0b4so1665ad.1
-        for <bpf@vger.kernel.org>; Wed, 28 May 2025 09:59:28 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Gd7CSwr3"
+Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-310cf8f7301so83417a91.1
+        for <bpf@vger.kernel.org>; Wed, 28 May 2025 10:04:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1748451568; x=1749056368; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AU+5V0D50sosAbJkKDzKL3jVUZ5FjJivIDtXJcMadFo=;
-        b=3Yj1XlCbJRh4dz+XQ54jCMu6hEj/eJa3CO9xHnolvo3yhI/HuKIkkVxyKNwvSoiJ12
-         vy9fOmfhtiiVAVwct8RZTfOZ7EY4VctfJrVmRswHrdR7n4cUi4ZqNY6q7OZBenrQa5kU
-         Z13SE6uavKbInk0qRtWIocb8FKisp7qWsXJ3BM/qOfmK7AZhI43UaPJ0gRY0QXhzBubH
-         nSe9QSbwcF1LZdo1dnlPTJlfltMPjHMHn9pLDHXPdbwQwwOJnDHVrmXN1xAqd7th6+3R
-         O1IhO32L3wuh5e1HecH8MZJpP/PKWO+aR/2SrcCOnte5qr/0j5hgKSni2IRcjimyQR5s
-         f1cQ==
+        d=gmail.com; s=20230601; t=1748451879; x=1749056679; darn=vger.kernel.org;
+        h=mime-version:user-agent:message-id:date:references:in-reply-to
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=lq7CWPjVn72DUN23VbJW/vXDCgcdXdP6g7IA4lvfo8M=;
+        b=Gd7CSwr3LkKk3H4zRMcpfaVYAiBbI5lnPxPd8XPlVgCush/ZKhaA28RlPgTb2By0xx
+         fc9YBPZwqmBp1owr2AMrJQ/BZ0r4a4HDOXFSZWzA3m1kyddqrAjd3Hkmga7fe59zNB/h
+         TdTFpAUvVLtv5jlBRK9SxmSXRqZhkTLH6mtYRc2N/sgSasP+sZpsUo4SEkHiW1z9NpFQ
+         tgDjqLxMUqoKHP0dcWgQ1AwvUqCBkkDSc+6hOI1rxIKPbN8rsavnsWUMORqcdd7L5Hhw
+         tThXE3+rX++wBE/9lcJwWNpXFmjyfZ2mmh2YqYc+Og9sC6RGXI63VYKi+845aXmyijBp
+         357Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748451568; x=1749056368;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AU+5V0D50sosAbJkKDzKL3jVUZ5FjJivIDtXJcMadFo=;
-        b=kccaCqwN6+/zcZD4wFa3+j0/Iv5gssfZJ5NeT7KobMIrSpkWFVaeZLhVWSuUVOFKO+
-         3ef6QSNNEG2XuWMkARWsumjrcq6bCa8wZqNvQ9x3MJMgUe9yyuxffOGV5wCjnUYyBZQf
-         2cGTbjjvltlVhAa9Pp7rzgpCu1UJQ25mp2ZB2j7SbRl8JnunE8zPz2DzNUjljysXo6dK
-         TD01BpEdcRAP81r7eUahD1kineEKQN8jpw+arZMkRyI6HMgWIvmCMjVIaJnYMjPXMIKg
-         NL7MscU+2TU5YSz2QKzqoKRdL4vdLFX4j3ZdJ8wGIvsfIJSjpTtCgeH9JtFI6+mQ6K52
-         5lBg==
-X-Forwarded-Encrypted: i=1; AJvYcCVI7YT3AJpwmPymRhpjRSrC332gEFjdZh4r5i7yX9l3Fm/U3U4ghxeatNf94YazFYzsQDo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwCezYnpUzndOb/gXikspXr/ErwlqaSox9yO1S3EcDL9/YLoIAZ
-	AW0QhDjPB3OJNIqBUt/UQ2D/5kUOu0Hz+jwHG65A785+9sgsXj3d8ATEpqIPB+WXkPjTVPCyYVX
-	fMziepKQR9TbMZaeUzg6I73VyEfg7+BUkdX1QkR9S
-X-Gm-Gg: ASbGncvOEfLJQ3oXasb96P4TQBhGobWuXb/7EGS+VufaJJuHi7GYkmHsehzqVT7zpN3
-	it5vnUIihPyNjxDH7a3i9muMi+cvbuqWWFFdEo0lb1U45J7DLUH+5iSbCRigFb6XaH33JU5y8v2
-	MoXN/1jBNjv9+D5VtQZcgjC9qcqNjRcssS2lKj8qIjhgXuJeruNzEynWrZYVjy/PqkAzsENKWvk
-	APZCww6w2nZ
-X-Google-Smtp-Source: AGHT+IGH9FRqbmLXCu8WFJb6dVN46h/TnBW/MP1T5WeV0m8oyOEBp/rxcLIB9unWYsuTueREphw7MK8d9rPrgIGIBnE=
-X-Received: by 2002:a17:903:1b63:b0:21f:2ded:bfc5 with SMTP id
- d9443c01a7336-234c55ab5aamr3548825ad.28.1748451567487; Wed, 28 May 2025
- 09:59:27 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1748451879; x=1749056679;
+        h=mime-version:user-agent:message-id:date:references:in-reply-to
+         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lq7CWPjVn72DUN23VbJW/vXDCgcdXdP6g7IA4lvfo8M=;
+        b=sIKfG2fUn/dUGwuqC48UmNLxKu4UU7ouwKU6pS4JClvkifE6JD4vIVU5eMFe8mEn3e
+         PrKeFIJXRX1Fel/rMwNPpfwZKCahyl9ze7Vl5+LcJZ+1t5hbsNh4vH3GISN4RXFH1QwU
+         ySKDPsdvRpn/OHVq11dWwZBKXBGNjLaC3egZ+jkDiD1RfNl7Dv8u/DbbjFOEV6IFYA40
+         et+kvRhyGaM87ZTEO8f0OJU5PUF3ZQjbyTpphbYHGxhzUjybiZZJKb3s0fmlw9kjrAIu
+         xN1/fSMiK/+G0WqU5UD3dYq6uF099qu1U9Uj9kKzpGWK1gJ8srTNWKktQICkF4P00R38
+         MK4w==
+X-Gm-Message-State: AOJu0YzjHDFxuVU0+cyld0p0aPGwSWtwUadyg5Xbv0x0CDPaYDr3oxs1
+	6aj7nL1tUKSLgPMmUyCLPPk0hB8JoTlFCEugRxiGRaNZ0HLo93WTdDoo
+X-Gm-Gg: ASbGncug4xsZylXl6cPYRMZ5+b9HSeKeanUnM6sv+DFJwDDC5/7Xh2ZCA+snZCLVl+9
+	bvyvtxf93UOT8KNKDXfyMa+n/HMB10mLHb5WU7QVl5gy7AmM+Klq1+o4T3fLv9WsRFKuuxUIzpn
+	kTv5JnJJRMteC0yRWeQHsFJE7lPBMlRbXdMNit/QScxpp5277D6ErrC2qSNqav6qOANkvNes7Ag
+	yLnWhkJk0pjA2EvjHO+VdHPjxzhg+OnrPXxZnAV5QvZEPWnKtQi6EmzEol7930gbNWHjTueQECE
+	zn0F5hdjKCt2Q/2WKGOFugyTcVAERQYdYChRKcoiKe5fy1iQRCJbYziBx9OvqBlmUw==
+X-Google-Smtp-Source: AGHT+IFcsbVRZq7O7wfTS8eN2yBL6jegoV/TJ9TGyanywg9G6Hlo0NbgyJCO06puDarvUBl2hE7J8Q==
+X-Received: by 2002:a17:90b:3e8c:b0:311:9cdf:a8a4 with SMTP id 98e67ed59e1d1-31214e4d8f7mr516257a91.8.1748451879238;
+        Wed, 28 May 2025 10:04:39 -0700 (PDT)
+Received: from ezingerman-mba ([2620:10d:c090:500::4:d651])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-311e47e4288sm1665714a91.43.2025.05.28.10.04.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 May 2025 10:04:38 -0700 (PDT)
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: bpf@vger.kernel.org,  Alexei Starovoitov <ast@kernel.org>,  Andrii
+ Nakryiko <andrii@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>,
+  Martin KaFai Lau <martin.lau@kernel.org>,  Emil Tsalapatis
+ <emil@etsalapatis.com>,  Barret Rhoden <brho@google.com>,  Matt Bobrowski
+ <mattbobrowski@google.com>,  kkd@meta.com,  kernel-team@meta.com
+Subject: Re: [PATCH bpf-next v2 11/11] selftests/bpf: Add tests for prog
+ streams
+In-Reply-To: <20250524011849.681425-12-memxor@gmail.com> (Kumar Kartikeya
+	Dwivedi's message of "Fri, 23 May 2025 18:18:49 -0700")
+References: <20250524011849.681425-1-memxor@gmail.com>
+	<20250524011849.681425-12-memxor@gmail.com>
+Date: Wed, 28 May 2025 10:04:36 -0700
+Message-ID: <m2wma01xaz.fsf@gmail.com>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250528022911.73453-1-byungchul@sk.com> <20250528022911.73453-17-byungchul@sk.com>
- <20250528060715.GE9346@system.software.com> <87v7plmbo9.fsf@toke.dk>
-In-Reply-To: <87v7plmbo9.fsf@toke.dk>
-From: Mina Almasry <almasrymina@google.com>
-Date: Wed, 28 May 2025 09:59:14 -0700
-X-Gm-Features: AX0GCFuxRFdaXnvFJo88yADv-joqzgj8xrel-S60sB-_CFIsIQuQGzHBPdDTD9k
-Message-ID: <CAHS8izOJVRu=qvsqZyXERKxA-fcqGuNVfiVsXsszQYAjD4d00g@mail.gmail.com>
-Subject: Re: [PATCH v2 16/16] mt76: use netmem descriptor and APIs for page pool
-To: =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
-Cc: Byungchul Park <byungchul@sk.com>, willy@infradead.org, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, kernel_team@skhynix.com, 
-	kuba@kernel.org, ilias.apalodimas@linaro.org, harry.yoo@oracle.com, 
-	hawk@kernel.org, akpm@linux-foundation.org, davem@davemloft.net, 
-	john.fastabend@gmail.com, andrew+netdev@lunn.ch, asml.silence@gmail.com, 
-	tariqt@nvidia.com, edumazet@google.com, pabeni@redhat.com, saeedm@nvidia.com, 
-	leon@kernel.org, ast@kernel.org, daniel@iogearbox.net, david@redhat.com, 
-	lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com, vbabka@suse.cz, 
-	rppt@kernel.org, surenb@google.com, mhocko@suse.com, horms@kernel.org, 
-	linux-rdma@vger.kernel.org, bpf@vger.kernel.org, vishal.moola@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 
-On Wed, May 28, 2025 at 12:34=E2=80=AFAM Toke H=C3=B8iland-J=C3=B8rgensen <=
-toke@redhat.com> wrote:
->
-> Byungchul Park <byungchul@sk.com> writes:
->
-> > On Wed, May 28, 2025 at 11:29:11AM +0900, Byungchul Park wrote:
-> >> To simplify struct page, the effort to separate its own descriptor fro=
-m
-> >> struct page is required and the work for page pool is on going.
-> >>
-> >> Use netmem descriptor and APIs for page pool in mt76 code.
-> >>
-> >> Signed-off-by: Byungchul Park <byungchul@sk.com>
-> >> ---
-> >>  drivers/net/wireless/mediatek/mt76/dma.c      |  6 ++---
-> >>  drivers/net/wireless/mediatek/mt76/mt76.h     | 12 +++++-----
-> >>  .../net/wireless/mediatek/mt76/sdio_txrx.c    | 24 +++++++++---------=
--
-> >>  drivers/net/wireless/mediatek/mt76/usb.c      | 10 ++++----
-> >>  4 files changed, 26 insertions(+), 26 deletions(-)
-> >>
-> >> diff --git a/drivers/net/wireless/mediatek/mt76/dma.c b/drivers/net/wi=
-reless/mediatek/mt76/dma.c
-> >> index 35b4ec91979e..cceff435ec4a 100644
-> >> --- a/drivers/net/wireless/mediatek/mt76/dma.c
-> >> +++ b/drivers/net/wireless/mediatek/mt76/dma.c
-> >> @@ -820,10 +820,10 @@ mt76_add_fragment(struct mt76_dev *dev, struct m=
-t76_queue *q, void *data,
-> >>      int nr_frags =3D shinfo->nr_frags;
-> >>
-> >>      if (nr_frags < ARRAY_SIZE(shinfo->frags)) {
-> >> -            struct page *page =3D virt_to_head_page(data);
-> >> -            int offset =3D data - page_address(page) + q->buf_offset;
-> >> +            netmem_ref netmem =3D netmem_compound_head(virt_to_netmem=
-(data));
-> >> +            int offset =3D data - netmem_address(netmem) + q->buf_off=
-set;
-> >>
-> >> -            skb_add_rx_frag(skb, nr_frags, page, offset, len, q->buf_=
-size);
-> >> +            skb_add_rx_frag_netmem(skb, nr_frags, netmem, offset, len=
-, q->buf_size);
-> >>      } else {
-> >>              mt76_put_page_pool_buf(data, allow_direct);
-> >>      }
-> >> diff --git a/drivers/net/wireless/mediatek/mt76/mt76.h b/drivers/net/w=
-ireless/mediatek/mt76/mt76.h
-> >> index 5f8d81cda6cd..f075c1816554 100644
-> >> --- a/drivers/net/wireless/mediatek/mt76/mt76.h
-> >> +++ b/drivers/net/wireless/mediatek/mt76/mt76.h
-> >> @@ -1795,21 +1795,21 @@ int mt76_rx_token_consume(struct mt76_dev *dev=
-, void *ptr,
-> >>  int mt76_create_page_pool(struct mt76_dev *dev, struct mt76_queue *q)=
-;
-> >>  static inline void mt76_put_page_pool_buf(void *buf, bool allow_direc=
-t)
-> >>  {
-> >> -    struct page *page =3D virt_to_head_page(buf);
-> >> +    netmem_ref netmem =3D netmem_compound_head(virt_to_netmem(buf));
-> >>
-> >> -    page_pool_put_full_page(page->pp, page, allow_direct);
-> >
-> > To Mina,
-> >
-> > They touch ->pp field.  That's why I thought they use page pool.  Am I
-> > missing something?
->
-> It does, since commit: 2f5c3c77fc9b ("wifi: mt76: switch to page_pool all=
-ocator")
->
+Kumar Kartikeya Dwivedi <memxor@gmail.com> writes:
 
-I am very sorry, I was clearly hallucinating when I first looked at
-this. In my defence it was kinda late at night in my time zone :-D
+[...]
 
-Since this driver supports page_pool, I think it's reasonable to
-convert it to netmem. It may not be intreseted in supporting devmem or
-io_uring zcrx but there may be more netmem features in the future and
-future proofing it sounds good to me.
+> +struct {
+> +	int prog_off;
+> +	const char *errstr;
+> +} stream_error_arr[] = {
+> +	{
+> +		offsetof(struct stream, progs.stream_cond_break),
+> +		"ERROR: Timeout detected for may_goto instruction",
+> +	},
+> +	{
+> +		offsetof(struct stream, progs.stream_deadlock),
+> +		"ERROR: AA or ABBA deadlock detected",
+> +	},
+> +};
 
-Reviewed-by: Mina Almasry <almasrymina@google.com>
+Wild idea: instead of hand-coding this for each test, maybe add
+__bpf_stderr, __bpf_stdout annotations to test_loader.c?
+With intent for them to operate like __msg.
 
-(although I would like to see a virt_to_head_netmem helper FWIW).
-
---=20
-Thanks,
-Mina
+[...]
