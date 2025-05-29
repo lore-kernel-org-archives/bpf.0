@@ -1,17 +1,17 @@
 Received: from invmail4.hynix.com (exvmail4.hynix.com [166.125.252.92])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FC55253F22;
-	Thu, 29 May 2025 03:11:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26ADA2505AA;
+	Thu, 29 May 2025 03:11:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.125.252.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748488274; cv=none; b=V6v2CErsFxF9kQvfdRUrXYTmiTp9ECWxji4zRE2SimXxy93O/CkQc+ohvCQ6z1KvD4jcUmJwVtGxKeKp+UkSGUKJozFysKq7qbqYbs3rCRnlH84B2TyoYxQFGHDPxiZ2aTT4xNmGoDaygsAXwXKIWl3vBO8lprLkvW87hE5W0Ig=
+	t=1748488274; cv=none; b=tZC1OxvIWuZIW4xd7ylQenU58bTQx2jL0JLRahebqiv9QP1XWUdcW7SaGqYd8Nq4y1MjnWYWSq2B9rZAleBZ3y0C8jXAftJw4fXmiKTlBtdhdUHThXgfqWs333xwrpogD3ZLaEbMcFtdKs8Jslk3ckxyqK8GVyiRgmVFzGGT7sc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1748488274; c=relaxed/simple;
-	bh=Q61n92PSF6nkMDXjrMAO+5P+TPRY8etYRrZye4mpY8Y=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=aS/NXhkmRyYQB0cGtT/oEb2a+hBrpUKHgyWRiTl7PjBjZWnD0k6zZdIepr/hIKfq9/1fgYtnwJx4revTvTtAqnqgCMY9Rn7lhGOGYAI+KzGkaIZCg6X/Mdq0EculYGy0CDmcMlOrKw8+f86REBDRPGCmpDfklwqgtLEznfGI6uM=
+	bh=uIwR7axH9Equs+S/iZzeG25sMPe0xPv7iodn8Q2LgeY=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=XM3oOfF0L/PnT22C/Rl5Ksbs6pF8gpbCB/GHmN8KhSfcCjOzeVg8AZdYo3rGDU4DxmKitk9cRO6u2zn1T43fFeKH8q1PWCUwiaKgTe/AbTMz1HV2EDHaIczSOBtV0ZoqyaUwVL27D0OB517f5PQmd8jFuC8ht2rHclMPEJuEQlQ=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com; spf=pass smtp.mailfrom=sk.com; arc=none smtp.client-ip=166.125.252.92
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sk.com
-X-AuditID: a67dfc5b-681ff7000002311f-7b-6837d04350d9
+X-AuditID: a67dfc5b-681ff7000002311f-47-6837d042ae70
 From: Byungchul Park <byungchul@sk.com>
 To: willy@infradead.org,
 	netdev@vger.kernel.org
@@ -47,40 +47,40 @@ Cc: linux-kernel@vger.kernel.org,
 	linux-rdma@vger.kernel.org,
 	bpf@vger.kernel.org,
 	vishal.moola@gmail.com
-Subject: [RFC v3 18/18] page_pool: access ->pp_magic through struct netmem_desc in page_pool_page_is_pp()
-Date: Thu, 29 May 2025 12:10:47 +0900
-Message-Id: <20250529031047.7587-19-byungchul@sk.com>
+Subject: [RFC v3 13/18] netmem: remove __netmem_get_pp()
+Date: Thu, 29 May 2025 12:10:42 +0900
+Message-Id: <20250529031047.7587-14-byungchul@sk.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20250529031047.7587-1-byungchul@sk.com>
 References: <20250529031047.7587-1-byungchul@sk.com>
-X-Brightmail-Tracker: H4sIAAAAAAAAAzWRa0hTcRjG+++cnXOczk7L6mSgtQhN0DQs3w+amlDnQ0FpFGmQI09teW1T
-	m91QM03JZd7IuWBa3oXFtDlFLU28lKB4iXkpRVFIUktzeMnKiX778Tw8v/fDS2GiNtyekkXF
-	cvIoSYSYEOCCWZti14BeL6l7t9EaNLpqAqqWlVA2buSDptKA4PfKCAmLbR0EvC4yY6DpScFh
-	SbeKwVT7BAljpdM4NKbVYTDxvJOAzJQ1DJKN5TzoNaj4kLtagkFd4jgJ/Q0aAr5V/+PDdGsm
-	Dl3qChzGVH7Qrt0L5s8/ELTp6nhgfvaKgJw+LQGTKWMI+j5O4FCYpEKgazbxYW1ZQ/gdYmsr
-	hnhsvforyWr1cWxNuQubYerDWH1lOsHqF7JJdvRLI8F2vlzD2XrjIo/NfDxHsL+mhnF2vnmQ
-	YHW1gzjbrW0j2UW9wwU6WOAdxkXI4jn5sVOhAmlaYTMvZlSk1NfPkolocmcGsqIY2pN52l9I
-	bvP4p1zCwgTtxJhMK5iF7WgPZnGiA89AAgqj5/jMlGaNZyl20zIm19C5wRSF00eYvlwfSyyk
-	TzA5pYYtpyNT9fbDpsdqI8+vyd+cijZuFWS0EBYnQy+RTNL8+tZgP9NSbsKzkFCLdlQikSwq
-	PlIii/B0kyZEyZRuN6Ij9Wjjt6UP/4QY0UJvUCuiKSS2EXYiL6mIL4lXJES2IobCxHbCZN+T
-	UpEwTJJwj5NHX5fHRXCKVnSAwsX7hMfNd8NE9C1JLBfOcTGcfLvlUVb2icgpP6nEP3rA1vrB
-	zfrVy4qWkHOlZVm2wZdmzroHvhhw9lAO+w5ljcSFBw56f1cp17uyQ4OcTwc0XZtR4XvU5qOP
-	emyzh5waXA/vGi9WL8nTS8ryzvMuOvpPY+lNDYrUpOn7Dgev9r4jBMKivNSKO098z0S+L7ji
-	8Dda5fPT5o3h9pQYV0glHi6YXCH5D8nIS/zXAgAA
-X-Brightmail-Tracker: H4sIAAAAAAAAAzWRe0hTcRzF/d17d3cdzW5L8mJ/BIMoCjXN5beslCi6+Ucq9PSfvOjVDeeU
-	TZdLxPkAzdRSh88JK8k3TTaZU3zUFJ0VJIpiZSoTRSLt4QN1QanRfx/O4Zzzx6FwSRPhSylU
-	abxaxSmlpIgQ3QzN87syFiI/U2g+D0ZzOwltWxnQNG8XgLHVhmB9+7MQ1oZGSGh4vomD8UM+
-	ARvmHRwWh11CmGtcIqC3oAsH11MnCSX5bhxy7c0YDNaPCmDMVioAw85LHLr080KY6DGSMNv+
-	RwBLjhICRmtbCJgrDYdh0xHYfPcNwZC5C4PN4noSKsZNJCzkzyEYH3QRUJdTisDcPy0A95aR
-	DJeynS0fMba79ouQNVnSWWvzKbZoehxnLa2PSdbyq1zIzkz1kqyz2k2w3fY1jC3JWyXZn4uf
-	CPZ7/yTJNiz/wFhz5yTBvjcNCaMOxYguxvNKhZZXB1yOFckL6vqx1BlJhqV7RahHCweLkCfF
-	0MHM/FsDucckfYKZnt7G99ibDmTWXCNEERJROL0qYBaNbmzPOEwrGIPNucsURdDHmXHDpT1Z
-	TMuYikab8F/nMaat4/V+j+euXmmt3I9Kdrdqit6Qz5DIhDxakbdCpU3mFEqZvyZJrlMpMvzj
-	UpItaPe+xqzfZXa0PnHdgWgKSQ+InShELhFwWo0u2YEYCpd6i3PDzskl4nhO94hXpzxQpyt5
-	jQMdpQipjzjiLh8roRO5ND6J51N59X8Xozx99SizD1xV9dnXIjK9guV+WX1TbaHF87MPQ4J1
-	0SkVhspyWecrR1yMCpuMDQrA8K/3Q1p8Eysj8/KD7gxwvn2346tk9ls3fAaq9YPRGy8Efsvd
-	Vwv8JdaphISzqg5bdJmo/V6hNr3nZOcFL11COPekZiMn6nRotnnFw7odttMXuS4lNHIu8BSu
-	1nB/AUwxzXe6AgAA
+X-Brightmail-Tracker: H4sIAAAAAAAAAzWRa0hTYRjHfXfec3Zcrk7T8lhQNoxIULOsng9dzEhePxRR2IdEbOTRjeaF
+	rZZGmdWiGrrCRXQ50UzMeWsxbc5QSzM1ijQrm92shVFQWq3sMrvMid9+PM//938+PCyl6MRz
+	WE3ubkGXq9IqGRmWfQopj0nqW6leIopxINrrGKj9WQBVr100iDVOBN9+PZeCt7ObgYryMQrE
+	XiOG7/bfFAx3eaQwdOUdhpZjTRR4TvYwUGr0UXDYZZNAn9NMw+nflRQ0Fb+WwqMbIgOv6v7R
+	8K6jFMPd89UYhsyJ0GWdDWP3PiLotDdJYKzkIgOWfisDb41DCPpvezBcOGRGYG9z0+D7KTKJ
+	C0hj9aCENJ9/KSVWxx7SYIsmJnc/RRw1Jxji+FomJS8GWhjSc9aHSbPLKyGlR0YY8mX4GSaj
+	bU8YYm98gsl9a6eUeB3zNnPbZasyBa3GIOji1uyQqW13x3H+JVmB6DmOi9Ed1oSCWZ5L4Ed9
+	9ZIp/lDmoieY4RbxbvcvaoLDuHje6+nGJiRjKW6E5odFX0AI5YD/0WwJMOYW8p/7Wv0yy8q5
+	5fyDsozJzvl87bVbgZ5g//hMw5lAXOG/dc7Uzkx08tx3KX/5qYgmhQi+3ebGp5DcioJqkEKT
+	a8hRabQJserCXE1B7M68HAfy//bKgfE0F/rat7UDcSxShsh70Eq1glYZ9IU5HYhnKWWY/PDa
+	FWqFPFNVuE/Q5WXo9mgFfQeay2JluHzp2N5MBZet2i3sEoR8QTe1lbDBc4pRUYphgElPv7dh
+	ZoLlWUJKqvbyttZlM2ZFBhmLFp/OcqxPTw7rNU//kx1zYnZ9UNX765eSV0co9nqc8LRHLFrm
+	Pho+XvTQGRXpvLmUJL39q31Mb0qprMi6Gv+nWROV0+2q5NMGIzdqSiwH41IH1rH6N6F0RMVI
+	9/T9Hw9sgaZpXJ0S69Wq+GhKp1f9B7yxTVrXAgAA
+X-Brightmail-Tracker: H4sIAAAAAAAAAzWRa0hTYRjHe3fOzs5Gg9MUO2mRLCKQWgpeHqhMCuokkZZdyC868+CGOmVT
+	0UIyJ2RDrTSsbNJK03mBibdNMavNK0qaZmpWk8msvJfmbaKp0bcf/9vz4SExUSnuSsoVCaxS
+	IY0REwJccOGY+sipXj+ZZ9aIGLSGSgIqlpOhdNTEBW15PYKFlREezLe0E1D0YhEDbU8GDn8M
+	qxjY22w8sJaM49B014iB7X4HAdkZDgzSTXoOWAo7udBbn8OFR6uvMDCmjfKgv1FLwLfKDS6M
+	m7Nx6Cwow8GaEwBtOhdY7JpC0GIwcmAxq5CAvD4dAWMZVgR9FhsOz+7kIDA0D3HBsawlAsRM
+	bdkwh2ko+MpjdNWJTI3eg9EM9WFMdfk9gqn+nctjvnxqIpiOJw6caTDNc5hs9QzB/LJ/xpnZ
+	5gGCKfoxx2EMtQM4061r4QXvChUcj2Rj5Ems8qh/uECm71zD458LkrW2TDwNtZIaxCdpypv+
+	mWvibjFBHaKHhlawLXamvOh5WzuuQQISo2a4tF3r4GwZThTQSw1524xTB+m53tebZZIUUj70
+	+9ywf5v76Yqqt9s7/E05vyZ/Oy7avPVU8454gAQ6tKMcOcsVSbFSeYyPRBUtS1HIkyU34mKr
+	0eb7SlLXHprQQv9ZM6JIJN4p7EB+MhFXmqRKiTUjmsTEzsL0k74ykTBSmnKTVcaFKRNjWJUZ
+	uZG4eLcw8BobLqKipAlsNMvGs8r/Lofku6YhPio2u3RNhdga0rIz486Ig89Zdl3kH9Acdory
+	SV28Pp3ysTjH3fuNS3Re6HJQq2RwMtVd7e55OzDCaJ+uX3C83LDqu/ehgtn09cq6Jd+Ax+uR
+	34P8J6suX5JGRfA+9NSFnB70dTtRar9qG9jTe4uvHrwyIRmb2DvcmFksMbadt4hxlUzq5YEp
+	VdK/0he7z7oCAAA=
 X-CFilter-Loop: Reflected
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -88,82 +88,41 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-To simplify struct page, the effort to separate its own descriptor from
-struct page is required and the work for page pool is on going.
-
-To achieve that, all the code should avoid directly accessing page pool
-members of struct page.
-
-Access ->pp_magic through struct netmem_desc instead of directly
-accessing it through struct page in page_pool_page_is_pp().  Plus, move
-page_pool_page_is_pp() from mm.h to netmem.h to use struct netmem_desc
-without header dependency issue.
+There are no users of __netmem_get_pp().  Remove it.
 
 Signed-off-by: Byungchul Park <byungchul@sk.com>
+Reviewed-by: Mina Almasry <almasrymina@google.com>
 ---
- include/linux/mm.h   | 12 ------------
- include/net/netmem.h | 14 ++++++++++++++
- mm/page_alloc.c      |  1 +
- 3 files changed, 15 insertions(+), 12 deletions(-)
+ include/net/netmem.h | 16 ----------------
+ 1 file changed, 16 deletions(-)
 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 8dc012e84033..de10ad386592 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -4311,16 +4311,4 @@ int arch_lock_shadow_stack_status(struct task_struct *t, unsigned long status);
-  */
- #define PP_MAGIC_MASK ~(PP_DMA_INDEX_MASK | 0x3UL)
- 
--#ifdef CONFIG_PAGE_POOL
--static inline bool page_pool_page_is_pp(struct page *page)
--{
--	return (page->pp_magic & PP_MAGIC_MASK) == PP_SIGNATURE;
--}
--#else
--static inline bool page_pool_page_is_pp(struct page *page)
--{
--	return false;
--}
--#endif
--
- #endif /* _LINUX_MM_H */
 diff --git a/include/net/netmem.h b/include/net/netmem.h
-index f05a8b008d00..9e4ed3530788 100644
+index 74f269c6815d..ef639b5c70ec 100644
 --- a/include/net/netmem.h
 +++ b/include/net/netmem.h
-@@ -53,6 +53,20 @@ NETMEM_DESC_ASSERT_OFFSET(pp_ref_count, pp_ref_count);
-  */
- static_assert(sizeof(struct netmem_desc) <= offsetof(struct page, _refcount));
+@@ -239,22 +239,6 @@ static inline struct net_iov *__netmem_clear_lsb(netmem_ref netmem)
+ 	return (struct net_iov *)((__force unsigned long)netmem & ~NET_IOV);
+ }
  
-+#ifdef CONFIG_PAGE_POOL
-+static inline bool page_pool_page_is_pp(struct page *page)
-+{
-+	struct netmem_desc *desc = (__force struct netmem_desc *)page;
-+
-+	return (desc->pp_magic & PP_MAGIC_MASK) == PP_SIGNATURE;
-+}
-+#else
-+static inline bool page_pool_page_is_pp(struct page *page)
-+{
-+	return false;
-+}
-+#endif
-+
- /* net_iov */
- 
- DECLARE_STATIC_KEY_FALSE(page_pool_mem_providers);
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index 8c75433ff9a4..40f956cee2d8 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -55,6 +55,7 @@
- #include <linux/delayacct.h>
- #include <linux/cacheinfo.h>
- #include <linux/pgalloc_tag.h>
-+#include <net/netmem.h>
- #include <asm/div64.h>
- #include "internal.h"
- #include "shuffle.h"
+-/**
+- * __netmem_get_pp - unsafely get pointer to the &page_pool backing @netmem
+- * @netmem: netmem reference to get the pointer from
+- *
+- * Unsafe version of netmem_get_pp(). When @netmem is always page-backed,
+- * e.g. when it's a header buffer, performs faster and generates smaller
+- * object code (avoids clearing the LSB). When @netmem points to IOV,
+- * provokes invalid memory access.
+- *
+- * Return: pointer to the &page_pool (garbage if @netmem is not page-backed).
+- */
+-static inline struct page_pool *__netmem_get_pp(netmem_ref netmem)
+-{
+-	return __netmem_to_page(netmem)->pp;
+-}
+-
+ static inline struct page_pool *netmem_get_pp(netmem_ref netmem)
+ {
+ 	return __netmem_clear_lsb(netmem)->pp;
 -- 
 2.17.1
 
