@@ -1,21 +1,21 @@
-Received: from 69-171-232-181.mail-mxout.facebook.com (69-171-232-181.mail-mxout.facebook.com [69.171.232.181])
+Received: from 66-220-144-179.mail-mxout.facebook.com (66-220-144-179.mail-mxout.facebook.com [66.220.144.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5159A23C8AA
-	for <bpf@vger.kernel.org>; Fri, 30 May 2025 17:38:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B6112609FD
+	for <bpf@vger.kernel.org>; Fri, 30 May 2025 17:38:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748626712; cv=none; b=FdRW6J/jLr6VAHjspVuCEx6ckoHoKIY+rxf80bmSB/jPDvQvZciHA48fhzLCCBvhBnsQbo9gdf2PjmOasvhxreZAtzzgu/+Brz9gDXrNgdxVZ11AJWSQnIBDgfTHT8ckTOLz+9aU/I1C4awGGx0POEbPo2uqKen0Xlykrhqs4tA=
+	t=1748626724; cv=none; b=EkWgvHDPN9tDkNiZHAUSDTXFFAwqejU/oEW4kFvN2OuQtW1Z6+V9AgrNK6AbgRJPNdGoSsoBSHBWq9MgCvacXcg3WrrIXJ2DlO5vwe/7guglvYSiBDG3qoECgHRYLwj3yrhvb7JmQ41xpKN2O2CSquWZUi5fse9mh5m8eras+Fc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748626712; c=relaxed/simple;
-	bh=MGoStATA3ngYU/7c7cMvbVk/UvgIiC2kr1wlfVWv9xA=;
+	s=arc-20240116; t=1748626724; c=relaxed/simple;
+	bh=1D7k5ZoOUIjdasVeus6Xm3V9VHldFXPDrrlkYLpRHoc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=rsKctkKK8Yb0RzYmzfT901Ry3B+1opAokCCXMP+11FrtZoYcix9cSeikDbk+R7q+ausvkwy5SDlLcaaCsxFMp+ofzV9Wuj1KYpy/nrILyoKYHM0rY8tKcPXEyevaQrNvJ4VnsdTc2MX1LrCkn9mIiLT/VqHETt2jC4C/f1cmeBQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.181
+	 MIME-Version; b=RoqapVhp6ztXCBQ8+CA/2lDbgM6dYvKKhfFUAmpr8Qjts8Or8XJmpsiMcI3qi8xydXBb5UTXq7CcsCQfUi8mgaC/0Ha6UwuKqN6Aokeyv37ih4UaQxjAoySxA+ONltcwQOihAygBwTXBPQcbtG1C0dLP8OrycE4kjgV5C59yP/c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id CD4E788B38D6; Fri, 30 May 2025 10:38:17 -0700 (PDT)
+	id 2361F88B398D; Fri, 30 May 2025 10:38:33 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -23,9 +23,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	kernel-team@fb.com,
 	Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf-next v4 1/5] cgroup: Add bpf prog revisions to struct cgroup_bpf
-Date: Fri, 30 May 2025 10:38:17 -0700
-Message-ID: <20250530173817.1823858-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v4 4/5] selftests/bpf: Move some tc_helpers.h functions to test_progs.h
+Date: Fri, 30 May 2025 10:38:33 -0700
+Message-ID: <20250530173833.1825358-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.47.1
 In-Reply-To: <20250530173812.1823479-1-yonghong.song@linux.dev>
 References: <20250530173812.1823479-1-yonghong.song@linux.dev>
@@ -37,51 +37,97 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-One of key items in mprog API is revision for prog list. The revision
-number will be increased if the prog list changed, e.g., attach, detach
-or replace.
+Move static inline functions id_from_prog_fd() and id_from_link_fd()
+from prog_tests/tc_helpers.h to test_progs.h so these two functions
+can be reused for later cgroup mprog selftests.
 
-Add 'revisions' field to struct cgroup_bpf, representing revisions for
-all cgroup related attachment types. The initial revision value is
-set to 1, the same as kernel mprog implementations.
-
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- include/linux/bpf-cgroup-defs.h | 1 +
- kernel/cgroup/cgroup.c          | 5 +++++
- 2 files changed, 6 insertions(+)
+ .../selftests/bpf/prog_tests/tc_helpers.h     | 28 -------------------
+ tools/testing/selftests/bpf/test_progs.h      | 28 +++++++++++++++++++
+ 2 files changed, 28 insertions(+), 28 deletions(-)
 
-diff --git a/include/linux/bpf-cgroup-defs.h b/include/linux/bpf-cgroup-d=
-efs.h
-index 0985221d5478..c9e6b26abab6 100644
---- a/include/linux/bpf-cgroup-defs.h
-+++ b/include/linux/bpf-cgroup-defs.h
-@@ -63,6 +63,7 @@ struct cgroup_bpf {
- 	 */
- 	struct hlist_head progs[MAX_CGROUP_BPF_ATTACH_TYPE];
- 	u8 flags[MAX_CGROUP_BPF_ATTACH_TYPE];
-+	u64 revisions[MAX_CGROUP_BPF_ATTACH_TYPE];
+diff --git a/tools/testing/selftests/bpf/prog_tests/tc_helpers.h b/tools/=
+testing/selftests/bpf/prog_tests/tc_helpers.h
+index 924d0e25320c..d52a62af77bf 100644
+--- a/tools/testing/selftests/bpf/prog_tests/tc_helpers.h
++++ b/tools/testing/selftests/bpf/prog_tests/tc_helpers.h
+@@ -8,34 +8,6 @@
+ # define loopback 1
+ #endif
 =20
- 	/* list of cgroup shared storages */
- 	struct list_head storages;
-diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
-index a723b7dc6e4e..312c6a8b55bb 100644
---- a/kernel/cgroup/cgroup.c
-+++ b/kernel/cgroup/cgroup.c
-@@ -2074,6 +2074,11 @@ static void init_cgroup_housekeeping(struct cgroup=
- *cgrp)
- 	for_each_subsys(ss, ssid)
- 		INIT_LIST_HEAD(&cgrp->e_csets[ssid]);
-=20
-+#ifdef CONFIG_CGROUP_BPF
-+	for (int i =3D 0; i < ARRAY_SIZE(cgrp->bpf.revisions); i++)
-+		cgrp->bpf.revisions[i] =3D 1;
-+#endif
-+
- 	init_waitqueue_head(&cgrp->offline_waitq);
- 	INIT_WORK(&cgrp->release_agent_work, cgroup1_release_agent);
+-static inline __u32 id_from_prog_fd(int fd)
+-{
+-	struct bpf_prog_info prog_info =3D {};
+-	__u32 prog_info_len =3D sizeof(prog_info);
+-	int err;
+-
+-	err =3D bpf_obj_get_info_by_fd(fd, &prog_info, &prog_info_len);
+-	if (!ASSERT_OK(err, "id_from_prog_fd"))
+-		return 0;
+-
+-	ASSERT_NEQ(prog_info.id, 0, "prog_info.id");
+-	return prog_info.id;
+-}
+-
+-static inline __u32 id_from_link_fd(int fd)
+-{
+-	struct bpf_link_info link_info =3D {};
+-	__u32 link_info_len =3D sizeof(link_info);
+-	int err;
+-
+-	err =3D bpf_link_get_info_by_fd(fd, &link_info, &link_info_len);
+-	if (!ASSERT_OK(err, "id_from_link_fd"))
+-		return 0;
+-
+-	ASSERT_NEQ(link_info.id, 0, "link_info.id");
+-	return link_info.id;
+-}
+-
+ static inline __u32 ifindex_from_link_fd(int fd)
+ {
+ 	struct bpf_link_info link_info =3D {};
+diff --git a/tools/testing/selftests/bpf/test_progs.h b/tools/testing/sel=
+ftests/bpf/test_progs.h
+index 870694f2a359..df2222a1806f 100644
+--- a/tools/testing/selftests/bpf/test_progs.h
++++ b/tools/testing/selftests/bpf/test_progs.h
+@@ -460,6 +460,34 @@ static inline void *u64_to_ptr(__u64 ptr)
+ 	return (void *) (unsigned long) ptr;
  }
+=20
++static inline __u32 id_from_prog_fd(int fd)
++{
++	struct bpf_prog_info prog_info =3D {};
++	__u32 prog_info_len =3D sizeof(prog_info);
++	int err;
++
++	err =3D bpf_obj_get_info_by_fd(fd, &prog_info, &prog_info_len);
++	if (!ASSERT_OK(err, "id_from_prog_fd"))
++		return 0;
++
++	ASSERT_NEQ(prog_info.id, 0, "prog_info.id");
++	return prog_info.id;
++}
++
++static inline __u32 id_from_link_fd(int fd)
++{
++	struct bpf_link_info link_info =3D {};
++	__u32 link_info_len =3D sizeof(link_info);
++	int err;
++
++	err =3D bpf_link_get_info_by_fd(fd, &link_info, &link_info_len);
++	if (!ASSERT_OK(err, "id_from_link_fd"))
++		return 0;
++
++	ASSERT_NEQ(link_info.id, 0, "link_info.id");
++	return link_info.id;
++}
++
+ int bpf_find_map(const char *test, struct bpf_object *obj, const char *n=
+ame);
+ int compare_map_keys(int map1_fd, int map2_fd);
+ int compare_stack_ips(int smap_fd, int amap_fd, int stack_trace_len);
 --=20
 2.47.1
 
