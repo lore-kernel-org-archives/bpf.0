@@ -1,65 +1,87 @@
-Received: from mx-rz-1.rrze.uni-erlangen.de (mx-rz-1.rrze.uni-erlangen.de [131.188.11.20])
+Received: from mx-rz-2.rrze.uni-erlangen.de (mx-rz-2.rrze.uni-erlangen.de [131.188.11.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A15BC2153EA;
-	Tue,  3 Jun 2025 20:53:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=131.188.11.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69A861F12F4;
+	Tue,  3 Jun 2025 21:03:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=131.188.11.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748984035; cv=none; b=ELFy+YGdY5DLhbgylEzEMR1STELxv61DVjwdibOVkQv1fyNKNJxkVav6Yr9/y/+Ou1MzD+g62Cn+A3mPHlNx4HLijZng5WzK2e+gQ4c8W96VoY121eg+j/5t3cSTQofGA5isw4abhm9DcvXT9ou3pu52ZS9eqfSNCapWcPu/0ho=
+	t=1748984636; cv=none; b=KM8SU6zMP3CN38nLl+5pDDeVkYgOguN9TZPR45fndMBEzG+u6zXGaRnaykIdjBOXxWWJoiM7YhcRjR6NoyskXDcosgvb4nXbQyPEgt75WXXI4bG8I2Aah8c1bAsmSMrM+4+vNv9SrEoYyjy0vCDryc2TgMyLrtT0ZPMD3mVKKcM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748984035; c=relaxed/simple;
-	bh=0BP/5dGCz0PCIngKdcnEAonCQdD6pNDUv6FrHnLlfWY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ikXte/1XXfEhmtO24ZYpcoHu8jQB7XFcPO/IaveQnZ76cg5X/CZqcxNcn/qutnvMySOZ3gcvJ0OvvmTVAwgmLCDqIeiTgfT06qCO50Bl5lGtRwBO2wbgNqSJPZge4RS35I6vMC/1Woz5Jp6SLyjhL0WcLgHPEa9y8trr1sKqPl4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fau.de; spf=pass smtp.mailfrom=fau.de; dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.b=xig0onIz; arc=none smtp.client-ip=131.188.11.20
+	s=arc-20240116; t=1748984636; c=relaxed/simple;
+	bh=W6Nhh3ZCRHLqwfzIjPbKNeTIxBcOEyxYHK4U+kynE/E=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=eQYhMJtIDHePSkfZ2iWaPqTK3fz0OWATJ8XyZ+6arZ0Dcq76aRHDVVeR/zQGQ4TjTVLo8AIbhEUxfnaHXnnMLy+FQy6+h1q8o32+SZN9Vt9aoDZbabd9b2xtRSyX+JYRn2X/8jCSAZIIgm1RFEMJkmjaYDLPNXBhYP4aOznVaq0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fau.de; spf=pass smtp.mailfrom=fau.de; dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.b=SYBaqtRb; arc=none smtp.client-ip=131.188.11.21
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fau.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fau.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.b="xig0onIz"
+	dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.b="SYBaqtRb"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fau.de; s=fau-2021;
-	t=1748983580; bh=7DaMB/8Bf1cVB5O1oatwGQNMO20xEogCqa42wONtoKI=;
-	h=From:To:Cc:Subject:Date:From:To:CC:Subject;
-	b=xig0onIzdeIMdm9UlibZ5uNfmNCxzj8tUsn97tYmL+98HujpF/us/mKxckBX/7x9a
-	 Q7I/cTXye7qPrHTRnqSUV9Fi64TesJKHGUANHo8J/wwjU6N30w38J8ob17Vwg48/dZ
-	 798N9vgx6VBIJMO+XzkZHemqEWzS+5qs0pGXhBdbsL/wG7t1Wcd/pz16NMFOM6+O9w
-	 iFUVgTCDAZvjBU4e7fPYO//yvseQfAGsvNZpSPqGr8caeSXiA7GPYelE7BtdUBo9iS
-	 IJGc3m2aE3I76j67yaXs/Qrdrb577tn/a9Q7pzv+2qEWrHktk95loLIVjXQ/6G/Esa
-	 yp9YFF+2ky/Ig==
+	t=1748984285; bh=xfzs1Ogf0DKZ/YULLmQfkygDrX6ZPmGjv16hUj4o9H0=;
+	h=From:To:Subject:Date:From:To:CC:Subject;
+	b=SYBaqtRb39acS5t+QgIbA5sTlWkgJzSPyuQBg1BDigIHp16Q2J/creWnuLgUDMWZJ
+	 HM92g2qDmrsm9ijFygECQZpwQg4b9fHx5AKuv6kh2x7aDcuzebqcLZlnVvcr0wKrNV
+	 hSoY28zujYOOGh8snrGw3+Cxg7/FDQiImLPk/gCq4lw0rs9C1EUAej/4+//y8Uk1XF
+	 LyIDw5qlnWUEEayv4TalHGl8qToxaNA8suYioxYyqfmvdkkZJv6+9TGWWyJvKavuoc
+	 /eDRiOqrKMYivjN3ntSu8Gd2+miv7iE3ZU1TYst+lOHPTTzDVoVPRO1xHnkS3iH4ky
+	 OYT1MNbk3MiTw==
 Received: from mx-rz-smart.rrze.uni-erlangen.de (mx-rz-smart.rrze.uni-erlangen.de [IPv6:2001:638:a000:1025::1e])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-rz-1.rrze.uni-erlangen.de (Postfix) with ESMTPS id 4bBjRc2yJlz8slT;
-	Tue,  3 Jun 2025 22:46:20 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at boeck1.rrze.uni-erlangen.de (RRZE)
+	by mx-rz-2.rrze.uni-erlangen.de (Postfix) with ESMTPS id 4bBjj90qyPzPjvv;
+	Tue,  3 Jun 2025 22:58:05 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at boeck4.rrze.uni-erlangen.de (RRZE)
 X-RRZE-Flag: Not-Spam
 X-RRZE-Submit-IP: 2001:9e8:3639:fe00:a21f:4ce4:8495:5578
 Received: from luis-tp.fritz.box (unknown [IPv6:2001:9e8:3639:fe00:a21f:4ce4:8495:5578])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	(Authenticated sender: U2FsdGVkX1/QoQQ0EeRSuWsH6+0EAiEPD2l8zEg0hjM=)
-	by smtp-auth.uni-erlangen.de (Postfix) with ESMTPSA id 4bBjRY1kNcz8st8;
-	Tue,  3 Jun 2025 22:46:17 +0200 (CEST)
+	(Authenticated sender: U2FsdGVkX1+JbA/3lyDF+n/+UvApQhduk6C5CJwWwrU=)
+	by smtp-auth.uni-erlangen.de (Postfix) with ESMTPSA id 4bBjj46tHzzPkFW;
+	Tue,  3 Jun 2025 22:58:00 +0200 (CEST)
 From: Luis Gerhorst <luis.gerhorst@fau.de>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>,
+To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Martin KaFai Lau <martin.lau@linux.dev>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	Song Liu <song@kernel.org>,
 	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
 	KP Singh <kpsingh@kernel.org>,
 	Stanislav Fomichev <sdf@fomichev.me>,
 	Hao Luo <haoluo@google.com>,
 	Jiri Olsa <jolsa@kernel.org>,
+	Puranjay Mohan <puranjay@kernel.org>,
+	Xu Kuohai <xukuohai@huaweicloud.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Hari Bathini <hbathini@linux.ibm.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Naveen N Rao <naveen@kernel.org>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Mykola Lysenko <mykolal@fb.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Luis Gerhorst <luis.gerhorst@fau.de>,
+	Henriette Herzog <henriette.herzog@rub.de>,
+	Saket Kumar Bhaskar <skb99@linux.ibm.com>,
+	Cupertino Miranda <cupertino.miranda@oracle.com>,
+	Jiayuan Chen <mrpre@163.com>,
+	Matan Shachnai <m.shachnai@gmail.com>,
+	Dimitar Kanaliev <dimitar.kanaliev@siteground.com>,
+	Shung-Hsi Yu <shung-hsi.yu@suse.com>,
+	Daniel Xu <dxu@dxuuu.xyz>,
 	bpf@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
-	Luis Gerhorst <luis.gerhorst@fau.de>
-Subject: [PATCH bpf-next] bpf: Clarify sanitize_check_bounds()
-Date: Tue,  3 Jun 2025 22:45:57 +0200
-Message-ID: <20250603204557.332447-1-luis.gerhorst@fau.de>
+	linuxppc-dev@lists.ozlabs.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf-next v4 0/9] bpf: Mitigate Spectre v1 using barriers
+Date: Tue,  3 Jun 2025 22:57:51 +0200
+Message-ID: <20250603205800.334980-1-luis.gerhorst@fau.de>
 X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -70,156 +92,173 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-As is, it appears as if pointer arithmetic is allowed for everything
-except PTR_TO_{STACK,MAP_VALUE} if one only looks at
-sanitize_check_bounds(). However, this is misleading as the function
-only works together with retrieve_ptr_limit() and the two must be kept
-in sync. This patch documents the interdependency and adds a check to
-ensure they stay in sync.
+This improves the expressiveness of unprivileged BPF by inserting
+speculation barriers instead of rejecting the programs.
 
-adjust_ptr_min_max_vals(): Because the preceding switch returns -EACCES
-for every opcode except for ADD/SUB, the sanitize_needed() following the
-sanitize_check_bounds() call is always true if reached. This means,
-unless sanitize_check_bounds() detected that the pointer goes OOB
-because of the ADD/SUB and returns -EACCES, sanitize_ptr_alu() always
-executes after sanitize_check_bounds().
+The approach was previously presented at LPC'24 [1] and RAID'24 [2].
 
-The following shows that this also implies that retrieve_ptr_limit()
-runs in all relevant cases.
+To mitigate the Spectre v1 (PHT) vulnerability, the kernel rejects
+potentially-dangerous unprivileged BPF programs as of
+commit 9183671af6db ("bpf: Fix leakage under speculation on mispredicted
+branches"). In [2], we have analyzed 364 object files from open source
+projects (Linux Samples and Selftests, BCC, Loxilb, Cilium, libbpf
+Examples, Parca, and Prevail) and found that this affects 31% to 54% of
+programs.
 
-Note that there are two calls to sanitize_ptr_alu(), these are simply
-needed to easily calculate the correct alu_limit as explained in
-commit 7fedb63a8307 ("bpf: Tighten speculative pointer arithmetic
-mask"). The truncation-simulation is already performed on the first
-call.
+To resolve this in the majority of cases this patchset adds a fall-back
+for mitigating Spectre v1 using speculation barriers. The kernel still
+optimistically attempts to verify all speculative paths but uses
+speculation barriers against v1 when unsafe behavior is detected. This
+allows for more programs to be accepted without disabling the BPF
+Spectre mitigations (e.g., by setting cpu_mitigations_off()).
 
-In the second sanitize_ptr_alu(commit_window = true), we always run
-retrieve_ptr_limit(), unless:
+For this, it relies on the fact that speculation barriers generally
+prevent all later instructions from executing if the speculation was not
+correct (not only loads). See patch 7 ("bpf: Fall back to nospec for
+Spectre v1") for a detailed description and references to the relevant
+vendor documentation (AMD and Intel x86-64, ARM64, and PowerPC).
 
-* can_skip_alu_sanititation() is true, notably `BPF_SRC(insn->code) ==
-  BPF_K`. BPF_K is fine because it means that there is no scalar
-  register (which could be subject to speculative scalar confusion due
-  to Spectre v4) that goes into the ALU operation. The pointer register
-  can not be subject to v4-based value confusion due to the nospec
-  added. Thus, in this case it would have been fine to also skip
-  sanitize_check_bounds().
+In [1] we have measured the overhead of this approach relative to having
+mitigations off and including the upstream Spectre v4 mitigations. For
+event tracing and stack-sampling profilers, we found that mitigations
+increase BPF program execution time by 0% to 62%. For the Loxilb network
+load balancer, we have measured a 14% slowdown in SCTP performance but
+no significant slowdown for TCP. This overhead only applies to programs
+that were previously rejected.
 
-* If we are on a speculative path (`vstate->speculative`) and in the
-  second "commit" phase, sanitize_ptr_alu() always just returns 0. This
-  makes sense because there are no ALU sanitization limits to be learned
-  from speculative paths. Furthermore, because the sanitization will
-  ensure that pointer arithmetic stays in (architectural) bounds, the
-  sanitize_check_bounds() on the speculative path could also be skipped.
+I reran the expressiveness-evaluation with v6.14 and made sure the main
+results still match those from [1] and [2] (which used v6.5).
 
-The second case needs more attention: Assume we have some ALU operation
-that is used with scalars architecturally, but with a
-non-PTR_TO_{STACK,MAP_VALUE} pointer (e.g., PTR_TO_PACKET)
-speculatively. It might appear as if this would allow an unsanitized
-pointer ALU operations, but this can not happen because one of the
-following two always holds:
+Main design decisions are:
 
-* The type mismatch stems from Spectre v4, then it is prevented by a
-  nospec after the possibly-bypassed store involving the pointer. There
-  is no speculative path simulated for this case thus it never happens.
+* Do not use separate bytecode insns for v1 and v4 barriers (inspired by
+  Daniel Borkmann's question at LPC). This simplifies the verifier
+  significantly and has the only downside that performance on PowerPC is
+  not as high as it could be.
 
-* The type mismatch stems from a Spectre v1 gadget like the following:
+* Allow archs to still disable v1/v4 mitigations separately by setting
+  bpf_jit_bypass_spec_v1/v4(). This has the benefit that archs can
+  benefit from improved BPF expressiveness / performance if they are not
+  vulnerable (e.g., ARM64 for v4 in the kernel).
 
-    r1 = slow(0)
-    r4 = fast(0)
-    r3 = SCALAR // Spectre v4 scalar confusion
-    if (r1) {
-      r2 = PTR_TO_PACKET
-    } else {
-      r2 = 42
-    }
-    if (r4) {
-      r2 += r3
-      *r2
-    }
+* Do not remove the empty BPF_NOSPEC implementation for backends for
+  which it is unknown whether they are vulnerable to Spectre v1.
 
-  If `r2 = PTR_TO_PACKET` is indeed dead code, it will be sanitized to
-  `goto -1` (as is the case for the r4-if block). If it is not (e.g., if
-  `r1 = r4 = 1` is possible), it will also be explored on an
-  architectural path and retrieve_ptr_limit() will reject it.
+[1] https://lpc.events/event/18/contributions/1954/ ("Mitigating
+    Spectre-PHT using Speculation Barriers in Linux eBPF")
+[2] https://arxiv.org/pdf/2405.00078 ("VeriFence: Lightweight and
+    Precise Spectre Defenses for Untrusted Linux Kernel Extensions")
 
-To summarize, the exception for `vstate->speculative` is safe.
+Changes:
 
-Back to retrieve_ptr_limit(): It only allows the ALU operation if the
-involved pointer register (can be either source or destination for ADD)
-is PTR_TO_STACK or PTR_TO_MAP_VALUE. Otherwise, it returns -EOPNOTSUPP.
+* v3 -> v4:
+  - Remove insn parameter from do_check_insn() and extract
+    process_bpf_exit_full as a function as requested by Eduard
+  - Investigate apparent sanitize_check_bounds() bug reported by
+    Kartikeya (does appear to not be a bug but only confusing code),
+    sent separate patch to document it and add an assert
+  - Remove already-merged commit 1 ("selftests/bpf: Fix caps for
+    __xlated/jited_unpriv")
+  - Drop former commit 10 ("bpf: Allow nospec-protected var-offset stack
+    access") as it did not include a test and there are other places
+    where var-off is rejected. Also, none of the tested real-world
+    programs used var-off in the paper. Therefore keep the old behavior
+    for now and potentially prepare a patch that converts all cases
+    later if required.
+  - Add link to AMD lfence and PowerPC speculation barrier (ori 31,31,0)
+    documentation
+  - Move detailed barrier documentation to commit 7 ("bpf: Fall back to
+    nospec for Spectre v1")
+  - Link to v3: https://lore.kernel.org/all/20250501073603.1402960-1-luis.gerhorst@fau.de/
 
-Therefore, sanitize_check_bounds() returning 0 for
-non-PTR_TO_{STACK,MAP_VALUE} is fine because retrieve_ptr_limit() also
-runs for all relevant cases and prevents unsafe operations.
+* v2 -> v3:
+  - Fix
+    https://lore.kernel.org/oe-kbuild-all/202504212030.IF1SLhz6-lkp@intel.com/
+    and similar by moving the bpf_jit_bypass_spec_v1/v4() prototypes out
+    of the #ifdef CONFIG_BPF_SYSCALL. Decided not to move them to
+    filter.h (where similar bpf_jit_*() prototypes live) as they would
+    still have to be duplicated in bpf.h to be usable to
+    bpf_bypass_spec_v1/v4() (unless including filter.h in bpf.h is an
+    option).
+  - Fix
+    https://lore.kernel.org/oe-kbuild-all/202504220035.SoGveGpj-lkp@intel.com/
+    by moving the variable declarations out of the switch-case.
+  - Build touched C files with W=2 and bpf config on x86 to check that
+    there are no other warnings introduced.
+  - Found 3 more checkpatch warnings that can be fixed without degrading
+    readability.
+  - Rebase to bpf-next 2025-05-01
+  - Link to v2: https://lore.kernel.org/bpf/20250421091802.3234859-1-luis.gerhorst@fau.de/
 
-To summarize, we allow unsanitized pointer arithmetic with 64-bit
-ADD/SUB for the following instructions if the requirements from
-retrieve_ptr_limit() AND sanitize_check_bounds() hold:
+* v1 -> v2:
+  - Drop former commits 9 ("bpf: Return PTR_ERR from push_stack()") and 11
+    ("bpf: Fall back to nospec for spec path verification") as suggested
+    by Alexei. This series therefore no longer changes push_stack() to
+    return PTR_ERR.
+  - Add detailed explanation of how lfence works internally and how it
+    affects the algorithm.
+  - Add tests checking that nospec instructions are inserted in expected
+    locations using __xlated_unpriv as suggested by Eduard (also,
+    include a fix for __xlated_unpriv)
+  - Add a test for the mitigations from the description of
+    commit 9183671af6db ("bpf: Fix leakage under speculation on
+    mispredicted branches")
+  - Remove unused variables from do_check[_insn]() as suggested by
+    Eduard.
+  - Remove INSN_IDX_MODIFIED to improve readability as suggested by
+    Eduard. This also causes the nospec_result-check to run (and fail)
+    for jumping-ops. Add a warning to assert that this check must never
+    succeed in that case.
+  - Add details on the safety of patch 10 ("bpf: Allow nospec-protected
+    var-offset stack access") based on the feedback on v1.
+  - Rebase to bpf-next-250420
+  - Link to v1: https://lore.kernel.org/all/20250313172127.1098195-1-luis.gerhorst@fau.de/
 
-* ptr -=/+= imm32 (i.e. `BPF_SRC(insn->code) == BPF_K`)
+* RFC -> v1:
+  - rebase to bpf-next-250313
+  - tests: mark expected successes/new errors
+  - add bpt_jit_bypass_spec_v1/v4() to avoid #ifdef in
+    bpf_bypass_spec_v1/v4()
+  - ensure that nospec with v1-support is implemented for archs for
+    which GCC supports speculation barriers, except for MIPS
+  - arm64: emit speculation barrier
+  - powerpc: change nospec to include v1 barrier
+  - discuss potential security (archs that do not impl. BPF nospec) and
+    performance (only PowerPC) regressions
+  - Link to RFC: https://lore.kernel.org/bpf/20250224203619.594724-1-luis.gerhorst@fau.de/
 
-* PTR_TO_{STACK,MAP_VALUE} -= scalar
+Luis Gerhorst (9):
+  bpf: Move insn if/else into do_check_insn()
+  bpf: Return -EFAULT on misconfigurations
+  bpf: Return -EFAULT on internal errors
+  bpf, arm64, powerpc: Add bpf_jit_bypass_spec_v1/v4()
+  bpf, arm64, powerpc: Change nospec to include v1 barrier
+  bpf: Rename sanitize_stack_spill to nospec_result
+  bpf: Fall back to nospec for Spectre v1
+  selftests/bpf: Add test for Spectre v1 mitigation
+  bpf: Fall back to nospec for sanitization-failures
 
-* PTR_TO_{STACK,MAP_VALUE} += scalar
+ arch/arm64/net/bpf_jit.h                      |   5 +
+ arch/arm64/net/bpf_jit_comp.c                 |  28 +-
+ arch/powerpc/net/bpf_jit_comp64.c             |  80 ++-
+ include/linux/bpf.h                           |  11 +-
+ include/linux/bpf_verifier.h                  |   3 +-
+ include/linux/filter.h                        |   2 +-
+ kernel/bpf/core.c                             |  32 +-
+ kernel/bpf/verifier.c                         | 633 ++++++++++--------
+ tools/testing/selftests/bpf/progs/bpf_misc.h  |   4 +
+ .../selftests/bpf/progs/verifier_and.c        |   8 +-
+ .../selftests/bpf/progs/verifier_bounds.c     |  66 +-
+ .../bpf/progs/verifier_bounds_deduction.c     |  45 +-
+ .../selftests/bpf/progs/verifier_map_ptr.c    |  20 +-
+ .../selftests/bpf/progs/verifier_movsx.c      |  16 +-
+ .../selftests/bpf/progs/verifier_unpriv.c     |  65 +-
+ .../bpf/progs/verifier_value_ptr_arith.c      | 101 ++-
+ .../selftests/bpf/verifier/dead_code.c        |   3 +-
+ tools/testing/selftests/bpf/verifier/jmp32.c  |  33 +-
+ tools/testing/selftests/bpf/verifier/jset.c   |  10 +-
+ 19 files changed, 755 insertions(+), 410 deletions(-)
 
-* scalar += PTR_TO_{STACK,MAP_VALUE}
-
-To document the interdependency between sanitize_check_bounds() and
-retrieve_ptr_limit(), add a verifier_bug_if() to make sure they stay in
-sync.
-
-Signed-off-by: Luis Gerhorst <luis.gerhorst@fau.de>
-Reported-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Link: https://lore.kernel.org/bpf/CAP01T76HZ+s5h+_REqRFkRjjoKwnZZn9YswpSVinGicah1pGJw@mail.gmail.com/
-Link: https://lore.kernel.org/bpf/CAP01T75oU0zfZCiymEcH3r-GQ5A6GOc6GmYzJEnMa3=53XuUQQ@mail.gmail.com/
----
- kernel/bpf/verifier.c | 16 ++++++++++++----
- 1 file changed, 12 insertions(+), 4 deletions(-)
-
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index a7d6e0c5928b..e31f6b0ccb30 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -14284,7 +14284,7 @@ static int sanitize_check_bounds(struct bpf_verifier_env *env,
- 		}
- 		break;
- 	default:
--		break;
-+		return -EOPNOTSUPP;
- 	}
- 
- 	return 0;
-@@ -14311,7 +14311,7 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env,
- 	struct bpf_sanitize_info info = {};
- 	u8 opcode = BPF_OP(insn->code);
- 	u32 dst = insn->dst_reg;
--	int ret;
-+	int ret, bounds_ret;
- 
- 	dst_reg = &regs[dst];
- 
-@@ -14511,11 +14511,19 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env,
- 	if (!check_reg_sane_offset(env, dst_reg, ptr_reg->type))
- 		return -EINVAL;
- 	reg_bounds_sync(dst_reg);
--	if (sanitize_check_bounds(env, insn, dst_reg) < 0)
--		return -EACCES;
-+	bounds_ret = sanitize_check_bounds(env, insn, dst_reg);
-+	if (bounds_ret == -EACCES)
-+		return bounds_ret;
- 	if (sanitize_needed(opcode)) {
- 		ret = sanitize_ptr_alu(env, insn, dst_reg, off_reg, dst_reg,
- 				       &info, true);
-+		if (verifier_bug_if(!can_skip_alu_sanitation(env, insn)
-+				    && !env->cur_state->speculative
-+				    && bounds_ret
-+				    && !ret,
-+				    env, "Pointer type unsupported by sanitize_check_bounds() not rejected by retrieve_ptr_limit() as required")) {
-+			return -EFAULT;
-+		}
- 		if (ret < 0)
- 			return sanitize_err(env, insn, ret, off_reg, dst_reg);
- 	}
 
 base-commit: cd2e103d57e5615f9bb027d772f93b9efd567224
 -- 
