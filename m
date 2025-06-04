@@ -1,129 +1,108 @@
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B19891F3B87
-	for <bpf@vger.kernel.org>; Wed,  4 Jun 2025 16:55:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75BC61FC0E6
+	for <bpf@vger.kernel.org>; Wed,  4 Jun 2025 16:55:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749056121; cv=none; b=VpbWa0HXs2+yABl7mvrSk33h/N/vr/ZqNg4uGMOtulxkO/yjfs6R8+0XmYigrzQJo1sz0hMGKFHOnamwdM7juPGjFOUNa5i7zZDaimYVTxxzQrUZyY2SyI4Z5OEQF89o4Jv10D80blGZzc7w+R5ZpVg4qqVoQpv4DFd4rb6HPyg=
+	t=1749056131; cv=none; b=QmMY4IQw+shAcxYHunOG7CXlM2DmElhHK6VDhqICoK1tjesTXs2GKkdQjgI2h3xgmy8xgO6kKv8NMdm7y248GaPk9kZNni3P5w7kC01tZhOMiFlXglCzbA20nOayeX3vo3xPV+AxM+GCd5BXWFVzQHxJSd639ySGFSeEhQwuF+Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749056121; c=relaxed/simple;
-	bh=AM+A6P9w2wkT0X0Ss8sfC+rK4sLbZj/SNTI2K8QsSFg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=EZkzcWsE1l/e6fKzTDJlREq/arFkfIM6BHzE8dWLylZedYphIUphTDe5kG2Blaf6nVKZ+fQpGACBbiYiud+g8TTrUqQ8g2ZcHr4BWfPvSzAM2YL4fVq8QNaJS9Wg+B21CzunUUxtacQQkbLVSCOEIxpHAoz+sqOGjhhk6jEDzSk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=riotgames.com; spf=pass smtp.mailfrom=riotgames.com; dkim=pass (1024-bit key) header.d=riotgames.com header.i=@riotgames.com header.b=iXdqDuZl; arc=none smtp.client-ip=209.85.216.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=riotgames.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=riotgames.com
+	s=arc-20240116; t=1749056131; c=relaxed/simple;
+	bh=EnhN4jFQnJm7PRT0iNbSmd2PcRrtPdhuDjTVGsmqhS4=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=EabJEW6CyD4zh+sgYYUyDUckSbH5woT+TUnelrPkz7hzJTdM1DWT+5Dg4pvEI6hpDx5uUWiMrwRzN26xUVWgOSkoIvLtmpojABGAe0K2UHEAqnZwGxXib+hv+EWUBPnDSj7yIx9eSqNOQ6fvWbrdn5/yByfhx30AuULCo8DUDe4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=X76reIEM; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=riotgames.com header.i=@riotgames.com header.b="iXdqDuZl"
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-3124f18c214so53900a91.2
-        for <bpf@vger.kernel.org>; Wed, 04 Jun 2025 09:55:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=riotgames.com; s=riotgames; t=1749056119; x=1749660919; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AM+A6P9w2wkT0X0Ss8sfC+rK4sLbZj/SNTI2K8QsSFg=;
-        b=iXdqDuZlBH4gDyQQxyUTHepKQrLj73ZDyIYN5fhnC0YHLzKnBYRsD+LyXnLyYHPjlO
-         GPaiBxrQQ5epRK0oeJc4kP/t7aY7HhHVENHyLD03QmoSxF77odqBo2osHWJcmvtUhXAX
-         hhBi4s3uRpKFvQcyfJtSGAHBEvVmPcyoxENhw=
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="X76reIEM"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1749056127;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=EnhN4jFQnJm7PRT0iNbSmd2PcRrtPdhuDjTVGsmqhS4=;
+	b=X76reIEMqdgc7ORiIHmizaBp3GUUK8ox60wPouFSricciC25mFBbS++8r/NghXf5mijgFf
+	bM0Y1YwuFfDxvgiQSDTihM/YVLdS0r/kcXTBlWQ4lBYexFWZh9sQQBQX3rOJxKbzgwlzyp
+	fDjXJyauGB/75xOlQsOyO8TopfcJ5aM=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-60-sLPmYXczO3SDtjvRsCRXTQ-1; Wed, 04 Jun 2025 12:55:24 -0400
+X-MC-Unique: sLPmYXczO3SDtjvRsCRXTQ-1
+X-Mimecast-MFC-AGG-ID: sLPmYXczO3SDtjvRsCRXTQ_1749056122
+Received: by mail-ed1-f72.google.com with SMTP id 4fb4d7f45d1cf-604793191acso7154872a12.0
+        for <bpf@vger.kernel.org>; Wed, 04 Jun 2025 09:55:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749056119; x=1749660919;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1749056122; x=1749660922;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=AM+A6P9w2wkT0X0Ss8sfC+rK4sLbZj/SNTI2K8QsSFg=;
-        b=SMwsyBObz5bBx3Zc01EKS5pvnl3vheMKWEfMLereMbbaMXqWkvpi/r3W9EsjioCyfr
-         ov3rtudLM4eMfGuP6xY4JpmbeGf1d1oSjPwwQANpZN1Z/2jBrTmz+DU/i0UiuMovum4b
-         cMnQ3vja3/HEsAPZe7iR5DCvj5X6hBJnaHp2n1PdoIEU3zXdpondVj1NJHfDnKqI8mqg
-         EQd77cDeWCKmf4CXPSqzVNZKGZM73bwlfKJxG6CuCaw1LzlfE+fLf8NdKbizyJMWwt+D
-         oqhwM++hNa5rDytBW6YUGNBf2KdOEnsKm+AroKUcjj4/LqNwlqlK9yS2uY2e1wrd1052
-         vcvQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUvwVjp6489ndKPGqHp3Kl4rziRWcYmJisJ5whX7m0Zaw8tQiuTjB9DA6jHDh/8TrPfvpM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YypxyjkSPrVAbRn860nsp1DD9RDort2iQYSyh06WXNB6a9PKehw
-	O42hn3x5XIbKAmdaXgjNXE9JkipPB8UkjUlPMwWbBXggHDU6OgTvfttXJa5rkLBSPjoSXd5qgln
-	peFk2ikOmRDZddF0EfDMjP1fJmmAdL1b0YFklniIL2Q==
-X-Gm-Gg: ASbGnctMPae4lZgw+Nu16GqxUyl82WNjJOgDdXg5M03p+EERtjDhoLWYh6j2ShxNHSC
-	l8943343MAn1P6QDVg/xAmV8So2727Vkus0hhf0R/3TQ1m8nULvZ7o+l3uKMckKn2CYM8YQT5Jz
-	lFNgvwFLfcCt09oGvCzyxBXviwn6ROsweh
-X-Google-Smtp-Source: AGHT+IHSFm7AlkobZVkgSc2uHdOWwSJZnf8VUDuCELETibH45kd+R/oYzSGq4wkai7atxPvVDpyDGYc+gyHX+9/SSX8=
-X-Received: by 2002:a17:90b:3d02:b0:312:e9d:4002 with SMTP id
- 98e67ed59e1d1-3130cdad8e7mr5604061a91.28.1749056118925; Wed, 04 Jun 2025
- 09:55:18 -0700 (PDT)
+        bh=EnhN4jFQnJm7PRT0iNbSmd2PcRrtPdhuDjTVGsmqhS4=;
+        b=o4ElGh4x3cAef9f2+nuIUuppmI6YhcpxlOo1yAjND58UL6uC+f9Olf/YhXMvWS1wg0
+         FMDSsxUGiHhG3gg4BBdPnqOFq63NE2era/K72DkWd1DBo8NukcWj1oN1y/tNQ1AZUhog
+         w0kr09nlItKTOdiACWGPtwk0DTVtIm4bMw3paQlw0clZpXw441qCiJQ9+epCG0JduwY6
+         uyaKD6kUtCv8SRPSrkFqAzsp7yuUDUCik2bRuTszeVMOPu+iedvwnv17Gnf+roDgrCaZ
+         i2+3Zs/K55hC0WWq04Ok0bRQWrmEngcBR+eMI4z20QLJS2IbsNKRr85agsLean7qfy9L
+         LpSw==
+X-Forwarded-Encrypted: i=1; AJvYcCV3/jKvkCyOlFPXumoyWTcXA32pcWshFYWVO8WogsuDFplQoRQPiv+lJEpwkwAfyK31ciY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzyAaD1AHAvi6s8QBjYWzxpjboSFSEQvZ+JOics4aSIQURyNCmH
+	sznSMJ5A03lgaoQFzkGuQeBZ62/bovMgA/NkCyi8TZDn+r1W002V2CG+UaGO8AyVQwms2fZAqId
+	t48D43/uulVPs1FhuX8AVmGAYeR6mJ3LftuRNPmd8BDQqdOlr1yT0gA==
+X-Gm-Gg: ASbGncv0Y3czAP3wPU0ZPe5pMTEZpHJFmyY/l5r/UuiybSj95QdVAhQZvkIf9prMNVe
+	b+qigxstfGtbpli533Tvp9pqNyUzz4YlR66WTdr3QGVvP956hl3yroCwJhrVvjCJQTfFhnDh+a5
+	t9WliEmDq4aZ1HafLrfeErNhJ8QiwKfnTg0xnuMVi6n608Xh6b6VvKtCkjt5fj8BJb6jc27sxlN
+	VO9cbLEB3sdByv0wdMNyQ0n/mVWlpjUnkOwcHn0Jy3+smut5KCZXkWYK0Xe4eE7/gV7laCAn6Fz
+	ywCIQirF
+X-Received: by 2002:a50:9f8a:0:b0:606:f836:c656 with SMTP id 4fb4d7f45d1cf-606f836d433mr1955702a12.19.1749056122178;
+        Wed, 04 Jun 2025 09:55:22 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IF+BjJ2HDUdmh+5/RYHtCz7LviWdEXcE1ZllvhVdcERGB6/R14KgQ+G7LcqUq87LQrs0WIhnw==
+X-Received: by 2002:a50:9f8a:0:b0:606:f836:c656 with SMTP id 4fb4d7f45d1cf-606f836d433mr1955643a12.19.1749056121651;
+        Wed, 04 Jun 2025 09:55:21 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-60566c5a8f1sm9163889a12.20.2025.06.04.09.55.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Jun 2025 09:55:21 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+	id 0ABE61AA9160; Wed, 04 Jun 2025 18:55:20 +0200 (CEST)
+From: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To: Byungchul Park <byungchul@sk.com>, willy@infradead.org,
+ netdev@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+ kernel_team@skhynix.com, kuba@kernel.org, almasrymina@google.com,
+ ilias.apalodimas@linaro.org, harry.yoo@oracle.com, hawk@kernel.org,
+ akpm@linux-foundation.org, davem@davemloft.net, john.fastabend@gmail.com,
+ andrew+netdev@lunn.ch, asml.silence@gmail.com, tariqt@nvidia.com,
+ edumazet@google.com, pabeni@redhat.com, saeedm@nvidia.com,
+ leon@kernel.org, ast@kernel.org, daniel@iogearbox.net, david@redhat.com,
+ lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com, vbabka@suse.cz,
+ rppt@kernel.org, surenb@google.com, mhocko@suse.com, horms@kernel.org,
+ linux-rdma@vger.kernel.org, bpf@vger.kernel.org, vishal.moola@gmail.com
+Subject: Re: [RFC v4 09/18] page_pool: rename __page_pool_put_page() to
+ __page_pool_put_netmem()
+In-Reply-To: <20250604025246.61616-10-byungchul@sk.com>
+References: <20250604025246.61616-1-byungchul@sk.com>
+ <20250604025246.61616-10-byungchul@sk.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date: Wed, 04 Jun 2025 18:55:19 +0200
+Message-ID: <87sekfv43s.fsf@toke.dk>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250603150613.83802-1-minhquangbui99@gmail.com>
-In-Reply-To: <20250603150613.83802-1-minhquangbui99@gmail.com>
-From: Zvi Effron <zeffron@riotgames.com>
-Date: Wed, 4 Jun 2025 09:55:06 -0700
-X-Gm-Features: AX0GCFuTjwtD_LQoMjFITQPds6k3nNGJ-eA3Q34d-mo_X9J99JpFJ2MIxKJ-Rd8
-Message-ID: <CAC1LvL0xTSv9sBRYnD-ykDqQr+Reg7yB0uwAR158-+aAm1J1Ew@mail.gmail.com>
-Subject: Re: [PATCH net] virtio-net: drop the multi-buffer XDP packet in zerocopy
-To: Bui Quang Minh <minhquangbui99@gmail.com>
-Cc: netdev@vger.kernel.org, "Michael S. Tsirkin" <mst@redhat.com>, 
-	Jason Wang <jasowang@redhat.com>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>, 
-	=?UTF-8?Q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
-	virtualization@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	bpf@vger.kernel.org, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jun 3, 2025 at 8:09=E2=80=AFAM Bui Quang Minh <minhquangbui99@gmail=
-.com> wrote:
->
-> In virtio-net, we have not yet supported multi-buffer XDP packet in
-> zerocopy mode when there is a binding XDP program. However, in that
-> case, when receiving multi-buffer XDP packet, we skip the XDP program
-> and return XDP_PASS. As a result, the packet is passed to normal network
-> stack which is an incorrect behavior. This commit instead returns
-> XDP_DROP in that case.
+Byungchul Park <byungchul@sk.com> writes:
 
-Does it make more sense to return XDP_ABORTED? This seems like an unexpecte=
-d
-exception case to me, but I'm not familiar enough with virtio-net's multibu=
-ffer
-support.
+> Now that __page_pool_put_page() puts netmem, not struct page, rename it
+> to __page_pool_put_netmem() to reflect what it does.
+>
+> Signed-off-by: Byungchul Park <byungchul@sk.com>
+> Reviewed-by: Mina Almasry <almasrymina@google.com>
 
->
-> Fixes: 99c861b44eb1 ("virtio_net: xsk: rx: support recv merge mode")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Bui Quang Minh <minhquangbui99@gmail.com>
-> ---
-> drivers/net/virtio_net.c | 11 ++++++++---
-> 1 file changed, 8 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-> index e53ba600605a..4c35324d6e5b 100644
-> --- a/drivers/net/virtio_net.c
-> +++ b/drivers/net/virtio_net.c
-> @@ -1309,9 +1309,14 @@ static struct sk_buff *virtnet_receive_xsk_merge(s=
-truct net_device *dev, struct
-> ret =3D XDP_PASS;
-> rcu_read_lock();
-> prog =3D rcu_dereference(rq->xdp_prog);
-> - /* TODO: support multi buffer. */
-> - if (prog && num_buf =3D=3D 1)
-> - ret =3D virtnet_xdp_handler(prog, xdp, dev, xdp_xmit, stats);
-> + if (prog) {
-> + /* TODO: support multi buffer. */
-> + if (num_buf =3D=3D 1)
-> + ret =3D virtnet_xdp_handler(prog, xdp, dev, xdp_xmit,
-> + stats);
-> + else
-> + ret =3D XDP_DROP;
-> + }
-> rcu_read_unlock();
->
-> switch (ret) {
-> --
-> 2.43.0
->
->
+Reviewed-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
+
