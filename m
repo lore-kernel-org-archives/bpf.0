@@ -1,168 +1,148 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CDEF1922FD;
-	Wed,  4 Jun 2025 01:06:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from invmail4.hynix.com (exvmail4.skhynix.com [166.125.252.92])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 434A61F9F70;
+	Wed,  4 Jun 2025 02:53:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.125.252.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748999177; cv=none; b=ZHoPmqf0/m23BaZVevCos+BnfCDc8A7CIX2GBnHDt7UPMXFWVLW4SfCVFA9YQWtjlRbecHl3YDCuopy4WQg14GdirOp8ZPsvx76TMXUfhwBEnRPOYSzj/fd48ipwy0tQq9g5VLIz2KU03h6yCFOu7SlmL/nw0rp353x1KvSckbw=
+	t=1749005590; cv=none; b=Qpkak8PUCZmm+2xKdhig3K1c8IIPDOZyP49uABQL7oDw1fPEpCQj4Yye5VNfLFhz47bv1LRQP7dD3Ub3GJjMUZ4DRVcWW7+6sh2bUfJvgrbvmTMlV/BDoasAOsDnYQiG4lqHWsf5dG0KPDj84xDCQEaJGn5mZtAozYiB22kXbak=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748999177; c=relaxed/simple;
-	bh=6PpL0gCbXfBRyt7NE6srUXN+h5ji8hiZ69L/Eo6UrBg=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=jhqQAcQ5dLS00KPdyqfot/O1MuYC4abdFdzXC7sxHU+sDXTLCO6G/IZDX4FmzZMiO6CivQlS3tQ4YCnT7/ALqy1uN1uR2JbKUzJ8hLsHDssZuFzaat9F8kuorjU8kwbw3lkD6Z+pbTZ0jRwevAFNzFsLUwBa92kGpwA7AFQadjc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ojo1x7hC; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ojo1x7hC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25089C4CEED;
-	Wed,  4 Jun 2025 01:06:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748999177;
-	bh=6PpL0gCbXfBRyt7NE6srUXN+h5ji8hiZ69L/Eo6UrBg=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Ojo1x7hCoWGNW5Arp4D8puaMp4sbWeQ23srJA9c9v1+O+y+rfgp+XHbbhqz1NNqCp
-	 r5x7ibO+iY04Ii1XEGkjK7TYdRrlxHIub0fqPpFPm6lKLf/rGT38wmGub2F+DW//u2
-	 fUlDDzxCG3UwFY+mPI3NTHC4CssiwrXKdl9VO8nNnWvqXpCJxs57iH53HwAGhwlZWd
-	 XZg/OMC1iNhCUhjXmmfS2YR9FN8Hg1WVG+HkQEx+WdU5JHfULn5qXSO/ZDpqnHNSZw
-	 gL7fkJ4u19kwgIBNv8e6d/eMU58ng9X3vHj+6xK/B7FHqcZJ/wzDz2C4TfZ3Vp+gv/
-	 YwvuPSmg9rBSA==
-From: Sasha Levin <sashal@kernel.org>
-To: patches@lists.linux.dev,
-	stable@vger.kernel.org
-Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Sasha Levin <sashal@kernel.org>,
+	s=arc-20240116; t=1749005590; c=relaxed/simple;
+	bh=9wfY+yvRgQnruPB/Le46bQg63025QDIHYWA1g7RBE6I=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=j18ny/jhQFQlKGiT5gCEvhH/Cxehp/SIAWfbsa8zI71TZQf5FZZ7zNWdf3je+4CoM9jr0bj81RxtvPhOLMEKKMAARatTTdLHSWuxb2vUC5hPOlMJQHPxtz+NlOwF3j++ozXlK+e/XgDeR3TNQUyxo4+5gY7eTV2iPOYf+5NxCKs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com; spf=pass smtp.mailfrom=sk.com; arc=none smtp.client-ip=166.125.252.92
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sk.com
+X-AuditID: a67dfc5b-681ff7000002311f-14-683fb5093870
+From: Byungchul Park <byungchul@sk.com>
+To: willy@infradead.org,
+	netdev@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org,
+	kernel_team@skhynix.com,
+	kuba@kernel.org,
+	almasrymina@google.com,
+	ilias.apalodimas@linaro.org,
+	harry.yoo@oracle.com,
+	hawk@kernel.org,
+	akpm@linux-foundation.org,
+	davem@davemloft.net,
 	john.fastabend@gmail.com,
-	jakub@cloudflare.com,
-	netdev@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 32/33] bpf, sockmap: Fix data lost during EAGAIN retries
-Date: Tue,  3 Jun 2025 21:05:23 -0400
-Message-Id: <20250604010524.6091-32-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250604010524.6091-1-sashal@kernel.org>
-References: <20250604010524.6091-1-sashal@kernel.org>
+	andrew+netdev@lunn.ch,
+	asml.silence@gmail.com,
+	toke@redhat.com,
+	tariqt@nvidia.com,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	saeedm@nvidia.com,
+	leon@kernel.org,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	david@redhat.com,
+	lorenzo.stoakes@oracle.com,
+	Liam.Howlett@oracle.com,
+	vbabka@suse.cz,
+	rppt@kernel.org,
+	surenb@google.com,
+	mhocko@suse.com,
+	horms@kernel.org,
+	linux-rdma@vger.kernel.org,
+	bpf@vger.kernel.org,
+	vishal.moola@gmail.com
+Subject: [RFC v4 09/18] page_pool: rename __page_pool_put_page() to __page_pool_put_netmem()
+Date: Wed,  4 Jun 2025 11:52:37 +0900
+Message-Id: <20250604025246.61616-10-byungchul@sk.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20250604025246.61616-1-byungchul@sk.com>
+References: <20250604025246.61616-1-byungchul@sk.com>
+X-Brightmail-Tracker: H4sIAAAAAAAAAzWRa0hTcRjG/Z9zds5xOTktqdOCpFFZgpZl8v8QUxDilJVRQZRCLXdywzll
+	U9MiMJUycTNKKGzBMjKd1mpeNi9YeY/yks6ad5k4M3KWyzUvYU7x2+99Hp7fl5dE+a2YgJQp
+	UlilQiwX4lyMO+NTHMStDpcenO7jQK2hAofl7nT4cty8eulrAPyzMERAZ0s7Dp8/c6FQ252D
+	wXnDIgon22wEHCuxY7DhrgmFtoIOHKpzllCYZS5FYE+NhgMLF1+g0JQ5TsC+Oi0ORytWONDe
+	pMbgx6IyDI5pImCbbit0ffoJYIvBhEBX/lMcPuzV4XAiZwzA3mYbBp/c1gBoaLRy4JJbi0fs
+	YqrKBhCmtmiEYHTGVKayNJDJs/aijFF/D2eMcw8IZvhrA850PF7CmFqzE2HU2Q6c+T05iDGz
+	jf04Y6jqx5jPuhaCcRp3nqEucY9KWLksjVUeEF3hSls6C/Bk++b0giETkgnqfPOAN0lToXRh
+	VwO6wcZ/o7iHcSqAtloX1nI/KoR22tqxPMAlUcrBoSe1S4in2ELF0j96XxEexqg99F/NBPAw
+	jwqjWwtaiXWpP13+5v2ayHs1H3Y8WtvyqSO02mxBPVKaWiDoxrcOzvpgO/2h1IrdBzwd8NID
+	vkyRliiWyUODpRkKWXpwXFKiEaw+t+TWcowZzPWcawIUCYQ+PPOwSMrniNNUGYlNgCZRoR/P
+	f/9qxJOIM26wyqTLylQ5q2oCO0hMuI13yHVdwqfixSlsAssms8qNFiG9BZkg8MQxdVym6Gz8
+	Qsa1SS9HfVzdxMVTtQkXTvsOrtxpjypOcAVlN0ceD+9wu/XTPHzlaiDyrdurNssVNhMtskRL
+	Imdz3+W3jkTVL+4VBJw8rN09bon1iVH96rS3T00lfj+Pal7f7BqotiV0bPpiQ3P3SQXL8nqt
+	xi6xzDuHKgvDhJhKKg4JRJUq8X8dtS6g2AIAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAAzWRa0hTcRyG+++c/XfJxXGKnQwxBmZJzoSUXxfN6kOnPliEEGiko53adE7b
+	VFQQLU1LcmrZBZs0M81bTKbpFJGad8qKqeEtZzMlulipmZfKnNG3h+flfb+8fEJcSbrzleoE
+	VqOWqSRYSApD92f6Cp4cVOy+XREAemMthprFZHg0YeaCvroRwfzSKA/mOroxlJUuEKB/lUXC
+	D+MyAVNddh7YKqZJaM1pIsCe34MhL2uFgMvmSg60l/Ry4XWjjgtFy+UENGVM8KC/RY9hvHaV
+	C9OWPBJ6i6tIsOlCoMvgBgvPPyPoMDZxYOF6CYabVgOGySwbAmu7nYR7l3QIjG1DXFhZ1OMQ
+	CdNQNcxhmovf8hiDKZGpr/RhcoesBGOqvoYZ0+wNHjP2phUzPXdXSKbZPMdh8jJnMPN9aoRk
+	vrYNYqbswzcOY2wYJJkXhg7eSedw4QE5q1ImsRq/4CihoqMvH8dPOyfnjzZxMlDLplwk4NPU
+	Htr0exw7GFPe9NDQEuFgV8qfnrN3k7lIyCeoGS49pV/hOAIX6gz90fqY52CS8qJ/6iaRg0VU
+	IN2Z38n7N+pJ19Q9XR8SrPmxmTvrXTEVQOeZB4gCJDSgDdXIValOipUpVQFSbYwiRa1Mlp6L
+	izWhtf8q0n4VmtF8/1ELovhI4iQyjwUrxFxZkjYl1oJoPiFxFXnuXFMiuSwlldXERWoSVazW
+	grbySclm0fHTbJSYuiBLYGNYNp7V/E85fIF7Brr6qXxU4abDw4E5GUFVilZr/X1Z2r5ZMvqs
+	32zRCemfMI9jV+TbT2miH4gLF7sk0yPW9AKLYUt2auHAl9KI8HK3uslEr9yHiiJxceOhyCOD
+	KX3e8o06X8Ph7H5s29uyK/28EUcsODWHvl8NansZ6N5/y+PZoHxbmDThosu7HX5SCalVyPx9
+	CI1W9hcRWZbBuwIAAA==
+X-CFilter-Loop: Reflected
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.15.184
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
 
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
+Now that __page_pool_put_page() puts netmem, not struct page, rename it
+to __page_pool_put_netmem() to reflect what it does.
 
-[ Upstream commit 7683167196bd727ad5f3c3fc6a9ca70f54520a81 ]
-
-We call skb_bpf_redirect_clear() to clean _sk_redir before handling skb in
-backlog, but when sk_psock_handle_skb() return EAGAIN due to sk_rcvbuf
-limit, the redirect info in _sk_redir is not recovered.
-
-Fix skb redir loss during EAGAIN retries by restoring _sk_redir
-information using skb_bpf_set_redir().
-
-Before this patch:
-'''
-./bench sockmap -c 2 -p 1 -a --rx-verdict-ingress
-Setting up benchmark 'sockmap'...
-create socket fd c1:13 p1:14 c2:15 p2:16
-Benchmark 'sockmap' started.
-Send Speed 1343.172 MB/s, BPF Speed 1343.238 MB/s, Rcv Speed   65.271 MB/s
-Send Speed 1352.022 MB/s, BPF Speed 1352.088 MB/s, Rcv Speed   0 MB/s
-Send Speed 1354.105 MB/s, BPF Speed 1354.105 MB/s, Rcv Speed   0 MB/s
-Send Speed 1355.018 MB/s, BPF Speed 1354.887 MB/s, Rcv Speed   0 MB/s
-'''
-Due to the high send rate, the RX processing path may frequently hit the
-sk_rcvbuf limit. Once triggered, incorrect _sk_redir will cause the flow
-to mistakenly enter the "!ingress" path, leading to send failures.
-(The Rcv speed depends on tcp_rmem).
-
-After this patch:
-'''
-./bench sockmap -c 2 -p 1 -a --rx-verdict-ingress
-Setting up benchmark 'sockmap'...
-create socket fd c1:13 p1:14 c2:15 p2:16
-Benchmark 'sockmap' started.
-Send Speed 1347.236 MB/s, BPF Speed 1347.367 MB/s, Rcv Speed   65.402 MB/s
-Send Speed 1353.320 MB/s, BPF Speed 1353.320 MB/s, Rcv Speed   65.536 MB/s
-Send Speed 1353.186 MB/s, BPF Speed 1353.121 MB/s, Rcv Speed   65.536 MB/s
-'''
-
-Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
-Link: https://lore.kernel.org/r/20250407142234.47591-2-jiayuan.chen@linux.dev
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Byungchul Park <byungchul@sk.com>
+Reviewed-by: Mina Almasry <almasrymina@google.com>
 ---
+ net/core/page_pool.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-**YES** This commit should be backported to stable kernel trees. ##
-Extensive Analysis ### **Critical Bug Fix Nature** This is a **data loss
-bug** in the BPF sockmap subsystem that causes silent packet drops under
-load conditions. The commit adds a single line that restores essential
-redirect information during EAGAIN retry scenarios. ### **Code Change
-Analysis** The fix adds exactly one line at `net/core/skmsg.c:694`: ```c
-skb_bpf_set_redir(skb, psock->sk, ingress); ``` This line restores
-redirect information that was previously cleared by
-`skb_bpf_redirect_clear(skb)` at line 684. When `sk_psock_handle_skb()`
-returns `-EAGAIN` due to memory pressure or socket buffer limits, the
-work is rescheduled, but without this fix, the redirect information
-(`skb->_sk_redir`) would be lost. ### **Impact Without the Fix** 1.
-**Silent Data Loss**: When EAGAIN occurs, subsequent retry attempts find
-no redirect target (`skb_bpf_redirect_fetch()` returns NULL), causing
-packets to be dropped in `sk_psock_skb_redirect()` at lines 935-938. 2.
-**BPF Policy Bypass**: Packets that should be redirected according to
-BPF program logic get dropped instead, effectively bypassing network
-policies. 3. **Production Impact**: The commit message shows concrete
-performance degradation - receive speeds dropping from 65+ MB/s to 0
-MB/s under high load conditions. ### **Backport Suitability Factors**
-**✅ Minimal and Surgical:** - Single line addition - No API changes or
-structural modifications - Uses existing stable function
-`skb_bpf_set_redir()` **✅ Self-Contained:** - Fix only affects the
-specific error path (`ret == -EAGAIN`) - No dependencies on other
-concurrent changes - Uses well-established APIs present across kernel
-versions **✅ Clear Bug Fix Semantics:** - Restores state that was
-previously cleared - Follows the established pattern: clear → try →
-restore on failure - The comment explicitly states "Restore redir info
-we cleared before" **✅ Critical Subsystem:** - Affects BPF sockmap, a
-core networking infrastructure component - Used by service meshes,
-container networking, and load balancers - Failure causes silent data
-loss that's difficult to debug ### **Comparison with Similar Commits**
-Looking at the provided historical examples: - Similar to commit #2 and
-#4 (both marked YES) which also fix sockmap data handling issues -
-Unlike commit #1, #3, and #5 (marked NO) which involved more complex
-architectural changes - This fix addresses a fundamental correctness
-issue rather than optimizations ### **Risk Assessment** **Low Risk:** -
-The fix is in an error recovery path, so it only executes when problems
-already exist - Restoring redirect information cannot make the situation
-worse - The function `skb_bpf_set_redir()` is a simple state restoration
-operation ### **Stable Tree Criteria Compliance** 1. **Important
-bugfix**: ✅ Fixes silent data loss 2. **Minimal risk**: ✅ Single line,
-error path only 3. **No new features**: ✅ Pure bug fix 4. **Confined
-scope**: ✅ Limited to sockmap redirect handling 5. **User-visible
-impact**: ✅ Prevents packet loss under load This commit perfectly fits
-the stable tree criteria for important, low-risk bug fixes that address
-user-visible problems in critical subsystems.
-
- net/core/skmsg.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-index a5947aa559837..3ae1704a8a7c1 100644
---- a/net/core/skmsg.c
-+++ b/net/core/skmsg.c
-@@ -663,7 +663,8 @@ static void sk_psock_backlog(struct work_struct *work)
- 			if (ret <= 0) {
- 				if (ret == -EAGAIN) {
- 					sk_psock_skb_state(psock, state, len, off);
--
-+					/* Restore redir info we cleared before */
-+					skb_bpf_set_redir(skb, psock->sk, ingress);
- 					/* Delay slightly to prioritize any
- 					 * other work that might be here.
- 					 */
+diff --git a/net/core/page_pool.c b/net/core/page_pool.c
+index c31a35621b24..0d6a72a71745 100644
+--- a/net/core/page_pool.c
++++ b/net/core/page_pool.c
+@@ -790,8 +790,8 @@ static bool __page_pool_page_can_be_recycled(netmem_ref netmem)
+  * subsystem.
+  */
+ static __always_inline netmem_ref
+-__page_pool_put_page(struct page_pool *pool, netmem_ref netmem,
+-		     unsigned int dma_sync_size, bool allow_direct)
++__page_pool_put_netmem(struct page_pool *pool, netmem_ref netmem,
++		       unsigned int dma_sync_size, bool allow_direct)
+ {
+ 	lockdep_assert_no_hardirq();
+ 
+@@ -850,7 +850,7 @@ static bool page_pool_napi_local(const struct page_pool *pool)
+ 	/* Allow direct recycle if we have reasons to believe that we are
+ 	 * in the same context as the consumer would run, so there's
+ 	 * no possible race.
+-	 * __page_pool_put_page() makes sure we're not in hardirq context
++	 * __page_pool_put_netmem() makes sure we're not in hardirq context
+ 	 * and interrupts are enabled prior to accessing the cache.
+ 	 */
+ 	cpuid = smp_processor_id();
+@@ -868,8 +868,8 @@ void page_pool_put_unrefed_netmem(struct page_pool *pool, netmem_ref netmem,
+ 	if (!allow_direct)
+ 		allow_direct = page_pool_napi_local(pool);
+ 
+-	netmem = __page_pool_put_page(pool, netmem, dma_sync_size,
+-				      allow_direct);
++	netmem = __page_pool_put_netmem(pool, netmem, dma_sync_size,
++					allow_direct);
+ 	if (netmem && !page_pool_recycle_in_ring(pool, netmem)) {
+ 		/* Cache full, fallback to free pages */
+ 		recycle_stat_inc(pool, ring_full);
+@@ -970,8 +970,8 @@ void page_pool_put_netmem_bulk(netmem_ref *data, u32 count)
+ 				continue;
+ 			}
+ 
+-			netmem = __page_pool_put_page(pool, netmem, -1,
+-						      allow_direct);
++			netmem = __page_pool_put_netmem(pool, netmem, -1,
++							allow_direct);
+ 			/* Approved for bulk recycling in ptr_ring cache */
+ 			if (netmem)
+ 				bulk[bulk_len++] = netmem;
 -- 
-2.39.5
+2.17.1
 
