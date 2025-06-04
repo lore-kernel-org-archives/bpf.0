@@ -1,122 +1,128 @@
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 189E6C2FA
-	for <bpf@vger.kernel.org>; Wed,  4 Jun 2025 00:38:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.153.30
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 829D7846C;
+	Wed,  4 Jun 2025 00:50:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748997521; cv=none; b=oaXJ0ETjmf2IB1TnFo/E/rKCm64XS4z4gCpr5padkGF8HzYVU7iTNai424VxIvWPwLSqvDtcnU+08zR4qW0nK6JTuqk7bVFLf7sgh3zI0GFaPADrJbrK808ZUR4roOBwMolE/Ry8Kc6WIsSOVOIka1GzGgGBG6nyQqsrZpu54+o=
+	t=1748998257; cv=none; b=g8zbZZlWArQ9B57f0LzZWhwZhqKuaJlKuA9MRot+D2+4939yu5gxrRNdomm+cz5H0S291K+GugX6XK+6g7iqdgfbfBtiF4LwqKNtzXaVLWEQiaCH9o709ifE4wSH21d90cXH0A9OySgo0FSEm+RpEQ9TQ9WB4KxJn34Z7R8Rq6o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748997521; c=relaxed/simple;
-	bh=g77+F/9L/hdLiDx9MjZAJxoDKD/hIa2VWgCLKTXDfjk=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=JWaEGyExZdZjn6G6/xEX7QhqYlxDOD3dNUH2rsSyQlkxp5bM+TMQUp1j5ZIfi008aoCmJynblezFlZTtv9ot71RKkHL6Xw0+lfGHb+oGtV2WxbDW5k1/MYqZBO7mYiJK09/j+KUk31p+KSuQPEQ9GPKiK4fXQrLr5glQm5ggq/A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=bqYCu2vH; arc=none smtp.client-ip=67.231.153.30
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
+	s=arc-20240116; t=1748998257; c=relaxed/simple;
+	bh=8N9PRbmXo6eHR6l8hMzEZo3I0aj/ZpmARYOKE7oRLfU=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=nd9pYCvBPLpmtanvxLDDpLwlJRBIwKEzhtMpgJ0/CWhbmCwN5E5cwxirtzf+SYd5F+DX0tWPNIC6V8jo8OSBzIsWlJGlZilJBqczgMbF9oRS9qcwF7hsf4YBXYMbI7kpRtPn/XEfqSYuA6hTjdkxLtmiZ2iOwJPOHypemmPNuhU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ixlcCDoj; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="bqYCu2vH"
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-	by m0001303.ppops.net (8.18.1.2/8.18.1.2) with ESMTP id 553MunI4023549
-	for <bpf@vger.kernel.org>; Tue, 3 Jun 2025 17:38:39 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
-	:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:reply-to:subject:to; s=s2048-2021-q4; bh=QJ3kaiJ2s
-	/+6QS3wVA0z4CUNu9ayRmt3DqsqGnMWoJ0=; b=bqYCu2vHTZ/Uycyabg+5xLcH0
-	9XLRP7BPwqXcJTBFFeg8jJrxvWURNrXukykw6ggu8RsbXS4FJHbAUQplGd9ZT1pw
-	eS7Y+/uf1f4H/jTTsaeFD2YXH43bUamBksdDCZmW3XkARqkeHbW0GoFcE3j+tZ7g
-	hdOiC/DAfwsun2sxUSXuHs092K9rQ+YGR1qzlJ8zcZ71T1hxrqbmv9fT+Q4x28EM
-	q8eQNZ65q7zNpLYcnC6y8Uhi4bIB3k33jCJvAfUS/uYKdfslfQikXMJWCJTGvm7l
-	kqBYItyxMyWYkhF1LgYyP3By/M7sutTLl2pwqNN3U+JNvbJXhj1sJt6Ps+HDQ==
-Received: from mail.thefacebook.com ([163.114.134.16])
-	by m0001303.ppops.net (PPS) with ESMTPS id 471x0pxgp8-13
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Tue, 03 Jun 2025 17:38:38 -0700 (PDT)
-Received: from twshared4652.28.prn2.facebook.com (2620:10d:c085:108::150d) by
- mail.thefacebook.com (2620:10d:c08b:78::c78f) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.2.1748.24; Wed, 4 Jun 2025 00:38:34 +0000
-Received: by devvm7589.cco0.facebook.com (Postfix, from userid 669379)
-	id AB728343F60; Tue,  3 Jun 2025 17:38:18 -0700 (PDT)
-From: Ihor Solodrai <isolodrai@meta.com>
-To: <andrii@kernel.org>
-CC: <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
-        <eddyz87@gmail.com>, <mykolal@fb.com>, <kernel-team@meta.com>
-Subject: [PATCH bpf-next v2 1/3] bpf: make reg_not_null() true for CONST_PTR_TO_MAP
-Date: Tue, 3 Jun 2025 17:37:57 -0700
-Message-ID: <20250604003759.1020745-1-isolodrai@meta.com>
-X-Mailer: git-send-email 2.47.1
-Reply-To: <ihor.solodrai@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ixlcCDoj"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FD5FC4CEED;
+	Wed,  4 Jun 2025 00:50:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1748998257;
+	bh=8N9PRbmXo6eHR6l8hMzEZo3I0aj/ZpmARYOKE7oRLfU=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=ixlcCDojHSV5S/UsWlBwQvbl6fX9t3xV0Jk5XUmNVJZ0HnCa1flbH+c/XfGv8BCOL
+	 bwOPcoCWh+moyM4FrWx7oDd37t20bq3s+udeF+OoxgufBzzqkbfuu5n9ia1VNMSsTM
+	 L4U2doEwyeof6alyJLRLyGC9nxGWa8y7wy3kBnzbypjU8KbOeEf9KQEPzvt+y/JbIY
+	 4Z8iA37Y9IJPAOPd1JjnvJj9XSqSEcrShgr1GRCIq8DNMytZNQerxx+UT8ZoSNIzf5
+	 YcA029VTh8db3C18f7GsujiqbXUw0JDX+68+58Do+MtkhrgPGnx1CZ4bp7UbbkQEr5
+	 LyZpkbi4lNexA==
+From: Sasha Levin <sashal@kernel.org>
+To: patches@lists.linux.dev,
+	stable@vger.kernel.org
+Cc: Hou Tao <houtao1@huawei.com>,
+	syzbot+dce5aae19ae4d6399986@syzkaller.appspotmail.com,
+	Alexei Starovoitov <ast@kernel.org>,
+	Sasha Levin <sashal@kernel.org>,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.15 005/118] bpf: Check rcu_read_lock_trace_held() in bpf_map_lookup_percpu_elem()
+Date: Tue,  3 Jun 2025 20:48:56 -0400
+Message-Id: <20250604005049.4147522-5-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20250604005049.4147522-1-sashal@kernel.org>
+References: <20250604005049.4147522-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Authority-Analysis: v=2.4 cv=UrljN/wB c=1 sm=1 tr=0 ts=683f958e cx=c_pps a=CB4LiSf2rd0gKozIdrpkBw==:117 a=CB4LiSf2rd0gKozIdrpkBw==:17 a=6IFa9wvqVegA:10 a=VabnemYjAAAA:8 a=eyZTgQFGG2VFfHX4qDcA:9 a=gKebqoRLp9LExxC7YDUY:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjA0MDAwMiBTYWx0ZWRfX/klim3DrEKlL Y+OQ6IZXbSWeb3L0B2wZi8qyBdq5FHdYxFaJ+Z+3mbw9hnHUATqwjG0oNMn/3Telg1YJYXHUZdJ bXksdbcyaB4onYEnez1r24wbm5ZE2UK5sXUeZtGXZ/mwz5VRe3aZn6GENcXeLLuMNLSDmkFfek1
- KpBUoMOxzuuEC6i6xT5IFc8jb7HjaDgAyTXL69BrNfTwp4iKXewTU5a4Q090/yYzPPMNPL+HG/t F918Umik3ukhlNrx981DgjuiQ61VCZAp1fy0nFj8ZJUK7s2PSh/jmv94UuTXNZ/+hrRfBZN2B+L VsLyjC9RkQKpjTykGTm4FVXfEvJYpzHnkbP1DSOi3jTf0o6YW2VaDt8hrQNivW9bz1q2dMiCBdf
- xbJoNw+nFRiLxEZgPkyDMz2+hyP6vf9Q42Lf7/jRG6ReSsRA+mWI5JJxncP+5jqHv2qQ8+V7
-X-Proofpoint-ORIG-GUID: tftTYhkqJsRd3sh6EXXPuGR2q3DhU14y
-X-Proofpoint-GUID: tftTYhkqJsRd3sh6EXXPuGR2q3DhU14y
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-06-03_03,2025-06-03_02,2025-03-28_01
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.15
+Content-Transfer-Encoding: 8bit
 
-When reg->type is CONST_PTR_TO_MAP, it can not be null. However the
-verifier explores the branches under rX =3D=3D 0 in check_cond_jmp_op()
-even if reg->type is CONST_PTR_TO_MAP, because it was not checked for
-in reg_not_null().
+From: Hou Tao <houtao1@huawei.com>
 
-Fix this by adding CONST_PTR_TO_MAP to the set of types that are
-considered non nullable in reg_not_null().
+[ Upstream commit d4965578267e2e81f67c86e2608481e77e9c8569 ]
 
-An old "unpriv: cmp map pointer with zero" selftest fails with this
-change, because now early out correctly triggers in
-check_cond_jmp_op(), making the verification to pass.
+bpf_map_lookup_percpu_elem() helper is also available for sleepable bpf
+program. When BPF JIT is disabled or under 32-bit host,
+bpf_map_lookup_percpu_elem() will not be inlined. Using it in a
+sleepable bpf program will trigger the warning in
+bpf_map_lookup_percpu_elem(), because the bpf program only holds
+rcu_read_lock_trace lock. Therefore, add the missed check.
 
-In practice verifier may allow pointer to null comparison in unpriv,
-since in many cases the relevant branch and comparison op are removed
-as dead code. So change the expected test result to __success_unpriv.
-
-Signed-off-by: Ihor Solodrai <isolodrai@meta.com>
+Reported-by: syzbot+dce5aae19ae4d6399986@syzkaller.appspotmail.com
+Closes: https://lore.kernel.org/bpf/000000000000176a130617420310@google.com/
+Signed-off-by: Hou Tao <houtao1@huawei.com>
+Link: https://lore.kernel.org/r/20250526062534.1105938-1-houtao@huaweicloud.com
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/bpf/verifier.c                               | 3 ++-
- tools/testing/selftests/bpf/progs/verifier_unpriv.c | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index a7d6e0c5928b..0c100e430744 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -405,7 +405,8 @@ static bool reg_not_null(const struct bpf_reg_state *=
-reg)
- 		type =3D=3D PTR_TO_MAP_KEY ||
- 		type =3D=3D PTR_TO_SOCK_COMMON ||
- 		(type =3D=3D PTR_TO_BTF_ID && is_trusted_reg(reg)) ||
--		type =3D=3D PTR_TO_MEM;
-+		type =3D=3D PTR_TO_MEM ||
-+		type =3D=3D CONST_PTR_TO_MAP;
- }
-=20
- static struct btf_record *reg_btf_record(const struct bpf_reg_state *reg=
-)
-diff --git a/tools/testing/selftests/bpf/progs/verifier_unpriv.c b/tools/=
-testing/selftests/bpf/progs/verifier_unpriv.c
-index a4a5e2071604..28200f068ce5 100644
---- a/tools/testing/selftests/bpf/progs/verifier_unpriv.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_unpriv.c
-@@ -619,7 +619,7 @@ __naked void pass_pointer_to_tail_call(void)
-=20
- SEC("socket")
- __description("unpriv: cmp map pointer with zero")
--__success __failure_unpriv __msg_unpriv("R1 pointer comparison")
-+__success __success_unpriv
- __retval(0)
- __naked void cmp_map_pointer_with_zero(void)
+**YES** This commit should be backported to stable kernel trees based on
+my analysis: ## Analysis **1. Clear Bug Fix:** This commit fixes a
+legitimate bug where `bpf_map_lookup_percpu_elem()` triggers warnings in
+sleepable BPF programs when the BPF JIT is disabled or on 32-bit hosts.
+The warning occurs because sleepable BPF programs hold
+`rcu_read_lock_trace` instead of `rcu_read_lock`, but the function only
+checked for the latter. **2. Minimal, Contained Change:** The fix is
+extremely small and surgical - it only adds
+`!rcu_read_lock_trace_held()` to the existing warning condition in
+`bpf_map_lookup_percpu_elem()` at kernel/bpf/helpers.c:132-133. This
+follows the exact same pattern established by the previous similar fix.
+**3. Strong Historical Precedent:** Multiple similar commits have been
+successfully backported: - **Commit 169410eba271** (Similar Commit #1 -
+Backport Status: YES) - Added the same `rcu_read_lock_trace_held()`
+check to `bpf_map_{lookup,update,delete}_elem()` helpers with identical
+reasoning - **Commit 29a7e00ffadd** (Similar Commit #4 - Backport
+Status: YES) - Fixed missed RCU read lock in `bpf_task_under_cgroup()`
+for sleepable programs **4. Clear User Impact:** The commit was reported
+by syzbot and fixes a concrete issue affecting users running sleepable
+BPF programs. Without this fix, users see spurious warnings that
+indicate potential RCU usage bugs. **5. Low Regression Risk:** The
+change only expands the conditions under which the warning is suppressed
+- it doesn't change any functional behavior, just makes the assertion
+more accurate for sleepable BPF programs. **6. Part of Ongoing
+Pattern:** This is the missing piece in a series of similar fixes that
+have systematically addressed RCU assertions for sleepable BPF programs.
+The previous commit 169410eba271 fixed the basic map helpers but missed
+this percpu variant. **7. Stable Tree Criteria Alignment:** - Fixes
+important functionality (eliminates false warnings) - No architectural
+changes - Minimal risk of regression - Confined to BPF subsystem - Clear
+side effects (none beyond fixing the warning) The commit perfectly
+matches the stable tree backporting criteria and follows the established
+pattern of similar successful backports.
+
+ kernel/bpf/helpers.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index e3a2662f4e336..a71aa4cb85fae 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -129,7 +129,8 @@ const struct bpf_func_proto bpf_map_peek_elem_proto = {
+ 
+ BPF_CALL_3(bpf_map_lookup_percpu_elem, struct bpf_map *, map, void *, key, u32, cpu)
  {
---=20
-2.47.1
+-	WARN_ON_ONCE(!rcu_read_lock_held() && !rcu_read_lock_bh_held());
++	WARN_ON_ONCE(!rcu_read_lock_held() && !rcu_read_lock_trace_held() &&
++		     !rcu_read_lock_bh_held());
+ 	return (unsigned long) map->ops->map_lookup_percpu_elem(map, key, cpu);
+ }
+ 
+-- 
+2.39.5
 
