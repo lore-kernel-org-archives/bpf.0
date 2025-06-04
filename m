@@ -1,216 +1,135 @@
-Received: from dediextern.your-server.de (dediextern.your-server.de [85.10.215.232])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAD0018E1F;
-	Wed,  4 Jun 2025 16:04:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.10.215.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCC5B339A1;
+	Wed,  4 Jun 2025 16:22:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749053046; cv=none; b=s1wAFkeK2R2FZyIgeA13q75UY43xGOZB2OJG3Th5z9PYX5xVc8PqWjCRUJbWgBkVh0MpXNc014ESlYyLZprjSeN0tXublBF3AstzbRrqYVAdXs8ColRI6LImhe0WQxvvfCbsEJMHogsPmlwHIQju0SMr3CH0CU8GAgtf4mqhxjk=
+	t=1749054129; cv=none; b=jMhyamVn6M8R3XwmzT7QoDtdAgx2joS5oBRj64Z5W+4ae9E8EZV4gmjUm5vLrg07KjnQvPDGQ5lSTlt1TPeCS2brjGfkSeJhIDgQf/f4XFADyMMJ9RE5XHBYD7RWJXs0e75pcJ467ZGX88lDSrFVrANb2I9TJbjAEETgpHEI0tE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749053046; c=relaxed/simple;
-	bh=Vbss+hkHN6igBHYC0QfKfg2uSLdRpUecKqmMSm0PGo8=;
-	h=Message-ID:Date:MIME-Version:From:To:Cc:Subject:Content-Type; b=ZbAFKeOVvve15XtFfmS4tYFQ51oZUmvfig+WPCwM3qpFKryuB/NyyrCpw8nF1byjyMWhCNi1NRb9jDWOPcKhvHbUWMQz7yiM64kgVg8MXxYpZMc40XhatDQnOlD1KzgaZK3o8ivSdEat8kxmdITyIdfYCXCtmxNevxSQmGTrhdQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hetzner-cloud.de; spf=pass smtp.mailfrom=hetzner-cloud.de; arc=none smtp.client-ip=85.10.215.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hetzner-cloud.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hetzner-cloud.de
-Received: from sslproxy08.your-server.de ([78.47.166.52])
-	by dediextern.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <marcus.wichelmann@hetzner-cloud.de>)
-	id 1uMq7W-000Q0d-RO; Wed, 04 Jun 2025 17:33:39 +0200
-Received: from localhost ([127.0.0.1])
-	by sslproxy08.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <marcus.wichelmann@hetzner-cloud.de>)
-	id 1uMq7W-000E76-2k;
-	Wed, 04 Jun 2025 17:33:39 +0200
-Message-ID: <9da42688-bfaa-4364-8797-e9271f3bdaef@hetzner-cloud.de>
-Date: Wed, 4 Jun 2025 17:33:36 +0200
+	s=arc-20240116; t=1749054129; c=relaxed/simple;
+	bh=NwyhNX9L7Xq2ErWehfIalz8JzuMef0oO/ln44trXpA4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Gui4qMYhcfRWqIA4xziXBu5Oa3Kc06ASm9RapvP4lP8D/Qn3ehQeXuKL7T29Pkyepwm8uMlFkG7PaDx5CudMQjoZ/y0D5oC8zp8Vk8eXsEpWP5Vy8NQ10xGcViuUOMwUOkaB3gLgDj3gxidt+eKcRBbyqLHO2iRERJQXVk3fcNs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H76lsaDM; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H76lsaDM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2569C4CEE4;
+	Wed,  4 Jun 2025 16:22:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1749054128;
+	bh=NwyhNX9L7Xq2ErWehfIalz8JzuMef0oO/ln44trXpA4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=H76lsaDMCV/V1fSovSqUD3ZgpyfaAK1GSAcEleRzyy09LC73xwV/QIc5PtBoh9sIp
+	 kG8LzOzST625ooMG9JTmodtSLCJhJOoItoVy/NQK94w8L14M/wOScCcprXSwV6tUFL
+	 D5z6yam1/tUrHUK5r5r0NXnjaPSZEESwIqJs2J1m9eJ3lq/veABA/7m/8ItlkpJlYg
+	 F+B7FDrBIErALMwEN91J7NCms86WbbIgV6mJ3eKQJ3Pxt3t+Q8sqK/iMZ/Xo3NrnOv
+	 XoezvNldvYykhgLZ8BNfqsTyaGtlBlhKxUcMNTlc6/TnPOQyBEd3yTZSoeN+w+Po1X
+	 IMspJI66V/OxA==
+Date: Wed, 4 Jun 2025 19:22:04 +0300
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
+Cc: Paul Moore <paul@paul-moore.com>, zeffron@riotgames.com,
+	xiyou.wangcong@gmail.com, kysrinivasan@gmail.com, code@tyhicks.com,
+	linux-security-module@vger.kernel.org, roberto.sassu@huawei.com,
+	James.Bottomley@hansenpartnership.com,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	David Howells <dhowells@redhat.com>, Lukas Wunner <lukas@wunner.de>,
+	Ignat Korchagin <ignat@cloudflare.com>,
+	Quentin Monnet <qmo@kernel.org>,
+	Jason Xing <kerneljasonxing@gmail.com>,
+	Willem de Bruijn <willemb@google.com>,
+	Anton Protopopov <aspsk@isovalent.com>,
+	Jordan Rome <linux@jordanrome.com>,
+	Martin Kelly <martin.kelly@crowdstrike.com>,
+	Alan Maguire <alan.maguire@oracle.com>,
+	Matteo Croce <teknoraver@meta.com>, bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org, keyrings@vger.kernel.org,
+	linux-crypto@vger.kernel.org
+Subject: Re: [PATCH 0/3] BPF signature verification
+Message-ID: <aEByrCJ1R_OYDYxH@kernel.org>
+References: <20250528215037.2081066-1-bboscaccy@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-From: Marcus Wichelmann <marcus.wichelmann@hetzner-cloud.de>
-Autocrypt: addr=marcus.wichelmann@hetzner-cloud.de; keydata=
- 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
- wySmewx3h/yfMh0aFxHhvLPxrO2IEQ==
-To: Jesper Dangaard Brouer <hawk@kernel.org>, bpf@vger.kernel.org,
- netdev@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Jamal Hadi Salim <jhs@mojatatu.com>, Cong Wang <xiyou.wangcong@gmail.com>,
- Jiri Pirko <jiri@resnulli.us>, linux-kernel@vger.kernel.org
-Subject: [BUG] veth: TX drops with NAPI enabled and crash in combination with
- qdisc
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: marcus.wichelmann@hetzner-cloud.de
-X-Virus-Scanned: Clear (ClamAV 1.0.7/27658/Wed Jun  4 10:36:16 2025)
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250528215037.2081066-1-bboscaccy@linux.microsoft.com>
 
-Hi,
+On Wed, May 28, 2025 at 02:49:02PM -0700, Blaise Boscaccy wrote:
+> As suggested or mandated by KP Singh
+> https://lore.kernel.org/linux-security-module/CACYkzJ6VQUExfyt0=-FmXz46GHJh3d=FXh5j4KfexcEFbHV-vg@mail.gmail.com/,
+> this patchset proposes and implements an alternative hash-chain
+> algorithm for signature verification of BPF programs.
+> 
+> This design diverges in two key ways:
+> 
+> 1. Signature Strategy
+> 
+> Two different signature strategies are
+> implemented. One verifies only the signature of the loader program in
+> the kernel, as described in the link above. The other verifies the
 
-while experimenting with XDP_REDIRECT from a veth-pair to another interface, I
-noticed that the veth-pair looses lots of packets when multiple TCP streams go
-through it, resulting in stalling TCP connections and noticeable instabilities.
+Describe "the one" briefly, despite having the link.  Label them A and
+B, and also, why there are two strategies. Then you can use those labels
+as references later on in this description.
 
-This doesn't seem to be an issue with just XDP but rather occurs whenever the
-NAPI mode of the veth driver is active.
-I managed to reproduce the same behavior just by bringing the veth-pair into
-NAPI mode (see commit d3256efd8e8b ("veth: allow enabling NAPI even without
-XDP")) and running multiple TCP streams through it using a network namespace.
+> program’s maps in-kernel via a hash chain.  The original design
+> required loader programs to be “self-aborting” and embedded the
+> terminal hash verification logic as metaprogramming code generation
+> routines inside libbpf. While this patchset supports that scheme, it
+> is considered undesirable in certain environments due to the potential
+> for supply-chain attack vectors and the lack of visibility for the LSM
+> subsystem.  Additionally, it is impossible to verify the code
+> performing the signature verification, as it is uniquely regenerated
+> for every program.
+> 
+> 2. Timing of Signature Check
+> 
+> This patchset moves the signature check to a point before
+> security_bpf_prog_load is invoked, due to an unresolved discussion
+> here:
+> https://lore.kernel.org/linux-security-module/CAHC9VhTj3=ZXgrYMNA+G64zsOyZO+78uDs1g=kh91=GR5KypYg@mail.gmail.com/
+> This change allows the LSM subsystem to be informed of the signature
+> verification result—if it occurred—and the method used, all without
+> introducing a new hook. It improves visibility and auditability,
+> reducing the “trust me, friend” aspect of the original design.
+> 
+> 
+> Blaise Boscaccy (3):
+>   bpf: Add bpf_check_signature
+>   bpf: Support light-skeleton signatures in autogenerated code
+>   bpftool: Allow signing of light-skeleton programs
+> 
+>  include/linux/bpf.h            |   2 +
+>  include/linux/verification.h   |   1 +
+>  include/uapi/linux/bpf.h       |   4 +
+>  kernel/bpf/arraymap.c          |  11 +-
+>  kernel/bpf/syscall.c           | 123 +++++++++++++++++++-
+>  tools/bpf/bpftool/Makefile     |   4 +-
+>  tools/bpf/bpftool/common.c     | 204 +++++++++++++++++++++++++++++++++
+>  tools/bpf/bpftool/gen.c        |  66 ++++++++++-
+>  tools/bpf/bpftool/main.c       |  24 +++-
+>  tools/bpf/bpftool/main.h       |  23 ++++
+>  tools/include/uapi/linux/bpf.h |   4 +
+>  tools/lib/bpf/libbpf.h         |   4 +
+>  tools/lib/bpf/skel_internal.h  |  28 ++++-
+>  13 files changed, 491 insertions(+), 7 deletions(-)
+> 
+> -- 
+> 2.48.1
+> 
 
-Here is how I reproduced it:
-
-  ip netns add lb
-  ip link add dev to-lb type veth peer name in-lb netns lb
-
-  # Enable NAPI
-  ethtool -K to-lb gro on
-  ethtool -K to-lb tso off
-  ip netns exec lb ethtool -K in-lb gro on
-  ip netns exec lb ethtool -K in-lb tso off
-
-  ip link set dev to-lb up
-  ip -netns lb link set dev in-lb up
-
-Then run a HTTP server inside the "lb" namespace that serves a large file:
-
-  fallocate -l 10G testfiles/10GB.bin
-  caddy file-server --root testfiles/
-
-Download this file from within the root namespace multiple times in parallel:
-
-  curl http://[fe80::...%to-lb]/10GB.bin -o /dev/null
-
-In my tests, I ran four parallel curls at the same time and after just a few
-seconds, three of them stalled while the other one "won" over the full bandwidth
-and completed the download.
-
-This is probably a result of the veth's ptr_ring running full, causing many
-packet drops on TX, and the TCP congestion control reacting to that.
-
-In this context, I also took notice of Jesper's patch which describes a very
-similar issue and should help to resolve this:
-  commit dc82a33297fc ("veth: apply qdisc backpressure on full ptr_ring to
-  reduce TX drops")
-
-But when repeating the above test with latest mainline, which includes this
-patch, and enabling qdisc via
-  tc qdisc add dev in-lb root sfq perturb 10
-the Kernel crashed just after starting the second TCP stream (see output below).
-
-So I have two questions:
-- Is my understanding of the described issue correct and is Jesper's patch
-  sufficient to solve this?
-- Is my qdisc configuration to make use of this patch correct and the kernel
-  crash is likely a bug?
-
-------------[ cut here ]------------
-UBSAN: array-index-out-of-bounds in net/sched/sch_sfq.c:203:12
-index 65535 is out of range for type 'sfq_head [128]'
-CPU: 1 UID: 0 PID: 24 Comm: ksoftirqd/1 Not tainted 6.15.0+ #1 PREEMPT(voluntary) 
-Hardware name: GIGABYTE MP32-AR1-SW-HZ-001/MP32-AR1-00, BIOS F31n (SCP: 2.10.20220810) 09/30/2022
-Call trace:
- show_stack+0x24/0x50 (C)
- dump_stack_lvl+0x80/0x140
- dump_stack+0x1c/0x38
- __ubsan_handle_out_of_bounds+0xd0/0x128
- sfq_dequeue+0x37c/0x3e0 [sch_sfq]
- __qdisc_run+0x90/0x760
- net_tx_action+0x1b8/0x3b0
- handle_softirqs+0x13c/0x418
- run_ksoftirqd+0x9c/0xe8
- smpboot_thread_fn+0x1c0/0x2e0
- kthread+0x150/0x230
- ret_from_fork+0x10/0x20
----[ end trace ]---
-------------[ cut here ]------------
-UBSAN: array-index-out-of-bounds in net/sched/sch_sfq.c:208:8
-index 65535 is out of range for type 'sfq_head [128]'
-CPU: 1 UID: 0 PID: 24 Comm: ksoftirqd/1 Not tainted 6.15.0+ #1 PREEMPT(voluntary) 
-Hardware name: GIGABYTE MP32-AR1-SW-HZ-001/MP32-AR1-00, BIOS F31n (SCP: 2.10.20220810) 09/30/2022
-Call trace:
- show_stack+0x24/0x50 (C)
- dump_stack_lvl+0x80/0x140
- dump_stack+0x1c/0x38
- __ubsan_handle_out_of_bounds+0xd0/0x128
- sfq_dequeue+0x394/0x3e0 [sch_sfq]
- __qdisc_run+0x90/0x760
- net_tx_action+0x1b8/0x3b0
- handle_softirqs+0x13c/0x418
- run_ksoftirqd+0x9c/0xe8
- smpboot_thread_fn+0x1c0/0x2e0
- kthread+0x150/0x230
- ret_from_fork+0x10/0x20
----[ end trace ]---
-Unable to handle kernel NULL pointer dereference at virtual address 0000000000000005
-Mem abort info:
-  ESR = 0x0000000096000004
-  EC = 0x25: DABT (current EL), IL = 32 bits
-  SET = 0, FnV = 0
-  EA = 0, S1PTW = 0
-  FSC = 0x04: level 0 translation fault
-Data abort info:
-  ISV = 0, ISS = 0x00000004, ISS2 = 0x00000000
-  CM = 0, WnR = 0, TnD = 0, TagAccess = 0
-  GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
-user pgtable: 4k pages, 48-bit VAs, pgdp=000008002ad67000
-[0000000000000005] pgd=0000000000000000, p4d=0000000000000000
-Internal error: Oops: 0000000096000004 [#1]  SMP
-
-CPU: Ampere(R) Altra(R) Processor Q80-30 CPU @ 3.0GHz
-
-# tc qdisc
-qdisc sfq 8001: dev in-lb root refcnt 81 limit 127p quantum 1514b depth 127 divisor 1024 perturb 10sec 
-
-Thanks,
-Marcus
+BR, Jarkko
