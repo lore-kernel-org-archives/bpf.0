@@ -1,123 +1,112 @@
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6ED4A1EEA47
-	for <bpf@vger.kernel.org>; Wed,  4 Jun 2025 22:28:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.145.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1F3E22F75C
+	for <bpf@vger.kernel.org>; Wed,  4 Jun 2025 22:41:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749076126; cv=none; b=rmACtGYM0fYpXM41qJDnUhCAwN4q5v12LPMOqrA1CojA7lL04xcnGuV7AJ7q3nhOES1E0TjGh9sHD1J7Uv8ibsycSnBOgK/krGzesWJdQNdKfUaRu594uvJAz4hAbMfmlg0Q/VhcIfomlHjeRO9KyyRZXF0FOA6WeYCBuTPBLXA=
+	t=1749076886; cv=none; b=qUVIim7HIDbqlRyMgX72cYekm/Nx/a3N2/vwJ6xm1YsYtn4InI6IvYkC/JXEJv19mLIIxdcDs8QbTT+dq0aCASap62c9Pc3plh39d8jnjZfKCcQQQ48GnZuXu6iBvH0CUzrqX5RwHnNWRsOfjIlrY0khGIprw+BPj0kFjTIBegM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749076126; c=relaxed/simple;
-	bh=g77+F/9L/hdLiDx9MjZAJxoDKD/hIa2VWgCLKTXDfjk=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=fhvMR3m7XsyAyvZGTE/ty6amEmSqRaUanzTkGdy3Dz698WiavFioKimebNSlWdFnvW2EpOk8WVRCjwUPptYO46x2COKPfxvFp31XeKtpdnYxLPVJFVu28wsN92x8FuF/Y/4O8emNS7n/rGv6N/eT6lACa3TwTUUB0V/o9CnNlN0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=bx5qwgSN; arc=none smtp.client-ip=67.231.145.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
+	s=arc-20240116; t=1749076886; c=relaxed/simple;
+	bh=l0Myg1hhSDa7aUGY2ZdpXBZy1BWgI63tOzL5gLJTXuY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=QbeUrKJ+YtAgK5I8jYeA9eGUWJPSDk0qDohaS+AtPKrF3UXhSA06pWfE8GrWG5KKBBBkDiSGV3pADBcEMau1bSI0Se5FRRZHArYww8wFFB1FfarhA0FBnIZe0L/mnF2bPhduRTpa11AV5tPTTbw5nwNP8B6pjS+Q+x5U0f3TEyw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Wg2V7AUC; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="bx5qwgSN"
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 554MPElh003313
-	for <bpf@vger.kernel.org>; Wed, 4 Jun 2025 15:28:43 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
-	:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:reply-to:subject:to; s=s2048-2021-q4; bh=QJ3kaiJ2s
-	/+6QS3wVA0z4CUNu9ayRmt3DqsqGnMWoJ0=; b=bx5qwgSNVrinv532HFGnVw0my
-	BQcFQejPucb1OBU5DcpAFSqOCSJ4Lj6zOkNIl4HD7bNKWJQutsvcr74BQdUdhiR7
-	eYi9RwmK620tEMeRLHKbWkNaRwzIXq7RSUHsWrId6Ywe1EjYb20IBJC900d38vgc
-	dbaeRUydwW+WZqu8Zp9In8d8gReuL87Oh0Gv8KWXMAePUCQJ9ZduMMGQ4FbwDnPn
-	iYjMLw5FqG3y1RUW9G/zdKhDuAlYAuPGXzniYQAWx5qWbHPM7vMbJzEhQ6+HrIj+
-	UQ5Ovpr+NIneZjuXslp44LeDoLy5cP0IMXqWagKLN7Ib3oa+5j17qmLrlxduQ==
-Received: from maileast.thefacebook.com ([163.114.135.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 472mnjw8us-11
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Wed, 04 Jun 2025 15:28:43 -0700 (PDT)
-Received: from twshared71637.05.prn6.facebook.com (2620:10d:c0a8:1c::1b) by
- mail.thefacebook.com (2620:10d:c0a9:6f::8fd4) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.2.1748.24; Wed, 4 Jun 2025 22:28:14 +0000
-Received: by devvm7589.cco0.facebook.com (Postfix, from userid 669379)
-	id 1C8BC46C87A; Wed,  4 Jun 2025 15:27:59 -0700 (PDT)
-From: Ihor Solodrai <isolodrai@meta.com>
-To: <andrii@kernel.org>
-CC: <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
-        <eddyz87@gmail.com>, <mykolal@fb.com>, <yonghong.song@linux.dev>,
-        <kernel-team@meta.com>
-Subject: [PATCH bpf-next v3 1/3] bpf: make reg_not_null() true for CONST_PTR_TO_MAP
-Date: Wed, 4 Jun 2025 15:27:27 -0700
-Message-ID: <20250604222729.3351946-1-isolodrai@meta.com>
-X-Mailer: git-send-email 2.47.1
-Reply-To: <ihor.solodrai@linux.dev>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Wg2V7AUC"
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-451ebd3d149so1927735e9.2
+        for <bpf@vger.kernel.org>; Wed, 04 Jun 2025 15:41:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1749076883; x=1749681683; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ey7/9lMkvct6eknaxY6LUmrUmXlwGmP3YaMcHdJ1fX4=;
+        b=Wg2V7AUCDjP4GZj/B+PrlbKkKpOCPqPqe6jPcF4R5cG2T5dbRyQMi6gZ3Eo7M77QZ/
+         7UZUHyBoD0yWCyFxZ0qNEZ4Lash4colY0lN/XAP9phZbT4j/f7zq3nhkYUbL6IwP/x9y
+         KypStdY4HQXTmpGJU7Rv/N2UK8reyBJh4446vSWINzgt7hF0nZBJG2naCkSYrkpvw8kx
+         d1/eexdWHNo8kRqxfu+0IpZkLsxBfFL92F6HwQTITye/BWSyY32ZHZ0hATExf3w5N2ei
+         /N1bP61rlnDy7dWTdW87gsEtNDzbQmT8G6xHrbjRLYyq26pIncQi+HECAfYUfc9hnUjY
+         AQLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749076883; x=1749681683;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ey7/9lMkvct6eknaxY6LUmrUmXlwGmP3YaMcHdJ1fX4=;
+        b=xB5h1lWlNtbAgc3YlTecCRZWP/wyDxmOcvcvX6ncxycy+nv7NMS9SQxxs43IeyvhtU
+         tJdZw7rDT/P18jQNngL6MgVC8KR6ochRt1TkK9cwaY2yR20Eaz/u/kg/1nVghIuwP3Nu
+         Yxqk4Y7hVTnCx66kjlUpbWrRpdVrq5EKPFwINBXzm3qnUv9ueVFmg+9j/rZ9tZHH2emL
+         HRtY9lThWFGqTlwV3ERJkDkp6lrfr7UhG78DxxcwoMYFKvVkfhytPapCYGektRsgK5Lb
+         RNdqeB1P0oISTM3vdFJ79iQxh7X5YFisW3rzXGcgoViEcFgIpjoTSzkR6Y4NW3V1p/zP
+         xUBw==
+X-Forwarded-Encrypted: i=1; AJvYcCVPB5PvgXH7zGOYXS70IWU83qXQQljdvurzKKUia6ESBmfVdm8jePSlu4JC2nG3swKOaR8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzmCQIHoBa46cro2VIXhTUEF0Gn02KYE+xL+Jy39+Rmq+a/msqs
+	y2is8VGhhqt4SFhLFPsQSDObmKMm4q/O+dZ4F8RTi8R+xNHkGprgmnLwBMKG2J2hncne0FH8tIP
+	rOMlEst7EeYDbEyNqVGyn2D/lDE/UnlU=
+X-Gm-Gg: ASbGncuoWVGtOmivCxYcGHNtfadZUGizgcInk+WMMfcwWhkKGntkR5/lD1bTOGTk3u9
+	r//kyId37nWcBwasFF6s/yfw21D3e1h8Ri6Gvp/R2M8neM4r0aysBVAr3c2vGzM6oNr7te8v+vI
+	1Yd6JccUrSVhFbzn6iJW9qicCRc85w4WX/mcOD9iukp1AL2JOC
+X-Google-Smtp-Source: AGHT+IGh9YeiLZi2Lb9GrzTZYuWQKZsQ71/0eMcbUbiauVYSsQBVJZY4YU3l7UBDIFVNgZvU/Lf7zvlACZgFQDH0Yus=
+X-Received: by 2002:a05:600c:154f:b0:442:f4a3:8c5c with SMTP id
+ 5b1f17b1804b1-451f0a72b3cmr51827845e9.10.1749076882660; Wed, 04 Jun 2025
+ 15:41:22 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20250604222729.3351946-1-isolodrai@meta.com> <20250604222729.3351946-2-isolodrai@meta.com>
+In-Reply-To: <20250604222729.3351946-2-isolodrai@meta.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Wed, 4 Jun 2025 15:41:11 -0700
+X-Gm-Features: AX0GCFuC65kd-isQJFcrXrNUM7FhOrw9iHSyJsa1Ad8K3BTQShaD0322YolmmXc
+Message-ID: <CAADnVQJr0JZ1BKeSEE0YM=xcnP0QEBM0smmCkjNs2oaOR1jcbw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 2/3] selftests/bpf: add cmp_map_pointer_with_const
+ test
+To: Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Eduard <eddyz87@gmail.com>, 
+	Mykola Lysenko <mykolal@fb.com>, Yonghong Song <yonghong.song@linux.dev>, 
+	Kernel Team <kernel-team@meta.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjA0MDE4NSBTYWx0ZWRfX8wtvDamEXXKz uBnONDZrAAwyWEBqlvRiIWYKYEdbVkvQPfUqfg1/nEy6akxY4r2fPUoldNTlAhg7twKa5L9hp02 EZz06FrFt20OAgmnfWtE2KuEYKkxYcH6cqL4rkC28gpeaDdq3ogoLm8zbVO7FfyrS/3+NWHrY1c
- /Ppudty/DPh2a/CVgciWpTdmhjKNNVnJmYJ816mZKhZo1Y3qrybV1YnPO4AZQt4BJxQFG2Dd+aD rxxN79vzUs4vy109Gb+Rvaq3FBHKU8c6XsmHHUiUKe/kvV6SJlSKLq6/IXG/YxIeyZmWpBTbFdp Aoo/M3gCa7uP5oUCUyIZO7jfq5oonBbj0Vb098SQ31nVeBl43JS4+g9i6MMMf6XYbS/8k7IP0/v
- KYHiOOzprX2mHmr14w44FNVxoWm3a5xMIFXWXjvQePHnfFhVjatT55VzQWtUVSGys52Zi4Ey
-X-Authority-Analysis: v=2.4 cv=S+zZwJsP c=1 sm=1 tr=0 ts=6840c89b cx=c_pps a=MfjaFnPeirRr97d5FC5oHw==:117 a=MfjaFnPeirRr97d5FC5oHw==:17 a=6IFa9wvqVegA:10 a=VabnemYjAAAA:8 a=eyZTgQFGG2VFfHX4qDcA:9 a=gKebqoRLp9LExxC7YDUY:22
-X-Proofpoint-ORIG-GUID: rUkeLNYhX8flc3CMFFpyCQ0Nr1g9xmzv
-X-Proofpoint-GUID: rUkeLNYhX8flc3CMFFpyCQ0Nr1g9xmzv
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-06-04_04,2025-06-03_02,2025-03-28_01
 
-When reg->type is CONST_PTR_TO_MAP, it can not be null. However the
-verifier explores the branches under rX =3D=3D 0 in check_cond_jmp_op()
-even if reg->type is CONST_PTR_TO_MAP, because it was not checked for
-in reg_not_null().
-
-Fix this by adding CONST_PTR_TO_MAP to the set of types that are
-considered non nullable in reg_not_null().
-
-An old "unpriv: cmp map pointer with zero" selftest fails with this
-change, because now early out correctly triggers in
-check_cond_jmp_op(), making the verification to pass.
-
-In practice verifier may allow pointer to null comparison in unpriv,
-since in many cases the relevant branch and comparison op are removed
-as dead code. So change the expected test result to __success_unpriv.
-
-Signed-off-by: Ihor Solodrai <isolodrai@meta.com>
----
- kernel/bpf/verifier.c                               | 3 ++-
- tools/testing/selftests/bpf/progs/verifier_unpriv.c | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index a7d6e0c5928b..0c100e430744 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -405,7 +405,8 @@ static bool reg_not_null(const struct bpf_reg_state *=
-reg)
- 		type =3D=3D PTR_TO_MAP_KEY ||
- 		type =3D=3D PTR_TO_SOCK_COMMON ||
- 		(type =3D=3D PTR_TO_BTF_ID && is_trusted_reg(reg)) ||
--		type =3D=3D PTR_TO_MEM;
-+		type =3D=3D PTR_TO_MEM ||
-+		type =3D=3D CONST_PTR_TO_MAP;
- }
-=20
- static struct btf_record *reg_btf_record(const struct bpf_reg_state *reg=
-)
-diff --git a/tools/testing/selftests/bpf/progs/verifier_unpriv.c b/tools/=
+On Wed, Jun 4, 2025 at 3:28=E2=80=AFPM Ihor Solodrai <isolodrai@meta.com> w=
+rote:
+>
+> Add a test for CONST_PTR_TO_MAP comparison with a non-0 constant. A
+> BPF program with this code must not pass verification in unpriv.
+>
+> Signed-off-by: Ihor Solodrai <isolodrai@meta.com>
+> ---
+>  .../selftests/bpf/progs/verifier_unpriv.c       | 17 +++++++++++++++++
+>  1 file changed, 17 insertions(+)
+>
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_unpriv.c b/tools/=
 testing/selftests/bpf/progs/verifier_unpriv.c
-index a4a5e2071604..28200f068ce5 100644
---- a/tools/testing/selftests/bpf/progs/verifier_unpriv.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_unpriv.c
-@@ -619,7 +619,7 @@ __naked void pass_pointer_to_tail_call(void)
-=20
- SEC("socket")
- __description("unpriv: cmp map pointer with zero")
--__success __failure_unpriv __msg_unpriv("R1 pointer comparison")
-+__success __success_unpriv
- __retval(0)
- __naked void cmp_map_pointer_with_zero(void)
- {
---=20
-2.47.1
+> index 28200f068ce5..c4a48b57e167 100644
+> --- a/tools/testing/selftests/bpf/progs/verifier_unpriv.c
+> +++ b/tools/testing/selftests/bpf/progs/verifier_unpriv.c
+> @@ -634,6 +634,23 @@ l0_%=3D:     r0 =3D 0;                              =
+           \
+>         : __clobber_all);
+>  }
+>
+> +SEC("socket")
+> +__description("unpriv: cmp map pointer with const")
+> +__success __failure_unpriv __msg_unpriv("R1 pointer comparison prohibite=
+d")
+> +__retval(0)
+> +__naked void cmp_map_pointer_with_const(void)
+> +{
+> +       asm volatile ("                                 \
+> +       r1 =3D 0;                                         \
+> +       r1 =3D %[map_hash_8b] ll;                         \
+> +       if r1 =3D=3D 0xdeadbeef goto l0_%=3D;         \
 
+I bet this doesn't fit into imm32 either.
+It should fit into _signed_ imm32.
