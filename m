@@ -1,36 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EAEB1FC0FE;
-	Wed,  4 Jun 2025 21:40:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E70A129A2;
+	Wed,  4 Jun 2025 22:12:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749073238; cv=none; b=e4l09WIJ48uE52o0POpSfRlqONzqynqFVwDgwK5IAncQonVsTFKzAoA7x39hGRSbFDxZ244iBHeEj9l2nNESvnbOuqO3gftGjQEyUdRU02l9whYEEENEgRBvGcJnx705uh8UPobsg/4uF1cRIOELmo5deiaW+T0CyTnMzTmrApk=
+	t=1749075143; cv=none; b=UgUCiBANBw43q/wiNLYVi8JvQL0GeonIH34oGzsBwilf04TwqAGS9rfFlN0oOCfCQwxWc0Nd3U5eOv8+qCjqrPE+WbzEWO1CR4bQclUkcm+gmEmSUEnWcLp3qEtiKBIgEwGbHELjW90X0KdT5EW0u/D7OcNuTXD4U/PLTFkMjYE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749073238; c=relaxed/simple;
-	bh=aAeuHK5WWn3+SYekWH+tpsFhTjD2tgoSA/hS4ezKTkU=;
+	s=arc-20240116; t=1749075143; c=relaxed/simple;
+	bh=ZgNC/tzUGjuhabSWLf9s/V5Dj4iYLMJ7BsfBi8LCeDs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CjinQD3XkA8PgRcwMMk6lUn+KBowQk+wbJ+LLsdyAVTpRs2deD58Dc2ydycpaD0x1qop19H1AtXf8DfmPZZK9qMx0VUzIp+l5BlXaoXM9Tk04Fn9zplCE60Y3Hg7Uxwb93k4bMK26mcRq+GsdmY+b6HZE8MlA1AqUTxVSnbP9Mg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ly5nrdNW; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=mXlxBfkTp7hI6am1UQYy8hwqeM3pFNkjwaRmA7lDAwDEaAF8kiUEJdmdvAtoBfg7S2l3mTZHPkYKk7M70As4GNR8LCByWQFpVmM5nI5b4ZUBVUhpyzVJT/UaGrXI9azLip6O+2X7aJIYxqJQAFpo+SO4RIHOPPR+onMVI41lRZ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QTNYLMal; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ly5nrdNW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42C29C4CEE4;
-	Wed,  4 Jun 2025 21:40:36 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QTNYLMal"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7931C4CEE4;
+	Wed,  4 Jun 2025 22:12:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749073237;
-	bh=aAeuHK5WWn3+SYekWH+tpsFhTjD2tgoSA/hS4ezKTkU=;
+	s=k20201202; t=1749075142;
+	bh=ZgNC/tzUGjuhabSWLf9s/V5Dj4iYLMJ7BsfBi8LCeDs=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Ly5nrdNWs6kVeCnPi710BfN63b45OWCwtbvkKFkWSrNnnZ/ML956ygHdjWdKuHvJz
-	 3apMaLBfA73s2qNF5+6l04aJqKXpccKBYA0y/OYgwP3jEbILwsWHW+cIselWUaRbGM
-	 7mDqdbGc+01hDgdSpEnRkutkibqe2KwZEvKa10l2rdPfht4kREnmKnQkgGgVNyfwMk
-	 dl5g9g4I9htbco3lTlRzcFAQZDMhLP5enEgWrXyyBa1HxoyjYPG4pEmOike2Kgl8UJ
-	 BHVKQIotuJRelSWbhVQ0xTGxTyllhuy34/3zhksryfxW3AeJLYnk2VsDPjCProtGNk
-	 WRJFhk8U/TmEw==
-Date: Wed, 4 Jun 2025 14:40:34 -0700
-From: Namhyung Kim <namhyung@kernel.org>
-To: Blake Jones <blakejones@google.com>, Song Liu <song@kernel.org>,
-	Jiri Olsa <jolsa@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>,
+	b=QTNYLMalq6elO/8yeakwihsxnK3xe5UkzqTnVdvj9JT74aJBxwpgy1Foz0W+0aoXj
+	 uZ3cbrt51gg0ovSDbusEIHfxRm1CiA7O19bpk/sC1M/4ZKRtoBLFKShyXV9S6ajM6+
+	 Q5QjVH8AAMxJqXMbNlQfQAESEXBmZtBKXxPJHRVBOJNpFXyP3uW3o0VXpPv4KQ8hdA
+	 XWTltp1U/6wqSQMnRagDlQJlYDY/l/foDyVLSJ02/Wkga+MhhIPC1ygW+418vVYkvm
+	 lR5Hp9HDqTuqZ1OpViq/XiN5etrqzbBv0L95mmk9Tdz9CVGno+7ds6Zdh+NVVjGCts
+	 IN744KBfKdVEA==
+Date: Wed, 4 Jun 2025 19:12:19 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: Namhyung Kim <namhyung@kernel.org>
+Cc: Blake Jones <blakejones@google.com>, Song Liu <song@kernel.org>,
+	Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Martin KaFai Lau <martin.lau@linux.dev>,
@@ -39,9 +39,7 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	John Fastabend <john.fastabend@gmail.com>,
 	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
 	Hao Luo <haoluo@google.com>, Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
+	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>,
 	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
 	Ian Rogers <irogers@google.com>,
 	Adrian Hunter <adrian.hunter@intel.com>,
@@ -57,7 +55,7 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Ben Gainey <ben.gainey@arm.com>, linux-kernel@vger.kernel.org,
 	bpf@vger.kernel.org, linux-perf-users@vger.kernel.org
 Subject: Re: [PATCH 2/3] perf: collect BPF metadata from existing BPF programs
-Message-ID: <aEC9UqkKeEj4on3M@google.com>
+Message-ID: <aEDEw7bCDAtEXfGC@x1>
 References: <20250521222725.3895192-1-blakejones@google.com>
  <20250521222725.3895192-3-blakejones@google.com>
  <aD9Xxhwqpm8BDeKe@google.com>
@@ -66,6 +64,7 @@ References: <20250521222725.3895192-1-blakejones@google.com>
  <CAP_z_Cg+mPpdzxg-d+VV5J9t7vTTNXQmKLdnfuNETm1H40OA+g@mail.gmail.com>
  <aD9yte49C_BM5oA9@google.com>
  <CAP_z_Cg0ZCfvEFpJpvhuRcUkjV_paCODw2J61D3YQMm7dg0aGg@mail.gmail.com>
+ <aEC9UqkKeEj4on3M@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -75,45 +74,73 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAP_z_Cg0ZCfvEFpJpvhuRcUkjV_paCODw2J61D3YQMm7dg0aGg@mail.gmail.com>
+In-Reply-To: <aEC9UqkKeEj4on3M@google.com>
 
-On Tue, Jun 03, 2025 at 03:29:35PM -0700, Blake Jones wrote:
-> On Tue, Jun 3, 2025 at 3:10 PM Namhyung Kim <namhyung@kernel.org> wrote:
-> > > Hmmm. Is that documented and tested anywhere? Offhand it sounds like an
-> > > implementation detail that I wouldn't feel great about depending on -
-> > > certainly not without a strong guarantee that it wouldn't change.
-> >
-> > Good point.  Maybe BPF folks have some idea?
-> >
-> > Anyway the current code generates them together in a function.
-> >
-> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/kernel/events/core.c?h=v6.15#n9825
-> 
-> It certainly does, yeah. But I don't want to have that become another
-> instance of https://www.hyrumslaw.com/.
+On Wed, Jun 04, 2025 at 02:40:34PM -0700, Namhyung Kim wrote:
+> On Tue, Jun 03, 2025 at 03:29:35PM -0700, Blake Jones wrote:
+> > On Tue, Jun 3, 2025 at 3:10 PM Namhyung Kim <namhyung@kernel.org> wrote:
+> > > > Hmmm. Is that documented and tested anywhere? Offhand it sounds like an
+> > > > implementation detail that I wouldn't feel great about depending on -
+> > > > certainly not without a strong guarantee that it wouldn't change.
 
-Thanks for sharing this.
+> > > Good point.  Maybe BPF folks have some idea?
 
-I'm curious about the semantics of the KSYMBOL and BPF_EVENT.  And I
-feel like there should be a connection between them.
+> > > Anyway the current code generates them together in a function.
 
-Song and Jiri, what do you think?
+> > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/kernel/events/core.c?h=v6.15#n9825
 
-Thanks,
-Namhyung
+> > It certainly does, yeah. But I don't want to have that become another
+> > instance of https://www.hyrumslaw.com/.
 
-> 
-> > > Can you say more about why the duplicated records concern you?
-> >
-> > More data means more chance to lost something.  I don't expect this is
-> > gonna be a practical concern but in general we should pursue less data.
-> 
-> That makes sense. In this case, it will only show up for BPF programs that
-> define "bpf_metadata_" variables (which is already an opt-in action), and
-> the number of variables a given program defines is likely to be quite small.
-> So I think the cost of the marginal increase in data generated is outweighed
-> by the usability and reliability benefits of being able to match these events
-> 1:1 with the KSYMBOL events. If this proves to be a problem in practice,
-> it can be revisited.
-> 
-> Blake
+> Thanks for sharing this.
+
+> I'm curious about the semantics of the KSYMBOL and BPF_EVENT.  And I
+> feel like there should be a connection between them.
+
+So, the comment in:
+
+tools/perf/util/bpf-event.c
+
+Is:
+
+ * Synthesize PERF_RECORD_KSYMBOL and PERF_RECORD_BPF_EVENT for one bpf
+ * program. One PERF_RECORD_BPF_EVENT is generated for the program. And
+ * one PERF_RECORD_KSYMBOL is generated for each sub program.
+
+which is not so nicely worded tho :-\
+
+"One KSYMBOL per program", followed by "one KSYMBOL per sub program".
+
+But that matches the referenced:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/kernel/events/core.c?h=v6.15#n9825
+
+So, for these bpf_metadata_ variables, would that be strictly per
+program or would it be perf 'sub program'?
+
+Couldn't get an answer from looking at tools/bpf/bpftool/prog.c, but
+seems to be with progs, not subprogs, i.e. just the PERF_RECORD_KSYMBOL
+associated with progs (not subprogs) will have those variables.
+
+But then it seems those variables _are_ associated with at least one
+PERF_RECORD_KSYMBOL, right?
+
+- Arnaldo
+
+> Song and Jiri, what do you think?
+
+> Thanks,
+> Namhyung
+
+> > > > Can you say more about why the duplicated records concern you?
+> > >
+> > > More data means more chance to lost something.  I don't expect this is
+> > > gonna be a practical concern but in general we should pursue less data.
+> > 
+> > That makes sense. In this case, it will only show up for BPF programs that
+> > define "bpf_metadata_" variables (which is already an opt-in action), and
+> > the number of variables a given program defines is likely to be quite small.
+> > So I think the cost of the marginal increase in data generated is outweighed
+> > by the usability and reliability benefits of being able to match these events
+> > 1:1 with the KSYMBOL events. If this proves to be a problem in practice,
+> > it can be revisited.
