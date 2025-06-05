@@ -1,125 +1,118 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DA21235072;
-	Thu,  5 Jun 2025 13:27:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28E5923644F;
+	Thu,  5 Jun 2025 13:27:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749130023; cv=none; b=GTVAaL8pOTl6gsciBaaBNj5tOHrV29QivF7fEk/f58tGFyEcMzr59d5bnaOOu+Cy2RN1enAVP6KVENaOELBQvvpPc8k3Aq4k1RjO9Lm61YTQCD5xNjROsNI63QuGf4be57yEOjF6kwC3EmXy/zl7HOVCYbh6ixplTZFoVBU9KEg=
+	t=1749130029; cv=none; b=jk0ttFD8ML21Xxk7zf7XRBXjc6/mW9/6tn5XIKyuKcVUnpe1hzHLVJ9zLWoL50f4sXvTphGGCCtrmVDON5qRSNBNrZlJwMnaTnPKI7z7HgoDwHgfKPckC459/ZWvDCVmGDmsR2+8JK13KhR/3HQiqGTD6I8V1APDVNjhTuIZEIQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749130023; c=relaxed/simple;
-	bh=homajw06345S0l4YIs2RkqSbi/C7IEpQUvMFjl5CQ2s=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=jAxtb68yFdDIOk9JBjapBTD1ZBYqtL5s5haINCXisT+lzRIBx+IX2E+BSwa1PIoqGLeYC94FlmnSdZMpSZ90cemDZe7dAR9Pq09miW2e+Vb6ISROBNyf1UKsPrYvX0lIX+Xdsj5v1ouXEDuJ7tOH8ntLgujxcwwB/EiMvf+ZUnM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ssZ/+q4o; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1749130029; c=relaxed/simple;
+	bh=6WYxkDB8bWFLBv4Z/Y9ATt9LzxPCKrcOgKpqaQmRRgo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=A/NZYhqfkD6XYXOyOiuqP4L9oNLjRzPGTTAQy1zKyhcgbaPevUin6Z7gcbS1uUr00g9SFawob3J+tAjme3pj5RS6/WLMtro6TlLeRATBo9scmVWhH3s+itZZClk2rdBoaAC6mxOboOtA+0R+kEklVgiER5P6mXCGgkS63AqWCng=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iB4FaTOI; arc=none smtp.client-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ssZ/+q4o"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CE0FC4CEE7;
-	Thu,  5 Jun 2025 13:26:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749130023;
-	bh=homajw06345S0l4YIs2RkqSbi/C7IEpQUvMFjl5CQ2s=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ssZ/+q4oS1F9zHoKYoabsKnU1EICmVGkYwct1HnU+lODvQ6zxxZYlPfBDniXvbKDR
-	 WgQXenxIisMoNj76F2CtpkF4Uz+z2uYXrMDFEUq8YQN9ICVKYqjL5lgZzgogK31/LN
-	 cJlCMpSlvIqZPXP0+wXMZQNfQezVaaH/vG1J1UPtlIFu9/XU/MCalAuxvp6tg/8+lh
-	 pIAHhLm/KRoFvpaTwjwsenumSbArPxaqYNOT5oV19kOakHSBrAm+VlRJ5Cc90+tkz4
-	 VKpvdRkwqYCTBqS9MVR3edOMRK+La34XYq6fACs/NYBKq9smSbxt/GzTqBZlK22pUA
-	 cOb/wS4Hil/Ig==
-From: Jiri Olsa <jolsa@kernel.org>
-To: Oleg Nesterov <oleg@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Andrii Nakryiko <andrii@kernel.org>
-Cc: bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	x86@kernel.org,
-	Song Liu <songliubraving@fb.com>,
-	Yonghong Song <yhs@fb.com>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Hao Luo <haoluo@google.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Alan Maguire <alan.maguire@oracle.com>,
-	David Laight <David.Laight@ACULAB.COM>,
-	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <thomas@t-8ch.de>,
-	Ingo Molnar <mingo@kernel.org>
-Subject: [PATCHv3 perf/core 16/22] selftests/bpf: Add uprobe syscall sigill signal test
-Date: Thu,  5 Jun 2025 15:23:43 +0200
-Message-ID: <20250605132350.1488129-17-jolsa@kernel.org>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250605132350.1488129-1-jolsa@kernel.org>
-References: <20250605132350.1488129-1-jolsa@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iB4FaTOI"
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-451d41e1ad1so8067655e9.1;
+        Thu, 05 Jun 2025 06:27:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1749130026; x=1749734826; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Dc0t8LJWwMsH8u7lCLoZZlP0jO1SucXJeyDx8z9BxhY=;
+        b=iB4FaTOIsv/Gc4jdn04H/sUBnexSH3qNWuVn1t1ZK9edmEJ8/F5W79Hm/wBuRCYb5t
+         Ld/ny15utovSsIyy+eudXoGL1OKw+/GrPs9567nTAfJv6YxKBdSH2EubWBR+HtwAfo5U
+         VcXLzGDMttcuVXh60EgLK6q2ZksnB4MqSvbO0bm1o0JsaRf7Dh9f40RNmwVyIBrZAf8z
+         xmdKgL+03qk842/X0hrJeS81wWGErNjq69EwxDHHXyYEk/fktmAcP7pykMs1jKhPNgRD
+         Le7ZkpYaLk59FEjd/BMLSE2L8MzQKUNCNErU0+V11KEXbI0QSsHlOPxPpBv6/zexytj8
+         btTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749130026; x=1749734826;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Dc0t8LJWwMsH8u7lCLoZZlP0jO1SucXJeyDx8z9BxhY=;
+        b=Dhsz3GAlxubBeGPxX+FFX3eHafMI1irvQXUBQOXMNvnU1Iiadt0qNO+WRlVe4wYIYW
+         PADwmoteRVYbsp8lvYN/Uqc2JzlIe93lWsn+n31GY22BUruqWMa1CylYx6u59Bod38Z5
+         ZkUJ6qhH+5KsA0fIwh1PESo3aAbaK+TRyPYu+eTEEkyGYu4ZoOR7r0i3ercoVVVgU469
+         O5PWpkV3mAx58g0TUUrnKtPtV5/0r14SbHhwb9G+J+FTWfwSUSSBoke0oRsgNZl0kX8V
+         bwY4eHJVXcPmDyQBi9yNeGQqFee1UjVDhzj7SkVFYb2tYvevoqqeaOWP49Xvnrf5PUEI
+         ggpg==
+X-Forwarded-Encrypted: i=1; AJvYcCUFNn0/sP9nAQ5Ak6AHCHwLDumn/OHJz38hvDbJZUJR1W8P3KPKbqxNNZ0X/aD8T9n5yMtTQigv@vger.kernel.org, AJvYcCVh7jIvafKkyzvCJWJ5QuJcgeQXAZ7U8CpXmrU171NuSuvmW8i1Sf4EXMEKiiVP7Dp8uWGYkXwnpB8cefBN@vger.kernel.org, AJvYcCWLrGc7Z4GLytwj8LMYVFby77Fh4jx3P+lT9bGx6F/zne4JQbSHKYSav6wYnVdV3Tz7rC8Srs60MHzdIQ==@vger.kernel.org, AJvYcCXFLwDdyhT65xILh41TMGa5x/A1GWUps0w0fbe1ZGXgbvL0nu4Yg35KZEnBDbMQJiRUAYI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyMk7KuX5k4XvT+ss2qR3pPT/7yFTaMmYHOSngJdcxaPmCxXC8C
+	9JziA2lcXe+ilFGqlp1EpyUCOiaO8u6/AsFAjguYEI7/FLIQBSCCI+g6
+X-Gm-Gg: ASbGnctPPHI48R/jSJxgFPHs96ODp3xR/XM/p5gU1QzAhwXrmqX0n9N/5eM+fh/8hi8
+	af+3FIH3vySwU/jrl1sJNJ3jPRozUhL/a91nIEhQ4bIYmDtTIud/7zRXquKZLR8OGJWhb2UdhqG
+	KA51CS5cQGqV6bk6URwGdeY81RXK2ZQgu6eyL/A8tvaBGoGZaeHB5ZZpn7HCrAcSeqwVw+yevM2
+	mv5fzpXwBS2vht04yhoh5t5zRbT2qPFJeFDGhRScjyKwasdbEWMfeCs20dm/k47b7MSrKkcglTz
+	YkNegrFs3AgtBoAMUptJ5b9ugie+UPDG7UE0+7hpPSutiLS9y+cju6Uvu1Yxhw==
+X-Google-Smtp-Source: AGHT+IFQTEpAwXkhDKcJd2Civ8ezQlDCDxM2AVWY9CCxR7LpFEe6jtx4UHnl03vBjg7BNjYYxNKBdQ==
+X-Received: by 2002:a05:6000:4021:b0:3a1:fcd9:f2ff with SMTP id ffacd0b85a97d-3a51dbb3391mr5327763f8f.12.1749130026081;
+        Thu, 05 Jun 2025 06:27:06 -0700 (PDT)
+Received: from [192.168.8.100] ([148.252.145.124])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-451f8311ae6sm16366935e9.2.2025.06.05.06.27.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 05 Jun 2025 06:27:05 -0700 (PDT)
+Message-ID: <342e7df1-ea55-416f-9f4a-2712d4087b24@gmail.com>
+Date: Thu, 5 Jun 2025 14:28:23 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC v4 18/18] page_pool: access ->pp_magic through struct
+ netmem_desc in page_pool_page_is_pp()
+To: Harry Yoo <harry.yoo@oracle.com>
+Cc: Byungchul Park <byungchul@sk.com>, willy@infradead.org,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+ kernel_team@skhynix.com, kuba@kernel.org, almasrymina@google.com,
+ ilias.apalodimas@linaro.org, hawk@kernel.org, akpm@linux-foundation.org,
+ davem@davemloft.net, john.fastabend@gmail.com, andrew+netdev@lunn.ch,
+ toke@redhat.com, tariqt@nvidia.com, edumazet@google.com, pabeni@redhat.com,
+ saeedm@nvidia.com, leon@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ david@redhat.com, lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com,
+ vbabka@suse.cz, rppt@kernel.org, surenb@google.com, mhocko@suse.com,
+ horms@kernel.org, linux-rdma@vger.kernel.org, bpf@vger.kernel.org,
+ vishal.moola@gmail.com
+References: <20250604025246.61616-1-byungchul@sk.com>
+ <20250604025246.61616-19-byungchul@sk.com>
+ <390073b2-cc7f-4d31-a1c8-4149e884ce95@gmail.com> <aEGEM3Snkl8z8v4N@hyeyoo>
+ <aEGKx34Zz3v4hPTK@hyeyoo>
+Content-Language: en-US
+From: Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <aEGKx34Zz3v4hPTK@hyeyoo>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Make sure that calling uprobe syscall from outside uprobe trampoline
-results in sigill signal.
+On 6/5/25 13:17, Harry Yoo wrote:
+> On Thu, Jun 05, 2025 at 08:49:07PM +0900, Harry Yoo wrote:
+>> On Thu, Jun 05, 2025 at 11:56:14AM +0100, Pavel Begunkov wrote:
+>>> On 6/4/25 03:52, Byungchul Park wrote:
+>>>> To simplify struct page, the effort to separate its own descriptor from
+>>>> struct page is required and the work for page pool is on going.
+>>>>
+>>>> To achieve that, all the code should avoid directly accessing page pool
+>>>> members of struct page.
+>>>
+>>> Just to clarify, are we leaving the corresponding struct page fields
+>>> for now until the final memdesc conversion is done?
+>>
+>> Yes, that's correct.
+> 
+> Oops, looks like misread it. If by "leaving the corresponding struct page
+> fields" you meant "leaving netmem fields in struct page", no.
+> It'll be removed.
 
-Signed-off-by: Jiri Olsa <jolsa@kernel.org>
----
- .../selftests/bpf/prog_tests/uprobe_syscall.c | 36 +++++++++++++++++++
- 1 file changed, 36 insertions(+)
+I see, in which case instead we might want to leave a reminder
+in page_pool_page_is_pp in a form of a build warning, but the
+patch looks fine either way.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c b/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
-index 792ff7d411d2..94be99dcd1f3 100644
---- a/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
-+++ b/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
-@@ -740,6 +740,40 @@ static void test_uprobe_race(void)
- 	ASSERT_FALSE(USDT_SEMA_IS_ACTIVE(race), "race_semaphore");
- }
- 
-+#ifndef __NR_uprobe
-+#define __NR_uprobe 336
-+#endif
-+
-+static void test_uprobe_sigill(void)
-+{
-+	int status, err, pid;
-+
-+	pid = fork();
-+	if (!ASSERT_GE(pid, 0, "fork"))
-+		return;
-+	/* child */
-+	if (pid == 0) {
-+		asm volatile (
-+			"pushq %rax\n"
-+			"pushq %rcx\n"
-+			"pushq %r11\n"
-+			"movq $" __stringify(__NR_uprobe) ", %rax\n"
-+			"syscall\n"
-+			"popq %r11\n"
-+			"popq %rcx\n"
-+			"retq\n"
-+		);
-+		exit(0);
-+	}
-+
-+	err = waitpid(pid, &status, 0);
-+	ASSERT_EQ(err, pid, "waitpid");
-+
-+	/* verify the child got killed with SIGILL */
-+	ASSERT_EQ(WIFSIGNALED(status), 1, "WIFSIGNALED");
-+	ASSERT_EQ(WTERMSIG(status), SIGILL, "WTERMSIG");
-+}
-+
- static void __test_uprobe_syscall(void)
- {
- 	if (test__start_subtest("uretprobe_regs_equal"))
-@@ -760,6 +794,8 @@ static void __test_uprobe_syscall(void)
- 		test_uprobe_usdt();
- 	if (test__start_subtest("uprobe_race"))
- 		test_uprobe_race();
-+	if (test__start_subtest("uprobe_sigill"))
-+		test_uprobe_sigill();
- }
- #else
- static void __test_uprobe_syscall(void)
 -- 
-2.49.0
+Pavel Begunkov
 
