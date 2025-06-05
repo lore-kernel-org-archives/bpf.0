@@ -1,131 +1,119 @@
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
+Received: from out162-62-57-210.mail.qq.com (out162-62-57-210.mail.qq.com [162.62.57.210])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2D651A2545;
-	Thu,  5 Jun 2025 07:35:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EC821F4176;
+	Thu,  5 Jun 2025 07:51:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.57.210
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749108931; cv=none; b=GXggvh5Y2h94e+Zdl79u6gciivNLpK60n+nXxFA1RIHsq+xBnxuSPrSLdHZa7ExUpd4FlA5MCnmBCquneHk9FFVQj58UZUK9iUmrqitYutgvwneLFSWctobqDT7XHHzAF5lKN4Q4BATXxonCCj3KorbF5x5Q7o+y8b8PX8cqVOg=
+	t=1749109903; cv=none; b=HrvOzbPDqa+ScxXB4hi7ZvbVW/ENU0UiLU52ScFwUbEZWi/Y+KM+M7K+ykl14PBEgQiuM6jd7Mc6BdYod4xD9XE3HHgHRyLA+A01V6SfWtsQ49QWnp0Ho6mXxevmudnu+OpIs/nNbeOLjA2FtDMrfzl3Q0vtHJ5wIuy0RuB0zCI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749108931; c=relaxed/simple;
-	bh=5Yg2TszODfSWyu/tkAewlOKe9bmGQWD5HRPUFzitAq0=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=KiJsa4xEGDz2aJLNsv/s54tTTnXmNvA/LuFx4QEm3OynDdd3VjYtDXxkfCF5qUKeJZCpdXdzxJRY/uWBplaFG/n7TbQ1nF4Ewg3UTfGoL3YEULhKxJd+GWqZPnwaE6bGwTzQbck0iP35txm7iTb/dwib6Z1aC6ix5FREBy9IENg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=kj784Nm5; arc=none smtp.client-ip=217.70.183.200
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1749109903; c=relaxed/simple;
+	bh=ADAo4tuAn9RJse2Dsl/pLYasjN1HWf+dOgXZED+HZ0c=;
+	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
+	 MIME-Version; b=R5eSTmWsraynviKI4JR79fj6KAKZOUC5md8sAumYSJzI2IKUZ1PuIH8ygaPeaaaRA0GYAr1Y1LHMC9x8O84G4TsVLKgRTpX7LwPpIhkQXvbJkn/pto6Aom1UVICG/LtSLyT2dMra+AMNCEAUY8FErhmtjfK/gqlDebGPvuQcr5E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=AYd+VJE5; arc=none smtp.client-ip=162.62.57.210
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="kj784Nm5"
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 5236843935;
-	Thu,  5 Jun 2025 07:35:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1749108920;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=5Yg2TszODfSWyu/tkAewlOKe9bmGQWD5HRPUFzitAq0=;
-	b=kj784Nm5ZgltuTXJv+pbKGMDA1t5/ru/eck+iLsRHT9bh9dUAeKg1UtiSce3r6Rlkt7NZG
-	qIToZTnegQa10FbPzHFs+21XG8fPMSJ9luRmHf0Tcez7mIKtXf9cvIyEX0qlJeupy/3EGv
-	MrWDfRryvUUNfeFlQnZP3sB5mO5Z0Q7yCadc1YSb2Q4hFOq0DMbigaRqE5MeN8JAuyOXOS
-	tdRwbxKu/TiRONaFFbT1o0xDZe9esDi5hlY10LwDmFTJoQ+xZELZxa87B0WtIdPEUOanPV
-	hRLRzekmcstDQk4EaSTKY5DBrLMkgQ6hPQxyzj9+v0rfzvpRPaSdlch0EXpxZg==
+	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="AYd+VJE5"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+	s=s201512; t=1749109883;
+	bh=riOYvbqngrrZtJixWRHCaMdJe6DT8P5TkGFvEYl78Zg=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=AYd+VJE5lKlEjhHf5oHs05oZUpDJ2BsMS3x+/D01ci4p5dtZTDLw/RtuQCezvK4H4
+	 9JOfr/k+yyHOMjRFZ+a+HK+2J9PF9ugugnt+8r4dMoSJQj3zvINBu7MroedVSc0Bky
+	 Ts0VX32LXNwaiOpUJPsFN8Sog3eTxdg6IHqu+MuA=
+Received: from NUC10.. ([39.156.73.10])
+	by newxmesmtplogicsvrszc16-0.qq.com (NewEsmtp) with SMTP
+	id CD1A1A28; Thu, 05 Jun 2025 15:51:17 +0800
+X-QQ-mid: xmsmtpt1749109877th51j190x
+Message-ID: <tencent_F85EF146D110170D48845EB3F02ED5549409@qq.com>
+X-QQ-XMAILINFO: MRMtjO3A6C9XKLqM7JeVPGU0RrgQGAi/gOOybpETim/eOO5nyhGqNka7shneg+
+	 EufHpPXJz532I2fJbZBPyyrG3nQTLAkguSn7BQRmDhkzAWl4orFo2S8X4OFdhxguZdsUGxFa9Mpo
+	 qHPVqqQ0mrHBhc7D1Q8wSg5YZkRCmYPtwpavBWcH18V9vABB8UGGspg4hfTxmR3qmO3u6+Ktjq3l
+	 vSoZbLqoXUFQYpoZc1j8UPk5Pucde7gn5Qqv3XoNlOZxzCzKmXwhxoloFjKx984LuvDP58qvzmrV
+	 mBpBBU38mmOuvsEgc9PIcUszCcbjXYPjMNSHGarFQ6Ziu2GG+nkRm0z2rJk1PPRWI75iMnAqOLZW
+	 wLUfRSTdc+7lTQzflFTgQC+qGbQwW+yS1Gxe3II6ct8IoL1K/TBbAVYeTydoWxc2CJP/Kbw+YPtt
+	 clrenvo9DNdjIDhr4qsbkIA2ZK0by+x5oYRX9CwdPEZa5jt8vBDQSoEFveJhTXhQw98xFdoDMpRb
+	 86nIuZfXCUsnJAazvQZu5OUmn5qVY70GFgY3duM3sAnyNJZhnJINFI9GcR2GDqYXmMB/g7wHcBjf
+	 pCuCYUITgbELJKl7b4Ib9pNISvM1/Afst8/uMe9vF5utiVAHpYQAZsiH/gu3xF6Yq6EyRlIk1pxn
+	 0XfryPS4YcCy8Op+GlanCOTtnMR+EHoJM/Nyj3sazXKTu2giouYGJsL5Fr0uaiTnze4uTe62qDtR
+	 N7lC+jSMoE6cqWm8TmhyHebAEt8C4SGbOWs4bok2Gwv1fWCyBvMKMy7zbAHb45a/u22oVs/WNY6q
+	 KdII5KSnQ6U4Xfkz3WLdYJH6qo+OdbkbtWi4IiOZfD5N71mg6yfCGkqHQ/h1jHRrRWv3VHrDXF1h
+	 cJr+2ZRobCb7qhbKiY5AwJjE1P8PFEY3PrAbWhmpIhkytZvI7wipn/g08cQpNg0/P6fcoY4dmVo4
+	 EwdfnowzxsSO0h1wfBAol3gVIBd1wjrL0d7KATx1GZv8t8k7SzViUFb0XAVT/tYe7OQmvCrP8mW9
+	 NdohZDZPVkg1QnDtxcZAM+hicZx+I=
+X-QQ-XMRINFO: OD9hHCdaPRBwq3WW+NvGbIU=
+From: Rong Tao <rtoax@foxmail.com>
+To: Quentin Monnet <qmo@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Andrew Kreimer <algonell@gmail.com>,
+	Rong Tao <rongtao@cestc.cn>,
+	Lin Yikai <yikai.lin@vivo.com>,
+	bpf@vger.kernel.org (open list:BPF [TOOLING] (bpftool)),
+	linux-kernel@vger.kernel.org (open list)
+Cc: rtoax@foxmail.com
+Subject: [PATCH bpf-next 2/2] bpftool: skel: Introduce NAME__open_and_load_opts()
+Date: Thu,  5 Jun 2025 15:51:13 +0800
+X-OQ-MSGID: <8c0f486b44591013c4fe538fb5edb908992978b8.1749109589.git.rongtao@cestc.cn>
+X-Mailer: git-send-email 2.49.0
+In-Reply-To: <cover.1749109589.git.rongtao@cestc.cn>
+References: <cover.1749109589.git.rongtao@cestc.cn>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 05 Jun 2025 09:35:15 +0200
-Message-Id: <DAEFD2WH7HRV.2SOG9Q00QSEXH@bootlin.com>
-Cc: "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "John Fastabend" <john.fastabend@gmail.com>,
- "Andrii Nakryiko" <andrii@kernel.org>, "Martin KaFai Lau"
- <martin.lau@linux.dev>, "Eduard Zingerman" <eddyz87@gmail.com>, "Song Liu"
- <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "KP Singh"
- <kpsingh@kernel.org>, "Stanislav Fomichev" <sdf@fomichev.me>, "Hao Luo"
- <haoluo@google.com>, "Jiri Olsa" <jolsa@kernel.org>, "Puranjay Mohan"
- <puranjay@kernel.org>, "Xu Kuohai" <xukuohai@huaweicloud.com>, "Catalin
- Marinas" <catalin.marinas@arm.com>, "Will Deacon" <will@kernel.org>,
- "Mykola Lysenko" <mykolal@fb.com>, "Shuah Khan" <shuah@kernel.org>, "Maxime
- Coquelin" <mcoquelin.stm32@gmail.com>, "Alexandre Torgue"
- <alexandre.torgue@foss.st.com>, "Florent Revest" <revest@chromium.org>,
- "Bastien Curutchet" <bastien.curutchet@bootlin.com>,
- <ebpf@linuxfoundation.org>, "Thomas Petazzoni"
- <thomas.petazzoni@bootlin.com>, <bpf@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
- <linux-kselftest@vger.kernel.org>,
- <linux-stm32@st-md-mailman.stormreply.com>, <dwarves@vger.kernel.org>
-Subject: Re: [Question] attributes encoding in BTF
-From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-To: "Ihor Solodrai" <ihor.solodrai@linux.dev>, "Andrii Nakryiko"
- <andrii.nakryiko@gmail.com>
-X-Mailer: aerc 0.20.1-0-g2ecb8770224a
-References: <20250411-many_args_arm64-v1-0-0a32fe72339e@bootlin.com>
- <20250411-many_args_arm64-v1-1-0a32fe72339e@bootlin.com>
- <CAEf4Bzbn6BdXTOb0dTcsQmOMZpp5=DzGS2hHHQ3+dwcja=gv+w@mail.gmail.com>
- <D98Q8BRNUVS9.11J60C67L1ALR@bootlin.com>
- <CAEf4BzZHMYyGDZ4c4eNXG7Fm=ecxCCbKhKbQTbCjvWmKtdwvBw@mail.gmail.com>
- <D9E9IQQ3QKXM.3UJ17G9CBS1FH@bootlin.com>
- <DADMLIVHMSSO.3AXSI5216WCT6@bootlin.com>
- <9a2ba0ad-b34d-42f8-89a6-d9a44f007bdc@linux.dev>
-In-Reply-To: <9a2ba0ad-b34d-42f8-89a6-d9a44f007bdc@linux.dev>
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddugdeffedvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpegggfgtfffkvefuhffvofhfjgesthhqredtredtjeenucfhrhhomheptehlvgigihhsucfnohhthhhorhoruceorghlvgigihhsrdhlohhthhhorhgvsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeffvddufffhieffheetfffggeeugedtieduheeilefguddvheegvdeuffeuveeltdenucffohhmrghinhepkhgvrhhnvghlrdhorhhgpdgsohhothhlihhnrdgtohhmnecukfhppedvuddvrddutdehrdduhedtrddvhedvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdduvddruddthedrudehtddrvdehvddphhgvlhhopehlohgtrghlhhhoshhtpdhmrghilhhfrhhomheprghlvgigihhsrdhlohhthhhorhgvsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeefvddprhgtphhtthhopehihhhorhdrshholhhoughrrghisehlihhnuhigrdguvghvpdhrtghpthhtoheprghnughrihhirdhnrghkrhihihhkohesghhmrghilhdrtghomhdprhgtphhtthhopegrshhtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghnihgvlhesihhoghgvrghrsghogidrnhgvt
- hdprhgtphhtthhopehjohhhnhdrfhgrshhtrggsvghnugesghhmrghilhdrtghomhdprhgtphhtthhopegrnhgurhhiiheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepmhgrrhhtihhnrdhlrghusehlihhnuhigrdguvghvpdhrtghpthhtohepvgguugihiiekjeesghhmrghilhdrtghomh
-X-GND-Sasl: alexis.lothore@bootlin.com
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Hi Ihor,
+From: Rong Tao <rongtao@cestc.cn>
 
-On Wed Jun 4, 2025 at 7:31 PM CEST, Ihor Solodrai wrote:
-> On 6/4/25 2:02 AM, Alexis Lothor=C3=83=C2=A9 wrote:
+Update Documentation for skel NAME__open_and_load_opts()
 
-[...]
+Signed-off-by: Rong Tao <rongtao@cestc.cn>
+---
+ tools/bpf/bpftool/Documentation/bpftool-gen.rst | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
->> Could I be missing something obvious ? Or did I misunderstand the actual
->> attribute encoding feature ?
->
-> Hi Alexis.
->
-> The changes recently landed in pahole and libbpf re attributes had a=20
-> very narrow goal: passing through particular attributes for some BPF=20
-> kfuncs from the kernel source to vmlinux.h
->
-> BTF now has a way of encoding any attribute (as opposed to only bpf=20
-> type/decl tags) by setting type/decl tag kind flag [1]. So it is=20
-> possible to represent attributes like packed and aligned in BTF.
->
-> However, the BTF tags need to be generated by something, in case of=20
-> vmlinux by pahole. Pahole generates BTF by parsing DWARF. And, as far as=
-=20
-> I understand, attributes are not (can not be?) represented in DWARF in a=
-=20
-> generic way, it really depends on specifics of the attribute.
->
-> In order to support packed/aligned, pahole needs to know how to figure=20
-> them out from DWARF input and add the tags to BTF. And this does not=20
-> happen right now, which is why you don't see anything in bpftool output.
->
-> [1]=20
-> https://lore.kernel.org/bpf/20250130201239.1429648-1-ihor.solodrai@linux.=
-dev/
-
-Thanks for the details ! I have missed this possibility, as I have been
-assuming that DWARF info was exposing the needed info. I'll take a look at
-it, but if those attributes can not be represented by DWARF, I'll have to
-find another way of getting those packing/alignment modifications on data
-type (eg: re-use/share btf__align_of from libbpf, as suggested by Andrii,
-but it may not able to cover all cases).
-
-Thanks,
-
-Alexis
-
---=20
-Alexis Lothor=C3=A9, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/tools/bpf/bpftool/Documentation/bpftool-gen.rst b/tools/bpf/bpftool/Documentation/bpftool-gen.rst
+index ca860fd97d8d..4dc2a624090e 100644
+--- a/tools/bpf/bpftool/Documentation/bpftool-gen.rst
++++ b/tools/bpf/bpftool/Documentation/bpftool-gen.rst
+@@ -107,8 +107,10 @@ bpftool gen skeleton *FILE*
+       global data maps. It corresponds to libbpf's **bpf_object__load**\ ()
+       API.
+ 
+-    - **example__open_and_load** combines **example__open** and
+-      **example__load** invocations in one commonly used operation.
++    - **example__open_and_load** and **example__open_and_load_opts**.
++      Combines **example__open** and **example__load** invocations in one
++      commonly used operation. **_opts** variants accepts extra
++      **bpf_object_open_opts** options.
+ 
+     - **example__attach** and **example__detach**.
+       This pair of functions allow to attach and detach, correspondingly,
+@@ -336,6 +338,9 @@ files into the final BPF ELF object file *example.bpf.o*.
+                 const struct bpf_object_open_opts *opts);
+   static inline struct example *example__open();
+   static inline int example__load(struct example *obj);
++  static inline struct example *example__open();
++  static inline struct example *example__open_and_load_opts(
++                const struct bpf_object_open_opts *opts);
+   static inline struct example *example__open_and_load();
+   static inline int example__attach(struct example *obj);
+   static inline void example__detach(struct example *obj);
+-- 
+2.49.0
 
