@@ -1,20 +1,21 @@
-Received: from 66-220-144-178.mail-mxout.facebook.com (66-220-144-178.mail-mxout.facebook.com [66.220.144.178])
+Received: from 66-220-144-179.mail-mxout.facebook.com (66-220-144-179.mail-mxout.facebook.com [66.220.144.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18F2270823
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17B63EC5
 	for <bpf@vger.kernel.org>; Fri,  6 Jun 2025 16:31:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.178
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749227507; cv=none; b=EoefByHAY/y2j2k7XR3mgh4k7KjDcPmj8b0czwuayZAhKdywu7hwNmgKN7ViyHAlh762/qmTZIgG69SixIoTv7Tyn2j2Yvj1CDGLmHmhlQZQ46vHbEfg9YTB9JQOBYNr5s4reUrjof7Eqca6kOfKQE8lvJ2ZDB+8QXMebqUkC0E=
+	t=1749227507; cv=none; b=rxogeCLbe5IeyMJIe8uOLBhMPN2wQViWyR0Lez+dSA92gpSqrRmFnqz6iLMkE00xHZROK6LZCZy8AYC2HhSCcpGKlbe0PYAVYBZp8KCvWma3dQBKdRMqHNkYhzeEqkZh4qVrs9EV2s45Gsi5Qonv4I/eTpoAuXFqSQZUH2DbY4s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1749227507; c=relaxed/simple;
-	bh=N326Dw7gCXedbOAIkdiLmhIoVv2W5Ah367mL2eMzjR4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=oGnJ4MVOBuJ2magoxUxRwon/Bf29YfBKG6kRfTfdzKQ59M+RAc2Ae+DGmod/s4P7RR8zdKe2Trd+tVeOuXN4FwDdrPC1DgW2xAout7F7ANZzUJt8N+v9QolQIZoKLwEobAvHwakKJRI6AHFZ96nthSJ6X2ItnGJYDFUewYK3uBk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.178
+	bh=0Log9+Aiwt2vBxo+TYf6Wv+0LOERBxUxSdymm01PJCw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=a3JFFVwLSdLu8CEBTV/gFdeCCrCp7tooyouTZQlbjh8VRjjMbrt1gppwR4Q7a4wfFkZgAnqq0MXH8jxhJFg/9NoM6+ZqWlgn8S0NyGrgsw3oLhhUlrDOUIhNArElaWUJR1KmoEiww88qIk9Ark086UBsrAoo+rjss2KCbmDZUz8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 4AD33902F8E5; Fri,  6 Jun 2025 09:31:31 -0700 (PDT)
+	id 76BB7902F91F; Fri,  6 Jun 2025 09:31:41 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -22,10 +23,12 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	kernel-team@fb.com,
 	Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf-next v5 0/5] bpf: Implement mprog API on top of existing cgroup progs
-Date: Fri,  6 Jun 2025 09:31:31 -0700
-Message-ID: <20250606163131.2428225-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v5 2/5] bpf: Implement mprog API on top of existing cgroup progs
+Date: Fri,  6 Jun 2025 09:31:41 -0700
+Message-ID: <20250606163141.2428937-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.47.1
+In-Reply-To: <20250606163131.2428225-1-yonghong.song@linux.dev>
+References: <20250606163131.2428225-1-yonghong.song@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -36,113 +39,552 @@ Content-Transfer-Encoding: quoted-printable
 
 Current cgroup prog ordering is appending at attachment time. This is not
 ideal. In some cases, users want specific ordering at a particular cgroup
-level. For example, in Meta, we have a case where three different
-applications all have cgroup/setsockopt progs and they require specific
-ordering. Current approach is to use a bpfchainer where one bpf prog
-contains multiple global functions and each global function can be
-freplaced by a prog for a specific application. The ordering of global
-functions decides the ordering of those application specific bpf progs.
-Using bpfchainer is a centralized approach and is not desirable as
-one of applications acts as a daemon. The decentralized attachment
-approach is more favorable for those applications.
+level. To address this, the existing mprog API seems an ideal solution wi=
+th
+supporting BPF_F_BEFORE and BPF_F_AFTER flags.
 
-To address this, the existing mprog API ([2]) seems an ideal solution wit=
-h
-supporting BPF_F_BEFORE and BPF_F_AFTER flags on top of existing cgroup
-bpf implementation. More specifically, the support is added for prog/link
-attachment with BPF_F_BEFORE and BPF_F_AFTER. The kernel mprog
-interface ([2]) is not used and the implementation is directly done in
-cgroup bpf code base. The mprog 'revision' is also implemented in
-attach/detach/replace, so users can query revision number to check the
-change of cgroup prog list.
+But there are a few obstacles to directly use kernel mprog interface.
+Currently cgroup bpf progs already support prog attach/detach/replace
+and link-based attach/detach/replace. For example, in struct
+bpf_prog_array_item, the cgroup_storage field needs to be together
+with bpf prog. But the mprog API struct bpf_mprog_fp only has bpf_prog
+as the member, which makes it difficult to use kernel mprog interface.
 
-The patch set contains 5 patches. Patch 1 adds revision support for
-cgroup bpf progs. Patch 2 implements mprog API implementation for
-prog/link attach and revision update. Patch 3 adds a new libbpf
-API to do cgroup link attach with flags like BPF_F_BEFORE/BPF_F_AFTER.
-Patches 4 and 5 add two tests to validate the implementation.
+In another case, the current cgroup prog detach tries to use the
+same flag as in attach. This is different from mprog kernel interface
+which uses flags passed from user space.
 
-  [1] https://lore.kernel.org/r/20250224230116.283071-1-yonghong.song@lin=
-ux.dev
-  [2] https://lore.kernel.org/r/20230719140858.13224-2-daniel@iogearbox.n=
-et
+So to avoid modifying existing behavior, I made the following changes to
+support mprog API for cgroup progs:
+ - The support is for prog list at cgroup level. Cross-level prog list
+   (a.k.a. effective prog list) is not supported.
+ - Previously, BPF_F_PREORDER is supported only for prog attach, now
+   BPF_F_PREORDER is also supported by link-based attach.
+ - For attach, BPF_F_BEFORE/BPF_F_AFTER/BPF_F_ID/BPF_F_LINK is supported
+   similar to kernel mprog but with different implementation.
+ - For detach and replace, use the existing implementation.
+ - For attach, detach and replace, the revision for a particular prog
+   list, associated with a particular attach type, will be updated
+   by increasing count by 1.
 
-Changelogs:
-  v4 -> v5:
-    - v4: https://lore.kernel.org/bpf/20250530173812.1823479-1-yonghong.s=
-ong@linux.dev/
-    - Remove early prog/link checking based flags and id_or_fd as later c=
-ode
-      will do checking as well.
-    - Do proper cgroup flag checking for bpf_prog_attach().
-  v3 -> v4:
-    - v3: https://lore.kernel.org/bpf/20250517162720.4077882-1-yonghong.s=
-ong@linux.dev/
-    - Refactor some to make BPF_F_BEFORE/BPF_F_AFTER handling easier to u=
-nderstand.
-    - Perviously, I degraded 'link' to 'prog' for later mprog handling. T=
-his is
-      not correct. Similar to mprog.c, we should be check 'link' instead =
-link->prog
-      since it is possible two different links may have the same underlyi=
-ng prog and
-      we do not want to miss supporting such use case.
-  v2 -> v3:
-    - v2: https://lore.kernel.org/bpf/20250508223524.487875-1-yonghong.so=
-ng@linux.dev/
-    - Big change to replace get_anchor_prog() to get_prog_list() so the
-      'struct bpf_prog_list *' is returned directly.
-    - Support 'BPF_F_BEFORE | BPF_F_AFTER' attachment if the prog list is=
- empty
-      and flags do not have 'BPF_F_LINK | BPF_F_ID' and id_or_fd is 0.
-    - Add BPF_F_LINK support.
-    - Patch 4 is added to reuse id_from_prog_fd() and id_from_link_fd().
-  v1 -> v2:
-    - v1: https://lore.kernel.org/bpf/20250411011523.1838771-1-yonghong.s=
-ong@linux.dev/
-    - Change cgroup_bpf.revisions from atomic64_t to u64.
-    - Added missing bpf_prog_put in various places.
-    - Rename get_cmp_prog() to get_anchor_prog(). The implementation trie=
-s to
-      find the anchor prog regardless of whether id_or_fd is non-NULL or =
-not.
-    - Rename bpf_cgroup_prog_attached() to is_cgroup_prog_type() and hand=
-le
-      BPF_PROG_TYPE_LSM properly (with BPF_LSM_CGROUP attach type).
-    - I kept 'id || id_or_fd' condition as the condition 'id' is also use=
-d
-      in mprog.c so I assume it is okay in cgroup.c as well.
+Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+---
+ include/uapi/linux/bpf.h       |   7 ++
+ kernel/bpf/cgroup.c            | 188 +++++++++++++++++++++++++++++----
+ kernel/bpf/syscall.c           |  44 +++++---
+ tools/include/uapi/linux/bpf.h |   7 ++
+ 4 files changed, 209 insertions(+), 37 deletions(-)
 
-Yonghong Song (5):
-  cgroup: Add bpf prog revisions to struct cgroup_bpf
-  bpf: Implement mprog API on top of existing cgroup progs
-  libbpf: Support link-based cgroup attach with options
-  selftests/bpf: Move some tc_helpers.h functions to test_progs.h
-  selftests/bpf: Add two selftests for mprog API based cgroup progs
-
- include/linux/bpf-cgroup-defs.h               |   1 +
- include/uapi/linux/bpf.h                      |   7 +
- kernel/bpf/cgroup.c                           | 188 +++++-
- kernel/bpf/syscall.c                          |  44 +-
- kernel/cgroup/cgroup.c                        |   5 +
- tools/include/uapi/linux/bpf.h                |   7 +
- tools/lib/bpf/bpf.c                           |  44 ++
- tools/lib/bpf/bpf.h                           |   5 +
- tools/lib/bpf/libbpf.c                        |  28 +
- tools/lib/bpf/libbpf.h                        |  15 +
- tools/lib/bpf/libbpf.map                      |   1 +
- .../bpf/prog_tests/cgroup_mprog_opts.c        | 617 ++++++++++++++++++
- .../bpf/prog_tests/cgroup_mprog_ordering.c    |  77 +++
- .../selftests/bpf/prog_tests/tc_helpers.h     |  28 -
- .../selftests/bpf/progs/cgroup_mprog.c        |  30 +
- tools/testing/selftests/bpf/test_progs.h      |  28 +
- 16 files changed, 1060 insertions(+), 65 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/cgroup_mprog_o=
-pts.c
- create mode 100644 tools/testing/selftests/bpf/prog_tests/cgroup_mprog_o=
-rdering.c
- create mode 100644 tools/testing/selftests/bpf/progs/cgroup_mprog.c
-
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index f1160ebbf526..25e9cf92ffaf 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -1794,6 +1794,13 @@ union bpf_attr {
+ 				};
+ 				__u64		expected_revision;
+ 			} netkit;
++			struct {
++				union {
++					__u32	relative_fd;
++					__u32	relative_id;
++				};
++				__u64		expected_revision;
++			} cgroup;
+ 		};
+ 	} link_create;
+=20
+diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+index 9122c39870bf..c3ac5661da27 100644
+--- a/kernel/bpf/cgroup.c
++++ b/kernel/bpf/cgroup.c
+@@ -658,6 +658,122 @@ static struct bpf_prog_list *find_attach_entry(stru=
+ct hlist_head *progs,
+ 	return NULL;
+ }
+=20
++static struct bpf_link *bpf_get_anchor_link(u32 flags, u32 id_or_fd)
++{
++	struct bpf_link *link =3D ERR_PTR(-EINVAL);
++
++	if (flags & BPF_F_ID)
++		link =3D bpf_link_by_id(id_or_fd);
++	else if (id_or_fd)
++		link =3D bpf_link_get_from_fd(id_or_fd);
++	if (IS_ERR(link))
++		return ERR_PTR(PTR_ERR(link));
++
++	return link;
++}
++
++static struct bpf_prog *bpf_get_anchor_prog(u32 flags, u32 id_or_fd)
++{
++	struct bpf_prog *prog =3D ERR_PTR(-EINVAL);
++
++	if (flags & BPF_F_ID)
++		prog =3D bpf_prog_by_id(id_or_fd);
++	else if (id_or_fd)
++		prog =3D bpf_prog_get(id_or_fd);
++	if (IS_ERR(prog))
++		return prog;
++
++	return prog;
++}
++
++static struct bpf_prog_list *get_prog_list(struct hlist_head *progs, str=
+uct bpf_prog *prog,
++					   struct bpf_cgroup_link *link, u32 flags, u32 id_or_fd)
++{
++	bool is_link =3D flags & BPF_F_LINK, is_id =3D flags & BPF_F_ID;
++	struct bpf_prog_list *pltmp, *pl =3D ERR_PTR(-EINVAL);
++	bool preorder =3D flags & BPF_F_PREORDER;
++	struct bpf_link *anchor_link =3D NULL;
++	struct bpf_prog *anchor_prog =3D NULL;
++	bool is_before, is_after;
++
++	is_before =3D flags & BPF_F_BEFORE;
++	is_after =3D flags & BPF_F_AFTER;
++	if (is_link || is_id || id_or_fd) {
++		/* flags must have either BPF_F_BEFORE or BPF_F_AFTER */
++		if (is_before =3D=3D is_after)
++			return ERR_PTR(-EINVAL);
++		if ((is_link && !link) || (!is_link && !prog))
++			return ERR_PTR(-EINVAL);
++	} else if (!hlist_empty(progs)) {
++		/* flags cannot have both BPF_F_BEFORE and BPF_F_AFTER */
++		if (is_before && is_after)
++			return ERR_PTR(-EINVAL);
++	}
++
++	if (is_link) {
++		anchor_link =3D bpf_get_anchor_link(flags, id_or_fd);
++		if (IS_ERR(anchor_link))
++			return ERR_PTR(PTR_ERR(anchor_link));
++	} else if (is_id || id_or_fd) {
++		anchor_prog =3D bpf_get_anchor_prog(flags, id_or_fd);
++		if (IS_ERR(anchor_prog))
++			return ERR_PTR(PTR_ERR(anchor_prog));
++	}
++
++	if (!anchor_prog && !anchor_link) {
++		/* if there is no anchor_prog/anchor_link, then BPF_F_PREORDER
++		 * doesn't matter since either prepend or append to a combined
++		 * list of progs will end up with correct result.
++		 */
++		hlist_for_each_entry(pltmp, progs, node) {
++			if (is_before)
++				return pltmp;
++			if (pltmp->node.next)
++				continue;
++			return pltmp;
++		}
++		return NULL;
++	}
++
++	hlist_for_each_entry(pltmp, progs, node) {
++		if ((anchor_prog && anchor_prog =3D=3D pltmp->prog) ||
++		    (anchor_link && anchor_link =3D=3D &pltmp->link->link)) {
++			if (!!(pltmp->flags & BPF_F_PREORDER) !=3D preorder)
++				goto out;
++			pl =3D pltmp;
++			goto out;
++		}
++	}
++
++	pl =3D ERR_PTR(-ENOENT);
++out:
++	if (anchor_link)
++		bpf_link_put(anchor_link);
++	else
++		bpf_prog_put(anchor_prog);
++	return pl;
++}
++
++static int insert_pl_to_hlist(struct bpf_prog_list *pl, struct hlist_hea=
+d *progs,
++			      struct bpf_prog *prog, struct bpf_cgroup_link *link,
++			      u32 flags, u32 id_or_fd)
++{
++	struct bpf_prog_list *pltmp;
++
++	pltmp =3D get_prog_list(progs, prog, link, flags, id_or_fd);
++	if (IS_ERR(pltmp))
++		return PTR_ERR(pltmp);
++
++	if (!pltmp)
++		hlist_add_head(&pl->node, progs);
++	else if (flags & BPF_F_BEFORE)
++		hlist_add_before(&pl->node, &pltmp->node);
++	else
++		hlist_add_behind(&pl->node, &pltmp->node);
++
++	return 0;
++}
++
+ /**
+  * __cgroup_bpf_attach() - Attach the program or the link to a cgroup, a=
+nd
+  *                         propagate the change to descendants
+@@ -667,6 +783,8 @@ static struct bpf_prog_list *find_attach_entry(struct=
+ hlist_head *progs,
+  * @replace_prog: Previously attached program to replace if BPF_F_REPLAC=
+E is set
+  * @type: Type of attach operation
+  * @flags: Option flags
++ * @id_or_fd: Relative prog id or fd
++ * @revision: bpf_prog_list revision
+  *
+  * Exactly one of @prog or @link can be non-null.
+  * Must be called with cgroup_mutex held.
+@@ -674,7 +792,8 @@ static struct bpf_prog_list *find_attach_entry(struct=
+ hlist_head *progs,
+ static int __cgroup_bpf_attach(struct cgroup *cgrp,
+ 			       struct bpf_prog *prog, struct bpf_prog *replace_prog,
+ 			       struct bpf_cgroup_link *link,
+-			       enum bpf_attach_type type, u32 flags)
++			       enum bpf_attach_type type, u32 flags, u32 id_or_fd,
++			       u64 revision)
+ {
+ 	u32 saved_flags =3D (flags & (BPF_F_ALLOW_OVERRIDE | BPF_F_ALLOW_MULTI)=
+);
+ 	struct bpf_prog *old_prog =3D NULL;
+@@ -690,6 +809,9 @@ static int __cgroup_bpf_attach(struct cgroup *cgrp,
+ 	    ((flags & BPF_F_REPLACE) && !(flags & BPF_F_ALLOW_MULTI)))
+ 		/* invalid combination */
+ 		return -EINVAL;
++	if ((flags & BPF_F_REPLACE) && (flags & (BPF_F_BEFORE | BPF_F_AFTER)))
++		/* only either replace or insertion with before/after */
++		return -EINVAL;
+ 	if (link && (prog || replace_prog))
+ 		/* only either link or prog/replace_prog can be specified */
+ 		return -EINVAL;
+@@ -700,6 +822,8 @@ static int __cgroup_bpf_attach(struct cgroup *cgrp,
+ 	atype =3D bpf_cgroup_atype_find(type, new_prog->aux->attach_btf_id);
+ 	if (atype < 0)
+ 		return -EINVAL;
++	if (revision && revision !=3D cgrp->bpf.revisions[atype])
++		return -ESTALE;
+=20
+ 	progs =3D &cgrp->bpf.progs[atype];
+=20
+@@ -728,22 +852,18 @@ static int __cgroup_bpf_attach(struct cgroup *cgrp,
+ 	if (pl) {
+ 		old_prog =3D pl->prog;
+ 	} else {
+-		struct hlist_node *last =3D NULL;
+-
+ 		pl =3D kmalloc(sizeof(*pl), GFP_KERNEL);
+ 		if (!pl) {
+ 			bpf_cgroup_storages_free(new_storage);
+ 			return -ENOMEM;
+ 		}
+-		if (hlist_empty(progs))
+-			hlist_add_head(&pl->node, progs);
+-		else
+-			hlist_for_each(last, progs) {
+-				if (last->next)
+-					continue;
+-				hlist_add_behind(&pl->node, last);
+-				break;
+-			}
++
++		err =3D insert_pl_to_hlist(pl, progs, prog, link, flags, id_or_fd);
++		if (err) {
++			kfree(pl);
++			bpf_cgroup_storages_free(new_storage);
++			return err;
++		}
+ 	}
+=20
+ 	pl->prog =3D prog;
+@@ -762,6 +882,7 @@ static int __cgroup_bpf_attach(struct cgroup *cgrp,
+ 	if (err)
+ 		goto cleanup_trampoline;
+=20
++	cgrp->bpf.revisions[atype] +=3D 1;
+ 	if (old_prog) {
+ 		if (type =3D=3D BPF_LSM_CGROUP)
+ 			bpf_trampoline_unlink_cgroup_shim(old_prog);
+@@ -793,12 +914,13 @@ static int cgroup_bpf_attach(struct cgroup *cgrp,
+ 			     struct bpf_prog *prog, struct bpf_prog *replace_prog,
+ 			     struct bpf_cgroup_link *link,
+ 			     enum bpf_attach_type type,
+-			     u32 flags)
++			     u32 flags, u32 id_or_fd, u64 revision)
+ {
+ 	int ret;
+=20
+ 	cgroup_lock();
+-	ret =3D __cgroup_bpf_attach(cgrp, prog, replace_prog, link, type, flags=
+);
++	ret =3D __cgroup_bpf_attach(cgrp, prog, replace_prog, link, type, flags=
+,
++				  id_or_fd, revision);
+ 	cgroup_unlock();
+ 	return ret;
+ }
+@@ -886,6 +1008,7 @@ static int __cgroup_bpf_replace(struct cgroup *cgrp,
+ 	if (!found)
+ 		return -ENOENT;
+=20
++	cgrp->bpf.revisions[atype] +=3D 1;
+ 	old_prog =3D xchg(&link->link.prog, new_prog);
+ 	replace_effective_prog(cgrp, atype, link);
+ 	bpf_prog_put(old_prog);
+@@ -1011,12 +1134,14 @@ static void purge_effective_progs(struct cgroup *=
+cgrp, struct bpf_prog *prog,
+  * @prog: A program to detach or NULL
+  * @link: A link to detach or NULL
+  * @type: Type of detach operation
++ * @revision: bpf_prog_list revision
+  *
+  * At most one of @prog or @link can be non-NULL.
+  * Must be called with cgroup_mutex held.
+  */
+ static int __cgroup_bpf_detach(struct cgroup *cgrp, struct bpf_prog *pro=
+g,
+-			       struct bpf_cgroup_link *link, enum bpf_attach_type type)
++			       struct bpf_cgroup_link *link, enum bpf_attach_type type,
++			       u64 revision)
+ {
+ 	enum cgroup_bpf_attach_type atype;
+ 	struct bpf_prog *old_prog;
+@@ -1034,6 +1159,9 @@ static int __cgroup_bpf_detach(struct cgroup *cgrp,=
+ struct bpf_prog *prog,
+ 	if (atype < 0)
+ 		return -EINVAL;
+=20
++	if (revision && revision !=3D cgrp->bpf.revisions[atype])
++		return -ESTALE;
++
+ 	progs =3D &cgrp->bpf.progs[atype];
+ 	flags =3D cgrp->bpf.flags[atype];
+=20
+@@ -1059,6 +1187,7 @@ static int __cgroup_bpf_detach(struct cgroup *cgrp,=
+ struct bpf_prog *prog,
+=20
+ 	/* now can actually delete it from this cgroup list */
+ 	hlist_del(&pl->node);
++	cgrp->bpf.revisions[atype] +=3D 1;
+=20
+ 	kfree(pl);
+ 	if (hlist_empty(progs))
+@@ -1074,12 +1203,12 @@ static int __cgroup_bpf_detach(struct cgroup *cgr=
+p, struct bpf_prog *prog,
+ }
+=20
+ static int cgroup_bpf_detach(struct cgroup *cgrp, struct bpf_prog *prog,
+-			     enum bpf_attach_type type)
++			     enum bpf_attach_type type, u64 revision)
+ {
+ 	int ret;
+=20
+ 	cgroup_lock();
+-	ret =3D __cgroup_bpf_detach(cgrp, prog, NULL, type);
++	ret =3D __cgroup_bpf_detach(cgrp, prog, NULL, type, revision);
+ 	cgroup_unlock();
+ 	return ret;
+ }
+@@ -1097,6 +1226,7 @@ static int __cgroup_bpf_query(struct cgroup *cgrp, =
+const union bpf_attr *attr,
+ 	struct bpf_prog_array *effective;
+ 	int cnt, ret =3D 0, i;
+ 	int total_cnt =3D 0;
++	u64 revision =3D 0;
+ 	u32 flags;
+=20
+ 	if (effective_query && prog_attach_flags)
+@@ -1134,6 +1264,10 @@ static int __cgroup_bpf_query(struct cgroup *cgrp,=
+ const union bpf_attr *attr,
+ 		return -EFAULT;
+ 	if (copy_to_user(&uattr->query.prog_cnt, &total_cnt, sizeof(total_cnt))=
+)
+ 		return -EFAULT;
++	if (!effective_query && from_atype =3D=3D to_atype)
++		revision =3D cgrp->bpf.revisions[from_atype];
++	if (copy_to_user(&uattr->query.revision, &revision, sizeof(revision)))
++		return -EFAULT;
+ 	if (attr->query.prog_cnt =3D=3D 0 || !prog_ids || !total_cnt)
+ 		/* return early if user requested only program count + flags */
+ 		return 0;
+@@ -1216,7 +1350,8 @@ int cgroup_bpf_prog_attach(const union bpf_attr *at=
+tr,
+ 	}
+=20
+ 	ret =3D cgroup_bpf_attach(cgrp, prog, replace_prog, NULL,
+-				attr->attach_type, attr->attach_flags);
++				attr->attach_type, attr->attach_flags,
++				attr->relative_fd, attr->expected_revision);
+=20
+ 	if (replace_prog)
+ 		bpf_prog_put(replace_prog);
+@@ -1238,7 +1373,7 @@ int cgroup_bpf_prog_detach(const union bpf_attr *at=
+tr, enum bpf_prog_type ptype)
+ 	if (IS_ERR(prog))
+ 		prog =3D NULL;
+=20
+-	ret =3D cgroup_bpf_detach(cgrp, prog, attr->attach_type);
++	ret =3D cgroup_bpf_detach(cgrp, prog, attr->attach_type, attr->expected=
+_revision);
+ 	if (prog)
+ 		bpf_prog_put(prog);
+=20
+@@ -1267,7 +1402,7 @@ static void bpf_cgroup_link_release(struct bpf_link=
+ *link)
+ 	}
+=20
+ 	WARN_ON(__cgroup_bpf_detach(cg_link->cgroup, NULL, cg_link,
+-				    cg_link->type));
++				    cg_link->type, 0));
+ 	if (cg_link->type =3D=3D BPF_LSM_CGROUP)
+ 		bpf_trampoline_unlink_cgroup_shim(cg_link->link.prog);
+=20
+@@ -1339,6 +1474,13 @@ static const struct bpf_link_ops bpf_cgroup_link_l=
+ops =3D {
+ 	.fill_link_info =3D bpf_cgroup_link_fill_link_info,
+ };
+=20
++#define BPF_F_LINK_ATTACH_MASK	\
++	(BPF_F_ID |		\
++	 BPF_F_BEFORE |		\
++	 BPF_F_AFTER |		\
++	 BPF_F_PREORDER |	\
++	 BPF_F_LINK)
++
+ int cgroup_bpf_link_attach(const union bpf_attr *attr, struct bpf_prog *=
+prog)
+ {
+ 	struct bpf_link_primer link_primer;
+@@ -1346,7 +1488,7 @@ int cgroup_bpf_link_attach(const union bpf_attr *at=
+tr, struct bpf_prog *prog)
+ 	struct cgroup *cgrp;
+ 	int err;
+=20
+-	if (attr->link_create.flags)
++	if (attr->link_create.flags & (~BPF_F_LINK_ATTACH_MASK))
+ 		return -EINVAL;
+=20
+ 	cgrp =3D cgroup_get_from_fd(attr->link_create.target_fd);
+@@ -1370,7 +1512,9 @@ int cgroup_bpf_link_attach(const union bpf_attr *at=
+tr, struct bpf_prog *prog)
+ 	}
+=20
+ 	err =3D cgroup_bpf_attach(cgrp, NULL, NULL, link,
+-				link->type, BPF_F_ALLOW_MULTI);
++				link->type, BPF_F_ALLOW_MULTI | attr->link_create.flags,
++				attr->link_create.cgroup.relative_fd,
++				attr->link_create.cgroup.expected_revision);
+ 	if (err) {
+ 		bpf_link_cleanup(&link_primer);
+ 		goto out_put_cgroup;
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 89d027cd7ca0..2035093eeeb3 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -4186,6 +4186,25 @@ static int bpf_prog_attach_check_attach_type(const=
+ struct bpf_prog *prog,
+ 	}
+ }
+=20
++static bool is_cgroup_prog_type(enum bpf_prog_type ptype, enum bpf_attac=
+h_type atype,
++				bool check_atype)
++{
++	switch (ptype) {
++	case BPF_PROG_TYPE_CGROUP_DEVICE:
++	case BPF_PROG_TYPE_CGROUP_SKB:
++	case BPF_PROG_TYPE_CGROUP_SOCK:
++	case BPF_PROG_TYPE_CGROUP_SOCK_ADDR:
++	case BPF_PROG_TYPE_CGROUP_SOCKOPT:
++	case BPF_PROG_TYPE_CGROUP_SYSCTL:
++	case BPF_PROG_TYPE_SOCK_OPS:
++		return true;
++	case BPF_PROG_TYPE_LSM:
++		return check_atype ? atype =3D=3D BPF_LSM_CGROUP : true;
++	default:
++		return false;
++	}
++}
++
+ #define BPF_PROG_ATTACH_LAST_FIELD expected_revision
+=20
+ #define BPF_F_ATTACH_MASK_BASE	\
+@@ -4216,6 +4235,9 @@ static int bpf_prog_attach(const union bpf_attr *at=
+tr)
+ 	if (bpf_mprog_supported(ptype)) {
+ 		if (attr->attach_flags & ~BPF_F_ATTACH_MASK_MPROG)
+ 			return -EINVAL;
++	} else if (is_cgroup_prog_type(ptype, 0, false)) {
++		if (attr->attach_flags & ~(BPF_F_ATTACH_MASK_BASE | BPF_F_ATTACH_MASK_=
+MPROG))
++			return -EINVAL;
+ 	} else {
+ 		if (attr->attach_flags & ~BPF_F_ATTACH_MASK_BASE)
+ 			return -EINVAL;
+@@ -4244,20 +4266,6 @@ static int bpf_prog_attach(const union bpf_attr *a=
+ttr)
+ 	case BPF_PROG_TYPE_FLOW_DISSECTOR:
+ 		ret =3D netns_bpf_prog_attach(attr, prog);
+ 		break;
+-	case BPF_PROG_TYPE_CGROUP_DEVICE:
+-	case BPF_PROG_TYPE_CGROUP_SKB:
+-	case BPF_PROG_TYPE_CGROUP_SOCK:
+-	case BPF_PROG_TYPE_CGROUP_SOCK_ADDR:
+-	case BPF_PROG_TYPE_CGROUP_SOCKOPT:
+-	case BPF_PROG_TYPE_CGROUP_SYSCTL:
+-	case BPF_PROG_TYPE_SOCK_OPS:
+-	case BPF_PROG_TYPE_LSM:
+-		if (ptype =3D=3D BPF_PROG_TYPE_LSM &&
+-		    prog->expected_attach_type !=3D BPF_LSM_CGROUP)
+-			ret =3D -EINVAL;
+-		else
+-			ret =3D cgroup_bpf_prog_attach(attr, ptype, prog);
+-		break;
+ 	case BPF_PROG_TYPE_SCHED_CLS:
+ 		if (attr->attach_type =3D=3D BPF_TCX_INGRESS ||
+ 		    attr->attach_type =3D=3D BPF_TCX_EGRESS)
+@@ -4266,7 +4274,10 @@ static int bpf_prog_attach(const union bpf_attr *a=
+ttr)
+ 			ret =3D netkit_prog_attach(attr, prog);
+ 		break;
+ 	default:
+-		ret =3D -EINVAL;
++		if (!is_cgroup_prog_type(ptype, prog->expected_attach_type, true))
++			ret =3D -EINVAL;
++		else
++			ret =3D cgroup_bpf_prog_attach(attr, ptype, prog);
+ 	}
+=20
+ 	if (ret)
+@@ -4296,6 +4307,9 @@ static int bpf_prog_detach(const union bpf_attr *at=
+tr)
+ 			if (IS_ERR(prog))
+ 				return PTR_ERR(prog);
+ 		}
++	} else if (is_cgroup_prog_type(ptype, 0, false)) {
++		if (attr->attach_flags || attr->relative_fd)
++			return -EINVAL;
+ 	} else if (attr->attach_flags ||
+ 		   attr->relative_fd ||
+ 		   attr->expected_revision) {
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bp=
+f.h
+index f1160ebbf526..25e9cf92ffaf 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -1794,6 +1794,13 @@ union bpf_attr {
+ 				};
+ 				__u64		expected_revision;
+ 			} netkit;
++			struct {
++				union {
++					__u32	relative_fd;
++					__u32	relative_id;
++				};
++				__u64		expected_revision;
++			} cgroup;
+ 		};
+ 	} link_create;
+=20
 --=20
 2.47.1
 
