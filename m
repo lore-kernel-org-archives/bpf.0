@@ -1,21 +1,21 @@
-Received: from 66-220-144-179.mail-mxout.facebook.com (66-220-144-179.mail-mxout.facebook.com [66.220.144.179])
+Received: from 66-220-144-178.mail-mxout.facebook.com (66-220-144-178.mail-mxout.facebook.com [66.220.144.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DB2927702
-	for <bpf@vger.kernel.org>; Fri,  6 Jun 2025 03:23:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBB2019066B
+	for <bpf@vger.kernel.org>; Fri,  6 Jun 2025 03:23:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749180210; cv=none; b=eSDuf7eXp8Yv1mhOZZtldtivSxPjrc7ZvBNe+Ym5QJ/ewHkeeZrxOXqF0PZojzq8hZIE4Y9Uo9htLVLv+mKWdP+WjH6MVVuqCcr/U2rNGZrbMrS0qH8xhJeCjR+mNWhF/EHvHVHAoxvo3Ttg9+neolj7oSSz/doFAy6pWuEBbBE=
+	t=1749180223; cv=none; b=Segg4doNWveTGFBwGbhiRI4ORFhwu4/nUZMhQkzTv8Wla15m8fOdfNlUEL8hGmsnieSxCg6Sky1YmoCXOrfdYRscLItCXzkNFDcURRvLYZGf1kLLj5Y2QkY4fx0PxoBrxZPHZ2lstBBfNbpQO1NLgcQ6U63O4iHU+bbcVcTG5eM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749180210; c=relaxed/simple;
-	bh=hHLYhil1lEHMtJ4WsLcI2QiQyZas2+PY8aHCTmpv/Lg=;
+	s=arc-20240116; t=1749180223; c=relaxed/simple;
+	bh=06RDIb69u1gSeiB+Xdk31l6rl3SQm6P5JNBNcbsavok=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=AqLmb1i05UIByOZsQmrXp93sFmUZwum6tM2UqXqee3+hhHAKT01Tpb1QWM7qRt1btxS9JyfDfEqA/eb5e+Dx2Py2tMPNhowx7p2fEcxm+vt+qwJKX93QZncg/ZUnzAiwXgiNOG3ZuRMzybJppfxGf647xg3sV2mdnO3GLDAH+uc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.179
+	 MIME-Version; b=Jp9c40bsarop7CshQuovBuf+tmEgDmc5tqu1TxfJctsDWw9h/H9e4D7dKEsus0z6cmiYLZ7b/nuRFDbblphB9xIXKx6A1GlOflA1iGR2z71GXtFwv2fcGALYN/TUEYX0mndTS3wkyBdzSa0MvssAjJgJSHMw4LlQ+yEp6Lz7Xg0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devbig061.cco5.facebook.com (Postfix, from userid 128203)
-	id EA8F7202EDA6; Thu,  5 Jun 2025 20:23:14 -0700 (PDT)
+	id 20359202EDF0; Thu,  5 Jun 2025 20:23:30 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -23,9 +23,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	kernel-team@fb.com,
 	Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf-next 1/4] selftests/bpf: Reduce test_xdp_adjust_frags_tail_grow logs
-Date: Thu,  5 Jun 2025 20:23:14 -0700
-Message-ID: <20250606032314.444957-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next 4/4] selftests/bpf: Fix a user_ringbuf failure with arm64 64KB page size
+Date: Thu,  5 Jun 2025 20:23:30 -0700
+Message-ID: <20250606032330.446016-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.47.1
 In-Reply-To: <20250606032309.444401-1-yonghong.song@linux.dev>
 References: <20250606032309.444401-1-yonghong.song@linux.dev>
@@ -37,57 +37,41 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-For selftest xdp_adjust_tail/xdp_adjust_frags_tail_grow, if tested failur=
-e,
-I see a long list of log output like
-
-    ...
-    test_xdp_adjust_frags_tail_grow:PASS:9Kb+10b-untouched 0 nsec
-    test_xdp_adjust_frags_tail_grow:PASS:9Kb+10b-untouched 0 nsec
-    test_xdp_adjust_frags_tail_grow:PASS:9Kb+10b-untouched 0 nsec
-    test_xdp_adjust_frags_tail_grow:PASS:9Kb+10b-untouched 0 nsec
-    ...
-
-There are total 7374 lines of the above which is too much. Let us
-only issue such logs when it is an assert failure.
+The ringbuf max_entries must be PAGE_ALIGNED. See kernel function
+ringbuf_map_alloc(). So for arm64 64KB page size, adjust max_entries
+properly.
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- .../selftests/bpf/prog_tests/xdp_adjust_tail.c | 18 ++++++++++++------
- 1 file changed, 12 insertions(+), 6 deletions(-)
+ tools/testing/selftests/bpf/prog_tests/user_ringbuf.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c b/t=
-ools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c
-index b2b2d85dbb1b..e361129402a1 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c
-@@ -246,14 +246,20 @@ static void test_xdp_adjust_frags_tail_grow(void)
- 	ASSERT_EQ(topts.retval, XDP_TX, "9Kb+10b retval");
- 	ASSERT_EQ(topts.data_size_out, exp_size, "9Kb+10b size");
+diff --git a/tools/testing/selftests/bpf/prog_tests/user_ringbuf.c b/tool=
+s/testing/selftests/bpf/prog_tests/user_ringbuf.c
+index d424e7ecbd12..f50aa8e7f6c2 100644
+--- a/tools/testing/selftests/bpf/prog_tests/user_ringbuf.c
++++ b/tools/testing/selftests/bpf/prog_tests/user_ringbuf.c
+@@ -21,8 +21,7 @@
+ #include "../progs/test_user_ringbuf.h"
 =20
--	for (i =3D 0; i < 9000; i++)
--		ASSERT_EQ(buf[i], 1, "9Kb+10b-old");
-+	for (i =3D 0; i < 9000; i++) {
-+		if (buf[i] !=3D 1)
-+			ASSERT_EQ(buf[i], 1, "9Kb+10b-old");
-+	}
+ static const long c_sample_size =3D sizeof(struct sample) + BPF_RINGBUF_=
+HDR_SZ;
+-static const long c_ringbuf_size =3D 1 << 12; /* 1 small page */
+-static const long c_max_entries =3D c_ringbuf_size / c_sample_size;
++static long c_ringbuf_size, c_max_entries;
 =20
--	for (i =3D 9000; i < 9010; i++)
--		ASSERT_EQ(buf[i], 0, "9Kb+10b-new");
-+	for (i =3D 9000; i < 9010; i++) {
-+		if (buf[i] !=3D 0)
-+			ASSERT_EQ(buf[i], 0, "9Kb+10b-new");
-+	}
+ static void drain_current_samples(void)
+ {
+@@ -686,6 +685,9 @@ void test_user_ringbuf(void)
+ {
+ 	int i;
 =20
--	for (i =3D 9010; i < 16384; i++)
--		ASSERT_EQ(buf[i], 1, "9Kb+10b-untouched");
-+	for (i =3D 9010; i < 16384; i++) {
-+		if (buf[i] !=3D 1)
-+			ASSERT_EQ(buf[i], 1, "9Kb+10b-untouched");
-+	}
-=20
- 	/* Test a too large grow */
- 	memset(buf, 1, 16384);
++	c_ringbuf_size =3D getpagesize(); /* 1 page */
++	c_max_entries =3D c_ringbuf_size / c_sample_size;
++
+ 	for (i =3D 0; i < ARRAY_SIZE(success_tests); i++) {
+ 		if (!test__start_subtest(success_tests[i].test_name))
+ 			continue;
 --=20
 2.47.1
 
