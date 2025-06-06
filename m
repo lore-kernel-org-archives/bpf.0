@@ -1,71 +1,71 @@
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E372288CA3;
-	Fri,  6 Jun 2025 13:56:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60D4128937F;
+	Fri,  6 Jun 2025 13:56:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749218209; cv=none; b=L2+Lie/h0t3xkFrjjtZrbztNc/Pd+8MBj8nnz02meyNPUCStWnVMPplcJGSUkChyzsahwBYVUVyTkaPW/VF+7FW+zDf+b7DzucExIrIL11Ki/TTaJDNgXOF5sma0ymHeWSVk1jPUwpswgKzVjOVTZ3XNTpbYTEhBod2Z3c4H894=
+	t=1749218210; cv=none; b=fxD+MPD6kenBIlVIU7Zs82rLxrHhgbdnMDG15Vyne1DPEkPaSfPMTlUGvlzEzATaBDzK66E52nO+LtxeCaNP781biFbyPF7Jhwyx2k+FeeSZrlqtlwYLn4PFYN8QlMbYpxnMkt1DAIysm/81KWZKhq9r4eeE6+2/oThr3SPhxBo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749218209; c=relaxed/simple;
-	bh=i3124dRDrSgAJDr+S4wMhaq4i3Iio62CzkpMX/msx8I=;
+	s=arc-20240116; t=1749218210; c=relaxed/simple;
+	bh=5VMdPBhIyqMD1MmtIpltOSTRWEVW47+1088cj4tJ8pM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=g9spgI34xHbRYVYA1UVdtZFy/XycV0lI2ok2kPmVDkqoGNIpK+TrnJR1hr+PHPAhVm91IPAmbbQDtdrt8Miap9hGFcjGGscuehheY8Fjf2F0+1C+Yerf+f+rYU6flUO7DHzQAccIH9JX6aUe1+41IQ8x7NrSo+dmY+bVyrodov0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WMJHFBxe; arc=none smtp.client-ip=209.85.218.51
+	 MIME-Version; b=Kc7sPf/uyI2xCNg4QDnZ7W2UgU3rHrIiHmSTYIJLem3K4ZUdv7NfLQXVT3iVsKXi0qC5qwO+QnBG0k7/keIhtCBJS7SoMBrbvzfl5M+eMZFIDxIwskcJZPG8chzWkpYBdL4ujhdkqVji+rWoKolKBH6Lzr1smY7cC1fV81x7/Yk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HI7e2Mbd; arc=none smtp.client-ip=209.85.208.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WMJHFBxe"
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-ad89333d603so380697066b.2;
-        Fri, 06 Jun 2025 06:56:46 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HI7e2Mbd"
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-60497d07279so3980635a12.3;
+        Fri, 06 Jun 2025 06:56:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1749218204; x=1749823004; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1749218206; x=1749823006; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=nWMe+CPV752eWO5pJOHKZI3Zz5P7ROmouZdNiOUAjLg=;
-        b=WMJHFBxehjaW++XnXc+MrzQX12bULfmTAZpto2DdIz9Tvi6rV8Y1a+zeYNmL3j35LE
-         JIrRgIRZd0bT8DGH1+tQ0XTjfBogKb4ygTEyZcfx0v6ME5nhTn/dV0AaD92dOpFxgP0J
-         rSUQN2vQ1UA4KgzlNqyKSpspglkdrWBXA5zgRYDAtSdJG3vldSu0y5C7e9OLLaogWtBt
-         WBcB8RsFUHfKya7opXZW1XI+teKobt+FGZm97wlF38iTd7/y47pPwAvi8tQ0JDYGpkjA
-         eaqO+lDqdz2X36toXTe2b1BJ2yJDWYMtX086kXXwKoMDUdErOmOR6BND4x37+HdTzTaz
-         mBtA==
+        bh=Kq02ZXnReuZLLwrZBHg+lNbHT6a4SK/xczUYFbR7a/w=;
+        b=HI7e2Mbd4La1/kwJxp8sK9qRadhKdYQmaSUSsgucjwpsdp8Q/NmYuB+GYYZgvefCWK
+         xpgTeT1p/IHr8ahlbYVvpn8c+1OofvwvnFHX2VU299fOUKYDTK6qLac+sLrwkVHsize7
+         EfP8U7O7gtlVH0b4SRMbffN3rIWhFsL+tkutV5uetWWLVu1cgSi561YfMkXzXtPYQVwq
+         1pMJM0qnH4gBDfN036E4zMRpJZBgEl1E76nuTsiRUR7Jn4Hq8hYfyEk4Fs+7TJCwNOEy
+         7ZVmub4l9NfV2RzO/3dgft+sqJZQGaYRMGILxHkY36zISAx8nEcleRmZPU9xx8Gv2HiM
+         MvZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749218204; x=1749823004;
+        d=1e100.net; s=20230601; t=1749218206; x=1749823006;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=nWMe+CPV752eWO5pJOHKZI3Zz5P7ROmouZdNiOUAjLg=;
-        b=kznFAIu631ZyUg4oUV9uh0I9EHSXf99YdAHI6d88AwhoQDncQLXTGO+1ejChrTwfHd
-         3RndVlUfEswnzE1mp9SwxqVq4VZ2fzBG/WTRrAMrFjDvLVpA+it80IM5qpM0FwcrJBy0
-         3yuBpfk1fY2asf81M78zuQ43VW6sUa0qEtsnF8CL6fVhG6dYxXtPPiwK8oJhGOy73ASn
-         6v46pxpQ5Sg642czfTVSQwWoZa3GYqLTHvSUZ6/9sQCmdz58ZxoOE27gbEdHOE/42pK2
-         /kDa5mhcbI7FVcDljVpwMUsLzFpR5iVm6IQj/G6c4gumyTaPqheyo/ZqAjVqyd0HGsNZ
-         dqHw==
-X-Forwarded-Encrypted: i=1; AJvYcCXAQxkhLXQRLwiU3NEKYok0CI0FIAEPs1yu8NTWc7dytwxSGy4fvnW0XoXPKjVBg6eBRvb+PuEEAHDy3D14@vger.kernel.org, AJvYcCXzYfK3J0SONxsvKrOdvg34+F2fOyjiAYsBPxE6TbSS1ztosV5tvrzbEAODz2TbjWL02rw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxisZlZjLNUw2k6+uvuXTsFf+Cq8/+zCrBWBX4LJeutnD4R+SMu
-	BHQ0W+xav5hpV6NZAh1gq4txkOVfGWn9MGs0UJQ6wsdWXVU1wGnFtWLFHTXCcA==
-X-Gm-Gg: ASbGncsq6g1599UWy/ZOUtRf0DGr3nOCKxY8Pyc0ZMf1CnENQ9lGCOfAPQUq+cH2FXj
-	VoV82OL7S6VfuL+FIOn0LIahs72xb5HHqPpmjF4704w9aTna30E7mXN1thtxUsG3F7zJxcLOeU7
-	cfnL2FwjmHhWLSWxfFk/GGM2CcCC8OQ9+AbPuDr6qpcpCWWz82EHZHOxYJ6qQsEs8RhxRKuLqnj
-	8ipeCZRHpieZXp4/VnbnbKY1ZYPYTj1kXMK6yXFdE3iRlHMWkTm4pGlD2pF0+mh/kHRDEVBo7Pw
-	LtKyEsCnZ1vqA/SPbFOEq2sbaSBVGI/nEdeSYgdv5L0tKQ==
-X-Google-Smtp-Source: AGHT+IGTHo98cVWlTElkkwQOFkdLagcBVYC8pG8zXRDACYh8UdDhDdzYtg/jdxODl6/+g+QxBQfFvQ==
-X-Received: by 2002:a17:907:7f2a:b0:ace:d710:a8d1 with SMTP id a640c23a62f3a-ade1a90a2f4mr306337766b.24.1749218204198;
-        Fri, 06 Jun 2025 06:56:44 -0700 (PDT)
+        bh=Kq02ZXnReuZLLwrZBHg+lNbHT6a4SK/xczUYFbR7a/w=;
+        b=FjtxfRkh2nqPYjM3hkEv5gJsDMyo1uVQiTf1BsN5qhFrirwgox9RyW+gVDUZ7+9h7i
+         eqYV2b+dRUfVGLM0bneeNszmnIoKEKP6DcauYWBcIWQw9b2pUbucWZItFeUWC4nSXuyZ
+         cTzr/7jfNuo7GuWk/lXcE/ODDlFNC+BAT5FvX0seUPOSUY6ugLNTEIjw7knxkETfcYK7
+         zBg++vmzGAHsGMN09p8f0isU/KAxj8E5D6sgVlDrt+Vk3qjxOD4n9bapqreciRZD78H8
+         0YqfQN1whFC4fgpMGNSKQLPsoNHW1M51RwtokZy09ZvgrTvdmwLN/pJybHVthhX4kkiV
+         HkuA==
+X-Forwarded-Encrypted: i=1; AJvYcCWkS7JlAhmIS1gmC5QBElyFBPl+m20juJqew6J0pfzCULV1y4sG9qQGa1U/AQ22aFpfe14=@vger.kernel.org, AJvYcCX/1i7AEv32LCx6SvPVF9qUn6W+tm0pIAO7i3eQQlV7Jk/j2FJMmQTBjLiD25kacmii/sCOI9FxE+nVnzV4@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz+EZlW9PA8qQTSxt23cTLM5r5JQg8IaDAwqYMy+Ctj52auakyJ
+	urtBsy7eMZTpXY+Ovb0LCyDQvQev9fpR/rc5GvOapcIavpdXptdBitQ4UKa5vQ==
+X-Gm-Gg: ASbGncuY5dI0lIKWTt0H+tzsOrk8lkIdBItbd10aHJMA+b1pN8CdTa9nhwBTaWYYUqT
+	9LwgC6BgLmC+p+H5eBGtwpr5vsF9WVSDyFiqAFNHNobB9hlqb1dDV0f+Ek75jbLtIt/hwlyAmVS
+	KdFibufv1LaFpVtIoLg8cBYL75C1ysI7mt2Md+lpgf2sF8fXt7W+SE8vxkZA2HtjC9OMPh5ezKp
+	MAUp8YA9xiXmEnB3Eh5dRmPzONRlqR/SXFsCuQYinTGIolHEFKzyOCYvv5R2lv7fG8poCWuSUeB
+	ahLZFiUj8PCeSEE/k4Aq/66JWp0ON084gzk=
+X-Google-Smtp-Source: AGHT+IGxiOsNefek1Bu4XB/BKFZspesjby3DK69VYtx8UdcH82CyMF+V+9+JJsat6eaOhAdeWfxkzQ==
+X-Received: by 2002:a17:907:3c88:b0:ad8:96d2:f41 with SMTP id a640c23a62f3a-ade1a9229f0mr321862066b.33.1749218206122;
+        Fri, 06 Jun 2025 06:56:46 -0700 (PDT)
 Received: from 127.com ([2620:10d:c092:600::1:a199])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ade1dc379f6sm118026766b.110.2025.06.06.06.56.43
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ade1dc379f6sm118026766b.110.2025.06.06.06.56.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Jun 2025 06:56:43 -0700 (PDT)
+        Fri, 06 Jun 2025 06:56:45 -0700 (PDT)
 From: Pavel Begunkov <asml.silence@gmail.com>
 To: io-uring@vger.kernel.org
 Cc: asml.silence@gmail.com,
 	Martin KaFai Lau <martin.lau@linux.dev>,
 	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [RFC v2 1/5] io_uring: add struct for state controlling cqwait
-Date: Fri,  6 Jun 2025 14:57:58 +0100
-Message-ID: <933217fc63d9f7753e0e3e8dc239ba1a3f15add4.1749214572.git.asml.silence@gmail.com>
+Subject: [RFC v2 3/5] io_uring/bpf: implement struct_ops registration
+Date: Fri,  6 Jun 2025 14:58:00 +0100
+Message-ID: <f43e5d4e5e1797312ef3ee7986f4447bddac1d3c.1749214572.git.asml.silence@gmail.com>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <cover.1749214572.git.asml.silence@gmail.com>
 References: <cover.1749214572.git.asml.silence@gmail.com>
@@ -77,143 +77,126 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add struct iou_loop_state and place there parameter controlling the flow
-of normal CQ waiting. It will be exposed to BPF for api of the helpers,
-and while I could've used struct io_wait_queue, the name is not ideal,
-and keeping only necessary bits makes further development a bit cleaner.
+Add ring_fd to the struct_ops and implement [un]registration.
 
 Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
 ---
- io_uring/io_uring.c | 20 ++++++++++----------
- io_uring/io_uring.h | 11 ++++++++---
- io_uring/napi.c     |  4 ++--
- 3 files changed, 20 insertions(+), 15 deletions(-)
+ io_uring/bpf.c | 67 +++++++++++++++++++++++++++++++++++++++++++++++++-
+ io_uring/bpf.h |  3 +++
+ 2 files changed, 69 insertions(+), 1 deletion(-)
 
-diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index 5cdccf65c652..9cc4d8f335a1 100644
---- a/io_uring/io_uring.c
-+++ b/io_uring/io_uring.c
-@@ -2404,8 +2404,8 @@ static enum hrtimer_restart io_cqring_min_timer_wakeup(struct hrtimer *timer)
- 	struct io_ring_ctx *ctx = iowq->ctx;
+diff --git a/io_uring/bpf.c b/io_uring/bpf.c
+index 3096c54e4fb3..0f82acf09959 100644
+--- a/io_uring/bpf.c
++++ b/io_uring/bpf.c
+@@ -3,6 +3,8 @@
+ #include "bpf.h"
+ #include "register.h"
  
- 	/* no general timeout, or shorter (or equal), we are done */
--	if (iowq->timeout == KTIME_MAX ||
--	    ktime_compare(iowq->min_timeout, iowq->timeout) >= 0)
-+	if (iowq->state.timeout == KTIME_MAX ||
-+	    ktime_compare(iowq->min_timeout, iowq->state.timeout) >= 0)
- 		goto out_wake;
- 	/* work we may need to run, wake function will see if we need to wake */
- 	if (io_has_work(ctx))
-@@ -2431,7 +2431,7 @@ static enum hrtimer_restart io_cqring_min_timer_wakeup(struct hrtimer *timer)
- 	}
- 
- 	hrtimer_update_function(&iowq->t, io_cqring_timer_wakeup);
--	hrtimer_set_expires(timer, iowq->timeout);
-+	hrtimer_set_expires(timer, iowq->state.timeout);
- 	return HRTIMER_RESTART;
- out_wake:
- 	return io_cqring_timer_wakeup(timer);
-@@ -2447,7 +2447,7 @@ static int io_cqring_schedule_timeout(struct io_wait_queue *iowq,
- 		hrtimer_setup_on_stack(&iowq->t, io_cqring_min_timer_wakeup, clock_id,
- 				       HRTIMER_MODE_ABS);
- 	} else {
--		timeout = iowq->timeout;
-+		timeout = iowq->state.timeout;
- 		hrtimer_setup_on_stack(&iowq->t, io_cqring_timer_wakeup, clock_id,
- 				       HRTIMER_MODE_ABS);
- 	}
-@@ -2488,7 +2488,7 @@ static int __io_cqring_wait_schedule(struct io_ring_ctx *ctx,
- 	 */
- 	if (ext_arg->iowait && current_pending_io())
- 		current->in_iowait = 1;
--	if (iowq->timeout != KTIME_MAX || iowq->min_timeout)
-+	if (iowq->state.timeout != KTIME_MAX || iowq->min_timeout)
- 		ret = io_cqring_schedule_timeout(iowq, ctx->clockid, start_time);
- 	else
- 		schedule();
-@@ -2546,18 +2546,18 @@ static int io_cqring_wait(struct io_ring_ctx *ctx, int min_events, u32 flags,
- 	iowq.wq.private = current;
- 	INIT_LIST_HEAD(&iowq.wq.entry);
- 	iowq.ctx = ctx;
--	iowq.cq_tail = READ_ONCE(ctx->rings->cq.head) + min_events;
-+	iowq.state.target_cq_tail = READ_ONCE(ctx->rings->cq.head) + min_events;
- 	iowq.cq_min_tail = READ_ONCE(ctx->rings->cq.tail);
- 	iowq.nr_timeouts = atomic_read(&ctx->cq_timeouts);
- 	iowq.hit_timeout = 0;
- 	iowq.min_timeout = ext_arg->min_time;
--	iowq.timeout = KTIME_MAX;
-+	iowq.state.timeout = KTIME_MAX;
- 	start_time = io_get_time(ctx);
- 
- 	if (ext_arg->ts_set) {
--		iowq.timeout = timespec64_to_ktime(ext_arg->ts);
-+		iowq.state.timeout = timespec64_to_ktime(ext_arg->ts);
- 		if (!(flags & IORING_ENTER_ABS_TIMER))
--			iowq.timeout = ktime_add(iowq.timeout, start_time);
-+			iowq.state.timeout = ktime_add(iowq.state.timeout, start_time);
- 	}
- 
- 	if (ext_arg->sig) {
-@@ -2582,7 +2582,7 @@ static int io_cqring_wait(struct io_ring_ctx *ctx, int min_events, u32 flags,
- 
- 		/* if min timeout has been hit, don't reset wait count */
- 		if (!iowq.hit_timeout)
--			nr_wait = (int) iowq.cq_tail -
-+			nr_wait = (int) iowq.state.target_cq_tail -
- 					READ_ONCE(ctx->rings->cq.tail);
- 		else
- 			nr_wait = 1;
-diff --git a/io_uring/io_uring.h b/io_uring/io_uring.h
-index 0ea7a435d1de..edf698b81a95 100644
---- a/io_uring/io_uring.h
-+++ b/io_uring/io_uring.h
-@@ -39,15 +39,19 @@ enum {
- 	IOU_REQUEUE		= -3072,
++DEFINE_MUTEX(io_bpf_ctrl_mutex);
++
+ static struct io_uring_ops io_bpf_ops_stubs = {
  };
  
-+struct iou_loop_state {
-+	__u32			target_cq_tail;
-+	ktime_t			timeout;
-+};
-+
- struct io_wait_queue {
-+	struct iou_loop_state state;
- 	struct wait_queue_entry wq;
- 	struct io_ring_ctx *ctx;
--	unsigned cq_tail;
- 	unsigned cq_min_tail;
- 	unsigned nr_timeouts;
- 	int hit_timeout;
- 	ktime_t min_timeout;
--	ktime_t timeout;
- 	struct hrtimer t;
- 
- #ifdef CONFIG_NET_RX_BUSY_POLL
-@@ -59,7 +63,8 @@ struct io_wait_queue {
- static inline bool io_should_wake(struct io_wait_queue *iowq)
+@@ -50,20 +52,83 @@ static int bpf_io_init_member(const struct btf_type *t,
+ 			       const struct btf_member *member,
+ 			       void *kdata, const void *udata)
  {
- 	struct io_ring_ctx *ctx = iowq->ctx;
--	int dist = READ_ONCE(ctx->rings->cq.tail) - (int) iowq->cq_tail;
-+	u32 target = iowq->state.target_cq_tail;
-+	int dist = READ_ONCE(ctx->rings->cq.tail) - target;
++	u32 moff = __btf_member_bit_offset(t, member) / 8;
++	const struct io_uring_ops *uops = udata;
++	struct io_uring_ops *ops = kdata;
++
++	switch (moff) {
++	case offsetof(struct io_uring_ops, ring_fd):
++		ops->ring_fd = uops->ring_fd;
++		return 1;
++	}
++	return 0;
++}
++
++static int io_register_bpf_ops(struct io_ring_ctx *ctx, struct io_uring_ops *ops)
++{
++	if (ctx->bpf_ops)
++		return -EBUSY;
++	if (!(ctx->flags & IORING_SETUP_DEFER_TASKRUN))
++		return -EOPNOTSUPP;
++
++	percpu_ref_get(&ctx->refs);
++	ops->ctx = ctx;
++	ctx->bpf_ops = ops;
+ 	return 0;
+ }
  
- 	/*
- 	 * Wake up if we have enough events, or if a timeout occurred since we
-diff --git a/io_uring/napi.c b/io_uring/napi.c
-index 4a10de03e426..e08bddc1dbd2 100644
---- a/io_uring/napi.c
-+++ b/io_uring/napi.c
-@@ -360,8 +360,8 @@ void __io_napi_busy_loop(struct io_ring_ctx *ctx, struct io_wait_queue *iowq)
- 		return;
+ static int bpf_io_reg(void *kdata, struct bpf_link *link)
+ {
+-	return -EOPNOTSUPP;
++	struct io_uring_ops *ops = kdata;
++	struct io_ring_ctx *ctx;
++	struct file *file;
++	int ret;
++
++	file = io_uring_register_get_file(ops->ring_fd, false);
++	if (IS_ERR(file))
++		return PTR_ERR(file);
++
++	ctx = file->private_data;
++	scoped_guard(mutex, &ctx->uring_lock)
++		ret = io_register_bpf_ops(ctx, ops);
++
++	fput(file);
++	return ret;
+ }
  
- 	iowq->napi_busy_poll_dt = READ_ONCE(ctx->napi_busy_poll_dt);
--	if (iowq->timeout != KTIME_MAX) {
--		ktime_t dt = ktime_sub(iowq->timeout, io_get_time(ctx));
-+	if (iowq->state.timeout != KTIME_MAX) {
-+		ktime_t dt = ktime_sub(iowq->state.timeout, io_get_time(ctx));
+ static void bpf_io_unreg(void *kdata, struct bpf_link *link)
+ {
++	struct io_uring_ops *ops = kdata;
++	struct io_ring_ctx *ctx;
++
++	guard(mutex)(&io_bpf_ctrl_mutex);
++
++	ctx = ops->ctx;
++	ops->ctx = NULL;
++
++	if (ctx) {
++		scoped_guard(mutex, &ctx->uring_lock) {
++			if (ctx->bpf_ops == ops)
++				ctx->bpf_ops = NULL;
++		}
++		percpu_ref_put(&ctx->refs);
++	}
+ }
  
- 		iowq->napi_busy_poll_dt = min_t(u64, iowq->napi_busy_poll_dt, dt);
- 	}
+ void io_unregister_bpf_ops(struct io_ring_ctx *ctx)
+ {
++	struct io_uring_ops *ops;
++
++	guard(mutex)(&io_bpf_ctrl_mutex);
++	guard(mutex)(&ctx->uring_lock);
++
++	ops = ctx->bpf_ops;
++	ctx->bpf_ops = NULL;
++
++	if (ops && ops->ctx) {
++		percpu_ref_put(&ctx->refs);
++		ops->ctx = NULL;
++	}
+ }
+ 
+ static struct bpf_struct_ops bpf_io_uring_ops = {
+diff --git a/io_uring/bpf.h b/io_uring/bpf.h
+index a61c489d306b..4b147540d006 100644
+--- a/io_uring/bpf.h
++++ b/io_uring/bpf.h
+@@ -8,6 +8,9 @@
+ #include "io_uring.h"
+ 
+ struct io_uring_ops {
++	__u32 ring_fd;
++
++	struct io_ring_ctx *ctx;
+ };
+ 
+ static inline bool io_bpf_attached(struct io_ring_ctx *ctx)
 -- 
 2.49.0
 
