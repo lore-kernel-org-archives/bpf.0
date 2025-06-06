@@ -1,21 +1,21 @@
 Received: from 66-220-144-179.mail-mxout.facebook.com (66-220-144-179.mail-mxout.facebook.com [66.220.144.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DBD91DF963
-	for <bpf@vger.kernel.org>; Fri,  6 Jun 2025 03:23:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DB2927702
+	for <bpf@vger.kernel.org>; Fri,  6 Jun 2025 03:23:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749180210; cv=none; b=bVg/9V4ILHM+Zj7xZUGethXVHQdDcguK+qMxH8MEMwR01aPuiYwaPKXoRd5IrYXcE7Yxk3pJcvMIzM6F8xiA40FPXCAfhbv9QSLFCy/HOczeA4CQDJxeqcJf98c49PNoXfsjSbECPqdg1rwDe4f6NBk67rUhH8dGWoEGPn8PPkI=
+	t=1749180210; cv=none; b=eSDuf7eXp8Yv1mhOZZtldtivSxPjrc7ZvBNe+Ym5QJ/ewHkeeZrxOXqF0PZojzq8hZIE4Y9Uo9htLVLv+mKWdP+WjH6MVVuqCcr/U2rNGZrbMrS0qH8xhJeCjR+mNWhF/EHvHVHAoxvo3Ttg9+neolj7oSSz/doFAy6pWuEBbBE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1749180210; c=relaxed/simple;
-	bh=NmJ+Msv6fUmqKhjBC4MSS0SFpd8+eyyd3BJsab8idZk=;
+	bh=hHLYhil1lEHMtJ4WsLcI2QiQyZas2+PY8aHCTmpv/Lg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=k31IV2iDa2Xd6PboDVPGeaf/d9gafGoahkFcrJFnfqnu1Z0M3gv41GIoB2mvIp29w/WYQEXGFvCG9eHFLz7LzFWJOfGjHBfhSoffAtl/77/nhCwqthvz6oXtBeFYJVPq5STwnqDJHHpvBD4aup0VKJnjgOIoAhc1zzzyi9K3sbI=
+	 MIME-Version; b=AqLmb1i05UIByOZsQmrXp93sFmUZwum6tM2UqXqee3+hhHAKT01Tpb1QWM7qRt1btxS9JyfDfEqA/eb5e+Dx2Py2tMPNhowx7p2fEcxm+vt+qwJKX93QZncg/ZUnzAiwXgiNOG3ZuRMzybJppfxGf647xg3sV2mdnO3GLDAH+uc=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devbig061.cco5.facebook.com (Postfix, from userid 128203)
-	id 12398202EDDC; Thu,  5 Jun 2025 20:23:25 -0700 (PDT)
+	id EA8F7202EDA6; Thu,  5 Jun 2025 20:23:14 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -23,9 +23,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	kernel-team@fb.com,
 	Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf-next 3/4] selftests/bpf: Fix ringbuf/ringbuf_write test failure with arm64 64KB page size
-Date: Thu,  5 Jun 2025 20:23:25 -0700
-Message-ID: <20250606032325.445567-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next 1/4] selftests/bpf: Reduce test_xdp_adjust_frags_tail_grow logs
+Date: Thu,  5 Jun 2025 20:23:14 -0700
+Message-ID: <20250606032314.444957-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.47.1
 In-Reply-To: <20250606032309.444401-1-yonghong.song@linux.dev>
 References: <20250606032309.444401-1-yonghong.song@linux.dev>
@@ -37,68 +37,57 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-The ringbuf max_entries must be PAGE_ALIGNED. See kernel function
-ringbuf_map_alloc(). So for arm64 64KB page size, adjust max_entries
-properly.
+For selftest xdp_adjust_tail/xdp_adjust_frags_tail_grow, if tested failur=
+e,
+I see a long list of log output like
+
+    ...
+    test_xdp_adjust_frags_tail_grow:PASS:9Kb+10b-untouched 0 nsec
+    test_xdp_adjust_frags_tail_grow:PASS:9Kb+10b-untouched 0 nsec
+    test_xdp_adjust_frags_tail_grow:PASS:9Kb+10b-untouched 0 nsec
+    test_xdp_adjust_frags_tail_grow:PASS:9Kb+10b-untouched 0 nsec
+    ...
+
+There are total 7374 lines of the above which is too much. Let us
+only issue such logs when it is an assert failure.
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- tools/testing/selftests/bpf/prog_tests/ringbuf.c       | 5 +++--
- tools/testing/selftests/bpf/progs/test_ringbuf_write.c | 5 +++--
- 2 files changed, 6 insertions(+), 4 deletions(-)
+ .../selftests/bpf/prog_tests/xdp_adjust_tail.c | 18 ++++++++++++------
+ 1 file changed, 12 insertions(+), 6 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/ringbuf.c b/tools/tes=
-ting/selftests/bpf/prog_tests/ringbuf.c
-index da430df45aa4..89fd3401a23e 100644
---- a/tools/testing/selftests/bpf/prog_tests/ringbuf.c
-+++ b/tools/testing/selftests/bpf/prog_tests/ringbuf.c
-@@ -97,7 +97,8 @@ static void ringbuf_write_subtest(void)
- 	if (!ASSERT_OK_PTR(skel, "skel_open"))
- 		return;
+diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c b/t=
+ools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c
+index b2b2d85dbb1b..e361129402a1 100644
+--- a/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c
++++ b/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c
+@@ -246,14 +246,20 @@ static void test_xdp_adjust_frags_tail_grow(void)
+ 	ASSERT_EQ(topts.retval, XDP_TX, "9Kb+10b retval");
+ 	ASSERT_EQ(topts.data_size_out, exp_size, "9Kb+10b size");
 =20
--	skel->maps.ringbuf.max_entries =3D 0x4000;
-+	skel->maps.ringbuf.max_entries =3D 4 * page_size;
-+	skel->rodata->reserve_size =3D 3 * page_size;
+-	for (i =3D 0; i < 9000; i++)
+-		ASSERT_EQ(buf[i], 1, "9Kb+10b-old");
++	for (i =3D 0; i < 9000; i++) {
++		if (buf[i] !=3D 1)
++			ASSERT_EQ(buf[i], 1, "9Kb+10b-old");
++	}
 =20
- 	err =3D test_ringbuf_write_lskel__load(skel);
- 	if (!ASSERT_OK(err, "skel_load"))
-@@ -108,7 +109,7 @@ static void ringbuf_write_subtest(void)
- 	mmap_ptr =3D mmap(NULL, page_size, PROT_READ | PROT_WRITE, MAP_SHARED, =
-rb_fd, 0);
- 	if (!ASSERT_OK_PTR(mmap_ptr, "rw_cons_pos"))
- 		goto cleanup;
--	*mmap_ptr =3D 0x3000;
-+	*mmap_ptr =3D 3 * page_size;
- 	ASSERT_OK(munmap(mmap_ptr, page_size), "unmap_rw");
+-	for (i =3D 9000; i < 9010; i++)
+-		ASSERT_EQ(buf[i], 0, "9Kb+10b-new");
++	for (i =3D 9000; i < 9010; i++) {
++		if (buf[i] !=3D 0)
++			ASSERT_EQ(buf[i], 0, "9Kb+10b-new");
++	}
 =20
- 	skel->bss->pid =3D getpid();
-diff --git a/tools/testing/selftests/bpf/progs/test_ringbuf_write.c b/too=
-ls/testing/selftests/bpf/progs/test_ringbuf_write.c
-index 350513c0e4c9..9acef7afbe8a 100644
---- a/tools/testing/selftests/bpf/progs/test_ringbuf_write.c
-+++ b/tools/testing/selftests/bpf/progs/test_ringbuf_write.c
-@@ -12,6 +12,7 @@ struct {
+-	for (i =3D 9010; i < 16384; i++)
+-		ASSERT_EQ(buf[i], 1, "9Kb+10b-untouched");
++	for (i =3D 9010; i < 16384; i++) {
++		if (buf[i] !=3D 1)
++			ASSERT_EQ(buf[i], 1, "9Kb+10b-untouched");
++	}
 =20
- /* inputs */
- int pid =3D 0;
-+const volatile int reserve_size =3D 0;
-=20
- /* outputs */
- long passed =3D 0;
-@@ -26,11 +27,11 @@ int test_ringbuf_write(void *ctx)
- 	if (cur_pid !=3D pid)
- 		return 0;
-=20
--	sample1 =3D bpf_ringbuf_reserve(&ringbuf, 0x3000, 0);
-+	sample1 =3D bpf_ringbuf_reserve(&ringbuf, reserve_size, 0);
- 	if (!sample1)
- 		return 0;
- 	/* first one can pass */
--	sample2 =3D bpf_ringbuf_reserve(&ringbuf, 0x3000, 0);
-+	sample2 =3D bpf_ringbuf_reserve(&ringbuf, reserve_size, 0);
- 	if (!sample2) {
- 		bpf_ringbuf_discard(sample1, 0);
- 		__sync_fetch_and_add(&discarded, 1);
+ 	/* Test a too large grow */
+ 	memset(buf, 1, 16384);
 --=20
 2.47.1
 
