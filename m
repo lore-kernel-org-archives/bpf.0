@@ -1,154 +1,123 @@
-Received: from mail2.ietf.org (mail2.ietf.org [166.84.6.31])
+Received: from mout01.posteo.de (mout01.posteo.de [185.67.36.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D7F21FFC7B
-	for <bpf@vger.kernel.org>; Sun,  8 Jun 2025 14:41:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.84.6.31
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03CAE4502A
+	for <bpf@vger.kernel.org>; Sun,  8 Jun 2025 15:35:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.67.36.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749393699; cv=none; b=sKQ4HDN5qQKMzgVjB8YGxr5hGkRNHVSmgK70IFBFPLhwT+40PNTcvpWrm+Loo+BrsyOw8677fbITS+qlyH7D17u2jmEhc4vgew6VRKKRDzhURCw8Ud3LavfZZQz/8mZfZYN6bZKLfwK2V2cERFgTiEYTbKsA0JQTYsoF/b4/CBo=
+	t=1749396921; cv=none; b=X7ismhuCsR3pkkRDxSQV/RSizX7Z5a3LZi4EaXJF3HzeRjl3t6SwaiQIp5x1TyBXX6xD6HoyRDFJoyKbvMKS7C2+Hxz1CGe+lA8RUhc2ZQnwSUDGpg3Ve+8EIu5lw0yl1XodnxkCzWETkd5/N0viSL0rfA0wfJTcG2hKxIqjMMk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749393699; c=relaxed/simple;
-	bh=/a1jI8Ci3i1GxFxpapm1vhh0OG4twAQlwuWo7nzbMIM=;
-	h=Message-ID:Date:MIME-Version:To:References:From:In-Reply-To:CC:
-	 Subject:Content-Type; b=Qa8cBiX9QDX+EVVI2aGc32mmxAiOrTrvOkNAy2QxB23/q+QYotqgJtdT+L+EiI/LHfa67K/fdb8jLcmw4js2wxNpA4AcECaE5Ar9R6JHebDzsWq0b0z538OJc02KqWfmrIPEO2rj4Fv2epg6uMGea7R8Q1+6wPOuPKKSsPvqSFA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=ietf.org; dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b=w0V1wIEW; dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b=w0V1wIEW; dkim=fail (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=lBPJ766E reason="signature verification failed"; arc=none smtp.client-ip=166.84.6.31
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ietf.org
+	s=arc-20240116; t=1749396921; c=relaxed/simple;
+	bh=+7FrqGD94iVWcdbGz2+uCljqiSBoVQtmboCi9o5L1VE=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=XYVkEPESpK0uD948l5LnBu7sbwDkFpJeujtNitnYWmebJJJ8ld6PWhBZGQw8eQQZfE8JBfvoUdyFYUmat9PMdaev1dQFu9eL0msaFL1ZPkcFDxRLJSxukbOYGY17aFQODKx9TZYjK7fukcfthSvABJ7lA9rX3n4/ef1atpakHQw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net; spf=pass smtp.mailfrom=posteo.net; dkim=pass (3072-bit key) header.d=posteo.net header.i=@posteo.net header.b=LkOSeTj/; arc=none smtp.client-ip=185.67.36.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=posteo.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b="w0V1wIEW";
-	dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b="w0V1wIEW";
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="lBPJ766E"
-Received: from mail2.ietf.org (localhost [127.0.0.1])
-	by mail2.ietf.org (Postfix) with ESMTP id 2C319325DA9B
-	for <bpf@vger.kernel.org>; Sun,  8 Jun 2025 07:32:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
-	t=1749393149; bh=/a1jI8Ci3i1GxFxpapm1vhh0OG4twAQlwuWo7nzbMIM=;
-	h=Date:To:References:From:In-Reply-To:CC:Subject:List-Id:
-	 List-Archive:List-Help:List-Owner:List-Post:List-Subscribe:
-	 List-Unsubscribe;
-	b=w0V1wIEWrRYHU6hbewcTWRNYOuODFyMqvT/Xb+XuSocAl01zVRNbW8QUbci8hTBkg
-	 d08SnF4S+7KCa37JlTW+wfITvTBgM86tflhEV+DBUWL34DQN44eHjSXYkarhoEZKwX
-	 g3j/NDJccZ9c7Byd29+ydscUN069NBZqr96X2l1Y=
-X-Mailbox-Line: From bpf-bounces+bpf=vger.kernel.org@ietf.org  Sun Jun  8 07:32:29 2025
-Received: from mail2.ietf.org (localhost [127.0.0.1])
-	by mail2.ietf.org (Postfix) with ESMTP id 26B01325DA9A
-	for <bpf@vger.kernel.org>; Sun,  8 Jun 2025 07:32:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
-	t=1749393149; bh=/a1jI8Ci3i1GxFxpapm1vhh0OG4twAQlwuWo7nzbMIM=;
-	h=Date:To:References:From:In-Reply-To:CC:Subject:List-Id:
-	 List-Archive:List-Help:List-Owner:List-Post:List-Subscribe:
-	 List-Unsubscribe;
-	b=w0V1wIEWrRYHU6hbewcTWRNYOuODFyMqvT/Xb+XuSocAl01zVRNbW8QUbci8hTBkg
-	 d08SnF4S+7KCa37JlTW+wfITvTBgM86tflhEV+DBUWL34DQN44eHjSXYkarhoEZKwX
-	 g3j/NDJccZ9c7Byd29+ydscUN069NBZqr96X2l1Y=
-Received: from localhost (localhost [127.0.0.1])
-	by mail2.ietf.org (Postfix) with ESMTP id F17EC325D9B5
-	for <bpf@mail2.ietf.org>; Sun,  8 Jun 2025 07:32:18 -0700 (PDT)
-X-Virus-Scanned: amavisd-new at ietf.org
-X-Spam-Flag: NO
-X-Spam-Score: -2.101
-X-Spam-Level: 
-Authentication-Results: mail2.ietf.org (amavisd-new); dkim=pass (1024-bit key)
-	header.d=linux.dev
-Received: from mail2.ietf.org ([166.84.6.31])
-	by localhost (mail2.ietf.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id c3beZEQjfpYH for <bpf@mail2.ietf.org>;
-	Sun,  8 Jun 2025 07:32:18 -0700 (PDT)
-Received: from out-188.mta1.migadu.com (out-188.mta1.migadu.com
- [IPv6:2001:41d0:203:375::bc])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail2.ietf.org (Postfix) with ESMTPS id 781FC325D9B0
-	for <bpf@ietf.org>; Sun,  8 Jun 2025 07:32:18 -0700 (PDT)
-Message-ID: <a09cbf07-f6b9-4808-a955-2f506c320585@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1749393136;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=GWGpWO4XZip3DDSvOV06d85tUhqZHEdZ1brs1WQyrzs=;
-	b=lBPJ766EukbyvQ1Uy3PN+0uY9B4zWhk2+1hmw7Di08Jm1Y96qWA61F7pvalbdATyGGFTHL
-	hbl+V/kkq9+xiuymQsk5Q4TyXFAuaRPkdh4pFjTOsp5ujCYfabn5iVm7Cw9L0/ZeRRsYco
-	cJ7JVRJ2crhdwuZPWrcGZsmDV7WNd7w=
-Date: Sun, 8 Jun 2025 07:32:02 -0700
+	dkim=pass (3072-bit key) header.d=posteo.net header.i=@posteo.net header.b="LkOSeTj/"
+Received: from submission (posteo.de [185.67.36.169]) 
+	by mout01.posteo.de (Postfix) with ESMTPS id 4A84D240029
+	for <bpf@vger.kernel.org>; Sun,  8 Jun 2025 17:35:17 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net;
+	s=1984.ea087b; t=1749396917;
+	bh=+7FrqGD94iVWcdbGz2+uCljqiSBoVQtmboCi9o5L1VE=;
+	h=From:Date:Subject:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:Message-Id:To:Cc:From;
+	b=LkOSeTj/YHKtLcJ/mB8whXDh7KtNkhjkCAzn9WTjlG7gvMEsLWqiJA+opAt++/fI5
+	 YXKcTfP0QBufkq826TnL9qHarKSp9acOTKh7wjBMTfqI3TC3pEJZbqV168sAB/xjzq
+	 01bz2j13nxIqMdKH/nn8tj2IVrvmJaM8lrKb9ZLCRBet9cs9cQh/pYwSOct29t5VeK
+	 v+1T6AgY8Rm5MU57aHOSYNihJKgt49FmXQBKQ2iCNrOcyEU3c3e+i+pfNdcfgcPb0K
+	 mtWat8/c6Fg99C9XXN4IreikGmzcZk0/hGVGI5j8GhkpArLEvqi5UyH8RGK4n+nK/P
+	 nHHJOd0a+bRX+7JwF0nx03OPpMl8fFDFNIbBc4lG3uzKCVHZ23CPukwmmJMQwtGkKz
+	 mU4u0BJn/aBVPtulV0dW2REvUpxln3KGidTT+Qg3TsyJ97Iv5ZKMWxdiUeQvM/C4qt
+	 fRzMDeWIPUH3tEjOg47ZKEaIZCR+8RyP7kx8hBJrlJgx2/h21DD
+Received: from customer (localhost [127.0.0.1])
+	by submission (posteo.de) with ESMTPSA id 4bFfJK1d0pz6tvc;
+	Sun,  8 Jun 2025 17:35:13 +0200 (CEST)
+From: Charalampos Mitrodimas <charmitro@posteo.net>
+Date: Sun, 08 Jun 2025 15:34:55 +0000
+Subject: [PATCH bpf-next] bpf: Fix RCU usage in bpf_get_cgroup_classid_curr
+ helper
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Language: en-GB
-To: Eslam Khafagy <eslam.medhat1993@gmail.com>
-References: <20250607222434.227890-1-eslam.medhat1993@gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and
- include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <20250607222434.227890-1-eslam.medhat1993@gmail.com>
-X-Migadu-Flow: FLOW_OUT
-Message-ID-Hash: TTAOP5WQ34FZGCVULZLD3IONRV2A3MRE
-X-Message-ID-Hash: TTAOP5WQ34FZGCVULZLD3IONRV2A3MRE
-X-MailFrom: yonghong.song@linux.dev
-X-Mailman-Rule-Misses: dmarc-mitigation; no-senders; approved; emergency;
- loop; banned-address; member-moderation; nonmember-moderation; administrivia;
- implicit-dest; max-recipients; max-size; news-moderation; no-subject;
- digests; suspicious-header
-CC: skhan@linuxfoundation.org, David Vernet <void@manifault.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>,
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
- Dave Thaler <dthaler1968@googlemail.com>,
- "open list:BPF [DOCUMENTATION] (Related to Standardization)"
- <bpf@vger.kernel.org>,
- "open list:BPF [DOCUMENTATION] (Related to Standardization)" <bpf@ietf.org>,
- "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
- open list <linux-kernel@vger.kernel.org>
-X-Mailman-Version: 3.3.9rc6
-Precedence: list
-Subject: =?utf-8?q?=5BBpf=5D_Re=3A_=5BPATCH_bpf-next=5D_Documentation=3A_Enhance_read?=
-	=?utf-8?q?ability_in_BPF_docs?=
-Archived-At: 
- <https://mailarchive.ietf.org/arch/msg/bpf/XGjGxS-WlLnpq8qrJDRwC2jMxGo>
-List-Archive: <https://mailarchive.ietf.org/arch/browse/bpf>
-List-Help: <mailto:bpf-request@ietf.org?subject=help>
-List-Owner: <mailto:bpf-owner@ietf.org>
-List-Post: <mailto:bpf@ietf.org>
-X-Mailman-Copy: yes
-Content-Type: text/plain; charset="utf-8"; format="flowed"
-Content-Transfer-Encoding: base64
-Message-ID: <20250608143202.NryEAfPZCrycqnwQCeppvEhNq6KE-46YextBwRYx6JQ@z>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250608-rcu-fix-task_cls_state-v1-1-2a2025b4603b@posteo.net>
+X-B4-Tracking: v=1; b=H4sIAJ6tRWgC/x2M7QpAQBAAX0X729ZxvvIqkq67xUbo9kjJu7v8n
+ JqZB4Q8k0CbPODpYuF9i5ClCdjZbBMhu8iQq7xUlWrQ2xNHvjEYWQa7yiDBBEJFrtZjoWuXEcT
+ 48BStf9z17/sBBQ7m8GgAAAA=
+X-Change-ID: 20250608-rcu-fix-task_cls_state-0ed73f437d1e
+To: "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Feng Yang <yangfeng@kylinos.cn>, 
+ Tejun Heo <tj@kernel.org>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ bpf@vger.kernel.org, syzbot+b4169a1cfb945d2ed0ec@syzkaller.appspotmail.com, 
+ Charalampos Mitrodimas <charmitro@posteo.net>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1749396896; l=1811;
+ i=charmitro@posteo.net; s=20250526; h=from:subject:message-id;
+ bh=+7FrqGD94iVWcdbGz2+uCljqiSBoVQtmboCi9o5L1VE=;
+ b=YnnNXup1gwqyVg+Q760GVOdLmszHN8jeFOIQHKavcH7xBLebR+ekaAPuUS7md/qk9y1was3qj
+ QLScmUeznjwCQec6DbpYC67nuAyHEyCP5kpLdrgSBwV/9ZPGoq2Zxve
+X-Developer-Key: i=charmitro@posteo.net; a=ed25519;
+ pk=PNHEh5o1dcr5kfKoZhfwdsfm3CxVfRje7vFYKIW0Mp4=
 
-DQoNCk9uIDYvNy8yNSAzOjI0IFBNLCBFc2xhbSBLaGFmYWd5IHdyb3RlOg0KPiBUaGUgcGhyYXNl
-ICJkaXZpZGluZyAtMSIgaXMgb25lIEkgZmluZCBjb25mdXNpbmcuICBFLmcuLA0KPiAiSU5UX01J
-TiBkaXZpZGluZyAtMSIgc291bmRzIGxpa2UgIi0xIC8gSU5UX01JTiIgcmF0aGVyIHRoYW4gdGhl
-IGludmVyc2UuDQo+ICJkaXZpZGVkIGJ5IiBpbnN0ZWFkIG9mICJkaXZpZGluZyIgYXNzdW1pbmcg
-dGhlIGludmVyc2UgaXMgbWVhbnQuDQo+DQo+IFNpZ25lZC1vZmYtYnk6IEVzbGFtIEtoYWZhZ3kg
-PGVzbGFtLm1lZGhhdDE5OTNAZ21haWwuY29tPg0KDQpBY2tlZC1ieTogWW9uZ2hvbmcgU29uZyA8
-eW9uZ2hvbmcuc29uZ0BsaW51eC5kZXY+DQoNCj4gLS0tDQo+ICAgRG9jdW1lbnRhdGlvbi9icGYv
-c3RhbmRhcmRpemF0aW9uL2luc3RydWN0aW9uLXNldC5yc3QgfCA0ICsrLS0NCj4gICAxIGZpbGUg
-Y2hhbmdlZCwgMiBpbnNlcnRpb25zKCspLCAyIGRlbGV0aW9ucygtKQ0KPg0KPiBkaWZmIC0tZ2l0
-IGEvRG9jdW1lbnRhdGlvbi9icGYvc3RhbmRhcmRpemF0aW9uL2luc3RydWN0aW9uLXNldC5yc3Qg
-Yi9Eb2N1bWVudGF0aW9uL2JwZi9zdGFuZGFyZGl6YXRpb24vaW5zdHJ1Y3Rpb24tc2V0LnJzdA0K
-PiBpbmRleCBhYzk1MGE1YmI2YWQuLjM5Yzc0NjExNzUyYiAxMDA2NDQNCj4gLS0tIGEvRG9jdW1l
-bnRhdGlvbi9icGYvc3RhbmRhcmRpemF0aW9uL2luc3RydWN0aW9uLXNldC5yc3QNCj4gKysrIGIv
-RG9jdW1lbnRhdGlvbi9icGYvc3RhbmRhcmRpemF0aW9uL2luc3RydWN0aW9uLXNldC5yc3QNCj4g
-QEAgLTM1MCw4ICszNTAsOCBAQCBVbmRlcmZsb3cgYW5kIG92ZXJmbG93IGFyZSBhbGxvd2VkIGR1
-cmluZyBhcml0aG1ldGljIG9wZXJhdGlvbnMsIG1lYW5pbmcNCj4gICB0aGUgNjQtYml0IG9yIDMy
-LWJpdCB2YWx1ZSB3aWxsIHdyYXAuIElmIEJQRiBwcm9ncmFtIGV4ZWN1dGlvbiB3b3VsZA0KPiAg
-IHJlc3VsdCBpbiBkaXZpc2lvbiBieSB6ZXJvLCB0aGUgZGVzdGluYXRpb24gcmVnaXN0ZXIgaXMg
-aW5zdGVhZCBzZXQgdG8gemVyby4NCj4gICBPdGhlcndpc2UsIGZvciBgYEFMVTY0YGAsIGlmIGV4
-ZWN1dGlvbiB3b3VsZCByZXN1bHQgaW4gYGBMTE9OR19NSU5gYA0KPiAtZGl2aWRpbmcgLTEsIHRo
-ZSBkZXN0aW5hdGlvbiByZWdpc3RlciBpcyBpbnN0ZWFkIHNldCB0byBgYExMT05HX01JTmBgLiBG
-b3INCj4gLWBgQUxVYGAsIGlmIGV4ZWN1dGlvbiB3b3VsZCByZXN1bHQgaW4gYGBJTlRfTUlOYGAg
-ZGl2aWRpbmcgLTEsIHRoZQ0KPiArZGl2aWRlZCBieSAtMSwgdGhlIGRlc3RpbmF0aW9uIHJlZ2lz
-dGVyIGlzIGluc3RlYWQgc2V0IHRvIGBgTExPTkdfTUlOYGAuIEZvcg0KPiArYGBBTFVgYCwgaWYg
-ZXhlY3V0aW9uIHdvdWxkIHJlc3VsdCBpbiBgYElOVF9NSU5gYCBkaXZpZGVkIGJ5IC0xLCB0aGUN
-Cj4gICBkZXN0aW5hdGlvbiByZWdpc3RlciBpcyBpbnN0ZWFkIHNldCB0byBgYElOVF9NSU5gYC4N
-Cj4gICANCj4gICBJZiBleGVjdXRpb24gd291bGQgcmVzdWx0IGluIG1vZHVsbyBieSB6ZXJvLCBm
-b3IgYGBBTFU2NGBgIHRoZSB2YWx1ZSBvZg0KDQotLSAKQnBmIG1haWxpbmcgbGlzdCAtLSBicGZA
-aWV0Zi5vcmcKVG8gdW5zdWJzY3JpYmUgc2VuZCBhbiBlbWFpbCB0byBicGYtbGVhdmVAaWV0Zi5v
-cmcK
+The commit ee971630f20f ("bpf: Allow some trace helpers for all prog
+types") made bpf_get_cgroup_classid_curr helper available to all BPF
+program types.  This helper used __task_get_classid() which calls
+task_cls_state() that requires rcu_read_lock_bh_held().
+
+This triggers an RCU warning when called from BPF syscall programs
+which run under rcu_read_lock_trace():
+
+  WARNING: suspicious RCU usage
+  6.15.0-rc4-syzkaller-g079e5c56a5c4 #0 Not tainted
+  -----------------------------
+  net/core/netclassid_cgroup.c:24 suspicious rcu_dereference_check() usage!
+
+Fix this by replacing __task_get_classid() with task_cls_classid()
+which handles RCU locking internally using regular rcu_read_lock() and
+is safe to call from any context.
+
+Reported-by: syzbot+b4169a1cfb945d2ed0ec@syzkaller.appspotmail.com
+Closes: https://syzkaller.appspot.com/bug?extid=b4169a1cfb945d2ed0ec
+Fixes: ee971630f20f ("bpf: Allow some trace helpers for all prog types")
+Signed-off-by: Charalampos Mitrodimas <charmitro@posteo.net>
+---
+ net/core/filter.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 30e7d36790883b29174654315738e93237e21dd0..3b3f81cf674dde7d2bd83488450edad4e129bdac 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -3083,7 +3083,7 @@ static const struct bpf_func_proto bpf_msg_pop_data_proto = {
+ #ifdef CONFIG_CGROUP_NET_CLASSID
+ BPF_CALL_0(bpf_get_cgroup_classid_curr)
+ {
+-	return __task_get_classid(current);
++	return task_cls_classid(current);
+ }
+ 
+ const struct bpf_func_proto bpf_get_cgroup_classid_curr_proto = {
+
+---
+base-commit: 079e5c56a5c41d285068939ff7b0041ab10386fa
+change-id: 20250608-rcu-fix-task_cls_state-0ed73f437d1e
+
+Best regards,
+-- 
+Charalampos Mitrodimas <charmitro@posteo.net>
+
