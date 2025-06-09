@@ -1,131 +1,150 @@
-Received: from invmail4.hynix.com (exvmail4.hynix.com [166.125.252.92])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77D6027FD7D;
-	Mon,  9 Jun 2025 04:32:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.125.252.92
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99C641A7AE3;
+	Mon,  9 Jun 2025 06:23:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749443565; cv=none; b=NZf9J0H8LIKnChYB0zWAvANRSIc7PJoGhfWa/vEjEvDXyCwPnZuU1CMhEg7y0IQUhOHXaHTxnZPaE1JCwNk+QbmsrP64bp3qsx88LO3DY6d+/V/l955/6ewvxQjKpf8VfucbJgluLTWhctCk/VqXnMaIK3kiP4zVq7OSJ7eQgRA=
+	t=1749450226; cv=none; b=bMbevv++F9K037wFwwG5xuj9moa3yRmJ/mNFVQzWPgMoWN2+9tuuKBEDCsHddXMg+BoqHJLoClpP1+6OWXfXuLKZsVkw3/fQJisvgMbIcYlmw+jpGsSUEQ8aNkgmuAFZyeFDE+1VNiDoNsOJb8R2Onr6+XBeBMGfXFDbzYzElCA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749443565; c=relaxed/simple;
-	bh=hvhefW5aoQ5VsS9tMRkwS2v29al0s6YzPpQyZayU4RU=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=mw9TVb1Dj9J+Ijdk9C6Kt6J2APkvjjoFt59BjzGJBbEE1wNppupoocH2qPH5SQ0rS5zI15EWQtPN5fou5m5T5xa7698qJo1xRqPlyrMrtvPeccgNS43BW/pyKF7oalB7foEsLca13B7wkH0znfGMNahiu78HyadjZQ4CP74JdmM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com; spf=pass smtp.mailfrom=sk.com; arc=none smtp.client-ip=166.125.252.92
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sk.com
-X-AuditID: a67dfc5b-669ff7000002311f-8f-684663e4e1a1
-From: Byungchul Park <byungchul@sk.com>
-To: willy@infradead.org,
-	netdev@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org,
-	kernel_team@skhynix.com,
-	kuba@kernel.org,
-	almasrymina@google.com,
-	ilias.apalodimas@linaro.org,
-	harry.yoo@oracle.com,
-	hawk@kernel.org,
-	akpm@linux-foundation.org,
-	davem@davemloft.net,
-	john.fastabend@gmail.com,
-	andrew+netdev@lunn.ch,
-	asml.silence@gmail.com,
-	toke@redhat.com,
-	tariqt@nvidia.com,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	saeedm@nvidia.com,
-	leon@kernel.org,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	david@redhat.com,
-	lorenzo.stoakes@oracle.com,
-	Liam.Howlett@oracle.com,
-	vbabka@suse.cz,
-	rppt@kernel.org,
-	surenb@google.com,
-	mhocko@suse.com,
-	horms@kernel.org,
-	linux-rdma@vger.kernel.org,
-	bpf@vger.kernel.org,
-	vishal.moola@gmail.com
-Subject: [PATCH net-next 7/9] page_pool: make page_pool_get_dma_addr() just wrap page_pool_get_dma_addr_netmem()
-Date: Mon,  9 Jun 2025 13:32:23 +0900
-Message-Id: <20250609043225.77229-8-byungchul@sk.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20250609043225.77229-1-byungchul@sk.com>
-References: <20250609043225.77229-1-byungchul@sk.com>
+	s=arc-20240116; t=1749450226; c=relaxed/simple;
+	bh=XvsNeIKAvfYxeWu94vpzujuaP/jIFZurJxIpc+BHVpI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=KvlrUc0a1+Cmj1vWXjQCjppfd4A6LDzLeu9Gtb1P6zKMFWnOlB4Qwwy+hN6c9bitqHQffQS8nJuJNR2R3fdl7ahmDm/UvIz9O48Q5QDS6kDzAHax4ZRSceRfMLa1xwHgYlJXKyEi3RcuU3sumpkvB1GaKOo7L9lPMk5erwxhb/A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u06q4XRJ; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u06q4XRJ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33EE4C4CEEB;
+	Mon,  9 Jun 2025 06:23:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1749450224;
+	bh=XvsNeIKAvfYxeWu94vpzujuaP/jIFZurJxIpc+BHVpI=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=u06q4XRJsHiDSTpvSWKH2Z/pNiXWEcSmbPCXaa439I67fDtvI1Lu+hOcNanh8d2Te
+	 Vapusw1KEUaelaQBwKBQnURlQrhBoXtAJvC1oq0JccikGONLOHZKco6sEGS++gUpj0
+	 FfCPVQyrXrLjSVbEVSuxXCP7XhKV0cNBUGa++/QY1Is6lMWrGnA/q8wulLJrBfdLmv
+	 t91KB0QxgT5gxAjvAY2smUWLcoRsD8TU75ZEnHlJjGsOD6pfM42IJWLe/LahNSc+3C
+	 fB6jQpKo7Z9aClERVeLDNXZuTk3e6sAYfSekwc6dyaQCoN9IjKn8q9cTubf4AgudXA
+	 p3UYxbFglHIXw==
+Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-6f8b2682d61so54550356d6.0;
+        Sun, 08 Jun 2025 23:23:44 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVSrSavIDfN8TLsPFAaU5spdJHOknUK+WDl80p76J8THNW8WXgpQ0+s9Szuy393/0OcMNRttLdCUSyveqrRrA==@vger.kernel.org, AJvYcCWnCpMdRPiQNOZsvaLy0uFb/lnqYJEd4ReJG8kTvqdPQubZvdimJoRBJKqsfrKfknKJeV5fHf6MPqaWUec0mZkAnY4VFiKZ@vger.kernel.org, AJvYcCX7qCrI0zYJZoZhwvYTdVyQL/+F8raYyPgUldMQpk/25uV+sNnoIQHv/6eDDxL218uonLw=@vger.kernel.org, AJvYcCXKtn7z5WeRl+Uk+bBEaews8YGeNbPqX8sB3riWoFjNWG4Fr9sBkprwN0a1lRlxK1NlJukowUGOQr5k977u@vger.kernel.org
+X-Gm-Message-State: AOJu0YwOZbaXzf4cm7e/kGDVSikTPTKA8+Qh4MY8Z/B+GuC5bhp4qmOW
+	tLfu3pzSuEGGXTRSaxrbkpOaQd0lKWbVsYRkrKu/y2VL8jtK5cFBIAK/5v5Z282aiYsshpYCNQs
+	waC14hOOIm9O1/RHg/gV3Xl7PHNDG1k4=
+X-Google-Smtp-Source: AGHT+IFZKIPiFOniWwO3JrSqHR8EFdDF+J9SLDjDaY4aBJDBvQcgJT8acvrljCKcpwaPOgLoEBVL6sspTmqVKcaeq4w=
+X-Received: by 2002:ad4:5c42:0:b0:6f8:c773:26e with SMTP id
+ 6a1803df08f44-6fb10b73db7mr130561536d6.18.1749450223383; Sun, 08 Jun 2025
+ 23:23:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Sa0hTYRzGefe+57Ll4rSsjgZdRiEI2gWLPxFRRPUWUVEfIoNy6cGtptm8
-	NKXI0rK8FRVUa9akMlNzOs1pSeSSvFWK19lN8fZBUklN0kW1g0R9e3j+v+d5vvx5rLnC+POG
-	6DjJFK0zalkVUY345AYNhG/Xr7Y1zgWrvYiFwh9meNxbyYC1oALB5PRHDiZq61h4kDuFwdqc
-	SuC7fQbD4Js+DnryhghUpzkx9F2tZyEr1YPhQmW+Aloqshm4OfMIgzO5l4O251YWvhT9ZmDI
-	lUWgwfKEQE/2ZnhjWwhTTV8R1NqdCpjKzGHhRquNhf7UHgStr/sI3D2fjcD+0s2A54eV3byc
-	lj/pVtAqy2eO2hzxtCw/kKa7WzF1FFxhqWP8Okc/dVaztP62h9CqygkFzUoZZem3wQ+Ejr3s
-	YKm9vIPQt7Zajk44luwTQlUbIySjIUEyrdoUptKPO88rYrJV5pJiD5eMPvPpSMmLQoh433mP
-	/NXvJws4WbNCgOh2T2NZ+wprxIm+Oi+j4rEwyoiDVo8iHfH8fCFGTHunkBkirBTb29IYWauF
-	dWKWc5Sb7VwqFpa8wjKuFNaLve442dZ4EVd7Pp7F54kNdwaIjGDvrP2eRraxN5ny7C6WV0Uh
-	hxdThl+j2Uo/sSbfTa4hwfJf3PIvbvkvbkO4AGkM0QlROoMxJFifGG0wB4efjHIg74Pknf15
-	uBKNtxxwIYFHWh912K1teg2jS4hNjHIhkcdaX7XQs1WvUUfoEpMk08mjpnijFOtCi3miXaRe
-	O3U6QiNE6uKkE5IUI5n+XhW80j8Z3SjdW/7+nafx5/EQ40MavJcLUm5nzLbqVbt9XvjQp8N1
-	gSOhuw7m2torqvs3pJLSwi9dATssK3/FnNmys/NiV1Gmue3yns7u+29vNh0baj41mtFUc+lB
-	2UzkghU5GfyRuDG//oyuOb2HPp74RhqX96/IVCadQ0FlxRsq2pep59r3Yy2J1evWBGJTrO4P
-	nGIdbhwDAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA03Se0hTcRQHcH73d1+OBrdldTFCmkUgZQlZhyyRQrv4x+q/IIkcemmjTdc2
-	xQXia2SaWmlhzVkr05xKEyunUhLT1PXGaayHzuaDoFiZJuqCckjkf1/O+Zxz/jksln0jI1h1
-	plHUZyo1clpCShTxxTsn05NVu6tKEVgdrTS0LOTCvfFOCqzNHQjmFj8yMNs3QEP97XkM1jdm
-	En45ljBM9fsZ8DVOk/C4xInBf2mQhgpzEENRZxMBvXVuCt52VFJwdakBg7NgnAFPt5WGsdY/
-	FEy7KkhwW+wk+CoTod+2AeZffEPQ53ASMF9eR0P1kI2GCbMPwVCvn4TawkoEjh4vBcEFK50o
-	Fx7a3xNCl2WUEWzt2cKDpmihzDuEhfbmUlpo/1nFCJ/ePaaFwetBUujqnCWEiuIALcxMfSCF
-	7z0jtFD/5QchOB6OkMJLWx9zbO0JyYEMUaPOEfW7EtIkqp/OQkJXKcltux9kCtAoW4bCWJ7b
-	w7+ea2ZCmea2817vIg7lcC6Wn/UPkGVIwmIuQPFT1iBRhlh2HafjS14RIUNy2/hhTwkVylIu
-	jq9wBpiVnZF8S9tTHOJh3F5+3GsMlWXLxDXchFf4Wt59Y5IMEbx81nFTFirj5cniR7X4MpJa
-	VinLf2VZpWwIN6NwdWaOVqnWxMUYzqhMmercmPQsbTta/oHGvN9XOtGc54gLcSySr5Gm1SSp
-	ZJQyx2DSuhDPYnm4lPMdVsmkGUrTOVGfdUqfrRENLrSJJeUbpSnHxTQZd1ppFM+Iok7U/+sS
-	bFhEARr8rKHajFPl9vMs52Gepfrc6+92mU1VyVtORm6WLETVHLugSTTRnuiWFFSdMFPNPlpo
-	0rpKz87UHhSL8u6cbKiD/h/xin2K0qPa9PoorQ7Nu2/lZ2jzklJb7dfM0d3EweD+LPbrE+WO
-	sQj/UmAiPF+R5rW/ed7TUb314qGXctKgUsZGY71B+RdVujwW/wIAAA==
-X-CFilter-Loop: Reflected
+References: <20250606213015.255134-1-song@kernel.org> <dbc7ee0f1f483b7bc2ec9757672a38d99015e9ae.1749402769@maowtm.org>
+In-Reply-To: <dbc7ee0f1f483b7bc2ec9757672a38d99015e9ae.1749402769@maowtm.org>
+From: Song Liu <song@kernel.org>
+Date: Sun, 8 Jun 2025 23:23:30 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW7n_+u-M7bnUwX4Go0D+jj7oZZVopE1Bj5S_nHM1+8PZg@mail.gmail.com>
+X-Gm-Features: AX0GCFst8MCLxlAk4KkSJ6q3kT2d11EjKvEwczcwJRDGZGVDyszvu-NNmnxwdA8
+Message-ID: <CAPhsuW7n_+u-M7bnUwX4Go0D+jj7oZZVopE1Bj5S_nHM1+8PZg@mail.gmail.com>
+Subject: Re: [PATCH v3 bpf-next 0/5] bpf path iterator
+To: Tingmao Wang <m@maowtm.org>
+Cc: =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
+	Al Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, amir73il@gmail.com, 
+	andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net, 
+	eddyz87@gmail.com, gnoack@google.com, jack@suse.cz, jlayton@kernel.org, 
+	josef@toxicpanda.com, kernel-team@meta.com, kpsingh@kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, martin.lau@linux.dev, 
+	mattbobrowski@google.com, repnop@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The page pool members in struct page cannot be removed unless it's not
-allowed to access any of them via struct page.
+On Sun, Jun 8, 2025 at 10:34=E2=80=AFAM Tingmao Wang <m@maowtm.org> wrote:
+[...]
+> Hi Song, Christian, Al and others,
+>
+> Previously I proposed in [1] to add ability to do a reference-less parent
+> walk for Landlock.  However, as Christian pointed out and I do agree in
+> hindsight, it is not a good idea to do things like this in non-VFS code.
+>
+> However, I still think this is valuable to consider given the performance
+> improvement, and after some discussion with Micka=C3=ABl, I would like to
+> propose extending Song's helper to support such usage.  While I recognize
+> that this patch series is already in its v3, and I do not want to delay i=
+t
+> by too much, putting this proposal out now is still better than after thi=
+s
+> has merged, so that we may consider signature changes.
+>
+> I've created a proof-of-concept and did some brief testing.  The
+> performance improvement attained here is the same as in [1] (with a "git
+> status" workload, median landlock overhead 35% -> 28%, median time in
+> landlock decreases by 26.6%).
+>
+> If this idea is accepted, I'm happy to work on it further, split out this
+> patch, update the comments and do more testing etc, potentially in
+> collaboration with Song.
+>
+> An alternative to this is perhaps to add a new helper
+> path_walk_parent_rcu, also living in namei.c, that will be used directly
+> by Landlock.  I'm happy to do it either way, but with some experimentatio=
+n
+> I personally think that the code in this patch is still clean enough, and
+> can avoid some duplication.
+>
+> Patch title: path_walk_parent: support reference-less walk
+>
+> A later commit will update the BPF path iterator to use this.
+>
+> Signed-off-by: Tingmao Wang <m@maowtm.org>
+[...]
+>
+> -bool path_walk_parent(struct path *path, const struct path *root);
+> +struct parent_iterator {
+> +       struct path path;
+> +       struct path root;
+> +       bool rcu;
+> +       /* expected seq of path->dentry */
+> +       unsigned next_seq;
+> +       unsigned m_seq, r_seq;
 
-Do not access 'page->dma_addr' directly in page_pool_get_dma_addr() but
-just wrap page_pool_get_dma_addr_netmem() safely.
+Most of parent_iterator is not really used by reference walk.
+So it is probably just separate the two APIs?
 
-Signed-off-by: Byungchul Park <byungchul@sk.com>
-Reviewed-by: Mina Almasry <almasrymina@google.com>
-Reviewed-by: Ilias Apalodimas <ilias.apalodimas@linaro.org>
-Reviewed-by: Toke Høiland-Jørgensen <toke@redhat.com>
-Reviewed-by: Pavel Begunkov <asml.silence@gmail.com>
----
- include/net/page_pool/helpers.h | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+Also, is it ok to make m_seq and r_seq available out of fs/?
 
-diff --git a/include/net/page_pool/helpers.h b/include/net/page_pool/helpers.h
-index 93f2c31baf9b..387913b6c8bf 100644
---- a/include/net/page_pool/helpers.h
-+++ b/include/net/page_pool/helpers.h
-@@ -437,12 +437,7 @@ static inline dma_addr_t page_pool_get_dma_addr_netmem(netmem_ref netmem)
-  */
- static inline dma_addr_t page_pool_get_dma_addr(const struct page *page)
- {
--	dma_addr_t ret = page->dma_addr;
--
--	if (PAGE_POOL_32BIT_ARCH_WITH_64BIT_DMA)
--		ret <<= PAGE_SHIFT;
--
--	return ret;
-+	return page_pool_get_dma_addr_netmem(page_to_netmem(page));
- }
- 
- static inline void __page_pool_dma_sync_for_cpu(const struct page_pool *pool,
--- 
-2.17.1
+> +};
+> +
+> +#define PATH_WALK_PARENT_UPDATED               0
+> +#define PATH_WALK_PARENT_ALREADY_ROOT  -1
+> +#define PATH_WALK_PARENT_RETRY                 -2
+> +
+> +void path_walk_parent_start(struct parent_iterator *pit,
+> +                           const struct path *path, const struct path *r=
+oot,
+> +                           bool ref_less);
+> +int path_walk_parent(struct parent_iterator *pit, struct path *next_pare=
+nt);
+> +int path_walk_parent_end(struct parent_iterator *pit);
 
+I think it is better to make this rcu walk a separate set of APIs.
+IOW, we will have:
+
+int path_walk_parent(struct path *path, struct path *root);
+
+and
+
+void path_walk_parent_rcu_start(struct parent_iterator *pit,
+                           const struct path *path, const struct path *root=
+);
+int path_walk_parent_rcu_next(struct parent_iterator *pit, struct path
+*next_parent);
+int path_walk_parent_rcu_end(struct parent_iterator *pit);
+
+Thanks,
+Song
+
+[...]
