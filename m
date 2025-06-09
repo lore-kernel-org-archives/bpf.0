@@ -1,55 +1,51 @@
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4B0F18DB1E
-	for <bpf@vger.kernel.org>; Mon,  9 Jun 2025 18:30:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.153.30
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5691C1B425C
+	for <bpf@vger.kernel.org>; Mon,  9 Jun 2025 18:30:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.145.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749493856; cv=none; b=qaDbwjEuct83+ZwhMKdo3/PTPtv9ZnSGsDn69fO131zwA88cMJNCn94/nHQ8BxVN1CBKAQDTWBfQ8iomK0QuLVhHVuT54YcIDNQmyKqBd/Em9uABcuv46qKkXVg3rGQZitvGvAE8Wj2IxDcNgXOjkLsRs2z+IupsMw0AcWJjP18=
+	t=1749493856; cv=none; b=irV9uWzY00aNXXvANdLQepE4CYHJ8w1Lx7O8Ci7Qnb7BP+6UFdetAWHnPI5GSeXzzoWvhoD443QHgR7XRfLJO9ZXHJ3YG+TvmZT1lekEWyluFOzRufTVXMMe4H16OaR0yxqfZ3GftGFt/OrKFikGmrcI02+vF0jlMJmI86BK12M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1749493856; c=relaxed/simple;
-	bh=Ta6CfFiM3ROqzH5t0Od4UMf+qs8xwYDnpuo3WrYlEn8=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=uOIc4w6P7X4sK8t/Oey0b7J0r/LpqEWUh7s17Qgz3p+UMnWm/KAYM1AP7scdyBEaG+hMCYLvQU6qlhB+sk6eGN7Xu9/+fYdEm+id5KArKes6Y6caQobzN1c2DKBl8KsowaWqJxZxCoQ/0ZW0EvREbnMxyhAlxNIVK5PEUCfSDsk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=lUc3Glzd; arc=none smtp.client-ip=67.231.153.30
+	bh=nGH9brEjf1TqCcRsgMkoxTNb0PDZ1JOHQd47Mohfr98=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=BffnI3ccFgSnEjl+W5ESiWSKjOiuHcSfaDNSm+iQICEOnjQtbRfkV3tpn5fychs4LMWTmiZR8zOeDA/Z8rIPFjPasTl2hmubVRQGLvtWvGAzOT8uQFk7iJxVbFCrpvx8Bsov4huL+VFxat1hvtMRpvZm/MiWM7D0bgbO6CPoF4A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=WA8ycHeR; arc=none smtp.client-ip=67.231.145.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="lUc3Glzd"
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-	by m0089730.ppops.net (8.18.1.2/8.18.1.2) with ESMTP id 559HV2At009026
-	for <bpf@vger.kernel.org>; Mon, 9 Jun 2025 11:30:53 -0700
+	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="WA8ycHeR"
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 559HUr1r025857
+	for <bpf@vger.kernel.org>; Mon, 9 Jun 2025 11:30:54 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:to; s=
-	s2048-2021-q4; bh=PzsTDYbhkMBhQ1DaSijt6C50F2hWkVTGWNN/9c+M4Po=; b=
-	lUc3GlzdsqDyFIMbvH2jHs5ewpAJNe3FlDBgU+Xtu2TXS3QCq1AU0piOdDEozrpL
-	o9edXZwblbW2CpBMozxPj7IYC5l0CuFepxLFz+Qtbks7C6kGVAlIe/rdw2rM2ocW
-	OoLFEJYA/aGqiMdWLT8ClYApujDvYvNWJlkuh3y9V9k3njxFehbKKS5kMpgo5uYt
-	xcIJwdKmKYU0hS52zn9r1HC8wPpoSiIqbc32w8/BAGszyPekKlKSoL/QTJSyWotd
-	HpsJG2uJQieV8PJFHFVnZ1lTfiewr5bf7ErvxTHdm7MbInmVVDMtqAc/sq9kb6Gg
-	kKMu2W5/OOWSZx0bPslLaQ==
-Received: from mail.thefacebook.com ([163.114.134.16])
-	by m0089730.ppops.net (PPS) with ESMTPS id 475hncww6p-3
+	:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:reply-to:subject:to; s=s2048-2021-q4; bh=Gc5tleTuK
+	e8jYXfoLcp4G9mtWZ4vTHrEtwmqB5zdKhQ=; b=WA8ycHeR9u3fvsmOQ35MXb32C
+	MAhf5Sd2m/qSW9xJCrROTC2nrlQKliV92MGSllzN2hzPK74bJYXItzgTpNsbp/Id
+	55CAj6pBYmVyx3uYSNE/kPzq5D8+DbGFBb02hIPD0uq9pQu6UTySLM3+OE6LByAB
+	qc8XeZp0neMNdCacIU9UOaMhKnGQUSyUHzGW2Yg2azjiJNpo7kg1R55RmU83le+n
+	XqgUcwNzqa1xu3cIttntHown71K4cKw94ZR+PhuYxZLiCpu0N0tZJI2eQa92uDQK
+	YJSFKB7vHgl/3tuN40wyN5XJQ3KjBe/7nbMlSG9mp3nDnovSvMC2EqFha8vEg==
+Received: from maileast.thefacebook.com ([163.114.135.16])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 475qdtvxu7-2
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Mon, 09 Jun 2025 11:30:52 -0700 (PDT)
-Received: from twshared18532.02.prn5.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c08b:78::c78f) with Microsoft SMTP Server
+	for <bpf@vger.kernel.org>; Mon, 09 Jun 2025 11:30:54 -0700 (PDT)
+Received: from twshared15756.17.prn3.facebook.com (2620:10d:c0a8:1c::11) by
+ mail.thefacebook.com (2620:10d:c0a9:6f::8fd4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.2.1748.24; Mon, 9 Jun 2025 18:30:50 +0000
+ 15.2.1748.24; Mon, 9 Jun 2025 18:30:52 +0000
 Received: by devvm7589.cco0.facebook.com (Postfix, from userid 669379)
-	id D185994A1E0; Mon,  9 Jun 2025 11:30:43 -0700 (PDT)
+	id CE63B94A1DD; Mon,  9 Jun 2025 11:30:43 -0700 (PDT)
 From: Ihor Solodrai <isolodrai@meta.com>
 To: <andrii@kernel.org>
 CC: <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
         <eddyz87@gmail.com>, <mykolal@fb.com>, <yonghong.song@linux.dev>,
         <kernel-team@meta.com>
-Subject: [PATCH bpf-next v4 2/3] selftests/bpf: add cmp_map_pointer_with_const test
-Date: Mon, 9 Jun 2025 11:30:23 -0700
-Message-ID: <20250609183024.359974-3-isolodrai@meta.com>
+Subject: [PATCH bpf-next v4 0/3] bpf: make reg_not_null() true for CONST_PTR_TO_MAP
+Date: Mon, 9 Jun 2025 11:30:21 -0700
+Message-ID: <20250609183024.359974-1-isolodrai@meta.com>
 X-Mailer: git-send-email 2.47.1
-In-Reply-To: <20250609183024.359974-1-isolodrai@meta.com>
-References: <20250609183024.359974-1-isolodrai@meta.com>
 Reply-To: <ihor.solodrai@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -60,61 +56,40 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjA5MDE0MCBTYWx0ZWRfXyfID67949wEz Xjh+aD6OQ7JrxKZbG1OLXq92odReOroGVcgWPINBX8mTb6EO58oQqT5c9Et+dTN90xMWaz23XF3 AfWkdbku3Q8pXdVyd3KZo4yv0pKQoBO75tWbFjQsDwVMWwolYWwT2G02dsWsmZ7Gxli+wihtLXQ
- 0XhGCaG8M2+/RBoBQM6ymlUV78JMob699B0EfLOGo7BRrnJ8lYCspdK1B2C96FxMyJ7KyKKcLwW wbz2xjfniNkifrvQAc4ds+nCa1tWSrwG5rZyWMVxotvac918d5Yc9bwpBEbNjIpijp0GGP7Oq2m WD7MubFryef+i7u8xOhoisfEMgJhtvHo68NeQ0Fqg9Tc+vHFouAh0r1T3WrpfCDXehKyjhZSQ1n
- ODogo4ww1ODqkLmfrK56j+bhGWKOyYNDwkl4H94s1fXQQv71i/wiElPZBMGSz2vluMZ+8cUy
-X-Proofpoint-ORIG-GUID: Z9lGKdCin6rIhYw-2vIhFQAWaR5LbCJZ
-X-Authority-Analysis: v=2.4 cv=SoKQ6OO0 c=1 sm=1 tr=0 ts=6847285c cx=c_pps a=CB4LiSf2rd0gKozIdrpkBw==:117 a=CB4LiSf2rd0gKozIdrpkBw==:17 a=6IFa9wvqVegA:10 a=VabnemYjAAAA:8 a=ucs8h2RCo5JdfC4RZmEA:9 a=gKebqoRLp9LExxC7YDUY:22
-X-Proofpoint-GUID: Z9lGKdCin6rIhYw-2vIhFQAWaR5LbCJZ
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjA5MDE0MCBTYWx0ZWRfXxSCGF70Hu1T/ a144UXcySEP+a1H7LrR5IYKgGSbPsjZOqi3PyIsQuO9/65Zd0aoeuP/HLWROGbd6Fg7yPbjqr4T PvLfd8aG6f95CiRdg2VvVkuYWFHlIpFp0oypwWy1GtuNyybvLwnPLldp0N3Brrp1f9jQ9O0o1AE
+ nOXmD3lwZJYq3+OGUMqryW5VQpWJ+S70z03STj/Btg0Vb6az8ITwpjoRZy/NPuZzRa40oEwrwJu emeXw44x1xchJXDv4eBcxqI+IYUtWNxWTQFtjgM+bDfwUJP5c/UdSyFxW4Pf2TG0wbB5tVtmkAK fm6lWW/w05Djm/VlWYu1uoM3kz/iMKJpO1d2WlC2IbGNWECNdvw8SvX1k0/0LaORz1r2dFoy8U0
+ uikqtQcwBVJ9gcns0SxkD85jrFuLLArEhi07lILS5kKLmsuJhjHpc4I/vwSztlmOn1FIZ7hK
+X-Authority-Analysis: v=2.4 cv=U+KSDfru c=1 sm=1 tr=0 ts=6847285e cx=c_pps a=MfjaFnPeirRr97d5FC5oHw==:117 a=MfjaFnPeirRr97d5FC5oHw==:17 a=6IFa9wvqVegA:10 a=VwQbUJbxAAAA:8 a=VabnemYjAAAA:8 a=qYyqmn8cqaj1eAp1U7MA:9 a=gKebqoRLp9LExxC7YDUY:22
+X-Proofpoint-GUID: dZ0zxTIkQLvMWylmq94vbT86SFXZUAvh
+X-Proofpoint-ORIG-GUID: dZ0zxTIkQLvMWylmq94vbT86SFXZUAvh
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
  definitions=2025-06-09_07,2025-06-09_02,2025-03-28_01
 
-Add a test for CONST_PTR_TO_MAP comparison with a non-0 constant. A
-BPF program with this code must not pass verification in unpriv.
+Handle CONST_PTR_TO_MAP null checks in the BPF verifier. Add
+appropriate test cases.
 
-Signed-off-by: Ihor Solodrai <isolodrai@meta.com>
----
- .../selftests/bpf/progs/verifier_unpriv.c       | 17 ++++++++++++++++-
- 1 file changed, 16 insertions(+), 1 deletion(-)
+v3->v4: more test cases
+v2->v3: change constant in unpriv test
+v1->v2: add a test case with ringbufs
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_unpriv.c b/tools/=
-testing/selftests/bpf/progs/verifier_unpriv.c
-index 28200f068ce5..db52ba66e880 100644
---- a/tools/testing/selftests/bpf/progs/verifier_unpriv.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_unpriv.c
-@@ -624,7 +624,6 @@ __retval(0)
- __naked void cmp_map_pointer_with_zero(void)
- {
- 	asm volatile ("					\
--	r1 =3D 0;						\
- 	r1 =3D %[map_hash_8b] ll;				\
- 	if r1 =3D=3D 0 goto l0_%=3D;				\
- l0_%=3D:	r0 =3D 0;						\
-@@ -634,6 +633,22 @@ l0_%=3D:	r0 =3D 0;						\
- 	: __clobber_all);
- }
-=20
-+SEC("socket")
-+__description("unpriv: cmp map pointer with const")
-+__success __failure_unpriv __msg_unpriv("R1 pointer comparison prohibite=
-d")
-+__retval(0)
-+__naked void cmp_map_pointer_with_const(void)
-+{
-+	asm volatile ("					\
-+	r1 =3D %[map_hash_8b] ll;				\
-+	if r1 =3D=3D 0x0000beef goto l0_%=3D;			\
-+l0_%=3D:	r0 =3D 0;						\
-+	exit;						\
-+"	:
-+	: __imm_addr(map_hash_8b)
-+	: __clobber_all);
-+}
-+
- SEC("socket")
- __description("unpriv: write into frame pointer")
- __failure __msg("frame pointer is read only")
+v3: https://lore.kernel.org/bpf/20250604222729.3351946-1-isolodrai@meta.c=
+om/=20
+v2: https://lore.kernel.org/bpf/20250604003759.1020745-1-isolodrai@meta.c=
+om/
+v1: https://lore.kernel.org/bpf/20250523232503.1086319-1-isolodrai@meta.c=
+om/
+
+Ihor Solodrai (3):
+  bpf: make reg_not_null() true for CONST_PTR_TO_MAP
+  selftests/bpf: add cmp_map_pointer_with_const test
+  selftests/bpf: add test cases with CONST_PTR_TO_MAP null checks
+
+ kernel/bpf/verifier.c                         |   3 +-
+ .../selftests/bpf/progs/verifier_map_in_map.c | 118 ++++++++++++++++++
+ .../selftests/bpf/progs/verifier_unpriv.c     |  19 ++-
+ 3 files changed, 137 insertions(+), 3 deletions(-)
+
 --=20
 2.47.1
 
