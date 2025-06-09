@@ -1,128 +1,243 @@
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73BFB21E0AD
-	for <bpf@vger.kernel.org>; Mon,  9 Jun 2025 18:31:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.145.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F37C218EA7;
+	Mon,  9 Jun 2025 18:38:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749493863; cv=none; b=rL8vn7XkooY8mOPs9DH/qBvf9h59kXy6VdKnS1raUTLvn8lP36KqcaM5kPshGoVXVu8kT+UGj4yWTZ4LGrOgvniZFf6z6y0kUKuVXds6dR75cy8lXUqVabdqDTbMnqRR565V0l/odmY2qFE6PecssPtZVCAppEOSLKyczLTvSDA=
+	t=1749494294; cv=none; b=l1v6WGnUJ3r8OkgmYufqtF2XpsRpQ4gkjpviZDjCZtIbw0SEUpTNecRc/A/rwTTVfnG4VKhjWdvC7FRq8tOfdrVaiCBuW8fINTPy2+KwkXPBpatQPxjVNMwDFmI/Nh9XSxPVesNuzXWN6Wd3OUYkdbMRDix2y9Fs1AUnwNI0MPc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749493863; c=relaxed/simple;
-	bh=5Evca0RhB0byDAJ2hptWAaaop+n2KYIXTIQNfYrPgyI=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=U+2hy6FLjDCvtI2o+DXTxsT6R1TsRHDddhIYVcrJfV5iqicUESCAK3BKYNq5fVivCT4TikbIotbRHem9eKKQHXx8IEKMbyTNyIwhQqUC4Rvw08nqPujkOFwOe6xzt3oK8JXpqdkKzQVJdJNZdqq/yDktPhTsnPxHR81vDIm8PCI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=E+d/2knc; arc=none smtp.client-ip=67.231.145.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
+	s=arc-20240116; t=1749494294; c=relaxed/simple;
+	bh=tuw5hfAO6pfAw54+AasME1BzZdzy9gMf5PS77lO5HjM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=PZI9XNEfdmEO835szBu2oruHvCAFuOrkWlh/NIBcmyUSGhD10LdmmxL3Sq5Fpc+Q3eRYBkbFAHxpS3DgiSVKAAAD4fwrKsNVwIKIFfk3sdEdn6a+XOjsALB00J+N6i0o5gKst0uqQD0XYmcQkUVE+xV8IUCaY0uFjyB4dkbyQmw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Cd72mHzE; arc=none smtp.client-ip=209.85.128.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="E+d/2knc"
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 559HV3dn006907
-	for <bpf@vger.kernel.org>; Mon, 9 Jun 2025 11:31:01 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:to; s=
-	s2048-2021-q4; bh=EWpymFEb6MVHWqaGyShtHnqpMq6nM2bySiTZsWFb/nA=; b=
-	E+d/2knc82OZrQH/9sYy/zstocN6IRr5cPAym4oCYxpfOTnKUM3gYtT4hlAiJVus
-	o11heaS6NYxDB2oOTy76EiWZkcfgnQ5PDF8HqIKxXq8g3XbcnQG2IKl/hvou3Vdr
-	8LrM0lo2vfJUTJWS3LaScFNhBy7Xh0yAnUFeyIt10/opGBVF0yS3VNMVNIKLF3LW
-	8yrRXFL6CCar6bLbhThU1D3mxhCxzKqTYROr3TY18vIdbd5uMj3henDrOuF6E//R
-	4ncw5/JTo3X/yLHd+YEcj/5jMqsQBu/AsfcJAqUNOTZ3AqVLsiaR0F7Qo1ywz0Hx
-	xM3kDFYnL1fX+aXTsvXZTg==
-Received: from maileast.thefacebook.com ([163.114.135.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4755c0ywn7-2
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Mon, 09 Jun 2025 11:31:01 -0700 (PDT)
-Received: from twshared33022.03.prn6.facebook.com (2620:10d:c0a8:1b::30) by
- mail.thefacebook.com (2620:10d:c0a9:6f::237c) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.2.1748.24; Mon, 9 Jun 2025 18:30:59 +0000
-Received: by devvm7589.cco0.facebook.com (Postfix, from userid 669379)
-	id D05ED94A1DE; Mon,  9 Jun 2025 11:30:43 -0700 (PDT)
-From: Ihor Solodrai <isolodrai@meta.com>
-To: <andrii@kernel.org>
-CC: <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
-        <eddyz87@gmail.com>, <mykolal@fb.com>, <yonghong.song@linux.dev>,
-        <kernel-team@meta.com>
-Subject: [PATCH bpf-next v4 1/3] bpf: make reg_not_null() true for CONST_PTR_TO_MAP
-Date: Mon, 9 Jun 2025 11:30:22 -0700
-Message-ID: <20250609183024.359974-2-isolodrai@meta.com>
-X-Mailer: git-send-email 2.47.1
-In-Reply-To: <20250609183024.359974-1-isolodrai@meta.com>
-References: <20250609183024.359974-1-isolodrai@meta.com>
-Reply-To: <ihor.solodrai@linux.dev>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Cd72mHzE"
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-70a57a8ffc3so45003607b3.0;
+        Mon, 09 Jun 2025 11:38:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1749494292; x=1750099092; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Qhp29CuIb7iGqIWK2izDqy/zUPnZPCcXPtGOH8g1wF4=;
+        b=Cd72mHzEmVi7MIx1tsIQh5vGsSD6dRBSJCXkm23qmIDLJ44BhHjbdGOIplTtNKwlNr
+         ZZfuwqc4QpUXGGM92013GQpmDBOLAMrMkc9y1TQzPARQczMjKdJSH00kq6lXs4eW8enL
+         S8nbh6J9G4xtyJhZazeA2S0hqZGiz41oZBLa2YcSMw9Q25ICqdjsF8DWmPG3KnZQbZI8
+         vdNP4ncJTZl+j69PUgEXJUkO8ZfumE8GuVL1enV8rD2PIU/uaj81OhzwqKUvQhW48R1O
+         RzzRQXu52PK7YC9Gw+rB0PuShVeoTqe+t9OF6M6Z8FzJqretIlfIUEJvDCUTLxgo+UGv
+         ewog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749494292; x=1750099092;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Qhp29CuIb7iGqIWK2izDqy/zUPnZPCcXPtGOH8g1wF4=;
+        b=n5tbNy1MhiBLywuCDA7pUauj1NF9w+194t9s9pQ+UG/wTbRJwYbVSwggAB0gOf/3gV
+         0RDUzR7kuk6Gyz7rWxJpNPgGH5PHvINcwSAUm561NyzGncp1NvFPMZl0LaBcv7JDdqva
+         3rWM2oVFEMCDxKGSncQhfvDThNMwj1VYQgrSWM2BMFG7q0qN69ci73HZjj57Xh3Jpe5C
+         qGG3j8yVheWx32PhP/afy8s7+KNjZ5TZcFqPJHy6g8CFmZFJ8tE7KT9UviOfixSBKDP8
+         7veHrOswn8Od2gukdG9vrtoArMc7cPZIYKGYA9Z/qpP/JeEqyPV33AE+xXK5p3MX7SjA
+         D54w==
+X-Forwarded-Encrypted: i=1; AJvYcCVrGpcAlg5UROaoFbygRpXpNbKWwJc0UrxKzymlZ1Fv6fv8SJt8S+uAjP484x+x0PjXoZk3C2z1TVFHtfhVwmhc8g==@vger.kernel.org, AJvYcCWO2MKBhBqifOoGjHfsnckqX6LWZlalHqwNKqJ/MiaYTBwf4v3TKUhBSB8ZSRho0dJI6Fg=@vger.kernel.org, AJvYcCXrdCf92pN6U06LbOcVByh3jJNkR1kyW6Zv2ci8xEdgTETATmpf/o/4hAgoQCZPU6/mJKUoV4PAWOnr65Qx@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzpmm17pRU9wvmQsn1cr4Q6upBZxstQQTkBDHvbKQgkMEGsQ9tA
+	cYu6JNuYE5BX3/+N0hZHqXaSSYsZBJHaNxDRZQhkyu1scWf6upJjVRcIRMnbJOCHNxwG81CsTEg
+	NTZPGFy+xoU/3nTJ+GGB/VFIoOOBNnmI=
+X-Gm-Gg: ASbGncsK2b6dnw5Bygsg5PSrKWGQzx4B5DjHwpf3JtS1cXHVogqMMA61rX+H9kcrK/o
+	m20TpYa31/R4JnKvW0ksLMVBujG6SaH25w27lggqbzK8tkuiRXLwiov028iHlMd8YLOjETcZEu9
+	JIjURJq1SX2E0r53zZvFHJd7pjSrMBp25lzMxhkJKPyA==
+X-Google-Smtp-Source: AGHT+IEA0OiVnuSQGUrHzwOA9PG1/Ehf5LU2jf1N8aiKnF5p6Xlm7aeavf+MEx+4ct/p8cyUhmjffyP1BWPj61x75X4=
+X-Received: by 2002:a05:690c:6f0d:b0:70d:ed5d:b4bf with SMTP id
+ 00721157ae682-710f7710633mr191012327b3.24.1749494291936; Mon, 09 Jun 2025
+ 11:38:11 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20250529065537.529937-1-howardchu95@gmail.com>
+ <aDpBTLoeOJ3NAw_-@google.com> <CAH0uvojGoLX6mpK9wA1cw-EO-y_fUmdndAU8eZ1pa70Lc_rvvw@mail.gmail.com>
+ <20250602181743.1c3dabea@gandalf.local.home> <aEAfHYLEyc7xGy7E@krava>
+In-Reply-To: <aEAfHYLEyc7xGy7E@krava>
+From: Howard Chu <howardchu95@gmail.com>
+Date: Mon, 9 Jun 2025 11:38:00 -0700
+X-Gm-Features: AX0GCFuPGtDfipaA_75L7T4H9ErlTIAUaONsbR5a8kUDQD8o6sw_DY1_XDDZsA0
+Message-ID: <CAH0uvogvkRoHc6jWYSJHLenaRMru23YaGfA1i_vWZ6eF9LwVzw@mail.gmail.com>
+Subject: Re: [RFC PATCH v1] perf trace: Mitigate failures in parallel perf
+ trace instances
+To: Jiri Olsa <olsajiri@gmail.com>
+Cc: Namhyung Kim <namhyung@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, acme@kernel.org, 
+	mingo@redhat.com, mark.rutland@arm.com, alexander.shishkin@linux.intel.com, 
+	irogers@google.com, adrian.hunter@intel.com, peterz@infradead.org, 
+	kan.liang@linux.intel.com, linux-perf-users@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Song Liu <song@kernel.org>, bpf@vger.kernel.org, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Steven Rostedt <rostedt@goodmis.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Authority-Analysis: v=2.4 cv=fNE53Yae c=1 sm=1 tr=0 ts=68472865 cx=c_pps a=MfjaFnPeirRr97d5FC5oHw==:117 a=MfjaFnPeirRr97d5FC5oHw==:17 a=6IFa9wvqVegA:10 a=VabnemYjAAAA:8 a=VwQbUJbxAAAA:8 a=eyZTgQFGG2VFfHX4qDcA:9 a=gKebqoRLp9LExxC7YDUY:22
-X-Proofpoint-ORIG-GUID: slWLNUjYF3EyM96xNkJFS9nWOpSmNbY5
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjA5MDE0MCBTYWx0ZWRfXwzSACHdJbOS9 OMlwYe7Bv/yvfvJOzmLQ3da/miGGXzrsYtUtDSz1df4pkd9BOTil7ZkS+ySs9LP4A76GS61gVEs 19G19fD3KQ3NoCs0Ba2YGPFdObd11n5Ghr80dc0R5lY/IrNuL3/LD7hGKO0/wKWqzw/gIQKEl4P
- amfLIEhmSXgxF4tg8NBNi5/5temfY13acWTPfQUz5b3FPeoV0Xf4KeII3ExtQ0O3guzM2Ub/2my pd85PzLCnEsSo4C/jyxr5yPGkQOFMFehMUly3JlpphQtSRs490Lb3OpY7xAGjpO3mIkpOidnpkG nKYkd+1sDRYX9rt+bVEu0RmkPiACaSzARt8YOViO/6jGwbbxH+HMDNUhB1druXfIoJQMIdnkYU1
- JNdP8TmFknXMOy0e52eyVJeoGuh9v+p0HMO0dBcXjRtUU2bCMYJ/0ZwdA3r1CyUpZSjajiJA
-X-Proofpoint-GUID: slWLNUjYF3EyM96xNkJFS9nWOpSmNbY5
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-06-09_07,2025-06-09_02,2025-03-28_01
 
-When reg->type is CONST_PTR_TO_MAP, it can not be null. However the
-verifier explores the branches under rX =3D=3D 0 in check_cond_jmp_op()
-even if reg->type is CONST_PTR_TO_MAP, because it was not checked for
-in reg_not_null().
+Hi Jiri,
 
-Fix this by adding CONST_PTR_TO_MAP to the set of types that are
-considered non nullable in reg_not_null().
+On Wed, Jun 4, 2025 at 3:25=E2=80=AFAM Jiri Olsa <olsajiri@gmail.com> wrote=
+:
+>
+> On Mon, Jun 02, 2025 at 06:17:43PM -0400, Steven Rostedt wrote:
+> > On Fri, 30 May 2025 17:00:38 -0700
+> > Howard Chu <howardchu95@gmail.com> wrote:
+> >
+> > > Hello Namhyung,
+> > >
+> > > On Fri, May 30, 2025 at 4:37=E2=80=AFPM Namhyung Kim <namhyung@kernel=
+.org> wrote:
+> > > >
+> > > > Hello,
+> > > >
+> > > > (Adding tracing folks)
+> > >
+> > > (That's so convenient wow)
+> >
+> > Shouldn't the BPF folks be more relevant. I don't see any of the tracin=
+g
+> > code involved here.
+> >
+> > >
+> > > >
+> > > > On Wed, May 28, 2025 at 11:55:36PM -0700, Howard Chu wrote:
+> > > > > perf trace utilizes the tracepoint utility, the only filter in pe=
+rf
+> > > > > trace is a filter on syscall type. For example, if perf traces on=
+ly
+> > > > > openat, then it filters all the other syscalls, such as readlinka=
+t,
+> > > > > readv, etc.
+> > > > >
+> > > > > This filtering is flawed. Consider this case: two perf trace
+> > > > > instances are running at the same time, trace instance A tracing
+> > > > > readlinkat, trace instance B tracing openat. When an openat sysca=
+ll
+> > > > > enters, it triggers both BPF programs (sys_enter) in both perf tr=
+ace
+> > > > > instances, these kernel functions will be executed:
+> > > > >
+> > > > > perf_syscall_enter
+> > > > >   perf_call_bpf_enter
+> > > > >     trace_call_bpf
+> >
+> > This is in bpf_trace.c (BPF related, not tracing related).
+> >
+> > -- Steve
+> >
+> >
+> > > > >       bpf_prog_run_array
+> > > > >
+> > > > > In bpf_prog_run_array:
+> > > > > ~~~
+> > > > > while ((prog =3D READ_ONCE(item->prog))) {
+> > > > >       run_ctx.bpf_cookie =3D item->bpf_cookie;
+> > > > >       ret &=3D run_prog(prog, ctx);
+> > > > >       item++;
+> > > > > }
+> > > > > ~~~
+> > > > >
+> > > > > I'm not a BPF expert, but by tinkering I found that if one of the=
+ BPF
+> > > > > programs returns 0, there will be no tracepoint sample. That is,
+> > > > >
+> > > > > (Is there a sample?) =3D ProgRetA & ProgRetB & ProgRetC
+> > > > >
+> > > > > Where ProgRetA is the return value of one of the BPF programs in =
+the BPF
+> > > > > program array.
+> > > > >
+> > > > > Go back to the case, when two perf trace instances are tracing tw=
+o
+> > > > > different syscalls, again, A is tracing readlinkat, B is tracing =
+openat,
+> > > > > when an openat syscall enters, it triggers the sys_enter program =
+in
+> > > > > instance A, call it ProgA, and the sys_enter program in instance =
+B,
+> > > > > ProgB, now ProgA will return 0 because ProgA cares about readlink=
+at only,
+> > > > > even though ProgB returns 1; (Is there a sample?) =3D ProgRetA (0=
+) &
+> > > > > ProgRetB (1) =3D 0. So there won't be a tracepoint sample in B's =
+output,
+> > > > > when there really should be one.
+> > > >
+> > > > Sounds like a bug.  I think it should run bpf programs attached to =
+the
+> > > > current perf_event only.  Isn't it the case for tracepoint + perf +=
+ bpf?
+> > >
+> > > I really can't answer that question.
+>
+> bpf programs for tracepoint are executed before the perf event specific
+> check/trigger in perf_trace_run_bpf_submit
+>
+> bpf programs array is part of struct trace_event_call so it's global per
+> tracepoint, not per perf event
+>
+> IIRC perf trace needs the perf event sample and the bpf program is there
+> to do the filter and some other related stuff?
 
-An old "unpriv: cmp map pointer with zero" selftest fails with this
-change, because now early out correctly triggers in
-check_cond_jmp_op(), making the verification to pass.
+Actually perf trace relies on BPF programs to produce samples and do
+filtering, but it can also turn BPF off and use tracepoints only.
 
-In practice verifier may allow pointer to null comparison in unpriv,
-since in many cases the relevant branch and comparison op are removed
-as dead code. So change the expected test result to __success_unpriv.
+>
+> if that's the case I wonder we could switch bpf_prog_run_array logic
+> to be permissive like below, and perhaps make that as tracepoint specific
+> change, because bpf_prog_run_array is used in other place
 
-Signed-off-by: Ihor Solodrai <isolodrai@meta.com>
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
----
- kernel/bpf/verifier.c                               | 3 ++-
- tools/testing/selftests/bpf/progs/verifier_unpriv.c | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+Thanks but as Alexei said this may break those who depend on it.
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index e31f6b0ccb30..48a3241cda0f 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -405,7 +405,8 @@ static bool reg_not_null(const struct bpf_reg_state *=
-reg)
- 		type =3D=3D PTR_TO_MAP_KEY ||
- 		type =3D=3D PTR_TO_SOCK_COMMON ||
- 		(type =3D=3D PTR_TO_BTF_ID && is_trusted_reg(reg)) ||
--		type =3D=3D PTR_TO_MEM;
-+		type =3D=3D PTR_TO_MEM ||
-+		type =3D=3D CONST_PTR_TO_MAP;
- }
-=20
- static struct btf_record *reg_btf_record(const struct bpf_reg_state *reg=
-)
-diff --git a/tools/testing/selftests/bpf/progs/verifier_unpriv.c b/tools/=
-testing/selftests/bpf/progs/verifier_unpriv.c
-index a4a5e2071604..28200f068ce5 100644
---- a/tools/testing/selftests/bpf/progs/verifier_unpriv.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_unpriv.c
-@@ -619,7 +619,7 @@ __naked void pass_pointer_to_tail_call(void)
-=20
- SEC("socket")
- __description("unpriv: cmp map pointer with zero")
--__success __failure_unpriv __msg_unpriv("R1 pointer comparison")
-+__success __success_unpriv
- __retval(0)
- __naked void cmp_map_pointer_with_zero(void)
- {
---=20
-2.47.1
+>
+> or make it somehow configurable.. otherwise I fear that might break exist=
+ing
+> use cases.. FWIW bpf ci tests [1] survived the change below
+>
+> jirka
+>
+>
+> [1] https://github.com/kernel-patches/bpf/pull/9044
+>
+> ---
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index 5b25d278409b..4ca8afe0217c 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -2218,12 +2218,12 @@ bpf_prog_run_array(const struct bpf_prog_array *a=
+rray,
+>         const struct bpf_prog *prog;
+>         struct bpf_run_ctx *old_run_ctx;
+>         struct bpf_trace_run_ctx run_ctx;
+> -       u32 ret =3D 1;
+> +       u32 ret =3D 0;
+>
+>         RCU_LOCKDEP_WARN(!rcu_read_lock_held(), "no rcu lock held");
+>
+>         if (unlikely(!array))
+> -               return ret;
+> +               return 1;
+>
+>         run_ctx.is_uprobe =3D false;
+>
+> @@ -2232,7 +2232,7 @@ bpf_prog_run_array(const struct bpf_prog_array *arr=
+ay,
+>         item =3D &array->items[0];
+>         while ((prog =3D READ_ONCE(item->prog))) {
+>                 run_ctx.bpf_cookie =3D item->bpf_cookie;
+> -               ret &=3D run_prog(prog, ctx);
+> +               ret |=3D run_prog(prog, ctx);
+>                 item++;
+>         }
+>         bpf_reset_run_ctx(old_run_ctx);
 
+Thank you so much for looking into this.
+
+Thanks,
+Howard
