@@ -1,185 +1,173 @@
-Received: from out-173.mta0.migadu.com (out-173.mta0.migadu.com [91.218.175.173])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE56224394B
-	for <bpf@vger.kernel.org>; Tue, 10 Jun 2025 17:17:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C51E2441A0;
+	Tue, 10 Jun 2025 17:26:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749575836; cv=none; b=pADwA51OzolRyCnXFYA7SgJP4DwAj1sBiwt2o9Cox/qotnwUmH7hihylBJNLXNzqZWz3fWApbr9YX5q/wVcA0TiOi6ScXN+x6DuBVuN7h1KYp8cJm860EblEa3t6oIJHGegSIopOtnCRF48ioIbW/7Xg5gmfXynW45Zub5SwQac=
+	t=1749576397; cv=none; b=WNuGA+dlhRqtd3cjJSb392xxM1eoS+78bnh2ZQQAdtycvSnE7KnbWZ6s/Di7LrtsirQx2mW0For5CUOdgX4L1HS30y3bQLV0/gjk1X9TEM9Tw2ociWvoiO5hLxVFCnDIMQrCzlnbOSpLU0CyL3/0o4sz3zyo69CPS/taCsKlb7M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749575836; c=relaxed/simple;
-	bh=7qWvqWj2EPLfEU+9olEuqM3aOuZT6KWZE0lgk7JeiA8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HGCBsAGvjlbFUw6zvO4kF+iheqhyl3qnVYgHne9A89BH8h8Bd6BSiKDjHKDBRuC4su083D71PD8G5ZN11QjF3jcpcqYvordXWVYCLAwZdgWOpvS5yu3aLOu3ZEzQDATc81l5uAwpZr+JSVVVdvzuyCffuNo3f1vnQ8ZV2jj+lZs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=liGWDznj; arc=none smtp.client-ip=91.218.175.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1749576397; c=relaxed/simple;
+	bh=f64BzYbWwrcswaFdSrDpPjRWyUJjPC8m2gBNkU6g2pU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=C+bV/+d6ZtrSbloYk8GpaRZNEuI3LtqwuhkKXPiGwyYv3g3dvQdUji4tHQtFIj0Vr7BzTmgUghRGqCbR1Ih8wT5IGzU5kPw553Qv3V9LpjCkhJ0hDKdBmOYjv4iqzHP11oxjcEWJsgnvI/pGu3g66ESXDVz/2+mYPDDE8azaFgw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ceJ3xECC; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="liGWDznj"
-Message-ID: <32cb1c74-4a15-491b-90b0-6c2fdf07dbb9@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1749575821;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=+6TLYW+X+ICRdTEemlhyxVV2i9XawqfMflRijJ5ErnI=;
-	b=liGWDznjsQnZfLpkxO80cgofTbJIluw5YkqYn3LOMjUkDS6Cc/lgdz5QYubeluHK1gfl1w
-	OYvcnObecHhkbw6WXGUTf1sW+AbmjjUyD0utX3oi2mwJhcRnnu6RTDzQkumwVHtGgwaEC1
-	QuaXoip0XSi1hYKg1Z89iFSZyX+h47w=
-Date: Tue, 10 Jun 2025 10:16:55 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ceJ3xECC"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD601C4CEF0;
+	Tue, 10 Jun 2025 17:26:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1749576396;
+	bh=f64BzYbWwrcswaFdSrDpPjRWyUJjPC8m2gBNkU6g2pU=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=ceJ3xECC0Kl+gtIZbbu8XnZ3pFCDr5UfOPXrAgHFnsL9LU0utUKP2JU6SPJkKT+lH
+	 hNazbcpD7ejB21Gnk4A3fPHS2HJOZnPUnW3aRujkfGNJdctyvZ1LSGXT5RPRDebug1
+	 nZxCC0HO9vpuISQVZYTy3SmbdKufXm40oryTNOFpJJVPtIxAbI3sUurAhFPi0GpgET
+	 DdPFPGnxq900KRutkNRaCnFrQ6RHhtl5DURkP18dOHKylpTn4kExBH2zgbJeRfcFne
+	 hvJRTiDz+mXBvLeMElfLcTeuBAoq/dY84NkQX+3SsKNSI19ixpAPFnfjwoc0bdAagm
+	 S0zfKQWozkrZQ==
+Received: by mail-qt1-f174.google.com with SMTP id d75a77b69052e-4a58c2430edso781711cf.1;
+        Tue, 10 Jun 2025 10:26:36 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUqJgqZ5X0wjqevfxG6yfu/ec0OayOIjoppJNRMdd+l4T7cszkOkFpcimMrTOLEyH1udy2GBn4oGxTGssLa@vger.kernel.org, AJvYcCWuOhQUJrPRyNY7ZVUiS2LojfR5XhAhZrlKl1HHokoj6rOGzvUNlPpeWWwJ1KW4TWZBnjO1gowDoL+aRDE/@vger.kernel.org, AJvYcCXqcxFeFFavN6eMvQZwQnN52JIL3egnCSXnC0Prz5ofwF+3pUJXbSL2qWvVdkiiIWxuHqXKdxRAeWd42ZXr8rA3664HrKyG@vger.kernel.org
+X-Gm-Message-State: AOJu0YzNtLjx+0GEGBu0fgeDIGoqPTWeIqga94aHj35VITuZ4dOodCig
+	VOelO0VKi8wlNGBbDrO+YR3iEaDK5NYYL/zQ7gVu8hV9iNauSTm/WGf2P8X+Ci025yJPyL004r4
+	Zu1V0X2weYQbyGr1qrgOCSPAY7esWPyA=
+X-Google-Smtp-Source: AGHT+IGFc2+k1iCnhuGoGqscF+tifHIl1pEkK+0lLMlrzW9eFNzUpsFwybkLvs3KvX7SPR8qouSN1Qa2cBTv6F08xjA=
+X-Received: by 2002:ac8:5cc9:0:b0:4a6:fac6:fa1e with SMTP id
+ d75a77b69052e-4a713bf27cdmr4370421cf.8.1749576384973; Tue, 10 Jun 2025
+ 10:26:24 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v2 2/2] selftests/bpf: Convert test_sysctl to prog_tests
-Content-Language: en-GB
-To: Jerome Marchand <jmarchan@redhat.com>, bpf@vger.kernel.org
-Cc: Martin KaFai Lau <martin.lau@linux.dev>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, linux-kernel@vger.kernel.org,
- Eduard Zingerman <eddyz87@gmail.com>
-References: <20250527165412.533335-1-jmarchan@redhat.com>
- <20250610091933.717824-1-jmarchan@redhat.com>
- <20250610091933.717824-3-jmarchan@redhat.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <20250610091933.717824-3-jmarchan@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+References: <20250606213015.255134-1-song@kernel.org> <20250606213015.255134-2-song@kernel.org>
+ <20250610.rox7aeGhi7zi@digikod.net>
+In-Reply-To: <20250610.rox7aeGhi7zi@digikod.net>
+From: Song Liu <song@kernel.org>
+Date: Tue, 10 Jun 2025 10:26:13 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW5G0Th+9dRSmxDjo5E7CxV1E9N8AiKjw3cKyEhOBVWJFw@mail.gmail.com>
+X-Gm-Features: AX0GCFtlUudIDDILbjkSliTETHB9ADLDpGB_tREWEmJbKZ4UGEbktaZJBtiHTAs
+Message-ID: <CAPhsuW5G0Th+9dRSmxDjo5E7CxV1E9N8AiKjw3cKyEhOBVWJFw@mail.gmail.com>
+Subject: Re: [PATCH v3 bpf-next 1/5] namei: Introduce new helper function path_walk_parent()
+To: =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
+Cc: bpf@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	kernel-team@meta.com, andrii@kernel.org, eddyz87@gmail.com, ast@kernel.org, 
+	daniel@iogearbox.net, martin.lau@linux.dev, viro@zeniv.linux.org.uk, 
+	brauner@kernel.org, jack@suse.cz, kpsingh@kernel.org, 
+	mattbobrowski@google.com, amir73il@gmail.com, repnop@google.com, 
+	jlayton@kernel.org, josef@toxicpanda.com, gnoack@google.com, m@maowtm.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-
-
-On 6/10/25 2:19 AM, Jerome Marchand wrote:
-> Convert test_sysctl test to prog_tests with minimal change to the
-> tests themselves.
+On Tue, Jun 10, 2025 at 10:19=E2=80=AFAM Micka=C3=ABl Sala=C3=BCn <mic@digi=
+kod.net> wrote:
 >
-> Signed-off-by: Jerome Marchand <jmarchan@redhat.com>
-> ---
->   tools/testing/selftests/bpf/.gitignore        |  1 -
->   tools/testing/selftests/bpf/Makefile          |  5 ++-
->   .../bpf/{ => prog_tests}/test_sysctl.c        | 32 ++++---------------
->   3 files changed, 9 insertions(+), 29 deletions(-)
->   rename tools/testing/selftests/bpf/{ => prog_tests}/test_sysctl.c (98%)
+> On Fri, Jun 06, 2025 at 02:30:11PM -0700, Song Liu wrote:
+> > This helper walks an input path to its parent. Logic are added to handl=
+e
+> > walking across mount tree.
+> >
+> > This will be used by landlock, and BPF LSM.
+> >
+> > Signed-off-by: Song Liu <song@kernel.org>
+> > ---
+> >  fs/namei.c            | 51 +++++++++++++++++++++++++++++++++++++++++++
+> >  include/linux/namei.h |  2 ++
+> >  2 files changed, 53 insertions(+)
+> >
+> > diff --git a/fs/namei.c b/fs/namei.c
+> > index 4bb889fc980b..f02183e9c073 100644
+> > --- a/fs/namei.c
+> > +++ b/fs/namei.c
+> > @@ -1424,6 +1424,57 @@ static bool choose_mountpoint(struct mount *m, c=
+onst struct path *root,
+> >       return found;
+> >  }
+> >
+> > +/**
+> > + * path_walk_parent - Walk to the parent of path
+> > + * @path: input and output path.
+> > + * @root: root of the path walk, do not go beyond this root. If @root =
+is
+> > + *        zero'ed, walk all the way to real root.
+> > + *
+> > + * Given a path, find the parent path. Replace @path with the parent p=
+ath.
+> > + * If we were already at the real root or a disconnected root, @path i=
+s
+> > + * not changed.
+> > + *
+> > + * The logic of path_walk_parent() is similar to follow_dotdot(), exce=
+pt
+> > + * that path_walk_parent() will continue walking for !path_connected c=
+ase.
+> > + * This effectively means we are walking from disconnected bind mount =
+to
+> > + * the original mount. If this behavior is not desired, the caller can=
+ add
+> > + * a check like:
+> > + *
+> > + *   if (path_walk_parent(&path) && !path_connected(path.mnt, path.den=
+try)
+> > + *           // continue walking
+> > + *   else
+> > + *           // stop walking
+> > + *
+> > + * Returns:
+> > + *  true  - if @path is updated to its parent.
+> > + *  false - if @path is already the root (real root or @root).
+> > + */
+> > +bool path_walk_parent(struct path *path, const struct path *root)
+> > +{
+> > +     struct dentry *parent;
+> > +
+> > +     if (path_equal(path, root))
+> > +             return false;
+> > +
+> > +     if (unlikely(path->dentry =3D=3D path->mnt->mnt_root)) {
+> > +             struct path p;
+> > +
+> > +             if (!choose_mountpoint(real_mount(path->mnt), root, &p))
+> > +                     return false;
+> > +             path_put(path);
+> > +             *path =3D p;
+> > +     }
+> > +
+> > +     if (unlikely(IS_ROOT(path->dentry)))
 >
-> diff --git a/tools/testing/selftests/bpf/.gitignore b/tools/testing/selftests/bpf/.gitignore
-> index e2a2c46c008b1..3d8378972d26c 100644
-> --- a/tools/testing/selftests/bpf/.gitignore
-> +++ b/tools/testing/selftests/bpf/.gitignore
-> @@ -21,7 +21,6 @@ test_lirc_mode2_user
->   flow_dissector_load
->   test_tcpnotify_user
->   test_libbpf
-> -test_sysctl
->   xdping
->   test_cpp
->   *.d
-> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-> index 66bb50356be08..53dc08d905bd1 100644
-> --- a/tools/testing/selftests/bpf/Makefile
-> +++ b/tools/testing/selftests/bpf/Makefile
-> @@ -70,7 +70,7 @@ endif
->   # Order correspond to 'make run_tests' order
->   TEST_GEN_PROGS = test_verifier test_tag test_maps test_lru_map test_progs \
->   	test_sockmap \
-> -	test_tcpnotify_user test_sysctl \
-> +	test_tcpnotify_user \
->   	test_progs-no_alu32
->   TEST_INST_SUBDIRS := no_alu32
->   
-> @@ -215,7 +215,7 @@ ifeq ($(VMLINUX_BTF),)
->   $(error Cannot find a vmlinux for VMLINUX_BTF at any of "$(VMLINUX_BTF_PATHS)")
->   endif
->   
-> -# Define simple and short `make test_progs`, `make test_sysctl`, etc targets
-> +# Define simple and short `make test_progs`, `make test_maps`, etc targets
->   # to build individual tests.
->   # NOTE: Semicolon at the end is critical to override lib.mk's default static
->   # rule for binaries.
-> @@ -324,7 +324,6 @@ NETWORK_HELPERS := $(OUTPUT)/network_helpers.o
->   $(OUTPUT)/test_sockmap: $(CGROUP_HELPERS) $(TESTING_HELPERS)
->   $(OUTPUT)/test_tcpnotify_user: $(CGROUP_HELPERS) $(TESTING_HELPERS) $(TRACE_HELPERS)
->   $(OUTPUT)/test_sock_fields: $(CGROUP_HELPERS) $(TESTING_HELPERS)
-> -$(OUTPUT)/test_sysctl: $(CGROUP_HELPERS) $(TESTING_HELPERS)
->   $(OUTPUT)/test_tag: $(TESTING_HELPERS)
->   $(OUTPUT)/test_lirc_mode2_user: $(TESTING_HELPERS)
->   $(OUTPUT)/xdping: $(TESTING_HELPERS)
-> diff --git a/tools/testing/selftests/bpf/test_sysctl.c b/tools/testing/selftests/bpf/prog_tests/test_sysctl.c
-> similarity index 98%
-> rename from tools/testing/selftests/bpf/test_sysctl.c
-> rename to tools/testing/selftests/bpf/prog_tests/test_sysctl.c
-> index bcdbd27f22f08..049671361f8fa 100644
-> --- a/tools/testing/selftests/bpf/test_sysctl.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/test_sysctl.c
-> @@ -1,22 +1,8 @@
->   // SPDX-License-Identifier: GPL-2.0
->   // Copyright (c) 2019 Facebook
->   
-> -#include <fcntl.h>
-> -#include <stdint.h>
-> -#include <stdio.h>
-> -#include <stdlib.h>
-> -#include <string.h>
-> -#include <unistd.h>
-> -
-> -#include <linux/filter.h>
-> -
-> -#include <bpf/bpf.h>
-> -#include <bpf/libbpf.h>
-> -
-> -#include <bpf/bpf_endian.h>
-> -#include "bpf_util.h"
-> +#include "test_progs.h"
->   #include "cgroup_helpers.h"
-> -#include "testing_helpers.h"
->   
->   #define CG_PATH			"/foo"
->   #define MAX_INSNS		512
-> @@ -1608,26 +1594,22 @@ static int run_tests(int cgfd)
->   	return fails ? -1 : 0;
->   }
->   
-> -int main(int argc, char **argv)
-> +void test_sysctl(void)
->   {
->   	int cgfd = -1;
+> path would be updated while false is returned, which is not correct.
 
--1 is not needed.
+Good catch.. How about the following:
 
-> -	int err = 0;
->   
->   	cgfd = cgroup_setup_and_join(CG_PATH);
-> -	if (cgfd < 0)
-> -		goto err;
-> +	if (CHECK_FAIL(cgfd < 0))
+bool path_walk_parent(struct path *path, const struct path *root)
+{
+        struct dentry *parent;
+        bool ret =3D false;
 
-Use ASSERT* macros. For example, if (!ASSERT_OK_FD(cgfd, "create cgroup"))
+        if (path_equal(path, root))
+                return false;
 
-> +		goto out;
->   
->   	/* Use libbpf 1.0 API mode */
->   	libbpf_set_strict_mode(LIBBPF_STRICT_ALL);
+        if (unlikely(path->dentry =3D=3D path->mnt->mnt_root)) {
+                struct path p;
 
-This is not needed.
+                if (!choose_mountpoint(real_mount(path->mnt), root, &p))
+                        return false;
+                path_put(path);
+                *path =3D p;
+                ret =3D true;
+        }
 
->   
-> -	if (run_tests(cgfd))
-> -		goto err;
-> +	if (CHECK_FAIL(run_tests(cgfd)))
+        if (unlikely(IS_ROOT(path->dentry)))
+                return ret;
 
-if (!ASSERT_OK(run_tests(cgfd), "run_tests"))
+        parent =3D dget_parent(path->dentry);
+        dput(path->dentry);
+        path->dentry =3D parent;
+        return true;
+}
 
-> +		goto out;
->   
-> -	goto out;
-> -err:
-> -	err = -1;
->   out:
->   	close(cgfd);
->   	cleanup_cgroup_environment();
-> -	return err;
-> +	return;
->   }
+Thanks,
+Song
