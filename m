@@ -1,139 +1,69 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C03112367CC;
-	Tue, 10 Jun 2025 17:54:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B62A2459E5
+	for <bpf@vger.kernel.org>; Tue, 10 Jun 2025 17:57:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749578086; cv=none; b=Py2ZXm3XIuh15GJy9rfofnNcXEizLDAqRW8B2+sIMLNbEERfx9YrCzTAx4gprOxAgEJjk9ZUXlPwYZKJnzfjjyf/1sS1v8Hdk6Hr8NswvwcFaEc2Bo4UDxHqoyjosgx41ZuS4NNseJtx3zrAG/PXgJQ6rYr6ojmYDs8bq0hGli4=
+	t=1749578221; cv=none; b=s2ltWzCfugL8XCjj5/wrkmFLg1gK2JQ/sjBS6qNSrgQwkuFgFLo4X697DTab4mPIoqg6M4/9NoKDdvTdHaJSyYb/M2gcUqkojzQ1+2Re5E7sehWrArlXVjpc8ZNDF+cX+2XMDlHayej3GYcrCMG82NRExttBxHhs00ZOHV2CBlI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749578086; c=relaxed/simple;
-	bh=tQJJVVL0eqt772KtNAuNcEbkrh0mO/guKZpsGTY4qMs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=mK1FeCCgts9HntuA9KnM8HHMv/P5C2vuSQ1kRtWdbIm4KHzvJWfVPZOy+6Nh+0WzE3MSMApvPKJ22TZU4fdVyQt+r7cF/KOakOOYTCroF3lj+sGfBUSIFRAbyUc3akUV9SmpusNcBujJ6jC0i5pHv3XJu9BDJBuksUITs09DwVw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TJ+E0Ndi; arc=none smtp.client-ip=209.85.214.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1749578221; c=relaxed/simple;
+	bh=o/EIqDhRHXNwC661Ix/Xh07w858mX3cfWZTrFQXedL8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=jMOBfbFaR3/VPuBvDwb+et6ZRhCJyB/PJiFOhaOPWDPYn5DEC38RzqeP935MdGJYdjpY7lfsJq8WzrEc8gNkeVEP+EwhRRY8kJ0Kxxx4jloT/elORgU7OyWW+KPvIEjo7FWEJE6ljtHDLNu2heWg05CjcWRRHS9uSE7pw6IOFPA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C8lA2SJe; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TJ+E0Ndi"
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-236377f00a1so11522395ad.3;
-        Tue, 10 Jun 2025 10:54:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1749578084; x=1750182884; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=e5JsbzcuPMRv3BROQqL987dI+PHmhbXk76yQ+kmKPwE=;
-        b=TJ+E0Ndiz90qRjwfRNP9rlZ5VnFbR9VkgcoZ/xeLNLUE1AMqVolx5NB7Hr5fsZChF6
-         +u3fDr5c6G5Dhi2rsezpCDgM9AsjXXfEb6xGOvgBERkyI7G7u/7nbaX9yQRh0JBDM706
-         l0Z2eYVl5cf0scGNlxQzXQb8+DW/YXmdbNuBC4ypcytrX5E3efvRPPWJWXbRNp98Hpb7
-         ypa6O6ZcfNxR9JOc7IDR1PVuhxwavWwV1s1kZ8HqW4Ocq1H3s754R9X/k6ueOfsKPGvV
-         BcSa15GvVfcNrPMx8X+ywVEouAcTLOQjF+Uu8Mqbr/N0kHqmBftcwrNpCQcTbw2bpaZA
-         RzJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749578084; x=1750182884;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=e5JsbzcuPMRv3BROQqL987dI+PHmhbXk76yQ+kmKPwE=;
-        b=qd523oR/sJSfMzlFje715BTjWy+rh2On8TKpsu72FXyPQRggepKjeAEVHQn1yj+exp
-         BdjeDiY3dGRjebAR6CPNfobE3QAPhjvusnbOB8+75Ooh7G3JsciRew92TIetRMF88zsC
-         vDSa4vIwqdofJPC2cDKMUn2AJfye28Hd36RXWCKxgyRwoe1XSLmGob7+2qcQQgl9Yyo4
-         YMwI6s8pDGZ+KzsdXpEhBJcWnWxf5NdIIha9LLoAt1+2bnIzHeHQymg3p1SA5TLevIFI
-         5JLLpXec45L2MVuuHaWxRJidds3rYkMmaB/VH+6uQXD/1ZQ3t6gwrU4YQVlY8ni4BWLd
-         bLBQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWcHGDg8Re66GRfJcPvJBjT0065E9L9wqM05tYPtsK2bmqUSYhzUWDcVY410wZxdwJgsu+B1Ie5Q4VewCU=@vger.kernel.org, AJvYcCXyDoRLXlfFJUgvRAY2pc022B4Axog+c0CsjKbViNZm5UAp5XzHh567EudH3ZJ/HtvlDe1IAlFz@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw7DpnbklhKawOJUw9mJfKO4VljKTHUXEL/l5Z0lHPbNnr4frPI
-	Q+EpxRr0vXyniCxuTtdEoJ2L6tjhaUR6QhP+j9bDox6HDGbqySPGvwAx1jfX
-X-Gm-Gg: ASbGncsIFbMXw9bs7lYceehyEGFfEzw8rf8qlL3eBB4TLtQSxYWm4jgwY2wwxklKd/v
-	w1trehKjDu2VkQU86dFaB80jSg0rVAfDA1GLpAKRzytsbdYoaioIxm6w8toVUKJgAvUeGoh6Ahf
-	i9yCbYUGEnamSonDUW3NO7Mc0II/h9b38pDs461Mn8lXYbBIJOM5fEE3SdeNy1K7Tnf65SCC09s
-	l8iuDpVX87EoPaoCLIshRJyL2rL02AX8Dhk8Q2s5HOx3BFaIaFu1P/pRtWgxP18Utr3RWoTcFlb
-	JioAk0bmaOpceHAlvn2b2zQi870nF6w2BAQl1AAwATbvZiMLh3PgG1blA93nOLln5ogHHEFC6GC
-	EzzTtWMTEIh5Sp4nfvNPeqzs=
-X-Google-Smtp-Source: AGHT+IGVcqG1LowNwUuMehBhqun6fUhP34xVFnmk2EXdHllUdHXUpiYS9CVKQCt4hVUx8kUTyTRQRA==
-X-Received: by 2002:a17:902:f611:b0:235:f45f:ed49 with SMTP id d9443c01a7336-23641b1a711mr2483835ad.33.1749578083762;
-        Tue, 10 Jun 2025 10:54:43 -0700 (PDT)
-Received: from localhost (c-73-158-218-242.hsd1.ca.comcast.net. [73.158.218.242])
-        by smtp.gmail.com with UTF8SMTPSA id d9443c01a7336-23603077ffasm73819425ad.30.2025.06.10.10.54.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Jun 2025 10:54:43 -0700 (PDT)
-From: Stanislav Fomichev <stfomichev@gmail.com>
-To: bpf@vger.kernel.org,
-	netdev@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yhs@fb.com,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	akpm@linux-foundation.org,
-	lumag@kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf] MAINTAINERS: add myself as bpf networking reviewer
-Date: Tue, 10 Jun 2025 10:54:37 -0700
-Message-ID: <20250610175442.2138504-1-stfomichev@gmail.com>
-X-Mailer: git-send-email 2.49.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C8lA2SJe"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAF12C4CEF4
+	for <bpf@vger.kernel.org>; Tue, 10 Jun 2025 17:57:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1749578220;
+	bh=o/EIqDhRHXNwC661Ix/Xh07w858mX3cfWZTrFQXedL8=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=C8lA2SJeEYhikdL+aZZWnFPTO8dh+r7awAOO0N6zOr2Y1JSszkaghSQ6g2jc5TsaG
+	 bRXjG/WJwjW0YgCzD3fRLjSraJN88Ih3AccAMiAZBJaEJv/Tet940P0Zpfr9z6IfF6
+	 V/Eq4N++eRmnwMXWi00mtB26HFk8wESbAHZW8OrJJ3qB1v+q+mRZf+sksu7fZs4tgU
+	 UgXblbBx+nSd3/lvIqxkuou2Crr7jJXZj4mQU0X6Oda4F5TWhQ5PSbCuVzGUCLTDak
+	 7+bSybB1XsAGTbVZ7vgXLQlqm7A0Bm26swXpbKEzIXYlitePywArEXCCk53Pvh1GJD
+	 qzebgfYrFh2JA==
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-60779962c00so5622335a12.0
+        for <bpf@vger.kernel.org>; Tue, 10 Jun 2025 10:57:00 -0700 (PDT)
+X-Gm-Message-State: AOJu0Yx2ACn/ybc4GErfnwbIXPkomPLMAJoWhyYUigeUfLbkabsGVbX3
+	ahQ97r2rMKZ6c7o4WWyAOkK6+muOSLp+Bmfv8hGgo4rYZANWQS8n1EVbkCLd5a1XdXuYeNJxQf8
+	F3hPGFmS3gMV4ql4+iqwurLfGm0LV1jGMITVaMby6
+X-Google-Smtp-Source: AGHT+IGZXUq7dF0vWaS7EQJBO5eVjQ/62SvrC56EQBE7WguprI9Qv3UDt+jKNg2wBvmdSxFLEb1PFEKm0hwONKUXytE=
+X-Received: by 2002:a05:6402:d0d:b0:604:bb1d:938d with SMTP id
+ 4fb4d7f45d1cf-60846d30b2dmr95190a12.34.1749578219228; Tue, 10 Jun 2025
+ 10:56:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20250610175442.2138504-1-stfomichev@gmail.com>
+In-Reply-To: <20250610175442.2138504-1-stfomichev@gmail.com>
+From: KP Singh <kpsingh@kernel.org>
+Date: Tue, 10 Jun 2025 19:56:48 +0200
+X-Gmail-Original-Message-ID: <CACYkzJ6Y+wcBeVgU-SbxFbimQQ5ve3p3J1YEAcb=VhPJwaYFvA@mail.gmail.com>
+X-Gm-Features: AX0GCFugYv_WEc-J17kTVrbFElExKOsgJjQw9bwraM1ZC-OWcx0MedIOHxHss0E
+Message-ID: <CACYkzJ6Y+wcBeVgU-SbxFbimQQ5ve3p3J1YEAcb=VhPJwaYFvA@mail.gmail.com>
+Subject: Re: [PATCH bpf] MAINTAINERS: add myself as bpf networking reviewer
+To: Stanislav Fomichev <stfomichev@gmail.com>
+Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, ast@kernel.org, 
+	daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev, 
+	song@kernel.org, yhs@fb.com, john.fastabend@gmail.com, haoluo@google.com, 
+	jolsa@kernel.org, akpm@linux-foundation.org, lumag@kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-I've been focusing on networking BPF bits lately, add myself as a
-reviewer.
+On Tue, Jun 10, 2025 at 7:54=E2=80=AFPM Stanislav Fomichev <stfomichev@gmai=
+l.com> wrote:
+>
+> I've been focusing on networking BPF bits lately, add myself as a
+> reviewer.
+>
+> Signed-off-by: Stanislav Fomichev <stfomichev@gmail.com>
 
-Signed-off-by: Stanislav Fomichev <stfomichev@gmail.com>
----
- .mailmap    | 1 +
- MAINTAINERS | 3 +++
- 2 files changed, 4 insertions(+)
-
-diff --git a/.mailmap b/.mailmap
-index 77bb62564ef7..7641338b8d3f 100644
---- a/.mailmap
-+++ b/.mailmap
-@@ -712,6 +712,7 @@ Srinivas Ramana <quic_sramana@quicinc.com> <sramana@codeaurora.org>
- Sriram R <quic_srirrama@quicinc.com> <srirrama@codeaurora.org>
- Sriram Yagnaraman <sriram.yagnaraman@ericsson.com> <sriram.yagnaraman@est.tech>
- Stanislav Fomichev <sdf@fomichev.me> <sdf@google.com>
-+Stanislav Fomichev <sdf@fomichev.me> <stfomichev@gmail.com>
- Stefan Wahren <wahrenst@gmx.net> <stefan.wahren@i2se.com>
- Stéphane Witzmann <stephane.witzmann@ubpmes.univ-bpclermont.fr>
- Stephen Hemminger <stephen@networkplumber.org> <shemminger@linux-foundation.org>
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 8d314e169486..8e109f4436eb 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -4555,6 +4555,7 @@ BPF [NETWORKING] (tcx & tc BPF, sock_addr)
- M:	Martin KaFai Lau <martin.lau@linux.dev>
- M:	Daniel Borkmann <daniel@iogearbox.net>
- R:	John Fastabend <john.fastabend@gmail.com>
-+R:	Stanislav Fomichev <sdf@fomichev.me>
- L:	bpf@vger.kernel.org
- L:	netdev@vger.kernel.org
- S:	Maintained
-@@ -26948,6 +26949,7 @@ M:	David S. Miller <davem@davemloft.net>
- M:	Jakub Kicinski <kuba@kernel.org>
- M:	Jesper Dangaard Brouer <hawk@kernel.org>
- M:	John Fastabend <john.fastabend@gmail.com>
-+R:	Stanislav Fomichev <sdf@fomichev.me>
- L:	netdev@vger.kernel.org
- L:	bpf@vger.kernel.org
- S:	Supported
-@@ -26969,6 +26971,7 @@ M:	Björn Töpel <bjorn@kernel.org>
- M:	Magnus Karlsson <magnus.karlsson@intel.com>
- M:	Maciej Fijalkowski <maciej.fijalkowski@intel.com>
- R:	Jonathan Lemon <jonathan.lemon@gmail.com>
-+R:	Stanislav Fomichev <sdf@fomichev.me>
- L:	netdev@vger.kernel.org
- L:	bpf@vger.kernel.org
- S:	Maintained
--- 
-2.49.0
-
+Acked-by: KP Singh <kpsingh@kernel.org>
