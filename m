@@ -1,257 +1,207 @@
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E337246BB9;
-	Tue, 10 Jun 2025 13:21:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749561673; cv=fail; b=I7+JYiaubeexzgxCP3554VSeEF1SdEAv8HnNwns0CmOPziJCIYeNMjhC/cDnmVGkSoEVlclYx6/XwJnyvMEnrzyk/OwEMQqY4BVRhuXkyjg6qWUCQD3gtHOytotu3U0GZgzafAGcpD/pVm1KdMaIaVKKTR1RbATpnqF4FHDwKFU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749561673; c=relaxed/simple;
-	bh=xMpF2ybiqRvwspFE2pjUxV6KeKAP4VxJeZmpM8QiJgs=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=CvtkJvXcSogo6iS+4OsG9RZ+F+nv+rEClKz37PUm0R/9KrEj9+G1kmwkqN4i4qiFDoJ175jLDnhBSsNiQWkZpcZGLjtiZwhOop+fxOGBKu3oluMrEctbKPixp9VAYas1+mB+4kKmnSiLnPpCG0LSqvrvgOnkbyYeKRX5HWqIY2A=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=dS3pDt4U; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=Kk4EZjhm; arc=fail smtp.client-ip=205.220.165.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11A1D29827C;
+	Tue, 10 Jun 2025 13:48:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1749563340; cv=none; b=m1gGDvF/3Qod1ZbLLoAXNVZ4c4N9D6kzQ1AGg+RrDyZ1wYNQTGgNejtpN4nB/8USyIAKrJBA/gia5+cqp50g40NiWGhHRKwQYoXDTLlURZCVDS3afog1iZJV/ALxCKUIOR3sQpXQp4aJIoUZR4xcmgNLvPoXzuund8w2uJ0Ijs8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1749563340; c=relaxed/simple;
+	bh=o7MT+1yWJ1FcHO9fcPG6RY9nyAeuxospmM9wYr00rks=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MupmL04yonGLp0bln/ak5w8rHn/R9tI5jnzuQbNTPRaNZB7LlU2dea/yHdL3CPFKzI2RwIxMYwj/cTEl6yj3VvMA/SEEWFbz+YBt6cwSBa4Jpfs00Oi7X1C/J/cmdW1hxmHDXmnxiJa5m4mE6WiDAj9ZHIBP/wg7n4msqFHyCV8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=VIQm6z9u; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="dS3pDt4U";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="Kk4EZjhm"
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55ADC80Q005261;
-	Tue, 10 Jun 2025 13:21:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=ddDEabj2cO6LbZ/MpV/EERT01fY2da+PpLNpUInNwoY=; b=
-	dS3pDt4UP9tkHfF4wDZhZC/nIWkFidSquh0bFtx+zk+0HqoGLpnJYRNDcv3LPqKB
-	ORoccIpU+3GXEmLYJKyYR/TdwdHARaiJgF/bxMGveFkzzxli7JQxaZupPiOSFKIp
-	XU/LbSrRXxU2cqeI4BsNhzx6+gPHPABdCfGKqFAZ0AA7n5EiTMFj82+QqjKQoC41
-	faVlyRIc5zo5lb3q3haBe7FMADGw0TDqJikjv5O3wX9zJHotyqvLdvtOlh9O/8DY
-	/H5UgVdUVQIGn85ghmUu2U3D8hkooKxLyco6BqE4H9AuGTBzPdY6wQdolQq7ZC2m
-	mys1ecRAwrkD4MSE43MXIQ==
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 474dywv6r8-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 10 Jun 2025 13:21:03 +0000 (GMT)
-Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 55ACnBVD020981;
-	Tue, 10 Jun 2025 13:21:02 GMT
-Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11on2066.outbound.protection.outlook.com [40.107.223.66])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 474bveyp19-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 10 Jun 2025 13:21:01 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=QHp3gdGx7Eh6jOb2McZWqlluuXduTlMNTlirHtYkdOKfjAdtGYF2XcCOxiRhE4VKvVZeSJ5CBO4I3jH6fkW/63VoNbRN/QU23Vh+T2QPiQ2j29ed12qQ/xddHIQ9jHrrta7cuwO9YPYZgpvrZ5uh6NJCgqtcYodTVSebzx4TpKDGqRNcAcrzSMumayNS/24VndmhHeLnqLdMKHTP2wJzgjh+vVO5PuZ/N8/0kNiifKaDbHRTAINmUz5ot3ec4yacXIZJ68gDosnG5165Muga2civmvtCSYeNMy7d4KaBDF8ueRZ9Bq+hH+1FCfsOmPDM9XMiTBQLGpEu3M4VnS4+PQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ddDEabj2cO6LbZ/MpV/EERT01fY2da+PpLNpUInNwoY=;
- b=Vxvx/udqi8XTsIZaUh5clt6s2cRumK6OagzY1iiiwwfeyjKJ31RFfeCRVNCbvXEKPJZns8mK8YXQOM4XKfUOxH9HXLqwp+8mvINxZqLUPa2avWFQHB9sFgQ2S4tmd5nYpL7YYIcENvaVHfjuCiOWRfrUa9VdQxvyESVKrPNT4Rtk2vB3niHwy3aj/G5ZmXeatt5P9z49V/Fd3148YffZcDx59R6bn5truLJOYCl87mN0uZR0YpPwVxQ12IKmnB//e258ttauMcP9DD2SVz0zIZ13aw+AQYoc+nND5wMKiG3qU2hY1XYqf6iKDqKq5gjVISFXPxOAjFmcGMTvCxPQ9g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ddDEabj2cO6LbZ/MpV/EERT01fY2da+PpLNpUInNwoY=;
- b=Kk4EZjhmbbNZR90dqwdBG19ZUbqk0yvgdlAY6CQfs3KfUqhrzukXs1LptcvUqVKAtmuUZFQpziB8VKETuB5wjq5uBeRxVP2rYcS5IFTUkiqXBA19DugnWHB1peyY4kMl5AvQf6leh20+8E3/l0qxyZaEuP5t/LPl2Vjp6k8SMFY=
-Received: from BN0PR10MB5128.namprd10.prod.outlook.com (2603:10b6:408:117::24)
- by BLAPR10MB4883.namprd10.prod.outlook.com (2603:10b6:208:334::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8813.29; Tue, 10 Jun
- 2025 13:20:54 +0000
-Received: from BN0PR10MB5128.namprd10.prod.outlook.com
- ([fe80::743a:3154:40da:cf90]) by BN0PR10MB5128.namprd10.prod.outlook.com
- ([fe80::743a:3154:40da:cf90%4]) with mapi id 15.20.8813.024; Tue, 10 Jun 2025
- 13:20:54 +0000
-Message-ID: <1f74cf95-9547-4915-923e-8c05d9c5672c@oracle.com>
-Date: Tue, 10 Jun 2025 09:20:52 -0400
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v1 0/7] netlink: specs: fix all the yamllint
- errors
-To: Donald Hunter <donald.hunter@gmail.com>, netdev@vger.kernel.org,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-        Simon Horman <horms@kernel.org>, mptcp@lists.linux.dev,
-        kernel-tls-handshake@lists.linux.dev, bpf@vger.kernel.org
-Cc: donald.hunter@redhat.com
-References: <20250610125944.85265-1-donald.hunter@gmail.com>
-Content-Language: en-US
-From: Chuck Lever <chuck.lever@oracle.com>
-In-Reply-To: <20250610125944.85265-1-donald.hunter@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: CH2PR05CA0047.namprd05.prod.outlook.com
- (2603:10b6:610:38::24) To BN0PR10MB5128.namprd10.prod.outlook.com
- (2603:10b6:408:117::24)
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="VIQm6z9u"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=NN1oY6hyaXR/auEel5IcJ300oTpCb73CwzAZ443+3zI=; b=VIQm6z9uDh7r5x0aSn9a1e6VZ5
+	MLf7bkeUQ0VSVVM8+jVLbq4rvIqiZ7jAOGq4YEpzbGWPX3ij1digJZFN/1xYXw7egYcTiGGwGyxTw
+	Rt6rLCeQBIlJpXUKnnxAj/AViUMHQGApVPqfSaeavOjo7ovJ7deu+QXhfQUhiAnaxfFV8Cy0SOkcY
+	mEgKKqPmD6G0ADZWyqREaHiI/b31i53lKqg2LeMGX27VGIEXJlly6XPiv7fD4YAxMwIzZTE+fjQLD
+	DfwBVz5ma53R3syyBdWl9qI8J/fjF4pdpJs/v3s38V96RYNxmnDcSSemtroQrczr98WT+qbogHDAy
+	26U71AaQ==;
+Received: from sslproxy06.your-server.de ([78.46.172.3])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1uOzLJ-000H5V-10;
+	Tue, 10 Jun 2025 15:48:45 +0200
+Received: from localhost ([127.0.0.1])
+	by sslproxy06.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1uOzLI-000HpM-1I;
+	Tue, 10 Jun 2025 15:48:44 +0200
+Message-ID: <bf7209aa-8775-448d-a12e-3a30451dad22@iogearbox.net>
+Date: Tue, 10 Jun 2025 15:48:43 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN0PR10MB5128:EE_|BLAPR10MB4883:EE_
-X-MS-Office365-Filtering-Correlation-Id: 407928e7-eec6-41be-2735-08dda821a0e5
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|7416014|376014|1800799024|921020;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?bCtmdEhtMHQ5RUdEbHRNcGIrOHVaYnJRRFU2RHFuUXZQNm9NZVdzSXJUYncx?=
- =?utf-8?B?bHh1QzhiRE55WUw0Z08yZC9OZ0N1TFpsMWpQNlhNUmFUNGhGdHdabXJMWmd3?=
- =?utf-8?B?UzJrQWtiQUliSTlLSzU0eVBxNCttdVVsWm5tWnV5MVh6Z2FMdDRoTVVTeG1x?=
- =?utf-8?B?SjhUMDNiT1poWWRxbmEzdGNHQzdOQnBoQWo4YWhwQVdxN1E1K01Mb2ZGdE5j?=
- =?utf-8?B?RjRrNU8zWFNFWitnY01Kcm9sdXlkTk5qYTZXaWoyZk12MGxJZU9mYUNBR2Fh?=
- =?utf-8?B?K2NwdnhWQVdGVmxLSWZMNGhORmMrbHVJWUxTNUZZd3RhK0lhcDFIU3NaakRy?=
- =?utf-8?B?STN5dzNpVXdoYzJKempTRXpGL0kvS3l4Y0h1WTgwNXZTWTJ0aHY5TXl0NEcw?=
- =?utf-8?B?MnRSYi9MRWNLdWVSZXFWbDk5eEpiMTcxMUlmTHpDK05rQUcybU1BWnp3Tlls?=
- =?utf-8?B?OVcvL2t2TjJSK05JWDlPdU5EbnlLNjE3dFArUm5SNWNLQ00xSEoyRWkwejgy?=
- =?utf-8?B?OERLM2EyM1NVZUtYVVVURlNlb2F4QUpIQnlPdHA0SDgwQnd4bDNBem5jT3B0?=
- =?utf-8?B?ZndSUDdlQ2FKbkpvS1JIUGw3WjN5b3h1MThKdjBsU0t0ZFJYcWJ1RFVYTmNB?=
- =?utf-8?B?RW9DUlVueGNOeEJRUUsvcUR5VXk0enJiQ0ZlNVpmbFpMeW1MU3FiSjdJRU5u?=
- =?utf-8?B?T3FvS2FOdTgvUjIrcVRaTEcwRHFnUnJXK3MwdVFpc3QveHFLc25zZFRTSjhn?=
- =?utf-8?B?c1pIN09rTGoxNTY3a3prRUpUZzZMTGpQN20yemUxQ1JLUENpWWJhdjMxVTlQ?=
- =?utf-8?B?K3EwcG1Qa2QvaGlOWTVZYzJveWdvMitVUG9PYjNBQ1FpYzNZMmNkNVVvMTAw?=
- =?utf-8?B?K1dPT2NDcXlHNlFUbXFDNDRhL1IvaVQwY2NiRDFBQklqWml6amlaWVVEbXFZ?=
- =?utf-8?B?VkxEYTBlc0E0SWZYUXd2RXlrVjYzVEM5WHE5eHJaU0R2b1NHY1BPUTRLVXRI?=
- =?utf-8?B?TG83QVVQYXROb1gxRE0yWE4wM3M5U011YXk1bUpMMWpPYWtiSStUVzVEYnB3?=
- =?utf-8?B?NFJ6N0xlUk1KQnlySG5OamhwNTMydmNSVFgxemgzaGNLMnJtc0hKTTRJZ3pr?=
- =?utf-8?B?bUZPRDJ2NHdaRlZpd0dSZmZxS1NBV0szblZrTDJlN0x1cUNxU3E2MGF5V3NB?=
- =?utf-8?B?S0M2TVJ0Y1hrQkhTSHU4dGh4NWdTMTc3cEpyZ1FmbEZHeFVlL2dPU3dPUWhP?=
- =?utf-8?B?azZHWWFtWnVSc3JMNU5qRkVWcHJoZDFVYXE3RnM0MEJDSm1lbHNNUk1LaVpB?=
- =?utf-8?B?M0VnbHZUbTdUdmE3dm1kblJKUE1BSmdtdWx5V0N6NWxxUlBmeGdTaG1vczcz?=
- =?utf-8?B?cEN6dndxVGNpZHdWMkwyQTZzSktzYmwvVGQwVDBGQW5RenBzWGozWmV3UTYv?=
- =?utf-8?B?SHJjNXVWQ3V2YTdNQy9YRFZ5bkxBYUJ3ZGN1ejdVc2N3S3dENFpuczNhYlpz?=
- =?utf-8?B?RUh1VkEyeVU4akJmRGltRTNkekJmLzNTamIzM21XbHE5M1BGRGlRM3Z5T25N?=
- =?utf-8?B?Z3JBU1NWZGNnL3JVT1ZSSlB5S3Q0QUh0Y0wrdzdwaWNwcUxyNEhMWFM0VlVW?=
- =?utf-8?B?OXIvSklsbDROTUUrVjRQQXpuSlJIMHlNcmVGd3N3N2p1UGNnQUU2VldzYWdK?=
- =?utf-8?B?cjIzb2RpeVFXcUcxSDg3bERHRGFOd0M2MTh3VDJVSmllRlQ1N3RTUHBFK01J?=
- =?utf-8?B?SXBSaGhqc2p2SnhCSkxQMlFzb0szZ0owNnFGZENDR3VpZHkrWWVnMXNnZUNC?=
- =?utf-8?B?dzZqUXhIQWQ3bU5YcXJNVGI3R0oyRVdZbWx4d282KzFHbjF3cnE4ZU5tc3o3?=
- =?utf-8?B?MUJ6dWMyblpoVkIyWW1ORTlwSC9xTGhxQUpzSllPN2d2Y1RnZlRTTS9Cd29j?=
- =?utf-8?B?TUtpL2ZlM2NwQ1UzVU9YalBtU1JLUHJFNEVsdEtPbTVTTDZWMjB0UUZNN0Zm?=
- =?utf-8?B?aVVGamgrd0pRPT0=?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR10MB5128.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(376014)(1800799024)(921020);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?Nk1peFpSdTVTeFNFbEVpd21mUkl2MnR4QmxzSnJON05TWDJtYkFyQkZDY3hp?=
- =?utf-8?B?by9EdC9URHN4VGJqUUlLTGFiam9lbjZaMmIvSVhoN29PTEhxenlpam4zcGVB?=
- =?utf-8?B?V0hETUNiSWkrdFBzWEpJTlloQlpDT2dlelBobE9wNVc1eDlWRDR1MkRNS3Iv?=
- =?utf-8?B?QUt6UnRQby9WVGg0R1BZaVkxbEpjc1VXRUtmYVN6ZTRmUFNpYkF2c2Nxc250?=
- =?utf-8?B?YktGT2hqQXdpclQwTGJ2WTJMdUFQL1BKRnNxcURFb0c2SjZpUjhnZDhCa2FU?=
- =?utf-8?B?ZysyRXNERTFseUR4RnJJeUVQVzlQQnJzZ0paYU44TVdLOGlCTzBIRlFiMzNL?=
- =?utf-8?B?WW90YmNmMWdKTEQ1Tk9Sc3lOOXNHZ3BVMzdKZVk5OE9rVFdIdm5kbjBDT09t?=
- =?utf-8?B?REloZStKcjRLMkRJUE9yVjNyNktBbXFsVWtKU01UZHNyMmg0TE9CSUU4aS9y?=
- =?utf-8?B?czNlUnlpSE5EYjRiRy94SHBFYThqMWhVRmVwWlh1dzg3cUlPeU9jRC83OCtM?=
- =?utf-8?B?M1F5aWM4M29kekVKRTJ4R2dtS1VyR2V0L2h4OUhadnRpdGlHR1JPNkFMQjFw?=
- =?utf-8?B?UnhOR09hUmJleFJzNnhrMEtPYmUyREYzeFBCMGN2bGRwYWxzMk5ZSkR6S2xv?=
- =?utf-8?B?bnFmbXZSSE1uZGJSRnlReGU0VGhSZVE3aUVtUTd3VU5jVTFXbUdnblhYYnh3?=
- =?utf-8?B?UHhJQlBzRXJDanVnQmpKZkFFOUNEZDB2eXVkZTVWekg3S0w0VzdBQnVOS2wy?=
- =?utf-8?B?bkdaUmZ6WnNoR2dUZUJwaisvOU9aa0VqL2RVOHZZZ2NtMGhWYm96MnFxS2ZN?=
- =?utf-8?B?Q1VRTktLNGxJZ2JxWGxySWF2dlRiN3NDeStrS1d6RFI2aTJMcjFNaUhyQmFS?=
- =?utf-8?B?K1ZqemViMXUxdC9LQy8rRTlZUGlUVE14OTZwY1FwOEEzWkVVc1B2VXJ2REJZ?=
- =?utf-8?B?dnVSeWo0TjVGRDJ1SnFxTDNwM0krWjRmZG5Cb2QxUityck1DbUptSkdzVzRj?=
- =?utf-8?B?QW9idEk0L3N6Q3BScW5GYmgwZjM2aEZ6Z2p0UHRmWExmRWNyY2RHdVNtTHJD?=
- =?utf-8?B?VU5LQTErcTgydGI3ckQ2UzdicVA3empmWS9qVjR3RTFzanpac2hnb3VQeFp1?=
- =?utf-8?B?VXFrb0FxVzZ3Wi9KYUxUSDVDWU82d2JObW85SjFYU1JucFVPRitTcWRFOHcr?=
- =?utf-8?B?UVVHVXRxR0RWbkdRY3pHNVpaNVdDalpLL0VmNCt2Z1BseDh2ck1ic0g3S1NL?=
- =?utf-8?B?RDVaREROYlk0Z2tiYS9wREc1MWRBYmg1TTBJZmZHTTRUcTUxbWFNSGdBeEZr?=
- =?utf-8?B?Vm5CR3B2WU9xY3p2cHF6cTRnQWpnb0RjT0JCdkFkRTBuZlo1bHhOSVJrSmV5?=
- =?utf-8?B?OWRTdHJKejhuNkFzMTdEcjM3ei9FbU52L3B2Ynd4cmN2U1lZNFR0OHR6S2Zp?=
- =?utf-8?B?YUdPVkErQUxiZWlvK0FZUVYyN0grcVRXYml4d3dRd2MvZFhjTXVZSk03UXov?=
- =?utf-8?B?U0UrSzF0RFIwWHkxazVOUDZmMnBkSTlvWmk0dkZRd09tNElGNHJwWnViNkdG?=
- =?utf-8?B?M3pmTDdZZHlMeGhJUUlSY0wrRUdjYkpqUXV2WGIxQXRUVTl1ekNwZ3FkVGtV?=
- =?utf-8?B?WE5MSko1TUI3b1o2S2NkcDhpMmRlSlp1NnlrM0R0VmNCaFJwUnNLRHRiTElo?=
- =?utf-8?B?dWY2L2NCUWM5dlJ3Ym5oR0txTUFOOEtwMzZrWFJxYzRBcDJLTzB0TGt3bmhM?=
- =?utf-8?B?NmtHalNLUE05NnFBQUdQaU44TXVlbGRhWnB4MElLMElpOS9ySjhZV29VUDl0?=
- =?utf-8?B?MFo5NWc3MDIvR3FVSHNGVzBicUluSTFRVUN1V0xnbitXb3lUNmxwbjgyQnM4?=
- =?utf-8?B?RDlDckFUYzR6TmJEOXRxTDRhbUQyTC9WN0FxS1JzU2lnY2ZkaDhnRndUNmhw?=
- =?utf-8?B?aVZKaVBacnlGV01DV3hwQ1NUZTNmei9vb0JNeUJRa2EyekZPTXFUcEdMNllF?=
- =?utf-8?B?M1RjclFjMnJQVmdBYnJDSmpxRFBVeS9HZDhwNWJreklFQTNWOXpWb2tYdmJj?=
- =?utf-8?B?TUhOTTczOUYrZFlVRjRrak5ra0ZJTTJ2cFFUb3FzUzVhdmFuOUtPY290Qm9B?=
- =?utf-8?B?MEhBS05CTUo4T3BFQW8rcVFVWkNxdkxtSmk5dVBnbk9UcGMzL1BZQllxcWhh?=
- =?utf-8?B?d0E9PQ==?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	6x4XnIvHBuhVRoqYbtx9HKA2D528mf2k+6v2AsFQz+LGID4bv/7MhvHHP3w14FW7GZaJl9tq1rEr29AzdYksCHONFuTBJN/B76JY7sIWtSR3pN3NuyOo6JaX41ftm9ce+tQdbYQs50Q38csN34tkVZvbDYqR4E/AYNDieGpAhtEj283k7l/rQpog4bdeA9T2T5rbf6B4jOe4weBFne389m5+Rd78Vo8kJUqpiUrbBpFs9S9sAousZGIa88eQnJ1ELLED72VSPB1EhZY6kjcngrmSnxCiCS//3xF0dFio4siYA2l/lx2Dd8dj8GPxsNE91jROOH4UPy2cyCByGw9NUjaEwwsIrPyP22Ay0qQwOAb9TU43mBXoAdrqbS4in7+vku9oMKd9mB6WDX9HNd4czXI3cAUtJIuVa1szM6MAXw9pKZ/urO/1jFkQlSBHpecP2iiP1KA/wVs73nDEF5MIequ8bbG/Mt8yKAZuO3FTkx9nre/a0kpQ7s0X2BI04QrGziQ9zJpanENOtxMyZe3WaRpt8zBBJfOzf4lrB0js59dV8fMsssGb/9ydEP/hJZwok/SX0Vz3zky2Pbgp8qj6arzICjg2RjYnwEShhFNapSE=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 407928e7-eec6-41be-2735-08dda821a0e5
-X-MS-Exchange-CrossTenant-AuthSource: BN0PR10MB5128.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jun 2025 13:20:54.4386
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ghiljy4I+OJq0axC+K1kUSRi/N1GCD97/t5eYStQ+uL1e2KFQWjY8sE5CzmTqkOX5v+yugFegqfpC1KyOUGRrg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR10MB4883
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-06-10_05,2025-06-10_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxscore=0 mlxlogscore=999
- bulkscore=0 adultscore=0 suspectscore=0 malwarescore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2505160000
- definitions=main-2506100104
-X-Authority-Analysis: v=2.4 cv=fdaty1QF c=1 sm=1 tr=0 ts=6848313f b=1 cx=c_pps a=qoll8+KPOyaMroiJ2sR5sw==:117 a=qoll8+KPOyaMroiJ2sR5sw==:17 a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=wKuvFiaSGQ0qltdbU6+NXLB8nM8=:19
- a=Ol13hO9ccFRV9qXi2t6ftBPywas=:19 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10 a=6IFa9wvqVegA:10 a=GoEa3M9JfhUA:10 a=VwQbUJbxAAAA:8 a=pGLkceISAAAA:8 a=yPCof4ZbAAAA:8 a=wdO_r5vxAQ5BLrPc5UMA:9 a=QEXdDO2ut3YA:10 cc=ntf awl=host:13207
-X-Proofpoint-ORIG-GUID: RljorqbQgrUOTNoOHha_AEGSVd91mx2K
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjEwMDEwNCBTYWx0ZWRfXxOa1aEYRtDzV 7WE/yD3uactQskwT0XIxzes3XJM0T6D7RrQEOcXy54Bfzh6/zlqQ+DuxNqZWJbF1Tf65Aet1A6F fMsQ3YPEPX7Ptd24Es8NpzfMwahEOR3n8YhqpeGsakF1obkUS8n4DXHS+gT8hHsgT17Fu3zsJ4r
- Cq1sJ7xoCmOQdj+6ittbfqgyV1ed2aMAiw+Zf5TruatECNd4ZORp7E/O9X4UKPThw77Y8dGIWx/ u9LQ2ut8UyUpi8b1NmIFH6efP/Z8POsKmZWvT+7rzAaBxQdVd8UzvQOauPpRgXJCF4KMdQ/vOy/ JH1ZegtZ7wgAa+0fAeK/TUXyHFbwhHxhA/6XmXAXatFNjfUHRdg88Uuk58pteHUM9FrsjLWoV1j
- s3lzNLX99WyyWHMKdZrSWZhdfynkbS/hUE8qWTvODGNEG6JkfersFxmPILn/IWG5xbsDg3kW
-X-Proofpoint-GUID: RljorqbQgrUOTNoOHha_AEGSVd91mx2K
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next V1 7/7] net: xdp: update documentation for
+ xdp-rx-metadata.rst
+To: Stanislav Fomichev <stfomichev@gmail.com>,
+ Jesper Dangaard Brouer <hawk@kernel.org>
+Cc: bpf@vger.kernel.org, netdev@vger.kernel.org,
+ Jakub Kicinski <kuba@kernel.org>, lorenzo@kernel.org,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+ <borkmann@iogearbox.net>, Eric Dumazet <eric.dumazet@gmail.com>,
+ "David S. Miller" <davem@davemloft.net>, Paolo Abeni <pabeni@redhat.com>,
+ sdf@fomichev.me, kernel-team@cloudflare.com, arthur@arthurfabre.com,
+ jakub@cloudflare.com, Magnus Karlsson <magnus.karlsson@intel.com>,
+ Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+References: <174897271826.1677018.9096866882347745168.stgit@firesoul>
+ <174897279518.1677018.5982630277641723936.stgit@firesoul>
+ <aEJWTPdaVmlIYyKC@mini-arch>
+Content-Language: en-US
+From: Daniel Borkmann <daniel@iogearbox.net>
+Autocrypt: addr=daniel@iogearbox.net; keydata=
+ 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
+In-Reply-To: <aEJWTPdaVmlIYyKC@mini-arch>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: Clear (ClamAV 1.0.7/27664/Tue Jun 10 10:41:04 2025)
 
-On 6/10/25 8:59 AM, Donald Hunter wrote:
-> yamllint reported ~500 errors and warnings in the netlink specs. Fix all
-> the reported issues.
+On 6/6/25 4:45 AM, Stanislav Fomichev wrote:
+> On 06/03, Jesper Dangaard Brouer wrote:
+>> Update the documentation[1] based on the changes in this patchset.
+>>
+>> [1] https://docs.kernel.org/networking/xdp-rx-metadata.html
+>>
+>> Signed-off-by: Jesper Dangaard Brouer <hawk@kernel.org>
+>> ---
+>>   Documentation/networking/xdp-rx-metadata.rst |   74 ++++++++++++++++++++------
+>>   net/core/xdp.c                               |   32 +++++++++++
+>>   2 files changed, 90 insertions(+), 16 deletions(-)
+>>
+>> diff --git a/Documentation/networking/xdp-rx-metadata.rst b/Documentation/networking/xdp-rx-metadata.rst
+>> index a6e0ece18be5..2c54208e4f7e 100644
+>> --- a/Documentation/networking/xdp-rx-metadata.rst
+>> +++ b/Documentation/networking/xdp-rx-metadata.rst
+>> @@ -90,22 +90,64 @@ the ``data_meta`` pointer.
+>>   In the future, we'd like to support a case where an XDP program
+>>   can override some of the metadata used for building ``skbs``.
+>>   
+>> -bpf_redirect_map
+>> -================
+>> -
+>> -``bpf_redirect_map`` can redirect the frame to a different device.
+>> -Some devices (like virtual ethernet links) support running a second XDP
+>> -program after the redirect. However, the final consumer doesn't have
+>> -access to the original hardware descriptor and can't access any of
+>> -the original metadata. The same applies to XDP programs installed
+>> -into devmaps and cpumaps.
+>> -
+>> -This means that for redirected packets only custom metadata is
+>> -currently supported, which has to be prepared by the initial XDP program
+>> -before redirect. If the frame is eventually passed to the kernel, the
+>> -``skb`` created from such a frame won't have any hardware metadata populated
+>> -in its ``skb``. If such a packet is later redirected into an ``XSK``,
+>> -that will also only have access to the custom metadata.
+>> +XDP_REDIRECT
+>> +============
+>> +
+>> +The ``XDP_REDIRECT`` action forwards an XDP frame to another net device or a CPU
+>> +(via cpumap/devmap) for further processing. It is invoked using BPF helpers like
+>> +``bpf_redirect_map()`` or ``bpf_redirect()``.  When an XDP frame is redirected,
+>> +the recipient (e.g., an XDP program on a veth device, or the kernel stack via
+>> +cpumap) loses direct access to the original NIC's hardware descriptor and thus
+>> +its hardware metadata
+>> +
+>> +By default, this loss of access means that if an ``xdp_frame`` is redirected and
+>> +then converted to an ``skb``, its ``skb`` fields for hardware-derived metadata
+>> +(like ``skb->hash`` or VLAN info) are not populated from the original
+>> +packet. This can impact features like Generic Receive Offload (GRO).  While XDP
+>> +programs can manually save custom data (e.g., using ``bpf_xdp_adjust_meta()``),
+>> +propagating specific *hardware* RX hints to ``skb`` creation requires using the
+>> +kfuncs described below.
+>> +
+>> +To enable propagating selected hardware RX hints, store BPF kfuncs allow an
+>> +XDP program on the initial NIC to read these hints and then explicitly
+>> +*store* them. The kfuncs place this metadata in locations associated with
+>> +the XDP packet buffer, making it available if an ``skb`` is later built or
+>> +the frame is otherwise processed. For instance, RX hash and VLAN tags are
+>> +stored within the XDP frame's addressable headroom, while RX timestamps are
+>> +typically written to an area corresponding to ``skb_shared_info``.
+>> +
+>> +**Crucially, the BPF programmer must call these "store" kfuncs to save the
+>> +desired hardware hints for propagation.** The system does not do this
+>> +automatically. The NIC driver is responsible for ensuring sufficient headroom is
+>> +available; kfuncs may return ``-ENOSPC`` if space is inadequate for storing
+>> +these hints.
 > 
-> Link: https://lore.kernel.org/netdev/m2tt4tt3wv.fsf@gmail.com/
-> 
-> Donald Hunter (7):
->   netlink: specs: add doc start markers to yaml
->   netlink: specs: clean up spaces in brackets
->   netlink: specs: fix up spaces before comments
->   netlink: specs: fix up truthy values
->   netlink: specs: fix up indentation errors
->   netlink: specs: wrap long doc lines (>80 chars)
->   netlink: specs: fix a couple of yamllint warnings
-> 
->  Documentation/netlink/specs/conntrack.yaml    |  38 ++--
->  Documentation/netlink/specs/devlink.yaml      | 208 +++++++++---------
->  Documentation/netlink/specs/dpll.yaml         |  14 +-
->  Documentation/netlink/specs/ethtool.yaml      |  70 +++---
->  Documentation/netlink/specs/fou.yaml          |  14 +-
->  Documentation/netlink/specs/handshake.yaml    |  10 +-
->  Documentation/netlink/specs/lockd.yaml        |   4 +-
->  Documentation/netlink/specs/mptcp_pm.yaml     | 192 ++++++++--------
->  Documentation/netlink/specs/net_shaper.yaml   |   7 +-
->  Documentation/netlink/specs/netdev.yaml       |  43 ++--
->  Documentation/netlink/specs/nfsd.yaml         |  10 +-
->  Documentation/netlink/specs/nftables.yaml     |  16 +-
->  Documentation/netlink/specs/nl80211.yaml      | 109 ++++-----
->  Documentation/netlink/specs/nlctrl.yaml       |   6 +-
->  Documentation/netlink/specs/ovpn.yaml         |  26 +--
->  Documentation/netlink/specs/ovs_datapath.yaml |   2 +-
->  Documentation/netlink/specs/ovs_flow.yaml     |  16 +-
->  Documentation/netlink/specs/ovs_vport.yaml    |   4 +-
->  Documentation/netlink/specs/rt-addr.yaml      |   2 +-
->  Documentation/netlink/specs/rt-link.yaml      |   2 +-
->  Documentation/netlink/specs/rt-neigh.yaml     |   2 +-
->  Documentation/netlink/specs/rt-route.yaml     |  10 +-
->  Documentation/netlink/specs/rt-rule.yaml      |   2 +-
->  Documentation/netlink/specs/tc.yaml           |  27 ++-
->  Documentation/netlink/specs/tcp_metrics.yaml  |   8 +-
->  Documentation/netlink/specs/team.yaml         |  16 +-
->  26 files changed, 440 insertions(+), 418 deletions(-)
-> 
+> Why not have a new flag for bpf_redirect that transparently stores all
+> available metadata? If you care only about the redirect -> skb case.
+> Might give us more wiggle room in the future to make it work with
+> traits.
 
-For the changes to Documentation/netlink/specs/handshake.yml:
+Also q from my side: If I understand the proposal correctly, in order to fully
+populate an skb at some point, you have to call all the bpf_xdp_metadata_* kfuncs
+to collect the data from the driver descriptors (indirect call), and then yet
+again all equivalent bpf_xdp_store_rx_* kfuncs to re-store the data in struct
+xdp_rx_meta again. This seems rather costly and once you add more kfuncs with
+meta data aren't you better off switching to tc(x) directly so the driver can
+do all this natively? :/
 
-Reviewed-by: Chuck Lever <chuck.lever@oracle.com>
+Also, have you thought about taking the opportunity to generalize the existing
+struct xsk_tx_metadata? It would be nice to actually use the same/similar struct
+for RX and TX, similarly as done in struct virtio_net_hdr. Such that we have
+XDP_{RX,TX}_METADATA and XDP_{RX,TX}MD_FLAGS_* to describe what meta data we
+have and from a developer PoV this will be a nicely consistent API in XDP. Then
+you could store at the right location in the meta data region just with
+bpf_xdp_metadata_* kfuncs (and/or plain BPF code) and finally set XDP_RX_METADATA
+indicator bit.
 
-
--- 
-Chuck Lever
+Thanks,
+Daniel
