@@ -1,63 +1,63 @@
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4ED5C28E60C;
-	Tue, 10 Jun 2025 12:59:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0203F2D323E;
+	Tue, 10 Jun 2025 13:00:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749560401; cv=none; b=rsCm0yA4u6kAYmk2vRXDNID6zrAAsdVCs/Q/auHc0WA0W1+5LQ7K0g1c+uq+LuVGFgsmPtRCNgITmFvgxvjQdt/+5SVEi4kiRzcJRmtZlqZv+aSij7UmFRc9nTlZ4GJJAoUq/MczqjB3+caVMMRSF3aV2EXGRqI1k2jk9wuGaP4=
+	t=1749560404; cv=none; b=NSU4zhKDG9J+OuCTr5cS1+0TU15dr4OH2RCyrnnyxlR4vNPl9rfxeagt3WaqDiwwsvFM5Lq7a7VebrmG9QQ14IL+9co7wzzSwD3f1LGxIuD6wVfFufXzgArDDDn+G+kHaFWd39pnv+dEbH9pz7EG/Q2JUkHgHkc/KfSyn8ig+yk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749560401; c=relaxed/simple;
-	bh=+BLFLrllz1J78kqDxqSGCpszH0IJLr1P8ZkyAohB4Qc=;
+	s=arc-20240116; t=1749560404; c=relaxed/simple;
+	bh=5ggtLBn/fC8LW33kGzWZYhNT8p0kOpSONQQefdYNAeo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=HpAPsW4tFLefhpag9YB5Ba6x23oz2dqG5oKPNUN/kNyRbdwx5TYe7mT+8uwYk1Jc4o7oeIKlefWOyQlQI4UB/kUibnfm+YEHAF51ha5j9N+KawhKBb7mJncHkllxLlQ1++LMu+qZ0bV/AimRm/XrH9iETphcLdeJ++dyhSIoxJA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=h047b/Rn; arc=none smtp.client-ip=209.85.128.43
+	 MIME-Version; b=o17Ew3ate2eQXBRS6JAaBS4Jjv4R5AqsFradA0i5tTttVhpE496FpXbNyw2jDREajyQVzmHImLovv+NthsSPteDThW8iGp4W1lpxE9rKeRC/dD+Qu7NhBqC/NhNNr9DekvEGdS7aPYOuuQwAc1X6qV/4+5QzzbtkNx8EGqNZk2o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IJWKmtPm; arc=none smtp.client-ip=209.85.128.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h047b/Rn"
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-450ce3a2dd5so48425475e9.3;
-        Tue, 10 Jun 2025 05:59:59 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IJWKmtPm"
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-453066fad06so19537485e9.2;
+        Tue, 10 Jun 2025 06:00:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1749560397; x=1750165197; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1749560400; x=1750165200; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=P2jf0bqIzemKYIXkakyySlUtmWmhD9x5Ni3JII1U00U=;
-        b=h047b/RnN6yGs0f7xVFWWkxXXMRLSL/7RfEUYQhIAfLNPOFsSQUHZQa9nQPG0I7AW4
-         5A2B2S7t2pvqLFS2weMb1w2wZdrTHWCgkuBbDSUhPW13wwoREvQ8CNGtXMy5j5IPBDjz
-         ngdS2DGC1g9nyuwHIZXAuHbhc9DA5Ilc1d1EB95TY4U0PDJttl5lg7a/zqMfnGdJmuy0
-         lpyQSbn48n2yi0pVk+dgAUquzSIoQ10v/8St0buJ+a1lltaII5iBlHuAxsvrHUmYUnqg
-         pKz42xt+Z8quh/df5Lthyn9wNm6lisiR2Rds3VZEUKWyvUJesA2khRDIODsFH0UOa75D
-         YFkQ==
+        bh=olF6cbbV/GQ1QDh802N8RqxyfjAusQs/jMapQ1m2ci8=;
+        b=IJWKmtPmjOni1hkcM1T2YHxn+Dw041GTHCIN0qiDYQ9e3ceoLs5i7TJKGHDyJitKTh
+         PEAgcxqlSW/A6+3J556bKtZtlZUzUntFAI+BndBSXHYZvhmHajNthRPLRTJ/drPNw3Ea
+         cL7Z7qeN7bv/jflE3B3r1lQuUW/lESG+UHiGGLpwCccNwJgIXlr1Ezk0PMlweur7+AQL
+         Kr4iJbKYylC3kCxi7VDt98u0Cpp4z5SGGQ4wxDYPbH0D+qSfFCtCoR2G9DhfVf94V6X0
+         JMCmJ/FiuNd0TSjV/qASaBjq1teWB2EhXQJlIk4Sy3xUKVtGG0vr3CyNz1o/LN1tyqZW
+         cM4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749560397; x=1750165197;
+        d=1e100.net; s=20230601; t=1749560400; x=1750165200;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=P2jf0bqIzemKYIXkakyySlUtmWmhD9x5Ni3JII1U00U=;
-        b=sAwPSGh6frKX662cWaUYsR4Z0fBENqR/DGmoDvLPwHEPR5j+EYtibIJ4FUvctsuCCC
-         tgiIEKHuc1UDAqeLwgdpySGyJ3FbFIiRXXpyH/5/NEp06aL0nsAblumidVchuyLtvPAv
-         YW7yf9zITr+3Np+5FTezGT1i/1wWW/UELM9h8LAo3jT48es+l5Ad3x/LRBPvUwswZ5/Q
-         897iw6jL98Rq9Pj78zp2DbpijzJaI2IxejIQJCvQkBkeBUcWzY7E6guaMyjhThGKeb8u
-         YVpmpxJZIqw1xdiFQKu35weUb5lAJweyjRCgSr1jSg/St4OcR7RVSrvWR/wNOopZBNcS
-         sTCw==
-X-Forwarded-Encrypted: i=1; AJvYcCUsQ9rMpdHQkyY45fp7eJ1+84z8Mn8ZKwNZQHzlRAWoTcB66d/qxAAbA/enfG7x+IIZ5GY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxhQTtYLqlM120fZAxrTidxcimt50lJ72akmQjlABT+YcNt4a93
-	tTRw/ra4oeTqRulLuqHfFNGxuYWHnhkXg2kZnlG6WSTb5l39psh4uJcwQ37g7A==
-X-Gm-Gg: ASbGncv+ZiUxNtReN2IJiZNQt3W8HZlv782f162kwdIZrBBZv1jdjpWXXJ+cr6EXhCA
-	acPDXGz3GKdf8g3OJqFazHnE6txy8fej1C+iWPixCVWrT6OOAHMwNdRuqTnMcVmEYXIamiYbqI6
-	+qujfx5gqAb/lHuagkIbxBGx8yIJ8kx60SLB9KmBRvrUz3oYhZgD8tl/1/wK3DHNbvRA8xn1X9k
-	2rkHDz69vZijCnjMB/5qexO/NdwENGuJzqfRbzvE/KGVmbD372yHLOs2uedYSacbMkjOyBK+r6D
-	PFMWizKp1OoYDWNPDp6NG6ntO/Z+dfBf6eQp8xuLxs3nDndvfr4kvtUIvJ7u3abJLzIZpEakxHI
-	QdHwK
-X-Google-Smtp-Source: AGHT+IHxaPUkSpK4p/0zzDJa+3SZDES6FfsGUU/vr0VQymRd3Lgr3mZZ1qpeUaWHuy3FZI13xT7R4g==
-X-Received: by 2002:a7b:cc07:0:b0:43d:878c:7c40 with SMTP id 5b1f17b1804b1-452015d90a2mr133772685e9.10.1749560397077;
-        Tue, 10 Jun 2025 05:59:57 -0700 (PDT)
+        bh=olF6cbbV/GQ1QDh802N8RqxyfjAusQs/jMapQ1m2ci8=;
+        b=UDFYvnFhy5zzYG1IFcLZNmNCEQ9i42dUH1T5zf7x5vruC5yzvhKV5N4X9nstKpwOeN
+         +xvAJoycYYiKNyhA2qmJI1f2ANJWLYOE7QWCBqdJZo/5O0GH0+D5z36nTQdUSH6SAJ2k
+         bzgHxDFXeznNZLjDZ4FWaFpdQJLN6BEDGZlqCa/xXHKmWGs46zZ6GCW5WqSS1Cl/Yk+0
+         4cYUw4HAnW8PuMy2i78T9zcQhfE+jtAJvX+/tc9mqlAAUijliUYjjaME4OGUCYxaT4w6
+         qzEmyj16CZPkaekl3oD170PYt2vtAVeCL/DiXGUvnOKe+vsbMX1S7G7oYVqtX3CGPxFy
+         +IZQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVCrbBertYvsutPVE1F5bJinTIDwv0z9Dq8tSUJZvG2IgNpvqEgrGI6SjaSTgfgqGCTTdc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzzv21/ZIArq+KOnK2mKbi/4jLMTGakH2P7daccYd6Nlh0tbLJD
+	5Ebln6wsH9JpkLKAfDjdWDlboUjw+CQbjypd5BTaCrLwQF3DgW/WpC4IoyIaeA==
+X-Gm-Gg: ASbGncuGjsXQ2hmJe6qQalKORbsjPQhf96kq4Gj80bpwBH1WhFz5O+S9ZyrW9vdz/1G
+	Vhjqro2ClfIZdXNArX8norGEuadkppSCDGvopaR5UmBbW3Q1wQGhUdJW1QN72dUc9CakyvLqAzF
+	ltHKvWhFf3OQ3NVXCRvoNmJ5JIi4NpeTEl8v1ed4M/uPkNXYKp9xTyL5ahy1EAbJkG6uaaPFMEB
+	Vp3S0Z0FoYMZp9Zexne57YVY78GSW94BNKwMXIbOH29qFjRcAfbC19tASnLoPmA5JizRBlCxEaQ
+	5KAe+ohlwX9Z37VvIe0dfN4UrW10TVfMNwWL4GB49p6Y6Rgpw1WfAUAwPHj1zTuWVsv9Or/mso7
+	beKItu/JINVvIJo4=
+X-Google-Smtp-Source: AGHT+IEYe4gl3jVV9ikHsBcdnghab5YipQFrjLU+VUYP1mBkpixyw9eo3bALINf+QBYGpW7/OV/OXA==
+X-Received: by 2002:a05:600c:1e15:b0:43b:c0fa:f9dd with SMTP id 5b1f17b1804b1-452014b64f8mr140967125e9.25.1749560399832;
+        Tue, 10 Jun 2025 05:59:59 -0700 (PDT)
 Received: from imac.lan ([2a02:8010:60a0:0:6117:17d9:610b:9e0a])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-452fb381abfsm130563485e9.17.2025.06.10.05.59.55
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-452fb381abfsm130563485e9.17.2025.06.10.05.59.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Jun 2025 05:59:56 -0700 (PDT)
+        Tue, 10 Jun 2025 05:59:59 -0700 (PDT)
 From: Donald Hunter <donald.hunter@gmail.com>
 To: netdev@vger.kernel.org,
 	Jakub Kicinski <kuba@kernel.org>,
@@ -70,9 +70,9 @@ To: netdev@vger.kernel.org,
 	bpf@vger.kernel.org
 Cc: donald.hunter@redhat.com,
 	Donald Hunter <donald.hunter@gmail.com>
-Subject: [PATCH net-next v1 1/7] netlink: specs: add doc start markers to yaml
-Date: Tue, 10 Jun 2025 13:59:38 +0100
-Message-ID: <20250610125944.85265-2-donald.hunter@gmail.com>
+Subject: [PATCH net-next v1 3/7] netlink: specs: fix up spaces before comments
+Date: Tue, 10 Jun 2025 13:59:40 +0100
+Message-ID: <20250610125944.85265-4-donald.hunter@gmail.com>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20250610125944.85265-1-donald.hunter@gmail.com>
 References: <20250610125944.85265-1-donald.hunter@gmail.com>
@@ -84,330 +84,545 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Clean up all document-start warnings reported by yamllint in the
-netlink specs:
+Clean up all comments warnings reported by yamllint in the netlink specs:
 
-    warning  missing document start "---"  (document-start)
+    warning  too few spaces before comment: expected 2  (comments)
 
 Signed-off-by: Donald Hunter <donald.hunter@gmail.com>
 ---
- Documentation/netlink/specs/conntrack.yaml    | 2 +-
- Documentation/netlink/specs/devlink.yaml      | 2 +-
- Documentation/netlink/specs/dpll.yaml         | 2 +-
- Documentation/netlink/specs/ethtool.yaml      | 2 +-
- Documentation/netlink/specs/fou.yaml          | 2 +-
- Documentation/netlink/specs/handshake.yaml    | 2 +-
- Documentation/netlink/specs/lockd.yaml        | 2 +-
- Documentation/netlink/specs/mptcp_pm.yaml     | 2 +-
- Documentation/netlink/specs/net_shaper.yaml   | 1 +
- Documentation/netlink/specs/netdev.yaml       | 2 +-
- Documentation/netlink/specs/nfsd.yaml         | 2 +-
- Documentation/netlink/specs/nftables.yaml     | 2 +-
- Documentation/netlink/specs/nl80211.yaml      | 2 +-
- Documentation/netlink/specs/nlctrl.yaml       | 2 +-
- Documentation/netlink/specs/ovpn.yaml         | 2 +-
- Documentation/netlink/specs/ovs_datapath.yaml | 2 +-
- Documentation/netlink/specs/ovs_flow.yaml     | 2 +-
- Documentation/netlink/specs/ovs_vport.yaml    | 2 +-
- Documentation/netlink/specs/rt-addr.yaml      | 2 +-
- Documentation/netlink/specs/rt-link.yaml      | 2 +-
- Documentation/netlink/specs/rt-neigh.yaml     | 2 +-
- Documentation/netlink/specs/rt-route.yaml     | 2 +-
- Documentation/netlink/specs/rt-rule.yaml      | 2 +-
- Documentation/netlink/specs/tc.yaml           | 2 +-
- Documentation/netlink/specs/tcp_metrics.yaml  | 2 +-
- Documentation/netlink/specs/team.yaml         | 2 +-
- 26 files changed, 26 insertions(+), 25 deletions(-)
+ Documentation/netlink/specs/ethtool.yaml  |   2 +-
+ Documentation/netlink/specs/netdev.yaml   |   4 +-
+ Documentation/netlink/specs/nl80211.yaml  | 100 +++++++++++-----------
+ Documentation/netlink/specs/rt-route.yaml |   8 +-
+ Documentation/netlink/specs/tc.yaml       |  18 ++--
+ 5 files changed, 66 insertions(+), 66 deletions(-)
 
-diff --git a/Documentation/netlink/specs/conntrack.yaml b/Documentation/netlink/specs/conntrack.yaml
-index 840dc4504216..e48add669b6d 100644
---- a/Documentation/netlink/specs/conntrack.yaml
-+++ b/Documentation/netlink/specs/conntrack.yaml
-@@ -1,5 +1,5 @@
- # SPDX-License-Identifier: ((GPL-2.0 WITH Linux-syscall-note) OR BSD-3-Clause)
--
-+---
- name: conntrack
- protocol: netlink-raw
- protonum: 12
-diff --git a/Documentation/netlink/specs/devlink.yaml b/Documentation/netlink/specs/devlink.yaml
-index 05fee1b7fe19..b76b162ce607 100644
---- a/Documentation/netlink/specs/devlink.yaml
-+++ b/Documentation/netlink/specs/devlink.yaml
-@@ -1,5 +1,5 @@
- # SPDX-License-Identifier: ((GPL-2.0 WITH Linux-syscall-note) OR BSD-3-Clause)
--
-+---
- name: devlink
- 
- protocol: genetlink-legacy
-diff --git a/Documentation/netlink/specs/dpll.yaml b/Documentation/netlink/specs/dpll.yaml
-index 8feefeae5376..0865692bc9ca 100644
---- a/Documentation/netlink/specs/dpll.yaml
-+++ b/Documentation/netlink/specs/dpll.yaml
-@@ -1,5 +1,5 @@
- # SPDX-License-Identifier: ((GPL-2.0 WITH Linux-syscall-note) OR BSD-3-Clause)
--
-+---
- name: dpll
- 
- doc: DPLL subsystem.
 diff --git a/Documentation/netlink/specs/ethtool.yaml b/Documentation/netlink/specs/ethtool.yaml
-index 9f98715a6512..90453ab0e0fa 100644
+index dc7f8e657967..0b6a1db71ef5 100644
 --- a/Documentation/netlink/specs/ethtool.yaml
 +++ b/Documentation/netlink/specs/ethtool.yaml
-@@ -1,5 +1,5 @@
- # SPDX-License-Identifier: ((GPL-2.0 WITH Linux-syscall-note) OR BSD-3-Clause)
--
-+---
- name: ethtool
- 
- protocol: genetlink-legacy
-diff --git a/Documentation/netlink/specs/fou.yaml b/Documentation/netlink/specs/fou.yaml
-index 0af5ab842c04..944463fcae91 100644
---- a/Documentation/netlink/specs/fou.yaml
-+++ b/Documentation/netlink/specs/fou.yaml
-@@ -1,5 +1,5 @@
- # SPDX-License-Identifier: ((GPL-2.0 WITH Linux-syscall-note) OR BSD-3-Clause)
--
-+---
- name: fou
- 
- protocol: genetlink-legacy
-diff --git a/Documentation/netlink/specs/handshake.yaml b/Documentation/netlink/specs/handshake.yaml
-index b934cc513e3d..21e0381e878c 100644
---- a/Documentation/netlink/specs/handshake.yaml
-+++ b/Documentation/netlink/specs/handshake.yaml
-@@ -4,7 +4,7 @@
- #
- # Copyright (c) 2023, Oracle and/or its affiliates.
- #
--
-+---
- name: handshake
- 
- protocol: genetlink
-diff --git a/Documentation/netlink/specs/lockd.yaml b/Documentation/netlink/specs/lockd.yaml
-index bbd4da5fe54b..f99244a7dc41 100644
---- a/Documentation/netlink/specs/lockd.yaml
-+++ b/Documentation/netlink/specs/lockd.yaml
-@@ -1,5 +1,5 @@
- # SPDX-License-Identifier: ((GPL-2.0 WITH Linux-syscall-note) OR BSD-3-Clause)
--
-+---
- name: lockd
- protocol: genetlink
- uapi-header: linux/lockd_netlink.h
-diff --git a/Documentation/netlink/specs/mptcp_pm.yaml b/Documentation/netlink/specs/mptcp_pm.yaml
-index dfd017780d2f..fd2ea7f90441 100644
---- a/Documentation/netlink/specs/mptcp_pm.yaml
-+++ b/Documentation/netlink/specs/mptcp_pm.yaml
-@@ -1,5 +1,5 @@
- # SPDX-License-Identifier: ((GPL-2.0 WITH Linux-syscall-note) OR BSD-3-Clause)
--
-+---
- name: mptcp_pm
- protocol: genetlink-legacy
- doc: Multipath TCP.
-diff --git a/Documentation/netlink/specs/net_shaper.yaml b/Documentation/netlink/specs/net_shaper.yaml
-index 8ebad0d02904..4fb9c7b6ac19 100644
---- a/Documentation/netlink/specs/net_shaper.yaml
-+++ b/Documentation/netlink/specs/net_shaper.yaml
-@@ -1,4 +1,5 @@
- # SPDX-License-Identifier: ((GPL-2.0 WITH Linux-syscall-note) OR BSD-3-Clause)
-+---
- name: net-shaper
- 
- doc: |
+@@ -19,7 +19,7 @@ definitions:
+     name: stringset
+     type: enum
+     entries: []
+-    header: linux/ethtool.h # skip rendering, no actual definition
++    header: linux/ethtool.h  # skip rendering, no actual definition
+   -
+     name: header-flags
+     type: flags
 diff --git a/Documentation/netlink/specs/netdev.yaml b/Documentation/netlink/specs/netdev.yaml
-index c0ef6d0d7786..fda8a9667bf3 100644
+index 0ca6c28321c7..0422a73776d4 100644
 --- a/Documentation/netlink/specs/netdev.yaml
 +++ b/Documentation/netlink/specs/netdev.yaml
-@@ -1,5 +1,5 @@
- # SPDX-License-Identifier: ((GPL-2.0 WITH Linux-syscall-note) OR BSD-3-Clause)
--
-+---
- name: netdev
- 
- doc:
-diff --git a/Documentation/netlink/specs/nfsd.yaml b/Documentation/netlink/specs/nfsd.yaml
-index c87658114852..fcca5a06ddf5 100644
---- a/Documentation/netlink/specs/nfsd.yaml
-+++ b/Documentation/netlink/specs/nfsd.yaml
-@@ -1,5 +1,5 @@
- # SPDX-License-Identifier: ((GPL-2.0 WITH Linux-syscall-note) OR BSD-3-Clause)
--
-+---
- name: nfsd
- protocol: genetlink
- uapi-header: linux/nfsd_netlink.h
-diff --git a/Documentation/netlink/specs/nftables.yaml b/Documentation/netlink/specs/nftables.yaml
-index bd938bd01b6b..ed9c5cf68477 100644
---- a/Documentation/netlink/specs/nftables.yaml
-+++ b/Documentation/netlink/specs/nftables.yaml
-@@ -1,5 +1,5 @@
- # SPDX-License-Identifier: ((GPL-2.0 WITH Linux-syscall-note) OR BSD-3-Clause)
--
-+---
- name: nftables
- protocol: netlink-raw
- protonum: 12
+@@ -205,7 +205,7 @@ attribute-sets:
+       -
+         name: alloc-fast
+         type: uint
+-        value: 8 # reserve some attr ids in case we need more metadata later
++        value: 8  # reserve some attr ids in case we need more metadata later
+       -
+         name: alloc-slow
+         type: uint
+@@ -367,7 +367,7 @@ attribute-sets:
+           For drivers supporting XDP, XDP is considered the first layer
+           of the stack, so packets consumed by XDP are still counted here.
+         type: uint
+-        value: 8 # reserve some attr ids in case we need more metadata later
++        value: 8  # reserve some attr ids in case we need more metadata later
+       -
+         name: rx-bytes
+         doc: Successfully received bytes, see `rx-packets`.
 diff --git a/Documentation/netlink/specs/nl80211.yaml b/Documentation/netlink/specs/nl80211.yaml
-index 3611b11a7d8f..8d380670ea6a 100644
+index 8d380670ea6a..ba0601474eff 100644
 --- a/Documentation/netlink/specs/nl80211.yaml
 +++ b/Documentation/netlink/specs/nl80211.yaml
-@@ -1,5 +1,5 @@
- # SPDX-License-Identifier: ((GPL-2.0 WITH Linux-syscall-note) OR BSD-3-Clause)
--
-+---
- name: nl80211
- protocol: genetlink-legacy
- 
-diff --git a/Documentation/netlink/specs/nlctrl.yaml b/Documentation/netlink/specs/nlctrl.yaml
-index a36535350bdb..e9f5328a688d 100644
---- a/Documentation/netlink/specs/nlctrl.yaml
-+++ b/Documentation/netlink/specs/nlctrl.yaml
-@@ -1,5 +1,5 @@
- # SPDX-License-Identifier: ((GPL-2.0 WITH Linux-syscall-note) OR BSD-3-Clause)
--
-+---
- name: nlctrl
- protocol: genetlink-legacy
- uapi-header: linux/genetlink.h
-diff --git a/Documentation/netlink/specs/ovpn.yaml b/Documentation/netlink/specs/ovpn.yaml
-index 096c51f0c69a..b3a5bd00b8a5 100644
---- a/Documentation/netlink/specs/ovpn.yaml
-+++ b/Documentation/netlink/specs/ovpn.yaml
-@@ -4,7 +4,7 @@
- #
- # Copyright (c) 2024-2025, OpenVPN Inc.
- #
--
-+---
- name: ovpn
- 
- protocol: genetlink
-diff --git a/Documentation/netlink/specs/ovs_datapath.yaml b/Documentation/netlink/specs/ovs_datapath.yaml
-index df6a8f94975e..0c0abf3f9f05 100644
---- a/Documentation/netlink/specs/ovs_datapath.yaml
-+++ b/Documentation/netlink/specs/ovs_datapath.yaml
-@@ -1,5 +1,5 @@
- # SPDX-License-Identifier: ((GPL-2.0 WITH Linux-syscall-note) OR BSD-3-Clause)
--
-+---
- name: ovs_datapath
- version: 2
- protocol: genetlink-legacy
-diff --git a/Documentation/netlink/specs/ovs_flow.yaml b/Documentation/netlink/specs/ovs_flow.yaml
-index 46f5d1cd8a5f..02ef3597ea94 100644
---- a/Documentation/netlink/specs/ovs_flow.yaml
-+++ b/Documentation/netlink/specs/ovs_flow.yaml
-@@ -1,5 +1,5 @@
- # SPDX-License-Identifier: ((GPL-2.0 WITH Linux-syscall-note) OR BSD-3-Clause)
--
-+---
- name: ovs_flow
- version: 1
- protocol: genetlink-legacy
-diff --git a/Documentation/netlink/specs/ovs_vport.yaml b/Documentation/netlink/specs/ovs_vport.yaml
-index 306da6bb842d..e254537f6192 100644
---- a/Documentation/netlink/specs/ovs_vport.yaml
-+++ b/Documentation/netlink/specs/ovs_vport.yaml
-@@ -1,5 +1,5 @@
- # SPDX-License-Identifier: ((GPL-2.0 WITH Linux-syscall-note) OR BSD-3-Clause)
--
-+---
- name: ovs_vport
- version: 2
- protocol: genetlink-legacy
-diff --git a/Documentation/netlink/specs/rt-addr.yaml b/Documentation/netlink/specs/rt-addr.yaml
-index 4f86aa1075da..bafe3bfeabfb 100644
---- a/Documentation/netlink/specs/rt-addr.yaml
-+++ b/Documentation/netlink/specs/rt-addr.yaml
-@@ -1,5 +1,5 @@
- # SPDX-License-Identifier: ((GPL-2.0 WITH Linux-syscall-note) OR BSD-3-Clause)
--
-+---
- name: rt-addr
- protocol: netlink-raw
- uapi-header: linux/rtnetlink.h
-diff --git a/Documentation/netlink/specs/rt-link.yaml b/Documentation/netlink/specs/rt-link.yaml
-index b41b31eebcae..8024580c4293 100644
---- a/Documentation/netlink/specs/rt-link.yaml
-+++ b/Documentation/netlink/specs/rt-link.yaml
-@@ -1,5 +1,5 @@
- # SPDX-License-Identifier: ((GPL-2.0 WITH Linux-syscall-note) OR BSD-3-Clause)
--
-+---
- name: rt-link
- protocol: netlink-raw
- uapi-header: linux/rtnetlink.h
-diff --git a/Documentation/netlink/specs/rt-neigh.yaml b/Documentation/netlink/specs/rt-neigh.yaml
-index e9cba164e3d1..25cc2d528d2f 100644
---- a/Documentation/netlink/specs/rt-neigh.yaml
-+++ b/Documentation/netlink/specs/rt-neigh.yaml
-@@ -1,5 +1,5 @@
- # SPDX-License-Identifier: ((GPL-2.0 WITH Linux-syscall-note) OR BSD-3-Clause)
--
-+---
- name: rt-neigh
- protocol: netlink-raw
- uapi-header: linux/rtnetlink.h
+@@ -285,7 +285,7 @@ attribute-sets:
+         type: u16
+       -
+         name: sta-flags
+-        type: binary # TODO: nest
++        type: binary  # TODO: nest
+       -
+         name: sta-listen-interval
+         type: u16
+@@ -297,14 +297,14 @@ attribute-sets:
+         type: u32
+       -
+         name: sta-info
+-        type: binary # TODO: nest
++        type: binary  # TODO: nest
+       -
+         name: wiphy-bands
+         type: nest
+         nested-attributes: wiphy-bands
+       -
+         name: mntr-flags
+-        type: binary # TODO: nest
++        type: binary  # TODO: nest
+       -
+         name: mesh-id
+         type: binary
+@@ -317,7 +317,7 @@ attribute-sets:
+         display-hint: mac
+       -
+         name: mpath-info
+-        type: binary # TODO: nest
++        type: binary  # TODO: nest
+       -
+         name: bss-cts-prot
+         type: u8
+@@ -339,16 +339,16 @@ attribute-sets:
+         type: binary
+       -
+         name: reg-rules
+-        type: binary # TODO: nest
++        type: binary  # TODO: nest
+       -
+         name: mesh-config
+-        type: binary # TODO: nest
++        type: binary  # TODO: nest
+       -
+         name: bss-basic-rates
+         type: binary
+       -
+         name: wiphy-txq-params
+-        type: binary # TODO: nest
++        type: binary  # TODO: nest
+       -
+         name: wiphy-freq
+         type: u32
+@@ -370,16 +370,16 @@ attribute-sets:
+         type: u8
+       -
+         name: scan-frequencies
+-        type: binary # TODO: nest
++        type: binary  # TODO: nest
+       -
+         name: scan-ssids
+-        type: binary # TODO: nest
++        type: binary  # TODO: nest
+       -
+         name: generation
+         type: u32
+       -
+         name: bss
+-        type: binary # TODO: nest
++        type: binary  # TODO: nest
+       -
+         name: reg-initiator
+         type: u8
+@@ -416,10 +416,10 @@ attribute-sets:
+         display-hint: hex
+       -
+         name: freq-before
+-        type: binary # TODO: nest
++        type: binary  # TODO: nest
+       -
+         name: freq-after
+-        type: binary # TODO: nest
++        type: binary  # TODO: nest
+       -
+         name: freq-fixed
+         type: flag
+@@ -483,10 +483,10 @@ attribute-sets:
+         type: binary
+       -
+         name: key
+-        type: binary # TODO: nest
++        type: binary  # TODO: nest
+       -
+         name: keys
+-        type: binary # TODO: nest
++        type: binary  # TODO: nest
+       -
+         name: pid
+         type: u32
+@@ -495,7 +495,7 @@ attribute-sets:
+         type: u8
+       -
+         name: survey-info
+-        type: binary # TODO: nest
++        type: binary  # TODO: nest
+       -
+         name: pmkid
+         type: binary
+@@ -513,7 +513,7 @@ attribute-sets:
+         type: u8
+       -
+         name: tx-rates
+-        type: binary # TODO: nest
++        type: binary  # TODO: nest
+       -
+         name: frame-match
+         type: binary
+@@ -525,7 +525,7 @@ attribute-sets:
+         type: u32
+       -
+         name: cqm
+-        type: binary # TODO: nest
++        type: binary  # TODO: nest
+       -
+         name: local-state-change
+         type: flag
+@@ -575,13 +575,13 @@ attribute-sets:
+         type: u16
+       -
+         name: key-default-types
+-        type: binary # TODO: nest
++        type: binary  # TODO: nest
+       -
+         name: max-remain-on-channel-duration
+         type: u32
+       -
+         name: mesh-setup
+-        type: binary # TODO: nest
++        type: binary  # TODO: nest
+       -
+         name: wiphy-antenna-avail-tx
+         type: u32
+@@ -596,7 +596,7 @@ attribute-sets:
+         type: u8
+       -
+         name: wowlan-triggers
+-        type: binary # TODO: nest
++        type: binary  # TODO: nest
+       -
+         name: wowlan-triggers-supported
+         type: nest
+@@ -615,7 +615,7 @@ attribute-sets:
+         nested-attributes: supported-iftypes
+       -
+         name: rekey-data
+-        type: binary # TODO: nest
++        type: binary  # TODO: nest
+       -
+         name: max-num-sched-scan-ssids
+         type: u8
+@@ -624,7 +624,7 @@ attribute-sets:
+         type: u16
+       -
+         name: scan-supp-rates
+-        type: binary # TODO: nest
++        type: binary  # TODO: nest
+       -
+         name: hidden-ssid
+         type: u32
+@@ -636,7 +636,7 @@ attribute-sets:
+         type: binary
+       -
+         name: sta-wme
+-        type: binary # TODO: nest
++        type: binary  # TODO: nest
+       -
+         name: support-ap-uapsd
+         type: flag
+@@ -645,13 +645,13 @@ attribute-sets:
+         type: flag
+       -
+         name: sched-scan-match
+-        type: binary # TODO: nest
++        type: binary  # TODO: nest
+       -
+         name: max-match-sets
+         type: u8
+       -
+         name: pmksa-candidate
+-        type: binary # TODO: nest
++        type: binary  # TODO: nest
+       -
+         name: tx-no-cck-rate
+         type: flag
+@@ -749,7 +749,7 @@ attribute-sets:
+         type: u32
+       -
+         name: mac-addrs
+-        type: binary # TODO: nest
++        type: binary  # TODO: nest
+       -
+         name: mac-acl-max
+         type: u32
+@@ -798,7 +798,7 @@ attribute-sets:
+         type: u16
+       -
+         name: coalesce-rule
+-        type: binary # TODO: nest
++        type: binary  # TODO: nest
+       -
+         name: ch-switch-count
+         type: u32
+@@ -807,7 +807,7 @@ attribute-sets:
+         type: flag
+       -
+         name: csa-ies
+-        type: binary # TODO: nest
++        type: binary  # TODO: nest
+       -
+         name: cntdwn-offs-beacon
+         type: binary
+@@ -929,13 +929,13 @@ attribute-sets:
+         type: u32
+       -
+         name: sched-scan-plans
+-        type: binary # TODO: nest
++        type: binary  # TODO: nest
+       -
+         name: pbss
+         type: flag
+       -
+         name: bss-select
+-        type: binary # TODO: nest
++        type: binary  # TODO: nest
+       -
+         name: sta-support-p2p-ps
+         type: u8
+@@ -944,7 +944,7 @@ attribute-sets:
+         type: binary
+       -
+         name: iftype-ext-capa
+-        type: binary # TODO: nest
++        type: binary  # TODO: nest
+       -
+         name: mu-mimo-group-data
+         type: binary
+@@ -975,10 +975,10 @@ attribute-sets:
+         type: u32
+       -
+         name: nan-func
+-        type: binary # TODO: nest
++        type: binary  # TODO: nest
+       -
+         name: nan-match
+-        type: binary # TODO: nest
++        type: binary  # TODO: nest
+       -
+         name: fils-kek
+         type: binary
+@@ -1067,16 +1067,16 @@ attribute-sets:
+         type: binary
+       -
+         name: ftm-responder
+-        type: binary # TODO: nest
++        type: binary  # TODO: nest
+       -
+         name: ftm-responder-stats
+-        type: binary # TODO: nest
++        type: binary  # TODO: nest
+       -
+         name: timeout
+         type: u32
+       -
+         name: peer-measurements
+-        type: binary # TODO: nest
++        type: binary  # TODO: nest
+       -
+         name: airtime-weight
+         type: u16
+@@ -1094,7 +1094,7 @@ attribute-sets:
+         type: flag
+       -
+         name: he-obss-pd
+-        type: binary # TODO: nest
++        type: binary  # TODO: nest
+       -
+         name: wiphy-edmg-channels
+         type: u8
+@@ -1106,13 +1106,13 @@ attribute-sets:
+         type: u16
+       -
+         name: he-bss-color
+-        type: binary # TODO: nest
++        type: binary  # TODO: nest
+       -
+         name: iftype-akm-suites
+-        type: binary # TODO: nest
++        type: binary  # TODO: nest
+       -
+         name: tid-config
+-        type: binary # TODO: nest
++        type: binary  # TODO: nest
+       -
+         name: control-port-no-preauth
+         type: flag
+@@ -1133,16 +1133,16 @@ attribute-sets:
+         type: u32
+       -
+         name: scan-freq-khz
+-        type: binary # TODO: nest
++        type: binary  # TODO: nest
+       -
+         name: he-6ghz-capability
+         type: binary
+       -
+         name: fils-discovery
+-        type: binary # TOOD: nest
++        type: binary  # TOOD: nest
+       -
+         name: unsol-bcast-probe-resp
+-        type: binary # TOOD: nest
++        type: binary  # TOOD: nest
+       -
+         name: s1g-capability
+         type: binary
+@@ -1173,13 +1173,13 @@ attribute-sets:
+         type: u8
+       -
+         name: color-change-elems
+-        type: binary # TODO: nest
++        type: binary  # TODO: nest
+       -
+         name: mbssid-config
+-        type: binary # TODO: nest
++        type: binary  # TODO: nest
+       -
+         name: mbssid-elems
+-        type: binary # TODO: nest
++        type: binary  # TODO: nest
+       -
+         name: radar-background
+         type: flag
+@@ -1194,7 +1194,7 @@ attribute-sets:
+         type: flag
+       -
+         name: mlo-links
+-        type: binary # TODO: nest
++        type: binary  # TODO: nest
+       -
+         name: mlo-link-id
+         type: u8
+@@ -1234,7 +1234,7 @@ attribute-sets:
+         type: flag
+       -
+         name: ema-rnr-elems
+-        type: binary # TODO: nest
++        type: binary  # TODO: nest
+       -
+         name: mlo-link-disabled
+         type: flag
+@@ -1252,10 +1252,10 @@ attribute-sets:
+         type: flag
+       -
+         name: wiphy-radios
+-        type: binary # TODO: nest
++        type: binary  # TODO: nest
+       -
+         name: wiphy-interface-combinations
+-        type: binary # TODO: nest
++        type: binary  # TODO: nest
+       -
+         name: vif-radio-mask
+         type: u32
 diff --git a/Documentation/netlink/specs/rt-route.yaml b/Documentation/netlink/specs/rt-route.yaml
-index 800f3a823d47..9c514c543b1f 100644
+index 9c514c543b1f..5b514ddeff1d 100644
 --- a/Documentation/netlink/specs/rt-route.yaml
 +++ b/Documentation/netlink/specs/rt-route.yaml
-@@ -1,5 +1,5 @@
- # SPDX-License-Identifier: ((GPL-2.0 WITH Linux-syscall-note) OR BSD-3-Clause)
--
-+---
- name: rt-route
- protocol: netlink-raw
- uapi-header: linux/rtnetlink.h
-diff --git a/Documentation/netlink/specs/rt-rule.yaml b/Documentation/netlink/specs/rt-rule.yaml
-index 003707ca4a3e..46b1d426e7e8 100644
---- a/Documentation/netlink/specs/rt-rule.yaml
-+++ b/Documentation/netlink/specs/rt-rule.yaml
-@@ -1,5 +1,5 @@
- # SPDX-License-Identifier: ((GPL-2.0 WITH Linux-syscall-note) OR BSD-3-Clause)
--
-+---
- name: rt-rule
- protocol: netlink-raw
- uapi-header: linux/fib_rules.h
+@@ -117,7 +117,7 @@ attribute-sets:
+         name: multipath
+         type: binary
+       -
+-        name: protoinfo # not used
++        name: protoinfo  # not used
+         type: binary
+       -
+         name: flow
+@@ -127,10 +127,10 @@ attribute-sets:
+         type: binary
+         struct: rta-cacheinfo
+       -
+-        name: session # not used
++        name: session  # not used
+         type: binary
+       -
+-        name: mp-algo # not used
++        name: mp-algo  # not used
+         type: binary
+       -
+         name: table
+@@ -155,7 +155,7 @@ attribute-sets:
+         type: u16
+       -
+         name: encap
+-        type: binary # tunnel specific nest
++        type: binary  # tunnel specific nest
+       -
+         name: expires
+         type: u32
 diff --git a/Documentation/netlink/specs/tc.yaml b/Documentation/netlink/specs/tc.yaml
-index cb7ea7d62e56..52f62ab11136 100644
+index 52f62ab11136..dfcb9cc3ea0a 100644
 --- a/Documentation/netlink/specs/tc.yaml
 +++ b/Documentation/netlink/specs/tc.yaml
-@@ -1,5 +1,5 @@
- # SPDX-License-Identifier: ((GPL-2.0 WITH Linux-syscall-note) OR BSD-3-Clause)
--
-+---
- name: tc
- protocol: netlink-raw
- uapi-header: linux/pkt_cls.h
-diff --git a/Documentation/netlink/specs/tcp_metrics.yaml b/Documentation/netlink/specs/tcp_metrics.yaml
-index 1bd94f43e526..2e57e4c19e58 100644
---- a/Documentation/netlink/specs/tcp_metrics.yaml
-+++ b/Documentation/netlink/specs/tcp_metrics.yaml
-@@ -1,5 +1,5 @@
- # SPDX-License-Identifier: ((GPL-2.0 WITH Linux-syscall-note) OR BSD-3-Clause)
--
-+---
- name: tcp_metrics
- 
- protocol: genetlink-legacy
-diff --git a/Documentation/netlink/specs/team.yaml b/Documentation/netlink/specs/team.yaml
-index c13529e011c9..83a9d088594e 100644
---- a/Documentation/netlink/specs/team.yaml
-+++ b/Documentation/netlink/specs/team.yaml
-@@ -1,5 +1,5 @@
- # SPDX-License-Identifier: ((GPL-2.0 WITH Linux-syscall-note) OR BSD-3-Clause)
--
-+---
- name: team
- 
- protocol: genetlink-legacy
+@@ -1161,7 +1161,7 @@ definitions:
+       -
+         name: keys
+         type: binary
+-        struct: tc-u32-key # TODO: array
++        struct: tc-u32-key  # TODO: array
+   -
+     name: tc-u32-pcnt
+     type: struct
+@@ -1174,7 +1174,7 @@ definitions:
+         type: u64
+       -
+         name: kcnts
+-        type: u64 # TODO: array
++        type: u64  # TODO: array
+   -
+     name: tcf-t
+     type: struct
+@@ -1336,7 +1336,7 @@ definitions:
+       -
+         name: keys
+         type: binary
+-        struct: tc-pedit-key # TODO: array
++        struct: tc-pedit-key  # TODO: array
+   -
+     name: tc-pedit-key
+     type: struct
+@@ -2885,7 +2885,7 @@ attribute-sets:
+     attributes:
+       -
+         name: parms
+-        type: binary # array of struct: tc-gred-qopt
++        type: binary  # array of struct: tc-gred-qopt
+       -
+         name: stab
+         type: binary
+@@ -3335,10 +3335,10 @@ attribute-sets:
+         struct: tc-police
+       -
+         name: rate
+-        type: binary # TODO
++        type: binary  # TODO
+       -
+         name: peakrate
+-        type: binary # TODO
++        type: binary  # TODO
+       -
+         name: avrate
+         type: u32
+@@ -3698,7 +3698,7 @@ sub-messages:
+         value: choke
+         attribute-set: choke-attrs
+       -
+-        value: clsact # no content
++        value: clsact  # no content
+       -
+         value: codel
+         attribute-set: codel-attrs
+@@ -3742,12 +3742,12 @@ sub-messages:
+         value: htb
+         attribute-set: htb-attrs
+       -
+-        value: ingress # no content
++        value: ingress  # no content
+       -
+         value: matchall
+         attribute-set: matchall-attrs
+       -
+-        value: mq # no content
++        value: mq  # no content
+       -
+         value: mqprio
+         fixed-header: tc-mqprio-qopt
 -- 
 2.49.0
 
