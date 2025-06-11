@@ -1,31 +1,31 @@
-Received: from relay.hostedemail.com (smtprelay0017.hostedemail.com [216.40.44.17])
+Received: from relay.hostedemail.com (smtprelay0011.hostedemail.com [216.40.44.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF41A1B808;
-	Wed, 11 Jun 2025 01:03:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B131A198A1A;
+	Wed, 11 Jun 2025 01:03:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749603790; cv=none; b=VUVVkseYC6Szss/6bE1zxZM2sSw69qXnjhVSb1HOlHf2dKZBvyu4/14ilU+lHuoqlDcqf2tO7RUrFoWSvMhf0bkJfdWANbLo0FXFiFRf/fgXv6lBvfH6hu3qRO/jZ7bFMwGKHT8ocg5QW+1FsOVlTgkacnxGZTJhpivZjSgX7Ig=
+	t=1749603791; cv=none; b=cpXz1DMqUWv31LD6HlJT3K6iMhQaEsFFPK6/FBB6ODPrhTprR0C+k7ASQU7Fnl+s8PXzd5DuLuraY8hKX1ldXrEZNZNd3cCyQJ7imkc7KX3DU1IP0f9TgQM8+wY2RaqGK4MXHTCIJF1D4AUFukQm6LWsUPD9WlZwqUaAoJrPBM0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749603790; c=relaxed/simple;
-	bh=4vDOBIoUHUiC3BHSTDobiE9oNjdxoZfAGrZ2BlXpfY4=;
+	s=arc-20240116; t=1749603791; c=relaxed/simple;
+	bh=a8SrMgu7Q5frriAvZ6hSGoY+qGRM5omerc//373nOfA=;
 	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type; b=pFuPkZk/QEF387nCAOJ9mCyk2FwLJZX7omSjRIlI/UiFaski38QcMVjgEx/jfNPT/f9Zh49SwvPPTLlNHwFtL+7pdjYlpVYWkyIaEcZ/zoP8SMovF6GUbFQP2emUnfl8He02s+oJ2/ExRTGwEUMkojp9swQqeiFJWPD2cJOrCe0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.17
+	 Content-Type; b=Tfy+UlVZckjEBETl5YV9s/sygelgVfo0hEfDT+0NTGODRKHLMjkQheXoRhMc2PXqV+V8ruEqnSw8MQ1P/IeHCAcTkSt0olmPYYEg++H1coedHRbWGMRLaeRScErK766AlG6WDzcBhI3ODhsjdgYzmtuObIlA/s50hw/Hip0TLOE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf10.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay02.hostedemail.com (Postfix) with ESMTP id 276CD121505;
-	Wed, 11 Jun 2025 01:03:01 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: nevets@goodmis.org) by omf10.hostedemail.com (Postfix) with ESMTPA id 0EA2C2F;
-	Wed, 11 Jun 2025 01:02:58 +0000 (UTC)
+Received: from omf11.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay07.hostedemail.com (Postfix) with ESMTP id 20213161482;
+	Wed, 11 Jun 2025 01:03:00 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: nevets@goodmis.org) by omf11.hostedemail.com (Postfix) with ESMTPA id 15EB72002D;
+	Wed, 11 Jun 2025 01:02:57 +0000 (UTC)
 Received: from rostedt by gandalf with local (Exim 4.98.2)
 	(envelope-from <rostedt@goodmis.org>)
-	id 1uP9tG-00000000vDc-0QqN;
-	Tue, 10 Jun 2025 21:04:30 -0400
-Message-ID: <20250611010429.957013350@goodmis.org>
+	id 1uP9tF-00000000vAh-0Lh4;
+	Tue, 10 Jun 2025 21:04:29 -0400
+Message-ID: <20250611010428.938845449@goodmis.org>
 User-Agent: quilt/0.68
-Date: Tue, 10 Jun 2025 20:54:34 -0400
+Date: Tue, 10 Jun 2025 20:54:28 -0400
 From: Steven Rostedt <rostedt@goodmis.org>
 To: linux-kernel@vger.kernel.org,
  linux-trace-kernel@vger.kernel.org,
@@ -46,7 +46,7 @@ Cc: Masami Hiramatsu <mhiramat@kernel.org>,
  Jens Remus <jremus@linux.ibm.com>,
  Linus Torvalds <torvalds@linux-foundation.org>,
  Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH v10 13/14] perf/x86: Rename and move get_segment_base() and make it global
+Subject: [PATCH v10 07/14] unwind_user/deferred: Make unwind deferral requests NMI-safe
 References: <20250611005421.144238328@goodmis.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -55,182 +55,189 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Rspamd-Server: rspamout01
-X-Rspamd-Queue-Id: 0EA2C2F
-X-Stat-Signature: 3am47d7tteeu7iiet7kfxk6jwxybttkb
+X-Rspamd-Queue-Id: 15EB72002D
+X-Stat-Signature: x64qi1ah5jdgg6cu1taank451ukmsfbi
+X-Rspamd-Server: rspamout06
 X-Session-Marker: 6E657665747340676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX18DlY18f07S9uesh6GrlFyqx0guSIaJxXw=
-X-HE-Tag: 1749603778-889697
-X-HE-Meta: U2FsdGVkX1/vbJZAAHLOO3kSSGwV5V40UnVUbMFMNya1p047qc4+gHPfm/V68yyGPRGU94TRlCOLCUl0jh/obqixATiwzlq858R/nS1pTIaangx0T5Yb2APEoN/GRz+5V+Eqhn9IbYNIDlrQZh95YIHAFjmtfusgMzDdgoFp3WxqmSV2BshcyF6g6tcq5VZuy/KbXix71gZrRMOXMGxqfA+a/1hhU16OGSU69t+zE8pJo9eIj3hc3eA2Z/prRUTj2ForrQatQgKu6TkRP0lQsys3D6gHiTL/npKA+Z6Gc6H9lPxTRaTrBPqQBKEvGnyn+fh0qhINfKMiAD89yqEwq6L0JPw2O2V4z4mxVNwhfIfQ4UcE1+sQU8v1a2lNGYb5nZp9G2v2of4DDtfd68gU74yocOMuAQjRIu4BOBzWsqA=
+X-Session-ID: U2FsdGVkX19Ksv4W/toZnjUpeP07wqZ5Kg5uVupVKIg=
+X-HE-Tag: 1749603777-939147
+X-HE-Meta: U2FsdGVkX19LgvhndpAJr1L2blB5Bjl6YfCv7q5NzsCokKSwj56wkqxx1DLCvupfcDt0Bp7IWIUoL5Z8f+9qrwwzrluTg91tVJFD/fgbpjsEtAF7cqr7BCnqd732ttl4/IzkiI1HDfX9fyI9hQj0LWfLI/LAnIjSDU7c6qB/LBGlWMD52JHqUXTwmqm2DnQU78makwOyauT0ZSnFrgQ31bauxG9DGAWt6O3XCMGdLIDe163XmHxCZ36eS/MEFOgnqygGSuqD3+i2uf3TlmJYHWUKv5sU59bWDi7lS/DSgOaVpB2rjOyS71BlbAPhvDOixe07TNGuMmvEFWTpl53tM/aYsifFqw3Tsak6YTxnDXpn7fnxBCOynO+7CvwBpIgNBcbhMtQ6zdsbZ2segf6VS232XGcuhYJQCS5TwKLF3OI=
 
 From: Josh Poimboeuf <jpoimboe@kernel.org>
 
-get_segment_base() will be used by the unwind_user code, so make it
-global and rename it to segment_base_address() so it doesn't conflict with
-a KVM function of the same name.
+Make unwind_deferred_request() NMI-safe so tracers in NMI context can
+call it and safely request a user space stacktrace when the task exits.
 
-As the function is no longer specific to perf, move it to ptrace.c as that
-seems to be a better location for a generic function like this.
-
-Also add a lockdep_assert_irqs_disabled() to make sure it's always called
-with interrupts disabled.
+A "nmi_timestamp" is added to the unwind_task_info that gets updated by
+NMIs to not race with setting the info->timestamp.
 
 Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- arch/x86/events/core.c        | 44 ++++-------------------------------
- arch/x86/include/asm/ptrace.h |  2 ++
- arch/x86/kernel/ptrace.c      | 38 ++++++++++++++++++++++++++++++
- 3 files changed, 45 insertions(+), 39 deletions(-)
+Changes since v9: https://lore.kernel.org/linux-trace-kernel/20250513223552.636076711@goodmis.org/
 
-diff --git a/arch/x86/events/core.c b/arch/x86/events/core.c
-index 7610f26dfbd9..2f2ec84f2a14 100644
---- a/arch/x86/events/core.c
-+++ b/arch/x86/events/core.c
-@@ -43,6 +43,7 @@
- #include <asm/ldt.h>
- #include <asm/unwind.h>
- #include <asm/uprobes.h>
-+#include <asm/ptrace.h>
- #include <asm/ibt.h>
+- Check for ret < 0 instead of just ret != 0 from return code of
+  task_work_add(). Don't want to just assume it's less than zero as it
+  needs to return a negative on error.
+
+ include/linux/unwind_deferred_types.h |  1 +
+ kernel/unwind/deferred.c              | 91 ++++++++++++++++++++++++---
+ 2 files changed, 84 insertions(+), 8 deletions(-)
+
+diff --git a/include/linux/unwind_deferred_types.h b/include/linux/unwind_deferred_types.h
+index 5df264cf81ad..ae27a02234b8 100644
+--- a/include/linux/unwind_deferred_types.h
++++ b/include/linux/unwind_deferred_types.h
+@@ -11,6 +11,7 @@ struct unwind_task_info {
+ 	struct unwind_cache	*cache;
+ 	struct callback_head	work;
+ 	u64			timestamp;
++	u64			nmi_timestamp;
+ 	int			pending;
+ };
  
- #include "perf_event.h"
-@@ -2808,41 +2809,6 @@ valid_user_frame(const void __user *fp, unsigned long size)
- 	return __access_ok(fp, size);
- }
+diff --git a/kernel/unwind/deferred.c b/kernel/unwind/deferred.c
+index b76c704ddc6d..88c867c32c01 100644
+--- a/kernel/unwind/deferred.c
++++ b/kernel/unwind/deferred.c
+@@ -25,8 +25,27 @@ static u64 get_timestamp(struct unwind_task_info *info)
+ {
+ 	lockdep_assert_irqs_disabled();
  
--static unsigned long get_segment_base(unsigned int segment)
--{
--	struct desc_struct *desc;
--	unsigned int idx = segment >> 3;
--
--	if ((segment & SEGMENT_TI_MASK) == SEGMENT_LDT) {
--#ifdef CONFIG_MODIFY_LDT_SYSCALL
--		struct ldt_struct *ldt;
--
--		/*
--		 * If we're not in a valid context with a real (not just lazy)
--		 * user mm, then don't even try.
--		 */
--		if (!nmi_uaccess_okay())
--			return 0;
--
--		/* IRQs are off, so this synchronizes with smp_store_release */
--		ldt = smp_load_acquire(&current->mm->context.ldt);
--		if (!ldt || idx >= ldt->nr_entries)
--			return 0;
--
--		desc = &ldt->entries[idx];
--#else
--		return 0;
--#endif
--	} else {
--		if (idx >= GDT_ENTRIES)
--			return 0;
--
--		desc = raw_cpu_ptr(gdt_page.gdt) + idx;
--	}
--
--	return get_desc_base(desc);
--}
--
- #ifdef CONFIG_UPROBES
- /*
-  * Heuristic-based check if uprobe is installed at the function entry.
-@@ -2899,8 +2865,8 @@ perf_callchain_user32(struct pt_regs *regs, struct perf_callchain_entry_ctx *ent
- 	if (user_64bit_mode(regs))
- 		return 0;
- 
--	cs_base = get_segment_base(regs->cs);
--	ss_base = get_segment_base(regs->ss);
-+	cs_base = segment_base_address(regs->cs);
-+	ss_base = segment_base_address(regs->ss);
- 
- 	fp = compat_ptr(ss_base + regs->bp);
- 	pagefault_disable();
-@@ -3019,11 +2985,11 @@ static unsigned long code_segment_base(struct pt_regs *regs)
- 		return 0x10 * regs->cs;
- 
- 	if (user_mode(regs) && regs->cs != __USER_CS)
--		return get_segment_base(regs->cs);
-+		return segment_base_address(regs->cs);
- #else
- 	if (user_mode(regs) && !user_64bit_mode(regs) &&
- 	    regs->cs != __USER32_CS)
--		return get_segment_base(regs->cs);
-+		return segment_base_address(regs->cs);
- #endif
- 	return 0;
- }
-diff --git a/arch/x86/include/asm/ptrace.h b/arch/x86/include/asm/ptrace.h
-index 50f75467f73d..59357ec98e52 100644
---- a/arch/x86/include/asm/ptrace.h
-+++ b/arch/x86/include/asm/ptrace.h
-@@ -314,6 +314,8 @@ static __always_inline bool regs_irqs_disabled(struct pt_regs *regs)
- 	return !(regs->flags & X86_EFLAGS_IF);
- }
- 
-+unsigned long segment_base_address(unsigned int segment);
-+
- /* Query offset/name of register from its name/offset */
- extern int regs_query_register_offset(const char *name);
- extern const char *regs_query_register_name(unsigned int offset);
-diff --git a/arch/x86/kernel/ptrace.c b/arch/x86/kernel/ptrace.c
-index 095f04bdabdc..81353a09701b 100644
---- a/arch/x86/kernel/ptrace.c
-+++ b/arch/x86/kernel/ptrace.c
-@@ -41,6 +41,7 @@
- #include <asm/syscall.h>
- #include <asm/fsgsbase.h>
- #include <asm/io_bitmap.h>
-+#include <asm/mmu_context.h>
- 
- #include "tls.h"
- 
-@@ -339,6 +340,43 @@ static int set_segment_reg(struct task_struct *task,
- 
- #endif	/* CONFIG_X86_32 */
- 
-+unsigned long segment_base_address(unsigned int segment)
-+{
-+	struct desc_struct *desc;
-+	unsigned int idx = segment >> 3;
-+
-+	lockdep_assert_irqs_disabled();
-+
-+	if ((segment & SEGMENT_TI_MASK) == SEGMENT_LDT) {
-+#ifdef CONFIG_MODIFY_LDT_SYSCALL
-+		struct ldt_struct *ldt;
-+
+-	if (!info->timestamp)
+-		info->timestamp = local_clock();
++	/*
++	 * Note, the timestamp is generated on the first request.
++	 * If it exists here, then the timestamp is earlier than
++	 * this request and it means that this request will be
++	 * valid for the stracktrace.
++	 */
++	if (!info->timestamp) {
++		WRITE_ONCE(info->timestamp, local_clock());
++		barrier();
 +		/*
-+		 * If we're not in a valid context with a real (not just lazy)
-+		 * user mm, then don't even try.
++		 * If an NMI came in and set a timestamp, it means that
++		 * it happened before this timestamp was set (otherwise
++		 * the NMI would have used this one). Use the NMI timestamp
++		 * instead.
 +		 */
-+		if (!nmi_uaccess_okay())
-+			return 0;
-+
-+		/* IRQs are off, so this synchronizes with smp_store_release */
-+		ldt = smp_load_acquire(&current->mm->context.ldt);
-+		if (!ldt || idx >= ldt->nr_entries)
-+			return 0;
-+
-+		desc = &ldt->entries[idx];
-+#else
-+		return 0;
-+#endif
-+	} else {
-+		if (idx >= GDT_ENTRIES)
-+			return 0;
-+
-+		desc = raw_cpu_ptr(gdt_page.gdt) + idx;
++		if (unlikely(info->nmi_timestamp)) {
++			WRITE_ONCE(info->timestamp, info->nmi_timestamp);
++			barrier();
++			WRITE_ONCE(info->nmi_timestamp, 0);
++		}
++	}
+ 
+ 	return info->timestamp;
+ }
+@@ -103,6 +122,13 @@ static void unwind_deferred_task_work(struct callback_head *head)
+ 
+ 	unwind_deferred_trace(&trace);
+ 
++	/* Check if the timestamp was only set by NMI */
++	if (info->nmi_timestamp) {
++		WRITE_ONCE(info->timestamp, info->nmi_timestamp);
++		barrier();
++		WRITE_ONCE(info->nmi_timestamp, 0);
 +	}
 +
-+	return get_desc_base(desc);
+ 	timestamp = info->timestamp;
+ 
+ 	guard(mutex)(&callback_mutex);
+@@ -111,6 +137,48 @@ static void unwind_deferred_task_work(struct callback_head *head)
+ 	}
+ }
+ 
++static int unwind_deferred_request_nmi(struct unwind_work *work, u64 *timestamp)
++{
++	struct unwind_task_info *info = &current->unwind_info;
++	bool inited_timestamp = false;
++	int ret;
++
++	/* Always use the nmi_timestamp first */
++	*timestamp = info->nmi_timestamp ? : info->timestamp;
++
++	if (!*timestamp) {
++		/*
++		 * This is the first unwind request since the most recent entry
++		 * from user space. Initialize the task timestamp.
++		 *
++		 * Don't write to info->timestamp directly, otherwise it may race
++		 * with an interruption of get_timestamp().
++		 */
++		info->nmi_timestamp = local_clock();
++		*timestamp = info->nmi_timestamp;
++		inited_timestamp = true;
++	}
++
++	if (info->pending)
++		return 1;
++
++	ret = task_work_add(current, &info->work, TWA_NMI_CURRENT);
++	if (ret < 0) {
++		/*
++		 * If this set nmi_timestamp and is not using it,
++		 * there's no guarantee that it will be used.
++		 * Set it back to zero.
++		 */
++		if (inited_timestamp)
++			info->nmi_timestamp = 0;
++		return ret;
++	}
++
++	info->pending = 1;
++
++	return 0;
 +}
 +
- static unsigned long get_flags(struct task_struct *task)
+ /**
+  * unwind_deferred_request - Request a user stacktrace on task exit
+  * @work: Unwind descriptor requesting the trace
+@@ -139,31 +207,38 @@ static void unwind_deferred_task_work(struct callback_head *head)
+ int unwind_deferred_request(struct unwind_work *work, u64 *timestamp)
  {
- 	unsigned long retval = task_pt_regs(task)->flags;
+ 	struct unwind_task_info *info = &current->unwind_info;
++	int pending;
+ 	int ret;
+ 
+ 	*timestamp = 0;
+ 
+-	if (WARN_ON_ONCE(in_nmi()))
+-		return -EINVAL;
+-
+ 	if ((current->flags & (PF_KTHREAD | PF_EXITING)) ||
+ 	    !user_mode(task_pt_regs(current)))
+ 		return -EINVAL;
+ 
++	if (in_nmi())
++		return unwind_deferred_request_nmi(work, timestamp);
++
+ 	guard(irqsave)();
+ 
+ 	*timestamp = get_timestamp(info);
+ 
+ 	/* callback already pending? */
+-	if (info->pending)
++	pending = READ_ONCE(info->pending);
++	if (pending)
++		return 1;
++
++	/* Claim the work unless an NMI just now swooped in to do so. */
++	if (!try_cmpxchg(&info->pending, &pending, 1))
+ 		return 1;
+ 
+ 	/* The work has been claimed, now schedule it. */
+ 	ret = task_work_add(current, &info->work, TWA_RESUME);
+-	if (WARN_ON_ONCE(ret))
++	if (WARN_ON_ONCE(ret)) {
++		WRITE_ONCE(info->pending, 0);
+ 		return ret;
++	}
+ 
+-	info->pending = 1;
+ 	return 0;
+ }
+ 
 -- 
 2.47.2
 
