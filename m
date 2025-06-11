@@ -1,131 +1,306 @@
-Received: from mx-rz-3.rrze.uni-erlangen.de (mx-rz-3.rrze.uni-erlangen.de [131.188.11.22])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AF191C8632;
-	Wed, 11 Jun 2025 21:32:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=131.188.11.22
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D10C5248864;
+	Wed, 11 Jun 2025 21:40:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749677555; cv=none; b=YvQfQjvbCYWfspTo8qSvvP1GKy3pceN1zDqmoIobcwWMaWzpJrR7Q+SfnjjWwDLrsGQ9iQuaUZKI7W8Q3+M+JW+Bl6th8JsqWVR0hig6bQftrDiJK2TORit1kFN9kjL80Au1ta5Wg6oGB+l11t8vUFIDZjfkI4qZ7H0+lx12SLQ=
+	t=1749678057; cv=none; b=PlnE9w2jdQhyOQVP57swqqM86u2s1BlqqoJuJVOAV5MHgRARUcwyOJrnU4WZDP7fRgGJ5heV01erzIwR7YLhhaIEt9VKJoypyawPPLjqoc+RBMfd07IOqD7PN7Z2ywhPD3ciUOuCGV4YGPpmFRba6mcz/Ijnd/5UhVEtmS3xtAw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749677555; c=relaxed/simple;
-	bh=M20sO39sYxTyK6D5pEluUSUaJR341uYSo1s7urocdwA=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=gbft2g+yy0+QZNJU4CSVyWJBT2KIj85B53PlE6SL/TeVmIVLGPIUQrBaJzu6OChxQ/PtuA1SrUlZ/ViYXljl04dMnDTyBalbgB82era8s4xoyoadQFy8VUBVV74zASg27dUWyOSeOE0hesmwqwZ9Z7KNLf360OyOIu9M5AzLxLM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fau.de; spf=pass smtp.mailfrom=fau.de; dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.b=NnK48SlU; arc=none smtp.client-ip=131.188.11.22
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fau.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fau.de
+	s=arc-20240116; t=1749678057; c=relaxed/simple;
+	bh=NGMQpewXqK7wOSzQXxAhgwNeQ860ld/Fy7wHeTmf5qE=;
+	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=ZCIXSJjReZtaqI9xOOStqPQxCuIajhiYtcKgUIMGh11iZ5R24R6CNgoM7jK9HTidzp6ykcDsKjkfN6w7+xrb3RluzOobwKXfwIDEzYX4bcgdSRFyUdMHRcJZdnw43hBC+sSW1mvdNszap/ynzCd3megwTMksQG6hnunSby2/4tE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KqCgwdPz; arc=none smtp.client-ip=209.85.215.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.b="NnK48SlU"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fau.de; s=fau-2021;
-	t=1749677549; bh=aIbK56pMyMT9UiC8X8/dnyzVoOnjpQYtsfIzj6mxIDo=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From:To:CC:
-	 Subject;
-	b=NnK48SlUlQlylM+/e43Ujl8MpND5H8bvnmIs1S6cvafFIQW5pF4fowpyH9fQy0l/0
-	 y2oyDhrYqwXuyPfO8JuddZQp+KtDCQXcUWq3FwDs1R53ydDdus0Yndob2xX2K0G8xx
-	 cHO/zTg9kU+vLkUSgK9GYjvf3/AIjYP9CFu2wFPnIRzH1Z9EpbHvGMjJ7TredeEKb2
-	 RcDbznFaFODfnPt7dYBwDI1REQKXx7eGUEAN6mXlvQIQiD1Yi8v3jPQFgKxImOMDgy
-	 Axke7jyxnm7lcWBKbNrRKhdvIjskRFe8R8EU9f7d3l8VZu7dVyMCpoD20xRTHF7V0I
-	 K/RDlxO3jqq6A==
-Received: from mx-rz-smart.rrze.uni-erlangen.de (mx-rz-smart.rrze.uni-erlangen.de [IPv6:2001:638:a000:1025::1e])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-rz-3.rrze.uni-erlangen.de (Postfix) with ESMTPS id 4bHf594DHnz1y9M;
-	Wed, 11 Jun 2025 23:32:29 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at boeck2.rrze.uni-erlangen.de (RRZE)
-X-RRZE-Flag: Not-Spam
-X-RRZE-Submit-IP: 2001:9e8:3626:500:39da:8819:39bd:1255
-Received: from localhost (unknown [IPv6:2001:9e8:3626:500:39da:8819:39bd:1255])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: U2FsdGVkX18QGhsARh+4uVnCO71vtG3f9XgeRQIcBgU=)
-	by smtp-auth.uni-erlangen.de (Postfix) with ESMTPSA id 4bHf563dxCz1y8r;
-	Wed, 11 Jun 2025 23:32:26 +0200 (CEST)
-From: Luis Gerhorst <luis.gerhorst@fau.de>
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: andrii@kernel.org,  ast@kernel.org,  bpf@vger.kernel.org,
-  daniel@iogearbox.net,  haoluo@google.com,  john.fastabend@gmail.com,
-  jolsa@kernel.org,  kpsingh@kernel.org,  linux-kernel@vger.kernel.org,
-  martin.lau@linux.dev,  sdf@fomichev.me,  song@kernel.org,
-  syzkaller-bugs@googlegroups.com,  yonghong.song@linux.dev
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KqCgwdPz"
+Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-b26d7ddbfd7so233090a12.0;
+        Wed, 11 Jun 2025 14:40:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1749678055; x=1750282855; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:to:from:subject:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Uwah7JnOOjZKU0Tx+3NnoQcDku9HhLIL23Wwwgfqd5k=;
+        b=KqCgwdPzOOeqyM80QFVrGvmeGH10esoQqJNECaiV0AvYkmQbd4EfQQ67Hg3z8b7kiE
+         k+Md05iOfKvU0nIXOrvGqEFvpixscuMs7nHSSmlzT73TBLPvqe5YER0ceAyqLnITRMzc
+         OV9PATsLkQAGP4Lx/LPJsy01c6eacKn0bEkPELatENy+FEA7cvSia1cNBtzWsD/lxyhC
+         HUm5PM/cBQPsC7Tqt8l136oI1vcD0rT9Ms5MpdKUMr+KX0cfzz1jQlyloyD/vFntM+bn
+         7j8kJcH0OVhl/WdVU1rBYwAdqK026E4+BCZS8WaeNGcvgowYbv/zzyeeiUoY0T98bdQC
+         oGgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749678055; x=1750282855;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:to:from:subject:message-id:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Uwah7JnOOjZKU0Tx+3NnoQcDku9HhLIL23Wwwgfqd5k=;
+        b=S3JwXWC4EhxMhhP8IrC1DX1nHiJBCmFYmB3LZoGPIgTYFR7b5D3+7Y2Kt6aZQxHtB8
+         Vai/bJFrl58//S+VJJZ05rdj7yWv7L7Vyyje6O8OrPkZc47fTC1h/aoP4I3kDlun3DF7
+         /YqAJtQytiIiPACZ4yRri+D/9rYaoCfP4tYMz1Dt3OPp2boaX4rqKSml75ehb/Uq2kPS
+         rvqfNM5czFhlMweNoBgVTL/G/CoJUutGhOd0fD4e/2mFuZyjRA8/6o5wXvoFIvymIwjJ
+         aQPt8DlJRJjIVImYwdDoG3c6wy0mY0rU8u//Vubln37pNzpk6rnW0u11hQoIHtEcnX9W
+         bDcg==
+X-Forwarded-Encrypted: i=1; AJvYcCV+yDkrchYJMhI+8gIDfTDIcBp+ztxGGumbHkpe3OKU2RcoHoVjmav6/YlytbHibkqKPD03pyh8C+qSO9r/@vger.kernel.org, AJvYcCW5Hd4TldTyI4MwbUmwqXHX7mjm/Vl7Js6cEqG2L7e2qECbh0Qa3DDxdKbuTDWf9ka91ak=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw4m+5/A2C/C21OXTpWLkoDoJT2Fx0Xe5s8Adgtz3OH0ez6ZeXB
+	ofLVgEsGtfW8KCKkaeNoKNTN4ycdmNkHUv4440AMLQDSYac5384ChBpY
+X-Gm-Gg: ASbGncu8zG0fvBUnrOp6EXakYPSpxlBtmXbW6Kq3E6fwn672HOvsKJAITOaknHbU7LX
+	n0Ng7OYE81sIsUNFdJcblQxab7KZKt30MvFvRA549Xj05WQkvDGOBU0QGchb+IxG9/2pOTwuQkD
+	4vuS/ClMppigYoWXT9tv5AZsQuaIbkginkLhEO0gO1EUAD4ZJ1z/uJxbaInsKfaEYvO91un2Y/H
+	BaQ3+piFS86B76mPgjAixluXgl6wQj5lERpYgLqbEoG3t04mTwBKZdV4P23RBgHgL6Oj4MaWIeG
+	L8wB4zRGrDjJ80tZBm44WXJ9xFxeK2onPjwYpZsuH0sHwcp7NwI5Hebb/KIUGPQT/T8Z50wgWAB
+	OzyoEBSDUkGTUrTWLDO3z
+X-Google-Smtp-Source: AGHT+IGiXuhUjD32nfI01PxlHh1zwnDAf32d5oWwFMpajFVw+7qFTEene9b+OKtkMyxnyi/1inMBGQ==
+X-Received: by 2002:a05:6a20:729c:b0:1ee:efa5:6573 with SMTP id adf61e73a8af0-21f86600846mr7376990637.8.1749678054950;
+        Wed, 11 Jun 2025 14:40:54 -0700 (PDT)
+Received: from ?IPv6:2a03:83e0:115c:1:b1d2:545:de25:d977? ([2620:10d:c090:500::7:d234])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b2fd613cfa3sm55689a12.21.2025.06.11.14.40.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Jun 2025 14:40:54 -0700 (PDT)
+Message-ID: <26122837c64946d89cb5d0a3a568bdc2b4854ba6.camel@gmail.com>
 Subject: Re: [syzbot] [bpf?] KASAN: slab-use-after-free Read in do_check
-In-Reply-To: <b6931bd0dd72327c55287862f821ca6c4c3eb69a.camel@gmail.com>
-	(Eduard Zingerman's message of "Wed, 11 Jun 2025 10:20:40 -0700")
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: syzbot <syzbot+b5eb72a560b8149a1885@syzkaller.appspotmail.com>, 
+	andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+ daniel@iogearbox.net, 	haoluo@google.com, john.fastabend@gmail.com,
+ jolsa@kernel.org, kpsingh@kernel.org, 	linux-kernel@vger.kernel.org,
+ martin.lau@linux.dev, sdf@fomichev.me, 	song@kernel.org,
+ syzkaller-bugs@googlegroups.com, yonghong.song@linux.dev
+Date: Wed, 11 Jun 2025 14:40:52 -0700
+In-Reply-To: <68497853.050a0220.33aa0e.036a.GAE@google.com>
 References: <68497853.050a0220.33aa0e.036a.GAE@google.com>
-	<38862a832b91382cddb083dddd92643bed0723b8.camel@gmail.com>
-	<87frg6gysw.fsf@fau.de>
-	<b6931bd0dd72327c55287862f821ca6c4c3eb69a.camel@gmail.com>
-User-Agent: mu4e 1.12.8; emacs 30.1
-Date: Wed, 11 Jun 2025 23:32:25 +0200
-Message-ID: <87plfa3qxi.fsf@fau.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2 (3.56.2-1.fc42) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
 
-Eduard Zingerman <eddyz87@gmail.com> writes:
+On Wed, 2025-06-11 at 05:36 -0700, syzbot wrote:
+> Hello,
+>=20
+> syzbot found the following issue on:
+>=20
+> HEAD commit:    19a60293b992 Add linux-next specific files for 20250611
+> git tree:       linux-next
+> console+strace: https://syzkaller.appspot.com/x/log.txt?x=3D15472d7058000=
+0
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=3D76ed3656d7159=
+e27
+> dashboard link: https://syzkaller.appspot.com/bug?extid=3Db5eb72a560b8149=
+a1885
+> compiler:       Debian clang version 20.1.6 (++20250514063057+1e4d39e0775=
+7-1~exp1~20250514183223.118), Debian LLD 20.1.6
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D16af860c580=
+000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D174db60c58000=
+0
+>=20
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/c453c11565fa/dis=
+k-19a60293.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/4034ded42b2e/vmlinu=
+x-19a60293.xz
+> kernel image: https://storage.googleapis.com/syzbot-assets/5355903cdb8f/b=
+zImage-19a60293.xz
+>=20
+> IMPORTANT: if you fix the issue, please add the following tag to the comm=
+it:
+> Reported-by: syzbot+b5eb72a560b8149a1885@syzkaller.appspotmail.com
+>=20
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> BUG: KASAN: slab-use-after-free in do_check+0xb388/0xe170 kernel/bpf/veri=
+fier.c:19756
+> Read of size 1 at addr ffff88801deeef79 by task syz-executor672/5842
+>=20
+> CPU: 1 UID: 0 PID: 5842 Comm: syz-executor672 Not tainted 6.16.0-rc1-next=
+-20250611-syzkaller #0 PREEMPT(full)=20
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS G=
+oogle 05/07/2025
+> Call Trace:
+>  <TASK>
+>  dump_stack_lvl+0x189/0x250 lib/dump_stack.c:120
+>  print_address_description mm/kasan/report.c:408 [inline]
+>  print_report+0xd2/0x2b0 mm/kasan/report.c:521
+>  kasan_report+0x118/0x150 mm/kasan/report.c:634
+>  do_check+0xb388/0xe170 kernel/bpf/verifier.c:19756
+>  do_check_common+0x168d/0x20b0 kernel/bpf/verifier.c:22905
+>  do_check_main kernel/bpf/verifier.c:22996 [inline]
+>  bpf_check+0x1381e/0x19e50 kernel/bpf/verifier.c:24162
+>  bpf_prog_load+0x1318/0x1930 kernel/bpf/syscall.c:2972
+>  __sys_bpf+0x5f1/0x860 kernel/bpf/syscall.c:5978
+>  __do_sys_bpf kernel/bpf/syscall.c:6085 [inline]
+>  __se_sys_bpf kernel/bpf/syscall.c:6083 [inline]
+>  __x64_sys_bpf+0x7c/0x90 kernel/bpf/syscall.c:6083
+>  do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+>  do_syscall_64+0xfa/0x3b0 arch/x86/entry/syscall_64.c:94
+>  entry_SYSCALL_64_after_hwframe+0x77/0x7f
+> RIP: 0033:0x7f7586cdbeb9
+> Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 c1 17 00 00 90 48 89 f8 48 89 f=
+7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff=
+ ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+> RSP: 002b:00007ffc2e683128 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
+> RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f7586cdbeb9
+> RDX: 0000000000000094 RSI: 0000200000000840 RDI: 0000000000000005
+> RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000006
+> R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+> R13: 0000000000000000 R14: 0000000000000001 R15: 0000000000000001
+>  </TASK>
+>=20
+> Allocated by task 5842:
+>  kasan_save_stack mm/kasan/common.c:47 [inline]
+>  kasan_save_track+0x3e/0x80 mm/kasan/common.c:68
+>  poison_kmalloc_redzone mm/kasan/common.c:377 [inline]
+>  __kasan_kmalloc+0x93/0xb0 mm/kasan/common.c:394
+>  kasan_kmalloc include/linux/kasan.h:260 [inline]
+>  __kmalloc_cache_noprof+0x230/0x3d0 mm/slub.c:4359
+>  kmalloc_noprof include/linux/slab.h:905 [inline]
+>  kzalloc_noprof include/linux/slab.h:1039 [inline]
+>  do_check_common+0x13f/0x20b0 kernel/bpf/verifier.c:22798
+>  do_check_main kernel/bpf/verifier.c:22996 [inline]
+>  bpf_check+0x1381e/0x19e50 kernel/bpf/verifier.c:24162
+>  bpf_prog_load+0x1318/0x1930 kernel/bpf/syscall.c:2972
+>  __sys_bpf+0x5f1/0x860 kernel/bpf/syscall.c:5978
+>  __do_sys_bpf kernel/bpf/syscall.c:6085 [inline]
+>  __se_sys_bpf kernel/bpf/syscall.c:6083 [inline]
+>  __x64_sys_bpf+0x7c/0x90 kernel/bpf/syscall.c:6083
+>  do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+>  do_syscall_64+0xfa/0x3b0 arch/x86/entry/syscall_64.c:94
+>  entry_SYSCALL_64_after_hwframe+0x77/0x7f
+>=20
+> Freed by task 5842:
+>  kasan_save_stack mm/kasan/common.c:47 [inline]
+>  kasan_save_track+0x3e/0x80 mm/kasan/common.c:68
+>  kasan_save_free_info+0x46/0x50 mm/kasan/generic.c:576
+>  poison_slab_object mm/kasan/common.c:247 [inline]
+>  __kasan_slab_free+0x62/0x70 mm/kasan/common.c:264
+>  kasan_slab_free include/linux/kasan.h:233 [inline]
+>  slab_free_hook mm/slub.c:2381 [inline]
+>  slab_free mm/slub.c:4643 [inline]
+>  kfree+0x18e/0x440 mm/slub.c:4842
+>  push_stack+0x247/0x3c0 kernel/bpf/verifier.c:2069
+>  check_cond_jmp_op+0x1069/0x2340 kernel/bpf/verifier.c:16562
+>  do_check_insn kernel/bpf/verifier.c:19621 [inline]
+>  do_check+0x672c/0xe170 kernel/bpf/verifier.c:19755
+>  do_check_common+0x168d/0x20b0 kernel/bpf/verifier.c:22905
+>  do_check_main kernel/bpf/verifier.c:22996 [inline]
+>  bpf_check+0x1381e/0x19e50 kernel/bpf/verifier.c:24162
+>  bpf_prog_load+0x1318/0x1930 kernel/bpf/syscall.c:2972
+>  __sys_bpf+0x5f1/0x860 kernel/bpf/syscall.c:5978
+>  __do_sys_bpf kernel/bpf/syscall.c:6085 [inline]
+>  __se_sys_bpf kernel/bpf/syscall.c:6083 [inline]
+>  __x64_sys_bpf+0x7c/0x90 kernel/bpf/syscall.c:6083
+>  do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+>  do_syscall_64+0xfa/0x3b0 arch/x86/entry/syscall_64.c:94
+>  entry_SYSCALL_64_after_hwframe+0x77/0x7f
+>=20
+> The buggy address belongs to the object at ffff88801deeef00
+>  which belongs to the cache kmalloc-192 of size 192
+> The buggy address is located 121 bytes inside of
+>  freed 192-byte region [ffff88801deeef00, ffff88801deeefc0)
+>=20
+> The buggy address belongs to the physical page:
+> page: refcount:0 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x1dee=
+e
+> flags: 0xfff00000000000(node=3D0|zone=3D1|lastcpupid=3D0x7ff)
+> page_type: f5(slab)
+> raw: 00fff00000000000 ffff88801a4413c0 ffffea00006fca40 dead000000000004
+> raw: 0000000000000000 0000000000100010 00000000f5000000 0000000000000000
+> page dumped because: kasan: bad access detected
+> page_owner tracks the page as allocated
+> page last allocated via order 0, migratetype Unmovable, gfp_mask 0x52820(=
+GFP_ATOMIC|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP), pid 1, tgid 1 (swapper/0=
+), ts 2954361175, free_ts 2954343552
+>  set_page_owner include/linux/page_owner.h:32 [inline]
+>  post_alloc_hook+0x240/0x2a0 mm/page_alloc.c:1704
+>  prep_new_page mm/page_alloc.c:1712 [inline]
+>  get_page_from_freelist+0x21e4/0x22c0 mm/page_alloc.c:3669
+>  __alloc_frozen_pages_noprof+0x181/0x370 mm/page_alloc.c:4959
+>  alloc_pages_mpol+0x232/0x4a0 mm/mempolicy.c:2419
+>  alloc_slab_page mm/slub.c:2451 [inline]
+>  allocate_slab+0x8a/0x3b0 mm/slub.c:2619
+>  new_slab mm/slub.c:2673 [inline]
+>  ___slab_alloc+0xbfc/0x1480 mm/slub.c:3859
+>  __slab_alloc mm/slub.c:3949 [inline]
+>  __slab_alloc_node mm/slub.c:4024 [inline]
+>  slab_alloc_node mm/slub.c:4185 [inline]
+>  __do_kmalloc_node mm/slub.c:4327 [inline]
+>  __kmalloc_node_noprof+0x2fd/0x4e0 mm/slub.c:4334
+>  kmalloc_node_noprof include/linux/slab.h:932 [inline]
+>  __vmalloc_area_node mm/vmalloc.c:3690 [inline]
+>  __vmalloc_node_range_noprof+0x5a9/0x12f0 mm/vmalloc.c:3885
+>  vmalloc_huge_node_noprof+0xb3/0xf0 mm/vmalloc.c:4001
+>  vmalloc_huge include/linux/vmalloc.h:185 [inline]
+>  alloc_large_system_hash+0x2b8/0x5e0 mm/mm_init.c:2515
+>  posixtimer_init+0x140/0x270 kernel/time/posix-timers.c:1561
+>  do_one_initcall+0x233/0x820 init/main.c:1274
+>  do_initcall_level+0x137/0x1f0 init/main.c:1336
+>  do_initcalls+0x69/0xd0 init/main.c:1352
+>  kernel_init_freeable+0x3d9/0x570 init/main.c:1584
+>  kernel_init+0x1d/0x1d0 init/main.c:1474
+> page last free pid 1 tgid 1 stack trace:
+>  reset_page_owner include/linux/page_owner.h:25 [inline]
+>  free_pages_prepare mm/page_alloc.c:1248 [inline]
+>  __free_frozen_pages+0xc71/0xe70 mm/page_alloc.c:2706
+>  __kasan_populate_vmalloc mm/kasan/shadow.c:383 [inline]
+>  kasan_populate_vmalloc+0x18a/0x1a0 mm/kasan/shadow.c:417
+>  alloc_vmap_area+0xd51/0x1490 mm/vmalloc.c:2084
+>  __get_vm_area_node+0x1f8/0x300 mm/vmalloc.c:3179
+>  __vmalloc_node_range_noprof+0x301/0x12f0 mm/vmalloc.c:3845
+>  vmalloc_huge_node_noprof+0xb3/0xf0 mm/vmalloc.c:4001
+>  vmalloc_huge include/linux/vmalloc.h:185 [inline]
+>  alloc_large_system_hash+0x2b8/0x5e0 mm/mm_init.c:2515
+>  posixtimer_init+0x140/0x270 kernel/time/posix-timers.c:1561
+>  do_one_initcall+0x233/0x820 init/main.c:1274
+>  do_initcall_level+0x137/0x1f0 init/main.c:1336
+>  do_initcalls+0x69/0xd0 init/main.c:1352
+>  kernel_init_freeable+0x3d9/0x570 init/main.c:1584
+>  kernel_init+0x1d/0x1d0 init/main.c:1474
+>  ret_from_fork+0x3f9/0x770 arch/x86/kernel/process.c:148
+>  ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
+>=20
+> Memory state around the buggy address:
+>  ffff88801deeee00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+>  ffff88801deeee80: 00 00 00 00 00 00 00 fc fc fc fc fc fc fc fc fc
+> > ffff88801deeef00: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>                                                                 ^
+>  ffff88801deeef80: fb fb fb fb fb fb fb fb fc fc fc fc fc fc fc fc
+>  ffff88801deef000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>=20
+>=20
+> ---
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+>=20
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+>=20
+> If the report is already addressed, let syzbot know by replying with:
+> #syz fix: exact-commit-title
+>=20
+> If you want syzbot to run the reproducer, reply with:
+> #syz test: git://repo/address.git branch-or-commit-hash
+> If you attach or paste a git patch, syzbot will apply it before testing.
+>=20
+> If you want to overwrite report's subsystems, reply with:
+> #syz set subsystems: new-subsystem
+> (See the list of subsystem names on the web dashboard)
+>=20
+> If the report is a duplicate of another one, reply with:
+> #syz dup: exact-subject-of-another-report
+>=20
+> If you want to undo deduplication, reply with:
+> #syz undup
 
-> On Wed, 2025-06-11 at 16:03 +0200, Luis Gerhorst wrote:
->> Eduard Zingerman <eddyz87@gmail.com> writes:
->> 
->> > Either 'state = env->cur_state' is needed after 'do_check_insn()' or
->> > error path should not free env->cur_state (seems logical).
-
-[...]
-
->> The latter might also be possible, but I guess it would require more
->> significant changes.
->
-> do_check_common() has the following logic:
->
->    out:
->          /* check for NULL is necessary, since cur_state can be freed inside                                                                                                                                                                                                                           
->           * do_check() under memory pressure.                                                                                                                                                                                                                                                          
->           */
->          if (env->cur_state) {
->                  free_verifier_state(state: env->cur_state, free_self: true);
->                  env->cur_state = NULL;
->          }
->          while (!pop_stack(env, prev_insn_idx: NULL, insn_idx: NULL, pop_log: false));
->          if (!ret && pop_log)
->                  bpf_vlog_reset(log: &env->log, new_pos: 0);
->          free_states(env);
->          return ret;
->
-> Same cleanup cycles are done in push_stack() and push_async_cb(),
-> both functions are only reachable from do_check_common() via
-> do_check() -> do_check_insn().
->
-> Hence, I think that cur state should not be freed in push_*()
-> functions and pop_stack() loop there is not needed.
-
-Ah, yes I agree. I sent a patch separate from the fix [2].
-
->> state->speculative does not make sense if the error path of push_stack()
->> ran. In that case, `state->speculative &&
->> error_recoverable_with_nospec(err)` as a whole should already never
->> evaluate to true (because all cases where push_stack() fails also return
->> a non-recoverable error -ENOMEM/-EFAULT).
-
-I noticed the was not really true yet, I had to fix the call for
-sanitize_ptr_alu() to return -ENOMEM while [3] is not landed yet.
-
->> Alternatively to adding `state = env->cur_state` and `state &&`, turning
->> the check around would avoid the use-after-free. However, I think your
->> idea is better because it is more explicit compared to this:
->> 
->> 	if (error_recoverable_with_nospec(err) && state->speculative) ...
->> 
->> Does this make sense to you? If yes I can send the fix later today.
->
-> I think this flip makes perfect sense and should be done.
-
-I sent the fix [1], let me know if it is as desired.
-
-[1] https://lore.kernel.org/all/20250611210728.266563-1-luis.gerhorst@fau.de/
-[2] https://lore.kernel.org/all/20250611211431.275731-1-luis.gerhorst@fau.de/
-[3] https://lore.kernel.org/all/20250603213232.339242-1-luis.gerhorst@fau.de/
+#syz test: git@github.com:kernel-patches/bpf.git 974c296e39c3b2462bbf1f926d=
+5a5db64399359f
