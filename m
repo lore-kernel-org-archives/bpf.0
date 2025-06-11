@@ -1,31 +1,31 @@
-Received: from relay.hostedemail.com (smtprelay0010.hostedemail.com [216.40.44.10])
+Received: from relay.hostedemail.com (smtprelay0017.hostedemail.com [216.40.44.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7731A18EFD1;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF41A1B808;
 	Wed, 11 Jun 2025 01:03:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.10
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749603790; cv=none; b=EJDHqqqWgI0XCYspXiSvTH9R+Fj/m43mwhrgurlaHFfzgsxwzwoqVN9Lpj9U9amgJ9orjqzRkAfGPuDEKbO0wAwXeLvu9lRa4E2ZxD+I1hx5tZMKGNPR3cF2U2d8T9h85eRQwMeFzZJlx5VQv4xzUqoUDtTtXs2jTWZk2Ie7l7c=
+	t=1749603790; cv=none; b=VUVVkseYC6Szss/6bE1zxZM2sSw69qXnjhVSb1HOlHf2dKZBvyu4/14ilU+lHuoqlDcqf2tO7RUrFoWSvMhf0bkJfdWANbLo0FXFiFRf/fgXv6lBvfH6hu3qRO/jZ7bFMwGKHT8ocg5QW+1FsOVlTgkacnxGZTJhpivZjSgX7Ig=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1749603790; c=relaxed/simple;
-	bh=JMGALe8NBV0afyaihQpFztZ463RRAe1+FbMrIliyHKI=;
+	bh=4vDOBIoUHUiC3BHSTDobiE9oNjdxoZfAGrZ2BlXpfY4=;
 	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type; b=TEqquum8ZKj9v++ugaeubMMsv1Fb39ZbJNjUQVJU/7/mflTcTsi7vPsyeRk8gye8e85virlNRvHwkiNUg80fT3CPbef72Z17juw6sl6qfKCwMHqYD+apy6FZaYckaa3K7ascu/nYEJ6vu5uiUa0fI27570A730UdPTA6NGQPSIw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.10
+	 Content-Type; b=pFuPkZk/QEF387nCAOJ9mCyk2FwLJZX7omSjRIlI/UiFaski38QcMVjgEx/jfNPT/f9Zh49SwvPPTLlNHwFtL+7pdjYlpVYWkyIaEcZ/zoP8SMovF6GUbFQP2emUnfl8He02s+oJ2/ExRTGwEUMkojp9swQqeiFJWPD2cJOrCe0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf16.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay08.hostedemail.com (Postfix) with ESMTP id AF36B141480;
-	Wed, 11 Jun 2025 01:03:00 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: nevets@goodmis.org) by omf16.hostedemail.com (Postfix) with ESMTPA id 9AD2120018;
-	Wed, 11 Jun 2025 01:02:57 +0000 (UTC)
+Received: from omf10.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay02.hostedemail.com (Postfix) with ESMTP id 276CD121505;
+	Wed, 11 Jun 2025 01:03:01 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: nevets@goodmis.org) by omf10.hostedemail.com (Postfix) with ESMTPA id 0EA2C2F;
+	Wed, 11 Jun 2025 01:02:58 +0000 (UTC)
 Received: from rostedt by gandalf with local (Exim 4.98.2)
 	(envelope-from <rostedt@goodmis.org>)
-	id 1uP9tF-00000000vCd-3CtF;
-	Tue, 10 Jun 2025 21:04:29 -0400
-Message-ID: <20250611010429.615420889@goodmis.org>
+	id 1uP9tG-00000000vDc-0QqN;
+	Tue, 10 Jun 2025 21:04:30 -0400
+Message-ID: <20250611010429.957013350@goodmis.org>
 User-Agent: quilt/0.68
-Date: Tue, 10 Jun 2025 20:54:32 -0400
+Date: Tue, 10 Jun 2025 20:54:34 -0400
 From: Steven Rostedt <rostedt@goodmis.org>
 To: linux-kernel@vger.kernel.org,
  linux-trace-kernel@vger.kernel.org,
@@ -46,7 +46,7 @@ Cc: Masami Hiramatsu <mhiramat@kernel.org>,
  Jens Remus <jremus@linux.ibm.com>,
  Linus Torvalds <torvalds@linux-foundation.org>,
  Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH v10 11/14] unwind: Finish up unwind when a task exits
+Subject: [PATCH v10 13/14] perf/x86: Rename and move get_segment_base() and make it global
 References: <20250611005421.144238328@goodmis.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -55,123 +55,182 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Rspamd-Queue-Id: 9AD2120018
-X-Rspamd-Server: rspamout08
-X-Stat-Signature: pefpzyuk7dkqaumf8tbxifgjnf9e4q3e
+X-Rspamd-Server: rspamout01
+X-Rspamd-Queue-Id: 0EA2C2F
+X-Stat-Signature: 3am47d7tteeu7iiet7kfxk6jwxybttkb
 X-Session-Marker: 6E657665747340676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX1+F6qH0ZBVkCT2MTqVaXgAI/nfOofUpnuc=
-X-HE-Tag: 1749603777-237719
-X-HE-Meta: U2FsdGVkX1/V3hKepsGXv1c8Lr4ogUhjysQDKh0bK2168/tgUsLTi4phS9f/YF6+6uAK5yB7GFnHUgV9gZjJuGZyAnU1xWyGsYf4Xjk0q3iikjcHFZsB21KdLLTXWJ9/CpE71r5aZU5JMaUCTog6a2dHX6LkpLpKifzOqNDihfAJLjziH/t+XP1B8ABJgykYLnJ+KqNnpJ07VuPNDsVSGyP57jD1Rj+0h6CDxyK41Wy5DBjALKS714nF8HqVmmlB/QeRJhCLZ9N1aJEWD+aKr7qN1hu0Q6zZLb0EWwpHaRUlM80elWqdz/gmgabPBVsKhJQPgK1WHrvb2JAv2dERYfOEP4g/G6WVx5JJ72JCXw1Sw1Dl2tjh3kjVtgVXyK5D7YYOaVmTunwZUhXRWwrM0jeyCbMqTAH3+9vjke55u6PMulMFTviQRzKW7N+NX8/t
+X-Session-ID: U2FsdGVkX18DlY18f07S9uesh6GrlFyqx0guSIaJxXw=
+X-HE-Tag: 1749603778-889697
+X-HE-Meta: U2FsdGVkX1/vbJZAAHLOO3kSSGwV5V40UnVUbMFMNya1p047qc4+gHPfm/V68yyGPRGU94TRlCOLCUl0jh/obqixATiwzlq858R/nS1pTIaangx0T5Yb2APEoN/GRz+5V+Eqhn9IbYNIDlrQZh95YIHAFjmtfusgMzDdgoFp3WxqmSV2BshcyF6g6tcq5VZuy/KbXix71gZrRMOXMGxqfA+a/1hhU16OGSU69t+zE8pJo9eIj3hc3eA2Z/prRUTj2ForrQatQgKu6TkRP0lQsys3D6gHiTL/npKA+Z6Gc6H9lPxTRaTrBPqQBKEvGnyn+fh0qhINfKMiAD89yqEwq6L0JPw2O2V4z4mxVNwhfIfQ4UcE1+sQU8v1a2lNGYb5nZp9G2v2of4DDtfd68gU74yocOMuAQjRIu4BOBzWsqA=
 
-From: Steven Rostedt <rostedt@goodmis.org>
+From: Josh Poimboeuf <jpoimboe@kernel.org>
 
-On do_exit() when a task is exiting, if a unwind is requested and the
-deferred user stacktrace is deferred via the task_work, the task_work
-callback is called after exit_mm() is called in do_exit(). This means that
-the user stack trace will not be retrieved and an empty stack is created.
+get_segment_base() will be used by the unwind_user code, so make it
+global and rename it to segment_base_address() so it doesn't conflict with
+a KVM function of the same name.
 
-Instead, add a function unwind_deferred_task_exit() and call it just
-before exit_mm() so that the unwinder can call the requested callbacks
-with the user space stack.
+As the function is no longer specific to perf, move it to ptrace.c as that
+seems to be a better location for a generic function like this.
 
+Also add a lockdep_assert_irqs_disabled() to make sure it's always called
+with interrupts disabled.
+
+Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- include/linux/unwind_deferred.h |  4 +++-
- kernel/exit.c                   |  2 ++
- kernel/unwind/deferred.c        | 23 ++++++++++++++++++++---
- 3 files changed, 25 insertions(+), 4 deletions(-)
+ arch/x86/events/core.c        | 44 ++++-------------------------------
+ arch/x86/include/asm/ptrace.h |  2 ++
+ arch/x86/kernel/ptrace.c      | 38 ++++++++++++++++++++++++++++++
+ 3 files changed, 45 insertions(+), 39 deletions(-)
 
-diff --git a/include/linux/unwind_deferred.h b/include/linux/unwind_deferred.h
-index 426e21457606..bf0cc0477b2e 100644
---- a/include/linux/unwind_deferred.h
-+++ b/include/linux/unwind_deferred.h
-@@ -35,6 +35,8 @@ int unwind_deferred_init(struct unwind_work *work, unwind_callback_t func);
- int unwind_deferred_request(struct unwind_work *work, u64 *timestamp);
- void unwind_deferred_cancel(struct unwind_work *work);
+diff --git a/arch/x86/events/core.c b/arch/x86/events/core.c
+index 7610f26dfbd9..2f2ec84f2a14 100644
+--- a/arch/x86/events/core.c
++++ b/arch/x86/events/core.c
+@@ -43,6 +43,7 @@
+ #include <asm/ldt.h>
+ #include <asm/unwind.h>
+ #include <asm/uprobes.h>
++#include <asm/ptrace.h>
+ #include <asm/ibt.h>
  
-+void unwind_deferred_task_exit(struct task_struct *task);
-+
- static __always_inline void unwind_exit_to_user_mode(void)
- {
- 	struct unwind_task_info *info = &current->unwind_info;
-@@ -65,7 +67,7 @@ static inline int unwind_deferred_trace(struct unwind_stacktrace *trace) { retur
- static inline int unwind_deferred_init(struct unwind_work *work, unwind_callback_t func) { return -ENOSYS; }
- static inline int unwind_deferred_request(struct unwind_work *work, u64 *timestamp) { return -ENOSYS; }
- static inline void unwind_deferred_cancel(struct unwind_work *work) {}
+ #include "perf_event.h"
+@@ -2808,41 +2809,6 @@ valid_user_frame(const void __user *fp, unsigned long size)
+ 	return __access_ok(fp, size);
+ }
+ 
+-static unsigned long get_segment_base(unsigned int segment)
+-{
+-	struct desc_struct *desc;
+-	unsigned int idx = segment >> 3;
 -
-+static inline void unwind_deferred_task_exit(struct task_struct *task) {}
- static inline void unwind_exit_to_user_mode(void) {}
+-	if ((segment & SEGMENT_TI_MASK) == SEGMENT_LDT) {
+-#ifdef CONFIG_MODIFY_LDT_SYSCALL
+-		struct ldt_struct *ldt;
+-
+-		/*
+-		 * If we're not in a valid context with a real (not just lazy)
+-		 * user mm, then don't even try.
+-		 */
+-		if (!nmi_uaccess_okay())
+-			return 0;
+-
+-		/* IRQs are off, so this synchronizes with smp_store_release */
+-		ldt = smp_load_acquire(&current->mm->context.ldt);
+-		if (!ldt || idx >= ldt->nr_entries)
+-			return 0;
+-
+-		desc = &ldt->entries[idx];
+-#else
+-		return 0;
+-#endif
+-	} else {
+-		if (idx >= GDT_ENTRIES)
+-			return 0;
+-
+-		desc = raw_cpu_ptr(gdt_page.gdt) + idx;
+-	}
+-
+-	return get_desc_base(desc);
+-}
+-
+ #ifdef CONFIG_UPROBES
+ /*
+  * Heuristic-based check if uprobe is installed at the function entry.
+@@ -2899,8 +2865,8 @@ perf_callchain_user32(struct pt_regs *regs, struct perf_callchain_entry_ctx *ent
+ 	if (user_64bit_mode(regs))
+ 		return 0;
  
- #endif /* !CONFIG_UNWIND_USER */
-diff --git a/kernel/exit.c b/kernel/exit.c
-index bd743900354c..6599f9518436 100644
---- a/kernel/exit.c
-+++ b/kernel/exit.c
-@@ -68,6 +68,7 @@
- #include <linux/rethook.h>
- #include <linux/sysfs.h>
- #include <linux/user_events.h>
-+#include <linux/unwind_deferred.h>
- #include <linux/uaccess.h>
- #include <linux/pidfs.h>
+-	cs_base = get_segment_base(regs->cs);
+-	ss_base = get_segment_base(regs->ss);
++	cs_base = segment_base_address(regs->cs);
++	ss_base = segment_base_address(regs->ss);
  
-@@ -938,6 +939,7 @@ void __noreturn do_exit(long code)
+ 	fp = compat_ptr(ss_base + regs->bp);
+ 	pagefault_disable();
+@@ -3019,11 +2985,11 @@ static unsigned long code_segment_base(struct pt_regs *regs)
+ 		return 0x10 * regs->cs;
  
- 	tsk->exit_code = code;
- 	taskstats_exit(tsk, group_dead);
-+	unwind_deferred_task_exit(tsk);
- 	trace_sched_process_exit(tsk, group_dead);
- 
- 	exit_mm();
-diff --git a/kernel/unwind/deferred.c b/kernel/unwind/deferred.c
-index 8a6caaae04d3..6c95f484568e 100644
---- a/kernel/unwind/deferred.c
-+++ b/kernel/unwind/deferred.c
-@@ -77,7 +77,7 @@ int unwind_deferred_trace(struct unwind_stacktrace *trace)
- 	/* Should always be called from faultable context */
- 	might_fault();
- 
--	if (current->flags & PF_EXITING)
-+	if (!current->mm)
- 		return -EINVAL;
- 
- 	if (!info->cache) {
-@@ -107,9 +107,9 @@ int unwind_deferred_trace(struct unwind_stacktrace *trace)
+ 	if (user_mode(regs) && regs->cs != __USER_CS)
+-		return get_segment_base(regs->cs);
++		return segment_base_address(regs->cs);
+ #else
+ 	if (user_mode(regs) && !user_64bit_mode(regs) &&
+ 	    regs->cs != __USER32_CS)
+-		return get_segment_base(regs->cs);
++		return segment_base_address(regs->cs);
+ #endif
  	return 0;
  }
- 
--static void unwind_deferred_task_work(struct callback_head *head)
-+static void process_unwind_deferred(struct task_struct *task)
- {
--	struct unwind_task_info *info = container_of(head, struct unwind_task_info, work);
-+	struct unwind_task_info *info = &task->unwind_info;
- 	struct unwind_stacktrace trace;
- 	struct unwind_work *work;
- 	unsigned long bits;
-@@ -151,6 +151,23 @@ static void unwind_deferred_task_work(struct callback_head *head)
- 	srcu_read_unlock(&unwind_srcu, idx);
+diff --git a/arch/x86/include/asm/ptrace.h b/arch/x86/include/asm/ptrace.h
+index 50f75467f73d..59357ec98e52 100644
+--- a/arch/x86/include/asm/ptrace.h
++++ b/arch/x86/include/asm/ptrace.h
+@@ -314,6 +314,8 @@ static __always_inline bool regs_irqs_disabled(struct pt_regs *regs)
+ 	return !(regs->flags & X86_EFLAGS_IF);
  }
  
-+static void unwind_deferred_task_work(struct callback_head *head)
++unsigned long segment_base_address(unsigned int segment);
++
+ /* Query offset/name of register from its name/offset */
+ extern int regs_query_register_offset(const char *name);
+ extern const char *regs_query_register_name(unsigned int offset);
+diff --git a/arch/x86/kernel/ptrace.c b/arch/x86/kernel/ptrace.c
+index 095f04bdabdc..81353a09701b 100644
+--- a/arch/x86/kernel/ptrace.c
++++ b/arch/x86/kernel/ptrace.c
+@@ -41,6 +41,7 @@
+ #include <asm/syscall.h>
+ #include <asm/fsgsbase.h>
+ #include <asm/io_bitmap.h>
++#include <asm/mmu_context.h>
+ 
+ #include "tls.h"
+ 
+@@ -339,6 +340,43 @@ static int set_segment_reg(struct task_struct *task,
+ 
+ #endif	/* CONFIG_X86_32 */
+ 
++unsigned long segment_base_address(unsigned int segment)
 +{
-+	process_unwind_deferred(current);
++	struct desc_struct *desc;
++	unsigned int idx = segment >> 3;
++
++	lockdep_assert_irqs_disabled();
++
++	if ((segment & SEGMENT_TI_MASK) == SEGMENT_LDT) {
++#ifdef CONFIG_MODIFY_LDT_SYSCALL
++		struct ldt_struct *ldt;
++
++		/*
++		 * If we're not in a valid context with a real (not just lazy)
++		 * user mm, then don't even try.
++		 */
++		if (!nmi_uaccess_okay())
++			return 0;
++
++		/* IRQs are off, so this synchronizes with smp_store_release */
++		ldt = smp_load_acquire(&current->mm->context.ldt);
++		if (!ldt || idx >= ldt->nr_entries)
++			return 0;
++
++		desc = &ldt->entries[idx];
++#else
++		return 0;
++#endif
++	} else {
++		if (idx >= GDT_ENTRIES)
++			return 0;
++
++		desc = raw_cpu_ptr(gdt_page.gdt) + idx;
++	}
++
++	return get_desc_base(desc);
 +}
 +
-+void unwind_deferred_task_exit(struct task_struct *task)
-+{
-+	struct unwind_task_info *info = &current->unwind_info;
-+
-+	if (!unwind_pending(info))
-+		return;
-+
-+	process_unwind_deferred(task);
-+
-+	task_work_cancel(task, &info->work);
-+}
-+
- static int unwind_deferred_request_nmi(struct unwind_work *work, u64 *timestamp)
+ static unsigned long get_flags(struct task_struct *task)
  {
- 	struct unwind_task_info *info = &current->unwind_info;
+ 	unsigned long retval = task_pt_regs(task)->flags;
 -- 
 2.47.2
 
