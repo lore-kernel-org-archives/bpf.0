@@ -1,98 +1,142 @@
-Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AEF2221FD6
-	for <bpf@vger.kernel.org>; Wed, 11 Jun 2025 17:21:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EACDA222561
+	for <bpf@vger.kernel.org>; Wed, 11 Jun 2025 17:21:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.67.36.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749662464; cv=none; b=tOcBPSrNHO//5FvWzFw3lkFWn2mNYqF0aAYUhaJ0hw+9UgQUQ8/cysVMau/+gEhx8VHmLf2V4Csywz1gOfFJIzI0ViM75oWnNZJJvQ+ZM9WfhpaXp1Ygk6bK9bpBzqG42q+6W1DKTGwywccqCUKiaezixBqmh8+Otc+tsnQc9M4=
+	t=1749662471; cv=none; b=qnOH5IEg/mKwGuevTWBRHpoZXI8EjsMxKdNg7Nw1sWc7U3KWQDEpi18dlZ2vuKm6ZWfrIy+qBjG2SXrX95fTYD7cEtSX6fMkdC4+0SX86tU6HV4FqEWWVR8JH3G3shzOpvYCHwPcvHhoRS8zvNc+aevrTlNeG/92bMyjgp9zysw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749662464; c=relaxed/simple;
-	bh=HpuX6uXXDdRqKGkUplqApGYf7n4pQ4n1YKaQS/Bqm1g=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gk5cRXsXRTJ+yqGafMGwtO5LD6gDhPUxbooQ7h7PcdNx4d69L+uSex/wtuGCvpNgCquwTFoYNkpkLjKxml6K8ebbMbe78AEL7LtrLAsNC67LnsbpPGQNNm3U5WKTpio1eOXgX5wa/+qmlWKILzLll3OHKHDRwlN0QUaoW0t1oyU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=I2PWERXt; arc=none smtp.client-ip=209.85.219.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1749662471; c=relaxed/simple;
+	bh=u5Kk1jfvzFrOwlCXwYxoep/9dBDPOwrOQVQdE3Geobw=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=C9Woqk2GWImZm18X++r/v4f+Tz/54iG9LqN25UikQcgsMFIukmRLqJQg90gSjQ5bUQV24yO0UtWDI+MiwtjV3dnD+OC1F71HTTF8tTGm2zDTuPFor1ACjLJQc6FeXKuHNgKT/hyt7Ku/CbRtHN+FLzcARj1WeYpRKAn8t6xKGBY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net; spf=pass smtp.mailfrom=posteo.net; dkim=pass (3072-bit key) header.d=posteo.net header.i=@posteo.net header.b=A5Md52u3; arc=none smtp.client-ip=185.67.36.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=posteo.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="I2PWERXt"
-Received: by mail-qv1-f49.google.com with SMTP id 6a1803df08f44-6fafb6899c2so866926d6.0
-        for <bpf@vger.kernel.org>; Wed, 11 Jun 2025 10:21:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1749662462; x=1750267262; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HpuX6uXXDdRqKGkUplqApGYf7n4pQ4n1YKaQS/Bqm1g=;
-        b=I2PWERXtiQRvwc1ZQUSZXkeEc+3TXbe48hlG/e60wj/yOaDDXDParCnA++hl4AsFCL
-         8z+1GBsolupvYMtcqf0hFLKyXh/4+jygO7WePXtLtP0Fsat2ibjEC80ZbcXUvE2NeeLs
-         l3TAmkLKtn33o1Ybf/HEchFBtrmoueu+YDZhOSaJSamaEG5/09O4fELSBTrOXKiBLU+v
-         9JvfoHQjx/dv7xJUgc2ljgHJ9GGiB0d9675SUnr1WJYhiOPRi3wL/Pc7/+pgpBFrWr70
-         W53pYRYO35mzW6w2Xig4sm/CSkurctWF1cbBYAT17rfrzsrG49TwKNa4QiFL33vf5pPC
-         JIGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749662462; x=1750267262;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HpuX6uXXDdRqKGkUplqApGYf7n4pQ4n1YKaQS/Bqm1g=;
-        b=eKr6qN3mdX9wyCBpc+sg3JrDKSQxrrGTwvY3eEKzZKkSmDeQDwg3KahEzj6Le9spWy
-         /cU62vqxO/hRXBGqug0NKA3813JXol2T8rVspACWpyYVgemVRPbdjynEflqHQeO+SgVB
-         S64rwITMYkFNJdsQQz4VI9+8HOeVRTu5YdY3WI/23+tN4uExKfUBgEY0eyHpsMtQ6+fb
-         uFwXuXKG161kbSPZpGVAPOOU4R2hToboEKoVX/BQ9K/9QseWKrwEQV4s8Xq6zsG2s5ev
-         TZDnUFLevDZeAuHFZLyUODX3oxkIdCK6V7aTBgeVNXwVX1AvWPKqjdbgeFno13pSwDje
-         yMeQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW8njnKZ45sipsFgj+yWWR7u9pfPDTllXQh0OyCWJ1c491TGatqGluD85sQcB0f0CiJ16w=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwWLwEsnFrwCtiKKsR3ePYIgC/czMklqe9KabFMGn04XhPmKTLK
-	T4y9SVy7pHFFumYmhHHnAUn+o7efqdTwOGOAj71kR8eXL7NOf857S+0fDg8pJDGYA1GmcFC4lzF
-	gWVbVQt4Xn2RECdXXA+k/LLTJZWyJO4C+7zyc54RdIloiHZslGhS6ai7f
-X-Gm-Gg: ASbGncvwgRdCLVhce9GyBdeM2yoSQBANuNsI/R7MglNtQ55GGle1QKiZDiWjv02pT6Q
-	VLPn8blINYONcSx1MXxB6LgQsGPHSxkj+1y7HH8Jr23hpIOWHLtKfD6p8f4mBdiTec+f99pJC0r
-	gwbBN3+1QUrvEltIPtB0KlwuYMZw0BZaAhroa/YGw4dZ8=
-X-Google-Smtp-Source: AGHT+IEhBRuN7B6LTZSzKYkY+Fjb2lZgXyxJ8Yl907OIMJvAVPiU/JV/c+cD9SxUr3eRy1O+wSBc6HX0nM4di6nPfvk=
-X-Received: by 2002:a05:6122:2088:b0:52f:a0c8:263d with SMTP id
- 71dfb90a1353d-5312dc2164amr411708e0c.5.1749662449580; Wed, 11 Jun 2025
- 10:20:49 -0700 (PDT)
+	dkim=pass (3072-bit key) header.d=posteo.net header.i=@posteo.net header.b="A5Md52u3"
+Received: from submission (posteo.de [185.67.36.169]) 
+	by mout02.posteo.de (Postfix) with ESMTPS id 5B212240101
+	for <bpf@vger.kernel.org>; Wed, 11 Jun 2025 19:21:07 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net;
+	s=1984.ea087b; t=1749662467;
+	bh=u5Kk1jfvzFrOwlCXwYxoep/9dBDPOwrOQVQdE3Geobw=;
+	h=From:Date:Subject:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:Message-Id:To:Cc:From;
+	b=A5Md52u3STlkO+A8jTT+13k1GA3nD1EBgT6khcCenX/tpCDQSURx9JPPCVEBBHfXb
+	 eZzOT1HsHBVaGUqYPzH02x4srcEGZer2OgO0WGiv6/dueoIu4mcT8Pu6NXpP2Ndhxq
+	 yq5/9d83/1d0Qz5W58Oqj7yjbCwIcjq3oL1yaIx28k1hClgRVafa/GdYJVtb2nmOhJ
+	 GlPPnpmIArGpb0ls3pFhioBSjphuortNfRRXyibVYOozphg/KxuQ5k+8OXh0QMWoOC
+	 TjYVvv62gb/mCO8W+dpH3oPPUOcGi2Mx++WS/ldb4SLfBDidrseF7OVhgYMvi5pFAp
+	 xQRM30E1zv/K7YuEcXOb+nQr8jaHLir+p64PvyIH3QZN0B8nfE7Gpf8QoupLV+wDNb
+	 V8c4lRb+/aLqXNaqd8oAMP45JlSvR6nfEtEyHEinPQMeJB5aemwbxl1SgZYFLDjoYD
+	 kWR2mzs87p7pGq9RKP419oYEJ8aMqwSALe52YeKvIpFpxcxQUOP
+Received: from customer (localhost [127.0.0.1])
+	by submission (posteo.de) with ESMTPSA id 4bHXW323xjz9rxQ;
+	Wed, 11 Jun 2025 19:21:03 +0200 (CEST)
+From: Charalampos Mitrodimas <charmitro@posteo.net>
+Date: Wed, 11 Jun 2025 17:20:43 +0000
+Subject: [PATCH bpf-next v3] net: Fix RCU usage in task_cls_state() for BPF
+ programs
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250603203701.520541-1-blakejones@google.com> <aElbyWY-cIQNf4wp@krava>
-In-Reply-To: <aElbyWY-cIQNf4wp@krava>
-From: Blake Jones <blakejones@google.com>
-Date: Wed, 11 Jun 2025 10:20:38 -0700
-X-Gm-Features: AX0GCFs5Krou7gfrh8qKoaSovcVxAQ3oWFMVkI5FV16KOLRRiLHpznUaJBLq07s
-Message-ID: <CAP_z_Cgo0mLn6+cObVSBu4dY2SZaDTO6HZ-0D=1uAhuoc+jQRQ@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] libbpf: add support for printing BTF character
- arrays as strings
-To: Jiri Olsa <olsajiri@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>, Namhyung Kim <namhyung@kernel.org>, 
-	Ian Rogers <irogers@google.com>, bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250611-rcu-fix-task_cls_state-v3-1-3d30e1de753f@posteo.net>
+X-B4-Tracking: v=1; b=H4sIAOq6SWgC/4XNQQ6CMBAF0KuQrq1ppxWIK+9hDCllkEZDSac2G
+ sLdLax0YVz+yf9vZkYYHBI7FjMLmBw5P+agdgWzgxmvyF2XMwMBB1GKmgf74L178mjo1tg7NRR
+ NRC6wq1SvVdVJZHk8BcytDT5fch4cRR9e258k1+tfMkkuOZi11upSqPY0eYro9yNGtpoJPhwpf
+ zqQHWmq3oKuQYH5cpZleQNGtF7QBQEAAA==
+X-Change-ID: 20250608-rcu-fix-task_cls_state-0ed73f437d1e
+To: "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Feng Yang <yangfeng@kylinos.cn>, 
+ Tejun Heo <tj@kernel.org>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ bpf@vger.kernel.org, syzbot+b4169a1cfb945d2ed0ec@syzkaller.appspotmail.com, 
+ Charalampos Mitrodimas <charmitro@posteo.net>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1749662443; l=2729;
+ i=charmitro@posteo.net; s=20250526; h=from:subject:message-id;
+ bh=u5Kk1jfvzFrOwlCXwYxoep/9dBDPOwrOQVQdE3Geobw=;
+ b=cOJU/Y97B/mIsiD6ycUzLbHOj+hDqh9honeXQ3bF5ZN1FpCw/P9xFzMlBjxDgS6XhO9jdIj0R
+ BW5omZ1EtlGBMPPQfoVetlQvPuxjKIUWGThuj0Mz8r5uXn4WqXjI4A4
+X-Developer-Key: i=charmitro@posteo.net; a=ed25519;
+ pk=PNHEh5o1dcr5kfKoZhfwdsfm3CxVfRje7vFYKIW0Mp4=
 
-Hi Jiri,
+The commit ee971630f20f ("bpf: Allow some trace helpers for all prog
+types") made bpf_get_cgroup_classid_curr helper available to all BPF
+program types, not just networking programs.
 
-On Wed, Jun 11, 2025 at 3:34=E2=80=AFAM Jiri Olsa <olsajiri@gmail.com> wrot=
-e:
-> could this be used in bpftool map dump? ;-) I checked, but it looks like
-> bpftool map dump is using something else to dump data.. I admit I haven't
-> spent much on time that
+This helper calls __task_get_classid() which internally calls
+task_cls_state() requiring rcu_read_lock_bh_held(). This works in
+networking/tc context where RCU BH is held, but triggers an RCU
+warning when called from other contexts like BPF syscall programs that
+run under rcu_read_lock_trace():
 
-I actually started this work by looking at bpftool's dumper, and only
-after a bit of time did I realize that there was a more general dumper
-in libbpf. I suspect that part of why no one has updated bpftool to
-use libbpf for this is that bpftool's dumper also has a "display in
-JSON" mode which libbpf doesn't support. So yes, it could be done, but
-it would take some work.
+  WARNING: suspicious RCU usage
+  6.15.0-rc4-syzkaller-g079e5c56a5c4 #0 Not tainted
+  -----------------------------
+  net/core/netclassid_cgroup.c:24 suspicious rcu_dereference_check() usage!
 
-Blake
+Fix this by also accepting rcu_read_lock_held() and
+rcu_read_lock_trace_held() as valid RCU contexts in the
+task_cls_state() function. This ensures the helper works correctly in
+all RCU contexts where it might be called, regular RCU, RCU BH (for
+networking), and RCU trace (for BPF syscall programs).
+
+Reported-by: syzbot+b4169a1cfb945d2ed0ec@syzkaller.appspotmail.com
+Closes: https://syzkaller.appspot.com/bug?extid=b4169a1cfb945d2ed0ec
+Fixes: ee971630f20f ("bpf: Allow some trace helpers for all prog types")
+Signed-off-by: Charalampos Mitrodimas <charmitro@posteo.net>
+---
+Changes in v3:
+- Add rcu_read_lock_held() check as well 
+- Link to v2: https://lore.kernel.org/r/20250611-rcu-fix-task_cls_state-v2-1-1a7fc248232a@posteo.net
+
+Changes in v2:
+- Fix RCU usage in task_cls_state() instead of BPF helper
+- Add rcu_read_lock_trace_held() check to accept trace RCU as valid
+  context
+- Drop the approach of using task_cls_classid() which has in_interrupt()
+  check
+- Link to v1: https://lore.kernel.org/r/20250608-rcu-fix-task_cls_state-v1-1-2a2025b4603b@posteo.net
+---
+ net/core/netclassid_cgroup.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/net/core/netclassid_cgroup.c b/net/core/netclassid_cgroup.c
+index d22f0919821e931fbdedf5a8a7a2998d59d73978..dff66d8fb325d28bb15f42641b9ec738b0022353 100644
+--- a/net/core/netclassid_cgroup.c
++++ b/net/core/netclassid_cgroup.c
+@@ -21,7 +21,9 @@ static inline struct cgroup_cls_state *css_cls_state(struct cgroup_subsys_state
+ struct cgroup_cls_state *task_cls_state(struct task_struct *p)
+ {
+ 	return css_cls_state(task_css_check(p, net_cls_cgrp_id,
+-					    rcu_read_lock_bh_held()));
++					    rcu_read_lock_held() ||
++					    rcu_read_lock_bh_held() ||
++					    rcu_read_lock_trace_held()));
+ }
+ EXPORT_SYMBOL_GPL(task_cls_state);
+ 
+
+---
+base-commit: 079e5c56a5c41d285068939ff7b0041ab10386fa
+change-id: 20250608-rcu-fix-task_cls_state-0ed73f437d1e
+
+Best regards,
+-- 
+Charalampos Mitrodimas <charmitro@posteo.net>
+
