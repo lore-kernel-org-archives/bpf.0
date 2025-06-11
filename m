@@ -1,171 +1,131 @@
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E7475695
-	for <bpf@vger.kernel.org>; Wed, 11 Jun 2025 00:45:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1878B5695;
+	Wed, 11 Jun 2025 00:56:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749602723; cv=none; b=aZvFDwpwtyQgvKTRum0AGDt+es7zts+fttGmx7oWTU8Ly5l7/hvww6IC9Lr0gBTx1OHAGU+ze04u32eMnjvzgI+RePa56AXt5DR0n3eEl79XS4aXZQf3+POaiV4PdFz6pZtEG9jVxG77znyHBmX3ucDEd5Ykw2uSknUXmegtm4E=
+	t=1749603375; cv=none; b=j35bMFGyOAy7se/lXdbdoHUEtOs8NYNiSb4sc5anrLSll9FBN8PUD3qQu1L05L1SwpDkvVZtBL8OqtSQqO4ueHZwtUudlerTP3O2iSdObSJNsd2JthN5jiLXxjTxvvC6gsT79Oo2aHJVfszVYy3v2ugXTb5kJpzRQBs+BvPl204=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749602723; c=relaxed/simple;
-	bh=GL7dXZ6TYN2daR8uY9dujj/NsJJD55NmhRegf2PWVSw=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=l5/a+gAZS3QMtpnkbNHLqPEoSf2i+pfRfqzYwmpVqKZVyqr/T/GIih5a6tpAlkDhWDREmKdzg3Q4rFNp/cLQw6VRpfYh3atbhA6JZ+YFSsIigkG13vr0LRPB+6cxB3cXyG9cIoFJD5ALUBpJ4ulNdc7awH2OVbcL33QPKb7yt2c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=frYTcKa8; arc=none smtp.client-ip=209.85.210.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1749603375; c=relaxed/simple;
+	bh=yW2+s1S0dYwBFjAXmnAj4igW3DXypljO3osHyrjTWuo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=pbhJYwScE1o4jB2AANuh96Fo6OxPh7zkCip4muhUNszep23bIUQXUlUrcZbRC8UKntNHrTw1UqS1gsORhIJf4UHiT9z+wU/66pdTbU1cuPoJarwQbAi2+ZF2Bf42bKmlpANESGikAMvyTedrw0luKljz6zfmPgZU8NkgMqUoElI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ix7qs+1O; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="frYTcKa8"
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-739b3fe7ce8so4751553b3a.0
-        for <bpf@vger.kernel.org>; Tue, 10 Jun 2025 17:45:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1749602720; x=1750207520; darn=vger.kernel.org;
-        h=mime-version:user-agent:references:in-reply-to:date:cc:to:from
-         :subject:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=wisaM9cKhtKwrendSa4f005YgS+BgCeTiLO0WcTFBrY=;
-        b=frYTcKa8q9GVWOpot4Uj+pSu5HgK6pFonIjbIvSbmmUsHe0F8iWT/+CR+oa+aaf+5H
-         OU6xTpYswZ/5owpgIlDHj59Pd/LVOSxM1NpKtqO0DlauCeM7If7xY/mCtPKJvTMEL3l8
-         yTRiNlXY3fh+j/pSR2rF9ZDSSo5a3G9RLfmErKs6BzfWYMlmq5O951Wtx98FuvaRzwcb
-         lRiIdF79KdTj5a+F+TgzM4rldHtmsHS90h/emCdFwsGLx3+8SsXLG2pNsKCmEUPWRk/w
-         LqafRivd6FOa+pe0TaeESl2HvwH3jXLVc4Cn88/3BFSmZHkYm3LqpWJIu1twjaCzY67T
-         vwXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749602720; x=1750207520;
-        h=mime-version:user-agent:references:in-reply-to:date:cc:to:from
-         :subject:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wisaM9cKhtKwrendSa4f005YgS+BgCeTiLO0WcTFBrY=;
-        b=arPueTqPoGCJ8r2Fhd7o914t/j0yjN30e0YUmIQLfjkON609sccpgiKy3iuYGNTpjc
-         JaJ4GTo85ci5YR55EEAKrwCz43inmMgvaorTBFhIRHn417SnwK8dsh3FjXHuOY7RonwY
-         iGp65zuyFjlNdJHgVIpdeIZLpykS4ftiyj5mukOPaWMMuCLlEMXiarDkf/i2FzOnls1F
-         F3pJ++KuPL4/mPIfr9RVG/a+bDjlCqe6G8p4TXe5F1dKHs5V+w1wRH6trd3BYYtgk/c4
-         mY3nos5i6pHfx9LdOwy86BM7jCzAV0ZkvVQwgyPsjeKNWxNHLW8hBgIsxR3gTVO8InuV
-         qwaQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUx57tI7eETmGHwi5D3g2HPaEVFhqD92UihlLD7sFjoTsC9UQknEvFm/BpGkqV14RHv+mM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzE35fPEkSJNrYHv/ZSW9VplvhN4+a/57ig5I0c0+EBGgkzzFGM
-	rn4PkORhyby2IaGnxeM8y74059Qp4Vc4s+EgrADbBntvXGyINu38e/cpYjCOJ67P
-X-Gm-Gg: ASbGnct3VliNnbw22iRStjy4Kl3obrZlOhFsW1X2C1JzGJ7+j9lwlWQKLe7EifrhtKC
-	S6lBtPAPxx9e3YRcLs/hLZjD77AEjLg+EuSNw0WTD/pGHlBScuQuLNhWL/W3p5PmVVs5G2RAghN
-	TmsnQIktjC+k1iQZuLbm3baLN7shziFBu90JUFFcfMxYj4ffuT+mINqVPkXpQWHv+nINZ3Uisa3
-	cWBTBPTCztXwyBkH0xWQbdZMFueOXsp2+RINyQusj/LhCB9iEJOIgprktc8HVBF4cW8yLFICazC
-	Yhr8/aMQY1sfXxqhUyHDiN5BUW+L1xNDv7OkxPYxDeNt68DZCohpetsiKIFhjz1jb1QD
-X-Google-Smtp-Source: AGHT+IH17wNsF+I+Vtfu2F+7vRaIe6glBJ4D2z4YIU8jV8CvyIdVl1OoMbIXCQAXmNpyFYOjE0fDwQ==
-X-Received: by 2002:a05:6a21:998e:b0:21f:5409:32f4 with SMTP id adf61e73a8af0-21f865b9433mr2192461637.8.1749602720267;
-        Tue, 10 Jun 2025 17:45:20 -0700 (PDT)
-Received: from ?IPv6:2620:10d:c096:14a::647? ([2620:10d:c090:600::1:e4f4])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b2f5ef88914sm7448712a12.33.2025.06.10.17.45.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Jun 2025 17:45:19 -0700 (PDT)
-Message-ID: <4ff2fafb99131f599901580eac96dca34ca20cc0.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v3 2/3] selftests/bpf: support array presets in
- veristat
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, bpf@vger.kernel.org, 
-	ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net, kafai@meta.com, 
-	kernel-team@meta.com
-Cc: Mykyta Yatsenko <yatsenko@meta.com>
-Date: Tue, 10 Jun 2025 17:45:17 -0700
-In-Reply-To: <20250610190840.1758122-3-mykyta.yatsenko5@gmail.com>
-References: <20250610190840.1758122-1-mykyta.yatsenko5@gmail.com>
-	 <20250610190840.1758122-3-mykyta.yatsenko5@gmail.com>
-Content-Type: multipart/mixed; boundary="=-xG4L2sl2ldRrvmcrfkMc"
-User-Agent: Evolution 3.56.2 (3.56.2-1.fc42) 
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ix7qs+1O"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AEB6C4CEF7;
+	Wed, 11 Jun 2025 00:56:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1749603373;
+	bh=yW2+s1S0dYwBFjAXmnAj4igW3DXypljO3osHyrjTWuo=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=Ix7qs+1OOS03g3OgEyAqtA3tJ1Km6thWuMpTMlUAB4t3wtHZs1xKmfp4yAhk+kPXD
+	 u9cL2ZGQJmwYFaQgjA6n2vk9Bv2plghnHQEop9bltf4sJopPBhGfV7kKTCZasn53hO
+	 2AYpoTZsAwqVOg+OvKXDphjI0SGVu7CWFyIu2YlWbLxi4WAhuF/3l5d/Jwz7wCJR3x
+	 nR0RkqB7mIekEjtAFKb/YgjSzVnwk9/iuNFhIQH0cKuGkUFFUdK+iwmYZn3PQX3c4J
+	 wmhjVvKBqb0seaoFY/mD9B6DneC1383fkc48KhXl1UGdZBU7Z9vOXmj47Dz0lJ9g6Z
+	 bUuSzQBBQBf6w==
+Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-6f8a87f0c0fso66824376d6.0;
+        Tue, 10 Jun 2025 17:56:13 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCX/kX6uL4WK6/foPfomJNn7nDoRlg95354czakrcZ0wqm0uAMxgjJgqNq2N9c6zn28MY2TIOdt9MvAR/WIo@vger.kernel.org, AJvYcCX81Gk5VdtTdnrAjfNKlSBsLpQEE/CIaaQicfKhf/Hc5gfmk5umZ+gxQQuNoQyu2TaTXwy6cD8anFPa5o1YEQ==@vger.kernel.org, AJvYcCXB4etdv/Dg8BAf9r69SVd526/OmWqRDsxCJIFRmt31seehrIK+C8q2lfKvlHcvOMdhGD8gHqT1YtkcBxbVRfMLp0AYdUTe@vger.kernel.org, AJvYcCXYeGVn645RuHHGhb96oqWh9pRLyAdXnqX+f/2Wlj5uAekt2g3NVqB1xkLioIdmMaraKSo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywbe5WWIKoezrujSp+/4xyxgfU9hGx7HAN203stASTv1fMmpqNv
+	u18AsS8FshYU8ODD354JurqT44hSC1/T+3LOmZhlkgQPpTsy51Lriu1+5dOlgRtsdV82MUqXErW
+	lbjtWez9cQqqziSRYa5Y/0bufUUnKVNY=
+X-Google-Smtp-Source: AGHT+IGSVeuJ+FOXkPbiyzb4l38dn5Y2lPF187pto/+/yD/Nj5qfj6UaX5J81ibPmEr9a8rn1ItvqlL0uinCvFk/UwU=
+X-Received: by 2002:a05:6214:e87:b0:6f4:cb2e:25cc with SMTP id
+ 6a1803df08f44-6fb2c375cbcmr25386766d6.32.1749603372419; Tue, 10 Jun 2025
+ 17:56:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-
---=-xG4L2sl2ldRrvmcrfkMc
+References: <20250606213015.255134-1-song@kernel.org> <20250606213015.255134-2-song@kernel.org>
+ <174959847640.608730.1496017556661353963@noble.neil.brown.name>
+In-Reply-To: <174959847640.608730.1496017556661353963@noble.neil.brown.name>
+From: Song Liu <song@kernel.org>
+Date: Tue, 10 Jun 2025 17:56:01 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW6oet8_LbL+6mVi7Lc4U_8i7O-PN5F1zOm5esV52sBu0A@mail.gmail.com>
+X-Gm-Features: AX0GCFvEtC27CfJCDtYJnIsvh1XG7Q2O9NKGpEtUlKwZpyuicB1tN-YkqmLZmHU
+Message-ID: <CAPhsuW6oet8_LbL+6mVi7Lc4U_8i7O-PN5F1zOm5esV52sBu0A@mail.gmail.com>
+Subject: Re: [PATCH v3 bpf-next 1/5] namei: Introduce new helper function path_walk_parent()
+To: NeilBrown <neil@brown.name>
+Cc: Jan Kara <jack@suse.cz>, bpf@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	kernel-team@meta.com, andrii@kernel.org, eddyz87@gmail.com, ast@kernel.org, 
+	daniel@iogearbox.net, martin.lau@linux.dev, viro@zeniv.linux.org.uk, 
+	brauner@kernel.org, kpsingh@kernel.org, mattbobrowski@google.com, 
+	amir73il@gmail.com, repnop@google.com, jlayton@kernel.org, 
+	josef@toxicpanda.com, mic@digikod.net, gnoack@google.com, m@maowtm.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, 2025-06-10 at 20:08 +0100, Mykyta Yatsenko wrote:
-> From: Mykyta Yatsenko <yatsenko@meta.com>
->=20
-> Implement support for presetting values for array elements in
-> veristat.
-> For example:
-> ```
-> sudo ./veristat set_global_vars.bpf.o -G "arr[3] =3D 1"
-> ```
-> Arrays of structures and structure of arrays work, but each
-> individual
-> scalar value has to be set separately: `foo[1].bar[2] =3D value`.
->=20
-> Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
-> ---
+Hi Neil,
 
-A few nits regarding error reporting:
+Thanks for your suggestion! It does look like a good solution.
 
-  ./veristat -q -G ptr_arr[10]=3D0 set_global_vars.bpf.o=20
-  Unsupported array element type for variable ptr_arr. Only int, enum, stru=
-ct, union are supported
-                                                                           =
-                      ^^^
-											 missing dot
+On Tue, Jun 10, 2025 at 4:34=E2=80=AFPM NeilBrown <neil@brown.name> wrote:
 
-  ./veristat -G arr[[10]]=3D0 set_global_vars.bpf.o=20
-  Could not parse 'arr[[10]]'Failed to parse global variable presets: arr[[=
-10]]=3D0
-  ^^^^^^^^^                ^^^                                             =
-     ^^^
-  Can't ?		   dot or comma                                 missing dot
+> The above looks a lot like follow_dotdot().  This is good because it
+> means that it is likely correct.  But it is bad because it means there
+> are two copies of essentially the same code - making maintenance harder.
+>
+> I think it would be good to split the part that you want out of
+> follow_dotdot() and use that.  Something like the following.
+>
+> You might need a small wrapper in landlock which would, for example,
+> pass LOOKUP_BENEATH and replace path->dentry with the parent on success.
+>
+> NeilBrown
+>
+> diff --git a/fs/namei.c b/fs/namei.c
+> index 4bb889fc980b..b81d07b4417b 100644
+> --- a/fs/namei.c
+> +++ b/fs/namei.c
+> @@ -2048,36 +2048,65 @@ static struct dentry *follow_dotdot_rcu(struct na=
+meidata *nd)
+>         return nd->path.dentry;
+>  }
+>
+> -static struct dentry *follow_dotdot(struct nameidata *nd)
+> +/**
+> + * path_walk_parent - Find the parent of the given struct path
+> + * @path  - The struct path to start from
+> + * @root  - A struct path which serves as a boundary not to be crosses
+> + * @flags - Some LOOKUP_ flags
+> + *
+> + * Find and return the dentry for the parent of the given path (mount/de=
+ntry).
+> + * If the given path is the root of a mounted tree, it is first updated =
+to
+> + * the mount point on which that tree is mounted.
+> + *
+> + * If %LOOKUP_NO_XDEV is given, then *after* the path is updated to a ne=
+w mount,
+> + * the error EXDEV is returned.
+> + * If no parent can be found, either because the tree is not mounted or =
+because
+> + * the @path matches the @root, then @path->dentry is returned unless @f=
+lags
+> + * contains %LOOKUP_BENEATH, in which case -EXDEV is returned.
+> + *
+> + * Returns: either an ERR_PTR() or the chosen parent which will have had=
+ the
+> + * refcount incremented.
+> + */
+> +struct dentry *path_walk_parent(struct path *path, struct path *root, in=
+t flags)
 
-  ./veristat -q -G "struct1[0] =3D 0" set_global_vars.bpf.o=20
-  Setting value for type Struct is not supported
-                                           ^^^^^^^^^
-					   report full_name here?
+We can probably call this __path_walk_parent() and make it static.
 
-I applied a diff as in the attachment, to see what offsets are being assign=
-ed.
-Looks like this shows a bug:
+Then we can add an exported path_walk_parent() that calls
+__path_walk_parent() and adds extra logic.
 
-  ./veristat  -q -G "struct1[0].filler =3D 42" set_global_vars.bpf.o > /dev=
-/null
-  setting struct1[0].filler: offset 54, kind int, value 42
+If this looks good to folks, I can draft v4 based on this idea.
 
-Shouldn't offset be 2 in this case?
-
-(maybe print such info in debug (-d) mode?)
-
-Unrelated to this patch, but still a bug:
-
-  # Catches range error:
-  ./veristat -q -G "struct1[0].filler2 =3D 100500" set_global_vars.bpf.o=
-=20
-  Variable unsigned short value 100500 is out of range [0; 65535]
-  # Does not range error:
-  ./veristat -q -G "struct1[0].filler2 =3D -1" set_global_vars.bpf.o
-  ... success ...
+Thanks,
+Song
 
 [...]
-
---=-xG4L2sl2ldRrvmcrfkMc
-Content-Disposition: attachment; filename="show-offset.patch"
-Content-Transfer-Encoding: base64
-Content-Type: text/x-patch; name="show-offset.patch"; charset="UTF-8"
-
-ZGlmZiAtLWdpdCBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2JwZi92ZXJpc3RhdC5jIGIvdG9v
-bHMvdGVzdGluZy9zZWxmdGVzdHMvYnBmL3ZlcmlzdGF0LmMKaW5kZXggYmM5ZWJmNWEyOTg1Li43
-ZjNlOGJhNzVhY2MgMTAwNjQ0Ci0tLSBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2JwZi92ZXJp
-c3RhdC5jCisrKyBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2JwZi92ZXJpc3RhdC5jCkBAIC0x
-NzI1LDYgKzE3MjUsOCBAQCBzdGF0aWMgaW50IGFkanVzdF92YXJfc2VjaW5mbyhzdHJ1Y3QgYnRm
-ICpidGYsIGNvbnN0IHN0cnVjdCBidGZfdHlwZSAqdCwKICAgICAgICByZXR1cm4gMDsKIH0KIAor
-Y29uc3QgY2hhciAqYnRmX2tpbmRfc3RyKGNvbnN0IHN0cnVjdCBidGZfdHlwZSAqdCk7CisKIHN0
-YXRpYyBpbnQgc2V0X2dsb2JhbF92YXIoc3RydWN0IGJwZl9vYmplY3QgKm9iaiwgc3RydWN0IGJ0
-ZiAqYnRmLAogICAgICAgICAgICAgICAgICAgICAgICAgIHN0cnVjdCBicGZfbWFwICptYXAsIHN0
-cnVjdCBidGZfdmFyX3NlY2luZm8gKnNpbmZvLAogICAgICAgICAgICAgICAgICAgICAgICAgIHN0
-cnVjdCB2YXJfcHJlc2V0ICpwcmVzZXQpCkBAIC0xNzYxLDYgKzE3NjMsOSBAQCBzdGF0aWMgaW50
-IHNldF9nbG9iYWxfdmFyKHN0cnVjdCBicGZfb2JqZWN0ICpvYmosIHN0cnVjdCBidGYgKmJ0ZiwK
-ICAgICAgICAgICAgICAgIH0KICAgICAgICB9CiAKKyAgICAgICBmcHJpbnRmKHN0ZGVyciwgInNl
-dHRpbmcgJXM6IG9mZnNldCAlZCwga2luZCAlcywgdmFsdWUgJWxsZFxuIiwKKyAgICAgICAgICAg
-ICAgIHByZXNldC0+ZnVsbF9uYW1lLCBzaW5mby0+b2Zmc2V0LCBidGZfa2luZF9zdHIoYmFzZV90
-eXBlKSwgdmFsdWUpOworCiAgICAgICAgLyogQ2hlY2sgaWYgdmFsdWUgZml0cyBpbnRvIHRoZSB0
-YXJnZXQgdmFyaWFibGUgc2l6ZSAqLwogICAgICAgIGlmICAoc2luZm8tPnNpemUgPCBzaXplb2Yo
-dmFsdWUpKSB7CiAgICAgICAgICAgICAgICBib29sIGlzX3NpZ25lZCA9IGlzX3NpZ25lZF90eXBl
-KGJhc2VfdHlwZSk7Cg==
-
-
---=-xG4L2sl2ldRrvmcrfkMc--
