@@ -1,131 +1,263 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay.hostedemail.com (smtprelay0012.hostedemail.com [216.40.44.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1878B5695;
-	Wed, 11 Jun 2025 00:56:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22B504C80;
+	Wed, 11 Jun 2025 01:03:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749603375; cv=none; b=j35bMFGyOAy7se/lXdbdoHUEtOs8NYNiSb4sc5anrLSll9FBN8PUD3qQu1L05L1SwpDkvVZtBL8OqtSQqO4ueHZwtUudlerTP3O2iSdObSJNsd2JthN5jiLXxjTxvvC6gsT79Oo2aHJVfszVYy3v2ugXTb5kJpzRQBs+BvPl204=
+	t=1749603784; cv=none; b=m8cJED9fTt157O+dlvtvqCoBco8HTL45rYJ+PI6USuOu7sJzqTyrV2LCTIAdX6AY5shVX9uHdlPG17uOj1uKnTra/5WXkpx2AwD1TydP4YDT8lgpwjK3FKd/cGCPNuaarpjOoJTSrj3ff2vFd/m6VcNTFkPvYyqD8HR2m/yH8uY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749603375; c=relaxed/simple;
-	bh=yW2+s1S0dYwBFjAXmnAj4igW3DXypljO3osHyrjTWuo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=pbhJYwScE1o4jB2AANuh96Fo6OxPh7zkCip4muhUNszep23bIUQXUlUrcZbRC8UKntNHrTw1UqS1gsORhIJf4UHiT9z+wU/66pdTbU1cuPoJarwQbAi2+ZF2Bf42bKmlpANESGikAMvyTedrw0luKljz6zfmPgZU8NkgMqUoElI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ix7qs+1O; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ix7qs+1O"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AEB6C4CEF7;
-	Wed, 11 Jun 2025 00:56:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749603373;
-	bh=yW2+s1S0dYwBFjAXmnAj4igW3DXypljO3osHyrjTWuo=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=Ix7qs+1OOS03g3OgEyAqtA3tJ1Km6thWuMpTMlUAB4t3wtHZs1xKmfp4yAhk+kPXD
-	 u9cL2ZGQJmwYFaQgjA6n2vk9Bv2plghnHQEop9bltf4sJopPBhGfV7kKTCZasn53hO
-	 2AYpoTZsAwqVOg+OvKXDphjI0SGVu7CWFyIu2YlWbLxi4WAhuF/3l5d/Jwz7wCJR3x
-	 nR0RkqB7mIekEjtAFKb/YgjSzVnwk9/iuNFhIQH0cKuGkUFFUdK+iwmYZn3PQX3c4J
-	 wmhjVvKBqb0seaoFY/mD9B6DneC1383fkc48KhXl1UGdZBU7Z9vOXmj47Dz0lJ9g6Z
-	 bUuSzQBBQBf6w==
-Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-6f8a87f0c0fso66824376d6.0;
-        Tue, 10 Jun 2025 17:56:13 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCX/kX6uL4WK6/foPfomJNn7nDoRlg95354czakrcZ0wqm0uAMxgjJgqNq2N9c6zn28MY2TIOdt9MvAR/WIo@vger.kernel.org, AJvYcCX81Gk5VdtTdnrAjfNKlSBsLpQEE/CIaaQicfKhf/Hc5gfmk5umZ+gxQQuNoQyu2TaTXwy6cD8anFPa5o1YEQ==@vger.kernel.org, AJvYcCXB4etdv/Dg8BAf9r69SVd526/OmWqRDsxCJIFRmt31seehrIK+C8q2lfKvlHcvOMdhGD8gHqT1YtkcBxbVRfMLp0AYdUTe@vger.kernel.org, AJvYcCXYeGVn645RuHHGhb96oqWh9pRLyAdXnqX+f/2Wlj5uAekt2g3NVqB1xkLioIdmMaraKSo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywbe5WWIKoezrujSp+/4xyxgfU9hGx7HAN203stASTv1fMmpqNv
-	u18AsS8FshYU8ODD354JurqT44hSC1/T+3LOmZhlkgQPpTsy51Lriu1+5dOlgRtsdV82MUqXErW
-	lbjtWez9cQqqziSRYa5Y/0bufUUnKVNY=
-X-Google-Smtp-Source: AGHT+IGSVeuJ+FOXkPbiyzb4l38dn5Y2lPF187pto/+/yD/Nj5qfj6UaX5J81ibPmEr9a8rn1ItvqlL0uinCvFk/UwU=
-X-Received: by 2002:a05:6214:e87:b0:6f4:cb2e:25cc with SMTP id
- 6a1803df08f44-6fb2c375cbcmr25386766d6.32.1749603372419; Tue, 10 Jun 2025
- 17:56:12 -0700 (PDT)
+	s=arc-20240116; t=1749603784; c=relaxed/simple;
+	bh=GkcfV+ZHCvd7P4aVWtjysL4L/glnQ1G8j6U3jNYg0yk=;
+	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
+	 Content-Type; b=teTpZwKjde7NNQWgCDW1JxX3jcTPRvTFSGEMEj6o1piyBZxLKEqL179XoxvcWP0OCT3qXzOGnNXRpW9ZTK/OSdwtz+aLmUjlRle/sPMo3t7wg6MVOyOXUKoHkNqI3iTQmqunziGdxkxXrbEMkoFXTB/zMBHQMRbrzI6sAKWBsaU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+Received: from omf05.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay09.hostedemail.com (Postfix) with ESMTP id A09F781473;
+	Wed, 11 Jun 2025 01:02:59 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: nevets@goodmis.org) by omf05.hostedemail.com (Postfix) with ESMTPA id 8A39120010;
+	Wed, 11 Jun 2025 01:02:56 +0000 (UTC)
+Received: from rostedt by gandalf with local (Exim 4.98.2)
+	(envelope-from <rostedt@goodmis.org>)
+	id 1uP9tE-00000000v9F-2Rhg;
+	Tue, 10 Jun 2025 21:04:28 -0400
+Message-ID: <20250611010428.433111891@goodmis.org>
+User-Agent: quilt/0.68
+Date: Tue, 10 Jun 2025 20:54:25 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org,
+ bpf@vger.kernel.org,
+ x86@kernel.org
+Cc: Masami Hiramatsu <mhiramat@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Josh Poimboeuf <jpoimboe@kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>,
+ Ingo Molnar <mingo@kernel.org>,
+ Jiri Olsa <jolsa@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>,
+ Thomas Gleixner <tglx@linutronix.de>,
+ Andrii Nakryiko <andrii@kernel.org>,
+ Indu Bhagat <indu.bhagat@oracle.com>,
+ "Jose E. Marchesi" <jemarch@gnu.org>,
+ Beau Belgrave <beaub@linux.microsoft.com>,
+ Jens Remus <jremus@linux.ibm.com>,
+ Linus Torvalds <torvalds@linux-foundation.org>,
+ Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH v10 04/14] unwind_user/deferred: Add unwind_deferred_trace()
+References: <20250611005421.144238328@goodmis.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250606213015.255134-1-song@kernel.org> <20250606213015.255134-2-song@kernel.org>
- <174959847640.608730.1496017556661353963@noble.neil.brown.name>
-In-Reply-To: <174959847640.608730.1496017556661353963@noble.neil.brown.name>
-From: Song Liu <song@kernel.org>
-Date: Tue, 10 Jun 2025 17:56:01 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW6oet8_LbL+6mVi7Lc4U_8i7O-PN5F1zOm5esV52sBu0A@mail.gmail.com>
-X-Gm-Features: AX0GCFvEtC27CfJCDtYJnIsvh1XG7Q2O9NKGpEtUlKwZpyuicB1tN-YkqmLZmHU
-Message-ID: <CAPhsuW6oet8_LbL+6mVi7Lc4U_8i7O-PN5F1zOm5esV52sBu0A@mail.gmail.com>
-Subject: Re: [PATCH v3 bpf-next 1/5] namei: Introduce new helper function path_walk_parent()
-To: NeilBrown <neil@brown.name>
-Cc: Jan Kara <jack@suse.cz>, bpf@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	kernel-team@meta.com, andrii@kernel.org, eddyz87@gmail.com, ast@kernel.org, 
-	daniel@iogearbox.net, martin.lau@linux.dev, viro@zeniv.linux.org.uk, 
-	brauner@kernel.org, kpsingh@kernel.org, mattbobrowski@google.com, 
-	amir73il@gmail.com, repnop@google.com, jlayton@kernel.org, 
-	josef@toxicpanda.com, mic@digikod.net, gnoack@google.com, m@maowtm.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+X-Rspamd-Queue-Id: 8A39120010
+X-Stat-Signature: d1sd67rsay336rropajpju8x4iyaw1jq
+X-Rspamd-Server: rspamout06
+X-Session-Marker: 6E657665747340676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX18s4Fht9zOCaOpUtgl/qgh+t7hS1DhCsZM=
+X-HE-Tag: 1749603776-184028
+X-HE-Meta: U2FsdGVkX182XWrvivxISvy8k+rDzRpftjL+HLhibTBHBTuVTxbNndIytvyPK49g3IjrkC7X9QdetfNDCbDqC1GE3a2Octol2BvVX8AcvMiApR2UqKfAfbDNk4ihWxtK6KFIopQOjOL2xZXdPyIU1fciZuxhbiswW4mB5Vfcr0LiU/+wBz9M7ACHrH9wq6TUlOR/NsK7kegh+qKn4wYYjLiQFIZ5NGYOG7uX7xCFsSsP5o1MdzRN1XQPgH+a59BGEHYasXHhjWdeoD1rlug5JaQF5qQIWZAEbi2BQkWzHUWFmUcka5y0VdEbWQNsHVI11fm9GAbx0t2Ebfq8V1K4kq2Sz7b+PIJgtobZgEOCoPgM6oTs/omxFpqtiEGt3U8Jwsh2tDBUWezOZ6zN0FiI9WnAtWvnhF8WtnnTiqoGkmI=
 
-Hi Neil,
+From: Steven Rostedt <rostedt@goodmis.org>
 
-Thanks for your suggestion! It does look like a good solution.
+Add a function that must be called inside a faultable context that will
+retrieve a user space stack trace. The function unwind_deferred_trace()
+can be called by a tracer when a task is about to enter user space, or has
+just come back from user space and has interrupts enabled.
 
-On Tue, Jun 10, 2025 at 4:34=E2=80=AFPM NeilBrown <neil@brown.name> wrote:
+This code is based on work by Josh Poimboeuf's deferred unwinding code:
 
-> The above looks a lot like follow_dotdot().  This is good because it
-> means that it is likely correct.  But it is bad because it means there
-> are two copies of essentially the same code - making maintenance harder.
->
-> I think it would be good to split the part that you want out of
-> follow_dotdot() and use that.  Something like the following.
->
-> You might need a small wrapper in landlock which would, for example,
-> pass LOOKUP_BENEATH and replace path->dentry with the parent on success.
->
-> NeilBrown
->
-> diff --git a/fs/namei.c b/fs/namei.c
-> index 4bb889fc980b..b81d07b4417b 100644
-> --- a/fs/namei.c
-> +++ b/fs/namei.c
-> @@ -2048,36 +2048,65 @@ static struct dentry *follow_dotdot_rcu(struct na=
-meidata *nd)
->         return nd->path.dentry;
->  }
->
-> -static struct dentry *follow_dotdot(struct nameidata *nd)
-> +/**
-> + * path_walk_parent - Find the parent of the given struct path
-> + * @path  - The struct path to start from
-> + * @root  - A struct path which serves as a boundary not to be crosses
-> + * @flags - Some LOOKUP_ flags
-> + *
-> + * Find and return the dentry for the parent of the given path (mount/de=
-ntry).
-> + * If the given path is the root of a mounted tree, it is first updated =
-to
-> + * the mount point on which that tree is mounted.
-> + *
-> + * If %LOOKUP_NO_XDEV is given, then *after* the path is updated to a ne=
-w mount,
-> + * the error EXDEV is returned.
-> + * If no parent can be found, either because the tree is not mounted or =
-because
-> + * the @path matches the @root, then @path->dentry is returned unless @f=
-lags
-> + * contains %LOOKUP_BENEATH, in which case -EXDEV is returned.
-> + *
-> + * Returns: either an ERR_PTR() or the chosen parent which will have had=
- the
-> + * refcount incremented.
-> + */
-> +struct dentry *path_walk_parent(struct path *path, struct path *root, in=
-t flags)
+Link: https://lore.kernel.org/all/6052e8487746603bdb29b65f4033e739092d9925.1737511963.git.jpoimboe@kernel.org/
 
-We can probably call this __path_walk_parent() and make it static.
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+---
+ include/linux/sched.h                 |  5 +++
+ include/linux/unwind_deferred.h       | 24 +++++++++++
+ include/linux/unwind_deferred_types.h |  9 ++++
+ kernel/fork.c                         |  4 ++
+ kernel/unwind/Makefile                |  2 +-
+ kernel/unwind/deferred.c              | 60 +++++++++++++++++++++++++++
+ 6 files changed, 103 insertions(+), 1 deletion(-)
+ create mode 100644 include/linux/unwind_deferred.h
+ create mode 100644 include/linux/unwind_deferred_types.h
+ create mode 100644 kernel/unwind/deferred.c
 
-Then we can add an exported path_walk_parent() that calls
-__path_walk_parent() and adds extra logic.
+diff --git a/include/linux/sched.h b/include/linux/sched.h
+index 4f78a64beb52..59fdf7d9bb1e 100644
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -46,6 +46,7 @@
+ #include <linux/rv.h>
+ #include <linux/uidgid_types.h>
+ #include <linux/tracepoint-defs.h>
++#include <linux/unwind_deferred_types.h>
+ #include <asm/kmap_size.h>
+ 
+ /* task_struct member predeclarations (sorted alphabetically): */
+@@ -1654,6 +1655,10 @@ struct task_struct {
+ 	struct user_event_mm		*user_event_mm;
+ #endif
+ 
++#ifdef CONFIG_UNWIND_USER
++	struct unwind_task_info		unwind_info;
++#endif
++
+ 	/* CPU-specific state of this task: */
+ 	struct thread_struct		thread;
+ 
+diff --git a/include/linux/unwind_deferred.h b/include/linux/unwind_deferred.h
+new file mode 100644
+index 000000000000..5064ebe38c4f
+--- /dev/null
++++ b/include/linux/unwind_deferred.h
+@@ -0,0 +1,24 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _LINUX_UNWIND_USER_DEFERRED_H
++#define _LINUX_UNWIND_USER_DEFERRED_H
++
++#include <linux/unwind_user.h>
++#include <linux/unwind_deferred_types.h>
++
++#ifdef CONFIG_UNWIND_USER
++
++void unwind_task_init(struct task_struct *task);
++void unwind_task_free(struct task_struct *task);
++
++int unwind_deferred_trace(struct unwind_stacktrace *trace);
++
++#else /* !CONFIG_UNWIND_USER */
++
++static inline void unwind_task_init(struct task_struct *task) {}
++static inline void unwind_task_free(struct task_struct *task) {}
++
++static inline int unwind_deferred_trace(struct unwind_stacktrace *trace) { return -ENOSYS; }
++
++#endif /* !CONFIG_UNWIND_USER */
++
++#endif /* _LINUX_UNWIND_USER_DEFERRED_H */
+diff --git a/include/linux/unwind_deferred_types.h b/include/linux/unwind_deferred_types.h
+new file mode 100644
+index 000000000000..aa32db574e43
+--- /dev/null
++++ b/include/linux/unwind_deferred_types.h
+@@ -0,0 +1,9 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _LINUX_UNWIND_USER_DEFERRED_TYPES_H
++#define _LINUX_UNWIND_USER_DEFERRED_TYPES_H
++
++struct unwind_task_info {
++	unsigned long		*entries;
++};
++
++#endif /* _LINUX_UNWIND_USER_DEFERRED_TYPES_H */
+diff --git a/kernel/fork.c b/kernel/fork.c
+index 1ee8eb11f38b..3341d50c61f2 100644
+--- a/kernel/fork.c
++++ b/kernel/fork.c
+@@ -105,6 +105,7 @@
+ #include <uapi/linux/pidfd.h>
+ #include <linux/pidfs.h>
+ #include <linux/tick.h>
++#include <linux/unwind_deferred.h>
+ 
+ #include <asm/pgalloc.h>
+ #include <linux/uaccess.h>
+@@ -732,6 +733,7 @@ void __put_task_struct(struct task_struct *tsk)
+ 	WARN_ON(refcount_read(&tsk->usage));
+ 	WARN_ON(tsk == current);
+ 
++	unwind_task_free(tsk);
+ 	sched_ext_free(tsk);
+ 	io_uring_free(tsk);
+ 	cgroup_free(tsk);
+@@ -2135,6 +2137,8 @@ __latent_entropy struct task_struct *copy_process(
+ 	p->bpf_ctx = NULL;
+ #endif
+ 
++	unwind_task_init(p);
++
+ 	/* Perform scheduler related setup. Assign this task to a CPU. */
+ 	retval = sched_fork(clone_flags, p);
+ 	if (retval)
+diff --git a/kernel/unwind/Makefile b/kernel/unwind/Makefile
+index 349ce3677526..6752ac96d7e2 100644
+--- a/kernel/unwind/Makefile
++++ b/kernel/unwind/Makefile
+@@ -1 +1 @@
+- obj-$(CONFIG_UNWIND_USER) += user.o
++ obj-$(CONFIG_UNWIND_USER)		+= user.o deferred.o
+diff --git a/kernel/unwind/deferred.c b/kernel/unwind/deferred.c
+new file mode 100644
+index 000000000000..0bafb95e6336
+--- /dev/null
++++ b/kernel/unwind/deferred.c
+@@ -0,0 +1,60 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Deferred user space unwinding
++ */
++#include <linux/kernel.h>
++#include <linux/sched.h>
++#include <linux/slab.h>
++#include <linux/unwind_deferred.h>
++
++#define UNWIND_MAX_ENTRIES 512
++
++/**
++ * unwind_deferred_trace - Produce a user stacktrace in faultable context
++ * @trace: The descriptor that will store the user stacktrace
++ *
++ * This must be called in a known faultable context (usually when entering
++ * or exiting user space). Depending on the available implementations
++ * the @trace will be loaded with the addresses of the user space stacktrace
++ * if it can be found.
++ *
++ * Return: 0 on success and negative on error
++ *         On success @trace will contain the user space stacktrace
++ */
++int unwind_deferred_trace(struct unwind_stacktrace *trace)
++{
++	struct unwind_task_info *info = &current->unwind_info;
++
++	/* Should always be called from faultable context */
++	might_fault();
++
++	if (current->flags & PF_EXITING)
++		return -EINVAL;
++
++	if (!info->entries) {
++		info->entries = kmalloc_array(UNWIND_MAX_ENTRIES, sizeof(long),
++					      GFP_KERNEL);
++		if (!info->entries)
++			return -ENOMEM;
++	}
++
++	trace->nr = 0;
++	trace->entries = info->entries;
++	unwind_user(trace, UNWIND_MAX_ENTRIES);
++
++	return 0;
++}
++
++void unwind_task_init(struct task_struct *task)
++{
++	struct unwind_task_info *info = &task->unwind_info;
++
++	memset(info, 0, sizeof(*info));
++}
++
++void unwind_task_free(struct task_struct *task)
++{
++	struct unwind_task_info *info = &task->unwind_info;
++
++	kfree(info->entries);
++}
+-- 
+2.47.2
 
-If this looks good to folks, I can draft v4 based on this idea.
 
-Thanks,
-Song
-
-[...]
