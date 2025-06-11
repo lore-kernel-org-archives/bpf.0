@@ -1,42 +1,42 @@
 Received: from mx0b-00206402.pphosted.com (mx0b-00206402.pphosted.com [148.163.152.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A718E1FFC54;
-	Wed, 11 Jun 2025 21:45:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47B3B247DF9;
+	Wed, 11 Jun 2025 21:49:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.152.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749678315; cv=none; b=axdyTKkxTlU4uvu/xAXvxfVQXuLnspNONKBP85UEW0FynjfualiLxAfe+11MySxnRxsd6pmui3WnycquUDzhUiUw9HI9QHFXDSLZnFANy9wQWb6OciK5agi8VRyzHjxv39Wp3MftY1jqWlcjTeawPDZ52w0/heygvROYrMeIT3o=
+	t=1749678581; cv=none; b=qHF8hKI9oyWkGxiCKRpzIcXR7bNDpVkgxi2jXWV7izp/Y3blWDoDfrgrOS2zH+CpLf8XhjO8FIlRspbrQHmWG1SMVhrKhj3IhtX4FL7OUlenZ3I7Jey6VOXDvn4/5AgYhUZuEEX1L33koksgDY/nVHg/j4NPJgT66flE5pRDTa4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749678315; c=relaxed/simple;
-	bh=nqRO5OgebVyWIVOI2XgZ/jMVe1jj36qOOjMKRb8BlyM=;
+	s=arc-20240116; t=1749678581; c=relaxed/simple;
+	bh=OtDz+EVCzM/AZL6dZm9vgoBTwCYbhlzoU3pVGOM3SQ8=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=OeFhgMJ21ak/rMvE2WHQTJA5SbCJBa1/T4MdHmC0flBPrxr/nbtPvAqAs7Z7Yo3/HWYxbewN5lZ6l1MTarS4iQOQHYuDiQiRH7DUU5FVxqkosQ7ykd9QICTuWuIOThu9hYpdYm0HA2IHEi1tyZhqHXYoAx3iaj/XH3ElewfL+70=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=zLEjSVtS; arc=none smtp.client-ip=148.163.152.16
+	 MIME-Version:Content-Type; b=TDbzNzSdzn4H5kmYAky5VQ/nWdVs2ZcCodfYKT6/+OIZeB86s47tUV69eEmf19lpFf2x4JXBHPD74Z0bXIitFv6G/9jm3mGGg3/kCN4/GAb7tKF91L14bdggyaVAZlAkgSUZv7qPDlI2E+RoHRRYo6Se7MRzoFVVUujTk7IyVAQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=jUf+PHhC; arc=none smtp.client-ip=148.163.152.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="zLEjSVtS"
+	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="jUf+PHhC"
 Received: from pps.filterd (m0354653.ppops.net [127.0.0.1])
-	by mx0b-00206402.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55BKuhkN023871;
-	Wed, 11 Jun 2025 21:39:55 GMT
+	by mx0b-00206402.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55BGUBYc023981;
+	Wed, 11 Jun 2025 21:06:41 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
 	 h=cc:content-transfer-encoding:content-type:date:from
 	:in-reply-to:message-id:mime-version:references:subject:to; s=
-	default; bh=M6eB7MOK4OEpwU3dAcNFsfMvjjyTtN+xja+AsNl5g44=; b=zLEj
-	SVtSK4TrHPJM0lt3e/3g2337w90IU+bXGurNwyHguwm5hh/RIGJVtVWekvEARze4
-	ytc13nylu4rjE+SfYc5PnSt/Iv2dPx9OFdUnbASBZsCLSLkj1wpjN3l+vUwPUZkY
-	QSiE2hDe9cY9Ivnq8iymVgRbnArK4t8jFtkZZfV6N1+KR743Pj154B6zG4mcuD3g
-	pJpL0g5KLPToYLqnKXudQoK3P7O0BKMU5iTEb5T8NYzGo1+J//V2YWvmFMW5jS/i
-	5gAU687G6iIl9A4ES/RKqBxFis8SkG9s+lGqNQ6G7KFXze35ZxBdXWzbKxNRd8zB
-	JyGlc9t/I9snb62Wfg==
+	default; bh=SnGev3U/yD8kg9SDWZeTHMimn/M3rVYK94ITsbFxIR8=; b=jUf+
+	PHhC61HkOauLm/IHn1MrMfklj66WPTUyVwKVrrnjGYbyLsOJUa3I1oBGYIO3tnES
+	4falPcmwRgXzCZMs1KR37H3WPJ4WgyNa69LXtbChVUy50FqTGyzlUUfATRHz3ozd
+	kStvB0TP8Zw21ASY7GItvLH4FEXEZdAWKTTZGbUWzX5nqrUov52ZKcOeGN1Fcgty
+	b3e/XsQn0hjPymzgaHUQkPRjDsYcxzrTGAV+9VcPM4kRz771sEIxyl2LZNO9cdvr
+	0D4tlQv7hdvK4eDeCwsXE55DwATxmME3K/neD1Dj12wl8G1RXKvdv6SvkIfx7Urr
+	GOu9hyKqReB2egUcNA==
 Received: from mail.crowdstrike.com (dragosx.crowdstrike.com [208.42.231.60] (may be forged))
-	by mx0b-00206402.pphosted.com (PPS) with ESMTPS id 476ps7resm-1
+	by mx0b-00206402.pphosted.com (PPS) with ESMTPS id 476ps7r7n7-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 11 Jun 2025 21:39:55 +0000 (GMT)
+	Wed, 11 Jun 2025 21:06:41 +0000 (GMT)
 Received: from ML-CTVHTF21DX.crowdstrike.sys (10.100.11.122) by
  04WPEXCH007.crowdstrike.sys (10.100.11.74) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Wed, 11 Jun 2025 21:39:50 +0000
+ 15.2.1544.9; Wed, 11 Jun 2025 21:06:36 +0000
 From: Slava Imameev <slava.imameev@crowdstrike.com>
 To: <qmo@kernel.org>
 CC: <andrii@kernel.org>, <ast@kernel.org>, <bpf@vger.kernel.org>,
@@ -48,12 +48,12 @@ CC: <andrii@kernel.org>, <ast@kernel.org>, <bpf@vger.kernel.org>,
         <mykolal@fb.com>, <sdf@fomichev.me>, <shuah@kernel.org>,
         <slava.imameev@crowdstrike.com>, <song@kernel.org>,
         <yonghong.song@linux.dev>
-Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: Add test for bpftool access to read-only protected maps
-Date: Thu, 12 Jun 2025 07:39:47 +1000
-Message-ID: <20250611213947.21534-1-slava.imameev@crowdstrike.com>
+Subject: Re: [PATCH bpf-next v2 1/2] bpftool: Use appropriate permissions for map access
+Date: Thu, 12 Jun 2025 07:06:33 +1000
+Message-ID: <20250611210633.92084-1-slava.imameev@crowdstrike.com>
 X-Mailer: git-send-email 2.39.5 (Apple Git-154)
-In-Reply-To: <aaa49f30-d571-4c7e-8135-691252ebc3c2@kernel.org>
-References: <aaa49f30-d571-4c7e-8135-691252ebc3c2@kernel.org>
+In-Reply-To: <c3b403f5-4849-44f3-82cb-b0b506b10138@kernel.org>
+References: <c3b403f5-4849-44f3-82cb-b0b506b10138@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -65,136 +65,164 @@ Content-Type: text/plain
 X-ClientProxiedBy: 04WPEXCH006.crowdstrike.sys (10.100.11.70) To
  04WPEXCH007.crowdstrike.sys (10.100.11.74)
 X-Disclaimer: USA
-X-Proofpoint-ORIG-GUID: CnKjQ_HD441G03lCLB0FU1hd5XguhixQ
-X-Proofpoint-GUID: CnKjQ_HD441G03lCLB0FU1hd5XguhixQ
-X-Authority-Analysis: v=2.4 cv=OeyYDgTY c=1 sm=1 tr=0 ts=6849f7ab cx=c_pps
+X-Proofpoint-ORIG-GUID: ApAh2UNTX3bCMpO1EKz6kR3-5nHK5-ov
+X-Proofpoint-GUID: ApAh2UNTX3bCMpO1EKz6kR3-5nHK5-ov
+X-Authority-Analysis: v=2.4 cv=OeyYDgTY c=1 sm=1 tr=0 ts=6849efe1 cx=c_pps
  a=1d8vc5iZWYKGYgMGCdbIRA==:117 a=1d8vc5iZWYKGYgMGCdbIRA==:17
- a=EjBHVkixTFsA:10 a=6IFa9wvqVegA:10 a=47lfzmhVyG3JbEG8tnMA:9
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjExMDE4MyBTYWx0ZWRfXwl0j1zkJzs7+
- TpuuuLdNhMOZT2PXJRxiPXs61OMK7l7ziPy3cCJMsKncnrnpJ6P+aejJJVbr3coCH+PABQweB7m
- FhxDXc/UcC2JFoO/3/wLwlv97zqH1aryCef5n1jPmySROWSFKw03eCeW8xbJFwC0FU4LyiG7aAA
- pbG/2Y89tG3l8ssHb7z5x4T6PPUpuqI4tBKGDd2bo4R2UIpEcSHHak2bCToNQKYVxp2VJvTjBj2
- Q9SUc5rwI/xU8+N7fZ1M9LdKhwjRzQMDB+FkZEnJ4vGL0nacvhX58ThthSyrVz7cCxjgFdKHT0S
- gtwE+waOdlquDpoEu/HdgWHwhlZH7AMt9g/fX/BnMuUt3kgGbh31KVm2EvG2dIL/JY72nCeldn4
- dI7fXwZ0UD50KZfmLf/xp1K1a3oZ94a6biB25xqb4VgCtvlRdX2dNlBh4wsUSZEYUSrm3ThH
+ a=EjBHVkixTFsA:10 a=6IFa9wvqVegA:10 a=pl6vuDidAAAA:8 a=j6b8ci30a58VJQJFYksA:9
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjExMDE3OCBTYWx0ZWRfX1mcB1tCRvOqP
+ 2JrS/+x3UxZWySTQe5gosarprNVi12I2fnWaZ2dL7d6+RphZkr4hlcgEcesYwLDiIZTDKBf/iKy
+ gx/nPYISkHZ8EQh7ACp6KtnkVL8q40wRqx7gK/VBa0Jw3RGe5wJ4AmFNnbQABEypkC/6um/6hwU
+ Wk9BPQVTe6c1oL/AwR5m/ZykB3rBzEVwmJO9MNfeQAXVs4OlVVJX31pYDfuhx+ic925lwuBVmB4
+ 7xdTow7zBVmgicFLZZDg5tGRTk5TKzBvxk9K0xjmarPe93yqSKAOnKqWr15cmfLeQZBcd92xTBE
+ VEd5/cuKA3PK63cN+dJ7zYlu6TBBhlXeQmFCQ7P+9DRxXhkHIkJ2ny+NlqXRY1IwMMEld2yohng
+ zjReRLJ1P8MFpiMsBPBlgmU3AMAKnf5LRZ2AGTj7BIAHe5EZ3Zi0fosabjwrdQL1PiPVLI4A
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
  definitions=2025-06-11_09,2025-06-10_01,2025-03-28_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- adultscore=0 mlxlogscore=682 spamscore=0 bulkscore=0 suspectscore=0
+ adultscore=0 mlxlogscore=999 spamscore=0 bulkscore=0 suspectscore=0
  malwarescore=0 priorityscore=1501 lowpriorityscore=0 phishscore=0
  impostorscore=0 mlxscore=0 clxscore=1015 classifier=spam authscore=0
  authtc=n/a authcc= route=outbound adjust=0 reason=mlx scancount=1
- engine=8.19.0-2505280000 definitions=main-2506110183
+ engine=8.19.0-2505280000 definitions=main-2506110178
 
-> > +	make -C tools/bpf/bpftool -s -j"$ncpus" OUTPUT="$output_dir"/ >/dev/null
-> > +	echo ... finished building bpftool
-> > +	cd "$pwd"
-> > +}
+> > Modify several functions in tools/bpf/bpftool/common.c to allow
+> > specification of requested access for file descriptors, such as
+> > read-only access.
+> >
+> > Update bpftool to request only read access for maps when write
+> > access is not required. This fixes errors when reading from maps
+> > that are protected from modification via security_bpf_map.
+> >
+> > Signed-off-by: Slava Imameev <slava.imameev@crowdstrike.com>
 >
 >
-> Given that you're reusing the BPF selftests infra, you shouldn't have to
-> rebuild bpftool as part of the test. It's already built from the
-> Makefile, and other tests just assume it's available already (see
-> test_bpftool.py, test_bpftool.sh).
+> Thanks for this!
+>
+> I think the topic of map access in bpftool has been discussed in the
+> path, but I can't remember what we said or find it again - maybe I don't
+> remember correctly. Looks good to me overall.
+>
+> One question: How thoroughly have you tested that write permissions are
+> necessary for the different cases? I'm asking because I'm wondering
+> whether we could restrict to read-only in a couple more cases, see
+> below. (At the end of the day it doesn't matter too much, it's fine
+> being conservative and conserving write permissions for now, we can
+> always refine later; it's already an improvement to do read-only for the
+> dump/list cases).
 
 
-Agree, the build step will be removed for v3.
+The goal of this patch was to fix bpftool errors we experienced on our systems.
+The efforts were focused only on changes to the affected subset of map commands.
 
 
-> > +	# Test write access to the map
-> > +	if "$bpftool_path" map update name "$map_name" key $key value $value; then
-> > +		if [ "$write_should_succeed" = "true" ]; then
-> > +			echo "  Write access to $map_name succeeded as expected"
-> > +		else
-> > +			echo "  Write access to $map_name succeeded but should have failed"
-> > +			exit 1
-> > +		fi
-> > +	else
-> > +		if [ "$write_should_succeed" = "true" ]; then
-> > +			echo "  Write access to $map_name failed but should have succeeded"
-> > +			exit 1
-> > +		else
-> > +			echo "  Write access to $map_name failed as expected"
-> > +		fi
-> > +	fi
-> 
-> 
-> Can we try to delete an item as well, please?
+> > +		/* Get an fd with the requested options. */
+> > +		close(fd);
+> > +		fd = bpf_map_get_fd_by_id_opts(id, opts);
+> > +		if (fd < 0) {
+> > +			p_err("can't get map by id (%u): %s", id,
+> > +			      strerror(errno));
+> > +			goto err_close_fds;
+> > +		}
+>
+>
+> We could maybe skip this step if the requested options are read-only, no
+> need to close and re-open a fd in that case?
 
-I added an item deletion test to v3.
 
+I agree. The change will be submitted with version 3.
+
+
+> > -int map_parse_fds(int *argc, char ***argv, int **fds)
+> > +int map_parse_fds(int *argc, char ***argv, int **fds, __u32 open_flags)
+> >  {
+> > +	LIBBPF_OPTS(bpf_get_fd_by_id_opts, opts);
 > > +
-> > +	# Pin the map to the BPF filesystem
-> > +	"$bpftool_path" map pin name "$map_name" "$pin_path"
-> > +	if [ -e "$pin_path" ]; then
-> > +		echo "  Successfully pinned $map_name to $pin_path"
-> > +	else
-> > +		echo "  Failed to pin $map_name"
-> > +		exit 1
-> > +	fi
-> > +
-> > +	# Test read access to the pinned map
-> > +	if "$bpftool_path" map lookup pinned "$pin_path" key $key; then
-> > +		echo "  Read access to pinned $map_name succeeded"
-> > +	else
-> > +		echo "  Read access to pinned $map_name failed"
-> > +		exit 1
-> > +	fi
-> > +
-> > +	# Test write access to the pinned map
-> > +	if "$bpftool_path" map update pinned "$pin_path" key $key value $value; then
-> > +		if [ "$write_should_succeed" = "true" ]; then
-> > +			echo "  Write access to pinned $map_name succeeded as expected"
-> > +		else
-> > +			echo "  Write access to pinned $map_name succeeded but should have failed"
-> > +			exit 1
-> > +		fi
-> > +	else
-> > +		if [ "$write_should_succeed" = "true" ]; then
-> > +			echo "  Write access to pinned $map_name failed but should have succeeded"
-> > +			exit 1
-> > +		else
-> > +			echo "  Write access to pinned $map_name failed as expected"
-> > +		fi
-> > +	fi
-> 
-> 
-> Maybe refactor lookup/update as a function that you can call before and
-> after pinning the map? (I don't mind much.)
+> > +	if (open_flags & ~BPF_F_RDONLY) {
+> > +		p_err("invalid open_flags: %x", open_flags);
+> > +		return -1;
+> > +	}
+>
+>
+> I don't think we need this check, the flag is never passed by users. If
+> you want to catch a bug, use an assert() instead?
 
 
-I changed it as suggested for v3.
+I agree. This check is replaced with an assert and will be submitted with v3.
 
 
-> > +check_bpffs() {
-> > +	if [ -z "$BPF_FS" ]; then
-> > +		echo "Could not run test without bpffs mounted"
-> 
-> 
-> Why not? Bpftool will attempt to mount it for you if it's not available
-> (create_and_mount_bpffs_dir()).
-> 
-> You could mount it manually to a specific location and unmount it during
->  the clean-up phase, if you wanted to be sure that the test doesn't have
-> any side effect on the filesystem.
+> > diff --git a/tools/bpf/bpftool/iter.c b/tools/bpf/bpftool/iter.c
+> > index 5c39c2ed36a2..ad318a8667a4 100644
+> > --- a/tools/bpf/bpftool/iter.c
+> > +++ b/tools/bpf/bpftool/iter.c
+> > @@ -37,7 +37,7 @@ static int do_pin(int argc, char **argv)
+> >  				return -1;
+> >  			}
+> >  
+> > -			map_fd = map_parse_fd(&argc, &argv);
+> > +			map_fd = map_parse_fd(&argc, &argv, 0);
+>
+>
+> Do you need write permissions here? (I don't remember.)
 
 
-I made changes as suggested for v3.
+Iterator requires only read access. I changed it to BPF_F_RDONLY for v3.
+An iterator test is added to v3.
 
 
-> > +# Load and attach the BPF programs to control maps access
-> > +"$BPFTOOL_PATH" prog loadall "$BPF_FILE_PATH" "$BPF_DIR"/prog autoattach
-> > +
-> > +# Test protected map (write should fail)
-> > +test_map_access "$PROTECTED_MAP_NAME" "false" "$BPFTOOL_PATH" "$BPF_DIR"
-> > +
-> > +# Test not protected map (write should succeed)
-> > +test_map_access "$NOT_PROTECTED_MAP_NAME" "true" "$BPFTOOL_PATH" "$BPF_DIR"
-> 
-> 
-> We could also test map creation here (possibly even with inner maps).
+> > -	fd = map_parse_fd_and_info(&argc, &argv, &info, &len);
+> > +	fd = map_parse_fd_and_info(&argc, &argv, &info, &len, BPF_F_RDONLY);
+>
+>
+> This one is surprising, don't you need write permissions to delete an
+> element from the map? Please double-check if you haven't already, I
+> wouldn't want to break "bpftool map delete".
+>
+> I note you don't test items deletion in your tests, by the way.
 
-I added a test for map-of-maps creation for v3.
+
+Right, the delete command requires write access. I changed it and added
+an item deletion test to v3.
+
+
+> >  static int do_pin(int argc, char **argv)
+> >  {
+> >  	int err;
+> >  
+> > -	err = do_pin_any(argc, argv, map_parse_fd);
+> > +	err = do_pin_any(argc, argv, map_parse_read_only_fd);
+> >  	if (!err && json_output)
+> >  		jsonw_null(json_wtr);
+> >  	return err;
+> > @@ -1319,7 +1329,7 @@ static int do_create(int argc, char **argv)
+> >  			if (!REQ_ARGS(2))
+> >  				usage();
+> >  			inner_map_fd = map_parse_fd_and_info(&argc, &argv,
+> > -							     &info, &len);
+> > +							     &info, &len, 0);
+>
+>
+> Do you need write permissions for the inner map's fd? This is something
+> that could be worth checking in the tests, as well.
+
+The inner map fd can be created with read only access. I changed it and added
+a test for map-of-maps creation to v3.
+
+
+> > @@ -128,7 +128,8 @@ int do_event_pipe(int argc, char **argv)
+> >  	int err, map_fd;
+> >  
+> >  	map_info_len = sizeof(map_info);
+> > -	map_fd = map_parse_fd_and_info(&argc, &argv, &map_info, &map_info_len);
+> > +	map_fd = map_parse_fd_and_info(&argc, &argv, &map_info, &map_info_len,
+> > +				       0);
+>
+>
+> This one might be worth checking, too.
+
+
+An event pipe map fd requires write access as the map is updated by bpf_map_update_elem
+inside __perf_buffer__new .
 
 
