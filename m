@@ -1,31 +1,31 @@
-Received: from relay.hostedemail.com (smtprelay0012.hostedemail.com [216.40.44.12])
+Received: from relay.hostedemail.com (smtprelay0013.hostedemail.com [216.40.44.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1C7217BB6;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2457C1B808;
 	Wed, 11 Jun 2025 01:03:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.12
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749603785; cv=none; b=ZPhMSIGSCwx9QadXBu/J7TEBybDkRUjXq/euJRK7iKt+EweqgCAd971ZCj5tC/h1WhUMT/bkp4tuJswBfWN5mdmtv1crlhzzZxD2snd6914hE4I5G3zZZzzpikYf+HWBTW7sxUF2FXSyPFzElIF4hQD4aHMDI31qDbnnl7LJMcA=
+	t=1749603785; cv=none; b=tGo7y6Q0ybSNRWwk6L04Wri13135G2xZPVafPBsQ57AVx/op4bhJlSzwXdOANBULnB9Wjm9iUpM5j0zrXmJFbl/qme5mlW3ZrilJAv0GBkQPUUZGzhPuGsAf5lhhcSCoqndxebyaB/75M21crRaRmeOuPcYK/0wQntw8kilJTys=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1749603785; c=relaxed/simple;
-	bh=AyHqgtoVY8VieXZI0kCzFifYIGg38Q2Mm5KsA7ZPhWM=;
+	bh=FsBpRUG9mO01SDgziP1KqYDkNXwIMvIjJjcG/j181qo=;
 	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type; b=DUfsaTx/Xaaz78HWv4IRt/SK0/E/jvt7yQHejXCQMqsPcnSfoV+rfty3d79MuhC1iqeCe5lcNAgmE1nLpAuXftkA5aKGOgl7YPc+kJtUZMS5b4WIJKp4JY+ViWTiOd8t0M04J+wRxLy4N18s1PL6wZ60jwUOCHcq2Toijnkz9P8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.12
+	 Content-Type; b=jDXoAByvUkXai90Lp3s7T40EU6uvN3I0AC86JXgDuWFTTCW5cKzEfWQKAASSWXchFO46fy2YT0FnF249GIa4CiKxCVqJ5NCugxHj08IxevOYf5JREWwwwVy1BWuUPTBMC3yA5kkTFjjuHPTLMRXbhfhV96J6VafwTiz92zUErdE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf15.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay07.hostedemail.com (Postfix) with ESMTP id 3C2DF161479;
-	Wed, 11 Jun 2025 01:02:59 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: nevets@goodmis.org) by omf15.hostedemail.com (Postfix) with ESMTPA id 2C5FE17;
-	Wed, 11 Jun 2025 01:02:56 +0000 (UTC)
+Received: from omf01.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay07.hostedemail.com (Postfix) with ESMTP id 5E672161483;
+	Wed, 11 Jun 2025 01:03:00 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: nevets@goodmis.org) by omf01.hostedemail.com (Postfix) with ESMTPA id 6240060009;
+	Wed, 11 Jun 2025 01:02:57 +0000 (UTC)
 Received: from rostedt by gandalf with local (Exim 4.98.2)
 	(envelope-from <rostedt@goodmis.org>)
-	id 1uP9tE-00000000v7m-0J2I;
-	Tue, 10 Jun 2025 21:04:28 -0400
-Message-ID: <20250611010427.923519889@goodmis.org>
+	id 1uP9tF-00000000vBf-1mVG;
+	Tue, 10 Jun 2025 21:04:29 -0400
+Message-ID: <20250611010429.274682576@goodmis.org>
 User-Agent: quilt/0.68
-Date: Tue, 10 Jun 2025 20:54:22 -0400
+Date: Tue, 10 Jun 2025 20:54:30 -0400
 From: Steven Rostedt <rostedt@goodmis.org>
 To: linux-kernel@vger.kernel.org,
  linux-trace-kernel@vger.kernel.org,
@@ -46,7 +46,7 @@ Cc: Masami Hiramatsu <mhiramat@kernel.org>,
  Jens Remus <jremus@linux.ibm.com>,
  Linus Torvalds <torvalds@linux-foundation.org>,
  Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH v10 01/14] unwind_user: Add user space unwinding API
+Subject: [PATCH v10 09/14] unwind deferred: Use SRCU unwind_deferred_task_work()
 References: <20250611005421.144238328@goodmis.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -55,217 +55,144 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Rspamd-Server: rspamout01
-X-Rspamd-Queue-Id: 2C5FE17
-X-Stat-Signature: o8opz6oua8crdq3fft4epmfwhi3d37z4
+X-Rspamd-Queue-Id: 6240060009
+X-Stat-Signature: dt5tmn58ihicz5p8idskysj4amfx3z6y
+X-Rspamd-Server: rspamout06
 X-Session-Marker: 6E657665747340676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX181uCPnTOZlY+s0XxsdUKjikqA8ZBlJOFY=
-X-HE-Tag: 1749603776-202463
-X-HE-Meta: U2FsdGVkX18LSM9wrvoebXmeg9hhppJB4N88SZahvgAptmkGIIxMMtHzTMGF1Nhk0LFwzk/pbiOry1Ia6BcaVRSSnl+dQLTq+tWNSKZwBjYcsdTTbc+qWzBFOgUxRF9tv5XtleI+LpfHypbPeI64FxdmaMIOCki4NY637jUhuJnrrLz0IrAtbXZgGTRi7+9fRdBdIY0XttKlsJqAcgTwkgkAiRVHhzxv9uhQDYg8VF6x3ZHXfOSfHz9XQOq4QfhubmfEsJj93Wxxo3Kdid6RQVNnQ3yNQ4XSsFTxY0ULPfO6UGI+v44+BObD2V7HLxjJ04Uoig//cgMmAb6nIcJ4fPPx//Zlw0c1BxsUVV27EU67UcdXcJKwejM6DfpUojYnkEboKwLzRvfC3ZRQx5gvR94jjh3yl1Qw8rRsTuNC4ysFWm2/7GQ01nFxxvwhQFEC7pJUaM0lSw0=
+X-Session-ID: U2FsdGVkX1/z9/lilI4oan58reBSJkvqzJyIm0ANZTc=
+X-HE-Tag: 1749603777-714072
+X-HE-Meta: U2FsdGVkX18F1GndJ4MsaZwcZTkiwymhcSzlC32dYaGbcH34MXUm3bsVx4aMVJySzo1QIUnjN7tSgIayhxT8qI9eD29p6HF+Gubz18a6STGzo+Bqj4DAn3ks5DtYjc3IaB4PUrQZSmO/F7q7wlR+UquGIMy2ZHMv2Ap8Y2mwu1UEX9vZ6mrjSHKxaBec45KJh+ZxPUd32zpH93KJi37jgiSt/ED9xrFZwCuNHfkh+bONFggIlGZu7Jo20EpQyPGVdY6cnEc/1K+pYmBwTQhLTeuisFE5dLGnXc3ioHMwR0Ql1eNwXXHZNMmvctL87Ydpxdg35CDSjCEc0tw46TUyh7umy3CSHj+jX22rUCmuLAUHwmssV9nU2JBI2qXnJrMuGYF8KiDWWbZ+DdUl2qU9MXVlkd56ijwaHSHNUePI0mfvIimmlms/QYrkH7ubJFir4Q5MbFgin8Iy/HDKeRi2cyoN0K8tG/YZHKgcsTD+zyk=
 
-From: Josh Poimboeuf <jpoimboe@kernel.org>
+From: Steven Rostedt <rostedt@goodmis.org>
 
-Introduce a generic API for unwinding user stacks.
+Instead of using the callback_mutex to protect the link list of callbacks
+in unwind_deferred_task_work(), use SRCU instead. This gets called every
+time a task exits that has to record a stack trace that was requested.
+This can happen for many tasks on several CPUs at the same time. A mutex
+is a bottleneck and can cause a bit of contention and slow down performance.
 
-In order to expand user space unwinding to be able to handle more complex
-scenarios, such as deferred unwinding and reading user space information,
-create a generic interface that all architectures can use that support the
-various unwinding methods.
+As the callbacks themselves are allowed to sleep, regular RCU cannot be
+used to protect the list. Instead use SRCU, as that still allows the
+callbacks to sleep and the list can be read without needing to hold the
+callback_mutex.
 
-This is an alternative method for handling user space stack traces from
-the simple stack_trace_save_user() API. This does not replace that
-interface, but this interface will be used to expand the functionality of
-user space stack walking.
+Link: https://lore.kernel.org/all/ca9bd83a-6c80-4ee0-a83c-224b9d60b755@efficios.com/
 
-None of the structures introduced will be exposed to user space tooling.
-
-Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+Suggested-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- MAINTAINERS                       |  8 +++++
- arch/Kconfig                      |  3 ++
- include/linux/unwind_user.h       | 15 +++++++++
- include/linux/unwind_user_types.h | 31 +++++++++++++++++
- kernel/Makefile                   |  1 +
- kernel/unwind/Makefile            |  1 +
- kernel/unwind/user.c              | 55 +++++++++++++++++++++++++++++++
- 7 files changed, 114 insertions(+)
- create mode 100644 include/linux/unwind_user.h
- create mode 100644 include/linux/unwind_user_types.h
- create mode 100644 kernel/unwind/Makefile
- create mode 100644 kernel/unwind/user.c
+ kernel/unwind/deferred.c | 33 +++++++++++++++++++++++++--------
+ 1 file changed, 25 insertions(+), 8 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index a92290fffa16..8617f87bceed 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -25885,6 +25885,14 @@ F:	Documentation/driver-api/uio-howto.rst
- F:	drivers/uio/
- F:	include/linux/uio_driver.h
+diff --git a/kernel/unwind/deferred.c b/kernel/unwind/deferred.c
+index 268afae31ba4..e44538a2be6c 100644
+--- a/kernel/unwind/deferred.c
++++ b/kernel/unwind/deferred.c
+@@ -13,10 +13,11 @@
  
-+USERSPACE STACK UNWINDING
-+M:	Josh Poimboeuf <jpoimboe@kernel.org>
-+M:	Steven Rostedt <rostedt@goodmis.org>
-+S:	Maintained
-+F:	include/linux/unwind*.h
-+F:	kernel/unwind/
-+
-+
- UTIL-LINUX PACKAGE
- M:	Karel Zak <kzak@redhat.com>
- L:	util-linux@vger.kernel.org
-diff --git a/arch/Kconfig b/arch/Kconfig
-index a3308a220f86..ea59e5d7cc69 100644
---- a/arch/Kconfig
-+++ b/arch/Kconfig
-@@ -435,6 +435,9 @@ config HAVE_HARDLOCKUP_DETECTOR_ARCH
- 	  It uses the same command line parameters, and sysctl interface,
- 	  as the generic hardlockup detectors.
+ #define UNWIND_MAX_ENTRIES 512
  
-+config UNWIND_USER
-+	bool
-+
- config HAVE_PERF_REGS
- 	bool
- 	help
-diff --git a/include/linux/unwind_user.h b/include/linux/unwind_user.h
-new file mode 100644
-index 000000000000..aa7923c1384f
---- /dev/null
-+++ b/include/linux/unwind_user.h
-@@ -0,0 +1,15 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _LINUX_UNWIND_USER_H
-+#define _LINUX_UNWIND_USER_H
-+
-+#include <linux/unwind_user_types.h>
-+
-+int unwind_user_start(struct unwind_user_state *state);
-+int unwind_user_next(struct unwind_user_state *state);
-+
-+int unwind_user(struct unwind_stacktrace *trace, unsigned int max_entries);
-+
-+#define for_each_user_frame(state) \
-+	for (unwind_user_start((state)); !(state)->done; unwind_user_next((state)))
-+
-+#endif /* _LINUX_UNWIND_USER_H */
-diff --git a/include/linux/unwind_user_types.h b/include/linux/unwind_user_types.h
-new file mode 100644
-index 000000000000..6ed1b4ae74e1
---- /dev/null
-+++ b/include/linux/unwind_user_types.h
-@@ -0,0 +1,31 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _LINUX_UNWIND_USER_TYPES_H
-+#define _LINUX_UNWIND_USER_TYPES_H
-+
-+#include <linux/types.h>
-+
-+enum unwind_user_type {
-+	UNWIND_USER_TYPE_NONE,
-+};
-+
-+struct unwind_stacktrace {
-+	unsigned int	nr;
-+	unsigned long	*entries;
-+};
-+
-+struct unwind_user_frame {
-+	s32 cfa_off;
-+	s32 ra_off;
-+	s32 fp_off;
-+	bool use_fp;
-+};
-+
-+struct unwind_user_state {
-+	unsigned long ip;
-+	unsigned long sp;
-+	unsigned long fp;
-+	enum unwind_user_type type;
-+	bool done;
-+};
-+
-+#endif /* _LINUX_UNWIND_USER_TYPES_H */
-diff --git a/kernel/Makefile b/kernel/Makefile
-index 32e80dd626af..541186050251 100644
---- a/kernel/Makefile
-+++ b/kernel/Makefile
-@@ -55,6 +55,7 @@ obj-y += rcu/
- obj-y += livepatch/
- obj-y += dma/
- obj-y += entry/
-+obj-y += unwind/
- obj-$(CONFIG_MODULES) += module/
+-/* Guards adding to and reading the list of callbacks */
++/* Guards adding to or removing from the list of callbacks */
+ static DEFINE_MUTEX(callback_mutex);
+ static LIST_HEAD(callbacks);
+ static unsigned long unwind_mask;
++DEFINE_STATIC_SRCU(unwind_srcu);
  
- obj-$(CONFIG_KCMP) += kcmp.o
-diff --git a/kernel/unwind/Makefile b/kernel/unwind/Makefile
-new file mode 100644
-index 000000000000..349ce3677526
---- /dev/null
-+++ b/kernel/unwind/Makefile
-@@ -0,0 +1 @@
-+ obj-$(CONFIG_UNWIND_USER) += user.o
-diff --git a/kernel/unwind/user.c b/kernel/unwind/user.c
-new file mode 100644
-index 000000000000..d30449328981
---- /dev/null
-+++ b/kernel/unwind/user.c
-@@ -0,0 +1,55 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+* Generic interfaces for unwinding user space
-+*/
-+#include <linux/kernel.h>
-+#include <linux/sched.h>
-+#include <linux/sched/task_stack.h>
-+#include <linux/unwind_user.h>
-+
-+int unwind_user_next(struct unwind_user_state *state)
-+{
-+	/* no implementation yet */
-+	return -EINVAL;
-+}
-+
-+int unwind_user_start(struct unwind_user_state *state)
-+{
-+	struct pt_regs *regs = task_pt_regs(current);
-+
-+	memset(state, 0, sizeof(*state));
-+
-+	if ((current->flags & PF_KTHREAD) || !user_mode(regs)) {
-+		state->done = true;
-+		return -EINVAL;
-+	}
-+
-+	state->type = UNWIND_USER_TYPE_NONE;
-+
-+	state->ip = instruction_pointer(regs);
-+	state->sp = user_stack_pointer(regs);
-+	state->fp = frame_pointer(regs);
-+
-+	return 0;
-+}
-+
-+int unwind_user(struct unwind_stacktrace *trace, unsigned int max_entries)
-+{
-+	struct unwind_user_state state;
-+
-+	trace->nr = 0;
-+
-+	if (!max_entries)
+ /*
+  * Read the task context timestamp, if this is the first caller then
+@@ -107,6 +108,7 @@ static void unwind_deferred_task_work(struct callback_head *head)
+ 	struct unwind_stacktrace trace;
+ 	struct unwind_work *work;
+ 	u64 timestamp;
++	int idx;
+ 
+ 	if (WARN_ON_ONCE(!info->pending))
+ 		return;
+@@ -132,13 +134,15 @@ static void unwind_deferred_task_work(struct callback_head *head)
+ 
+ 	timestamp = info->timestamp;
+ 
+-	guard(mutex)(&callback_mutex);
+-	list_for_each_entry(work, &callbacks, list) {
++	idx = srcu_read_lock(&unwind_srcu);
++	list_for_each_entry_srcu(work, &callbacks, list,
++				 srcu_read_lock_held(&unwind_srcu)) {
+ 		if (info->unwind_mask & BIT(work->bit)) {
+ 			work->func(work, &trace, timestamp);
+ 			clear_bit(work->bit, &info->unwind_mask);
+ 		}
+ 	}
++	srcu_read_unlock(&unwind_srcu, idx);
+ }
+ 
+ static int unwind_deferred_request_nmi(struct unwind_work *work, u64 *timestamp)
+@@ -215,6 +219,7 @@ int unwind_deferred_request(struct unwind_work *work, u64 *timestamp)
+ {
+ 	struct unwind_task_info *info = &current->unwind_info;
+ 	int pending;
++	int bit;
+ 	int ret;
+ 
+ 	*timestamp = 0;
+@@ -226,12 +231,17 @@ int unwind_deferred_request(struct unwind_work *work, u64 *timestamp)
+ 	if (in_nmi())
+ 		return unwind_deferred_request_nmi(work, timestamp);
+ 
++	/* Do not allow cancelled works to request again */
++	bit = READ_ONCE(work->bit);
++	if (WARN_ON_ONCE(bit < 0))
 +		return -EINVAL;
 +
-+	if (current->flags & PF_KTHREAD)
-+		return 0;
+ 	guard(irqsave)();
+ 
+ 	*timestamp = get_timestamp(info);
+ 
+ 	/* This is already queued */
+-	if (info->unwind_mask & BIT(work->bit))
++	if (info->unwind_mask & BIT(bit))
+ 		return 1;
+ 
+ 	/* callback already pending? */
+@@ -257,19 +267,26 @@ int unwind_deferred_request(struct unwind_work *work, u64 *timestamp)
+ void unwind_deferred_cancel(struct unwind_work *work)
+ {
+ 	struct task_struct *g, *t;
++	int bit;
+ 
+ 	if (!work)
+ 		return;
+ 
+ 	guard(mutex)(&callback_mutex);
+-	list_del(&work->list);
++	list_del_rcu(&work->list);
++	bit = work->bit;
 +
-+	for_each_user_frame(&state) {
-+		trace->entries[trace->nr++] = state.ip;
-+		if (trace->nr >= max_entries)
-+			break;
-+	}
++	/* Do not allow any more requests and prevent callbacks */
++	work->bit = -1;
 +
-+	return 0;
-+}
++	clear_bit(bit, &unwind_mask);
+ 
+-	clear_bit(work->bit, &unwind_mask);
++	synchronize_srcu(&unwind_srcu);
+ 
+ 	guard(rcu)();
+ 	/* Clear this bit from all threads */
+ 	for_each_process_thread(g, t) {
+-		clear_bit(work->bit, &t->unwind_info.unwind_mask);
++		clear_bit(bit, &t->unwind_info.unwind_mask);
+ 	}
+ }
+ 
+@@ -286,7 +303,7 @@ int unwind_deferred_init(struct unwind_work *work, unwind_callback_t func)
+ 	work->bit = ffz(unwind_mask);
+ 	unwind_mask |= BIT(work->bit);
+ 
+-	list_add(&work->list, &callbacks);
++	list_add_rcu(&work->list, &callbacks);
+ 	work->func = func;
+ 	return 0;
+ }
 -- 
 2.47.2
 
