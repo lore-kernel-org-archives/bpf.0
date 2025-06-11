@@ -1,47 +1,47 @@
-Received: from mx-rz-2.rrze.uni-erlangen.de (mx-rz-2.rrze.uni-erlangen.de [131.188.11.21])
+Received: from mx-rz-1.rrze.uni-erlangen.de (mx-rz-1.rrze.uni-erlangen.de [131.188.11.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6828B1F7904;
-	Wed, 11 Jun 2025 21:14:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=131.188.11.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7AC91BD9CE;
+	Wed, 11 Jun 2025 21:23:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=131.188.11.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749676444; cv=none; b=EHZCb1cnOr5HaLaMwqlWmJ6KpnhWjRN39ZrI8eZT1VfAzU0MSR4lgUCCQBymtVIpoiAQrOO8aFjxsMWTDw/ldLWUFj+hHgQrvFJWm3WB2A41MoN4VuPxGomaTdbeQ+yQ5xqtKeH9xCrvAQXlBnn+K8wxmidr3xBwZrIZQT0B6Uo=
+	t=1749677039; cv=none; b=bulC0PajIt2khmUIQghsRSLVKqwkKS3fdZQKeKGs4Zg7ZWkBWYd/ej67pLHg8W8yyui0f+UVMzzzbxfSI9FyhX7JiFfnzGL0823U3MTj5SScqF7HF4WYXltBrTFkOFiv+weTDQhnnn8ZfgDaDqe0ZHq0RmBMfikUQCkeijfNU5k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749676444; c=relaxed/simple;
-	bh=123Y/VUR32niZhCHmmjiMZx7FMUBE0IJr1z6U7X4cNE=;
+	s=arc-20240116; t=1749677039; c=relaxed/simple;
+	bh=t1zJH4Rmm4htAzj/dQwNCS9TEe1c1gCbgRoNZ2a76h4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=gIXZRaw1NVNbZP8QTZjh3kuadGpGY6AvA8zGTTkgwSjDmd9XdpJ8daiJdMDmb/03rmYU7olNPB4jQvC4W/8j20PFc6Q8v8/eYSRT42NB6djm/g55wIEVGbaoLL30al6xfzdiiZe2TqYuRMjaEg2nZ1G8l9bV/uh27c7vI5PJhM8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fau.de; spf=pass smtp.mailfrom=fau.de; dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.b=TTxOyECL; arc=none smtp.client-ip=131.188.11.21
+	 MIME-Version; b=pmjGXMk3QCKFgFTT68iAmRpIwKmw34sleU895c+CEsdg15rSKJJqlR+aB62ooiKlYt6qxQISHckIahuxK1gE55QH1o3NNUs9PUUuxiLBRZ9aJMVJtqnnEzk/047LEXygW8m46lQTewkpHDYyQocm1SSt3rmJW/RFsLiKtzgfQak=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fau.de; spf=pass smtp.mailfrom=fau.de; dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.b=GB7QRGZ5; arc=none smtp.client-ip=131.188.11.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fau.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fau.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.b="TTxOyECL"
+	dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.b="GB7QRGZ5"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fau.de; s=fau-2021;
-	t=1749676106; bh=SCKfOOSOyeoVjmJnLCPkDxbbVBBcC0ITZCX1zItnZbI=;
+	t=1749676562; bh=S2j0xHEZeQOTVtx7TJX88U0NbtEMbxvs08E3DcOiM3k=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From:To:CC:
 	 Subject;
-	b=TTxOyECLcB9SDsb2/N6+cXBw3ZgEPfYveEtZaPg9pX40OqZHp5PSX2yGkhh8DgVdz
-	 dWnP1jcsZhWVOPVHGujAZdylhyUWQFMaqDGmOAUXt6sB40bAnc/FRgp3IG938oP5jd
-	 EbXveXMUyFlGnnhe86ASG8hbXITApl21ujueGKCBf3s90KO9+u5YqkN4EmmHSxGWf0
-	 truTIaCRpjcgFgnQXlQypO8aZ09Y/TqDWFzA1Z6eGUGotCq5sy6BX6cSAmO4NdVSH4
-	 v+I0CPVULxBWq6++OoQkaMwqcpso/5Afnv4XCfPG4OXMelHF/4DLRfl/pj/n4SJW5f
-	 wE65+xLMnklRw==
+	b=GB7QRGZ5lNQDix0fSkRgtNjMUUycMz/UHj26osAKdXgqXZKpzhvC7+v9XyS8QmlYC
+	 azUB/LpaFU0XoJC/mJ0vbZ/D59tDhDxJBssj5jaqn1fbH695ZHK/xkgYdQIE7kK+sS
+	 N5j8WALlbhpLQrq98pYbzkDR7mjZlqOt+NDyWZyph3hi749A9BIreU1ETu6Pg/Pma7
+	 QZXaBnZdUvryQAzJbNaE60AG/8ryVYMTcyp52o6CfoGab8AYoxvbeVrnlVBXMvDLHI
+	 OyijBtu3r24T5wMOIZBqjwlbpMaG3cg0dUtM4NFqKqTy0xGay1OeXO7hnwnR+7souS
+	 uQpsPOkO1Iuxg==
 Received: from mx-rz-smart.rrze.uni-erlangen.de (mx-rz-smart.rrze.uni-erlangen.de [IPv6:2001:638:a000:1025::1e])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-rz-2.rrze.uni-erlangen.de (Postfix) with ESMTPS id 4bHdYQ5phXzPk2s;
-	Wed, 11 Jun 2025 23:08:26 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at boeck2.rrze.uni-erlangen.de (RRZE)
+	by mx-rz-1.rrze.uni-erlangen.de (Postfix) with ESMTPS id 4bHdkB0q3Sz8sk1;
+	Wed, 11 Jun 2025 23:16:02 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at boeck1.rrze.uni-erlangen.de (RRZE)
 X-RRZE-Flag: Not-Spam
 X-RRZE-Submit-IP: 2001:9e8:3626:500:39da:8819:39bd:1255
 Received: from luis-tp.fritz.box (unknown [IPv6:2001:9e8:3626:500:39da:8819:39bd:1255])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	(Authenticated sender: U2FsdGVkX19M3XQgzUSjR5vKVmuW0oXhCVKObzOx14A=)
-	by smtp-auth.uni-erlangen.de (Postfix) with ESMTPSA id 4bHdYM4FmRzPjmG;
-	Wed, 11 Jun 2025 23:08:23 +0200 (CEST)
+	(Authenticated sender: U2FsdGVkX19Vu+9xQHHGMkmfqtW7CJMHQ2bOqLm6aCk=)
+	by smtp-auth.uni-erlangen.de (Postfix) with ESMTPSA id 4bHdk70Msdz8spC;
+	Wed, 11 Jun 2025 23:15:58 +0200 (CEST)
 From: Luis Gerhorst <luis.gerhorst@fau.de>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -55,15 +55,12 @@ To: Alexei Starovoitov <ast@kernel.org>,
 	Stanislav Fomichev <sdf@fomichev.me>,
 	Hao Luo <haoluo@google.com>,
 	Jiri Olsa <jolsa@kernel.org>,
-	Luis Gerhorst <luis.gerhorst@fau.de>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Henriette Herzog <henriette.herzog@rub.de>,
 	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Cc: syzbot+b5eb72a560b8149a1885@syzkaller.appspotmail.com
-Subject: [PATCH bpf-next] bpf: Fix state use-after-free on push_stack() err
-Date: Wed, 11 Jun 2025 23:07:28 +0200
-Message-ID: <20250611210728.266563-1-luis.gerhorst@fau.de>
+Cc: Luis Gerhorst <luis.gerhorst@fau.de>
+Subject: [PATCH bpf-next] bpf: Remove redundant free_verifier_state()/pop_stack()
+Date: Wed, 11 Jun 2025 23:14:31 +0200
+Message-ID: <20250611211431.275731-1-luis.gerhorst@fau.de>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <b6931bd0dd72327c55287862f821ca6c4c3eb69a.camel@gmail.com>
 References: <b6931bd0dd72327c55287862f821ca6c4c3eb69a.camel@gmail.com>
@@ -75,65 +72,86 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Without this, `state->speculative` is used after the cleanup cycles in
-push_stack() or push_async_cb() freed `env->cur_state` (i.e., `state`).
-Avoid this by relying on the short-circuit logic to only access `state`
-if the error is recoverable (and make sure it never is after push_*()
-failed).
+This patch removes duplicated code.
 
-push_*() callers must always return an error for which
-error_recoverable_with_nospec(err) is false if push_*() returns NULL,
-otherwise we try to recover and access the stale `state`. This is only
-violated by sanitize_ptr_alu(), thus also fix this case to return
--ENOMEM.
+Eduard points out [1]:
 
-state->speculative does not make sense if the error path of push_*()
-ran. In that case, `state->speculative &&
-error_recoverable_with_nospec(err)` as a whole should already never
-evaluate to true (because all cases where push_stack() fails must return
--ENOMEM/-EFAULT). As mentioned, this is only violated by the
-push_stack() call in sanitize_speculative_path() which returns -EACCES
-without [1] (through REASON_STACK in sanitize_err() after
-sanitize_ptr_alu()). To fix this, return -ENOMEM for REASON_STACK (which
-is also the behavior we will have after [1]).
+    Same cleanup cycles are done in push_stack() and push_async_cb(),
+    both functions are only reachable from do_check_common() via
+    do_check() -> do_check_insn().
 
-Checked that it fixes the syzbot reproducer as expected.
+    Hence, I think that cur state should not be freed in push_*()
+    functions and pop_stack() loop there is not needed.
 
-[1] https://lore.kernel.org/all/20250603213232.339242-1-luis.gerhorst@fau.de/
+This would also fix the 'symptom' for [2], but the issue also has a
+simpler fix which was sent separately. This fix also makes sure the
+push_*() callers always return an error for which
+error_recoverable_with_nospec(err) is false. This is required because
+otherwise we try to recover and access the stale `state`.
 
-Fixes: d6f1c85f2253 ("bpf: Fall back to nospec for Spectre v1")
-Reported-by: syzbot+b5eb72a560b8149a1885@syzkaller.appspotmail.com
+[1] https://lore.kernel.org/all/b6931bd0dd72327c55287862f821ca6c4c3eb69a.camel@gmail.com/
+[2] https://lore.kernel.org/all/68497853.050a0220.33aa0e.036a.GAE@google.com/
+
 Reported-by: Eduard Zingerman <eddyz87@gmail.com>
-Link: https://lore.kernel.org/all/38862a832b91382cddb083dddd92643bed0723b8.camel@gmail.com/
+Link: https://lore.kernel.org/all/b6931bd0dd72327c55287862f821ca6c4c3eb69a.camel@gmail.com/
 Signed-off-by: Luis Gerhorst <luis.gerhorst@fau.de>
 ---
- kernel/bpf/verifier.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ kernel/bpf/verifier.c | 26 +++++++++++---------------
+ 1 file changed, 11 insertions(+), 15 deletions(-)
 
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index b1f797616f20..d3bff0385a55 100644
+index d3bff0385a55..fa147c207c4b 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -14229,7 +14229,7 @@ static int sanitize_err(struct bpf_verifier_env *env,
- 	case REASON_STACK:
- 		verbose(env, "R%d could not be pushed for speculative verification, %s\n",
- 			dst, err);
--		break;
-+		return -ENOMEM;
- 	default:
- 		verbose(env, "verifier internal error: unknown reason (%d)\n",
- 			reason);
-@@ -19753,7 +19753,7 @@ static int do_check(struct bpf_verifier_env *env)
- 			goto process_bpf_exit;
+@@ -2066,10 +2066,10 @@ static struct bpf_verifier_state *push_stack(struct bpf_verifier_env *env,
+ 	}
+ 	return &elem->st;
+ err:
+-	free_verifier_state(env->cur_state, true);
+-	env->cur_state = NULL;
+-	/* pop all elements and return */
+-	while (!pop_stack(env, NULL, NULL, false));
++	/* free_verifier_state() and pop_stack() loop will be done in
++	 * do_check_common(). Caller must return an error for which
++	 * error_recoverable_with_nospec(err) is false.
++	 */
+ 	return NULL;
+ }
  
- 		err = do_check_insn(env, &do_print_state);
--		if (state->speculative && error_recoverable_with_nospec(err)) {
-+		if (error_recoverable_with_nospec(err) && state->speculative) {
- 			/* Prevent this speculative path from ever reaching the
- 			 * insn that would have been unsafe to execute.
- 			 */
+@@ -2838,10 +2838,10 @@ static struct bpf_verifier_state *push_async_cb(struct bpf_verifier_env *env,
+ 	elem->st.frame[0] = frame;
+ 	return &elem->st;
+ err:
+-	free_verifier_state(env->cur_state, true);
+-	env->cur_state = NULL;
+-	/* pop all elements and return */
+-	while (!pop_stack(env, NULL, NULL, false));
++	/* free_verifier_state() and pop_stack() loop will be done in
++	 * do_check_common(). Caller must return an error for which
++	 * error_recoverable_with_nospec(err) is false.
++	 */
+ 	return NULL;
+ }
+ 
+@@ -22904,13 +22904,9 @@ static int do_check_common(struct bpf_verifier_env *env, int subprog)
+ 
+ 	ret = do_check(env);
+ out:
+-	/* check for NULL is necessary, since cur_state can be freed inside
+-	 * do_check() under memory pressure.
+-	 */
+-	if (env->cur_state) {
+-		free_verifier_state(env->cur_state, true);
+-		env->cur_state = NULL;
+-	}
++	WARN_ON_ONCE(!env->cur_state);
++	free_verifier_state(env->cur_state, true);
++	env->cur_state = NULL;
+ 	while (!pop_stack(env, NULL, NULL, false));
+ 	if (!ret && pop_log)
+ 		bpf_vlog_reset(&env->log, 0);
 
-base-commit: 2d72dd14d77f31a7caa619fe0b889304844e612e
+base-commit: 1d251153a480fc7467d00a8c5dabc55cc6166c43
 -- 
 2.49.0
 
