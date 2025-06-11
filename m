@@ -1,30 +1,32 @@
-Received: from out-181.mta0.migadu.com (out-181.mta0.migadu.com [91.218.175.181])
+Received: from out-177.mta1.migadu.com (out-177.mta1.migadu.com [95.215.58.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F71424A04A;
-	Wed, 11 Jun 2025 22:16:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFD6C22CBD5
+	for <bpf@vger.kernel.org>; Wed, 11 Jun 2025 22:16:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749680170; cv=none; b=twqIyOMTwslA4ddZpi3qqNJp7Db56c8qR+BJfDD4JaZe1bjpwuQHMv25K7tBuSIeePYdZ9CPL3mnVsn73ehND1r9/XMnUqhkAQyRMTyPuEcfMxVKV9R9HirQnwsyKUk+ZWNa9+h5L4alXZ3/x/xzQ3nBFcmJK1enrHzhSSfbQs4=
+	t=1749680179; cv=none; b=bcyFkBEEeHInM8AZNnhXIXofHN2Zhk488vPHmV3gBpltgtN5YxnkHP8ZogEVFUbSFFwKnPAhoSqP3/VtLieZyQiwQ+vd9VbsTjVoZoX84mRCQ76Wz3XpQBxsZE4FRl48j6EvDEy5F1UubBP4mC1YyE1dx45R04gyDqKmPkXVZp4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749680170; c=relaxed/simple;
-	bh=nlAgSavjtdsiPe9rsk1pY8gZUiGpNyTj6HcBVPcuhPc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=FbSgxPuAV3yjJZhkYRokZ1WXZ/+22x3WvRnw21XxOOSMgUUDEbI72IIHzUOSp5HXiEhN1LWzfkQ4pL/8IL9CFnmHFEAj+89RqC92cGdln2nVjzKaOgBB/PHylypwcHNYqJ9B3ykzX+ezG64J0ARlXSIrwCXQLrTRZWPKMyVN414=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=H4KFhf79; arc=none smtp.client-ip=91.218.175.181
+	s=arc-20240116; t=1749680179; c=relaxed/simple;
+	bh=D68pq3sMPpHvWgI65rGf3z86KZKo1vQhqxt3HJb4DCI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=egKtHdtML/bUORts1ATqZTUYWt5KHkZWMcF0WeZKIyubURMbzO0qxNHFEvSdbpI+SoJaPm4De2mGm7M/YM7f5U8VbR0E7RD6hjN9rHhHbetEC7qi0M9F+Cs0oJmb9OESrpPLP54mTy0wRMte/ctA1rKW9fkNemzLGWlmyj4kxNM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=OV/VvR3x; arc=none smtp.client-ip=95.215.58.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="H4KFhf79"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="OV/VvR3x"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1749680154;
+	t=1749680173;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=lYytpibLt4/Z7wsWilf15mdzCpQBPoxPKxpntneeV0s=;
-	b=H4KFhf7971HKrGdif2KwiqK92xb+/SwP2ksEGNoh4wz57QCSWT8YmWoMcT6Pt/6N0+wpB/
-	Iw36uws2qtccUfqOAbMTtP7mYI/LbttTWzgnJ/IAZIH5m8LVNolgiL/F2dhWuVrnqX1DVH
-	GQOum3dN6a4RzH/KhZXizuX8H62+r3M=
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=nkbZifWNsj/jvVHvX2J02HCzx/mgIhtufDCBJPadwMA=;
+	b=OV/VvR3xcNT6rWYSnEPGYAXvZ6T08E2DVqQ91TNN8F7Nla1meRLbeLt8SoZA8cAFGXL8AL
+	hHsbj18GcI7in7vU6DKq6ooauHFQ5lXLVx4EZU3TvIjrivt3QVjMpPRcHVcx/qxyVXGXCv
+	MambegDnX8BmL6SlDCIqf6Pa5GKUNR4=
 From: Shakeel Butt <shakeel.butt@linux.dev>
 To: Tejun Heo <tj@kernel.org>,
 	Andrew Morton <akpm@linux-foundation.org>
@@ -44,9 +46,11 @@ Cc: JP Kobryn <inwardvessel@gmail.com>,
 	cgroups@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Meta kernel team <kernel-team@meta.com>
-Subject: [PATCH v2 0/4] cgroup: nmi safe css_rstat_updated
-Date: Wed, 11 Jun 2025 15:15:28 -0700
-Message-ID: <20250611221532.2513772-1-shakeel.butt@linux.dev>
+Subject: [PATCH v2 3/4] cgroup: remove per-cpu per-subsystem locks
+Date: Wed, 11 Jun 2025 15:15:31 -0700
+Message-ID: <20250611221532.2513772-4-shakeel.butt@linux.dev>
+In-Reply-To: <20250611221532.2513772-1-shakeel.butt@linux.dev>
+References: <20250611221532.2513772-1-shakeel.butt@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -56,61 +60,262 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-BPF programs can run in nmi context and may trigger memcg charged memory
-allocation in such context. Recently linux added support to nmi safe
-page allocation along with memcg charging of such allocations. However
-the kmalloc/slab support and corresponding memcg charging is still
-lacking,
+The rstat update side used to insert the cgroup whose stats are updated
+in the update tree and the read side flush the update tree to get the
+latest uptodate stats. The per-cpu per-subsystem locks were used to
+synchronize the update and flush side. However now the update side does
+not access update tree but uses per-cpu lockless lists. So there is no
+need for locks to synchronize update and flush side. Let's remove them.
 
-To provide nmi safe support for memcg charging for kmalloc/slab
-allocations, we need nmi safe memcg stats because for kernel memory
-charging and stats happen together. At the moment, memcg charging and
-memcg stats are nmi safe and the only thing which is not nmi safe is
-adding the cgroup to the per-cpu rstat update tree. i.e.
-css_rstat_updated() which this series is doing.
+Suggested-by: JP Kobryn <inwardvessel@gmail.com>
+Signed-off-by: Shakeel Butt <shakeel.butt@linux.dev>
+---
+ include/linux/cgroup-defs.h   |   7 ---
+ include/trace/events/cgroup.h |  47 ---------------
+ kernel/cgroup/rstat.c         | 107 ++--------------------------------
+ 3 files changed, 4 insertions(+), 157 deletions(-)
 
-This series made css_rstat_updated by using per-cpu lockless lists whose
-node in embedded in individual struct cgroup_subsys_state and the
-per-cpu head is placed in struct cgroup_subsys. For rstat users without
-cgroup_subsys, a global per-cpu lockless list head is created. The main
-challenge to use lockless in this scenario was the potential multiple
-inserters from the stacked context i.e. process, softirq, hardirq & nmi,
-potentially using the same per-cpu lockless node of a given
-cgroup_subsys_state. The normal lockless list does not protect against
-such scenario.
-
-The multiple stacked inserters using potentially same lockless node was
-resolved by making one of them succeed on reset the lockless node and the
-winner gets to insert the lockless node in the corresponding lockless
-list. The losers can assume the lockless list insertion will eventually
-succeed and continue their operation.
-
-Changelog since v2:
-- Add more clear explanation in cover letter and in the comment as
-  suggested by Andrew, Michal & Tejun.
-- Use this_cpu_cmpxchg() instead of try_cmpxchg() as suggested by Tejun.
-- Remove the per-cpu ss locks as they are not needed anymore.
-
-Changelog since v1:
-- Based on Yosry's suggestion always use llist on the update side and
-  create the update tree on flush side
-
-[v1] https://lore.kernel.org/cgroups/20250429061211.1295443-1-shakeel.butt@linux.dev/
+diff --git a/include/linux/cgroup-defs.h b/include/linux/cgroup-defs.h
+index 45860fe5dd0c..bca3562e3df4 100644
+--- a/include/linux/cgroup-defs.h
++++ b/include/linux/cgroup-defs.h
+@@ -375,12 +375,6 @@ struct css_rstat_cpu {
+ 	 * Child cgroups with stat updates on this cpu since the last read
+ 	 * are linked on the parent's ->updated_children through
+ 	 * ->updated_next. updated_children is terminated by its container css.
+-	 *
+-	 * In addition to being more compact, singly-linked list pointing to
+-	 * the css makes it unnecessary for each per-cpu struct to point back
+-	 * to the associated css.
+-	 *
+-	 * Protected by per-cpu css->ss->rstat_ss_cpu_lock.
+ 	 */
+ 	struct cgroup_subsys_state *updated_children;
+ 	struct cgroup_subsys_state *updated_next;	/* NULL if not on the list */
+@@ -824,7 +818,6 @@ struct cgroup_subsys {
+ 	unsigned int depends_on;
  
-
-
-Shakeel Butt (4):
-  cgroup: support to enable nmi-safe css_rstat_updated
-  cgroup: make css_rstat_updated nmi safe
-  cgroup: remove per-cpu per-subsystem locks
-  memcg: cgroup: call css_rstat_updated irrespective of in_nmi()
-
- include/linux/cgroup-defs.h   |  11 +--
- include/trace/events/cgroup.h |  47 ----------
- kernel/cgroup/rstat.c         | 169 +++++++++++++---------------------
- mm/memcontrol.c               |  10 +-
- 4 files changed, 74 insertions(+), 163 deletions(-)
-
+ 	spinlock_t rstat_ss_lock;
+-	raw_spinlock_t __percpu *rstat_ss_cpu_lock;
+ 	struct llist_head __percpu *lhead; /* lockless update list head */
+ };
+ 
+diff --git a/include/trace/events/cgroup.h b/include/trace/events/cgroup.h
+index 7d332387be6c..ba9229af9a34 100644
+--- a/include/trace/events/cgroup.h
++++ b/include/trace/events/cgroup.h
+@@ -257,53 +257,6 @@ DEFINE_EVENT(cgroup_rstat, cgroup_rstat_unlock,
+ 	TP_ARGS(cgrp, cpu, contended)
+ );
+ 
+-/*
+- * Related to per CPU locks:
+- * global rstat_base_cpu_lock for base stats
+- * cgroup_subsys::rstat_ss_cpu_lock for subsystem stats
+- */
+-DEFINE_EVENT(cgroup_rstat, cgroup_rstat_cpu_lock_contended,
+-
+-	TP_PROTO(struct cgroup *cgrp, int cpu, bool contended),
+-
+-	TP_ARGS(cgrp, cpu, contended)
+-);
+-
+-DEFINE_EVENT(cgroup_rstat, cgroup_rstat_cpu_lock_contended_fastpath,
+-
+-	TP_PROTO(struct cgroup *cgrp, int cpu, bool contended),
+-
+-	TP_ARGS(cgrp, cpu, contended)
+-);
+-
+-DEFINE_EVENT(cgroup_rstat, cgroup_rstat_cpu_locked,
+-
+-	TP_PROTO(struct cgroup *cgrp, int cpu, bool contended),
+-
+-	TP_ARGS(cgrp, cpu, contended)
+-);
+-
+-DEFINE_EVENT(cgroup_rstat, cgroup_rstat_cpu_locked_fastpath,
+-
+-	TP_PROTO(struct cgroup *cgrp, int cpu, bool contended),
+-
+-	TP_ARGS(cgrp, cpu, contended)
+-);
+-
+-DEFINE_EVENT(cgroup_rstat, cgroup_rstat_cpu_unlock,
+-
+-	TP_PROTO(struct cgroup *cgrp, int cpu, bool contended),
+-
+-	TP_ARGS(cgrp, cpu, contended)
+-);
+-
+-DEFINE_EVENT(cgroup_rstat, cgroup_rstat_cpu_unlock_fastpath,
+-
+-	TP_PROTO(struct cgroup *cgrp, int cpu, bool contended),
+-
+-	TP_ARGS(cgrp, cpu, contended)
+-);
+-
+ #endif /* _TRACE_CGROUP_H */
+ 
+ /* This part must be outside protection */
+diff --git a/kernel/cgroup/rstat.c b/kernel/cgroup/rstat.c
+index a7550961dd12..c8a48cf83878 100644
+--- a/kernel/cgroup/rstat.c
++++ b/kernel/cgroup/rstat.c
+@@ -10,7 +10,6 @@
+ #include <trace/events/cgroup.h>
+ 
+ static DEFINE_SPINLOCK(rstat_base_lock);
+-static DEFINE_PER_CPU(raw_spinlock_t, rstat_base_cpu_lock);
+ static DEFINE_PER_CPU(struct llist_head, rstat_backlog_list);
+ 
+ static void cgroup_base_stat_flush(struct cgroup *cgrp, int cpu);
+@@ -53,86 +52,6 @@ static inline struct llist_head *ss_lhead_cpu(struct cgroup_subsys *ss, int cpu)
+ 	return per_cpu_ptr(&rstat_backlog_list, cpu);
+ }
+ 
+-static raw_spinlock_t *ss_rstat_cpu_lock(struct cgroup_subsys *ss, int cpu)
+-{
+-	if (ss) {
+-		/*
+-		 * Depending on config, the subsystem per-cpu lock type may be an
+-		 * empty struct. In enviromnents where this is the case, allocation
+-		 * of this field is not performed in ss_rstat_init(). Avoid a
+-		 * cpu-based offset relative to NULL by returning early. When the
+-		 * lock type is zero in size, the corresponding lock functions are
+-		 * no-ops so passing them NULL is acceptable.
+-		 */
+-		if (sizeof(*ss->rstat_ss_cpu_lock) == 0)
+-			return NULL;
+-
+-		return per_cpu_ptr(ss->rstat_ss_cpu_lock, cpu);
+-	}
+-
+-	return per_cpu_ptr(&rstat_base_cpu_lock, cpu);
+-}
+-
+-/*
+- * Helper functions for rstat per CPU locks.
+- *
+- * This makes it easier to diagnose locking issues and contention in
+- * production environments. The parameter @fast_path determine the
+- * tracepoints being added, allowing us to diagnose "flush" related
+- * operations without handling high-frequency fast-path "update" events.
+- */
+-static __always_inline
+-unsigned long _css_rstat_cpu_lock(struct cgroup_subsys_state *css, int cpu,
+-		const bool fast_path)
+-{
+-	struct cgroup *cgrp = css->cgroup;
+-	raw_spinlock_t *cpu_lock;
+-	unsigned long flags;
+-	bool contended;
+-
+-	/*
+-	 * The _irqsave() is needed because the locks used for flushing are
+-	 * spinlock_t which is a sleeping lock on PREEMPT_RT. Acquiring this lock
+-	 * with the _irq() suffix only disables interrupts on a non-PREEMPT_RT
+-	 * kernel. The raw_spinlock_t below disables interrupts on both
+-	 * configurations. The _irqsave() ensures that interrupts are always
+-	 * disabled and later restored.
+-	 */
+-	cpu_lock = ss_rstat_cpu_lock(css->ss, cpu);
+-	contended = !raw_spin_trylock_irqsave(cpu_lock, flags);
+-	if (contended) {
+-		if (fast_path)
+-			trace_cgroup_rstat_cpu_lock_contended_fastpath(cgrp, cpu, contended);
+-		else
+-			trace_cgroup_rstat_cpu_lock_contended(cgrp, cpu, contended);
+-
+-		raw_spin_lock_irqsave(cpu_lock, flags);
+-	}
+-
+-	if (fast_path)
+-		trace_cgroup_rstat_cpu_locked_fastpath(cgrp, cpu, contended);
+-	else
+-		trace_cgroup_rstat_cpu_locked(cgrp, cpu, contended);
+-
+-	return flags;
+-}
+-
+-static __always_inline
+-void _css_rstat_cpu_unlock(struct cgroup_subsys_state *css, int cpu,
+-		unsigned long flags, const bool fast_path)
+-{
+-	struct cgroup *cgrp = css->cgroup;
+-	raw_spinlock_t *cpu_lock;
+-
+-	if (fast_path)
+-		trace_cgroup_rstat_cpu_unlock_fastpath(cgrp, cpu, false);
+-	else
+-		trace_cgroup_rstat_cpu_unlock(cgrp, cpu, false);
+-
+-	cpu_lock = ss_rstat_cpu_lock(css->ss, cpu);
+-	raw_spin_unlock_irqrestore(cpu_lock, flags);
+-}
+-
+ /**
+  * css_rstat_updated - keep track of updated rstat_cpu
+  * @css: target cgroup subsystem state
+@@ -335,15 +254,12 @@ static struct cgroup_subsys_state *css_rstat_updated_list(
+ {
+ 	struct css_rstat_cpu *rstatc = css_rstat_cpu(root, cpu);
+ 	struct cgroup_subsys_state *head = NULL, *parent, *child;
+-	unsigned long flags;
+-
+-	flags = _css_rstat_cpu_lock(root, cpu, false);
+ 
+ 	css_process_update_tree(root->ss, cpu);
+ 
+ 	/* Return NULL if this subtree is not on-list */
+ 	if (!rstatc->updated_next)
+-		goto unlock_ret;
++		return NULL;
+ 
+ 	/*
+ 	 * Unlink @root from its parent. As the updated_children list is
+@@ -375,8 +291,7 @@ static struct cgroup_subsys_state *css_rstat_updated_list(
+ 	rstatc->updated_children = root;
+ 	if (child != root)
+ 		head = css_rstat_push_children(head, child, cpu);
+-unlock_ret:
+-	_css_rstat_cpu_unlock(root, cpu, flags, false);
++
+ 	return head;
+ }
+ 
+@@ -572,29 +487,15 @@ int __init ss_rstat_init(struct cgroup_subsys *ss)
+ {
+ 	int cpu;
+ 
+-	/*
+-	 * Depending on config, the subsystem per-cpu lock type may be an empty
+-	 * struct. Avoid allocating a size of zero in this case.
+-	 */
+-	if (ss && sizeof(*ss->rstat_ss_cpu_lock)) {
+-		ss->rstat_ss_cpu_lock = alloc_percpu(raw_spinlock_t);
+-		if (!ss->rstat_ss_cpu_lock)
+-			return -ENOMEM;
+-	}
+-
+ 	if (ss) {
+ 		ss->lhead = alloc_percpu(struct llist_head);
+-		if (!ss->lhead) {
+-			free_percpu(ss->rstat_ss_cpu_lock);
++		if (!ss->lhead)
+ 			return -ENOMEM;
+-		}
+ 	}
+ 
+ 	spin_lock_init(ss_rstat_lock(ss));
+-	for_each_possible_cpu(cpu) {
+-		raw_spin_lock_init(ss_rstat_cpu_lock(ss, cpu));
++	for_each_possible_cpu(cpu)
+ 		init_llist_head(ss_lhead_cpu(ss, cpu));
+-	}
+ 
+ 	return 0;
+ }
 -- 
 2.47.1
 
