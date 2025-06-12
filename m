@@ -1,100 +1,178 @@
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28C4D1F5858
-	for <bpf@vger.kernel.org>; Thu, 12 Jun 2025 19:49:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A64FD2D3230
+	for <bpf@vger.kernel.org>; Thu, 12 Jun 2025 19:49:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749757784; cv=none; b=lywUJr72VO8LLd0Z6kJwlfc3VBkjkl9KacoP05ISs2ktDN51M6dHivygpFrAXQCDf+Mt8S9CjaAZAImiPKjqu3oAUbgCk6afqZD9nJ8OCgW+vAK7KxP/zWePcfGx0j1k1TDxcGuW3MYCYAb2a2KtteBTXVsPJZH7ISb2oVaxyjM=
+	t=1749757785; cv=none; b=vANn91qSjyDefaazShZFd8ER64qgJY/xGRZN8kohzDgH/zZUu2wpuW+EL2vkfwwM9FBJmn3gwd50qlsm/KZEQRjHy4lByXoIfojijIoL5h8W+FGb/ME/l/b66URY3HLXp4BK0D47KZ62ukIDlT25Nnd6rQjPm+74oR3m58iUlfU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749757784; c=relaxed/simple;
-	bh=wYQhcyVw0FB5Q07FXBQTuV0DUjq5YhH873qs8zPlBqo=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=WJZ35kjdQMAm2eNocnEWWhoUQj1YsZQcP27AVzfZHmQog8FRsJvTEhy9g0a71wv0v1a5xXWvT4eNMI4cIiGyhuOYe1lmra/aT2T/ZGZf04zf/fEY9AitSn5Wj+Lvc7k/HKeyD5LSZ9jO9j1tpgdnTqEgjjdMTq9ZbZ4Egp6ox9g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Wyf2Ox8I; arc=none smtp.client-ip=209.85.210.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1749757785; c=relaxed/simple;
+	bh=chSaC++D/KyOpv+GZTMMsJcBWrfO2VNl6nPnGCY7BBs=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=o6hdGvcrZSWeoNlgzEisISwX2x/GlVPzbMXehQqV0Hm22SLHiCqP1K8urwPVflOTMjj6O/d8YrLy55mB2ebn5vxEFkNK9mt0HBX5Di+dByVah4cOpe95Fv3apYEqaZsh97YIHgx7IPb/typxg34PQU8kzfe4aRRP7uqakn4DNkc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--blakejones.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ZGjIoIs7; arc=none smtp.client-ip=209.85.210.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--blakejones.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Wyf2Ox8I"
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-73c17c770a7so1765584b3a.2
-        for <bpf@vger.kernel.org>; Thu, 12 Jun 2025 12:49:42 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ZGjIoIs7"
+Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-7395d07a3dcso978228b3a.3
+        for <bpf@vger.kernel.org>; Thu, 12 Jun 2025 12:49:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1749757782; x=1750362582; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+        d=google.com; s=20230601; t=1749757783; x=1750362583; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=wYQhcyVw0FB5Q07FXBQTuV0DUjq5YhH873qs8zPlBqo=;
-        b=Wyf2Ox8Imjw1wgPB4B2veLRhPvJ3N9Pz4Ad6pSRjw4ZLWHrHi9uM0rjInLxBuFbeXm
-         6taMh/7bFGFfb08VE0F0Anpzs8j72dKT9oUkeAAcpLnycHhmc7k6SwJyjkta3xW52H91
-         /Ta3XAoOp+Tl2+HeKXPib2Eu41Naih6d3yeEu38erVuKGguP2JQ9k7b3bF7MtLBuC71c
-         ZS9xbrez9/fI0JGOSV+/yNyD+rIGfqTKccSvDhfRdc8CRPZ7ugFJEE3L5ETJ+t4Mj5wo
-         zrHOUAkZBezutU8fmX+Q5AvigDFFllm1hUpwec6Oy1eABh+ClpM1bx516uWfsSi7YIsC
-         R62w==
+        bh=QRtdXj9Yg5ChlR8GveTsxt0/9PdGzyJBP4FqYzn0P3E=;
+        b=ZGjIoIs7bcMsbHxS8vKH/kA5aqIWIAvG/xeviYAxv2cTjEK/EHi++orjZaQFZ+87hg
+         6NQ2ikbSZX99iJT36e0L9hIz7lEXWSaRbYFGZYMnyVxjSjdKm4fqOCmizeg8j3VdvRN/
+         uFJTM7s2G5l/tbTJb+jOW+Pm8Sa3ofNJ3OZmU6Wdnyhr9a8ZUHvfz2SRPLrwJpsSaXhI
+         c7qQJzJn5i7Z5klpm1HfzMIdA+sEYs8g3jGfN+Y5aEyIH8lD34OE1mfxZy3N9wSG0HKw
+         TozlLe8AFuKeECHE0GHStXEozqoyCtj+ByP004Hw/KNW86zxe6QbDh0mcQwsdZFBrpQn
+         Ux1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749757782; x=1750362582;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+        d=1e100.net; s=20230601; t=1749757783; x=1750362583;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=wYQhcyVw0FB5Q07FXBQTuV0DUjq5YhH873qs8zPlBqo=;
-        b=RqV/5KA/RACMmqkqXNgDHui+fV2ht8gQx/jA1lqCoTVx6tFnv0i9MnS/1VQtgu5XSw
-         qXzvIg7YlvMNgFNlpZio2xZ6HP1h1LYeFc0thfmdDbK4vcqy5vx31AzX2TdAvwmAhN3I
-         YrSv9rCTDohk3873E2s5fu1F835hm7UJlwl5fW7Rmpzi75dQFpuKblJF/8q7CJg9fK4/
-         lx/b+y6qrJNzpUvGJcrMQ/SlG7BLb4UgirGtftqHDUI1DQqw9a+ZToO5dd+/OTs+Xy72
-         QL5Vdv1NrsiRPShJ6svsObibkBteUpWX2KSGxJjl8WO1/7GgwdXNPM3K7ghQLmUPlrDb
-         ng4g==
-X-Gm-Message-State: AOJu0YwOMrnjpDYsXLFZtDqYUjTpz3O85w086WquUE9FozxTXYfmRo3K
-	Uh+gwbmZnXrLxfxQ43zSdta62KAMucn/9OUtx47czSA2Ya/T30vTPmcpfC1CsQP4OFM=
-X-Gm-Gg: ASbGncszgmXtcGl2ia3ieKBTxMRhgb4JXiumtEDyZGNfRf3Kk220JcgPdxv8/mgw0Sc
-	XdzvbZad/3DE2OicSeWd6VusgOPcYtNGC8zzAwkuVOwy0DaK/nUYQNpovmQ3Ra6L58T/y0S8wlO
-	J/ZIagY7MSLosIUOcuSQFLgsk25dEJe3hMBsgw3acwyZzudoCPkdPBxSdhMPOhP0h6BBqoJ3E04
-	BjW0cWew+uAUcujdJC0hGQcsF5RNqW8gn5RoyKbEZB4DT/0quagBZBcuHDRViuvKB9SBp7Tvesw
-	AHPGn+9XYSSL6mbdOYmEphQVrMN6any7jazL9bFTbgvIxKviqEFtK/QbJZ4=
-X-Google-Smtp-Source: AGHT+IHHtIqxWw+8QY1OA+TFZYRCxGGNhL9Fj3TM2SpmhumwbfPATsvCInnwjZMRvUpm919ZWVRtqg==
-X-Received: by 2002:a05:6a00:3a04:b0:736:35d4:f03f with SMTP id d2e1a72fcca58-7488f704e2dmr668074b3a.6.1749757782349;
-        Thu, 12 Jun 2025 12:49:42 -0700 (PDT)
-Received: from [192.168.0.226] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7488ffecfc5sm125490b3a.13.2025.06.12.12.49.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Jun 2025 12:49:42 -0700 (PDT)
-Message-ID: <b35717b7c65a0ee8baba9800dbbb2c9e58c62b32.camel@gmail.com>
-Subject: Re: [PATCH bpf-next] selftests/bpf: Fix some incorrect inline asm
- codes
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Yonghong Song <yonghong.song@linux.dev>, Alexei Starovoitov	
- <alexei.starovoitov@gmail.com>, "Jose E. Marchesi"
- <jose.marchesi@oracle.com>
-Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, Andrii
- Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Kernel Team <kernel-team@fb.com>,  Martin KaFai Lau <martin.lau@kernel.org>
-Date: Thu, 12 Jun 2025 12:49:39 -0700
-In-Reply-To: <cbc60943-783e-4444-9d46-3a25e71a6e63@linux.dev>
-References: <20250612171938.2373564-1-yonghong.song@linux.dev>
-	 <5341c8c05537d6f9a4d252f5c98ec895ade09430.camel@gmail.com>
-	 <CAADnVQKNBps+MvPmHG3BGYtNV34ut6L8cF+wCNWCOLTiauuL0g@mail.gmail.com>
-	 <cbc60943-783e-4444-9d46-3a25e71a6e63@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2 (3.56.2-1.fc42) 
+        bh=QRtdXj9Yg5ChlR8GveTsxt0/9PdGzyJBP4FqYzn0P3E=;
+        b=bAjA3QsB3Ns/5MWQq8+vikp4km28Oh5Skke3z6+e/Uv9CG7Ex8plkkHC8TmY2EvAMR
+         /KGrvo4KNvddKaqB8xrgLDy5IMxZFHp60c2yTgzi2Eb679+PW06A+mvvoA+VtLkpRq+B
+         cjcmOMnJkZk+lfSZxI2ir4brPLSUD3NtKZvBrdeRshM70VV6kKhHe49ZC4739gpyhXz3
+         ve2tzBPllP/wYiT/EGMrwd7Ee9A19p5yxPdFJKq3OFVBzaVHJOazo5VlGDC7icfnqPCd
+         WRLj0RxSo3XJhiT1SIO/iot96dhO8+/r43jshrvXVeAOYti11ScStnIbw4gS/UVel9Uy
+         kkig==
+X-Forwarded-Encrypted: i=1; AJvYcCVHV2TjNDQc74N/o1tGln3btdqvM7z/vzb9mHkpMHMcjtZlEZN6nfwd4yjSpuo0KoaEA08=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxaHcnhIbOTL3QLrZ/be82Xl1zPnLE70wHNjJhwyzyj4SLDtiYZ
+	YkI2tC/MBpYnU54kDY/5A+HrGSuX9Q8Q2HpGvjD3kSHrOfMFg/EAPEV4dCAwQp9mfHj6v3fX8Jg
+	jMeX+Vxa5k17oc6s7Ai0+4g==
+X-Google-Smtp-Source: AGHT+IFM8Zsyd1izWSsKwHQVwM28qL7GxFgsDTq3f1gsP9i89hkNUtONoVCoWeSmOlItnRfASjQ6b12TLmirns5R
+X-Received: from pfm10.prod.google.com ([2002:a05:6a00:72a:b0:746:3321:3880])
+ (user=blakejones job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:6a00:27a0:b0:736:34a2:8a23 with SMTP id d2e1a72fcca58-7488f76502fmr596866b3a.15.1749757782819;
+ Thu, 12 Jun 2025 12:49:42 -0700 (PDT)
+Date: Thu, 12 Jun 2025 12:49:34 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.50.0.rc1.591.g9c95f17f64-goog
+Message-ID: <20250612194939.162730-1-blakejones@google.com>
+Subject: [PATCH v4 0/5] perf: generate events for BPF metadata
+From: Blake Jones <blakejones@google.com>
+To: Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>
+Cc: Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Kan Liang <kan.liang@linux.intel.com>, 
+	Steven Rostedt <rostedt@goodmis.org>, Tomas Glozar <tglozar@redhat.com>, 
+	James Clark <james.clark@linaro.org>, Leo Yan <leo.yan@arm.com>, 
+	Guilherme Amadio <amadio@gentoo.org>, Yang Jihong <yangjihong@bytedance.com>, 
+	Charlie Jenkins <charlie@rivosinc.com>, Chun-Tse Shao <ctshao@google.com>, 
+	Aditya Gupta <adityag@linux.ibm.com>, Athira Rajeev <atrajeev@linux.vnet.ibm.com>, 
+	Zhongqiu Han <quic_zhonhan@quicinc.com>, Andi Kleen <ak@linux.intel.com>, 
+	Dmitry Vyukov <dvyukov@google.com>, Yujie Liu <yujie.liu@intel.com>, 
+	Graham Woodward <graham.woodward@arm.com>, Yicong Yang <yangyicong@hisilicon.com>, 
+	Ben Gainey <ben.gainey@arm.com>, linux-kernel@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, bpf@vger.kernel.org, 
+	Blake Jones <blakejones@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, 2025-06-12 at 12:29 -0700, Yonghong Song wrote:
+Commit ffa915f46193 ("Merge branch 'bpf_metadata'"), from September 2020,
+added support to the kernel, libbpf, and bpftool to treat read-only BPF
+variables that have names starting with 'bpf_metadata_' specially. This
+patch series updates perf to handle these variables similarly, allowing a
+perf.data file to capture relevant information about BPF programs on the
+system being profiled.
 
-[...]
+When it encounters a BPF program, it reads the program's maps to find an
+'.rodata' map with 'bpf_metadata_' variables. If it finds one, it extracts
+their values as strings, and creates a new PERF_RECORD_BPF_METADATA
+synthetic event using that data. It does this both for BPF programs that
+were loaded when a 'perf record' starts, as well as for programs that are
+loaded while the profile is running. For the latter case, it stores the
+metadata for the duration of the profile, and then dumps it at the end of
+the profile, where it's in a better context to do so.
 
-> > Warning in llvm/gcc on imm32 > UINT_MAX is not correct either.
-> > llvm should probably accept 0xffffFFFFdeadbeef as imm32.
->=20
-> In llvm, the value is represented as an int64, we probably
-> can just check the upper 32bit must be 0 or 0xffffFFFF.
-> Otherwise, the value is out of range.
+The PERF_RECORD_BPF_METADATA event holds an array of key-value pairs, where
+the key is the variable name (minus the "bpf_metadata_" prefix) and the
+value is the variable's value, formatted as a string. There is one such
+event generated for each BPF subprogram. Generating it per subprogram
+rather than per program allows it to be correlated with PERF_RECORD_KSYMBOL
+events; the metadata event's "prog_name" is designed to be identical to the
+"name" field of a perf_record_ksymbol. This allows specific BPF metadata to
+be associated with each BPF address range in the collection.
 
-I agree with Yonghong, supporting things like 0xffffFFFFdeadbeef and
-rejecting things like 0x8000FFFFdeadbeef would require changes to the
-assembly parser to behave differently for literals of length 8 (signe
-extend them) and >8 (zero extend them), which might be surprising in
-some other ways.
+Changes:
+
+* v3 -> v4:
+  - Fix LIBBPF_INCLUDE in tools/perf/Makefile.config to use the libbpf
+    source path, since libbpf/include doesn't exist during feature testing.
+  - Fix the bpf_metadata_free() declaration for HAVE_LIBBPF_SUPPORT=0.
+  - Add HAVE_LIBBPF_SUPPORT around some declarations in util/env.h,
+    to align with the guards in util/env.c.
+  - Add HAVE_LIBBPF_SUPPORT around a function call in builtin-record.c.
+  - Link to v3:
+    https://lore.kernel.org/linux-perf-users/20250606215246.2419387-1-blakejones@google.com/T/#t
+
+* v2 -> v3:
+  - Split out event collection from event display.
+  - Resync with tmp.perf-tools-next.
+  - Link to v2:
+    https://lore.kernel.org/linux-perf-users/20250605233934.1881839-1-blakejones@google.com/T/#t
+
+* v1 -> v2:
+  - Split out libbpf change and send it to the bpf tree.
+  - Add feature detection to perf to detect the libbpf change.
+  - Allow the feature to be skipped if the libbpf support is not found.
+  - Add an example of a PERF_RECORD_BPF_METADATA record.
+  - Change calloc() calls to zalloc().
+  - Don't check for NULL before calling free().
+  - Update the perf_event header when it is created, rather than
+    storing the event size and updating it later.
+  - Add a BPF metadata variable (with the perf version) to all
+    perf BPF programs.
+  - Update the selftest to look for the new perf_version variable.
+  - Split out the selftest into its own patch.
+  - Link to v1:
+    https://lore.kernel.org/linux-perf-users/20250521222725.3895192-1-blakejones@google.com/T/#t
+
+Blake Jones (5):
+  perf: detect support for libbpf's emit_strings option
+  perf: collect BPF metadata from existing BPF programs
+  perf: collect BPF metadata from new programs
+  perf: display the new PERF_RECORD_BPF_METADATA event
+  perf: add test for PERF_RECORD_BPF_METADATA collection
+
+ tools/build/Makefile.feature                |   1 +
+ tools/build/feature/Makefile                |   4 +
+ tools/build/feature/test-libbpf-strings.c   |  10 +
+ tools/lib/perf/include/perf/event.h         |  18 +
+ tools/perf/Documentation/perf-check.txt     |   1 +
+ tools/perf/Makefile.config                  |   8 +
+ tools/perf/Makefile.perf                    |   3 +-
+ tools/perf/builtin-check.c                  |   1 +
+ tools/perf/builtin-inject.c                 |   1 +
+ tools/perf/builtin-record.c                 |  10 +
+ tools/perf/builtin-script.c                 |  15 +-
+ tools/perf/tests/shell/test_bpf_metadata.sh |  76 ++++
+ tools/perf/util/bpf-event.c                 | 378 ++++++++++++++++++++
+ tools/perf/util/bpf-event.h                 |  13 +
+ tools/perf/util/bpf_skel/perf_version.h     |  17 +
+ tools/perf/util/env.c                       |  19 +-
+ tools/perf/util/env.h                       |   6 +
+ tools/perf/util/event.c                     |  21 ++
+ tools/perf/util/event.h                     |   1 +
+ tools/perf/util/header.c                    |   1 +
+ tools/perf/util/session.c                   |   4 +
+ tools/perf/util/synthetic-events.h          |   2 +
+ tools/perf/util/tool.c                      |  14 +
+ tools/perf/util/tool.h                      |   3 +-
+ 24 files changed, 622 insertions(+), 5 deletions(-)
+ create mode 100644 tools/build/feature/test-libbpf-strings.c
+ create mode 100755 tools/perf/tests/shell/test_bpf_metadata.sh
+ create mode 100644 tools/perf/util/bpf_skel/perf_version.h
+
+-- 
+2.50.0.rc1.591.g9c95f17f64-goog
+
