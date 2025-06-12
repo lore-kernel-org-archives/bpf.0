@@ -1,131 +1,96 @@
-Received: from mail-vs1-f44.google.com (mail-vs1-f44.google.com [209.85.217.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B8F81E487
-	for <bpf@vger.kernel.org>; Thu, 12 Jun 2025 00:39:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DA4E182D0;
+	Thu, 12 Jun 2025 00:40:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749688763; cv=none; b=UKapUr7nCFpDpsv7LijGuFtHA7flurWbazlkxwFgLLIBHXFFubOfoChVBEOP8tsqXhfvfeyxfNPjvYVx8K0dRbi+D6NrCnzJqNy7VFUz96jh+ggRWcca+TQ6ZdnSpq3/18umJaNVh6fVNsphlr7IWHmIyIUGhaetzD/i1JjmXLs=
+	t=1749688801; cv=none; b=i0UbWdWkrkOQOdhSX2FbtCwZa2jWCI/UKMP+8mGW/SSFohcut4CUKFIFZJ/mD/LRc8SLauQehr/sU8jinNbE+HAZJ4goSzeHAdnaz4DqTD7bFy/SyYFh8PVulZDYIJXJhPhnCyLe/0HWKotDyBWOUhIcud7qwJzudaJO7/wkicg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749688763; c=relaxed/simple;
-	bh=1/YtnVp2w5cLp0fXiP/AkynA4GjML3bPzu3yfR14Y34=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=d8auiEHtwx0R3fN24F0kuy15Rp4uwLtSoYCmpW4FvvnBsDvAx7KaQbtMlWU4xauw5tlSvDmGgrp5flIKCIXAitXUln2l2VAx8+Iu7Ny3nQfb77RYBx2lblZp2GyE5kSwOA8JodMZTxlApFckBa5JSDahtSJFD2C6Dn+hmRE1wFg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=AnG9Eito; arc=none smtp.client-ip=209.85.217.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1749688801; c=relaxed/simple;
+	bh=jpj01HFrpsqQ9KoLARSa3nYvj53bpFwNKRQ3OKEk8As=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=Nh4UeYKiquZoIbF0n/Lx2Krny19yEbOOfJQhiFicxgxqUKMpJKd6oF7+SUyIdYB+Qu2BsNpAjUTex3aBaX0QmH3qRzPQrdhLjOjEW5NcJduYaFo9mp+P8dnTjPDoVG8tl3EHJVOS7yELaXkrt++P4tEOSFwapvd4PhV4pFBKtu8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=APAOw6/a; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="AnG9Eito"
-Received: by mail-vs1-f44.google.com with SMTP id ada2fe7eead31-4e7c23a0c46so120734137.1
-        for <bpf@vger.kernel.org>; Wed, 11 Jun 2025 17:39:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1749688760; x=1750293560; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MijS6fKI8avgozeUh7V7g+wjXCdFSSFspwam+Jh7L04=;
-        b=AnG9EitoIjCACvlxjPoy7H/3x22cSvo+/Tu4hMhTJCOPYGAhirEnle10JkT/BHEXJc
-         9ZL4vufBbE4zVP5ThJIyg8pjEbVa9roiLzwael+phWD3wMQIgctGYLnUX04kdwxZB6rh
-         8KtpXjqtN/hw1YSaz0tVIZh5EzGAuRd59bBTw8HGsRUxwNcqLEygtA076T988oiUfMvj
-         8JI6U15UazpbG9/kjDpIQbf8zdh56Zo4i9i0XbWZOpU/rF5ZFyPPyAjOYai6Wgi09U/H
-         rG8w7ejZ24qM+pi3gw8OmYttKZiM+DUpNfJyWdw/lfKA9wW0gyAttKPqi91bEZY1lfO4
-         WQ0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749688760; x=1750293560;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MijS6fKI8avgozeUh7V7g+wjXCdFSSFspwam+Jh7L04=;
-        b=hKuxiAL6zoORsOGVPI9V6KI+JK0xju+j0kzy9es/FkUiq1fMtx3JyL85yVdo04O/Zv
-         yoOTNDPd7CV+zLY24USOumzeSdyU6FOoxccDipelYOUr6fkwmPZNZqua/UeF9aIyXYyu
-         jnMqHnPe6U8wxq4esyTGyUVDC++nxh1SVvf/ZpXXpc8OPU5kzINtaL7A9pA4XP669Laj
-         W8/Iell8HbVBl8QRnzsn2zsk2QWA+gJd2MMUvsk+fpSUYOL/Q8OFp681/9FnZ24uUA44
-         lgNm1+RJ+nkDcV2NMQN94opAoopu2LWlK0gB8wRpDhxew8MrRyvqPImbO5rNa7/bLkSx
-         W9pw==
-X-Forwarded-Encrypted: i=1; AJvYcCVWq1Y4AOHuEqSG3kvVlIR91nvbgHJlcpH+gmFxaI15mqjG8Ja0dwbIYFtP5H8/aRB4MgU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwrizFc3WhYIuTiZiZIqLPYDhb+HR7itQTbwTkJ3ZahMMyZfnFf
-	0DtIykgj8HMNMcCDEOcEMPesN7BgfKvOeFVDyEqlrquEQn51pyHw+DrkeKoLqmW5iniik1GVoFm
-	HpIpybVTLeU/ECysCtwK3GSp3PQCVw9wGw02Hf15e
-X-Gm-Gg: ASbGncvlpIxvgHG+q4jnPub3US0c5U7OBL+rQY9UWrop2bhpFXXxAmudAJ1Giudlmgg
-	TwUuDAHFJY1ALV+EVeDFGfON92t61ZpTpjE1Oe1Qc98nquXkBvXW7XMxnQHyJBSDYYoYMl/lduD
-	+Z4mGEGFiUG65y/kDil5znhfzL2uIwiZlM5FN0QR7Lksw=
-X-Google-Smtp-Source: AGHT+IGJyR0TkHrxu2ca510smf27CLRnlR33XS+KipMFozqKN/NJ2jtkGZyOWX8gVxAfHrBxFp4dlDR5VA1QBQu8htA=
-X-Received: by 2002:a05:6102:510e:b0:4e5:acea:2dec with SMTP id
- ada2fe7eead31-4e7ccb90176mr2182302137.7.1749688760064; Wed, 11 Jun 2025
- 17:39:20 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="APAOw6/a"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A61D1C4CEE3;
+	Thu, 12 Jun 2025 00:40:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1749688800;
+	bh=jpj01HFrpsqQ9KoLARSa3nYvj53bpFwNKRQ3OKEk8As=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=APAOw6/aLgn4GH1zi0JCsdqyqGgxnYvd2c3XYJyK8H42HsA8b2XK0h9PyTuORr8rS
+	 xrsz+w2cIGCRMxmANmtxU2i4QHYofyh3pDGp0SgDQvm77ZC+tvpyojsGTrcjp578Ad
+	 veA2m+LNcdQbMeyvU2BdE9zpvruzDOJwGJdjRdafK1659VGtsCn2N7bZb4Apv3RHSD
+	 7JBNOQBNKJ0vAiWCipa/554cQeMscB0/o//c7iF47hFWDAt1zy76d+xpEhN5h40gfn
+	 2JkXZuqGaSFaWW5bJNxW2pM/I4TYEWxrIzY/KPG+0gWnbO6pbCFMfgyT1bEZv2xctX
+	 OHFJjGTYVr4Dw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EADAB3822D1A;
+	Thu, 12 Jun 2025 00:40:31 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250606215246.2419387-1-blakejones@google.com> <aEnLBgCTuuZjeakP@google.com>
-In-Reply-To: <aEnLBgCTuuZjeakP@google.com>
-From: Blake Jones <blakejones@google.com>
-Date: Wed, 11 Jun 2025 17:39:09 -0700
-X-Gm-Features: AX0GCFtvh8DDYNH81d0g8swylgEtR-w4SutaqGqiWCk_py3r2whgK08XDdIBGYk
-Message-ID: <CAP_z_Ci2HtnSX8h51Lg=XcW_-5OryGb3PAH7MJjWg60Bjpdpng@mail.gmail.com>
-Subject: Re: [PATCH v3 0/5] perf: generate events for BPF metadata
-To: Namhyung Kim <namhyung@kernel.org>
-Cc: Arnaldo Carvalho de Melo <acme@kernel.org>, Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Kan Liang <kan.liang@linux.intel.com>, 
-	Steven Rostedt <rostedt@goodmis.org>, Tomas Glozar <tglozar@redhat.com>, 
-	James Clark <james.clark@linaro.org>, Leo Yan <leo.yan@arm.com>, 
-	Guilherme Amadio <amadio@gentoo.org>, Yang Jihong <yangjihong@bytedance.com>, 
-	Charlie Jenkins <charlie@rivosinc.com>, Chun-Tse Shao <ctshao@google.com>, 
-	Aditya Gupta <adityag@linux.ibm.com>, Athira Rajeev <atrajeev@linux.vnet.ibm.com>, 
-	Zhongqiu Han <quic_zhonhan@quicinc.com>, Andi Kleen <ak@linux.intel.com>, 
-	Dmitry Vyukov <dvyukov@google.com>, Yujie Liu <yujie.liu@intel.com>, 
-	Graham Woodward <graham.woodward@arm.com>, Yicong Yang <yangyicong@hisilicon.com>, 
-	Ben Gainey <ben.gainey@arm.com>, linux-kernel@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net v3 1/2] net: clear the dst when changing skb protocol
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <174968883075.3549461.11849610540706113890.git-patchwork-notify@kernel.org>
+Date: Thu, 12 Jun 2025 00:40:30 +0000
+References: <20250610001245.1981782-1-kuba@kernel.org>
+In-Reply-To: <20250610001245.1981782-1-kuba@kernel.org>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+ pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
+ willemdebruijn.kernel@gmail.com, maze@google.com, daniel@iogearbox.net,
+ stable@vger.kernel.org, martin.lau@linux.dev, john.fastabend@gmail.com,
+ eddyz87@gmail.com, sdf@fomichev.me, haoluo@google.com, willemb@google.com,
+ william.xuanziyang@huawei.com, alan.maguire@oracle.com, bpf@vger.kernel.org,
+ shuah@kernel.org, linux-kselftest@vger.kernel.org, yonghong.song@linux.dev
 
-Hi Namhyung,
+Hello:
 
-On Wed, Jun 11, 2025 at 11:29=E2=80=AFAM Namhyung Kim <namhyung@kernel.org>=
- wrote:
-> I tried to process your patches but it failed to build like below:
+This series was applied to netdev/net.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Mon,  9 Jun 2025 17:12:44 -0700 you wrote:
+> A not-so-careful NAT46 BPF program can crash the kernel
+> if it indiscriminately flips ingress packets from v4 to v6:
+> 
+>   BUG: kernel NULL pointer dereference, address: 0000000000000000
+>     ip6_rcv_core (net/ipv6/ip6_input.c:190:20)
+>     ipv6_rcv (net/ipv6/ip6_input.c:306:8)
+>     process_backlog (net/core/dev.c:6186:4)
+>     napi_poll (net/core/dev.c:6906:9)
+>     net_rx_action (net/core/dev.c:7028:13)
+>     do_softirq (kernel/softirq.c:462:3)
+>     netif_rx (net/core/dev.c:5326:3)
+>     dev_loopback_xmit (net/core/dev.c:4015:2)
+>     ip_mc_finish_output (net/ipv4/ip_output.c:363:8)
+>     NF_HOOK (./include/linux/netfilter.h:314:9)
+>     ip_mc_output (net/ipv4/ip_output.c:400:5)
+>     dst_output (./include/net/dst.h:459:9)
+>     ip_local_out (net/ipv4/ip_output.c:130:9)
+>     ip_send_skb (net/ipv4/ip_output.c:1496:8)
+>     udp_send_skb (net/ipv4/udp.c:1040:8)
+>     udp_sendmsg (net/ipv4/udp.c:1328:10)
+> 
 > [...]
-> Please run 'make build-test' and send v4.
 
-Very sorry about that. I've fixed the two issues you noticed, as well as
-one additional one where I was using the wrong include path to check for
-the presence of the libbpf-strings feature.
+Here is the summary with links:
+  - [net,v3,1/2] net: clear the dst when changing skb protocol
+    https://git.kernel.org/netdev/net/c/ba9db6f907ac
+  - [net,v3,2/2] selftests: net: add test case for NAT46 looping back dst
+    https://git.kernel.org/netdev/net/c/567766954b2d
 
-I'm trying to test my fixes using "make build-test", but it's proving a bit
-of a challenge. I installed libgtk-4-dev, binutils-dev, and libopencsd-dev
-to fix build problems as they came up; I also installed libtraceevent-dev,
-but somehow it still wasn't detected by the build process and so I had to
-use NO_LIBTRACEEVENT=3D1.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Even after installing these libraries, I'm still hitting errors when doing
-"make build-test" on a copy of the perf source *without* my changes:
 
-    In file included from util/disasm_bpf.c:18:
-    .../tools/include/tools/dis-asm-compat.h:10:6:
-        error: redeclaration of 'enum disassembler_style'
-       10 | enum disassembler_style {DISASSEMBLER_STYLE_NOT_EMPTY};
-          |      ^~~~~~~~~~~~~~~~~~
-    In file included from util/disasm_bpf.c:15:
-    /usr/include/dis-asm.h:53:6: note: originally defined here
-       53 | enum disassembler_style
-          |      ^~~~~~~~~~~~~~~~~~
-
-I noticed that tools/perf/BUILD_TEST_FEATURE_DUMP has
-"feature-disassembler-four-args=3D0" and "feature-disassembler-init-styled=
-=3D0"
-as of when this failed, which seems to be upstream of the observed failure
-(the version of binutils-dev that I installed seems to have newer-style
-versions of these interfaces).
-
-Is there anything written up about how to set up a machine so that
-"make build-test" works reliably?
-
-Thanks.
-
-Blake
