@@ -1,134 +1,83 @@
-Received: from 66-220-144-179.mail-mxout.facebook.com (66-220-144-179.mail-mxout.facebook.com [66.220.144.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-186.mta0.migadu.com (out-186.mta0.migadu.com [91.218.175.186])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BBF01A3A80
-	for <bpf@vger.kernel.org>; Thu, 12 Jun 2025 03:50:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 287654690
+	for <bpf@vger.kernel.org>; Thu, 12 Jun 2025 03:53:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.186
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749700250; cv=none; b=TPUQlACHpBDpc80Y1dwU5cVuB/1PjQnOwN+uWm1ObU647AvbGXT/qWlMtGgiL9ERCQjsOULqnw3aSwH1d1mX99Wznbcz5bs4KgYKA+EkFmXONwFlT/FM2qy7XRhnmzCMCBgfHVEJ4XLOfsf3ii+ROrRIugFFKDJ3W6ZHWn+vEgc=
+	t=1749700390; cv=none; b=TNqI+7eaXzX2sGnbFzbqJQteHA6DP19fxGTl4oq52hqa/Qwf+nkseIH+sFlqY8O/NdK/baHM7JgkVpVeXF0KKZK7ZYdL46N34xIkbeai4OR39iRhmgTDZzsmItpR1y9cQYtw/eUdWSKw3GU6WTnCUzBkIDNH7VGoDMZsWiPaVM8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749700250; c=relaxed/simple;
-	bh=jXaz8wbgZn548CE6oO4x/9hAeFnwzFzbktNPFUD6coU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=pLdqf8Nt4d45evt3vgYx+seTm+osr6ZnTszLL+sXwFGsYkrPY+yQpROqDjQIWTb303FrgV9lOhzmKJoDxCN6xRxCM+tErmhtQYbMApQAyCwvNMAzjYB9XW4kiHs7B+GG18ytLOGAaMjpAok5ZqPuEX9vqaU1KeDSnxvyr2sHCUc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
-Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id ADBAD96FFDB3; Wed, 11 Jun 2025 20:50:37 -0700 (PDT)
-From: Yonghong Song <yonghong.song@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	kernel-team@fb.com,
-	Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf-next v3 2/3] selftests/bpf: Fix two net related test failures with 64K page size
-Date: Wed, 11 Jun 2025 20:50:37 -0700
-Message-ID: <20250612035037.2207911-1-yonghong.song@linux.dev>
-X-Mailer: git-send-email 2.47.1
-In-Reply-To: <20250612035027.2207299-1-yonghong.song@linux.dev>
-References: <20250612035027.2207299-1-yonghong.song@linux.dev>
+	s=arc-20240116; t=1749700390; c=relaxed/simple;
+	bh=boTdffM0YY6LvJ2vrbVdysstNGHA2kq/Qx89g7cwAeo=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=YDt79ZKe8EFFmr5kWP8dFFdcvvQnUy1vETAArYDKhVfUo4bAuFIh83B+vrszUqqb8q+xcbsBLR31vf8p0Cwxz7cM77IAQi1jeXTGo1f7PseAVVCZt8Flyc6ae73rV6WaENPqQED2PFKFeLzHropaRFXkBqfVJHShHrLxQqQ4JwM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=DRrkFieR; arc=none smtp.client-ip=91.218.175.186
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="DRrkFieR"
+Message-ID: <0e680ab0-f4a2-410b-9002-e34442211f0d@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1749700385;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=rBxsMBbj0m54LEZ+PcWOe/40CWnDBHCKbkzHyXZuItI=;
+	b=DRrkFieREkEfu2CX1wLFGy0jm52//Ha2ftpLrqygTVqidOC7E1FNfo3FVi1y2Ys8qpus7o
+	YA+k8X8rBK3Jhpw0qGhfAbZANnmg6R0WWDAsk13SpRcB1WbqymdYn17qWCwccjSkr0r1JD
+	Jz6Jg3RBi2XUNqLRVWL3nte4QKdumQs=
+Date: Wed, 11 Jun 2025 20:53:01 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH bpf-next v3 0/3] bpf: Fix a few test failures with 64K
+ page size
+Content-Language: en-GB
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, kernel-team@fb.com,
+ Martin KaFai Lau <martin.lau@kernel.org>
+References: <20250612035027.2207299-1-yonghong.song@linux.dev>
+In-Reply-To: <20250612035027.2207299-1-yonghong.song@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-When running BPF selftests on arm64 with a 64K page size, I encountered
-the following two test failures:
-  sockmap_basic/sockmap skb_verdict change tail:FAIL
-  tc_change_tail:FAIL
 
-With further debugging, I identified the root cause in the following
-kernel code within __bpf_skb_change_tail():
+Sorry, missed the below small description:
 
-    u32 max_len =3D BPF_SKB_MAX_LEN;
-    u32 min_len =3D __bpf_skb_min_len(skb);
-    int ret;
+This small patch set tried to fix a few networking related test failures
+due to 64K page size. Please see each individual patch for details.
 
-    if (unlikely(flags || new_len > max_len || new_len < min_len))
-        return -EINVAL;
-
-With a 4K page size, new_len =3D 65535 and max_len =3D 16064, the functio=
-n
-returns -EINVAL. However, With a 64K page size, max_len increases to
-261824, allowing execution to proceed further in the function. This is
-because BPF_SKB_MAX_LEN scales with the page size and larger page sizes
-result in higher max_len values.
-
-Updating the new_len parameter in both tests based on actual kernel
-page size resolved both failures.
-
-Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
----
- .../selftests/bpf/progs/test_sockmap_change_tail.c |  9 +++++++--
- .../selftests/bpf/progs/test_tc_change_tail.c      | 14 +++++++-------
- 2 files changed, 14 insertions(+), 9 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/progs/test_sockmap_change_tail.c=
- b/tools/testing/selftests/bpf/progs/test_sockmap_change_tail.c
-index 2796dd8545eb..1c7941a4ad00 100644
---- a/tools/testing/selftests/bpf/progs/test_sockmap_change_tail.c
-+++ b/tools/testing/selftests/bpf/progs/test_sockmap_change_tail.c
-@@ -1,8 +1,13 @@
- // SPDX-License-Identifier: GPL-2.0
- /* Copyright (c) 2024 ByteDance */
--#include <linux/bpf.h>
-+#include "vmlinux.h"
- #include <bpf/bpf_helpers.h>
-=20
-+#ifndef PAGE_SIZE
-+#define PAGE_SIZE __PAGE_SIZE
-+#endif
-+#define BPF_SKB_MAX_LEN (PAGE_SIZE << 2)
-+
- struct {
- 	__uint(type, BPF_MAP_TYPE_SOCKMAP);
- 	__uint(max_entries, 1);
-@@ -31,7 +36,7 @@ int prog_skb_verdict(struct __sk_buff *skb)
- 		change_tail_ret =3D bpf_skb_change_tail(skb, skb->len + 1, 0);
- 		return SK_PASS;
- 	} else if (data[0] =3D=3D 'E') { /* Error */
--		change_tail_ret =3D bpf_skb_change_tail(skb, 65535, 0);
-+		change_tail_ret =3D bpf_skb_change_tail(skb, BPF_SKB_MAX_LEN, 0);
- 		return SK_PASS;
- 	}
- 	return SK_PASS;
-diff --git a/tools/testing/selftests/bpf/progs/test_tc_change_tail.c b/to=
-ols/testing/selftests/bpf/progs/test_tc_change_tail.c
-index 28edafe803f0..fcba8299f0bc 100644
---- a/tools/testing/selftests/bpf/progs/test_tc_change_tail.c
-+++ b/tools/testing/selftests/bpf/progs/test_tc_change_tail.c
-@@ -1,11 +1,11 @@
- // SPDX-License-Identifier: GPL-2.0
--#include <linux/bpf.h>
-+#include "vmlinux.h"
- #include <bpf/bpf_helpers.h>
--#include <linux/if_ether.h>
--#include <linux/in.h>
--#include <linux/ip.h>
--#include <linux/udp.h>
--#include <linux/pkt_cls.h>
-+
-+#ifndef PAGE_SIZE
-+#define PAGE_SIZE __PAGE_SIZE
-+#endif
-+#define BPF_SKB_MAX_LEN (PAGE_SIZE << 2)
-=20
- long change_tail_ret =3D 1;
-=20
-@@ -94,7 +94,7 @@ int change_tail(struct __sk_buff *skb)
- 			bpf_skb_change_tail(skb, len, 0);
- 		return TCX_PASS;
- 	} else if (payload[0] =3D=3D 'E') { /* Error */
--		change_tail_ret =3D bpf_skb_change_tail(skb, 65535, 0);
-+		change_tail_ret =3D bpf_skb_change_tail(skb, BPF_SKB_MAX_LEN, 0);
- 		return TCX_PASS;
- 	} else if (payload[0] =3D=3D 'Z') { /* Zero */
- 		change_tail_ret =3D bpf_skb_change_tail(skb, 0, 0);
---=20
-2.47.1
+> Changelog:
+>    v2 -> v3:
+>      - v2: https://lore.kernel.org/bpf/20250611171519.2033193-1-yonghong.song@linux.dev/
+>      - Add additional comments for xdp_adjust_tail test.
+>      - Use actual kernel page size to set new_len for Patch 2 tests.
+>    v1 -> v2:
+>      - v1: https://lore.kernel.org/bpf/20250608165534.1019914-1-yonghong.song@linux.dev/
+>      - For xdp_adjust_tail, let kernel test_run can handle various page sizes for xdp progs.
+>      - For two change_tail tests, make code easier to understand.
+>      - Resolved a new test failure (xdp_do_redirect).
+>
+> Yonghong Song (3):
+>    bpf: Fix an issue in bpf_prog_test_run_xdp when page size greater than
+>      4K
+>    selftests/bpf: Fix two net related test failures with 64K page size
+>    selftests/bpf: Fix xdp_do_redirect failure with 64KB page size
+>
+>   net/bpf/test_run.c                            |  2 +-
+>   .../bpf/prog_tests/xdp_adjust_tail.c          | 96 +++++++++++++++++--
+>   .../bpf/prog_tests/xdp_do_redirect.c          | 13 ++-
+>   .../bpf/progs/test_sockmap_change_tail.c      |  9 +-
+>   .../selftests/bpf/progs/test_tc_change_tail.c | 14 +--
+>   .../bpf/progs/test_xdp_adjust_tail_grow.c     |  8 +-
+>   6 files changed, 122 insertions(+), 20 deletions(-)
+>
 
