@@ -1,203 +1,210 @@
-Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72B402E11B3
-	for <bpf@vger.kernel.org>; Fri, 13 Jun 2025 17:10:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AED0221D94
+	for <bpf@vger.kernel.org>; Fri, 13 Jun 2025 17:21:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749834613; cv=none; b=JprE+XXyworI5169EWYT8GRwiuk2PEO+WWiE5VlC8q4i8xlF5yY2sP5pNpZJQBTQcpVHROtFeIfwBqzt/7PuIZbKIC8lxXhfGlNKf9Kw6asKFRaRMV+YyMoyQx63czgier17/p0E1baKnRHjc1EDjaw7hu0M+mGggAH34Wv6rYk=
+	t=1749835300; cv=none; b=PU63HzDd0yEMy0sEPjW+KL+WRckGEX7xUHk++tipJS1gL4Fs97Hsd0JKRmqdTLIUIN3vDqI/SXPUD3y6f4GyGXcb7XqXdPJnla5rvbO+3TEPsPm5cftYUht5Vma/x2CWsDADYIesFnrHB/LdZ0AWLEfx6tWLqJkVhFkKSq8oXjA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749834613; c=relaxed/simple;
-	bh=2ap8nAW5nPCbSTlJ9Ftpgxti7ZmSgf6J2FR575U+qfk=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=g8Cslhn0NhbzgO2H329Fjvtx1tS2xh2aYn25A0wKWHb/34iQo7hEK/BKmfluWjC3N4RcOLk8ef9Az2u9JMKskyzhgJOPzBTrP+g0xMhDQis+OkbHct+urBVovjbdDeSSiOBJsY58DOamxtiGFrAsNsRuZjqvL1XwHGHsyryNU9U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LF5iBmNo; arc=none smtp.client-ip=209.85.215.178
+	s=arc-20240116; t=1749835300; c=relaxed/simple;
+	bh=cRsTY6tBqo+TEDNURDB4Eh7le5paE6fF31ly1M8Ee8M=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=l3GRLmcaDpMvWRuchwGyzE9kOkP3jJvDPuQ3hFPBrqDdbTYjh/bYlM59043OofJNrV5Ml1FdnNCi+CHRKNGjJ+K9MtvUK5lOg2Zau1d/lFOMqNpT3vNyqA/LYRV4oihEi/fi/RoVCJJKLwbxIKxJLuAScNk4+m7OijGasFnI5dQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NzFs6YL/; arc=none smtp.client-ip=209.85.215.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LF5iBmNo"
-Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-b2c4e46a89fso1945827a12.2
-        for <bpf@vger.kernel.org>; Fri, 13 Jun 2025 10:10:11 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NzFs6YL/"
+Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-af51596da56so2133648a12.0
+        for <bpf@vger.kernel.org>; Fri, 13 Jun 2025 10:21:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1749834611; x=1750439411; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=qy1EXMiUqlQMb7Jp2CvgkokiOXVK9+e77NrGmyNCxMA=;
-        b=LF5iBmNoXOvuQlM4Le3blk4zwJScy2JYo8wFyJIVyI6bSVSoE5DIEAyp9hWEI3kiVq
-         r6xmUXANVxD6gegny4PNY+EHt4HnWcxhLd23A+CHyoJLXdxKc3mO2gvTvLdxXejOcT+6
-         CKlQGiTJe+Cunek0FOvJ3HeJ4u9hviXF3DRSZ3CCRCrEBN/ustEb3kMJRKEIzHW+iW1x
-         czkkmTelwbJuozgielj69aTq79lTDWQlXFK9boWdvA2ZMsXn1YSotG2xBuTFLgC1zT/k
-         rNscdWJOjDFo/Dfb2ZG1ToD0QDDfHjpG5KfVSHEAVm/ZDiGOg/s/qOMTUmWrWx2km0zJ
-         tssQ==
+        d=gmail.com; s=20230601; t=1749835298; x=1750440098; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tY1mHLi8uYv9Ftwy4erUDfT1f4kpN3SFueRBAPuuz8w=;
+        b=NzFs6YL/BQ/duwySrd8CSni5BtFyBLOMbU4hF6OXYbQrnKJ3NG8xv1Wq2+Se40sRWA
+         Bp5YAAgOXZx926zNNZTjTpfFhkKQyS952+f8hn41hgI4SY4tUBltTPun7YVG74dOlvJ8
+         gkVQFQIfrJbQcmMfP87Qi2hRZ2JzizDtg+79ZEumIop5bm63Kzc8Dm0zyXz9GPa4o9Xd
+         FFyPgfTcEROKucPKyHZcZg2GVJc61JrknnPNFdDinQdfhtUYRFJBGTKwrj2/GH6DhFIk
+         jin+YGJ4L161U0xUkDk+K1PQ9rjaTmcL5PBkySKiX44+1bAlXOdxD4P5TSBaGzPrT+0s
+         bNtA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749834611; x=1750439411;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qy1EXMiUqlQMb7Jp2CvgkokiOXVK9+e77NrGmyNCxMA=;
-        b=C8FhoafDcbHh6lc857PtcucqsAYovy6zHPBPyWo4WUiKmiFopJLE/f+UdzK8Zl0hjX
-         AkhsPfrMlfEv5Ji0F7nUZk/menDvXicWMdS2S83MAWkB8p0iu877cmvOIAcgmqT4I1Kn
-         IY0xklHH4MdBF8XrO4K+jGoZnWpmJ/8lTr+VLUE+gHyTt2BKWSD4zW1kX1atDtCBe5Af
-         tUSPDdKAE9/Yi/jdmyiK0ra6hlp/zCHHvF6ZAIhAir463OZXjyn+5DX0Y6OIgyIoqBa0
-         MawZn16QMDOqpdyr9SoT/XNSx/GnLKoDaJmab68N2NwPOE8kH3O8Q6vgv1rRMoy6i20E
-         Rcaw==
-X-Forwarded-Encrypted: i=1; AJvYcCW1zqqQ9jw6/ps/nQbfgM2nBrGmnetIyS1086juhy41ZHTA8jHV+px0oc/k5e/OssCLVBA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywzr3gpYg2MEffZqY0ZcaaONqQVrvDutam95OgEiVZxDGvpLgOj
-	Wy2SDjgfHn5NE/e+eLAv/jzarCAzjtnCaCFWzM7cJBgU6l4/M+TTfpITa6gY9lnr4sU=
-X-Gm-Gg: ASbGncvAM1TcSKXd5Ehjz/KiLPnUKBfGccXG/M5pvREq4qsbGC3/V5/JfLgL53VD2xv
-	L4ZxCq736/tx5gcHAu6hPAdpQFrBTKGnvWehe1xh2i5fK+oUYbDnHPnqPIDd+xAkBZ/VE5ZZOAr
-	A9XaScQUTAM7JFsUkzSFbKP2x4ZzabGClYqX8MGCWiwntIDwFrGZ9WUs2GI+glpFrjtCax/KjqM
-	h1egQZKEu7D8ABlLEGaeYfthzobuwolOcheDTQ/e0R4usmP1WUE3eKZl0Ql45URP1KYbm9aDcob
-	UFif2e8FEHvqeNjFZd825bv2lCTa2I5iVRxOXwT9Rp672ENM2cwPZ7uwr5E=
-X-Google-Smtp-Source: AGHT+IFCLdkvsE31m7t8yD/6jqUG4uFt3i1KRw7QWyfZ/XoKsM8OV/p9H7+0x6GvFDE6MJKZsFDc+g==
-X-Received: by 2002:a05:6a21:329e:b0:215:f656:6632 with SMTP id adf61e73a8af0-21fbd588616mr155465637.29.1749834610746;
-        Fri, 13 Jun 2025 10:10:10 -0700 (PDT)
-Received: from [192.168.0.226] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7489008317csm1923000b3a.95.2025.06.13.10.10.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Jun 2025 10:10:10 -0700 (PDT)
-Message-ID: <bd1458d3166ecac6bb88e15bf2fd69a3e47f18ea.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v3 2/3] selftests/bpf: support array presets in
- veristat
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, bpf@vger.kernel.org, 
-	ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net, kafai@meta.com, 
-	kernel-team@meta.com, Mykyta Yatsenko <yatsenko@meta.com>
-Date: Fri, 13 Jun 2025 10:10:08 -0700
-In-Reply-To: <CAEf4BzYLGcKvFWTP1sOOSsJwyP54F2oFq0COKUaKeSg1zZb0+w@mail.gmail.com>
-References: <20250610190840.1758122-1-mykyta.yatsenko5@gmail.com>
-	 <20250610190840.1758122-3-mykyta.yatsenko5@gmail.com>
-	 <4ff2fafb99131f599901580eac96dca34ca20cc0.camel@gmail.com>
-	 <c1cb9bd3-c99d-4af3-bbcc-2ff3c2250ca1@gmail.com>
-	 <8134154a25af0153411c263df923acd350253c25.camel@gmail.com>
-	 <CAEf4BzahEMFWhFX_1AzYeKHY5FkVQiD5J8x69PrRUGhqNHyu6A@mail.gmail.com>
-	 <cb96c155c563cd8998fb8c8683a4b53497b373cf.camel@gmail.com>
-	 <CAEf4BzYLGcKvFWTP1sOOSsJwyP54F2oFq0COKUaKeSg1zZb0+w@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2 (3.56.2-1.fc42) 
+        d=1e100.net; s=20230601; t=1749835298; x=1750440098;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tY1mHLi8uYv9Ftwy4erUDfT1f4kpN3SFueRBAPuuz8w=;
+        b=VtK5xWPdho8c16u2GdBSwma8NIaN0JmuAeOca5aGHN7uhK2GUl6YQe1NFs3KUw01e5
+         o64SnRTUkp+d2KWdA73D6Za48OchcNyWZsaK6iSnhDzM5gmsmoQJCeVDBLhNRdMvqWai
+         rREFV58kkI6vKK1ynL5b+N0YCzXOrPV4+KspB0nyGz7CjxCAO7/nt0BEb9PThPW30GTC
+         38GtzJ2bRg+fwCjFJr7PrHaCY9QXq6k6Z0MMTggn+5abN+2XzkbiBElKJaciTDZT0i6f
+         CypZFe7nLun53cvDUtvm8U2FZ4E2MJybbuD4F+fwMyyzOCPxdB23fr+87M0PgM/BDLyo
+         oc3Q==
+X-Forwarded-Encrypted: i=1; AJvYcCV/MAdtu6kxAUvnAWY9iE3HBjaOQyNBtUSmgYzt4W6fRLMtsF/el6NxzABDXwXom9N4n3E=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxBG1WDz8CA7GuP4e2lTe4vYhbOjHd9g4PzoyWULhZ+Ry1oKUML
+	4xHST/fqqMWoMVbh+TdjBUutmbH9GLrbyxRic/bLGUTBHh/bDWEDOeN1lDVmP3tZ1e1Tc4UJDvz
+	Mq0QvwjRL8JIfHR/0eev7Uq+aJd74CNg=
+X-Gm-Gg: ASbGncsaAaELYb/W2VwQQSEyKYxRnHqEpfqzqTp2wrlwSLCGyvlTpNkspu3H4ptR4QM
+	jMv7xIFsIskOf3XHpQraVR+D5ONIpTlvWZqxVNfAV6FlDSIr2lBRlflW1DdAVG8C0NB+jvifvUD
+	o/icuvz3h21ZNC0iy2rdApNwC87OiAEAsbSRlrtaexI0UFhDwKMGSvkERiOh1xHzbzlO0wNQ==
+X-Google-Smtp-Source: AGHT+IHu1irFqibEqDz+w3CrKfQcG/NC+9jrDv8gNl7428z8WbEkmb1zDdZ7oW1p0km6qlpZCO06o4UzAQSqGixamC4=
+X-Received: by 2002:a05:6a00:22cd:b0:740:afda:a742 with SMTP id
+ d2e1a72fcca58-7489ccee906mr356351b3a.0.1749835298284; Fri, 13 Jun 2025
+ 10:21:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20250610190840.1758122-1-mykyta.yatsenko5@gmail.com>
+ <20250610190840.1758122-3-mykyta.yatsenko5@gmail.com> <4ff2fafb99131f599901580eac96dca34ca20cc0.camel@gmail.com>
+ <c1cb9bd3-c99d-4af3-bbcc-2ff3c2250ca1@gmail.com> <8134154a25af0153411c263df923acd350253c25.camel@gmail.com>
+ <CAEf4BzahEMFWhFX_1AzYeKHY5FkVQiD5J8x69PrRUGhqNHyu6A@mail.gmail.com>
+ <cb96c155c563cd8998fb8c8683a4b53497b373cf.camel@gmail.com>
+ <CAEf4BzYLGcKvFWTP1sOOSsJwyP54F2oFq0COKUaKeSg1zZb0+w@mail.gmail.com> <bd1458d3166ecac6bb88e15bf2fd69a3e47f18ea.camel@gmail.com>
+In-Reply-To: <bd1458d3166ecac6bb88e15bf2fd69a3e47f18ea.camel@gmail.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Fri, 13 Jun 2025 10:21:26 -0700
+X-Gm-Features: AX0GCFvMm5DnmRKp4Cf42gc2-tcwwjxatIuzmlZESuzbAQ6YDZr7Q9Wb_QX35sk
+Message-ID: <CAEf4BzYW_denf41UcSFWb66T8STMiu1RFAJaMNs-p-aXrqu5_g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 2/3] selftests/bpf: support array presets in veristat
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, bpf@vger.kernel.org, ast@kernel.org, 
+	andrii@kernel.org, daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com, 
+	Mykyta Yatsenko <yatsenko@meta.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, 2025-06-13 at 09:59 -0700, Andrii Nakryiko wrote:
-> On Fri, Jun 13, 2025 at 9:48=E2=80=AFAM Eduard Zingerman <eddyz87@gmail.c=
-om> wrote:
-> >=20
-> > On Fri, 2025-06-13 at 09:34 -0700, Andrii Nakryiko wrote:
-> > > On Wed, Jun 11, 2025 at 5:21=E2=80=AFAM Eduard Zingerman <eddyz87@gma=
-il.com> wrote:
-> > > >=20
-> > > > What do you think about a more recursive representation for presets=
-?
-> > > > E.g. as follows:
-> > > >=20
-> > > >   struct rvalue {
-> > > >     long long i; /* use find_enum_value() at parse time to avoid un=
-ion */
-> > > >   };
-> > > >=20
-> > > >   struct lvalue {
-> > > >     enum { VAR, FIELD, ARRAY } type;
-> > > >     union {
-> > > >       struct {
-> > > >         char *name;
-> > > >       } var;
-> > > >       struct {
-> > > >         struct lvalue *base;
-> > > >         char *name;
-> > > >       } field;
-> > > >       struct {
-> > > >         struct lvalue *base;
-> > > >         struct rvalue index;
-> > > >       } array;
-> > > >     };
-> > > >   };
-> > > >=20
-> > > >   struct preset {
-> > > >     struct lvalue *lv;
-> > > >     struct rvalue rv;
-> > > >   };
-> > > >=20
-> > > > It can handle matrices ("a[2][3]") and offset/type computation woul=
+On Fri, Jun 13, 2025 at 10:10=E2=80=AFAM Eduard Zingerman <eddyz87@gmail.co=
+m> wrote:
+>
+> On Fri, 2025-06-13 at 09:59 -0700, Andrii Nakryiko wrote:
+> > On Fri, Jun 13, 2025 at 9:48=E2=80=AFAM Eduard Zingerman <eddyz87@gmail=
+.com> wrote:
+> > >
+> > > On Fri, 2025-06-13 at 09:34 -0700, Andrii Nakryiko wrote:
+> > > > On Wed, Jun 11, 2025 at 5:21=E2=80=AFAM Eduard Zingerman <eddyz87@g=
+mail.com> wrote:
+> > > > >
+> > > > > What do you think about a more recursive representation for prese=
+ts?
+> > > > > E.g. as follows:
+> > > > >
+> > > > >   struct rvalue {
+> > > > >     long long i; /* use find_enum_value() at parse time to avoid =
+union */
+> > > > >   };
+> > > > >
+> > > > >   struct lvalue {
+> > > > >     enum { VAR, FIELD, ARRAY } type;
+> > > > >     union {
+> > > > >       struct {
+> > > > >         char *name;
+> > > > >       } var;
+> > > > >       struct {
+> > > > >         struct lvalue *base;
+> > > > >         char *name;
+> > > > >       } field;
+> > > > >       struct {
+> > > > >         struct lvalue *base;
+> > > > >         struct rvalue index;
+> > > > >       } array;
+> > > > >     };
+> > > > >   };
+> > > > >
+> > > > >   struct preset {
+> > > > >     struct lvalue *lv;
+> > > > >     struct rvalue rv;
+> > > > >   };
+> > > > >
+> > > > > It can handle matrices ("a[2][3]") and offset/type computation wo=
+uld
+> > > > > be a simple recursive function.
+> > > > >
+> > > >
+> > > > Why do we need recursion, though? All we should need is an array sp=
+ecs
+> > > > of one of the following types:
+> > > >
+> > > >   a) field access by name
+> > > >     a.1) we might want to distinguish array field vs non-array fiel=
 d
-> > > > be a simple recursive function.
-> > > >=20
-> > >=20
-> > > Why do we need recursion, though? All we should need is an array spec=
-s
-> > > of one of the following types:
-> > >=20
-> > >   a) field access by name
-> > >     a.1) we might want to distinguish array field vs non-array field
-> > > to better catch unintended user errors
-> > >   b) indexing by immediate integer
-> > >   c) indexing by symbolic enum name (or we can combine b and c,
-> > > whatever works better).
-> > >=20
-> > > And that's all. And it will support multi-dimensional arrays.
-> > >=20
-> > > We then process this array one at a time. Each *step* itself might be
-> > > recursive: finding a field by name in C struct is necessarily
-> > > recursive due to anonymous embedded struct/union fields. But other
-> > > than that, it's a simple sequential operation.
-> > >=20
-> > > So unless I'm missing something, let's not add data recursion if it's
-> > > not needed.
-> >=20
-> > Recursive representation I simpler in a sense that you need only one
-> > data type. W/o recursion you need to distinguish between container
-> > data type that links to each constituent.
->=20
-> So you have this tagged union of three different types some of which
-> are self-referential (struct lvalue *). Is that what is simpler than
-> an array of a similarly tagged union, but with no `struct lvalue *`
-> recursive data pointers? How so?
+> > > > to better catch unintended user errors
+> > > >   b) indexing by immediate integer
+> > > >   c) indexing by symbolic enum name (or we can combine b and c,
+> > > > whatever works better).
+> > > >
+> > > > And that's all. And it will support multi-dimensional arrays.
+> > > >
+> > > > We then process this array one at a time. Each *step* itself might =
+be
+> > > > recursive: finding a field by name in C struct is necessarily
+> > > > recursive due to anonymous embedded struct/union fields. But other
+> > > > than that, it's a simple sequential operation.
+> > > >
+> > > > So unless I'm missing something, let's not add data recursion if it=
+'s
+> > > > not needed.
+> > >
+> > > Recursive representation I simpler in a sense that you need only one
+> > > data type. W/o recursion you need to distinguish between container
+> > > data type that links to each constituent.
+> >
+> > So you have this tagged union of three different types some of which
+> > are self-referential (struct lvalue *). Is that what is simpler than
+> > an array of a similarly tagged union, but with no `struct lvalue *`
+> > recursive data pointers? How so?
+>
+> The following:
+>
+>   struct rvalue {
+>     long long i;
+>     const char *enum;
+>   };
+>
+>   struct field_access {
+>     enum { FIELD, ARRAY } type;
+>     union {
+>       struct {
+>         char *name;
+>       } field;
+>       struct {
+>         struct rvalue index;
+>       } array;
+>     };
+>   };
+>
+>   struct preset {
+>     struct field_access *atoms;
+>     int atoms_cnt;
+>     const char *var;
+>     struct rvalue rv;
+>   };
+>
+> Is logically more complex data structure, because it has two levels
+> for expression computation: to compute single offset and to drive a
+> loop for offset accumulation.
 
-The following:
+Perhaps it's subjective? I find an array of field_access structs
+simpler. Maybe because we have a similar approach with resolving CO-RE
+relocation spec strings (I think it's in bpf_core_spec_match()).
 
-  struct rvalue {
-    long long i;
-    const char *enum;
-  };
+I do prefer simpler non-recursive data structures.
 
-  struct field_access {
-    enum { FIELD, ARRAY } type;
-    union {
-      struct {
-        char *name;
-      } field;
-      struct {
-        struct rvalue index;
-      } array;
-    };
-  };
-
-  struct preset {
-    struct field_access *atoms;
-    int atoms_cnt;
-    const char *var;
-    struct rvalue rv;
-  };
-
-Is logically more complex data structure, because it has two levels
-for expression computation: to compute single offset and to drive a
-loop for offset accumulation.
-
-> > Plus in a computation function you need to distinguish first step from
-> > all others.  Recursive organization simplifies both data types and
-> > computation function.
->=20
-> Not sure I follow. You have two situations, and it doesn't matter
-> whether it's a first or not first element. It's either lookup by field
-> name or indexing using integer or enum. In the latter case we should
-> have an active "current type" of array kind we are working with (so
-> yes, we need error checking, but just like with a recursive approach).
->=20
-> Maybe I'm slow, but I don't see how recursivity is making anything
-> simpler, sorry.
+>
+> > > Plus in a computation function you need to distinguish first step fro=
+m
+> > > all others.  Recursive organization simplifies both data types and
+> > > computation function.
+> >
+> > Not sure I follow. You have two situations, and it doesn't matter
+> > whether it's a first or not first element. It's either lookup by field
+> > name or indexing using integer or enum. In the latter case we should
+> > have an active "current type" of array kind we are working with (so
+> > yes, we need error checking, but just like with a recursive approach).
+> >
+> > Maybe I'm slow, but I don't see how recursivity is making anything
+> > simpler, sorry.
