@@ -1,161 +1,126 @@
-Received: from out-186.mta1.migadu.com (out-186.mta1.migadu.com [95.215.58.186])
+Received: from out-180.mta0.migadu.com (out-180.mta0.migadu.com [91.218.175.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE7171FE477
-	for <bpf@vger.kernel.org>; Fri, 13 Jun 2025 02:28:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.186
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C8361EF09B
+	for <bpf@vger.kernel.org>; Fri, 13 Jun 2025 02:37:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749781736; cv=none; b=nTFJ8MkG+d39g+jqEhk33QGku6olsYGaer5V6tXaTwbFr60jVhaNRQcPfXxn6uHDDcNq+35y5nnEmhjI8pZKmsvg9gq/ZNHjC3tZ/1h/2gm19JtQbJ36gfR08c047R9K4S1sLJIS9ItL77fAJa7sK51Aq6Fxd0WLu1jkBn5x3mU=
+	t=1749782271; cv=none; b=qRrtRK5X0Hj10QAuo0DfpP8aMhcUtNlM83uqzddD5Se8V6p/qhWelmy44pp5V0xo/mYeWwks0+wu0heAij2ZHcHx+L39W2EV7VD9EPAUZrOyC8lxue52nsMCwN3kx906I64wq7PFRZvmN/LKXq7y80mZkjbPZUeuri9hc8Rdnq8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749781736; c=relaxed/simple;
-	bh=Z790ia3hhxJSz1+18ONd2BJAGrEX/umegvd5gEVMIME=;
+	s=arc-20240116; t=1749782271; c=relaxed/simple;
+	bh=rLyoFCsONdMg1X5FWeZBMkMcATeLGJmZZ6dsAOCgWIU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IlTn0Y5Iev0HRpRNKdDwyWMO323S+uB6+IjUqmJ7y+nUT+I1HP8xyDO2ICpeXIRh+2iiYkNfu+OXbsklx8Vu7bv9zLkVgG/3Q3KiLlYT+XzFZCCuOLrUr3UCBtJNSseuPEOROb4gg7CAedRYa2PxkladnEUy6aQaRfIzW1/ZLmo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=MugD2vs9; arc=none smtp.client-ip=95.215.58.186
+	 In-Reply-To:Content-Type; b=D/wx4rrULgsOytrSgkXXrJh1hGYDStyOAiw7Y/aHLQjj8ycZ3hl4mIOEjjbh4tSQe7nQT3MZ/en08/KEoGOyohdSXaA7S56W591pgT+kLdOoMXNvOdCuPtk9Mx7T7hEclmq4D21VoKxnoLQiSM8ObYa0WhvDcjHcaw7BWjpD1m4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=aCp9rHNO; arc=none smtp.client-ip=91.218.175.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="MugD2vs9"
-Message-ID: <6473772f-0de8-41f2-9ff7-b448287f5d84@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="aCp9rHNO"
+Message-ID: <6d0e5cd2-bb4e-45af-bf85-0b95d5d2ac18@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1749781732;
+	t=1749782267;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=0ytn+bcuObQ7MKdcELlJIkA6LwJWViBRc7WumuqHenU=;
-	b=MugD2vs99UfQT+anwxTgfoFugtxLmOZ//V9ijbL5YwOdq0vG46KCsAjf8/tpBD72FTkqFR
-	AqD1+o7aaUef/xGdgqKFB/T6F0JIyBgdWbJJQIDOxvxXLGGblkmt0YCnscghyX62e2byci
-	B+h10+RaeWZVCClWmjDZoKlfzCEMlNo=
-Date: Fri, 13 Jun 2025 10:28:05 +0800
+	bh=UEexevjYeaESnUVPiOmfuE919TTbWUklAG5JrE9vJ2w=;
+	b=aCp9rHNOudNL6WYLZrNQ5r4O7uk5JxlBhUWc/+JWs87qA62V+2p9z1u6MEheu/KcEneWfZ
+	gXo2AIF3zlKmxaFA63HeEgSr8J+06PR4MvUeihuqI3KZUYZY9NR0rrPaP4C0PIs5MbMXgv
+	unocSTYKHj52/jJraQKUoS6r1rUJOGw=
+Date: Fri, 13 Jun 2025 10:37:38 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next 1/2] bpf: Add show_fdinfo for uprobe_multi
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
- mattbobrowski@google.com, rostedt@goodmis.org, mhiramat@kernel.org,
- mathieu.desnoyers@efficios.com, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
-References: <20250612115556.295103-1-chen.dylane@linux.dev>
- <CAEf4BzbxGS85nKK8qAYkSE1HEj7hVshmr9xGsZcP5di0Fu02xQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpf: clear user buf when bpf_d_path failed
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+ Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: KP Singh <kpsingh@kernel.org>, Matt Bobrowski <mattbobrowski@google.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
+ Masami Hiramatsu <mhiramat@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, bpf
+ <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+ linux-trace-kernel <linux-trace-kernel@vger.kernel.org>
+References: <20250611154859.259682-1-chen.dylane@linux.dev>
+ <CAEf4Bzbn=RVhMOR7RapYwi+s8gbVS=1msOuZ7MhPvgz8zHiE9w@mail.gmail.com>
+ <CAADnVQJ8cVi4KyJqWgEfyWYs+zSYQ73PevrNszPkisrdPSjYMg@mail.gmail.com>
+ <CAEf4BzayBd9e5c9fiEPgDKPoRm-E4uB_u__xKcRpXDz18kNnkA@mail.gmail.com>
+ <CAADnVQKw2u9y-Cf+8idB0bZ0v-p6BtuyRV=JpmN4to3_1Z6GEA@mail.gmail.com>
+ <CAEf4BzbScdvawnTZ7364bXxU2QpW_ooCB-tjohBgC4WSvFigFg@mail.gmail.com>
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Tao Chen <chen.dylane@linux.dev>
-In-Reply-To: <CAEf4BzbxGS85nKK8qAYkSE1HEj7hVshmr9xGsZcP5di0Fu02xQ@mail.gmail.com>
+In-Reply-To: <CAEf4BzbScdvawnTZ7364bXxU2QpW_ooCB-tjohBgC4WSvFigFg@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-在 2025/6/13 05:27, Andrii Nakryiko 写道:
-> On Thu, Jun 12, 2025 at 4:56 AM Tao Chen <chen.dylane@linux.dev> wrote:
+在 2025/6/13 08:06, Andrii Nakryiko 写道:
+> On Thu, Jun 12, 2025 at 4:56 PM Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
 >>
->> Show uprobe_multi link info with fdinfo, the info as follows:
+>> On Thu, Jun 12, 2025 at 4:27 PM Andrii Nakryiko
+>> <andrii.nakryiko@gmail.com> wrote:
+>>>
+>>> On Thu, Jun 12, 2025 at 2:40 PM Alexei Starovoitov
+>>> <alexei.starovoitov@gmail.com> wrote:
+>>>>
+>>>> On Thu, Jun 12, 2025 at 2:29 PM Andrii Nakryiko
+>>>> <andrii.nakryiko@gmail.com> wrote:
+>>>>>
+>>>>> On Wed, Jun 11, 2025 at 8:49 AM Tao Chen <chen.dylane@linux.dev> wrote:
+>>>>>>
+>>>>>> The bpf_d_path() function may fail. If it does,
+>>>>>> clear the user buf, like bpf_probe_read etc.
+>>>>>>
+>>>>>
+>>>>> But that doesn't mean we *have to* do memset(0) for bpf_d_path(),
+>>>>> though. Especially given that path buffer can be pretty large (4KB).
+>>>>>
+>>>>> Is there an issue you are trying to address with this, or is it more
+>>>>> of a consistency clean up? Note, that more or less recently we made
+>>>>> this zero filling behavior an option with an extra flag
+>>>>> (BPF_F_PAD_ZEROS) for newer APIs. And if anything, bpf_d_path() is
+>>>>> more akin to variable-sized string probing APIs rather than
+>>>>> fixed-sized bpf_probe_read* family.
+>>>>
+>>>> All old helpers had this BPF_F_PAD_ZEROS behavior
+>>>> (or rather should have had).
+>>>> So it makes sense to zero in this helper too for consistency.
+>>>> I don't share performance concerns. This is an error path.
+>>>
+>>> It's just a bizarre behavior as it stands right now.
+>>>
+>>> On error, you'll have a zeroed out buffer, OK, good so far.
+>>>
+>>> On success, though, you'll have a buffer where first N bytes are
+>>> filled out with good path information, but then the last sizeof(buf) -
+>>> N bytes would be, effectively, garbage.
+>>>
+>>> All in all, you can't use that buffer as a key for hashmap looking
+>>> (because of leftover non-zeroed bytes at the end), yet on error we
+>>> still zero out bytes for no apparently useful reason.
+>>>
+>>> And then for the bpf_path_d_path(). What do we do about that one? It
+>>> doesn't have zeroing out either in the error path, nor in the success
+>>> path. So just more inconsistency all around.
 >>
->> link_type:      uprobe_multi
->> link_id:        9
->> prog_tag:       e729f789e34a8eca
->> prog_id:        39
->> type:   uprobe_multi
->> func_cnt:       3
->> pid:    0
->> path:   /home/dylane/bpf/tools/testing/selftests/bpf/test_progs
->> offset: 0xa69ed7
->> ref_ctr_offset: 0x0
->> cookie: 3
->> offset: 0xa69ee2
->> ref_ctr_offset: 0x0
->> cookie: 1
->> offset: 0xa69eed
->> ref_ctr_offset: 0x0
->> cookie: 2
+>> Consistency with bpf_path_d_path() kfunc is indeed missing.
 >>
->> Signed-off-by: Tao Chen <chen.dylane@linux.dev>
->> ---
->>   kernel/trace/bpf_trace.c | 48 ++++++++++++++++++++++++++++++++++++++++
->>   1 file changed, 48 insertions(+)
->>
->> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
->> index 24b94870b50..c4ad82b8fd8 100644
->> --- a/kernel/trace/bpf_trace.c
->> +++ b/kernel/trace/bpf_trace.c
->> @@ -3157,10 +3157,58 @@ static int bpf_uprobe_multi_link_fill_link_info(const struct bpf_link *link,
->>          return err;
->>   }
->>
->> +#ifdef CONFIG_PROC_FS
->> +static void bpf_uprobe_multi_show_fdinfo(const struct bpf_link *link,
->> +                                        struct seq_file *seq)
->> +{
->> +       struct bpf_uprobe_multi_link *umulti_link;
->> +       char *p, *buf;
->> +
->> +       umulti_link = container_of(link, struct bpf_uprobe_multi_link, link);
->> +
->> +       buf = kmalloc(PATH_MAX, GFP_KERNEL);
->> +       if (!buf)
->> +               return;
->> +
->> +       p = d_path(&umulti_link->path, buf, PATH_MAX);
->> +       if (IS_ERR(p)) {
->> +               kfree(buf);
->> +               return;
->> +       }
->> +
->> +       seq_printf(seq,
->> +                  "type:\t%s\n"
->> +                  "func_cnt:\t%u\n"
+>> Ok, since you insist, dropped this patch, and force pushed.
 > 
-> it's not really *func* (e.g., for USDTs it's basically guaranteed to
-> be somewhere inside the function, potentially in many places within
-> the same function), I'd use generic "uprobe_{cnt,count}"
-> 
->
+> Great, thank you!
 
-will change it in v2, thanks for the advice.
-
->> +                  "pid:\t%u\n"
->> +                  "path:\t%s\n",
->> +                  umulti_link->flags == BPF_F_UPROBE_MULTI_RETURN ?
->> +                                        "uretprobe_multi" : "uprobe_multi",
->> +                  umulti_link->cnt,
->> +                  umulti_link->task ? task_pid_nr_ns(umulti_link->task,
->> +                          task_active_pid_ns(current)) : 0,
->> +                  p);
->> +
->> +       for (int i = 0; i < umulti_link->cnt; i++) {
->> +               seq_printf(seq,
->> +                          "offset:\t%#llx\n"
->> +                          "ref_ctr_offset:\t%#lx\n"
->> +                          "cookie:\t%llu\n",
->> +                          umulti_link->uprobes[i].offset,
->> +                          umulti_link->uprobes[i].ref_ctr_offset,
->> +                          umulti_link->uprobes[i].cookie);
->> +       }
->> +
->> +       kfree(buf);
->> +}
->> +#endif
->> +
->>   static const struct bpf_link_ops bpf_uprobe_multi_link_lops = {
->>          .release = bpf_uprobe_multi_link_release,
->>          .dealloc_deferred = bpf_uprobe_multi_link_dealloc,
->>          .fill_link_info = bpf_uprobe_multi_link_fill_link_info,
->> +#ifdef CONFIG_PROC_FS
->> +       .show_fdinfo = bpf_uprobe_multi_show_fdinfo,
->> +#endif
->>   };
->>
->>   static int uprobe_prog_run(struct bpf_uprobe *uprobe,
->> --
->> 2.48.1
->>
-
+The changes in this patch are relatively simple, but the discussion 
+between the two of you is more meaningful to me. I agree with Andrii's 
+point of view. Thank you both for discussing this patch.
 
 -- 
 Best Regards
