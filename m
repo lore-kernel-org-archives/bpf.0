@@ -1,25 +1,25 @@
-Received: from relay.hostedemail.com (smtprelay0012.hostedemail.com [216.40.44.12])
+Received: from relay.hostedemail.com (smtprelay0013.hostedemail.com [216.40.44.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8630221D94;
-	Fri, 13 Jun 2025 02:27:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FA7F34CF9;
+	Fri, 13 Jun 2025 02:28:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749781643; cv=none; b=iNixb0JgWjBXexLYMIRgJtGJ9/kI1VZyqZZMWNVOEzz751R34SnEpzwGkzJA6RLopzGSnSY2gQRPyyeXdWThbJc8HgTOJBbtESw1QR0q2ZFMYr5EklcriNJtGIe0UTvy2alAmmhiDO+D9z3ssBu+1IRF6oeVr5cEcngu1QLRbXM=
+	t=1749781716; cv=none; b=apV2MiFkmdJILe76jCmbQ+c3qSojMabPAMMDH2VILpC92y9tvsDWP27S0eTqMAVnHpQtNq5cyj5aJPFmoRpBGBCVVG8C1gqhInaQkq9fBg9BJi7J/YSf9BTxKL70vBPUODdHqattg6Mpmvwq23hvMDSO+ccHAWQDWKSBlOBYIXU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749781643; c=relaxed/simple;
-	bh=5yip3kb/uXHDzziQvUnC/6AazHd/eRmyu6rm2WrhVm8=;
+	s=arc-20240116; t=1749781716; c=relaxed/simple;
+	bh=iOs1L4NIOZyQK9486zEGSy8J5viLC8mNIVx7iNPVSo8=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=gAwlkYOaN5sFS/4DrCqnv9OW6m7ZY6MyFRjL/AtXNjEHc0MFQEpKHzhPy/ETQMVv07aBWqHAgkg+wFEkdF0CtR0168CaXXBpO4rkdOof6MZVw0Xj6oxTx8UTM/jyWFct7G7gZz0WWcA/kIR/6dW05pvXGZKfQG1dXtDyS9h7M1w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.12
+	 MIME-Version:Content-Type; b=Gv2tXigCZbhEEPTjKYYLUflkL4f1GiMPiaqvH7EEYfEdhFbDJ0wm8Aq2OW18jY53F3KWIKybaMt0bWHZ8jk5YTmbQvNtCkcEABOjsIL55Ma+5EMDE7aqsFo21If8wjJR7rjWhsnU/xdWLecUqiR+5Z1gq9uv7Wn+rtRkb5m3aSg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf14.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay05.hostedemail.com (Postfix) with ESMTP id 3AA385C626;
-	Fri, 13 Jun 2025 02:26:56 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf14.hostedemail.com (Postfix) with ESMTPA id BB20930;
-	Fri, 13 Jun 2025 02:26:53 +0000 (UTC)
-Date: Thu, 12 Jun 2025 22:26:52 -0400
+Received: from omf04.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay07.hostedemail.com (Postfix) with ESMTP id 2F763160AD9;
+	Fri, 13 Jun 2025 02:28:33 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf04.hostedemail.com (Postfix) with ESMTPA id A153E20030;
+	Fri, 13 Jun 2025 02:28:30 +0000 (UTC)
+Date: Thu, 12 Jun 2025 22:28:29 -0400
 From: Steven Rostedt <rostedt@goodmis.org>
 To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 Cc: LKML <linux-kernel@vger.kernel.org>, Linux trace kernel
@@ -31,10 +31,11 @@ Cc: LKML <linux-kernel@vger.kernel.org>, Linux trace kernel
  Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>
 Subject: Re: [PATCH v2] xdp: tracing: Hide some xdp events under
  CONFIG_BPF_SYSCALL
-Message-ID: <20250612222652.229eaa9c@batman.local.home>
-In-Reply-To: <CAADnVQKEosaLbpLg4Zk_CcDSKT+Jzb3ScKQWBA51vLHt-AoQ8A@mail.gmail.com>
+Message-ID: <20250612222829.29817207@batman.local.home>
+In-Reply-To: <20250612222652.229eaa9c@batman.local.home>
 References: <20250612182023.78397b76@batman.local.home>
 	<CAADnVQKEosaLbpLg4Zk_CcDSKT+Jzb3ScKQWBA51vLHt-AoQ8A@mail.gmail.com>
+	<20250612222652.229eaa9c@batman.local.home>
 X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -42,53 +43,26 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Rspamd-Server: rspamout01
-X-Rspamd-Queue-Id: BB20930
-X-Stat-Signature: 951scg5cjfx8jkqraazt7kz8q97i8m78
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Server: rspamout03
+X-Rspamd-Queue-Id: A153E20030
+X-Stat-Signature: tz4opxtxea3rmmf5436zrzucdee5c8j5
 X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX1/tkEmgrH76JFA6D39uy7avEvTqIygOF6w=
-X-HE-Tag: 1749781613-255969
-X-HE-Meta: U2FsdGVkX19pH4pVTyeC9rmZu58S+wheISxQ2eujOYvLAd3K9X5UXYOcvHtT9H31sN5LMrVshnuKZHpsyJFf6QjgaxZJndjAF0YphG1J4ROgjzeKrCP3mRNzf3n/nIVYTksOvt8uBkIHYQ/UFxRx18HnP7FjlUUFadrcZUBMw7vdy62g2SA2wgFtYdaHt50JFzdaTlO+Xzy+XO103nsQieyb2xQcF0oBSBcaPegZFX8z4yYDATVI9GB59JZr89IBTfNWO304+jAS73Ef6dA8TA/WS9Qi6JmjxELBm0nV5T5EPpWMV0/XXX7qg5LoTOsnpyAgILMw+SVNXIJLcAgpMS90XZz0447ZykWDXx+xAPIH4GrqqxzggvMLxFdADwRrdHPtP2QKNOGl98vZKp7CojGbVho2QVVQJjEjg5BRTZg=
+X-Session-ID: U2FsdGVkX18LY8ouoVMEBS83hqnPGAKja8nZSul9RzE=
+X-HE-Tag: 1749781710-7210
+X-HE-Meta: U2FsdGVkX19EdnVgXbNNYZRgvT3PpYGbhG1vIuMISp6DQDbBZn5sFKeX+FLbnq5HNxuJ+iK5BiX47hYI2LcRB6A3BAffH3UE6ODSM5wDyoxOGFCGIAeXBd268etc2x7L0kh2RfnV3ehUnJZLg6z2CRlPZ2VNDqQdgM8gQGcK0LjCwZC3+LuIfkUqiWRinID1klNIEuwRnvH9Fejs0u1Qc7/xDpmAR9qYWtqVc4S8VOGQl3b/QZG/P2Fip6o6TAlAYekkejAMPU6RcBLRcqMK1QmoHxn3YtwXQEElRTAMuOcdZsiI4nW0sf2tqav3I8JeCU0q2Q9HM0cnIhAsFoXjVpIsP0FUNPkGMAFOCdStIKe31YkQf0DhYqDGWpZIdcnlA66aYe0ybgUJz8ea3+Aa8g==
 
-On Thu, 12 Jun 2025 19:16:33 -0700
-Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
+On Thu, 12 Jun 2025 22:26:52 -0400
+Steven Rostedt <rostedt@goodmis.org> wrote:
+> 
+> > We can certainly take it, but you mentioned you're working
+> > on some patches that will warn when tracepoint is not used.
+> > So do you need this to land sooner than the next merge window ?  
+> 
 
-> On Thu, Jun 12, 2025 at 3:20=E2=80=AFPM Steven Rostedt <rostedt@goodmis.o=
-rg> wrote:
-> >
-> > From: Steven Rostedt <rostedt@goodmis.org>
-> >
-> > The events xdp_cpumap_kthread, xdp_cpumap_enqueue and xdp_devmap_xmit a=
-re
-> > only called when CONFIG_BPF_SYSCALL is defined.  As each event can take=
- up
-> > to 5K regardless if they are used or not, it's best not to define them
-> > when they are not used. Add #ifdef around these events when they are not
-> > used.
-> >
-> > Acked-by: Jesper Dangaard Brouer <hawk@kernel.org>
-> > Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-> > ---
-> > Changes since v1: https://lore.kernel.org/20250612101612.3d4509cc@batma=
-n.local.home
-> >
-> > - Rebased on top of bpf-next =20
->=20
-> We can certainly take it, but you mentioned you're working
-> on some patches that will warn when tracepoint is not used.
-> So do you need this to land sooner than the next merge window ?
+BTW, if you are curious about those patches, I just posted them:
 
-No. I plan on sending that code near the end of the next merge window
-to let these patches get in before they start to add warnings.
-
-I'm also going to wait till near the end of this cycle before I add
-that code to linux-next to keep the warnings happening there too soon.
-
-So, please take it. That way there's less likelihood of another
-conflict.
-
-Thanks,
+https://lore.kernel.org/linux-trace-kernel/20250612235827.011358765@goodmis.org/
 
 -- Steve
