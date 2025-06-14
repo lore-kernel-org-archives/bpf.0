@@ -1,31 +1,31 @@
-Received: from relay.hostedemail.com (smtprelay0014.hostedemail.com [216.40.44.14])
+Received: from relay.hostedemail.com (smtprelay0010.hostedemail.com [216.40.44.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5196915383A;
-	Sat, 14 Jun 2025 02:46:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A171D15746F;
+	Sat, 14 Jun 2025 02:46:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749869174; cv=none; b=RCdU/b41C5/RGOms12i8HtxfyHboX86zA+DqlR7uLYdauxJBhQCBv5PHpTcXqWXX4KRMUwTo970p7kaRmPxhqPjVEhjPqDN7geGNAgw8mh5upijm9jv1TjRj3PoFCz2pxm7OIJ2ibhgvaEQL0GGhgSZi1TcfY0EyTRzi3aPc+GU=
+	t=1749869180; cv=none; b=arsWsu1cSAPFd0vtccLNCtZNRo0FilCxIPVYhq1HF1OPQrW+ae1FgnmfuTSuc0iNeaHKnNeoiSLPvS23ZqdGVupQ8d35SCy+7fW7Qv3aMbWtSvwPDZV8NHWwLMAwatsbSElpLoZAV0NNA2wvEut1PjwSoHCXPS+9srsulgyVcCg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749869174; c=relaxed/simple;
-	bh=P431Xsnqui3cxWjbZJTxi5mE9YPKPRSkaYRnObmYMjc=;
+	s=arc-20240116; t=1749869180; c=relaxed/simple;
+	bh=YSYs+sDx3g+kTQq1PzAjoKygSIU4zjvdJ8dLKOQE1cU=;
 	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type; b=GEWM2orh+k0QBwGk6SWsWgb8K3aJsP7K1LOAPf8ul/Sq4+B7xoWeXiQVCkZb+piu4tPiyKWw9/JDhFggEfef3HnMCRLm0exX8QHhrEhiLINKfCh/eBu5k5cShGGO+rn1eyNL71+6Iz0ORWY9163MV1fNNKNesrJo9CWUDv0gmN0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.14
+	 Content-Type; b=erj5KxcqF9kuEFpjju6if/AL9LlV8uncVJteXNCwW4m0vdGypdpmjk1bPZcc79gHDvicDfTpPp8M/UfOpJGXegdtGHpAGQ6zsOEY2dGGC0YrJX4GaQvDQARmvCwCjbFzRuHPhuU6CnZ5L1SFQSpxXCB+sEer5fkbyAJJYZlZRh8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
 Received: from omf01.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay10.hostedemail.com (Postfix) with ESMTP id 54709C1B24;
+	by unirelay04.hostedemail.com (Postfix) with ESMTP id 81B5F1A1B9B;
 	Sat, 14 Jun 2025 02:45:40 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: nevets@goodmis.org) by omf01.hostedemail.com (Postfix) with ESMTPA id 41E4D60009;
+Received: from [HIDDEN] (Authenticated sender: nevets@goodmis.org) by omf01.hostedemail.com (Postfix) with ESMTPA id 654EE60011;
 	Sat, 14 Jun 2025 02:45:37 +0000 (UTC)
 Received: from rostedt by gandalf with local (Exim 4.98.2)
 	(envelope-from <rostedt@goodmis.org>)
-	id 1uQGvM-00000002SnR-14KT;
+	id 1uQGvM-00000002SoQ-2WSo;
 	Fri, 13 Jun 2025 22:47:16 -0400
-Message-ID: <20250614024716.103249316@goodmis.org>
+Message-ID: <20250614024716.450609897@goodmis.org>
 User-Agent: quilt/0.68
-Date: Fri, 13 Jun 2025 22:46:08 -0400
+Date: Fri, 13 Jun 2025 22:46:10 -0400
 From: Steven Rostedt <rostedt@goodmis.org>
 To: linux-kernel@vger.kernel.org,
  linux-trace-kernel@vger.kernel.org,
@@ -46,7 +46,7 @@ Cc: Masami Hiramatsu <mhiramat@kernel.org>,
  Jens Remus <jremus@linux.ibm.com>,
  Linus Torvalds <torvalds@linux-foundation.org>,
  Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH v10 03/11] perf: Use current->flags & PF_KTHREAD instead of current->mm == NULL
+Subject: [PATCH v10 05/11] perf: Skip user unwind if the task is a kernel thread
 References: <20250614024605.597728558@goodmis.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -55,59 +55,38 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Stat-Signature: gh9us45h4e8psc1qttkwxihrnuzj1mpc
-X-Rspamd-Server: rspamout04
-X-Rspamd-Queue-Id: 41E4D60009
+X-Rspamd-Queue-Id: 654EE60011
+X-Stat-Signature: ymshrhe4p451jtxna5jhw8pgussssgoz
+X-Rspamd-Server: rspamout07
 X-Session-Marker: 6E657665747340676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX1+D2cbZAeherMC4l1RmnvmKaS9U/cP+v2c=
-X-HE-Tag: 1749869137-398534
-X-HE-Meta: U2FsdGVkX19NR++Z9YvGmoBnfjuP/vP1QemDs+0hRMqCwe9D7IHDkS7uQu8ouLklv69enG7UECykxwrC427JmHa8RXuMZIMVqQY+8bRV55cSxzSfVS4hNQafqyEucQfYvm+Hj/U5fU11guwl+S1K40wMrPIgSptasqOq6HxjZiw/XPnUJ1z8s8IIOhWqO8dSVMs9RCQMTvDl7K74gAVbNz5Qk+Ao7stAR5UbQcCD/NtL+kMmU5WcPv9kaILDfl6O7kl6qbYBu2DeHS/U193/KPeQn6c6q6wodUHFrw6ObPc1iiXAnqqVkqn/BRbA8fDkpFnBOhYIG6adIRUvx7ncLdGXIyDDHxRobo1C2i56FiIJgA0bkPIG9t8ncALqEJMHWb6yDHiYZmDcRir3YBDUqnsgKxgsVKfa/Tf9kM+Qli5NkWzZ5OhTl3kgYVZCAENYGmJ4QB7GwpBtzIjFDhqjrpE4LaMdugpymA6xdRvKPqc=
+X-Session-ID: U2FsdGVkX1967b6nyc8/EOFw7hQgGJZVARwzCsgK7LM=
+X-HE-Tag: 1749869137-688853
+X-HE-Meta: U2FsdGVkX19fz9QUkDzMZOy0Bu2GIX9DdjtB4jGskhgYGaSoVJsS+GrcdFeYkbljg8o2PwJoxjm6/K7r/bcZdn9i22emJycUbdAbPJ5tmmHfFUQgEPNTu8awP4Y9W1ufaYrS2Aftru6Df8oRLZN/B7HTmfOQd+9UqRH01yML7t/dxg1w9J0WOL7Yt030AoRTQrMzx4AFLyKbJoaPouAkE7FDlULjLi7CgyfAeS4UI1H3BK+XD/+Wm2K8hIFFzNR4gqTqEkhkUr5NIFS2QkarxYa4tgEHNy1zGwEtxjQpLaUAVmhdm87wJfDUPRcfoctmL1Nd/enfQjnn4lfnymdR/hUpDIbgL1QzbAlohW5Pv9gAf8fxxXIOOkSmq4vK/m1lx/y7i3BcMNX501PdCDWc3hMMyGmANjBxwJgClg0gCdI=
 
-From: Steven Rostedt <rostedt@goodmis.org>
+From: Josh Poimboeuf <jpoimboe@kernel.org>
 
-To determine if a task is a kernel thread or not, it is more reliable to
-use (current->flags & PF_KTHREAD) than to rely on current->mm being NULL.
-That is because some kernel tasks (io_uring helpers) may have a mm field.
+If the task is not a user thread, there's no user stack to unwind.
 
-Link: https://lore.kernel.org/linux-trace-kernel/20250424163607.GE18306@noisy.programming.kicks-ass.net/
-
+Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- kernel/events/callchain.c | 6 +++---
- kernel/events/core.c      | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ kernel/events/core.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/events/callchain.c b/kernel/events/callchain.c
-index cd0e3fc7ed05..42d21761cb4d 100644
---- a/kernel/events/callchain.c
-+++ b/kernel/events/callchain.c
-@@ -246,10 +246,10 @@ get_perf_callchain(struct pt_regs *regs, bool kernel, bool user,
- 
- 	if (user && !crosstask) {
- 		if (!user_mode(regs)) {
--			if  (current->mm)
--				regs = task_pt_regs(current);
--			else
-+			if (current->flags & PF_KTHREAD)
- 				regs = NULL;
-+			else
-+				regs = task_pt_regs(current);
- 		}
- 
- 		if (regs) {
 diff --git a/kernel/events/core.c b/kernel/events/core.c
-index d8688668d21a..375115492c02 100644
+index 375115492c02..55d5d4ded7ab 100644
 --- a/kernel/events/core.c
 +++ b/kernel/events/core.c
-@@ -8032,7 +8032,7 @@ static u64 perf_virt_to_phys(u64 virt)
- 		 * Try IRQ-safe get_user_page_fast_only first.
- 		 * If failed, leave phys_addr as 0.
- 		 */
--		if (current->mm != NULL) {
-+		if (!(current->flags & PF_KTHREAD)) {
- 			struct page *p;
- 
- 			pagefault_disable();
+@@ -8144,7 +8144,8 @@ struct perf_callchain_entry *
+ perf_callchain(struct perf_event *event, struct pt_regs *regs)
+ {
+ 	bool kernel = !event->attr.exclude_callchain_kernel;
+-	bool user   = !event->attr.exclude_callchain_user;
++	bool user   = !event->attr.exclude_callchain_user &&
++		!(current->flags & PF_KTHREAD);
+ 	/* Disallow cross-task user callchains. */
+ 	bool crosstask = event->ctx->task && event->ctx->task != current;
+ 	const u32 max_stack = event->attr.sample_max_stack;
 -- 
 2.47.2
 
