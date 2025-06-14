@@ -1,31 +1,31 @@
-Received: from relay.hostedemail.com (smtprelay0014.hostedemail.com [216.40.44.14])
+Received: from relay.hostedemail.com (smtprelay0011.hostedemail.com [216.40.44.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACDDB15746F;
-	Sat, 14 Jun 2025 02:46:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7361B19CC37;
+	Sat, 14 Jun 2025 02:46:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749869184; cv=none; b=MDvYm3EF/eUzNzeVRnOJrMmAoJsgDwfwETQlw+uGDNCqOi89Y9UKvNAt6++WT3fxgbARPrem6HPV2W0Uku3ObzYZERHTkge5X8UD4Xhxb1xUDBdhhYhfqPayzMBL6qT4aPEhjuLiviAJDIG2dRo9ZIzIYdzw24ol3Mh3XzEaLFk=
+	t=1749869187; cv=none; b=RAjOIFQ+hxDoSu+jvqPPTAa/x5jsdVp2Kz2XfoXT9GSlAQgkxVGWf61qoKIcZXtMtoeaL9iqb4C7bxOybjN0lgGQjewOghny/vQ6Eatltw9WkVZb2NBe5+0gmXhIQ1cXBCbl5BqaSya0jIlDlFBKpPJCquNNkvkahp3keZpHDIc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749869184; c=relaxed/simple;
-	bh=tO09DpsSPf5OLDazQv/DfSYXGXfDYhmqqdnykU40oGg=;
+	s=arc-20240116; t=1749869187; c=relaxed/simple;
+	bh=drCltSOBO4qBH4U6qNMyzlad2FUcdSN/k1Ro7pr12Kk=;
 	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type; b=ZND5c2uh4pFBQews1osjtRrQxK0jW9qB/GgDDiAvqGCDNA+d9S5q9Xw4mzDWC6Ag6I2etDBBEQo+sx9XC0jln+L+CTgeHE9T/8DbBuSflM3Zp8fQR0lbzqhJtZiRDKjeuJd2Qz2RU6hiw/yxWBGMuKMJU9xuqycDQ9m6eocrLs0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.14
+	 Content-Type; b=FPvjbBpSNT9PcO0LIDIdSsEs2Bb905BQIRMyrdaxDw1Nfe9cqeq7K1CjGizgoyahhLsZ42oEMx01lt+k3uaZLknnvDKSSmTQiJ4gwAWALWMKGTm49cXKZpYrK1+CT1Oqmhd+LOkOpQ8WmRjstJUz2574h99KeAzib1zAoI6RgVo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf02.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay07.hostedemail.com (Postfix) with ESMTP id 5CBE4161ADE;
+Received: from omf17.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay09.hostedemail.com (Postfix) with ESMTP id 5C93981AF6;
 	Sat, 14 Jun 2025 02:45:40 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: nevets@goodmis.org) by omf02.hostedemail.com (Postfix) with ESMTPA id 3DF9380009;
+Received: from [HIDDEN] (Authenticated sender: nevets@goodmis.org) by omf17.hostedemail.com (Postfix) with ESMTPA id 504401A;
 	Sat, 14 Jun 2025 02:45:37 +0000 (UTC)
 Received: from rostedt by gandalf with local (Exim 4.98.2)
 	(envelope-from <rostedt@goodmis.org>)
-	id 1uQGvM-00000002Smv-0LPo;
+	id 1uQGvM-00000002Snv-1nhI;
 	Fri, 13 Jun 2025 22:47:16 -0400
-Message-ID: <20250614024715.935871344@goodmis.org>
+Message-ID: <20250614024716.276531218@goodmis.org>
 User-Agent: quilt/0.68
-Date: Fri, 13 Jun 2025 22:46:07 -0400
+Date: Fri, 13 Jun 2025 22:46:09 -0400
 From: Steven Rostedt <rostedt@goodmis.org>
 To: linux-kernel@vger.kernel.org,
  linux-trace-kernel@vger.kernel.org,
@@ -46,8 +46,7 @@ Cc: Masami Hiramatsu <mhiramat@kernel.org>,
  Jens Remus <jremus@linux.ibm.com>,
  Linus Torvalds <torvalds@linux-foundation.org>,
  Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH v10 02/11] perf: Have get_perf_callchain() return NULL if crosstask and user are
- set
+Subject: [PATCH v10 04/11] perf: Simplify get_perf_callchain() user logic
 References: <20250614024605.597728558@goodmis.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -56,73 +55,57 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Rspamd-Queue-Id: 3DF9380009
-X-Stat-Signature: fftx6wqwzd5up73u5qa14rsnawapwoyj
-X-Rspamd-Server: rspamout05
+X-Rspamd-Server: rspamout03
+X-Rspamd-Queue-Id: 504401A
+X-Stat-Signature: bd9rq7gdccu5mpxo8cztwunacwmkjzsc
 X-Session-Marker: 6E657665747340676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX19YQQ6ows32X7Rgpbzet1mrfTXPKPXEawg=
-X-HE-Tag: 1749869137-870351
-X-HE-Meta: U2FsdGVkX1+2pV/i/1GJsW2PANrFg89gdJm9yQ6FOLEyM4aK5AITKQ5QbfKPFWno9SPASEiRVaqAEJtYdu0EW+c+gCqMiJIjfJJ90Np7BYt1UZbCBbAubdFtXWVqpIhG5WHGPDy/n4dwEbGtcWyglvmQVyB+++q6D19tTZhtak1nFVwQ06dU3szdxJRHjMvyw97FHbFPmOsGYJggH8QpP+l05QRblAn2iSV7S82xllXR2NiXGtytXOI6XEx98fs4cvrrgKcxy5cfOJBAX+tl2+xl/c+yQqiW5uUQWaGmq4KB8YvEhMOdGEZDu9RXm3DfPlsXTichs8PL0Av3mOsYkpl19QHk4lragX5JIJbeoMpDb73dHgrla1TOfJ9z3gL8gijvW+HMKw7iU34L5KTBc4x0UfOCmYvn+1SIww6eCdQ=
+X-Session-ID: U2FsdGVkX1+1VLZiuymOkoCxFkPRvKezoXm2tsMEHWk=
+X-HE-Tag: 1749869137-35291
+X-HE-Meta: U2FsdGVkX1/BldJ2gYVmlAYikMMZk6ca3adsVzzg66LYuuddbsfSDMA2Pi3Dy5V81nmiObqEvtZmWfjF1NyguNL2JJmD8Hw0wqlVl2ojrNN3bWTPgzmTDsQgXOv4dWxUUPKMTtFI3DBS9exhl1uPtHC68vvQzvbRyDwQJG6WZGkbyBTN63ELG3vm3Ie9MFxPjH0fVRit4RSbyAFs0Tjm+bkanHeY68eapd9xgtcdPJFA/Y2VHQBBtdEwlHluGTUR8yW6GaN+7uPabD4ktQ8T40oVjZ5QDA9VCi1IKTeRmUob8xy4IjW4rMMDxiCloe2oIJupzFb3758IHzZhQ8keAIYouhffIlp6UKvZUInAzfCYTX4ZqkDjR/ugLVQUgS9nYD2+py5W7lsxKBqt4JU/nBx9fxOdol2viGGLha54es4=
 
 From: Josh Poimboeuf <jpoimboe@kernel.org>
 
-get_perf_callchain() doesn't support cross-task unwinding for user space
-stacks, have it return NULL if both the crosstask and user arguments are
-set.
+Simplify the get_perf_callchain() user logic a bit.  task_pt_regs()
+should never be NULL.
 
+Acked-by: Namhyung Kim <namhyung@kernel.org>
 Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
-Changes since v8 (v9 is the same): https://lore.kernel.org/linux-trace-kernel/20250509165156.135430576@goodmis.org/
-
-- Allow crosstask for user and kernel in get_perf_callchain()
-  Instead of exiting out early if crosstask and user is set, also check for
-  kernel, and still allow the kernel stack to do the crosstask.
-  Not sure if anyone does that, but it should not break what use to work.
-  (Andrii Nakryiko)
-
- kernel/events/callchain.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ kernel/events/callchain.c | 18 ++++++++----------
+ 1 file changed, 8 insertions(+), 10 deletions(-)
 
 diff --git a/kernel/events/callchain.c b/kernel/events/callchain.c
-index b0f5bd228cd8..cd0e3fc7ed05 100644
+index 42d21761cb4d..16eb68f31810 100644
 --- a/kernel/events/callchain.c
 +++ b/kernel/events/callchain.c
-@@ -224,6 +224,10 @@ get_perf_callchain(struct pt_regs *regs, bool kernel, bool user,
- 	struct perf_callchain_entry_ctx ctx;
- 	int rctx, start_entry_idx;
- 
-+	/* crosstask is not supported for user stacks */
-+	if (crosstask && user && !kernel)
-+		return NULL;
-+
- 	entry = get_callchain_entry(&rctx);
- 	if (!entry)
- 		return NULL;
-@@ -240,7 +244,7 @@ get_perf_callchain(struct pt_regs *regs, bool kernel, bool user,
- 		perf_callchain_kernel(&ctx, regs);
- 	}
- 
--	if (user) {
-+	if (user && !crosstask) {
+@@ -247,21 +247,19 @@ get_perf_callchain(struct pt_regs *regs, bool kernel, bool user,
+ 	if (user && !crosstask) {
  		if (!user_mode(regs)) {
- 			if  (current->mm)
- 				regs = task_pt_regs(current);
-@@ -249,9 +253,6 @@ get_perf_callchain(struct pt_regs *regs, bool kernel, bool user,
+ 			if (current->flags & PF_KTHREAD)
+-				regs = NULL;
+-			else
+-				regs = task_pt_regs(current);
++				goto exit_put;
++			regs = task_pt_regs(current);
  		}
  
- 		if (regs) {
--			if (crosstask)
--				goto exit_put;
--
- 			if (add_mark)
- 				perf_callchain_store_context(&ctx, PERF_CONTEXT_USER);
+-		if (regs) {
+-			if (add_mark)
+-				perf_callchain_store_context(&ctx, PERF_CONTEXT_USER);
++		if (add_mark)
++			perf_callchain_store_context(&ctx, PERF_CONTEXT_USER);
  
-@@ -261,7 +262,6 @@ get_perf_callchain(struct pt_regs *regs, bool kernel, bool user,
- 		}
+-			start_entry_idx = entry->nr;
+-			perf_callchain_user(&ctx, regs);
+-			fixup_uretprobe_trampoline_entries(entry, start_entry_idx);
+-		}
++		start_entry_idx = entry->nr;
++		perf_callchain_user(&ctx, regs);
++		fixup_uretprobe_trampoline_entries(entry, start_entry_idx);
  	}
  
--exit_put:
++exit_put:
  	put_callchain_entry(rctx);
  
  	return entry;
