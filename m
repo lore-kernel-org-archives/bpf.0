@@ -1,46 +1,46 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56A1B28AB1E;
-	Mon, 16 Jun 2025 20:17:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0BA128C85A;
+	Mon, 16 Jun 2025 20:17:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750105037; cv=none; b=e43u6PyvB5mNOnZ7r0AsB6FtauO8/O0aL9b3st8uXHSJM/D1zIl7YYqe7ontN3c7z2X1uqkcGc3V7r18ixKOUz56nJPl4Rtfo0kHOaeRz0s8ofa5Ix7DmSQGvYpo2PDxuobTwwM9X/HlB/rIoeg5sM1aPtZuFn0FLmFFzNyxtMQ=
+	t=1750105038; cv=none; b=k6SAFHQAwDB48LxCR+b6N85j1X32c0bGyHSaN3rKBrb56HIEXrzfsjBOZGtWZR1ao/l7Pvrl17wyWmtfYksr2gwW+yVn0HZFqK76Kd+zJBRmd6l5wNr+6lSGS2YSupv+GqlYRR3HkuqbkEFD540tMZIa7/s75qpxOa9vwQ4o3NI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750105037; c=relaxed/simple;
-	bh=9QzRqEvJOJZWKyf9BV3Y3h0p5nXsrvyRoQXKrdNEWzU=;
+	s=arc-20240116; t=1750105038; c=relaxed/simple;
+	bh=69Ax6RStbSZBfbslpAffApKvNf6G+QV8hMb80JOBua4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=aD7FmpOTYFs51kPYp+OauAfezl5EltkKmxSzRzUsNFFW9M/KKpVwZQbQ0jt2hLh3v/ZozBdX0YQ2L828ch676apPIlGbCF7HenHNSRi555lmWrYCrqemqW0+uG8XzWcOY7smcfjlOFlIoAT6XHngg2KP4hKbTX9r+jk5+IDUu/Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HbhCdELD; arc=none smtp.client-ip=198.175.65.11
+	 MIME-Version; b=K13azOJSrZlvUC7QXAFINhJKRmXI/uIcpUMlASs8dZk0tFLnbewYGbq0TJCrXkylzv+XzrTROrtJRnk6M3NmwsfmMzyTlTB9WQzJttO1mLivQx2fj5k3JJ/dQxvG29l/YLSQo5qWx5ujW++hI+f7GJPMGGZoffmjmP6QQ68R0bc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fTohaG0+; arc=none smtp.client-ip=198.175.65.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HbhCdELD"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fTohaG0+"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1750105035; x=1781641035;
+  t=1750105036; x=1781641036;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=9QzRqEvJOJZWKyf9BV3Y3h0p5nXsrvyRoQXKrdNEWzU=;
-  b=HbhCdELD9TCsXdkW6C2Y/8pFLPFx5sXZKAliFIizI2bbUXH6h+wtc5XW
-   kbBxqM29Ctq7D8jywZL/axzgRQEELl1dGOnzy7AMY8AhmjzeDQUyDCToB
-   NzxqDVRX24D9COutG/MGUAC1NHahJ+tKnEpxj/t5L5lTt8nwbJpY72wLi
-   GVRjF10jGWKlVk0hDHupzVqBfZ7cXxSUoCjJbtj5RP+xCO9FsgneQWKNb
-   6y1yD/2EreFSik+zatKR2mEdHkz6ZcU9rh99ONechQ53sq/g0Z5YY/ptX
-   LXaIXKsW6GEPPfzwqi3D+Gzl9gHWdMlwPOf6RjAowtMlNasXRIySKX9eN
-   g==;
-X-CSE-ConnectionGUID: JX9WaYJNR4C6HqG1BYojpQ==
-X-CSE-MsgGUID: iUs3K+w/RSmju9KYBDAEmA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11465"; a="62533482"
+  bh=69Ax6RStbSZBfbslpAffApKvNf6G+QV8hMb80JOBua4=;
+  b=fTohaG0+2fnEa8jWDLDePdIZ922TQmaqJzcv6ln0Wm9cxxx0lBtOv5mb
+   fWgbCp922lQeFBGeHft492YU462BwcczfUE8ejXcuxM6kSnS+nNj1nuN7
+   41RtstkuoOsvl2YS1oHKpnwzweqMWQs1AkZtWHOgEYmYrvH/kR1G8bYbC
+   xXR5j62Dxa717jQssmNHuu8JaFnHERysktBx+UYoPr6tEWJ0oFoMgFvMV
+   +DTQk2J4nr7phAg2hPl9FvE7pyHrrPTvSGQUSZ8d4wrTXmSZOcdv+CwRL
+   m9yg0qp3awOroxqrWBeONQZuIQzR2vODIAfTuyxS5mAlebD1quwXm+mo5
+   A==;
+X-CSE-ConnectionGUID: AtyNgk3RQHORha1E+A8VuA==
+X-CSE-MsgGUID: iTk3G06YTKei6v0eOJEYeA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11465"; a="62533498"
 X-IronPort-AV: E=Sophos;i="6.16,241,1744095600"; 
-   d="scan'208";a="62533482"
+   d="scan'208";a="62533498"
 Received: from orviesa004.jf.intel.com ([10.64.159.144])
   by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2025 13:17:11 -0700
-X-CSE-ConnectionGUID: 8IAYm6p5Qm220uW6zba7jQ==
-X-CSE-MsgGUID: 9tq4KpejQXimfMFUmcjXAg==
+X-CSE-ConnectionGUID: gG7GTnjiREOxXP3/YqWZoQ==
+X-CSE-MsgGUID: 6jThtyhsT7qTRyIAjP/chg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,241,1744095600"; 
-   d="scan'208";a="153530981"
+   d="scan'208";a="153530987"
 Received: from anguy11-upstream.jf.intel.com ([10.166.9.133])
   by orviesa004.jf.intel.com with ESMTP; 16 Jun 2025 13:17:11 -0700
 From: Tony Nguyen <anthony.l.nguyen@intel.com>
@@ -62,9 +62,9 @@ Cc: Alexander Lobakin <aleksander.lobakin@intel.com>,
 	john.fastabend@gmail.com,
 	horms@kernel.org,
 	bpf@vger.kernel.org
-Subject: [PATCH net-next v2 05/17] libeth: xdp: add .ndo_xdp_xmit() helpers
-Date: Mon, 16 Jun 2025 13:16:26 -0700
-Message-ID: <20250616201639.710420-6-anthony.l.nguyen@intel.com>
+Subject: [PATCH net-next v2 07/17] libeth: xdp: add XDPSQ locking helpers
+Date: Mon, 16 Jun 2025 13:16:28 -0700
+Message-ID: <20250616201639.710420-8-anthony.l.nguyen@intel.com>
 X-Mailer: git-send-email 2.47.1
 In-Reply-To: <20250616201639.710420-1-anthony.l.nguyen@intel.com>
 References: <20250616201639.710420-1-anthony.l.nguyen@intel.com>
@@ -78,478 +78,294 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexander Lobakin <aleksander.lobakin@intel.com>
 
-Add helpers for implementing .ndo_xdp_xmit().
-Same as for XDP_TX, accumulate up to 16 DMA-mapped frames on the stack,
-then flush. If DMA mapping is failed for some reason, don't try mapping
-further frames, but still flush what was already prepared.
-DMA address of a head frame is stored in its headroom, assuming it
-has enough of it for an 8 (or 4) byte value.
-In addition to @prep and @xmit driver callbacks in XDP_TX, xmit also
-needs @finalize to kick the XDPSQ after filling.
+Unfortunately, it's not always possible to allocate
+max(num_rxqs, nr_cpu_ids) even on hi-end NICs.
+To mitigate this, add simple locking helpers to libeth_xdp.
+As long as XDPSQs are not shared, the whole functionality is gated
+behind a static lock. Otherwise, each bulk flush locks the queue for
+the time of cleaning and filling the descriptors.
+As long as this particular queue is not used by more than 1 CPU,
+the impact is minimal (runtime check for boolean twice per 16+
+descriptors).
 
+Suggested-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com> # static key
 Signed-off-by: Alexander Lobakin <aleksander.lobakin@intel.com>
 Reviewed-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
 ---
- drivers/net/ethernet/intel/libeth/xdp.c |  37 ++-
- include/net/libeth/tx.h                 |   6 +
- include/net/libeth/xdp.h                | 290 +++++++++++++++++++++++-
- 3 files changed, 328 insertions(+), 5 deletions(-)
+ drivers/net/ethernet/intel/libeth/xdp.c |  47 +++++++++
+ include/net/libeth/types.h              |  21 +++-
+ include/net/libeth/xdp.h                | 127 +++++++++++++++++++++++-
+ 3 files changed, 192 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/net/ethernet/intel/libeth/xdp.c b/drivers/net/ethernet/intel/libeth/xdp.c
-index 444449c72221..c65ea5d2746a 100644
+index c29a1a0dfc57..0f08dd405190 100644
 --- a/drivers/net/ethernet/intel/libeth/xdp.c
 +++ b/drivers/net/ethernet/intel/libeth/xdp.c
-@@ -42,7 +42,7 @@ static void __cold libeth_trace_xdp_exception(const struct net_device *dev,
-  * libeth_xdp_tx_exception - handle Tx exceptions of XDP frames
-  * @bq: XDP Tx frame bulk
-  * @sent: number of frames sent successfully (from this bulk)
-- * @flags: internal libeth_xdp flags
-+ * @flags: internal libeth_xdp flags (.ndo_xdp_xmit etc.)
-  *
-  * Cold helper used by __libeth_xdp_tx_flush_bulk(), do not call directly.
-  * Reports XDP Tx exceptions, frees the frames that won't be sent or adjust
-@@ -54,7 +54,8 @@ void __cold libeth_xdp_tx_exception(struct libeth_xdp_tx_bulk *bq, u32 sent,
- 	const struct libeth_xdp_tx_frame *pos = &bq->bulk[sent];
- 	u32 left = bq->count - sent;
+@@ -9,6 +9,53 @@
  
--	libeth_trace_xdp_exception(bq->dev, bq->prog, XDP_TX);
-+	if (!(flags & LIBETH_XDP_TX_NDO))
-+		libeth_trace_xdp_exception(bq->dev, bq->prog, XDP_TX);
+ #include "priv.h"
  
- 	if (!(flags & LIBETH_XDP_TX_DROP)) {
- 		memmove(bq->bulk, pos, left * sizeof(*bq->bulk));
-@@ -63,12 +64,42 @@ void __cold libeth_xdp_tx_exception(struct libeth_xdp_tx_bulk *bq, u32 sent,
- 		return;
- 	}
- 
--	libeth_xdp_tx_return_bulk(pos, left);
-+	if (!(flags & LIBETH_XDP_TX_NDO))
-+		libeth_xdp_tx_return_bulk(pos, left);
-+	else
-+		libeth_xdp_xmit_return_bulk(pos, left, bq->dev);
- 
- 	bq->count = 0;
- }
- EXPORT_SYMBOL_GPL(libeth_xdp_tx_exception);
- 
-+/* .ndo_xdp_xmit() implementation */
++/* XDPSQ sharing */
 +
-+u32 __cold libeth_xdp_xmit_return_bulk(const struct libeth_xdp_tx_frame *bq,
-+				       u32 count, const struct net_device *dev)
++DEFINE_STATIC_KEY_FALSE(libeth_xdpsq_share);
++EXPORT_SYMBOL_GPL(libeth_xdpsq_share);
++
++void __libeth_xdpsq_get(struct libeth_xdpsq_lock *lock,
++			const struct net_device *dev)
 +{
-+	u32 n = 0;
++	bool warn;
 +
-+	for (u32 i = 0; i < count; i++) {
-+		const struct libeth_xdp_tx_frame *frm = &bq[i];
-+		dma_addr_t dma;
++	spin_lock_init(&lock->lock);
++	lock->share = true;
 +
-+		if (frm->flags & LIBETH_XDP_TX_FIRST)
-+			dma = *libeth_xdp_xmit_frame_dma(frm->xdpf);
-+		else
-+			dma = dma_unmap_addr(frm, dma);
++	warn = !static_key_enabled(&libeth_xdpsq_share);
++	static_branch_inc(&libeth_xdpsq_share);
 +
-+		dma_unmap_page(dev->dev.parent, dma, dma_unmap_len(frm, len),
-+			       DMA_TO_DEVICE);
-+
-+		/* Actual xdp_frames are freed by the core */
-+		n += !!(frm->flags & LIBETH_XDP_TX_FIRST);
-+	}
-+
-+	return n;
++	if (warn && net_ratelimit())
++		netdev_warn(dev, "XDPSQ sharing enabled, possible XDP Tx slowdown\n");
 +}
-+EXPORT_SYMBOL_GPL(libeth_xdp_xmit_return_bulk);
++EXPORT_SYMBOL_GPL(__libeth_xdpsq_get);
 +
- /* Rx polling path */
++void __libeth_xdpsq_put(struct libeth_xdpsq_lock *lock,
++			const struct net_device *dev)
++{
++	static_branch_dec(&libeth_xdpsq_share);
++
++	if (!static_key_enabled(&libeth_xdpsq_share) && net_ratelimit())
++		netdev_notice(dev, "XDPSQ sharing disabled\n");
++
++	lock->share = false;
++}
++EXPORT_SYMBOL_GPL(__libeth_xdpsq_put);
++
++void __acquires(&lock->lock)
++__libeth_xdpsq_lock(struct libeth_xdpsq_lock *lock)
++{
++	spin_lock(&lock->lock);
++}
++EXPORT_SYMBOL_GPL(__libeth_xdpsq_lock);
++
++void __releases(&lock->lock)
++__libeth_xdpsq_unlock(struct libeth_xdpsq_lock *lock)
++{
++	spin_unlock(&lock->lock);
++}
++EXPORT_SYMBOL_GPL(__libeth_xdpsq_unlock);
++
+ /* ``XDP_TX`` bulking */
+ 
+ static void __cold
+diff --git a/include/net/libeth/types.h b/include/net/libeth/types.h
+index ad7a5c1f119f..abfccae1a346 100644
+--- a/include/net/libeth/types.h
++++ b/include/net/libeth/types.h
+@@ -4,7 +4,7 @@
+ #ifndef __LIBETH_TYPES_H
+ #define __LIBETH_TYPES_H
+ 
+-#include <linux/types.h>
++#include <linux/spinlock.h>
  
  /**
-diff --git a/include/net/libeth/tx.h b/include/net/libeth/tx.h
-index 3e68d11914f7..e2b62a8b4c57 100644
---- a/include/net/libeth/tx.h
-+++ b/include/net/libeth/tx.h
-@@ -19,6 +19,8 @@
-  * @LIBETH_SQE_SKB: &sk_buff, unmap and napi_consume_skb(), update stats
-  * @__LIBETH_SQE_XDP_START: separator between skb and XDP types
-  * @LIBETH_SQE_XDP_TX: &skb_shared_info, libeth_xdp_return_buff_bulk(), stats
-+ * @LIBETH_SQE_XDP_XMIT: &xdp_frame, unmap and xdp_return_frame_bulk(), stats
-+ * @LIBETH_SQE_XDP_XMIT_FRAG: &xdp_frame frag, only unmap DMA
-  */
- enum libeth_sqe_type {
- 	LIBETH_SQE_EMPTY		= 0U,
-@@ -29,6 +31,8 @@ enum libeth_sqe_type {
- 
- 	__LIBETH_SQE_XDP_START,
- 	LIBETH_SQE_XDP_TX		= __LIBETH_SQE_XDP_START,
-+	LIBETH_SQE_XDP_XMIT,
-+	LIBETH_SQE_XDP_XMIT_FRAG,
+  * struct libeth_sq_napi_stats - "hot" counters to update in Tx completion loop
+@@ -41,4 +41,23 @@ struct libeth_xdpsq_napi_stats {
+ 	};
  };
  
- /**
-@@ -38,6 +42,7 @@ enum libeth_sqe_type {
-  * @raw: slab buffer to free via kfree()
-  * @skb: &sk_buff to consume
-  * @sinfo: skb shared info of an XDP_TX frame
-+ * @xdpf: XDP frame from ::ndo_xdp_xmit()
-  * @dma: DMA address to unmap
-  * @len: length of the mapped region to unmap
-  * @nr_frags: number of frags in the frame this buffer belongs to
-@@ -53,6 +58,7 @@ struct libeth_sqe {
- 		void				*raw;
- 		struct sk_buff			*skb;
- 		struct skb_shared_info		*sinfo;
-+		struct xdp_frame		*xdpf;
- 	};
- 
- 	DEFINE_DMA_UNMAP_ADDR(dma);
-diff --git a/include/net/libeth/xdp.h b/include/net/libeth/xdp.h
-index 4988453a3d70..839001d901b2 100644
---- a/include/net/libeth/xdp.h
-+++ b/include/net/libeth/xdp.h
-@@ -11,6 +11,17 @@
- #include <net/libeth/tx.h>
- #include <net/xsk_buff_pool.h>
- 
++/* XDP */
++
 +/*
-+ * Defined as bits to be able to use them as a mask on Rx.
-+ * Also used as internal return values on Tx.
++ * The following structures should be embedded into driver's queue structure
++ * and passed to the libeth_xdp helpers, never used directly.
 + */
-+enum {
-+	LIBETH_XDP_PASS			= 0U,
-+	LIBETH_XDP_DROP			= BIT(0),
-+	LIBETH_XDP_ABORTED		= BIT(1),
-+	LIBETH_XDP_TX			= BIT(2),
++
++/* XDPSQ sharing */
++
++/**
++ * struct libeth_xdpsq_lock - locking primitive for sharing XDPSQs
++ * @lock: spinlock for locking the queue
++ * @share: whether this particular queue is shared
++ */
++struct libeth_xdpsq_lock {
++	spinlock_t			lock;
++	bool				share;
 +};
 +
- /*
-  * &xdp_buff_xsk is the largest structure &libeth_xdp_buff gets casted to,
-  * pick maximum pointer-compatible alignment.
-@@ -56,12 +67,14 @@ static_assert(IS_ALIGNED(sizeof(struct xdp_buff_xsk),
-  * @LIBETH_XDP_TX_BULK: one bulk size at which it will be flushed to the queue
-  * @LIBETH_XDP_TX_BATCH: batch size for which the queue fill loop is unrolled
-  * @LIBETH_XDP_TX_DROP: indicates the send function must drop frames not sent
-+ * @LIBETH_XDP_TX_NDO: whether the send function is called from .ndo_xdp_xmit()
-  */
- enum {
- 	LIBETH_XDP_TX_BULK		= DEV_MAP_BULK_SIZE,
- 	LIBETH_XDP_TX_BATCH		= 8,
+ #endif /* __LIBETH_TYPES_H */
+diff --git a/include/net/libeth/xdp.h b/include/net/libeth/xdp.h
+index c47ecba56020..20977fdfd6c9 100644
+--- a/include/net/libeth/xdp.h
++++ b/include/net/libeth/xdp.h
+@@ -60,6 +60,123 @@ static_assert(offsetof(struct libeth_xdp_buff, desc) ==
+ static_assert(IS_ALIGNED(sizeof(struct xdp_buff_xsk),
+ 			 __alignof(struct libeth_xdp_buff)));
  
- 	LIBETH_XDP_TX_DROP		= BIT(0),
-+	LIBETH_XDP_TX_NDO		= BIT(1),
- };
- 
- /**
-@@ -88,6 +101,11 @@ enum {
-  * @len_fl: ``XDP_TX``, combined flags [31:16] and len [15:0] field for speed
-  * @soff: ``XDP_TX``, offset from @data to the start of &skb_shared_info
-  * @frag: one (non-head) frag for ``XDP_TX``
-+ * @xdpf: &xdp_frame for the head frag for .ndo_xdp_xmit()
-+ * @dma: DMA address of the non-head frag for .ndo_xdp_xmit()
-+ * @len: frag length for .ndo_xdp_xmit()
-+ * @flags: Tx flags for the above
-+ * @opts: combined @len + @flags for the above for speed
-  */
- struct libeth_xdp_tx_frame {
- 	union {
-@@ -100,6 +118,21 @@ struct libeth_xdp_tx_frame {
- 
- 		/* ``XDP_TX`` frag */
- 		skb_frag_t			frag;
++/* XDPSQ sharing */
 +
-+		/* .ndo_xdp_xmit() */
-+		struct {
-+			union {
-+				struct xdp_frame		*xdpf;
-+				dma_addr_t			dma;
-+			};
-+			union {
-+				struct {
-+					u32				len;
-+					u32				flags;
-+				};
-+				aligned_u64			opts;
-+			};
-+		};
- 	};
- } __aligned_largest;
- static_assert(offsetof(struct libeth_xdp_tx_frame, frag.len) ==
-@@ -107,7 +140,7 @@ static_assert(offsetof(struct libeth_xdp_tx_frame, frag.len) ==
- 
- /**
-  * struct libeth_xdp_tx_bulk - XDP Tx frame bulk for bulk sending
-- * @prog: corresponding active XDP program
-+ * @prog: corresponding active XDP program, %NULL for .ndo_xdp_xmit()
-  * @dev: &net_device which the frames are transmitted on
-  * @xdpsq: shortcut to the corresponding driver-specific XDPSQ structure
-  * @count: current number of frames in @bulk
-@@ -445,7 +478,7 @@ void libeth_xdp_tx_exception(struct libeth_xdp_tx_bulk *bq, u32 sent,
- /**
-  * __libeth_xdp_tx_flush_bulk - internal helper to flush one XDP Tx bulk
-  * @bq: bulk to flush
-- * @flags: XDP TX flags
-+ * @flags: XDP TX flags (.ndo_xdp_xmit() etc.)
-  * @prep: driver-specific callback to prepare the queue for sending
-  * @fill: libeth_xdp callback to fill &libeth_sqe and &libeth_xdp_tx_desc
-  * @xmit: driver callback to fill a HW descriptor
-@@ -495,6 +528,259 @@ __libeth_xdp_tx_flush_bulk(struct libeth_xdp_tx_bulk *bq, u32 flags,
- 	__libeth_xdp_tx_flush_bulk(bq, flags, prep, libeth_xdp_tx_fill_buf,   \
- 				   xmit)
- 
-+/* .ndo_xdp_xmit() implementation */
++DECLARE_STATIC_KEY_FALSE(libeth_xdpsq_share);
 +
 +/**
-+ * libeth_xdp_xmit_frame_dma - internal helper to access DMA of an &xdp_frame
-+ * @xf: pointer to the XDP frame
++ * libeth_xdpsq_num - calculate optimal number of XDPSQs for this device + sys
++ * @rxq: current number of active Rx queues
++ * @txq: current number of active Tx queues
++ * @max: maximum number of Tx queues
 + *
-+ * There's no place in &libeth_xdp_tx_frame to store DMA address for an
-+ * &xdp_frame head. The headroom is used then, the address is placed right
-+ * after the frame struct, naturally aligned.
++ * Each RQ must have its own XDPSQ for XSk pairs, each CPU must have own XDPSQ
++ * for lockless sending (``XDP_TX``, .ndo_xdp_xmit()). Cap the maximum of these
++ * two with the number of SQs the device can have (minus used ones).
 + *
-+ * Return: pointer to the DMA address to use.
++ * Return: number of XDP Tx queues the device needs to use.
 + */
-+#define libeth_xdp_xmit_frame_dma(xf)					      \
-+	_Generic((xf),							      \
-+		 const struct xdp_frame *:				      \
-+			(const dma_addr_t *)__libeth_xdp_xmit_frame_dma(xf),  \
-+		 struct xdp_frame *:					      \
-+			(dma_addr_t *)__libeth_xdp_xmit_frame_dma(xf)	      \
-+	)
-+
-+static inline void *__libeth_xdp_xmit_frame_dma(const struct xdp_frame *xdpf)
++static inline u32 libeth_xdpsq_num(u32 rxq, u32 txq, u32 max)
 +{
-+	void *addr = (void *)(xdpf + 1);
-+
-+	if (!IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS) &&
-+	    __alignof(*xdpf) < sizeof(dma_addr_t))
-+		addr = PTR_ALIGN(addr, sizeof(dma_addr_t));
-+
-+	return addr;
++	return min(max(nr_cpu_ids, rxq), max - txq);
 +}
 +
 +/**
-+ * libeth_xdp_xmit_queue_head - internal helper for queueing one XDP xmit head
-+ * @bq: XDP Tx bulk to queue the head frag to
-+ * @xdpf: XDP frame with the head to queue
-+ * @dev: device to perform DMA mapping
++ * libeth_xdpsq_shared - whether XDPSQs can be shared between several CPUs
++ * @num: number of active XDPSQs
 + *
-+ * Return: ``LIBETH_XDP_DROP`` on DMA mapping error,
-+ *	   ``LIBETH_XDP_PASS`` if it's the only frag in the frame,
-+ *	   ``LIBETH_XDP_TX`` if it's an S/G frame.
++ * Return: true if there's no 1:1 XDPSQ/CPU association, false otherwise.
 + */
-+static inline u32 libeth_xdp_xmit_queue_head(struct libeth_xdp_tx_bulk *bq,
-+					     struct xdp_frame *xdpf,
-+					     struct device *dev)
++static inline bool libeth_xdpsq_shared(u32 num)
 +{
-+	dma_addr_t dma;
-+
-+	dma = dma_map_single(dev, xdpf->data, xdpf->len, DMA_TO_DEVICE);
-+	if (dma_mapping_error(dev, dma))
-+		return LIBETH_XDP_DROP;
-+
-+	*libeth_xdp_xmit_frame_dma(xdpf) = dma;
-+
-+	bq->bulk[bq->count++] = (typeof(*bq->bulk)){
-+		.xdpf	= xdpf,
-+		.len	= xdpf->len,
-+		.flags	= LIBETH_XDP_TX_FIRST,
-+	};
-+
-+	if (!xdp_frame_has_frags(xdpf))
-+		return LIBETH_XDP_PASS;
-+
-+	bq->bulk[bq->count - 1].flags |= LIBETH_XDP_TX_MULTI;
-+
-+	return LIBETH_XDP_TX;
++	return num < nr_cpu_ids;
 +}
 +
 +/**
-+ * libeth_xdp_xmit_queue_frag - internal helper for queueing one XDP xmit frag
-+ * @bq: XDP Tx bulk to queue the frag to
-+ * @frag: frag to queue
-+ * @dev: device to perform DMA mapping
++ * libeth_xdpsq_id - get XDPSQ index corresponding to this CPU
++ * @num: number of active XDPSQs
 + *
-+ * Return: true on success, false on DMA mapping error.
-+ */
-+static inline bool libeth_xdp_xmit_queue_frag(struct libeth_xdp_tx_bulk *bq,
-+					      const skb_frag_t *frag,
-+					      struct device *dev)
-+{
-+	dma_addr_t dma;
-+
-+	dma = skb_frag_dma_map(dev, frag);
-+	if (dma_mapping_error(dev, dma))
-+		return false;
-+
-+	bq->bulk[bq->count++] = (typeof(*bq->bulk)){
-+		.dma	= dma,
-+		.len	= skb_frag_size(frag),
-+	};
-+
-+	return true;
-+}
-+
-+/**
-+ * libeth_xdp_xmit_queue_bulk - internal helper for queueing one XDP xmit frame
-+ * @bq: XDP Tx bulk to queue the frame to
-+ * @xdpf: XDP frame to queue
-+ * @flush_bulk: driver callback to flush the bulk to the HW queue
++ * Helper for libeth_xdp routines, do not use in drivers directly.
 + *
-+ * Return: ``LIBETH_XDP_TX`` on success,
-+ *	   ``LIBETH_XDP_DROP`` if the frame should be dropped by the stack,
-+ *	   ``LIBETH_XDP_ABORTED`` if the frame will be dropped by libeth_xdp.
++ * Return: XDPSQ index needs to be used on this CPU.
 + */
-+static __always_inline u32
-+libeth_xdp_xmit_queue_bulk(struct libeth_xdp_tx_bulk *bq,
-+			   struct xdp_frame *xdpf,
-+			   bool (*flush_bulk)(struct libeth_xdp_tx_bulk *bq,
-+					      u32 flags))
++static inline u32 libeth_xdpsq_id(u32 num)
 +{
-+	u32 head, nr_frags, i, ret = LIBETH_XDP_TX;
-+	struct device *dev = bq->dev->dev.parent;
-+	const struct skb_shared_info *sinfo;
++	u32 ret = raw_smp_processor_id();
 +
-+	if (unlikely(bq->count == LIBETH_XDP_TX_BULK) &&
-+	    unlikely(!flush_bulk(bq, LIBETH_XDP_TX_NDO)))
-+		return LIBETH_XDP_DROP;
-+
-+	head = libeth_xdp_xmit_queue_head(bq, xdpf, dev);
-+	if (head == LIBETH_XDP_PASS)
-+		goto out;
-+	else if (head == LIBETH_XDP_DROP)
-+		return LIBETH_XDP_DROP;
-+
-+	sinfo = xdp_get_shared_info_from_frame(xdpf);
-+	nr_frags = sinfo->nr_frags;
-+
-+	for (i = 0; i < nr_frags; i++) {
-+		if (unlikely(bq->count == LIBETH_XDP_TX_BULK) &&
-+		    unlikely(!flush_bulk(bq, LIBETH_XDP_TX_NDO)))
-+			break;
-+
-+		if (!libeth_xdp_xmit_queue_frag(bq, &sinfo->frags[i], dev))
-+			break;
-+	}
-+
-+	if (unlikely(i < nr_frags))
-+		ret = LIBETH_XDP_ABORTED;
-+
-+out:
-+	bq->bulk[bq->count - 1].flags |= LIBETH_XDP_TX_LAST;
++	if (static_branch_unlikely(&libeth_xdpsq_share) &&
++	    libeth_xdpsq_shared(num))
++		ret %= num;
 +
 +	return ret;
 +}
 +
++void __libeth_xdpsq_get(struct libeth_xdpsq_lock *lock,
++			const struct net_device *dev);
++void __libeth_xdpsq_put(struct libeth_xdpsq_lock *lock,
++			const struct net_device *dev);
++
 +/**
-+ * libeth_xdp_xmit_fill_buf - internal helper to fill one XDP xmit &libeth_sqe
-+ * @frm: XDP Tx frame from the bulk
-+ * @i: index on the HW queue
-+ * @sq: XDPSQ abstraction for the queue
-+ * @priv: private data
++ * libeth_xdpsq_get - initialize &libeth_xdpsq_lock
++ * @lock: lock to initialize
++ * @dev: netdev which this lock belongs to
++ * @share: whether XDPSQs can be shared
 + *
-+ * Return: XDP Tx descriptor with the mapped DMA and other info to pass to
-+ * the driver callback.
++ * Tracks the current XDPSQ association and enables the static lock
++ * if needed.
 + */
-+static inline struct libeth_xdp_tx_desc
-+libeth_xdp_xmit_fill_buf(struct libeth_xdp_tx_frame frm, u32 i,
-+			 const struct libeth_xdpsq *sq, u64 priv)
++static inline void libeth_xdpsq_get(struct libeth_xdpsq_lock *lock,
++				    const struct net_device *dev,
++				    bool share)
 +{
-+	struct libeth_xdp_tx_desc desc;
-+	struct libeth_sqe *sqe;
-+	struct xdp_frame *xdpf;
-+
-+	if (frm.flags & LIBETH_XDP_TX_FIRST) {
-+		xdpf = frm.xdpf;
-+		desc.addr = *libeth_xdp_xmit_frame_dma(xdpf);
-+	} else {
-+		xdpf = NULL;
-+		desc.addr = frm.dma;
-+	}
-+	desc.opts = frm.opts;
-+
-+	sqe = &sq->sqes[i];
-+	dma_unmap_addr_set(sqe, dma, desc.addr);
-+	dma_unmap_len_set(sqe, len, desc.len);
-+
-+	if (!xdpf) {
-+		sqe->type = LIBETH_SQE_XDP_XMIT_FRAG;
-+		return desc;
-+	}
-+
-+	sqe->type = LIBETH_SQE_XDP_XMIT;
-+	sqe->xdpf = xdpf;
-+	libeth_xdp_tx_fill_stats(sqe, &desc,
-+				 xdp_get_shared_info_from_frame(xdpf));
-+
-+	return desc;
++	if (unlikely(share))
++		__libeth_xdpsq_get(lock, dev);
 +}
 +
 +/**
-+ * libeth_xdp_xmit_flush_bulk - wrapper to define flush of one XDP xmit bulk
-+ * @bq: bulk to flush
-+ * @flags: Tx flags, see __libeth_xdp_tx_flush_bulk()
-+ * @prep: driver callback to prepare the queue
-+ * @xmit: driver callback to fill a HW descriptor
-+ */
-+#define libeth_xdp_xmit_flush_bulk(bq, flags, prep, xmit)		      \
-+	__libeth_xdp_tx_flush_bulk(bq, (flags) | LIBETH_XDP_TX_NDO, prep,     \
-+				   libeth_xdp_xmit_fill_buf, xmit)
-+
-+u32 libeth_xdp_xmit_return_bulk(const struct libeth_xdp_tx_frame *bq,
-+				u32 count, const struct net_device *dev);
-+
-+/**
-+ * __libeth_xdp_xmit_do_bulk - internal function to implement .ndo_xdp_xmit()
-+ * @bq: XDP Tx bulk to queue frames to
-+ * @frames: XDP frames passed by the stack
-+ * @n: number of frames
-+ * @flags: flags passed by the stack
-+ * @flush_bulk: driver callback to flush an XDP xmit bulk
-+ * @finalize: driver callback to finalize sending XDP Tx frames on the queue
++ * libeth_xdpsq_put - deinitialize &libeth_xdpsq_lock
++ * @lock: lock to deinitialize
++ * @dev: netdev which this lock belongs to
 + *
-+ * Perform common checks, map the frags and queue them to the bulk, then flush
-+ * the bulk to the XDPSQ. If requested by the stack, finalize the queue.
-+ *
-+ * Return: number of frames send or -errno on error.
++ * Tracks the current XDPSQ association and disables the static lock
++ * if needed.
 + */
-+static __always_inline int
-+__libeth_xdp_xmit_do_bulk(struct libeth_xdp_tx_bulk *bq,
-+			  struct xdp_frame **frames, u32 n, u32 flags,
-+			  bool (*flush_bulk)(struct libeth_xdp_tx_bulk *bq,
-+					     u32 flags),
-+			  void (*finalize)(void *xdpsq, bool sent, bool flush))
++static inline void libeth_xdpsq_put(struct libeth_xdpsq_lock *lock,
++				    const struct net_device *dev)
 +{
-+	u32 nxmit = 0;
-+
-+	if (unlikely(flags & ~XDP_XMIT_FLAGS_MASK))
-+		return -EINVAL;
-+
-+	for (u32 i = 0; likely(i < n); i++) {
-+		u32 ret;
-+
-+		ret = libeth_xdp_xmit_queue_bulk(bq, frames[i], flush_bulk);
-+		if (unlikely(ret != LIBETH_XDP_TX)) {
-+			nxmit += ret == LIBETH_XDP_ABORTED;
-+			break;
-+		}
-+
-+		nxmit++;
-+	}
-+
-+	if (bq->count) {
-+		flush_bulk(bq, LIBETH_XDP_TX_NDO);
-+		if (unlikely(bq->count))
-+			nxmit -= libeth_xdp_xmit_return_bulk(bq->bulk,
-+							     bq->count,
-+							     bq->dev);
-+	}
-+
-+	finalize(bq->xdpsq, nxmit, flags & XDP_XMIT_FLUSH);
-+
-+	return nxmit;
++	if (static_branch_unlikely(&libeth_xdpsq_share) && lock->share)
++		__libeth_xdpsq_put(lock, dev);
 +}
 +
- /* Rx polling path */
++void __libeth_xdpsq_lock(struct libeth_xdpsq_lock *lock);
++void __libeth_xdpsq_unlock(struct libeth_xdpsq_lock *lock);
++
++/**
++ * libeth_xdpsq_lock - grab &libeth_xdpsq_lock if needed
++ * @lock: lock to take
++ *
++ * Touches the underlying spinlock only if the static key is enabled
++ * and the queue itself is marked as shareable.
++ */
++static inline void libeth_xdpsq_lock(struct libeth_xdpsq_lock *lock)
++{
++	if (static_branch_unlikely(&libeth_xdpsq_share) && lock->share)
++		__libeth_xdpsq_lock(lock);
++}
++
++/**
++ * libeth_xdpsq_unlock - free &libeth_xdpsq_lock if needed
++ * @lock: lock to free
++ *
++ * Touches the underlying spinlock only if the static key is enabled
++ * and the queue itself is marked as shareable.
++ */
++static inline void libeth_xdpsq_unlock(struct libeth_xdpsq_lock *lock)
++{
++	if (static_branch_unlikely(&libeth_xdpsq_share) && lock->share)
++		__libeth_xdpsq_unlock(lock);
++}
++
+ /* Common Tx bits */
  
- static inline void libeth_xdp_return_va(const void *data, bool napi)
+ /**
+@@ -179,6 +296,7 @@ struct libeth_xdp_tx_bulk {
+  * @count: number of descriptors on that queue
+  * @pending: pointer to the number of sent-not-completed descs on that queue
+  * @xdp_tx: pointer to the above
++ * @lock: corresponding XDPSQ lock
+  *
+  * Abstraction for driver-independent implementation of Tx. Placed on the stack
+  * and filled by the driver before the transmission, so that the generic
+@@ -193,6 +311,7 @@ struct libeth_xdpsq {
+ 
+ 	u32				*pending;
+ 	u32				*xdp_tx;
++	struct libeth_xdpsq_lock	*lock;
+ };
+ 
+ /**
+@@ -229,7 +348,8 @@ struct libeth_xdp_tx_desc {
+  *
+  * Internal abstraction for placing @n XDP Tx frames on the HW XDPSQ. Used for
+  * all types of frames.
+- * @unroll greatly increases the object code size, but also greatly increases
++ * @prep must lock the queue as this function releases it at the end. @unroll
++ * greatly increases the object code size, but also greatly increases
+  * performance.
+  * The compilers inline all those onstack abstractions to direct data accesses.
+  *
+@@ -253,7 +373,7 @@ libeth_xdp_tx_xmit_bulk(const struct libeth_xdp_tx_frame *bulk, void *xdpsq,
+ 
+ 	n = min(n, prep(xdpsq, &sq));
+ 	if (unlikely(!n))
+-		return 0;
++		goto unlock;
+ 
+ 	ntu = *sq.ntu;
+ 
+@@ -302,6 +422,9 @@ libeth_xdp_tx_xmit_bulk(const struct libeth_xdp_tx_frame *bulk, void *xdpsq,
+ 	if (sq.xdp_tx)
+ 		*sq.xdp_tx += n;
+ 
++unlock:
++	libeth_xdpsq_unlock(sq.lock);
++
+ 	return n;
+ }
+ 
 -- 
 2.47.1
 
