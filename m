@@ -1,48 +1,48 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A9E3264FB4;
-	Mon, 16 Jun 2025 20:17:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31A3F28A1D7;
+	Mon, 16 Jun 2025 20:17:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750105035; cv=none; b=fZSB25rkArgsLUffz+lLEWyzIL4N6raro5HPMC8bibi/JC7yT3t92nXeqLFDV02i7sSElYLrNHKztvCtLXuBZwAD4epMT3PVDV7lkDpz/ZPLib4d4XSJoeJNCGU5N90Op4FWxgQjpwtZNTEKQ3xL6CZwKhQfS8zh/udsirPEtwU=
+	t=1750105036; cv=none; b=t1hICtRpkMdel0SxremZTL8BcOQl5uWm7dXuv8DA2jplwnfK0m/xIa0/cf96yKSwsPsaWx5qkh0CSWuv1rJWehSmiwUTyrQ/4f6Kbsgo2YF4M1MthW7j5yNz0apWJ4ZrIMmajr+Z1FaY1AsHvv+y1Op5Rldw5Xz196Y+Ul8h3pA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750105035; c=relaxed/simple;
-	bh=bCcMgQ4/eQ+DORgmLI4K2+xdRVVniT/pd26A23+OY20=;
+	s=arc-20240116; t=1750105036; c=relaxed/simple;
+	bh=2Yn5sjWNQBaECCNjVlWPyg+hXPctYWRDz5A3x1W5mOs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=aXGDtHOMrwpYSePqvzv98fPkoogXiQSy9ewMFbE7SM8sFdt2B3YZBr7VL11a+UQO5DOx5lqfgLt6OFVPbBD4e9pUc7K/o1hcq9j+EmPKYg7WhI2i0OHP+x5w01RrsIAk9ZxGzz6MGL4Pe7Mw+lztQYGhucY/aIre+j73bOHwUuc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nmjZCNYj; arc=none smtp.client-ip=198.175.65.11
+	 MIME-Version; b=hzf9E5A/f6RhQejlBcjqiDampZHfV0EwcT1dfMEyoAwSvkLHWvauXrluHdDNwndgMEGBoZ03XzIHyfQpfjK1nQaNCOMLY1tGaEvPX1rt8/tmu/IkV+Do5zvgwV7GB4gjtZiZrZ4Xg5vP0SUdCaurjeRoBDiShs9UUXtZ0rSkKeE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=F4qMcjF2; arc=none smtp.client-ip=198.175.65.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nmjZCNYj"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="F4qMcjF2"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1750105033; x=1781641033;
+  t=1750105034; x=1781641034;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=bCcMgQ4/eQ+DORgmLI4K2+xdRVVniT/pd26A23+OY20=;
-  b=nmjZCNYj9vnP6NNYivr3SwwLsV4bYXdFCoXddvaakBx+CBUQD0559ZCC
-   I4PyB3Ek1AWEb21Uz/g64b5fPxykWB0yyJI0YWkdhKZV66TSRyXPrZyoF
-   OV1AdbL87Mmyb9quTpur/SHq8R71senoaPByAO3cgs93gTpej3ERh4Qii
-   /cSkWvXE9E1QKkxCc+5bYK1UB+zvG36Z8E/uJJZBn8jlUj+xFTS2pPh0C
-   6JyA1ZK/9FpFbKnUDtGuzr9IHdZmvEWMGZkStBDi9+lzH9caHQAyuw7U2
-   DL9vV+00+0hZxlpjSvVYzmGQUdQ4tUEMJqZ32e0ZwWridETbqwvT6WLuj
-   g==;
-X-CSE-ConnectionGUID: Ajj9z26GRKiFl7dznNR8Mg==
-X-CSE-MsgGUID: qq9bBc6OS5y5xTZWt3bRNw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11465"; a="62533456"
+  bh=2Yn5sjWNQBaECCNjVlWPyg+hXPctYWRDz5A3x1W5mOs=;
+  b=F4qMcjF2Ia7kWnK5CVmeVwryb8XqqHVUZx62I+kCbmvIuRt1sqFQITCf
+   E7LvdD/YD0fuZPPgGYYRdM9hj5WfT4/Lpgv8I3SFaeksXw8DDFnPXDg88
+   IHHEgp41dkOvL2PDLYP+LLfgVVvABaeIFa6eBeFqjfqZU2ei6XsAe0EHt
+   VjbZk5Ot8Kxiza7lc+ETxDGWF8xk/ZKlqwdBGWHh7psYNlcMztEG/Eic/
+   7R16s+BliMuM++yNSfMo87hsqDKwtfcUHh4CnvJKguajtXUNZDgyGLChT
+   lYcHMDO9SdSOGYnzeNmV+R1oXw442jCOLvkfch94W+pwSd/2mzhAFoPDO
+   w==;
+X-CSE-ConnectionGUID: l1WJDhq/QYu+/jlMjjOWUw==
+X-CSE-MsgGUID: 4Oej1T9wSqOHSrCJJnk/dg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11465"; a="62533474"
 X-IronPort-AV: E=Sophos;i="6.16,241,1744095600"; 
-   d="scan'208";a="62533456"
+   d="scan'208";a="62533474"
 Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2025 13:17:10 -0700
-X-CSE-ConnectionGUID: s5PvlugMRqiYr7x4tGGzXw==
-X-CSE-MsgGUID: MGTbnKjfTr+5RckJyAVZ3Q==
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2025 13:17:11 -0700
+X-CSE-ConnectionGUID: ApN83Z0FRqS15Yq4NZpqyA==
+X-CSE-MsgGUID: 9EjSulk6SAeKI18WG+QhQw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,241,1744095600"; 
-   d="scan'208";a="153530972"
+   d="scan'208";a="153530978"
 Received: from anguy11-upstream.jf.intel.com ([10.166.9.133])
-  by orviesa004.jf.intel.com with ESMTP; 16 Jun 2025 13:17:10 -0700
+  by orviesa004.jf.intel.com with ESMTP; 16 Jun 2025 13:17:11 -0700
 From: Tony Nguyen <anthony.l.nguyen@intel.com>
 To: davem@davemloft.net,
 	kuba@kernel.org,
@@ -61,11 +61,10 @@ Cc: Alexander Lobakin <aleksander.lobakin@intel.com>,
 	hawk@kernel.org,
 	john.fastabend@gmail.com,
 	horms@kernel.org,
-	bpf@vger.kernel.org,
-	Mina Almasry <almasrymina@google.com>
-Subject: [PATCH net-next v2 02/17] libeth: convert to netmem
-Date: Mon, 16 Jun 2025 13:16:23 -0700
-Message-ID: <20250616201639.710420-3-anthony.l.nguyen@intel.com>
+	bpf@vger.kernel.org
+Subject: [PATCH net-next v2 04/17] libeth: xdp: add XDP_TX buffers sending
+Date: Mon, 16 Jun 2025 13:16:25 -0700
+Message-ID: <20250616201639.710420-5-anthony.l.nguyen@intel.com>
 X-Mailer: git-send-email 2.47.1
 In-Reply-To: <20250616201639.710420-1-anthony.l.nguyen@intel.com>
 References: <20250616201639.710420-1-anthony.l.nguyen@intel.com>
@@ -79,281 +78,768 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexander Lobakin <aleksander.lobakin@intel.com>
 
-Back when the libeth Rx core was initially written, devmem was a draft
-and netmem_ref didn't exist in the mainline. Now that it's here, make
-libeth MP-agnostic before introducing any new code or any new library
-users.
-When it's known that the created PP/FQ is for header buffers, use faster
-"unsafe" underscored netmem <--> virt accessors as netmem_is_net_iov()
-is always false in that case, but consumes some cycles (bit test +
-true branch).
+Start adding XDP-specific code to libeth, namely handling XDP_TX buffers
+(only sending).
+The idea is that we accumulate up to 16 buffers on the stack, then,
+if either the limit is reached or the polling is finished, flush them
+at once with only one XDPSQ cleaning (if needed). The main sending
+function will be aware of the sending budget and already have all the
+info to send the buffers, so it can't fail.
+Drivers need to provide 2 inline callbacks to the main sending function:
+for cleaning an XDPSQ and for filling descriptors; the library code
+takes care of the rest.
+Note that unlike the generic code, multi-buffer support is not wrapped
+here with unlikely() to not hurt header split setups.
 
-Reviewed-by: Mina Almasry <almasrymina@google.com>
+&libeth_xdp_buff is a simple extension over &xdp_buff which has a direct
+pointer to the corresponding Rx descriptor (and, luckily, precisely 1 CL
+size and 16-byte alignment on x86_64).
+
+Suggested-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com> # xmit logic
 Signed-off-by: Alexander Lobakin <aleksander.lobakin@intel.com>
 Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
 ---
- drivers/net/ethernet/intel/iavf/iavf_txrx.c   | 14 ++++----
- .../ethernet/intel/idpf/idpf_singleq_txrx.c   |  2 +-
- drivers/net/ethernet/intel/idpf/idpf_txrx.c   | 36 +++++++++++--------
- drivers/net/ethernet/intel/libeth/rx.c        |  8 ++---
- include/net/libeth/rx.h                       | 22 ++++++------
- 5 files changed, 46 insertions(+), 36 deletions(-)
+ drivers/net/ethernet/intel/libeth/Kconfig  |  10 +-
+ drivers/net/ethernet/intel/libeth/Makefile |   6 +-
+ drivers/net/ethernet/intel/libeth/xdp.c    |  89 ++++
+ include/net/libeth/tx.h                    |  11 +-
+ include/net/libeth/xdp.h                   | 541 +++++++++++++++++++++
+ 5 files changed, 652 insertions(+), 5 deletions(-)
+ create mode 100644 drivers/net/ethernet/intel/libeth/xdp.c
+ create mode 100644 include/net/libeth/xdp.h
 
-diff --git a/drivers/net/ethernet/intel/iavf/iavf_txrx.c b/drivers/net/ethernet/intel/iavf/iavf_txrx.c
-index 23e786b9793d..aaf70c625655 100644
---- a/drivers/net/ethernet/intel/iavf/iavf_txrx.c
-+++ b/drivers/net/ethernet/intel/iavf/iavf_txrx.c
-@@ -723,7 +723,7 @@ static void iavf_clean_rx_ring(struct iavf_ring *rx_ring)
- 	for (u32 i = rx_ring->next_to_clean; i != rx_ring->next_to_use; ) {
- 		const struct libeth_fqe *rx_fqes = &rx_ring->rx_fqes[i];
+diff --git a/drivers/net/ethernet/intel/libeth/Kconfig b/drivers/net/ethernet/intel/libeth/Kconfig
+index 480293b71dbc..d8c4926574fb 100644
+--- a/drivers/net/ethernet/intel/libeth/Kconfig
++++ b/drivers/net/ethernet/intel/libeth/Kconfig
+@@ -1,9 +1,15 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+-# Copyright (C) 2024 Intel Corporation
++# Copyright (C) 2024-2025 Intel Corporation
  
--		page_pool_put_full_page(rx_ring->pp, rx_fqes->page, false);
-+		libeth_rx_recycle_slow(rx_fqes->netmem);
+ config LIBETH
+-	tristate
++	tristate "Common Ethernet library (libeth)" if COMPILE_TEST
+ 	select PAGE_POOL
+ 	help
+ 	  libeth is a common library containing routines shared between several
+ 	  drivers, but not yet promoted to the generic kernel API.
++
++config LIBETH_XDP
++	tristate "Common XDP library (libeth_xdp)" if COMPILE_TEST
++	select LIBETH
++	help
++	  XDP helpers based on libeth hotpath management.
+diff --git a/drivers/net/ethernet/intel/libeth/Makefile b/drivers/net/ethernet/intel/libeth/Makefile
+index 52492b081132..9ba78f463f2e 100644
+--- a/drivers/net/ethernet/intel/libeth/Makefile
++++ b/drivers/net/ethernet/intel/libeth/Makefile
+@@ -1,6 +1,10 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+-# Copyright (C) 2024 Intel Corporation
++# Copyright (C) 2024-2025 Intel Corporation
  
- 		if (unlikely(++i == rx_ring->count))
- 			i = 0;
-@@ -1197,10 +1197,11 @@ static void iavf_add_rx_frag(struct sk_buff *skb,
- 			     const struct libeth_fqe *rx_buffer,
- 			     unsigned int size)
- {
--	u32 hr = rx_buffer->page->pp->p.offset;
-+	u32 hr = netmem_get_pp(rx_buffer->netmem)->p.offset;
+ obj-$(CONFIG_LIBETH)		+= libeth.o
  
--	skb_add_rx_frag(skb, skb_shinfo(skb)->nr_frags, rx_buffer->page,
--			rx_buffer->offset + hr, size, rx_buffer->truesize);
-+	skb_add_rx_frag_netmem(skb, skb_shinfo(skb)->nr_frags,
-+			       rx_buffer->netmem, rx_buffer->offset + hr,
-+			       size, rx_buffer->truesize);
- }
- 
- /**
-@@ -1214,12 +1215,13 @@ static void iavf_add_rx_frag(struct sk_buff *skb,
- static struct sk_buff *iavf_build_skb(const struct libeth_fqe *rx_buffer,
- 				      unsigned int size)
- {
--	u32 hr = rx_buffer->page->pp->p.offset;
-+	struct page *buf_page = __netmem_to_page(rx_buffer->netmem);
-+	u32 hr = buf_page->pp->p.offset;
- 	struct sk_buff *skb;
- 	void *va;
- 
- 	/* prefetch first cache line of first page */
--	va = page_address(rx_buffer->page) + rx_buffer->offset;
-+	va = page_address(buf_page) + rx_buffer->offset;
- 	net_prefetch(va + hr);
- 
- 	/* build an skb around the page buffer */
-diff --git a/drivers/net/ethernet/intel/idpf/idpf_singleq_txrx.c b/drivers/net/ethernet/intel/idpf/idpf_singleq_txrx.c
-index 993c354aa27a..555879b1248d 100644
---- a/drivers/net/ethernet/intel/idpf/idpf_singleq_txrx.c
-+++ b/drivers/net/ethernet/intel/idpf/idpf_singleq_txrx.c
-@@ -1006,7 +1006,7 @@ static int idpf_rx_singleq_clean(struct idpf_rx_queue *rx_q, int budget)
- 			break;
- 
- skip_data:
--		rx_buf->page = NULL;
-+		rx_buf->netmem = 0;
- 
- 		IDPF_SINGLEQ_BUMP_RING_IDX(rx_q, ntc);
- 		cleaned_count++;
-diff --git a/drivers/net/ethernet/intel/idpf/idpf_txrx.c b/drivers/net/ethernet/intel/idpf/idpf_txrx.c
-index 5cf440e09d0a..cef9dfb877e8 100644
---- a/drivers/net/ethernet/intel/idpf/idpf_txrx.c
-+++ b/drivers/net/ethernet/intel/idpf/idpf_txrx.c
-@@ -383,12 +383,12 @@ static int idpf_tx_desc_alloc_all(struct idpf_vport *vport)
-  */
- static void idpf_rx_page_rel(struct libeth_fqe *rx_buf)
- {
--	if (unlikely(!rx_buf->page))
-+	if (unlikely(!rx_buf->netmem))
- 		return;
- 
--	page_pool_put_full_page(rx_buf->page->pp, rx_buf->page, false);
-+	libeth_rx_recycle_slow(rx_buf->netmem);
- 
--	rx_buf->page = NULL;
-+	rx_buf->netmem = 0;
- 	rx_buf->offset = 0;
- }
- 
-@@ -3240,10 +3240,10 @@ idpf_rx_process_skb_fields(struct idpf_rx_queue *rxq, struct sk_buff *skb,
- void idpf_rx_add_frag(struct idpf_rx_buf *rx_buf, struct sk_buff *skb,
- 		      unsigned int size)
- {
--	u32 hr = rx_buf->page->pp->p.offset;
-+	u32 hr = netmem_get_pp(rx_buf->netmem)->p.offset;
- 
--	skb_add_rx_frag(skb, skb_shinfo(skb)->nr_frags, rx_buf->page,
--			rx_buf->offset + hr, size, rx_buf->truesize);
-+	skb_add_rx_frag_netmem(skb, skb_shinfo(skb)->nr_frags, rx_buf->netmem,
-+			       rx_buf->offset + hr, size, rx_buf->truesize);
- }
- 
- /**
-@@ -3266,16 +3266,20 @@ static u32 idpf_rx_hsplit_wa(const struct libeth_fqe *hdr,
- 			     struct libeth_fqe *buf, u32 data_len)
- {
- 	u32 copy = data_len <= L1_CACHE_BYTES ? data_len : ETH_HLEN;
-+	struct page *hdr_page, *buf_page;
- 	const void *src;
- 	void *dst;
- 
--	if (!libeth_rx_sync_for_cpu(buf, copy))
-+	if (unlikely(netmem_is_net_iov(buf->netmem)) ||
-+	    !libeth_rx_sync_for_cpu(buf, copy))
- 		return 0;
- 
--	dst = page_address(hdr->page) + hdr->offset + hdr->page->pp->p.offset;
--	src = page_address(buf->page) + buf->offset + buf->page->pp->p.offset;
--	memcpy(dst, src, LARGEST_ALIGN(copy));
-+	hdr_page = __netmem_to_page(hdr->netmem);
-+	buf_page = __netmem_to_page(buf->netmem);
-+	dst = page_address(hdr_page) + hdr->offset + hdr_page->pp->p.offset;
-+	src = page_address(buf_page) + buf->offset + buf_page->pp->p.offset;
- 
-+	memcpy(dst, src, LARGEST_ALIGN(copy));
- 	buf->offset += copy;
- 
- 	return copy;
-@@ -3291,11 +3295,12 @@ static u32 idpf_rx_hsplit_wa(const struct libeth_fqe *hdr,
-  */
- struct sk_buff *idpf_rx_build_skb(const struct libeth_fqe *buf, u32 size)
- {
--	u32 hr = buf->page->pp->p.offset;
-+	struct page *buf_page = __netmem_to_page(buf->netmem);
-+	u32 hr = buf_page->pp->p.offset;
- 	struct sk_buff *skb;
- 	void *va;
- 
--	va = page_address(buf->page) + buf->offset;
-+	va = page_address(buf_page) + buf->offset;
- 	prefetch(va + hr);
- 
- 	skb = napi_build_skb(va, buf->truesize);
-@@ -3429,7 +3434,8 @@ static int idpf_rx_splitq_clean(struct idpf_rx_queue *rxq, int budget)
- 
- 		if (unlikely(!hdr_len && !skb)) {
- 			hdr_len = idpf_rx_hsplit_wa(hdr, rx_buf, pkt_len);
--			pkt_len -= hdr_len;
-+			/* If failed, drop both buffers by setting len to 0 */
-+			pkt_len -= hdr_len ? : pkt_len;
- 
- 			u64_stats_update_begin(&rxq->stats_sync);
- 			u64_stats_inc(&rxq->q_stats.hsplit_buf_ovf);
-@@ -3446,7 +3452,7 @@ static int idpf_rx_splitq_clean(struct idpf_rx_queue *rxq, int budget)
- 			u64_stats_update_end(&rxq->stats_sync);
- 		}
- 
--		hdr->page = NULL;
-+		hdr->netmem = 0;
- 
- payload:
- 		if (!libeth_rx_sync_for_cpu(rx_buf, pkt_len))
-@@ -3462,7 +3468,7 @@ static int idpf_rx_splitq_clean(struct idpf_rx_queue *rxq, int budget)
- 			break;
- 
- skip_data:
--		rx_buf->page = NULL;
-+		rx_buf->netmem = 0;
- 
- 		idpf_rx_post_buf_refill(refillq, buf_id);
- 		IDPF_RX_BUMP_NTC(rxq, ntc);
-diff --git a/drivers/net/ethernet/intel/libeth/rx.c b/drivers/net/ethernet/intel/libeth/rx.c
-index c2c53552c440..2afa6e33f160 100644
---- a/drivers/net/ethernet/intel/libeth/rx.c
-+++ b/drivers/net/ethernet/intel/libeth/rx.c
-@@ -204,14 +204,14 @@ void libeth_rx_fq_destroy(struct libeth_fq *fq)
- EXPORT_SYMBOL_GPL(libeth_rx_fq_destroy);
- 
- /**
-- * libeth_rx_recycle_slow - recycle a libeth page from the NAPI context
-- * @page: page to recycle
-+ * libeth_rx_recycle_slow - recycle libeth netmem
-+ * @netmem: network memory to recycle
-  *
-  * To be used on exceptions or rare cases not requiring fast inline recycling.
-  */
--void libeth_rx_recycle_slow(struct page *page)
-+void __cold libeth_rx_recycle_slow(netmem_ref netmem)
- {
--	page_pool_recycle_direct(page->pp, page);
-+	page_pool_put_full_netmem(netmem_get_pp(netmem), netmem, false);
- }
- EXPORT_SYMBOL_GPL(libeth_rx_recycle_slow);
- 
-diff --git a/include/net/libeth/rx.h b/include/net/libeth/rx.h
-index ab05024be518..7d5dc58984b1 100644
---- a/include/net/libeth/rx.h
-+++ b/include/net/libeth/rx.h
+ libeth-y			:= rx.o
++
++obj-$(CONFIG_LIBETH_XDP)	+= libeth_xdp.o
++
++libeth_xdp-y			+= xdp.o
+diff --git a/drivers/net/ethernet/intel/libeth/xdp.c b/drivers/net/ethernet/intel/libeth/xdp.c
+new file mode 100644
+index 000000000000..444449c72221
+--- /dev/null
++++ b/drivers/net/ethernet/intel/libeth/xdp.c
+@@ -0,0 +1,89 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/* Copyright (C) 2025 Intel Corporation */
++
++#define DEFAULT_SYMBOL_NAMESPACE	"LIBETH_XDP"
++
++#include <linux/export.h>
++
++#include <net/libeth/xdp.h>
++
++/* ``XDP_TX`` bulking */
++
++static void __cold
++libeth_xdp_tx_return_one(const struct libeth_xdp_tx_frame *frm)
++{
++	if (frm->len_fl & LIBETH_XDP_TX_MULTI)
++		libeth_xdp_return_frags(frm->data + frm->soff, true);
++
++	libeth_xdp_return_va(frm->data, true);
++}
++
++static void __cold
++libeth_xdp_tx_return_bulk(const struct libeth_xdp_tx_frame *bq, u32 count)
++{
++	for (u32 i = 0; i < count; i++) {
++		const struct libeth_xdp_tx_frame *frm = &bq[i];
++
++		if (!(frm->len_fl & LIBETH_XDP_TX_FIRST))
++			continue;
++
++		libeth_xdp_tx_return_one(frm);
++	}
++}
++
++static void __cold libeth_trace_xdp_exception(const struct net_device *dev,
++					      const struct bpf_prog *prog,
++					      u32 act)
++{
++	trace_xdp_exception(dev, prog, act);
++}
++
++/**
++ * libeth_xdp_tx_exception - handle Tx exceptions of XDP frames
++ * @bq: XDP Tx frame bulk
++ * @sent: number of frames sent successfully (from this bulk)
++ * @flags: internal libeth_xdp flags
++ *
++ * Cold helper used by __libeth_xdp_tx_flush_bulk(), do not call directly.
++ * Reports XDP Tx exceptions, frees the frames that won't be sent or adjust
++ * the Tx bulk to try again later.
++ */
++void __cold libeth_xdp_tx_exception(struct libeth_xdp_tx_bulk *bq, u32 sent,
++				    u32 flags)
++{
++	const struct libeth_xdp_tx_frame *pos = &bq->bulk[sent];
++	u32 left = bq->count - sent;
++
++	libeth_trace_xdp_exception(bq->dev, bq->prog, XDP_TX);
++
++	if (!(flags & LIBETH_XDP_TX_DROP)) {
++		memmove(bq->bulk, pos, left * sizeof(*bq->bulk));
++		bq->count = left;
++
++		return;
++	}
++
++	libeth_xdp_tx_return_bulk(pos, left);
++
++	bq->count = 0;
++}
++EXPORT_SYMBOL_GPL(libeth_xdp_tx_exception);
++
++/* Rx polling path */
++
++/**
++ * libeth_xdp_return_buff_slow - free &libeth_xdp_buff
++ * @xdp: buffer to free/return
++ *
++ * Slowpath version of libeth_xdp_return_buff() to be called on exceptions,
++ * queue clean-ups etc., without unwanted inlining.
++ */
++void __cold libeth_xdp_return_buff_slow(struct libeth_xdp_buff *xdp)
++{
++	__libeth_xdp_return_buff(xdp, false);
++}
++EXPORT_SYMBOL_GPL(libeth_xdp_return_buff_slow);
++
++MODULE_DESCRIPTION("Common Ethernet library - XDP infra");
++MODULE_IMPORT_NS("LIBETH");
++MODULE_LICENSE("GPL");
+diff --git a/include/net/libeth/tx.h b/include/net/libeth/tx.h
+index 35614f9523f6..3e68d11914f7 100644
+--- a/include/net/libeth/tx.h
++++ b/include/net/libeth/tx.h
 @@ -1,5 +1,5 @@
  /* SPDX-License-Identifier: GPL-2.0-only */
 -/* Copyright (C) 2024 Intel Corporation */
 +/* Copyright (C) 2024-2025 Intel Corporation */
  
- #ifndef __LIBETH_RX_H
- #define __LIBETH_RX_H
-@@ -31,7 +31,7 @@
+ #ifndef __LIBETH_TX_H
+ #define __LIBETH_TX_H
+@@ -12,11 +12,13 @@
  
  /**
-  * struct libeth_fqe - structure representing an Rx buffer (fill queue element)
-- * @page: page holding the buffer
-+ * @netmem: network memory reference holding the buffer
-  * @offset: offset from the page start (to the headroom)
-  * @truesize: total space occupied by the buffer (w/ headroom and tailroom)
-  *
-@@ -40,7 +40,7 @@
-  * former, @offset is always 0 and @truesize is always ```PAGE_SIZE```.
+  * enum libeth_sqe_type - type of &libeth_sqe to act on Tx completion
+- * @LIBETH_SQE_EMPTY: unused/empty, no action required
++ * @LIBETH_SQE_EMPTY: unused/empty OR XDP_TX frag, no action required
+  * @LIBETH_SQE_CTX: context descriptor with empty SQE, no action required
+  * @LIBETH_SQE_SLAB: kmalloc-allocated buffer, unmap and kfree()
+  * @LIBETH_SQE_FRAG: mapped skb frag, only unmap DMA
+  * @LIBETH_SQE_SKB: &sk_buff, unmap and napi_consume_skb(), update stats
++ * @__LIBETH_SQE_XDP_START: separator between skb and XDP types
++ * @LIBETH_SQE_XDP_TX: &skb_shared_info, libeth_xdp_return_buff_bulk(), stats
   */
- struct libeth_fqe {
--	struct page		*page;
-+	netmem_ref		netmem;
- 	u32			offset;
- 	u32			truesize;
- } __aligned_largest;
-@@ -102,15 +102,16 @@ static inline dma_addr_t libeth_rx_alloc(const struct libeth_fq_fp *fq, u32 i)
- 	struct libeth_fqe *buf = &fq->fqes[i];
- 
- 	buf->truesize = fq->truesize;
--	buf->page = page_pool_dev_alloc(fq->pp, &buf->offset, &buf->truesize);
--	if (unlikely(!buf->page))
-+	buf->netmem = page_pool_dev_alloc_netmem(fq->pp, &buf->offset,
-+						 &buf->truesize);
-+	if (unlikely(!buf->netmem))
- 		return DMA_MAPPING_ERROR;
- 
--	return page_pool_get_dma_addr(buf->page) + buf->offset +
-+	return page_pool_get_dma_addr_netmem(buf->netmem) + buf->offset +
- 	       fq->pp->p.offset;
- }
- 
--void libeth_rx_recycle_slow(struct page *page);
-+void libeth_rx_recycle_slow(netmem_ref netmem);
+ enum libeth_sqe_type {
+ 	LIBETH_SQE_EMPTY		= 0U,
+@@ -24,6 +26,9 @@ enum libeth_sqe_type {
+ 	LIBETH_SQE_SLAB,
+ 	LIBETH_SQE_FRAG,
+ 	LIBETH_SQE_SKB,
++
++	__LIBETH_SQE_XDP_START,
++	LIBETH_SQE_XDP_TX		= __LIBETH_SQE_XDP_START,
+ };
  
  /**
-  * libeth_rx_sync_for_cpu - synchronize or recycle buffer post DMA
-@@ -126,18 +127,19 @@ void libeth_rx_recycle_slow(struct page *page);
- static inline bool libeth_rx_sync_for_cpu(const struct libeth_fqe *fqe,
- 					  u32 len)
- {
--	struct page *page = fqe->page;
-+	netmem_ref netmem = fqe->netmem;
+@@ -32,6 +37,7 @@ enum libeth_sqe_type {
+  * @rs_idx: index of the last buffer from the batch this one was sent in
+  * @raw: slab buffer to free via kfree()
+  * @skb: &sk_buff to consume
++ * @sinfo: skb shared info of an XDP_TX frame
+  * @dma: DMA address to unmap
+  * @len: length of the mapped region to unmap
+  * @nr_frags: number of frags in the frame this buffer belongs to
+@@ -46,6 +52,7 @@ struct libeth_sqe {
+ 	union {
+ 		void				*raw;
+ 		struct sk_buff			*skb;
++		struct skb_shared_info		*sinfo;
+ 	};
  
- 	/* Very rare, but possible case. The most common reason:
- 	 * the last fragment contained FCS only, which was then
- 	 * stripped by the HW.
- 	 */
- 	if (unlikely(!len)) {
--		libeth_rx_recycle_slow(page);
-+		libeth_rx_recycle_slow(netmem);
- 		return false;
- 	}
- 
--	page_pool_dma_sync_for_cpu(page->pp, page, fqe->offset, len);
-+	page_pool_dma_sync_netmem_for_cpu(netmem_get_pp(netmem), netmem,
-+					  fqe->offset, len);
- 
- 	return true;
- }
+ 	DEFINE_DMA_UNMAP_ADDR(dma);
+diff --git a/include/net/libeth/xdp.h b/include/net/libeth/xdp.h
+new file mode 100644
+index 000000000000..4988453a3d70
+--- /dev/null
++++ b/include/net/libeth/xdp.h
+@@ -0,0 +1,541 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/* Copyright (C) 2025 Intel Corporation */
++
++#ifndef __LIBETH_XDP_H
++#define __LIBETH_XDP_H
++
++#include <linux/bpf_trace.h>
++#include <linux/unroll.h>
++
++#include <net/libeth/rx.h>
++#include <net/libeth/tx.h>
++#include <net/xsk_buff_pool.h>
++
++/*
++ * &xdp_buff_xsk is the largest structure &libeth_xdp_buff gets casted to,
++ * pick maximum pointer-compatible alignment.
++ */
++#define __LIBETH_XDP_BUFF_ALIGN						      \
++	(IS_ALIGNED(sizeof(struct xdp_buff_xsk), 16) ? 16 :		      \
++	 IS_ALIGNED(sizeof(struct xdp_buff_xsk), 8) ? 8 :		      \
++	 sizeof(long))
++
++/**
++ * struct libeth_xdp_buff - libeth extension over &xdp_buff
++ * @base: main &xdp_buff
++ * @data: shortcut for @base.data
++ * @desc: RQ descriptor containing metadata for this buffer
++ * @priv: driver-private scratchspace
++ *
++ * The main reason for this is to have a pointer to the descriptor to be able
++ * to quickly get frame metadata from xdpmo and driver buff-to-xdp callbacks
++ * (as well as bigger alignment).
++ * Pointer/layout-compatible with &xdp_buff and &xdp_buff_xsk.
++ */
++struct libeth_xdp_buff {
++	union {
++		struct xdp_buff		base;
++		void			*data;
++	};
++
++	const void			*desc;
++	unsigned long			priv[]
++					__aligned(__LIBETH_XDP_BUFF_ALIGN);
++} __aligned(__LIBETH_XDP_BUFF_ALIGN);
++static_assert(offsetof(struct libeth_xdp_buff, data) ==
++	      offsetof(struct xdp_buff_xsk, xdp.data));
++static_assert(offsetof(struct libeth_xdp_buff, desc) ==
++	      offsetof(struct xdp_buff_xsk, cb));
++static_assert(IS_ALIGNED(sizeof(struct xdp_buff_xsk),
++			 __alignof(struct libeth_xdp_buff)));
++
++/* Common Tx bits */
++
++/**
++ * enum - libeth_xdp internal Tx flags
++ * @LIBETH_XDP_TX_BULK: one bulk size at which it will be flushed to the queue
++ * @LIBETH_XDP_TX_BATCH: batch size for which the queue fill loop is unrolled
++ * @LIBETH_XDP_TX_DROP: indicates the send function must drop frames not sent
++ */
++enum {
++	LIBETH_XDP_TX_BULK		= DEV_MAP_BULK_SIZE,
++	LIBETH_XDP_TX_BATCH		= 8,
++
++	LIBETH_XDP_TX_DROP		= BIT(0),
++};
++
++/**
++ * enum - &libeth_xdp_tx_frame and &libeth_xdp_tx_desc flags
++ * @LIBETH_XDP_TX_LEN: only for ``XDP_TX``, [15:0] of ::len_fl is actual length
++ * @LIBETH_XDP_TX_FIRST: indicates the frag is the first one of the frame
++ * @LIBETH_XDP_TX_LAST: whether the frag is the last one of the frame
++ * @LIBETH_XDP_TX_MULTI: whether the frame contains several frags
++ * @LIBETH_XDP_TX_FLAGS: only for ``XDP_TX``, [31:16] of ::len_fl is flags
++ */
++enum {
++	LIBETH_XDP_TX_LEN		= GENMASK(15, 0),
++
++	LIBETH_XDP_TX_FIRST		= BIT(16),
++	LIBETH_XDP_TX_LAST		= BIT(17),
++	LIBETH_XDP_TX_MULTI		= BIT(18),
++
++	LIBETH_XDP_TX_FLAGS		= GENMASK(31, 16),
++};
++
++/**
++ * struct libeth_xdp_tx_frame - represents one XDP Tx element
++ * @data: frame start pointer for ``XDP_TX``
++ * @len_fl: ``XDP_TX``, combined flags [31:16] and len [15:0] field for speed
++ * @soff: ``XDP_TX``, offset from @data to the start of &skb_shared_info
++ * @frag: one (non-head) frag for ``XDP_TX``
++ */
++struct libeth_xdp_tx_frame {
++	union {
++		/* ``XDP_TX`` */
++		struct {
++			void				*data;
++			u32				len_fl;
++			u32				soff;
++		};
++
++		/* ``XDP_TX`` frag */
++		skb_frag_t			frag;
++	};
++} __aligned_largest;
++static_assert(offsetof(struct libeth_xdp_tx_frame, frag.len) ==
++	      offsetof(struct libeth_xdp_tx_frame, len_fl));
++
++/**
++ * struct libeth_xdp_tx_bulk - XDP Tx frame bulk for bulk sending
++ * @prog: corresponding active XDP program
++ * @dev: &net_device which the frames are transmitted on
++ * @xdpsq: shortcut to the corresponding driver-specific XDPSQ structure
++ * @count: current number of frames in @bulk
++ * @bulk: array of queued frames for bulk Tx
++ *
++ * All XDP Tx operations queue each frame to the bulk first and flush it
++ * when @count reaches the array end. Bulk is always placed on the stack
++ * for performance. One bulk element contains all the data necessary
++ * for sending a frame and then freeing it on completion.
++ */
++struct libeth_xdp_tx_bulk {
++	const struct bpf_prog		*prog;
++	struct net_device		*dev;
++	void				*xdpsq;
++
++	u32				count;
++	struct libeth_xdp_tx_frame	bulk[LIBETH_XDP_TX_BULK];
++} __aligned(sizeof(struct libeth_xdp_tx_frame));
++
++/**
++ * LIBETH_XDP_ONSTACK_BULK - declare &libeth_xdp_tx_bulk on the stack
++ * @bq: name of the variable to declare
++ *
++ * Helper to declare a bulk on the stack with a compiler hint that it should
++ * not be initialized automatically (with `CONFIG_INIT_STACK_ALL_*`) for
++ * performance reasons.
++ */
++#define LIBETH_XDP_ONSTACK_BULK(bq)					      \
++	struct libeth_xdp_tx_bulk bq __uninitialized
++
++/**
++ * struct libeth_xdpsq - abstraction for an XDPSQ
++ * @sqes: array of Tx buffers from the actual queue struct
++ * @descs: opaque pointer to the HW descriptor array
++ * @ntu: pointer to the next free descriptor index
++ * @count: number of descriptors on that queue
++ * @pending: pointer to the number of sent-not-completed descs on that queue
++ * @xdp_tx: pointer to the above
++ *
++ * Abstraction for driver-independent implementation of Tx. Placed on the stack
++ * and filled by the driver before the transmission, so that the generic
++ * functions can access and modify driver-specific resources.
++ */
++struct libeth_xdpsq {
++	struct libeth_sqe		*sqes;
++	void				*descs;
++
++	u32				*ntu;
++	u32				count;
++
++	u32				*pending;
++	u32				*xdp_tx;
++};
++
++/**
++ * struct libeth_xdp_tx_desc - abstraction for an XDP Tx descriptor
++ * @addr: DMA address of the frame
++ * @len: length of the frame
++ * @flags: XDP Tx flags
++ * @opts: combined @len + @flags for speed
++ *
++ * Filled by the generic functions and then passed to driver-specific functions
++ * to fill a HW Tx descriptor, always placed on the [function] stack.
++ */
++struct libeth_xdp_tx_desc {
++	dma_addr_t			addr;
++	union {
++		struct {
++			u32				len;
++			u32				flags;
++		};
++		aligned_u64			opts;
++	};
++} __aligned_largest;
++
++/**
++ * libeth_xdp_tx_xmit_bulk - main XDP Tx function
++ * @bulk: array of frames to send
++ * @xdpsq: pointer to the driver-specific XDPSQ struct
++ * @n: number of frames to send
++ * @unroll: whether to unroll the queue filling loop for speed
++ * @priv: driver-specific private data
++ * @prep: callback for cleaning the queue and filling abstract &libeth_xdpsq
++ * @fill: internal callback for filling &libeth_sqe and &libeth_xdp_tx_desc
++ * @xmit: callback for filling a HW descriptor with the frame info
++ *
++ * Internal abstraction for placing @n XDP Tx frames on the HW XDPSQ. Used for
++ * all types of frames.
++ * @unroll greatly increases the object code size, but also greatly increases
++ * performance.
++ * The compilers inline all those onstack abstractions to direct data accesses.
++ *
++ * Return: number of frames actually placed on the queue, <= @n. The function
++ * can't fail, but can send less frames if there's no enough free descriptors
++ * available. The actual free space is returned by @prep from the driver.
++ */
++static __always_inline u32
++libeth_xdp_tx_xmit_bulk(const struct libeth_xdp_tx_frame *bulk, void *xdpsq,
++			u32 n, bool unroll, u64 priv,
++			u32 (*prep)(void *xdpsq, struct libeth_xdpsq *sq),
++			struct libeth_xdp_tx_desc
++			(*fill)(struct libeth_xdp_tx_frame frm, u32 i,
++				const struct libeth_xdpsq *sq, u64 priv),
++			void (*xmit)(struct libeth_xdp_tx_desc desc, u32 i,
++				     const struct libeth_xdpsq *sq, u64 priv))
++{
++	struct libeth_xdpsq sq __uninitialized;
++	u32 this, batched, off = 0;
++	u32 ntu, i = 0;
++
++	n = min(n, prep(xdpsq, &sq));
++	if (unlikely(!n))
++		return 0;
++
++	ntu = *sq.ntu;
++
++	this = sq.count - ntu;
++	if (likely(this > n))
++		this = n;
++
++again:
++	if (!unroll)
++		goto linear;
++
++	batched = ALIGN_DOWN(this, LIBETH_XDP_TX_BATCH);
++
++	for ( ; i < off + batched; i += LIBETH_XDP_TX_BATCH) {
++		u32 base = ntu + i - off;
++
++		unrolled_count(LIBETH_XDP_TX_BATCH)
++		for (u32 j = 0; j < LIBETH_XDP_TX_BATCH; j++)
++			xmit(fill(bulk[i + j], base + j, &sq, priv),
++			     base + j, &sq, priv);
++	}
++
++	if (batched < this) {
++linear:
++		for ( ; i < off + this; i++)
++			xmit(fill(bulk[i], ntu + i - off, &sq, priv),
++			     ntu + i - off, &sq, priv);
++	}
++
++	ntu += this;
++	if (likely(ntu < sq.count))
++		goto out;
++
++	ntu = 0;
++
++	if (i < n) {
++		this = n - i;
++		off = i;
++
++		goto again;
++	}
++
++out:
++	*sq.ntu = ntu;
++	*sq.pending += n;
++	if (sq.xdp_tx)
++		*sq.xdp_tx += n;
++
++	return n;
++}
++
++/* ``XDP_TX`` bulking */
++
++void libeth_xdp_return_buff_slow(struct libeth_xdp_buff *xdp);
++
++/**
++ * libeth_xdp_tx_queue_head - internal helper for queueing one ``XDP_TX`` head
++ * @bq: XDP Tx bulk to queue the head frag to
++ * @xdp: XDP buffer with the head to queue
++ *
++ * Return: false if it's the only frag of the frame, true if it's an S/G frame.
++ */
++static inline bool libeth_xdp_tx_queue_head(struct libeth_xdp_tx_bulk *bq,
++					    const struct libeth_xdp_buff *xdp)
++{
++	const struct xdp_buff *base = &xdp->base;
++
++	bq->bulk[bq->count++] = (typeof(*bq->bulk)){
++		.data	= xdp->data,
++		.len_fl	= (base->data_end - xdp->data) | LIBETH_XDP_TX_FIRST,
++		.soff	= xdp_data_hard_end(base) - xdp->data,
++	};
++
++	if (!xdp_buff_has_frags(base))
++		return false;
++
++	bq->bulk[bq->count - 1].len_fl |= LIBETH_XDP_TX_MULTI;
++
++	return true;
++}
++
++/**
++ * libeth_xdp_tx_queue_frag - internal helper for queueing one ``XDP_TX`` frag
++ * @bq: XDP Tx bulk to queue the frag to
++ * @frag: frag to queue
++ */
++static inline void libeth_xdp_tx_queue_frag(struct libeth_xdp_tx_bulk *bq,
++					    const skb_frag_t *frag)
++{
++	bq->bulk[bq->count++].frag = *frag;
++}
++
++/**
++ * libeth_xdp_tx_queue_bulk - internal helper for queueing one ``XDP_TX`` frame
++ * @bq: XDP Tx bulk to queue the frame to
++ * @xdp: XDP buffer to queue
++ * @flush_bulk: driver callback to flush the bulk to the HW queue
++ *
++ * Return: true on success, false on flush error.
++ */
++static __always_inline bool
++libeth_xdp_tx_queue_bulk(struct libeth_xdp_tx_bulk *bq,
++			 struct libeth_xdp_buff *xdp,
++			 bool (*flush_bulk)(struct libeth_xdp_tx_bulk *bq,
++					    u32 flags))
++{
++	const struct skb_shared_info *sinfo;
++	bool ret = true;
++	u32 nr_frags;
++
++	if (unlikely(bq->count == LIBETH_XDP_TX_BULK) &&
++	    unlikely(!flush_bulk(bq, 0))) {
++		libeth_xdp_return_buff_slow(xdp);
++		return false;
++	}
++
++	if (!libeth_xdp_tx_queue_head(bq, xdp))
++		goto out;
++
++	sinfo = xdp_get_shared_info_from_buff(&xdp->base);
++	nr_frags = sinfo->nr_frags;
++
++	for (u32 i = 0; i < nr_frags; i++) {
++		if (unlikely(bq->count == LIBETH_XDP_TX_BULK) &&
++		    unlikely(!flush_bulk(bq, 0))) {
++			ret = false;
++			break;
++		}
++
++		libeth_xdp_tx_queue_frag(bq, &sinfo->frags[i]);
++	}
++
++out:
++	bq->bulk[bq->count - 1].len_fl |= LIBETH_XDP_TX_LAST;
++	xdp->data = NULL;
++
++	return ret;
++}
++
++/**
++ * libeth_xdp_tx_fill_stats - fill &libeth_sqe with ``XDP_TX`` frame stats
++ * @sqe: SQ element to fill
++ * @desc: libeth_xdp Tx descriptor
++ * @sinfo: &skb_shared_info for this frame
++ *
++ * Internal helper for filling an SQE with the frame stats, do not use in
++ * drivers. Fills the number of frags and bytes for this frame.
++ */
++#define libeth_xdp_tx_fill_stats(sqe, desc, sinfo)			      \
++	__libeth_xdp_tx_fill_stats(sqe, desc, sinfo, __UNIQUE_ID(sqe_),	      \
++				   __UNIQUE_ID(desc_), __UNIQUE_ID(sinfo_))
++
++#define __libeth_xdp_tx_fill_stats(sqe, desc, sinfo, ue, ud, us) do {	      \
++	const struct libeth_xdp_tx_desc *ud = (desc);			      \
++	const struct skb_shared_info *us;				      \
++	struct libeth_sqe *ue = (sqe);					      \
++									      \
++	ue->nr_frags = 1;						      \
++	ue->bytes = ud->len;						      \
++									      \
++	if (ud->flags & LIBETH_XDP_TX_MULTI) {				      \
++		us = (sinfo);						      \
++		ue->nr_frags += us->nr_frags;				      \
++		ue->bytes += us->xdp_frags_size;			      \
++	}								      \
++} while (0)
++
++/**
++ * libeth_xdp_tx_fill_buf - internal helper to fill one ``XDP_TX`` &libeth_sqe
++ * @frm: XDP Tx frame from the bulk
++ * @i: index on the HW queue
++ * @sq: XDPSQ abstraction for the queue
++ * @priv: private data
++ *
++ * Return: XDP Tx descriptor with the synced DMA and other info to pass to
++ * the driver callback.
++ */
++static inline struct libeth_xdp_tx_desc
++libeth_xdp_tx_fill_buf(struct libeth_xdp_tx_frame frm, u32 i,
++		       const struct libeth_xdpsq *sq, u64 priv)
++{
++	struct libeth_xdp_tx_desc desc;
++	struct skb_shared_info *sinfo;
++	skb_frag_t *frag = &frm.frag;
++	struct libeth_sqe *sqe;
++	netmem_ref netmem;
++
++	if (frm.len_fl & LIBETH_XDP_TX_FIRST) {
++		sinfo = frm.data + frm.soff;
++		skb_frag_fill_netmem_desc(frag, virt_to_netmem(frm.data),
++					  offset_in_page(frm.data),
++					  frm.len_fl);
++	} else {
++		sinfo = NULL;
++	}
++
++	netmem = skb_frag_netmem(frag);
++	desc = (typeof(desc)){
++		.addr	= page_pool_get_dma_addr_netmem(netmem) +
++			  skb_frag_off(frag),
++		.len	= skb_frag_size(frag) & LIBETH_XDP_TX_LEN,
++		.flags	= skb_frag_size(frag) & LIBETH_XDP_TX_FLAGS,
++	};
++
++	dma_sync_single_for_device(__netmem_get_pp(netmem)->p.dev, desc.addr,
++				   desc.len, DMA_BIDIRECTIONAL);
++
++	if (!sinfo)
++		return desc;
++
++	sqe = &sq->sqes[i];
++	sqe->type = LIBETH_SQE_XDP_TX;
++	sqe->sinfo = sinfo;
++	libeth_xdp_tx_fill_stats(sqe, &desc, sinfo);
++
++	return desc;
++}
++
++void libeth_xdp_tx_exception(struct libeth_xdp_tx_bulk *bq, u32 sent,
++			     u32 flags);
++
++/**
++ * __libeth_xdp_tx_flush_bulk - internal helper to flush one XDP Tx bulk
++ * @bq: bulk to flush
++ * @flags: XDP TX flags
++ * @prep: driver-specific callback to prepare the queue for sending
++ * @fill: libeth_xdp callback to fill &libeth_sqe and &libeth_xdp_tx_desc
++ * @xmit: driver callback to fill a HW descriptor
++ *
++ * Internal abstraction to create bulk flush functions for drivers.
++ *
++ * Return: true if anything was sent, false otherwise.
++ */
++static __always_inline bool
++__libeth_xdp_tx_flush_bulk(struct libeth_xdp_tx_bulk *bq, u32 flags,
++			   u32 (*prep)(void *xdpsq, struct libeth_xdpsq *sq),
++			   struct libeth_xdp_tx_desc
++			   (*fill)(struct libeth_xdp_tx_frame frm, u32 i,
++				   const struct libeth_xdpsq *sq, u64 priv),
++			   void (*xmit)(struct libeth_xdp_tx_desc desc, u32 i,
++					const struct libeth_xdpsq *sq,
++					u64 priv))
++{
++	u32 sent, drops;
++	int err = 0;
++
++	sent = libeth_xdp_tx_xmit_bulk(bq->bulk, bq->xdpsq,
++				       min(bq->count, LIBETH_XDP_TX_BULK),
++				       false, 0, prep, fill, xmit);
++	drops = bq->count - sent;
++
++	if (unlikely(drops)) {
++		libeth_xdp_tx_exception(bq, sent, flags);
++		err = -ENXIO;
++	} else {
++		bq->count = 0;
++	}
++
++	trace_xdp_bulk_tx(bq->dev, sent, drops, err);
++
++	return likely(sent);
++}
++
++/**
++ * libeth_xdp_tx_flush_bulk - wrapper to define flush of one ``XDP_TX`` bulk
++ * @bq: bulk to flush
++ * @flags: Tx flags, see above
++ * @prep: driver callback to prepare the queue
++ * @xmit: driver callback to fill a HW descriptor
++ */
++#define libeth_xdp_tx_flush_bulk(bq, flags, prep, xmit)			      \
++	__libeth_xdp_tx_flush_bulk(bq, flags, prep, libeth_xdp_tx_fill_buf,   \
++				   xmit)
++
++/* Rx polling path */
++
++static inline void libeth_xdp_return_va(const void *data, bool napi)
++{
++	netmem_ref netmem = virt_to_netmem(data);
++
++	page_pool_put_full_netmem(__netmem_get_pp(netmem), netmem, napi);
++}
++
++static inline void libeth_xdp_return_frags(const struct skb_shared_info *sinfo,
++					   bool napi)
++{
++	for (u32 i = 0; i < sinfo->nr_frags; i++) {
++		netmem_ref netmem = skb_frag_netmem(&sinfo->frags[i]);
++
++		page_pool_put_full_netmem(netmem_get_pp(netmem), netmem, napi);
++	}
++}
++
++/**
++ * libeth_xdp_return_buff - free/recycle &libeth_xdp_buff
++ * @xdp: buffer to free
++ *
++ * Hotpath helper to free &libeth_xdp_buff. Comparing to xdp_return_buff(),
++ * it's faster as it gets inlined and always assumes order-0 pages and safe
++ * direct recycling. Zeroes @xdp->data to avoid UAFs.
++ */
++#define libeth_xdp_return_buff(xdp)	__libeth_xdp_return_buff(xdp, true)
++
++static inline void __libeth_xdp_return_buff(struct libeth_xdp_buff *xdp,
++					    bool napi)
++{
++	if (!xdp_buff_has_frags(&xdp->base))
++		goto out;
++
++	libeth_xdp_return_frags(xdp_get_shared_info_from_buff(&xdp->base),
++				napi);
++
++out:
++	libeth_xdp_return_va(xdp->data, napi);
++	xdp->data = NULL;
++}
++
++#endif /* __LIBETH_XDP_H */
 -- 
 2.47.1
 
