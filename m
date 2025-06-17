@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D869E2EBBB6
-	for <bpf@vger.kernel.org>; Tue, 17 Jun 2025 20:30:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8F672ECE9E
+	for <bpf@vger.kernel.org>; Tue, 17 Jun 2025 20:30:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750192206; cv=none; b=ZLFy+rb6wIKCS+sLsuL2ZH/IkMDurKZwRWGeLawGeDJ3N/4sOKbO3a3THUYAluCRf1kboioZw12Nsxud0EltcO5Ral05PV/td/8jz4lJf0mLE5TdCAtW/Fsx2k6wGKjM+Rm6RgAtnNGFA0O7RakDbSYBZhzEPpm9Xbd/g65QQ74=
+	t=1750192207; cv=none; b=gxGGZhpMMl28Ps2eHK+e+qoNav8MSPxlT2VvBjOHcTn8o+fPimIw2ygS0fgqeQVTOyJ2TTQ1UpbXQ+EaQiHl0x74Zulbv6oB/uSnPD6f+Ea9KDfBTHKAv2L3T0irzXxFfkAoXjx/gBrFmHfvZePHCk0GSNfc7nt9D6TJ/knhj3g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750192206; c=relaxed/simple;
-	bh=SmD1vWJEzZrVaFh3eAafpZXnXQ9tBivyjGQPyRARPv4=;
+	s=arc-20240116; t=1750192207; c=relaxed/simple;
+	bh=mtCDOVymGT1vlKu9PoTeBEdlcrgzycsDV0+MYKdmSGw=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=mIA2e6dvllXdrESCJ2ncuyt/8N2PaL98oJfuV9k6rFyeFSdPNsnQjqe2/dG1aWWAIVIzuxSG/LcqmwmC2aiiCxmiqntK/KgLRbK7ixkp0XpmEdxH/ej5Oq8s1yNbNPpb3Bl1TPog6bO9BekGWFAIxQpV/+WN16ZLODsUYCDc7dk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TvT320zT; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=A2ArpBBpzu9xwZK0Ers6rYvoCl+QyY+o8Drx+o1F3eyvr+XwsLUGOSWnErT9yutigj23cYTOpaQEYSYrQDDItqEl5oSfW0zPong7uERYL7ZApAo0wPXILlmw9ZAyJMqvr8qW+258N7Ff8SjDSSqyFK5wq8T8aXDfY10AVlpuuEo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hCo/2ZnG; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TvT320zT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABB04C4CEE3;
-	Tue, 17 Jun 2025 20:30:06 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hCo/2ZnG"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E147C4CEEE;
+	Tue, 17 Jun 2025 20:30:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750192206;
-	bh=SmD1vWJEzZrVaFh3eAafpZXnXQ9tBivyjGQPyRARPv4=;
+	s=k20201202; t=1750192205;
+	bh=mtCDOVymGT1vlKu9PoTeBEdlcrgzycsDV0+MYKdmSGw=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=TvT320zTuR613MIG8rbn4XOTW16Ez+EsdUvgRoIMpKlTXGfissYf/BWfdsdbqnM+F
-	 7EQpL3GxSLhGjDarIC0TI/T3kiMCoIgN/A/ffiYI0W57NasfBKhI/4nOcNf83TPSQc
-	 NupCqfxVW4eTWUqyJXWBPHGJ8sCDjKlIcPISM+ISb/2BnZ3V+rvPKYURVt0huykqE2
-	 t3dtUCZ1/MvDIwe3Bp0qwlhkn3ycnsppX32tkAiIxDUGc7+QPRL8uQEwMY7aVcmBeL
-	 V+MdlzJ77kPPbg4ToTikGTMZcqF0ys0qRcYHIjF7E3CAREcid/IFVGCjNOPJ+J7CK/
-	 ufOJxxfbx5wGQ==
+	b=hCo/2ZnGDdC3JSpdO7wWFTaBfHGvJ5cXENCBqVNwSFLx/2SPPUrx4BoeJlIBdBf9k
+	 6N09TizmrGQeTWsi10gYtOEFIINUeldrj9w5USPVZNGmD9SBDxBPxzcADWoZBqMeQI
+	 ceg7Vv82kaoKCB+S7mA9vOTuKKiFSoi4lCQ8Q0z0JQHxf4KY3kUtOJ1BWIW85FaaKx
+	 i7B+lHqpYsO3PnGaI93DmEeKULy11fXESSf4guhnS8ZkNd3xL4uL2HkQNweef9xsZ8
+	 5B0ESsR2EB4ttta6IGxJJN5mwJXRZn1s2psc02tPVPvcJavHFSs9S4KOzv7rKi2MrH
+	 YRtI9ox6iOuEw==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70CDF38111DD;
-	Tue, 17 Jun 2025 20:30:36 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33DDA38111DD;
+	Tue, 17 Jun 2025 20:30:35 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -37,39 +37,40 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] selftests/bpf: fix unintentional switch case
- fall
- through
+Subject: Re: [PATCH bpf-next v3 0/1] selftests/bpf: more precise
+ cpu_mitigations
+ state detection
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <175019223524.3686091.17037412831949371950.git-patchwork-notify@kernel.org>
-Date: Tue, 17 Jun 2025 20:30:35 +0000
-References: <20250617121536.1320074-1-mykyta.yatsenko5@gmail.com>
-In-Reply-To: <20250617121536.1320074-1-mykyta.yatsenko5@gmail.com>
-To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+ <175019223374.3686091.10779806899057253382.git-patchwork-notify@kernel.org>
+Date: Tue, 17 Jun 2025 20:30:33 +0000
+References: <20250617005710.1066165-1-eddyz87@gmail.com>
+In-Reply-To: <20250617005710.1066165-1-eddyz87@gmail.com>
+To: Eduard Zingerman <eddyz87@gmail.com>
 Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
- daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com,
- eddyz87@gmail.com, yatsenko@meta.com
+ daniel@iogearbox.net, martin.lau@linux.dev, kernel-team@fb.com,
+ yonghong.song@linux.dev, laoar.shao@gmail.com, mykyta.yatsenko5@gmail.com
 
 Hello:
 
 This patch was applied to bpf/bpf-next.git (master)
 by Andrii Nakryiko <andrii@kernel.org>:
 
-On Tue, 17 Jun 2025 13:15:36 +0100 you wrote:
-> From: Mykyta Yatsenko <yatsenko@meta.com>
+On Mon, 16 Jun 2025 17:57:09 -0700 you wrote:
+> If kernel executing selftests is configured with spectre mitigations
+> disabled, verification of unprivileged BPF won't emulate speculative
+> branches.
 > 
-> Break from switch expression after parsing -n CLI argument in veristat,
-> instead of falling through and enabling comparison mode.
-> Fixes: a5c57f81eb2b ("veristat: add ability to set BPF_F_TEST_SANITY_STRICT flag with -r flag")
-> 
-> Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
+> A number of selftests relies on speculative branches being visited.
+> In discussion [1] it was decided not to add additional tests
+> classification, but to execute unprivileged tests only when
+> mitigations are enabled.
 > 
 > [...]
 
 Here is the summary with links:
-  - [bpf-next] selftests/bpf: fix unintentional switch case fall through
-    https://git.kernel.org/bpf/bpf-next/c/66ab68c9de89
+  - [bpf-next,v3,1/1] selftests/bpf: more precise cpu_mitigations state detection
+    https://git.kernel.org/bpf/bpf-next/c/fc2915bb8bfc
 
 You are awesome, thank you!
 -- 
