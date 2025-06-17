@@ -1,101 +1,93 @@
-Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
+Received: from relay.hostedemail.com (smtprelay0016.hostedemail.com [216.40.44.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69BA4169AE6
-	for <bpf@vger.kernel.org>; Tue, 17 Jun 2025 22:09:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E6372F5310;
+	Tue, 17 Jun 2025 22:51:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750198192; cv=none; b=ur+2fgQjMHfz7sxRc7cLeOWAQR4xy9/s2wm4NYARsIdRHEHyrz8P6lQ7Y6os9PdipXE5f2H9FQnYXJZIGhUfLQqARdGJl4VU5gb4F5FcwTuT9WD4Hy9qA0jYnkjOGjUHUqABVJY6nTNdoqQCuzkhXW30Ynnsyy1ia8jctVlUF1A=
+	t=1750200678; cv=none; b=a/AY6WqwJ7BavUz3NEyMOxRf7iiwqNs2fIhOirZXAYAHbVxpRq/6dQEy4WERhYlqtEtTQHt4Poccqt5z/xWxfSRt+qQwRq87pbu9NfjA/O0lHvUrlNVhCea/TdpcilDwlmuIQ92DWipQILd7hjO3kdcr8L0O0UZtK7cxNF0fmSE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750198192; c=relaxed/simple;
-	bh=md5ltiwqeUfrAI/H1uP9NmLu2Y+ryVbLw3ocw5PnKmQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=M+8vG3b5i0ZAoushaKATcOtxkhiVq8x7Yx3nss5h2Fjiqj4vP0MPE3LpnfNmO0waGVpHz78vb1VWbuwRJF4/coAxVSOALcfnhSOwk0HxxUDkxNT/hLAKpZZH8fYatz7MoP3SjJUjKyKHmf7AEjZhETSTlQbJOAVM0E4ViQoM0Ng=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=D9/lvRGQ; arc=none smtp.client-ip=91.218.175.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="D9/lvRGQ"
-Message-ID: <88cdbd9d-e0cf-443d-b3a2-28aa7e5d896c@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1750198188;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=TsMXzQXhQLFm9pTr9bci1vqfLwP8c5etCiCzRZNSYFA=;
-	b=D9/lvRGQYvSGw9GZtzyiUks0WuYvCOf1rTo9QFmCK3/HTnXQLq7v3aA/Ox4CjEi7cXHxZv
-	+9ip72z53WxGSBJKA/Boa6E9e+3L0hYs+umZG7aq+8j1xamW3xqyDJ2e55HmGuT423wfML
-	y/Pj61rjT9tqGdTHRaOhChlC1pIxz2Q=
-Date: Tue, 17 Jun 2025 15:09:42 -0700
+	s=arc-20240116; t=1750200678; c=relaxed/simple;
+	bh=iXGszjtXOZHDy7gWbPWg+lr0E7dCDoezrDFH319UBvg=;
+	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
+	 Content-Type; b=TgNLYWg7DDrY6a6XO/pGL2V84mwmP/uP8M2QV+aHPBEMnLrPKubBX6Ufc+TVRW10jq/GanRCcZErJNy3C50XazULRTwiHjH7lFWQRg2hTPnaSwsp3+Ng1qf1PnHNARLSrY6cRwK47tCRy7PyIN312ttl+jSDlIH4tr7WGnXi61A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+Received: from omf18.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay06.hostedemail.com (Postfix) with ESMTP id B67CD1017B3;
+	Tue, 17 Jun 2025 22:51:14 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: nevets@goodmis.org) by omf18.hostedemail.com (Postfix) with ESMTPA id B0B0530;
+	Tue, 17 Jun 2025 22:51:11 +0000 (UTC)
+Received: from rostedt by gandalf with local (Exim 4.98.2)
+	(envelope-from <rostedt@goodmis.org>)
+	id 1uRf9C-00000002L6s-29si;
+	Tue, 17 Jun 2025 18:51:18 -0400
+Message-ID: <20250617225118.364667867@goodmis.org>
+User-Agent: quilt/0.68
+Date: Tue, 17 Jun 2025 18:50:17 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org,
+ bpf@vger.kernel.org,
+ x86@kernel.org
+Cc: Masami Hiramatsu <mhiramat@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Josh Poimboeuf <jpoimboe@kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>,
+ Ingo Molnar <mingo@kernel.org>,
+ Jiri Olsa <jolsa@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>,
+ Thomas Gleixner <tglx@linutronix.de>,
+ Andrii Nakryiko <andrii@kernel.org>,
+ Indu Bhagat <indu.bhagat@oracle.com>,
+ "Jose E. Marchesi" <jemarch@gnu.org>,
+ Beau Belgrave <beaub@linux.microsoft.com>,
+ Jens Remus <jremus@linux.ibm.com>,
+ Linus Torvalds <torvalds@linux-foundation.org>,
+ Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH v6 08/12] unwind_user/sframe/x86: Enable sframe unwinding on x86
+References: <20250617225009.233007152@goodmis.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next] selftests/bpf: Fix RELEASE build failure with
- gcc14
-Content-Language: en-GB
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Kernel Team <kernel-team@fb.com>, Martin KaFai Lau <martin.lau@kernel.org>
-References: <20250617044956.2686668-1-yonghong.song@linux.dev>
- <CAADnVQKiTOst_qaN2azvg9JXqQPJ8SqE7LMPTWve6Omo=ZhLNw@mail.gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <CAADnVQKiTOst_qaN2azvg9JXqQPJ8SqE7LMPTWve6Omo=ZhLNw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=UTF-8
+X-Stat-Signature: q7ycq9d9dkc7owgwa5cynr53tds45bj8
+X-Rspamd-Server: rspamout04
+X-Rspamd-Queue-Id: B0B0530
+X-Session-Marker: 6E657665747340676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX1/Uzply6cl3gsXjJr1KesH0wywOxldb14w=
+X-HE-Tag: 1750200671-394734
+X-HE-Meta: U2FsdGVkX19AJUtTTAelvx03X7L/01djQSa83Uwsp3IhNfD2PRZCjVo0MqQWFJfaGNNof5VwHcEYxMnzNbSJWrh8w/oiY9wOtCwKDtiNXIB1pekrwVTMxdwmQykBPnET6Fc+5MRvFv1+i3GGNotahAsOxsh11izQoycQjERlY2zkxVkfrmC7XgvRjVGBEhNYKrWmOSEYT+h8fATbnln8bU8PVukvSQwR92XlwNMXVW0bgw6KVInYGxTg6v2qrmPJaSoJ2kSGKzUVK8CjNKlF3UPTLc8fOOUwa35jIHkUzRwq+Kd05rIJS90PhmdJa/IzYJwR0pN/rWQOy9Bhk/eLau7tlIRFC3vxeZFLGMO08rFlS6uo8oBQX902PMbymuAn80vrv6ghWqMugBD5MguW3yJF6Ad1+Lz2xrA9CzsizHE=
 
+From: Josh Poimboeuf <jpoimboe@kernel.org>
 
+The x86 sframe 2.0 implementation works fairly well, starting with
+binutils 2.41 (though some bugs are getting fixed in later versions).
+Enable it.
 
-On 6/17/25 10:24 AM, Alexei Starovoitov wrote:
-> On Mon, Jun 16, 2025 at 9:50 PM Yonghong Song <yonghong.song@linux.dev> wrote:
->> With gcc14, when building with RELEASE=1, I hit four below compilation
->> failure:
->>
->> Error 1:
->>    In file included from test_loader.c:6:
->>    test_loader.c: In function ‘run_subtest’: test_progs.h:194:17:
->>        error: ‘retval’ may be used uninitialized in this function
->>     [-Werror=maybe-uninitialized]
->>      194 |                 fprintf(stdout, ##format);           \
->>          |                 ^~~~~~~
->>    test_loader.c:958:13: note: ‘retval’ was declared here
->>      958 |         int retval, err, i;
->>          |             ^~~~~~
->>
->>    The uninitialized var 'retval' actaully could cause incorrect result.
-> actually
->
->> Error 2:
->>    In function ‘test_fd_array_cnt’:
->>    prog_tests/fd_array.c:71:14: error: ‘btf_id’ may be used uninitialized in this
->>        function [-Werror=maybe-uninitialized]
->>       71 |         fd = bpf_btf_get_fd_by_id(id);
->>          |              ^~~~~~~~~~~~~~~~~~~~~~~~
->>    prog_tests/fd_array.c:302:15: note: ‘btf_id’ was declared here
->>      302 |         __u32 btf_id;
->>          |               ^~~~~~
->>
->>    Changing ASSERT_GE to ASSERT_EQ can fix the compilation error. Otherwise,
->>    there is no functionality change.
->>
->> Error 3:
->>    prog_tests/tailcalls.c: In function ‘test_tailcall_hierarchy_count’:
->>    prog_tests/tailcalls.c:1402:23: error: ‘fentry_data_fd’ may be used uninitialized
->>        in this function [-Werror=maybe-uninitialized]
->>       1402 |                 err = bpf_map_lookup_elem(fentry_data_fd, &i, &val);
->>            |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->>
->>    The code is correct. The change intends to slient gcc errors.
-> to silence.
->
-> Fixed the typos while applying.
-> Pls use spell check.
+Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+---
+ arch/x86/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-Sorry about typo's. Will pay attention to spell check for later patches.
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index 3f7bdc9e3cec..e282c5123385 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -304,6 +304,7 @@ config X86
+ 	select HAVE_UNSTABLE_SCHED_CLOCK
+ 	select HAVE_UNWIND_USER_COMPAT_FP	if IA32_EMULATION
+ 	select HAVE_UNWIND_USER_FP		if X86_64
++	select HAVE_UNWIND_USER_SFRAME		if X86_64
+ 	select HAVE_USER_RETURN_NOTIFIER
+ 	select HAVE_GENERIC_VDSO
+ 	select VDSO_GETRANDOM			if X86_64
+-- 
+2.47.2
+
 
