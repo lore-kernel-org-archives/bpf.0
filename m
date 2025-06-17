@@ -1,30 +1,31 @@
 Received: from relay.hostedemail.com (smtprelay0017.hostedemail.com [216.40.44.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77E501E834F;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D80752236F0;
 	Tue, 17 Jun 2025 22:51:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750200679; cv=none; b=sD2a2kcAz9+jGY0h058Re2mtzRGAVcM6LUQ4MgaZ/ztkUTKwm4AgavqYY9+912zQR2HI7TduFdKtXtzRskXPM8iXcar3pxo8ZyQs/mp5vBv3jFzGOhdkaZXXzCoskIpC/1DlgNYsCXaja2fxY9ua02De6C4HTQjBYnUWrIm0L4Q=
+	t=1750200679; cv=none; b=OzHbtZr9ZU04xzsJdsC+9+o8YQHQeaWN5mD5Pw6d0CZTSoZpZm5MNzOmOcPDmphjm5zqQXU4fZgl56n4Igu6/VX2byfMVPR0+xoi9KoKnPiuWRyV1utAbSmSDf3OKOYZ8u/gaUaIgnQ9VDMhwxNxwFMFqGJofsZuapAHkYYfT7E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1750200679; c=relaxed/simple;
-	bh=SjN/rIiMPkLfbU6LPwVgV6/uhSYa2otNoJovf1WdRG4=;
-	h=Message-ID:Date:From:To:Cc:Subject; b=AbuAgtxj/nMcpfgaAFIxJ7pB5Dj5i5gfunCcocFz2y7g0JJkGU4aPEiLtaEH3iNCHaxGVwMROxrkpZdjHieEzwfkHaf/gxi4EXVdr+hIhmrF12s/irgum3qUrTSrb2SNOcOXC0IeibFB26urip2S4n0SNYdpi4F/jS+v18YzlW0=
+	bh=tQh371Xu4aNv634IWnbNpzI8g0gGO4AVuobSDHJ5Ps4=;
+	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
+	 Content-Type; b=Tw1WfaV6BiDHEkbUuNhJUQ1RhWjNiTovBm+tg6r4FDnPz/QsYRmg/x6vQlqT8FE+uM1z8svZ2/7Gy5A8tXLKzwzFUcokg232ClztyTHebZOeGiFqNoaawVIU/74MV7itzvrVm0w4e2uM/Gz239DsjqJjvvFvbnPmmLiw0A/W43U=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf08.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay09.hostedemail.com (Postfix) with ESMTP id 7567A810A6;
-	Tue, 17 Jun 2025 22:51:13 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: nevets@goodmis.org) by omf08.hostedemail.com (Postfix) with ESMTPA id 7ED502002B;
-	Tue, 17 Jun 2025 22:51:10 +0000 (UTC)
+Received: from omf05.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay08.hostedemail.com (Postfix) with ESMTP id BC6FA141154;
+	Tue, 17 Jun 2025 22:51:14 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: nevets@goodmis.org) by omf05.hostedemail.com (Postfix) with ESMTPA id B1A7D20010;
+	Tue, 17 Jun 2025 22:51:11 +0000 (UTC)
 Received: from rostedt by gandalf with local (Exim 4.98.2)
 	(envelope-from <rostedt@goodmis.org>)
-	id 1uRf9B-00000002L2x-0cvj;
-	Tue, 17 Jun 2025 18:51:17 -0400
-Message-ID: <20250617225009.233007152@goodmis.org>
+	id 1uRf9C-00000002L7M-2r6D;
+	Tue, 17 Jun 2025 18:51:18 -0400
+Message-ID: <20250617225118.534693313@goodmis.org>
 User-Agent: quilt/0.68
-Date: Tue, 17 Jun 2025 18:50:09 -0400
+Date: Tue, 17 Jun 2025 18:50:18 -0400
 From: Steven Rostedt <rostedt@goodmis.org>
 To: linux-kernel@vger.kernel.org,
  linux-trace-kernel@vger.kernel.org,
@@ -45,112 +46,50 @@ Cc: Masami Hiramatsu <mhiramat@kernel.org>,
  Jens Remus <jremus@linux.ibm.com>,
  Linus Torvalds <torvalds@linux-foundation.org>,
  Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH v6 00/12] unwind_deferred: Implement sframe handling
-X-Stat-Signature: j1pb3b6xcsrwsq3xz535mg64uo91nmzw
-X-Rspamd-Server: rspamout02
-X-Rspamd-Queue-Id: 7ED502002B
-X-Session-Marker: 6E657665747340676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX1/W7Fxv7wI9MpYqbUWObtM/M1U7x9QTPDs=
-X-HE-Tag: 1750200670-647277
-X-HE-Meta: U2FsdGVkX19es+oLwhvoqLEn0NYvhC6onBJqfLm93XomIUPkMbFt6qGpX4zFUb7W3tF53swAax/9jdpvk37MTho7MOHjpPUgLsC48Rxc7Y3fgPA4l0Ju0QTmwL1nPRosFA4WunsNcb6UGlAPMd5VINuBqeqq4CZUNNyIRTXpY7zm7zrMVBWcF0vPGcky50Xc3gJw7I05gWgvk+l0y0TTdFtcic9DQQ6dxUb3FE0LlMnP6QOaMYDfPAE3zj5kK74fM2lJEN5RLkzJt4FW9oNVHOdZeMBgdC8UkMh2LVOA8OpaTypqGeXGXhaf1TK/uo5AG0Fpr0hksqE16lJzd5UPzX7WQzADWZUzZhclO0YjDN1lG7cZnNr6b7Zxgh2bYIncrx/xUJWJFJp/0aYE1rL944ZuFWzCgA+gZRv+FnncdbCSOZDpXMq89p6yehdUwWYykixYOv4rcbE3PHALg2p0sQ==
+Subject: [PATCH v6 09/12] unwind_user/sframe: Remove .sframe section on detected corruption
+References: <20250617225009.233007152@goodmis.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+X-Rspamd-Queue-Id: B1A7D20010
+X-Stat-Signature: ypd7ortim7kq6rpt7cp9pyzhz77fkpzq
+X-Rspamd-Server: rspamout05
+X-Session-Marker: 6E657665747340676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX19ROPDjcbpEBpaHpXKFMHwDedIa85mBo9E=
+X-HE-Tag: 1750200671-360188
+X-HE-Meta: U2FsdGVkX18vE1pJ16lY9OgNx+z1WFFwrttJb3FBM4snVXAL/KHnaodDh/rVSZgH1O9GXj7mTKGocH/BB6CaN0ECSH1ijzQGBa6y7g06tkm+rGg0JQvTfy9JjhWjt4KOk6ntM7uz63BvlnFXmp9JV78NRGQ3DChWxakKuxAgVBkr3QGCelmPCvPsBjnE6w3EFjjlc07/bqSxz6h2LRSvPvPlhqgQbQRElg/nJSlfp3M0z8byjV3VIgLEHtBZKrqPoFWkCGFRWr9beyfHgDlqEXGkH++vXViSqvkLg2eqPhoy5ceg9T0lZuPSjmawa/eW2p4sobwMbgpPRt8jpCohi77bnPlByBlhB1M409dRPCJVWtCNbhvG2Tqz3BzLhCqSbbl+V/y/VZRgKgPcJk3AqOyROtM2vjhl/HuyPf+cBo35bHZyO2ESHxCvTCVNaaXLMj44G4h8QCk=
 
-This code is based on top of:
+From: Josh Poimboeuf <jpoimboe@kernel.org>
 
-  https://patchwork.kernel.org/project/linux-trace-kernel/cover/20250611005421.144238328@goodmis.org/
+To avoid continued attempted use of a bad .sframe section, remove it
+on demand when the first sign of corruption is detected.
 
-This is the implementation of parsing the SFrame section in an ELF file.
-It's a continuation of Josh's last work that can be found here:
+Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+---
+ kernel/unwind/sframe.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-   https://lore.kernel.org/all/cover.1737511963.git.jpoimboe@kernel.org/
+diff --git a/kernel/unwind/sframe.c b/kernel/unwind/sframe.c
+index b10420d19840..f246ead6c2a0 100644
+--- a/kernel/unwind/sframe.c
++++ b/kernel/unwind/sframe.c
+@@ -310,6 +310,10 @@ int sframe_find(unsigned long ip, struct unwind_user_frame *frame)
+ 	ret = __find_fre(sec, &fde, ip, frame);
+ end:
+ 	user_read_access_end();
++
++	if (ret == -EFAULT)
++		WARN_ON_ONCE(sframe_remove_section(sec->sframe_start));
++
+ 	return ret;
+ }
+ 
+-- 
+2.47.2
 
-Currently the only way to get a user space stack trace from a stack
-walk (and not just copying large amount of user stack into the kernel
-ring buffer) is to use frame pointers. This has a few issues. The biggest
-one is that compiling frame pointers into every application and library
-has been shown to cause performance overhead.
 
-Another issue is that the format of the frames may not always be consistent
-between different compilers and some architectures (s390) has no defined
-format to do a reliable stack walk. The only way to perform user space
-profiling on these architectures is to copy the user stack into the kernel
-buffer.
-
-SFrames[1] is now supported in gcc binutils and soon will also be supported
-by LLVM. SFrames acts more like ORC, and lives in the ELF executable
-file as its own section. Like ORC it has two tables where the first table
-is sorted by instruction pointers (IP) and using the current IP and finding
-it's entry in the first table, it will take you to the second table which
-will tell you where the return address of the current function is located
-and then you can use that address to look it up in the first table to find
-the return address of that function, and so on. This performs a user
-space stack walk.
-
-Now because the SFrame section lives in the ELF file it needs to be faulted
-into memory when it is used. This means that walking the user space stack
-requires being in a faultable context. As profilers like perf request a stack
-trace in interrupt or NMI context, it cannot do the walking when it is
-requested. Instead it must be deferred until it is safe to fault in user
-space. One place this is known to be safe is when the task is about to return
-back to user space.
-
-This series makes the deferred unwind code implement SFrames.
-
--- Steve
-
-[1] https://sourceware.org/binutils/wiki/sframe
-
-Changes since v5: https://patchwork.kernel.org/project/linux-trace-kernel/cover/20250424201511.921245242@goodmis.org/
-
-- Added updates from Jens Remus <jremus@linux.ibm.com>
-  https://lore.kernel.org/all/20250528102655.1455423-1-jremus@linux.ibm.com/
-
-- Have sframe use initialize the frame = &_frame
-
-  The unwind code had the on stack _frame storage removed since it wasn't
-  being used. The sframe code needs it. Add it back but only assign it
-  when sframe is used.
-
-Josh Poimboeuf (12):
-      unwind_user/sframe: Add support for reading .sframe headers
-      unwind_user/sframe: Store sframe section data in per-mm maple tree
-      x86/uaccess: Add unsafe_copy_from_user() implementation
-      unwind_user/sframe: Add support for reading .sframe contents
-      unwind_user/sframe: Detect .sframe sections in executables
-      unwind_user/sframe: Add prctl() interface for registering .sframe sections
-      unwind_user/sframe: Wire up unwind_user to sframe
-      unwind_user/sframe/x86: Enable sframe unwinding on x86
-      unwind_user/sframe: Remove .sframe section on detected corruption
-      unwind_user/sframe: Show file name in debug output
-      unwind_user/sframe: Enable debugging in uaccess regions
-      unwind_user/sframe: Add .sframe validation option
-
-----
- MAINTAINERS                       |   1 +
- arch/Kconfig                      |  23 ++
- arch/x86/Kconfig                  |   1 +
- arch/x86/include/asm/mmu.h        |   2 +-
- arch/x86/include/asm/uaccess.h    |  39 ++-
- fs/binfmt_elf.c                   |  49 ++-
- include/linux/mm_types.h          |   3 +
- include/linux/sframe.h            |  60 ++++
- include/linux/unwind_user_types.h |   1 +
- include/uapi/linux/elf.h          |   1 +
- include/uapi/linux/prctl.h        |   6 +-
- kernel/fork.c                     |  10 +
- kernel/sys.c                      |   9 +
- kernel/unwind/Makefile            |   1 +
- kernel/unwind/sframe.c            | 612 ++++++++++++++++++++++++++++++++++++++
- kernel/unwind/sframe.h            |  71 +++++
- kernel/unwind/sframe_debug.h      |  99 ++++++
- kernel/unwind/user.c              |  25 +-
- mm/init-mm.c                      |   2 +
- 19 files changed, 997 insertions(+), 18 deletions(-)
- create mode 100644 include/linux/sframe.h
- create mode 100644 kernel/unwind/sframe.c
- create mode 100644 kernel/unwind/sframe.h
- create mode 100644 kernel/unwind/sframe_debug.h
