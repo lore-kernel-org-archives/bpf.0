@@ -1,124 +1,77 @@
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E7B82EA733;
-	Wed, 18 Jun 2025 13:55:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15F522EA736;
+	Wed, 18 Jun 2025 13:59:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750254941; cv=none; b=jRrbyim23EgC2Nhq2hz/Lv9Upcr5cgMIpdo7sjAp3vWqCt00CwGG7uD2ETw3kqsyTqSk+7JbNqC+Tg1v9/v6NDldh3TBQrHH7ncsK/p59X/6yek/6/uXGwsLGXiXQFnSh9PPw/kmTOVSPQ7JymzwI/3eBPKmQTTvZ20sOSTv0x0=
+	t=1750255156; cv=none; b=lnIT6YGMEuau41Yk5iBTKsf0IrUErf+bC1VRiZWAnMxYxIl8n4nIiP410l8WTxw8ABMUReEyVpOMwn15ELAv7cAnJl1e5AzbF+iOmBa+mhnJLxMkC6HgBfMSEnjSOxMLYxZ44gzKKQEfcgc9EBUHFsHRDdfoCvzF+LJzEasrpyI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750254941; c=relaxed/simple;
-	bh=gx+h3lSh4Jepxc+O8pXLQ82fTA6oke/o0DXkKDYoMJA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=EdI51It0Bknn1jA0IJ7uP0gCDxGYhCW1H2SvB/cidsHgWTa7J2GNY5G4I9ghFwOtdPvSY4Trsc4zsH5JVozB+qUt3lsIyruK48XGsqiaShUjXtUnBCpVILlEMI3UXLI5gVYq12nt4ULmU9nreSHEjNKTADwVwk/ZqpFZ/JKDwRo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AXLa9lvU; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1750255156; c=relaxed/simple;
+	bh=o6EXKqIOQ92YndRNNyHRp6OGIcI3KPyINI+NbaiAHHQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=L2VlLGmYvID3hmDbaauPTgYM5FUls5PzolnBqZMCZen6HtpK7TgrupiWgVDMmTgyGGThFJjb5Edw28bsYq+y1H4CPc9wrEInfO0TxA7eN7JVplEL7NhiUhdhRZPiOAv+qj5lkFLfLqWN2+sS/L3Lnuqev52jxip8zSPKMxoEEK0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=OVYnmy3H; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AXLa9lvU"
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-450cf214200so60234915e9.1;
-        Wed, 18 Jun 2025 06:55:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1750254938; x=1750859738; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gx+h3lSh4Jepxc+O8pXLQ82fTA6oke/o0DXkKDYoMJA=;
-        b=AXLa9lvUEh3j3vNkqnm+G4asiw+lP6caJScDSQbeHBscSXp8pbIHFT/CIvjLgpddzc
-         9OUedXM4lfjs5cZ0G0ciS2PfOjozRewpPgx5M0UCG/hYSlq3UUnyi5rFDfe9cOM2TkdH
-         XJ10nhI6F+qwFnsOfj+1x7X4RoiSH4D0lOq+McKEfBWLvFpiOFjYDLyaytGBOj/nBvJg
-         xtc569S9vpoyK8eavWWtrfVPxhXNVQxvwET5K7AxswLYB2qVWTEOa7r8qhMBzVIDWbnl
-         i9dhHGGeBB5jK6Ob5eTuO4EZfVZCRkK/TpDY4xghn0AXaDzFjL47FgcAIVR6lJ1AsWRf
-         TGNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750254938; x=1750859738;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gx+h3lSh4Jepxc+O8pXLQ82fTA6oke/o0DXkKDYoMJA=;
-        b=frEKAiQffdYIa3BnKFNovACcpBipN48ZdfWgANOD46AFjXY/W+7jTcpVUZPU4xj3LF
-         HJDaQShciTY9SO+Mm+cmKBk98EyVZpdkmbr9rjEs6EFLmp16OfcfpUUj6P62piHhjbhh
-         KB3dHjX2OcJvKvtY6XerB0HGQx0VxQEQyirwz4c6gq85uo8Sk7oDKA60Pks+v5DvFo3X
-         atDsRYD1QuXfbFG/IocIHZ2U4seKTH0gsqxn5B7IsgW6blo5LUHYF5UU3BD86v8FQxeG
-         Ljf1R9op40bItjJx5LxOAXRPUYpzCDDEYLUlZ0VDTmoFiwmVMOEtH5HeCRssQ8EF3k16
-         zeJQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVMeGekd/dLlGukZRDsw4fxQp5nvdusxWblPnyrfDfINe1Jblr9G0+9sXltPUuIiZej6Nn+e7A7@vger.kernel.org, AJvYcCVe++pRHEfrgSo4uFurR7UJxHsKYMER67KpXYOnaj2rLznQYfeESY+pxU8WcnHX0Kq4R88=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzPvDe+Qrm7I6xvaqd1g2mrW6gOMkjKzINx1ljjlZytTkKcqddA
-	W7QRMMzF/4QaZa8+jqZhzYc8EWzM+lvbBtT82qfLnOlZyhOH6kp2cgmNelwrK4fHq72BgNJRqLk
-	lJMuzyeLGckoYhrLRwmEaPhuyO6IKtx36jw==
-X-Gm-Gg: ASbGncuHUs7Lh8QXWqW8gae3U2+5JlM6dbKInXBSfgcWTqVsNtlgYkkq7kXeq4xYlGo
-	qH8NuP4D9OrZSJpyLc/UvGtN6/y6i8QX/sxjKe2zC+WDWap77MkrEkZdca6k9knssKtA12/YAo2
-	ixwHHIb8tx0Purdy6LxLs55Q9mY91S2mqV1St/p6QeVo5dKcNq5hALPXi7fs983df8r/0wsLiYm
-	aZ6bTy+HoY=
-X-Google-Smtp-Source: AGHT+IHDoKNc8XOtTbe2orSChEcrWqEC8PHhmYDUT8YfV2CDPcqRIsj9tUSL68FxNGM41+8brCOybvH3mptxoFLHPEw=
-X-Received: by 2002:a05:600c:3e19:b0:439:9424:1b70 with SMTP id
- 5b1f17b1804b1-4533cadf928mr170600855e9.30.1750254938270; Wed, 18 Jun 2025
- 06:55:38 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="OVYnmy3H"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=cLny5fdbWXa03ojEBDQztF37oAyKTytrgydjanBvVl0=; b=OVYnmy3H6OTXaPq9kE1rWDJgqS
+	yUrJaez6x89JUeD1SgtM2mDSsTDFA6edaYZ3zbteaLdZh9Fj5AV9zoKS53P+MBS6eyiQwe96SBW8y
+	Dcvn8DclP4Blmw8IRBDmbaHeIaBLyzi6EcrjFr4FQWCNJ/k5L11Ra23ycmdik/IjxKojClpd/YehI
+	PSmZarHt5e6oAkVtE2LTG3knIN94rf8XGUDx0XQ6wM+BAt9Rl1oV2fVqyCcEfFaHnarAchkjGFnfM
+	9a50cwbzrF3CkimVowezaTOJ72o+QkKfFYmMGnko889Za77dbwPSu+WgWHCVDAoxD1D83Eks5HWtC
+	a4KchlXQ==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1uRtJk-000000044tn-0r7t;
+	Wed, 18 Jun 2025 13:59:08 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 20626307FB7; Wed, 18 Jun 2025 15:59:07 +0200 (CEST)
+Date: Wed, 18 Jun 2025 15:59:07 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+	bpf@vger.kernel.org, x86@kernel.org,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Ingo Molnar <mingo@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Indu Bhagat <indu.bhagat@oracle.com>,
+	"Jose E. Marchesi" <jemarch@gnu.org>,
+	Beau Belgrave <beaub@linux.microsoft.com>,
+	Jens Remus <jremus@linux.ibm.com>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH v10 04/14] unwind_user/deferred: Add
+ unwind_deferred_trace()
+Message-ID: <20250618135907.GO1613376@noisy.programming.kicks-ass.net>
+References: <20250611005421.144238328@goodmis.org>
+ <20250611010428.433111891@goodmis.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250616143846.2154727-1-willemdebruijn.kernel@gmail.com> <aFLFkFpQP789M1Tx@mail.gmail.com>
-In-Reply-To: <aFLFkFpQP789M1Tx@mail.gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Wed, 18 Jun 2025 06:55:26 -0700
-X-Gm-Features: Ac12FXxJByYbVqEo1nTEMnir_otv-CadiwMHeSWF5PYiM4XSd4cdw3LKtJhQ9b0
-Message-ID: <CAADnVQJ9e3Sf_kAh1LNqqeVvs7dwOC-AY_KEj5eRGGLGyC1F5A@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] bpf: lru: adjust free target to avoid global
- table starvation
-To: Anton Protopopov <a.s.protopopov@gmail.com>
-Cc: Willem de Bruijn <willemdebruijn.kernel@gmail.com>, bpf <bpf@vger.kernel.org>, 
-	Network Development <netdev@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Willem de Bruijn <willemb@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250611010428.433111891@goodmis.org>
 
-On Wed, Jun 18, 2025 at 6:50=E2=80=AFAM Anton Protopopov
-<a.s.protopopov@gmail.com> wrote:
->
-> On 25/06/16 10:38AM, Willem de Bruijn wrote:
-> > From: Willem de Bruijn <willemb@google.com>
-> >
-> > BPF_MAP_TYPE_LRU_HASH can recycle most recent elements well before the
-> > map is full, due to percpu reservations and force shrink before
-> > neighbor stealing. Once a CPU is unable to borrow from the global map,
-> > it will once steal one elem from a neighbor and after that each time
-> > flush this one element to the global list and immediately recycle it.
-> >
-> > Batch value LOCAL_FREE_TARGET (128) will exhaust a 10K element map
-> > with 79 CPUs. CPU 79 will observe this behavior even while its
-> > neighbors hold 78 * 127 + 1 * 15 =3D=3D 9921 free elements (99%).
-> >
-> > CPUs need not be active concurrently. The issue can appear with
-> > affinity migration, e.g., irqbalance. Each CPU can reserve and then
-> > hold onto its 128 elements indefinitely.
-> >
-> > Avoid global list exhaustion by limiting aggregate percpu caches to
-> > half of map size, by adjusting LOCAL_FREE_TARGET based on cpu count.
-> > This change has no effect on sufficiently large tables.
-> >
-> > Similar to LOCAL_NR_SCANS and lru->nr_scans, introduce a map variable
-> > lru->free_target. The extra field fits in a hole in struct bpf_lru.
-> > The cacheline is already warm where read in the hot path. The field is
-> > only accessed with the lru lock held.
->
-> Hi Willem! The patch looks very reasonable. I've bumbed into this
-> issue before (see https://lore.kernel.org/bpf/ZJwy478jHkxYNVMc@zh-lab-nod=
-e-5/)
-> but didn't follow up, as we typically have large enough LRU maps.
->
-> I've tested your patch (with a patched map_tests/map_percpu_stats.c
-> selftest), works as expected for small maps. E.g., before your patch
-> map of size 4096 after being updated 2176 times from 32 threads on 32
-> CPUS contains around 150 elements, after your patch around (expected)
-> 2100 elements.
->
-> Tested-by: Anton Protopopov <a.s.protopopov@gmail.com>
+On Tue, Jun 10, 2025 at 08:54:25PM -0400, Steven Rostedt wrote:
+> diff --git a/kernel/unwind/Makefile b/kernel/unwind/Makefile
+> index 349ce3677526..6752ac96d7e2 100644
+> --- a/kernel/unwind/Makefile
+> +++ b/kernel/unwind/Makefile
+> @@ -1 +1 @@
+> - obj-$(CONFIG_UNWIND_USER) += user.o
+> + obj-$(CONFIG_UNWIND_USER)		+= user.o deferred.o
 
-Looks like we have consensus.
-
-Willem,
-please target bpf tree when you respin.
+We really needed that extra whitespace? :-)
