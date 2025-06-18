@@ -1,50 +1,50 @@
 Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F60C281508;
-	Wed, 18 Jun 2025 10:51:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81C3443ABC;
+	Wed, 18 Jun 2025 10:51:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750243882; cv=none; b=CubfSdBnVCIOLrpZ7gnCwI5YTljuUSct6DGvHx7lwXBen6Le3HPlP+UEV8raL9akFZZgCzl6IsZD75PoLXE25UpiqLtJ39Tdk+cDFZqOMCd8scYGaJPr2xCdTGst/ug4pN2DxZz5PADd+i5CxYwZyf8VgmtCZwNLrqA9oTxJjjM=
+	t=1750243884; cv=none; b=XgnSeXXzdEhnX/DBnmIIu/rkyvgV/fmX9+9narnX2evpamPrYNGJzJpksFlTT1BGFy2ZbPMNnKV8iGLToX31Hr1vIB7ZUZKD2FbienDzi0daPlwrRqF9iZ/yAgDZwdX7ItylwJ5JsDzEqBpaPJJfVfVSvMjM7tVGRoMrj/Jw1qY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750243882; c=relaxed/simple;
-	bh=fUFyXWZ8Nho6a3FbbDgw0Dos+ahz3ghs6GFziTuJ604=;
+	s=arc-20240116; t=1750243884; c=relaxed/simple;
+	bh=+NWfDEi9U7FJzFDSH2mcrKoJw7FeUqkALmourSsSgcY=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=cB8G8nPTCg9mq2NbJL9m9N3KrMvRYUxvDikLBTAvn+3OFB2qZf8x10o9K4p/KhYgxRHOT82shVJbIgWyFi9ECawb2Twr6OrtosniXgr6L9iCp6cS93TQqIUWDveynCxFBHFRhGghIUI5rbrcZ9ZMGOZkT3KS9HV4HHlpzj6ktSs=
+	 MIME-Version; b=CaMkxD1D5/NkM7KBCUl9zvEWewHZuhxsDHd44vHWfBhadFMDxXWruowV/06oNZIAG9rMdsYDLeuwVw6Fhxeyt9devmPxKuDjc8pBKv0ovwEkp7KtfRilvOa/i3FAVgDkvPVlIJ86m42dh3rvtaJOh2cDI1Sx0ZlNTEsSqniDbgE=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 279a1f904c3211f0b29709d653e92f7d-20250618
+X-UUID: 26cffc884c3211f0b29709d653e92f7d-20250618
 X-CTIC-Tags:
-	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NO_NAME, HR_CTE_8B, HR_CTT_MISS
-	HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME, HR_SJ_DIGIT_LEN
-	HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM, HR_SJ_PHRASE
-	HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT, HR_TO_NO_NAME
-	IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED, SA_EXISTED, SN_EXISTED
-	SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS, CIE_BAD, CIE_GOOD
-	CIE_GOOD_SPF, GTI_FG_BS, GTI_RG_INFO, GTI_C_BU, AMN_T1
-	AMN_GOOD, AMN_C_TI, AMN_C_BU, ABX_MISS_RDNS
+	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CC_NO_NAME, HR_CTE_8B
+	HR_CTT_MISS, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME
+	HR_SJ_DIGIT_LEN, HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM
+	HR_SJ_PHRASE, HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT
+	HR_TO_NO_NAME, IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED, SA_EXISTED
+	SN_EXISTED, SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS, CIE_BAD
+	CIE_GOOD, CIE_GOOD_SPF, GTI_FG_BS, GTI_RG_INFO, GTI_C_BU
+	AMN_T1, AMN_GOOD, AMN_C_TI, AMN_C_BU, ABX_MISS_RDNS
 X-CID-CACHE: Type:Local,Time:202506181848+08,HitQuantity:1
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.45,REQID:502ec6b0-8846-4386-b2ab-f87ae7485496,IP:10,
+X-CID-O-INFO: VERSION:1.1.45,REQID:da639e8b-1a93-4b88-a5d7-8e2bf45be6ab,IP:10,
 	URL:0,TC:0,Content:0,EDM:-30,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,AC
 	TION:release,TS:-35
-X-CID-INFO: VERSION:1.1.45,REQID:502ec6b0-8846-4386-b2ab-f87ae7485496,IP:10,UR
+X-CID-INFO: VERSION:1.1.45,REQID:da639e8b-1a93-4b88-a5d7-8e2bf45be6ab,IP:10,UR
 	L:0,TC:0,Content:0,EDM:-30,RT:0,SF:-15,FILE:0,BULK:0,RULE:EDM_GN8D19FE,ACT
 	ION:release,TS:-35
-X-CID-META: VersionHash:6493067,CLOUDID:cb775d0c997507a316e4d70106dc82cf,BulkI
-	D:25061818481409KWSERW,BulkQuantity:0,Recheck:0,SF:17|19|24|44|66|78|81|82
+X-CID-META: VersionHash:6493067,CLOUDID:beed39781909102466e59146768bf1cb,BulkI
+	D:250618184812UTXWTWDY,BulkQuantity:0,Recheck:0,SF:17|19|24|44|66|78|81|82
 	|102,TC:nil,Content:0|50,EDM:2,IP:-2,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil
 	,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
 X-CID-BVR: 0
 X-CID-BAS: 0,_,0,_
 X-CID-FACTOR: TF_CID_SPAM_FSD,TF_CID_SPAM_FSI,TF_CID_SPAM_SNR,TF_CID_SPAM_FAS
-X-UUID: 279a1f904c3211f0b29709d653e92f7d-20250618
+X-UUID: 26cffc884c3211f0b29709d653e92f7d-20250618
 X-User: duanchenghao@kylinos.cn
 Received: from localhost.localdomain [(223.70.159.239)] by mailgw.kylinos.cn
 	(envelope-from <duanchenghao@kylinos.cn>)
 	(Generic MTA)
-	with ESMTP id 1687231276; Wed, 18 Jun 2025 18:51:14 +0800
+	with ESMTP id 346226568; Wed, 18 Jun 2025 18:51:13 +0800
 From: Chenghao Duan <duanchenghao@kylinos.cn>
 To: ast@kernel.org,
 	daniel@iogearbox.net,
@@ -68,10 +68,11 @@ Cc: martin.lau@linux.dev,
 	guodongtai@kylinos.cn,
 	duanchenghao@kylinos.cn,
 	youling.tang@linux.dev,
-	jianghaoran@kylinos.cn
-Subject: [PATCH v2 2/4] LoongArch: BPF: Add bpf_arch_text_poke support for Loongarch
-Date: Wed, 18 Jun 2025 18:50:46 +0800
-Message-Id: <20250618105048.1510560-3-duanchenghao@kylinos.cn>
+	jianghaoran@kylinos.cn,
+	Youling Tang <tangyouling@kylinos.cn>
+Subject: [PATCH v2 1/4] LoongArch: BPF: The operation commands needed to add a trampoline
+Date: Wed, 18 Jun 2025 18:50:45 +0800
+Message-Id: <20250618105048.1510560-2-duanchenghao@kylinos.cn>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20250618105048.1510560-1-duanchenghao@kylinos.cn>
 References: <20250618105048.1510560-1-duanchenghao@kylinos.cn>
@@ -83,96 +84,121 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Implement the bpf_arch_text_poke function for the LoongArch
-architecture. On LoongArch, since symbol addresses in the direct mapping
-region cannot be reached via relative jump instructions from the paged
-mapping region, we use the move_imm+jirl instruction pair as absolute
-jump instructions. These require 2-5 instructions, so we reserve 5 NOP
-instructions in the program as placeholders for function jumps.
+Add branch jump function:
+larch_insn_gen_beq
+larch_insn_gen_bne
+
+Add instruction copy function: larch_insn_text_copy
 
 Co-developed-by: George Guo <guodongtai@kylinos.cn>
 Signed-off-by: George Guo <guodongtai@kylinos.cn>
+Co-developed-by: Youling Tang <tangyouling@kylinos.cn>
+Signed-off-by: Youling Tang <tangyouling@kylinos.cn>
 Signed-off-by: Chenghao Duan <duanchenghao@kylinos.cn>
 ---
- arch/loongarch/net/bpf_jit.c | 62 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 62 insertions(+)
+ arch/loongarch/include/asm/inst.h |  3 ++
+ arch/loongarch/kernel/inst.c      | 57 +++++++++++++++++++++++++++++++
+ 2 files changed, 60 insertions(+)
 
-diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
-index fa1500d4a..24332c596 100644
---- a/arch/loongarch/net/bpf_jit.c
-+++ b/arch/loongarch/net/bpf_jit.c
-@@ -4,6 +4,7 @@
-  *
-  * Copyright (C) 2022 Loongson Technology Corporation Limited
-  */
-+#include <linux/memory.h>
- #include "bpf_jit.h"
+diff --git a/arch/loongarch/include/asm/inst.h b/arch/loongarch/include/asm/inst.h
+index 3089785ca..88bb73e46 100644
+--- a/arch/loongarch/include/asm/inst.h
++++ b/arch/loongarch/include/asm/inst.h
+@@ -497,6 +497,7 @@ void arch_simulate_insn(union loongarch_instruction insn, struct pt_regs *regs);
+ int larch_insn_read(void *addr, u32 *insnp);
+ int larch_insn_write(void *addr, u32 insn);
+ int larch_insn_patch_text(void *addr, u32 insn);
++int larch_insn_text_copy(void *dst, void *src, size_t len);
  
- #define REG_TCC		LOONGARCH_GPR_A6
-@@ -1359,3 +1360,64 @@ bool bpf_jit_supports_subprog_tailcalls(void)
+ u32 larch_insn_gen_nop(void);
+ u32 larch_insn_gen_b(unsigned long pc, unsigned long dest);
+@@ -511,6 +512,8 @@ u32 larch_insn_gen_lu12iw(enum loongarch_gpr rd, int imm);
+ u32 larch_insn_gen_lu32id(enum loongarch_gpr rd, int imm);
+ u32 larch_insn_gen_lu52id(enum loongarch_gpr rd, enum loongarch_gpr rj, int imm);
+ u32 larch_insn_gen_jirl(enum loongarch_gpr rd, enum loongarch_gpr rj, int imm);
++u32 larch_insn_gen_beq(enum loongarch_gpr rd, enum loongarch_gpr rj, int imm);
++u32 larch_insn_gen_bne(enum loongarch_gpr rd, enum loongarch_gpr rj, int imm);
+ 
+ static inline bool signed_imm_check(long val, unsigned int bit)
  {
- 	return true;
+diff --git a/arch/loongarch/kernel/inst.c b/arch/loongarch/kernel/inst.c
+index 14d7d700b..7423b0772 100644
+--- a/arch/loongarch/kernel/inst.c
++++ b/arch/loongarch/kernel/inst.c
+@@ -4,6 +4,7 @@
+  */
+ #include <linux/sizes.h>
+ #include <linux/uaccess.h>
++#include <linux/set_memory.h>
+ 
+ #include <asm/cacheflush.h>
+ #include <asm/inst.h>
+@@ -218,6 +219,34 @@ int larch_insn_patch_text(void *addr, u32 insn)
+ 	return ret;
+ }
+ 
++int larch_insn_text_copy(void *dst, void *src, size_t len)
++{
++	unsigned long flags;
++	size_t wlen = 0;
++	size_t size;
++	void *ptr;
++	int ret = 0;
++
++	set_memory_rw((unsigned long)dst, round_up(len, PAGE_SIZE) / PAGE_SIZE);
++	raw_spin_lock_irqsave(&patch_lock, flags);
++	while (wlen < len) {
++		ptr = dst + wlen;
++		size = min_t(size_t, PAGE_SIZE - offset_in_page(ptr),
++			     len - wlen);
++
++		ret = copy_to_kernel_nofault(ptr, src + wlen, size);
++		if (ret) {
++			pr_err("%s: operation failed\n", __func__);
++			break;
++		}
++		wlen += size;
++	}
++	raw_spin_unlock_irqrestore(&patch_lock, flags);
++	set_memory_rox((unsigned long)dst, round_up(len, PAGE_SIZE) / PAGE_SIZE);
++
++	return ret;
++}
++
+ u32 larch_insn_gen_nop(void)
+ {
+ 	return INSN_NOP;
+@@ -336,3 +365,31 @@ u32 larch_insn_gen_jirl(enum loongarch_gpr rd, enum loongarch_gpr rj, int imm)
+ 
+ 	return insn.word;
  }
 +
-+static int emit_jump_and_link(struct jit_ctx *ctx, u8 rd, u64 ip, u64 target)
++u32 larch_insn_gen_beq(enum loongarch_gpr rd, enum loongarch_gpr rj, int imm)
 +{
-+	s64 offset = (s64)(target - ip);
++	union loongarch_instruction insn;
 +
-+	if (offset && (offset >= -SZ_128M && offset < SZ_128M)) {
-+		emit_insn(ctx, bl, offset >> 2);
-+	} else {
-+		move_imm(ctx, LOONGARCH_GPR_T1, target, false);
-+		emit_insn(ctx, jirl, rd, LOONGARCH_GPR_T1, 0);
++	if ((imm & 3) || imm < -SZ_128K || imm >= SZ_128K) {
++		pr_warn("The generated beq instruction is out of range.\n");
++		return INSN_BREAK;
 +	}
 +
-+	return 0;
++	emit_beq(&insn, rd, rj, imm >> 2);
++
++	return insn.word;
 +}
 +
-+static int gen_jump_or_nops(void *target, void *ip, u32 *insns, bool is_call)
++u32 larch_insn_gen_bne(enum loongarch_gpr rd, enum loongarch_gpr rj, int imm)
 +{
-+	struct jit_ctx ctx;
++	union loongarch_instruction insn;
 +
-+	ctx.idx = 0;
-+	ctx.image = (union loongarch_instruction *)insns;
-+
-+	if (!target) {
-+		emit_insn((&ctx), nop);
-+		emit_insn((&ctx), nop);
-+		return 0;
++	if ((imm & 3) || imm < -SZ_128K || imm >= SZ_128K) {
++		pr_warn("The generated bne instruction is out of range.\n");
++		return INSN_BREAK;
 +	}
 +
-+	return emit_jump_and_link(&ctx, is_call ? LOONGARCH_GPR_T0 : LOONGARCH_GPR_ZERO,
-+				  (unsigned long)ip, (unsigned long)target);
-+}
++	emit_bne(&insn, rj, rd, imm >> 2);
 +
-+int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type poke_type,
-+		       void *old_addr, void *new_addr)
-+{
-+	u32 old_insns[5] = {[0 ... 4] = INSN_NOP};
-+	u32 new_insns[5] = {[0 ... 4] = INSN_NOP};
-+	bool is_call = poke_type == BPF_MOD_CALL;
-+	int ret;
-+
-+	if (!is_kernel_text((unsigned long)ip) &&
-+		!is_bpf_text_address((unsigned long)ip))
-+		return -ENOTSUPP;
-+
-+	ret = gen_jump_or_nops(old_addr, ip, old_insns, is_call);
-+	if (ret)
-+		return ret;
-+
-+	if (memcmp(ip, old_insns, 5 * 4))
-+		return -EFAULT;
-+
-+	ret = gen_jump_or_nops(new_addr, ip, new_insns, is_call);
-+	if (ret)
-+		return ret;
-+
-+	mutex_lock(&text_mutex);
-+	if (memcmp(ip, new_insns, 5 * 4))
-+		ret = larch_insn_text_copy(ip, new_insns, 5 * 4);
-+	mutex_unlock(&text_mutex);
-+	return ret;
++	return insn.word;
 +}
 -- 
 2.43.0
