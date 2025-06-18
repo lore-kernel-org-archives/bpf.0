@@ -1,101 +1,115 @@
-Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D15B283145;
-	Wed, 18 Jun 2025 15:09:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BA7216A95B
+	for <bpf@vger.kernel.org>; Wed, 18 Jun 2025 15:10:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750259372; cv=none; b=sDxQi3NQrh9y/ZhiZE3Qt2NhZ4SdQcvrjM01IxsMBKA0TCslnkZqF75RKt5CbbeDHGyuqo4xDubhJR6ftMKP8xMwsSvFUIi/3Y0AEUzCDsRRe9V/92w+HxxnRzsj1248v6RTt2pqFWMQ74yFIPDCuXq3ByEU1s/yY6xJt2p7yDc=
+	t=1750259440; cv=none; b=PaZwVPVoIgIsEfsulFM4DshZu5hk2irsNak8n2LaBUj2gE2C91EX+ciBCAj3vNyr0uqS2duPN13PkWlMyNLksImb/hJYOJVShVyQA6HKoRKdt5pWTK8roC7vclgxp1+NGg3/uUPfQirSrT8diWaFJdYTtxBe1vXjasmFJoGYxrc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750259372; c=relaxed/simple;
-	bh=sHdDL0lA0stF0MeG+rkk3pcKnkNoIWMrrmlS6ON+UeA=;
+	s=arc-20240116; t=1750259440; c=relaxed/simple;
+	bh=1L8SSDc03Msw3Ti/A8GPma4nS+bZbONzRnzxr66b1V8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QvSODjh26pEHpgrqbZuDOXzcgI2Q4XgpAo4Xk7xYz3WAqV90KKM8gsBb+LMZvIdxY5fB3qv3WiotIw+cSRWvH6BgeUXtMjUjN0piUaDCZYCp3ObqL7mvNf0xUtoxbQNQsZmXFM3pCHq1GLF2ONyk5oRklJ+RJjEpPyrxT4bGp0o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X6j8dsn0; arc=none smtp.client-ip=209.85.215.175
+	 Content-Type:Content-Disposition:In-Reply-To; b=TwwADF5uiQjzgw1mrDoqswhmB4z4Q7I19QP2FQt/UCdpuUPDpSuHKxzONVYIWez7GK72UuYottQb78vPsfov1VIFuqPfFIL613SM0AWhvfg9IhovFby0n/y7Fy44PVZ4VK9Q7jgBbcgPNdAeAbYrJvO08XgZWEp3VaYbt2pgJY8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=clMQPrqe; arc=none smtp.client-ip=209.85.128.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X6j8dsn0"
-Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-b2c4e46a89fso5760606a12.2;
-        Wed, 18 Jun 2025 08:09:31 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="clMQPrqe"
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-453066fad06so53167935e9.2
+        for <bpf@vger.kernel.org>; Wed, 18 Jun 2025 08:10:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1750259370; x=1750864170; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1750259427; x=1750864227; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=cNb6f+/HlT4jqkJKTMtbJO2tCcxdBDz9ZG+I5Pj37LI=;
-        b=X6j8dsn01GqLFdtPPpw2RP0UDa+OFHPobow29Y8aI4wUFZgowERLmBPpcou2mLt5VY
-         Q6PuzLt7Uoc/u/iJQMSc91y6l+nFSA2nm2Xvy7P52UAAX0fJr5qoGcu21OvhTe4J0xnG
-         pVn8roaszI3K1W4mHCrPIQsRRsNX03GE1nq16p92zCbaIYTJU4KgtiZeMJYJddoV4X69
-         lNKzPlUor1v1wsNcnBLIhybw/2P6MRXmPSWRKyhExRZ7ueMjOhNlEcpFqJkvCl3XZTKB
-         eG4BLJQgh+6v5JIk8hNJiuuvatVRHGe3ywzjHwfWDE5BH7eJ3bxwR8RE8ubKiJ3W6a5h
-         hEjw==
+        bh=+0Jw2A3wrLE8p/thMzFm+ApEh6PtJflGxW5xlxNP30I=;
+        b=clMQPrqe+FMjTa6HCY79ktTY/uKMi35WmgaIBqKFgUonjT58tiqLJ8n+K1cbXfOovu
+         yAtXcpoEGJ4Sl0xU75kzFDwfHoicZEfBKymfK9yQS5tMMQEAhNmfNp9QAoNykzhg03Vl
+         M8eAvJHHEZkwSmVrh1kU18flSuoDIInLsysZn3CELGp1+JVcXK8/MGC3LRVwK7Ya8Onf
+         x/qyMb4QKfs23h1MmpXf8pzsks0YOpub4D930Y/lRrwBR+jgdoo04eemtWZav9yKoO3j
+         Pn1uU4TZbWTq3uosG/IRORXCWci+Mur7umgoaBdS0Kzf9j5gVBJKtO3+o1Lm/+i7WoFc
+         L+LA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750259370; x=1750864170;
+        d=1e100.net; s=20230601; t=1750259427; x=1750864227;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=cNb6f+/HlT4jqkJKTMtbJO2tCcxdBDz9ZG+I5Pj37LI=;
-        b=TFyKnHQnO7iF6+RRACWQ0IHfvuEk76K2U4iOdLdd72PRuj4n9Oy39r0QN+a7ORLvDL
-         oCa7opVGtD8dU1bwjr9NEfXDe22Uj/q2knp1al6vbhd2yrR2QuWHJGbaiOcYNaHAJQ5W
-         OlrPNYaxk4Ouqbv867pUz94ZVIWFuSZ+Ps16rj58ilGBnX22EudywM61kYzYceqzRFAg
-         R8Uh92sB9HvnRopR7A1m8osLLrLBTTSvMbYKrOhy/8J0nvNsrB/oShjYKKmg5QCgWXKY
-         wgPYmGnr7WG2J5RNUbj8iiH1waVgO0YS2/YYRC7QL3NWyoatwdqnWOLbohCJFHDdXcVU
-         4/tw==
-X-Forwarded-Encrypted: i=1; AJvYcCVtdKwKgJ5q27cKSdSw8GONhjaAbdHNevo64BR3AWsTtUFPbKGA/HJnPnhqby+pru84y677G+mX@vger.kernel.org, AJvYcCW3gZABBUGZgFs1xkX4ULA5Sf9HulGdZJ6P/VfKElndWmajH95IR7VVCxcGs4GIvBWjJAQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyXSwBQ4RqVvJz+6UKnP/cPj6nEnJ46cfxvjwDIf8QcJP0MpFsD
-	KoBooyO/mgOdk2ia5QOADUP7KlAEp5X2lnOx+EO93xF4fkQrhdVONx8=
-X-Gm-Gg: ASbGncttH/hcN4z2UloZeIw/JbjhyITMA6rzDvvOrAYs/YtVjehUg4Zk0CjKw+4DKqS
-	BaHyqAFdhYGgJn1FLz0eDK+hqJ1Cb+HnAclYzk1P5gVhSJF2e1iB7pkEfP7xSCdvUS/TWp1pUC7
-	6jFmlGtex9i2kBDYht9FyrjAfpT1Q0fL15sUTFO4PUDUrtg5OyviyZ15BmTR/ySrIut62wqamCU
-	qZrTchTda2oXSBAUXAAJR9fpiBxzSiODscACf3ZKy65mAV8QUB6mvrHPggerl5PNiOVaViLRWiQ
-	4HiwXFP0N3hhloADy3+DMPnLaRlHttNyNHshi9o/9SstwTz0tQAAChW1765voZu7LnkneajIbrF
-	YSEM/Y4q0QoGe8kqmRLOSrUQ=
-X-Google-Smtp-Source: AGHT+IGUm7uBSvn4NHDyf/t75YKWMdQKachTxhA8/0XLD5p+1+PaWOBk+QFFO5aAgkLt6UXKrHgO/Q==
-X-Received: by 2002:a05:6a21:6d8c:b0:21a:bfb6:1c74 with SMTP id adf61e73a8af0-21fbd58c764mr30915422637.34.1750259368276;
-        Wed, 18 Jun 2025 08:09:28 -0700 (PDT)
-Received: from localhost (c-73-158-218-242.hsd1.ca.comcast.net. [73.158.218.242])
-        by smtp.gmail.com with UTF8SMTPSA id 41be03b00d2f7-b2fe163a470sm11130566a12.9.2025.06.18.08.09.27
+        bh=+0Jw2A3wrLE8p/thMzFm+ApEh6PtJflGxW5xlxNP30I=;
+        b=xLL4zfUTrMJoNDynn9s9zpAhY2jjPeC/R3VDmZ03Tp0b5433cIMH+O8z39owYbNDGF
+         8wzk0qtBmCZi1/4qLKwp/7Ch5fZZj1/WOU2DTqaeyjglNteRaRi/6lqw3+85ahIqoO+U
+         AQ7Y4b+7gxTuzkAfXtmr/GFnsAwl3n4yIrShpEo/gakF+xcjPCmHpE7tUGDNm/g9f9Rh
+         Gu2s3o+4EccWObUA+PqHrHPNeQsBxGtiMyTI1Br3Mf107Y70qDuMNN2nSf/CFpCUQehm
+         U65Jrza1REFaHFIVS6EfNOf9HQWzfPoELDxg7guPsHE4w0omhGLyqp9ux8oavHCkKjZz
+         pjHQ==
+X-Gm-Message-State: AOJu0YwPbR5mEiW8CNTZ97pH4lYlnza5pQYlizK+cdqGQAPcjtgFikq3
+	LuH90oRB6vXvao/MDWkes7mWjGXf+6OxjpKrxb/f4u0m3R7Z8r6gOv31
+X-Gm-Gg: ASbGncvsxjQQHpShxptuXhvlE1QFQkMHIMbEBX7zcCYEpvfgW9ysHp8Uxj5ZwyAbdgJ
+	4cPt7G0fZm0c7JfwV0Z+Vgq8UMErxWMxHy5i9S9jsZaz78b8uGdcqlKyJXDnverGpzfOFfJpXYB
+	gDxUIR3M0ox5dTib78Dj+TcBDa9RBaz0/vhJUVefh/1lIqvYF9UKmLteCn5JTu9s52nAMSUchgr
+	H6zx/5QvBNz5o0GvB+g6eW4VcGBlYkujWPhGW/Uo+IefSyTyB93aEsi51K3DRuSJoER7ppHwOa1
+	thyvFVy3dJ4wPJD2OqZIbFBUY5GIGTXxlFfVQpI7f4/BCzN7RF4uAcIKDrpeIeMCqBBehRJTyQ=
+	=
+X-Google-Smtp-Source: AGHT+IFNDf/fetoJrgOYLjSi09U/3FGOFsywMjythgbm5Rzh1cDvGJ7TvCZMqdquAGADw9ggPhTEZA==
+X-Received: by 2002:a05:600c:3541:b0:442:f4a3:b5f2 with SMTP id 5b1f17b1804b1-4533ca42734mr167214485e9.6.1750259427517;
+        Wed, 18 Jun 2025 08:10:27 -0700 (PDT)
+Received: from mail.gmail.com ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4535ead2449sm3785e9.30.2025.06.18.08.10.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jun 2025 08:09:27 -0700 (PDT)
-Date: Wed, 18 Jun 2025 08:09:26 -0700
-From: Stanislav Fomichev <stfomichev@gmail.com>
-To: Jason Xing <kerneljasonxing@gmail.com>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, bjorn@kernel.org, magnus.karlsson@intel.com,
-	maciej.fijalkowski@intel.com, jonathan.lemon@gmail.com,
-	sdf@fomichev.me, ast@kernel.org, daniel@iogearbox.net,
-	hawk@kernel.org, john.fastabend@gmail.com, joe@dama.to,
-	bpf@vger.kernel.org, netdev@vger.kernel.org,
-	Jason Xing <kernelxing@tencent.com>
-Subject: Re: [PATCH net-next v2] net: xsk: add sysctl_xsk_max_tx_budget in
- the xmit path
-Message-ID: <aFLWpssHj9sE9vvc@mini-arch>
-References: <20250618065553.96822-1-kerneljasonxing@gmail.com>
+        Wed, 18 Jun 2025 08:10:27 -0700 (PDT)
+Date: Wed, 18 Jun 2025 15:16:11 +0000
+From: Anton Protopopov <a.s.protopopov@gmail.com>
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Anton Protopopov <aspsk@isovalent.com>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Quentin Monnet <qmo@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>
+Subject: Re: [RFC bpf-next 3/9] selftests/bpf: add selftests for new insn_set
+ map
+Message-ID: <aFLYO5xlJvDsxiGt@mail.gmail.com>
+References: <20250615085943.3871208-1-a.s.protopopov@gmail.com>
+ <20250615085943.3871208-4-a.s.protopopov@gmail.com>
+ <bf18e12a52cf013b96f8aaa88b062e6bb48ba36c.camel@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250618065553.96822-1-kerneljasonxing@gmail.com>
+In-Reply-To: <bf18e12a52cf013b96f8aaa88b062e6bb48ba36c.camel@gmail.com>
 
-On 06/18, Jason Xing wrote:
-> From: Jason Xing <kernelxing@tencent.com>
+On 25/06/18 04:04AM, Eduard Zingerman wrote:
+> On Sun, 2025-06-15 at 08:59 +0000, Anton Protopopov wrote:
+> > Tests are split in two parts.
+> > 
+> > The `bpf_insn_set_ops` test checks that the map is managed properly:
+> > 
+> >   * Incorrect instruction indexes are rejected
+> >   * Non-sorted and non-unique indexes are rejected
+> >   * Unfrozen maps are not accepted
+> >   * Two programs can't use the same map
+> >   * BPF progs can't operate the map
+> > 
+> > The `bpf_insn_set_reloc` part validates, as best as it can do it from user
+> > space, that instructions are relocated properly:
+> > 
+> >   * no relocations => map is the same
+> >   * expected relocations when instructions are added
+> >   * expected relocations when instructions are deleted
+> >   * expected relocations when multiple functions are present
+> > 
+> > Signed-off-by: Anton Protopopov <a.s.protopopov@gmail.com>
+> > ---
 > 
-> For some applications, it's quite useful to let users have the chance to
-> tune the max budget, like accelerating transmission, when xsk is sending
-> packets. Exposing such a knob also helps auto/AI tuning in the long run.
-> 
-> The patch unifies two definitions into one that is 32 by default and
-> makes the sysctl knob namespecified.
-> 
-> Signed-off-by: Jason Xing <kernelxing@tencent.com>
-> ---
-> v2
-> Link: https://lore.kernel.org/all/20250617002236.30557-1-kerneljasonxing@gmail.com/
-> 1. use a per-netns sysctl knob
+> Nit: term "relocation" is ambiguous, in BPF context first thing that
+>      comes to mind are ELF relocations that allow CO-RE to work.
 
-Why are you still insisting on the sysctl? Why not a per-socket (struct
-xdp_sock) value? And then you can add a setsockopt (xsk_setsockopt) to tune it.
+Thanks, agree. I will try to find other words for the desriptions
+
+> [...]
+> 
+> 
+
