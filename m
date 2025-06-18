@@ -1,123 +1,165 @@
-Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D1CC2877E8
-	for <bpf@vger.kernel.org>; Wed, 18 Jun 2025 14:27:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1071827E071
+	for <bpf@vger.kernel.org>; Wed, 18 Jun 2025 14:40:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750256859; cv=none; b=DV6RuibEd6+B6MDF/JX2pM+mQSEMfHhButaALkGz9v35/AtqwchnVsss/5KPnefqy1jAMRtYW+2vl3dHp6hIxa4H4AuwCUlJylNS6dP4xbHn/WHQLzsQn4sOj0VcYxncOwPxJktEYxf4amX7+odgWTVUYHNPrtpVy0x6r0s7ipM=
+	t=1750257640; cv=none; b=SFwN/tFDcXqGTNZx/ENyh1bDiDqid0oPjlr/FkWJvLCX1YhrCPN8MNBGPRprFkcTBOYvmeQxAda3UnicWBrzO+GebbDrYhinSmTd8ikJlIj3Rd3gUq/KXFq/hRuVTqnGvugiRs4wm//fFsUQEnsUrcXghyfYkg3qLm1JLDrxozI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750256859; c=relaxed/simple;
-	bh=0R04X2IxAUZ+Y0jSm7qz0sa4qxhk6NzAtpPdgD8xbVQ=;
+	s=arc-20240116; t=1750257640; c=relaxed/simple;
+	bh=s4bbGvmBfOc+GNEx/wDDd4G9EZzztNpo6c3V+WPbXWY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Zww51WSzr/hdBKxRcpYPlqPAWZsRmWTuH8hHRYKQ8l1Y1PqW660ojWXicdg3oR3sDIJBQsHehhtPPdHBWEIqeGSIGbmaWTBNhVXl7ZGmJmEM0FcFFCvRiaAOnJ37SpLYO6uI2QlFh+1WfrK0TqDxnZleIr37oEUs8Nv55Nb5SDU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=M8F939s6; arc=none smtp.client-ip=209.85.208.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+	 To:Cc:Content-Type; b=U0LTptpEzPfCqBxpQ6bEjtc6l4zRL7071BQBXqn5wm/K3cTmbPNo6VZY6RnAtVqbcv2lBMhEbYq6XvUrNYsJkafUnixRyVeaDLHDdR+ujW90OFsKAA9PqcpGql87/1JDSFcq1gzzyCXsA6Mxjoi752pAC4y0Gkw+sgmEekh5Bs0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jQIFwer5; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="M8F939s6"
-Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-32addf54a01so73028021fa.3
-        for <bpf@vger.kernel.org>; Wed, 18 Jun 2025 07:27:36 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jQIFwer5"
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-451d54214adso54060345e9.3
+        for <bpf@vger.kernel.org>; Wed, 18 Jun 2025 07:40:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1750256854; x=1750861654; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1750257636; x=1750862436; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=0R04X2IxAUZ+Y0jSm7qz0sa4qxhk6NzAtpPdgD8xbVQ=;
-        b=M8F939s6AEUCMyHjj+jeloh3DP6d22N7SImeAmZ0qEzWxA1fhP/5tFCK1U5OsJ0kPG
-         si6gpln635DkGCqpQX7pZ44u0T1Fuqq1LH9OQA18hHD+xgEyNPGZM/p0xXeyn7nowqMK
-         Gfck6hyqQmu2QsIcQVr3qCWVChMW4ZLCEu2RNJypBcfXWSW5G+2TjRkJlUR3TSoVjoBu
-         k4nYslmXfLO03hEHcTl6tfRs8ltl88u1Q9ZGbymcAGajCajMDq039AHx6O9syvYyKim2
-         xWYmI9BA80QODd+z/b+ldOr6YXmrgj5vS2aJNMkxYK9kEn/793ejXhnoj9pKgq+ZdKi1
-         Hq1g==
+        bh=KThMzXeTXCcvMnBD/oVLEje4P+EluL1loERY1QqGn84=;
+        b=jQIFwer5gqpel96PaT2TV/vWIs4KHLX4Q7bIhZLUYauUr6ZCEmnEmE4RtcusUqsq0W
+         7x9QGVGxciGjD1keMmoA38y7KRWrvdHyL3FpBhD6Deasup0tF0BszEQMNcjm/t9qq+lp
+         3QqAj+GnSDf6p6v6kHwRXaLZF3vOPOVFsuXHJzlnunUgyBfHgCLO9eh9C88T6OAKkQXN
+         hRPj542nFwrcv8a0aF1Fzlmvdky/MfruYhKM+Y8jBA3s4+PjHpf17RP4XF8XpL3hALdn
+         Hdacfj+pigX59ayUKlyhYisA3y1d/Zaj3+eotL2h2oZs/hyy+8LlFtUB9nzPv7JdBc0p
+         IQsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750256854; x=1750861654;
+        d=1e100.net; s=20230601; t=1750257636; x=1750862436;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=0R04X2IxAUZ+Y0jSm7qz0sa4qxhk6NzAtpPdgD8xbVQ=;
-        b=tpF4q0nw3xRGwLPYtNwDN1TkFooLAOYnXIyLkPA4aXGQ5FEn5xy8+vmUwpl/YlFZB5
-         rcaxAJ/xuzvo03nA9T3nnYX/BxtHogZ6UlZ9ydyIv0R630/OwQ4I1lsEg1K3zCt9WF8w
-         ylfUN+g9FGOeLqlXUNzEde0URbebFbY2hL+Upw6HS7fzaVkwYt//OM/NcuL6M3Z0KYop
-         /2Fs3Eh5lY+OKPEn1qrRq0c6UPlhEeECtyHGr3dH43NGgpWvwQB8v0mHzvX/ZYqFR+sX
-         nFxw0pDBD66y7WRcupmDrN+erKAJXWEjXpDzVxTuHtAMA/ScQQ8c4xt7j0loNHpy5/YL
-         3lZg==
-X-Forwarded-Encrypted: i=1; AJvYcCU8bkds9xU/dijp8tffImmakhZRLx+ocm+AVnpNLrLasMMDnUL8re4jF1EoETix2MzKzRM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzwdjJ2dsEcZiyyTNXKrUn8zDPrSPf8qvfbWzpM2EbMB5CV92k+
-	E9L0cfSHHyVrWeZji8xRm3EJZt2GNmDrk2v//ocbUpuMXnbSYV8BlRN0+f21/rA1IpfPUbAEM5g
-	QNTLu0bgNsCoAVDMPZt5lt4rCFyoB9X5X/3oMzG8+Fw==
-X-Gm-Gg: ASbGnctlwbGJqmF5Jn10Y9tKFv9RRYzR7VvUg3qT7sRltPzpcClhCarMiKrZpkN2nuP
-	iCxKHMOXbN/vyW8vV8lOZhD2SJpLUG3HLAgShebSAakWbxHINoptZ9zT0S2obRfDeQ/1od2X45e
-	sJFqOSi6ZlyVxRB68ZDzbVEAwhLHOgE8nm4+xwgG/UN0UHlOWZ9SOO9uhaP6nUlw==
-X-Google-Smtp-Source: AGHT+IGGgI3FTwdOcK8RLKdtKdhn3U4LuZlr6R5KwqYquv0mpgnRFvgV/Xu6G6n/cNU5rLBns6CPyI5rMhviN4oJemU=
-X-Received: by 2002:a05:651c:1987:b0:32a:ec98:e15c with SMTP id
- 38308e7fff4ca-32b4a5ca0f9mr60085391fa.19.1750256854524; Wed, 18 Jun 2025
- 07:27:34 -0700 (PDT)
+        bh=KThMzXeTXCcvMnBD/oVLEje4P+EluL1loERY1QqGn84=;
+        b=ZIbOwIyqXLGdjGT4PybsLVrxy2thGaOJGTaoKeE+qN2XncdpcyvrLdh4KLHgjdnXrz
+         1a2a88ksOjbGgEG9FvHBUjlTpOd0xXu1JFbsTKlYQYvHb6Aom1usB3HStPmzBqX7hRc4
+         M/OIeC9a/mQIXeF2wXIqSj0ylQ3p7NZDmed3fRRb1tCA43AhDy1BDLb8Sah7Us3HxmOk
+         oLnA9bKYQqLwzGu468TQbfSsIz7v08kfsBjIsqU0nw+G1LXxeUkgIlMxyPwdG6i5waMR
+         IVLmEoHbfPNl9B6setaJMpVFIF2QIIVqAbgxLAxxIlp3G4dC+F3zU/HPsa1DxLFZQtek
+         JJkw==
+X-Gm-Message-State: AOJu0YwccqVxBN1J0ARrk8JX3YyOAeZDLGbZWOembu9EjTY2+hOJWOn2
+	BN093Q3eqTx3eLz7zuIV9yO1DXD0nFgjmj/+DVLQZeqOXIhAVYv0bNnFc5IubA6L4pxG79GGcLS
+	dBB/cysDmDOF/NyVeq0e3sQ0VAcYiuoE=
+X-Gm-Gg: ASbGncvT5MtYnucTBJhDjhh+nS/T4UopgmARoRUEvZFFEZxwTlFqdkRbZXdXXaIlKtK
+	TFpXQomosx04hi4K+9yKDFv8fN+YSOPZ9ecuoxddJWzQdunTMaK9PlUpmKRKAaXNZr1O94vMFCI
+	yromETa1moE28YRUWlto4lyJJuYyGLC+FFHaRdiQnrjLSkKnR3Yqt4/GmSA4f2yWV2m5SwUpvb
+X-Google-Smtp-Source: AGHT+IH+0RPAYE7P5b/EDaBROlkg26LwIGaXd3OKxcog1FCEKJjnfek+9gS8I0X25gh1SBvkPwME3P1urxgqALbHkGg=
+X-Received: by 2002:a05:600c:a02:b0:450:c210:a01b with SMTP id
+ 5b1f17b1804b1-4533caa641emr181370465e9.17.1750257636035; Wed, 18 Jun 2025
+ 07:40:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250616095532.47020-1-matt@readmodwrite.com> <CAPhsuW4ie=vvDSc97pk5qH+faoKjz+b51MDYGA3shaJwNd677Q@mail.gmail.com>
- <CAENh_SQPLHC8pswTRoqh0bQR84HHQmnO3bM07UQa1Xu9uY_3WA@mail.gmail.com>
- <CAADnVQ+QyPqi7XJ2p=S9FVDbOxMXvVPU859n+2ApuRQv5T2S5w@mail.gmail.com>
- <CAENh_SQgZ5yVpshKRhiezhGMDAMvgV7SmwD_8u++mACE33oNrg@mail.gmail.com> <CAADnVQJgOyBCCySnBkTk-VCsz0dy+ppdGHpggxbtDpBBGhaXVg@mail.gmail.com>
-In-Reply-To: <CAADnVQJgOyBCCySnBkTk-VCsz0dy+ppdGHpggxbtDpBBGhaXVg@mail.gmail.com>
-From: Ignat Korchagin <ignat@cloudflare.com>
-Date: Wed, 18 Jun 2025 15:27:23 +0100
-X-Gm-Features: AX0GCFsaM9DGTqH4WJ6Z032fn61el3PhuhfhzVPYIHaWfMnL8mcSuRqckaKRyAc
-Message-ID: <CALrw=nFvUwmpjUMYh5iJqjo6SbAO8fZt8pkys7iDjZHfpF2DxQ@mail.gmail.com>
-Subject: Re: [PATCH] bpf: Call cond_resched() to avoid soft lockup in trie_free()
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Matt Fleming <matt@readmodwrite.com>, Song Liu <song@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Yonghong Song <yonghong.song@linux.dev>, 
-	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	kernel-team <kernel-team@cloudflare.com>, Matt Fleming <mfleming@cloudflare.com>, 
-	Jesper Dangaard Brouer <hawk@kernel.org>
+References: <cover.1750252029.git.vmalik@redhat.com> <04a320f8a9405caee87c59807a4192e2b5e14bed.1750252029.git.vmalik@redhat.com>
+In-Reply-To: <04a320f8a9405caee87c59807a4192e2b5e14bed.1750252029.git.vmalik@redhat.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Wed, 18 Jun 2025 07:40:24 -0700
+X-Gm-Features: Ac12FXy2bVcP1GQlhLYQ1aKroVbGpnKaNaP5dwhPpHU02xzDLFvFCXbvRhGrXBU
+Message-ID: <CAADnVQLwxwLo5RqBPy=-Rr30nni5ZL8X5on-LenFMHqArZ6XFg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v5 3/4] selftests/bpf: Allow macros in __retval
+To: Viktor Malik <vmalik@redhat.com>
+Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jun 18, 2025 at 3:01=E2=80=AFPM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
+On Wed, Jun 18, 2025 at 6:32=E2=80=AFAM Viktor Malik <vmalik@redhat.com> wr=
+ote:
 >
-> On Wed, Jun 18, 2025 at 5:29=E2=80=AFAM Matt Fleming <matt@readmodwrite.c=
-om> wrote:
-> >
-> > On Tue, Jun 17, 2025 at 4:55=E2=80=AFPM Alexei Starovoitov
-> > <alexei.starovoitov@gmail.com> wrote:
-> > >
-> > > On Tue, Jun 17, 2025 at 2:43=E2=80=AFAM Matt Fleming <matt@readmodwri=
-te.com> wrote:
-> > > >
-> > >
-> > > > soft lockup - CPU#41 stuck for 76s
-> > >
-> > > How many elements are in the trie that it takes 76 seconds??
-> >
-> > We run our maps with potentially millions of entries, so it's the size
-> > of the map plus the fact that kfree() does more work with KASAN that
-> > triggers this for us.
-> >
-> > > I feel the issue is different.
-> > > It seems the trie_free() algorithm doesn't scale.
-> > > Pls share a full reproducer.
-> >
-> > Yes, the scalability of the algorithm is also an issue. Jesper (CC'd)
-> > had some thoughts on this.
-> >
-> > But regardless, it seems like a bad idea to have an unbounded loop
-> > inside the kernel that processes user-controlled data.
+> Allow macro expansion for values passed to the `__retval` and
+> `__retval_unpriv` attributes. This is especially useful for testing
+> programs which return various error codes.
 >
-> 1M kfree should still be very fast even with kasan, lockdep, etc.
-> 76 seconds is an algorithm problem. Address the root cause.
+> With this change, the code for parsing special literals is made
+> redundant (as the literals are defined via macros) so drop it.
+>
+> Signed-off-by: Viktor Malik <vmalik@redhat.com>
+> ---
+>  tools/testing/selftests/bpf/progs/bpf_misc.h | 11 ++++++-----
+>  tools/testing/selftests/bpf/test_loader.c    | 17 -----------------
+>  2 files changed, 6 insertions(+), 22 deletions(-)
+>
+> diff --git a/tools/testing/selftests/bpf/progs/bpf_misc.h b/tools/testing=
+/selftests/bpf/progs/bpf_misc.h
+> index a678463e972c..1758265f5905 100644
+> --- a/tools/testing/selftests/bpf/progs/bpf_misc.h
+> +++ b/tools/testing/selftests/bpf/progs/bpf_misc.h
+> @@ -83,9 +83,10 @@
+>   *                   expect return value to match passed parameter:
+>   *                   - a decimal number
+>   *                   - a hexadecimal number, when starts from 0x
+> - *                   - literal INT_MIN
+> - *                   - literal POINTER_VALUE (see definition below)
+> - *                   - literal TEST_DATA_LEN (see definition below)
+> + *                   - a macro which expands to one of the above
+> + *                   In addition, two special macros are defined:
+> + *                   - POINTER_VALUE (see definition below)
+> + *                   - TEST_DATA_LEN (see definition below)
+>   * __retval_unpriv   Same, but load program in unprivileged mode.
+>   *
+>   * __description     Text to be used instead of a program name for displ=
+ay
+> @@ -125,8 +126,8 @@
+>  #define __success_unpriv       __attribute__((btf_decl_tag("comment:test=
+_expect_success_unpriv")))
+>  #define __log_level(lvl)       __attribute__((btf_decl_tag("comment:test=
+_log_level=3D"#lvl)))
+>  #define __flag(flag)           __attribute__((btf_decl_tag("comment:test=
+_prog_flags=3D"#flag)))
+> -#define __retval(val)          __attribute__((btf_decl_tag("comment:test=
+_retval=3D"#val)))
+> -#define __retval_unpriv(val)   __attribute__((btf_decl_tag("comment:test=
+_retval_unpriv=3D"#val)))
+> +#define __retval(val)          __attribute__((btf_decl_tag("comment:test=
+_retval=3D"XSTR(val))))
+> +#define __retval_unpriv(val)   __attribute__((btf_decl_tag("comment:test=
+_retval_unpriv=3D"XSTR(val))))
+>  #define __auxiliary            __attribute__((btf_decl_tag("comment:test=
+_auxiliary")))
+>  #define __auxiliary_unpriv     __attribute__((btf_decl_tag("comment:test=
+_auxiliary_unpriv")))
+>  #define __btf_path(path)       __attribute__((btf_decl_tag("comment:test=
+_btf_path=3D" path)))
+> diff --git a/tools/testing/selftests/bpf/test_loader.c b/tools/testing/se=
+lftests/bpf/test_loader.c
+> index 9551d8d5f8f9..28d2d366a8ae 100644
+> --- a/tools/testing/selftests/bpf/test_loader.c
+> +++ b/tools/testing/selftests/bpf/test_loader.c
+> @@ -318,23 +318,6 @@ static int parse_caps(const char *str, __u64 *val, c=
+onst char *name)
+>
+>  static int parse_retval(const char *str, int *val, const char *name)
+>  {
+> -       struct {
+> -               char *name;
+> -               int val;
+> -       } named_values[] =3D {
+> -               { "INT_MIN"      , INT_MIN },
+> -               { "POINTER_VALUE", POINTER_VALUE },
+> -               { "TEST_DATA_LEN", TEST_DATA_LEN },
+> -       };
+> -       int i;
+> -
+> -       for (i =3D 0; i < ARRAY_SIZE(named_values); ++i) {
+> -               if (strcmp(str, named_values[i].name) !=3D 0)
+> -                       continue;
+> -               *val =3D named_values[i].val;
+> -               return 0;
+> -       }
+> -
 
-What if later we have 1G? 100G? Apart from the root cause we still
-have "scalability concerns" unless we can somehow reimplement this as
-O(1)
+and this broke a bunch of tests.
 
-Ignat
+pw-bot: cr
