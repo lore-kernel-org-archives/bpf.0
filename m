@@ -1,73 +1,67 @@
-Received: from relay.hostedemail.com (smtprelay0016.hostedemail.com [216.40.44.16])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 414CF265CBB;
-	Thu, 19 Jun 2025 08:47:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84FFA3085A5;
+	Thu, 19 Jun 2025 08:48:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750322837; cv=none; b=be+hAeoVag1nHrV4Wigt/EC08plTjvb8ek1zW8cfsajKhz0lULe3xWpdmBgai3MgbNkv+FsLSQBRtQ1bRDS3G+djJC/8v9kpV7lsVSH/d1/f4IGtvANAF/W2ES2gQBGLGS20znBLMDiOe/BkEVTQ5QL0FxC1dWQr8H0eG6gsYXA=
+	t=1750322900; cv=none; b=jNslDwLqwiPaljFBP6phpqWkuuqWJ9rbYQSjIfIIMqUvQH2f/FSgjPCqnlWYqsSWNEVS9Qag3fgRY+S6ojkoULF3EXIEsA8XfOTQWgorimzjDtIaHw+iHKidh4fI517eWoZgxFLbIFP7T1OuIECrULn4pXP1ZAwfUrXBumdxPo0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750322837; c=relaxed/simple;
-	bh=b0XWpvGm8wgW6A/uSiwkYOT2KLb+DLRb+ve9xFGOjd8=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=hlD86U/aIWryqQnDblcvas44rqlOj3E0rG+fI8ocF5ICbDmCxKo5kvn2ZZWpS2OR2Niwkxf+EXXZFPk7C35m0HiW5JYnocb8z3sOMfDbzBYFia/2t3trJlBrhE4fcVZdY78ISjoP9GYiaXaGpjkkN7kL13FNUtBssSNY98agyjc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf05.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay04.hostedemail.com (Postfix) with ESMTP id B99241A075C;
-	Thu, 19 Jun 2025 08:47:12 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf05.hostedemail.com (Postfix) with ESMTPA id D9D8C2000D;
-	Thu, 19 Jun 2025 08:47:08 +0000 (UTC)
-Date: Thu, 19 Jun 2025 04:47:14 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- bpf@vger.kernel.org, x86@kernel.org, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Josh Poimboeuf <jpoimboe@kernel.org>, Ingo Molnar <mingo@kernel.org>, Jiri
- Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Thomas
- Gleixner <tglx@linutronix.de>, Andrii Nakryiko <andrii@kernel.org>, Indu
- Bhagat <indu.bhagat@oracle.com>, "Jose E. Marchesi" <jemarch@gnu.org>, Beau
- Belgrave <beaub@linux.microsoft.com>, Jens Remus <jremus@linux.ibm.com>,
- Linus Torvalds <torvalds@linux-foundation.org>, Andrew Morton
- <akpm@linux-foundation.org>
-Subject: Re: [PATCH v10 05/14] unwind_user/deferred: Add unwind cache
-Message-ID: <20250619044714.5e676bf3@batman.local.home>
-In-Reply-To: <20250619075611.GX1613376@noisy.programming.kicks-ass.net>
-References: <20250611005421.144238328@goodmis.org>
-	<20250611010428.603778772@goodmis.org>
-	<20250618141345.GR1613376@noisy.programming.kicks-ass.net>
-	<20250618113359.585b3770@gandalf.local.home>
-	<20250619075611.GX1613376@noisy.programming.kicks-ass.net>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1750322900; c=relaxed/simple;
+	bh=48BhRGPoPQC3ZkFsaCUupKaDvr/iXvVX4G/QDp4DAKY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pBetjvoe9BQyJxypKmC7JUWpYUxRBtuYVZimDpIQoy/kBh75JVyMrU5c/f8h9s6ayZgDC7aFS4tqCioFIp8GYCb5mhQYoyQJJQ+h7nvTzGXwRfOblAi+zsbUvMK9E08yrFl9KV7ZKAYE6eEwLw17b7s/6qYmzSaOSSM118wrouw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UwI1tCtz; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UwI1tCtz"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50A52C4CEEA;
+	Thu, 19 Jun 2025 08:48:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1750322900;
+	bh=48BhRGPoPQC3ZkFsaCUupKaDvr/iXvVX4G/QDp4DAKY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=UwI1tCtzVaxcRAQ+91xU5Yw1D1P5yrJOQ1NmyJ1w4RJuBfuwYpXo5TpyixVWFqgmh
+	 HMMOmlsLB++U7x1wCuApC2Z3C+zFZSAokbSkG2ha1zX3CBeP76mnO3hcCoowshVdTF
+	 xv0qWAjQ7GTRisIXK5A/3Acc+CDMz9W49nN1oEfdDxcnekeK3MfICNEI+1xTEckG8g
+	 lj1FmqG3xMwbKZ6Df6kQV5Fg1VEaR4d8MIEgBANFbghsnjmYz8DZnu09tg1G/tKlnY
+	 T+YVwJD5SmL/rWD7pqSq+29q326punG6FW8MynVsf+Zn3jc9dylXtCA1Ofm+RnRmkX
+	 Qmz25pxKQquJA==
+Date: Thu, 19 Jun 2025 10:48:13 +0200
+From: Christian Brauner <brauner@kernel.org>
+To: Tejun Heo <tj@kernel.org>
+Cc: Song Liu <song@kernel.org>, bpf@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, kernel-team@meta.com, andrii@kernel.org, eddyz87@gmail.com, 
+	ast@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev, 
+	viro@zeniv.linux.org.uk, jack@suse.cz, kpsingh@kernel.org, mattbobrowski@google.com, 
+	amir73il@gmail.com, gregkh@linuxfoundation.org, daan.j.demeyer@gmail.com
+Subject: Re: [PATCH bpf-next 0/4] Introduce bpf_kernfs_read_xattr
+Message-ID: <20250619-zwirn-thunfisch-de6e4891a453@brauner>
+References: <20250618233739.189106-1-song@kernel.org>
+ <aFNdNv4Bvw6MwlaH@slm.duckdns.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: D9D8C2000D
-X-Stat-Signature: hdnso6s7b8h14ty8pwta4y6t1z4ps3a6
-X-Rspamd-Server: rspamout07
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX18mL5Mp+KUi7te2UfafbcE31pupD+cnzTg=
-X-HE-Tag: 1750322828-715024
-X-HE-Meta: U2FsdGVkX1/6nmXO2xLOAzIpyS7FXKe4FiuacAkvz+FOe86TrNckB2C4V/DB0PqfuqCcIYSFlx7JIAKM8Sl1lCbwTmBopNN9hYbJhrGKJ5zwS8TG5y0SsSiybX4oYUoKi7R1VEG9MCmK1pnOdpwCAjSk0eObCETPMieQ2xZrRQVow61s0WfTp7bQye7vf9KsL2xFXydIb9H5q4GmlPLkjwbp9YAUOCpxoimMVgT/JuA03tf4+yQ51AIwY3pD7nI8eToHEESCgGFZljTyd6Scg1UoO07WBivLGtFmwzPTubHRHzJAav3GDewzhdMnDKrIwv+BjoYkx7qRFraknHjMtgibs3FafmEnOK8lUgMbFrK8R4fNj8SddH4rLYTGrv/c
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <aFNdNv4Bvw6MwlaH@slm.duckdns.org>
 
-On Thu, 19 Jun 2025 09:56:11 +0200
-Peter Zijlstra <peterz@infradead.org> wrote:
+On Wed, Jun 18, 2025 at 02:43:34PM -1000, Tejun Heo wrote:
+> Hello,
+> 
+> On Wed, Jun 18, 2025 at 04:37:35PM -0700, Song Liu wrote:
+> > Introduce a new kfunc bpf_kernfs_read_xattr, which can read xattr from
+> > kernfs nodes (cgroupfs, for example). The primary users are LSMs, for
+> > example, from systemd. sched_ext could also use xattrs on cgroupfs nodes.
+> > However, this is not allowed yet, because bpf_kernfs_read_xattr is only
+> > allowed from LSM hooks. The plan is to address sched_ext later (or in a
+> > later revision of this set).
+> 
+> I don't think kernfs is the name we should be exposing to BPF users. This is
+> an implementation detail which may change in the future. I'd rather make it
+> a generic interface or a cgroup specific one. The name "kernfs" doesn't
 
-> Well, the trivial solution is to make it 511 and call it a day. Don't
-> make things complicated if you don't have to.
-
-I don't know if this is more complicated, but it should make it fit
-nicely in a page:
-
-  /* Make the cache fit in a page */
-  #define UNWIND_MAX_ENTRIES                                      \
-        ((PAGE_SIZE - sizeof(struct unwind_cache)) / sizeof(long))
-
--- Steve
+cgroup specific, please. That's what I suggested to Daan. 
