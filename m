@@ -1,190 +1,117 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7CCE263F4A
-	for <bpf@vger.kernel.org>; Thu, 19 Jun 2025 14:06:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5F261386C9;
+	Thu, 19 Jun 2025 14:17:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750341988; cv=none; b=lpqMbQPSTY5S0sUhFExpC30v4U666r1fTH8PmXfGtJV+R9HyWLSPl4N3IxR/uouKThkOU4zmwE9M1HfaeM9Oqjkwm5I3LQUCBFU4W3RFXWo+X3126fiwJbRYtKdUyrE/r1mGWNYrkzgN25HFhAaPmYiUsmdfyLVmKR2EGu80VeE=
+	t=1750342634; cv=none; b=cGqvM/c+l7GH065in4jnJ2u7Gd48HUZe0FbnZMg+AS0jU4bF23o8ko/WE6xunEVi4RiC2ScI3Uo64af3n0DjDkn3oyRGLO0UUuVqwco2OZuNS/nPOKeIjW0BBZtgMmKULKcUzCTJ5ir04a+KICDvj9wZjzaNqZGNm103T6gsO0Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750341988; c=relaxed/simple;
-	bh=mNbUYvZReUbPX24HxzYrXfLJ05cI+cpHUEK2EdjWNwk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=SJE47JVZNgJDCskeWTNMVuioOe5DQhZz6VgrlQQAPYt4NJL+YCL4sBRsYw9pZD2b83J5RuSO9/CCypX/Phn/ec2x+7UgYF8RDiyM9oodGgLmTLYz57zqLsYBWdKqEaj9nARXy5iU8grqZCkuASSj97x6XaSshP67+yd6IHdZms0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Z+frvmtt; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1750342634; c=relaxed/simple;
+	bh=1hirRnewnVTSaRWGgBit3cpzA+mUHqZUrx6XP1uGhbY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=YB4FJMbNU69DrhpwxcJXpjzINWwu2XHYg3Qy9h7kPfPpF4Al12f9y3NwWCkQ2NDDmHtmAQrFLzW6nWG0Q5sxmv7LVrvcUGmWs++k8rYQ5cyapqQsXVkgvqKA7nSM4Q3KDxwgzyKYbpAyOw/RcEaMfNqF76He7N4rZPy+cYPpJjY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NcWOWZ/p; arc=none smtp.client-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Z+frvmtt"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1750341986;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=3rFJy2cGcGcOiZjoBdoVKK7T7Guml8LSC5Piayfcnbo=;
-	b=Z+frvmtt/pVNM2pt6D0dn8AbouCeZfCVWUn0uaDIFcSgxb0364s1kLKAsBlWmOavQs7eTi
-	m6hkT3XJhUUWOXNarBgU+YyXlvXm2H/rGnGbbpnxKbKBdrNd38RwxlmLzw3fdDbOyz3G+8
-	LmLeXajvsp6HW/VSxlND86rSJffSjY8=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-3-prla-sTlMFOhS4rQhKUc6A-1; Thu,
- 19 Jun 2025 10:06:24 -0400
-X-MC-Unique: prla-sTlMFOhS4rQhKUc6A-1
-X-Mimecast-MFC-AGG-ID: prla-sTlMFOhS4rQhKUc6A_1750341982
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5C77C1800283;
-	Thu, 19 Jun 2025 14:06:22 +0000 (UTC)
-Received: from fedora (unknown [10.45.226.41])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id 2F38F19560A3;
-	Thu, 19 Jun 2025 14:06:17 +0000 (UTC)
-Received: by fedora (sSMTP sendmail emulation); Thu, 19 Jun 2025 16:06:16 +0200
-From: "Jerome Marchand" <jmarchan@redhat.com>
-To: bpf@vger.kernel.org
-Cc: Martin KaFai Lau <martin.lau@linux.dev>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	linux-kernel@vger.kernel.org,
-	Jerome Marchand <jmarchan@redhat.com>
-Subject: [PATCH v3 2/2] selftests/bpf: Convert test_sysctl to prog_tests
-Date: Thu, 19 Jun 2025 16:06:03 +0200
-Message-ID: <20250619140603.148942-3-jmarchan@redhat.com>
-In-Reply-To: <20250619140603.148942-1-jmarchan@redhat.com>
-References: <20250619140603.148942-1-jmarchan@redhat.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NcWOWZ/p"
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-234d366e5f2so11116895ad.1;
+        Thu, 19 Jun 2025 07:17:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1750342632; x=1750947432; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hs5sTPL4UKP6A3I0eYJSr3E+nHFf8KogN1avtTdVl5M=;
+        b=NcWOWZ/pIlootJttCZS4IvNqUcvWoBuEKqWmrPnRKmmCE4PmDbFeQWwvQA/5z0R/gb
+         fFGNV7VSsX07G30xzBFWmkUqFzWcHiC6jPkXYKgoxHziT5rAkFZvA4u250VRCk/iDV2p
+         Rii26RJlnJGKvPE81SluN8IScByS04wza0mU6xXbeWUY6lqVv/9r/8opGIjVTdatAFpP
+         uMroSexi7n9sPG2rMilxN+PzmkUPtqVWGc0E3izwOwXz4jweQB8AOz7A2X7dXOPDukuc
+         7r+y5RkiOKRq630Z69Wh/cE7L/e5dP1x8v/R2Fwj2aomnSCtqGWZesSTAnnajAR+QVKf
+         gLXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750342632; x=1750947432;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hs5sTPL4UKP6A3I0eYJSr3E+nHFf8KogN1avtTdVl5M=;
+        b=nJ18xCaxILh9PNFKBzCBNt5zrgY5K/DqtTyyF6HCRBeGtysglLxulXhvPUza01pPch
+         AhKWScgc3fnLi2ixZeoUsRy6bgqY4oGN9VTZiIQ7XAtvW92kOmYTcRT9xbbmKwq2+7rr
+         L/W0Ly9yImlSEjURaNnIoUnAEkL2z1D5ckjpctMsoHQ/NngMOu79QR6jZD3m3nLu6Krk
+         aCIdjAHSX0vl3KjMTGaUXG4r4HMWl8kUCMJDixOKSMKOoJRLpaXAcrJ5fdf0JM3T+si8
+         kY2TcnI9iFnUay4RloS5zRGLdLC5R0H2UBJi9LNaF/bQ2UYFvcSAG4DLEAOAQEIcnec4
+         7w5w==
+X-Forwarded-Encrypted: i=1; AJvYcCWj6ZfjNvhxRrKyiC/2DoyjNArtWLE7mDrJUcK1IudJHhqSlUmvjJ6A2RzlwfgS4euTB1X6hmolEJyZBEJR@vger.kernel.org, AJvYcCX9HChUpvcp1J8m48kST8xX8vLVBxAK1gIndmdTIzYLJi8J+oIr9WYDWg9mbvs6i8bUvMY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwTqYXuLCTT3flh9hWeaTIHsZrMc1REHHPnl+ZpSjB/nze/dOtL
+	fdnrV/HbdKFoN4OjXYSOVx+yipRaRAnPsWTYKQp1R7ydU8tcTwNeNbSK
+X-Gm-Gg: ASbGncutmMLKd8xTDuTtP6zF4FDRq/88j9Eo0Js+YOxE+CSdGdvrofoUYJKG8eBMuB+
+	ybNuYvjTcoL3H6abQqP1b3U9jRiFGD20Rea66X7iR7sINlvW4T6cODr14ks2Kac2gUyEwgEIL6T
+	JdXS0ZdwUYJQSduT/mHfZkUuhBZST99ZeYb5pG5xoPFT28q8PlF5EYbRxfC1QPVgXCzcuBs4iaW
+	IF/Dt0ddgqZz5iJ05ZbpUoyGSP1MLQXoBuhwx4b8B23826r1ceyy9M2DNLc51JIY9Vr9QG0Ln8n
+	YUukUZ+ItKoowPAksdp9NTX/IKWZm9vxuZBQp0xPPw+R4eV0XfH8z3lUfssPzb14e63SB39XLaW
+	AGmnG0XA0TB6NIktBKZVVWHv04YhpPchl4PoVtRUc
+X-Google-Smtp-Source: AGHT+IFirRO1ynx4PNieJwh+/qxRIudXvdXESLhzB5PFfPGxqyne4FswnV3bsltUa6DtqhYDvrtYcg==
+X-Received: by 2002:a17:903:b88:b0:234:9094:3fb1 with SMTP id d9443c01a7336-2366b3c2d82mr381111275ad.35.1750342632036;
+        Thu, 19 Jun 2025 07:17:12 -0700 (PDT)
+Received: from ?IPV6:2001:ee0:4f0e:fb30:5502:31a7:8320:fc5a? ([2001:ee0:4f0e:fb30:5502:31a7:8320:fc5a])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2365d8a1f93sm120183875ad.79.2025.06.19.07.17.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 Jun 2025 07:17:11 -0700 (PDT)
+Message-ID: <9a38a134-3ce8-4c91-a7e7-2a162cbf3b7c@gmail.com>
+Date: Thu, 19 Jun 2025 21:17:03 +0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net 1/2] virtio-net: xsk: rx: fix the frame's length check
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: netdev@vger.kernel.org, "Michael S. Tsirkin" <mst@redhat.com>,
+ Jason Wang <jasowang@redhat.com>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+ =?UTF-8?Q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>,
+ Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Paolo Abeni <pabeni@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>, virtualization@lists.linux.dev,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+References: <20250615151333.10644-1-minhquangbui99@gmail.com>
+ <20250615151333.10644-2-minhquangbui99@gmail.com>
+ <20250618191111.29e6136e@kernel.org>
+Content-Language: en-US
+From: Bui Quang Minh <minhquangbui99@gmail.com>
+In-Reply-To: <20250618191111.29e6136e@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Convert test_sysctl test to prog_tests with minimal change to the
-tests themselves.
+On 6/19/25 09:11, Jakub Kicinski wrote:
+> On Sun, 15 Jun 2025 22:13:32 +0700 Bui Quang Minh wrote:
+>> +/**
+>> + * buf_to_xdp() - convert the @buf context to xdp_buff
+>> + * @vi: virtnet_info struct
+>> + * @rq: the receive queue struct
+>> + * @buf: the xdp_buff pointer that is passed to virtqueue_add_inbuf_premapped in
+>> + *       virtnet_add_recvbuf_xsk
+>> + * @len: the length of received data without virtio header's length
+>> + * @first_buf: this buffer is the first one or not
+>> + */
+>>   static struct xdp_buff *buf_to_xdp(struct virtnet_info *vi,
+>> -				   struct receive_queue *rq, void *buf, u32 len)
+>> +				   struct receive_queue *rq, void *buf,
+>> +				   u32 len, bool first_buf)
+> I think Michael mention he's AFK so while we wait could you fix this
+> kdoc? I'm not sure whether the kdoc is really necessary here, but if
+> you want to keep it you have to document the return value:
+>
+> Warning: drivers/net/virtio_net.c:1141 No description found for return value of 'buf_to_xdp'
 
-Signed-off-by: Jerome Marchand <jmarchan@redhat.com>
----
- tools/testing/selftests/bpf/.gitignore        |  1 -
- tools/testing/selftests/bpf/Makefile          |  5 +--
- .../bpf/{ => prog_tests}/test_sysctl.c        | 37 ++++---------------
- 3 files changed, 10 insertions(+), 33 deletions(-)
- rename tools/testing/selftests/bpf/{ => prog_tests}/test_sysctl.c (98%)
+I want to add kdoc to clarify that the @len must be without virtio 
+header's length. I'll fix it in the next version.
 
-diff --git a/tools/testing/selftests/bpf/.gitignore b/tools/testing/selftests/bpf/.gitignore
-index e2a2c46c008b1..3d8378972d26c 100644
---- a/tools/testing/selftests/bpf/.gitignore
-+++ b/tools/testing/selftests/bpf/.gitignore
-@@ -21,7 +21,6 @@ test_lirc_mode2_user
- flow_dissector_load
- test_tcpnotify_user
- test_libbpf
--test_sysctl
- xdping
- test_cpp
- *.d
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 66bb50356be08..53dc08d905bd1 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -70,7 +70,7 @@ endif
- # Order correspond to 'make run_tests' order
- TEST_GEN_PROGS = test_verifier test_tag test_maps test_lru_map test_progs \
- 	test_sockmap \
--	test_tcpnotify_user test_sysctl \
-+	test_tcpnotify_user \
- 	test_progs-no_alu32
- TEST_INST_SUBDIRS := no_alu32
- 
-@@ -215,7 +215,7 @@ ifeq ($(VMLINUX_BTF),)
- $(error Cannot find a vmlinux for VMLINUX_BTF at any of "$(VMLINUX_BTF_PATHS)")
- endif
- 
--# Define simple and short `make test_progs`, `make test_sysctl`, etc targets
-+# Define simple and short `make test_progs`, `make test_maps`, etc targets
- # to build individual tests.
- # NOTE: Semicolon at the end is critical to override lib.mk's default static
- # rule for binaries.
-@@ -324,7 +324,6 @@ NETWORK_HELPERS := $(OUTPUT)/network_helpers.o
- $(OUTPUT)/test_sockmap: $(CGROUP_HELPERS) $(TESTING_HELPERS)
- $(OUTPUT)/test_tcpnotify_user: $(CGROUP_HELPERS) $(TESTING_HELPERS) $(TRACE_HELPERS)
- $(OUTPUT)/test_sock_fields: $(CGROUP_HELPERS) $(TESTING_HELPERS)
--$(OUTPUT)/test_sysctl: $(CGROUP_HELPERS) $(TESTING_HELPERS)
- $(OUTPUT)/test_tag: $(TESTING_HELPERS)
- $(OUTPUT)/test_lirc_mode2_user: $(TESTING_HELPERS)
- $(OUTPUT)/xdping: $(TESTING_HELPERS)
-diff --git a/tools/testing/selftests/bpf/test_sysctl.c b/tools/testing/selftests/bpf/prog_tests/test_sysctl.c
-similarity index 98%
-rename from tools/testing/selftests/bpf/test_sysctl.c
-rename to tools/testing/selftests/bpf/prog_tests/test_sysctl.c
-index bcdbd27f22f08..273dd41ca09e4 100644
---- a/tools/testing/selftests/bpf/test_sysctl.c
-+++ b/tools/testing/selftests/bpf/prog_tests/test_sysctl.c
-@@ -1,22 +1,8 @@
- // SPDX-License-Identifier: GPL-2.0
- // Copyright (c) 2019 Facebook
- 
--#include <fcntl.h>
--#include <stdint.h>
--#include <stdio.h>
--#include <stdlib.h>
--#include <string.h>
--#include <unistd.h>
--
--#include <linux/filter.h>
--
--#include <bpf/bpf.h>
--#include <bpf/libbpf.h>
--
--#include <bpf/bpf_endian.h>
--#include "bpf_util.h"
-+#include "test_progs.h"
- #include "cgroup_helpers.h"
--#include "testing_helpers.h"
- 
- #define CG_PATH			"/foo"
- #define MAX_INSNS		512
-@@ -1608,26 +1594,19 @@ static int run_tests(int cgfd)
- 	return fails ? -1 : 0;
- }
- 
--int main(int argc, char **argv)
-+void test_sysctl(void)
- {
--	int cgfd = -1;
--	int err = 0;
-+	int cgfd;
- 
- 	cgfd = cgroup_setup_and_join(CG_PATH);
--	if (cgfd < 0)
--		goto err;
-+	if (!ASSERT_OK_FD(cgfd < 0, "create_cgroup"))
-+		goto out;
- 
--	/* Use libbpf 1.0 API mode */
--	libbpf_set_strict_mode(LIBBPF_STRICT_ALL);
-+	if (!ASSERT_OK(run_tests(cgfd), "run_tests"))
-+		goto out;
- 
--	if (run_tests(cgfd))
--		goto err;
--
--	goto out;
--err:
--	err = -1;
- out:
- 	close(cgfd);
- 	cleanup_cgroup_environment();
--	return err;
-+	return;
- }
--- 
-2.49.0
+Thanks,
+Quang Minh.
 
