@@ -1,79 +1,75 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from relay.hostedemail.com (smtprelay0010.hostedemail.com [216.40.44.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBD45265CC9;
-	Thu, 19 Jun 2025 08:48:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 101AA200127;
+	Thu, 19 Jun 2025 08:49:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750322904; cv=none; b=QqE12xMCO5l/2phfR2j0Hj+r3fxLJVvXPn8sTbAkkACXDEhAsaUiaAl2Loj6UySGw1h4KU53R1XTmLzq8pavAWQkx0gnIXGp6MK7FjYW66sP6zGNDAKUTBovWZTU9AZjrTLlW3aYvEx9AC/Mlz7WD0MggGuF8T4pXJ7sBAgYs2Q=
+	t=1750322996; cv=none; b=q2bFzre3ECxVUdDm2yEunxhm7tShvuBEf5e66WVBV9yl+hBnNv/aNbwq5p3HIYpaPl3hG4gZYpZImggtUGUiDAEp+SjFhbrO4J2kjvlRCYOxNqlzxdDtoYfeQa9Z5zdIg484zgzJLIfMzu/zMqZpzhzmsdmjnrcjt6GT6jlQ8DI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750322904; c=relaxed/simple;
-	bh=vww0wtuYapFk4A06ppyCbC9dlVIFOUMMAQV4XHfEuXM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OKzYyM38pEl1F/6B9tvGk7Tlu8AIwYVuCjlnR4Q17eghWEXCCfPysrDNWXzcPJG8z/ioz14v7FinLqPEFObx2ZoulrvP0GuMwl3xtVurek+/PbeSEXYq7Ba9KHumBqdYQKkpsroPhmq/A8vd58kt+PhVJl2U57KB2olREnbIP30=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=ToBAKOAR; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="ToBAKOAR"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=vww0wtuYapFk4A06ppyCbC9dlVIFOUMMAQV4XHfEuXM=; b=ToBAKOAR/KSKlolXqPBhH8mhg+
-	soSiIdL67/PGAN1BaapkrSw7SgtTR+S2XL6WSjxZCiHEt570jrBMenh4sxkYSAuLIZQr6IPEyaZmT
-	1y3Zbim/djaSDskOXEODkjy/gG2TBjriJL+67SAUNLObYpV9uLL4RiCYgtYlygwdCJzzIY21p9MSF
-	YBV/hemaC0jhHKN9cV+sdPfP8KwggnCm6yEo78xo0YpUVBcWO3Lx8dPhRb9n+Hq/3eMu33xkX9kXB
-	5CeMauG/mGaAMT3rkzgySxVjxHylEDA9DD5TaOiXpujyEP6q590uY2Rr7It1HYlKu27okse4Nuu7R
-	FimoTX+g==;
-Received: from 2001-1c00-8d82-d000-266e-96ff-fe07-7dcc.cable.dynamic.v6.ziggo.nl ([2001:1c00:8d82:d000:266e:96ff:fe07:7dcc] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1uSAwP-00000007vXx-448X;
-	Thu, 19 Jun 2025 08:48:15 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 5B1393088F2; Thu, 19 Jun 2025 10:48:13 +0200 (CEST)
-Date: Thu, 19 Jun 2025 10:48:13 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Steven Rostedt <rostedt@goodmis.org>
+	s=arc-20240116; t=1750322996; c=relaxed/simple;
+	bh=n71zzM0zn0yiB0UuLeFSmpaT+ZOUy5bd8NLW3zJzq+g=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=HVCApn2+23JKakkp6StPIZnQ1xst0Bk0fkAM9InBTuuXtVxsjKOkAJr0X3OHlTT4VZCHtMresB6pyZpw3s3NDLZi1USz3S2A36frHggYz0u5aGJmNdu3YDzwv+K1mo0zdAuaz3cfr3yHOqo7RC5guLpC2bONcv2aDunPq8ouUP4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+Received: from omf06.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay05.hostedemail.com (Postfix) with ESMTP id 688035B3C3;
+	Thu, 19 Jun 2025 08:49:52 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf06.hostedemail.com (Postfix) with ESMTPA id 70A6B20011;
+	Thu, 19 Jun 2025 08:49:48 +0000 (UTC)
+Date: Thu, 19 Jun 2025 04:49:53 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Peter Zijlstra <peterz@infradead.org>
 Cc: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-	bpf@vger.kernel.org, x86@kernel.org,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Ingo Molnar <mingo@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Indu Bhagat <indu.bhagat@oracle.com>,
-	"Jose E. Marchesi" <jemarch@gnu.org>,
-	Beau Belgrave <beaub@linux.microsoft.com>,
-	Jens Remus <jremus@linux.ibm.com>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH v10 07/14] unwind_user/deferred: Make unwind deferral
- requests NMI-safe
-Message-ID: <20250619084813.GG1613633@noisy.programming.kicks-ass.net>
+ bpf@vger.kernel.org, x86@kernel.org, Masami Hiramatsu
+ <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Josh Poimboeuf <jpoimboe@kernel.org>, Ingo Molnar <mingo@kernel.org>, Jiri
+ Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Thomas
+ Gleixner <tglx@linutronix.de>, Andrii Nakryiko <andrii@kernel.org>, Indu
+ Bhagat <indu.bhagat@oracle.com>, "Jose E. Marchesi" <jemarch@gnu.org>, Beau
+ Belgrave <beaub@linux.microsoft.com>, Jens Remus <jremus@linux.ibm.com>,
+ Linus Torvalds <torvalds@linux-foundation.org>, Andrew Morton
+ <akpm@linux-foundation.org>
+Subject: Re: [PATCH v10 06/14] unwind_user/deferred: Add deferred unwinding
+ interface
+Message-ID: <20250619044953.630c349a@batman.local.home>
+In-Reply-To: <20250619080108.GY1613376@noisy.programming.kicks-ass.net>
 References: <20250611005421.144238328@goodmis.org>
- <20250611010428.938845449@goodmis.org>
- <20250619083415.GZ1613376@noisy.programming.kicks-ass.net>
- <20250619043733.2a74d431@batman.local.home>
- <20250619084427.GA1613376@noisy.programming.kicks-ass.net>
+	<20250611010428.770214773@goodmis.org>
+	<20250618142000.GS1613376@noisy.programming.kicks-ass.net>
+	<20250618113706.2eb46544@gandalf.local.home>
+	<20250619080108.GY1613376@noisy.programming.kicks-ass.net>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250619084427.GA1613376@noisy.programming.kicks-ass.net>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: 70A6B20011
+X-Stat-Signature: wm8mdhhxwsab9enitotenb1s4y6gfb3r
+X-Rspamd-Server: rspamout05
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX1+m9RaEQFiWcConn3hFsX2R58+fX92JsoU=
+X-HE-Tag: 1750322988-760678
+X-HE-Meta: U2FsdGVkX19ItN7KcrqT3FzBR8Bm28K8TnxtDsJL/KxHZ+vHOPUqMdz5SmRXrau124q3SQQJYemftlaLRX67QqjcHj4zpZRxdM8hF4lxz32ei7WwobXcl27K68b+tKhTZgbk+uPGmXrtVFMcWQSarkzIxwyuG2rrAU3Vh8+4D9F1ZdXqAyGdE/oj0PNUXXHEV4MPhOI1X8xsIi3PRwDivWX2pmpw5JK7+xny1u4m+3B0D1r+FEUscmLWESdNcdao3i2O9STRZlSK2US6KDZGcWuewZpDYUFzri1kugojVDcNBH7oHrYAce1tpYSedi8pupgvPLJ4o4ATd48DLfve/zK1FhityT+C7reWBTkrnQ3OwYQs3w9kq4b+r0fMuz3r
 
-On Thu, Jun 19, 2025 at 10:44:27AM +0200, Peter Zijlstra wrote:
+On Thu, 19 Jun 2025 10:01:08 +0200
+Peter Zijlstra <peterz@infradead.org> wrote:
 
-> Luckily, x86 dropped support for !CMPXCHG8B right along with !TSC. So on
-> x86 we good with timestamps, even on 32bit.
+> If you want to rely on consecutive system calls never seeing the same
+> timestamp, let alone PID reuse in the same timestamp -- for some generic
+> infrastructure -- you need to go audit all the arch code.
 
-Well, not entirely true, local_clock() is not guaranteed monotonic. So
-you might be in for quite a bit of hurt if you rely on that.
+I can drop the timestamp and go back to the original "cookie"
+generation that guaranteed unique ids for something like 2^48 system
+calls per task.
 
+I thought the timestamps just made it easier. But having to audit every
+arch, may make that not the case.
 
+-- Steve
