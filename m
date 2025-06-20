@@ -1,18 +1,18 @@
-Received: from invmail4.hynix.com (exvmail4.skhynix.com [166.125.252.92])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6ADB1DC1AB;
+Received: from invmail4.hynix.com (exvmail4.hynix.com [166.125.252.92])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BBA4C1DED5C;
 	Fri, 20 Jun 2025 04:12:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.125.252.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750392758; cv=none; b=Yn3XnkR1O9REuQTxPFUxSvEANI6cfVIcalJ7uzUsDWNquMG/e/pQgHOaHWyS1cv/uB6/SfOiDxxTKlgEOt/BXtQnt6T/pZPXPsQTpcRzldKhfsrrMd/l6qdouAp/Y95+1lHuMYuwocQ4qOjTRUMFmWdHf3FMrZUolPCevkaYL3k=
+	t=1750392758; cv=none; b=QvEpWUXVPKELoHJP8SQPdvq8z4HpCorB7WwxDhoyH6apGvP2Ys67YAHvuaaeWz5Lnu/P0ei699x4x53Qcc/rIYi3djl5zLx1pORPptC2uQg26n8jFW2marooO+7MDRwyIsedJ/Skp31GysvlVnkCxGiPZeMMD6S2D08XTlebKgs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1750392758; c=relaxed/simple;
-	bh=5wmAbXkvBz9wa/ZdobtkB+f94h+QeIjLFQaRf9o9B5E=;
+	bh=BpEBqg0Tn6vBpZdUHkN0C1T/n1AoxJGZgoBMWrqDqIo=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=XASWeslA+NbGU2k2b8mnrMRZaCmYewCNX/7b1ec2x1ViWn72zm21lsJu/vY8SwSERGHmKRFQxMbjfskUHMaBk4RlpCx6XQU8fHckcVJFJPxyWpdn+bp7efPRIJ26WhJvat9MWPxAt6CEl8l18lGxiHIegK46CVF5TTg1RZ5bhdk=
+	 MIME-Version:Content-Type; b=m9JV1U09pZSNz5IelJ6TLy7oFNeF/uwSV2Jj5C+8GirpWJeN4tFkI4IjTWxGxQ93ZcE37JErJdQXElKKLON9yhtX4ROqODRDktq4IEMlOxhtOtXFHu89MQ2csdUQ787raIhHRK0ndvvpPJWBzqG4fnkObFS6Ag+fgajWLEE8EGQ=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com; spf=pass smtp.mailfrom=sk.com; arc=none smtp.client-ip=166.125.252.92
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sk.com
-X-AuditID: a67dfc5b-669ff7000002311f-53-6854dfb21c96
+X-AuditID: a67dfc5b-669ff7000002311f-75-6854dfb227fc
 From: Byungchul Park <byungchul@sk.com>
 To: willy@infradead.org,
 	netdev@vger.kernel.org
@@ -51,9 +51,9 @@ Cc: linux-kernel@vger.kernel.org,
 	hannes@cmpxchg.org,
 	ziy@nvidia.com,
 	jackmanb@google.com
-Subject: [PATCH net-next v6 1/9] netmem: introduce struct netmem_desc mirroring struct page
-Date: Fri, 20 Jun 2025 13:12:16 +0900
-Message-Id: <20250620041224.46646-2-byungchul@sk.com>
+Subject: [PATCH net-next v6 4/9] page_pool: rename __page_pool_alloc_pages_slow() to __page_pool_alloc_netmems_slow()
+Date: Fri, 20 Jun 2025 13:12:19 +0900
+Message-Id: <20250620041224.46646-5-byungchul@sk.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20250620041224.46646-1-byungchul@sk.com>
 References: <20250620041224.46646-1-byungchul@sk.com>
@@ -65,180 +65,73 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA02SbUhTYRTHeXaf++JocF2RN4OKlYSGVmJ5gij7INwoJTAssrCVFzfUGZua
-	RoGpGJmzKKOcM65Kvk2dTc1ZJjktFQXfKGaWjpX6IStMG75RbUrktz//c36/8+UwhLyI9GXU
-	mhRBq1EmKigpln7bUBpomTit2jfTEQRGcy0FpoV0qHRYSTDWPEcwvzhGw1xXNwXlpS4CjAM5
-	GH6ZlwiYfOukwWSJgImKKQxtt1oIcN7toUCfs0zAq8XvNGRZqyQw+LyAhMKlpwS0ZDpoGHlh
-	pGC89g8JUzY9hl5DNYaJgjB4K24GV98Mgi5ziwRc+SUUPBgWKficM4FguNOJofhmAQJzu52E
-	5QW3o/jNOB22i++c+UHwTdWjEr7V8InmRUsq31gVwOfZhwneUnOb4i0/79P8x/dtFN/zeBnz
-	rdY5Ca/P/k7xs5MfMP+j/R3Fm5veYb5f7KJPeZ+THo4TEtVpgnbvkYtS1cusu+iK0T89N7sP
-	ZaL2HXnIi+HYEG66uZr+lxvLekhPptjdnN2+SHjyJnY/N+fsxnlIyhBsHcV11Y6tAhvZGG5+
-	ctYNMAxm/bg/NzM8tYw9wImmCrTm3M6ZGl6verzYg9xs1kvKk+XunYWyHHJt35vrLfqCPRrC
-	fdf8RO6pCTea3VxMeM5ybBvD3XKt4DXnFq6jyo7vIdawDjf8xw3rcBERNUiu1qQlKdWJIUGq
-	DI06PehycpIFuR+m4sZKjBX9HIyyIZZBig0y63yUSk4q03QZSTbEMYRik6y8J1Ill8UpM64J
-	2uRYbWqioLOhrQxW+MiCXVfj5Gy8MkVIEIQrgvbfVMJ4+WaiR/F3HDMnZNcbRN3O7oTzbP/8
-	wMmR6KlL5YqiuoHf7Zf2pEXXh3uH+uCzTHzy9HCgw7/utuPCaNMz8WGdJKjc0jqb+VEMjezb
-	tjRyqCaM1JQ0F4Qf3623JUfktzacMRU5c3/FVpoPH/MLLtMf9RsSCluyY4c09W39o50BfYee
-	flVgnUq5P4DQ6pR/AddoijYsAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Se0hTcRzF+e3e3XtdjW5L6qJZMrJQSLMyvlCEkODN0IzsgSE59eKGc8am
-	4orwsaUkaU+i5pSlab5yNU2XL8Qt3SqoLMvUVDStIDWdiY/AtiTqv8M5n3O+/3wpTLSMe1Ay
-	RSqnVEjkYkKACyL2a3aahqOku/ofbwG9sZaAmoUMeDBi5oO+uhHB3OIACQ5rNwFl9+Yx0L/S
-	4vDTuITBeNcoCTWmcBiumMChNa8Jg9GrNgIKtMsYtC1OkZBjruSBpdjOh9eNhXy4tVSOQVPW
-	CAlvm/UEDNWu8GGiswAHu64Kh+HCYOgybIT5F98RWI1NPJi/UkzAzR4DAWPaYQQ9llEcirIL
-	ERjb+/iwvODcKHo2RAb7sJbv0xjbUPWRxz7VfSJZgymNra/0Y/P7ejDWVH2ZYE2zN0h28H0r
-	wdruLOPsU7ODxxZopgh2ZrwfZ6fbewm27OsPHmts6MUjRdGCAwmcXJbOKQMOxgqkLTlX0Tm9
-	b0au5gXKQu3e+ciNYui9TH2pje/SBL2D6etbxFzanQ5kHKPdeD4SUBj9kGCstQOkK9hAn2Hm
-	xmecBYrCaR9mJVvtsoV0EGOoqUCrm1uZmkcdf3bc6H3MTE4L4dIiJ7NQquWv8usZ+93PuGsG
-	c941lohcNuasap4UYdeQUPcfpftH6f6jDAirRu4yRXqyRCYP8lclSdUKWYZ/fEqyCTlfouLi
-	r+tmNPc2tBPRFBKvFZrnjktFfEm6Sp3ciRgKE7sLy2wRUpEwQaI+zylTzirT5JyqE3lSuHiT
-	MOwUFyuiEyWpXBLHneOUf1Me5eaRheIsR+sybWGH/L2iM9/sp9Ydvl9sceyRHm72Ot3YG2UI
-	SCvuPXlku8O+NTlFY0VvwofiPUPLj63pqN6NJo9lNYe8jIxpG9TplupGvsXpykKKYk5MTdgW
-	5r0Dt82WLPUrvsgb9n0g0/OeJ15YdPhOvqPGcm+veZ0YLgzYrN10yf0AT4yrpJJAP0ypkvwG
-	Xn+cjQ4DAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA02SWUhUcRSH+c9dHZy63ga9aQtNhiRoGi6nrPChh9tDEdSDlVSDXprBLcYl
+	FSrTAUnSIhNs1BoV17FGxm1cklJzDVLLmHIZGVNaXHBNncpmlKi3j3N+3++8HBpjcwlXWhkd
+	J6ii5ZEyUoyLZxwLvWrM5xU+E1LI11eRoFtNhLJxIwH5lfUIltaGKVjs6CKhuHAFg/y3ahyW
+	9esYTHZaKNAZToO5dAqHlvQGDCz3u0nIVFsxeLE2S0GqsVwE/fVZBDxaL8GgIWWcgndN+SSM
+	VW0QMNWWiUOPpgIHc1YwdGqdYaVvGkGHvkEEK/cKSMge1JIwoTYjGGy34JB3JwuBvtVEgHXV
+	1pH3eowKdufbp+cwvrbio4hv1IxSvNYQz9eUe/IZpkGMN1TeJXnDwkOKH/nQQvLduVacbzQu
+	ivjMtFmSn5/8hPNzrUMkr68dwvk32g7qrNNF8bFwIVKZIKgOnbgqVpSOSq8viBMNFV9RCipw
+	yEAONMf4cZMlWvSXey2TuJ1JxoMzmdYwO0sZX27R0mWbi2mMeUZyHVXDlH2xg4nnlp/qCTvj
+	zAEu7XHqpixh/LnBohJ8q3Qvp6t+uVnkwARw86nNpJ1ZW2a1SE1s5Z24nsefbXnadsCD0z9h
+	7WPMpqbV5WH2uxxTS3MD+lZqq3Mn96rchD9AjOY/XfNP1/ynaxFWiVhldEKUXBnp561IilYm
+	eofFRBmQ7V9Kb/68ZEQL/efaEEMjmaPEuHROwRLyhNikqDbE0ZhMKinuPqNgJeHypGRBFXNF
+	FR8pxLYhNxqXuUgOr9wIZ5lr8jghQhCuC6q/WxHt4JqCdDmWLz/2KRqbUqSX91sriI2DTE0o
+	jIUEbrhbPCMczaMX3u8+Wp1dInGt673VWbDBotKQHGcdgYp+W4WnbnXvRtJ/uSwXh30rC5B5
+	dSVrb/sXHnHekxhj+H7gitK1OQuCZmB72Ul2Kk7Wpw4UD/iMa4lTPmOhQebj29jnuzpleKxC
+	7uuJqWLlfwBO5gJLKwMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Sa0iTcRjF+e+9bjl4W1IvCVkDKQK7QMZDSRh0+SfM7AJBH6pRL201Z21e
+	phSZG4SS2g2sOctLW3mJ2TKdZlFzLS0oWyRL08nKlaFmaaIuqk2J+nY453fO8+VhCVmIXMyq
+	tRmCTqvUyGkJKUnZaIx3+Peq1vivxoPFXk9D3ZQBbg04KbDUNiGYmO5lYNz9jIbqykkCLK9M
+	JPywzxAw6AkwUOdQgN8WJKHtXDMBgZIOGopMIQIeTo8ykO+8LYL28k4KupqKKbgyYyWgOW+A
+	gTetFhr6639TEHQVkdBpriHBX5wEnoqFMPliGIHb3iyCyfPlNFz2VtDwweRH4G0PkFB2thiB
+	/ZGPgtBUeKPsaT+TFIfbh78SuLHmnQi3mPsYXOHIxPdur8SFPi+BHbUFNHZ8v8Tg991tNO64
+	GiJxi3NchIuMozT+NthD4q+P3tK4+vOYCNsb35Kpsv2SxCOCRp0l6FZvOiRR2fqiT3yXGBw1
+	QygPlYsLkZjluXX888AgGdE0t5z3+aaJiI7m1vLjgWdhX8IS3B2ad9f3MpFgAZfJ/7hhpyKa
+	5OJ447X82bKUS+C9VVZybjSWr2t4PDsk5tbz3/If0BEtCzNTVSZqjp/Pd177GObZ8IHlvP26
+	LGIT4arxfhlxAUnN/1Hmf5T5P6oCEbUoWq3NSlOqNQmr9MdVOVq1YdXh9DQHCr+E7fTPi040
+	8Wa7C3EskkdJnRN7VDJKmaXPSXMhniXk0dLqjhSVTHpEmZMr6NIP6jI1gt6FYlhSvkiavE84
+	JOOOKjOE44JwQtD9TUWseHEeSm30FPg/WZ6OWVdk4C29doVvj2XbgcT4HdWbN4hf9/CK0gHr
+	sn03+jiPGavl7iiF4Xx2ws2uuzFnSpYYRlJaD9t6tC9jT9XZSphjtcyuIasl6F+q+dIQrGza
+	qTLnssmfTjrSNTmlI4k1S4xn+7J3z9t6M900097d8KTl5C8qKCf1KuXalYROr/wDnSYNGg4D
+	AAA=
 X-CFilter-Loop: Reflected
 
-To simplify struct page, the page pool members of struct page should be
-moved to other, allowing these members to be removed from struct page.
-
-Introduce a network memory descriptor to store the members, struct
-netmem_desc, and make it union'ed with the existing fields in struct
-net_iov, allowing to organize the fields of struct net_iov.
+Now that __page_pool_alloc_pages_slow() is for allocating netmem, not
+struct page, rename it to __page_pool_alloc_netmems_slow() to reflect
+what it does.
 
 Signed-off-by: Byungchul Park <byungchul@sk.com>
-Reviewed-by: Toke Høiland-Jørgensen <toke@redhat.com>
-Reviewed-by: Pavel Begunkov <asml.silence@gmail.com>
 Reviewed-by: Mina Almasry <almasrymina@google.com>
-Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
-Acked-by: Harry Yoo <harry.yoo@oracle.com>
+Reviewed-by: Toke Høiland-Jørgensen <toke@redhat.com>
 ---
- include/net/netmem.h | 94 ++++++++++++++++++++++++++++++++++----------
- 1 file changed, 73 insertions(+), 21 deletions(-)
+ net/core/page_pool.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/include/net/netmem.h b/include/net/netmem.h
-index 7a1dafa3f080..e0aa67aca9bb 100644
---- a/include/net/netmem.h
-+++ b/include/net/netmem.h
-@@ -12,6 +12,50 @@
- #include <linux/mm.h>
- #include <net/net_debug.h>
+diff --git a/net/core/page_pool.c b/net/core/page_pool.c
+index 95ffa48c7c67..05e2e22a8f7c 100644
+--- a/net/core/page_pool.c
++++ b/net/core/page_pool.c
+@@ -544,8 +544,8 @@ static struct page *__page_pool_alloc_page_order(struct page_pool *pool,
+ }
  
-+/* These fields in struct page are used by the page_pool and net stack:
-+ *
-+ *        struct {
-+ *                unsigned long pp_magic;
-+ *                struct page_pool *pp;
-+ *                unsigned long _pp_mapping_pad;
-+ *                unsigned long dma_addr;
-+ *                atomic_long_t pp_ref_count;
-+ *        };
-+ *
-+ * We mirror the page_pool fields here so the page_pool can access these
-+ * fields without worrying whether the underlying fields belong to a
-+ * page or netmem_desc.
-+ *
-+ * CAUTION: Do not update the fields in netmem_desc without also
-+ * updating the anonymous aliasing union in struct net_iov.
-+ */
-+struct netmem_desc {
-+	unsigned long _flags;
-+	unsigned long pp_magic;
-+	struct page_pool *pp;
-+	unsigned long _pp_mapping_pad;
-+	unsigned long dma_addr;
-+	atomic_long_t pp_ref_count;
-+};
-+
-+#define NETMEM_DESC_ASSERT_OFFSET(pg, desc)        \
-+	static_assert(offsetof(struct page, pg) == \
-+		      offsetof(struct netmem_desc, desc))
-+NETMEM_DESC_ASSERT_OFFSET(flags, _flags);
-+NETMEM_DESC_ASSERT_OFFSET(pp_magic, pp_magic);
-+NETMEM_DESC_ASSERT_OFFSET(pp, pp);
-+NETMEM_DESC_ASSERT_OFFSET(_pp_mapping_pad, _pp_mapping_pad);
-+NETMEM_DESC_ASSERT_OFFSET(dma_addr, dma_addr);
-+NETMEM_DESC_ASSERT_OFFSET(pp_ref_count, pp_ref_count);
-+#undef NETMEM_DESC_ASSERT_OFFSET
-+
-+/*
-+ * Since struct netmem_desc uses the space in struct page, the size
-+ * should be checked, until struct netmem_desc has its own instance from
-+ * slab, to avoid conflicting with other members within struct page.
-+ */
-+static_assert(sizeof(struct netmem_desc) <= offsetof(struct page, _refcount));
-+
- /* net_iov */
- 
- DECLARE_STATIC_KEY_FALSE(page_pool_mem_providers);
-@@ -31,12 +75,25 @@ enum net_iov_type {
- };
- 
- struct net_iov {
--	enum net_iov_type type;
--	unsigned long pp_magic;
--	struct page_pool *pp;
-+	union {
-+		struct netmem_desc desc;
-+
-+		/* XXX: The following part should be removed once all
-+		 * the references to them are converted so as to be
-+		 * accessed via netmem_desc e.g. niov->desc.pp instead
-+		 * of niov->pp.
-+		 */
-+		struct {
-+			unsigned long _flags;
-+			unsigned long pp_magic;
-+			struct page_pool *pp;
-+			unsigned long _pp_mapping_pad;
-+			unsigned long dma_addr;
-+			atomic_long_t pp_ref_count;
-+		};
-+	};
- 	struct net_iov_area *owner;
--	unsigned long dma_addr;
--	atomic_long_t pp_ref_count;
-+	enum net_iov_type type;
- };
- 
- struct net_iov_area {
-@@ -48,27 +105,22 @@ struct net_iov_area {
- 	unsigned long base_virtual;
- };
- 
--/* These fields in struct page are used by the page_pool and net stack:
-+/* net_iov is union'ed with struct netmem_desc mirroring struct page, so
-+ * the page_pool can access these fields without worrying whether the
-+ * underlying fields are accessed via netmem_desc or directly via
-+ * net_iov, until all the references to them are converted so as to be
-+ * accessed via netmem_desc e.g. niov->desc.pp instead of niov->pp.
-  *
-- *        struct {
-- *                unsigned long pp_magic;
-- *                struct page_pool *pp;
-- *                unsigned long _pp_mapping_pad;
-- *                unsigned long dma_addr;
-- *                atomic_long_t pp_ref_count;
-- *        };
-- *
-- * We mirror the page_pool fields here so the page_pool can access these fields
-- * without worrying whether the underlying fields belong to a page or net_iov.
-- *
-- * The non-net stack fields of struct page are private to the mm stack and must
-- * never be mirrored to net_iov.
-+ * The non-net stack fields of struct page are private to the mm stack
-+ * and must never be mirrored to net_iov.
-  */
--#define NET_IOV_ASSERT_OFFSET(pg, iov)             \
--	static_assert(offsetof(struct page, pg) == \
-+#define NET_IOV_ASSERT_OFFSET(desc, iov)                    \
-+	static_assert(offsetof(struct netmem_desc, desc) == \
- 		      offsetof(struct net_iov, iov))
-+NET_IOV_ASSERT_OFFSET(_flags, _flags);
- NET_IOV_ASSERT_OFFSET(pp_magic, pp_magic);
- NET_IOV_ASSERT_OFFSET(pp, pp);
-+NET_IOV_ASSERT_OFFSET(_pp_mapping_pad, _pp_mapping_pad);
- NET_IOV_ASSERT_OFFSET(dma_addr, dma_addr);
- NET_IOV_ASSERT_OFFSET(pp_ref_count, pp_ref_count);
- #undef NET_IOV_ASSERT_OFFSET
+ /* slow path */
+-static noinline netmem_ref __page_pool_alloc_pages_slow(struct page_pool *pool,
+-							gfp_t gfp)
++static noinline netmem_ref __page_pool_alloc_netmems_slow(struct page_pool *pool,
++							  gfp_t gfp)
+ {
+ 	const int bulk = PP_ALLOC_CACHE_REFILL;
+ 	unsigned int pp_order = pool->p.order;
+@@ -615,7 +615,7 @@ netmem_ref page_pool_alloc_netmems(struct page_pool *pool, gfp_t gfp)
+ 	if (static_branch_unlikely(&page_pool_mem_providers) && pool->mp_ops)
+ 		netmem = pool->mp_ops->alloc_netmems(pool, gfp);
+ 	else
+-		netmem = __page_pool_alloc_pages_slow(pool, gfp);
++		netmem = __page_pool_alloc_netmems_slow(pool, gfp);
+ 	return netmem;
+ }
+ EXPORT_SYMBOL(page_pool_alloc_netmems);
 -- 
 2.17.1
 
