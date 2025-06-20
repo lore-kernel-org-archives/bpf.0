@@ -1,231 +1,669 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mx0b-00206402.pphosted.com (mx0b-00206402.pphosted.com [148.163.152.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E68B185920;
-	Fri, 20 Jun 2025 15:35:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.14
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750433756; cv=fail; b=pcywNywkfedWjvDmjY0RB0Jden0wXxeW8O0p4KnwRFrNJK0iQ+KA6bcnjc7FjptN7krt6zaOjHPprY11K6i+rO+TojKmae6PZnVl++3qucRGktRpmbTy5EiW1JqktajtAsIEUckeAbIqZiS6MZ7IrH2RNpj0fNnJRj8KnPu7aXc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750433756; c=relaxed/simple;
-	bh=twAUdFCdCEdffl9tJzjPOd2ArhDcK2m5/32Dzu5lQ2U=;
-	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=aY6OxXowS0+zDQtmAmA8Pm9OzoNNHlJGA+NdipBJfKOCjUtgWmt8BcfrNku9jSr9qajD+UcNLZL1Ka7sdSmuuc8MYx8jcwOYao9/LqXsDGyxz8lm/FrNRT5HsNyVK0Ek8o0XaFbXuOZitLzouRlN4JxfirSzJAYy6YexE3jv4H4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=l6FOetZa; arc=fail smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 110A8294A04;
+	Fri, 20 Jun 2025 15:41:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.152.16
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1750434105; cv=none; b=q/NecFDGt+GJYI/jXgN4xzzZa+RWiFHLlD7ZQHscapp9OeI0tLPV2lnejIJqm+aTd/83xPIBE0a994T+o25S2LFlWmaoApXTaWZlLTufaDNC+H/uYgBnUbOrOCnc3lPZyjGjt4QOgDxnmVR3zi7JiY3QB03hGVk7VfVb4Fg1BhA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1750434105; c=relaxed/simple;
+	bh=SfIaBI9ghqii+eH3Y4fNqtAAKmegYZiLPYlWglPKn7E=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=H01Wi5wOupf/mr3Ia5NK4mVA6R1sU2usu2jpR1o3NN3/kP7Qo6L+a5cOQs9L/TxC1EbaWXy6M9ymXXuUrJENSJWWQ9OKLv/KF6Tbyurj0XKXuCSk8we6pEP1megK1tB6WjfndkB5pgRT4RPhl4g+v/4VZA1jvSbX+hy14PxbHu4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=JL1XOU3t; arc=none smtp.client-ip=148.163.152.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="l6FOetZa"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1750433755; x=1781969755;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=twAUdFCdCEdffl9tJzjPOd2ArhDcK2m5/32Dzu5lQ2U=;
-  b=l6FOetZaDoG109XSr8MMg/YQU7JQD8iTAEgpaXH5KH6oGp3idnm6t+1m
-   FAdip0iBOAENu6mBP/aXfUNkmXG2s6kIRrOpP5PJEGO5CKzxLrrrnAJ+e
-   AtmkLmDyIODj7yr0b4zKPjhY2V0xvOz+sNgGsEV6mjx/FZpPLk40Kxvmg
-   VQplJYTPhNEI7w8OiHqL364H3AJGW1KvhJ6bo2f2uWpbJTqsYkF3f9lRm
-   uz3+f7qipii9Y+/j+wu8mW1Tu3q7DcVfLZribcK9al4AICFhHhpFrV+Ar
-   1G2KvasNuhTij43VNAxBn+zirFr4Sv5J0FhjgH46PcDRc+SI6Bh2+Jdgg
-   Q==;
-X-CSE-ConnectionGUID: MwKzTVN5TbCiPdXtKu2DKg==
-X-CSE-MsgGUID: fGr8wTTYS9ih5WpTDa+TMA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11469"; a="52779884"
-X-IronPort-AV: E=Sophos;i="6.16,251,1744095600"; 
-   d="scan'208";a="52779884"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2025 08:35:53 -0700
-X-CSE-ConnectionGUID: LaaU8/b2Q/aoVR25oQLxqQ==
-X-CSE-MsgGUID: cJaeteaKTROS7bdkLEPcJw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,251,1744095600"; 
-   d="scan'208";a="156435579"
-Received: from orsmsx903.amr.corp.intel.com ([10.22.229.25])
-  by fmviesa004.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2025 08:35:53 -0700
-Received: from ORSMSX903.amr.corp.intel.com (10.22.229.25) by
- ORSMSX903.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="JL1XOU3t"
+Received: from pps.filterd (m0354654.ppops.net [127.0.0.1])
+	by mx0b-00206402.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55KCov1o005597;
+	Fri, 20 Jun 2025 15:18:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
+	 h=cc:content-transfer-encoding:content-type:date:from
+	:message-id:mime-version:subject:to; s=default; bh=F9cvJ7I38eTke
+	SErVw5XNNKLULovChOaTfd6D/hyg2k=; b=JL1XOU3tAV626DPJ0cXtSe3KYogM8
+	xEGGNfNvjzVjGNYltWepXjCr2HQ1Ef/ExOn0RAq79WHnNKurwE+bgRamSxTAYSNS
+	I3GjyN5GUxwF29wbHBhIoiqPPVKmNR4XisOfj+ZVwHPkAkhZAl+U1TT6PXd4SN7d
+	KRNYF+7UZMLM+kgyt8VBVUCsIsikbxpKaUCqPRPrsxz5vff+MgRIuomFYRwhdIu5
+	YB7TLyYzpb0cpxUW5JcKVGLZLyk31JjBRoIymWgoJMgLgSC3EtxLpn9qWofeqkic
+	CvUP6JbeoMSxG7+A1bEQF06XzcuIeYcVWVn5wSmbHPiKHFpLY+4S9VLqw==
+Received: from mail.crowdstrike.com (dragosx.crowdstrike.com [208.42.231.60] (may be forged))
+	by mx0b-00206402.pphosted.com (PPS) with ESMTPS id 47d80j0g67-2
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 20 Jun 2025 15:18:25 +0000 (GMT)
+Received: from ML-CTVHTF21DX.crowdstrike.sys (10.100.11.122) by
+ 04WPEXCH007.crowdstrike.sys (10.100.11.74) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.25; Fri, 20 Jun 2025 08:35:52 -0700
-Received: from ORSEDG903.ED.cps.intel.com (10.7.248.13) by
- ORSMSX903.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.25 via Frontend Transport; Fri, 20 Jun 2025 08:35:52 -0700
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (40.107.220.43)
- by edgegateway.intel.com (134.134.137.113) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.25; Fri, 20 Jun 2025 08:35:51 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=e7DlaJxecTlzQMxnrzq5wDPUjlfvFRRMfkXqwwrGft7EJfEjBGajekBnfSgqZHNAS6XZtKTWkoNs/Kz7+Hxh0WuoN/Tg1m3ELSw2oSlCbdfUuI2ZLzKo6I8EjiTdaj6kAixcMdTpv899h9cpx/yrHLWMCribPbbpHedHtstF01ljFP7I7pDxGYFLAZE7mzWJIqX5JBtHJzSHUHrJHm5IHC8Jwy5v1tPqdar/K4Fr3R1P2812KYQ1UcqPk//q3lEWlVffyDz+8NO3LGOm2S8XjfQG1tqiU/HNKruz4MX9YieBUBMUfMZijNFjlVRlparB7FzCD3p2cEoMHCZzpSHAvg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=H2CWS98ltk08Nwergg/oil04CKaY6AKmI2EFI4Ui99g=;
- b=KZb6DtLOzIo9QjeiSIGg2MFzfhPOBovazcKI2NuD8Sc3YILEi8xNxwYfYaG2QBUrgUf0V/CACrR/4Xm2Ydo8t+QwrPid8PdJ/s+964Nu+CICAOzDWgWTHV/X5l1pq/zAVfOQkXx+CSx4N/ZVaQo4O7+pWjVHOOBpnh+5ElYgrZ5LHnKeCvjBBftvwSiymdXs9uIKLAlU55Hb4ieSYvkwUAVCei6wYAdB6bCttNZm6EyEzvx8SU3iBKlwkoOO9dZI/8MSxg8eF5VNmQHZqrK9PLxrRxGAVbmaC57AYsuOS3pYzog9NJH3hLgi5AMjBT8oV2PrYxMlcIgX+7sGGhM1EQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM4PR11MB6117.namprd11.prod.outlook.com (2603:10b6:8:b3::19) by
- SA1PR11MB7062.namprd11.prod.outlook.com (2603:10b6:806:2b3::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8835.35; Fri, 20 Jun
- 2025 15:35:49 +0000
-Received: from DM4PR11MB6117.namprd11.prod.outlook.com
- ([fe80::d19:56fe:5841:77ca]) by DM4PR11MB6117.namprd11.prod.outlook.com
- ([fe80::d19:56fe:5841:77ca%4]) with mapi id 15.20.8835.027; Fri, 20 Jun 2025
- 15:35:49 +0000
-Date: Fri, 20 Jun 2025 17:35:36 +0200
-From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-To: Stanislav Fomichev <stfomichev@gmail.com>
-CC: Jason Xing <kerneljasonxing@gmail.com>, <davem@davemloft.net>,
-	<edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-	<bjorn@kernel.org>, <magnus.karlsson@intel.com>, <jonathan.lemon@gmail.com>,
-	<sdf@fomichev.me>, <ast@kernel.org>, <daniel@iogearbox.net>,
-	<hawk@kernel.org>, <john.fastabend@gmail.com>, <joe@dama.to>,
-	<willemdebruijn.kernel@gmail.com>, <bpf@vger.kernel.org>,
-	<netdev@vger.kernel.org>, Jason Xing <kernelxing@tencent.com>
-Subject: Re: [PATCH net-next] net: xsk: update tx queue consumer immdiately
- after transmission
-Message-ID: <aFV/yG6pFEPwrwDz@boxer>
-References: <20250619093641.70700-1-kerneljasonxing@gmail.com>
- <aFVr60tw3QJopcOo@mini-arch>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <aFVr60tw3QJopcOo@mini-arch>
-X-ClientProxiedBy: DUZP191CA0040.EURP191.PROD.OUTLOOK.COM
- (2603:10a6:10:4f8::18) To DM4PR11MB6117.namprd11.prod.outlook.com
- (2603:10b6:8:b3::19)
+ 15.2.1544.9; Fri, 20 Jun 2025 15:18:20 +0000
+From: Slava Imameev <slava.imameev@crowdstrike.com>
+To: <qmo@kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
+        <andrii@kernel.org>, <shuah@kernel.org>, <bpf@vger.kernel.org>
+CC: <martin.lau@linux.dev>, <eddyz87@gmail.com>, <song@kernel.org>,
+        <yonghong.song@linux.dev>, <john.fastabend@gmail.com>,
+        <kpsingh@kernel.org>, <sdf@fomichev.me>, <haoluo@google.com>,
+        <jolsa@kernel.org>, <mykolal@fb.com>, <slava.imameev@crowdstrike.com>,
+        <justin.deschamp@crowdstrike.com>, <mark.fontana@crowdstrike.com>,
+        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
+Subject: [PATCH bpf-next v4 1/2] bpftool: Use appropriate permissions for map access
+Date: Sat, 21 Jun 2025 01:18:11 +1000
+Message-ID: <20250620151812.13952-1-slava.imameev@crowdstrike.com>
+X-Mailer: git-send-email 2.39.5 (Apple Git-154)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR11MB6117:EE_|SA1PR11MB7062:EE_
-X-MS-Office365-Filtering-Correlation-Id: a61e584b-d292-4c14-78e2-08ddb0102230
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|376014|1800799024|366016;
-X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?wQGM3iqBK1bQv+wZFCF8iGZ8q8etbpHue0uMJ+RYR5t6YVXu3uqSRO2vJ0HN?=
- =?us-ascii?Q?FmDKL8fNnZKFl5JOsFxrhaYXJK2F0nRJ9Y2f3/BJSjqFzXqEGOd8mF506djI?=
- =?us-ascii?Q?WgUoV2EIhhWw4jiNbNmE3LghzyPVbgWjkqa7An0OaESD+gXcxdAAov61OkCH?=
- =?us-ascii?Q?BS6mka91kdaAyh03BsUjw/NtHE7aCSmYodh8lSaCjQdLvvHKmHJ7VZ8jOm7j?=
- =?us-ascii?Q?VA/rl3TedNWHsFx1P9q3VIW9ch8dJ2jsYDzknVuzZytSmJMKjSEM4ta1Zhqv?=
- =?us-ascii?Q?eJS32wcpkw5G+4O+XS2auyVQtQ/Pg4Nbok1bn3JC8GTnnuF0rpjHOwC+Q1EO?=
- =?us-ascii?Q?omxfwNswTFBdDFE5Ww36K99U4qXi6zkvVnqYKJn9loqOUjSWta4ELj5nM8MI?=
- =?us-ascii?Q?yV3+6D0iIhnWuLrQA/+H74Ky999GSL6PG/kvnPotTcXEHDYv1jmr0o3vVLhF?=
- =?us-ascii?Q?lIOTHPiYe+FyRGMypuOCiYdY/5abVqMoPHA+ggKiAz0FLKRdLrj3hTnzBy13?=
- =?us-ascii?Q?LpBxuMTM4yL2+7ke6Z9dDdhYV6or1T2KOVpS3gkjp+nLeNA9SljSRJpgBclo?=
- =?us-ascii?Q?C8mDJG8cOSYD1xdj/wMLe8rkE3mVObonGs30RYXwnvXVzVUSqbH8180+m3yt?=
- =?us-ascii?Q?gNK8/URLE9NqxwxC6jrQ3UGLlTuJvmGEpW1bU47Uz9rGD8FTL2louG7q3vRS?=
- =?us-ascii?Q?6uZnH9zIOC4jBFGju5Z/kspLttU/4kaH1MxsMSrsGyhgSWxxwYg7YRQEyQDO?=
- =?us-ascii?Q?f+GFvCpA5QuXDkEt0kKp8s7Me3HjPbk4HRP6ZG+pUMFbN9lKkpkgPfHv3/29?=
- =?us-ascii?Q?VljG1cHm+GtLecuWst4ZKJDa2ySmxrCFYzcp/e5IS51kuSWAu989Tpyj92OW?=
- =?us-ascii?Q?kSmWI249k4ys4QEWbJH4i1OBaZYT3KDO0YlUbyAPABDgUg9Gm6SmaMDlGvWh?=
- =?us-ascii?Q?R1yBW/KBUweQjbm3cXGi/d3C0wNveffUYZzrpKTvZrPTfdBtD8JkDWHx2Hjo?=
- =?us-ascii?Q?tAYvIO8BRdTNk9XWHXF7KBkM12RFGxknijDa+EyzgU4KRqjA/OLAAGIQXoFY?=
- =?us-ascii?Q?OOZ4ARtp3JlvxlsXLmxaD6xOigXhmcCIfRnAK56grYw+MA6kGByNmFBydGy/?=
- =?us-ascii?Q?4gvEYcLo6wiMUee7X6KmktKdhv9MXRrq0xhwA0QGm4MZQN4pzZR4DdhYN8i+?=
- =?us-ascii?Q?hRcd5/QMCu1MypKR35s6P7srdybTBoSGBvlFYeWh1qM0Sbl6X31lHPORwLhr?=
- =?us-ascii?Q?TWnzgV66dllxXO4nmDEH1/zjIu2tXbyLbRtg2yxEd0QEsK/+3ataQ58YrwSv?=
- =?us-ascii?Q?Cic/KhSenQRT5k9xM7kyc5DO1OHv97bBg0AMVHHJU0bC6xYQ5izfd69VsqP8?=
- =?us-ascii?Q?FVVaEJDp1pZaoByvZea4pNg9zcrZGoqkyrzgB0rAPHSnjOLZcA=3D=3D?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB6117.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(366016);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?XJLm1pDnLo6YiTDG2RH6CGcQR4KSC+ljFfWGmP3lQujBSJ1SQZRGJSmx31ue?=
- =?us-ascii?Q?teJpiWk+E+sanAAqbOE3mgEeeUPxIdCYyyZgf0DORnjQ/vLcsHN7HOtzGuc8?=
- =?us-ascii?Q?sBD41g9p+QWN7VVUTIuCLXrzFE+O7eJz7xesrxj0VZK62LSSdjOS39xTtj05?=
- =?us-ascii?Q?+ugYW4yDHhARj4iVhDMlw20luWks6EkiJqEwyPmBQG433hiNtah9wjhPzqNV?=
- =?us-ascii?Q?s26ASub1qp3vfY91byg/hYvZyhqIXPypSTs/OUx04CgVg0kHUjJjsFMkIr6j?=
- =?us-ascii?Q?fSXkn/X8ehR/2WMuuYRmIbdsrE0hoVsTIA9R0T3k2pTcxRAz0n8P55wkrWP6?=
- =?us-ascii?Q?V8eMBW2AaF66CrbZXlDy+bVVBghJNjJzCYT92CHaUWXTtTCYrtfeCR1BdQvS?=
- =?us-ascii?Q?cWCpfd6+GqDSEo4JCVg3SOGFjBBP1wB0McbnjpiRRwtTBKGsNkYdNi2nYJuN?=
- =?us-ascii?Q?3QJrD1AWN1qx10U4Cof3skxOyuG5IJcDHNWJryQYKnFfvdfaidusPqzG1UAn?=
- =?us-ascii?Q?7uZ2XkIDMzQy6OXwUtbJ0hZRIKKE6WUS3Nr/5QGPJbA+tghMiPgT6vUyQogc?=
- =?us-ascii?Q?3epdk24Mgahm2yakzxDow53nKmFCr/IevT5K7q5c/FqLYVcQ/su2Ft+wu0J4?=
- =?us-ascii?Q?4r0ORQOhRPtwN/+qPeCoO+JPLdnLUUbbfl6loBfbLlUoVkhdrznvhsziDbNT?=
- =?us-ascii?Q?Ql7AfeIWTQbIjVYIq8kbBmKOtFlBIBIlyWPaZ7wuFELu4R2KHi50GJDKDvz+?=
- =?us-ascii?Q?ft7DxMcxR1KLUfDdY3sb7UJN59NojG0uBHlAfkfeAsApXMCjOWa6k34rl2Ss?=
- =?us-ascii?Q?xmQ99SJKn2UVnXsNaJ15JlPnhxVM2KGnVNYnM/F1z6btH5ptw3ICFSfhj2sY?=
- =?us-ascii?Q?LMTudiiIhhltFuS0WKfR/wTnqEmqaMo2MMJ2VosgsWRlur7KLgZ4+iUCs7jn?=
- =?us-ascii?Q?TeHz97sN7vJ64D7YfJCbF8h/BqYco22YY36rR8lBow94zoV0K/UeF2/5n6Vs?=
- =?us-ascii?Q?la/+XUoNRcSC+KHFjMVykceK3qoG60PdjvrQJbGGCyR+K992vivvrtm4rzr3?=
- =?us-ascii?Q?0m2A+29M2aKVG7inVhswiyUZD96AZatenCyQCEf3WbdAALkr5STvBQqa5OVN?=
- =?us-ascii?Q?n5BnCpLne9Cg7J+XpIgCQsyCT3vfcLmrDuRnj8lj3eUVf/z/KPviKBydfVZ3?=
- =?us-ascii?Q?Q60aMfxhlNPQuTWudiMPl1JCDjUhkmLIYMMgVyHbCrc2c/7J+shPxB5cR/8y?=
- =?us-ascii?Q?nCAZHNKqzkLN1G3fxMgLsb66iF4tSldw0JJSsDVgpB2FflPEgW2CKSw6+E7d?=
- =?us-ascii?Q?5wJE6S4DWv4CVWLiJNJrUzBqpn3XCRd+T4KXCkS/Zc8u6dCTpDNhCAbXWjDp?=
- =?us-ascii?Q?k4vz8fKEwOB3YNaLEWBcIBjDoR5ZPIit4mmEzBtdO9vLwA9XWrpt6dx1MeQ4?=
- =?us-ascii?Q?+2thopWTlOHOs/AnTeLnf2NN85jMe/JZvwuOLRmvW9YF25xHOKOeawCzJQyv?=
- =?us-ascii?Q?Zk6gYH/lP8MM8qt5gFkkzDJptDvv7Uwno8WRwOxPN++m8Cpx5YfjJhvBMQzj?=
- =?us-ascii?Q?rKbpQ0Ob/tZ3vet3ncHDMh9pCiNEHLWMRreh8FzZzKpI2PAgcsNUKY8hiCQb?=
- =?us-ascii?Q?8Q=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: a61e584b-d292-4c14-78e2-08ddb0102230
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB6117.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jun 2025 15:35:49.7603
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: hm8+ToS98smJwmJVU7y5YLU6T8Ok6jFtEz3xDxVTWIJ86VBYy0cAJ8E8XcicMY+yQJj7B7cDccGzg1SSLkn9z468vx/v0sFkbb0qw/iPymM=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR11MB7062
-X-OriginatorOrg: intel.com
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: 04WPEXCH012.crowdstrike.sys (10.100.11.82) To
+ 04WPEXCH007.crowdstrike.sys (10.100.11.74)
+X-Disclaimer: USA
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjIwMDEwOCBTYWx0ZWRfX/sWTmckEtpjD
+ n4ZKATEUfllT4NWQF+0SyVuXzKmKibPG6sbqIKv//xmqnG8XSvei+hzDyMO2KoTzi+kDfQXazda
+ 50wqFr7tq21mKSx5RPRSc4gb7v6xXc4X+NOMVIbhZqT+o+Pv09Atz0Re3XkIYZir6/prUjqDRW/
+ nuzrOAeCvpmSRIWvbmQ2GM7SJXQXj/CwiNVnSDts3XCjuBe4KPDFxMLXSPtKG1GnBYmdi9HsBcX
+ BnCZYueU76x7AeukjzwFf5WDwMMtBmejDn4AVSQmNaFxKPwM4nZ6tyl+2sR1N/lQCFlprlZGUc9
+ 0wqtunNseisPTfHT9h8d1dWiblNfOvVm5FC1cp8KkRXI36wLB+hep2rmE3/F2Btnx+k1oQcO1y8
+ tzVCxs4YegyRT8YinRBDRficzZV2unroDeU0xrpYJ1W8STMhaL2oWWIC0HbhxLKJAGB+1KN+
+X-Proofpoint-GUID: 2-lb2QoQgZmdsPl4MEX188C2fxsRLnaT
+X-Proofpoint-ORIG-GUID: 2-lb2QoQgZmdsPl4MEX188C2fxsRLnaT
+X-Authority-Analysis: v=2.4 cv=fcmty1QF c=1 sm=1 tr=0 ts=68557bc2 cx=c_pps
+ a=1d8vc5iZWYKGYgMGCdbIRA==:117 a=1d8vc5iZWYKGYgMGCdbIRA==:17
+ a=EjBHVkixTFsA:10 a=6IFa9wvqVegA:10 a=pl6vuDidAAAA:8 a=y7mXRdQcq0g1OKeiM7QA:9
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-06-20_06,2025-06-20_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ phishscore=0 priorityscore=1501 bulkscore=0 suspectscore=0 lowpriorityscore=0
+ spamscore=0 mlxlogscore=999 impostorscore=0 mlxscore=0 malwarescore=0
+ adultscore=0 clxscore=1015 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
+ definitions=main-2506200108
 
-On Fri, Jun 20, 2025 at 07:10:51AM -0700, Stanislav Fomichev wrote:
-> On 06/19, Jason Xing wrote:
-> > From: Jason Xing <kernelxing@tencent.com>
-> > 
-> > For afxdp, the return value of sendto() syscall doesn't reflect how many
-> > descs handled in the kernel. One of use cases is that when user-space
-> > application tries to know the number of transmitted skbs and then decides
-> > if it continues to send, say, is it stopped due to max tx budget?
-> > 
-> > The following formular can be used after sending to learn how many
-> > skbs/descs the kernel takes care of:
-> > 
-> >   tx_queue.consumers_before - tx_queue.consumers_after
-> > 
-> > Prior to the current patch, the consumer of tx queue is not immdiately
-> > updated at the end of each sendto syscall, which leads the consumer
-> > value out-of-dated from the perspective of user space. So this patch
-> > requires store operation to pass the cached value to the shared value
-> > to handle the problem.
-> > 
-> > Signed-off-by: Jason Xing <kernelxing@tencent.com>
-> > ---
-> >  net/xdp/xsk.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> > 
-> > diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-> > index 7c47f665e9d1..3288ab2d67b4 100644
-> > --- a/net/xdp/xsk.c
-> > +++ b/net/xdp/xsk.c
-> > @@ -856,6 +856,8 @@ static int __xsk_generic_xmit(struct sock *sk)
-> >  	}
-> >  
-> >  out:
-> > +	__xskq_cons_release(xs->tx);
-> > +
-> >  	if (sent_frame)
-> >  		if (xsk_tx_writeable(xs))
-> >  			sk->sk_write_space(sk);
-> 
-> So for the "good" case we are going to write the cons twice? From
-> xskq_cons_peek_desc and from here? Maybe make this __xskq_cons_release
-> conditional ('if (err)')?
+Modify several functions in tools/bpf/bpftool/common.c to allow
+specification of requested access for file descriptors, such as
+read-only access.
 
-this patch updates a global state of producer whereas generic xmit loop
-updates local value. this global state is also updated within peeking
-function.
+Update bpftool to request only read access for maps when write
+access is not required. This fixes errors when reading from maps
+that are protected from modification via security_bpf_map.
 
-from quick look patch seems to be correct however my mind is in vacation
-mode so i'll take a second look on monday.
+Signed-off-by: Slava Imameev <slava.imameev@crowdstrike.com>
+---
+Changes in v2:
+- fix for a test compilation error: "conflicting types for 'bpf_fentry_test1'"
+Changes in v3:
+- Addressed review feedback
+- Converted the check for flags to an assert in map_parse_fds
+- Modified map_fd_by_name to keep an existing fd where possible
+- Fixed requested access for map delete command in do_delete
+- Changed requested access to RDONLY for inner map fd in do_create
+- Changed requested access to RDONLY for iterator fd in do_pin
+Changes in v4:
+- Explicitly included assert.h in common.c
+- Added read only access to map in build_btf_type_table
+---
 
-> 
-> I also wonder whether we should add a test for that? Should be easy to
-> verify by sending more than 32 packets. Is there a place in
-> tools/testing/selftests/bpf/xskxceiver.c to add that?
+tools/bpf/bpftool/btf.c
+---
+ tools/bpf/bpftool/btf.c           |  8 +++--
+ tools/bpf/bpftool/common.c        | 59 ++++++++++++++++++++++---------
+ tools/bpf/bpftool/iter.c          |  2 +-
+ tools/bpf/bpftool/link.c          |  2 +-
+ tools/bpf/bpftool/main.h          | 13 ++++---
+ tools/bpf/bpftool/map.c           | 56 +++++++++++++++++------------
+ tools/bpf/bpftool/map_perf_ring.c |  3 +-
+ tools/bpf/bpftool/prog.c          |  4 +--
+ 8 files changed, 96 insertions(+), 51 deletions(-)
+
+diff --git a/tools/bpf/bpftool/btf.c b/tools/bpf/bpftool/btf.c
+index 6b14cbfa58aa..946612029dee 100644
+--- a/tools/bpf/bpftool/btf.c
++++ b/tools/bpf/bpftool/btf.c
+@@ -905,7 +905,8 @@ static int do_dump(int argc, char **argv)
+ 			return -1;
+ 		}
+ 
+-		fd = map_parse_fd_and_info(&argc, &argv, &info, &len);
++		fd = map_parse_fd_and_info(&argc, &argv, &info, &len,
++					   BPF_F_RDONLY);
+ 		if (fd < 0)
+ 			return -1;
+ 
+@@ -1118,10 +1119,13 @@ build_btf_type_table(struct hashmap *tab, enum bpf_obj_type type,
+ 		[BPF_OBJ_PROG]		= "prog",
+ 		[BPF_OBJ_MAP]		= "map",
+ 	};
++	LIBBPF_OPTS(bpf_get_fd_by_id_opts, opts_ro);
+ 	__u32 btf_id, id = 0;
+ 	int err;
+ 	int fd;
+ 
++	opts_ro.open_flags = BPF_F_RDONLY;
++
+ 	while (true) {
+ 		switch (type) {
+ 		case BPF_OBJ_PROG:
+@@ -1151,7 +1155,7 @@ build_btf_type_table(struct hashmap *tab, enum bpf_obj_type type,
+ 			fd = bpf_prog_get_fd_by_id(id);
+ 			break;
+ 		case BPF_OBJ_MAP:
+-			fd = bpf_map_get_fd_by_id(id);
++			fd = bpf_map_get_fd_by_id_opts(id, &opts_ro);
+ 			break;
+ 		default:
+ 			err = -1;
+diff --git a/tools/bpf/bpftool/common.c b/tools/bpf/bpftool/common.c
+index ecfa790adc13..b07317d2842f 100644
+--- a/tools/bpf/bpftool/common.c
++++ b/tools/bpf/bpftool/common.c
+@@ -4,6 +4,7 @@
+ #ifndef _GNU_SOURCE
+ #define _GNU_SOURCE
+ #endif
++#include <assert.h>
+ #include <ctype.h>
+ #include <errno.h>
+ #include <fcntl.h>
+@@ -193,7 +194,8 @@ int mount_tracefs(const char *target)
+ 	return err;
+ }
+ 
+-int open_obj_pinned(const char *path, bool quiet)
++int open_obj_pinned(const char *path, bool quiet,
++		    const struct bpf_obj_get_opts *opts)
+ {
+ 	char *pname;
+ 	int fd = -1;
+@@ -205,7 +207,7 @@ int open_obj_pinned(const char *path, bool quiet)
+ 		goto out_ret;
+ 	}
+ 
+-	fd = bpf_obj_get(pname);
++	fd = bpf_obj_get_opts(pname, opts);
+ 	if (fd < 0) {
+ 		if (!quiet)
+ 			p_err("bpf obj get (%s): %s", pname,
+@@ -221,12 +223,13 @@ int open_obj_pinned(const char *path, bool quiet)
+ 	return fd;
+ }
+ 
+-int open_obj_pinned_any(const char *path, enum bpf_obj_type exp_type)
++int open_obj_pinned_any(const char *path, enum bpf_obj_type exp_type,
++			const struct bpf_obj_get_opts *opts)
+ {
+ 	enum bpf_obj_type type;
+ 	int fd;
+ 
+-	fd = open_obj_pinned(path, false);
++	fd = open_obj_pinned(path, false, opts);
+ 	if (fd < 0)
+ 		return -1;
+ 
+@@ -555,7 +558,7 @@ static int do_build_table_cb(const char *fpath, const struct stat *sb,
+ 	if (typeflag != FTW_F)
+ 		goto out_ret;
+ 
+-	fd = open_obj_pinned(fpath, true);
++	fd = open_obj_pinned(fpath, true, NULL);
+ 	if (fd < 0)
+ 		goto out_ret;
+ 
+@@ -928,7 +931,7 @@ int prog_parse_fds(int *argc, char ***argv, int **fds)
+ 		path = **argv;
+ 		NEXT_ARGP();
+ 
+-		(*fds)[0] = open_obj_pinned_any(path, BPF_OBJ_PROG);
++		(*fds)[0] = open_obj_pinned_any(path, BPF_OBJ_PROG, NULL);
+ 		if ((*fds)[0] < 0)
+ 			return -1;
+ 		return 1;
+@@ -965,7 +968,8 @@ int prog_parse_fd(int *argc, char ***argv)
+ 	return fd;
+ }
+ 
+-static int map_fd_by_name(char *name, int **fds)
++static int map_fd_by_name(char *name, int **fds,
++			  const struct bpf_get_fd_by_id_opts *opts)
+ {
+ 	unsigned int id = 0;
+ 	int fd, nb_fds = 0;
+@@ -973,6 +977,7 @@ static int map_fd_by_name(char *name, int **fds)
+ 	int err;
+ 
+ 	while (true) {
++		LIBBPF_OPTS(bpf_get_fd_by_id_opts, opts_ro);
+ 		struct bpf_map_info info = {};
+ 		__u32 len = sizeof(info);
+ 
+@@ -985,7 +990,9 @@ static int map_fd_by_name(char *name, int **fds)
+ 			return nb_fds;
+ 		}
+ 
+-		fd = bpf_map_get_fd_by_id(id);
++		/* Request a read-only fd to query the map info */
++		opts_ro.open_flags = BPF_F_RDONLY;
++		fd = bpf_map_get_fd_by_id_opts(id, &opts_ro);
+ 		if (fd < 0) {
+ 			p_err("can't get map by id (%u): %s",
+ 			      id, strerror(errno));
+@@ -1004,6 +1011,19 @@ static int map_fd_by_name(char *name, int **fds)
+ 			continue;
+ 		}
+ 
++		/* Get an fd with the requested options, if they differ
++		 * from the read-only options used to get the fd above.
++		 */
++		if (memcmp(opts, &opts_ro, sizeof(opts_ro))) {
++			close(fd);
++			fd = bpf_map_get_fd_by_id_opts(id, opts);
++			if (fd < 0) {
++				p_err("can't get map by id (%u): %s", id,
++					strerror(errno));
++				goto err_close_fds;
++			}
++		}
++
+ 		if (nb_fds > 0) {
+ 			tmp = realloc(*fds, (nb_fds + 1) * sizeof(int));
+ 			if (!tmp) {
+@@ -1023,8 +1043,13 @@ static int map_fd_by_name(char *name, int **fds)
+ 	return -1;
+ }
+ 
+-int map_parse_fds(int *argc, char ***argv, int **fds)
++int map_parse_fds(int *argc, char ***argv, int **fds, __u32 open_flags)
+ {
++	LIBBPF_OPTS(bpf_get_fd_by_id_opts, opts);
++
++	assert((open_flags & ~BPF_F_RDONLY) == 0);
++	opts.open_flags = open_flags;
++
+ 	if (is_prefix(**argv, "id")) {
+ 		unsigned int id;
+ 		char *endptr;
+@@ -1038,7 +1063,7 @@ int map_parse_fds(int *argc, char ***argv, int **fds)
+ 		}
+ 		NEXT_ARGP();
+ 
+-		(*fds)[0] = bpf_map_get_fd_by_id(id);
++		(*fds)[0] = bpf_map_get_fd_by_id_opts(id, &opts);
+ 		if ((*fds)[0] < 0) {
+ 			p_err("get map by id (%u): %s", id, strerror(errno));
+ 			return -1;
+@@ -1056,16 +1081,18 @@ int map_parse_fds(int *argc, char ***argv, int **fds)
+ 		}
+ 		NEXT_ARGP();
+ 
+-		return map_fd_by_name(name, fds);
++		return map_fd_by_name(name, fds, &opts);
+ 	} else if (is_prefix(**argv, "pinned")) {
+ 		char *path;
++		LIBBPF_OPTS(bpf_obj_get_opts, get_opts);
++		get_opts.file_flags = open_flags;
+ 
+ 		NEXT_ARGP();
+ 
+ 		path = **argv;
+ 		NEXT_ARGP();
+ 
+-		(*fds)[0] = open_obj_pinned_any(path, BPF_OBJ_MAP);
++		(*fds)[0] = open_obj_pinned_any(path, BPF_OBJ_MAP, &get_opts);
+ 		if ((*fds)[0] < 0)
+ 			return -1;
+ 		return 1;
+@@ -1075,7 +1102,7 @@ int map_parse_fds(int *argc, char ***argv, int **fds)
+ 	return -1;
+ }
+ 
+-int map_parse_fd(int *argc, char ***argv)
++int map_parse_fd(int *argc, char ***argv, __u32 open_flags)
+ {
+ 	int *fds = NULL;
+ 	int nb_fds, fd;
+@@ -1085,7 +1112,7 @@ int map_parse_fd(int *argc, char ***argv)
+ 		p_err("mem alloc failed");
+ 		return -1;
+ 	}
+-	nb_fds = map_parse_fds(argc, argv, &fds);
++	nb_fds = map_parse_fds(argc, argv, &fds, open_flags);
+ 	if (nb_fds != 1) {
+ 		if (nb_fds > 1) {
+ 			p_err("several maps match this handle");
+@@ -1103,12 +1130,12 @@ int map_parse_fd(int *argc, char ***argv)
+ }
+ 
+ int map_parse_fd_and_info(int *argc, char ***argv, struct bpf_map_info *info,
+-			  __u32 *info_len)
++			  __u32 *info_len, __u32 open_flags)
+ {
+ 	int err;
+ 	int fd;
+ 
+-	fd = map_parse_fd(argc, argv);
++	fd = map_parse_fd(argc, argv, open_flags);
+ 	if (fd < 0)
+ 		return -1;
+ 
+diff --git a/tools/bpf/bpftool/iter.c b/tools/bpf/bpftool/iter.c
+index 5c39c2ed36a2..df5f0d1e07e8 100644
+--- a/tools/bpf/bpftool/iter.c
++++ b/tools/bpf/bpftool/iter.c
+@@ -37,7 +37,7 @@ static int do_pin(int argc, char **argv)
+ 				return -1;
+ 			}
+ 
+-			map_fd = map_parse_fd(&argc, &argv);
++			map_fd = map_parse_fd(&argc, &argv, BPF_F_RDONLY);
+ 			if (map_fd < 0)
+ 				return -1;
+ 
+diff --git a/tools/bpf/bpftool/link.c b/tools/bpf/bpftool/link.c
+index 03513ffffb79..a773e05d5ade 100644
+--- a/tools/bpf/bpftool/link.c
++++ b/tools/bpf/bpftool/link.c
+@@ -117,7 +117,7 @@ static int link_parse_fd(int *argc, char ***argv)
+ 		path = **argv;
+ 		NEXT_ARGP();
+ 
+-		return open_obj_pinned_any(path, BPF_OBJ_LINK);
++		return open_obj_pinned_any(path, BPF_OBJ_LINK, NULL);
+ 	}
+ 
+ 	p_err("expected 'id' or 'pinned', got: '%s'?", **argv);
+diff --git a/tools/bpf/bpftool/main.h b/tools/bpf/bpftool/main.h
+index 9eb764fe4cc8..6db704fda5c0 100644
+--- a/tools/bpf/bpftool/main.h
++++ b/tools/bpf/bpftool/main.h
+@@ -15,6 +15,7 @@
+ 
+ #include <bpf/hashmap.h>
+ #include <bpf/libbpf.h>
++#include <bpf/bpf.h>
+ 
+ #include "json_writer.h"
+ 
+@@ -140,8 +141,10 @@ void get_prog_full_name(const struct bpf_prog_info *prog_info, int prog_fd,
+ int get_fd_type(int fd);
+ const char *get_fd_type_name(enum bpf_obj_type type);
+ char *get_fdinfo(int fd, const char *key);
+-int open_obj_pinned(const char *path, bool quiet);
+-int open_obj_pinned_any(const char *path, enum bpf_obj_type exp_type);
++int open_obj_pinned(const char *path, bool quiet,
++		    const struct bpf_obj_get_opts *opts);
++int open_obj_pinned_any(const char *path, enum bpf_obj_type exp_type,
++			const struct bpf_obj_get_opts *opts);
+ int mount_bpffs_for_file(const char *file_name);
+ int create_and_mount_bpffs_dir(const char *dir_name);
+ int do_pin_any(int argc, char **argv, int (*get_fd_by_id)(int *, char ***));
+@@ -167,10 +170,10 @@ int do_iter(int argc, char **argv) __weak;
+ int parse_u32_arg(int *argc, char ***argv, __u32 *val, const char *what);
+ int prog_parse_fd(int *argc, char ***argv);
+ int prog_parse_fds(int *argc, char ***argv, int **fds);
+-int map_parse_fd(int *argc, char ***argv);
+-int map_parse_fds(int *argc, char ***argv, int **fds);
++int map_parse_fd(int *argc, char ***argv, __u32 open_flags);
++int map_parse_fds(int *argc, char ***argv, int **fds, __u32 open_flags);
+ int map_parse_fd_and_info(int *argc, char ***argv, struct bpf_map_info *info,
+-			  __u32 *info_len);
++			  __u32 *info_len, __u32 open_flags);
+ 
+ struct bpf_prog_linfo;
+ #if defined(HAVE_LLVM_SUPPORT) || defined(HAVE_LIBBFD_SUPPORT)
+diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
+index 81cc668b4b05..c9de44a45778 100644
+--- a/tools/bpf/bpftool/map.c
++++ b/tools/bpf/bpftool/map.c
+@@ -337,9 +337,9 @@ static void fill_per_cpu_value(struct bpf_map_info *info, void *value)
+ 		memcpy(value + i * step, value, info->value_size);
+ }
+ 
+-static int parse_elem(char **argv, struct bpf_map_info *info,
+-		      void *key, void *value, __u32 key_size, __u32 value_size,
+-		      __u32 *flags, __u32 **value_fd)
++static int parse_elem(char **argv, struct bpf_map_info *info, void *key,
++		      void *value, __u32 key_size, __u32 value_size,
++		      __u32 *flags, __u32 **value_fd, __u32 open_flags)
+ {
+ 	if (!*argv) {
+ 		if (!key && !value)
+@@ -362,7 +362,7 @@ static int parse_elem(char **argv, struct bpf_map_info *info,
+ 			return -1;
+ 
+ 		return parse_elem(argv, info, NULL, value, key_size, value_size,
+-				  flags, value_fd);
++				  flags, value_fd, open_flags);
+ 	} else if (is_prefix(*argv, "value")) {
+ 		int fd;
+ 
+@@ -388,7 +388,7 @@ static int parse_elem(char **argv, struct bpf_map_info *info,
+ 				return -1;
+ 			}
+ 
+-			fd = map_parse_fd(&argc, &argv);
++			fd = map_parse_fd(&argc, &argv, open_flags);
+ 			if (fd < 0)
+ 				return -1;
+ 
+@@ -424,7 +424,7 @@ static int parse_elem(char **argv, struct bpf_map_info *info,
+ 		}
+ 
+ 		return parse_elem(argv, info, key, NULL, key_size, value_size,
+-				  flags, NULL);
++				  flags, NULL, open_flags);
+ 	} else if (is_prefix(*argv, "any") || is_prefix(*argv, "noexist") ||
+ 		   is_prefix(*argv, "exist")) {
+ 		if (!flags) {
+@@ -440,7 +440,7 @@ static int parse_elem(char **argv, struct bpf_map_info *info,
+ 			*flags = BPF_EXIST;
+ 
+ 		return parse_elem(argv + 1, info, key, value, key_size,
+-				  value_size, NULL, value_fd);
++				  value_size, NULL, value_fd, open_flags);
+ 	}
+ 
+ 	p_err("expected key or value, got: %s", *argv);
+@@ -639,7 +639,7 @@ static int do_show_subset(int argc, char **argv)
+ 		p_err("mem alloc failed");
+ 		return -1;
+ 	}
+-	nb_fds = map_parse_fds(&argc, &argv, &fds);
++	nb_fds = map_parse_fds(&argc, &argv, &fds, BPF_F_RDONLY);
+ 	if (nb_fds < 1)
+ 		goto exit_free;
+ 
+@@ -672,12 +672,15 @@ static int do_show_subset(int argc, char **argv)
+ 
+ static int do_show(int argc, char **argv)
+ {
++	LIBBPF_OPTS(bpf_get_fd_by_id_opts, opts);
+ 	struct bpf_map_info info = {};
+ 	__u32 len = sizeof(info);
+ 	__u32 id = 0;
+ 	int err;
+ 	int fd;
+ 
++	opts.open_flags = BPF_F_RDONLY;
++
+ 	if (show_pinned) {
+ 		map_table = hashmap__new(hash_fn_for_key_as_id,
+ 					 equal_fn_for_key_as_id, NULL);
+@@ -707,7 +710,7 @@ static int do_show(int argc, char **argv)
+ 			break;
+ 		}
+ 
+-		fd = bpf_map_get_fd_by_id(id);
++		fd = bpf_map_get_fd_by_id_opts(id, &opts);
+ 		if (fd < 0) {
+ 			if (errno == ENOENT)
+ 				continue;
+@@ -909,7 +912,7 @@ static int do_dump(int argc, char **argv)
+ 		p_err("mem alloc failed");
+ 		return -1;
+ 	}
+-	nb_fds = map_parse_fds(&argc, &argv, &fds);
++	nb_fds = map_parse_fds(&argc, &argv, &fds, BPF_F_RDONLY);
+ 	if (nb_fds < 1)
+ 		goto exit_free;
+ 
+@@ -997,7 +1000,7 @@ static int do_update(int argc, char **argv)
+ 	if (argc < 2)
+ 		usage();
+ 
+-	fd = map_parse_fd_and_info(&argc, &argv, &info, &len);
++	fd = map_parse_fd_and_info(&argc, &argv, &info, &len, 0);
+ 	if (fd < 0)
+ 		return -1;
+ 
+@@ -1006,7 +1009,7 @@ static int do_update(int argc, char **argv)
+ 		goto exit_free;
+ 
+ 	err = parse_elem(argv, &info, key, value, info.key_size,
+-			 info.value_size, &flags, &value_fd);
++			 info.value_size, &flags, &value_fd, 0);
+ 	if (err)
+ 		goto exit_free;
+ 
+@@ -1076,7 +1079,7 @@ static int do_lookup(int argc, char **argv)
+ 	if (argc < 2)
+ 		usage();
+ 
+-	fd = map_parse_fd_and_info(&argc, &argv, &info, &len);
++	fd = map_parse_fd_and_info(&argc, &argv, &info, &len, BPF_F_RDONLY);
+ 	if (fd < 0)
+ 		return -1;
+ 
+@@ -1084,7 +1087,8 @@ static int do_lookup(int argc, char **argv)
+ 	if (err)
+ 		goto exit_free;
+ 
+-	err = parse_elem(argv, &info, key, NULL, info.key_size, 0, NULL, NULL);
++	err = parse_elem(argv, &info, key, NULL, info.key_size, 0, NULL, NULL,
++			 BPF_F_RDONLY);
+ 	if (err)
+ 		goto exit_free;
+ 
+@@ -1127,7 +1131,7 @@ static int do_getnext(int argc, char **argv)
+ 	if (argc < 2)
+ 		usage();
+ 
+-	fd = map_parse_fd_and_info(&argc, &argv, &info, &len);
++	fd = map_parse_fd_and_info(&argc, &argv, &info, &len, BPF_F_RDONLY);
+ 	if (fd < 0)
+ 		return -1;
+ 
+@@ -1140,8 +1144,8 @@ static int do_getnext(int argc, char **argv)
+ 	}
+ 
+ 	if (argc) {
+-		err = parse_elem(argv, &info, key, NULL, info.key_size, 0,
+-				 NULL, NULL);
++		err = parse_elem(argv, &info, key, NULL, info.key_size, 0, NULL,
++				 NULL, BPF_F_RDONLY);
+ 		if (err)
+ 			goto exit_free;
+ 	} else {
+@@ -1198,7 +1202,7 @@ static int do_delete(int argc, char **argv)
+ 	if (argc < 2)
+ 		usage();
+ 
+-	fd = map_parse_fd_and_info(&argc, &argv, &info, &len);
++	fd = map_parse_fd_and_info(&argc, &argv, &info, &len, 0);
+ 	if (fd < 0)
+ 		return -1;
+ 
+@@ -1209,7 +1213,8 @@ static int do_delete(int argc, char **argv)
+ 		goto exit_free;
+ 	}
+ 
+-	err = parse_elem(argv, &info, key, NULL, info.key_size, 0, NULL, NULL);
++	err = parse_elem(argv, &info, key, NULL, info.key_size, 0, NULL, NULL,
++			 0);
+ 	if (err)
+ 		goto exit_free;
+ 
+@@ -1226,11 +1231,16 @@ static int do_delete(int argc, char **argv)
+ 	return err;
+ }
+ 
++static int map_parse_read_only_fd(int *argc, char ***argv)
++{
++	return map_parse_fd(argc, argv, BPF_F_RDONLY);
++}
++
+ static int do_pin(int argc, char **argv)
+ {
+ 	int err;
+ 
+-	err = do_pin_any(argc, argv, map_parse_fd);
++	err = do_pin_any(argc, argv, map_parse_read_only_fd);
+ 	if (!err && json_output)
+ 		jsonw_null(json_wtr);
+ 	return err;
+@@ -1319,7 +1329,7 @@ static int do_create(int argc, char **argv)
+ 			if (!REQ_ARGS(2))
+ 				usage();
+ 			inner_map_fd = map_parse_fd_and_info(&argc, &argv,
+-							     &info, &len);
++							     &info, &len, BPF_F_RDONLY);
+ 			if (inner_map_fd < 0)
+ 				return -1;
+ 			attr.inner_map_fd = inner_map_fd;
+@@ -1368,7 +1378,7 @@ static int do_pop_dequeue(int argc, char **argv)
+ 	if (argc < 2)
+ 		usage();
+ 
+-	fd = map_parse_fd_and_info(&argc, &argv, &info, &len);
++	fd = map_parse_fd_and_info(&argc, &argv, &info, &len, 0);
+ 	if (fd < 0)
+ 		return -1;
+ 
+@@ -1407,7 +1417,7 @@ static int do_freeze(int argc, char **argv)
+ 	if (!REQ_ARGS(2))
+ 		return -1;
+ 
+-	fd = map_parse_fd(&argc, &argv);
++	fd = map_parse_fd(&argc, &argv, 0);
+ 	if (fd < 0)
+ 		return -1;
+ 
+diff --git a/tools/bpf/bpftool/map_perf_ring.c b/tools/bpf/bpftool/map_perf_ring.c
+index 552b4ca40c27..bcb767e2d673 100644
+--- a/tools/bpf/bpftool/map_perf_ring.c
++++ b/tools/bpf/bpftool/map_perf_ring.c
+@@ -128,7 +128,8 @@ int do_event_pipe(int argc, char **argv)
+ 	int err, map_fd;
+ 
+ 	map_info_len = sizeof(map_info);
+-	map_fd = map_parse_fd_and_info(&argc, &argv, &map_info, &map_info_len);
++	map_fd = map_parse_fd_and_info(&argc, &argv, &map_info, &map_info_len,
++				       0);
+ 	if (map_fd < 0)
+ 		return -1;
+ 
+diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
+index 96eea8a67225..deeaa5c1ed7d 100644
+--- a/tools/bpf/bpftool/prog.c
++++ b/tools/bpf/bpftool/prog.c
+@@ -1062,7 +1062,7 @@ static int parse_attach_detach_args(int argc, char **argv, int *progfd,
+ 	if (!REQ_ARGS(2))
+ 		return -EINVAL;
+ 
+-	*mapfd = map_parse_fd(&argc, &argv);
++	*mapfd = map_parse_fd(&argc, &argv, 0);
+ 	if (*mapfd < 0)
+ 		return *mapfd;
+ 
+@@ -1608,7 +1608,7 @@ static int load_with_options(int argc, char **argv, bool first_prog_only)
+ 			}
+ 			NEXT_ARG();
+ 
+-			fd = map_parse_fd(&argc, &argv);
++			fd = map_parse_fd(&argc, &argv, 0);
+ 			if (fd < 0)
+ 				goto err_free_reuse_maps;
+ 
+-- 
+2.34.1
+
