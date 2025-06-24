@@ -1,61 +1,61 @@
-Received: from mail-ed1-f68.google.com (mail-ed1-f68.google.com [209.85.208.68])
+Received: from mail-ej1-f67.google.com (mail-ej1-f67.google.com [209.85.218.67])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0973D192D87
-	for <bpf@vger.kernel.org>; Tue, 24 Jun 2025 03:12:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.68
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A23D0192D87
+	for <bpf@vger.kernel.org>; Tue, 24 Jun 2025 03:12:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.67
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750734778; cv=none; b=Uw201NdQqX9f1GupWN0876QjOH8Q65gmlAjTBY3y64/5GOEYWBFpiF/ZDRiaH3J99QwLbDTP7uY59JjsOmroX58DSofhigJDp+RFOAnA/xniBYpohgK3kAFE1EjHwT7tv3EO/PjCqJ7wlAhMLroAFtXeaLcdbjZwq7fcymtzVmU=
+	t=1750734781; cv=none; b=sGsRxyKQ14LHmF3blvFTARNNPrz/2NHGHRstna0eb6a4eIAoTsxz+XQxCMYYy4pwR6iUd6tQHNrHjKSQK0bYBqA2UnyGq8wx5TgB5Ee3Yx/qvGcla7Mz2Stn7eGFVpGVizBaAEsCtzbHyrhvW3R9VuzbVz4AmIGBTe9ofz3qR74=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750734778; c=relaxed/simple;
-	bh=t2BRcr2+6gJr3KgAcNgxMy3UcbJhiQrwP9oBAKjG6WA=;
+	s=arc-20240116; t=1750734781; c=relaxed/simple;
+	bh=7rMNU6al8xl2IR7waRixJcjrw776mAeFeVF8NFNnCQ0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Mpr1Vdaj6P5LCwblG6109i+hIftgJSmc1JESmpGSdk4HFz6qIsU/uRtASpH7QE0xj5zufQLbuFEE9zJ32NzfxnO1xkaBKsjguWZxHpCS/Fkgn0b1JzcVn/QtM26daTSWKMvrokggaHfJJg47+YvCoBu2lbUCLMg9n2lBqU7JJ/k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ew7c9z3P; arc=none smtp.client-ip=209.85.208.68
+	 MIME-Version; b=aXAdLLcZBEO20mAkplBxVbxFG71wPrYsAgtwJwSZHT/pYTPBpcnZD/onPipc9pzPzPY58b74hDv9S5zBNIUg7CoRwi+q/vpTHmLUFyXh6h7X0jDdyFVTPWT23kwgq4PydicFPA+hjuSgHFn97C7jerJzvMy/r+oETQn+liwmPvM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hBNiN2U4; arc=none smtp.client-ip=209.85.218.67
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ew7c9z3P"
-Received: by mail-ed1-f68.google.com with SMTP id 4fb4d7f45d1cf-60794c43101so7338378a12.1
-        for <bpf@vger.kernel.org>; Mon, 23 Jun 2025 20:12:56 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hBNiN2U4"
+Received: by mail-ej1-f67.google.com with SMTP id a640c23a62f3a-ade48b24c97so848082466b.2
+        for <bpf@vger.kernel.org>; Mon, 23 Jun 2025 20:12:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1750734775; x=1751339575; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1750734778; x=1751339578; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=t/hTuWeeMXLcMNlg+KK9mgTVa/gu4Le9bSuoKeSo/Ak=;
-        b=Ew7c9z3P8NpYHU3iQldNHNSRYuHjnwQwD4ArzXc6xa+Zp2KlyIXX/N1Jwlh3Be4Ol3
-         CpTUTb5w6zoii/jhB3vjNn402/x4j+vH/UVQKgrF4fhfamtxoQWkjz2I1ZEqB7Ytt6AI
-         6pAWzUm8JOWwbdmzRcQvcn/hH5W517HouoY5a4lIG6Ho+Qg3H73qVfLMEhTQTjTqghQE
-         jikNTsQRWp37EM8H6KvwndBk+MGvLdfBVxMwiwt1j3Yzax6NBSScRikTlftGBJNUoWZx
-         wep72/7EmXyvkuH3+LOT973UFhev1g9UXzrFyoEFWz5vIZQgvv5A4Q8b7R9a25rQSMlA
-         9D3Q==
+        bh=vsOZrkl4yZUq7zsnX75WI81xSlFYBwTl7ifJCHRa8AI=;
+        b=hBNiN2U4r8CgAXftK44x3Tgb6NmlibswmXrYUKEV1mAAx+Wll9r3sRMF3m0mdEWEhd
+         Eo/AAJHpdDzd/ocQj9JfCbWCk6oML7uMt9xhXBDf14HV3YGljSNqpyJLdgNoI6qIPXCk
+         RCUH6Tt4XPL4/StSUctU4HM5LCznKVo2CMsryWAkqZFD3Zfsv3Wd7+RPEVxaQANjP2q3
+         QSsLXXL6DjTh8dQYdnE+EQiz+UW++ilvjUCFkqyVqGKpyQ+DupGX68XTvIe/GK6qyuTR
+         fkeoEL9uwBzIxRy0UPXvsTd2jmrrKU1VxUgOxqwuu9jlZTKwdeTcciPng/PeZzuZSkCE
+         6mTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750734775; x=1751339575;
+        d=1e100.net; s=20230601; t=1750734778; x=1751339578;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=t/hTuWeeMXLcMNlg+KK9mgTVa/gu4Le9bSuoKeSo/Ak=;
-        b=grKYPraFRougp59VZfB7Xiea0/AC5+N024Wh8GtTvxjaStqA/s07ieNX3LHZhhhF9k
-         2bPTrQP8svUcw0B551SUfmQetsooOYElXlQDrcSfoYzZBKEcttajAaJBWwPJ4SR4tC6s
-         TRGP+fnEbIm4Vf1JoU0pKmahLY9g8kf1YR2/II/l/g/kYhaq+pstzBTXnGBQoooFhAhP
-         0Nti1AOITeDhTH7hluVZYUvNVbshilOVFky7oBlc8/kkPJOh2DwdqV5aUBYBEONhWQqL
-         7uEBVrPi4Vs5WYmjEfc/hWW79HQvA2E6nQFOF6jPMe+AvRyN+DaH0OmY7T5i76VC1Cbd
-         6ULg==
-X-Gm-Message-State: AOJu0Yzfzu+yXS9woT9dRO6SRfpV8I/V587eiFQ2JfMvBg382VosKSPR
-	F8k8eS6slXkOelU38eiJAn0KDMPUhgFFoMAsA57ib/Yisslb8qGhoRx7A1scSP1TgI3Z4w==
-X-Gm-Gg: ASbGncuYrnMOO/zVCehQcJ9+C48caytqoJrYjQrviN7gAk1Kq2GL+4aLZXEi+QhdgFb
-	zqz+A7O1F0MdztkfsqCJSZGiLSL9hVLxahVlU6NAnoDRhdicmCivDh3dUvC4tJfA6k+SWlSdF+o
-	mi8cZjdioOCzaNQOIy9+BeRtMuUAIt5Ji3ko3NlQAUS66ADsMa33wFRo6LPqYOcdusd9EPH5Dw2
-	8r03N5VM7UmUSVs89ipvNLJbDtPavEe15+fiZYEwqhU/Efd7ddS8wAT4r1oyAsQKg/WqY4JODaI
-	zq9GZ9gywmf680NaH1AlXT5PZ4UNL5wdnshLkywtavrd4wzSq84=
-X-Google-Smtp-Source: AGHT+IFJVhrCIGjyPV0nn8HwscwWYl2gvyCpGkUdjX9TscjB3PVqmZnYNzrmEk5D8sdL9FmcNH8sNg==
-X-Received: by 2002:a05:6402:5241:b0:607:77ed:19da with SMTP id 4fb4d7f45d1cf-60a1cd1a899mr12442922a12.1.1750734774963;
-        Mon, 23 Jun 2025 20:12:54 -0700 (PDT)
-Received: from localhost ([2a03:2880:30ff:4::])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-60c2f4a61b8sm346393a12.75.2025.06.23.20.12.54
+        bh=vsOZrkl4yZUq7zsnX75WI81xSlFYBwTl7ifJCHRa8AI=;
+        b=u/3xMdrYrYsgvPac18yVfkWDhNOhhRspo3ws7m+rYy3+mClt0S7+yFSfgEhZQUmAIP
+         w4lzOU3sk6l0Rwr7AuB9esbC2tSK9ColWeBaV4qoRQpE8AxpDFcDog9K/sfZZrYBjWqw
+         OJ8ArJ+KGnikAQ8z03d87TqyXSLtrhqd+Yel8AjBPsozarQu0qg1oabFh5GsE+ZMS3eq
+         B6g02ubh0O+/2Fs0mVvIZbkcmLJKhGrOqSpFMQaSZ7BOdUkRVsSpsTSwZ2lZ5E5uu+vC
+         YhGLf1K3yAk4X9uWo0XEwykI79/JLS7kCkjm+ReSXUpUXfyWkZKH9Z1PjHPKZ1CExlby
+         UBJw==
+X-Gm-Message-State: AOJu0YwpMDAuE0PJeyTzW1tWvUxZ2LiFnjocjeULoTHVuR9rzo90UlUn
+	VLuDav8xPmiEcKUZhBFyFXIU2TrT6pWl/BddCOqFxh1UL6wfmAxT9RkaaVQ+QpDkouab0Q==
+X-Gm-Gg: ASbGncvtFdkzOVmz2JrnBSKf8rzxoxBRK/ydYxWVuXF5xU9RYgTRqQ7aES0waiFP8AL
+	invoMe+1cfnw8fiu5oXXzdoHInVNcU+599EXLoG6/QqYnDktujSiNYKlB8a4l0Sd8p3P7oP72Jq
+	itx3b6fFabiP5Tf6RF0k/RcA5kEcpN2ZzyzoAjEdptW5nQaJ+SqOtRA+rjSO5iWzTj0zgmJxggt
+	oACx4DldqNjrXhne3kx1f2R0rc9Fso6c4ycmIfN0JS3oaSzTkc4XAyQdp6O4n3poEI42kY3VO3V
+	mlRRLyzyWZZ9xHOyKLNyJ8nUfdPuYCCLM/dq4S1UkTXaKL1Pwxm8MisxiP9gcA==
+X-Google-Smtp-Source: AGHT+IEK5DSQiue5KAzUDB4iBoEy6Cat2h+azamrBUtAH/im4AoYVEL4li/2aDF7A9EA4QQ79EfG1Q==
+X-Received: by 2002:a17:906:fe0c:b0:adf:f82f:fe0a with SMTP id a640c23a62f3a-ae0579bc670mr1298548366b.16.1750734777605;
+        Mon, 23 Jun 2025 20:12:57 -0700 (PDT)
+Received: from localhost ([2a03:2880:30ff:2::])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ae053ecbda9sm794004266b.48.2025.06.23.20.12.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Jun 2025 20:12:54 -0700 (PDT)
+        Mon, 23 Jun 2025 20:12:57 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -68,9 +68,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Matt Bobrowski <mattbobrowski@google.com>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v3 01/12] bpf: Refactor bprintf buffer support
-Date: Mon, 23 Jun 2025 20:12:41 -0700
-Message-ID: <20250624031252.2966759-2-memxor@gmail.com>
+Subject: [PATCH bpf-next v3 03/12] bpf: Add function to extract program source info
+Date: Mon, 23 Jun 2025 20:12:43 -0700
+Message-ID: <20250624031252.2966759-4-memxor@gmail.com>
 X-Mailer: git-send-email 2.47.1
 In-Reply-To: <20250624031252.2966759-1-memxor@gmail.com>
 References: <20250624031252.2966759-1-memxor@gmail.com>
@@ -80,128 +80,93 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4083; h=from:subject; bh=t2BRcr2+6gJr3KgAcNgxMy3UcbJhiQrwP9oBAKjG6WA=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBoWhWdXAGZufG0sXf1qzhje+9cXBSx0KqK77OawF/6 x2mr+K2JAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCaFoVnQAKCRBM4MiGSL8Ryu+LD/ 9phmxyP0zhTda9S5hOAx9H7rozgMUZBfivYG9ARjEuAseUMg38kPexRdWoeg3WpE/x/Rhwl3+oqGXp o08C7WwleUqcOkcjQYh98P0zXcsOfP9ebnm/VoXGXc75bDQBvCLMe7IfgjU2AWAo2wXmwgOjz+Gqtb OXff/JYzgYRBkRBdSGl/diwoETliz2EVCRRIl+tkG/uk+2alK+0YdA8+AjCBm+9p9KaimJ4vtaTkYr RDzC2cGcnU7ugmV5cnGxM1LK6kquVOZF+BcXqjgH813CXgnascY1x6jigxumyaQBlk1m5bb16YR8JJ nXKh9ZBXLMpj08QsdtrVrC9MoCZeav+JjkYEmw70BietO4rrs8uPGiK3gNHYt2M+xzbiat+Ir9odOF Xd03bHEx4Jk2QSv4w+SNOVwvQ6hX9knSHIBwj/LEhlXeWgoGLjzsMVPn+oOC+nsZoPYtxCLny0Ief6 dcVt9uGWuiE58AEJAU67F0zbLPqaqkqrGGlm6gnL4E9CmhVwdgkvh+CyRN6cRGZ5JZ7BKCZYuPI2/p THDuVQ+cVOVFM26x9jNAOKHtHDnZXLhagZLmBo31b2b+XSmW3BxNVjBHySw58QBj/TRwlPYnVK9SyU 7QpdjoNkZo+247T6mQnYFG8zw6si99+WsX9rcLpFXphfwYS8CJGBVMhLcl1w==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2676; h=from:subject; bh=7rMNU6al8xl2IR7waRixJcjrw776mAeFeVF8NFNnCQ0=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBoWhWdL/vgUQymZn62fKNSo8Cls4vb8vw1DqY6O7qM W5mPk12JAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCaFoVnQAKCRBM4MiGSL8RyoGLD/ 4rAbX2dn739buXT/2Q6lDVwf5169lf51Yscsfz7aij8HACmYo4CnNk7L3esbhPJc27bXzwBr3ASe2j aHd6JXQHG/8q2XCqo/U/YmqkXAaDaZxoikIj1RruST56wlag3YAl9ilkXnMMDaIwAksFQ8gW41CQEv wcG6BrQz8ger6AW1ss1/Q5KVsVmKVBL/LM61RKSVC0a/N7Cumo6VlaxG3WXxK2/VXoCqn1eqlDp3YS O84eyZ7CqOOp4l+8mKOevCJAwb5HMNuCF4r07G32WU+TrLYhEeBUnv4zKt51mzPIzVB3KZn0aRDnWU HByTNYsEAGbTaG1Rq4avALrEO2eA0dXoi88x5I0+LrFcuCqN0xibBThHH2D0iriNBmwayRYiTOLW0a Wv4nJqBLVfnP0Fqd4AwJ5VqFrS36TKae/TtaLzsV6gu7mHZUbRwphV32Uh8GM3JkAvqG4j4wp0hDHe zgexq/y+e+atP6h9KM3BMR/bKrUKehlNBXK09s+0vtxqTXWHq2CNxrrSML2mGIu6ufiAGAJFRI2/UO HwAE3rvq4OB/9agSBHgA2LXK4jjQmKgnRtfsW0kD0VRNYQ1UxIyniH63Dj+80jn3tIYf5DBs58zGcy ty6kubOK+iKSeTgxv1Chpp3LxYELGRqgwVqp1gA7v/VTj5kr8zmDuz0W3hbA==
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=4BBE2A7E06ECF9D5823C61114CE0C88648BF11CA
 Content-Transfer-Encoding: 8bit
 
-Refactor code to be able to get and put bprintf buffers and use
-bpf_printf_prepare independently. This will be used in the next patch to
-implement BPF streams support, particularly as a staging buffer for
-strings that need to be formatted and then allocated and pushed into a
+Prepare a function for use in future patches that can extract the file
+info, line info, and the source line number for a given BPF program
+provided it's program counter.
+
+Only the basename of the file path is provided, given it can be
+excessively long in some cases.
+
+This will be used in later patches to print source info to the BPF
 stream.
 
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- include/linux/bpf.h  | 15 ++++++++++++++-
- kernel/bpf/helpers.c | 26 +++++++++++---------------
- 2 files changed, 25 insertions(+), 16 deletions(-)
+ include/linux/bpf.h |  3 +++
+ kernel/bpf/core.c   | 47 +++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 50 insertions(+)
 
 diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 5dd556e89cce..4fff0cee8622 100644
+index cdd726cfe622..f30697c72ba9 100644
 --- a/include/linux/bpf.h
 +++ b/include/linux/bpf.h
-@@ -3550,6 +3550,16 @@ bool btf_id_set_contains(const struct btf_id_set *set, u32 id);
- #define MAX_BPRINTF_VARARGS		12
- #define MAX_BPRINTF_BUF			1024
- 
-+/* Per-cpu temp buffers used by printf-like helpers to store the bprintf binary
-+ * arguments representation.
-+ */
-+#define MAX_BPRINTF_BIN_ARGS	512
-+
-+struct bpf_bprintf_buffers {
-+	char bin_args[MAX_BPRINTF_BIN_ARGS];
-+	char buf[MAX_BPRINTF_BUF];
-+};
-+
- struct bpf_bprintf_data {
- 	u32 *bin_args;
- 	char *buf;
-@@ -3557,9 +3567,12 @@ struct bpf_bprintf_data {
- 	bool get_buf;
- };
- 
--int bpf_bprintf_prepare(char *fmt, u32 fmt_size, const u64 *raw_args,
-+int bpf_bprintf_prepare(const char *fmt, u32 fmt_size, const u64 *raw_args,
- 			u32 num_args, struct bpf_bprintf_data *data);
- void bpf_bprintf_cleanup(struct bpf_bprintf_data *data);
-+int bpf_try_get_buffers(struct bpf_bprintf_buffers **bufs);
-+void bpf_put_buffers(void);
-+
- 
- #ifdef CONFIG_BPF_LSM
- void bpf_cgroup_atype_get(u32 attach_btf_id, int cgroup_atype);
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index b71e428ad936..67d48f9fb173 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -763,22 +763,13 @@ static int bpf_trace_copy_string(char *buf, void *unsafe_ptr, char fmt_ptype,
- 	return -EINVAL;
+@@ -3667,4 +3667,7 @@ static inline bool bpf_is_subprog(const struct bpf_prog *prog)
+ 	return prog->aux->func_idx != 0;
  }
  
--/* Per-cpu temp buffers used by printf-like helpers to store the bprintf binary
-- * arguments representation.
-- */
--#define MAX_BPRINTF_BIN_ARGS	512
--
- /* Support executing three nested bprintf helper calls on a given CPU */
- #define MAX_BPRINTF_NEST_LEVEL	3
--struct bpf_bprintf_buffers {
--	char bin_args[MAX_BPRINTF_BIN_ARGS];
--	char buf[MAX_BPRINTF_BUF];
--};
++int bpf_prog_get_file_line(struct bpf_prog *prog, unsigned long ip, const char **filep,
++			   const char **linep, int *nump);
++
+ #endif /* _LINUX_BPF_H */
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index f0def24573ae..5c6e9fbb5508 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -3213,3 +3213,50 @@ EXPORT_SYMBOL(bpf_stats_enabled_key);
  
- static DEFINE_PER_CPU(struct bpf_bprintf_buffers[MAX_BPRINTF_NEST_LEVEL], bpf_bprintf_bufs);
- static DEFINE_PER_CPU(int, bpf_bprintf_nest_level);
- 
--static int try_get_buffers(struct bpf_bprintf_buffers **bufs)
-+int bpf_try_get_buffers(struct bpf_bprintf_buffers **bufs)
- {
- 	int nest_level;
- 
-@@ -794,16 +785,21 @@ static int try_get_buffers(struct bpf_bprintf_buffers **bufs)
- 	return 0;
- }
- 
--void bpf_bprintf_cleanup(struct bpf_bprintf_data *data)
-+void bpf_put_buffers(void)
- {
--	if (!data->bin_args && !data->buf)
--		return;
- 	if (WARN_ON_ONCE(this_cpu_read(bpf_bprintf_nest_level) == 0))
- 		return;
- 	this_cpu_dec(bpf_bprintf_nest_level);
- 	preempt_enable();
- }
- 
-+void bpf_bprintf_cleanup(struct bpf_bprintf_data *data)
+ EXPORT_TRACEPOINT_SYMBOL_GPL(xdp_exception);
+ EXPORT_TRACEPOINT_SYMBOL_GPL(xdp_bulk_tx);
++
++#ifdef CONFIG_BPF_SYSCALL
++
++int bpf_prog_get_file_line(struct bpf_prog *prog, unsigned long ip, const char **filep,
++			   const char **linep, int *nump)
 +{
-+	if (!data->bin_args && !data->buf)
-+		return;
-+	bpf_put_buffers();
++	int idx = -1, insn_start, insn_end, len;
++	struct bpf_line_info *linfo;
++	void **jited_linfo;
++	struct btf *btf;
++
++	btf = prog->aux->btf;
++	linfo = prog->aux->linfo;
++	jited_linfo = prog->aux->jited_linfo;
++
++	if (!btf || !linfo || !prog->aux->jited_linfo)
++		return -EINVAL;
++	len = prog->aux->func ? prog->aux->func[prog->aux->func_idx]->len : prog->len;
++
++	linfo = &prog->aux->linfo[prog->aux->linfo_idx];
++	jited_linfo = &prog->aux->jited_linfo[prog->aux->linfo_idx];
++
++	insn_start = linfo[0].insn_off;
++	insn_end = insn_start + len;
++
++	for (int i = 0; i < prog->aux->nr_linfo &&
++	     linfo[i].insn_off >= insn_start && linfo[i].insn_off < insn_end; i++) {
++		if (jited_linfo[i] >= (void *)ip)
++			break;
++		idx = i;
++	}
++
++	if (idx == -1)
++		return -ENOENT;
++
++	/* Get base component of the file path. */
++	*filep = btf_name_by_offset(btf, linfo[idx].file_name_off);
++	*filep = kbasename(*filep);
++	/* Obtain the source line, and strip whitespace in prefix. */
++	*linep = btf_name_by_offset(btf, linfo[idx].line_off);
++	while (isspace(**linep))
++		*linep += 1;
++	*nump = BPF_LINE_INFO_LINE_NUM(linfo[idx].line_col);
++	return 0;
 +}
 +
- /*
-  * bpf_bprintf_prepare - Generic pass on format strings for bprintf-like helpers
-  *
-@@ -818,7 +814,7 @@ void bpf_bprintf_cleanup(struct bpf_bprintf_data *data)
-  * In argument preparation mode, if 0 is returned, safe temporary buffers are
-  * allocated and bpf_bprintf_cleanup should be called to free them after use.
-  */
--int bpf_bprintf_prepare(char *fmt, u32 fmt_size, const u64 *raw_args,
-+int bpf_bprintf_prepare(const char *fmt, u32 fmt_size, const u64 *raw_args,
- 			u32 num_args, struct bpf_bprintf_data *data)
- {
- 	bool get_buffers = (data->get_bin_args && num_args) || data->get_buf;
-@@ -834,7 +830,7 @@ int bpf_bprintf_prepare(char *fmt, u32 fmt_size, const u64 *raw_args,
- 		return -EINVAL;
- 	fmt_size = fmt_end - fmt;
- 
--	if (get_buffers && try_get_buffers(&buffers))
-+	if (get_buffers && bpf_try_get_buffers(&buffers))
- 		return -EBUSY;
- 
- 	if (data->get_bin_args) {
++#endif
 -- 
 2.47.1
 
