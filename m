@@ -1,61 +1,59 @@
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84E4E248898
-	for <bpf@vger.kernel.org>; Tue, 24 Jun 2025 19:10:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9117626CE17
+	for <bpf@vger.kernel.org>; Tue, 24 Jun 2025 19:10:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750792220; cv=none; b=NIzOWB3X1PopSI6LbMknpJqile4iE/4effQY/jWTd8bGFG2Xwuupt9HrfE9u+fpkHI8SiXsW5i/QI9O/o/wh3hQcgE4iiKmFUVm12KDeukZI1DRiozvPYLrcOQ1mM6Jjp/sGQnewtikWI5HvYGTHT28zUvFXQTGenfb60w4Ckew=
+	t=1750792220; cv=none; b=HGNhPxsykYv50+n/5QHKlnzupc2dAjnBVGvzYqmVLUwvShioFySaWvajJjAgsevCjKiBSCj1ZUt2/XJ4B0n8X+6bmPpNzgGJgWNGCU/XVG0bp6xwRtkNtwDtkaAjkt9/yc2dsi/QsxmcSMTK/I8ddwUZ+R80MDwX4V8b3tTSGGk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1750792220; c=relaxed/simple;
-	bh=x1O/JA565UIX/K21ox6cxmMdMtZIUFW4tqLJZcfXPsw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=p6+X0e6VV46pPemBkaa26o5pAs/LUnIqWWR/4j6zq9t3Tw4ohfzzFCtWUCqaU+NNGf32gutXUDQBVYfC7sHUOGm47BozUmOXBQiU9or974pLIXdDpVoDLahwh9s75+I6O2RTQEiuIkT9c751+0VEc9cY4ZcPSx6mr42FTq5WQbo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LLzqUMHz; arc=none smtp.client-ip=209.85.128.175
+	bh=bqaq/52d9OD/mO+3Kh9STVP5L6n9kRmmkQE35EirZf8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=SquMmIW+ytgT6eBZnK0nxz704vQxryxBGOEh9BgL+APYjJQwXqsDifldC+/h7rJtBDVdDi8lW7WRwdVC0HvXKuIAp8SOI3ZYf3OiG+odCs0c5UTFruX4d02d1BV09wyvQvtOA7KrKpOtbPc2YaDGSjkhOfuzjhlSzsiOl9h3emQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jxFEIO86; arc=none smtp.client-ip=209.85.219.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LLzqUMHz"
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-70a57a8ffc3so9702737b3.0
-        for <bpf@vger.kernel.org>; Tue, 24 Jun 2025 12:10:18 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jxFEIO86"
+Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-e819aa98e7aso817356276.2
+        for <bpf@vger.kernel.org>; Tue, 24 Jun 2025 12:10:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1750792217; x=1751397017; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TX+oxwqVgIWivvv02YJc6IR9uahfAlKK8BZAEPmEt6c=;
-        b=LLzqUMHzapllUAAIUWTZIT6gNwaZ1tNtaCvLBBKZz+31jq1n8vW7IZxFaqlPq21uhO
-         f+w7DFJ2JSuJwG0bF/md2pJ35uoWiGlelL+/ZxyoP+nc7yDH8DUHFCLR5huzvO7Q4pT8
-         4AonXAC1qFrvZRerJqiPb81vFPM76jp0o4Ifl2G2mxE3N6SNHsF6+DLb5SpE6d8J6SWt
-         4WyL8WVcfhwp/D3e2P1hOJJbVsVRQC/f2DLXQ4uuOWWiM/moT4ZYceC978Am9SGwqqxm
-         aaVq6V8UeYbCFRdJCzSov8jU4UdoSwt0yEP1ALOu3z5Nd5YrvkQ52tIOoawvdNSUoJIP
-         OmFw==
+        d=gmail.com; s=20230601; t=1750792215; x=1751397015; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=GMu96dmqoXgf7fx8UyYzbGgEVFzqBMJJL4GLBC+G7Fc=;
+        b=jxFEIO86qAKbApE90Msrp1wWogbts+uXo6s1/XGAX28afr6Iv8si1f62/hL0vK6UOk
+         Cdj0DOkw7umuJRQAsy2zvabJJkv39kHZftEPh446NQ49jM5SYAItv5ZYbGNqs0S0MTgN
+         nejh3xeKMzc4CpIAJ/0GLHmSLxrZLPXLGgzLMEHr7xhHVyTQPHm/Eed1KzoRAcntbWue
+         rPm3WfrOMTv37X1/ApJP2MbzIpakWHXKM0QCifr1pKlISFAJCcT/M90Kwegekx/j8mo4
+         2UVnF2Mh2y98cJG+y7dnQy+kVfn8rqAejwswKadcWeHrDmJDXgO53MKNWnLxgVboRwI8
+         u+fQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750792217; x=1751397017;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TX+oxwqVgIWivvv02YJc6IR9uahfAlKK8BZAEPmEt6c=;
-        b=KxRBnEqUoYpIlZMcFzeP42YZqj3lKtervryfceejAgtagoGS2zfSH85Ccgwe9d12hX
-         E5AaZo9coMqw8kFtuK9qGmUErR4XX9k60NszhDuwBoyIQlCjGuMFujoNwbGkf8lbn7h7
-         Ijf9SdggoVUdH8LV8p4sQIO+GWru41LhMXyFxM3Id8VuW+fInLvkM0ULlHVbL0cMvA7S
-         040owYPQg/kOWdYswv/f0WtuLri5rrT4Zasxfa3Nvq4L5867eo1P1BJfonZL3YD2U5ov
-         ft7N+RKuZ5axIcXQ9BeznCm1egt7HhqPoRiEnGuVIzpiHLxzLeg9+CodvIJwIQhsSLeB
-         LW/A==
-X-Gm-Message-State: AOJu0Yx7A4CfMBD9UZHtPzKc4axweW/PoVDTGLZBJhBPTRYqhEE7rPfJ
-	Yh9jwV8YdQSIcaMl6uBJsSLyI9Jy0aIRPAL/YJVjBf0p3qfVHSh4yoqHn9hH5lsD
-X-Gm-Gg: ASbGncuN09JUIyR1MWe/n4A1QzPKgXYr2TywtKYGX74GlN/5/97bFm2ouQsC0Z9v9Ye
-	tJjGShGh0Ai41hHbgu/FOk1SHnr62zUn2kOEoKvQwN/1G7wjULmu6sPwe2hn6PvAy1y0UK8ZuCc
-	5iabJsfFkFGUEpPKlb29WIG9v+ZGQUBD1dRLoTpaHMxfdqpIZQ2doaYtHY4lpn0JJrIt2j6gPUI
-	NWhsroHGO8Q4x70D1NMny19w4ZVLX0rPbfqWC1nrHLKBMICeRcstdjX+RNNAYLn4zZDpDK5fV+l
-	kVVP1xmLOxwxqucZm2wyi0BaktxeJEMWleu2As1MCn/BEe43QtD5ig==
-X-Google-Smtp-Source: AGHT+IFCaIZEFH+Z/St7Bv9vinFPgJytp5gFadimker9jnN2+QpQKjRpb6mj41FDX1qodOE0hdJqQQ==
-X-Received: by 2002:a05:690c:3391:b0:70e:2a0c:bc5 with SMTP id 00721157ae682-71406e1ba1fmr1155857b3.38.1750792217109;
-        Tue, 24 Jun 2025 12:10:17 -0700 (PDT)
-Received: from localhost ([2a03:2880:25ff:72::])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-712c4bd6aecsm21223777b3.82.2025.06.24.12.10.16
+        d=1e100.net; s=20230601; t=1750792215; x=1751397015;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GMu96dmqoXgf7fx8UyYzbGgEVFzqBMJJL4GLBC+G7Fc=;
+        b=Iewz8Vp/dkxGtYMdI4kcRszyyNQlBS2o5WXBNVc4NUBQ6QQLvCkAlxp6/mjvo8+4Qd
+         8fae63W+n1bFlal3+nS/N5iwf5KNSCAqGRxoCJ2uDWcM5yyfXZBfDeMsMi9CP84G6OHb
+         b3U6YQNqKQQzwn/xeV5iV8LLP3Ffm9PKBkiPmDs/OIQL2ZFID+k8hcYI5t1jgTCYTh8x
+         TtWnT8lBcxK5JBXelf5Hm4uXuUH38TQ3/WliW5uzk/kMO+k+nSyImD5zIeiaGZED6i3R
+         y/m1tnmjgxBIZykW06zs6z/ycPcmv2OrsfZgiujVYkgiXVE6KyeAPiysizH1vVM8ztZ1
+         vyEA==
+X-Gm-Message-State: AOJu0YwD03qXhc7TkLDaPwDKYBZwOQqJx+M+b5xN0yk32JGWWXr3b/XM
+	A0xcraemuel9HPCDVcKgbJ2R71Ov+9WuhqSMok6YKTCA0vUBVVjbM/YsjrRkcF+O
+X-Gm-Gg: ASbGncsyelrcQaVx0UiX+fubMaX5xRsleX2lM1He3qXh7DIRI5MOLohyAS++02NpsKS
+	4Xch/dt6ejnxMcxjnDD8n0+GMYy4cAjVWlRS7h3QaWguOSn6mLObNfEKv010Tjxu25eXrRWwrL4
+	Qu8Dly0BqkpRQD7EVdyLo+pzXgMmLW6QegmhYmMVtyPJ6IEr8iw7XrmD1UaFZnusPO/F5kQyHK7
+	jSZYbj463f3cPAdH0io5FWpIY+c0y1cA0QNjG5/L+cPZXYBF74F24kvjmuAQSxsHP6bUD886/8P
+	YPUY0dF738vs6XjuVuncXqpnEvQLLJUbDxhC5uW2ClxJfz0NHqLwDw==
+X-Google-Smtp-Source: AGHT+IF8P9mD1Nce35w1SArJh2n1ZVeNqM6r69efIrEwy7ZkXv0hvkfebntQ7x4c5uvaHHDwEFyefQ==
+X-Received: by 2002:a05:6902:2e09:b0:e81:8972:f1b5 with SMTP id 3f1490d57ef6-e842bd13653mr21779082276.37.1750792215284;
+        Tue, 24 Jun 2025 12:10:15 -0700 (PDT)
+Received: from localhost ([2a03:2880:25ff:54::])
+        by smtp.gmail.com with ESMTPSA id 3f1490d57ef6-e842ac93e78sm3214064276.38.2025.06.24.12.10.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Jun 2025 12:10:16 -0700 (PDT)
+        Tue, 24 Jun 2025 12:10:14 -0700 (PDT)
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org,
@@ -65,12 +63,10 @@ Cc: daniel@iogearbox.net,
 	kernel-team@fb.com,
 	yonghong.song@linux.dev,
 	eddyz87@gmail.com
-Subject: [PATCH bpf-next v1 2/4] bpf: add bpf_features enum
-Date: Tue, 24 Jun 2025 12:10:07 -0700
-Message-ID: <20250624191009.902874-3-eddyz87@gmail.com>
+Subject: [PATCH bpf-next v1 0/4] bpf: allow void* cast using bpf_rdonly_cast()
+Date: Tue, 24 Jun 2025 12:10:05 -0700
+Message-ID: <20250624191009.902874-1-eddyz87@gmail.com>
 X-Mailer: git-send-email 2.47.1
-In-Reply-To: <20250624191009.902874-1-eddyz87@gmail.com>
-References: <20250624191009.902874-1-eddyz87@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -79,47 +75,40 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This commit adds a kernel side enum for use in conjucntion with BTF
-CO-RE bpf_core_enum_value_exists. The goal of the enum is to assist
-with available BPF features detection.
+At the moment pointers returned by bpf_rdonly_cast() have type
+"pointer to btf id", and only casts to structure types are allowed.
+Access to memory pointed to by returned pointers is done through
+BPF_PROBE_{MEM,MEMSX} instructions and does not produce errors on
+invalid memory access.
 
-Support for bpf_rdonly_cast to void* is the first feature listed in
-the enum. Here is an example usage:
+This patch-set extends bpf_rdonly_cast() to allow casts to an
+equivalent of 'void *', effectively replacing bpf_probe_read_kernel()
+calls in situations when access to individual bytes or integers is
+necessary.
+
+The mechanism was suggested and explored by Andrii Nakryiko in [1].
+
+To help with detecting support for this feature 'enum bpf_features' is
+added with intended usage like below:
 
   if (bpf_core_enum_value_exists(enum bpf_features,
                                  BPF_FEAT_RDONLY_CAST_TO_VOID))
-     ... bpf_rdonly_cast(..., 0) ...
+    ...
 
-Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
----
- kernel/bpf/verifier.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+[1] https://github.com/anakryiko/linux/tree/bpf-mem-cast
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 8fd65eb74051..01050d1f7389 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -44,6 +44,11 @@ static const struct bpf_verifier_ops * const bpf_verifier_ops[] = {
- #undef BPF_LINK_TYPE
- };
- 
-+enum bpf_features {
-+	BPF_FEAT_RDONLY_CAST_TO_VOID = 0,
-+	BPF_FEAT_TOTAL,
-+};
-+
- struct bpf_mem_alloc bpf_global_percpu_ma;
- static bool bpf_global_percpu_ma_set;
- 
-@@ -24436,6 +24441,8 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr, __u3
- 	u32 log_true_size;
- 	bool is_priv;
- 
-+	BTF_TYPE_EMIT(enum bpf_features);
-+
- 	/* no program is valid */
- 	if (ARRAY_SIZE(bpf_verifier_ops) == 0)
- 		return -EINVAL;
+Eduard Zingerman (4):
+  bpf: allow void* cast using bpf_rdonly_cast()
+  bpf: add bpf_features enum
+  selftests/bpf: allow tests from verifier.c not to drop CAP_SYS_ADMIN
+  selftests/bpf: check operations on untrusted ro pointers to mem
+
+ kernel/bpf/verifier.c                         |  79 ++++++++--
+ .../selftests/bpf/prog_tests/verifier.c       |  19 ++-
+ .../bpf/progs/verifier_mem_rdonly_untrusted.c | 136 ++++++++++++++++++
+ 3 files changed, 216 insertions(+), 18 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_mem_rdonly_untrusted.c
+
 -- 
 2.47.1
 
