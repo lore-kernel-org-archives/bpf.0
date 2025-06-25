@@ -1,242 +1,191 @@
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1ED8263F40
-	for <bpf@vger.kernel.org>; Wed, 25 Jun 2025 15:11:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E36726A0D0;
+	Wed, 25 Jun 2025 15:11:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750864266; cv=none; b=hO5s1Zy1UpajIA+j/Xi0rVhcvOg7M6ksx1dlfjAVE7Tq04o4O82h7yncmunM8B2Yu7eW0Ltrs77VuuQPosyJurN9gK76wipRJAL9u2t/BJbYa/1erbUlKVw+AMNNuWhnjM6hJJGUSV4KdOgNYEKtPh+L/Ykq/bjvAxJAUsMq1f8=
+	t=1750864278; cv=none; b=oYBa35RZkxxhnNmjy6wQAOSPUIV8wxONd1/Jm6aQRUsWZHWDMw1MVBw2PaO2RahmMyFyOnI1F7k/YoCJqVWSYlgq6KyQYKADIWxEekx6Agb4mUl9Afh6lDWqYlJyd1XPqoi2OGQ3j2lCwVOA+ksn8qNCEdGXnPwtwd0qD4bMAUA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750864266; c=relaxed/simple;
-	bh=UEOeBSrjzdVUL5ZqJCdDZhx32YLw0Y/pk4ww/CvCKuQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=jcKo8rVs+T3AvhUidkIcazgc3JQWlUPk5LsWgMIndREgkvL8ZrWfR+QTupNjHBSmH5bKTD8Im2nW/NluBuSrIl6YOuat0HftUCh4/c8nmooIS59VMTQ28of02CEGewUvcdAZL8uu3xu+9fxtj+uyupcAQOMuU3Quunv6rHRylCA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=U5qpdKsj; arc=none smtp.client-ip=209.85.221.51
+	s=arc-20240116; t=1750864278; c=relaxed/simple;
+	bh=sQWzXMpttU3Q4RdTkLeDK11omHBR555qHYPgdiuh080=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=r1gNwNnWczsTdtWBjRDjo2TrX5Kf/DwzwMu4QV+IEH32hRMa1ExMOnW89lg/yFWiwdzw6vwML79xONQqEXKGghYi7stekvpN3da8/kv8p/BY+UY/hVwYCjrdGTsVjLOzFukKmO8hnIzYQzI+bkuGq4iKrT0RM3UJwE1Nv2l93dM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RMyx0lNt; arc=none smtp.client-ip=209.85.218.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U5qpdKsj"
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-3a53359dea5so3334338f8f.0
-        for <bpf@vger.kernel.org>; Wed, 25 Jun 2025 08:11:04 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RMyx0lNt"
+Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-ad572ba1347so1082598566b.1;
+        Wed, 25 Jun 2025 08:11:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1750864263; x=1751469063; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=bPRnWSPaVcIk+ktD+4Q2+rLDIxS2CgRGs+96l5gby+8=;
-        b=U5qpdKsjq5Zv/MnLR8Zbo/DjvSzEno4gnPJkrJL6CB0GCGXr+sncBOa8lVpJVHMVGf
-         epE6pOuy2ZBx98WKVwg1ILs542naoox2xmLdVuvSLIXuQYhg3wejudhuO964Bk4zDUgS
-         8+tNtEaX10RRZy6FxpGRD12grUGdTI+ddL2gOukm3f+V7z/WMTws3iFDevyqxDRNIdW+
-         rh5m/16nMV8Q1mT/QbNop8bheiNP5U5QucaHJJA7pvwyePdXqIERg9aVU9ATApqC3tqh
-         USwDFY/wfiRKsKh+dko3aP8QqzrFLcLB+J0Xg7iC50MR05Iszg6C/hATKFExUNpwmgmR
-         5USA==
+        d=gmail.com; s=20230601; t=1750864275; x=1751469075; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=73ypKXXgUqafYwYORXlEImzIyHG0DLPjWMG5BzkdwL0=;
+        b=RMyx0lNt7NrHiF7IsQsWJfs2RykQjbgheqF4xRQwVAwv89ZM86MNPbLpv43RrWrcw3
+         etYxHUJN9JKsX4pnhaNCovk0ZQo4tJmGOloNmWuZXqUoDyfKNpjUQFyWZf576pEly5MJ
+         fKeGNoAnKAScbXJERIMjc+wsrRn61zRJRMK/C9s1dM7pMkSbv7OFoWW8k2bX80+S3vLL
+         Gi0mCSG9A7+0XwsCGfUBy4HtsKADanImyo06LK1uoCxhrsjzqAO52Yphitof5gJdTzyG
+         FWzkI7yhPUKw29Pjk0hqVaJjSCSyQj84FO4Qb/w0trRynkyA6EgfjIYYsKRSh3LlD3Xu
+         TFfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750864263; x=1751469063;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bPRnWSPaVcIk+ktD+4Q2+rLDIxS2CgRGs+96l5gby+8=;
-        b=w4J9JUmYFipdUM8RhCXejz7o6wBi0nVHptfcfQGeo0Cr55WiJmgAghQyqtgmOL4b10
-         mCJzdmKZ429X19Zq09L2THvtD4QKo4qIa5mdG36xQmcsYnO6GtngrY9Nm/WVDVpqGVrW
-         +7v0CiKAV8axPKvhi5MeZwAifj8gNY5SMGdWEnanC6cXi92z7ofBLeyPxGOrLyT+LuQr
-         lguEc1Posyrz65ccf9B5tPueXKeLaPQvJaWTQjyttPLoYx+yJUKYTWC0EnT96a1fyeGL
-         uwQ9KFQrEBAiS4gkscwx4l8ui9hBRKNKZRjmTqtvVaiPxCzlnvgBAZantk+of6qx8NWG
-         XLWg==
-X-Gm-Message-State: AOJu0YwIQvZIfshQTaA654hFcZpOckkUMXbmHEiWCuyh0F9/EJNYJMBQ
-	NRcWjQtLwoVnQBl/G5eOeVGeZ1wSjMoXCzkE3hwitSnzRDwb3Nk50Oxfi/Z7JQ==
-X-Gm-Gg: ASbGncvk4HB8LDwLxKqZjBADhkkCnOrqtffHMbRpMT0LsuQVCEaMYxn0t7Q/oT5Tgbj
-	yBIbac/S2VFfjN+X2mhQUZvQmLKTE0bNOGrQEhKtnjSb6yXnL/8Jd1VqOHq8ltdxIOuer4Pyd0G
-	jubaYgQm0L/k8bRMt7QTSBPAqk6Rh3D52F47sbPSHm6vPyAJJBeaPmNBR0+FIoZfGPvf8HSokCD
-	F6UMlFLg0ev1zBxJ2hmtWiUIl3pHEe51YE47nwSYygRBO4twQKfyZSvdFqqDnZGIMxQFDX2inXM
-	1tSCQT8CR98hSAQYXnEQjHjtmwjUDEGRX/lq/u3jIxES5lNkzdb/LqrgTcIGFruigy1qHnlMoHO
-	TrFv2Yzg=
-X-Google-Smtp-Source: AGHT+IGnYSH3VjI0jz0iOGKG98SD71+tclVw1mL9CKRLXVEntEhXQdydH4DL+9hnubvqgWXhZaGUpA==
-X-Received: by 2002:a5d:64cf:0:b0:3a4:dd16:a26d with SMTP id ffacd0b85a97d-3a6ed66a503mr2653653f8f.38.1750864262426;
-        Wed, 25 Jun 2025 08:11:02 -0700 (PDT)
-Received: from localhost.localdomain ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a6e80f2a4csm4932331f8f.65.2025.06.25.08.11.01
+        d=1e100.net; s=20230601; t=1750864275; x=1751469075;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=73ypKXXgUqafYwYORXlEImzIyHG0DLPjWMG5BzkdwL0=;
+        b=mA6CPCXAgvWxBFtXAxhAb/T5CYfIE+5wy6Swi8tt7fFRjMR9PV7mlvQDUKG5jPXz66
+         iSQ1oV9idJ7S+rF6xSjg5lwXp9EpovRKHt+GxwpxgPYOTbQe5MwA9LaXXxhQBw97G44R
+         seTwPRBOo9G2Is6JxIreckBWa70qTZFh2De94wkNxblRo+BRgRJlux0UBlT14q3HSo1A
+         zKwYYVwARAl5BK2xwIxeYzmai/OJs1seIBdapGVdBFnW0eW+M9D2qjUudhCyonBJ7KV1
+         Eip7uaKPFOt/ZYe6+IpScplCR6YB8AWdCE3JhTrrlSFYDYgSO74nVRxJ4mnUyHnlwtKV
+         NFhA==
+X-Forwarded-Encrypted: i=1; AJvYcCUSrGiriUY/tM1SUm9VWfs4TTNcGl8SoSGxI18ThyvpXm1KvgDOl1Ys2FXyuUuE5YnxdBJpFbZQNCyP3iRo7Wwt2slQ@vger.kernel.org, AJvYcCW/NK8UKdBcReMvzuN2+UCbd4Tr1QMVR27zLKoW41FiCVjO8anfRp9P271b7OYhxjLS8cXpNG+L/mZAIEzc@vger.kernel.org, AJvYcCXO4pzSi5Q/IZFHOBNoOMtqAGQ/6Fw+WkRnY9ZrwqA8Aovhqp0PLpDeQbjfYVd3yE/Ro7I=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzR9ylazOMMYXkOr0qK3Qns1U7c53Rda6QmAKi0vz5d2aP+l1Lk
+	ncVzU0jaQIPVhCqLYNJQQICBkBZ2Ew9CTLTjM5jpl7puuzQ8/PklInxV
+X-Gm-Gg: ASbGncsfhTzHqmZvSW/k2KjkGA6seOCp6nO3VkzvZvVwQYI+en5Lf+JIdgOEWdv51Zi
+	l6R70CtRaMjHTDDu9c+vXJSZzPfE6il/UA1su1IgkjddjW/YaFnbD87TszL5QnWvlKnnh+paxZ8
+	G7JSQRlCDNcdqE5ZguYOabOkJtP4bu7PGIrkdvDTCLIVWAZ3FfTjWq8Bq2ZP23E7BkAmTFcxzLE
+	81eSC+6+W6EK4uq/LkocHagysAPyNaw1njHpg7DeW5nb7shDRFrzoZOxg97jH3s9/ItJT/ksYPr
+	DtI69KkNKFo3s+KDZcD/oafq0jKmJJx+J3qvJ5pcA3Z8vCLJKQ==
+X-Google-Smtp-Source: AGHT+IHR73kNjkLY6I6z8/OKPl7imSBMI/aYV5GL05PY9WoiLG/9bgiLimAwHJf6yVTIF1PIfqYUzA==
+X-Received: by 2002:a17:907:26c2:b0:ae0:cca0:e6af with SMTP id a640c23a62f3a-ae0cca0ebf1mr95706966b.1.1750864272815;
+        Wed, 25 Jun 2025 08:11:12 -0700 (PDT)
+Received: from krava ([176.74.159.170])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ae0543421e9sm1059851066b.185.2025.06.25.08.11.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Jun 2025 08:11:01 -0700 (PDT)
-From: Anton Protopopov <a.s.protopopov@gmail.com>
-To: bpf@vger.kernel.org
-Cc: Anton Protopopov <a.s.protopopov@gmail.com>,
-	Eduard Zingerman <eddyz87@gmail.com>
-Subject: [PATCH v2 bpf-next] bpf: add btf_type_is_i{32,64} helpers
-Date: Wed, 25 Jun 2025 15:16:21 +0000
-Message-Id: <20250625151621.1000584-1-a.s.protopopov@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 25 Jun 2025 08:11:11 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Wed, 25 Jun 2025 17:11:09 +0200
+To: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Oleg Nesterov <oleg@redhat.com>, Peter Zijlstra <peterz@infradead.org>,
+	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+	x86@kernel.org, Song Liu <songliubraving@fb.com>,
+	Yonghong Song <yhs@fb.com>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Hao Luo <haoluo@google.com>, Steven Rostedt <rostedt@goodmis.org>,
+	Alan Maguire <alan.maguire@oracle.com>,
+	David Laight <David.Laight@aculab.com>,
+	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas@t-8ch.de>,
+	Ingo Molnar <mingo@kernel.org>
+Subject: Re: [PATCHv3 perf/core 07/22] uprobes: Add do_ref_ctr argument to
+ uprobe_write function
+Message-ID: <aFwRjTkluiE-g-Ab@krava>
+References: <20250605132350.1488129-1-jolsa@kernel.org>
+ <20250605132350.1488129-8-jolsa@kernel.org>
+ <20250625154259.4a092f0213739404a0e9b210@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250625154259.4a092f0213739404a0e9b210@kernel.org>
 
-There are places in BPF code which check if a BTF type is an integer
-of particular size. This code can be made simpler by using helpers.
-Add new btf_type_is_i{32,64} helpers, and simplify code in a few
-files. (Suggested by Eduard for a patch which copy-pasted such a
-check [1].)
+On Wed, Jun 25, 2025 at 03:42:59PM +0900, Masami Hiramatsu wrote:
+> On Thu,  5 Jun 2025 15:23:34 +0200
+> Jiri Olsa <jolsa@kernel.org> wrote:
+> 
+> > Making update_ref_ctr call in uprobe_write conditional based
+> > on do_ref_ctr argument. This way we can use uprobe_write for
+> > instruction update without doing ref_ctr_offset update.
+> > 
+> 
+> Can we just decouple this update from uprobe_write()?
+> If we do this exclusively, I think we can do something like;
+> 
+> lock()
+> update_ref_ctr(uprobe, mm, +1);
+> ...
+> ret = uprobe_write();
+> ...
+> if (ret < 0)
+>   update_ref_ctr(uprobe, mm, -1);
+> unlock()
+> 
+> Thank you,
 
-  v1 -> v2:
-    * export less generic helpers (Eduard)
-    * make subject less generic than in [v1] (Eduard)
+it was the intention in the v1 but as Oleg pointed out [1] it won't
+work, because the set_orig_refctr part of this change does not know
+if the refctr should be really updated or not
 
-[1] https://lore.kernel.org/bpf/7edb47e73baa46705119a23c6bf4af26517a640f.camel@gmail.com/
-[v1] https://lore.kernel.org/bpf/20250624193655.733050-1-a.s.protopopov@gmail.com/
+while inside uprobe_write it happens right after verify callback and
+we make sure to update refctr only if the instruction was updated
 
-Suggested-by: Eduard Zingerman <eddyz87@gmail.com>
-Signed-off-by: Anton Protopopov <a.s.protopopov@gmail.com>
----
- include/linux/btf.h            |  2 ++
- kernel/bpf/arraymap.c          | 11 +++------
- kernel/bpf/bpf_local_storage.c |  8 +------
- kernel/bpf/btf.c               | 41 +++++++++++++++++++++-------------
- kernel/bpf/local_storage.c     |  9 +-------
- 5 files changed, 33 insertions(+), 38 deletions(-)
+thanks,
+jirka
 
-diff --git a/include/linux/btf.h b/include/linux/btf.h
-index b2983706292f..a40beb9cf160 100644
---- a/include/linux/btf.h
-+++ b/include/linux/btf.h
-@@ -221,6 +221,8 @@ bool btf_is_vmlinux(const struct btf *btf);
- struct module *btf_try_get_module(const struct btf *btf);
- u32 btf_nr_types(const struct btf *btf);
- struct btf *btf_base_btf(const struct btf *btf);
-+bool btf_type_is_i32(const struct btf_type *t);
-+bool btf_type_is_i64(const struct btf_type *t);
- bool btf_member_is_reg_int(const struct btf *btf, const struct btf_type *s,
- 			   const struct btf_member *m,
- 			   u32 expected_offset, u32 expected_size);
-diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
-index eb28c0f219ee..3d080916faf9 100644
---- a/kernel/bpf/arraymap.c
-+++ b/kernel/bpf/arraymap.c
-@@ -530,8 +530,6 @@ static int array_map_check_btf(const struct bpf_map *map,
- 			       const struct btf_type *key_type,
- 			       const struct btf_type *value_type)
- {
--	u32 int_data;
--
- 	/* One exception for keyless BTF: .bss/.data/.rodata map */
- 	if (btf_type_is_void(key_type)) {
- 		if (map->map_type != BPF_MAP_TYPE_ARRAY ||
-@@ -544,14 +542,11 @@ static int array_map_check_btf(const struct bpf_map *map,
- 		return 0;
- 	}
- 
--	if (BTF_INFO_KIND(key_type->info) != BTF_KIND_INT)
--		return -EINVAL;
--
--	int_data = *(u32 *)(key_type + 1);
--	/* bpf array can only take a u32 key. This check makes sure
-+	/*
-+	 * Bpf array can only take a u32 key. This check makes sure
- 	 * that the btf matches the attr used during map_create.
- 	 */
--	if (BTF_INT_BITS(int_data) != 32 || BTF_INT_OFFSET(int_data))
-+	if (!btf_type_is_i32(key_type))
- 		return -EINVAL;
- 
- 	return 0;
-diff --git a/kernel/bpf/bpf_local_storage.c b/kernel/bpf/bpf_local_storage.c
-index fa56c30833ff..b931fbceb54d 100644
---- a/kernel/bpf/bpf_local_storage.c
-+++ b/kernel/bpf/bpf_local_storage.c
-@@ -722,13 +722,7 @@ int bpf_local_storage_map_check_btf(const struct bpf_map *map,
- 				    const struct btf_type *key_type,
- 				    const struct btf_type *value_type)
- {
--	u32 int_data;
--
--	if (BTF_INFO_KIND(key_type->info) != BTF_KIND_INT)
--		return -EINVAL;
--
--	int_data = *(u32 *)(key_type + 1);
--	if (BTF_INT_BITS(int_data) != 32 || BTF_INT_OFFSET(int_data))
-+	if (!btf_type_is_i32(key_type))
- 		return -EINVAL;
- 
- 	return 0;
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 682acb1ed234..05fd64a371af 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -858,26 +858,37 @@ const struct btf_type *btf_type_by_id(const struct btf *btf, u32 type_id)
- EXPORT_SYMBOL_GPL(btf_type_by_id);
- 
- /*
-- * Regular int is not a bit field and it must be either
-- * u8/u16/u32/u64 or __int128.
-+ * Check that the type @t is a regular int. This means that @t is not
-+ * a bit field and it has the same size as either of u8/u16/u32/u64
-+ * or __int128. If @expected_size is not zero, then size of @t should
-+ * be the same. A caller should already have checked that the type @t
-+ * is an integer.
-  */
-+static bool __btf_type_int_is_regular(const struct btf_type *t, size_t expected_size)
-+{
-+	u32 int_data = btf_type_int(t);
-+	u8 nr_bits = BTF_INT_BITS(int_data);
-+	u8 nr_bytes = BITS_ROUNDUP_BYTES(nr_bits);
-+
-+	return BITS_PER_BYTE_MASKED(nr_bits) == 0 &&
-+	       BTF_INT_OFFSET(int_data) == 0 &&
-+	       (nr_bytes <= 16 && is_power_of_2(nr_bytes)) &&
-+	       (expected_size == 0 || nr_bytes == expected_size);
-+}
-+
- static bool btf_type_int_is_regular(const struct btf_type *t)
- {
--	u8 nr_bits, nr_bytes;
--	u32 int_data;
-+	return __btf_type_int_is_regular(t, 0);
-+}
- 
--	int_data = btf_type_int(t);
--	nr_bits = BTF_INT_BITS(int_data);
--	nr_bytes = BITS_ROUNDUP_BYTES(nr_bits);
--	if (BITS_PER_BYTE_MASKED(nr_bits) ||
--	    BTF_INT_OFFSET(int_data) ||
--	    (nr_bytes != sizeof(u8) && nr_bytes != sizeof(u16) &&
--	     nr_bytes != sizeof(u32) && nr_bytes != sizeof(u64) &&
--	     nr_bytes != (2 * sizeof(u64)))) {
--		return false;
--	}
-+bool btf_type_is_i32(const struct btf_type *t)
-+{
-+	return btf_type_is_int(t) && __btf_type_int_is_regular(t, 4);
-+}
- 
--	return true;
-+bool btf_type_is_i64(const struct btf_type *t)
-+{
-+	return btf_type_is_int(t) && __btf_type_int_is_regular(t, 8);
- }
- 
- /*
-diff --git a/kernel/bpf/local_storage.c b/kernel/bpf/local_storage.c
-index 3969eb0382af..632d51b05fe9 100644
---- a/kernel/bpf/local_storage.c
-+++ b/kernel/bpf/local_storage.c
-@@ -394,17 +394,10 @@ static int cgroup_storage_check_btf(const struct bpf_map *map,
- 		if (!btf_member_is_reg_int(btf, key_type, m, offset, size))
- 			return -EINVAL;
- 	} else {
--		u32 int_data;
--
- 		/*
- 		 * Key is expected to be u64, which stores the cgroup_inode_id
- 		 */
--
--		if (BTF_INFO_KIND(key_type->info) != BTF_KIND_INT)
--			return -EINVAL;
--
--		int_data = *(u32 *)(key_type + 1);
--		if (BTF_INT_BITS(int_data) != 64 || BTF_INT_OFFSET(int_data))
-+		if (!btf_type_is_i64(key_type))
- 			return -EINVAL;
- 	}
- 
--- 
-2.34.1
 
+[1] https://lore.kernel.org/bpf/20250427141335.GA9350@redhat.com/
+
+> 
+> 
+> > Acked-by: Oleg Nesterov <oleg@redhat.com>
+> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> > ---
+> >  include/linux/uprobes.h | 2 +-
+> >  kernel/events/uprobes.c | 8 ++++----
+> >  2 files changed, 5 insertions(+), 5 deletions(-)
+> > 
+> > diff --git a/include/linux/uprobes.h b/include/linux/uprobes.h
+> > index 518b26756469..5080619560d4 100644
+> > --- a/include/linux/uprobes.h
+> > +++ b/include/linux/uprobes.h
+> > @@ -200,7 +200,7 @@ extern unsigned long uprobe_get_trap_addr(struct pt_regs *regs);
+> >  extern int uprobe_write_opcode(struct arch_uprobe *auprobe, struct vm_area_struct *vma, unsigned long vaddr, uprobe_opcode_t,
+> >  			       bool is_register);
+> >  extern int uprobe_write(struct arch_uprobe *auprobe, struct vm_area_struct *vma, const unsigned long opcode_vaddr,
+> > -			uprobe_opcode_t *insn, int nbytes, uprobe_write_verify_t verify, bool is_register);
+> > +			uprobe_opcode_t *insn, int nbytes, uprobe_write_verify_t verify, bool is_register, bool do_update_ref_ctr);
+> >  extern struct uprobe *uprobe_register(struct inode *inode, loff_t offset, loff_t ref_ctr_offset, struct uprobe_consumer *uc);
+> >  extern int uprobe_apply(struct uprobe *uprobe, struct uprobe_consumer *uc, bool);
+> >  extern void uprobe_unregister_nosync(struct uprobe *uprobe, struct uprobe_consumer *uc);
+> > diff --git a/kernel/events/uprobes.c b/kernel/events/uprobes.c
+> > index 1e5dc3b30707..6795b8d82b9c 100644
+> > --- a/kernel/events/uprobes.c
+> > +++ b/kernel/events/uprobes.c
+> > @@ -492,12 +492,12 @@ int uprobe_write_opcode(struct arch_uprobe *auprobe, struct vm_area_struct *vma,
+> >  		bool is_register)
+> >  {
+> >  	return uprobe_write(auprobe, vma, opcode_vaddr, &opcode, UPROBE_SWBP_INSN_SIZE,
+> > -			    verify_opcode, is_register);
+> > +			    verify_opcode, is_register, true /* do_update_ref_ctr */);
+> >  }
+> >  
+> >  int uprobe_write(struct arch_uprobe *auprobe, struct vm_area_struct *vma,
+> >  		 const unsigned long insn_vaddr, uprobe_opcode_t *insn, int nbytes,
+> > -		 uprobe_write_verify_t verify, bool is_register)
+> > +		 uprobe_write_verify_t verify, bool is_register, bool do_update_ref_ctr)
+> >  {
+> >  	const unsigned long vaddr = insn_vaddr & PAGE_MASK;
+> >  	struct mm_struct *mm = vma->vm_mm;
+> > @@ -538,7 +538,7 @@ int uprobe_write(struct arch_uprobe *auprobe, struct vm_area_struct *vma,
+> >  	}
+> >  
+> >  	/* We are going to replace instruction, update ref_ctr. */
+> > -	if (!ref_ctr_updated && uprobe->ref_ctr_offset) {
+> > +	if (do_update_ref_ctr && !ref_ctr_updated && uprobe->ref_ctr_offset) {
+> >  		ret = update_ref_ctr(uprobe, mm, is_register ? 1 : -1);
+> >  		if (ret) {
+> >  			folio_put(folio);
+> > @@ -590,7 +590,7 @@ int uprobe_write(struct arch_uprobe *auprobe, struct vm_area_struct *vma,
+> >  
+> >  out:
+> >  	/* Revert back reference counter if instruction update failed. */
+> > -	if (ret < 0 && ref_ctr_updated)
+> > +	if (do_update_ref_ctr && ret < 0 && ref_ctr_updated)
+> >  		update_ref_ctr(uprobe, mm, is_register ? -1 : 1);
+> >  
+> >  	/* try collapse pmd for compound page */
+> > -- 
+> > 2.49.0
+> > 
+> 
+> 
+> -- 
+> Masami Hiramatsu (Google) <mhiramat@kernel.org>
