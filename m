@@ -1,140 +1,378 @@
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63AE02FCE2A
-	for <bpf@vger.kernel.org>; Wed, 25 Jun 2025 22:32:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC8552877E4;
+	Wed, 25 Jun 2025 22:56:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750890753; cv=none; b=oMRZqIQs2lqCal3mnFqJI59iUkVVZV7wdY9QFNhIAL6Lwt8cSgNgGQWcx3s13Sc+f5tKTd6Z+54HsP/fWK3ItcHEo70zg1YGockEiUQrm0pqNEcw+WWYixrOGV4bVYOymJ2GAkS+h77RG+c924nZMowxWPswicMAlOBMoVPkJ00=
+	t=1750892219; cv=none; b=P5I++vPx1xRtvAv7sRqEc96R7u+ffmw7HQ3bdbn2lZ7FY2tQfR/BwdAmLHfea7fctGId/Nm5YYeyswE3CmI01bWE11+10qs+BRAzcxBSZRQPu52Xhf/xysfUUYJbSYsmeoFrygN+/y82b+HdDOHx7IA3LP6uyCJMG4yZjAgU8LY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750890753; c=relaxed/simple;
-	bh=IUM/kfBVvarUWx4RU+riNCjVspmOSjnthX27WEMy/5w=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=g70L6QAxkpCH+vU4Q9YCRWdF4pgmzmgwK1uN4uck/Lx8rnzbnT7U10PBywbKnB5WWbOu/gSWwNyAZoaNxAZEh17Nt52tZWj+hfeqObgvGWfHmxgtaV1Wn0cy7jlvFbo6d5tGJwXkHEe8oAWZCcgbiY+WwN/g5u2bczykA1OF6rA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c3bTAqTo; arc=none smtp.client-ip=209.85.214.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c3bTAqTo"
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2349f096605so6563495ad.3
-        for <bpf@vger.kernel.org>; Wed, 25 Jun 2025 15:32:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1750890752; x=1751495552; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZIkFdSYIcusgUJU1H/OMxJd0qPE0IZGP0431s23HeZY=;
-        b=c3bTAqTo98JB1GNk4vkFeC0qN/JPXzRwsgu352vy+qiZlFkUvS2xC2Cr+QMPe7lj8Y
-         TWHlqouxtrUBV4GrvS+iWlqJbwiDU+DsIwwqf+FUrIFJWfXD/YNddU2q71Nm0nrUtrTV
-         WlDbBZRtREDiZHQBRjW3mGQ9iy9pQmkRhWnkmQvF+4zHKsrr7srlCMtit0FXXsqXU3Ty
-         qkM7ISGx9f2QG7I2ruy8MHHwh23ExbRdUzSoa0FHOQZSQemM2h/KigN246yq3gwQnpLJ
-         WUdWT8DahsuK5nipCrQMyBh5CvRHlFacqOW7FB1mYRS5h3gnR5swOVBbQN1VUmS3jMuR
-         wsJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750890752; x=1751495552;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZIkFdSYIcusgUJU1H/OMxJd0qPE0IZGP0431s23HeZY=;
-        b=fujwcGgQ3bDt/myAOjvz2zQC1V+oipiqLYYw1QWxUcLMkblttmvLGTAsuw08Z5sn59
-         wW6zm6mY7OnLj4SHco+uQ2vcdcFqe1Yu0d9J+TrXf98TPZPpQ2pH3Tgsi6hDDumoof3b
-         9YB/I+j4NY+82IDzwExSxqUfPZ+0SHZqTBDDIP0zn9zQVcTrD5Uu0ZrbeQ3q5aYTSila
-         R3mrJ0/+2ItKvSYPActMDMbH+Gs2kCtT4stDBJSKSX6ULMjPolo5Nrv/BgRLC/JZ4tYc
-         A8xPo4M6y8Ig7e8mMK7clmVWnfFny5VMZwDKB6CrFffRzzrPZBZKAiQJTLYJedOvDsM3
-         ItRQ==
-X-Gm-Message-State: AOJu0Yz7sDYEFHExbfIrjyotMDUVL1KD4priKWI6rv4s6YlDjQxmekf4
-	wj8d6QE/mF/+dP/dQNcJ6/dmm/B3lKX85LKU/JJwjbTCLHpNQIeKcXsq
-X-Gm-Gg: ASbGnctTcVUeqxWSRMsOczjIL2T7L7c469sBXrNKvROvTgM7iFiJMy48UVUglfqzC6v
-	5S8UAbigq1iRSDfO3vw1rrWaMD1dPqhHyP/Hm+UPeRiR7YnVYS6XVY9CSVAhdPRqUzNchsFxcz0
-	zThISFxWkVeL1L691omzoV9BvpYBlstL2OPIduIbq/kBNNXJTAgdV707olLGqET019Xm6fVcySz
-	FC2HiozKRKqVRPXLhLR8FsV0MF+ypmroHG8qaxIGN3QPzMamVVVIhtwaqIbHYexqpQRjtdSTLWn
-	J/DN145BoI/807la9c0m94gVmL3RkZRU8byj28VMvMiWJ1PrMrlXEezHODLrTSuROh5oA63O/pl
-	yZJTCJ0VhVnNpxa6sPlDOD1hUo08=
-X-Google-Smtp-Source: AGHT+IFf+M1Og8vRIh/vHIEJHvbLU2kGASq+Yz8uuPh9GMiD1jvr6yyCeMIeRSJoUh4xpP/WPQPeOA==
-X-Received: by 2002:a17:902:f608:b0:237:e818:30f2 with SMTP id d9443c01a7336-2382409f299mr79173805ad.50.1750890751698;
-        Wed, 25 Jun 2025 15:32:31 -0700 (PDT)
-Received: from localhost.localdomain ([2001:558:600a:7:a83d:600f:32cc:235a])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-237d8642450sm142364805ad.147.2025.06.25.15.32.30
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Wed, 25 Jun 2025 15:32:31 -0700 (PDT)
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To: torvalds@linux-foundation.org
-Cc: bpf@vger.kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@kernel.org
-Subject: [GIT PULL] BPF fixes for 6.16-rc4
-Date: Wed, 25 Jun 2025 15:32:29 -0700
-Message-Id: <20250625223229.46651-1-alexei.starovoitov@gmail.com>
-X-Mailer: git-send-email 2.39.5 (Apple Git-154)
+	s=arc-20240116; t=1750892219; c=relaxed/simple;
+	bh=1REnszmbSgdI4pH4JSOyv7IfR9sppqawjYaSwndvGZM=;
+	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
+	 Content-Type; b=i4blrTZqDfMInP1A4Sh3srLu1/0/YhdWizKIdyG4szkmaqTgD41LCVfIirbI4ITW/EvaYgieXSAh2eCHy/snDcmNR4Y2h6x1jxMDuJ2+kwZQcN4WM9oTDLdZ+KbzVdzwIZdOs8RadyIEDOFhZ9Enl5Xpx4XGp/Es7vLSxWLgWsk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+Received: from omf20.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay04.hostedemail.com (Postfix) with ESMTP id 096E11A0784;
+	Wed, 25 Jun 2025 22:56:53 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: nevets@goodmis.org) by omf20.hostedemail.com (Postfix) with ESMTPA id BED1020026;
+	Wed, 25 Jun 2025 22:56:50 +0000 (UTC)
+Received: from rostedt by gandalf with local (Exim 4.98.2)
+	(envelope-from <rostedt@goodmis.org>)
+	id 1uUZ3L-000000043fn-44eR;
+	Wed, 25 Jun 2025 18:57:15 -0400
+Message-ID: <20250625225715.825831885@goodmis.org>
+User-Agent: quilt/0.68
+Date: Wed, 25 Jun 2025 18:56:06 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org,
+ bpf@vger.kernel.org,
+ x86@kernel.org
+Cc: Masami Hiramatsu <mhiramat@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Josh Poimboeuf <jpoimboe@kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>,
+ Ingo Molnar <mingo@kernel.org>,
+ Jiri Olsa <jolsa@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>,
+ Thomas Gleixner <tglx@linutronix.de>,
+ Andrii Nakryiko <andrii@kernel.org>,
+ Indu Bhagat <indu.bhagat@oracle.com>,
+ "Jose E. Marchesi" <jemarch@gnu.org>,
+ Beau Belgrave <beaub@linux.microsoft.com>,
+ Jens Remus <jremus@linux.ibm.com>,
+ Linus Torvalds <torvalds@linux-foundation.org>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH v11 06/14] unwind_user/deferred: Add deferred unwinding interface
+References: <20250625225600.555017347@goodmis.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+X-Stat-Signature: m96k1dzifbzeeiaqp1dic47185xecsiy
+X-Rspamd-Server: rspamout03
+X-Rspamd-Queue-Id: BED1020026
+X-Session-Marker: 6E657665747340676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX18XVPStbC6q5tH+to2GD7pEUKCYL0SrhZs=
+X-HE-Tag: 1750892210-680092
+X-HE-Meta: U2FsdGVkX18ThzG8jFOu6pSSfHCNQ59UQUzTkHbG87f/lfHAKTv1ghnm8h9sRmpIkkHjiA3psUv0sSPQ6tQuG2gToLoPJSt0TdJISNidmGp1oLsrfT+hD3fCWS8qtTiGTqrIuKGJG3Paakp4/5C1Jwv9zFWPCXDwd8dtZBNjuvG48kO4ZMxrKCGSL4rtj1tUHqR2BLeSIF4XNvqOt3EE4oakAUPi1AqYuLFhmgVeT+IX9sHvDaTlPKCTeeprXsWhJkvT2fDjdXj2gJPdOWv4fxdww6rKw3pHy8bMdAishtc01EtOwVUhk1jlubGlxsAjr73J5pL7ZRfaEmEP6FQjyDnzf9IUXy6LAq5GXLF9jNje1quq/5wPtLiT45SoOHXf0FU+N5NzQVX2K8gcp6lqLaVwhC/4aqie3EfRQuH9lCA=
 
-Hi Linus,
+From: Josh Poimboeuf <jpoimboe@kernel.org>
 
-The following changes since commit 9afe652958c3ee88f24df1e4a97f298afce89407:
+Add an interface for scheduling task work to unwind the user space stack
+before returning to user space. This solves several problems for its
+callers:
 
-  Merge tag 'x86_urgent_for_6.16-rc3' of git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip (2025-06-16 11:36:21 -0700)
+  - Ensure the unwind happens in task context even if the caller may be
+    running in interrupt context.
 
-are available in the Git repository at:
+  - Avoid duplicate unwinds, whether called multiple times by the same
+    caller or by different callers.
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git tags/bpf-fixes
+  - Take a timestamp when the first request comes in since the task
+    entered the kernel. This will be returned to the calling function
+    along with the stack trace when the task leaves the kernel. This
+    timestamp can be used to correlate kernel unwinds/traces with the user
+    unwind. For this to work properly, the architecture must have a
+    local_clock() resolution that guarantees a different timestamp per
+    a task systemcall.
 
-for you to fetch changes up to 5e9388f7984a9cc7e659a105113f6ccf0aebedd0:
+The timestamp is created to detect when the stacktrace is the same. It is
+generated the first time a user space stacktrace is requested after the
+task enters the kernel.
 
-  selftests/bpf: adapt one more case in test_lru_map to the new target_free (2025-06-25 15:19:36 -0700)
+The timestamp is passed to the caller on request, and when the stacktrace is
+generated upon returning to user space, it will call the requester's callback
+with the timestamp as well as the stacktrace.
 
-----------------------------------------------------------------
-- Fix use-after-free in libbpf when map is resized (Adin Scannell)
+A global list is created and protected by a global mutex that holds
+tracers that register with the unwind infrastructure. The number of
+registered tracers will be limited in future changes. Each perf program or
+ftrace instance will register its own descriptor to use for deferred
+unwind stack traces.
 
-- Fix verifier assumptions about 2nd argument of bpf_sysctl_get_name
-  (Jerome Marchand)
+Note, in the function unwind_deferred_task_work() that gets called when
+returning to user space, it uses a global mutex for synchronization which
+will cause a big bottleneck. This will be replaced by SRCU, but that
+change adds some complex synchronization that deservers its own commit.
 
-- Fix verifier assumption of nullness of d_inode in dentry (Song Liu)
+Co-developed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+---
+Changes since v10: https://lore.kernel.org/20250611010428.770214773@goodmis.org
 
-- Fix global starvation of LRU map (Willem de Bruijn)
+- Added comment stating that the clock used for the timestamp must have a
+  resolution that will guarantee that two system called back to back will
+  have a different timestamp.
 
-- Fix potential NULL dereference in btf_dump__free (Yuan Chen)
+- Use timestamp being zero to exit out early in unwind_reset_info() so
+  that there's no writes when not used. (Peter Zijlstra)
 
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-----------------------------------------------------------------
-Adin Scannell (1):
-      libbpf: Fix possible use-after-free for externs
+- Update change log to mention that each perf program and ftrace intance
+  will register with the deferred unwinder. (Peter Zijlstra).
 
-Alexei Starovoitov (1):
-      Merge branch 'bpf-specify-access-type-of-bpf_sysctl_get_name-args'
+- Update change log to express that unwind_deferred_task_work() uses a
+  global lock but will later be replaced with SRCU. (Peter Zijlstra)
 
-Jerome Marchand (2):
-      bpf: Specify access type of bpf_sysctl_get_name args
-      selftests/bpf: Convert test_sysctl to prog_tests
+ include/linux/unwind_deferred.h       |  24 ++++-
+ include/linux/unwind_deferred_types.h |   3 +
+ kernel/unwind/deferred.c              | 139 +++++++++++++++++++++++++-
+ 3 files changed, 164 insertions(+), 2 deletions(-)
 
-Song Liu (1):
-      bpf: Mark dentry->d_inode as trusted_or_null
+diff --git a/include/linux/unwind_deferred.h b/include/linux/unwind_deferred.h
+index baacf4a1eb4c..26011b413142 100644
+--- a/include/linux/unwind_deferred.h
++++ b/include/linux/unwind_deferred.h
+@@ -2,9 +2,19 @@
+ #ifndef _LINUX_UNWIND_USER_DEFERRED_H
+ #define _LINUX_UNWIND_USER_DEFERRED_H
+ 
++#include <linux/task_work.h>
+ #include <linux/unwind_user.h>
+ #include <linux/unwind_deferred_types.h>
+ 
++struct unwind_work;
++
++typedef void (*unwind_callback_t)(struct unwind_work *work, struct unwind_stacktrace *trace, u64 timestamp);
++
++struct unwind_work {
++	struct list_head		list;
++	unwind_callback_t		func;
++};
++
+ #ifdef CONFIG_UNWIND_USER
+ 
+ void unwind_task_init(struct task_struct *task);
+@@ -12,10 +22,19 @@ void unwind_task_free(struct task_struct *task);
+ 
+ int unwind_user_faultable(struct unwind_stacktrace *trace);
+ 
++int unwind_deferred_init(struct unwind_work *work, unwind_callback_t func);
++int unwind_deferred_request(struct unwind_work *work, u64 *timestamp);
++void unwind_deferred_cancel(struct unwind_work *work);
++
+ static __always_inline void unwind_reset_info(void)
+ {
+-	if (unlikely(current->unwind_info.cache))
++	/* Exit out early if this was never used */
++	if (likely(!current->unwind_info.timestamp))
++		return;
++
++	if (current->unwind_info.cache)
+ 		current->unwind_info.cache->nr_entries = 0;
++	current->unwind_info.timestamp = 0;
+ }
+ 
+ #else /* !CONFIG_UNWIND_USER */
+@@ -24,6 +43,9 @@ static inline void unwind_task_init(struct task_struct *task) {}
+ static inline void unwind_task_free(struct task_struct *task) {}
+ 
+ static inline int unwind_user_faultable(struct unwind_stacktrace *trace) { return -ENOSYS; }
++static inline int unwind_deferred_init(struct unwind_work *work, unwind_callback_t func) { return -ENOSYS; }
++static inline int unwind_deferred_request(struct unwind_work *work, u64 *timestamp) { return -ENOSYS; }
++static inline void unwind_deferred_cancel(struct unwind_work *work) {}
+ 
+ static inline void unwind_reset_info(void) {}
+ 
+diff --git a/include/linux/unwind_deferred_types.h b/include/linux/unwind_deferred_types.h
+index db5b54b18828..5df264cf81ad 100644
+--- a/include/linux/unwind_deferred_types.h
++++ b/include/linux/unwind_deferred_types.h
+@@ -9,6 +9,9 @@ struct unwind_cache {
+ 
+ struct unwind_task_info {
+ 	struct unwind_cache	*cache;
++	struct callback_head	work;
++	u64			timestamp;
++	int			pending;
+ };
+ 
+ #endif /* _LINUX_UNWIND_USER_DEFERRED_TYPES_H */
+diff --git a/kernel/unwind/deferred.c b/kernel/unwind/deferred.c
+index 96368a5aa522..d5f2c004a5b0 100644
+--- a/kernel/unwind/deferred.c
++++ b/kernel/unwind/deferred.c
+@@ -2,16 +2,43 @@
+ /*
+  * Deferred user space unwinding
+  */
++#include <linux/sched/task_stack.h>
++#include <linux/unwind_deferred.h>
++#include <linux/sched/clock.h>
++#include <linux/task_work.h>
+ #include <linux/kernel.h>
+ #include <linux/sched.h>
+ #include <linux/sizes.h>
+ #include <linux/slab.h>
+-#include <linux/unwind_deferred.h>
++#include <linux/mm.h>
+ 
+ /* Make the cache fit in a 4K page */
+ #define UNWIND_MAX_ENTRIES					\
+ 	((SZ_4K - sizeof(struct unwind_cache)) / sizeof(long))
+ 
++/* Guards adding to and reading the list of callbacks */
++static DEFINE_MUTEX(callback_mutex);
++static LIST_HEAD(callbacks);
++
++/*
++ * Read the task context timestamp, if this is the first caller then
++ * it will set the timestamp.
++ *
++ * For this to work properly, the timestamp (local_clock()) must
++ * have a resolution that will guarantee a different timestamp
++ * everytime a task makes a system call. That is, two short
++ * system calls back to back must have a different timestamp.
++ */
++static u64 get_timestamp(struct unwind_task_info *info)
++{
++	lockdep_assert_irqs_disabled();
++
++	if (!info->timestamp)
++		info->timestamp = local_clock();
++
++	return info->timestamp;
++}
++
+ /**
+  * unwind_user_faultable - Produce a user stacktrace in faultable context
+  * @trace: The descriptor that will store the user stacktrace
+@@ -62,11 +89,120 @@ int unwind_user_faultable(struct unwind_stacktrace *trace)
+ 	return 0;
+ }
+ 
++static void unwind_deferred_task_work(struct callback_head *head)
++{
++	struct unwind_task_info *info = container_of(head, struct unwind_task_info, work);
++	struct unwind_stacktrace trace;
++	struct unwind_work *work;
++	u64 timestamp;
++
++	if (WARN_ON_ONCE(!info->pending))
++		return;
++
++	/* Allow work to come in again */
++	WRITE_ONCE(info->pending, 0);
++
++	/*
++	 * From here on out, the callback must always be called, even if it's
++	 * just an empty trace.
++	 */
++	trace.nr = 0;
++	trace.entries = NULL;
++
++	unwind_user_faultable(&trace);
++
++	timestamp = info->timestamp;
++
++	guard(mutex)(&callback_mutex);
++	list_for_each_entry(work, &callbacks, list) {
++		work->func(work, &trace, timestamp);
++	}
++}
++
++/**
++ * unwind_deferred_request - Request a user stacktrace on task exit
++ * @work: Unwind descriptor requesting the trace
++ * @timestamp: The time stamp of the first request made for this task
++ *
++ * Schedule a user space unwind to be done in task work before exiting the
++ * kernel.
++ *
++ * The returned @timestamp output is the timestamp of the very first request
++ * for a user space stacktrace for this task since it entered the kernel.
++ * It can be from a request by any caller of this infrastructure.
++ * Its value will also be passed to the callback function.  It can be
++ * used to stitch kernel and user stack traces together in post-processing.
++ *
++ * Note, the architecture must have a local_clock() implementation that
++ * guarantees a different timestamp per task systemcall.
++ *
++ * It's valid to call this function multiple times for the same @work within
++ * the same task entry context.  Each call will return the same timestamp
++ * while the task hasn't left the kernel. If the callback is not pending because
++ * it has already been previously called for the same entry context, it will be
++ * called again with the same stack trace and timestamp.
++ *
++ * Return: 1 if the the callback was already queued.
++ *         0 if the callback successfully was queued.
++ *         Negative if there's an error.
++ *         @timestamp holds the timestamp of the first request by any user
++ */
++int unwind_deferred_request(struct unwind_work *work, u64 *timestamp)
++{
++	struct unwind_task_info *info = &current->unwind_info;
++	int ret;
++
++	*timestamp = 0;
++
++	if (WARN_ON_ONCE(in_nmi()))
++		return -EINVAL;
++
++	if ((current->flags & (PF_KTHREAD | PF_EXITING)) ||
++	    !user_mode(task_pt_regs(current)))
++		return -EINVAL;
++
++	guard(irqsave)();
++
++	*timestamp = get_timestamp(info);
++
++	/* callback already pending? */
++	if (info->pending)
++		return 1;
++
++	/* The work has been claimed, now schedule it. */
++	ret = task_work_add(current, &info->work, TWA_RESUME);
++	if (WARN_ON_ONCE(ret))
++		return ret;
++
++	info->pending = 1;
++	return 0;
++}
++
++void unwind_deferred_cancel(struct unwind_work *work)
++{
++	if (!work)
++		return;
++
++	guard(mutex)(&callback_mutex);
++	list_del(&work->list);
++}
++
++int unwind_deferred_init(struct unwind_work *work, unwind_callback_t func)
++{
++	memset(work, 0, sizeof(*work));
++
++	guard(mutex)(&callback_mutex);
++	list_add(&work->list, &callbacks);
++	work->func = func;
++	return 0;
++}
++
+ void unwind_task_init(struct task_struct *task)
+ {
+ 	struct unwind_task_info *info = &task->unwind_info;
+ 
+ 	memset(info, 0, sizeof(*info));
++	init_task_work(&info->work, unwind_deferred_task_work);
+ }
+ 
+ void unwind_task_free(struct task_struct *task)
+@@ -74,4 +210,5 @@ void unwind_task_free(struct task_struct *task)
+ 	struct unwind_task_info *info = &task->unwind_info;
+ 
+ 	kfree(info->cache);
++	task_work_cancel(task, &info->work);
+ }
+-- 
+2.47.2
 
-Willem de Bruijn (2):
-      bpf: Adjust free target to avoid global starvation of LRU map
-      selftests/bpf: adapt one more case in test_lru_map to the new target_free
 
-Yuan Chen (1):
-      libbpf: Fix null pointer dereference in btf_dump__free on allocation failure
-
- Documentation/bpf/map_hash.rst                     |   8 +-
- Documentation/bpf/map_lru_hash_update.dot          |   6 +-
- kernel/bpf/bpf_lru_list.c                          |   9 +-
- kernel/bpf/bpf_lru_list.h                          |   1 +
- kernel/bpf/cgroup.c                                |   2 +-
- kernel/bpf/verifier.c                              |   5 +-
- tools/lib/bpf/btf_dump.c                           |   3 +
- tools/lib/bpf/libbpf.c                             |  10 +-
- tools/testing/selftests/bpf/.gitignore             |   1 -
- tools/testing/selftests/bpf/Makefile               |   5 +-
- .../selftests/bpf/{ => prog_tests}/test_sysctl.c   |  37 ++------
- .../selftests/bpf/progs/test_global_map_resize.c   |  16 ++++
- .../selftests/bpf/progs/verifier_vfs_accept.c      |  18 ++++
- .../selftests/bpf/progs/verifier_vfs_reject.c      |  15 +++
- tools/testing/selftests/bpf/test_lru_map.c         | 105 +++++++++++----------
- 15 files changed, 142 insertions(+), 99 deletions(-)
- rename tools/testing/selftests/bpf/{ => prog_tests}/test_sysctl.c (98%)
