@@ -1,30 +1,31 @@
-Received: from relay.hostedemail.com (smtprelay0013.hostedemail.com [216.40.44.13])
+Received: from relay.hostedemail.com (smtprelay0014.hostedemail.com [216.40.44.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9064F2F3646;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B9F126E6EB;
 	Wed, 25 Jun 2025 23:16:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.13
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750893365; cv=none; b=Lp7q1PPKlh84Rk63VhoAP7zg8hksrpQJrFOF4FJQsTB6ji9y9cxDbdF6mKp0E+rqZM2nHroCeZKy575OVjQshRD0lcjXftc7Mz6eFMTHQ6VzbS6ug7K2i0P00SaVIxBg+7pi8490UKfoEGkmXJCRedl6dHpN1YOyVSMExjp1r5w=
+	t=1750893365; cv=none; b=SCcNNpkGM3SnSuZT83555V0wq3yZhqAl1Ll58ef/ZpxwvHabOjR7cgdp+IaIxrACjTGR0vTHHjyaXikt3vq/lJnXbZI1IhsfLx+gIEPIbn3E0RjBHSBIyDJDQcWnmza+M2QIiubKa1UadgiGFVhfvAYtcETlt6IJzdkBv+xmbYc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1750893365; c=relaxed/simple;
-	bh=Umn+ScgSRnA/hfGr3imuIglkH7+kvqT0cE1QZM7nsdQ=;
-	h=Message-ID:Date:From:To:Cc:Subject; b=dT5OF+eb6Br/KpGo17ZBTCFKx4K6ubBV0ya5REtLoIKqu6kbfW/Nc5ueEB2bnJcO2FOWAtCJFc8ra1ZUFECtkOQkhcdlCE2iH0dCfcttCxOaEvVCme/TsL/RcACty4mJSt1vcUmTo5zhJdqkdKgMSB6WuHosmrZdjzO2GnA4BRo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.13
+	bh=INPL5mykLyHh9BAddpKD33kEw5Zh1QT3Mw8WI6pEDxg=;
+	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
+	 Content-Type; b=qjAfdRImFNaDTAE6vn4oufQ/KcdNkE2nBuSEhc65zjgTRwsFGdjHo0H0A3uOMftp63SQrbrrTzm4Q3WBNR8Dj8bM3LBNPhni8M6TEqPd63I8jsSjr8mZ4VlQQRuH/HB8SYtmlJsmrPuxNxk/FPnj11vDPrxSDG7GKTw/HgvE6ys=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf02.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay04.hostedemail.com (Postfix) with ESMTP id CA36C1A0784;
-	Wed, 25 Jun 2025 23:15:59 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: nevets@goodmis.org) by omf02.hostedemail.com (Postfix) with ESMTPA id D6C1080009;
+Received: from omf10.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay04.hostedemail.com (Postfix) with ESMTP id 358E91A07B5;
+	Wed, 25 Jun 2025 23:16:00 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: nevets@goodmis.org) by omf10.hostedemail.com (Postfix) with ESMTPA id EF9402F;
 	Wed, 25 Jun 2025 23:15:56 +0000 (UTC)
 Received: from rostedt by gandalf with local (Exim 4.98.2)
 	(envelope-from <rostedt@goodmis.org>)
-	id 1uUZLp-000000044fH-3OGU;
-	Wed, 25 Jun 2025 19:16:21 -0400
-Message-ID: <20250625231541.584226205@goodmis.org>
+	id 1uUZLq-000000044gG-0dBi;
+	Wed, 25 Jun 2025 19:16:22 -0400
+Message-ID: <20250625231622.002316317@goodmis.org>
 User-Agent: quilt/0.68
-Date: Wed, 25 Jun 2025 19:15:41 -0400
+Date: Wed, 25 Jun 2025 19:15:43 -0400
 From: Steven Rostedt <rostedt@goodmis.org>
 To: linux-kernel@vger.kernel.org,
  linux-trace-kernel@vger.kernel.org,
@@ -46,76 +47,79 @@ Cc: Masami Hiramatsu <mhiramat@kernel.org>,
  Linus Torvalds <torvalds@linux-foundation.org>,
  Andrew Morton <akpm@linux-foundation.org>,
  Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH v11 00/11] perf: Support the deferred unwinding infrastructure
-X-Rspamd-Server: rspamout02
-X-Rspamd-Queue-Id: D6C1080009
-X-Stat-Signature: c79fuz3hd14cab8ht74td7w538x3rkz8
-X-Session-Marker: 6E657665747340676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX19t464FQAQY5A9I2dwVp9JU1ObIkOlUlqA=
-X-HE-Tag: 1750893356-152776
-X-HE-Meta: U2FsdGVkX18bEXihUvvqf72N4carTM0iuAvItw6mJraqTC4iSm7aVCYe+5ysmN5fvlQ8xMVG3gdUnJtdKUp2O7ADoBwO+eZwxyMke6/LbJhfXd6PWx/hUAr1KIaNVXHJ85OemcMffPx5Iir+Y6Wj2wCgQ7wnR/l4Lp4h2kXBJ0bfE+wRaoZyuc6BStQxHh5TqhduciGrea6t0LvlMDMXEsi7XXrYe1jsERNUCdPBS3mIdTa5LoJi1LNrCnf6TpAjpowSbnGn4e51TMwho88PIu3XxS9Brr7dtSnm54JUq2q0SyOcKyAiYwuKdddSvY4UTAomGucKEYNQAC3RMF3kVz8EIw7mN6YHCDigds7dT8KGuK5sb0de4kJlHlUQtdkD
+Subject: [PATCH v11 02/11] perf: Have get_perf_callchain() return NULL if crosstask and user are
+ set
+References: <20250625231541.584226205@goodmis.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+X-Stat-Signature: 1p8if5js4t5yq9bh6ff4fygzi1d9fce6
+X-Rspamd-Server: rspamout05
+X-Rspamd-Queue-Id: EF9402F
+X-Session-Marker: 6E657665747340676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX188kjvS+mWB42wzpmtmJv3x7MsKmJWWSlM=
+X-HE-Tag: 1750893356-313938
+X-HE-Meta: U2FsdGVkX1+XcjmPd0s26qAQpGmBVhaaTwi1VuxJiZDIA/sL7vqGO4HeuRzWIYiwKxChyEHXEtJb0RBXsL+aRbsqQmVOVfxEW55N+tyftmGu/yLgmET1TOiW6ggwQGrp2q1IrGUDKvmqAtlyHeqwskqedyo8bsk7opy/ncgWsfcqd6d1br3HPCJyhyF598UkTvZVVZMMRJIDOXDfcJkcwowBf8ggx9IToDBZYmAmzVBmYhcSkS6WlODjBiDHfrUaSvfqQVBEboP/uHN0OtjC4w5ELrqJGIP7w4iIck6S2JO6oerqFatL/fIMqy2mT+WkwIALsU20vZ6vKA1PZddDaIDZPyNen3aJkcj4K1B60knb+PXGyYTPXmwPH/CkeAZfypEwP3zDKpMOXOv2aUZuMxWXGO+jfWRPgZp8av7TlEU=
 
-This is based on top of the deferred unwind core patch series:
+From: Josh Poimboeuf <jpoimboe@kernel.org>
 
- https://lore.kernel.org/linux-trace-kernel/20250625225600.555017347@goodmis.org/ 
+get_perf_callchain() doesn't support cross-task unwinding for user space
+stacks, have it return NULL if both the crosstask and user arguments are
+set.
 
-This series implements the perf interface to use deferred user space stack
-tracing. This version fixes a few issues from v10.
+Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+---
+ kernel/events/callchain.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-Changes since v10: https://lore.kernel.org/linux-trace-kernel/20250614024605.597728558@goodmis.org/
+diff --git a/kernel/events/callchain.c b/kernel/events/callchain.c
+index b0f5bd228cd8..cd0e3fc7ed05 100644
+--- a/kernel/events/callchain.c
++++ b/kernel/events/callchain.c
+@@ -224,6 +224,10 @@ get_perf_callchain(struct pt_regs *regs, bool kernel, bool user,
+ 	struct perf_callchain_entry_ctx ctx;
+ 	int rctx, start_entry_idx;
+ 
++	/* crosstask is not supported for user stacks */
++	if (crosstask && user && !kernel)
++		return NULL;
++
+ 	entry = get_callchain_entry(&rctx);
+ 	if (!entry)
+ 		return NULL;
+@@ -240,7 +244,7 @@ get_perf_callchain(struct pt_regs *regs, bool kernel, bool user,
+ 		perf_callchain_kernel(&ctx, regs);
+ 	}
+ 
+-	if (user) {
++	if (user && !crosstask) {
+ 		if (!user_mode(regs)) {
+ 			if  (current->mm)
+ 				regs = task_pt_regs(current);
+@@ -249,9 +253,6 @@ get_perf_callchain(struct pt_regs *regs, bool kernel, bool user,
+ 		}
+ 
+ 		if (regs) {
+-			if (crosstask)
+-				goto exit_put;
+-
+ 			if (add_mark)
+ 				perf_callchain_store_context(&ctx, PERF_CONTEXT_USER);
+ 
+@@ -261,7 +262,6 @@ get_perf_callchain(struct pt_regs *regs, bool kernel, bool user,
+ 		}
+ 	}
+ 
+-exit_put:
+ 	put_callchain_entry(rctx);
+ 
+ 	return entry;
+-- 
+2.47.2
 
-- Rebased on v11 of the core patches
 
-- Added another smp_mb() between the call to perf_event_callchain_deferred()
-  and clearing of cpu_unwind->processing.
-
-- Update using the renamed function that was renamed from
-  unwind_deferred_trace() to unwind_user_faultable() in the core
-  series.
-
-Josh Poimboeuf (5):
-      perf: Remove get_perf_callchain() init_nr argument
-      perf: Have get_perf_callchain() return NULL if crosstask and user are set
-      perf: Simplify get_perf_callchain() user logic
-      perf: Skip user unwind if the task is a kernel thread
-      perf: Support deferred user callchains
-
-Namhyung Kim (4):
-      perf tools: Minimal CALLCHAIN_DEFERRED support
-      perf record: Enable defer_callchain for user callchains
-      perf script: Display PERF_RECORD_CALLCHAIN_DEFERRED
-      perf tools: Merge deferred user callchains
-
-Steven Rostedt (2):
-      perf: Use current->flags & PF_KTHREAD instead of current->mm == NULL
-      perf: Support deferred user callchains for per CPU events
-
-----
- include/linux/perf_event.h                |  14 +-
- include/uapi/linux/perf_event.h           |  19 +-
- kernel/bpf/stackmap.c                     |   8 +-
- kernel/events/callchain.c                 |  49 ++--
- kernel/events/core.c                      | 426 +++++++++++++++++++++++++++++-
- tools/include/uapi/linux/perf_event.h     |  19 +-
- tools/lib/perf/include/perf/event.h       |   7 +
- tools/perf/Documentation/perf-script.txt  |   5 +
- tools/perf/builtin-script.c               |  92 +++++++
- tools/perf/util/callchain.c               |  24 ++
- tools/perf/util/callchain.h               |   3 +
- tools/perf/util/event.c                   |   1 +
- tools/perf/util/evlist.c                  |   1 +
- tools/perf/util/evlist.h                  |   1 +
- tools/perf/util/evsel.c                   |  39 +++
- tools/perf/util/evsel.h                   |   1 +
- tools/perf/util/machine.c                 |   1 +
- tools/perf/util/perf_event_attr_fprintf.c |   1 +
- tools/perf/util/sample.h                  |   3 +-
- tools/perf/util/session.c                 |  78 ++++++
- tools/perf/util/tool.c                    |   2 +
- tools/perf/util/tool.h                    |   4 +-
- 22 files changed, 763 insertions(+), 35 deletions(-)
