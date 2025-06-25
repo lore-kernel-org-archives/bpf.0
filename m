@@ -1,139 +1,112 @@
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BF7E263889
-	for <bpf@vger.kernel.org>; Wed, 25 Jun 2025 19:39:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 667752AD13
+	for <bpf@vger.kernel.org>; Wed, 25 Jun 2025 19:46:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750880401; cv=none; b=PieFm7x+SqtsyCSQL/cH92lqoNGSwO2iN68FpbAODFDNewDIWAK3OaHMN+J518C2nKgulC/d8el+AhDDdW3UTSElpmyGKD4VLmQBzh36fXxdiKa1mzEJ8PcemlqLOCyyH1o/mCWxB47aqb4IIWmBXYCGGZnTFqqjWTZTH4l+Hxc=
+	t=1750880778; cv=none; b=sxR1mT8xtkx6UO2GFpYdaUliGqlTaKqvj90PFXaaEHjZxJ4JH0Yc/B4sUwPIHIEfDU7e9vjXWnr3N1DOVS4I8UkTBXL/pab1mFcsn/HwvHQn4q/twP6xi9oL7fWwnNpVZj2v5jAWZ9OxM7/dcP/QNnBDnhxMjIbYp0xMpMjI3Y4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750880401; c=relaxed/simple;
-	bh=RVDP9wrlmrPidYC/0s5454LvDdVGGSQecA+w2jE2ZRc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=lb/SF23FzkkXlsf1+NkOl7UQrCCLyabY2WyzXuWsaXErrFbFHtWfROio8df/Mue+EkzSJsyu3v7q71LoK4JTJFbfdiKJZGfpE4GIhfKLsOhsTYEjYgzCI+PyN+LeI6duNfIllDLU5b6dTZ3kwFGayoc01Cs1kA1xNB9689KCbSA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eGwLYQnG; arc=none smtp.client-ip=209.85.215.182
+	s=arc-20240116; t=1750880778; c=relaxed/simple;
+	bh=aRvxc2CkKJWNm9x/VrnvdKH1FZkFN8xYZWOUKF1uer4=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=nY+2uisrMzJ2OhxR8A8Qjf40bx1x383CrmlEwPGtm/bromcr2HcFMbroDbcHFnhRRn5Myt/PvRZdIAvXVbaXsxyflurt549aHgwU+r3Tet3GFNN9r/NdCBMC1ZkUT9zPP+MgH6GPUi53sh8dKYSZUQFqT3gnDHqeTqa1KCUvHBc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CUkuHtHU; arc=none smtp.client-ip=209.85.214.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eGwLYQnG"
-Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-b2fd091f826so286356a12.1
-        for <bpf@vger.kernel.org>; Wed, 25 Jun 2025 12:39:59 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CUkuHtHU"
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2363616a1a6so2885535ad.3
+        for <bpf@vger.kernel.org>; Wed, 25 Jun 2025 12:46:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1750880398; x=1751485198; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1h2wIIr43mgwmRt1frjzzszZLKKT+xCvqtCTq5HwKdg=;
-        b=eGwLYQnGuAEfZds+7MwjK+BYaIh49JQ8i2tCxQa2GZmNgRMh0cX9k5ENpjxoBsomJh
-         00CUFqCKHOlFvqUSuviCnwqVYeSjo1P0+DWBDc04zMbOwAGwW/FINL48ckY50q005Bsp
-         8INMN9k+dcwEnXY+o8LFxCo+Y5hE9nWaL+Lchl1v9CcOIH0jVAfKerx5916VFgcdoCc7
-         a301puX1ji3tghXkOJqRiQK5sn0Zq+LrFfzKEhISLi9lt1qKr3WtYAQA2PD2x9V+/qQh
-         h8tcMjObCk0dvB6bfVzmO3sBVxnKWmOh+73kGXpCerdsD2e52iXXEfM8vlA5239zUq05
-         nKfA==
+        d=gmail.com; s=20230601; t=1750880777; x=1751485577; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=PHm2VbDsH9bJuWx3x6oS3u6X68/W0rI/VG9RJRRlLjk=;
+        b=CUkuHtHUviPQasbYlD/erDkmk8NPAI3h34p/RLgMXNY6wC4w4mxc+ZFTCMTjRIcZ85
+         UiViUpjZCO6ptZ111bmJ6bJQa9i0y7NGFrpRw2dxlECmyPlPmcinQGt/wV9HNss4xzEH
+         cj4z1eqbm0JZ51NDEckRmQhCQW1Fzrl7cgiUiKw6kDf11yH1SxcrCchVV4w5pQgpAbKh
+         HeJpEDxuwtixIPbLhSuj+XVv/75oJWNFPzhCKj1MtR63jBmESxd7K0EasZSTe5TCOq9M
+         4JhVRgj/fHS0ATX+MKophW555oFscQMqVYZjZHU0vno4VMBgXT7lDOG+sY9SVYhN9MGj
+         dXJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750880398; x=1751485198;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1h2wIIr43mgwmRt1frjzzszZLKKT+xCvqtCTq5HwKdg=;
-        b=eUZSlrOLXW9oic/NzsQi1+kcx4zLB2jmUvxiRWrC7kn3iGLe9rjbxul+16zE5tdm99
-         dM57Ww0BUy1iNm+EtQA4+/kr1BmNwdKWw8iTXlMjRYs3pjsjVjTTQKvkVyPg+eUd6HW5
-         QFJxBJU52VIst1fWciwsNgBLW8ZKm3PnnZNB5yICZXKcNjDdwIT9fSCPV+3GLPlEMOtn
-         9jKhpNY7M9CbFP7zZm9br2ZF+7+82A9rtslg5xgytvlhvwCzZJhKTauut8amdGExG+bZ
-         VE3QOFdXjCvnEuaOCHx9ghXQK0wCBsuXjwxI199Z14gepQudv7ThqIhcmHli29yeoeXm
-         9RLA==
-X-Gm-Message-State: AOJu0Yz/LHCWezoqYIzhzi0JEyyAaHstKjWjvHJ0GZBH+GPjC3wNtadH
-	TqjphBrLCqJTzxc5CqE7LSw50VcaCywAeiwtoIrXFrOVmj/yRxnPiw6WT9FfmwNV/tmRnnPvNp0
-	/ZOSLQsWd7X5pAD4R76Jdl2inxJrjN80=
-X-Gm-Gg: ASbGncsfGgV4e2cwqWqid26cRaWQDi4pApYJKk/mR/2nKdXZLFgzO5hWMGOF5pwYx3r
-	IhWJ7uYwRitadJRUxCD2H4qe9Dn6QBHL7yKrokJ1HGEYS0it5vHoaikqoc13uJGz33X+Z7LDYFI
-	/pYc5tUKeG2HpzNrwtWkucBWKEoETHrnfWfcq9Ud9VrJ+tsahMBU9iRjgKlV0=
-X-Google-Smtp-Source: AGHT+IFsHgrPvf6kgyDoQq29b7w9oJXevbIzo5g7nLRpIcol1/Bkh3/Ges5WG4ZOZjxdYcDcVj+RhMeFbW5t/eoDotg=
-X-Received: by 2002:a17:90b:55d0:b0:311:482a:f956 with SMTP id
- 98e67ed59e1d1-316d69bf0cbmr1022580a91.5.1750880398423; Wed, 25 Jun 2025
- 12:39:58 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1750880777; x=1751485577;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=PHm2VbDsH9bJuWx3x6oS3u6X68/W0rI/VG9RJRRlLjk=;
+        b=XZpgnVgtMp+l6qeDUTvJQ0J82Mdh3hhWCstS40tM5X/6Bo7T/GuTWgY0rRAuDa9Lup
+         GIObbA7Z9Hw+Bvlb2CEkJcASjtSftlHIZNoq4QN6nAU0o3wVO9WIOv14fDhCH4jdulb6
+         0v+fOOmSvqbqbfDws/WP47olAkOdWvzQyGqx6NdESJssYlUEOEJMfVW5z5IIIYjDIuUT
+         CLyT1nV3bAuGahQjlKyuOR9TeEvmfMhocR2gKRmU0BKl/O8FfilW8V8/g5q9N8K2nhju
+         nO9Y3/a3RLJTIEodiTeuytdXE+yGXg9GQHCf0iBJrzhRH9h75K7jq+OI0tPpqOBOv/EP
+         eWAw==
+X-Gm-Message-State: AOJu0YxwSDwFRHgO5G63KlicGrDonFTR8sp2MicBHMctqJ+uto5QLjiF
+	h7F3nNZ2JPo9wfvEA/+y8kSSo6gQhjkXJoVu1pazIvdMVaAF9iriYvN+
+X-Gm-Gg: ASbGncunDuD4qDygu9Di0Af+pI5ay1Yk2xBTi57veD5rGo+W0cW2sL3bbaVBm1BqoLy
+	Drj5GyTuL1z0G/i/0HVeR1l4jZafqIf5fONgE9eNZDaBqtAtbB74CKi/Dy8mRgkzhbflAUQvEnI
+	Z9zvsm+EhtU1O9/x4CxNTr9qp5JmA83tkyPZpOjebRcQ42SXS5B04/2AqL+kXWIYJY70TEkdtPd
+	BqIjeuTFWFomXm7j0VZKMzr5vx/4fMK1lN5bKt3RQPchBsYN9Yucq9idkbAQNdkevNPz+kqE+yF
+	kJEN/faUKrI7IkQyuH2GwFPuzTGQFNgIYQVJ8Gwpt/7rOB2CJCx9u/+9d/NH0ONCm84VpbW3IEe
+	tCgjc4D4hjls=
+X-Google-Smtp-Source: AGHT+IEvCSmNiHh8lMnLOiePa83UmueRtJjKdvB8HXNjFLXYUejryZ8t3sooXbZxnSMX9hIkdcxFzw==
+X-Received: by 2002:a17:903:166e:b0:235:880:cf8a with SMTP id d9443c01a7336-23823fd068fmr71003785ad.15.1750880776658;
+        Wed, 25 Jun 2025 12:46:16 -0700 (PDT)
+Received: from ?IPv6:2a03:83e0:115c:1:2bd4:b3aa:7cc1:1d78? ([2620:10d:c090:500::5:1734])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b31f119e820sm13254259a12.23.2025.06.25.12.46.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Jun 2025 12:46:16 -0700 (PDT)
+Message-ID: <8fa3ad36c2754bfa9a9b7366d47a1d2824c81ce1.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v3 3/3] selftests/bpf: check operations on
+ untrusted ro pointers to mem
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+ daniel@iogearbox.net, 	martin.lau@linux.dev, kernel-team@fb.com,
+ yonghong.song@linux.dev
+Date: Wed, 25 Jun 2025 12:46:14 -0700
+In-Reply-To: <CAEf4BzYv1GKz81pVsCoeBBO5pdc76bkdg-AY6vA9sbbaXE3Eew@mail.gmail.com>
+References: <20250625182414.30659-1-eddyz87@gmail.com>
+	 <20250625182414.30659-4-eddyz87@gmail.com>
+	 <CAEf4BzYv1GKz81pVsCoeBBO5pdc76bkdg-AY6vA9sbbaXE3Eew@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2 (3.56.2-1.fc42) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250625182414.30659-1-eddyz87@gmail.com>
-In-Reply-To: <20250625182414.30659-1-eddyz87@gmail.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Wed, 25 Jun 2025 12:39:46 -0700
-X-Gm-Features: Ac12FXxnif0LcuWFFYN0xirnzJpjwGLQPWE3Cl_riS2A7RQrv553rKvPt2urKks
-Message-ID: <CAEf4BzYLkz1_+2s_e4No8jKiVzYvYr0Lyf8ERXSMf2MaZiFTiw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 0/3] bpf: allow void* cast using bpf_rdonly_cast()
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
-	daniel@iogearbox.net, martin.lau@linux.dev, kernel-team@fb.com, 
-	yonghong.song@linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jun 25, 2025 at 11:24=E2=80=AFAM Eduard Zingerman <eddyz87@gmail.co=
-m> wrote:
->
-> Currently, pointers returned by `bpf_rdonly_cast()` have a type of
-> "pointer to btf id", and only casts to structure types are allowed.
-> Access to memory pointed to by these pointers is done through
-> `BPF_PROBE_{MEM,MEMSX}` instructions and does not produce errors on
-> invalid memory access.
->
-> This patch set extends `bpf_rdonly_cast()` to allow casts to an
-> equivalent of 'void *', effectively replacing
-> `bpf_probe_read_kernel()` calls in situations where access to
-> individual bytes or integers is necessary.
->
-> The mechanism was suggested and explored by Andrii Nakryiko in [1].
->
-> To help with detecting support for this feature, an
-> `enum bpf_features` is added with intended usage as follows:
->
->   if (bpf_core_enum_value_exists(enum bpf_features,
->                                  BPF_FEAT_RDONLY_CAST_TO_VOID))
->     ...
->
-> [1] https://github.com/anakryiko/linux/tree/bpf-mem-cast
->
-> Changelog:
->
-> v2: https://lore.kernel.org/bpf/20250625000520.2700423-1-eddyz87@gmail.co=
-m/
-> v2 -> v3:
-> - dropped direct numbering for __MAX_BPF_FEAT.
->
-> v1: https://lore.kernel.org/bpf/20250624191009.902874-1-eddyz87@gmail.com=
-/
-> v1 -> v2:
-> - renamed BPF_FEAT_TOTAL to __MAX_BPF_FEAT and moved patch introducing
->   bpf_features enum to the start of the series (Alexei);
-> - dropped patch #3 allowing optout from CAP_SYS_ADMIN drop in
->   prog_tests/verifier.c, use a separate runner in prog_tests/*
->   instead.
->
-> Eduard Zingerman (3):
->   bpf: add bpf_features enum
->   bpf: allow void* cast using bpf_rdonly_cast()
->   selftests/bpf: check operations on untrusted ro pointers to mem
->
+On Wed, 2025-06-25 at 12:38 -0700, Andrii Nakryiko wrote:
+> On Wed, Jun 25, 2025 at 11:24=E2=80=AFAM Eduard Zingerman <eddyz87@gmail.=
+com> wrote:
+> >=20
+> > The following cases are tested:
+> > - it is ok to load memory at any offset from rdonly_untrusted_mem;
+> > - rdonly_untrusted_mem offset/bounds are not tracked;
+> > - writes into rdonly_untrusted_mem are forbidden;
+> > - atomic operations on rdonly_untrusted_mem are forbidden;
+> > - rdonly_untrusted_mem can't be passed as a memory argument of a
+> >   helper of kfunc;
+> > - it is ok to use PTR_TO_MEM and PTR_TO_BTF_ID in a same load
+> >   instruction.
+> >=20
+> > Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
+> > ---
+> >  .../bpf/prog_tests/mem_rdonly_untrusted.c     |   9 ++
+> >  .../bpf/progs/mem_rdonly_untrusted.c          | 136 ++++++++++++++++++
+> >  2 files changed, 145 insertions(+)
+> >  create mode 100644 tools/testing/selftests/bpf/prog_tests/mem_rdonly_u=
+ntrusted.c
+> >  create mode 100644 tools/testing/selftests/bpf/progs/mem_rdonly_untrus=
+ted.c
+> >=20
+>=20
+> Would be good to have a test that demonstrates loads of all
+> combinations of signed/unsigned and 1/2/4/8 bytes. Maybe as a follow
+> up?
 
-As I mentioned on patch #3, we are lacking demonstration of another
-critical property: ability to dereference the pointer as 1/2/4/8 byte
-pointers. Other than that, lgtm.
-
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
-
->  kernel/bpf/verifier.c                         |  79 ++++++++--
->  .../bpf/prog_tests/mem_rdonly_untrusted.c     |   9 ++
->  .../bpf/progs/mem_rdonly_untrusted.c          | 136 ++++++++++++++++++
->  3 files changed, 212 insertions(+), 12 deletions(-)
->  create mode 100644 tools/testing/selftests/bpf/prog_tests/mem_rdonly_unt=
-rusted.c
->  create mode 100644 tools/testing/selftests/bpf/progs/mem_rdonly_untruste=
-d.c
->
-> --
-> 2.47.1
->
+Will respin.
