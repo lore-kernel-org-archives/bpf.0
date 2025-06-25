@@ -1,31 +1,31 @@
-Received: from relay.hostedemail.com (smtprelay0011.hostedemail.com [216.40.44.11])
+Received: from relay.hostedemail.com (smtprelay0012.hostedemail.com [216.40.44.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A30A92F49E3;
-	Wed, 25 Jun 2025 22:57:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B56C42F49F8;
+	Wed, 25 Jun 2025 22:57:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750892225; cv=none; b=N0BsDT/EmaVxNGMrYH1s4XfjJmMiLteLCisHrBEdXOoeqrTjGkMCloogSg5L7QfO47UilwuIv0RoO0VtWzeb/jRuYXloQsmWa1GbYkmn2X1vfILmXaMB+8YngG9xIfix9SezK5EQ8W4k0Ra+Gig7wBSdGg0MNqOBQEJaABlZAaU=
+	t=1750892225; cv=none; b=g92Xh05DE9KAishneau6T5ul8PjDC4eOZnt0fiXg2c3bpmLQm/s03TLaN51yGu2CqtP5Zekz6WxWBRPgoTLCoWhNluce+5pTt8iX1kg7oiz/cOxvhkJwDRJ79+MYY+JQNYTjEvifmvCot4WSoI2kcmOkQ0fxoReaCY4ClzChVwc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1750892225; c=relaxed/simple;
-	bh=nYCNLIg1KRntUpgdqK18VcHOHOZYxatVKh1vAncVTdQ=;
+	bh=BTki9KcgQuBs03ZLixR3EfsIYgDN30ni9Vj+f0Agnh0=;
 	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type; b=VvTfkpXBb/weVF5NYdV7EQ1ibH3G9m6nw/PO4Vf68E3UpFCw/aICyiiv4hJ/FSAJG/oTSPg4gtHSeMIy9ykswK0nsPddao0BZQky8uxNxAD1AlI4fMX0WIKbRyJ4UV/xgyWqJNjE+pGdg+NBrIzo3yGlDwLAmNwSAQIxqPwrlZw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.11
+	 Content-Type; b=IWizK1PWHIsRqwICFQBcSOZwYiufYZxwzGKaJ3GRGTH1OdpdNw/t8mfxpbHXY/U58LLtWmKhUsvXWPsQPYBW6fMiEBRT8Gy/J7A1k5MrCvYzWWOVf7os7NxA1Cju3YHwVJNe6rd9a+kEaf4bJ3mWigBwgrDYN9G6YWqiKz3tGW8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf16.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay07.hostedemail.com (Postfix) with ESMTP id 3B0E31607A7;
-	Wed, 25 Jun 2025 22:56:54 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: nevets@goodmis.org) by omf16.hostedemail.com (Postfix) with ESMTPA id EEAD320016;
+Received: from omf02.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay06.hostedemail.com (Postfix) with ESMTP id 897271047D0;
+	Wed, 25 Jun 2025 22:56:53 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: nevets@goodmis.org) by omf02.hostedemail.com (Postfix) with ESMTPA id 4DF758000F;
 	Wed, 25 Jun 2025 22:56:50 +0000 (UTC)
 Received: from rostedt by gandalf with local (Exim 4.98.2)
 	(envelope-from <rostedt@goodmis.org>)
-	id 1uUZ3M-000000043gH-0d3e;
-	Wed, 25 Jun 2025 18:57:16 -0400
-Message-ID: <20250625225716.004109448@goodmis.org>
+	id 1uUZ3L-000000043eL-1xnh;
+	Wed, 25 Jun 2025 18:57:15 -0400
+Message-ID: <20250625225715.319252952@goodmis.org>
 User-Agent: quilt/0.68
-Date: Wed, 25 Jun 2025 18:56:07 -0400
+Date: Wed, 25 Jun 2025 18:56:03 -0400
 From: Steven Rostedt <rostedt@goodmis.org>
 To: linux-kernel@vger.kernel.org,
  linux-trace-kernel@vger.kernel.org,
@@ -47,7 +47,7 @@ Cc: Masami Hiramatsu <mhiramat@kernel.org>,
  Linus Torvalds <torvalds@linux-foundation.org>,
  Andrew Morton <akpm@linux-foundation.org>,
  Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH v11 07/14] unwind_user/deferred: Make unwind deferral requests NMI-safe
+Subject: [PATCH v11 03/14] unwind_user: Add compat mode frame pointer support
 References: <20250625225600.555017347@goodmis.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -56,226 +56,199 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Rspamd-Queue-Id: EEAD320016
-X-Stat-Signature: frkkoexfjaia1s81fnex9umzf33qieyf
-X-Rspamd-Server: rspamout06
+X-Stat-Signature: u71xmu1cznptucshk3bon4dmo8t6eszg
+X-Rspamd-Server: rspamout05
+X-Rspamd-Queue-Id: 4DF758000F
 X-Session-Marker: 6E657665747340676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX19dcg96G3ZyymYWhYgW84cFvU9PReOWxoQ=
-X-HE-Tag: 1750892210-536468
-X-HE-Meta: U2FsdGVkX18AaT7amwqkanTaRw0qkfnKWvaBRWWXywqTD1UfXIRP9d8dtVev+Ads6Jt1ApvOB+mEQWkeSTMD5GhdYB6uovDJfT46CcYvmxGW2OjcBgqnIyb/i3yJiW8d3UHL7eZFHUnm1d+5XbpMMQp3PN3yVQ5b/N2+JEtJWfhY12/Rm6lBBQ74Z/ftU2BAMrBCfWDVmKOjOoyC9Y/oilQPBY6u5cIVvT15u36Yum9tANdnGrDqykbL8cFXQWUJ9qqxuY0mFJTpmzx3GpkB5m98Znp2iRjAcxI7RjfJVdp4O1oIEc9j1OSucBKLKNAj2FBm+zgPtOIVqyGLrcR8cZp/cvima+qVPfRAJrVU3ZzIueGGx6TFcmwAi+q2h4Jrahf+TDdNfpNEPZJ0e6/94cZr4dQzD4Ywdoe4nGkvmtm8zILBsoWji8NiSA1kZHXSuxBUiDM87ayHTpsggZRGexkR/fLSlKa0G1v+n8ddNsg=
+X-Session-ID: U2FsdGVkX1/OmbiHdwR6oaDQqzTo3ytvVL/34RQqUa4=
+X-HE-Tag: 1750892210-797740
+X-HE-Meta: U2FsdGVkX19ptLZDQbVnXH2MvdZXZdeYsg4h4/9amlJ4uuUMEppxK0Jw7m/KMg1PVjp50TUcgvwNahM/NyuPzb8hW2VJWu8FAJT+FrTLajgnzEofH9lx0HEk2r8a4D7bw7NxM6tM+0YzkJPl21HzK4O3BwaGfjQf/pJci+WC/Hm8zs/xaLVeNHrw2XB0xkKtHrSPLeJMZmplzAGGS94HJzddJEQsvYN4gsMOadXdNXGTT9uLXhF3/YEVyB19BN5bol1NX4mwrVdwHPSddBWcbAHOwZRbXDj8xMhfxGyZ+HXz9gRVA47NFW7ZSIsLdYUWoIz0+CLiWsYN0XTZ+ksF972n0nYHQ7A9KBhXPGuiAHKXAS9Z7NLFsO69BR4dUtn8ilPfRpkrjRRiVLX/5dUkzUQy7L3rmDdeZX3oVVAEXZU=
 
-From: Steven Rostedt <rostedt@goodmis.org>
+From: Josh Poimboeuf <jpoimboe@kernel.org>
 
-Make unwind_deferred_request() NMI-safe so tracers in NMI context can
-call it and safely request a user space stacktrace when the task exits.
+Add optional support for user space compat mode frame pointer unwinding.
+If supported, the arch needs to enable CONFIG_HAVE_UNWIND_USER_COMPAT_FP
+and define ARCH_INIT_USER_COMPAT_FP_FRAME.
 
-Note, this is only allowed for architectures that implement a safe 64 bit
-cmpxchg. Which rules out some 32bit architectures and even some 64 bit
-ones.  If an architecture requests a deferred stack trace from NMI context
-that does not support a safe NMI 64 bit cmpxchg, it will get an -EINVAL.
-For those architectures, they would need another method (perhaps an
-irqwork), to request a deferred user space stack trace. That can be dealt
-with later if one of theses architectures require this feature.
-
-Suggested-by: Peter Zijlstra <peterz@infradead.org>
+Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+Co-developed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
-Changse since v10: https://lore.kernel.org/20250611010428.938845449@goodmis.org
+Changes since v10: https://lore.kernel.org/20250611010428.261095906@goodmis.org
 
-- Reworked to simply use a 64bit cmpxchg to update the timestamp.
+- Rename compat_state() to compat_fp_state() for consistency. (Peter Zijlstra)
 
-- Removed Josh Poimboeuf's authorship as the commit is completely
-  rewritten.
+- Lowercase macro UNWIND_GET_USER_LONG() to unwind_get_user_long()
+  (Peter Zijlstra and Linus Torvalds)
 
-- Switch timestamp to local64_t type and pending to local_t type.
+- Remove currently unused arch_unwind_user_init() and
+  arch_unwind_user_next() and add them in the later patches when they are
+  used. (Peter Zijlstra)
 
- include/linux/unwind_deferred.h       |  4 +-
- include/linux/unwind_deferred_types.h |  7 ++-
- kernel/unwind/deferred.c              | 74 ++++++++++++++++++++++-----
- 3 files changed, 69 insertions(+), 16 deletions(-)
+ arch/Kconfig                            |  4 ++++
+ include/asm-generic/Kbuild              |  1 +
+ include/asm-generic/unwind_user_types.h |  5 ++++
+ include/linux/unwind_user.h             |  5 ++++
+ include/linux/unwind_user_types.h       |  7 ++++++
+ kernel/unwind/user.c                    | 32 +++++++++++++++++++++----
+ 6 files changed, 50 insertions(+), 4 deletions(-)
+ create mode 100644 include/asm-generic/unwind_user_types.h
 
-diff --git a/include/linux/unwind_deferred.h b/include/linux/unwind_deferred.h
-index 26011b413142..718637777649 100644
---- a/include/linux/unwind_deferred.h
-+++ b/include/linux/unwind_deferred.h
-@@ -29,12 +29,12 @@ void unwind_deferred_cancel(struct unwind_work *work);
- static __always_inline void unwind_reset_info(void)
- {
- 	/* Exit out early if this was never used */
--	if (likely(!current->unwind_info.timestamp))
-+	if (likely(!local64_read(&current->unwind_info.timestamp)))
- 		return;
+diff --git a/arch/Kconfig b/arch/Kconfig
+index 8e3fd723bd74..2c41d3072910 100644
+--- a/arch/Kconfig
++++ b/arch/Kconfig
+@@ -442,6 +442,10 @@ config HAVE_UNWIND_USER_FP
+ 	bool
+ 	select UNWIND_USER
  
- 	if (current->unwind_info.cache)
- 		current->unwind_info.cache->nr_entries = 0;
--	current->unwind_info.timestamp = 0;
-+	local64_set(&current->unwind_info.timestamp, 0);
- }
- 
- #else /* !CONFIG_UNWIND_USER */
-diff --git a/include/linux/unwind_deferred_types.h b/include/linux/unwind_deferred_types.h
-index 5df264cf81ad..0d722e877473 100644
---- a/include/linux/unwind_deferred_types.h
-+++ b/include/linux/unwind_deferred_types.h
-@@ -2,6 +2,9 @@
- #ifndef _LINUX_UNWIND_USER_DEFERRED_TYPES_H
- #define _LINUX_UNWIND_USER_DEFERRED_TYPES_H
- 
-+#include <asm/local64.h>
-+#include <asm/local.h>
++config HAVE_UNWIND_USER_COMPAT_FP
++	bool
++	depends on HAVE_UNWIND_USER_FP
 +
- struct unwind_cache {
- 	unsigned int		nr_entries;
- 	unsigned long		entries[];
-@@ -10,8 +13,8 @@ struct unwind_cache {
- struct unwind_task_info {
- 	struct unwind_cache	*cache;
- 	struct callback_head	work;
--	u64			timestamp;
--	int			pending;
-+	local64_t		timestamp;
-+	local_t			pending;
- };
+ config HAVE_PERF_REGS
+ 	bool
+ 	help
+diff --git a/include/asm-generic/Kbuild b/include/asm-generic/Kbuild
+index 295c94a3ccc1..b797a2434396 100644
+--- a/include/asm-generic/Kbuild
++++ b/include/asm-generic/Kbuild
+@@ -60,6 +60,7 @@ mandatory-y += topology.h
+ mandatory-y += trace_clock.h
+ mandatory-y += uaccess.h
+ mandatory-y += unwind_user.h
++mandatory-y += unwind_user_types.h
+ mandatory-y += vermagic.h
+ mandatory-y += vga.h
+ mandatory-y += video.h
+diff --git a/include/asm-generic/unwind_user_types.h b/include/asm-generic/unwind_user_types.h
+new file mode 100644
+index 000000000000..f568b82e52cd
+--- /dev/null
++++ b/include/asm-generic/unwind_user_types.h
+@@ -0,0 +1,5 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _ASM_GENERIC_UNWIND_USER_TYPES_H
++#define _ASM_GENERIC_UNWIND_USER_TYPES_H
++
++#endif /* _ASM_GENERIC_UNWIND_USER_TYPES_H */
+diff --git a/include/linux/unwind_user.h b/include/linux/unwind_user.h
+index a405111c41b0..ac007363820a 100644
+--- a/include/linux/unwind_user.h
++++ b/include/linux/unwind_user.h
+@@ -9,6 +9,11 @@
+  #define ARCH_INIT_USER_FP_FRAME
+ #endif
  
- #endif /* _LINUX_UNWIND_USER_DEFERRED_TYPES_H */
-diff --git a/kernel/unwind/deferred.c b/kernel/unwind/deferred.c
-index d5f2c004a5b0..dd36e58c8cad 100644
---- a/kernel/unwind/deferred.c
-+++ b/kernel/unwind/deferred.c
-@@ -12,6 +12,35 @@
- #include <linux/slab.h>
- #include <linux/mm.h>
- 
-+/*
-+ * For requesting a deferred user space stack trace from NMI context
-+ * the architecture must support a 64bit safe cmpxchg in NMI context.
-+ * For those architectures that do not have that, then it cannot ask
-+ * for a deferred user space stack trace from an NMI context. If it
-+ * does, then it will get -EINVAL.
-+ */
-+#if defined(CONFIG_ARCH_HAVE_NMI_SAFE_CMPXCHG) && \
-+	!defined(CONFIG_GENERIC_ATOMIC64)
-+# define CAN_USE_IN_NMI		1
-+static inline u64 assign_timestamp(struct unwind_task_info *info,
-+				   u64 timestamp)
-+{
-+	u64 old = 0;
-+	if (!local64_try_cmpxchg(&info->timestamp, &old, timestamp))
-+		timestamp = old;
-+	return timestamp;
-+}
-+#else
-+# define CAN_USE_IN_NMI		0
-+static inline u64 assign_timestamp(struct unwind_task_info *info,
-+				   u64 timestamp)
-+{
-+	/* For archs that do not allow NMI here */
-+	local64_set(&info->timestamp, timestamp);
-+	return timestamp;
-+}
++#ifndef ARCH_INIT_USER_COMPAT_FP_FRAME
++ #define ARCH_INIT_USER_COMPAT_FP_FRAME
++ #define in_compat_mode(regs) false
 +#endif
 +
- /* Make the cache fit in a 4K page */
- #define UNWIND_MAX_ENTRIES					\
- 	((SZ_4K - sizeof(struct unwind_cache)) / sizeof(long))
-@@ -31,12 +60,21 @@ static LIST_HEAD(callbacks);
-  */
- static u64 get_timestamp(struct unwind_task_info *info)
- {
-+	u64 timestamp;
+ int unwind_user_start(struct unwind_user_state *state);
+ int unwind_user_next(struct unwind_user_state *state);
+ 
+diff --git a/include/linux/unwind_user_types.h b/include/linux/unwind_user_types.h
+index 65bd070eb6b0..0b6563951ca4 100644
+--- a/include/linux/unwind_user_types.h
++++ b/include/linux/unwind_user_types.h
+@@ -3,10 +3,16 @@
+ #define _LINUX_UNWIND_USER_TYPES_H
+ 
+ #include <linux/types.h>
++#include <asm/unwind_user_types.h>
 +
- 	lockdep_assert_irqs_disabled();
++#ifndef arch_unwind_user_state
++struct arch_unwind_user_state {};
++#endif
  
--	if (!info->timestamp)
--		info->timestamp = local_clock();
-+	/*
-+	 * Note, the timestamp is generated on the first request.
-+	 * If it exists here, then the timestamp is earlier than
-+	 * this request and it means that this request will be
-+	 * valid for the stracktrace.
-+	 */
-+	timestamp = local64_read(&info->timestamp);
-+	if (timestamp)
-+		return timestamp;
+ enum unwind_user_type {
+ 	UNWIND_USER_TYPE_NONE,
+ 	UNWIND_USER_TYPE_FP,
++	UNWIND_USER_TYPE_COMPAT_FP,
+ };
  
--	return info->timestamp;
-+	return assign_timestamp(info, local_clock());
+ struct unwind_stacktrace {
+@@ -25,6 +31,7 @@ struct unwind_user_state {
+ 	unsigned long ip;
+ 	unsigned long sp;
+ 	unsigned long fp;
++	struct arch_unwind_user_state arch;
+ 	enum unwind_user_type type;
+ 	bool done;
+ };
+diff --git a/kernel/unwind/user.c b/kernel/unwind/user.c
+index 1201d655654a..3a0ac4346f5b 100644
+--- a/kernel/unwind/user.c
++++ b/kernel/unwind/user.c
+@@ -12,12 +12,32 @@ static struct unwind_user_frame fp_frame = {
+ 	ARCH_INIT_USER_FP_FRAME
+ };
+ 
++static struct unwind_user_frame compat_fp_frame = {
++	ARCH_INIT_USER_COMPAT_FP_FRAME
++};
++
+ static inline bool fp_state(struct unwind_user_state *state)
+ {
+ 	return IS_ENABLED(CONFIG_HAVE_UNWIND_USER_FP) &&
+ 	       state->type == UNWIND_USER_TYPE_FP;
  }
  
- /**
-@@ -96,11 +134,11 @@ static void unwind_deferred_task_work(struct callback_head *head)
- 	struct unwind_work *work;
- 	u64 timestamp;
- 
--	if (WARN_ON_ONCE(!info->pending))
-+	if (WARN_ON_ONCE(!local_read(&info->pending)))
- 		return;
- 
- 	/* Allow work to come in again */
--	WRITE_ONCE(info->pending, 0);
-+	local_set(&info->pending, 0);
- 
- 	/*
- 	 * From here on out, the callback must always be called, even if it's
-@@ -111,7 +149,7 @@ static void unwind_deferred_task_work(struct callback_head *head)
- 
- 	unwind_user_faultable(&trace);
- 
--	timestamp = info->timestamp;
-+	timestamp = local64_read(&info->timestamp);
- 
- 	guard(mutex)(&callback_mutex);
- 	list_for_each_entry(work, &callbacks, list) {
-@@ -150,31 +188,43 @@ static void unwind_deferred_task_work(struct callback_head *head)
- int unwind_deferred_request(struct unwind_work *work, u64 *timestamp)
++static inline bool compat_fp_state(struct unwind_user_state *state)
++{
++	return IS_ENABLED(CONFIG_HAVE_UNWIND_USER_COMPAT_FP) &&
++	       state->type == UNWIND_USER_TYPE_COMPAT_FP;
++}
++
++#define unwind_get_user_long(to, from, state)				\
++({									\
++	int __ret;							\
++	if (compat_fp_state(state))					\
++		__ret = get_user(to, (u32 __user *)(from));		\
++	else								\
++		__ret = get_user(to, (unsigned long __user *)(from));	\
++	__ret;								\
++})
++
+ int unwind_user_next(struct unwind_user_state *state)
  {
- 	struct unwind_task_info *info = &current->unwind_info;
-+	long pending;
- 	int ret;
- 
- 	*timestamp = 0;
- 
--	if (WARN_ON_ONCE(in_nmi()))
--		return -EINVAL;
--
- 	if ((current->flags & (PF_KTHREAD | PF_EXITING)) ||
- 	    !user_mode(task_pt_regs(current)))
+ 	struct unwind_user_frame *frame;
+@@ -26,7 +46,9 @@ int unwind_user_next(struct unwind_user_state *state)
+ 	if (state->done)
  		return -EINVAL;
  
-+	/* NMI requires having safe 64 bit cmpxchg operations */
-+	if (!CAN_USE_IN_NMI && in_nmi())
-+		return -EINVAL;
-+
- 	guard(irqsave)();
+-	if (fp_state(state))
++	if (compat_fp_state(state))
++		frame = &compat_fp_frame;
++	else if (fp_state(state))
+ 		frame = &fp_frame;
+ 	else
+ 		goto done;
+@@ -39,10 +61,10 @@ int unwind_user_next(struct unwind_user_state *state)
+ 		goto done;
  
- 	*timestamp = get_timestamp(info);
+ 	/* Find the Return Address (RA) */
+-	if (get_user(ra, (unsigned long *)(cfa + frame->ra_off)))
++	if (unwind_get_user_long(ra, cfa + frame->ra_off, state))
+ 		goto done;
  
- 	/* callback already pending? */
--	if (info->pending)
-+	pending = local_read(&info->pending);
-+	if (pending)
- 		return 1;
+-	if (frame->fp_off && get_user(fp, (unsigned long __user *)(cfa + frame->fp_off)))
++	if (frame->fp_off && unwind_get_user_long(fp, cfa + frame->fp_off, state))
+ 		goto done;
  
-+	if (CAN_USE_IN_NMI) {
-+		/* Claim the work unless an NMI just now swooped in to do so. */
-+		if (!local_try_cmpxchg(&info->pending, &pending, 1))
-+			return 1;
-+	} else {
-+		local_set(&info->pending, 1);
-+	}
-+
- 	/* The work has been claimed, now schedule it. */
- 	ret = task_work_add(current, &info->work, TWA_RESUME);
--	if (WARN_ON_ONCE(ret))
-+	if (WARN_ON_ONCE(ret)) {
-+		local_set(&info->pending, 0);
- 		return ret;
-+	}
+ 	state->ip = ra;
+@@ -68,7 +90,9 @@ int unwind_user_start(struct unwind_user_state *state)
+ 		return -EINVAL;
+ 	}
  
--	info->pending = 1;
- 	return 0;
- }
- 
+-	if (IS_ENABLED(CONFIG_HAVE_UNWIND_USER_FP))
++	if (IS_ENABLED(CONFIG_HAVE_UNWIND_USER_COMPAT_FP) && in_compat_mode(regs))
++		state->type = UNWIND_USER_TYPE_COMPAT_FP;
++	else if (IS_ENABLED(CONFIG_HAVE_UNWIND_USER_FP))
+ 		state->type = UNWIND_USER_TYPE_FP;
+ 	else
+ 		state->type = UNWIND_USER_TYPE_NONE;
 -- 
 2.47.2
 
