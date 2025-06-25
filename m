@@ -1,563 +1,138 @@
-Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B36C22F5499;
-	Wed, 25 Jun 2025 23:16:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 692FF2F3C0E;
+	Wed, 25 Jun 2025 23:17:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750893367; cv=none; b=lAHLJBKJhVn8sn0wF/+898my/dCxL8fjJoEKZvRKnFYJRgf4xbLP1Xp35OQHKTvrSAwn8yAvTV7NR7uVlCEcedAqlve9WmIhTDnZVMZX1Er/m/0fVC3SZn9iDYoq7TQQdrMrmYbZZQlDKIQk8fKic11VN8e3vBDrrth1ClGwJLg=
+	t=1750893453; cv=none; b=InKhuXCWWQULK0qdC14rpby9iDjMbmdg+DGLvTVonQ0P7KRTN5leL1Z1SSs+IMGMLGJyEa7XSMYu7d3jbGFf9Gs4VYwmP9GeryiqF2s7cHJqaUU+j9/rYqqW0VOEU1ioLOrkLDU7HnRdL7jPbEeAXUbhyVH55uBzA+N1IBkZKKw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750893367; c=relaxed/simple;
-	bh=6hlWRK7eLiQbBAOxoeYh7opCi7gLvsIfLDxBI5Z0v3s=;
-	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type; b=f9j7yYr5cmD/b84QRYN83jtzFjdDraytgApNh++uBwmtRg3e81bFMNmMYWjfXn9i9f0gKU7/5wOcCQ3JTei2rlh1zPNcKzzXPczX/n9KFU1g62h6Tqj4zaNb9xp623y3z9xQVxJjAYFhzyuKZ2TBLfSZAK5BFCq3q4Ed/yubevc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf12.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay06.hostedemail.com (Postfix) with ESMTP id 3E67A104843;
-	Wed, 25 Jun 2025 23:16:01 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: nevets@goodmis.org) by omf12.hostedemail.com (Postfix) with ESMTPA id BFDF21B;
-	Wed, 25 Jun 2025 23:15:57 +0000 (UTC)
-Received: from rostedt by gandalf with local (Exim 4.98.2)
-	(envelope-from <rostedt@goodmis.org>)
-	id 1uUZLq-000000044ii-4BkQ;
-	Wed, 25 Jun 2025 19:16:23 -0400
-Message-ID: <20250625231622.846993672@goodmis.org>
-User-Agent: quilt/0.68
-Date: Wed, 25 Jun 2025 19:15:48 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org,
- bpf@vger.kernel.org,
- x86@kernel.org
-Cc: Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Josh Poimboeuf <jpoimboe@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>,
- Ingo Molnar <mingo@kernel.org>,
- Jiri Olsa <jolsa@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>,
- Thomas Gleixner <tglx@linutronix.de>,
- Andrii Nakryiko <andrii@kernel.org>,
- Indu Bhagat <indu.bhagat@oracle.com>,
- "Jose E. Marchesi" <jemarch@gnu.org>,
- Beau Belgrave <beaub@linux.microsoft.com>,
- Jens Remus <jremus@linux.ibm.com>,
- Linus Torvalds <torvalds@linux-foundation.org>,
- Andrew Morton <akpm@linux-foundation.org>,
- Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH v11 07/11] perf: Support deferred user callchains for per CPU events
-References: <20250625231541.584226205@goodmis.org>
+	s=arc-20240116; t=1750893453; c=relaxed/simple;
+	bh=d93OHtZpHqLPoIbKn84sAiKUZpSfPfqxrY/UyMGc52Y=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=WbKo52p6YqpCP65YmqpPEIEG9KoPO+LPdODqlyNuvYQKJMBpQxqgw24H54LGqr6LX2oNt52arfDKbXYT7/WV5nDmvFZLoQGkLmddXqKHkIDz5ciohyxkQowVk+eL/0CMqh9TlDtYK8YiN7pGlM2Jd5P7p4awO2i3tWXOn4v2Gvk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gMHywAqH; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gMHywAqH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 022FAC4CEF1;
+	Wed, 25 Jun 2025 23:17:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1750893453;
+	bh=d93OHtZpHqLPoIbKn84sAiKUZpSfPfqxrY/UyMGc52Y=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=gMHywAqH8meta8A/WSGEK51VZYqQ8kjn7QsJ6qVHot3M3+OWo6U3SC2EFZyYznee4
+	 pggYPNhlxhBO0cdFOu4FYzKhdHX5beyO4FwbP3utEpQOBUIXFr3LHpy6rHSc7eq496
+	 Hd6+RpQnI6ucEx+8JTggHdP4Vzmlnyorrc2jVesD9C6uaiRgHVNm0+ExvVnsmvIQnx
+	 HPsBUX2qXP3yjfZl/ryligK+Fa2A07VEpjRieDzwtyMM/yMFi9ESwadN7VL3ZM6odh
+	 KNaMZJ8qrRaLn1WmAQtEgatdWrOPkttH9Lr5uy3x5h80oZj594emMO1+RS5+JDLX75
+	 MmpxiMp8sifnQ==
+Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-4a585dc5f4aso5652301cf.2;
+        Wed, 25 Jun 2025 16:17:32 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUAL5OFZdtA/JnUqgcGCHNPYR+JS83Zooxp+HxfP8q0kDQY96fGkeuwzboCyrtch0KhI//y3MpLr+ZvRIcy@vger.kernel.org, AJvYcCUdDjCTZnvqeiUoClI3hAvkV5olLu/FlerNgVDhLOcD8SwExruDHRXSdhRAQfmQyRds5yZnd51tthGYD937bQ==@vger.kernel.org, AJvYcCWGd4rE9JYPsl9YA3uVVFBVVlUYGdTGMKr3avbXayJEoB1uv4LGi4clGSuH5m3KTSdIBGvqqnUTCRjoLoq20u7lmpSmnmkT@vger.kernel.org, AJvYcCWOY+5hs4XjxW+tXxYSNM0TgNIudpdH0DagScFjkyzUtciU8F1vicihCRqAKY1nBBJlF68=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzubCcr4i3nJYU6t7Uklhj4k2tjoVPz2dQXtPdMeJzN8v+UxAdL
+	j2H3OKED7WBAccUkNeQp9pYB8q+jRaHk/c1lZSrPrZrLB+1TU8sxigA2yHw9/JU+ocGd384g5dC
+	Q+6tXK4ueq5aDWn6TzDznhI9+5N8otzE=
+X-Google-Smtp-Source: AGHT+IGoh6S2nBdD+7L5IEbXsOa4fFgsvTiWA2MUQtgk66QvUy2ctdvR0Io57I8XDB1k/+xhQ0KaTf20soOaK2X8wDI=
+X-Received: by 2002:a05:622a:2293:b0:4a6:f434:8cd with SMTP id
+ d75a77b69052e-4a7c06ef9a4mr80144551cf.23.1750893452178; Wed, 25 Jun 2025
+ 16:17:32 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Stat-Signature: yjq1tr6yetzywuuijugseduxxxrt7oer
-X-Rspamd-Server: rspamout01
-X-Rspamd-Queue-Id: BFDF21B
-X-Session-Marker: 6E657665747340676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX18VE1wvHbsVhsZxHaoGdht5wkOxc4u2b1M=
-X-HE-Tag: 1750893357-619582
-X-HE-Meta: U2FsdGVkX19/3MZH75rEkuFB8YQW8PvqgiQ2d1mTGaapD49apgEP0L7zz8GepQ3FfFdaJZ9hVZ5n5sh3nDXLztspNDYHcTBBwZ5Xl+2PJ9zIk0Byh1sTPa6R9InpiwZR3vXaUA1UeZh7ybIILaeV4KrCAIcHzFbz/SB5IyYv9xyDIXEK2fvk09du/zpWesaTJ8oVoppBpd4M/TLDeKaDFrB0u8AoR9AQZbJNw10eV40Y+3i4TCvQA8Z2kqdEiutX9RK8Jrr470V0eGosz1KhnGwjvZP3/0c5JA3YYHYDvh3O1KmaqXIww23XRc98Xu7YYOJUZ1mhi5prevkB9mYd89CTxcIuakuUzXk6cUajLNt0NpcewEj8hSKS41U5qjXUReJbiAF3vIAe8tKfslsHWYatU7RdbSlBOYinNt/xpuA=
+References: <20250625.Ee2Ci6chae8h@digikod.net> <175089269668.2280845.5681675711269608822@noble.neil.brown.name>
+In-Reply-To: <175089269668.2280845.5681675711269608822@noble.neil.brown.name>
+From: Song Liu <song@kernel.org>
+Date: Wed, 25 Jun 2025 16:17:20 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW53QiS8Aa5c4VLFjojShmgibftVe=py-RuL+ZyHBY5Pbg@mail.gmail.com>
+X-Gm-Features: Ac12FXziaRaFqMxVW6VcmQD_8qDZwMUUshKYzHkXEjuqAFIdtIHjuJL3ctPGHIo
+Message-ID: <CAPhsuW53QiS8Aa5c4VLFjojShmgibftVe=py-RuL+ZyHBY5Pbg@mail.gmail.com>
+Subject: Re: [PATCH v5 bpf-next 0/5] bpf path iterator
+To: NeilBrown <neil@brown.name>
+Cc: =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
+	bpf@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	brauner@kernel.org, kernel-team@meta.com, andrii@kernel.org, 
+	eddyz87@gmail.com, ast@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev, 
+	viro@zeniv.linux.org.uk, jack@suse.cz, kpsingh@kernel.org, 
+	mattbobrowski@google.com, Tingmao Wang <m@maowtm.org>, 
+	=?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Steven Rostedt <rostedt@goodmis.org>
+On Wed, Jun 25, 2025 at 4:05=E2=80=AFPM NeilBrown <neil@brown.name> wrote:
+>
+> On Wed, 25 Jun 2025, Micka=C3=ABl Sala=C3=BCn wrote:
+> > On Wed, Jun 25, 2025 at 07:38:53AM +1000, NeilBrown wrote:
+> > >
+> > > Can you spell out the minimum that you need?
+> >
+> > Sure.  We'd like to call this new helper in a RCU
+> > read-side critical section and leverage this capability to speed up pat=
+h
+> > walk when there is no concurrent hierarchy modification.  This use case
+> > is similar to handle_dots() with LOOKUP_RCU calling follow_dotdot_rcu()=
+.
+> >
+> > The main issue with this approach is to keep some state of the path wal=
+k
+> > to know if the next call to "path_walk_parent_rcu()" would be valid
+> > (i.e. something like a very light version of nameidata, mainly sequence
+> > integers), and to get back to the non-RCU version otherwise.
+> >
+> > >
+> > > My vague impression is that you want to search up from a given strut =
+path,
+> > > no further then some other given path, looking for a dentry that matc=
+hes
+> > > some rule.  Is that correct?
+> >
+> > Yes
+> >
+> > >
+> > > In general, the original dentry could be moved away from under the
+> > > dentry you find moments after the match is reported.  What mechanisms=
+ do
+> > > you have in place to ensure this doesn't happen, or that it doesn't
+> > > matter?
+> >
+> > In the case of Landlock, by default, a set of access rights are denied
+> > and can only be allowed by an element in the file hierarchy.  The goal
+> > is to only allow access to files under a specific directory (or directl=
+y
+> > a specific file).  That's why we only care of the file hierarchy at the
+> > time of access check.  It's not an issue if the file/directory was
+> > moved or is being moved as long as we can walk its "current" hierarchy.
+> > Furthermore, a sandboxed process is restricted from doing arbitrary
+> > mounts (and renames/links are controlled with the
+> > LANDLOCK_ACCESS_FS_REFER right).
+> >
+> > However, we need to get a valid "snapshot" of the set of dentries that
+> > (could) lead to the evaluated file/directory.
+>
+> A "snapshot" is an interesting idea - though looking at the landlock
+> code you one need inodes, not dentries.
+> I imagine an interface where you give it a starting path, a root, and
+> and array of inode pointers, and it fills in the pointers with the path
+> - all under rcu so no references are needed.
+> But you would need some fallback if the array isn't big enough, so maybe
+> that isn't a good idea.
+>
+> Based on the comments by Al and Christian, I think the only viable
+> approach is to pass a callback to some vfs function that does the
+> walking.
+>
+>    vfs_walk_ancestors(struct path *path, struct path *root,
+>                       int (*walk_cb)(struct path *ancestor, void *data),
+>                       void *data)
 
-The deferred unwinder works fine for task events (events that trace only a
-specific task), as it can use a task_work from an interrupt or NMI and
-when the task goes back to user space it will call the event's callback to
-do the deferred unwinding.
+I like this idea.
 
-But for per CPU events things are not so simple. When a per CPU event
-wants a deferred unwinding to occur, it can not simply use a task_work as
-there's a many to many relationship. If the task migrates and another task
-is scheduled in where the per CPU event wants a deferred unwinding to
-occur on that task as well, and the task that migrated to another CPU has
-that CPU's event want to unwind it too, each CPU may need unwinding from
-more than one task, and each task may have requests from many CPUs.
+Maybe we want "struct path *ancestor" of walk_cb to be const.
+walk_cb should only change "data", so that we can undo all the
+changes when the rcu walk fails.
 
-To solve this, when a per CPU event is created that has defer_callchain
-attribute set, it will do a lookup from a global list
-(unwind_deferred_list), for a perf_unwind_deferred descriptor that has the
-id that matches the PID of the current task's group_leader.
-
-If it is not found, then it will create one and add it to the global list.
-This descriptor contains an array of all possible CPUs, where each element
-is a perf_unwind_cpu descriptor.
-
-The perf_unwind_cpu descriptor has a list of all the per CPU events that
-is tracing the matching CPU that corresponds to its index in the array,
-where the events belong to a task that has the same group_leader.
-It also has a processing bit and rcuwait to handle removal.
-
-For each occupied perf_unwind_cpu descriptor in the array, the
-perf_deferred_unwind descriptor increments its nr_cpu_events. When a
-perf_unwind_cpu descriptor is empty, the nr_cpu_events is decremented.
-This is used to know when to free the perf_deferred_unwind descriptor, as
-when it becomes empty, it is no longer referenced.
-
-Finally, the perf_deferred_unwind descriptor has an id that holds the PID
-of the group_leader for the tasks that the events were created by.
-
-When a second (or more) per CPU event is created where the
-perf_deferred_unwind descriptor is already created, it just adds itself to
-the perf_unwind_cpu array of that descriptor. Updating the necessary
-counter. This is used to map different per CPU events to each other based
-on their group leader PID.
-
-Each of these perf_deferred_unwind descriptors have a unwind_work that
-registers with the deferred unwind infrastructure via
-unwind_deferred_init(), where it also registers a callback to
-perf_event_deferred_cpu().
-
-Now when a per CPU event requests a deferred unwinding, it calls
-unwind_deferred_request() with the associated perf_deferred_unwind
-descriptor. It is expected that the program that uses this has events on
-all CPUs, as the deferred trace may not be called on the CPU event that
-requested it. That is, the task may migrate and its user stack trace will
-be recorded on the CPU event of the CPU that it exits back to user space
-on.
-
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
-Changes since v10: https://lore.kernel.org/20250614024716.798086123@goodmis.org
-
-- Added another smp_mb() between the call to perf_event_callchain_deferred()
-  and clearing of cpu_unwind->processing.
-
-- Update using the renamed function that was renamed from
-  unwind_deferred_trace() to unwind_user_faultable().
-
- include/linux/perf_event.h |   5 +
- kernel/events/core.c       | 303 ++++++++++++++++++++++++++++++++++---
- 2 files changed, 283 insertions(+), 25 deletions(-)
-
-diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
-index c7d474391e51..04d9e6fb64c4 100644
---- a/include/linux/perf_event.h
-+++ b/include/linux/perf_event.h
-@@ -733,6 +733,7 @@ struct swevent_hlist {
- struct bpf_prog;
- struct perf_cgroup;
- struct perf_buffer;
-+struct perf_unwind_deferred;
- 
- struct pmu_event_list {
- 	raw_spinlock_t			lock;
-@@ -885,6 +886,9 @@ struct perf_event {
- 	struct callback_head		pending_unwind_work;
- 	struct rcuwait			pending_unwind_wait;
- 
-+	struct perf_unwind_deferred	*unwind_deferred;
-+	struct list_head		unwind_list;
-+
- 	atomic_t			event_limit;
- 
- 	/* address range filters */
-@@ -925,6 +929,7 @@ struct perf_event {
- #ifdef CONFIG_SECURITY
- 	void *security;
- #endif
-+
- 	struct list_head		sb_list;
- 	struct list_head		pmu_list;
- 
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index 1bb76c39ccb1..ded734045e07 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -5582,10 +5582,185 @@ static bool exclusive_event_installable(struct perf_event *event,
- 	return true;
- }
- 
-+/* Holds a list of per CPU events that registered for deferred unwinding */
-+struct perf_unwind_cpu {
-+	struct list_head	list;
-+	struct rcuwait		pending_unwind_wait;
-+	int			processing;
-+};
-+
-+struct perf_unwind_deferred {
-+	struct list_head		list;
-+	struct unwind_work		unwind_work;
-+	struct perf_unwind_cpu __rcu	*cpu_events;
-+	struct rcu_head			rcu_head;
-+	int				nr_cpu_events;
-+	int				id;
-+};
-+
-+static DEFINE_MUTEX(unwind_deferred_mutex);
-+static LIST_HEAD(unwind_deferred_list);
-+
-+static void perf_event_deferred_cpu(struct unwind_work *work,
-+				    struct unwind_stacktrace *trace, u64 timestamp);
-+
-+/*
-+ * Add a per CPU event.
-+ *
-+ * The deferred callstack can happen on a different CPU than what was
-+ * requested. If one CPU event requests a deferred callstack, but the
-+ * tasks migrates, it will execute on a different CPU and save the
-+ * stack trace to that CPU event.
-+ *
-+ * In order to map all the CPU events with the same application,
-+ * use the current->gorup_leader->pid as the identifier of what
-+ * events share the same program.
-+ *
-+ * A perf_unwind_deferred descriptor is created for each unique
-+ * group_leader pid, and all the events that have the same group_leader
-+ * pid will be linked to the same deferred descriptor.
-+ *
-+ * If there's no descriptor that matches the current group_leader pid,
-+ * one will be created.
-+ */
-+static int perf_add_unwind_deferred(struct perf_event *event)
-+{
-+	struct perf_unwind_deferred *defer;
-+	struct perf_unwind_cpu *cpu_events;
-+	int id = current->group_leader->pid;
-+	bool found = false;
-+	int ret = 0;
-+
-+	if (event->cpu < 0)
-+		return -EINVAL;
-+
-+	guard(mutex)(&unwind_deferred_mutex);
-+
-+	list_for_each_entry(defer, &unwind_deferred_list, list) {
-+		if (defer->id == id) {
-+			found = true;
-+			break;
-+		}
-+	}
-+
-+	if (!found) {
-+		defer = kzalloc(sizeof(*defer), GFP_KERNEL);
-+		if (!defer)
-+			return -ENOMEM;
-+		list_add(&defer->list, &unwind_deferred_list);
-+		defer->id = id;
-+	}
-+
-+	/*
-+	 * The deferred desciptor has an array for every CPU.
-+	 * Each entry in this array is a link list of all the CPU
-+	 * events for the corresponding CPU. This is a quick way to
-+	 * find the associated event for a given CPU in
-+	 * perf_event_deferred_cpu().
-+	 */
-+	if (!defer->nr_cpu_events) {
-+		cpu_events = kcalloc(num_possible_cpus(),
-+				     sizeof(*cpu_events),
-+				     GFP_KERNEL);
-+		if (!cpu_events) {
-+			ret = -ENOMEM;
-+			goto free;
-+		}
-+		for (int cpu = 0; cpu < num_possible_cpus(); cpu++) {
-+			rcuwait_init(&cpu_events[cpu].pending_unwind_wait);
-+			INIT_LIST_HEAD(&cpu_events[cpu].list);
-+		}
-+
-+		rcu_assign_pointer(defer->cpu_events, cpu_events);
-+
-+		ret = unwind_deferred_init(&defer->unwind_work,
-+					   perf_event_deferred_cpu);
-+		if (ret)
-+			goto free;
-+	}
-+	cpu_events = rcu_dereference_protected(defer->cpu_events,
-+				lockdep_is_held(&unwind_deferred_mutex));
-+
-+	if (list_empty(&cpu_events[event->cpu].list))
-+		defer->nr_cpu_events++;
-+	list_add_tail_rcu(&event->unwind_list, &cpu_events[event->cpu].list);
-+
-+	event->unwind_deferred = defer;
-+	return 0;
-+free:
-+	if (found)
-+		return ret;
-+
-+	list_del(&defer->list);
-+	kfree(cpu_events);
-+	kfree(defer);
-+	return ret;
-+}
-+
-+static void free_unwind_deferred_rcu(struct rcu_head *head)
-+{
-+	struct perf_unwind_cpu *cpu_events;
-+	struct perf_unwind_deferred *defer =
-+		container_of(head, struct perf_unwind_deferred, rcu_head);
-+
-+	/*
-+	 * This is called by call_rcu() and there are no more
-+	 * references to cpu_events.
-+	 */
-+	cpu_events = rcu_dereference_protected(defer->cpu_events, 1);
-+	kfree(cpu_events);
-+	kfree(defer);
-+}
-+
-+static void perf_remove_unwind_deferred(struct perf_event *event)
-+{
-+	struct perf_unwind_deferred *defer = event->unwind_deferred;
-+	struct perf_unwind_cpu *cpu_events, *cpu_unwind;
-+
-+	if (!defer)
-+		return;
-+
-+	guard(mutex)(&unwind_deferred_mutex);
-+	list_del_rcu(&event->unwind_list);
-+
-+	cpu_events = rcu_dereference_protected(defer->cpu_events,
-+				lockdep_is_held(&unwind_deferred_mutex));
-+	cpu_unwind = &cpu_events[event->cpu];
-+
-+	if (list_empty(&cpu_unwind->list)) {
-+		defer->nr_cpu_events--;
-+		if (!defer->nr_cpu_events)
-+			unwind_deferred_cancel(&defer->unwind_work);
-+	}
-+
-+	event->unwind_deferred = NULL;
-+
-+	/*
-+	 * Make sure perf_event_deferred_cpu() is done with this event.
-+	 * That function will set cpu_unwind->processing and then
-+	 * call smp_mb() before iterating the list of its events.
-+	 * If the event's unwind_deferred is NULL, it will be skipped.
-+	 * The smp_mb() in that function matches the mb() in
-+	 * rcuwait_wait_event().
-+	 */
-+	rcuwait_wait_event(&cpu_unwind->pending_unwind_wait,
-+				   !cpu_unwind->processing, TASK_UNINTERRUPTIBLE);
-+
-+	/* Is this still being used by other per CPU events? */
-+	if (defer->nr_cpu_events)
-+		return;
-+
-+	list_del(&defer->list);
-+	/* The defer->cpu_events is protected by RCU */
-+	call_rcu(&defer->rcu_head, free_unwind_deferred_rcu);
-+}
-+
- static void perf_pending_unwind_sync(struct perf_event *event)
- {
- 	might_sleep();
- 
-+	perf_remove_unwind_deferred(event);
-+
- 	if (!event->pending_unwind_callback)
- 		return;
- 
-@@ -5609,62 +5784,119 @@ static void perf_pending_unwind_sync(struct perf_event *event)
- 
- struct perf_callchain_deferred_event {
- 	struct perf_event_header	header;
-+	u64				timestamp;
- 	u64				nr;
- 	u64				ips[];
- };
- 
--static void perf_event_callchain_deferred(struct callback_head *work)
-+static void perf_event_callchain_deferred(struct perf_event *event,
-+					  struct unwind_stacktrace *trace,
-+					  u64 timestamp)
- {
--	struct perf_event *event = container_of(work, struct perf_event, pending_unwind_work);
- 	struct perf_callchain_deferred_event deferred_event;
- 	u64 callchain_context = PERF_CONTEXT_USER;
--	struct unwind_stacktrace trace;
- 	struct perf_output_handle handle;
- 	struct perf_sample_data data;
- 	u64 nr;
- 
--	if (!event->pending_unwind_callback)
--		return;
--
--	if (unwind_deferred_trace(&trace) < 0)
--		goto out;
--
--	/*
--	 * All accesses to the event must belong to the same implicit RCU
--	 * read-side critical section as the ->pending_unwind_callback reset.
--	 * See comment in perf_pending_unwind_sync().
--	 */
--	guard(rcu)();
--
- 	if (current->flags & PF_KTHREAD)
--		goto out;
-+		return;
- 
--	nr = trace.nr + 1 ; /* '+1' == callchain_context */
-+	nr = trace->nr + 1 ; /* '+1' == callchain_context */
- 
- 	deferred_event.header.type = PERF_RECORD_CALLCHAIN_DEFERRED;
- 	deferred_event.header.misc = PERF_RECORD_MISC_USER;
- 	deferred_event.header.size = sizeof(deferred_event) + (nr * sizeof(u64));
- 
-+	deferred_event.timestamp = timestamp;
- 	deferred_event.nr = nr;
- 
- 	perf_event_header__init_id(&deferred_event.header, &data, event);
- 
- 	if (perf_output_begin(&handle, &data, event, deferred_event.header.size))
--		goto out;
-+		return;
- 
- 	perf_output_put(&handle, deferred_event);
- 	perf_output_put(&handle, callchain_context);
--	perf_output_copy(&handle, trace.entries, trace.nr * sizeof(u64));
-+	perf_output_copy(&handle, trace->entries, trace->nr * sizeof(u64));
- 	perf_event__output_id_sample(event, &handle, &data);
- 
- 	perf_output_end(&handle);
-+}
-+
-+/* Deferred unwinding callback for task specific events */
-+static void perf_event_deferred_task(struct callback_head *work)
-+{
-+	struct perf_event *event = container_of(work, struct perf_event, pending_unwind_work);
-+	struct unwind_stacktrace trace;
-+
-+	if (!event->pending_unwind_callback)
-+		return;
-+
-+	if (unwind_user_faultable(&trace) >= 0) {
-+
-+		/*
-+		 * All accesses to the event must belong to the same implicit RCU
-+		 * read-side critical section as the ->pending_unwind_callback reset.
-+		 * See comment in perf_pending_unwind_sync().
-+		 */
-+		guard(rcu)();
-+		perf_event_callchain_deferred(event, &trace, 0);
-+	}
- 
--out:
- 	event->pending_unwind_callback = 0;
- 	local_dec(&event->ctx->nr_no_switch_fast);
- 	rcuwait_wake_up(&event->pending_unwind_wait);
- }
- 
-+/*
-+ * Deferred unwinding callback for per CPU events.
-+ * Note, the request for the deferred unwinding may have happened
-+ * on a different CPU.
-+ */
-+static void perf_event_deferred_cpu(struct unwind_work *work,
-+				    struct unwind_stacktrace *trace, u64 timestamp)
-+{
-+	struct perf_unwind_deferred *defer =
-+		container_of(work, struct perf_unwind_deferred, unwind_work);
-+	struct perf_unwind_cpu *cpu_events, *cpu_unwind;
-+	struct perf_event *event;
-+	int cpu;
-+
-+	guard(rcu)();
-+	guard(preempt)();
-+
-+	cpu = smp_processor_id();
-+	cpu_events = rcu_dereference(defer->cpu_events);
-+	cpu_unwind = &cpu_events[cpu];
-+
-+	WRITE_ONCE(cpu_unwind->processing, 1);
-+	/*
-+	 * Make sure the above is seen before the event->unwind_deferred
-+	 * is checked. This matches the mb() in rcuwait_rcu_wait_event() in
-+	 * perf_remove_unwind_deferred().
-+	 */
-+	smp_mb();
-+
-+	list_for_each_entry_rcu(event, &cpu_unwind->list, unwind_list) {
-+		/* If unwind_deferred is NULL the event is going away */
-+		if (unlikely(!event->unwind_deferred))
-+			continue;
-+		perf_event_callchain_deferred(event, trace, timestamp);
-+		/* Only the first CPU event gets the trace */
-+		break;
-+	}
-+
-+	/*
-+	 * The perf_event_callchain_deferred() must finish before setting
-+	 * cpu_unwind->processing to zero. This is also to synchronize
-+	 * with the rcuwait in perf_remove_unwind_deferred().
-+	 */
-+	smp_mb();
-+	WRITE_ONCE(cpu_unwind->processing, 0);
-+	rcuwait_wake_up(&cpu_unwind->pending_unwind_wait);
-+}
-+
- static void perf_free_addr_filters(struct perf_event *event);
- 
- /* vs perf_event_alloc() error */
-@@ -8263,6 +8495,15 @@ static int deferred_request_nmi(struct perf_event *event)
- 	return 0;
- }
- 
-+static int deferred_unwind_request(struct perf_unwind_deferred *defer)
-+{
-+	u64 timestamp;
-+	int ret;
-+
-+	ret = unwind_deferred_request(&defer->unwind_work, &timestamp);
-+	return ret < 0 ? ret : 0;
-+}
-+
- /*
-  * Returns:
- *     > 0 : if already queued.
-@@ -8272,14 +8513,19 @@ static int deferred_request_nmi(struct perf_event *event)
- static int deferred_request(struct perf_event *event)
- {
- 	struct callback_head *work = &event->pending_unwind_work;
-+	struct perf_unwind_deferred *defer;
- 	int pending;
- 	int ret;
- 
--	/* Only defer for task events */
--	if (!event->ctx->task)
-+	if ((current->flags & PF_KTHREAD) || !user_mode(task_pt_regs(current)))
- 		return -EINVAL;
- 
--	if ((current->flags & PF_KTHREAD) || !user_mode(task_pt_regs(current)))
-+	defer = READ_ONCE(event->unwind_deferred);
-+	if (defer)
-+		return deferred_unwind_request(defer);
-+
-+	/* Per CPU events should have had unwind_deferred set! */
-+	if (WARN_ON_ONCE(!event->ctx->task))
- 		return -EINVAL;
- 
- 	if (in_nmi())
-@@ -13174,13 +13420,20 @@ perf_event_alloc(struct perf_event_attr *attr, int cpu,
- 		}
- 	}
- 
-+	/* Setup unwind deferring for per CPU events */
-+	if (event->attr.defer_callchain && !task) {
-+		err = perf_add_unwind_deferred(event);
-+		if (err)
-+			return ERR_PTR(err);
-+	}
-+
- 	err = security_perf_event_alloc(event);
- 	if (err)
- 		return ERR_PTR(err);
- 
- 	if (event->attr.defer_callchain)
- 		init_task_work(&event->pending_unwind_work,
--			       perf_event_callchain_deferred);
-+			       perf_event_deferred_task);
- 
- 	/* symmetric to unaccount_event() in _free_event() */
- 	account_event(event);
--- 
-2.47.2
-
-
+Thanks,
+Song
