@@ -1,31 +1,31 @@
-Received: from relay.hostedemail.com (smtprelay0014.hostedemail.com [216.40.44.14])
+Received: from relay.hostedemail.com (smtprelay0017.hostedemail.com [216.40.44.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B9F126E6EB;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 067162F3C07;
 	Wed, 25 Jun 2025 23:16:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.14
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750893365; cv=none; b=SCcNNpkGM3SnSuZT83555V0wq3yZhqAl1Ll58ef/ZpxwvHabOjR7cgdp+IaIxrACjTGR0vTHHjyaXikt3vq/lJnXbZI1IhsfLx+gIEPIbn3E0RjBHSBIyDJDQcWnmza+M2QIiubKa1UadgiGFVhfvAYtcETlt6IJzdkBv+xmbYc=
+	t=1750893365; cv=none; b=sI5HKXzGhjgl/Ua1sBeWks08Yuqmpj1cpNN3bE+1Bnz75TJBaWsbTAJnKBmiQ1pzeceBIYtuJLZowUkr/5N4sAWx1xg2HrmNATL9aOF4hYQOYs60GijYfU8rJva4HulzCV/q9sxlnn3Px0F13NVQbhsAo/e2WWLun4IE2ZiX6O4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1750893365; c=relaxed/simple;
-	bh=INPL5mykLyHh9BAddpKD33kEw5Zh1QT3Mw8WI6pEDxg=;
+	bh=c7XmsSRbXS+wdlNfX+ILlqyx+XTp7g6I18Re8KvRp3k=;
 	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type; b=qjAfdRImFNaDTAE6vn4oufQ/KcdNkE2nBuSEhc65zjgTRwsFGdjHo0H0A3uOMftp63SQrbrrTzm4Q3WBNR8Dj8bM3LBNPhni8M6TEqPd63I8jsSjr8mZ4VlQQRuH/HB8SYtmlJsmrPuxNxk/FPnj11vDPrxSDG7GKTw/HgvE6ys=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.14
+	 Content-Type; b=I3BtrWx8ue1QqlNSbt0rmiZjefGm54kb2y41KHak1oNhIzzczPTQn1/3rMxMbg9VXr1ZAe5RKxXLRLgDZCyc7cvtNMm2kkoLWyMVrXYZzsrYgy7dW/4NGuisw9ISyhcS0Yvlqt++YQGB5TZU4VgC7ZqFiJWjVDILnv6NCR3bws4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
 Received: from omf10.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay04.hostedemail.com (Postfix) with ESMTP id 358E91A07B5;
+	by unirelay05.hostedemail.com (Postfix) with ESMTP id 8653154F51;
 	Wed, 25 Jun 2025 23:16:00 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: nevets@goodmis.org) by omf10.hostedemail.com (Postfix) with ESMTPA id EF9402F;
-	Wed, 25 Jun 2025 23:15:56 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: nevets@goodmis.org) by omf10.hostedemail.com (Postfix) with ESMTPA id 550D130;
+	Wed, 25 Jun 2025 23:15:57 +0000 (UTC)
 Received: from rostedt by gandalf with local (Exim 4.98.2)
 	(envelope-from <rostedt@goodmis.org>)
-	id 1uUZLq-000000044gG-0dBi;
+	id 1uUZLq-000000044hk-2kfx;
 	Wed, 25 Jun 2025 19:16:22 -0400
-Message-ID: <20250625231622.002316317@goodmis.org>
+Message-ID: <20250625231622.509379386@goodmis.org>
 User-Agent: quilt/0.68
-Date: Wed, 25 Jun 2025 19:15:43 -0400
+Date: Wed, 25 Jun 2025 19:15:46 -0400
 From: Steven Rostedt <rostedt@goodmis.org>
 To: linux-kernel@vger.kernel.org,
  linux-trace-kernel@vger.kernel.org,
@@ -47,8 +47,7 @@ Cc: Masami Hiramatsu <mhiramat@kernel.org>,
  Linus Torvalds <torvalds@linux-foundation.org>,
  Andrew Morton <akpm@linux-foundation.org>,
  Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH v11 02/11] perf: Have get_perf_callchain() return NULL if crosstask and user are
- set
+Subject: [PATCH v11 05/11] perf: Skip user unwind if the task is a kernel thread
 References: <20250625231541.584226205@goodmis.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -57,68 +56,38 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Stat-Signature: 1p8if5js4t5yq9bh6ff4fygzi1d9fce6
-X-Rspamd-Server: rspamout05
-X-Rspamd-Queue-Id: EF9402F
+X-Stat-Signature: 3ds84qnymoopxajjbic9e76mxzqfbb4j
+X-Rspamd-Server: rspamout03
+X-Rspamd-Queue-Id: 550D130
 X-Session-Marker: 6E657665747340676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX188kjvS+mWB42wzpmtmJv3x7MsKmJWWSlM=
-X-HE-Tag: 1750893356-313938
-X-HE-Meta: U2FsdGVkX1+XcjmPd0s26qAQpGmBVhaaTwi1VuxJiZDIA/sL7vqGO4HeuRzWIYiwKxChyEHXEtJb0RBXsL+aRbsqQmVOVfxEW55N+tyftmGu/yLgmET1TOiW6ggwQGrp2q1IrGUDKvmqAtlyHeqwskqedyo8bsk7opy/ncgWsfcqd6d1br3HPCJyhyF598UkTvZVVZMMRJIDOXDfcJkcwowBf8ggx9IToDBZYmAmzVBmYhcSkS6WlODjBiDHfrUaSvfqQVBEboP/uHN0OtjC4w5ELrqJGIP7w4iIck6S2JO6oerqFatL/fIMqy2mT+WkwIALsU20vZ6vKA1PZddDaIDZPyNen3aJkcj4K1B60knb+PXGyYTPXmwPH/CkeAZfypEwP3zDKpMOXOv2aUZuMxWXGO+jfWRPgZp8av7TlEU=
+X-Session-ID: U2FsdGVkX1/xANTxVWHo7orD3GNRhF/thAcdperY2as=
+X-HE-Tag: 1750893357-121383
+X-HE-Meta: U2FsdGVkX1+ljfSTKiZ9A/3J61yduk6c+/qDmguQXo60UEZjY9V1claOk+AMbZF2O0x/5sP8cbPPBxfQKvAAGZtWP0ftCmItMdLWhp/dQuzMKWhZcPXRNmMSIDn6PyDVf+wJ/Qfz2ylWD2we1LNA2uy2LDLxMI5hlqbXoq15TwyJzZTuDm5kkw811z19AEByp7VVPHyiBMvX0yoFT8PT3wrcsLlMlRxw9qoLoxwivOXVmwj2RpYY6MV+agxdm/z4veWc5imJ6TgaTyzPLJMWwfuRbtBxWFWKDw3BacumMBMB4D+Bp81TW8VECgrucmF6tDDY/GJUfjYvcjj2ddPIyezbu9aU/g3c5EXI4zIsHAN9J3ZeADB6on2cfdzex3pNLU4HUHZXZg1NvznRl2i6hxlzjKG3Du0r5vTf5p9m6Ok=
 
 From: Josh Poimboeuf <jpoimboe@kernel.org>
 
-get_perf_callchain() doesn't support cross-task unwinding for user space
-stacks, have it return NULL if both the crosstask and user arguments are
-set.
+If the task is not a user thread, there's no user stack to unwind.
 
 Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- kernel/events/callchain.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ kernel/events/core.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/events/callchain.c b/kernel/events/callchain.c
-index b0f5bd228cd8..cd0e3fc7ed05 100644
---- a/kernel/events/callchain.c
-+++ b/kernel/events/callchain.c
-@@ -224,6 +224,10 @@ get_perf_callchain(struct pt_regs *regs, bool kernel, bool user,
- 	struct perf_callchain_entry_ctx ctx;
- 	int rctx, start_entry_idx;
- 
-+	/* crosstask is not supported for user stacks */
-+	if (crosstask && user && !kernel)
-+		return NULL;
-+
- 	entry = get_callchain_entry(&rctx);
- 	if (!entry)
- 		return NULL;
-@@ -240,7 +244,7 @@ get_perf_callchain(struct pt_regs *regs, bool kernel, bool user,
- 		perf_callchain_kernel(&ctx, regs);
- 	}
- 
--	if (user) {
-+	if (user && !crosstask) {
- 		if (!user_mode(regs)) {
- 			if  (current->mm)
- 				regs = task_pt_regs(current);
-@@ -249,9 +253,6 @@ get_perf_callchain(struct pt_regs *regs, bool kernel, bool user,
- 		}
- 
- 		if (regs) {
--			if (crosstask)
--				goto exit_put;
--
- 			if (add_mark)
- 				perf_callchain_store_context(&ctx, PERF_CONTEXT_USER);
- 
-@@ -261,7 +262,6 @@ get_perf_callchain(struct pt_regs *regs, bool kernel, bool user,
- 		}
- 	}
- 
--exit_put:
- 	put_callchain_entry(rctx);
- 
- 	return entry;
+diff --git a/kernel/events/core.c b/kernel/events/core.c
+index ae371007a2a6..02ff31af3d8b 100644
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -8166,7 +8166,8 @@ struct perf_callchain_entry *
+ perf_callchain(struct perf_event *event, struct pt_regs *regs)
+ {
+ 	bool kernel = !event->attr.exclude_callchain_kernel;
+-	bool user   = !event->attr.exclude_callchain_user;
++	bool user   = !event->attr.exclude_callchain_user &&
++		!(current->flags & PF_KTHREAD);
+ 	/* Disallow cross-task user callchains. */
+ 	bool crosstask = event->ctx->task && event->ctx->task != current;
+ 	const u32 max_stack = event->attr.sample_max_stack;
 -- 
 2.47.2
 
