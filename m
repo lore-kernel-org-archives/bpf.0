@@ -1,238 +1,113 @@
-Received: from relay.hostedemail.com (smtprelay0010.hostedemail.com [216.40.44.10])
+Received: from neil.brown.name (neil.brown.name [103.29.64.221])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E495B2F49FC;
-	Wed, 25 Jun 2025 22:57:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23AC225A33F;
+	Wed, 25 Jun 2025 23:05:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.29.64.221
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750892227; cv=none; b=L7MhCFxLwTAgadMA9Wmi2qmugAJcDkrsx2vPgS3/HPP0iEdCSSUYTI/iNQJPzhCmIX7HyPTnZJtJqx2F3VgTVdVz845Ucy7MSJfIUDy7ogskTQFev6YMTYibDDLyYF/WTKGyQUjCDURVzCE6j/f5SXsaBecMeU5I0Z+GH7o/8SY=
+	t=1750892707; cv=none; b=Jfre1eebV1iGvO48lCwM1d0Y1CWvr47sKfsR61/+S94XiCbJJgrlBGaOvKyils8+tF+HBriDhh3jE03DB08jFC9gNz3c1BtAFec6l4VT784LFuSAA/qPEWmcXyT8bnB2/L8IftI3ul+wE76sBLLizzjheAAXLFE131vuf0nomng=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750892227; c=relaxed/simple;
-	bh=4vDOBIoUHUiC3BHSTDobiE9oNjdxoZfAGrZ2BlXpfY4=;
-	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type; b=kF5tYh8JoVtjd4lFh/5zjS5+joadfKSNuaDzTBGFpiDV5Pda52mBTX/Tbk2JAevN5F+zeCcZSM93WKUUUFG2IHw0Wu071ifElBzgPVRmO5NS2eEou6/08hfn/40PJ6oJv3/y99/sEte7k2GI1bxnSKHTdRgAtopYirHZ5vnoYJs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf18.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay10.hostedemail.com (Postfix) with ESMTP id 2BE21C050D;
-	Wed, 25 Jun 2025 22:56:55 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: nevets@goodmis.org) by omf18.hostedemail.com (Postfix) with ESMTPA id E92FE2E;
-	Wed, 25 Jun 2025 22:56:51 +0000 (UTC)
-Received: from rostedt by gandalf with local (Exim 4.98.2)
-	(envelope-from <rostedt@goodmis.org>)
-	id 1uUZ3N-000000043jC-0hQc;
-	Wed, 25 Jun 2025 18:57:17 -0400
-Message-ID: <20250625225717.016385736@goodmis.org>
-User-Agent: quilt/0.68
-Date: Wed, 25 Jun 2025 18:56:13 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org,
- bpf@vger.kernel.org,
- x86@kernel.org
-Cc: Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Josh Poimboeuf <jpoimboe@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>,
- Ingo Molnar <mingo@kernel.org>,
- Jiri Olsa <jolsa@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>,
- Thomas Gleixner <tglx@linutronix.de>,
- Andrii Nakryiko <andrii@kernel.org>,
- Indu Bhagat <indu.bhagat@oracle.com>,
- "Jose E. Marchesi" <jemarch@gnu.org>,
- Beau Belgrave <beaub@linux.microsoft.com>,
- Jens Remus <jremus@linux.ibm.com>,
- Linus Torvalds <torvalds@linux-foundation.org>,
- Andrew Morton <akpm@linux-foundation.org>,
- Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH v11 13/14] perf/x86: Rename and move get_segment_base() and make it global
-References: <20250625225600.555017347@goodmis.org>
+	s=arc-20240116; t=1750892707; c=relaxed/simple;
+	bh=u7ptJ2XReCH4v22yKtQsXDi9KrS1wW909Hht8Ak/I6k=;
+	h=Content-Type:MIME-Version:From:To:Cc:Subject:In-reply-to:
+	 References:Date:Message-id; b=t8GF8RFvijcDt0TiS3YeXd+PSWAZrw7bcbFOEa8yqrk5OaeGQBSjIuciNt6RRglRcjel63PeAiCD2etBLk53YLWJvM0/GO1l7aKm49MXgfhgtrLmnN8Y0rl6q7SVHHSA7riHaM+8fzoxvfJJN0FEk59zNULMKtd/bMjsT6RYVJI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brown.name; spf=pass smtp.mailfrom=neil.brown.name; arc=none smtp.client-ip=103.29.64.221
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brown.name
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=neil.brown.name
+Received: from 196.186.233.220.static.exetel.com.au ([220.233.186.196] helo=home.neil.brown.name)
+	by neil.brown.name with esmtp (Exim 4.95)
+	(envelope-from <mr@neil.brown.name>)
+	id 1uUZAn-004tNX-Di;
+	Wed, 25 Jun 2025 23:04:57 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Stat-Signature: emrupgxgq1rapmeio3dk49kxngjxrbe5
-X-Rspamd-Server: rspamout03
-X-Rspamd-Queue-Id: E92FE2E
-X-Session-Marker: 6E657665747340676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX19GfgKJWxcrDJRgBFxTqvaBoBbdblVc8GU=
-X-HE-Tag: 1750892211-928430
-X-HE-Meta: U2FsdGVkX18KJlGFqh5T1dVmBut0o+O7x3cW0+8YhZ/RxHEb+o7IHnGnIpghDKoHXtxhlpbeeWJx63yi9VX6n68dwQ1wHZj16C+3EV4bHy04IpuMMYur1oqfX583VDymNylXa4rzgNU/Fm5IeiEUu52KUuBQRbRw69VkEZhoY6vTaUHCJuHrTrWBCFVdE9CuodUFIBjokTrqD2Ok4XvRNDFk/qSQX1PBgPTH12/qQiMs4/ozQ6I9rU++g1s9sDSjI+bugBrrJ8OE7nRNJ7VC2oCiSDSEm7N27ihT63qMI5vz8+QIqRbbN9xOMGj69AoYHAD2ia88/o3+TfzdCMU3+HYx/9tjov9vdHFirI1AVniZ4xJxSV+ia5kAmpHuGmHh9RspvdD0kkCfInTNpmbxJOSs0EG81z8AiDOX0v4/U6w=
+From: "NeilBrown" <neil@brown.name>
+To: =?utf-8?q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
+Cc: "Song Liu" <song@kernel.org>, bpf@vger.kernel.org,
+ linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-security-module@vger.kernel.org, brauner@kernel.org,
+ kernel-team@meta.com, andrii@kernel.org, eddyz87@gmail.com, ast@kernel.org,
+ daniel@iogearbox.net, martin.lau@linux.dev, viro@zeniv.linux.org.uk,
+ jack@suse.cz, kpsingh@kernel.org, mattbobrowski@google.com,
+ "Tingmao Wang" <m@maowtm.org>,
+ =?utf-8?q?G=C3=BCnther?= Noack <gnoack@google.com>
+Subject: Re: [PATCH v5 bpf-next 0/5] bpf path iterator
+In-reply-to: <20250625.Ee2Ci6chae8h@digikod.net>
+References: <>, <20250625.Ee2Ci6chae8h@digikod.net>
+Date: Thu, 26 Jun 2025 09:04:56 +1000
+Message-id: <175089269668.2280845.5681675711269608822@noble.neil.brown.name>
 
-From: Josh Poimboeuf <jpoimboe@kernel.org>
+On Wed, 25 Jun 2025, Mickaël Salaün wrote:
+> On Wed, Jun 25, 2025 at 07:38:53AM +1000, NeilBrown wrote:
+> > 
+> > Can you spell out the minimum that you need?
+> 
+> Sure.  We'd like to call this new helper in a RCU
+> read-side critical section and leverage this capability to speed up path
+> walk when there is no concurrent hierarchy modification.  This use case
+> is similar to handle_dots() with LOOKUP_RCU calling follow_dotdot_rcu().
+> 
+> The main issue with this approach is to keep some state of the path walk
+> to know if the next call to "path_walk_parent_rcu()" would be valid
+> (i.e. something like a very light version of nameidata, mainly sequence
+> integers), and to get back to the non-RCU version otherwise.
+> 
+> > 
+> > My vague impression is that you want to search up from a given strut path,
+> > no further then some other given path, looking for a dentry that matches
+> > some rule.  Is that correct?
+> 
+> Yes
+> 
+> > 
+> > In general, the original dentry could be moved away from under the
+> > dentry you find moments after the match is reported.  What mechanisms do
+> > you have in place to ensure this doesn't happen, or that it doesn't
+> > matter?
+> 
+> In the case of Landlock, by default, a set of access rights are denied
+> and can only be allowed by an element in the file hierarchy.  The goal
+> is to only allow access to files under a specific directory (or directly
+> a specific file).  That's why we only care of the file hierarchy at the
+> time of access check.  It's not an issue if the file/directory was
+> moved or is being moved as long as we can walk its "current" hierarchy.
+> Furthermore, a sandboxed process is restricted from doing arbitrary
+> mounts (and renames/links are controlled with the
+> LANDLOCK_ACCESS_FS_REFER right).
+> 
+> However, we need to get a valid "snapshot" of the set of dentries that
+> (could) lead to the evaluated file/directory.
 
-get_segment_base() will be used by the unwind_user code, so make it
-global and rename it to segment_base_address() so it doesn't conflict with
-a KVM function of the same name.
+A "snapshot" is an interesting idea - though looking at the landlock
+code you one need inodes, not dentries.
+I imagine an interface where you give it a starting path, a root, and
+and array of inode pointers, and it fills in the pointers with the path
+- all under rcu so no references are needed.
+But you would need some fallback if the array isn't big enough, so maybe
+that isn't a good idea.
 
-As the function is no longer specific to perf, move it to ptrace.c as that
-seems to be a better location for a generic function like this.
+Based on the comments by Al and Christian, I think the only viable
+approach is to pass a callback to some vfs function that does the
+walking.
 
-Also add a lockdep_assert_irqs_disabled() to make sure it's always called
-with interrupts disabled.
+   vfs_walk_ancestors(struct path *path, struct path *root,
+		      int (*walk_cb)(struct path *ancestor, void *data),
+		      void *data)
 
-Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
- arch/x86/events/core.c        | 44 ++++-------------------------------
- arch/x86/include/asm/ptrace.h |  2 ++
- arch/x86/kernel/ptrace.c      | 38 ++++++++++++++++++++++++++++++
- 3 files changed, 45 insertions(+), 39 deletions(-)
+where walk_cb() returns a negative number if it wants to abort, and is
+given a NULL ancestor if vfs_walk_ancestors() needed to restart.
 
-diff --git a/arch/x86/events/core.c b/arch/x86/events/core.c
-index 7610f26dfbd9..2f2ec84f2a14 100644
---- a/arch/x86/events/core.c
-+++ b/arch/x86/events/core.c
-@@ -43,6 +43,7 @@
- #include <asm/ldt.h>
- #include <asm/unwind.h>
- #include <asm/uprobes.h>
-+#include <asm/ptrace.h>
- #include <asm/ibt.h>
- 
- #include "perf_event.h"
-@@ -2808,41 +2809,6 @@ valid_user_frame(const void __user *fp, unsigned long size)
- 	return __access_ok(fp, size);
- }
- 
--static unsigned long get_segment_base(unsigned int segment)
--{
--	struct desc_struct *desc;
--	unsigned int idx = segment >> 3;
--
--	if ((segment & SEGMENT_TI_MASK) == SEGMENT_LDT) {
--#ifdef CONFIG_MODIFY_LDT_SYSCALL
--		struct ldt_struct *ldt;
--
--		/*
--		 * If we're not in a valid context with a real (not just lazy)
--		 * user mm, then don't even try.
--		 */
--		if (!nmi_uaccess_okay())
--			return 0;
--
--		/* IRQs are off, so this synchronizes with smp_store_release */
--		ldt = smp_load_acquire(&current->mm->context.ldt);
--		if (!ldt || idx >= ldt->nr_entries)
--			return 0;
--
--		desc = &ldt->entries[idx];
--#else
--		return 0;
--#endif
--	} else {
--		if (idx >= GDT_ENTRIES)
--			return 0;
--
--		desc = raw_cpu_ptr(gdt_page.gdt) + idx;
--	}
--
--	return get_desc_base(desc);
--}
--
- #ifdef CONFIG_UPROBES
- /*
-  * Heuristic-based check if uprobe is installed at the function entry.
-@@ -2899,8 +2865,8 @@ perf_callchain_user32(struct pt_regs *regs, struct perf_callchain_entry_ctx *ent
- 	if (user_64bit_mode(regs))
- 		return 0;
- 
--	cs_base = get_segment_base(regs->cs);
--	ss_base = get_segment_base(regs->ss);
-+	cs_base = segment_base_address(regs->cs);
-+	ss_base = segment_base_address(regs->ss);
- 
- 	fp = compat_ptr(ss_base + regs->bp);
- 	pagefault_disable();
-@@ -3019,11 +2985,11 @@ static unsigned long code_segment_base(struct pt_regs *regs)
- 		return 0x10 * regs->cs;
- 
- 	if (user_mode(regs) && regs->cs != __USER_CS)
--		return get_segment_base(regs->cs);
-+		return segment_base_address(regs->cs);
- #else
- 	if (user_mode(regs) && !user_64bit_mode(regs) &&
- 	    regs->cs != __USER32_CS)
--		return get_segment_base(regs->cs);
-+		return segment_base_address(regs->cs);
- #endif
- 	return 0;
- }
-diff --git a/arch/x86/include/asm/ptrace.h b/arch/x86/include/asm/ptrace.h
-index 50f75467f73d..59357ec98e52 100644
---- a/arch/x86/include/asm/ptrace.h
-+++ b/arch/x86/include/asm/ptrace.h
-@@ -314,6 +314,8 @@ static __always_inline bool regs_irqs_disabled(struct pt_regs *regs)
- 	return !(regs->flags & X86_EFLAGS_IF);
- }
- 
-+unsigned long segment_base_address(unsigned int segment);
-+
- /* Query offset/name of register from its name/offset */
- extern int regs_query_register_offset(const char *name);
- extern const char *regs_query_register_name(unsigned int offset);
-diff --git a/arch/x86/kernel/ptrace.c b/arch/x86/kernel/ptrace.c
-index 095f04bdabdc..81353a09701b 100644
---- a/arch/x86/kernel/ptrace.c
-+++ b/arch/x86/kernel/ptrace.c
-@@ -41,6 +41,7 @@
- #include <asm/syscall.h>
- #include <asm/fsgsbase.h>
- #include <asm/io_bitmap.h>
-+#include <asm/mmu_context.h>
- 
- #include "tls.h"
- 
-@@ -339,6 +340,43 @@ static int set_segment_reg(struct task_struct *task,
- 
- #endif	/* CONFIG_X86_32 */
- 
-+unsigned long segment_base_address(unsigned int segment)
-+{
-+	struct desc_struct *desc;
-+	unsigned int idx = segment >> 3;
-+
-+	lockdep_assert_irqs_disabled();
-+
-+	if ((segment & SEGMENT_TI_MASK) == SEGMENT_LDT) {
-+#ifdef CONFIG_MODIFY_LDT_SYSCALL
-+		struct ldt_struct *ldt;
-+
-+		/*
-+		 * If we're not in a valid context with a real (not just lazy)
-+		 * user mm, then don't even try.
-+		 */
-+		if (!nmi_uaccess_okay())
-+			return 0;
-+
-+		/* IRQs are off, so this synchronizes with smp_store_release */
-+		ldt = smp_load_acquire(&current->mm->context.ldt);
-+		if (!ldt || idx >= ldt->nr_entries)
-+			return 0;
-+
-+		desc = &ldt->entries[idx];
-+#else
-+		return 0;
-+#endif
-+	} else {
-+		if (idx >= GDT_ENTRIES)
-+			return 0;
-+
-+		desc = raw_cpu_ptr(gdt_page.gdt) + idx;
-+	}
-+
-+	return get_desc_base(desc);
-+}
-+
- static unsigned long get_flags(struct task_struct *task)
- {
- 	unsigned long retval = task_pt_regs(task)->flags;
--- 
-2.47.2
+vfs_walk_ancestors() would initialise a "struct nameidata" and
+effectively call handle_dots(&nd, LAST_DOTDOT) repeatedly, calling
+    walk_cb(&nd.path, data)
+each time.
 
+How would you feel about that sort of interface?
 
+NeilBrown
