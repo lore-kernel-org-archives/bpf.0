@@ -1,126 +1,150 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DA6078F2E
-	for <bpf@vger.kernel.org>; Fri, 27 Jun 2025 02:43:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+Received: from invmail4.hynix.com (exvmail4.skhynix.com [166.125.252.92])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEC87199FD0;
+	Fri, 27 Jun 2025 03:54:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.125.252.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750992217; cv=none; b=lLWcVS4ojGUjwDo0TLMz+9lo1BZ671ZQQUAqM+irZyfZkYQ5OGfFzWTDCgAmXa6tZedDLghiVu9P7TKvlI6Q8VOWnZE3x/31S/bKmTwRRuESAHSaSxKCegSvJqNDZdIr6WmD8TP1i3QeDg2jRtWuzmh64g8goW3o+rC2wALo+co=
+	t=1750996459; cv=none; b=uff1RfafbibSnGTdx4xECYW+CMWsk4zFYrpIwRKPhqU5naBITkyiyBmzCF06ellzSiYcXRav+ueVafGvgRPuF79o13jhse/XbDrRK0187Cw97CVZdB2TtOmQEN9QVLHdrBaYwSBOXiK5ckIvTx6T4Hlio42EpQQVot37rimnJOA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750992217; c=relaxed/simple;
-	bh=RXC4Rxkam+ZBAOFfCItPQiQAgEwB6Nk3xgueJRX/EL4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MYksmrn0Y5qUuovUGM3W/xAHbnYFXot0bhxDUv6k3yjzkEx7IAQC6VAYy8NJhS4sXWN2jzanEPu5y79vlRIqnu0JxWIJPnzcoX/NwBKIbkmMfAhoacX1y72IBEAwTDpRQW35d1DWnF7y23hxdgKt5PHSk1qbIOJl/TtW9y8AaOU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=f+OpDwJ8; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="f+OpDwJ8"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1750992215;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=RXC4Rxkam+ZBAOFfCItPQiQAgEwB6Nk3xgueJRX/EL4=;
-	b=f+OpDwJ8InoOr8JvoeuHxbODQk0deDxL8X3f+/xEylGS2Lac9HO8f9BbGjU33L6z2e2caC
-	xuJafinTLHXaeLRMu3UTElGML4az6V/ipbfDkmA7sd65FxjVMSKQp4jselapY2+2WG/YmX
-	0Vp+fgbZ2FvOrpX9kuXYUrh5J1swJZ8=
-Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com
- [209.85.216.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-374-44nhwcQ8PUiY-_woQdgygQ-1; Thu, 26 Jun 2025 22:43:33 -0400
-X-MC-Unique: 44nhwcQ8PUiY-_woQdgygQ-1
-X-Mimecast-MFC-AGG-ID: 44nhwcQ8PUiY-_woQdgygQ_1750992212
-Received: by mail-pj1-f71.google.com with SMTP id 98e67ed59e1d1-313ff01d2a6so1633298a91.3
-        for <bpf@vger.kernel.org>; Thu, 26 Jun 2025 19:43:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750992212; x=1751597012;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RXC4Rxkam+ZBAOFfCItPQiQAgEwB6Nk3xgueJRX/EL4=;
-        b=OV4I/QD5bvVSvKzbYckYRagKS2EmZ+JqN3ebCrZJRNdGU8C1mpsW8/WAfXhg/Q6bmA
-         oLu2pXsd8nVuCsQaTgkn9Pfosnl2+KnO3xES/mEqnI29VtzDDm576mqm6zOHD/4Y+xmo
-         oEi5twSLBQSqS9JUgop+VDGZ7vWUt//Wton5N0x97bx/F1ad/qZbTIOASQeOJxAfKNb6
-         O21PWPaa7b1wGsuPd38VqrjS8oNN9LPrAaOphKUpzd1N4HNgh99JaJTjvuI8mHQq4gF9
-         VvTrp4HfdWuizh8eowcvjyi8e1fGHSOMidGrLnJfc0EmhJuFRFwk7MGRmyHtIzsVBvhs
-         KBXw==
-X-Forwarded-Encrypted: i=1; AJvYcCWbgBQgjiDqxdClI3m6au0TmWFld+gB5v/qWG8r/kENewthSxXHXN9DJV6k/5WEdWRAj9I=@vger.kernel.org
-X-Gm-Message-State: AOJu0YySsnelsaU7M+g+lRKfP+/KQURZjReS5GQLB4euj+0ilpA7LxXt
-	nwVzmgfoWLLtFoKMTAO8glXylpxBcKCVcZ27EFMGeojAtFAS/ps4tsht/OGEaewmPR8MZPyiGx9
-	h4jWRWMfYdFt85cd0i+Czqwm6FbPOnYw4lRn/UCxJwUpjgDhMrmEi41ppo4d42OLTNS0WW1o+no
-	Ra9xOBSoxlxbFShLAEChbmkd77NJTd
-X-Gm-Gg: ASbGncuKpySYQeMXVB/OaLCWi1YOqmOs/GJHLY/UfgQcxxyhViWG98ww2dFksoEwT0l
-	iEeoue2NVHLGs5d7s5antOY76U/bLeKz8Uqkgd3LBtx8eWL6Ylo3F1ZI8L7NU6bUeLFqGTKMHzC
-	Pg
-X-Received: by 2002:a17:90a:d64b:b0:312:1dc9:9f67 with SMTP id 98e67ed59e1d1-318c9107a53mr2192664a91.2.1750992212424;
-        Thu, 26 Jun 2025 19:43:32 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGJM16rdnxRskTxwuXyeMZbSoBcs9q4++zM+ywcskISDMXjQ0J0UHxMNSH2KE2x3C2uBazsSFuOebCMbQTd6Tc=
-X-Received: by 2002:a17:90a:d64b:b0:312:1dc9:9f67 with SMTP id
- 98e67ed59e1d1-318c9107a53mr2192640a91.2.1750992212056; Thu, 26 Jun 2025
- 19:43:32 -0700 (PDT)
+	s=arc-20240116; t=1750996459; c=relaxed/simple;
+	bh=1wSshET0D4HzFtPkni4hcnJJMmDOUANJjtoKlvShps8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=EYCkzhbHTFD1oNEC1pLBxXS9qJVppLycdCOiYdIwB9y2FdYfLyVHPL9X0ZODFmBda+/gv0VhBnlgM31r7fFPKNppdt7Q8IcYqGpvWVVAOi3m+C8WlCDxP7mYwtEL7NY3kmsMjrTPF7NZoHIm+Ym4pPuSG9fTDrvRpDLBRCSt23M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com; spf=pass smtp.mailfrom=sk.com; arc=none smtp.client-ip=166.125.252.92
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sk.com
+X-AuditID: a67dfc5b-669ff7000002311f-b5-685e15e2381c
+Date: Fri, 27 Jun 2025 12:54:05 +0900
+From: Byungchul Park <byungchul@sk.com>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: willy@infradead.org, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+	kernel_team@skhynix.com, almasrymina@google.com,
+	ilias.apalodimas@linaro.org, harry.yoo@oracle.com, hawk@kernel.org,
+	akpm@linux-foundation.org, davem@davemloft.net,
+	john.fastabend@gmail.com, andrew+netdev@lunn.ch,
+	asml.silence@gmail.com, toke@redhat.com, tariqt@nvidia.com,
+	edumazet@google.com, pabeni@redhat.com, saeedm@nvidia.com,
+	leon@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+	david@redhat.com, lorenzo.stoakes@oracle.com,
+	Liam.Howlett@oracle.com, vbabka@suse.cz, rppt@kernel.org,
+	surenb@google.com, mhocko@suse.com, horms@kernel.org,
+	linux-rdma@vger.kernel.org, bpf@vger.kernel.org,
+	vishal.moola@gmail.com, hannes@cmpxchg.org, ziy@nvidia.com,
+	jackmanb@google.com
+Subject: Re: [PATCH net-next v7 1/7] netmem: introduce struct netmem_desc
+ mirroring struct page
+Message-ID: <20250627035405.GA4276@system.software.com>
+References: <20250625043350.7939-1-byungchul@sk.com>
+ <20250625043350.7939-2-byungchul@sk.com>
+ <20250626174904.4a6125c9@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250625160849.61344-1-minhquangbui99@gmail.com>
- <20250625160849.61344-4-minhquangbui99@gmail.com> <CACGkMEvY9pvvfq3Ok=55O1t3+689RCfqQJqaWjLcduHJ79CDWA@mail.gmail.com>
- <8f0927bf-dc2f-4a20-887a-6d8529623dd7@gmail.com>
-In-Reply-To: <8f0927bf-dc2f-4a20-887a-6d8529623dd7@gmail.com>
-From: Jason Wang <jasowang@redhat.com>
-Date: Fri, 27 Jun 2025 10:43:20 +0800
-X-Gm-Features: Ac12FXyeaiRss6v-acFo0ljDViofeaY9eNXnTbOP2WE1qi3Xv2JlKX1swLORs6U
-Message-ID: <CACGkMEvf18Dmo5Wzdq-GnJf-jOrzKMQ7epZA+ssWPzXvCnCXvw@mail.gmail.com>
-Subject: Re: [PATCH net 3/4] virtio-net: create a helper to check received
- mergeable buffer's length
-To: Bui Quang Minh <minhquangbui99@gmail.com>
-Cc: netdev@vger.kernel.org, "Michael S. Tsirkin" <mst@redhat.com>, 
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>, =?UTF-8?Q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
-	Stanislav Fomichev <sdf@fomichev.me>, virtualization@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250626174904.4a6125c9@kernel.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Sa0hTYRjHec85O+e4Wh3nrFf9EsuohDJD6iG6GAQdiiiQIhLTUzu41TSZ
+	lzRITKWLqd1Ec7OYRrmWNZvhVkytqVmYFZaxbmrrQpktLBuppW2K5Lcf/+f//Hg+PCwp10tC
+	WU1KuqhLEbRKWkpJv82sXuIO3q1e1mpaBJWWWhqu/c6Cmj67BCrNDQiGhl8z8LO1nYZLVV4S
+	Kp8UUPDLMkLCx/tuBq5Zt0DvlU8UOI7ZSHCfekBDccEoCY3DHgby7CYCnjaUSKB05DIJttw+
+	Bp7dqaShp3ZcAp+cxRQ81F+loLckBu4b54C3YwBBq8VGgLfoAg3nuow0vC/oRdDV4qbAcKQE
+	gaXJJYHR3z6Hoa2HiQnnWwa+k/ytqy8J/rb+LcMbrRl8vSmCL3R1kbzVfILmrT/OMvybFw6a
+	f3B+lOJv238SfHG+h+YHP76i+O9N3TRvudVN8Y+Mrcy2wF3S1SpRq8kUdZFrE6XqzrHU1DJF
+	lvP1YyIXDc8uRAEs5qKxNb9TMsV/y0YYP1PcAjxoez/BNLcQu1zDpJ8VXDguqK+gCpGUJbkq
+	GhvLHROlIE7ADvcQ4WcZtxL3egaRvyTnjiLc/vcPPTkIxA8rPlB+JrkI7Br74ltgfRyGa8ZY
+	fxzAReGeurYJTzA3H99taCf8HszZWVxuyCcmLw3B90wu6jTi9NO0+mla/X+tEZFmJNekZCYL
+	Gm30UnV2iiZr6d4DyVbk+5grh//E2dGPp7FOxLFIOVMGkfFquUTITMtOdiLMkkqFTPbCF8lU
+	QvYhUXcgQZehFdOcKIyllHNly70HVXIuSUgX94tiqqibmhJsQGguqh5fMn55lmFASLz5anvF
+	RvWOFfuDjElNbS2bPMkrYj6c6Xt+z1bSfD3rRkh6R96Q1/A1pCbOGj508eChvC/xOfnanFX9
+	/SfvzD5uXluxWfHZY1l8rK/fZG5+1xwl3VnduHVfUUMd+UaVvj7uVFFsRlhdqWJeQtjGPd9m
+	sGvWBedoNjiVVJpaiIogdWnCP+YTlCAtAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Sa0hTcRjG+59zds7ZaHRasw5WRLMLCKVC0QtGaRT9CbKgD4WUeWgHN9Jp
+	m5cZBGpWJGllUTqVJtbyFqspOmtKTE1NummXleVkphSIZl5wOq3NiPr243mf3/PpZUmFjwpm
+	tbpUUa8TElW0jJLFRJ7f4gmK04TPTy2HUmstDTUzRrg/YJdAaXUDgklvHwMTbR00VJRPk1D6
+	KpeCKessCUPPPAzU2A6C2zJMgeNSIwmeq5005OfOkdDsHWUgx15JQGtZlwReNxRI4ObsPRIa
+	swYY6H1cSkN/7S8JDDvzKegyVVHgLoiCZ+aVMN09gqDN2kjA9JUyGm70mGkYzHUj6Gn1UFCS
+	XYDA2uKSwNyMf6OkvZ+J2ohbR8ZIXF/1kcBNpi8MNtvScF1lKM5z9ZDYVn2ZxrafhQz+/N5B
+	486iOQo32ScInH9+lMbjQ58oPNbyjsYV334Q2Fr/jjqsiJXtVIuJ2nRRH7YrXqZ5sZCScktp
+	dPa9JLKQd1kekrI8t42fvzXLBJjiNvLjjYOLTHObeZfLSwZYyW3gc+uKqTwkY0munObNtx2L
+	pRWcwDs8k0SA5dwO3j06jgIlBXcR8R3zPvrPYTnfVfyVCjDJhfKuhe9+gfXzav7+AhuIpVwE
+	3/+wfXEniAvhnzZ0ENeQ3PSfbfrPNv2zzYisRkqtLj1J0CZu32o4rcnUaY1bTyUn2ZD/Jyzn
+	fNftaLJ3vxNxLFItlUPYCY1CIqQbMpOciGdJlVIuf++P5Goh86yoTz6pT0sUDU60mqVUq+QH
+	jorxCi5BSBVPi2KKqP97JVhpcBb6kO5u3hO3e2/LnoLI4dCcwyOFwZbxyDMZIeua7Z2HXsbi
+	48mOu1NrpSHMvti3j2a6pc0Pomq8tRHdRypLBt8svMkr0s2uWXKkzfVELxo3FR6LUSh3L2GU
+	FkF7Y29/X/QFaVjCnO/j83D1g+hstTmDbcLrM3y8uvfmHUtyNFW1RkUZNEJEKKk3CL8BPOu0
+	Jg8DAAA=
+X-CFilter-Loop: Reflected
 
-On Thu, Jun 26, 2025 at 11:38=E2=80=AFPM Bui Quang Minh
-<minhquangbui99@gmail.com> wrote:
->
-> On 6/26/25 09:38, Jason Wang wrote:
-> > On Thu, Jun 26, 2025 at 12:10=E2=80=AFAM Bui Quang Minh
-> > <minhquangbui99@gmail.com> wrote:
-> >> Currently, we have repeated code to check the received mergeable buffe=
-r's
-> >> length with allocated size. This commit creates a helper to do that an=
-d
-> >> converts current code to use it.
-> >>
-> >> Signed-off-by: Bui Quang Minh <minhquangbui99@gmail.com>
-> > I think it would be better to introduce this as patch 1, so a
-> > mergeable XDP path can use that directly.
-> >
-> > This will have a smaller changeset.
->
-> I'm just concerned that it might make backporting the fix harder because
-> the fix depends on this refactor and this refactor touches some function
-> that may create conflict.
+On Thu, Jun 26, 2025 at 05:49:04PM -0700, Jakub Kicinski wrote:
+> On Wed, 25 Jun 2025 13:33:44 +0900 Byungchul Park wrote:
+> > +/* A memory descriptor representing abstract networking I/O vectors,
+> > + * generally for non-pages memory that doesn't have its corresponding
+> > + * struct page and needs to be explicitly allocated through slab.
+> 
+> I still don't get what your final object set is going to be.
 
-We can make it a single patch that contains:
+The ultimate goal is:
 
-1) new helper
-2) fixes
+   Remove the pp fields from struct page
 
-as long as the changeset meets the requirement of -stable.
+The second important goal is:
 
-Thanks
+   Introduce a network pp descriptor, netmem_desc
 
->
-> Thanks,
-> Quang Minh.
->
+While working on these two goals, I added some extra patches too, to
+clean up related code if it's obvious e.g. patches for renaming and so
+on.
 
+> We have
+>  - CPU-readable buffers (struct page)
+>  - un-readable buffers (struct net_iov)
+>  - abstract reference which can be a pointer to either of the
+>    above two (bitwise netmem_ref)
+> 
+> You say you want to evacuate page pool state from struct page
+> so I'd expect you to add a type which can always be fed into
+> some form of $type_to_virt(). A type which can always be cast
+> to net_iov, but not vice versa. So why are you putting things
+> inside net_iov, not outside.
+
+The type, struct netmem_desc, is declared outside.  Even though it's
+used overlaying on struct page *for now*, it will be dynamically
+allocated through slab shortly - it's also one of mm's plan.
+
+As you know, net_iov is working with the assumption that it overlays on
+struct page *for now* indeed, when it comes to netmem_ref.  See the
+following APIs as example:
+
+static inline struct net_iov *__netmem_clear_lsb(netmem_ref netmem)
+{
+	return (struct net_iov *)((__force unsigned long)netmem & ~NET_IOV);
+}
+
+static inline void netmem_set_pp(netmem_ref netmem, struct page_pool *pool)
+{
+	__netmem_clear_lsb(netmem)->pp = pool;
+}
+
+I'd say, I replaced the overlaying (on struct page) part with a
+well-defined struct, netmem_desc that will play the role of struct page
+for pp usage, instead of a set of the current overlaying fields of
+net_iov.
+
+This 'introduction of netmem_desc' patch can be the base for network
+code to use netmem_desc as pp descriptor instead of struct page.  That's
+what I meant.
+
+Am I missing something or got you wrong?  If yes, please explain in more
+detail then I will get back with the answer.
+
+	Byungchul
+
+> > + * net_iovs are allocated and used by networking code, and the size of
+> > + * the chunk is PAGE_SIZE.
+> 
+> FWIW not for long. Patches to make the size of net_iov configurable
+> are in progress.
