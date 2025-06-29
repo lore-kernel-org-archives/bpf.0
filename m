@@ -1,282 +1,157 @@
-Received: from mx-rz-1.rrze.uni-erlangen.de (mx-rz-1.rrze.uni-erlangen.de [131.188.11.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f179.google.com (mail-il1-f179.google.com [209.85.166.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE61415DBB3;
-	Sat, 28 Jun 2025 15:01:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=131.188.11.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 990A52F1FE2;
+	Sun, 29 Jun 2025 02:52:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751122920; cv=none; b=KpYjJRp9DUv3FJAj+UR9iW2JEeu6zTU02QpHVZEKTUzRlp7P5S/eFj+HT2aXOqlQMmCi+4kh7rt55J1tsidcOSKNPoOIimGe4Vl1OM4Fojq93DPBHfhmEomD4P80zaQUk1u+HpkiSF895PjmPDyDjCfDAn153AygNUZPBFcMTZA=
+	t=1751165556; cv=none; b=olfSzwU8dEI6vKsgPZZccsFeP33KrBoD4HA2AapORf19YxK9JmrkM4VBEjGWMN8PXdNSV9eZB3Qlo3CKj63dFL9C4bAVrLmPNGFORxF3wDq9bYqwnRq9tk/nXyZFbxyqyZx9HJuFaih6MReFUznXGNylCjGGO1E5NSFAyTZ6MeA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751122920; c=relaxed/simple;
-	bh=JYSr+4axxHIotvpxTe4hIWmAX2B/c5uvK0LSS2w+C3Q=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=jJR1m4vVeB7EpJgc96TN5eFcpv32dmq0Pd4LvbznBMjXQ+klH8LjofMTuuWpXmqK9zTI5pcS0d6egWyWrunVYO+R6HMjtgjDGXQbwBgQWC2CyyKTmEqCA3nQMR4othqC9Zfnw2dL4yfCRfKOdAEMZ5cqB1RXC1i7tmSZJ0yyh74=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fau.de; spf=pass smtp.mailfrom=fau.de; dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.b=z1CxaaF9; arc=none smtp.client-ip=131.188.11.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fau.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fau.de
+	s=arc-20240116; t=1751165556; c=relaxed/simple;
+	bh=JUu4d6Lu/r48ANhRNx+jrIxyrNppEQqkxSGp6HYToIw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=VGP38tsnmgvaX0O/SOjt1yDTCapNIMjHrZH+7DoF4MH7vFJfxQP6qaBby5imuLhP5s71TK21XZpBbOT9qMsZn5jj7lFksrKTR8JcbwXuATDNt4cPT8HoVZC/mD6hpjiTKGfYzDBXFqoMO4AToxT62OifPdBmutUq1rCUZrclm2I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ifdxIhbF; arc=none smtp.client-ip=209.85.166.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.b="z1CxaaF9"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fau.de; s=fau-2021;
-	t=1751122916; bh=rcqvB24Pyxx9S4coBRICiUhH7Jgty3vrOBOTtW7/DS4=;
-	h=From:To:Subject:Date:In-Reply-To:References:From:To:CC:Subject;
-	b=z1CxaaF9NsGWMH3jmIMb7iEKyZ2ye4UdsaLIcIPH7vV14CGLm8/9Kf7XD6MXr4ELP
-	 J+TEj+EKt463xDv9zDqb3pRGzdbBl30jhmC541/kREwC53SVN7OxcUO8BJA6/SJJxg
-	 VyEfVE49AzqkoSrxFNcZ1nNRr0VWi/lh3+0jqLyYaLRTSlYBdqh0n/Dq3swMDLhrNf
-	 +1NqrAs+ELXUTpbHhrjiGpFXA0RTjFPqd/BDr5Lh04ApnS7Q+dpRcBvglx6Q0H2EXY
-	 Gb4g8qkiXyv5YLai8I39T0II1ul/cFANLY2coXPAWTxQdxdymxmuwWB0JXJnyI3iK4
-	 2uQQF2Yci9GJA==
-Received: from mx-rz-smart.rrze.uni-erlangen.de (mx-rz-smart.rrze.uni-erlangen.de [IPv6:2001:638:a000:1025::1e])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-rz-1.rrze.uni-erlangen.de (Postfix) with ESMTPS id 4bTwch4h5Zz8v7p;
-	Sat, 28 Jun 2025 17:01:56 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at boeck1.rrze.uni-erlangen.de (RRZE)
-X-RRZE-Flag: Not-Spam
-X-RRZE-Submit-IP: 2001:9e8:3601:f400:3a2b:2f7e:18b0:5ef9
-Received: from luis-tp.fritz.box (unknown [IPv6:2001:9e8:3601:f400:3a2b:2f7e:18b0:5ef9])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: U2FsdGVkX1+gFv4becOpWZ+vsA9E7Nstjmq1QxCJIsQ=)
-	by smtp-auth.uni-erlangen.de (Postfix) with ESMTPSA id 4bTwcd0wD5z8sgD;
-	Sat, 28 Jun 2025 17:01:53 +0200 (CEST)
-From: Luis Gerhorst <luis.gerhorst@fau.de>
-To: Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Mykola Lysenko <mykolal@fb.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Luis Gerhorst <luis.gerhorst@fau.de>,
-	Peilin Ye <yepeilin@google.com>,
-	Jiayuan Chen <mrpre@163.com>,
-	Saket Kumar Bhaskar <skb99@linux.ibm.com>,
-	Ihor Solodrai <isolodrai@meta.com>,
-	Daniel Xu <dxu@dxuuu.xyz>,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Paul Chaignon <paul.chaignon@gmail.com>
-Subject: [PATCH bpf-next v2 3/3] selftests/bpf: Add Spectre v4 tests
-Date: Sat, 28 Jun 2025 16:50:16 +0200
-Message-ID: <20250628145016.784256-4-luis.gerhorst@fau.de>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250628145016.784256-1-luis.gerhorst@fau.de>
-References: <20250628145016.784256-1-luis.gerhorst@fau.de>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ifdxIhbF"
+Received: by mail-il1-f179.google.com with SMTP id e9e14a558f8ab-3d948ce7d9dso5795595ab.2;
+        Sat, 28 Jun 2025 19:52:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1751165554; x=1751770354; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xTIn6bX/pcDrl5VzI3z6pvqx/3sHwV7Go2abDrLLtgs=;
+        b=ifdxIhbF97Ghv2rg73t8CoUUR2kIZHKH1yjLtcwV/7IKiXmrR1hAnS4c/MTfl8jmum
+         Nd9px+aVH8jn/u/4Uw69NrF7YzEeY9MdKokgLpSaXJS+oILgXMYixLFkGUgpudvePbm5
+         xVBoeAoIXh7dU/6rDONTa6gTIcScTtfnEXaL5OVJWtsb4R9bIT30fE7t6edJ5z5okw0w
+         3vyWWXiESdS+NFAjR8KQcUdCIv7uNkVxERNvvdeXFgfxfk9ihg2llJMPJA5TwTlre/fn
+         FM3d+ZEufP4NhmGelWU1lf2PL2W612bLGt0M9Gkt5ZALVQE2g5PS1EOC/EVyEg6vqRes
+         sHTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751165554; x=1751770354;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xTIn6bX/pcDrl5VzI3z6pvqx/3sHwV7Go2abDrLLtgs=;
+        b=vZa6Ehs6E0xXAQ2+h4aJPiMNF/Na6IEbQcM0t7u9YmlLY/RSD1zzXUz6TB7pXiddTA
+         6Vu+dOPFCxJcmoZGixJkUbYFCmaCwP7o6ZLDmBQes1DotY4avlLTQyy5O60RouXg6LYG
+         kZTGYyG+MgAXIHBG4LZ7+Z9BHMGt933OspqI8Z5uGgsYFQEUyP6Pwk00r+EG1SmcdJkQ
+         PqZ1bUaMa8i5Fh1zHKU/Ox+OmpQ8bCIsAzB0NE3H2ZdOUY+nP8AOp3SXk3rlaOClGBoB
+         NSKlgFGn6kuqUa1vzDKvbmoFzNh4XT52CL8p83WK4FDYtl9xKkFvLh+2aaKcTkAGXgXU
+         EOSw==
+X-Forwarded-Encrypted: i=1; AJvYcCX3g0I8vCdkg7g6v8N2/PJn1M90xqUsUtVDTen5C5xep+t3yybKEDETeEhRLUMIuKPLWd3t2dg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyCaQ5rx62Rm7enwBZjT7PfeMJvPFvRzsqWEU3pi7JU+tUCutNB
+	UOk/wrLEAtLt+7WS5kQ1xsSwAeLFPNqmrMi+0Q5ouiZWMBED1+0ZVUdfvg9XhzXHCmgtfGxNfuj
+	j1si8HE23My6QGyCkPOInz96273sMGDg=
+X-Gm-Gg: ASbGncuwRON0bgfI4YzeGXUUS8tPrH29Q7wcZparnUC4Vq2+jJVe5xVg0Wdi6ebhyce
+	1uUMcwLznYoKHedsVblo/XgFpSQAEQJmIb150ihRBS40HHfZlo4kNIlCBEBJx+xoFtQ1Ys51S0T
+	dhILgs7zCwy8lIzEMI6YxoHWc+JWN5xzLMR287OxBFtA==
+X-Google-Smtp-Source: AGHT+IEDnvtHrTUWB+UWMUfEOhNVfh7lXsYxCnJn28f/nA63rMKiq21nBJTuGZstL87WpOyv9xciulcXGNXmHhJRuIE=
+X-Received: by 2002:a05:6e02:1a0c:b0:3dd:b4b5:5c9f with SMTP id
+ e9e14a558f8ab-3df4ace8ef5mr102247725ab.19.1751165553620; Sat, 28 Jun 2025
+ 19:52:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250627110121.73228-1-kerneljasonxing@gmail.com>
+In-Reply-To: <20250627110121.73228-1-kerneljasonxing@gmail.com>
+From: Jason Xing <kerneljasonxing@gmail.com>
+Date: Sun, 29 Jun 2025 10:51:57 +0800
+X-Gm-Features: Ac12FXznGNTBxfDxAHPTXZ8dubaXwFW_NkSg8bJ_Qa2xDiQ471BbpIT3R-dIqZg
+Message-ID: <CAL+tcoCSd_LA8w9ov7+_sOWLt3EU1rcqK8Sa6UF5S-xgfAGPnA@mail.gmail.com>
+Subject: Re: [PATCH net-next v6] net: xsk: introduce XDP_MAX_TX_BUDGET set/getsockopt
+To: davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
+	pabeni@redhat.com, bjorn@kernel.org, magnus.karlsson@intel.com, 
+	maciej.fijalkowski@intel.com, jonathan.lemon@gmail.com, sdf@fomichev.me, 
+	ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org, 
+	john.fastabend@gmail.com, joe@dama.to, willemdebruijn.kernel@gmail.com
+Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, 
+	Jason Xing <kernelxing@tencent.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Add the following tests:
+On Fri, Jun 27, 2025 at 7:01=E2=80=AFPM Jason Xing <kerneljasonxing@gmail.c=
+om> wrote:
+>
+> From: Jason Xing <kernelxing@tencent.com>
+>
+> This patch provides a setsockopt method to let applications leverage to
+> adjust how many descs to be handled at most in one send syscall. It
+> mitigates the situation where the default value (32) that is too small
+> leads to higher frequency of triggering send syscall.
+>
+> Considering the prosperity/complexity the applications have, there is no
+> absolutely ideal suggestion fitting all cases. So keep 32 as its default
+> value like before.
+>
+> The patch does the following things:
+> - Add XDP_MAX_TX_BUDGET socket option.
+> - Convert TX_BATCH_SIZE to tx_budget_spent.
+> - Set tx_budget_spent to 32 by default in the initialization phase as a
+>   per-socket granular control. 32 is also the min value for
+>   tx_budget_spent.
+> - Set the range of tx_budget_spent as [32, xs->tx->nentries].
+>
+> The idea behind this comes out of real workloads in production. We use a
+> user-level stack with xsk support to accelerate sending packets and
+> minimize triggering syscalls. When the packets are aggregated, it's not
+> hard to hit the upper bound (namely, 32). The moment user-space stack
+> fetches the -EAGAIN error number passed from sendto(), it will loop to tr=
+y
+> again until all the expected descs from tx ring are sent out to the drive=
+r.
+> Enlarging the XDP_MAX_TX_BUDGET value contributes to less frequency of
+> sendto() and higher throughput/PPS.
+>
+> Here is what I did in production, along with some numbers as follows:
+> For one application I saw lately, I suggested using 128 as max_tx_budget
+> because I saw two limitations without changing any default configuration:
+> 1) XDP_MAX_TX_BUDGET, 2) socket sndbuf which is 212992 decided by
+> net.core.wmem_default. As to XDP_MAX_TX_BUDGET, the scenario behind
+> this was I counted how many descs are transmitted to the driver at one
+> time of sendto() based on [1] patch and then I calculated the
+> possibility of hitting the upper bound. Finally I chose 128 as a
+> suitable value because 1) it covers most of the cases, 2) a higher
+> number would not bring evident results. After twisting the parameters,
+> a stable improvement of around 4% for both PPS and throughput and less
+> resources consumption were found to be observed by strace -c -p xxx:
+> 1) %time was decreased by 7.8%
+> 2) error counter was decreased from 18367 to 572
 
-1. A test with an (unimportant) ldimm64 (16 byte insn) and a
-   Spectre-v4--induced nospec that clarifies and serves as a basic
-   Spectre v4 test.
+More interesting numbers are arriving here as I run some benchmarks
+from xdp-project/bpf-examples/AF_XDP-example/ in my VM.
 
-2. Make sure a Spectre v4 nospec_result does not prevent a Spectre v1
-   nospec from being added before the dangerous instruction (tests that
-   [1] is fixed).
+Running "sudo taskset -c 2 ./xdpsock -i eth0 -q 1 -l -N -t -b 256"
 
-3. Combine the two, which is the combination that triggers the warning
-   in [2]. This is because the unanalyzed stack write has nospec_result
-   set, but the ldimm64 (which was just analyzed) had incremented
-   insn_idx by 2. That violates the assertion that nospec_result is only
-   used after insns that increment insn_idx by 1 (i.e., stack writes).
+Using the default configure 32 as the max budget iteration:
+ sock0@eth0:1 txonly xdp-drv
+                   pps            pkts           1.01
+rx                 0              0
+tx                 48,574         49,152
 
-[1] https://lore.kernel.org/bpf/4266fd5de04092aa4971cbef14f1b4b96961f432.camel@gmail.com/
-[2] https://lore.kernel.org/bpf/685b3c1b.050a0220.2303ee.0010.GAE@google.com/
+Enlarging the value to 256:
+ sock0@eth0:1 txonly xdp-drv
+                   pps            pkts           1.00
+rx                 0              0
+tx                 148,277        148,736
 
-Signed-off-by: Luis Gerhorst <luis.gerhorst@fau.de>
----
- tools/testing/selftests/bpf/progs/bpf_misc.h  |   4 +
- .../selftests/bpf/progs/verifier_unpriv.c     | 149 ++++++++++++++++++
- 2 files changed, 153 insertions(+)
+Enlarging the value to 512:
+ sock0@eth0:1 txonly xdp-drv
+                   pps            pkts           1.00
+rx                 0              0
+tx                 226,306        227,072
 
-diff --git a/tools/testing/selftests/bpf/progs/bpf_misc.h b/tools/testing/selftests/bpf/progs/bpf_misc.h
-index a678463e972c..be7d9bfa8390 100644
---- a/tools/testing/selftests/bpf/progs/bpf_misc.h
-+++ b/tools/testing/selftests/bpf/progs/bpf_misc.h
-@@ -235,4 +235,8 @@
- #define SPEC_V1
- #endif
- 
-+#if defined(__TARGET_ARCH_x86)
-+#define SPEC_V4
-+#endif
-+
- #endif
-diff --git a/tools/testing/selftests/bpf/progs/verifier_unpriv.c b/tools/testing/selftests/bpf/progs/verifier_unpriv.c
-index 4470541b5e71..28b4f7035ceb 100644
---- a/tools/testing/selftests/bpf/progs/verifier_unpriv.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_unpriv.c
-@@ -801,4 +801,153 @@ l2_%=:							\
- 	: __clobber_all);
- }
- 
-+SEC("socket")
-+__description("unpriv: ldimm64 before Spectre v4 barrier")
-+__success __success_unpriv
-+__retval(0)
-+#ifdef SPEC_V4
-+__xlated_unpriv("r1 = 0x2020200005642020") /* should not matter */
-+__xlated_unpriv("*(u64 *)(r10 -8) = r1")
-+__xlated_unpriv("nospec")
-+#endif
-+__naked void unpriv_ldimm64_spectre_v4(void)
-+{
-+	asm volatile ("					\
-+	r1 = 0x2020200005642020 ll;			\
-+	*(u64 *)(r10 -8) = r1;				\
-+	r0 = 0;						\
-+	exit;						\
-+"	::: __clobber_all);
-+}
-+
-+SEC("socket")
-+__description("unpriv: Spectre v1 and v4 barrier")
-+__success __success_unpriv
-+__retval(0)
-+#ifdef SPEC_V1
-+#ifdef SPEC_V4
-+/* starts with r0 == r8 == r9 == 0 */
-+__xlated_unpriv("if r8 != 0x0 goto pc+1")
-+__xlated_unpriv("goto pc+2")
-+__xlated_unpriv("if r9 == 0x0 goto pc+4")
-+__xlated_unpriv("r2 = r0")
-+/* Following nospec required to prevent following dangerous `*(u64 *)(NOT_FP -64)
-+ * = r1` iff `if r9 == 0 goto pc+4` was mispredicted because of Spectre v1. The
-+ * test therefore ensures the Spectre-v4--induced nospec does not prevent the
-+ * Spectre-v1--induced speculative path from being fully analyzed.
-+ */
-+__xlated_unpriv("nospec") /* Spectre v1 */
-+__xlated_unpriv("*(u64 *)(r2 -64) = r1") /* could be used to leak r2 */
-+__xlated_unpriv("nospec") /* Spectre v4 */
-+#endif
-+#endif
-+__naked void unpriv_spectre_v1_and_v4(void)
-+{
-+	asm volatile ("					\
-+	r1 = 0;						\
-+	*(u64*)(r10 - 8) = r1;				\
-+	r2 = r10;					\
-+	r2 += -8;					\
-+	r1 = %[map_hash_8b] ll;				\
-+	call %[bpf_map_lookup_elem];			\
-+	r8 = r0;					\
-+	r2 = r10;					\
-+	r2 += -8;					\
-+	r1 = %[map_hash_8b] ll;				\
-+	call %[bpf_map_lookup_elem];			\
-+	r9 = r0;					\
-+	r0 = r10;					\
-+	r1 = 0;						\
-+	r2 = r10;					\
-+	if r8 != 0 goto l0_%=;				\
-+	if r9 != 0 goto l0_%=;				\
-+	r0 = 0;						\
-+l0_%=:	if r8 != 0 goto l1_%=;				\
-+	goto l2_%=;					\
-+l1_%=:	if r9 == 0 goto l3_%=;				\
-+	r2 = r0;					\
-+l2_%=:	*(u64 *)(r2 -64) = r1;				\
-+l3_%=:	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm(bpf_map_lookup_elem),
-+	  __imm_addr(map_hash_8b)
-+	: __clobber_all);
-+}
-+
-+SEC("socket")
-+__description("unpriv: Spectre v1 and v4 barrier (simple)")
-+__success __success_unpriv
-+__retval(0)
-+#ifdef SPEC_V1
-+#ifdef SPEC_V4
-+__xlated_unpriv("if r8 != 0x0 goto pc+1")
-+__xlated_unpriv("goto pc+2")
-+__xlated_unpriv("goto pc-1") /* if r9 == 0 goto l3_%= */
-+__xlated_unpriv("goto pc-1") /* r2 = r0 */
-+__xlated_unpriv("nospec")
-+__xlated_unpriv("*(u64 *)(r2 -64) = r1")
-+__xlated_unpriv("nospec")
-+#endif
-+#endif
-+__naked void unpriv_spectre_v1_and_v4_simple(void)
-+{
-+	asm volatile ("					\
-+	r8 = 0;						\
-+	r9 = 0;						\
-+	r0 = r10;					\
-+	r1 = 0;						\
-+	r2 = r10;					\
-+	if r8 != 0 goto l0_%=;				\
-+	if r9 != 0 goto l0_%=;				\
-+	r0 = 0;						\
-+l0_%=:	if r8 != 0 goto l1_%=;				\
-+	goto l2_%=;					\
-+l1_%=:	if r9 == 0 goto l3_%=;				\
-+	r2 = r0;					\
-+l2_%=:	*(u64 *)(r2 -64) = r1;				\
-+l3_%=:	r0 = 0;						\
-+	exit;						\
-+"	::: __clobber_all);
-+}
-+
-+SEC("socket")
-+__description("unpriv: ldimm64 before Spectre v1 and v4 barrier (simple)")
-+__success __success_unpriv
-+__retval(0)
-+#ifdef SPEC_V1
-+#ifdef SPEC_V4
-+__xlated_unpriv("if r8 != 0x0 goto pc+1")
-+__xlated_unpriv("goto pc+4")
-+__xlated_unpriv("goto pc-1") /* if r9 == 0 goto l3_%= */
-+__xlated_unpriv("goto pc-1") /* r2 = r0 */
-+__xlated_unpriv("goto pc-1") /* r1 = 0x2020200005642020 ll */
-+__xlated_unpriv("goto pc-1") /* second part of ldimm64 */
-+__xlated_unpriv("nospec")
-+__xlated_unpriv("*(u64 *)(r2 -64) = r1")
-+__xlated_unpriv("nospec")
-+#endif
-+#endif
-+__naked void unpriv_ldimm64_spectre_v1_and_v4_simple(void)
-+{
-+	asm volatile ("					\
-+	r8 = 0;						\
-+	r9 = 0;						\
-+	r0 = r10;					\
-+	r1 = 0;						\
-+	r2 = r10;					\
-+	if r8 != 0 goto l0_%=;				\
-+	if r9 != 0 goto l0_%=;				\
-+	r0 = 0;						\
-+l0_%=:	if r8 != 0 goto l1_%=;				\
-+	goto l2_%=;					\
-+l1_%=:	if r9 == 0 goto l3_%=;				\
-+	r2 = r0;					\
-+	r1 = 0x2020200005642020 ll;			\
-+l2_%=:	*(u64 *)(r2 -64) = r1;				\
-+l3_%=:	r0 = 0;						\
-+	exit;						\
-+"	::: __clobber_all);
-+}
-+
- char _license[] SEC("license") = "GPL";
--- 
-2.49.0
+The performance of pps goes up by 365% (with max budget set as 512)
+which is an incredible number :)
 
+If the next-respin is needed, I will attach those convincing numbers
+in the commit message.
+
+Thanks,
+Jason
