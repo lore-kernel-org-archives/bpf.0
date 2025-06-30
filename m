@@ -1,115 +1,109 @@
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DA3E28A72B
-	for <bpf@vger.kernel.org>; Mon, 30 Jun 2025 13:28:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2E1128A73C
+	for <bpf@vger.kernel.org>; Mon, 30 Jun 2025 13:35:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751290101; cv=none; b=S0nBTlYDBSzhjaCvJwD2mYNGsxJ6ooRHd9i86q6Q/0EGq+eVSDrcYUei6aDVyPbWpg72ru+DQ7HzCWz5nDqK98iE2MB9XP1LK/fb5y3AFTWRjbxsnmMhR6QyFNgBNoT7dWpDhM90fmhMlDzJ1+tm0UQT9nbaIP8ZidDurkYzETY=
+	t=1751290547; cv=none; b=oKuVEV1zlx6K1Erc2ylbH8eC2FQNbRoMnYE1W9OAOjHKlOiOmyra2/329Ak3oQYNOCh0J+TRblZH4IoN7XnLaBXnmrHUDJej6crV2poYJN7FSE0XHhpdkHR+fwOCNWTmrfYBn2tt06hV7SokhNz8INkumyorKNhBrtLO9eenDfI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751290101; c=relaxed/simple;
-	bh=JOPlee8+H1wqCZ/ex4u70pd3NWavrS1JM0blGK0HgUI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KdiEhkNsyxabERfeYE9l2xbL5hgn1cl3ThANsJldaBgjJ0d+37wGjpk68Rg5NPxAhN/nXUFVIC8qNp8bt8FZGu3WZVkssZsRA1pO6JPtByr2WDkn1iqx3fwaMTxfRdPbPmK9yLyjBbmvAdEyhSDACUXzgn3YZTJVoN3aDvT1e7c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=KHPEZGc+; arc=none smtp.client-ip=209.85.208.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+	s=arc-20240116; t=1751290547; c=relaxed/simple;
+	bh=I4BVh2jJgSeCbGxd0AFiSobgYmGM/cPArZgyx8LH2j0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=m7qUzymL8ZtENNXHIM5zPGpWc8QvU+/zAyN3xBGx2pVpw0l+U32mHeRwvb7G3PG065yyMwQMuACeqVKPpN64BOm6LqJQntkTLWeCcDwKhxQFkZOrwp2xhMJnLzIoDHKMQ4QVC12lZ7TekpGXb8MrFo6xChEPBMhPcW4ZJwJusFc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=bXRKr1P6; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="KHPEZGc+"
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-60789b450ceso4184870a12.2
-        for <bpf@vger.kernel.org>; Mon, 30 Jun 2025 06:28:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1751290098; x=1751894898; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=JOPlee8+H1wqCZ/ex4u70pd3NWavrS1JM0blGK0HgUI=;
-        b=KHPEZGc+l3XTOiNeIK/SH4Vj3ktmjbktN86pSTlJpeSSubVlwrKT3rM2f94lb6sXVq
-         Tb1JJzsbs0v9dK+zkz9ukRyQQnIkKjZxVX430ZovDeihIu47oGVkSJG0qci/lSc/jofj
-         bnSqgi+yatHCXYVBHDKDKdJafTzKCXexyytrGoPANTNPh2iNzbqki71MrQJg7ioalQVt
-         LAO6l3nEYmP0fx4nzSbXdg1kb2P5Q/XW/HXcLxFOiEU/6T+e38B5tF1mdYQZj0ZNOPoq
-         Abj8fpg/yLm1lPTqsrhO9IwE+D8SY+7QJYPZR5R5g1x3XfjjCxLO0etvFvH80YKteyyx
-         w3Qw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751290098; x=1751894898;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JOPlee8+H1wqCZ/ex4u70pd3NWavrS1JM0blGK0HgUI=;
-        b=plwXmsFQpgsqcqmsFTVxmI8ZUHNi2C1l+kFDcHR6uWmZxR/3d2ptzYTLxDQUZL5Z2J
-         ydlE20vGa+xt54m4XYG8x+O7eZht/M7R+Lvh8fagEkKu00dJhurROcbio8JyALNigbrQ
-         PNowtRa66WnVchvkl3166OEB7F5paT7cf8J6BlDY11klIJuUn9mNjgef2iYTZLZaqWpz
-         5uGPz5aUnzB0BjztqBptgpL7/YVu3gnvIwA72EwiXRw2742AlwzytpnbqhmJRkBzEVxE
-         st5H0e3l5gtWelp3ywmrQR/m8UixAD8koFFETzJBFLqT6KL9ONi+XniO3iTZtTGbwb0t
-         z+vQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVoubOttQ6VRDPykoBKf1aNLYekofW8gW+lEDoPdWI6YJD7ZOLhMw5igjBuhDJrDV84QkM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzVVMSUuL6uz44/rFpTGJqxiJ1qTVOlXeQfJKB5XX4LrbcHIY+j
-	YCq1+qZt1VERfnLCVLkWzlnp/8qWIvKiHy++fGCvxtfg29v6GnzHlpTleFN1BJDflPyQVTjxBvp
-	ppIRbaQcD9nR2GXvuW9iGkRl/DgqAgjH6bMJUdAqZTQ==
-X-Gm-Gg: ASbGncuHpBeVm/pTXYyj+CP51GgmGecpYRJTlsJFdYyA+pfUtAB2ldOe+j5A10QQ1Vm
-	HIdSpFUEWmZ4cO6hojqbKqN1Q3Hz8zrhiCUuAhG4POy8Z6XIgMc50tz8pEsmVPF/jeQzmEaSNAp
-	ao8rjbhDyG3BhhZR2k9AVC9GDO39PiwIg6eqNkiDIJfyGo0wW+U7G/AcTCnKagfXVlRHykdQ==
-X-Google-Smtp-Source: AGHT+IHCK0fPjZVZy4IAIBdmQg4VEfs7xo5JaePIp6jIQWk4rF8khpEsxLOS+G1AlpruG5EP5fXrkymRLvSpySiCwDQ=
-X-Received: by 2002:a05:6402:5108:b0:5fe:7b09:9e27 with SMTP id
- 4fb4d7f45d1cf-60c88b55d4dmr9970788a12.12.1751290097533; Mon, 30 Jun 2025
- 06:28:17 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bXRKr1P6"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1751290544;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=/3RRoNkOVQN6TpJYq3En+WCVz9JU89wuTAMcgf1kyHE=;
+	b=bXRKr1P6/9ZU+NImV/O844Qxse05+FKLHcid0oWE7ErlM055mRCNX4uyBHEWTSJaOzdW9a
+	rCnoojFUrirB07s/ctKJrYqtCq4gsROOvr6V0mhtLD6H87Sr8G1B2wwGwNM9uYKmSAmhmG
+	o/i7Ky0HtZ7p2SYVL+vBI5g2Y8BrXRE=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-434-w_aTevF0NEiiIOL5zFnoSA-1; Mon,
+ 30 Jun 2025 09:35:39 -0400
+X-MC-Unique: w_aTevF0NEiiIOL5zFnoSA-1
+X-Mimecast-MFC-AGG-ID: w_aTevF0NEiiIOL5zFnoSA_1751290537
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id B85A619560BE;
+	Mon, 30 Jun 2025 13:35:36 +0000 (UTC)
+Received: from vmalik-fedora.redhat.com (unknown [10.45.225.53])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id EE3F418003FC;
+	Mon, 30 Jun 2025 13:35:29 +0000 (UTC)
+From: Viktor Malik <vmalik@redhat.com>
+To: bpf@vger.kernel.org
+Cc: Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Mykola Lysenko <mykolal@fb.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Amery Hung <ameryhung@gmail.com>,
+	=?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+	Viktor Malik <vmalik@redhat.com>,
+	Feng Yang <yangfeng@kylinos.cn>
+Subject: [PATCH bpf] selftests/bpf: Re-add kfunc declarations to qdisc tests
+Date: Mon, 30 Jun 2025 15:35:24 +0200
+Message-ID: <20250630133524.364236-1-vmalik@redhat.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250616095532.47020-1-matt@readmodwrite.com> <CAPhsuW4ie=vvDSc97pk5qH+faoKjz+b51MDYGA3shaJwNd677Q@mail.gmail.com>
- <CAENh_SQPLHC8pswTRoqh0bQR84HHQmnO3bM07UQa1Xu9uY_3WA@mail.gmail.com>
- <CAADnVQ+QyPqi7XJ2p=S9FVDbOxMXvVPU859n+2ApuRQv5T2S5w@mail.gmail.com>
- <CAENh_SQgZ5yVpshKRhiezhGMDAMvgV7SmwD_8u++mACE33oNrg@mail.gmail.com>
- <CAADnVQJgOyBCCySnBkTk-VCsz0dy+ppdGHpggxbtDpBBGhaXVg@mail.gmail.com>
- <CALrw=nFvUwmpjUMYh5iJqjo6SbAO8fZt8pkys7iDjZHfpF2DxQ@mail.gmail.com>
- <CAADnVQLC44+D-FAW=k=iw+RQA057_ohTdwTYePm5PVMY-BEyqw@mail.gmail.com>
- <CAENh_SSduKpUtkW_=L5Gg0PYcgDCpkgX4g+7grm4kxucWmq0Ag@mail.gmail.com> <CAADnVQ+_UZ2xUaV-=mb63f+Hy2aVcfC+y9ds1X70tbZhV8W9gw@mail.gmail.com>
-In-Reply-To: <CAADnVQ+_UZ2xUaV-=mb63f+Hy2aVcfC+y9ds1X70tbZhV8W9gw@mail.gmail.com>
-From: Matt Fleming <mfleming@cloudflare.com>
-Date: Mon, 30 Jun 2025 14:28:06 +0100
-X-Gm-Features: Ac12FXx0fYS0dAUVkSwEgtfKWEJIu58_CB5GnzygkiN6a3f1tL111CFtlrAmvas
-Message-ID: <CAGis_TUNfUOD3+GdbJn1U33W8wW5pWmASxiMa5e5+5-BqJ-PKw@mail.gmail.com>
-Subject: Re: [PATCH] bpf: Call cond_resched() to avoid soft lockup in trie_free()
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Matt Fleming <matt@readmodwrite.com>, Ignat Korchagin <ignat@cloudflare.com>, 
-	Song Liu <song@kernel.org>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Yonghong Song <yonghong.song@linux.dev>, 
-	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	kernel-team <kernel-team@cloudflare.com>, Jesper Dangaard Brouer <hawk@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
 
-On Fri, 27 Jun 2025 at 20:36, Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> Good. Now you see my point, right?
-> The cond_resched() doesn't fix the issue.
-> 1hr to free a trie of 100M elements is horrible.
-> Try 100M kmalloc/kfree to see that slab is not the issue.
-> trie_free() algorithm is to blame. It doesn't need to start
-> from the root for every element. Fix the root cause.
+BPF selftests compilation fails on systems with CONFIG_NET_SCH_BPF=n.
+The reason is that qdisc-related kfuncs are included via vmlinux.h but
+when qdisc is disabled, they are not defined and do not appear in
+vmlinux.h.
 
-It doesn't take an hour to free 100M entries, the table showed it
-takes about a minute (67 or 62 seconds).
+Fix the issue by defining the kfunc prototypes explicitly in
+bpf_qdisc_common.h. They were originally there but were removed by the
+fixed commit mentioned below.
 
-I never claimed that kmalloc/kfree was at fault. I said that the loop
-in trie_free() has no preemption, and that's a problem with tries with
-millions of entries.
+Fixes: 2f9838e25790 ("selftests/bpf: Cleanup bpf qdisc selftests")
+Signed-off-by: Viktor Malik <vmalik@redhat.com>
+---
+ tools/testing/selftests/bpf/progs/bpf_qdisc_common.h | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-Of course, rewriting the algorithm used in the lpm trie code would
-make this less of an issue. But this would require a major rework.
-It's not as simple as improving trie_free() alone. FWIW I tried using
-a recursive algorithm in trie_free() and the results are slightly
-better, but it still takes multiple seconds to free 10M entries (4.3s)
-and under a minute for 100M (56.7s). To fix this properly it's
-necessary to use more than two children per node to reduce the height
-of the trie. And in the meantime, anyone who uses maps with millions
-of entries is gonna have the kthread spin in a loop without
-preemption.
+diff --git a/tools/testing/selftests/bpf/progs/bpf_qdisc_common.h b/tools/testing/selftests/bpf/progs/bpf_qdisc_common.h
+index 3754f581b328..7e7f2fe04f22 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_qdisc_common.h
++++ b/tools/testing/selftests/bpf/progs/bpf_qdisc_common.h
+@@ -14,6 +14,12 @@
+ 
+ struct bpf_sk_buff_ptr;
+ 
++u32 bpf_skb_get_hash(struct sk_buff *p) __ksym;
++void bpf_kfree_skb(struct sk_buff *p) __ksym;
++void bpf_qdisc_skb_drop(struct sk_buff *p, struct bpf_sk_buff_ptr *to_free) __ksym;
++void bpf_qdisc_watchdog_schedule(struct Qdisc *sch, u64 expire, u64 delta_ns) __ksym;
++void bpf_qdisc_bstats_update(struct Qdisc *sch, const struct sk_buff *skb) __ksym;
++
+ static struct qdisc_skb_cb *qdisc_skb_cb(const struct sk_buff *skb)
+ {
+ 	return (struct qdisc_skb_cb *)skb->cb;
+-- 
+2.50.0
 
-Thanks,
-Matt
