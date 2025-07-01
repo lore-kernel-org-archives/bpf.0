@@ -1,202 +1,231 @@
-Received: from mail-il1-f182.google.com (mail-il1-f182.google.com [209.85.166.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay.hostedemail.com (smtprelay0010.hostedemail.com [216.40.44.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A712C347D5;
-	Tue,  1 Jul 2025 00:20:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 072DA339A1;
+	Tue,  1 Jul 2025 00:54:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751329255; cv=none; b=CjvN4q/iX77YJ2AogoE1YiWG7Ab0Q7GxWRhB3EWc/X7PFKog9olPRxLzi5GI/yki91V21WDeE0ffz01um9pFSvaH4RcdFGITeQ+eH+mNein4jlE0ZkQ01zzUee9HYGkaJ58up/peQ9dbysfHpK2CTbduyzBBfuSa9vf2KSLcJOk=
+	t=1751331262; cv=none; b=DwlDf+eWzuIsaT0FbYXskPaVY3kXR4Zvnq0D/7F43GYJhvOBFncLWBWlO4JN2k6OshBwgKBG3jn/FCgBXEs4iG5Hft7H94pNdfNus+r+Y7sDJyOPj0D65mtW9rcPG/mL6BKdz7CTDdLi2P7qMRRBNBYQE1tiiFZ3GTcub7amAN8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751329255; c=relaxed/simple;
-	bh=1zva/vyvpeqf+VyPVIat7QLdr9isufIskxi8szsQ9e8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mKoleKrJY6Pb28+8gG85ZcNSwQ88o3MXIOi6u0aXEVTzDqgb5yUj2cPrYkRdXa6PutG53Vt3f3O6iFiR2RN6EEsFIncHjONaHZMYQ6PoCJqHnzpbd1QLYyaLwNub1op6oNLCzn9Eh+y5T6ZG5pbWQh0WPs2FBA/ou+I5i6w1dWY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=b0T6u+lc; arc=none smtp.client-ip=209.85.166.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b0T6u+lc"
-Received: by mail-il1-f182.google.com with SMTP id e9e14a558f8ab-3de18fdeab0so44894655ab.3;
-        Mon, 30 Jun 2025 17:20:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1751329253; x=1751934053; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DEBCdoj55gHUDc+Kc3khDe1kXAkYl31rGdURJbmNFHs=;
-        b=b0T6u+lcbUFpxflcQ0rw/xwWjX5uKogO7Y+AcRSOGsaIES5bmPjuA09sZHumZteIdZ
-         wz5KIiMSiX9DLF2OFYDow1Mz5qMfpioGlzcIrQpqMcPfs0xCeN156MgKzJ1KqiUir+l8
-         Qus98+LAv3NpucWVwZhw3Wds2lEdekv/lXM5CSJ0NZZksucQTog6aj87lC6pbxwyyR9L
-         z5wPSsHLbMOzfsvRGoG5gKxl599qcK5R37omS00V3kjSZy/tKcx/GqgJcbnTZ3itelGa
-         F0bidi09jO2KWbCK/ZR9I83K8Y/jTyMS+iILFotm61q2OTNhouWvwGswZrkXyDHQGRP8
-         46Zw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751329253; x=1751934053;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DEBCdoj55gHUDc+Kc3khDe1kXAkYl31rGdURJbmNFHs=;
-        b=LffvRb3ei8Wn+CZsUNaX8pbfkPnYE3SNzYycx5y9c+l6GdV4XmthpZm+GqrTmG33Ae
-         qRg/hNxHCkXLfadZ5dniepbEKKipxEvzwYTYdjIYsTcgEnrKCRyD1z9KYukd+GP7HZXt
-         vGW00cUuo9k5LhryBmVALF5VEIXCSl+HawiQDXdLSFu79nIFvwquXP5gl/Wz1cnN2q+U
-         AE0p0uBgfEkuK7ad+Blt7b14jZNIWpz02W2nnOiocSCDGfz4MrMVx8IaUTJig2yNBf1V
-         +Sid5yrKTaQ0p+wEu/muCKh4KP6Brm70WUpLBifbQKJJiP9GvuzkImZJs26/9R81OZA4
-         zsZg==
-X-Forwarded-Encrypted: i=1; AJvYcCWR27L6CdhJe25jx/4MnPmq3C2A1IbpkN1RvDNBuGAg3lRcCVrcCA/w4KQzrUdwBBQQ45Um2Klk@vger.kernel.org, AJvYcCXoptvPZWQAabbVA141JINfxYgU0D0cvHskOKTDxAicAkdTrF8c8EdWqKRepxFN/1kaBAM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzLdxNxRZhG9vPu9GKeypLqIq3wRRYAnsgzTWVyJXpm3pTMqYQs
-	y6M4VyNd2am1EVwEV09OHUQhpaO3qeR1xt/BXQYUnZ+vCWpTcIs0r2DIbDB26u/jJPr540p8ojZ
-	EJCNjdeZFd7KN5AG7/Ag5DyJ0enR4+9A=
-X-Gm-Gg: ASbGncu/zaWsi5vEHpnqkmFquyQ6pE0MJK3vh350UUTsqOgF8CQ/BvgFjKgnFr2w2Go
-	EuinQI8BC79X2e7Hw2tBZOknOBWtlWqRWlnNZMHSr9hRaCQmWqfCOYLluWq7x/lqSv6kgRQ2Wuy
-	eZq+1XK6mvkf7v55YCBx6gq+6PpgUmPo2a5Qcb+nSOOg==
-X-Google-Smtp-Source: AGHT+IFOAnKHo4eiJk08bURW/bxpCeR/U7Ix+nvOQBBNU0O4inbT9887YDOiPbmYhq1JoGU15uGzmoXuA9+RKAx+bQE=
-X-Received: by 2002:a05:6e02:370c:b0:3dc:79e5:e696 with SMTP id
- e9e14a558f8ab-3df4aba3be2mr165686535ab.11.1751329252593; Mon, 30 Jun 2025
- 17:20:52 -0700 (PDT)
+	s=arc-20240116; t=1751331262; c=relaxed/simple;
+	bh=5Iasa2WIfq3X+AqTWa+BKLntbTlcAOBg3PK5qlqtnys=;
+	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
+	 Content-Type; b=J/P3Hja/HvhB24Y3jYQJIQ8DNehTbtpolUJBdDMD8O5PsiNGhWnt26oSedFvwXRuzm/wUPKhkKwxC/ClQl+zFhKrHNWSiBDzHKDP5nKS+RXhvc4KCxszoAbhZ/Hnnugnc07W6DKZbyCM0pr16861G0LcRp5+Hbbm7+/mpko4PhM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+Received: from omf20.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay03.hostedemail.com (Postfix) with ESMTP id 9F89CB75E5;
+	Tue,  1 Jul 2025 00:54:17 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: nevets@goodmis.org) by omf20.hostedemail.com (Postfix) with ESMTPA id 35D1C20025;
+	Tue,  1 Jul 2025 00:54:14 +0000 (UTC)
+Received: from rostedt by gandalf with local (Exim 4.98.2)
+	(envelope-from <rostedt@goodmis.org>)
+	id 1uWPGt-00000007NfE-096E;
+	Mon, 30 Jun 2025 20:54:51 -0400
+Message-ID: <20250701005450.888492528@goodmis.org>
+User-Agent: quilt/0.68
+Date: Mon, 30 Jun 2025 20:53:23 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org,
+ bpf@vger.kernel.org,
+ x86@kernel.org
+Cc: Masami Hiramatsu <mhiramat@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Josh Poimboeuf <jpoimboe@kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>,
+ Ingo Molnar <mingo@kernel.org>,
+ Jiri Olsa <jolsa@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>,
+ Thomas Gleixner <tglx@linutronix.de>,
+ Andrii Nakryiko <andrii@kernel.org>,
+ Indu Bhagat <indu.bhagat@oracle.com>,
+ "Jose E. Marchesi" <jemarch@gnu.org>,
+ Beau Belgrave <beaub@linux.microsoft.com>,
+ Jens Remus <jremus@linux.ibm.com>,
+ Linus Torvalds <torvalds@linux-foundation.org>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Jens Axboe <axboe@kernel.dk>,
+ Florian Weimer <fweimer@redhat.com>
+Subject: [PATCH v12 02/14] unwind_user: Add frame pointer support
+References: <20250701005321.942306427@goodmis.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250627110121.73228-1-kerneljasonxing@gmail.com>
- <CAL+tcoCSd_LA8w9ov7+_sOWLt3EU1rcqK8Sa6UF5S-xgfAGPnA@mail.gmail.com>
- <CAL+tcoCCM+m6eJ1VNoeF2UMdFOhMjJ1z2FVUoMJk=js++hk0RQ@mail.gmail.com>
- <aGJ5DDtFAZ/IsE0B@boxer> <CAL+tcoB+_5p4V3WgMmpGnrjj-+axTDkhKoYS=1cMKxTRs68JAA@mail.gmail.com>
- <aGKCM2z1I85AAXFc@boxer>
-In-Reply-To: <aGKCM2z1I85AAXFc@boxer>
-From: Jason Xing <kerneljasonxing@gmail.com>
-Date: Tue, 1 Jul 2025 08:20:16 +0800
-X-Gm-Features: Ac12FXxbXll0iFIoZhuB9QgHAotM7rhT8ycjzj-6aD5iphT-LY7JvuebDcVCFsY
-Message-ID: <CAL+tcoBj_cv761-rair8vgvhgu1+DSFoNd2nZspvjtm3dKKxXw@mail.gmail.com>
-Subject: Re: [PATCH net-next v6] net: xsk: introduce XDP_MAX_TX_BUDGET set/getsockopt
-To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
-	pabeni@redhat.com, bjorn@kernel.org, magnus.karlsson@intel.com, 
-	jonathan.lemon@gmail.com, sdf@fomichev.me, ast@kernel.org, 
-	daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com, joe@dama.to, 
-	willemdebruijn.kernel@gmail.com, bpf@vger.kernel.org, netdev@vger.kernel.org, 
-	Jason Xing <kernelxing@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+X-Stat-Signature: cmy8obsme1cmom97qsitmp8chnekokxo
+X-Rspamd-Server: rspamout07
+X-Rspamd-Queue-Id: 35D1C20025
+X-Session-Marker: 6E657665747340676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX1910KeiyFB1zMtgzd1/IStIF7uzHz5wEpY=
+X-HE-Tag: 1751331254-994453
+X-HE-Meta: U2FsdGVkX1/8PikpHKWDXxedWTvuKqpUfhekNDq3rJv+5P1OCBp9S+8p9nRSkMOCYnitPJY3ampgGueKaT5heZUNC3waAjV3A1oTcgNX3ujTyUs4vxIjn6HosG/k7QUlHjzk/sTEmOkaA0n1KX9hDRD+LhqK1pDPljKM+48YHEZH5vS8deXZzBoBzHbQCqQxeBCgIanF5J556Ns7OqiifCJ0pS5bSVnOxyRkI8ImQ6oKLAgEFMzwDt0Be5HvpRTz1ZXLszB4Gtah69pDMU4c3kDSTj2nklU0b9his2TkQjKVgENwJasPmCuUObBIBkwb4oPI8pVkxGcs7YApO7PHJsKtdBYipgx+EjwTJMEPN5lrHSHxEIjjOONOBkV4Ey9k4lmDUVNVZbJN6GIMImTwsM+F2SI5BFRa69WYlYm3rMM=
 
-On Mon, Jun 30, 2025 at 8:25=E2=80=AFPM Maciej Fijalkowski
-<maciej.fijalkowski@intel.com> wrote:
->
-> On Mon, Jun 30, 2025 at 08:07:01PM +0800, Jason Xing wrote:
-> > On Mon, Jun 30, 2025 at 7:47=E2=80=AFPM Maciej Fijalkowski
-> > <maciej.fijalkowski@intel.com> wrote:
-> > >
-> > > On Sun, Jun 29, 2025 at 06:43:05PM +0800, Jason Xing wrote:
-> > > > On Sun, Jun 29, 2025 at 10:51=E2=80=AFAM Jason Xing <kerneljasonxin=
-g@gmail.com> wrote:
-> > > > >
-> > > > > On Fri, Jun 27, 2025 at 7:01=E2=80=AFPM Jason Xing <kerneljasonxi=
-ng@gmail.com> wrote:
-> > > > > >
-> > > > > > From: Jason Xing <kernelxing@tencent.com>
-> > > > > >
-> > > > > > This patch provides a setsockopt method to let applications lev=
-erage to
-> > > > > > adjust how many descs to be handled at most in one send syscall=
-. It
-> > > > > > mitigates the situation where the default value (32) that is to=
-o small
-> > > > > > leads to higher frequency of triggering send syscall.
-> > > > > >
-> > > > > > Considering the prosperity/complexity the applications have, th=
-ere is no
-> > > > > > absolutely ideal suggestion fitting all cases. So keep 32 as it=
-s default
-> > > > > > value like before.
-> > > > > >
-> > > > > > The patch does the following things:
-> > > > > > - Add XDP_MAX_TX_BUDGET socket option.
-> > > > > > - Convert TX_BATCH_SIZE to tx_budget_spent.
-> > > > > > - Set tx_budget_spent to 32 by default in the initialization ph=
-ase as a
-> > > > > >   per-socket granular control. 32 is also the min value for
-> > > > > >   tx_budget_spent.
-> > > > > > - Set the range of tx_budget_spent as [32, xs->tx->nentries].
-> > > > > >
-> > > > > > The idea behind this comes out of real workloads in production.=
- We use a
-> > > > > > user-level stack with xsk support to accelerate sending packets=
- and
-> > > > > > minimize triggering syscalls. When the packets are aggregated, =
-it's not
-> > > > > > hard to hit the upper bound (namely, 32). The moment user-space=
- stack
-> > > > > > fetches the -EAGAIN error number passed from sendto(), it will =
-loop to try
-> > > > > > again until all the expected descs from tx ring are sent out to=
- the driver.
-> > > > > > Enlarging the XDP_MAX_TX_BUDGET value contributes to less frequ=
-ency of
-> > > > > > sendto() and higher throughput/PPS.
-> > > > > >
-> > > > > > Here is what I did in production, along with some numbers as fo=
-llows:
-> > > > > > For one application I saw lately, I suggested using 128 as max_=
-tx_budget
-> > > > > > because I saw two limitations without changing any default conf=
-iguration:
-> > > > > > 1) XDP_MAX_TX_BUDGET, 2) socket sndbuf which is 212992 decided =
-by
-> > > > > > net.core.wmem_default. As to XDP_MAX_TX_BUDGET, the scenario be=
-hind
-> > > > > > this was I counted how many descs are transmitted to the driver=
- at one
-> > > > > > time of sendto() based on [1] patch and then I calculated the
-> > > > > > possibility of hitting the upper bound. Finally I chose 128 as =
-a
-> > > > > > suitable value because 1) it covers most of the cases, 2) a hig=
-her
-> > > > > > number would not bring evident results. After twisting the para=
-meters,
-> > > > > > a stable improvement of around 4% for both PPS and throughput a=
-nd less
-> > > > > > resources consumption were found to be observed by strace -c -p=
- xxx:
-> > > > > > 1) %time was decreased by 7.8%
-> > > > > > 2) error counter was decreased from 18367 to 572
-> > > > >
-> > > > > More interesting numbers are arriving here as I run some benchmar=
-ks
-> > > > > from xdp-project/bpf-examples/AF_XDP-example/ in my VM.
-> > > > >
-> > > > > Running "sudo taskset -c 2 ./xdpsock -i eth0 -q 1 -l -N -t -b 256=
-"
-> > >
-> > > do you have a patch against xdpsock that does setsockopt you're
-> > > introducing here?
-> >
-> > Sure, I added the following code in the apply_setsockopt():
-> > if (setsockopt(xsk_socket__fd(xsk->xsk), SOL_XDP, 9, &a, sizeof(a)) < 0=
-)
-> > ...
-> >
-> > >
-> > > -B -b 256 was for enabling busy polling and giving it 256 budget, whi=
-ch is
-> > > not what you wanted to achieve.
-> >
-> > I checked that I can use getsockopt to get the budget value the same
-> > as what I use setsockopt().
-> >
-> > Sorry, I don't know what you meant here. Could you say more about it?
->
-> I meant that -b is for setting SO_BUSY_POLL_BUDGET. just pick different
-> knob for your use case.
+From: Josh Poimboeuf <jpoimboe@kernel.org>
 
-After taking a deep sleep, I clearly know what that is... I will try
-to test with other parameters. But for me, the primary factor is the
-security interception on the host side because of a larger number of
-descs containing useless information. Well, I will find a good way to
-avoid this in the future...
+Add optional support for user space frame pointer unwinding.  If
+supported, the arch needs to enable CONFIG_HAVE_UNWIND_USER_FP and
+define ARCH_INIT_USER_FP_FRAME.
 
-And what is your opinion of the current patch? I used [32, nentries]
-as the min/max range as you advised :)
+By encoding the frame offsets in struct unwind_user_frame, much of this
+code can also be reused for future unwinder implementations like sframe.
 
-Thanks,
-Jason
+Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+Co-developed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+---
+ arch/Kconfig                      |  4 +++
+ include/asm-generic/Kbuild        |  1 +
+ include/asm-generic/unwind_user.h |  5 +++
+ include/linux/unwind_user.h       |  5 +++
+ include/linux/unwind_user_types.h |  1 +
+ kernel/unwind/user.c              | 51 +++++++++++++++++++++++++++++--
+ 6 files changed, 65 insertions(+), 2 deletions(-)
+ create mode 100644 include/asm-generic/unwind_user.h
+
+diff --git a/arch/Kconfig b/arch/Kconfig
+index ea59e5d7cc69..8e3fd723bd74 100644
+--- a/arch/Kconfig
++++ b/arch/Kconfig
+@@ -438,6 +438,10 @@ config HAVE_HARDLOCKUP_DETECTOR_ARCH
+ config UNWIND_USER
+ 	bool
+ 
++config HAVE_UNWIND_USER_FP
++	bool
++	select UNWIND_USER
++
+ config HAVE_PERF_REGS
+ 	bool
+ 	help
+diff --git a/include/asm-generic/Kbuild b/include/asm-generic/Kbuild
+index 8675b7b4ad23..295c94a3ccc1 100644
+--- a/include/asm-generic/Kbuild
++++ b/include/asm-generic/Kbuild
+@@ -59,6 +59,7 @@ mandatory-y += tlbflush.h
+ mandatory-y += topology.h
+ mandatory-y += trace_clock.h
+ mandatory-y += uaccess.h
++mandatory-y += unwind_user.h
+ mandatory-y += vermagic.h
+ mandatory-y += vga.h
+ mandatory-y += video.h
+diff --git a/include/asm-generic/unwind_user.h b/include/asm-generic/unwind_user.h
+new file mode 100644
+index 000000000000..b8882b909944
+--- /dev/null
++++ b/include/asm-generic/unwind_user.h
+@@ -0,0 +1,5 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _ASM_GENERIC_UNWIND_USER_H
++#define _ASM_GENERIC_UNWIND_USER_H
++
++#endif /* _ASM_GENERIC_UNWIND_USER_H */
+diff --git a/include/linux/unwind_user.h b/include/linux/unwind_user.h
+index aa7923c1384f..a405111c41b0 100644
+--- a/include/linux/unwind_user.h
++++ b/include/linux/unwind_user.h
+@@ -3,6 +3,11 @@
+ #define _LINUX_UNWIND_USER_H
+ 
+ #include <linux/unwind_user_types.h>
++#include <asm/unwind_user.h>
++
++#ifndef ARCH_INIT_USER_FP_FRAME
++ #define ARCH_INIT_USER_FP_FRAME
++#endif
+ 
+ int unwind_user_start(struct unwind_user_state *state);
+ int unwind_user_next(struct unwind_user_state *state);
+diff --git a/include/linux/unwind_user_types.h b/include/linux/unwind_user_types.h
+index 6ed1b4ae74e1..65bd070eb6b0 100644
+--- a/include/linux/unwind_user_types.h
++++ b/include/linux/unwind_user_types.h
+@@ -6,6 +6,7 @@
+ 
+ enum unwind_user_type {
+ 	UNWIND_USER_TYPE_NONE,
++	UNWIND_USER_TYPE_FP,
+ };
+ 
+ struct unwind_stacktrace {
+diff --git a/kernel/unwind/user.c b/kernel/unwind/user.c
+index d30449328981..1201d655654a 100644
+--- a/kernel/unwind/user.c
++++ b/kernel/unwind/user.c
+@@ -6,10 +6,54 @@
+ #include <linux/sched.h>
+ #include <linux/sched/task_stack.h>
+ #include <linux/unwind_user.h>
++#include <linux/uaccess.h>
++
++static struct unwind_user_frame fp_frame = {
++	ARCH_INIT_USER_FP_FRAME
++};
++
++static inline bool fp_state(struct unwind_user_state *state)
++{
++	return IS_ENABLED(CONFIG_HAVE_UNWIND_USER_FP) &&
++	       state->type == UNWIND_USER_TYPE_FP;
++}
+ 
+ int unwind_user_next(struct unwind_user_state *state)
+ {
+-	/* no implementation yet */
++	struct unwind_user_frame *frame;
++	unsigned long cfa = 0, fp, ra = 0;
++
++	if (state->done)
++		return -EINVAL;
++
++	if (fp_state(state))
++		frame = &fp_frame;
++	else
++		goto done;
++
++	/* Get the Canonical Frame Address (CFA) */
++	cfa = (frame->use_fp ? state->fp : state->sp) + frame->cfa_off;
++
++	/* stack going in wrong direction? */
++	if (cfa <= state->sp)
++		goto done;
++
++	/* Find the Return Address (RA) */
++	if (get_user(ra, (unsigned long *)(cfa + frame->ra_off)))
++		goto done;
++
++	if (frame->fp_off && get_user(fp, (unsigned long __user *)(cfa + frame->fp_off)))
++		goto done;
++
++	state->ip = ra;
++	state->sp = cfa;
++	if (frame->fp_off)
++		state->fp = fp;
++
++	return 0;
++
++done:
++	state->done = true;
+ 	return -EINVAL;
+ }
+ 
+@@ -24,7 +68,10 @@ int unwind_user_start(struct unwind_user_state *state)
+ 		return -EINVAL;
+ 	}
+ 
+-	state->type = UNWIND_USER_TYPE_NONE;
++	if (IS_ENABLED(CONFIG_HAVE_UNWIND_USER_FP))
++		state->type = UNWIND_USER_TYPE_FP;
++	else
++		state->type = UNWIND_USER_TYPE_NONE;
+ 
+ 	state->ip = instruction_pointer(regs);
+ 	state->sp = user_stack_pointer(regs);
+-- 
+2.47.2
+
+
