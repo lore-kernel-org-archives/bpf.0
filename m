@@ -1,26 +1,26 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 882062877D8;
-	Tue,  1 Jul 2025 19:19:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9B72288C17;
+	Tue,  1 Jul 2025 19:19:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751397550; cv=none; b=JR4chVCkgMGiUokxpX7JAiqUf8moekycNgJ92OIdyqs/Axwmy2UCQvAahHbg8g0Sa72kvtVzZpNJMiZMitgnymsZy9T3je64PhQ/VySrcH3SYR4kPNq3eqjd7TCn+h8HBUMZi+z/SrOcGBc5EUcdLlcVlXe2vgFUNWI147/iQww=
+	t=1751397551; cv=none; b=lNVII0oeW74Y6nU4Hl0bMSyADUJlYQmbWNY2z6rLHfe2X1M9b41RMG3bRRxIoIZIefFZprWMQNFOKC7Jbkd889ye/0rRskNj+g36XRRsfflYtd7xbfPJPislB06bwfmQIB+c9o+o9Y2SGsyOKafCDWAjPsMeOzFK+kSn1XE7gHw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751397550; c=relaxed/simple;
-	bh=Kp6RYb5t+RCZ7jokiwYGJB2GAw8QmJKJAuA8NhLPUp4=;
+	s=arc-20240116; t=1751397551; c=relaxed/simple;
+	bh=hU7wh3L/Y6kWz2ZPGTguNkdzYwHWR2713HobCoHObyQ=;
 	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type; b=oObZD6XxUuGhueLDzcgI5iWiI64apFgjpwvcI50zaaTMixmXjSPUedszTKI1jcr2XS7QhBIjZ5EeKf6DBfQOsVofkUugGTdCEoBmp1qEE+XmUpJUxvNlgmdHlVZpnzN2baso5e4+xsLqGQlYG2ENSZQ9pGllplHA7mXkVc0x/ow=
+	 Content-Type; b=pXUvSB4W++cl8pcvZ2TloT032YYPlOEiCfvMTg/l/VF+YvkE2jr5HXBB/JPDy2WLrvX3I5pfrgpZd3g5/gZfl8IpVLPLqu/XCgoji5/G5eiwebkwD/pWZeX34+rCKCQ7N8XMzD71EQyDjts3nuxv8ngapvpeSdjxl3DGFchZK+M=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FE80C4CEEB;
-	Tue,  1 Jul 2025 19:19:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52ED2C4AF09;
+	Tue,  1 Jul 2025 19:19:11 +0000 (UTC)
 Received: from rostedt by gandalf with local (Exim 4.98.2)
 	(envelope-from <rostedt@goodmis.org>)
-	id 1uWg3t-00000007gs4-2VEK;
-	Tue, 01 Jul 2025 14:50:33 -0400
-Message-ID: <20250701185033.444686442@goodmis.org>
+	id 1uWg3s-00000007gpe-38uG;
+	Tue, 01 Jul 2025 14:50:32 -0400
+Message-ID: <20250701185032.600017825@goodmis.org>
 User-Agent: quilt/0.68
-Date: Tue, 01 Jul 2025 14:49:50 -0400
+Date: Tue, 01 Jul 2025 14:49:45 -0400
 From: Steven Rostedt <rostedt@goodmis.org>
 To: linux-kernel@vger.kernel.org,
  linux-trace-kernel@vger.kernel.org,
@@ -43,7 +43,7 @@ Cc: Masami Hiramatsu <mhiramat@kernel.org>,
  Andrew Morton <akpm@linux-foundation.org>,
  Jens Axboe <axboe@kernel.dk>,
  Florian Weimer <fweimer@redhat.com>
-Subject: [PATCH v7 11/12] unwind_user/sframe: Add .sframe validation option
+Subject: [PATCH v7 06/12] unwind_user/sframe: Wire up unwind_user to sframe
 References: <20250701184939.026626626@goodmis.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -55,145 +55,106 @@ Content-Type: text/plain; charset=UTF-8
 
 From: Josh Poimboeuf <jpoimboe@kernel.org>
 
-Add a debug feature to validate all .sframe sections when first loading
-the file rather than on demand.
+Now that the sframe infrastructure is fully in place, make it work by
+hooking it up to the unwind_user interface.
 
 Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- arch/Kconfig           | 19 ++++++++++
- kernel/unwind/sframe.c | 81 ++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 100 insertions(+)
+ arch/Kconfig                      |  1 +
+ include/linux/unwind_user_types.h |  1 +
+ kernel/unwind/user.c              | 25 ++++++++++++++++++++++---
+ 3 files changed, 24 insertions(+), 3 deletions(-)
 
 diff --git a/arch/Kconfig b/arch/Kconfig
-index 0c6056ef13de..86eec85cb898 100644
+index c54d35e2f860..0c6056ef13de 100644
 --- a/arch/Kconfig
 +++ b/arch/Kconfig
-@@ -450,6 +450,25 @@ config HAVE_UNWIND_USER_SFRAME
- 	bool
- 	select UNWIND_USER
+@@ -448,6 +448,7 @@ config HAVE_UNWIND_USER_COMPAT_FP
  
-+config SFRAME_VALIDATION
-+	bool "Enable .sframe section debugging"
-+	depends on HAVE_UNWIND_USER_SFRAME
-+	depends on DYNAMIC_DEBUG
-+	help
-+	  When adding an .sframe section for a task, validate the entire
-+	  section immediately rather than on demand.
-+
-+	  This is a debug feature which is helpful for rooting out .sframe
-+	  section issues.  If the .sframe section is corrupt, it will fail to
-+	  load immediately, with more information provided in dynamic printks.
-+
-+	  This has a significant page cache footprint due to its reading of the
-+	  entire .sframe section for every loaded executable and shared
-+	  library.  Also, it's done for all processes, even those which don't
-+	  get stack traced by the kernel.  Not recommended for general use.
-+
-+	  If unsure, say N.
-+
+ config HAVE_UNWIND_USER_SFRAME
+ 	bool
++	select UNWIND_USER
+ 
  config HAVE_PERF_REGS
  	bool
- 	help
-diff --git a/kernel/unwind/sframe.c b/kernel/unwind/sframe.c
-index 3972bce40fc7..6159f072bdb6 100644
---- a/kernel/unwind/sframe.c
-+++ b/kernel/unwind/sframe.c
-@@ -353,6 +353,83 @@ int sframe_find(unsigned long ip, struct unwind_user_frame *frame)
- 	return ret;
+diff --git a/include/linux/unwind_user_types.h b/include/linux/unwind_user_types.h
+index 0b6563951ca4..4d50476e950e 100644
+--- a/include/linux/unwind_user_types.h
++++ b/include/linux/unwind_user_types.h
+@@ -13,6 +13,7 @@ enum unwind_user_type {
+ 	UNWIND_USER_TYPE_NONE,
+ 	UNWIND_USER_TYPE_FP,
+ 	UNWIND_USER_TYPE_COMPAT_FP,
++	UNWIND_USER_TYPE_SFRAME,
+ };
+ 
+ struct unwind_stacktrace {
+diff --git a/kernel/unwind/user.c b/kernel/unwind/user.c
+index 2bb7995c3f23..139ca9740875 100644
+--- a/kernel/unwind/user.c
++++ b/kernel/unwind/user.c
+@@ -7,6 +7,7 @@
+ #include <linux/sched/task_stack.h>
+ #include <linux/unwind_user.h>
+ #include <linux/uaccess.h>
++#include <linux/sframe.h>
+ 
+ static struct unwind_user_frame fp_frame = {
+ 	ARCH_INIT_USER_FP_FRAME
+@@ -28,6 +29,12 @@ static inline bool compat_fp_state(struct unwind_user_state *state)
+ 	       state->type == UNWIND_USER_TYPE_COMPAT_FP;
  }
  
-+#ifdef CONFIG_SFRAME_VALIDATION
-+
-+static __always_inline int __sframe_validate_section(struct sframe_section *sec)
++static inline bool sframe_state(struct unwind_user_state *state)
 +{
-+	unsigned long prev_ip = 0;
-+	unsigned int i;
-+
-+	for (i = 0; i < sec->num_fdes; i++) {
-+		struct sframe_fre *fre, *prev_fre = NULL;
-+		unsigned long ip, fre_addr;
-+		struct sframe_fde fde;
-+		struct sframe_fre fres[2];
-+		bool which = false;
-+		unsigned int j;
-+		int ret;
-+
-+		ret = __read_fde(sec, i, &fde);
-+		if (ret)
-+			return ret;
-+
-+		ip = sec->sframe_start + fde.start_addr;
-+		if (ip <= prev_ip) {
-+			dbg_sec_uaccess("fde %u not sorted\n", i);
-+			return -EFAULT;
-+		}
-+		prev_ip = ip;
-+
-+		fre_addr = sec->fres_start + fde.fres_off;
-+		for (j = 0; j < fde.fres_num; j++) {
-+			int ret;
-+
-+			fre = which ? fres : fres + 1;
-+			which = !which;
-+
-+			ret = __read_fre(sec, &fde, fre_addr, fre);
-+			if (ret) {
-+				dbg_sec_uaccess("fde %u: __read_fre(%u) failed\n", i, j);
-+				dbg_print_fde_uaccess(sec, &fde);
-+				return ret;
-+			}
-+
-+			fre_addr += fre->size;
-+
-+			if (prev_fre && fre->ip_off <= prev_fre->ip_off) {
-+				dbg_sec_uaccess("fde %u: fre %u not sorted\n", i, j);
-+				return -EFAULT;
-+			}
-+
-+			prev_fre = fre;
-+		}
-+	}
-+
-+	return 0;
++	return IS_ENABLED(CONFIG_HAVE_UNWIND_USER_SFRAME) &&
++	       state->type == UNWIND_USER_TYPE_SFRAME;
 +}
 +
-+static int sframe_validate_section(struct sframe_section *sec)
-+{
-+	int ret;
-+
-+	if (!user_read_access_begin((void __user *)sec->sframe_start,
-+				    sec->sframe_end - sec->sframe_start)) {
-+		dbg_sec("section usercopy failed\n");
-+		return -EFAULT;
-+	}
-+
-+	ret = __sframe_validate_section(sec);
-+	user_read_access_end();
-+	return ret;
-+}
-+
-+#else /*  !CONFIG_SFRAME_VALIDATION */
-+
-+static int sframe_validate_section(struct sframe_section *sec) { return 0; }
-+
-+#endif /* !CONFIG_SFRAME_VALIDATION */
-+
-+
- static void free_section(struct sframe_section *sec)
+ #define unwind_get_user_long(to, from, state)				\
+ ({									\
+ 	int __ret;							\
+@@ -41,17 +48,27 @@ static inline bool compat_fp_state(struct unwind_user_state *state)
+ int unwind_user_next(struct unwind_user_state *state)
  {
- 	dbg_free(sec);
-@@ -461,6 +538,10 @@ int sframe_add_section(unsigned long sframe_start, unsigned long sframe_end,
- 		goto err_free;
- 	}
+ 	struct unwind_user_frame *frame;
++	struct unwind_user_frame _frame;
+ 	unsigned long cfa = 0, fp, ra = 0;
  
-+	ret = sframe_validate_section(sec);
-+	if (ret)
-+		goto err_free;
-+
- 	ret = mtree_insert_range(sframe_mt, sec->text_start, sec->text_end, sec, GFP_KERNEL);
- 	if (ret) {
- 		dbg_sec("mtree_insert_range failed: text=%lx-%lx\n",
+ 	if (state->done)
+ 		return -EINVAL;
+ 
+-	if (compat_fp_state(state))
++	if (compat_fp_state(state)) {
+ 		frame = &compat_fp_frame;
+-	else if (fp_state(state))
++	} else if (sframe_state(state)) {
++		/* sframe expects the frame to be local storage */
++		frame = &_frame;
++		if (sframe_find(state->ip, frame)) {
++			if (!IS_ENABLED(CONFIG_HAVE_UNWIND_USER_FP))
++				goto done;
++			frame = &fp_frame;
++		}
++	} else if (fp_state(state)) {
+ 		frame = &fp_frame;
+-	else
++	} else {
+ 		goto done;
++	}
+ 
+ 	/* Get the Canonical Frame Address (CFA) */
+ 	cfa = (frame->use_fp ? state->fp : state->sp) + frame->cfa_off;
+@@ -94,6 +111,8 @@ int unwind_user_start(struct unwind_user_state *state)
+ 
+ 	if (IS_ENABLED(CONFIG_HAVE_UNWIND_USER_COMPAT_FP) && in_compat_mode(regs))
+ 		state->type = UNWIND_USER_TYPE_COMPAT_FP;
++	else if (current_has_sframe())
++		state->type = UNWIND_USER_TYPE_SFRAME;
+ 	else if (IS_ENABLED(CONFIG_HAVE_UNWIND_USER_FP))
+ 		state->type = UNWIND_USER_TYPE_FP;
+ 	else
 -- 
 2.47.2
 
