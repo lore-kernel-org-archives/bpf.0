@@ -1,168 +1,196 @@
-Received: from relay.hostedemail.com (smtprelay0012.hostedemail.com [216.40.44.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 387A0280A20;
-	Tue,  1 Jul 2025 18:04:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD35123BF96;
+	Tue,  1 Jul 2025 18:31:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751393066; cv=none; b=Y5S7xBJRgv3TMC0Y8hwZneBkGV10mp8h2XKY7k1AFP7lx+ooPYuY9oCeHW3u4lvHlcFKbHhRDRAyg7cXkUpDRS9G+DAOgI61ez6TmyDn6r7XfRjEe077W7EP6kzvaQLBWIUJnFLEHwwlgL97Gdr2Opxd2xb5L7qjhYsPaB4wIdY=
+	t=1751394695; cv=none; b=j/Gwfe6ReQCIWp5PU91ZuQ4WfGlEhswGz0WOmrpl5eLBtgudWrxuVXu2WqDbDRomBHlhR93DDGIkZEZMLeyCTAIZRRXfnEIrMow6X+WeCeoCibk2b4zoZFb7gdEdIYu4EXXCwyUkozsL7fIB3SeyMSgWOwNz35L22L940VBIqEg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751393066; c=relaxed/simple;
-	bh=XIFsOQevrALTnOzE5a3ZQ30B4oAKQQbVJo/QLF9teyQ=;
-	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type; b=jl1ZZose8PAlzVoEG6oRT48NiwWBY98qa2EQa7rnfsDgz+dM7RGngp6C/wT7eL3NRQkyzrXFJjxCEDYRDqKUfJ8DtB0va9lZD0koLTK41JDqa299/CvPJUZ91shikk0Xg0sF3UoBh1i7cOMmUkC6IvZpBrDCNjAJa2r+D/7ZU1w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf05.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay10.hostedemail.com (Postfix) with ESMTP id 3CE4BC05B2;
-	Tue,  1 Jul 2025 18:04:21 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: nevets@goodmis.org) by omf05.hostedemail.com (Postfix) with ESMTPA id 87E1520015;
-	Tue,  1 Jul 2025 18:04:17 +0000 (UTC)
-Received: from rostedt by gandalf with local (Exim 4.98.2)
-	(envelope-from <rostedt@goodmis.org>)
-	id 1uWfLj-00000007fzk-3ZKj;
-	Tue, 01 Jul 2025 14:04:55 -0400
-Message-ID: <20250701180455.704168933@goodmis.org>
-User-Agent: quilt/0.68
-Date: Tue, 01 Jul 2025 14:04:11 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org,
- bpf@vger.kernel.org,
- x86@kernel.org
-Cc: Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Josh Poimboeuf <jpoimboe@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>,
- Ingo Molnar <mingo@kernel.org>,
- Jiri Olsa <jolsa@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>,
- Thomas Gleixner <tglx@linutronix.de>,
- Andrii Nakryiko <andrii@kernel.org>,
- Indu Bhagat <indu.bhagat@oracle.com>,
- "Jose E. Marchesi" <jemarch@gnu.org>,
- Beau Belgrave <beaub@linux.microsoft.com>,
- Jens Remus <jremus@linux.ibm.com>,
- Linus Torvalds <torvalds@linux-foundation.org>,
- Andrew Morton <akpm@linux-foundation.org>,
- Jens Axboe <axboe@kernel.dk>,
- Florian Weimer <fweimer@redhat.com>,
- Namhyung Kim <Namhyung@kernel.org>,
- Alexei Starovoitov <ast@kernel.org>
-Subject: [PATCH v12 01/11] perf: Remove get_perf_callchain() init_nr argument
-References: <20250701180410.755491417@goodmis.org>
+	s=arc-20240116; t=1751394695; c=relaxed/simple;
+	bh=8f5T/z/d9mkXgNIGoAFY6PAJ6uLHSygkYSo7LU0k71E=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=TBoBaoLASA9HW7zWZgEB4iWfRZeuOdghEcuu9ENaG6Hb/lHWb+nxj19hSm+rW9RJlvN/jMtTcbepSyyvw6dnpZp+ks8yQzblLFYMQj/leIilOcn3mDOvSXIJHPNEIaQVnpp8kx1AjTrrUjdWM1Li37qapH19VXbZ8uajONzD6RE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Qror3dzs; arc=none smtp.client-ip=209.85.208.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Qror3dzs"
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-60c3aafae23so15174910a12.1;
+        Tue, 01 Jul 2025 11:31:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1751394692; x=1751999492; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=UGSR1+268qXSnAbGFjg52/5RelVsYrvQ6RHRNOoVlp4=;
+        b=Qror3dzs3p26zs6epwDYnDES+LF5Jw/K3WZQI6OoICu0NNWhiiwrjDPKoTVLBQnkVm
+         Am0bOWeOANAspLVM4nOtCIpAEtye/Q54jsEyxUCwT8LDMta52DJ4CkEO+N0n9M4BRA6L
+         v1FsTny2O4kO6yWucbH6ciYO9FQH1MDHxcjpXAEH+lB7jtIM31GsGBbxhrtWAxrGOszV
+         AJlSatCotJ8jygdsO51zFaGir9nYBORJf0LAOobOpVQCDugd3YqfjEPB2x3w60w3kOfn
+         FniMF4kZSd15hjn+vtUu4Llwc1tR5B4f5KP15evV72Ycr27t5dFFzmCSGNd/EdBTD60Q
+         nysw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751394692; x=1751999492;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UGSR1+268qXSnAbGFjg52/5RelVsYrvQ6RHRNOoVlp4=;
+        b=ndi5dW3kiZ+VHn89XSWukiiONcgZP62Vvy4sjOrFrSgeT3NozrFlF7Uib2LR/IcDIS
+         eRY3G4Uakq2AkGSWl2QiyST8Rvk5vuIai3GirVSmo3ql8Bc1I+AHKFfFZEpbvOPJe/I6
+         LeDaZpxkw/GWxFyCMgwf3qWpKtqOTvbuybZ4FiKnnkeXIboBYG1M59QE+6myFZ6Ushgv
+         8bj7LLgCKYqDFnonSLFE/ih7oUtg89KYCJecdjJ3P342l0tluMUZDo+bdmJpLrhaFIXm
+         UfmW3DVE99crhBx7O/j893TZsDzAWnXPz1GzdQI3iq01K5SOBj4V5LBPDGOlJYviWJ8N
+         WNvg==
+X-Forwarded-Encrypted: i=1; AJvYcCWCcHDTxshM1tDHA57XmCtWj67mWyqkzPQdEBh9MbgHWY8upESXwr0v/1LO4zja1z0UZMuWTyaAuDK4y/ua@vger.kernel.org
+X-Gm-Message-State: AOJu0YylPq4iF4LOW66o0spmpQwAoVIvslGi/ZuWe94nGukB/RULtyaN
+	EnN8parlRY5iYJmaPoGmKWgbI45T9hBa5P+abB6eLjSiIX08FUq7mTbZoayh3PU6
+X-Gm-Gg: ASbGnctWJivWb66FcL44G1+UOkHG1VbS5oEJnC4cwV6PecuJ24QMQjERLEUN5htIPWc
+	KsmSE/dHdMD+12vVwRs8mVxBLkHaA7Pno2Q4Mujd3i4nePlvxgnvcbFy/PgQygGufi/ny+QsWHE
+	WkTimOj05xBCFmjvpgh9VjDanFANiMe4QQMzc0WpsSx1bUhr9RbYAvU8hQ3rZ6K0umlNp9qRQDM
+	L5sp2FEgBReRRTIVWU8iJovcsx//VKGqUUNznfnfBZ8wtruCoPBtEv/Wh6Sg5yUIi8Qus5f3ZR1
+	vlYje1CAs35dkFi0QrE9G+0bZFZm9Ce0AKr7KLJ2eZWv4VrGwKJSXvZ82o01LdBcpM+Kqo7s7h3
+	2faG6rda0a92RgCKrTUV3b1KqDd9wjWZL
+X-Google-Smtp-Source: AGHT+IFblHAzwzGC7Z820EiJieU1PxcRCD6BEorQmoDKlU2lrnoIDmdqYqVbQVjSsIiIEW3Z/ponxg==
+X-Received: by 2002:a17:907:3f8d:b0:ae2:3544:8121 with SMTP id a640c23a62f3a-ae3c17a2a3bmr14416866b.9.1751394691636;
+        Tue, 01 Jul 2025 11:31:31 -0700 (PDT)
+Received: from fedorarm (net-37-182-2-165.cust.vodafonedsl.it. [37.182.2.165])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ae353ca371csm929782566b.179.2025.07.01.11.31.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Jul 2025 11:31:31 -0700 (PDT)
+From: Matteo Croce <technoboy85@gmail.com>
+To: bpf@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Christian Brauner <brauner@kernel.org>,
+	Song Liu <song@kernel.org>
+Cc: linux-kernel@vger.kernel.org,
+	Matteo Croce <teknoraver@meta.com>
+Subject: [PATCH bpf-next] selftests/bpf: don't call fsopen() as privileged user
+Date: Tue,  1 Jul 2025 20:31:23 +0200
+Message-ID: <20250701183123.31781-1-technoboy85@gmail.com>
+X-Mailer: git-send-email 2.50.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Stat-Signature: drxq4n8agaci5pkqq8aw35uwj53jthxa
-X-Rspamd-Server: rspamout08
-X-Rspamd-Queue-Id: 87E1520015
-X-Session-Marker: 6E657665747340676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX1+hKfiF5+6dnhqc507ngVWcZTsB6Gns04c=
-X-HE-Tag: 1751393057-387633
-X-HE-Meta: U2FsdGVkX1+VnnSMnQy6wzuA51f6IeFkI67mn88B6w1lNQf3d4xoc3SJe5yaGUfe3hUgUu8fsRL05hQRUq6ZpWLRDztAamr7bqHwwYpBFSXNuCaxDgVY/yHkZdfi79Knl0exTVYWEZlBo01HraIBxRJTDNbs5mdluceeFiu4sBeWNG0XIqunXyQdxSIis9FIFUuINb2tWdVnjzvAu9+BS8M1Lif+PtdLOzq9FM9BB20qXlT2Jtub06mddYy2T453e5CksXfUbKwoJaXh12Eb2zMEndoFFXdtCHT7ci5ZGnkYVuVEVCsF5b/uCqiUU05nTbQ7yZggJUSTYfruxgtuB+u/ogExnLVLrmDQfR4YUNj4ojUKURjVRbz5GmE/aNhOce2+/xTTwXv4JG9YcKY//RtmiF474vUvB9Qx2IoqHjU=
+Content-Transfer-Encoding: 8bit
 
-From: Josh Poimboeuf <jpoimboe@kernel.org>
+From: Matteo Croce <teknoraver@meta.com>
 
-The 'init_nr' argument has double duty: it's used to initialize both the
-number of contexts and the number of stack entries.  That's confusing
-and the callers always pass zero anyway.  Hard code the zero.
+In the BPF token example, the fsopen() syscall is called as privileged
+user. This is unneeded because fsopen() can be called also as
+unprivileged user from the user namespace.
+As the `fs_fd` file descriptor which was sent back and fort is still the
+same, keep it open instead of cloning and closing it twice via SCM_RIGHTS.
 
-Acked-by: Namhyung Kim <Namhyung@kernel.org>
-Acked-by: Alexei Starovoitov <ast@kernel.org>
-Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+cfr. https://github.com/systemd/systemd/pull/36134
+
+Signed-off-by: Matteo Croce <teknoraver@meta.com>
 ---
- include/linux/perf_event.h |  2 +-
- kernel/bpf/stackmap.c      |  4 ++--
- kernel/events/callchain.c  | 12 ++++++------
- kernel/events/core.c       |  2 +-
- 4 files changed, 10 insertions(+), 10 deletions(-)
+ .../testing/selftests/bpf/prog_tests/token.c  | 41 ++++++++++---------
+ 1 file changed, 21 insertions(+), 20 deletions(-)
 
-diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
-index ec9d96025683..54e0d31afcad 100644
---- a/include/linux/perf_event.h
-+++ b/include/linux/perf_event.h
-@@ -1719,7 +1719,7 @@ DECLARE_PER_CPU(struct perf_callchain_entry, perf_callchain_entry);
- extern void perf_callchain_user(struct perf_callchain_entry_ctx *entry, struct pt_regs *regs);
- extern void perf_callchain_kernel(struct perf_callchain_entry_ctx *entry, struct pt_regs *regs);
- extern struct perf_callchain_entry *
--get_perf_callchain(struct pt_regs *regs, u32 init_nr, bool kernel, bool user,
-+get_perf_callchain(struct pt_regs *regs, bool kernel, bool user,
- 		   u32 max_stack, bool crosstask, bool add_mark);
- extern int get_callchain_buffers(int max_stack);
- extern void put_callchain_buffers(void);
-diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
-index 3615c06b7dfa..ec3a57a5fba1 100644
---- a/kernel/bpf/stackmap.c
-+++ b/kernel/bpf/stackmap.c
-@@ -314,7 +314,7 @@ BPF_CALL_3(bpf_get_stackid, struct pt_regs *, regs, struct bpf_map *, map,
- 	if (max_depth > sysctl_perf_event_max_stack)
- 		max_depth = sysctl_perf_event_max_stack;
+diff --git a/tools/testing/selftests/bpf/prog_tests/token.c b/tools/testing/selftests/bpf/prog_tests/token.c
+index f9392df23f8a..cfc032b910c4 100644
+--- a/tools/testing/selftests/bpf/prog_tests/token.c
++++ b/tools/testing/selftests/bpf/prog_tests/token.c
+@@ -115,7 +115,7 @@ static int create_bpffs_fd(void)
  
--	trace = get_perf_callchain(regs, 0, kernel, user, max_depth,
-+	trace = get_perf_callchain(regs, kernel, user, max_depth,
- 				   false, false);
- 
- 	if (unlikely(!trace))
-@@ -451,7 +451,7 @@ static long __bpf_get_stack(struct pt_regs *regs, struct task_struct *task,
- 	else if (kernel && task)
- 		trace = get_callchain_entry_for_task(task, max_depth);
- 	else
--		trace = get_perf_callchain(regs, 0, kernel, user, max_depth,
-+		trace = get_perf_callchain(regs, kernel, user, max_depth,
- 					   crosstask, false);
- 
- 	if (unlikely(!trace) || trace->nr < skip) {
-diff --git a/kernel/events/callchain.c b/kernel/events/callchain.c
-index 6c83ad674d01..b0f5bd228cd8 100644
---- a/kernel/events/callchain.c
-+++ b/kernel/events/callchain.c
-@@ -217,7 +217,7 @@ static void fixup_uretprobe_trampoline_entries(struct perf_callchain_entry *entr
- }
- 
- struct perf_callchain_entry *
--get_perf_callchain(struct pt_regs *regs, u32 init_nr, bool kernel, bool user,
-+get_perf_callchain(struct pt_regs *regs, bool kernel, bool user,
- 		   u32 max_stack, bool crosstask, bool add_mark)
+ static int materialize_bpffs_fd(int fs_fd, struct bpffs_opts *opts)
  {
- 	struct perf_callchain_entry *entry;
-@@ -228,11 +228,11 @@ get_perf_callchain(struct pt_regs *regs, u32 init_nr, bool kernel, bool user,
- 	if (!entry)
- 		return NULL;
+-	int mnt_fd, err;
++	int err;
  
--	ctx.entry     = entry;
--	ctx.max_stack = max_stack;
--	ctx.nr	      = entry->nr = init_nr;
--	ctx.contexts       = 0;
--	ctx.contexts_maxed = false;
-+	ctx.entry		= entry;
-+	ctx.max_stack		= max_stack;
-+	ctx.nr			= entry->nr = 0;
-+	ctx.contexts		= 0;
-+	ctx.contexts_maxed	= false;
+ 	/* set up token delegation mount options */
+ 	err = set_delegate_mask(fs_fd, "delegate_cmds", opts->cmds, opts->cmds_str);
+@@ -136,12 +136,7 @@ static int materialize_bpffs_fd(int fs_fd, struct bpffs_opts *opts)
+ 	if (err < 0)
+ 		return -errno;
  
- 	if (kernel && !user_mode(regs)) {
- 		if (add_mark)
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index 7281230044d0..f2f7cff826e0 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -8178,7 +8178,7 @@ perf_callchain(struct perf_event *event, struct pt_regs *regs)
- 	if (!kernel && !user)
- 		return &__empty_callchain;
- 
--	callchain = get_perf_callchain(regs, 0, kernel, user,
-+	callchain = get_perf_callchain(regs, kernel, user,
- 				       max_stack, crosstask, true);
- 	return callchain ?: &__empty_callchain;
+-	/* create O_PATH fd for detached mount */
+-	mnt_fd = sys_fsmount(fs_fd, 0, 0);
+-	if (err < 0)
+-		return -errno;
+-
+-	return mnt_fd;
++	return 0;
  }
+ 
+ /* send FD over Unix domain (AF_UNIX) socket */
+@@ -287,6 +282,7 @@ static void child(int sock_fd, struct bpffs_opts *opts, child_callback_fn callba
+ {
+ 	int mnt_fd = -1, fs_fd = -1, err = 0, bpffs_fd = -1, token_fd = -1;
+ 	struct token_lsm *lsm_skel = NULL;
++	char one;
+ 
+ 	/* load and attach LSM "policy" before we go into unpriv userns */
+ 	lsm_skel = token_lsm__open_and_load();
+@@ -333,13 +329,19 @@ static void child(int sock_fd, struct bpffs_opts *opts, child_callback_fn callba
+ 	err = sendfd(sock_fd, fs_fd);
+ 	if (!ASSERT_OK(err, "send_fs_fd"))
+ 		goto cleanup;
+-	zclose(fs_fd);
++
++	/* wait that the parent reads the fd, does the fsconfig() calls
++	 * and send us a signal that it is done
++	 */
++	err = read(sock_fd, &one, sizeof(one));
++	if (!ASSERT_GE(err, 0, "read_one"))
++		goto cleanup;
+ 
+ 	/* avoid mucking around with mount namespaces and mounting at
+-	 * well-known path, just get detach-mounted BPF FS fd back from parent
++	 * well-known path, just create O_PATH fd for detached mount
+ 	 */
+-	err = recvfd(sock_fd, &mnt_fd);
+-	if (!ASSERT_OK(err, "recv_mnt_fd"))
++	mnt_fd = sys_fsmount(fs_fd, 0, 0);
++	if (!ASSERT_OK_FD(mnt_fd, "mnt_fd"))
+ 		goto cleanup;
+ 
+ 	/* try to fspick() BPF FS and try to add some delegation options */
+@@ -429,24 +431,24 @@ static int wait_for_pid(pid_t pid)
+ 
+ static void parent(int child_pid, struct bpffs_opts *bpffs_opts, int sock_fd)
+ {
+-	int fs_fd = -1, mnt_fd = -1, token_fd = -1, err;
++	int fs_fd = -1, token_fd = -1, err;
++	char one = 1;
+ 
+ 	err = recvfd(sock_fd, &fs_fd);
+ 	if (!ASSERT_OK(err, "recv_bpffs_fd"))
+ 		goto cleanup;
+ 
+-	mnt_fd = materialize_bpffs_fd(fs_fd, bpffs_opts);
+-	if (!ASSERT_GE(mnt_fd, 0, "materialize_bpffs_fd")) {
++	err = materialize_bpffs_fd(fs_fd, bpffs_opts);
++	if (!ASSERT_GE(err, 0, "materialize_bpffs_fd")) {
+ 		err = -EINVAL;
+ 		goto cleanup;
+ 	}
+-	zclose(fs_fd);
+ 
+-	/* pass BPF FS context object to parent */
+-	err = sendfd(sock_fd, mnt_fd);
+-	if (!ASSERT_OK(err, "send_mnt_fd"))
++	/* notify the child that we did the fsconfig() calls and it can proceed. */
++	err = write(sock_fd, &one, sizeof(one));
++	if (!ASSERT_EQ(err, sizeof(one), "send_one"))
+ 		goto cleanup;
+-	zclose(mnt_fd);
++	zclose(fs_fd);
+ 
+ 	/* receive BPF token FD back from child for some extra tests */
+ 	err = recvfd(sock_fd, &token_fd);
+@@ -459,7 +461,6 @@ static void parent(int child_pid, struct bpffs_opts *bpffs_opts, int sock_fd)
+ cleanup:
+ 	zclose(sock_fd);
+ 	zclose(fs_fd);
+-	zclose(mnt_fd);
+ 	zclose(token_fd);
+ 
+ 	if (child_pid > 0)
 -- 
-2.47.2
-
+2.50.0
 
