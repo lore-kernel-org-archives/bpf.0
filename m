@@ -1,26 +1,26 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39275288502;
-	Tue,  1 Jul 2025 19:19:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 882062877D8;
+	Tue,  1 Jul 2025 19:19:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751397549; cv=none; b=m1cG4fTFFrsZ0ijgtNLsKEAFLoq6rmaPbW4j4byP7UCZAclpZFogvAr2mz23Lh3jspAQ7fLnn5BmDe98qBiN08LTwGChcEvu1XkaRRX3obyVYpGrSLE+7dfRxHXl7dCaWSs+8deIlYBlVuYMe582vJWuw9eB9ILfQZFCYYBQWiY=
+	t=1751397550; cv=none; b=JR4chVCkgMGiUokxpX7JAiqUf8moekycNgJ92OIdyqs/Axwmy2UCQvAahHbg8g0Sa72kvtVzZpNJMiZMitgnymsZy9T3je64PhQ/VySrcH3SYR4kPNq3eqjd7TCn+h8HBUMZi+z/SrOcGBc5EUcdLlcVlXe2vgFUNWI147/iQww=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751397549; c=relaxed/simple;
-	bh=sGPJyaMt5chGSbAS/TjitWf/JKBtwNhMQ3g3k4X3fJw=;
+	s=arc-20240116; t=1751397550; c=relaxed/simple;
+	bh=Kp6RYb5t+RCZ7jokiwYGJB2GAw8QmJKJAuA8NhLPUp4=;
 	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type; b=rr1tVcJdDQ30Uk1rlv1gYOTYNgNn5A5AVm0AVq5eBoF9w8ICaeAOWOgYB8C3hpiBzuskMM4HMSuNRV2ptaVErKihv0K8bXnwPJOLjyxmTNpWQnmcbVWMhq0D9LIJrM2yzJ3a+9/mCDaWh05mO6fKt80qckcKsDdzFl1WL4+jZDg=
+	 Content-Type; b=oObZD6XxUuGhueLDzcgI5iWiI64apFgjpwvcI50zaaTMixmXjSPUedszTKI1jcr2XS7QhBIjZ5EeKf6DBfQOsVofkUugGTdCEoBmp1qEE+XmUpJUxvNlgmdHlVZpnzN2baso5e4+xsLqGQlYG2ENSZQ9pGllplHA7mXkVc0x/ow=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CD88C4CEEB;
-	Tue,  1 Jul 2025 19:19:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FE80C4CEEB;
+	Tue,  1 Jul 2025 19:19:10 +0000 (UTC)
 Received: from rostedt by gandalf with local (Exim 4.98.2)
 	(envelope-from <rostedt@goodmis.org>)
-	id 1uWfLl-00000007g48-1Yhj;
-	Tue, 01 Jul 2025 14:04:57 -0400
-Message-ID: <20250701180457.223396050@goodmis.org>
+	id 1uWg3t-00000007gs4-2VEK;
+	Tue, 01 Jul 2025 14:50:33 -0400
+Message-ID: <20250701185033.444686442@goodmis.org>
 User-Agent: quilt/0.68
-Date: Tue, 01 Jul 2025 14:04:20 -0400
+Date: Tue, 01 Jul 2025 14:49:50 -0400
 From: Steven Rostedt <rostedt@goodmis.org>
 To: linux-kernel@vger.kernel.org,
  linux-trace-kernel@vger.kernel.org,
@@ -43,8 +43,8 @@ Cc: Masami Hiramatsu <mhiramat@kernel.org>,
  Andrew Morton <akpm@linux-foundation.org>,
  Jens Axboe <axboe@kernel.dk>,
  Florian Weimer <fweimer@redhat.com>
-Subject: [PATCH v12 10/11] perf script: Display PERF_RECORD_CALLCHAIN_DEFERRED
-References: <20250701180410.755491417@goodmis.org>
+Subject: [PATCH v7 11/12] unwind_user/sframe: Add .sframe validation option
+References: <20250701184939.026626626@goodmis.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -53,150 +53,147 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 
-From: Namhyung Kim <namhyung@kernel.org>
+From: Josh Poimboeuf <jpoimboe@kernel.org>
 
-Handle the deferred callchains in the script output.
+Add a debug feature to validate all .sframe sections when first loading
+the file rather than on demand.
 
-  $ perf script
-  perf     801 [000]    18.031793:          1 cycles:P:
-          ffffffff91a14c36 __intel_pmu_enable_all.isra.0+0x56 ([kernel.kallsyms])
-          ffffffff91d373e9 perf_ctx_enable+0x39 ([kernel.kallsyms])
-          ffffffff91d36af7 event_function+0xd7 ([kernel.kallsyms])
-          ffffffff91d34222 remote_function+0x42 ([kernel.kallsyms])
-          ffffffff91c1ebe1 generic_exec_single+0x61 ([kernel.kallsyms])
-          ffffffff91c1edac smp_call_function_single+0xec ([kernel.kallsyms])
-          ffffffff91d37a9d event_function_call+0x10d ([kernel.kallsyms])
-          ffffffff91d33557 perf_event_for_each_child+0x37 ([kernel.kallsyms])
-          ffffffff91d47324 _perf_ioctl+0x204 ([kernel.kallsyms])
-          ffffffff91d47c43 perf_ioctl+0x33 ([kernel.kallsyms])
-          ffffffff91e2f216 __x64_sys_ioctl+0x96 ([kernel.kallsyms])
-          ffffffff9265f1ae do_syscall_64+0x9e ([kernel.kallsyms])
-          ffffffff92800130 entry_SYSCALL_64+0xb0 ([kernel.kallsyms])
-
-  perf     801 [000]    18.031814: DEFERRED CALLCHAIN
-              7fb5fc22034b __GI___ioctl+0x3b (/usr/lib/x86_64-linux-gnu/libc.so.6)
-
-Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- tools/perf/builtin-script.c | 89 +++++++++++++++++++++++++++++++++++++
- 1 file changed, 89 insertions(+)
+ arch/Kconfig           | 19 ++++++++++
+ kernel/unwind/sframe.c | 81 ++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 100 insertions(+)
 
-diff --git a/tools/perf/builtin-script.c b/tools/perf/builtin-script.c
-index 6c3bf74dd78c..a6f8209256fe 100644
---- a/tools/perf/builtin-script.c
-+++ b/tools/perf/builtin-script.c
-@@ -2483,6 +2483,93 @@ static int process_sample_event(const struct perf_tool *tool,
+diff --git a/arch/Kconfig b/arch/Kconfig
+index 0c6056ef13de..86eec85cb898 100644
+--- a/arch/Kconfig
++++ b/arch/Kconfig
+@@ -450,6 +450,25 @@ config HAVE_UNWIND_USER_SFRAME
+ 	bool
+ 	select UNWIND_USER
+ 
++config SFRAME_VALIDATION
++	bool "Enable .sframe section debugging"
++	depends on HAVE_UNWIND_USER_SFRAME
++	depends on DYNAMIC_DEBUG
++	help
++	  When adding an .sframe section for a task, validate the entire
++	  section immediately rather than on demand.
++
++	  This is a debug feature which is helpful for rooting out .sframe
++	  section issues.  If the .sframe section is corrupt, it will fail to
++	  load immediately, with more information provided in dynamic printks.
++
++	  This has a significant page cache footprint due to its reading of the
++	  entire .sframe section for every loaded executable and shared
++	  library.  Also, it's done for all processes, even those which don't
++	  get stack traced by the kernel.  Not recommended for general use.
++
++	  If unsure, say N.
++
+ config HAVE_PERF_REGS
+ 	bool
+ 	help
+diff --git a/kernel/unwind/sframe.c b/kernel/unwind/sframe.c
+index 3972bce40fc7..6159f072bdb6 100644
+--- a/kernel/unwind/sframe.c
++++ b/kernel/unwind/sframe.c
+@@ -353,6 +353,83 @@ int sframe_find(unsigned long ip, struct unwind_user_frame *frame)
  	return ret;
  }
  
-+static int process_deferred_sample_event(const struct perf_tool *tool,
-+					 union perf_event *event,
-+					 struct perf_sample *sample,
-+					 struct evsel *evsel,
-+					 struct machine *machine)
++#ifdef CONFIG_SFRAME_VALIDATION
++
++static __always_inline int __sframe_validate_section(struct sframe_section *sec)
 +{
-+	struct perf_script *scr = container_of(tool, struct perf_script, tool);
-+	struct perf_event_attr *attr = &evsel->core.attr;
-+	struct evsel_script *es = evsel->priv;
-+	unsigned int type = output_type(attr->type);
-+	struct addr_location al;
-+	FILE *fp = es->fp;
-+	int ret = 0;
++	unsigned long prev_ip = 0;
++	unsigned int i;
 +
-+	if (output[type].fields == 0)
-+		return 0;
++	for (i = 0; i < sec->num_fdes; i++) {
++		struct sframe_fre *fre, *prev_fre = NULL;
++		unsigned long ip, fre_addr;
++		struct sframe_fde fde;
++		struct sframe_fre fres[2];
++		bool which = false;
++		unsigned int j;
++		int ret;
 +
-+	/* Set thread to NULL to indicate addr_al and al are not initialized */
-+	addr_location__init(&al);
++		ret = __read_fde(sec, i, &fde);
++		if (ret)
++			return ret;
 +
-+	if (perf_time__ranges_skip_sample(scr->ptime_range, scr->range_num,
-+					  sample->time)) {
-+		goto out_put;
-+	}
-+
-+	if (debug_mode) {
-+		if (sample->time < last_timestamp) {
-+			pr_err("Samples misordered, previous: %" PRIu64
-+				" this: %" PRIu64 "\n", last_timestamp,
-+				sample->time);
-+			nr_unordered++;
++		ip = sec->sframe_start + fde.start_addr;
++		if (ip <= prev_ip) {
++			dbg_sec_uaccess("fde %u not sorted\n", i);
++			return -EFAULT;
 +		}
-+		last_timestamp = sample->time;
-+		goto out_put;
-+	}
++		prev_ip = ip;
 +
-+	if (filter_cpu(sample))
-+		goto out_put;
++		fre_addr = sec->fres_start + fde.fres_off;
++		for (j = 0; j < fde.fres_num; j++) {
++			int ret;
 +
-+	if (machine__resolve(machine, &al, sample) < 0) {
-+		pr_err("problem processing %d event, skipping it.\n",
-+		       event->header.type);
-+		ret = -1;
-+		goto out_put;
-+	}
++			fre = which ? fres : fres + 1;
++			which = !which;
 +
-+	if (al.filtered)
-+		goto out_put;
-+
-+	if (!show_event(sample, evsel, al.thread, &al, NULL))
-+		goto out_put;
-+
-+	if (evswitch__discard(&scr->evswitch, evsel))
-+		goto out_put;
-+
-+	perf_sample__fprintf_start(scr, sample, al.thread, evsel,
-+				   PERF_RECORD_CALLCHAIN_DEFERRED, fp);
-+	fprintf(fp, "DEFERRED CALLCHAIN");
-+
-+	if (PRINT_FIELD(IP)) {
-+		struct callchain_cursor *cursor = NULL;
-+
-+		if (symbol_conf.use_callchain && sample->callchain) {
-+			cursor = get_tls_callchain_cursor();
-+			if (thread__resolve_callchain(al.thread, cursor, evsel,
-+						      sample, NULL, NULL,
-+						      scripting_max_stack)) {
-+				pr_info("cannot resolve deferred callchains\n");
-+				cursor = NULL;
++			ret = __read_fre(sec, &fde, fre_addr, fre);
++			if (ret) {
++				dbg_sec_uaccess("fde %u: __read_fre(%u) failed\n", i, j);
++				dbg_print_fde_uaccess(sec, &fde);
++				return ret;
 +			}
-+		}
 +
-+		fputc(cursor ? '\n' : ' ', fp);
-+		sample__fprintf_sym(sample, &al, 0, output[type].print_ip_opts,
-+				    cursor, symbol_conf.bt_stop_list, fp);
++			fre_addr += fre->size;
++
++			if (prev_fre && fre->ip_off <= prev_fre->ip_off) {
++				dbg_sec_uaccess("fde %u: fre %u not sorted\n", i, j);
++				return -EFAULT;
++			}
++
++			prev_fre = fre;
++		}
 +	}
 +
-+	fprintf(fp, "\n");
++	return 0;
++}
 +
-+	if (verbose > 0)
-+		fflush(fp);
++static int sframe_validate_section(struct sframe_section *sec)
++{
++	int ret;
 +
-+out_put:
-+	addr_location__exit(&al);
++	if (!user_read_access_begin((void __user *)sec->sframe_start,
++				    sec->sframe_end - sec->sframe_start)) {
++		dbg_sec("section usercopy failed\n");
++		return -EFAULT;
++	}
++
++	ret = __sframe_validate_section(sec);
++	user_read_access_end();
 +	return ret;
 +}
 +
- // Used when scr->per_event_dump is not set
- static struct evsel_script es_stdout;
++#else /*  !CONFIG_SFRAME_VALIDATION */
++
++static int sframe_validate_section(struct sframe_section *sec) { return 0; }
++
++#endif /* !CONFIG_SFRAME_VALIDATION */
++
++
+ static void free_section(struct sframe_section *sec)
+ {
+ 	dbg_free(sec);
+@@ -461,6 +538,10 @@ int sframe_add_section(unsigned long sframe_start, unsigned long sframe_end,
+ 		goto err_free;
+ 	}
  
-@@ -4069,6 +4156,7 @@ int cmd_script(int argc, const char **argv)
- 
- 	perf_tool__init(&script.tool, !unsorted_dump);
- 	script.tool.sample		 = process_sample_event;
-+	script.tool.callchain_deferred	 = process_deferred_sample_event;
- 	script.tool.mmap		 = perf_event__process_mmap;
- 	script.tool.mmap2		 = perf_event__process_mmap2;
- 	script.tool.comm		 = perf_event__process_comm;
-@@ -4095,6 +4183,7 @@ int cmd_script(int argc, const char **argv)
- 	script.tool.throttle		 = process_throttle_event;
- 	script.tool.unthrottle		 = process_throttle_event;
- 	script.tool.ordering_requires_timestamps = true;
-+	script.tool.merge_deferred_callchains = false;
- 	session = perf_session__new(&data, &script.tool);
- 	if (IS_ERR(session))
- 		return PTR_ERR(session);
++	ret = sframe_validate_section(sec);
++	if (ret)
++		goto err_free;
++
+ 	ret = mtree_insert_range(sframe_mt, sec->text_start, sec->text_end, sec, GFP_KERNEL);
+ 	if (ret) {
+ 		dbg_sec("mtree_insert_range failed: text=%lx-%lx\n",
 -- 
 2.47.2
 
