@@ -1,26 +1,26 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01F532882B7;
-	Tue,  1 Jul 2025 19:19:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39275288502;
+	Tue,  1 Jul 2025 19:19:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751397548; cv=none; b=QsHA8jOYyFG8Flsv2nbPN9Dh9tQeJWUFr1L7XXyQXiMgyf/4VI3SujPX0uqlrSZeZEutn8/yQGX+9LT1z5pelsi9vJ+UcJJ6RlvWyykYmdLjR2rt4pm12bRNtRzgHJWDhzDbTjpP098ZJgYrWuOz/VQNff64Xq2HH/srUgKER4E=
+	t=1751397549; cv=none; b=m1cG4fTFFrsZ0ijgtNLsKEAFLoq6rmaPbW4j4byP7UCZAclpZFogvAr2mz23Lh3jspAQ7fLnn5BmDe98qBiN08LTwGChcEvu1XkaRRX3obyVYpGrSLE+7dfRxHXl7dCaWSs+8deIlYBlVuYMe582vJWuw9eB9ILfQZFCYYBQWiY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751397548; c=relaxed/simple;
-	bh=vrk74lb0dbKscq8FL04HpWM1hSFFbh97X1kJjRZQ/GY=;
+	s=arc-20240116; t=1751397549; c=relaxed/simple;
+	bh=sGPJyaMt5chGSbAS/TjitWf/JKBtwNhMQ3g3k4X3fJw=;
 	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type; b=KGfdD/NpAZ9yYPrDyRLgm7a7TSfApuNG40c8Z8EwCzdh4bN6n8oqyXj4qI4qXreT/l8rCW8NhRHdgKRh9YwyizouT3jNx8Y3jDQlbdEVMnhUAOOJzUIx7i1fkmH0/ifGNs76phdhirCSTQ3pDUZYtPbPVakwJR7k2kNU4hgJ4Dw=
+	 Content-Type; b=rr1tVcJdDQ30Uk1rlv1gYOTYNgNn5A5AVm0AVq5eBoF9w8ICaeAOWOgYB8C3hpiBzuskMM4HMSuNRV2ptaVErKihv0K8bXnwPJOLjyxmTNpWQnmcbVWMhq0D9LIJrM2yzJ3a+9/mCDaWh05mO6fKt80qckcKsDdzFl1WL4+jZDg=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2E49C4CEEB;
-	Tue,  1 Jul 2025 19:19:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CD88C4CEEB;
+	Tue,  1 Jul 2025 19:19:09 +0000 (UTC)
 Received: from rostedt by gandalf with local (Exim 4.98.2)
 	(envelope-from <rostedt@goodmis.org>)
-	id 1uWg3s-00000007gni-0IY2;
-	Tue, 01 Jul 2025 14:50:32 -0400
-Message-ID: <20250701185031.921690551@goodmis.org>
+	id 1uWfLl-00000007g48-1Yhj;
+	Tue, 01 Jul 2025 14:04:57 -0400
+Message-ID: <20250701180457.223396050@goodmis.org>
 User-Agent: quilt/0.68
-Date: Tue, 01 Jul 2025 14:49:41 -0400
+Date: Tue, 01 Jul 2025 14:04:20 -0400
 From: Steven Rostedt <rostedt@goodmis.org>
 To: linux-kernel@vger.kernel.org,
  linux-trace-kernel@vger.kernel.org,
@@ -42,10 +42,9 @@ Cc: Masami Hiramatsu <mhiramat@kernel.org>,
  Linus Torvalds <torvalds@linux-foundation.org>,
  Andrew Morton <akpm@linux-foundation.org>,
  Jens Axboe <axboe@kernel.dk>,
- Florian Weimer <fweimer@redhat.com>,
- linux-mm@kvack.org
-Subject: [PATCH v7 02/12] unwind_user/sframe: Store sframe section data in per-mm maple tree
-References: <20250701184939.026626626@goodmis.org>
+ Florian Weimer <fweimer@redhat.com>
+Subject: [PATCH v12 10/11] perf script: Display PERF_RECORD_CALLCHAIN_DEFERRED
+References: <20250701180410.755491417@goodmis.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -54,221 +53,150 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 
-From: Josh Poimboeuf <jpoimboe@kernel.org>
+From: Namhyung Kim <namhyung@kernel.org>
 
-Associate an sframe section with its mm by adding it to a per-mm maple
-tree which is indexed by the corresponding text address range.  A single
-sframe section can be associated with multiple text ranges.
+Handle the deferred callchains in the script output.
 
-Cc: linux-mm@kvack.org
+  $ perf script
+  perf     801 [000]    18.031793:          1 cycles:P:
+          ffffffff91a14c36 __intel_pmu_enable_all.isra.0+0x56 ([kernel.kallsyms])
+          ffffffff91d373e9 perf_ctx_enable+0x39 ([kernel.kallsyms])
+          ffffffff91d36af7 event_function+0xd7 ([kernel.kallsyms])
+          ffffffff91d34222 remote_function+0x42 ([kernel.kallsyms])
+          ffffffff91c1ebe1 generic_exec_single+0x61 ([kernel.kallsyms])
+          ffffffff91c1edac smp_call_function_single+0xec ([kernel.kallsyms])
+          ffffffff91d37a9d event_function_call+0x10d ([kernel.kallsyms])
+          ffffffff91d33557 perf_event_for_each_child+0x37 ([kernel.kallsyms])
+          ffffffff91d47324 _perf_ioctl+0x204 ([kernel.kallsyms])
+          ffffffff91d47c43 perf_ioctl+0x33 ([kernel.kallsyms])
+          ffffffff91e2f216 __x64_sys_ioctl+0x96 ([kernel.kallsyms])
+          ffffffff9265f1ae do_syscall_64+0x9e ([kernel.kallsyms])
+          ffffffff92800130 entry_SYSCALL_64+0xb0 ([kernel.kallsyms])
+
+  perf     801 [000]    18.031814: DEFERRED CALLCHAIN
+              7fb5fc22034b __GI___ioctl+0x3b (/usr/lib/x86_64-linux-gnu/libc.so.6)
+
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- arch/x86/include/asm/mmu.h |  2 +-
- include/linux/mm_types.h   |  3 +++
- include/linux/sframe.h     | 13 +++++++++
- kernel/fork.c              | 10 +++++++
- kernel/unwind/sframe.c     | 55 +++++++++++++++++++++++++++++++++++---
- mm/init-mm.c               |  2 ++
- 6 files changed, 81 insertions(+), 4 deletions(-)
+ tools/perf/builtin-script.c | 89 +++++++++++++++++++++++++++++++++++++
+ 1 file changed, 89 insertions(+)
 
-diff --git a/arch/x86/include/asm/mmu.h b/arch/x86/include/asm/mmu.h
-index 0fe9c569d171..227a32899a59 100644
---- a/arch/x86/include/asm/mmu.h
-+++ b/arch/x86/include/asm/mmu.h
-@@ -87,7 +87,7 @@ typedef struct {
- 	.context = {							\
- 		.ctx_id = 1,						\
- 		.lock = __MUTEX_INITIALIZER(mm.context.lock),		\
--	}
-+	},
- 
- void leave_mm(void);
- #define leave_mm leave_mm
-diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
-index d6b91e8a66d6..4296cabf4afa 100644
---- a/include/linux/mm_types.h
-+++ b/include/linux/mm_types.h
-@@ -1206,6 +1206,9 @@ struct mm_struct {
- #ifdef CONFIG_MM_ID
- 		mm_id_t mm_id;
- #endif /* CONFIG_MM_ID */
-+#ifdef CONFIG_HAVE_UNWIND_USER_SFRAME
-+		struct maple_tree sframe_mt;
-+#endif
- 	} __randomize_layout;
- 
- 	/*
-diff --git a/include/linux/sframe.h b/include/linux/sframe.h
-index 0584f661f698..73bf6f0b30c2 100644
---- a/include/linux/sframe.h
-+++ b/include/linux/sframe.h
-@@ -22,18 +22,31 @@ struct sframe_section {
- 	signed char	fp_off;
- };
- 
-+#define INIT_MM_SFRAME .sframe_mt = MTREE_INIT(sframe_mt, 0),
-+extern void sframe_free_mm(struct mm_struct *mm);
-+
- extern int sframe_add_section(unsigned long sframe_start, unsigned long sframe_end,
- 			      unsigned long text_start, unsigned long text_end);
- extern int sframe_remove_section(unsigned long sframe_addr);
- 
-+static inline bool current_has_sframe(void)
-+{
-+	struct mm_struct *mm = current->mm;
-+
-+	return mm && !mtree_empty(&mm->sframe_mt);
-+}
-+
- #else /* !CONFIG_HAVE_UNWIND_USER_SFRAME */
- 
-+#define INIT_MM_SFRAME
-+static inline void sframe_free_mm(struct mm_struct *mm) {}
- static inline int sframe_add_section(unsigned long sframe_start, unsigned long sframe_end,
- 				     unsigned long text_start, unsigned long text_end)
- {
- 	return -ENOSYS;
- }
- static inline int sframe_remove_section(unsigned long sframe_addr) { return -ENOSYS; }
-+static inline bool current_has_sframe(void) { return false; }
- 
- #endif /* CONFIG_HAVE_UNWIND_USER_SFRAME */
- 
-diff --git a/kernel/fork.c b/kernel/fork.c
-index 3341d50c61f2..e56daf4e546f 100644
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -106,6 +106,7 @@
- #include <linux/pidfs.h>
- #include <linux/tick.h>
- #include <linux/unwind_deferred.h>
-+#include <linux/sframe.h>
- 
- #include <asm/pgalloc.h>
- #include <linux/uaccess.h>
-@@ -687,6 +688,7 @@ void __mmdrop(struct mm_struct *mm)
- 	mm_pasid_drop(mm);
- 	mm_destroy_cid(mm);
- 	percpu_counter_destroy_many(mm->rss_stat, NR_MM_COUNTERS);
-+	sframe_free_mm(mm);
- 
- 	free_mm(mm);
- }
-@@ -1024,6 +1026,13 @@ static void mmap_init_lock(struct mm_struct *mm)
- #endif
- }
- 
-+static void mm_init_sframe(struct mm_struct *mm)
-+{
-+#ifdef CONFIG_HAVE_UNWIND_USER_SFRAME
-+	mt_init(&mm->sframe_mt);
-+#endif
-+}
-+
- static struct mm_struct *mm_init(struct mm_struct *mm, struct task_struct *p,
- 	struct user_namespace *user_ns)
- {
-@@ -1053,6 +1062,7 @@ static struct mm_struct *mm_init(struct mm_struct *mm, struct task_struct *p,
- 	mm->pmd_huge_pte = NULL;
- #endif
- 	mm_init_uprobes_state(mm);
-+	mm_init_sframe(mm);
- 	hugetlb_count_init(mm);
- 
- 	if (current->mm) {
-diff --git a/kernel/unwind/sframe.c b/kernel/unwind/sframe.c
-index 20287f795b36..fa7d87ffd00a 100644
---- a/kernel/unwind/sframe.c
-+++ b/kernel/unwind/sframe.c
-@@ -122,15 +122,64 @@ int sframe_add_section(unsigned long sframe_start, unsigned long sframe_end,
- 	if (ret)
- 		goto err_free;
- 
--	/* TODO nowhere to store it yet - just free it and return an error */
--	ret = -ENOSYS;
-+	ret = mtree_insert_range(sframe_mt, sec->text_start, sec->text_end, sec, GFP_KERNEL);
-+	if (ret) {
-+		dbg("mtree_insert_range failed: text=%lx-%lx\n",
-+		    sec->text_start, sec->text_end);
-+		goto err_free;
-+	}
-+
-+	return 0;
- 
- err_free:
- 	free_section(sec);
+diff --git a/tools/perf/builtin-script.c b/tools/perf/builtin-script.c
+index 6c3bf74dd78c..a6f8209256fe 100644
+--- a/tools/perf/builtin-script.c
++++ b/tools/perf/builtin-script.c
+@@ -2483,6 +2483,93 @@ static int process_sample_event(const struct perf_tool *tool,
  	return ret;
  }
  
-+static int __sframe_remove_section(struct mm_struct *mm,
-+				   struct sframe_section *sec)
++static int process_deferred_sample_event(const struct perf_tool *tool,
++					 union perf_event *event,
++					 struct perf_sample *sample,
++					 struct evsel *evsel,
++					 struct machine *machine)
 +{
-+	if (!mtree_erase(&mm->sframe_mt, sec->text_start)) {
-+		dbg("mtree_erase failed: text=%lx\n", sec->text_start);
-+		return -EINVAL;
-+	}
-+
-+	free_section(sec);
-+
-+	return 0;
-+}
-+
- int sframe_remove_section(unsigned long sframe_start)
- {
--	return -ENOSYS;
-+	struct mm_struct *mm = current->mm;
-+	struct sframe_section *sec;
-+	unsigned long index = 0;
-+	bool found = false;
++	struct perf_script *scr = container_of(tool, struct perf_script, tool);
++	struct perf_event_attr *attr = &evsel->core.attr;
++	struct evsel_script *es = evsel->priv;
++	unsigned int type = output_type(attr->type);
++	struct addr_location al;
++	FILE *fp = es->fp;
 +	int ret = 0;
 +
-+	mt_for_each(&mm->sframe_mt, sec, index, ULONG_MAX) {
-+		if (sec->sframe_start == sframe_start) {
-+			found = true;
-+			ret |= __sframe_remove_section(mm, sec);
-+		}
++	if (output[type].fields == 0)
++		return 0;
++
++	/* Set thread to NULL to indicate addr_al and al are not initialized */
++	addr_location__init(&al);
++
++	if (perf_time__ranges_skip_sample(scr->ptime_range, scr->range_num,
++					  sample->time)) {
++		goto out_put;
 +	}
 +
-+	if (!found || ret)
-+		return -EINVAL;
++	if (debug_mode) {
++		if (sample->time < last_timestamp) {
++			pr_err("Samples misordered, previous: %" PRIu64
++				" this: %" PRIu64 "\n", last_timestamp,
++				sample->time);
++			nr_unordered++;
++		}
++		last_timestamp = sample->time;
++		goto out_put;
++	}
 +
-+	return 0;
++	if (filter_cpu(sample))
++		goto out_put;
++
++	if (machine__resolve(machine, &al, sample) < 0) {
++		pr_err("problem processing %d event, skipping it.\n",
++		       event->header.type);
++		ret = -1;
++		goto out_put;
++	}
++
++	if (al.filtered)
++		goto out_put;
++
++	if (!show_event(sample, evsel, al.thread, &al, NULL))
++		goto out_put;
++
++	if (evswitch__discard(&scr->evswitch, evsel))
++		goto out_put;
++
++	perf_sample__fprintf_start(scr, sample, al.thread, evsel,
++				   PERF_RECORD_CALLCHAIN_DEFERRED, fp);
++	fprintf(fp, "DEFERRED CALLCHAIN");
++
++	if (PRINT_FIELD(IP)) {
++		struct callchain_cursor *cursor = NULL;
++
++		if (symbol_conf.use_callchain && sample->callchain) {
++			cursor = get_tls_callchain_cursor();
++			if (thread__resolve_callchain(al.thread, cursor, evsel,
++						      sample, NULL, NULL,
++						      scripting_max_stack)) {
++				pr_info("cannot resolve deferred callchains\n");
++				cursor = NULL;
++			}
++		}
++
++		fputc(cursor ? '\n' : ' ', fp);
++		sample__fprintf_sym(sample, &al, 0, output[type].print_ip_opts,
++				    cursor, symbol_conf.bt_stop_list, fp);
++	}
++
++	fprintf(fp, "\n");
++
++	if (verbose > 0)
++		fflush(fp);
++
++out_put:
++	addr_location__exit(&al);
++	return ret;
 +}
 +
-+void sframe_free_mm(struct mm_struct *mm)
-+{
-+	struct sframe_section *sec;
-+	unsigned long index = 0;
-+
-+	if (!mm)
-+		return;
-+
-+	mt_for_each(&mm->sframe_mt, sec, index, ULONG_MAX)
-+		free_section(sec);
-+
-+	mtree_destroy(&mm->sframe_mt);
- }
-diff --git a/mm/init-mm.c b/mm/init-mm.c
-index 4600e7605cab..b32fcf167cc2 100644
---- a/mm/init-mm.c
-+++ b/mm/init-mm.c
-@@ -11,6 +11,7 @@
- #include <linux/atomic.h>
- #include <linux/user_namespace.h>
- #include <linux/iommu.h>
-+#include <linux/sframe.h>
- #include <asm/mmu.h>
+ // Used when scr->per_event_dump is not set
+ static struct evsel_script es_stdout;
  
- #ifndef INIT_MM_CONTEXT
-@@ -46,6 +47,7 @@ struct mm_struct init_mm = {
- 	.user_ns	= &init_user_ns,
- 	.cpu_bitmap	= CPU_BITS_NONE,
- 	INIT_MM_CONTEXT(init_mm)
-+	INIT_MM_SFRAME
- };
+@@ -4069,6 +4156,7 @@ int cmd_script(int argc, const char **argv)
  
- void setup_initial_init_mm(void *start_code, void *end_code,
+ 	perf_tool__init(&script.tool, !unsorted_dump);
+ 	script.tool.sample		 = process_sample_event;
++	script.tool.callchain_deferred	 = process_deferred_sample_event;
+ 	script.tool.mmap		 = perf_event__process_mmap;
+ 	script.tool.mmap2		 = perf_event__process_mmap2;
+ 	script.tool.comm		 = perf_event__process_comm;
+@@ -4095,6 +4183,7 @@ int cmd_script(int argc, const char **argv)
+ 	script.tool.throttle		 = process_throttle_event;
+ 	script.tool.unthrottle		 = process_throttle_event;
+ 	script.tool.ordering_requires_timestamps = true;
++	script.tool.merge_deferred_callchains = false;
+ 	session = perf_session__new(&data, &script.tool);
+ 	if (IS_ERR(session))
+ 		return PTR_ERR(session);
 -- 
 2.47.2
 
