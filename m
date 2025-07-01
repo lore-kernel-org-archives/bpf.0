@@ -1,100 +1,126 @@
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay.hostedemail.com (smtprelay0014.hostedemail.com [216.40.44.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C90015E96
-	for <bpf@vger.kernel.org>; Tue,  1 Jul 2025 17:47:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7CFB28032D;
+	Tue,  1 Jul 2025 18:04:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751392034; cv=none; b=OAgb+qD8J7hca3Aa+dn1O7bhlNfs4X/VKHmFSHcQGecfYASVkeQmpOUwgtTbrWGQD9B4xJdPYIHoLoE9HeuPx6kEpi7HpEHE9sHZClDIrbICDmOP8QrqCIe2ZcOL6dGYYWEWkeHtMMPZgU6cgCuuz/ZXCAvbCKWdlYUWDyzzhh4=
+	t=1751393065; cv=none; b=twOtmv075yYMCB/kkFSbzlATeIJt9snAJY0E+Xof8SXvuNVYG7iNURnpLP2X6d9iIgC8LD3y+VvYobzTJq4k7wV/eALpDi1IGstbXPJZiLIsil/ubMajdN8PBVSAH1rhw0Lfg84GCn7HCNkFX9/bp/8Jq6MT8ydsK7OgjSUeSkQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751392034; c=relaxed/simple;
-	bh=n/nunSYr7P9aa6GoYBP4odZSLWFcdx3gwMipNHq4Tck=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=I8mdzA/62kYeybuPygZjk5OqbAik6fwTgptuq83M+at9rL4ok6NlKkVh8ywFijiQRiCHynSO2486tPuCOKIm/fNFqq53IkX+uE+o+M8n3WIEoZ/6L8dUsnXsMH+/bWOWJfcnWKh9k/Za8EgR9dHe4Wptj4THF6haKtCCCUMcoYY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hXLwyHMM; arc=none smtp.client-ip=209.85.221.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hXLwyHMM"
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-3a536ecbf6fso3483757f8f.2
-        for <bpf@vger.kernel.org>; Tue, 01 Jul 2025 10:47:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1751392031; x=1751996831; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=n/nunSYr7P9aa6GoYBP4odZSLWFcdx3gwMipNHq4Tck=;
-        b=hXLwyHMMmCzgiun5zhddEJpMZ0wCCo0AUOvyTbGujmqfEzlxYnXVHllk6OJwjYeJez
-         Qo33klmWaYcRE9bevbBluW1gAWIdW2MNXr/T7d9VeZTFCwUT+BTdN5k1V/LizDtBL5Sw
-         RD3Ryq3u94seJKrrY6Em/8CkDaz6NkSL+MmgaufUhgaNochs2cxmAPxhoGWc0Xt8XLFW
-         Zo3MaFb6UzIUSWlwsPd+1r4Lc/Yz8XRd4lGtFwQNozzqolGwzDSoXclUOq11jVnGE43G
-         fi/MDmlMLxzWZKKzz4tzx7aCxQiuLaVqaQZiY+Cqdb36nrjKpMMSzm/2s1x7ym4egkTO
-         RMLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751392031; x=1751996831;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=n/nunSYr7P9aa6GoYBP4odZSLWFcdx3gwMipNHq4Tck=;
-        b=c9zV9bZGyBMHsWlyfrSpuKQqcpmONg00epKnnqonMWODlc4I5AL2Kq78dKuJiAaNDW
-         BanNgQsJAYJw6RV2Oz15lCwiHYjHpWSegxxig4egnh88D5/M64OBfMqpeitU03CWYASH
-         CxY8rhJcRmReQXKNTKiL8zvod6Wy+sQgAz++XioSqY9pbwyBamLWDpPZrexrJVMBgwS1
-         tcocvSndM1xE/A7hoJiVzaQExhDFll+X09sJMsxufCvxCo7OwC21ZRcZL+6tg6RtykPy
-         d+yuERZHtCU7ZN721W7UCrS3V/7ZHvcNW/jGiD0tQtokMyLQeEBFebpSPSefLlP127cs
-         crRg==
-X-Gm-Message-State: AOJu0YySrvWVpId63p/wrhT5ACrPlxkpxz7AOYAw46ZdP5gjlGeMAom7
-	DhbhBXHbCgSxZ/F1n2hZ1AUNgL6nOv8GG2pZREZ05w4Do4LyHefi+nm5vVzGW/AnuQ325a/4Y/4
-	1NM4m3LnEYfv6qUMq3CkcD21EaROaE9I=
-X-Gm-Gg: ASbGncvhk3wFq0Rbse13Y9IG9Cn0epay0fsu6WBQ/B9TINxbSVfUuUh27lnMvTE0rtW
-	3R8FSHned9sW7LBNTkzb1p6tAvANez1mzeVC7SKzlwbi8ZIhEJ9XAGuFj36qhuFjMIUXseDXYJO
-	CLYnpV0dlomKVRhNkWXuEhYSt2BhKhVEAC+i8/SXeiGlK3efKEfzooFldKBv0=
-X-Google-Smtp-Source: AGHT+IFTQmLGLDol4XW8X8CkDJn9RW1Rcb3BfR7jLblIr1h6CXTRI82oeZYpyNCXUVQj8womismEY87fE1D3EeZ45bc=
-X-Received: by 2002:a5d:584a:0:b0:3a4:e844:745d with SMTP id
- ffacd0b85a97d-3a90be8d151mr16896007f8f.56.1751392030571; Tue, 01 Jul 2025
- 10:47:10 -0700 (PDT)
+	s=arc-20240116; t=1751393065; c=relaxed/simple;
+	bh=INPL5mykLyHh9BAddpKD33kEw5Zh1QT3Mw8WI6pEDxg=;
+	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
+	 Content-Type; b=XWAE+7AP6XyAryCF34cV7Ec+02m8cmEVdZELbmrmk6h+fUkac+/NFr0K4tAk2bGMGubXvFj4Lcj9jJy4sQ4eR7ROpK+PVbc+5uZH+oU/zcEjFOa2svDz/WIvV3r4o3IHdYrJzw0M4TZDDH9cQiOSnEt/OdNu3euNznee/vbnYBE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+Received: from omf12.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay03.hostedemail.com (Postfix) with ESMTP id 0CFDDBA5E0;
+	Tue,  1 Jul 2025 18:04:21 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: nevets@goodmis.org) by omf12.hostedemail.com (Postfix) with ESMTPA id 8B75F18;
+	Tue,  1 Jul 2025 18:04:17 +0000 (UTC)
+Received: from rostedt by gandalf with local (Exim 4.98.2)
+	(envelope-from <rostedt@goodmis.org>)
+	id 1uWfLk-00000007g0E-05dU;
+	Tue, 01 Jul 2025 14:04:56 -0400
+Message-ID: <20250701180455.872384844@goodmis.org>
+User-Agent: quilt/0.68
+Date: Tue, 01 Jul 2025 14:04:12 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org,
+ bpf@vger.kernel.org,
+ x86@kernel.org
+Cc: Masami Hiramatsu <mhiramat@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Josh Poimboeuf <jpoimboe@kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>,
+ Ingo Molnar <mingo@kernel.org>,
+ Jiri Olsa <jolsa@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>,
+ Thomas Gleixner <tglx@linutronix.de>,
+ Andrii Nakryiko <andrii@kernel.org>,
+ Indu Bhagat <indu.bhagat@oracle.com>,
+ "Jose E. Marchesi" <jemarch@gnu.org>,
+ Beau Belgrave <beaub@linux.microsoft.com>,
+ Jens Remus <jremus@linux.ibm.com>,
+ Linus Torvalds <torvalds@linux-foundation.org>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Jens Axboe <axboe@kernel.dk>,
+ Florian Weimer <fweimer@redhat.com>
+Subject: [PATCH v12 02/11] perf: Have get_perf_callchain() return NULL if crosstask and user are
+ set
+References: <20250701180410.755491417@goodmis.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250630133524.364236-1-vmalik@redhat.com>
-In-Reply-To: <20250630133524.364236-1-vmalik@redhat.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Tue, 1 Jul 2025 10:46:56 -0700
-X-Gm-Features: Ac12FXwrmvoAo_yl-wb9DRp6RZ0XpReer1I6IrZCju8CEjy6mhWplt5JhfHo--w
-Message-ID: <CAADnVQJF8-8zHV75Cf7v8XWGVrJwU5JaQjBm0B-Q3JUUMqNmcQ@mail.gmail.com>
-Subject: Re: [PATCH bpf] selftests/bpf: Re-add kfunc declarations to qdisc tests
-To: Viktor Malik <vmalik@redhat.com>
-Cc: bpf <bpf@vger.kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, Amery Hung <ameryhung@gmail.com>, 
-	=?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>, 
-	Feng Yang <yangfeng@kylinos.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+X-Stat-Signature: 9e7goc9a1kip16qfkakpdef5h3igtoty
+X-Rspamd-Server: rspamout03
+X-Rspamd-Queue-Id: 8B75F18
+X-Session-Marker: 6E657665747340676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX1+a27bIlBW3R5rVNigKqT3jicHlXSOqmsY=
+X-HE-Tag: 1751393057-410247
+X-HE-Meta: U2FsdGVkX1+ugqMjWqnch2DVuPFAL5NBDwQF7X4X166VlJL2rwFtiaYXtnk4y67y1o5/375pk8wvKf+5QmWCnu1BAh5EPneqkUgaLDWgjVZN1rWl4nyO7HKtlEL9hyiSpzBXuLWjJRO3nR46gHaE61Ln3cdrTGqATRWy0HPCE+DtJUJmj8+82fCwY9RpQkV6yDWvfAPCFO6Z+qzO2watUNcjSGQo5Q9uH9KrHJ1Z+uN29juPCF9+7rDhcnClP9ALV9tmYcONR4Ee9mB+rSoCCLnfi7mV7vBb4fuAX4QSO21oU0oZr11Spcv68IVblY98S/1gcvKybUsYrwXUFcy5rty62CS/lF/3CwEWtjI11rOsmK2YeKWa+ZKa2VjZdcfPnUbHBNRkneGkrei4X5pFT3IQnbOqD2XU5+IVRLyO1EA=
 
-On Mon, Jun 30, 2025 at 6:35=E2=80=AFAM Viktor Malik <vmalik@redhat.com> wr=
-ote:
->
-> BPF selftests compilation fails on systems with CONFIG_NET_SCH_BPF=3Dn.
-> The reason is that qdisc-related kfuncs are included via vmlinux.h but
-> when qdisc is disabled, they are not defined and do not appear in
-> vmlinux.h.
+From: Josh Poimboeuf <jpoimboe@kernel.org>
 
-Yes and that's expected behavior. It's not a bug.
-That's why we have CONFIG_NET_SCH_BPF=3Dy in
-selftests/bpf/config
-and CI picks it up automatically.
+get_perf_callchain() doesn't support cross-task unwinding for user space
+stacks, have it return NULL if both the crosstask and user arguments are
+set.
 
-If we add these kfuncs to bpf_qdisc_common.h where would we
-draw the line when the kfuncs should be added or not ?
+Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+---
+ kernel/events/callchain.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-Currently we don't add any new kfuncs, since they all
-should be in vmlinux.h
+diff --git a/kernel/events/callchain.c b/kernel/events/callchain.c
+index b0f5bd228cd8..cd0e3fc7ed05 100644
+--- a/kernel/events/callchain.c
++++ b/kernel/events/callchain.c
+@@ -224,6 +224,10 @@ get_perf_callchain(struct pt_regs *regs, bool kernel, bool user,
+ 	struct perf_callchain_entry_ctx ctx;
+ 	int rctx, start_entry_idx;
+ 
++	/* crosstask is not supported for user stacks */
++	if (crosstask && user && !kernel)
++		return NULL;
++
+ 	entry = get_callchain_entry(&rctx);
+ 	if (!entry)
+ 		return NULL;
+@@ -240,7 +244,7 @@ get_perf_callchain(struct pt_regs *regs, bool kernel, bool user,
+ 		perf_callchain_kernel(&ctx, regs);
+ 	}
+ 
+-	if (user) {
++	if (user && !crosstask) {
+ 		if (!user_mode(regs)) {
+ 			if  (current->mm)
+ 				regs = task_pt_regs(current);
+@@ -249,9 +253,6 @@ get_perf_callchain(struct pt_regs *regs, bool kernel, bool user,
+ 		}
+ 
+ 		if (regs) {
+-			if (crosstask)
+-				goto exit_put;
+-
+ 			if (add_mark)
+ 				perf_callchain_store_context(&ctx, PERF_CONTEXT_USER);
+ 
+@@ -261,7 +262,6 @@ get_perf_callchain(struct pt_regs *regs, bool kernel, bool user,
+ 		}
+ 	}
+ 
+-exit_put:
+ 	put_callchain_entry(rctx);
+ 
+ 	return entry;
+-- 
+2.47.2
 
---
-pw-bot: cr
+
