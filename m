@@ -1,167 +1,230 @@
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E98172EFDBC;
-	Tue,  1 Jul 2025 20:39:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF11E246781;
+	Tue,  1 Jul 2025 20:46:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751402393; cv=none; b=XDEt4BjWaxcvFHj20VKTzwRaJBPFgepA7Y0Uahpn8Flji9/sDvE070LqyT+4Sx8CYTCBJJWEME/kt5SrLeoDRd+oTmujbOgY0e57PBsqAOripDhfBKt5TxFyMTM9ks7JSe/7NvcKXcZ+CXs2D0e9IA3FWtbG45470CD03cINx/s=
+	t=1751402767; cv=none; b=dH+XxC6KNubdyufXYdw5jvjMet3oN4NpNFax0E/dfJ/ShHwU6EytFhDdDzQJIHOvwfeSJTsoa8Zek4RnmevdGeEEN9i5y2VJLhJC38GqvA3quAKTT7k79G9/JcEjKQEbioIh26Hd012JMG2wjv0AgP9UCuuOI/Igs+tea+tOois=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751402393; c=relaxed/simple;
-	bh=KvEAW9ogBRBHR5i+dsQB56CXTAnYOE98VGUFrR9TpVA=;
+	s=arc-20240116; t=1751402767; c=relaxed/simple;
+	bh=cgf2UXP07i29I0Sz7Ucz+VMLeoyIB1XYNHnEU1OdDfM=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kNlyvuSWXndpx1pVls+9vvJy0JvU5JI9iuItw6QtOwMD5mXsAgfTAD6MSTvv+GEjMAlW4pHHb/EF+ognb748Yj+oomRRU8q90X/ZfwjCJQpzUQrqMd4RbBhpSKc4moQ6JqZVY7YdgB4DrNYK++1r+gdmFDBQmhOfxfyRuuzfcLg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e/K2hnVN; arc=none smtp.client-ip=209.85.128.54
+	 To:Cc:Content-Type; b=QQR4wiDjE/0cBORpz2Vkpp/VlRKcf9mxgCo46MbxNP+NPCVhjOABb3+vSM7gxSg4vmg/51yyuWhKd4w+CHXIU9HkYv+BUPAm95Q+4Pe22Xq/Sex2uzV7CNx8g+OvBSGN4wXpgNFc6YiFfs8EoDjrRwfk1ram1FZ84WmHP3HyLAY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ildLjMwu; arc=none smtp.client-ip=209.85.215.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e/K2hnVN"
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4538bc1cffdso35793825e9.0;
-        Tue, 01 Jul 2025 13:39:51 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ildLjMwu"
+Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-b3226307787so2846444a12.1;
+        Tue, 01 Jul 2025 13:46:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1751402390; x=1752007190; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1751402765; x=1752007565; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=2XOX/9hw+RJEcjJnWmrVCmdr6SZDbQ2g17tUexPr8iU=;
-        b=e/K2hnVNcIF7MNtzZsLhOCPAIDMwZlgZDOGk686mVXQk9pR6blNe90XQcPUJFAU4c7
-         lOzfEnKLhdvXEOo6DxQ/YxAiJh9aeuNAJau+o15rBmdLq5OKzkZx87UrRKvltoTTVF3o
-         HLPUm3M4JLF4XQkdAlG+FmqUWWzPFHB+ocYHCSZ07Gquu1Mw35hHPUJ4vPrRchzv2giX
-         9flmkBxr2FHffi8aK20AtdXKxEWv+Ah7WiNGD7lU0VolTPIx29Des1cHesLQg9EL/CRS
-         z2TYwibqSbYdgL9GldRRReafKAKqHtV/dG/D2po4jV2AoOF3xorw+uxKdpHpKXYB0249
-         Fufw==
+        bh=hCgrlLfo9Mns92U/5iXO12KGKM9lhSDCM+Q2c4kfSmE=;
+        b=ildLjMwu8XfJILGEu8lDB/KokcoMaCVPu8ab7XnvASRTMjtYt5uhd0nitARask9NBK
+         edjtW3FcD3iBmLflyj0qkBF9+HAu47lQsgfdXhy8niOIksuurSsp5hmhA++koRVc5I4j
+         +ot6VPnt+k0BAzU+ajgUFzq4mc/nCArsn4J1Bjnd68ugorwNKs4DWUiInpf8rTDaSvO3
+         w5nc9EbgIh5QgoMLlFL/WQ+cqWnAWzeyeojvi785yiYsJQV9vy4fCc0ac2tsasP+WXXz
+         JK8BOc470k9cPee6ihxmnLmoCL50Dz5L6obKzPkbaFSm+A5LbnGcFA+uA1YMQUj1N0dD
+         /TKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751402390; x=1752007190;
+        d=1e100.net; s=20230601; t=1751402765; x=1752007565;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=2XOX/9hw+RJEcjJnWmrVCmdr6SZDbQ2g17tUexPr8iU=;
-        b=N/SUR8FkYjH5R5ZQqvpUTEPJB7eFNCGrRLxKB7QU8NOgtRk73jlOuhWFWI9jiIy6Lr
-         T4FUjJI32ML7Ped7RncEyBD4BMbsXNUmdR4qxg16KzTLYvddofhaRQCPu7eOuKStDAJc
-         ZBeKJdFj8ZWvlVQtVc8WB7cBUC8sTbj4N+20T3qitGB9A3AF7XOnqzegEpXb8ia/9yLB
-         sXeNntMI87ZpF1qPDxtQ2bIsAqLMTU2Jt0HLm5/hj9UQzWj8Z2RUuR9hqU58Z+CwuJBr
-         sBFVHMqIN+oFIMwGyT+BLULOACw5qaPop3KdYttiSRrN32M0IWk9pFaqr/YUQ4IviXrU
-         N6JQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU2GSw26wWfiJ5CaDLaOlV91BaK7dmhdVa2nL/xQVvSaeCEhEzdXYCrdA05CzfLNlGPPBU=@vger.kernel.org, AJvYcCUMNV8t6wTt/7fhh0vL5jOtDhkG7aY0HslDN2aXPykyg7DJQPkADxG7u5uS0nvb8+5ztlm8Fytn0zvZmH6j@vger.kernel.org, AJvYcCXk3fbuJMV/vaicSrVVoybtUt0qB1oGoPbW8/3oIiM9SKFnHScp6avp45zq9w8DqNldX4y0jkxmsqK/hZDoioFBwqJ3@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz8E4jJRu9axxkDyiTfXT3mvfm8MJixrYj4f5rkw3Uytct81grX
-	PqKNbulzI19qXdT8UrSy/b+zps8C8LIePNWEw+fuO877Z3zmNceQj8SvM+7NaRTWb3wlXfydeIb
-	U+W0XFgk2pADHU2xncuhasCZF3QUcnXs=
-X-Gm-Gg: ASbGnctvjw6G2A4F1ADEWDc5VMEeYEpSoxh7LXir0WJ31XEr/gykwoVQGaZAwBt6bfq
-	qc4324fMaH5uBBVPDlSML6S2BegT3z3o3Nlp4vPbiSff426mMuy1Kta7iwH6FSFs7oNxw/nklz1
-	vNJYI7CL6nzeq5G7GiA/IKEk0uKhwwTDrZWfHQmfRjAU0vUGeDXzq6AoFT47A=
-X-Google-Smtp-Source: AGHT+IFkD3VKzjNhJyz1lQhSkSumIJYVNMubG2GpXJQWVqc+L8fe8lkb2VZPKQSY1cwv6eJm5RePzDUyG2wS/o0W3tM=
-X-Received: by 2002:a05:600c:4688:b0:453:81a:2f3f with SMTP id
- 5b1f17b1804b1-454a372df70mr5999675e9.30.1751402389960; Tue, 01 Jul 2025
- 13:39:49 -0700 (PDT)
+        bh=hCgrlLfo9Mns92U/5iXO12KGKM9lhSDCM+Q2c4kfSmE=;
+        b=dFb0rpgY34MJSz1AxJFeoFMvBpYLnRvvUmQ2y9gZSvoyqr8fVIw2u0S5Zq9OOoI7e5
+         J1fBqZsCk0Fn+p8Ib/dCFIx7+57hyWK8PaZYPn+9w5f6Pfx+Y3FKk4NR33TQq+EPmYW6
+         6l643QA95r2c1GiSnuzlPOtaojY4MYo6QNklY3Vy04VSvHFY4EAyQaWq+IP/bYVkVtD6
+         ulpEartgA1oYsu6Z3IEQmE+rY34047fDEDkYtpaiyaskbj/jT5Bo0T9XMyj6ttmDZKnc
+         ZKVJwXuwRq4rRCcCFPH0P5/aEXUVL2tAq3TkXuLOSx2y/Ogt4VuhENFZtCQSYj9Tj4pl
+         iRsg==
+X-Forwarded-Encrypted: i=1; AJvYcCVJSgltE6JBfKmKESnypbOuT+VeMOAfHvioSV73Nffjs2x8LxqVFJyqq2J8/wJd5lvDFtE=@vger.kernel.org, AJvYcCVlUMi3FXt5l5sKJMUPWJi1a7AXtLv5QMGzdzZThHi5wxOkLnPsE+NlN/ELrIXWJaicDXRfD7wsrj1sHIXS@vger.kernel.org
+X-Gm-Message-State: AOJu0YyZrJT1D7BWNjbJS2MGXcVYzlMdTvjCse8d9W6tJQ1tyyC9cYdZ
+	ZUA/NUbrVY2/mQsm9Paphb8HFcfFyusE8vFBX7FhwITOKBH9Hyb+Kl7U6FTDJrWo0RUIbgeXwqH
+	QhjGGfompTWqXPoq8lAWNj09b3yTT8iM=
+X-Gm-Gg: ASbGncv93eHdFyIQ247+3BDCX28RkKpFiu9NsWQ/IIV0M0/wdFVhyY6ag2YhQWFVn5C
+	enoyqAKwYlkPYlaO+IuzfW/AvAyV4zgQZwXWgwd4mwZRX9pmK61hqf4hosk/iuoUkswDyKwMSXu
+	cuxXPZHY9IFyWXTfw6gbKDud/pR0MFn3f3UlwaeqwU66dgfTcW2alUxrkkFa4=
+X-Google-Smtp-Source: AGHT+IE0GrZOy0np0jvotiCpIi/pC4GYr+OPKKBtDYVBM8itFJuYyOIpiylRF1p1h/76mb4orDWecoU4sJTxm4EJHfg=
+X-Received: by 2002:a17:90b:2c8d:b0:311:c1ec:7cfb with SMTP id
+ 98e67ed59e1d1-31a90bd47aemr511891a91.21.1751402765101; Tue, 01 Jul 2025
+ 13:46:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250627082252.431209-1-chen.dylane@linux.dev>
-In-Reply-To: <20250627082252.431209-1-chen.dylane@linux.dev>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Tue, 1 Jul 2025 13:39:36 -0700
-X-Gm-Features: Ac12FXxZHD5m2DWz8uVFdq-SqPDe-6gXNykWOwpyJs2uf2haLluZbHq7yK9bv0M
-Message-ID: <CAADnVQLWZH0sQk6ni-AWb+SRJ+H_sE=Gvwn3wdu+UC=mJiPPrg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v6 1/3] bpf: Show precise link_type for
- {uprobe,kprobe}_multi fdinfo
-To: Tao Chen <chen.dylane@linux.dev>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+References: <20250620113846.3950478-1-arnd@kernel.org> <CAADnVQKAT3UPzcpzkJ6_-powz4YTiDAku4-a+++hrhYdJUnLiw@mail.gmail.com>
+ <361eb614-e145-49dc-aa32-12f313f61b96@linux.dev>
+In-Reply-To: <361eb614-e145-49dc-aa32-12f313f61b96@linux.dev>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Tue, 1 Jul 2025 13:45:50 -0700
+X-Gm-Features: Ac12FXyI7Qso7jRBjHBJtEsaXWo4_BsHAlGq7GXcFjjswLG4pAt_g_gsBh58Zpg
+Message-ID: <CAEf4BzahSLGiW_F4LtG1tMAb0O1b6D-kO0AcrU2O+nLKVbkvZA@mail.gmail.com>
+Subject: Re: [PATCH] bpf: turn off sanitizer in do_misc_fixups for old clang
+To: Yonghong Song <yonghong.song@linux.dev>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Arnd Bergmann <arnd@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	John Fastabend <john.fastabend@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, KP Singh <kpsingh@kernel.org>, 
 	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Matt Bobrowski <mattbobrowski@google.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	linux-trace-kernel <linux-trace-kernel@vger.kernel.org>
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Luis Gerhorst <luis.gerhorst@fau.de>, bpf <bpf@vger.kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jun 27, 2025 at 1:23=E2=80=AFAM Tao Chen <chen.dylane@linux.dev> wr=
-ote:
+On Tue, Jul 1, 2025 at 1:03=E2=80=AFPM Yonghong Song <yonghong.song@linux.d=
+ev> wrote:
 >
-> Alexei suggested, 'link_type' can be more precise and differentiate
-> for human in fdinfo. In fact BPF_LINK_TYPE_KPROBE_MULTI includes
-> kretprobe_multi type, the same as BPF_LINK_TYPE_UPROBE_MULTI, so we
-> can show it more concretely.
 >
-> link_type:      kprobe_multi
-> link_id:        1
-> prog_tag:       d2b307e915f0dd37
+>
+> On 6/23/25 2:32 PM, Alexei Starovoitov wrote:
+> > On Fri, Jun 20, 2025 at 4:38=E2=80=AFAM Arnd Bergmann <arnd@kernel.org>=
+ wrote:
+> >> From: Arnd Bergmann <arnd@arndb.de>
+> >>
+> >> clang versions before version 18 manage to badly optimize the bpf
+> >> verifier, with lots of variable spills leading to excessive stack
+> >> usage in addition to likely rather slow code:
+> >>
+> >> kernel/bpf/verifier.c:23936:5: error: stack frame size (2096) exceeds =
+limit (1280) in 'bpf_check' [-Werror,-Wframe-larger-than]
+> >> kernel/bpf/verifier.c:21563:12: error: stack frame size (1984) exceeds=
+ limit (1280) in 'do_misc_fixups' [-Werror,-Wframe-larger-than]
+> >>
+> >> Turn off the sanitizer in the two functions that suffer the most from
+> >> this when using one of the affected clang version.
+> >>
+> >> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> >> ---
+> >>   kernel/bpf/verifier.c | 11 +++++++++--
+> >>   1 file changed, 9 insertions(+), 2 deletions(-)
+> >>
+> >> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> >> index 2fa797a6d6a2..7724c7a56d79 100644
+> >> --- a/kernel/bpf/verifier.c
+> >> +++ b/kernel/bpf/verifier.c
+> >> @@ -19810,7 +19810,14 @@ static int do_check_insn(struct bpf_verifier_=
+env *env, bool *do_print_state)
+> >>          return 0;
+> >>   }
+> >>
+> >> -static int do_check(struct bpf_verifier_env *env)
+> >> +#if defined(CONFIG_CC_IS_CLANG) && CONFIG_CLANG_VERSION < 180100
+> >> +/* old clang versions cause excessive stack usage here */
+> >> +#define __workaround_kasan  __disable_sanitizer_instrumentation
+> >> +#else
+> >> +#define __workaround_kasan
+> >> +#endif
+> >> +
+> >> +static __workaround_kasan int do_check(struct bpf_verifier_env *env)
+> > This looks too hacky for a workaround.
+> > Let's figure out what's causing such excessive stack usage and fix it.
+> > We did some of this work in
+> > commit 6f606ffd6dd7 ("bpf: Move insn_buf[16] to bpf_verifier_env")
+> > and similar.
+> > Looks like it wasn't enough or more stack usage crept in since then.
+> >
+> > Also make sure you're using the latest bpf-next.
+> > A bunch of code was moved out of do_check().
+> > So I bet the current bpf-next/master doesn't have a problem
+> > with this particular function.
+> > In my kasan build do_check() is now fully inlined.
+> > do_check_common() is not and it's using 512 bytes of stack.
+> >
+> >>   {
+> >>          bool pop_log =3D !(env->log.level & BPF_LOG_LEVEL2);
+> >>          struct bpf_verifier_state *state =3D env->cur_state;
+> >> @@ -21817,7 +21824,7 @@ static int add_hidden_subprog(struct bpf_verif=
+ier_env *env, struct bpf_insn *pat
+> >>   /* Do various post-verification rewrites in a single program pass.
+> >>    * These rewrites simplify JIT and interpreter implementations.
+> >>    */
+> >> -static int do_misc_fixups(struct bpf_verifier_env *env)
+> >> +static __workaround_kasan int do_misc_fixups(struct bpf_verifier_env =
+*env)
+> > This one is using 832 byte of stack with kasan.
+> > Which is indeed high.
+> > Big chunk seems to be coming from chk_and_sdiv[] and chk_and_smod[].
+> >
+> > Yonghong,
+> > looks like you contributed that piece of code.
+> > Pls see how to reduce stack size here.
+> > Daniel used this pattern in earlier commits. Looks like
+> > we took it too far.
+>
+> With llvm17, I got the following error:
+>
+> /home/yhs/work/bpf-next/kernel/bpf/verifier.c:24491:5: error: stack frame=
+ size (2552) exceeds limit (1280) in 'bpf_check' [-
+> Werror,-Wframe-larger-than]
+>   24491 | int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpf=
+ptr_t uattr, __u32 uattr_size)
+>         |     ^
+> /home/yhs/work/bpf-next/kernel/bpf/verifier.c:19921:12: error: stack fram=
+e size (1368) exceeds limit (1280) in 'do_check' [-
+> Werror,-Wframe-larger-than]
+>   19921 | static int do_check(struct bpf_verifier_env *env)
+>         |            ^
+> 2 errors generated.
+>
+> I checked IR and found the following memory allocations which may contrib=
+ute
+> excessive stack usage:
+>
+> attr.coerce1, i32 noundef %uattr_size) local_unnamed_addr #0 align 16 !db=
+g !19800 {
+> entry:
+>    %zext_patch.i =3D alloca [2 x %struct.bpf_insn], align 16, !DIAssignID=
+ !19854
+>    %rnd_hi32_patch.i =3D alloca [4 x %struct.bpf_insn], align 16, !DIAssi=
+gnID !19855
+>    %cnt.i =3D alloca i32, align 4, !DIAssignID !19856
+>    %patch.i766 =3D alloca [3 x %struct.bpf_insn], align 16, !DIAssignID !=
+19857
+>    %chk_and_sdiv.i =3D alloca [1 x %struct.bpf_insn], align 4, !DIAssignI=
+D !19858
+>    %chk_and_smod.i =3D alloca [1 x %struct.bpf_insn], align 4, !DIAssignI=
+D !19859
+>    %chk_and_div.i =3D alloca [4 x %struct.bpf_insn], align 16, !DIAssignI=
+D !19860
+>    %chk_and_mod.i =3D alloca [4 x %struct.bpf_insn], align 16, !DIAssignI=
+D !19861
+>    %chk_and_sdiv343.i =3D alloca [8 x %struct.bpf_insn], align 16, !DIAss=
+ignID !19862
+>    %chk_and_smod472.i =3D alloca [9 x %struct.bpf_insn], align 16, !DIAss=
+ignID !19863
+>    %desc.i =3D alloca %struct.bpf_jit_poke_descriptor, align 8, !DIAssign=
+ID !19864
+>    %target_size.i =3D alloca i32, align 4, !DIAssignID !19865
+>    %patch.i =3D alloca [2 x %struct.bpf_insn], align 16, !DIAssignID !198=
+66
+>    %patch355.i =3D alloca [2 x %struct.bpf_insn], align 16, !DIAssignID !=
+19867
+>    %ja.i =3D alloca %struct.bpf_insn, align 8, !DIAssignID !19868
+>    %ret_insn.i.i =3D alloca [8 x i32], align 16, !DIAssignID !19869
+>    %ret_prog.i.i =3D alloca [8 x i32], align 16, !DIAssignID !19870
+>    %fd.i =3D alloca i32, align 4, !DIAssignID !19871
+>    %log_true_size =3D alloca i32, align 4, !DIAssignID !19872
 > ...
-> link_type:      kretprobe_multi
-> link_id:        2
-> prog_tag:       ab9ea0545870781d
-> ...
-> link_type:      uprobe_multi
-> link_id:        9
-> prog_tag:       e729f789e34a8eca
-> ...
-> link_type:      uretprobe_multi
-> link_id:        10
-> prog_tag:       7db356c03e61a4d4
 >
-> As Andrii suggested attach_type can be recorded in bpf_link, there is
-> still a 6 byte hole in bpf_link, we can fill the hole with attach_type
-> soon.
+> So yes, chk_and_{div,mod,sdiv,smod} consumes quite some stack and
+> can be coverted to runtime allocation but that is not enough for 1280
+> stack limit, we need to do more conversion from stack to memory
+> allocation. Will try to have uniform way to convert
+> 'alloca [<num> x %struct.bpf_insn]' to runtime allocation.
 >
-> Co-authored-by: Jiri Olsa <jolsa@kernel.org>
-> Signed-off-by: Tao Chen <chen.dylane@linux.dev>
-> ---
->  include/linux/bpf.h      |  1 +
->  kernel/bpf/syscall.c     |  9 ++++++++-
->  kernel/trace/bpf_trace.c | 10 ++++------
->  3 files changed, 13 insertions(+), 7 deletions(-)
->
-> Change list:
->   v5 -> v6:
->     - Move flags into bpf_link to get retprobe info
->       directly.(Alexei, Jiri)
->   v5:
->   https://lore.kernel.org/bpf/20250623134342.227347-1-chen.dylane@linux.d=
-ev
->
->   v4 -> v5:
->     - Add patch1 to show precise link_type for
->       {uprobe,kprobe}_multi.(Alexei)
->     - patch2,3 just remove type field, which will be showed in
->       link_type
->   v4:
->   https://lore.kernel.org/bpf/20250619034257.70520-1-chen.dylane@linux.de=
-v
->
->   v3 -> v4:
->     - use %pS to print func info.(Alexei)
->   v3:
->   https://lore.kernel.org/bpf/20250616130233.451439-1-chen.dylane@linux.d=
-ev
->
->   v2 -> v3:
->     - show info in one line for multi events.(Jiri)
->   v2:
->   https://lore.kernel.org/bpf/20250615150514.418581-1-chen.dylane@linux.d=
-ev
->
->   v1 -> v2:
->     - replace 'func_cnt' with 'uprobe_cnt'.(Andrii)
->     - print func name is more readable and security for kprobe_multi.(Ale=
-xei)
->   v1:
->   https://lore.kernel.org/bpf/20250612115556.295103-1-chen.dylane@linux.d=
-ev
->
-> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> index 5b25d278409..3d8fecc9b17 100644
-> --- a/include/linux/bpf.h
-> +++ b/include/linux/bpf.h
-> @@ -1702,6 +1702,7 @@ struct bpf_link {
->          * link's semantics is determined by target attach hook
->          */
->         bool sleepable;
-> +       u32 flags :8;
 
-There is a 7-byte hole here.
-Let's use 'u32 flags' right now and optimize later if necessary.
+Do we need to go all the way to dynamic allocation? See env->insns_buf
+(which some parts of this function are already using for constructing
+instruction patch), let's just converge on that? It pre-allocates
+space for 32 instructions, should be sufficient for all the use cases,
+no?
