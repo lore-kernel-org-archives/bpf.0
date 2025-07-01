@@ -1,26 +1,26 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 290EC284B26;
-	Tue,  1 Jul 2025 19:18:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B14EB283FF6;
+	Tue,  1 Jul 2025 19:18:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751397536; cv=none; b=hRnzEPvJVJyMrUgt+FbF8C02hr/WGZJ3bGam+yi85bcaKMDxl+elV0WC6MuyE8S24Gs7sh4ZgsqvIUdloflPLdxz+M50TBYS7V4JbWKHEkenltlA75wqWtc934O42bXlM2zMYXyuGJYVmZFv8W8d6r1B2JW1dojuttB7n/6oiWc=
+	t=1751397537; cv=none; b=S7WEhl1XbNusCat8G5Vs4PZ9Op9XcNx+HHCnxCmEenNtt7MsgPDHsQ8XUX5KwUm7FBKlTzyXiQeN9FpqqGdh+0DZqyUW79RiyB2gIv/KpUgVD7Kw4yKnATFkUyD8Iwk/rQSuO4EFnyhaqgq9+sgaxG0BHICRc0HWzQefqqWmZyg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751397536; c=relaxed/simple;
-	bh=w3zlkwOetCuL4IjiyP6cPFfl8DekoC294wC1K1nFMzE=;
+	s=arc-20240116; t=1751397537; c=relaxed/simple;
+	bh=Ut+iVTIHMBQnU1pbZZ59ZgZri4xhPXiNg+APs2M5CUE=;
 	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type; b=INaqTZWyvqwVKw2l5h40jTuAHysDtx034R70p91+zdsSexXaDKtvpALzr929jziDXEXgir79T326iUdwWv5v8hh9uRPWJURvQGRvTE65tguMLQz30lcrOBFTEenz4D5fCJQLU75182kahu3FEX8zG2aI0hwdAfiz06hKJKPHw/I=
+	 Content-Type; b=MT11fkBCxlVwccSLmOH95t7UQ2LK7AWB9ePM+u8WQJHudZfeKFdozcQ2UohgSzdT62LrxJGzaLDaRXHA7bgVyUdHqYhM5mALHhQpa+PnqEa2UGx/oD6e/itAOfx97K1uiThfoZqPddxTcsYcePC2+RCnmLQmJIl69we/kye1iCU=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05C22C4CEF1;
-	Tue,  1 Jul 2025 19:18:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30D8AC4CEF1;
+	Tue,  1 Jul 2025 19:18:57 +0000 (UTC)
 Received: from rostedt by gandalf with local (Exim 4.98.2)
 	(envelope-from <rostedt@goodmis.org>)
-	id 1uWg3s-00000007gpA-2QrK;
-	Tue, 01 Jul 2025 14:50:32 -0400
-Message-ID: <20250701185032.430778420@goodmis.org>
+	id 1uWfLl-00000007g3A-083o;
+	Tue, 01 Jul 2025 14:04:57 -0400
+Message-ID: <20250701180456.884974538@goodmis.org>
 User-Agent: quilt/0.68
-Date: Tue, 01 Jul 2025 14:49:44 -0400
+Date: Tue, 01 Jul 2025 14:04:18 -0400
 From: Steven Rostedt <rostedt@goodmis.org>
 To: linux-kernel@vger.kernel.org,
  linux-trace-kernel@vger.kernel.org,
@@ -43,8 +43,8 @@ Cc: Masami Hiramatsu <mhiramat@kernel.org>,
  Andrew Morton <akpm@linux-foundation.org>,
  Jens Axboe <axboe@kernel.dk>,
  Florian Weimer <fweimer@redhat.com>
-Subject: [PATCH v7 05/12] unwind_user/sframe: Detect .sframe sections in executables
-References: <20250701184939.026626626@goodmis.org>
+Subject: [PATCH v12 08/11] perf tools: Minimal CALLCHAIN_DEFERRED support
+References: <20250701180410.755491417@goodmis.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -53,139 +53,224 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 
-From: Josh Poimboeuf <jpoimboe@kernel.org>
+From: Namhyung Kim <namhyung@kernel.org>
 
-When loading an ELF executable, automatically detect an .sframe section
-and associate it with the mm_struct.
+Add a new event type for deferred callchains and a new callback for the
+struct perf_tool.  For now it doesn't actually handle the deferred
+callchains but it just marks the sample if it has the PERF_CONTEXT_
+USER_DEFFERED in the callchain array.
 
+At least, perf report can dump the raw data with this change.  Actually
+this requires the next commit to enable attr.defer_callchain, but if you
+already have a data file, it'll show the following result.
+
+  $ perf report -D
+  ...
+  0x5fe0@perf.data [0x40]: event: 22
+  .
+  . ... raw event: size 64 bytes
+  .  0000:  16 00 00 00 02 00 40 00 02 00 00 00 00 00 00 00  ......@.........
+  .  0010:  00 fe ff ff ff ff ff ff 4b d3 3f 25 45 7f 00 00  ........K.?%E...
+  .  0020:  21 03 00 00 21 03 00 00 43 02 12 ab 05 00 00 00  !...!...C.......
+  .  0030:  00 00 00 00 00 00 00 00 09 00 00 00 00 00 00 00  ................
+
+  0 24344920643 0x5fe0 [0x40]: PERF_RECORD_CALLCHAIN_DEFERRED(IP, 0x2): 801/801: 0
+  ... FP chain: nr:2
+  .....  0: fffffffffffffe00
+  .....  1: 00007f45253fd34b
+  : unhandled!
+
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- fs/binfmt_elf.c          | 49 +++++++++++++++++++++++++++++++++++++---
- include/uapi/linux/elf.h |  1 +
- 2 files changed, 47 insertions(+), 3 deletions(-)
+ tools/lib/perf/include/perf/event.h       |  7 +++++++
+ tools/perf/util/event.c                   |  1 +
+ tools/perf/util/evsel.c                   | 15 +++++++++++++++
+ tools/perf/util/machine.c                 |  1 +
+ tools/perf/util/perf_event_attr_fprintf.c |  1 +
+ tools/perf/util/sample.h                  |  3 ++-
+ tools/perf/util/session.c                 | 17 +++++++++++++++++
+ tools/perf/util/tool.c                    |  1 +
+ tools/perf/util/tool.h                    |  3 ++-
+ 9 files changed, 47 insertions(+), 2 deletions(-)
 
-diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
-index a43363d593e5..e7128d026ec0 100644
---- a/fs/binfmt_elf.c
-+++ b/fs/binfmt_elf.c
-@@ -47,6 +47,7 @@
- #include <linux/dax.h>
- #include <linux/uaccess.h>
- #include <linux/rseq.h>
-+#include <linux/sframe.h>
- #include <asm/param.h>
- #include <asm/page.h>
+diff --git a/tools/lib/perf/include/perf/event.h b/tools/lib/perf/include/perf/event.h
+index 09b7c643ddac..4590d62ca913 100644
+--- a/tools/lib/perf/include/perf/event.h
++++ b/tools/lib/perf/include/perf/event.h
+@@ -151,6 +151,12 @@ struct perf_record_switch {
+ 	__u32			 next_prev_tid;
+ };
  
-@@ -622,6 +623,21 @@ static inline int make_prot(u32 p_flags, struct arch_elf_state *arch_state,
- 	return arch_elf_adjust_prot(prot, arch_state, has_interp, is_interp);
++struct perf_record_callchain_deferred {
++	struct perf_event_header header;
++	__u64			 nr;
++	__u64			 ips[];
++};
++
+ struct perf_record_header_attr {
+ 	struct perf_event_header header;
+ 	struct perf_event_attr	 attr;
+@@ -505,6 +511,7 @@ union perf_event {
+ 	struct perf_record_read			read;
+ 	struct perf_record_throttle		throttle;
+ 	struct perf_record_sample		sample;
++	struct perf_record_callchain_deferred	callchain_deferred;
+ 	struct perf_record_bpf_event		bpf;
+ 	struct perf_record_ksymbol		ksymbol;
+ 	struct perf_record_text_poke_event	text_poke;
+diff --git a/tools/perf/util/event.c b/tools/perf/util/event.c
+index 7544a3104e21..720682fea9be 100644
+--- a/tools/perf/util/event.c
++++ b/tools/perf/util/event.c
+@@ -58,6 +58,7 @@ static const char *perf_event__names[] = {
+ 	[PERF_RECORD_CGROUP]			= "CGROUP",
+ 	[PERF_RECORD_TEXT_POKE]			= "TEXT_POKE",
+ 	[PERF_RECORD_AUX_OUTPUT_HW_ID]		= "AUX_OUTPUT_HW_ID",
++	[PERF_RECORD_CALLCHAIN_DEFERRED]	= "CALLCHAIN_DEFERRED",
+ 	[PERF_RECORD_HEADER_ATTR]		= "ATTR",
+ 	[PERF_RECORD_HEADER_EVENT_TYPE]		= "EVENT_TYPE",
+ 	[PERF_RECORD_HEADER_TRACING_DATA]	= "TRACING_DATA",
+diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
+index d55482f094bf..6176c31b57ea 100644
+--- a/tools/perf/util/evsel.c
++++ b/tools/perf/util/evsel.c
+@@ -2978,6 +2978,18 @@ int evsel__parse_sample(struct evsel *evsel, union perf_event *event,
+ 	data->data_src = PERF_MEM_DATA_SRC_NONE;
+ 	data->vcpu = -1;
+ 
++	if (event->header.type == PERF_RECORD_CALLCHAIN_DEFERRED) {
++		const u64 max_callchain_nr = UINT64_MAX / sizeof(u64);
++
++		data->callchain = (struct ip_callchain *)&event->callchain_deferred.nr;
++		if (data->callchain->nr > max_callchain_nr)
++			return -EFAULT;
++
++		if (evsel->core.attr.sample_id_all)
++			perf_evsel__parse_id_sample(evsel, event, data);
++		return 0;
++	}
++
+ 	if (event->header.type != PERF_RECORD_SAMPLE) {
+ 		if (!evsel->core.attr.sample_id_all)
+ 			return 0;
+@@ -3108,6 +3120,9 @@ int evsel__parse_sample(struct evsel *evsel, union perf_event *event,
+ 		if (data->callchain->nr > max_callchain_nr)
+ 			return -EFAULT;
+ 		sz = data->callchain->nr * sizeof(u64);
++		if (evsel->core.attr.defer_callchain && data->callchain->nr >= 1 &&
++		    data->callchain->ips[data->callchain->nr - 1] == PERF_CONTEXT_USER_DEFERRED)
++			data->deferred_callchain = true;
+ 		OVERFLOW_CHECK(array, sz, max_size);
+ 		array = (void *)array + sz;
+ 	}
+diff --git a/tools/perf/util/machine.c b/tools/perf/util/machine.c
+index 7ec12c207970..de6100366eee 100644
+--- a/tools/perf/util/machine.c
++++ b/tools/perf/util/machine.c
+@@ -2124,6 +2124,7 @@ static int add_callchain_ip(struct thread *thread,
+ 				*cpumode = PERF_RECORD_MISC_KERNEL;
+ 				break;
+ 			case PERF_CONTEXT_USER:
++			case PERF_CONTEXT_USER_DEFERRED:
+ 				*cpumode = PERF_RECORD_MISC_USER;
+ 				break;
+ 			default:
+diff --git a/tools/perf/util/perf_event_attr_fprintf.c b/tools/perf/util/perf_event_attr_fprintf.c
+index 66b666d9ce64..abfd9b9a718c 100644
+--- a/tools/perf/util/perf_event_attr_fprintf.c
++++ b/tools/perf/util/perf_event_attr_fprintf.c
+@@ -343,6 +343,7 @@ int perf_event_attr__fprintf(FILE *fp, struct perf_event_attr *attr,
+ 	PRINT_ATTRf(inherit_thread, p_unsigned);
+ 	PRINT_ATTRf(remove_on_exec, p_unsigned);
+ 	PRINT_ATTRf(sigtrap, p_unsigned);
++	PRINT_ATTRf(defer_callchain, p_unsigned);
+ 
+ 	PRINT_ATTRn("{ wakeup_events, wakeup_watermark }", wakeup_events, p_unsigned, false);
+ 	PRINT_ATTRf(bp_type, p_unsigned);
+diff --git a/tools/perf/util/sample.h b/tools/perf/util/sample.h
+index 0e96240052e9..9d6e2f14551c 100644
+--- a/tools/perf/util/sample.h
++++ b/tools/perf/util/sample.h
+@@ -108,7 +108,8 @@ struct perf_sample {
+ 		u16 p_stage_cyc;
+ 		u16 retire_lat;
+ 	};
+-	bool no_hw_idx;		/* No hw_idx collected in branch_stack */
++	bool no_hw_idx;			/* No hw_idx collected in branch_stack */
++	bool deferred_callchain;	/* Has deferred user callchains */
+ 	char insn[MAX_INSN];
+ 	void *raw_data;
+ 	struct ip_callchain *callchain;
+diff --git a/tools/perf/util/session.c b/tools/perf/util/session.c
+index a320672c264e..e6be01459352 100644
+--- a/tools/perf/util/session.c
++++ b/tools/perf/util/session.c
+@@ -715,6 +715,7 @@ static perf_event__swap_op perf_event__swap_ops[] = {
+ 	[PERF_RECORD_CGROUP]		  = perf_event__cgroup_swap,
+ 	[PERF_RECORD_TEXT_POKE]		  = perf_event__text_poke_swap,
+ 	[PERF_RECORD_AUX_OUTPUT_HW_ID]	  = perf_event__all64_swap,
++	[PERF_RECORD_CALLCHAIN_DEFERRED]  = perf_event__all64_swap,
+ 	[PERF_RECORD_HEADER_ATTR]	  = perf_event__hdr_attr_swap,
+ 	[PERF_RECORD_HEADER_EVENT_TYPE]	  = perf_event__event_type_swap,
+ 	[PERF_RECORD_HEADER_TRACING_DATA] = perf_event__tracing_data_swap,
+@@ -1118,6 +1119,19 @@ static void dump_sample(struct evsel *evsel, union perf_event *event,
+ 		sample_read__printf(sample, evsel->core.attr.read_format);
  }
  
-+static void elf_add_sframe(struct elf_phdr *text, struct elf_phdr *sframe,
-+			   unsigned long base_addr)
++static void dump_deferred_callchain(struct evsel *evsel, union perf_event *event,
++				    struct perf_sample *sample)
 +{
-+	unsigned long sframe_start, sframe_end, text_start, text_end;
++	if (!dump_trace)
++		return;
 +
-+	sframe_start = base_addr + sframe->p_vaddr;
-+	sframe_end   = sframe_start + sframe->p_memsz;
++	printf("(IP, 0x%x): %d/%d: %#" PRIx64 "\n",
++	       event->header.misc, sample->pid, sample->tid, sample->ip);
 +
-+	text_start   = base_addr + text->p_vaddr;
-+	text_end     = text_start + text->p_memsz;
-+
-+	/* Ignore return value, sframe section isn't critical */
-+	sframe_add_section(sframe_start, sframe_end, text_start, text_end);
++	if (evsel__has_callchain(evsel))
++		callchain__printf(evsel, sample);
 +}
 +
- /* This is much more generalized than the library routine read function,
-    so we keep this separate.  Technically the library read function
-    is only provided so that we can read a.out libraries that have
-@@ -632,7 +648,7 @@ static unsigned long load_elf_interp(struct elfhdr *interp_elf_ex,
- 		unsigned long no_base, struct elf_phdr *interp_elf_phdata,
- 		struct arch_elf_state *arch_state)
+ static void dump_read(struct evsel *evsel, union perf_event *event)
  {
--	struct elf_phdr *eppnt;
-+	struct elf_phdr *eppnt, *sframe_phdr = NULL;
- 	unsigned long load_addr = 0;
- 	int load_addr_set = 0;
- 	unsigned long error = ~0UL;
-@@ -658,7 +674,8 @@ static unsigned long load_elf_interp(struct elfhdr *interp_elf_ex,
+ 	struct perf_record_read *read_event = &event->read;
+@@ -1348,6 +1362,9 @@ static int machines__deliver_event(struct machines *machines,
+ 		return tool->text_poke(tool, event, sample, machine);
+ 	case PERF_RECORD_AUX_OUTPUT_HW_ID:
+ 		return tool->aux_output_hw_id(tool, event, sample, machine);
++	case PERF_RECORD_CALLCHAIN_DEFERRED:
++		dump_deferred_callchain(evsel, event, sample);
++		return tool->callchain_deferred(tool, event, sample, evsel, machine);
+ 	default:
+ 		++evlist->stats.nr_unknown_events;
+ 		return -1;
+diff --git a/tools/perf/util/tool.c b/tools/perf/util/tool.c
+index 37bd8ac63b01..e1d60abb4e41 100644
+--- a/tools/perf/util/tool.c
++++ b/tools/perf/util/tool.c
+@@ -266,6 +266,7 @@ void perf_tool__init(struct perf_tool *tool, bool ordered_events)
+ 	tool->read = process_event_sample_stub;
+ 	tool->throttle = process_event_stub;
+ 	tool->unthrottle = process_event_stub;
++	tool->callchain_deferred = process_event_sample_stub;
+ 	tool->attr = process_event_synth_attr_stub;
+ 	tool->event_update = process_event_synth_event_update_stub;
+ 	tool->tracing_data = process_event_synth_tracing_data_stub;
+diff --git a/tools/perf/util/tool.h b/tools/perf/util/tool.h
+index db1c7642b0d1..9987bbde6d5e 100644
+--- a/tools/perf/util/tool.h
++++ b/tools/perf/util/tool.h
+@@ -42,7 +42,8 @@ enum show_feature_header {
  
- 	eppnt = interp_elf_phdata;
- 	for (i = 0; i < interp_elf_ex->e_phnum; i++, eppnt++) {
--		if (eppnt->p_type == PT_LOAD) {
-+		switch (eppnt->p_type) {
-+		case PT_LOAD: {
- 			int elf_type = MAP_PRIVATE;
- 			int elf_prot = make_prot(eppnt->p_flags, arch_state,
- 						 true, true);
-@@ -697,6 +714,20 @@ static unsigned long load_elf_interp(struct elfhdr *interp_elf_ex,
- 				error = -ENOMEM;
- 				goto out;
- 			}
-+			break;
-+		}
-+		case PT_GNU_SFRAME:
-+			sframe_phdr = eppnt;
-+			break;
-+		}
-+	}
-+
-+	if (sframe_phdr) {
-+		eppnt = interp_elf_phdata;
-+		for (i = 0; i < interp_elf_ex->e_phnum; i++, eppnt++) {
-+			if (eppnt->p_flags & PF_X) {
-+				elf_add_sframe(eppnt, sframe_phdr, load_addr);
-+			}
- 		}
- 	}
- 
-@@ -821,7 +852,7 @@ static int load_elf_binary(struct linux_binprm *bprm)
- 	int first_pt_load = 1;
- 	unsigned long error;
- 	struct elf_phdr *elf_ppnt, *elf_phdata, *interp_elf_phdata = NULL;
--	struct elf_phdr *elf_property_phdata = NULL;
-+	struct elf_phdr *elf_property_phdata = NULL, *sframe_phdr = NULL;
- 	unsigned long elf_brk;
- 	bool brk_moved = false;
- 	int retval, i;
-@@ -930,6 +961,10 @@ static int load_elf_binary(struct linux_binprm *bprm)
- 				executable_stack = EXSTACK_DISABLE_X;
- 			break;
- 
-+		case PT_GNU_SFRAME:
-+			sframe_phdr = elf_ppnt;
-+			break;
-+
- 		case PT_LOPROC ... PT_HIPROC:
- 			retval = arch_elf_pt_proc(elf_ex, elf_ppnt,
- 						  bprm->file, false,
-@@ -1227,6 +1262,14 @@ static int load_elf_binary(struct linux_binprm *bprm)
- 			elf_brk = k;
- 	}
- 
-+	if (sframe_phdr) {
-+		for (i = 0, elf_ppnt = elf_phdata;
-+		     i < elf_ex->e_phnum; i++, elf_ppnt++) {
-+			if ((elf_ppnt->p_flags & PF_X))
-+				elf_add_sframe(elf_ppnt, sframe_phdr, load_bias);
-+		}
-+	}
-+
- 	e_entry = elf_ex->e_entry + load_bias;
- 	phdr_addr += load_bias;
- 	elf_brk += load_bias;
-diff --git a/include/uapi/linux/elf.h b/include/uapi/linux/elf.h
-index 819ded2d39de..92c16c94fca8 100644
---- a/include/uapi/linux/elf.h
-+++ b/include/uapi/linux/elf.h
-@@ -41,6 +41,7 @@ typedef __u16	Elf64_Versym;
- #define PT_GNU_STACK	(PT_LOOS + 0x474e551)
- #define PT_GNU_RELRO	(PT_LOOS + 0x474e552)
- #define PT_GNU_PROPERTY	(PT_LOOS + 0x474e553)
-+#define PT_GNU_SFRAME	(PT_LOOS + 0x474e554)
- 
- 
- /* ARM MTE memory tag segment type */
+ struct perf_tool {
+ 	event_sample	sample,
+-			read;
++			read,
++			callchain_deferred;
+ 	event_op	mmap,
+ 			mmap2,
+ 			comm,
 -- 
 2.47.2
 
