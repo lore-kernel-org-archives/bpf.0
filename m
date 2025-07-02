@@ -1,348 +1,275 @@
-Received: from 69-171-232-180.mail-mxout.facebook.com (69-171-232-180.mail-mxout.facebook.com [69.171.232.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07E9360B8A
-	for <bpf@vger.kernel.org>; Wed,  2 Jul 2025 05:33:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.180
+Received: from invmail4.hynix.com (exvmail4.skhynix.com [166.125.252.92])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35ED7199FAB;
+	Wed,  2 Jul 2025 05:48:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.125.252.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751434427; cv=none; b=g9KjbJYl7OZZglZtqI4bl06nx0gpvxjnKApR/SgrT0UWwCHs+QkAVQZ82YspRnnT8LkiBXp5je/ogvkUQxcnXYnOUn6nPtddNpaOGPjPpkF9bwWut8W9XqoMPYxjUAJ2R5ymYo7ZCby8qtGvImI8Um5G7uLxf9gD+HRiAHCRuvM=
+	t=1751435297; cv=none; b=l0M1fK20M9AtvbPzKIV3uJ9kVMNDK0/DomV/ME8gQEvLXeIZv5AIS0Iay5eF4S0t/oBvAh/j/oagJqymg3ZTmvXjNTxHD1jw/U6/KBjLXmVgFb2nHCDzoiU0CIKGmR8QUYe6wwFJYXLhIhM3DRyR/UuUUmCbr6hLmmrpCpaBfaU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751434427; c=relaxed/simple;
-	bh=DfuQmhcAQu3yoA+1QEI6G+Y81rNa1TXntP+QpmHpwC8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HAz44mAbcfGUIkRleHkwlmxN66htMKBrXlsNeOUzk+fcJIOOF8Pr5Mfefhr/q5DyYRBy4zR80nohdEyqtyHDYiHrti4p22rWGcl1cdWA7JmGC5o4VJXGDhVWQ+PugnA2SPFbH8xGug2aP81BwRJz3Cw6ZO3wqwaFsPPLdnbADq8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
-Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 205E0AB32034; Tue,  1 Jul 2025 22:33:32 -0700 (PDT)
-From: Yonghong Song <yonghong.song@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	kernel-team@fb.com,
-	Martin KaFai Lau <martin.lau@kernel.org>,
-	Arnd Bergmann <arnd@kernel.org>
-Subject: [PATCH bpf-next 1/2] bpf: Reduce stack frame size by using env->insn_buf for bpf insns
-Date: Tue,  1 Jul 2025 22:33:32 -0700
-Message-ID: <20250702053332.1991516-1-yonghong.song@linux.dev>
-X-Mailer: git-send-email 2.47.1
+	s=arc-20240116; t=1751435297; c=relaxed/simple;
+	bh=4hD4MOimnEYWCD4hSnlRjGStBdpJEfn2L1ZQnbN4BHY=;
+	h=From:To:Cc:Subject:Date:Message-Id; b=t5kH1dl+FDfcKy0hjKevXxNH0kYnAWKlrlLSx7MgKjxHBSJiUw8/JWNksvT2vge4yDyTU3YidBIYzdXh15B0kczDffQC3bRlysOSwDj6uWFGh0J2CKvLLeOT9TEwFTv8plJ5NYBsfC6yHS33Ud5K74aj29ynuDz2iB64FYxLOwA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com; spf=pass smtp.mailfrom=sk.com; arc=none smtp.client-ip=166.125.252.92
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sk.com
+X-AuditID: a67dfc5b-669ff7000002311f-fd-6864c492d922
+From: Byungchul Park <byungchul@sk.com>
+To: willy@infradead.org,
+	netdev@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org,
+	kernel_team@skhynix.com,
+	kuba@kernel.org,
+	almasrymina@google.com,
+	ilias.apalodimas@linaro.org,
+	harry.yoo@oracle.com,
+	hawk@kernel.org,
+	akpm@linux-foundation.org,
+	davem@davemloft.net,
+	john.fastabend@gmail.com,
+	andrew+netdev@lunn.ch,
+	asml.silence@gmail.com,
+	toke@redhat.com,
+	tariqt@nvidia.com,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	saeedm@nvidia.com,
+	leon@kernel.org,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	david@redhat.com,
+	lorenzo.stoakes@oracle.com,
+	Liam.Howlett@oracle.com,
+	vbabka@suse.cz,
+	rppt@kernel.org,
+	surenb@google.com,
+	mhocko@suse.com,
+	horms@kernel.org,
+	linux-rdma@vger.kernel.org,
+	bpf@vger.kernel.org,
+	vishal.moola@gmail.com,
+	hannes@cmpxchg.org,
+	ziy@nvidia.com,
+	jackmanb@google.com
+Subject: [PATCH net-next v8 0/5] Split netmem from struct page
+Date: Wed,  2 Jul 2025 14:32:51 +0900
+Message-Id: <20250702053256.4594-1-byungchul@sk.com>
+X-Mailer: git-send-email 2.17.1
+X-Brightmail-Tracker: H4sIAAAAAAAAAzXRW0hTcRwHcP87Z+ccl4s1xU6OMpYhSa60GT9DzB6C40MQ6kv5oMMd3Eg3
+	mXfpYjmShi7TCtMZs8jbrMW8TTGrudTQSixr5WWy0oK8kNrw1sV1efvw/cL35Uthwi48gFKq
+	sliNSpYmJng4b87nTmi5Xa44WFwfAgZzMwGmlTyon7JywdDUjmB5dYyEJXs/AXdr3RgYXmlx
+	+G5ew2C6z0WCyXICnHUzOHQXd2DgujpAQKl2HYNHq/MkXLI2cGC4Xc+F62v3MOgonCLhdZeB
+	gMnmX1yYsZXi8LyqEQenPgb6jP7gHpxFYDd3cMBdUkNAxYiRgI9aJ4KRXhcO1Rf1CMw9Di6s
+	r2xuVD+bJGOCmN7ZBYxpbXzPYTqrJkjGaMlmWhpCGJ1jBGMsTVcIxrJYTjLjb7sJZqByHWc6
+	rUscprRonmC+TX/AmYWeUYIxt47izJDRTp7cdpoXJWfTlDms5kB0Mk9hqGjnZBRBnsN6CytE
+	s/t1yJuiBVJ6ftJM6BD1xz9WhZ6YEATTDscq5rGfIIxecvXjOsSjMMF9grY3j5GewlcQTbeM
+	rxEe44K9dH1zPfKYv7kzMfwT+7sfSJsePvnnOZKuqYv/6x300wYHXoa2GJFXExIqVTnpMmWa
+	VKLIVynzJCnqdAvafLTu3EaiFS0Ox9uQgEJiH/7AmxSFkCvLycxPtyGawsR+/K07NyO+XJZf
+	wGrUSZrsNDbThkQULt7OD3fnyoWCVFkWe4ZlM1jN/5ZDeQcUIto4P1CmP/pZGnEqcGUpLoLS
+	T+VmqKWlgZ8GbyepbMHvEo7vERVdiNq3K9IZ8UXygJ96rS3ucLTqpXmjIPx80Vl1kr9FgSWl
+	y2PnDEEBQy+IY6HhIqMmeVkbENs27qt5PJRrK5dc3jANiqjIyhKp68gNV8LX2puHvHY75LQx
+	UYxnKmRhIZgmU/Ybuabfrs0CAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAAzWRa0hTcRyG+++cnR2Hi8M0O2kWjCSw1IyCH6VD6UOnQJEKor7k1IMbblM2
+	NTUEb91Ep+kC0wkLSd2cTKboDBOZ84ZU4o2VVxZKgqmpTTcz24K+Pbwv7/PlJTFhIx5MypTZ
+	rEopkYsIPs5PvF4aUWNPk14yHZ0CndlEQNt+HrQsW7mgM3Yj2HXP8WDHPkJA01sXBrrPZTj8
+	MnswWBl28qDNkgBLzas49D3vwcBZNUpAZdkBBh/cGzwosbZyYLBxjAsT3RouaD3vMOgpWubB
+	1HsdAYumIy6s2ipxGKs34LCkiYNhfRC4xtcR2M09HHBVNBJQO6kn4FvZEoLJQScODcUaBOZ+
+	BxcO9r2OhqFFXlwYM7i+iTFdhi8cprd+gcfoLTlMZ2s4U+6YxBiL8SXBWLZreMz8bB/BjNYd
+	4EyvdYfDVJZuEMzPla84s9k/QzBN37c4jLlrBk8SPuTHpLFyWS6rihIn86W62m5OVinkOaxv
+	sCK0frEckSRNXaEP3cJy5EcS1Hna4XBjPg6koukd5whejvgkRrUTtN00x/MVAZSY7pz3ED7G
+	qTC6xdSCfCzwehYm/vwb09RZuq1jAKtGpB4dM6JAmTJXIZHJr0aqM6T5SlleZGqmwoK8pzUX
+	/n5lRbtTN22IIpHIXzDwMVUq5Epy1fkKG6JJTBQoOB7qjQRpkvwCVpX5SJUjZ9U2FELiopOC
+	2/fZZCGVLslmM1g2i1X9bzmkX3ARyiI1a9IfFxRhuo5707sljwPaP7WaomOnE18DfQKT9hvO
+	nD7X/1SVnrK8528UxnfHxKQUJBmGiPHRJzvXDivsjllbQry2ulNYl5ozv7aoFWv3CiOCjC2u
+	8X1P8VZghPRBX6ygK/yZcPuFouIWGRpyeauq3T+q4cZd8ZbrjsYgwtVSSXQ4plJL/gLMc8aZ
+	sAIAAA==
+X-CFilter-Loop: Reflected
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
 
-Arnd Bergmann reported an issue ([1]) where clang compiler (less than
-llvm18) may trigger an error where the stack frame size exceeds the limit=
-.
-I can reproduce the error like below:
-  kernel/bpf/verifier.c:24491:5: error: stack frame size (2552) exceeds l=
-imit (1280) in 'bpf_check'
-      [-Werror,-Wframe-larger-than]
-  kernel/bpf/verifier.c:19921:12: error: stack frame size (1368) exceeds =
-limit (1280) in 'do_check'
-      [-Werror,-Wframe-larger-than]
+Hi all,
 
-Use env->insn_buf for bpf insns instead of putting these insns on the
-stack. This can resolve the above 'bpf_check' error. The 'do_check' error
-will be resolved in the next patch.
+In this version, I'm posting non-controversial patches first since there
+are pending works that should be based on this series so that those can
+be started shortly.  I will post the rest later.
 
-  [1] https://lore.kernel.org/bpf/20250620113846.3950478-1-arnd@kernel.or=
-g/
+The MM subsystem is trying to reduce struct page to a single pointer.
+The first step towards that is splitting struct page by its individual
+users, as has already been done with folio and slab.  This patchset does
+that for netmem which is used for page pools.
 
-Reported-by: Arnd Bergmann <arnd@kernel.org>
-Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
----
- kernel/bpf/verifier.c | 194 ++++++++++++++++++++----------------------
- 1 file changed, 91 insertions(+), 103 deletions(-)
+Matthew Wilcox tried and stopped the same work, you can see in:
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 90e688f81a48..29faef51065d 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -20939,26 +20939,27 @@ static bool insn_is_cond_jump(u8 code)
- static void opt_hard_wire_dead_code_branches(struct bpf_verifier_env *en=
-v)
- {
- 	struct bpf_insn_aux_data *aux_data =3D env->insn_aux_data;
--	struct bpf_insn ja =3D BPF_JMP_IMM(BPF_JA, 0, 0, 0);
-+	struct bpf_insn *ja =3D env->insn_buf;
- 	struct bpf_insn *insn =3D env->prog->insnsi;
- 	const int insn_cnt =3D env->prog->len;
- 	int i;
-=20
-+	*ja =3D BPF_JMP_IMM(BPF_JA, 0, 0, 0);
- 	for (i =3D 0; i < insn_cnt; i++, insn++) {
- 		if (!insn_is_cond_jump(insn->code))
- 			continue;
-=20
- 		if (!aux_data[i + 1].seen)
--			ja.off =3D insn->off;
-+			ja->off =3D insn->off;
- 		else if (!aux_data[i + 1 + insn->off].seen)
--			ja.off =3D 0;
-+			ja->off =3D 0;
- 		else
- 			continue;
-=20
- 		if (bpf_prog_is_offloaded(env->prog->aux))
--			bpf_prog_offload_replace_insn(env, i, &ja);
-+			bpf_prog_offload_replace_insn(env, i, ja);
-=20
--		memcpy(insn, &ja, sizeof(ja));
-+		memcpy(insn, ja, sizeof(*ja));
- 	}
- }
-=20
-@@ -21017,7 +21018,9 @@ static int opt_remove_nops(struct bpf_verifier_en=
-v *env)
- static int opt_subreg_zext_lo32_rnd_hi32(struct bpf_verifier_env *env,
- 					 const union bpf_attr *attr)
- {
--	struct bpf_insn *patch, zext_patch[2], rnd_hi32_patch[4];
-+	struct bpf_insn *patch;
-+	struct bpf_insn *zext_patch =3D env->insn_buf;
-+	struct bpf_insn *rnd_hi32_patch =3D &env->insn_buf[2];
- 	struct bpf_insn_aux_data *aux =3D env->insn_aux_data;
- 	int i, patch_len, delta =3D 0, len =3D env->prog->len;
- 	struct bpf_insn *insns =3D env->prog->insnsi;
-@@ -21195,13 +21198,12 @@ static int convert_ctx_accesses(struct bpf_veri=
-fier_env *env)
-=20
- 		if (env->insn_aux_data[i + delta].nospec) {
- 			WARN_ON_ONCE(env->insn_aux_data[i + delta].alu_state);
--			struct bpf_insn patch[] =3D {
--				BPF_ST_NOSPEC(),
--				*insn,
--			};
-+			struct bpf_insn *patch =3D &insn_buf[0];
-=20
--			cnt =3D ARRAY_SIZE(patch);
--			new_prog =3D bpf_patch_insn_data(env, i + delta, patch, cnt);
-+			*patch++ =3D BPF_ST_NOSPEC();
-+			*patch++ =3D *insn;
-+			cnt =3D patch - insn_buf;
-+			new_prog =3D bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
- 			if (!new_prog)
- 				return -ENOMEM;
-=20
-@@ -21269,13 +21271,12 @@ static int convert_ctx_accesses(struct bpf_veri=
-fier_env *env)
- 			/* nospec_result is only used to mitigate Spectre v4 and
- 			 * to limit verification-time for Spectre v1.
+   https://lore.kernel.org/linux-mm/20230111042214.907030-1-willy@infradead.org/
+
+Mina Almasry already has done a lot fo prerequisite works by luck.  I
+stacked my patches on the top of his work e.i. netmem.
+
+I focused on removing the page pool members in struct page this time,
+not moving the allocation code of page pool from net to mm.  It can be
+done later if needed.
+
+The final patch removing the page pool fields will be submitted once
+all the converting work of page to netmem are done:
+
+   1. converting of libeth_fqe by Tony Nguyen.
+   2. converting of mlx5 by Tariq Toukan.
+   3. converting of prueth_swdata.
+   4. converting of freescale driver.
+
+For our discussion, I'm sharing what the final patch looks like the
+following.
+
+	Byungchul
+--8<--
+commit 1847d9890f798456b21ccb27aac7545303048492
+Author: Byungchul Park <byungchul@sk.com>
+Date:   Wed May 28 20:44:55 2025 +0900
+
+    mm, netmem: remove the page pool members in struct page
+    
+    Now that all the users of the page pool members in struct page have been
+    gone, the members can be removed from struct page.
+    
+    However, since struct netmem_desc still uses the space in struct page,
+    the important offsets should be checked properly, until struct
+    netmem_desc has its own instance from slab.
+    
+    Remove the page pool members in struct page and modify static checkers
+    for the offsets.
+    
+    Signed-off-by: Byungchul Park <byungchul@sk.com>
+
+diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
+index 32ba5126e221..db2fe0d0ebbf 100644
+--- a/include/linux/mm_types.h
++++ b/include/linux/mm_types.h
+@@ -120,17 +120,6 @@ struct page {
  			 */
--			struct bpf_insn patch[] =3D {
--				*insn,
--				BPF_ST_NOSPEC(),
--			};
-+			struct bpf_insn *patch =3D &insn_buf[0];
-=20
--			cnt =3D ARRAY_SIZE(patch);
--			new_prog =3D bpf_patch_insn_data(env, i + delta, patch, cnt);
-+			*patch++ =3D *insn;
-+			*patch++ =3D BPF_ST_NOSPEC();
-+			cnt =3D patch - insn_buf;
-+			new_prog =3D bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
- 			if (!new_prog)
- 				return -ENOMEM;
-=20
-@@ -21945,13 +21946,12 @@ static int do_misc_fixups(struct bpf_verifier_e=
-nv *env)
- 	u16 stack_depth_extra =3D 0;
-=20
- 	if (env->seen_exception && !env->exception_callback_subprog) {
--		struct bpf_insn patch[] =3D {
--			env->prog->insnsi[insn_cnt - 1],
--			BPF_MOV64_REG(BPF_REG_0, BPF_REG_1),
--			BPF_EXIT_INSN(),
+ 			unsigned long private;
+ 		};
+-		struct {	/* page_pool used by netstack */
+-			/**
+-			 * @pp_magic: magic value to avoid recycling non
+-			 * page_pool allocated pages.
+-			 */
+-			unsigned long pp_magic;
+-			struct page_pool *pp;
+-			unsigned long _pp_mapping_pad;
+-			unsigned long dma_addr;
+-			atomic_long_t pp_ref_count;
 -		};
-+		struct bpf_insn *patch =3D &insn_buf[0];
-=20
--		ret =3D add_hidden_subprog(env, patch, ARRAY_SIZE(patch));
-+		*patch++ =3D env->prog->insnsi[insn_cnt - 1];
-+		*patch++ =3D BPF_MOV64_REG(BPF_REG_0, BPF_REG_1);
-+		*patch++ =3D BPF_EXIT_INSN();
-+		ret =3D add_hidden_subprog(env, insn_buf, patch - insn_buf);
- 		if (ret < 0)
- 			return ret;
- 		prog =3D env->prog;
-@@ -21987,20 +21987,18 @@ static int do_misc_fixups(struct bpf_verifier_e=
-nv *env)
- 		    insn->off =3D=3D 1 && insn->imm =3D=3D -1) {
- 			bool is64 =3D BPF_CLASS(insn->code) =3D=3D BPF_ALU64;
- 			bool isdiv =3D BPF_OP(insn->code) =3D=3D BPF_DIV;
--			struct bpf_insn *patchlet;
--			struct bpf_insn chk_and_sdiv[] =3D {
--				BPF_RAW_INSN((is64 ? BPF_ALU64 : BPF_ALU) |
--					     BPF_NEG | BPF_K, insn->dst_reg,
--					     0, 0, 0),
--			};
--			struct bpf_insn chk_and_smod[] =3D {
--				BPF_MOV32_IMM(insn->dst_reg, 0),
--			};
-+			struct bpf_insn *patch =3D &insn_buf[0];
-+
-+			if (isdiv)
-+				*patch++ =3D BPF_RAW_INSN((is64 ? BPF_ALU64 : BPF_ALU) |
-+							BPF_NEG | BPF_K, insn->dst_reg,
-+							0, 0, 0);
-+			else
-+				*patch++ =3D BPF_MOV32_IMM(insn->dst_reg, 0);
-=20
--			patchlet =3D isdiv ? chk_and_sdiv : chk_and_smod;
--			cnt =3D isdiv ? ARRAY_SIZE(chk_and_sdiv) : ARRAY_SIZE(chk_and_smod);
-+			cnt =3D patch - insn_buf;
-=20
--			new_prog =3D bpf_patch_insn_data(env, i + delta, patchlet, cnt);
-+			new_prog =3D bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
- 			if (!new_prog)
- 				return -ENOMEM;
-=20
-@@ -22019,83 +22017,73 @@ static int do_misc_fixups(struct bpf_verifier_e=
-nv *env)
- 			bool isdiv =3D BPF_OP(insn->code) =3D=3D BPF_DIV;
- 			bool is_sdiv =3D isdiv && insn->off =3D=3D 1;
- 			bool is_smod =3D !isdiv && insn->off =3D=3D 1;
--			struct bpf_insn *patchlet;
--			struct bpf_insn chk_and_div[] =3D {
--				/* [R,W]x div 0 -> 0 */
--				BPF_RAW_INSN((is64 ? BPF_JMP : BPF_JMP32) |
--					     BPF_JNE | BPF_K, insn->src_reg,
--					     0, 2, 0),
--				BPF_ALU32_REG(BPF_XOR, insn->dst_reg, insn->dst_reg),
--				BPF_JMP_IMM(BPF_JA, 0, 0, 1),
--				*insn,
--			};
--			struct bpf_insn chk_and_mod[] =3D {
--				/* [R,W]x mod 0 -> [R,W]x */
--				BPF_RAW_INSN((is64 ? BPF_JMP : BPF_JMP32) |
--					     BPF_JEQ | BPF_K, insn->src_reg,
--					     0, 1 + (is64 ? 0 : 1), 0),
--				*insn,
--				BPF_JMP_IMM(BPF_JA, 0, 0, 1),
--				BPF_MOV32_REG(insn->dst_reg, insn->dst_reg),
--			};
--			struct bpf_insn chk_and_sdiv[] =3D {
-+			struct bpf_insn *patch =3D &insn_buf[0];
-+
-+			if (is_sdiv) {
- 				/* [R,W]x sdiv 0 -> 0
- 				 * LLONG_MIN sdiv -1 -> LLONG_MIN
- 				 * INT_MIN sdiv -1 -> INT_MIN
- 				 */
--				BPF_MOV64_REG(BPF_REG_AX, insn->src_reg),
--				BPF_RAW_INSN((is64 ? BPF_ALU64 : BPF_ALU) |
--					     BPF_ADD | BPF_K, BPF_REG_AX,
--					     0, 0, 1),
--				BPF_RAW_INSN((is64 ? BPF_JMP : BPF_JMP32) |
--					     BPF_JGT | BPF_K, BPF_REG_AX,
--					     0, 4, 1),
--				BPF_RAW_INSN((is64 ? BPF_JMP : BPF_JMP32) |
--					     BPF_JEQ | BPF_K, BPF_REG_AX,
--					     0, 1, 0),
--				BPF_RAW_INSN((is64 ? BPF_ALU64 : BPF_ALU) |
--					     BPF_MOV | BPF_K, insn->dst_reg,
--					     0, 0, 0),
-+				*patch++ =3D BPF_MOV64_REG(BPF_REG_AX, insn->src_reg);
-+				*patch++ =3D BPF_RAW_INSN((is64 ? BPF_ALU64 : BPF_ALU) |
-+							BPF_ADD | BPF_K, BPF_REG_AX,
-+							0, 0, 1);
-+				*patch++ =3D BPF_RAW_INSN((is64 ? BPF_JMP : BPF_JMP32) |
-+							BPF_JGT | BPF_K, BPF_REG_AX,
-+							0, 4, 1);
-+				*patch++ =3D BPF_RAW_INSN((is64 ? BPF_JMP : BPF_JMP32) |
-+							BPF_JEQ | BPF_K, BPF_REG_AX,
-+							0, 1, 0);
-+				*patch++ =3D BPF_RAW_INSN((is64 ? BPF_ALU64 : BPF_ALU) |
-+							BPF_MOV | BPF_K, insn->dst_reg,
-+							0, 0, 0);
- 				/* BPF_NEG(LLONG_MIN) =3D=3D -LLONG_MIN =3D=3D LLONG_MIN */
--				BPF_RAW_INSN((is64 ? BPF_ALU64 : BPF_ALU) |
--					     BPF_NEG | BPF_K, insn->dst_reg,
--					     0, 0, 0),
--				BPF_JMP_IMM(BPF_JA, 0, 0, 1),
--				*insn,
--			};
--			struct bpf_insn chk_and_smod[] =3D {
-+				*patch++ =3D BPF_RAW_INSN((is64 ? BPF_ALU64 : BPF_ALU) |
-+							BPF_NEG | BPF_K, insn->dst_reg,
-+							0, 0, 0);
-+				*patch++ =3D BPF_JMP_IMM(BPF_JA, 0, 0, 1);
-+				*patch++ =3D *insn;
-+				cnt =3D patch - insn_buf;
-+			} else if (is_smod) {
- 				/* [R,W]x mod 0 -> [R,W]x */
- 				/* [R,W]x mod -1 -> 0 */
--				BPF_MOV64_REG(BPF_REG_AX, insn->src_reg),
--				BPF_RAW_INSN((is64 ? BPF_ALU64 : BPF_ALU) |
--					     BPF_ADD | BPF_K, BPF_REG_AX,
--					     0, 0, 1),
--				BPF_RAW_INSN((is64 ? BPF_JMP : BPF_JMP32) |
--					     BPF_JGT | BPF_K, BPF_REG_AX,
--					     0, 3, 1),
--				BPF_RAW_INSN((is64 ? BPF_JMP : BPF_JMP32) |
--					     BPF_JEQ | BPF_K, BPF_REG_AX,
--					     0, 3 + (is64 ? 0 : 1), 1),
--				BPF_MOV32_IMM(insn->dst_reg, 0),
--				BPF_JMP_IMM(BPF_JA, 0, 0, 1),
--				*insn,
--				BPF_JMP_IMM(BPF_JA, 0, 0, 1),
--				BPF_MOV32_REG(insn->dst_reg, insn->dst_reg),
--			};
--
--			if (is_sdiv) {
--				patchlet =3D chk_and_sdiv;
--				cnt =3D ARRAY_SIZE(chk_and_sdiv);
--			} else if (is_smod) {
--				patchlet =3D chk_and_smod;
--				cnt =3D ARRAY_SIZE(chk_and_smod) - (is64 ? 2 : 0);
-+				*patch++ =3D BPF_MOV64_REG(BPF_REG_AX, insn->src_reg);
-+				*patch++ =3D BPF_RAW_INSN((is64 ? BPF_ALU64 : BPF_ALU) |
-+							BPF_ADD | BPF_K, BPF_REG_AX,
-+							0, 0, 1);
-+				*patch++ =3D BPF_RAW_INSN((is64 ? BPF_JMP : BPF_JMP32) |
-+							BPF_JGT | BPF_K, BPF_REG_AX,
-+							0, 3, 1);
-+				*patch++ =3D BPF_RAW_INSN((is64 ? BPF_JMP : BPF_JMP32) |
-+							BPF_JEQ | BPF_K, BPF_REG_AX,
-+							0, 3 + (is64 ? 0 : 1), 1);
-+				*patch++ =3D BPF_MOV32_IMM(insn->dst_reg, 0);
-+				*patch++ =3D BPF_JMP_IMM(BPF_JA, 0, 0, 1);
-+				*patch++ =3D *insn;
-+				*patch++ =3D BPF_JMP_IMM(BPF_JA, 0, 0, 1);
-+				*patch++ =3D BPF_MOV32_REG(insn->dst_reg, insn->dst_reg);
-+				cnt =3D (patch - insn_buf) - (is64 ? 2 : 0);
-+			} else if (isdiv) {
-+				/* [R,W]x div 0 -> 0 */
-+				*patch++ =3D BPF_RAW_INSN((is64 ? BPF_JMP : BPF_JMP32) |
-+							BPF_JNE | BPF_K, insn->src_reg,
-+							0, 2, 0);
-+				*patch++ =3D BPF_ALU32_REG(BPF_XOR, insn->dst_reg, insn->dst_reg);
-+				*patch++ =3D BPF_JMP_IMM(BPF_JA, 0, 0, 1);
-+				*patch++ =3D *insn;
-+				cnt =3D patch - insn_buf;
- 			} else {
--				patchlet =3D isdiv ? chk_and_div : chk_and_mod;
--				cnt =3D isdiv ? ARRAY_SIZE(chk_and_div) :
--					      ARRAY_SIZE(chk_and_mod) - (is64 ? 2 : 0);
-+				/* [R,W]x mod 0 -> [R,W]x */
-+				*patch++ =3D BPF_RAW_INSN((is64 ? BPF_JMP : BPF_JMP32) |
-+							BPF_JEQ | BPF_K, insn->src_reg,
-+							0, 1 + (is64 ? 0 : 1), 0);
-+				*patch++ =3D *insn;
-+				*patch++ =3D BPF_JMP_IMM(BPF_JA, 0, 0, 1);
-+				*patch++ =3D BPF_MOV32_REG(insn->dst_reg, insn->dst_reg);
-+				cnt =3D (patch - insn_buf) - (is64 ? 2 : 0);
- 			}
-=20
--			new_prog =3D bpf_patch_insn_data(env, i + delta, patchlet, cnt);
-+			new_prog =3D bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
- 			if (!new_prog)
- 				return -ENOMEM;
-=20
---=20
-2.47.1
+ 		struct {	/* Tail pages of compound page */
+ 			unsigned long compound_head;	/* Bit zero is set */
+ 		};
+diff --git a/include/net/netmem.h b/include/net/netmem.h
+index 8f354ae7d5c3..3414f184d018 100644
+--- a/include/net/netmem.h
++++ b/include/net/netmem.h
+@@ -42,11 +42,8 @@ struct netmem_desc {
+ 	static_assert(offsetof(struct page, pg) == \
+ 		      offsetof(struct netmem_desc, desc))
+ NETMEM_DESC_ASSERT_OFFSET(flags, _flags);
+-NETMEM_DESC_ASSERT_OFFSET(pp_magic, pp_magic);
+-NETMEM_DESC_ASSERT_OFFSET(pp, pp);
+-NETMEM_DESC_ASSERT_OFFSET(_pp_mapping_pad, _pp_mapping_pad);
+-NETMEM_DESC_ASSERT_OFFSET(dma_addr, dma_addr);
+-NETMEM_DESC_ASSERT_OFFSET(pp_ref_count, pp_ref_count);
++NETMEM_DESC_ASSERT_OFFSET(lru, pp_magic);
++NETMEM_DESC_ASSERT_OFFSET(mapping, _pp_mapping_pad);
+ #undef NETMEM_DESC_ASSERT_OFFSET
+ 
+ /*
+---
+Changes from v7 (no actual updates):
+	1. Exclude "netmem: introduce struct netmem_desc mirroring
+	   struct page" that might be controversial.
+	2. Exclude "netmem: introduce a netmem API,
+	   virt_to_head_netmem()" since there are no users.
+
+Changes from v6 (no actual updates):
+	1. Rebase on net-next/main as of Jun 25.
+	2. Supplement a comment describing struct net_iov.
+	3. Exclude a controversial patch, "page_pool: access ->pp_magic
+	   through struct netmem_desc in page_pool_page_is_pp()".
+	4. Exclude "netmem: remove __netmem_get_pp()" since the API
+	   started to be used again by libeth.
+
+Changes from v5 (no actual updates):
+	1. Rebase on net-next/main as of Jun 20.
+	2. Add given 'Reviewed-by's and 'Acked-by's, thanks to all.
+	3. Add missing cc's.
+
+Changes from v4:
+	1. Add given 'Reviewed-by's, thanks to all.
+	2. Exclude potentially controversial patches.
+
+Changes from v3:
+	1. Relocates ->owner and ->type of net_iov out of netmem_desc
+	   and make them be net_iov specific.
+	2. Remove __force when casting struct page to struct netmem_desc.
+
+Changes from v2:
+	1. Introduce a netmem API, virt_to_head_netmem(), and use it
+	   when it's needed.
+	2. Introduce struct netmem_desc as a new struct and union'ed
+	   with the existing fields in struct net_iov.
+	3. Make page_pool_page_is_pp() access ->pp_magic through struct
+	   netmem_desc instead of struct page.
+	4. Move netmem alloc APIs from include/net/netmem.h to
+	   net/core/netmem_priv.h.
+	5. Apply trivial feedbacks, thanks to Mina, Pavel, and Toke.
+	6. Add given 'Reviewed-by's, thanks to Mina.
+
+Changes from v1:
+	1. Rebase on net-next's main as of May 26.
+	2. Check checkpatch.pl, feedbacked by SJ Park.
+	3. Add converting of page to netmem in mt76.
+	4. Revert 'mlx5: use netmem descriptor and APIs for page pool'
+	   since it's on-going by Tariq Toukan.  I will wait for his
+	   work to be done.
+	5. Revert 'page_pool: use netmem APIs to access page->pp_magic
+	   in page_pool_page_is_pp()' since we need more discussion.
+	6. Revert 'mm, netmem: remove the page pool members in struct
+	   page' since there are some prerequisite works to remove the
+	   page pool fields from struct page.  I can submit this patch
+	   separatedly later.
+	7. Cancel relocating a page pool member in struct page.
+	8. Modify static assert for offests and size of struct
+	   netmem_desc.
+
+Changes from rfc:
+	1. Rebase on net-next's main branch.
+	   https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/
+	2. Fix a build error reported by kernel test robot.
+	   https://lore.kernel.org/all/202505100932.uzAMBW1y-lkp@intel.com/
+	3. Add given 'Reviewed-by's, thanks to Mina and Ilias.
+	4. Do static_assert() on the size of struct netmem_desc instead
+	   of placing place-holder in struct page, feedbacked by
+	   Matthew.
+	5. Do struct_group_tagged(netmem_desc) on struct net_iov instead
+	   of wholly renaming it to strcut netmem_desc, feedbacked by
+	   Mina and Pavel.
+
+Byungchul Park (5):
+  page_pool: rename page_pool_return_page() to page_pool_return_netmem()
+  page_pool: rename __page_pool_release_page_dma() to
+    __page_pool_release_netmem_dma()
+  page_pool: rename __page_pool_alloc_pages_slow() to
+    __page_pool_alloc_netmems_slow()
+  netmem: use _Generic to cover const casting for page_to_netmem()
+  page_pool: make page_pool_get_dma_addr() just wrap
+    page_pool_get_dma_addr_netmem()
+
+ include/net/netmem.h            |  7 +++----
+ include/net/page_pool/helpers.h |  7 +------
+ net/core/page_pool.c            | 36 ++++++++++++++++-----------------
+ 3 files changed, 22 insertions(+), 28 deletions(-)
+
+
+base-commit: 8dacfd92dbefee829ca555a860e86108fdd1d55b
+-- 
+2.17.1
 
