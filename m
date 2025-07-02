@@ -1,152 +1,80 @@
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1229230BE4
-	for <bpf@vger.kernel.org>; Wed,  2 Jul 2025 21:03:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.145.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 137DD22FAC3
+	for <bpf@vger.kernel.org>; Wed,  2 Jul 2025 22:04:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.70
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751490214; cv=none; b=S/XJZCWSRiBmNAZuFJTaUc3RiKphirtDcXc2JKeai0XdSSLS5OMTkpnw9sKIMcbQpv1sDSuIU78TZ3wbN380OqIZYenii/TdVywMKoysZ7QGbZUc5FObivZ6yjZ410N92GYtINtCMJOoWhTGlUqwoRJ8fFNBTLgakMa4tPKQBYc=
+	t=1751493845; cv=none; b=lJnoAFdBAWinx63nEjeRgq9R3rYTcpMo7oAobMUrk+g3KiuJT/8G3Ey71qOwgX5mSbKm3DTtUfUoVLlatc/HwlsOPsxStXOjZSrObyKUuVVxjaP8YOmpt9jqdyyo7PHIhnpp7tKsYTDQHNwZjXvPi8YoqphSbX++obrYOGGayaw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751490214; c=relaxed/simple;
-	bh=sHAQN1XO8BYeiy21xEHSvSLLE3PKM8Z6VdTX7v8Grbw=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=EbqkZpRAPjOV+wekjv7Z4IIyzT/uDey2hDPPkbZFdqpp13wOUd89/BmFaSHmCOQfRpKLPc/BYC2UprplWGHU3itlsRYhLPRGN9Gq75Cx2OIKoAl3I6rNlD6xgcwraDGTMiFrdYEfcEBeTVB5kJGIdLcIef0H/n6cr9WREE0CruA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=SNthrAzI; arc=none smtp.client-ip=67.231.145.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="SNthrAzI"
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 562Hwr83021480
-	for <bpf@vger.kernel.org>; Wed, 2 Jul 2025 14:03:32 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:to; s=
-	s2048-2025-q2; bh=7JYxZO6OUZgGaTepe2ytp+rULeCYWF+it19fJxFBRAA=; b=
-	SNthrAzIVGnqxNsrfUPmi4S9xOiMJPUg+X+hvudd1Rr42SNhZAYmy/UTrUCQzlCR
-	s12BqIcYdJGicoKTg3u+eg4mfkrjSHO64ReJmKQnCz5HFKHyLHomz0ftb6T3bpsb
-	sEgclHEvUcGP5AVh8EJ35qt4tFDTzOyc/joKpYiDNjsHeM+VzTD4WQaNgMQ34DZl
-	epJu0w46cHHVtICIe1yhk2sNDZqRfvKO5hVDkeH8dokEJOB+aT2DL54VjzoFoTfH
-	snBkAE10JDXcBsuVqlkVz9BBEUyAuEscSJcL2VIVnVYxZngq8K8DsCoG+KUL5kJ+
-	JH5L1HPpPSuIjWP848Hz3A==
-Received: from mail.thefacebook.com ([163.114.134.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 47myx2wdax-4
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Wed, 02 Jul 2025 14:03:31 -0700 (PDT)
-Received: from twshared78382.04.prn6.facebook.com (2620:10d:c085:208::7cb7) by
- mail.thefacebook.com (2620:10d:c08b:78::c78f) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.2.1748.24; Wed, 2 Jul 2025 21:03:29 +0000
-Received: by devvm7589.cco0.facebook.com (Postfix, from userid 669379)
-	id 7EDF61D1F551; Wed,  2 Jul 2025 14:03:15 -0700 (PDT)
-From: Ihor Solodrai <isolodrai@meta.com>
-To: <bpf@vger.kernel.org>
-CC: <andrii@kernel.org>, <ast@kernel.org>, <eddyz87@gmail.com>,
-        <mykyta.yatsenko5@gmail.com>, <mykolal@fb.com>, <kernel-team@meta.com>
-Subject: [PATCH bpf-next v4 1/2] bpf: add bpf_dynptr_memset() kfunc
-Date: Wed, 2 Jul 2025 14:03:08 -0700
-Message-ID: <20250702210309.3115903-2-isolodrai@meta.com>
-X-Mailer: git-send-email 2.47.1
-In-Reply-To: <20250702210309.3115903-1-isolodrai@meta.com>
-References: <20250702210309.3115903-1-isolodrai@meta.com>
-Reply-To: <ihor.solodrai@linux.dev>
+	s=arc-20240116; t=1751493845; c=relaxed/simple;
+	bh=SsfceBP+qhOoMo7OoM5UWUZ1eymVxtTJuiLiM1pfvGI=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=RpqP9lDrEJ8If7X3jfwzSdKUmqszPt2lgp5bD5roAdxc9sQehVabs5K8vdJaLZoJm9l9dD8RsDv5gUOWC7mhw2t24jycYXILHObREPJ0p9EGP+71xzuckChKdk+2aXUhuI1KlI56jZe9rPqXxlJfWdT/d5lQA9TDsS1aImNy5ec=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.70
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f70.google.com with SMTP id ca18e2360f4ac-86a5def8869so773622939f.0
+        for <bpf@vger.kernel.org>; Wed, 02 Jul 2025 15:04:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751493843; x=1752098643;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=n/J03lRbzuvB4PtTp7I4ZDRquz2XgnWn7PW50AxA3/A=;
+        b=hSuP8uAlsZCeKweZkqi8GbQbs7TPLICHQokmeXkBODL3xnUCMHXze8zTfpsUdF6ORP
+         c6pkmC2IA6C3AtdonP08DaCHXH7reqTf2ZYXvD9lgjOPp7P0SaQUyY1dqv+jNLS/ToLA
+         7HUhgG2hj5qokpQZPwLdd2www1YXzFI8Nv3fYfm2RIrgnQorHrHGMhD7UJ7hc/Y9Qpk3
+         CtQ3Wd9ZDIp8iu93mpU5FoHO+1iXeyKH1Ba2ZqFhkl3C0AerzRkjt0Dl20W1P5ZckW4a
+         T7TOMUoBkoXNk4EKjJ8oWjEJLARNYgRu1cgwI+RLYLa1HDf0WnhM0e96JnMdlPFk+Zz2
+         lzQg==
+X-Forwarded-Encrypted: i=1; AJvYcCUFIPHJW6CJZYgKnve9gEGz4Pjkw6YhDJTgAUrTTAYCzJH0VPwyNUb+1rmtMW1BdUSaXVU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzJrmoIgPeHNn+yvoonho5yi0FgfglpeG1avE5v1OQNBV3HvieZ
+	Yct4FtjMq9w8gQlaWU+k45ToExxhmPSqFb5Bm5TIgz192Afx0fWgDbVJc9kJDsh6lZs8RPtSVri
+	6BWuqu/rR3AnH+ItAwnbpMIACj0z29g0eKgkiAVEirUOKcANQAcidecT61ZY=
+X-Google-Smtp-Source: AGHT+IEw/ZHDnLHRk/xRKLu4Ya2e0GjrHeyDhj/YYErj5HvA2TZDeohNuR8anf7y3BU+aQdE712Xkz53vyUBKu1Q4hNP8ysjci3Y
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Authority-Analysis: v=2.4 cv=AZOxH2XG c=1 sm=1 tr=0 ts=68659ea3 cx=c_pps a=CB4LiSf2rd0gKozIdrpkBw==:117 a=CB4LiSf2rd0gKozIdrpkBw==:17 a=Wb1JkmetP80A:10 a=VabnemYjAAAA:8 a=09Va2MswjQcXjQzM8gUA:9 a=gKebqoRLp9LExxC7YDUY:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzAyMDE3NCBTYWx0ZWRfXy2prYdnQK7Oi bVxpA0Q/Dg1zNRNaqklgApGO3D6RJtYY2XWGjAmHFoBSvucKu0uSPmQuPXn61m/oqsHnslhW/4O 8Fi2Bu5icNfMMvfRRnyK5PJ1P4DbC5vqmFBMuTlVw2xKKsf38/b7fQMFwGt7NamHBz2TcKx5/He
- utwEpG56AEW3mIxxdY6pHzix8qzJVKMtHz3eTwFSYP2r1ciAVyNyQnizHJc6D9xlKdAx/aZb2f8 mDnnqAXfypt2zpfGnQy4HCiYMI1LC/e8MrZ88yjVn1n/KK3WgGMToFrgfODjKFJOJV8EYecu/Nu FoRIW2ihG9tZ6t+P37Ixq+IsZsXrKE1g/vLqnIC+4ipbD86Q3iWTxd4yizmNUG7pp8gIAa9DEsH
- +pBY9T/ouYQWQ0RRCzyKjA0hHSb1Hs/zuaCl8a02YjWuRlDqA8Q74xcP3f+zEqlbccVXLXsW
-X-Proofpoint-GUID: kF7wHbN8CZA-YDo_RXVRC_Oq39Bkn6L7
-X-Proofpoint-ORIG-GUID: kF7wHbN8CZA-YDo_RXVRC_Oq39Bkn6L7
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
- definitions=2025-07-02_04,2025-07-02_04,2025-03-28_01
+X-Received: by 2002:a05:6e02:1c0c:b0:3df:5314:1b88 with SMTP id
+ e9e14a558f8ab-3e05c324012mr16573595ab.15.1751493843172; Wed, 02 Jul 2025
+ 15:04:03 -0700 (PDT)
+Date: Wed, 02 Jul 2025 15:04:03 -0700
+In-Reply-To: <686491d6.a70a0220.3b7e22.20ea.GAE@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <6865acd3.a70a0220.2b31f5.0005.GAE@google.com>
+Subject: Re: [syzbot] [bpf?] WARNING in check_helper_call
+From: syzbot <syzbot+69014a227f8edad4d8c6@syzkaller.appspotmail.com>
+To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
+	daniel@iogearbox.net, eddyz87@gmail.com, haoluo@google.com, 
+	john.fastabend@gmail.com, jolsa@kernel.org, kpsingh@kernel.org, 
+	linux-kernel@vger.kernel.org, martin.lau@linux.dev, netdev@vger.kernel.org, 
+	paul.chaignon@gmail.com, sdf@fomichev.me, song@kernel.org, 
+	syzkaller-bugs@googlegroups.com, yonghong.song@linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-Currently there is no straightforward way to fill dynptr memory with a
-value (most commonly zero). One can do it with bpf_dynptr_write(), but
-a temporary buffer is necessary for that.
+syzbot has bisected this issue to:
 
-Implement bpf_dynptr_memset() - an analogue of memset() from libc.
+commit 0df1a55afa832f463f9ad68ddc5de92230f1bc8a
+Author: Paul Chaignon <paul.chaignon@gmail.com>
+Date:   Tue Jul 1 18:36:15 2025 +0000
 
-Signed-off-by: Ihor Solodrai <isolodrai@meta.com>
----
- kernel/bpf/helpers.c | 47 ++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 47 insertions(+)
+    bpf: Warn on internal verifier errors
 
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index f48fa3fe8dec..5269381d6d3d 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -2907,6 +2907,52 @@ __bpf_kfunc int bpf_dynptr_copy(struct bpf_dynptr =
-*dst_ptr, u32 dst_off,
- 	return 0;
- }
-=20
-+/**
-+ * bpf_dynptr_memset() - Fill dynptr memory with a constant byte.
-+ * @p: Destination dynptr - where data will be filled
-+ * @offset: Offset into the dynptr to start filling from
-+ * @size: Number of bytes to fill
-+ * @val: Constant byte to fill the memory with
-+ *
-+ * Fills the @size bytes of the memory area pointed to by @p
-+ * at @offset with the constant byte @val.
-+ * Returns 0 on success; negative error, otherwise.
-+ */
-+ __bpf_kfunc int bpf_dynptr_memset(struct bpf_dynptr *p, u32 offset, u32=
- size, u8 val)
-+ {
-+	struct bpf_dynptr_kern *ptr =3D (struct bpf_dynptr_kern *)p;
-+	u32 chunk_sz, write_off;
-+	char buf[256];
-+	void* slice;
-+	int err;
-+
-+	slice =3D bpf_dynptr_slice_rdwr(p, offset, NULL, size);
-+	if (likely(slice)) {
-+		memset(slice, val, size);
-+		return 0;
-+	}
-+
-+	if (__bpf_dynptr_is_rdonly(ptr))
-+		return -EINVAL;
-+
-+	err =3D bpf_dynptr_check_off_len(ptr, offset, size);
-+	if (err)
-+		return err;
-+
-+	/* Non-linear data under the dynptr, write from a local buffer */
-+	chunk_sz =3D min_t(u32, sizeof(buf), size);
-+	memset(buf, val, chunk_sz);
-+
-+	for (write_off =3D 0; write_off < size; write_off +=3D chunk_sz) {
-+		chunk_sz =3D min_t(u32, sizeof(buf), size - write_off);
-+		err =3D __bpf_dynptr_write(ptr, offset + write_off, buf, chunk_sz, 0);
-+		if (err)
-+			return err;
-+	}
-+
-+	return 0;
-+}
-+
- __bpf_kfunc void *bpf_cast_to_kern_ctx(void *obj)
- {
- 	return obj;
-@@ -3735,6 +3781,7 @@ BTF_ID_FLAGS(func, bpf_dynptr_is_rdonly)
- BTF_ID_FLAGS(func, bpf_dynptr_size)
- BTF_ID_FLAGS(func, bpf_dynptr_clone)
- BTF_ID_FLAGS(func, bpf_dynptr_copy)
-+BTF_ID_FLAGS(func, bpf_dynptr_memset)
- #ifdef CONFIG_NET
- BTF_ID_FLAGS(func, bpf_modify_return_test_tp)
- #endif
---=20
-2.47.1
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=155a848c580000
+start commit:   cce3fee729ee selftests/bpf: Enable dynptr/test_probe_read_..
+git tree:       bpf-next
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=175a848c580000
+console output: https://syzkaller.appspot.com/x/log.txt?x=135a848c580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=79da270cec5ffd65
+dashboard link: https://syzkaller.appspot.com/bug?extid=69014a227f8edad4d8c6
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=144053d4580000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13d45770580000
 
+Reported-by: syzbot+69014a227f8edad4d8c6@syzkaller.appspotmail.com
+Fixes: 0df1a55afa83 ("bpf: Warn on internal verifier errors")
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
