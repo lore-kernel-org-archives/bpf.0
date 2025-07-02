@@ -1,84 +1,77 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from 66-220-144-179.mail-mxout.facebook.com (66-220-144-179.mail-mxout.facebook.com [66.220.144.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80F552FF47B;
-	Wed,  2 Jul 2025 17:10:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E52B327A907
+	for <bpf@vger.kernel.org>; Wed,  2 Jul 2025 17:11:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751476229; cv=none; b=GgDBDEiTmpz7/yrkb69WCyizIBdZxGYtffHrZbVoMfDnVz47YbfNwHBgYAXs53NUHuPyFFgSbMXGOki3Ytqij2WiQDBnhaiN3SNocNMkeHH1QC6a/yTRgGOioerwubioMjwX83Xm5rZGg9XfFYOhsZil/2hTSyww969H08ZaP3I=
+	t=1751476308; cv=none; b=rUIECfT7P9FRabAA/+On09r63SBgykKyV8UDso1iDFd3wVrnFp18p8rVuUZhOFVY9g722YDssC8+1eSasX6CESI6sd+D478qFeWPzXpb4JLkZ2jSOUyXQX3/VdSxepnNWBvwzKvAT5fh7FQ6S87uZ7i5MrknLODAG4+7DUU9jT0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751476229; c=relaxed/simple;
-	bh=+kwbqJ0NQ6+/Ia1UxvkxCi/+QKYvGzcps3yND1R8ih8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hUmBpNiWoaSF5kOPoiV4kwr+3hBkwITZXHowX/Bbpf3AfQSI1j5X2h/XAdz7EnM04UlXyACXu7Gzkhfa0ViDKkfJCTR92xxnPuSrTEivpDzaXAbNgmrM80nTfnIOxUWxKEbYjYvwz/cUNJ87+imaP4WxM6VKvTmkpoPUCogGaAU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f3stI/pz; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f3stI/pz"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61D0BC4CEE7;
-	Wed,  2 Jul 2025 17:10:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751476229;
-	bh=+kwbqJ0NQ6+/Ia1UxvkxCi/+QKYvGzcps3yND1R8ih8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=f3stI/pzfWwQFAil0f1V55CQJXgC8m7OG1upghb9IwksQeG0e4wu6KcPSgaF4L3JO
-	 spXlloArOmnq7DM/UYhlGCKtwVqWTRAFygjbZwPt5iZVZMuVOgoBpSjiEdTZC0rfbe
-	 1FIGyekhJgdNlhlN8JSm9Xk93hFPv7fJKZbaiei+tzSUibZ+IXgf5Q3gNfqJxyl5VN
-	 HFAg8+xAinGTxbs6jRKnuJ+3fjRZaYXbJIbwUCYBBO8UflhhZIWxIK4h/dnS3SrtIp
-	 meIsrxR3mT1IQ5zS+soZy/RHGuDoUztFRG2tFpC/jtNrwm2JFNGE2T0lycsnZJ+nbu
-	 o3xP2WhNks51Q==
-Date: Wed, 2 Jul 2025 10:10:25 -0700
-From: Namhyung Kim <namhyung@kernel.org>
-To: Sam James <sam@gentoo.org>
-Cc: fweimer@redhat.com, akpm@linux-foundation.org, andrii@kernel.org,
-	axboe@kernel.dk, beaub@linux.microsoft.com, bpf@vger.kernel.org,
-	indu.bhagat@oracle.com, jemarch@gnu.org, jolsa@kernel.org,
-	jpoimboe@kernel.org, jremus@linux.ibm.com,
-	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-	mathieu.desnoyers@efficios.com, mhiramat@kernel.org,
-	mingo@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
-	tglx@linutronix.de, torvalds@linux-foundation.org, x86@kernel.org
-Subject: Re: [PATCH v11 00/14] unwind_user: x86: Deferred unwinding
- infrastructure
-Message-ID: <aGVoAT6asYLUx4He@google.com>
-References: <878ql9mlzn.fsf@oldenburg.str.redhat.com>
- <87wm8qlsuk.fsf@gentoo.org>
+	s=arc-20240116; t=1751476308; c=relaxed/simple;
+	bh=rP+ltmIGkW0TR396EDm/9x6Udvow20e1FxA+fvfYSP0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=GwPZi8jxlsHxbreUEQt2AfP7UAvAahccABDmulFwasIyCh/DORc9hJLqBixjX71PVG7FO25OoZ5tatALqRlsbsq0sVsvguntVnj4hOM4tsbj5wUj9zkhO8zp9jtS0aOUebJ9Lu8MwpCaL/BGRSUUGB6CkaDpt9MKCjGz2/XRiGY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
+Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
+	id 5EB65ABB2E56; Wed,  2 Jul 2025 10:11:39 -0700 (PDT)
+From: Yonghong Song <yonghong.song@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	kernel-team@fb.com,
+	Martin KaFai Lau <martin.lau@kernel.org>
+Subject: [PATCH bpf-next v2 1/3] bpf: Simplify assignment to struct bpf_insn pointer in do_misc_fixups()
+Date: Wed,  2 Jul 2025 10:11:39 -0700
+Message-ID: <20250702171139.2370585-1-yonghong.song@linux.dev>
+X-Mailer: git-send-email 2.47.1
+In-Reply-To: <20250702171134.2370432-1-yonghong.song@linux.dev>
+References: <20250702171134.2370432-1-yonghong.song@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <87wm8qlsuk.fsf@gentoo.org>
+Content-Transfer-Encoding: quoted-printable
 
-Hello,
+In verifier.c, the following code patterns (in two places)
+  struct bpf_insn *patch =3D &insn_buf[0];
+can be simplified to
+  struct bpf_insn *patch =3D insn_buf;
+which is easier to understand.
 
-On Wed, Jul 02, 2025 at 12:44:51PM +0100, Sam James wrote:
-> I started to play around with this properly last night and it was
-> straightforward, fortunately.
-> 
-> Did initially attempt to backport to 6.15 but it was a victim of some
-> mm refactoring and didn't seem worth to carry on w/ that route.
-> 
-> Started a rough page with notes for myself (but corrections & such
-> welcome) at https://wiki.gentoo.org/wiki/Project:Toolchain/SFrame but
-> honestly, it's immediately obvious (and beautiful) when it's working
-> correctly. I've used Namhyung Kim's example from this thread but you can
-> see it easily with `perf top -g` too.
+Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+---
+ kernel/bpf/verifier.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-I've looked at the page but it doesn't seem to work well unfortunately.
-The working case has the symbols correct but the overheads are same.
-It should have more 'Children' overhead than 'Self' like in the broken
-case because 'children = self + callchain'.
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 52e36fd23f40..8b0a25851089 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -22102,7 +22102,7 @@ static int do_misc_fixups(struct bpf_verifier_env=
+ *env)
+ 		if (BPF_CLASS(insn->code) =3D=3D BPF_LDX &&
+ 		    (BPF_MODE(insn->code) =3D=3D BPF_PROBE_MEM ||
+ 		     BPF_MODE(insn->code) =3D=3D BPF_PROBE_MEMSX)) {
+-			struct bpf_insn *patch =3D &insn_buf[0];
++			struct bpf_insn *patch =3D insn_buf;
+ 			u64 uaddress_limit =3D bpf_arch_uaddress_limit();
+=20
+ 			if (!uaddress_limit)
+@@ -22153,7 +22153,7 @@ static int do_misc_fixups(struct bpf_verifier_env=
+ *env)
+ 		    insn->code =3D=3D (BPF_ALU64 | BPF_SUB | BPF_X)) {
+ 			const u8 code_add =3D BPF_ALU64 | BPF_ADD | BPF_X;
+ 			const u8 code_sub =3D BPF_ALU64 | BPF_SUB | BPF_X;
+-			struct bpf_insn *patch =3D &insn_buf[0];
++			struct bpf_insn *patch =3D insn_buf;
+ 			bool issrc, isneg, isimm;
+ 			u32 off_reg;
+=20
+--=20
+2.47.1
 
-Thanks,
-Namhyung
-
-> 
-> In one of the commit messages in the perf series, Steven also gave `perf
-> record -g -vv true` which was convenient for making sure it's correctly
-> discovered deferred unwinding support.
-> 
-> I plan on doing measurements next and doing some more playing once I've
-> built more userland with it.
