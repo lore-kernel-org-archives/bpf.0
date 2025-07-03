@@ -1,330 +1,106 @@
-Received: from 69-171-232-181.mail-mxout.facebook.com (69-171-232-181.mail-mxout.facebook.com [69.171.232.181])
+Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F4D52E7657
-	for <bpf@vger.kernel.org>; Thu,  3 Jul 2025 14:11:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70ADF1AF0B4;
+	Thu,  3 Jul 2025 14:17:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751551886; cv=none; b=pF27YIt+SFbceuBWM0C3k8iDpN39jN3yhj8MIdUKxcNgdZra1P5tK+SVddkOpwdzosCl6yzwPa/nNjcHINBs3h2LivaF7TizMIk93QGlrqMNuid8Zh+fG+QC6dRyrZFvkz2CNrLDmaN3koERp2JXJkF/fvj8UMH8u1no805qKWg=
+	t=1751552241; cv=none; b=Ouigj2Hu5IR3K+4LFiH88w766/pEDVNNELUSDeaChMiANPu5hX9KtEwUzjINpYWueGOXGVVfWfdQiOib/Vwcr8DgSEbMLsA32UQvoyVqnQUBgkx2AkGzRZBJrcbTCjkIYWv3K5rjn+w75U4qq3wY+CKInR0in1tek+ztxEdTPyo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751551886; c=relaxed/simple;
-	bh=Av34FPzj8e1jYXqhGAW81LoPYj4FkgIRtwpe2nSZ0+I=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=gKXyWhUY6Rl+qRqSJUeyWU5mPamYPqqNyCFIaL4Si2H+REQseqAO+U5qjiTKzLXTwYMGS4Nz6d+n3/uGbTVkRL6U0PzpOeE7zeOiBbdBxM/+NsuOiWXldlCQZtEFMk+or8qlrPOjEHHPdbJydmbTGlL24fUBgBw9aWNU/PnMKAE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
-Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id E6FC8AC9F5F0; Thu,  3 Jul 2025 07:11:11 -0700 (PDT)
-From: Yonghong Song <yonghong.song@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	kernel-team@fb.com,
-	Martin KaFai Lau <martin.lau@kernel.org>,
-	Arnd Bergmann <arnd@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>
-Subject: [PATCH bpf-next v3 2/3] bpf: Reduce stack frame size by using env->insn_buf for bpf insns
-Date: Thu,  3 Jul 2025 07:11:11 -0700
-Message-ID: <20250703141111.1484521-1-yonghong.song@linux.dev>
-X-Mailer: git-send-email 2.47.1
-In-Reply-To: <20250703141101.1482025-1-yonghong.song@linux.dev>
-References: <20250703141101.1482025-1-yonghong.song@linux.dev>
+	s=arc-20240116; t=1751552241; c=relaxed/simple;
+	bh=reBhGGUgnrJ139gpendbTey/6SeXB3WwExAdYkRGRZ0=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=JD9bi8lEh08hcTuewzLgQt7Z2I7MEr9R+QWOISJN4QBPhrl4syBhjX19K5XYan+ulCa0tDoKIa/0VDiBe2A+F0HkZ3H1p6FMIYETrgQY0kqudMJgpDm8B2PX4r0tLNTOChWyRW5QLSNHYHiXDdH1EFNur7z4dObBBQutaZ7v7o4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XUjrmYwL; arc=none smtp.client-ip=209.85.215.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XUjrmYwL"
+Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-b31befde0a0so4028653a12.0;
+        Thu, 03 Jul 2025 07:17:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1751552240; x=1752157040; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Yl+pCOUgN8IvUzWEVj5uD0HOSNZhBVyVLHBB+osf1V4=;
+        b=XUjrmYwLWTPxrzGpIizGR6cq84Yy2kwtvhKvJ5Xg/QlcYqeJ8dTThqFwUWKiaxcRQR
+         wr400tpL5Da+CCFDVhJQRjasJp2xgIOoNOdDszQNdIo5tuRVWuiyAdSGJ4NNIjhGE3FX
+         Wi3Wd+CGMQkol+WEG4c72HWWfrVjXirTqe6YF5syIjl7QvlDU1OdHkmuRTCyaRo2vtiT
+         YV0Z0EZl9UqzJ8Gbbf74kvXLtRbLH6Cs2tyv4+aNvHJaSOvJjvDZ1o8VT08Ja6DKUH//
+         zvuBuLVe/81uHYPXIlRxkfI1gl2bOk23H9Zdw8PdaID6qNaIlVwxknR810COCp7SzVlu
+         plKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751552240; x=1752157040;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Yl+pCOUgN8IvUzWEVj5uD0HOSNZhBVyVLHBB+osf1V4=;
+        b=rV7V6xCR0lDIICykiO+TKAGnEpwaYMNxtJtrMrFaZnRTElYAduxVXVUt9Y2DMl0bgz
+         zjY5qWT9TrIO6lR0d27VdaL0fzCYsXt7RzRLuddYncuYHDs1mHEG4i4kR/dFoxdSUx83
+         Qp4OUW24L6PhnZlmfBEuWReOb1dvelVDi+bmkZ9w0Ph3VsYVwrYoYsLQ+rHormxwQckB
+         ZXvEST1otfX8slLwrADIrwIPungCp9jUxEpyLEBFee1tsQQhEYRNBfQ6+jcyzIP4Plv9
+         5oWJFKWt8zJ8EVBwv6kjC3+Yc+xS75G4UKyceSgtIFgGRJUlmQ0mQuLdpMh5dKafOiNg
+         ikpg==
+X-Forwarded-Encrypted: i=1; AJvYcCVqRAzN76XslfIcBHLIfgQRF69s+kAl67QrNQCuaNnXorFfzhfNDw6qOESg+5ae2yzKedh/uGQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyUHgCzs7gvXEQf78FMu4JO3mdrBoTAEzQuZGaA0jLAjnAPVvoW
+	yqcwm2Lm5+QWIACvHmSd9HxsuZjA1vozS4Qab3WR25EU1+avuIyVRw4I
+X-Gm-Gg: ASbGncuKOn73jcREQSCtd3rwXDRcP5XXcK2ZueFGGQE8iSvolhkYQNhZnkddkjc6dOP
+	9IP735bpsAE2oLqEis+Hbt7vq0ZsjCD6KNjpFYtA4QE9JO9z9lpYO3sGK5NiyLJuXxsyLRvTTXJ
+	c8QOkjxpUQ4WSpyt3LkslWIdsyg4uabY+29AmBk3JdFcwXlcWiCdx4zT7dtml1VPOb2Dvqnp0y7
+	OoYuo4xax8xzKlDhnzruEFOybSTPN6SxYM5bbSaxeF6SxmPH2d+QmGlWUbd/t+5w2DT6bQ0Krme
+	XZCoNGiz1d+e2wms3r+NVfpMISncHmFoBnaNxr6ilz8tO627Q4F/NIlUZtrC0v+o6CVsk8nkRJJ
+	SKg9cBSeRANIw506DZWmufQ==
+X-Google-Smtp-Source: AGHT+IErrxkRFJTq7kH9uZXcG89aUQoUNBB16RTH+HXvcSml9cXuMyhQn6QZH4smqKQ8rsY2cTnndw==
+X-Received: by 2002:a05:6a21:6e8a:b0:1f5:95a7:8159 with SMTP id adf61e73a8af0-222d7de0c2amr12113792637.10.1751552239552;
+        Thu, 03 Jul 2025 07:17:19 -0700 (PDT)
+Received: from KERNELXING-MC1.tencent.com ([111.201.26.0])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b34e31da818sm13800150a12.61.2025.07.03.07.17.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Jul 2025 07:17:19 -0700 (PDT)
+From: Jason Xing <kerneljasonxing@gmail.com>
+To: davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	bjorn@kernel.org,
+	magnus.karlsson@intel.com,
+	maciej.fijalkowski@intel.com,
+	jonathan.lemon@gmail.com,
+	sdf@fomichev.me,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	hawk@kernel.org,
+	john.fastabend@gmail.com,
+	joe@dama.to,
+	willemdebruijn.kernel@gmail.com
+Cc: bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	Jason Xing <kernelxing@tencent.com>
+Subject: [PATCH net-next v6 0/2] net: xsk: update tx queue consumer
+Date: Thu,  3 Jul 2025 22:17:10 +0800
+Message-Id: <20250703141712.33190-1-kerneljasonxing@gmail.com>
+X-Mailer: git-send-email 2.33.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-Arnd Bergmann reported an issue ([1]) where clang compiler (less than
-llvm18) may trigger an error where the stack frame size exceeds the limit=
-.
-I can reproduce the error like below:
-  kernel/bpf/verifier.c:24491:5: error: stack frame size (2552) exceeds l=
-imit (1280) in 'bpf_check'
-      [-Werror,-Wframe-larger-than]
-  kernel/bpf/verifier.c:19921:12: error: stack frame size (1368) exceeds =
-limit (1280) in 'do_check'
-      [-Werror,-Wframe-larger-than]
+From: Jason Xing <kernelxing@tencent.com>
 
-Use env->insn_buf for bpf insns instead of putting these insns on the
-stack. This can resolve the above 'bpf_check' error. The 'do_check' error
-will be resolved in the next patch.
+Patch 1 makes sure the consumer is updated at the end of generic xmit.
+Patch 2 adds corresponding test.
 
-  [1] https://lore.kernel.org/bpf/20250620113846.3950478-1-arnd@kernel.or=
-g/
+Jason Xing (2):
+  net: xsk: update tx queue consumer immediately after transmission
+  selftests/bpf: add a new test to check the consumer update case
 
-Reported-by: Arnd Bergmann <arnd@kernel.org>
-Tested-by: Arnd Bergmann <arnd@arndb.de>
-Acked-by: Jiri Olsa <jolsa@kernel.org>
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
-Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
----
- kernel/bpf/verifier.c | 190 ++++++++++++++++++++----------------------
- 1 file changed, 92 insertions(+), 98 deletions(-)
+ net/xdp/xsk.c                            | 17 ++++---
+ tools/testing/selftests/bpf/xskxceiver.c | 56 +++++++++++++++++++++++-
+ tools/testing/selftests/bpf/xskxceiver.h |  1 +
+ 3 files changed, 66 insertions(+), 8 deletions(-)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 8b0a25851089..24c8b1c355c9 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -21010,7 +21010,10 @@ static int opt_remove_nops(struct bpf_verifier_e=
-nv *env)
- static int opt_subreg_zext_lo32_rnd_hi32(struct bpf_verifier_env *env,
- 					 const union bpf_attr *attr)
- {
--	struct bpf_insn *patch, zext_patch[2], rnd_hi32_patch[4];
-+	struct bpf_insn *patch;
-+	/* use env->insn_buf as two independent buffers */
-+	struct bpf_insn *zext_patch =3D env->insn_buf;
-+	struct bpf_insn *rnd_hi32_patch =3D &env->insn_buf[2];
- 	struct bpf_insn_aux_data *aux =3D env->insn_aux_data;
- 	int i, patch_len, delta =3D 0, len =3D env->prog->len;
- 	struct bpf_insn *insns =3D env->prog->insnsi;
-@@ -21188,13 +21191,12 @@ static int convert_ctx_accesses(struct bpf_veri=
-fier_env *env)
-=20
- 		if (env->insn_aux_data[i + delta].nospec) {
- 			WARN_ON_ONCE(env->insn_aux_data[i + delta].alu_state);
--			struct bpf_insn patch[] =3D {
--				BPF_ST_NOSPEC(),
--				*insn,
--			};
-+			struct bpf_insn *patch =3D insn_buf;
-=20
--			cnt =3D ARRAY_SIZE(patch);
--			new_prog =3D bpf_patch_insn_data(env, i + delta, patch, cnt);
-+			*patch++ =3D BPF_ST_NOSPEC();
-+			*patch++ =3D *insn;
-+			cnt =3D patch - insn_buf;
-+			new_prog =3D bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
- 			if (!new_prog)
- 				return -ENOMEM;
-=20
-@@ -21262,13 +21264,12 @@ static int convert_ctx_accesses(struct bpf_veri=
-fier_env *env)
- 			/* nospec_result is only used to mitigate Spectre v4 and
- 			 * to limit verification-time for Spectre v1.
- 			 */
--			struct bpf_insn patch[] =3D {
--				*insn,
--				BPF_ST_NOSPEC(),
--			};
-+			struct bpf_insn *patch =3D insn_buf;
-=20
--			cnt =3D ARRAY_SIZE(patch);
--			new_prog =3D bpf_patch_insn_data(env, i + delta, patch, cnt);
-+			*patch++ =3D *insn;
-+			*patch++ =3D BPF_ST_NOSPEC();
-+			cnt =3D patch - insn_buf;
-+			new_prog =3D bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
- 			if (!new_prog)
- 				return -ENOMEM;
-=20
-@@ -21938,13 +21939,12 @@ static int do_misc_fixups(struct bpf_verifier_e=
-nv *env)
- 	u16 stack_depth_extra =3D 0;
-=20
- 	if (env->seen_exception && !env->exception_callback_subprog) {
--		struct bpf_insn patch[] =3D {
--			env->prog->insnsi[insn_cnt - 1],
--			BPF_MOV64_REG(BPF_REG_0, BPF_REG_1),
--			BPF_EXIT_INSN(),
--		};
-+		struct bpf_insn *patch =3D insn_buf;
-=20
--		ret =3D add_hidden_subprog(env, patch, ARRAY_SIZE(patch));
-+		*patch++ =3D env->prog->insnsi[insn_cnt - 1];
-+		*patch++ =3D BPF_MOV64_REG(BPF_REG_0, BPF_REG_1);
-+		*patch++ =3D BPF_EXIT_INSN();
-+		ret =3D add_hidden_subprog(env, insn_buf, patch - insn_buf);
- 		if (ret < 0)
- 			return ret;
- 		prog =3D env->prog;
-@@ -21980,20 +21980,18 @@ static int do_misc_fixups(struct bpf_verifier_e=
-nv *env)
- 		    insn->off =3D=3D 1 && insn->imm =3D=3D -1) {
- 			bool is64 =3D BPF_CLASS(insn->code) =3D=3D BPF_ALU64;
- 			bool isdiv =3D BPF_OP(insn->code) =3D=3D BPF_DIV;
--			struct bpf_insn *patchlet;
--			struct bpf_insn chk_and_sdiv[] =3D {
--				BPF_RAW_INSN((is64 ? BPF_ALU64 : BPF_ALU) |
--					     BPF_NEG | BPF_K, insn->dst_reg,
--					     0, 0, 0),
--			};
--			struct bpf_insn chk_and_smod[] =3D {
--				BPF_MOV32_IMM(insn->dst_reg, 0),
--			};
-+			struct bpf_insn *patch =3D insn_buf;
-=20
--			patchlet =3D isdiv ? chk_and_sdiv : chk_and_smod;
--			cnt =3D isdiv ? ARRAY_SIZE(chk_and_sdiv) : ARRAY_SIZE(chk_and_smod);
-+			if (isdiv)
-+				*patch++ =3D BPF_RAW_INSN((is64 ? BPF_ALU64 : BPF_ALU) |
-+							BPF_NEG | BPF_K, insn->dst_reg,
-+							0, 0, 0);
-+			else
-+				*patch++ =3D BPF_MOV32_IMM(insn->dst_reg, 0);
-+
-+			cnt =3D patch - insn_buf;
-=20
--			new_prog =3D bpf_patch_insn_data(env, i + delta, patchlet, cnt);
-+			new_prog =3D bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
- 			if (!new_prog)
- 				return -ENOMEM;
-=20
-@@ -22012,83 +22010,79 @@ static int do_misc_fixups(struct bpf_verifier_e=
-nv *env)
- 			bool isdiv =3D BPF_OP(insn->code) =3D=3D BPF_DIV;
- 			bool is_sdiv =3D isdiv && insn->off =3D=3D 1;
- 			bool is_smod =3D !isdiv && insn->off =3D=3D 1;
--			struct bpf_insn *patchlet;
--			struct bpf_insn chk_and_div[] =3D {
--				/* [R,W]x div 0 -> 0 */
--				BPF_RAW_INSN((is64 ? BPF_JMP : BPF_JMP32) |
--					     BPF_JNE | BPF_K, insn->src_reg,
--					     0, 2, 0),
--				BPF_ALU32_REG(BPF_XOR, insn->dst_reg, insn->dst_reg),
--				BPF_JMP_IMM(BPF_JA, 0, 0, 1),
--				*insn,
--			};
--			struct bpf_insn chk_and_mod[] =3D {
--				/* [R,W]x mod 0 -> [R,W]x */
--				BPF_RAW_INSN((is64 ? BPF_JMP : BPF_JMP32) |
--					     BPF_JEQ | BPF_K, insn->src_reg,
--					     0, 1 + (is64 ? 0 : 1), 0),
--				*insn,
--				BPF_JMP_IMM(BPF_JA, 0, 0, 1),
--				BPF_MOV32_REG(insn->dst_reg, insn->dst_reg),
--			};
--			struct bpf_insn chk_and_sdiv[] =3D {
-+			struct bpf_insn *patch =3D insn_buf;
-+
-+			if (is_sdiv) {
- 				/* [R,W]x sdiv 0 -> 0
- 				 * LLONG_MIN sdiv -1 -> LLONG_MIN
- 				 * INT_MIN sdiv -1 -> INT_MIN
- 				 */
--				BPF_MOV64_REG(BPF_REG_AX, insn->src_reg),
--				BPF_RAW_INSN((is64 ? BPF_ALU64 : BPF_ALU) |
--					     BPF_ADD | BPF_K, BPF_REG_AX,
--					     0, 0, 1),
--				BPF_RAW_INSN((is64 ? BPF_JMP : BPF_JMP32) |
--					     BPF_JGT | BPF_K, BPF_REG_AX,
--					     0, 4, 1),
--				BPF_RAW_INSN((is64 ? BPF_JMP : BPF_JMP32) |
--					     BPF_JEQ | BPF_K, BPF_REG_AX,
--					     0, 1, 0),
--				BPF_RAW_INSN((is64 ? BPF_ALU64 : BPF_ALU) |
--					     BPF_MOV | BPF_K, insn->dst_reg,
--					     0, 0, 0),
-+				*patch++ =3D BPF_MOV64_REG(BPF_REG_AX, insn->src_reg);
-+				*patch++ =3D BPF_RAW_INSN((is64 ? BPF_ALU64 : BPF_ALU) |
-+							BPF_ADD | BPF_K, BPF_REG_AX,
-+							0, 0, 1);
-+				*patch++ =3D BPF_RAW_INSN((is64 ? BPF_JMP : BPF_JMP32) |
-+							BPF_JGT | BPF_K, BPF_REG_AX,
-+							0, 4, 1);
-+				*patch++ =3D BPF_RAW_INSN((is64 ? BPF_JMP : BPF_JMP32) |
-+							BPF_JEQ | BPF_K, BPF_REG_AX,
-+							0, 1, 0);
-+				*patch++ =3D BPF_RAW_INSN((is64 ? BPF_ALU64 : BPF_ALU) |
-+							BPF_MOV | BPF_K, insn->dst_reg,
-+							0, 0, 0);
- 				/* BPF_NEG(LLONG_MIN) =3D=3D -LLONG_MIN =3D=3D LLONG_MIN */
--				BPF_RAW_INSN((is64 ? BPF_ALU64 : BPF_ALU) |
--					     BPF_NEG | BPF_K, insn->dst_reg,
--					     0, 0, 0),
--				BPF_JMP_IMM(BPF_JA, 0, 0, 1),
--				*insn,
--			};
--			struct bpf_insn chk_and_smod[] =3D {
-+				*patch++ =3D BPF_RAW_INSN((is64 ? BPF_ALU64 : BPF_ALU) |
-+							BPF_NEG | BPF_K, insn->dst_reg,
-+							0, 0, 0);
-+				*patch++ =3D BPF_JMP_IMM(BPF_JA, 0, 0, 1);
-+				*patch++ =3D *insn;
-+				cnt =3D patch - insn_buf;
-+			} else if (is_smod) {
- 				/* [R,W]x mod 0 -> [R,W]x */
- 				/* [R,W]x mod -1 -> 0 */
--				BPF_MOV64_REG(BPF_REG_AX, insn->src_reg),
--				BPF_RAW_INSN((is64 ? BPF_ALU64 : BPF_ALU) |
--					     BPF_ADD | BPF_K, BPF_REG_AX,
--					     0, 0, 1),
--				BPF_RAW_INSN((is64 ? BPF_JMP : BPF_JMP32) |
--					     BPF_JGT | BPF_K, BPF_REG_AX,
--					     0, 3, 1),
--				BPF_RAW_INSN((is64 ? BPF_JMP : BPF_JMP32) |
--					     BPF_JEQ | BPF_K, BPF_REG_AX,
--					     0, 3 + (is64 ? 0 : 1), 1),
--				BPF_MOV32_IMM(insn->dst_reg, 0),
--				BPF_JMP_IMM(BPF_JA, 0, 0, 1),
--				*insn,
--				BPF_JMP_IMM(BPF_JA, 0, 0, 1),
--				BPF_MOV32_REG(insn->dst_reg, insn->dst_reg),
--			};
--
--			if (is_sdiv) {
--				patchlet =3D chk_and_sdiv;
--				cnt =3D ARRAY_SIZE(chk_and_sdiv);
--			} else if (is_smod) {
--				patchlet =3D chk_and_smod;
--				cnt =3D ARRAY_SIZE(chk_and_smod) - (is64 ? 2 : 0);
-+				*patch++ =3D BPF_MOV64_REG(BPF_REG_AX, insn->src_reg);
-+				*patch++ =3D BPF_RAW_INSN((is64 ? BPF_ALU64 : BPF_ALU) |
-+							BPF_ADD | BPF_K, BPF_REG_AX,
-+							0, 0, 1);
-+				*patch++ =3D BPF_RAW_INSN((is64 ? BPF_JMP : BPF_JMP32) |
-+							BPF_JGT | BPF_K, BPF_REG_AX,
-+							0, 3, 1);
-+				*patch++ =3D BPF_RAW_INSN((is64 ? BPF_JMP : BPF_JMP32) |
-+							BPF_JEQ | BPF_K, BPF_REG_AX,
-+							0, 3 + (is64 ? 0 : 1), 1);
-+				*patch++ =3D BPF_MOV32_IMM(insn->dst_reg, 0);
-+				*patch++ =3D BPF_JMP_IMM(BPF_JA, 0, 0, 1);
-+				*patch++ =3D *insn;
-+
-+				if (!is64) {
-+					*patch++ =3D BPF_JMP_IMM(BPF_JA, 0, 0, 1);
-+					*patch++ =3D BPF_MOV32_REG(insn->dst_reg, insn->dst_reg);
-+				}
-+				cnt =3D patch - insn_buf;
-+			} else if (isdiv) {
-+				/* [R,W]x div 0 -> 0 */
-+				*patch++ =3D BPF_RAW_INSN((is64 ? BPF_JMP : BPF_JMP32) |
-+							BPF_JNE | BPF_K, insn->src_reg,
-+							0, 2, 0);
-+				*patch++ =3D BPF_ALU32_REG(BPF_XOR, insn->dst_reg, insn->dst_reg);
-+				*patch++ =3D BPF_JMP_IMM(BPF_JA, 0, 0, 1);
-+				*patch++ =3D *insn;
-+				cnt =3D patch - insn_buf;
- 			} else {
--				patchlet =3D isdiv ? chk_and_div : chk_and_mod;
--				cnt =3D isdiv ? ARRAY_SIZE(chk_and_div) :
--					      ARRAY_SIZE(chk_and_mod) - (is64 ? 2 : 0);
-+				/* [R,W]x mod 0 -> [R,W]x */
-+				*patch++ =3D BPF_RAW_INSN((is64 ? BPF_JMP : BPF_JMP32) |
-+							BPF_JEQ | BPF_K, insn->src_reg,
-+							0, 1 + (is64 ? 0 : 1), 0);
-+				*patch++ =3D *insn;
-+
-+				if (!is64) {
-+					*patch++ =3D BPF_JMP_IMM(BPF_JA, 0, 0, 1);
-+					*patch++ =3D BPF_MOV32_REG(insn->dst_reg, insn->dst_reg);
-+				}
-+				cnt =3D patch - insn_buf;
- 			}
-=20
--			new_prog =3D bpf_patch_insn_data(env, i + delta, patchlet, cnt);
-+			new_prog =3D bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
- 			if (!new_prog)
- 				return -ENOMEM;
-=20
---=20
-2.47.1
+-- 
+2.41.3
 
