@@ -1,304 +1,130 @@
-Received: from mail-pf1-f194.google.com (mail-pf1-f194.google.com [209.85.210.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D0FD2EE97A;
-	Thu,  3 Jul 2025 12:18:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDD211D5142;
+	Thu,  3 Jul 2025 12:26:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751545099; cv=none; b=p7qY90zYH7bF/2QS1Kd0n9iys5nsJHcRdh0HzLZYluly64+r6f4XHjWdwngQsamRTVku3R6N5K2KXVLQYGo7Rcg1crc9gNK88sOU9zfXxwUCRehqLBjo7xKDAAc0gitEFeV8V69+tAlwsUMfBM6ejVvi/l0BLhGH2gZyuZ7j+7Q=
+	t=1751545579; cv=none; b=G8/BuSqQyU/J5O+jM4webOJZR5xzDihsfa65HSrxQDJjlO+/0F7cgLDp+AY1NmMNkYh3ETR8vO0JNVfZmSddcYUVJtUkpLahLoKzGQouG8QOPmnQAFg0E30Ws6C3Q7ZGwhOyqpkg40Ox4GcyQ3erv03RxBbt79LD7vaVl4EGeW0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751545099; c=relaxed/simple;
-	bh=A4maR+ym1UWBIiGpvABPayxYHENx7ob0ofT6FQcgEQk=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=ruQXeNWCEFRu+Xie4/3aWjbG6nWjemCadaG1LJt3S1n6fbfvoeuOMisR0epDUoWwTHAoYyj7C2FumzxlSTTDa7Mp5euS13Jo4Y62Hb9Y8lkYw5LyErQ822r7EscnTvn1LP34iy8DvzM4ux2qWO7KEHi9BnQofeThjSwl50t9jmE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LmturfIB; arc=none smtp.client-ip=209.85.210.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1751545579; c=relaxed/simple;
+	bh=FGGDxsEbhFQvw8rRrT3WmXoyONQi0V7r2zXqtnk/B7k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uEcCjrirBCxLYjOEs207VZhtdesaTzDoNncA1EvrG9+7zFBgGy4cSveyqt6QUD7TlND67pmg5KqegRgvro80b5YJ8BvaRqYVhert2OeUU9RUi68IL5L3tbXFtF1LCVI7KN5uxFlkDXckdkRi938YkmaGdL9whnayzG/0ZZEfV94=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X2aU65QR; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LmturfIB"
-Received: by mail-pf1-f194.google.com with SMTP id d2e1a72fcca58-748fe69a7baso7422517b3a.3;
-        Thu, 03 Jul 2025 05:18:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1751545097; x=1752149897; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=B2Y/tNEM0ulgYJ7h98kqdHkd9WCaMgRog3nRAxQgWOI=;
-        b=LmturfIBIldPjnr17qN2KJlib+XYI6iFy0kAvOZWp6ItNbPatFm1+1UZ2G7AAkhQuW
-         DlCnS/cIT2K/6rMTWOgoyjLCTyxDDWon43O3iTElYgZmb7HhUE18kl96E1jNJnZliJzh
-         vaCP3Z79fRMJbj0lukfodPtSk+GSPimZqSyplZJohaQM8eFFhGFxEKB9O0Ao5gyYNnSw
-         QA69nrP7vAgYk1BJsBc/wWOFsXSxW0VdTc9WsHMfA754c99/jToi//MWbFUy/nLzeIhe
-         ZsnYcLnVpLd2jQniDVnPceoleSLlRIuCDXhOqIYw78urglBveJEaBBQ8KJJM7ZtTvJcY
-         gqfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751545097; x=1752149897;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=B2Y/tNEM0ulgYJ7h98kqdHkd9WCaMgRog3nRAxQgWOI=;
-        b=pnJ1CyjEu6Cc1feKq2t9aaXE3K6N4RuvOv83CUCzBl1RHX2un+5U6CHbdQm09kLozl
-         /Dc1TdTNQRZ/cVgHDixnxVYRjpN7IDIneK+wM/zqxIrJCe6fD0Js3Kb4ExP1CTZ9Bol5
-         V5XQPkhYm639wgM7qSoDOEG0EVHwvrs1iVgHJz4RuGeZzmnuiHZwKChqizAh/DPang9j
-         4vIWQdfTd1PF092B1Arn4LTlbdFa/vVReP8hOGEAmEMrSOtXP2ultV3QutSj79sFmGqY
-         1XVyS718Wl+Yz/ZryNCoirZRGyOYwGXzUyCu/nw4CN/p8NTTVRy7zkAHiMay/R/DIVSc
-         5wIQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVV/PeqddflT0+9NezB0mxWu4IpQ9kB0YIWvoypvMxn6luK5gW+ueJw0ENLnTlwaMXHwLvW/ur4S/S8LZs8Bqcn@vger.kernel.org, AJvYcCWMk7szsqD3/e1PVWoRuFkaTZ4DvU9oCelkX8M48RUH0PCN69WGSgkEjhVyD/033OzwIbEjh2vRXGOgaF4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxDCROl2/WBXGOgpJ6QCsW8l+V6UO8052AwTJwo+7ewr2WfjR+5
-	mwr7r3nEYnPH4WKUTd2tVkUZ8Ji1kylHTLKv3DbeRfhvtzk6ocytTZDEgV2aXQXEMZPMNg==
-X-Gm-Gg: ASbGnctEe3I6+t+6QbO5/TO0TnJop5ltNBRiPurBY76wpiD83nhSGrj/QEPt+W8bSF7
-	MuEyh193FwUvKE9JDWqtBAC9SYSwyqSdUQMpgwQF4MQEhmsledrvU6mxUv+EjNpxHqoRKlXxenI
-	CLT5jrdsm4B/3dr4I2L+1ZkIbcCEM7B5cSkVzQlyvM4oMEWTFG2Yso/q9cDe9N1pRDlHRCtpsxV
-	E7eAANVlg2wYdR5o3fGK4llLHWgemkiZpXQDru5IE2fC+QzbjwQVjqqyedukh86PVsCo7Gx6pJh
-	Kad8FSV+M6/HE4zNxocytQGQnLw9/ZjnDkBoTC/ChXtft/kL0NjlBM7O8T4XGeDxrV0nwd4QVqG
-	Z1T0=
-X-Google-Smtp-Source: AGHT+IEJ/xANJXHVQ1ORXK8DAYjINsVZ3TBgS7WVSrfSzxWAZNAP+BDf5vO1EFMY3uxQr2+HmULR0A==
-X-Received: by 2002:a05:6a00:92a9:b0:748:f406:b09 with SMTP id d2e1a72fcca58-74b512c1b0amr8849811b3a.23.1751545096776;
-        Thu, 03 Jul 2025 05:18:16 -0700 (PDT)
-Received: from localhost.localdomain ([43.129.244.20])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-74af5575895sm18591081b3a.94.2025.07.03.05.18.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Jul 2025 05:18:16 -0700 (PDT)
-From: Menglong Dong <menglong8.dong@gmail.com>
-X-Google-Original-From: Menglong Dong <dongml2@chinatelecom.cn>
-To: alexei.starovoitov@gmail.com,
-	rostedt@goodmis.org,
-	jolsa@kernel.org
-Cc: bpf@vger.kernel.org,
-	Menglong Dong <dongml2@chinatelecom.cn>,
-	Mykola Lysenko <mykolal@fb.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v2 18/18] selftests/bpf: add bench tests for tracing_multi
-Date: Thu,  3 Jul 2025 20:15:21 +0800
-Message-Id: <20250703121521.1874196-19-dongml2@chinatelecom.cn>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250703121521.1874196-1-dongml2@chinatelecom.cn>
-References: <20250703121521.1874196-1-dongml2@chinatelecom.cn>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X2aU65QR"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDF94C4CEE3;
+	Thu,  3 Jul 2025 12:26:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1751545578;
+	bh=FGGDxsEbhFQvw8rRrT3WmXoyONQi0V7r2zXqtnk/B7k=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=X2aU65QRDKR60l59uymldg2kEa4Se/gGiTVnyPNabl4nf4Uf2iguO1PTe1n65Bhn1
+	 lnOkbXoph9UcZxgqgNA7+A01SEQpuo4GfeW8YUkh1lWoLfrnW9rnS5FoMyI2NPVNzX
+	 vE5ssFD2I/200MnPJ1V/Mv65+11q26gnJxhsevx2v/VUtbYsgDHnKBO6rDIr5ZA648
+	 edu4npApn7y0W1lixLdAyEb4IE+ssx0k6JiGEEZop5k4/w/bij3KsKXIAmSkuHsizJ
+	 lL/Znw+TBytqM9tf4vuywabWXt3ZAeWV3eNNzfbq8bTK0vydIziunq/KIjoO8cbIFE
+	 9V6BG0rHPz7ug==
+Date: Thu, 3 Jul 2025 14:26:15 +0200
+From: Lorenzo Bianconi <lorenzo@kernel.org>
+To: Jesper Dangaard Brouer <hawk@kernel.org>
+Cc: bpf@vger.kernel.org, netdev@vger.kernel.org,
+	Jakub Kicinski <kuba@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <borkmann@iogearbox.net>,
+	Eric Dumazet <eric.dumazet@gmail.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Paolo Abeni <pabeni@redhat.com>, sdf@fomichev.me,
+	kernel-team@cloudflare.com, arthur@arthurfabre.com,
+	jakub@cloudflare.com
+Subject: Re: [PATCH bpf-next V2 3/7] net: xdp: Add kfuncs to store hw
+ metadata in xdp_buff
+Message-ID: <aGZ25_gUxziOoNZp@lore-desk>
+References: <175146824674.1421237.18351246421763677468.stgit@firesoul>
+ <175146831297.1421237.17665319427079757435.stgit@firesoul>
+ <85eee028-2784-4bcd-b9a9-9e1bdf0799f3@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="xPVA+SWq1wChkKMJ"
+Content-Disposition: inline
+In-Reply-To: <85eee028-2784-4bcd-b9a9-9e1bdf0799f3@kernel.org>
 
-Add bench testcase for fentry_multi, fexit_multi and fmodret_multi in
-bench_trigger.c.
 
-Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
----
-v2:
-- use the existing bpf bench framework instead of introducing new one
----
- tools/testing/selftests/bpf/bench.c           |  8 +++
- .../selftests/bpf/benchs/bench_trigger.c      | 72 +++++++++++++++++++
- .../selftests/bpf/benchs/run_bench_trigger.sh |  1 +
- .../selftests/bpf/progs/trigger_bench.c       | 22 ++++++
- 4 files changed, 103 insertions(+)
+--xPVA+SWq1wChkKMJ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/tools/testing/selftests/bpf/bench.c b/tools/testing/selftests/bpf/bench.c
-index ddd73d06a1eb..32f1e2e936c0 100644
---- a/tools/testing/selftests/bpf/bench.c
-+++ b/tools/testing/selftests/bpf/bench.c
-@@ -510,8 +510,12 @@ extern const struct bench bench_trig_kretprobe;
- extern const struct bench bench_trig_kprobe_multi;
- extern const struct bench bench_trig_kretprobe_multi;
- extern const struct bench bench_trig_fentry;
-+extern const struct bench bench_trig_fentry_multi;
-+extern const struct bench bench_trig_fentry_multi_all;
- extern const struct bench bench_trig_fexit;
-+extern const struct bench bench_trig_fexit_multi;
- extern const struct bench bench_trig_fmodret;
-+extern const struct bench bench_trig_fmodret_multi;
- extern const struct bench bench_trig_tp;
- extern const struct bench bench_trig_rawtp;
- 
-@@ -578,8 +582,12 @@ static const struct bench *benchs[] = {
- 	&bench_trig_kprobe_multi,
- 	&bench_trig_kretprobe_multi,
- 	&bench_trig_fentry,
-+	&bench_trig_fentry_multi,
-+	&bench_trig_fentry_multi_all,
- 	&bench_trig_fexit,
-+	&bench_trig_fexit_multi,
- 	&bench_trig_fmodret,
-+	&bench_trig_fmodret_multi,
- 	&bench_trig_tp,
- 	&bench_trig_rawtp,
- 	/* uprobes */
-diff --git a/tools/testing/selftests/bpf/benchs/bench_trigger.c b/tools/testing/selftests/bpf/benchs/bench_trigger.c
-index 82327657846e..a1844ee358f1 100644
---- a/tools/testing/selftests/bpf/benchs/bench_trigger.c
-+++ b/tools/testing/selftests/bpf/benchs/bench_trigger.c
-@@ -226,6 +226,54 @@ static void trigger_fentry_setup(void)
- 	attach_bpf(ctx.skel->progs.bench_trigger_fentry);
- }
- 
-+static void trigger_fentry_multi_setup(void)
-+{
-+	setup_ctx();
-+	bpf_program__set_autoload(ctx.skel->progs.bench_trigger_fentry_multi, true);
-+	load_ctx();
-+	attach_bpf(ctx.skel->progs.bench_trigger_fentry_multi);
-+}
-+
-+static void trigger_fentry_multi_all_setup(void)
-+{
-+	LIBBPF_OPTS(bpf_trace_multi_opts, opts);
-+	struct bpf_program *prog;
-+	struct bpf_link *link;
-+	char **syms = NULL;
-+	size_t cnt = 0;
-+	int i;
-+
-+	setup_ctx();
-+	prog = ctx.skel->progs.bench_trigger_fentry_multi;
-+	bpf_program__set_autoload(prog, true);
-+	load_ctx();
-+
-+	if (bpf_get_ksyms(&syms, &cnt, true)) {
-+		printf("failed to get ksyms\n");
-+		exit(1);
-+	}
-+
-+	for (i = 0; i < cnt; i++) {
-+		if (strcmp(syms[i], "bpf_get_numa_node_id") == 0)
-+			break;
-+	}
-+	if (i == cnt) {
-+		printf("bpf_get_numa_node_id not found in ksyms\n");
-+		exit(1);
-+	}
-+
-+	printf("found %zu ksyms\n", cnt);
-+	opts.syms = (const char **) syms;
-+	opts.cnt = cnt;
-+	opts.skip_invalid = true;
-+	link = bpf_program__attach_trace_multi_opts(prog, &opts);
-+	if (!link) {
-+		printf("failed to attach bench_trigger_fentry_multi to all\n");
-+		exit(1);
-+	}
-+	ctx.skel->links.bench_trigger_fentry_multi = link;
-+}
-+
- static void trigger_fexit_setup(void)
- {
- 	setup_ctx();
-@@ -234,6 +282,14 @@ static void trigger_fexit_setup(void)
- 	attach_bpf(ctx.skel->progs.bench_trigger_fexit);
- }
- 
-+static void trigger_fexit_multi_setup(void)
-+{
-+	setup_ctx();
-+	bpf_program__set_autoload(ctx.skel->progs.bench_trigger_fexit_multi, true);
-+	load_ctx();
-+	attach_bpf(ctx.skel->progs.bench_trigger_fexit_multi);
-+}
-+
- static void trigger_fmodret_setup(void)
- {
- 	setup_ctx();
-@@ -246,6 +302,18 @@ static void trigger_fmodret_setup(void)
- 	attach_bpf(ctx.skel->progs.bench_trigger_fmodret);
- }
- 
-+static void trigger_fmodret_multi_setup(void)
-+{
-+	setup_ctx();
-+	bpf_program__set_autoload(ctx.skel->progs.trigger_driver, false);
-+	bpf_program__set_autoload(ctx.skel->progs.trigger_driver_kfunc, true);
-+	bpf_program__set_autoload(ctx.skel->progs.bench_trigger_fmodret_multi, true);
-+	load_ctx();
-+	/* override driver program */
-+	ctx.driver_prog_fd = bpf_program__fd(ctx.skel->progs.trigger_driver_kfunc);
-+	attach_bpf(ctx.skel->progs.bench_trigger_fmodret_multi);
-+}
-+
- static void trigger_tp_setup(void)
- {
- 	setup_ctx();
-@@ -512,8 +580,12 @@ BENCH_TRIG_KERNEL(kretprobe, "kretprobe");
- BENCH_TRIG_KERNEL(kprobe_multi, "kprobe-multi");
- BENCH_TRIG_KERNEL(kretprobe_multi, "kretprobe-multi");
- BENCH_TRIG_KERNEL(fentry, "fentry");
-+BENCH_TRIG_KERNEL(fentry_multi, "fentry-multi");
-+BENCH_TRIG_KERNEL(fentry_multi_all, "fentry-multi-all");
- BENCH_TRIG_KERNEL(fexit, "fexit");
-+BENCH_TRIG_KERNEL(fexit_multi, "fexit-multi");
- BENCH_TRIG_KERNEL(fmodret, "fmodret");
-+BENCH_TRIG_KERNEL(fmodret_multi, "fmodret-multi");
- BENCH_TRIG_KERNEL(tp, "tp");
- BENCH_TRIG_KERNEL(rawtp, "rawtp");
- 
-diff --git a/tools/testing/selftests/bpf/benchs/run_bench_trigger.sh b/tools/testing/selftests/bpf/benchs/run_bench_trigger.sh
-index a690f5a68b6b..48a7f809d053 100755
---- a/tools/testing/selftests/bpf/benchs/run_bench_trigger.sh
-+++ b/tools/testing/selftests/bpf/benchs/run_bench_trigger.sh
-@@ -5,6 +5,7 @@ set -eufo pipefail
- def_tests=( \
- 	usermode-count kernel-count syscall-count \
- 	fentry fexit fmodret \
-+	fentry-multi fentry-multi-all fexit-multi fmodret-multi \
- 	rawtp tp \
- 	kprobe kprobe-multi \
- 	kretprobe kretprobe-multi \
-diff --git a/tools/testing/selftests/bpf/progs/trigger_bench.c b/tools/testing/selftests/bpf/progs/trigger_bench.c
-index 044a6d78923e..2ff1a7568080 100644
---- a/tools/testing/selftests/bpf/progs/trigger_bench.c
-+++ b/tools/testing/selftests/bpf/progs/trigger_bench.c
-@@ -111,6 +111,13 @@ int bench_trigger_fentry(void *ctx)
- 	return 0;
- }
- 
-+SEC("?fentry.multi/bpf_get_numa_node_id")
-+int bench_trigger_fentry_multi(void *ctx)
-+{
-+	inc_counter();
-+	return 0;
-+}
-+
- SEC("?fexit/bpf_get_numa_node_id")
- int bench_trigger_fexit(void *ctx)
- {
-@@ -118,6 +125,14 @@ int bench_trigger_fexit(void *ctx)
- 	return 0;
- }
- 
-+SEC("?fexit.multi/bpf_get_numa_node_id")
-+int bench_trigger_fexit_multi(void *ctx)
-+{
-+	inc_counter();
-+
-+	return 0;
-+}
-+
- SEC("?fmod_ret/bpf_modify_return_test_tp")
- int bench_trigger_fmodret(void *ctx)
- {
-@@ -125,6 +140,13 @@ int bench_trigger_fmodret(void *ctx)
- 	return -22;
- }
- 
-+SEC("?fmod_ret.multi/bpf_modify_return_test_tp")
-+int bench_trigger_fmodret_multi(void *ctx)
-+{
-+	inc_counter();
-+	return -22;
-+}
-+
- SEC("?tp/bpf_test_run/bpf_trigger_tp")
- int bench_trigger_tp(void *ctx)
- {
--- 
-2.39.5
+>=20
+> On 02/07/2025 16.58, Jesper Dangaard Brouer wrote:
+> > From: Lorenzo Bianconi<lorenzo@kernel.org>
+> >=20
+> > Introduce the following kfuncs to store hw metadata provided by the NIC
+> > into the xdp_buff struct:
+> >=20
+> > - rx-hash: bpf_xdp_store_rx_hash
+> > - rx-vlan: bpf_xdp_store_rx_vlan
+> > - rx-hw-ts: bpf_xdp_store_rx_ts
+> >=20
+> > Signed-off-by: Lorenzo Bianconi<lorenzo@kernel.org>
+> > Signed-off-by: Jesper Dangaard Brouer<hawk@kernel.org>
+> > ---
+> >   include/net/xdp.h |    5 +++++
+> >   net/core/xdp.c    |   45 +++++++++++++++++++++++++++++++++++++++++++++
+> >   2 files changed, 50 insertions(+)
+> >=20
+> > diff --git a/net/core/xdp.c b/net/core/xdp.c
+> > index bd3110fc7ef8..1ffba57714ea 100644
+> > --- a/net/core/xdp.c
+> > +++ b/net/core/xdp.c
+> > @@ -963,12 +963,57 @@ __bpf_kfunc int bpf_xdp_metadata_rx_vlan_tag(cons=
+t struct xdp_md *ctx,
+> [...]
+> > +__bpf_kfunc int bpf_xdp_store_rx_ts(struct xdp_md *ctx, u64 ts)
+> > +{
+> > +	struct xdp_buff *xdp =3D (struct xdp_buff *)ctx;
+> > +	struct skb_shared_info *sinfo =3D xdp_get_shared_info_from_buff(xdp);
+> > +	struct skb_shared_hwtstamps *shwt =3D &sinfo->hwtstamps;
+> > +
+> > +	shwt->hwtstamp =3D ts;
+>=20
+> Here we are storing into the SKB shared_info struct.  This is located at
+> the SKB data tail.  Thus, this will very likely cause a cache-miss.
+>=20
+> What about storing it into xdp->rx_meta and then starting a prefetch for
+> shared_info?  (and updating patch-4 that moved it into SKB)
 
+ack, I am fine with it. I can address it in v3.
+
+Regards,
+Lorenzo
+
+>=20
+> (Reviewers should be aware that writing into the xdp_frame headroom
+> (xdp->rx_meta) likely isn't a cache-miss, because all drivers does a
+> prefetchw for this memory prior to running BPF-prog).
+>=20
+>=20
+> > +	xdp->flags |=3D XDP_FLAGS_META_RX_TS;
+> > +
+> > +	return 0;
+> > +}
+
+--xPVA+SWq1wChkKMJ
+Content-Type: application/pgp-signature; name=signature.asc
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCaGZ25wAKCRA6cBh0uS2t
+rEGKAQC3kQLYnv0+ZQBPZFycOo3LedDafyfcd8gPMRsf8fdXLQD8CV9huCZbmKaB
+au+Tnw1bQvDN82WaCGitu5kI0qbQYQY=
+=gkxR
+-----END PGP SIGNATURE-----
+
+--xPVA+SWq1wChkKMJ--
