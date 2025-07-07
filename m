@@ -1,300 +1,119 @@
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 691BF1FCF41;
-	Mon,  7 Jul 2025 14:02:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751896934; cv=none; b=Ke2gwpyrvw8fosIPakHYx/SNIVyCqU7WNWuEiFBTA/EGrhn6N8RgdiYDGjwi+dGvgdRTB2apDJZ2bAZbPAKY3HeT4iTr8AXDSjjT06rKpotYyvbIi4wRPrkomPw+QjttMW67sfruytGMJo8yv36dZXjnLXxmglRgSgq4Zwt2tKs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751896934; c=relaxed/simple;
-	bh=Ui0SVBAF9ZOOCGT2pgDGK3fz7RgnUEizMhpIhHdPW6Q=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=gMF5iGj7EKGEC7i08iDxnJqkbBImuDw1QfGhPJOv4zpAWsvwD8khShQyv5N+jHBW5Q/DG7MogUUGpWr0k3oKH8WoIBHFf1byIzfJryiOJ4eqxTVP+wxuoAUtAAA3yf4I0CI0s/ZdrtydN10pfMy8JdOqPKVDjix7A90WMgQPS4c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Xp1Ks6o5; arc=none smtp.client-ip=217.70.183.196
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9F271E4AB;
+	Mon,  7 Jul 2025 14:06:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1751897220; cv=pass; b=dqiZNXl/c3uKwxzHOKSAhp5KE7TnPdhzhZFjvY56Zw6fcRjL5ohe3EB3x/95KQ8y+V2MYbJOlFJHRHhO/z1LZ7Zv488E6HIxf8cRu0wYMt3WuO8GXNju2s4K6Y4NU2do0DezZl6VBQ7YMzrp+Uu2bQeTpWatGdoM0PQJ2dMV7BM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1751897220; c=relaxed/simple;
+	bh=nVL8RzbfQUbV3cWEN5HyzMj2JgPrLDM8C/LUWwir5pc=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 MIME-Version:Content-Type; b=QtxbJ0kxjGdEypMvPITufngXDeif1RTlOO7X87uPZPm35tD3GvhC7iwdexZoJHp7S2GFsRgnQSIgLQ65MGQ61Hhf/iM9Ip0JrBw2+nILmCW5FTeZ/TWWi4vWVMg5PMobPIUpUTtJrMJFFBURLUdm5X7cAcau7c+6coVPZDAcFmA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=gus@collabora.com header.b=F6zJHbYC; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Xp1Ks6o5"
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 3A676443B1;
-	Mon,  7 Jul 2025 14:02:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1751896930;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=40NAIMtjpvdSKHdzmcfQA9UKomJZG7cKSHLRYBGNLJQ=;
-	b=Xp1Ks6o5Uf1BiOawub/QE6BZfAS7mKmzFXNAi882ft4mrYHreEPyq64uT+7vQHhgquNvTS
-	2PQ4/APoSJmRWDE0QbPYXyUzWCEHo9ckQd6ojbZgpNlGhnAnZ6H7pCMec3Wa0lveSTrhk8
-	mCc8jmXvRAUpmn+aOWa9asj29/V1tL4A0TG0vQS5BJ8MWvJjb5g125xNtkQBuEsND96h5m
-	+pJMLwuDLa7OopCpHdEcQJwZK4OS2qfAZErwpbqVkzTRGnCMOPF30chzed/QoCRzeq3B05
-	fzUNM0y5AHiKiLkVfbcF0pHojI8X3lGLi9qvrktLVp3tFpZlrY4wIQFveIwXPw==
-From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
-Date: Mon, 07 Jul 2025 16:02:04 +0200
-Subject: [PATCH v3 2/3] tests: add some tests validating skipped functions
- due to uncertain arg location
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=gus@collabora.com header.b="F6zJHbYC"
+ARC-Seal: i=1; a=rsa-sha256; t=1751897194; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=LLNCR/NHkkh4BtqPJ/pCtseK5Ws83oNmpJh/GforqVFlguYwvIBNA98X+3RH/2aLRQvuOVpumum5U1cNiKzSGdz8m/zIMaeaMFiSjHOM4M3FxDPdfFTLbskUt6ruJo2Gmmbpj3nA8IvBseDeD8iCi+qj55JDKRJCTIkfmcexHsk=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1751897194; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=p6r215HORtQkgpJubgFcQt2s0rODNo5ViU4EIRgi/3s=; 
+	b=hy8A1BZXYujB1ebEPIQDioLRmyBnLGIrBarFzbw3hOijaYeqvdA0E71iI9KGWkusngIY0f6E3aJyhD74/anu5qqiMeqjwvUBL/FoJ/0+bK/U6SvlarU1v8OjLN9L8CHJU01Zb9KFNH6LsMBBjaHRURCdV5PKGsNSyV2+tJ12qlw=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=gus@collabora.com;
+	dmarc=pass header.from=<gus@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1751897194;
+	s=zohomail; d=collabora.com; i=gus@collabora.com;
+	h=Date:Date:From:From:To:To:Cc:Cc:Message-ID:In-Reply-To:References:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+	bh=p6r215HORtQkgpJubgFcQt2s0rODNo5ViU4EIRgi/3s=;
+	b=F6zJHbYCHlzWqNy+5ogEzSuVhclGr3HMknP58crLG6vbFkXT75CKz23/eSB4LNtZ
+	3cRN08qWfSR3+GKwhk8319Ht3f+/l+ylPJcnkVrEzn4cYUcoNaMPFdxyvLlcs8GJ9jO
+	OiAtk66JaIHW8pvXJEcS70nHSfXrsZkhrmFPqugg=
+Received: from mail.zoho.com by mx.zohomail.com
+	with SMTP id 1751897191262513.0769904210841; Mon, 7 Jul 2025 07:06:31 -0700 (PDT)
+Date: Mon, 07 Jul 2025 11:06:31 -0300
+From: Gustavo Padovan <gus@collabora.com>
+To: "Randy Dunlap" <rdunlap@infradead.org>
+Cc: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "bot" <bot@kernelci.org>,
+	"kernelci" <kernelci@lists.linux.dev>,
+	"Stephen Rothwell" <sfr@canb.auug.org.au>,
+	"Linux Next Mailing List" <linux-next@vger.kernel.org>,
+	"Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+	"bpf" <bpf@vger.kernel.org>
+Message-ID: <197e535b307.1104f59621371677.7964423033912786920@collabora.com>
+In-Reply-To: <d5136da0-51f9-4359-a283-9075b4992bfb@infradead.org>
+References: <20250704205116.551577e4@canb.auug.org.au>
+ <5496b723-440f-451b-b101-f0c7c971fc9b@infradead.org>
+ <f06082bf-27b5-488d-b484-fecc100014a1@infradead.org>
+ <CAP01T77AWoBqDgOPpmmcL5tQFqNa8W3rxBDB+Er0J5rxogCrVA@mail.gmail.com> <d5136da0-51f9-4359-a283-9075b4992bfb@infradead.org>
+Subject: Re: linux-next: Tree for Jul 4 (kernel/bpf/stream.c)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20250707-btf_skip_structs_on_stack-v3-2-29569e086c12@bootlin.com>
-References: <20250707-btf_skip_structs_on_stack-v3-0-29569e086c12@bootlin.com>
-In-Reply-To: <20250707-btf_skip_structs_on_stack-v3-0-29569e086c12@bootlin.com>
-To: dwarves@vger.kernel.org
-Cc: bpf@vger.kernel.org, Alan Maguire <alan.maguire@oracle.com>, 
- Arnaldo Carvalho de Melo <acme@kernel.org>, Alexei Starovoitov <ast@fb.com>, 
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- Bastien Curutchet <bastien.curutchet@bootlin.com>, ebpf@linuxfoundation.org, 
- =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
-X-Mailer: b4 0.14.2
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdefudellecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephfffufggtgfgkfhfjgfvvefosehtkeertdertdejnecuhfhrohhmpeetlhgvgihishcunfhothhhohhrroculdgvuefrhfcuhfhouhhnuggrthhiohhnmdcuoegrlhgvgihishdrlhhothhhohhrvgessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepleejkeetffefveelgeeklefhtefhgfeigeduveffjeehleeifeefjedtudejgeeunecukfhppedvrgdtvdemkeegvdekmehfleegtgemvgdttdemmehfkeehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddvmeekgedvkeemfhelgegtmegvtddtmeemfhekhedphhgvlhhopegludelvddrudeikedruddrudeljegnpdhmrghilhhfrhhomheprghlvgigihhsrdhlohhthhhorhgvsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeelpdhrtghpthhtoheprghlvgigihhsrdhlohhthhhorhgvsegsohhothhlihhnrdgtohhmpdhrtghpthhtoheprghlrghnrdhmrghguhhirhgvsehorhgrtghlvgdrtghomhdprhgtphhtthhopehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdprhgtp
- hhtthhopegrtghmvgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepvggsphhfsehlihhnuhigfhhouhhnuggrthhiohhnrdhorhhgpdhrtghpthhtohepugifrghrvhgvshesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegsrghsthhivghnrdgtuhhruhhttghhvghtsegsohhothhlihhnrdgtohhmpdhrtghpthhtoheprghsthesfhgsrdgtohhm
-X-GND-Sasl: alexis.lothore@bootlin.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+Importance: Medium
+User-Agent: Zoho Mail
+X-Mailer: Zoho Mail
 
-Add a small binary representing specific cases likely absent from
-standard vmlinux or kernel modules files. As a starter, the introduced
-binary exposes a few functions consuming structs passed by value, some
-passed by register, some passed on the stack:
 
-  int main(void);
-  int test_bin_func_struct_on_stack_ko(int, void *, char, short int, int, \
-    void *, char, short int, struct test_bin_struct_packed);
-  int test_bin_func_struct_on_stack_ok(int, void *, char, short int, int, \
-    void *, char, short int, struct test_bin_struct);
-  int test_bin_func_struct_ok(int, void *, char, struct test_bin_struct);
-  int test_bin_func_ok(int, void *, char, short int);
 
-Then enrich btf_functions.sh to make it perform the following steps:
-- build the binary
-- generate BTF info and pfunct listing, both with dwarf and the
-  generated BTF
-- check that any function encoded in BTF is found in DWARF
-- check that any function announced as skipped is indeed absent from BTF
-- check that any skipped function has been skipped due to uncertain
-  parameter location
+---- On Sat, 05 Jul 2025 01:52:58 -0300 Randy Dunlap <rdunlap@infradead.org> wrote ---
 
-Example of the new test execution:
-  Encoding...Matched 4 functions exactly.
-  Ok
-  Validation of skipped function logic...
-  Skipped encoding 1 functions in BTF.
-  Ok
-  Validating skipped functions have uncertain parameter location...
-  pahole: /home/alexis/src/pahole/tests/bin/test_bin: Invalid argument
-  Found 1 legitimately skipped function due to uncertain loc
-  Ok
+ > 
+ > 
+ > On 7/4/25 9:44 PM, Kumar Kartikeya Dwivedi wrote: 
+ > > On Sat, 5 Jul 2025 at 01:38, Randy Dunlap <rdunlap@infradead.org> wrote: 
+ > >> 
+ > >> 
+ > >> 
+ > >> On 7/4/25 4:35 PM, Randy Dunlap wrote: 
+ > >>> 
+ > >>> 
+ > >>> On 7/4/25 3:51 AM, Stephen Rothwell wrote: 
+ > >>>> Hi all, 
+ > >>>> 
+ > >>>> Changes since 20250703: 
+ > >>>> 
+ > >>> 
+ > >>> on i386: 
+ > >>> 
+ > >>> kernel/bpf/stream.c: In function 'dump_stack_cb': 
+ > >>> kernel/bpf/stream.c:501:53: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast] 
+ > >>>   501 |                                                     (void *)ip, line, file, num); 
+ > >>>       |                                                     ^ 
+ > >>> ../kernel/bpf/stream.c:505:64: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast] 
+ > >>>   505 |         ctxp->err = bpf_stream_stage_printk(ctxp->ss, "%pS\n", (void *)ip); 
+ > >>>       | 
+ > >>> 
+ > >>> 
+ > >> 
+ > >> Also reported (earlier) here: 
+ > >> 
+ > >> https://lore.kernel.org/linux-next/CACo-S-16Ry4Gn33k4zygRKwjE116h1t--DSqJpQfodeVb0ssGA@mail.gmail.com/T/#u 
+ > >> 
+ > > 
+ > > Thanks, I will share a fix soon. Could the bot also Cc the author of 
+ > > the commit using git blame? 
+ >  
+ > I added the email address for the bot. We'll see if it can read email. 
 
-Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
----
-Changes in v3:
-- bring a userspace binary instead of an OoT kernel module
-- remove test dependency to a kernel directory being provided
-- improve test dir detection
+The bot doesn't know how to read email yet. :)
 
-Changes in v2:
-- new patch
----
- tests/bin/Makefile     | 10 ++++++
- tests/bin/test_bin.c   | 66 ++++++++++++++++++++++++++++++++++++
- tests/btf_functions.sh | 91 ++++++++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 167 insertions(+)
+The challenge with Cc the author today is that we don't build every commit or bisect,
+so we are not able to indentify the culprit commit. It is definitely on our roadmap to
+do that, but we don't know when such a feature would be available.
 
-diff --git a/tests/bin/Makefile b/tests/bin/Makefile
-new file mode 100644
-index 0000000000000000000000000000000000000000..70bcf57ac4744f30fe03ea12908e42c69390f14a
---- /dev/null
-+++ b/tests/bin/Makefile
-@@ -0,0 +1,10 @@
-+CC=${CROSS_COMPILE}gcc
-+
-+test_bin: test_bin.c
-+	${CC} $^ -Wall -Wextra -Werror -g -o $@
-+
-+clean:
-+	rm -rf test_bin
-+
-+.PHONY: clean
-+
-diff --git a/tests/bin/test_bin.c b/tests/bin/test_bin.c
-new file mode 100644
-index 0000000000000000000000000000000000000000..ca6a4852cc511243925db905e55e040519af9cfd
---- /dev/null
-+++ b/tests/bin/test_bin.c
-@@ -0,0 +1,66 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <stdio.h>
-+
-+#define noinline __attribute__((noinline))
-+#define __packed __attribute__((__packed__))
-+
-+struct test_bin_struct {
-+	char a;
-+	short b;
-+	int c;
-+	unsigned long long d;
-+};
-+
-+struct test_bin_struct_packed {
-+	char a;
-+	short b;
-+	int c;
-+	unsigned long long d;
-+}__packed;
-+
-+int test_bin_func_ok(int a, void *b, char c, short d);
-+int test_bin_func_struct_ok(int a, void *b, char c, struct test_bin_struct d);
-+int test_bin_func_struct_on_stack_ok(int a, void *b, char c, short d, int e,
-+                                      void *f, char g, short h,
-+                                      struct test_bin_struct i);
-+int test_bin_func_struct_on_stack_ko(int a, void *b, char c, short d, int e,
-+                                      void *f, char g, short h,
-+                                      struct test_bin_struct_packed i);
-+
-+noinline int test_bin_func_ok(int a, void *b, char c, short d)
-+{
-+	return a + (long)b + c + d;
-+}
-+
-+noinline int test_bin_func_struct_ok(int a, void *b, char c,
-+                                      struct test_bin_struct d)
-+{
-+	return a + (long)b + c + d.a + d.b + d.c + d.d;
-+}
-+
-+noinline int test_bin_func_struct_on_stack_ok(int a, void *b, char c, short d,
-+                                               int e, void *f, char g, short h,
-+                                               struct test_bin_struct i)
-+{
-+	return a + (long)b + c + d + e + (long)f + g + h + i.a + i.b + i.c + i.d;
-+}
-+
-+noinline int test_bin_func_struct_on_stack_ko(int a, void *b, char c, short d,
-+                                               int e, void *f, char g, short h,
-+                                               struct test_bin_struct_packed i)
-+{
-+	return a + (long)b + c + d + e + (long)f + g + h + i.a + i.b + i.c + i.d;
-+}
-+
-+int main()
-+{
-+	struct test_bin_struct test;
-+	struct test_bin_struct_packed test_bis;
-+
-+	test_bin_func_ok(0, NULL, 0, 0);
-+	test_bin_func_struct_ok(0, NULL, 0, test);
-+	test_bin_func_struct_on_stack_ok(0, NULL, 0, 0, 0, NULL, 0, 0, test);
-+	test_bin_func_struct_on_stack_ko(0, NULL, 0, 0, 0, NULL, 0, 0, test_bis);
-+	return 0;
-+}
-+
-diff --git a/tests/btf_functions.sh b/tests/btf_functions.sh
-index c92e5ae906f90badfede86eb530108894fbc8c93..fb62b0b56662bb2ae58f7adc0a022c400cba5e0f 100755
---- a/tests/btf_functions.sh
-+++ b/tests/btf_functions.sh
-@@ -193,4 +193,95 @@ if [[ -n "$VERBOSE" ]]; then
- fi
- echo "Ok"
- 
-+# Some specific cases can not  be tested directly with a standard kernel.
-+# We can use the small binary in bin/ to test those cases, like packed
-+# structs passed on the stack. 
-+
-+echo -n "Validation of BTF encoding corner cases with test_bin functions; this may take some time: "
-+
-+test -n "$VERBOSE" && printf "\nBuilding test_bin..."
-+tests_dir=$(realpath $(dirname $0))
-+make -C ${tests_dir}/bin
-+
-+test -n "$VERBOSE" && printf "\nEncoding..."
-+pahole --btf_features=default --lang_exclude=rust --btf_encode_detached=$outdir/test_bin.btf \
-+	--verbose ${tests_dir}/bin/test_bin | grep "skipping BTF encoding of function" \
-+	> ${outdir}/test_bin_skipped_fns
-+
-+funcs=$(pfunct --format_path=btf $outdir/test_bin.btd 2>/dev/null|sort)
-+pfunct --all --no_parm_names --format_path=dwarf bin/test_bin | \
-+	sort|uniq > $outdir/test_bin_dwarf.funcs
-+pfunct --all --no_parm_names --format_path=btf $outdir/test_bin.btf 2>/dev/null|\
-+	awk '{ gsub("^(bpf_kfunc |bpf_fastcall )+",""); print $0}'|sort|uniq > $outdir/test_bin_btf.funcs
-+
-+exact=0
-+while IFS= read -r btf ; do
-+	# Matching process can be kept simpler as the tested binary is
-+	# specifically tailored for tests
-+	dwarf=$(grep -F "$btf" $outdir/test_bin_dwarf.funcs)
-+	if [[ "$btf" != "$dwarf" ]]; then
-+		echo "ERROR: mismatch : BTF '$btf' not found; DWARF '$dwarf'"
-+		fail
-+	else
-+		exact=$((exact+1))
-+	fi
-+done < $outdir/test_bin_btf.funcs
-+
-+if [[ -n "$VERBOSE" ]]; then
-+	echo "Matched $exact functions exactly."
-+	echo "Ok"
-+	echo "Validation of skipped function logic..."
-+fi
-+
-+skipped_cnt=$(wc -l ${outdir}/test_bin_skipped_fns | awk '{ print $1}')
-+if [[ "$skipped_cnt" == "0" ]]; then
-+	echo "No skipped functions.  Done."
-+	exit 0
-+fi
-+
-+skipped_fns=$(awk '{print $1}' $outdir/test_bin_skipped_fns)
-+for s in $skipped_fns ; do
-+	# Ensure the skipped function are not in BTF
-+	inbtf=$(grep " $s(" $outdir/test_bin_btf.funcs)
-+	if [[ -n "$inbtf" ]]; then
-+		echo "ERROR: '${s}()' was added incorrectly to BTF: '$inbtf'"
-+		fail
-+	fi
-+done
-+
-+if [[ -n "$VERBOSE" ]]; then
-+	echo "Skipped encoding $skipped_cnt functions in BTF."
-+	echo "Ok"
-+	echo "Validating skipped functions have uncertain parameter location..."
-+fi
-+
-+uncertain_loc=$(awk '/due to uncertain parameter location/ { print $1 }' $outdir/test_bin_skipped_fns)
-+legitimate_skip=0
-+
-+for f in $uncertain_loc ; do
-+	# Extract parameters types
-+	raw_params=$(grep ${f} $outdir/test_bin_dwarf.funcs|sed -n 's/^[^(]*(\([^)]*\)).*/\1/p')
-+	IFS=',' read -ra params <<< "${raw_params}"
-+	for param in "${params[@]}"
-+	do
-+		# Search any param that could be a struct
-+		struct_type=$(echo ${param}|grep -E '^struct [^*]' | sed -E 's/^struct //')
-+		if [ -n "${struct_type}" ]; then
-+			# Check with pahole if the struct is detected as
-+			# packed
-+			if pahole -F dwarf -C "${struct_type}" ${tests_dir}/bin/test_bin|tail -n 2|grep -q __packed__
-+			then
-+				legitimate_skip=$((legitimate_skip+1))
-+				continue 2
-+			fi
-+		fi
-+	done
-+	echo "ERROR: '${f}()' should not have been skipped; it has no parameter with uncertain location"
-+	fail
-+done
-+
-+if [[ -n "$VERBOSE" ]]; then
-+	echo "Found ${legitimate_skip} legitimately skipped function due to uncertain loc"
-+fi
-+echo "Ok"
- exit 0
+Best,
 
--- 
-2.50.0
+- Gus
+
 
