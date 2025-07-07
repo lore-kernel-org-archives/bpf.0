@@ -1,82 +1,111 @@
-Received: from relay.hostedemail.com (smtprelay0017.hostedemail.com [216.40.44.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 403B6285CB3;
-	Mon,  7 Jul 2025 21:17:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18B751B4236
+	for <bpf@vger.kernel.org>; Mon,  7 Jul 2025 21:19:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751923069; cv=none; b=ETO8whqf5uYFXlItPGcMgc0qEOw8fT1W0nawAf9OwYOR8wQNlwZC+A18Bzv4s8Td2swVrH714KufcaA6ECBlz6cx4qQbzxG4myw8Rqlu1RUaaZiyMtibzlXCq/l5l3puJrdj0FAdXI8EYwg+pFQspxR11p65svqQkfOt6lacZ0M=
+	t=1751923197; cv=none; b=RQ3bFv613/sj0Ufnl7RN3Iw7ClfJqk+yIgil6DK1dvTYN6nDWpvdkv9su/Q3lwdaXbQdNJVyX3QXs74gO0xdfgLFST2RvNiASPKMv+ZpvjtguaqkIC3nWmcyu6OotfFVNJwb0q5nn7TOI0cn2tr+EBiPhsHaaGVRvGO8ZOBsLaY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751923069; c=relaxed/simple;
-	bh=6w1dVPixiY3k13k17rtRyUsCZzgPtumdTmATn1RT6BU=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=LoPoQoLRC3JD4iih/VhiJz0c71wLTj5bSMtIKX7nItXV+sxh65ma35eZwjCeezk1M/iuJnZ9DAII/AVYzdrThvLUNlUPsgJA5F6Lm4ifWD2EUlrdTi2xFw+m9aCm/tyCsNZuTQaBBeolxtqxX00a22o92/0OFCAXb+EpEEYLHTs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf01.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay09.hostedemail.com (Postfix) with ESMTP id ECC2D8037B;
-	Mon,  7 Jul 2025 21:01:10 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf01.hostedemail.com (Postfix) with ESMTPA id 5AD786000F;
-	Mon,  7 Jul 2025 21:01:06 +0000 (UTC)
-Date: Mon, 7 Jul 2025 17:01:05 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- bpf@vger.kernel.org, x86@kernel.org, Masami Hiramatsu
- <mhiramat@kernel.org>, Josh Poimboeuf <jpoimboe@kernel.org>, Peter Zijlstra
- <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>, Jiri Olsa
- <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Thomas Gleixner
- <tglx@linutronix.de>, Andrii Nakryiko <andrii@kernel.org>, Indu Bhagat
- <indu.bhagat@oracle.com>, "Jose E. Marchesi" <jemarch@gnu.org>, Beau
- Belgrave <beaub@linux.microsoft.com>, Jens Remus <jremus@linux.ibm.com>,
- Linus Torvalds <torvalds@linux-foundation.org>, Andrew Morton
- <akpm@linux-foundation.org>, Jens Axboe <axboe@kernel.dk>, Florian Weimer
- <fweimer@redhat.com>
-Subject: Re: [PATCH v12 01/14] unwind_user: Add user space unwinding API
-Message-ID: <20250707170105.1ea1ccd5@batman.local.home>
-In-Reply-To: <20250707154245.7eeeb448@batman.local.home>
-References: <20250701005321.942306427@goodmis.org>
-	<20250701005450.721228270@goodmis.org>
-	<12c620ea-4bee-4019-8143-8ecbaeeafc11@efficios.com>
-	<20250707154245.7eeeb448@batman.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1751923197; c=relaxed/simple;
+	bh=3a5jAiTp8yS6qb/i34pbOlQ3gaBo9s+omrxiO7fH0zM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=CcsWX7M8gQ03dwVqGs0AWLinp6kUD1rPXOLR1pKApQsazavO+N36qff9Ss/3DEedqCOytoXkgte+Iu3qAWzZStIg7C2qca5mLuVy2KaPCeEbURfK2FR+YsAtGRAbkXY9ftaGRfDznpPBIbeWaCyvEvwJPIXALJQ6Nw4TEeHLUIE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=L7mUMP3i; arc=none smtp.client-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="L7mUMP3i"
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-451d6ade159so31720965e9.1
+        for <bpf@vger.kernel.org>; Mon, 07 Jul 2025 14:19:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1751923194; x=1752527994; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3a5jAiTp8yS6qb/i34pbOlQ3gaBo9s+omrxiO7fH0zM=;
+        b=L7mUMP3io57jYG7QcDEAzWWy3qoRqwHovmgS3m6bKOV+Nyb1yAnlX6puYIX1pfwogE
+         DB3+p+3dWHD9IgmIwLtcYINZ8ACeSQfXw+Glb5JO7fl7lr1siKz3+8qRuqm9JH3CEIVb
+         r0/kM533CfnNKDd3f9q2g7+O9WawyirY4ldcm3kprsCdCzwj+rEoqGd1K2/oCAyqwmKS
+         pP5XBZHWwdOlwmzXX+YSjVJEog98enwWN1dN5izm4c+UpA786dH5YP1CtwMzvs6gRWxP
+         yg2jL/5CD4P2GMWrr3W7htkWDnyYE/CdlxvOeWkdMD3B10poMafsB8tH61UZJEpagDw/
+         rtqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751923194; x=1752527994;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3a5jAiTp8yS6qb/i34pbOlQ3gaBo9s+omrxiO7fH0zM=;
+        b=XHM6pjER815fMYUZzYJuPSvuZcvoC0K4XFbNdv1uTGPMB7KPz+zgDzcMT2lOf1BEzx
+         CywiC6keNhnvMwN4nXlwy5IoBOBieugEM1U6pkbYkECtsPEjBefjBVKwr8AS+gTIGFMB
+         2gAu98WGVLeiYO3mo91H6ElZJsjZD48JkFqHwyZRPQHvNenvwOX1vfWXT+0LeOT6UQCq
+         AJUoPG0MpD0UamNTJEwcqgA+meixFAD3SOI0PrEEwVX4L0dXSYRf+/7j7TnriLUfWJ84
+         PZeI94pLHLY2G+tO1QxPVDurU84RWuMI6ejL4UUkeybwGiOHwT8HzWekOT7Ma3hlLZor
+         Er3g==
+X-Forwarded-Encrypted: i=1; AJvYcCWtmtoQX8DsmNdY8vHnaCqgxBvhyGc+Lhk1d8OmhD4epbSO/P7umzXepqMsq6j/P7ZHr9A=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxbmQVFQBZj0ZBgz91hfwNIvOULA9kvL1sv6yfar0GA0O9Fvdly
+	vDlAMF8Zq7P6Yd03cCHypm8AWWZ7Ls9bRoir6RGhaiPCq+BTfRQkj0nz7RvLrIBrJWleHlgVgRP
+	5Fv0uAFKsrTy3Y0rgSF06s9GaNAirez4=
+X-Gm-Gg: ASbGncvGJkaQlGJsIfGyhbFSyR4BFMo93SHTJKaBRivWk05/tKP5fY21V7p5ndxWytJ
+	OLuB1gQaQ4C32XBAhfBcPgUUmLyMq/Ybo7iqs6DgnIvdkpWLS58PMGMkQMQ/MnOz39BhVVBhWDg
+	pqHBF9myVIgNDVzjiH8TLJDCITzPBj4xq7gBpxYp1Jj0KKBAtwpo9cHMG58EzI9yY8+CnkulbP0
+	yAb4hEfeKo=
+X-Google-Smtp-Source: AGHT+IHmBjdT+TyJl1Z4uG1LaK68AKIjYSJ87o+AZQnF6g1t4St/+UVfEOU0qXT27fRRBNX3+y9IAO6cJRtXDZnR6Io=
+X-Received: by 2002:a05:600c:3481:b0:43d:97ea:2f4 with SMTP id
+ 5b1f17b1804b1-454b4e74760mr120508425e9.12.1751923194073; Mon, 07 Jul 2025
+ 14:19:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: 5AD786000F
-X-Rspamd-Server: rspamout02
-X-Stat-Signature: t8cy4pfn5kbywkbtcd3fwte3h7einzic
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX1/hJGEJuHvQAlzXM3nyahxqw5XL3ZPesbc=
-X-HE-Tag: 1751922066-394350
-X-HE-Meta: U2FsdGVkX184maHp6AbgAf/k2jFaTcaeSpS3K9TchigjJp+AUwA/uPIZxrsWq7w+ozKsT2CHLZtdR/CMMdEZsv1i16RlIkZ3Whg0lthKOJcoNFa0x7FuSkemuK4mA0+U8bZuj/O51FHf+WNP1GIjLiW7wPxUeDVpTZmok2m+9aPbm1I4hEWS+uOWaWIyd5V54lInMb9k6AH42l8AEwtbpPgUmNFWTuLi5+2Su6KN+wFZejFeA4XWH36aDSjowkMB+UJjVp0UDuLZ1KLiLOSGrjhiu8uNgeS95bn+njQz+L/NPoC+dzquqoBguOOpBvdM8Uxx3Rfz6O6M1oC2du4HLTFx2lVrFt6GpeZGY9hN6x1QyknJ6BqBptV48fHoSaN5pahZ+k18pqtE38ILr/yfnJ07mKf2V+5hvzpnN7isVTDnmpmM9z/clCEPpEaUhbc/
+References: <1A9DA34D-7AC9-4A77-A07D-46B4DD0E3136@oracle.com>
+In-Reply-To: <1A9DA34D-7AC9-4A77-A07D-46B4DD0E3136@oracle.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Mon, 7 Jul 2025 14:19:42 -0700
+X-Gm-Features: Ac12FXwkbtJpTnlD03RYRJKhfYNd1XfPUlRUvE3q_4M-kqNyJFjxC0d4hayXDe4
+Message-ID: <CAADnVQKDeKmz95rHT4sRX9JhrRiBR06wngVck_cVzmGtDMiK7w@mail.gmail.com>
+Subject: Re: Potential BPF Arena Security Vulnerability, Possible Memory
+ Access and Overflow Issues
+To: Yifei Liu <yifei.l.liu@oracle.com>
+Cc: "ast@kernel.org" <ast@kernel.org>, "bpf@vger.kernel.org" <bpf@vger.kernel.org>, 
+	"daniel@iogearbox.net" <daniel@iogearbox.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 7 Jul 2025 15:42:45 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
+On Mon, Jul 7, 2025 at 1:44=E2=80=AFPM Yifei Liu <yifei.l.liu@oracle.com> w=
+rote:
+>
+> Hi Alexei,
+>
+> I recently noticed that the verifier_arena_large selftest would fail on t=
+he overflow and underflow section for 64k page size kernels. After a deeper=
+ investigation, the similar issue is also reproducible on 4k page size over=
+ both x86 and aarch64 platforms.
+>
+> The root reason of this failure looks to be a failed or missing check of =
+the pointer upper 32-bit from the user space. User space could access the a=
+rena space value even the pointer is not in the assigned user space pointer=
+ range. For example, if the user_vm_start is 7f7d26200000 and arena size is=
+ 4G (end upper bound is 7f7e26200000), when I set *(7f7e26200000 - 65536) =
+=3D 20, I could also get the value of (7f7d26200000 - 65536) as 20. It shou=
+ld be 0 if that is out of the range.
+>
+> Could you please take a look at this issue? Or could you please point me =
+where is the place doing the address translation and I could try to provide=
+ a patch for this?
+>
+> Thank you very much.
+> Yifei
+>
+> Methods on reproduce:
+> 1. Use a 64k page size arm based kernel and run verifier_arena_large self=
+test, it would failed on return 12 and 13. Or
 
-> On Fri, 4 Jul 2025 14:20:54 -0400
-> Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
-> 
-> > > None of the structures introduced will be exposed to user space tooling.    
-> > 
-> > Would it be possible to make those unwind APIs EXPORT_SYMBOL_GPL
-> > so they are available for GPL kernel modules ?  
-> 
-> I'm OK with that, but others tend to complain about EXPORT_SYMBOL_GPL
-> for functions not used by modules in the kernel. But I personally feel
-> that LTTng should get an exception for that rule ;-)
+Are you sure you're running the latest kernel ?
+This sounds like issue fixed in commit 517e8a7835e8 ("bpf: Fix
+softlockup in arena_map_free on 64k page kernel")
 
-I just noticed that this was to patch 1. The functions here probably
-shouldn't be exported as they are more internal to the infrastructure.
-
-In fact, I think I'll move that macro into the user.c code. I don't
-think it should be used outside that function. And the
-unwind_user_start/next() could also be static functions.
-
--- Steve
+In general this is not a security vulnerability in any way.
+32-bit wraparound is there by design.
