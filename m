@@ -1,35 +1,68 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-178.mta0.migadu.com (out-178.mta0.migadu.com [91.218.175.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3A301E9B31;
-	Mon,  7 Jul 2025 15:39:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78AFC1E2614
+	for <bpf@vger.kernel.org>; Mon,  7 Jul 2025 15:41:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751902789; cv=none; b=jIOZ0d3ECgCogp/dtbACd+I/UTSnv2km+PYLOXFVqYZgLfMITcVNgjFyJ+rWMZeWsoeJ/JhiUs5QlsUbpTWj63YC8krVC/79vPlA36qnrLyw53jjBnHdeOeddnUi3Zf9L4an7/zS8KXeP+1vo9VJzM0PBhcXHuKDlIB2ORW+Ljk=
+	t=1751902883; cv=none; b=KsZpVD4hc3U3iGbfJCk2d7Yu0qhYdKC572fd1n8z/zDbyI8lvBELIayqVv+qsCoZx3AuFqc5hGD9ehVpxQHu2/YdrAd8NsT98VjwJMtJ6CcgYFmWRvd3es+RQ2q3XAFoGTg58ZH542Au+2fBGoNEEyJlnrY2U2kbWHfBzRffF0c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751902789; c=relaxed/simple;
-	bh=REZLQrlRb8EJsN7RuVszma03pCayuWgDp1TpIzshJZs=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=m9teBDJ3Gng8lYfmRbFWdspZE1UNGr4Q42wohgPn3A0AVG9KkgnM2Irpx+oai4Z/tWdzXthMHhVd12EPvsWAyjfOu+AMnGn0z+EGoAt9QNFeqnYmBHpZygmLe/F4dOM3Oi3uC9gpA7/Ct58kxDOjFX69FGzus0mN1OcCHgv1kgs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iFz1/JjF; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1751902883; c=relaxed/simple;
+	bh=ePOPubuWj17eRi0sYt5gn5zhUwG2cej8IddcFeCTXXM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Ce9AiQp+jjdTafVksCjumUAAdVCKGh9iCbkpm/1EfqumfUsAOYIhTBo5DLK5GI9FzE8u5fIsnHRoVmblNyxXPlnZeV0N6ccocrw/12dxPmLscW56xlWuOHDSQybhh46RL6a5j7s1f/jXd7mps2b+OZqUV0E1uLnoy3DmwR+e31A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Yr0XVWux; arc=none smtp.client-ip=91.218.175.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iFz1/JjF"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EC19C4CEE3;
-	Mon,  7 Jul 2025 15:39:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751902788;
-	bh=REZLQrlRb8EJsN7RuVszma03pCayuWgDp1TpIzshJZs=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=iFz1/JjFtuU3YPv0UBNQpZf3JxMuM63gaMmJGqk/jMRWuYPFSqmdit7xgynU+km7P
-	 RNmFWQNYQ9TBFnObWI1misfa0sl8s26Or13jt2SOwfUExNilF97v3CS3eohLXQpqnm
-	 +ZhB1463qvUt/VCT4thCgsL0qfSCOOzL1VPTsxTPpCyzd2c8CE4cexM8jbda8mft3p
-	 jrBhw7ZHvtwbLLKjY6MWzQUyCRj2/xI711hSqZo7Vy5R3ecY24YubHPo8616L2QsqO
-	 ak6eYfhlvGIaYmpUhNvJoewP97lSI4DWmsalkIpNrTbvfGOPENYPD3QJHQQ6r0nqBD
-	 h7Wg0unJ/fKhg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EB008383BA25;
-	Mon,  7 Jul 2025 15:40:12 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Yr0XVWux"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1751902869;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=q3RrQWA0hl2m0Jg5mJm6780LOhvTRsObdRFSzyTIGtE=;
+	b=Yr0XVWuxfD334RtnfP0rxbc+BWxrdqSYqtRltclNSQJe/WG7/ZAUAZLPOgQonXSIf4O+zi
+	wPVs1mBAUazhpSsbztZiS7Vy3GfvHYgBMk2/BCsd/u0L258ep/8V8if24dVPYCtugI+bqE
+	7JRo1lDd8eyvUhNFvmxoanDff6hGxyk=
+From: Tao Chen <chen.dylane@linux.dev>
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	john.fastabend@gmail.com,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	mattbobrowski@google.com,
+	rostedt@goodmis.org,
+	mhiramat@kernel.org,
+	mathieu.desnoyers@efficios.com,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	kuniyu@amazon.com,
+	willemb@google.com,
+	jakub@cloudflare.com,
+	pablo@netfilter.org,
+	kadlec@netfilter.org,
+	hawk@kernel.org
+Cc: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	netfilter-devel@vger.kernel.org,
+	coreteam@netfilter.org,
+	Tao Chen <chen.dylane@linux.dev>
+Subject: [PATCH bpf-next 0/6] Move attach_type into bpf_link
+Date: Mon,  7 Jul 2025 23:39:10 +0800
+Message-ID: <20250707153916.802802-1-chen.dylane@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -37,47 +70,53 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] selftests/bpf: Set CONFIG_PACKET=y for selftests
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <175190281175.3336255.8398481475533442439.git-patchwork-notify@kernel.org>
-Date: Mon, 07 Jul 2025 15:40:11 +0000
-References: <20250707071735.705137-1-skb99@linux.ibm.com>
-In-Reply-To: <20250707071735.705137-1-skb99@linux.ibm.com>
-To: Saket Kumar Bhaskar <skb99@linux.ibm.com>
-Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, hbathini@linux.ibm.com, sachinpb@linux.ibm.com,
- andrii@kernel.org, eddyz87@gmail.com, mykolal@fb.com, ast@kernel.org,
- daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
- yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, shuah@kernel.org
+X-Migadu-Flow: FLOW_OUT
 
-Hello:
+Andrii suggested moving the attach_type into bpf_link, the previous discussion
+is as follows:
+https://lore.kernel.org/bpf/CAEf4BzY7TZRjxpCJM-+LYgEqe23YFj5Uv3isb7gat2-HU4OSng@mail.gmail.com
 
-This patch was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+patch1 add attach_type in bpf_link, and pass it to bpf_link_init, which
+will init the attach_type field.
 
-On Mon,  7 Jul 2025 12:47:35 +0530 you wrote:
-> BPF selftest fails to build with below error:
-> 
->   CLNG-BPF [test_progs] lsm_cgroup.bpf.o
-> progs/lsm_cgroup.c:105:21: error: variable has incomplete type 'struct sockaddr_ll'
->   105 |         struct sockaddr_ll sa = {};
->       |                            ^
-> progs/lsm_cgroup.c:105:9: note: forward declaration of 'struct sockaddr_ll'
->   105 |         struct sockaddr_ll sa = {};
->       |                ^
-> 1 error generated.
-> 
-> [...]
+patch2-6 remove the attach_type in struct bpf_xx_link, update the info
+with bpf_link attach_type.
 
-Here is the summary with links:
-  - selftests/bpf: Set CONFIG_PACKET=y for selftests
-    https://git.kernel.org/bpf/bpf-next/c/0f626c98fd10
+There are some functions finally call bpf_link_init but do not have bpf_attr
+from user or do not need to init attach_type from user like bpf_raw_tracepoint_open,
+now use prog->expected_attach_type to init attach_type.
 
-You are awesome, thank you!
+bpf_struct_ops_map_update_elem
+bpf_raw_tracepoint_open
+bpf_struct_ops_test_run
+
+Feedback of any kind is welcome, thanks.
+
+Tao Chen (6):
+  bpf: Add attach_type in bpf_link
+  bpf: Remove attach_type in bpf_cgroup_link
+  bpf: Remove attach_type in bpf_sockmap_link
+  bpf: Remove location field in tcx_link
+  bpf: Remove attach_type in bpf_netns_link
+  bpf: Remove attach_type in bpf_tracing_link
+
+ include/linux/bpf-cgroup.h     |  1 -
+ include/linux/bpf.h            | 18 +++++++++------
+ include/net/tcx.h              |  1 -
+ kernel/bpf/bpf_iter.c          |  3 ++-
+ kernel/bpf/bpf_struct_ops.c    |  5 +++--
+ kernel/bpf/cgroup.c            | 17 +++++++--------
+ kernel/bpf/net_namespace.c     |  8 +++----
+ kernel/bpf/syscall.c           | 40 ++++++++++++++++++++--------------
+ kernel/bpf/tcx.c               | 16 +++++++-------
+ kernel/bpf/trampoline.c        | 10 +++++----
+ kernel/trace/bpf_trace.c       |  4 ++--
+ net/bpf/bpf_dummy_struct_ops.c |  3 ++-
+ net/core/dev.c                 |  3 ++-
+ net/core/sock_map.c            | 13 +++++------
+ net/netfilter/nf_bpf_link.c    |  3 ++-
+ 15 files changed, 79 insertions(+), 66 deletions(-)
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.48.1
 
