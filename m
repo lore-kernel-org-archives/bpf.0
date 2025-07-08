@@ -1,37 +1,38 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D91F8217719;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D919A217705;
 	Tue,  8 Jul 2025 02:11:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751940718; cv=none; b=EQG1lBmyAzA6LEJyQSQSZmZ3lZf/hbJrOHwZAlE2UL+nezc9WcOHNA/RZXDyJ9pNoP/leMlBM7mOU5XO7B76i3Q7jnKqbznxRWWEGUZZ18kDLBuAuyo4uAyOuwhzvgFiHh7DvArEmMflbpjj2re5Tcpizg85dZPubkNUNvWNn1s=
+	t=1751940718; cv=none; b=SLUbqbqGcQ1SudP3XEtr4sv/R9JC/4LVO5F3Aq5Zw9rA5OAcYeXxZy7IK7rMSzkmtrHFHfd7Wm9v1dx1MgkEx6VgNn1Nz3QOhyYAB+/j5DTDXpl1hWNFJ59cd4j1ibb2e6wxNdKA/JNeyK+OlfpjgqRyNIyp2Fi1fLvbsqlRehc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1751940718; c=relaxed/simple;
-	bh=HUAMBVlHDy1ZZzedd5ag1omB8qFZjUS0QyoIpq9v38I=;
-	h=Message-ID:Date:From:To:Cc:Subject; b=WRylJ/EmG1mEwlEuhyXApPZDNxLK7kcG14MaUJqshpAjSIaOb+QV9jZ41vI0PE1xWtH5k/trs8oQJDHzp4DHIMdKo7qJ1sGoVyozXp2hyMSMxR6AmqCYs7AzvvuuL3H47DdqVe7cVeHQSwl/Rpq6Yi4mC4ypMABzwhMtQE0No68=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UA+CrwH3; arc=none smtp.client-ip=10.30.226.201
+	bh=vrk74lb0dbKscq8FL04HpWM1hSFFbh97X1kJjRZQ/GY=;
+	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
+	 Content-Type; b=q6a+d60U9Fh5RX2fYJylgLHnOdQB85YILwEcfkG7uyVxAPb77VkV8y5J30/kKRXFYO5pw1AuT/Gp7zWv2/JLBSOosTuoK0SBUvS3EKlp3ArcSIPsgvYn30N3AzfJpr5IivP5Ob5bVc0kz90nVXcydDhBorqU9C4ay5iZhIeMs1k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dxWUMbXU; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UA+CrwH3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60560C4CEF5;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dxWUMbXU"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8658FC4CEFA;
 	Tue,  8 Jul 2025 02:11:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1751940718;
-	bh=HUAMBVlHDy1ZZzedd5ag1omB8qFZjUS0QyoIpq9v38I=;
-	h=Date:From:To:Cc:Subject:From;
-	b=UA+CrwH33vbHJ5WsV3jEQD9MJAUCtMna90WFO7Xk52c6yzQ3wtcNLFhbudxJi4nsy
-	 NfmloDP/X9tbc712OZHILt6wC1FbnWHRindi0RAge89oaxHMKMAAkINeUrRw01bEXW
-	 6qQIMCBEHbqdVyO/OSRDUrGDezpAig2YAPrym+tdglimM7MWtOuV/5MUGqGqZ5gX4+
-	 FTe/ryqGq/PFcUQzrSWNUhoEPfB3yLXzvMgHzMuFqs9b/GY4fCdrtWxA3QSwkAnRk4
-	 NFfc5zVQyx9TpuOB4/+BTKmw5hkzdI+ic46l1QjllZ8XJIUCMpT9Xz+mmyXESRANIl
-	 0pxG3EgweO2iQ==
+	bh=vrk74lb0dbKscq8FL04HpWM1hSFFbh97X1kJjRZQ/GY=;
+	h=Date:From:To:Cc:Subject:References:From;
+	b=dxWUMbXUS3Hbvh+iklY9B/+DdeZgposPgRfU2a7qzi/znqoocNJ9sEjZ/9Hp851k9
+	 W2sKUd9QKQoPXhLryNkOHg/JPvF9seNW3dG2e6DtKHwAvUvzIKYT4DEqDwvolvXr1L
+	 JeK4eJ1uoNmb1yP5kaEsZZ1AilKnO39FKbFfnxs3+P4FdoRv3Y6NexD20NViOyBrNu
+	 zb+/5jbdFhA8fsl9ODH6NXVgGzL6HcTUc4mEKrc3fe6gEHg7le7NISslGmiHWj2xS+
+	 B/P4FYou+W0o6En0kVtE/zvdVNCr9EuJdDqN7yQ6fNeMT22+Rnqh694sIB/i/OqY8z
+	 oCdRI0v79UPug==
 Received: from rostedt by gandalf with local (Exim 4.98.2)
 	(envelope-from <rostedt@kernel.org>)
-	id 1uYxoM-00000000DaZ-26iW;
+	id 1uYxoM-00000000DbZ-3aoz;
 	Mon, 07 Jul 2025 22:11:58 -0400
-Message-ID: <20250708021115.894007410@kernel.org>
+Message-ID: <20250708021158.709625173@kernel.org>
 User-Agent: quilt/0.68
-Date: Mon, 07 Jul 2025 22:11:15 -0400
+Date: Mon, 07 Jul 2025 22:11:17 -0400
 From: Steven Rostedt <rostedt@kernel.org>
 To: linux-kernel@vger.kernel.org,
  linux-trace-kernel@vger.kernel.org,
@@ -54,106 +55,234 @@ Cc: Masami Hiramatsu <mhiramat@kernel.org>,
  Andrew Morton <akpm@linux-foundation.org>,
  Jens Axboe <axboe@kernel.dk>,
  Florian Weimer <fweimer@redhat.com>,
- Sam James <sam@gentoo.org>
-Subject: [PATCH v8 00/12] unwind_deferred: Implement sframe handling
+ Sam James <sam@gentoo.org>,
+ linux-mm@kvack.org
+Subject: [PATCH v8 02/12] unwind_user/sframe: Store sframe section data in per-mm maple tree
+References: <20250708021115.894007410@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+
+From: Josh Poimboeuf <jpoimboe@kernel.org>
+
+Associate an sframe section with its mm by adding it to a per-mm maple
+tree which is indexed by the corresponding text address range.  A single
+sframe section can be associated with multiple text ranges.
+
+Cc: linux-mm@kvack.org
+Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+---
+ arch/x86/include/asm/mmu.h |  2 +-
+ include/linux/mm_types.h   |  3 +++
+ include/linux/sframe.h     | 13 +++++++++
+ kernel/fork.c              | 10 +++++++
+ kernel/unwind/sframe.c     | 55 +++++++++++++++++++++++++++++++++++---
+ mm/init-mm.c               |  2 ++
+ 6 files changed, 81 insertions(+), 4 deletions(-)
+
+diff --git a/arch/x86/include/asm/mmu.h b/arch/x86/include/asm/mmu.h
+index 0fe9c569d171..227a32899a59 100644
+--- a/arch/x86/include/asm/mmu.h
++++ b/arch/x86/include/asm/mmu.h
+@@ -87,7 +87,7 @@ typedef struct {
+ 	.context = {							\
+ 		.ctx_id = 1,						\
+ 		.lock = __MUTEX_INITIALIZER(mm.context.lock),		\
+-	}
++	},
+ 
+ void leave_mm(void);
+ #define leave_mm leave_mm
+diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
+index d6b91e8a66d6..4296cabf4afa 100644
+--- a/include/linux/mm_types.h
++++ b/include/linux/mm_types.h
+@@ -1206,6 +1206,9 @@ struct mm_struct {
+ #ifdef CONFIG_MM_ID
+ 		mm_id_t mm_id;
+ #endif /* CONFIG_MM_ID */
++#ifdef CONFIG_HAVE_UNWIND_USER_SFRAME
++		struct maple_tree sframe_mt;
++#endif
+ 	} __randomize_layout;
+ 
+ 	/*
+diff --git a/include/linux/sframe.h b/include/linux/sframe.h
+index 0584f661f698..73bf6f0b30c2 100644
+--- a/include/linux/sframe.h
++++ b/include/linux/sframe.h
+@@ -22,18 +22,31 @@ struct sframe_section {
+ 	signed char	fp_off;
+ };
+ 
++#define INIT_MM_SFRAME .sframe_mt = MTREE_INIT(sframe_mt, 0),
++extern void sframe_free_mm(struct mm_struct *mm);
++
+ extern int sframe_add_section(unsigned long sframe_start, unsigned long sframe_end,
+ 			      unsigned long text_start, unsigned long text_end);
+ extern int sframe_remove_section(unsigned long sframe_addr);
+ 
++static inline bool current_has_sframe(void)
++{
++	struct mm_struct *mm = current->mm;
++
++	return mm && !mtree_empty(&mm->sframe_mt);
++}
++
+ #else /* !CONFIG_HAVE_UNWIND_USER_SFRAME */
+ 
++#define INIT_MM_SFRAME
++static inline void sframe_free_mm(struct mm_struct *mm) {}
+ static inline int sframe_add_section(unsigned long sframe_start, unsigned long sframe_end,
+ 				     unsigned long text_start, unsigned long text_end)
+ {
+ 	return -ENOSYS;
+ }
+ static inline int sframe_remove_section(unsigned long sframe_addr) { return -ENOSYS; }
++static inline bool current_has_sframe(void) { return false; }
+ 
+ #endif /* CONFIG_HAVE_UNWIND_USER_SFRAME */
+ 
+diff --git a/kernel/fork.c b/kernel/fork.c
+index 3341d50c61f2..e56daf4e546f 100644
+--- a/kernel/fork.c
++++ b/kernel/fork.c
+@@ -106,6 +106,7 @@
+ #include <linux/pidfs.h>
+ #include <linux/tick.h>
+ #include <linux/unwind_deferred.h>
++#include <linux/sframe.h>
+ 
+ #include <asm/pgalloc.h>
+ #include <linux/uaccess.h>
+@@ -687,6 +688,7 @@ void __mmdrop(struct mm_struct *mm)
+ 	mm_pasid_drop(mm);
+ 	mm_destroy_cid(mm);
+ 	percpu_counter_destroy_many(mm->rss_stat, NR_MM_COUNTERS);
++	sframe_free_mm(mm);
+ 
+ 	free_mm(mm);
+ }
+@@ -1024,6 +1026,13 @@ static void mmap_init_lock(struct mm_struct *mm)
+ #endif
+ }
+ 
++static void mm_init_sframe(struct mm_struct *mm)
++{
++#ifdef CONFIG_HAVE_UNWIND_USER_SFRAME
++	mt_init(&mm->sframe_mt);
++#endif
++}
++
+ static struct mm_struct *mm_init(struct mm_struct *mm, struct task_struct *p,
+ 	struct user_namespace *user_ns)
+ {
+@@ -1053,6 +1062,7 @@ static struct mm_struct *mm_init(struct mm_struct *mm, struct task_struct *p,
+ 	mm->pmd_huge_pte = NULL;
+ #endif
+ 	mm_init_uprobes_state(mm);
++	mm_init_sframe(mm);
+ 	hugetlb_count_init(mm);
+ 
+ 	if (current->mm) {
+diff --git a/kernel/unwind/sframe.c b/kernel/unwind/sframe.c
+index 20287f795b36..fa7d87ffd00a 100644
+--- a/kernel/unwind/sframe.c
++++ b/kernel/unwind/sframe.c
+@@ -122,15 +122,64 @@ int sframe_add_section(unsigned long sframe_start, unsigned long sframe_end,
+ 	if (ret)
+ 		goto err_free;
+ 
+-	/* TODO nowhere to store it yet - just free it and return an error */
+-	ret = -ENOSYS;
++	ret = mtree_insert_range(sframe_mt, sec->text_start, sec->text_end, sec, GFP_KERNEL);
++	if (ret) {
++		dbg("mtree_insert_range failed: text=%lx-%lx\n",
++		    sec->text_start, sec->text_end);
++		goto err_free;
++	}
++
++	return 0;
+ 
+ err_free:
+ 	free_section(sec);
+ 	return ret;
+ }
+ 
++static int __sframe_remove_section(struct mm_struct *mm,
++				   struct sframe_section *sec)
++{
++	if (!mtree_erase(&mm->sframe_mt, sec->text_start)) {
++		dbg("mtree_erase failed: text=%lx\n", sec->text_start);
++		return -EINVAL;
++	}
++
++	free_section(sec);
++
++	return 0;
++}
++
+ int sframe_remove_section(unsigned long sframe_start)
+ {
+-	return -ENOSYS;
++	struct mm_struct *mm = current->mm;
++	struct sframe_section *sec;
++	unsigned long index = 0;
++	bool found = false;
++	int ret = 0;
++
++	mt_for_each(&mm->sframe_mt, sec, index, ULONG_MAX) {
++		if (sec->sframe_start == sframe_start) {
++			found = true;
++			ret |= __sframe_remove_section(mm, sec);
++		}
++	}
++
++	if (!found || ret)
++		return -EINVAL;
++
++	return 0;
++}
++
++void sframe_free_mm(struct mm_struct *mm)
++{
++	struct sframe_section *sec;
++	unsigned long index = 0;
++
++	if (!mm)
++		return;
++
++	mt_for_each(&mm->sframe_mt, sec, index, ULONG_MAX)
++		free_section(sec);
++
++	mtree_destroy(&mm->sframe_mt);
+ }
+diff --git a/mm/init-mm.c b/mm/init-mm.c
+index 4600e7605cab..b32fcf167cc2 100644
+--- a/mm/init-mm.c
++++ b/mm/init-mm.c
+@@ -11,6 +11,7 @@
+ #include <linux/atomic.h>
+ #include <linux/user_namespace.h>
+ #include <linux/iommu.h>
++#include <linux/sframe.h>
+ #include <asm/mmu.h>
+ 
+ #ifndef INIT_MM_CONTEXT
+@@ -46,6 +47,7 @@ struct mm_struct init_mm = {
+ 	.user_ns	= &init_user_ns,
+ 	.cpu_bitmap	= CPU_BITS_NONE,
+ 	INIT_MM_CONTEXT(init_mm)
++	INIT_MM_SFRAME
+ };
+ 
+ void setup_initial_init_mm(void *start_code, void *end_code,
+-- 
+2.47.2
 
 
-This code is based on top of:
-
- https://lore.kernel.org/linux-trace-kernel/20250708012239.268642741@kernel.org/ 
-  git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace.git
-   unwind/core
-
-This is the implementation of parsing the SFrame section in an ELF file.
-It's a continuation of Josh's last work that can be found here:
-
-   https://lore.kernel.org/all/cover.1737511963.git.jpoimboe@kernel.org/
-
-Currently the only way to get a user space stack trace from a stack
-walk (and not just copying large amount of user stack into the kernel
-ring buffer) is to use frame pointers. This has a few issues. The biggest
-one is that compiling frame pointers into every application and library
-has been shown to cause performance overhead.
-
-Another issue is that the format of the frames may not always be consistent
-between different compilers and some architectures (s390) has no defined
-format to do a reliable stack walk. The only way to perform user space
-profiling on these architectures is to copy the user stack into the kernel
-buffer.
-
-SFrames[1] is now supported in gcc binutils and soon will also be supported
-by LLVM. SFrames acts more like ORC, and lives in the ELF executable
-file as its own section. Like ORC it has two tables where the first table
-is sorted by instruction pointers (IP) and using the current IP and finding
-it's entry in the first table, it will take you to the second table which
-will tell you where the return address of the current function is located
-and then you can use that address to look it up in the first table to find
-the return address of that function, and so on. This performs a user
-space stack walk.
-
-Now because the SFrame section lives in the ELF file it needs to be faulted
-into memory when it is used. This means that walking the user space stack
-requires being in a faultable context. As profilers like perf request a stack
-trace in interrupt or NMI context, it cannot do the walking when it is
-requested. Instead it must be deferred until it is safe to fault in user
-space. One place this is known to be safe is when the task is about to return
-back to user space.
-
-This series makes the deferred unwind code implement SFrames.
-
-[1] https://sourceware.org/binutils/wiki/sframe
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace.git
-unwind/sframe
-
-The unwind/main branch is just unwind/sframe merged into unwind/perf
-and can be used for testing with perf.
-
-Changes since v7: https://lore.kernel.org/linux-trace-kernel/20250701184939.026626626@goodmis.org/
-
-- Simply rebased on top of the latest unwind/core
-
-Josh Poimboeuf (12):
-      unwind_user/sframe: Add support for reading .sframe headers
-      unwind_user/sframe: Store sframe section data in per-mm maple tree
-      x86/uaccess: Add unsafe_copy_from_user() implementation
-      unwind_user/sframe: Add support for reading .sframe contents
-      unwind_user/sframe: Detect .sframe sections in executables
-      unwind_user/sframe: Wire up unwind_user to sframe
-      unwind_user/sframe/x86: Enable sframe unwinding on x86
-      unwind_user/sframe: Remove .sframe section on detected corruption
-      unwind_user/sframe: Show file name in debug output
-      unwind_user/sframe: Enable debugging in uaccess regions
-      unwind_user/sframe: Add .sframe validation option
-      unwind_user/sframe: Add prctl() interface for registering .sframe sections
-
-----
- MAINTAINERS                       |   1 +
- arch/Kconfig                      |  23 ++
- arch/x86/Kconfig                  |   1 +
- arch/x86/include/asm/mmu.h        |   2 +-
- arch/x86/include/asm/uaccess.h    |  39 ++-
- fs/binfmt_elf.c                   |  49 ++-
- include/linux/mm_types.h          |   3 +
- include/linux/sframe.h            |  60 ++++
- include/linux/unwind_user_types.h |   1 +
- include/uapi/linux/elf.h          |   1 +
- include/uapi/linux/prctl.h        |   6 +-
- kernel/fork.c                     |  10 +
- kernel/sys.c                      |   9 +
- kernel/unwind/Makefile            |   3 +-
- kernel/unwind/sframe.c            | 612 ++++++++++++++++++++++++++++++++++++++
- kernel/unwind/sframe.h            |  71 +++++
- kernel/unwind/sframe_debug.h      |  99 ++++++
- kernel/unwind/user.c              |  25 +-
- mm/init-mm.c                      |   2 +
- 19 files changed, 998 insertions(+), 19 deletions(-)
- create mode 100644 include/linux/sframe.h
- create mode 100644 kernel/unwind/sframe.c
- create mode 100644 kernel/unwind/sframe.h
- create mode 100644 kernel/unwind/sframe_debug.h
