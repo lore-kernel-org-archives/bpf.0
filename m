@@ -1,38 +1,38 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F781157A72;
-	Tue,  8 Jul 2025 02:11:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6889621FF5F;
+	Tue,  8 Jul 2025 02:11:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751940719; cv=none; b=aMSEA2j1JS2KRWEmpzhor+V+LUe4fnNPvJ7fJlWWtjtbseuEAvDd2kc/pVY5Pz1dCBPMMzXu/4ZzwX+Cyn2UIkGBsiXVD7u+x/iqmGDcWXKHgyHiO2y6CgrJVqDlqbxS8/l0ZAtMt17mGEn2AZyCgNkcUZUgWN/R1Ao/d9etytM=
+	t=1751940719; cv=none; b=WBzRCe0F9UdoSjELX3mmRFgs3BQoeT1UzhtGyw6VAA3fW7zq3r0R2H4AG50szXMXqSTRQeahzPovj2BohvlUUabin2q9mpk/P8fKxrbTW3HVVXM4BeBhv/9pNrpRPJzEFualjiXWrapNcVYmmByOTEagbTPJ1ZnVREOv2ZQN4jI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1751940719; c=relaxed/simple;
-	bh=ckTATXCHrvGOC+WZsqQof/3QKuBCz763BBzol3sDKjI=;
+	bh=mCPJ2wJkMSxHj5eWYMxvQ3cKpVx1XsIVQRcDHIz7ptQ=;
 	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type; b=QoQihxQrEwKT3VfmDk4mazVay0qOzqXjceK4nxB1sdLCZeO/xh0fixhqJ3zBP+22rFA3YfyF5vwuJ/9aJhpMSU5UOXsX1pulNfnDAwYoqsn7PAvBsYX5e8gRRlFx9KxMddO0m1AABcRyO8hIkBc8197cRYSFWbb12XkjcvxAFj8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ofnIIwI7; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type; b=ksYGLiTGyeAUC6vxUz5t1MFYiINkWhSliMp+4AB7mrtsJ/I3F3GH3/auPR6L6kuJzbNw2nHKA9RNT36NhBPxJdRem3ADdx4mG+3eH4PnqL10buiaBdgcbKE36dD6a6syyJDhQ3+y5FwQJARr8P9eVEE3vp1brjtXAh6/gImA7DU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WRjxgpx7; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ofnIIwI7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACE87C113CF;
-	Tue,  8 Jul 2025 02:11:58 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WRjxgpx7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 348A3C4CEE3;
+	Tue,  8 Jul 2025 02:11:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751940718;
-	bh=ckTATXCHrvGOC+WZsqQof/3QKuBCz763BBzol3sDKjI=;
+	s=k20201202; t=1751940719;
+	bh=mCPJ2wJkMSxHj5eWYMxvQ3cKpVx1XsIVQRcDHIz7ptQ=;
 	h=Date:From:To:Cc:Subject:References:From;
-	b=ofnIIwI7PS1T8WQKSafoAShNse+Hq8QtKkuNEiJif+r0N2fw3K4arHLO9yfL6gAu4
-	 w4+hDxz519FskchMvlmWy3OiHR6/Z8TJez1DhNSfuGHQeDBaxEHmuhaDDdPifAT9mX
-	 oYpKKLgpQqD9nsIwyO3NB+iEWq+0MyTYr/Kqh83xxW3iRAfpmRflP7lijK/r/aO76b
-	 IDj7EPOflJc6Ke2qGjQ3OyrI2YFcYyT3ntecH0aPF4nzeQlA2gKxzAPILckuYm1Dhm
-	 t48UEppWpt34tF/kXehmzupVbXa0dcbuliLSt+uq95KmlLyWOs4eZJtqs9ra+F53Zg
-	 5jGoKIIhmuwwQ==
+	b=WRjxgpx7ixr/OLWzER0sgV925ibErSPLN39Gg6pPZ2p1j8RrcCC3T/Xys/P8IqgN4
+	 R/1ZIvIq4ep9yt41d/6ooDm4+X/D5PLebifZHKpchhJ43xO97D9qW4m4uKyAm5oBKu
+	 CLB0XXNgCOzyYwZi9LNPdYfz0IgUVdjnJ8b5xsUbcXC7bk+yhq1pS5BM/EULP08iLZ
+	 DYOMhavsW92Smv6Hl7OkaEaFDkNhuw30LB23jQWqc8eLSrI3JzZ0wHh16me8wOxuGG
+	 F8sAn9OhvOwjLrvl5ObQIkuGTDdViS/CoRj/QKXQC5uXSpGldlDkGaEYnh5dKl4jEn
+	 y1iykIam4u2ZQ==
 Received: from rostedt by gandalf with local (Exim 4.98.2)
 	(envelope-from <rostedt@kernel.org>)
-	id 1uYxoN-00000000Dc3-06pt;
+	id 1uYxoN-00000000DdW-2EZU;
 	Mon, 07 Jul 2025 22:11:59 -0400
-Message-ID: <20250708021158.877986536@kernel.org>
+Message-ID: <20250708021159.386608979@kernel.org>
 User-Agent: quilt/0.68
-Date: Mon, 07 Jul 2025 22:11:18 -0400
+Date: Mon, 07 Jul 2025 22:11:21 -0400
 From: Steven Rostedt <rostedt@kernel.org>
 To: linux-kernel@vger.kernel.org,
  linux-trace-kernel@vger.kernel.org,
@@ -56,7 +56,7 @@ Cc: Masami Hiramatsu <mhiramat@kernel.org>,
  Jens Axboe <axboe@kernel.dk>,
  Florian Weimer <fweimer@redhat.com>,
  Sam James <sam@gentoo.org>
-Subject: [PATCH v8 03/12] x86/uaccess: Add unsafe_copy_from_user() implementation
+Subject: [PATCH v8 06/12] unwind_user/sframe: Wire up unwind_user to sframe
 References: <20250708021115.894007410@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -68,72 +68,107 @@ Content-Type: text/plain; charset=UTF-8
 
 From: Josh Poimboeuf <jpoimboe@kernel.org>
 
-Add an x86 implementation of unsafe_copy_from_user() similar to the
-existing unsafe_copy_to_user().
+Now that the sframe infrastructure is fully in place, make it work by
+hooking it up to the unwind_user interface.
 
 Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- arch/x86/include/asm/uaccess.h | 39 +++++++++++++++++++++++++---------
- 1 file changed, 29 insertions(+), 10 deletions(-)
+ arch/Kconfig                      |  1 +
+ include/linux/unwind_user_types.h |  1 +
+ kernel/unwind/user.c              | 25 ++++++++++++++++++++++---
+ 3 files changed, 24 insertions(+), 3 deletions(-)
 
-diff --git a/arch/x86/include/asm/uaccess.h b/arch/x86/include/asm/uaccess.h
-index 3a7755c1a441..3caf02d0503e 100644
---- a/arch/x86/include/asm/uaccess.h
-+++ b/arch/x86/include/asm/uaccess.h
-@@ -599,7 +599,7 @@ _label:									\
-  * We want the unsafe accessors to always be inlined and use
-  * the error labels - thus the macro games.
-  */
--#define unsafe_copy_loop(dst, src, len, type, label)				\
-+#define unsafe_copy_to_user_loop(dst, src, len, type, label)			\
- 	while (len >= sizeof(type)) {						\
- 		unsafe_put_user(*(type *)(src),(type __user *)(dst),label);	\
- 		dst += sizeof(type);						\
-@@ -607,15 +607,34 @@ _label:									\
- 		len -= sizeof(type);						\
- 	}
+diff --git a/arch/Kconfig b/arch/Kconfig
+index c54d35e2f860..0c6056ef13de 100644
+--- a/arch/Kconfig
++++ b/arch/Kconfig
+@@ -448,6 +448,7 @@ config HAVE_UNWIND_USER_COMPAT_FP
  
--#define unsafe_copy_to_user(_dst,_src,_len,label)			\
--do {									\
--	char __user *__ucu_dst = (_dst);				\
--	const char *__ucu_src = (_src);					\
--	size_t __ucu_len = (_len);					\
--	unsafe_copy_loop(__ucu_dst, __ucu_src, __ucu_len, u64, label);	\
--	unsafe_copy_loop(__ucu_dst, __ucu_src, __ucu_len, u32, label);	\
--	unsafe_copy_loop(__ucu_dst, __ucu_src, __ucu_len, u16, label);	\
--	unsafe_copy_loop(__ucu_dst, __ucu_src, __ucu_len, u8, label);	\
-+#define unsafe_copy_to_user(_dst, _src, _len, label)				\
-+do {										\
-+	void __user *__dst = (_dst);						\
-+	const void *__src = (_src);						\
-+	size_t __len = (_len);							\
-+	unsafe_copy_to_user_loop(__dst, __src, __len, u64, label);		\
-+	unsafe_copy_to_user_loop(__dst, __src, __len, u32, label);		\
-+	unsafe_copy_to_user_loop(__dst, __src, __len, u16, label);		\
-+	unsafe_copy_to_user_loop(__dst, __src, __len, u8,  label);		\
-+} while (0)
+ config HAVE_UNWIND_USER_SFRAME
+ 	bool
++	select UNWIND_USER
+ 
+ config HAVE_PERF_REGS
+ 	bool
+diff --git a/include/linux/unwind_user_types.h b/include/linux/unwind_user_types.h
+index 0b6563951ca4..4d50476e950e 100644
+--- a/include/linux/unwind_user_types.h
++++ b/include/linux/unwind_user_types.h
+@@ -13,6 +13,7 @@ enum unwind_user_type {
+ 	UNWIND_USER_TYPE_NONE,
+ 	UNWIND_USER_TYPE_FP,
+ 	UNWIND_USER_TYPE_COMPAT_FP,
++	UNWIND_USER_TYPE_SFRAME,
+ };
+ 
+ struct unwind_stacktrace {
+diff --git a/kernel/unwind/user.c b/kernel/unwind/user.c
+index 249d9e32fad7..6e7ca9f1293a 100644
+--- a/kernel/unwind/user.c
++++ b/kernel/unwind/user.c
+@@ -7,6 +7,7 @@
+ #include <linux/sched/task_stack.h>
+ #include <linux/unwind_user.h>
+ #include <linux/uaccess.h>
++#include <linux/sframe.h>
+ 
+ static struct unwind_user_frame fp_frame = {
+ 	ARCH_INIT_USER_FP_FRAME
+@@ -31,6 +32,12 @@ static inline bool compat_fp_state(struct unwind_user_state *state)
+ 	       state->type == UNWIND_USER_TYPE_COMPAT_FP;
+ }
+ 
++static inline bool sframe_state(struct unwind_user_state *state)
++{
++	return IS_ENABLED(CONFIG_HAVE_UNWIND_USER_SFRAME) &&
++	       state->type == UNWIND_USER_TYPE_SFRAME;
++}
 +
-+#define unsafe_copy_from_user_loop(dst, src, len, type, label)			\
-+	while (len >= sizeof(type)) {						\
-+		unsafe_get_user(*(type *)(dst), (type __user *)(src), label);	\
-+		dst += sizeof(type);						\
-+		src += sizeof(type);						\
-+		len -= sizeof(type);						\
+ #define unwind_get_user_long(to, from, state)				\
+ ({									\
+ 	int __ret;							\
+@@ -44,18 +51,28 @@ static inline bool compat_fp_state(struct unwind_user_state *state)
+ static int unwind_user_next(struct unwind_user_state *state)
+ {
+ 	struct unwind_user_frame *frame;
++	struct unwind_user_frame _frame;
+ 	unsigned long cfa = 0, fp, ra = 0;
+ 	unsigned int shift;
+ 
+ 	if (state->done)
+ 		return -EINVAL;
+ 
+-	if (compat_fp_state(state))
++	if (compat_fp_state(state)) {
+ 		frame = &compat_fp_frame;
+-	else if (fp_state(state))
++	} else if (sframe_state(state)) {
++		/* sframe expects the frame to be local storage */
++		frame = &_frame;
++		if (sframe_find(state->ip, frame)) {
++			if (!IS_ENABLED(CONFIG_HAVE_UNWIND_USER_FP))
++				goto done;
++			frame = &fp_frame;
++		}
++	} else if (fp_state(state)) {
+ 		frame = &fp_frame;
+-	else
++	} else {
+ 		goto done;
 +	}
-+
-+#define unsafe_copy_from_user(_dst, _src, _len, label)				\
-+do {										\
-+	void *__dst = (_dst);							\
-+	void __user *__src = (_src);						\
-+	size_t __len = (_len);							\
-+	unsafe_copy_from_user_loop(__dst, __src, __len, u64, label);		\
-+	unsafe_copy_from_user_loop(__dst, __src, __len, u32, label);		\
-+	unsafe_copy_from_user_loop(__dst, __src, __len, u16, label);		\
-+	unsafe_copy_from_user_loop(__dst, __src, __len, u8,  label);		\
- } while (0)
  
- #ifdef CONFIG_CC_HAS_ASM_GOTO_OUTPUT
+ 	if (frame->use_fp) {
+ 		if (state->fp < state->sp)
+@@ -111,6 +128,8 @@ static int unwind_user_start(struct unwind_user_state *state)
+ 
+ 	if (IS_ENABLED(CONFIG_HAVE_UNWIND_USER_COMPAT_FP) && in_compat_mode(regs))
+ 		state->type = UNWIND_USER_TYPE_COMPAT_FP;
++	else if (current_has_sframe())
++		state->type = UNWIND_USER_TYPE_SFRAME;
+ 	else if (IS_ENABLED(CONFIG_HAVE_UNWIND_USER_FP))
+ 		state->type = UNWIND_USER_TYPE_FP;
+ 	else
 -- 
 2.47.2
 
