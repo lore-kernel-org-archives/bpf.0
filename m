@@ -1,38 +1,38 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D911E20F062;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F781157A72;
 	Tue,  8 Jul 2025 02:11:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751940718; cv=none; b=tT2s/swZBbifPPF9GcSb2BUl1XPZIHi7aoK/dbPjs3dxxK5unZmmJ3QIIy1fT1cyS43kS8Ahynv4MFiG2lvr9Xs0nOq2H3BFKwjqv+XPxV8fnbhAQRe8Yf4CyCeOzs74SmAf72nkbLfTzjFZ3w909rfmgNLRhZP3OR13M59QilI=
+	t=1751940719; cv=none; b=aMSEA2j1JS2KRWEmpzhor+V+LUe4fnNPvJ7fJlWWtjtbseuEAvDd2kc/pVY5Pz1dCBPMMzXu/4ZzwX+Cyn2UIkGBsiXVD7u+x/iqmGDcWXKHgyHiO2y6CgrJVqDlqbxS8/l0ZAtMt17mGEn2AZyCgNkcUZUgWN/R1Ao/d9etytM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751940718; c=relaxed/simple;
-	bh=Jwf3IJv5L+/CRPGF2QZQl1YIeSHddJV1V5U7FHvFfQI=;
+	s=arc-20240116; t=1751940719; c=relaxed/simple;
+	bh=ckTATXCHrvGOC+WZsqQof/3QKuBCz763BBzol3sDKjI=;
 	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type; b=B4dVbIzk8TuhiZvJA1XmJdDm046kUHYwdKUCsQhyLc9+AU35WYMPRKFQzBC+QxQ3OvWv21A17AxnnTxSKcX8FciVr41lMnEOT/mlvcQ3PTvKgLkC4+cgjpz1Ulu5LrZgnLW5kRVRlSLIboknwBXDFOAK2vfxRBl09Kc/4FMGGS4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=McD6Ut5Z; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type; b=QoQihxQrEwKT3VfmDk4mazVay0qOzqXjceK4nxB1sdLCZeO/xh0fixhqJ3zBP+22rFA3YfyF5vwuJ/9aJhpMSU5UOXsX1pulNfnDAwYoqsn7PAvBsYX5e8gRRlFx9KxMddO0m1AABcRyO8hIkBc8197cRYSFWbb12XkjcvxAFj8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ofnIIwI7; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="McD6Ut5Z"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CAB7C4CEE3;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ofnIIwI7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACE87C113CF;
 	Tue,  8 Jul 2025 02:11:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1751940718;
-	bh=Jwf3IJv5L+/CRPGF2QZQl1YIeSHddJV1V5U7FHvFfQI=;
+	bh=ckTATXCHrvGOC+WZsqQof/3QKuBCz763BBzol3sDKjI=;
 	h=Date:From:To:Cc:Subject:References:From;
-	b=McD6Ut5Z7SZJoobkuakgq8mPZoZJoDZunX3Cy6jcBzxUlMzZIlMdGZY+QBJ6tAeFn
-	 rTlfi8ExUpmr4VA/sJib4XKZbwDxRBL0leQpTPD+UwJ+Srj8g6lPZNKpc389x1AFIt
-	 NKjSf+wbOBDVnzHzUfvFAeTh++DRh96l4u+y9eswPUCtQhg2qxi1uywWBz62xToTQ2
-	 cps1R0tJjJwvCcCxU5rfmAyYpNu6DC6FucVDEr79CjkVvJgvl8clycfAwo9TQnqjRb
-	 19UkVKOYwRmduwty4EWc0hRsS9PZ1ZYf5UhCCAqbraAUWLfzCE0l4yDR2iRg+ElNrx
-	 oc+kKNIGH9Q4g==
+	b=ofnIIwI7PS1T8WQKSafoAShNse+Hq8QtKkuNEiJif+r0N2fw3K4arHLO9yfL6gAu4
+	 w4+hDxz519FskchMvlmWy3OiHR6/Z8TJez1DhNSfuGHQeDBaxEHmuhaDDdPifAT9mX
+	 oYpKKLgpQqD9nsIwyO3NB+iEWq+0MyTYr/Kqh83xxW3iRAfpmRflP7lijK/r/aO76b
+	 IDj7EPOflJc6Ke2qGjQ3OyrI2YFcYyT3ntecH0aPF4nzeQlA2gKxzAPILckuYm1Dhm
+	 t48UEppWpt34tF/kXehmzupVbXa0dcbuliLSt+uq95KmlLyWOs4eZJtqs9ra+F53Zg
+	 5jGoKIIhmuwwQ==
 Received: from rostedt by gandalf with local (Exim 4.98.2)
 	(envelope-from <rostedt@kernel.org>)
-	id 1uYxoM-00000000Db5-2pIg;
-	Mon, 07 Jul 2025 22:11:58 -0400
-Message-ID: <20250708021158.531886085@kernel.org>
+	id 1uYxoN-00000000Dc3-06pt;
+	Mon, 07 Jul 2025 22:11:59 -0400
+Message-ID: <20250708021158.877986536@kernel.org>
 User-Agent: quilt/0.68
-Date: Mon, 07 Jul 2025 22:11:16 -0400
+Date: Mon, 07 Jul 2025 22:11:18 -0400
 From: Steven Rostedt <rostedt@kernel.org>
 To: linux-kernel@vger.kernel.org,
  linux-trace-kernel@vger.kernel.org,
@@ -56,7 +56,7 @@ Cc: Masami Hiramatsu <mhiramat@kernel.org>,
  Jens Axboe <axboe@kernel.dk>,
  Florian Weimer <fweimer@redhat.com>,
  Sam James <sam@gentoo.org>
-Subject: [PATCH v8 01/12] unwind_user/sframe: Add support for reading .sframe headers
+Subject: [PATCH v8 03/12] x86/uaccess: Add unsafe_copy_from_user() implementation
 References: <20250708021115.894007410@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -68,329 +68,72 @@ Content-Type: text/plain; charset=UTF-8
 
 From: Josh Poimboeuf <jpoimboe@kernel.org>
 
-In preparation for unwinding user space stacks with sframe, add basic
-sframe compile infrastructure and support for reading the .sframe
-section header.
-
-sframe_add_section() reads the header and unconditionally returns an
-error, so it's not very useful yet.  A subsequent patch will improve
-that.
-
-Link: https://lore.kernel.org/all/f27e8463783febfa0dabb0432a3dd6be8ad98412.1737511963.git.jpoimboe@kernel.org/
+Add an x86 implementation of unsafe_copy_from_user() similar to the
+existing unsafe_copy_to_user().
 
 Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- MAINTAINERS            |   1 +
- arch/Kconfig           |   3 +
- include/linux/sframe.h |  40 ++++++++++++
- kernel/unwind/Makefile |   3 +-
- kernel/unwind/sframe.c | 136 +++++++++++++++++++++++++++++++++++++++++
- kernel/unwind/sframe.h |  71 +++++++++++++++++++++
- 6 files changed, 253 insertions(+), 1 deletion(-)
- create mode 100644 include/linux/sframe.h
- create mode 100644 kernel/unwind/sframe.c
- create mode 100644 kernel/unwind/sframe.h
+ arch/x86/include/asm/uaccess.h | 39 +++++++++++++++++++++++++---------
+ 1 file changed, 29 insertions(+), 10 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 370d780fd5f8..a6a94d2d03b0 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -25932,6 +25932,7 @@ USERSPACE STACK UNWINDING
- M:	Josh Poimboeuf <jpoimboe@kernel.org>
- M:	Steven Rostedt <rostedt@goodmis.org>
- S:	Maintained
-+F:	include/linux/sframe.h
- F:	include/linux/unwind*.h
- F:	kernel/unwind/
+diff --git a/arch/x86/include/asm/uaccess.h b/arch/x86/include/asm/uaccess.h
+index 3a7755c1a441..3caf02d0503e 100644
+--- a/arch/x86/include/asm/uaccess.h
++++ b/arch/x86/include/asm/uaccess.h
+@@ -599,7 +599,7 @@ _label:									\
+  * We want the unsafe accessors to always be inlined and use
+  * the error labels - thus the macro games.
+  */
+-#define unsafe_copy_loop(dst, src, len, type, label)				\
++#define unsafe_copy_to_user_loop(dst, src, len, type, label)			\
+ 	while (len >= sizeof(type)) {						\
+ 		unsafe_put_user(*(type *)(src),(type __user *)(dst),label);	\
+ 		dst += sizeof(type);						\
+@@ -607,15 +607,34 @@ _label:									\
+ 		len -= sizeof(type);						\
+ 	}
  
-diff --git a/arch/Kconfig b/arch/Kconfig
-index 2c41d3072910..c54d35e2f860 100644
---- a/arch/Kconfig
-+++ b/arch/Kconfig
-@@ -446,6 +446,9 @@ config HAVE_UNWIND_USER_COMPAT_FP
- 	bool
- 	depends on HAVE_UNWIND_USER_FP
+-#define unsafe_copy_to_user(_dst,_src,_len,label)			\
+-do {									\
+-	char __user *__ucu_dst = (_dst);				\
+-	const char *__ucu_src = (_src);					\
+-	size_t __ucu_len = (_len);					\
+-	unsafe_copy_loop(__ucu_dst, __ucu_src, __ucu_len, u64, label);	\
+-	unsafe_copy_loop(__ucu_dst, __ucu_src, __ucu_len, u32, label);	\
+-	unsafe_copy_loop(__ucu_dst, __ucu_src, __ucu_len, u16, label);	\
+-	unsafe_copy_loop(__ucu_dst, __ucu_src, __ucu_len, u8, label);	\
++#define unsafe_copy_to_user(_dst, _src, _len, label)				\
++do {										\
++	void __user *__dst = (_dst);						\
++	const void *__src = (_src);						\
++	size_t __len = (_len);							\
++	unsafe_copy_to_user_loop(__dst, __src, __len, u64, label);		\
++	unsafe_copy_to_user_loop(__dst, __src, __len, u32, label);		\
++	unsafe_copy_to_user_loop(__dst, __src, __len, u16, label);		\
++	unsafe_copy_to_user_loop(__dst, __src, __len, u8,  label);		\
++} while (0)
++
++#define unsafe_copy_from_user_loop(dst, src, len, type, label)			\
++	while (len >= sizeof(type)) {						\
++		unsafe_get_user(*(type *)(dst), (type __user *)(src), label);	\
++		dst += sizeof(type);						\
++		src += sizeof(type);						\
++		len -= sizeof(type);						\
++	}
++
++#define unsafe_copy_from_user(_dst, _src, _len, label)				\
++do {										\
++	void *__dst = (_dst);							\
++	void __user *__src = (_src);						\
++	size_t __len = (_len);							\
++	unsafe_copy_from_user_loop(__dst, __src, __len, u64, label);		\
++	unsafe_copy_from_user_loop(__dst, __src, __len, u32, label);		\
++	unsafe_copy_from_user_loop(__dst, __src, __len, u16, label);		\
++	unsafe_copy_from_user_loop(__dst, __src, __len, u8,  label);		\
+ } while (0)
  
-+config HAVE_UNWIND_USER_SFRAME
-+	bool
-+
- config HAVE_PERF_REGS
- 	bool
- 	help
-diff --git a/include/linux/sframe.h b/include/linux/sframe.h
-new file mode 100644
-index 000000000000..0584f661f698
---- /dev/null
-+++ b/include/linux/sframe.h
-@@ -0,0 +1,40 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _LINUX_SFRAME_H
-+#define _LINUX_SFRAME_H
-+
-+#include <linux/mm_types.h>
-+#include <linux/unwind_user_types.h>
-+
-+#ifdef CONFIG_HAVE_UNWIND_USER_SFRAME
-+
-+struct sframe_section {
-+	unsigned long	sframe_start;
-+	unsigned long	sframe_end;
-+	unsigned long	text_start;
-+	unsigned long	text_end;
-+
-+	unsigned long	fdes_start;
-+	unsigned long	fres_start;
-+	unsigned long	fres_end;
-+	unsigned int	num_fdes;
-+
-+	signed char	ra_off;
-+	signed char	fp_off;
-+};
-+
-+extern int sframe_add_section(unsigned long sframe_start, unsigned long sframe_end,
-+			      unsigned long text_start, unsigned long text_end);
-+extern int sframe_remove_section(unsigned long sframe_addr);
-+
-+#else /* !CONFIG_HAVE_UNWIND_USER_SFRAME */
-+
-+static inline int sframe_add_section(unsigned long sframe_start, unsigned long sframe_end,
-+				     unsigned long text_start, unsigned long text_end)
-+{
-+	return -ENOSYS;
-+}
-+static inline int sframe_remove_section(unsigned long sframe_addr) { return -ENOSYS; }
-+
-+#endif /* CONFIG_HAVE_UNWIND_USER_SFRAME */
-+
-+#endif /* _LINUX_SFRAME_H */
-diff --git a/kernel/unwind/Makefile b/kernel/unwind/Makefile
-index eae37bea54fd..146038165865 100644
---- a/kernel/unwind/Makefile
-+++ b/kernel/unwind/Makefile
-@@ -1 +1,2 @@
-- obj-$(CONFIG_UNWIND_USER)	+= user.o deferred.o
-+ obj-$(CONFIG_UNWIND_USER)		+= user.o deferred.o
-+ obj-$(CONFIG_HAVE_UNWIND_USER_SFRAME)	+= sframe.o
-diff --git a/kernel/unwind/sframe.c b/kernel/unwind/sframe.c
-new file mode 100644
-index 000000000000..20287f795b36
---- /dev/null
-+++ b/kernel/unwind/sframe.c
-@@ -0,0 +1,136 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Userspace sframe access functions
-+ */
-+
-+#define pr_fmt(fmt)	"sframe: " fmt
-+
-+#include <linux/sched.h>
-+#include <linux/slab.h>
-+#include <linux/srcu.h>
-+#include <linux/uaccess.h>
-+#include <linux/mm.h>
-+#include <linux/string_helpers.h>
-+#include <linux/sframe.h>
-+#include <linux/unwind_user_types.h>
-+
-+#include "sframe.h"
-+
-+#define dbg(fmt, ...)							\
-+	pr_debug("%s (%d): " fmt, current->comm, current->pid, ##__VA_ARGS__)
-+
-+static void free_section(struct sframe_section *sec)
-+{
-+	kfree(sec);
-+}
-+
-+static int sframe_read_header(struct sframe_section *sec)
-+{
-+	unsigned long header_end, fdes_start, fdes_end, fres_start, fres_end;
-+	struct sframe_header shdr;
-+	unsigned int num_fdes;
-+
-+	if (copy_from_user(&shdr, (void __user *)sec->sframe_start, sizeof(shdr))) {
-+		dbg("header usercopy failed\n");
-+		return -EFAULT;
-+	}
-+
-+	if (shdr.preamble.magic != SFRAME_MAGIC ||
-+	    shdr.preamble.version != SFRAME_VERSION_2 ||
-+	    !(shdr.preamble.flags & SFRAME_F_FDE_SORTED) ||
-+	    shdr.auxhdr_len) {
-+		dbg("bad/unsupported sframe header\n");
-+		return -EINVAL;
-+	}
-+
-+	if (!shdr.num_fdes || !shdr.num_fres) {
-+		dbg("no fde/fre entries\n");
-+		return -EINVAL;
-+	}
-+
-+	header_end = sec->sframe_start + SFRAME_HEADER_SIZE(shdr);
-+	if (header_end >= sec->sframe_end) {
-+		dbg("header doesn't fit in section\n");
-+		return -EINVAL;
-+	}
-+
-+	num_fdes   = shdr.num_fdes;
-+	fdes_start = header_end + shdr.fdes_off;
-+	fdes_end   = fdes_start + (num_fdes * sizeof(struct sframe_fde));
-+
-+	fres_start = header_end + shdr.fres_off;
-+	fres_end   = fres_start + shdr.fre_len;
-+
-+	if (fres_start < fdes_end || fres_end > sec->sframe_end) {
-+		dbg("inconsistent fde/fre offsets\n");
-+		return -EINVAL;
-+	}
-+
-+	sec->num_fdes		= num_fdes;
-+	sec->fdes_start		= fdes_start;
-+	sec->fres_start		= fres_start;
-+	sec->fres_end		= fres_end;
-+
-+	sec->ra_off		= shdr.cfa_fixed_ra_offset;
-+	sec->fp_off		= shdr.cfa_fixed_fp_offset;
-+
-+	return 0;
-+}
-+
-+int sframe_add_section(unsigned long sframe_start, unsigned long sframe_end,
-+		       unsigned long text_start, unsigned long text_end)
-+{
-+	struct maple_tree *sframe_mt = &current->mm->sframe_mt;
-+	struct vm_area_struct *sframe_vma, *text_vma;
-+	struct mm_struct *mm = current->mm;
-+	struct sframe_section *sec;
-+	int ret;
-+
-+	if (!sframe_start || !sframe_end || !text_start || !text_end) {
-+		dbg("zero-length sframe/text address\n");
-+		return -EINVAL;
-+	}
-+
-+	scoped_guard(mmap_read_lock, mm) {
-+		sframe_vma = vma_lookup(mm, sframe_start);
-+		if (!sframe_vma || sframe_end > sframe_vma->vm_end) {
-+			dbg("bad sframe address (0x%lx - 0x%lx)\n",
-+			    sframe_start, sframe_end);
-+			return -EINVAL;
-+		}
-+
-+		text_vma = vma_lookup(mm, text_start);
-+		if (!text_vma ||
-+		    !(text_vma->vm_flags & VM_EXEC) ||
-+		    text_end > text_vma->vm_end) {
-+			dbg("bad text address (0x%lx - 0x%lx)\n",
-+			    text_start, text_end);
-+			return -EINVAL;
-+		}
-+	}
-+
-+	sec = kzalloc(sizeof(*sec), GFP_KERNEL);
-+	if (!sec)
-+		return -ENOMEM;
-+
-+	sec->sframe_start	= sframe_start;
-+	sec->sframe_end		= sframe_end;
-+	sec->text_start		= text_start;
-+	sec->text_end		= text_end;
-+
-+	ret = sframe_read_header(sec);
-+	if (ret)
-+		goto err_free;
-+
-+	/* TODO nowhere to store it yet - just free it and return an error */
-+	ret = -ENOSYS;
-+
-+err_free:
-+	free_section(sec);
-+	return ret;
-+}
-+
-+int sframe_remove_section(unsigned long sframe_start)
-+{
-+	return -ENOSYS;
-+}
-diff --git a/kernel/unwind/sframe.h b/kernel/unwind/sframe.h
-new file mode 100644
-index 000000000000..e9bfccfaf5b4
---- /dev/null
-+++ b/kernel/unwind/sframe.h
-@@ -0,0 +1,71 @@
-+/* SPDX-License-Identifier: GPL-2.0-or-later */
-+/*
-+ * From https://www.sourceware.org/binutils/docs/sframe-spec.html
-+ */
-+#ifndef _SFRAME_H
-+#define _SFRAME_H
-+
-+#include <linux/types.h>
-+
-+#define SFRAME_VERSION_1			1
-+#define SFRAME_VERSION_2			2
-+#define SFRAME_MAGIC				0xdee2
-+
-+#define SFRAME_F_FDE_SORTED			0x1
-+#define SFRAME_F_FRAME_POINTER			0x2
-+
-+#define SFRAME_ABI_AARCH64_ENDIAN_BIG		1
-+#define SFRAME_ABI_AARCH64_ENDIAN_LITTLE	2
-+#define SFRAME_ABI_AMD64_ENDIAN_LITTLE		3
-+
-+#define SFRAME_FDE_TYPE_PCINC			0
-+#define SFRAME_FDE_TYPE_PCMASK			1
-+
-+struct sframe_preamble {
-+	u16	magic;
-+	u8	version;
-+	u8	flags;
-+} __packed;
-+
-+struct sframe_header {
-+	struct sframe_preamble preamble;
-+	u8	abi_arch;
-+	s8	cfa_fixed_fp_offset;
-+	s8	cfa_fixed_ra_offset;
-+	u8	auxhdr_len;
-+	u32	num_fdes;
-+	u32	num_fres;
-+	u32	fre_len;
-+	u32	fdes_off;
-+	u32	fres_off;
-+} __packed;
-+
-+#define SFRAME_HEADER_SIZE(header) \
-+	((sizeof(struct sframe_header) + header.auxhdr_len))
-+
-+#define SFRAME_AARCH64_PAUTH_KEY_A		0
-+#define SFRAME_AARCH64_PAUTH_KEY_B		1
-+
-+struct sframe_fde {
-+	s32	start_addr;
-+	u32	func_size;
-+	u32	fres_off;
-+	u32	fres_num;
-+	u8	info;
-+	u8	rep_size;
-+	u16 padding;
-+} __packed;
-+
-+#define SFRAME_FUNC_FRE_TYPE(data)		(data & 0xf)
-+#define SFRAME_FUNC_FDE_TYPE(data)		((data >> 4) & 0x1)
-+#define SFRAME_FUNC_PAUTH_KEY(data)		((data >> 5) & 0x1)
-+
-+#define SFRAME_BASE_REG_FP			0
-+#define SFRAME_BASE_REG_SP			1
-+
-+#define SFRAME_FRE_CFA_BASE_REG_ID(data)	(data & 0x1)
-+#define SFRAME_FRE_OFFSET_COUNT(data)		((data >> 1) & 0xf)
-+#define SFRAME_FRE_OFFSET_SIZE(data)		((data >> 5) & 0x3)
-+#define SFRAME_FRE_MANGLED_RA_P(data)		((data >> 7) & 0x1)
-+
-+#endif /* _SFRAME_H */
+ #ifdef CONFIG_CC_HAS_ASM_GOTO_OUTPUT
 -- 
 2.47.2
 
