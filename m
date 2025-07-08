@@ -1,362 +1,214 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB2C3226CF9;
-	Tue,  8 Jul 2025 02:00:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751940052; cv=none; b=XqY5YXWBWt+ucnPjbZyrLoRrUgtViysGKiN9H1jRpRZoN3nlEmf6SjQ4Z/SbU3OKBvOE3BQygpUrvMPBD+ScVYhsq0QBwQGFjkHqpSGTwJFGAMP1KnfDCcIPSasIA6RY11fyfq38ZWkrN0zMgmI/RTvUw7VeR7HD0ydPjCG78vo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751940052; c=relaxed/simple;
-	bh=oHPYUeSh9kzOTuyf9BuaYRfYud04q8z+PPKjT187KuE=;
-	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type; b=ct05MMw4JlAUXdm27dASX5Tm7d6w+/v8dL4aNbvJV/NFsbV0rFSG/Q/J3jltwrp/f7feshcwPSrHSn8rODXyms+BH+AXSMzIjXRrickoKvUgwN4IC4ntmul/WXtQr2fiSSeObVONuZazY7P9OTgVTnhwPtYzemWWWbRMfS0pTsg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TmgXjxWz; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC76220B7ED;
+	Tue,  8 Jul 2025 02:06:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.10
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1751940397; cv=fail; b=KCgI3ny2LwRnZF/IxxzOhPnrP4hF5URnD4FJTEKWUUJcM1A3cNQKFYAmYRjYLF2PW1ONTXLHOTNJ16wRYF1yqOKxJYby+1skEgZUf1nkKoWCC+AWmnGemg54WHgAozSrXuwQe9/9xWR5eB9GOmE1VtuNoqh+vi4muaoPRoUfjO0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1751940397; c=relaxed/simple;
+	bh=qA7Y4ddaKd2COuJP4csJSvAWBhOCs4GOlcQ9otFaPZE=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=RPTj4scTeTjFMKcAu3NQynic5yZVLTUN33bH1J8eKPCNsKC1JgZZ1++J+o8+z0HmZnOHxriplrVi3xu1SbsWccLCfK1Jo6mmibZTwtFpu0S4wduYzNDyt6p3Gq2Ezi0VC+/V7Waa9zu6e1rgfp6CYFsHoNl7SxZs4Jxjgo5Ec+A=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XoD5oA01; arc=fail smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TmgXjxWz"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CAFCC4CEF7;
-	Tue,  8 Jul 2025 02:00:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751940051;
-	bh=oHPYUeSh9kzOTuyf9BuaYRfYud04q8z+PPKjT187KuE=;
-	h=Date:From:To:Cc:Subject:References:From;
-	b=TmgXjxWzZ2LrqaxdQiU1KJVO9X5aLjJv5Fr3GTlWU+JqFXAzFMy/hYBTSoZjAXZkm
-	 jptFj64C84BZE+06SrbeGm14DlaKy6CZ4vKG4yIN2gJMKfyWf3oKO7WcbwI1rwW1mu
-	 +Eqs6IuAxBM3g9f6wmwRqOS5ca2K1s48ZQeLUBXjlbVqvxcTk/MMPjnA/rMrPfarID
-	 of2WgaPrDpCBrWaUm8O39zGIRGAl8NC4gUeMqWvHFxNFY0TYlWCJSuofnJ6xoO2XzY
-	 wIwTsSIpa9Pq7rSLcXhRQGOnujBP5WRiA9iaE9RUReSFakc1prnekBPw8QOt0xgGfZ
-	 +08ThXc86+IOg==
-Received: from rostedt by gandalf with local (Exim 4.98.2)
-	(envelope-from <rostedt@kernel.org>)
-	id 1uYxdb-00000000D97-3qeB;
-	Mon, 07 Jul 2025 22:00:51 -0400
-Message-ID: <20250708020051.774149982@kernel.org>
-User-Agent: quilt/0.68
-Date: Mon, 07 Jul 2025 22:00:14 -0400
-From: Steven Rostedt <rostedt@kernel.org>
-To: linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org,
- bpf@vger.kernel.org,
- x86@kernel.org
-Cc: Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Josh Poimboeuf <jpoimboe@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>,
- Ingo Molnar <mingo@kernel.org>,
- Jiri Olsa <jolsa@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>,
- Thomas Gleixner <tglx@linutronix.de>,
- Andrii Nakryiko <andrii@kernel.org>,
- Indu Bhagat <indu.bhagat@oracle.com>,
- "Jose E. Marchesi" <jemarch@gnu.org>,
- Beau Belgrave <beaub@linux.microsoft.com>,
- Jens Remus <jremus@linux.ibm.com>,
- Linus Torvalds <torvalds@linux-foundation.org>,
- Andrew Morton <akpm@linux-foundation.org>,
- Jens Axboe <axboe@kernel.dk>,
- Florian Weimer <fweimer@redhat.com>,
- Sam James <sam@gentoo.org>
-Subject: [PATCH v13 11/11] perf tools: Merge deferred user callchains
-References: <20250708020003.565862284@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XoD5oA01"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1751940396; x=1783476396;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=qA7Y4ddaKd2COuJP4csJSvAWBhOCs4GOlcQ9otFaPZE=;
+  b=XoD5oA01jmdA5rCDqIPKlVOKOAI5AFUGzWAawrbhNPaJxAfqMdgBgLOO
+   gKWuidM6UWr1iR7W5TEtB8pm3iUsoJH0T3ktfOQXZfgUltuxEM7+eSFoa
+   9OAKlVGpApG3W0o9OWbrwDqnMYYl1T6ve4Ogc3OFz0Rko+zLuaSnuYVkX
+   W3gWISNm2q9UijFcM0J6sld+kj74RroqhAJ6vIBquPCkupjrWYP8t5/Hq
+   W7tZ00wMT/eOt3RwFcWnWU+WlvEI7quydmS4WJUb/lxLO24c5SnAPLaeP
+   WnhZhrFrPs8dD6+FZBTGGOj6nplIKCRHhuFYVp4aNd6y2Ct66EPjSb+1W
+   w==;
+X-CSE-ConnectionGUID: xqVw6qkNT4Scc4NmGVQYfw==
+X-CSE-MsgGUID: 8nVkf+ARTdymOuaGc1x2iw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11487"; a="65520657"
+X-IronPort-AV: E=Sophos;i="6.16,296,1744095600"; 
+   d="scan'208";a="65520657"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2025 19:06:31 -0700
+X-CSE-ConnectionGUID: KZNGCc3LRNyMzld7hFuGgA==
+X-CSE-MsgGUID: /Jgzs2RFQNGyuUEGG+zCpA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,296,1744095600"; 
+   d="scan'208";a="154770242"
+Received: from orsmsx901.amr.corp.intel.com ([10.22.229.23])
+  by orviesa006.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2025 19:06:30 -0700
+Received: from ORSMSX901.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.25; Mon, 7 Jul 2025 19:06:30 -0700
+Received: from ORSEDG901.ED.cps.intel.com (10.7.248.11) by
+ ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.25 via Frontend Transport; Mon, 7 Jul 2025 19:06:30 -0700
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (40.107.236.76)
+ by edgegateway.intel.com (134.134.137.111) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.25; Mon, 7 Jul 2025 19:06:28 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=GUXc9diilhJTMoEnitmvA9cliDPG3IA1BxwsxJ1QNE7douWP0kLzlqzUMp0jejeYqkAL5kXwGxbAE6e6UjWbruV4O6gX1iTN1xbDPkudZUVMr6MyUg8xf0iYObg3reCzAS+cbyw87OImhOoFu+RdmcChzGEsC1oGMQl+t7o3WxrKRtOIMSrumkErdz70ZYOLrE62pc/Re5Dp52mPHTFtEAk6EVzrkTr0HYEAwbKOP9mYOnGJxDZoUN3sHddJuyI78OgG0h+XHPmzyr1PTHG/x7HjBo57k3bSa4uq1RZ4EH3Ou59plWovFxO5qX7OTfcxsJHk+MaYVbkLJ8SccV4SbQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qA7Y4ddaKd2COuJP4csJSvAWBhOCs4GOlcQ9otFaPZE=;
+ b=fXc7y4vxeZSM3gEYhlq5I+YEDZpCVx7gDnXxOLujUq2EoQsHqD2bLRXJ76pxJVsSCkXiDknYe69GsWUCAzEeFZiLhr/TGN+78mUrJRJYL5da7gmZBzTo6pK+33mRObx16nf5enFGSPK/YVyLVcTsWhIh6Hrrvu11tM975VUobW9RtxeuT2tQwZILmaew8VnFXIpCGPMA89vWaQwBcbFuRD2r3+To4nbzxQnv2g6gKQG+BjwdVaMQUP9EvcmhkujxanJYCYjf2vpq2RZyNcKSfNpRGxCtuA5p81jmWA455B0/Qzpc66qgigtfhqtRwKit7HQ5QiCBZ14RogtRnYqJNw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from IA3PR11MB9254.namprd11.prod.outlook.com (2603:10b6:208:573::10)
+ by DM4PR11MB8090.namprd11.prod.outlook.com (2603:10b6:8:188::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8901.26; Tue, 8 Jul
+ 2025 02:06:13 +0000
+Received: from IA3PR11MB9254.namprd11.prod.outlook.com
+ ([fe80::8547:f00:c13c:8fc7]) by IA3PR11MB9254.namprd11.prod.outlook.com
+ ([fe80::8547:f00:c13c:8fc7%5]) with mapi id 15.20.8901.023; Tue, 8 Jul 2025
+ 02:06:12 +0000
+From: "Song, Yoong Siang" <yoong.siang.song@intel.com>
+To: Jakub Kicinski <kuba@kernel.org>
+CC: "David S . Miller" <davem@davemloft.net>, Eric Dumazet
+	<edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon Horman
+	<horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Alexei Starovoitov
+	<ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, "Jesper Dangaard
+ Brouer" <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>, Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+	<eddyz87@gmail.com>, Song Liu <song@kernel.org>, Yonghong Song
+	<yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, Hao Luo
+	<haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko
+	<mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, "netdev@vger.kernel.org"
+	<netdev@vger.kernel.org>, "linux-doc@vger.kernel.org"
+	<linux-doc@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+Subject: RE: [PATCH bpf-next 0/2] Clarify and Enhance XDP Rx Metadata Handling
+Thread-Topic: [PATCH bpf-next 0/2] Clarify and Enhance XDP Rx Metadata
+ Handling
+Thread-Index: AQHb6kDv34r7CwtKZU+M/H+rEE6nILQnLlWAgAA5NRCAABe7gIAABI8w
+Date: Tue, 8 Jul 2025 02:06:11 +0000
+Message-ID: <IA3PR11MB92545C3B2CD5778EE24244C1D84EA@IA3PR11MB9254.namprd11.prod.outlook.com>
+References: <20250701042940.3272325-1-yoong.siang.song@intel.com>
+	<20250707135507.29cb55be@kernel.org>
+	<IA3PR11MB9254DC4B7984E014206A1FBFD84EA@IA3PR11MB9254.namprd11.prod.outlook.com>
+ <20250707184449.42736a0a@kernel.org>
+In-Reply-To: <20250707184449.42736a0a@kernel.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: IA3PR11MB9254:EE_|DM4PR11MB8090:EE_
+x-ms-office365-filtering-correlation-id: d2c0e2c7-f95a-45b8-c563-08ddbdc4030f
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|376014|7416014|366016|1800799024|38070700018;
+x-microsoft-antispam-message-info: =?us-ascii?Q?SJRKzT9i7OUVr+YKaFCqrBmP+PltBoNATxQNdsyhtfs+tHzJWA41jx7+wIth?=
+ =?us-ascii?Q?IY6U6a4gX6weU6ZtsVoFok2bZlctz4FuuzB4pmJsIhNdm+XmsvYW310lHGwl?=
+ =?us-ascii?Q?R6LKDawFlCkkaTxywpBEcaG9lOfvQm1HLh/epJjnd9++sMdPMR4Fsr1FPPV/?=
+ =?us-ascii?Q?aWPq+0Tkgd+aCikDNIVpSBFviBPhnEMBBRvYkVZl805fgI/86+XwsgrOD0Bx?=
+ =?us-ascii?Q?tvf1dpmZJE/0JR/WRjZhiFgsudkgsXkwEU1oDJqEchXDmmIZ9Vd5bXxSBWQl?=
+ =?us-ascii?Q?Qb7KDdzolV/1plp55oXTCaJudCt92QQcPD4Mqos7k04ZaEpLBe85l8ondKth?=
+ =?us-ascii?Q?14+YbWXHxr6hLonMkviKrojbU63w6tFe9qrLG1UiKOjI75aQP6SPs/OpZnYS?=
+ =?us-ascii?Q?ayuvS6ooFq4mv2xSoqTjnyIXq4v2K3R8FXZDmFOt9Rhbr6JgmMCfABmzXu1k?=
+ =?us-ascii?Q?lye8wv3wBj0zkXry1LHv6XiKuLiuPLb6piBMLR7+VyY6LuxaQppR796Le1In?=
+ =?us-ascii?Q?G1IXxXQnnGXb8w03oLr11/hXmM8xIrpNPHPcnsrdi3ipoxkHT59L0+XYEccW?=
+ =?us-ascii?Q?06XtwYsxdoQJnvUKTjZwCEQNB0HY3Nq1TFxB3hJaTO9ewi1M0ZXGhRlnIXoy?=
+ =?us-ascii?Q?L5nAh9uyD/eyb7rF9jowBR7OZL7euOuLHQ3o3rdVbl92Wa2fhZzLytKAWmIG?=
+ =?us-ascii?Q?KyPnFboLiug4HfuAb3961pNWQdWcAcFj3W4ffFF9clib7QZThezP/uFM649Y?=
+ =?us-ascii?Q?Cm9cyVkFNBP9UU+D9NOg+yAjOU6XFivvwMVWC9GcdR7kt2l+eEjWI89YSX4A?=
+ =?us-ascii?Q?LIWiei1u371C78o+BAR0+uL9bhXaz3EESuAsEpg4GBoDBt2ipVebaygpW6le?=
+ =?us-ascii?Q?J3iu0rp3Z85Li89awXKtnMOaygUm7cuLH979jUj5m03tJDbSKFJJC/4+Yhfp?=
+ =?us-ascii?Q?+rbA2OEDFuqs19K1Cqy6St5luZNA3HzePD4+wz96MlL+B1hfdQQFHq3dhRI0?=
+ =?us-ascii?Q?J/Xi+NAU5hdsl5GUYJf+dK5sELjo1tXmo2voly9dO3UXAMPb2KAGR6ilMJ3a?=
+ =?us-ascii?Q?pIUZvG9//5i/xzEZLZr/q2RWBnO5kfgOenfb5jjQdLQuesuPM2wTzZKpdXKu?=
+ =?us-ascii?Q?2ZI/bo1SDNfwBYQTZn92DZN2ciLvC5kJxbyRZ25hFfgaRbo5ZmIUCSQaHzpE?=
+ =?us-ascii?Q?y0F0Am/kb2+vsOup/KQKAvml3SaYBldBE3bcHVZhL3LnjYCP42QWHVsHgl9I?=
+ =?us-ascii?Q?6p+NZL2WZHuZBf5B3IwEAGXMzzRAfEOvVkxpD/qg4P0M7G3XZeGZ4YxW3qG0?=
+ =?us-ascii?Q?x6xNOBl/U/DRM5wNrOZb6GmgMduNwL0b/ODZY7Z5rnpO/d1LtUvb7/ezJXLT?=
+ =?us-ascii?Q?wIqZ3vR9NqRv1UUwbJtQGmtys8I5pPDTux3ij4jUIvJn4QSAxOsEkNO415Ko?=
+ =?us-ascii?Q?XHrc+N5iaCwPHLcwuHAPUgv7/fzuJdlPmrlITZPnV6DU+RJLY0ZfNA=3D=3D?=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA3PR11MB9254.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(1800799024)(38070700018);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?7LQAla4Xy5r6n6YpztQS3lSqP4q+Nq+TB5TqJJkLGtE263Va8RBB8K2zhTBY?=
+ =?us-ascii?Q?5G5d6ikknvhRIefZbrYbykjE6lvHxMr9mubqluhRbDqeDwLE5TWtXTMa4np9?=
+ =?us-ascii?Q?RJ16uFR8rl6kskHDupseTbKDPcG9m2mFvBNrsiQu0o8zP1JYEy9u0TXNc42E?=
+ =?us-ascii?Q?zfmbStlyJqm4pKNBcKH9JescBs14IJmMG1zYMwD684WALBKw01Git2IrdDEj?=
+ =?us-ascii?Q?BKyQDxdE98SvgtLflJM5CUuWCi3nYHKTss/DES8SBnWbaMz+ZN4i1babqJMs?=
+ =?us-ascii?Q?GJCYr/MyfYuB32ZdEfCAVaW+v1mMuYZ2z23CHLnjCDwrHXNGSqlnKAVTOTLt?=
+ =?us-ascii?Q?FMSbxhvbHtuSIR3WbxjrP3Ytl5HJK3BAzKkwItj7QM16dEyHMBM8JabucC4d?=
+ =?us-ascii?Q?6DTAO8KRE2/LPuuVbH56GlJbs1rzaPigjnsPzwj5il2V/mjRUBNbRHmUOfBQ?=
+ =?us-ascii?Q?2d/8NHLOk7nwd2q29q4ns3FFoCuSgnPTPPa6Ra2y+CSNbhL2XJE/f2g7xIv7?=
+ =?us-ascii?Q?ShuSEU7pw9m5VPINOopb0tdnNTr2nPdlc2zyjzefzCnr1NUrnyQnnGHNMHz4?=
+ =?us-ascii?Q?JhFzxTX6CNIvci32yYRCg3yOqD05I8JtO0qc4Tp8OJMrpa6qVrSTQO+IfvG3?=
+ =?us-ascii?Q?ZWLynT8Wi45Xe6c5B9RV7rEm/DRq6LwObjwr3f0Vbmyn0rmIeaucIok204zF?=
+ =?us-ascii?Q?KRUM0iiUuyQAjKGX2BXSa7k8i+NS+ck9I4D3A8kwHiJd840kuegR8WcBJGCt?=
+ =?us-ascii?Q?VHBClj0D0j325MkLkJ9tkKk4KzsKEuKjjCVmdCXLmflMjO+RAUmSPZvdH9iB?=
+ =?us-ascii?Q?8Hn3W31301Wqst03yWl5MaoT5j107wopUgysO5l3GZtINDkCB47z/cx063yi?=
+ =?us-ascii?Q?8BEsTydyVvlIkP7z6RpEjXj+1fvAXdEjWoElpFAMRDrdB4sPtxAhYuu97WkY?=
+ =?us-ascii?Q?TiZmOF5nhLHlgezyYKE8rTtAus37nCdsdRMTMPXDO4AFhsXaUiGO8w42CJBV?=
+ =?us-ascii?Q?CTe2ruSR9ausp/St4qsc+6NLLbxIPoSrRnNnb03CkqGnSzFQD3x/kKBqffUz?=
+ =?us-ascii?Q?OSH3vfwNZA02jCb5UH/zYb7wxmzbg3CUHDESOkkHdGQFqtGVSeo/kDESYl4r?=
+ =?us-ascii?Q?2Gj5sgKFbgSypO2Bd57TXibXyvRt9bFs0oo4lsiZQDkwN7r2K+7pyN4J3wDR?=
+ =?us-ascii?Q?nKxOqrx9BpZFNwDyw4rzPppl4XLvOleL9gmHE2WAHk8yld5ITtiYzU2QAVrH?=
+ =?us-ascii?Q?Yk7r1CdoGCPcl8+H2u+5H6h3LyHy+91DX2VC7/htKzC1QutETrLULGgEcEwY?=
+ =?us-ascii?Q?H22/vR963ExIXrEAd/hyC4GL7jBSEjIzTYhc8jnNVrBQx4AoFfD6CJ9wAe6R?=
+ =?us-ascii?Q?/P/bDaFJGOT5UdSKaL1lC2UtXBHn5IEmaHD0O1dU1MP8LqhxWdqOcquSjxny?=
+ =?us-ascii?Q?v2dRrVnY0np0ExcGnZPL12nIQSt4DHQ7YgVlKrmAbX4IhNKi66o7pD31mTzv?=
+ =?us-ascii?Q?vsK32fHFgPm1Cp+fDKHoL1GevOESCahz5SKzyLVafrHlQ8/fU9LMhmvmidmL?=
+ =?us-ascii?Q?mGfki19WufW4A0QZ/SeGrhDgK6ubYuAqPnEmFWBPxZFpf4NzejgpZ/aQHtBS?=
+ =?us-ascii?Q?WA=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: IA3PR11MB9254.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d2c0e2c7-f95a-45b8-c563-08ddbdc4030f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Jul 2025 02:06:11.8509
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: +xojRm1Iw1C9S1m/dQADqPCD0v93xeflUnicSfbTcUJNrjIpWYeJIaLxCv8WAfrmszGit+vCnfy2uFrO6Qr6SbQcn43uYezvI42ApHR7u7s=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB8090
+X-OriginatorOrg: intel.com
 
-From: Namhyung Kim <namhyung@kernel.org>
+On Tuesday, July 8, 2025 9:45 AM, Jakub Kicinski <kuba@kernel.org> wrote:
+>On Tue, 8 Jul 2025 01:34:13 +0000 Song, Yoong Siang wrote:
+>> >For normal XDP my understanding is that its the driver's responsibility
+>> >to move the "reserved" stuff out of place before presenting the frame t=
+o
+>> >program.
+>>
+>> Is it means that driver needs to move out the "reserved" stuff before XD=
+P program
+>> and then move back the stuff after XDP program for certain situation, li=
+ke
+>XDP_PASS?
+>
+>Why would the driver need to move it back?
+>On XDP_PASS an skb is constructed, so the metadata should
+>be transferred to the skb. There is no need to copy it back
+>as a prepend.
 
-Save samples with deferred callchains in a separate list and deliver
-them after merging the user callchains.  If users don't want to merge
-they can set tool->merge_deferred_callchains to false to prevent the
-behavior.
+I said so because I thought need to put back the timestamp
+as prepend and then point skb_shared_hwtstamps.netdev_data to it
+to support the ndo_get_tstamp().
 
-With previous result, now perf script will show the merged callchains.
-
-  $ perf script
-  perf     801 [000]    18.031793:          1 cycles:P:
-          ffffffff91a14c36 __intel_pmu_enable_all.isra.0+0x56 ([kernel.kallsyms])
-          ffffffff91d373e9 perf_ctx_enable+0x39 ([kernel.kallsyms])
-          ffffffff91d36af7 event_function+0xd7 ([kernel.kallsyms])
-          ffffffff91d34222 remote_function+0x42 ([kernel.kallsyms])
-          ffffffff91c1ebe1 generic_exec_single+0x61 ([kernel.kallsyms])
-          ffffffff91c1edac smp_call_function_single+0xec ([kernel.kallsyms])
-          ffffffff91d37a9d event_function_call+0x10d ([kernel.kallsyms])
-          ffffffff91d33557 perf_event_for_each_child+0x37 ([kernel.kallsyms])
-          ffffffff91d47324 _perf_ioctl+0x204 ([kernel.kallsyms])
-          ffffffff91d47c43 perf_ioctl+0x33 ([kernel.kallsyms])
-          ffffffff91e2f216 __x64_sys_ioctl+0x96 ([kernel.kallsyms])
-          ffffffff9265f1ae do_syscall_64+0x9e ([kernel.kallsyms])
-          ffffffff92800130 entry_SYSCALL_64+0xb0 ([kernel.kallsyms])
-              7fb5fc22034b __GI___ioctl+0x3b (/usr/lib/x86_64-linux-gnu/libc.so.6)
-  ...
-
-The old output can be get using --no-merge-callchain option.
-Also perf report can get the user callchain entry at the end.
-
-  $ perf report --no-children --percent-limit=0 --stdio -q -S __intel_pmu_enable_all.isra.0
-  # symbol: __intel_pmu_enable_all.isra.0
-       0.00%  perf     [kernel.kallsyms]
-              |
-              ---__intel_pmu_enable_all.isra.0
-                 perf_ctx_enable
-                 event_function
-                 remote_function
-                 generic_exec_single
-                 smp_call_function_single
-                 event_function_call
-                 perf_event_for_each_child
-                 _perf_ioctl
-                 perf_ioctl
-                 __x64_sys_ioctl
-                 do_syscall_64
-                 entry_SYSCALL_64
-                 __GI___ioctl
-
-Signed-off-by: Namhyung Kim <namhyung@kernel.org>
-Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
- tools/perf/Documentation/perf-script.txt |  5 ++
- tools/perf/builtin-script.c              |  5 +-
- tools/perf/util/callchain.c              | 24 +++++++++
- tools/perf/util/callchain.h              |  3 ++
- tools/perf/util/evlist.c                 |  1 +
- tools/perf/util/evlist.h                 |  1 +
- tools/perf/util/session.c                | 63 +++++++++++++++++++++++-
- tools/perf/util/tool.c                   |  1 +
- tools/perf/util/tool.h                   |  1 +
- 9 files changed, 102 insertions(+), 2 deletions(-)
-
-diff --git a/tools/perf/Documentation/perf-script.txt b/tools/perf/Documentation/perf-script.txt
-index 28bec7e78bc8..03d112960632 100644
---- a/tools/perf/Documentation/perf-script.txt
-+++ b/tools/perf/Documentation/perf-script.txt
-@@ -527,6 +527,11 @@ include::itrace.txt[]
- 	The known limitations include exception handing such as
- 	setjmp/longjmp will have calls/returns not match.
- 
-+--merge-callchains::
-+	Enable merging deferred user callchains if available.  This is the
-+	default behavior.  If you want to see separate CALLCHAIN_DEFERRED
-+	records for some reason, use --no-merge-callchains explicitly.
-+
- :GMEXAMPLECMD: script
- :GMEXAMPLESUBCMD:
- include::guest-files.txt[]
-diff --git a/tools/perf/builtin-script.c b/tools/perf/builtin-script.c
-index a6f8209256fe..b50442cca540 100644
---- a/tools/perf/builtin-script.c
-+++ b/tools/perf/builtin-script.c
-@@ -3775,6 +3775,7 @@ int cmd_script(int argc, const char **argv)
- 	bool header_only = false;
- 	bool script_started = false;
- 	bool unsorted_dump = false;
-+	bool merge_deferred_callchains = true;
- 	char *rec_script_path = NULL;
- 	char *rep_script_path = NULL;
- 	struct perf_session *session;
-@@ -3928,6 +3929,8 @@ int cmd_script(int argc, const char **argv)
- 		    "Guest code can be found in hypervisor process"),
- 	OPT_BOOLEAN('\0', "stitch-lbr", &script.stitch_lbr,
- 		    "Enable LBR callgraph stitching approach"),
-+	OPT_BOOLEAN('\0', "merge-callchains", &merge_deferred_callchains,
-+		    "Enable merge deferred user callchains"),
- 	OPTS_EVSWITCH(&script.evswitch),
- 	OPT_END()
- 	};
-@@ -4183,7 +4186,7 @@ int cmd_script(int argc, const char **argv)
- 	script.tool.throttle		 = process_throttle_event;
- 	script.tool.unthrottle		 = process_throttle_event;
- 	script.tool.ordering_requires_timestamps = true;
--	script.tool.merge_deferred_callchains = false;
-+	script.tool.merge_deferred_callchains = merge_deferred_callchains;
- 	session = perf_session__new(&data, &script.tool);
- 	if (IS_ERR(session))
- 		return PTR_ERR(session);
-diff --git a/tools/perf/util/callchain.c b/tools/perf/util/callchain.c
-index d7b7eef740b9..6d423d92861b 100644
---- a/tools/perf/util/callchain.c
-+++ b/tools/perf/util/callchain.c
-@@ -1828,3 +1828,27 @@ int sample__for_each_callchain_node(struct thread *thread, struct evsel *evsel,
- 	}
- 	return 0;
- }
-+
-+int sample__merge_deferred_callchain(struct perf_sample *sample_orig,
-+				     struct perf_sample *sample_callchain)
-+{
-+	u64 nr_orig = sample_orig->callchain->nr - 1;
-+	u64 nr_deferred = sample_callchain->callchain->nr;
-+	struct ip_callchain *callchain;
-+
-+	callchain = calloc(1 + nr_orig + nr_deferred, sizeof(u64));
-+	if (callchain == NULL) {
-+		sample_orig->deferred_callchain = false;
-+		return -ENOMEM;
-+	}
-+
-+	callchain->nr = nr_orig + nr_deferred;
-+	/* copy except for the last PERF_CONTEXT_USER_DEFERRED */
-+	memcpy(callchain->ips, sample_orig->callchain->ips, nr_orig * sizeof(u64));
-+	/* copy deferred use callchains */
-+	memcpy(&callchain->ips[nr_orig], sample_callchain->callchain->ips,
-+	       nr_deferred * sizeof(u64));
-+
-+	sample_orig->callchain = callchain;
-+	return 0;
-+}
-diff --git a/tools/perf/util/callchain.h b/tools/perf/util/callchain.h
-index 86ed9e4d04f9..89785125ed25 100644
---- a/tools/perf/util/callchain.h
-+++ b/tools/perf/util/callchain.h
-@@ -317,4 +317,7 @@ int sample__for_each_callchain_node(struct thread *thread, struct evsel *evsel,
- 				    struct perf_sample *sample, int max_stack,
- 				    bool symbols, callchain_iter_fn cb, void *data);
- 
-+int sample__merge_deferred_callchain(struct perf_sample *sample_orig,
-+				     struct perf_sample *sample_callchain);
-+
- #endif	/* __PERF_CALLCHAIN_H */
-diff --git a/tools/perf/util/evlist.c b/tools/perf/util/evlist.c
-index dcd1130502df..1d5f50f83b31 100644
---- a/tools/perf/util/evlist.c
-+++ b/tools/perf/util/evlist.c
-@@ -83,6 +83,7 @@ void evlist__init(struct evlist *evlist, struct perf_cpu_map *cpus,
- 	evlist->ctl_fd.ack = -1;
- 	evlist->ctl_fd.pos = -1;
- 	evlist->nr_br_cntr = -1;
-+	INIT_LIST_HEAD(&evlist->deferred_samples);
- }
- 
- struct evlist *evlist__new(void)
-diff --git a/tools/perf/util/evlist.h b/tools/perf/util/evlist.h
-index 85859708393e..d2895c8be167 100644
---- a/tools/perf/util/evlist.h
-+++ b/tools/perf/util/evlist.h
-@@ -86,6 +86,7 @@ struct evlist {
- 		int	pos;	/* index at evlist core object to check signals */
- 	} ctl_fd;
- 	struct event_enable_timer *eet;
-+	struct list_head deferred_samples;
- };
- 
- struct evsel_str_handler {
-diff --git a/tools/perf/util/session.c b/tools/perf/util/session.c
-index e6be01459352..21b0958e8229 100644
---- a/tools/perf/util/session.c
-+++ b/tools/perf/util/session.c
-@@ -1277,6 +1277,56 @@ static int evlist__deliver_sample(struct evlist *evlist, const struct perf_tool
- 					    per_thread);
- }
- 
-+struct deferred_event {
-+	struct list_head list;
-+	union perf_event *event;
-+};
-+
-+static int evlist__deliver_deferred_samples(struct evlist *evlist,
-+					    const struct perf_tool *tool,
-+					    union  perf_event *event,
-+					    struct perf_sample *sample,
-+					    struct machine *machine)
-+{
-+	struct deferred_event *de, *tmp;
-+	struct evsel *evsel;
-+	int ret = 0;
-+
-+	if (!tool->merge_deferred_callchains) {
-+		evsel = evlist__id2evsel(evlist, sample->id);
-+		return tool->callchain_deferred(tool, event, sample,
-+						evsel, machine);
-+	}
-+
-+	list_for_each_entry_safe(de, tmp, &evlist->deferred_samples, list) {
-+		struct perf_sample orig_sample;
-+
-+		ret = evlist__parse_sample(evlist, de->event, &orig_sample);
-+		if (ret < 0) {
-+			pr_err("failed to parse original sample\n");
-+			break;
-+		}
-+
-+		if (sample->tid != orig_sample.tid)
-+			continue;
-+
-+		evsel = evlist__id2evsel(evlist, orig_sample.id);
-+		sample__merge_deferred_callchain(&orig_sample, sample);
-+		ret = evlist__deliver_sample(evlist, tool, de->event,
-+					     &orig_sample, evsel, machine);
-+
-+		if (orig_sample.deferred_callchain)
-+			free(orig_sample.callchain);
-+
-+		list_del(&de->list);
-+		free(de);
-+
-+		if (ret)
-+			break;
-+	}
-+	return ret;
-+}
-+
- static int machines__deliver_event(struct machines *machines,
- 				   struct evlist *evlist,
- 				   union perf_event *event,
-@@ -1305,6 +1355,16 @@ static int machines__deliver_event(struct machines *machines,
- 			return 0;
- 		}
- 		dump_sample(evsel, event, sample, perf_env__arch(machine->env));
-+		if (sample->deferred_callchain && tool->merge_deferred_callchains) {
-+			struct deferred_event *de = malloc(sizeof(*de));
-+
-+			if (de == NULL)
-+				return -ENOMEM;
-+
-+			de->event = event;
-+			list_add_tail(&de->list, &evlist->deferred_samples);
-+			return 0;
-+		}
- 		return evlist__deliver_sample(evlist, tool, event, sample, evsel, machine);
- 	case PERF_RECORD_MMAP:
- 		return tool->mmap(tool, event, sample, machine);
-@@ -1364,7 +1424,8 @@ static int machines__deliver_event(struct machines *machines,
- 		return tool->aux_output_hw_id(tool, event, sample, machine);
- 	case PERF_RECORD_CALLCHAIN_DEFERRED:
- 		dump_deferred_callchain(evsel, event, sample);
--		return tool->callchain_deferred(tool, event, sample, evsel, machine);
-+		return evlist__deliver_deferred_samples(evlist, tool, event,
-+							sample, machine);
- 	default:
- 		++evlist->stats.nr_unknown_events;
- 		return -1;
-diff --git a/tools/perf/util/tool.c b/tools/perf/util/tool.c
-index e1d60abb4e41..61fdba70b0a4 100644
---- a/tools/perf/util/tool.c
-+++ b/tools/perf/util/tool.c
-@@ -245,6 +245,7 @@ void perf_tool__init(struct perf_tool *tool, bool ordered_events)
- 	tool->cgroup_events = false;
- 	tool->no_warn = false;
- 	tool->show_feat_hdr = SHOW_FEAT_NO_HEADER;
-+	tool->merge_deferred_callchains = true;
- 
- 	tool->sample = process_event_sample_stub;
- 	tool->mmap = process_event_stub;
-diff --git a/tools/perf/util/tool.h b/tools/perf/util/tool.h
-index 9987bbde6d5e..d06580478ab1 100644
---- a/tools/perf/util/tool.h
-+++ b/tools/perf/util/tool.h
-@@ -87,6 +87,7 @@ struct perf_tool {
- 	bool		cgroup_events;
- 	bool		no_warn;
- 	bool		dont_split_sample_group;
-+	bool		merge_deferred_callchains;
- 	enum show_feature_header show_feat_hdr;
- };
- 
--- 
-2.47.2
-
-
+I haven't study the code flow in detail, so I might be missing something.
