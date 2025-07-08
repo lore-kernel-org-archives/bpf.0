@@ -1,216 +1,255 @@
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D94C18633F;
-	Tue,  8 Jul 2025 00:57:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3211E35893;
+	Tue,  8 Jul 2025 01:23:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751936257; cv=none; b=SVNYN24vIoDOurkCygaMgoHOs+zrCUYH5IJ4fc4MhAqsUpemyWxkKsLrmmRGjPkxIWue/x3EE4yHTlTTPeJGSe96qfHdJ0aMwTiSm8hgSU548qGL2yTdAIhG+pISKHoWOQS/Vo4ff8t0/zTuWgFegjfIDi1rG+niXY1P+puY18M=
+	t=1751937838; cv=none; b=MRvnhRomKHL7QboTLysNFlVl3nwrHfQD9eoK0KOgH06i5Ja++kDEaIC1w1LPuwRv3NPfXEkBRyeKWJYXU6N58PwVMY9zuy4G1FJKPOyz4GEXH8cHFrOQsuH6AGwFB9pYzQp3C8mxAFCslv67dpJyv1crK3KU3sbJgnJErEoLOwI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751936257; c=relaxed/simple;
-	bh=pEWuuzO75FdHQuUBjLHBDVKQP3TK9GJfR6oXQ/qgI+A=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=EmSxFZZ4zdWeY2XIEN6lsYHgBtl8uUgEQjvxZ+kfoKhnpNFeYBxJm2jw0A2j9csUqXIeRhLmi1hbWMVE2kqeM39ul39/U7+aaICDvZdvdUt6niDuEmZ0N9qwE7r22QmXSLrfIrKyI2dfbuIKBkOmPbhprfk0n1wBuyFjutjFYX4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HHFnL/dB; arc=none smtp.client-ip=209.85.210.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1751937838; c=relaxed/simple;
+	bh=aN8l2NtS9Oba9cJOPW3Q9OnFBUI6l6LjWtk/C1O7k5w=;
+	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
+	 Content-Type; b=a4FzgBqrvrQUZpW63hnaqEs6XLn55pu67ekjkNMJB15zAK2B7XOjBK2s1cUV5P2dfsGLn+GYo0WfWo2NBY6vbWYNPy/NtLyxcIybCqj7SCccKRebvRvhUxbQzHcmFpZJ+rWFUA1NDy8y9hw7RMGe2xpHwj77VpsWFvxjd5yZEdc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ge+s6SrG; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HHFnL/dB"
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-74ad4533ac5so3841059b3a.0;
-        Mon, 07 Jul 2025 17:57:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1751936255; x=1752541055; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=wNUCviKwg+4KT+O9PcdqMmr4jCZBknZpXaowI9v0jKI=;
-        b=HHFnL/dBn8NkQuos5sjCMWqs/lbrbUfjIB8uF8+vpKp/48xpMG0K9t3xVSeUL70mmD
-         LNn/87O66Krr17yknBP+0Bm4ZFb9Z53HeRaH5jtSOk5Z64ECcEdaGfDp1f0N9VQRQsTd
-         bGI2MoQDluaHpLeqfJMxTRVhZSVEs5BJqYYvCoqA7jjWrXzJV8vxVEAhVgAP9qkOB8z5
-         YTZH7uOrKcSsl6n+wS1IcxiquzJtmeDHWTu2Zww+YlNFOUlKm3o2yzqFgejn7xHtgnvH
-         OO4fKIjgonyLzMWSZTLSUMkKMox7eUFF/19LbnlKmRqxTj+a6n+VfQCCRZQPkWocM1KV
-         tyBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751936255; x=1752541055;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wNUCviKwg+4KT+O9PcdqMmr4jCZBknZpXaowI9v0jKI=;
-        b=EUneObfZUNacIVF1XDYBInzfm0USxo0X8NLfpZPrMMAJXcLFlCFfAv93iI+6Sv9kcb
-         KM4VxLQ3/sDgxLKznHqJR4RNXInIXrmjGpyl74TT4kO+nnHQmgL58YqXkVfDBS9EoTRY
-         87YLzosimPhpwrJK3qjODmJxyqoNPW2DMyORJg2BmQLUCpAqFCsCJ9UGm78MDT9G2J7N
-         XMYxNPcfYNqRXKYV9zAPlv0hRwjA+jj/aOLENbtUGezqw3kcIkLrcUciP9qdb+6z27lo
-         CouhhkfL2xdPBjujr7Wat6YFwDV8eMilxfvPt0Dj7ezQzRDDMeTmLatNwgwlhplAEGEt
-         Vl0Q==
-X-Forwarded-Encrypted: i=1; AJvYcCU8d6K9DJe1obY7IVQqR5EESsRkqwK4n5rTTuU9gZvVbKpXG/oH0TWvCXXsJBL0zTXWe17pgd00@vger.kernel.org, AJvYcCW6PNVQvmFxdaCZJLT8bgUghAZoA0t75fLuBcrvT8s0xlBSZPrPCVXr092G/p8TAY9Kbehdfnr5e0X04jAa@vger.kernel.org, AJvYcCWqS0+JOQNftyldBmjNXtqhwTg0zO2P+s2DrdCcxY7c8cJMk9JuGdc2l3VcgFwArev3Pco=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwnAXaHXHuJhLJSiT2PCXMrAMc1OC1JwPHKRL08f0EcsMwFj0Qk
-	JP3vruG2esia6zHICAnjad43mCagiAW0/2ZHnIWex4fdWk2YM2K6GImk
-X-Gm-Gg: ASbGncsA/nwrThXU1aTDm+YChCRWEczUVcr+xnszeNaE0NbqivuLo1GepatArZOALli
-	P+InF9ZgW/e5hZCmnfsLT8bgMj0OdEEjMNgfoMMswP4EQdseIwycVB3874FEcIkR5cCugd1Jg1L
-	7lfPJQ42bCx4MqJldwQeJbzL45vga2N/T2x/uBeGb25qn6t7KPEhGL4eYlLsxf/SFyIGCeowHmh
-	a7CCuwUc0Kq0im/hFsdaxqh8dTAUSmcyk9KEL58SwNTlglrETIFKqq2y6EL4W44H3ajcX9Yqyr3
-	MBbmw+4LvbLzvsCcdMNZtdujQ3jC0TKgiutC0Tulx3e0TUTMtF6gOgIrRjHh9tdWXQk=
-X-Google-Smtp-Source: AGHT+IHXo366oRwc1N3ei11TOtbJeTTLtiBEy4xfBpN/11epTl7eJGrY2mvCVQ9NRC2R0trSH8Z85A==
-X-Received: by 2002:a05:6a20:c79a:b0:218:17a2:4421 with SMTP id adf61e73a8af0-22b60db4dc6mr1098705637.10.1751936255061;
-        Mon, 07 Jul 2025 17:57:35 -0700 (PDT)
-Received: from ?IPv6:2620:10d:c096:14a::647? ([2620:10d:c090:600::1:6ad])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b38ee62c615sm9889836a12.60.2025.07.07.17.57.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Jul 2025 17:57:34 -0700 (PDT)
-Message-ID: <4ae6fd0d54ff2650d0f6724fb44b33723e26ea49.camel@gmail.com>
-Subject: Re: [syzbot] [bpf?] WARNING in reg_bounds_sanity_check
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Paul Chaignon <paul.chaignon@gmail.com>, syzbot	
- <syzbot+c711ce17dd78e5d4fdcf@syzkaller.appspotmail.com>, Andrii Nakryiko	
- <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>, bpf	
- <bpf@vger.kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Hao Luo	
- <haoluo@google.com>, John Fastabend <john.fastabend@gmail.com>, Jiri Olsa	
- <jolsa@kernel.org>, KP Singh <kpsingh@kernel.org>, LKML	
- <linux-kernel@vger.kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
- Network Development <netdev@vger.kernel.org>, Stanislav Fomichev
- <sdf@fomichev.me>, Song Liu <song@kernel.org>,  syzkaller-bugs
- <syzkaller-bugs@googlegroups.com>, Yonghong Song <yonghong.song@linux.dev>
-Date: Mon, 07 Jul 2025 17:57:32 -0700
-In-Reply-To: <CAADnVQKKdpj-0wXKoKJC4uGhMivdr9FMYvMxZ6jLdPMdva0Vvw@mail.gmail.com>
-References: <68649190.a70a0220.3b7e22.20e8.GAE@google.com>
-	 <aGa3iOI1IgGuPDYV@Tunnel>
-	 <865f2345eaa61afbd26d9de0917e3b1d887c647d.camel@gmail.com>
-	 <aGgL_g3wA2w3yRrG@mail.gmail.com>
-	 <df2cdc5f4fa16a4e3e08e6a997af3722f3673d38.camel@gmail.com>
-	 <e43c25b451395edff0886201ad3358acd9670eda.camel@gmail.com>
-	 <aGxKcF2Ceany8q7W@mail.gmail.com>
-	 <2fb0a354ec117d36a24fe37a3184c1d40849ef1a.camel@gmail.com>
-	 <c35d5392b961a4d5b54bdb4b92c4e104bd7857cc.camel@gmail.com>
-	 <CAADnVQKKdpj-0wXKoKJC4uGhMivdr9FMYvMxZ6jLdPMdva0Vvw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2 (3.56.2-1.fc42) 
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ge+s6SrG"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6606C4CEF4;
+	Tue,  8 Jul 2025 01:23:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1751937838;
+	bh=aN8l2NtS9Oba9cJOPW3Q9OnFBUI6l6LjWtk/C1O7k5w=;
+	h=Date:From:To:Cc:Subject:References:From;
+	b=Ge+s6SrGDoYX7jmof8Ey6SY4sX3JaZYAukf71gTKevMu4R3kBDb09MQgv5HgB/9zS
+	 DGvuNdEbB1rlqgpyKWCEbB7ZkmDB42D5MRaRTECkzIHKIgS/A/uTMcp07Ye/QJX3Vp
+	 gbZD7dj7Ahn5pcybQNFtcmSpxzPuYUgaK6TlUALQrtKliP9y4GWxJLdoxfEvXpwwnN
+	 bwC5xjxEJXY/xe4CyEwUJIWrnHtQI5mdpDGJ/WvWezd4A7j7NSROFsnXX4XtZOzpHq
+	 +xAduRJm1BCRObcEXL32vJuUAI7FAgsvSjNifHTo3jzgM+h1sy1+QJh+w00pzTtaBz
+	 fQrFHqhuawD1g==
+Received: from rostedt by gandalf with local (Exim 4.98.2)
+	(envelope-from <rostedt@kernel.org>)
+	id 1uYx3u-00000000Bq0-0Xzw;
+	Mon, 07 Jul 2025 21:23:58 -0400
+Message-ID: <20250708012357.982692711@kernel.org>
+User-Agent: quilt/0.68
+Date: Mon, 07 Jul 2025 21:22:41 -0400
+From: Steven Rostedt <rostedt@kernel.org>
+To: linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org,
+ bpf@vger.kernel.org,
+ x86@kernel.org
+Cc: Masami Hiramatsu <mhiramat@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Josh Poimboeuf <jpoimboe@kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>,
+ Ingo Molnar <mingo@kernel.org>,
+ Jiri Olsa <jolsa@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>,
+ Thomas Gleixner <tglx@linutronix.de>,
+ Andrii Nakryiko <andrii@kernel.org>,
+ Indu Bhagat <indu.bhagat@oracle.com>,
+ "Jose E. Marchesi" <jemarch@gnu.org>,
+ Beau Belgrave <beaub@linux.microsoft.com>,
+ Jens Remus <jremus@linux.ibm.com>,
+ Linus Torvalds <torvalds@linux-foundation.org>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Jens Axboe <axboe@kernel.dk>,
+ Florian Weimer <fweimer@redhat.com>,
+ Sam James <sam@gentoo.org>
+Subject: [PATCH v13 02/14] unwind_user: Add frame pointer support
+References: <20250708012239.268642741@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 
-On Mon, 2025-07-07 at 17:51 -0700, Alexei Starovoitov wrote:
-> On Mon, Jul 7, 2025 at 5:37=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.co=
-m> wrote:
-> >
-> > On Mon, 2025-07-07 at 16:29 -0700, Eduard Zingerman wrote:
-> > > On Tue, 2025-07-08 at 00:30 +0200, Paul Chaignon wrote:
-> > >
-> > > [...]
-> > >
-> > > > This is really nice! I think we can extend it to detect some
-> > > > always-true branches as well, and thus handle the initial case repo=
-rted
-> > > > by syzbot.
-> > > >
-> > > > - if a_min =3D=3D 0: we don't deduce anything
-> > > > - bits that may be set in 'a' are: possible_a =3D or_range(a_min, a=
-_max)
-> > > > - bits that are always set in 'b' are: always_b =3D b_value & ~b_ma=
-sk
-> > > > - if possible_a & always_b =3D=3D possible_a: only true branch is p=
-ossible
-> > > > - otherwise, we can't deduce anything
-> > > >
-> > > > For BPF_X case, we probably want to also check the reverse with
-> > > > possible_b & always_a.
-> > >
-> > > So, this would extend existing predictions:
-> > > - [old] always_a & always_b -> infer always true
-> > > - [old] !(possible_a & possible_b) -> infer always false
-> > > - [new] if possible_a & always_b =3D=3D possible_a -> infer true
-> > >         (but make sure 0 is not in possible_a)
-> > >
-> > > And it so happens, that it covers example at hand.
-> > > Note that or_range(1, (u64)-1) =3D=3D (u64)-1, so maybe tnum would be
-> > > sufficient, w/o the need for or_range().
-> > >
-> > > The part of the verifier that narrows the range after prediction:
-> > >
-> > >   regs_refine_cond_op:
-> > >
-> > >          case BPF_JSET | BPF_X: /* reverse of BPF_JSET, see rev_opcod=
-e() */
-> > >                  if (!is_reg_const(reg: reg2, subreg32: is_jmp32))
-> > >                          swap(reg1, reg2);
-> > >                  if (!is_reg_const(reg: reg2, subreg32: is_jmp32))
-> > >                          break;
-> > >                  val =3D reg_const_value(reg: reg2, subreg32: is_jmp3=
-2);
-> > >                ...
-> > >                          reg1->var_off =3D tnum_and(a: reg1->var_off,=
- b: tnum_const(value: ~val));
-> > >                ...
-> > >                  break;
-> > >
-> > > And after suggested change this part would be executed only if tnum
-> > > bounds can be changed by jset. So, this eliminates at-least a
-> > > sub-class of a problem.
-> >
-> > But I think the program below would still be problematic:
-> >
-> > SEC("socket")
-> > __success
-> > __retval(0)
-> > __naked void jset_bug1(void)
-> > {
-> >         asm volatile ("                                 \
-> >         call %[bpf_get_prandom_u32];                    \
-> >         if r0 < 2 goto 1f;                              \
-> >         r0 |=3D 1;                                        \
-> >         if r0 & -2 goto 1f;                             \
-> > 1:      r0 =3D 0;                                         \
-> >         exit;                                           \
-> > "       :
-> >         : __imm(bpf_get_prandom_u32)
-> >         : __clobber_all);
-> > }
-> >
-> > The possible_r0 would be changed by `if r0 & -2`, so new rule will not =
-hit.
-> > And the problem remains unsolved. I think we need to reset min/max
-> > bounds in regs_refine_cond_op for JSET:
-> > - in some cases range is more precise than tnum
-> > - in these cases range cannot be compressed to a tnum
-> > - predictions in jset are done for a tnum
-> > - to avoid issues when narrowing tnum after prediction, forget the
-> >   range.
->
-> You're digging too deep. llvm doesn't generate JSET insn,
-> so this is syzbot only issue. Let's address it with minimal changes.
-> Do not introduce fancy branch taken analysis.
-> I would be fine with reverting this particular verifier_bug() hunk.
+From: Josh Poimboeuf <jpoimboe@kernel.org>
 
-My point is that the fix should look as below (but extract it as a
-utility function):
+Add optional support for user space frame pointer unwinding.  If
+supported, the arch needs to enable CONFIG_HAVE_UNWIND_USER_FP and
+define ARCH_INIT_USER_FP_FRAME.
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 53007182b46b..b2fe665901b7 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -16207,6 +16207,14 @@ static void regs_refine_cond_op(struct bpf_reg_sta=
-te *reg1, struct bpf_reg_state
-                        swap(reg1, reg2);
-                if (!is_reg_const(reg2, is_jmp32))
-                        break;
-+               reg1->u32_max_value =3D U32_MAX;
-+               reg1->u32_min_value =3D 0;
-+               reg1->s32_max_value =3D S32_MAX;
-+               reg1->s32_min_value =3D S32_MIN;
-+               reg1->umax_value =3D U64_MAX;
-+               reg1->umin_value =3D 0;
-+               reg1->smax_value =3D S64_MAX;
-+               reg1->smin_value =3D S32_MIN;
-                val =3D reg_const_value(reg2, is_jmp32);
-                if (is_jmp32) {
-                        t =3D tnum_and(tnum_subreg(reg1->var_off), tnum_con=
-st(~val));
+By encoding the frame offsets in struct unwind_user_frame, much of this
+code can also be reused for future unwinder implementations like sframe.
 
-----
+Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+Co-developed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+---
+Changes since v12: https://lore.kernel.org/20250701005450.888492528@goodmis.org
 
-Because of irreconcilable differences in what can be represented as a
-tnum and what can be represented as a range.
+- Added test when use_fp is true to make sure fp < sp (Jens Remus)
+
+- Make sure the address read is word aligned (Linus Torvalds)
+
+ arch/Kconfig                      |  4 ++
+ include/asm-generic/Kbuild        |  1 +
+ include/asm-generic/unwind_user.h |  5 +++
+ include/linux/unwind_user.h       |  5 +++
+ include/linux/unwind_user_types.h |  1 +
+ kernel/unwind/user.c              | 65 ++++++++++++++++++++++++++++++-
+ 6 files changed, 79 insertions(+), 2 deletions(-)
+ create mode 100644 include/asm-generic/unwind_user.h
+
+diff --git a/arch/Kconfig b/arch/Kconfig
+index ea59e5d7cc69..8e3fd723bd74 100644
+--- a/arch/Kconfig
++++ b/arch/Kconfig
+@@ -438,6 +438,10 @@ config HAVE_HARDLOCKUP_DETECTOR_ARCH
+ config UNWIND_USER
+ 	bool
+ 
++config HAVE_UNWIND_USER_FP
++	bool
++	select UNWIND_USER
++
+ config HAVE_PERF_REGS
+ 	bool
+ 	help
+diff --git a/include/asm-generic/Kbuild b/include/asm-generic/Kbuild
+index 8675b7b4ad23..295c94a3ccc1 100644
+--- a/include/asm-generic/Kbuild
++++ b/include/asm-generic/Kbuild
+@@ -59,6 +59,7 @@ mandatory-y += tlbflush.h
+ mandatory-y += topology.h
+ mandatory-y += trace_clock.h
+ mandatory-y += uaccess.h
++mandatory-y += unwind_user.h
+ mandatory-y += vermagic.h
+ mandatory-y += vga.h
+ mandatory-y += video.h
+diff --git a/include/asm-generic/unwind_user.h b/include/asm-generic/unwind_user.h
+new file mode 100644
+index 000000000000..b8882b909944
+--- /dev/null
++++ b/include/asm-generic/unwind_user.h
+@@ -0,0 +1,5 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _ASM_GENERIC_UNWIND_USER_H
++#define _ASM_GENERIC_UNWIND_USER_H
++
++#endif /* _ASM_GENERIC_UNWIND_USER_H */
+diff --git a/include/linux/unwind_user.h b/include/linux/unwind_user.h
+index 1d77bed8de2c..7f7282516bf5 100644
+--- a/include/linux/unwind_user.h
++++ b/include/linux/unwind_user.h
+@@ -3,6 +3,11 @@
+ #define _LINUX_UNWIND_USER_H
+ 
+ #include <linux/unwind_user_types.h>
++#include <asm/unwind_user.h>
++
++#ifndef ARCH_INIT_USER_FP_FRAME
++ #define ARCH_INIT_USER_FP_FRAME
++#endif
+ 
+ int unwind_user(struct unwind_stacktrace *trace, unsigned int max_entries);
+ 
+diff --git a/include/linux/unwind_user_types.h b/include/linux/unwind_user_types.h
+index 6ed1b4ae74e1..65bd070eb6b0 100644
+--- a/include/linux/unwind_user_types.h
++++ b/include/linux/unwind_user_types.h
+@@ -6,6 +6,7 @@
+ 
+ enum unwind_user_type {
+ 	UNWIND_USER_TYPE_NONE,
++	UNWIND_USER_TYPE_FP,
+ };
+ 
+ struct unwind_stacktrace {
+diff --git a/kernel/unwind/user.c b/kernel/unwind/user.c
+index d0cf3ee2706d..62b3ef37d71b 100644
+--- a/kernel/unwind/user.c
++++ b/kernel/unwind/user.c
+@@ -6,13 +6,71 @@
+ #include <linux/sched.h>
+ #include <linux/sched/task_stack.h>
+ #include <linux/unwind_user.h>
++#include <linux/uaccess.h>
++
++static struct unwind_user_frame fp_frame = {
++	ARCH_INIT_USER_FP_FRAME
++};
++
++static inline bool fp_state(struct unwind_user_state *state)
++{
++	return IS_ENABLED(CONFIG_HAVE_UNWIND_USER_FP) &&
++	       state->type == UNWIND_USER_TYPE_FP;
++}
+ 
+ #define for_each_user_frame(state) \
+ 	for (unwind_user_start(state); !(state)->done; unwind_user_next(state))
+ 
+ static int unwind_user_next(struct unwind_user_state *state)
+ {
+-	/* no implementation yet */
++	struct unwind_user_frame *frame;
++	unsigned long cfa = 0, fp, ra = 0;
++	unsigned int shift;
++
++	if (state->done)
++		return -EINVAL;
++
++	if (fp_state(state))
++		frame = &fp_frame;
++	else
++		goto done;
++
++	if (frame->use_fp) {
++		if (state->fp < state->sp)
++			goto done;
++		cfa = state->fp;
++	} else {
++		cfa = state->sp;
++	}
++
++	/* Get the Canonical Frame Address (CFA) */
++	cfa += frame->cfa_off;
++
++	/* stack going in wrong direction? */
++	if (cfa <= state->sp)
++		goto done;
++
++	/* Make sure that the address is word aligned */
++	shift = sizeof(long) == 4 ? 2 : 3;
++	if ((cfa + frame->ra_off) & ((1 << shift) - 1))
++		goto done;
++
++	/* Find the Return Address (RA) */
++	if (get_user(ra, (unsigned long *)(cfa + frame->ra_off)))
++		goto done;
++
++	if (frame->fp_off && get_user(fp, (unsigned long __user *)(cfa + frame->fp_off)))
++		goto done;
++
++	state->ip = ra;
++	state->sp = cfa;
++	if (frame->fp_off)
++		state->fp = fp;
++
++	return 0;
++
++done:
++	state->done = true;
+ 	return -EINVAL;
+ }
+ 
+@@ -27,7 +85,10 @@ static int unwind_user_start(struct unwind_user_state *state)
+ 		return -EINVAL;
+ 	}
+ 
+-	state->type = UNWIND_USER_TYPE_NONE;
++	if (IS_ENABLED(CONFIG_HAVE_UNWIND_USER_FP))
++		state->type = UNWIND_USER_TYPE_FP;
++	else
++		state->type = UNWIND_USER_TYPE_NONE;
+ 
+ 	state->ip = instruction_pointer(regs);
+ 	state->sp = user_stack_pointer(regs);
+-- 
+2.47.2
+
+
