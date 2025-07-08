@@ -1,37 +1,38 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79EDA1C8606;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CB5320459A;
 	Tue,  8 Jul 2025 02:00:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751940050; cv=none; b=rbqn4Bv7YhYgneHv8op/Tx1sNJCrRw6sP+uTqFt6wstZ4KqpzsGvL6lz/UyhdzqCeAVHO3ezzQ2ijDDaClQYf/7QazRoBZqvgnD8lJtABZJCOAvqTodu2SNd8iqplNiJf4XXBiEePCgD4Qte3wlrKPp9XVOmPTQDI+ynm5qwL3s=
+	t=1751940050; cv=none; b=PdkRP8Y3uTYKrz0S7nYTL8RqO9LdfbzCQolk9fXC8hxWGbEnY813TYg4I5DqLQssZw9D3F3LKlRJE3EaKxrTnXLUSukTDPQQuSq6byE7Ymwz5w0RrcDA/oyjk72pE2hD5th8UClUrm4ZoplvwZPtJGwb3kysXWhzOe5CXGo/R9Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1751940050; c=relaxed/simple;
-	bh=AIE1bYpSQl2sDdlrLBEu7VHTjeRI0UsChEr6022uLng=;
-	h=Message-ID:Date:From:To:Cc:Subject; b=XjQmhicYV8exeQ+PCWEBmsT+VAQZJY7txF1gzisrnPz/ZNgol5TwJVl9S/BaYzMvZvTjNcpkuXBvtLvI6u64fEJ+k6bz5zYs6365uVdlISBq0hHDA3s7WtDWr1SVM/egr8DKxQvw6NDp5MLF90xjkA8J99+KSqp5nksc4r1t1Wg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T6Z1voif; arc=none smtp.client-ip=10.30.226.201
+	bh=/LTAfcjza1uzXV2X9tyx4ljH3sU7KdDveD6pJLOcz4A=;
+	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
+	 Content-Type; b=HD5jo3o5VLPa3TqomVn0Fq8aHLO+ZySkCOYKeqscE2pfpwdL/L1jdSqiuWhV4/Mz8LG5T6tYMtKx+v6HIEWTA9jXRGRX21CkTTZ3jvLRoMljDAEgZY6HG0M+UeB1Bmi4B+f5IDiOT5FREuINTtUOVeXIzTVUTVOuXr/HZoXmDAM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aSy4BAUM; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T6Z1voif"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE06CC4CEE3;
-	Tue,  8 Jul 2025 02:00:49 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aSy4BAUM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 474F3C116C6;
+	Tue,  8 Jul 2025 02:00:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1751940050;
-	bh=AIE1bYpSQl2sDdlrLBEu7VHTjeRI0UsChEr6022uLng=;
-	h=Date:From:To:Cc:Subject:From;
-	b=T6Z1voifSAnMTSG+iRKH3UQAe2bqZ0/pU4pxDBYSVOu7Gs7biMqUKPypYXZ+/dRtp
-	 Msn5/HceB6wYqaNTJKH+pEvrxTkrZh/OnGFbmVKL8xJ7/owi8OoCcDofDWpL4GMyic
-	 hoYJPh6Tp/2+KMDQggogauuV9/wLzQ45dwrk6xqFeDiD4Z5SphJE3AZGElqsaTpp+/
-	 0MqpX68tLwJVAsJuFS3ukMeZ9yutNEvHtxGrKoLrYjkMnemTPQESG1MandHTjur/4n
-	 h0PXbIlDkILEx2k6HoB9GbtzZwcyTGDSVMBghuP09ge/8HJoubLnu03CV1DTQcnvRF
-	 xIkZec/bX1F8A==
+	bh=/LTAfcjza1uzXV2X9tyx4ljH3sU7KdDveD6pJLOcz4A=;
+	h=Date:From:To:Cc:Subject:References:From;
+	b=aSy4BAUMiwQlbOp+VaYaAAFHGxpqrBKS4n3MbAnmj8eOgHX7T7RVCVn0PbQ1DDQrL
+	 jjC0La1OJmS/3n8xsUIwErT0To7LD0ZEI7FhBklVoAenDqwNJtcKQC8XlyHMO192SA
+	 gu07I2wRKzvl6KBthnnmts5YmA0obN/QKzypUszpvqWoDiU9hCY47ubNFxMxQ3g7E+
+	 ivwTW5DpVbyvkl/QmDRlclrrzYEnUe43qhCThLujYnlAvZnWtNN/vdz4i/0DfE5aYz
+	 AvBJOzE4sBwEzeJKRNXL0glc/lzPgtTtpjTq3vR6tfCH/esckX4FPxy7JS+uEHAuaC
+	 1hkxCF8IRehGQ==
 Received: from rostedt by gandalf with local (Exim 4.98.2)
 	(envelope-from <rostedt@kernel.org>)
-	id 1uYxda-00000000D3f-0CsA;
+	id 1uYxda-00000000D59-2M7c;
 	Mon, 07 Jul 2025 22:00:50 -0400
-Message-ID: <20250708020003.565862284@kernel.org>
+Message-ID: <20250708020050.410920799@kernel.org>
 User-Agent: quilt/0.68
-Date: Mon, 07 Jul 2025 22:00:03 -0400
+Date: Mon, 07 Jul 2025 22:00:06 -0400
 From: Steven Rostedt <rostedt@kernel.org>
 To: linux-kernel@vger.kernel.org,
  linux-trace-kernel@vger.kernel.org,
@@ -55,81 +56,79 @@ Cc: Masami Hiramatsu <mhiramat@kernel.org>,
  Jens Axboe <axboe@kernel.dk>,
  Florian Weimer <fweimer@redhat.com>,
  Sam James <sam@gentoo.org>
-Subject: [PATCH v13 00/11] perf: Support the deferred unwinding infrastructure
+Subject: [PATCH v13 03/11] perf: Use current->flags & PF_KTHREAD|PF_USER_WORKER instead of
+ current->mm == NULL
+References: <20250708020003.565862284@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 
-This is based on top of the deferred unwind core patch series:
+From: Steven Rostedt <rostedt@goodmis.org>
 
- https://lore.kernel.org/linux-trace-kernel/20250708012239.268642741@kernel.org/
-   git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace.git
-     unwind/core
+To determine if a task is a kernel thread or not, it is more reliable to
+use (current->flags & (PF_KTHREAD|PF_USER_WORKERi)) than to rely on
+current->mm being NULL.  That is because some kernel tasks (io_uring
+helpers) may have a mm field.
 
-This series implements the perf interface to use deferred user space stack
-tracing.
+Link: https://lore.kernel.org/linux-trace-kernel/20250424163607.GE18306@noisy.programming.kicks-ass.net/
+Link: https://lore.kernel.org/all/20250624130744.602c5b5f@batman.local.home/
 
-The code for this series is located here:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace.git
-unwind/perf
-
-Changes since v12: https://lore.kernel.org/linux-trace-kernel/20250701180410.755491417@goodmis.org/
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+---
+Changes since v11: https://lore.kernel.org/20250625231622.172100822@goodmis.org
 
 - Also check against PF_USER_WORKER as io workers do not have PF_KTHREAD
   set.
 
-- Removed deferred_request_nmi() and have NMIs just use the normal
-  deferred_request() function. As Peter Zijlstra has stated, in_nmi() can
-  nest because some exceptions set in_nmi() and another NMI could come in.
+ kernel/events/callchain.c | 6 +++---
+ kernel/events/core.c      | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-- Removed use of timestamp. The deferred unwind has gone back to using
-  cookies, and perf doesn't use the cookie. This means the
-  struct perf_callchain_deferred_event is not modified.
+diff --git a/kernel/events/callchain.c b/kernel/events/callchain.c
+index cd0e3fc7ed05..5982d18f169b 100644
+--- a/kernel/events/callchain.c
++++ b/kernel/events/callchain.c
+@@ -246,10 +246,10 @@ get_perf_callchain(struct pt_regs *regs, bool kernel, bool user,
+ 
+ 	if (user && !crosstask) {
+ 		if (!user_mode(regs)) {
+-			if  (current->mm)
+-				regs = task_pt_regs(current);
+-			else
++			if (current->flags & (PF_KTHREAD | PF_USER_WORKER))
+ 				regs = NULL;
++			else
++				regs = task_pt_regs(current);
+ 		}
+ 
+ 		if (regs) {
+diff --git a/kernel/events/core.c b/kernel/events/core.c
+index b2a53cabcb17..cf35dc707ad5 100644
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -7414,7 +7414,7 @@ static void perf_sample_regs_user(struct perf_regs *regs_user,
+ 	if (user_mode(regs)) {
+ 		regs_user->abi = perf_reg_abi(current);
+ 		regs_user->regs = regs;
+-	} else if (!(current->flags & PF_KTHREAD)) {
++	} else if (!(current->flags & (PF_KTHREAD | PF_USER_WORKER))) {
+ 		perf_get_regs_user(regs_user, regs);
+ 	} else {
+ 		regs_user->abi = PERF_SAMPLE_REGS_ABI_NONE;
+@@ -8054,7 +8054,7 @@ static u64 perf_virt_to_phys(u64 virt)
+ 		 * Try IRQ-safe get_user_page_fast_only first.
+ 		 * If failed, leave phys_addr as 0.
+ 		 */
+-		if (current->mm != NULL) {
++		if (!(current->flags & PF_KTHREAD)) {
+ 			struct page *p;
+ 
+ 			pagefault_disable();
+-- 
+2.47.2
 
-Head SHA1: 3d88d03d533ede8d2d513942e768607aa9279c4b
 
-
-Josh Poimboeuf (5):
-      perf: Remove get_perf_callchain() init_nr argument
-      perf: Have get_perf_callchain() return NULL if crosstask and user are set
-      perf: Simplify get_perf_callchain() user logic
-      perf: Skip user unwind if the task is a kernel thread
-      perf: Support deferred user callchains
-
-Namhyung Kim (4):
-      perf tools: Minimal CALLCHAIN_DEFERRED support
-      perf record: Enable defer_callchain for user callchains
-      perf script: Display PERF_RECORD_CALLCHAIN_DEFERRED
-      perf tools: Merge deferred user callchains
-
-Steven Rostedt (2):
-      perf: Use current->flags & PF_KTHREAD|PF_USER_WORKER instead of current->mm == NULL
-      perf: Support deferred user callchains for per CPU events
-
-----
- include/linux/perf_event.h                |  13 +-
- include/uapi/linux/perf_event.h           |  19 +-
- kernel/bpf/stackmap.c                     |   8 +-
- kernel/events/callchain.c                 |  49 ++--
- kernel/events/core.c                      | 407 +++++++++++++++++++++++++++++-
- tools/include/uapi/linux/perf_event.h     |  19 +-
- tools/lib/perf/include/perf/event.h       |   7 +
- tools/perf/Documentation/perf-script.txt  |   5 +
- tools/perf/builtin-script.c               |  92 +++++++
- tools/perf/util/callchain.c               |  24 ++
- tools/perf/util/callchain.h               |   3 +
- tools/perf/util/event.c                   |   1 +
- tools/perf/util/evlist.c                  |   1 +
- tools/perf/util/evlist.h                  |   1 +
- tools/perf/util/evsel.c                   |  39 +++
- tools/perf/util/evsel.h                   |   1 +
- tools/perf/util/machine.c                 |   1 +
- tools/perf/util/perf_event_attr_fprintf.c |   1 +
- tools/perf/util/sample.h                  |   3 +-
- tools/perf/util/session.c                 |  78 ++++++
- tools/perf/util/tool.c                    |   2 +
- tools/perf/util/tool.h                    |   4 +-
- 22 files changed, 742 insertions(+), 36 deletions(-)
