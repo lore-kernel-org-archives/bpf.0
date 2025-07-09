@@ -1,74 +1,75 @@
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A653C26B763;
-	Wed,  9 Jul 2025 08:43:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 864D55383;
+	Wed,  9 Jul 2025 08:58:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752050601; cv=none; b=sbnQCNz1DSBen8jar2gsbKfVzvXXU4PrZtTY2Wo3i+3NYtKOQS8i8scosQLQmKCjF5aoEO5h49A2j4reHIjcT46VP38CeC4hz6s0+AgkuqKTyqwC21gzzGA0XMEGE1VA3Bmu+SY1hP29JoPXxMypVFWIlKbgD1V7RJc3iiFuXoI=
+	t=1752051515; cv=none; b=AXT2eOh1RxtNy1eKin3bRqJpJa8mMdjQlo1yDURv6P3wlKnDht1KBczU7u/kHPB4AVw545JoXcrWTpIex+tSe+BQm4rSKltZgrw0MOTfrAOVKGUa7cg8ezTz3mU4TzKdwiybfGkmg3H/3R5NdKb5khwiUejG/WTzCcJFsvErzMo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752050601; c=relaxed/simple;
-	bh=Cs6JjLSPsTFLJj4H5Z6R6MrU1Qqzt2zZkRBKKWUvFLo=;
+	s=arc-20240116; t=1752051515; c=relaxed/simple;
+	bh=Y0o0ryo0AoD3mTpRJuuHPuBO5t3sO486uzuJTcp1iEM=;
 	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EjD2uTUWtoe661ZjUdqPaCiC6G9IHfFEEfwdN+tAHt/LKncrdnehT6XUABS0VMNDO98EoN9YVPy5hcTkmYT9iJMO8jrAZwCQAB8Y/g0YnDbFdFeCeDMEjyqvDl4q1tHbetkeLBdvBDBUONGw8I7E8sJRR5kcAl0/XSoKJaVtdTs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Pc7+bpuF; arc=none smtp.client-ip=209.85.208.46
+	 Content-Type:Content-Disposition:In-Reply-To; b=au8f7u0CgiheGhjXGspwRiv8AnlWD4Y2R+tBerTMS3FehsAQDi0cdwVtULj8vQEri3WP9jRb1myJWI0Ni3N3UsDgmYjpIAkewGQ0q6Jp9+smyFIrmJGQKvPA5sPrioNbpDnGHWkgWUaxYMKyoEYwfbhohb5BviVNMYu5SeS3N24=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XOClkRZd; arc=none smtp.client-ip=209.85.218.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Pc7+bpuF"
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-60c93c23b08so10426128a12.3;
-        Wed, 09 Jul 2025 01:43:18 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XOClkRZd"
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-ae0a0cd709bso157722466b.0;
+        Wed, 09 Jul 2025 01:58:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752050597; x=1752655397; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1752051511; x=1752656311; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=9Xdlzo8mlFP5VJmSLNkxHKCX30v3KVlncbbCZk7gPQs=;
-        b=Pc7+bpuFhD8krPW7IzKZqA5Z0x0EKdn9y80VN8HwY3fUsxbIbg1IocEMVux1XpfUdl
-         5sQvuXAUjZnOdxmsOO7yoVg3HlacJcHnO+al8UmvJ8tlez92p0xCKy6Gr2o30MFveZIM
-         ZUE0vS8nuLJql7TUscJYqrU3VONYi/7Ff+EZYuNCRaBqjRoSC95YKS3zl9Md3+JNVcBf
-         WRCDy2JJp4K/etfEX6j7enVGDH2JELsY5ysK648/SDGXuVMAqo5qbcDsfZ4ZuylBmW/L
-         QH+WrJwE1ZIkioQ1hs2IsJOrHeeMolMnSMQAP+h2xZFOOf+uXuVXYhN6wUIC5El1zKpW
-         ocfQ==
+        bh=6ZU7PLU9etK740VjrgTZnaTTwZRId0YkGwhFbRJaUiw=;
+        b=XOClkRZdmXFoete18uk/9aEzr7JDDKV9tQPzR4CPH6bgOri1TA0tuKLfxbJ1auonev
+         J2s6pUl8NFSVVGqo44GtySvB8SgoaWiN+W0scoVe1pbtZKwgWoopQI0g2saJRQJQQQ/P
+         vw+YvL+JreeRqG/dqz4XoCCW4HhxHSqbSHhjmFNB13H/1+Xa99CXIksCRpuLU2/o95MI
+         vbJiGA/Pf3dfxKnr4ghzBlyloE18TTHuv4VTqiWQPJvYvXpYUzD2lyWB95LvdJ2R9tAx
+         XRBAdN+PQG7PrOT9JIAvlqY84lYKr2Iqwy5r/GeKaT3ac79nxhzM2zaVuM1ME/Y/6oUa
+         qK4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752050597; x=1752655397;
+        d=1e100.net; s=20230601; t=1752051511; x=1752656311;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=9Xdlzo8mlFP5VJmSLNkxHKCX30v3KVlncbbCZk7gPQs=;
-        b=cpiammEnBXNSRGUf9AxvEG7kr7X1ZKpO8g9EnGOtiW564YlUz/FiHX85opv8CgAzq8
-         I+y5fvqRMHgyDfvhV1PwLsUGvPqWs8cHzlwk0ve6dFw1v+XFo0dwpibh1kdSoVMUFgVP
-         qFkX/BuQirJ61L4otqpfT63H9Ch7vfq4uualuH0lv0cbzZQ28GU8KwXdYY0zuyWACI1d
-         9+xhmQHaQF6pnLgCEa2zQCxq5iQi7+6OQWT4GfRzj/Fi7WMNZFfHNft7wwTIu30cE45U
-         iPrJWnNCrdIcYurTDqvwB2/kArqDbJ8XWI0LzEnYH/KXCFR0gIQ8qxPfNmhf60DwIbdO
-         HeMw==
-X-Forwarded-Encrypted: i=1; AJvYcCUHMyH08u2U1sD2xN4hgi39otxwBj9UShYfKzhzClt+2clNPjesWe0yD8IGpMd+uGhCPhI=@vger.kernel.org, AJvYcCWOzgOAKacEcJD8/C7DmUiRCIdSD2apHmmMwc+IRSWUajYm02cMMQdAreD9pKtVjAEI85srgPR+coFGHMfr@vger.kernel.org
-X-Gm-Message-State: AOJu0YxODs+ROY5hpCQGzT9vL21hLEGs5exuKVzk/vN/bSIzxRI4Z8r1
-	dkECwYmg3fTZPe2+D+2xZmCjm5LbT9byRBdMwQWpRVzDwtECdKx2XQT+
-X-Gm-Gg: ASbGnctQrYUiYwM8DoHnGMQCNlDgozoQE9kl97u7hY6+QYbsd5nbcCj6tvWMtqiLJGS
-	WV0nczSftLUxPQh5/SVu0GKvsJqLKVIEkRlMo/NW3yZ9C8oDgpHitDmNItehOV4fwc94wN5FxXh
-	sx7g+S5xaAMbZsOZ7eWeZS81dkD7Kc88WeIwgMJsNl6t6ZOnr0HdaCgT8vymwuV2am1V9GctG8S
-	VYRpLaGir+YZynIZhCUN66wzY+TTN+zcLGjBXuf6gkAzsY1P9sk0nopowQ5VL9rRA8S3MFpX1o/
-	Hn4X7btOSFZ6s+z7iT0j/waiVzONeaWO9p3y9ox6AjpiKXdh
-X-Google-Smtp-Source: AGHT+IFl1+1FOYlrpDcn9VUhVaoJ43veqLZ6vLPtd0eGG2eIlWocyufPSPJVqBo5GtjMTwGE10wG1A==
-X-Received: by 2002:a17:907:268d:b0:ae6:d968:4aff with SMTP id a640c23a62f3a-ae6d96854dfmr45055666b.47.1752050596717;
-        Wed, 09 Jul 2025 01:43:16 -0700 (PDT)
+        bh=6ZU7PLU9etK740VjrgTZnaTTwZRId0YkGwhFbRJaUiw=;
+        b=Oymu1q8gknlJ7LOmC000dikkzZ1Qmy5Z3O9wnMo7+TyWHphowmfwydaMsQNE0rvAsm
+         +iFFtJ4xdVofSxwiSQZISioamFvjN54lmVXoItgcZ3iiReI5f4K0E9zy21WPet24qHeL
+         5uvpUcPd59DgVxU+uTFh5tJQy6NbyyaDKkPNbdEmgj2LZLQaxkRKiYgKPl0hBCKgFN4v
+         YNyWFPBqqnhtLUgKVtsdYxUrrmFaNfI4iLwC1QfmH7yz5Y1u3t63Wy2ZHSeR/7DA5TYL
+         0fJ9afa7hT89WBD0NIR0xX9566FYYAcxI/lZFTVOH+tM43zIlEMHmi0cRbVb+zs5VcNe
+         c70Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUAh3mQ8tCXxHkdqgXJRxteSucfQKeMqbh0Y7YegxL0daIPnsuigVXEBPdSqG7oBDzYHaIUTt7xXeTETGe8@vger.kernel.org, AJvYcCWk/zAA1lkv1uzyUwmZrJF+ci/6Ksy/Q/DMTpM1J//3t8ti2RYUB6FlLSPdArjjX6dc9ICcXU7c2sQt/QLTqO53vYVU@vger.kernel.org, AJvYcCWuM/kiklun1CAA01k/v0SaoCwtn6vmQ04MetLR6s2SXBb6ox6tUuXmxEjECiJRARww4nk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyfFXSl9zfyDSEAu+A7XBoq+PU/3EfGe51ZLaQ7SQN5ruXCXsgu
+	1sj0EWh5CEMjEEUAU8vMSXaXO7w70U1vwQ6tHs1D1gn2kkbySAkiKWIJ
+X-Gm-Gg: ASbGnctkjRE5rQrB8qNFI1uVVIIw7L+RaaTEBrua6SZ3HAlIR8GCCFFDpcpJe2YqP+p
+	HM4DzP2vUfY5b9TW/k8rVl9niX2nkX1wqQjuD0Utx/IcJMR2jvtM/zTu8674JdyNRy9iUB0PSJK
+	PXJt/rH5gRB37m3DARrh5CfQyWt3qryPwFFoUbpPUHK8k7R1LIEqqRcfhyISMrAtPdydpxNnNzY
+	B2j6FM9kO2dh/DJaCL/0GS/frS1iEhHpl8W2PRq7GdovzN9AvzKcUlJ/ET+YZv8ib4EJFn8GTs1
+	QSEatOsqgp+pT7kA9fdTKNCVNWAcD2reKZMNdYN8TFMdG6FV
+X-Google-Smtp-Source: AGHT+IGMs8mKBfncdPVlgcuDOMHk/B1ZdoW3Ur23b6Nt5GbyAgyTzAx9ZOUVxdidKzOlFDPJNz3BFQ==
+X-Received: by 2002:a17:907:6ea2:b0:ae0:7e95:fb with SMTP id a640c23a62f3a-ae6b2363d94mr578100066b.5.1752051510223;
+        Wed, 09 Jul 2025 01:58:30 -0700 (PDT)
 Received: from krava ([173.38.220.54])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-60fca78fd37sm8426099a12.23.2025.07.09.01.43.15
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ae3f6abfd8bsm1061632866b.81.2025.07.09.01.58.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Jul 2025 01:43:16 -0700 (PDT)
+        Wed, 09 Jul 2025 01:58:29 -0700 (PDT)
 From: Jiri Olsa <olsajiri@gmail.com>
 X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Wed, 9 Jul 2025 10:43:14 +0200
-To: Menglong Dong <menglong8.dong@gmail.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
-	andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com,
-	song@kernel.org, yonghong.song@linux.dev, kpsingh@kernel.org,
-	sdf@fomichev.me, haoluo@google.com, bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Menglong Dong <dongml2@chinatelecom.cn>
-Subject: Re: [PATCH bpf-next v2] bpf: make the attach target more accurate
-Message-ID: <aG4roiqyzNFOvu2R@krava>
-References: <20250708072140.945296-1-dongml2@chinatelecom.cn>
+Date: Wed, 9 Jul 2025 10:58:28 +0200
+To: Feng Yang <yangfeng59949@163.com>
+Cc: martin.lau@linux.dev, ast@kernel.org, daniel@iogearbox.net,
+	andrii@kernel.org, eddyz87@gmail.com, song@kernel.org,
+	yonghong.song@linux.dev, john.fastabend@gmail.com,
+	kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com,
+	mattbobrowski@google.com, rostedt@goodmis.org, mhiramat@kernel.org,
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next] bpf: Clean up individual BTF_ID code
+Message-ID: <aG4vNLiusia14f4Z@krava>
+References: <20250709082038.103249-1-yangfeng59949@163.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -77,152 +78,89 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250708072140.945296-1-dongml2@chinatelecom.cn>
+In-Reply-To: <20250709082038.103249-1-yangfeng59949@163.com>
 
-On Tue, Jul 08, 2025 at 03:21:40PM +0800, Menglong Dong wrote:
-> For now, we lookup the address of the attach target in
-> bpf_check_attach_target() with find_kallsyms_symbol_value or
-> kallsyms_lookup_name, which is not accurate in some cases.
+On Wed, Jul 09, 2025 at 04:20:38PM +0800, Feng Yang wrote:
+> From: Feng Yang <yangfeng@kylinos.cn>
 > 
-> For example, we want to attach to the target "t_next", but there are
-> multiple symbols with the name "t_next" exist in the kallsyms. The one
-> that kallsyms_lookup_name() returned may have no ftrace record, which
-> makes the attach target not available. So we want the one that has ftrace
-> record to be returned.
-> 
-> Meanwhile, there may be multiple symbols with the name "t_next" in ftrace
-> record. In this case, the attach target is ambiguous, so the attach should
-> fail.
+> Use BTF_ID_LIST_SINGLE(a, b, c) instead of
+> BTF_ID_LIST(a)
+> BTF_ID(b, c)
 
-could you reproduce this somehow (bpftrace/selftest) for some symbol?
-I'd think pahole now filters all such symbols out of BTF and you need
-BTF func record to load the program in the first place
+there's couple more in:
+
+net/ipv6/route.c
+net/netlink/af_netlink.c
+net/sched/bpf_qdisc.c
 
 jirka
 
 
 > 
-> Introduce the function bpf_lookup_attach_addr() to do the address lookup,
-> which is able to solve this problem.
-> 
-> Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
+> Signed-off-by: Feng Yang <yangfeng@kylinos.cn>
 > ---
-> v2:
-> - Lookup both vmlinux and modules symbols when mod is NULL, just like
->   kallsyms_lookup_name().
+>  kernel/bpf/btf.c         | 3 +--
+>  kernel/bpf/link_iter.c   | 3 +--
+>  kernel/bpf/prog_iter.c   | 3 +--
+>  kernel/trace/bpf_trace.c | 3 +--
+>  4 files changed, 4 insertions(+), 8 deletions(-)
 > 
->   If the btf is not a modules, shouldn't we lookup on the vmlinux only?
->   I'm not sure if we should keep the same logic with
->   kallsyms_lookup_name().
-> 
-> - Return the kernel symbol that don't have ftrace location if the symbols
->   with ftrace location are not available
-> ---
->  kernel/bpf/verifier.c | 77 ++++++++++++++++++++++++++++++++++++++++---
->  1 file changed, 72 insertions(+), 5 deletions(-)
-> 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 53007182b46b..4bacd0abf207 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -23476,6 +23476,73 @@ static int check_non_sleepable_error_inject(u32 btf_id)
->  	return btf_id_set_contains(&btf_non_sleepable_error_inject, btf_id);
+> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> index 2dd13eea7b0e..0aff814cb53a 100644
+> --- a/kernel/bpf/btf.c
+> +++ b/kernel/bpf/btf.c
+> @@ -6200,8 +6200,7 @@ int get_kern_ctx_btf_id(struct bpf_verifier_log *log, enum bpf_prog_type prog_ty
+>  	return kctx_type_id;
 >  }
 >  
-> +struct symbol_lookup_ctx {
-> +	const char *name;
-> +	unsigned long addr;
-> +	bool ftrace_addr;
-> +};
-> +
-> +static int symbol_callback(void *data, unsigned long addr)
-> +{
-> +	struct symbol_lookup_ctx *ctx = data;
-> +
-> +	ctx->addr = addr;
-> +	if (!ftrace_location(addr))
-> +		return 0;
-> +
-> +	if (ctx->ftrace_addr)
-> +		return -EADDRNOTAVAIL;
-> +	ctx->ftrace_addr = true;
-> +
-> +	return 0;
-> +}
-> +
-> +static int symbol_mod_callback(void *data, const char *name, unsigned long addr)
-> +{
-> +	if (strcmp(((struct symbol_lookup_ctx *)data)->name, name) != 0)
-> +		return 0;
-> +
-> +	return symbol_callback(data, addr);
-> +}
-> +
-> +/**
-> + * bpf_lookup_attach_addr: Lookup address for a symbol
-> + *
-> + * @mod: kernel module to lookup the symbol, NULL means to lookup both vmlinux
-> + * and modules symbols
-> + * @sym: the symbol to resolve
-> + * @addr: pointer to store the result
-> + *
-> + * Lookup the address of the symbol @sym. If multiple symbols with the name
-> + * @sym exist, the one that has ftrace location is preferred. If more
-> + * than 1 has ftrace location, -EADDRNOTAVAIL will be returned.
-> + *
-> + * Returns: 0 on success, -errno otherwise.
-> + */
-> +static int bpf_lookup_attach_addr(const struct module *mod, const char *sym,
-> +				  unsigned long *addr)
-> +{
-> +	struct symbol_lookup_ctx ctx = { .addr = 0, .name = sym };
-> +	const char *mod_name = NULL;
-> +	int err = 0;
-> +
-> +#ifdef CONFIG_MODULES
-> +	mod_name = mod ? mod->name : NULL;
-> +#endif
-> +	if (!mod_name)
-> +		err = kallsyms_on_each_match_symbol(symbol_callback, sym, &ctx);
-> +
-> +	if (!err && !ctx.addr)
-> +		err = module_kallsyms_on_each_symbol(mod_name, symbol_mod_callback,
-> +						     &ctx);
-> +
-> +	if (!ctx.addr)
-> +		err = -ENOENT;
-> +	*addr = err ? 0 : ctx.addr;
-> +
-> +	return err;
-> +}
-> +
->  int bpf_check_attach_target(struct bpf_verifier_log *log,
->  			    const struct bpf_prog *prog,
->  			    const struct bpf_prog *tgt_prog,
-> @@ -23729,18 +23796,18 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
->  			if (btf_is_module(btf)) {
->  				mod = btf_try_get_module(btf);
->  				if (mod)
-> -					addr = find_kallsyms_symbol_value(mod, tname);
-> +					ret = bpf_lookup_attach_addr(mod, tname, &addr);
->  				else
-> -					addr = 0;
-> +					ret = -ENOENT;
->  			} else {
-> -				addr = kallsyms_lookup_name(tname);
-> +				ret = bpf_lookup_attach_addr(NULL, tname, &addr);
->  			}
-> -			if (!addr) {
-> +			if (ret) {
->  				module_put(mod);
->  				bpf_log(log,
->  					"The address of function %s cannot be found\n",
->  					tname);
-> -				return -ENOENT;
-> +				return ret;
->  			}
->  		}
+> -BTF_ID_LIST(bpf_ctx_convert_btf_id)
+> -BTF_ID(struct, bpf_ctx_convert)
+> +BTF_ID_LIST_SINGLE(bpf_ctx_convert_btf_id, struct, bpf_ctx_convert)
 >  
+>  static struct btf *btf_parse_base(struct btf_verifier_env *env, const char *name,
+>  				  void *data, unsigned int data_size)
+> diff --git a/kernel/bpf/link_iter.c b/kernel/bpf/link_iter.c
+> index fec8005a121c..8158e9c1af7b 100644
+> --- a/kernel/bpf/link_iter.c
+> +++ b/kernel/bpf/link_iter.c
+> @@ -78,8 +78,7 @@ static const struct seq_operations bpf_link_seq_ops = {
+>  	.show	= bpf_link_seq_show,
+>  };
+>  
+> -BTF_ID_LIST(btf_bpf_link_id)
+> -BTF_ID(struct, bpf_link)
+> +BTF_ID_LIST_SINGLE(btf_bpf_link_id, struct, bpf_link)
+>  
+>  static const struct bpf_iter_seq_info bpf_link_seq_info = {
+>  	.seq_ops		= &bpf_link_seq_ops,
+> diff --git a/kernel/bpf/prog_iter.c b/kernel/bpf/prog_iter.c
+> index 53a73c841c13..85d8fcb56fb7 100644
+> --- a/kernel/bpf/prog_iter.c
+> +++ b/kernel/bpf/prog_iter.c
+> @@ -78,8 +78,7 @@ static const struct seq_operations bpf_prog_seq_ops = {
+>  	.show	= bpf_prog_seq_show,
+>  };
+>  
+> -BTF_ID_LIST(btf_bpf_prog_id)
+> -BTF_ID(struct, bpf_prog)
+> +BTF_ID_LIST_SINGLE(btf_bpf_prog_id, struct, bpf_prog)
+>  
+>  static const struct bpf_iter_seq_info bpf_prog_seq_info = {
+>  	.seq_ops		= &bpf_prog_seq_ops,
+> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> index e7f97a9a8bbd..c8162dc89dc3 100644
+> --- a/kernel/trace/bpf_trace.c
+> +++ b/kernel/trace/bpf_trace.c
+> @@ -781,8 +781,7 @@ BPF_CALL_1(bpf_task_pt_regs, struct task_struct *, task)
+>  	return (unsigned long) task_pt_regs(task);
+>  }
+>  
+> -BTF_ID_LIST(bpf_task_pt_regs_ids)
+> -BTF_ID(struct, pt_regs)
+> +BTF_ID_LIST_SINGLE(bpf_task_pt_regs_ids, struct, pt_regs)
+>  
+>  const struct bpf_func_proto bpf_task_pt_regs_proto = {
+>  	.func		= bpf_task_pt_regs,
 > -- 
-> 2.39.5
+> 2.43.0
 > 
