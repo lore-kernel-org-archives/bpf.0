@@ -1,80 +1,82 @@
-Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51B2F19066D
-	for <bpf@vger.kernel.org>; Wed,  9 Jul 2025 01:53:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31BD118B464
+	for <bpf@vger.kernel.org>; Wed,  9 Jul 2025 01:53:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752026000; cv=none; b=j1hqR6dFyydO3zY9+6zEPdP7cSaq7KevQaNfqtOTNHZxDiSOt2+PhmOUT2SZZU0PgCD5QgFBMLHdYfyXAh/Iv20P7aqrsfsMAUWKY972123TF5TDbLt9s2E7e8lw9Y/FZjPP9xH0W6TtDcxEO1JC+rAjhunI7Wkgt/Rc/73B1ys=
+	t=1752026001; cv=none; b=SQo237B+y5b+d0xh3KxceNC97mzvs4ygRZ42Rh9KCdfmwr/cS/9Fwvuo4BLj2tRSgWydu45sSmVCvJjodVXN4TUKQkRqfa+Zd0OFJBrkYpB/tGUj7Ycs0BcDluZlKzGWqe9ICVjrdP7OFTL4KtmWxp56RgcDEdROyFKLSWpa2Us=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752026000; c=relaxed/simple;
-	bh=14mSjPg4+F4hRyuI4xEiSo4AjxdpUORz/4rjdErLhVY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ZdpmSfFZ0PW5SQDXR+6vtS23mGX6xrhLJgm9MQ41K0lbvd7nho2cXtL72MvOvAn/26ihZH03BcR4Q31+tpDh0uk2ewuwIKIKR+0hzvadcBlZMLBvz+EfdK3PbvyY697c4J100ZKuYbe0ax9LSW79SwY9fRA9Ew1FYkY1jrKlfIY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=wXKVDAWT; arc=none smtp.client-ip=209.85.219.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	s=arc-20240116; t=1752026001; c=relaxed/simple;
+	bh=P2XZGdSkkAFyODSPdEwiiNaBKxYB2nyNakMRZNrm7lI=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=rIwiIiks0ujqTLquB2zFPa4+2bBBY3SXBd7HtqRP8Mg0LVuSXwFDGzx/671DtELlFQ4VXwzPZ8cs9LO0JqIm1fGpr0m87bZDrO7k3PTrci4W2eDSdZ7ulzVZP8cftG4j+pHrVYXggIh5uhiamjG8Gd7CitHGEJ/eipL4fMLohhM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YztZzglr; arc=none smtp.client-ip=209.85.216.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="wXKVDAWT"
-Received: by mail-qv1-f42.google.com with SMTP id 6a1803df08f44-702b5559bbdso26072496d6.3
-        for <bpf@vger.kernel.org>; Tue, 08 Jul 2025 18:53:18 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YztZzglr"
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-311e2cc157bso4240959a91.2
+        for <bpf@vger.kernel.org>; Tue, 08 Jul 2025 18:53:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1752025997; x=1752630797; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1752025997; x=1752630797; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/qSob9Nyh3DPUpqr3bgVvc1lDKTweoRVLhNXj727VRA=;
-        b=wXKVDAWTqLhkiRTb1Jvs9vqTJW26SQDbeD4RNEJzu9QgKoYdwLgKSh6Ugd6Lb0HxSX
-         SN8LuNlQJJXLHSMcEA3SqRybmLeuYxtjmqdukeKYbdDqelcqdYZVeSZ13L4YwkMFK40f
-         VYyVqrHBLdDTS0iMRKV31+YSjWRLx3lJoOBHuHsn9SrW5Ss/8Bwc9lPyJyFuJhZ/dPTp
-         FyJxqfChejfI/Lr/xKnVI9fi2G6tSus9xH5vJb3UMztP+x+y8UyAgmGkYYuaYcGsaGev
-         v7nRhb18w73vFhNzYLcGCkmCBA3YAjihzaGAwRP7l/f7Aj9lBTSOqRymvtYJbKgw+Cic
-         pxzQ==
+        bh=oGJ5phVBe26AHffUjtQ0C5chQhrjMeWzPyV2gXCSEws=;
+        b=YztZzglrNyMnMnnheX9iy3YmT7wTsIuACiynSUWrLEeiKo1hrRvcqIcpMnk/iMXcsm
+         m5LwKbwiuhKsVGIUaPj261otMOzOvTZkG/qAz7P2TCwg92ZRG1BJDjRGxMk2vSYORf9i
+         6ROcysaRF7YKNH1c+EzmMDII7Epipyb72xDGRgYLKPiKbaTGoB6N4JzHAG03bWmJd9JK
+         qKMhcInNHWHVZmhz5ZAdz30O9xCjHV1n3KyOgF9GFqq2DALV/seK3Wc3YKBbNtR8DmpS
+         eUkRitmzyrB8EVQGVE9zjjOGl85hzwLxO1lgcdk4DQmC/MjvzP2EA+BdOQpTFrGWu6tm
+         S+nA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20230601; t=1752025997; x=1752630797;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=/qSob9Nyh3DPUpqr3bgVvc1lDKTweoRVLhNXj727VRA=;
-        b=CHvIuuBJTuF4KfBEYZCG0c317qdKuR5bPMuwmqikOqLpqG652M/L8mNsO3wtAR++Vm
-         YOuSamczVMoo/+Dtl65Va2rQzOwWXpqc/czU0zXss+lwUlstschT31xe2yMT7s3wwnyT
-         RqGF9wma+LbXI8llMPE0Q3uHG/IPhjwqa/Ui92cK4HRywIQXm7vuEYVbKCrjvbhJhtga
-         HdcSDhZAqs3M28AsiUiiqTJAbF6L05EkWgVQPFpbcoAJ5itfxQPyeXCvavGePy5oMKoT
-         +bRGh1KxKccynoJUCxdGEjemmNCqva/Fm5n6WJcorMuUyU78UEGtRLPNv4kadQ9dTnsr
-         FCCw==
-X-Gm-Message-State: AOJu0YyMPAx04oRNuHHNTrRyE2ObKfo+/1GaL3LEaMcvjKpjfw+GH9LK
-	hoaH4xRI6YTbBQtnmeBP9RHe9yy3S5kYhMJwQRWB3MkSNOOACt4+GV6SFY+VGzoC14C73YPkNyX
-	9GQ1heBU=
-X-Gm-Gg: ASbGncvLu+qhsa353tP46FgEIk3WldkvFtWvdRjEYbtI4by0HHPQose4u93mwhbyLhL
-	uMOchVr3iPsCWKdJHyF6j7DJewlHVX0hFa/W+mFMva9KzQq4KmPTdOEMiRyz0PNnYrMF+GERE8I
-	mPiqj7lIR6rUfOYwircu33WTk03oNw+UIpSuda5UghkvxZlwbTWG3sosvrF3lNkzPb3kHCwWkXS
-	SgqQIc5lloHbOsAgDBjEJNN2J0PFNnKkbM1ulxWeHD4W4Pcn4OzavwwIYBJD52uZIfywl1Jqqhm
-	zv0LeKerM7vTmB9wqM6vGbOj8ejnEy4f2GLK7Ga6y4c+4pZcgcD0paBx788=
-X-Google-Smtp-Source: AGHT+IFmzFzYTN+HTRV6NkCX1NzXE/BEBG8mzGeElHaL7LTTVX0TFJJdAKEItjKMK6aiO/xtKJhXeA==
-X-Received: by 2002:a05:6214:29cc:b0:6fa:facf:7b7a with SMTP id 6a1803df08f44-7048ba03e9emr11938726d6.42.1752025997120;
-        Tue, 08 Jul 2025 18:53:17 -0700 (PDT)
-Received: from boreas.. ([140.174.215.70])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-702d5e53246sm59807986d6.1.2025.07.08.18.53.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        bh=oGJ5phVBe26AHffUjtQ0C5chQhrjMeWzPyV2gXCSEws=;
+        b=tlJrwOwmWj1XB4dxMRGX3FJcJY390EjDu4R7dSD7vQ6ilTCU57wY65NX/BdA8SVVck
+         Ag9Y6oSdeGyeuGjcWrs55UMQd6ZFQsDQXVpyDSrv/8clKNIV8jDYBHobJ9egqU+3vSB4
+         el9GsSUFPRmKU6a7nJZ3fRd99+pyCEEqfef+4crBdh+r2DG50DfV+zJ4AAbCNxBE6Of/
+         Fhu1mwv0+ZfBysBAnnMQjzd4MlLZhxv+DdnNHPH300RbzFaF2sXTvwn4XH4lYIuh1Oin
+         LBr7fu6E8W0ma1Q7M9j7etg2s9ZnMZV+8WsCIBReMjSBAUOesDkMO9dEgT7m5DGEBzjI
+         Y0Bw==
+X-Gm-Message-State: AOJu0Yxk7mMYAdFwsS838RHebo7hl0U/lZ+nxEm+iUHucF5Dk0MIrN37
+	yKZYhNjt+fIsGl+9a+fkcG3umgSErbHe38Mq2udweNrenVm1dvbZlrY7e8wurQ==
+X-Gm-Gg: ASbGncueKwndoP86JciI2gaWi/QrOKVGwpRCGxtrA8C8MqzkuYmlNGBxr7DGv7nxskS
+	21DpDQYJSE/+zsIIiRxhxtNJWIFGtodWPz5HgFXoNWZ/DamEL/K5MQfCp23m/2be1yVDJbZ5LJ+
+	PmmocVs82S0AnReAQzUlI1xttz0x/4AxE6u/4Bt4j5xhDw5hDb7CO71Rn33vtVJtcWJCiTc5YjJ
+	6GcAnbqQ4h/vy3d9D3hgG1xI7S1qpvZgYxuY794Nm3FJy+Awl/DfGR6W8eteO3QDI4KHaEoEsJL
+	riWj2cJAeSjOc24GXFmZ7xFTkMRfTNDJOO//BN1gvGIysmGDngoUsYTZ4CQtcZSzJ1zJn/Rdh+u
+	ozGeb6rGxnm73RynrFF04wS0gq1s=
+X-Google-Smtp-Source: AGHT+IHGHvw2R/ZLy4YM57AnOJL7xjem1ShfJH6FuzBAF2fTOGwIMvfNS2UPCGKW+uTTJb4HLFOW6w==
+X-Received: by 2002:a17:90b:1cc3:b0:311:b0d3:865 with SMTP id 98e67ed59e1d1-31c2fe04666mr916648a91.32.1752025996974;
         Tue, 08 Jul 2025 18:53:16 -0700 (PDT)
-From: Emil Tsalapatis <emil@etsalapatis.com>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
+Received: from localhost.localdomain ([2001:558:600a:7:a83d:600f:32cc:235a])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-31c300f7177sm453103a91.45.2025.07.08.18.53.16
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Tue, 08 Jul 2025 18:53:16 -0700 (PDT)
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To: bpf@vger.kernel.org,
+	linux-mm@kvack.org
+Cc: vbabka@suse.cz,
+	harry.yoo@oracle.com,
+	shakeel.butt@linux.dev,
+	mhocko@suse.com,
+	bigeasy@linutronix.de,
 	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	song@kernel.org,
 	memxor@gmail.com,
-	yonghong.song@linux.dev,
-	sched-ext@meta.com,
-	Emil Tsalapatis <emil@etsalapatis.com>
-Subject: [PATCH v3 1/2] bpf/arena: add bpf_arena_reserve_pages kfunc
-Date: Tue,  8 Jul 2025 21:53:08 -0400
-Message-ID: <20250709015309.96742-1-emil@etsalapatis.com>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250709014751.96274-1-emil@etsalapatis.com>
-References: <20250709014751.96274-1-emil@etsalapatis.com>
+	akpm@linux-foundation.org,
+	peterz@infradead.org,
+	rostedt@goodmis.org,
+	hannes@cmpxchg.org
+Subject: [PATCH v2 4/6] mm: Allow GFP_ACCOUNT to be used in alloc_pages_nolock().
+Date: Tue,  8 Jul 2025 18:53:01 -0700
+Message-Id: <20250709015303.8107-5-alexei.starovoitov@gmail.com>
+X-Mailer: git-send-email 2.39.5 (Apple Git-154)
+In-Reply-To: <20250709015303.8107-1-alexei.starovoitov@gmail.com>
+References: <20250709015303.8107-1-alexei.starovoitov@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -83,81 +85,92 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add a new BPF arena kfunc for reserving a range of arena virtual
-addresses without backing them with pages. This prevents the range from
-being populated using bpf_arena_alloc_pages().
+From: Alexei Starovoitov <ast@kernel.org>
 
-Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
+Change alloc_pages_nolock() to default to __GFP_COMP when allocating
+pages, since upcoming reentrant alloc_slab_page() needs __GFP_COMP.
+Also allow __GFP_ACCOUNT flag to be specified,
+since BPF infra needs __GFP_ACCOUNT.
+
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/arena.c | 43 +++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 43 insertions(+)
+ include/linux/gfp.h  |  2 +-
+ kernel/bpf/syscall.c |  2 +-
+ mm/page_alloc.c      | 10 ++++++----
+ 3 files changed, 8 insertions(+), 6 deletions(-)
 
-diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
-index 0d56cea71602..5b37753799d2 100644
---- a/kernel/bpf/arena.c
-+++ b/kernel/bpf/arena.c
-@@ -550,6 +550,34 @@ static void arena_free_pages(struct bpf_arena *arena, long uaddr, long page_cnt)
- 	}
+diff --git a/include/linux/gfp.h b/include/linux/gfp.h
+index 5ebf26fcdcfa..0ceb4e09306c 100644
+--- a/include/linux/gfp.h
++++ b/include/linux/gfp.h
+@@ -354,7 +354,7 @@ static inline struct page *alloc_page_vma_noprof(gfp_t gfp,
  }
+ #define alloc_page_vma(...)			alloc_hooks(alloc_page_vma_noprof(__VA_ARGS__))
  
-+/*
-+ * Reserve an arena virtual address range without populating it. This call stops
-+ * bpf_arena_alloc_pages from adding pages to this range.
-+ */
-+static int arena_reserve_pages(struct bpf_arena *arena, long uaddr, u32 page_cnt)
-+{
-+	long page_cnt_max = (arena->user_vm_end - arena->user_vm_start) >> PAGE_SHIFT;
-+	long pgoff;
-+	int ret;
-+
-+	if (uaddr & ~PAGE_MASK)
-+		return 0;
-+
-+	pgoff = compute_pgoff(arena, uaddr);
-+	if (pgoff + page_cnt > page_cnt_max)
-+		return -EINVAL;
-+
-+	guard(mutex)(&arena->lock);
-+
-+	/* Cannot guard already allocated pages. */
-+	ret = is_range_tree_set(&arena->rt, pgoff, page_cnt);
-+	if (ret)
-+		return -EBUSY;
-+
-+	/* "Allocate" the region to prevent it from being allocated. */
-+	return range_tree_clear(&arena->rt, pgoff, page_cnt);
-+}
-+
- __bpf_kfunc_start_defs();
+-struct page *alloc_pages_nolock_noprof(int nid, unsigned int order);
++struct page *alloc_pages_nolock_noprof(gfp_t gfp_flags, int nid, unsigned int order);
+ #define alloc_pages_nolock(...)			alloc_hooks(alloc_pages_nolock_noprof(__VA_ARGS__))
  
- __bpf_kfunc void *bpf_arena_alloc_pages(void *p__map, void *addr__ign, u32 page_cnt,
-@@ -573,11 +601,26 @@ __bpf_kfunc void bpf_arena_free_pages(void *p__map, void *ptr__ign, u32 page_cnt
- 		return;
- 	arena_free_pages(arena, (long)ptr__ign, page_cnt);
- }
-+
-+__bpf_kfunc int bpf_arena_reserve_pages(void *p__map, void *ptr__ign, u32 page_cnt)
-+{
-+	struct bpf_map *map = p__map;
-+	struct bpf_arena *arena = container_of(map, struct bpf_arena, map);
-+
-+	if (map->map_type != BPF_MAP_TYPE_ARENA)
-+		return -EINVAL;
-+
-+	if (!page_cnt)
-+		return 0;
-+
-+	return arena_reserve_pages(arena, (long)ptr__ign, page_cnt);
-+}
- __bpf_kfunc_end_defs();
+ extern unsigned long get_free_pages_noprof(gfp_t gfp_mask, unsigned int order);
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index dd5304c6ac3c..eb9b6c4c10e9 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -579,7 +579,7 @@ static bool can_alloc_pages(void)
+ static struct page *__bpf_alloc_page(int nid)
+ {
+ 	if (!can_alloc_pages())
+-		return alloc_pages_nolock(nid, 0);
++		return alloc_pages_nolock(__GFP_ACCOUNT, nid, 0);
  
- BTF_KFUNCS_START(arena_kfuncs)
- BTF_ID_FLAGS(func, bpf_arena_alloc_pages, KF_TRUSTED_ARGS | KF_SLEEPABLE | KF_ARENA_RET | KF_ARENA_ARG2)
- BTF_ID_FLAGS(func, bpf_arena_free_pages, KF_TRUSTED_ARGS | KF_SLEEPABLE | KF_ARENA_ARG2)
-+BTF_ID_FLAGS(func, bpf_arena_reserve_pages, KF_TRUSTED_ARGS | KF_SLEEPABLE | KF_ARENA_ARG2)
- BTF_KFUNCS_END(arena_kfuncs)
+ 	return alloc_pages_node(nid,
+ 				GFP_KERNEL | __GFP_ZERO | __GFP_ACCOUNT
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index 78ddf1d43c6c..148945f0b667 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -7506,6 +7506,7 @@ static bool __free_unaccepted(struct page *page)
  
- static const struct btf_kfunc_id_set common_kfunc_set = {
+ /**
+  * alloc_pages_nolock - opportunistic reentrant allocation from any context
++ * @gfp_flags: GFP flags. Only __GFP_ACCOUNT allowed.
+  * @nid: node to allocate from
+  * @order: allocation order size
+  *
+@@ -7519,7 +7520,7 @@ static bool __free_unaccepted(struct page *page)
+  * Return: allocated page or NULL on failure. NULL does not mean EBUSY or EAGAIN.
+  * It means ENOMEM. There is no reason to call it again and expect !NULL.
+  */
+-struct page *alloc_pages_nolock_noprof(int nid, unsigned int order)
++struct page *alloc_pages_nolock_noprof(gfp_t gfp_flags, int nid, unsigned int order)
+ {
+ 	/*
+ 	 * Do not specify __GFP_DIRECT_RECLAIM, since direct claim is not allowed.
+@@ -7541,12 +7542,13 @@ struct page *alloc_pages_nolock_noprof(int nid, unsigned int order)
+ 	 * specify it here to highlight that alloc_pages_nolock()
+ 	 * doesn't want to deplete reserves.
+ 	 */
+-	gfp_t alloc_gfp = __GFP_NOWARN | __GFP_ZERO | __GFP_NOMEMALLOC
+-			| __GFP_ACCOUNT;
++	gfp_t alloc_gfp = __GFP_NOWARN | __GFP_ZERO | __GFP_NOMEMALLOC | __GFP_COMP
++			| gfp_flags;
+ 	unsigned int alloc_flags = ALLOC_TRYLOCK;
+ 	struct alloc_context ac = { };
+ 	struct page *page;
+ 
++	VM_WARN_ON_ONCE(gfp_flags & ~__GFP_ACCOUNT);
+ 	/*
+ 	 * In PREEMPT_RT spin_trylock() will call raw_spin_lock() which is
+ 	 * unsafe in NMI. If spin_trylock() is called from hard IRQ the current
+@@ -7584,7 +7586,7 @@ struct page *alloc_pages_nolock_noprof(int nid, unsigned int order)
+ 	if (page)
+ 		set_page_refcounted(page);
+ 
+-	if (memcg_kmem_online() && page &&
++	if (memcg_kmem_online() && page && (gfp_flags & __GFP_ACCOUNT) &&
+ 	    unlikely(__memcg_kmem_charge_page(page, alloc_gfp, order) != 0)) {
+ 		free_pages_nolock(page, order);
+ 		page = NULL;
 -- 
-2.49.0
+2.47.1
 
