@@ -1,62 +1,62 @@
 Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0C6E16DEB3
-	for <bpf@vger.kernel.org>; Wed,  9 Jul 2025 01:53:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84B7E137932
+	for <bpf@vger.kernel.org>; Wed,  9 Jul 2025 01:57:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752026006; cv=none; b=f23an5k6kJd1KcoG2xKP49FUish5+wtomNlSH0k8bzpk77SXMWZ9KuSvvYpP0t0pSZD1nQxPeW13Utkj1ta87ZPoGRJNvbRRHOf8XHPv9bNTX+LYP0QY5fTCJIKyvb3YIaT+pzCgwYK4cxwPfdu2ZEHnPTeagpQXbYZUt5XvcQA=
+	t=1752026240; cv=none; b=U7B4zq+hWz9HFUwXADVHeOv/ZPNwheSYeYkW16PBdJjV9eL4G9zpAwkcj7+h3crG2TrWa5zFGcvSbfJhiQ2trLqmotpjyYnqRTvKa+hCPYdAzHCuWXMTL26iXOhjfzwyzIlqlI2mjTgNhbNJoVknGBSzwrhNsMYVZyEKyiI3GAQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752026006; c=relaxed/simple;
-	bh=AwfP0uqgz+uuSBk3O8NUy5bkuPQKAyG37pk8Qtxkzmw=;
+	s=arc-20240116; t=1752026240; c=relaxed/simple;
+	bh=14mSjPg4+F4hRyuI4xEiSo4AjxdpUORz/4rjdErLhVY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=rDRz8lBJJFll1EuI1MZURhGVdYNq96ITdfTLSIclkbXfhzYT77Ueb+WUNl+nDJL4vGmMrqjM7scFLeeqmpjqG0FFNMb0ESKV0T/nk1fp+ymeJ37KSFnAz3mC328CGO5lHt4vVvAu7SmSAuC0oBL22teRjeXJpyRSn0hM92MJww4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=2pHSdbpU; arc=none smtp.client-ip=209.85.222.172
+	 MIME-Version; b=eoxOwqC96Z/WDGFHg1EdzRW8v/3iu+TtWxGucXpa310Ju0vTRkRNcLjAsS2lNneTuXWavvkeDVbDsr+WIAF1wIpulJJZwhlaSD9yxhUDkiSk08bi3udmDu/+HDciV2I8In+/K9hzJ7htAdmvK7gcSUP9qlWVw1LsKvj78rxpYaE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=uS9T4MUx; arc=none smtp.client-ip=209.85.222.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="2pHSdbpU"
-Received: by mail-qk1-f172.google.com with SMTP id af79cd13be357-7d7cf6efc2fso306513885a.3
-        for <bpf@vger.kernel.org>; Tue, 08 Jul 2025 18:53:24 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="uS9T4MUx"
+Received: by mail-qk1-f172.google.com with SMTP id af79cd13be357-7d09a17d2f7so454629685a.1
+        for <bpf@vger.kernel.org>; Tue, 08 Jul 2025 18:57:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1752026003; x=1752630803; darn=vger.kernel.org;
+        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1752026237; x=1752631037; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Ksu8nqKnroXcHaUiosqlWb0w7zGyAK3qP74Gg9s7Pes=;
-        b=2pHSdbpUuYw5GrlDbHScuHKPetD3qxaILJi79c7Kl2IgZJxx6gi+FTdTtt3MLpTyeA
-         iduN7vef62xRPvpHSnQ6KagF6506u8QCxaG1wJZQRzJjkeDh+EePWPjwFqq7lh9QOsaM
-         wGrkzl0j4OsOZjcaCtuBL3Vf6B0gN6Ttv1mbxy0IdsG/zD6sW+Rous2bPHHqMPw0ekDR
-         xcB9MIGJNU93lv1YWyujlUpfVJcN5Do2rH1kUBBlZOdel66WUqn+SfhxdKFeYu2rVI+Y
-         OoIWp5oVKIOhCUQ+TsW2vkESmiRFj0dgGoKMJQEMqB8J/+IFMxsXCUFoHoymcxsPURM9
-         Rc8Q==
+        bh=/qSob9Nyh3DPUpqr3bgVvc1lDKTweoRVLhNXj727VRA=;
+        b=uS9T4MUxj5m8t5jiiekSNWRM9E+o0h0swJvlD4aPAYpfAUnk2YhvtHeKoAHlQc8Vqw
+         JxoOMlIilpArn6kifH8DVqq9Ff/4JSrBmo5jPbANkwK1tLTYWAfz0Ebdj0W1rQ5IGz6Q
+         U9RbFhU+8oOX8SBa0V9kZdW6VIdMO+UP4GzXdhxySJiIImguZ/wnOxXpPsqP8s+LibBA
+         wTERi895A6PYcPG0Indpdp2NlVd76l39Qk9g6qV3tdtRru28oJ0ICZPUlKez09gBv03T
+         cAb+OK/HFPpp9RmdivnVQqJyU+3oyaT+FnSfazZ5qHEzaobxqCdxyDP7hNYx9U+YD7/O
+         DRsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752026003; x=1752630803;
+        d=1e100.net; s=20230601; t=1752026237; x=1752631037;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Ksu8nqKnroXcHaUiosqlWb0w7zGyAK3qP74Gg9s7Pes=;
-        b=G/wS8pSpb97ytxF60J3Bptw4DHNQhERQwogggljWBsHr9i9QQn9Dp4cnHr7m2HeeTA
-         SucvgjWIvwH4X1mSO05TjE18eZ8PYDJf8BUmqGIiq+i8od7t0Lr/mB/qvgEfatpPWY6M
-         3NKIxMtTeVwRxec/+zJpDW6rMnhp+1Hjx4QcmWVSQ1yd1NM/zmp1hRPNaQmK9sw90d28
-         vair+yvhSMSmvkclk3/+2K/aBxyOr9O8d9ylVtD5QcvCWNQDKYA5N35wMOtnQY/VrNL+
-         NpPyiX9nEioM2bLurVsHcU7DULzItX3pqpo8/CyfL99qo7hcI4whQouq7pVp/wWN9eZw
-         b6Ew==
-X-Gm-Message-State: AOJu0YwiulUCpKpyzHs2PHOrvqhKt/qhdBNI4jkLol9DZLvcB7DLKyaf
-	mqCWdMvR/ij+kMsu+iGUteXFYG95QnvjtXG6fMsaXXrOuErhpkQIs4QZm7fjIPOeDXQwo46Tj20
-	nnnh6gtI=
-X-Gm-Gg: ASbGncsQmmIRFDl14WOXhh7MbQ8BZc9xhgVkFhbHThLqV3LcI4WCLSUuZGh7xzNWEJc
-	jylkjRTyql9wkE2evlJl1Faw4ho1WFSP2+gFlnEOYk4L4RDBMnTazEelQyNpiCS1fXAs57JRw92
-	hcRkcmXFz2YfcCC7PGR7znpaXG+pyhUinkgJWvmFUzCkUidpOdb1EmBunnH9Aya4bS4Uqkob5Yx
-	yxH67k2c8kL1mJDpDA7eY3BG32uiaWXEOkRa8hj9opmGpDz39UO/Mz8BoMlJBKpGWlnTgNjle4M
-	TJEaABcu5B7V1MkgcAS2KoZ+W2fD0BFu5DQwp4MQ05k8NI0U1YFiDK25cAA=
-X-Google-Smtp-Source: AGHT+IEAyGmLAXbvXk+nW0w/d+PExQOr9tKZB61T3Oy9xnNfK66OGzxf6+C+/CjohOlNGqPugkiGew==
-X-Received: by 2002:ad4:5766:0:b0:6fd:5dc9:6029 with SMTP id 6a1803df08f44-7048ba8bf4amr12416276d6.43.1752026003455;
-        Tue, 08 Jul 2025 18:53:23 -0700 (PDT)
+        bh=/qSob9Nyh3DPUpqr3bgVvc1lDKTweoRVLhNXj727VRA=;
+        b=QMZA8IEgKcApAvWoHzHMqWYT0rFiNm/z7p2gBtW1enq/WCNbTzZBqzbIcmM9qetld3
+         tCC7CcJq+JooLS2P2y4DVmtWs6AY96PXjdGuZpeO4ehtBo0dCbn4zI4P/DW9VzPpB3aA
+         ambYc1iMipl+5a13sX4u3vlFPdWr+NWxV7iHcUADHz+dSeldgskbIRWIOxSLr6ioNVPa
+         Zrn4mT5Jnng1ouH5kg3kUwPdTXAPGEqCD9FZHzKcUFkq0opajPuAD+GT0h50+R5md3tN
+         LSnQdecLFSADTs6ZsgQ/y8XCT72iDjU5LQeou1CP9Z3dQR8smv1d/qXu2Uqs4mLjylW5
+         /L9g==
+X-Gm-Message-State: AOJu0YxhrD1/kxsymq+lTdztTCBJpr4ZUeCJa4plwhr5bbiPxqdXVb1g
+	XsP6t8LkJH4iMfxD+t936KOMh6d6G6fgpzojnfNrlQvmcevCBnvIqL4s/w8H2hOZefeOG9EM+OH
+	sUbJkiYk=
+X-Gm-Gg: ASbGnctepPaFWUXSpJGFZ3iMmZ3mW9c4kGalRlQZzvprKBmPwAslU1MmtCx1pXwbArK
+	Y4r2qIVtM3w9cIGMZNyPRwrbsdcC2dFWfGG8J109SCxJVzb8Um8DaPgHNBtJHoqmxUypSeka9fN
+	54p5SlzZACGGcqvfW9BBkPu+djxEffMVz3QnE6HpXDVjMoUjzQdOBdelLoe5MLPWy95fUkGJ22P
+	o1bx8zk6g4v7P86SGY6DusyT36iYRdZI9y/ewpXJdh0gfAMYJzs/SP9CQwm3mT/KJbIEFqkGTE9
+	YHUEaghARnkec2wCHvOA94ERsJBWw6jn98JWiFmuxr80xyj5ptoruAbDgcM=
+X-Google-Smtp-Source: AGHT+IFpUwDIZdatZ/BaqotN+PuflvVC6MM3PjG04G4hWM780MZL77EvrlXbR8bYEE8depQMTf7d9w==
+X-Received: by 2002:a05:620a:1a27:b0:7d4:43aa:6a7c with SMTP id af79cd13be357-7db7dc6ec53mr132921185a.57.1752026237521;
+        Tue, 08 Jul 2025 18:57:17 -0700 (PDT)
 Received: from boreas.. ([140.174.215.70])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-702d5e53246sm59807986d6.1.2025.07.08.18.53.22
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4a994a79106sm92041421cf.45.2025.07.08.18.57.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Jul 2025 18:53:23 -0700 (PDT)
+        Tue, 08 Jul 2025 18:57:17 -0700 (PDT)
 From: Emil Tsalapatis <emil@etsalapatis.com>
 To: bpf@vger.kernel.org
 Cc: ast@kernel.org,
@@ -69,13 +69,12 @@ Cc: ast@kernel.org,
 	yonghong.song@linux.dev,
 	sched-ext@meta.com,
 	Emil Tsalapatis <emil@etsalapatis.com>
-Subject: [PATCH v3 2/2] selftests/bpf: add selftests for bpf_arena_reserve_pages
-Date: Tue,  8 Jul 2025 21:53:09 -0400
-Message-ID: <20250709015309.96742-2-emil@etsalapatis.com>
+Subject: [PATCH v3 1/2] bpf/arena: add bpf_arena_reserve_pages kfunc
+Date: Tue,  8 Jul 2025 21:57:11 -0400
+Message-ID: <20250709015712.97099-2-emil@etsalapatis.com>
 X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250709015309.96742-1-emil@etsalapatis.com>
-References: <20250709014751.96274-1-emil@etsalapatis.com>
- <20250709015309.96742-1-emil@etsalapatis.com>
+In-Reply-To: <20250709015712.97099-1-emil@etsalapatis.com>
+References: <20250709015712.97099-1-emil@etsalapatis.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -84,254 +83,81 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add selftests for the new bpf_arena_reserve_pages kfunc.
+Add a new BPF arena kfunc for reserving a range of arena virtual
+addresses without backing them with pages. This prevents the range from
+being populated using bpf_arena_alloc_pages().
 
 Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
 ---
- .../testing/selftests/bpf/bpf_arena_common.h  |   3 +
- .../selftests/bpf/progs/verifier_arena.c      | 106 ++++++++++++++++++
- .../bpf/progs/verifier_arena_large.c          |  95 ++++++++++++++++
- 3 files changed, 204 insertions(+)
+ kernel/bpf/arena.c | 43 +++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 43 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/bpf_arena_common.h b/tools/testing/selftests/bpf/bpf_arena_common.h
-index 68a51dcc0669..16f8ce832004 100644
---- a/tools/testing/selftests/bpf/bpf_arena_common.h
-+++ b/tools/testing/selftests/bpf/bpf_arena_common.h
-@@ -46,8 +46,11 @@
- 
- void __arena* bpf_arena_alloc_pages(void *map, void __arena *addr, __u32 page_cnt,
- 				    int node_id, __u64 flags) __ksym __weak;
-+int bpf_arena_reserve_pages(void *map, void __arena *addr, __u32 page_cnt) __ksym __weak;
- void bpf_arena_free_pages(void *map, void __arena *ptr, __u32 page_cnt) __ksym __weak;
- 
-+#define arena_base(map) ((void __arena *)((struct bpf_arena *)(map))->user_vm_start)
-+
- #else /* when compiled as user space code */
- 
- #define __arena
-diff --git a/tools/testing/selftests/bpf/progs/verifier_arena.c b/tools/testing/selftests/bpf/progs/verifier_arena.c
-index 67509c5d3982..35248b3327aa 100644
---- a/tools/testing/selftests/bpf/progs/verifier_arena.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_arena.c
-@@ -114,6 +114,112 @@ int basic_alloc3(void *ctx)
- 	return 0;
+diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
+index 0d56cea71602..5b37753799d2 100644
+--- a/kernel/bpf/arena.c
++++ b/kernel/bpf/arena.c
+@@ -550,6 +550,34 @@ static void arena_free_pages(struct bpf_arena *arena, long uaddr, long page_cnt)
+ 	}
  }
  
-+SEC("syscall")
-+__success __retval(0)
-+int basic_reserve1(void *ctx)
++/*
++ * Reserve an arena virtual address range without populating it. This call stops
++ * bpf_arena_alloc_pages from adding pages to this range.
++ */
++static int arena_reserve_pages(struct bpf_arena *arena, long uaddr, u32 page_cnt)
 +{
-+#if defined(__BPF_FEATURE_ADDR_SPACE_CAST)
-+	char __arena *page;
++	long page_cnt_max = (arena->user_vm_end - arena->user_vm_start) >> PAGE_SHIFT;
++	long pgoff;
 +	int ret;
 +
-+	page = bpf_arena_alloc_pages(&arena, NULL, 1, NUMA_NO_NODE, 0);
-+	if (!page)
-+		return 1;
++	if (uaddr & ~PAGE_MASK)
++		return 0;
 +
-+	page += __PAGE_SIZE;
++	pgoff = compute_pgoff(arena, uaddr);
++	if (pgoff + page_cnt > page_cnt_max)
++		return -EINVAL;
 +
-+	/* Reserve the second page */
-+	ret = bpf_arena_reserve_pages(&arena, page, 1);
++	guard(mutex)(&arena->lock);
++
++	/* Cannot guard already allocated pages. */
++	ret = is_range_tree_set(&arena->rt, pgoff, page_cnt);
 +	if (ret)
-+		return 2;
++		return -EBUSY;
 +
-+	/* Try to explicitly allocate the reserved page. */
-+	page = bpf_arena_alloc_pages(&arena, page, 1, NUMA_NO_NODE, 0);
-+	if (page)
-+		return 3;
-+
-+	/* Try to implicitly allocate the page (since there's only 2 of them). */
-+	page = bpf_arena_alloc_pages(&arena, NULL, 1, NUMA_NO_NODE, 0);
-+	if (page)
-+		return 4;
-+#endif
-+	return 0;
++	/* "Allocate" the region to prevent it from being allocated. */
++	return range_tree_clear(&arena->rt, pgoff, page_cnt);
 +}
 +
-+SEC("syscall")
-+__success __retval(0)
-+int basic_reserve2(void *ctx)
-+{
-+#if defined(__BPF_FEATURE_ADDR_SPACE_CAST)
-+	char __arena *page;
-+	int ret;
-+
-+	page = arena_base(&arena);
-+	ret = bpf_arena_reserve_pages(&arena, page, 1);
-+	if (ret)
-+		return 1;
-+
-+	page = bpf_arena_alloc_pages(&arena, page, 1, NUMA_NO_NODE, 0);
-+	if ((u64)page)
-+		return 2;
-+#endif
-+	return 0;
-+}
-+
-+/* Reserve the same page twice, should return -EBUSY. */
-+SEC("syscall")
-+__success __retval(0)
-+int reserve_twice(void *ctx)
-+{
-+#if defined(__BPF_FEATURE_ADDR_SPACE_CAST)
-+	char __arena *page;
-+	int ret;
-+
-+	page = arena_base(&arena);
-+
-+	ret = bpf_arena_reserve_pages(&arena, page, 1);
-+	if (ret)
-+		return 1;
-+
-+	/* Should be -EBUSY. */
-+	ret = bpf_arena_reserve_pages(&arena, page, 1);
-+	if (ret != -16)
-+		return 2;
-+#endif
-+	return 0;
-+}
-+
-+/* Try to reserve past the end of the arena. */
-+SEC("syscall")
-+__success __retval(0)
-+int reserve_invalid_region(void *ctx)
-+{
-+#if defined(__BPF_FEATURE_ADDR_SPACE_CAST)
-+	char __arena *page;
-+	int ret;
-+
-+	/* Try a NULL pointer. */
-+	ret = bpf_arena_reserve_pages(&arena, NULL, 3);
-+	if (ret != -22)
-+		return 1;
-+
-+	page = arena_base(&arena);
-+
-+	ret = bpf_arena_reserve_pages(&arena, page, 3);
-+	if (ret != -22)
-+		return 2;
-+
-+	ret = bpf_arena_reserve_pages(&arena, page, 4096);
-+	if (ret != -22)
-+		return 3;
-+
-+	ret = bpf_arena_reserve_pages(&arena, page, (1ULL << 32) - 1);
-+	if (ret != -22)
-+		return 4;
-+#endif
-+	return 0;
-+}
-+
- SEC("iter.s/bpf_map")
- __success __log_level(2)
- int iter_maps1(struct bpf_iter__bpf_map *ctx)
-diff --git a/tools/testing/selftests/bpf/progs/verifier_arena_large.c b/tools/testing/selftests/bpf/progs/verifier_arena_large.c
-index f94f30cf1bb8..9eee51912280 100644
---- a/tools/testing/selftests/bpf/progs/verifier_arena_large.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_arena_large.c
-@@ -67,6 +67,101 @@ int big_alloc1(void *ctx)
- 	return 0;
- }
+ __bpf_kfunc_start_defs();
  
-+/* Try to access a reserved page. Behavior should be identical with accessing unallocated pages. */
-+SEC("syscall")
-+__success __retval(0)
-+int access_reserved(void *ctx)
+ __bpf_kfunc void *bpf_arena_alloc_pages(void *p__map, void *addr__ign, u32 page_cnt,
+@@ -573,11 +601,26 @@ __bpf_kfunc void bpf_arena_free_pages(void *p__map, void *ptr__ign, u32 page_cnt
+ 		return;
+ 	arena_free_pages(arena, (long)ptr__ign, page_cnt);
+ }
++
++__bpf_kfunc int bpf_arena_reserve_pages(void *p__map, void *ptr__ign, u32 page_cnt)
 +{
-+#if defined(__BPF_FEATURE_ADDR_SPACE_CAST)
-+	volatile char __arena *page;
-+	char __arena *base;
-+	const size_t len = 4;
-+	int ret, i;
++	struct bpf_map *map = p__map;
++	struct bpf_arena *arena = container_of(map, struct bpf_arena, map);
 +
-+	/* Get a separate region of the arena. */
-+	page = base = arena_base(&arena) + 16384 * PAGE_SIZE;
++	if (map->map_type != BPF_MAP_TYPE_ARENA)
++		return -EINVAL;
 +
-+	ret = bpf_arena_reserve_pages(&arena, base, len);
-+	if (ret)
-+		return 1;
++	if (!page_cnt)
++		return 0;
 +
-+	/* Try to dirty reserved memory. */
-+	for (i = 0; i < len && can_loop; i++)
-+		*page = 0x5a;
-+
-+	for (i = 0; i < len && can_loop; i++) {
-+		page = (volatile char __arena *)(base + i * PAGE_SIZE);
-+
-+		/*
-+		 * Error out in case either the write went through,
-+		 * or the address has random garbage.
-+		 */
-+		if (*page == 0x5a)
-+			return 2 + 2 * i;
-+
-+		if (*page)
-+			return 2 + 2 * i + 1;
-+	}
-+#endif
-+	return 0;
++	return arena_reserve_pages(arena, (long)ptr__ign, page_cnt);
 +}
-+
-+/* Try to allocate a region overlapping with a reservation. */
-+SEC("syscall")
-+__success __retval(0)
-+int request_partially_reserved(void *ctx)
-+{
-+#if defined(__BPF_FEATURE_ADDR_SPACE_CAST)
-+	volatile char __arena *page;
-+	char __arena *base;
-+	int ret;
-+
-+	/* Add an arbitrary page offset. */
-+	page = base = arena_base(&arena) + 4096 * __PAGE_SIZE;
-+
-+	ret = bpf_arena_reserve_pages(&arena, base + 3 * __PAGE_SIZE, 4);
-+	if (ret)
-+		return 1;
-+
-+	page = bpf_arena_alloc_pages(&arena, base, 5, NUMA_NO_NODE, 0);
-+	if ((u64)page != 0ULL)
-+		return 2;
-+#endif
-+	return 0;
-+}
-+
-+SEC("syscall")
-+__success __retval(0)
-+int free_reserved(void *ctx)
-+{
-+#if defined(__BPF_FEATURE_ADDR_SPACE_CAST)
-+	char __arena *addr;
-+	char __arena *page;
-+	int ret;
-+
-+	/* Add an arbitrary page offset. */
-+	addr = arena_base(&arena) + 32768 * __PAGE_SIZE;
-+
-+	page = bpf_arena_alloc_pages(&arena, addr, 4, NUMA_NO_NODE, 0);
-+	if (!page)
-+		return 1;
-+
-+	ret = bpf_arena_reserve_pages(&arena, addr + 4 * __PAGE_SIZE, 4);
-+	if (ret)
-+		return 2;
-+
-+	/* Freeing a reserved area, fully or partially, should succeed. */
-+	bpf_arena_free_pages(&arena, addr, 2);
-+	bpf_arena_free_pages(&arena, addr + 2 * __PAGE_SIZE, 2);
-+
-+	/* The free pages call above should have succeeded, so this allocation should too. */
-+	page = bpf_arena_alloc_pages(&arena, addr + 3 * __PAGE_SIZE, 1, NUMA_NO_NODE, 0);
-+	if (!page)
-+		return 3;
-+#endif
-+	return 0;
-+}
-+
- #if defined(__BPF_FEATURE_ADDR_SPACE_CAST)
- #define PAGE_CNT 100
- __u8 __arena * __arena page[PAGE_CNT]; /* occupies the first page */
+ __bpf_kfunc_end_defs();
+ 
+ BTF_KFUNCS_START(arena_kfuncs)
+ BTF_ID_FLAGS(func, bpf_arena_alloc_pages, KF_TRUSTED_ARGS | KF_SLEEPABLE | KF_ARENA_RET | KF_ARENA_ARG2)
+ BTF_ID_FLAGS(func, bpf_arena_free_pages, KF_TRUSTED_ARGS | KF_SLEEPABLE | KF_ARENA_ARG2)
++BTF_ID_FLAGS(func, bpf_arena_reserve_pages, KF_TRUSTED_ARGS | KF_SLEEPABLE | KF_ARENA_ARG2)
+ BTF_KFUNCS_END(arena_kfuncs)
+ 
+ static const struct btf_kfunc_id_set common_kfunc_set = {
 -- 
 2.49.0
 
