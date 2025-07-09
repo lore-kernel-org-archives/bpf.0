@@ -1,73 +1,149 @@
-Received: from out-184.mta0.migadu.com (out-184.mta0.migadu.com [91.218.175.184])
+Received: from neil.brown.name (neil.brown.name [103.29.64.221])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A872924467A
-	for <bpf@vger.kernel.org>; Wed,  9 Jul 2025 22:13:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.184
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45C04242D76;
+	Wed,  9 Jul 2025 22:24:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.29.64.221
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752099211; cv=none; b=EHfambZG8aqtiXl6zOrJKCSWoa0qYMgySahicczRoNARy1eliE1GZeOcT1t3qk8kjQ75tAmurnJ4v0A7m4+HnmxYWNy8cAlOgixTp1qy4nBEBsS3BEzWwAzZi8+bXQVuHUUY8wCk8SIhSqU0mBiuslp6MTGQ5PO0xa58eTehHHw=
+	t=1752099860; cv=none; b=tDS/CysrFgGLqjG5HiSN5WBtC9eZrHnYfK7Ax6OeTi0smK0to4OltcR9YKywYITP0aePVqfijLLnt63GNV1+yEMrMej6+GRvVBlajiTXOpcnkBNDhe0E2qpnggj74bfN9XtjDp1izKo4J1poFxborvk7UY1bjnP02ultVIeHg9E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752099211; c=relaxed/simple;
-	bh=CeEZvdrB3NYkxordf6P3c7dTW7ManM5/c32NhZfNWow=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SW3jntJBAMWIGA+82JdfXFwTEAUWGn8R+SU+Zz4Jw2479fFILPrCGuZ/lLcYZtZt1NO1awXGj+DdoO7v6oivVcpeS28uG3tNBVL9u7/d8qROSMsRUCFrjnX4BPTVpN8wLpN3bg0P/qDShTGfXJu7vy31B/06Y6vXUohfbyjrtIs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=G3aeTfzI; arc=none smtp.client-ip=91.218.175.184
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="G3aeTfzI"
-Message-ID: <68f4b77c-3265-489e-9190-0333ed54b697@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1752099207;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=IdJH0FYj3ss9xfqGu8zSStWAw3PQkbIEPp6h1hKKfrY=;
-	b=G3aeTfzIBUguPrjweimU+ZmFQRPIFIOhR4+nrb15MuqL/Uoo6LSgXR/Te2fyCiqI1sH0I8
-	9GHXc7+ZUJyAi6suP8J3gJS7l6//qgTimlZFYpt5vZ+HL2LjPxa4ZRmlSanoNqEbyhaZwF
-	uzhO6CfHd73UkNm6kxAnH5jrkDoJcLI=
-Date: Wed, 9 Jul 2025 15:13:22 -0700
+	s=arc-20240116; t=1752099860; c=relaxed/simple;
+	bh=CbHFJShFE8DpTC/MzdtDKAEYS5cu2PsOLLa0V3B56V4=;
+	h=Content-Type:MIME-Version:From:To:Cc:Subject:In-reply-to:
+	 References:Date:Message-id; b=JBGDSquBvGiOmtEPrVuzDpdZ1fFH1Aar2bEvipFA9Lf2ZRpuwHgstHQKACmd/YGhA0885J4+7zSe71f62Hz1+Rw+XxxC+RgsYt37CDasVvAcBIxl8lce0c7MpNzPcbQMKxbIxUEPW1p99mlKPGfSbjOpwpbONioDKPGcgSxUMeo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brown.name; spf=pass smtp.mailfrom=neil.brown.name; arc=none smtp.client-ip=103.29.64.221
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brown.name
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=neil.brown.name
+Received: from 196.186.233.220.static.exetel.com.au ([220.233.186.196] helo=home.neil.brown.name)
+	by neil.brown.name with esmtp (Exim 4.95)
+	(envelope-from <mr@neil.brown.name>)
+	id 1uZdD3-001GGv-Iu;
+	Wed, 09 Jul 2025 22:24:15 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [RFC bpf-next v1 2/4] bpf: Support cookie for linked-based
- struct_ops attachment
-To: Amery Hung <ameryhung@gmail.com>
-Cc: alexei.starovoitov@gmail.com, andrii@kernel.org, daniel@iogearbox.net,
- tj@kernel.org, martin.lau@kernel.org, kernel-team@meta.com,
- bpf@vger.kernel.org
-References: <20250708230825.4159486-1-ameryhung@gmail.com>
- <20250708230825.4159486-3-ameryhung@gmail.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <20250708230825.4159486-3-ameryhung@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+From: "NeilBrown" <neil@brown.name>
+To: "Song Liu" <songliubraving@meta.com>
+Cc: =?utf-8?q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>,
+ "Christian Brauner" <brauner@kernel.org>, "Tingmao Wang" <m@maowtm.org>,
+ "Song Liu" <song@kernel.org>, "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+ "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-security-module@vger.kernel.org"
+ <linux-security-module@vger.kernel.org>, "Kernel Team" <kernel-team@meta.com>,
+ "andrii@kernel.org" <andrii@kernel.org>,
+ "eddyz87@gmail.com" <eddyz87@gmail.com>, "ast@kernel.org" <ast@kernel.org>,
+ "daniel@iogearbox.net" <daniel@iogearbox.net>,
+ "martin.lau@linux.dev" <martin.lau@linux.dev>,
+ "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+ "jack@suse.cz" <jack@suse.cz>, "kpsingh@kernel.org" <kpsingh@kernel.org>,
+ "mattbobrowski@google.com" <mattbobrowski@google.com>,
+ =?utf-8?q?G=C3=BCnther?= Noack <gnoack@google.com>,
+ "Jann Horn" <jannh@google.com>
+Subject: Re: [PATCH v5 bpf-next 0/5] bpf path iterator
+In-reply-to: <C8FA6AFF-704B-4F8D-AE88-68E6046FBE01@meta.com>
+References: <>, <C8FA6AFF-704B-4F8D-AE88-68E6046FBE01@meta.com>
+Date: Thu, 10 Jul 2025 08:24:14 +1000
+Message-id: <175209985487.2234665.6008354090530669455@noble.neil.brown.name>
 
-On 7/8/25 4:08 PM, Amery Hung wrote:
-> @@ -906,6 +904,10 @@ static long bpf_struct_ops_map_update_elem(struct bpf_map *map, void *key,
->   		goto unlock;
->   	}
->   
-> +	err = bpf_struct_ops_prepare_attach(st_map, 0);
+On Thu, 10 Jul 2025, Song Liu wrote:
+> 
+> 
+> > On Jul 9, 2025, at 9:06 AM, Mickaël Salaün <mic@digikod.net> wrote:\
+> 
+> [...]
+> 
+> >> If necessary, we hide “root" inside @data. This is good. 
+> >> 
+> >>> @path would be updated with latest ancestor path (e.g. @root).
+> >> 
+> >> Update @path to the last ancestor and hold proper references. 
+> >> I missed this part earlier. With this feature, vfs_walk_ancestors 
+> >> should work usable with open-codeed bpf path iterator. 
+> >> 
+> >> I have a question about this behavior with RCU walk. IIUC, RCU 
+> >> walk does not hold reference to @ancestor when calling walk_cb().
+> > 
+> > I think a reference to the mount should be held, but not necessarily to
+> > the dentry if we are still in the same mount as the original path.
+> 
+> If we update @path and do path_put() after the walk, we have to hold 
+> reference to both the mnt and the dentry, no? 
+> 
+> > 
+> >> If walk_cb() returns false, shall vfs_walk_ancestors() then
+> >> grab a reference on @ancestor? This feels a bit weird to me.
+> > 
+> > If walk_cb() checks for a root, it will return false when the path will
+> > match, and the caller would expect to get this root path, right?
+> 
+> If the user want to walk to the global root, walk_cb() may not 
+> return false at all, IIUC. walk_cb() may also return false on 
+> other conditions. 
+> 
+> > 
+> > In general, it's safer to always have the same behavior when holding or
+> > releasing a reference.  I think the caller should then always call
+> > path_put() after vfs_walk_ancestors() whatever the return code is.
+> > 
+> >> Maybe “updating @path to the last ancestor” should only apply to
+> >> LOOKUP_RCU==false case? 
+> >> 
+> >>> @flags could contain LOOKUP_RCU or not, which enables us to have
+> >>> walk_cb() not-RCU compatible.
+> >>> 
+> >>> When passing LOOKUP_RCU, if the first call to vfs_walk_ancestors()
+> >>> failed with -ECHILD, the caller can restart the walk by calling
+> >>> vfs_walk_ancestors() again but without LOOKUP_RCU.
+> >> 
+> >> 
+> >> Given we want callers to handle -ECHILD and call vfs_walk_ancestors
+> >> again without LOOKUP_RCU, I think we should keep @path not changed
+> >> With LOOKUP_RCU==true, and only update it to the last ancestor 
+> >> when LOOKUP_RCU==false.
+> > 
+> > As Neil said, we don't want to explicitly pass LOOKUP_RCU as a public
+> > flag.  Instead, walk_cb() should never sleep (and then potentially be
+> > called under RCU by the vfs_walk_ancestors() implementation).
+> 
+> How should the user handle -ECHILD without LOOKUP_RCU flag? Say the
+> following code in landlocked:
+> 
+> /* Try RCU walk first */
+> err = vfs_walk_ancestors(path, ll_cb, data, LOOKUP_RCU);
+> 
+> if (err == -ECHILD) {
+> 	struct path walk_path = *path;
+> 
+> 	/* reset any data changed by the walk */
+> 	reset_data(data);
+> 	
+> 	/* now do ref-walk */
+> 	err = vfs_walk_ancestors(&walk_path, ll_cb, data, 0);
+> }
+> 
+> Or do you mean vfs_walk_ancestors will never return -ECHILD?
+> Then we need vfs_walk_ancestors to call reset_data logic, right?
 
-A follow-up on the "using the map->id as the cookie" comment in the cover 
-letter. I meant to use the map->id here instead of 0. If the cookie is intended 
-to identify a particular struct_ops instance (i.e., the struct_ops map), then 
-map->id should be a good fit, and it is automatically generated by the kernel 
-during the map creation. As a result, I suspect that most of the changes in 
-patch 1 and patch 2 will not be needed.
+It isn't clear to me that vfs_walk_ancestors() needs to return anything.
+All the communication happens through walk_cb()
 
-If I understand correctly, the kfunc implementation needs to look up the scx_ops 
-instance (i.e., the struct_ops map) from the map->id/cookie. There is a similar 
-map->id lookup in bpf_map_get_fd_by_id(), which requires acquiring a spin_lock. 
-If performance is a concern, we can investigate whether it can be rcu-ified. 
- From a quick glance, bpf_map_free_id() is called before call_rcu(). Note that 
-bpf_struct_ops_map_free() will wait for an RCU grace period.
+walk_cb() is called with a path, the data, and a "may_sleep" flag.
+If it needs to sleep but may_sleep is not set, it returns "-ECHILD"
+which causes the walk to restart and use refcounts.
+If it wants to stop, it returns 0.
+If it wants to continue, it returns 1.
+If it wants a reference to the path then it can use (new)
+vfs_legitimize_path() which might fail.
+If it wants a reference to the path and may_sleep is true, it can use
+path_get() which won't fail.
 
+When returning -ECHILD (either because of a need to sleep or because
+vfs_legitimize_path() fails), walk_cb() would reset_data().
+
+NeilBrown
