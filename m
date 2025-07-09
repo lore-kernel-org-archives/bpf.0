@@ -1,37 +1,38 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B284287252;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B2E828DF42;
 	Wed,  9 Jul 2025 12:48:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752065286; cv=none; b=pUZQMpKijf+6wLpiq8PVQ8N4GIGtQJwiafCCOug4mTaGnZEB5Wvs8xCpRfAQLGHj0tp4m+h2NRp3e4GmTsHfme2KdOopHUP3wSrp+aqk/xer8iu77WZH3L2AzgDCLimYIWXLqWlPIla5O8WJfu9yfq6KXfWTH51/JBuO694dFZ8=
+	t=1752065286; cv=none; b=qo7feXsSVzb6hDCLEaAe9TtAMkPUDsMB2nUFuXj+ORw8USKZSJimxxWPsWjLL0K/tbFiB1kRT1+9MO6SkSKdVrkB1fhAYb4iXXVmRkd6/ZhXZoOzArhgWWOaIkId1plpnu8/kkxP1KRbSrn8zl698nlkAimDUAQp1tex1ma9Cmg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1752065286; c=relaxed/simple;
-	bh=LLq14NfQ6qP1jqDAZlejPOC5EKe/uhtCVVfk2KqwqLg=;
+	bh=KAxosOVOQ6l+B1NRsPIMYW/2Pb2Tn47aUOZur2xYXu4=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=sM0XoQdv+4He6XLbOJgNSppzuOFrPXSf5E3XEhePFex5VqK/QuWpsdrLacxB+t2gHyY/kXxfuPj99grPq0tg+vCDEKOjJaMmxwLJWzAQPAesgBRAE8wk11dCFxPYGG/hWfk6+hu7tRg+Rqm+FWOOQLrK7kMwfJ3DNv4gmVi/QCY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QOLrU+if; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=Qfs7xbN3zQBl5eWklQ6Z1S4wwV00hkz4WYfQDFsXTvx/OPOH3UfKWkA/efhDtGUtjhUCiK7jf5vxPrY9EtSxeYktwSg8NMlzA9ORwEDw/Jyk4d4QdzE9P6R06C/JcEHHiiaFHcgFGnC4pIWCTAqViGlRzoP4dfkRtuMBRJWipaM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BEeNRFF4; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QOLrU+if"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B6CDAC4CEF7;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BEeNRFF4"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C5298C4CEF8;
 	Wed,  9 Jul 2025 12:48:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1752065285;
-	bh=LLq14NfQ6qP1jqDAZlejPOC5EKe/uhtCVVfk2KqwqLg=;
+	bh=KAxosOVOQ6l+B1NRsPIMYW/2Pb2Tn47aUOZur2xYXu4=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=QOLrU+ifWmmqO07J+oF5deBw2vPc7UfLQXV/pUJmu/Roto+t4cb6pCpIfndBWDu0I
-	 KOSlGiPsYNBPwqTpAOWGrBze1qLVzBCxp/MrZc+uaXyBtJDllFxfJcjcwYWr8L+bRD
-	 tYwRPg4g5cmucPbOCWS/ca0JJLVnax5ejhBepaFhWXnjchIKWHNsYae6UJHhLxwxbA
-	 raxSOo7GGTX4nep2+GVvtS2hNudQmIrVCzV6S7u6qvBMbyP5lhZnChwXOu9sDZCkhW
-	 ZDESEi1SVNzXN7A+ZakCju8He3n4V5G1pNo5NjSmlxbWra0rKv5e6kIuKidxJzfMyL
-	 FD/jttdlsFXOQ==
+	b=BEeNRFF41TLrKdDremt/jb8A4DgetZ5xFgGcm6vSsdF5LXAvEaOjTRmXTzJsUdLh3
+	 MlZ8nWZl3HKcDNDczXzxsGg1JMd8n1rH974QW8fNKXtnY0tEiPr5nrBAahSEcMWFHv
+	 TnflxIGJY5Knix1BAdt5sKPgjg9vE6N7y4vPbBHeWz4Im/78JRHUKelPKWtbsxR7Cq
+	 l23sHOwVIoIKxCc8dN4RmabTjAFvV3bK7dVKzJ/NsEqIclc14nlo1anLffOFO9OEAk
+	 YOZHQ2HxfWvXwC7g5m6Lt/pStMBSLBc28KCO2zhgabRgTY5GcBznAa/6MmnidAf/ro
+	 iOZP7XDiKI4Qg==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A344AC83F12;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BD143C83F15;
 	Wed,  9 Jul 2025 12:48:05 +0000 (UTC)
 From: Vincent Whitchurch via B4 Relay <devnull+vincent.whitchurch.datadoghq.com@kernel.org>
-Date: Wed, 09 Jul 2025 14:47:58 +0200
-Subject: [PATCH bpf-next v3 2/5] tcp_bpf: Fix reading with splice(2)
+Date: Wed, 09 Jul 2025 14:48:00 +0200
+Subject: [PATCH bpf-next v3 4/5] selftests/bpf: sockmap: Allow SK_PASS in
+ verdict
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -40,7 +41,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250709-sockmap-splice-v3-2-b23f345a67fc@datadoghq.com>
+Message-Id: <20250709-sockmap-splice-v3-4-b23f345a67fc@datadoghq.com>
 References: <20250709-sockmap-splice-v3-0-b23f345a67fc@datadoghq.com>
 In-Reply-To: <20250709-sockmap-splice-v3-0-b23f345a67fc@datadoghq.com>
 To: John Fastabend <john.fastabend@gmail.com>, 
@@ -49,11 +50,11 @@ Cc: Kuniyuki Iwashima <kuniyu@google.com>, Jakub Kicinski <kuba@kernel.org>,
  netdev@vger.kernel.org, bpf@vger.kernel.org, 
  Vincent Whitchurch <vincent.whitchurch@datadoghq.com>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1752065284; l=2078;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1752065284; l=2649;
  i=vincent.whitchurch@datadoghq.com; s=20240606; h=from:subject:message-id;
- bh=InhXGybr0db9Lk1NjNwJ/NeOyi7WHVAFjgQS5ZRfqY4=;
- b=6yeMMqRtCLOhWq2tqcD2QHNnh8nuxckKRDB5Ee+5wDuUC/1QX2MrTErolu2bfmQibpUt39qZQ
- atdE7eeJvAtCzNL95G1v6xs2tKMfvMoJjysRAxyT06c+egpYh7dG+Yw
+ bh=ttXkzBtePefhL92l8qDuBVl8NcBEWEyezoI06KE7GQg=;
+ b=FRrlWWYinWhzF+G4Xad5WfD4U6xjBbvQHLf7gMQ13mmPt0TwvKc2hW+HiLOhH/DtIQMtd5v3V
+ UJ9w1nqEU/FAQo8Yl7nL8OgYa4rbedwK/a60fwOu2Nk9Fa5eytITBBE
 X-Developer-Key: i=vincent.whitchurch@datadoghq.com; a=ed25519;
  pk=GwUiPK96WuxbUAD4UjapyK7TOt+aX0EqABOZ/BOj+/M=
 X-Endpoint-Received: by B4 Relay for
@@ -63,59 +64,74 @@ Reply-To: vincent.whitchurch@datadoghq.com
 
 From: Vincent Whitchurch <vincent.whitchurch@datadoghq.com>
 
-If a socket is added to a sockmap with a verdict program which returns
-SK_PASS, splice(2) is not able to read from the socket.
-
-The verdict code removes skbs from the receive queue, checks them using
-the bpf program, and then re-queues them onto a separate queue
-(psock->ingress_msg).  The sockmap code modifies the TCP recvmsg hook to
-check this second queue also so that works. But the splice_read hooks is
-not modified and the default tcp_read_splice() only reads the normal
-receive queue so it never sees the skbs which have been re-queued.
-
-Fix it by using copy_splice_read() when replacing the proto for the
-sockmap.  This could eventually be replaced with a more efficient custom
-version.
+Add an option to always return SK_PASS in the verdict callback
+instead of redirecting the skb.  This allows testing cases
+which are not covered by the test program as of now.
 
 Signed-off-by: Vincent Whitchurch <vincent.whitchurch@datadoghq.com>
 ---
- net/ipv4/tcp_bpf.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ tools/testing/selftests/bpf/test_sockmap.c | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
 
-diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
-index ba581785adb4..197429b6adae 100644
---- a/net/ipv4/tcp_bpf.c
-+++ b/net/ipv4/tcp_bpf.c
-@@ -3,6 +3,7 @@
- 
- #include <linux/skmsg.h>
- #include <linux/filter.h>
-+#include <linux/fs.h>
- #include <linux/bpf.h>
- #include <linux/init.h>
- #include <linux/wait.h>
-@@ -381,6 +382,13 @@ static int tcp_bpf_recvmsg(struct sock *sk, struct msghdr *msg, size_t len,
- 	return ret;
- }
- 
-+static ssize_t tcp_bpf_splice_read(struct socket *sock, loff_t *ppos,
-+				   struct pipe_inode_info *pipe, size_t len,
-+				   unsigned int flags)
-+{
-+	return copy_splice_read(sock->file, ppos, pipe, len, flags);
-+}
-+
- static int tcp_bpf_send_verdict(struct sock *sk, struct sk_psock *psock,
- 				struct sk_msg *msg, int *copied, int flags)
+diff --git a/tools/testing/selftests/bpf/test_sockmap.c b/tools/testing/selftests/bpf/test_sockmap.c
+index cf1c36ed32c1..8be2714dd573 100644
+--- a/tools/testing/selftests/bpf/test_sockmap.c
++++ b/tools/testing/selftests/bpf/test_sockmap.c
+@@ -80,6 +80,7 @@ int txmsg_end_push;
+ int txmsg_start_pop;
+ int txmsg_pop;
+ int txmsg_ingress;
++int txmsg_pass_skb;
+ int txmsg_redir_skb;
+ int txmsg_ktls_skb;
+ int txmsg_ktls_skb_drop;
+@@ -114,6 +115,7 @@ static const struct option long_options[] = {
+ 	{"txmsg_start_pop",  required_argument,	NULL, 'w'},
+ 	{"txmsg_pop",	     required_argument,	NULL, 'x'},
+ 	{"txmsg_ingress", no_argument,		&txmsg_ingress, 1 },
++	{"txmsg_pass_skb", no_argument,		&txmsg_pass_skb, 1 },
+ 	{"txmsg_redir_skb", no_argument,	&txmsg_redir_skb, 1 },
+ 	{"ktls", no_argument,			&ktls, 1 },
+ 	{"peek", no_argument,			&peek_flag, 1 },
+@@ -183,6 +185,7 @@ static void test_reset(void)
+ 	txmsg_pass = txmsg_drop = txmsg_redir = 0;
+ 	txmsg_apply = txmsg_cork = 0;
+ 	txmsg_ingress = txmsg_redir_skb = 0;
++	txmsg_pass_skb = 0;
+ 	txmsg_ktls_skb = txmsg_ktls_skb_drop = txmsg_ktls_skb_redir = 0;
+ 	txmsg_omit_skb_parser = 0;
+ 	skb_use_parser = 0;
+@@ -1050,6 +1053,7 @@ static int run_options(struct sockmap_options *options, int cg_fd,  int test)
  {
-@@ -605,6 +613,7 @@ static void tcp_bpf_rebuild_protos(struct proto prot[TCP_BPF_NUM_CFGS],
- 	prot[TCP_BPF_BASE].destroy		= sock_map_destroy;
- 	prot[TCP_BPF_BASE].close		= sock_map_close;
- 	prot[TCP_BPF_BASE].recvmsg		= tcp_bpf_recvmsg;
-+	prot[TCP_BPF_BASE].splice_read		= tcp_bpf_splice_read;
- 	prot[TCP_BPF_BASE].sock_is_readable	= sk_msg_is_readable;
+ 	int i, key, next_key, err, zero = 0;
+ 	struct bpf_program *tx_prog;
++	struct bpf_program *skb_verdict_prog;
  
- 	prot[TCP_BPF_TX]			= prot[TCP_BPF_BASE];
+ 	/* If base test skip BPF setup */
+ 	if (test == BASE || test == BASE_SENDPAGE)
+@@ -1066,7 +1070,12 @@ static int run_options(struct sockmap_options *options, int cg_fd,  int test)
+ 		}
+ 	}
+ 
+-	links[1] = bpf_program__attach_sockmap(progs[1], map_fd[0]);
++	if (txmsg_pass_skb)
++		skb_verdict_prog = progs[2];
++	else
++		skb_verdict_prog = progs[1];
++
++	links[1] = bpf_program__attach_sockmap(skb_verdict_prog, map_fd[0]);
+ 	if (!links[1]) {
+ 		fprintf(stderr, "ERROR: bpf_program__attach_sockmap (sockmap): (%s)\n",
+ 			strerror(errno));
+@@ -1455,6 +1464,8 @@ static void test_options(char *options)
+ 	}
+ 	if (txmsg_ingress)
+ 		append_str(options, "ingress,", OPTSTRING);
++	if (txmsg_pass_skb)
++		append_str(options, "pass_skb,", OPTSTRING);
+ 	if (txmsg_redir_skb)
+ 		append_str(options, "redir_skb,", OPTSTRING);
+ 	if (txmsg_ktls_skb)
 
 -- 
 2.34.1
