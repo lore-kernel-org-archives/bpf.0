@@ -1,128 +1,170 @@
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from neil.brown.name (neil.brown.name [103.29.64.221])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B41502192EE
-	for <bpf@vger.kernel.org>; Wed,  9 Jul 2025 22:27:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52BB6156237;
+	Wed,  9 Jul 2025 22:34:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.29.64.221
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752100047; cv=none; b=hLG+VST+7H1zqCwFwWLMjj5+75bWiDUIjvxrJmzoLXcOsH8QAzFhgTglx3PqkQNWEp4WSh90u0VIiR27BzPmVB0cD2HsKJqLZtlGk+A0GqJxY+k9EK7l+/M7Asbq8nVJY+s0uzXV0zZj4Bo4wbVrTl1OQJfmtQj0/xGGlnl8Sto=
+	t=1752100481; cv=none; b=OqoHub95zpLLIMx0JoJbcwM8Mi6nccfxuc4pBoZAhx2Ls+cKU+7xhylOqA7DK5EtqPSCp164tRPrurpA/079XjyRpgUHj/cwKl8yV01DuuorC0RIzamgfme0XjdkD967I+yir+3A+FZnnPV8LwlZrJENMm32Wmso4Q9Tx/2ZgmQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752100047; c=relaxed/simple;
-	bh=bztqHnKzwxWldAgxfchev1H0ftv+W+htjlaWR8a6R9s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FoNMjmYt3ytsAgJFOe0ifvqNEEZa8+DLLudLJ7Xqrv4vWpeC4c0Tybkcb/Ap9gtjKdA72HIzLfiurL17z9QbdaL7PvukbDH9COrJ2Dg37W5q+SsflLEvNJUcOdowy070p/+nDmTXAMqtQ+q25wKpUZ51UR5iol1ObpjLyjw65Qg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KIuo9yY3; arc=none smtp.client-ip=209.85.221.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KIuo9yY3"
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-3a4fd1ba177so293198f8f.0
-        for <bpf@vger.kernel.org>; Wed, 09 Jul 2025 15:27:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752100044; x=1752704844; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=qxWJZ65v0/e+PK0Cbc7GeVA8XdAlhQ/j+sMYGg/5pnA=;
-        b=KIuo9yY3Ag68g2ITADEg2t7nocCuj5JAVj4kIp9x+46T2XCDKsUb6lYQ8WXZwPY1GH
-         pXu2P3Tp4qVPEzP0WQdwOrnD1n5eHp+Nfznu9IxAG+/T/DxTLS0RjeeGdc+wPwGk21XY
-         CYZepKN+IHdS8WcUoSrYeNT2B12fntXmIfuugha2k+qgPPxDi9W+9niDf1Ehdf9xwuBk
-         QMu4rZjVA3LTu2VbaG+vm6azN2RFU/DMcLC5W6SQ9DxGlFxjUk0L2YZvzA/NXMiAwynH
-         Af+LPChfaxBbLN+MQXUZhtgFOM/iuxxcWJEGC/nnQWLj8NGFIW16B98UBkSjscVxsLRY
-         ehtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752100044; x=1752704844;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qxWJZ65v0/e+PK0Cbc7GeVA8XdAlhQ/j+sMYGg/5pnA=;
-        b=JXCHGcZkE0nvd8bEhguI4hiISQSrVo4kaRatMBJ9f1lP0LgMfYy178FNLccxL0cLea
-         1SfyzP9iv+WrGkZGEWwDyTFClBhU/O8bIDEcnP7KAlf6oPl+IjACdWGKyRO3JX0CStvp
-         IJ6zrafrOp20e3k/oty6dXP0UZU/h1uxzq23+VLwZVHZ2kCfcQuO9W5H/mtplz1hcp9+
-         TGlFvC018gdubW4NyCgIxd394TB9m2EmTPJrwhzObyB4ES12a0XD7QWtw22bfcVDAt5U
-         4R2pXuv1cmZPmohSjlb5k6731Aj0hCHQbd/nmjcBn68qfJFeR+ZYTKuu4Taq1+Ktydof
-         SyLg==
-X-Gm-Message-State: AOJu0Yw52QRSxcfU3UwV7bgJFw83N9xfWavRyTtKt8vVDHHJKpPtJHGs
-	SQecnSJoEoBHjuTokV5k0hWuHvCBxcgW6bl4ub9w32IJCkj6r1JxyDFoJa4Hng==
-X-Gm-Gg: ASbGncu2vt3aKb8mtUoPkr/rZYJnhelmc9QiTFBwhouDpzIz/DZY2Cx2B6zRo/9rPww
-	nHQZCBgnBzBoWOCTETBwbyneGCwqivD4zrQFg1/SCAEl/V3uzfbUN2XH4orY5+hWtBazWfy9A0V
-	/NWehGWVUoxAL/Hv25XYyvCJtZRWEjViUtYrdUWcGSnmlHnXzPLYNuK5Oy4P4d2/H8B/ZJvOjbl
-	IiqmO16srgNKM+7/XiW4KHkcBy+1Yftqys/62jIQlsa6L5vD1C4TW4KXC0rYx6saFTNJ33nwUvb
-	K+yN9MXSOPdJQA/gYed+gEQfkjr3ZwfZnNRYWcrDmuNb/oZmTv8fZFr8m4WyCoyKXrrucmkfYvZ
-	o/eQ7IdGMPwwS28O3hor9kTslgqLI5BcSg9KMnmdhIqAtealag9Tk8Ft4RQU=
-X-Google-Smtp-Source: AGHT+IEmCyF4cWOwDdYi2+Wai8mrJcFNDOLSePYI3c48ogP3YBLZEnnd13jgwd+zO6Wzp3oJXXJi4Q==
-X-Received: by 2002:a5d:5f51:0:b0:3b5:e6bf:f86b with SMTP id ffacd0b85a97d-3b5e7f11908mr1047101f8f.11.1752100043831;
-        Wed, 09 Jul 2025 15:27:23 -0700 (PDT)
-Received: from mail.gmail.com (2a01cb0889497e00f9b02e2208aa1971.ipv6.abo.wanadoo.fr. [2a01:cb08:8949:7e00:f9b0:2e22:8aa:1971])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-454dd4b5250sm1112215e9.18.2025.07.09.15.27.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Jul 2025 15:27:23 -0700 (PDT)
-Date: Thu, 10 Jul 2025 00:27:21 +0200
-From: Paul Chaignon <paul.chaignon@gmail.com>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>
-Subject: [PATCH bpf-next 2/2] selftests/bpf: Range analysis test case for JSET
-Message-ID: <9e72d9b0e793c85362c86727911e36a087fe3044.1752099022.git.paul.chaignon@gmail.com>
-References: <75b3af3d315d60c1c5bfc8e3929ac69bb57d5cea.1752099022.git.paul.chaignon@gmail.com>
+	s=arc-20240116; t=1752100481; c=relaxed/simple;
+	bh=MY2Vx9zpExNRGPVZnEiH82ov0uFOe4OTJxBtVTuPRIg=;
+	h=Content-Type:MIME-Version:From:To:Cc:Subject:In-reply-to:
+	 References:Date:Message-id; b=aos+ih7+Nxw2h/uOrgTKoAI7NmU/Z1yiCizEu4CTFetOknu8wc7wTLKEXJzvegTLisfnngQWNJHOqGp2hAI8ZF/kJgk/jyzEjVgMhQk57oLWeDNDySb2FQETtsQMDZ2mFPoeQghtwWaV30bcSr5wG+aUy3beA826pl7OYkP7lVI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brown.name; spf=pass smtp.mailfrom=neil.brown.name; arc=none smtp.client-ip=103.29.64.221
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brown.name
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=neil.brown.name
+Received: from 196.186.233.220.static.exetel.com.au ([220.233.186.196] helo=home.neil.brown.name)
+	by neil.brown.name with esmtp (Exim 4.95)
+	(envelope-from <mr@neil.brown.name>)
+	id 1uZd3M-001GCq-6w;
+	Wed, 09 Jul 2025 22:14:13 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <75b3af3d315d60c1c5bfc8e3929ac69bb57d5cea.1752099022.git.paul.chaignon@gmail.com>
+From: "NeilBrown" <neil@brown.name>
+To: "Song Liu" <songliubraving@meta.com>
+Cc: "Christian Brauner" <brauner@kernel.org>, "Tingmao Wang" <m@maowtm.org>,
+ =?utf-8?q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>,
+ "Song Liu" <song@kernel.org>, "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+ "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-security-module@vger.kernel.org"
+ <linux-security-module@vger.kernel.org>, "Kernel Team" <kernel-team@meta.com>,
+ "andrii@kernel.org" <andrii@kernel.org>,
+ "eddyz87@gmail.com" <eddyz87@gmail.com>, "ast@kernel.org" <ast@kernel.org>,
+ "daniel@iogearbox.net" <daniel@iogearbox.net>,
+ "martin.lau@linux.dev" <martin.lau@linux.dev>,
+ "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+ "jack@suse.cz" <jack@suse.cz>, "kpsingh@kernel.org" <kpsingh@kernel.org>,
+ "mattbobrowski@google.com" <mattbobrowski@google.com>,
+ =?utf-8?q?G=C3=BCnther?= Noack <gnoack@google.com>
+Subject: Re: [PATCH v5 bpf-next 0/5] bpf path iterator
+In-reply-to: <40D24586-5EC7-462A-9940-425182F2972A@meta.com>
+References: <>, <40D24586-5EC7-462A-9940-425182F2972A@meta.com>
+Date: Thu, 10 Jul 2025 08:14:13 +1000
+Message-id: <175209925346.2234665.15385484299365186166@noble.neil.brown.name>
 
-This patch adds coverage for the warning detected by syzkaller and fixed
-in the previous patch. Without the previous patch, this test fails with:
+On Tue, 08 Jul 2025, Song Liu wrote:
+> Hi Christian,=20
+>=20
+> Thanks for your comments!=20
+>=20
+> > On Jul 7, 2025, at 4:17=E2=80=AFAM, Christian Brauner <brauner@kernel.org=
+> wrote:
+>=20
+> [...]
+>=20
+> >>> 3/ Extend vfs_walk_ancestors() to pass a "may sleep" flag to the callba=
+ck.
+> >>=20
+> >> I think that's fine.
+> >=20
+> > Ok, sorry for the delay but there's a lot of different things going on
+> > right now and this one isn't exactly an easy thing to solve.
+> >=20
+> > I mentioned this before and so did Neil: the lookup implementation
+> > supports two modes sleeping and non-sleeping. That api is abstracted
+> > away as heavily as possible by the VFS so that non-core code will not be
+> > exposed to it other than in exceptional circumstances and doesn't have
+> > to care about it.
+> >=20
+> > It is a conceptual dead-end to expose these two modes via separate APIs
+> > and leak this implementation detail into non-core code. It will not
+> > happen as far as I'm concerned.
+> >=20
+> > I very much understand the urge to get the refcount step-by-step thing
+> > merged asap. Everyone wants their APIs merged fast. And if it's
+> > reasonable to move fast we will (see the kernfs xattr thing).
+> >=20
+> > But here are two use-cases that ask for the same thing with different
+> > constraints that closely mirror our unified approach. Merging one
+> > quickly just to have something and then later bolting the other one on
+> > top, augmenting, or replacing, possible having to deprecate the old API
+> > is just objectively nuts. That's how we end up with a spaghetthi helper
+> > collection. We want as little helper fragmentation as possible.
+> >=20
+> > We need a unified API that serves both use-cases. I dislike
+> > callback-based APIs generally but we have precedent in the VFS for this
+> > for cases where the internal state handling is delicate enough that it
+> > should not be exposed (see __iterate_supers() which does exactly work
+> > like Neil suggested down to the flag argument itself I added).
+> >=20
+> > So I'm open to the callback solution.
+> >=20
+> > (Note for really absurd perf requirements you could even make it work
+> > with static calls I'm pretty sure.)
+>=20
+> I guess we will go with Micka=C3=ABl=E2=80=99s idea:
+>=20
+> > int vfs_walk_ancestors(struct path *path,
+> >                       bool (*walk_cb)(const struct path *ancestor, void *=
+data),
+> >                       void *data, int flags)
+> >=20
+> > The walk continue while walk_cb() returns true.  walk_cb() can then
+> > check if @ancestor is equal to a @root, or other properties.  The
+> > walk_cb() return value (if not bool) should not be returned by
+> > vfs_walk_ancestors() because a walk stop doesn't mean an error.
+>=20
+> If necessary, we hide =E2=80=9Croot" inside @data. This is good.=20
+>=20
+> > @path would be updated with latest ancestor path (e.g. @root).
+>=20
+> Update @path to the last ancestor and hold proper references.=20
+> I missed this part earlier. With this feature, vfs_walk_ancestors=20
+> should work usable with open-codeed bpf path iterator.=20
 
-  verifier bug: REG INVARIANTS VIOLATION (false_reg1): range bounds
-  violation u64=[0x0, 0x0] s64=[0x0, 0x0] u32=[0x1, 0x0] s32=[0x0, 0x0]
-  var_off=(0x0, 0x0)(1)
+I don't think path should be updated.  That adds complexity which might
+not be needed.  The original (landlock) requirements were only to look
+at each ancestor, not to take a reference to any of them.
 
-Signed-off-by: Paul Chaignon <paul.chaignon@gmail.com>
----
- .../selftests/bpf/progs/verifier_bounds.c     | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+If the caller needs a reference to any of the ancestors I think that
+walk_cb() needs to take that reference and store it in data.
+Note that attempting to take the reference might fail.  See
+legitimize_path() in fs/namei.c.
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_bounds.c b/tools/testing/selftests/bpf/progs/verifier_bounds.c
-index 6f986ae5085e..2232bce1bdce 100644
---- a/tools/testing/selftests/bpf/progs/verifier_bounds.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_bounds.c
-@@ -2,6 +2,7 @@
- /* Converted from tools/testing/selftests/bpf/verifier/bounds.c */
- 
- #include <linux/bpf.h>
-+#include <../../../include/linux/filter.h>
- #include <bpf/bpf_helpers.h>
- #include "bpf_misc.h"
- 
-@@ -1532,4 +1533,22 @@ __naked void sub32_partial_overflow(void)
- 	: __clobber_all);
- }
- 
-+SEC("socket")
-+__description("dead branch on jset, does not result in invariants violation error")
-+__success __log_level(2)
-+__retval(0) __flag(BPF_F_TEST_REG_INVARIANTS)
-+__naked void jset_range_analysis(void)
-+{
-+	asm volatile ("						\
-+	call %[bpf_get_netns_cookie];				\
-+	if r0 == 0 goto l0_%=;					\
-+	.8byte %[jset]; /* if r0 & 0xffffffff goto +0 */	\
-+l0_%=:	r0 = 0;							\
-+	exit;							\
-+"	:
-+	: __imm(bpf_get_netns_cookie),
-+	  __imm_insn(jset, BPF_JMP_IMM(BPF_JSET, BPF_REG_0, 0xffffffff, 0))
-+	: __clobber_all);
-+}
-+
- char _license[] SEC("license") = "GPL";
--- 
-2.43.0
+It isn't yet clear to me what would be a good API for requesting the
+reference.
+One option would be for vfs_walk_ancestors() to pass another void* to
+walk_cb(), and it passed it on to vfs_legitimize_path() which extracts
+the seq numbers from there.
+Another might be that the path passed to walk_cb is always
+nameidata.path, and so when that is passed to vfs_legitimize_path() path
+it can use container_of() to find the seq numbers.
 
+If vfs_legitimize_path() fail, walk_cb() might want to ask for the walk
+to be restarted.
+
+>=20
+> I have a question about this behavior with RCU walk. IIUC, RCU=20
+> walk does not hold reference to @ancestor when calling walk_cb().
+> If walk_cb() returns false, shall vfs_walk_ancestors() then
+> grab a reference on @ancestor? This feels a bit weird to me.=20
+> Maybe =E2=80=9Cupdating @path to the last ancestor=E2=80=9D should only app=
+ly to
+> LOOKUP_RCU=3D=3Dfalse case?=20
+>=20
+> > @flags could contain LOOKUP_RCU or not, which enables us to have
+> > walk_cb() not-RCU compatible.
+> >=20
+> > When passing LOOKUP_RCU, if the first call to vfs_walk_ancestors()
+> > failed with -ECHILD, the caller can restart the walk by calling
+> > vfs_walk_ancestors() again but without LOOKUP_RCU.
+>=20
+>=20
+> Given we want callers to handle -ECHILD and call vfs_walk_ancestors
+> again without LOOKUP_RCU, I think we should keep @path not changed
+> With LOOKUP_RCU=3D=3Dtrue, and only update it to the last ancestor=20
+> when LOOKUP_RCU=3D=3Dfalse.=20
+
+No, we really don't want to pass a LOOKUP_RCU() flag to
+vfs_walk_ancestors().
+vfs_walk_ancestors() might choose to pass that flag to walk_cb().
+
+NeilBrown
