@@ -1,117 +1,174 @@
-Received: from out-178.mta0.migadu.com (out-178.mta0.migadu.com [91.218.175.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 424D1283153
-	for <bpf@vger.kernel.org>; Wed,  9 Jul 2025 08:58:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67B9878F36;
+	Wed,  9 Jul 2025 09:08:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752051534; cv=none; b=edVLjIuxst8o9LZdgVBuHTqK0vvgw41ckxZ/5D3w9rcCwkxTcQhFVJD4dloAuHMeGSj4O4kbjM22BXMtgt3SoYrYMAvdnMq2mB8NU8ZrOS6kCBjMLUahM76JIqS2oj/0QjHeqoqIeZdZaNkX1GJEcunU0u+WqCNDqf9yJVQHc4c=
+	t=1752052113; cv=none; b=D73BcvKzn0SquRFSpjJ3be6eTyaYEi31ScfYth24hK/N2jQMXx1Hn4QvkktHRQScaUg1pPGUFVH6ijrcj3Vbd0b1bGMxrO1+CuBkp52Tc+scvb+Fj0TiFGJSm50cOdOKAHGf++5eJpEjIa83iqHdElEX1HDLMxsi+dC51jafDqI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752051534; c=relaxed/simple;
-	bh=U9/cmNWHSKmPc3QSgv92YKAiDqZjIrfs5dRo8/xJljo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uJaKYJr2SLOBvpgXT0FdhhN/WZ7ApMbrhEm9R7zt0Zjl1gmmLiJH1C1tTOUvrquK0ZjiDtSGLI9A3vKWcpqr3BM3c/F1Ln6AEtRI8vznz0BJc35tkU+rT92Mmc7lcMLCjwP+lzI9Nhn6ZdZKJcd7QySsPtjWHRFCKuGxKpeo5qs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=aShfP3nD; arc=none smtp.client-ip=91.218.175.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="aShfP3nD"
-Message-ID: <540c2855-da19-4562-ac17-d85225886732@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1752051519;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Dux8HAaVmUxWXS8Gbs3Xy9RMiPdruTHWLLZ5gnv1ECE=;
-	b=aShfP3nDbvgVx7l9jECP1YajsjEoxOUiiJ23tNZpdsd+c9JhApnCCwa3QZ9JNHJwkOXtmk
-	2QcboS3rjOC3HGbRPfyj7Ryuh1WzCmiv6wMPpk6Le07Omn/ZlsUNNqhVpXWbhultsRcLgf
-	r19FWoNPQ4qS9KeptPURc9+hHrUrf5Y=
-Date: Wed, 9 Jul 2025 16:58:26 +0800
+	s=arc-20240116; t=1752052113; c=relaxed/simple;
+	bh=4oP/BxQ13aamcUJCA30PvuCdZJb618zDuY0b6VNikI0=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=R3BLYBNXSEqUt+s7OUCEt4WYrKC7ar2AszMfoL8s/98Cs8DVbNlXoqy7IGWIAs2FOB1OSo8/xIjfqgYQxWXH8N/R4C0VhoufthAysho9GfxCWBlGy9vcwprWMD4w6tp7Nv1XtuFWhJGIW9j8yBVd7htxUlAcpXkKOYo5GHGM2CI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-60bfcada295so8618190a12.1;
+        Wed, 09 Jul 2025 02:08:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752052110; x=1752656910;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WSsTwFQE4LJ67DmF/fgc6P+/sHFKlTuTrdiV4mhoHyE=;
+        b=MkJ27OeTUYH1/oEjNWotgHzKm2qaib7zA5jIsKNDX8wv/+dO8msBSSsLKDkIqmbfAP
+         EcSYBzO/P29nV7E15460ySPlSVus7L2gKORhUXKhQdWxmNmNaM8fcgBR9Zwl7D+KtMFo
+         /qaRTJm0JIN7MqRWPi+uz6bfpL80wg9AqjQeayqOoPxUYht3SpqxtMS2fh2gvOiYXmok
+         6iCG1fdPB6t6EiLF8/qNQ6Csji176ojxpeechSSqnzH5P6PHQIEU7ttdxdbABtpmifEM
+         +YRy3mLJS8LtW63RK+z/xzv7/V15zUc3PfjXFgmUQ9xSVAbKMK+j1K8sHa+y5Cge9snC
+         gSMQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUZ/pZx4ZgGkNSz6gL2VOcUCTYTm4II2wHK366YEtRS/+laNQmjrkw/fepKB28WaigvZ+shsn/o29GDyi205H96@vger.kernel.org, AJvYcCWXDs0hZE+m4iV4MpK0ukhRlwMgfmoTnoq4HdOvoHF/Lbz9qB7ART5FqA41PlA1nshdjS0=@vger.kernel.org, AJvYcCWoGsJ9oUg9cWfcw3NLx6I+Hv8zzI9xoeiHnx2sQ+YH0qFJxShUiycLOH4s7J6kvjvziAcc9LaV@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxw8bLbu4Ou3CMJ/QZOxDhbjiWk4R6EcLqXRaYOlEOhDnbnOi++
+	3xfzzqk0upqPtKezGNlTFuRXb/KbIaTYVFCj3PiwRxkkVsvtc+Ubu1jQ9tAnxg==
+X-Gm-Gg: ASbGncsxjl5XTfFwRsR1OP0BJg7lACHAgdFumMfMYpSwPyJphc+4D8eknnLPRXeqOao
+	V+b6x/7zQ9baRL3vxlME9wrF9AjLUAa4Sp/tMAJCkcTB14bC2tN+Fm4J6+jYuCv6kufKtTetWbr
+	1nLwz8CsrvUvwp8QCqhn5LkjDuq4B7KHxQXygOuPHZlIOMaKmQDH3mNEV5KNLX2tZwx+edrLeXM
+	C2qYYuqVb74SKwl1jlj89s2wl59TrHqTP0RrVY/KFYoXsCZlX9vRrn7lUpAbe9ALBvxcVAfxz6j
+	VbMgR8wAtIJ6XliwvwIH7vfLFdOMTAnLFkZx7yK8mqENPn3p+kiCnQ==
+X-Google-Smtp-Source: AGHT+IFVKDXRSM/7QlhW8X/iY/vWLuI93QWpeJcbvGgdIWUfRuFXIxogGi5q4e81CMsYHkVbjNqP/Q==
+X-Received: by 2002:a05:6402:40c5:b0:606:df70:7aa2 with SMTP id 4fb4d7f45d1cf-611a6f3ef46mr1239856a12.31.1752052109427;
+        Wed, 09 Jul 2025 02:08:29 -0700 (PDT)
+Received: from localhost ([2a03:2880:30ff:70::])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-60fcb0c790dsm8538029a12.37.2025.07.09.02.08.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Jul 2025 02:08:28 -0700 (PDT)
+From: Breno Leitao <leitao@debian.org>
+Subject: [PATCH net-next v5 0/3] selftest: net: Add selftest for netpoll
+Date: Wed, 09 Jul 2025 02:08:14 -0700
+Message-Id: <20250709-netpoll_test-v5-0-b3737895affe@debian.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v3 5/7] bpf: Remove attach_type in bpf_netns_link
-To: Jakub Sitnicki <jakub@cloudflare.com>
-Cc: daniel@iogearbox.net, razor@blackwall.org, andrew+netdev@lunn.ch,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, ast@kernel.org, andrii@kernel.org, martin.lau@linux.dev,
- eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev,
- john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
- haoluo@google.com, jolsa@kernel.org, mattbobrowski@google.com,
- rostedt@goodmis.org, mhiramat@kernel.org, mathieu.desnoyers@efficios.com,
- horms@kernel.org, willemb@google.com, pablo@netfilter.org,
- kadlec@netfilter.org, hawk@kernel.org, bpf@vger.kernel.org,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, netfilter-devel@vger.kernel.org,
- coreteam@netfilter.org
-References: <20250709030802.850175-1-chen.dylane@linux.dev>
- <20250709030802.850175-6-chen.dylane@linux.dev>
- <874ivlg4fq.fsf@cloudflare.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Tao Chen <chen.dylane@linux.dev>
-In-Reply-To: <874ivlg4fq.fsf@cloudflare.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAH4xbmgC/23PwYqDMBDG8VcJc3aWOEkc9bTvsSzFJmMbKLFok
+ C7Fdy91D+vanoff92fuMMkYZYJW3WGUOU5xSNAqVyjw5y6dBGOAVgFpcroqCZPk63C5HLJMGbv
+ SkA2kHfsaCgXXUfp4W+e+IEnGJLcM34WCc5zyMP6snblc7+8n5xJLtMy2D41rjOk/gxxjlz6G8
+ fRM/CrSb5TTVV0b6pl6v1XP/kybJrmdJtRoORAzOyJ61WareacNanTsjoG09nXXvGj7p1nv/7W
+ o0YsnYqldZf7rZVke7/8wVKMBAAA=
+X-Change-ID: 20250612-netpoll_test-a1324d2057c8
+To: Andrew Lunn <andrew+netdev@lunn.ch>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>
+Cc: linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, 
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>, bpf@vger.kernel.org, 
+ kernel-team@meta.com, Breno Leitao <leitao@debian.org>, 
+ Willem de Bruijn <willemb@google.com>
+X-Mailer: b4 0.15-dev-dd21f
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3426; i=leitao@debian.org;
+ h=from:subject:message-id; bh=4oP/BxQ13aamcUJCA30PvuCdZJb618zDuY0b6VNikI0=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBobjGLCka0PhRapUGcKAOYG1LziuVAG+bSZzBNR
+ vK/d940zuKJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaG4xiwAKCRA1o5Of/Hh3
+ bUuOD/46pfHqzsum11VFl4bHz3EmIf5Dwg8DsZPZsAuqvip1bLcVfgSH4wpZ07vLUdZRZLLdZ/K
+ NIh1jMAGzcHv9n0GAFmYT3jwVcrRtg2xNtoNE2Mx3YGub0sgz5ZXhVkWRA3hE5AGfLKx2H4BYbw
+ yhWeduw2rKPc3Yhe0Z7KooV1qD1phFlKSKREIRYGFmOsHScDNupY09uvSST1qRQIDIv1z4Eh+d8
+ xo7o1dk2JU9zEA1VxWiYTisRL6NVlvtd5uqnCPShchCsp777rCZobe0CLVY2zL1IF0ytwsYqs85
+ JZldcuzYgOBX1cUd2lBAEfHtd03S4YEli4WnnSJwGkNhPA/YRIaAlkkEoTkcPduzVQyllwCd4Iz
+ Y+35U7+HMspMDI0KC89BlWnke+OcrtURmNdU4Ek1pe1T8VWbNVMZFuhRvruYj/uIm9d1GosGEK3
+ okIZhv0yIHRGQZxk3crKWAM9Bydhtg/UiyzDKqDQt4b5n/MHf4s35wN8EYLG09ybn4yhESTXNXP
+ RraYAXU2WJ1objji3zIsmGdKuWMQ/FIsQo8QnYeejv3p7jIt4KG+S2kAPsjmmYsTewHicwiROdm
+ CuFhbjdbZcahKGDdRycem9Jt7VfzkLEfgXoDJIpmq6WV3pcqVfmMz7LaE0h6f6qUr2LYlaT24GH
+ vAWWBTXY2+bpOWA==
+X-Developer-Key: i=leitao@debian.org; a=openpgp;
+ fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
 
-在 2025/7/9 16:21, Jakub Sitnicki 写道:
-> On Wed, Jul 09, 2025 at 11:08 AM +08, Tao Chen wrote:
->> Use attach_type in bpf_link, and remove it in bpf_netns_link.
->>
->> Acked-by: Jiri Olsa <jolsa@kernel.org>
->> Signed-off-by: Tao Chen <chen.dylane@linux.dev>
->> ---
->>   kernel/bpf/net_namespace.c | 6 ++----
->>   1 file changed, 2 insertions(+), 4 deletions(-)
->>
->> diff --git a/kernel/bpf/net_namespace.c b/kernel/bpf/net_namespace.c
->> index 63702c86275..6d27bd97c95 100644
->> --- a/kernel/bpf/net_namespace.c
->> +++ b/kernel/bpf/net_namespace.c
->> @@ -11,7 +11,6 @@
->>   
->>   struct bpf_netns_link {
->>   	struct bpf_link	link;
->> -	enum bpf_attach_type type;
->>   	enum netns_bpf_attach_type netns_type;
->>   
->>   	/* We don't hold a ref to net in order to auto-detach the link
-> 
-> Nit: Doesn't that create a hole? Maybe move netns_type to the end.
-> 
+I am submitting a new selftest for the netpoll subsystem specifically
+targeting the case where the RX is polling in the TX path, which is
+a case that we don't have any test in the tree today. This is done when
+netpoll_poll_dev() called, and this test creates a scenario when that is
+probably.
 
-Hi Jakub,
-You are right, i will change it in v4, thanks.
+The test does the following:
 
-pahole -C bpf_netns_link vmlinux
-struct bpf_netns_link {
-	struct bpf_link            link __attribute__((__aligned__(8))); /* 
-0    80 */
+ 1) Configuring a single RX/TX queue to increase contention on the
+    interface.
+ 2) Generating background traffic to saturate the network, mimicking
+    real-world congestion.
+ 3) Sending netconsole messages to trigger netpoll polling and monitor
+    its behavior.
+ 4) Using dynamic netconsole targets via configfs, with the ability to
+    delete and recreate targets during the test.
+ 5) Running bpftrace in parallel to verify that netpoll_poll_dev() is
+    called when expected. If it is called, then the test passes,
+    otherwise the test is marked as skipped.
 
-	/* XXX last struct has 7 bytes of padding */
+In order to achieve it, I stole Jakub's bpftrace helper from [1], and
+did some small changes that I found useful to use the helper.
 
-	/* --- cacheline 1 boundary (64 bytes) was 16 bytes ago --- */
-	enum netns_bpf_attach_type netns_type;           /*    80     4 */
+So, this patchset basically contains:
 
-	/* XXX 4 bytes hole, try to pack */
+ 1) The code stolen from Jakub
+ 2) Improvements on bpftrace() helper
+ 3) The selftest itself
 
-	struct net *               net;                  /*    88     8 */
-	struct list_head           node;                 /*    96    16 */
+Link: https://lore.kernel.org/all/20250421222827.283737-22-kuba@kernel.org/ [1]
 
-	/* size: 112, cachelines: 2, members: 4 */
-	/* sum members: 108, holes: 1, sum holes: 4 */
-	/* paddings: 1, sum paddings: 7 */
-	/* forced alignments: 1 */
-	/* last cacheline: 48 bytes */
-} __attribute__((__aligned__(8)));
+---
+Changes in v5:
+- Rebased on top of net-next.
+- Calling bpftrace_stop using the defer helper. (Willem)
+- Link to v4: https://lore.kernel.org/r/20250702-netpoll_test-v4-0-cec227e85639@debian.org
 
-> [...]
+Changes in v4:
+- Make the test XFail if it doesn't hit the function we are looking for
+- Toggle the interface while the traffic is flowing.
+- Bumped the number of messages from 10 to 40 per iterations.
+   * This is hitting ~15 times per run on my vng test.
+- Decreased the time from 15 seconds to 10 seconds, given that if
+  it didn't hit the function in 10 seconds, 5 seconds extra will not
+  help.
+- Link to v3: https://lore.kernel.org/r/20250627-netpoll_test-v3-0-575bd200c8a9@debian.org
 
+Changes in v3:
+- Make pylint happy (Simon)
+- Remove the unnecessary patch in bpftrace to raise an exception when it
+  fails. (Jakub)
+- Improved the bpftrace code (Willem)
+- Stop sending messages if bpftrace is not alive anymore.
+- Link to v2: https://lore.kernel.org/r/20250625-netpoll_test-v2-0-47d27775222c@debian.org
 
--- 
-Best Regards
-Tao Chen
+Changes in v2:
+- Stole Jakub's helper to run bpftrace
+- Removed the DEBUG option and moved logs to logging
+- Change the code to have a higher chance of calling netpoll_poll_dev().
+  In my current configuration, it is hitting multiple times during the
+  test.
+- Save and restore TX/RX queue size (Jakub)
+- Link to v1: https://lore.kernel.org/r/20250620-netpoll_test-v1-1-5068832f72fc@debian.org
+
+---
+Breno Leitao (2):
+      selftests: drv-net: Strip '@' prefix from bpftrace map keys
+      selftests: net: add netpoll basic functionality test
+
+Jakub Kicinski (1):
+      selftests: drv-net: add helper/wrapper for bpftrace
+
+ tools/testing/selftests/drivers/net/Makefile       |   1 +
+ .../selftests/drivers/net/lib/py/__init__.py       |   3 +-
+ .../testing/selftests/drivers/net/netpoll_basic.py | 366 +++++++++++++++++++++
+ tools/testing/selftests/net/lib/py/utils.py        |  35 ++
+ 4 files changed, 404 insertions(+), 1 deletion(-)
+---
+base-commit: 0234362d0af4649bc2ff745e94d06d0c6f0a46ce
+change-id: 20250612-netpoll_test-a1324d2057c8
+
+Best regards,
+--  
+Breno Leitao <leitao@debian.org>
+
