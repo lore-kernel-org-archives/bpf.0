@@ -1,57 +1,57 @@
 Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D63ED2F1994;
-	Thu, 10 Jul 2025 16:35:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A4002F002D;
+	Thu, 10 Jul 2025 16:36:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752165359; cv=none; b=iWRwqSbbYILJeHyklBtsNmi+/YMGD0XA+gwkL3KVazA0cJEEGBa7vATaMTEhj85j5Oacp9yLSZH+W4ifI2G0Gisesfb8Pi/RSL70/HbSlLgWyFUk9F++G+1qV2otOUlrHiOJ1n2/CRrEeepfLxet6J+oUjxz1219gv0YYYYB/us=
+	t=1752165362; cv=none; b=VhPd7K3uKLgRzxsGvcb2R+zfrLfKaJHZU2AcCjvt4S+JnQ0l1bqHP7gq2cVGbMW2XdvfO9kdHKpvCBhUnFZBLoB9Umq1DWSzEywu1SgsaM0v9ZwJFZ6m4H6HS315DzzbLjOiY1fasoQGy2QTFy6uPMVFF8JUsieW5b0iARwY71E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752165359; c=relaxed/simple;
-	bh=KYs1ceJENroDnUDxMw8CSyDdmDwONMFDpRkG9gCVQU0=;
+	s=arc-20240116; t=1752165362; c=relaxed/simple;
+	bh=enTOsuCqjALpapvYJ9I7QkN0U6oAXy2MiVcKV5e8ivY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=K4oZQGFdRIBk3QVhUEtMk189fDnfz72kE6FmLzX5OkV4joUGpjWysPO8iM661a8d5KRqub+MPEdLVgLwNeDm9h9KpyenHC1FB2a6uKMuWMM35zWrqrhWVQeqslvxGEh3YCqCbG2vlsM4EKlqsn6gaYyL1ryVcsnotdRJ0MU9l1c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=JZLheqKM; arc=none smtp.client-ip=148.163.158.5
+	 MIME-Version; b=t2gUi0DT6jQ04u2g00pkY0PCU8zE0Ao8R7Rq3TvdNo0Bjb68gR5CyhR/RV4cpnFSxz0ERkDc2RXlE7XCU+p9zx1abaB1IacLyM2P/MIB6dxs3zvZK6DPUPvxu790eNrbQ+7GA7pSii+nnLnVSGwwdgAGpq2/6qdcyIbnsB6rIJM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=MdOEuyXR; arc=none smtp.client-ip=148.163.158.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="JZLheqKM"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="MdOEuyXR"
 Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56AD5iuA028946;
-	Thu, 10 Jul 2025 16:35:34 GMT
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56AB7Aks023830;
+	Thu, 10 Jul 2025 16:35:33 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
 	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=KrkxlXID0uInFpjQ8
-	IQoc2pW64e8vi2BEAPTzF7Znlc=; b=JZLheqKMirWKx0B+sLwiyxFeg0EzUa8TI
-	DI0FQ7WSflnSOC3HAhHPZJB/yvWng6zNcFhchW6y4LKUuEOQjhyxTABOoNU4SJ+C
-	CwqFADXo4FU7n2zIpGJVyvv5C5Zr5NL5Qkgdins/w9WZ3XinxqEQYAX4nSYMkpWX
-	ACXmWdW/By5qgQLOMWLitVZnNVFrDIrNKcKir2hIXRpQ9ao4U7i+zsdMtr1vDjMF
-	OOVd1S5QtA5KQutybO44I6f98MG2sSRhAerHXxzU+MbYwsHe185YDzQkNmWmPUjo
-	jW8kO50vhV1YET/NPORePZXzt1U+zsAcmEzLCRv4uLoLKgSBwMvsw==
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 47ptjrd3bd-1
+	:mime-version:references:subject:to; s=pp1; bh=mWM+yaAd4FMlrFJ91
+	xRDMXfu+Sdz7jbSI0RwWQTtlr0=; b=MdOEuyXRp9KX/yA2bWS0zkivYONWTZPEC
+	xw3hlK3JA1bR/CgI1XvQXQPOxUpTZGN2O2gdr6mco2pcK5pfUQm0tCE08101z6C5
+	5SF1AJcPhmYxTBgwHoI6Ol4ILRVcpwccp/ABNclRtzKN37Qk8IMbax0THuQCjCmJ
+	CatK9/19MeoaBWl5ZerlfC0+0b7+QDgOzE4TCWqCweNvuAGTAbslIGxw+3TGujWb
+	HVYSs9R6rPt3945e7SCH50zh/WnvNVTd+007cbpGsAzN5vy2sVSdg+SHxUeIJ9Vi
+	FgD4Uq47ztH0UcNJ+aOUxkwDWHRW2bIR7bpwbZyC+CbH0gaYehKpw==
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 47ptjrd3bc-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 10 Jul 2025 16:35:33 +0000 (GMT)
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 56AF4hNf013616;
+	Thu, 10 Jul 2025 16:35:32 +0000 (GMT)
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 56AEGXmY025623;
 	Thu, 10 Jul 2025 16:35:32 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 47qgkm6bc6-1
+Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 47qfcpek07-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 10 Jul 2025 16:35:32 +0000
+	Thu, 10 Jul 2025 16:35:31 +0000
 Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 56AGZSJI12714314
+	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 56AGZRR135062190
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 10 Jul 2025 16:35:28 GMT
+	Thu, 10 Jul 2025 16:35:27 GMT
 Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 670A02004B;
-	Thu, 10 Jul 2025 16:35:28 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 9003120043;
+	Thu, 10 Jul 2025 16:35:27 +0000 (GMT)
 Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 27DFE20063;
-	Thu, 10 Jul 2025 16:35:28 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 529102004B;
+	Thu, 10 Jul 2025 16:35:27 +0000 (GMT)
 Received: from tuxmaker.lnxne.boe (unknown [9.152.85.9])
 	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Thu, 10 Jul 2025 16:35:28 +0000 (GMT)
+	Thu, 10 Jul 2025 16:35:27 +0000 (GMT)
 From: Jens Remus <jremus@linux.ibm.com>
 To: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
         bpf@vger.kernel.org, x86@kernel.org,
@@ -72,11 +72,10 @@ Cc: Jens Remus <jremus@linux.ibm.com>, Heiko Carstens <hca@linux.ibm.com>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         Jens Axboe <axboe@kernel.dk>, Florian Weimer <fweimer@redhat.com>,
-        Sam James <sam@gentoo.org>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>
-Subject: [RFC PATCH v1 15/16] PREREQ: x86/vdso: Enable sframe generation in VDSO
-Date: Thu, 10 Jul 2025 18:35:21 +0200
-Message-ID: <20250710163522.3195293-16-jremus@linux.ibm.com>
+        Sam James <sam@gentoo.org>
+Subject: [RFC PATCH v1 12/16] unwind_user/backchain: Introduce back chain user space unwinding
+Date: Thu, 10 Jul 2025 18:35:18 +0200
+Message-ID: <20250710163522.3195293-13-jremus@linux.ibm.com>
 X-Mailer: git-send-email 2.48.1
 In-Reply-To: <20250710163522.3195293-1-jremus@linux.ibm.com>
 References: <20250710163522.3195293-1-jremus@linux.ibm.com>
@@ -88,12 +87,12 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Authority-Analysis: v=2.4 cv=GL8IEvNK c=1 sm=1 tr=0 ts=686febd5 cx=c_pps a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17 a=Wb1JkmetP80A:10 a=VwQbUJbxAAAA:8 a=meVymXHHAAAA:8 a=6um0ROA3cFbXW2b5GMEA:9 a=2JgSa4NbpEOStq-L5dxp:22
-X-Proofpoint-ORIG-GUID: JRIN3E5Xi3FJ8BYjaneJzGrh9Og3E1E1
-X-Proofpoint-GUID: JRIN3E5Xi3FJ8BYjaneJzGrh9Og3E1E1
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzEwMDEzOSBTYWx0ZWRfXx90kOBlahgzh kaZOzdwX14SVgAmiIXxfeMUzpeMQ+s+hI7Mz0zZ3dQvL5DC9wgf2rJ+B5fGRBKhOsPCiVAjYskv WDj478bPA8OBYV3Q4jI8KMzC5f5MH2A6JtycY2zdZzBD/9LfHErPJN8E6HM82TOgS9TlfwL6yc3
- YZXkphRQmyQpdeGQUBt2PrkuzRmrAEkFl2uABwbHAf+1pUtjMewKugLTPpFRgRkdFuL10B0USbd F639aoSPt1jCdpDwfrKhA3qoLyUiIbMF6TWJ2IAznqDFSg99JaKGubopdE4l+Di92LL7pVio6O3 4Hyq1HPW3EVrJvp8lXevWnV3wa+zV2eMuoMMXAWc2KG7hnB7T1htjT0O9ebrvFWl6doFNsTtj4r
- CloP3ms6jUBp/dA6l+H+eUi7HPQU6/EkNRNECwe3PL3625bfDN2fpSTGwXLLU1AyBFLdBEjD
+X-Authority-Analysis: v=2.4 cv=GL8IEvNK c=1 sm=1 tr=0 ts=686febd4 cx=c_pps a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17 a=Wb1JkmetP80A:10 a=VnNF1IyMAAAA:8 a=lmyv6DA6xqyH8GGdWh0A:9
+X-Proofpoint-ORIG-GUID: ndzDO_VFZBLUlab7uuKnHmlevyGHUr6q
+X-Proofpoint-GUID: ndzDO_VFZBLUlab7uuKnHmlevyGHUr6q
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzEwMDEzOSBTYWx0ZWRfX79q1kXPe/vot zFjaFFocjr8DJBMJ52xxFHDOPbuU4oBNL9C5lrxtXW35UfVy9kdJunJqPVM190eWPBfxMk6mEez c/LpmIYe4thdQRR+jgIBYtRgYqbIYr5TShe1XAV9itjO7Pgvbxei9r/EVe/xLsQIlqq+JzUD6Fc
+ UkqywUS/GH7NgAicncOKZavvGdWZsPXu8ywRWE5elZr+mJxi6SUvGa1As8VC9hqTbKeZDB0gyLf IqMFXv42XkEGsYl+/OtPmep6GJcRaqXCn6/PGwkmWb6NBASAVWs7pNH4rWjtgABzlheH8aqOgWG oBFANsSjJwKzXcYPJhKjsZFxV042aCYS/dMINfShlIBxL5gTatOC1JqEufH+DLhMGGI7pbUDZi9
+ Dh2Il8jUJFl03EUbuOMJWFimGdT+FIJ5HemFUk0s2R8QScftgsFN1v4lK0dXo4XwiEMC3BCV
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
  definitions=2025-07-10_04,2025-07-09_01,2025-03-28_01
@@ -104,126 +103,168 @@ X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malware
  route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
  definitions=main-2507100139
 
-From: Josh Poimboeuf <jpoimboe@kernel.org>
+Add support for unwinding of user space using back chain to the
+unwind user interface.  Use it as secondary fallback for unwinding
+using SFrame, if that fails and the primary fallback using frame
+pointer is not available.
 
-Enable sframe generation in the VDSO library so kernel and user space
-can unwind through it.
-
-Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Signed-off-by: Jens Remus <jremus@linux.ibm.com>
 ---
-
-Notes (jremus):
-    Link: https://lore.kernel.org/all/20250425024023.173709192@goodmis.org/
-    
-    This is a prerequisite for patch "s390/vdso: Enable SFrame generation in
-    vDSO" to actually generate SFrame in vDSO, as it introduces config
-    option CONFIG_AS_SFRAME.
-
- arch/Kconfig                          |  3 +++
- arch/x86/entry/vdso/Makefile          | 10 +++++++---
- arch/x86/entry/vdso/vdso-layout.lds.S |  3 +++
- arch/x86/include/asm/dwarf2.h         |  5 ++++-
- 4 files changed, 17 insertions(+), 4 deletions(-)
+ arch/Kconfig                          |  6 ++++++
+ include/linux/unwind_user_backchain.h | 17 +++++++++++++++++
+ include/linux/unwind_user_types.h     |  1 +
+ kernel/unwind/Makefile                |  1 +
+ kernel/unwind/user.c                  | 24 +++++++++++++++++++++---
+ kernel/unwind/user_backchain.c        | 13 +++++++++++++
+ 6 files changed, 59 insertions(+), 3 deletions(-)
+ create mode 100644 include/linux/unwind_user_backchain.h
+ create mode 100644 kernel/unwind/user_backchain.c
 
 diff --git a/arch/Kconfig b/arch/Kconfig
-index 4fe16ad6f053..1c3daccd9072 100644
+index 9e28dffe42cb..4fe16ad6f053 100644
 --- a/arch/Kconfig
 +++ b/arch/Kconfig
-@@ -435,6 +435,9 @@ config HAVE_HARDLOCKUP_DETECTOR_ARCH
- 	  It uses the same command line parameters, and sysctl interface,
- 	  as the generic hardlockup detectors.
- 
-+config AS_SFRAME
-+	def_bool $(as-instr,.cfi_sections .sframe\n.cfi_startproc\n.cfi_endproc)
-+
+@@ -438,6 +438,12 @@ config HAVE_HARDLOCKUP_DETECTOR_ARCH
  config UNWIND_USER
  	bool
  
-diff --git a/arch/x86/entry/vdso/Makefile b/arch/x86/entry/vdso/Makefile
-index 54d3e9774d62..2dc0e0ca19a7 100644
---- a/arch/x86/entry/vdso/Makefile
-+++ b/arch/x86/entry/vdso/Makefile
-@@ -47,13 +47,17 @@ quiet_cmd_vdso2c = VDSO2C  $@
- $(obj)/vdso-image-%.c: $(obj)/vdso%.so.dbg $(obj)/vdso%.so $(obj)/vdso2c FORCE
- 	$(call if_changed,vdso2c)
- 
-+ifeq ($(CONFIG_AS_SFRAME),y)
-+  SFRAME_CFLAGS := -Wa,-gsframe
-+endif
++config HAVE_UNWIND_USER_BACKCHAIN
++	bool
++	select UNWIND_USER
++	help
++	  The arch supports unwinding of user space using back chain.
 +
- #
- # Don't omit frame pointers for ease of userspace debugging, but do
- # optimize sibling calls.
- #
- CFL := $(PROFILING) -mcmodel=small -fPIC -O2 -fasynchronous-unwind-tables -m64 \
-        $(filter -g%,$(KBUILD_CFLAGS)) -fno-stack-protector \
--       -fno-omit-frame-pointer -foptimize-sibling-calls \
-+       -fno-omit-frame-pointer $(SFRAME_CFLAGS) -foptimize-sibling-calls \
-        -DDISABLE_BRANCH_PROFILING -DBUILD_VDSO
+ config HAVE_UNWIND_USER_FP
+ 	bool
+ 	select UNWIND_USER
+diff --git a/include/linux/unwind_user_backchain.h b/include/linux/unwind_user_backchain.h
+new file mode 100644
+index 000000000000..daae74c97c54
+--- /dev/null
++++ b/include/linux/unwind_user_backchain.h
+@@ -0,0 +1,17 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _LINUX_UNWIND_USER_BACKCHAIN_H
++#define _LINUX_UNWIND_USER_BACKCHAIN_H
++
++struct unwind_user_state;
++
++#ifdef CONFIG_HAVE_UNWIND_USER_BACKCHAIN
++
++extern int unwind_user_backchain_next(struct unwind_user_state *state);
++
++#else /* !CONFIG_HAVE_UNWIND_USER_BACKCHAIN */
++
++static inline int unwind_user_backchain_next(struct unwind_user_state *state) { return -EINVAL; }
++
++#endif /* !CONFIG_HAVE_UNWIND_USER_BACKCHAIN */
++
++#endif /* _LINUX_UNWIND_USER_BACKCHAIN_H */
+diff --git a/include/linux/unwind_user_types.h b/include/linux/unwind_user_types.h
+index 57fd16e314cf..41b1bc082cb1 100644
+--- a/include/linux/unwind_user_types.h
++++ b/include/linux/unwind_user_types.h
+@@ -14,6 +14,7 @@ enum unwind_user_type {
+ 	UNWIND_USER_TYPE_FP,
+ 	UNWIND_USER_TYPE_COMPAT_FP,
+ 	UNWIND_USER_TYPE_SFRAME,
++	UNWIND_USER_TYPE_BACKCHAIN,
+ };
  
- ifdef CONFIG_MITIGATION_RETPOLINE
-@@ -63,7 +67,7 @@ endif
- endif
+ struct unwind_stacktrace {
+diff --git a/kernel/unwind/Makefile b/kernel/unwind/Makefile
+index 146038165865..38cef261abcb 100644
+--- a/kernel/unwind/Makefile
++++ b/kernel/unwind/Makefile
+@@ -1,2 +1,3 @@
+  obj-$(CONFIG_UNWIND_USER)		+= user.o deferred.o
++ obj-$(CONFIG_HAVE_UNWIND_USER_BACKCHAIN)	+= user_backchain.o
+  obj-$(CONFIG_HAVE_UNWIND_USER_SFRAME)	+= sframe.o
+diff --git a/kernel/unwind/user.c b/kernel/unwind/user.c
+index ee00d39d2a8e..3c3f75bc146b 100644
+--- a/kernel/unwind/user.c
++++ b/kernel/unwind/user.c
+@@ -7,6 +7,7 @@
+ #include <linux/sched.h>
+ #include <linux/sched/task_stack.h>
+ #include <linux/unwind_user.h>
++#include <linux/unwind_user_backchain.h>
+ #include <linux/uaccess.h>
+ #include <linux/sframe.h>
  
- $(vobjs): KBUILD_CFLAGS := $(filter-out $(PADDING_CFLAGS) $(CC_FLAGS_LTO) $(CC_FLAGS_CFI) $(RANDSTRUCT_CFLAGS) $(GCC_PLUGINS_CFLAGS) $(RETPOLINE_CFLAGS),$(KBUILD_CFLAGS)) $(CFL)
--$(vobjs): KBUILD_AFLAGS += -DBUILD_VDSO
-+$(vobjs): KBUILD_AFLAGS += -DBUILD_VDSO $(SFRAME_CFLAGS)
- 
- #
- # vDSO code runs in userspace and -pg doesn't help with profiling anyway.
-@@ -104,7 +108,7 @@ $(obj)/%-x32.o: $(obj)/%.o FORCE
- 
- targets += vdsox32.lds $(vobjx32s-y)
- 
--$(obj)/%.so: OBJCOPYFLAGS := -S --remove-section __ex_table
-+$(obj)/%.so: OBJCOPYFLAGS := -g --remove-section __ex_table
- $(obj)/%.so: $(obj)/%.so.dbg FORCE
- 	$(call if_changed,objcopy)
- 
-diff --git a/arch/x86/entry/vdso/vdso-layout.lds.S b/arch/x86/entry/vdso/vdso-layout.lds.S
-index ec1ac191a057..c57cfddfc37d 100644
---- a/arch/x86/entry/vdso/vdso-layout.lds.S
-+++ b/arch/x86/entry/vdso/vdso-layout.lds.S
-@@ -59,6 +59,7 @@ SECTIONS
- 	.eh_frame_hdr	: { *(.eh_frame_hdr) }		:text	:eh_frame_hdr
- 	.eh_frame	: { KEEP (*(.eh_frame)) }	:text
- 
-+	.sframe		: { *(.sframe) }		:text	:sframe
- 
- 	/*
- 	 * Text is well-separated from actual data: there's plenty of
-@@ -87,6 +88,7 @@ SECTIONS
-  * Very old versions of ld do not recognize this name token; use the constant.
-  */
- #define PT_GNU_EH_FRAME	0x6474e550
-+#define PT_GNU_SFRAME	0x6474e554
- 
- /*
-  * We must supply the ELF program headers explicitly to get just one
-@@ -98,4 +100,5 @@ PHDRS
- 	dynamic		PT_DYNAMIC	FLAGS(4);		/* PF_R */
- 	note		PT_NOTE		FLAGS(4);		/* PF_R */
- 	eh_frame_hdr	PT_GNU_EH_FRAME;
-+	sframe		PT_GNU_SFRAME;
+@@ -39,6 +40,12 @@ static inline bool sframe_state(struct unwind_user_state *state)
+ 	       state->type == UNWIND_USER_TYPE_SFRAME;
  }
-diff --git a/arch/x86/include/asm/dwarf2.h b/arch/x86/include/asm/dwarf2.h
-index 65d958ef1178..ce294e6c9017 100644
---- a/arch/x86/include/asm/dwarf2.h
-+++ b/arch/x86/include/asm/dwarf2.h
-@@ -12,8 +12,11 @@
- 	 * For the vDSO, emit both runtime unwind information and debug
- 	 * symbols for the .dbg file.
- 	 */
--
-+#if defined(__x86_64__) && defined(CONFIG_AS_SFRAME)
-+	.cfi_sections .eh_frame, .debug_frame, .sframe
-+#else
- 	.cfi_sections .eh_frame, .debug_frame
-+#endif
  
- #define CFI_STARTPROC		.cfi_startproc
- #define CFI_ENDPROC		.cfi_endproc
++static inline bool backchain_state(struct unwind_user_state *state)
++{
++	return IS_ENABLED(CONFIG_HAVE_UNWIND_USER_BACKCHAIN) &&
++	       state->type == UNWIND_USER_TYPE_BACKCHAIN;
++}
++
+ #define unwind_get_user_long(to, from, state)				\
+ ({									\
+ 	int __ret;							\
+@@ -66,12 +73,20 @@ static int unwind_user_next(struct unwind_user_state *state)
+ 		/* sframe expects the frame to be local storage */
+ 		frame = &_frame;
+ 		if (sframe_find(state->ip, frame, topmost)) {
+-			if (!IS_ENABLED(CONFIG_HAVE_UNWIND_USER_FP))
+-				goto done;
+-			frame = &fp_frame;
++			if (IS_ENABLED(CONFIG_HAVE_UNWIND_USER_FP)) {
++				frame = &fp_frame;
++			} else if (IS_ENABLED(CONFIG_HAVE_UNWIND_USER_BACKCHAIN)) {
++				if (unwind_user_backchain_next(state))
++					goto done;
++				goto done_backchain;
++			}
+ 		}
+ 	} else if (fp_state(state)) {
+ 		frame = &fp_frame;
++	} else if (backchain_state(state)) {
++		if (unwind_user_backchain_next(state))
++			goto done;
++		goto done_backchain;
+ 	} else {
+ 		goto done;
+ 	}
+@@ -153,6 +168,7 @@ static int unwind_user_next(struct unwind_user_state *state)
+ 
+ 	arch_unwind_user_next(state);
+ 
++done_backchain:
+ 	state->topmost = false;
+ 	return 0;
+ 
+@@ -178,6 +194,8 @@ static int unwind_user_start(struct unwind_user_state *state)
+ 		state->type = UNWIND_USER_TYPE_SFRAME;
+ 	else if (IS_ENABLED(CONFIG_HAVE_UNWIND_USER_FP))
+ 		state->type = UNWIND_USER_TYPE_FP;
++	else if (IS_ENABLED(CONFIG_HAVE_UNWIND_USER_BACKCHAIN))
++		state->type = UNWIND_USER_TYPE_BACKCHAIN;
+ 	else
+ 		state->type = UNWIND_USER_TYPE_NONE;
+ 
+diff --git a/kernel/unwind/user_backchain.c b/kernel/unwind/user_backchain.c
+new file mode 100644
+index 000000000000..5b60a3d4f34f
+--- /dev/null
++++ b/kernel/unwind/user_backchain.c
+@@ -0,0 +1,13 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#define pr_fmt(fmt)	"backchain: " fmt
++
++#include <linux/sched.h>
++#include <linux/unwind_user.h>
++#include <linux/unwind_user_backchain.h>
++#include <asm/unwind_user_backchain.h>
++
++int unwind_user_backchain_next(struct unwind_user_state *state)
++{
++	return arch_unwind_user_backchain_next(state);
++}
 -- 
 2.48.1
 
