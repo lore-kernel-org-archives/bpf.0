@@ -1,88 +1,84 @@
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 110102F0C50;
-	Thu, 10 Jul 2025 16:27:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B2D1271441;
+	Thu, 10 Jul 2025 16:35:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752164871; cv=none; b=Q9KJbr483Rzm1f8ZCEtt2r387NLvFb1DsCbFsYX+inO/8EIiQr8J7GWG/O3y/q+yNQrkJ/yzhxJrTQZtichI//B+eLb0E8Vq/38wXJ7XI+MsLp1T8s8C6Kph/1Qg7sG+miMEhnruh+y5MzHOiIGv14YV7bgbNqSXkSHxkDPEx3E=
+	t=1752165353; cv=none; b=m8srOcf273jIrgth3nZVIdTTg3mlXzHs1XzeA47oer4QMxwAtB1YQ8Sny+2W2bUhDGEWEBSatYcQgl0mr8Ml+S5tIx1w8MvjPCm7rKwmhoqu58HP2FVr8z8Vmo57YQ04b9NM6ysnKzvpCbGNhKz4faxTQG1oXkKQjIPPufqHrQc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752164871; c=relaxed/simple;
-	bh=DvFlR5aW86yPe+1lde5CxO1YM7etXrMOcAvLOufI/eg=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Pa8TB4RSHpU4yxq6G/heUWzuPC3J/B4scoiQX/pQRg0ioj4hlg9xxh8ol3SD6fJFA25KtuLekyTuUm5qsaRFaUxRIkhlvdM55g46/ct1fYaiwie6U9jLCFZe5VkL2pTWEk2UVJJSdCu64GqH43lf6YlqSUz3Q7ZDoqhQQE2VCN8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mcRYN7ZA; arc=none smtp.client-ip=209.85.210.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1752165353; c=relaxed/simple;
+	bh=WeMe4aAFoj8CCDszqd7zTqOwo34LjyucoBCk9E/sNAg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=YDRxU1NGvmDP3sLvkoto9T/Ki/F0EnptVq8RqoG3AcenY4CyL05fsNBJ3+r6vHntoDlOAmsl7w35AEjLtvawwq1o8yc+zloZdomB7vZrhT1rAudwKgU/h2YewDIghg5x5XxkCb+etkZuzfmEM1/hK+V4mTSFTEIxWEWoOCFURg4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=YLHh1Chu; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mcRYN7ZA"
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-73972a54919so1094078b3a.3;
-        Thu, 10 Jul 2025 09:27:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752164869; x=1752769669; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1BYPbCSIwivsMBLKvSdWxmNEsZsKhpWfufy1kkW0+hY=;
-        b=mcRYN7ZAqUbcr9vvvg4esU0gS0naRa2tzjAwzuI4lg7F48olUMYSi9U+EJONE0vRPH
-         oZT7GHMv9dNkKlkBSUZsC98Vn9opijxC/ASZJgq55FUtyFBvgU3eZ0i2tTRPVjS8/6xe
-         XrNWwLCg9nbX52s0LV+zsRz+OAOidOj+3nFV5eBQmfZsnX+xoe9GManWbbS0GlYGz/B3
-         8x68tmLVOHextcJ/OYSJtYlZpYxIfFQJYiIGntQSaqBFJDKFt17xeEMosqLwEYREKHzd
-         BYSXlKZDFWVWih7F1nv56JJcKOHyh0Fc5QoGsBlx0Y9NFI3xr18EEu0POF8FclKzIeuS
-         jTxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752164869; x=1752769669;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1BYPbCSIwivsMBLKvSdWxmNEsZsKhpWfufy1kkW0+hY=;
-        b=MjX0MY7tI/d5gPsoZChmebRQjk8g4Bv7SGnVrlCJ8LwUfGoQ6XEBcu7hLgVbRgCMZI
-         xghVHpPs8azAUCF9Pjomdji5sLguG1T3VqeXU2r/QzkU7F1CCy0z/wdDD9sSQYpv0f5b
-         3u/G+2+MIKrktNf/8E0o1vuCym/PMSUnOGIU1ZWBqMHmnlT0l8YvkxM+yAljEXdTiRs5
-         buefFhmpuyDAFqxloQb1XTdnVCRQcUeOQOg1KRq/bXBbUpNbnE2IkXtPEnT9EiXUjTSD
-         5P/dLuPh57TqUe8vzYQePMjxZHWb+KRjH0XpA4/w8opXjlaf6HssKFSg9qubuDxiRwLH
-         F2Iw==
-X-Forwarded-Encrypted: i=1; AJvYcCUOYBARm5cz7mXf7cDV/MefNATdpMZTihjbQ5ez5otbNRl6FV+KDu41jqYjSN9bynFp6XU=@vger.kernel.org, AJvYcCWOU9QaddXbP5RjDL3YUfZscW7WNUNtChp5sQb5QlRnuvHQa6L7BeF8a7j87hn2Kb17Is3Io6vhTmvUWEGB@vger.kernel.org, AJvYcCXAASunYdoitpMl7Ebs2WucW8ty3RiiV/nWpx52j3AqF4U7j6iLDu/BeSbA3pyowrq7yYovf9bxFqCMYVZo3kn+@vger.kernel.org
-X-Gm-Message-State: AOJu0Yys4YHoWef0bUQbWCykBbFytMDDCc2s2Uau45d6jmdF5vyNYm2m
-	3ZgwXdpV/up/srfdNZ5vd2GkROUYF86+lxz1IWNaU5GtQUYl1XRCU7sF
-X-Gm-Gg: ASbGnctFHpWBIlWmiIdQkTeuQlh79HGU5EX7yNzGIEor3TT1wnXkf827yspmtYvJSyF
-	F04POoDkcuObEU9bPy1SlTzD8n16LAllSsPF6kVbBRkw7FSxFdney3ichQJJ+uf/zXZE+CpH/cy
-	+XbXUDKXvfL/wYuxX91yJnmGjcY99+PAC9ccrBvjsu5fS0JiRluHTMIrSizuSYxUUYbtTTS9k0d
-	wtG6NzZz2E3P2BuqoVc6bdXaPQHEbzOaAZ1etTuUWcEN6K/a2R44triFVwGy9heo5+OrRtaHCr1
-	vqG4GP4yKGP+VYPYacXeEh8bIxziUR628fKeFdsy/67zabYk0MefZIw39aRc9l4=
-X-Google-Smtp-Source: AGHT+IGORneXs3KPwTzhvEbXdkzIsp6rMKf81/nZyIdT2xkOejVHhvtR6CD5mm+LdSJslhaRrmlUuQ==
-X-Received: by 2002:a05:6a00:889:b0:740:6f69:f52a with SMTP id d2e1a72fcca58-74eb8c2c2f2mr5279323b3a.0.1752164869116;
-        Thu, 10 Jul 2025 09:27:49 -0700 (PDT)
-Received: from ubuntu2404.. ([60.176.129.123])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-74eb9f25269sm2690418b3a.107.2025.07.10.09.27.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Jul 2025 09:27:48 -0700 (PDT)
-From: KaFai Wan <mannkafai@gmail.com>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	john.fastabend@gmail.com,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	mykolal@fb.com,
-	shuah@kernel.org,
-	mannkafai@gmail.com,
-	laoar.shao@gmail.com,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next 3/3] selftests/bpf: Add selftest for attaching tracing to __btf_id functions
-Date: Fri, 11 Jul 2025 00:27:17 +0800
-Message-ID: <20250710162717.3808020-4-mannkafai@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250710162717.3808020-1-mannkafai@gmail.com>
-References: <20250710162717.3808020-1-mannkafai@gmail.com>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="YLHh1Chu"
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56ACJJav010221;
+	Thu, 10 Jul 2025 16:35:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:date:from:in-reply-to:message-id
+	:mime-version:references:subject:to; s=pp1; bh=a2QnHXfSjqiJcYDdg
+	SLbDeTmwAq43ZDRI3vvdFCTwp8=; b=YLHh1ChufYeacNR0LblxBCU/PThYOBH8u
+	imhtso02uTaZA8Mpeh9k355DJe76tMqMTgwcAUDLEtCsVsJ4rEECUXzo5UVkF3E3
+	RC741d2bALqf5232cXqw2hefs7FAJy/DxpG/ieMUC8hHcT2KyX61NICNFujYwcLG
+	PQMvfBwsuYEDX0olG4rUgwmSyTKa3W91EhlmmKPxiYzBTmRmIHbk4xw+54Le8EM+
+	kiZDlnkVHEN3H+1IYc0ccZ0RaBe6cSeSFGFimprTO4bulr/Bg0kX0O/JqlS7Bjcs
+	H/E0Ej3IG8m9NDvT3ZJZRA7WFYLwOZqbG+nJET6umdjS2FPhvaVvw==
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 47svb26ate-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 10 Jul 2025 16:35:30 +0000 (GMT)
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 56AEdWPo003123;
+	Thu, 10 Jul 2025 16:35:30 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 47qfvmpenb-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 10 Jul 2025 16:35:30 +0000
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 56AGZQSN13304230
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 10 Jul 2025 16:35:26 GMT
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 3B65020040;
+	Thu, 10 Jul 2025 16:35:26 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id E9F5E2004E;
+	Thu, 10 Jul 2025 16:35:25 +0000 (GMT)
+Received: from tuxmaker.lnxne.boe (unknown [9.152.85.9])
+	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Thu, 10 Jul 2025 16:35:25 +0000 (GMT)
+From: Jens Remus <jremus@linux.ibm.com>
+To: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, x86@kernel.org,
+        Steven Rostedt <rostedt@kernel.org>
+Cc: Jens Remus <jremus@linux.ibm.com>, Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Indu Bhagat <indu.bhagat@oracle.com>,
+        "Jose E. Marchesi" <jemarch@gnu.org>,
+        Beau Belgrave <beaub@linux.microsoft.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>, Florian Weimer <fweimer@redhat.com>,
+        Sam James <sam@gentoo.org>
+Subject: [RFC PATCH v1 07/16] unwind_user: Enable archs that do not necessarily save RA
+Date: Thu, 10 Jul 2025 18:35:13 +0200
+Message-ID: <20250710163522.3195293-8-jremus@linux.ibm.com>
+X-Mailer: git-send-email 2.48.1
+In-Reply-To: <20250710163522.3195293-1-jremus@linux.ibm.com>
+References: <20250710163522.3195293-1-jremus@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -90,65 +86,263 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzEwMDEzOSBTYWx0ZWRfX1fZS5HfnoCKn covDhxdqgyesad77GoNAbsLf1DclPuRfgEHTX/rMgCd3FMzzYBKqlAItLiFmtU/50q3h9UgiK30 E8SWutf3k4txyxRNer1l38dJLamaB0kiKnddvJiQE0/Z1fgZDD0llZ8cpuOE/FykWh852HFIYH3
+ 3aGHC2LXmEKlUQz4o7Es5KITLWz4g5qVhKmq3ArnY3WmrYpYtsiGmDvio6ckhxAoumjHrQHtYl5 HVn9NfFYtI65vvfAfSP0/U0ZHu56xqrg8JhEAruTvDS9VU11EazxLQOjRViFXLRqgxAOY1bcnRF IC+g46pN2iJzoU6VtFegUeZgfGdjsApzcI0ku4z0tteKAvIG5YHjy4qriOJ4YSZgnSWJfOpjDgE
+ mbf0pRFujsE9YXRmngshM5O9Ah85Z6XQxIygK24AR3w3E09vWByl6DtSLVexzos2SLmz81kH
+X-Authority-Analysis: v=2.4 cv=Y774sgeN c=1 sm=1 tr=0 ts=686febd3 cx=c_pps a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17 a=Wb1JkmetP80A:10 a=VnNF1IyMAAAA:8 a=-JoFLTHXnnuQBJsBKZgA:9
+X-Proofpoint-ORIG-GUID: FzkgWJBakICnhs7gazxtaS3x9RVSQtcu
+X-Proofpoint-GUID: FzkgWJBakICnhs7gazxtaS3x9RVSQtcu
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
+ definitions=2025-07-10_04,2025-07-09_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 adultscore=0
+ priorityscore=1501 malwarescore=0 bulkscore=0 impostorscore=0
+ lowpriorityscore=0 phishscore=0 suspectscore=0 mlxlogscore=999 mlxscore=0
+ clxscore=1015 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
+ definitions=main-2507100139
 
-The reuslt:
+Not all architectures have the return address (RA) in user space saved
+on the stack on function entry, as x86-64 does due to its CALL
+instruction pushing the RA onto the stack.  Architectures/ABIs, such as
+s390, also do not necessarily enforce to save the RA in user space on
+the stack in the function prologue or even at all, for instance in leaf
+functions.
 
-  $ tools/testing/selftests/bpf/test_progs --name=tracing_btf_ids
-  #467/1   tracing_btf_ids/btf_ids:OK
-  #467     tracing_btf_ids:OK
-  Summary: 1/1 PASSED, 0 SKIPPED, 0 FAILED
+Treat a RA offset from CFA of zero as indication that the RA is not
+saved on the stack.  In that case obtain the RA from the RA register.
+Allow the SP to be unchanged in the topmost frame, for architectures
+where SP at function entry == SP at call site.
 
-Signed-off-by: KaFai Wan <mannkafai@gmail.com>
+Note that treating a RA offset from CFA of zero as indication that
+the RA is not saved on the stack additionally allows for architectures,
+such as s390, where the frame pointer (FP) may be saved without the RA
+being saved as well.  Provided that such architectures represent this
+in SFrame by encoding the "missing" RA offset using a padding RA offset
+with a value of zero.
+
+Signed-off-by: Jens Remus <jremus@linux.ibm.com>
 ---
- .../selftests/bpf/prog_tests/tracing_btf_ids.c   | 16 ++++++++++++++++
- .../selftests/bpf/progs/tracing_btf_ids.c        | 15 +++++++++++++++
- 2 files changed, 31 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/tracing_btf_ids.c
- create mode 100644 tools/testing/selftests/bpf/progs/tracing_btf_ids.c
+ arch/Kconfig                      |  5 +++++
+ include/linux/ptrace.h            |  8 ++++++++
+ include/linux/sframe.h            |  4 ++--
+ include/linux/unwind_user_types.h |  1 +
+ kernel/unwind/sframe.c            | 21 +++++++++++---------
+ kernel/unwind/user.c              | 32 ++++++++++++++++++++++---------
+ 6 files changed, 51 insertions(+), 20 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/tracing_btf_ids.c b/tools/testing/selftests/bpf/prog_tests/tracing_btf_ids.c
-new file mode 100644
-index 000000000000..b45b9ac3630c
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/tracing_btf_ids.c
-@@ -0,0 +1,16 @@
-+// SPDX-License-Identifier: GPL-2.0
+diff --git a/arch/Kconfig b/arch/Kconfig
+index 86eec85cb898..367eaf7e62e0 100644
+--- a/arch/Kconfig
++++ b/arch/Kconfig
+@@ -450,6 +450,11 @@ config HAVE_UNWIND_USER_SFRAME
+ 	bool
+ 	select UNWIND_USER
+ 
++config HAVE_USER_RA_REG
++	bool
++	help
++	  The arch passes the return address (RA) in user space in a register.
 +
-+#include <test_progs.h>
-+#include "tracing_btf_ids.skel.h"
-+
-+void test_tracing_btf_ids(void)
+ config SFRAME_VALIDATION
+ 	bool "Enable .sframe section debugging"
+ 	depends on HAVE_UNWIND_USER_SFRAME
+diff --git a/include/linux/ptrace.h b/include/linux/ptrace.h
+index 90507d4afcd6..a245c8586673 100644
+--- a/include/linux/ptrace.h
++++ b/include/linux/ptrace.h
+@@ -397,6 +397,14 @@ static inline void user_single_step_report(struct pt_regs *regs)
+ #define exception_ip(x) instruction_pointer(x)
+ #endif
+ 
++#ifndef user_return_address
++static inline unsigned long user_return_address(const struct pt_regs *regs)
 +{
-+	int btf_id;
-+
-+	// `migrate_disable` depends on `CONFIG_SMP`, may not exists
-+	btf_id = libbpf_find_vmlinux_btf_id("migrate_disable", BPF_TRACE_FENTRY);
-+	if (btf_id <= 0)
-+		return;
-+
-+	RUN_TESTS(tracing_btf_ids);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/tracing_btf_ids.c b/tools/testing/selftests/bpf/progs/tracing_btf_ids.c
-new file mode 100644
-index 000000000000..92a7f2e9fb89
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/tracing_btf_ids.c
-@@ -0,0 +1,15 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include "bpf_misc.h"
-+
-+char _license[] SEC("license") = "GPL";
-+
-+SEC("fentry/migrate_disable")
-+__failure __msg("Attaching tracing to __btf_id function 'migrate_disable' is rejected.")
-+int BPF_PROG(btf_ids)
-+{
++	WARN_ON_ONCE(1);
 +	return 0;
 +}
++#endif
++
+ extern int task_current_syscall(struct task_struct *target, struct syscall_info *info);
+ 
+ extern void sigaction_compat_abi(struct k_sigaction *act, struct k_sigaction *oact);
+diff --git a/include/linux/sframe.h b/include/linux/sframe.h
+index b79c5ec09229..e3c6414f1a17 100644
+--- a/include/linux/sframe.h
++++ b/include/linux/sframe.h
+@@ -33,7 +33,7 @@ extern void sframe_free_mm(struct mm_struct *mm);
+ extern int sframe_add_section(unsigned long sframe_start, unsigned long sframe_end,
+ 			      unsigned long text_start, unsigned long text_end);
+ extern int sframe_remove_section(unsigned long sframe_addr);
+-extern int sframe_find(unsigned long ip, struct unwind_user_frame *frame);
++extern int sframe_find(unsigned long ip, struct unwind_user_frame *frame, bool topmost);
+ 
+ static inline bool current_has_sframe(void)
+ {
+@@ -52,7 +52,7 @@ static inline int sframe_add_section(unsigned long sframe_start, unsigned long s
+ 	return -ENOSYS;
+ }
+ static inline int sframe_remove_section(unsigned long sframe_addr) { return -ENOSYS; }
+-static inline int sframe_find(unsigned long ip, struct unwind_user_frame *frame) { return -ENOSYS; }
++static inline int sframe_find(unsigned long ip, struct unwind_user_frame *frame, bool topmost) { return -ENOSYS; }
+ static inline bool current_has_sframe(void) { return false; }
+ 
+ #endif /* CONFIG_HAVE_UNWIND_USER_SFRAME */
+diff --git a/include/linux/unwind_user_types.h b/include/linux/unwind_user_types.h
+index 8050a3237a03..adef01698bb3 100644
+--- a/include/linux/unwind_user_types.h
++++ b/include/linux/unwind_user_types.h
+@@ -35,6 +35,7 @@ struct unwind_user_state {
+ 	unsigned long fp;
+ 	struct arch_unwind_user_state arch;
+ 	enum unwind_user_type type;
++	bool topmost;
+ 	bool done;
+ };
+ 
+diff --git a/kernel/unwind/sframe.c b/kernel/unwind/sframe.c
+index acbf791e713b..5bfaf06e6cd2 100644
+--- a/kernel/unwind/sframe.c
++++ b/kernel/unwind/sframe.c
+@@ -222,12 +222,8 @@ static __always_inline int __read_fre(struct sframe_section *sec,
+ 	offset_count--;
+ 
+ 	ra_off = sec->ra_off;
+-	if (!ra_off) {
+-		if (!offset_count--) {
+-			dbg_sec_uaccess("zero offset_count, can't find ra_off\n");
+-			return -EFAULT;
+-		}
+-
++	if (!ra_off && offset_count) {
++		offset_count--;
+ 		UNSAFE_GET_USER_INC(ra_off, cur, offset_size, Efault);
+ 	}
+ 
+@@ -257,7 +253,8 @@ static __always_inline int __read_fre(struct sframe_section *sec,
+ 
+ static __always_inline int __find_fre(struct sframe_section *sec,
+ 				      struct sframe_fde *fde, unsigned long ip,
+-				      struct unwind_user_frame *frame)
++				      struct unwind_user_frame *frame,
++				      bool topmost)
+ {
+ 	unsigned char fde_type = SFRAME_FUNC_FDE_TYPE(fde->info);
+ 	struct sframe_fre *fre, *prev_fre = NULL;
+@@ -310,6 +307,12 @@ static __always_inline int __find_fre(struct sframe_section *sec,
+ 		return -EINVAL;
+ 	fre = prev_fre;
+ 
++	if ((!IS_ENABLED(CONFIG_HAVE_USER_RA_REG) || !topmost) && !fre->ra_off) {
++		dbg_sec_uaccess("fde addr 0x%x: zero ra_off\n",
++				fde->start_addr);
++		return -EINVAL;
++	}
++
+ 	frame->cfa_off = fre->cfa_off;
+ 	frame->ra_off  = fre->ra_off;
+ 	frame->fp_off  = fre->fp_off;
+@@ -319,7 +322,7 @@ static __always_inline int __find_fre(struct sframe_section *sec,
+ 	return 0;
+ }
+ 
+-int sframe_find(unsigned long ip, struct unwind_user_frame *frame)
++int sframe_find(unsigned long ip, struct unwind_user_frame *frame, bool topmost)
+ {
+ 	struct mm_struct *mm = current->mm;
+ 	struct sframe_section *sec;
+@@ -343,7 +346,7 @@ int sframe_find(unsigned long ip, struct unwind_user_frame *frame)
+ 	if (ret)
+ 		goto end;
+ 
+-	ret = __find_fre(sec, &fde, ip, frame);
++	ret = __find_fre(sec, &fde, ip, frame, topmost);
+ end:
+ 	user_read_access_end();
+ 
+diff --git a/kernel/unwind/user.c b/kernel/unwind/user.c
+index 45c8c6932ba6..03a6da36192f 100644
+--- a/kernel/unwind/user.c
++++ b/kernel/unwind/user.c
+@@ -3,6 +3,7 @@
+ * Generic interfaces for unwinding user space
+ */
+ #include <linux/kernel.h>
++#include <linux/ptrace.h>
+ #include <linux/sched.h>
+ #include <linux/sched/task_stack.h>
+ #include <linux/unwind_user.h>
+@@ -53,6 +54,7 @@ static int unwind_user_next(struct unwind_user_state *state)
+ 	struct unwind_user_frame *frame;
+ 	struct unwind_user_frame _frame;
+ 	unsigned long cfa = 0, sp, fp, ra = 0;
++	bool topmost = state->topmost;
+ 	unsigned int shift;
+ 
+ 	if (state->done)
+@@ -63,7 +65,7 @@ static int unwind_user_next(struct unwind_user_state *state)
+ 	} else if (sframe_state(state)) {
+ 		/* sframe expects the frame to be local storage */
+ 		frame = &_frame;
+-		if (sframe_find(state->ip, frame)) {
++		if (sframe_find(state->ip, frame, topmost)) {
+ 			if (!IS_ENABLED(CONFIG_HAVE_UNWIND_USER_FP))
+ 				goto done;
+ 			frame = &fp_frame;
+@@ -86,18 +88,28 @@ static int unwind_user_next(struct unwind_user_state *state)
+ 
+ 	/* Get the Stack Pointer (SP) */
+ 	sp = cfa + frame->sp_val_off;
+-	/* Make sure that stack is not going in wrong direction */
+-	if (sp <= state->sp)
++	/*
++	 * Make sure that stack is not going in wrong direction.  Allow SP
++	 * to be unchanged for the topmost frame, by subtracting topmost,
++	 * which is either 0 or 1.
++	 */
++	if (sp <= state->sp - topmost)
+ 		goto done;
+ 
+-	/* Make sure that the address is word aligned */
+-	shift = sizeof(long) == 4 || compat_fp_state(state) ? 2 : 3;
+-	if ((cfa + frame->ra_off) & ((1 << shift) - 1))
+-		goto done;
+ 
+ 	/* Get the Return Address (RA) */
+-	if (unwind_get_user_long(ra, cfa + frame->ra_off, state))
+-		goto done;
++	if (frame->ra_off) {
++		/* Make sure that the address is word aligned */
++		shift = sizeof(long) == 4 || compat_fp_state(state) ? 2 : 3;
++		if ((cfa + frame->ra_off) & ((1 << shift) - 1))
++			goto done;
++		if (unwind_get_user_long(ra, cfa + frame->ra_off, state))
++			goto done;
++	} else {
++		if (!IS_ENABLED(CONFIG_HAVE_USER_RA_REG) || !topmost)
++			goto done;
++		ra = user_return_address(task_pt_regs(current));
++	}
+ 
+ 	/* Get the Frame Pointer (FP) */
+ 	if (frame->fp_off && unwind_get_user_long(fp, cfa + frame->fp_off, state))
+@@ -110,6 +122,7 @@ static int unwind_user_next(struct unwind_user_state *state)
+ 
+ 	arch_unwind_user_next(state);
+ 
++	state->topmost = false;
+ 	return 0;
+ 
+ done:
+@@ -140,6 +153,7 @@ static int unwind_user_start(struct unwind_user_state *state)
+ 	state->ip = instruction_pointer(regs);
+ 	state->sp = user_stack_pointer(regs);
+ 	state->fp = frame_pointer(regs);
++	state->topmost = true;
+ 
+ 	arch_unwind_user_init(state, regs);
+ 
 -- 
-2.43.0
+2.48.1
 
