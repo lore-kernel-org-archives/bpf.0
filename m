@@ -1,108 +1,103 @@
-Received: from out-183.mta0.migadu.com (out-183.mta0.migadu.com [91.218.175.183])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54B2B2777F1
-	for <bpf@vger.kernel.org>; Mon, 14 Jul 2025 22:29:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 894BC126F0A;
+	Mon, 14 Jul 2025 22:30:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752532170; cv=none; b=rubOvCPaUrUaUM0QrF4EKVEKfUFmNwUsayCCb0B9EBh0mnIZkd+7z5SdjDIixY9KqSFDUZ5Vt2f+VJvW3vSWtPI1eA4yU6qFxz7OfUVKW8B1Zg/BtT+zWqaXq/0cI3z8O8tIzOh+HbLou2xtDOla+3o+1tYPWHS+/xm0vK9Y0iQ=
+	t=1752532200; cv=none; b=cYP7/WonwQp+aHtPReR3MrURNkf662AKxk8EhJ6rmaMWe/aX3NL+k8vpvThfYDgbYEAjiK5ZOdWsOdK9W+dP8THL5U8GJ0r8ns1aj9l1QTS3GgT78ifqsc4Knicit+6zvTKGfFT6cRPGVsuhHBye8/aUQUbyWIInBXtDgz5QNbU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752532170; c=relaxed/simple;
-	bh=pJnm9Oj99nS8XPVmx+Sv6KI3a8fGfJkUedosPujfQ/g=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JxvgnJGwMHSd3gPIPSTDa7eSVwa73NxHXXMEbyWYzZgzo6hCu2NWML/hrz3/rVYcR1y3oRz37rUDJSRSFhWT0abu95PEi3ErOVqrlOwoVeYSpNngG57/jvAV+4EYNsSemILYc/7+JzN1tAHsbLgX8/c0tXIhylgt19pJjRx0wmY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ffCpTw+i; arc=none smtp.client-ip=91.218.175.183
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1752532200; c=relaxed/simple;
+	bh=M0PZUEikwZplgsTp5pCh0WMPeVdma/lYCtz7xVZ+LUo=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=QrVKpsbbnb+qgkKjKnkhVYMF+NmiX4iAt6BUgYDSQHfrjySNCCUCm0UvVaqxGLC2XXLESTjGr5IDY7VH546jNg2OhOXfBdYhW1OMtBF3Zvo3JkpYscQ8YCPhNNFaxuj2SnWlZXudB9l4PDXB5qnaHKwozdoUsKONbKUzDHywWbs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y8zaKZwB; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ffCpTw+i"
-Message-ID: <d109f0de-c857-46f6-9560-a7bd93b59bef@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1752532155;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=b0LwTTo9xIG1xQG6uvghVnGDmMDc4C6/jvkxhw5/uY0=;
-	b=ffCpTw+ialmLq8C2vkn6EWsLUKW/RqvNggj3D6DXHng+/3Mcrf3N9S/wGJBpJlHlpJ948g
-	bWF+uJIVAZaH1Sf8gEdbiOWd0uJQR9Tz7O4Ufa9PG8daB57/ZwIGn/ClKpj6u8YW4roc5M
-	Jx70NECbzv5qh58cNHW+SfjUKKTo5b0=
-Date: Mon, 14 Jul 2025 15:29:08 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y8zaKZwB"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AA0DC4CEED;
+	Mon, 14 Jul 2025 22:30:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1752532200;
+	bh=M0PZUEikwZplgsTp5pCh0WMPeVdma/lYCtz7xVZ+LUo=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=Y8zaKZwBCt+WmYCbsPSZfpJ1aHjxuSnwRYDxK38vvBBXLhKL9Z7t7mC95INXkyY6w
+	 2Xa33caw7jycaGFBrdrHIISwS+Tz2ZdNv8soFBW8IgWZiuuChnNSitx1AmFztQ9ufs
+	 SG1lFyyC9rXUWrT35VusMrhEPRy+p0dxTJnznQGNtR8mK+rflEHNg+UjyMmpNMedKC
+	 z6XtXzlkhFb9lr7jdYV1Yi+VV5hJO0ZBI2y1DCLAf27oKO2TUG77hg6ah/95uetYu2
+	 QTJttpI5RweBPnkW35ojVSVgLghg7skfa2o1v+x/qVxAsacoAaNV/mqxt3WiuZPMj4
+	 kamQgOnFJ9ReA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33CE8383B276;
+	Mon, 14 Jul 2025 22:30:22 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v6 bpf-next 10/12] selftests/bpf: Create established
- sockets in socket iterator tests
-To: Jordan Rife <jordan@jrife.io>
-Cc: Daniel Borkmann <daniel@iogearbox.net>,
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
- Kuniyuki Iwashima <kuniyu@google.com>,
- Alexei Starovoitov <alexei.starovoitov@gmail.com>,
- Stanislav Fomichev <stfomichev@gmail.com>, netdev@vger.kernel.org,
- bpf@vger.kernel.org
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v6 bpf-next 00/12] bpf: tcp: Exactly-once socket iteration
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <175253222101.4006958.10212169466412631754.git-patchwork-notify@kernel.org>
+Date: Mon, 14 Jul 2025 22:30:21 +0000
 References: <20250714180919.127192-1-jordan@jrife.io>
- <20250714180919.127192-11-jordan@jrife.io>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <20250714180919.127192-11-jordan@jrife.io>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+In-Reply-To: <20250714180919.127192-1-jordan@jrife.io>
+To: Jordan Rife <jordan@jrife.io>
+Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net,
+ martin.lau@linux.dev, willemdebruijn.kernel@gmail.com, kuniyu@google.com,
+ alexei.starovoitov@gmail.com, stfomichev@gmail.com
 
-On 7/14/25 11:09 AM, Jordan Rife wrote:
-> +static int *connect_to_server(int family, int sock_type, const char *addr,
-> +			      __u16 port, int nr_connects, int *server_fds,
-> +			      int server_fds_len)
-> +{
-> +	struct pollfd *server_poll_fds = NULL;
-> +	struct network_helper_opts opts = {
+Hello:
 
-A nit. I removed "opts" and just passed NULL to connect_to_addr_str.
+This series was applied to bpf/bpf-next.git (net)
+by Martin KaFai Lau <martin.lau@kernel.org>:
 
-I also carried Stan's ack from v4. Applied. Thanks.
+On Mon, 14 Jul 2025 11:09:04 -0700 you wrote:
+> TCP socket iterators use iter->offset to track progress through a
+> bucket, which is a measure of the number of matching sockets from the
+> current bucket that have been seen or processed by the iterator. On
+> subsequent iterations, if the current bucket has unprocessed items, we
+> skip at least iter->offset matching items in the bucket before adding
+> any remaining items to the next batch. However, iter->offset isn't
+> always an accurate measure of "things already seen" when the underlying
+> bucket changes between reads, which can lead to repeated or skipped
+> sockets. Instead, this series remembers the cookies of the sockets we
+> haven't seen yet in the current bucket and resumes from the first cookie
+> in that list that we can find on the next iteration.
+> 
+> [...]
 
-> +		.timeout_ms = 0,
-> +	};
-> +	int *established_socks = NULL;
-> +	int i;
-> +
-> +	server_poll_fds = calloc(server_fds_len, sizeof(*server_poll_fds));
-> +	if (!ASSERT_OK_PTR(server_poll_fds, "server_poll_fds"))
-> +		return NULL;
-> +
-> +	for (i = 0; i < server_fds_len; i++) {
-> +		server_poll_fds[i].fd = server_fds[i];
-> +		server_poll_fds[i].events = POLLIN;
-> +	}
-> +
-> +	i = 0;
-> +
-> +	established_socks = malloc(sizeof(*established_socks) * nr_connects*2);
-> +	if (!ASSERT_OK_PTR(established_socks, "established_socks"))
-> +		goto error;
-> +
-> +	while (nr_connects--) {
-> +		established_socks[i] = connect_to_addr_str(family, sock_type,
-> +							   addr, port, &opts);
-> +		if (!ASSERT_OK_FD(established_socks[i], "connect_to_addr_str"))
-> +			goto error;
-> +		i++;
-> +		established_socks[i] = accept_from_one(server_poll_fds,
-> +						       server_fds_len);
-> +		if (!ASSERT_OK_FD(established_socks[i], "accept_from_one"))
-> +			goto error;
-> +		i++;
-> +	}
-> +
-> +	free(server_poll_fds);
-> +	return established_socks;
-> +error:
-> +	free_fds(established_socks, i);
-> +	free(server_poll_fds);
-> +	return NULL;
-> +}
+Here is the summary with links:
+  - [v6,bpf-next,01/12] bpf: tcp: Make mem flags configurable through bpf_iter_tcp_realloc_batch
+    https://git.kernel.org/bpf/bpf-next/c/8271bec9fc1c
+  - [v6,bpf-next,02/12] bpf: tcp: Make sure iter->batch always contains a full bucket snapshot
+    https://git.kernel.org/bpf/bpf-next/c/cdec67a489d4
+  - [v6,bpf-next,03/12] bpf: tcp: Get rid of st_bucket_done
+    https://git.kernel.org/bpf/bpf-next/c/e25ab9b874a4
+  - [v6,bpf-next,04/12] bpf: tcp: Use bpf_tcp_iter_batch_item for bpf_tcp_iter_state batch items
+    https://git.kernel.org/bpf/bpf-next/c/efeb820951eb
+  - [v6,bpf-next,05/12] bpf: tcp: Avoid socket skips and repeats during iteration
+    https://git.kernel.org/bpf/bpf-next/c/f5080f612a1c
+  - [v6,bpf-next,06/12] selftests/bpf: Add tests for bucket resume logic in listening sockets
+    https://git.kernel.org/bpf/bpf-next/c/da1d987d3b39
+  - [v6,bpf-next,07/12] selftests/bpf: Allow for iteration over multiple ports
+    https://git.kernel.org/bpf/bpf-next/c/346066c3278f
+  - [v6,bpf-next,08/12] selftests/bpf: Allow for iteration over multiple states
+    https://git.kernel.org/bpf/bpf-next/c/f00468124a08
+  - [v6,bpf-next,09/12] selftests/bpf: Make ehash buckets configurable in socket iterator tests
+    (no matching commit)
+  - [v6,bpf-next,10/12] selftests/bpf: Create established sockets in socket iterator tests
+    (no matching commit)
+  - [v6,bpf-next,11/12] selftests/bpf: Create iter_tcp_destroy test program
+    https://git.kernel.org/bpf/bpf-next/c/8fc0c5a82d04
+  - [v6,bpf-next,12/12] selftests/bpf: Add tests for bucket resume logic in established sockets
+    https://git.kernel.org/bpf/bpf-next/c/f126f0ce7c83
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
