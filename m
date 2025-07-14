@@ -1,131 +1,83 @@
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-172.mta1.migadu.com (out-172.mta1.migadu.com [95.215.58.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9A8919CD01;
-	Mon, 14 Jul 2025 22:30:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C36622083
+	for <bpf@vger.kernel.org>; Mon, 14 Jul 2025 22:51:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752532208; cv=none; b=CnTV6VO3KWWKWSb0CnZaE2pz7lbEXZ3faoW1OPJbxtfuT7ymVE98xcU6Kmx1IIKpqshKhTc+8R81spmnoRmSS3h0YaRlRStHneIhAYovfeTFqZe+HGX+C4I6numtWAbqqgbSAt+PMzTh3d6JzwnwFAqpdG/0qugMZUKXgL1eybE=
+	t=1752533491; cv=none; b=YKEH15nmfLNBMngsu05klj9U9oy+agkCmo8ydnW4B+0G3YRoUbB0MLvoCs2v5AXPwytJyMH1ZIX/nLJRB4NoX4dYB7el7JleE9A8lNP1hDedRBxaxWqGGVhkKDKWfFffYvkD67g3hQD7+TBqFMRWtrHgR8oeNRc+VzQAmufi4+o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752532208; c=relaxed/simple;
-	bh=7yQAdW8SgBlbelXCbyx+6x3Eo2rdkzWH0feLGuqFTXI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qfHcMhnxlWV3jQN+Mkvv2YlOF8E1asMTb5IqzKu7bFlXnU0bDXFLXCQI/+JafyXQHLk1wNLKpXFRVUqPZ9/57nTtW/S9D2X7UKjkWsIMPDFVnT4Y81q9cM9Tpf4bHm290ljDYE8SvVppZPkSwyedD8/X/nm0SLAGxSKmQTW/Cyk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HZhg5ioi; arc=none smtp.client-ip=209.85.221.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1752533491; c=relaxed/simple;
+	bh=qGEGGsLEkfCd2TcIxz7+VuvOfdgrAfBQKt0q4ngZHg4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Wm6bUmDIFWKGFNJNeLHKtJncns5mQps73qP+r+cjXQAseMCkoM+AHjHiGPRfgGy56Iftht724m1kT0u83lIo5lk1c1y6vmnxUn+0Atvq9QnvbuXqfafY7YqIeNyEAorE+oDLzTSVQ32fPQ9owTSkZKW0pcvTuqo+WkmXkJZzqv0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=c0uetxNg; arc=none smtp.client-ip=95.215.58.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HZhg5ioi"
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-3a50fc7ac4dso2200243f8f.0;
-        Mon, 14 Jul 2025 15:30:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752532205; x=1753137005; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=voZKt3OZFqV4HNSRlyMI/mjoMu7OKrG93jyyqd7nrWM=;
-        b=HZhg5ioi91Ml1GZ87fOR4V5weTC+q5vODAfowzgyE0U4b2bEySwticsPP9EJgEbXSc
-         p630TGApDq4qmgM/dIYgjVSA5ikSJeSZ2fCLy+J0TiZBJVCE4w+v4SmKkUJyN6LZ0uej
-         ia/4KdUF2oiGx7I1Tf/f+R1hmZkprLVAQFVRbMuXpuCq2sEx2tFlSrzNslKvdOOow/TB
-         DQgxKVtkiXNueaVPYmSmCkb1SFj/Hz5bOmTwToVGBq2zUr4JmU4Z53nh5bLww5AkLCwj
-         /40wIG7XsRdDLnWFD3bd4K/Too6fhCFGZ6+Q2Kcw8Xo5x2ZBBEfUQkmqzb50dZNocwB6
-         AyYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752532205; x=1753137005;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=voZKt3OZFqV4HNSRlyMI/mjoMu7OKrG93jyyqd7nrWM=;
-        b=pZKmTjRLgsG1IBZNfUAVsgzciK9xgOMwNq2SXuWxdKumNuuPNtJ39CsG1iIcAtlqPp
-         E88lHM7B43N68/PaGG/wPO/kQlwcUZ8yTOMlmyBsPr3I4zrpmm+C/VglDYoBFQzVBOJG
-         8Tm7Bro4huBt7HKi4cuQPPFwUQliJx7jX5At6drYzXfLAqfu9S85zzcQABFjRxfbK7k1
-         IEMbqpLLu3jJDiWTI9/eoi/Rzyk9YzASjqErNHDH4rHleEMFFw1uIBfwnae6ZFb2nbul
-         mZHSNNZUOEi9UfZmyB6t58+HuLR+ZrhVcIcgVM0/gSVXauyaJfVBCaQnVXroB6PWVQTq
-         y46Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWL1CehJ4E+Clvfy31o0p8pXoSLeNHpLIiXxr3Drw/Lf1BiUtv5lTLyWtEhJ7wlazTnMtv0HnTwRvSDju6z@vger.kernel.org, AJvYcCWLnCp3B93/YOEcsq6rs8BJazmdxYMT3gn8xz2j75gLVoUgDVYgTXwPZvmLjNMmV2xQAxU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzD2eY4yQaGmnCJoiNf2Cvb35vhI+H/VuTmShiWA+eqZi7yWs1D
-	ZMlAYCi+x4sJ2aqy5lQnZLiS+jtpxqkx+70Zu7QjP9GiKus8TD+syrx5NrVkODgZHVqRuAO3tAt
-	ykKVqABy/3GAPdFcInFWzz/Nz5DUeT2Y=
-X-Gm-Gg: ASbGncu29CJxn6KcLsE26rmAQO5WvSNXWqtrvNHHCTTxD4eXYacvCZgJ4oT1fRvTND7
-	i8a3xwO2/VEsk0p2oV0JnIHKVWgDEQMPh+Bu2E8KQ4Pv/peD+ZDvI8sBPVeOqUnQru0ZZdWYHIs
-	CVFM80fUuGF01AghEOMpvuwUxL7Yx3j+PGvDlviNxMo6Yij6wcYwfga4wjJcfWRIcmMThX/QGfW
-	puBZSxzh77k2JpB2pBQzLbMYF2n+Xxtm0lT
-X-Google-Smtp-Source: AGHT+IGRbeX8fmsTNmKi5NQJnQub/iuiFTDd8ihavQgYpw6Dr2yi6L1mh3Ir2506x2DmRqaEm+Uado/mD563wWrauMw=
-X-Received: by 2002:a5d:5f52:0:b0:3a6:c923:bc5f with SMTP id
- ffacd0b85a97d-3b5f187ebaamr13502161f8f.17.1752532204746; Mon, 14 Jul 2025
- 15:30:04 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="c0uetxNg"
+Message-ID: <2fe9d096-846c-4cb6-ac7e-a9e072cb3281@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1752533486;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=AUs7rSl9OOabs5zzmuV58HHyP49Xlu4Muu7/qo2/NcA=;
+	b=c0uetxNgQLzyjiFZBsX4MJUCl9BohZuUDyeEtfEafRG0rtJBtuPPz96S2kIYnGXLAXcgWh
+	fm+iBbYMWo49MPtFYe/mqUAI/Q/8ig3rSH9UnXHfj+XsQw1NtLpo6MwuNrYIMvnEXjcGHm
+	b4K9WOaKpgOxZfag+qLT6UaddvK6sGQ=
+Date: Mon, 14 Jul 2025 15:51:19 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250710070835.260831-1-dongml2@chinatelecom.cn>
- <CAADnVQKmUE3_5RHDFLmKzNSDkLD=Z2g3bkfT2aRsPkFiMPd-4Q@mail.gmail.com> <750dd5f1-a5f8-4ed2-a448-1a57cb5447dc@linux.dev>
-In-Reply-To: <750dd5f1-a5f8-4ed2-a448-1a57cb5447dc@linux.dev>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Mon, 14 Jul 2025 15:29:53 -0700
-X-Gm-Features: Ac12FXzSMKRUSNRy4FW07LRiVVjWQ8Ewfne8bN1Fu_Wa64oMvuCGk59Vmnd-nkY
-Message-ID: <CAADnVQLHORFKC3PzJ540xxa_bETBypXu2-z7Z+8c+as97vByXA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3] bpf: make the attach target more accurate
-To: Menglong Dong <menglong.dong@linux.dev>
-Cc: Menglong Dong <menglong8.dong@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Eduard <eddyz87@gmail.com>, 
-	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Menglong Dong <dongml2@chinatelecom.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [RFC bpf-next v1 2/4] bpf: Support cookie for linked-based
+ struct_ops attachment
+To: Amery Hung <ameryhung@gmail.com>,
+ Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Tejun Heo <tj@kernel.org>, Martin KaFai Lau <martin.lau@kernel.org>,
+ Kernel Team <kernel-team@meta.com>, bpf <bpf@vger.kernel.org>
+References: <20250708230825.4159486-1-ameryhung@gmail.com>
+ <20250708230825.4159486-3-ameryhung@gmail.com>
+ <68f4b77c-3265-489e-9190-0333ed54b697@linux.dev>
+ <CAMB2axO3Ma7jYa00fbSzB8ZFZyekS13BNJ87rsTfbfcSZhpc6w@mail.gmail.com>
+ <2d1b45f3-3bde-415d-8568-eb4c2a7dd219@linux.dev>
+ <CAMB2axMDUr+s+f9K-4sj-5vSkPQV4RXHo8y73VH9V2JQbKZOxQ@mail.gmail.com>
+ <CAEf4BzaUK0i7QFkKi800TQhAKw2WL+FyoG3eFP6nq_r-TUPBKw@mail.gmail.com>
+ <CAMB2axONnVJ5BY-YOASWGUGpaZa-P64Yf5f6AbX+O8fjCiZNfw@mail.gmail.com>
+ <CAADnVQJxu5hsDw0iCP68eRW3v2CXRBos8asfN1x9F=gVyGmqbw@mail.gmail.com>
+ <CAMB2axMw0uEojfdq33KbjqZXAtRSJwR2=f1Y1S4ma01sWJFNfg@mail.gmail.com>
+ <CAEf4BzaoUCapHxdVJj6vyx=Ai_tCO+HY3kaD2ZNK2v0R0zuTMw@mail.gmail.com>
+ <CAMB2axNXLm2mWnSv4EL_YxexYa97_OnRD9Nj7ww9Qq_3dAp5hg@mail.gmail.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <CAMB2axNXLm2mWnSv4EL_YxexYa97_OnRD9Nj7ww9Qq_3dAp5hg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Mon, Jul 14, 2025 at 2:50=E2=80=AFPM Menglong Dong <menglong.dong@linux.=
-dev> wrote:
->
->
-> On 2025/7/15 03:52, Alexei Starovoitov wrote:
-> > On Thu, Jul 10, 2025 at 12:10=E2=80=AFAM Menglong Dong <menglong8.dong@=
-gmail.com> wrote:
-> >>                          } else {
-> >> -                               addr =3D kallsyms_lookup_name(tname);
-> >> +                               ret =3D bpf_lookup_attach_addr(NULL, t=
-name, &addr);
-> >>                          }
-> > Not sure why your benchmarking doesn't show the difference,
-> > but above is a big regression.
-> > kallsyms_lookup_name() is a binary search whereas your
-> > bpf_lookup_attach_addr() is linear.
-> > You should see a massive degradation in multi-kprobe attach speeds.
->
->
-> Hi, Alexei. Like I said above, the benchmarking does have
-> a difference for the symbol in the modules, which makes
-> the attachment time increased from 0.135543s to 0.176904s
-> for 8631 symbols. As the symbols in the modules
-> is not plentiful, which makes the overhead slight(or not?).
->
-> But for the symbol in vmlinux, bpf_lookup_attach_addr() will
-> call kallsyms_on_each_match_symbol(), which is also
-> a binary search, so the benchmarking has no difference,
-> which makes sense.
+On 7/14/25 2:02 PM, Amery Hung wrote:
+>>> It should work. Currently, it makes sense to have cookie in struct_ops
+>>> map as all struct_ops implementers (hid, tcp cc, qdisc, sched_ext) do
+>>> not allow multi-attachment of the same map. A struct_ops map is
+>>> effectively an unique attachment for now.
+>>
+>> Is there any conceptual reason why struct_ops map shouldn't be allowed
+>> to be attached to multiple places? If not, should we try to lift this
+>> restriction and not invent struct_ops-specific BPF cookie APIs?
 
-I see.
-Just curious, what was the function count in modules on your system ?
-cat /proc/kallsyms|grep '\['|grep -v bpf|wc -l
+bpf_struct_ops map currently does allow attaching multiple times through the 
+link interface. It is up to the subsystem tcp-cc/hid/qdisc/scx how to handle it.
 
-Only now I read the diff carefully enough to realize that
-you're looking for duplicates across vmlinux and that one module.
+> I am fixing the patchset by moving trampoline and ksyms to
+> bpf_struct_ops_link. It shouldn't complicate struct_ops code too much
+> (finger cross).
 
-Why ?
-BTF based attachment identifies a specific module.
-Even if there are dups between that module and vmlinux the attachment
-is not ambiguous.
-
-> I thought we don't need this patch after the pahole fixes this
-> problem. Should I send a V4?
-
-pahole should fix it, so this change is not needed.
-But pahole will be removing the dups within vmlinux and
-within each module independently. Not across them.
-I don't think "across" is needed, but you somehow believe that
-it's necessary ? (based on this diff)
+seems reasonable. I think it will be useful to have comments in v2 on how their 
+lifecycle will be handled.
