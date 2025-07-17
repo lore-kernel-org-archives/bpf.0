@@ -1,60 +1,60 @@
 Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40864262FC2;
-	Thu, 17 Jul 2025 11:10:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D31E428935C;
+	Thu, 17 Jul 2025 11:29:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752750641; cv=none; b=D0hBoYMbqR/6qsDAmvoyDMCWXD7qau9xiNW2r7pA1i05Taqhyg3JKZjAUny6ec/bazKztuFjWyW4TKUXptZ+n0UlV30feP2Y/KAWFoCN7qYdeydXbWM7lMqqv/nofdHkVbA9YGK0kXj3JdcoT50cZ0pUC1roJL9C2i4Hy+olFRA=
+	t=1752751743; cv=none; b=jS9nE24oHWs3NO3yxgwXdflXL8PCFqBRMLtUwxe2i1O1ivl0RVZhGieN2QQqNU+lrgnElNt/auPsTx3SL1s+3C9HAG6ZM9y+c23IcYDcVJewNHQTQCS0iIf5yb/tdngksoKX6+Es/xwGZeWr3SrIrDlcp9dbahMzDnkO+VMO4cc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752750641; c=relaxed/simple;
-	bh=EWFl6shmU2zXxv7iAdUpoBEoZHn97NDn8y/skqYlOGs=;
+	s=arc-20240116; t=1752751743; c=relaxed/simple;
+	bh=kzGkY7JKL+oPheWyIxkry6TqelxZeSbXNtwbYiwWVqY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NIUAgWXqjGnjQJ97EWN8KRUB2b77Vtfnlj4lvbkbFB34Ns5g+6M+CSXdDgOtDSLSqcaneSQg5AcJY6axENOStN9JHzkmJjvWPvhPCCZ+GG9jBpKj9+RZSGCxIwZXwsz95pf6vnX/RVNy8/pdHmsTcopDh3dE5+jYU2dCpkqJPwo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Zl5vFhZX; arc=none smtp.client-ip=148.163.158.5
+	 In-Reply-To:Content-Type; b=eYutSzU73NUNx3wDHoiW+gH0QUSxDS6/YIao8xokHNrEGZu88EM9inQA7k4548RlGSwawhpIR5Us+9uwTw/sI2rhyQCsGsEiWFLkd+Mq47S78bTJCEa2IS6h4ST9CT61kcLJduoOKnu2gmdhppT/MRUfe9m03DXtGc2jOgmZByM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=lLMOqasw; arc=none smtp.client-ip=148.163.158.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Zl5vFhZX"
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56H8ShWI004602;
-	Thu, 17 Jul 2025 11:09:53 GMT
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="lLMOqasw"
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56H9HNVG027865;
+	Thu, 17 Jul 2025 11:28:31 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=2CzZTk
-	QfcLO+g8E9ozYuUqDsF0V+r5NipF1gMiNv1zE=; b=Zl5vFhZXfpGTkZaFj1mcSP
-	Xa5AcqP444y819/uasfzbe+bijSWDMBfszHjB17fxzY1NCjFwY98soGG41aBIROG
-	GzZFdyb2U2x/YmrjGiLI3HZPggT4YPvQDtoDqnBOSHhj/z0S88cWUihqFWUGT+xy
-	J1r7+7KqEBvf+JRqeetZnD9d5Zn5MtE8il6nnsIOsmoHFDitZdebX7qAPNebYtmo
-	cC3xzGvsLf2+vUD9+Tx3rl4W+g0X1CSn4E9o0Lv2Dma21WOgrocNlkmGWYPANQQv
-	45hP1O11wbbhHHeISzsH7+Ic4Z5+L/oPapKBTlrHqlRLC45KpfICOXvCyQmcDgEg
+	:message-id:mime-version:references:subject:to; s=pp1; bh=MsiVpe
+	WOpoqOr99vGViu11zWrWDu+pDv0+cXEOGDnDA=; b=lLMOqaswnb/V6aJdecA8Y7
+	jwEAbfPK2wToS7/HnWfBtD5XklyH+rjlOLGD4ZLvQUqQ0xKNArtPchzhhbq9BAJP
+	MilY6Ii1q85bSQoI1+CDega1SA7Knn0IEPZMggBccSPhOB4vbe+bWPfr76M2nb7d
+	6hTyoOYWp1IPeEeIf1xfUCLR6EXmLQkBV5R68zCsfxSeh+HFKFVrGiAMJJ46P1Iq
+	DekgAWjLLYiOlXE84Fyc6kPS7XFbljvbyv8VIhjLff/9wvhJoNyvxNnf2XzdZmoV
+	5a0EMHd8QGQ7wVB2ktlSVxCH9xgJ4YpPIigvz5brRrCWVnmxr7mdIOIBMXJFm7bw
 	==
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 47ufc7a8ne-1
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 47vamu5v9p-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 17 Jul 2025 11:09:52 +0000 (GMT)
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 56HAU0wZ021890;
-	Thu, 17 Jul 2025 11:09:51 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 47v4r3bhk4-1
+	Thu, 17 Jul 2025 11:28:31 +0000 (GMT)
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 56H819rt031903;
+	Thu, 17 Jul 2025 11:28:30 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 47v21uc4fk-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 17 Jul 2025 11:09:51 +0000
+	Thu, 17 Jul 2025 11:28:29 +0000
 Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 56HB9ldt32834162
+	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 56HBSQcK52691366
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 17 Jul 2025 11:09:47 GMT
+	Thu, 17 Jul 2025 11:28:26 GMT
 Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id A0E272004E;
-	Thu, 17 Jul 2025 11:09:47 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 1735020043;
+	Thu, 17 Jul 2025 11:28:26 +0000 (GMT)
 Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 4424B2004B;
-	Thu, 17 Jul 2025 11:09:47 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id A7C8120040;
+	Thu, 17 Jul 2025 11:28:25 +0000 (GMT)
 Received: from [9.152.222.105] (unknown [9.152.222.105])
 	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Thu, 17 Jul 2025 11:09:47 +0000 (GMT)
-Message-ID: <b5121d71-f916-45ea-9e6c-b74a27f90dcd@linux.ibm.com>
-Date: Thu, 17 Jul 2025 13:09:47 +0200
+	Thu, 17 Jul 2025 11:28:25 +0000 (GMT)
+Message-ID: <6285a2b1-eb9b-4315-b960-cfaa99513ac1@linux.ibm.com>
+Date: Thu, 17 Jul 2025 13:28:25 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -62,8 +62,8 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v1 07/16] unwind_user: Enable archs that do not
- necessarily save RA
+Subject: Re: [RFC PATCH v1 08/16] unwind_user: Enable archs that save RA/FP in
+ other registers
 To: Josh Poimboeuf <jpoimboe@kernel.org>
 Cc: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
         bpf@vger.kernel.org, x86@kernel.org,
@@ -85,137 +85,197 @@ Cc: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
         Jens Axboe <axboe@kernel.dk>, Florian Weimer <fweimer@redhat.com>,
         Sam James <sam@gentoo.org>
 References: <20250710163522.3195293-1-jremus@linux.ibm.com>
- <20250710163522.3195293-8-jremus@linux.ibm.com>
- <xgbpe46th7rbpslybo5xdt57ushlgwr5xyrq4epuft5nfrqms3@izeojto3wzu4>
+ <20250710163522.3195293-9-jremus@linux.ibm.com>
+ <oasyyga72yuiad7y2nzh7wcd7t7wmxnsbo2kuvsn5xsnuypewd@ukxxgdjbvegz>
 Content-Language: en-US
 From: Jens Remus <jremus@linux.ibm.com>
 Organization: IBM Deutschland Research & Development GmbH
-In-Reply-To: <xgbpe46th7rbpslybo5xdt57ushlgwr5xyrq4epuft5nfrqms3@izeojto3wzu4>
+In-Reply-To: <oasyyga72yuiad7y2nzh7wcd7t7wmxnsbo2kuvsn5xsnuypewd@ukxxgdjbvegz>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Authority-Analysis: v=2.4 cv=Je68rVKV c=1 sm=1 tr=0 ts=6878da00 cx=c_pps a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17 a=IkcTkHD0fZMA:10 a=Wb1JkmetP80A:10 a=VnNF1IyMAAAA:8 a=Tut4zIY26HbeGpenRGoA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzE3MDA5NSBTYWx0ZWRfX9EsHMfQaa05K SSF51bv8yBrxeU38D+wK6AOmryBinIF5ONZirCqa/gNYLPuco+DTrWgKswI6evnqONxMSiNcFj9 Aq8NzBmIexei13+uvLKO7sn8rfiT3whVzrMY6b0KsQqW2akwDWHyuKjRXhzumhSuNlpBNWfOHqb
- re6wWBbnzzmIARgVsC3r1UwPqEVKDsSzKFoJAMNFJLwfNcGkj3qYunmlYtX1gVznqcVC/hUVpZv wJyRxV/oyDvi0TI624dc4QHWEEC6WjDD9IuDw6aXb6KdL/VXkz5tjHYldq3k8VfNLgxVlwj6iCP 8pNeCHwZvAd3Su2aIWNPyqHPny8lb1jfpBbHGCvuPPwc3qxdlwiZaV78G4VHkrsW2UhptYMYDXf
- +wp/SGs3geOCZ55bbLPabITJ8wlGJJjW8ZdPRcuBxfIJ1+nBrNgu6I7ooML+syzGVS4OHjK4
-X-Proofpoint-GUID: fRg2GABNH87s1fipgqSKkT5r6ME2NxOt
-X-Proofpoint-ORIG-GUID: fRg2GABNH87s1fipgqSKkT5r6ME2NxOt
+X-Proofpoint-GUID: 9f1MEs6w3D4ZFzesLbcAi0V8sz3Q2bTy
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzE3MDA5OSBTYWx0ZWRfX39WTLE7dfTTI SZ93ysZqnVGO+28E4EPb93MAEDLhb0WhtUYgJ97KhWM3eIRzhMvSF7RrG2GRXB3s9+5Kbj6O4E1 Z0M2Z3WIYxk/9DEWaxkT6C8xCT2S0Pg1ehLXR/7ND3XE3YAC0+Isj2ozfBs65K3fUGWITW3heDU
+ s3abHg17zlWeNBYsds7reMCubFFbt7kYpxkCOCI5IHR3T9HrTjd9jpFeyUnMu2pf4Xy7mtV4gps eG30geSbXNpCCiRrtcLg2cIq0WyosTqML+wX3P4uKDj0R2rLRIc6QTS4bpm2eYI03RZoo0Ls/23 nB2amcPpD4yOB5bAqtwADY0/hPRhlnqTI39dYfM3gksaQRQ69CpS7BOpRX5cSyLOvabhFIVrAHP
+ CDPAnsQ7UqVCsDO2L/kkqHDUVN9y54y6DKThR1eNWubagUAOVtkk1lAeMLh+c3z3/S7i4MX2
+X-Proofpoint-ORIG-GUID: 9f1MEs6w3D4ZFzesLbcAi0V8sz3Q2bTy
+X-Authority-Analysis: v=2.4 cv=dNSmmPZb c=1 sm=1 tr=0 ts=6878de5f cx=c_pps a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17 a=IkcTkHD0fZMA:10 a=Wb1JkmetP80A:10 a=VnNF1IyMAAAA:8 a=o1T9f-mJ__uqyuaix_cA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-07-17_01,2025-07-16_02,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- malwarescore=0 lowpriorityscore=0 suspectscore=0 adultscore=0
- priorityscore=1501 clxscore=1015 bulkscore=0 phishscore=0 spamscore=0
- mlxlogscore=999 mlxscore=0 classifier=spam authscore=0 authtc=n/a authcc=
+ definitions=2025-07-17_01,2025-07-17_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ mlxlogscore=999 bulkscore=0 lowpriorityscore=0 suspectscore=0 spamscore=0
+ clxscore=1015 phishscore=0 malwarescore=0 mlxscore=0 adultscore=0
+ impostorscore=0 classifier=spam authscore=0 authtc=n/a authcc=
  route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
- definitions=main-2507170095
+ definitions=main-2507170099
 
-On 17.07.2025 01:01, Josh Poimboeuf wrote:
-> On Thu, Jul 10, 2025 at 06:35:13PM +0200, Jens Remus wrote:
->> +++ b/arch/Kconfig
->> @@ -450,6 +450,11 @@ config HAVE_UNWIND_USER_SFRAME
->>  	bool
->>  	select UNWIND_USER
->>  
->> +config HAVE_USER_RA_REG
->> +	bool
->> +	help
->> +	  The arch passes the return address (RA) in user space in a register.
+On 17.07.2025 04:01, Josh Poimboeuf wrote:
+> On Thu, Jul 10, 2025 at 06:35:14PM +0200, Jens Remus wrote:
+>> +#ifndef unwind_user_get_reg
+>> +
+>> +/**
+>> + * generic_unwind_user_get_reg - Get register value.
+>> + * @val: Register value.
+>> + * @regnum: DWARF register number to obtain the value from.
+>> + *
+>> + * Returns zero if successful. Otherwise -EINVAL.
+>> + */
+>> +static inline int generic_unwind_user_get_reg(unsigned long *val, int regnum)
+>> +{
+>> +	return -EINVAL;
+>> +}
+>> +
+>> +#define unwind_user_get_reg generic_unwind_user_get_reg
+>> +
+>> +#endif /* !unwind_user_get_reg */
 > 
-> How about "HAVE_UNWIND_USER_RA_REG" so it matches the existing
-> namespace?
+> I believe the traditional way to do this is to give the function the
+> same name as the define:
+> 
+> #ifndef unwind_user_get_reg
+> static inline int unwind_user_get_reg(unsigned long *val, int regnum)
+> {
+> 	return -EINVAL;
+> }
+> #define unwind_user_get_reg unwind_user_get_reg
+> #endif
 
-Ok.  I am open to any improvements.
+Thanks!  I will use use suggestion.
 
->> @@ -310,6 +307,12 @@ static __always_inline int __find_fre(struct sframe_section *sec,
->>  		return -EINVAL;
->>  	fre = prev_fre;
->>  
->> +	if ((!IS_ENABLED(CONFIG_HAVE_USER_RA_REG) || !topmost) && !fre->ra_off) {
->> +		dbg_sec_uaccess("fde addr 0x%x: zero ra_off\n",
->> +				fde->start_addr);
->> +		return -EINVAL;
+>> +/**
+>> + * generic_sframe_set_frame_reginfo - Populate info to unwind FP/RA register
+>> + * from SFrame offset.
+>> + * @reginfo: Unwind info for FP/RA register.
+>> + * @offset: SFrame offset value.
+>> + *
+>> + * A non-zero offset value denotes a stack offset from CFA and indicates
+>> + * that the register is saved on the stack. A zero offset value indicates
+>> + * that the register is not saved.
+>> + */
+>> +static inline void generic_sframe_set_frame_reginfo(
+>> +	struct unwind_user_reginfo *reginfo,
+>> +	s32 offset)
+>> +{
+>> +	if (offset) {
+>> +		reginfo->loc = UNWIND_USER_LOC_STACK;
+>> +		reginfo->frame_off = offset;
+>> +	} else {
+>> +		reginfo->loc = UNWIND_USER_LOC_NONE;
 >> +	}
+>> +}
 > 
-> The topmost frame doesn't necessarily (or even likely) come from before
-> the prologue, or from a leaf function, so this check would miss the case
-> where a non-leaf function wrongly has !ra_off after its prologue.
->
-> Which in reality is probably fine, as there are other guardrails in
-> place to catch such bad sframe data.
+> This just inits the reginfo struct, can we call it sframe_init_reginfo()?
+> 
+> Also the function comment seems completely superfluous as the function
+> is completely obvious.
+> 
+> Also the signature should match kernel style, something like:
+> 
+> static inline void
+> sframe_init_reginfo(struct unwind_user_reginfo *reginfo, s32 offset)
 
-On s390 the compiler may intermingle prologue instructions with function
-body instructions.  As a result !ra_off is valid as long as the RA
-register value from function entry has not been destroyed.  Furthermore
-the compiler may decide to save RA only if it is actually about to
-destroy the RA register value (e.g. due to a function call).
+Ditto.
 
-Note that it is valid to restore the RA register value anywhere in a
-function and represent that in SFrame.  Following is an example from
-Glibc libc.so psignal() on s390x.  The RA rule changes back to "u"
-(= undefined; !ra_off) multiple times, whenever the RA register has
-its value from function entry again.
-
-  func idx [589]: pc = 0x6c530, size = 250 bytes <psignal>
-  STARTPC         CFA       FP        RA
-  000000000006c530  sp+160    u         u
-  000000000006c536  sp+160    c-72      c-48
-  000000000006c53c  sp+328    c-72      c-48
-  000000000006c5b4  sp+160    u         u
-  000000000006c5b6  sp+328    c-72      c-48
-  000000000006c60c  sp+160    u         u
-  000000000006c60e  sp+328    c-72      c-48
-
-> But then do we think the !ra_off check is still worth the effort?  It
-> would be simpler to just always assume !ra_off is valid for the
-> CONFIG_HAVE_USER_RA_REG case.
-
-It is only valid in the topmost frame.  Otherwise something is wrong.
-
-> I think I prefer the simplicity of removing the check, as the error
-> would be rare, and corrupt sframe would be caught in other ways.
-
-But I am fine with removing it in user unwind sframe (above), as
-user unwind performs the same check (see below).
-
->> @@ -86,18 +88,28 @@ static int unwind_user_next(struct unwind_user_state *state)
+>> @@ -98,26 +98,57 @@ static int unwind_user_next(struct unwind_user_state *state)
 >>  
->>  	/* Get the Stack Pointer (SP) */
->>  	sp = cfa + frame->sp_val_off;
->> -	/* Make sure that stack is not going in wrong direction */
->> -	if (sp <= state->sp)
->> +	/*
->> +	 * Make sure that stack is not going in wrong direction.  Allow SP
->> +	 * to be unchanged for the topmost frame, by subtracting topmost,
->> +	 * which is either 0 or 1.
->> +	 */
->> +	if (sp <= state->sp - topmost)
->>  		goto done;
->>  
->> -	/* Make sure that the address is word aligned */
->> -	shift = sizeof(long) == 4 || compat_fp_state(state) ? 2 : 3;
->> -	if ((cfa + frame->ra_off) & ((1 << shift) - 1))
->> -		goto done;
 >>  
 >>  	/* Get the Return Address (RA) */
->> -	if (unwind_get_user_long(ra, cfa + frame->ra_off, state))
->> -		goto done;
->> +	if (frame->ra_off) {
->> +		/* Make sure that the address is word aligned */
->> +		shift = sizeof(long) == 4 || compat_fp_state(state) ? 2 : 3;
->> +		if ((cfa + frame->ra_off) & ((1 << shift) - 1))
->> +			goto done;
->> +		if (unwind_get_user_long(ra, cfa + frame->ra_off, state))
->> +			goto done;
->> +	} else {
+>> -	if (frame->ra_off) {
+>> +	switch (frame->ra.loc) {
+>> +	case UNWIND_USER_LOC_NONE:
 >> +		if (!IS_ENABLED(CONFIG_HAVE_USER_RA_REG) || !topmost)
 >> +			goto done;
+>> +		ra = user_return_address(task_pt_regs(current));
+>> +		break;
+>> +	case UNWIND_USER_LOC_STACK:
+>> +		if (!frame->ra.frame_off)
+>> +			goto done;
+>>  		/* Make sure that the address is word aligned */
+>>  		shift = sizeof(long) == 4 || compat_fp_state(state) ? 2 : 3;
+>> -		if ((cfa + frame->ra_off) & ((1 << shift) - 1))
+>> +		if ((cfa + frame->ra.frame_off) & ((1 << shift) - 1))
+>>  			goto done;
+>> -		if (unwind_get_user_long(ra, cfa + frame->ra_off, state))
+>> +		if (unwind_get_user_long(ra, cfa + frame->ra.frame_off, state))
+>>  			goto done;
+>> -	} else {
+>> -		if (!IS_ENABLED(CONFIG_HAVE_USER_RA_REG) || !topmost)
+>> +		break;
+>> +	case UNWIND_USER_LOC_REG:
+>> +		if (!IS_ENABLED(CONFIG_HAVE_UNWIND_USER_LOC_REG) || !topmost)
+>>  			goto done;
+>> -		ra = user_return_address(task_pt_regs(current));
+>> +		if (unwind_user_get_reg(&ra, frame->ra.regnum))
+>> +			goto done;
+>> +		break;
+>> +	default:
+>> +		WARN_ON_ONCE(1);
+>> +		goto done;
 > 
-> I think this check is redundant with the one in __find_fre()?
+> The default case will never happen, can we make it a BUG()?
 
-Correct.  This one needs to stay, as it is at the topmost level (user
-unwind checks the unwind info obtained from user unwind sframe or any
-other method).
+Whatever Steve and you agree on.  I am new to Kernel development.
+
+>>  	}
+>>  
+>>  	/* Get the Frame Pointer (FP) */
+>> -	if (frame->fp_off && unwind_get_user_long(fp, cfa + frame->fp_off, state))
+>> +	switch (frame->fp.loc) {
+>> +	case UNWIND_USER_LOC_NONE:
+>> +		break;
+> 
+> The UNWIND_USER_LOC_NONE behavior is different here compared to above.
+
+See my comments below.
+
+> Do we also need UNWIND_USER_LOC_PT_REGS?
+
+Sorry, I cannot follow.  Do you suggest to rename UNWIND_USER_LOC_REG to
+UNWIND_USER_LOC_PT_REGS?
+
+>> +	case UNWIND_USER_LOC_STACK:
+>> +		if (!frame->fp.frame_off)
+>> +			goto done;
+>> +		if (unwind_get_user_long(fp, cfa + frame->fp.frame_off, state))
+>> +			goto done;
+>> +		break;
+>> +	case UNWIND_USER_LOC_REG:
+>> +		if (!IS_ENABLED(CONFIG_HAVE_UNWIND_USER_LOC_REG) || !topmost)
+>> +			goto done;
+> 
+> The topmost checking is *really* getting cumbersome, I do hope we can
+> get rid of that.
+
+Restoring from arbitrary registers is only valid in the topmost frame,
+as their values (i.e. task_pt_regs(current)) are only available there.
+For other frames only SP, FP, and RA register values are available.
+
+I think this test makes sense.  Is this test really that expensive?
+
+>> +		if (unwind_user_get_reg(&fp, frame->fp.regnum))
+>> +			goto done;
+>> +		break;
+>> +	default:
+>> +		WARN_ON_ONCE(1);
+>>  		goto done;
+>> +	}
+> 
+> BUG(1) here as well.
+
+Same as for other WARN_ON_ONCE() vs. BUG().
+
+>>  	state->ip = ra;
+>>  	state->sp = sp;
+>> -	if (frame->fp_off)
+>> +	if (frame->fp.loc != UNWIND_USER_LOC_NONE)
+>>  		state->fp = fp;
+> 
+> Instead of the extra conditional here, can fp be initialized to zero?
+> Either at the top of the function or in the RA switch statement?
+
+No.  But fp could be initialized to state->fp, so that when it is not
+saved and thus not restored it keeps it previous value.
 
 Regards,
 Jens
