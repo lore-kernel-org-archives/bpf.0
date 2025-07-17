@@ -1,60 +1,81 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ABDC2F850;
-	Thu, 17 Jul 2025 09:29:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33699288526
+	for <bpf@vger.kernel.org>; Thu, 17 Jul 2025 09:29:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752744558; cv=none; b=dYLjZk1TJQwbD/KFL3YvOQADUBWexxP2YYzlCTXWt5A3Jgp2NA8stLNk2CU/Zqsm50VJC0avUnSOhWaUvhSKL5/OFiFQKv4xnLLyGuk0xbygfUs5fs6HFY2bb/rhwusp0Ipa2PkApSSkXDgQxoIxVB9lGjKwVfqwe6iqgFGDFG0=
+	t=1752744570; cv=none; b=Rl1BOGQhMekdsEm6sOPkVvH2eAvwaGAHSVbwo2Q2v5L19izsI/60gXhbmLPpw+MkffPJLGwBTDi14IBRcZA8KkRWkF9scn0e28/9cErfh1M0s906lr0GF6wt62i+iV1vRRq/kcaRGTLaXBQVsD3s8SN8G/nLDcZWfnNGEAxTM48=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752744558; c=relaxed/simple;
-	bh=mH+YbEAXlJWH++eCVNxLYsOB6N+PZNhGYfFFQiF6ApQ=;
+	s=arc-20240116; t=1752744570; c=relaxed/simple;
+	bh=iW3HN3xgk4Ktd/shscMO3kKAkiCsallEkg6lWqhrUNg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JZrT5nAcaL2ZSShRN/HXVAAzsfox6DJx2rLYZXvKlDAlGcy6YI59doOLlSYJhHs4NwRbex9MH2lxlYZPmEfyoaPxaObcS8CcgzM0fV7bJrc7dBCMXvACqUlgYg1zYPY7D0TyDFg8CZrMQGEB7D6FUKLdUWyO6/3b4fuzqZ+PN4I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=TzSnh1CD; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	 In-Reply-To:Content-Type; b=cTOrEOnYlNDlP3ze4l8PsIjGtuDVcq+T3ARSnBeSheTF2f1Prq78adV8pXy7x0hLnzEKgO2Zw0INfUAKr3E2RCiy/CyIlB0Cy6QRMdsolYBfdppd+q/n/rZSoiwsLCpatilCF9juSKkOC8GldrG2GaiW8GsNIVO2DNGGrPpnNTE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=aiGLkqx3; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=q2+6AbNP; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=aiGLkqx3; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=q2+6AbNP; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="TzSnh1CD"
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56GNPV9v017572;
-	Thu, 17 Jul 2025 09:27:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=rVXK4n
-	jLLzFaBFUpR2DnrCCgtkl777amkMgNdy1I+X8=; b=TzSnh1CDfxpUyn7niuL0kC
-	EAe8Yf1AioeVZg/z7AgxUjU+PpEaupV8mJ1gijnVJlTUxVSTifuIF1soAekTWOwP
-	qzapAK3Y2tFu3b2H1PsS7RKV9GEZ+Wy028lHJCadERruYP7Iz5sKAC8u9XaThLjB
-	7QOaOofM9yE3hLXTzSNh1Hs0bO3hEWivP659NPTcGioIBdHaas4l3Ttv5ZjDY1XY
-	aEZ6Ry8UAaOiocuw+rYHX1hNOLiffXArkQmTRaA0srIb7YtXPWncSqWrT56/ojTy
-	GjK/m+dzUud6fWHEWTaKX1JIsr6PIP/4B92axHDSMiny9pVwJGvdyRAHQki4GKww
-	==
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 47xh9036bc-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 17 Jul 2025 09:27:50 +0000 (GMT)
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 56H5o3HJ032738;
-	Thu, 17 Jul 2025 09:27:49 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 47v48mb8gc-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 17 Jul 2025 09:27:49 +0000
-Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
-	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 56H9RjBJ51970528
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 17 Jul 2025 09:27:45 GMT
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id C24022004B;
-	Thu, 17 Jul 2025 09:27:45 +0000 (GMT)
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 66F1720043;
-	Thu, 17 Jul 2025 09:27:45 +0000 (GMT)
-Received: from [9.152.222.105] (unknown [9.152.222.105])
-	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Thu, 17 Jul 2025 09:27:45 +0000 (GMT)
-Message-ID: <ae46c02a-d871-4b26-97f4-bd82361ab8bc@linux.ibm.com>
-Date: Thu, 17 Jul 2025 11:27:45 +0200
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="aiGLkqx3";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="q2+6AbNP";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="aiGLkqx3";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="q2+6AbNP"
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 3555E215E7;
+	Thu, 17 Jul 2025 09:29:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1752744566; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=YLATFPVe4pgeqZtxHedb13XzCjSrhme4IJ4yO7+ttC4=;
+	b=aiGLkqx31HXxroD7da2w7vbY1DaqxZ/cXHbs0Xl+0sPDdbaO6B4fQazSNDook1JqqGRtK9
+	ERIF8KpQBs2XhDC1lvwsSzv+PxKoiJEZsE95ittHEZft0I/LXDMFV/uW3xxGLlF8fFw9fB
+	5jipV7e3/aY1uP9IaKvj8b4EPMjpXiY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1752744566;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=YLATFPVe4pgeqZtxHedb13XzCjSrhme4IJ4yO7+ttC4=;
+	b=q2+6AbNPKK/o7Ha82AXfS4X1YYK1bh/CokKxuiuKT931wC+nwDJcStBt1So7flcg/jxw8d
+	A5AYy2CnnyvF6rBQ==
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=aiGLkqx3;
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=q2+6AbNP
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1752744566; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=YLATFPVe4pgeqZtxHedb13XzCjSrhme4IJ4yO7+ttC4=;
+	b=aiGLkqx31HXxroD7da2w7vbY1DaqxZ/cXHbs0Xl+0sPDdbaO6B4fQazSNDook1JqqGRtK9
+	ERIF8KpQBs2XhDC1lvwsSzv+PxKoiJEZsE95ittHEZft0I/LXDMFV/uW3xxGLlF8fFw9fB
+	5jipV7e3/aY1uP9IaKvj8b4EPMjpXiY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1752744566;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=YLATFPVe4pgeqZtxHedb13XzCjSrhme4IJ4yO7+ttC4=;
+	b=q2+6AbNPKK/o7Ha82AXfS4X1YYK1bh/CokKxuiuKT931wC+nwDJcStBt1So7flcg/jxw8d
+	A5AYy2CnnyvF6rBQ==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 197BE13A6C;
+	Thu, 17 Jul 2025 09:29:26 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id oQ7dBXbCeGj1VwAAD6G6ig
+	(envelope-from <vbabka@suse.cz>); Thu, 17 Jul 2025 09:29:26 +0000
+Message-ID: <af48c5ec-e366-4151-8224-74cd5fe14b2a@suse.cz>
+Date: Thu, 17 Jul 2025 11:29:25 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -62,129 +83,134 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v1 06/16] unwind_user: Enable archs that define CFA =
- SP_callsite + offset
-To: Josh Poimboeuf <jpoimboe@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, x86@kernel.org,
-        Steven Rostedt <rostedt@kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Masami Hiramatsu
- <mhiramat@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Indu Bhagat <indu.bhagat@oracle.com>,
-        "Jose E. Marchesi" <jemarch@gnu.org>,
-        Beau Belgrave <beaub@linux.microsoft.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jens Axboe <axboe@kernel.dk>, Florian Weimer <fweimer@redhat.com>,
-        Sam James <sam@gentoo.org>
-References: <20250710163522.3195293-1-jremus@linux.ibm.com>
- <20250710163522.3195293-7-jremus@linux.ibm.com>
- <qoiocmdhuuaox5v5ig2ui67qbuxkvzl4z3ft4gdp7p3c4b4zfq@trjthmmculkf>
+Subject: Re: [PATCH v3 6/6] slab: Make slub local_trylock_t more precise for
+ LOCKDEP
 Content-Language: en-US
-From: Jens Remus <jremus@linux.ibm.com>
-Organization: IBM Deutschland Research & Development GmbH
-In-Reply-To: <qoiocmdhuuaox5v5ig2ui67qbuxkvzl4z3ft4gdp7p3c4b4zfq@trjthmmculkf>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, linux-mm <linux-mm@kvack.org>,
+ Harry Yoo <harry.yoo@oracle.com>, Shakeel Butt <shakeel.butt@linux.dev>,
+ Michal Hocko <mhocko@suse.com>, Sebastian Sewior <bigeasy@linutronix.de>,
+ Andrii Nakryiko <andrii@kernel.org>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Peter Zijlstra <peterz@infradead.org>, Steven Rostedt <rostedt@goodmis.org>,
+ Johannes Weiner <hannes@cmpxchg.org>
+References: <20250716022950.69330-1-alexei.starovoitov@gmail.com>
+ <20250716022950.69330-7-alexei.starovoitov@gmail.com>
+ <7173c09b-99fa-4e16-a764-b9ddfa7909ce@suse.cz>
+ <CAADnVQ+HoTbEdE1h+GubW_9++avZKGXLpifCK89nBh9cvDNRMQ@mail.gmail.com>
+From: Vlastimil Babka <vbabka@suse.cz>
+Autocrypt: addr=vbabka@suse.cz; keydata=
+ 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
+ m6M14QORSWTLRg==
+In-Reply-To: <CAADnVQ+HoTbEdE1h+GubW_9++avZKGXLpifCK89nBh9cvDNRMQ@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: wI6VvsJ2a1WoW6x-eSHjn4DVuGGhuHDT
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzE3MDA4MSBTYWx0ZWRfX2N4VbSkkUJ+I 9cJVvw34fHHv54+bWz4zYmKeqIZcvd9/SNPFA81lvMJSVkgKu414+bQPjp/CmWO/Cu6DU6A2gLv OJTDTwuM7asaj2e17olpfwqnOnaL32q26Mg68t9WGlTOlqsbYVRSwrmVPhQ8/1ZBNoB3zA/X3bu
- 95m98IXpxEh//nrPV9walN6zrqVdUMvfa/OkGixU3ikn5k1+FbkERHn3uIJ1diNEZwUSWNxRyMO tta/GFjbXz4mX/v3ZkpuYq2cZU7OM/bsYWtP6nFUHdEBGfDtYds3QhEFmbl9sc/RBkuQ0TZvyNU BaG1AaC/AuRv/wAmPjqU3aoZmHmtoh/qMth/W1kyfE9xAsFRj/DzE3tjhQQ0BvRy6lgzmJ3S6Xe
- 1QjNcRXC7LJ4bLWidPzMQ3TlwtdLfaneHCG0YeFFJ7cPggJ38pZbr4PuhBVZJV3jzcQC5fTx
-X-Proofpoint-GUID: wI6VvsJ2a1WoW6x-eSHjn4DVuGGhuHDT
-X-Authority-Analysis: v=2.4 cv=C43pyRP+ c=1 sm=1 tr=0 ts=6878c216 cx=c_pps a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17 a=IkcTkHD0fZMA:10 a=Wb1JkmetP80A:10 a=VnNF1IyMAAAA:8 a=rJ7-DNekCqM9-0Bz_MUA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-07-17_01,2025-07-16_02,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
- impostorscore=0 malwarescore=0 mlxlogscore=757 mlxscore=0
- priorityscore=1501 clxscore=1015 lowpriorityscore=0 bulkscore=0
- adultscore=0 spamscore=0 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
- definitions=main-2507170081
+X-Spamd-Result: default: False [-3.01 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	SUSPICIOUS_RECIPS(1.50)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	ARC_NA(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com];
+	TO_DN_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	RCVD_TLS_ALL(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_TWO(0.00)[2];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[vger.kernel.org,kvack.org,oracle.com,linux.dev,suse.com,linutronix.de,kernel.org,gmail.com,linux-foundation.org,infradead.org,goodmis.org,cmpxchg.org];
+	DNSWL_BLOCKED(0.00)[2a07:de40:b281:106:10:150:64:167:received,2a07:de40:b281:104:10:150:64:97:from];
+	TAGGED_RCPT(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	DKIM_TRACE(0.00)[suse.cz:+];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[13]
+X-Spam-Flag: NO
+X-Spam-Level: 
+X-Rspamd-Queue-Id: 3555E215E7
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Rspamd-Action: no action
+X-Spam-Score: -3.01
 
-On 16.07.2025 23:32, Josh Poimboeuf wrote:
-> On Thu, Jul 10, 2025 at 06:35:12PM +0200, Jens Remus wrote:
->> Most architectures define their CFA as the value of the stack pointer
->> (SP) at the call site in the previous frame, as suggested by the DWARF
->> standard:
+On 7/17/25 05:32, Alexei Starovoitov wrote:
+> On Wed, Jul 16, 2025 at 6:35 AM Vlastimil Babka <vbabka@suse.cz> wrote:
+>> >  #endif
+>> >       /* Used for retrieving partial slabs, etc. */
+>> >       slab_flags_t flags;
+>> > diff --git a/mm/slub.c b/mm/slub.c
+>> > index c92703d367d7..526296778247 100644
+>> > --- a/mm/slub.c
+>> > +++ b/mm/slub.c
+>> > @@ -3089,12 +3089,26 @@ static inline void note_cmpxchg_failure(const char *n,
+>> >
+>> >  static void init_kmem_cache_cpus(struct kmem_cache *s)
+>> >  {
+>> > +#ifdef CONFIG_PREEMPT_RT
+>> > +     /* Register lockdep key for non-boot kmem caches */
+>> > +     bool finegrain_lockdep = !init_section_contains(s, 1);
 >>
->>   CFA = <SP at call site>
->>
->> Enable unwinding of user space for architectures, such as s390, which
->> define their CFA as the value of the SP at the call site in the previous
->> frame with an offset:
->>
->>   CFA = <SP at call site> + offset
+>> I guess it's to avoid the "if (WARN_ON_ONCE(static_obj(key)))"
+>> if it means the two bootstrap caches get a different class just by being
+>> static, then I guess it works.
 > 
-> This is a bit confusing, as the comment and code define it as
-> 
->     SP = CFA + offset
-> 
-> Should the commit log be updated to match that?
+> Yes. Not pretty. The alternative is to pass a flag
+> through a bunch of functions all the way from kmem_cache_init.
+> Another alternative is to
+> bool finegrain_lockdep = s != boot_kmem_cache_node && s != boot_kmem_cache.
+> Both are imo uglier.
+> init_section_contains() is more precise and matches static_obj().
 
-I agree that the commit message is confusing. Would it help if I replace
-it with the following:
+We also have the slab_state variable to handle bootstrap, but it would need
+to gain a new state I think. Currently it's updated to "slab_state =
+PARTIAL;" right between creating kmem_cache_node and kmem_cache, and the
+next update "slab_state = UP;" is only after all the kmalloc caches. IIUC
+we'd need to add a new one right after creating "kmem_cache".
 
-Most architectures define their CFA as the value of the stack pointer
-(SP) at the call site in the previous frame, as suggested by the DWARF
-standard.  Therefore the SP at call site can be unwound using an
-implicitly assumed value offset from CFA rule with an offset of zero:
+I guess up to you, the init_section_contains() seems working too.
 
-  .cfi_val_offset <SP>, 0
-
-As a result the SP at call site computes as follows:
-
-  SP = CFA
-
-Enable unwinding of user space for architectures, such as s390, which
-define their CFA as the value of the SP at the call site in the previous
-frame with an offset.  Do so by enabling architectures to override the
-default SP value offset from CFA of zero with an architecture-specific
-one:
-
-  .cfi_val_offset <SP>, offset
-  
-So that the SP at call site computes as follows:
-
-  SP = CFA + offset
-
->> +++ b/arch/x86/include/asm/unwind_user.h
->> @@ -8,6 +8,7 @@
->>  	.cfa_off	= (s32)sizeof(long) *  2,				\
->>  	.ra_off		= (s32)sizeof(long) * -1,				\
->>  	.fp_off		= (s32)sizeof(long) * -2,				\
->> +	.sp_val_off	= (s32)0,						\
-> 
-> IIUC, this is similar to ra_off and fp_off in that its an offset from
-> the CFA.  Can we call it "sp_off"?
-
-My intent was to use the terminology from DWARF CFI (i.e. "offset(N)"
-and "val_offset(N)") and the related assembler CFI directives:
-
-  .cfi_offset register, offset:  Previous value of register is saved at
-                                 offset from CFA.
-
-  .cfi_val_offset register, offset:  Previous value of register is
-                                     CFA + offset. 
-
-Regards,
-Jens
--- 
-Jens Remus
-Linux on Z Development (D3303)
-+49-7031-16-1128 Office
-jremus@de.ibm.com
-
-IBM
-
-IBM Deutschland Research & Development GmbH; Vorsitzender des Aufsichtsrats: Wolfgang Wendt; Geschäftsführung: David Faller; Sitz der Gesellschaft: Böblingen; Registergericht: Amtsgericht Stuttgart, HRB 243294
-IBM Data Privacy Statement: https://www.ibm.com/privacy/
+> Checking for SLAB_NO_OBJ_EXT isn't an option. Since it's conditional.
 
