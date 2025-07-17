@@ -1,38 +1,38 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9DAC1EFFB7;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD6E51F4169;
 	Thu, 17 Jul 2025 01:29:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752715756; cv=none; b=TzWq7nyfIuDLJuvPhu0kxDdSQriU/bayEkAQWOoaqzw0VzXOYOhTM+lEsyH0duZ4wRlmOdCCbWFVuF/vqToTCDLg+i295hdKMr7NcaTh9POg8Wy48Cjr9eZangOEdtzLv/Mgdsy4uWlXf/oLBnycQrhH7Ar0ZqthqqztJ6HfGHU=
+	t=1752715757; cv=none; b=RSQ3qnfaRS6A43dfvCdrqlHz37R56+PEAjnl5rb/U44fGQxrYct8Be9YMIHXH8z8rX5KsvDvdgZZVs9LLV1dLGiZc7dW1RaXwlT6F4+gt7P3IQbp3J7SyNJrqt2mZfLmGq4FS2VFRKWCJJYjNGxb7A7jRWsNIQD9Fm54zcU/0mw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752715756; c=relaxed/simple;
-	bh=w3zlkwOetCuL4IjiyP6cPFfl8DekoC294wC1K1nFMzE=;
+	s=arc-20240116; t=1752715757; c=relaxed/simple;
+	bh=tQh371Xu4aNv634IWnbNpzI8g0gGO4AVuobSDHJ5Ps4=;
 	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type; b=CMz95NlwVZUIMb0JPoggGcLEeovmnR5fW9mrQax9dYTy+MNVGM6pUA7BMD1VmWkm8RDDLpzcxbI8g7v6Q2mYVUO54ehfMfpCvJBWURoDl/vXki8Ovwde6U8V3bwCSZv5jib2vbrzt6GwFnqY7IlB+rz/+Z0jWnVGTeX8YLdnqZw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fj1XH2tn; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type; b=rp6bvutDINRdo2y2oSJ0v+Kb8Z9v9wRgZrEcyd62dnoJGn62tiHghHEA8Lfje5dze4KXgqttkx6i+r9IwDnoFi8yfI4JrEVc972LkKTd4B8pnt/ujIMQaee6Wa/A8iBmery6Q4qUQ4UvZwJVkb2uNFNV/xoV5IScY/d34NcoLdI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kJBeqAyz; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fj1XH2tn"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41922C4CEE7;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kJBeqAyz"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA32FC4CEF4;
 	Thu, 17 Jul 2025 01:29:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1752715756;
-	bh=w3zlkwOetCuL4IjiyP6cPFfl8DekoC294wC1K1nFMzE=;
+	bh=tQh371Xu4aNv634IWnbNpzI8g0gGO4AVuobSDHJ5Ps4=;
 	h=Date:From:To:Cc:Subject:References:From;
-	b=fj1XH2tn68v/d6Ku+hmXyT5aZ4OXuMTP8/i9B8ecQ+ZMAwstAGb/ZP7ac8o8ZhmMO
-	 +DcdMhgHeka1jyRB3Fb/YDCX0CoAVRxmSbxr5JgCAtK3tiAfQ/owISf2w9/JJvcpE2
-	 VEdTmJb9OBcTDiar/3rrmICeDv0ib7e8kK+OhLPtsRa7kW8q7fR2d/oXNhUlfvt8k7
-	 KA/akKfXzNaSOlqkTT3U+Bu3rbqiSolSjcXkF2+eaR2YA6Z6hNRhrWHuF4J4IA8y+j
-	 eQEHRxdb2fvRXA8w/o8HRhWz4O7+OnkDj5JWzweTtwmZHvYmCKnkxHk3ckCjmKDU4Z
-	 XzBk7K8Hd0Vvw==
+	b=kJBeqAyz4tUxhCCJvJ88LMpi7Kd9mtT8GIrBQDiJSkqAx1uKNvIelnNHSoPtwR7ee
+	 uEuFDpVTzU/zswUKFJdxGy9lucs3uk+0WirTaau0MJDzi83I68ljRIQiylCxMu6hqh
+	 MeU8gjjg0Nai1TFVQQ081YXIh4TML3NABi/MFqtTawFIF/YBHG1SVcAsLc1e/chF9j
+	 8imwhCPaSZybBhAQ+gMEtJXPJptZUImi7p75vUsKY/RErgeAhePlKuqAzMB5rACpyc
+	 krBJb2Qn5V5FHl0Q009Y9E89mrDCGRshQNjbqAcMCmIREaruN9oYpJ2iEu7TyBf2Lk
+	 KMLhYK6spcxrg==
 Received: from rostedt by gandalf with local (Exim 4.98.2)
 	(envelope-from <rostedt@kernel.org>)
-	id 1ucDRI-000000068wi-2Vpm;
-	Wed, 16 Jul 2025 21:29:36 -0400
-Message-ID: <20250717012936.450412190@kernel.org>
+	id 1ucDRJ-000000068yD-0S7b;
+	Wed, 16 Jul 2025 21:29:37 -0400
+Message-ID: <20250717012936.957316732@kernel.org>
 User-Agent: quilt/0.68
-Date: Wed, 16 Jul 2025 21:28:53 -0400
+Date: Wed, 16 Jul 2025 21:28:56 -0400
 From: Steven Rostedt <rostedt@kernel.org>
 To: linux-kernel@vger.kernel.org,
  linux-trace-kernel@vger.kernel.org,
@@ -56,7 +56,7 @@ Cc: Masami Hiramatsu <mhiramat@kernel.org>,
  Jens Axboe <axboe@kernel.dk>,
  Florian Weimer <fweimer@redhat.com>,
  Sam James <sam@gentoo.org>
-Subject: [PATCH v9 05/11] unwind_user/sframe: Detect .sframe sections in executables
+Subject: [PATCH v9 08/11] unwind_user/sframe: Remove .sframe section on detected corruption
 References: <20250717012848.927473176@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -68,137 +68,30 @@ Content-Type: text/plain; charset=UTF-8
 
 From: Josh Poimboeuf <jpoimboe@kernel.org>
 
-When loading an ELF executable, automatically detect an .sframe section
-and associate it with the mm_struct.
+To avoid continued attempted use of a bad .sframe section, remove it
+on demand when the first sign of corruption is detected.
 
 Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- fs/binfmt_elf.c          | 49 +++++++++++++++++++++++++++++++++++++---
- include/uapi/linux/elf.h |  1 +
- 2 files changed, 47 insertions(+), 3 deletions(-)
+ kernel/unwind/sframe.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
-index a43363d593e5..e7128d026ec0 100644
---- a/fs/binfmt_elf.c
-+++ b/fs/binfmt_elf.c
-@@ -47,6 +47,7 @@
- #include <linux/dax.h>
- #include <linux/uaccess.h>
- #include <linux/rseq.h>
-+#include <linux/sframe.h>
- #include <asm/param.h>
- #include <asm/page.h>
- 
-@@ -622,6 +623,21 @@ static inline int make_prot(u32 p_flags, struct arch_elf_state *arch_state,
- 	return arch_elf_adjust_prot(prot, arch_state, has_interp, is_interp);
+diff --git a/kernel/unwind/sframe.c b/kernel/unwind/sframe.c
+index b10420d19840..f246ead6c2a0 100644
+--- a/kernel/unwind/sframe.c
++++ b/kernel/unwind/sframe.c
+@@ -310,6 +310,10 @@ int sframe_find(unsigned long ip, struct unwind_user_frame *frame)
+ 	ret = __find_fre(sec, &fde, ip, frame);
+ end:
+ 	user_read_access_end();
++
++	if (ret == -EFAULT)
++		WARN_ON_ONCE(sframe_remove_section(sec->sframe_start));
++
+ 	return ret;
  }
  
-+static void elf_add_sframe(struct elf_phdr *text, struct elf_phdr *sframe,
-+			   unsigned long base_addr)
-+{
-+	unsigned long sframe_start, sframe_end, text_start, text_end;
-+
-+	sframe_start = base_addr + sframe->p_vaddr;
-+	sframe_end   = sframe_start + sframe->p_memsz;
-+
-+	text_start   = base_addr + text->p_vaddr;
-+	text_end     = text_start + text->p_memsz;
-+
-+	/* Ignore return value, sframe section isn't critical */
-+	sframe_add_section(sframe_start, sframe_end, text_start, text_end);
-+}
-+
- /* This is much more generalized than the library routine read function,
-    so we keep this separate.  Technically the library read function
-    is only provided so that we can read a.out libraries that have
-@@ -632,7 +648,7 @@ static unsigned long load_elf_interp(struct elfhdr *interp_elf_ex,
- 		unsigned long no_base, struct elf_phdr *interp_elf_phdata,
- 		struct arch_elf_state *arch_state)
- {
--	struct elf_phdr *eppnt;
-+	struct elf_phdr *eppnt, *sframe_phdr = NULL;
- 	unsigned long load_addr = 0;
- 	int load_addr_set = 0;
- 	unsigned long error = ~0UL;
-@@ -658,7 +674,8 @@ static unsigned long load_elf_interp(struct elfhdr *interp_elf_ex,
- 
- 	eppnt = interp_elf_phdata;
- 	for (i = 0; i < interp_elf_ex->e_phnum; i++, eppnt++) {
--		if (eppnt->p_type == PT_LOAD) {
-+		switch (eppnt->p_type) {
-+		case PT_LOAD: {
- 			int elf_type = MAP_PRIVATE;
- 			int elf_prot = make_prot(eppnt->p_flags, arch_state,
- 						 true, true);
-@@ -697,6 +714,20 @@ static unsigned long load_elf_interp(struct elfhdr *interp_elf_ex,
- 				error = -ENOMEM;
- 				goto out;
- 			}
-+			break;
-+		}
-+		case PT_GNU_SFRAME:
-+			sframe_phdr = eppnt;
-+			break;
-+		}
-+	}
-+
-+	if (sframe_phdr) {
-+		eppnt = interp_elf_phdata;
-+		for (i = 0; i < interp_elf_ex->e_phnum; i++, eppnt++) {
-+			if (eppnt->p_flags & PF_X) {
-+				elf_add_sframe(eppnt, sframe_phdr, load_addr);
-+			}
- 		}
- 	}
- 
-@@ -821,7 +852,7 @@ static int load_elf_binary(struct linux_binprm *bprm)
- 	int first_pt_load = 1;
- 	unsigned long error;
- 	struct elf_phdr *elf_ppnt, *elf_phdata, *interp_elf_phdata = NULL;
--	struct elf_phdr *elf_property_phdata = NULL;
-+	struct elf_phdr *elf_property_phdata = NULL, *sframe_phdr = NULL;
- 	unsigned long elf_brk;
- 	bool brk_moved = false;
- 	int retval, i;
-@@ -930,6 +961,10 @@ static int load_elf_binary(struct linux_binprm *bprm)
- 				executable_stack = EXSTACK_DISABLE_X;
- 			break;
- 
-+		case PT_GNU_SFRAME:
-+			sframe_phdr = elf_ppnt;
-+			break;
-+
- 		case PT_LOPROC ... PT_HIPROC:
- 			retval = arch_elf_pt_proc(elf_ex, elf_ppnt,
- 						  bprm->file, false,
-@@ -1227,6 +1262,14 @@ static int load_elf_binary(struct linux_binprm *bprm)
- 			elf_brk = k;
- 	}
- 
-+	if (sframe_phdr) {
-+		for (i = 0, elf_ppnt = elf_phdata;
-+		     i < elf_ex->e_phnum; i++, elf_ppnt++) {
-+			if ((elf_ppnt->p_flags & PF_X))
-+				elf_add_sframe(elf_ppnt, sframe_phdr, load_bias);
-+		}
-+	}
-+
- 	e_entry = elf_ex->e_entry + load_bias;
- 	phdr_addr += load_bias;
- 	elf_brk += load_bias;
-diff --git a/include/uapi/linux/elf.h b/include/uapi/linux/elf.h
-index 819ded2d39de..92c16c94fca8 100644
---- a/include/uapi/linux/elf.h
-+++ b/include/uapi/linux/elf.h
-@@ -41,6 +41,7 @@ typedef __u16	Elf64_Versym;
- #define PT_GNU_STACK	(PT_LOOS + 0x474e551)
- #define PT_GNU_RELRO	(PT_LOOS + 0x474e552)
- #define PT_GNU_PROPERTY	(PT_LOOS + 0x474e553)
-+#define PT_GNU_SFRAME	(PT_LOOS + 0x474e554)
- 
- 
- /* ARM MTE memory tag segment type */
 -- 
 2.47.2
 
