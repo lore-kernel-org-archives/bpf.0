@@ -1,38 +1,38 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77BED191F9C;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCBF21B0F1E;
 	Thu, 17 Jul 2025 00:49:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752713377; cv=none; b=HIu2r7EX7OTDs/W/21cqQkCPTZzVHblmJTs2UT2LuapjVoYFxfsDF+S2LpZ2skQpKD7fiw7DizjeJbJn8VLFdZOzpbbUe0mb7r0oiYfEVgxXnQs6LUVc1xAJkTgp6Ebe4qJVucP//UyiJaSOcYba5hOJTV5Q6VfcPge39WZ4ALA=
+	t=1752713377; cv=none; b=EUE3gT3vFjzEoDKknyZXfW4QxwKa6UfPNFvtvA9GqcDbf7Fj7FkZ/6t43eMHVLpy2yk20Rbsmy8fAiVtHHQMcKRQqXMDFD4WIewkbZw8qqUhu4+aduQ50XNqNoIctLQd/xsDldmuKff0AjPdonld0NkM02tZRH11kxo7tyakMMI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1752713377; c=relaxed/simple;
-	bh=ztTkHi/rpUOWBF3uj+nA3GGXDP9p4j/gtyL2oahl20g=;
+	bh=Wq6u8PYGkAyQl/xVgbmkj6KCcF4ZvUyT5Z2nnZPFToQ=;
 	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type; b=PUpbHsR1ftPOSRES6BBDloYIGCo3/mn1KJsvAUZO9baLFhrY+7ymXfPvIB3KSuvcR6cowB6beijHF5a4+tNEWwK56/dDbiOfvKpX6/bqyG4Gf6YwuyJUhDEFKBZUcy738Sl5MaQLumXwSESEuAKUb6bsdDZf9PRTTL/P3HLHf6c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WpfsPeNr; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type; b=upn+xzrz3aKrgNhehgtLWDdPq8zlXaGQ00IajvtJLdNNnil/xmleI0ekV5LKdZRCz6FMN7l5im0KMxxsZc6fNJOfcp7NWmlK4DOzEN0rCBc/qWTbvPXCvyjnlFvN/VmF5RXi0iniV8iM6y9hXB0aEhB3VkKvdVhng+J7iTziu9o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lUsxwkWC; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WpfsPeNr"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2296BC4CEF5;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lUsxwkWC"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B054C4CEE7;
 	Thu, 17 Jul 2025 00:49:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1752713377;
-	bh=ztTkHi/rpUOWBF3uj+nA3GGXDP9p4j/gtyL2oahl20g=;
+	bh=Wq6u8PYGkAyQl/xVgbmkj6KCcF4ZvUyT5Z2nnZPFToQ=;
 	h=Date:From:To:Cc:Subject:References:From;
-	b=WpfsPeNrvXDjQQIrQuEvhm/PUI//mNaXnCwa3eFALiGpzOChJ0LHWz8ClxTnd/By6
-	 mcC1utqCu56O3wLbNhOb44PXX8QuYjnj+QNyb3Mg6L51aMbBKzWRwaii+bXdrUhzgb
-	 aXG028REbWfg4JM1frSKUqvCdrVMfexUx0+RXar0k3tiB2Yg28TIXVHcWsby2v7jpg
-	 kyE9g+EDHJa1J4Hmni741jSiemCpxkaJL8h/QFeevjxeVg5C8CktxMQcDr5MO2KrUi
-	 ztEfrgqbaPlG7BOSbECtS4hiRZjl0+B2hotPOJgPdvpBArDpHBaKhSB4KC6riJwbJ6
-	 ycarTFs156erA==
+	b=lUsxwkWCcEyrjWOszLLXvOUm4HSGY21eHRxTc4MwDI71GyA4Uup7RZHIlJEHiRnKA
+	 bTPaHugWSLoaMvE79Tt8h5nvlBowIVt/0VA6iuYe2pFxS56Mn507tG3+AW/u+ruryz
+	 YuSqC7oNt9ChAALmrWbMNi/vz+w3sFdY/qOOO1997GSSy2v0uWSNTKDbwugqVEjOMH
+	 WRgFsd6azTYsI/Pos8xBd2UyZdgqbcyvP6MO3UdwH7fIym9zPeO1JR5K9kKC6XPr1m
+	 3zBQ4BIJpW1hTfUiE79OOEjzgJxyRgDPCdQTEr3RyRvygI9Hc8HN2McVu+7oCCPaaz
+	 y0624NTBi98FQ==
 Received: from rostedt by gandalf with local (Exim 4.98.2)
 	(envelope-from <rostedt@kernel.org>)
-	id 1ucCov-000000067Tx-1d9d;
+	id 1ucCov-000000067Uv-333V;
 	Wed, 16 Jul 2025 20:49:57 -0400
-Message-ID: <20250717004957.244220351@kernel.org>
+Message-ID: <20250717004957.580552530@kernel.org>
 User-Agent: quilt/0.68
-Date: Wed, 16 Jul 2025 20:49:15 -0400
+Date: Wed, 16 Jul 2025 20:49:17 -0400
 From: Steven Rostedt <rostedt@kernel.org>
 To: linux-kernel@vger.kernel.org,
  linux-trace-kernel@vger.kernel.org,
@@ -56,7 +56,7 @@ Cc: Masami Hiramatsu <mhiramat@kernel.org>,
  Jens Axboe <axboe@kernel.dk>,
  Florian Weimer <fweimer@redhat.com>,
  Sam James <sam@gentoo.org>
-Subject: [PATCH v14 05/12] unwind_user/deferred: Make unwind deferral requests NMI-safe
+Subject: [PATCH v14 07/12] unwind deferred: Add unwind_completed mask to stop spurious callbacks
 References: <20250717004910.297898999@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -68,135 +68,139 @@ Content-Type: text/plain; charset=UTF-8
 
 From: Steven Rostedt <rostedt@goodmis.org>
 
-Make unwind_deferred_request() NMI-safe so tracers in NMI context can
-call it and safely request a user space stacktrace when the task exits.
+If there's more than one registered tracer to the unwind deferred
+infrastructure, it is currently possible that one tracer could cause extra
+callbacks to happen for another tracer if the former requests a deferred
+stacktrace after the latter's callback was executed and before the task
+went back to user space.
 
-Note, this is only allowed for architectures that implement a safe
-cmpxchg. If an architecture requests a deferred stack trace from NMI
-context that does not support a safe NMI cmpxchg, it will get an -EINVAL
-and trigger a warning. For those architectures, they would need another
-method (perhaps an irqwork), to request a deferred user space stack trace.
-That can be dealt with later if one of theses architectures require this
-feature.
+Here's an example of how this could occur:
 
-Suggested-by: Peter Zijlstra <peterz@infradead.org>
+  [Task enters kernel]
+    tracer 1 request -> add cookie to its buffer
+    tracer 1 request -> add cookie to its buffer
+    <..>
+    [ task work executes ]
+    tracer 1 callback -> add trace + cookie to its buffer
+
+    [tracer 2 requests and triggers the task work again]
+    [ task work executes again ]
+    tracer 1 callback -> add trace + cookie to its buffer
+    tracer 2 callback -> add trace + cookie to its buffer
+ [Task exits back to user space]
+
+This is because the bit for tracer 1 gets set in the task's unwind_mask
+when it did its request and does not get cleared until the task returns
+back to user space. But if another tracer were to request another deferred
+stacktrace, then the next task work will executed all tracer's callbacks
+that have their bits set in the task's unwind_mask.
+
+To fix this issue, add another mask called unwind_completed and place it
+into the task's info->cache structure. The cache structure is allocated
+on the first occurrence of a deferred stacktrace and this unwind_completed
+mask is not needed until then. It's better to have it in the cache than to
+permanently waste space in the task_struct.
+
+After a tracer's callback is executed, it's bit gets set in this
+unwind_completed mask. When the task_work enters, it will AND the task's
+unwind_mask with the inverse of the unwind_completed which will eliminate
+any work that already had its callback executed since the task entered the
+kernel.
+
+When the task leaves the kernel, it will reset this unwind_completed mask
+just like it resets the other values as it enters user space.
+
+Link: https://lore.kernel.org/all/20250716142609.47f0e4a5@batman.local.home/
+
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
-Changes since v13: https://lore.kernel.org/20250708012358.831631671@kernel.org
+ include/linux/unwind_deferred.h       |  4 +++-
+ include/linux/unwind_deferred_types.h |  1 +
+ kernel/unwind/deferred.c              | 19 +++++++++++++++----
+ 3 files changed, 19 insertions(+), 5 deletions(-)
 
-- Removed update to convert pending over to local_t as the standalone
-  pending field is going away in subsequent patches.
-
-- Added WARN_ON when unwind_deferred_request() is called from NMI context
-  when an architecture doesn't support it. (Peter Zijlstra).
-
-- Always do the try_cmpxchg() in unwind_deferred_request() instead of
-  having a special case for !CAN_USE_IN_NMI as that logic will be
-  replaced in coming patches (this simplifies the code).
-
- kernel/unwind/deferred.c | 52 +++++++++++++++++++++++++++++++++-------
- 1 file changed, 44 insertions(+), 8 deletions(-)
-
+diff --git a/include/linux/unwind_deferred.h b/include/linux/unwind_deferred.h
+index 337ead927d4d..b9ec4c8515c7 100644
+--- a/include/linux/unwind_deferred.h
++++ b/include/linux/unwind_deferred.h
+@@ -55,8 +55,10 @@ static __always_inline void unwind_reset_info(void)
+ 	 * depends on nr_entries being cleared on exit to user,
+ 	 * this needs to be a separate conditional.
+ 	 */
+-	if (unlikely(info->cache))
++	if (unlikely(info->cache)) {
+ 		info->cache->nr_entries = 0;
++		info->cache->unwind_completed = 0;
++	}
+ }
+ 
+ #else /* !CONFIG_UNWIND_USER */
+diff --git a/include/linux/unwind_deferred_types.h b/include/linux/unwind_deferred_types.h
+index 5dc9cda141ff..33b62ac25c86 100644
+--- a/include/linux/unwind_deferred_types.h
++++ b/include/linux/unwind_deferred_types.h
+@@ -3,6 +3,7 @@
+ #define _LINUX_UNWIND_USER_DEFERRED_TYPES_H
+ 
+ struct unwind_cache {
++	unsigned long		unwind_completed;
+ 	unsigned int		nr_entries;
+ 	unsigned long		entries[];
+ };
 diff --git a/kernel/unwind/deferred.c b/kernel/unwind/deferred.c
-index 2cbae2ada309..c5ac087d2396 100644
+index e19f02ef416d..a3d26014a2e6 100644
 --- a/kernel/unwind/deferred.c
 +++ b/kernel/unwind/deferred.c
-@@ -12,6 +12,31 @@
- #include <linux/slab.h>
- #include <linux/mm.h>
+@@ -166,12 +166,18 @@ static void unwind_deferred_task_work(struct callback_head *head)
  
-+/*
-+ * For requesting a deferred user space stack trace from NMI context
-+ * the architecture must support a safe cmpxchg in NMI context.
-+ * For those architectures that do not have that, then it cannot ask
-+ * for a deferred user space stack trace from an NMI context. If it
-+ * does, then it will get -EINVAL.
-+ */
-+#if defined(CONFIG_ARCH_HAVE_NMI_SAFE_CMPXCHG)
-+# define CAN_USE_IN_NMI		1
-+static inline bool try_assign_cnt(struct unwind_task_info *info, u32 cnt)
-+{
-+	u32 old = 0;
+ 	unwind_user_faultable(&trace);
+ 
++	if (info->cache)
++		bits &= ~(info->cache->unwind_completed);
 +
-+	return try_cmpxchg(&info->id.cnt, &old, cnt);
-+}
-+#else
-+# define CAN_USE_IN_NMI		0
-+/* When NMIs are not allowed, this always succeeds */
-+static inline bool try_assign_cnt(struct unwind_task_info *info, u32 cnt)
-+{
-+	info->id.cnt = cnt;
-+	return true;
-+}
-+#endif
-+
- /* Make the cache fit in a 4K page */
- #define UNWIND_MAX_ENTRIES					\
- 	((SZ_4K - sizeof(struct unwind_cache)) / sizeof(long))
-@@ -42,14 +67,13 @@ static DEFINE_PER_CPU(u32, unwind_ctx_ctr);
- static u64 get_cookie(struct unwind_task_info *info)
- {
- 	u32 cnt = 1;
--	u32 old = 0;
+ 	cookie = info->id.id;
  
- 	if (info->id.cpu)
- 		return info->id.id;
- 
- 	/* LSB is always set to ensure 0 is an invalid value */
- 	cnt |= __this_cpu_read(unwind_ctx_ctr) + 2;
--	if (try_cmpxchg(&info->id.cnt, &old, cnt)) {
-+	if (try_assign_cnt(info, cnt)) {
- 		/* Update the per cpu counter */
- 		__this_cpu_write(unwind_ctx_ctr, cnt);
+ 	guard(mutex)(&callback_mutex);
+ 	list_for_each_entry(work, &callbacks, list) {
+-		if (test_bit(work->bit, &bits))
++		if (test_bit(work->bit, &bits)) {
+ 			work->func(work, &trace, cookie);
++			if (info->cache)
++				info->cache->unwind_completed |= BIT(work->bit);
++		}
  	}
-@@ -167,31 +191,43 @@ static void unwind_deferred_task_work(struct callback_head *head)
- int unwind_deferred_request(struct unwind_work *work, u64 *cookie)
+ }
+ 
+@@ -260,23 +266,28 @@ int unwind_deferred_request(struct unwind_work *work, u64 *cookie)
+ void unwind_deferred_cancel(struct unwind_work *work)
  {
- 	struct unwind_task_info *info = &current->unwind_info;
-+	long pending;
- 	int ret;
+ 	struct task_struct *g, *t;
++	int bit;
  
- 	*cookie = 0;
+ 	if (!work)
+ 		return;
  
--	if (WARN_ON_ONCE(in_nmi()))
--		return -EINVAL;
--
- 	if ((current->flags & (PF_KTHREAD | PF_EXITING)) ||
- 	    !user_mode(task_pt_regs(current)))
- 		return -EINVAL;
- 
-+	/*
-+	 * NMI requires having safe cmpxchg operations.
-+	 * Trigger a warning to make it obvious that an architecture
-+	 * is using this in NMI when it should not be.
-+	 */
-+	if (WARN_ON_ONCE(!CAN_USE_IN_NMI && in_nmi()))
-+		return -EINVAL;
++	bit = work->bit;
 +
- 	guard(irqsave)();
+ 	/* No work should be using a reserved bit */
+-	if (WARN_ON_ONCE(BIT(work->bit) & RESERVED_BITS))
++	if (WARN_ON_ONCE(BIT(bit) & RESERVED_BITS))
+ 		return;
  
- 	*cookie = get_cookie(info);
+ 	guard(mutex)(&callback_mutex);
+ 	list_del(&work->list);
  
- 	/* callback already pending? */
--	if (info->pending)
-+	pending = READ_ONCE(info->pending);
-+	if (pending)
-+		return 1;
-+
-+	/* Claim the work unless an NMI just now swooped in to do so. */
-+	if (!try_cmpxchg(&info->pending, &pending, 1))
- 		return 1;
+-	__clear_bit(work->bit, &unwind_mask);
++	__clear_bit(bit, &unwind_mask);
  
- 	/* The work has been claimed, now schedule it. */
- 	ret = task_work_add(current, &info->work, TWA_RESUME);
--	if (WARN_ON_ONCE(ret))
-+	if (WARN_ON_ONCE(ret)) {
-+		WRITE_ONCE(info->pending, 0);
- 		return ret;
-+	}
- 
--	info->pending = 1;
- 	return 0;
+ 	guard(rcu)();
+ 	/* Clear this bit from all threads */
+ 	for_each_process_thread(g, t) {
+-		clear_bit(work->bit, &t->unwind_info.unwind_mask);
++		clear_bit(bit, &t->unwind_info.unwind_mask);
++		if (t->unwind_info.cache)
++			clear_bit(bit, &t->unwind_info.cache->unwind_completed);
+ 	}
  }
  
 -- 
