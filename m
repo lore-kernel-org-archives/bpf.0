@@ -1,38 +1,38 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 010AB1C5F14;
-	Thu, 17 Jul 2025 00:49:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FF591D7995;
+	Thu, 17 Jul 2025 00:49:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752713378; cv=none; b=f4v1g2XmpQnix+KlTMyXVIan9BE5S1bG6Nu/knYuyrhSBQ1C2KJPyXKgkgn6+fAkY9vWNSJkqfIiztna7PcgAXDS4aTHwopEtPjtlpbQe1dVO2Ch46mw0H7gGiQuMWeA4cd2WGqM9prMQhfmoog8deII1ihon12b3i/HZF3+ZUw=
+	t=1752713378; cv=none; b=Ns4NG1Gbmn4ZUQhE2v2NcNfu1JBHVTztqWSFva3lHRoz8NhNKjmztxREEf0dKV5mH9cArsBYEIAO2QXuPBX/bN+RHAB1uWz+m2kY4yNzxxVQ/pJZq62SWu7UOOzZKXiNiIuYa6g7Q0EKDZTBKCUeyckvE1ZY0yuirox2SARWUnM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1752713378; c=relaxed/simple;
-	bh=dJy0RlrgubpV6rD6clb6uFiYqp1YYYGQ+bP34ejBXng=;
+	bh=q9368biQbKFkdqwUJGMNR4U7z4DEcx2lmBxRY3YPNYQ=;
 	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type; b=kchq06OAdVIRG5GteI7yqLZHJ/xJS9YsuNg/890bMcpJ4bAhxg+OjRCc6PNon6F+bbLHGh/hxlqKD/ofV/hW505HXLompnMJnnRh2hlLyZKyp9y76qg1nl+TUD4mnCKuBsxLL5OmcG/CUXvaSLAvRMjpaQ7BszuB93niZYlG9D0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sLrQKjMG; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type; b=R0vJUKcNSVPStym7witLIXkuWaam0aEBOpB12vp+DQu1iEX6sZbkhjLtYgz/2UO0LX3TIRdDhdpuPR3+Fr4KW78xjZ3b/UKpQruFSb/WMDCI3CqFsTjx/NV7XI3NCEjCEkE6h0M73IcIOVOxR19YPqS+Oz5Cdj67yYDeo1490mU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PJ67K37d; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sLrQKjMG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4B2BC113CF;
-	Thu, 17 Jul 2025 00:49:37 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PJ67K37d"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D9ABC4CEF5;
+	Thu, 17 Jul 2025 00:49:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752713377;
-	bh=dJy0RlrgubpV6rD6clb6uFiYqp1YYYGQ+bP34ejBXng=;
+	s=k20201202; t=1752713378;
+	bh=q9368biQbKFkdqwUJGMNR4U7z4DEcx2lmBxRY3YPNYQ=;
 	h=Date:From:To:Cc:Subject:References:From;
-	b=sLrQKjMGaLpcdpbbMt+bKmSwFo/wqRJoIbliYw7Iavmmpl5QphqVUaStSnTt7XCiM
-	 ZB0JFklmETqmG0fmhcoLiXCXQG6DN9CHwtRKP9YXev+nwvQVOIiRo953PvWFHsdaLB
-	 3FlPQyUsROoBdDzdVMW5Drr6vHk8IxGLUl9fVBBr2nomQ0LfDcycK9ZyBzFYQDyOuJ
-	 v78DTrBc3+URWsTas1ERHu0g2MJgPWMAcpxLwiA/+ICguB9rf5IIpMXnkOh8QFbkrD
-	 T15JIq+2I4uTzFSJj8PySnFMVVxea8qSdUaz5magfCctyffOs1dPYEy8+7OvJIdwDN
-	 1r4NMyl7wlfWw==
+	b=PJ67K37dGwS/YzRyyE/L7rF12OvhYcXucXz6Ah5IsxWG1kBJ0dTKE/ypRKP/UsE+y
+	 wj7aP/uMkuKXl5/neY9F3CC6vPUu2+sX2GwpIxYYyykNf6T3QNp6lI9Ni9CUA0qCuG
+	 mqzsinO8hxwd0ltY3V7Dc4xuunThJURQ/OzmLh77OOpkMfrK2wg4ub4YP4SZ92vEpt
+	 +3iZd9P1/VVVprsB4NQxjUdLsTuqaeLNsy9Vj5+vlauhluma17eVFAWVt4IXKefKlb
+	 5lStyIvxU6URsrseXNbfa1EV0nj9HImpblCuz62tg0opQhnpPFmoswX1IimyyeJqAW
+	 qglwaaFR02LvQ==
 Received: from rostedt by gandalf with local (Exim 4.98.2)
 	(envelope-from <rostedt@kernel.org>)
-	id 1ucCow-000000067Vw-0HuY;
+	id 1ucCow-000000067Wx-1jAE;
 	Wed, 16 Jul 2025 20:49:58 -0400
-Message-ID: <20250717004957.918908732@kernel.org>
+Message-ID: <20250717004958.260781923@kernel.org>
 User-Agent: quilt/0.68
-Date: Wed, 16 Jul 2025 20:49:19 -0400
+Date: Wed, 16 Jul 2025 20:49:21 -0400
 From: Steven Rostedt <rostedt@kernel.org>
 To: linux-kernel@vger.kernel.org,
  linux-trace-kernel@vger.kernel.org,
@@ -55,9 +55,8 @@ Cc: Masami Hiramatsu <mhiramat@kernel.org>,
  Andrew Morton <akpm@linux-foundation.org>,
  Jens Axboe <axboe@kernel.dk>,
  Florian Weimer <fweimer@redhat.com>,
- Sam James <sam@gentoo.org>,
- "Paul E. McKenney" <paulmck@kernel.org>
-Subject: [PATCH v14 09/12] unwind deferred: Use SRCU unwind_deferred_task_work()
+ Sam James <sam@gentoo.org>
+Subject: [PATCH v14 11/12] unwind_user/x86: Enable frame pointer unwinding on x86
 References: <20250717004910.297898999@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -67,136 +66,49 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 
-From: Steven Rostedt <rostedt@goodmis.org>
+From: Josh Poimboeuf <jpoimboe@kernel.org>
 
-Instead of using the callback_mutex to protect the link list of callbacks
-in unwind_deferred_task_work(), use SRCU instead. This gets called every
-time a task exits that has to record a stack trace that was requested.
-This can happen for many tasks on several CPUs at the same time. A mutex
-is a bottleneck and can cause a bit of contention and slow down performance.
+Use ARCH_INIT_USER_FP_FRAME to describe how frame pointers are unwound
+on x86, and enable CONFIG_HAVE_UNWIND_USER_FP accordingly so the
+unwind_user interfaces can be used.
 
-As the callbacks themselves are allowed to sleep, regular RCU cannot be
-used to protect the list. Instead use SRCU, as that still allows the
-callbacks to sleep and the list can be read without needing to hold the
-callback_mutex.
-
-Link: https://lore.kernel.org/all/ca9bd83a-6c80-4ee0-a83c-224b9d60b755@efficios.com/
-
-Also added a new guard (srcu_lite) written by Peter Zilstra
-
-Link: https://lore.kernel.org/all/20250715102912.GQ1613200@noisy.programming.kicks-ass.net/
-
-Cc: "Paul E. McKenney" <paulmck@kernel.org>
-Suggested-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
-Changes since v13: https://lore.kernel.org/20250708012359.172959778@kernel.org
+ arch/x86/Kconfig                   |  1 +
+ arch/x86/include/asm/unwind_user.h | 11 +++++++++++
+ 2 files changed, 12 insertions(+)
+ create mode 100644 arch/x86/include/asm/unwind_user.h
 
-- Have the locking of the link list walk use guard(srcu_lite)
-  (Peter Zijlstra)
-
-- Fixed up due to the new atomic_long logic.
-
- include/linux/srcu.h     |  4 ++++
- kernel/unwind/deferred.c | 27 +++++++++++++++++++++------
- 2 files changed, 25 insertions(+), 6 deletions(-)
-
-diff --git a/include/linux/srcu.h b/include/linux/srcu.h
-index 900b0d5c05f5..879054b8bf87 100644
---- a/include/linux/srcu.h
-+++ b/include/linux/srcu.h
-@@ -524,4 +524,8 @@ DEFINE_LOCK_GUARD_1(srcu, struct srcu_struct,
- 		    srcu_read_unlock(_T->lock, _T->idx),
- 		    int idx)
- 
-+DEFINE_LOCK_GUARD_1(srcu_lite, struct srcu_struct,
-+		    _T->idx = srcu_read_lock_lite(_T->lock),
-+		    srcu_read_unlock_lite(_T->lock, _T->idx),
-+		    int idx)
- #endif
-diff --git a/kernel/unwind/deferred.c b/kernel/unwind/deferred.c
-index 2311b725d691..353f7af610bf 100644
---- a/kernel/unwind/deferred.c
-+++ b/kernel/unwind/deferred.c
-@@ -41,7 +41,7 @@ static inline bool try_assign_cnt(struct unwind_task_info *info, u32 cnt)
- #define UNWIND_MAX_ENTRIES					\
- 	((SZ_4K - sizeof(struct unwind_cache)) / sizeof(long))
- 
--/* Guards adding to and reading the list of callbacks */
-+/* Guards adding to or removing from the list of callbacks */
- static DEFINE_MUTEX(callback_mutex);
- static LIST_HEAD(callbacks);
- 
-@@ -49,6 +49,7 @@ static LIST_HEAD(callbacks);
- 
- /* Zero'd bits are available for assigning callback users */
- static unsigned long unwind_mask = RESERVED_BITS;
-+DEFINE_STATIC_SRCU(unwind_srcu);
- 
- static inline bool unwind_pending(struct unwind_task_info *info)
- {
-@@ -174,8 +175,9 @@ static void unwind_deferred_task_work(struct callback_head *head)
- 
- 	cookie = info->id.id;
- 
--	guard(mutex)(&callback_mutex);
--	list_for_each_entry(work, &callbacks, list) {
-+	guard(srcu_lite)(&unwind_srcu);
-+	list_for_each_entry_srcu(work, &callbacks, list,
-+				 srcu_read_lock_held(&unwind_srcu)) {
- 		if (test_bit(work->bit, &bits)) {
- 			work->func(work, &trace, cookie);
- 			if (info->cache)
-@@ -213,7 +215,7 @@ int unwind_deferred_request(struct unwind_work *work, u64 *cookie)
- {
- 	struct unwind_task_info *info = &current->unwind_info;
- 	unsigned long old, bits;
--	unsigned long bit = BIT(work->bit);
-+	unsigned long bit;
- 	int ret;
- 
- 	*cookie = 0;
-@@ -230,6 +232,14 @@ int unwind_deferred_request(struct unwind_work *work, u64 *cookie)
- 	if (WARN_ON_ONCE(!CAN_USE_IN_NMI && in_nmi()))
- 		return -EINVAL;
- 
-+	/* Do not allow cancelled works to request again */
-+	bit = READ_ONCE(work->bit);
-+	if (WARN_ON_ONCE(bit < 0))
-+		return -EINVAL;
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index 71019b3b54ea..5862433c81e1 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -302,6 +302,7 @@ config X86
+ 	select HAVE_SYSCALL_TRACEPOINTS
+ 	select HAVE_UACCESS_VALIDATION		if HAVE_OBJTOOL
+ 	select HAVE_UNSTABLE_SCHED_CLOCK
++	select HAVE_UNWIND_USER_FP		if X86_64
+ 	select HAVE_USER_RETURN_NOTIFIER
+ 	select HAVE_GENERIC_VDSO
+ 	select VDSO_GETRANDOM			if X86_64
+diff --git a/arch/x86/include/asm/unwind_user.h b/arch/x86/include/asm/unwind_user.h
+new file mode 100644
+index 000000000000..8597857bf896
+--- /dev/null
++++ b/arch/x86/include/asm/unwind_user.h
+@@ -0,0 +1,11 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _ASM_X86_UNWIND_USER_H
++#define _ASM_X86_UNWIND_USER_H
 +
-+	/* Only need the mask now */
-+	bit = BIT(bit);
++#define ARCH_INIT_USER_FP_FRAME							\
++	.cfa_off	= (s32)sizeof(long) *  2,				\
++	.ra_off		= (s32)sizeof(long) * -1,				\
++	.fp_off		= (s32)sizeof(long) * -2,				\
++	.use_fp		= true,
 +
- 	guard(irqsave)();
- 
- 	*cookie = get_cookie(info);
-@@ -281,10 +291,15 @@ void unwind_deferred_cancel(struct unwind_work *work)
- 		return;
- 
- 	guard(mutex)(&callback_mutex);
--	list_del(&work->list);
-+	list_del_rcu(&work->list);
-+
-+	/* Do not allow any more requests and prevent callbacks */
-+	work->bit = -1;
- 
- 	__clear_bit(bit, &unwind_mask);
- 
-+	synchronize_srcu(&unwind_srcu);
-+
- 	guard(rcu)();
- 	/* Clear this bit from all threads */
- 	for_each_process_thread(g, t) {
-@@ -307,7 +322,7 @@ int unwind_deferred_init(struct unwind_work *work, unwind_callback_t func)
- 	work->bit = ffz(unwind_mask);
- 	__set_bit(work->bit, &unwind_mask);
- 
--	list_add(&work->list, &callbacks);
-+	list_add_rcu(&work->list, &callbacks);
- 	work->func = func;
- 	return 0;
- }
++#endif /* _ASM_X86_UNWIND_USER_H */
 -- 
 2.47.2
 
