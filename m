@@ -1,38 +1,38 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CD2D1E47B7;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9215B1E9905;
 	Thu, 17 Jul 2025 01:29:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752715756; cv=none; b=BWK2nBJuZ+/fwfqqRY3RmTgLSvvMtN88g9QNE0MvwfBVcCeYf5kcBXK3T459XzowoRTn2RAck58uAYwC6yhfXUPO4iV7g3GfBKy0QS6VI4EeBdM0Uc2/QGmdkVrEFYuVeN38/zlb2tCXkZvRWwEYKCzAxm31dGFMKLqGaILtPOA=
+	t=1752715756; cv=none; b=N0IcTz8d7mhARqp9TLHNizMWdaxEiBLmSquqKGA/udDMRsv9M9l/j8ujXaXicigPZ76r8iyfWZVEv6lNm6lSrB9JPL5OiJG3Xx2dDgPvRz9K9XaglDPrdBbvduiuKqyYnPGV4Dwa1aZW4e0L9qK8GtxtIe4MGWUFaaHG5x8YBok=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1752715756; c=relaxed/simple;
-	bh=ckTATXCHrvGOC+WZsqQof/3QKuBCz763BBzol3sDKjI=;
+	bh=P9XXjXhMuNIRa4aikXrGsKJEOWW6WFkYabNwOXfxzKY=;
 	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type; b=QcB0w/aoftzXbprWNudqa2b5+mm7mwZE84wU8abQGRen6WR+53AwrjlKARGU3/0Uia2/6dzJ4LQBu9pJnCnrxR1jTFWKbs+F0D7sZ7vRYzl7K3gEps8y1XyPwx7byVK12r5+cnnCwg/ajPPrQtCIldSmQHKcJwzp1ffJMaZ6Y0k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m/QFJQWw; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type; b=BOrXKfYxArvHLWEccR4q2U4k1d3sQ5embHZ/ce+dDf7sRNhTRYktrBQIcyu8yaqVCH/7rnIX3G7QobaDxUZcXFlNHLpq7I1k1VOVaCh+h/xu+t4ZbHGpjjneiA08SWFpw8thDzbmn18PmjFEHfZa74ZLX81dkxNmEckZYESxhhs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A8GHI1c4; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m/QFJQWw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8E31C113D0;
-	Thu, 17 Jul 2025 01:29:15 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A8GHI1c4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6833EC4CEF6;
+	Thu, 17 Jul 2025 01:29:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1752715756;
-	bh=ckTATXCHrvGOC+WZsqQof/3QKuBCz763BBzol3sDKjI=;
+	bh=P9XXjXhMuNIRa4aikXrGsKJEOWW6WFkYabNwOXfxzKY=;
 	h=Date:From:To:Cc:Subject:References:From;
-	b=m/QFJQWwppgTiNK2hwh/4uOiQoAmu1LW1Y7Mcxm75h50ZpfmkeKyKJy+1Vbv4EZjI
-	 bR3c1iQQDRh5JWFsExVEsZZOxDD+QhfBMUXOP4U6jRlresanvXYSfCtfySeKM+y7Ux
-	 dZby2XAwmjD7AS37wD7RuCFJu/k1JYX5pSoRc/NkklAKhb3dTS6W4pZ+KLWurZDNTX
-	 LBpaWA11PaYttZJeM3Ck7PQE3W5pkpLbYJ3fmbnvUiKXuIWbqSPpCYSYtHeWAN0UEF
-	 Oy1hRNLnYEXlx0Bx8y9UedmFqTZ9FVsNEoYua3qMVuzvdGXKZdz07czIyrE6oaMM9B
-	 2IFVPJyc5TcQw==
+	b=A8GHI1c4OPNU27FZQc+UCvRWEeLoYVEMLMAzYlT3l3uFzj7sUOrzyoynV93haVwHX
+	 KPr+8wdRKaYLM94b9CkcAFSprK1wn+xlP3ZAd+re9M1Axb1w4s8fr2Ta+JLMzWM/7n
+	 /VdMNTKDOd19wWtnrOqCmMNGN1hTr4fIH6Zgx61Z7dc/+xSzrWWE0obNOvM3dfLeK9
+	 256VUnTJZSxmQWeeCS5YBTqhj3lquGXztaWAB4nQ/MSU9Ang2LAxO5jNZBt8swgSrC
+	 OoWtHjPrrm7v/uhWBq0E6iGoRtw61NP71NaoxF0whOvXEJ9qQ0pCpVuceaFOUfZcJO
+	 yHe74WAPIRo0w==
 Received: from rostedt by gandalf with local (Exim 4.98.2)
 	(envelope-from <rostedt@kernel.org>)
-	id 1ucDRI-000000068vj-16Y0;
+	id 1ucDRI-000000068xC-3DTJ;
 	Wed, 16 Jul 2025 21:29:36 -0400
-Message-ID: <20250717012936.120967362@kernel.org>
+Message-ID: <20250717012936.619600891@kernel.org>
 User-Agent: quilt/0.68
-Date: Wed, 16 Jul 2025 21:28:51 -0400
+Date: Wed, 16 Jul 2025 21:28:54 -0400
 From: Steven Rostedt <rostedt@kernel.org>
 To: linux-kernel@vger.kernel.org,
  linux-trace-kernel@vger.kernel.org,
@@ -56,7 +56,7 @@ Cc: Masami Hiramatsu <mhiramat@kernel.org>,
  Jens Axboe <axboe@kernel.dk>,
  Florian Weimer <fweimer@redhat.com>,
  Sam James <sam@gentoo.org>
-Subject: [PATCH v9 03/11] x86/uaccess: Add unsafe_copy_from_user() implementation
+Subject: [PATCH v9 06/11] unwind_user/sframe: Wire up unwind_user to sframe
 References: <20250717012848.927473176@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -68,72 +68,138 @@ Content-Type: text/plain; charset=UTF-8
 
 From: Josh Poimboeuf <jpoimboe@kernel.org>
 
-Add an x86 implementation of unsafe_copy_from_user() similar to the
-existing unsafe_copy_to_user().
+Now that the sframe infrastructure is fully in place, make it work by
+hooking it up to the unwind_user interface.
 
 Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- arch/x86/include/asm/uaccess.h | 39 +++++++++++++++++++++++++---------
- 1 file changed, 29 insertions(+), 10 deletions(-)
+Changes since v8: https://lore.kernel.org/20250708021159.386608979@kernel.org
 
-diff --git a/arch/x86/include/asm/uaccess.h b/arch/x86/include/asm/uaccess.h
-index 3a7755c1a441..3caf02d0503e 100644
---- a/arch/x86/include/asm/uaccess.h
-+++ b/arch/x86/include/asm/uaccess.h
-@@ -599,7 +599,7 @@ _label:									\
-  * We want the unsafe accessors to always be inlined and use
-  * the error labels - thus the macro games.
+- Rebased on the changes by Mathieu in the user.c file
+  https://lore.kernel.org/all/20250710164301.3094-2-mathieu.desnoyers@efficios.com/
+
+ arch/Kconfig                      |  1 +
+ include/linux/unwind_user_types.h |  4 ++-
+ kernel/unwind/user.c              | 41 +++++++++++++++++++++++++++++--
+ 3 files changed, 43 insertions(+), 3 deletions(-)
+
+diff --git a/arch/Kconfig b/arch/Kconfig
+index edd6393512f5..f3b3e5a91f6d 100644
+--- a/arch/Kconfig
++++ b/arch/Kconfig
+@@ -444,6 +444,7 @@ config HAVE_UNWIND_USER_FP
+ 
+ config HAVE_UNWIND_USER_SFRAME
+ 	bool
++	select UNWIND_USER
+ 
+ config HAVE_PERF_REGS
+ 	bool
+diff --git a/include/linux/unwind_user_types.h b/include/linux/unwind_user_types.h
+index a449f15be890..d30e8495eaa9 100644
+--- a/include/linux/unwind_user_types.h
++++ b/include/linux/unwind_user_types.h
+@@ -9,7 +9,8 @@
+  * available.
   */
--#define unsafe_copy_loop(dst, src, len, type, label)				\
-+#define unsafe_copy_to_user_loop(dst, src, len, type, label)			\
- 	while (len >= sizeof(type)) {						\
- 		unsafe_put_user(*(type *)(src),(type __user *)(dst),label);	\
- 		dst += sizeof(type);						\
-@@ -607,15 +607,34 @@ _label:									\
- 		len -= sizeof(type);						\
+ enum unwind_user_type_bits {
+-	UNWIND_USER_TYPE_FP_BIT =		0,
++	UNWIND_USER_TYPE_SFRAME_BIT =		0,
++	UNWIND_USER_TYPE_FP_BIT =		1,
+ 
+ 	NR_UNWIND_USER_TYPE_BITS,
+ };
+@@ -17,6 +18,7 @@ enum unwind_user_type_bits {
+ enum unwind_user_type {
+ 	/* Type "none" for the start of stack walk iteration. */
+ 	UNWIND_USER_TYPE_NONE =			0,
++	UNWIND_USER_TYPE_SFRAME =		BIT(UNWIND_USER_TYPE_SFRAME_BIT),
+ 	UNWIND_USER_TYPE_FP =			BIT(UNWIND_USER_TYPE_FP_BIT),
+ };
+ 
+diff --git a/kernel/unwind/user.c b/kernel/unwind/user.c
+index 85b8c764d2f7..e7ba01cf87a4 100644
+--- a/kernel/unwind/user.c
++++ b/kernel/unwind/user.c
+@@ -7,17 +7,24 @@
+ #include <linux/sched/task_stack.h>
+ #include <linux/unwind_user.h>
+ #include <linux/uaccess.h>
++#include <linux/sframe.h>
+ 
+ static struct unwind_user_frame fp_frame = {
+ 	ARCH_INIT_USER_FP_FRAME
+ };
+ 
++static struct unwind_user_frame *get_fp_frame(struct pt_regs *regs)
++{
++	return &fp_frame;
++}
++
+ #define for_each_user_frame(state) \
+ 	for (unwind_user_start(state); !(state)->done; unwind_user_next(state))
+ 
+-static int unwind_user_next_fp(struct unwind_user_state *state)
++static int unwind_user_next_common(struct unwind_user_state *state,
++				   struct unwind_user_frame *frame,
++				   struct pt_regs *regs)
+ {
+-	struct unwind_user_frame *frame = &fp_frame;
+ 	unsigned long cfa, fp, ra = 0;
+ 	unsigned int shift;
+ 
+@@ -55,6 +62,24 @@ static int unwind_user_next_fp(struct unwind_user_state *state)
+ 	return 0;
+ }
+ 
++static int unwind_user_next_sframe(struct unwind_user_state *state)
++{
++	struct unwind_user_frame _frame, *frame;
++
++	/* sframe expects the frame to be local storage */
++	frame = &_frame;
++	if (sframe_find(state->ip, frame))
++		return -ENOENT;
++	return unwind_user_next_common(state, frame, task_pt_regs(current));
++}
++
++static int unwind_user_next_fp(struct unwind_user_state *state)
++{
++	struct pt_regs *regs = task_pt_regs(current);
++
++	return unwind_user_next_common(state, get_fp_frame(regs), regs);
++}
++
+ static int unwind_user_next(struct unwind_user_state *state)
+ {
+ 	unsigned long iter_mask = state->available_types;
+@@ -68,6 +93,16 @@ static int unwind_user_next(struct unwind_user_state *state)
+ 
+ 		state->current_type = type;
+ 		switch (type) {
++		case UNWIND_USER_TYPE_SFRAME:
++			switch (unwind_user_next_sframe(state)) {
++			case 0:
++				return 0;
++			case -ENOENT:
++				continue;	/* Try next method. */
++			default:
++				state->done = true;
++			}
++			break;
+ 		case UNWIND_USER_TYPE_FP:
+ 			if (!unwind_user_next_fp(state))
+ 				return 0;
+@@ -96,6 +131,8 @@ static int unwind_user_start(struct unwind_user_state *state)
+ 		return -EINVAL;
  	}
  
--#define unsafe_copy_to_user(_dst,_src,_len,label)			\
--do {									\
--	char __user *__ucu_dst = (_dst);				\
--	const char *__ucu_src = (_src);					\
--	size_t __ucu_len = (_len);					\
--	unsafe_copy_loop(__ucu_dst, __ucu_src, __ucu_len, u64, label);	\
--	unsafe_copy_loop(__ucu_dst, __ucu_src, __ucu_len, u32, label);	\
--	unsafe_copy_loop(__ucu_dst, __ucu_src, __ucu_len, u16, label);	\
--	unsafe_copy_loop(__ucu_dst, __ucu_src, __ucu_len, u8, label);	\
-+#define unsafe_copy_to_user(_dst, _src, _len, label)				\
-+do {										\
-+	void __user *__dst = (_dst);						\
-+	const void *__src = (_src);						\
-+	size_t __len = (_len);							\
-+	unsafe_copy_to_user_loop(__dst, __src, __len, u64, label);		\
-+	unsafe_copy_to_user_loop(__dst, __src, __len, u32, label);		\
-+	unsafe_copy_to_user_loop(__dst, __src, __len, u16, label);		\
-+	unsafe_copy_to_user_loop(__dst, __src, __len, u8,  label);		\
-+} while (0)
-+
-+#define unsafe_copy_from_user_loop(dst, src, len, type, label)			\
-+	while (len >= sizeof(type)) {						\
-+		unsafe_get_user(*(type *)(dst), (type __user *)(src), label);	\
-+		dst += sizeof(type);						\
-+		src += sizeof(type);						\
-+		len -= sizeof(type);						\
-+	}
-+
-+#define unsafe_copy_from_user(_dst, _src, _len, label)				\
-+do {										\
-+	void *__dst = (_dst);							\
-+	void __user *__src = (_src);						\
-+	size_t __len = (_len);							\
-+	unsafe_copy_from_user_loop(__dst, __src, __len, u64, label);		\
-+	unsafe_copy_from_user_loop(__dst, __src, __len, u32, label);		\
-+	unsafe_copy_from_user_loop(__dst, __src, __len, u16, label);		\
-+	unsafe_copy_from_user_loop(__dst, __src, __len, u8,  label);		\
- } while (0)
++	if (current_has_sframe())
++		state->available_types |= UNWIND_USER_TYPE_SFRAME;
+ 	if (IS_ENABLED(CONFIG_HAVE_UNWIND_USER_FP))
+ 		state->available_types |= UNWIND_USER_TYPE_FP;
  
- #ifdef CONFIG_CC_HAS_ASM_GOTO_OUTPUT
 -- 
 2.47.2
 
