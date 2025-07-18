@@ -1,37 +1,37 @@
 Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8C3F1F8725;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC39720C000;
 	Fri, 18 Jul 2025 21:35:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752874520; cv=none; b=jfTSpWRZ8q7Znyp33DvJbmUwbCPp4mIwzRDQHqjX0+4KMrh5nWYarCb6hctDjoJrIMd9GjCqokjQnASTrZ6KTAb8QdZHXpBqH6R+iSAgqzEVmq6vwOdhT803a1x4nneBklbIMsHhMVnBykjuSFrOJUscFdNrstJLS0Kx784TeQI=
+	t=1752874520; cv=none; b=QXJd3EuXWXdLr8RKfLfTkfxeZCGJDI+bgNWOf5nzEqXAP1iNxslBevHbd/HBqzvRjLR75B/Q6Mo6sIhoIlcF0uraGCkU9MX1v2vUkVReW5YabPnjKupxDiChqPjw7wux2pYy3smb1IG3xYEDBqCkRsjsV6V21H5kF/5oKzB+Yvw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1752874520; c=relaxed/simple;
-	bh=OPia4yWRRB0ETvHg3iEu6ZARkqU6LQuX0N7+VdhAdZY=;
+	bh=+dM1bld6YqFuWFqTeVy2M0W6B7tgTC8OPQdbIxYR2qs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=mTf13X+jZR40QuqQSKWIPOw/ruuXOGpstSEQCemD8p/OyZptPebF+J+YlGHK3J6JVf/ny66bz7GpfITIMrSV61J1tgFQp3/Y0evr/UoQO8XdtgXD+h7D0BY+mC0bcqR1TE4YDS2RWXhGIcGuWB6F56ReAAQcT70wW53KBV0HJC4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=cFg+031R; arc=none smtp.client-ip=198.137.202.136
+	 MIME-Version; b=LKD8yqmcxqS7hhj5NAzeG60l+pV8TDclhzLctSfelycwy5o+GO4+Tn9UEPvdUg2j6NMZlPqOXYhy6FU2k3GwgVs0bxKQPmwq3PPVvSS1lgQu7rFk/n+FOTvGynodi7gTuwwY7PibuHuQ+qh8T0WzgXzMYfltBg5f/s3+15FAYbk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=Kx/7ty58; arc=none smtp.client-ip=198.137.202.136
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="cFg+031R"
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="Kx/7ty58"
 Received: from mail.zytor.com ([IPv6:2601:646:8081:9482:197f:c1e5:8ae9:2d06])
 	(authenticated bits=0)
-	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 56ILX0sp2795198
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 56ILX0sj2795198
 	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-	Fri, 18 Jul 2025 14:33:30 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 56ILX0sp2795198
+	Fri, 18 Jul 2025 14:33:08 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 56ILX0sj2795198
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2025062101; t=1752874414;
-	bh=PBGN4oO/waKGE3jC/Ll9lbwkGvnnLUY8sUOeeNBmyj4=;
+	s=2025062101; t=1752874392;
+	bh=vsGxPzzTTwhbkBTwSIw4sMhUPUpWMkx20cB75uEuQgk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=cFg+031RqaaaPlckPQZdrk7tHRtUQ91gMNZp0PCiAL+WS4vDpv5381NXCbOx9+vvi
-	 vA2jRIb+O5/TVvIfLSuwnuFCz0DXgInWqk0DTtrJi8gPLUe1MVqpOm2n5j0W3DxwAJ
-	 tZAeEeTeTQWXhL+b+HKBe5o7KVHhnv/VYE/5PTiVKLImFHUL30VJ3SiEiEkDceRwIQ
-	 j22Dtvl6wpGlQSC4QquExka0Lf8ys+jSvS1EgRDoVCuzSPtlcM+fBkck//a3x1N7r9
-	 y1P3/wLVyPO9mfdNhI6s4gnvNmYd8pAlAeKvUir8mEV0gjLzQYUn3RG9wWSMQC6YUp
-	 rWuLmL/fzY+bA==
+	b=Kx/7ty58HGwlQQ9wukr5GLlArF7WbH8FuLxY3YsNTqgBvNvDn0WLESCp9yJlEkRvK
+	 D4v3jsyACGn/Zs+sckVl4E860FaFow+wHRJOWxoCMXIYb5M2IMBAuSPrJjBVrsUBhD
+	 /z/2WYf/0/n2ZRIQN1GkLQfeh2VxSfqhR08ebExZYrzLD/q2cp0wIUqMd8i/5oolkG
+	 m9q4A3UgO3CxGt0qZyknk+aBLuIVgK4P11GErU8wEHk64cwd2VWdUQYXO2EbfL8jqY
+	 h9urWUThtVvbUsShKEJP0wwRg/YQQwYh6tfsnwTvBJ48CiN2PxQ0jt/Wp6SDYN/z5X
+	 4iujXkUVnsq5A==
 From: "H. Peter Anvin" <hpa@zytor.com>
 To: 
 Cc: "H. Peter Anvin" <hpa@zytor.com>,
@@ -79,9 +79,9 @@ Cc: "H. Peter Anvin" <hpa@zytor.com>,
         linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-sparse@vger.kernel.org,
         virtualization@lists.linux.dev, x86@kernel.org
-Subject: [PATCH 7/7] tools/virtio: replace "__auto_type" with "auto"
-Date: Fri, 18 Jul 2025 14:32:50 -0700
-Message-ID: <20250718213252.2384177-8-hpa@zytor.com>
+Subject: [PATCH 1/7] compiler_types.h: add "auto" as a macro for "__auto_type"
+Date: Fri, 18 Jul 2025 14:32:44 -0700
+Message-ID: <20250718213252.2384177-2-hpa@zytor.com>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <20250718213252.2384177-1-hpa@zytor.com>
 References: <20250718213252.2384177-1-hpa@zytor.com>
@@ -93,31 +93,52 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Replace one instance of "__auto_type" with "auto" in:
+"auto" was defined as a keyword back in the K&R days, but as a storage
+type specifier.  No one ever used it, since it was and is the default
+storage type for local variables.
 
-	tools/virtio/linux/compiler.h
+C++11 recycled the keyword to allow a type to be declared based on the
+type of an initializer.  This was finally adopted into standard C in
+C23.
 
-This file *does* include <linux/compiler_types.h> directly, so there
-is no need to duplicate the definition.
+gcc and clang provide the "__auto_type" alias keyword as an extension
+for pre-C23, however, there is no reason to pollute the bulk of the
+source base with this temporary keyword; instead define "auto" as a
+macro unless the compiler is running in C23+ mode.
+
+This macro is added in <linux/compiler_types.h> because that header is
+included in some of the tools headers, wheres <linux/compiler.h> is
+not as it has a bunch of very kernel-specific things in it.
 
 Signed-off-by: H. Peter Anvin (Intel) <hpa@zytor.com>
 ---
- tools/virtio/linux/compiler.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/linux/compiler_types.h | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/tools/virtio/linux/compiler.h b/tools/virtio/linux/compiler.h
-index 204ef0e9f542..b6e94c2ebe49 100644
---- a/tools/virtio/linux/compiler.h
-+++ b/tools/virtio/linux/compiler.h
-@@ -31,7 +31,7 @@
-  */
- #define data_race(expr)							\
- ({									\
--	__auto_type __v = (expr);					\
-+	auto __v = (expr);					\
- 	__v;								\
- })
+diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
+index 2b77d12e07b2..c8b1ee37934e 100644
+--- a/include/linux/compiler_types.h
++++ b/include/linux/compiler_types.h
+@@ -13,6 +13,19 @@
  
+ #ifndef __ASSEMBLY__
+ 
++/*
++ * C23 introduces "auto" as a standard way to define type-inferred
++ * variables, but "auto" has been a (useless) keyword even since K&R C,
++ * so it has always been "namespace reserved."
++ *
++ * Until at some future time we require C23 support, we need the gcc
++ * extension __auto_type, but there is no reason to put that elsewhere
++ * in the source code.
++ */
++#if __STDC_VERSION__ < 202311L
++# define auto __auto_type
++#endif
++
+ /*
+  * Skipped when running bindgen due to a libclang issue;
+  * see https://github.com/rust-lang/rust-bindgen/issues/2244.
 -- 
 2.50.1
 
