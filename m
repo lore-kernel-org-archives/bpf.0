@@ -1,105 +1,170 @@
-Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AE9C1D88D0;
-	Fri, 18 Jul 2025 16:18:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FAF7EEDE;
+	Fri, 18 Jul 2025 16:42:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752855540; cv=none; b=iO2uzA1/TYbDUJs0YbVoHaKo5hQg3EuEOlYsCf3Se5vX8oVu1mSEZFvrmstSjDrlCP8Ql7OKeG0NYrdA/o6it4HjQHX33RKOWneq7v90QTuXWfI01Iy3z3KHZ7z1KUfsbvIScrERfmmuJjKy22gyWar9XBy4U25iVTp80M7e2Qk=
+	t=1752856980; cv=none; b=V7J1/1nK9MwJH9WdKilYlKk+hfL2fYbVDw9OXtqIBcWtGoSuIr0WNK+tgxHYxBLcN4g6l1anBjybky3tPT9Lrs5/tttoiytqZPMkbXkwZ4/B3QbwgYi14BuKAOeNIrk4kci3mud9FhlRwyOWH/rVFUQJzHrGeSb8G+uKMj8IIGI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752855540; c=relaxed/simple;
-	bh=JsGI4d1WgsQxQwDTlELaaQan2DJyyq7rBgqt3cAK84Q=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Si/sHFB7RYI+G/P/WysEJdg9hwRd1ECdKhhPJzzjz0g55e43IFbkUFx/xi8hF64lWH1/HVHQyPNNfWK0+Cpk7lvVQdMOJXIOme22BkA0AVCYeiNZ5cHu/DR4+a4pZUwTIa2hOYERmuWozs9mEibuIhRJ3ziRJHyGEFWUzATvORs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M8umVjmU; arc=none smtp.client-ip=209.85.160.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1752856980; c=relaxed/simple;
+	bh=PlMed3FiOV4T6l6o16L8MmIemjqgKth6Lso3Lz/CSCM=;
+	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
+	 Content-Type; b=avU8gkV2JRaNgC9MmJ3wecgQ6oWz2c+bCMQGTbgaW/mvJo1rNsEcGXe0QI9R6QGI9Q3RNu7QjikjKv96JWWzw3EEnrZA8ZN+0y/Q1JXwfwKfQGkbyj0kX7cSab8aR8zG2Ur7+5PJlgSePD6eR4AVnOL8KYjStIXHGFdF7t2Yu9s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kpPeK7JH; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M8umVjmU"
-Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-2ebb72384dbso769250fac.1;
-        Fri, 18 Jul 2025 09:18:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752855538; x=1753460338; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JsGI4d1WgsQxQwDTlELaaQan2DJyyq7rBgqt3cAK84Q=;
-        b=M8umVjmUuWh/O0qn+XkrvkRM7EMUOEUcg4Cl934gRYWM1RHs7BG41Z8Ib6pWnsqQ4M
-         L5NOfNwMy8ROv1ecjagO2tonOk/lW3E+Iv+qyCAlUm3NIoIe9tj3yw5VpcXIDceI1vNv
-         fINWq2zwInZ98tALlqp9C8Jsb6A5f0rhgVjdNF7GSOBCa3I2kw72Fj/qRa0cwpzrGKiH
-         JhA53Aa7cC61E4xJ8N1UtkXpl4X29vZEYKUYm6PD5Ws6D2d+LWiDqZc0sRJ3CdF30tX8
-         CcBp91wYGODHteKsS7IdPkCL2+OGXxWdJ4BtVqNG5a+1X9KJZfeO1RJTijsZd8fg65LD
-         o3rg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752855538; x=1753460338;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JsGI4d1WgsQxQwDTlELaaQan2DJyyq7rBgqt3cAK84Q=;
-        b=hDxTGeJYN5v3e/qvlLTytbCRnigNN0unGLTGqz89rMJv6LdTJNrMZJoD1Nx069mq7P
-         karfvYwWmaOTGXTg9+16kTKA+nQtZ0ToQpcO9idVzqGNdEsVx4mTbGvWZ34SCeRTZYi0
-         SEdrM9f4llcX886sX/jbKaFP6Xd11NeGB+vgOhsGYqesEE14iRbc/h6Y/Rbm/Cob4oFm
-         JIyFsuGEDl5XMp2kk9htPS83/u2wX7OarFBanXbFDYXC4WYEWOPMf4rd6TSGpThJI3md
-         8AQFWunw90fbc35pXShCQylY6s6IDvLHQym8J1wps/Z+nkU2ZClZ3bnPlfcJw7LBNC9l
-         c29Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWAXNmDSDhv13ZDO0kCueieVjX8OiZIYogRwmklGuH3JujzFJFVYDXXLvFFi/hmMOfvWhDXL2bIGkZxYBEI@vger.kernel.org, AJvYcCXDe6fdSoI4OhSKUrU0j8lZ9DQ1iKGs14Gi4ymjtJy8tcAD2vhfrZq3hWQ26DTBurGWFhc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwVyYSLQu/+TDik1rJgO/IW1RNInKEayirjd45FmdPdA2x2OMWL
-	cZda8NCWKMmzZmPfqdWUpgKCW3rT32k6n7+X0tkyXgLkhj6B6QQ/kgg/nfL5ClUIz2UxZI/KnqE
-	ospECGUWTFqr/XZtMJwSZS5+u6fuxaCY=
-X-Gm-Gg: ASbGncvOqUBd0F36jd/uG9aOCBPDl2nCn+KuuP//8txFyKHfdZi0uLY4e8DZK8/yhuX
-	ifzpz4+7u2aZqKa1gNkqW4JbklsDsbnUZSSm74u89+ygf9DMoUcmCn54dVcKIzPzIXBLGGNpLCJ
-	F7izAPpvSrvpSA73JRiukii7VVxxCsxaEtVsMXb2bItcT+Ba6TbxH7Yx2kPQXoe6SykT9oue7mT
-	7HyZgVN
-X-Google-Smtp-Source: AGHT+IGe4Yj5ws/qqsi0APF23sRi0Iv9xe2xK91Wy35K93f2vavegXJAkOTU2w+EaE+/G0T1B+A6VAnk+FODlxkSWOk=
-X-Received: by 2002:a05:6870:a40a:b0:2c1:bc87:9bd7 with SMTP id
- 586e51a60fabf-300ea49dbd9mr2765849fac.35.1752855537239; Fri, 18 Jul 2025
- 09:18:57 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kpPeK7JH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95476C4CEED;
+	Fri, 18 Jul 2025 16:42:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1752856979;
+	bh=PlMed3FiOV4T6l6o16L8MmIemjqgKth6Lso3Lz/CSCM=;
+	h=Date:From:To:Cc:Subject:References:From;
+	b=kpPeK7JHJMkrK6cUZEgcxnAVqey9jEpYFdvgjwwMHRBKLzOljCgXPfKAEnkvZNhpM
+	 Mm8+2src/Zd8uKJT2p6vxmTUJC6zfj6ChjNbRsoK4bZ8Y6gHwq+gzs3ds3ooep/sn2
+	 t6BCzEylWnibAsZQ0Kplc5GYcbWeYyt5Q2dbniabtAhJlUmgCHTY/lXCYw63UkKxiX
+	 b1+t6twac9ysuSrhHaRGxw6p11p0QiwK5ND9F5cEZvbmchLH2gyF8/ycu7MMhZANPe
+	 mc0i7JtKMoO5WEIzdGHKww45Rr64Zuk8sVE417Cj8tueC2Fu1nUZorPqGwZyQ9zVOr
+	 xJQkVpVaERyZw==
+Received: from rostedt by gandalf with local (Exim 4.98.2)
+	(envelope-from <rostedt@kernel.org>)
+	id 1ucoB9-00000007JWK-1asR;
+	Fri, 18 Jul 2025 12:43:23 -0400
+Message-ID: <20250718164323.229516800@kernel.org>
+User-Agent: quilt/0.68
+Date: Fri, 18 Jul 2025 12:41:20 -0400
+From: Steven Rostedt <rostedt@kernel.org>
+To: linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org,
+ bpf@vger.kernel.org,
+ x86@kernel.org
+Cc: Masami Hiramatsu <mhiramat@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Josh Poimboeuf <jpoimboe@kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>,
+ Ingo Molnar <mingo@kernel.org>,
+ Jiri Olsa <jolsa@kernel.org>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>,
+ Thomas Gleixner <tglx@linutronix.de>,
+ Andrii Nakryiko <andrii@kernel.org>,
+ Indu Bhagat <indu.bhagat@oracle.com>,
+ "Jose E. Marchesi" <jemarch@gnu.org>,
+ Beau Belgrave <beaub@linux.microsoft.com>,
+ Jens Remus <jremus@linux.ibm.com>,
+ Linus Torvalds <torvalds@linux-foundation.org>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Jens Axboe <axboe@kernel.dk>,
+ Florian Weimer <fweimer@redhat.com>,
+ Sam James <sam@gentoo.org>,
+ Namhyung Kim <Namhyung@kernel.org>,
+ Alexei Starovoitov <ast@kernel.org>
+Subject: [PATCH v14 01/11] perf: Remove get_perf_callchain() init_nr argument
+References: <20250718164119.089692174@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250717115936.7025-1-suchitkarunakaran@gmail.com>
- <CAEf4BzZ+OTkaXmtWPbOGB0OWz5xmj-d06UWchooO+iUyDHar4g@mail.gmail.com>
- <CAO9wTFgLOymS+VDcUTCHZ7niu_gEgN-N-F1uX-Kpm+uqvaMrQg@mail.gmail.com> <CAEf4Bzayn6UNjjbtgA8i2n4-_kuyERnOZAZMfc4cXTDKrSFr+w@mail.gmail.com>
-In-Reply-To: <CAEf4Bzayn6UNjjbtgA8i2n4-_kuyERnOZAZMfc4cXTDKrSFr+w@mail.gmail.com>
-From: Suchit K <suchitkarunakaran@gmail.com>
-Date: Fri, 18 Jul 2025 21:48:42 +0530
-X-Gm-Features: Ac12FXwjJnu7p3rh_Nm1Hf80A9R6X2OQXnzsdSC58X3ar7pRz68vSsoQRwmvdJo
-Message-ID: <CAO9wTFgGgoEs08PazyWvnRyEQ4tvdCgjvtLNnzX_6Ov-RjU4Rg@mail.gmail.com>
-Subject: Re: [PATCH] libbpf: Replace strcpy() with memcpy() in bpf_object__new()
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
-	martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org, 
-	yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org, 
-	sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org, 
-	skhan@linuxfoundation.org, linux-kernel-mentees@lists.linux.dev, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
 
-On Fri, 18 Jul 2025 at 21:09, Andrii Nakryiko <andrii.nakryiko@gmail.com> w=
-rote:
->
-> On Thu, Jul 17, 2025 at 10:33=E2=80=AFAM Suchit K <suchitkarunakaran@gmai=
-l.com> wrote:
-> >
-> > > This is user-space libbpf code, where the API contract mandates that
-> > > the path argument is a well-formed zero-terminated C string. Plus, if
-> > > you look at the few lines above, we allocate just enough space to fit
-> > > the entire contents of the string without truncation.
-> > >
-> > > In other words, there is nothing to fix or improve here.
-> > >
-> >
-> > Even though it=E2=80=99s safe in this context, would it still be a good=
- idea
-> > to replace strcpy() with something like memcpy() since it's
->
-> no, there is no need. And keep in mind that this is libbpf library
-> source code, which is developed as part of kernel repo, but isn't
-> running inside the kernel itself
->
+From: Josh Poimboeuf <jpoimboe@kernel.org>
 
-Yup got it. Thank you so much for the clarification.
+The 'init_nr' argument has double duty: it's used to initialize both the
+number of contexts and the number of stack entries.  That's confusing
+and the callers always pass zero anyway.  Hard code the zero.
+
+Acked-by: Namhyung Kim <Namhyung@kernel.org>
+Acked-by: Alexei Starovoitov <ast@kernel.org>
+Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+---
+ include/linux/perf_event.h |  2 +-
+ kernel/bpf/stackmap.c      |  4 ++--
+ kernel/events/callchain.c  | 12 ++++++------
+ kernel/events/core.c       |  2 +-
+ 4 files changed, 10 insertions(+), 10 deletions(-)
+
+diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
+index ec9d96025683..54e0d31afcad 100644
+--- a/include/linux/perf_event.h
++++ b/include/linux/perf_event.h
+@@ -1719,7 +1719,7 @@ DECLARE_PER_CPU(struct perf_callchain_entry, perf_callchain_entry);
+ extern void perf_callchain_user(struct perf_callchain_entry_ctx *entry, struct pt_regs *regs);
+ extern void perf_callchain_kernel(struct perf_callchain_entry_ctx *entry, struct pt_regs *regs);
+ extern struct perf_callchain_entry *
+-get_perf_callchain(struct pt_regs *regs, u32 init_nr, bool kernel, bool user,
++get_perf_callchain(struct pt_regs *regs, bool kernel, bool user,
+ 		   u32 max_stack, bool crosstask, bool add_mark);
+ extern int get_callchain_buffers(int max_stack);
+ extern void put_callchain_buffers(void);
+diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
+index 3615c06b7dfa..ec3a57a5fba1 100644
+--- a/kernel/bpf/stackmap.c
++++ b/kernel/bpf/stackmap.c
+@@ -314,7 +314,7 @@ BPF_CALL_3(bpf_get_stackid, struct pt_regs *, regs, struct bpf_map *, map,
+ 	if (max_depth > sysctl_perf_event_max_stack)
+ 		max_depth = sysctl_perf_event_max_stack;
+ 
+-	trace = get_perf_callchain(regs, 0, kernel, user, max_depth,
++	trace = get_perf_callchain(regs, kernel, user, max_depth,
+ 				   false, false);
+ 
+ 	if (unlikely(!trace))
+@@ -451,7 +451,7 @@ static long __bpf_get_stack(struct pt_regs *regs, struct task_struct *task,
+ 	else if (kernel && task)
+ 		trace = get_callchain_entry_for_task(task, max_depth);
+ 	else
+-		trace = get_perf_callchain(regs, 0, kernel, user, max_depth,
++		trace = get_perf_callchain(regs, kernel, user, max_depth,
+ 					   crosstask, false);
+ 
+ 	if (unlikely(!trace) || trace->nr < skip) {
+diff --git a/kernel/events/callchain.c b/kernel/events/callchain.c
+index 6c83ad674d01..b0f5bd228cd8 100644
+--- a/kernel/events/callchain.c
++++ b/kernel/events/callchain.c
+@@ -217,7 +217,7 @@ static void fixup_uretprobe_trampoline_entries(struct perf_callchain_entry *entr
+ }
+ 
+ struct perf_callchain_entry *
+-get_perf_callchain(struct pt_regs *regs, u32 init_nr, bool kernel, bool user,
++get_perf_callchain(struct pt_regs *regs, bool kernel, bool user,
+ 		   u32 max_stack, bool crosstask, bool add_mark)
+ {
+ 	struct perf_callchain_entry *entry;
+@@ -228,11 +228,11 @@ get_perf_callchain(struct pt_regs *regs, u32 init_nr, bool kernel, bool user,
+ 	if (!entry)
+ 		return NULL;
+ 
+-	ctx.entry     = entry;
+-	ctx.max_stack = max_stack;
+-	ctx.nr	      = entry->nr = init_nr;
+-	ctx.contexts       = 0;
+-	ctx.contexts_maxed = false;
++	ctx.entry		= entry;
++	ctx.max_stack		= max_stack;
++	ctx.nr			= entry->nr = 0;
++	ctx.contexts		= 0;
++	ctx.contexts_maxed	= false;
+ 
+ 	if (kernel && !user_mode(regs)) {
+ 		if (add_mark)
+diff --git a/kernel/events/core.c b/kernel/events/core.c
+index 0db36b2b2448..b2a53cabcb17 100644
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -8178,7 +8178,7 @@ perf_callchain(struct perf_event *event, struct pt_regs *regs)
+ 	if (!kernel && !user)
+ 		return &__empty_callchain;
+ 
+-	callchain = get_perf_callchain(regs, 0, kernel, user,
++	callchain = get_perf_callchain(regs, kernel, user,
+ 				       max_stack, crosstask, true);
+ 	return callchain ?: &__empty_callchain;
+ }
+-- 
+2.47.2
+
+
