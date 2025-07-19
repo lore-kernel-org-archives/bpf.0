@@ -1,26 +1,27 @@
 Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D86C5238166;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8618238157;
 	Sat, 19 Jul 2025 09:14:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752916468; cv=none; b=kfriQMzB9aHcDDhuEqATjKlzyPivo6F903nwIq8y3y2VvFgvfrAu29B4StbXhzDYOBuOiQTvmT2W+MFm6bJdFvasc/cDAMKoJ2iNqbyxSAxUr8s1jYQJYw921O695BFqm27tdSUNKSmQmKpupFyoVCheQFWtPutFCrFL3jTSHxs=
+	t=1752916468; cv=none; b=d/oBIZnLNN5J26oLqEgj3U7N7uzJRW9HgSu2MgLpOnlgXSXdnVzGsJx4lhJf8xjpAtIoanTTBMMh7NIaAoHH3p4WT7VdyY894d0eXJ7/JUwWcvz1YeVQaVk5SzC12wK0Nz5O/Fg9Zab0rReMSLcXChmpeN6ROVmTmS3Nb1sv19A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1752916468; c=relaxed/simple;
-	bh=aMHhOoynbPDET+/Dpg649q+vDc0nYBSz40pFbmgcYaQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=IiwlSH591ZIf6c/t2g0FJEcXIZ6y04Bw0bpqIxd1wxMx1PlVeLuxrraVDpkWdEN1BFBsoP7mwdS4xEoedew1cGTWCmTDz6JZS1RBjnWRS0F9vGIhXUr0p8DTYAyvq5yBnufxA10u4iKVu7OKLFVgtYj8XAxFU3eGra1aCfQLcNs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+	bh=3WNVVMbICgtUBQ+2+m32VAxdQK3v7AO/RYBe6p2zlLM=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=erA+KBHTgum+JRkz3lyUUtkTYDJqhulpmaRIOnx0d/UbpWM32tJrJqg3ySPogiKnlr3Fzryvg2rkxKVFwJ4n47H3+lsaCsM0FCD6jDK+7OLgY8sA/yZA/RQlZyE/p2FAZ0azNhsVsmlztCvN7m2mAuUOxh+ohHxtIdmj95Enl64=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=none smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.93.142])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4bkgw06XK6zKHMq3;
-	Sat, 19 Jul 2025 17:14:24 +0800 (CST)
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.216])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4bkgw10llQzKHMqW;
+	Sat, 19 Jul 2025 17:14:25 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id 839EB1A109E;
+	by mail.maildlp.com (Postfix) with ESMTP id BA94C1A17E8;
 	Sat, 19 Jul 2025 17:14:23 +0800 (CST)
 Received: from ultra.huawei.com (unknown [10.90.53.71])
-	by APP4 (Coremail) with SMTP id gCh0CgCHURLuYXtopCAYAw--.54295S2;
+	by APP4 (Coremail) with SMTP id gCh0CgCHURLuYXtopCAYAw--.54295S4;
 	Sat, 19 Jul 2025 17:14:23 +0800 (CST)
 From: Pu Lehui <pulehui@huaweicloud.com>
 To: bpf@vger.kernel.org,
@@ -43,10 +44,12 @@ Cc: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
 	Hao Luo <haoluo@google.com>,
 	Jiri Olsa <jolsa@kernel.org>,
 	Pu Lehui <pulehui@huawei.com>
-Subject: [PATCH bpf-next 00/10] Add support arena atomics for RV64
-Date: Sat, 19 Jul 2025 09:17:20 +0000
-Message-Id: <20250719091730.2660197-1-pulehui@huaweicloud.com>
+Subject: [PATCH bpf-next 02/10] riscv, bpf: Extract emit_st() helper
+Date: Sat, 19 Jul 2025 09:17:22 +0000
+Message-Id: <20250719091730.2660197-3-pulehui@huaweicloud.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20250719091730.2660197-1-pulehui@huaweicloud.com>
+References: <20250719091730.2660197-1-pulehui@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -54,106 +57,202 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgCHURLuYXtopCAYAw--.54295S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxAw1DAryftr4fCFW3Kw4DArb_yoW5AFW3pr
-	43Gr9rGa15Ww1UCa9I9a4xC345Ca1Yvw15Jw4kAw1xAF1Ygr15JFZ2k3W3Ar15Krs3Xa1Y
-	kryjqa4jyw4UAr7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUv2b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0E
-	n4kS14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I
-	0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8
-	ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcV
-	CY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAF
-	wI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa
-	7IU0s2-5UUUUU==
+X-CM-TRANSID:gCh0CgCHURLuYXtopCAYAw--.54295S4
+X-Coremail-Antispam: 1UD129KBjvJXoWxZry5ur15urWDKrW8CF1DGFg_yoW7Jr4rpw
+	13K3yxu39aqr4Fva4kGF1UWw13AF4UCFsF9Fs3Jwn5Jw43Xr4rGF1UtrWSvFyUC34fZ3yr
+	XF1DA3sFk3W7GrDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUP2b4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUXw
+	A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+	w2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+	W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+	6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
+	Ij6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
+	Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI
+	0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG
+	67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MI
+	IYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E
+	14v26F4j6r4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr
+	0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0I3
+	85UUUUU==
 X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 
 From: Pu Lehui <pulehui@huawei.com>
 
-patch 1-3 refactor redundant load and store operations.
-patch 4-7 add Zacas instructions for cmpxchg.
-patch 8 optimizes exception table handling.
-patch 9-10 add support arena atomics for RV64.
+There's a lot of redundant code related to store from immediate
+operations, let's extract emit_st() to make code more compact.
 
-Tests `test_progs -t atomic,arena` have passed as shown bellow,
-as well as `test_verifier` and `test_bpf.ko` have passed.
+Signed-off-by: Pu Lehui <pulehui@huawei.com>
+---
+ arch/riscv/net/bpf_jit_comp64.c | 135 ++++++--------------------------
+ 1 file changed, 26 insertions(+), 109 deletions(-)
 
-$ ./test_progs -t arena,atomic
-#3/1     arena_atomics/add:OK
-#3/2     arena_atomics/sub:OK
-#3/3     arena_atomics/and:OK
-#3/4     arena_atomics/or:OK
-#3/5     arena_atomics/xor:OK
-#3/6     arena_atomics/cmpxchg:OK
-#3/7     arena_atomics/xchg:OK
-#3/8     arena_atomics/uaf:OK
-#3/9     arena_atomics/load_acquire:OK
-#3/10    arena_atomics/store_release:OK
-#3       arena_atomics:OK
-#4/1     arena_htab/arena_htab_llvm:OK
-#4/2     arena_htab/arena_htab_asm:OK
-#4       arena_htab:OK
-#5/1     arena_list/arena_list_1:OK
-#5/2     arena_list/arena_list_1000:OK
-#5       arena_list:OK
-#6/1     arena_spin_lock/arena_spin_lock_1:OK
-#6/2     arena_spin_lock/arena_spin_lock_1000:OK
-#6/3     arena_spin_lock/arena_spin_lock_50000:OK
-#6       arena_spin_lock:OK
-#10      atomic_bounds:OK
-#11/1    atomics/add:OK
-#11/2    atomics/sub:OK
-#11/3    atomics/and:OK
-#11/4    atomics/or:OK
-#11/5    atomics/xor:OK
-#11/6    atomics/cmpxchg:OK
-#11/7    atomics/xchg:OK
-#11      atomics:OK
-#513/1   verifier_arena/basic_alloc1:OK
-#513/2   verifier_arena/basic_alloc2:OK
-#513/3   verifier_arena/basic_alloc3:OK
-#513/4   verifier_arena/basic_reserve1:OK
-#513/5   verifier_arena/basic_reserve2:OK
-#513/6   verifier_arena/reserve_twice:OK
-#513/7   verifier_arena/reserve_invalid_region:OK
-#513/8   verifier_arena/iter_maps1:OK
-#513/9   verifier_arena/iter_maps2:OK
-#513/10  verifier_arena/iter_maps3:OK
-#513     verifier_arena:OK
-#514/1   verifier_arena_large/big_alloc1:OK
-#514/2   verifier_arena_large/access_reserved:OK
-#514/3   verifier_arena_large/request_partially_reserved:OK
-#514/4   verifier_arena_large/free_reserved:OK
-#514/5   verifier_arena_large/big_alloc2:OK
-#514     verifier_arena_large:OK
-Summary: 8/39 PASSED, 0 SKIPPED, 0 FAILED
-
-Pu Lehui (10):
-  riscv, bpf: Extract emit_stx() helper
-  riscv, bpf: Extract emit_st() helper
-  riscv, bpf: Extract emit_ldx() helper
-  riscv: Separate toolchain support dependency from RISCV_ISA_ZACAS
-  riscv, bpf: Add rv_ext_enabled macro for runtime detection extentsion
-  riscv, bpf: Add Zacas instructions
-  riscv, bpf: Optimize cmpxchg insn with Zacas support
-  riscv, bpf: Add ex_insn_off and ex_jmp_off for exception table
-    handling
-  riscv, bpf: Add support arena atomics for RV64
-  selftests/bpf: Enable arena atomics tests for RV64
-
- arch/riscv/Kconfig                            |   1 -
- arch/riscv/include/asm/cmpxchg.h              |   6 +-
- arch/riscv/kernel/setup.c                     |   1 +
- arch/riscv/net/bpf_jit.h                      |  70 ++-
- arch/riscv/net/bpf_jit_comp64.c               | 516 +++++-------------
- .../selftests/bpf/progs/arena_atomics.c       |   9 +-
- 6 files changed, 214 insertions(+), 389 deletions(-)
-
+diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
+index ba75ba179b26..5e354f686ea3 100644
+--- a/arch/riscv/net/bpf_jit_comp64.c
++++ b/arch/riscv/net/bpf_jit_comp64.c
+@@ -577,6 +577,24 @@ static void emit_stx_insn(u8 rd, s16 off, u8 rs, u8 size, struct rv_jit_context
+ 	}
+ }
+ 
++static int emit_st(u8 rd, s16 off, s32 imm, u8 size, struct rv_jit_context *ctx)
++{
++	int insns_start;
++
++	emit_imm(RV_REG_T1, imm, ctx);
++	if (is_12b_int(off)) {
++		insns_start = ctx->ninsns;
++		emit_stx_insn(rd, off, RV_REG_T1, size, ctx);
++		return ctx->ninsns - insns_start;
++	}
++
++	emit_imm(RV_REG_T2, off, ctx);
++	emit_add(RV_REG_T2, RV_REG_T2, rd, ctx);
++	insns_start = ctx->ninsns;
++	emit_stx_insn(RV_REG_T2, 0, RV_REG_T1, size, ctx);
++	return ctx->ninsns - insns_start;
++}
++
+ static int emit_stx(u8 rd, s16 off, u8 rs, u8 size, struct rv_jit_context *ctx)
+ {
+ 	int insns_start;
+@@ -1870,128 +1888,27 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
+ 
+ 	/* ST: *(size *)(dst + off) = imm */
+ 	case BPF_ST | BPF_MEM | BPF_B:
+-		emit_imm(RV_REG_T1, imm, ctx);
+-		if (is_12b_int(off)) {
+-			emit(rv_sb(rd, off, RV_REG_T1), ctx);
+-			break;
+-		}
+-
+-		emit_imm(RV_REG_T2, off, ctx);
+-		emit_add(RV_REG_T2, RV_REG_T2, rd, ctx);
+-		emit(rv_sb(RV_REG_T2, 0, RV_REG_T1), ctx);
+-		break;
+-
+ 	case BPF_ST | BPF_MEM | BPF_H:
+-		emit_imm(RV_REG_T1, imm, ctx);
+-		if (is_12b_int(off)) {
+-			emit(rv_sh(rd, off, RV_REG_T1), ctx);
+-			break;
+-		}
+-
+-		emit_imm(RV_REG_T2, off, ctx);
+-		emit_add(RV_REG_T2, RV_REG_T2, rd, ctx);
+-		emit(rv_sh(RV_REG_T2, 0, RV_REG_T1), ctx);
+-		break;
+ 	case BPF_ST | BPF_MEM | BPF_W:
+-		emit_imm(RV_REG_T1, imm, ctx);
+-		if (is_12b_int(off)) {
+-			emit_sw(rd, off, RV_REG_T1, ctx);
+-			break;
+-		}
+-
+-		emit_imm(RV_REG_T2, off, ctx);
+-		emit_add(RV_REG_T2, RV_REG_T2, rd, ctx);
+-		emit_sw(RV_REG_T2, 0, RV_REG_T1, ctx);
+-		break;
+ 	case BPF_ST | BPF_MEM | BPF_DW:
+-		emit_imm(RV_REG_T1, imm, ctx);
+-		if (is_12b_int(off)) {
+-			emit_sd(rd, off, RV_REG_T1, ctx);
+-			break;
+-		}
+-
+-		emit_imm(RV_REG_T2, off, ctx);
+-		emit_add(RV_REG_T2, RV_REG_T2, rd, ctx);
+-		emit_sd(RV_REG_T2, 0, RV_REG_T1, ctx);
+-		break;
+-
++	/* ST | PROBE_MEM32: *(size *)(dst + RV_REG_ARENA + off) = imm */
+ 	case BPF_ST | BPF_PROBE_MEM32 | BPF_B:
+ 	case BPF_ST | BPF_PROBE_MEM32 | BPF_H:
+ 	case BPF_ST | BPF_PROBE_MEM32 | BPF_W:
+ 	case BPF_ST | BPF_PROBE_MEM32 | BPF_DW:
+ 	{
+-		int insn_len, insns_start;
+-
+-		emit_add(RV_REG_T3, rd, RV_REG_ARENA, ctx);
+-		rd = RV_REG_T3;
+-
+-		/* Load imm to a register then store it */
+-		emit_imm(RV_REG_T1, imm, ctx);
+-
+-		switch (BPF_SIZE(code)) {
+-		case BPF_B:
+-			if (is_12b_int(off)) {
+-				insns_start = ctx->ninsns;
+-				emit(rv_sb(rd, off, RV_REG_T1), ctx);
+-				insn_len = ctx->ninsns - insns_start;
+-				break;
+-			}
+-
+-			emit_imm(RV_REG_T2, off, ctx);
+-			emit_add(RV_REG_T2, RV_REG_T2, rd, ctx);
+-			insns_start = ctx->ninsns;
+-			emit(rv_sb(RV_REG_T2, 0, RV_REG_T1), ctx);
+-			insn_len = ctx->ninsns - insns_start;
+-			break;
+-		case BPF_H:
+-			if (is_12b_int(off)) {
+-				insns_start = ctx->ninsns;
+-				emit(rv_sh(rd, off, RV_REG_T1), ctx);
+-				insn_len = ctx->ninsns - insns_start;
+-				break;
+-			}
+-
+-			emit_imm(RV_REG_T2, off, ctx);
+-			emit_add(RV_REG_T2, RV_REG_T2, rd, ctx);
+-			insns_start = ctx->ninsns;
+-			emit(rv_sh(RV_REG_T2, 0, RV_REG_T1), ctx);
+-			insn_len = ctx->ninsns - insns_start;
+-			break;
+-		case BPF_W:
+-			if (is_12b_int(off)) {
+-				insns_start = ctx->ninsns;
+-				emit_sw(rd, off, RV_REG_T1, ctx);
+-				insn_len = ctx->ninsns - insns_start;
+-				break;
+-			}
+-
+-			emit_imm(RV_REG_T2, off, ctx);
+-			emit_add(RV_REG_T2, RV_REG_T2, rd, ctx);
+-			insns_start = ctx->ninsns;
+-			emit_sw(RV_REG_T2, 0, RV_REG_T1, ctx);
+-			insn_len = ctx->ninsns - insns_start;
+-			break;
+-		case BPF_DW:
+-			if (is_12b_int(off)) {
+-				insns_start = ctx->ninsns;
+-				emit_sd(rd, off, RV_REG_T1, ctx);
+-				insn_len = ctx->ninsns - insns_start;
+-				break;
+-			}
++		int insn_len;
+ 
+-			emit_imm(RV_REG_T2, off, ctx);
+-			emit_add(RV_REG_T2, RV_REG_T2, rd, ctx);
+-			insns_start = ctx->ninsns;
+-			emit_sd(RV_REG_T2, 0, RV_REG_T1, ctx);
+-			insn_len = ctx->ninsns - insns_start;
+-			break;
++		if (BPF_MODE(insn->code) == BPF_PROBE_MEM32) {
++			emit_add(RV_REG_T3, rd, RV_REG_ARENA, ctx);
++			rd = RV_REG_T3;
+ 		}
+ 
+-		ret = add_exception_handler(insn, ctx, REG_DONT_CLEAR_MARKER,
+-					    insn_len);
++		insn_len = emit_st(rd, off, imm, BPF_SIZE(code), ctx);
++
++		ret = add_exception_handler(insn, ctx, REG_DONT_CLEAR_MARKER, insn_len);
+ 		if (ret)
+ 			return ret;
+-
+ 		break;
+ 	}
+ 
 -- 
 2.34.1
 
