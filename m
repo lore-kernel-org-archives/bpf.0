@@ -1,156 +1,146 @@
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EA0F1CA84;
-	Sat, 19 Jul 2025 09:31:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3656227B94;
+	Sat, 19 Jul 2025 09:52:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752917502; cv=none; b=f8+U1Qd+kjzDDgD/3M799qkVhZM7EDAa7WMATZblWx2pJWjzj9d619hfH2VMhclCGpg4sG+11WPLF9yoUyfCKT55FNntmojMHX0q/etQhAfUBLGI5pdzhW+k52r4jbPas0nDJPopQCjWmSKx0SZDHZMckRaVBpctgdlToL5hyQ8=
+	t=1752918754; cv=none; b=pu1CYdAfH6LT5Pyjc0MTaxBgAiwDEJdTNzueiSrACmDBIS3RSFxKAdraFECg+Lbd2LPVZovhJz9+8qcfIHi0PduXWuq1XSq1u0KJ64mLdrDp2FebfSiCj2dNrGp6tLd68aAECa8bs4x8PzqWacbce/XXCZtcwxepBxiU//rRd+M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752917502; c=relaxed/simple;
-	bh=qTPANgJhoxN+77TcMvbQIoWCGUwfN/Vi70SixOWqH98=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=d7znqGE6D6cPXpTecvqybjlHVcgIVtWX2e1T3tm93/cAgYbXwLvvMYxtbIEVyIGqZozrDvqP8NMyBi0ayFX35kEO0hOVlGWxTX5kixIeB26bNYTPTuV8ymA2Q730EozLly0B+9zWygtwb4F8uW/2sFo0UMN0ilu7N51NtTiOLjA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.93.142])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4bkgw11NXPzYQvFL;
-	Sat, 19 Jul 2025 17:14:25 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id E446C1A10A8;
-	Sat, 19 Jul 2025 17:14:23 +0800 (CST)
-Received: from ultra.huawei.com (unknown [10.90.53.71])
-	by APP4 (Coremail) with SMTP id gCh0CgCHURLuYXtopCAYAw--.54295S6;
-	Sat, 19 Jul 2025 17:14:23 +0800 (CST)
-From: Pu Lehui <pulehui@huaweicloud.com>
-To: bpf@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Cc: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
-	Puranjay Mohan <puranjay@kernel.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Alexandre Ghiti <alex@ghiti.fr>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Pu Lehui <pulehui@huawei.com>
-Subject: [PATCH bpf-next 04/10] riscv: Separate toolchain support dependency from RISCV_ISA_ZACAS
-Date: Sat, 19 Jul 2025 09:17:24 +0000
-Message-Id: <20250719091730.2660197-5-pulehui@huaweicloud.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250719091730.2660197-1-pulehui@huaweicloud.com>
-References: <20250719091730.2660197-1-pulehui@huaweicloud.com>
+	s=arc-20240116; t=1752918754; c=relaxed/simple;
+	bh=oSt+1bwQznG4gMR3tFfughPMF0WDaB7Y07l3ebktgr4=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=tSZCiPfrl4LtCQXWvKSBFVFmbJ5CCmoNTbn73rs30MpzUC6Out1EPaGy3vvMnKuI/RIXIk6kBNKC1odfBPj/26GSsOrjegfHX2misgvNfbcmbXWk6cfBSk87b3YL2FAbpn12vu1FfVKUWubTyfbCUBZAsL7fY5vLw76Nmwsw9ew=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hKCtxXzR; arc=none smtp.client-ip=209.85.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hKCtxXzR"
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-451d54214adso20612785e9.3;
+        Sat, 19 Jul 2025 02:52:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1752918751; x=1753523551; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5pEXn5VHOGjD9SP45xNUPOGCXrKn0jYGF1BCukLPods=;
+        b=hKCtxXzRTaCZm0wGBSkNIcxm4b4aq7S79pQXEA/aonYCm5GGHai5by6PtYCNvHGQiq
+         nrPqX6+TNROHPSEWypuhFjMmyeodYslkei9EU/ngGFPRhQ0hdNctk+6sLIe4tu+YAd5y
+         eBCXGeR2x3VPUc2k/fdoMIIyaDG3eIWjCjf330YWOYw0LxeDD3Wej4fYIETDjKwgXpyo
+         LejBDeMXBZEnhxSSZoCRpjGWpYOaVHjG3aPnS7tg/Bz8D59mJviZcraH48LpXZLJ6Cea
+         /85xOD0q9j4YBK439c8q9AahuYK8GSvsWsM/q2o8Sn69VBRRyan28fakqnLCtRtF2K8N
+         iNSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752918751; x=1753523551;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5pEXn5VHOGjD9SP45xNUPOGCXrKn0jYGF1BCukLPods=;
+        b=qAHiyyRCshbJJZUDg9hewod149Jo9SPrTBivp5eQF7UJRFyoCwejaBnDF7tDDsawIc
+         vIKM5gEHi8aN3h+KHtp51+37AZryqDAhP4Wj/cvb29hFzmD8uK90u0/9aghFwiBfMv8N
+         oJZK6u45VM5UYCNSsSF+rKtWw9+6RODUN7rVRa4LQ5tNhuHby2zLCfdBbtkHSwWvIEqO
+         9UHIsL+dqitKS+BxJerUDPRAjKTsgfxleU8a3DJDNqbYSdu2Sm7oz4xczk4p9E6K1SCR
+         a0Y9xOzxoPhRKE7isUmUwMegCboOCAY5TLjTYCXrLijkf/6ytCestxkMSS21W4SaI2PS
+         WKuA==
+X-Forwarded-Encrypted: i=1; AJvYcCUYTFNo89fqvd5m3Bd4gX6GPlB4BIhOiFKjbqQgBW4xL25SbKXVzHNmhjt+9FeV0TSUwAzttzbMfcoKIp1ZVErX@vger.kernel.org, AJvYcCV+hTnNQ5SZiZ3aFJnyQxAzd9S3AoArY92DLukxAGPhUvmyGiT/79ttuzwqxuHTmeUxyeo5qtXHhDklj3AJ@vger.kernel.org, AJvYcCVGNd/NRwazYBzrkL8dhy7WHmyaT2FDMEf4qSQDzfodEAxGkZlyJGSuBDUX2tHh+FHa3CYz22wWqNcu7dZ1@vger.kernel.org, AJvYcCX3BvTAS5xc6iqo4xIbKbYxRqqRZWHX94foq5KhpfsbfoxQCLCFAxDu4HOYKwtwe2R6DTneOzATlMx9WRlRTA==@vger.kernel.org, AJvYcCX5d8+8OHdWafoVYEzAcoLzzVfSzmJxF/iy1dl44e9V7uVyJJsDo6ERcj5+s6GJHuoXn+Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywgt/4U+BYa3PG00MHbAriBGPLqAHcSYhro2I56LjrG4OURztvI
+	JHyhqLeULFG+UbpQUOJEwzHOzf1ksT13XiCeooXgYQi91ziJAjhdNda5
+X-Gm-Gg: ASbGncu0GPUnk7EtkesxcwN5xWWGLvhSSC9+tqoOz4wga2KIWWV0EEuk5+V7TTc/OA2
+	m6BOy8RFv5l9MKCWdyyiirNqHwb2NKfTo9aH7UCIgbjBUoWbTOwFPV+faibebd0DqAxUjPrXN5+
+	YCQB9aS+5JZO3c23QfZDXLotmpab00GUdbrey3arf8ECaLt/rcnx8XxaKZXTkCWuFxSOCgYAkOV
+	P8LQk1ruqG9Sy2y0tQ46IytS34C9it/6jBj7Wqbz29q2KCqx22TPRHeZ9rEkAgK6oGyvgFapf72
+	RlrDnaIdw/0G/FVDu4QsILKS3lPYv0k+yG5kEMzLB7VqWzJMxAVgivryygNhLQTP1FPy7DjtFsZ
+	+0XOSw9m59FDOE0GBRto6uWVK5tSNbzf/vEkxBpR5j23Nsu3yxL4KsLbJ4U6o
+X-Google-Smtp-Source: AGHT+IGgS3eKZd0WOE5CaGVORMk8w7YbhfbUyHdCIflKLfBmlFtKqD0yPw9BMSfCnK1ze+Ow5Wktqw==
+X-Received: by 2002:a05:600c:3484:b0:456:1a41:f932 with SMTP id 5b1f17b1804b1-4563535d2ddmr77234825e9.22.1752918750524;
+        Sat, 19 Jul 2025 02:52:30 -0700 (PDT)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4562e7f2bb4sm100634135e9.8.2025.07.19.02.52.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 19 Jul 2025 02:52:30 -0700 (PDT)
+Date: Sat, 19 Jul 2025 10:52:28 +0100
+From: David Laight <david.laight.linux@gmail.com>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: "H. Peter Anvin" <hpa@zytor.com>, Eugenio =?UTF-8?B?UMOpcmV6?=
+ <eperezma@redhat.com>, Ilpo =?UTF-8?B?SsOkcnZpbmVu?=
+ <ilpo.jarvinen@linux.intel.com>, "Michael S. Tsirkin" <mst@redhat.com>, Al
+ Viro <viro@zeniv.linux.org.uk>, Alexei Starovoitov <ast@kernel.org>, Alexey
+ Dobriyan <adobriyan@gmail.com>, Andrew Morton <akpm@linux-foundation.org>,
+ Andrii Nakryiko <andrii@kernel.org>, Arnd Bergmann <arnd@kernel.org>,
+ Borislav Petkov <bp@alien8.de>, Cong Wang <cong.wang@bytedance.com>, Dan
+ Williams <dan.j.williams@intel.com>, Daniel Borkmann
+ <daniel@iogearbox.net>, Dave Hansen <dave.hansen@linux.intel.com>, David
+ Laight <David.Laight@aculab.com>, David Lechner <dlechner@baylibre.com>,
+ Dinh Nguyen <dinguyen@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Gatlin Newhouse <gatlin.newhouse@gmail.com>, Hao Luo <haoluo@google.com>,
+ Ingo Molnar <mingo@redhat.com>, Jakub Sitnicki <jakub@cloudflare.com>, Jan
+ Hendrik Farr <kernel@jfarr.cc>, Jason Wang <jasowang@redhat.com>, Jiri Olsa
+ <jolsa@kernel.org>, John Fastabend <john.fastabend@gmail.com>, Jonathan
+ Cameron <Jonathan.Cameron@huawei.com>, Josh Poimboeuf
+ <jpoimboe@kernel.org>, KP Singh <kpsingh@kernel.org>, Kees Cook
+ <kees@kernel.org>, Luc Van Oostenryck <luc.vanoostenryck@gmail.com>, Marc
+ Herbert <Marc.Herbert@linux.intel.com>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Mateusz Guzik <mjguzik@gmail.com>, Michal Luczaj
+ <mhal@rbox.co>, Miguel Ojeda <ojeda@kernel.org>, Mykola Lysenko
+ <mykolal@fb.com>, NeilBrown <neil@brown.name>, Peter Zijlstra
+ <peterz@infradead.org>, Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+ Sami Tolvanen <samitolvanen@google.com>, Shuah Khan <shuah@kernel.org>,
+ Song Liu <song@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Thomas
+ Gleixner <tglx@linutronix.de>, Thorsten Blum <thorsten.blum@linux.dev>,
+ Uros Bizjak <ubizjak@gmail.com>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+ Yafang Shao <laoar.shao@gmail.com>, Ye Bin <yebin10@huawei.com>, Yonghong
+ Song <yonghong.song@linux.dev>, Yufeng Wang <wangyufeng@kylinos.cn>,
+ bpf@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-sparse@vger.kernel.org, virtualization@lists.linux.dev,
+ x86@kernel.org
+Subject: Re: [PATCH 4/7] arch/nios: replace "__auto_type" with "auto"
+Message-ID: <20250719105228.1704538d@pumpkin>
+In-Reply-To: <CAHk-=whGcopJ_wewAtzfTS7=cG1yvpC90Y-xz5t-1Aw0ew682w@mail.gmail.com>
+References: <20250718213252.2384177-1-hpa@zytor.com>
+	<20250718213252.2384177-5-hpa@zytor.com>
+	<CAHk-=whGcopJ_wewAtzfTS7=cG1yvpC90Y-xz5t-1Aw0ew682w@mail.gmail.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgCHURLuYXtopCAYAw--.54295S6
-X-Coremail-Antispam: 1UD129KBjvJXoWxZw17tF13Xr45Kw4DZr17trb_yoW5Xr4Upr
-	4IkrZ5KrykCFy2qrZYyryDWr1kXws7W343Kw4UW345JFW0y3y0qr90v3WfuryqqFWIvrWS
-	9F1fur1fZa1jkaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUPSb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
-	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
-	rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267
-	AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E
-	14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7
-	xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Y
-	z7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2
-	AFwI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAq
-	x4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6r
-	W5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF
-	7I0E14v26F4j6r4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI
-	0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7I
-	U0sqXPUUUUU==
-X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-From: Pu Lehui <pulehui@huawei.com>
+On Fri, 18 Jul 2025 14:49:41 -0700
+Linus Torvalds <torvalds@linux-foundation.org> wrote:
 
-RV64 bpf is going to support ZACAS instructions. Let's separate
-toolchain support dependency from RISCV_ISA_ZACAS.
+...
+> Side note: I think some coccinelle (or sed) script that replaces that
+> older form of
+> 
+>        typeof(x) Y = (typeof(x))(Z);
+...
+> 
+> with just
+> 
+>         auto Y = Z;
+> 
+> is also worthwhile at some point.
 
-Signed-off-by: Pu Lehui <pulehui@huawei.com>
----
- arch/riscv/Kconfig               | 1 -
- arch/riscv/include/asm/cmpxchg.h | 6 ++++--
- arch/riscv/kernel/setup.c        | 1 +
- 3 files changed, 5 insertions(+), 3 deletions(-)
+That one needs to keep the typeof() - but the cast might be spurious.
+It could be either:
+	typeof(x) Y = Z;
+or:
+	auto Y = (typeof(x))(Z);
+but the latter could hide compilation errors.
 
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index d71ea0f4466f..191b5d372fdf 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -717,7 +717,6 @@ config TOOLCHAIN_HAS_ZACAS
- 
- config RISCV_ISA_ZACAS
- 	bool "Zacas extension support for atomic CAS"
--	depends on TOOLCHAIN_HAS_ZACAS
- 	depends on RISCV_ALTERNATIVE
- 	default y
- 	help
-diff --git a/arch/riscv/include/asm/cmpxchg.h b/arch/riscv/include/asm/cmpxchg.h
-index 0b749e710216..4f4f389282b8 100644
---- a/arch/riscv/include/asm/cmpxchg.h
-+++ b/arch/riscv/include/asm/cmpxchg.h
-@@ -133,6 +133,7 @@
- ({										\
- 	if (IS_ENABLED(CONFIG_RISCV_ISA_ZABHA) &&				\
- 	    IS_ENABLED(CONFIG_RISCV_ISA_ZACAS) &&				\
-+	    IS_ENABLED(CONFIG_TOOLCHAIN_HAS_ZACAS) &&				\
- 	    riscv_has_extension_unlikely(RISCV_ISA_EXT_ZABHA) &&		\
- 	    riscv_has_extension_unlikely(RISCV_ISA_EXT_ZACAS)) {		\
- 		r = o;								\
-@@ -180,6 +181,7 @@
- 		       r, p, co, o, n)					\
- ({									\
- 	if (IS_ENABLED(CONFIG_RISCV_ISA_ZACAS) &&			\
-+	    IS_ENABLED(CONFIG_TOOLCHAIN_HAS_ZACAS) &&			\
- 	    riscv_has_extension_unlikely(RISCV_ISA_EXT_ZACAS)) {	\
- 		r = o;							\
- 									\
-@@ -315,7 +317,7 @@
- 	arch_cmpxchg_release((ptr), (o), (n));				\
- })
- 
--#if defined(CONFIG_64BIT) && defined(CONFIG_RISCV_ISA_ZACAS)
-+#if defined(CONFIG_64BIT) && defined(CONFIG_RISCV_ISA_ZACAS) && defined(CONFIG_TOOLCHAIN_HAS_ZACAS)
- 
- #define system_has_cmpxchg128()        riscv_has_extension_unlikely(RISCV_ISA_EXT_ZACAS)
- 
-@@ -351,7 +353,7 @@ union __u128_halves {
- #define arch_cmpxchg128_local(ptr, o, n)					\
- 	__arch_cmpxchg128((ptr), (o), (n), "")
- 
--#endif /* CONFIG_64BIT && CONFIG_RISCV_ISA_ZACAS */
-+#endif /* CONFIG_64BIT && CONFIG_RISCV_ISA_ZACAS && CONFIG_TOOLCHAIN_HAS_ZACAS */
- 
- #ifdef CONFIG_RISCV_ISA_ZAWRS
- /*
-diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
-index 14888e5ea19a..348b924bbbca 100644
---- a/arch/riscv/kernel/setup.c
-+++ b/arch/riscv/kernel/setup.c
-@@ -288,6 +288,7 @@ static void __init riscv_spinlock_init(void)
- 
- 	if (IS_ENABLED(CONFIG_RISCV_ISA_ZABHA) &&
- 	    IS_ENABLED(CONFIG_RISCV_ISA_ZACAS) &&
-+	    IS_ENABLED(CONFIG_TOOLCHAIN_HAS_ZACAS) &&
- 	    riscv_isa_extension_available(NULL, ZABHA) &&
- 	    riscv_isa_extension_available(NULL, ZACAS)) {
- 		using_ext = "using Zabha";
--- 
-2.34.1
+I'm waiting for the next 'duck shoot' (after strings) to be casts.
 
+While casts of 'buffer' to/from 'void *' are fine (and not needed),
+casts to/from 'integer_type *' are definitely problematic.
+
+And 'random' casts of integer values could easily hide real bugs
+and most just aren't needed.
+Although you might want the compiler to make the result of
+'u64_var & 0xffu' 'unsigned int'.
+
+	David
