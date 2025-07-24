@@ -1,30 +1,32 @@
-Received: from out-174.mta0.migadu.com (out-174.mta0.migadu.com [91.218.175.174])
+Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B101A2EA15D
-	for <bpf@vger.kernel.org>; Thu, 24 Jul 2025 15:15:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 946412E9EAC
+	for <bpf@vger.kernel.org>; Thu, 24 Jul 2025 15:15:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753370125; cv=none; b=O41TqsN45XvrswwpG949B5oXvBR+U2kxXen3XN4pFpU/9WmBSAanvIiAo+KhLypQ/bUyB4eg7saausPB3WDtc0Dcz1Tj3B9i7eT4Qa8oP7R4kPXiP6JZjqlHwW++CRVxBu028LVyvEkavE1FLhtYhGpcs2U7wRYjNM9HFRGPJJI=
+	t=1753370131; cv=none; b=AYSCsV4rDELu2TvVK578zgW662M7/VE4vzbkMQzsr2L9gjl+0NEEeT5bnoR04FvB491AumVO3IR8PcwxEYNBlZ209/bd8qnC5/7UYnWN7/VC7LfKMpN8odqmgcKJGnK1yBTCKbBiIC0DspgEQEauKm1m9LM+z6OirOkQ/uJHB38=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753370125; c=relaxed/simple;
-	bh=HFs9e4GRx5Xr5NbjGGQjvwPKKVUUlE8Z0bI9D8f35k0=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version; b=hSoeF/NqtTamyQovFxfWIJuN82eB287FwhznmXMWvcEjRV1vvWDdhUCI5G3xWlnVZscA/iNLvBryRtdZAuAMpl04YMphfMCMXaSAJF3hJwSRO5kIc7DJLZbRu6oTyvtWlvJPz10ZNpgp7OeVHsyJREZbtFsnOSJC93T69XUF+X0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=UzCI1Lzy; arc=none smtp.client-ip=91.218.175.174
+	s=arc-20240116; t=1753370131; c=relaxed/simple;
+	bh=Rp6QB38jGHbwBhBe9EF3FxRJm3xchbnZjDcQFcC5nRg=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=TSIUsgFtxK4lxLJ8jUX3JU/r2dgkSqKYZGLPBEtEnydu0iyJrzvwT1cgwK6uCHeV64KcWEzAr0oYJHcs6Smpg9rTad6ZK1V2erdhWozkTVeIJXN60g+Rc/jISmmNgSBp6Uuenh5JNSIdlYVM35iwq/adMLerCcEmW66+xbrJl8c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=WDvgmDkW; arc=none smtp.client-ip=91.218.175.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="UzCI1Lzy"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="WDvgmDkW"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1753370110;
+	t=1753370126;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=10zbmwKgUh+KE8grpL0UhT126MR+ngBmfxMox32GllA=;
-	b=UzCI1Lzy1y0ac3ERbi51gMX1/Qz1dv/ppr7o0syCyS6F8Qtr6hWou+XYpaSOp1V5tgi9DE
-	WDHKwaf8rtvrYZEwOhxUIbtsA6X0syicaNKhW7IUCRyVU2Y74RZ3llolbaHRyDUXZlHlJo
-	fV835J8IFiR5UMJjLddoNda4/imc4pE=
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=gYH+7OzFGHpSlM/+cXLObejEneebIcCwpxyqa2mfSxA=;
+	b=WDvgmDkWbWWZB+va1kleq5YoDlhqFpAyuQOneXTCrd996ZnRls2+16q6oEP5AyohBbMYMF
+	N9fa4P/DJ46622uBfltSO9fQgr6LyvbLeoV1dYJrPOgeRr2Gngi71xOItfbevOPCl6rKcq
+	+Wj2Tj5r6pe41Lq8jOX4vWGDeawxGu0=
 From: KaFai Wan <kafai.wan@linux.dev>
 To: ast@kernel.org,
 	daniel@iogearbox.net,
@@ -46,9 +48,11 @@ To: ast@kernel.org,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	leon.hwang@linux.dev
-Subject: [PATCH bpf-next v4 0/4] bpf: Show precise rejected function when attaching to __noreturn and deny list functions
-Date: Thu, 24 Jul 2025 23:14:50 +0800
-Message-ID: <20250724151454.499040-1-kafai.wan@linux.dev>
+Subject: [PATCH bpf-next v4 2/4] bpf: Add log for attaching tracing programs to functions in deny list
+Date: Thu, 24 Jul 2025 23:14:52 +0800
+Message-ID: <20250724151454.499040-3-kafai.wan@linux.dev>
+In-Reply-To: <20250724151454.499040-1-kafai.wan@linux.dev>
+References: <20250724151454.499040-1-kafai.wan@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -58,50 +62,38 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-Show precise rejected function when attaching fexit/fmod_ret to __noreturn 
-functions.
-Add log for attaching tracing programs to functions in deny list.
-Add selftest for attaching tracing programs to functions in deny list.
-Migrate fexit_noreturns case into tracing_failure test suite.
+Show the rejected function name when attaching tracing programs to
+functions in deny list.
 
-changes:
-v4:
-- change tracing_deny case attaching function (Yonghong Song)
-- add Acked-by: Yafang Shao and Yonghong Song
+With this change, we know why tracing programs can't attach to functions
+like __rcu_read_lock() from log.
 
-v3:
-- add tracing_deny case into existing files (Alexei)
-- migrate fexit_noreturns into tracing_failure 
-- change SOB
-  https://lore.kernel.org/bpf/20250722153434.20571-1-kafai.wan@linux.dev/
+$ ./fentry
+libbpf: prog '__rcu_read_lock': BPF program load failed: -EINVAL
+libbpf: prog '__rcu_read_lock': -- BEGIN PROG LOAD LOG --
+Attaching tracing programs to function '__rcu_read_lock' is rejected.
 
-v2:
-- change verifier log message (Alexei)
-- add missing Suggested-by
-  https://lore.kernel.org/bpf/20250714120408.1627128-1-mannkafai@gmail.com/
-
-v1:
- https://lore.kernel.org/all/20250710162717.3808020-1-mannkafai@gmail.com/
-
+Suggested-by: Leon Hwang <leon.hwang@linux.dev>
+Signed-off-by: KaFai Wan <kafai.wan@linux.dev>
+Acked-by: Yafang Shao <laoar.shao@gmail.com>
+Acked-by: Yonghong Song <yonghong.song@linux.dev>
 ---
-KaFai Wan (4):
-  bpf: Show precise rejected function when attaching fexit/fmod_ret to
-    __noreturn functions
-  bpf: Add log for attaching tracing programs to functions in deny list
-  selftests/bpf: Add selftest for attaching tracing programs to
-    functions in deny list
-  selftests/bpf: Migrate fexit_noreturns case into tracing_failure test
-    suite
+ kernel/bpf/verifier.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
- kernel/bpf/verifier.c                         |  5 +-
- .../bpf/prog_tests/fexit_noreturns.c          |  9 ----
- .../bpf/prog_tests/tracing_failure.c          | 52 +++++++++++++++++++
- .../selftests/bpf/progs/fexit_noreturns.c     | 15 ------
- .../selftests/bpf/progs/tracing_failure.c     | 12 +++++
- 5 files changed, 68 insertions(+), 25 deletions(-)
- delete mode 100644 tools/testing/selftests/bpf/prog_tests/fexit_noreturns.c
- delete mode 100644 tools/testing/selftests/bpf/progs/fexit_noreturns.c
-
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 00d287814f12..c24c0d57e595 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -23942,6 +23942,8 @@ static int check_attach_btf_id(struct bpf_verifier_env *env)
+ 			return ret;
+ 	} else if (prog->type == BPF_PROG_TYPE_TRACING &&
+ 		   btf_id_set_contains(&btf_id_deny, btf_id)) {
++		verbose(env, "Attaching tracing programs to function '%s' is rejected.\n",
++			tgt_info.tgt_name);
+ 		return -EINVAL;
+ 	} else if ((prog->expected_attach_type == BPF_TRACE_FEXIT ||
+ 		   prog->expected_attach_type == BPF_MODIFY_RETURN) &&
 -- 
 2.43.0
 
