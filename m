@@ -1,41 +1,58 @@
-Received: from lamorak.hansenpartnership.com (lamorak.hansenpartnership.com [198.37.111.173])
+Received: from out-189.mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65D502E2F15;
-	Thu, 24 Jul 2025 14:40:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.37.111.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 979A62E9EC7
+	for <bpf@vger.kernel.org>; Thu, 24 Jul 2025 15:15:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753368046; cv=none; b=WWMLnHD4o6WqH5F/GwSA/o20nfAUJsIkIhec77hTDmCGFoLUc+VUWGEa1LQIzy6f6C2TQnFNmbvIPWK0LoXISSLdCVx/btD+FR1t7iEW//z2PUIA09fCkCmvAbVH88Yyn8qFef0NtkIWLBWo862St90w1Nq1OqiIF3Av8jHZsaE=
+	t=1753370123; cv=none; b=tzeCWASWsXWZDh7h8d0VW75NtH96v+bMzykONFBfJ4iQhO8XtCmvwVItlpxBwrCst5Dj6KFXcKMRo8AQOR6f425OFPoLqbS0dce9CulR2tMWdV/zygfbRQGgbYS09qVLvMDdxXavU7ocnJAgCmLEJVRaZJCw2Bz9Vu8IrzkSPF4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753368046; c=relaxed/simple;
-	bh=oMNBG6IAuIWfV3TGb7z7bijgfhvYkpgvypaGPsdErDw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KiNG9tgZMeRUYINkgI9unMkDK+OUJqguD5EaWGFFocdJsSM44G9PR2WDy+f+5HX2DEJA4w6k0NNCzdBwaQSchcqMb3fIr8RumukynyUJqcRX71oSqxTISh/wT7IZQ+waCuHWrEOLCGzB25EZDHzSmWSW6vTN0o1XKhbo/3U7Hqg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=N5ZNkqdf; arc=none smtp.client-ip=198.37.111.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=HansenPartnership.com
+	s=arc-20240116; t=1753370123; c=relaxed/simple;
+	bh=EOcAPAX1vQ4XIk2/UrVWTxL9MCVWE5oN9MT9W2II56I=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=JF1N1ECE8IsPHheTthWvxRzMz8YZxn/6cYqDUhfy183PGA3wqA+oq7x4ZpHwO0GsfZDLLRIeES/6Xcr/PYiIxzmrjMyNIzXXcxlXAz61RYJCh67FZ96dgFpBr6QvonEJBdIF9LByeXojSm2uw2VA6NY/ixPt/dpM9R1LsMxzwIM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=A4798Up0; arc=none smtp.client-ip=91.218.175.189
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="N5ZNkqdf"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-	d=hansenpartnership.com; s=20151216; t=1753368043;
-	bh=oMNBG6IAuIWfV3TGb7z7bijgfhvYkpgvypaGPsdErDw=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:From;
-	b=N5ZNkqdfbwwBsgZ1U2S4m8GtV0zSo5AP9ipNvTmn2Yb7voUH44uRoc6gXPqt0LgOS
-	 MhTENwTs23foB/VSsVfjgO9pUss+DW9j3inPcO2a63a266n5LJsXguL0SEoY0YCHf7
-	 3vl+y7wj52O54b71aml96kZXdNMjG96QG/ad7sgE=
-Received: from lingrow.int.hansenpartnership.com (unknown [153.66.160.227])
-	by lamorak.hansenpartnership.com (Postfix) with ESMTP id 49B8B1C003D;
-	Thu, 24 Jul 2025 10:40:43 -0400 (EDT)
-From: James Bottomley <James.Bottomley@HansenPartnership.com>
-To: bpf@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org
-Cc: Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH 3/3] bpf: eliminate the allocation of an intermediate struct bpf_key
-Date: Thu, 24 Jul 2025 10:34:28 -0400
-Message-ID: <20250724143428.4416-4-James.Bottomley@HansenPartnership.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250724143428.4416-1-James.Bottomley@HansenPartnership.com>
-References: <20250724143428.4416-1-James.Bottomley@HansenPartnership.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="A4798Up0"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1753370118;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ElR9Dd4bdnPHpZLYz3QLh/uZus9GLW0mgy218VPlreM=;
+	b=A4798Up0BsBRUIgT7YPu1ixF9//13jLsBK4Y5pNRMwPKvbMj7qRSx8FNQ+w4Z4G/eb8LqQ
+	sigTBLrPYKGJ4/VOkhEl7oJJucqgYPaDuP96d3utXvj1PcnkvrgtrmL2ppaqlkUQIkRBz9
+	iZWZNTfmDzOmtOsh60GS7n7OzlPm1OQ=
+From: KaFai Wan <kafai.wan@linux.dev>
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	john.fastabend@gmail.com,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	mykolal@fb.com,
+	shuah@kernel.org,
+	kafai.wan@linux.dev,
+	laoar.shao@gmail.com,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	leon.hwang@linux.dev
+Subject: [PATCH bpf-next v4 1/4] bpf: Show precise rejected function when attaching fexit/fmod_ret to __noreturn functions
+Date: Thu, 24 Jul 2025 23:14:51 +0800
+Message-ID: <20250724151454.499040-2-kafai.wan@linux.dev>
+In-Reply-To: <20250724151454.499040-1-kafai.wan@linux.dev>
+References: <20250724151454.499040-1-kafai.wan@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -43,123 +60,52 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Now that struct bpf_key is an opaque structure only containing a
-pointer to the key, make it an alias for the key itself and thus
-eliminate the need to allocate and free the container.
+With this change, we know the precise rejected function name when
+attaching fexit/fmod_ret to __noreturn functions from log.
 
-Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
+$ ./fexit
+libbpf: prog 'fexit': BPF program load failed: -EINVAL
+libbpf: prog 'fexit': -- BEGIN PROG LOAD LOG --
+Attaching fexit/fmod_ret to __noreturn function 'do_exit' is rejected.
+
+Suggested-by: Leon Hwang <leon.hwang@linux.dev>
+Signed-off-by: KaFai Wan <kafai.wan@linux.dev>
+Acked-by: Yafang Shao <laoar.shao@gmail.com>
+Acked-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- kernel/trace/bpf_trace.c | 39 +++++++++------------------------------
- 1 file changed, 9 insertions(+), 30 deletions(-)
+ kernel/bpf/verifier.c                               | 3 ++-
+ tools/testing/selftests/bpf/progs/fexit_noreturns.c | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 9575d018ed0f..287b69438fac 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -1242,10 +1242,6 @@ static const struct bpf_func_proto bpf_get_func_arg_cnt_proto = {
- };
- 
- #ifdef CONFIG_KEYS
--struct bpf_key {
--	struct key *key;
--};
--
- __bpf_kfunc_start_defs();
- 
- /**
-@@ -1276,7 +1272,6 @@ __bpf_kfunc_start_defs();
- __bpf_kfunc struct bpf_key *bpf_lookup_user_key(s32 serial, u64 flags)
- {
- 	key_ref_t key_ref;
--	struct bpf_key *bkey;
- 
- 	if (flags & ~KEY_LOOKUP_ALL)
- 		return NULL;
-@@ -1289,15 +1284,7 @@ __bpf_kfunc struct bpf_key *bpf_lookup_user_key(s32 serial, u64 flags)
- 	if (IS_ERR(key_ref))
- 		return NULL;
- 
--	bkey = kmalloc(sizeof(*bkey), GFP_KERNEL);
--	if (!bkey) {
--		key_put(key_ref_to_ptr(key_ref));
--		return NULL;
--	}
--
--	bkey->key = key_ref_to_ptr(key_ref);
--
--	return bkey;
-+	return (struct bpf_key *)key_ref_to_ptr(key_ref);
- }
- 
- /**
-@@ -1323,18 +1310,10 @@ __bpf_kfunc struct bpf_key *bpf_lookup_user_key(s32 serial, u64 flags)
-  */
- __bpf_kfunc struct bpf_key *bpf_lookup_system_key(u64 id)
- {
--	struct bpf_key *bkey;
--
- 	if (system_keyring_id_check(id) < 0)
- 		return NULL;
- 
--	bkey = kmalloc(sizeof(*bkey), GFP_ATOMIC);
--	if (!bkey)
--		return NULL;
--
--	bkey->key = (struct key *)(unsigned long)id;
--
--	return bkey;
-+	return (struct bpf_key *)(unsigned long)id;
- }
- 
- /**
-@@ -1346,10 +1325,10 @@ __bpf_kfunc struct bpf_key *bpf_lookup_system_key(u64 id)
-  */
- __bpf_kfunc void bpf_key_put(struct bpf_key *bkey)
- {
--	if (system_keyring_id_check((u64)bkey->key) < 0)
--		key_put(bkey->key);
-+	struct key *key = (struct key *)bkey;
- 
--	kfree(bkey);
-+	if (system_keyring_id_check((u64)key) < 0)
-+		key_put(key);
- }
- 
- #ifdef CONFIG_SYSTEM_DATA_VERIFICATION
-@@ -1370,11 +1349,12 @@ __bpf_kfunc int bpf_verify_pkcs7_signature(struct bpf_dynptr *data_p,
- {
- 	struct bpf_dynptr_kern *data_ptr = (struct bpf_dynptr_kern *)data_p;
- 	struct bpf_dynptr_kern *sig_ptr = (struct bpf_dynptr_kern *)sig_p;
-+	struct key *key = (struct key *)trusted_keyring;
- 	const void *data, *sig;
- 	u32 data_len, sig_len;
- 	int ret;
- 
--	if (system_keyring_id_check((u64)trusted_keyring->key) < 0) {
-+	if (system_keyring_id_check((u64)key) < 0) {
- 		/*
- 		 * Do the permission check deferred in bpf_lookup_user_key().
- 		 * See bpf_lookup_user_key() for more details.
-@@ -1383,7 +1363,7 @@ __bpf_kfunc int bpf_verify_pkcs7_signature(struct bpf_dynptr *data_p,
- 		 * it is already done by keyring_search() called by
- 		 * find_asymmetric_key().
- 		 */
--		ret = key_validate(trusted_keyring->key);
-+		ret = key_validate(key);
- 		if (ret < 0)
- 			return ret;
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index e2fcea860755..00d287814f12 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -23946,7 +23946,8 @@ static int check_attach_btf_id(struct bpf_verifier_env *env)
+ 	} else if ((prog->expected_attach_type == BPF_TRACE_FEXIT ||
+ 		   prog->expected_attach_type == BPF_MODIFY_RETURN) &&
+ 		   btf_id_set_contains(&noreturn_deny, btf_id)) {
+-		verbose(env, "Attaching fexit/fmod_ret to __noreturn functions is rejected.\n");
++		verbose(env, "Attaching fexit/fmod_ret to __noreturn function '%s' is rejected.\n",
++			tgt_info.tgt_name);
+ 		return -EINVAL;
  	}
-@@ -1393,8 +1373,7 @@ __bpf_kfunc int bpf_verify_pkcs7_signature(struct bpf_dynptr *data_p,
- 	sig_len = __bpf_dynptr_size(sig_ptr);
- 	sig = __bpf_dynptr_data(sig_ptr, sig_len);
  
--	return verify_pkcs7_signature(data, data_len, sig, sig_len,
--				      trusted_keyring->key,
-+	return verify_pkcs7_signature(data, data_len, sig, sig_len, key,
- 				      VERIFYING_UNSPECIFIED_SIGNATURE, NULL,
- 				      NULL);
- }
+diff --git a/tools/testing/selftests/bpf/progs/fexit_noreturns.c b/tools/testing/selftests/bpf/progs/fexit_noreturns.c
+index 54654539f550..b1c33d958ae2 100644
+--- a/tools/testing/selftests/bpf/progs/fexit_noreturns.c
++++ b/tools/testing/selftests/bpf/progs/fexit_noreturns.c
+@@ -8,7 +8,7 @@
+ char _license[] SEC("license") = "GPL";
+ 
+ SEC("fexit/do_exit")
+-__failure __msg("Attaching fexit/fmod_ret to __noreturn functions is rejected.")
++__failure __msg("Attaching fexit/fmod_ret to __noreturn function 'do_exit' is rejected.")
+ int BPF_PROG(noreturns)
+ {
+ 	return 0;
 -- 
 2.43.0
 
