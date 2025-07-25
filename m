@@ -1,20 +1,21 @@
-Received: from 69-171-232-180.mail-mxout.facebook.com (69-171-232-180.mail-mxout.facebook.com [69.171.232.180])
+Received: from 66-220-144-178.mail-mxout.facebook.com (66-220-144-178.mail-mxout.facebook.com [66.220.144.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2DC33594E
-	for <bpf@vger.kernel.org>; Fri, 25 Jul 2025 04:34:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3116618BBAE
+	for <bpf@vger.kernel.org>; Fri, 25 Jul 2025 04:34:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753418082; cv=none; b=VZKJ5YVVB6eLSrABdYOMuurUt/WbD4708O6KNzCPSAzDH/z7YMq2PHsWXTFXGMaMRZnlOzQHKW7l4CMtIlW2KJ+2FViIvpUFSkw/QslRcUbScarwI2xuw7noVkTzj0AFTrLlD36eU3c+yK9sEY7iAeFjSQsHE+Gc8ZxIJWuUHpk=
+	t=1753418083; cv=none; b=D1ql4FbYm+4NNr4wHbppgkeoM547IGiNnsJ44krwW68PSVDYfwe115sZPfbU3H80+36oBjXFaMKOwYM64NEr5fgj03ERsw9IT299+ssBlPU/Cn3NHBKPp4JL6hHeOfcbnjb8MK2ETjfgIgXdhqqgLefoAYKOilFuRH7DFBFWhVA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753418082; c=relaxed/simple;
-	bh=Fc7IlW1rFQ40A5rMGVZww28zxatOe/ZpSFHGEtTRd/8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=sPYh0CpbiZy4hF2GfEIu/hwGA00mAYD0wWVJMcyDQRhDA7JWxvsX6uc3s+wrKfLALdY63h30D5x9RiHH6nCdiLz+7Xb/Xl2vqS8aSSq8CBHyqC38ZXQ7mysLwtwcQ7wIa2ba9UFHq6coSN9+rdu92fIRByVe+zlwrvyDYR38O48=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.180
+	s=arc-20240116; t=1753418083; c=relaxed/simple;
+	bh=DaMG/r65719Nw2Om2znT75jlHD1MlbnwdZtfCkU7E88=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=k8i209ju5ZRgLPhT3XdklWUfQE2PK/070NCSTvEHeqUOC/Qh3Zrj/5ok3n1eBEaLpK8fSy1uE+tOol+DUk3sNW5gDKvDpIY1WN/lz4DpP80v6hRIxjzWYn2DmxlqPx6z9ZihzHQcSJQSsuAxFe5UKSB6vQ1qCNcSEGDPeSPp+aU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 5A99CC48A4DE; Thu, 24 Jul 2025 21:34:25 -0700 (PDT)
+	id 85801C48A525; Thu, 24 Jul 2025 21:34:35 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -22,10 +23,12 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	kernel-team@fb.com,
 	Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf-next 0/3] selftests/bpf: Fix a few dynptr test failures with 64K page size
-Date: Thu, 24 Jul 2025 21:34:25 -0700
-Message-ID: <20250725043425.208128-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next 2/3] selftests/bpf: Fix test dynptr/test_dynptr_copy_xdp failure
+Date: Thu, 24 Jul 2025 21:34:35 -0700
+Message-ID: <20250725043435.208974-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20250725043425.208128-1-yonghong.song@linux.dev>
+References: <20250725043425.208128-1-yonghong.song@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -34,19 +37,47 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-There are a few dynptr test failures with arm64 64K page size.
-They are fixed in this patch set and please see individual patches
-for details.
+For arm64 64K page size, the bpf_dynptr_copy() in test dynptr/test_dynptr=
+_copy_xdp
+will succeed, but the test will failure with 4K page size. This patch mad=
+e a change
+so the test will fail expectedly for both 4K and 64K page sizes.
 
-Yonghong Song (3):
-  selftests/bpf: Increase xdp data size for arm64 64K page size
-  selftests/bpf: Fix test dynptr/test_dynptr_copy_xdp failure
-  selftests/bpf: Fix test dynptr/test_dynptr_memset_xdp_chunks failure
+Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+---
+ tools/testing/selftests/bpf/progs/dynptr_success.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
- .../testing/selftests/bpf/prog_tests/dynptr.c  | 10 ++++++++--
- .../selftests/bpf/progs/dynptr_success.c       | 18 +++++++++++++++---
- 2 files changed, 23 insertions(+), 5 deletions(-)
-
+diff --git a/tools/testing/selftests/bpf/progs/dynptr_success.c b/tools/t=
+esting/selftests/bpf/progs/dynptr_success.c
+index 7d7081d05d47..3094a1e4ee91 100644
+--- a/tools/testing/selftests/bpf/progs/dynptr_success.c
++++ b/tools/testing/selftests/bpf/progs/dynptr_success.c
+@@ -611,11 +611,12 @@ int test_dynptr_copy_xdp(struct xdp_md *xdp)
+ 	struct bpf_dynptr ptr_buf, ptr_xdp;
+ 	char data[] =3D "qwertyuiopasdfghjkl";
+ 	char buf[32] =3D {'\0'};
+-	__u32 len =3D sizeof(data);
++	__u32 len =3D sizeof(data), xdp_data_size;
+ 	int i, chunks =3D 200;
+=20
+ 	/* ptr_xdp is backed by non-contiguous memory */
+ 	bpf_dynptr_from_xdp(xdp, 0, &ptr_xdp);
++	xdp_data_size =3D bpf_dynptr_size(&ptr_xdp);
+ 	bpf_ringbuf_reserve_dynptr(&ringbuf, len * chunks, 0, &ptr_buf);
+=20
+ 	/* Destination dynptr is backed by non-contiguous memory */
+@@ -673,7 +674,7 @@ int test_dynptr_copy_xdp(struct xdp_md *xdp)
+ 			goto out;
+ 	}
+=20
+-	if (bpf_dynptr_copy(&ptr_xdp, 2000, &ptr_xdp, 0, len * chunks) !=3D -E2=
+BIG)
++	if (bpf_dynptr_copy(&ptr_xdp, xdp_data_size - 3000, &ptr_xdp, 0, len * =
+chunks) !=3D -E2BIG)
+ 		err =3D 1;
+=20
+ out:
 --=20
 2.47.3
 
