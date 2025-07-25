@@ -1,39 +1,40 @@
 Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDF4D7260B
-	for <bpf@vger.kernel.org>; Fri, 25 Jul 2025 00:28:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF76A61FFE
+	for <bpf@vger.kernel.org>; Fri, 25 Jul 2025 00:28:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753403335; cv=none; b=E7t64T81mh6x5RK93pCtxd97WZk6OYhmEbGD7n2ikCgBvo/ZxczHgy5WPedeGnzAMGZ1y9FTeo7aEULVs0mVcBpqCcmfE9NTQqyBbpqbDzXpMWFqfeZgIxAKXi2uc04W5MoJeqXcnxMG3Sbb5gQtZd4hC4s8EIyF67Dr7F65BiU=
+	t=1753403336; cv=none; b=M3iZwXf0NuoWzhyInA6BAJVUq9KDUczxokGKlHjTGEWL5etfaRF5OmAw6cvl390PC5EJ29UdAHp15TnvvW1esklL0g24rZrePP/b/rdeBZek0VGGDad7hCPqGuCB4kZUMS3Xehe8Ab3xZUyG2/XcG/X90sL54iEnhfz0j0qESCk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753403335; c=relaxed/simple;
-	bh=FzwZKj6D2kXvqQX4k81CHMQO+h2+EOfd9gnQPKkLeQM=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=u3RCmDhP8W1RoiLXMVkzAIuYuTHi17b9pfpbR03mQoIwnUQ+TXnPDGXYNJQnbKhvl70KjHdZjTssQPKhluI5H9toyXNr6+MNqEejkxwEYsKIkrPIXq9HZgS7Tz7gbHfAr5/smrEpdqez+y2Du3hXW6degjTvSlarJbDy6upx2ME=
+	s=arc-20240116; t=1753403336; c=relaxed/simple;
+	bh=coHpCL4EZG60x9z+IKJsPKsRFaP/pt8ZrG2BPSTO7lc=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=uebbudpXHqdO4sX3A3q6U2/HNqeHAa25UABUiQ7l+3d63+BXzc4sEFyaF3hZgd9HPo+SwDsRby4djzeeOPuYBplwWxivo0USI8pwmlra17XqDpyS066IuyCZWoTGGdHlP/aPSM7BAKh46pSAwGZ4QHjMMopqaLaYx+9JrYbYg6U=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 526cfed068ee11f0b29709d653e92f7d-20250725
+X-UUID: 52d4fc8868ee11f0b29709d653e92f7d-20250725
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.45,REQID:97c8a2cf-3102-486f-b571-b55d7cd1cee2,IP:15,
+X-CID-O-INFO: VERSION:1.1.45,REQID:833c4936-da1e-4d44-abc4-8a52614ffc5a,IP:15,
 	URL:0,TC:0,Content:0,EDM:0,RT:0,SF:-40,FILE:0,BULK:0,RULE:Release_Ham,ACTI
 	ON:release,TS:-25
-X-CID-INFO: VERSION:1.1.45,REQID:97c8a2cf-3102-486f-b571-b55d7cd1cee2,IP:15,UR
+X-CID-INFO: VERSION:1.1.45,REQID:833c4936-da1e-4d44-abc4-8a52614ffc5a,IP:15,UR
 	L:0,TC:0,Content:0,EDM:0,RT:0,SF:-40,FILE:0,BULK:0,RULE:Release_Ham,ACTION
 	:release,TS:-25
-X-CID-META: VersionHash:6493067,CLOUDID:a2f2aa4939be0fd7fd1220bf8caf4a42,BulkI
-	D:250725082847SMVIEQ0J,BulkQuantity:0,Recheck:0,SF:10|24|44|66|78|102,TC:n
-	il,Content:0|50,EDM:-3,IP:-2,URL:1,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil
-	,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FSI,TF_CID_SPAM_ULS
-X-UUID: 526cfed068ee11f0b29709d653e92f7d-20250725
+X-CID-META: VersionHash:6493067,CLOUDID:cc5910aa9c612e6de566e8bd0db3b210,BulkI
+	D:250725082847NVB9L9HB,BulkQuantity:0,Recheck:0,SF:10|24|44|66|78|81|82|10
+	2,TC:nil,Content:0|50,EDM:-3,IP:-2,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,B
+	EC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FSI
+X-UUID: 52d4fc8868ee11f0b29709d653e92f7d-20250725
 X-User: jianghaoran@kylinos.cn
 Received: from localhost.localdomain [(39.156.73.13)] by mailgw.kylinos.cn
 	(envelope-from <jianghaoran@kylinos.cn>)
 	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 1345983305; Fri, 25 Jul 2025 08:28:44 +0800
+	with ESMTP id 1793497198; Fri, 25 Jul 2025 08:28:44 +0800
 From: Haoran Jiang <jianghaoran@kylinos.cn>
 To: loongarch@lists.linux.dev
 Cc: bpf@vger.kernel.org,
@@ -53,10 +54,12 @@ Cc: bpf@vger.kernel.org,
 	andrii@kernel.org,
 	daniel@iogearbox.net,
 	ast@kernel.org
-Subject: [PATCH v3 0/2] Fix two tailcall-related issues
-Date: Fri, 25 Jul 2025 08:28:33 +0800
-Message-Id: <20250725002835.64211-1-jianghaoran@kylinos.cn>
+Subject: [PATCH v3 2/2] LoongArch: BPF: Fix tailcall hierarchy
+Date: Fri, 25 Jul 2025 08:28:35 +0800
+Message-Id: <20250725002835.64211-3-jianghaoran@kylinos.cn>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20250725002835.64211-1-jianghaoran@kylinos.cn>
+References: <20250725002835.64211-1-jianghaoran@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -66,326 +69,343 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-v3:
-1,In the prepare_bpf_tail_call_cnt function, emit_tailcall_jmp is replaced with emit_cond_jmp.
-2,Fix the issue where test cases using fentry/fexit fail.
+In specific use cases combining tailcalls and BPF-to-BPF calls，
+MAX_TAIL_CALL_CNT won't work because of missing tail_call_cnt
+back-propagation from callee to caller。This patch fixes this
+tailcall issue caused by abusing the tailcall in bpf2bpf feature
+on LoongArch like the way of "bpf, x64: Fix tailcall hierarchy".
 
-Test after merging these two patches and the following trampoline series patches.
-https://lore.kernel.org/loongarch/CAK3+h2zirm6cV2tAbd38RSYSF3=B1qZ+9jm_GZPsAPrMtaozmg@mail.gmail.com/T/#mf1f1c9f965d5229c6d2dce3b1ca8bc9a5d70520d
+push tail_call_cnt_ptr and tail_call_cnt into the stack,
+tail_call_cnt_ptr is passed between tailcall and bpf2bpf,
+uses tail_call_cnt_ptr to increment tail_call_cnt.
 
-./test_progs -a tailcalls
-#413/1   tailcalls/tailcall_1:OK
-#413/2   tailcalls/tailcall_2:OK
-#413/3   tailcalls/tailcall_3:OK
-#413/4   tailcalls/tailcall_4:OK
-#413/5   tailcalls/tailcall_5:OK
-#413/6   tailcalls/tailcall_6:OK
-#413/7   tailcalls/tailcall_bpf2bpf_1:OK
-#413/8   tailcalls/tailcall_bpf2bpf_2:OK
-#413/9   tailcalls/tailcall_bpf2bpf_3:OK
-#413/10  tailcalls/tailcall_bpf2bpf_4:OK
-#413/11  tailcalls/tailcall_bpf2bpf_5:OK
-#413/12  tailcalls/tailcall_bpf2bpf_6:OK
-#413/13  tailcalls/tailcall_bpf2bpf_fentry:OK
-#413/14  tailcalls/tailcall_bpf2bpf_fexit:OK
-#413/15  tailcalls/tailcall_bpf2bpf_fentry_fexit:OK
-#413/16  tailcalls/tailcall_bpf2bpf_fentry_entry:OK
-#413/17  tailcalls/tailcall_poke:OK
-#413/18  tailcalls/tailcall_bpf2bpf_hierarchy_1:OK
-#413/19  tailcalls/tailcall_bpf2bpf_hierarchy_fentry:OK
-#413/20  tailcalls/tailcall_bpf2bpf_hierarchy_fexit:OK
-#413/21  tailcalls/tailcall_bpf2bpf_hierarchy_fentry_fexit:OK
-#413/22  tailcalls/tailcall_bpf2bpf_hierarchy_fentry_entry:OK
-#413/23  tailcalls/tailcall_bpf2bpf_hierarchy_2:OK
-#413/24  tailcalls/tailcall_bpf2bpf_hierarchy_3:OK
-#413/25  tailcalls/tailcall_freplace:OK
-#413/26  tailcalls/tailcall_bpf2bpf_freplace:OK
-#413/27  tailcalls/tailcall_failure:OK
-#413/28  tailcalls/reject_tail_call_spin_lock:OK
-#413/29  tailcalls/reject_tail_call_rcu_lock:OK
-#413/30  tailcalls/reject_tail_call_preempt_lock:OK
-#413/31  tailcalls/reject_tail_call_ref:OK
-#413     tailcalls:OK
-Summary: 1/31 PASSED, 0 SKIPPED, 0 FAILED
+Fixes: bb035ef0cc91 ("LoongArch: BPF: Support mixing bpf2bpf and tailcalls")
+Fixes: 5dc615520c4d ("LoongArch: Add BPF JIT support")
 
+Reviewed-by: Hengqi Chen <hengqi.chen@gmail.com>
+Signed-off-by: Haoran Jiang <jianghaoran@kylinos.cn>
+---
+ arch/loongarch/net/bpf_jit.c | 159 ++++++++++++++++++++++++-----------
+ 1 file changed, 112 insertions(+), 47 deletions(-)
 
-v2:
-1,Add a Fixes tag.
-2,Ctx as the first parameter of emit_bpf_tail_call.
-3,Define jmp_offset as a macro in emit_bpf_tail_call.
-
-After merging these two patches, the test results are as follows:
-
-./test_progs --allow=tailcalls
-tester_init:PASS:tester_log_buf 0 nsec
-process_subtest:PASS:obj_open_mem 0 nsec
-process_subtest:PASS:specs_alloc 0 nsec
-#413/1   tailcalls/tailcall_1:OK
-#413/2   tailcalls/tailcall_2:OK
-#413/3   tailcalls/tailcall_3:OK
-#413/4   tailcalls/tailcall_4:OK
-#413/5   tailcalls/tailcall_5:OK
-#413/6   tailcalls/tailcall_6:OK
-#413/7   tailcalls/tailcall_bpf2bpf_1:OK
-#413/8   tailcalls/tailcall_bpf2bpf_2:OK
-#413/9   tailcalls/tailcall_bpf2bpf_3:OK
-#413/10  tailcalls/tailcall_bpf2bpf_4:OK
-#413/11  tailcalls/tailcall_bpf2bpf_5:OK
-#413/12  tailcalls/tailcall_bpf2bpf_6:OK
-test_tailcall_count:PASS:open fentry_obj file 0 nsec
-test_tailcall_count:PASS:find fentry prog 0 nsec
-test_tailcall_count:PASS:set_attach_target subprog_tail 0 nsec
-test_tailcall_count:PASS:load fentry_obj 0 nsec
-libbpf: prog 'fentry': failed to attach: -ENOTSUPP
-test_tailcall_count:FAIL:attach_trace unexpected error: -524
-#413/13  tailcalls/tailcall_bpf2bpf_fentry:FAIL
-test_tailcall_count:PASS:open fexit_obj file 0 nsec
-test_tailcall_count:PASS:find fexit prog 0 nsec
-test_tailcall_count:PASS:set_attach_target subprog_tail 0 nsec
-test_tailcall_count:PASS:load fexit_obj 0 nsec
-libbpf: prog 'fexit': failed to attach: -ENOTSUPP
-test_tailcall_count:FAIL:attach_trace unexpected error: -524
-#413/14  tailcalls/tailcall_bpf2bpf_fexit:FAIL
-test_tailcall_count:PASS:open fentry_obj file 0 nsec
-test_tailcall_count:PASS:find fentry prog 0 nsec
-test_tailcall_count:PASS:set_attach_target subprog_tail 0 nsec
-test_tailcall_count:PASS:load fentry_obj 0 nsec
-libbpf: prog 'fentry': failed to attach: -ENOTSUPP
-test_tailcall_count:FAIL:attach_trace unexpected error: -524
-#413/15  tailcalls/tailcall_bpf2bpf_fentry_fexit:FAIL
-test_tailcall_bpf2bpf_fentry_entry:PASS:load tgt_obj 0 nsec
-test_tailcall_bpf2bpf_fentry_entry:PASS:find jmp_table map 0 nsec
-test_tailcall_bpf2bpf_fentry_entry:PASS:find jmp_table map fd 0 nsec
-test_tailcall_bpf2bpf_fentry_entry:PASS:find classifier_0 prog 0 nsec
-test_tailcall_bpf2bpf_fentry_entry:PASS:find classifier_0 prog fd 0 nsec
-test_tailcall_bpf2bpf_fentry_entry:PASS:update jmp_table 0 nsec
-test_tailcall_bpf2bpf_fentry_entry:PASS:open fentry_obj file 0 nsec
-test_tailcall_bpf2bpf_fentry_entry:PASS:find fentry prog 0 nsec
-test_tailcall_bpf2bpf_fentry_entry:PASS:set_attach_target classifier_0 0 nsec
-test_tailcall_bpf2bpf_fentry_entry:PASS:load fentry_obj 0 nsec
-libbpf: prog 'fentry': failed to attach: -ENOTSUPP
-test_tailcall_bpf2bpf_fentry_entry:FAIL:attach_trace unexpected error: -524
-#413/16  tailcalls/tailcall_bpf2bpf_fentry_entry:FAIL
-#413/17  tailcalls/tailcall_poke:OK
-#413/18  tailcalls/tailcall_bpf2bpf_hierarchy_1:OK
-test_tailcall_hierarchy_count:PASS:load obj 0 nsec
-test_tailcall_hierarchy_count:PASS:find entry prog 0 nsec
-test_tailcall_hierarchy_count:PASS:prog_fd 0 nsec
-test_tailcall_hierarchy_count:PASS:find jmp_table 0 nsec
-test_tailcall_hierarchy_count:PASS:map_fd 0 nsec
-test_tailcall_hierarchy_count:PASS:update jmp_table 0 nsec
-test_tailcall_hierarchy_count:PASS:find data_map 0 nsec
-test_tailcall_hierarchy_count:PASS:open fentry_obj file 0 nsec
-test_tailcall_hierarchy_count:PASS:find fentry prog 0 nsec
-test_tailcall_hierarchy_count:PASS:set_attach_target subprog_tail 0 nsec
-test_tailcall_hierarchy_count:PASS:load fentry_obj 0 nsec
-libbpf: prog 'fentry': failed to attach: -ENOTSUPP
-test_tailcall_hierarchy_count:FAIL:attach_trace unexpected error: -524
-#413/19  tailcalls/tailcall_bpf2bpf_hierarchy_fentry:FAIL
-test_tailcall_hierarchy_count:PASS:load obj 0 nsec
-test_tailcall_hierarchy_count:PASS:find entry prog 0 nsec
-test_tailcall_hierarchy_count:PASS:prog_fd 0 nsec
-test_tailcall_hierarchy_count:PASS:find jmp_table 0 nsec
-test_tailcall_hierarchy_count:PASS:map_fd 0 nsec
-test_tailcall_hierarchy_count:PASS:update jmp_table 0 nsec
-test_tailcall_hierarchy_count:PASS:find data_map 0 nsec
-test_tailcall_hierarchy_count:PASS:open fexit_obj file 0 nsec
-test_tailcall_hierarchy_count:PASS:find fexit prog 0 nsec
-test_tailcall_hierarchy_count:PASS:set_attach_target subprog_tail 0 nsec
-test_tailcall_hierarchy_count:PASS:load fexit_obj 0 nsec
-libbpf: prog 'fexit': failed to attach: -ENOTSUPP
-test_tailcall_hierarchy_count:FAIL:attach_trace unexpected error: -524
-#413/20  tailcalls/tailcall_bpf2bpf_hierarchy_fexit:FAIL
-test_tailcall_hierarchy_count:PASS:load obj 0 nsec
-test_tailcall_hierarchy_count:PASS:find entry prog 0 nsec
-test_tailcall_hierarchy_count:PASS:prog_fd 0 nsec
-test_tailcall_hierarchy_count:PASS:find jmp_table 0 nsec
-test_tailcall_hierarchy_count:PASS:map_fd 0 nsec
-test_tailcall_hierarchy_count:PASS:update jmp_table 0 nsec
-test_tailcall_hierarchy_count:PASS:find data_map 0 nsec
-test_tailcall_hierarchy_count:PASS:open fentry_obj file 0 nsec
-test_tailcall_hierarchy_count:PASS:find fentry prog 0 nsec
-test_tailcall_hierarchy_count:PASS:set_attach_target subprog_tail 0 nsec
-test_tailcall_hierarchy_count:PASS:load fentry_obj 0 nsec
-libbpf: prog 'fentry': failed to attach: -ENOTSUPP
-test_tailcall_hierarchy_count:FAIL:attach_trace unexpected error: -524
-#413/21  tailcalls/tailcall_bpf2bpf_hierarchy_fentry_fexit:FAIL
-test_tailcall_hierarchy_count:PASS:load obj 0 nsec
-test_tailcall_hierarchy_count:PASS:find entry prog 0 nsec
-test_tailcall_hierarchy_count:PASS:prog_fd 0 nsec
-test_tailcall_hierarchy_count:PASS:open fentry_obj file 0 nsec
-test_tailcall_hierarchy_count:PASS:find fentry prog 0 nsec
-test_tailcall_hierarchy_count:PASS:set_attach_target entry 0 nsec
-test_tailcall_hierarchy_count:PASS:load fentry_obj 0 nsec
-libbpf: prog 'fentry': failed to attach: -ENOTSUPP
-test_tailcall_hierarchy_count:FAIL:attach_trace unexpected error: -524
-tester_init:PASS:tester_log_buf 0 nsec
-process_subtest:PASS:obj_open_mem 0 nsec
-process_subtest:PASS:specs_alloc 0 nsec
-#413/22  tailcalls/tailcall_bpf2bpf_hierarchy_fentry_entry:FAIL
-#413/23  tailcalls/tailcall_bpf2bpf_hierarchy_2:OK
-#413/24  tailcalls/tailcall_bpf2bpf_hierarchy_3:OK
-test_tailcall_freplace:PASS:tailcall_freplace__open 0 nsec
-test_tailcall_freplace:PASS:tc_bpf2bpf__open_and_load 0 nsec
-test_tailcall_freplace:PASS:set_attach_target 0 nsec
-test_tailcall_freplace:PASS:tailcall_freplace__load 0 nsec
-test_tailcall_freplace:PASS:update jmp_table failure 0 nsec
-libbpf: prog 'entry_freplace': failed to attach to freplace: -ENOTSUPP
-test_tailcall_freplace:FAIL:attach_freplace unexpected error: -524
-#413/25  tailcalls/tailcall_freplace:FAIL
-test_tailcall_bpf2bpf_freplace:PASS:tc_bpf2bpf__open_and_load 0 nsec
-test_tailcall_bpf2bpf_freplace:PASS:tailcall_freplace__open 0 nsec
-test_tailcall_bpf2bpf_freplace:PASS:set_attach_target 0 nsec
-test_tailcall_bpf2bpf_freplace:PASS:tailcall_freplace__load 0 nsec
-libbpf: prog 'entry_freplace': failed to attach to freplace: -ENOTSUPP
-test_tailcall_bpf2bpf_freplace:FAIL:attach_freplace unexpected error: -524
-#413/26  tailcalls/tailcall_bpf2bpf_freplace:FAIL
-#413/27  tailcalls/tailcall_failure:OK
-#413/28  tailcalls/reject_tail_call_spin_lock:OK
-#413/29  tailcalls/reject_tail_call_rcu_lock:OK
-#413/30  tailcalls/reject_tail_call_preempt_lock:OK
-#413/31  tailcalls/reject_tail_call_ref:OK
-#413     tailcalls:FAIL
-
-All error logs:
-tester_init:PASS:tester_log_buf 0 nsec
-process_subtest:PASS:obj_open_mem 0 nsec
-process_subtest:PASS:specs_alloc 0 nsec
-test_tailcall_count:PASS:open fentry_obj file 0 nsec
-test_tailcall_count:PASS:find fentry prog 0 nsec
-test_tailcall_count:PASS:set_attach_target subprog_tail 0 nsec
-test_tailcall_count:PASS:load fentry_obj 0 nsec
-libbpf: prog 'fentry': failed to attach: -ENOTSUPP
-test_tailcall_count:FAIL:attach_trace unexpected error: -524
-#413/13  tailcalls/tailcall_bpf2bpf_fentry:FAIL
-test_tailcall_count:PASS:open fexit_obj file 0 nsec
-test_tailcall_count:PASS:find fexit prog 0 nsec
-test_tailcall_count:PASS:set_attach_target subprog_tail 0 nsec
-test_tailcall_count:PASS:load fexit_obj 0 nsec
-libbpf: prog 'fexit': failed to attach: -ENOTSUPP
-test_tailcall_count:FAIL:attach_trace unexpected error: -524
-#413/14  tailcalls/tailcall_bpf2bpf_fexit:FAIL
-test_tailcall_count:PASS:open fentry_obj file 0 nsec
-test_tailcall_count:PASS:find fentry prog 0 nsec
-test_tailcall_count:PASS:set_attach_target subprog_tail 0 nsec
-test_tailcall_count:PASS:load fentry_obj 0 nsec
-libbpf: prog 'fentry': failed to attach: -ENOTSUPP
-test_tailcall_count:FAIL:attach_trace unexpected error: -524
-#413/15  tailcalls/tailcall_bpf2bpf_fentry_fexit:FAIL
-test_tailcall_bpf2bpf_fentry_entry:PASS:load tgt_obj 0 nsec
-test_tailcall_bpf2bpf_fentry_entry:PASS:find jmp_table map 0 nsec
-test_tailcall_bpf2bpf_fentry_entry:PASS:find jmp_table map fd 0 nsec
-test_tailcall_bpf2bpf_fentry_entry:PASS:find classifier_0 prog 0 nsec
-test_tailcall_bpf2bpf_fentry_entry:PASS:find classifier_0 prog fd 0 nsec
-test_tailcall_bpf2bpf_fentry_entry:PASS:update jmp_table 0 nsec
-test_tailcall_bpf2bpf_fentry_entry:PASS:open fentry_obj file 0 nsec
-test_tailcall_bpf2bpf_fentry_entry:PASS:find fentry prog 0 nsec
-test_tailcall_bpf2bpf_fentry_entry:PASS:set_attach_target classifier_0 0 nsec
-test_tailcall_bpf2bpf_fentry_entry:PASS:load fentry_obj 0 nsec
-libbpf: prog 'fentry': failed to attach: -ENOTSUPP
-test_tailcall_bpf2bpf_fentry_entry:FAIL:attach_trace unexpected error: -524
-#413/16  tailcalls/tailcall_bpf2bpf_fentry_entry:FAIL
-test_tailcall_hierarchy_count:PASS:load obj 0 nsec
-test_tailcall_hierarchy_count:PASS:find entry prog 0 nsec
-test_tailcall_hierarchy_count:PASS:prog_fd 0 nsec
-test_tailcall_hierarchy_count:PASS:find jmp_table 0 nsec
-test_tailcall_hierarchy_count:PASS:map_fd 0 nsec
-test_tailcall_hierarchy_count:PASS:update jmp_table 0 nsec
-test_tailcall_hierarchy_count:PASS:find data_map 0 nsec
-test_tailcall_hierarchy_count:PASS:open fentry_obj file 0 nsec
-test_tailcall_hierarchy_count:PASS:find fentry prog 0 nsec
-test_tailcall_hierarchy_count:PASS:set_attach_target subprog_tail 0 nsec
-test_tailcall_hierarchy_count:PASS:load fentry_obj 0 nsec
-libbpf: prog 'fentry': failed to attach: -ENOTSUPP
-test_tailcall_hierarchy_count:FAIL:attach_trace unexpected error: -524
-#413/19  tailcalls/tailcall_bpf2bpf_hierarchy_fentry:FAIL
-test_tailcall_hierarchy_count:PASS:load obj 0 nsec
-test_tailcall_hierarchy_count:PASS:find entry prog 0 nsec
-test_tailcall_hierarchy_count:PASS:prog_fd 0 nsec
-test_tailcall_hierarchy_count:PASS:find jmp_table 0 nsec
-test_tailcall_hierarchy_count:PASS:map_fd 0 nsec
-test_tailcall_hierarchy_count:PASS:update jmp_table 0 nsec
-test_tailcall_hierarchy_count:PASS:find data_map 0 nsec
-test_tailcall_hierarchy_count:PASS:open fexit_obj file 0 nsec
-test_tailcall_hierarchy_count:PASS:find fexit prog 0 nsec
-test_tailcall_hierarchy_count:PASS:set_attach_target subprog_tail 0 nsec
-test_tailcall_hierarchy_count:PASS:load fexit_obj 0 nsec
-libbpf: prog 'fexit': failed to attach: -ENOTSUPP
-test_tailcall_hierarchy_count:FAIL:attach_trace unexpected error: -524
-#413/20  tailcalls/tailcall_bpf2bpf_hierarchy_fexit:FAIL
-test_tailcall_hierarchy_count:PASS:load obj 0 nsec
-test_tailcall_hierarchy_count:PASS:find entry prog 0 nsec
-test_tailcall_hierarchy_count:PASS:prog_fd 0 nsec
-test_tailcall_hierarchy_count:PASS:find jmp_table 0 nsec
-test_tailcall_hierarchy_count:PASS:map_fd 0 nsec
-test_tailcall_hierarchy_count:PASS:update jmp_table 0 nsec
-test_tailcall_hierarchy_count:PASS:find data_map 0 nsec
-test_tailcall_hierarchy_count:PASS:open fentry_obj file 0 nsec
-test_tailcall_hierarchy_count:PASS:find fentry prog 0 nsec
-test_tailcall_hierarchy_count:PASS:set_attach_target subprog_tail 0 nsec
-test_tailcall_hierarchy_count:PASS:load fentry_obj 0 nsec
-libbpf: prog 'fentry': failed to attach: -ENOTSUPP
-test_tailcall_hierarchy_count:FAIL:attach_trace unexpected error: -524
-#413/21  tailcalls/tailcall_bpf2bpf_hierarchy_fentry_fexit:FAIL
-test_tailcall_hierarchy_count:PASS:load obj 0 nsec
-test_tailcall_hierarchy_count:PASS:find entry prog 0 nsec
-test_tailcall_hierarchy_count:PASS:prog_fd 0 nsec
-test_tailcall_hierarchy_count:PASS:open fentry_obj file 0 nsec
-test_tailcall_hierarchy_count:PASS:find fentry prog 0 nsec
-test_tailcall_hierarchy_count:PASS:set_attach_target entry 0 nsec
-test_tailcall_hierarchy_count:PASS:load fentry_obj 0 nsec
-libbpf: prog 'fentry': failed to attach: -ENOTSUPP
-test_tailcall_hierarchy_count:FAIL:attach_trace unexpected error: -524
-tester_init:PASS:tester_log_buf 0 nsec
-process_subtest:PASS:obj_open_mem 0 nsec
-process_subtest:PASS:specs_alloc 0 nsec
-#413/22  tailcalls/tailcall_bpf2bpf_hierarchy_fentry_entry:FAIL
-test_tailcall_freplace:PASS:tailcall_freplace__open 0 nsec
-test_tailcall_freplace:PASS:tc_bpf2bpf__open_and_load 0 nsec
-test_tailcall_freplace:PASS:set_attach_target 0 nsec
-test_tailcall_freplace:PASS:tailcall_freplace__load 0 nsec
-test_tailcall_freplace:PASS:update jmp_table failure 0 nsec
-libbpf: prog 'entry_freplace': failed to attach to freplace: -ENOTSUPP
-test_tailcall_freplace:FAIL:attach_freplace unexpected error: -524
-#413/25  tailcalls/tailcall_freplace:FAIL
-test_tailcall_bpf2bpf_freplace:PASS:tc_bpf2bpf__open_and_load 0 nsec
-test_tailcall_bpf2bpf_freplace:PASS:tailcall_freplace__open 0 nsec
-test_tailcall_bpf2bpf_freplace:PASS:set_attach_target 0 nsec
-test_tailcall_bpf2bpf_freplace:PASS:tailcall_freplace__load 0 nsec
-libbpf: prog 'entry_freplace': failed to attach to freplace: -ENOTSUPP
-test_tailcall_bpf2bpf_freplace:FAIL:attach_freplace unexpected error: -524
-#413/26  tailcalls/tailcall_bpf2bpf_freplace:FAIL
-#413     tailcalls:FAIL
-Summary: 0/21 PASSED, 0 SKIPPED, 1 FAILED
-
-v1:
-1,Fix the jmp_offset calculation error in the emit_bpf_tail_call function.
-2,Fix the issue that MAX_TAIL_CALL_CNT limit bypass in hybrid tailcall and BPF-to-BPF call
-
-After applying this patch, testing results are as follows:
-
-./test_progs --allow=tailcalls/tailcall_bpf2bpf_hierarchy_1
-413/18  tailcalls/tailcall_bpf2bpf_hierarchy_1:OK
-413     tailcalls:OK
-Summary: 1/1 PASSED, 0 SKIPPED, 0 FAILED
-
-./test_progs --allow=tailcalls/tailcall_bpf2bpf_hierarchy_2
-413/23  tailcalls/tailcall_bpf2bpf_hierarchy_2:OK
-413     tailcalls:OK
-Summary: 1/1 PASSED, 0 SKIPPED, 0 FAILED
-
-./test_progs --allow=tailcalls/tailcall_bpf2bpf_hierarchy_3
-413/24  tailcalls/tailcall_bpf2bpf_hierarchy_3:OK
-413     tailcalls:OK
-Summary: 1/1 PASSED, 0 SKIPPED, 0 FAILED
-
-Haoran Jiang (2):
-  LoongArch: BPF: Fix jump offset calculation in tailcall
-  LoongArch: BPF: Fix tailcall hierarchy
-
- arch/loongarch/net/bpf_jit.c | 180 +++++++++++++++++++++++------------
- 1 file changed, 118 insertions(+), 62 deletions(-)
-
+diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
+index 5da41ccc6698..2109748c4733 100644
+--- a/arch/loongarch/net/bpf_jit.c
++++ b/arch/loongarch/net/bpf_jit.c
+@@ -17,10 +17,7 @@
+ #define LOONGARCH_BPF_FENTRY_NBYTES (LOONGARCH_LONG_JUMP_NINSNS * 4)
+ 
+ #define REG_TCC		LOONGARCH_GPR_A6
+-#define TCC_SAVED	LOONGARCH_GPR_S5
+-
+-#define SAVE_RA		BIT(0)
+-#define SAVE_TCC	BIT(1)
++#define BPF_TAIL_CALL_CNT_PTR_STACK_OFF(stack) (round_up(stack, 16) - 80)
+ 
+ static const int regmap[] = {
+ 	/* return value from in-kernel function, and exit value for eBPF program */
+@@ -42,32 +39,59 @@ static const int regmap[] = {
+ 	[BPF_REG_AX] = LOONGARCH_GPR_T0,
+ };
+ 
+-static void mark_call(struct jit_ctx *ctx)
++static void prepare_bpf_tail_call_cnt(struct jit_ctx *ctx, int *store_offset)
+ {
+-	ctx->flags |= SAVE_RA;
+-}
++	const struct bpf_prog *prog = ctx->prog;
++	const bool is_main_prog = !bpf_is_subprog(prog);
+ 
+-static void mark_tail_call(struct jit_ctx *ctx)
+-{
+-	ctx->flags |= SAVE_TCC;
+-}
++	if (is_main_prog) {
++		/*
++		 * LOONGARCH_GPR_T3 = MAX_TAIL_CALL_CNT
++		 * if (REG_TCC > T3 )
++		 *	std REG_TCC -> LOONGARCH_GPR_SP + store_offset
++		 * else
++		 *	std REG_TCC -> LOONGARCH_GPR_SP + store_offset
++		 *	REG_TCC = LOONGARCH_GPR_SP + store_offset
++		 *
++		 * std REG_TCC -> LOONGARCH_GPR_SP + store_offset
++		 *
++		 * The purpose of this code is to first push the TCC into stack,
++		 * and then push the address of TCC into stack.
++		 * In cases where bpf2bpf and tailcall are used in combination，
++		 * the value in REG_TCC may be a count or an address，
++		 * these two cases need to be judged and handled separately。
++		 *
++		 */
++		emit_insn(ctx, addid, LOONGARCH_GPR_T3, LOONGARCH_GPR_ZERO, MAX_TAIL_CALL_CNT);
++		*store_offset -= sizeof(long);
+ 
+-static bool seen_call(struct jit_ctx *ctx)
+-{
+-	return (ctx->flags & SAVE_RA);
+-}
++		emit_cond_jmp(ctx, BPF_JGT, REG_TCC, LOONGARCH_GPR_T3, 4);
+ 
+-static bool seen_tail_call(struct jit_ctx *ctx)
+-{
+-	return (ctx->flags & SAVE_TCC);
+-}
++		/* If REG_TCC < MAX_TAIL_CALL_CNT, the value in REG_TCC is a count,
++		 * push TCC into stack
++		 */
++		emit_insn(ctx, std, REG_TCC, LOONGARCH_GPR_SP, *store_offset);
+ 
+-static u8 tail_call_reg(struct jit_ctx *ctx)
+-{
+-	if (seen_call(ctx))
+-		return TCC_SAVED;
++		/* Push the address of TCC into the stack */
++		emit_insn(ctx, addid, REG_TCC, LOONGARCH_GPR_SP, *store_offset);
++
++		emit_uncond_jmp(ctx, 2);
++
++		/* If REG_TCC > MAX_TAIL_CALL_CNT, the value in REG_TCC is an address,
++		 * push TCC_ptr into stack
++		 */
++		emit_insn(ctx, std, REG_TCC, LOONGARCH_GPR_SP, *store_offset);
++
++		*store_offset -= sizeof(long);
++		emit_insn(ctx, std, REG_TCC, LOONGARCH_GPR_SP, *store_offset);
++
++	} else {
++		*store_offset -= sizeof(long);
++		emit_insn(ctx, std, REG_TCC, LOONGARCH_GPR_SP, *store_offset);
+ 
+-	return REG_TCC;
++		*store_offset -= sizeof(long);
++		emit_insn(ctx, std, REG_TCC, LOONGARCH_GPR_SP, *store_offset);
++	}
+ }
+ 
+ /*
+@@ -90,6 +114,10 @@ static u8 tail_call_reg(struct jit_ctx *ctx)
+  *                            |           $s4           |
+  *                            +-------------------------+
+  *                            |           $s5           |
++ *                            +-------------------------+
++ *                            |           tcc           |
++ *                            +-------------------------+
++ *                            |           tcc_ptr       |
+  *                            +-------------------------+ <--BPF_REG_FP
+  *                            |  prog->aux->stack_depth |
+  *                            |        (optional)       |
+@@ -99,11 +127,14 @@ static u8 tail_call_reg(struct jit_ctx *ctx)
+ static void build_prologue(struct jit_ctx *ctx)
+ {
+ 	int stack_adjust = 0, store_offset, bpf_stack_adjust;
++	const struct bpf_prog *prog = ctx->prog;
++	const bool is_main_prog = !bpf_is_subprog(prog);
+ 
+ 	bpf_stack_adjust = round_up(ctx->prog->aux->stack_depth, 16);
+ 
+-	/* To store ra, fp, s0, s1, s2, s3, s4 and s5. */
+-	stack_adjust += sizeof(long) * 8;
++	/* To store ra, fp, s0, s1, s2, s3, s4, s5, tcc and tcc_ptr */
++	stack_adjust += sizeof(long) * 10;
++
+ 
+ 	stack_adjust = round_up(stack_adjust, 16);
+ 	stack_adjust += bpf_stack_adjust;
+@@ -116,11 +147,12 @@ static void build_prologue(struct jit_ctx *ctx)
+ 	emit_insn(ctx, nop);
+ 
+ 	/*
+-	 * First instruction initializes the tail call count (TCC).
+-	 * On tail call we skip this instruction, and the TCC is
++	 * First instruction initializes the tail call count (TCC) register
++	 * to zero. On tail call we skip this instruction, and the TCC is
+ 	 * passed in REG_TCC from the caller.
+ 	 */
+-	emit_insn(ctx, addid, REG_TCC, LOONGARCH_GPR_ZERO, MAX_TAIL_CALL_CNT);
++	if (is_main_prog)
++		emit_insn(ctx, addid, REG_TCC, LOONGARCH_GPR_ZERO, 0);
+ 
+ 	emit_insn(ctx, addid, LOONGARCH_GPR_SP, LOONGARCH_GPR_SP, -stack_adjust);
+ 
+@@ -148,20 +180,14 @@ static void build_prologue(struct jit_ctx *ctx)
+ 	store_offset -= sizeof(long);
+ 	emit_insn(ctx, std, LOONGARCH_GPR_S5, LOONGARCH_GPR_SP, store_offset);
+ 
++	prepare_bpf_tail_call_cnt(ctx, &store_offset);
++
++
+ 	emit_insn(ctx, addid, LOONGARCH_GPR_FP, LOONGARCH_GPR_SP, stack_adjust);
+ 
+ 	if (bpf_stack_adjust)
+ 		emit_insn(ctx, addid, regmap[BPF_REG_FP], LOONGARCH_GPR_SP, bpf_stack_adjust);
+ 
+-	/*
+-	 * Program contains calls and tail calls, so REG_TCC need
+-	 * to be saved across calls.
+-	 */
+-	if (seen_tail_call(ctx) && seen_call(ctx))
+-		move_reg(ctx, TCC_SAVED, REG_TCC);
+-	else
+-		emit_insn(ctx, nop);
+-
+ 	ctx->stack_size = stack_adjust;
+ }
+ 
+@@ -194,6 +220,16 @@ static void __build_epilogue(struct jit_ctx *ctx, bool is_tail_call)
+ 	load_offset -= sizeof(long);
+ 	emit_insn(ctx, ldd, LOONGARCH_GPR_S5, LOONGARCH_GPR_SP, load_offset);
+ 
++	/*
++	 *  When push into the stack, follow the order of tcc then tcc_ptr.
++	 *  When pop from the stack, first pop tcc_ptr followed by tcc
++	 */
++	load_offset -= 2*sizeof(long);
++	emit_insn(ctx, ldd, REG_TCC, LOONGARCH_GPR_SP, load_offset);
++
++	load_offset += sizeof(long);
++	emit_insn(ctx, ldd, REG_TCC, LOONGARCH_GPR_SP, load_offset);
++
+ 	emit_insn(ctx, addid, LOONGARCH_GPR_SP, LOONGARCH_GPR_SP, stack_adjust);
+ 
+ 	if (!is_tail_call) {
+@@ -206,7 +242,7 @@ static void __build_epilogue(struct jit_ctx *ctx, bool is_tail_call)
+ 		 * Call the next bpf prog and skip the first instruction
+ 		 * of TCC initialization.
+ 		 */
+-		emit_insn(ctx, jirl, LOONGARCH_GPR_ZERO, LOONGARCH_GPR_T3, 1);
++		emit_insn(ctx, jirl, LOONGARCH_GPR_ZERO, LOONGARCH_GPR_T3, 6);
+ 	}
+ }
+ 
+@@ -228,7 +264,7 @@ bool bpf_jit_supports_far_kfunc_call(void)
+ static int emit_bpf_tail_call(struct jit_ctx *ctx, int insn)
+ {
+ 	int off;
+-	u8 tcc = tail_call_reg(ctx);
++	int tcc_ptr_off = BPF_TAIL_CALL_CNT_PTR_STACK_OFF(ctx->stack_size);
+ 	u8 a1 = LOONGARCH_GPR_A1;
+ 	u8 a2 = LOONGARCH_GPR_A2;
+ 	u8 t1 = LOONGARCH_GPR_T1;
+@@ -257,11 +293,15 @@ static int emit_bpf_tail_call(struct jit_ctx *ctx, int insn)
+ 		goto toofar;
+ 
+ 	/*
+-	 * if (--TCC < 0)
+-	 *	 goto out;
++	 * if ((*tcc_ptr)++ >= MAX_TAIL_CALL_CNT)
++	 *      goto out;
+ 	 */
+-	emit_insn(ctx, addid, REG_TCC, tcc, -1);
+-	if (emit_tailcall_jmp(ctx, BPF_JSLT, REG_TCC, LOONGARCH_GPR_ZERO, jmp_offset) < 0)
++	emit_insn(ctx, ldd, REG_TCC, LOONGARCH_GPR_SP, tcc_ptr_off);
++	emit_insn(ctx, ldd, t3, REG_TCC, 0);
++	emit_insn(ctx, addid, t3, t3, 1);
++	emit_insn(ctx, std, t3, REG_TCC, 0);
++	emit_insn(ctx, addid, t2, LOONGARCH_GPR_ZERO, MAX_TAIL_CALL_CNT);
++	if (emit_tailcall_jmp(ctx, BPF_JSGT, t3, t2, jmp_offset) < 0)
+ 		goto toofar;
+ 
+ 	/*
+@@ -482,6 +522,7 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
+ 	const s16 off = insn->off;
+ 	const s32 imm = insn->imm;
+ 	const bool is32 = BPF_CLASS(insn->code) == BPF_ALU || BPF_CLASS(insn->code) == BPF_JMP32;
++	int tcc_ptr_off;
+ 
+ 	switch (code) {
+ 	/* dst = src */
+@@ -908,12 +949,17 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
+ 
+ 	/* function call */
+ 	case BPF_JMP | BPF_CALL:
+-		mark_call(ctx);
+ 		ret = bpf_jit_get_func_addr(ctx->prog, insn, extra_pass,
+ 					    &func_addr, &func_addr_fixed);
+ 		if (ret < 0)
+ 			return ret;
+ 
++		if (insn->src_reg == BPF_PSEUDO_CALL) {
++			tcc_ptr_off = BPF_TAIL_CALL_CNT_PTR_STACK_OFF(ctx->stack_size);
++			emit_insn(ctx, ldd, REG_TCC, LOONGARCH_GPR_SP, tcc_ptr_off);
++		}
++
++
+ 		move_addr(ctx, t1, func_addr);
+ 		emit_insn(ctx, jirl, LOONGARCH_GPR_RA, t1, 0);
+ 
+@@ -924,7 +970,6 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
+ 
+ 	/* tail call */
+ 	case BPF_JMP | BPF_TAIL_CALL:
+-		mark_tail_call(ctx);
+ 		if (emit_bpf_tail_call(ctx, i) < 0)
+ 			return -EINVAL;
+ 		break;
+@@ -1592,7 +1637,7 @@ static int __arch_prepare_bpf_trampoline(struct jit_ctx *ctx, struct bpf_tramp_i
+ {
+ 	int i;
+ 	int stack_size = 0, nargs = 0;
+-	int retval_off, args_off, nargs_off, ip_off, run_ctx_off, sreg_off;
++	int retval_off, args_off, nargs_off, ip_off, run_ctx_off, sreg_off, tcc_ptr_off;
+ 	struct bpf_tramp_links *fentry = &tlinks[BPF_TRAMP_FENTRY];
+ 	struct bpf_tramp_links *fexit = &tlinks[BPF_TRAMP_FEXIT];
+ 	struct bpf_tramp_links *fmod_ret = &tlinks[BPF_TRAMP_MODIFY_RETURN];
+@@ -1628,6 +1673,7 @@ static int __arch_prepare_bpf_trampoline(struct jit_ctx *ctx, struct bpf_tramp_i
+ 	 *
+ 	 * FP - sreg_off    [ callee saved reg  ]
+ 	 *
++	 * FP - tcc_ptr_off [ tail_call_cnt_ptr ]
+ 	 */
+ 
+ 	if (m->nr_args > LOONGARCH_MAX_REG_ARGS)
+@@ -1670,6 +1716,13 @@ static int __arch_prepare_bpf_trampoline(struct jit_ctx *ctx, struct bpf_tramp_i
+ 	stack_size += 8;
+ 	sreg_off = stack_size;
+ 
++	/* room of trampoline frame to store tail_call_cnt_ptr */
++	if (flags & BPF_TRAMP_F_TAIL_CALL_CTX) {
++		stack_size += 8;
++		tcc_ptr_off = stack_size;
++	}
++
++
+ 	stack_size = round_up(stack_size, 16);
+ 
+ 	if (!is_struct_ops) {
+@@ -1698,6 +1751,10 @@ static int __arch_prepare_bpf_trampoline(struct jit_ctx *ctx, struct bpf_tramp_i
+ 		emit_insn(ctx, addid, LOONGARCH_GPR_FP, LOONGARCH_GPR_SP, stack_size);
+ 	}
+ 
++	if (flags & BPF_TRAMP_F_TAIL_CALL_CTX)
++		emit_insn(ctx, std, REG_TCC, LOONGARCH_GPR_FP, -tcc_ptr_off);
++
++
+ 	/* callee saved register S1 to pass start time */
+ 	emit_insn(ctx, std, LOONGARCH_GPR_S1, LOONGARCH_GPR_FP, -sreg_off);
+ 
+@@ -1745,6 +1802,10 @@ static int __arch_prepare_bpf_trampoline(struct jit_ctx *ctx, struct bpf_tramp_i
+ 
+ 	if (flags & BPF_TRAMP_F_CALL_ORIG) {
+ 		restore_args(ctx, m->nr_args, args_off);
++
++		if (flags & BPF_TRAMP_F_TAIL_CALL_CTX)
++			emit_insn(ctx, ldd, REG_TCC, LOONGARCH_GPR_FP, -tcc_ptr_off);
++
+ 		ret = emit_call(ctx, (const u64)orig_call);
+ 		if (ret)
+ 			goto out;
+@@ -1789,6 +1850,10 @@ static int __arch_prepare_bpf_trampoline(struct jit_ctx *ctx, struct bpf_tramp_i
+ 
+ 	emit_insn(ctx, ldd, LOONGARCH_GPR_S1, LOONGARCH_GPR_FP, -sreg_off);
+ 
++	if (flags & BPF_TRAMP_F_TAIL_CALL_CTX)
++		emit_insn(ctx, ldd, REG_TCC, LOONGARCH_GPR_FP, -tcc_ptr_off);
++
++
+ 	if (!is_struct_ops) {
+ 		/* trampoline called from function entry */
+ 		emit_insn(ctx, ldd, LOONGARCH_GPR_T0, LOONGARCH_GPR_SP, stack_size - 8);
 -- 
 2.43.0
 
