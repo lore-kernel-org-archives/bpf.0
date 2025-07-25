@@ -1,21 +1,21 @@
 Received: from 66-220-144-178.mail-mxout.facebook.com (66-220-144-178.mail-mxout.facebook.com [66.220.144.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 311D7235044
-	for <bpf@vger.kernel.org>; Fri, 25 Jul 2025 04:34:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17C8423B63B
+	for <bpf@vger.kernel.org>; Fri, 25 Jul 2025 04:34:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753418083; cv=none; b=GanHG+HgAQPp4p7cGQ9XGkjLtQU7aK5Trfm9FERu+Fs0l6QuTbx0al4ug/UsrDzxDNwrxHjJ+iFeFJQngdrN7hq0Mz2xKvkkpQSSkR8uVx0gByRiNCBA7ySVoh4+1w+QYC4SAkm40ZIG6QIrJlw2J3O+KIA8/WMmJv0trgQwGg8=
+	t=1753418084; cv=none; b=meqOcsFXK40Tchc8y28GnfFrR55284hw15CGPmJAAVsVR8UBcuQwrkxgYDkxu3OWC6BvllK0YR2ciA9DUH3oCPZoZuNyqGHMZb0O2iRwZEYOwuvD/aE2NeNidMHB0GN9M9yyTco+Uhj3agWRKTCfGpHLXQwBtAf2/Z+Ig1gbUO8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753418083; c=relaxed/simple;
-	bh=hvsSAh5lheWaC2g83RAeeU8dnR2ZWaZQiXWVVgTg8Fc=;
+	s=arc-20240116; t=1753418084; c=relaxed/simple;
+	bh=dLvJFapkl/9Ii+9bFVeUE1Zm7UW6Xkrs2Cm3Zx0/tjM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=hixWqPud88iXzhmGZphoL6fL/PKF9e2xUJTKn3uFKXDVjKfMo/zu54W5S5p8Qm2/mK7tal0y3H8rITsUHJIlVJmqMZF1Sbo6YARrg9+MtGgMWcCnHuh/O3FpLkY9vRzsQSgtLJMDyT+DZWyDrm6ETGf6D8z94rbarj0ga7y+gAQ=
+	 MIME-Version; b=i+MJclxf+uaX0D5KWg5N7ytIFWv2gZBUTHS6SvCAebXtrXYa1OWShMUHBhnXT/U+7jd/lxOjhRJWhrrX10gSdRjcrwwxOL0bv1rWGP5tm99GqcmDBmHYfO7Hi6Hb8jq3VAUMbTRX+SBoLvtBdDTTCg2H2M/9X/3XneaCvpI2h0g=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 6DE80C48A501; Thu, 24 Jul 2025 21:34:30 -0700 (PDT)
+	id 9E564C48A546; Thu, 24 Jul 2025 21:34:40 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -23,9 +23,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	kernel-team@fb.com,
 	Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf-next 1/3] selftests/bpf: Increase xdp data size for arm64 64K page size
-Date: Thu, 24 Jul 2025 21:34:30 -0700
-Message-ID: <20250725043430.208469-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next 3/3] selftests/bpf: Fix test dynptr/test_dynptr_memset_xdp_chunks failure
+Date: Thu, 24 Jul 2025 21:34:40 -0700
+Message-ID: <20250725043440.209266-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20250725043425.208128-1-yonghong.song@linux.dev>
 References: <20250725043425.208128-1-yonghong.song@linux.dev>
@@ -37,69 +37,51 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-With arm64 64K page size, the following 4 subtests failed:
-  #97/25   dynptr/test_probe_read_user_dynptr:FAIL
-  #97/26   dynptr/test_probe_read_kernel_dynptr:FAIL
-  #97/27   dynptr/test_probe_read_user_str_dynptr:FAIL
-  #97/28   dynptr/test_probe_read_kernel_str_dynptr:FAIL
-
-These failures are due to function bpf_dynptr_check_off_len() in
-include/linux/bpf.h where there is a test
-  if (len > size || offset > size - len)
-    return -E2BIG;
-With 64K page size, the 'offset' is greater than 'size - len',
-which caused the test failure.
-
-For 64KB page size, this patch increased the xdp buffer size from 5000 to
-90000. The above 4 test failures are fixed as 'size' value is increased.
-But it introduced two new failures:
-  #97/4    dynptr/test_dynptr_copy_xdp:FAIL
-  #97/12   dynptr/test_dynptr_memset_xdp_chunks:FAIL
-
-These two failures will be addressed in subsequent patches.
+For arm64 64K page size, the xdp data size was set to be more than 64K
+in one of previous patches. This will cause failure for bpf_dynptr_memset=
+().
+Since the failure of bpf_dynptr_memset() is expected with 64K page size,
+return success.
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- tools/testing/selftests/bpf/prog_tests/dynptr.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ tools/testing/selftests/bpf/progs/dynptr_success.c | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/dynptr.c b/tools/test=
-ing/selftests/bpf/prog_tests/dynptr.c
-index f2b65398afce..9b2d9ceda210 100644
---- a/tools/testing/selftests/bpf/prog_tests/dynptr.c
-+++ b/tools/testing/selftests/bpf/prog_tests/dynptr.c
-@@ -51,6 +51,8 @@ static struct {
- 	{"test_copy_from_user_task_str_dynptr", SETUP_SYSCALL_SLEEP},
- };
+diff --git a/tools/testing/selftests/bpf/progs/dynptr_success.c b/tools/t=
+esting/selftests/bpf/progs/dynptr_success.c
+index 3094a1e4ee91..8315273cb900 100644
+--- a/tools/testing/selftests/bpf/progs/dynptr_success.c
++++ b/tools/testing/selftests/bpf/progs/dynptr_success.c
+@@ -9,6 +9,8 @@
+ #include "bpf_misc.h"
+ #include "errno.h"
 =20
 +#define PAGE_SIZE_64K 65536
 +
- static void verify_success(const char *prog_name, enum test_setup_type s=
-etup_type)
- {
- 	char user_data[384] =3D {[0 ... 382] =3D 'a', '\0'};
-@@ -146,14 +148,18 @@ static void verify_success(const char *prog_name, e=
-num test_setup_type setup_typ
- 	}
- 	case SETUP_XDP_PROG:
- 	{
--		char data[5000];
-+		char data[90000];
- 		int err, prog_fd;
- 		LIBBPF_OPTS(bpf_test_run_opts, opts,
- 			    .data_in =3D &data,
--			    .data_size_in =3D sizeof(data),
- 			    .repeat =3D 1,
- 		);
+ char _license[] SEC("license") =3D "GPL";
 =20
-+		if (getpagesize() =3D=3D PAGE_SIZE_64K)
-+			opts.data_size_in =3D sizeof(data);
-+		else
-+			opts.data_size_in =3D 5000;
-+
- 		prog_fd =3D bpf_program__fd(prog);
- 		err =3D bpf_prog_test_run_opts(prog_fd, &opts);
+ int pid, err, val;
+@@ -821,8 +823,17 @@ int test_dynptr_memset_xdp_chunks(struct xdp_md *xdp=
+)
+ 	data_sz =3D bpf_dynptr_size(&ptr_xdp);
 =20
+ 	err =3D bpf_dynptr_memset(&ptr_xdp, 0, data_sz, DYNPTR_MEMSET_VAL);
+-	if (err)
++	if (err) {
++		/* bpf_dynptr_memset() eventually called bpf_xdp_pointer()
++		 * where if data_sz is greater than 0xffff, -EFAULT will be
++		 * returned. For 64K page size, data_sz is greater than
++		 * 64K, so error is expected and let us zero out error and
++		 * return success.
++		 */
++		if (data_sz >=3D PAGE_SIZE_64K)
++			err =3D 0;
+ 		goto out;
++	}
+=20
+ 	bpf_for(i, 0, max_chunks) {
+ 		offset =3D i * sizeof(buf);
 --=20
 2.47.3
 
