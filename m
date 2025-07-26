@@ -1,87 +1,67 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5176C1FC3;
-	Sat, 26 Jul 2025 18:29:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E621205E25;
+	Sat, 26 Jul 2025 19:05:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753554594; cv=none; b=DdxsBc+u6MUHQI6AN8f8NidOA4a9sQ15/8V4A1zK39W7q34nqV5tEoTumkSMpFKdFFYdnUYPq5yyzKIkE6HeMAyeJNSgDiO2WPwS6z9omL9ZhFIN0J+nxPojZHX1CvNQ642cn6Ar26p8fK8GkDbFTCoLkl8OJwnDqDZnNFlq9T4=
+	t=1753556701; cv=none; b=WTd1cvBCdI41wqwpiA5ZgozBPa/p7ERA/x34ePo7FCyTfIRveNhVa9aOejx7eZ4SogPi/Z2YzU3CECLVHjJWge1SRJHS7QmH+JitQVbhDrQFqrmmrOOCdwz3LRklo7dBwA/106hxUxUsB796XOKLIttYipBfaNO5yqdHEkpSFfE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753554594; c=relaxed/simple;
-	bh=mxo9qya/kzvBI7JkhII6DI4w28F8yzccAxoPm1FQ4Mc=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=jAje75u/yKjngODBqscnIxshhuXK8Sl5BOePg58iN6RLNL8CHhD5TfJKc5xkQS6V1xyuDxe1BCMsuEwpspapHBXUK3/Wk/AD609OC4w2m/PO0YovXubIuclKPgDtGBIGWwv+3vXjp7+vDPHJbfKy80rhRIyb0GnDHTvjkoY4m78=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tYiVri0Q; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1753556701; c=relaxed/simple;
+	bh=yy6cnTwBnCXmwWO3MHjMEhHRrAAkWwy77MMk1Vy+NxE=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=IIdXS2B5+F3ztOUvVa5hD4HlMzW49eaDU46FDjQpq53/dhh1XZBBLHYj/jcbObl63OkioxhZ6/0UMspPRK1w8iTbMx8Z534dPMmMybL6i6uQeqXmwFnt+hGF7ewFCHPPHWzJB4R+ROW/L54GAcQvy4RgzajZQd7ZQ+wHKkDej0k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=exYFZq/j; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tYiVri0Q"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3188C4CEF1;
-	Sat, 26 Jul 2025 18:29:53 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="exYFZq/j"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E237C4CEED;
+	Sat, 26 Jul 2025 19:04:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753554593;
-	bh=mxo9qya/kzvBI7JkhII6DI4w28F8yzccAxoPm1FQ4Mc=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=tYiVri0QD33QM0ljryw3G6aNP5+B/csvJqrOIvwmx3AGsJOo0dNaKCdXW+m5ViZWb
-	 d+8uVdUCbGDy6ghfyIxWQFonT0WxCz4jiwY060cGdSgUsPJGJu3gNZOYFAT8RwpOS9
-	 hch5tpQjrTyOp+XvpgKOSsI7YIThcvX+LoYdE2Z+tYZMhAO5/ufBUzpDkNKIUSP4XU
-	 +HWtSCSpf6lBjv8lJFVZMhen5K/qrqRsnPa28RxqESE55KXpCENEMhgmjmmafx9cyW
-	 UpSa8+g9qabVPejG3TF62QGmLEo+cYPCgutZmJe5dtiJJk9FelzYMCzjGZFhcFTVck
-	 qbhbn3aEppxUw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33D39383BF4E;
-	Sat, 26 Jul 2025 18:30:12 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1753556701;
+	bh=yy6cnTwBnCXmwWO3MHjMEhHRrAAkWwy77MMk1Vy+NxE=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=exYFZq/jxGPb59AlOyb8xRihdk/qpCpv8/nIJsn0oHjxk57XSUPYVBtBof395L9jZ
+	 nf4wkJdDAlhXUBzPOat7bgUHOUxHDRr7gDbtSbmeCRQo2g2gb2r9JAtumqriBltlxb
+	 o75lnH0VpC4AUIbedKQqTBhPLE5nw3DXe8GB/1wcYsbHxZm+S3ypib80zQ+xSfBA9g
+	 3yln1rPFtoQ5Dpn0OOXvMKPJXenqfj2zsFyTXsOeLj3dYNNhB0kulEtevXL3RRrU0e
+	 Bvjv48s6ykEt9aPloLNjgK7t3YJqgcxs4td+c/biTlpUUXkCR/xp7cgr0MvYelTzyQ
+	 tdqeUSohvW6hQ==
+Date: Sat, 26 Jul 2025 12:04:58 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Daniel Borkmann <daniel@iogearbox.net>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+ pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org, ast@kernel.org,
+ andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com,
+ song@kernel.org, yonghong.song@linux.dev, john.fastabend@gmail.com,
+ kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
+ mykolal@fb.com, shuah@kernel.org, pablo@netfilter.org,
+ bigeasy@linutronix.de, fw@strlen.de, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next] selftests: bpf: fix legacy netfilter options
+Message-ID: <20250726120458.4aa17989@kernel.org>
+In-Reply-To: <e691eb39-e13a-4558-8f62-6a1fd98382f1@iogearbox.net>
+References: <20250726155349.1161845-1-kuba@kernel.org>
+	<e691eb39-e13a-4558-8f62-6a1fd98382f1@iogearbox.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net v3 0/2] xsk: fix negative overflow issues in zerocopy
- xmit
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <175355461105.3662765.16598122698049376540.git-patchwork-notify@kernel.org>
-Date: Sat, 26 Jul 2025 18:30:11 +0000
-References: <20250723142327.85187-1-kerneljasonxing@gmail.com>
-In-Reply-To: <20250723142327.85187-1-kerneljasonxing@gmail.com>
-To: Jason Xing <kerneljasonxing@gmail.com>
-Cc: anthony.l.nguyen@intel.com, przemyslaw.kitszel@intel.com,
- andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, bjorn@kernel.org,
- magnus.karlsson@intel.com, maciej.fijalkowski@intel.com,
- jonathan.lemon@gmail.com, sdf@fomichev.me, ast@kernel.org,
- daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
- mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com,
- linux-stm32@st-md-mailman.stormreply.com, bpf@vger.kernel.org,
- intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
- kernelxing@tencent.com
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hello:
-
-This series was applied to netdev/net.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Wed, 23 Jul 2025 22:23:25 +0800 you wrote:
-> From: Jason Xing <kernelxing@tencent.com>
+On Sat, 26 Jul 2025 20:54:33 +0200 Daniel Borkmann wrote:
+> On 7/26/25 5:53 PM, Jakub Kicinski wrote:
+> > Recent commit to add NETFILTER_XTABLES_LEGACY missed setting
+> > a couple of configs to y. They are still enabled but as modules
+> > which appears to have upset BPF CI, e.g.:
+> > 
+> >     test_bpf_nf_ct:FAIL:iptables-legacy -t raw -A PREROUTING -j CONNMARK --set-mark 42/0 unexpected error: 768 (errno 0)
+> > 
+> > Fixes: 3c3ab65f00eb ("selftests: net: Enable legacy netfilter legacy options.")
+> > Signed-off-by: Jakub Kicinski <kuba@kernel.org>  
 > 
-> Fix two negative overflow issues around {stmmac_xdp|igb}_xmit_zc().
-> 
-> Jason Xing (2):
->   stmmac: xsk: fix negative overflow of budget in zerocopy mode
->   igb: xsk: solve negative overflow of nb_pkts in zerocopy mode
-> 
-> [...]
+> Acked-by: Daniel Borkmann <daniel@iogearbox.net>
 
-Here is the summary with links:
-  - [net,v3,1/2] stmmac: xsk: fix negative overflow of budget in zerocopy mode
-    https://git.kernel.org/netdev/net/c/2764ab51d5f0
-  - [net,v3,2/2] igb: xsk: solve negative overflow of nb_pkts in zerocopy mode
-    https://git.kernel.org/netdev/net/c/3b7c13dfdcc2
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Thank you for the quick ack!
