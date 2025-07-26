@@ -1,46 +1,46 @@
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88FDE219300;
-	Sat, 26 Jul 2025 19:14:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E231C1B85FD;
+	Sat, 26 Jul 2025 19:19:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753557281; cv=none; b=LAQurfiXCRW7S6yHsPyRE8R0zQgU2cbr9ZDVdY2rBUUY0tZxL3qdLNsB/btaUAfz2zvjIOYiXxOP77VCK5v5ygCcTQeQN+Zrsg+bMzRSdSEXrDmw3RRHwiwCBBI6tSgbIfZ59cIxzll2Z3vxbT5ypsF5GglrjcCu/F+UACgrXMw=
+	t=1753557600; cv=none; b=tXFlA5LZhQz3pXAXZYQ0xumJK+5k0EAD7HcLw8IsSpE+k6818MAH8aIMfOM5+/caSP4hS0IK9Qn8yP5L83it74tu3NYARYNGQsfsMlcWxwREk+WsxfpLwzpszNueJlDsWvm7Cq7DJH3A4EvcXQFQ7BTU1tACIM6nrREBEy+4vLU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753557281; c=relaxed/simple;
-	bh=P1hYjFDSCAoFlyAkV2asYDBPZHfVwHXvMY0Fw/8MUrw=;
+	s=arc-20240116; t=1753557600; c=relaxed/simple;
+	bh=ejUPB+SXuu2nQSPPNszkSk8hWnRKdD1HE9yeHEv+dTo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=M/38jYWZTih3yFvFKzGHuZxxws+s/gcqNtLYdjW58XByYe2nUv29X7lETpLlZc+HLdbBTu+F6sdDDajOJ+/UzSO7BNYr+SkqDGPp3Rjx0PkMx9NsKVkcaXsSNSQVh+Pgel55ZsQCLiTzUCukxDCCFlkCnuURkNhaSzmbCFWJNiU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=Qjc9KVxC; arc=none smtp.client-ip=213.133.104.62
+	 In-Reply-To:Content-Type; b=prjEqMnhj2PaE5nRgx8x/IeqZLKGWd4Tlu0kVEEJvwSOP2wRlCjTAZYuLC3npb/ZwlQuwk07l9mBSUG5gP3lHpWG4nmMBszeBTc8o1/fAb1coKYybs/+D7jjC+XFB0vOK7wuIA/OdNpNzLavkuSA2L8GCJFT279cL8ACUxlkWN8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=YAx7HAxR; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="Qjc9KVxC"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="YAx7HAxR"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
 	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
 	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=XItMU9mIdM3iXfkaZWvCDGF2WtlmssSbd8WieKxoeug=; b=Qjc9KVxCABkQ/65EMF64wQpjQu
-	HHFzW1eRIeueDKsu0nBNIyeuK5EIf9RuwTIEucQGqT18wLxva6IkIyYPuIODVy80fBuIjh2yuN1rM
-	bOcbnGMldbYhTySvle64g0gn7a6McdyzjmsdyOTB0KoM5vmbsNYwkqa7F1Rfk5AWqGl54GiB12SES
-	XgaCoJI2D7czmdqE5cWzNBgGdQA5zAe0+W/4go+BFqEO/5SZN+LM9LOEC1ZMTELJZ6DFWSPui8TAX
-	1WJ3bR8MOJ5Oci7O4lDQhZbzaUR++yKKQl1NW/M8i+zQkIc+ootG3mX7cdPPxK1I3NJd/9cKZgWrm
-	Xwqrngew==;
-Received: from sslproxy04.your-server.de ([78.46.152.42])
+	bh=q9X/hN1QzRJKye8BRA40DMBxtEO4Nmsm3xPqIazwALU=; b=YAx7HAxRsg9wWPKaxYunm2vdbb
+	WrftboTrbZboSHa0R0ykL5zFhz0j0QeU6yolvjlrByOn3yE5N68B1f3EinhBMFFCY+ZBo6g4Xg8Xf
+	cV8AGTp0Wup/+aQkDd65ro6INZ6y/yIFETu9AgzvDI1fOLj+LU9oC8tWhyvipk1w8TkUrNEpy6hSD
+	6FjxVoUW3QzcCJZz9eqIsLn4xwtYY6CIlIJVWk7+DQAu5EFUrqGe7OWtGIXl9ufwD+xZP8Ep5QqKm
+	fN5P4MMGx4m05LXr94O7fllvHFmVjeD2sWR5n+l4yZRgZCgvgz1Bhmn7UuBdCnyEHRy9kOc50OgO4
+	jeV0XF2Q==;
+Received: from sslproxy05.your-server.de ([78.46.172.2])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1ufk2V-000NEr-1T;
-	Sat, 26 Jul 2025 20:54:35 +0200
+	id 1ufkQs-0000yn-02;
+	Sat, 26 Jul 2025 21:19:46 +0200
 Received: from localhost ([127.0.0.1])
-	by sslproxy04.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	by sslproxy05.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1ufk2T-000H9H-1O;
-	Sat, 26 Jul 2025 20:54:34 +0200
-Message-ID: <e691eb39-e13a-4558-8f62-6a1fd98382f1@iogearbox.net>
-Date: Sat, 26 Jul 2025 20:54:33 +0200
+	id 1ufkQr-0005wO-0M;
+	Sat, 26 Jul 2025 21:19:45 +0200
+Message-ID: <61c20b77-b664-46dd-8555-9142f6d647da@iogearbox.net>
+Date: Sat, 26 Jul 2025 21:19:44 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -48,16 +48,14 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next] selftests: bpf: fix legacy netfilter options
-To: Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net
-Cc: netdev@vger.kernel.org, edumazet@google.com, pabeni@redhat.com,
- andrew+netdev@lunn.ch, horms@kernel.org, ast@kernel.org, andrii@kernel.org,
- martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
- shuah@kernel.org, pablo@netfilter.org, bigeasy@linutronix.de, fw@strlen.de,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20250726155349.1161845-1-kuba@kernel.org>
+Subject: Re: [PATCH v4 0/2] Fix two tailcall-related issues
+To: Haoran Jiang <jianghaoran@kylinos.cn>, loongarch@lists.linux.dev
+Cc: bpf@vger.kernel.org, kernel@xen0n.name, chenhuacai@kernel.org,
+ hengqi.chen@gmail.com, yangtiezhu@loongson.cn, jolsa@kernel.org,
+ haoluo@google.com, sdf@fomichev.me, kpsingh@kernel.org,
+ john.fastabend@gmail.com, yonghong.song@linux.dev, song@kernel.org,
+ eddyz87@gmail.com, martin.lau@linux.dev, andrii@kernel.org, ast@kernel.org
+References: <20250725102307.1026434-1-jianghaoran@kylinos.cn>
 Content-Language: en-US
 From: Daniel Borkmann <daniel@iogearbox.net>
 Autocrypt: addr=daniel@iogearbox.net; keydata=
@@ -103,19 +101,23 @@ Autocrypt: addr=daniel@iogearbox.net; keydata=
  rUD9YI1Je/WifL/HbIubHCCdK8/N7rblgUrZJMG3W+7vAvZsOh/6VTZeP4wCe7Gs/cJhE2gI
  DmGcR+7rQvbFQC4zQxEjo8fNaTwjpzLM9NIp4vG9SDIqAm20MXzLBAeVkofixCsosUWUODxP
  owLbpg7pFRJGL9YyEHpS7MGPb3jSLzucMAFXgoI8rVqoq6si2sxr2l0VsNH5o3NgoAgJNIg=
-In-Reply-To: <20250726155349.1161845-1-kuba@kernel.org>
+In-Reply-To: <20250725102307.1026434-1-jianghaoran@kylinos.cn>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Virus-Scanned: Clear (ClamAV 1.0.7/27711/Sat Jul 26 10:35:43 2025)
 
-On 7/26/25 5:53 PM, Jakub Kicinski wrote:
-> Recent commit to add NETFILTER_XTABLES_LEGACY missed setting
-> a couple of configs to y. They are still enabled but as modules
-> which appears to have upset BPF CI, e.g.:
+On 7/25/25 12:23 PM, Haoran Jiang wrote:
+> v4:
+> 1,There is a conflict when merging these two patches on the basis of the trampoline series patches, resolve the conflict issue
+[...]
+> Haoran Jiang (2):
+>    LoongArch: BPF: Fix jump offset calculation in tailcall
+>    LoongArch: BPF: Fix tailcall hierarchy
 > 
->     test_bpf_nf_ct:FAIL:iptables-legacy -t raw -A PREROUTING -j CONNMARK --set-mark 42/0 unexpected error: 768 (errno 0)
-> 
-> Fixes: 3c3ab65f00eb ("selftests: net: Enable legacy netfilter legacy options.")
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+>   arch/loongarch/net/bpf_jit.c | 181 +++++++++++++++++++++++------------
+>   1 file changed, 119 insertions(+), 62 deletions(-)
 
-Acked-by: Daniel Borkmann <daniel@iogearbox.net>
+Same here, I presume Huacai will pick these up.
+
+Thanks,
+Daniel
