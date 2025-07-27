@@ -1,83 +1,35 @@
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D3923B7A8;
-	Sun, 27 Jul 2025 08:18:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DFE92045B7
+	for <bpf@vger.kernel.org>; Sun, 27 Jul 2025 17:29:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753604289; cv=none; b=klk9ChsYy2g/dHehEZLNrcvlw2ZvMsIUqP7aBATtCaGJ13oWi+ZSk1U3TfenRAjhL8tNDMa1rnCXEqvqBzHReYKgQO66I33BmnErQMCYDZxZMT/hn9rmEx3gd7nx+75d75x/FQ3ciGH0BHq9FnKjNxJ5nDWX3S5doICsfKV6hNI=
+	t=1753637389; cv=none; b=TWnNlk0BxuBzp2pPOHIYPd4KD3XiGI/PzFyqZ1b957uJf7f1i5CNVYPc7pUe6AeFMZt6neeF3QBu3dGBCQkI0IFl1Jnb3KsRahavlD54BTDg2YuH2PfhMq6FT/DH5SqmikHze1lbq0bm4epoLGg++L005Vp4Hhldh9tc/Yj5hNA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753604289; c=relaxed/simple;
-	bh=h2x6vdv/JzyV9NCqHup4antc8GUh2Fc+FuFK5KC/RRU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QM+WTRgDBCYADdnofoKS8vI2sTB7/gPp/zAvdZOFxN7mOO3vLJOHekZwiicBJdSZFFyLsawdoH6+RrwIimvieE0FBBP/04qVqNDCShEHI/ExE93JZSmRVZNNT8mCbFje4AXF/9VVJnEPhmlMdT++9L4QDb/ngNaWmZrrjUuKUOY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Lv1tHGXx; arc=none smtp.client-ip=209.85.210.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1753637389; c=relaxed/simple;
+	bh=9tVwppI2+LwRAXn6LJuFx41/S0dTdLD5N6yd15s7Rcc=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=hKVnbr/XNHBUzwgw6zWYMy70I43HArNKpuFcryH9q+CPgCcHcospXh+AlA1xKnD2FegK0fYlmAVgYZhZkeF0nNOouOxAwpPVud/+81Y+epIjerYqmjkWBNNxW8Io6w5WqDmqQlhoKWDrlYK1nRodhhPe9w37pfB3MZbu1awBh10=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XY2vGfGW; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Lv1tHGXx"
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-749248d06faso3011291b3a.2;
-        Sun, 27 Jul 2025 01:18:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1753604287; x=1754209087; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=4w3nvIifgn0iSMKuiOg/hmSn/FEUf3sNnbRx7riRRJg=;
-        b=Lv1tHGXxpGsHUh5ZlxkISH1rSrnfCGqikTKZS1kd7ZsiVlebGCzilHPHDyQJZQUaxQ
-         RJZKOVSAV7RRjsvcTqbeNo4eONRa2lryZHZ/h0tTnZoqRfP7xGRYzoeBuKheGLi07dxm
-         EHXqgG1xnJFTeSBkg5oNphtSt08TS2hYjbaeCKu/7Y+EApV9GfmP6Bh7h6GEwKjDEEd9
-         03JUK8+6OErKaGoYTYeIqxMK3JMwRsIr0y91jRtF6mK5FgARKw+QqJf2VaADSVtyX+qo
-         YLw4Lh6kqLzym5UzGNVvoB4dcQv9CfgDMQl9EIh+y9ScLCgaAvpnG5c21k18DP6RLei6
-         IH3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753604287; x=1754209087;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4w3nvIifgn0iSMKuiOg/hmSn/FEUf3sNnbRx7riRRJg=;
-        b=E+eSLcoOJgPs+oUL+rR30YgG/JzWanc1xDhRRdEVroIwWYkeGyJli9tI3QDMjdcgGK
-         e7lBmW/wKrIdkSUUc6abbwqPxAg+bZGZHMamQg3lVGRBovKXoV1sgqBvtKxXvT7x1tQc
-         PFKy+9hbgoGvNUDrJ4RQRlOk5dbK5r0OUJyuBsEAgMlvT5f2WNeXdg58xS8iNZ6/sQ1X
-         Cc4zFway80EfAUcsjlxK1Rp3D3EUuPZ7f5tIjBzUxBT773uzU83BkujeRqjmodDgfUQO
-         hMf6xKpgA0mHB5xbHbx7N+9ZL6Xid0+tvi51V8OGj6BuDw4/95e/+te/QXQDKU34/flt
-         zf7w==
-X-Forwarded-Encrypted: i=1; AJvYcCUMbY7df2/4XW07HOx39wNyyadnPEi7BvggCSI4SknC/3LxMXg6xSEFry8i4j//6tq2ieY=@vger.kernel.org, AJvYcCVJCU7fyFCvWrXK2OydGiXR7OeCGYWzLYXZkYiNwk4/MC5b0AHVHLoAZjpu0c/kkKP4I6WhrAJkN9z6peh8@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy7fFlF//qlvW9CMzS2Q4sJ1MRlO3OvoCabymzX3o+OZ731gBx6
-	hMmPcG3p6VGpihVbXmnHsa+CMNTqKiow2AXabnF56XQk04uz1rPmMO/b
-X-Gm-Gg: ASbGncuInCHbAbaxbGdYJGlWQnfPnqO2m2epzgRn0lOTvlQh/sddWYdOyc/1gEnqZyi
-	oRKrCf+qNYckK9CZQPsTyHBjnF1i3xHO/wRiZYWLW/32i4cdNhGEvQaCwJsb9jO4Vsz90vhILY2
-	cUhyV2DhH4AI2T3MGF5w49YuoS9YAqmFG7uW2ta+Uw3aHdeuUfpZS6FdNWsYPNUTT49SyhdkaT+
-	bAD1xzA9ePYjeeWVZDMAvjGR8/Ue7mHEWLhVmuiqp1uwo4qj0rQBs7L047usekEjncDcFrAR5Ut
-	x1A612vCbfabywjK9/Sd8H5FSDr/VSsNicVwWMiG4Uf6Sld77XzlhcSP5qzzi17C/DyiRPutRPv
-	IB3tr+AuuR/Gybmv2iJ7Z+RO3wEAk0cg=
-X-Google-Smtp-Source: AGHT+IERtAcA1hASNVnSuyLgCZuySFIDgpHVod4VMFHMhTbjWTMV5KfmnnO/eqKIF5S6h8aYQR0OlQ==
-X-Received: by 2002:a05:6a00:1741:b0:736:4644:86ee with SMTP id d2e1a72fcca58-763343da65dmr10726993b3a.14.1753604286599;
-        Sun, 27 Jul 2025 01:18:06 -0700 (PDT)
-Received: from archlinux ([205.254.163.108])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7640863503csm3085296b3a.5.2025.07.27.01.17.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 27 Jul 2025 01:18:06 -0700 (PDT)
-From: Suchit Karunakaran <suchitkarunakaran@gmail.com>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	john.fastabend@gmail.com,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	bpf@vger.kernel.org
-Cc: skhan@linuxfoundation.org,
-	linux-kernel-mentees@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Suchit Karunakaran <suchitkarunakaran@gmail.com>
-Subject: [PATCH] bpf: fix various typos in verifier.c comments
-Date: Sun, 27 Jul 2025 13:47:54 +0530
-Message-ID: <20250727081754.15986-1-suchitkarunakaran@gmail.com>
-X-Mailer: git-send-email 2.50.1
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XY2vGfGW"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C5AFC4CEEB;
+	Sun, 27 Jul 2025 17:29:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1753637388;
+	bh=9tVwppI2+LwRAXn6LJuFx41/S0dTdLD5N6yd15s7Rcc=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=XY2vGfGWQVARd3t+oMp2OHjndkx3TyCjoN56Tc1CH3I6rBHVKHkNEsV+nE/ms+KRd
+	 woeJQYDR5nEn4QhiJZibS2TSkUxeZkdbGfrYV0jMnbbU02W1OQj9Wd1Se8h4/p2tzY
+	 hQkxQ9V2NYDxtI2upCoXf6T/87rdH6NmOgYpA9tEPnmZMlbnU9YR+tIOCjKfAo4Ode
+	 aXdILvEXwSEY2kpgKXRxRjgh1HojH1krbr9TdQcEPiAMFJEpuPDQVe2Vz1Bayysf+Y
+	 Gc5NXxvKYf+T4nKSdsgpQWFKX+puwTfX84rFxTKhHeL4YB1/4NnNbAPdQPNgAm6x1N
+	 Tvy06UY/x7M+g==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id ADE7D383BF4E;
+	Sun, 27 Jul 2025 17:30:06 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -85,64 +37,40 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next] bpf: Simplify bounds refinement from s32
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <175363740552.3914338.8842497376005706320.git-patchwork-notify@kernel.org>
+Date: Sun, 27 Jul 2025 17:30:05 +0000
+References: <aIJwnFnFyUjNsCNa@mail.gmail.com>
+In-Reply-To: <aIJwnFnFyUjNsCNa@mail.gmail.com>
+To: Paul Chaignon <paul.chaignon@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, eddyz87@gmail.com, shung-hsi.yu@suse.com
 
-This patch fixes several minor typos in comments within the BPF verifier.
-No changes in functionality.
+Hello:
 
-Signed-off-by: Suchit Karunakaran <suchitkarunakaran@gmail.com>
----
- kernel/bpf/verifier.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+This patch was applied to bpf/bpf-next.git (master)
+by Daniel Borkmann <daniel@iogearbox.net>:
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index e2fcea860755..4f13cce28815 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -4518,7 +4518,7 @@ static int backtrack_insn(struct bpf_verifier_env *env, int idx, int subseq_idx,
-  *   . if (scalar cond K|scalar)
-  *   .  helper_call(.., scalar, ...) where ARG_CONST is expected
-  *   backtrack through the verifier states and mark all registers and
-- *   stack slots with spilled constants that these scalar regisers
-+ *   stack slots with spilled constants that these scalar registers
-  *   should be precise.
-  * . during state pruning two registers (or spilled stack slots)
-  *   are equivalent if both are not precise.
-@@ -18450,7 +18450,7 @@ static void clean_verifier_state(struct bpf_verifier_env *env,
- /* the parentage chains form a tree.
-  * the verifier states are added to state lists at given insn and
-  * pushed into state stack for future exploration.
-- * when the verifier reaches bpf_exit insn some of the verifer states
-+ * when the verifier reaches bpf_exit insn some of the verifier states
-  * stored in the state lists have their final liveness state already,
-  * but a lot of states will get revised from liveness point of view when
-  * the verifier explores other branches.
-@@ -19166,7 +19166,7 @@ static bool is_iter_next_insn(struct bpf_verifier_env *env, int insn_idx)
-  * terminology) calls specially: as opposed to bounded BPF loops, it *expects*
-  * states to match, which otherwise would look like an infinite loop. So while
-  * iter_next() calls are taken care of, we still need to be careful and
-- * prevent erroneous and too eager declaration of "ininite loop", when
-+ * prevent erroneous and too eager declaration of "infinite loop", when
-  * iterators are involved.
-  *
-  * Here's a situation in pseudo-BPF assembly form:
-@@ -19208,7 +19208,7 @@ static bool is_iter_next_insn(struct bpf_verifier_env *env, int insn_idx)
-  *
-  * This approach allows to keep infinite loop heuristic even in the face of
-  * active iterator. E.g., C snippet below is and will be detected as
-- * inifintely looping:
-+ * infinitely looping:
-  *
-  *   struct bpf_iter_num it;
-  *   int *p, x;
-@@ -24449,7 +24449,7 @@ static int compute_scc(struct bpf_verifier_env *env)
- 	 *        if pre[i] == 0:
- 	 *            recur(i)
- 	 *
--	 * Below implementation replaces explicit recusion with array 'dfs'.
-+	 * Below implementation replaces explicit recursion with array 'dfs'.
- 	 */
- 	for (i = 0; i < insn_cnt; i++) {
- 		if (pre[i])
+On Thu, 24 Jul 2025 19:42:52 +0200 you wrote:
+> During the bounds refinement, we improve the precision of various ranges
+> by looking at other ranges. Among others, we improve the following in
+> this order (other things happen between 1 and 2):
+> 
+>   1. Improve u32 from s32 in __reg32_deduce_bounds.
+>   2. Improve s/u64 from u32 in __reg_deduce_mixed_bounds.
+>   3. Improve s/u64 from s32 in __reg_deduce_mixed_bounds.
+> 
+> [...]
+
+Here is the summary with links:
+  - [bpf-next] bpf: Simplify bounds refinement from s32
+    https://git.kernel.org/bpf/bpf-next/c/5345e64760d3
+
+You are awesome, thank you!
 -- 
-2.50.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
