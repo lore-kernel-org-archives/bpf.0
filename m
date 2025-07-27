@@ -1,213 +1,167 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64CE41D88D0;
-	Sun, 27 Jul 2025 17:29:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEE904A11
+	for <bpf@vger.kernel.org>; Sun, 27 Jul 2025 22:00:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753637404; cv=none; b=L7vqh5PDrfB767jBtItGuaYy7k0MaDJhjMYk8MZzMhPDTH/yNkB+LJwgd4dQKzYMznHOR8sjAoV68vkT2qAupI4zM1VjAuij0TE8E9NC2X/8ylaOjozUMqDeJY8Oi1cDvsTqYsdfKgzhNVGcIPpxScGgPphD7zB0kKZ9MrgmHFk=
+	t=1753653602; cv=none; b=a2UfGRpMilFDSLH5RBnH3uVEkd9obg0yOYs4rbrp3Xj0QmHQ3zfofA1B3d3nU1CjeahW4bcZH3/jyL5GF/6A9fmZfUmrzG9ylz/hiUaNHD4wYUNB3Za8mvA/sVdmO6WsW03cWyyGVGQfic5ffETRMEsQnXzFuTTc+ud8dIB+96o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753637404; c=relaxed/simple;
-	bh=YN4OUMEmYYlsvg3YJWY6SJd2TltixNw6QFJIBCSUVNQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ewFAfT9vzMvsoJTqIm5J1Hd3LIhRgYqvMsOoyiX+wVR0EL035swTjuAE2KVUSZD2ODtZ6DQX+K1LTgQinAKKnUtSo5T0hUnQ5AOvkccc0gp5r16yiV4YnDXIjOIog1R+xDXL6aIjR6+UoL4raa6I669cROy+cOy3kUFVJBdHS7U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=WU3f25Wn; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1753653602; c=relaxed/simple;
+	bh=OFcesHnwXQ6s/tXD3BalnBZun5reM15avV0oxWvWsrM=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=QVljTxbJj1qh8GmvI9XI/060HcWrWCrZt32r4EQyAoP4hDINf/nkGJQy028XiTuAAuzkOVInPLDohcPME60KZGAZXZeiCRVPbqw2Mzhu/Vg8Nzw8LSmonkeVwd5JFYu36Tty9e+2UogFv1AVzlWTNvKFQI6vOz8cGFiomNIfmdQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jQCrOced; arc=none smtp.client-ip=209.85.210.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="WU3f25Wn"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=LyRwSo6shZlwP9Bgfh1wxu4NA1objl4EP4vyfCXNCPI=; b=WU3f25WniMySsz82S2k2K/Z/lT
-	auUGAjSv7EWRJIxDjirhtvu0WDt6OOO24M7iHBIe+J9M6NjCLdiHOvbngsoPQMVofE8YwmuASiZ6Z
-	IKTpLS8uLY2MpL6U+T1lWIBo+5yn4wozM0kb9dtGdZu++vqafN20nh5lgUvGHwcLuEBj7azUIRaGP
-	yLmPQGzJGvglVSIjvFMeL76BVmGsISyXsW3d6JRdV+IS9x8dOPszy11cczi4eJZnsDS4OYoWeMgmj
-	f5qa5PLAq3lrl3D1EbBYcgTozLKfLQlswkcCtDiE9bVcePh40ncichPGLt60BiUwNHBq+0TNcdgrE
-	tMcO2v2w==;
-Received: from sslproxy05.your-server.de ([78.46.172.2])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1ug5C6-000FGM-1S;
-	Sun, 27 Jul 2025 19:29:54 +0200
-Received: from localhost ([127.0.0.1])
-	by sslproxy05.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1ug5C4-000E4z-3D;
-	Sun, 27 Jul 2025 19:29:53 +0200
-Message-ID: <c3eff304-8dd3-418d-afa9-eaf91020c535@iogearbox.net>
-Date: Sun, 27 Jul 2025 19:29:52 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jQCrOced"
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-748e378ba4fso4740018b3a.1
+        for <bpf@vger.kernel.org>; Sun, 27 Jul 2025 15:00:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1753653600; x=1754258400; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Z7y53oibyFi9f2igTiOkCWqfCKyKCqHN6TlXQC2GoGY=;
+        b=jQCrOced6axOXEkK44FBtr1OAeTF2/q6rWrxTFKOtHDDm//23Yf+jOHw8JMo/ZwpWF
+         uRSsP8p2x/0FUKVUZMpxTT6LcIs5212xZriUAs/SNh07YU70TODoLKqVOAm00qgQZRNU
+         IHE/9hS+50fN5GwUxabP9Ua1HKPMgvHnoEBrzl/7VvdQutcsF2ncR6am6TO2/FlzhaZN
+         eKbq9OVn3KrmRfF2mw68IM5q3Fhd2rp9d43Po6zCdng37LIqsJM07XgRPigLG6hpylqs
+         qNZibbY23Cob15H6C/qp/U+DoDmMmi7QHExiLsI+O5p5booWh6Ximm7qYfA55AUCJsw1
+         pqVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753653600; x=1754258400;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Z7y53oibyFi9f2igTiOkCWqfCKyKCqHN6TlXQC2GoGY=;
+        b=j63uk5loKq4mpAeI/XRTly9Qpezb/RjZJz2ZHd0P7lJkTElafBcfFfQuN5YHAhjAoS
+         Orv+woylGtclwDJtSRWuqXhPXVQQuGkyU7BoUvnVkVEABLr3f8j1I28KTIKdTOFfNqdv
+         rMhp2KV8uEdEcipApN0xosnOCIax/0z0hURdc2GyxE/PLmWLdE2HTkUwcefmzK+bbPxg
+         VoOuyBdSx3kD30lwAnUYmGKCUv25uWfM6+9d4PPLkOcndqDd8KMfhR1j/btwhQMsBaNz
+         nuE1J+UOws3rO3KFsO1tkdbZnnn9xfHWcbhjCZEOghXByLeGfe1lsUUbGKoou1bxTF2j
+         sgiQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVk7iv5uBSt8guKhRT3BsqI/s3tyDenPFjKYet+HiWRPmK67RRRLUlrB+ttVxVIVcQ2LFY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx7DWlSZ01WxunHli7T+d5NmMmogAqIV1CHJrTxAicAsysbi95l
+	bsoAMRzTnFJHPXQPkK8fW/w/CfsFyvLBTq6lPLX6JfnHpQAQa6Kcu5Y7
+X-Gm-Gg: ASbGncuKM2Qn2t9fMc4lwhWnR6yWr204qMQZeHXg/yqqSbtn5GzWtG3q7TQv/d3GYyG
+	fa+0BKh/Y4TBiXVdn2FK0/4nzoIXxsDYJ+ApS1MJY0RZa11E9nfCrl5+sqKAOUvDkxKEEgPGPRN
+	4w4wDheTmOtrJxTOwg4kJK5XHi0dEQdN0ukZ0eAvJT/VHeUemx0qaEGyQLETsilOdgNvGrhXVne
+	nQXL4IY39pqKX7/ujW2zkBPmy/G0B75Hg3WaWKrIkqdwCyI51HPgG3g6puq25WO5UBge/8Fm+OJ
+	DUnyNwv2Km6DxTZfgfKDbr+smNFpT1Krgp/ZuRbd2JlsrH9sdomM++nuwZdFP4K7bzWMs0ElvGq
+	A+ZmNA2zJW1QB2bqYnw==
+X-Google-Smtp-Source: AGHT+IFwpfYNiYmrF9OaVaKU4jnBy2GnbUu8mr2zOPQEu2ox7LJHeOoFVaXf70uuh4fZlfgHQNr6Gw==
+X-Received: by 2002:a05:6a00:1410:b0:748:34a4:ab13 with SMTP id d2e1a72fcca58-76332c46a56mr13961372b3a.6.1753653599748;
+        Sun, 27 Jul 2025 14:59:59 -0700 (PDT)
+Received: from [192.168.0.56] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-76408c02727sm4074874b3a.48.2025.07.27.14.59.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 27 Jul 2025 14:59:59 -0700 (PDT)
+Message-ID: <f1e5b0cad2f34f3670603be11be52ccb28c42a08.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v3 3/5] selftests/bpf: Test cross-sign 64bits
+ range refinement
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Paul Chaignon <paul.chaignon@gmail.com>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>,  Andrii Nakryiko <andrii@kernel.org>, Yonghong Song
+ <yonghong.song@linux.dev>, Shung-Hsi Yu <shung-hsi.yu@suse.com>
+Date: Sun, 27 Jul 2025 14:59:55 -0700
+In-Reply-To: <efbb1967c5595dcf4a0b334f934b6d59c6c20d30.1753468667.git.paul.chaignon@gmail.com>
+References: <cover.1753468667.git.paul.chaignon@gmail.com>
+	 <efbb1967c5595dcf4a0b334f934b6d59c6c20d30.1753468667.git.paul.chaignon@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2 (3.56.2-1.fc42) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RESEND bpf-next 1/1] powerpc64/bpf: Add jit support for
- load_acquire and store_release
-To: Saket Kumar Bhaskar <skb99@linux.ibm.com>, puranjay@kernel.org
-Cc: Madhavan Srinivasan <maddy@linux.ibm.com>,
- Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
- Christophe Leroy <christophe.leroy@csgroup.eu>,
- Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Hari Bathini <hbathini@linux.ibm.com>,
- Naveen N Rao <naveen@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
- Peilin Ye <yepeilin@google.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org, "Paul E . McKenney" <paulmck@kernel.org>,
- lkmm@lists.linux.dev
-References: <20250717202935.29018-1-puranjay@kernel.org>
- <20250717202935.29018-2-puranjay@kernel.org> <mb61pfreuy1rm.fsf@kernel.org>
- <aIIKo39dK22ew1T5@linux.ibm.com>
-Content-Language: en-US
-From: Daniel Borkmann <daniel@iogearbox.net>
-Autocrypt: addr=daniel@iogearbox.net; keydata=
- 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
-In-Reply-To: <aIIKo39dK22ew1T5@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: Clear (ClamAV 1.0.7/27712/Sun Jul 27 10:35:17 2025)
 
-On 7/24/25 12:27 PM, Saket Kumar Bhaskar wrote:
+On Fri, 2025-07-25 at 21:08 +0200, Paul Chaignon wrote:
+> This patch adds coverage for the new cross-sign 64bits range refinement
+> logic. The three tests cover the cases when the u64 and s64 ranges
+> overlap (1) in the negative portion of s64, (2) in the positive portion
+> of s64, and (3) in both portions.
+>=20
+> The first test is a simplified version of a BPF program generated by
+> syzkaller that caused an invariant violation [1]. It looks like
+> syzkaller could not extract the reproducer itself (and therefore didn't
+> report it to the mailing list), but I was able to extract it from the
+> console logs of a crash.
+>=20
+> The principle is similar to the invariant violation described in
+> commit 6279846b9b25 ("bpf: Forget ranges when refining tnum after
+> JSET"): the verifier walks a dead branch, uses the condition to refine
+> ranges, and ends up with inconsistent ranges. In this case, the dead
+> branch is when we fallthrough on both jumps. The new refinement logic
+> improves the bounds such that the second jump is properly detected as
+> always-taken and the verifier doesn't end up walking a dead branch.
+>=20
+> The second and third tests are inspired by the first, but rely on
+> condition jumps to prepare the bounds instead of ALU instructions. An
+> R10 write is used to trigger a verifier error when the bounds can't be
+> refined.
+>=20
+> Link: https://syzkaller.appspot.com/bug?extid=3Dc711ce17dd78e5d4fdcf [1]
+> Signed-off-by: Paul Chaignon <paul.chaignon@gmail.com>
+> ---
+
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+
 [...]
-> Thanks for the patch. I applied the patch and tested it.
-> 
-> Before this patch:
-> 
-> # ./test_progs -a \
->    verifier_load_acquire,verifier_store_release,atomics
-> #11/1    atomics/add:OK
-> #11/2    atomics/sub:OK
-> #11/3    atomics/and:OK
-> #11/4    atomics/or:OK
-> #11/5    atomics/xor:OK
-> #11/6    atomics/cmpxchg:OK
-> #11/7    atomics/xchg:OK
-> #11      atomics:OK
-> #528/1   verifier_load_acquire/Clang version < 18, ENABLE_ATOMICS_TESTS not defined, and/or JIT doesn't support load-acquire, use a dummy test:OK
-> #528     verifier_load_acquire:OK
-> #565/1   verifier_store_release/Clang version < 18, ENABLE_ATOMICS_TESTS not defined, and/or JIT doesn't support store-release, use a dummy test:OK
-> #565     verifier_store_release:OK
-> Summary: 3/9 PASSED, 0 SKIPPED, 0 FAILED
-> 
-> After this patch:
-> 
-> # ./test_progs -a \
->    verifier_load_acquire,verifier_store_release,atomics
-> #11/1    atomics/add:OK
-> #11/2    atomics/sub:OK
-> #11/3    atomics/and:OK
-> #11/4    atomics/or:OK
-> #11/5    atomics/xor:OK
-> #11/6    atomics/cmpxchg:OK
-> #11/7    atomics/xchg:OK
-> #11      atomics:OK
-> #529/1   verifier_load_acquire/load-acquire, 8-bit:OK
-> #529/2   verifier_load_acquire/load-acquire, 8-bit @unpriv:OK
-> #529/3   verifier_load_acquire/load-acquire, 16-bit:OK
-> #529/4   verifier_load_acquire/load-acquire, 16-bit @unpriv:OK
-> #529/5   verifier_load_acquire/load-acquire, 32-bit:OK
-> #529/6   verifier_load_acquire/load-acquire, 32-bit @unpriv:OK
-> #529/7   verifier_load_acquire/load-acquire, 64-bit:OK
-> #529/8   verifier_load_acquire/load-acquire, 64-bit @unpriv:OK
-> #529/9   verifier_load_acquire/load-acquire with uninitialized src_reg:OK
-> #529/10  verifier_load_acquire/load-acquire with uninitialized src_reg @unpriv:OK
-> #529/11  verifier_load_acquire/load-acquire with non-pointer src_reg:OK
-> #529/12  verifier_load_acquire/load-acquire with non-pointer src_reg @unpriv:OK
-> #529/13  verifier_load_acquire/misaligned load-acquire:OK
-> #529/14  verifier_load_acquire/misaligned load-acquire @unpriv:OK
-> #529/15  verifier_load_acquire/load-acquire from ctx pointer:OK
-> #529/16  verifier_load_acquire/load-acquire from ctx pointer @unpriv:OK
-> #529/17  verifier_load_acquire/load-acquire with invalid register R15:OK
-> #529/18  verifier_load_acquire/load-acquire with invalid register R15 @unpriv:OK
-> #529/19  verifier_load_acquire/load-acquire from pkt pointer:OK
-> #529/20  verifier_load_acquire/load-acquire from flow_keys pointer:OK
-> #529/21  verifier_load_acquire/load-acquire from sock pointer:OK
-> #529     verifier_load_acquire:OK
-> #566/1   verifier_store_release/store-release, 8-bit:OK
-> #566/2   verifier_store_release/store-release, 8-bit @unpriv:OK
-> #566/3   verifier_store_release/store-release, 16-bit:OK
-> #566/4   verifier_store_release/store-release, 16-bit @unpriv:OK
-> #566/5   verifier_store_release/store-release, 32-bit:OK
-> #566/6   verifier_store_release/store-release, 32-bit @unpriv:OK
-> #566/7   verifier_store_release/store-release, 64-bit:OK
-> #566/8   verifier_store_release/store-release, 64-bit @unpriv:OK
-> #566/9   verifier_store_release/store-release with uninitialized src_reg:OK
-> #566/10  verifier_store_release/store-release with uninitialized src_reg @unpriv:OK
-> #566/11  verifier_store_release/store-release with uninitialized dst_reg:OK
-> #566/12  verifier_store_release/store-release with uninitialized dst_reg @unpriv:OK
-> #566/13  verifier_store_release/store-release with non-pointer dst_reg:OK
-> #566/14  verifier_store_release/store-release with non-pointer dst_reg @unpriv:OK
-> #566/15  verifier_store_release/misaligned store-release:OK
-> #566/16  verifier_store_release/misaligned store-release @unpriv:OK
-> #566/17  verifier_store_release/store-release to ctx pointer:OK
-> #566/18  verifier_store_release/store-release to ctx pointer @unpriv:OK
-> #566/19  verifier_store_release/store-release, leak pointer to stack:OK
-> #566/20  verifier_store_release/store-release, leak pointer to stack @unpriv:OK
-> #566/21  verifier_store_release/store-release, leak pointer to map:OK
-> #566/22  verifier_store_release/store-release, leak pointer to map @unpriv:OK
-> #566/23  verifier_store_release/store-release with invalid register R15:OK
-> #566/24  verifier_store_release/store-release with invalid register R15 @unpriv:OK
-> #566/25  verifier_store_release/store-release to pkt pointer:OK
-> #566/26  verifier_store_release/store-release to flow_keys pointer:OK
-> #566/27  verifier_store_release/store-release to sock pointer:OK
-> #566     verifier_store_release:OK
-> Summary: 3/55 PASSED, 0 SKIPPED, 0 FAILED
-> 
-> Tested-by: Saket Kumar Bhaskar <skb99@linux.ibm.com>
 
-Michael/Madhavan, I presume you'll pick this patch up?
+> +/* This test covers the bounds deduction on 64bits when the s64 and u64 =
+ranges
+> + * overlap on the positive side. At instruction 3, the ranges look as fo=
+llows:
+> + *
+> + * 0 umin=3D0                      umax=3D0xfffffffffffffeff       U64_M=
+AX
 
-Thanks,
-Daniel
+Nit: when I insert prints on master the umax is 0xffffffffffffff00,
+     which makes sense, as for the false branch the bound for r0
+     would be deduced from r0 <=3D r1 with r1 =3D=3D 0xffffffffffffff00.
+
+> + * [xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx]            |
+> + * |----------------------------|------------------------------|
+> + * |xxxxxxxx]                                         [xxxxxxxx|
+> + * 0      smax=3D127                                smin=3D-128    -1
+> + *
+> + * We should therefore deduce the following new bounds:
+> + *
+> + * 0  u64=3D[0;127]                                              U64_MAX
+> + * [xxxxxxxx]                                                  |
+> + * |----------------------------|------------------------------|
+> + * [xxxxxxxx]                                                  |
+> + * 0  s64=3D[0;127]                                              -1
+> + *
+> + * Without the deduction cross sign boundary, the program is rejected du=
+e to
+> + * the frame pointer write.
+> + */
+> +SEC("socket")
+> +__description("bounds deduction cross sign boundary, positive overlap")
+> +__success __log_level(2) __flag(BPF_F_TEST_REG_INVARIANTS)
+> +__msg("3: (2d) if r0 > r1 {{.*}} R0_w=3Dscalar(smin=3Dsmin32=3D0,smax=3D=
+umax=3Dsmax32=3Dumax32=3D127,var_off=3D(0x0; 0x7f))")
+> +__retval(0)
+> +__naked void bounds_deduct_positive_overlap(void)
+> +{
+> +	asm volatile("			\
+> +	call %[bpf_get_prandom_u32];	\
+> +	r0 =3D (s8)r0;			\
+> +	r1 =3D 0xffffffffffffff00;	\
+> +	if r0 > r1 goto l0_%=3D;		\
+> +	if r0 < 128 goto l0_%=3D;		\
+> +	r10 =3D 0;			\
+> +l0_%=3D:	r0 =3D 0;				\
+> +	exit;				\
+> +"	:
+> +	: __imm(bpf_get_prandom_u32)
+> +	: __clobber_all);
+> +}
+
+[...]
