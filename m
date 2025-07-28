@@ -1,223 +1,124 @@
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 302C421D3D6
-	for <bpf@vger.kernel.org>; Mon, 28 Jul 2025 18:00:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C5C22727E1;
+	Mon, 28 Jul 2025 18:17:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753725611; cv=none; b=HKtH7galb5MaQANA6b3J8Ky0psQC3S78SVgPzrurS0f5QZfgeL2vyD7UXAJSLDblqnqgq35df5xa2BbMB6YPKJGGiw6HxFuMnfM7fqZgyOJz0ODTRBM6o1XbsAIDmOkTdeb0MCJcku8PiWnyDghjNClg0bsrzY12xCxWl+2goN0=
+	t=1753726674; cv=none; b=H+AdF0FVjYe7iBsrfXhhyBL+Cz8yZlwnLPm2tJd2UGVFKgvQbGHuDynayh6h1CDOcipA6SyRwKmsqUsBQMsQPHStn+fSsbCW9P8ExuAAhFVbdV7lbeH0hN7V/7Fh/npRC+ON4KWBf5ccbKpdYwruaVJhjHiNrKQIQw9ils1FGaE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753725611; c=relaxed/simple;
-	bh=iKYYXYU3kztPrvshqIoQqsBr9Q3R9Rjku5p1Xr/11eI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=A7rHhES/Jca2A8KUlpcwDbsW06h4BqjmVaIuTeGi8qEqJlJBLJrUifF+42At6WFQ1OSydTtgV3sVI5SYx+m4i57vLJs/dOYhmJUMSs/SjquACbZWrdAwMTpuJbdUDpSL50H4+gyVSrf5o8fRxa3gYdnXudSQW3EnH+ognyl3y88=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=NriczTb3; arc=none smtp.client-ip=209.85.128.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	s=arc-20240116; t=1753726674; c=relaxed/simple;
+	bh=PKmMSBbak+KMI9JOS1+iN1bZXrRdIRjoqfoUDhXdluo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Lzu7f2Ge/hsk55b/VfDsGLnsv5+5GLtkx/eWhgolgBEmmTCqQgJUheY5A78L+bWwGGEZvfIx5zq2vCDNO7jBfDRK8Tlmjk0t2rStiAwOFr7Pk5lXnc8MuoFLq5+CzUwI5PPX59CNH/WDWnNE2KJ45fNN6hZTA//GxXI8MB/gt7I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EjIlmfnF; arc=none smtp.client-ip=209.85.208.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="NriczTb3"
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-718389fb988so41870417b3.1
-        for <bpf@vger.kernel.org>; Mon, 28 Jul 2025 11:00:08 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EjIlmfnF"
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-60c4521ae2cso8417418a12.0;
+        Mon, 28 Jul 2025 11:17:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1753725608; x=1754330408; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kPYhbPyoxtTqfzZvkF/q/aqSvB2qPK5VJT7HARAmoyA=;
-        b=NriczTb3ply7dUQir392gfobkXeh6MIRLHZvk7+8OFaImvMZ41OsQqi1zoOnIDU7ei
-         wNQAdOjdRLNU9DCgZ2lQLzgIWtc2u5jdYkUOnGF0thQzNgJ7oJrZulXA4sbkUWHnoSlJ
-         nlEH5Erhjaz/Tnt0MxPv70/qEs5KUfzTE2kuu6ebx/6b2xfQ83RnazEXZy+FQvsu0bxR
-         8+iXLl1jUaqF3rETGdDkWb02jqacdmNonp2gAop6yO4ONH80j0KhA2Nd14i+NhTj91QV
-         qbAo86HffFxmvLv67j8GYp0aWkUu8zSPq9nx8/MKvjDDqrLLjWaKLJoVNldsG72R/m0H
-         BQpw==
+        d=gmail.com; s=20230601; t=1753726671; x=1754331471; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2XImG3RY7RQ20GriC3ThDwzyOsZ+ZnkQcvN3PF0GjwU=;
+        b=EjIlmfnFOubpzFqZtkXglKKvffqkiOF1aBd01loywoYtQ0dcPNOxwlhSxkTQKCr8FZ
+         ADkIDmYurx54pmz5Yo23mk4AT9zNPOhijNTC3XWI5DMrhEzyrS+KkCRLqhi41pm7Vo+i
+         9ftkynNA0lqhFE88zXqIA/Q4FvSwLj1s4IrpY1AAj+oYFLCXdTRuEdd4lpTkH65/ipDc
+         yo2DCHrLNchm6YOr2oY+lIhjKA//tmZg5vhVeB4FgGKYhaogAQtXR6FkKcAiDmVYv6Pn
+         UWoXEw7K/bEgNvdcv7dSKloXkZ7TfpFiy+RkdBHYl2GkeU914R+cfj6+sbTtDUecrtc6
+         Qtmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753725608; x=1754330408;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kPYhbPyoxtTqfzZvkF/q/aqSvB2qPK5VJT7HARAmoyA=;
-        b=kwSX/N0Ys/dqx1ctUHpy1rzItqHW8ED9kHoRScYSVuKxYsxh45EUrJqgrM/PJw3S6x
-         WnkjY1OjbOj/vjWchwGUKA0AkKF2TP6ibnk1HSiNE3gsDRrMsvEGnC7hm7dBlZGOZhS/
-         i48F7muQiXsbdY+XtNSri9g9gafrpqP6cN9IR6cR/FPZ6jq1lXYHi1JJTwhbbCbRLw4T
-         61ZCPcLpmy+qDpP+fwaHdfhTOnbR+D5wPtXapOnM3f7X4svvJxyCyPU8vNn2gH/KEnvI
-         I1kI20cjmmIjMd6FYe1+zdTNJLtWvdQoE6eg6XkQXYKA7OLei2H1NHZ1lR5SCJ50RNzk
-         vokA==
-X-Gm-Message-State: AOJu0YxhEM3k1SWJwum3r1jlw5p6jpt151DXeRlR2sskncL3qV4uFl/l
-	gPlNovBwkw+2ntqpUotVlqK92ZDsOjU4+BSFyql+C2ReU/KItibF8UeucBj5l8ugJmgIOM0jUYI
-	y49yknojc0Omtdi5J3y0CAQp/B6Ot07/AtXrxgZC26g==
-X-Gm-Gg: ASbGnct6S8ghujYUEy9XHxhNnNOF7UvBRezcJNrjt0mIk9BTIBt+A34v/1Nn7UDUhHD
-	NvGA7PvJXCid6VwoWicnmK4LOBbch86CvypMEihLVPQOc7WVCJNozzI3AOkFUi6UZJnZ+bLapsn
-	ChoTBoX/qeUoMq0bty6V4OXAd0s6Q+WdcjCl2XukT1e48MrVzuPM1jGmFKI1BFHF3Tk4FNQPGPp
-	Nf3QEGxj529qrcF6lY=
-X-Google-Smtp-Source: AGHT+IFPQMTCbUXEGoNyCs6Sgj4JWecmHBMzlLFFRut2vE4mH8TAAmDpOQ+7bsQ0M3GoHloxaGBllF8iFenr6u3msSw=
-X-Received: by 2002:a05:690c:6f08:b0:71a:3437:af45 with SMTP id
- 00721157ae682-71a3437b484mr9121217b3.25.1753725607990; Mon, 28 Jul 2025
- 11:00:07 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1753726671; x=1754331471;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2XImG3RY7RQ20GriC3ThDwzyOsZ+ZnkQcvN3PF0GjwU=;
+        b=rhj8qeWp47k1iP8YpU7a/EO59odDDwFBj6MmoJLyTSILZSnOg6G4ayuMrPJ84/PjLh
+         rTuRB14b2HMydoX2tkBn0Q2QgLFsUAaeA7laT3wK0gI2pcLPWT+bYgaSUB90os+GRbPG
+         AX3OoW+hEEfHf5CQ1irJMMFWDN94SrzRMUJ/X7S7t/uDdQrI2gqpd2en30wonCOwuMBR
+         vVj+lL5HD0zKcr9xkbxwSmQjDEikb1JT7zW/7Fz6anTtcl63PXNLKnFFJPsiBYIeNl3r
+         1bfqr8y8Rx32dNSIMV84Ib3zgmFxcqs/ntMdXMCX+AHn0huPDR+Ji/4o7P/qRcrsHDD/
+         gk2A==
+X-Forwarded-Encrypted: i=1; AJvYcCV+RQ4jUGcciy/LuVfg+8IIRlfIWi46oXIQBpxgOZMlcEu+dhi9jAlbGNfcLOsnsBM1Ifg=@vger.kernel.org, AJvYcCWYZGduEQlAaJWI8Qs7p3spy0wW4TiyySFfInD9E3wVbGBU/GF2KUEv8GvQ6MaJ2dfhcQrYcF39D6mong==@vger.kernel.org, AJvYcCXLVUiTxYQRvJO8IMaH933+yGTrGJox8v4xvGMrZnyoSUgCWVnkiF/mkoyCPcwzozW9YlXK8gPDHA4H3pYv@vger.kernel.org, AJvYcCXqwftA5XwxoYx3o+iAhc9ONvgSkpQ1fnYG4u1WE1zf8GzMMicwUZnTZ4DsJmu4z6Y/AaHpyMgr@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy7W/QKTuwR0y6XlJvEWblYJMYCg03cP1ACWjrVVCNnbr5OCyP1
+	y1VFdiEDfXyhm2H4CnmD0q/iiz23eHm5Dt7pVCD5U6vNG/toyFAOcAC1
+X-Gm-Gg: ASbGncuSJ3moHgRb6yBeTQ+64csV1J+DvZmrdwp4HY5921vPLcfiP9aQVz1jYmW7OjT
+	uz/tYcu7dQ7domh2qyNg5yztJMN14pCnmWFWeDoB0RRJNF5BY4v4yPx9pHupov4HKmnJZ3pyh4s
+	VLF/qmwVZJZU+wQPUOdN76T3dQHjvCgozs2CWfZWtS5ovhDlz8PvlXsuusgm4n+Rlyp2uMjiSMX
+	0rJ+nUJdBpsHylUChd8ltIbXU2jTeWfvlzhkGgFYkqSwa8OKmMAHsPpJm8XOICyMxzngoGoPbmB
+	ieMAoALrYHImY1/WxMDeeHSa3J/JxDpoYCfJUSSWzgS4dll+cm00Dy926fHweRcm+tM3nl6tCiM
+	BXZOKm2k+MnawQtaHubBFFL3VO1FPvLs=
+X-Google-Smtp-Source: AGHT+IHE61hHXgBHYY7mn+Rm9n8UNepBWRf5ECBwt+Kj2Dy/Or/52jRxs31VW64wRWx15L3XVNwb2g==
+X-Received: by 2002:a05:6402:524a:b0:602:1d01:286a with SMTP id 4fb4d7f45d1cf-614f1bdd941mr12122182a12.6.1753726671077;
+        Mon, 28 Jul 2025 11:17:51 -0700 (PDT)
+Received: from [192.168.8.100] ([185.69.144.164])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-615400cebf0sm1481690a12.61.2025.07.28.11.17.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Jul 2025 11:17:50 -0700 (PDT)
+Message-ID: <72861320-2b54-47da-993d-a82050cf56c2@gmail.com>
+Date: Mon, 28 Jul 2025 19:19:11 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250717164842.1848817-1-ameryhung@gmail.com> <20250717164842.1848817-4-ameryhung@gmail.com>
-In-Reply-To: <20250717164842.1848817-4-ameryhung@gmail.com>
-From: Emil Tsalapatis <linux-lists@etsalapatis.com>
-Date: Mon, 28 Jul 2025 13:59:56 -0400
-X-Gm-Features: Ac12FXyQuNO7tHXoWijJr4Od2sdtWGv39lNKiLZRs78lxqDqNW1mw0ex6fe6PrI
-Message-ID: <CABFh=a75g_EUwEq_3PA+K4O6CPR9HnCq28xU7XY=-VcBknB5DA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v6 3/3] selftests/bpf: Test concurrent task local
- data key creation
-To: Amery Hung <ameryhung@gmail.com>
-Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, alexei.starovoitov@gmail.com, 
-	andrii@kernel.org, daniel@iogearbox.net, tj@kernel.org, memxor@gmail.com, 
-	martin.lau@kernel.org, kernel-team@meta.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v9 3/8] page_pool: access ->pp_magic through
+ struct netmem_desc in page_pool_page_is_pp()
+To: Byungchul Park <byungchul@sk.com>
+Cc: Mina Almasry <almasrymina@google.com>,
+ David Hildenbrand <david@redhat.com>,
+ "willy@infradead.org" <willy@infradead.org>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-mm@kvack.org, kernel_team@skhynix.com,
+ kuba@kernel.org, ilias.apalodimas@linaro.org, harry.yoo@oracle.com,
+ hawk@kernel.org, akpm@linux-foundation.org, davem@davemloft.net,
+ john.fastabend@gmail.com, andrew+netdev@lunn.ch, toke@redhat.com,
+ tariqt@nvidia.com, edumazet@google.com, pabeni@redhat.com,
+ saeedm@nvidia.com, leon@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com, vbabka@suse.cz,
+ rppt@kernel.org, surenb@google.com, mhocko@suse.com, horms@kernel.org,
+ linux-rdma@vger.kernel.org, bpf@vger.kernel.org, vishal.moola@gmail.com,
+ hannes@cmpxchg.org, ziy@nvidia.com, jackmanb@google.com
+References: <20250710082807.27402-1-byungchul@sk.com>
+ <20250710082807.27402-4-byungchul@sk.com>
+ <CAHS8izMXkyGvYmf1u6r_kMY_QGSOoSCECkF0QJC4pdKx+DOq0A@mail.gmail.com>
+ <20250711011435.GC40145@system.software.com>
+ <582f41c0-2742-4400-9c81-0d46bf4e8314@gmail.com>
+ <20250717030858.GA26168@system.software.com>
+ <20250722012324.GA63367@system.software.com>
+Content-Language: en-US
+From: Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <20250722012324.GA63367@system.software.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Thu, Jul 17, 2025 at 12:49=E2=80=AFPM Amery Hung <ameryhung@gmail.com> w=
-rote:
->
-> Test thread-safety of tld_create_key(). Since tld_create_key() does
-> not rely on locks but memory barriers and atomic operations to protect
-> the shared metadata, the thread-safety of the function is non-trivial.
-> Make sure concurrent tld_key_create(), both valid and invalid, can not
-> race and corrupt metatada, which may leads to TLDs not being thread-
-> specific or duplicate TLDs with the same name.
->
-> Signed-off-by: Amery Hung <ameryhung@gmail.com>
+On 7/22/25 02:23, Byungchul Park wrote:
+> On Thu, Jul 17, 2025 at 12:08:58PM +0900, Byungchul Park wrote:
+>> On Sat, Jul 12, 2025 at 02:58:14PM +0100, Pavel Begunkov wrote:
+>>> On 7/11/25 02:14, Byungchul Park wrote:
+...>>> commit 8fc2347fb3ff4a3fc7929c70a5a21e1128935d4a
+>>> Author: Pavel Begunkov <asml.silence@gmail.com>
+>>> Date:   Sat Jul 12 14:29:52 2025 +0100
+>>>
+>>>      net/mm: use PGTY for tracking page pool pages
+>>>
+>>>      Currently, we use page->pp_magic to determine whether a page belongs to
+>>>      a page pool. It's not ideal as the field is aliased with other page
+>>>      types, and thus needs to to rely on elaborated rules to work. Add a new
+>>>      page type for page pool.
+>>
+>> Hi Pavel,
+>>
+>> I need this work to be done to remove ->pp_magic in struct page.  Will
+>> you let me work on this work?  Or can you please refine and post this
+> 
+> No response I got.  Thus, I started.  I hope you understand.
+Missed the first message and then got busy. Anyway, sure, go ahead.
 
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+-- 
+Pavel Begunkov
 
-> ---
->  .../bpf/prog_tests/test_task_local_data.c     | 105 ++++++++++++++++++
->  1 file changed, 105 insertions(+)
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/test_task_local_data.=
-c b/tools/testing/selftests/bpf/prog_tests/test_task_local_data.c
-> index fde4a030ab42..1d3ccb98b5db 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/test_task_local_data.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/test_task_local_data.c
-> @@ -185,8 +185,113 @@ static void test_task_local_data_basic(void)
->         test_task_local_data__destroy(skel);
->  }
->
-> +#define TEST_RACE_THREAD_NUM (TLD_MAX_DATA_CNT - 3)
-> +
-> +void *test_task_local_data_race_thread(void *arg)
-> +{
-> +       int err =3D 0, id =3D (intptr_t)arg;
-> +       char key_name[32];
-> +       tld_key_t key;
-> +
-> +       key =3D tld_create_key("value_not_exist", TLD_PAGE_SIZE + 1);
-> +       if (tld_key_err_or_zero(key) !=3D -E2BIG) {
-> +               err =3D 1;
-> +               goto out;
-> +       }
-> +
-> +       /* Only one thread will succeed in creating value1 */
-> +       key =3D tld_create_key("value1", sizeof(int));
-> +       if (!tld_key_is_err(key))
-> +               tld_keys[1] =3D key;
-> +
-> +       /* Only one thread will succeed in creating value2 */
-> +       key =3D tld_create_key("value2", sizeof(struct test_tld_struct));
-> +       if (!tld_key_is_err(key))
-> +               tld_keys[2] =3D key;
-> +
-> +       snprintf(key_name, 32, "thread_%d", id);
-> +       tld_keys[id] =3D tld_create_key(key_name, sizeof(int));
-> +       if (tld_key_is_err(tld_keys[id]))
-> +               err =3D 2;
-> +out:
-> +       return (void *)(intptr_t)err;
-> +}
-> +
-> +static void test_task_local_data_race(void)
-> +{
-> +       LIBBPF_OPTS(bpf_test_run_opts, opts);
-> +       pthread_t thread[TEST_RACE_THREAD_NUM];
-> +       struct test_task_local_data *skel;
-> +       int fd, i, j, err, *data;
-> +       void *ret =3D NULL;
-> +
-> +       skel =3D test_task_local_data__open_and_load();
-> +       if (!ASSERT_OK_PTR(skel, "skel_open_and_load"))
-> +               return;
-> +
-> +       tld_keys =3D calloc(TLD_MAX_DATA_CNT, sizeof(tld_key_t));
-> +       if (!ASSERT_OK_PTR(tld_keys, "calloc tld_keys"))
-> +               goto out;
-> +
-> +       fd =3D bpf_map__fd(skel->maps.tld_data_map);
-> +
-> +       ASSERT_FALSE(tld_key_is_err(value0_key), "TLD_DEFINE_KEY");
-> +       tld_keys[0] =3D value0_key;
-> +
-> +       for (j =3D 0; j < 100; j++) {
-> +               reset_tld();
-> +
-> +               for (i =3D 0; i < TEST_RACE_THREAD_NUM; i++) {
-> +                       /*
-> +                        * Try to make tld_create_key() race with each ot=
-her. Call
-> +                        * tld_create_key(), both valid and invalid, from=
- different threads.
-> +                        */
-> +                       err =3D pthread_create(&thread[i], NULL, test_tas=
-k_local_data_race_thread,
-> +                                            (void *)(intptr_t)(i + 3));
-> +                       if (CHECK_FAIL(err))
-> +                               break;
-> +               }
-> +
-> +               /* Wait for all tld_create_key() to return */
-> +               for (i =3D 0; i < TEST_RACE_THREAD_NUM; i++) {
-> +                       pthread_join(thread[i], &ret);
-> +                       if (CHECK_FAIL(ret))
-> +                               break;
-> +               }
-> +
-> +               /* Write a unique number to each TLD */
-> +               for (i =3D 0; i < TLD_MAX_DATA_CNT; i++) {
-> +                       data =3D tld_get_data(fd, tld_keys[i]);
-> +                       if (CHECK_FAIL(!data))
-> +                               break;
-> +                       *data =3D i;
-> +               }
-> +
-> +               /* Read TLDs and check the value to see if any address co=
-llides with another */
-> +               for (i =3D 0; i < TLD_MAX_DATA_CNT; i++) {
-> +                       data =3D tld_get_data(fd, tld_keys[i]);
-> +                       if (CHECK_FAIL(*data !=3D i))
-> +                               break;
-> +               }
-> +
-> +               /* Run task_main to make sure no invalid TLDs are added *=
-/
-> +               err =3D bpf_prog_test_run_opts(bpf_program__fd(skel->prog=
-s.task_main), &opts);
-> +               ASSERT_OK(err, "run task_main");
-> +               ASSERT_OK(opts.retval, "task_main retval");
-> +       }
-> +out:
-> +       if (tld_keys) {
-> +               free(tld_keys);
-> +               tld_keys =3D NULL;
-> +       }
-> +       tld_free();
-> +       test_task_local_data__destroy(skel);
-> +}
-> +
->  void test_task_local_data(void)
->  {
->         if (test__start_subtest("task_local_data_basic"))
->                 test_task_local_data_basic();
-> +       if (test__start_subtest("task_local_data_race"))
-> +               test_task_local_data_race();
->  }
-> --
-> 2.47.1
->
->
