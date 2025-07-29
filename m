@@ -1,115 +1,143 @@
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C69122538F;
-	Tue, 29 Jul 2025 09:21:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15A252877DA;
+	Tue, 29 Jul 2025 09:53:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753780875; cv=none; b=E5FDpugDvc2Xa3y0PYyCBTgWSpl7YutBTtbY7dWvsAoZSIFjA4VH9SVd+dNgyeBdEwzpBb5qdwSBrTaIqt9mz1DXn2HLrzrLsGhsYXi9WICmr5O5BrlCTyBOJXj6vOpbZgbScpmndaQD4w3uOZBw+pbD9bQ4EDFgzi3G09hZ5Kw=
+	t=1753782798; cv=none; b=UeNhvCl22Url+CaltKDJX55im+jTuqVcr2nmFxtUsGPk4YyBf7hOYvo/8sGAWaxy2J8teXFVL0C/7+cnTm+o9f73sXV9I9k0+ZjgwWZ3/RBxf4LNI3jLPZSDI191+r+XCAxQRGAAP1jyfJX9ydH+RAmTwTjnh8L4RIJQoJPu0HU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753780875; c=relaxed/simple;
-	bh=EpKjTlfw0kd8rON0v9QAxAUM6H8C5WKYIrqJkAcA4HY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FIG1qVberHboYdUkWtzczvua1WWPFMEDLPC+QmonuVQ4dDztOSxSlITPqOW+/UsyTnDsBDV6W/3izQ03aV2MtmiUTD1dr/0GG34QiCZ6zuIMzrU33742z7DXS6A2MqziSj6AEqbamnUOMk+GvU8IIB4CR18UN69iqJcGJmaroJM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RVLW2e54; arc=none smtp.client-ip=209.85.128.45
+	s=arc-20240116; t=1753782798; c=relaxed/simple;
+	bh=rlndRviMl0UcHdaxHRoggsqdCQNzmSzMZrAcRGb5hqQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bIftiBEKeCOebATaGrDz4g9CXzEyqphXQPf7uK4mQ8Qlm0bDz4q7qACQ3m8bHBA5KulZ49fvqnxpbo+Mlj8t82cmoHnnovXEEkU3SXfM9g+N/G0CLZR3LjChIUgKv26/ZspMPYqLt6dKz/ySt+qfvqeBSis+Au37id014w8QzxE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XQA/PbY2; arc=none smtp.client-ip=209.85.128.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RVLW2e54"
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-45618ddd62fso53230115e9.3;
-        Tue, 29 Jul 2025 02:21:13 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XQA/PbY2"
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4563a57f947so3062325e9.1;
+        Tue, 29 Jul 2025 02:53:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1753780872; x=1754385672; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2u4rjqAF5Zc7Kz0jelPex7W70gE8IrEqV1bRA0AwlWo=;
-        b=RVLW2e54oJ/MtM8SI6uUORf1TmYGgy/WiLmhvd6oDr9D9rPtbsLdWE4qbiaHEGpArW
-         t0OCYvYg1sviS30hOhV3/Np5rBIcJYOKSIzlpXsdyU4OEBIqClrw8MpjCil/+AGa77qV
-         THfZA8I4fO5BWhYO0nxTJxE9iNETlX/E0uRFZrKlUR2PmBG5SckrWKUN7hA1WG9OIS1O
-         NhqwUh5iDNBLS5ZLUXyCKt8d+zvF47ktFoMI+AB58dL+6GvTTcAmPqaOOFUbxR9BTFXI
-         Vu5scKnFJjDTE71jsf1BJsyzWvGkxGBFjSynifVLf6nV19rOWkqcesX/mhMbcwE4M/tH
-         Y3cg==
+        d=gmail.com; s=20230601; t=1753782795; x=1754387595; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=EE9S7KbhSao+VXArHjxBh/cgveFNCFgRdGsc9h/clf8=;
+        b=XQA/PbY2VY8gIcV2WDayvPks9ywOuz1T8MAcHHw1R8f9Za8LBmx2UhivrZljvar1Eq
+         v/nPbDAHkQeRILzF8Hj5anWqkOcF2hhiweYaR1f6bJT9TQhgzOTCCkdZAZJg4liGgTTb
+         6oQ2KEJzxNo5D4eE8NlqFGbsZ7aL/btKk+SNE+62ZGoBD/XKqWVr8ZC6dIxotT6VdNDd
+         71PwmdvIdI0tYxq0Zwek8G7wgW2nKVNgfpBTRLLrdWJgYZbLKhvwJNmIqHe9rOF4M1SI
+         oUliZFh/mU1Dq5smhHRAa9qBtlUMiq+Ug2VWPXCM3ODITZ4SGPWlgphF/pgyzU1vGOXD
+         /0mw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753780872; x=1754385672;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2u4rjqAF5Zc7Kz0jelPex7W70gE8IrEqV1bRA0AwlWo=;
-        b=ti/iLyKbD4ctQtpf3VqNy18f7YyZyX47xyhOgn2zy6xad9N47Ppxrw6Ow7oJcJbKEQ
-         SEDHrLzTHM6aEt1Tof6N/wTw0ohMo10wrZbY4oANm43YLVpYwkeOFNBTIWeHq4hRwRyl
-         epiGABWpMpmNtosI63zjHdprKW5sFYufptJe93LkZ040oBkTlN3fVNVyO0hXPHVFH/ln
-         Z90JDRtnrkE3QRMhppZOgfCordpiZTT9ZbmpGJHlvE0bI0SH5n94t4HeCD+FxE7XZz4r
-         u+4vNqRloZhpYSoG+CpQoZr/ZFrcwmGeZXCrLgzRr7ReHmgHSV3Q+UXqD1VE9tXXVEtL
-         lqFw==
-X-Forwarded-Encrypted: i=1; AJvYcCUmrQvGZV/QIHoYymb98JeRb03H4Me/Do0TOE0C6AJ2O5Qkvav+MdwWt04qJ4B+nVqhGjc0dmo5kbCevbsc@vger.kernel.org, AJvYcCUtnOXDZz61yt+zm7NZncpNUCXAqGB6q4QkiWKfUDhj+e31EGMmxvnE2GV/Oeewy85HVqPkFPTIiR+U6g==@vger.kernel.org, AJvYcCVp8xFG1Xph0KqrZl57CeZ2P7c3rxF+yOr2H+ObxZLXt5kXaz/D7Cnz+IK+EokADr1/IsLfiN6E@vger.kernel.org, AJvYcCVu3hKvcY3/wvIs77B0e/6lEDZz25fRXDSn3TSPS22xxyWJeuJsDzr3ySbH5TBzUaLQ94o=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw8hjTxESt/q/5nxJ8YlEDmnDATXEejeSY+dxEEC5Syjr1RCW4x
-	GsuQ37jks4BZLEzwy0JXn16QCAcGXTcfFdLZwVc3S+o6+/Q4oDg4TQZX
-X-Gm-Gg: ASbGnctBVjOAd0ji2xJs5HtWG5yO4102arSzW8SIUs8RB8a0FrCKicv6pis9lzHO410
-	rbxfIVbikKkW+X1wlkAIaPR2e5SBO5DhWxUmPP2s34HjYL//W1eY1yTJgcuJmFTQMWH3uZQmZJ7
-	rsuJJLj/Osl/1y+fyTLpfGrBNJ2CpawjGU/HkvkMxagI2PES495yylmu2R/ZcWw6jVv3uMTmIVU
-	eWQFzC1cCbivu8bp1d2grHXiKEoCZHGnW7o9Ned1+l/xQy6+OIPYz08qeMlPo7hvGgk5a79sHSc
-	40JNq48P2G2ug2BrsXZgoKYzDX/7pjxleW+V9AamqPikvM3UazhKhiDsSCb1VPy42PpBsAV13j2
-	lTooNX8z6rEokXI/e4k55y8d74qhTzpexKt8=
-X-Google-Smtp-Source: AGHT+IEMHicGGzOV7QARfXRDayyJkBXpLEq9lHyvKxQ609TVgvsTQ+QeaMTZZwxl6gjtb3oKoyYgXw==
-X-Received: by 2002:a05:600c:4513:b0:43c:ee3f:2c3 with SMTP id 5b1f17b1804b1-4587630a123mr108515205e9.7.1753780871722;
-        Tue, 29 Jul 2025 02:21:11 -0700 (PDT)
-Received: from ?IPV6:2620:10d:c096:325::26f? ([2620:10d:c092:600::1:72ea])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4588e5b7722sm17504375e9.3.2025.07.29.02.21.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Jul 2025 02:21:11 -0700 (PDT)
-Message-ID: <18eb9e6c-1d60-4db1-81e1-6bce22425afe@gmail.com>
-Date: Tue, 29 Jul 2025 10:22:30 +0100
+        d=1e100.net; s=20230601; t=1753782795; x=1754387595;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EE9S7KbhSao+VXArHjxBh/cgveFNCFgRdGsc9h/clf8=;
+        b=c5s9tRoRwWpOu/ZmtfASq0CzzdH3YTm1uS1PQQ6Dn5an5sXvIbcZOBlKxgf5YCUj9t
+         Me55NvAbeT69IJoxhMvW06mK5mkwTN7gt1ff9ulbnHP/uKVksV1e0Um/OVDzkWBnxq6x
+         gIS+Zc1nh4HMA4oO/N50+Ml2Di0/0NnsssTbN+0wxgMIRuCPGCFhS92x+2uj1Fn41PGR
+         iyOa0z8fLZAOGT+FIECK48wFz0V12VaKb10CPZNQds4HcAwVjUXPFxkI2q7gcmupaamx
+         EyQTojyGX16V+S9KVeGqDQ1d7F1pXp83oRTrmW7Lkv4kz7OgoLlNCWd1PZcmqlnWt9mI
+         FLzA==
+X-Forwarded-Encrypted: i=1; AJvYcCWBQH48nyJA9Xuy646/USy/OwOmNGkfWD26+QUBYxJF1wAg+FcyRKpaJTEoOMzsDlJWBOo=@vger.kernel.org, AJvYcCWvk62lNGvR7bMvlHK+z9X/ZLzGPhXDR8PXGF73KM6xcLpfIN2abTjFrSq/pJiqc+WklE1Ke7L2@vger.kernel.org, AJvYcCX5eLWccUqZZq6noRlyAGK/mgP8+V1ETi9ttbQ94yZuI7OEFGyhtt0rVgGvajv7q5oMpPp6ZcnT4mAzX9CpmUTC@vger.kernel.org
+X-Gm-Message-State: AOJu0YzqaGr1FsgFG0lhOTdTaE2FeozOrJSlzUle95UWQWwvNa+VmqfX
+	txp3rGMB6cB2rKe4vZJs+YAvx4G8iwyXewI756CcPJrD2q/o4ADB5qLe
+X-Gm-Gg: ASbGncuuR2tdZOZgzG1U2zEnY8idCpWagXfPXUm5EdklrQg1mM1lBT+XFgOUQUrWkJv
+	wLYjyfhYFtcqFd9k5TnNZBVs1+NbJw9QKOyOtU9yhDWax0e051bXdtseV1yjRzKyE9qBbICprLS
+	0ji6jWJW4zv3obg8US/xUWQkKjjAUxwCljhLyD2+C8nkXMZKToDIPDGXwrl89K9JYi8YZdq0Ta3
+	dL/0XtmjoGZe9hiMwyl80dCJXrkiGLnFyOxO7mH+wB8TCo1Z9BS3kRRDtU5Vof10RDmrwmvNB2w
+	Cap3+rQyacOEFvAAMzCJn3wT3Wkgey/fBZ1vDxZPeT03G8+qYnuMESc/Uqr+Pk2Yi66bo8v3gKc
+	mr3MZp6QFi6IYm6LuniSKW8Lt0flX6YnrY48aAys+hDBJBSz426LV914=
+X-Google-Smtp-Source: AGHT+IGZrlB2YEoAZYXWNimrkcTKG3bFP6Bf59CEiAeLziQfIZ6sdzcDPoKMp80H8l0VyK0C7TQmsQ==
+X-Received: by 2002:a05:6000:240b:b0:3a5:1388:9a55 with SMTP id ffacd0b85a97d-3b78e3d5ac2mr2135420f8f.5.1753782795107;
+        Tue, 29 Jul 2025 02:53:15 -0700 (PDT)
+Received: from gmail.com (deskosmtp.auranext.com. [195.134.167.217])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-458705bcb96sm196872745e9.21.2025.07.29.02.53.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Jul 2025 02:53:14 -0700 (PDT)
+Date: Tue, 29 Jul 2025 11:53:11 +0200
+From: Mahe Tardy <mahe.tardy@gmail.com>
+To: Martin KaFai Lau <martin.lau@linux.dev>
+Cc: alexei.starovoitov@gmail.com, andrii@kernel.org, ast@kernel.org,
+	bpf@vger.kernel.org, coreteam@netfilter.org, daniel@iogearbox.net,
+	fw@strlen.de, john.fastabend@gmail.com, netdev@vger.kernel.org,
+	netfilter-devel@vger.kernel.org, oe-kbuild-all@lists.linux.dev,
+	pablo@netfilter.org, lkp@intel.com
+Subject: Re: [PATCH bpf-next v3 0/4] bpf: add icmp_send_unreach kfunc
+Message-ID: <aIiaB2QUxKmhvPlx@gmail.com>
+References: <202507270940.kXGmRbg5-lkp@intel.com>
+ <20250728094345.46132-1-mahe.tardy@gmail.com>
+ <b36532a2-506b-4ba5-b6a3-a089386a190e@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] mm, page_pool: introduce a new page type for page pool
- in page type
-To: Byungchul Park <byungchul@sk.com>
-Cc: linux-mm@kvack.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- kernel_team@skhynix.com, harry.yoo@oracle.com, ast@kernel.org,
- daniel@iogearbox.net, davem@davemloft.net, kuba@kernel.org, hawk@kernel.org,
- john.fastabend@gmail.com, sdf@fomichev.me, saeedm@nvidia.com,
- leon@kernel.org, tariqt@nvidia.com, mbloch@nvidia.com,
- andrew+netdev@lunn.ch, edumazet@google.com, pabeni@redhat.com,
- akpm@linux-foundation.org, david@redhat.com, lorenzo.stoakes@oracle.com,
- Liam.Howlett@oracle.com, vbabka@suse.cz, rppt@kernel.org, surenb@google.com,
- mhocko@suse.com, horms@kernel.org, jackmanb@google.com, hannes@cmpxchg.org,
- ziy@nvidia.com, ilias.apalodimas@linaro.org, willy@infradead.org,
- brauner@kernel.org, kas@kernel.org, yuzhao@google.com,
- usamaarif642@gmail.com, baolin.wang@linux.alibaba.com,
- almasrymina@google.com, toke@redhat.com, bpf@vger.kernel.org,
- linux-rdma@vger.kernel.org
-References: <20250728052742.81294-1-byungchul@sk.com>
- <fc1ed731-33f8-4754-949f-2c7e3ed76c7b@gmail.com>
- <20250729011941.GA74655@system.software.com>
-Content-Language: en-US
-From: Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <20250729011941.GA74655@system.software.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b36532a2-506b-4ba5-b6a3-a089386a190e@linux.dev>
 
-On 7/29/25 02:19, Byungchul Park wrote:
-> On Mon, Jul 28, 2025 at 07:36:54PM +0100, Pavel Begunkov wrote:
->> On 7/28/25 06:27, Byungchul Park wrote:
->>> Changes from v1:
->>>        1. Rebase on linux-next.
->>
->> net-next is closed, looks like until August 11.
+On Mon, Jul 28, 2025 at 06:21:50PM -0700, Martin KaFai Lau wrote:
+> On 7/28/25 2:43 AM, Mahe Tardy wrote:
+> > Hello,
+> > 
+> > This is v3 of adding the icmp_send_unreach kfunc, as suggested during
+> > LSF/MM/BPF 2025[^1]. The goal is to allow cgroup_skb programs to
+> > actively reject east-west traffic, similarly to what is possible to do
+> > with netfilter reject target.
+> > 
+> > The first step to implement this is using ICMP control messages, with
+> > the ICMP_DEST_UNREACH type with various code ICMP_NET_UNREACH,
+> > ICMP_HOST_UNREACH, ICMP_PROT_UNREACH, etc. This is easier to implement
+> > than a TCP RST reply and will already hint the client TCP stack to abort
+> > the connection and not retry extensively.
+> > 
+> > Note that this is different than the sock_destroy kfunc, that along
+> > calls tcp_abort and thus sends a reset, destroying the underlying
+> > socket.
+> > 
+> > Caveats of this kfunc design are that a cgroup_skb program can call this
+> > function N times, thus send N ICMP unreach control messages and that the
+> > program can return from the BPF filter with SK_PASS leading to a
+> > potential confusing situation where the TCP connection was established
+> > while the client received ICMP_DEST_UNREACH messages.
+> > 
+> > Another more sophisticated design idea would be for the kfunc to set the
+> > kernel to send an ICMP_HOST_UNREACH control message with the appropriate
+> > code when the cgroup_skb program terminates with SK_DROP. Creating a new
+> > 'SK_REJECT' return code for cgroup_skb program was generally rejected
+> > and would be too limited for other program types support.
+> > 
+> > We should bear in mind that we want to add a TCP reset kfunc next and
+> > also could extend this kfunc to other program types if wanted.
 > 
-> Worth noting, this is based on linux-next, not net-next :-)
+> Some high level questions.
+> 
+> Which other program types do you need this kfunc to send icmp and the future
+> tcp rst?
 
-It doesn't matter, you're still sending it to be merged into
-the net tree. Please read
+I don't really know, I mostly need this in cgroup_skb for my use case
+but I could see other programs type using this either for simplification
+(for progs that can already rewrite the packet, like tc) or other
+programs types like cgroup_skb, because they can't touch the packet
+themselves.
 
-https://docs.kernel.org/process/maintainer-netdev.html
+> 
+> This cover letter mentioned sending icmp unreach is easier than sending tcp
+> rst. What problems do you see in sending tcp rst?
+> 
 
-Especially the "git-trees-and-patch-flow" section.
+Yes, I based these patches on what net/ipv4/netfilter/ipt_REJECT.c's
+'reject_tg' function does. In the case of sending ICMP unreach
+'nf_send_unreach', the routing step is quite straighforward as they are
+only inverting the daddr and the saddr (that's what my renamed/moved
+ip_route_reply_fetch_dst helper does).
 
--- 
-Pavel Begunkov
-
+In the case of sending RST 'nf_send_reset', there are extra steps, first
+the same routing mechanism is done by just inverting the daddr and the
+saddr but later 'ip_route_me_harder' is called which is doing a lot
+more. I'm currently not sure which parts of this must be ported to work
+in our BPF use case so I wanted to start with unreach.
