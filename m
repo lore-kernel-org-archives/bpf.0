@@ -1,30 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40A4E22539E;
-	Tue, 29 Jul 2025 10:28:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62C4E288C16;
+	Tue, 29 Jul 2025 10:28:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753784899; cv=none; b=fAPaOP7C48+xmLkxy6oyyLfbMFK2CJWJzKV7SxBEVpEzbg6IwO666BONltFxq96j2oq1Qj4H07hZLCgDMCpXGEcoD0gDWJoDGgGCNn4IgZdgKX86I0Z7CJaDQD708H+LwOZ1NOvFcDoiQy5effqfutoQweLwcInXF693lDyuLJo=
+	t=1753784909; cv=none; b=Zm3kZ0bIShMJ0PA5VOSPIdL5A1HHJX4hpDB6DamwFTkFkpSQCCp/LVu5tRFf/cmvWLOgqVoAk1o5j9kfa2W1XjAxvcUNR1athWvsRApdiciwckhomHS3ACb2chZztfNktYpbZJvbtVOQyAxHMWmBpf/aaPcdi9+7dqvGuPMf9Es=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753784899; c=relaxed/simple;
-	bh=OdjL2rd1addmR1OyPctySgVMlUNEtBw1AyeTREwXlmQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=op1hnF3yQyWGB344uCI8+WA6YjiVZRr8ARCOfkh8mFUpXWpWcQJQEIFgVvwL1/UzW5WlmIVd14gaPfTArsNdZzF01Kpwl5zXOPTMBn/r0XY21duKWirxi+9dajKSwb6+dJfKv9T9TAHxG+n+HGfZeGEr3gHUYo1ngcWXlZzb2k0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mV11jTfE; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1753784909; c=relaxed/simple;
+	bh=Sm7jV+tRKsytGK5LOleOia6QLTmymRlF5GUTJcd927I=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=otWeEcecTeeGcWtX9IxGoK+jzOu39HexKhUVrhH6fu99v0pryjokU2Kh/W1cQA2ePBT7cf0ytQ+ukpyoNO2WZeuHrTGMPauIYRuxXKjUSFd8aqDWg+1ojRGSCFuO1qKjas4tnvuwUOrK8j8X8XSPUuHfAJr7+6s1HSimAAldey0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Fa94HDat; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mV11jTfE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC27EC4CEF5;
-	Tue, 29 Jul 2025 10:28:15 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Fa94HDat"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B207C4CEEF;
+	Tue, 29 Jul 2025 10:28:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753784898;
-	bh=OdjL2rd1addmR1OyPctySgVMlUNEtBw1AyeTREwXlmQ=;
-	h=From:To:Cc:Subject:Date:From;
-	b=mV11jTfEzIy7cXmLJFY4fmn7U37r6DX9yP3lmPbtt5dwSA8KG2y8881YwOB9Ph2Yy
-	 VIUnsq5ImkMQynvHIL+M/tHcOdifQU+3r3vVSx+LLvxK09rlboMz57EWaRtXTL9JTb
-	 pcuU3wegX6QusUMJ+C2DHhigdbSxGlGAucMF6Lf7U84UYBDKqCXCNAnzEL3tiQvLLa
-	 C3Ipovo2vCe4hCQ3YVczf3Lq7eZCZme3EWVq+b4a42V/p4hEdCnTm+nFwbbiati9CO
-	 LM0tmHvSAf1ANu0mhOSLoCrNUJn2zy2UZZyI+Sp6Lq26SVD+mG8GU/+Ez0PIp5IJd4
-	 JWL2XmaqlEdHw==
+	s=k20201202; t=1753784909;
+	bh=Sm7jV+tRKsytGK5LOleOia6QLTmymRlF5GUTJcd927I=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=Fa94HDatVkSI/VlhVI0V22z6g6CxlV/NoPqz+yc+zjKjJUkB+9QSzWB1X4RMqR+6s
+	 Kc0V7nU/Nx4KMQirEt6DddN50VwYea+QdtZTQcYRJY0zya2q7v5M6F41xdT5ci2E33
+	 xaAbUYW8p/b6ucLEhs5YXr9CUn9woOz/6ta/GtW/Qz3MwKnAaBUeBxbeRNK5JM+pcT
+	 aRlY4mh7bvXmj3bAbFZwUxmVr8waN3MscHIRtxQJCfcGrV20eB+zjLCAk3GobxLkxF
+	 5d01W12qAJdZsNr6RRUa6XvJ4TO3iN2Zw5+3TVtiLMiW4vELhmAlZeaSX2zNelYDLN
+	 nS4YoTPAtwL0Q==
 From: Jiri Olsa <jolsa@kernel.org>
 To: Steven Rostedt <rostedt@kernel.org>,
 	Florent Revest <revest@google.com>,
@@ -37,10 +38,12 @@ Cc: bpf@vger.kernel.org,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Menglong Dong <menglong8.dong@gmail.com>
-Subject: [RFC 00/10] ftrace,bpf: Use single direct ops for bpf trampolines
-Date: Tue, 29 Jul 2025 12:28:03 +0200
-Message-ID: <20250729102813.1531457-1-jolsa@kernel.org>
+Subject: [RFC 01/10] ftrace: Make alloc_and_copy_ftrace_hash direct friendly
+Date: Tue, 29 Jul 2025 12:28:04 +0200
+Message-ID: <20250729102813.1531457-2-jolsa@kernel.org>
 X-Mailer: git-send-email 2.50.1
+In-Reply-To: <20250729102813.1531457-1-jolsa@kernel.org>
+References: <20250729102813.1531457-1-jolsa@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -49,41 +52,55 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-hi,
-while poking the multi-tracing interface I ended up with just one
-ftrace_ops object to attach all trampolines.
+Make alloc_and_copy_ftrace_hash to copy also direct address
+for each hash entry.
 
-This change allows to use less direct API calls during the attachment
-changes in the future code, so in effect speeding up the attachment.
-
-However having just single ftrace_ops object removes direct_call
-field from direct_call, which is needed by arm, so I'm not sure
-it's the right path forward.
-
-Mark, Florent,
-any idea how hard would it be to for arm to get rid of direct_call field?
-
-thougts? thanks,
-jirka
-
-
+Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
-Jiri Olsa (10):
-      ftrace: Make alloc_and_copy_ftrace_hash direct friendly
-      ftrace: Add register_ftrace_direct_hash function
-      ftrace: Add unregister_ftrace_direct_hash function
-      ftrace: Add modify_ftrace_direct_hash function
-      ftrace: Export some of hash related functions
-      ftrace: Use direct hash interface in direct functions
-      bpf: Add trampoline ip hash table
-      ftrace: Factor ftrace_ops ops_func interface
-      bpf: Remove ftrace_ops from bpf_trampoline object
-      Revert "ftrace: Store direct called addresses in their ops"
+ kernel/trace/ftrace.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
- include/linux/bpf.h           |   8 +-
- include/linux/ftrace.h        |  51 ++++++++++---
- kernel/bpf/trampoline.c       |  94 +++++++++++++-----------
- kernel/trace/ftrace.c         | 481 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-----------------------------------------------
- kernel/trace/trace.h          |   8 --
- kernel/trace/trace_selftest.c |   5 +-
- 6 files changed, 395 insertions(+), 252 deletions(-)
+diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+index 4203fad56b6c..5b8f565a1258 100644
+--- a/kernel/trace/ftrace.c
++++ b/kernel/trace/ftrace.c
+@@ -1190,7 +1190,7 @@ static void __add_hash_entry(struct ftrace_hash *hash,
+ }
+ 
+ static struct ftrace_func_entry *
+-add_hash_entry(struct ftrace_hash *hash, unsigned long ip)
++add_hash_entry_direct(struct ftrace_hash *hash, unsigned long ip, unsigned long direct)
+ {
+ 	struct ftrace_func_entry *entry;
+ 
+@@ -1199,11 +1199,18 @@ add_hash_entry(struct ftrace_hash *hash, unsigned long ip)
+ 		return NULL;
+ 
+ 	entry->ip = ip;
++	entry->direct = direct;
+ 	__add_hash_entry(hash, entry);
+ 
+ 	return entry;
+ }
+ 
++static struct ftrace_func_entry *
++add_hash_entry(struct ftrace_hash *hash, unsigned long ip)
++{
++	return add_hash_entry_direct(hash, ip, 0);
++}
++
+ static void
+ free_hash_entry(struct ftrace_hash *hash,
+ 		  struct ftrace_func_entry *entry)
+@@ -1376,7 +1383,7 @@ alloc_and_copy_ftrace_hash(int size_bits, struct ftrace_hash *hash)
+ 	size = 1 << hash->size_bits;
+ 	for (i = 0; i < size; i++) {
+ 		hlist_for_each_entry(entry, &hash->buckets[i], hlist) {
+-			if (add_hash_entry(new_hash, entry->ip) == NULL)
++			if (add_hash_entry_direct(new_hash, entry->ip, entry->direct) == NULL)
+ 				goto free_hash;
+ 		}
+ 	}
+-- 
+2.50.1
+
