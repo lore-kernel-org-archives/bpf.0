@@ -1,45 +1,48 @@
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 953EB2264B0
-	for <bpf@vger.kernel.org>; Wed, 30 Jul 2025 23:47:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A23A823A993
+	for <bpf@vger.kernel.org>; Wed, 30 Jul 2025 23:47:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753919264; cv=none; b=YKAxLvB3FQu7mRCp7/D5IrkDZZFQIFI0QnhqNhYhJzlUlavMyBccmwMgbuYRj1sgJvsEQiuVkBTR20ZaA8GS11Xqo+5BgsOwnAHXfh33Jkcl+kwUaRi1tCKmXKxg+N1oa6DNxRQkipn+Ad0NaWXSGTmUspAjBR8mxcev6QySCDg=
+	t=1753919265; cv=none; b=NgVafnYswQIv2Ig3HE3xLV5XXOAtc70d3ZFZiY1o2VL/kAyQaWBRYEprT/YpfTatZt6dDBfHqkSaXBT/XV0O6qU7V3AtBi+DzAhSiq4Nawp5hrEWJUi/BXgzOd2RoAS0iD1uppbESlnp1ZXdS3+T282g6VWUKkQ6iPOHaYhu5gQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753919264; c=relaxed/simple;
-	bh=MDrsAPi/6KYaY23TYNsTBKt/8NaTbyULeZdZgCep01U=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=WDkQhHmfZr+lgdgwpnDPa8QxZHRiH/7S+0jl/qJSOE3EqQKx9UsboQsYAO15OR5jUQaQiEZ4JmRYctfqmSRyPe4RBnfeluNtVu5Ow3jET1WJx4+6Iqe3E6/LOfnDpXUroU8ib7NmQqUhqVqfiPH/CeUyuq0demhWceBRNRSNHKU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=pT+PmoF8; arc=none smtp.client-ip=213.133.104.62
+	s=arc-20240116; t=1753919265; c=relaxed/simple;
+	bh=QkYo5w2FDAhqeGytZ3n57e5O1HJcdaXWxi4YhWWsSfQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=pa6i04v36ng9SAgDuEXoqB4ODzn2ZY2Sm1VvKQkUDXcGjN8T3G0mw9+6QOHruKOFadNJEQI+tTsb7WKwL0Dc5ra7VWJlEzH2qYTpGch3A5m1DBT0yGFmV3FnCOS3H7dCy1psbRfPBK9YpgY75itYlQi4dgBeDetdespZPKU6CpM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=MCS6Mgj8; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="pT+PmoF8"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="MCS6Mgj8"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
-	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:In-Reply-To:References;
-	bh=LlGBIfXbRqR8Orle/Qb0WRK8vIfzdoZNvBUL6/jJpMA=; b=pT+PmoF8xWorrUyUEbL271FGc1
-	AdGeoKabcY8m7ADPdNpOWKLZLcRMqxj9+XspN1aQHXR1yUtdy4lazY8ajVlQ93e0Is5zvf9I9Ssyh
-	9Mtt15s7WwuYWch5Yv/chrnyiJlfsXSwFuMxuE1fJlJsp1XieyItt0uIY1xt31la5ZO7g5pnXYnxe
-	UDT+0NM9IumRckRdXOiIdRf5xfud7+U6TymWZDOGmEnfoJ2DGonP8YNeYervz0YNg27XUrQoyAhfq
-	QH7k4G5DrJnMqZyYSNxTXnZ1rTPvDsLYXdQt36oLD9RbaSZFcJ1a2+PNoq2fpD0CmzMvNQhS+e/A1
-	/mjqg18Q==;
+	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
+	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=jJyCnqLxuYt2NpMzZxCc65Zf0RIZLZaobXIPZzcBBkg=; b=MCS6Mgj8StaJ7B5MkvGJNy9pSC
+	AeU0xpDtlAPditQrfRTCbzv+IRyKQlbxN8A/CMk5axm0XFldt/l8GxI+1awvJr0y73JkwSlpkBIn9
+	vd1NCbMkyE4R8tVBuooedBALc9QuTkI2yuYJ0eXKLn3IYcgBXdAVewxjEa/ruLQB5AjNSswevpn/q
+	d27MlHf1g9zJwepVOrnLOzWCG9UdlEkIZ6WKQmLx6bPdpnWY+csk057Xp8gi01UQKH4IL6RZCw65k
+	5YiHd9iEc7rtXgn4EfLzmYTv5bpsOHwWrOqemMR06clOaOyYijG2lzDu8xnxdB08mm56UHbeUux7U
+	dUgvWWVw==;
 Received: from localhost ([127.0.0.1])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1uhGWE-0008QI-08;
-	Thu, 31 Jul 2025 01:47:34 +0200
+	id 1uhGWF-0008QU-1t;
+	Thu, 31 Jul 2025 01:47:35 +0200
 From: Daniel Borkmann <daniel@iogearbox.net>
 To: ast@kernel.org
 Cc: andrii@kernel.org,
 	bpf@vger.kernel.org
-Subject: [PATCH bpf v2 1/4] bpf: Add cookie object to bpf maps
-Date: Thu, 31 Jul 2025 01:47:30 +0200
-Message-ID: <20250730234733.530041-1-daniel@iogearbox.net>
+Subject: [PATCH bpf v2 3/4] bpf: Move cgroup iterator helpers to bpf.h
+Date: Thu, 31 Jul 2025 01:47:32 +0200
+Message-ID: <20250730234733.530041-3-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20250730234733.530041-1-daniel@iogearbox.net>
+References: <20250730234733.530041-1-daniel@iogearbox.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -49,59 +52,83 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Virus-Scanned: Clear (ClamAV 1.0.7/27717/Wed Jul 30 18:34:37 2025)
 
-Add a cookie to BPF maps to uniquely identify BPF maps for the timespan
-when the node is up. This is different to comparing a pointer or BPF map
-id which could get rolled over and reused.
+Move them into bpf.h given we also need them in core code.
 
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 ---
- include/linux/bpf.h  | 1 +
- kernel/bpf/syscall.c | 6 ++++++
- 2 files changed, 7 insertions(+)
+ v1 -> v2:
+  - Fixed kbuild bot for !CONFIG_CGROUP_BPF. Removing the
+    defione for_each_cgroup_storage_type for this case I
+    left for a future series.
+  - Removed for_each_cgroup_storage_type_cond
 
+ include/linux/bpf-cgroup.h |  5 -----
+ include/linux/bpf.h        | 22 ++++++++++++++--------
+ 2 files changed, 14 insertions(+), 13 deletions(-)
+
+diff --git a/include/linux/bpf-cgroup.h b/include/linux/bpf-cgroup.h
+index 082ccd8ad96b..aedf573bdb42 100644
+--- a/include/linux/bpf-cgroup.h
++++ b/include/linux/bpf-cgroup.h
+@@ -77,9 +77,6 @@ to_cgroup_bpf_attach_type(enum bpf_attach_type attach_type)
+ extern struct static_key_false cgroup_bpf_enabled_key[MAX_CGROUP_BPF_ATTACH_TYPE];
+ #define cgroup_bpf_enabled(atype) static_branch_unlikely(&cgroup_bpf_enabled_key[atype])
+ 
+-#define for_each_cgroup_storage_type(stype) \
+-	for (stype = 0; stype < MAX_BPF_CGROUP_STORAGE_TYPE; stype++)
+-
+ struct bpf_cgroup_storage_map;
+ 
+ struct bpf_storage_buffer {
+@@ -510,8 +507,6 @@ static inline int bpf_percpu_cgroup_storage_update(struct bpf_map *map,
+ #define BPF_CGROUP_RUN_PROG_SETSOCKOPT(sock, level, optname, optval, optlen, \
+ 				       kernel_optval) ({ 0; })
+ 
+-#define for_each_cgroup_storage_type(stype) for (; false; )
+-
+ #endif /* CONFIG_CGROUP_BPF */
+ 
+ #endif /* _BPF_CGROUP_H */
 diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index f9cd2164ed23..308530c8326b 100644
+index a87646cc5398..02aa41e301a5 100644
 --- a/include/linux/bpf.h
 +++ b/include/linux/bpf.h
-@@ -310,6 +310,7 @@ struct bpf_map {
- 	bool free_after_rcu_gp;
- 	atomic64_t sleepable_refcnt;
- 	s64 __percpu *elem_count;
-+	u64 cookie; /* write-once */
+@@ -208,6 +208,20 @@ enum btf_field_type {
+ 	BPF_RES_SPIN_LOCK = (1 << 12),
  };
  
- static inline const char *btf_field_type_name(enum btf_field_type type)
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index e63039817af3..7a814e98d5f5 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -37,6 +37,7 @@
- #include <linux/trace_events.h>
- #include <linux/tracepoint.h>
- #include <linux/overflow.h>
-+#include <linux/cookie.h>
- 
- #include <net/netfilter/nf_bpf_link.h>
- #include <net/netkit.h>
-@@ -53,6 +54,7 @@
- #define BPF_OBJ_FLAG_MASK   (BPF_F_RDONLY | BPF_F_WRONLY)
- 
- DEFINE_PER_CPU(int, bpf_prog_active);
-+DEFINE_COOKIE(bpf_map_cookie);
- static DEFINE_IDR(prog_idr);
- static DEFINE_SPINLOCK(prog_idr_lock);
- static DEFINE_IDR(map_idr);
-@@ -1487,6 +1489,10 @@ static int map_create(union bpf_attr *attr, bool kernel)
- 	if (err < 0)
- 		goto free_map;
- 
-+	preempt_disable();
-+	map->cookie = gen_cookie_next(&bpf_map_cookie);
-+	preempt_enable();
++enum bpf_cgroup_storage_type {
++	BPF_CGROUP_STORAGE_SHARED,
++	BPF_CGROUP_STORAGE_PERCPU,
++	__BPF_CGROUP_STORAGE_MAX
++#define MAX_BPF_CGROUP_STORAGE_TYPE __BPF_CGROUP_STORAGE_MAX
++};
 +
- 	atomic64_set(&map->refcnt, 1);
- 	atomic64_set(&map->usercnt, 1);
- 	mutex_init(&map->freeze_mutex);
++#ifdef CONFIG_CGROUP_BPF
++# define for_each_cgroup_storage_type(stype) \
++	for (stype = 0; stype < MAX_BPF_CGROUP_STORAGE_TYPE; stype++)
++#else
++# define for_each_cgroup_storage_type(stype) for (; false; )
++#endif /* CONFIG_CGROUP_BPF */
++
+ typedef void (*btf_dtor_kfunc_t)(void *);
+ 
+ struct btf_field_kptr {
+@@ -1085,14 +1099,6 @@ struct bpf_prog_offload {
+ 	u32			jited_len;
+ };
+ 
+-enum bpf_cgroup_storage_type {
+-	BPF_CGROUP_STORAGE_SHARED,
+-	BPF_CGROUP_STORAGE_PERCPU,
+-	__BPF_CGROUP_STORAGE_MAX
+-};
+-
+-#define MAX_BPF_CGROUP_STORAGE_TYPE __BPF_CGROUP_STORAGE_MAX
+-
+ /* The longest tracepoint has 12 args.
+  * See include/trace/bpf_probe.h
+  */
 -- 
 2.43.0
 
