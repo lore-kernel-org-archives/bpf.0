@@ -1,204 +1,153 @@
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B1D021D3F8;
-	Thu, 31 Jul 2025 20:40:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 044E0A921;
+	Thu, 31 Jul 2025 21:09:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753994413; cv=none; b=o0aYk4Nv8D2eM2ODZ9YgLOuijyLb/ba4GUup76IdqiZhZmpXPeFuSJ2okLenmeP49NXf57AQ6DFVwt/JfAWDcm4N7NBYuXpnsWOqmJzH2eGtAcSaPThjI3tzC94TYfYR34P9ARqhXCevwJxgllsorSlGyaMWsyL4ziwPbO0ygRs=
+	t=1753996194; cv=none; b=FxSECdXKnC/u0hMjQqUIXdzSVyHeQkTeKJtShj4AWPu1q8sfPgrbqm8TT14umESdpDIpGDWV4eSxBYFhPQohrbg1HOKR8OfwtlXZOuLUWWQt/DP9q8KknDz5ulIWEFLqu/tKT0Hrkd/O7ceuJcNVSr4ZN99FsNvKZhNmVQ3Sw3k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753994413; c=relaxed/simple;
-	bh=inVa1LGB4oH7vDHQdafLXK3uqBgxi40KPmhmoCIdyGk=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=m7NU9MtwPOH9eAhmsqKfchq+e6mj05D/FrfWZSFPC2JzLJ8sgZW9uIwB8YhM5XfPkVrc4FHH3AFI0RDuLy3VzeZ2dBPHLNhKF/MphkaFhtJ40cq3KVTGBauE3/ZX0WOgZ+LSSJQ4PNm5yksX7ezhN/lP5WXH3fwHfb//Ccm4aBE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PssxvYfD; arc=none smtp.client-ip=209.85.218.43
+	s=arc-20240116; t=1753996194; c=relaxed/simple;
+	bh=goGHIwXQjm39lClSVOguqWuCOjqXk95voq5ncmSIXY0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=ZFNDSQPOAri/A1sPERv+/aNCu/QpOizjrFUKnHVA+r2pkf8n65L/FR1xUwydyVUoEPF2LvVfOOFmANDpM/C048emV7ae+1YYftVojvjfjggLRm6gbyN4U86af89WWdF3ol1uA9ZkUSoGSATUfyuKvvrmUl1Z7XQBYDzFSEWewYQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Cmi/PP2d; arc=none smtp.client-ip=209.85.210.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PssxvYfD"
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-af66d49daffso33435166b.1;
-        Thu, 31 Jul 2025 13:40:11 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Cmi/PP2d"
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-73c17c770a7so302440b3a.2;
+        Thu, 31 Jul 2025 14:09:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1753994410; x=1754599210; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=/AAkvvpbQOhTuAwe9EJHG3ghOkBXusQx1F2hWyP1fLc=;
-        b=PssxvYfDdq9l2hRGv9uXkVK/TAfyK+6YPFOKy7GbGpyHsyOH44okqEIsGfxDUQM9Bu
-         vVW3n1KXlLu9NWHioDNm2N6yOxrQDCXwoGkmSsHeRzsw55O7luf4gEzM04cpvaCo4zSB
-         A/K3pg2jk3GzBXXQXizTe3tIYzLEJDOIg+XSu8amSV7MCzrfX+b9UN9G+aykK1lTDveg
-         ap/d80qFOyzlEAPgPHnEsrWOt4vHm2KrOb57nAeDUjRp1Bi9gKNeKyMrpcDTSvL15Ers
-         cK3pIN9yDWqdeEc1P2ibpJYTZ7OmhqDku3RhUqk1OL86gOKt0vlfv83u5xxFQCKLf+Po
-         wpnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753994410; x=1754599210;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1753996192; x=1754600992; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/AAkvvpbQOhTuAwe9EJHG3ghOkBXusQx1F2hWyP1fLc=;
-        b=NUzgyHDFqZ+itxQHtvDi6h0Bi8sPFL7ViackubyReOYvpe2w1nq/7roy6rVPhvOFOA
-         2vGVRoJbNVhcdRlN4RGs4DTIAZJViTlIDd/cN4mDUgrpzYrmnA/ahtdS4HFvnOXKTqPk
-         U/f/D4j0LMUKk/zpy0vltFNXxKOgIxz+Z8/NmGn8N2ktpbAJCn35p33SbBSQ/8Q/0Syl
-         8wHlcr0KlPnt8xoEqVtZebAhRvOWw+iFaXfikAo61UniYjBdYhAOAQZJmBq10XvC7SaT
-         UrOXYJqim1MlYJkOh5WAdnIT+3MQe3jetG/ee0qfOeATvLONt109Ves8V/nHdbD0sAmF
-         tSUQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVBcyTPMT3eseb4UXFcTkSASzCQgd8B2to4hE0IUls8rspJKXEreiHNJD83g4ypwa1EhfM=@vger.kernel.org, AJvYcCVcp5xyn5TpcjKlXj2MdlRchIk1QE8ctx22HeIaln31VHiMrZ2ebvndrBCxwIEIYpNzKjYB0WocPWwXN9vwkhsaHnux@vger.kernel.org, AJvYcCXHUL6pYaSZjPx30ZY+afcILjxC4Q1SQSeMu0dKlMVQGkXW0v0wxyY3h0ftzKtkjnM+EsImojgIYXc3nhAy@vger.kernel.org
-X-Gm-Message-State: AOJu0YwxP8iP9XMsMrptuha4FbL5Fs5fyMAHsp1gvNHC4L1r/2raNkjW
-	qmkUnnBV1PSjKpa5Fn2Rulf7kiGtTZoDvYF2Bt2+araWCePmQoj7Q++u
-X-Gm-Gg: ASbGncuOOvkoSZ394w/JbWs5txQlf088QWefgS+uLu5ftzYi2JRnkBZDi1c3v24UuB2
-	VPgwWWWi66Q6biNyBugvAw6xricXejuLT5Q8O2EM0tZ+82pTCm1UP5fmrqLJ6WbbereGZPjRvEv
-	0nFNtKcyFt8F0SUzumPtpsqBMfMgxt5qfyxqqWQ+T96EQIyOyFK2W7F3x1W9hO+DDVApOkRIrHG
-	E8a+4mm0wTrIOhwzgMqRsNZm6TiLttZyohwLX2gS5GTUYWHhFxErccfOjw2nCAI+ZoWfc7uq2ev
-	j4sGt6RdEnoojiQiJxy8kiWeX21pR/+4kzEFoD+YagJVQiw5T6UavmBdIMjrB1A69k7FTee3IcC
-	2yEiywR01fA==
-X-Google-Smtp-Source: AGHT+IH35GZfVfrFy+4u5JJvJfBMXKVCGrjrhAiwGxS9sqsd6tRiJOQQ6uPYqZ73ZuJ5boDADFvL5w==
-X-Received: by 2002:a17:907:3cca:b0:aec:f8bb:abeb with SMTP id a640c23a62f3a-af8fd9a5c45mr987006766b.42.1753994409970;
-        Thu, 31 Jul 2025 13:40:09 -0700 (PDT)
-Received: from krava ([176.74.159.170])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-af91a1e8359sm166233666b.89.2025.07.31.13.40.08
+        bh=QBN+keDzAc8UM8NN7QgsoVq8Hc93jRiQDLCV28ad4h4=;
+        b=Cmi/PP2dwzzOnLaPtfKEV7WEQ092UycWyU8oABN0ysuuje7FnYH7Z+1KGYMtioz3Cw
+         c7q+4qJZY7TSNUFd5KKHKjG4JhnFhehPYA09lbjlerhvxkTos72amyUseguz7cTq+3Gv
+         BGziSPxo6HzcR14GNagXDTaCrdESSpBVke+yHcOMp0hhQulhmkIU9pMAnU24+gcGlf1k
+         FYqU/QaNFQYP2fep3q00nIHtYFUNDvfeSORAhYbof+yZYSRhpZLCiETtmGFGzQCSV4od
+         DnUtlrH+py3ZtlnSwhB1sVmTDZIKyPxtGnLTXB7fi05CDKLAlDLikjkVaE/0MMpsXr6Z
+         5Zew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753996192; x=1754600992;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QBN+keDzAc8UM8NN7QgsoVq8Hc93jRiQDLCV28ad4h4=;
+        b=whCLlkalJvbG6gNAJ//rM9Fth+mVX3xvKvRNJzlrV9yNbjv+54g7P16kCC0ETHlkvt
+         hCnWowxJlG4gftRz5QgXK9acTUlxxj0Siw+eoXilRwca1stt7UhJRSxQ6qVYvIJ4cfit
+         AK1q4rUCGGA3AEjX/Lh/uXpK6c7n27v8iAjyRK8ddrObPmyXq7OYsPhLThgIzyE8AxrN
+         D2H/ff7hycWHmGaM9KmNakWlI2vrTIN9QoJFz3VZRlr2KLFiy0Q+XStTvcd0dGBE3oah
+         FKUIjE6QMx9aLVJhg2LmaoanJD+QNW2stgY5i3EbBxMVh3x1XSfOf2qhtE1Gds5Rkvy6
+         RZBg==
+X-Gm-Message-State: AOJu0Yw0Gfzaax6tP1ajTVBWRfAZphkGPez5OFVxcuEFGLyt7CIZiDyC
+	TPZCl8aLyzxVrF7cGBdAjwRrgXhL0qoC3SVWJqkUr0FRS9HPKNkjSLB97xnC8Q==
+X-Gm-Gg: ASbGncu25m5NNiL4xfLvP7hlmMwnWvZOuCvsqfidY1iLjfyaj7rAJH02iAwHLxoinJQ
+	VzxhbsBNMfL7q+HrIgMbn2aPTA5O/ZqBZJS0DPT1jywMf7MmDvPhoyYD1aYglA0Q0mYKQdOp9Hs
+	WxN0BnDGNk7RPUNBJZogFcBTPwVFbXIV4Jt1LOKqNq3rVDdwxt5CVtrGe6BgtucXe4ob3w5/tzm
+	7NDS/+MFruOSanifq0kiZ0NhfwRe/4Fo5WZSeyP3FaLY68kesonniOVGWRS7aseESJXZInbEg3b
+	uvxNFSpgVeY5YOryAgjRVFXuGqH+x+iLUVfZVihGz/Vgg6Eju7HcGck4cmd0bP+SB+WWB+bj5M6
+	mIZv9w2tunXPKlg==
+X-Google-Smtp-Source: AGHT+IH9F2syxC4mBH45kGTSzw7yMBlMLuoMHoQzMAxqqjwHhNTZkSHcy+Fz41VvSYbDr7TJ8Z692g==
+X-Received: by 2002:a05:6a00:3a1e:b0:730:95a6:3761 with SMTP id d2e1a72fcca58-76ab092f862mr14827577b3a.3.1753996192112;
+        Thu, 31 Jul 2025 14:09:52 -0700 (PDT)
+Received: from localhost ([2a03:2880:ff:41::])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-76bccfbf07fsm2439371b3a.86.2025.07.31.14.09.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Jul 2025 13:40:09 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Thu, 31 Jul 2025 22:40:07 +0200
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: Jiri Olsa <olsajiri@gmail.com>, Mark Rutland <mark.rutland@arm.com>,
-	Steven Rostedt <rostedt@kernel.org>,
-	Florent Revest <revest@google.com>, bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Menglong Dong <menglong8.dong@gmail.com>,
-	Naveen N Rao <naveen@kernel.org>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
-	Andy Chiu <andybnac@gmail.com>,
-	Alexandre Ghiti <alexghiti@rivosinc.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>
-Subject: Re: [RFC 00/10] ftrace,bpf: Use single direct ops for bpf trampolines
-Message-ID: <aIvUp_88v84Uw-lQ@krava>
-References: <20250729102813.1531457-1-jolsa@kernel.org>
- <aIkLlB7Z7V--BeGi@J2N7QTR9R3.cambridge.arm.com>
- <aIn_12KHz7ikF2t1@krava>
- <20250730095641.660800b1@gandalf.local.home>
+        Thu, 31 Jul 2025 14:09:51 -0700 (PDT)
+From: Amery Hung <ameryhung@gmail.com>
+To: bpf@vger.kernel.org
+Cc: netdev@vger.kernel.org,
+	alexei.starovoitov@gmail.com,
+	andrii@kernel.org,
+	daniel@iogearbox.net,
+	tj@kernel.org,
+	memxor@gmail.com,
+	martin.lau@kernel.org,
+	ameryhung@gmail.com,
+	kernel-team@meta.com
+Subject: [PATCH bpf-next v1 1/3] bpf: Allow getting bpf_map from struct_ops kdata
+Date: Thu, 31 Jul 2025 14:09:48 -0700
+Message-ID: <20250731210950.3927649-2-ameryhung@gmail.com>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20250731210950.3927649-1-ameryhung@gmail.com>
+References: <20250731210950.3927649-1-ameryhung@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250730095641.660800b1@gandalf.local.home>
+Content-Transfer-Encoding: 8bit
 
-On Wed, Jul 30, 2025 at 09:56:41AM -0400, Steven Rostedt wrote:
-> On Wed, 30 Jul 2025 13:19:51 +0200
-> Jiri Olsa <olsajiri@gmail.com> wrote:
-> 
-> > so it's all work on PoC stage, the idea is to be able to attach many
-> > (like 20,30,40k) functions to their trampolines quickly, which at the
-> > moment is slow because all the involved interfaces work with just single
-> > function/tracempoline relation
-> 
-> Sounds like you are reinventing the ftrace mechanism itself. Which I warned
-> against when I first introduced direct trampolines, which were purposely
-> designed to do a few functions, not thousands. But, oh well.
-> 
-> 
-> > Steven, please correct me if/when I'm wrong ;-)
-> > 
-> > IIUC in x86_64, IF there's just single ftrace_ops defined for the function,
-> > it will bypass ftrace trampoline and call directly the direct trampoline
-> > for the function, like:
-> > 
-> >    <foo>:
-> >      call direct_trampoline
-> >      ...
-> 
-> Yes.
-> 
-> And it will also do the same for normal ftrace functions. If you have:
-> 
-> struct ftrace_ops {
-> 	.func = myfunc;
-> };
-> 
-> It will create a trampoline that has:
-> 
->       <tramp>
-> 	...
-> 	call myfunc
-> 	...
-> 	ret
-> 
-> On x86, I believe the ftrace_ops for myfunc is added to the trampoline,
-> where as in arm, it's part of the function header. To modify it, it
-> requires converting to the list operation (which ignores the ops
-> parameter), then the ops at the function gets changed before it goes to the
-> new function.
-> 
-> And if it is the only ops attached to a function foo, the function foo
-> would have:
-> 
->       <foo>
-> 	call tramp
-> 	...
-> 
-> But what's nice about this is that if you have 12 different ftrace_ops that
-> each attach to a 1000 different functions, but no two ftrace_ops attach to
-> the same function, they all do the above. No hash needed!
-> 
-> > 
-> > IF there are other ftrace_ops 'users' on the same function, we execute
-> > each of them like:
-> > 
-> >   <foo>:
-> >     call ftrace_trampoline
-> >       call ftrace_ops_1->func
-> >       call ftrace_ops_2->func
-> >       ...
-> > 
-> > with our direct ftrace_ops->func currently using ftrace_ops->direct_call
-> > to return direct trampoline for the function:
-> > 
-> > 	-static void call_direct_funcs(unsigned long ip, unsigned long pip,
-> > 	-                             struct ftrace_ops *ops, struct ftrace_regs *fregs)
-> > 	-{
-> > 	-       unsigned long addr = READ_ONCE(ops->direct_call);
-> > 	-
-> > 	-       if (!addr)
-> > 	-               return;
-> > 	-
-> > 	-       arch_ftrace_set_direct_caller(fregs, addr);
-> > 	-}
-> > 
-> > in the new changes it will do hash lookup (based on ip) for the direct
-> > trampoline we want to execute:
-> > 
-> > 	+static void call_direct_funcs_hash(unsigned long ip, unsigned long pip,
-> > 	+                                  struct ftrace_ops *ops, struct ftrace_regs *fregs)
-> > 	+{
-> > 	+       unsigned long addr;
-> > 	+
-> > 	+       addr = ftrace_find_rec_direct(ip);
-> > 	+       if (!addr)
-> > 	+               return;
-> > 	+
-> > 	+       arch_ftrace_set_direct_caller(fregs, addr);
-> > 	+}
-> 
-> I think the above will work.
-> 
-> > 
-> > still this is the slow path for the case where multiple ftrace_ops objects use
-> > same function.. for the fast path we have the direct attachment as described above
-> > 
-> > sorry I probably forgot/missed discussion on this, but doing the fast path like in
-> > x86_64 is not an option in arm, right?
-> 
-> That's a question for Mark, right?
+To allow struct_ops implementors to access the bpf_map during reg() and
+unreg(), return bpf_map from bpf_struct_ops_get() instead and let
+callers check the error. Additionally, expose bpf_struct_ops_get() and
+bpf_struct_ops_put() so that kernel modules can use them.
 
-yes, thanks for the other details
+Signed-off-by: Amery Hung <ameryhung@gmail.com>
+---
+ include/linux/bpf.h         | 4 ++--
+ kernel/bpf/bpf_struct_ops.c | 7 ++++---
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-jirka
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index f9cd2164ed23..5bc08a77df7c 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1948,7 +1948,7 @@ struct bpf_struct_ops_common_value {
+ 		__register_bpf_struct_ops(st_ops);			\
+ 	})
+ #define BPF_MODULE_OWNER ((void *)((0xeB9FUL << 2) + POISON_POINTER_DELTA))
+-bool bpf_struct_ops_get(const void *kdata);
++struct bpf_map *bpf_struct_ops_get(const void *kdata);
+ void bpf_struct_ops_put(const void *kdata);
+ int bpf_struct_ops_supported(const struct bpf_struct_ops *st_ops, u32 moff);
+ int bpf_struct_ops_map_sys_lookup_elem(struct bpf_map *map, void *key,
+@@ -1963,7 +1963,7 @@ void bpf_struct_ops_image_free(void *image);
+ static inline bool bpf_try_module_get(const void *data, struct module *owner)
+ {
+ 	if (owner == BPF_MODULE_OWNER)
+-		return bpf_struct_ops_get(data);
++		return !IS_ERR(bpf_struct_ops_get(data));
+ 	else
+ 		return try_module_get(owner);
+ }
+diff --git a/kernel/bpf/bpf_struct_ops.c b/kernel/bpf/bpf_struct_ops.c
+index 687a3e9c76f5..7b9bb6a211f0 100644
+--- a/kernel/bpf/bpf_struct_ops.c
++++ b/kernel/bpf/bpf_struct_ops.c
+@@ -1150,7 +1150,7 @@ const struct bpf_map_ops bpf_struct_ops_map_ops = {
+ /* "const void *" because some subsystem is
+  * passing a const (e.g. const struct tcp_congestion_ops *)
+  */
+-bool bpf_struct_ops_get(const void *kdata)
++struct bpf_map *bpf_struct_ops_get(const void *kdata)
+ {
+ 	struct bpf_struct_ops_value *kvalue;
+ 	struct bpf_struct_ops_map *st_map;
+@@ -1159,9 +1159,9 @@ bool bpf_struct_ops_get(const void *kdata)
+ 	kvalue = container_of(kdata, struct bpf_struct_ops_value, data);
+ 	st_map = container_of(kvalue, struct bpf_struct_ops_map, kvalue);
+ 
+-	map = __bpf_map_inc_not_zero(&st_map->map, false);
+-	return !IS_ERR(map);
++	return __bpf_map_inc_not_zero(&st_map->map, false);
+ }
++EXPORT_SYMBOL_GPL(bpf_struct_ops_get);
+ 
+ void bpf_struct_ops_put(const void *kdata)
+ {
+@@ -1173,6 +1173,7 @@ void bpf_struct_ops_put(const void *kdata)
+ 
+ 	bpf_map_put(&st_map->map);
+ }
++EXPORT_SYMBOL_GPL(bpf_struct_ops_put);
+ 
+ static bool bpf_struct_ops_valid_to_reg(struct bpf_map *map)
+ {
+-- 
+2.47.3
+
