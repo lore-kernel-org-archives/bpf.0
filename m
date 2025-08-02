@@ -1,114 +1,114 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.4])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 242961991DD;
-	Sat,  2 Aug 2025 08:48:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.4
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C239E1E98E6
+	for <bpf@vger.kernel.org>; Sat,  2 Aug 2025 10:35:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754124529; cv=none; b=ooTILDAEuLRkPcGXZm/Y7R+XR9sExcgWyo3QVRKgsL5FYLaiZsJQW7YRSLn55hgVczbM1C+2KCBuB5K1BXxB23JuL+UhCW7WvJVxm8GxSyWzI550n+9hDxjBRVGmYoCELTSYX24qkU52cm6m1KlPuTbXqjDWXyBxetY3MCxzfvg=
+	t=1754130953; cv=none; b=qOCjs6elLufHmqyVNvTZEnh/InDo9GWXYHTxU6siooBua7q/p0qpYkR+JMI8RBDy5cc6T6X//DOKzMd8qwuH6QWRP2w08fUy8Wff7mnEYySgpu8BezfVqH3oZonx4da476ovmc+aJv90upIvpVoonbi1sAVcpeTGNKr4xbbrtx8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754124529; c=relaxed/simple;
-	bh=fREpQNUrtavxU8QayzqBdgeY5FpPd0Bho3ELIraYThQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=My0sDDTuWKYXT20V/jozyk4Z4AgVTo5rFPDpKYd7ZSRp+/cgcCn78TKkFB/JwB0xchhIoLPQvuvajN+ACLGxTEUolH1Wm9semglbjztzs1z4tD9t5jtERGIxojdEduZQfP7Eo5/EjmXFYHiJCKpYmvJEwsD0kIbLh+s0HQsV+CE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=LtSECY5+; arc=none smtp.client-ip=220.197.31.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1754130953; c=relaxed/simple;
+	bh=1Uj13WzecZIDJ4INt1Rw447b+I7X9TTWD1JGhKjVzXA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=n0zwX5ACHJzQoSri4uqEjlYgozZBOdowCU/NYq+ZhP+n3fjJPPVp7hpyBKihjG28yuvqJFNU9s8gS7hwoitGujGX/9hD2GXByR5scVatz8oq5iF68fHq9Vv8KorH1piDhoTEHmjpZu98KMbODxct/sFAl1c+YHN8A/y5l2VGCPo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ErExNi2l; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="LtSECY5+"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=zN
-	AXx6WfWyovDgYFNAy9sMXGfSUDt+d5QpqplK6q7dk=; b=LtSECY5+NurLN2YZ0X
-	ZcCNdigPQQ/TuxkwmMUFgKbenZbiIXjGVZy30P7zrj1gu92Twki9ocftJPevLro2
-	zb1IIwhWxWbyilx6XbkSfBE8+1fRYtI9tT0ppemuHm+1IUJqrKC1lAVnkAwLNrmr
-	NKEgamP62ONWy904XsX2sG/k0=
-Received: from phoenix.. (unknown [])
-	by gzga-smtp-mtada-g0-4 (Coremail) with SMTP id _____wDX0bXE0I1oWsxLJQ--.56694S2;
-	Sat, 02 Aug 2025 16:48:06 +0800 (CST)
-From: Jiawei Zhao <phoenix500526@163.com>
-To: ast@kernel.org
-Cc: daniel@iogearbox.net,
-	andrii@kernel.org,
-	yonghong.song@linux.dev,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v6 0/2] libbpf: fix USDT SIB argument handling causing unrecognized register error
-Date: Sat,  2 Aug 2025 08:48:01 +0000
-Message-ID: <20250802084803.108777-1-phoenix500526@163.com>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ErExNi2l"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1754130950;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ZDacmucnw23kEnOX8217Q3tfUEPnn76onGyj7DcVKiI=;
+	b=ErExNi2lsT4s0d0+SFisyplFkGQe7PSdsnT3yakJo8qw7uER+E+O5/bUeHwIbqQ/7oPRLY
+	/F9DnEMIUcgCpPIun+kJja5SeR7kK51eL+U1GA870GaZix+SAPMrSjBQzau3chs7HanJSC
+	ng6VkxjW03CVL2Zo+WaeGLQ3pjRQ7x4=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-189-QpngofaIPa6G3Qs7PgEIZA-1; Sat,
+ 02 Aug 2025 06:35:46 -0400
+X-MC-Unique: QpngofaIPa6G3Qs7PgEIZA-1
+X-Mimecast-MFC-AGG-ID: QpngofaIPa6G3Qs7PgEIZA_1754130944
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 643FB180045B;
+	Sat,  2 Aug 2025 10:35:43 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.224.25])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id 38D8719373D9;
+	Sat,  2 Aug 2025 10:35:37 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+	oleg@redhat.com; Sat,  2 Aug 2025 12:34:33 +0200 (CEST)
+Date: Sat, 2 Aug 2025 12:34:27 +0200
+From: Oleg Nesterov <oleg@redhat.com>
+To: Jiri Olsa <jolsa@kernel.org>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+	x86@kernel.org, Song Liu <songliubraving@fb.com>,
+	Yonghong Song <yhs@fb.com>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Hao Luo <haoluo@google.com>, Steven Rostedt <rostedt@goodmis.org>,
+	Ingo Molnar <mingo@kernel.org>
+Subject: Re: [RFC 1/4] uprobe: Do not emulate/sstep original instruction when
+ ip is changed
+Message-ID: <20250802103426.GC31711@redhat.com>
+References: <20250801210238.2207429-1-jolsa@kernel.org>
+ <20250801210238.2207429-2-jolsa@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wDX0bXE0I1oWsxLJQ--.56694S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxJrWxGr13ZF17Cw1UKr4xXrb_yoW8Kr18pF
-	WrKwn8KFWqka43GFsrXr42yrWfWFs5GF4UGF17Xw1YyF4rGFnrZrWxK347CF9xGas3Xaya
-	vF12yF98G3WrA3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jopBfUUUUU=
-X-CM-SenderInfo: pskrv0dl0viiqvswqiywtou0bp/xtbBgBmdiGiNzPBAzwAAsa
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250801210238.2207429-2-jolsa@kernel.org>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
+On 08/01, Jiri Olsa wrote:
+>
+> If uprobe handler changes instruction pointer we still execute single
+> step) or emulate the original instruction and increment the (new) ip
+> with its length.
 
-When using GCC on x86-64 to compile an usdt prog with -O1 or higher
-optimization, the compiler will generate SIB addressing mode for global
-array and PC-relative addressing mode for global variable,
-e.g. "1@-96(%rbp,%rax,8)" and "-1@4+t1(%rip)".
+Yes... but what if we there are multiple consumers? The 1st one changes
+instruction_pointer, the next is unaware. Or it may change regs->ip too...
 
-The current USDT implementation in libbpf cannot parse these two formats,
-causing `bpf_program__attach_usdt()` to fail with -ENOENT
-(unrecognized register).
+Oleg.
 
-This patch series adds support for SIB addressing mode in USDT probes.
-The main changes include:
-- add correct handling logic for SIB-addressed arguments in
-  `parse_usdt_arg`.
-- force -O2 optimization for usdt.test.o to generate SIB addressing usdt
-  argument spec.
-- change the global variable t1 to a local variable, to avoid compiler
-  generating PC-relative addressing mode for it.
-
-Testing shows that the SIB probe correctly generates 8@(%rcx,%rax,8) 
-argument spec and passes all validation checks.
-
-The modification history of this patch series:
-Change since v1:
-- refactor the code to make it more readable
-- modify the commit message to explain why and how
-
-Change since v2:
-- fix the `scale` uninitialized error
-
-Change since v3:
-- force -O2 optimization for usdt.test.o to generate SIB addressing usdt
-  and pass all test cases.
-
-Change since v4:
-- split the patch into two parts, one for the fix and the other for the
-  test
-
-Change since v5:
-- Only enable optimization for x86 architecture to generate SIB addressing
-  usdt argument spec.
-
-Do we need to add support for PC-relative USDT argument spec handling in
-libbpf? I have some interest in this question, but currently have no 
-ideas. Getting offsets based on symbols requires dependency on the symbol
-table. However, once the binary file is stripped, the symtab will also be
-removed, which will cause this approach to fail. Does anyone have any
-thoughts on this?
-
-Jiawei Zhao (2):
-  libbpf: fix USDT SIB argument handling causing unrecognized register
-    error
-  selftests/bpf: Force -O2 for USDT selftests to cover SIB handling
-    logic
-
- tools/lib/bpf/usdt.bpf.h                      | 33 +++++++++++++-
- tools/lib/bpf/usdt.c                          | 43 ++++++++++++++++---
- tools/testing/selftests/bpf/Makefile          |  8 ++++
- tools/testing/selftests/bpf/prog_tests/usdt.c | 18 +++++---
- 4 files changed, 89 insertions(+), 13 deletions(-)
-
--- 
-2.43.0
+> This makes the new instruction pointer bogus and application will
+> likely crash on illegal instruction execution.
+> 
+> If user decided to take execution elsewhere, it makes little sense
+> to execute the original instruction, so let's skip it.
+> 
+> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> ---
+>  kernel/events/uprobes.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/kernel/events/uprobes.c b/kernel/events/uprobes.c
+> index 4c965ba77f9f..dff5509cde67 100644
+> --- a/kernel/events/uprobes.c
+> +++ b/kernel/events/uprobes.c
+> @@ -2742,6 +2742,9 @@ static void handle_swbp(struct pt_regs *regs)
+>  
+>  	handler_chain(uprobe, regs);
+>  
+> +	if (instruction_pointer(regs) != bp_vaddr)
+> +		goto out;
+> +
+>  	if (arch_uprobe_skip_sstep(&uprobe->arch, regs))
+>  		goto out;
+>  
+> -- 
+> 2.50.1
+> 
 
