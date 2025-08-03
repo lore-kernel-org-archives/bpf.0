@@ -1,30 +1,30 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA1F51F4612;
-	Sun,  3 Aug 2025 21:19:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7726F1F561D;
+	Sun,  3 Aug 2025 21:20:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754255980; cv=none; b=C0SJ8KyiumqmK5iiiHA8bqao011iFu7YwK5UVhI9qBLKH5xTA2If4uDpcgSzYleTYADfasp8GEk0u4DIoyJMKAbExZzfVYJN4ruTEj7BPy1pC4poLwhpfLBIueXN6YpJmBSnOWrRefVynH1Ez8/LtkO5yOEqND/jjqQVtLBGlrk=
+	t=1754256035; cv=none; b=KvCu9s1Q+3ghokYl+sp22NKjmDMVzzsWKwCQ1PS+3Kemh2HBvZsOE9MAvw/pTGSzZLQS4a+rmD5lDhVBKSrqgQqNGUb0EZQ2ExioGsgmA7o4rlPQJvz2dg98fYLtU2aV+V3bcrK5lnaw/vObb0jZPE14TLrhAYTSNWjYkRtf1Vg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754255980; c=relaxed/simple;
-	bh=P4aI6WkE8WTDcnNa8bsV5CGbPMjZlFabXQyaxRm60Fc=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=kt0syQ/Kce3Kg9QYqu459H1w4FQolp9SrnuhSEFG2YhZsEe44FHel4btRLSJcy2wksCkdqtxBzzlJHr2o37ZK9H6/0f9fLKhAdyeS0vNDF4T8hOvgSLbUHc5eMK3qeoiymfXw9kjhLqDnsUxfjYJ5OIMrDzeLUF6updfota+liI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oZVe3sF7; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1754256035; c=relaxed/simple;
+	bh=Ee902fUa6bbaaSWJt4bE9r5UBNbsDJ1soI7xXi/JtlA=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=k0WMkdEAnQXezqfb/TyW5dP5ztK1QUnNsKrihZDgneyZEy03XWSq5y7ed9ZP7O28mSspAYEFGm8IcGjTUU/37cHhMUntDDpG9g4RNvZWcvXzThLbB5i+kq67bDmUauRZr8j5In1P3irbt/ymyLTbpX5Cqwz14MMPhYk04vgfcQw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UOoJ0k5u; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oZVe3sF7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9888EC4CEEB;
-	Sun,  3 Aug 2025 21:19:37 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UOoJ0k5u"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FD14C4CEEB;
+	Sun,  3 Aug 2025 21:20:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754255980;
-	bh=P4aI6WkE8WTDcnNa8bsV5CGbPMjZlFabXQyaxRm60Fc=;
+	s=k20201202; t=1754256035;
+	bh=Ee902fUa6bbaaSWJt4bE9r5UBNbsDJ1soI7xXi/JtlA=;
 	h=From:To:Cc:Subject:Date:From;
-	b=oZVe3sF790hEMwdAYlEQo70L3O505rrpi4C+hwy3qh76QOilFJtLfeWXLmS/T1pS2
-	 v7fmS7KKtvln/muLP0MxlDQrEghe5nC3wpNg7L1kk5uqOiigh+rEClkONDy+bj0bkX
-	 KrsfnmG1zbE8M9JA16ltjCUE6Qou7eLQuWgwN5WsePvZCokqol4cmaDFxNkkY5hDxo
-	 LQ3NrwIIc4+4CWgpRo968jDgzQqewqhRIJ8lU37GiAXPs3FQ3SgYpC38bPQxEjGF/w
-	 eybPcCmCEm+AUuhfp1izXhcdvy0c1vrNLoAO4A/dW/wgPIJba6T9FNhURDTKTfOHey
-	 sQpjdkaMwnQwA==
+	b=UOoJ0k5usxlRauFueD7QEGpSz4Xj1TUzUQILWYWd0b3NKJjX/+6YdnJoxRuZcRNa0
+	 0w7qgGZtY9yioXbQchsUvaOGxYUYKJ+VYRNBSQ/fEPHq0PulVQoQMm3+pvsICTXZ49
+	 StuA/tQRDQlOzQ+248aYI9nAxcp2q7tpF4tblCv4FRSAHvTJ0/MjH8DvmarnE9lqxA
+	 enV+/VCoIj0PBVwg3v8Zl8IYYCUQ6VGUZ+We6N2/oCb53fMESvMHf9Dbg4RfHBy1hu
+	 NkGBUws36MKLEtN8rRZdOhXKCM2O66IxbjJdx84jCsICJaMFIpPFHKkNbOsEGRlGv6
+	 DjOoD6ta9OBvQ==
 From: Sasha Levin <sashal@kernel.org>
 To: patches@lists.linux.dev,
 	stable@vger.kernel.org
@@ -35,9 +35,9 @@ Cc: Viacheslav Dubeyko <slava@dubeyko.com>,
 	linux-fsdevel@vger.kernel.org,
 	Sasha Levin <sashal@kernel.org>,
 	bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.12 01/31] hfs: fix general protection fault in hfs_find_init()
-Date: Sun,  3 Aug 2025 17:19:04 -0400
-Message-Id: <20250803211935.3547048-1-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.6 01/23] hfs: fix general protection fault in hfs_find_init()
+Date: Sun,  3 Aug 2025 17:20:08 -0400
+Message-Id: <20250803212031.3547641-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -47,7 +47,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.12.41
+X-stable-base: Linux 6.6.101
 Content-Transfer-Encoding: 8bit
 
 From: Viacheslav Dubeyko <slava@dubeyko.com>
@@ -416,7 +416,7 @@ index 2fa4b1f8cc7f..e86e1e235658 100644
  	tree->inode->i_mapping->a_ops = &hfs_aops;
  	iput(tree->inode);
 diff --git a/fs/hfs/extent.c b/fs/hfs/extent.c
-index 4a0ce131e233..580c62981dbd 100644
+index 6d1878b99b30..941c92525815 100644
 --- a/fs/hfs/extent.c
 +++ b/fs/hfs/extent.c
 @@ -71,7 +71,7 @@ int hfs_ext_keycmp(const btree_key *key1, const btree_key *key2)
@@ -429,7 +429,7 @@ index 4a0ce131e233..580c62981dbd 100644
  	int i;
  	u16 count;
 diff --git a/fs/hfs/hfs_fs.h b/fs/hfs/hfs_fs.h
-index a0c7cb0f79fc..732c5c4c7545 100644
+index 49d02524e667..f1402d71b092 100644
 --- a/fs/hfs/hfs_fs.h
 +++ b/fs/hfs/hfs_fs.h
 @@ -190,6 +190,7 @@ extern const struct inode_operations hfs_dir_inode_operations;
