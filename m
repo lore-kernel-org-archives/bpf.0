@@ -1,30 +1,30 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AECAF9D6;
-	Sun,  3 Aug 2025 21:18:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA1F51F4612;
+	Sun,  3 Aug 2025 21:19:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754255921; cv=none; b=PbwVpPF2foP2Y1T3woindpP0QbU7WKCxBRffD0YF2yGUXex64IihDUAZtZ8uzSVzQ50KgyTHEWfrOcFKH6xN+i3fzRUuhzoUTxo1afTq1r/GnGl2J1di+BFGCHYpOxWHhXIL5l7cgsccR2RyCIrTPsrLRIqf6cqf6VYWiyw14l0=
+	t=1754255980; cv=none; b=C0SJ8KyiumqmK5iiiHA8bqao011iFu7YwK5UVhI9qBLKH5xTA2If4uDpcgSzYleTYADfasp8GEk0u4DIoyJMKAbExZzfVYJN4ruTEj7BPy1pC4poLwhpfLBIueXN6YpJmBSnOWrRefVynH1Ez8/LtkO5yOEqND/jjqQVtLBGlrk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754255921; c=relaxed/simple;
+	s=arc-20240116; t=1754255980; c=relaxed/simple;
 	bh=P4aI6WkE8WTDcnNa8bsV5CGbPMjZlFabXQyaxRm60Fc=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=k6HFOjSNY728xF/ZiNt/GcTOboOSnVpmeXUzqLnya+GHruiiAG2inPZOCvdKMsChxEamo6ngFvdvN6bEuuR+6+zcCXfzuZKIwIJkZVC0t2QKzcwSrPezZjgrJBTsBA/3MiZego9biSDED4YNmMtacBVYiRSDH9M4hyw10vRLnas=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bBQwZodx; arc=none smtp.client-ip=10.30.226.201
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=kt0syQ/Kce3Kg9QYqu459H1w4FQolp9SrnuhSEFG2YhZsEe44FHel4btRLSJcy2wksCkdqtxBzzlJHr2o37ZK9H6/0f9fLKhAdyeS0vNDF4T8hOvgSLbUHc5eMK3qeoiymfXw9kjhLqDnsUxfjYJ5OIMrDzeLUF6updfota+liI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oZVe3sF7; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bBQwZodx"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14268C4CEEB;
-	Sun,  3 Aug 2025 21:18:38 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oZVe3sF7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9888EC4CEEB;
+	Sun,  3 Aug 2025 21:19:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754255921;
+	s=k20201202; t=1754255980;
 	bh=P4aI6WkE8WTDcnNa8bsV5CGbPMjZlFabXQyaxRm60Fc=;
 	h=From:To:Cc:Subject:Date:From;
-	b=bBQwZodxcjW1jqg05g7+Q3NziQ+pXv84yV7g8ijtLpAR72MGfjDoKdC8Wm7x+FDHi
-	 moGXKdo93rRTgpWBIuJrN5F1po8UXvCscNK54wu2e0Yw9w6tDe4MgKlvSePNKPIqn/
-	 juZDkiEvefuKMeprgerNEnijuxzIxzLPxcbmZMnNFJXZRz3MywHjME70hZt4+/rnTK
-	 gAO8YtLo+luH4no99sK2yzOLRqFltwRMxTZJsmF+tZmRBx4pfMnYriNMJbAxIbaPUg
-	 VnMYEcdUqJCzIQibFF5vCOTzHX//xMCh94jXx1a4pgbl1su4QUUOHwiHfQ7NX1GxVP
-	 bEgCNdNWtF3yw==
+	b=oZVe3sF790hEMwdAYlEQo70L3O505rrpi4C+hwy3qh76QOilFJtLfeWXLmS/T1pS2
+	 v7fmS7KKtvln/muLP0MxlDQrEghe5nC3wpNg7L1kk5uqOiigh+rEClkONDy+bj0bkX
+	 KrsfnmG1zbE8M9JA16ltjCUE6Qou7eLQuWgwN5WsePvZCokqol4cmaDFxNkkY5hDxo
+	 LQ3NrwIIc4+4CWgpRo968jDgzQqewqhRIJ8lU37GiAXPs3FQ3SgYpC38bPQxEjGF/w
+	 eybPcCmCEm+AUuhfp1izXhcdvy0c1vrNLoAO4A/dW/wgPIJba6T9FNhURDTKTfOHey
+	 sQpjdkaMwnQwA==
 From: Sasha Levin <sashal@kernel.org>
 To: patches@lists.linux.dev,
 	stable@vger.kernel.org
@@ -35,9 +35,9 @@ Cc: Viacheslav Dubeyko <slava@dubeyko.com>,
 	linux-fsdevel@vger.kernel.org,
 	Sasha Levin <sashal@kernel.org>,
 	bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.15 01/34] hfs: fix general protection fault in hfs_find_init()
-Date: Sun,  3 Aug 2025 17:18:03 -0400
-Message-Id: <20250803211836.3546094-1-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.12 01/31] hfs: fix general protection fault in hfs_find_init()
+Date: Sun,  3 Aug 2025 17:19:04 -0400
+Message-Id: <20250803211935.3547048-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -47,7 +47,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.15.9
+X-stable-base: Linux 6.12.41
 Content-Transfer-Encoding: 8bit
 
 From: Viacheslav Dubeyko <slava@dubeyko.com>
