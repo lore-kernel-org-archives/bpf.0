@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6B0A232785;
-	Mon,  4 Aug 2025 20:27:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9008222586;
+	Mon,  4 Aug 2025 20:29:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754339232; cv=none; b=ellcEPjBgGRehizT91qvlY1O1wxPjYL3cBgq9dYnd+vUpE/Q4OKseeFV8aByw3h+VRnQm2zmbKgAxxe5WFj2DpkdN2G4n1uZTex4jnii08s5KSu/Ch05q0tWHB2lOPOlSfgb8SvgD2ORWD8kSdQ4+F65cXrVvu55IjuZaz8RD/g=
+	t=1754339370; cv=none; b=FuhluR6rRvu/mt6hSfAE7nCRHW6koX/mAToXupzPeAWvFy9KYmeaMDt4mfLAGEg9oASidLCaBWzJS2E/kmA5OyZXjHYfgTQki3wf6QVGfUeZlUHrrfIva/G9IT5Ep6796eCT3Vr27Vw+taaDRS/6/mAcm5590WgQqNUsXf/KtkA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754339232; c=relaxed/simple;
-	bh=k5iYYySHG/5Vfd/EFSgIWIBri0jYjQoozxrWTGCJIc8=;
+	s=arc-20240116; t=1754339370; c=relaxed/simple;
+	bh=4BPsES3b5klXzdk6RpmOqf1VgsIU8ZAY8khzKwSwfwk=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=tqly6sDLbUooDq4VHQdOTAUPILogdQmL/HOwi3miGKdtvrezK6Sfaa0Y8e/ucUuUoEIhUPBLLhRNlyjOYpEYj2EnBeapZw80M1gsUSulkkE0Z1mfQ5py8qiMkORj3dkWXQOvyuy7qRvmiXQMAq42oVS0JWFHCdhPjL8Y1q2F11A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Jz81xEhX; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version:Content-Type; b=Pkv1NAy+nZwlt/t7lyaJR/I6JpU6Jblhmz2pFt5VW2BwVUSa9VKqk6tA4gKus6S1ZSzeVIvcTw3K96cRw2ULAbvNi7SVr2K7/LfzQbXV64/bgh7bv0ZCZZiea5/NUb+OC0HRB1hXgFtwG/op4n5yiAc8gYFnKOhmA/vZFjYHiK8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iJjfFllp; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Jz81xEhX"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4C7FC4CEE7;
-	Mon,  4 Aug 2025 20:27:11 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iJjfFllp"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFD6FC4CEE7;
+	Mon,  4 Aug 2025 20:29:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754339232;
-	bh=k5iYYySHG/5Vfd/EFSgIWIBri0jYjQoozxrWTGCJIc8=;
+	s=k20201202; t=1754339370;
+	bh=4BPsES3b5klXzdk6RpmOqf1VgsIU8ZAY8khzKwSwfwk=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=Jz81xEhXHgQTDGtffbAFiQrMddlJq+HKTHTbuSwG+khg7OC80YrMcEzbbz4n6c8C0
-	 IMKUlfyKUrSQvKI9jvSTbtp42M+M6mtFuAUIcJeEbOXJm+M14gOO3TemuKsyPVbqxx
-	 k2IUQ3UfFH1YdxGsAfWddxjG63QNRM6dyM45isTWFFIPN5fS+O+kk+foEa0cPuV7p0
-	 giqfltC+FXZ8NPLGAfJxP3J1J/SdNi35u+XA28PDROuGRZiucs6llc5zrnhxl7H24m
-	 k4rdTYhoTvrFmWqVopmLYM2HhKNHWzbedFx0Z+KTzvogyrEWgWMbXIgPbWMRrVwdVV
-	 WlWleDHgw59hQ==
+	b=iJjfFllp9A5t0b3evqDJ86gBmdgbLw5CO5nbxRfYOF6T6zvYvTJplqmOZMF4ThZIo
+	 rfobGezjJOtX/4wBS1Vk8pP70muPLRhZvC7BSpdi9LBXuciPN6JVp4ZmbxfnGxAPlt
+	 F2pr/W0FtNniSZnsJ2+qO5E4eRlppbsRuZougnurPEQoriP4vL/c6WS6GDjE/0waXr
+	 KygzMNkPN6s9HyzUlxoVkon6bRUzRG3pIVdGKQYfE2IItRdcVRlP4mbp3Dc1o43HHX
+	 1TGjSl/9ZjSU37FkaDT1TDUea1L8WdHxiUVUbvp/8tAE1RHZ8f6iRV1eS0AptBRwS1
+	 ohcd9/z6+3Gnw==
 From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
 To: Pu Lehui <pulehui@huaweicloud.com>, bpf@vger.kernel.org,
  linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
@@ -38,12 +38,13 @@ Cc: Puranjay Mohan <puranjay@kernel.org>, Palmer Dabbelt
  Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo
  <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, Pu Lehui
  <pulehui@huawei.com>
-Subject: Re: [PATCH bpf-next 03/10] riscv, bpf: Extract emit_ldx() helper
-In-Reply-To: <20250719091730.2660197-4-pulehui@huaweicloud.com>
+Subject: Re: [PATCH bpf-next 04/10] riscv: Separate toolchain support
+ dependency from RISCV_ISA_ZACAS
+In-Reply-To: <20250719091730.2660197-5-pulehui@huaweicloud.com>
 References: <20250719091730.2660197-1-pulehui@huaweicloud.com>
- <20250719091730.2660197-4-pulehui@huaweicloud.com>
-Date: Mon, 04 Aug 2025 22:27:09 +0200
-Message-ID: <87v7n23k9u.fsf@all.your.base.are.belong.to.us>
+ <20250719091730.2660197-5-pulehui@huaweicloud.com>
+Date: Mon, 04 Aug 2025 22:29:27 +0200
+Message-ID: <87qzxq3k60.fsf@all.your.base.are.belong.to.us>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -57,8 +58,8 @@ Pu Lehui <pulehui@huaweicloud.com> writes:
 
 > From: Pu Lehui <pulehui@huawei.com>
 >
-> There's a lot of redundant code related to load into register
-> operations, let's extract emit_ldx() to make code more compact.
+> RV64 bpf is going to support ZACAS instructions. Let's separate
+> toolchain support dependency from RISCV_ISA_ZACAS.
 >
 > Signed-off-by: Pu Lehui <pulehui@huawei.com>
 
