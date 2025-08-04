@@ -1,235 +1,139 @@
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f77.google.com (mail-io1-f77.google.com [209.85.166.77])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8464720127B;
-	Mon,  4 Aug 2025 02:27:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39D4386328
+	for <bpf@vger.kernel.org>; Mon,  4 Aug 2025 05:08:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.77
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754274434; cv=none; b=t1b154R4ebf4qmJSin6gzLCGDn2ViZ/6xJlIilQWuzWVfW5Cpzl600eAoGocceBalOmqCRE74W33Nvwy492YKa1XeIobgbJMf1bCkjsOBzKmPlrGu5BDPyqFiyoqppti1L+19FWQifAlMPF8sc0DUxnHjSd6+N9fhFqzbCNpbv4=
+	t=1754284114; cv=none; b=ueyh1+Lalq9+ul1A5GY1+CQcZUjpwnCdLzzRiSfJzzVTQxIa5tzKBKxnfz5whxRma/G6KR7eFn23NAoj3YPJUE4U5GUz6YTyJH1ZiIj1qFxwAtWz6BzKYjIdjl0PKv24mVvfcBTCZyqK1FhpsS1GAUjw8P3F2+0l/IrQnyiXGRs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754274434; c=relaxed/simple;
-	bh=UW1WmWLA5hqVf8AQJiB3mCG4tYSWQTkhlPbwBNCJnik=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Iuok66QA+f2LhF5SjZayj2h+mpq/9E+baDJ8OIk6tkgGGzTnSW1xKUEFRmRpdYLGV1WxrYvDYTQbWvAQ+y6hqbI690OFNXSJn6HRwA8bqIq/nwGGlNNPN/TMeWDYji5TpA3U/SJuaLKHq6gLXGk+poqOdEDuUku7XYMwYkurQ78=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.93.142])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4bwL6k4KDNzYQtxF;
-	Mon,  4 Aug 2025 10:27:10 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id 40CCA1A018D;
-	Mon,  4 Aug 2025 10:27:09 +0800 (CST)
-Received: from k-arm6401.huawei.com (unknown [7.217.19.243])
-	by APP4 (Coremail) with SMTP id gCh0CgAX4BBsGpBoTUL9CQ--.242S6;
-	Mon, 04 Aug 2025 10:27:08 +0800 (CST)
-From: Xu Kuohai <xukuohai@huaweicloud.com>
-To: bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Yonghong Song <yhs@fb.com>,
-	Song Liu <song@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Mykola Lysenko <mykolal@fb.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Willem de Bruijn <willemb@google.com>,
-	Jason Xing <kerneljasonxing@gmail.com>,
-	Paul Chaignon <paul.chaignon@gmail.com>,
-	Tao Chen <chen.dylane@linux.dev>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin Kelly <martin.kelly@crowdstrike.com>
-Subject: [PATCH bpf-next 4/4] selftests/bpf/benchs: Add overwrite mode bench for rb-libbpf
-Date: Mon,  4 Aug 2025 10:21:00 +0800
-Message-ID: <20250804022101.2171981-5-xukuohai@huaweicloud.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250804022101.2171981-1-xukuohai@huaweicloud.com>
-References: <20250804022101.2171981-1-xukuohai@huaweicloud.com>
+	s=arc-20240116; t=1754284114; c=relaxed/simple;
+	bh=ZLBP3RUIikByUa7KPtiF0g+jtRkXsaeIPURdK5TfryI=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=lzxvxr1csqqjpFepJyxdxxgXunBOpbwQnsd46EhVo3Tff3++fxbwQBRNp4iKyHwkfoJcuZvjbapT8nTBpD5vwkXga+35JNCD0509ItMzkAF4+Or/4JiKLlNCOUW4Ol15iZ8UAZkHxK9qVGXJCH62s4IUWWgBZ7bgEhFiZtwAPRQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.77
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f77.google.com with SMTP id ca18e2360f4ac-88170a3e085so125057039f.1
+        for <bpf@vger.kernel.org>; Sun, 03 Aug 2025 22:08:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1754284112; x=1754888912;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hHDuSz8uOADbevwcrJx5h2+exfV1RPbCBux+vztrfZg=;
+        b=jtreSrtCq46NcXXjtB5Zg+sXicZllq6yJthnKszsVBWwcd5JYrWZTjx00Qjue0+zyo
+         yC/DxyMt4YzDpSxlctqCv+LzeJ4q73Rtp7EMMg0zfMxvWMFVKtHJrSKWy/QByokRk2ny
+         fjnR/aONnmQzch00i3mc1gJyIsVN0ZJOXKIrdh9/GsOyLev92mON3kNGfiq1+hnYKbgO
+         nvbxahGrGPCXOv4nyI14RnuDOg6sLYbWwy8avy+/9pfMNYKWypBKsBD2FTyfcrSnn1YH
+         cNqyu6norEeNoPGasqCY17180rvbNCXkrvWfg6TvfIFapnDz9dpP1FlBrxMlCslb5Z64
+         lDLA==
+X-Forwarded-Encrypted: i=1; AJvYcCW5srUxQGH143wC+vCRtujvobvvBsT9jhYFx7AppENbHiXBoeKJBIgU1eG/HHueaOrQd2U=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzQ7v4EtU0ycK0D0l6AbSFmTM4vpz+qQn0RaISFygzVj4m9RBUB
+	gvokq43hXCt6b60Wb1M9L5Dp7D6DU6kE7Z/Gsmh1TRnb1Z8zVbN/2Oqji1Gd4SBWeYIQQfgeqdo
+	eIuh1tI+3wHIeLktKS2ob168I1sl7PsGJtBMdI1JgDDt6x5Og2/SnGNuKSLE=
+X-Google-Smtp-Source: AGHT+IEfhL5kxH+ViRn+tjSPehb7rvgtjFomaPJY2Ou1a+LpGpm0byaDKQUUxSxBQ91TiRJ+aGH7Z/6kNNBRvcF/PmYwOB1Je311
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgAX4BBsGpBoTUL9CQ--.242S6
-X-Coremail-Antispam: 1UD129KBjvJXoW3Xw45ZrWUAr45urWDtw4xWFg_yoWxGF4fpF
-	WDCFWfCw1xtr93XF1vkw48JrW7ZrnrZ3W5CFyfta17Zw1xWan0q3yxK3yUt3Z8G348C3WS
-	v34ktryrGw1UJwUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUQvb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
-	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
-	rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267
-	AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E
-	14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7
-	xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Y
-	z7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2
-	AFwI0_GFv_Wrylc7CjxVAKzI0EY4vE52x082I5MxkIecxEwVCI4VW8JwCF04k20xvY0x0E
-	wIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E74
-	80Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0
-	I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJwCI42IY6x
-	AIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY
-	1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07jtsqXUUUUU=
-X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
+X-Received: by 2002:a05:6602:6b81:b0:881:419d:4a31 with SMTP id
+ ca18e2360f4ac-8816830d61bmr1261736839f.3.1754284112354; Sun, 03 Aug 2025
+ 22:08:32 -0700 (PDT)
+Date: Sun, 03 Aug 2025 22:08:32 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <68904050.050a0220.7f033.0001.GAE@google.com>
+Subject: [syzbot] [bpf?] WARNING in do_misc_fixups
+From: syzbot <syzbot+a9ed3d9132939852d0df@syzkaller.appspotmail.com>
+To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
+	daniel@iogearbox.net, eddyz87@gmail.com, haoluo@google.com, 
+	john.fastabend@gmail.com, jolsa@kernel.org, kpsingh@kernel.org, 
+	linux-kernel@vger.kernel.org, martin.lau@linux.dev, sdf@fomichev.me, 
+	song@kernel.org, syzkaller-bugs@googlegroups.com, yonghong.song@linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-From: Xu Kuohai <xukuohai@huawei.com>
+Hello,
 
-Add overwrite mode bench for ring buffer.
+syzbot found the following issue on:
 
-For reference, below are bench numbers collected from x86_64 and arm64.
+HEAD commit:    a6923c06a3b2 Merge tag 'bpf-fixes' of git://git.kernel.org..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=1561dcf0580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=f89bb9497754f485
+dashboard link: https://syzkaller.appspot.com/bug?extid=a9ed3d9132939852d0df
+compiler:       aarch64-linux-gnu-gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
+userspace arch: arm64
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=165d0aa2580000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=117bd834580000
 
-- x86_64 (AMD EPYC 9654)
+Downloadable assets:
+disk image (non-bootable): https://storage.googleapis.com/syzbot-assets/fa3fbcfdac58/non_bootable_disk-a6923c06.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/9862ca8219e0/vmlinux-a6923c06.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/042ebe320cfd/Image-a6923c06.gz.xz
 
-  Ringbuf, multi-producer contention, overwrite mode
-  ==================================================
-  rb-libbpf nr_prod 1  14.970 ± 0.012M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 2  14.064 ± 0.007M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 3  7.493 ± 0.003M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 4  6.575 ± 0.001M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 8  3.696 ± 0.011M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 12 2.612 ± 0.012M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 16 2.335 ± 0.005M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 20 2.079 ± 0.005M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 24 1.965 ± 0.004M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 28 1.846 ± 0.004M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 32 1.790 ± 0.002M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 36 1.735 ± 0.002M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 40 1.701 ± 0.002M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 44 1.669 ± 0.001M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 48 1.749 ± 0.001M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 52 1.709 ± 0.001M/s (drops 0.000 ± 0.000M/s)
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+a9ed3d9132939852d0df@syzkaller.appspotmail.com
 
-- arm64 (HiSilicon Kunpeng 920)
+------------[ cut here ]------------
+verifier bug: not inlined functions bpf_probe_read_kernel_str#115 is missing func(1)
+WARNING: CPU: 1 PID: 3594 at kernel/bpf/verifier.c:22838 do_misc_fixups+0x1784/0x1ab4 kernel/bpf/verifier.c:22838
+Modules linked in:
+CPU: 1 UID: 0 PID: 3594 Comm: syz.2.17 Not tainted 6.16.0-syzkaller-11105-ga6923c06a3b2 #0 PREEMPT 
+Hardware name: linux,dummy-virt (DT)
+pstate: 61402009 (nZCv daif +PAN -UAO -TCO +DIT -SSBS BTYPE=--)
+pc : do_misc_fixups+0x1784/0x1ab4 kernel/bpf/verifier.c:22838
+lr : do_misc_fixups+0x1784/0x1ab4 kernel/bpf/verifier.c:22838
+sp : ffff80008936b9a0
+x29: ffff80008936b9a0 x28: f5ff8000832f5000 x27: 000000000000000a
+x26: f8f0000007ba8000 x25: 0000000000000000 x24: f8f0000007bae200
+x23: 000000000000f0ff x22: 000000000000000a x21: f8f0000007bae128
+x20: f8f0000007ba8aa8 x19: ffff80008243e828 x18: 0000000000000000
+x17: 0000000000000000 x16: 0000000000000000 x15: ffff800081b73b80
+x14: 0000000000000342 x13: 0000000000000000 x12: 0000000000000002
+x11: 00000000000000c0 x10: 646e0773d90f24cc x9 : 73727a981a23afd7
+x8 : fcf0000007bb36f8 x7 : 0000000000000190 x6 : 0000003978391654
+x5 : 0000000000000001 x4 : fbffff3fffffffff x3 : 000000000000ffff
+x2 : 0000000000000000 x1 : 0000000000000000 x0 : fcf0000007bb2500
+Call trace:
+ do_misc_fixups+0x1784/0x1ab4 kernel/bpf/verifier.c:22838 (P)
+ bpf_check+0x1308/0x2a8c kernel/bpf/verifier.c:24739
+ bpf_prog_load+0x634/0xb74 kernel/bpf/syscall.c:2979
+ __sys_bpf+0x2e0/0x1a3c kernel/bpf/syscall.c:6029
+ __do_sys_bpf kernel/bpf/syscall.c:6139 [inline]
+ __se_sys_bpf kernel/bpf/syscall.c:6137 [inline]
+ __arm64_sys_bpf+0x24/0x34 kernel/bpf/syscall.c:6137
+ __invoke_syscall arch/arm64/kernel/syscall.c:35 [inline]
+ invoke_syscall+0x48/0x110 arch/arm64/kernel/syscall.c:49
+ el0_svc_common.constprop.0+0x40/0xe0 arch/arm64/kernel/syscall.c:132
+ do_el0_svc+0x1c/0x28 arch/arm64/kernel/syscall.c:151
+ el0_svc+0x34/0x10c arch/arm64/kernel/entry-common.c:879
+ el0t_64_sync_handler+0xa0/0xe4 arch/arm64/kernel/entry-common.c:898
+ el0t_64_sync+0x1a4/0x1a8 arch/arm64/kernel/entry.S:596
+---[ end trace 0000000000000000 ]---
 
-  Ringbuf, multi-producer contention, overwrite mode
-  ==================================================
-  rb-libbpf nr_prod 1  10.319 ± 0.231M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 2  9.219 ± 0.006M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 3  6.699 ± 0.013M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 4  4.608 ± 0.001M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 8  3.905 ± 0.001M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 12 3.282 ± 0.004M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 16 3.182 ± 0.008M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 20 3.029 ± 0.006M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 24 3.116 ± 0.004M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 28 2.869 ± 0.005M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 32 3.075 ± 0.010M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 36 2.795 ± 0.003M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 40 2.947 ± 0.005M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 44 2.748 ± 0.006M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 48 2.767 ± 0.003M/s (drops 0.000 ± 0.000M/s)
-  rb-libbpf nr_prod 52 2.858 ± 0.002M/s (drops 0.000 ± 0.000M/s)
 
-Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
 ---
- .../selftests/bpf/benchs/bench_ringbufs.c     | 22 ++++++++++++++++++-
- .../bpf/benchs/run_bench_ringbufs.sh          |  4 ++++
- 2 files changed, 25 insertions(+), 1 deletion(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/tools/testing/selftests/bpf/benchs/bench_ringbufs.c b/tools/testing/selftests/bpf/benchs/bench_ringbufs.c
-index e1ee979e6acc..6fdfc61c721b 100644
---- a/tools/testing/selftests/bpf/benchs/bench_ringbufs.c
-+++ b/tools/testing/selftests/bpf/benchs/bench_ringbufs.c
-@@ -19,6 +19,7 @@ static struct {
- 	int ringbuf_sz; /* per-ringbuf, in bytes */
- 	bool ringbuf_use_output; /* use slower output API */
- 	int perfbuf_sz; /* per-CPU size, in pages */
-+	bool overwrite_mode;
- } args = {
- 	.back2back = false,
- 	.batch_cnt = 500,
-@@ -27,6 +28,7 @@ static struct {
- 	.ringbuf_sz = 512 * 1024,
- 	.ringbuf_use_output = false,
- 	.perfbuf_sz = 128,
-+	.overwrite_mode = false,
- };
- 
- enum {
-@@ -35,6 +37,7 @@ enum {
- 	ARG_RB_BATCH_CNT = 2002,
- 	ARG_RB_SAMPLED = 2003,
- 	ARG_RB_SAMPLE_RATE = 2004,
-+	ARG_RB_OVERWRITE = 2005,
- };
- 
- static const struct argp_option opts[] = {
-@@ -43,6 +46,7 @@ static const struct argp_option opts[] = {
- 	{ "rb-batch-cnt", ARG_RB_BATCH_CNT, "CNT", 0, "Set BPF-side record batch count"},
- 	{ "rb-sampled", ARG_RB_SAMPLED, NULL, 0, "Notification sampling"},
- 	{ "rb-sample-rate", ARG_RB_SAMPLE_RATE, "RATE", 0, "Notification sample rate"},
-+	{ "rb-overwrite", ARG_RB_OVERWRITE, NULL, 0, "overwrite mode"},
- 	{},
- };
- 
-@@ -72,6 +76,9 @@ static error_t parse_arg(int key, char *arg, struct argp_state *state)
- 			argp_usage(state);
- 		}
- 		break;
-+	case ARG_RB_OVERWRITE:
-+		args.overwrite_mode = true;
-+		break;
- 	default:
- 		return ARGP_ERR_UNKNOWN;
- 	}
-@@ -104,6 +111,11 @@ static void bufs_validate(void)
- 		fprintf(stderr, "back-to-back mode makes sense only for single-producer case!\n");
- 		exit(1);
- 	}
-+
-+	if (args.overwrite_mode && strcmp(env.bench_name, "rb-libbpf") != 0) {
-+		fprintf(stderr, "rb-overwrite mode only supports rb-libbpf!\n");
-+		exit(1);
-+	}
- }
- 
- static void *bufs_sample_producer(void *input)
-@@ -134,6 +146,8 @@ static void ringbuf_libbpf_measure(struct bench_res *res)
- 
- static struct ringbuf_bench *ringbuf_setup_skeleton(void)
- {
-+	__u32 flags;
-+	struct bpf_map *ringbuf;
- 	struct ringbuf_bench *skel;
- 
- 	setup_libbpf();
-@@ -151,7 +165,13 @@ static struct ringbuf_bench *ringbuf_setup_skeleton(void)
- 		/* record data + header take 16 bytes */
- 		skel->rodata->wakeup_data_size = args.sample_rate * 16;
- 
--	bpf_map__set_max_entries(skel->maps.ringbuf, args.ringbuf_sz);
-+	ringbuf = skel->maps.ringbuf;
-+	if (args.overwrite_mode) {
-+		flags = bpf_map__map_flags(ringbuf) | BPF_F_OVERWRITE;
-+		bpf_map__set_map_flags(ringbuf,  flags);
-+	}
-+
-+	bpf_map__set_max_entries(ringbuf, args.ringbuf_sz);
- 
- 	if (ringbuf_bench__load(skel)) {
- 		fprintf(stderr, "failed to load skeleton\n");
-diff --git a/tools/testing/selftests/bpf/benchs/run_bench_ringbufs.sh b/tools/testing/selftests/bpf/benchs/run_bench_ringbufs.sh
-index 91e3567962ff..4e758bc52b73 100755
---- a/tools/testing/selftests/bpf/benchs/run_bench_ringbufs.sh
-+++ b/tools/testing/selftests/bpf/benchs/run_bench_ringbufs.sh
-@@ -49,3 +49,7 @@ for b in 1 2 3 4 8 12 16 20 24 28 32 36 40 44 48 52; do
- 	summarize "rb-libbpf nr_prod $b" "$($RUN_RB_BENCH -p$b --rb-batch-cnt 50 rb-libbpf)"
- done
- 
-+header "Ringbuf, multi-producer contention, overwrite mode"
-+for b in 1 2 3 4 8 12 16 20 24 28 32 36 40 44 48 52; do
-+	summarize "rb-libbpf nr_prod $b" "$($RUN_RB_BENCH -p$b --rb-overwrite --rb-batch-cnt 50 rb-libbpf)"
-+done
--- 
-2.43.0
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
