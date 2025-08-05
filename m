@@ -1,64 +1,64 @@
 Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C3F921C9E5;
-	Tue,  5 Aug 2025 06:29:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BE0F21FF24;
+	Tue,  5 Aug 2025 06:29:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754375352; cv=none; b=m6u16cqUXdViFbv1uQa8bIS+7eKT2WrO5gcWH590jbwZ16IylW/fYrQdhUBYbhho9pBlTRVRdyeZLszahGEu8r7OI9mmyrnsZJl8jnNu1Biqzu11h3RCuiwMKCq/6bGy6aumv9nuSdgil4DA3Zpqi2OcRwinESNzF8NukV2Zj0A=
+	t=1754375361; cv=none; b=iyNyabEIB+Dgr+fBcfKy6NXFybuwg48xOdMZYC1EqAx/230L62k+rKAW3JykQ84PINMeg+fempZQU1bP+GsdrD7bJS76Sr5fxv7BTtEVeCyXu3zAgbsvM4oOQbmYKlHerTcIlljUUlXSUbe8HHPHU0g/EGvQ8ov1Thqiz4cjCes=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754375352; c=relaxed/simple;
-	bh=MVvPvZCE3I713bYs8EBca4lo70Y5VkoX2XvvlNdG3LQ=;
+	s=arc-20240116; t=1754375361; c=relaxed/simple;
+	bh=OGJYvaoMg2wHvnr0j10NC2nMnlWBlp36/emw5KofFrk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ZZwgUMF6XRVIfxH2wYOQejSKIhdb0X48IL/ht9l3RBEu5CHNa7+Uqgn8qkCqajo+f9fTTnGE0pgKqksefgqdCLl5322xTsH7Wnx9H9LyCfrx9fKzdCi76yFf001sXZx8rCqr92jVOwV3kVCBme1345N9AQ5CRqjZSska8K0qzKw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=R7uyQpbS; arc=none smtp.client-ip=148.163.158.5
+	 MIME-Version; b=ZteCjZ/jkluFsbIKSBajZOZuYL7NxeviUgIOzksqmewFnBkfUZi1aIDIHd4BL7dfBnmCXjZeCkBaYnC55pv92WsWr0eXZLb4tuWnqOlb0Z0/zgfq0cYq/kS6ypDNvur17Q7Xj1O/xwTIUtqLIqjy71nTQAlAwE/2DZIDP5iXJfM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=qJgEW7D4; arc=none smtp.client-ip=148.163.158.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="R7uyQpbS"
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 574L1ZVx014654;
-	Tue, 5 Aug 2025 06:28:38 GMT
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="qJgEW7D4"
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5754tZcq032572;
+	Tue, 5 Aug 2025 06:28:52 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
 	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=FAc975URBeDhQ2ZGa
-	Ba4r6rkYNEci9eNQVanL1mGVvg=; b=R7uyQpbSfScbGqYvykgLCtO5dHVOvnAd9
-	FcdlT8Tv1Ah0vYfnco53NW3Yxomv5JCSk8ncxlHnqpvgqnYHT0W8Z03ejSCXPEST
-	kebY0iDYbkyAMMH8r6dha/BUrDLX0KrLFQ4tnCyvBrn/UNUFGSo+tAy3zURjf/4D
-	7dTyzI/d2NUFhf96anckFqAARCBL7CJ/MsLTs/2HnqXZJaArE4yaRzoTBQkD7WzA
-	M4qcpk5W725p2FN4ee3eS4bFhp29WmTBL7FgzB42XqG6v1d13UKQ9NUBF3iU5FcT
-	S9hdELmRMNBWr19S0/ZXTnAMpwL3hADb2lBcHMtsPLpIz2CXKmQIw==
+	:mime-version:references:subject:to; s=pp1; bh=v7OKblw0xucwCWLwh
+	8AHjg9A9qvlAn86fZ/L6YQyAcg=; b=qJgEW7D4jZQywXjKTqkIH8sEYppO3MUH1
+	3NDYlbrWKE10yRXc1rduDYTurdEiILjhPCYb7mQJU6JJpFP36oY5eE7OcYH5zLyS
+	8Mj1yIae7GtjO+Omuu8iNb2YSsPWZ1/G1FmlmdBYHw00hvY8Q2GFSt2EqrJGQCcb
+	NU2HuCieoDkIVL4Vdc9Sza95U0B25B22Nvr7qgN90UqEMhZkfEqibX7/LwDw0cHl
+	eKMjYiNC323Q61uHxkzhdIEy1guc7pAZgrUlTfsFQdWgArc+W0/Qyc7zpMAUkG2G
+	Y3/IbCdXeGwEdEzd7zHlnkBHDdfb2RSDq64U7WMLoZNFYH+If6fdg==
 Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 48983t55vh-1
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 48bbbq09v0-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 05 Aug 2025 06:28:37 +0000 (GMT)
-Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 5756SaKh019111;
-	Tue, 5 Aug 2025 06:28:36 GMT
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 48983t55va-1
+	Tue, 05 Aug 2025 06:28:51 +0000 (GMT)
+Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 5756SpDh018514;
+	Tue, 5 Aug 2025 06:28:51 GMT
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 48bbbq09uw-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 05 Aug 2025 06:28:36 +0000 (GMT)
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5753JJaL009807;
-	Tue, 5 Aug 2025 06:28:35 GMT
+	Tue, 05 Aug 2025 06:28:51 +0000 (GMT)
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5754NkDb009584;
+	Tue, 5 Aug 2025 06:28:50 GMT
 Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 489w0thbtu-1
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 489x0p16fk-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 05 Aug 2025 06:28:35 +0000
+	Tue, 05 Aug 2025 06:28:50 +0000
 Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 5756SWek33358368
+	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 5756Sk4k33358382
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 5 Aug 2025 06:28:32 GMT
+	Tue, 5 Aug 2025 06:28:46 GMT
 Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id EA11820043;
-	Tue,  5 Aug 2025 06:28:31 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 3B7C920040;
+	Tue,  5 Aug 2025 06:28:46 +0000 (GMT)
 Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 3291320040;
-	Tue,  5 Aug 2025 06:28:25 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 8934B20043;
+	Tue,  5 Aug 2025 06:28:39 +0000 (GMT)
 Received: from li-621bac4c-27c7-11b2-a85c-c2bf7c4b3c07.ibm.com.com (unknown [9.43.39.141])
 	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Tue,  5 Aug 2025 06:28:24 +0000 (GMT)
+	Tue,  5 Aug 2025 06:28:39 +0000 (GMT)
 From: Saket Kumar Bhaskar <skb99@linux.ibm.com>
 To: bpf@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
@@ -70,9 +70,9 @@ Cc: hbathini@linux.ibm.com, sachinpb@linux.ibm.com, venkat88@linux.ibm.com,
         christophe.leroy@csgroup.eu, naveen@kernel.org, maddy@linux.ibm.com,
         mpe@ellerman.id.au, npiggin@gmail.com, memxor@gmail.com,
         iii@linux.ibm.com, shuah@kernel.org
-Subject: [bpf-next 4/6] bpf,powerpc: Introduce bpf_jit_emit_atomic_ops() to emit atomic instructions
-Date: Tue,  5 Aug 2025 11:57:45 +0530
-Message-ID: <20250805062747.3479221-5-skb99@linux.ibm.com>
+Subject: [bpf-next 6/6] selftests/bpf: Fix arena_spin_lock selftest failure
+Date: Tue,  5 Aug 2025 11:57:47 +0530
+Message-ID: <20250805062747.3479221-7-skb99@linux.ibm.com>
 X-Mailer: git-send-email 2.43.5
 In-Reply-To: <20250805062747.3479221-1-skb99@linux.ibm.com>
 References: <20250805062747.3479221-1-skb99@linux.ibm.com>
@@ -84,274 +84,146 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODA1MDA0NSBTYWx0ZWRfXwiJSf2dWPA2n
- 2Iv/EQoxRlLW23TjNZ0uDp6JwW6KZePtFViAxhd5mt4bcRvYZRMFSJPErJS6dszQ6nQHfWtXGQ3
- lDMydrDdFweplrZSzAiFbIlOYz/uVS1MhTy4N2ybUo2QwZDzHe7Abd99vDvO8E3FalZvAXF3Ja7
- hgibLd7fKp2XUMajCCe2lQLxiKXu3brJXpf/828GQoiKrMiznM/o1jJcmAACv55tkmCRhGeg/nB
- x7Sth7L1eb8HcdWG0ubziEmwnvjzhoNbZn1Jxj/624phGxAUZeZXDYlf1l0CTpoMoqKe+EebRXo
- fIbDXgGny0ypovrRrQn/MSJT25aUhWS6d617KVb0KH7O4QzjAJZMw97WgbaYHTF3CvtMqw+BFGB
- 0WCem9zn2GtKsi6lr6C4o970Js3dMVUxB0eANGlNi8jGi4RrrhacCoaE8dR4eOamGoYeI6ss
-X-Proofpoint-GUID: y1IvXRs28EEz1D4IoEQyuqPzy5m9abLt
-X-Proofpoint-ORIG-GUID: 5m-gE2FuSQ8KJqOr79Xa4f8uo9KsfHfl
-X-Authority-Analysis: v=2.4 cv=AZSxH2XG c=1 sm=1 tr=0 ts=6891a495 cx=c_pps
- a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
- a=2OwXVqhp2XgA:10 a=VnNF1IyMAAAA:8 a=mLi99PhJ1kaOFlELNpEA:9
+X-Proofpoint-GUID: MHtfuhSBX86H1GS-EDUE7_iMFDkm4UOi
+X-Authority-Analysis: v=2.4 cv=M65NKzws c=1 sm=1 tr=0 ts=6891a4a3 cx=c_pps
+ a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
+ a=2OwXVqhp2XgA:10 a=VnNF1IyMAAAA:8 a=JZnv35P8lLju3lMB9JkA:9
+X-Proofpoint-ORIG-GUID: RLgM9aYmcIzILwAR7Iotf-RVGtxWO2zm
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODA1MDA0NSBTYWx0ZWRfX1K7J+oUmd5nL
+ mfCZkWQLhWPVY9M222gUMff3yf4Zg+BRL0jXdtdHhtkRVXWByE6K8Uh1KpHEC7LoLklxpQGD/r9
+ hIimr1BHSV7ECIDd6qkwC4BRM/cedilc7J58riP9sgBy/RBTa31HyO4ui6C7VHH/gohDCwhI3AL
+ 3krUVIZFugLWIcW3NsTJAIzSAQh8/ddSezjMSMmPZRPQep/931tnHC+X+0HOfPH83KwVp/82iUP
+ F7z6aVpGcFdwdZeaSOuSQW+zdompotUc+Q34c3lO5X8yREM553guktYZzyAksnNR2ToJybF33kn
+ zAvMFtPrgIdtWoWhJ32V3HR9xtldl8cJssl1j0X8D2MgUVn2Yxb43rla10I6c0JNNOG7cDxbBjW
+ 34enIJSqdMAGf20IWycsqEe9nNXw2euxgZ98BCDMleohl3EHgxqVI3Br6cMRfzxWpOQswMIa
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
  definitions=2025-08-05_01,2025-08-04_01,2025-03-28_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1015 priorityscore=1501 impostorscore=0 bulkscore=0
- lowpriorityscore=0 mlxscore=0 spamscore=0 malwarescore=0 phishscore=0
- suspectscore=0 mlxlogscore=999 adultscore=0 classifier=spam authscore=0
- authtc=n/a authcc= route=outbound adjust=0 reason=mlx scancount=1
- engine=8.19.0-2505280000 definitions=main-2508050045
+ impostorscore=0 malwarescore=0 spamscore=0 bulkscore=0 lowpriorityscore=0
+ suspectscore=0 clxscore=1015 mlxscore=0 phishscore=0 priorityscore=1501
+ mlxlogscore=999 adultscore=0 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
+ definitions=main-2508050045
 
-The existing code for emitting bpf atomic instruction sequences for
-atomic operations such as XCHG, CMPXCHG, ADD, AND, OR, and XOR has been
-refactored into a reusable function, bpf_jit_emit_ppc_atomic_op().
-It also computes the jump offset and tracks the instruction index for jited
-LDARX/LWARX to be used in case it causes a fault.
+For systems having CONFIG_NR_CPUS set to > 1024 in kernel config
+the selftest fails even though the current number of online cpus
+is less. For example, on powerpc the default value for
+CONFIG_NR_CPUS is set to 8192.
+
+get_nprocs() is used to get the number of available cpus in test
+driver code and the same is passed to the bpf program using rodata.
+
+Also the selftest is skipped incase bpf program returns EOPNOTSUPP,
+with a descriptive message logged.
 
 Signed-off-by: Saket Kumar Bhaskar <skb99@linux.ibm.com>
 ---
- arch/powerpc/net/bpf_jit_comp64.c | 203 +++++++++++++++++-------------
- 1 file changed, 115 insertions(+), 88 deletions(-)
+ .../bpf/prog_tests/arena_spin_lock.c          | 23 +++++++++++++++++--
+ .../selftests/bpf/progs/arena_spin_lock.c     |  8 ++++++-
+ .../selftests/bpf/progs/bpf_arena_spin_lock.h |  4 +---
+ 3 files changed, 29 insertions(+), 6 deletions(-)
 
-diff --git a/arch/powerpc/net/bpf_jit_comp64.c b/arch/powerpc/net/bpf_jit_comp64.c
-index d4fe4dacf2d6..6a85cd847075 100644
---- a/arch/powerpc/net/bpf_jit_comp64.c
-+++ b/arch/powerpc/net/bpf_jit_comp64.c
-@@ -423,6 +423,111 @@ asm (
- "		blr				;"
- );
+diff --git a/tools/testing/selftests/bpf/prog_tests/arena_spin_lock.c b/tools/testing/selftests/bpf/prog_tests/arena_spin_lock.c
+index 0223fce4db2b..fa0b4f0240a3 100644
+--- a/tools/testing/selftests/bpf/prog_tests/arena_spin_lock.c
++++ b/tools/testing/selftests/bpf/prog_tests/arena_spin_lock.c
+@@ -40,8 +40,13 @@ static void *spin_lock_thread(void *arg)
  
-+static int bpf_jit_emit_atomic_ops(u32 *image, struct codegen_context *ctx,
-+				   const struct bpf_insn *insn, u32 *jmp_off,
-+				   u32 *tmp_idx, u32 *addrp)
-+{
-+	u32 tmp1_reg = bpf_to_ppc(TMP_REG_1);
-+	u32 tmp2_reg = bpf_to_ppc(TMP_REG_2);
-+	u32 size = BPF_SIZE(insn->code);
-+	u32 src_reg = bpf_to_ppc(insn->src_reg);
-+	u32 dst_reg = bpf_to_ppc(insn->dst_reg);
-+	s32 imm = insn->imm;
+ 	err = bpf_prog_test_run_opts(prog_fd, &topts);
+ 	ASSERT_OK(err, "test_run err");
 +
-+	u32 save_reg = tmp2_reg;
-+	u32 ret_reg = src_reg;
-+	u32 fixup_idx;
++	if (topts.retval == -EOPNOTSUPP)
++		goto end;
 +
-+	/* Get offset into TMP_REG_1 */
-+	EMIT(PPC_RAW_LI(tmp1_reg, insn->off));
-+       /*
-+	* Enforce full ordering for operations with BPF_FETCH by emitting a 'sync'
-+	* before and after the operation.
-+	*
-+	* This is a requirement in the Linux Kernel Memory Model.
-+	* See __cmpxchg_u64() in asm/cmpxchg.h as an example.
-+	*/
-+	if ((imm & BPF_FETCH) && IS_ENABLED(CONFIG_SMP))
-+		EMIT(PPC_RAW_SYNC());
+ 	ASSERT_EQ((int)topts.retval, 0, "test_run retval");
+ 
++end:
+ 	pthread_exit(arg);
+ }
+ 
+@@ -60,9 +65,16 @@ static void test_arena_spin_lock_size(int size)
+ 		return;
+ 	}
+ 
+-	skel = arena_spin_lock__open_and_load();
+-	if (!ASSERT_OK_PTR(skel, "arena_spin_lock__open_and_load"))
++	skel = arena_spin_lock__open();
++	if (!ASSERT_OK_PTR(skel, "arena_spin_lock__open"))
+ 		return;
 +
-+	*tmp_idx = ctx->idx;
++	skel->rodata->nr_cpus = get_nprocs();
 +
-+	/* load value from memory into TMP_REG_2 */
-+	if (size == BPF_DW)
-+		EMIT(PPC_RAW_LDARX(tmp2_reg, tmp1_reg, dst_reg, 0));
-+	else
-+		EMIT(PPC_RAW_LWARX(tmp2_reg, tmp1_reg, dst_reg, 0));
-+	/* Save old value in _R0 */
-+	if (imm & BPF_FETCH)
-+		EMIT(PPC_RAW_MR(_R0, tmp2_reg));
++	err = arena_spin_lock__load(skel);
++	if (!ASSERT_OK(err, "arena_spin_lock__load"))
++		goto end;
 +
-+	switch (imm) {
-+	case BPF_ADD:
-+	case BPF_ADD | BPF_FETCH:
-+		EMIT(PPC_RAW_ADD(tmp2_reg, tmp2_reg, src_reg));
-+		break;
-+	case BPF_AND:
-+	case BPF_AND | BPF_FETCH:
-+		EMIT(PPC_RAW_AND(tmp2_reg, tmp2_reg, src_reg));
-+		break;
-+	case BPF_OR:
-+	case BPF_OR | BPF_FETCH:
-+		EMIT(PPC_RAW_OR(tmp2_reg, tmp2_reg, src_reg));
-+		break;
-+	case BPF_XOR:
-+	case BPF_XOR | BPF_FETCH:
-+		EMIT(PPC_RAW_XOR(tmp2_reg, tmp2_reg, src_reg));
-+		break;
-+	case BPF_CMPXCHG:
-+	       /*
-+		* Return old value in BPF_REG_0 for BPF_CMPXCHG &
-+		* in src_reg for other cases.
-+		*/
-+		ret_reg = bpf_to_ppc(BPF_REG_0);
-+
-+		/* Compare with old value in BPF_R0 */
-+		if (size == BPF_DW)
-+			EMIT(PPC_RAW_CMPD(bpf_to_ppc(BPF_REG_0), tmp2_reg));
-+		else
-+			EMIT(PPC_RAW_CMPW(bpf_to_ppc(BPF_REG_0), tmp2_reg));
-+		/* Don't set if different from old value */
-+		PPC_BCC_SHORT(COND_NE, (ctx->idx + 3) * 4);
-+		fallthrough;
-+	case BPF_XCHG:
-+		save_reg = src_reg;
-+		break;
-+	default:
-+		return -EOPNOTSUPP;
+ 	if (skel->data->test_skip == 2) {
+ 		test__skip();
+ 		goto end;
+@@ -86,6 +98,13 @@ static void test_arena_spin_lock_size(int size)
+ 			goto end_barrier;
+ 	}
+ 
++	if (skel->data->test_skip == 2) {
++		printf("%s:SKIP: %d online CPUs exceed the maximum supported by arena spinlock\n",
++		       __func__, get_nprocs());
++		test__skip();
++		goto end_barrier;
 +	}
 +
-+	/* store new value */
-+	if (size == BPF_DW)
-+		EMIT(PPC_RAW_STDCX(save_reg, tmp1_reg, dst_reg));
-+	else
-+		EMIT(PPC_RAW_STWCX(save_reg, tmp1_reg, dst_reg));
-+	/* we're done if this succeeded */
-+	PPC_BCC_SHORT(COND_NE, *tmp_idx * 4);
-+	fixup_idx = ctx->idx;
+ 	ASSERT_EQ(skel->bss->counter, repeat * nthreads, "check counter value");
+ 
+ end_barrier:
+diff --git a/tools/testing/selftests/bpf/progs/arena_spin_lock.c b/tools/testing/selftests/bpf/progs/arena_spin_lock.c
+index c4500c37f85e..9ed5a3281fd4 100644
+--- a/tools/testing/selftests/bpf/progs/arena_spin_lock.c
++++ b/tools/testing/selftests/bpf/progs/arena_spin_lock.c
+@@ -4,6 +4,9 @@
+ #include <bpf/bpf_tracing.h>
+ #include <bpf/bpf_helpers.h>
+ #include "bpf_misc.h"
 +
-+	if (imm & BPF_FETCH) {
-+		/* Emit 'sync' to enforce full ordering */
-+		if (IS_ENABLED(CONFIG_SMP))
-+			EMIT(PPC_RAW_SYNC());
-+		EMIT(PPC_RAW_MR(ret_reg, _R0));
-+		/*
-+		 * Skip unnecessary zero-extension for 32-bit cmpxchg.
-+		 * For context, see commit 39491867ace5.
-+		 */
-+		if (size != BPF_DW && imm == BPF_CMPXCHG &&
-+		    insn_is_zext(insn + 1))
-+			*addrp = ctx->idx * 4;
++const volatile int nr_cpus;
++
+ #include "bpf_arena_spin_lock.h"
+ 
+ struct {
+@@ -37,8 +40,11 @@ int prog(void *ctx)
+ #if defined(ENABLE_ATOMICS_TESTS) && defined(__BPF_FEATURE_ADDR_SPACE_CAST)
+ 	unsigned long flags;
+ 
+-	if ((ret = arena_spin_lock_irqsave(&lock, flags)))
++	if ((ret = arena_spin_lock_irqsave(&lock, flags))) {
++		if (ret == -EOPNOTSUPP)
++			test_skip = 2;
+ 		return ret;
 +	}
-+
-+	*jmp_off = (fixup_idx - *tmp_idx) * 4;
-+
-+	return 0;
-+}
-+
- static int bpf_jit_emit_probe_mem_store(struct codegen_context *ctx, u32 src_reg, s16 off,
- 					u32 code, u32 *image)
+ 	if (counter != limit)
+ 		counter++;
+ 	bpf_repeat(cs_count);
+diff --git a/tools/testing/selftests/bpf/progs/bpf_arena_spin_lock.h b/tools/testing/selftests/bpf/progs/bpf_arena_spin_lock.h
+index d67466c1ff77..752131161315 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_arena_spin_lock.h
++++ b/tools/testing/selftests/bpf/progs/bpf_arena_spin_lock.h
+@@ -20,8 +20,6 @@
+ #define __arena __attribute__((address_space(1)))
+ #endif
+ 
+-extern unsigned long CONFIG_NR_CPUS __kconfig;
+-
+ /*
+  * Typically, we'd just rely on the definition in vmlinux.h for qspinlock, but
+  * PowerPC overrides the definition to define lock->val as u32 instead of
+@@ -494,7 +492,7 @@ static __always_inline int arena_spin_lock(arena_spinlock_t __arena *lock)
  {
-@@ -538,7 +643,6 @@ int bpf_jit_build_body(struct bpf_prog *fp, u32 *image, u32 *fimage, struct code
- 		u32 size = BPF_SIZE(code);
- 		u32 tmp1_reg = bpf_to_ppc(TMP_REG_1);
- 		u32 tmp2_reg = bpf_to_ppc(TMP_REG_2);
--		u32 save_reg, ret_reg;
- 		s16 off = insn[i].off;
- 		s32 imm = insn[i].imm;
- 		bool func_addr_fixed;
-@@ -546,6 +650,7 @@ int bpf_jit_build_body(struct bpf_prog *fp, u32 *image, u32 *fimage, struct code
- 		u64 imm64;
- 		u32 true_cond;
- 		u32 tmp_idx;
-+		u32 jmp_off;
+ 	int val = 0;
  
- 		/*
- 		 * addrs[] maps a BPF bytecode address into a real offset from
-@@ -1081,93 +1186,15 @@ int bpf_jit_build_body(struct bpf_prog *fp, u32 *image, u32 *fimage, struct code
- 				return -EOPNOTSUPP;
- 			}
+-	if (CONFIG_NR_CPUS > 1024)
++	if (nr_cpus > 1024)
+ 		return -EOPNOTSUPP;
  
--			save_reg = tmp2_reg;
--			ret_reg = src_reg;
--
--			/* Get offset into TMP_REG_1 */
--			EMIT(PPC_RAW_LI(tmp1_reg, off));
--			/*
--			 * Enforce full ordering for operations with BPF_FETCH by emitting a 'sync'
--			 * before and after the operation.
--			 *
--			 * This is a requirement in the Linux Kernel Memory Model.
--			 * See __cmpxchg_u64() in asm/cmpxchg.h as an example.
--			 */
--			if ((imm & BPF_FETCH) && IS_ENABLED(CONFIG_SMP))
--				EMIT(PPC_RAW_SYNC());
--			tmp_idx = ctx->idx * 4;
--			/* load value from memory into TMP_REG_2 */
--			if (size == BPF_DW)
--				EMIT(PPC_RAW_LDARX(tmp2_reg, tmp1_reg, dst_reg, 0));
--			else
--				EMIT(PPC_RAW_LWARX(tmp2_reg, tmp1_reg, dst_reg, 0));
--
--			/* Save old value in _R0 */
--			if (imm & BPF_FETCH)
--				EMIT(PPC_RAW_MR(_R0, tmp2_reg));
--
--			switch (imm) {
--			case BPF_ADD:
--			case BPF_ADD | BPF_FETCH:
--				EMIT(PPC_RAW_ADD(tmp2_reg, tmp2_reg, src_reg));
--				break;
--			case BPF_AND:
--			case BPF_AND | BPF_FETCH:
--				EMIT(PPC_RAW_AND(tmp2_reg, tmp2_reg, src_reg));
--				break;
--			case BPF_OR:
--			case BPF_OR | BPF_FETCH:
--				EMIT(PPC_RAW_OR(tmp2_reg, tmp2_reg, src_reg));
--				break;
--			case BPF_XOR:
--			case BPF_XOR | BPF_FETCH:
--				EMIT(PPC_RAW_XOR(tmp2_reg, tmp2_reg, src_reg));
--				break;
--			case BPF_CMPXCHG:
--				/*
--				 * Return old value in BPF_REG_0 for BPF_CMPXCHG &
--				 * in src_reg for other cases.
--				 */
--				ret_reg = bpf_to_ppc(BPF_REG_0);
--
--				/* Compare with old value in BPF_R0 */
--				if (size == BPF_DW)
--					EMIT(PPC_RAW_CMPD(bpf_to_ppc(BPF_REG_0), tmp2_reg));
--				else
--					EMIT(PPC_RAW_CMPW(bpf_to_ppc(BPF_REG_0), tmp2_reg));
--				/* Don't set if different from old value */
--				PPC_BCC_SHORT(COND_NE, (ctx->idx + 3) * 4);
--				fallthrough;
--			case BPF_XCHG:
--				save_reg = src_reg;
--				break;
--			default:
--				pr_err_ratelimited(
--					"eBPF filter atomic op code %02x (@%d) unsupported\n",
--					code, i);
--				return -EOPNOTSUPP;
--			}
--
--			/* store new value */
--			if (size == BPF_DW)
--				EMIT(PPC_RAW_STDCX(save_reg, tmp1_reg, dst_reg));
--			else
--				EMIT(PPC_RAW_STWCX(save_reg, tmp1_reg, dst_reg));
--			/* we're done if this succeeded */
--			PPC_BCC_SHORT(COND_NE, tmp_idx);
--
--			if (imm & BPF_FETCH) {
--				/* Emit 'sync' to enforce full ordering */
--				if (IS_ENABLED(CONFIG_SMP))
--					EMIT(PPC_RAW_SYNC());
--				EMIT(PPC_RAW_MR(ret_reg, _R0));
--				/*
--				 * Skip unnecessary zero-extension for 32-bit cmpxchg.
--				 * For context, see commit 39491867ace5.
--				 */
--				if (size != BPF_DW && imm == BPF_CMPXCHG &&
--				    insn_is_zext(&insn[i + 1]))
--					addrs[++i] = ctx->idx * 4;
-+			ret = bpf_jit_emit_atomic_ops(image, ctx, &insn[i],
-+						      &jmp_off, &tmp_idx, &addrs[i + 1]);
-+			if (ret) {
-+				if (ret == -EOPNOTSUPP) {
-+					pr_err_ratelimited(
-+						"eBPF filter atomic op code %02x (@%d) unsupported\n",
-+						code, i);
-+				}
-+				return ret;
- 			}
- 			break;
- 
+ 	bpf_preempt_disable();
 -- 
 2.43.5
 
