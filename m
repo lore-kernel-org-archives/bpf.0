@@ -1,113 +1,84 @@
-Received: from out-179.mta1.migadu.com (out-179.mta1.migadu.com [95.215.58.179])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57FED26980E
-	for <bpf@vger.kernel.org>; Wed,  6 Aug 2025 23:17:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8153223301;
+	Wed,  6 Aug 2025 23:19:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754522229; cv=none; b=YessbHnN2WHg6t1LiAaiHEK/J8qGk29MJGE6a+qUhrO5CI6sqzzQWS5/TS+JzlNw6SLqN2z8FwDYFml35Gy2PR2+gZiobJaZJfIihmgTJ/HyFpjwd5IwBcbUVZDq2p9ZQGdIjAG0DmeNEPeI+Fzb68nIvFnZZC48mGdZp7flZSs=
+	t=1754522397; cv=none; b=fRjAJy/9JUYWH7941FoK6DIv02XSEbB3s8t8giCuCTl1vgBrEsQDjbmDTV9MLjNRDZfOEp2yaKUqIWb/J2a75K26QtHYyyqdA2ybNNQboBGypbYPTRSiFZJCAKq09BGT9hv3UsfFeC2ZG2Cuc/lIDI4lm03kwcyUAA4CN6gmfqM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754522229; c=relaxed/simple;
-	bh=FeCWmPQiD/cqpQoXX+18fO/ItdirJ60NrDGDwnL9tn8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=P5PyHWuBN84Z1QHirc8hkBN0x3xIr+P0VGRUNrGtR3muY57kQrNMm++b3/oGbDlj+bfK/9QoNxq/FM58wpw1oPqMuMxHNsQHeNktd2kdzIWIRC4QZ9DLd5HWmk3kh+t6y56+haH9mzoXa2RzyKmiZTl2GOEj+F0FOBAnF11Z4GM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ozAk8y4t; arc=none smtp.client-ip=95.215.58.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1754522397; c=relaxed/simple;
+	bh=iVDwBBtRqvwE1jbW801y24V6/5gV/eTvg/6Zo55SnS4=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=fn1/U9WW9G7U7fV1rahBsVIr7NdmQpbB7xjAFLhXaceGPqlIU3haHeJ8gVckqiHcPioTKC2saOQdXmvRO6XVhsXR86Hyimf5msMItI7X/IIzgX8YKwkRUiieVmG6q1S7XXmrTHcOYROB1i/m93rQCupr9iJijpnB35BGk8n7MS4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ggQoHQLV; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ozAk8y4t"
-Message-ID: <3dba1e87-5087-4641-ac9b-db800cbbf994@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1754522224;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=pxYvcoRoayv+MkFE8DXXWCxjBeMenqdmnelOyMnQHG8=;
-	b=ozAk8y4tmU7Y4eQQeB4Ru/yI+fGj8kIOM/77kHpARmCPMs8aRq9TAy5e9JRXMfCA30s6Yv
-	7n6X7M23dyI6KAnGsm43MHiNqzMfHGWYPk1KqT/2ddNiCj3J1nch9L/DURtgLAX5EUYZ7w
-	edGjBrT3NOtW6u8eAACftYNohdGLYmk=
-Date: Wed, 6 Aug 2025 16:16:57 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ggQoHQLV"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43286C4CEE7;
+	Wed,  6 Aug 2025 23:19:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1754522397;
+	bh=iVDwBBtRqvwE1jbW801y24V6/5gV/eTvg/6Zo55SnS4=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=ggQoHQLVVASjJZBVv4DZOdk/P06K2bJwCrUufQtHIPT4qRrN4tPSl//Z7ZkNe9wDE
+	 KgH+D4jN6QfT0V/U4xGDZAFi1VdcQO3VJROKpEeW6sfBLeFPj54KqdHS6WEzgZSjgl
+	 TzGb+Z2vHmPPxUc4/eeeTj36+lPEtn7GP3nhyaVMGwPwuS0LBhPgX5de7rBUWVJjlP
+	 /qU3waR0PSC14s3qa3wrGTXaA71/jS0c6p9E1WfXk8iovPh9t5T2IqhteoLdGdxzSd
+	 PAAJHnCp+WZEugDoH5lUSBztrdQqxcTFX6Ec3XM8ZZi2/V+Lvovl5hI18GV3h2/zKb
+	 3WHwjLigCq02g==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33B85383BF63;
+	Wed,  6 Aug 2025 23:20:12 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v2 2/3] selftests/bpf: Add multi_st_ops that
- supports multiple instances
-To: Amery Hung <ameryhung@gmail.com>
-Cc: bpf@vger.kernel.org, netdev@vger.kernel.org,
- alexei.starovoitov@gmail.com, andrii@kernel.org, daniel@iogearbox.net,
- tj@kernel.org, memxor@gmail.com, martin.lau@kernel.org, kernel-team@meta.com
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v2 0/3] Allow struct_ops to create map id to
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <175452241100.2973132.16950481472519463981.git-patchwork-notify@kernel.org>
+Date: Wed, 06 Aug 2025 23:20:11 +0000
 References: <20250806162540.681679-1-ameryhung@gmail.com>
- <20250806162540.681679-3-ameryhung@gmail.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <20250806162540.681679-3-ameryhung@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+In-Reply-To: <20250806162540.681679-1-ameryhung@gmail.com>
+To: Amery Hung <ameryhung@gmail.com>
+Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, alexei.starovoitov@gmail.com,
+ andrii@kernel.org, daniel@iogearbox.net, tj@kernel.org, memxor@gmail.com,
+ martin.lau@kernel.org, kernel-team@meta.com
 
-On 8/6/25 9:25 AM, Amery Hung wrote:
-> +int bpf_kfunc_multi_st_ops_test_1(struct st_ops_args *args, u32 id)
-> +{
-> +	struct bpf_testmod_multi_st_ops *st_ops;
-> +	unsigned long flags;
-> +	int ret = -1;
-> +
-> +	spin_lock_irqsave(&multi_st_ops_lock, flags);
-> +	st_ops = multi_st_ops_find_nolock(id);
-> +	if (st_ops)
-> +		ret = st_ops->test_1(args);
+Hello:
 
-test_1 cannot be NULL,
+This series was applied to bpf/bpf-next.git (master)
+by Martin KaFai Lau <martin.lau@kernel.org>:
 
-> +	spin_unlock_irqrestore(&multi_st_ops_lock, flags);
-> +
-> +	return ret;
-> +}
-> +
-> +static int multi_st_ops_reg(void *kdata, struct bpf_link *link)
-> +{
-> +	struct bpf_testmod_multi_st_ops *st_ops =
-> +		(struct bpf_testmod_multi_st_ops *)kdata;
-> +	unsigned long flags;
-> +	int err = 0;
-> +	u32 id;
-> +
+On Wed,  6 Aug 2025 09:25:37 -0700 you wrote:
+> v1 -> v2
+>     Add bpf_struct_ops_id() instead of using bpf_struct_ops_get()
+> 
+> Hi,
+> 
+> This patchset allows struct_ops implementors to get map id from kdata in
+> reg(), unreg() and update() so that they create an id to struct_ops
+> instance mapping. This in turn allows struct_ops kfuncs to refer to the
+> calling instance without passing a pointer to the struct_ops. The selftest
+> provides an end-to-end example.
+> 
+> [...]
 
-so I added a "if (!st_ops->test_1)" test.
+Here is the summary with links:
+  - [bpf-next,v2,1/3] bpf: Allow struct_ops to get map id by kdata
+    https://git.kernel.org/bpf/bpf-next/c/d87a513d0937
+  - [bpf-next,v2,2/3] selftests/bpf: Add multi_st_ops that supports multiple instances
+    https://git.kernel.org/bpf/bpf-next/c/eeb52b6279cf
+  - [bpf-next,v2,3/3] selftests/bpf: Test multi_st_ops and calling kfuncs from different programs
+    https://git.kernel.org/bpf/bpf-next/c/ba7000f1c360
 
-> +	id = bpf_struct_ops_id(kdata);
-> +
-> +	spin_lock_irqsave(&multi_st_ops_lock, flags);
-> +	if (multi_st_ops_find_nolock(id)) {
-> +		pr_err("multi_st_ops(id:%d) has already been registered\n", id);
-> +		err = -EEXIST;
-> +		goto unlock;
-> +	}
-> +
-> +	st_ops->id = id;
-> +	hlist_add_head(&st_ops->node, &multi_st_ops_list);
-> +unlock:
-> +	spin_unlock_irqrestore(&multi_st_ops_lock, flags);
-> +
-> +	return err;
-> +}
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
-[ ... ]
-
-> diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.h b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.h
-> index c9fab51f16e2..b8001ba7c368 100644
-> --- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.h
-> +++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.h
-> @@ -116,4 +116,12 @@ struct bpf_testmod_st_ops {
->   	struct module *owner;
->   };
->   
-> +#define BPF_TESTMOD_NAME_SZ 16
-
-Not sure why it is here. I don't see it is used, so removed.
