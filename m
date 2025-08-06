@@ -1,127 +1,130 @@
-Received: from out-181.mta0.migadu.com (out-181.mta0.migadu.com [91.218.175.181])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1E2526A0EE
-	for <bpf@vger.kernel.org>; Wed,  6 Aug 2025 23:20:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D37B1FCF41;
+	Wed,  6 Aug 2025 23:33:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754522408; cv=none; b=RJ955JN2VYiEf6BgvNxLr95GbWmWXxB0nXPriVLcC38SOAKiWdx5ybloDjRPJaJd9LiqKLCkZTVvr8c4dPwctQcXFzi9hr1lktoaMUP5bU+If1E0NI0IuVnTA3LMNlaqF8JLhriZaePl1khxk2rW2dsaOcM+9CxQEQYEVmXoasc=
+	t=1754523234; cv=none; b=MMhOK/0+zqR1DOCIug+8e2uc4Zwrn/CE2mYZvuOcd/nbWjMuzmNKU6nXJAbNvej4P8acp9LB9XevucRijyayIAnWdtcB5aQQZ9HswnzQlKweR1WhfT1/I9HAA21+JleiC848CrWIXy1LQ5cHTVC0QeNDMkBDDqheUzU1rwYbc4Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754522408; c=relaxed/simple;
-	bh=wHsW6SIbPMwkbBblDPt7VXJn9JrfT2AFVFwEQUK6xNM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PAXoRknryNDVoDLznfRMRNekc5p08eAhDv0Dgp9mV08ZYJWRvJWyVWIwQTM7wnx7ZkcAE+v4p1kLz0PoYkYlNDmNy3X3oP5dcHk8JHLYgdgAwiCZx8hzUQ7E5ENDDYqw6fDKD9p/9ZCSYTrTYM0EImw/Kw5dMUG/mrWLyQeRNOg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=cr6KAsqV; arc=none smtp.client-ip=91.218.175.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1754523234; c=relaxed/simple;
+	bh=LwOsg5Phvym95NqHXVw0T6HmV6LxD1ZVx665EdoVQ8k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dkZYGpbOa0tRWUQHFCJDPj6p0GhFhSwMQ6ebjfqr1/r6VU+BuIEFNVhYcT1CgcDOKihxFmpg3sws0dPwe7qdGTui9GU+lGJc2i1vj7P7bobRUIS1N4Xu4F8qJ8Bcx67pL7VitAQ0PlD5H1jJ1CvXScsxb7lSyJuhPTAJzFtp0rY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ehnrsl9h; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="cr6KAsqV"
-Message-ID: <c9140ce6-8352-4aaa-8b18-d35d762c0d63@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1754522404;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=L2xgw2I4tQxBFyi7ikU0TjxCVGpF6S1DUopFBEFwPM4=;
-	b=cr6KAsqVllTpDNas5Vlq5gcPinIa55t4nbNRJVwBRtIZ6Rvt4IohVMF3yRWOzCLi1TS7gV
-	Mf0tFilHGREtkPl3keKwPZX4MBfVyvFvPrKTcanPCgSMhk0XyTLKKwnTdw0ekKVzNpUjRF
-	7/sWnCIoNYEjrWm0GwdNjOW8VTt9n6E=
-Date: Wed, 6 Aug 2025 16:20:00 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ehnrsl9h"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41FFEC4CEE7;
+	Wed,  6 Aug 2025 23:33:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1754523233;
+	bh=LwOsg5Phvym95NqHXVw0T6HmV6LxD1ZVx665EdoVQ8k=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Ehnrsl9htemG79QSVa2feSbQMp2F1BAMTaPhyd3JIGxJ3+ahsvfHL8JaaqPngzhfl
+	 QGVicQlqvyHH3T0t05j662gEl0RGPg+8DOzteW7/TY1aVlOa8UKgEn5cqMFM0NAM0Q
+	 YGoCEk2A0q5Ha0iHuoFAwFDjW9bxgnrklHo3plw0+UXFG46N0wPDwab5wDhHurFIzf
+	 +cbILmaE8LLXL/phUseMZGODessCxSwGK9QrImp1o/q/tNVtREHyYXDjobaR9XaleO
+	 z5FtYE9OPt03qOJ3mTlOIxGlXWhc0owd+m5ICwsG2HIuIqje6RP5+zb/9HXldDM0IF
+	 5Yn1ejufUy+dQ==
+Date: Wed, 6 Aug 2025 16:33:51 -0700
+From: Namhyung Kim <namhyung@kernel.org>
+To: Sam James <sam@gentoo.org>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	"Liang, Kan" <kan.liang@linux.intel.com>,
+	Andrew Pinski <quic_apinski@quicinc.com>,
+	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: Re: [PATCH] perf: use __builtin_preserve_field_info for GCC
+ compatibility
+Message-ID: <aJPmX8xc5x0W_r0y@google.com>
+References: <fea380fb0934d039d19821bba88130e632bbfe8d.1754438581.git.sam@gentoo.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v2 3/3] selftests/bpf: Test multi_st_ops and
- calling kfuncs from different programs
-To: Amery Hung <ameryhung@gmail.com>
-Cc: netdev@vger.kernel.org, alexei.starovoitov@gmail.com, andrii@kernel.org,
- daniel@iogearbox.net, tj@kernel.org, memxor@gmail.com,
- martin.lau@kernel.org, kernel-team@meta.com, bpf@vger.kernel.org
-References: <20250806162540.681679-1-ameryhung@gmail.com>
- <20250806162540.681679-4-ameryhung@gmail.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <20250806162540.681679-4-ameryhung@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <fea380fb0934d039d19821bba88130e632bbfe8d.1754438581.git.sam@gentoo.org>
 
-On 8/6/25 9:25 AM, Amery Hung wrote:
-> +static void test_st_ops_id_ops_mapping(void)
-> +{
-> +	struct struct_ops_id_ops_mapping1 *skel1 = NULL;
-> +	struct struct_ops_id_ops_mapping2 *skel2 = NULL;
-> +	LIBBPF_OPTS(bpf_test_run_opts, topts);
+Hello,
 
-A default topts is not needed. Passing NULL is as good, so removed.
+On Wed, Aug 06, 2025 at 01:03:01AM +0100, Sam James wrote:
+> When exploring building bpf_skel with GCC's BPF support, there was a
+> buid failure because of bpf_core_field_exists vs the mem_hops bitfield:
+> ```
+>  In file included from util/bpf_skel/sample_filter.bpf.c:6:
+> util/bpf_skel/sample_filter.bpf.c: In function 'perf_get_sample':
+> tools/perf/libbpf/include/bpf/bpf_core_read.h:169:42: error: cannot take address of bit-field 'mem_hops'
+>   169 | #define ___bpf_field_ref1(field)        (&(field))
+>       |                                          ^
+> tools/perf/libbpf/include/bpf/bpf_helpers.h:222:29: note: in expansion of macro '___bpf_field_ref1'
+>   222 | #define ___bpf_concat(a, b) a ## b
+>       |                             ^
+> tools/perf/libbpf/include/bpf/bpf_helpers.h:225:29: note: in expansion of macro '___bpf_concat'
+>   225 | #define ___bpf_apply(fn, n) ___bpf_concat(fn, n)
+>       |                             ^~~~~~~~~~~~~
+> tools/perf/libbpf/include/bpf/bpf_core_read.h:173:9: note: in expansion of macro '___bpf_apply'
+>   173 |         ___bpf_apply(___bpf_field_ref, ___bpf_narg(args))(args)
+>       |         ^~~~~~~~~~~~
+> tools/perf/libbpf/include/bpf/bpf_core_read.h:188:39: note: in expansion of macro '___bpf_field_ref'
+>   188 |         __builtin_preserve_field_info(___bpf_field_ref(field), BPF_FIELD_EXISTS)
+>       |                                       ^~~~~~~~~~~~~~~~
+> util/bpf_skel/sample_filter.bpf.c:167:29: note: in expansion of macro 'bpf_core_field_exists'
+>   167 |                         if (bpf_core_field_exists(data->mem_hops))
+>       |                             ^~~~~~~~~~~~~~~~~~~~~
+> cc1: error: argument is not a field access
+> ```
+> 
+> ___bpf_field_ref1 was adapted for GCC in 12bbcf8e840f40b82b02981e96e0a5fbb0703ea9
+> but the trick added for compatibility in 3a8b8fc3174891c4c12f5766d82184a82d4b2e3e
+> isn't compatible with that as an address is used as an argument.
+> 
+> Workaround this by calling __builtin_preserve_field_info directly as the
+> bpf_core_field_exists macro does, but without the ___bpf_field_ref use.
 
-> +	struct bpf_map_info info = {};
-> +	__u32 len = sizeof(info);
-> +	int err, pid, prog1_fd, prog2_fd;
-> +
-> +	skel1 = struct_ops_id_ops_mapping1__open_and_load();
-> +	if (!ASSERT_OK_PTR(skel1, "struct_ops_id_ops_mapping1__open"))
-> +		goto out;
-> +
-> +	skel2 = struct_ops_id_ops_mapping2__open_and_load();
-> +	if (!ASSERT_OK_PTR(skel2, "struct_ops_id_ops_mapping2__open"))
-> +		goto out;
-> +
-> +	err = bpf_map_get_info_by_fd(bpf_map__fd(skel1->maps.st_ops_map),
-> +				     &info, &len);
-> +	if (!ASSERT_OK(err, "bpf_map_get_info_by_fd"))
-> +		goto out;
-> +
-> +	skel1->bss->st_ops_id = info.id;
-> +
-> +	err = bpf_map_get_info_by_fd(bpf_map__fd(skel2->maps.st_ops_map),
-> +				     &info, &len);
-> +	if (!ASSERT_OK(err, "bpf_map_get_info_by_fd"))
-> +		goto out;
-> +
-> +	skel2->bss->st_ops_id = info.id;
-> +
-> +	err = struct_ops_id_ops_mapping1__attach(skel1);
-> +	if (!ASSERT_OK(err, "struct_ops_id_ops_mapping1__attach"))
-> +		goto out;
-> +
-> +	err = struct_ops_id_ops_mapping2__attach(skel2);
-> +	if (!ASSERT_OK(err, "struct_ops_id_ops_mapping2__attach"))
-> +		goto out;
-> +
-> +	/* run tracing prog that calls .test_1 and checks return */
-> +	pid = getpid();
-> +	skel1->bss->test_pid = pid;
-> +	skel2->bss->test_pid = pid;
-> +	sys_gettid();
-> +	skel1->bss->test_pid = 0;
-> +	skel2->bss->test_pid = 0;
-> +
-> +	/* run syscall_prog that calls .test_1 and checks return */
-> +	prog1_fd = bpf_program__fd(skel1->progs.syscall_prog);
-> +	err = bpf_prog_test_run_opts(prog1_fd, &topts);
-> +	ASSERT_OK(err, "bpf_prog_test_run_opts");
-> +
-> +	prog2_fd = bpf_program__fd(skel2->progs.syscall_prog);
-> +	err = bpf_prog_test_run_opts(prog2_fd, &topts);
-> +	ASSERT_OK(err, "bpf_prog_test_run_opts");
-> +
-> +	ASSERT_EQ(skel1->bss->test_err, 0, "skel1->bss->test_err");
-> +	ASSERT_EQ(skel2->bss->test_err, 0, "skel2->bss->test_err");
-> +
-> +out:
-> +	if (skel1)
-> +		struct_ops_id_ops_mapping1__destroy(skel1);
-> +	if (skel2)
+IIUC GCC doesn't support bpf_core_fields_exists() for bitfield members,
+right?  Is it gonna change in the future?
 
-NULL check on skel[12] is not needed, so removed.
+> 
+> Link: https://gcc.gnu.org/PR121420
+> Co-authored-by: Andrew Pinski <quic_apinski@quicinc.com>
+> Signed-off-by: Sam James <sam@gentoo.org>
+> ---
+>  tools/perf/util/bpf_skel/sample_filter.bpf.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/perf/util/bpf_skel/sample_filter.bpf.c b/tools/perf/util/bpf_skel/sample_filter.bpf.c
+> index b195e6efeb8be..e5666d4c17228 100644
+> --- a/tools/perf/util/bpf_skel/sample_filter.bpf.c
+> +++ b/tools/perf/util/bpf_skel/sample_filter.bpf.c
+> @@ -164,7 +164,7 @@ static inline __u64 perf_get_sample(struct bpf_perf_event_data_kern *kctx,
+>  		if (entry->part == 8) {
+>  			union perf_mem_data_src___new *data = (void *)&kctx->data->data_src;
+>  
+> -			if (bpf_core_field_exists(data->mem_hops))
+> +			if (__builtin_preserve_field_info(data->mem_hops, BPF_FIELD_EXISTS))
 
-Applied. Thanks.
+I believe those two are equivalent (maybe worth a comment?).  But it'd
+be great if BPF/clang folks can review if it's ok.
 
-> +		struct_ops_id_ops_mapping2__destroy(skel2);
-> +}
-> +
+Anyway, I can build it with clang.
+
+Tested-by: Namhyung Kim <namhyung@kernel.org>
+
+Thanks,
+Namhyung
+
+
+>  				return data->mem_hops;
+>  
+>  			return 0;
+> -- 
+> 2.50.1
+> 
