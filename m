@@ -1,154 +1,174 @@
-Received: from mail-ej1-f66.google.com (mail-ej1-f66.google.com [209.85.218.66])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7EDA20FAB2
-	for <bpf@vger.kernel.org>; Thu,  7 Aug 2025 19:02:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F36DC8F6E
+	for <bpf@vger.kernel.org>; Thu,  7 Aug 2025 19:05:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754593331; cv=none; b=Vjw9Iol7ifL9vUyigbswHl9/5Jwb+nYbx2zXeeqQ42nmm5qcf4AySgfLpbnZBm5Jr/e9N/V5B9yfQsuvPam5+251SCWJ5cwXYVGv11yqQIypB7BGzbZsrNV8JDghmt8MNof6j0gZC5bmg/GxenaccWLpu9t30HsPf4f05uGppgI=
+	t=1754593535; cv=none; b=TLrlQuk4hCvLZlDXHrINbsHffuAVAwKJbsygHIHiNtTRdd2Bpx6f89YmQkDLu3q2W+VOpmB9+fX7egN2A3+Q2rMF0WuIoETir46+fV1dKlxzuyl+VqBV2h2sDF+fvvqE04fmGHuPjda+bGEQerWJkyoGXcNx+ub1gvSERMQw6nU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754593331; c=relaxed/simple;
-	bh=MhY5w9l/1VY/E2uFM062NpjyRuLV0sG7cdXxo59LI9U=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PBk1ReJdR8YkaW3yqJGrLukt9PltcLc4VYG9NZTvU3BvVBeI2G0dl2WdNadAqmUt8bWKhv9GEazZRaaMSzlkhJi1oTbJzBIta50QrQr2FKnEQQSTk6NgRDfHlckpCQ/AWF47bKm9Q6kgs1HBmd5vHybXWoBu2FQjzXblTdDKvPs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NymDQ533; arc=none smtp.client-ip=209.85.218.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1754593535; c=relaxed/simple;
+	bh=dE+AVwYniT3vJHP+UoI8xx4iQ9ExHzmQRWkDYBFHlG4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=NkndXbCg3ZKuG/5m9bplkZ+h10w4z0LZsI4SZQm4Uodt/6bUlKEzYGeCH3mp+WAOflmI5COJ2cy0YrYA84cH75GscBxrbFfxLX3e8en1xZgHTQX6163X8I2stqerld64Brafhmw9jj2oqv2+AD92lLYbPtUd7gccFJzZw0B4ZP4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=CrxDhWEc; arc=none smtp.client-ip=91.218.175.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NymDQ533"
-Received: by mail-ej1-f66.google.com with SMTP id a640c23a62f3a-af968aa2de4so264737966b.1
-        for <bpf@vger.kernel.org>; Thu, 07 Aug 2025 12:02:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1754593328; x=1755198128; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=2qyWwKFMlIRWGs9L/F/X7q/RJO/j4wQRwY5EBSB9FCo=;
-        b=NymDQ533oJzZ6lZPoCzi+qjO3NqgbM5xzm66knwoihbYvuBYrgkxPlCOg5ZVxsmCqe
-         wEiop3U6b5ZXwdFkG9Y4oDjz2CZ93HHjjmlpHrSjzEFUMnIfjNzBJF+HETpu5aqtffpS
-         SY1MbTYBK0uF6mZIVjsXgdHTN1sABY4ZaK2+xBQ/UsOOTwRx4XATTjd9nL/h88Anw1kv
-         RSboMBiPxTSUH49SdQZLZ+WK+vKyfHmicl91QW2ZZ3il0G3jTxdqdEMnbci7kNUmsTwk
-         Wlpa2gToyA982t+MTN97DOowNan7JhfcG4sD/c2T6Q/K1QLBqt5ktKsLpCEeKzczn5LO
-         VbrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754593328; x=1755198128;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2qyWwKFMlIRWGs9L/F/X7q/RJO/j4wQRwY5EBSB9FCo=;
-        b=LQvMvK4Wb96Xjx4vte80l5Yl/sGhjCFu7Ud8EShxTPFnKFW0OWDpWxrJaVOq1heY6t
-         HbcfyKEtzefgar06v69c15gAbNERaNi+jFJqk/WfFg5bK8c70MuFHCZuWYsqyscbf1C8
-         oNzi++loaCl6gv+rbI5PFLqqjUfQvtmFGqofk1+nMS0T8zBHAuR5NvDpSb+sI9E+LmV0
-         36WCmco6neyT2uTiKbeVbWzWNroONo3rDJZRKkxatfZe017rH45q9caHETOE54CeWxa9
-         7lSR7CSzyygMHIe1lucyqEE4htRHA7dri3DJQdfejzBThe5dyKA9YdYPyq+5j51sYe1w
-         BWsw==
-X-Gm-Message-State: AOJu0YysJ9mT77QidDTAeq6ihYXn+VF+1okPvmiyZBUrm3UFF10L7R3X
-	/qa5vibvy9yjFQ8puS7ayV6XKX6rdpWFMCoSuJNjkpald+dSrQamxM3bJu40XJMtFA2MlTR44zc
-	UARINPxTTTG2q+aFMD7NIpJUx402RpriELpfo
-X-Gm-Gg: ASbGncuO9MB8rno4uhvEMDHlJ8mDySRfcTokj99/LxELbV6dOt0dX3CMcs9hFTBe2bm
-	KTJEkfkOuhiS9o7+R5XXrACMw8WTFVGmU0l/B4rpt86GOLh8KwiPOrgVAWSXIuHt0kENKDlLdT2
-	fhYlSIPue86/ua8igfQtsCL8lIij3F0kgABByBDaE0XTBklrWJ/HoXN3D7wSJxrZmm3e2BRjT92
-	KqzY8FC1R+l1vTNq3uodPj8fVGayqesDTNEdq/2
-X-Google-Smtp-Source: AGHT+IFFtkFopc4GrV2XsDv4SuWLS7xfiY8+gq8rGu+sW7rZPgoPISnDUyJyo/HCE3Mfb68/uzZ9WB2J+R+jPEG0ees=
-X-Received: by 2002:a17:906:6a07:b0:ade:44f8:569 with SMTP id
- a640c23a62f3a-af9c653e5admr5687866b.42.1754593327822; Thu, 07 Aug 2025
- 12:02:07 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="CrxDhWEc"
+Message-ID: <bfffe2d9-1d2a-4376-abb6-a8746a8a3a69@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1754593529;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=G9mKcMRuq6jINq5ANG/Ei6hvRGRifdTxiEw9xKT697k=;
+	b=CrxDhWEcZS33BnpYpxKbyUZQNRwX0NeaXuFlJgj+4DnB3z99uyFAkxDpFvwwjB5JZCQ3ZM
+	YKrVUS+sQqvB7T6+2w1Y3rATiHxbuKWX4h6DQi/QbiffHlff5cQkaKzrRgrrfPthmMMznh
+	5NJZ+p4V7W8p75Gg74aH9HtBPl92Q6U=
+Date: Thu, 7 Aug 2025 12:05:23 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250806144554.576706-1-mykyta.yatsenko5@gmail.com> <20250806144554.576706-3-mykyta.yatsenko5@gmail.com>
-In-Reply-To: <20250806144554.576706-3-mykyta.yatsenko5@gmail.com>
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date: Thu, 7 Aug 2025 21:01:31 +0200
-X-Gm-Features: Ac12FXzQlZKm70K7HU0Clam2n19O8meiACgjudj8ORxo6-iiM6yw2rfU4AX-l5o
-Message-ID: <CAP01T74oNNA=uQs9N5dtX6drLP5FgocVVZ0rWHP=ruDYH8Hvwg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 2/4] bpf: extract map key pointer calculation
-To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
-	daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com, eddyz87@gmail.com, 
-	Mykyta Yatsenko <yatsenko@meta.com>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH 2/2] bpf: fix stackmap overflow check in
+ __bpf_get_stackid()
+Content-Language: en-GB
+To: Arnaud Lecomte <contact@arnaud-lcm.com>
+Cc: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+ daniel@iogearbox.net, eddyz87@gmail.com, haoluo@google.com,
+ john.fastabend@gmail.com, jolsa@kernel.org, kpsingh@kernel.org,
+ linux-kernel@vger.kernel.org, martin.lau@linux.dev, sdf@fomichev.me,
+ song@kernel.org, syzbot+c9b724fbb41cf2538b7b@syzkaller.appspotmail.com,
+ syzkaller-bugs@googlegroups.com
+References: <20250807175032.7381-1-contact@arnaud-lcm.com>
+ <20250807175258.7613-1-contact@arnaud-lcm.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <20250807175258.7613-1-contact@arnaud-lcm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Wed, 6 Aug 2025 at 16:46, Mykyta Yatsenko <mykyta.yatsenko5@gmail.com> wrote:
+
+
+On 8/7/25 10:52 AM, Arnaud Lecomte wrote:
+> Syzkaller reported a KASAN slab-out-of-bounds write in __bpf_get_stackid()
+> when copying stack trace data. The issue occurs when the perf trace
+>   contains more stack entries than the stack map bucket can hold,
+>   leading to an out-of-bounds write in the bucket's data array.
 >
-> From: Mykyta Yatsenko <yatsenko@meta.com>
->
-> Calculation of the BPF map key, given the pointer to a value is
-> duplicated in a couple of places in helpers already, in the next patch
-> another use case is introduced as well.
-> This patch extracts that functionality into a separate function.
->
-> Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
+> Reported-by: syzbot+c9b724fbb41cf2538b7b@syzkaller.appspotmail.com
+> Closes: https://syzkaller.appspot.com/bug?extid=c9b724fbb41cf2538b7b
+> Signed-off-by: Arnaud Lecomte <contact@arnaud-lcm.com>
 > ---
-
-Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-
->  kernel/bpf/helpers.c | 31 ++++++++++++++-----------------
->  1 file changed, 14 insertions(+), 17 deletions(-)
+>   kernel/bpf/stackmap.c | 26 +++++++++++++++-----------
+>   1 file changed, 15 insertions(+), 11 deletions(-)
 >
-> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-> index 322ffcaedc38..516286f67f0d 100644
-> --- a/kernel/bpf/helpers.c
-> +++ b/kernel/bpf/helpers.c
-> @@ -1084,6 +1084,18 @@ const struct bpf_func_proto bpf_snprintf_proto = {
->         .arg5_type      = ARG_CONST_SIZE_OR_ZERO,
->  };
->
-> +static void *map_key_from_value(struct bpf_map *map, void *value, u32 *arr_idx)
-> +{
-> +       if (map->map_type == BPF_MAP_TYPE_ARRAY) {
-> +               struct bpf_array *array =
-> +                       container_of(map, struct bpf_array, map);
-
-nit: Can we keep it on the same line?
-
+> diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
+> index 14e034045310..d7ef840971f0 100644
+> --- a/kernel/bpf/stackmap.c
+> +++ b/kernel/bpf/stackmap.c
+> @@ -250,7 +250,7 @@ get_callchain_entry_for_task(struct task_struct *task, u32 max_depth)
+>   }
+>   
+>   static long __bpf_get_stackid(struct bpf_map *map,
+> -			      struct perf_callchain_entry *trace, u64 flags)
+> +			      struct perf_callchain_entry *trace, u64 flags, u32 max_depth)
+>   {
+>   	struct bpf_stack_map *smap = container_of(map, struct bpf_stack_map, map);
+>   	struct stack_map_bucket *bucket, *new_bucket, *old_bucket;
+> @@ -266,6 +266,8 @@ static long __bpf_get_stackid(struct bpf_map *map,
+>   
+>   	trace_nr = trace->nr - skip;
+>   	trace_len = trace_nr * sizeof(u64);
+> +	trace_nr = min(trace_nr, max_depth - skip);
 > +
-> +               *arr_idx = ((char *)value - array->value) / array->elem_size;
-> +               return arr_idx;
-> +       }
-> +       return (void *)value - round_up(map->key_size, 8);
-> +}
-> +
->  struct bpf_async_cb {
->         struct bpf_map *map;
->         struct bpf_prog *prog;
-> @@ -1166,15 +1178,8 @@ static enum hrtimer_restart bpf_timer_cb(struct hrtimer *hrtimer)
->          * bpf_map_delete_elem() on the same timer.
->          */
->         this_cpu_write(hrtimer_running, t);
-> -       if (map->map_type == BPF_MAP_TYPE_ARRAY) {
-> -               struct bpf_array *array = container_of(map, struct bpf_array, map);
->
-> -               /* compute the key */
-> -               idx = ((char *)value - array->value) / array->elem_size;
-> -               key = &idx;
-> -       } else { /* hash or lru */
-> -               key = value - round_up(map->key_size, 8);
-> -       }
-> +       key = map_key_from_value(map, value, &idx);
->
->         callback_fn((u64)(long)map, (u64)(long)key, (u64)(long)value, 0, 0);
->         /* The verifier checked that return value is zero. */
-> @@ -1200,15 +1205,7 @@ static void bpf_wq_work(struct work_struct *work)
->         if (!callback_fn)
->                 return;
->
-> -       if (map->map_type == BPF_MAP_TYPE_ARRAY) {
-> -               struct bpf_array *array = container_of(map, struct bpf_array, map);
+>   	ips = trace->ip + skip;
+>   	hash = jhash2((u32 *)ips, trace_len / sizeof(u32), 0);
+>   	id = hash & (smap->n_buckets - 1);
+> @@ -325,19 +327,19 @@ static long __bpf_get_stackid(struct bpf_map *map,
+>   BPF_CALL_3(bpf_get_stackid, struct pt_regs *, regs, struct bpf_map *, map,
+>   	   u64, flags)
+>   {
+> -	u32 max_depth = map->value_size / stack_map_data_size(map);
+> -	u32 skip = flags & BPF_F_SKIP_FIELD_MASK;
+> +	u32 elem_size = stack_map_data_size(map);
+>   	bool user = flags & BPF_F_USER_STACK;
+>   	struct perf_callchain_entry *trace;
+>   	bool kernel = !user;
+> +	u32 max_depth;
+>   
+>   	if (unlikely(flags & ~(BPF_F_SKIP_FIELD_MASK | BPF_F_USER_STACK |
+>   			       BPF_F_FAST_STACK_CMP | BPF_F_REUSE_STACKID)))
+>   		return -EINVAL;
+>   
+> -	max_depth += skip;
+> -	if (max_depth > sysctl_perf_event_max_stack)
+> -		max_depth = sysctl_perf_event_max_stack;
+> +	max_depth = stack_map_calculate_max_depth(map->value_size, elem_size, flags);
+> +	if (max_depth < 0)
+> +		return -EFAULT;
+
+the above condition is not needed.
+
+>   
+>   	trace = get_perf_callchain(regs, 0, kernel, user, max_depth,
+>   				   false, false);
+> @@ -346,7 +348,7 @@ BPF_CALL_3(bpf_get_stackid, struct pt_regs *, regs, struct bpf_map *, map,
+>   		/* couldn't fetch the stack trace */
+>   		return -EFAULT;
+>   
+> -	return __bpf_get_stackid(map, trace, flags);
+> +	return __bpf_get_stackid(map, trace, flags, max_depth);
+>   }
+>   
+>   const struct bpf_func_proto bpf_get_stackid_proto = {
+> @@ -378,6 +380,7 @@ BPF_CALL_3(bpf_get_stackid_pe, struct bpf_perf_event_data_kern *, ctx,
+>   	bool kernel, user;
+>   	__u64 nr_kernel;
+>   	int ret;
+> +	u32 elem_size, pe_max_depth;
+
+pe_max_depth -> max_depth.
+
+>   
+>   	/* perf_sample_data doesn't have callchain, use bpf_get_stackid */
+>   	if (!(event->attr.sample_type & PERF_SAMPLE_CALLCHAIN))
+> @@ -396,24 +399,25 @@ BPF_CALL_3(bpf_get_stackid_pe, struct bpf_perf_event_data_kern *, ctx,
+>   		return -EFAULT;
+>   
+>   	nr_kernel = count_kernel_ip(trace);
 > -
-> -               /* compute the key */
-> -               idx = ((char *)value - array->value) / array->elem_size;
-> -               key = &idx;
-> -       } else { /* hash or lru */
-> -               key = value - round_up(map->key_size, 8);
-> -       }
-> +       key = map_key_from_value(map, value, &idx);
->
->          rcu_read_lock_trace();
->          migrate_disable();
-> --
-> 2.50.1
->
->
+> +	elem_size = stack_map_data_size(map);
+>   	if (kernel) {
+>   		__u64 nr = trace->nr;
+>   
+>   		trace->nr = nr_kernel;
+> -		ret = __bpf_get_stackid(map, trace, flags);
+> +		pe_max_depth = stack_map_calculate_max_depth(map->value_size, elem_size, flags);
+> +		ret = __bpf_get_stackid(map, trace, flags, pe_max_depth);
+>   
+>   		/* restore nr */
+>   		trace->nr = nr;
+>   	} else { /* user */
+>   		u64 skip = flags & BPF_F_SKIP_FIELD_MASK;
+> -
+
+please keep an empty line here.
+
+>   		skip += nr_kernel;
+>   		if (skip > BPF_F_SKIP_FIELD_MASK)
+>   			return -EFAULT;
+>   
+>   		flags = (flags & ~BPF_F_SKIP_FIELD_MASK) | skip;
+> -		ret = __bpf_get_stackid(map, trace, flags);
+> +		pe_max_depth = stack_map_calculate_max_depth(map->value_size, elem_size, flags);
+> +		ret = __bpf_get_stackid(map, trace, flags, pe_max_depth);
+>   	}
+>   	return ret;
+>   }
+
