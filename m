@@ -1,121 +1,108 @@
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58AD126A1AB
-	for <bpf@vger.kernel.org>; Thu,  7 Aug 2025 15:56:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D994266B52;
+	Thu,  7 Aug 2025 15:59:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754582219; cv=none; b=OgTQjHbmm+27KuIrLla+aUeGpU04U0/C0JuEqdjQ3SIfHVgOULTX2NWlmK2RDO6bgWUuNdAQVmYOiKS0rz+Ibdqxx2lHC3WKFlPNVvlKerJ8R4OBgu4GTp1JEo+DHqi6wUPGlwFBWmZPm7G7FhS4T0eL9CD9Z4GkKB7Jb8IAcnY=
+	t=1754582393; cv=none; b=sJz/8pKuBfjZEFbFKu94IrSPLKW+AMsyP38d8xraG5xTEhd+bxzMIJxB5SeQwU1eAl/hunHkGBXnUILksQkreZ1wPQTEySrN4YIMAmWxjh/55MfOQrzq5PJXJQA/pRfRYkU8+uJEyS1eq4T+cu84wAHDEB+Mahjs2T+jOvqjWC8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754582219; c=relaxed/simple;
-	bh=Mod4sbppqJFW6I4Th85h6rMcZCKXtYNLapqIpCeppLs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QtN9akLXyunkLBHwC11Sn748IRpGM2VyJrvdAAFFEHRg+4X/4SH4h26LHaTHLqF3XCbcdD5Uq37/yTSTnPAeUY0Ib+HGCQ6tDaMxKmOtJHOJ4gFDLtaNTc1foWAY7fUYPOA+3bGFDJofTy3UzHkQnz0DHBpfUUOsb3ZnhGETkPM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fQP2pARf; arc=none smtp.client-ip=209.85.128.44
+	s=arc-20240116; t=1754582393; c=relaxed/simple;
+	bh=Ebc+AGF/6GnJxKxuAOGAeYl3CtsjqnQbzPgqYYqm/Cc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=PwkmlvnaJPzhPV9M1ExCL2+eFmKyYtHI66LA3B+/PzH+KmJhYZ8LZPY7dciTqZ8dxE4HVZI0jXYU+cNSePxBK3wcBA6gy+tXXVYnkv98SkYCe+PbhM/e8pBn1biS6f956o7PdSQl8PX/WTfBiaZu01Z6teOf3Ii6aYTF0EntAuY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fmc3cZQs; arc=none smtp.client-ip=209.85.128.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fQP2pARf"
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-455b00339c8so8027875e9.3
-        for <bpf@vger.kernel.org>; Thu, 07 Aug 2025 08:56:58 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fmc3cZQs"
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-459d40d16bdso8064215e9.0;
+        Thu, 07 Aug 2025 08:59:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1754582217; x=1755187017; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ToAtNeoshwNX488L1ak59/KtK+qCXavZIc52w5zjBio=;
-        b=fQP2pARfMpzuOBTD2sdqpGSIK0ZXQsTyKKWNpv/ckN8xRwJwd0qwTtM82IsiWsL5ew
-         6H7PI6G0GZHSSS+yXnGY4jy53srbSKTZO3jJHD2oqVegZZ34C46PNcAoho4flXQqRdeh
-         558qEDkfEte3bjF3Z+BVf2U35Z0bulhRW5ZHVWvbQstBnkLiu8aSTGJkhgmVXDv3q5L0
-         1ccb+BKo7Yrik0u/bSjmnd/UdRWyz5fsC0M2cZmM9FkSHbnilwK+co9ZPd91gw4nW/MV
-         YGqBhMetJRHhdNn2H6GQGlY3c9cdc213wdpWFDF+L5+HLc7tQrrYqZ73+NZSxriZc+Dr
-         lSgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754582217; x=1755187017;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1754582390; x=1755187190; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ToAtNeoshwNX488L1ak59/KtK+qCXavZIc52w5zjBio=;
-        b=cJrWcNOlfOFekGZ83XvA38cuAuLLLvS+cQFz5ownKZRWncZ6wCiKnSqXCdaceZAFfM
-         Om2lwlpKWWcALlvbUEJw28hPYxE9lwmnsZuij3iICDE8ALRUzKYU64dp+6sFM0Ish0QW
-         ieRTH1AULEtzFoRnCdz4A6UPDRvZN9AAModjfkUEEG82vMr5UrfKembRlMxqv4tnrt3v
-         /oAInpluv7TCL+/lLBwU7pdrPVQ379hSdZ5hL30It49ucDXC1YtJ4RGdhcaOX6THEeLU
-         TGdZciw5buDJIQaWLY/nKsQF7Lb3dyrMo++2FeZhnqnbGGNFXKGPZmU6zQUHsjYHU5BG
-         QOXA==
-X-Gm-Message-State: AOJu0Yy/IiuDFiTKWeANJZBifEygsIQO7OSIN0Oe3DNygyI/ndqAD4ZG
-	CiVtG7nQMd5w62AtOA5/VOdz39G53TEDdcGs3cgYyDwxsvfzOJ/3vhIT
-X-Gm-Gg: ASbGncsIpax2lwlGGAZ31B2ily0hc0NWzYpHOemhjILAoH+DcmVAq2SgsFiw6iFiPM8
-	Watp2phzoDPIiaWmjkdpEIQTgFkHmOSmDoC36gwlAjRlMW1cs/86jhwxH6lLmG4GQqxwiC9dtOS
-	NHuLEpbtM5PX+ry5bEFBoX3D14wmzOHesWzePo25RGAah5oOv3NC4AuhxT1Wd8fa1FaENN//CSA
-	zt1kce2EKpjhtmhkoY8D9/u/3xO/i/IMUaC29CvVbk7qBmyOKbtrLfiFQObjgI2B0IFjypUfd1N
-	UvibKtLWh4Xg8eg0JeI4xnJsMjWjWcc93N00hNmn6fEsd0vc9rBrGtDTWD84ebpuYorz7rS4PyE
-	01Eg1HROXcYdsU4y/ijboQLnfzFmkGOnwvQ==
-X-Google-Smtp-Source: AGHT+IE260H90pexDPjq/KuVUuL8jhxAV+2VqoVIhAQZ8xuHynAb7QICKhfpRE1cOh0+tERd/7WGxA==
-X-Received: by 2002:a05:600c:4506:b0:456:133f:a02d with SMTP id 5b1f17b1804b1-459e70ef03bmr75432095e9.17.1754582216431;
-        Thu, 07 Aug 2025 08:56:56 -0700 (PDT)
-Received: from mail.gmail.com ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3b8fc28a7b0sm2571162f8f.63.2025.08.07.08.56.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Aug 2025 08:56:56 -0700 (PDT)
-Date: Thu, 7 Aug 2025 16:02:06 +0000
-From: Anton Protopopov <a.s.protopopov@gmail.com>
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
-	daniel@iogearbox.net, martin.lau@linux.dev, kernel-team@fb.com,
-	yonghong.song@linux.dev,
-	Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Subject: Re: [PATCH bpf-next v2 2/2] bpf: use realloc in bpf_patch_insn_data
-Message-ID: <aJTN/rQxfyr5BjVk@mail.gmail.com>
-References: <20250807010205.3210608-1-eddyz87@gmail.com>
- <20250807010205.3210608-3-eddyz87@gmail.com>
+        bh=Ebc+AGF/6GnJxKxuAOGAeYl3CtsjqnQbzPgqYYqm/Cc=;
+        b=fmc3cZQsBxLMqMtCYKH7lbrzFsVhFkBikzaDihD9bGUN/47F/2e8LoHlWRvbM09yEG
+         ngdHgofgL48JSgb2q02BcpuNrThNTV67BzvrbewmzCj39XSYL4nNlt10lVpJbIEAPJxl
+         IeVq7LdQ2RI86SGwxXNwlzG/fLw0aJDFQmVKK3/X45kdfAnKgtYSAFDz43zEYG28m6/N
+         OI4gBCW7Ef7UIrVxBNBAAfvsSr0PyihN1CWHcxGa//tZV5EUGFXRRD6WpsAtgii1F+xe
+         LnDnHXbgEwxIIXRrsOIQM0r4Z8WprjGEZuZLAjNBumPi2yXaQSYWZRJuWx0g2tt9r0V7
+         jyKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1754582390; x=1755187190;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Ebc+AGF/6GnJxKxuAOGAeYl3CtsjqnQbzPgqYYqm/Cc=;
+        b=t65O+T8IT6iL6Zz5OzpYx2GnogfpWxo0GKaYXMrtIqWjp/YAHLXepJwtBYerpjNq37
+         3T+/StYuyHwI82ptsKzPNsU1MaoY6q+8daO0jMwzCeYPlyPxRtn2y7x2vWiCqz+db+/g
+         sNfrZy/enQigN2b/t4xjYFIddGNQeBBZBRk+mEC36EvEwYzWU/3icAYElKa6nZwAH2H4
+         iKm8JQo16/z5ILOpx5s1AQbe47Fa5+WHmBssbrO3hWpU6Pi0FxRD6J+AraMsHJeRePbU
+         5g5KAVg2Vg012Ga9j4T7X+NQgRxFhtE5bV8fomK2JUi7uW2fZFrkr7GZUAH3oA5C5aDW
+         TZjA==
+X-Forwarded-Encrypted: i=1; AJvYcCWKDoI8vnr3b65Pz8N0QDrtvMKepdwQGcalUbMg/fs2YhsA2grVql3FfSPicyomKfWwd64=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwnIlnAC0wmG/n1RrPq3daC2dk/maco7oQgUcg0pe2zP8i2HrAj
+	2dESFKTXh8KNwTMdLkLPaIiniXXVhOAJvrtwtc14Pvezsr9gDa4vvFUvo7CHle4P9Oau0ztHbf6
+	dHwXyIwf0hM29qHTCXLUqFJA0P9BcQ7Wo22YL
+X-Gm-Gg: ASbGncv7MPlUJtXRkzwHo2a/5ZF1GrmKaCrEY5tY6k+UPo8lsGoaS8bDFM+5RIul/BE
+	cZv/OE9CEOTGX2T/kvMKbioMPZYV+hUPofjb83ppcSMI7RjHcv9NY8DCqn52u/Nruz4O89ew5nl
+	KyX6Oh/tihKEpiHFd4GE6p9wRyKKxsooeog1BLd6TOnEEAtpkBla71iYja5h1ULOxUGlGHw81VJ
+	cVhus4Th9oy6Rgon7LSkKulHNddvWda1Q==
+X-Google-Smtp-Source: AGHT+IE3TM+0uXQsXwFIJZxPZSu/cSCLUb58nUrkM6m28IFLNP2XvykwfP4WwQRmDLnJJ447+1GnV7N2+gooJwSEhRk=
+X-Received: by 2002:a05:600c:840f:b0:456:25aa:e9b0 with SMTP id
+ 5b1f17b1804b1-459e745c61amr77325365e9.16.1754582389733; Thu, 07 Aug 2025
+ 08:59:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250807010205.3210608-3-eddyz87@gmail.com>
+References: <20250807144209.1845760-1-alan.maguire@oracle.com> <20250807144209.1845760-6-alan.maguire@oracle.com>
+In-Reply-To: <20250807144209.1845760-6-alan.maguire@oracle.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Thu, 7 Aug 2025 08:59:36 -0700
+X-Gm-Features: Ac12FXxtb_SM4LHJl4FVRaghuJYV-bF0AKxyHytUHvAEuMDHA3iR1VsKkDw41Zg
+Message-ID: <CAADnVQK38yk3XO9cebrXhMUSK10bH2LVPvs6W4e168x3mGpTWA@mail.gmail.com>
+Subject: Re: [RFC dwarves 5/6] btf_encoder: Do not error out if BTF is not
+ found in some input files
+To: Alan Maguire <alan.maguire@oracle.com>
+Cc: dwarves <dwarves@vger.kernel.org>, bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 25/08/06 06:02PM, Eduard Zingerman wrote:
-> Avoid excessive vzalloc/vfree calls when patching instructions in
-> do_misc_fixups(). bpf_patch_insn_data() uses vzalloc to allocate new
-> memory for env->insn_aux_data for each patch as follows:
-> 
->   struct bpf_prog *bpf_patch_insn_data(env, ...)
->   {
->     ...
->     new_data = vzalloc(... O(program size) ...);
->     ...
->     adjust_insn_aux_data(env, new_data, ...);
->     ...
->   }
-> 
->   void adjust_insn_aux_data(env, new_data, ...)
->   {
->     ...
->     memcpy(new_data, env->insn_aux_data);
->     vfree(env->insn_aux_data);
->     env->insn_aux_data = new_data;
->     ...
->   }
-> 
-> The vzalloc/vfree pair is hot in perf report collected for e.g.
-> pyperf180 test case. It can be replaced with a call to vrealloc in
-> order to reduce the number of actual memory allocations.
+On Thu, Aug 7, 2025 at 7:42=E2=80=AFAM Alan Maguire <alan.maguire@oracle.co=
+m> wrote:
+>
+> This is no substitute for link-time BTF deduplication of course, but
+> it does provide a simple way to see the BTF that gcc generates for vmlinu=
+x.
+>
+> The idea is that we can explore differences in BTF generation across
+> the various combinations
+>
+> 1. debug info source: DWARF; dedup done via pahole (traditional)
+> 2. debug info source: compiler-generated BTF; dedup done via pahole (abov=
+e)
+> 3. debug info source: compiler-generated BTF; dedup done via linker (TBD)
+>
+> Handling 3 - linker-based dedup - will require BTF archives so that is th=
+e
+> next step we need to explore.
 
-Given that I am in any case looking at the code around,
-I've rebased on top of this change and tested it:
+Overall, the patch set makes sense and we need to make this step in pahole,
+but before we start any discussion about 3 and BTF archives
+the 1 and 2 above need to reach parity.
+Not just being close enough, but an exact equivalence.
 
-Tested-by: Anton Protopopov <a.s.protopopov@gmail.com>
-
-> This is a stop-gap solution, as bpf_patch_insn_data is still hot in
-> the profile. More comprehansive solutions had been discussed before
-> e.g. as in [1].
-> 
-> [1] https://lore.kernel.org/bpf/CAEf4BzY_E8MSL4mD0UPuuiDcbJhh9e2xQo2=5w+ppRWWiYSGvQ@mail.gmail.com/
-> 
-> Suggested-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-> Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
-
-[snip]
+But, frankly, gcc support for btf_decl_tags is much much higher priority
+than any of this.
+We're tired of adding hacks through the bpf subsystem, because
+gcc cannot do decl_tags.
+Here are the hacks that will be removed:
+1. BTF_TYPE_SAFE*
+2. raw_tp_null_args[]
+3. KF_ARENA_ARG
+and probably other cases.
