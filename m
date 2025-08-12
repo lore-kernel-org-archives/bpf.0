@@ -1,144 +1,78 @@
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 451CE2F0661
-	for <bpf@vger.kernel.org>; Tue, 12 Aug 2025 22:51:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B88DC2F0687;
+	Tue, 12 Aug 2025 22:59:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755039084; cv=none; b=H/8RU3UItP/ALy2OpNAphMscJaZxUbkTTaAe7A4DYvh9jeVtCuHQpS2mD6EgPpcIyqznZDGNzSAUdxQjrNSj0HDM1LWsJRigUZsSR0sBEt7JJt4zdOQaNVRBAuvNTq3N1Q/KVIe+dGXuBK3k5EPAP7A8rxKyRVRd66hd0sQTaTw=
+	t=1755039595; cv=none; b=hOYm4IX9IkSFzjJlDdwNj9I0sycqnnvoHotKnLMqJ9xyzBZuHnKqrPb5Gx8eGRMTDw7Kp459mRwm/h0vcvHzas6geB4gMxRlcgUAzBopmrzLp1kO03erF0pH/4GqQjLy0TSznn7YMkkLHsomuEhJi2r0RT2B0MlBNoY+6Rp1xVA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755039084; c=relaxed/simple;
-	bh=nIhICFYZV96YJLAfePFwkF0LL3nTncggnJ3qzr6Yn8g=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=auWXE9+Na6wPJ3nHWQDFdEzyQdEKtT7EyWDXyTXhKWBkx1fPm2J4kjgkH8Oa93JF0qPTR/2CoN/+C+ElUXsuU3yHLtRMJ3sb2lyZFF0t26Mft0EjzwHFW99MmhRhrPfL5nWWELJGPsFRFGfdIT54LPowsxkGyiVlTqgpvdZTtNE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lTLauqxA; arc=none smtp.client-ip=209.85.216.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1755039595; c=relaxed/simple;
+	bh=fpchoCTZioGd6XRCUCJs0T8y5Ql2Q1u9UY0oUOYuvzc=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=GaPfv3/+41MEMzLrQstnvIthIrJhf4aF+TCo7zH6WRJRPpV18/dG4/NS0qDqEEqMjYoGGE11W6sDjKUQwfqvbA6KH/3ykA7fwwHf+c8OF6BRDElSFUYOsE9tvPan6HuubnN38vzw7RK6UefEVLq2LYGBny7O13TNFPpwnyjfASw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KYoA76D7; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lTLauqxA"
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-31ee880f7d2so6785237a91.0
-        for <bpf@vger.kernel.org>; Tue, 12 Aug 2025 15:51:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755039082; x=1755643882; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rscLN99lZI2H2ORwai3qyRzSkpvZJiFeiFnTC0prHoo=;
-        b=lTLauqxA17rm3FC5+pBsLhKreBGiNfL3byolegNDuFMozkK9YUp44q3yl02+LEEzeY
-         19U/pZz99P+6Q9IRptMsriBGhGdfFmTY3xeXvPv4Jv7qdd4g1bVwml6soHDjLa9iPKwd
-         1kxvv2FMerNEFFlOWY74XJniJD2TJwRaoJttlRDOlMzUP5+IaU4Rl//OnpsHFDwghYT5
-         MHkO3y295rffNtIH6c93Qtdn7yXgLOuxA2Wfw/24jwobT+NKGU7fEF30fIXeTp6LsSt5
-         T+kx2JTea2vXd0FOQZzsPQHvNZqOeMm85seNOJoxwzxwV7Kb/xHOYfwWnDKWklsdjOvr
-         H3iw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755039082; x=1755643882;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rscLN99lZI2H2ORwai3qyRzSkpvZJiFeiFnTC0prHoo=;
-        b=uJfvEgp5EIPCoeXMQs0ArgAO0r+u9q6BuDNsmxPrge35Gaca4YQq6ygxmzoVhz/tPo
-         76kmtEFUfyEnJrIX3TJHT1JlZSyfrZ/HJl4kXFLCPyJXKIsmR4vJ/uNlStpyWBmwCU6Y
-         TnKqddP9YQJym2tiKbeiKs04sWdqB7++2Zn/GCVe9vTz3qOYmUQ8lgdLcojIm0Y3jZj4
-         BTg2Y9DD2JHx02a76R8eY5HimDlfarbt+rqAoBRfT8kWPakahhOSRrVXIPD8VN4meM0A
-         ffU7Z4XoQ/nsOqBSbfvRKsSriI2JvwVxl8gr4xao7UDR5yLnpqeyKhUmdoKh+qQIrBm8
-         oyyg==
-X-Gm-Message-State: AOJu0YxjKT4d54REiHMT/9zMj4XkoOdY4nXDD1t13NCD6ouQtEQ2avfP
-	sWBEZ2AIFkB3xqxzrgCKgZdUYVGz+8Yub+R8unmxVqIPj/rIjrEjEDHhwTINX9FOMkQiWLnUhRl
-	7Bqc9qs4PqafJrHMwouvgWEhHwNl8Wi+ubA==
-X-Gm-Gg: ASbGncvQK2SeQ3qSa+k8BrwU8A1iIH7QWTgHHC3/bmTLqGLanBUrEYfa7AVFw+IAuQO
-	cTusqnV7mN/mi6UGiawalsfBXsVzmMfq9sujMcUs9P1942ai4GbsQ4vN4PSTjwKJOm4JjcHlpmc
-	LHIwRuEJ6/0t5KywZm5BNL1zn2C6XnUf6MH+xS/MLxWI9A/q1wUjPJhPU7fGT2KuDD3V/PkCre3
-	4qkQ2W6/rNCNMg2gAIkg6k=
-X-Google-Smtp-Source: AGHT+IHIK7AMq3HssPrvAmr7hGObGaX3wvlma7a6r6o4uHaEjsCEdPq5mpQkvR8cltWhk5p2icEMCHekqiWXzSPuBRE=
-X-Received: by 2002:a17:90a:d650:b0:31f:3c3:947c with SMTP id
- 98e67ed59e1d1-321d0d8b1c6mr1053628a91.10.1755039082321; Tue, 12 Aug 2025
- 15:51:22 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KYoA76D7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 473FEC4CEF0;
+	Tue, 12 Aug 2025 22:59:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1755039595;
+	bh=fpchoCTZioGd6XRCUCJs0T8y5Ql2Q1u9UY0oUOYuvzc=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=KYoA76D78cUzEsrGdeDhq8mMz2dFzCUq/WoD3SEp2QkJft1wO8Z3+QHbH+qoJUHtz
+	 lqwYGMQBpXhFtUlSgAilJaTKed0V+IDv8q54koyHfVExlB5Hvt9Nko9zfPUmb9DNEE
+	 tbtZcfdSbXo+Sg788Je7JFGumhej+VXm9cBf5SIiADnAxTCDDYvGSLkC5/GPRtcJUv
+	 aBEdIkWxuCrYggMF0JeKNFCuJrV5WG/U2/YkERCpGYGhSh7SLXesG6xO/raZkK2u2W
+	 BHrp/ZyrytErplBRDohjPVfeFejEXtjbsiWepD/sqlVgDvF/dQO+aYeiZL65BoBYqX
+	 Cy95cfh2kBDog==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70CF8383BF51;
+	Tue, 12 Aug 2025 23:00:08 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <aJo9THBrzo8jFXsh@mail.gmail.com>
-In-Reply-To: <aJo9THBrzo8jFXsh@mail.gmail.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 12 Aug 2025 15:51:06 -0700
-X-Gm-Features: Ac12FXyuRgu5g7rkf8YBr4oWvyVqc7uJIn26BgwRs3xnDFuF39da87BjejtMg8I
-Message-ID: <CAEf4BzbMGmXn54sR1z1OX-am3gAsZy8LAwqeEg+iotkvK2bB1w@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] bpf: Tidy verifier bug message
-To: Paul Chaignon <paul.chaignon@gmail.com>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] bpf: replace kvfree with kfree for kzalloc memory
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <175503960726.2855347.13670250861747428049.git-patchwork-notify@kernel.org>
+Date: Tue, 12 Aug 2025 23:00:07 +0000
+References: <20250811123949.552885-1-rongqianfeng@vivo.com>
+In-Reply-To: <20250811123949.552885-1-rongqianfeng@vivo.com>
+To: Qianfeng Rong <rongqianfeng@vivo.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
+ andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, kpsingh@kernel.org, sdf@fomichev.me,
+ haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org
 
-On Mon, Aug 11, 2025 at 11:58=E2=80=AFAM Paul Chaignon <paul.chaignon@gmail=
-.com> wrote:
->
-> Yonghong noticed that error messages for potential verifier bugs often
-> have a '(1)' at the end. This is happening because verifier_bug_if(cond,
-> env, fmt, args...) prints "(" #cond ")\n" as part of the message and
-> verifier_bug() is defined as:
->
->   #define verifier_bug(env, fmt, args...) verifier_bug_if(1, env, fmt, ##=
-args)
->
-> Hence, verifier_bug() always ends up displaying '(1)'. This small patch
-> fixes it by having verifier_bug_if conditionally call verifier_bug
-> instead of the other way around.
->
-> Fixes: 1cb0f56d9618 ("bpf: WARN_ONCE on verifier bugs")
-> Reported-by: Yonghong Song <yonghong.song@linux.dev>
-> Signed-off-by: Paul Chaignon <paul.chaignon@gmail.com>
-> ---
->  include/linux/bpf_verifier.h | 9 ++++++---
->  1 file changed, 6 insertions(+), 3 deletions(-)
->
-> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-> index c823f8efe3ed..d38b5ac6a191 100644
-> --- a/include/linux/bpf_verifier.h
-> +++ b/include/linux/bpf_verifier.h
-> @@ -876,12 +876,15 @@ __printf(3, 4) void verbose_linfo(struct bpf_verifi=
-er_env *env,
->         ({                                                               =
-                       \
->                 bool __cond =3D (cond);                                  =
-                         \
->                 if (unlikely(__cond)) {                                  =
-                       \
-> -                       BPF_WARN_ONCE(1, "verifier bug: " fmt "(" #cond "=
-)\n", ##args);         \
-> -                       bpf_log(&env->log, "verifier bug: " fmt "(" #cond=
- ")\n", ##args);       \
-> +                       verifier_bug(env, fmt " (" #cond ")", ##args);   =
-                       \
->                 }                                                        =
-                       \
+Hello:
 
-dropped now unnecessary {}
+This patch was applied to bpf/bpf-next.git (master)
+by Andrii Nakryiko <andrii@kernel.org>:
 
->                 (__cond);                                                =
-                       \
->         })
-> -#define verifier_bug(env, fmt, args...) verifier_bug_if(1, env, fmt, ##a=
-rgs)
-> +#define verifier_bug(env, fmt, args...)                                 =
-       \
-> +       ({                                                              \
-> +               BPF_WARN_ONCE(1, "verifier bug: " fmt "\n", ##args);    \
-> +               bpf_log(&env->log, "verifier bug: " fmt "\n", ##args);  \
-> +       })
+On Mon, 11 Aug 2025 20:39:49 +0800 you wrote:
+> The 'backedge' pointer is allocated with kzalloc(), which returns
+> physically contiguous memory. Using kvfree() to deallocate such
+> memory is functionally safe but semantically incorrect.
+> 
+> Replace kvfree() with kfree() to avoid unnecessary is_vmalloc_addr()
+> check in kvfree().
+> 
+> [...]
 
-shifted those ending \ to align with verifier_buf_if's ones.
+Here is the summary with links:
+  - bpf: replace kvfree with kfree for kzalloc memory
+    https://git.kernel.org/bpf/bpf-next/c/bf0c2a84df9f
 
-Applied to bpf-next, thanks.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
->
->  static inline struct bpf_func_state *cur_func(struct bpf_verifier_env *e=
-nv)
->  {
-> --
-> 2.43.0
->
