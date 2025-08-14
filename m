@@ -1,27 +1,28 @@
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9B3C184;
-	Thu, 14 Aug 2025 16:08:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.2
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.3])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A9811ADFFB;
+	Thu, 14 Aug 2025 16:08:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.3
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755187696; cv=none; b=W3BuMirIbEH+85Y2dvPqa5dYWqS0Iw80uwJENaibz1EoZaibvDfEgg4yEVWdvNJ/YwEtLB0AKEkXqykIFmTq+dSIgiko69da8mQRJt4utB9tfB+N99auBphkcg5P72KIl+ls30ZsrTNrmo7lgS8Lx5J6NNuy1qN5v8Cd2H8IYek=
+	t=1755187697; cv=none; b=itE0smeG5nU7tvNF6uziTdSNh6uWseUHIeVB5lM+PC+ancIl1+jNXspkFBlwVABgiFb1MP8L1EQbFDzYmqIThlTjOsgIbUP9jyJLCx8ePJeEAgSDg+04p+ULnj1gEt9cgyk2C9Tt94fNRD0b/xu0yvsG8CNLwALgr+Zoo7iovFk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755187696; c=relaxed/simple;
-	bh=AkOJYAfSU03UNBem+zavN7JuyZKK1aByA5MBFV4pzmU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=EkOQ5J12N7yWRpUuy7glhsU3a/qAC0GNvTJ5wf2Yg/nBnfF0RA7ewPr4LnFQzW+wQ8IFHX4Zi1/Z6yjg4gJ4TTc/fqcuL8twM2+PS7H9swpKX9tAgQpMxG6ynxNMige9lmyq52nH83+vRdYvXYOH6r56WjEcWDsw39fy1IVnXM8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=n6/gSe5k; arc=none smtp.client-ip=117.135.210.2
+	s=arc-20240116; t=1755187697; c=relaxed/simple;
+	bh=svkp08rdGVyKgFVxwgXAWa3Xf1Z0GRrg8XDC2J4AQsQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=K5JvPaRiWCYeMTfMnLMV78Tm+/E/xSkP082UbXROjyrMIoE9ezHv4Av7S7lUpnbIJ4AImRn9bjCGqZEv98UdrK97yyyFFcVg1svYArZAGLlv++FvSXkuIUQRcYEc3uIiT9aKQT5uKu8Sx7S11SiyaPApUmOTYQND7X+WfA65hB0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=bdj4u54A; arc=none smtp.client-ip=117.135.210.3
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="n6/gSe5k"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="bdj4u54A"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=VN
-	G5t39SRqkXzyt7mfNlVPiAWBTeAtA1OtCt+HC0uE8=; b=n6/gSe5kTSLFgZMh5y
-	1JKvTmAyZC58i5w4CVdtcG81n7bvLukP54KIkNv8faQooJqBUsYbrfYkEaL5ya7z
-	sFXL7nI9eA48gNT3RVP+ori3AMB8ndfwaBCxmua0U9RgqpRxyVc+aSmYvNxPdKOh
-	Xk+C7ej5aoeNe/4Mc/qA2dsx8=
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=ns
+	TqgMpwxxk6C6R6rkKnNo1S3EeyK8BjaeGgYw51cqk=; b=bdj4u54AAT1IoAtlrX
+	/Og9Kd8Stgws8RGW2N9Km2zU+WOyRLsS9Je5gI9f5x8H0xdBdbfLPRPO/pnBLLBR
+	CjWUJaTQNeRpMNi67XJswH0iu6FQOo6TYe8LEkgR839b7uD+xSuMKu+5Hk/aDiH4
+	9XUIzs71pypKXkzQ8hfV6GVwc=
 Received: from phoenix.. (unknown [])
-	by gzga-smtp-mtada-g0-3 (Coremail) with SMTP id _____wAnEgTMCZ5otf6bBw--.46198S2;
-	Fri, 15 Aug 2025 00:07:43 +0800 (CST)
+	by gzga-smtp-mtada-g0-3 (Coremail) with SMTP id _____wAnEgTMCZ5otf6bBw--.46198S5;
+	Fri, 15 Aug 2025 00:07:44 +0800 (CST)
 From: Jiawei Zhao <phoenix500526@163.com>
 To: ast@kernel.org
 Cc: daniel@iogearbox.net,
@@ -30,10 +31,12 @@ Cc: daniel@iogearbox.net,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v10 0/3] libbpf: fix USDT SIB argument handling causing unrecognized register error
-Date: Thu, 14 Aug 2025 16:07:36 +0000
-Message-ID: <20250814160740.96150-1-phoenix500526@163.com>
+Subject: [PATCH bpf-next v10 3/3] selftests/bpf: make usdt_o2 reliably generate SIB USDT arg spec
+Date: Thu, 14 Aug 2025 16:07:39 +0000
+Message-ID: <20250814160740.96150-4-phoenix500526@163.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20250814160740.96150-1-phoenix500526@163.com>
+References: <20250814160740.96150-1-phoenix500526@163.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -41,85 +44,84 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wAnEgTMCZ5otf6bBw--.46198S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxWw4ktFy5Zr1xJr4UGF1UGFg_yoW5Xr4xpa
-	yrKws8trWjya47GFsxWr42qw4fGan3GFWUGFn2qw1Yvr4rGFyxJr4xKr15JFnxGa93Xa4Y
-	vF1DtFs8Gas5AwUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07joGQDUUUUU=
-X-CM-SenderInfo: pskrv0dl0viiqvswqiywtou0bp/xtbBawWpiGid-FPtBAAAs8
+X-CM-TRANSID:_____wAnEgTMCZ5otf6bBw--.46198S5
+X-Coremail-Antispam: 1Uf129KBjvJXoWxJF1xur1fJFW3Xr43CFW3Jrb_yoW5XFWrpa
+	4kJayYkF1vqFyfA34fJr42v3WrK3Z5ZFW8ArWkKw1jvr1UX3y8Xr4xKa4jv3sYk3yF934Y
+	v3y8t398uay8Aw7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07j-F4_UUUUU=
+X-CM-SenderInfo: pskrv0dl0viiqvswqiywtou0bp/1tbiFB6piGieCMAXxwABsE
 
-When using GCC on x86-64 to compile an usdt prog with -O1 or higher
-optimization, the compiler will generate SIB addressing mode for global
-array and PC-relative addressing mode for global variable,
-e.g. "1@-96(%rbp,%rax,8)" and "-1@4+t1(%rip)".
+usdt_o2 is intended to exercise the SIB (Scale-Index-Base) argument
+handling in libbpf's USDT path. With GCC 13 this reliably produced a
+SIB-form argument (e.g. 8@(%rdx,%rax,8)), but with newer GCC (e.g. 15)
+the compiler frequently optimizes the probe argument into a plain
+register (e.g. 8@%rax) or a stack slot, so the test stops covering the
+SIB code path and becomes flaky across toolchains.
 
-The current USDT implementation in libbpf cannot parse these two formats,
-causing `bpf_program__attach_usdt()` to fail with -ENOENT
-(unrecognized register).
+Force a SIB memory operand in the probe by:
+* placing the base pointer into %rdx and the index into %rax using an
+  empty inline asm with output constraints ("=d", "=a") and matching
+  inputs
+* immediately passing base[idx] to STAP_PROBE1.
+* only enable on x86 platform.
 
-This patch series adds support for SIB addressing mode in USDT probes.
-The main changes include:
-- add correct handling logic for SIB-addressed arguments in
-  `parse_usdt_arg`.
-- add an usdt_o2 test case to cover SIB addressing mode.
+This makes the compiler encode the operand as SIB (base + index8),
+which in .note.stapsdt shows up as 8@(%rdx,%rax,8) regardless of GCC
+version. A memory clobber and noinline prevent reordering/re-allocation
+around the probe site.
 
-Testing shows that the SIB probe correctly generates 8@(%rcx,%rax,8) 
-argument spec and passes all validation checks.
+This change is x86_64-specific and does not alter program semantics; it
+only stabilizes the USDT argument shape so the test consistently
+validates SIB handling. Clang historically prefers stack temporaries for
+such operands, but the selftests build with GCC, and this keeps behavior
+stable across GCC versions without introducing a separate .S file.
 
-The modification history of this patch series:
-Change since v1:
-- refactor the code to make it more readable
-- modify the commit message to explain why and how
+Signed-off-by: Jiawei Zhao <phoenix500526@163.com>
+---
+ .../selftests/bpf/prog_tests/usdt_o2.c        | 20 ++++++++++++++-----
+ 1 file changed, 15 insertions(+), 5 deletions(-)
 
-Change since v2:
-- fix the `scale` uninitialized error
-
-Change since v3:
-- force -O2 optimization for usdt.test.o to generate SIB addressing usdt
-  and pass all test cases.
-
-Change since v4:
-- split the patch into two parts, one for the fix and the other for the
-  test
-
-Change since v5:
-- Only enable optimization for x86 architecture to generate SIB addressing
-  usdt argument spec.
-
-Change since v6:
-- Add an usdt_o2 test case to cover SIB addressing mode.
-- Reinstate the usdt.c test case.
-
-Change since v7:
-- Refactor modifications to __bpf_usdt_arg_spec to avoid increasing its size,
-  achieving better compatibility
-- Fix some minor code style issues
-- Refactor the usdt_o2 test case, removing semaphore and adding GCC attribute
-  to force -O2 optimization
-
-Change since v8:
-- Refactor the usdt_o2 test case, using assembly to force SIB addressing mode.
-
-Change since v9:
-- Only enable the usdt_o2 test case on x86_64 and i386 architectures since the
-  SIB addressing mode is only supported on x86_64 and i386.
-
-Jiawei Zhao (3):
-  libbpf: fix USDT SIB argument handling causing unrecognized register
-    error
-  selftests/bpf: Add an usdt_o2 test case in selftests to cover SIB
-    handling logic
-  selftests/bpf: make usdt_o2 reliably generate SIB USDT arg spec
-
- tools/lib/bpf/usdt.bpf.h                      | 54 ++++++++++++-
- tools/lib/bpf/usdt.c                          | 61 ++++++++++++--
- tools/testing/selftests/bpf/Makefile          |  1 +
- .../selftests/bpf/prog_tests/usdt_o2.c        | 79 +++++++++++++++++++
- .../selftests/bpf/progs/test_usdt_o2.c        | 37 +++++++++
- 5 files changed, 225 insertions(+), 7 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/usdt_o2.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_usdt_o2.c
-
+diff --git a/tools/testing/selftests/bpf/prog_tests/usdt_o2.c b/tools/testing/selftests/bpf/prog_tests/usdt_o2.c
+index f02dcf5188ab..e46d5743ad24 100644
+--- a/tools/testing/selftests/bpf/prog_tests/usdt_o2.c
++++ b/tools/testing/selftests/bpf/prog_tests/usdt_o2.c
+@@ -15,11 +15,19 @@ __attribute__((optimize("O2")))
+ int lets_test_this(int);
+ static volatile __u64 array[1] = {test_value};
+ 
+-static __always_inline void trigger_func(void)
++static noinline void trigger_func(void)
+ {
++#if defined(__x86_64__) || defined(__i386__)
+ 	/* Base address + offset + (index * scale) */
+-	for (volatile int i = 0; i <= 0; i++)
+-		STAP_PROBE1(test, usdt1, array[i]);
++	/* Force SIB addressing with inline assembly */
++	const __u64 *base;
++	__u32 idx;
++	/* binding base to %rdx and idx to %rax */
++	asm volatile("" : "=d"(base), "=a"(idx) : "0"(array), "1"((__u32)0) : "memory");
++	STAP_PROBE1(test, usdt1, base[idx]);
++#else
++	STAP_PROBE1(test, usdt1, array[0]);
++#endif
+ }
+ 
+ static void basic_sib_usdt(void)
+@@ -61,9 +69,11 @@ static void basic_sib_usdt(void)
+ 	test_usdt_o2__destroy(skel);
+ }
+ 
+-
+-
+ void test_usdt_o2(void)
+ {
++#if !defined(__x86_64__) && !defined(__i386__)
++	test__skip();
++	return;
++#endif
+ 	basic_sib_usdt();
+ }
 -- 
 2.43.0
 
