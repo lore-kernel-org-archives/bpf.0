@@ -1,121 +1,115 @@
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.5])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C72F51D6188;
-	Thu, 14 Aug 2025 14:18:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.5
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9DF41514DC;
+	Thu, 14 Aug 2025 14:18:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755181100; cv=none; b=aKYR7zyr4yqgvZ7kf9hasOvOJ7qfdveWb8B0is8gwS6Bq023tjSTiJIcHJkzmvqRbniDks3X3j2HGT9nN07uQQ4q+YjRy+eNd+uI7LwFEYoTXd3nhPMq24zzZJHNhlO8DbxhMBDPZGb3hY30xF6AJrFk5Lm52GrRo6GR1FPX82k=
+	t=1755181115; cv=none; b=oYb7PrCaECx7T53Q6CxXVRs4Dw0PxqNcyevcpgmrBbgSvYHx6dz/0i/fBUN+9J8zvLSfMpzYIJ4D2FRBjyXhJirY7ANKH+H2l2/9V2tausypZeTvvAOUeaxZSvl4miZQQ8fTb4m+auFRoGkvTitkmrULwNWmPM4naljffLvwTBM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755181100; c=relaxed/simple;
-	bh=fkB8DkoZb1oZNbrYSSwnjyBm03Xw/im88bG42r7TEkU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=X4foZsTh2IotsZYHBcxlPNUr7ZUr1A3iuu5mX4RT5ybGPo6HFNVsLdNYJm30a8tqJgNkq50mdKizyzQrmH3TfziLyGJcFplBjuUufU3cJ+QDi7Obl+GuEaJ+yxcU216ej0xg93ecOwA34t7pf08yhPbC5z9eZWt5yssawxU6qeA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=Mzo6F6co; arc=none smtp.client-ip=117.135.210.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1755181115; c=relaxed/simple;
+	bh=cDxMRRN3nGG/IneZ80STg/q0CEsWcsHRsiUKXzouC7k=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AvxYcetnUohU+HUJO8Xmp2bSeXPiL/CiWQgqzRSil5wOXj87qkRSC10LhKziVeay/frJJY2Nk1J7vGqQjbbx5+hVygK1EHr+ZuuBsJAym4oBuemipXdUTyTOgRUIoBUqUUpFGlTk37F2rhKFNPtFP4hVgDhFz2pIBMUq+a48B4A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DluXtWa4; arc=none smtp.client-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="Mzo6F6co"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=0O
-	BOvNjE4rQN4ZWaV0+VTg3QRrUL9Y9ebRZMVvXEMMI=; b=Mzo6F6coua6wBtKhDi
-	YgBghu9a/s8UbTedn382ewkp2uoFgSo5o2exy7iZlsi4RastDZVeSFytbqgLnJf6
-	F0jE4NnXuM3qzG1Nd5HYkr8s7qP/8WgKErUHk2Pzg0tbSGdGK6hZmiYQ+tXOc1Ee
-	18f7Q8EdTcTF1laF7O3Ar57Q0=
-Received: from phoenix.. (unknown [])
-	by gzga-smtp-mtada-g1-0 (Coremail) with SMTP id _____wAXt8QG8J1otxnOBw--.45910S2;
-	Thu, 14 Aug 2025 22:17:44 +0800 (CST)
-From: Jiawei Zhao <phoenix500526@163.com>
-To: ast@kernel.org
-Cc: daniel@iogearbox.net,
-	andrii@kernel.org,
-	yonghong.song@linux.dev,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v9 0/3] libbpf: fix USDT SIB argument handling causing unrecognized register error
-Date: Thu, 14 Aug 2025 14:17:37 +0000
-Message-ID: <20250814141741.77698-1-phoenix500526@163.com>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DluXtWa4"
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-45a1b05a59fso6474785e9.1;
+        Thu, 14 Aug 2025 07:18:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1755181112; x=1755785912; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=munZb2Idj5EmrK5Qup4Vq55yHF7nYHNJeVVYe4G2yfQ=;
+        b=DluXtWa4r1LDya4rTX+9UjDaYxYtf8ssAx4WP4wzoBL31z5kwZVNgW0ppyZXzjGed+
+         Rs2U//xMDUZf2EnEoJATBKeHuTS870s7kAsZiGXSQuF1okxaNK4kt1YURd9wD5H5R/05
+         FbHwIE4D+72xAdenj934DqEmduGlF/cbDg7g2gJi/+V/JZSwtXDe4JsLBpZp0g3fVjyV
+         YwXY6a3jsEaPwz+Kh5eNytpxSpx7xPpEPB4ku5seAIkjq0wa479aWEv7diXkSHRDZlf1
+         XrywbuDE6tdsZqEr8CFs5qHdBKEI+tZgzMG/JjWpFa5V0WtIq1jYXvJwQX22yKIXDbxh
+         FJRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755181112; x=1755785912;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=munZb2Idj5EmrK5Qup4Vq55yHF7nYHNJeVVYe4G2yfQ=;
+        b=iNQJox2rxGZHp9YTcB1a7/Fzdu8Vbfn72ngm0VgBYCzYcTV6v4mnsTUoIuIoOYDhiz
+         CsgA9cnZhVukhd5abc/z21XOcyF+f0kChmVgBRP0DutZvf4KL4grsAhN53bK3TqvTw9H
+         59ZduSr7F6azvmWj8Y5wovfbQ0qCVyFECgFP/TJQZOAY7pHRAgPFPhc09biXVxMMxsnx
+         +Cg8H5W9XN5BvKFNybiEEloX3Ce09iDXqnkDikBjUxFNLToUhol51ML6FCuBMfJc8aoC
+         mJh3dK0174zwKcZXOV/1iUysNacDSnksvOaGQm+KZ91TmNNphsY0NFZetLF0JyOCXjBJ
+         powg==
+X-Forwarded-Encrypted: i=1; AJvYcCWO7koucCmGObgmG/8bx4oH+Ty17YBP7AjCS8W8QSLh8hNYekWdC2Dn8sitoxJftK9Y7mA=@vger.kernel.org, AJvYcCWbxod1jbH264qhYITOd4JdJEK6CshgEe3ZZeYrEX2w57NmFlDocXHQNmR31s+nJp3xSIIXQEw3faIpVq2oEKQa5A==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx+wiL/cEARy626Q3FgT21TT6dnOR6RPkMloKW80x5ATHgV/6DT
+	VmhkxVWxPcty65GA8zedcaC2lu1F0pgZhNKwQXpX/Nmbr75Tvb1UbBw0u8jB5Q==
+X-Gm-Gg: ASbGncsr6RQX3tJjQaVS+mASgA9gUPtthcuIyKLpEnGyueVGfgLE1a7m3FY2WJ3D8Rs
+	6hmzEPoJZ0jmf3CmkgF3ynoCDErnD5wAa4lXH0munkMTb+d+mrcF897GrtgeVSRTR5BtVNfZ+O9
+	0EVhUhqFWHj0wJ7MxCM6i/aps6YVTEcwJ4rddTSumzW8mqrb44elR+fgC1E/hPFq329OdQtAv3Z
+	Gegx/NR+HAoGbq483OVqRLxDfE9zSmbHTflC6oCovHR1ZXFTh2qactesEzvYOoWYnOSKpHwmcw8
+	9ITELE7uWtsfh0HtCq22WP1L14cLoiOB7zYMSY//vsiH12atbwYqAK4PLMoE7R5FrvJv3L+z
+X-Google-Smtp-Source: AGHT+IEJSCepsCsWgS1C0XRMaPGsfColBKegZEB98PwfyIaYK8cTKr4bipT2OmCoLIqfOVq5lolW7w==
+X-Received: by 2002:a05:600c:8707:b0:459:d709:e5d4 with SMTP id 5b1f17b1804b1-45a1b7f97e4mr31355965e9.0.1755181111896;
+        Thu, 14 Aug 2025 07:18:31 -0700 (PDT)
+Received: from krava ([2a02:8308:a00c:e200::31e0])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45a1c6e66fesm23849155e9.17.2025.08.14.07.18.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Aug 2025 07:18:31 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Thu, 14 Aug 2025 16:18:29 +0200
+To: Paul Chaignon <paul.chaignon@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	syzbot+a9ed3d9132939852d0df@syzkaller.appspotmail.com,
+	bpf@vger.kernel.org, linux-perf-users@vger.kernel.org,
+	Martin KaFai Lau <kafai@fb.com>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Hao Luo <haoluo@google.com>
+Subject: Re: [PATCHv2 bpf] bpf: Check the helper function is valid in
+ get_helper_proto
+Message-ID: <aJ3wNQNodQhnt8GG@krava>
+References: <20250813133832.755428-1-jolsa@kernel.org>
+ <aJ3qSru3r1is9lxy@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wAXt8QG8J1otxnOBw--.45910S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxWw4ktFy5Zr1xJr4UGF1UGFg_yoW5Jw45pa
-	yrK3s8tryjya47JFsxXr47tw4fGan3GrWUGF1Iqw1Yvr4rGFyxJr4xKr15JrnxGa95Xa4Y
-	vF1DtF43Gas5A37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jrZ2fUUUUU=
-X-CM-SenderInfo: pskrv0dl0viiqvswqiywtou0bp/xtbBgB2piGid6YUzlgABsB
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aJ3qSru3r1is9lxy@mail.gmail.com>
 
-When using GCC on x86-64 to compile an usdt prog with -O1 or higher
-optimization, the compiler will generate SIB addressing mode for global
-array and PC-relative addressing mode for global variable,
-e.g. "1@-96(%rbp,%rax,8)" and "-1@4+t1(%rip)".
+On Thu, Aug 14, 2025 at 03:53:14PM +0200, Paul Chaignon wrote:
+> On Wed, Aug 13, 2025 at 03:38:32PM +0200, Jiri Olsa wrote:
+> > From: Jiri Olsa <olsajiri@gmail.com>
+> > 
+> > syzbot reported an verifier bug [1] where the helper func pointer
+> > could be NULL due to disabled config option.
+> > 
+> > As Alexei suggested we could check on that in get_helper_proto
+> > directly. Excluding tail_call helper from the check, because it
+> > is NULL by design and valid in all configs.
+> > 
+> > [1] https://lore.kernel.org/bpf/68904050.050a0220.7f033.0001.GAE@google.com/
+> > Reported-by: syzbot+a9ed3d9132939852d0df@syzkaller.appspotmail.com
+> 
+> The same bug was reported before by the kernel test robot at
+> https://lore.kernel.org/oe-lkp/202507160818.68358831-lkp@intel.com, so
+> I guess we'll need:
+> 
+> Reported-by: kernel test robot <oliver.sang@intel.com>
+> Closes: https://lore.kernel.org/oe-lkp/202507160818.68358831-lkp@intel.com
+> 
+> With that,
+> 
+> Acked-by: Paul Chaignon <paul.chaignon@gmail.com>
 
-The current USDT implementation in libbpf cannot parse these two formats,
-causing `bpf_program__attach_usdt()` to fail with -ENOENT
-(unrecognized register).
+thanks, will fix
 
-This patch series adds support for SIB addressing mode in USDT probes.
-The main changes include:
-- add correct handling logic for SIB-addressed arguments in
-  `parse_usdt_arg`.
-- add an usdt_o2 test case to cover SIB addressing mode.
-
-Testing shows that the SIB probe correctly generates 8@(%rcx,%rax,8) 
-argument spec and passes all validation checks.
-
-The modification history of this patch series:
-Change since v1:
-- refactor the code to make it more readable
-- modify the commit message to explain why and how
-
-Change since v2:
-- fix the `scale` uninitialized error
-
-Change since v3:
-- force -O2 optimization for usdt.test.o to generate SIB addressing usdt
-  and pass all test cases.
-
-Change since v4:
-- split the patch into two parts, one for the fix and the other for the
-  test
-
-Change since v5:
-- Only enable optimization for x86 architecture to generate SIB addressing
-  usdt argument spec.
-
-Change since v6:
-- Add an usdt_o2 test case to cover SIB addressing mode.
-- Reinstate the usdt.c test case.
-
-Change since v7:
-- Refactor modifications to __bpf_usdt_arg_spec to avoid increasing its size,
-  achieving better compatibility
-- Fix some minor code style issues
-- Refactor the usdt_o2 test case, removing semaphore and adding GCC attribute
-  to force -O2 optimization
-
-Change since v8:
-- Refactor the usdt_o2 test case, using assembly to force SIB addressing mode.
-
-Jiawei Zhao (3):
-  libbpf: fix USDT SIB argument handling causing unrecognized register
-    error
-  selftests/bpf: Add an usdt_o2 test case in selftests to cover SIB
-    handling logic
-  selftests/bpf: make usdt_o2 reliably generate SIB USDT arg spec
-
- tools/lib/bpf/usdt.bpf.h                      | 54 +++++++++++++-
- tools/lib/bpf/usdt.c                          | 61 ++++++++++++++--
- tools/testing/selftests/bpf/Makefile          |  1 +
- .../selftests/bpf/prog_tests/usdt_o2.c        | 73 +++++++++++++++++++
- .../selftests/bpf/progs/test_usdt_o2.c        | 37 ++++++++++
- 5 files changed, 219 insertions(+), 7 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/usdt_o2.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_usdt_o2.c
-
--- 
-2.43.0
-
+jirka
