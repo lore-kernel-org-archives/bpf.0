@@ -1,35 +1,60 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07F7424E4BD;
-	Fri, 15 Aug 2025 09:19:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47DA62877DA;
+	Fri, 15 Aug 2025 11:37:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755249596; cv=none; b=oWv1CUB54254f1Ep9JNBanMeGLGpsB9uMwlJnG0wNxS6HkJnIXea/E4PusOhBJqav5sLzyOdZaWcLrSX0JfqeMmc2VXTQ4whBiVAzpJ8Li6NvTsGjTEvZTwsgTdakOl5/I9DcFjZ0JNwi2QnVRHNiTVSoOR76AZt7Jmoz9PSHlU=
+	t=1755257846; cv=none; b=lZIxnBcFchywbkFpW4tU9J5FdhssVk9DQpUlJRVL4mtgbGHSAQNcRJAOpEp7Iu/ekFds5ljwx9cYhhJI5NDx8DyQWEf4wWV0HwK4V/tvOAK8dnOBgvFwX8WLjM1QwYJJ1TY5MNqlVw+n52wCJctfEV6eo8vnyYFB5A+IO0iqVj4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755249596; c=relaxed/simple;
-	bh=2ta+fShbR6bzPh1NFB8OUN9f4zy7nhQZC/H02M+f58I=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=rOrYvGHSuKgkYHnLXyEUrvmHvT7wZVDJhQuEz0XOMvdKJxdeKZN/U24ARVmY1jx4ndNgwLCqwaG752Q99FVl0AhEfttDebAE3Xc/PlwYm/SEC724rrcysC4mhnHIauhw5++T2T/iAaJ7PgkgdfcZEvK7cTgaPRLBlQE15gI6hyw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WiOt6U7g; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1755257846; c=relaxed/simple;
+	bh=U/g86Ig1pMFruBqlvyzjZIHjO9UsMDLq3GNFDgoQFww=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=cMG+TBVhOK8OZdjAyAoknQgHQScZ+cyDcV9H4yd7gw1Wf+BV+aKsKvG9rbvbr/wbIusvnu4ZOAphtl8lY8z2vPpc+1QVMFZzq4dAkhIMpyHojz22qzWHka7OS1hzXtFb7dWZcoum/nd3uVNA9qr8hcNaJVqcLE0DV0LamhmcW3w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=USYkRbnE; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WiOt6U7g"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD3CFC4CEEB;
-	Fri, 15 Aug 2025 09:19:55 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="USYkRbnE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8744C4CEF8;
+	Fri, 15 Aug 2025 11:37:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755249595;
-	bh=2ta+fShbR6bzPh1NFB8OUN9f4zy7nhQZC/H02M+f58I=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=WiOt6U7g5IedFGSNPzdAGXs/NkBSjyw9PJ6zwXr2qt/x6b12JMAm189iXC9iy8uQv
-	 LW3AbPvWjX2HszeOB3BGMJVkjWsXeIPneqtSDBFIsKU172LMNpRYM+hh9ocWg9DYY4
-	 fDloXo0j4Yin1yN0PvX2bLGNdEevOhcoxzE142Vx9ZJG/k9hfLXanAmKE7n1QRzRUJ
-	 jSgpFfrcp+U/RKa8656NWBLBnGE2twDJOtow3rH5n6oK/eCJggLjWtys+nPph/6iHF
-	 iC6wpGpFWfSJ61/91LobZZedEbUaolRPUPr/Vxd6fDTIUj6Og5EzjpHLVZJgXfZ1d2
-	 OAtCUign4oCWg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33F9D39D0C3B;
-	Fri, 15 Aug 2025 09:20:08 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1755257846;
+	bh=U/g86Ig1pMFruBqlvyzjZIHjO9UsMDLq3GNFDgoQFww=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=USYkRbnEwnF4+qENTLbHftnrPtONckoKAuM+TucKwcCuz5bN7omBDrfEGRp65OBcC
+	 4k3sDdAZQraKoYZK79ZqgX+lcSjl0CXwaYkUo9hE/l81D8U8iVlMV8w5cLZdu0Qu2x
+	 ukY/+FKMNF66kCL3htCyMnVwkeZ+s/Zh+3IyVY9h7iw9c0B3IE9cc4NX7s1FfX2DRI
+	 pldxzF88fiCsWy9D9M0ypnb64DAcv2iZX6kisk6iWGwRGHgcn6wT4adr3WQd0H74rv
+	 m6qa5Tl3YNl+w/Oh6vmlSv3EsHDg3sJN/zvFpPl8hiNTsa2siTyUxkRMJasclVI+rM
+	 eBNwOude/Ewew==
+Received: from mchehab by mail.kernel.org with local (Exim 4.98.2)
+	(envelope-from <mchehab+huawei@kernel.org>)
+	id 1umskO-000000042TH-0QUu;
+	Fri, 15 Aug 2025 13:37:24 +0200
+From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To: Jonathan Corbet <corbet@lwn.net>,
+	Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
+	"Mauro Carvalho Chehab" <mchehab+huawei@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Andreas Hindborg <mchehab+huawei@kernel.org>,
+	Benno Lossin <mchehab+huawei@kernel.org>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Danilo Krummrich <mchehab+huawei@kernel.org>,
+	Gary Guo <gary@garyguo.net>,
+	Miguel Ojeda <mchehab+huawei@kernel.org>,
+	Trevor Gross <tmgross@umich.edu>,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	rust-for-linux@vger.kernel.org,
+	Akira Yokosawa <akiyks@gmail.com>
+Subject: [PATCH 06/11] scripts: sphinx-pre-install: fix PDF build issues on Ubuntu
+Date: Fri, 15 Aug 2025 13:36:22 +0200
+Message-ID: <a888d353ac1eb0d558fda5482c6955d6c4a29f23.1755256868.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.50.1
+In-Reply-To: <cover.1755256868.git.mchehab+huawei@kernel.org>
+References: <cover.1755256868.git.mchehab+huawei@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -37,45 +62,132 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCHv3 bpf] bpf: Check the helper function is valid in
- get_helper_proto
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <175524960701.1002181.5903388173238461777.git-patchwork-notify@kernel.org>
-Date: Fri, 15 Aug 2025 09:20:07 +0000
-References: <20250814200655.945632-1-jolsa@kernel.org>
-In-Reply-To: <20250814200655.945632-1-jolsa@kernel.org>
-To: Jiri Olsa <jolsa@kernel.org>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- oliver.sang@intel.com, paul.chaignon@gmail.com, bpf@vger.kernel.org,
- linux-perf-users@vger.kernel.org, kafai@fb.com, eddyz87@gmail.com,
- songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
- haoluo@google.com
+Sender: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-Hello:
+PDF output with current Debian-based distros require other
+packages for it to work. The main one is pzdr.tfm. Without
+that, \sphinxhyphen{} won't work, affecting multiple docs.
 
-This patch was applied to bpf/bpf.git (master)
-by Daniel Borkmann <daniel@iogearbox.net>:
+For CJK, tex-gyre is required.
 
-On Thu, 14 Aug 2025 22:06:55 +0200 you wrote:
-> From: Jiri Olsa <olsajiri@gmail.com>
-> 
-> kernel test robot reported verifier bug [1] where the helper func
-> pointer could be NULL due to disabled config option.
-> 
-> As Alexei suggested we could check on that in get_helper_proto
-> directly. Marking tail_call helper func with BPF_PTR_POISON,
-> because it is unused by design.
-> 
-> [...]
+Add the missing packages to the list.
 
-Here is the summary with links:
-  - [PATCHv3,bpf] bpf: Check the helper function is valid in get_helper_proto
-    https://git.kernel.org/bpf/bpf/c/e4414b01c1cd
+After the change, all PDF files build on latest Ubuntu:
 
-You are awesome, thank you!
+Ubuntu 25.04:
+-------------
+    PASSED: OS detection: Ubuntu 25.04
+    SKIPPED (Sphinx Sphinx 8.1.3): System packages
+    SKIPPED (Sphinx already installed either as venv or as native package): Sphinx on venv
+    SKIPPED (Sphinx already installed either as venv or as native package): Sphinx package
+    PASSED: Clean documentation: Build time: 0:00, return code: 0
+    PASSED: Build HTML documentation: Build time: 3:28, return code: 0
+    PASSED: Build PDF documentation: Build time: 11:08, return code: 0
+
+  PDF docs:
+  ---------
+      PASSED: dev-tools: pdf/dev-tools.pdf
+      PASSED: tools: pdf/tools.pdf
+      PASSED: filesystems: pdf/filesystems.pdf
+      PASSED: w1: pdf/w1.pdf
+      PASSED: maintainer: pdf/maintainer.pdf
+      PASSED: process: pdf/process.pdf
+      PASSED: isdn: pdf/isdn.pdf
+      PASSED: fault-injection: pdf/fault-injection.pdf
+      PASSED: iio: pdf/iio.pdf
+      PASSED: scheduler: pdf/scheduler.pdf
+      PASSED: staging: pdf/staging.pdf
+      PASSED: fpga: pdf/fpga.pdf
+      PASSED: power: pdf/power.pdf
+      PASSED: leds: pdf/leds.pdf
+      PASSED: edac: pdf/edac.pdf
+      PASSED: PCI: pdf/PCI.pdf
+      PASSED: firmware-guide: pdf/firmware-guide.pdf
+      PASSED: cpu-freq: pdf/cpu-freq.pdf
+      PASSED: mhi: pdf/mhi.pdf
+      PASSED: wmi: pdf/wmi.pdf
+      PASSED: timers: pdf/timers.pdf
+      PASSED: accel: pdf/accel.pdf
+      PASSED: hid: pdf/hid.pdf
+      PASSED: userspace-api: pdf/userspace-api.pdf
+      PASSED: spi: pdf/spi.pdf
+      PASSED: networking: pdf/networking.pdf
+      PASSED: virt: pdf/virt.pdf
+      PASSED: nvme: pdf/nvme.pdf
+      PASSED: translations: pdf/translations.pdf
+      PASSED: input: pdf/input.pdf
+      PASSED: tee: pdf/tee.pdf
+      PASSED: doc-guide: pdf/doc-guide.pdf
+      PASSED: cdrom: pdf/cdrom.pdf
+      PASSED: gpu: pdf/gpu.pdf
+      PASSED: i2c: pdf/i2c.pdf
+      PASSED: RCU: pdf/RCU.pdf
+      PASSED: watchdog: pdf/watchdog.pdf
+      PASSED: usb: pdf/usb.pdf
+      PASSED: rust: pdf/rust.pdf
+      PASSED: crypto: pdf/crypto.pdf
+      PASSED: kbuild: pdf/kbuild.pdf
+      PASSED: livepatch: pdf/livepatch.pdf
+      PASSED: mm: pdf/mm.pdf
+      PASSED: locking: pdf/locking.pdf
+      PASSED: infiniband: pdf/infiniband.pdf
+      PASSED: driver-api: pdf/driver-api.pdf
+      PASSED: bpf: pdf/bpf.pdf
+      PASSED: devicetree: pdf/devicetree.pdf
+      PASSED: block: pdf/block.pdf
+      PASSED: target: pdf/target.pdf
+      PASSED: arch: pdf/arch.pdf
+      PASSED: pcmcia: pdf/pcmcia.pdf
+      PASSED: scsi: pdf/scsi.pdf
+      PASSED: netlabel: pdf/netlabel.pdf
+      PASSED: sound: pdf/sound.pdf
+      PASSED: security: pdf/security.pdf
+      PASSED: accounting: pdf/accounting.pdf
+      PASSED: admin-guide: pdf/admin-guide.pdf
+      PASSED: core-api: pdf/core-api.pdf
+      PASSED: fb: pdf/fb.pdf
+      PASSED: peci: pdf/peci.pdf
+      PASSED: trace: pdf/trace.pdf
+      PASSED: misc-devices: pdf/misc-devices.pdf
+      PASSED: kernel-hacking: pdf/kernel-hacking.pdf
+      PASSED: hwmon: pdf/hwmon.pdf
+
+Reported-by: Akira Yokosawa <akiyks@gmail.com>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+---
+ scripts/sphinx-pre-install | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
+
+diff --git a/scripts/sphinx-pre-install b/scripts/sphinx-pre-install
+index b8474848df4e..b24a6f91ec0a 100755
+--- a/scripts/sphinx-pre-install
++++ b/scripts/sphinx-pre-install
+@@ -764,9 +764,6 @@ class SphinxDependencyChecker(MissingCheckers):
+ 
+         if self.pdf:
+             pdf_pkgs = {
+-                "texlive-lang-chinese": [
+-                    "/usr/share/texlive/texmf-dist/tex/latex/ctex/ctexhook.sty",
+-                ],
+                 "fonts-dejavu": [
+                     "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+                 ],
+@@ -775,6 +772,15 @@ class SphinxDependencyChecker(MissingCheckers):
+                     "/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc",
+                     "/usr/share/fonts/opentype/noto/NotoSerifCJK-Regular.ttc",
+                 ],
++                "tex-gyre": [
++                    "/usr/share/texmf/tex/latex/tex-gyre/tgtermes.sty"
++                ],
++                "texlive-fonts-recommended": [
++                    "/usr/share/texlive/texmf-dist/fonts/tfm/adobe/zapfding/pzdr.tfm",
++                ],
++                "texlive-lang-chinese": [
++                    "/usr/share/texlive/texmf-dist/tex/latex/ctex/ctexhook.sty",
++                ],
+             }
+ 
+             for package, files in pdf_pkgs.items():
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.50.1
 
