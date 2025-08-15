@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79F4A28851C;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BED528852D;
 	Fri, 15 Aug 2025 11:37:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755257846; cv=none; b=iKC5J+k6hScXz0xl27QuhxYJP6g3kkayr7GrVvQ3fb9a6uQyWZLkjGMMnJczUNfTXn5uAZHRX2gq1c8+ybhRO7H+dM37UvsmZ1rbsYvu1n+IP5eHB/r2No/jg2zXeVjeYT9MwS2Fqgkds4EoO/I++gwcJZazw3w+mnCWNGwKCTY=
+	t=1755257846; cv=none; b=cKv5k4TDb6gPgJe0ca/UU2msDn06cwOc/UrzdCiovuXF+wdOZBFaAJqZgc8m3gY/I1zgtaNiqqTfFyXuE9Vr3n+mGpMfqp9roNhSrUx/KWpgqRsi23ct+lfCRzDk+V+aA+iHqbJIF2IWENjmV8mRsQApDr4CKD09ScNVvb3NQmw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1755257846; c=relaxed/simple;
-	bh=FF6CTJItuLQX4L+saUiPgdc0K549DCILUpiRkhl6c30=;
+	bh=41pClSqrGKyS+WUV3sXkeu12bzUgmg2ZeJUiAXxatDs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=jHa1NBYDj5VeBRoaCU961DUxyPSXjuna6nd+Eg1fYPnEIqGA1oDrJFz/P+KDGk4sTHJpHCP8Y2jmSFH+AzGTrLMfg72DoxnUjWjp5Iz2QnLlPs4ArYZdxk7eD3P5S6LdW52oACn0q0i/H2K3YJJh0hvFYi5p+3eB1z5kXvh1a6E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vLOIUVNc; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=A1O3krRxVIOb1f6sP9tnvsPp146/dvLpvNygOQbww1hG6AMN4HS6qhOlyIIcdMucIiu5yOlYAOHs23itSAb3IpCPRcjA+SclXj3GmhhRKkcZWarWTtDO6U6v/CBcaYYBTD2Usz1cM8xeT6cETBz5B4EkjFLbitFtUIq85qDjffw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gQ5MDXz2; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vLOIUVNc"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16F36C116B1;
-	Fri, 15 Aug 2025 11:37:26 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gQ5MDXz2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F008DC4AF09;
+	Fri, 15 Aug 2025 11:37:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1755257846;
-	bh=FF6CTJItuLQX4L+saUiPgdc0K549DCILUpiRkhl6c30=;
+	bh=41pClSqrGKyS+WUV3sXkeu12bzUgmg2ZeJUiAXxatDs=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=vLOIUVNcxzibC03/MJr57laqLFHNh4zKfsrDIxXugUTygc+6I2VcnO+yYYaYIdigV
-	 BcEusm2FKdC0qRq9zLxzPV11cMpY2wUoBT/5S8Ta/KcxhqaP5ju7hvVp6FyiYv5yUu
-	 +VLBXIoD3XY+WMM3ap6bcDAnXUQ3xlHwmH6voojjAx+RDRxmKLLG7xnJWy8f8Qtje/
-	 3Ro0XSOWzlaOhHJuSc0NAluRaYF0VQP74F3FPR2N4nhGFrSu3vYbWFFoYoGaFKpKSz
-	 ZWd6VG93gkAY3uCSwspTvmUi3jbgNxEx8tKv4fTkqNfB1u01jRzKT0pCdSQCiM6+wW
-	 0mAsqyZWSHirg==
+	b=gQ5MDXz2tJyeUjch/T6OPRGT4o34nT48A42+kY36KmVHeLiGieCK31KQafsAXm/DD
+	 wWHE+zJ/RjPQwg1qzn5HYcrtfRg9LxETAJswKLIf16l2CpjgDgMWzZgAmCtJJOXy0J
+	 hY3qX81ARZ1apcHhOj+8co/3kUZEau+UNueZyOa9ltlBrh712aHFyR19aJAAN9EICZ
+	 Hm0oX98GXiR7qSG7PCO3DqMvLjZVbAoT/elL00F2AxC5pwbPc/SutnhdlRtok6l2m4
+	 H+k6N3JEt0dlitmv2xitt6abN2RDAsXaTgoexWFTE3DZT+iYB4Iqdaqf7Cq47Stno2
+	 YAdrYgx+Jm7jQ==
 Received: from mchehab by mail.kernel.org with local (Exim 4.98.2)
 	(envelope-from <mchehab+huawei@kernel.org>)
-	id 1umskO-000000042Tb-10C5;
+	id 1umskO-000000042TL-0XzB;
 	Fri, 15 Aug 2025 13:37:24 +0200
 From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To: Jonathan Corbet <corbet@lwn.net>,
@@ -48,9 +48,9 @@ Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
 	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	rust-for-linux@vger.kernel.org
-Subject: [PATCH 11/11] scripts: sphinx-pre-install: fix PDF dependencies for gentoo
-Date: Fri, 15 Aug 2025 13:36:27 +0200
-Message-ID: <fc1dbf7d4eb4cb0887a19f75d1ae71d683648771.1755256868.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 07/11] scripts: sphinx-pre-install: add missing gentoo pdf dependencies
+Date: Fri, 15 Aug 2025 13:36:23 +0200
+Message-ID: <3772eb51d1af3653dcd05b4d31cca8e52bad974b.1755256868.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <cover.1755256868.git.mchehab+huawei@kernel.org>
 References: <cover.1755256868.git.mchehab+huawei@kernel.org>
@@ -63,8 +63,25 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-Package fonts are wrong. Fix it. With that, most PDF files
-now builds.
+There are two packages that are required to build PDF at gentoo:
+
+	dev-texlive/texlive-latexextra
+	media-fonts/lm
+
+Place latex_dependencies on a list to make it easier to maintain
+and add the missing ones.
+
+With that, most PDF documents now build on Gentoo:
+
+Gentoo Base System release 2.17:
+--------------------------------
+    PASSED: OS detection: Gentoo Base System release 2.17
+    SKIPPED (Sphinx Sphinx 8.2.3): System packages
+    SKIPPED (Sphinx already installed either as venv or as native package): Sphinx on venv
+    SKIPPED (Sphinx already installed either as venv or as native package): Sphinx package
+    PASSED: Clean documentation: Build time: 0:00, return code: 0
+    PASSED: Build HTML documentation: Build time: 5:28, return code: 0
+    PARTIAL: Build PDF documentation: Test failed (Build time: 9:19, return code: 2)
 
   PDF docs:
   ---------
@@ -136,25 +153,34 @@ now builds.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- scripts/sphinx-pre-install | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ scripts/sphinx-pre-install | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
 diff --git a/scripts/sphinx-pre-install b/scripts/sphinx-pre-install
-index 758a84ae6347..c46d7b76f93c 100755
+index b24a6f91ec0a..f987abfec802 100755
 --- a/scripts/sphinx-pre-install
 +++ b/scripts/sphinx-pre-install
-@@ -1069,10 +1069,10 @@ class SphinxDependencyChecker(MissingCheckers):
+@@ -1058,12 +1058,19 @@ class SphinxDependencyChecker(MissingCheckers):
+         """
          Provide package installation hints for Gentoo.
          """
-         texlive_deps = [
-+            "dev-texlive/texlive-fontsrecommended",
-             "dev-texlive/texlive-latexextra",
-             "dev-texlive/texlive-xetex",
-             "media-fonts/dejavu",
--            "media-fonts/lm",
-         ]
- 
++        texlive_deps = [
++            "dev-texlive/texlive-latexextra",
++            "dev-texlive/texlive-xetex",
++            "media-fonts/dejavu",
++            "media-fonts/lm",
++        ]
++
          progs = {
+             "convert":       "media-gfx/imagemagick",
+             "dot":           "media-gfx/graphviz",
+             "rsvg-convert":  "gnome-base/librsvg",
+             "virtualenv":    "dev-python/virtualenv",
+-            "xelatex":       "dev-texlive/texlive-xetex media-fonts/dejavu",
++            "xelatex":       " ".join(texlive_deps),
+             "yaml":          "dev-python/pyyaml",
+             "python-sphinx": "dev-python/sphinx",
+         }
 -- 
 2.50.1
 
