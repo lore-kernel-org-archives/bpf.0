@@ -1,62 +1,62 @@
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFCCE2FF678
-	for <bpf@vger.kernel.org>; Sat, 16 Aug 2025 18:02:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C14721E1A3D
+	for <bpf@vger.kernel.org>; Sat, 16 Aug 2025 18:02:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755367326; cv=none; b=ug2r9AfRhN8EqgjsQXdQJIJuZ+NU5Itqmtyc1/Fu1W0jnmZUhPmCRwsExxdVpUVKUpmdvorzXJb0NuhwzQHMxWqd0oeRkeqy06Z3i1ojPCl66gg0XmcfI2Bk1XqKViMi6oSiHkYWZnaQNaB5RY4/AAOUdGdHXZeSwQpdOM/2Lng=
+	t=1755367328; cv=none; b=rXIdqcUcFdzAvz7l15sh3v6KHhSMe5BKYfEAi+n+idVtwPHzZzmqqRijkP1oM1mT0YLBWzDsmgl7ynZO0WAAifW49nmLOmYF9cZvFUQLqDKzg21DKwQhhZ5IwaeMxYjFnfjkEmAtdXcrdwmNdYte4I4MA++baRKiA08QtF5adXA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755367326; c=relaxed/simple;
-	bh=il5ApFsJBPAZ62erQh8mD+YPLkvJNduVjp8dqemNK30=;
+	s=arc-20240116; t=1755367328; c=relaxed/simple;
+	bh=b8m08FEJ82EolP51zIAwwLa3onPEWcFAvAvIUiQH1dU=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=AY5nLQqCYp1uNfEb2JkBMwvCbYYJaFcK5ZzZLpYM4eJjNA0OzYdpnhR6O3JE3gwP3DuT9d6b/GKqytuEVxa2tJc3JZAVzCp8hSMgSZMr0SlydYZbxkG1W3/KwA2hIxLz/UgM/2XrflltcYCuyY2DQmqEJaavMLHquqdqcTO9LXc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SwEYnX5t; arc=none smtp.client-ip=209.85.221.43
+	 MIME-Version; b=QNRwAaDs1r3KB5V+xGG5qgdjbJpuYfMMTdBfzUgzxe5R0OXxn/isvEz9POlfTE4gy5bXnOc9GRinZgyaJoemDe9hWxA55JEk0mflDhjf7UK9LavAZKwHuUzR9kuyPMTokR7ArXm6HiJUhajLxIoEGTmV6wf9jQnxiAFEL8FZbRg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=E63/3cUx; arc=none smtp.client-ip=209.85.221.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SwEYnX5t"
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-3b9d41bfa35so2642934f8f.0
-        for <bpf@vger.kernel.org>; Sat, 16 Aug 2025 11:02:04 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="E63/3cUx"
+Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-3b9d41c1963so1453993f8f.0
+        for <bpf@vger.kernel.org>; Sat, 16 Aug 2025 11:02:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755367322; x=1755972122; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1755367325; x=1755972125; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=O1gLomVePLU1NjXOEDuVj4EhRJXOxrwAT7KMF5bibB4=;
-        b=SwEYnX5tuJeUU/9O0Cf9vsYtgb4HthIsVYaEqLdY/AVcf9JeOsgwSQhX6Vku74tAvA
-         5MnDDF+xDAubZLZMpVIp4Q2uAfhrvk7EbTGwDZ66auN8g+FOFaJkhoOhOAhsOB6Yk5/b
-         3iuSEshByvcCjrNOFdCkXyM3NZW/r3Xv+lTQ52tA+eKud3M0hpKc1+2Gk4VvBXV7YYB4
-         COFnAr9RjWqK3LggbR59rYZMfYXDqqNMVL43y8dcIkQVnmTYCwFbZp4aBx3VG39XBvY7
-         1nFDCyYFwlpQIgI3ENJqgjyqM2vwRAuOPcBKJydJtmYmAT5xYHZwhS0NskmXtgSjadr5
-         cZBA==
+        bh=AYrjQhvJMHXaP/9ruUcfnVI2r2C+MiR/30xTndOw3+s=;
+        b=E63/3cUxWUDFP8/4EqHbsXPW/uPu4CyRDKteWPlOCDQm5Xh8aqxeGvaX4b78g7T3J9
+         Dn0mWJjfLG85YoZ58IVx8K6ig8GP3A25fU6q1eSEERoismAOQA+nKn3ZgVB66sOvsRsK
+         sVd5hTXu+QIqIdZwdrhrf0DcwkKSWJwsaXjvB0mFBD/OeTT9kQZ8KRnTHu09SykNDpHZ
+         D+GVc6RuL66PTQqRqw0MHxzNccoKEYd2wSNzJetq2EfVHGGH71Ml6nM7JvQ0zuz5TEiY
+         OANCQ/LhwIxZ2wOhuAyXPnJy0yKg/OisV5YezuIxeD6c7CFLOr5ju7KOhUcRYR97k2og
+         st6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755367323; x=1755972123;
+        d=1e100.net; s=20230601; t=1755367325; x=1755972125;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=O1gLomVePLU1NjXOEDuVj4EhRJXOxrwAT7KMF5bibB4=;
-        b=Cdb9RxJ9ng5s4qE2Ne2iGWUuhb1mGkeawYGe4ALx/AwruCUgC5kFX1gj6yeZQd082p
-         TcyTwp4NBIihZy0WgNPS3F1MjXl/5RnhhdAN1KqoOcaKYgJvSMMdBPsdY/Ng1WO4doa8
-         KjE3aABE9/zyp6gkVwPiT8SQj/IT/luzZtFJm2/M/edeVCUjJD/Uvztn0LHV0CwsP9J5
-         X63WghEVSbZgZojRrhuSzaE97yfdX8HxkNptCttd8/zq/XSYH92XTkPOG3lWCH2V4fKf
-         +8Poxy8bYl/3+h9OyJBpE+Zl+CKDbQwVAugWJKxJ+UBh+OJXCUycpj6X6s4RcWyrG+SP
-         Q+uQ==
-X-Gm-Message-State: AOJu0YzcE3qLR00XuuxqeMhIgbs0WvjbGx3Qr1jSwAs7B1GfcXHKREps
-	8xDTIzDHCYD5MCLCuNrwMqOZlNCmtmY8IWqu5QwzJQzQHA7aXaEiQH06Gnl0Mw==
-X-Gm-Gg: ASbGncuJQfLsW6iDNrhyaDHW+DWLpW+wBkkgbqVszFWuBkjMGFOjdR0Ywx8tyBb2ZU3
-	jwqnzJy5EhLr0o7mcSTXmPGogKn/HtyH1Ps/ZIdIX+s5xWpP6WVSMqhaan55oEPM+OEknDMcIyq
-	9/oJhtOXQRNLosy65Vhb3Sby7pCYTh2K1qKG4YK2bBEi31e/QJLhUNVXnKHFhlEq4RsNX8ovol8
-	V8j49sTwAbdwtBGGaUFO7j22PhhtdVEm5IWADh2b+laYUA8zOhOFX34lrH14JpS+wFR/dCAP+MB
-	1k078qZTtM+PomR6ZQ+xHHvsgsJb6NleOoMjqsPG/GVjZuMYq6OzHXLZzTQBZ9mFNcrlyI6bHl4
-	Po/iNmkhMklAygEluQmGFGgIQJmrF0wnc2zwqw0UvKgtitARVCic7zg==
-X-Google-Smtp-Source: AGHT+IE0h/mF+QEESKiSOek/ey0EHyMaAfBfZJcTno5jXKjadXFlIfqb3OVNxsgikXQauHjLqry9Pg==
-X-Received: by 2002:a05:6000:290d:b0:3b7:7563:9d59 with SMTP id ffacd0b85a97d-3bb6969ad7emr4441356f8f.57.1755367322481;
-        Sat, 16 Aug 2025 11:02:02 -0700 (PDT)
+        bh=AYrjQhvJMHXaP/9ruUcfnVI2r2C+MiR/30xTndOw3+s=;
+        b=GtQ0KNE+Pr20AvjGC/vjA5GVUZeDrYmsNCGCIQdbpIVQNuRs+LPEPeU6iQ/S5tcL/L
+         6nH3FZue7aqNQTUGX6fywWd/I9VttdqvS7T1nnKX4OcW26S/z2ezSpWh7ippIkFpfaUd
+         bbZ1I6YAoWOdZB8zKKidaMtxRyPNDxakZGG0uoGVnCb+Gis00trVIuPTLHdrQNbYA3em
+         QTURd7QLZCUdoij9dZPCIS//sYfQxmFx2C3LCMrI6PfUUpZGJmrq2tC8mUzvCc9p/MFU
+         cJvGZROZDGO9x57k3jDNDlY1a915+Cdcf+Q9tBQSkMeKawCfFk+zD+bwYITbrI9qqa5I
+         xqiw==
+X-Gm-Message-State: AOJu0YwqyPlOy/S5H383IfTSKq6jG0oUA2iNjJo+oNM06yXXmvTKK0wV
+	NvSHn1+Lcub44EkFWwAoUBNvVufxuH+yEAGLt700Qy8LgW1tOjqI5b8Cyv0Xsg==
+X-Gm-Gg: ASbGncuXx+ymq8t6i0nzVZOPFVEpkUB5+tv7KubamTDE6UWAmlkgmraY4piJDjg2SxS
+	cTVah2wzLYZEt+EgWgOoeLxN1JEe5ffu+wKY3B7sq/Sj/5jRsKqUEO5YsqNqoOJS62VdaFbia/w
+	N5GjNnbHtWNtjS3swOcbAnlusDylqDb597qh6P+yUVzjtjFcJUujJQ95GTVInbApiOIvt6/zoHs
+	sBS6Rz3SYz5Oi5Fyk1LjbMKcJIG3yleZU4dnHLjOzssATXoNLSUx9q40Wa3/XFHPWWuYrtYwtQd
+	6T6J8cLlibVkyVNIznrPHXtkXZqQeZEAWUEFaSVUpkgdfxBD9h5UqGgP4kIJBbSQwE9TdA350Kt
+	R4nP3nixUVlfVVWPX02eGrT67vsTyq+acqIT9RLShkrU=
+X-Google-Smtp-Source: AGHT+IG/Wd3NBFQaW1Z7Ldz/b2j9gbxQwxqG1hGJJdXMNtm9EljxmSGJUcudtlpztnDczSYUWi83Xw==
+X-Received: by 2002:a05:6000:24c4:b0:3b7:644f:9ca7 with SMTP id ffacd0b85a97d-3bc694261a0mr2388933f8f.25.1755367324807;
+        Sat, 16 Aug 2025 11:02:04 -0700 (PDT)
 Received: from localhost.localdomain ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3bd736b88besm1080193f8f.67.2025.08.16.11.02.01
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3bd736b88besm1080193f8f.67.2025.08.16.11.02.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 16 Aug 2025 11:02:02 -0700 (PDT)
+        Sat, 16 Aug 2025 11:02:04 -0700 (PDT)
 From: Anton Protopopov <a.s.protopopov@gmail.com>
 To: bpf@vger.kernel.org,
 	Alexei Starovoitov <ast@kernel.org>,
@@ -67,9 +67,9 @@ To: bpf@vger.kernel.org,
 	Quentin Monnet <qmo@kernel.org>,
 	Yonghong Song <yonghong.song@linux.dev>
 Cc: Anton Protopopov <a.s.protopopov@gmail.com>
-Subject: [PATCH v1 bpf-next 04/11] selftests/bpf: add selftests for new insn_array map
-Date: Sat, 16 Aug 2025 18:06:24 +0000
-Message-Id: <20250816180631.952085-5-a.s.protopopov@gmail.com>
+Subject: [PATCH v1 bpf-next 06/11] selftests/bpf: test instructions arrays with blinding
+Date: Sat, 16 Aug 2025 18:06:26 +0000
+Message-Id: <20250816180631.952085-7-a.s.protopopov@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20250816180631.952085-1-a.s.protopopov@gmail.com>
 References: <20250816180631.952085-1-a.s.protopopov@gmail.com>
@@ -81,77 +81,69 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Tests are split in two parts.
-
-The `bpf_insn_array_ops` test checks that the map is managed properly:
-
-  * Incorrect instruction indexes are rejected
-  * Non-sorted and non-unique indexes are rejected
-  * Unfrozen maps are not accepted
-  * Two programs can't use the same map
-  * BPF progs can't operate the map
-
-The `bpf_insn_array` part validates, as best as it can do it from user
-space, that instructions were adjusted properly:
-
-  * no changes to code => map is the same
-  * expected changes when instructions are added
-  * expected changes when instructions are deleted
-  * expected changes when multiple functions are present
+Add a specific test for instructions arrays with blinding enabled.
 
 Signed-off-by: Anton Protopopov <a.s.protopopov@gmail.com>
 ---
- .../selftests/bpf/prog_tests/bpf_insn_array.c | 406 ++++++++++++++++++
- 1 file changed, 406 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/bpf_insn_array.c
+ .../selftests/bpf/prog_tests/bpf_insn_array.c | 92 +++++++++++++++++++
+ 1 file changed, 92 insertions(+)
 
 diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_insn_array.c b/tools/testing/selftests/bpf/prog_tests/bpf_insn_array.c
-new file mode 100644
-index 000000000000..da329c2e85f2
---- /dev/null
+index da329c2e85f2..4fa09c05c272 100644
+--- a/tools/testing/selftests/bpf/prog_tests/bpf_insn_array.c
 +++ b/tools/testing/selftests/bpf/prog_tests/bpf_insn_array.c
-@@ -0,0 +1,406 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <bpf/bpf.h>
-+#include <test_progs.h>
-+
-+static int map_create(__u32 map_type, __u32 max_entries)
+@@ -287,6 +287,95 @@ static void check_with_functions(void)
+ 	close(map_fd);
+ }
+ 
++static int set_bpf_jit_harden(char *level)
 +{
-+	const char *map_name = "insn_array";
-+	__u32 key_size = 4;
-+	__u32 value_size = sizeof(struct bpf_insn_array_value);
++	char old_level;
++	int err = -1;
++	int fd = -1;
 +
-+	return bpf_map_create(map_type, map_name, key_size, value_size, max_entries, NULL);
++	fd = open("/proc/sys/net/core/bpf_jit_harden", O_RDWR | O_NONBLOCK);
++        if (fd < 0) {
++		ASSERT_FAIL("open .../bpf_jit_harden returned %d (errno=%d)", fd, errno);
++		return -1;
++	}
++
++	err = read(fd, &old_level, 1);
++	if (err != 1) {
++		ASSERT_FAIL("read from .../bpf_jit_harden returned %d (errno=%d)", err, errno);
++		err = -1;
++		goto end;
++	}
++
++	lseek(fd, 0, SEEK_SET);
++
++	err = write(fd, level, 1);
++	if (err != 1) {
++		ASSERT_FAIL("write to .../bpf_jit_harden returned %d (errno=%d)", err, errno);
++		err = -1;
++		goto end;
++	}
++
++	err = 0;
++	*level = old_level;
++end:
++	if (fd >= 0)
++		close(fd);
++	return err;
 +}
 +
-+static int prog_load(struct bpf_insn *insns, __u32 insn_cnt, int *fd_array, __u32 fd_array_cnt)
-+{
-+	LIBBPF_OPTS(bpf_prog_load_opts, opts);
-+
-+	opts.fd_array = fd_array;
-+	opts.fd_array_cnt = fd_array_cnt;
-+
-+	return bpf_prog_load(BPF_PROG_TYPE_XDP, NULL, "GPL", insns, insn_cnt, &opts);
-+}
-+
-+/*
-+ * Load a program, which will not be anyhow mangled by the verifier.  Add an
-+ * insn_array map pointing to every instruction. Check that it hasn't changed
-+ * after the program load.
-+ */
-+static void check_one_to_one_mapping(void)
++static void check_blindness(void)
 +{
 +	struct bpf_insn insns[] = {
 +		BPF_MOV64_IMM(BPF_REG_0, 4),
 +		BPF_MOV64_IMM(BPF_REG_0, 3),
 +		BPF_MOV64_IMM(BPF_REG_0, 2),
 +		BPF_MOV64_IMM(BPF_REG_0, 1),
-+		BPF_MOV64_IMM(BPF_REG_0, 0),
 +		BPF_EXIT_INSN(),
 +	};
 +	int prog_fd = -1, map_fd;
 +	struct bpf_insn_array_value val = {};
++	char bpf_jit_harden = '@'; /* non-exizsting value */
 +	int i;
 +
 +	map_fd = map_create(BPF_MAP_TYPE_INSN_ARRAY, ARRAY_SIZE(insns));
@@ -164,359 +156,48 @@ index 000000000000..da329c2e85f2
 +			goto cleanup;
 +	}
 +
++	bpf_jit_harden = '2';
++	if (set_bpf_jit_harden(&bpf_jit_harden)) {
++		bpf_jit_harden = '@'; /* open, read or write failed => no write was done */
++		goto cleanup;
++	}
++
 +	prog_fd = prog_load(insns, ARRAY_SIZE(insns), &map_fd, 1);
 +	if (!ASSERT_GE(prog_fd, 0, "bpf(BPF_PROG_LOAD)"))
 +		goto cleanup;
 +
 +	for (i = 0; i < ARRAY_SIZE(insns); i++) {
++		char fmt[32];
++
 +		if (!ASSERT_EQ(bpf_map_lookup_elem(map_fd, &i, &val), 0, "bpf_map_lookup_elem"))
 +			goto cleanup;
 +
-+		ASSERT_EQ(val.xlated_off, i, "val should be equal i");
++		snprintf(fmt, sizeof(fmt), "val should be equal 3*%d", i);
++		ASSERT_EQ(val.xlated_off, i * 3, fmt);
 +	}
 +
 +cleanup:
++	/* restore the old one */
++	if (bpf_jit_harden != '@')
++		set_bpf_jit_harden(&bpf_jit_harden);
++
 +	close(prog_fd);
 +	close(map_fd);
 +}
 +
-+/*
-+ * Try to load a program with a map which points to outside of the program
-+ */
-+static void check_out_of_bounds_index(void)
-+{
-+	struct bpf_insn insns[] = {
-+		BPF_MOV64_IMM(BPF_REG_0, 4),
-+		BPF_MOV64_IMM(BPF_REG_0, 3),
-+		BPF_MOV64_IMM(BPF_REG_0, 2),
-+		BPF_MOV64_IMM(BPF_REG_0, 1),
-+		BPF_MOV64_IMM(BPF_REG_0, 0),
-+		BPF_EXIT_INSN(),
-+	};
-+	int prog_fd, map_fd;
-+	struct bpf_insn_array_value val = {};
-+	int key;
+ /* Map can be used only by one BPF program */
+ static void check_no_map_reuse(void)
+ {
+@@ -390,6 +479,9 @@ void test_bpf_insn_array(void)
+ 
+ 	if (test__start_subtest("multiple-functions"))
+ 		check_with_functions();
 +
-+	map_fd = map_create(BPF_MAP_TYPE_INSN_ARRAY, 1);
-+	if (!ASSERT_GE(map_fd, 0, "map_create"))
-+		return;
-+
-+	key = 0;
-+	val.xlated_off = ARRAY_SIZE(insns); /* too big */
-+	if (!ASSERT_EQ(bpf_map_update_elem(map_fd, &key, &val, 0), 0, "bpf_map_update_elem"))
-+		goto cleanup;
-+
-+	errno = 0;
-+	prog_fd = prog_load(insns, ARRAY_SIZE(insns), &map_fd, 1);
-+	if (!ASSERT_EQ(prog_fd, -EINVAL, "program should have been rejected (prog_fd != -EINVAL)")) {
-+		close(prog_fd);
-+		goto cleanup;
-+	}
-+
-+cleanup:
-+	close(map_fd);
-+}
-+
-+/*
-+ * Try to load a program with a map which points to the middle of 16-bit insn
-+ */
-+static void check_mid_insn_index(void)
-+{
-+	struct bpf_insn insns[] = {
-+		BPF_LD_IMM64(BPF_REG_0, 0), /* 2 x 8 */
-+		BPF_EXIT_INSN(),
-+	};
-+	int prog_fd, map_fd;
-+	struct bpf_insn_array_value val = {};
-+	int key;
-+
-+	map_fd = map_create(BPF_MAP_TYPE_INSN_ARRAY, 1);
-+	if (!ASSERT_GE(map_fd, 0, "map_create"))
-+		return;
-+
-+	key = 0;
-+	val.xlated_off = 1; /* middle of 16-byte instruction */
-+	if (!ASSERT_EQ(bpf_map_update_elem(map_fd, &key, &val, 0), 0, "bpf_map_update_elem"))
-+		goto cleanup;
-+
-+	errno = 0;
-+	prog_fd = prog_load(insns, ARRAY_SIZE(insns), &map_fd, 1);
-+	if (!ASSERT_EQ(prog_fd, -EINVAL, "program should have been rejected (prog_fd != -EINVAL)")) {
-+		close(prog_fd);
-+		goto cleanup;
-+	}
-+
-+cleanup:
-+	close(map_fd);
-+}
-+
-+static void check_incorrect_index(void)
-+{
-+	check_out_of_bounds_index();
-+	check_mid_insn_index();
-+}
-+
-+/*
-+ * Load a program with two patches (get jiffies, for simplicity). Add an
-+ * insn_array map pointing to every instruction. Check how it was changed
-+ * after the program load.
-+ */
-+static void check_simple(void)
-+{
-+	struct bpf_insn insns[] = {
-+		BPF_MOV64_IMM(BPF_REG_0, 2),
-+		BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_jiffies64),
-+		BPF_MOV64_IMM(BPF_REG_0, 1),
-+		BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_jiffies64),
-+		BPF_MOV64_IMM(BPF_REG_0, 0),
-+		BPF_EXIT_INSN(),
-+	};
-+	int prog_fd = -1, map_fd;
-+	__u32 map_in[] = {0, 1, 2, 3, 4, 5};
-+	__u32 map_out[] = {0, 1, 4, 5, 8, 9};
-+	struct bpf_insn_array_value val = {};
-+	int i;
-+
-+	map_fd = map_create(BPF_MAP_TYPE_INSN_ARRAY, ARRAY_SIZE(insns));
-+	if (!ASSERT_GE(map_fd, 0, "map_create"))
-+		return;
-+
-+	for (i = 0; i < ARRAY_SIZE(insns); i++) {
-+		val.xlated_off = map_in[i];
-+		if (!ASSERT_EQ(bpf_map_update_elem(map_fd, &i, &val, 0), 0,
-+			       "bpf_map_update_elem"))
-+			goto cleanup;
-+	}
-+
-+	prog_fd = prog_load(insns, ARRAY_SIZE(insns), &map_fd, 1);
-+	if (!ASSERT_GE(prog_fd, 0, "bpf(BPF_PROG_LOAD)"))
-+		goto cleanup;
-+
-+	for (i = 0; i < ARRAY_SIZE(insns); i++) {
-+		if (!ASSERT_EQ(bpf_map_lookup_elem(map_fd, &i, &val), 0, "bpf_map_lookup_elem"))
-+			goto cleanup;
-+
-+		ASSERT_EQ(val.xlated_off, map_out[i], "val should be equal map_out[i]");
-+	}
-+
-+cleanup:
-+	close(prog_fd);
-+	close(map_fd);
-+}
-+
-+/*
-+ * Verifier can delete code in two cases: nops & dead code. From insn
-+ * array's point of view, the two cases are the same, so test using
-+ * the simplest method: by loading some nops
-+ */
-+static void check_deletions(void)
-+{
-+	struct bpf_insn insns[] = {
-+		BPF_MOV64_IMM(BPF_REG_0, 2),
-+		BPF_JMP_IMM(BPF_JA, 0, 0, 0), /* nop */
-+		BPF_MOV64_IMM(BPF_REG_0, 1),
-+		BPF_JMP_IMM(BPF_JA, 0, 0, 0), /* nop */
-+		BPF_MOV64_IMM(BPF_REG_0, 0),
-+		BPF_EXIT_INSN(),
-+	};
-+	int prog_fd = -1, map_fd;
-+	__u32 map_in[] = {0, 1, 2, 3, 4, 5};
-+	__u32 map_out[] = {0, -1, 1, -1, 2, 3};
-+	struct bpf_insn_array_value val = {};
-+	int i;
-+
-+	map_fd = map_create(BPF_MAP_TYPE_INSN_ARRAY, ARRAY_SIZE(insns));
-+	if (!ASSERT_GE(map_fd, 0, "map_create"))
-+		return;
-+
-+	for (i = 0; i < ARRAY_SIZE(insns); i++) {
-+		val.xlated_off = map_in[i];
-+		if (!ASSERT_EQ(bpf_map_update_elem(map_fd, &i, &val, 0), 0,
-+			       "bpf_map_update_elem"))
-+			goto cleanup;
-+	}
-+
-+	prog_fd = prog_load(insns, ARRAY_SIZE(insns), &map_fd, 1);
-+	if (!ASSERT_GE(prog_fd, 0, "bpf(BPF_PROG_LOAD)"))
-+		goto cleanup;
-+
-+	for (i = 0; i < ARRAY_SIZE(insns); i++) {
-+		if (!ASSERT_EQ(bpf_map_lookup_elem(map_fd, &i, &val), 0, "bpf_map_lookup_elem"))
-+			goto cleanup;
-+
-+		ASSERT_EQ(val.xlated_off, map_out[i], "val should be equal map_out[i]");
-+	}
-+
-+cleanup:
-+	close(prog_fd);
-+	close(map_fd);
-+}
-+
-+static void check_with_functions(void)
-+{
-+	struct bpf_insn insns[] = {
-+		BPF_JMP_IMM(BPF_JA, 0, 0, 0), /* nop */
-+		BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_jiffies64),
-+		BPF_JMP_IMM(BPF_JA, 0, 0, 0), /* nop */
-+		BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 1, 0, 2),
-+		BPF_MOV64_IMM(BPF_REG_0, 1),
-+		BPF_EXIT_INSN(),
-+		BPF_JMP_IMM(BPF_JA, 0, 0, 0), /* nop */
-+		BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_jiffies64),
-+		BPF_JMP_IMM(BPF_JA, 0, 0, 0), /* nop */
-+		BPF_MOV64_IMM(BPF_REG_0, 2),
-+		BPF_EXIT_INSN(),
-+	};
-+	int prog_fd = -1, map_fd;
-+	__u32 map_in[] =  { 0, 1,  2, 3, 4, 5, /* func */  6, 7,  8, 9, 10};
-+	__u32 map_out[] = {-1, 0, -1, 3, 4, 5, /* func */ -1, 6, -1, 9, 10};
-+	struct bpf_insn_array_value val = {};
-+	int i;
-+
-+	map_fd = map_create(BPF_MAP_TYPE_INSN_ARRAY, ARRAY_SIZE(insns));
-+	if (!ASSERT_GE(map_fd, 0, "map_create"))
-+		return;
-+
-+	for (i = 0; i < ARRAY_SIZE(insns); i++) {
-+		val.xlated_off = map_in[i];
-+		if (!ASSERT_EQ(bpf_map_update_elem(map_fd, &i, &val, 0), 0,
-+			       "bpf_map_update_elem"))
-+			goto cleanup;
-+	}
-+
-+	prog_fd = prog_load(insns, ARRAY_SIZE(insns), &map_fd, 1);
-+	if (!ASSERT_GE(prog_fd, 0, "bpf(BPF_PROG_LOAD)"))
-+		goto cleanup;
-+
-+	for (i = 0; i < ARRAY_SIZE(insns); i++) {
-+		if (!ASSERT_EQ(bpf_map_lookup_elem(map_fd, &i, &val), 0, "bpf_map_lookup_elem"))
-+			goto cleanup;
-+
-+		ASSERT_EQ(val.xlated_off, map_out[i], "val should be equal map_out[i]");
-+	}
-+
-+cleanup:
-+	close(prog_fd);
-+	close(map_fd);
-+}
-+
-+/* Map can be used only by one BPF program */
-+static void check_no_map_reuse(void)
-+{
-+	struct bpf_insn insns[] = {
-+		BPF_MOV64_IMM(BPF_REG_0, 0),
-+		BPF_EXIT_INSN(),
-+	};
-+	int prog_fd = -1, map_fd, extra_fd = -1;
-+	struct bpf_insn_array_value val = {};
-+	int i;
-+
-+	map_fd = map_create(BPF_MAP_TYPE_INSN_ARRAY, ARRAY_SIZE(insns));
-+	if (!ASSERT_GE(map_fd, 0, "map_create"))
-+		return;
-+
-+	for (i = 0; i < ARRAY_SIZE(insns); i++) {
-+		val.xlated_off = i;
-+		if (!ASSERT_EQ(bpf_map_update_elem(map_fd, &i, &val, 0), 0, "bpf_map_update_elem"))
-+			goto cleanup;
-+	}
-+
-+	prog_fd = prog_load(insns, ARRAY_SIZE(insns), &map_fd, 1);
-+	if (!ASSERT_GE(prog_fd, 0, "bpf(BPF_PROG_LOAD)"))
-+		goto cleanup;
-+
-+	for (i = 0; i < ARRAY_SIZE(insns); i++) {
-+		if (!ASSERT_EQ(bpf_map_lookup_elem(map_fd, &i, &val), 0, "bpf_map_lookup_elem"))
-+			goto cleanup;
-+
-+		ASSERT_EQ(val.xlated_off, i, "val should be equal i");
-+	}
-+
-+	errno = 0;
-+	extra_fd = prog_load(insns, ARRAY_SIZE(insns), &map_fd, 1);
-+	if (!ASSERT_EQ(extra_fd, -EBUSY, "program should have been rejected (extra_fd != -EBUSY)"))
-+		goto cleanup;
-+
-+	/* correctness: check that prog is still loadable without fd_array */
-+	extra_fd = prog_load(insns, ARRAY_SIZE(insns), NULL, 0);
-+	if (!ASSERT_GE(prog_fd, 0, "bpf(BPF_PROG_LOAD): expected no error"))
-+		goto cleanup;
-+
-+cleanup:
-+	close(extra_fd);
-+	close(prog_fd);
-+	close(map_fd);
-+}
-+
-+static void check_bpf_no_lookup(void)
-+{
-+	struct bpf_insn insns[] = {
-+		BPF_LD_MAP_FD(BPF_REG_1, 0),
-+		BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0),
-+		BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
-+		BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
-+		BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_map_lookup_elem),
-+		BPF_EXIT_INSN(),
-+	};
-+	int prog_fd = -1, map_fd;
-+
-+	map_fd = map_create(BPF_MAP_TYPE_INSN_ARRAY, 1);
-+	if (!ASSERT_GE(map_fd, 0, "map_create"))
-+		return;
-+
-+	insns[0].imm = map_fd;
-+
-+	errno = 0;
-+	prog_fd = prog_load(insns, ARRAY_SIZE(insns), NULL, 0);
-+	if (!ASSERT_EQ(prog_fd, -EINVAL, "program should have been rejected (prog_fd != -EINVAL)"))
-+		goto cleanup;
-+
-+	/* correctness: check that prog is still loadable with normal map */
-+	close(map_fd);
-+	map_fd = map_create(BPF_MAP_TYPE_ARRAY, 1);
-+	insns[0].imm = map_fd;
-+	prog_fd = prog_load(insns, ARRAY_SIZE(insns), NULL, 0);
-+	if (!ASSERT_GE(prog_fd, 0, "bpf(BPF_PROG_LOAD)"))
-+		goto cleanup;
-+
-+cleanup:
-+	close(prog_fd);
-+	close(map_fd);
-+}
-+
-+static void check_bpf_side(void)
-+{
-+	check_bpf_no_lookup();
-+}
-+
-+/* Test if offsets are adjusted properly */
-+void test_bpf_insn_array(void)
-+{
-+	if (test__start_subtest("one2one"))
-+		check_one_to_one_mapping();
-+
-+	if (test__start_subtest("simple"))
-+		check_simple();
-+
-+	if (test__start_subtest("deletions"))
-+		check_deletions();
-+
-+	if (test__start_subtest("multiple-functions"))
-+		check_with_functions();
-+}
-+
-+/* Check all kinds of operations and related restrictions */
-+void test_bpf_insn_array_ops(void)
-+{
-+	if (test__start_subtest("incorrect-index"))
-+		check_incorrect_index();
-+
-+	if (test__start_subtest("no-map-reuse"))
-+		check_no_map_reuse();
-+
-+	if (test__start_subtest("bpf-side-ops"))
-+		check_bpf_side();
-+}
++	if (test__start_subtest("blindness"))
++		check_blindness();
+ }
+ 
+ /* Check all kinds of operations and related restrictions */
 -- 
 2.34.1
 
