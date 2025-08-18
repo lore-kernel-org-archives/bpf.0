@@ -1,78 +1,94 @@
-Received: from baidu.com (mx22.baidu.com [220.181.50.185])
+Received: from out30-124.freemail.mail.aliyun.com (out30-124.freemail.mail.aliyun.com [115.124.30.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8786025D53B;
-	Mon, 18 Aug 2025 03:24:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.181.50.185
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EEEB26D4E2;
+	Mon, 18 Aug 2025 05:39:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755487499; cv=none; b=fn19LXhN0tMPGfgJOTPea0W+CfXE4Pw4Wq67plii1sYFVTZYYcs+CBlGgR26xnwmLUoTfULiZSakY5MWivAotryBopXxKAFkuHHouYgTNgkYrooIVmbjirxXH0AqqZgDevxejwyO35lmnhwKj5862JKdFAU8W17VtlF/Grlimxs=
+	t=1755495591; cv=none; b=lwMKVFpp39qfT+/HLn5ki13CZXQRqCTfZgb59Xl6bqvh3+XGi1VA6h/7L1VvfNNBFXHsbmoQpyfWBu2FL/8AS1JMshpXUs6DzsVHVD3rVzzw8bKtxlZyhqlGRHn9yoWCmSav2z+yTfN724J+4pxLGCBblhtngUgQZpxky0qf4ns=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755487499; c=relaxed/simple;
-	bh=wi2kRpnTO2A/WrOgjNo/vYLtqr3YGX7eHBKRlFB0eeE=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=sasFlsPdMTWx756b8MyYax/V+lJIPovICILewmSAEJ27DIk0mI/pckaBsVSnT6CgCL9yw9+A/PP1azxv+rHeyyED3Qg89ILrgi0hMY2M5lZm9AhhaFUtA6A/4CZbQdOsEfVsoLam8NV8+2kC6FfsLMG7gbbrE8vHE617hwgf9T4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=baidu.com; spf=pass smtp.mailfrom=baidu.com; arc=none smtp.client-ip=220.181.50.185
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=baidu.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baidu.com
-From: Fushuai Wang <wangfushuai@baidu.com>
-To: <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
-	<martin.lau@linux.dev>, <ast@kernel.org>, <daniel@iogearbox.net>,
-	<andrii@kernel.org>
-CC: <eddyz87@gmail.com>, <song@kernel.org>, <yonghong.song@linux.dev>,
-	<john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@fomichev.me>,
-	<haoluo@google.com>, <jolsa@kernel.org>, Fushuai Wang <wangfushuai@baidu.com>
-Subject: [PATCH bpf-next v2] bpf: Replace get_next_cpu() with cpumask_next_wrap()
-Date: Mon, 18 Aug 2025 11:23:44 +0800
-Message-ID: <20250818032344.23229-1-wangfushuai@baidu.com>
-X-Mailer: git-send-email 2.39.2 (Apple Git-143)
+	s=arc-20240116; t=1755495591; c=relaxed/simple;
+	bh=o3uNSVAiO3egJNj37SYbpwN8ZS+890QUO9bcSpSLBAM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SqissgrSBwnVrjzcBIb48fX8I1aroIOO+TdQt+CaTUNm7MDt7eBY3+Ot+/3FwFm88MLkvE1xGYopiXp9nBw3zQROTAf11lWgcTpHVQWOyNHfVZ66ocZnYGrvoruGVAB39FxAtBH1lEIqX0OZxXr/aXPvtL/42knWBcZ/xL1Sa5s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=GxqwK5Wz; arc=none smtp.client-ip=115.124.30.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="GxqwK5Wz"
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1755495578; h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+	bh=dihRxXmk6cpasMYFcjt6iSrWf1Q1lC5HSGvLlVUkcis=;
+	b=GxqwK5WzuXqvw3Q5xmjX1V98cg0ogRLgw6L3Cx/XC/knZvUyeoR9vGkg4uWJSs6vnx5d0ILTUfj6kAvPbp2P47XWDZ16aiKQ6H+npIB2AQzHjkFF0ZU7kvP9GDNdKmpgt/OwSTpN9Z6uH417R0PG+KmgX+6NyNYq9q/uwH6+GQ8=
+Received: from localhost(mailfrom:alibuda@linux.alibaba.com fp:SMTPD_---0WlveepU_1755495576 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Mon, 18 Aug 2025 13:39:36 +0800
+Date: Mon, 18 Aug 2025 13:39:36 +0800
+From: "D. Wythe" <alibuda@linux.alibaba.com    >
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Alexandra Winter <wintera@linux.ibm.com>,
+	"D. Wythe" <alibuda@linux.alibaba.com>, ast@kernel.org,
+	daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
+	pabeni@redhat.com, song@kernel.org, sdf@google.com,
+	haoluo@google.com, yhs@fb.com, edumazet@google.com,
+	john.fastabend@gmail.com, kpsingh@kernel.org, jolsa@kernel.org,
+	Mahanta.Jambigi@ibm.com, Sidraya.Jayagond@ibm.com,
+	wenjia@linux.ibm.com, dust.li@linux.alibaba.com,
+	tonylu@linux.alibaba.com, guwen@linux.alibaba.com,
+	bpf@vger.kernel.org, davem@davemloft.net, netdev@vger.kernel.org,
+	jaka@linux.ibm.com
+Subject: Re: [PATCH bpf-next 2/5] net/smc: fix UAF on smcsk after
+ smc_listen_out()
+Message-ID: <20250818053936.GA28521@j66a10360.sqa.eu95>
+References: <20250731084240.86550-1-alibuda@linux.alibaba.com>
+ <20250731084240.86550-3-alibuda@linux.alibaba.com>
+ <174ccf57-6e7c-4dab-8743-33989829de01@linux.ibm.com>
+ <20250811015452.GB19346@j66a10360.sqa.eu95>
+ <14ec76a2-e80e-44a8-a775-ebd4668959c4@linux.ibm.com>
+ <20250811083356.7911039b@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: bjhj-exc2.internal.baidu.com (172.31.3.12) To
- bjhj-exc17.internal.baidu.com (172.31.4.15)
-X-FEAS-Client-IP: 172.31.4.15
-X-FE-Policy-ID: 52:10:53:SYSTEM
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250811083356.7911039b@kernel.org>
+User-Agent: Mutt/1.5.21 (2010-09-15)
 
-The get_next_cpu() function was only used in one place to find
-the next possible CPU, which can be replaced by cpumask_next_wrap().
+On Mon, Aug 11, 2025 at 08:33:56AM -0700, Jakub Kicinski wrote:
+> On Mon, 11 Aug 2025 11:24:50 +0200 Alexandra Winter wrote:
+> > > Yes, it should be sent to net. But the problem is that if I don't carry
+> > > this patch, the BPF CI test will always crash. Maybe I should send a
+> > > copy to both net and bpf-next? Do you have any suggestions?
+> > 
+> > I do not have any experience with bpf-next. But typically patches
+> > to 'net' are taken after one or two days, if there are no issues.
+> > I'd assume they are then picked to net-next and bpf-next(?) almost instantly.
+> > Then you would not need it in your bpf series anymore.
+> 
+> AFAIU the patches which land in net will make it to -next trees after
+> respective PR with fixes. So
+> 
+> 
+>  patch -> 
+>           net ->
+>                  [next Thu] Linus ->
+>                                       [same day] net-next
+>                                       [at some point] bpf PR ->
+>                                                                  Linux
+>                                                                         -> bpf-next
+> 
+> What gets applied to net should be in net-next in a week,
+> and most -next trees within 2 weeks.
 
-Signed-off-by: Fushuai Wang <wangfushuai@baidu.com>
----
- kernel/bpf/bpf_lru_list.c | 10 +---------
- 1 file changed, 1 insertion(+), 9 deletions(-)
+That's very helpful.
 
-diff --git a/kernel/bpf/bpf_lru_list.c b/kernel/bpf/bpf_lru_list.c
-index 2d6e1c98d8ad..e7a2fc60523f 100644
---- a/kernel/bpf/bpf_lru_list.c
-+++ b/kernel/bpf/bpf_lru_list.c
-@@ -19,14 +19,6 @@
- #define LOCAL_PENDING_LIST_IDX	LOCAL_LIST_IDX(BPF_LRU_LOCAL_LIST_T_PENDING)
- #define IS_LOCAL_LIST_TYPE(t)	((t) >= BPF_LOCAL_LIST_T_OFFSET)
- 
--static int get_next_cpu(int cpu)
--{
--	cpu = cpumask_next(cpu, cpu_possible_mask);
--	if (cpu >= nr_cpu_ids)
--		cpu = cpumask_first(cpu_possible_mask);
--	return cpu;
--}
--
- /* Local list helpers */
- static struct list_head *local_free_list(struct bpf_lru_locallist *loc_l)
- {
-@@ -482,7 +474,7 @@ static struct bpf_lru_node *bpf_common_lru_pop_free(struct bpf_lru *lru,
- 
- 		raw_spin_unlock_irqrestore(&steal_loc_l->lock, flags);
- 
--		steal = get_next_cpu(steal);
-+		steal = cpumask_next_wrap(steal, cpu_possible_mask);
- 	} while (!node && steal != first_steal);
- 
- 	loc_l->next_steal = steal;
--- 
-2.36.1
+Based on those infomations, I will send this prerequisite patch to the net
+tree first. I'll then wait for about two weeks for it to propagate to
+bpf-next before submitting the rest of my BPF series.
 
+Best regards,
+D. Wythe
