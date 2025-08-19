@@ -1,91 +1,91 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from out-183.mta1.migadu.com (out-183.mta1.migadu.com [95.215.58.183])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9933933CEAE;
-	Tue, 19 Aug 2025 12:50:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AA4C322C77
+	for <bpf@vger.kernel.org>; Tue, 19 Aug 2025 12:57:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755607807; cv=none; b=Adn2wQAkK7iuO/9790jGMvW4R/RV+wP+pTsUyKJdhEavbYq2YIDw4pNnJwr6MG+zor4WSxw8LnFL5ofeoSR5pW79QGxiJvi9t6mEVh88cas+IxGMnTRJs5FwTBNOb39cC8uOTj8rTv+TsJGe3fW132c4stbZhCynJOhNO6iwfLQ=
+	t=1755608252; cv=none; b=jqr2fCNr30iiF3vEJcDzrfPXXvpn8daYp4FygMhLRcgtIAO1nUGLI7xSmDyGL5LTCtM3qu7u4N/ID9Q1V/AX3uvDv4+D+ZH8VCpzUwJYhnUT2A+TbdPJt9H85oL2fS+OSTaN6b46TQwRs1KYBnwvLDdtL6eb161xhp4RIC08E+c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755607807; c=relaxed/simple;
-	bh=BNNqh4Chf6E3EnB46K487xZwNEbEQafwRyXVXiMt44I=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=hCUhsiuo4z+m92lD1f1Rt3Y8VGk4GR1JhCYiZPM7cIJSAECvvSTgdIIhCa1uv+V1xB07FEK14SHzaf6HFuFpY1BOx2QcfSAvXvxUvVt8wZ5AyjyQc/xjbMu9998V6IWzQ7nU57Msnd2xwQUSkezakzm4utFUO9EIB6ykc1/2hi8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=b9yym+lj; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1755608252; c=relaxed/simple;
+	bh=FvU8+HnpnAE+HoIZCFz1dx5R8/F5SQPC+f1V3dtE1I8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Op6+l8JejO+IWY2hR8Bs+udDaEGbGoGxF6GMr+8pZJbdum8azE/4H+1TK2IgsfBNAVDU2r6FjZkh5hHa8XWgZ57wrMpnoY043lqupyRRmCKf2e42pXB3pclTxasACy8ZgIbtvnx+5CK+rvBEpW9pjMG4Lk76bYHKxTgC9laoO+Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=wkuiJp5P; arc=none smtp.client-ip=95.215.58.183
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="b9yym+lj"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1755607806; x=1787143806;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=BNNqh4Chf6E3EnB46K487xZwNEbEQafwRyXVXiMt44I=;
-  b=b9yym+lj455SemSvZlPiBPIJZvYceaU6V6xKv/eyVRd72Z9OhvgD+DGG
-   dalceUxOHqzpLjf08nc+ufmUCmW/e/XRBT/RLQccUBKU8jxN1ISw0EVMF
-   gHgSUdWVS4D7rXSl3p4ScjzecbJkBMjfjbe5cDsWFTkeD/DcoMaq/Ocyc
-   HHYGpcoYx+g69tsyj5ItWZUtLd7vGyhEeeqiw9Ac3vRAsDo9s7jN199G5
-   TRoH2KyN8SbeIOobd8Ah2VivztQpNHLjTcelgAhDko684aOXd27Z9y41l
-   JKmky92FgAR4QWzkd52Ln/I+okDl17lqFjIR5rjwPGbcZS4TBkWfhYWQy
-   g==;
-X-CSE-ConnectionGUID: hCrE33GdTrat8SLim/S/vQ==
-X-CSE-MsgGUID: zkDO+n1+QVqEITYCWfuQVw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11527"; a="75300444"
-X-IronPort-AV: E=Sophos;i="6.17,300,1747724400"; 
-   d="scan'208";a="75300444"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2025 05:50:05 -0700
-X-CSE-ConnectionGUID: 0aOZuD3URtSfFhgIgt/7WA==
-X-CSE-MsgGUID: nkG19eSCRoC6qnJ+sLFSow==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.17,300,1747724400"; 
-   d="scan'208";a="168245382"
-Received: from dhhellew-desk2.ger.corp.intel.com (HELO localhost) ([10.245.246.251])
-  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2025 05:49:57 -0700
-From: Jani Nikula <jani.nikula@intel.com>
-To: Peter Zijlstra <peterz@infradead.org>, Menglong Dong
- <menglong8.dong@gmail.com>
-Cc: mingo@redhat.com, juri.lelli@redhat.com, vincent.guittot@linaro.org,
- dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
- mgorman@suse.de, vschneid@redhat.com, ast@kernel.org,
- daniel@iogearbox.net, john.fastabend@gmail.com, andrii@kernel.org,
- martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, kpsingh@kernel.org, sdf@fomichev.me,
- haoluo@google.com, jolsa@kernel.org, simona.vetter@ffwll.ch,
- tzimmermann@suse.de, linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH v2 2/3] sched: make migrate_enable/migrate_disable inline
-In-Reply-To: <20250819123214.GH4067720@noisy.programming.kicks-ass.net>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20250819015832.11435-1-dongml2@chinatelecom.cn>
- <20250819015832.11435-3-dongml2@chinatelecom.cn>
- <20250819123214.GH4067720@noisy.programming.kicks-ass.net>
-Date: Tue, 19 Aug 2025 15:49:54 +0300
-Message-ID: <42cbca3dc56a1fde7d472754430458e2de8412a1@intel.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="wkuiJp5P"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1755608248;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=XrskpurdbhbEAEqLlf+PaKw7M2joz8cWTLGZUxQsWU8=;
+	b=wkuiJp5PGUiA88cc8Sfctvd1ifCNMmkQMlSjJqhreOF7gke72KnZ9W3hWU6TmxO1QbsB4N
+	xnEn+z6wXbCrpdvFLOlbdfXqyUPXC2iUAd6o4AEjGBNg2Gkbn3XtU1GcpNly+OT5Ym+wNU
+	S3BlOJ/MzhdQ+fbBIqhtK5SvMrm2yMc=
+From: Tao Chen <chen.dylane@linux.dev>
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	john.fastabend@gmail.com,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org
+Cc: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Tao Chen <chen.dylane@linux.dev>
+Subject: [PATCH bpf-next] bpf: Remove preempt_disable in bpf_try_get_buffers
+Date: Tue, 19 Aug 2025 20:56:38 +0800
+Message-ID: <20250819125638.2544715-1-chen.dylane@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Tue, 19 Aug 2025, Peter Zijlstra <peterz@infradead.org> wrote:
->> +EXPORT_SYMBOL_GPL(runqueues);
->
-> Oh no, absolutely not.
->
-> You never, ever, export a variable, and certainly not this one.
+Now BPF program will run with migration disabled, so it is safe
+to access this_cpu_inc_return(bpf_bprintf_nest_level).
 
-Tangential thought:
+Fixes: d9c9e4db186a ("bpf: Factorize bpf_trace_printk and bpf_seq_printf")
+Signed-off-by: Tao Chen <chen.dylane@linux.dev>
+---
+ kernel/bpf/helpers.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-I think it would be possible to warn about non-function exports at build
-time, and maybe plug it in W=1 builds.
-
-
-BR,
-Jani.
-
-
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index 6b4877e85a6..182886585d4 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -774,11 +774,9 @@ int bpf_try_get_buffers(struct bpf_bprintf_buffers **bufs)
+ {
+ 	int nest_level;
+ 
+-	preempt_disable();
+ 	nest_level = this_cpu_inc_return(bpf_bprintf_nest_level);
+ 	if (WARN_ON_ONCE(nest_level > MAX_BPRINTF_NEST_LEVEL)) {
+ 		this_cpu_dec(bpf_bprintf_nest_level);
+-		preempt_enable();
+ 		return -EBUSY;
+ 	}
+ 	*bufs = this_cpu_ptr(&bpf_bprintf_bufs[nest_level - 1]);
+@@ -791,7 +789,6 @@ void bpf_put_buffers(void)
+ 	if (WARN_ON_ONCE(this_cpu_read(bpf_bprintf_nest_level) == 0))
+ 		return;
+ 	this_cpu_dec(bpf_bprintf_nest_level);
+-	preempt_enable();
+ }
+ 
+ void bpf_bprintf_cleanup(struct bpf_bprintf_data *data)
 -- 
-Jani Nikula, Intel
+2.48.1
+
