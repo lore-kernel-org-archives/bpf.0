@@ -1,171 +1,127 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from fllvem-ot03.ext.ti.com (fllvem-ot03.ext.ti.com [198.47.19.245])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18A493054C0
-	for <bpf@vger.kernel.org>; Thu, 21 Aug 2025 10:33:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADD93307AD5;
+	Thu, 21 Aug 2025 10:49:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.245
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755772404; cv=none; b=KdpdHJKITn4H+KDD9m2N/oGjvLXe9/R7pOOWnexoKLteqEMJUTl8WSV+PXF4gCVJYXIvszX6gPvhidN9fxH4+XYaK8gqv0jdHHdKDN08Wb84sJ+2C5Bk5T3Hia9eVT0dhAOHtCFEvtjT6iYaYME60Oesqm7pajXbuEIqj1jYdJI=
+	t=1755773352; cv=none; b=JB7TnT99V9L1b6b1/w/H5TJru9nhFkE95cW10Tbh1vL/KDq8ESrU/KsnFtjrlDY+f5fRxT2lfxvBoX1sIqwVt0Wu19++8V3HCyJEOfo5SB0UmfugJmtbxtkxcLBrJzAG8mQA/fP0yEUiFektcpMZ+tiFEnm1AiH9y0ch3F4DbN0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755772404; c=relaxed/simple;
-	bh=cC0Mw9Jxryrwxdi6voaK4ZtTh9s3o1CrNrdcbulVbVk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=llMQYy5NH1Nrwx6SnmKtf2200v/RpCUB3l8LE1cWGO+t0bY2HlTcTleyvH9YGHVSSwrO1Zf4ydg/CnwyepgQJg+MnaHdz5jADSpffubTUdcn92E8QxpM+ZjpFT/+Xop1lMGBFQC3zER8DIzrexy4lfOyoU6Mif80zo1xkXtjr8k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=A6AEAPLr; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1755773352; c=relaxed/simple;
+	bh=rG5esXl5MyyU9ccbkRzn255OdRwlFHNiQdQoQp112nU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=rVOdyLNEHUyZjwcVKgkqePmyzga3zY1yQ73Mq22IxFJD02z7RU03CKsNr5jDGXPP3gE6uuoRHsWba1G2ySUCI29LDlu7ypEKSrT7ugt7+lSGJUc5HAdKjRNROewVa9gtN291uflANujAN8UJ2jzC+nsrYT+Mnl3uzTXOnSYsqXk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=kvtVQWY4; arc=none smtp.client-ip=198.47.19.245
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="A6AEAPLr"
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 57LAH0PW002774;
-	Thu, 21 Aug 2025 10:33:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=oYbawII9ZLUI6B0eg
-	DYOw5ax0uT7crDKzFI+3QTHX18=; b=A6AEAPLrUhvkgIvYByF5dLiN/ZmHcXH4N
-	Eo49XB5s4Z1GAYMdcxmb4qGSyRKoOBlF0Ef6f1i3qAAbq2m/3dz/pL1zKUxP4KDi
-	SkJxKrJlV2i8o0rK7NYxt9QBBtbOQZLgiO2vxnhsVZZbMS9AUOj3MWtqhP4ecteO
-	yelv33Ze4BvW8WdpJ5nJjTwGUgcJ4hD6RLkobVWSx5gGXFzWRD9+PMmR+VClRsth
-	0T7O2Pliyf0V6yvaCXQ3KyYOsmne4k7gUv/Pvl8q5Z55tGzuGc+2EYoakRvAkO77
-	J/kcJd2Dt0ioi4Qmmozuj+8UNXcTvFk3S64fRnkCBLVX4l/q/w1xg==
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 48n38w7xuh-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 21 Aug 2025 10:33:05 +0000 (GMT)
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 57L6kd0o026916;
-	Thu, 21 Aug 2025 10:33:05 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 48my4w7vqj-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 21 Aug 2025 10:33:05 +0000
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 57LAX1do44237236
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 21 Aug 2025 10:33:01 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 607D720040;
-	Thu, 21 Aug 2025 10:33:01 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 02F8A20049;
-	Thu, 21 Aug 2025 10:33:01 +0000 (GMT)
-Received: from heavy.ibm.com (unknown [9.111.21.94])
-	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Thu, 21 Aug 2025 10:33:00 +0000 (GMT)
-From: Ilya Leoshkevich <iii@linux.ibm.com>
-To: Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc: bpf@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>
-Subject: [PATCH bpf-next 4/5] selftests/bpf: Enable timed may_goto verifier tests on s390x
-Date: Thu, 21 Aug 2025 12:23:40 +0200
-Message-ID: <20250821103256.291412-5-iii@linux.ibm.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20250821103256.291412-1-iii@linux.ibm.com>
-References: <20250821103256.291412-1-iii@linux.ibm.com>
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="kvtVQWY4"
+Received: from lelvem-sh01.itg.ti.com ([10.180.77.71])
+	by fllvem-ot03.ext.ti.com (8.15.2/8.15.2) with ESMTP id 57LAmFE23352350;
+	Thu, 21 Aug 2025 05:48:15 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1755773295;
+	bh=ZdcQq0ODeLvFcyZ8c1y1bdz85c9KQB/TPqgiMZRTnJo=;
+	h=Date:Subject:To:CC:References:From:In-Reply-To;
+	b=kvtVQWY40B45uP1NmaZBuN+EuM78tEdP7xLQ47B+vp4LKGI78Io5SaBPkCqJ+Z+wV
+	 W8nk7I5i+I3rRLA8ddtPkKMkx9rO/yrAOGXKsHUHmjnGXGEX2mXXHw6gFAdzq63b5a
+	 +RcjA8x5Rb48WrKrmNNPxDoweF4ily0EFQPOIJTE=
+Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
+	by lelvem-sh01.itg.ti.com (8.18.1/8.18.1) with ESMTPS id 57LAmFl81899798
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-SHA256 bits=128 verify=FAIL);
+	Thu, 21 Aug 2025 05:48:15 -0500
+Received: from DLEE103.ent.ti.com (157.170.170.33) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.55; Thu, 21
+ Aug 2025 05:48:14 -0500
+Received: from lelvem-mr05.itg.ti.com (10.180.75.9) by DLEE103.ent.ti.com
+ (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.55 via
+ Frontend Transport; Thu, 21 Aug 2025 05:48:14 -0500
+Received: from [10.24.69.13] (meghana-pc.dhcp.ti.com [10.24.69.13] (may be forged))
+	by lelvem-mr05.itg.ti.com (8.18.1/8.18.1) with ESMTP id 57LAm7OG2038086;
+	Thu, 21 Aug 2025 05:48:08 -0500
+Message-ID: <d2015724-416b-4222-aa85-88c0c5f9160c@ti.com>
+Date: Thu, 21 Aug 2025 16:18:07 +0530
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODE5MDIyMiBTYWx0ZWRfX7Q8ZWHlb4Jd4
- mQEIAizf6Lx0IYAjpgKBziyDflaoAAlbZzNSn4XUUmJCwDZ9AsiU4XAdPvH+yvALmT/wJsBFn5W
- H93uyAMFuqOhiUVYtZgBKX+oWwcEDtTqVm3a80CMBBpB/v7bRRPxhn+DBFcXgGZLHYovttkkNmw
- 13r7A6NRd39MbWNhN7p3x+Ch/Yab2ykjUR0eWD1t/RRJNnGAlcS28heNcd4kYikQ/oruQPquNe5
- aqD+0H9IW5vXPd2ZqBl5cX6ePAMrlJNTqgMm+ALb9zM0PuFSiq0QBfoBqT/gWxgc2bUrtsyCBFb
- 0trl+XxW446yrJt6M9Cos/YClHqSemArRLfkkhztH32lJfnrR+60jjUN+L5Ln3loFx/4AX1o5T4
- Cbqui8nKQr0yY9TmbONWREwBzC5nQA==
-X-Authority-Analysis: v=2.4 cv=H62CA+Yi c=1 sm=1 tr=0 ts=68a6f5e1 cx=c_pps
- a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
- a=2OwXVqhp2XgA:10 a=VnNF1IyMAAAA:8 a=FhcJVP5P1EmADn9_fkIA:9
-X-Proofpoint-ORIG-GUID: dGBfipn7J2Cefu6JURFumv66GsvMyNXh
-X-Proofpoint-GUID: dGBfipn7J2Cefu6JURFumv66GsvMyNXh
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-08-21_02,2025-08-20_03,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1015 suspectscore=0 bulkscore=0 adultscore=0 phishscore=0
- priorityscore=1501 malwarescore=0 spamscore=0 impostorscore=0
- lowpriorityscore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2508110000
- definitions=main-2508190222
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next 5/6] net: ti: icssg-prueth: Add AF_XDP zero copy
+ for RX
+To: Jakub Kicinski <kuba@kernel.org>
+CC: <namcao@linutronix.de>, <jacob.e.keller@intel.com>,
+        <christian.koenig@amd.com>, <sumit.semwal@linaro.org>,
+        <sdf@fomichev.me>, <john.fastabend@gmail.com>, <hawk@kernel.org>,
+        <daniel@iogearbox.net>, <ast@kernel.org>, <pabeni@redhat.com>,
+        <edumazet@google.com>, <davem@davemloft.net>, <andrew+netdev@lunn.ch>,
+        <linaro-mm-sig@lists.linaro.org>, <dri-devel@lists.freedesktop.org>,
+        <linux-media@vger.kernel.org>, <bpf@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>,
+        Vignesh Raghavendra
+	<vigneshr@ti.com>,
+        Roger Quadros <rogerq@kernel.org>, <danishanwar@ti.com>
+References: <20250818112424.3068643-1-m-malladi@ti.com>
+ <20250818112424.3068643-6-m-malladi@ti.com>
+ <20250819073558.2c996b6d@kernel.org>
+Content-Language: en-US
+From: Meghana Malladi <m-malladi@ti.com>
+In-Reply-To: <20250819073558.2c996b6d@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 
-Now that the timed may_goto implementation is available on s390x,
-enable the respective verifier tests.
+Hi Jakub,
 
-Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
----
- tools/testing/selftests/bpf/prog_tests/stream.c         | 2 +-
- tools/testing/selftests/bpf/progs/verifier_may_goto_1.c | 8 ++++++--
- 2 files changed, 7 insertions(+), 3 deletions(-)
+On 8/19/25 20:05, Jakub Kicinski wrote:
+> On Mon, 18 Aug 2025 16:54:23 +0530 Meghana Malladi wrote:
+>> @@ -1332,6 +1350,13 @@ static int prueth_xsk_wakeup(struct net_device *ndev, u32 qid, u32 flags)
+>>   		}
+>>   	}
+>>   
+>> +	if (flags & XDP_WAKEUP_RX) {
+>> +		if (!napi_if_scheduled_mark_missed(&emac->napi_rx)) {
+>> +			if (likely(napi_schedule_prep(&emac->napi_rx)))
+>> +				__napi_schedule(&emac->napi_rx);
+>> +		}
+>> +	}
+>> +
+>>   	return 0;
+> 
+> I suspect this series is generated against old source or there's
+> another conflicting series in flight, because git ends up applying
+> this chunk to prueth_xsk_pool_disable() :S
+> 
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/stream.c b/tools/testing/selftests/bpf/prog_tests/stream.c
-index d9f0185dca61..d89d04832011 100644
---- a/tools/testing/selftests/bpf/prog_tests/stream.c
-+++ b/tools/testing/selftests/bpf/prog_tests/stream.c
-@@ -77,7 +77,7 @@ void test_stream_errors(void)
- 		ASSERT_OK(ret, "ret");
- 		ASSERT_OK(opts.retval, "retval");
- 
--#if !defined(__x86_64__)
-+#if !defined(__x86_64__) || !defined(__s390x__)
- 		ASSERT_TRUE(1, "Timed may_goto unsupported, skip.");
- 		if (i == 0) {
- 			ret = bpf_prog_stream_read(prog_fd, 2, buf, sizeof(buf), &ropts);
-diff --git a/tools/testing/selftests/bpf/progs/verifier_may_goto_1.c b/tools/testing/selftests/bpf/progs/verifier_may_goto_1.c
-index 3966d827f288..cc1063863569 100644
---- a/tools/testing/selftests/bpf/progs/verifier_may_goto_1.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_may_goto_1.c
-@@ -9,6 +9,7 @@
- SEC("raw_tp")
- __description("may_goto 0")
- __arch_x86_64
-+__arch_s390x
- __xlated("0: r0 = 1")
- __xlated("1: exit")
- __success
-@@ -27,6 +28,7 @@ __naked void may_goto_simple(void)
- SEC("raw_tp")
- __description("batch 2 of may_goto 0")
- __arch_x86_64
-+__arch_s390x
- __xlated("0: r0 = 1")
- __xlated("1: exit")
- __success
-@@ -47,6 +49,7 @@ __naked void may_goto_batch_0(void)
- SEC("raw_tp")
- __description("may_goto batch with offsets 2/1/0")
- __arch_x86_64
-+__arch_s390x
- __xlated("0: r0 = 1")
- __xlated("1: exit")
- __success
-@@ -69,8 +72,9 @@ __naked void may_goto_batch_1(void)
- }
- 
- SEC("raw_tp")
--__description("may_goto batch with offsets 2/0 - x86_64")
-+__description("may_goto batch with offsets 2/0 - x86_64 and s390x")
- __arch_x86_64
-+__arch_s390x
- __xlated("0: *(u64 *)(r10 -16) = 65535")
- __xlated("1: *(u64 *)(r10 -8) = 0")
- __xlated("2: r11 = *(u64 *)(r10 -16)")
-@@ -84,7 +88,7 @@ __xlated("9: r0 = 1")
- __xlated("10: r0 = 2")
- __xlated("11: exit")
- __success
--__naked void may_goto_batch_2_x86_64(void)
-+__naked void may_goto_batch_2_x86_64_s390x(void)
- {
- 	asm volatile (
- 	".8byte %[may_goto1];"
--- 
-2.50.1
+That's interesting. I have directly applied these patches locally on the 
+tip of net-next (62a2b3502573 "net: openvswitch: Use for_each_cpu() 
+where appropriate") And everything gets applied cleanly and I couldn't 
+reproduce the issue you mentioned above. Can you tell me on top of which 
+commit you tried applying this series ? Or I wonder if this happened 
+because I posted this series from my net tree instead of net-next. Does 
+it make sense to re-post the same patches from net-next tree ?
+
+> Before you proceed with AF_XDP could you make this driver build under
+> COMPILE_TEST on x86? This is very easy to miss, luckily we got an off
+> list report but its pure luck. And obviously much more effort for the
+> maintainers to investigate than if it was caught by the CI.
+
+I have tried what you have suggested and these are the logs for the 
+same: 
+https://gist.github.com/MeghanaMalladiTI/8a3f64773d96e58aec48aca78c1bc98c
+
+ICSSG driver as a module has been compiled without any errors but 
+encountered few linking errors due to some missing symbols from another 
+module (CONFIG_TI_K3_UDMA). I included this module in the next iteration 
+and tried compiling but facing some build failures, logs: 
+https://gist.github.com/MeghanaMalladiTI/f7ed3958b5ab2b2be479151254015ff0
+
+I think it is safe to assume ICSSG as a driver build on x86 doesn't have 
+build regressions, thoughts ? Also is this something which needs to be 
+done by us everytime we are posting some feature upstream or does Kernel 
+CI take care of it ?
 
