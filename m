@@ -1,135 +1,129 @@
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8988936CDE8
-	for <bpf@vger.kernel.org>; Thu, 21 Aug 2025 10:04:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E82822DA75C;
+	Thu, 21 Aug 2025 10:22:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755770682; cv=none; b=usjwaTtscakmXARZXRjzbGdZmJkIZAv6uU8C0NGIpA25izzPTMMH9oMafyYUAF8Xy5GX9Y4RiIa5HS985w+lOWNR4c8seQxKEjPyrE9gxs+AShdRgAKnsQmL2TZ/0ipWls6qDRn4dlFFgt/+dkXXsV0a+HRP6S/fFXgH+B9YmYY=
+	t=1755771735; cv=none; b=ofCHjo37iNZtJfzx33xs+lWyemgqzL0J0Co3Kse0LGmL0D280aopMz5PmSTaB2Yx4M6Sec2W6eZLGCaQHK8Jt0P+jrz5ISXmLee4Q9vaeNlPO5LddKRrWF8I11muhqOeW3rg1UmuYZ+8kwEy3BMr5+Er7VuMGlDmguRHlWZDDfU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755770682; c=relaxed/simple;
-	bh=eHtjpzeBUotBe9iJ5shsBWXjPiisjrMOZofLgwf8DmA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qrxC9fCiN8JILJPDdwu1AKi9KhzxON3Qb2jXn4mpqn5BcXKdaPmBjBBn4mZQjIq2ghTw9ocwLcW82lGmpqRhY/ypxkyXMoLLMaibEf9pRQM109F0cqfvh5lcmfNeOjqkkSoKIp/oFVEXDcy/QPRm+xYNaw7Nzco29OcbCj2GSNE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hP++ktQY; arc=none smtp.client-ip=209.85.128.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1755771735; c=relaxed/simple;
+	bh=P5LNrpuDso84evhrHDb5O/cBPmQFjz++sIDdWzNU4tY=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=HBHrI6XwA3700RnW+8T9IBA06AY/9M61WEluz76GcHO2pIVkdHj+FFo7AMo3BNp0qoKVdDkjYwYthNAWTwQzn5n3xl0Eoz21o0wXTolePwNfxcbYRB/+SkiVzlMqdINM/sSptu5RTe4YJtP1/SIf/714zZ0fB32uM+47UaEC42E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=rKsiUYA8; arc=none smtp.client-ip=213.97.179.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hP++ktQY"
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-45a1abf5466so5317965e9.0
-        for <bpf@vger.kernel.org>; Thu, 21 Aug 2025 03:04:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755770679; x=1756375479; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+qSqnNW5BPDmS3JUddq1Dx24H6xetXszPTWmtepLBsE=;
-        b=hP++ktQYGMBOo6dtlc1czA0PTinjak+EBQW8pzuAuS4cs8IT94Kf2+1sDkwYjrqf1r
-         xKOrACPoJ+/7tIjUbfB9n+Hv+YnvZZ6OQKYXlopxF5FC+r7HVoLXyop67zEDovQzhXS4
-         JGGveA1N5NOXXPB7skptPB3r2GJtHEpK7lFjdxaMYdl0JIGSYn/7xek+cpU8qwmr7zhI
-         MvjWJzCz3cXgzxpeiNav1W+Y7bDOzh4VSImDoUYA095dcqatsShSRHBq6pJ3Gl++kvv/
-         5biImTLuZoITKrPVbSyNkcnKalEaNGDSzcbKq4h6tGnRsunSh/6E71mErw3ti4bUoH8I
-         WiWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755770679; x=1756375479;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+qSqnNW5BPDmS3JUddq1Dx24H6xetXszPTWmtepLBsE=;
-        b=OcuEvM726G0QGeMTMLrAghrgkFe1egQA++tImAUeMoc+RuUWMnrwDp89ptvpWQ+ZzW
-         YjT03PusoslMcELC01gjKAy0hobrdXn0FbtrZVy7QxlRFaSM+33nmJ4KaaAYe5A1kNC6
-         aZvFF6yfVc512uWMJ7hZPO9Mt3A5n8xKSt96FM6Rf4TqSxGzv7chCC8ilHNUz2xMqT17
-         XE9Tnu4cPzzDbtQRXYxBrvyRcU91abT1KUVhf9BJ/8pv6ZMBWdNVuatzMqshyZpYA2iG
-         amIL4geslx9OfDGMIaDQ+10wzdadhUdz/fwk1eyb4PSYSIqDw0PCo4w+5l2RR5YRC4Qj
-         GpEA==
-X-Forwarded-Encrypted: i=1; AJvYcCWHTtAwjLfuCMtEYQdbXEzwxhK4xCOkndduciwDgEeXLRDtmLDzFi8ziHosrLZmSgeg7SE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywvu9vUOUx6CqxBg/eYebPrt4YzrNFRS+fIVq5uSC34ySyvflsx
-	vIZn1RVsmXmcOW6hscBlrolJwt6VGJXi2FbtkxZmclg1RVg8dqjmvHN7
-X-Gm-Gg: ASbGncvTtwx04AH3VPoFowU9dut0Auqy5M4W2MnA9q03REEH/He2PLIF5oofuV6tgu7
-	+LmfhE8YurXvqHfv3npWS+QotG3/GbVgMvGhBRMsUU0wE+f6X9vYiDqm+0QLTwxJf5QLv7Io+G1
-	ULbIb3C4G+kkPtUwzbs/v3av9D+2vbX9T5dZmkd54WaIYR7kQXIg6J32FFiNZLxyX4JWPgC9s5U
-	Oe9A/P86n3w4rIwyohs7WFwiXtVtDf6CafbsHL0KCYhoS5q2IOxt39skdgNsyTzHwOUrFqz58UF
-	2FnaOQQ8hSRk9mtoqFst67etUbyl4Nx/osjLHMvlBEyPxM/hLZaUz7NhgSAB5o9uG1dQ3dWIM9t
-	cHQcTXklCnUjIobx9IWO1OGqP+d+lci45bLjjBhW2kBdA6+zVnbsaE6BLOiPUbmjoAuuZY3TTyR
-	VFmEjXUO4WS/P2j4wF706Q5Sg8Ke8dp/k=
-X-Google-Smtp-Source: AGHT+IE+6GXkISYGbni+uaCAjkw1VzDWAcm9sJXxkCr8OoOVKD4QCrcDcbCgM7Qv9pG6Y3Wc4AVqDQ==
-X-Received: by 2002:a05:600c:4f53:b0:458:d289:3e26 with SMTP id 5b1f17b1804b1-45b4d8de8b9mr15459915e9.2.1755770678710;
-        Thu, 21 Aug 2025 03:04:38 -0700 (PDT)
-Received: from mail.gmail.com (2a01cb0889497e00765727e34656ae4a.ipv6.abo.wanadoo.fr. [2a01:cb08:8949:7e00:7657:27e3:4656:ae4a])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45b4db387fdsm23361045e9.11.2025.08.21.03.04.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Aug 2025 03:04:38 -0700 (PDT)
-Date: Thu, 21 Aug 2025 12:04:36 +0200
-From: Paul Chaignon <paul.chaignon@gmail.com>
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: syzbot ci <syzbot+ci59254af1cb47328a@syzkaller.appspotmail.com>,
-	andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-	daniel@iogearbox.net, shung-hsi.yu@suse.com,
-	yonghong.song@linux.dev, syzbot@lists.linux.dev,
-	syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot ci] Re: bpf: Use tnums for JEQ/JNE is_branch_taken logic
-Message-ID: <aKbvNM0WDUy7v4DB@mail.gmail.com>
-References: <ba9baf9f73d51d9bce9ef13778bd39408d67db79.1755098817.git.paul.chaignon@gmail.com>
- <689eeec8.050a0220.e29e5.000f.GAE@google.com>
- <aKWytdZ8mRegBE0H@mail.gmail.com>
- <6d172613960339eff4b3a9261ef61a2c50f69dae.camel@gmail.com>
+	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="rKsiUYA8"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+	s=20170329; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
+	Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=zRAnHsOfkqVGryjONqmeYxIHoj1DfmYgpmMCpMPPlBQ=; b=rKsiUYA89wVGH3IG3P4L0TkD8B
+	QhQhniq0xN2HodgjgeZ4GWESucqR9nCGc7TtiMk+wB8/Vyn7tZURFFXWZAMaqFixBOHWq5B2rFb6p
+	z7wQxtSUXI1hxOPoy2Q1gFCA5qShbEFPdVmqOvNe3z0FoAuIYmfszhyqKMdJuMM0bzULyNYCK1u/U
+	Arllm3Dd23QW780w1B8/oBSauPtNb1YAJB+ISdlMYEMPOq5bLFnJJ79Gu7pzyTL60Lswpd0XNusJy
+	fpLijRYQp5Kgx2eycxatNBjbwMdOp9VisPFG29G6HY3C/NHebb6synSOrDscGUXrOvyPfIe07jPiv
+	OC8vLlAg==;
+Received: from [223.233.68.152] (helo=localhost.localdomain)
+	by fanzine2.igalia.com with esmtpsa 
+	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+	id 1up2Qq-00HBmV-4T; Thu, 21 Aug 2025 12:22:08 +0200
+From: Bhupesh <bhupesh@igalia.com>
+To: akpm@linux-foundation.org
+Cc: bhupesh@igalia.com,
+	kernel-dev@igalia.com,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-perf-users@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-mm@kvack.org,
+	oliver.sang@intel.com,
+	lkp@intel.com,
+	laoar.shao@gmail.com,
+	pmladek@suse.com,
+	rostedt@goodmis.org,
+	mathieu.desnoyers@efficios.com,
+	arnaldo.melo@gmail.com,
+	alexei.starovoitov@gmail.com,
+	andrii.nakryiko@gmail.com,
+	mirq-linux@rere.qmqm.pl,
+	peterz@infradead.org,
+	willy@infradead.org,
+	david@redhat.com,
+	viro@zeniv.linux.org.uk,
+	keescook@chromium.org,
+	ebiederm@xmission.com,
+	brauner@kernel.org,
+	jack@suse.cz,
+	mingo@redhat.com,
+	juri.lelli@redhat.com,
+	bsegall@google.com,
+	mgorman@suse.de,
+	vschneid@redhat.com,
+	linux-trace-kernel@vger.kernel.org,
+	kees@kernel.org,
+	torvalds@linux-foundation.org
+Subject: [PATCH v8 1/5] exec: Remove obsolete comments
+Date: Thu, 21 Aug 2025 15:51:48 +0530
+Message-Id: <20250821102152.323367-2-bhupesh@igalia.com>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20250821102152.323367-1-bhupesh@igalia.com>
+References: <20250821102152.323367-1-bhupesh@igalia.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6d172613960339eff4b3a9261ef61a2c50f69dae.camel@gmail.com>
+Content-Transfer-Encoding: 8bit
 
-On Wed, Aug 20, 2025 at 12:37:46PM -0700, Eduard Zingerman wrote:
-> On Wed, 2025-08-20 at 13:34 +0200, Paul Chaignon wrote:
-> 
-> [...]
-> 
-> > I have a patch to potentially fix this, but I'm still testing it and
-> > would prefer to send it separately as it doesn't really relate to my
-> > current patchset.
-> 
-> I'd like to bring this point again: this is a cat-and-mouse game.
-> is_scalar_branch_taken() and regs_refine_cond_op() are essentially
-> same operation and should be treated as such: produce register states
-> for both branches and prune those that result in an impossible state.
+Patch 3a3f61ce5e0b ("exec: Make sure task->comm is always NUL-terminated"),
+replaced 'strscpy_pad()' with 'memcpy()' implementations inside
+'__set_task_comm()'.
 
-I agree. I've been slowly convincing myself of the same :)
-So far, the syzkaller invariant violation reports have been useful to
-retrieve examples of where the two functions diverge and to deduce
-improvements. But syzkaller now seems to be iterating between the same
-three different cases of violations, so maybe it's time to look at a
-more generic solution.
+However a few left-over comments are still there, which mention
+the usage of 'strscpy_pad()' inside '__set_task_comm()'.
 
-I assume you would call regs_refine_cond_op() then reg_bounds_sync()
-and use the result in is_scalar_branch_taken()? Most of the impossible
-states are only exposed once passed through reg_bounds_sync().
+Remove those obsolete comments.
 
-> There is nothing wrong with this logically and we haven't got a single
-> real bug from the invariant violations check if I remember correctly.
+While at it, also remove an obsolete comment regarding 'task_lock()'
+usage while handing 'task->comm'.
 
-That's correct. We also have pretty good coverage of this logic in
-selftests and now it seems in syzkaller as well. Agni is also
-continuously verifying reg_bounds_sync(). So I think the risk of relying
-on regs_refine_cond_op() and reg_bounds_sync() in
-is_scalar_branch_taken() would be low.
+Signed-off-by: Bhupesh <bhupesh@igalia.com>
+Reviewed-by: Kees Cook <kees@kernel.org>
+---
+ include/linux/sched.h | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-> 
-> Comparing the two functions, it looks like tricky cases are BPF_JE/JNE
-> and BPF_JSET/JSET|BPF_X. However, given that regs_refine_cond_op() is
-> called for a false branch with opcode reversed it looks like there is
-> no issues with these cases.
-> 
-> I'll give this a try.
+diff --git a/include/linux/sched.h b/include/linux/sched.h
+index f8188b833350..24216259cda4 100644
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -1159,10 +1159,8 @@ struct task_struct {
+ 	 *
+ 	 * - normally initialized begin_new_exec()
+ 	 * - set it with set_task_comm()
+-	 *   - strscpy_pad() to ensure it is always NUL-terminated and
++	 *   - logic inside set_task_comm() will ensure it is always NUL-terminated and
+ 	 *     zero-padded
+-	 *   - task_lock() to ensure the operation is atomic and the name is
+-	 *     fully updated.
+ 	 */
+ 	char				comm[TASK_COMM_LEN];
+ 
+@@ -1972,7 +1970,7 @@ extern void __set_task_comm(struct task_struct *tsk, const char *from, bool exec
+  *   User space can randomly change their names anyway, so locking for readers
+  *   doesn't make sense. For writers, locking is probably necessary, as a race
+  *   condition could lead to long-term mixed results.
+- *   The strscpy_pad() in __set_task_comm() can ensure that the task comm is
++ *   The logic inside __set_task_comm() should ensure that the task comm is
+  *   always NUL-terminated and zero-padded. Therefore the race condition between
+  *   reader and writer is not an issue.
+  *
+-- 
+2.38.1
 
-I'd be happy to contribute selftests extracted from the syzkaller logs.
-It's still hitting three different kinds of invariant violations: the
-one reported here, the one addressed by my patch, and another one.
-
-And I'm of course interested to run any patch through Cilium's CI to
-check the complexity impact.
-
-> 
-> [...]
