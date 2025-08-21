@@ -1,206 +1,175 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16CAE320CCB;
-	Thu, 21 Aug 2025 12:42:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2BCC3090CF
+	for <bpf@vger.kernel.org>; Thu, 21 Aug 2025 12:47:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755780172; cv=none; b=htKX7Tdjc/fqKWb/gKVUoABFiRTF3MUbYlxwat3ndkKUYztCofYK+LjXGPp+z1DUMInqByLhZw+47Ft0jecKwmSMF74VR7chvA23tSf3fU2fuwTokQpbhMoK9a8n90iql6DGJlImPzjzjT+3o04aTkJErKYCJOUq9U8jGjcHoYY=
+	t=1755780426; cv=none; b=lrBzrv+GxOhWkZUyqcnnzZbP4fVfaiTh57FrrmZbElixqQsqxOnj6GCFQpzbBZBPugL4bfdsgjk0omj67tQcsBDMqDzgo/mcL5ZFKUHw8SKqXD1ohq/HHBHaP6q/zraquKCU9/bvB/307xHB46mqF5g67pVvLZ04IjKNy8uJWhk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755780172; c=relaxed/simple;
-	bh=oq/yG06XThH0TAVnnFJ3Ji2lCZ4WoreG3a3P5NttsvI=;
-	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type; b=pyC1OjTZ95ACHYXHJHNljv0GTB3Z+294u168bzbTt/HQOooyFbKwo/MtswW3f+u767iEI2g3JSfd1gxBvBjY5fRR+t9D2BzUCMmFiRMruEteFehTjfharbCJXdg4ezHZKxSYFeZng5t+/YCLSJXq0LTKfksieNmIWd775hwMGXA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=d7WUjo5s; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1755780426; c=relaxed/simple;
+	bh=T5vFxjCh6b953wcDu7Rlc6rHd98sJerhHHx1XzU9U48=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=HELtotQK4/mqDhVrnS1lbquoMDH4lLk6wAZAzs9AfdnzGbPkaJvJyQTVcu/mNSXcYroZLlfhXVnidrkWfEM8R9kFsc6uSdJIvfXre5f5r5khVyeuvzs/HKWWBroFUWHwTZVudNpwtWAHd8QPxplLtoPjDUHYICgWKK5R/wDC2P8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=yv6pOtbB; arc=none smtp.client-ip=209.85.160.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="d7WUjo5s"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
-	Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
-	Content-ID:Content-Description:In-Reply-To;
-	bh=y+aSTnr9180YGHPj/X/hxIPUO484ST3otwkCN+epUbY=; b=d7WUjo5ssFzkM2anLj57PJ+D4R
-	nPKY0rpzTP73PzrnZvFZHl8RAomTWYwmabHUXo4ACjKl8g3HC3HHa4ncKA6goIZ/lAYL+Q+IXr7p4
-	wLQn6s69LZJz1HdOW+Ac5bb/gDeqmKRZOb+4HEjnS8VXxnw9pEmol3JqYAf/XuSs/GRpf/FmFVISD
-	w5nWcz6KWVzWIOgMHUM70T/uFAZtHL0rTG1HN91PQAXt+62m8Vdtj8GG3JaddJaGbzCaX9tWqYXEf
-	v2t5H3SUqaEBUkfJHn0Gcif2ln7gCIvtH6e/0GDp7NnlPvE01kZ/3rMAYuF5A3K3QQN/i+k0M7vqt
-	dfavWUMw==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1up4co-00000000Y9O-1fjZ;
-	Thu, 21 Aug 2025 12:42:38 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 0)
-	id 95A5C302E7B; Thu, 21 Aug 2025 14:42:37 +0200 (CEST)
-Message-ID: <20250821123657.055790090@infradead.org>
-User-Agent: quilt/0.68
-Date: Thu, 21 Aug 2025 14:28:26 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: jolsa@kernel.org,
- oleg@redhat.com,
- andrii@kernel.org,
- mhiramat@kernel.org
-Cc: linux-kernel@vger.kernel.org,
- peterz@infradead.org,
- alx@kernel.org,
- eyal.birger@gmail.com,
- kees@kernel.org,
- bpf@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org,
- x86@kernel.org,
- songliubraving@fb.com,
- yhs@fb.com,
- john.fastabend@gmail.com,
- haoluo@google.com,
- rostedt@goodmis.org,
- alan.maguire@oracle.com,
- David.Laight@ACULAB.COM,
- thomas@t-8ch.de,
- mingo@kernel.org,
- rick.p.edgecombe@intel.com
-Subject: [PATCH 4/6] uprobes/x86: Fix uprobe syscall vs shadow stack
-References: <20250821122822.671515652@infradead.org>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="yv6pOtbB"
+Received: by mail-qt1-f179.google.com with SMTP id d75a77b69052e-4b109921fe7so11265621cf.0
+        for <bpf@vger.kernel.org>; Thu, 21 Aug 2025 05:47:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1755780422; x=1756385222; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=shHdVfFUGDzfHfFpOtcyKZwrJCRaSaLcw+8WiOuBh54=;
+        b=yv6pOtbB5XXd2DqAK3srZwLPFEsGqPP8/nSdGY4ODesRvwTch6sP7WnVp7cZzlUrMH
+         PlcYLsYV/RI+BnLggWpwUUz+ZlEg/9YExWDroP22aXWAxctFb0kitYWo2lrydObBz250
+         OptfgJQolTJ/csXo8D+vpoOoU/gNupjoizan/28NVs+VEHe3/vIHzw6+LAIYtHZopl9F
+         +H08hZ/SxsOA9Hwn3LrCKMZVkiaLjq+Fwob3wJi0kwS0vDcHtr4Ra9gw44XyyRl7F783
+         IeCVuT48Si4hZi++JieKbAzg8F4gz8hQ/1VR/iMer86hBBhW29jZHAllOSpKzw8yUCrH
+         IgNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755780423; x=1756385223;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=shHdVfFUGDzfHfFpOtcyKZwrJCRaSaLcw+8WiOuBh54=;
+        b=EFyyys2BZSQ3ilMqd3M5mwp3xROdb6psu5BzJ00/3RyVycokZ5344QD8fh9VD8dOTm
+         NyHyLKhB+PXl/sw2fhYPGW+3GFcbdkJVTb6G53lhn7jVbT/klx3+P4GWB28dIFkO/JYX
+         Qp0N7UgZUdA90EhfP7xCHgsAz4OoxKWOLFQcSU8dWaHD1+joMDtVP3+etkzuxyM8dk3q
+         lrJYYPDb2VsES85QOnDu82klukgZaeMb/74ZF69MwlNIEU4x4TMCOuQUx3d8Uxc5iI/F
+         7T37KClJK11mimxj7O+hhb0hwNnyj65yYSp3eI5eJmyHabBJQdmYKvdpZuUDguYPY3EQ
+         GsuQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU5eKdf36b9PUkHMi9ZaDxTtji4Ppq4vLRQcj9OWnkjKkr4sWMSgXneEamzPfZfX0oL6XI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxvfoCsZmozP+wsU0oTdFUqVgyh1Vi6sNr0bgm7qAGsqDmHYlJ/
+	wZJbKAwhjVpJP3bNVU+bZfbTsVJoeWMfnU7CWjExwxH7jzY2ZRrM3Q8yqf3x9V7K2ebQ4AARdnr
+	5Ts/7Neg51f8D6ow0ene/zM/2/CI0qxOwx5YbOgdX
+X-Gm-Gg: ASbGncszz86Lp/KLXai6yZ41+KAkh2lJ97m2ueYAFG0PFIOSJ1ABLFgcoxht489UNGS
+	8a4DXAKBDfZ9s5BDPHu+4WIX04sN9M7CEWtaob/6Tml1vGFLYJGu24zMCDIAJOCqaoIUk1to8DF
+	fEhGmZfPn5jpZYaG5rlewyUTnC/WQRjWFOWuaUC6Hmqax8gAxO3PXaPvYP+eWrG28Btk+nZCM/g
+	h483sh3YHg8LEMr/opGto0lyw==
+X-Google-Smtp-Source: AGHT+IEwz3FB3i63JUlDizKlKFLIMm5I13VlasfnbwjfR4YX2pffIoWLATjFY51kSeKijUik2nVHlu+EnaAdU+CfakY=
+X-Received: by 2002:a05:622a:2b46:b0:4b2:8ac4:ef57 with SMTP id
+ d75a77b69052e-4b29ffc0c7bmr28111071cf.78.1755780422300; Thu, 21 Aug 2025
+ 05:47:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+References: <20250815083930.10547-1-chia-yu.chang@nokia-bell-labs.com> <20250815083930.10547-12-chia-yu.chang@nokia-bell-labs.com>
+In-Reply-To: <20250815083930.10547-12-chia-yu.chang@nokia-bell-labs.com>
+From: Eric Dumazet <edumazet@google.com>
+Date: Thu, 21 Aug 2025 05:46:49 -0700
+X-Gm-Features: Ac12FXz4nWLVsht97nfgNdGgE1s4G1y9w8ArleUb8uD5uJxc6BIM7EIe7pA-Kak
+Message-ID: <CANn89i+qYjt45-qO11vu_v=TrK7tn-C=iA5q7bw9YbK-qe5KZA@mail.gmail.com>
+Subject: Re: [PATCH v15 net-next 11/14] tcp: accecn: AccECN option send control
+To: chia-yu.chang@nokia-bell-labs.com
+Cc: pabeni@redhat.com, linux-doc@vger.kernel.org, corbet@lwn.net, 
+	horms@kernel.org, dsahern@kernel.org, kuniyu@amazon.com, bpf@vger.kernel.org, 
+	netdev@vger.kernel.org, dave.taht@gmail.com, jhs@mojatatu.com, 
+	kuba@kernel.org, stephen@networkplumber.org, xiyou.wangcong@gmail.com, 
+	jiri@resnulli.us, davem@davemloft.net, andrew+netdev@lunn.ch, 
+	donald.hunter@gmail.com, ast@fiberby.net, liuhangbin@gmail.com, 
+	shuah@kernel.org, linux-kselftest@vger.kernel.org, ij@kernel.org, 
+	ncardwell@google.com, koen.de_schepper@nokia-bell-labs.com, 
+	g.white@cablelabs.com, ingemar.s.johansson@ericsson.com, 
+	mirja.kuehlewind@ericsson.com, cheshire@apple.com, rs.ietf@gmx.at, 
+	Jason_Livingood@comcast.com, vidhi_goel@apple.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The uprobe syscall stores and strips the trampoline stack frame from
-the user context, to make it appear similar to an exception at the
-original instruction. It then restores the trampoline stack when it
-can exit using sysexit.
+On Fri, Aug 15, 2025 at 1:40=E2=80=AFAM <chia-yu.chang@nokia-bell-labs.com>=
+ wrote:
+>
+> From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+>
+> Instead of sending the option in every ACK, limit sending to
+> those ACKs where the option is necessary:
+> - Handshake
+> - "Change-triggered ACK" + the ACK following it. The
+>   2nd ACK is necessary to unambiguously indicate which
+>   of the ECN byte counters in increasing. The first
+>   ACK has two counters increasing due to the ecnfield
+>   edge.
+> - ACKs with CE to allow CEP delta validations to take
+>   advantage of the option.
+> - Force option to be sent every at least once per 2^22
+>   bytes. The check is done using the bit edges of the
+>   byte counters (avoids need for extra variables).
+> - AccECN option beacon to send a few times per RTT even if
+>   nothing in the ECN state requires that. The default is 3
+>   times per RTT, and its period can be set via
+>   sysctl_tcp_ecn_option_beacon.
+>
+> Below are the pahole outcomes before and after this patch,
+> in which the group size of tcp_sock_write_tx is increased
+> from 89 to 97 due to the new u64 accecn_opt_tstamp member:
+>
+> [BEFORE THIS PATCH]
+> struct tcp_sock {
+>     [...]
+>     u64                        tcp_wstamp_ns;        /*  2488     8 */
+>     struct list_head           tsorted_sent_queue;   /*  2496    16 */
+>
+>     [...]
+>     __cacheline_group_end__tcp_sock_write_tx[0];     /*  2521     0 */
+>     __cacheline_group_begin__tcp_sock_write_txrx[0]; /*  2521     0 */
+>     u8                         nonagle:4;            /*  2521: 0  1 */
+>     u8                         rate_app_limited:1;   /*  2521: 4  1 */
+>     /* XXX 3 bits hole, try to pack */
+>
+>     /* Force alignment to the next boundary: */
+>     u8                         :0;
+>     u8                         received_ce_pending:4;/*  2522: 0  1 */
+>     u8                         unused2:4;            /*  2522: 4  1 */
+>     u8                         accecn_minlen:2;      /*  2523: 0  1 */
+>     u8                         est_ecnfield:2;       /*  2523: 2  1 */
+>     u8                         unused3:4;            /*  2523: 4  1 */
+>
+>     [...]
+>     __cacheline_group_end__tcp_sock_write_txrx[0];   /*  2628     0 */
+>
+>     [...]
+>     /* size: 3200, cachelines: 50, members: 171 */
+> }
+>
+> [AFTER THIS PATCH]
+> struct tcp_sock {
+>     [...]
+>     u64                        tcp_wstamp_ns;        /*  2488     8 */
+>     u64                        accecn_opt_tstamp;    /*  2596     8 */
+>     struct list_head           tsorted_sent_queue;   /*  2504    16 */
+>
+>     [...]
+>     __cacheline_group_end__tcp_sock_write_tx[0];     /*  2529     0 */
+>     __cacheline_group_begin__tcp_sock_write_txrx[0]; /*  2529     0 */
+>     u8                         nonagle:4;            /*  2529: 0  1 */
+>     u8                         rate_app_limited:1;   /*  2529: 4  1 */
+>     /* XXX 3 bits hole, try to pack */
+>
+>     /* Force alignment to the next boundary: */
+>     u8                         :0;
+>     u8                         received_ce_pending:4;/*  2530: 0  1 */
+>     u8                         unused2:4;            /*  2530: 4  1 */
+>     u8                         accecn_minlen:2;      /*  2531: 0  1 */
+>     u8                         est_ecnfield:2;       /*  2531: 2  1 */
+>     u8                         accecn_opt_demand:2;  /*  2531: 4  1 */
+>     u8                         prev_ecnfield:2;      /*  2531: 6  1 */
+>
+>     [...]
+>     __cacheline_group_end__tcp_sock_write_txrx[0];   /*  2636     0 */
+>
+>     [...]
+>     /* size: 3200, cachelines: 50, members: 173 */
+> }
+>
+> Signed-off-by: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+> Co-developed-by: Ilpo J=C3=A4rvinen <ij@kernel.org>
+> Signed-off-by: Ilpo J=C3=A4rvinen <ij@kernel.org>
+>
 
-Make sure to match the regular stack manipulation with shadow stack
-operations such that regular and shadow stack don't get out of sync
-and causes trouble.
-
-This enables using the optimization when shadow stack is in use.
-
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
----
- arch/x86/include/asm/shstk.h |    4 ++++
- arch/x86/kernel/shstk.c      |   40 ++++++++++++++++++++++++++++++++++++++++
- arch/x86/kernel/uprobes.c    |   17 ++++++++---------
- 3 files changed, 52 insertions(+), 9 deletions(-)
-
---- a/arch/x86/include/asm/shstk.h
-+++ b/arch/x86/include/asm/shstk.h
-@@ -23,6 +23,8 @@ int setup_signal_shadow_stack(struct ksi
- int restore_signal_shadow_stack(void);
- int shstk_update_last_frame(unsigned long val);
- bool shstk_is_enabled(void);
-+int shstk_pop(u64 *val);
-+int shstk_push(u64 val);
- #else
- static inline long shstk_prctl(struct task_struct *task, int option,
- 			       unsigned long arg2) { return -EINVAL; }
-@@ -35,6 +37,8 @@ static inline int setup_signal_shadow_st
- static inline int restore_signal_shadow_stack(void) { return 0; }
- static inline int shstk_update_last_frame(unsigned long val) { return 0; }
- static inline bool shstk_is_enabled(void) { return false; }
-+static inline int shstk_pop(u64 *val) { return -ENOTSUPP; }
-+static inline int shstk_push(u64 val) { return -ENOTSUPP; }
- #endif /* CONFIG_X86_USER_SHADOW_STACK */
- 
- #endif /* __ASSEMBLER__ */
---- a/arch/x86/kernel/shstk.c
-+++ b/arch/x86/kernel/shstk.c
-@@ -246,6 +246,46 @@ static unsigned long get_user_shstk_addr
- 	return ssp;
- }
- 
-+int shstk_pop(u64 *val)
-+{
-+	int ret = 0;
-+	u64 ssp;
-+
-+	if (!features_enabled(ARCH_SHSTK_SHSTK))
-+		return -ENOTSUPP;
-+
-+	fpregs_lock_and_load();
-+
-+	rdmsrq(MSR_IA32_PL3_SSP, ssp);
-+	if (val && get_user(*val, (__user u64 *)ssp))
-+		ret = -EFAULT;
-+	else
-+		wrmsrq(MSR_IA32_PL3_SSP, ssp + SS_FRAME_SIZE);
-+	fpregs_unlock();
-+
-+	return ret;
-+}
-+
-+int shstk_push(u64 val)
-+{
-+	u64 ssp;
-+	int ret;
-+
-+	if (!features_enabled(ARCH_SHSTK_SHSTK))
-+		return -ENOTSUPP;
-+
-+	fpregs_lock_and_load();
-+
-+	rdmsrq(MSR_IA32_PL3_SSP, ssp);
-+	ssp -= SS_FRAME_SIZE;
-+	ret = write_user_shstk_64((__user void *)ssp, val);
-+	if (!ret)
-+		wrmsrq(MSR_IA32_PL3_SSP, ssp);
-+	fpregs_unlock();
-+
-+	return ret;
-+}
-+
- #define SHSTK_DATA_BIT BIT(63)
- 
- static int put_shstk_data(u64 __user *addr, u64 data)
---- a/arch/x86/kernel/uprobes.c
-+++ b/arch/x86/kernel/uprobes.c
-@@ -804,7 +804,7 @@ SYSCALL_DEFINE0(uprobe)
- {
- 	struct pt_regs *regs = task_pt_regs(current);
- 	struct uprobe_syscall_args args;
--	unsigned long ip, sp;
-+	unsigned long ip, sp, sret;
- 	int err;
- 
- 	/* Allow execution only from uprobe trampolines. */
-@@ -831,6 +831,10 @@ SYSCALL_DEFINE0(uprobe)
- 
- 	sp = regs->sp;
- 
-+	err = shstk_pop((u64 *)&sret);
-+	if (err == -EFAULT || (!err && sret != args.retaddr))
-+		goto sigill;
-+
- 	handle_syscall_uprobe(regs, regs->ip);
- 
- 	/*
-@@ -855,6 +859,9 @@ SYSCALL_DEFINE0(uprobe)
- 	if (args.retaddr - 5 != regs->ip)
- 		args.retaddr = regs->ip;
- 
-+	if (shstk_push(args.retaddr) == -EFAULT)
-+		goto sigill;
-+
- 	regs->ip = ip;
- 
- 	err = copy_to_user((void __user *)regs->sp, &args, sizeof(args));
-@@ -1124,14 +1131,6 @@ void arch_uprobe_optimize(struct arch_up
- 	struct mm_struct *mm = current->mm;
- 	uprobe_opcode_t insn[5];
- 
--	/*
--	 * Do not optimize if shadow stack is enabled, the return address hijack
--	 * code in arch_uretprobe_hijack_return_addr updates wrong frame when
--	 * the entry uprobe is optimized and the shadow stack crashes the app.
--	 */
--	if (shstk_is_enabled())
--		return;
--
- 	if (!should_optimize(auprobe))
- 		return;
- 
-
-
+Reviewed-by: Eric Dumazet <edumazet@google.com>
