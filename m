@@ -1,138 +1,96 @@
-Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0EAC320CC4
-	for <bpf@vger.kernel.org>; Thu, 21 Aug 2025 13:04:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.170
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29322192B66
+	for <bpf@vger.kernel.org>; Thu, 21 Aug 2025 13:48:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755781476; cv=none; b=M2CopvafV5hwDdMxYOlYb3NL/L+cjHJyt7FJNl1uLzTNsxNUAMoGKmmNHKqPktLlJqJ8BloHqVfiQh8TC72HImTZCb2rSMX6IodGODg8NRvgeFbiINBxtKOepdL14AY3wDsNjNRbO+NXjdER4jPQegQGllWL/7ainpjHdXdq6mw=
+	t=1755784143; cv=none; b=Hds6zRmmTKKdAyFPpadNJrxW97suvS/XXhf6KznYCd6LgWJmApthZs754eNcm/W+TAHZz6HZdlASMPbkZVsOBdnYN1BVfeMhHCx9vPAGlCMaz0Pjrz+xIZzEXVBGz7HDCpqa8YVcHEyAxI+AtsE0xw6e+8bR0H+7she7F+Lk3jY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755781476; c=relaxed/simple;
-	bh=dksXjVdpoZxSgSUQEjTqurSba+l6eHHY6MPN1daXJck=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ewhnNoafnxSav+ye7F+1njfsx66Ih+pH6cgwT7klwbaKCqB3hlUq3iFKbtvwOfdfAOf29UedlYMBfD2O1Sw3gQWjeNztA5FZc3PV11rxp2d2F3pjjGpV6IP0aRdX8hkbrlbDYXvKh70NdqvQV6YdV3DRPmM9jQbOYczQn/L10qo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=mEQJcZ/O; arc=none smtp.client-ip=209.85.222.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="mEQJcZ/O"
-Received: by mail-qk1-f170.google.com with SMTP id af79cd13be357-7e86faa158fso138287485a.1
-        for <bpf@vger.kernel.org>; Thu, 21 Aug 2025 06:04:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1755781473; x=1756386273; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2cyf0y+0F3zjeNAsfKiaSOtP08SnUX+d4gcmortqinM=;
-        b=mEQJcZ/O65dATBlYGtnKTmDmhKhukdF45BXUwIsXmz/8E2kVElQXFQwIHNWVg8q8ug
-         9KJSNf+LkwVn+QrVlYkNYyuvRTL9mIdG9Jrlu/ZE5Lv/ct+K7HFLzF6WiD8i9UVn7Wf+
-         NT69uI9ElWNrfOgQedsLVuF58qC/tyoHAFUrCDC/GW0uaK2YjuA1K94TUmfEu0hbBZZA
-         UY4SvTIZnpW2fAWKbH0tWJ4WXPnlpUnZ2QqdgYmJUllauwdS6LkRSkJFxRsCnnCgkBv5
-         CqWkiB7g+KDAy7u1MxPXXdLedySimf/Nm+WOoyMjaMsRFTJ6sfiV6QhGoIxyu/F4zGVz
-         5mOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755781473; x=1756386273;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2cyf0y+0F3zjeNAsfKiaSOtP08SnUX+d4gcmortqinM=;
-        b=tSHTzFV7Rot020ddEwaHR4nbEUtsz+QFuftSAG6yzvGcV2q04ueY9NmHK0CxQiMf3A
-         iJNVJLaDZuR0onZeMTHnKV5IU122aXlOHjlv7wSEC6nM9GRfWmYml7cKxwWF54EQsQUz
-         b+6ETdZISImQJ6pFUo7yk5HzDOYzua4V/UHDIkKKjjUE2AtkPIXEn85wp35Yjv0qZjrp
-         EA7KH2oREEU+9z/73NdvnTLID7TQu9Gi7y8SYlsaPg1VCuNWNIw88bJVniCWZCh4ljnY
-         O/QV7E7A03mHQz1cDhd4U/gPVn47qcHH3L/yqa+SNMRq2lWlRPd/4QdBuJFdO5Q9mLVS
-         yTMg==
-X-Forwarded-Encrypted: i=1; AJvYcCWV7BMNgZ9m+yPwzpiCbwY5lTVE5Bxr1eBETo+w2zLyVeCzpP9NWEyj7ZrzX9VK/iDmziI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxiz9gDhDIAUHCiKfyjLCmzlUYbcWOd8An1DbM+r/LmkzUSdeNC
-	wrAPDTDMbEecme7Fz9oxGoQ0Y0nbsyVtzsMLxPwc2a1SWVzNyKW1VQgecYycT+eQNm73vT0mUZl
-	attoucngzVp+8DqIfzqPvtLumeuRdoPmZduWnPn/R
-X-Gm-Gg: ASbGncuooSlO+nuvcdZQpAfI2TxDETvjeSUG2YgSxfGMCMd/puYy1gU+0zl78+DOHMK
-	5Ocw3UGtNw68Ezn0RB9sKDwKNjvRrBoyDZxF3NSjMDXlox8sDjZyh9m4N3+ACXKISmHDucFmwcZ
-	nlZJtbSkpqTL+28jIhea8kBoyQn2MrtxJB8BuY9Rkv1e+vN5poqAnY+KC/ZMIfQ8bsKyxqf0Ad/
-	uSaQby+2SHTEyWoYaa7EPfwfg==
-X-Google-Smtp-Source: AGHT+IE/rVuZ9SCIHg1gU7wHZFKJcVFlbis3SdAosQsMQXAAs3D+JvW5TH6jC+V2oisrZbfPgFfUQfa4iF740e0XHhA=
-X-Received: by 2002:a05:620a:1915:b0:7e9:f820:2b32 with SMTP id
- af79cd13be357-7ea0972ad73mr237461685a.39.1755781472346; Thu, 21 Aug 2025
- 06:04:32 -0700 (PDT)
+	s=arc-20240116; t=1755784143; c=relaxed/simple;
+	bh=5Gwu3gr9vnmpJzZUJbk2sP4G4x7XcGQ7vcQ/3FcAoMg=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=X4FHOpaS54tNYfvEIv6Ayp2riHQQZ22zqS2GLGozbbFX1TC9YgzJWS3FrxwCxtoaKNOzQCZAULGohcSzp5b6MoHamuItaquj4mxsLZMUit9NAbp3/I43UiGcfQ5OgicSNjkdfMK3qzq6pLndzU0ljPKcfOVFgQm6bAk97Mpa7xE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [113.200.148.30])
+	by gateway (Coremail) with SMTP id _____8Dx_tLHI6do83QBAA--.2655S3;
+	Thu, 21 Aug 2025 21:48:55 +0800 (CST)
+Received: from [10.130.10.66] (unknown [113.200.148.30])
+	by front1 (Coremail) with SMTP id qMiowJCxdOTGI6do_r9dAA--.27533S3;
+	Thu, 21 Aug 2025 21:48:55 +0800 (CST)
+Subject: Re: [PATCH 1/3] LoongArch: BPF: Remove duplicated flags check
+To: Hengqi Chen <hengqi.chen@gmail.com>, chenhuacai@kernel.org,
+ jianghaoran@kylinos.cn, duanchenghao@kylinos.cn, ast@kernel.org,
+ daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
+ vincent.mc.li@gmail.com
+Cc: bpf@vger.kernel.org, loongarch@lists.linux.dev
+References: <20250821091003.404870-1-hengqi.chen@gmail.com>
+ <20250821091003.404870-2-hengqi.chen@gmail.com>
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <800cfa7a-ecaf-94bc-a44f-3ee83acc9d3a@loongson.cn>
+Date: Thu, 21 Aug 2025 21:48:53 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250815083930.10547-1-chia-yu.chang@nokia-bell-labs.com> <20250815083930.10547-15-chia-yu.chang@nokia-bell-labs.com>
-In-Reply-To: <20250815083930.10547-15-chia-yu.chang@nokia-bell-labs.com>
-From: Eric Dumazet <edumazet@google.com>
-Date: Thu, 21 Aug 2025 06:04:20 -0700
-X-Gm-Features: Ac12FXyJZ2QzT9xkYMMFg0cMwGaeSy-IVq_aPmJhAwN18-ZLuJFS365DtCRetGA
-Message-ID: <CANn89iLFEM+mbU2d0AEH3O+3zg5Cwm7pdmaadUxXifUqLuaQLg@mail.gmail.com>
-Subject: Re: [PATCH v15 net-next 14/14] tcp: accecn: try to fit AccECN option
- with SACK
-To: chia-yu.chang@nokia-bell-labs.com
-Cc: pabeni@redhat.com, linux-doc@vger.kernel.org, corbet@lwn.net, 
-	horms@kernel.org, dsahern@kernel.org, kuniyu@amazon.com, bpf@vger.kernel.org, 
-	netdev@vger.kernel.org, dave.taht@gmail.com, jhs@mojatatu.com, 
-	kuba@kernel.org, stephen@networkplumber.org, xiyou.wangcong@gmail.com, 
-	jiri@resnulli.us, davem@davemloft.net, andrew+netdev@lunn.ch, 
-	donald.hunter@gmail.com, ast@fiberby.net, liuhangbin@gmail.com, 
-	shuah@kernel.org, linux-kselftest@vger.kernel.org, ij@kernel.org, 
-	ncardwell@google.com, koen.de_schepper@nokia-bell-labs.com, 
-	g.white@cablelabs.com, ingemar.s.johansson@ericsson.com, 
-	mirja.kuehlewind@ericsson.com, cheshire@apple.com, rs.ietf@gmx.at, 
-	Jason_Livingood@comcast.com, vidhi_goel@apple.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20250821091003.404870-2-hengqi.chen@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowJCxdOTGI6do_r9dAA--.27533S3
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj9xXoW7JF4fWw4xGrW8XFW5AF1kJFc_yoWkGrb_Jr
+	17A34xCrs8JFWrC3WDKr45ArnFvw15XFn5uFn3WrWIka45XrW5ArW8t345Zry7K39I9rW5
+	G393Xas3Aw4jvosvyTuYvTs0mTUanT9S1TB71UUUUjUqnTZGkaVYY2UrUUUUj1kv1TuYvT
+	s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
+	cSsGvfJTRUUUbDkYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
+	vaj40_Wr0E3s1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+	w2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+	WUJVW8JwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0
+	oVCq3wAaw2AFwI0_Jrv_JF1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa02
+	0Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JF0_Jw1l
+	Yx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI
+	0SjxkI62AI1cAE67vIY487MxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAKI48JMxC2
+	0s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r1Y6r17MI8I3I0E5I8CrVAFwI0_Jr
+	0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0E
+	wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJV
+	W8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAI
+	cVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0b6pPUUUUU==
 
-On Fri, Aug 15, 2025 at 1:40=E2=80=AFAM <chia-yu.chang@nokia-bell-labs.com>=
- wrote:
->
-> From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
->
-> As SACK blocks tend to eat all option space when there are
-> many holes, it is useful to compromise on sending many SACK
-> blocks in every ACK and attempt to fit the AccECN option
-> there by reducing the number of SACK blocks. However, it will
-> never go below two SACK blocks because of the AccECN option.
->
-> As the AccECN option is often not put to every ACK, the space
-> hijack is usually only temporary. Depending on the reuqired
-> AccECN fields (can be either 3, 2, 1, or 0, cf. Table 5 in
-> AccECN spec) and the NOPs used for alignment of other
-> TCP options, up to two SACK blocks will be reduced. Please
-> find below tables for more details:
->
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+
-> | Number of | Required | Remaining |  Number of  |    Final    |
-> |   SACK    |  AccECN  |  option   |  reduced    |  number of  |
-> |  blocks   |  fields  |  spaces   | SACK blocks | SACK blocks |
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+
-> |  x (<=3D2)  |  0 to 3  |    any    |      0      |      x      |
-> +-----------+----------+-----------+-------------+-------------+
-> |     3     |    0     |    any    |      0      |      3      |
-> |     3     |    1     |    <4     |      1      |      2      |
-> |     3     |    1     |    >=3D4    |      0      |      3      |
-> |     3     |    2     |    <8     |      1      |      2      |
-> |     3     |    2     |    >=3D8    |      0      |      3      |
-> |     3     |    3     |    <12    |      1      |      2      |
-> |     3     |    3     |    >=3D12   |      0      |      3      |
-> +-----------+----------+-----------+-------------+-------------+
-> |  y (>=3D4)  |    0     |    any    |      0      |      y      |
-> |  y (>=3D4)  |    1     |    <4     |      1      |     y-1     |
-> |  y (>=3D4)  |    1     |    >=3D4    |      0      |      y      |
-> |  y (>=3D4)  |    2     |    <8     |      1      |     y-1     |
-> |  y (>=3D4)  |    2     |    >=3D8    |      0      |      y      |
-> |  y (>=3D4)  |    3     |    <4     |      2      |     y-2     |
-> |  y (>=3D4)  |    3     |    <12    |      1      |     y-1     |
-> |  y (>=3D4)  |    3     |    >=3D12   |      0      |      y      |
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+
->
+On 2025/8/21 下午5:10, Hengqi Chen wrote:
+> The check for (BPF_TRAMP_F_ORIG_STACK | BPF_TRAMP_F_SHARE_IPMODIFY)
+> is duplicated in __arch_prepare_bpf_trampoline(). Remove it.
+> 
+> Signed-off-by: Hengqi Chen <hengqi.chen@gmail.com>
+> ---
+>   arch/loongarch/net/bpf_jit.c | 3 ---
+>   1 file changed, 3 deletions(-)
+> 
+> diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
+> index abfdb6bb5c38..b646c6b73014 100644
+> --- a/arch/loongarch/net/bpf_jit.c
+> +++ b/arch/loongarch/net/bpf_jit.c
+> @@ -1462,9 +1462,6 @@ static int __arch_prepare_bpf_trampoline(struct jit_ctx *ctx, struct bpf_tramp_i
+>   	struct bpf_tramp_links *fmod_ret = &tlinks[BPF_TRAMP_MODIFY_RETURN];
+>   	u32 **branches = NULL;
+>   
+> -	if (flags & (BPF_TRAMP_F_ORIG_STACK | BPF_TRAMP_F_SHARE_IPMODIFY))
+> -		return -ENOTSUPP;
+> -
+>   	/*
+>   	 * FP + 8       [ RA to parent func ] return address to parent
+>   	 *                    function
+> 
 
-It is unclear if this chart takes into account the TCP TS option ?
+Acked-by: Tiezhu Yang <yangtiezhu@loongson.cn>
 
-Can you clarify this point ?
+Maybe "stack_size = 0;" in this function is redundant too, if yes,
+you can remove it together.
+
+Thanks,
+Tiezhu
+
