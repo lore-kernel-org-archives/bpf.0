@@ -1,140 +1,173 @@
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20EB41C4A10;
-	Thu, 21 Aug 2025 02:55:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 784C723C509
+	for <bpf@vger.kernel.org>; Thu, 21 Aug 2025 04:07:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755744949; cv=none; b=H/VY/E5zen8jQL2GGikQk8B8Qrr7yj/Ps7Yf895V9z+nuEtUYJMthyZ7y/be6cD1sM8ENbPUV262cWmpLwzPslg9lIy917c4ZY6JV/DXae42MFlpOqVIAQpPX2gfqvUfS9cBy8lcnaviTTo+Doto73y8Sfrs1+inzrDFC9m8c1k=
+	t=1755749256; cv=none; b=B/OkIp29QKn+z0pr+GehKax1PHtWv3LMjFTd0BzMTdhAxYvFpRJttkUAtSv7kMcB3KTAj2G1FzyMQ72+YTmhKwdCRJjYSpdUXLPszC9b4vPzvCr2Uesx/Xh+wiC4D8jDCWVCgAmUWgLov6hF/eS/WW/tA/eFvSEOAuhDlrb109s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755744949; c=relaxed/simple;
-	bh=QvMUeM4pDlP632rKfYRBprYpHIkWELPeq80btpP7l6o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RfQH9L6qa/uCcD6yZT/lRumfmiPwL/X4++d5HBXNGVc3cDSLIhj4onkY4SEH6eBMsT736EOTaMJwWo9K3LiNlsYtu44stiHmvFOiOBG6YFa72qIX9W9zxYeN72ksPcfVEgU9RZLTBvzoyfqhggEVcbIY2rOqCI6zet7v/jZt+tw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 4fcfd56a7e3a11f0b29709d653e92f7d-20250821
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.45,REQID:31331416-7b38-4d16-a261-b0cb1ce5c005,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:6493067,CLOUDID:33274ee4927d2cea1b83a9d1f9bfd892,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:80|81|82|83|102,TC:nil,Content:0|50,EDM:
-	-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,
-	AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: 4fcfd56a7e3a11f0b29709d653e92f7d-20250821
-X-User: duanchenghao@kylinos.cn
-Received: from localhost [(10.44.16.150)] by mailgw.kylinos.cn
-	(envelope-from <duanchenghao@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 519076177; Thu, 21 Aug 2025 10:55:36 +0800
-Date: Thu, 21 Aug 2025 10:55:32 +0800
-From: Chenghao Duan <duanchenghao@kylinos.cn>
-To: Pu Lehui <pulehui@huawei.com>
-Cc: ast@kernel.org, bjorn@kernel.org, puranjay@kernel.org,
-	paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu,
-	daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
-	eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev,
-	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
-	haoluo@google.com, jolsa@kernel.org, alex@ghiti.fr,
-	bpf@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] riscv: bpf: Fix uninitialized symbol 'retval_off'
-Message-ID: <20250821025532.GA287128@chenghao-pc>
-References: <20250820062520.846720-1-duanchenghao@kylinos.cn>
- <8b836b6e-103a-41c2-b111-0417d8db4dce@huawei.com>
- <20250820092628.GA1289807@chenghao-pc>
- <239193b7-7dab-45b0-ab13-06bfe3f96f22@huawei.com>
- <20250820103530.GA1475460@chenghao-pc>
- <9cbdefd6-a757-44b3-a1db-69ca8117aacb@huawei.com>
+	s=arc-20240116; t=1755749256; c=relaxed/simple;
+	bh=5oirP7WiNifHumklvNdf1HOpwUeGPcRbhlJLskwX9hc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=NCEhBia/nhk6zxeO9LLUiwKrIM3ofVo/O8+g3cTb/DfZc4dm9RdwKyS23PhYXw1G55Ycgc371DY+ComhCrsBiJ1MPZDfIJw3sjTFAPfzBed5zFw1S1xFXQHWbwdIWJVzEScg2mYvekpvBIEjy2ordtjHheXmICk7W3L52Gbe6wc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=f4TN4DpN; arc=none smtp.client-ip=209.85.208.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="f4TN4DpN"
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-61a207a248cso7151a12.0
+        for <bpf@vger.kernel.org>; Wed, 20 Aug 2025 21:07:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1755749252; x=1756354052; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=D2zfCcSJOzjARkXqmrK2VbK9VW5RbRjtX977JzOFSGY=;
+        b=f4TN4DpNGOUC91OZ4sACkuUfzsOB7BCcfva7qX/8nCC7M1sTdmQPHiQDYT47nK4V1w
+         4FPmCvkdnuPZM+fVBCIN7atWpoGca6DBEI4qom+uvjjEOkRppLtg/AdebGa4Wr/B/C1U
+         3Wao/GaQlSi6m4d5cuKTGbz2Ck6+azpfjcilozM56ob+g76dTu385g4Zm0c6ELKGJ5uN
+         G4fpvLA7uQyk5YPGpGc8Qcj35ZHAY2gIBpgq9dIkA4ddic8M9lvw7bbt6NqMPfoMmYtm
+         RtSY/0+AH4MFtDtkZ3mL/xRfcoKEwuT6PjSl0AIns1FPhYpx3bls7mPBuAqHL2Wk5SMK
+         ZPAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755749252; x=1756354052;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=D2zfCcSJOzjARkXqmrK2VbK9VW5RbRjtX977JzOFSGY=;
+        b=se+oPHQjt+EYVEDO6E1oG921Jngy2DPeMIn/gifL9+ycD4hbuV+J9FMCOowx2R80z4
+         49ZnoV6pt0UmOyu3WacwJtcoEyy07cr3pz/LEN8d1Jjs89xXUqcVxmBnvTfwqNKBup8+
+         A2scwgfdAZ6LhDkbmEUx44zHaGRsIsS1y+lzn8bROccaJmc3m6QxZofpT/nmcBpDV71D
+         fd6O7igPZB5OCn/7CXhoPGW6q5ZEr3Tcb1TaYHq7HS/MVmmJHVQf8UVnE8IBr/JVa5OT
+         n8TDI7R24Jz+wqKdkitL1l1Zfmh/9piZgDC3HbcRuXb+2YiVV5vXfhudbmsjW4YcUTeO
+         S0UQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXGubcBG7f08GJr9MaySgM6G65WMqQ66bgHr/tKFmSUI4XprCIwu7KRCoF3LdFoFWpgr9Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwGvQr483sEwCYKPv3AkCoT7UCTr+M8JGv51VRZoY31DDyLE8+C
+	T0XUi6lr3+Td47XZV8jVY0jUprghGkX9Dyj8IAwH9p3/gYjogz6+opVhPaDkUpPlVr3Okjc7AKK
+	0t57l4WQA3cGWa+Czg4QWFmxmx5hKVL4pOlvDfxQi
+X-Gm-Gg: ASbGncvSdaHMJE3HZKKuaBZxAvvbfchksZajNRboVY/1e0+N7P/NFFOlts1+724TfDy
+	odwfw3Cl3gJrq4ZuhLXpswenkLVJKMfQt7h7EtFbkPaFwGn1clPA+yuV2GoXkNmmAU9Cf3gNkgl
+	Om5vBIQpQHRM1zN5lWqErl7b7z+81H3F8eYP8c7mtQHWcOZPuP3F/OHTfuHxLUFStdl7n/TkQ9N
+	WEzaj4Iyq7s9Wx7DlEZ6HJY2VMkDrUGNwq2Xuif/Gc=
+X-Google-Smtp-Source: AGHT+IFrsPEyM2E5GeeRSvRDPHxWAC8MsuCNQnD2ZE2YVMx9fd6Zq4+VAYIDnVwZC2VKlhk7LZVLABzTWFCADUsy7rk=
+X-Received: by 2002:a50:d658:0:b0:61b:f987:42d9 with SMTP id
+ 4fb4d7f45d1cf-61bf98753a1mr20993a12.2.1755749251625; Wed, 20 Aug 2025
+ 21:07:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <9cbdefd6-a757-44b3-a1db-69ca8117aacb@huawei.com>
+References: <20250813073955.1775315-1-maze@google.com> <6df59861-8334-49ac-8dca-2b0bac82f2d7@linux.dev>
+In-Reply-To: <6df59861-8334-49ac-8dca-2b0bac82f2d7@linux.dev>
+From: =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>
+Date: Wed, 20 Aug 2025 21:07:19 -0700
+X-Gm-Features: Ac12FXwOFUmHRzE1mYnem_hnpYjz3EZEML8HNI_-8PwFPwygE3VYTkye6feLPsg
+Message-ID: <CANP3RGek2nTodF_niyenmrLg2_g=BCPV6MQkwXT4SpZ6W8+9pg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpf: hashtab - allow BPF_MAP_LOOKUP{,_AND_DELETE}_BATCH
+ with NULL keys/values.
+To: Yonghong Song <yonghong.song@linux.dev>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Linux Network Development Mailing List <netdev@vger.kernel.org>, "David S . Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, BPF Mailing List <bpf@vger.kernel.org>, 
+	Stanislav Fomichev <sdf@fomichev.me>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Aug 21, 2025 at 09:58:20AM +0800, Pu Lehui wrote:
-> 
-> 
-> On 2025/8/20 18:35, Chenghao Duan wrote:
-> > On Wed, Aug 20, 2025 at 06:10:07PM +0800, Pu Lehui wrote:
-> > > 
-> > > 
-> > > On 2025/8/20 17:26, Chenghao Duan wrote:
-> > > > On Wed, Aug 20, 2025 at 02:52:01PM +0800, Pu Lehui wrote:
-> > > > > 
-> > > > > 
-> > > > > On 2025/8/20 14:25, Chenghao Duan wrote:
-> > > > > > In __arch_prepare_bpf_trampoline(), retval_off is only meaningful when
-> > > > > > save_ret is true, so the current logic is correct. However, in the
-> 
-> OK, I think we should make commit msg more explicit. Such like the follow.
-> wdyt?
-> 
-> `However, in the fmod_ret logic, the compiler is not aware that the flags of
-> the fmod_ret prog have set BPF_TRAMP_F_CALL_ORIG, resulting in an
-> uninitialized symbol compilation warning.`
-> 
+On Mon, Aug 18, 2025 at 1:58=E2=80=AFPM Yonghong Song <yonghong.song@linux.=
+dev> wrote:
+> On 8/13/25 12:39 AM, Maciej =C5=BBenczykowski wrote:
+> > BPF_MAP_LOOKUP_AND_DELETE_BATCH keys & values =3D=3D NULL
+> > seems like a nice way to simply quickly clear a map.
+>
+> This will change existing API as users will expect
+> some error (e.g., -EFAULT) return when keys or values is NULL.
 
-Good idea
+No reasonable user will call the current api with NULLs.
 
-> > > > > 
-> > > > > lgtm, and same for `ip_off`, pls patch it together.
-> > > > 
-> > > > I also checked at the time that ip_off is only initialized and assigned
-> > > > when flags & BPF_TRAMP_F_IP_ARG is true. However, I noticed that the use
-> > > > of ip_off also requires this condition, so the compiler did not issue a
-> > > > warning.
-> > > > 
-> > > > Chenghao
-> > > > 
-> > > > > 
-> > > > > > original logic, retval_off is only initialized under certain
-> > > 
-> > > Can you show how to replay this warning? I guess the warning path is as
-> > > follow. Compiler didn't know fmod_ret prog need BPF_TRAMP_F_CALL_ORIG.
-> > > 
-> > > ```
-> > > if (fmod_ret->nr_links) {
-> > > 	...
-> > > 	emit_sd(RV_REG_FP, -retval_off, RV_REG_ZERO, ctx);
-> > > }
-> > > ```
-> > > 
-> > 
-> > Exactly, the compiler sees the unconditional use of retval_off.
-> > 
-> > Chenghao
-> > 
-> > > > > > conditions, which may cause a build warning.
-> > > > > > 
-> > > > > > So initialize retval_off unconditionally to fix it.
-> > > > > > 
-> > > > > > Signed-off-by: Chenghao Duan <duanchenghao@kylinos.cn>
-> > > > > > ---
-> > > > > >     arch/riscv/net/bpf_jit_comp64.c | 5 ++---
-> > > > > >     1 file changed, 2 insertions(+), 3 deletions(-)
-> > > > > > 
-> > > > > > diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
-> > > > > > index 10e01ff06312..49bbda8372b0 100644
-> > > > > > --- a/arch/riscv/net/bpf_jit_comp64.c
-> > > > > > +++ b/arch/riscv/net/bpf_jit_comp64.c
-> > > > > > @@ -1079,10 +1079,9 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im,
-> > > > > >     	stack_size += 16;
-> > > > > >     	save_ret = flags & (BPF_TRAMP_F_CALL_ORIG | BPF_TRAMP_F_RET_FENTRY_RET);
-> > > > > > -	if (save_ret) {
-> > > > > > +	if (save_ret)
-> > > > > >     		stack_size += 16; /* Save both A5 (BPF R0) and A0 */
-> > > > > > -		retval_off = stack_size;
-> > > > > > -	}
-> > > > > > +	retval_off = stack_size;
-> > > > > >     	stack_size += nr_arg_slots * 8;
-> > > > > >     	args_off = stack_size;
+This is a similar API change to adding a new system call
+(where previously it returned -ENOSYS) - which *is* also a UAPI
+change, but obviously allowed.
+
+Or adding support for a new address family / protocol (where
+previously it -EAFNOSUPPORT)
+Or adding support for a new flag (where previously it returned -EINVAL)
+
+Consider why userspace would ever pass in NULL, two possibilities:
+(a) explicit NULL - you'd never do this since it would (till now)
+always -EFAULT,
+  so this would only possibly show up in a very thorough test suite
+(b) you're using dynamically allocated memory and it failed allocation.
+  that's already a program bug, you should catch that before you call bpf()=
+.
+
+> We have a 'flags' field in uapi header in
+>
+>          struct { /* struct used by BPF_MAP_*_BATCH commands */
+>                  __aligned_u64   in_batch;       /* start batch,
+>                                                   * NULL to start from be=
+ginning
+>                                                   */
+>                  __aligned_u64   out_batch;      /* output: next start ba=
+tch */
+>                  __aligned_u64   keys;
+>                  __aligned_u64   values;
+>                  __u32           count;          /* input/output:
+>                                                   * input: # of key/value
+>                                                   * elements
+>                                                   * output: # of filled e=
+lements
+>                                                   */
+>                  __u32           map_fd;
+>                  __u64           elem_flags;
+>                  __u64           flags;
+>          } batch;
+>
+> we can add a flag in 'flags' like BPF_F_CLEAR_MAP_IF_KV_NULL with a comme=
+nt
+> that if keys or values is NULL, the batched elements will be cleared.
+
+I just don't see what value this provides.
+
+> > BPF_MAP_LOOKUP keys/values =3D=3D NULL might be useful if we just want
+> > the values/keys and don't want to bother copying the keys/values...
+> >
+> > BPF_MAP_LOOKUP keys & values =3D=3D NULL might be useful to count
+> > the number of populated entries.
+>
+> bpf_map_lookup_elem() does not have flags field, so we probably should no=
+t
+> change existins semantics.
+
+This is unrelated to this patch, since this only touches 'batch' operation.
+(unless I'm missing something)
+
+> > Cc: Alexei Starovoitov <ast@kernel.org>
+> > Cc: Daniel Borkmann <daniel@iogearbox.net>
+> > Cc: Stanislav Fomichev <sdf@fomichev.me>
+> > Signed-off-by: Maciej =C5=BBenczykowski <maze@google.com>
+> > ---
+> >   kernel/bpf/hashtab.c | 4 ++--
+> >   1 file changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+> > index 5001131598e5..8fbdd000d9e0 100644
+> > --- a/kernel/bpf/hashtab.c
+> > +++ b/kernel/bpf/hashtab.c
+> > @@ -1873,9 +1873,9 @@ __htab_map_lookup_and_delete_batch(struct bpf_map=
+ *map,
+> >
+> >       rcu_read_unlock();
+> >       bpf_enable_instrumentation();
+> > -     if (bucket_cnt && (copy_to_user(ukeys + total * key_size, keys,
+> > +     if (bucket_cnt && (ukeys && copy_to_user(ukeys + total * key_size=
+, keys,
+> >           key_size * bucket_cnt) ||
+> > -         copy_to_user(uvalues + total * value_size, values,
+> > +         uvalues && copy_to_user(uvalues + total * value_size, values,
+> >           value_size * bucket_cnt))) {
+> >               ret =3D -EFAULT;
+> >               goto after_loop;
