@@ -1,112 +1,101 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB8682253A1;
-	Thu, 21 Aug 2025 11:41:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3193523D7D1
+	for <bpf@vger.kernel.org>; Thu, 21 Aug 2025 12:16:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755776510; cv=none; b=imoJmaKMporvIzGbhojdUZfbSZPvcC4j66jhcc1n73rrz2SYO6PdZELvC6JvSVAxHFpz6QW1jR1QTCbW6osD5+KwmcBPpWapPLIJ+/7yMEtSm6E7cydR6BYeT7z+7r+bcgDK7InEFrx4/H6N3ZoEE7VtueAzVRx+XyxEds6iLiE=
+	t=1755778602; cv=none; b=I8IcNx1r57+t3lnV5Fd/ssNEUsw6TU79T1Ht7odbZTDc02DyOTd/23qwrgNdD61ct+qkJbAvbmq6+hHGqSKZLbLIkQSdmsEjlrvpPRZEMXTgu7r+VgGtg8SgYbO8zDqZ4mMn9k8DIaBZnpZ4KWLOWZtCic9/6u2r0DPQouqZNBE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755776510; c=relaxed/simple;
-	bh=UlimAOmq4oBwLMElEItrHUAt5oszOCegMRpxWXdd0K0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YmsAxMjP/OHHaScujhABi/L274obWLypVjRTY71T9Zh46DgsLf+BfJi00urz+2fMKB6vTQYPpSkMDcay2xOR+rfedOkfgLPVQEKdQ+FPHhXqM9kmkpcGmWorIqRNNaAeRjIUGFCQmDSwyuqqbEv82vAxyx31zWUhh390sGccINY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=thnjZZX4; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1755778602; c=relaxed/simple;
+	bh=D3bW53kccqh7kC5HvQO/ybJCH5XgtyaXneoTz1iI9o4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=lQLLSd6hXOCkmm3gJpnKmFvlPkuEX+QrMsIbM5tr60FXG3gbWBAaBjWZkr37OvYEd4uMwEOHlIsXfh2SjLY113F8NsHT9ucSsENRWL4TpcgLdWtMFs3Sxxi/MBbw8sVfdwz8E1nDXrtNmAX4PRae5L5w007t7w8FBevzr4FW0Us=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MpXKRF7y; arc=none smtp.client-ip=209.85.216.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="thnjZZX4"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38C06C4CEEB;
-	Thu, 21 Aug 2025 11:41:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755776510;
-	bh=UlimAOmq4oBwLMElEItrHUAt5oszOCegMRpxWXdd0K0=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=thnjZZX4M0j7D4VmGOdSAk4KMpbTymEJH6+vygU/eBOW/Y5XYrXKRwSNocQ79AAZI
-	 tNhfBxJBg3G399FlkyAZ/Ys1Bo9gr/jB3Qu1sgyEb9UmH4JMEjURK6QU2K9i5d2Sca
-	 CsI+KJNhsS6Pb0//+QqvQ+3uJ/s0bZNjs/6gsL4MoosfUOx8Ui7FqkBETdNbrMZIri
-	 nQe43p3CezaEVWHZIX0WFvZ1UnS364zDzdrB6MWPfw1dUY/vS7sHvGhuGulKKPo9mU
-	 PwZysvqIDGD1ktFoRYGUtZXVjWwjBcv6C30C0iu93nENDITwWGqArAEE51VdZ3egsn
-	 jE0YeLbweXzWA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id D5A27CE0A48; Thu, 21 Aug 2025 04:41:49 -0700 (PDT)
-Date: Thu, 21 Aug 2025 04:41:49 -0700
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: Menglong Dong <menglong8.dong@gmail.com>
-Cc: ast@kernel.org, frederic@kernel.org, neeraj.upadhyay@kernel.org,
-	joelagnelf@nvidia.com, josh@joshtriplett.org, boqun.feng@gmail.com,
-	urezki@gmail.com, rostedt@goodmis.org,
-	mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
-	qiang.zhang@linux.dev, daniel@iogearbox.net,
-	john.fastabend@gmail.com, andrii@kernel.org, martin.lau@linux.dev,
-	eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev,
-	kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com,
-	jolsa@kernel.org, rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: Re: [PATCH bpf-next v3 1/7] rcu: add rcu_read_lock_dont_migrate()
-Message-ID: <a9745beb-133a-447d-80ea-b7322676b3ed@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <20250821090609.42508-1-dongml2@chinatelecom.cn>
- <20250821090609.42508-2-dongml2@chinatelecom.cn>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MpXKRF7y"
+Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-323266d2d9eso741853a91.0
+        for <bpf@vger.kernel.org>; Thu, 21 Aug 2025 05:16:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1755778600; x=1756383400; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=WLc1SqMx88bxm5UNAuFakYImFc8qDW5ITO4vuXogwcM=;
+        b=MpXKRF7yLWyjarnVUfVdLizh4lLOBoetu+tCMgDNfo3gjm+o/aTGcUnNcPUeBwcxRX
+         mbpFk6OlWqrmyfXY52tHVLB1Rnkdp883rseCYTqScnsJExrOeUwrEIzlQIo3vZKAwu4z
+         D5HGADXvxArI5mXa7DAQe01FuCVEkiwuS7fP06+mV2DYkEqzkXSasUwTXcEOtPEy0782
+         Nmyd+69S4P1CNOYFB3RntoEPCivv+aq4BRYoYuW5Jt4gQl68xuWJ6rH3VDrKx6axRj3i
+         ksRo9/drDheRS9PpfGyvxCvBQEGczdEDRRt/5MpRc/U+v5Wle7DDhjbzvWoEN6tHX3KZ
+         +DSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755778600; x=1756383400;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WLc1SqMx88bxm5UNAuFakYImFc8qDW5ITO4vuXogwcM=;
+        b=W2x68h2R2Mp3h/PmgplLcgomtrsIZgsr9IYG3R+Zych3vDKj0OF1L5Vw9vnc3smneT
+         52WQbUalP1JrLCJc183Hs8xQ08fn5g4LhnOq5zbsZAEGY2MLfcNVf1lepPco2m7VDa6i
+         Q78jwqkKGMylyt6H7cL/I9FtBL5b3P/BrCbps6rMh/2XgJY3h5Sv0wAN8txUGVYuIeRN
+         1YfuxdvO28VlMdjiIY8EZs7MSOACeTXxARnNAsgyuq4iACaohw4nt3vkZEfq6Ff/fove
+         txLSiDrugOR2C6oUHlQSmGf/9mObkWfnC7El0DHCCogLMD+hV9Ni6KCXPSBJyj+6jLxi
+         UJBQ==
+X-Gm-Message-State: AOJu0YyVzRf7XTB3OANZYKyfqVTCUGqeGhhlc0mg6ny5gRYtkVjU4Z8Z
+	OZEqqYOryDgVaAvfmqiRs95B7ydcjg5bfUsY2lqIwaShD6ndqnb4CbfhL2rdJL0ju54=
+X-Gm-Gg: ASbGncsNl3C99Z18pPrpQN+e5kRZa6m8Uc03KTE0X+4rNvSho580MWi/91Z3/UHVDUV
+	GUHq+gvaihvZ2TTyDsruG0cFM/9tntk2ZxyKJ9f6/VtqMdu0ea42uJwMBkGbh6gsq0tG1OuKiuW
+	diigwRoP+lt2xOCAFjLPzS333+D6alYJ1LBO2xRh1/Lc6d5EKjWe2vZXDMs/0ZafD4cfSGZ+huY
+	BILS4tB2B26lC60gwdPK64uMvFl76baaG0neZ+zihih5aXXjLWGp5nKFYEzUZuYwuIEA+coAdqe
+	M42DmMIhO1EWjc0YT661vKHZKdndfIgWJYgUBQYgY6nOuzkltGeAg30QEmo1e4vLDPVtYvRKJm6
+	/9dvX17pwqg+13Y0AhN3SqXVOIEMy15X6FZyHabOgMV1q9BCIsAU=
+X-Google-Smtp-Source: AGHT+IHoaaMZA6T6APFg53tzmeaf2Zh5Zrn4FteT1P37Y2XdhOf2oT0PLT3bidCUN9QlazYmYrMhjg==
+X-Received: by 2002:a17:90b:3d83:b0:323:39c0:8e74 with SMTP id 98e67ed59e1d1-324ed10c3camr3461899a91.24.1755778600188;
+        Thu, 21 Aug 2025 05:16:40 -0700 (PDT)
+Received: from devbox.. ([43.132.141.28])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-324f2c48337sm1745442a91.25.2025.08.21.05.16.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Aug 2025 05:16:39 -0700 (PDT)
+From: Hengqi Chen <hengqi.chen@gmail.com>
+To: chenhuacai@kernel.org,
+	yangtiezhu@loongson.cn,
+	jianghaoran@kylinos.cn,
+	duanchenghao@kylinos.cn,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	vincent.mc.li@gmail.com
+Cc: bpf@vger.kernel.org,
+	loongarch@lists.linux.dev,
+	Hengqi Chen <hengqi.chen@gmail.com>
+Subject: [PATCH 0/3] LoongArch: Fix BPF trampoline related issues
+Date: Thu, 21 Aug 2025 09:10:00 +0000
+Message-ID: <20250821091003.404870-1-hengqi.chen@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250821090609.42508-2-dongml2@chinatelecom.cn>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Aug 21, 2025 at 05:06:03PM +0800, Menglong Dong wrote:
-> migrate_disable() is called to disable migration in the kernel, and it is
-> often used together with rcu_read_lock().
-> 
-> However, with PREEMPT_RCU disabled, it's unnecessary, as rcu_read_lock()
-> will always disable preemption, which will also disable migration.
-> 
-> Introduce rcu_read_lock_dont_migrate() and rcu_read_unlock_migrate(),
-> which will do the migration enable and disable only when PREEMPT_RCU.
-> 
-> Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
+The following two selftest cases triggers oops on LoongArch:
 
-Much better!
+    $ ./test_progs -a ns_bpf_qdisc -a tracing_struct
 
-Reviewed-by: Paul E. McKenney <paulmck@kernel.org>
+This small series tries to fix/workaround these issues.
+See individual commit for details.
 
-> ---
-> v3:
-> - make rcu_read_lock_dont_migrate() more compact
-> 
-> v2:
-> - introduce rcu_read_lock_dont_migrate() instead of rcu_migrate_disable()
-> ---
->  include/linux/rcupdate.h | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
-> 
-> diff --git a/include/linux/rcupdate.h b/include/linux/rcupdate.h
-> index 120536f4c6eb..9691ca380a4f 100644
-> --- a/include/linux/rcupdate.h
-> +++ b/include/linux/rcupdate.h
-> @@ -962,6 +962,20 @@ static inline notrace void rcu_read_unlock_sched_notrace(void)
->  	preempt_enable_notrace();
->  }
->  
-> +static __always_inline void rcu_read_lock_dont_migrate(void)
-> +{
-> +	if (IS_ENABLED(CONFIG_PREEMPT_RCU))
-> +		migrate_disable();
-> +	rcu_read_lock();
-> +}
-> +
-> +static inline void rcu_read_unlock_migrate(void)
-> +{
-> +	rcu_read_unlock();
-> +	if (IS_ENABLED(CONFIG_PREEMPT_RCU))
-> +		migrate_enable();
-> +}
-> +
->  /**
->   * RCU_INIT_POINTER() - initialize an RCU protected pointer
->   * @p: The pointer to be initialized.
-> -- 
-> 2.50.1
-> 
+While at it, remove a duplicated flags check in __arch_prepare_bpf_trampoline().
+
+Hengqi Chen (3):
+  LoongArch: BPF: Remove duplicated flags check
+  LoongArch: BPF: Sign extend struct ops return values properly
+  LoongArch: BPF: No support of struct argument in trampoline programs
+
+ arch/loongarch/net/bpf_jit.c | 54 +++++++++++++++++++++++++++++-------
+ 1 file changed, 44 insertions(+), 10 deletions(-)
+
+--
+2.43.5
