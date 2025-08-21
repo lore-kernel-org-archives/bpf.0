@@ -1,35 +1,42 @@
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1054B1FAC42;
-	Thu, 21 Aug 2025 14:01:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6860519DF4A;
+	Thu, 21 Aug 2025 14:06:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755784894; cv=none; b=YuMCsllZ20MUOlIic7ztDEMvQmGmUj5Gr2I1m/MKJSTRP8rjNfiW57Zf1/A5Liq5YpTXAPTUucvj13yIrdBq6okSAlgr2yHv6FfsRu0WWCPTAn5sZUr1BKBvG94v6pyrR9lFj40UmJdkuJ+PONmuS8n502H2LlLRFn0zZVMHpNM=
+	t=1755785218; cv=none; b=TcPH/5WCTRApoFXy45wITafpVZaxau18fJ+iLT1C1jI7wvOCljDkwnAGeZfzXvuYBHjWTV2OM+NyiSA0ruduWIkwz8wqiJ2C2whuA1gIhKakvFJ2dG2PLr3R2sPEpsEe5KKNvyM0/T8Eigw2b92C9XK0Eu9sSmpsDC6g3ryJrqM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755784894; c=relaxed/simple;
-	bh=r/+8ODg0b9YgcL33UXUKZFg5Kqh5wZuQHj1SZZR1Jdo=;
+	s=arc-20240116; t=1755785218; c=relaxed/simple;
+	bh=nUGU27fzDsTOg2J9A5OTomvtQbT3M0USfEGyJ3PwOoo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=sGBEWC4b+ENMRqNXneElJm+wWFXEMlmmpnSnIh1/CZz2O8ruYkAhGHy7ts11sATzf1mP5uHA/K6K5z6cetp8SUMDyM/p4qF8QLGfFs2mPagvhIMMGMByExMlx6cJxYWaNwVs8H0lfEw73Rgaf4LtmnkqF9tLnZxacKZU3q1zV2Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [113.200.148.30])
-	by gateway (Coremail) with SMTP id _____8DxO9K4JqdoAXYBAA--.2704S3;
-	Thu, 21 Aug 2025 22:01:28 +0800 (CST)
-Received: from linux.localdomain (unknown [113.200.148.30])
-	by front1 (Coremail) with SMTP id qMiowJBxpeSyJqdorsZdAA--.26328S4;
-	Thu, 21 Aug 2025 22:01:28 +0800 (CST)
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
-To: Huacai Chen <chenhuacai@kernel.org>,
-	Hengqi Chen <hengqi.chen@gmail.com>
-Cc: loongarch@lists.linux.dev,
+	 MIME-Version; b=ciu3bbDvWOwYDzteEJak79+Y9QgzIpk0KpvauTVHsW28Of+/D6M56h6pOYzpuo/hGIF/oAw9S3FCx6+n1Je+1ngVnkRtUpfZB4w+eqlYohuanBcG/18wFs/P5Oz9ga+C0RtWMMsI0dGQjh0+DtuP1q3SQ8dnuVwddcmSE4ZJGcE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=TYVJT4gH; arc=none smtp.client-ip=117.135.210.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="TYVJT4gH"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=li
+	0tdgetfqc1FOFNnQpld+aQTCcO+7IXZb6ERmK+fVs=; b=TYVJT4gHE58tCmQ4pR
+	LehLCs6XAZcnBSAsXext3k+qO7m4avhN8Px9z5We+JJx/XiuABYf7tGmB57xwFpW
+	sLYHxAJPrwg16hw6ci92THcX4/wLwv7IUrlvwLcfafvsIIfzkulan/16vVCR8lfS
+	gg33b1IzfU0LMouLix1lGmtGQ=
+Received: from phoenix.. (unknown [])
+	by gzga-smtp-mtada-g0-2 (Coremail) with SMTP id _____wB3RUngJ6doG2VUDA--.41400S3;
+	Thu, 21 Aug 2025 22:06:27 +0800 (CST)
+From: Jiawei Zhao <phoenix500526@163.com>
+To: ast@kernel.org
+Cc: daniel@iogearbox.net,
+	andrii@kernel.org,
+	yonghong.song@linux.dev,
 	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [RFC PATCH 2/2] LoongArch: BPF: Add 12 function arguments support for trampoline
-Date: Thu, 21 Aug 2025 22:01:22 +0800
-Message-ID: <20250821140122.29752-3-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20250821140122.29752-1-yangtiezhu@loongson.cn>
-References: <20250821140122.29752-1-yangtiezhu@loongson.cn>
+Subject: [PATCH bpf-next v12 1/2] libbpf: fix USDT SIB argument handling causing unrecognized register error
+Date: Thu, 21 Aug 2025 14:06:22 +0000
+Message-ID: <20250821140623.971621-2-phoenix500526@163.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20250821140623.971621-1-phoenix500526@163.com>
+References: <20250821140623.971621-1-phoenix500526@163.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -37,184 +44,210 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJBxpeSyJqdorsZdAA--.26328S4
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoW3Gr15uw4DWF4DuFW7WF1fXwc_yoW7uF1kpF
-	1qkFsY9F18tFW7Wa97XF4Uur1Ykan3A3y5KrW7Ja92gws8Zr98GayrtF1akFy5Gr1kZr1x
-	Aws0vryYkF1xJrbCm3ZEXasCq-sJn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r126r13M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-	GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4
-	xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_WrylYx0Ex4A2jsIE14v2
-	6r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCF04k20xvY0x0EwI
-	xGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480
-	Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7
-	IYx2IY67AKxVW5JVW7JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k2
-	6cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxV
-	AFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07j5l1kUUUUU=
+X-CM-TRANSID:_____wB3RUngJ6doG2VUDA--.41400S3
+X-Coremail-Antispam: 1Uf129KBjvJXoWxtryfArWkXF4kJr1xKFWfZrb_yoWxZF47pa
+	y09rZYyr18tw4Svan3WF40va43Cws7Gr4rZrW8ta45ZFWxWr4UJrWSkr1Yyrn5Jay2yr43
+	XF4YvrWfGF13Zr7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jzlksUUUUU=
+X-CM-SenderInfo: pskrv0dl0viiqvswqiywtou0bp/xtbBgASwiGim-6KgjQAEsG
 
-Currently, LoongArch bpf trampoline supports up to 8 function arguments.
-According to the statistics from commit 473e3150e30a ("bpf, x86: allow
-function arguments up to 12 for TRACING"), there are over 200 functions
-accept 9 to 12 arguments, so add 12 arguments support for trampoline.
+On x86-64, USDT arguments can be specified using Scale-Index-Base (SIB)
+addressing, e.g. "1@-96(%rbp,%rax,8)". The current USDT implementation
+in libbpf cannot parse this format, causing `bpf_program__attach_usdt()`
+to fail with -ENOENT (unrecognized register).
 
-The initial aim is to pass the following related testcases:
+This patch fixes this by implementing the necessary changes:
+- add correct handling for SIB-addressed arguments in `bpf_usdt_arg`.
+- add adaptive support to `__bpf_usdt_arg_type` and
+  `__bpf_usdt_arg_spec` to represent SIB addressing parameters.
 
-  sudo ./test_progs -a tracing_struct/struct_many_args
-  sudo ./test_progs -a fentry_test/fentry_many_args
-  sudo ./test_progs -a fexit_test/fexit_many_args
-
-but there exist some other problems now, maybe it is related with
-the following failed testcase:
-
-  sudo ./test_progs -t module_attach
-
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+Signed-off-by: Jiawei Zhao <phoenix500526@163.com>
 ---
- arch/loongarch/net/bpf_jit.c | 57 ++++++++++++++++++++++++++++--------
- 1 file changed, 45 insertions(+), 12 deletions(-)
+ tools/lib/bpf/usdt.bpf.h | 47 ++++++++++++++++++++++++++++++--
+ tools/lib/bpf/usdt.c     | 58 ++++++++++++++++++++++++++++++++++++----
+ 2 files changed, 98 insertions(+), 7 deletions(-)
 
-diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
-index 7bd4b132755a..805fa6dba2d8 100644
---- a/arch/loongarch/net/bpf_jit.c
-+++ b/arch/loongarch/net/bpf_jit.c
-@@ -1340,26 +1340,48 @@ int bpf_arch_text_invalidate(void *dst, size_t len)
- 	return ret;
- }
+diff --git a/tools/lib/bpf/usdt.bpf.h b/tools/lib/bpf/usdt.bpf.h
+index 2a7865c8e3fe..263168d57286 100644
+--- a/tools/lib/bpf/usdt.bpf.h
++++ b/tools/lib/bpf/usdt.bpf.h
+@@ -4,6 +4,7 @@
+ #define __USDT_BPF_H__
  
--static void store_args(struct jit_ctx *ctx, int nregs, int args_off)
-+static void store_args(struct jit_ctx *ctx, int nr_arg_slots, int args_off)
+ #include <linux/errno.h>
++#include <asm/byteorder.h>
+ #include "bpf_helpers.h"
+ #include "bpf_tracing.h"
+ 
+@@ -34,13 +35,34 @@ enum __bpf_usdt_arg_type {
+ 	BPF_USDT_ARG_CONST,
+ 	BPF_USDT_ARG_REG,
+ 	BPF_USDT_ARG_REG_DEREF,
++	BPF_USDT_ARG_SIB,
+ };
+ 
++/*
++ * This struct layout is designed specifically to be backwards/forward
++ * compatible between libbpf versions for ARG_CONST, ARG_REG, and
++ * ARG_REG_DEREF modes. ARG_SIB requires libbpf v1.7+.
++ */
+ struct __bpf_usdt_arg_spec {
+ 	/* u64 scalar interpreted depending on arg_type, see below */
+ 	__u64 val_off;
+ 	/* arg location case, see bpf_usdt_arg() for details */
+-	enum __bpf_usdt_arg_type arg_type;
++	enum __bpf_usdt_arg_type arg_type: 8;
++#if defined(__LITTLE_ENDIAN_BITFIELD)
++	/* index register offset within struct pt_regs (high 12 bits) */
++	__u16	idx_reg_off: 12,
++	/* scale factor for index register (1, 2, 4, or 8) (low 4 bits) */
++		scale: 4;
++#elif defined(__BIG_ENDIAN_BITFIELD)
++	/* scale factor for index register (1, 2, 4, or 8) (high 4 bits) */
++	__u16	scale: 4,
++	/* index register offset within struct pt_regs (low 12 bits) */
++		idx_reg_off: 12;
++#else
++#error "Please fix <asm/byteorder.h>"
++#endif
++	/* reserved for future use, keeps reg_off offset stable */
++	__u8 reserved;
+ 	/* offset of referenced register within struct pt_regs */
+ 	short reg_off;
+ 	/* whether arg should be interpreted as signed value */
+@@ -149,7 +171,7 @@ int bpf_usdt_arg(struct pt_regs *ctx, __u64 arg_num, long *res)
  {
- 	int i;
+ 	struct __bpf_usdt_spec *spec;
+ 	struct __bpf_usdt_arg_spec *arg_spec;
+-	unsigned long val;
++	unsigned long val, idx;
+ 	int err, spec_id;
  
--	for (i = 0; i < nregs; i++) {
--		emit_insn(ctx, std, LOONGARCH_GPR_A0 + i, LOONGARCH_GPR_FP, -args_off);
-+	for (i = 0; i < nr_arg_slots; i++) {
-+		if (i < LOONGARCH_MAX_REG_ARGS) {
-+			emit_insn(ctx, std, LOONGARCH_GPR_A0 + i, LOONGARCH_GPR_FP, -args_off);
-+		} else {
-+			/* skip slots for T0 and FP of traced function */
-+			emit_insn(ctx, ldd, LOONGARCH_GPR_T1, LOONGARCH_GPR_FP,
-+				  16 + (i - LOONGARCH_MAX_REG_ARGS) * 8);
-+			emit_insn(ctx, std, LOONGARCH_GPR_T1, LOONGARCH_GPR_FP, -args_off);
+ 	*res = 0;
+@@ -202,6 +224,27 @@ int bpf_usdt_arg(struct pt_regs *ctx, __u64 arg_num, long *res)
+ 			return err;
+ #if __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+ 		val >>= arg_spec->arg_bitshift;
++#endif
++		break;
++	case BPF_USDT_ARG_SIB:
++		/* Arg is in memory addressed by SIB (Scale-Index-Base) mode
++		 * (e.g., "-1@-96(%rbp,%rax,8)" in USDT arg spec). We first
++		 * fetch the base register contents and the index register
++		 * contents from pt_regs. Then we calculate the final address
++		 * as base + (index * scale) + offset, and do a user-space
++		 * probe read to fetch the argument value.
++		 */
++		err = bpf_probe_read_kernel(&val, sizeof(val), (void *)ctx + arg_spec->reg_off);
++		if (err)
++			return err;
++		err = bpf_probe_read_kernel(&idx, sizeof(idx), (void *)ctx + arg_spec->idx_reg_off);
++		if (err)
++			return err;
++		err = bpf_probe_read_user(&val, sizeof(val), (void *)(val + (idx * arg_spec->scale) + arg_spec->val_off));
++		if (err)
++			return err;
++#if __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
++		val >>= arg_spec->arg_bitshift;
+ #endif
+ 		break;
+ 	default:
+diff --git a/tools/lib/bpf/usdt.c b/tools/lib/bpf/usdt.c
+index 3373b9d45ac4..730a896a566b 100644
+--- a/tools/lib/bpf/usdt.c
++++ b/tools/lib/bpf/usdt.c
+@@ -9,6 +9,7 @@
+ #include <unistd.h>
+ #include <linux/ptrace.h>
+ #include <linux/kernel.h>
++#include <asm/byteorder.h>
+ 
+ /* s8 will be marked as poison while it's a reg of riscv */
+ #if defined(__riscv)
+@@ -200,12 +201,23 @@ enum usdt_arg_type {
+ 	USDT_ARG_CONST,
+ 	USDT_ARG_REG,
+ 	USDT_ARG_REG_DEREF,
++	USDT_ARG_SIB,
+ };
+ 
+ /* should match exactly struct __bpf_usdt_arg_spec from usdt.bpf.h */
+ struct usdt_arg_spec {
+ 	__u64 val_off;
+-	enum usdt_arg_type arg_type;
++	enum usdt_arg_type arg_type: 8;
++#if defined(__LITTLE_ENDIAN_BITFIELD)
++	__u16	idx_reg_off: 12,
++		scale: 4;
++#elif defined(__BIG_ENDIAN_BITFIELD)
++	__u16	scale: 4,
++		idx_reg_off: 12;
++#else
++#error "Please fix <asm/byteorder.h>"
++#endif
++	__u8 reserved;     /* keep reg_off offset stable */
+ 	short reg_off;
+ 	bool arg_signed;
+ 	char arg_bitshift;
+@@ -1283,11 +1295,46 @@ static int calc_pt_regs_off(const char *reg_name)
+ 
+ static int parse_usdt_arg(const char *arg_str, int arg_num, struct usdt_arg_spec *arg, int *arg_sz)
+ {
+-	char reg_name[16];
+-	int len, reg_off;
+-	long off;
++	char reg_name[16] = {0}, idx_reg_name[16] = {0};
++	int len, reg_off, idx_reg_off, scale = 1;
++	long off = 0;
++
++	if (sscanf(arg_str, " %d @ %ld ( %%%15[^,] , %%%15[^,] , %d ) %n",
++			   arg_sz, &off, reg_name, idx_reg_name, &scale, &len) == 5 ||
++		sscanf(arg_str, " %d @ ( %%%15[^,] , %%%15[^,] , %d ) %n",
++			   arg_sz, reg_name, idx_reg_name, &scale, &len) == 4 ||
++		sscanf(arg_str, " %d @ %ld ( %%%15[^,] , %%%15[^)] ) %n",
++			   arg_sz, &off, reg_name, idx_reg_name, &len) == 4 ||
++		sscanf(arg_str, " %d @ ( %%%15[^,] , %%%15[^)] ) %n",
++			   arg_sz, reg_name, idx_reg_name, &len) == 3
++		) {
++		/*
++		 * Scale Index Base case:
++		 * 1@-96(%rbp,%rax,8)
++		 * 1@(%rbp,%rax,8)
++		 * 1@-96(%rbp,%rax)
++		 * 1@(%rbp,%rax)
++		 */
++		arg->arg_type = USDT_ARG_SIB;
++		arg->val_off = off;
+ 
+-	if (sscanf(arg_str, " %d @ %ld ( %%%15[^)] ) %n", arg_sz, &off, reg_name, &len) == 3) {
++		reg_off = calc_pt_regs_off(reg_name);
++		if (reg_off < 0)
++			return reg_off;
++		arg->reg_off = reg_off;
++
++		idx_reg_off = calc_pt_regs_off(idx_reg_name);
++		if (idx_reg_off < 0)
++			return idx_reg_off;
++		/* validate scale factor and set fields directly */
++		if (scale != 1 && scale != 2 && scale != 4 && scale != 8) {
++			pr_warn("usdt: invalid SIB scale %d, expected 1,2,4,8; defaulting to 1\n", scale);
++			return -EINVAL;
 +		}
- 		args_off -= 8;
- 	}
- }
++		arg->idx_reg_off = idx_reg_off;
++		arg->scale = scale;
++	} else if (sscanf(arg_str, " %d @ %ld ( %%%15[^)] ) %n",
++				arg_sz, &off, reg_name, &len) == 3) {
+ 		/* Memory dereference case, e.g., -4@-20(%rbp) */
+ 		arg->arg_type = USDT_ARG_REG_DEREF;
+ 		arg->val_off = off;
+@@ -1306,6 +1353,7 @@ static int parse_usdt_arg(const char *arg_str, int arg_num, struct usdt_arg_spec
+ 	} else if (sscanf(arg_str, " %d @ %%%15s %n", arg_sz, reg_name, &len) == 2) {
+ 		/* Register read case, e.g., -4@%eax */
+ 		arg->arg_type = USDT_ARG_REG;
++		/* register read has no memory offset */
+ 		arg->val_off = 0;
  
--static void restore_args(struct jit_ctx *ctx, int nregs, int args_off)
-+static void restore_args(struct jit_ctx *ctx, int nr_reg_args, int args_off)
- {
- 	int i;
- 
--	for (i = 0; i < nregs; i++) {
-+	for (i = 0; i < nr_reg_args; i++) {
- 		emit_insn(ctx, ldd, LOONGARCH_GPR_A0 + i, LOONGARCH_GPR_FP, -args_off);
- 		args_off -= 8;
- 	}
- }
- 
-+static void restore_stk_args(struct jit_ctx *ctx, int nr_stk_args,
-+			       int args_off, int stk_arg_off)
-+{
-+	int i;
-+
-+	for (i = 0; i < nr_stk_args; i++) {
-+		emit_insn(ctx, ldd, LOONGARCH_GPR_T1, LOONGARCH_GPR_FP,
-+			  -(args_off - LOONGARCH_MAX_REG_ARGS * 8));
-+		emit_insn(ctx, std, LOONGARCH_GPR_T1, LOONGARCH_GPR_FP,
-+			  -stk_arg_off);
-+		args_off -= 8;
-+		stk_arg_off -= 8;
-+	}
-+}
-+
- static int invoke_bpf_prog(struct jit_ctx *ctx, struct bpf_tramp_link *l,
- 			   const struct btf_func_model *m, int args_off,
- 			   int retval_off, int run_ctx_off, bool save_ret)
-@@ -1477,7 +1499,7 @@ static int __arch_prepare_bpf_trampoline(struct jit_ctx *ctx, struct bpf_tramp_i
- 					 void *func_addr, u32 flags)
- {
- 	int i, ret, save_ret;
--	int stack_size = 0, nregs = m->nr_args;
-+	int stack_size = 0, nr_arg_slots = 0, stk_arg_off;
- 	int retval_off, args_off, nregs_off, ip_off, run_ctx_off, sreg_off, tcc_ptr_off;
- 	bool is_struct_ops = flags & BPF_TRAMP_F_INDIRECT;
- 	void *orig_call = func_addr;
-@@ -1511,9 +1533,13 @@ static int __arch_prepare_bpf_trampoline(struct jit_ctx *ctx, struct bpf_tramp_i
- 	 * FP - sreg_off    [ callee saved reg  ]
- 	 *
- 	 * FP - tcc_ptr_off [ tail_call_cnt_ptr ]
-+	 *
-+	 *                  [ stack_argN        ]
-+	 *                  [ ...               ]
-+	 * FP - stk_arg_off [ stack_arg1        ] BPF_TRAMP_F_CALL_ORIG
- 	 */
- 
--	if (m->nr_args > LOONGARCH_MAX_REG_ARGS)
-+	if (m->nr_args > MAX_BPF_FUNC_ARGS)
- 		return -ENOTSUPP;
- 
- 	/* extra regiters for struct arguments */
-@@ -1544,7 +1570,7 @@ static int __arch_prepare_bpf_trampoline(struct jit_ctx *ctx, struct bpf_tramp_i
- 	}
- 
- 	/* Room of trampoline frame to store args */
--	stack_size += nregs * 8;
-+	stack_size += nr_arg_slots * 8;
- 	args_off = stack_size;
- 
- 	/* Room of trampoline frame to store args number */
-@@ -1570,8 +1596,14 @@ static int __arch_prepare_bpf_trampoline(struct jit_ctx *ctx, struct bpf_tramp_i
- 		tcc_ptr_off = stack_size;
- 	}
- 
-+	if ((flags & BPF_TRAMP_F_CALL_ORIG) && (nr_arg_slots - LOONGARCH_MAX_REG_ARGS > 0))
-+		stack_size += (nr_arg_slots - LOONGARCH_MAX_REG_ARGS) * 8;
-+
- 	stack_size = round_up(stack_size, 16);
- 
-+	/* Room for args on stack must be at the top of stack */
-+	stk_arg_off = stack_size;
-+
- 	if (is_struct_ops) {
- 		/*
- 		 * For the trampoline called directly, just handle
-@@ -1613,10 +1645,10 @@ static int __arch_prepare_bpf_trampoline(struct jit_ctx *ctx, struct bpf_tramp_i
- 	}
- 
- 	/* store arg regs count */
--	move_imm(ctx, LOONGARCH_GPR_T1, nregs, false);
-+	move_imm(ctx, LOONGARCH_GPR_T1, nr_arg_slots, false);
- 	emit_insn(ctx, std, LOONGARCH_GPR_T1, LOONGARCH_GPR_FP, -nregs_off);
- 
--	store_args(ctx, nregs, args_off);
-+	store_args(ctx, nr_arg_slots, args_off);
- 
- 	/* To traced function */
- 	/* Ftrace jump skips 2 NOP instructions */
-@@ -1648,7 +1680,8 @@ static int __arch_prepare_bpf_trampoline(struct jit_ctx *ctx, struct bpf_tramp_i
- 	}
- 
- 	if (flags & BPF_TRAMP_F_CALL_ORIG) {
--		restore_args(ctx, nregs, args_off);
-+		restore_args(ctx, min_t(int, nr_arg_slots, LOONGARCH_MAX_REG_ARGS), args_off);
-+		restore_stk_args(ctx, nr_arg_slots - LOONGARCH_MAX_REG_ARGS, args_off, stk_arg_off);
- 
- 		if (flags & BPF_TRAMP_F_TAIL_CALL_CTX)
- 			emit_insn(ctx, ldd, REG_TCC, LOONGARCH_GPR_FP, -tcc_ptr_off);
-@@ -1685,7 +1718,7 @@ static int __arch_prepare_bpf_trampoline(struct jit_ctx *ctx, struct bpf_tramp_i
- 	}
- 
- 	if (flags & BPF_TRAMP_F_RESTORE_REGS)
--		restore_args(ctx, nregs, args_off);
-+		restore_args(ctx, min_t(int, nr_arg_slots, LOONGARCH_MAX_REG_ARGS), args_off);
- 
- 	if (save_ret) {
- 		emit_insn(ctx, ldd, LOONGARCH_GPR_A0, LOONGARCH_GPR_FP, -retval_off);
+ 		reg_off = calc_pt_regs_off(reg_name);
 -- 
-2.42.0
+2.43.0
 
