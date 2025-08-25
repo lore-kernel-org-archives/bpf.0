@@ -1,101 +1,90 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from out-181.mta1.migadu.com (out-181.mta1.migadu.com [95.215.58.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E88002F0694;
-	Mon, 25 Aug 2025 16:57:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3C873019D7
+	for <bpf@vger.kernel.org>; Mon, 25 Aug 2025 17:00:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756141045; cv=none; b=HlkB2MPlvxNwLB3pAkJoPbQ9YjTqqS1Mg/C0Fz06FVhVXIp5XEjTx6OC3jzAE8XoPhrXC+IB3Tmjliypz2RTX4rxgI7YBQlrKsLJBk/UNu6w1+9k388qj2Jx1A7PjG0O/VRzPk1uNG+PrQ3U8Y6RV2aevie4N83uIijhIQVbP5E=
+	t=1756141214; cv=none; b=ipWGkZsLhrsbFqMvhGExxxgTc6GdlAcr2uC/X/IjksYhEL1/Q5IXRHWypmUraf4j5n1oNFzqEc/DjV0nsBaXY+B5v2MCEwiSXOjD7kVLvZAw1ruYV/L+0A0DZuWqyCep1NwYscsdAHMnqjmWPiI7Hm36sXX60QUVt89hNB3LG0A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756141045; c=relaxed/simple;
-	bh=sEe2Kjb73cyMrklNt7i9Cp03Sqbobdi1D7T+QgIjmDk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eG4WWNZL42f4yZ6UFNA2pmX4iURB+iuWONkRl0XEDssLPzwym+pRLu9eg6vUYB+UiEfpK0ayjP+XDnLxxOiC10IhOiAbo9kI4sJ7eiEeuZ2QZlZ5A/6GH+SORPBOiP7P5jiwFQlFuxCm0y5edpkya2ximPU29iIF/Sv7fTA3DME=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=baiFo9bD; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1756141214; c=relaxed/simple;
+	bh=ggWL8GPworOcyT85eNMo8lBrOLG6QsXHTYPtaF7L9O0=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=YQU3ghQ2Utt4spnF65HWgmZYo1+lEAHhV5UpQjnDUjEOHQa0iC0deGidzNyQj8PjUtwi8y2N8gyKELFR3w/JWiEiWI2F0qxL1EU+66smmvtVLig93Ow0+/AxUPlUD/70h1xBJX4OXk88qvAjREkSR1+ViSjSFDZXO38EvtDLxQw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ZUra9uhh; arc=none smtp.client-ip=95.215.58.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="baiFo9bD"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1756141044; x=1787677044;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=sEe2Kjb73cyMrklNt7i9Cp03Sqbobdi1D7T+QgIjmDk=;
-  b=baiFo9bDUG8zCllqXePc694tKZAcii/TQRg2MTkdbPkIFC8s0dVSTfvB
-   +0ZDx7SqAJMj0SKevOGRrsqZ6j6H/VEqyf9UFmsVN1EqIVM+ZAlTf45Em
-   HRZ4l+fghW7YIVhwCZCN84lOZvCYoPeVWoRbk5Pv+JLEwFOhLJWRL/0+t
-   NGs3I9BGkcbVv84gSEVHufOmB7ydPGjIQ+XfMN9fKTsWsq4owzxZ/prVC
-   KCJHZuMtJCC9MyRHkI/PfAfYP7rs+NZma+EjbzVbN/CVnKlqpGez5hNdQ
-   hBw/ua8QLRFu4D9HBhTADJecko7qnKK0fDwja4L+/gomABnDdK++ybJMf
-   w==;
-X-CSE-ConnectionGUID: D3Mi36EjRbWoXe7XzRyApQ==
-X-CSE-MsgGUID: V26QtKM/TK6NFgvdz3UOWg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="62186815"
-X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="62186815"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2025 09:57:23 -0700
-X-CSE-ConnectionGUID: QJvU2XXuQtmQ6GJE7DHYVg==
-X-CSE-MsgGUID: TgJFq6KJTFiNM3UGwwHrzA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,213,1751266800"; 
-   d="scan'208";a="173744658"
-Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
-  by orviesa004.jf.intel.com with ESMTP; 25 Aug 2025 09:57:19 -0700
-Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uqaVQ-000Nrr-1p;
-	Mon, 25 Aug 2025 16:57:16 +0000
-Date: Tue, 26 Aug 2025 00:56:52 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jason Xing <kerneljasonxing@gmail.com>, davem@davemloft.net,
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-	bjorn@kernel.org, magnus.karlsson@intel.com,
-	maciej.fijalkowski@intel.com, jonathan.lemon@gmail.com,
-	sdf@fomichev.me, ast@kernel.org, daniel@iogearbox.net,
-	hawk@kernel.org, john.fastabend@gmail.com, horms@kernel.org,
-	andrew+netdev@lunn.ch
-Cc: oe-kbuild-all@lists.linux.dev, bpf@vger.kernel.org,
-	netdev@vger.kernel.org, Jason Xing <kernelxing@tencent.com>
-Subject: Re: [PATCH net-next v2 5/9] xsk: add xsk_alloc_batch_skb() to build
- skbs in batch
-Message-ID: <202508260022.JtJJJkAw-lkp@intel.com>
-References: <20250825135342.53110-6-kerneljasonxing@gmail.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ZUra9uhh"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1756141210;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=6uJo9FbTXrzowr8bEe61nZYQy1ZZH3tikDVmsKo+eZ0=;
+	b=ZUra9uhhuroF/AWQrMpTXqdJomo2gUtw+oC8PyZGUMqGcCITfRywK7cZOklUHO1xq4J1h7
+	hXSNz+75AFa0o+inHBTr9VWOSw85k4C++U7huvSKbrcCyrmD0qkCwVh3Ow/Wx6VjYnW+UI
+	7ASd9pZu8gDLNMnaGJN1d6iVB4yLXr8=
+From: Roman Gushchin <roman.gushchin@linux.dev>
+To: Martin KaFai Lau <martin.lau@linux.dev>
+Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>,  linux-mm@kvack.org,
+  bpf@vger.kernel.org,  Suren Baghdasaryan <surenb@google.com>,  Johannes
+ Weiner <hannes@cmpxchg.org>,  Michal Hocko <mhocko@suse.com>,  David
+ Rientjes <rientjes@google.com>,  Matt Bobrowski
+ <mattbobrowski@google.com>,  Song Liu <song@kernel.org>,  Alexei
+ Starovoitov <ast@kernel.org>,  Andrew Morton <akpm@linux-foundation.org>,
+  linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 01/14] mm: introduce bpf struct ops for OOM handling
+In-Reply-To: <1f2711b1-d809-4063-804b-7b2a3c8d933e@linux.dev> (Martin KaFai
+	Lau's message of "Fri, 22 Aug 2025 12:27:48 -0700")
+References: <20250818170136.209169-1-roman.gushchin@linux.dev>
+	<20250818170136.209169-2-roman.gushchin@linux.dev>
+	<CAP01T76AUkN_v425s5DjCyOg_xxFGQ=P1jGBDv6XkbL5wwetHA@mail.gmail.com>
+	<87ms7tldwo.fsf@linux.dev>
+	<1f2711b1-d809-4063-804b-7b2a3c8d933e@linux.dev>
+Date: Mon, 25 Aug 2025 10:00:02 -0700
+Message-ID: <87wm6rwd4d.fsf@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250825135342.53110-6-kerneljasonxing@gmail.com>
+Content-Type: text/plain
+X-Migadu-Flow: FLOW_OUT
 
-Hi Jason,
+Martin KaFai Lau <martin.lau@linux.dev> writes:
 
-kernel test robot noticed the following build errors:
+> On 8/20/25 5:24 PM, Roman Gushchin wrote:
+>>> How is it decided who gets to run before the other? Is it based on
+>>> order of attachment (which can be non-deterministic)?
+>> Yeah, now it's the order of attachment.
+>> 
+>>> There was a lot of discussion on something similar for tc progs, and
+>>> we went with specific flags that capture partial ordering constraints
+>>> (instead of priorities that may collide).
+>>> https://lore.kernel.org/all/20230719140858.13224-2-daniel@iogearbox.net
+>>> It would be nice if we can find a way of making this consistent.
+>
+> +1
+>
+> The cgroup bpf prog has recently added the mprog api support also. If
+> the simple order of attachment is not enough and needs to have
+> specific ordering, we should make the bpf struct_ops support the same
+> mprog api instead of asking each subsystem creating its own.
+>
+> fyi, another need for struct_ops ordering is to upgrade the
+> BPF_PROG_TYPE_SOCK_OPS api to struct_ops for easier extension in the
+> future. Slide 13 in
+> https://drive.google.com/file/d/1wjKZth6T0llLJ_ONPAL_6Q_jbxbAjByp/view
 
-[auto build test ERROR on net-next/main]
+Does it mean it's better now to keep it simple in the context of oom
+patches with the plan to later reuse the generic struct_ops
+infrastructure?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jason-Xing/xsk-introduce-XDP_GENERIC_XMIT_BATCH-setsockopt/20250825-220610
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20250825135342.53110-6-kerneljasonxing%40gmail.com
-patch subject: [PATCH net-next v2 5/9] xsk: add xsk_alloc_batch_skb() to build skbs in batch
-config: i386-buildonly-randconfig-001-20250825 (https://download.01.org/0day-ci/archive/20250826/202508260022.JtJJJkAw-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14+deb12u1) 12.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250826/202508260022.JtJJJkAw-lkp@intel.com/reproduce)
+Honestly, I believe that the simple order of attachment should be
+good enough for quite a while, so I'd not over-complicate this,
+unless it's not fixable later.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202508260022.JtJJJkAw-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   ld: net/core/skbuff.o: in function `xsk_alloc_batch_skb':
->> skbuff.c:(.text+0x7e69): undefined reference to `xsk_build_skb'
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks!
