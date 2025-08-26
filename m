@@ -1,64 +1,64 @@
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 381F627F011;
-	Tue, 26 Aug 2025 07:21:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04D5928A1F1;
+	Tue, 26 Aug 2025 07:21:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756192900; cv=none; b=a6jQ6aj1AabuRDpwvW2bkMW4TEbGMkeqdHmZ/9hUMOlz+KCBUmQ5CdtEacGU4aeAkMlOdmOTOPX2qI1O6r5rC5tZ30qMHM5nfaLlENLj2iDsWTNGwvVmk1kiozgbjOVDzbCRkZJKjprvLZuwFOuUTLOAZA/0ncFwQa+MtYUkVfU=
+	t=1756192912; cv=none; b=PSFcu/1LQdAbYDWPjpfHBleJ/Qivefwotq5WC3s71HM0J0ulIZbBOh5d8+tXjec4JT1CR9sVZjDu0J7g4rrZM8Jyw5ovvuM9HjlzV/wB8hhoB/4b1LPxb5pHNzdhKMdZS7YsfW1z9EspTxFvhYuAMj0IEKl34k4KPAqGgCo1jnc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756192900; c=relaxed/simple;
-	bh=e9ucZJWwjfk4utxd3K4/ijLy5PQrcpiul2JEloToIFA=;
+	s=arc-20240116; t=1756192912; c=relaxed/simple;
+	bh=3DRVri6R6o8lkzsMBbKU5fHO/R7iLByDPyAx0y1tlA0=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=ggX+guyOWuGZGe3nrT/qSU1GSsZlnUtUVrE0EGWnPSTe01jALl2C0YtpKJyw2IAQxv3jC8nWEC6J7PTbp15mYqSkERbA1geaEgh89HJFxMzsWV03289kGEaN0USKnY4SToCh/0ho3P9nvILKKb8P7ZYT0uR2KmbSoBPHiNtU7iI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YGYw1Jcd; arc=none smtp.client-ip=209.85.210.170
+	 MIME-Version; b=kDafFuDEflh7ynMu3zfrz2UuptH1oSnZ/nm4yYr/brfPT/CSjC54GNLxHoTA8wxdPZwzRKTA2caj4nFYcIDq1kltnGN8pUKeM7L8qk23xmN/mrxA94Hrzqthmo7xuQvAY9XG3Xvglfobii6JFbp+c+i4pPuUJFhB8qpm4JUArUE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WnN8OSzx; arc=none smtp.client-ip=209.85.210.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YGYw1Jcd"
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-77057c4d88bso1743408b3a.2;
-        Tue, 26 Aug 2025 00:21:38 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WnN8OSzx"
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-7704f3c46ceso1944309b3a.2;
+        Tue, 26 Aug 2025 00:21:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756192898; x=1756797698; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1756192910; x=1756797710; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=bz96bAWfKvUeaQwW9qQof1i2mU24aQ5U0XcdPEkrqrU=;
-        b=YGYw1JcdMgp4RuQkO2NzR9MHGHiKLoR9wD1pr58mJXgv/3/3t1uZrS1iWTmSM4jJPM
-         smhTcLgjKaQcIFhRxyKsDZk1D2XGMZVN/uIEkeb9QWiii2Vwbz4KvSSutWK2fP97vwXF
-         ib8qB3JMbbveRKiDe1BRVmA1I99mcgW+00kqExUVcWTKbO4U1adJrL6Z10ngG4qRIki1
-         c9ejZjNCdajMNlwBHFRiIzbNojy/MucNmMLyOd8P7rx8aeXoymIkgm00spwFAW61cWb+
-         WdMx8p9nDqFIjSuHE1cszVCGR9MJv3VZERKauUbXCo07SD+CqfreviJRSjRFFmZEEtGn
-         qibw==
+        bh=t13H33qD8qLpbmeE54fNLyxvfIEhKYRpPw50c6x9IkI=;
+        b=WnN8OSzxf5Pv9068TPdExQSJ4GAG7rDopM0K8bLN6Wmfl5sWCZXQ0zJpTKyiyxs8dd
+         BfvAl0JLlHfR3HH/Sv9ANGPAgDeQskTJsvdYdPfcn7AbokoNOFaWwL+jIxathGuwVKdo
+         FbZ5tgaZFBB/YXqrSJXgQjQT4lJjlslMH3+h7n9/CvtHjIuWBR6+7HcqFXCDfPExbRZU
+         F4JIDDQAfLf71/0RMA62lNBhwjEiMgNrqydJ1cChuxY8iG/itLLo5ckK2yZcgxZ2YATj
+         gyTL+2CEtxIZq7lXFfg1sWwyhBUGK/URy1K1wLIU5a3Ii9IJX5pEyeYMhQN6s6hDGpbC
+         pY1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756192898; x=1756797698;
+        d=1e100.net; s=20230601; t=1756192910; x=1756797710;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=bz96bAWfKvUeaQwW9qQof1i2mU24aQ5U0XcdPEkrqrU=;
-        b=c4aw/p5Rg96Ur/Z4mkuj4QdVJEJyKToVeoH7qndUfY5kCxTGzDF4tB6uA2HTnGgZrQ
-         0MqbPjDxtZ2R/vjipkWXTHltcJmRuYsfmRBaNGAX96Mzsu5+17/ToMalDcbamdcgOWj5
-         FLfpc9Nhwk2Q1bpUUGxGwQ5FdIMlnls/GoYnZawyC7J7cS+1LItOVQE+0G5tG1wWY0HJ
-         WdxH5MyQI+CfMubJ3oRQr6+FV7C4ofkEabyocLWjUUAVtZ7hEPq+myVeEbCEPRwL1mSC
-         fojV8CpMMN4gIBYJTsfxZPuR9Xe75hDAuHgRefA+4SfcWO8gvAZuoHyI+ezzD5RbQkCg
-         zcjA==
-X-Forwarded-Encrypted: i=1; AJvYcCU0lTUL5P5sJ48coE6OzizBqYMJeHfixOYEB1UJcP4aebB+K66qG7LigXQ0wBr+pFV2NxQbaMUqegk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzC/lYHTWlUHig6dRB9CAwN99vjaLjcndL4Wg8jq8FPPZHf+5mZ
-	XViP1Q26lwECJHrNZLIcvk93y3ZvgZ253oVlda7Hjf2MnuhC8bZpZYV6
-X-Gm-Gg: ASbGncsbXgjKSA/emMW2De00EFvKOPylbAq1M2rOOwZ4p44QMxfz2poFbSix9a13AXH
-	hiFFRklqZKIclJ0jx4HvVtpyX8+3zZzoGAFR5e6k0+32pRBpE7kCS3hbWPyHQvOTEG2ANQ7dCPT
-	tCHSMqEpwnD9uxktjGAGvwW+GZfspm2MlbN/QHSGzls/39PY0+vYc6zPZgq99lbSSaUWqse7+eS
-	oRRTCMJSyUC+sduN8zJ/sJFyabJj+h3ybBa+9uXAEiJVhlcN1iFi3eoIErLwMV6oVYNPqSAkiQ5
-	lj1PEiwTcFn4T0QvhKeRo7MeuzRF2IqmqLE6eLbpMyIhHcQM2EJcWlQ5+bfTwIl+qE8bkh//o8X
-	sEjM/BokvplplA3MDAHA+CLeTUJyIF07QzCAE4zDJe3wcp2kG3xqkJe5JkhHyTIKmVlz0ovWKMz
-	Qvagjncpb4uQ++FQ==
-X-Google-Smtp-Source: AGHT+IHYvLUPX3UVhLFe8oerWPn+sp10WcjZPcf8Lvgh+d7IM89u6xbawEntdDvzZ3ZPexMDp+HCUw==
-X-Received: by 2002:a05:6a00:4189:b0:771:e2f7:5a12 with SMTP id d2e1a72fcca58-771e2f75d15mr9184474b3a.6.1756192898165;
-        Tue, 26 Aug 2025 00:21:38 -0700 (PDT)
+        bh=t13H33qD8qLpbmeE54fNLyxvfIEhKYRpPw50c6x9IkI=;
+        b=NvuiDQcaw4Yo5ncyzJ1KF/rzYPv3+OgErEIIhPqMh4CtDHIShEb447MkfY25vbJotg
+         f5FXwmx+y5+I7tOaCEZPkO7qE2Jzb8Y685nYN/1VzSKKrZXXzy3ehFy+uv+oiD9R6vzC
+         nXNFlFmLiamKir9mA73CTNARA+/aNyCmybvWibPlvxWHJszHFgeYAgAYxLTUBlDikBFP
+         2+/jxlKK0KdXFExPAfBpt0mKOK4el+oLXlbagDPi4L3bBuhPwNLv0S3VtgsSL53tos2F
+         d4i50hj+A7AdZ+UrkAFwCeuQKUL4SheBx/Vs33t+w57Bipa4+eHmpEBCVe8qwdxo/o1w
+         BM+A==
+X-Forwarded-Encrypted: i=1; AJvYcCW8K3fYS9NzfFkOGgnJ6vmjcgAuAqQNdq7UL/uii549JoxccC8KvgYHcNI7PClEgP6QqyVddhPIoqk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy3rpvd/2gEfB/9FfpNoov3D6H+KN31smeQM8TMzcd1npVdNwdp
+	z43JsyY4hcE66FBlpLjKWvAbORSfpTcDBGjbQ41wbrsW+sb85om2nSZy
+X-Gm-Gg: ASbGncs3PdT2XyqaUAHAMzRZAgfwJcyOn71hfBuDYa6ELwYRZwW5gyqWeD0o74N3kV0
+	n6K6AjjbWJ0e/ui/vp5SDUee8i4DOSIl2QCr2mu9kWeT7w9AlvPuJSiaKXunOC3PNjmoHbsbj+z
+	Ob2kgz5khoRQctjJvXtVbOK4C+73a2bUrzlUaMqqMkh9WO3FF6pswZ/Xhr/JlEG8S7qcGZ8vfGu
+	rVsuQ5m1nDRbs7gajPJOAkDdJuZRl2VSuQ6Ulaz2PCN7Vu1elFDQid+ZCVqjxM1MEFQUvEVYNSQ
+	4IJD84XSQKBQD9CXqR9yIxtugjVvlMwIJxOu698UYjo84KaBiWf1MTq956N8Q5vigwe65283cng
+	SoHrCvrOYkdsCwi+CIOEu8YtH1Sj8Lyw4AiqZJjoH221OkLwixN1cluCAG8rhOKEyNUxAx5QgTN
+	x9DCk=
+X-Google-Smtp-Source: AGHT+IEu2b0RM+dE+zHiTagKiYCBPegaYQagDUGzf74IowO/NX6e+8Qmik0yxURJXoig5rjUT1KdPg==
+X-Received: by 2002:a05:6a20:a110:b0:240:763:797e with SMTP id adf61e73a8af0-24340b8a6a0mr22053427637.25.1756192910180;
+        Tue, 26 Aug 2025 00:21:50 -0700 (PDT)
 Received: from localhost.localdomain ([101.82.213.56])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-770401ecc51sm9686052b3a.75.2025.08.26.00.21.26
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-770401ecc51sm9686052b3a.75.2025.08.26.00.21.38
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Tue, 26 Aug 2025 00:21:37 -0700 (PDT)
+        Tue, 26 Aug 2025 00:21:49 -0700 (PDT)
 From: Yafang Shao <laoar.shao@gmail.com>
 To: akpm@linux-foundation.org,
 	david@redhat.com,
@@ -83,9 +83,9 @@ Cc: bpf@vger.kernel.org,
 	linux-mm@kvack.org,
 	linux-doc@vger.kernel.org,
 	Yafang Shao <laoar.shao@gmail.com>
-Subject: [PATCH v6 mm-new 08/10] selftests/bpf: add test cases for invalid thp_adjust usage
-Date: Tue, 26 Aug 2025 15:19:46 +0800
-Message-Id: <20250826071948.2618-9-laoar.shao@gmail.com>
+Subject: [PATCH v6 mm-new 09/10] Documentation: add BPF-based THP adjustment documentation
+Date: Tue, 26 Aug 2025 15:19:47 +0800
+Message-Id: <20250826071948.2618-10-laoar.shao@gmail.com>
 X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
 In-Reply-To: <20250826071948.2618-1-laoar.shao@gmail.com>
 References: <20250826071948.2618-1-laoar.shao@gmail.com>
@@ -97,141 +97,68 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-1. The trusted VMA pointer can be null and must be checked before
-   dereferencing.
-2. Resources acquired via bpf_mm_get_task() must be released with
-   bpf_task_release().
-3. Memory groups obtained through bpf_mm_get_mem_cgroup() must be released
-   using bpf_put_mem_cgroup().
+Add the documentation.
 
 Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
 ---
- .../selftests/bpf/prog_tests/thp_adjust.c     |  7 +++++
- .../bpf/progs/test_thp_adjust_trusted_vma.c   | 27 +++++++++++++++++++
- .../progs/test_thp_adjust_unreleased_memcg.c  | 24 +++++++++++++++++
- .../progs/test_thp_adjust_unreleased_task.c   | 25 +++++++++++++++++
- 4 files changed, 83 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/test_thp_adjust_trusted_vma.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_thp_adjust_unreleased_memcg.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_thp_adjust_unreleased_task.c
+ Documentation/admin-guide/mm/transhuge.rst | 47 ++++++++++++++++++++++
+ 1 file changed, 47 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/thp_adjust.c b/tools/testing/selftests/bpf/prog_tests/thp_adjust.c
-index 6e65d7b0eb80..846679acaff2 100644
---- a/tools/testing/selftests/bpf/prog_tests/thp_adjust.c
-+++ b/tools/testing/selftests/bpf/prog_tests/thp_adjust.c
-@@ -11,6 +11,9 @@
- #include <test_progs.h>
- #include "cgroup_helpers.h"
- #include "test_thp_adjust.skel.h"
-+#include "test_thp_adjust_trusted_vma.skel.h"
-+#include "test_thp_adjust_unreleased_task.skel.h"
-+#include "test_thp_adjust_unreleased_memcg.skel.h"
- 
- #define LEN (16 * 1024 * 1024) /* 16MB */
- #define THP_ENABLED_FILE "/sys/kernel/mm/transparent_hugepage/enabled"
-@@ -333,4 +336,8 @@ void test_thp_adjust(void)
- 		subtest_thp_policy_update();
- 
- 	thp_adjust_destroy();
+diff --git a/Documentation/admin-guide/mm/transhuge.rst b/Documentation/admin-guide/mm/transhuge.rst
+index a16a04841b96..1725b89426a9 100644
+--- a/Documentation/admin-guide/mm/transhuge.rst
++++ b/Documentation/admin-guide/mm/transhuge.rst
+@@ -734,3 +734,50 @@ support enabled just fine as always. No difference can be noted in
+ hugetlbfs other than there will be less overall fragmentation. All
+ usual features belonging to hugetlbfs are preserved and
+ unaffected. libhugetlbfs will also work fine as usual.
 +
-+	RUN_TESTS(test_thp_adjust_trusted_vma);
-+	RUN_TESTS(test_thp_adjust_unreleased_task);
-+	RUN_TESTS(test_thp_adjust_unreleased_memcg);
- }
-diff --git a/tools/testing/selftests/bpf/progs/test_thp_adjust_trusted_vma.c b/tools/testing/selftests/bpf/progs/test_thp_adjust_trusted_vma.c
-new file mode 100644
-index 000000000000..caa73bebefcf
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_thp_adjust_trusted_vma.c
-@@ -0,0 +1,27 @@
-+// SPDX-License-Identifier: GPL-2.0
++BPF-based THP adjustment
++========================
 +
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
++Overview
++--------
 +
-+#include "bpf_misc.h"
++When the system is configured with "always" or "madvise" THP mode, a BPF program
++can be used to adjust THP allocation policies dynamically. This enables
++fine-grained control over THP decisions based on various factors including
++workload identity, allocation context, and system memory pressure.
 +
-+char _license[] SEC("license") = "GPL";
++Program Interface
++-----------------
 +
-+SEC("struct_ops/get_suggested_order")
-+__failure __msg("R1 invalid mem access 'trusted_ptr_or_null_'")
-+int BPF_PROG(thp_trusted_vma, struct mm_struct *mm, struct vm_area_struct *vma__nullable,
-+	     u64 vma_flags, u64 tva_flags, int orders)
-+{
-+	struct mem_cgroup *memcg = bpf_mm_get_mem_cgroup(vma__nullable->vm_mm);
++This feature implements a struct_ops BPF program with the following interface::
 +
-+	if (!memcg)
-+		return 0;
++  int (*get_suggested_order)(struct mm_struct *mm,
++                             struct vm_area_struct *vma__nullable,
++                             u64 vma_flags, enum tva_type tva_flags, int orders)
 +
-+	bpf_put_mem_cgroup(memcg);
-+	return 1;
-+}
-+SEC(".struct_ops.link")
-+struct bpf_thp_ops thp_memcg_ops = {
-+	.get_suggested_order = (void *)thp_trusted_vma,
-+};
-diff --git a/tools/testing/selftests/bpf/progs/test_thp_adjust_unreleased_memcg.c b/tools/testing/selftests/bpf/progs/test_thp_adjust_unreleased_memcg.c
-new file mode 100644
-index 000000000000..467befebb35f
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_thp_adjust_unreleased_memcg.c
-@@ -0,0 +1,24 @@
-+// SPDX-License-Identifier: GPL-2.0
++Parameters::
 +
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
++  @mm:  mm_struct associated with the THP allocation
++  @vma__nullable: vm_area_struct associated with the THP allocation (may be NULL)
++                  When NULL, the decision should be based on @mm (i.e., when
++                  triggered from an mm-scope hook rather than a VMA-specific
++                  context)
++                  Must belong to @mm (guaranteed by the caller).
++  @vma_flags: use these vm_flags instead of @vma->vm_flags (0 if @vma is NULL)
++  @tva_flags: TVA flags for current @vma (-1 if @vma is NULL)
++  @orders: Bitmask of requested THP orders for this allocation
++           - PMD-mapped allocation if PMD_ORDER is set
++           - mTHP allocation otherwise
 +
-+#include "bpf_misc.h"
++Return value::
 +
-+char _license[] SEC("license") = "GPL";
++  Bitmask of suggested THP orders for allocation. The highest suggested order
++  will not exceed the highest requested order in @orders.
 +
-+SEC("struct_ops/get_suggested_order")
-+__failure __msg("Unreleased reference")
-+int BPF_PROG(thp_unreleased_memcg, struct mm_struct *mm, struct vm_area_struct *vma__nullable,
-+	     u64 vma_flags, u64 tva_flags, int orders)
-+{
-+	struct mem_cgroup *memcg = bpf_mm_get_mem_cgroup(mm);
++Implementation Notes
++--------------------
 +
-+	/* The memcg should be released with bpf_put_mem_cgroup() */
-+	return memcg ? 0 : 1;
-+}
-+SEC(".struct_ops.link")
-+struct bpf_thp_ops thp_memcg_ops = {
-+	.get_suggested_order = (void *)thp_unreleased_memcg,
-+};
-diff --git a/tools/testing/selftests/bpf/progs/test_thp_adjust_unreleased_task.c b/tools/testing/selftests/bpf/progs/test_thp_adjust_unreleased_task.c
-new file mode 100644
-index 000000000000..50d756810412
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_thp_adjust_unreleased_task.c
-@@ -0,0 +1,25 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+#include "bpf_misc.h"
-+
-+char _license[] SEC("license") = "GPL";
-+
-+SEC("struct_ops/get_suggested_order")
-+__failure __msg("Unreleased reference")
-+int BPF_PROG(thp_unreleased_task, struct mm_struct *mm, struct vm_area_struct *vma__nullable,
-+	     u64 vma_flags, u64 tva_flags, int orders)
-+{
-+	struct task_struct *p = bpf_mm_get_task(mm);
-+
-+	/* The task should be released with bpf_task_release() */
-+	return p ? 0 : 1;
-+}
-+
-+SEC(".struct_ops.link")
-+struct bpf_thp_ops thp_task_ops = {
-+	.get_suggested_order = (void *)thp_unreleased_task,
-+};
++This is currently an experimental feature.
++CONFIG_EXPERIMENTAL_BPF_ORDER_SELECTION must be enabled to use it.
++Only one BPF program can be attached at a time, but the program can be updated
++dynamically to adjust policies without requiring affected tasks to be restarted.
 -- 
 2.47.3
 
