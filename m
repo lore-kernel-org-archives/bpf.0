@@ -1,152 +1,179 @@
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 659B021CA1C
-	for <bpf@vger.kernel.org>; Tue, 26 Aug 2025 16:09:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAA4F1B85F8;
+	Tue, 26 Aug 2025 16:13:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756224563; cv=none; b=iUlw2DMj159oIDifQwn1PSPRvE9vhyqgvxShczm1dOLXJhqYq8hUEF0kLg7xNy1v20Tr3k0B2nYJMGKOaWm4MVWSaLYAFuf2eT9lpaORmi0boPpIPnU2bn44VBvjcgRwDkr0sxL8vx2Aphr+Aoh2WqWAcXFAGgGAcJ5SzN3oBEk=
+	t=1756224809; cv=none; b=gMIcuOskKmOFEjbk+g1xj1qfWT6u9BA7ICaCrZo6Qq4jQbJusXi0sWBlxLuYN5G6U5H/DASQtorOs2lpmMrdRuMjNLVC+s9GDsmz4e3V9fT2+W7RoBxPaxj2hOGjNUCBPUUT6TI1jURm9kZEqJpsfmdbzRmMjHGHjSDrfzD78Ao=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756224563; c=relaxed/simple;
-	bh=zHqD1tnfOus6RrMhPlhcngpbfo+Lu4WSuJ/IJhrCWHs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VvqLVN/VoWUsUZMwdDy2yKB5VBCJldLrpJEDWM/cp7Rt3Vy3OzvLlY7OyffyW0OlhDqqVs1u2yziGoryq4tSIsOD/0RH4TcHHnkGuBzehqdAOM2+fGpL05fCgf0HTINvN/hwpYSQoIVIY13aY1EXciH9Xim6jidNG+ietuRF6UI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Lk+5RUR/; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1756224809; c=relaxed/simple;
+	bh=fQ3qr7gSKNiOWy7nrlKhfuZMLVGkbuKfJR1k3nNyANI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=MKZkrQ5vRK5m1Wg1AXR4VBGcwbAKhVNoJQ5On8HVLlqScIWhGRuRLEygk/bjlB6/7/56G5ikaJFeC/3DddknhXKkQfoqUrDXmpgbubOy/4xBG6JeDP/8cyPXKMpHIgfT4vVXf3/jEdD4Zyex/Zkxur8z0RfBPqUNVfoJ/5rQuec=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QmvUoE9i; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Lk+5RUR/"
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-45a1b0c8867so48111115e9.3
-        for <bpf@vger.kernel.org>; Tue, 26 Aug 2025 09:09:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756224560; x=1756829360; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=mvGuvisTAsNwEdG7fcgY8wL1+KWNZ8cH4WX2PTFNj3w=;
-        b=Lk+5RUR/uEmFIqhFiyL2J3rD6xQubwUSLA9LukSXWkguX3SD355R9MkAgGeXLq/crn
-         7IGbwFANWoTcP1hDZ0jYvxRZM9avGCPJ9MHTL2CNLPb8vJXM3AlAg9CAZYkeegIillgH
-         iR6EtaSoyU2ekSQ53NESFC8wq6YsxfhvzhnnMUJxY9BOv1MoVKrnP2i4TkMOETPq1tpY
-         Co/uuz15qB9SDD2S7JuGkh37SQKTKrnuO6PKB1aW2lGAecm8Hx5HuR3EWr22U+64tAtI
-         e3U00fvjyLHNpNxZQ0TWmbgd/rVeYbp3Dh4rg45mYCzV1WRmbHUBYlxvxS734qu2XYMH
-         J6KQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756224560; x=1756829360;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mvGuvisTAsNwEdG7fcgY8wL1+KWNZ8cH4WX2PTFNj3w=;
-        b=BwBww3X34D89xe79f7/UIHK4SD/J4zH5OUxFGhHJEpmClqWa8iRSrBfkDz3O0uYDaY
-         F6xfZ5nJvH6bRvhokVidcyRgzluE71cl9Hfdk5D88c1//adFXj97/W1Go89squnqvBCY
-         cCDfYJUc/clbW2fWqMUQMgzIPfIE3mjNW58P0daKdkTzhBdCAIlgAIsPwTgNPTNj5yWn
-         9xfjEeEiBbXVnaxsHQmceyW0+cn87Ec87CzXs7i7ONw9Do8PgxZwr+JjZX6gX2Bpz4Dx
-         v4chLqyyLChwuKUiZnGTV2eEOODjGC4qUa6zfFnApaBfXjJTnS6mBP/n1fp9YIKDb+Cc
-         b/vA==
-X-Gm-Message-State: AOJu0Yx6BELtrTA693/4SWWQ0OKVXJXUXbjI9lxIZTOHv1gfDOakhtgr
-	mosNuuwnt84VugHB2JCKobDhJqjqs5R0JsLzzBRHn6UgN5ZuQ3YOmprm
-X-Gm-Gg: ASbGnct5zLU3lzjMXE0cSosJ9QgwBJXfoAGiG9SHJaj5eOyag6CE+cLxlyvdT6QhjSy
-	t38Z5mU6nH2ka6Yl0G/Mrc/co3sI0ywc06fuBv+XoIu8b3swBUFk4CL4MlDy0Ydig623Xm5CFVs
-	JHiTF86LPKrOVmQX0xcy0zR/on7jp7NHdZW597y78t50mECfGjzY+atBzIxeuTEiNmuVWVHwclw
-	dXgYxLCWiP/jzauS5tEiX5m3dtiLIMp6sdyzEP2kUC/w7pqYhRmgDngYbDEp2Hfyve6ZUoqF0qF
-	rEg1zEjdXxrtUPlJ+gZSvneJ7+ZaMMP2CGEzqvMu6ayRbHsjzuGHU0/W+AUAPOXaUWF4R6ti+Xz
-	x2CVdVA8tafBAE2O94ovtLZD3xwcAQ307GQ==
-X-Google-Smtp-Source: AGHT+IFogSDQYYWZq3hiTS6e2AAompH7CAy18yL924Hjii6dlavlWRYCwJt8u7B8gtMFrCDbN3DDRg==
-X-Received: by 2002:a05:600c:1d23:b0:45a:236a:23ba with SMTP id 5b1f17b1804b1-45b648f7ddcmr42186875e9.22.1756224559408;
-        Tue, 26 Aug 2025 09:09:19 -0700 (PDT)
-Received: from mail.gmail.com ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3c7116e1483sm16642600f8f.50.2025.08.26.09.09.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Aug 2025 09:09:18 -0700 (PDT)
-Date: Tue, 26 Aug 2025 16:15:25 +0000
-From: Anton Protopopov <a.s.protopopov@gmail.com>
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Anton Protopopov <aspsk@isovalent.com>,
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QmvUoE9i"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1756224808; x=1787760808;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=fQ3qr7gSKNiOWy7nrlKhfuZMLVGkbuKfJR1k3nNyANI=;
+  b=QmvUoE9iZtQmjisDuQXofq+ySrEV9ZJzYRyPdF5URDQXJoNyUXZiq3kR
+   kafTT3uwkAaq5Iy8fxLJk6yWFOk9ePM3XG6stypOzj8ByAun6NzcxoC/o
+   MAF5PxjRIJKPNHmbp4AEgE/5f2AVI8CJtGmo3UTbO9nzE9UwG0VY6LXs7
+   RIZ2VxkALUTEKSPmNc1Ds7VLymt69ggCD8sThmafyedWUV37b+L0Q/bdM
+   gF009rCOjuysO1JFhKC0P7wlyRrbmxN9gxSXKXhvUgDN+6tg5rstvpFOU
+   YgPQJjYcroSrL3C3whHnC2FCPn7JqLbMCxlXxv0WWYABPeeW5vzhLCBzz
+   Q==;
+X-CSE-ConnectionGUID: VBONU64oQQm5eqdISJdxbQ==
+X-CSE-MsgGUID: euyyfDm+TuWjLaSLhfmO8g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11534"; a="46044850"
+X-IronPort-AV: E=Sophos;i="6.18,214,1751266800"; 
+   d="scan'208";a="46044850"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2025 09:13:27 -0700
+X-CSE-ConnectionGUID: yOy3j64zTuW3pL1C0sTFrA==
+X-CSE-MsgGUID: x/6I4/jBRouXbhqLejwyhg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,214,1751266800"; 
+   d="scan'208";a="200562024"
+Received: from newjersey.igk.intel.com ([10.102.20.203])
+  by orviesa002.jf.intel.com with ESMTP; 26 Aug 2025 09:13:22 -0700
+From: Alexander Lobakin <aleksander.lobakin@intel.com>
+To: intel-wired-lan@lists.osuosl.org
+Cc: Alexander Lobakin <aleksander.lobakin@intel.com>,
+	Michal Kubiak <michal.kubiak@intel.com>,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	Tony Nguyen <anthony.l.nguyen@intel.com>,
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
-	Quentin Monnet <qmo@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>
-Subject: Re: [PATCH v1 bpf-next 10/11] libbpf: support llvm-generated
- indirect jumps
-Message-ID: <aK3dnUhX2aYw6//s@mail.gmail.com>
-References: <20250816180631.952085-1-a.s.protopopov@gmail.com>
- <20250816180631.952085-11-a.s.protopopov@gmail.com>
- <69306a9742679ae8439fab4b415e3ca86683e61d.camel@gmail.com>
+	Simon Horman <horms@kernel.org>,
+	nxne.cnse.osdt.itp.upstreaming@intel.com,
+	bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH iwl-next v5 00/13] idpf: add XDP support
+Date: Tue, 26 Aug 2025 17:54:54 +0200
+Message-ID: <20250826155507.2138401-1-aleksander.lobakin@intel.com>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <69306a9742679ae8439fab4b415e3ca86683e61d.camel@gmail.com>
+Content-Transfer-Encoding: 8bit
 
-On 25/08/25 05:06PM, Eduard Zingerman wrote:
-> On Sat, 2025-08-16 at 18:06 +0000, Anton Protopopov wrote:
-> 
-> [...]
-> 
-> > diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> > index fe4fc5438678..a5f04544c09c 100644
-> > --- a/tools/lib/bpf/libbpf.c
-> > +++ b/tools/lib/bpf/libbpf.c
-> 
-> [...]
-> 
-> > @@ -6101,6 +6124,60 @@ static void poison_kfunc_call(struct bpf_program *prog, int relo_idx,
-> >  	insn->imm = POISON_CALL_KFUNC_BASE + ext_idx;
-> >  }
-> >  
-> > +static int create_jt_map(struct bpf_object *obj, int off, int size, int adjust_off)
-> > +{
-> > +	static union bpf_attr attr = {
-> > +		.map_type = BPF_MAP_TYPE_INSN_ARRAY,
-> > +		.key_size = 4,
-> > +		.value_size = sizeof(struct bpf_insn_array_value),
-> > +		.max_entries = 0,
-> > +	};
-> > +	struct bpf_insn_array_value val = {};
-> > +	int map_fd;
-> > +	int err;
-> > +	__u32 i;
-> > +	__u32 *jt;
-> > +
-> > +	attr.max_entries = size / 8;
-> > +
-> > +	map_fd = syscall(__NR_bpf, BPF_MAP_CREATE, &attr, sizeof(attr));
-> > +	if (map_fd < 0)
-> > +		return map_fd;
-> > +
-> > +	jt = (__u32 *)(obj->efile.jumptables_data.d_buf + off);
->   	     ^^^^^^^^^
->     Jump table entries are u64 now, e.g. see test case:
->     https://github.com/llvm/llvm-project/blob/39dc3c41e459e6c847c1e45e7e93c53aaf74c1de/llvm/test/CodeGen/BPF/jump_table_swith_stmt.ll#L68
-> 
-> [...]
+Add XDP support (w/o XSk for now) to the idpf driver using the libeth_xdp
+sublib. All possible verdicts, .ndo_xdp_xmit(), multi-buffer etc. are here.
+In general, nothing outstanding comparing to ice, except performance --
+let's say, up to 2x for .ndo_xdp_xmit() on certain platforms and
+scenarios.
+idpf doesn't support VLAN Rx offload, so only the hash hint is
+available for now.
 
-Yes, thanks, I will change it to u64. (Just in case, it works now
-because the code happens to work properly on little-endian: it uses
-jt[2*i] for i-th element.)
+Patches 1-7 are prereqs, without which XDP would either not work at all or
+work slower/worse/...
 
-> > @@ -6389,36 +6481,58 @@ static int append_subprog_relos(struct bpf_program *main_prog, struct bpf_progra
-> 
-> [...]
-> 
-> >  static int
-> >  bpf_object__append_subprog_code(struct bpf_object *obj, struct bpf_program *main_prog,
-> > -				struct bpf_program *subprog)
-> > +		struct bpf_program *subprog)
-> >  {
-> > -       struct bpf_insn *insns;
-> > -       size_t new_cnt;
-> > -       int err;
-> > +	struct bpf_insn *insns;
-> > +	size_t new_cnt;
-> > +	int err;
-> 
-> Could you please extract spaces vs tabs fix for this function as a separate commit?
-> Just to make diff easier to read.
-> 
-> [...]
+Alexander Lobakin (9):
+  xdp, libeth: make the xdp_init_buff() micro-optimization generic
+  idpf: fix Rx descriptor ready check barrier in splitq
+  idpf: use a saner limit for default number of queues to allocate
+  idpf: link NAPIs to queues
+  idpf: add support for nointerrupt queues
+  idpf: use generic functions to build xdp_buff and skb
+  idpf: add support for XDP on Rx
+  idpf: add support for .ndo_xdp_xmit()
+  idpf: add XDP RSS hash hint
 
-Sure, sorry, I haven't noticed it.
+Michal Kubiak (4):
+  idpf: add 4-byte completion descriptor definition
+  idpf: remove SW marker handling from NAPI
+  idpf: prepare structures to support XDP
+  idpf: implement XDP_SETUP_PROG in ndo_bpf for splitq
+
+ drivers/net/ethernet/intel/idpf/Kconfig       |   2 +-
+ drivers/net/ethernet/intel/idpf/Makefile      |   2 +
+ drivers/net/ethernet/intel/idpf/idpf.h        |  31 +-
+ .../net/ethernet/intel/idpf/idpf_lan_txrx.h   |   6 +-
+ drivers/net/ethernet/intel/idpf/idpf_txrx.h   | 140 ++++--
+ .../net/ethernet/intel/idpf/idpf_virtchnl.h   |   1 -
+ drivers/net/ethernet/intel/idpf/xdp.h         | 172 +++++++
+ include/net/libeth/xdp.h                      |  11 +-
+ include/net/xdp.h                             |  28 +-
+ drivers/net/ethernet/intel/idpf/idpf_dev.c    |  11 +-
+ drivers/net/ethernet/intel/idpf/idpf_lib.c    |  67 ++-
+ drivers/net/ethernet/intel/idpf/idpf_main.c   |   1 +
+ .../ethernet/intel/idpf/idpf_singleq_txrx.c   | 110 ++---
+ drivers/net/ethernet/intel/idpf/idpf_txrx.c   | 424 ++++++++--------
+ drivers/net/ethernet/intel/idpf/idpf_vf_dev.c |  11 +-
+ .../net/ethernet/intel/idpf/idpf_virtchnl.c   | 173 ++++---
+ drivers/net/ethernet/intel/idpf/xdp.c         | 454 ++++++++++++++++++
+ 17 files changed, 1217 insertions(+), 427 deletions(-)
+ create mode 100644 drivers/net/ethernet/intel/idpf/xdp.h
+ create mode 100644 drivers/net/ethernet/intel/idpf/xdp.c
+
+---
+From v4[0]:
+* 08/13: fix rare crashes when the number of XDPQSs < nr_cpu_ids -- merge
+         artefacts after rebasing on top of Joshua's recent changes;
+* 09/13: fix "suspicious RCU usage" during rmmod when lockdep is enabled.
+
+From v3[1]:
+* 01/13: make the xdp_init_buff() micro-opt generic, include some
+         bloat-o-meter and perf diffs (Simon, Kees);
+* 08/13: don't include XDPSQs in Ethtool's 'other_count' (Ethtool
+         channels are interrupts!) (Jakub);
+* 11/13:
+  * finalize XDPSQs a bit earlier on Rx;
+  * show some bloat-o-meter and performance diffs for
+    __LIBETH_WORD_ACCESS (Jakub).
+
+From v2[2]:
+* rebase on top of [3] to resolve conflicts in Tony's tree;
+* 02:
+  * harmonize maximum number of queues to not create more Tx queues than
+    completion queues or more Rx queues than buffer queues / 2;
+  * fix VC timeouts on certain steppings as there processing a lot of queues
+    can take more time than the minimum timeout of 2 seconds;
+* 03: fix RTNL assertion fail on PCI reset.
+
+From v1[4]:
+* drop the libeth_xdp part (submitted separately and accepted);
+* fix some typos and kdocs (Jakub, Maciej);
+* pick a couple RBs (Maciej);
+* 03: create a convenience helper (Maciej), fix rtnl assertion fail;
+* 04: since XDP uses its own queue cleaning routines, don't add 4-byte
+      completion support to the skb code;
+* 05: don't use old weird logic with negative descriptor index (Maciej);
+* 06: fix invalid interrupt vector counting in certain cases;
+* 07: fix cleanup timer is fired after the queue buffers are already freed;
+* 08: fix XDP program removal in corner cases such as PCI reset or
+      remove request when there's no active prog (from netdev_unregister());
+* 10: fix rare queue stuck -- HW requires to always have at least one free Tx
+      descriptor on the queue, otherwise it thinks the queue is empty and
+      there's nothing to send (true Intel HW veteran bug).
+
+Testing hints: basic Rx and Tx (TCP, UDP, VLAN, HW GRO on/off, trafficgen
+stress tests, performance comparison); xdp-tools with all possible actions
+(xdp-bench for PASS, DROP, TX, REDIRECT to cpumap, devmap (inc self-redirect);
+xdp-trafficgen to double-check XDP xmit). Would be nice to see a perf
+comparison against ice (in percent) (idpf must be plugged into a PCIe 4+).
+
+[0] https://lore.kernel.org/intel-wired-lan/20250811161044.32329-1-aleksander.lobakin@intel.com
+[1] https://lore.kernel.org/intel-wired-lan/20250730160717.28976-1-aleksander.lobakin@intel.com
+[2] https://lore.kernel.org/intel-wired-lan/20250624164515.2663137-1-aleksander.lobakin@intel.com
+[3] https://lore.kernel.org/intel-wired-lan/20250725184223.4084821-1-joshua.a.hay@intel.com
+[4] https://lore.kernel.org/intel-wired-lan/20250305162132.1106080-1-aleksander.lobakin@intel.com
+-- 
+2.51.0
+
