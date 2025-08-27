@@ -1,371 +1,135 @@
-Received: from out-183.mta0.migadu.com (out-183.mta0.migadu.com [91.218.175.183])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f79.google.com (mail-io1-f79.google.com [209.85.166.79])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FE242114
-	for <bpf@vger.kernel.org>; Wed, 27 Aug 2025 16:46:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADBE7166F1A
+	for <bpf@vger.kernel.org>; Wed, 27 Aug 2025 17:00:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.79
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756313169; cv=none; b=cGjcstJQ2JW9zdSZLSZGYJ/Osjg5hEOvv8Tm5QjXnnMkrIGH4DAHSNjjf2iTPQ+VMYP0fR6sjsqgxDPVy67IZSkhy7SHFV40t8KSiNRU6iPvCoV2+OAp8Jo6Fp+ykxF60kUWyMzp1B693SAE9Ucqij7Q7rBKFDIb0kh2qos9po0=
+	t=1756314036; cv=none; b=Q9yPrWQ8SWSsSWpcLDby7w47R7A6E/Z537jdS5WF1rJ9xlbLBbhMX7+3YqmnZ0zTDqRshaL6TsSuJCazHKZTgc0ecFEeVvDF10QHcikmPllmWJrz+fzr2DI6HkkPlaOaMIc44gXwyxYz2FUyZ+rZs/vDO95x7gXPiZgR4q7ZFDw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756313169; c=relaxed/simple;
-	bh=+8OHMXgGrmnGtoQUtPY/mFlpmN9ik9HAWGYf1HlxsPc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=av5+pXp3AQtL/zftOJCFSey0ES8qOh/NEG89FEz/l4S6XwRuPLcCFvB+/V19LcOaRN+DlSa8qw4M/ewlPuiRh0j/LHSiMhVK6r1PoEbMv4/+fwKlQsLNpiVDYSCf+LzUaIyAwaTrAZCoCKQ8kpl1kjnOOy3o4T8zs0rHXSiOCs8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Gvgpc6Je; arc=none smtp.client-ip=91.218.175.183
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Gvgpc6Je"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1756313165;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=FZT6mPR1uWxjlzpPONoQHkW2NXKy981WFFCYRX7OaAM=;
-	b=Gvgpc6JeptZrIcWWaKBrM/kKsmfzBkLqU4nakUQ96Y8UAdPFduu51GgJ84rBhLpfVSnJbO
-	Clr3bOdCs1HH/x2I5549AUVSLlWf+VHuTbCg89sci3/ehAgeGvon3W/PlU3OaqnXHJkYqx
-	qcX3ldHEMPplRThhBDDWzVCSVyeQwx0=
-From: Leon Hwang <leon.hwang@linux.dev>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	andrii@kernel.org,
-	daniel@iogearbox.net,
-	jolsa@kernel.org,
-	yonghong.song@linux.dev,
-	song@kernel.org,
-	eddyz87@gmail.com,
-	dxu@dxuuu.xyz,
-	deso@posteo.net,
-	leon.hwang@linux.dev,
-	kernel-patches-bot@fb.com
-Subject: [PATCH bpf-next v4 7/7] selftests/bpf: Add cases to test BPF_F_CPU and BPF_F_ALL_CPUS flags
-Date: Thu, 28 Aug 2025 00:45:09 +0800
-Message-ID: <20250827164509.7401-8-leon.hwang@linux.dev>
-In-Reply-To: <20250827164509.7401-1-leon.hwang@linux.dev>
-References: <20250827164509.7401-1-leon.hwang@linux.dev>
+	s=arc-20240116; t=1756314036; c=relaxed/simple;
+	bh=ecbNrh3gAkHhs0nqu+5SPQJJyt95NCljejpX4+7MoQQ=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=P0xdihA7m97ByDKxPz8Qpakw3cz1YQz2uFjWg7cNM6u9jSVnC4g8744OCuAvHwOWfVKZAJQtMG2fAcQ1MI2ouqogatBPUFgZR8zQQsuX4WkmC3dSrmqeRKyTJJwRXXc7xetPawT0ubZda8znliOM9EE4Z8PPa8VgVotacROGL/Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.79
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f79.google.com with SMTP id ca18e2360f4ac-886ff73eacbso19736939f.1
+        for <bpf@vger.kernel.org>; Wed, 27 Aug 2025 10:00:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756314034; x=1756918834;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ybv4LIIvMAT3Eoq2aTEAvOM1ieIsoRgZnCI/tNEIGZ8=;
+        b=k52CkZSf6JYK807/+dGubjAXpkQ4ppLR31/fFcy4EO33//If4A78sAb/kXZe3zABPP
+         OQC866ORvg0wG8qs3l1NYG2ZBAvWol9zevAFGfqbZmrfd0LCRfMs4++T3GfqKzVKCtEW
+         lC7ynPex5xju1sEOTj9sJ2HQRAsOLu4xQPUBQpeY57XuYEMxDSOtiCdmui2VMMuXXH1M
+         h1dYmwQ7SSo5eV5TTdVwgB8ZxMnHDrIV2/+A59IqQZlUIywXoKTPaU4Mx0PGvTu0gVYB
+         MsAKYjuM4pmKQGmSrOIpZ86G+KuQT8seA2+hLRCK30XOHUJR1tQa3Jzu23811fFYHF+d
+         favQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW1P3lZv6WIq4d0T5d0rXMGtORJATvYg9hWiDLzbgJh5RfX/5DEwO1RGoNwGmE93dnJKqE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw0IJyARab9lza/CYCYxJsYo3ftTYK885B2KnTe2bRhF85nQUyA
+	w6umCIAEsKdTMqk3DqyDJB5ZbIJVk0amJYlrES3/FBqy9OUKGvfcAbiqtZwIcO3vrukJI9xqJYF
+	sHKDHCWRq4vNDBrW9TXyCq8kvBUhN92fVLv7Qh+7c3tuHIN3N1mk7l0XubE4=
+X-Google-Smtp-Source: AGHT+IFTaM5B1uw90IYiFhY0ljaYzaOpTyCWJM1NuXIMJUat2baLWHnMrfLCCBb9RyBrFEjcFv5sBCvdXLNx++WR308rFmyDrKXU
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+X-Received: by 2002:a05:6e02:2141:b0:3e5:4b2e:3afd with SMTP id
+ e9e14a558f8ab-3e9201fcc4amr275163535ab.8.1756314030129; Wed, 27 Aug 2025
+ 10:00:30 -0700 (PDT)
+Date: Wed, 27 Aug 2025 10:00:30 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <68af39ae.a70a0220.3cafd4.002c.GAE@google.com>
+Subject: [syzbot] [net?] [bpf?] WARNING: ODEBUG bug in handle_softirqs
+From: syzbot <syzbot+60db000b8468baeddbb1@syzkaller.appspotmail.com>
+To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
+	daniel@iogearbox.net, linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
+	peterz@infradead.org, syzkaller-bugs@googlegroups.com, tglx@linutronix.de
+Content-Type: text/plain; charset="UTF-8"
 
-Add test coverage for the new BPF_F_CPU and BPF_F_ALL_CPUS flags support
-in percpu maps. The following APIs are exercised:
+Hello,
 
-* bpf_map_update_batch()
-* bpf_map_lookup_batch()
-* bpf_map_update_elem()
-* bpf_map__update_elem()
-* bpf_map_lookup_elem_flags()
-* bpf_map__lookup_elem()
+syzbot found the following issue on:
 
-cd tools/testing/selftests/bpf/
-./test_progs -t percpu_alloc
-253/13  percpu_alloc/cpu_flag_percpu_array:OK
-253/14  percpu_alloc/cpu_flag_percpu_hash:OK
-253/15  percpu_alloc/cpu_flag_lru_percpu_hash:OK
-253/16  percpu_alloc/cpu_flag_percpu_cgroup_storage:OK
-253     percpu_alloc:OK
-Summary: 1/16 PASSED, 0 SKIPPED, 0 FAILED
+HEAD commit:    4774cfe3543a Merge tag 'scsi-fixes' of git://git.kernel.or..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=140f4e82580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3a936e3316f9e2dc
+dashboard link: https://syzkaller.appspot.com/bug?extid=60db000b8468baeddbb1
+compiler:       Debian clang version 20.1.6 (++20250514063057+1e4d39e07757-1~exp1~20250514183223.118), Debian LLD 20.1.6
 
-Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/202021f78569/disk-4774cfe3.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/694d0f540b2c/vmlinux-4774cfe3.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/c3c1a8d42953/bzImage-4774cfe3.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+60db000b8468baeddbb1@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+ODEBUG: free active (active state 0) object: ffff888055e82a78 object type: timer_list hint: br_ip6_multicast_port_query_expired+0x0/0x20 net/bridge/br_multicast.c:1682
+WARNING: CPU: 0 PID: 15 at lib/debugobjects.c:615 debug_print_object+0x16b/0x1e0 lib/debugobjects.c:612
+Modules linked in:
+CPU: 0 UID: 0 PID: 15 Comm: ksoftirqd/0 Not tainted 6.16.0-rc1-syzkaller-00203-g4774cfe3543a #0 PREEMPT(full) 
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/07/2025
+RIP: 0010:debug_print_object+0x16b/0x1e0 lib/debugobjects.c:612
+Code: 4c 89 ff e8 17 37 5c fd 4d 8b 0f 48 c7 c7 a0 90 e2 8b 48 8b 34 24 4c 89 ea 89 e9 4d 89 f0 41 54 e8 4a 6a bc fc 48 83 c4 08 90 <0f> 0b 90 90 ff 05 77 9d d9 0a 48 83 c4 08 5b 41 5c 41 5d 41 5e 41
+RSP: 0000:ffffc90000147758 EFLAGS: 00010282
+RAX: bfb6a7e7ba7ad600 RBX: dffffc0000000000 RCX: ffff88801cef3c00
+RDX: 0000000000000100 RSI: 0000000000000000 RDI: 0000000000000002
+RBP: 0000000000000000 R08: 0000000000000003 R09: 0000000000000004
+R10: dffffc0000000000 R11: fffffbfff1bfa9e4 R12: ffffffff8a423ca0
+R13: ffffffff8be29220 R14: ffff888055e82a78 R15: ffffffff8b8ce020
+FS:  0000000000000000(0000) GS:ffff888125c52000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f8371b71d60 CR3: 000000005b468000 CR4: 00000000003526f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ __debug_check_no_obj_freed lib/debugobjects.c:1099 [inline]
+ debug_check_no_obj_freed+0x3a2/0x470 lib/debugobjects.c:1129
+ slab_free_hook mm/slub.c:2312 [inline]
+ slab_free mm/slub.c:4643 [inline]
+ kfree+0x112/0x440 mm/slub.c:4842
+ kobject_cleanup lib/kobject.c:689 [inline]
+ kobject_release lib/kobject.c:720 [inline]
+ kref_put include/linux/kref.h:65 [inline]
+ kobject_put+0x22b/0x480 lib/kobject.c:737
+ rcu_do_batch kernel/rcu/tree.c:2576 [inline]
+ rcu_core+0xca5/0x1710 kernel/rcu/tree.c:2832
+ handle_softirqs+0x286/0x870 kernel/softirq.c:579
+ run_ksoftirqd+0x9b/0x100 kernel/softirq.c:968
+ smpboot_thread_fn+0x53f/0xa60 kernel/smpboot.c:164
+ kthread+0x70e/0x8a0 kernel/kthread.c:464
+ ret_from_fork+0x3fc/0x770 arch/x86/kernel/process.c:148
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
+ </TASK>
+
+
 ---
- .../selftests/bpf/prog_tests/percpu_alloc.c   | 224 ++++++++++++++++++
- .../selftests/bpf/progs/percpu_alloc_array.c  |  32 +++
- 2 files changed, 256 insertions(+)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/percpu_alloc.c b/tools/testing/selftests/bpf/prog_tests/percpu_alloc.c
-index 343da65864d6d..98b6e8cc7ae60 100644
---- a/tools/testing/selftests/bpf/prog_tests/percpu_alloc.c
-+++ b/tools/testing/selftests/bpf/prog_tests/percpu_alloc.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <test_progs.h>
-+#include "cgroup_helpers.h"
- #include "percpu_alloc_array.skel.h"
- #include "percpu_alloc_cgrp_local_storage.skel.h"
- #include "percpu_alloc_fail.skel.h"
-@@ -115,6 +116,221 @@ static void test_failure(void) {
- 	RUN_TESTS(percpu_alloc_fail);
- }
- 
-+static void test_percpu_map_op_cpu_flag(struct bpf_map *map, void *keys, size_t key_sz,
-+					u32 max_entries, bool test_batch)
-+{
-+	int i, j, cpu, map_fd, value_size, nr_cpus, err;
-+	u64 *values = NULL, batch = 0, flags;
-+	const u64 value = 0xDEADC0DE;
-+	size_t value_sz = sizeof(u64);
-+	u32 count;
-+	LIBBPF_OPTS(bpf_map_batch_opts, batch_opts);
-+
-+	nr_cpus = libbpf_num_possible_cpus();
-+	if (!ASSERT_GT(nr_cpus, 0, "libbpf_num_possible_cpus"))
-+		return;
-+
-+	value_size = value_sz * nr_cpus;
-+	values = calloc(max_entries, value_size);
-+	if (!ASSERT_OK_PTR(values, "calloc values"))
-+		goto out;
-+	memset(values, 0, value_size * max_entries);
-+
-+	map_fd = bpf_map__fd(map);
-+	flags = (u64)nr_cpus << 32 | BPF_F_CPU;
-+	err = bpf_map_update_elem(map_fd, keys, values, flags);
-+	if (!ASSERT_EQ(err, -ERANGE, "bpf_map_update_elem_opts -ERANGE"))
-+		goto out;
-+
-+	err = bpf_map__update_elem(map, keys, key_sz, values, value_sz, flags);
-+	if (!ASSERT_EQ(err, -ERANGE, "bpf_map__update_elem_opts -ERANGE"))
-+		goto out;
-+
-+	err = bpf_map_lookup_elem_flags(map_fd, keys, values, flags);
-+	if (!ASSERT_EQ(err, -ERANGE, "bpf_map_lookup_elem_opts -ERANGE"))
-+		goto out;
-+
-+	err = bpf_map__lookup_elem(map, keys, key_sz, values, value_sz, flags);
-+	if (!ASSERT_EQ(err, -ERANGE, "bpf_map__lookup_elem_opts -ERANGE"))
-+		goto out;
-+
-+	for (cpu = 0; cpu < nr_cpus; cpu++) {
-+		/* clear value on all cpus */
-+		values[0] = 0;
-+		flags = BPF_F_ALL_CPUS;
-+		for (i = 0; i < max_entries; i++) {
-+			err = bpf_map__update_elem(map, keys + i * key_sz, key_sz, values,
-+						   value_sz, flags);
-+			if (!ASSERT_OK(err, "bpf_map__update_elem"))
-+				goto out;
-+		}
-+
-+		/* update value on specified cpu */
-+		for (i = 0; i < max_entries; i++) {
-+			values[0] = value;
-+			flags = (u64)cpu << 32 | BPF_F_CPU;
-+			err = bpf_map__update_elem(map, keys + i * key_sz, key_sz, values,
-+						   value_sz, flags);
-+			if (!ASSERT_OK(err, "bpf_map__update_elem specified cpu"))
-+				goto out;
-+
-+			/* lookup then check value on CPUs */
-+			for (j = 0; j < nr_cpus; j++) {
-+				flags = (u64)j << 32 | BPF_F_CPU;
-+				err = bpf_map__lookup_elem(map, keys + i * key_sz, key_sz, values,
-+							   value_sz, flags);
-+				if (!ASSERT_OK(err, "bpf_map__lookup_elem specified cpu"))
-+					goto out;
-+				if (!ASSERT_EQ(values[0], j != cpu ? 0 : value,
-+					       "bpf_map__lookup_elem value on specified cpu"))
-+					goto out;
-+			}
-+		}
-+	}
-+
-+	if (!test_batch)
-+		goto out;
-+
-+	batch_opts.elem_flags = (u64)nr_cpus << 32 | BPF_F_CPU;
-+	err = bpf_map_update_batch(map_fd, keys, values, &max_entries, &batch_opts);
-+	if (!ASSERT_EQ(err, -ERANGE, "bpf_map_update_batch -ERANGE"))
-+		goto out;
-+
-+	for (cpu = 0; cpu < nr_cpus; cpu++) {
-+		memset(values, 0, max_entries * value_size);
-+
-+		/* clear values across all CPUs */
-+		batch_opts.elem_flags = BPF_F_ALL_CPUS;
-+		err = bpf_map_update_batch(map_fd, keys, values, &max_entries, &batch_opts);
-+		if (!ASSERT_OK(err, "bpf_map_update_batch all cpus"))
-+			goto out;
-+
-+		/* update values on specified CPU */
-+		for (i = 0; i < max_entries; i++)
-+			values[i] = value;
-+
-+		batch_opts.elem_flags = (u64)cpu << 32 | BPF_F_CPU;
-+		err = bpf_map_update_batch(map_fd, keys, values, &max_entries, &batch_opts);
-+		if (!ASSERT_OK(err, "bpf_map_update_batch specified cpu"))
-+			goto out;
-+
-+		/* lookup values on specified CPU */
-+		memset(values, 0, max_entries * value_sz);
-+		err = bpf_map_lookup_batch(map_fd, NULL, &batch, keys, values, &count, &batch_opts);
-+		if (!ASSERT_TRUE(!err || err == -ENOENT, "bpf_map_lookup_batch specified cpu"))
-+			goto out;
-+
-+		for (i = 0; i < max_entries; i++)
-+			if (!ASSERT_EQ(values[i], value, "value on specified cpu"))
-+				goto out;
-+
-+		/* lookup values from all CPUs */
-+		batch_opts.elem_flags = 0;
-+		memset(values, 0, max_entries * value_size);
-+		err = bpf_map_lookup_batch(map_fd, NULL, &batch, keys, values, &count, &batch_opts);
-+		if (!ASSERT_TRUE(!err || err == -ENOENT, "bpf_map_lookup_batch all cpus"))
-+			goto out;
-+
-+		for (i = 0; i < max_entries; i++) {
-+			for (j = 0; j < nr_cpus; j++) {
-+				if (!ASSERT_EQ(values[i*nr_cpus + j], j != cpu ? 0 : value,
-+					       "value on specified cpu"))
-+					goto out;
-+			}
-+		}
-+	}
-+
-+out:
-+	if (values)
-+		free(values);
-+}
-+
-+static void test_percpu_map_cpu_flag(enum bpf_map_type map_type)
-+{
-+	struct percpu_alloc_array *skel;
-+	size_t key_sz = sizeof(int);
-+	int *keys = NULL, i, err;
-+	struct bpf_map *map;
-+	u32 max_entries;
-+
-+	skel = percpu_alloc_array__open();
-+	if (!ASSERT_OK_PTR(skel, "percpu_alloc_array__open"))
-+		return;
-+
-+	map = skel->maps.percpu;
-+	bpf_map__set_type(map, map_type);
-+
-+	err = percpu_alloc_array__load(skel);
-+	if (!ASSERT_OK(err, "test_percpu_alloc__load"))
-+		goto out;
-+
-+	max_entries = bpf_map__max_entries(map);
-+	keys = calloc(max_entries, key_sz);
-+	if (!ASSERT_OK_PTR(keys, "calloc keys"))
-+		goto out;
-+
-+	for (i = 0; i < max_entries; i++)
-+		keys[i] = i;
-+
-+	test_percpu_map_op_cpu_flag(map, keys, key_sz, max_entries, true);
-+out:
-+	if (keys)
-+		free(keys);
-+	percpu_alloc_array__destroy(skel);
-+}
-+
-+static void test_percpu_array_cpu_flag(void)
-+{
-+	test_percpu_map_cpu_flag(BPF_MAP_TYPE_PERCPU_ARRAY);
-+}
-+
-+static void test_percpu_hash_cpu_flag(void)
-+{
-+	test_percpu_map_cpu_flag(BPF_MAP_TYPE_PERCPU_HASH);
-+}
-+
-+static void test_lru_percpu_hash_cpu_flag(void)
-+{
-+	test_percpu_map_cpu_flag(BPF_MAP_TYPE_LRU_PERCPU_HASH);
-+}
-+
-+static void test_percpu_cgroup_storage_cpu_flag(void)
-+{
-+	struct bpf_cgroup_storage_key key;
-+	struct percpu_alloc_array *skel;
-+	int cgroup = -1, prog_fd, err;
-+	struct bpf_map *map;
-+
-+	skel = percpu_alloc_array__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "percpu_alloc_array__open_and_load"))
-+		return;
-+
-+	cgroup = create_and_get_cgroup("/cg_percpu");
-+	if (!ASSERT_GE(cgroup, 0, "create_and_get_cgroup"))
-+		goto out;
-+
-+	err = join_cgroup("/cg_percpu");
-+	if (!ASSERT_OK(err, "join_cgroup"))
-+		goto out;
-+
-+	prog_fd = bpf_program__fd(skel->progs.cgroup_egress);
-+	err = bpf_prog_attach(prog_fd, cgroup, BPF_CGROUP_INET_EGRESS, 0);
-+	if (!ASSERT_OK(err, "bpf_prog_attach"))
-+		goto out;
-+
-+	map = skel->maps.percpu_cgroup_storage;
-+	err = bpf_map_get_next_key(bpf_map__fd(map), NULL, &key);
-+	if (!ASSERT_OK(err, "bpf_map_get_next_key"))
-+		goto out;
-+
-+	test_percpu_map_op_cpu_flag(map, &key, sizeof(key), 1, false);
-+out:
-+	bpf_prog_detach2(-1, cgroup, BPF_CGROUP_INET_EGRESS);
-+	close(cgroup);
-+	cleanup_cgroup_environment();
-+	percpu_alloc_array__destroy(skel);
-+}
-+
- void test_percpu_alloc(void)
- {
- 	if (test__start_subtest("array"))
-@@ -125,4 +341,12 @@ void test_percpu_alloc(void)
- 		test_cgrp_local_storage();
- 	if (test__start_subtest("failure_tests"))
- 		test_failure();
-+	if (test__start_subtest("cpu_flag_percpu_array"))
-+		test_percpu_array_cpu_flag();
-+	if (test__start_subtest("cpu_flag_percpu_hash"))
-+		test_percpu_hash_cpu_flag();
-+	if (test__start_subtest("cpu_flag_lru_percpu_hash"))
-+		test_lru_percpu_hash_cpu_flag();
-+	if (test__start_subtest("cpu_flag_percpu_cgroup_storage"))
-+		test_percpu_cgroup_storage_cpu_flag();
- }
-diff --git a/tools/testing/selftests/bpf/progs/percpu_alloc_array.c b/tools/testing/selftests/bpf/progs/percpu_alloc_array.c
-index 37c2d2608ec0b..427301909c349 100644
---- a/tools/testing/selftests/bpf/progs/percpu_alloc_array.c
-+++ b/tools/testing/selftests/bpf/progs/percpu_alloc_array.c
-@@ -187,4 +187,36 @@ int BPF_PROG(test_array_map_10)
- 	return 0;
- }
- 
-+struct {
-+	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
-+	__uint(max_entries, 2);
-+	__type(key, int);
-+	__type(value, u64);
-+} percpu SEC(".maps");
-+
-+SEC("?fentry/bpf_fentry_test1")
-+int BPF_PROG(test_percpu_array, int x)
-+{
-+	u64 value = 0xDEADC0DE;
-+	int key = 0;
-+
-+	bpf_map_update_elem(&percpu, &key, &value, BPF_ANY);
-+	return 0;
-+}
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE);
-+	__type(key, struct bpf_cgroup_storage_key);
-+	__type(value, u64);
-+} percpu_cgroup_storage SEC(".maps");
-+
-+SEC("cgroup_skb/egress")
-+int cgroup_egress(struct __sk_buff *skb)
-+{
-+	u64 *val = bpf_get_local_storage(&percpu_cgroup_storage, 0);
-+
-+	__sync_fetch_and_add(val, 1);
-+	return 1;
-+}
-+
- char _license[] SEC("license") = "GPL";
--- 
-2.50.1
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
