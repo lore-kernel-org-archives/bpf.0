@@ -1,123 +1,105 @@
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E709B1B425C;
-	Wed, 27 Aug 2025 11:16:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FFBB28F1
+	for <bpf@vger.kernel.org>; Wed, 27 Aug 2025 11:19:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756293420; cv=none; b=ABBhC/oU6cnPobyr9zPZGdbkP2kGXkUGDCxaMZsUCK6VDVl9G/ykcQCQHykAY5FvWPYpJBJh4WfLY9yMFUEr3NYKe0PIZkyoYZvKzovb/Xc1aZ9UgBqrJFnnF1alWhrxslDGXZu8E956Ib6ofTkAKqlEAEPJlyk20sDkYlQa5Kg=
+	t=1756293567; cv=none; b=ltNTShmfVvRmXlxLEsRIFF7mjysPfHvS9TgKpuEmjAu/FOWLffR6Lb7PA+Q35ue3JYAO9lUXPydg/TtADVh2/pbbONpYSm+uhPrXRYARw/PRIU1zKnv23bC5ru8HgdmYskk/7dnV3lw9pEbRNH+XYNY9P2i7iXpm1OK4Ekjbwig=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756293420; c=relaxed/simple;
-	bh=laF4aCzdnYqqOiKe6TJk6V7rDYa2OP/TEOF4ueQbzRo=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=C6jffPMH0iVEe0Aeulpp27PUb206ksTCSu58GHHwvzyym/wqTrsJ29ykFKEzcDJ5xpOVdr+wLTscegKMo9YnquKGm7Y3R/Vwl8cuXeZk8LWJo3Bxq4hXN4kn/ftSrvGs5TZtrISrWsJS28VvTLsSB1BcQ2H6JpsmKINwDwI8B0c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RsDr45aS; arc=none smtp.client-ip=209.85.221.46
+	s=arc-20240116; t=1756293567; c=relaxed/simple;
+	bh=ddBCvL3X83QlTd+5WQd87vKRmMu0/T6UgLHIyN93SB8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Da1CqI1TxwIEgvsoC7Ae11CIovg4YDecMearR3UzeD3eDGz/I9TBj1X/r05robXNEfvujLBzSjufns8fQX1mrzmBcYnY5c58MJGiHDXvP86h7cUxkYmdQ7M/2MmvVDiN5vj4lriJD3qmQjBz8uPCwVdfGH6CMEcHndM2R70HPBs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=U8qKZoa0; arc=none smtp.client-ip=209.85.215.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RsDr45aS"
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-3c46686d1e6so4234270f8f.3;
-        Wed, 27 Aug 2025 04:16:58 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U8qKZoa0"
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-b49b56a3f27so3660391a12.1
+        for <bpf@vger.kernel.org>; Wed, 27 Aug 2025 04:19:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756293417; x=1756898217; darn=vger.kernel.org;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=NpRjwZvPLOD/qXd7yzG90qI1YNyMsZmvSBlze1Z94c4=;
-        b=RsDr45aSoDhlg/eK393W0XTPieZmu8alGPsmg/jPxx3I65EO1Kq/bDAHRMuKxQwPO0
-         aXQ7e2zX4JHxiR6z3WXkuMghoPU3mIqi7ybmU+26IxKob+ADpsweMQVDXhoZ1Jm6rn+e
-         tjOL/1/F+Nnfoc0k2f93qXy9NIH3D49ZRcvu3rV8ohHVS2Vbj/QEU88d4qM1ThIAmq9T
-         7VHTH+iMQ+vVals3O8YFfeT94XyNamrbURTI6pEolvQpR9r85lIwMbiasHw0vjKUXP2c
-         XzuTFTTEziIHDG/YSnB95Jqn9dvqA/oU8oxx8wm/sPIslDkvYYS3o4l9PYZvf/suf+cQ
-         huPQ==
+        d=gmail.com; s=20230601; t=1756293565; x=1756898365; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=93FWKoT6dFc5J2SoWMKbByMa7GuFs+3MAuu7ATorRVc=;
+        b=U8qKZoa03r2VDE2TeuikSTY/HpXAU+zdAdrTZozw4niyGXvCBJ+P1jn+DQrdhlYRef
+         gKdS9TzqTJmjizjovqpyKDffD7gFIXpXHZ6vFJ6A+vI0tOAIKuq2mZSY25uKEj49kjrA
+         BTctuo/13kdZ79IMj4Lm+rjqmCfA/uxdags+qbfz6crPUkGYoarYBfjqUNICe7rJgXy2
+         BxlLp+PPDw1iTjYmN5JAbLH/cwdATmSr87qvgD0Fh0ZpUKY+8qIvLYDl3VczACGI0U1z
+         4m1D8m0fpIVsOtLs2QFH3+2E+IOqAQ0wWffT+51Pu8JcwZKqR6zEfQDagL21iwOHz9zk
+         eSVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756293417; x=1756898217;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NpRjwZvPLOD/qXd7yzG90qI1YNyMsZmvSBlze1Z94c4=;
-        b=c9ZvWsUxefOJumWYDBOuLdVZV7CSV9HBh3EQ+xsKsjbqFOWmmReAvfNPe6CwDYuYhE
-         XQrG4oiDZGwmoFJt5RGDywgoX0/FpacxzF/IBWois6MulKBDEHCdKZEs4nLQUGbQix+H
-         AAsXlvfb8GouKP3AJgbq1FwzwjcMwOxnisF7CjVqVoawa/BPnti+GYLfOqDMsL3V48s5
-         /vF5tC/CinCEDFJPNIJF0iU7r5jOtkxUtJ1/Fv7rl24SS2vQHyNfg6tA4nXLfp1JYMFj
-         nSHYn1GTJ3HaxgFPTRzRhJ6uGu6mUdYUSz5b4hZD6ttddHYdBdqmQF8+cxraUCRNqLXB
-         BLoA==
-X-Forwarded-Encrypted: i=1; AJvYcCXK4fxbhCj0ZJIXf2cacn7UwtR+O05UAo2Kz488g3d0sLmbiFERj/o6DH578/bl6UxamHes6BIDycx2fkgW@vger.kernel.org, AJvYcCXoAYSlGrNdK7DXdQOtRz6AEP420sPkskEcHssrVGNHXXfR8S6GKTiPMyWizpHA9c0//WQ=@vger.kernel.org, AJvYcCXpt2v/ifQFB5mPg1W3LIjcCuENV1TqvtlbS1K3WcR5ps/kOLvzsR2QXE7C67dYtECub368bpuATlrZI3QA80HH@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx4qqfVPnKG13sFvkI2acywxqUBPk3pKWWr8iYPW5ugB44sSOBL
-	mK5FtEi+KDIAHomrjYUZQvFh6a4aFulwWEJuTMDHA0Tec9HSi0lbQGbgCiqjn28vZJRQqQ==
-X-Gm-Gg: ASbGncunXFluSdgr6a5cBhCnWXbAztGOgZEfKFab6S0gd4ARuKxO57IlBpIG7CYqga/
-	biWycy981kgVBfpW9h13d5LUTxGyk4HU/R5vBP0R1n+ZwMSMNnfPC/B1vaR9hYLABtftQ8auroS
-	KQWim1pKjarPkRkpdpc20J2ELSNbkAKxT0Cpjcmt5uAZz4Fh9FdliRRM6XSrgZ92fAZGbiCgMDL
-	hxzFKRgSmqjWOjDP5ICXd7iG5K5rlVfl/7n752iVP2UC1zXUNtw5eYC/Wj2ljauTZMOLek203iV
-	CztbpWlHnGFuADUUeLQ6uKK0aUof1VuYEQuL7XXmNnymadKdN/iIKrBRTtF5FO99wTz2r3SFKiN
-	Mca61DPDuTZ2zK2fceCbTWwk/Tu0jXaUAng2OfWfp4jRSHeufozE2kA==
-X-Google-Smtp-Source: AGHT+IHUDZ1Tch/bZVEatphfXZPYhJnc2lujMS/5Dy3W/Jlz6v8h2Z4+vQMwElC/Pu2wQHXGQZA7kg==
-X-Received: by 2002:a05:6000:188c:b0:3ca:c607:adb9 with SMTP id ffacd0b85a97d-3cac607b09emr6033359f8f.5.1756293416955;
-        Wed, 27 Aug 2025 04:16:56 -0700 (PDT)
-Received: from localhost (54-240-197-230.amazon.com. [54.240.197.230])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3c70e4ba078sm22085879f8f.4.2025.08.27.04.16.55
+        d=1e100.net; s=20230601; t=1756293565; x=1756898365;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=93FWKoT6dFc5J2SoWMKbByMa7GuFs+3MAuu7ATorRVc=;
+        b=c34XR9Y3kCZQSjzjJpvuaIlKqnXIDXDJQAHpLZLDtypv8X9Nunv3Y2lJ8F1P6hc6BE
+         ZJMrCW3bpvMZzepl82AeMQYT7XpoDgfJ7BNclVNn+fIdc3uwa1CoIo+GT+leLOFsISdg
+         EFQVEjSHUx6lS7nbBURE3V2eDQWB4N5BGMCoHQSBjhBXDzhlKC/IubfJfMPKA5qSVy1T
+         TxsqPF7/BANpOSD+laiyBLNcV6w745PNHJuUXtCnw0WH7P6FNxbd2LgS9YjqQBQmRcvl
+         GUBXrRIFxHmNqL7KtsyLmdTpi0OO/XZTiSuEcyA38TYFwv2VqoaxSCQ8AsU5NAcb54Kh
+         nwug==
+X-Gm-Message-State: AOJu0Yx0oG7QUGZIPLpK1leYQZNLeKFkolu0zYmVE6HqdA/msiyrPxnA
+	tfzcSOLT5cwkpTKQoffV6rHdr8peehus59XWQ1KBFV7F+6mN4gFF1ZXI
+X-Gm-Gg: ASbGncuC5KwVwtXEJZ9hNxxU3SVVcSVF0/t+yur1WJTJ/LLW/qIOhG9EACO2Eooior6
+	F+du7CGPP7g2MMJAQN1miraXKrOzcRGnS+LpO0OSVc/SaaHxv4DOe1Zk1SfmGmvhkknF5Lq/HsL
+	E0ULCosdxUTVSkUrBidMXQDY6FmUQpMydIt9UnIt2USvhSlP8wvFzn1IXA5S7JyaWQh7fmRDfZi
+	52jxthJUPUjnbibuADLeO5TKBcaKllUODIju23opZO1KADD16n/eG5GNmqg8OE5Ji2iYbqSGxQ6
+	frl5ym1sPL8clPrUMcu1Q3UHlOZaoZJxijHi54D6YiedHAzZ1yyRR6CY0OO+T4JNSKFKYdIe8/a
+	jHHg5S0s6O025LCQa5tQr7w5GOuwGrFYwhsIJsCQN
+X-Google-Smtp-Source: AGHT+IGHMyUCOUNe3WdFTytTI7vDD/W3K7K34Nd4VIqs9KdtpdHS1TLuZl4AOc0Ub0c52sQDgDVmBw==
+X-Received: by 2002:a17:902:ce82:b0:246:4de6:5cc0 with SMTP id d9443c01a7336-2464de66f6fmr233640965ad.53.1756293565298;
+        Wed, 27 Aug 2025 04:19:25 -0700 (PDT)
+Received: from devbox.. ([43.132.141.11])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3276f8a3335sm1829729a91.13.2025.08.27.04.19.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Aug 2025 04:16:56 -0700 (PDT)
-From: Puranjay Mohan <puranjay12@gmail.com>
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: KaFai Wan <kafai.wan@linux.dev>, xukuohai@huaweicloud.com,
- ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
- andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
- yonghong.song@linux.dev, kpsingh@kernel.org, sdf@fomichev.me,
- haoluo@google.com, jolsa@kernel.org, mykolal@fb.com, shuah@kernel.org,
- mrpre@163.com, linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf v2 2/2] selftests/bpf: Add socket filter attach test
-In-Reply-To: <139bf7d77750fdf04d26e1a77c0955466c9a4827.camel@gmail.com>
-References: <20250813152958.3107403-1-kafai.wan@linux.dev>
- <20250813152958.3107403-3-kafai.wan@linux.dev>
- <eb6f9ba4acccc7685596a8f1b282667a43d51ca8.camel@gmail.com>
- <CANk7y0hQWOL3OW8Ok4e-kp7Brn5Zq6H5+EfS=mVtoVd+AUxZmA@mail.gmail.com>
- <35c18502a4870d8a833c1c9af20b85ca3f8a0ff6.camel@gmail.com>
- <CANk7y0gVNwX70ur0KkZKNkSDq7RH1xs5=dOHx_UCOErbwc7zhA@mail.gmail.com>
- <139bf7d77750fdf04d26e1a77c0955466c9a4827.camel@gmail.com>
-Date: Wed, 27 Aug 2025 11:16:53 +0000
-Message-ID: <mb61pv7m92evu.fsf@gmail.com>
+        Wed, 27 Aug 2025 04:19:24 -0700 (PDT)
+From: Hengqi Chen <hengqi.chen@gmail.com>
+To: chenhuacai@kernel.org,
+	yangtiezhu@loongson.cn,
+	jianghaoran@kylinos.cn,
+	duanchenghao@kylinos.cn,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	vincent.mc.li@gmail.com
+Cc: bpf@vger.kernel.org,
+	loongarch@lists.linux.dev,
+	Hengqi Chen <hengqi.chen@gmail.com>
+Subject: [PATCH v2 0/3] LoongArch: Fix BPF trampoline related issues
+Date: Wed, 27 Aug 2025 09:47:30 +0000
+Message-ID: <20250827094733.426839-1-hengqi.chen@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 
-Eduard Zingerman <eddyz87@gmail.com> writes:
+The following two selftest cases triggers oops on LoongArch:
 
-> On Mon, 2025-08-25 at 21:27 +0200, Puranjay Mohan wrote:
->
-> [...]
->
->> Hi Eduard,
->> 
->> You were right, I have verified that the program is hitting the 0xfff
->> boundary while doing the call to bpf_skb_load_helper_32
->> While jiting this call, emit_a32_mov_i(tmp[1], func, ctx); is called,
->> where this issue it triggered.
->> 
->> The offset in imm_offset() is calculated as:
->> ctx->offsets[ctx->prog->len - 1] * 4 + ctx->prologue_bytes +
->> ctx->epilogue_bytes + imm_i * 4
->> 
->> For this program, ctx->offsets[ctx->prog->len - 1] * 4 itself is
->> 0x1400 which is above 0xfff boundary.
->> So, this is not a bug and expected behaviour with the current
->> implementation of the JIT.
->> 
->> For now, we can merge this and later I will try to improve the JIT so
->> it works for bigger programs.
->
-> Hi Puranjay,
->
-> Thank you for checking this!
-> What do you think about this test case, do we need it in the suite?
+    $ ./test_progs -a ns_bpf_qdisc -a tracing_struct
 
-I don't think that we need this test as it is based on a missing feature
-in the JIT. Once the arm JIT is improved, this test will silently stop
-testing what it is supposed to test (fallback to interpreter).
+This small series tries to fix/workaround these issues.
+See individual commit for details.
 
-Thanks,
-Puranjay
+While at it, remove a duplicated flags check in __arch_prepare_bpf_trampoline().
 
+v1 -> v2:
+* collect Acked-by/Tested-by tags
+* update sign_extend() in patch 2 as suggested by Huacai
+
+Hengqi Chen (3):
+  LoongArch: BPF: Remove duplicated flags check
+  LoongArch: BPF: Sign extend struct ops return values properly
+  LoongArch: BPF: No support of struct argument in trampoline programs
+
+ arch/loongarch/net/bpf_jit.c | 35 ++++++++++++++++++++++++++++++++---
+ 1 file changed, 32 insertions(+), 3 deletions(-)
+
+--
+2.43.5
