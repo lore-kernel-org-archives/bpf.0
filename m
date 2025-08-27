@@ -1,158 +1,172 @@
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47C432F49F7
-	for <bpf@vger.kernel.org>; Wed, 27 Aug 2025 11:19:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 370E43164B0;
+	Wed, 27 Aug 2025 11:26:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756293593; cv=none; b=cz00d7nf7nXpi1twsEmCJbYF8Dq68CwYa48UGhs5OH2fcxktaKjQYRn2mKxEvsLXTLt86nVwDti1vDMJcKv1SPckhZUybmLWtJthVlYk8gRmhDGbJPF2NfZtimnZXapyjHYatDKCM0/6aWe/fjgyI7JUb3tdwr+7UdAGy5lq2C0=
+	t=1756294005; cv=none; b=Hg9UDUk+VylWnmdaOLSzG4Q06KR4eI904h3v8c6wAV/vc8LZXqNqlLcWKL/bp65m3qa9btzxxVz2ZClzpk9SdfFI9g0N20q2/3+ZnbSRgki6BQc0jRmX1greFHElVtXaFwB3OsLghKy0KIHaN5tG/EIKIpEbv8FPVIpzsNx4zy0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756293593; c=relaxed/simple;
-	bh=yHSDgi1Qf9GLhybcnjVhZnbU0unpf2VgIN/ZDmjE2EE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=HA5bpNxHLRSBnsXVYWlVLnpQOsdLvCr/wH2MSQBbI+Hi+33uGJziIlJ3KoEon8Cse0Sm8Gaygm/d+i0xOOLT+5xn+gMkdRUcguo3uJy3LuPulnnWFJpx7ScSiVxr+u6tbqRWSpcsXZtEIlY0acgoh2i2uN7Le0fdZryRhasbSoM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nI3m2nx+; arc=none smtp.client-ip=209.85.216.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1756294005; c=relaxed/simple;
+	bh=/3Sdl+9Hs4FydUTYom9e80aLYCOQA3AX9l4E0K1R1+E=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=oGJNwXSceT389IrXFaps5BxUhZNU7LdokVq5hRMExj0/BVQByH2uvgpi2tkghTJvbYhOm31/T7CSm94OaunHl+QrSELrWdXb+HgMK/6ULv9HDx66W0HuTHYkseY+fMWwih5Dx4jNn8fFVO1Er/aSd5cw6AqxJQK9xx1hiCxN+bw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=rI0/XwXV; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nI3m2nx+"
-Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-321cfa7ad29so615572a91.1
-        for <bpf@vger.kernel.org>; Wed, 27 Aug 2025 04:19:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756293592; x=1756898392; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WV5B7+M1QeZLHSg/ECAdc/Y6fwTVPknY3WPmdEU6CxY=;
-        b=nI3m2nx+DhE57mVNu9M6QnArh6Hv05sRUw7UInxDec2rMzyBlUqCeG6LoOL6X9Hg8b
-         FCkGoekQ22FxBjj+64yKFw87julBocZHr0VqK8R3y34FU1qij4751PqiGpjhwmKw6UW7
-         9mWRV0xmU/FvYJmugt9gn+LGpr/+SYonsAA01KJAZhSA8RYMSapCqL/9+AfJvkdveIpZ
-         caos4w87nB4p3y0wfaI+jvSNRr4Ko0U/CUViUdudwkEMNstBIBgholNEvHZjJJB6wYxa
-         LaujkLXwOdNpiNva8/SrPxDMFkhqxHPQhw4FfWkuc7RVK8CwSL5PtrtSU72O5zQH/YdY
-         lX+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756293592; x=1756898392;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WV5B7+M1QeZLHSg/ECAdc/Y6fwTVPknY3WPmdEU6CxY=;
-        b=HkMCI6Gf/LWFHlZZLnwteSoTqmnM6PCRVHEn7yF8bw3CwYMmMJvFbhbjQ1CGavyN8Z
-         qUZqs64vBkZJAjnU9aW/luhIVYnJgtrELcmsZG6jmzjQgUUGbHDWpKkNHqXGUITjbipk
-         Gmjf5p1wDoLTqcl5gapwbu8t1ZRJScybxDO5VE9BWEr1TfHwTwZJeWKQPfUiZNPA384W
-         ujyWmNWj7ffAiQpIF0JzdUc2n8M38BWFv1e/CnZ7FRE8S8L6b65KhU1IvZwFedwgDW+n
-         fTcI+PPX86D20GNUDrPyxfDbMZS3FCMOQh0XU3psXJ64VEz2ZbHKvufliCPG8RxE+1JC
-         uYAw==
-X-Gm-Message-State: AOJu0Yzro536urB8h5dzhSrInjsAkGSZNTH/w6UF0He2PqupLAp2WVtE
-	r4mM7YUfeolmVSE+dWI53ZnQFmKuRZNOygE4XLtibhR27HILJrrUBgX5
-X-Gm-Gg: ASbGncs0kXxST5xfubUsJRkzT4G1d/N8hzdOP1sSmsrk7K6gRyvy1FD6XwSxfBthfD8
-	M7joUJC/PIjLK1L/B3wdUm1rJpxsIA1IXdr2SxlzviJEJ7nHqI/y85+zLGxr4/ut2G5QIbBBXrS
-	UA0taxKAf4nffIUn2NzcUH/+YWhvHaI4xpxospQEf5+IV/uUEQXZS8aN61JlebicpWhY2i6Tai2
-	yCSW7fG/VyLI3jAj9tgD8AmvE8oYsUQk5n8KIB5+G+YcgkuyfhiXErLn2Svx7jDzE+FyOb0pNec
-	x5/Pg5H4ajKxBaRbCifDfxjVUozK0CojDFESD9W/YuHh0CrrYYCwQJdLYnKrdUTTcJlN7qP2Bv/
-	fRQtz3rrDucMil1Ml5CuKQRE0+o6rArN67+mipMJP
-X-Google-Smtp-Source: AGHT+IGfxF9cJ3Lkj2hZ2O+9EnfpctZUJ6j5jfuIKVnEwz51XZgAfdOFoqHud7kKXEwN2KBfHWMkPw==
-X-Received: by 2002:a17:90b:5350:b0:315:9624:37db with SMTP id 98e67ed59e1d1-3275085eab1mr5869532a91.3.1756293591401;
-        Wed, 27 Aug 2025 04:19:51 -0700 (PDT)
-Received: from devbox.. ([43.132.141.11])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3276f8a3335sm1829729a91.13.2025.08.27.04.19.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Aug 2025 04:19:51 -0700 (PDT)
-From: Hengqi Chen <hengqi.chen@gmail.com>
-To: chenhuacai@kernel.org,
-	yangtiezhu@loongson.cn,
-	jianghaoran@kylinos.cn,
-	duanchenghao@kylinos.cn,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	vincent.mc.li@gmail.com
-Cc: bpf@vger.kernel.org,
-	loongarch@lists.linux.dev,
-	Hengqi Chen <hengqi.chen@gmail.com>
-Subject: [PATCH v2 3/3] LoongArch: BPF: No support of struct argument in trampoline programs
-Date: Wed, 27 Aug 2025 09:47:33 +0000
-Message-ID: <20250827094733.426839-4-hengqi.chen@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250827094733.426839-1-hengqi.chen@gmail.com>
-References: <20250827094733.426839-1-hengqi.chen@gmail.com>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="rI0/XwXV"
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 57R1GrTS021753;
+	Wed, 27 Aug 2025 11:26:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=/3Sdl+
+	9Hs4FydUTYom9e80aLYCOQA3AX9l4E0K1R1+E=; b=rI0/XwXVuA9sb6aICiffPq
+	3BTnQqYFWrMSJFajmzN/4tTIrx2Ts/V6fWatQFxBafZfGWPggB9maTHWZjfnQj6X
+	8TReVuvt1Ut44XvIVwbHyaO5njX0thdfPLzmEHOD+apVE76KNazYW0H5LSOg64P2
+	WgMZQULMASZw+7e5iTJim9ohrrHQVvZUckA2azFMwZLgd9g3c4qkffcUf+DkUgls
+	4EWWehtmWt82feFeM0G5YVYuoLcosgluU4P2EyEQ8MhMBC4/fOAa06xB9XH3nWsJ
+	xd2MDmAgq+r4hMT0E58XcCfL6Jo6WEo31jdl+V+h33eeVGs5J8OHLKMoDjm8twXA
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 48q5avkqc5-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 27 Aug 2025 11:26:21 +0000 (GMT)
+Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 57RBIm14017214;
+	Wed, 27 Aug 2025 11:26:20 GMT
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 48q5avkqc4-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 27 Aug 2025 11:26:20 +0000 (GMT)
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 57RAm7rk007514;
+	Wed, 27 Aug 2025 11:26:20 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 48qqyufw92-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 27 Aug 2025 11:26:19 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 57RBQGQH30343840
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 27 Aug 2025 11:26:16 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 0BFCF20043;
+	Wed, 27 Aug 2025 11:26:16 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 0E64F20040;
+	Wed, 27 Aug 2025 11:26:15 +0000 (GMT)
+Received: from [127.0.0.1] (unknown [9.152.108.100])
+	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Wed, 27 Aug 2025 11:26:14 +0000 (GMT)
+Message-ID: <304f8078d9f6d523f4e334503384d7decd6f205d.camel@linux.ibm.com>
+Subject: Re: [PATCH 0/2] scripts/gdb/symbols: make BPF debug info available
+ to GDB
+From: Ilya Leoshkevich <iii@linux.ibm.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann
+ <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Jan Kiszka
+ <jan.kiszka@siemens.com>,
+        Kieran Bingham <kbingham@kernel.org>,
+        LKML
+ <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Heiko Carstens	
+ <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev	
+ <agordeev@linux.ibm.com>
+Date: Wed, 27 Aug 2025 13:26:14 +0200
+In-Reply-To: <CAADnVQ+MYKvqRNSHFkMPxENNaZfrvEN8npY2JfiO_izxk1gUFw@mail.gmail.com>
+References: <20250710115920.47740-1-iii@linux.ibm.com>
+	 <8a20f7ba33426bb6ced600f97f5f67e9d67ea503.camel@linux.ibm.com>
+	 <CAADnVQ+MYKvqRNSHFkMPxENNaZfrvEN8npY2JfiO_izxk1gUFw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2 (3.56.2-1.fc42) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: vxJE-a3qq31fN7diTDv5cHvJtfx3I6tK
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODIzMDAyMSBTYWx0ZWRfX/DgCX+sBZ2Lw
+ oPCXpGl/M0Nw5g+iJhxxyBPOIiVK0RGZssxM3+jQZ/JHAymt4opXf//a6/P/U1qe/Q0j8TzqkIJ
+ xhk8/izkx3IYnJ9+CUxUb0aGh/bRPCBsJ3tMa9SZk8P7yhli5IlvyX17poYQsY7D5Cm7ebeRvYt
+ m/jAeGPHnt3zixAZdLPvRENRmZcVokVd2MkAMgcuvMUv79Sa2PkuuuFwfYve5YwF7raRluKrUJV
+ CEqCN4135G+kuztTYQOoVBpd3JbJArmhHpcHnLKoAMVDd6jadJoCHVL7s7Q1hJiipJj4YHf/q4V
+ 9fPQu6QmcXJI+y1WYjSLhfMaubfqbI7rLhc8QytDQPYb/NkfhA5ECXd3KqP8Bxou4IsIvVmsPxY
+ ARtiuED0
+X-Proofpoint-ORIG-GUID: -CFWS1NRaOp9G16fGYKIVH1tuyOhKRxR
+X-Authority-Analysis: v=2.4 cv=SNNCVPvH c=1 sm=1 tr=0 ts=68aeeb5d cx=c_pps
+ a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
+ a=IkcTkHD0fZMA:10 a=2OwXVqhp2XgA:10 a=VwQbUJbxAAAA:8 a=Q-fNiiVtAAAA:8
+ a=VnNF1IyMAAAA:8 a=HnuNM1E2Df1o6BHR4eQA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-08-27_02,2025-08-26_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ spamscore=0 adultscore=0 bulkscore=0 phishscore=0 clxscore=1015
+ impostorscore=0 malwarescore=0 suspectscore=0 priorityscore=1501
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2507300000 definitions=main-2508230021
 
-The current implementation does not support struct argument.
-This cause a oops when running bpf selftest:
+On Tue, 2025-08-05 at 09:48 -0700, Alexei Starovoitov wrote:
+> On Tue, Aug 5, 2025 at 6:23=E2=80=AFAM Ilya Leoshkevich <iii@linux.ibm.co=
+m>
+> wrote:
+> >=20
+> > On Thu, 2025-07-10 at 13:53 +0200, Ilya Leoshkevich wrote:
+> > > Hi,
+> > >=20
+> > > This series greatly simplifies debugging BPF progs when using
+> > > QEMU
+> > > gdbstub by providing symbol names, sizes, and line numbers to
+> > > GDB.
+> > >=20
+> > > Patch 1 adds radix tree iteration, which is necessary for parsing
+> > > prog_idr. Patch 2 is the actual implementation; its description
+> > > contains some details on how to use this.
+> > >=20
+> > > Best regards,
+> > > Ilya
+> > >=20
+> > > Ilya Leoshkevich (2):
+> > > =C2=A0 scripts/gdb/radix-tree: add lx-radix-tree-command
+> > > =C2=A0 scripts/gdb/symbols: make BPF debug info available to GDB
+> > >=20
+> > > =C2=A0scripts/gdb/linux/bpf.py=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0 | 253
+> > > ++++++++++++++++++++++++++++++
+> > > =C2=A0scripts/gdb/linux/constants.py.in |=C2=A0=C2=A0 3 +
+> > > =C2=A0scripts/gdb/linux/radixtree.py=C2=A0=C2=A0=C2=A0 | 139 ++++++++=
++++++++-
+> > > =C2=A0scripts/gdb/linux/symbols.py=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=
+=A0 77 ++++++++-
+> > > =C2=A04 files changed, 462 insertions(+), 10 deletions(-)
+> > > =C2=A0create mode 100644 scripts/gdb/linux/bpf.py
+> >=20
+> > Gentle ping. Any opinions on whether this is valuable? Personally
+> > I've
+> > been using this for quite some time, and having source level
+> > debugging
+> > for BPF progs (even if variables can't be inspected) feels really
+> > nice.
+>=20
+> Looks very useful to me.
+> Not sure which git tree it should be routed to.
 
-    $ ./test_progs -a tracing_struct
-    CPU -1 Unable to handle kernel paging request at virtual address 0000000000000018, era == 90000000845659f4, ra == 90000000845659e8
-    Oops[#1]:
-    CPU -1 Unable to handle kernel paging request at virtual address 0000000000000018, era == 9000000085bef268, ra == 90000000844f3938
-    rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
-    rcu:     1-...0: (19 ticks this GP) idle=1094/1/0x4000000000000000 softirq=1380/1382 fqs=801
-    rcu:     (detected by 0, t=5252 jiffies, g=1197, q=52 ncpus=4)
-    Sending NMI from CPU 0 to CPUs 1:
-    rcu: rcu_preempt kthread starved for 2495 jiffies! g1197 f0x0 RCU_GP_DOING_FQS(6) ->state=0x0 ->cpu=2
-    rcu:     Unless rcu_preempt kthread gets sufficient CPU time, OOM is now expected behavior.
-    rcu: RCU grace-period kthread stack dump:
-    task:rcu_preempt     state:I stack:0     pid:15    tgid:15    ppid:2      task_flags:0x208040 flags:0x00000800
-    Stack : 9000000100423e80 0000000000000402 0000000000000010 90000001003b0680
-            9000000085d88000 0000000000000000 0000000000000040 9000000087159350
-            9000000085c2b9b0 0000000000000001 900000008704a000 0000000000000005
-            00000000ffff355b 00000000ffff355b 0000000000000000 0000000000000004
-            9000000085d90510 0000000000000000 0000000000000002 7b5d998f8281e86e
-            00000000ffff355c 7b5d998f8281e86e 000000000000003f 9000000087159350
-            900000008715bf98 0000000000000005 9000000087036000 900000008704a000
-            9000000100407c98 90000001003aff80 900000008715c4c0 9000000085c2b9b0
-            00000000ffff355b 9000000085c33d3c 00000000000000b4 0000000000000000
-            9000000007002150 00000000ffff355b 9000000084615480 0000000007000002
-            ...
-    Call Trace:
-    [<9000000085c2a868>] __schedule+0x410/0x1520
-    [<9000000085c2b9ac>] schedule+0x34/0x190
-    [<9000000085c33d38>] schedule_timeout+0x98/0x140
-    [<90000000845e9120>] rcu_gp_fqs_loop+0x5f8/0x868
-    [<90000000845ed538>] rcu_gp_kthread+0x260/0x2e0
-    [<900000008454e8a4>] kthread+0x144/0x238
-    [<9000000085c26b60>] ret_from_kernel_thread+0x28/0xc8
-    [<90000000844f20e4>] ret_from_kernel_thread_asm+0xc/0x88
+Thanks, glad to hear that!
 
-    rcu: Stack dump where RCU GP kthread last ran:
-    Sending NMI from CPU 0 to CPUs 2:
-    NMI backtrace for cpu 2 skipped: idling at idle_exit+0x0/0x4
+I think it makes sense to route it via the Andrew Morton's tree, like
+all the other GDB patches. IIUC the proposal to ask subsystems to
+maintain GDB scripts relevant to them [1] didn't go anywhere.
 
-Reject it for now.
-
-Fixes: f9b6b41f0cf3 ("LoongArch: BPF: Add basic bpf trampoline support")
-Acked-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-Tested-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-Tested-by: Vincent Li <vincent.mc.li@gmail.com>
-Signed-off-by: Hengqi Chen <hengqi.chen@gmail.com>
----
- arch/loongarch/net/bpf_jit.c | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
-index c239e5ed0c92..66b102ed9874 100644
---- a/arch/loongarch/net/bpf_jit.c
-+++ b/arch/loongarch/net/bpf_jit.c
-@@ -1514,6 +1514,12 @@ static int __arch_prepare_bpf_trampoline(struct jit_ctx *ctx, struct bpf_tramp_i
- 	if (m->nr_args > LOONGARCH_MAX_REG_ARGS)
- 		return -ENOTSUPP;
- 
-+	/* don't support struct argument */
-+	for (i = 0; i < m->nr_args; i++) {
-+		if (m->arg_flags[i] & BTF_FMODEL_STRUCT_ARG)
-+			return -ENOTSUPP;
-+	}
-+
- 	if (flags & (BPF_TRAMP_F_ORIG_STACK | BPF_TRAMP_F_SHARE_IPMODIFY))
- 		return -ENOTSUPP;
- 
--- 
-2.43.5
-
-
+[1]
+https://lore.kernel.org/all/20250625231053.1134589-1-florian.fainelli@broad=
+com.com/
