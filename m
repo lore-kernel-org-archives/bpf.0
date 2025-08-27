@@ -1,138 +1,117 @@
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CE5F2F3C26
-	for <bpf@vger.kernel.org>; Wed, 27 Aug 2025 09:14:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98DA42D2485;
+	Wed, 27 Aug 2025 10:18:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756286093; cv=none; b=ioRCoanBC7wekP1RwG7Fpi5LlyjwPkHgSrG3OTikTSzNI3MiFegIWu5VEtTNuG9lxd/xrkLYHaMlK5A3WaoRSsbEJqUAI2pIdfkKGwSP9NhYptkR6xjdFnE8X7uWQWgSp/cxSeNWOYiI7LvGbhIpbXmTjckoG+0uqEvWAlDc4RQ=
+	t=1756289909; cv=none; b=rW24C60RHgUWo7lJsQNroKL23VvMH0QFVMZlyxdq1OgPN7+EBBM4lgiQVntt6kOOKIMq7hbLoiy7tl/w30XIB2/axhEKET75NRA+t7prrV9Q2FF+RZ3bLJ1w/kmRyMp+uWSfEamjWDnlrsU4iOfrb1LePOJmortTRp1+qCBmEog=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756286093; c=relaxed/simple;
-	bh=SIlqTwhLzWz/smF0man098JnQ7w0dXMfWkDodhPt2gw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Q1Iuzdvh87e91pkndaptZ9QZBzHYOE3cwekfyVWF9LNpGy8oyzFx3+DqPsMq3iIe708H4aoIzSH0K8sRfCibQBG09HsqoZRUYOYEb2ZJkLz7CjV3zJ9hKP7r+EPUegQTeLUEnOvnFHX2lT0ltTmbCFnCXrc3s3yIzprdDSKk6TM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Wsf5I45Z; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1756289909; c=relaxed/simple;
+	bh=6FzlqskmpU4mqgsOXMFz/wgzjeVlAW4PBLT2lq24aV4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=VlV4BYkxeFcTpByc1jTxRzC1yLAOY0xvRv83n2lCo0vEU+GrzsX31tZCZ6x+TWRQOXZG1sEBNwG98i8ITmudRTpTaRbNk9EmxDkf5F4V1T+OZpoZGRxI9MB4C1xZuxDum9zOSockFy5XaazeUAsSy2LrQECse7IDonGvGW6Uu64=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M5hdkaV6; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Wsf5I45Z"
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-45a1b004954so51974795e9.0
-        for <bpf@vger.kernel.org>; Wed, 27 Aug 2025 02:14:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756286090; x=1756890890; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=OQvfm+0aw5PXpwYaMEYsejA3RvCIG7u3OeODJdHKg84=;
-        b=Wsf5I45ZOVnk6UCFCQFASRtyqOo02wur76Z93r92PRkijn6HyTZCUjAzNKu8jBWlzO
-         14ErLwMEdjN1pHhdwfY4W4BN4JtdtzlodxfRTzuJuQOX0Grwj8KUw8Mr6nf4GL+tz86c
-         xVKexjqxg93iG1tUgsWOEhh32/lUvHruGwkt+odrBPEo1ahu9x3NVLKUilqQcK0FM7Mf
-         3eAeLl/VUufbcCmu93Oseu+tKLUvx+m5s0ap13ewq3NgsZhKEWdhwObcl0K7HGDsGFYx
-         tKxXxGihNzdyAo7kiKlzW2yE+yhnqruyvt62cIaax7WriihW1NaMnPHXv7RMV7Kkh3IO
-         D9/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756286090; x=1756890890;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OQvfm+0aw5PXpwYaMEYsejA3RvCIG7u3OeODJdHKg84=;
-        b=NMTceM0x1QEOtbz5sZBsyquTJGlF0VMqqS5RKRd6eENiVF1IsdShGNR04/VgQ+Tx7x
-         EZ6EXSeo0RLL5sqxgp35IMU/Iz4XOsjyvYpLtjwg/HW0KyI3+PQoCFbPAcfT2VcPYuVG
-         27wW+THePKaTCJHIIYZDn5KMyedNgWoyPSrg+V8V7r66RV4X+u4b3A7Ufk86Sj54ZpSC
-         N4EvbAigileWvdvG3T033+Gj2DUxhhhxpA8HxiQNwDUaTAhC/6TaQL5jEVu9V6Piyvy+
-         Sg2HhLNFTOWV4DfpDu5tQ63ETTfqJLZNlBj4Mj78KtDowCBM10iN21Tml91gSD+MZB2d
-         axkg==
-X-Gm-Message-State: AOJu0Yx1ScnKxYUq08PxETrnU/UzloGuig4v52Kzx143GuKOwl27EBRL
-	YL77UWgualwzNKBi0MYdjT0Gu4dk8GSRQEU2yghmZe7CcTGsOVMEoJOj
-X-Gm-Gg: ASbGncs/1Nfn5paIEEsgqKcWzM3D8aVoxA6gDIGIhMeUD0Tlo1AIJPK/GT+DcpJpZ3J
-	WDQtlQf8ODrO7ketHsbDvOJRJjlAEoSVIdplmxfoVKZ8JCTTutId9KpX1rpFahAWV5iwvFgj5bY
-	r+WPgCj+7oeGdnDCobZnDB0ln93PinR62b+QmQlBvQ/mC3c5ycyTwX1bro1mYHbUQA6TzFh7aGg
-	HO4ql2Mvey1XMyXGnqjBereHKeuA3EgEnJjzYwuWL9G/DMbsX6861Ty4kf/T9k4wPGdIH85w/p9
-	V4/DK28x/MKKnyVm1REbSY9M5tcuEfb/3DiAcPh7FTt3syU5zdRC35ChYtEmGWJWQuWTpRD3d3O
-	ovnGegPw9nsJeL++k7oSmuSWM4vIAJgJGsQ==
-X-Google-Smtp-Source: AGHT+IEaZyvDisOFpPOPggeWcV4H/8VATTv2S5+iohu7yinqeDRmiPKk0i8yQ+7bskJfzZgJMUZjrA==
-X-Received: by 2002:a05:600c:4748:b0:45b:47e1:ef66 with SMTP id 5b1f17b1804b1-45b517dae4fmr152015595e9.37.1756286089967;
-        Wed, 27 Aug 2025 02:14:49 -0700 (PDT)
-Received: from mail.gmail.com ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45b73627bc4sm5448765e9.9.2025.08.27.02.14.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Aug 2025 02:14:49 -0700 (PDT)
-Date: Wed, 27 Aug 2025 09:20:52 +0000
-From: Anton Protopopov <a.s.protopopov@gmail.com>
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Anton Protopopov <aspsk@isovalent.com>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Quentin Monnet <qmo@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>
-Subject: Re: [PATCH v1 bpf-next 05/11] bpf: support instructions arrays with
- constants blinding
-Message-ID: <aK7N9HPsBWs3TiWz@mail.gmail.com>
-References: <20250816180631.952085-1-a.s.protopopov@gmail.com>
- <20250816180631.952085-6-a.s.protopopov@gmail.com>
- <a46fd2898d1ece291d66703c656c38eced1a706c.camel@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M5hdkaV6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79B5AC4AF09;
+	Wed, 27 Aug 2025 10:18:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1756289909;
+	bh=6FzlqskmpU4mqgsOXMFz/wgzjeVlAW4PBLT2lq24aV4=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=M5hdkaV6NdbcRgLMTdZNGtKkBXlDzUaESLeMZ3UhOp2Lu/Eb0eDmH9DxvQDERmD8d
+	 dtg061BoVzk20FeEZOnpFcC8GsXs9FG0Ypc97u7EKCQYyqQpg89MG3RInCZUAgZ6Tl
+	 4QS+GTYWtFzE0laGDd2Vc0aoU8JL1sbVRu2ynic6fYmCGgJM+S0wMvGxWhA5SBQoTI
+	 DJv0i0ugeEtFH7IMPF0nQzozL1UiUPYta68OfIq1TKnmI5OiosllEU7wDkz52/norF
+	 SmKPFOQmjlZw7SdJGmn2ocSfchl0m2Sxfv/3PTI4SFSPkI+9rkApLntyGCWYPnQ+IY
+	 NqGcgP6jKuerg==
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-61cb9f6dbe7so641815a12.0;
+        Wed, 27 Aug 2025 03:18:29 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCW2akWTwVVsaNFbLMQwUQ7oGJ8TynEDACjgDd7lp1edNTOqkJy6n+/LOm0A561qTEzWdyHwUBA02Yk67kUt@vger.kernel.org, AJvYcCXPlqOzM+DvvtivQmledf0dVqcABqJ6lhmfP/wgYekIajN9cERIgyIio6cE+WyG5IlBEjo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzW3GsTBYzCYLovO80ErHAvViMklo7xfW3EFTB/7lfbCFUKxSU/
+	N1SJPPKLNGPaMRm+HjE+9b8/1K1HIPnl4dP6v+N8I3EbvL3vfkWIZ0yAQ30qbi7La/BRM0WqcvP
+	NNRj3/1rNUcs6ZFzLMy+p5Al8BzdD/8g=
+X-Google-Smtp-Source: AGHT+IFDaHJmXdP3CC1Di8LlIhQV097JtkfPqlF8wrrAryeIiXdqAtfMWhdoQiulQi8pOLJWyHP8mPXfB1Tn/2IkwCk=
+X-Received: by 2002:a05:6402:2792:b0:61c:bfa7:5d0 with SMTP id
+ 4fb4d7f45d1cf-61cbfa706c9mr119825a12.30.1756289908044; Wed, 27 Aug 2025
+ 03:18:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a46fd2898d1ece291d66703c656c38eced1a706c.camel@gmail.com>
+References: <20250826064906.10683-1-yangtiezhu@loongson.cn> <CAEyhmHQJcCvy2TPv7nwT87yS6y698WrECwd+xA9RjsCVmrVXvw@mail.gmail.com>
+In-Reply-To: <CAEyhmHQJcCvy2TPv7nwT87yS6y698WrECwd+xA9RjsCVmrVXvw@mail.gmail.com>
+From: Huacai Chen <chenhuacai@kernel.org>
+Date: Wed, 27 Aug 2025 18:18:16 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H5SCuXERUBbC5D+k1pjf-Pmf33LOQXL=aUP-E-DgO6+qg@mail.gmail.com>
+X-Gm-Features: Ac12FXw1WWwPsT1YP9ZG06PGkyzJXhLdasQwDqY8XKTWfUUAYVafM9Q29pau5cA
+Message-ID: <CAAhV-H5SCuXERUBbC5D+k1pjf-Pmf33LOQXL=aUP-E-DgO6+qg@mail.gmail.com>
+Subject: Re: [PATCH] LoongArch: BPF: Optimize sign-extention mov instructions
+To: Hengqi Chen <hengqi.chen@gmail.com>
+Cc: Tiezhu Yang <yangtiezhu@loongson.cn>, bpf@vger.kernel.org, loongarch@lists.linux.dev, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 25/08/25 04:29PM, Eduard Zingerman wrote:
-> On Sat, 2025-08-16 at 18:06 +0000, Anton Protopopov wrote:
-> 
-> [...]
-> 
-> > diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-> > index 5d1650af899d..27e9c30ad6dc 100644
-> > --- a/kernel/bpf/core.c
-> > +++ b/kernel/bpf/core.c
-> 
-> [...]
-> 
-> > @@ -1544,6 +1562,7 @@ struct bpf_prog *bpf_jit_blind_constants(struct bpf_prog *prog)
-> >  	}
-> >  
-> >  	clone->blinded = 1;
-> > +	clone->len = insn_cnt;
-> 
-> Is this an old bug? Does it require a separate commit and a fixes tag?
+Applied, thanks.
 
-Turns out this change is actually not needed, as the
-bpf_patch_insn_single() function sets the len properly.
+Huacai
 
-> >  	return clone;
-> >  }
-> >  #endif /* CONFIG_BPF_JIT */
-> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> > index e1f7744e132b..863b7114866b 100644
-> > --- a/kernel/bpf/verifier.c
-> > +++ b/kernel/bpf/verifier.c
-> 
-> [...]
-> 
-> > @@ -21665,7 +21666,15 @@ static int jit_subprogs(struct bpf_verifier_env *env)
-> >  		func[i]->aux->might_sleep = env->subprog_info[i].might_sleep;
-> >  		if (!i)
-> >  			func[i]->aux->exception_boundary = env->seen_exception;
-> > +
-> > +		/*
-> > +		 * To properly pass the absolute subprog start to jit
-> > +		 * all instruction adjustments should be accumulated
-> > +		 */
-> > +		instructions_added -= func[i]->len;
-> >  		func[i] = bpf_int_jit_compile(func[i]);
-> > +		instructions_added += func[i]->len;
-> > +
-> 
-> Nit: This -= / += pair is a bit hackish, maybe add a separate variable
->      to compute current delta?
-
-Sure, I've rewrote this piece.
-
-> >  		if (!func[i]->jited) {
-> >  			err = -ENOTSUPP;
-> >  			goto out_free;
+On Wed, Aug 27, 2025 at 9:27=E2=80=AFAM Hengqi Chen <hengqi.chen@gmail.com>=
+ wrote:
+>
+> On Tue, Aug 26, 2025 at 2:49=E2=80=AFPM Tiezhu Yang <yangtiezhu@loongson.=
+cn> wrote:
+> >
+> > For 8-bit and 16-bit sign-extention mov instructions, it can use the na=
+tive
+> > instructions ext.w.b and ext.w.h directly, no need to use the temporary=
+ t1
+> > register, just remove the redundant operations.
+> >
+> > Here are the test results:
+> >
+> >   # modprobe test_bpf test_range=3D81,84
+> >   # dmesg -t | tail -5
+> >   test_bpf: #81 ALU_MOVSX | BPF_B jited:1 5 PASS
+> >   test_bpf: #82 ALU_MOVSX | BPF_H jited:1 5 PASS
+> >   test_bpf: #83 ALU64_MOVSX | BPF_B jited:1 5 PASS
+> >   test_bpf: #84 ALU64_MOVSX | BPF_H jited:1 5 PASS
+> >   test_bpf: Summary: 4 PASSED, 0 FAILED, [4/4 JIT'ed]
+> >
+> > Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> > ---
+> >  arch/loongarch/net/bpf_jit.c | 6 ++----
+> >  1 file changed, 2 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.=
+c
+> > index abfdb6bb5c38..7072db18c6cd 100644
+> > --- a/arch/loongarch/net/bpf_jit.c
+> > +++ b/arch/loongarch/net/bpf_jit.c
+> > @@ -527,13 +527,11 @@ static int build_insn(const struct bpf_insn *insn=
+, struct jit_ctx *ctx, bool ext
+> >                         emit_zext_32(ctx, dst, is32);
+> >                         break;
+> >                 case 8:
+> > -                       move_reg(ctx, t1, src);
+> > -                       emit_insn(ctx, extwb, dst, t1);
+> > +                       emit_insn(ctx, extwb, dst, src);
+> >                         emit_zext_32(ctx, dst, is32);
+> >                         break;
+> >                 case 16:
+> > -                       move_reg(ctx, t1, src);
+> > -                       emit_insn(ctx, extwh, dst, t1);
+> > +                       emit_insn(ctx, extwh, dst, src);
+> >                         emit_zext_32(ctx, dst, is32);
+> >                         break;
+> >                 case 32:
+> > --
+>
+> Acked-by: Hengqi Chen <hengqi.chen@gmail.com>
+>
+> > 2.42.0
+> >
