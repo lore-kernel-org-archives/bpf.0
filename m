@@ -1,37 +1,38 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 422F9261581;
-	Thu, 28 Aug 2025 18:03:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 727D5262FD7;
+	Thu, 28 Aug 2025 18:03:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756404216; cv=none; b=DhEEQ37idlS6epGMvFtfCFgejd5kjCJ6kwkm1nUe3bEhYpifaWws7cPrF6e2M0PDO+JEmpgVQjQnd7wxp9oBhYTtl/U7AvdnmFbPfpxQNpOV3FT2G9UHTaHec3B4F6kABou97DyajtI0Js95Wb87BnFOhBKmKs52jdsFUKM5J50=
+	t=1756404216; cv=none; b=eIL40wVcAx5CK8JmeJqoAs3rv/qRMbEQL63ECYSgM9XcZjXynZTaieKn8jPzAK96iUQKz1O+lXK67eZYI1HCGYTDqQVjfLyVb4FbniyoWQs5iH4kAUkQMe51LX6nMGvZLKgv3nosT0X5An1oCTedyjyRs/EvRP2dS5QNMyT8oFo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1756404216; c=relaxed/simple;
-	bh=nr5fLsW9wRRZqiJlOLuUCjG60WO/RY0kea95ijoghhc=;
-	h=Message-ID:Date:From:To:Cc:Subject; b=dQBONLiJOdJxJiI51tICo4SFxktRI9UtSJZ+NBnZfH3bXTF/c1F5RwfaajG5Hhhw3fEAGlHXlyyYrnSvmCyyAPKh+3dUrt8jyE/NeE5M5Jr/Bk+YhmSjZJHpyoEatE+cQATmTCAYfkDtOWN0XYveK7Y/OBGJipWdQ66PeNfTVh0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UHc8YGG2; arc=none smtp.client-ip=10.30.226.201
+	bh=ndrE4gvdhVRpRUi6pNX6gi19dw4jMHbZ54Q/ID3v70c=;
+	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
+	 Content-Type; b=hUlPapkna8fA0O0tLuvZpqYtOSIiT7VhGboqYnZb6Y9OHno+0SWrO7GUY8OMR03lkW+lwrduZ3OWQD7MdOjzEJSQiaaqecsMTfhULbcxTnwI66T7S78uaPAIoEzHf86XsrKNauiLD0MZ+b/qi3q7UeheYaeRZUZX16rwY4JJY/I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mgDp6LSh; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UHc8YGG2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C56DEC4CEEB;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mgDp6LSh"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2252C4CEF4;
 	Thu, 28 Aug 2025 18:03:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756404215;
-	bh=nr5fLsW9wRRZqiJlOLuUCjG60WO/RY0kea95ijoghhc=;
-	h=Date:From:To:Cc:Subject:From;
-	b=UHc8YGG25tv2TxLOcxUSVKQwPLJHWCXOrp7kE6Zom/MZDt/v0SPqnRsJc2404/1A2
-	 u/fWDXGpkM/8DQiefxPl+g5Ei+7OlQYapRf1vixPdoCZEfwgmjMVzaccwHy0g+bK02
-	 1bu44aYgIq7DnDeETX3aYk15IaJrKw3w/R4qog1Muhcu0dCJTeaq6C30JnebOOeXaq
-	 n9C1nmtrclLkUwSOY860Bj0I7XY9VF3L/5mxPO3OljXkGWW+w6YQ/FUIIiWS+ICy00
-	 qXz9cadVJmaN736uN4VuU34aMrbnTX9V6yuPUO4PGxxRY4qnUSlqVdecpsLtS8oEFU
-	 j6+Z04t8QiDFg==
+	s=k20201202; t=1756404216;
+	bh=ndrE4gvdhVRpRUi6pNX6gi19dw4jMHbZ54Q/ID3v70c=;
+	h=Date:From:To:Cc:Subject:References:From;
+	b=mgDp6LSh2Bs/3yqNuAqNaq6W4stRWT66hiYWS+SGJ0h0e/bSrELTcF6SgFDyTDVbf
+	 nc8wVQ82dzKPHg2ZbbdXK58VCulitnJlnoQk1DQ2yPx0BFAEPeEmE2/o3mzLO5Ii9M
+	 gUI75wFfNqrcm9VEMoxb3TZYXmazuCpJYsPj+xadm5fB1CQ+X3zmbIvOMjmYf/ssY3
+	 N2mCPd5X9Ia9GlSGWwW1xWuNOZNr0RQjLgKtdUg7o0Q75nQE/br5jVB35ZtCVY+e3H
+	 FJRWqqXVng8WzK07B9+jyYx5ROaWjjHnlsmPM547shHd4s4wKFo88Dvrh1hquOgvG3
+	 HZgAuf048a7Ew==
 Received: from rostedt by gandalf with local (Exim 4.98.2)
 	(envelope-from <rostedt@kernel.org>)
-	id 1urgya-00000004GAo-2AcV;
+	id 1urgya-00000004GBo-3bon;
 	Thu, 28 Aug 2025 14:03:56 -0400
-Message-ID: <20250828180300.591225320@kernel.org>
+Message-ID: <20250828180356.716157474@kernel.org>
 User-Agent: quilt/0.68
-Date: Thu, 28 Aug 2025 14:03:00 -0400
+Date: Thu, 28 Aug 2025 14:03:02 -0400
 From: Steven Rostedt <rostedt@kernel.org>
 To: linux-kernel@vger.kernel.org,
  linux-trace-kernel@vger.kernel.org,
@@ -57,70 +58,152 @@ Cc: Masami Hiramatsu <mhiramat@kernel.org>,
  Sam James <sam@gentoo.org>,
  Kees Cook <kees@kernel.org>,
  "Carlos O'Donell" <codonell@redhat.com>
-Subject: [PATCH v6 0/6] tracing: Deferred unwinding of user space stack traces
+Subject: [PATCH v6 2/6] tracing: Rename __dynamic_array() to __dynamic_field() for ftrace
+ events
+References: <20250828180300.591225320@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+
+From: Steven Rostedt <rostedt@goodmis.org>
+
+The ftrace events (like function, trace_print, etc) are created somewhat
+manually and not via the TRACE_EVENT() or tracepoint magic macros. It has
+its own macros.
+
+The dynamic fields used __dynamic_array() to be created, but the output is
+different than the __dynamic_array() used by TRACE_EVENT().
+
+The TRACE_EVENT() __dynamic_array() creates the field like:
+
+	field:__data_loc u8[] v_data;   offset:120;     size:4; signed:0;
+
+Whereas the ftrace event is created as:
+
+	field:char buf[];       offset:12;      size:0; signed:0;
+
+The difference is that the ftrace field is defined as the rest of the size
+of the event saved in the ring buffer. TRACE_EVENT() doesn't have such a
+dynamic field, and its version saves a word that holds the offset into the
+event that the field is stored, as well as the size.
+
+For consistency rename the ftrace event macro to __dynamic_field(). This
+way the ftrace event can also include a __dynamic_array() later that works
+the same as the TRACE_EVENT() dynamic array.
+
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+---
+ kernel/trace/trace.h         |  4 ++--
+ kernel/trace/trace_entries.h | 10 +++++-----
+ kernel/trace/trace_export.c  | 12 ++++++------
+ 3 files changed, 13 insertions(+), 13 deletions(-)
+
+diff --git a/kernel/trace/trace.h b/kernel/trace/trace.h
+index 5f4bed5842f9..0fd2559ff119 100644
+--- a/kernel/trace/trace.h
++++ b/kernel/trace/trace.h
+@@ -92,8 +92,8 @@ enum trace_type {
+ #undef __array_desc
+ #define __array_desc(type, container, item, size)
+ 
+-#undef __dynamic_array
+-#define __dynamic_array(type, item)	type	item[];
++#undef __dynamic_field
++#define __dynamic_field(type, item)	type	item[];
+ 
+ #undef __rel_dynamic_array
+ #define __rel_dynamic_array(type, item)	type	item[];
+diff --git a/kernel/trace/trace_entries.h b/kernel/trace/trace_entries.h
+index de294ae2c5c5..5cf80f6c704a 100644
+--- a/kernel/trace/trace_entries.h
++++ b/kernel/trace/trace_entries.h
+@@ -63,7 +63,7 @@ FTRACE_ENTRY_REG(function, ftrace_entry,
+ 	F_STRUCT(
+ 		__field_fn(	unsigned long,		ip		)
+ 		__field_fn(	unsigned long,		parent_ip	)
+-		__dynamic_array( unsigned long,		args		)
++		__dynamic_field( unsigned long,		args		)
+ 	),
+ 
+ 	F_printk(" %ps <-- %ps",
+@@ -81,7 +81,7 @@ FTRACE_ENTRY(funcgraph_entry, ftrace_graph_ent_entry,
+ 		__field_struct(	struct ftrace_graph_ent,	graph_ent	)
+ 		__field_packed(	unsigned long,	graph_ent,	func		)
+ 		__field_packed(	unsigned int,	graph_ent,	depth		)
+-		__dynamic_array(unsigned long,	args				)
++		__dynamic_field(unsigned long,	args				)
+ 	),
+ 
+ 	F_printk("--> %ps (%u)", (void *)__entry->func, __entry->depth)
+@@ -259,7 +259,7 @@ FTRACE_ENTRY(bprint, bprint_entry,
+ 	F_STRUCT(
+ 		__field(	unsigned long,	ip	)
+ 		__field(	const char *,	fmt	)
+-		__dynamic_array(	u32,	buf	)
++		__dynamic_field(	u32,	buf	)
+ 	),
+ 
+ 	F_printk("%ps: %s",
+@@ -272,7 +272,7 @@ FTRACE_ENTRY_REG(print, print_entry,
+ 
+ 	F_STRUCT(
+ 		__field(	unsigned long,	ip	)
+-		__dynamic_array(	char,	buf	)
++		__dynamic_field(	char,	buf	)
+ 	),
+ 
+ 	F_printk("%ps: %s",
+@@ -287,7 +287,7 @@ FTRACE_ENTRY(raw_data, raw_data_entry,
+ 
+ 	F_STRUCT(
+ 		__field(	unsigned int,	id	)
+-		__dynamic_array(	char,	buf	)
++		__dynamic_field(	char,	buf	)
+ 	),
+ 
+ 	F_printk("id:%04x %08x",
+diff --git a/kernel/trace/trace_export.c b/kernel/trace/trace_export.c
+index 1698fc22afa0..d9d41e3ba379 100644
+--- a/kernel/trace/trace_export.c
++++ b/kernel/trace/trace_export.c
+@@ -57,8 +57,8 @@ static int ftrace_event_register(struct trace_event_call *call,
+ #undef __array_desc
+ #define __array_desc(type, container, item, size)	type item[size];
+ 
+-#undef __dynamic_array
+-#define __dynamic_array(type, item)			type item[];
++#undef __dynamic_field
++#define __dynamic_field(type, item)			type item[];
+ 
+ #undef F_STRUCT
+ #define F_STRUCT(args...)				args
+@@ -123,8 +123,8 @@ static void __always_unused ____ftrace_check_##name(void)		\
+ #undef __array_desc
+ #define __array_desc(_type, _container, _item, _len) __array(_type, _item, _len)
+ 
+-#undef __dynamic_array
+-#define __dynamic_array(_type, _item) {					\
++#undef __dynamic_field
++#define __dynamic_field(_type, _item) {					\
+ 	.type = #_type "[]", .name = #_item,				\
+ 	.size = 0, .align = __alignof__(_type),				\
+ 	is_signed_type(_type), .filter_type = FILTER_OTHER },
+@@ -161,8 +161,8 @@ static struct trace_event_fields ftrace_event_fields_##name[] = {	\
+ #undef __array_desc
+ #define __array_desc(type, container, item, len)
+ 
+-#undef __dynamic_array
+-#define __dynamic_array(type, item)
++#undef __dynamic_field
++#define __dynamic_field(type, item)
+ 
+ #undef F_printk
+ #define F_printk(fmt, args...) __stringify(fmt) ", "  __stringify(args)
+-- 
+2.50.1
 
 
-This is the tracefs (ftrace) implementation of the deferred stack tracing.
-
-This creates two new events that get set for every trace event when the new
-"userstacktrace_delay" option is enabled. The first event happens at the time
-of the request (after a trace event) that saves the cookie that represents the
-current user space stack trace (it stays the same while the task is in the
-kernel, as the user space stack doesn't change during this time). The second
-event is where the user space stacktrace is recorded along with the cookie.
-
-Since the callback is called in faultable context, it uses this opportunity
-to look at the addresses in the stacktrace and convert them to where
-they would be in the executable file (if found). It also records
-the inode and device major/minor numbers into the trace, so that post
-processing can find the exact location where the stacks are.
-
-To simplify the finding of the files, a new "inode_cache" event is created
-that gets triggered whenever a new inode/device is added to a new rhashtable.
-It will then look up the path that represents that inode/device via the vma
-descriptor. To keep the recording down to a minimum, this event is only
-triggered when a new inode/device is added to the rhashtable. The rhashtable
-is reset when certain changes occur in the tracefs system so that new readers
-of this event can get the latest changes.
-
-Changes since v5: https://lore.kernel.org/linux-trace-kernel/20250424192456.851953422@goodmis.org/
-
-- Removed unwind infrastructure patches as they have already been merged.
-
-- Also add check for PF_USER_WORKER to test for kernel thread
-
-- Have the userstacktrace_delay option not depend on the userstacktrace
-  option.
-
-- Do not expose the userstacktrace_delay option if it's not supported.
-
-- Set inode to -1L if vma is not found for that address to let user space
-  know that, and differentiate from a vdso section.
-
-- Added "inode_cache" to dsiplay inode/device paths when added to a stack trace
-
-Steven Rostedt (6):
-      tracing: Do not bother getting user space stacktraces for kernel threads
-      tracing: Rename __dynamic_array() to __dynamic_field() for ftrace events
-      tracing: Implement deferred user space stacktracing
-      tracing: Have deferred user space stacktrace show file offsets
-      tracing: Show inode and device major:minor in deferred user space stacktrace
-      tracing: Add an event to map the inodes to their file names
-
-----
- kernel/trace/Makefile            |   3 +
- kernel/trace/inode_cache.c       | 144 ++++++++++++++++++++++++++++++++++++++
- kernel/trace/trace.c             | 146 ++++++++++++++++++++++++++++++++++++++-
- kernel/trace/trace.h             |  32 ++++++++-
- kernel/trace/trace_entries.h     |  38 ++++++++--
- kernel/trace/trace_export.c      |  25 ++++++-
- kernel/trace/trace_inode_cache.h |  42 +++++++++++
- kernel/trace/trace_output.c      |  99 ++++++++++++++++++++++++++
- 8 files changed, 520 insertions(+), 9 deletions(-)
- create mode 100644 kernel/trace/inode_cache.c
- create mode 100644 kernel/trace/trace_inode_cache.h
