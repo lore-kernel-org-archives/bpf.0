@@ -1,253 +1,175 @@
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA1B82D7DF2
-	for <bpf@vger.kernel.org>; Thu, 28 Aug 2025 16:30:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAA2021578F
+	for <bpf@vger.kernel.org>; Thu, 28 Aug 2025 16:32:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756398645; cv=none; b=clV+vU4N50vZkOnUCQCtV5yP5Gu7P9Sbu2VWPcsW49yatAPohio7aefoqbX3MaOf4Fpf4oVNu6MJup4EWZ9E5XuL3RHf9Tmu5tWJGXgDEStbt7wJJ9Y+xmr1hXfPlIRyN/0GX11/a8GS58RweW1rksUVrBYmM76TBu9muGQG8F0=
+	t=1756398765; cv=none; b=VaaxqlSr0/OEl0bYJZnXgU1+l+bGWMPKtlvIJczGiHutl0CIVbZzIfnkF7TVryc2+Yt5AbXnhxCGcYWcs+S76JD8vQcoE5D18IE2u2ckKcovn97rlh8LXYoPlWUYlnzTtxu8RnvykUs7gaRe8g1AGHwxp2Qm/R3/n89DzwCCbfE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756398645; c=relaxed/simple;
-	bh=m76LxAMVQtchw4dmA6Hl9B7zkXnysj8+K01WAkKXkyA=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=fgwZ9kCm8s6klR/Ux+OQgjkImCQ/GU1lC94/z+xyMmOD4hxpq/FNgthqZ/a+TwQ1hwywhDKTH52w758d3jK7zW5Wy8r20SB3OdvBkXzBnBigs+c2Dn/rEssanfDBUUn9WjfG7dXHcRfshOQNx3UoOQMqxDI2sykrUV3+7TTm+Rw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iSyBrpCc; arc=none smtp.client-ip=209.85.210.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1756398765; c=relaxed/simple;
+	bh=J11KFE1Be/Xr62/bc+bzuCs7KvWgB6SiP/dHHQRBxgQ=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Content-Type; b=KgRR4Son8evROEyF+J4DidUK7Nj7pXOzHiBlohuMO1vTtkKsFkGc7aPLbiasOYBSI9lAkWqCjBNzodSQCx85pDEQloGd8k/yvm35P+cfeePypUI6yETrUqsiNrsYYgvMG3RkvKl2ywjPnkxUUwNbjzhqoGex/9bRO6coe2AT7uY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ShwcZpW9; arc=none smtp.client-ip=209.85.214.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iSyBrpCc"
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-771facea122so617780b3a.1
-        for <bpf@vger.kernel.org>; Thu, 28 Aug 2025 09:30:43 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ShwcZpW9"
+Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-246266f9ae1so11075255ad.2
+        for <bpf@vger.kernel.org>; Thu, 28 Aug 2025 09:32:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756398643; x=1757003443; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=Usu7y368Lc2y8DATX0pLsJ9QOflnSrERzqyjwRyi6OI=;
-        b=iSyBrpCcT40tIuDQ3ogL40rtcAxe5c2QPn6Dfl+kYh0x4qNdPHijfLSKqvRWtTa4OV
-         E7rDCyo0DUCwVLih2wqWua5aLO0fCoJmb21epAzSgj5I4HTqwlVXSAR4Cs2lTCFZGB3s
-         /vigA34vY+s8sratXbctOaID05TkqA32gz/hbkSlnGqwQ2+vFH6fmaQH+9wp7kJuszR5
-         JlUvQ0s5bXrDvBdNWHQPplX7S/UyGwYFxyk9qBkuu3wWoGCINxbc+2Vq7hGhA/2VkCFZ
-         5CvfSYVp4kpFix9NcJ8uz9UPNG1eMaYae0ctxZv17kKa+I59+KV72yzZZ5h953X/L6D6
-         YO2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756398643; x=1757003443;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+        d=google.com; s=20230601; t=1756398763; x=1757003563; darn=vger.kernel.org;
+        h=to:from:subject:message-id:references:mime-version:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Usu7y368Lc2y8DATX0pLsJ9QOflnSrERzqyjwRyi6OI=;
-        b=QB5hLkr2CkuyGQeeTHNxPpvrKB23mDDUuW+kz07QgHJQo980G21UKwom2rH+cx9gOK
-         nD7PYQ0UvD+5fNH+Kr2JBGPnHkNg4Mct2oqLyxr3dt+xMfpbOUsqEStZ/ghU8Iw5mDms
-         zM0FgoFhalGngqbG3O1TlE2zoP1PpI/9xDNhblJe8u8nKlC820SYD+apFvq5yvv3fRY+
-         +WiNMru/HbssbuOwM0SbCc0Y0K4bQWr93TPejqjUijo9AU2KZO2MGPlRP8faZHvkYZVK
-         6akTDwphR5IVYdQH/jMiENY/RljfrR3ipx63kyhVgT3Smd3q5FfxiNHklhx02QXiPKHC
-         X/aA==
-X-Gm-Message-State: AOJu0YxXYZWx2HVwvFXsUwQgfNivXnaRW2qsm7awIqp0LLj/WULIq23m
-	3wzyBbq4Kl6cdHnl1nn+0Pru3zrt44ViGwEZfyQ29Hm3OMViK9++agBW
-X-Gm-Gg: ASbGncswBXmgNNtcF+vooG1KEXLNjmwO01sleogmzZow6+NrdBpzEG2Azu5a0IBWqAE
-	Udk9uqO7kX4fHCir1fe2sj599AfljuSnduB3+bNnAEJjVjwbvobj0qwAq7OKNTzHaFEO32+K9oN
-	e+KMzzE1FJFPV5PD0spwcPWWF0iVFjUGToNnCaBOCxu/3iO5xE0WdVTIFJsEgao8Bl6H+GPjjUR
-	JkmFCncveAnA0YDHuHtIadiXctaEFOXTA98275gtverviHuLTjcxzbCVPakQkiiZVN7U5JodSSp
-	Xiswwrvv1ZBoLp2MJbD6DGQylxl4APsuLsLL6naowlm/LX3nfKw4oE/vmo5Da9mB0X1tbmU0RHd
-	VT/0yuEUMD0wWbCMAHSQZ/YzL8JFJsiio+YI6KWo307arHhyqpt9oQFQ=
-X-Google-Smtp-Source: AGHT+IH9dE01qGx1SnskrJB8kdvOgO85SPK6r2UXnqrMx1DpUOgZwfWLzhrJ2RlvOfZ2jYX/+IiWeA==
-X-Received: by 2002:a05:6a20:3ca8:b0:243:78a:8284 with SMTP id adf61e73a8af0-24340dc8587mr32993607637.60.1756398642697;
-        Thu, 28 Aug 2025 09:30:42 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:115c:1:92b8:1b31:4fe2:f? ([2620:10d:c090:500::5:b3bf])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b49cbbbbf5asm14444010a12.50.2025.08.28.09.30.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Aug 2025 09:30:42 -0700 (PDT)
-Message-ID: <08cb366465da990279460c1d56b2fb4492c45cf5.camel@gmail.com>
-Subject: Re: [PATCH v1 bpf-next 08/11] bpf, x86: add support for indirect
- jumps
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Anton Protopopov <a.s.protopopov@gmail.com>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, Andrii
- Nakryiko	 <andrii@kernel.org>, Anton Protopopov <aspsk@isovalent.com>,
- Daniel Borkmann	 <daniel@iogearbox.net>, Quentin Monnet <qmo@kernel.org>,
- Yonghong Song	 <yonghong.song@linux.dev>
-Date: Thu, 28 Aug 2025 09:30:40 -0700
-In-Reply-To: <aLAoUK22+PpuAbhy@mail.gmail.com>
-References: <20250816180631.952085-1-a.s.protopopov@gmail.com>
-	 <20250816180631.952085-9-a.s.protopopov@gmail.com>
-	 <506e9593cf15c388ddfd4feaf89053c1e469b078.camel@gmail.com>
-	 <aLAoUK22+PpuAbhy@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2 (3.56.2-1.fc42) 
+        bh=VQ/ghY8pg6tJyPFakofOZholK8TaewPdt9a6aHSESZA=;
+        b=ShwcZpW9uvT2W3p+ofesDQoxkvnxB7LbiO5PHx43lh4DPWtC2upTUCLQci1lB17iYh
+         +/azhNgft+WwMg4fF5Zuckm5a5QaM7yeHT0IY6WWITrdBu12pmJ+lQrdWcUmbIMa1Qi9
+         ZtACNzorYUM4eUrbFW2rAZ8ljQVtfwZ1/GMqHx27PUYXpx1aHCrp8uLvU5XMlQtWvkkP
+         MueMwVSzESIUwkhVvzJZ5I1tqB5+wRbtE6oiXcZ000Z4h5SJudjGE7DV0xWwL6CjVEJB
+         Qb1ohyXERJ1QCYpiNUm2Cp6XzbL1zk2ufWcL6+5bsXgVkWTbqV4z3lOAemId/lM092ea
+         9Q5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756398763; x=1757003563;
+        h=to:from:subject:message-id:references:mime-version:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VQ/ghY8pg6tJyPFakofOZholK8TaewPdt9a6aHSESZA=;
+        b=l3fcG5pBzReegFbY9fDETkeEmZJQH8lnH4FvU4EwZ3G34pNkCjpPGO+xH1uHeCJ1Wb
+         TqOBl47Xaa78IP3CUYpuB6aqfzHHUNtYDWhoLcVsCfQSl327pZxrYPxR8+Wp31yKLSU1
+         xjIirJL3NjeOr7EgAYZ8ehGOSq3dUyIAbF934bDX8ri3IF6LcaM5hJOj8ZnLppvjxJ17
+         aXTl+Ygu6RhDl+wPkK0UNlJtbLSjcAecYJA0eu4uneVv4fa7qqdBwIV222Y06Rgqnmq6
+         LO14XmNk5bulgKy+Q2dsckrtPIA80t/Aj+ku7oJ/BGIQevvoPUhwaSudZFLUP5gZY+3+
+         l5sQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXkczpQhkMNw+pvj1wj38P7zIUjMcDhSyVq8FFBcQxm+hDpRmQ3Hj9fFwQSYN+8wmqzuio=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyUi1iyDi3zux9rvxd4UKScATO4evRHpmyl3GesmvTJW0jpxgp9
+	QoIU7BzEpT2fxwudCRjdekAqg0yc9ohko9UZD1/AZfk6Rdwkv5JsaUgjBpazCYeYrIHe6pkbdeT
+	hwpC8ZzijzQ==
+X-Google-Smtp-Source: AGHT+IFu8V6TtyELchwUcAY78ealGTcerTErw/SpJ+KzGdeEI071RTZnVasMx+0nurw1gfBfBMnNb+sKJBsp
+X-Received: from pjbsv16.prod.google.com ([2002:a17:90b:5390:b0:325:4747:a99b])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:c40d:b0:248:79d4:93bb
+ with SMTP id d9443c01a7336-24879d49735mr109408325ad.31.1756398763077; Thu, 28
+ Aug 2025 09:32:43 -0700 (PDT)
+Date: Thu, 28 Aug 2025 09:32:11 -0700
+In-Reply-To: <20250828163225.3839073-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
+References: <20250828163225.3839073-1-irogers@google.com>
+X-Mailer: git-send-email 2.51.0.268.g9569e192d0-goog
+Message-ID: <20250828163225.3839073-2-irogers@google.com>
+Subject: [PATCH v2 01/15] perf parse-events: Fix legacy cache events if event
+ is duplicated in a PMU
+From: Ian Rogers <irogers@google.com>
+To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
+	Kan Liang <kan.liang@linux.intel.com>, James Clark <james.clark@linaro.org>, 
+	Xu Yang <xu.yang_2@nxp.com>, Thomas Falcon <thomas.falcon@intel.com>, 
+	Andi Kleen <ak@linux.intel.com>, linux-kernel@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, bpf@vger.kernel.org, 
+	Atish Patra <atishp@rivosinc.com>, Beeman Strong <beeman@rivosinc.com>, Leo Yan <leo.yan@arm.com>, 
+	Vince Weaver <vincent.weaver@maine.edu>
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, 2025-08-28 at 09:58 +0000, Anton Protopopov wrote:
+The term list when adding an event to a PMU is expected to have the
+event name for the alias lookup. Also, set found_supported so that
+-EINVAL isn't returned.
 
-[...]
+Fixes: 62593394f66a ("perf parse-events: Legacy cache names on all
+PMUs and lower priority")
 
-> > > @@ -16943,7 +17016,8 @@ static int check_ld_imm(struct bpf_verifier_e=
-nv *env, struct bpf_insn *insn)
-> > >  		}
-> > >  		dst_reg->type =3D PTR_TO_MAP_VALUE;
-> > >  		dst_reg->off =3D aux->map_off;
-> > > -		WARN_ON_ONCE(map->max_entries !=3D 1);
-> > > +		WARN_ON_ONCE(map->map_type !=3D BPF_MAP_TYPE_INSN_ARRAY &&
-> > > +			     map->max_entries !=3D 1);
-> >=20
-> > Q: when is this necessary?
->=20
-> For all maps except INSN_ARRAY only (map->max_entries =3D=3D 1) is
-> allowed. This change adds an exception for INSN_ARRAY.
+Signed-off-by: Ian Rogers <irogers@google.com>
+---
+ tools/perf/util/parse-events.c | 28 +++++++++++++++++++++++++++-
+ tools/perf/util/parse-events.h |  3 ++-
+ tools/perf/util/parse-events.y |  2 +-
+ 3 files changed, 30 insertions(+), 3 deletions(-)
 
-I see, thank you for explaining.
+diff --git a/tools/perf/util/parse-events.c b/tools/perf/util/parse-events.c
+index 8282ddf68b98..c219e3ffae65 100644
+--- a/tools/perf/util/parse-events.c
++++ b/tools/perf/util/parse-events.c
+@@ -465,8 +465,10 @@ static int parse_events_add_pmu(struct parse_events_state *parse_state,
+ 
+ int parse_events_add_cache(struct list_head *list, int *idx, const char *name,
+ 			   struct parse_events_state *parse_state,
+-			   struct parse_events_terms *parsed_terms)
++			   struct parse_events_terms *parsed_terms,
++			   void *loc_)
+ {
++	YYLTYPE *loc = loc_;
+ 	struct perf_pmu *pmu = NULL;
+ 	bool found_supported = false;
+ 	const char *config_name = get_config_name(parsed_terms);
+@@ -487,12 +489,36 @@ int parse_events_add_cache(struct list_head *list, int *idx, const char *name,
+ 			 * The PMU has the event so add as not a legacy cache
+ 			 * event.
+ 			 */
++			struct parse_events_terms temp_terms;
++			struct parse_events_term *term;
++			char *config = strdup(name);
++
++			if (!config)
++				goto out_err;
++
++			parse_events_terms__init(&temp_terms);
++			if (!parsed_terms)
++				parsed_terms = &temp_terms;
++
++			if (parse_events_term__num(&term,
++						    PARSE_EVENTS__TERM_TYPE_USER,
++						    config, /*num=*/1, /*novalue=*/true,
++						    loc, /*loc_val=*/NULL) < 0) {
++				zfree(&config);
++				goto out_err;
++			}
++			list_add(&term->list, &parsed_terms->terms);
++
+ 			ret = parse_events_add_pmu(parse_state, list, pmu,
+ 						   parsed_terms,
+ 						   first_wildcard_match,
+ 						   /*alternate_hw_config=*/PERF_COUNT_HW_MAX);
++			list_del_init(&term->list);
++			parse_events_term__delete(term);
++			parse_events_terms__exit(&temp_terms);
+ 			if (ret)
+ 				goto out_err;
++			found_supported = true;
+ 			if (first_wildcard_match == NULL)
+ 				first_wildcard_match =
+ 					container_of(list->prev, struct evsel, core.node);
+diff --git a/tools/perf/util/parse-events.h b/tools/perf/util/parse-events.h
+index 62dc7202e3ba..c498d896badf 100644
+--- a/tools/perf/util/parse-events.h
++++ b/tools/perf/util/parse-events.h
+@@ -235,7 +235,8 @@ int parse_events_add_numeric(struct parse_events_state *parse_state,
+ 			     bool wildcard);
+ int parse_events_add_cache(struct list_head *list, int *idx, const char *name,
+ 			   struct parse_events_state *parse_state,
+-			   struct parse_events_terms *parsed_terms);
++			   struct parse_events_terms *parsed_terms,
++			   void *loc);
+ int parse_events__decode_legacy_cache(const char *name, int pmu_type, __u64 *config);
+ int parse_events_add_breakpoint(struct parse_events_state *parse_state,
+ 				struct list_head *list,
+diff --git a/tools/perf/util/parse-events.y b/tools/perf/util/parse-events.y
+index a2361c0040d7..ced26c549c33 100644
+--- a/tools/perf/util/parse-events.y
++++ b/tools/perf/util/parse-events.y
+@@ -353,7 +353,7 @@ PE_LEGACY_CACHE opt_event_config
+ 	if (!list)
+ 		YYNOMEM;
+ 
+-	err = parse_events_add_cache(list, &parse_state->idx, $1, parse_state, $2);
++	err = parse_events_add_cache(list, &parse_state->idx, $1, parse_state, $2, &@1);
+ 
+ 	parse_events_terms__delete($2);
+ 	free($1);
+-- 
+2.51.0.268.g9569e192d0-goog
 
-[...]
-
-> > > +static int cmp_ptr_to_u32(const void *a, const void *b)
-> > > +{
-> > > +	return *(u32 *)a - *(u32 *)b;
-> > > +}
-> >=20
-> > This will overflow for e.g. `0 - 8`.
->=20
-> Why? 0U - 8U =3D 0xfffffff8U (it's not an UB because values are
-> unsigned).  Then it's cast to int on return which is -8.
-
-Uh-oh. Ok, looks like this works.
-
-[...]
-
-> > > +static int jt_from_subprog(struct bpf_verifier_env *env,
-> > > +			   int subprog_start,
-> > > +			   int subprog_end,
-> > > +			   struct jt *jt)
-> > > +{
-> > > +	struct bpf_map *map;
-> > > +	struct jt jt_cur;
-> > > +	u32 *off;
-> > > +	int err;
-> > > +	int i;
-> > > +
-> > > +	jt->off =3D NULL;
-> > > +	jt->off_cnt =3D 0;
-> > > +
-> > > +	for (i =3D 0; i < env->insn_array_map_cnt; i++) {
-> > > +		/*
-> > > +		 * TODO (when needed): collect only jump tables, not static keys
-> > > +		 * or maps for indirect calls
-> > > +		 */
-> > > +		map =3D env->insn_array_maps[i];
-> > > +
-> > > +		err =3D jt_from_map(map, &jt_cur);
-> > > +		if (err) {
-> > > +			kvfree(jt->off);
-> > > +			return err;
-> > > +		}
-> > > +
-> > > +		/*
-> > > +		 * This is enough to check one element. The full table is
-> > > +		 * checked to fit inside the subprog later in create_jt()
-> > > +		 */
-> > > +		if (jt_cur.off[0] >=3D subprog_start && jt_cur.off[0] < subprog_en=
-d) {
-> >=20
-> > This won't always catch cases when insn array references offsets from
-> > several subprograms. Also is one subprogram limitation really necessary=
-?
->=20
-> This was intentional. If you have a switch or a jump table
-> defined in C, then corresponding jump tables belong to one function.
-> Also, what if you have a jt which can jump from function f() to g(),
-> but then g() is livepatched by another function?
-
-Ok, yes, for gotox such limitation makes sense.
-
-[...]
-
-> > > @@ -18679,6 +19000,10 @@ static bool regsafe(struct bpf_verifier_env =
-*env, struct bpf_reg_state *rold,
-> > >  		return regs_exact(rold, rcur, idmap) && rold->frameno =3D=3D rcur-=
->frameno;
-> > >  	case PTR_TO_ARENA:
-> > >  		return true;
-> > > +	case PTR_TO_INSN:
-> > > +		/* cur =E2=8A=86 old */
-> >=20
-> > Out of curiosity: are unicode symbols allowed in kernel source code?
->=20
-> I've replaced with words, don't see other examples of unicode around
-> (but also can't find "don't use unicode" in coding-style.rst).
-
-Personally, I like unicode symbols :)
-
-> > > +		return (rcur->min_index >=3D rold->min_index &&
-> > > +			rcur->max_index <=3D rold->max_index);
-> > >  	default:
-> > >  		return regs_exact(rold, rcur, idmap);
-> > >  	}
-> > > @@ -19825,6 +20150,67 @@ static int process_bpf_exit_full(struct bpf_=
-verifier_env *env,
-> > >  	return PROCESS_BPF_EXIT;
-> > >  }
-> > > =20
-> > > +/* gotox *dst_reg */
-> > > +static int check_indirect_jump(struct bpf_verifier_env *env, struct =
-bpf_insn *insn)
-> > > +{
-
-[...]
-
-> > > +	if (dst_reg->max_index >=3D map->max_entries) {
-> > > +		verbose(env, "BPF_JA|BPF_X R%d is out of map boundaries: index=3D%=
-u, max_index=3D%u\n",
-> > > +				insn->dst_reg, dst_reg->max_index, map->max_entries-1);
-> > > +		return -EINVAL;
-> > > +	}
-> > > +
-> > > +	xoff =3D kvcalloc(dst_reg->max_index - dst_reg->min_index + 1, size=
-of(u32), GFP_KERNEL_ACCOUNT);
-> > > +	if (!xoff)
-> > > +		return -ENOMEM;
-> > > +
-> > > +	n =3D copy_insn_array_uniq(map, dst_reg->min_index, dst_reg->max_in=
-dex, xoff);
-> >=20
-> > Nit: I'd avoid this allocation and do a loop for(i =3D min_index; i <=
-=3D max_index; i++),
-> >      with map->ops->map_lookup_elem(map, &i) (or a wrapper) inside it.
->=20
-> But it should be a list of unique values, how would you sort it
-> without allocating memory (in a reqsonable time)?
-
-Because of the push_state() loop below, right?
-Makes sense.
-
-> > > +	if (n < 0) {
-> > > +		err =3D n;
-> > > +		goto free_off;
-> > > +	}
-> > > +	if (n =3D=3D 0) {
-> > > +		verbose(env, "register R%d doesn't point to any offset in map id=
-=3D%d\n",
-> > > +			     insn->dst_reg, map->id);
-> > > +		err =3D -EINVAL;
-> > > +		goto free_off;
-> > > +	}
-> > > +
-> > > +	for (i =3D 0; i < n - 1; i++) {
-> > > +		other_branch =3D push_stack(env, xoff[i], env->insn_idx, false);
-> > > +		if (IS_ERR(other_branch)) {
-> > > +			err =3D PTR_ERR(other_branch);
-> > > +			goto free_off;
-> > > +		}
-> > > +	}
-> > > +	env->insn_idx =3D xoff[n-1];
-> > > +
-> > > +free_off:
-> > > +	kvfree(xoff);
-> > > +	return err;
-> > > +}
-> > > +
-
-[...]
