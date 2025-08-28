@@ -1,76 +1,81 @@
-Received: from out162-62-57-87.mail.qq.com (out162-62-57-87.mail.qq.com [162.62.57.87])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFB53214813;
-	Thu, 28 Aug 2025 11:19:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.57.87
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBE97244691;
+	Thu, 28 Aug 2025 11:22:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756379971; cv=none; b=D0iXMwQMFMsfXWKbSadEtTJaJvFNis2PFYxvQlzxTSo+LWhk74qgUJY1Wiiy4KTo+6n7Mlbxyesn2l2alEQz+G/pP1rEW4rGlO1+oPc76vmMJWwgAX1bZVQr5aWttYVpV8a/wfe0qRWdZfdPSGGc4uVwYrJnFH11r4eK7/hBUdA=
+	t=1756380178; cv=none; b=ZivJeGmrCOM0Jeq3YSaM4BtwWLdaxw/N1JJc6VLt20YI1S2NxgTMwX1+awKwN9rG1GXsnPJmOr/HIZtTbDLWUt13Je7sDT5cDz3MPEDixv/Jmz5FZeqmSqILeIYizzoRa0vngh+ljeN9m7KF3HMSPkNOciT6gOopv7Wlg4tyEW0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756379971; c=relaxed/simple;
-	bh=FXgfQymDrsmrepLJABIctJ0oih0TYDCQeRXty9SQJdw=;
-	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
-	 MIME-Version; b=X1TEc5sks74Zmg5b9SGaC4Jc0taz4kxWi56aS5OcdZQTYX/8mbP3xDSTZn63eE8/2MuiS3f2evxc7l0c4GspEKEiu2X2FaTzHJrKiC4TEHCkGE84vx/k5kxKVxC9Tb8VwOUe5q+uSTIyTdSTp5c9Ojdgx6WNxSGno51voayKqno=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=BwCfnwXr; arc=none smtp.client-ip=162.62.57.87
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
+	s=arc-20240116; t=1756380178; c=relaxed/simple;
+	bh=fvV1/34M0q/gAMQ253l/U84MmKBcsMJLgosMs2oZQgk=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=d/iv61m2I+TkmV3UGbPnvSUt7w3+7WzfeYdAba8KFn5cWOVI9wr4IIPQVNRaeXjmXkCdunDpvcn96vtvtPcXuXzxvMaGw6UNI48TUZKxO3pGKU36xrRMo2+3vvuwCF5/455Maka4GaaFr0SnffQ97nMPjxzmBNdlbqVnmZSnkXk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Qt1kh0yC; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="BwCfnwXr"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-	s=s201512; t=1756379657;
-	bh=tcR1dyJby3rnBKKEPlwBslHLorWRcZCdjqllQkvmPyw=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=BwCfnwXreQ31C2w/qPOdbXx+4uik5jw4wYAkBbQYW1NxX3oq6DoUvxN4mRZfbVUwr
-	 j89Rt2xtuR89kyq9SH1IYg7MgLBzxEWtMMPX3olIV7H3BFsGQFYCDmK8JOaOnDqztM
-	 4wmh4rKramiaoqm/U2IwlJeW+Pp4lHw689BQpSFI=
-Received: from NUC10 ([39.156.73.10])
-	by newxmesmtplogicsvrszc43-0.qq.com (NewEsmtp) with SMTP
-	id 204184AE; Thu, 28 Aug 2025 19:08:04 +0800
-X-QQ-mid: xmsmtpt1756379284tcf27c71l
-Message-ID: <tencent_A842AF5EA32A88970690424E592897FC2A08@qq.com>
-X-QQ-XMAILINFO: N3l5ASPewLWq3KNqT5Iyod68V1MYkhI8XKpuANWh6xLWrgN9KAxvzDlV7wbX0r
-	 ++acAEkktHYeBNf31kmldATyh3lU+FuzWXEWHFoyvZvSbUx/QVdnB2SE3DqBZ9GjbzcF0NvpJaZU
-	 VQec3cH1S/R0kiuJJdlabiUo7F1RTmP30L5yCE8o5DrwokJcykmiduiHOW5wunTa+jFI6XK6oF3a
-	 P9wn/5ivIreAcVH7d4sWxZvzQNJOdnSAwhdm0s1Qn683ClMZDJ7/bCiC6o9l+9B3VUNizpctjkzd
-	 XCe3RtDpd2/l9ZZTQ9aUZBiGxQYkLH7ML/ShWhpuIM4WUAfCPqbo5dYaZocLVHj5fFjAXhM/5sMq
-	 gr0ir0bGG4K1OjaQd4uHaS/fkzlYleBW6MGaWnNX+IbUGUq4ycdmQggPeaZ1fqeNWoNg4nTCmYFq
-	 X2rGjau2+c7E/5NZsJZEYgZ7bLG/QJiBVuwiXJ6HCIhhpQicgxxvna9OKLm+LuPToy/xQoWvM7WH
-	 Leh2REUzVd5oj5un9zslNp4Nzeftbmm44fZM2Db3gupDQKHRuaBNUP8aqcS0LenpB0+sRuM9ej+5
-	 RQ9wp7VX7rjH8zqgo6y2Ne9zIXU1kn88vTJjCDkfVaryy/SXQiv8m+ne9LRVp1vFw3e4D32hk3Fc
-	 o8jMnhk4kOMKegoLzUUu/XWEbS1i4HE50TqFE2LOAZBsJKPfX+OMmkXHuzPjlBfK4y7d44mB4Oqf
-	 i2Mb2cgwyvMb2cIf6alv9qUhAlqVJWMsyG2YJy2aC6Ro7fPJ0y0fw5IwNix8SSkAqw7GypsbOalL
-	 K42tiYuj3iqyz3SteKjK4IdWhrKlKcbFvuSJcnRrjVMeXhqB33Zu07N4Rn0ms9bLoDAbDgd6OwCb
-	 weYHmfX/UfusgolCMDQa4tpsFNAaDzDs++iVrR2SO0CiH5Yc3cjc8jIeCUDkZB3/fCvQdnX1MAqc
-	 sMaqG5Pz7lve3o7sifCRfvNhJY6c1iht5G88I9wPeDSdNBGf+enj9mjgbLkrt2CUH0oo5KJmADlA
-	 wF3HoC715EKfhjdTyB/5gC1mCmxvU=
-X-QQ-XMRINFO: NS+P29fieYNw95Bth2bWPxk=
-From: Rong Tao <rtoax@foxmail.com>
-To: andrii.nakryiko@gmail.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	vmalik@redhat.com
-Cc: Rong Tao <rongtao@cestc.cn>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Mykola Lysenko <mykolal@fb.com>,
-	Shuah Khan <shuah@kernel.org>,
-	bpf@vger.kernel.org (open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)),
-	linux-kernel@vger.kernel.org (open list),
-	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
-Subject: [PATCH bpf-next v3 2/2] selftests/bpf: Add tests for bpf_strnstr
-Date: Thu, 28 Aug 2025 19:07:37 +0800
-X-OQ-MSGID: <01ab64c260739383c3f9253789c9b5ba0762776b.1756378974.git.rtoax@foxmail.com>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <cover.1756378974.git.rtoax@foxmail.com>
-References: <cover.1756378974.git.rtoax@foxmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Qt1kh0yC"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2445824dc27so7139685ad.3;
+        Thu, 28 Aug 2025 04:22:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1756380176; x=1756984976; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=PxeMfx1+uNFbtk5b+iMV6QezPtIYzUJuvmOTjg2DLuM=;
+        b=Qt1kh0yC0vw6jItCiCV9czAn4OxUuWnFj4N5JpMiJpbj0sAgDXYu9+mGe9LHRkJgQ2
+         lvZgeAvisXSaBFB8tM7pgmQ9knbZrvAs1ypnG0yKEJMa+/GFNvUJGJGpcQBKojNLE43Y
+         nofVOyfUHq/piwG50hZBRXhgxVvGSzAYxDTTrRD5oUmaxs6tNcc64V8TU2qYtcDlhNNc
+         qz8dL8THwnv9/3rW4mXFPJNUFZTGohLW/tcUISN/WWEazQil38RnyPNnjLKksr/sgrY7
+         78QjKisVDqJzF+P9oHKCkGI2uY5IBR/MF5O/z6bqlkE0fDF8B3ESYE7sim7GSMTIxe2R
+         I/xw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756380176; x=1756984976;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PxeMfx1+uNFbtk5b+iMV6QezPtIYzUJuvmOTjg2DLuM=;
+        b=UhrpCDLqTJpaX+ZgWymxslGSr3gR0ni8s/LQ3VeLWsQ4yB05xDeWUAV8HD4/K8VIou
+         AX9/ozU0UK/04U7sQX4uu+3pxsZgsTmaJdeoo4VEKj/mpDa2HRkmJoeHQGZjmblpvv2g
+         yAUHPtXc3K5+S0zIjdq6kGkiWxZ7+Z3Z7SQ7m5pDDL7Zwv+gatdBEviR0DklS8pNl/Ub
+         +W/k6F+fC6nHbkDv/WOjNaJKkwyWExPH+nLwdaFFm98bx1wUmDO4+P3iXwuGGmP5ClXy
+         mWKKM0kuoZoeFvzUrPG6/9O2VnVihVnODP+mM3bfw7DQPLs0UPJdG07rJNqRpDujCUvX
+         NTug==
+X-Forwarded-Encrypted: i=1; AJvYcCVBr6DgtmPWhbHdXj1CTfsfzvvVa7zCOMkysAvIGKps70G1JpgfNQ84fZBFQk18pLfRJRsskyE3@vger.kernel.org, AJvYcCWjwRlTwc6k3+H0LcjOisJarhehSPWbV54Q8Ywso8f5Pwa/TvaDs+rImEa64V3oaMVBQco=@vger.kernel.org, AJvYcCWpp76uyiENM6t509yPUC4nYseUZ6HPpuqVS8qHRrf/tNGJXbG3FSPx2lOTDWswoN+6AwjvMbFQOCq28w==@vger.kernel.org, AJvYcCXvR08hnM5jb73cboeoRv3nPFY2gooM0MZ43wqjSz1tZdD4IAkU8nH6IxHNpRS+TWsGiAjOcbSbrcLx/Jfr@vger.kernel.org
+X-Gm-Message-State: AOJu0YxmBuF3KO703f2KJGAixIW9chkaVIDaiUN9kAQhX94s/89Z0By4
+	zAJOg+f0i/sJDg7sAlUFbbgrBl93iIRMypC6fPHDQP3Sxibthimb77h8
+X-Gm-Gg: ASbGnctIbRq63VKxrki0H2ekp3f9sZWXOkSfjRliJprT2aLr+aJzLLgvKurDXGtIONB
+	uEWNkK5Km95fg8FJg8w38c5suHJkt5dzJdYjYCR7PcI/R5teEfo37ZSI2FOTrakuhdfOKZOBarj
+	8jKzy8rRZOs/19a6JuJmhgKUHMafqWYNIpnpueG3R9qJSvhfBvcr/04nvxw9JugdPEElxXNAgGH
+	c3C0ninF2lxFh2HEcXQzYiR0/+m6wRFiz8B+x66tsC2UV9TDuAilcPd7K2PprsgeC8MZ93efgkA
+	0ErCp4R8cTXCH7aTS+WPv3IbwDxTCoeSihffMdJmqZIJJMtn3PMqptDe94Uj4/BVMsluBt4KxVL
+	ULx8SUg2o3SOuI0sAHUWAgL01UTTVqUbSVhUOP81kjnsqsxFzbeRRyTWUH0wroIXvTj973noUxM
+	kyGr8Ipy/XHA9DbEZgN5wvOQ==
+X-Google-Smtp-Source: AGHT+IHQiVu4toyB2lDInXoaA+fupYv0LkXXDoJV5p3MjYWV2/Hw1sV5uJxKSw9UtwpQSAHlRTlqsQ==
+X-Received: by 2002:a17:902:fd0e:b0:242:accd:bbe8 with SMTP id d9443c01a7336-2462ef4ca76mr245371675ad.36.1756380175971;
+        Thu, 28 Aug 2025 04:22:55 -0700 (PDT)
+Received: from localhost.localdomain ([112.97.57.188])
+        by smtp.googlemail.com with ESMTPSA id 98e67ed59e1d1-3276f57ab3esm4952547a91.3.2025.08.28.04.22.48
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Thu, 28 Aug 2025 04:22:55 -0700 (PDT)
+From: Miaoqian Lin <linmq006@gmail.com>
+To: Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Hanjun Guo <guohanjun@huawei.com>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Len Brown <lenb@kernel.org>,
+	Joerg Roedel <jroedel@suse.de>,
+	Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
+	Robin Murphy <robin.murphy@arm.com>,
+	linux-acpi@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org
+Cc: linmq006@gmail.com,
+	stable@vger.kernel.org
+Subject: [PATCH] ACPI/IORT: Fix memory leak in iort_rmr_alloc_sids()
+Date: Thu, 28 Aug 2025 19:22:43 +0800
+Message-Id: <20250828112243.61460-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.39.5 (Apple Git-154)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -79,33 +84,37 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Rong Tao <rongtao@cestc.cn>
+If krealloc_array() fails in iort_rmr_alloc_sids(), the function returns
+NULL but does not free the original 'sids' allocation. This results in a
+memory leak since the caller overwrites the original pointer with the
+NULL return value.
 
-Add two tests for bpf_strnstr():
-
-    bpf_strnstr("", "", 0) = 0
-    bpf_strnstr("hello world", "hello", 5) = 0
-
-Signed-off-by: Rong Tao <rongtao@cestc.cn>
+Fixes: 491cf4a6735a ("ACPI/IORT: Add support to retrieve IORT RMR reserved regions")
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
 ---
- tools/testing/selftests/bpf/progs/string_kfuncs_success.c | 4 +++-
+This follows the same pattern as the fix in commit 06615967d488
+("bpf, verifier: Fix memory leak in array reallocation for stack state").
+---
+ drivers/acpi/arm64/iort.c | 4 +++-
  1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/string_kfuncs_success.c b/tools/testing/selftests/bpf/progs/string_kfuncs_success.c
-index 46697f381878..1b56bd5860e9 100644
---- a/tools/testing/selftests/bpf/progs/string_kfuncs_success.c
-+++ b/tools/testing/selftests/bpf/progs/string_kfuncs_success.c
-@@ -30,7 +30,9 @@ __test(2) int test_strcspn(void *ctx) { return bpf_strcspn(str, "lo"); }
- __test(6) int test_strstr_found(void *ctx) { return bpf_strstr(str, "world"); }
- __test(-ENOENT) int test_strstr_notfound(void *ctx) { return bpf_strstr(str, "hi"); }
- __test(0) int test_strstr_empty(void *ctx) { return bpf_strstr(str, ""); }
--__test(0) int test_strnstr_found(void *ctx) { return bpf_strnstr(str, "hello", 6); }
-+__test(0) int test_strnstr_found1(void *ctx) { return bpf_strnstr("", "", 0); }
-+__test(0) int test_strnstr_found2(void *ctx) { return bpf_strnstr(str, "hello", 5); }
-+__test(0) int test_strnstr_found3(void *ctx) { return bpf_strnstr(str, "hello", 6); }
- __test(-ENOENT) int test_strnstr_notfound(void *ctx) { return bpf_strnstr(str, "hi", 10); }
- __test(0) int test_strnstr_empty(void *ctx) { return bpf_strnstr(str, "", 1); }
+diff --git a/drivers/acpi/arm64/iort.c b/drivers/acpi/arm64/iort.c
+index 98759d6199d3..65f0f56ad753 100644
+--- a/drivers/acpi/arm64/iort.c
++++ b/drivers/acpi/arm64/iort.c
+@@ -937,8 +937,10 @@ static u32 *iort_rmr_alloc_sids(u32 *sids, u32 count, u32 id_start,
  
+ 	new_sids = krealloc_array(sids, count + new_count,
+ 				  sizeof(*new_sids), GFP_KERNEL);
+-	if (!new_sids)
++	if (!new_sids) {
++		kfree(sids);
+ 		return NULL;
++	}
+ 
+ 	for (i = count; i < total_count; i++)
+ 		new_sids[i] = id_start++;
 -- 
-2.51.0
+2.39.5 (Apple Git-154)
 
