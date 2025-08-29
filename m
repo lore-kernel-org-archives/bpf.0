@@ -1,25 +1,25 @@
-Received: from relay.hostedemail.com (smtprelay0017.hostedemail.com [216.40.44.17])
+Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0589A3081BE;
-	Fri, 29 Aug 2025 16:57:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7F1F3A1DB;
+	Fri, 29 Aug 2025 17:02:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756486664; cv=none; b=peXNPblJorjAUBfLtFVo+xUrCFUwRZ6t9eSgW+cr+9KsE/efo3UPAKipnJBVFeHEFhDgyGkJX/aD1A6YOp3pyPH+H0UOZmSJ3cJxHg76UFwMWS2UgWdb1tE4h3CI3pQK/C+LjM8yKVEfWj3J5fya3x353mh+GzpT1dC2LvcxA6c=
+	t=1756486952; cv=none; b=B9cPlYtWoX1ntnSDY+mc69yUWT3hvqn14Kjoy/UzkM/nfveYODDL7Dn8tbbP3RilqiAdLHwflGEgRkPYO/jlqwZLMMUdy01181n5zckgGmGoWZokZ6Xj8C6qOoC+WYo8QVPQPTp0BxudrMU9NzW0jHbXVHMuxxbxqGjkh7fs77U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756486664; c=relaxed/simple;
-	bh=B31eEimj8OTYKu7/EvM1IRu8gUQcEs3P1Hpgf4B8wMU=;
+	s=arc-20240116; t=1756486952; c=relaxed/simple;
+	bh=AsYSDcCvGRYfnSv74ffyi7VKLJBKc9BzzYtyWyzxWZQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=PldBEs6IzYMeJhQK/07vVRoTQE++FnfyzrD4DduH+RGwGZsOq+av3bj8Ip3/SdR2sqXuk7c16JvQ4NCkleb5IskLLGlizDwIBkeBFuHSFP6nbmYuYxJSe7E2s1Pxixf/TMahv0Z6Eq5dAbwxMdKSBVQju/34P+sVO30hH21KBsA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.17
+	 MIME-Version:Content-Type; b=ghFUGvLkjYipTjfIy+bniZq8JNzkyYspSSKDgOVLcu7TVI1xFvfQ+nHRNLW0GiTLA6/NmaRCbkmgRhC38ybeTZM42qGlpN6S+A0Gd4w1kLPNBUHFRI9IBVjIDPjPI2UlcrHRNzb1AUjqx63OYGStnoUNMEMpPKkP76GlRsmG3/w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf01.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay03.hostedemail.com (Postfix) with ESMTP id CBF1DBB93A;
-	Fri, 29 Aug 2025 16:57:38 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf01.hostedemail.com (Postfix) with ESMTPA id 984956000F;
-	Fri, 29 Aug 2025 16:57:33 +0000 (UTC)
-Date: Fri, 29 Aug 2025 12:57:56 -0400
+Received: from omf06.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay07.hostedemail.com (Postfix) with ESMTP id AA027160850;
+	Fri, 29 Aug 2025 17:02:21 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf06.hostedemail.com (Postfix) with ESMTPA id 4D7D02000F;
+	Fri, 29 Aug 2025 17:02:16 +0000 (UTC)
+Date: Fri, 29 Aug 2025 13:02:39 -0400
 From: Steven Rostedt <rostedt@goodmis.org>
 To: Linus Torvalds <torvalds@linux-foundation.org>
 Cc: Steven Rostedt <rostedt@kernel.org>, Arnaldo Carvalho de Melo
@@ -38,10 +38,9 @@ Cc: Steven Rostedt <rostedt@kernel.org>, Arnaldo Carvalho de Melo
  <codonell@redhat.com>
 Subject: Re: [PATCH v6 5/6] tracing: Show inode and device major:minor in
  deferred user space stacktrace
-Message-ID: <20250829125756.2be2a3c3@gandalf.local.home>
-In-Reply-To: <CAHk-=wgv11k-3e8Ee-Vk_KHJMB0S9J1PwHqFUv2X-Z8eFWq8mg@mail.gmail.com>
+Message-ID: <20250829130239.61e25379@gandalf.local.home>
+In-Reply-To: <CAHk-=whbHyKvJ5VSvObfmGSSEukYhv5DZVhR3_-smu_1_b54mg@mail.gmail.com>
 References: <20250828180300.591225320@kernel.org>
-	<20250828180357.223298134@kernel.org>
 	<CAHk-=wi0EnrBacWYJoUesS0LXUprbLmSDY3ywDfGW94fuBDVJw@mail.gmail.com>
 	<D7C36F69-23D6-4AD5-AED1-028119EAEE3F@gmail.com>
 	<CAHk-=wiBUdyV9UdNYEeEP-1Nx3VUHxUb0FQUYSfxN1LZTuGVyg@mail.gmail.com>
@@ -56,6 +55,7 @@ References: <20250828180300.591225320@kernel.org>
 	<CAHk-=wjCOWCzXG7Z=wkbLYOOcqFbuZTXSdX2yqCCWWOvanugUg@mail.gmail.com>
 	<20250829123321.63c9f525@gandalf.local.home>
 	<CAHk-=wgv11k-3e8Ee-Vk_KHJMB0S9J1PwHqFUv2X-Z8eFWq8mg@mail.gmail.com>
+	<CAHk-=whbHyKvJ5VSvObfmGSSEukYhv5DZVhR3_-smu_1_b54mg@mail.gmail.com>
 X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -65,58 +65,41 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Stat-Signature: 18jykodge4m1t8y9iu4ci1anjgx8bi38
+X-Stat-Signature: uh9qiu3ia5bgsp5icdgagfjbwxsqd5p3
 X-Rspamd-Server: rspamout05
-X-Rspamd-Queue-Id: 984956000F
+X-Rspamd-Queue-Id: 4D7D02000F
 X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX1801hL3r63Hi0MBtC7pDdEvK0YgZ9zEiac=
-X-HE-Tag: 1756486653-638081
-X-HE-Meta: U2FsdGVkX1/sCw8yIWzmnLshxirkyw2IcJV/SeAn8Hga1OXlAU7UEAxvJMnS2DybjyIECYf9cIpKtlQ3hcI9F7+f6ZcoqCukuPup6DhaHzQzd0Z7hImnUfk//XjJHxwPqSsmDiEEo/tKK3eP5g3Fbp1ijDC1hdlnCUfGYtCsrwGV3KLb2WJ7TwwFiUTq0ZpOAGgci+0vkE8Eh12cSxnr6QyO6jpK60Wz4OH1rtPyrU/rWns0xQrsPAJDk5daN0T1j+BRD7jPa0DS8y23njgh3a1EUbTeuebNqQbCtkrrvYfHnKp80NCKOLxMCI7CcyIrYB315qsvBm3ehrMVN25RDcJmQm2GpWKASfKTIGiVjRLAnn6G1SYq9boBtT1nwwikNEfZ5fX9t0x3pRFAef+ssIR0hVeLCK2bQxfeLdVL0Nv6c5OM6IKxOLEQRZ2qVXRG
+X-Session-ID: U2FsdGVkX1+9IovbtNRLJxfrsJ/GnO9v0te3ayW3eNU=
+X-HE-Tag: 1756486936-50009
+X-HE-Meta: U2FsdGVkX193s8aJ0xNbZih+i1YHm2l/z6jfuxgEnyr4Oi0TgmoqNXadxdqu8xLxkf17h+71/IXt+hPjuhBJ+CThS+6bMIrNytyahvkvNC93aOAA2xGc7EmlsmFnD0Th4Jmwcb62L4Ys58pDbdxof9fuwqg8nLyseF/xMnqXh5lnQWINicH77/UA7grRANVGboagTU2WjLfRLrT2VYK/3gdZbz6LocqTo1YbY4iLuFK9O60hFWOU3ZcanWG5r72gyU5YujnPmLWy+c17MqarmyS3AEGZiXzQtcKUxfY/kQnRjPjJ/R4gKDvQ854DJ5C4v0ln+iZfczAU+0IdhSgUgN0PLOdtsuuaGlsxTAhhni9al5LEiAbYis3hGnJRJuYK
 
-On Fri, 29 Aug 2025 09:42:03 -0700
+On Fri, 29 Aug 2025 09:50:12 -0700
 Linus Torvalds <torvalds@linux-foundation.org> wrote:
 
-> On Fri, 29 Aug 2025 at 09:33, Steven Rostedt <rostedt@goodmis.org> wrote:
+> On Fri, 29 Aug 2025 at 09:42, Linus Torvalds
+> <torvalds@linux-foundation.org> wrote:
 > >
-> > I just realized that I'm using the rhashtable as an "does this hash exist".  
+> > Just use the hash. Don't do anything to it. Don't mess with it.  
 > 
-> The question is still *why*?
-
-The reason is to keep from triggering the event that records the pathname
-for every look up.
-
+> In fact, at actual stack trace time, don't even do the hashing. Just
+> save the raw pointer value (but as a *value*, not as a pointer: we
+> absolutely do *not* want people to think that the random value can be
+> used as a 'struct file' *: it needs to be a plain unsigned long, not
+> some kernel pointer).
 > 
-> SO JUST USE THE NUMBERS, for chissake! Don't make them mean anything.
-> Don't try to think they mean something.
+> Then the hashing can happen when you expose those entries to user
+> space (in the "print" stage). At that point you can do that
 > 
-> The *reason* I htink hashing 'struct file *' is better than the
-> alternative is exactly that it *cannot* mean anything. It will get
-> re-used quite actively, even when nobody actually changes any of the
-> files. So you are forced to deal with this correctly, even though you
-> seem to be fighting dealing with it correctly tooth and nail.
+>        hash = siphash_1u64(value, secret);
 > 
-> And at no point have you explained why you can't just treat it as
-> meaningless numbers. The patch that started this all did exactly that.
-> It just used the *wrong* numbers, and I pointed out why they were
-> wrong, and why you shouldn't use those numbers.
+> thing.
+> 
+> That will likely help I$ and D$ too, since you won't be accessing the
+> secret hashing data randomly, but do it only at trace output time
+> (presumably in a fairly tight loop at that point).
 
-I agree. The hash I showed last time was just using the pointers. The hash
-itself is meaningless and is useless by itself. The only thing the hash is
-doing is to be an identifier in the stack trace so that the path name and
-buildid don't need to be generated and saved every time.
-
-In my other email, I'm thinking of using the pid / vma->vm_start as a key
-to know if the pathname needs to be printed again or not. Although, perhaps
-if a task does a dlopen(), load some text and execute it, then a dlclose()
-and another dlopen() and loads text, that this could break the assumption
-that the vm_start is unique per file.
-
-Just to clarify, the goal of this exercise is to avoid the work of creating
-and generating the pathnames and buildids for every lookup / stacktrace.
-
-Now maybe hashing the pathname isn't as expensive as I think it may be. And
-just doing that could be "good enough".
-
+Note, the ring buffer can be mapped to user space. So anything written into
+the buffer is already exposed. The "at trace output time" is done by user
+space, not the kernel (except when using "trace" and "trace_pipe" files).
 
 -- Steve
-
