@@ -1,28 +1,27 @@
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8993A1D5CD7;
-	Fri, 29 Aug 2025 06:11:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.2
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.5])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EBBF2248B8;
+	Fri, 29 Aug 2025 06:11:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756447903; cv=none; b=ZWI28P6vhjbijVz6YCteVppYPcuWfxtU8wwff3kNpybzr4KnuveCopRm+BwNC3S8kfQDzn3NwFZ6FhZN6BflLtwpAOW7uKOWREAF97gMEEuR8u+ORVQ6nbi5ke7eINGHfwpNqDFmHjSSJfIPbVsOOswoCrK/5hxfNv7pmBqlgfc=
+	t=1756447921; cv=none; b=gq7q3itRTdig4mK7MNsLXyQMLQt6U29D5WlJ3bacBtMBCCWWGoEEiYuFxz3hdl7BqvSAGsMT4QBzJ5P1lFq4R4MfskvyrXvk4RfTWOJ3pcwIL1pY7C2pL3GNhJMsWwCr3WSKHn8gaGuQmpdW7VYQ8BMZzXMB0lq93jxrMK6oJ/g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756447903; c=relaxed/simple;
-	bh=8eT40SFiTm3bVZK3mBpVRWmv0CD13kcOlWuHOLTsX8o=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=JflV4h3M2jAauMMQYPo5qUILAyFJIsU4TKH6bqTfymKhHRq7kffd1NQpl9jUnGNHljPGqgWUciWCrPg5Wug8mpW01RGaILNKhR7HeA4YcdLBLt4bdFmfBozGuKOtdDyUi9Q5v2k2G5zbjqYmd8Xh6VGkco5Z86zsPd5ydKDr+ys=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=ld3f3buL; arc=none smtp.client-ip=117.135.210.2
+	s=arc-20240116; t=1756447921; c=relaxed/simple;
+	bh=EQ/zcAckVWgbMbZQab4BvLqSIULf4GwdrgDeaUo913A=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=XbHbufVK7s2/RXRGjbJ971v51yxtRi/GzKqnRc7EvJ3kXIByNRIM6yTqeu2a0zFcHeccZqw4lzRV+G/jQRlQh3XET2/jeudnNvWoghAn2vcWd3Yf3xdryEZ3dqlOFeonf4ck54S/7570SDLlnV5lQbfnynyVjDRURRAaaWVUgyk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=f2cRPdd7; arc=none smtp.client-ip=220.197.31.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="ld3f3buL"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="f2cRPdd7"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=Cq
-	pEj+ueVwgCgyH4K9Q1Vf8CzcGg3m/pudLLnNbw+iA=; b=ld3f3buL4MukubknxU
-	+RIMMyVmjYRFVLSHjBZIGVkqQ6NkUBK+7IJ5GZuhnx9ZqwDoO+/vI6j4ReCSk87n
-	xczpr4XgXepT9t3OsfNkKylOeRMyh5RQQbfBhIcaBx8ZfogHUIB21f10Wy1ux/Nn
-	feACqfp7zLcfI/zeMNDYTmve0=
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=JW
+	JSnQ3s8yELJiCYVUrKb89fO2yyCBW/15VLGtPgeZ4=; b=f2cRPdd723qSuT6ak7
+	bWotvCXwTZ+Tnjaqs9SJLXDStlhvACg0juppw+1jynEr/GDhVyHqkuOR8rwqlqun
+	Ls2ljSUlMfnwTQuDEkwfvx0eHRtpNplA3rU8IluRq0XAs4NsOqGgjiZJMuEP3wMk
+	rVM7m7146YKaBSxoLvtotNRf4=
 Received: from 163.com (unknown [])
-	by gzga-smtp-mtada-g1-1 (Coremail) with SMTP id _____wD3vTZ9RLFoGWmGEg--.4740S4;
-	Fri, 29 Aug 2025 14:11:14 +0800 (CST)
+	by gzga-smtp-mtada-g1-1 (Coremail) with SMTP id _____wD3vTZ9RLFoGWmGEg--.4740S2;
+	Fri, 29 Aug 2025 14:11:10 +0800 (CST)
 From: chenyuan_fl@163.com
 To: qmo@kernel.org,
 	ast@kernel.org,
@@ -32,14 +31,11 @@ Cc: yonghong.song@linux.dev,
 	olsajiri@gmail.com,
 	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	chenyuan@kylinos.cn,
-	Jiri Olsa <jolsa@kernel.org>
-Subject: [PATCH v8 2/2] bpftool: Add CET-aware symbol matching for x86_64 architectures
-Date: Fri, 29 Aug 2025 07:11:07 +0100
-Message-Id: <20250829061107.23905-3-chenyuan_fl@163.com>
+	chenyuan@kylinos.cn
+Subject: [PATCH v8 0/2] bpftool: Refactor config parsing and add CET symbol matching
+Date: Fri, 29 Aug 2025 07:11:05 +0100
+Message-Id: <20250829061107.23905-1-chenyuan_fl@163.com>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250829061107.23905-1-chenyuan_fl@163.com>
-References: <20250829061107.23905-1-chenyuan_fl@163.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,126 +43,47 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wD3vTZ9RLFoGWmGEg--.4740S4
-X-Coremail-Antispam: 1Uf129KBjvJXoWxGr1Duw1kCw1kGFyruFWUtwb_yoWrGw1kpr
-	WrJw1YyFW8XrW3Wws3AayUCF43KFsavw4UAr9rG3yI9r15Xr1DZF4xKF10vF1avrykJa17
-	AF1fuFZ0kFZIyrDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jILvtUUUUU=
-X-CM-SenderInfo: xfkh05pxdqswro6rljoofrz/xtbBSQa4vWixPi6UnAABsK
+X-CM-TRANSID:_____wD3vTZ9RLFoGWmGEg--.4740S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7Cr4rZw4rAF4xJw1fAFy5Arb_yoW8JFy3p3
+	yfCrW3XryUXr13uanxGr48WrW5Grs7Wr48Xrn7G348Aw18Ar10yr1Igan7JasxJryaqF1U
+	ZF1F9FyqgasrArUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jn189UUUUU=
+X-CM-SenderInfo: xfkh05pxdqswro6rljoofrz/1tbiUQ+4vWixPtyECAAAss
 
-From: Yuan Chen <chenyuan@kylinos.cn>
+From: Yuan CHen <chenyuan@kylinos.cn>
 
-Adjust symbol matching logic to account for Control-flow Enforcement
-Technology (CET) on x86_64 systems. CET prefixes functions with
-a 4-byte 'endbr' instruction, shifting the actual hook entry point to
-symbol + 4.
+1. **Refactor kernel config parsing**  
+   - Moves duplicate config file handling from feature.c to common.c  
+   - Keeps all existing functionality while enabling code reuse  
 
-Acked-by: Quentin Monnet <qmo@kernel.org>
-Acked-by: Yonghong Song <yonghong.song@linux.dev>
-Acked-by: Jiri Olsa <jolsa@kernel.org>
-Signed-off-by: Yuan Chen <chenyuan@kylinos.cn>
----
- tools/bpf/bpftool/link.c | 54 +++++++++++++++++++++++++++++++++++++---
- 1 file changed, 50 insertions(+), 4 deletions(-)
+2. **Add CET-aware symbol matching**  
+   - Adjusts kprobe hook detection for x86_64 CET (endbr32/64 prefixes)  
+   - Matches symbols at both original and CET-adjusted addresses  
 
-diff --git a/tools/bpf/bpftool/link.c b/tools/bpf/bpftool/link.c
-index a773e05d5ade..bdcd717b0348 100644
---- a/tools/bpf/bpftool/link.c
-+++ b/tools/bpf/bpftool/link.c
-@@ -282,11 +282,52 @@ get_addr_cookie_array(__u64 *addrs, __u64 *cookies, __u32 count)
- 	return data;
- }
- 
-+static bool is_x86_ibt_enabled(void)
-+{
-+#if defined(__x86_64__)
-+	struct kernel_config_option options[] = {
-+		{ "CONFIG_X86_KERNEL_IBT", },
-+	};
-+	char *values[ARRAY_SIZE(options)] = { };
-+	bool ret;
-+
-+	if (read_kernel_config(options, ARRAY_SIZE(options), values, NULL))
-+		return false;
-+
-+	ret = !!values[0];
-+	free(values[0]);
-+	return ret;
-+#else
-+	return false;
-+#endif
-+}
-+
-+static bool
-+symbol_matches_target(__u64 sym_addr, __u64 target_addr, bool is_ibt_enabled)
-+{
-+	if (sym_addr == target_addr)
-+		return true;
-+
-+	/*
-+	 * On x86_64 architectures with CET (Control-flow Enforcement Technology),
-+	 * function entry points have a 4-byte 'endbr' instruction prefix.
-+	 * This causes kprobe hooks to target the address *after* 'endbr'
-+	 * (symbol address + 4), preserving the CET instruction.
-+	 * Here we check if the symbol address matches the hook target address
-+	 * minus 4, indicating a CET-enabled function entry point.
-+	 */
-+	if (is_ibt_enabled && sym_addr == target_addr - 4)
-+		return true;
-+
-+	return false;
-+}
-+
- static void
- show_kprobe_multi_json(struct bpf_link_info *info, json_writer_t *wtr)
- {
- 	struct addr_cookie *data;
- 	__u32 i, j = 0;
-+	bool is_ibt_enabled;
- 
- 	jsonw_bool_field(json_wtr, "retprobe",
- 			 info->kprobe_multi.flags & BPF_F_KPROBE_MULTI_RETURN);
-@@ -306,11 +347,13 @@ show_kprobe_multi_json(struct bpf_link_info *info, json_writer_t *wtr)
- 	if (!dd.sym_count)
- 		goto error;
- 
-+	is_ibt_enabled = is_x86_ibt_enabled();
- 	for (i = 0; i < dd.sym_count; i++) {
--		if (dd.sym_mapping[i].address != data[j].addr)
-+		if (!symbol_matches_target(dd.sym_mapping[i].address,
-+					   data[j].addr, is_ibt_enabled))
- 			continue;
- 		jsonw_start_object(json_wtr);
--		jsonw_uint_field(json_wtr, "addr", dd.sym_mapping[i].address);
-+		jsonw_uint_field(json_wtr, "addr", (unsigned long)data[j].addr);
- 		jsonw_string_field(json_wtr, "func", dd.sym_mapping[i].name);
- 		/* Print null if it is vmlinux */
- 		if (dd.sym_mapping[i].module[0] == '\0') {
-@@ -719,6 +762,7 @@ static void show_kprobe_multi_plain(struct bpf_link_info *info)
- {
- 	struct addr_cookie *data;
- 	__u32 i, j = 0;
-+	bool is_ibt_enabled;
- 
- 	if (!info->kprobe_multi.count)
- 		return;
-@@ -742,12 +786,14 @@ static void show_kprobe_multi_plain(struct bpf_link_info *info)
- 	if (!dd.sym_count)
- 		goto error;
- 
-+	is_ibt_enabled = is_x86_ibt_enabled();
- 	printf("\n\t%-16s %-16s %s", "addr", "cookie", "func [module]");
- 	for (i = 0; i < dd.sym_count; i++) {
--		if (dd.sym_mapping[i].address != data[j].addr)
-+		if (!symbol_matches_target(dd.sym_mapping[i].address,
-+					   data[j].addr, is_ibt_enabled))
- 			continue;
- 		printf("\n\t%016lx %-16llx %s",
--		       dd.sym_mapping[i].address, data[j].cookie, dd.sym_mapping[i].name);
-+		       (unsigned long)data[j].addr, data[j].cookie, dd.sym_mapping[i].name);
- 		if (dd.sym_mapping[i].module[0] != '\0')
- 			printf(" [%s]  ", dd.sym_mapping[i].module);
- 		else
+Changed in PATCH v4:
+* Refactor repeated code into a function.
+* Add detection for the x86 architecture.
+
+Changed int PATH v5:
+* Remove detection for the x86 architecture.
+
+ Changed in PATCH v6:
+* Add new helper patch (1/2) to refactor kernel config reading
+* Use the new read_kernel_config() in CET symbol matching (2/2) to check CONFIG_X86_KERNEL_IBT
+
+Changed in PATCH v7:
+* Display actual kprobe attachment addresses instead of symbol addresses
+
+Yuan Chen (2):
+  bpftool: Refactor kernel config reading into common helper
+  bpftool: Add CET-aware symbol matching for x86_64 architectures
+
+ tools/bpf/bpftool/common.c  | 93 +++++++++++++++++++++++++++++++++++++
+ tools/bpf/bpftool/feature.c | 86 ++--------------------------------
+ tools/bpf/bpftool/link.c    | 38 ++++++++++++++-
+ tools/bpf/bpftool/main.h    |  9 ++++
+ 4 files changed, 142 insertions(+), 84 deletions(-)
+
 -- 
 2.39.5
 
