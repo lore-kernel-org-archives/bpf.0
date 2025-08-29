@@ -1,156 +1,241 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA4E13128BA;
-	Fri, 29 Aug 2025 12:18:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CA0D29D267
+	for <bpf@vger.kernel.org>; Fri, 29 Aug 2025 13:28:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756469934; cv=none; b=j+avQN4WhEr7qXpDuA/3nhceLiCx2nMLiANtB4U3xGPsCcmFsdKQ73zdCesgJvKUYW3Gkjk5YeEWLfpsdkuT7kThPTFWA5UeDUkP1Qy8FCufqzoQS1OSATLB+fOkIIqiq2ErXMnOoiY2ormYdotsQ6vTGLhuxRLtU1dCLDRSIgc=
+	t=1756474113; cv=none; b=S9JePiXnYdKsbzxEEfMcU9BXkibRyGkQKQuZlaAwtuSo7pTorZnbAwYBO513N0wFK49zjCSdc8xu4iXbNQ7fANMNxz1PuZ0yDz5E89Mj4LSmlzrep/ki3CEvWzdS0jdrtDOdnzbAHAwEdGkvOFq6GZpFpVKp6qNvR8gfS/EzxFs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756469934; c=relaxed/simple;
-	bh=lmOaDJrWsALHNdIkFkPEn+1/tHhvy8ASz+0CpcTOxMQ=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=aixO4Udse8s1/Be5EQ+hm5B9V1oK4EoGuqdUm4w7WZN6OgfQjs9oDhXgFjHHuKBX6oB6pN/VihjWOlSnlzAU7WZg5OrRBnvWeTs7xPkgdvtSa+K9u01GU0NVVPZOrZ1nq17ue8hc+/U1WWO2OoUou5xWsMxaTmWf/Yo/c/qSaoU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JQ0/AxIO; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1756474113; c=relaxed/simple;
+	bh=m2w7J/BmEkKNK0Nfik2B9EcbF78wa0J9LOhx6vAmtsY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VB25bUa16/x4zoElD6mKjwfQmwM2rXb7Zw6fJRNStPIpPGKgF6p2SACEL/RZGGs5R85FPjrdfML69BaG+pLgWZqsgGLRO/Uk3ljGlct1TPxqYJHzXhsjX0XHKEyfAPT5OJmagDMa3MRxcxEpBopjMvG427MZ8pxrAhMUBYmVoD0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QphZIPv/; arc=none smtp.client-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JQ0/AxIO"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1756469933; x=1788005933;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=lmOaDJrWsALHNdIkFkPEn+1/tHhvy8ASz+0CpcTOxMQ=;
-  b=JQ0/AxIOhGOdNMLF+qwZWK/qJiXTSwfEjc9AjX87xrVNj81JYdTRUYja
-   V7Zb2LTkZJLsheaBDsqGMptJ5WLRby9tzbmbVTPMLbVDGXjofwZLzfW44
-   uOWocqbtuuJjlRsXxevgLMALWmEsvl5IiIVUgq/yRnlEAAkyhKziMiGiq
-   8LQ0HYP1ZzdKGkkj3GmzQUSZySM6I71X9QFAhieJDOOWEHkEahigArV0G
-   EZKhduHmce0JLMY2Jfh70zm2ysBhf+FZp5eGkImBMlzoWCDD2/UUeD67o
-   gUoOPBKJW64YrJe4R/5lKaE/2DIWL5soyk1zj202MgephKE5eRnOICCye
-   A==;
-X-CSE-ConnectionGUID: HteoTLb2Tjy5YxO8qrXg+A==
-X-CSE-MsgGUID: J3mI7IycSxOWSYmo7wvxqg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11536"; a="58603807"
-X-IronPort-AV: E=Sophos;i="6.18,221,1751266800"; 
-   d="scan'208";a="58603807"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2025 05:18:51 -0700
-X-CSE-ConnectionGUID: FceyOGKfTMK8J/ArNXLz6w==
-X-CSE-MsgGUID: nahg4MG6QSGDgmwgF/j0Ug==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,221,1751266800"; 
-   d="scan'208";a="170753940"
-Received: from hrotuna-mobl2.ger.corp.intel.com (HELO localhost) ([10.245.246.58])
-  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2025 05:18:22 -0700
-From: Jani Nikula <jani.nikula@intel.com>
-To: Bagas Sanjaya <bagasdotme@gmail.com>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Documentation
- <linux-doc@vger.kernel.org>, Linux DAMON <damon@lists.linux.dev>, Linux
- Memory Management List <linux-mm@kvack.org>, Linux Power Management
- <linux-pm@vger.kernel.org>, Linux Block Devices
- <linux-block@vger.kernel.org>, Linux BPF <bpf@vger.kernel.org>, Linux
- Kernel Workflows <workflows@vger.kernel.org>, Linux KASAN
- <kasan-dev@googlegroups.com>, Linux Devicetree
- <devicetree@vger.kernel.org>, Linux fsverity <fsverity@lists.linux.dev>,
- Linux MTD <linux-mtd@lists.infradead.org>, Linux DRI Development
- <dri-devel@lists.freedesktop.org>, Linux Kernel Build System
- <linux-lbuild@vger.kernel.org>, Linux Networking <netdev@vger.kernel.org>,
- Linux Sound <linux-sound@vger.kernel.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Borislav Petkov <bp@alien8.de>,
- Peter Zijlstra <peterz@infradead.org>, Josh Poimboeuf
- <jpoimboe@kernel.org>, Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
- Jonathan Corbet <corbet@lwn.net>, SeongJae Park <sj@kernel.org>, Andrew
- Morton <akpm@linux-foundation.org>, David Hildenbrand <david@redhat.com>,
- Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, "Liam R. Howlett"
- <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport
- <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, Michal Hocko
- <mhocko@suse.com>, Huang Rui <ray.huang@amd.com>, "Gautham R. Shenoy"
- <gautham.shenoy@amd.com>, Mario Limonciello <mario.limonciello@amd.com>,
- Perry Yuan <perry.yuan@amd.com>, Jens Axboe <axboe@kernel.dk>, Alexei
- Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu
- <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend
- <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav
- Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa
- <jolsa@kernel.org>, Dwaipayan Ray <dwaipayanray1@gmail.com>, Lukas Bulwahn
- <lukas.bulwahn@gmail.com>, Joe Perches <joe@perches.com>, Andrey Ryabinin
- <ryabinin.a.a@gmail.com>, Alexander Potapenko <glider@google.com>, Andrey
- Konovalov <andreyknvl@gmail.com>, Dmitry Vyukov <dvyukov@google.com>,
- Vincenzo Frascino <vincenzo.frascino@arm.com>, Rob Herring
- <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Eric Biggers <ebiggers@kernel.org>, tytso@mit.edu,
- Richard Weinberger <richard@nod.at>, Zhihao Cheng
- <chengzhihao1@huawei.com>, David Airlie <airlied@gmail.com>, Simona Vetter
- <simona@ffwll.ch>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann
- <tzimmermann@suse.de>, Nathan Chancellor <nathan@kernel.org>, Nicolas
- Schier <nicolas.schier@linux.dev>, Ingo Molnar <mingo@redhat.com>, Will
- Deacon <will@kernel.org>, Boqun Feng <boqun.feng@gmail.com>, Waiman Long
- <longman@redhat.com>, "David S. Miller" <davem@davemloft.net>, Eric
- Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo
- Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Shay Agroskin
- <shayagr@amazon.com>, Arthur Kiyanovski <akiyano@amazon.com>, David
- Arinzon <darinzon@amazon.com>, Saeed Bishara <saeedb@amazon.com>, Andrew
- Lunn <andrew@lunn.ch>, Liam Girdwood <lgirdwood@gmail.com>, Mark Brown
- <broonie@kernel.org>, Jaroslav Kysela <perex@perex.cz>, Takashi Iwai
- <tiwai@suse.com>, Alexandru Ciobotaru <alcioa@amazon.com>, The AWS Nitro
- Enclaves Team <aws-nitro-enclaves-devel@amazon.com>, Jesper Dangaard
- Brouer <hawk@kernel.org>, Bagas Sanjaya <bagasdotme@gmail.com>, Laurent
- Pinchart <laurent.pinchart@ideasonboard.com>, Steve French
- <stfrench@microsoft.com>, Meetakshi Setiya <msetiya@microsoft.com>, Greg
- Kroah-Hartman <gregkh@linuxfoundation.org>, "Martin K. Petersen"
- <martin.petersen@oracle.com>, Bart Van Assche <bvanassche@acm.org>, Thomas
- =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>, Masahiro Yamada
- <masahiroy@kernel.org>
-Subject: Re: [PATCH 00/14] Internalize www.kernel.org/doc cross-reference
-In-Reply-To: <20250829075524.45635-1-bagasdotme@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20250829075524.45635-1-bagasdotme@gmail.com>
-Date: Fri, 29 Aug 2025 15:18:20 +0300
-Message-ID: <437912a24e94673c2355a2b7b50c3c4b6f68fcc6@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QphZIPv/"
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-45b82a21eeeso3621285e9.2
+        for <bpf@vger.kernel.org>; Fri, 29 Aug 2025 06:28:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1756474110; x=1757078910; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=17u74bjVCEa7IlbKmae/+ywIyEMnxWgnm4Z9JL0BgL8=;
+        b=QphZIPv/1CGXmEUeqGdt4LKwGZ53mPMfTtrCLnT76MB7Q0qzkUrCxg0Qw7trtJBXjA
+         Kq2pRxWbzCy+usoMqJGHoHJZ28Od4OIotoo2YFkhUxlAGpSX1qU8Jq57fSBI/I3ejMim
+         3gZapIoYtm0n6CEZ8HMj2NySeZ0QvYJpi52QJxa6FuPS0OXmPvNSZHHhSSCBd6yTNXMS
+         q7bNOix9dCU5fStfzbX2X39bvwaWcFEdGq3jKOmiXkeK4S27roM856fFeoW2gGfz3Ykg
+         ByWKqgdn7qSaBkw3rIEVoA6sw0qv+vl+udxeeqdQmCwjNRVEN7oszRQM1IjjltL7r0t+
+         7nJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756474110; x=1757078910;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=17u74bjVCEa7IlbKmae/+ywIyEMnxWgnm4Z9JL0BgL8=;
+        b=mb3x7zvbtdJYgEhExYwAuMsAScQoCpR/6GvAYAPB5eOCZmPURYN727KmrCuCz5hVyc
+         qsROrSBQ3EGTFW2YdofyzH02rBD2FbAt/Zc7R0GlNbc6lALy5yVe1CVOtKAIuSP4uSmI
+         w6R/w7pYYep/xDftXaQfXL+OL0/CPMEvzdp8fsfSmJBX8mkP3yeCURJxJ4NxFY58x13u
+         dTEV1pzYgle1p4WI6Io7dfS2NClCoZvE/MqEcBjmZ9OpbbzyBX530aa1IZmUAJAcbZsL
+         d4Djn+orGZpmI6C427PTzXKzrJSsqaTup/F8JP6+oL9Wr3URVIwRAqc6UOh+JTj+gV/0
+         ddHA==
+X-Gm-Message-State: AOJu0Yw1+zmGdnssUe87zYWMWsuMfVO/5SMTrBuQB0YypKuhuu4xILK1
+	fQsLK17hdwsDRVrxw55z1eiw/FjPj8pLoKKs6Ii78HQ/KNHQSeTBVYjzh+hYTQ==
+X-Gm-Gg: ASbGncvzv5QcdSuWs+jLcjKjy6ZWVpOgRKLLRKs3Ux0giy4OPy8BMI9b5MNyTCFaHev
+	irE+378qBpo5WC+dIFONi/XFLspZAgU/zr/erFJT3TGwaScNNY7mRiAlRK/bXTgdW1mVQzDIAQL
+	w0ASwrBuqtT8Bm5AYLuoR1cQXcvd1fETinZx21QQD6ZJv/aecOjdZI+juQGjkOSMU24DfRJyDjY
+	MYsmi8MgzZvmfkz+cMdAUde2VGq3rwgO6IkGp+CAfkrWAb6bgFU0MAB2+Rc6ALRyv0AVnhmO9na
+	RnWObEHDxOhipCelsi0aFT0Ba0RpRvEvMsgaFVccMdpAGfTnvPAjgtQj/dOk1Z2sXk+AvNcf4Hu
+	jR4CJQf/i3TbM
+X-Google-Smtp-Source: AGHT+IEa9FwJ3QxqADYmt946/45w5PacFuP1hzQakjYrZEba/1+cS2T3I1JdcQ3xOHoG9cy+gJIT9A==
+X-Received: by 2002:a05:600c:8b85:b0:45b:581c:ad0d with SMTP id 5b1f17b1804b1-45b6211d560mr177193155e9.8.1756474109517;
+        Fri, 29 Aug 2025 06:28:29 -0700 (PDT)
+Received: from localhost ([2620:10d:c092:500::5:4e0a])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3cf276d204asm3428277f8f.24.2025.08.29.06.28.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Aug 2025 06:28:29 -0700 (PDT)
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+To: bpf@vger.kernel.org,
+	ast@kernel.org,
+	andrii@kernel.org,
+	daniel@iogearbox.net,
+	kafai@meta.com,
+	kernel-team@meta.com,
+	eddyz87@gmail.com
+Cc: Mykyta Yatsenko <yatsenko@meta.com>
+Subject: [PATCH bpf-next v4] selftests/bpf: add BPF program dump in veristat
+Date: Fri, 29 Aug 2025 14:28:13 +0100
+Message-ID: <20250829132813.105149-1-mykyta.yatsenko5@gmail.com>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 
-On Fri, 29 Aug 2025, Bagas Sanjaya <bagasdotme@gmail.com> wrote:
-> Cross-references to other docs (so-called internal links) are typically
-> done following Documentation/doc-guide/sphinx.rst: either simply
-> write the target docs (preferred) or use :doc: or :ref: reST directives
-> (for use-cases like having anchor text or cross-referencing sections).
-> In some places, however, links to https://www.kernel.org/doc
-> are used instead (outgoing, external links), owing inconsistency as
-> these requires Internet connection only to see docs that otherwise
-> can be accessed locally (after building with ``make htmldocs``).
->
-> Convert such external links to internal links. Note that this does not
-> cover docs.kernel.org links nor touching Documentation/tools (as
-> docs containing external links are in manpages).
+From: Mykyta Yatsenko <yatsenko@meta.com>
 
-FWIW, I'd much prefer using :ref: on rst anchors (that automatically
-pick the link text from the target heading) instead of manually adding
-link texts and file references.
+Add the ability to dump BPF program instructions directly from veristat.
+Previously, inspecting a program required separate bpftool invocations:
+one to load and another to dump it, which meant running multiple
+commands.
+During active development, it's common for developers to use veristat
+for testing verification. Integrating instruction dumping into veristat
+reduces the need to switch tools and simplifies the workflow.
+By making this information more readily accessible, this change aims
+to streamline the BPF development cycle and improve usability for
+developers.
+This implementation leverages bpftool, by running it directly via popen
+to avoid any code duplication and keep veristat simple.
 
-i.e.
+Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
+---
+ tools/testing/selftests/bpf/veristat.c | 75 +++++++++++++++++++++++++-
+ 1 file changed, 74 insertions(+), 1 deletion(-)
 
-.. _some_target:
-
-Heading After Some Target
-=========================
-
-See :ref:`some_target`.
-
-Will generate "See Heading After Some Target".
-
-
-BR,
-Jani.
-
-
+diff --git a/tools/testing/selftests/bpf/veristat.c b/tools/testing/selftests/bpf/veristat.c
+index d532dd82a3a8..c824f6e72e2f 100644
+--- a/tools/testing/selftests/bpf/veristat.c
++++ b/tools/testing/selftests/bpf/veristat.c
+@@ -181,6 +181,12 @@ struct var_preset {
+ 	bool applied;
+ };
+ 
++enum dump_mode {
++	DUMP_NONE = 0,
++	DUMP_XLATED = 1,
++	DUMP_JITED = 2,
++};
++
+ static struct env {
+ 	char **filenames;
+ 	int filename_cnt;
+@@ -227,6 +233,7 @@ static struct env {
+ 	char orig_cgroup[PATH_MAX];
+ 	char stat_cgroup[PATH_MAX];
+ 	int memory_peak_fd;
++	__u32 dump_mode;
+ } env;
+ 
+ static int libbpf_print_fn(enum libbpf_print_level level, const char *format, va_list args)
+@@ -271,6 +278,7 @@ const char argp_program_doc[] =
+ enum {
+ 	OPT_LOG_FIXED = 1000,
+ 	OPT_LOG_SIZE = 1001,
++	OPT_DUMP = 1002,
+ };
+ 
+ static const struct argp_option opts[] = {
+@@ -295,10 +303,12 @@ static const struct argp_option opts[] = {
+ 	  "Force BPF verifier failure on register invariant violation (BPF_F_TEST_REG_INVARIANTS program flag)" },
+ 	{ "top-src-lines", 'S', "N", 0, "Emit N most frequent source code lines" },
+ 	{ "set-global-vars", 'G', "GLOBAL", 0, "Set global variables provided in the expression, for example \"var1 = 1\"" },
++	{ "dump", OPT_DUMP, "DUMP_MODE", OPTION_ARG_OPTIONAL, "Print BPF program dump (xlated, jited)" },
+ 	{},
+ };
+ 
+ static int parse_stats(const char *stats_str, struct stat_specs *specs);
++static int parse_dump_mode(char *mode_str, __u32 *dump_mode);
+ static int append_filter(struct filter **filters, int *cnt, const char *str);
+ static int append_filter_file(const char *path);
+ static int append_var_preset(struct var_preset **presets, int *cnt, const char *expr);
+@@ -427,6 +437,11 @@ static error_t parse_arg(int key, char *arg, struct argp_state *state)
+ 			return err;
+ 		}
+ 		break;
++	case OPT_DUMP:
++		err = parse_dump_mode(arg, &env.dump_mode);
++		if (err)
++			return err;
++		break;
+ 	default:
+ 		return ARGP_ERR_UNKNOWN;
+ 	}
+@@ -956,6 +971,32 @@ static int parse_stats(const char *stats_str, struct stat_specs *specs)
+ 	return 0;
+ }
+ 
++static int parse_dump_mode(char *mode_str, __u32 *dump_mode)
++{
++	char *state = NULL, *cur;
++	int cnt = 0;
++
++	if (!mode_str) {
++		env.dump_mode = DUMP_XLATED;
++		return 0;
++	}
++
++	for (cur = mode_str; *cur; ++cur)
++		*cur = tolower(*cur);
++
++	while ((cur = strtok_r(cnt++ ? NULL : mode_str, ",", &state))) {
++		if (strcmp(cur, "jited") == 0) {
++			env.dump_mode |= DUMP_JITED;
++		} else if (strcmp(cur, "xlated") == 0) {
++			env.dump_mode |= DUMP_XLATED;
++		} else {
++			fprintf(stderr, "Unrecognized dump mode '%s'\n", cur);
++			return -EINVAL;
++		}
++	}
++	return 0;
++}
++
+ static void free_verif_stats(struct verif_stats *stats, size_t stat_cnt)
+ {
+ 	int i;
+@@ -1554,6 +1595,35 @@ static int parse_rvalue(const char *val, struct rvalue *rvalue)
+ 	return 0;
+ }
+ 
++static void dump(__u32 prog_id, const char *file_name, const char *prog_name)
++{
++	char command[64], buf[1024];
++	enum dump_mode modes[2] = { DUMP_XLATED, DUMP_JITED };
++	const char *mode_lower[2] = { "xlated", "jited" };
++	const char *mode_upper[2] = { "XLATED", "JITED" };
++	FILE *fp;
++	int i;
++
++	for (i = 0; i < ARRAY_SIZE(modes); ++i) {
++		if (!(env.dump_mode & modes[i]))
++			continue;
++		snprintf(command, sizeof(command), "bpftool prog dump %s id %u",
++			 mode_lower[i], prog_id);
++
++		fp = popen(command, "r");
++		if (!fp) {
++			fprintf(stderr, "Can't run bpftool\n");
++			return;
++		}
++
++		printf("%s/%s DUMP %s:\n", file_name, prog_name, mode_upper[i]);
++		while (fgets(buf, sizeof(buf), fp))
++			printf("%s", buf);
++		printf("\n");
++		pclose(fp);
++	}
++}
++
+ static int process_prog(const char *filename, struct bpf_object *obj, struct bpf_program *prog)
+ {
+ 	const char *base_filename = basename(strdupa(filename));
+@@ -1630,8 +1700,11 @@ static int process_prog(const char *filename, struct bpf_object *obj, struct bpf
+ 
+ 	memset(&info, 0, info_len);
+ 	fd = bpf_program__fd(prog);
+-	if (fd > 0 && bpf_prog_get_info_by_fd(fd, &info, &info_len) == 0)
++	if (fd > 0 && bpf_prog_get_info_by_fd(fd, &info, &info_len) == 0) {
+ 		stats->stats[JITED_SIZE] = info.jited_prog_len;
++		if (env.dump_mode != DUMP_NONE)
++			dump(info.id, base_filename, prog_name);
++	}
+ 
+ 	parse_verif_log(buf, buf_sz, stats);
+ 
 -- 
-Jani Nikula, Intel
+2.51.0
+
