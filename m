@@ -1,140 +1,104 @@
-Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out162-62-57-252.mail.qq.com (out162-62-57-252.mail.qq.com [162.62.57.252])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7275E101DE
-	for <bpf@vger.kernel.org>; Fri, 29 Aug 2025 16:34:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 621E9101DE;
+	Fri, 29 Aug 2025 16:35:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.57.252
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756485282; cv=none; b=jeanPcex0r+mgfkJhz/WHr1mN+9JzLe9R1rylNDUmuWTEzLlEDrWGW13FYrmisWreVl9YaP7Hxp8NinTHpOPA177J3wPtKMjkQUIOmRoy063D7PTW3aP1s3wIPSkzKHd1n3yHm0l5jf9cf+eid5+vAZ7cZwm3+o7e2Wsu2kMqWA=
+	t=1756485341; cv=none; b=WyXSOY5ZTDsRo42hT2i6riBChyoMqj2+ppVbsCqJrerhst4xjU8mTWu2DXbowFcwYeTHcMeUr4CnXcHzY4WwfJ+rcIU/wv78V8nNtMjG1vCp7BrxMptYs9EBQLsKRDv9Z+FXjVE5Dthb/P+PWEbWb8uYsbKTEKegn8Hn/pfBiI0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756485282; c=relaxed/simple;
-	bh=w02vc4ZIN2Yf79bTdKCIFILkHtJW+xpLkB9Df766SjM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=pi1feOSQoem0FO2C3ygxBXe72QLdMFSADDhaADB1tHy5pLLVv2VGZGzEqMlEEOFZg+aF+RzNcKsXBCR6Ii0CA+VTX4hY2CgXf9Pk/p3wUzary8VYku+AdjxYsUdO3452vCWhjPaJD1kTz0SP9iorA1agg2A1KBcy6JTjvkO8PLo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=fgKkOVvv; arc=none smtp.client-ip=209.85.160.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1756485341; c=relaxed/simple;
+	bh=avsdQAMCmTpxO9RaTShWc6B8/8TxZU+wQEr0gTzhhCY=;
+	h=Message-ID:From:To:Cc:Subject:Date:MIME-Version; b=TgKLfyvod/LuAgjsbqq/EVTVtSDjnfg5ytfQS5I0bOgf776jr4Do5RL18+eaHnZCsbo1AWzG03OAXnCdgYnSiDud/Nd+dwbgLMSROeTQKN8u/OAuQ60CW0NWR82t2C1A9a1yK5peyjllkTUY0u78RaigFvfIqZbBIt7yV4wCi0A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=QgY5OlkN; arc=none smtp.client-ip=162.62.57.252
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="fgKkOVvv"
-Received: by mail-qt1-f170.google.com with SMTP id d75a77b69052e-4b10c1abfe4so21489471cf.2
-        for <bpf@vger.kernel.org>; Fri, 29 Aug 2025 09:34:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1756485279; x=1757090079; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HJbh/xt21xx/+x2x94uAOCLVyNPUW7zvmYwO/H9Z7jc=;
-        b=fgKkOVvvn5iSE2wMO8ukaQSbym8MN7l4vYMQUzhCMuYq9qAZaT4hBkbVwVxCRs408z
-         fdpsC1VQYeTZR//qC+bTm7Mc2MINkfivYjM1Czh7Y/BcY2eQjL7S+UKzPLvpXNyx7RbU
-         q7iSnsRC97a+32Sp7qefa1/cfALlKqrFSeEQUP4gE/+rkv570gvULbL0TzJvOnVEpwLI
-         opCVFfTPDxfGWSEipCkJ/oQoIZr7CmQbmbNG850jXuhRTgKZB+lTejff6OMO4g4boQRX
-         MFMxHD/sD2JKD/RAlLa+BONNOCtIFomb4CTVX53+wB9MBVlS0JIQsokHCv/hE0mboZAH
-         HfdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756485279; x=1757090079;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HJbh/xt21xx/+x2x94uAOCLVyNPUW7zvmYwO/H9Z7jc=;
-        b=KFLnLGjLjuX10Osg5laKG2ezuqlTHvk3Qe+/ongQxljoAo9qjk2dZf/XTZKcflqnAJ
-         V1pyRqSQguuZQO0/G3YVINGGffjZouRkWvlIRhhqlvoPZd+fo7EGCCZA9XJKEpKFk90k
-         /0RpgnZRzWu8h/fxDFYsCjsIE864FX5Y/L9RG2djhqYQ5eMV1q182WUw1+361bwXTfc6
-         TkSxhUJ7mmOREujflK54tROeO74dW/2FG9GduEO9PPv2fHMwWOooOigHGYTPDKjA+t+g
-         e2enlY1foAunYRVfpRF5krm/YZHQLsfOXa1Zlm8sG2ovCiMcT5FHVTGzT3BL+Rg2bxPv
-         mmrA==
-X-Forwarded-Encrypted: i=1; AJvYcCXKZBmwRcAw/gWx3YO0Xn3YXqI7rsSXP9cQbGOTBwVjFtEYqulOgqd+KA2hIaG90pYoMhY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy/qR+a9LDXDFjw/WN4rOvGK7iUm1GvJGNJKdLAB0AAMhiKYKmq
-	t0cqX7hqjfIpXjO8HTuizQBxMI/qanLIgpovaKj47DR9g59/uvboLhtF/BSCGpGytQwKTCr9hYr
-	sGz2IygjzG7HC8BQ6IhMUkrt5eJeB4rrrlDKfW9LM
-X-Gm-Gg: ASbGncun/knn9CMhMcavx6yAopaAmbVXmmkSDt71vtlgXSiEDOfeX6212ZceGnsFxNF
-	WoYBD56+6TO3gl64fU9FgAk1mFRssCUVzHgQo0N5YwM9+9iSSqJ6f4p5azXpn3mbQhFRyd+y1MT
-	7XCVcotBWyvbBwJrpfRKbv4/8RvtLHmTFG0jYo6GESH2OXQL5MI9o0wnJDchyXm+OqfhqaeCdYd
-	w8FTGKMsDAsuFFoti2uM+Q7ekowkXzsoO4bQI8AjBrtjT1V4r0pW7LbDtY=
-X-Google-Smtp-Source: AGHT+IENd4Z0R9bs0yr+ss5hcDT2iTdZpCbQuWcpSCFPXVpeEPiccjbKYZO4LaH+miGYLmYc3pfD6qG5WCFK1qvIYh4=
-X-Received: by 2002:ac8:58cf:0:b0:4b2:fe63:ae03 with SMTP id
- d75a77b69052e-4b2fe63b804mr87346471cf.22.1756485278738; Fri, 29 Aug 2025
- 09:34:38 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="QgY5OlkN"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+	s=s201512; t=1756485027;
+	bh=Mq3b9/nym6/6DESK+e6R9ME6Y/BHiTYd9Ad87/o6mr4=;
+	h=From:To:Cc:Subject:Date;
+	b=QgY5OlkNHcl0xkwhvxjQT5iRMV6rHamPcbBpKO0pnPA8Vkds0GWzfxC9qY5T1NiMI
+	 kF/MCu8s3kstNeQDMDkVZWzO3HR0W2ijvOTFafh3xkMD/IrGerRTuD87Uz61on+BYt
+	 5bjZr9jWnQYvq2SM1mP8r6QHdctcMUVe4Cawui6U=
+Received: from f41.lan ([240e:305:1bb6:7c10:7285:c2ff:fe86:1af4])
+	by newxmesmtplogicsvrsza29-0.qq.com (NewEsmtp) with SMTP
+	id 79781438; Sat, 30 Aug 2025 00:30:23 +0800
+X-QQ-mid: xmsmtpt1756485023t8ndhyyre
+Message-ID: <tencent_E72A37AF03A3B18853066E421B5969976208@qq.com>
+X-QQ-XMAILINFO: NY3HYYTs4gYSGokr56ObDQiMcHSG6y/gjR1giVFmEfQAyv6IS4Qg4XXGf0cHOA
+	 vkrkQM2YmxgrFnMe/x6NL0iBJq6XTGJIuO0giTdGCJBnfiSVQhJ6Tn3KptNmFW3AlUGzvO7qm3Az
+	 08NnGGZHBUPnDYzZ2q5wvv2dpg1aP8Mo9MgVv+1y40iibPozBxs78YhpkdxM4HwT0dwBZFC9GQwX
+	 iVmGgrFah3/h0nkXmBXDs355cNGFC6TNywSldJxVnKR26sdytItJkPxBxuYTRu4IF98+2o0bfSRh
+	 BECyn4JyybBZoB+uO6aEUCXzRUwVDTGuls6pgdbgbakmlqSnIkWroG9GfoL4J5ESpFeak89+IsVa
+	 waTQIhGiGuVSMZu5AwQDYFn1MN4Y+8BpdPTmzAD7Y7FHAs1pwS3nS+vaMzCK6xyCjVW0KrX4MU3x
+	 u7l4fU2Z884QR1DNrUhXEZA92+JGN0OT4Y3rJZ6CvduQUELdv3tEjx9LfpyyJxAViy8GbIJzyM9J
+	 cNQQ5W7hLdF+8FoAw8Lwg86abRSlJrheS7/CyrL7vVpV1W1RZnw3/HJoDKa230VTm/z/Pw0h8Q4W
+	 PZgwtMjsqZxW4o7iFxjei/epmfoUplxQvOyZO8oP4y4QplbWaLwCTltSEGvWKDa5YSCU5ML/jKB2
+	 e2bGjPSMb5PdQDn/8NuetZAfKTn2PYE4NtDCvcrP1g6XZTc2MszTfDJOsyLqyNHH9x28Yw5YF1Pf
+	 wDziQZOuK4edUl48mfRdWDraTAZhtmEOB6RlHAcgCHjeAL3BAU0JVcm4REOLlGZtu1pBfswu9GDP
+	 OMEOtLNv3jsvIwLQro39G5iUJt9PDlQwaNZ8YYjNg/ybP+3Uv8H7VlDBEiFBhqj7rCGd++0UeCjY
+	 yVOvts+TTyyihVPUiZ0OG9wpFlWGZvtoJCadT/TIyCJS66bExFI2ON/pFCUFCgdgBpdJ5quye5d5
+	 RV6BrlvRWsz2GqB2L1N8T/jpy3kPnizc2Za9o7EznfS4N6y3RQ9R9qroW6j6SvFeHrv8L/ytEbr2
+	 w4LHkS9b6rJZFmebpD+QaN54yUsPO63/HYZN8uv85CluA0oFb1
+X-QQ-XMRINFO: NI4Ajvh11aEj8Xl/2s1/T8w=
+From: Rong Tao <rtoax@foxmail.com>
+To: vmalik@redhat.com,
+	andrii.nakryiko@gmail.com,
+	ast@kernel.org,
+	daniel@iogearbox.net
+Cc: Rong Tao <rongtao@cestc.cn>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Mykola Lysenko <mykolal@fb.com>,
+	Shuah Khan <shuah@kernel.org>,
+	bpf@vger.kernel.org (open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)),
+	linux-kernel@vger.kernel.org (open list),
+	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
+Subject: [PATCH bpf-next v5 0/2] Fix bpf_strnstr len error
+Date: Sat, 30 Aug 2025 00:30:16 +0800
+X-OQ-MSGID: <cover.1756484762.git.rongtao@cestc.cn>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250828-cpaasch-pf-927-netmlx5-avoid-copying-the-payload-to-the-malloced-area-v4-0-bfcd5033a77c@openai.com>
- <20250828-cpaasch-pf-927-netmlx5-avoid-copying-the-payload-to-the-malloced-area-v4-2-bfcd5033a77c@openai.com>
-In-Reply-To: <20250828-cpaasch-pf-927-netmlx5-avoid-copying-the-payload-to-the-malloced-area-v4-2-bfcd5033a77c@openai.com>
-From: Eric Dumazet <edumazet@google.com>
-Date: Fri, 29 Aug 2025 09:34:26 -0700
-X-Gm-Features: Ac12FXzW_w7AW6j0jAtk0R2jBActMK4XmdvL7HZnq7aTeIkGOtaz1bYi8RYYyM4
-Message-ID: <CANn89iJbbqCvTWnaWgRQd1KEVveaPL+qLPfsfNkCrDFenAjEgA@mail.gmail.com>
-Subject: Re: [PATCH net-next v4 2/2] net/mlx5: Avoid copying payload to the
- skb's linear part
-To: cpaasch@openai.com
-Cc: Gal Pressman <gal@nvidia.com>, Dragos Tatulea <dtatulea@nvidia.com>, 
-	Saeed Mahameed <saeedm@nvidia.com>, Tariq Toukan <tariqt@nvidia.com>, Mark Bloch <mbloch@nvidia.com>, 
-	Leon Romanovsky <leon@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
-	Stanislav Fomichev <sdf@fomichev.me>, netdev@vger.kernel.org, linux-rdma@vger.kernel.org, 
-	bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Thu, Aug 28, 2025 at 8:36=E2=80=AFPM Christoph Paasch via B4 Relay
-<devnull+cpaasch.openai.com@kernel.org> wrote:
->
-> From: Christoph Paasch <cpaasch@openai.com>
->
-> mlx5e_skb_from_cqe_mpwrq_nonlinear() copies MLX5E_RX_MAX_HEAD (256)
-> bytes from the page-pool to the skb's linear part. Those 256 bytes
-> include part of the payload.
->
-> When attempting to do GRO in skb_gro_receive, if headlen > data_offset
-> (and skb->head_frag is not set), we end up aggregating packets in the
-> frag_list.
->
-> This is of course not good when we are CPU-limited. Also causes a worse
-> skb->len/truesize ratio,...
->
-> So, let's avoid copying parts of the payload to the linear part. We use
-> eth_get_headlen() to parse the headers and compute the length of the
-> protocol headers, which will be used to copy the relevant bits ot the
-> skb's linear part.
->
-> We still allocate MLX5E_RX_MAX_HEAD for the skb so that if the networking
-> stack needs to call pskb_may_pull() later on, we don't need to reallocate
-> memory.
->
-> This gives a nice throughput increase (ARM Neoverse-V2 with CX-7 NIC and
-> LRO enabled):
->
-> BEFORE:
-> =3D=3D=3D=3D=3D=3D=3D
-> (netserver pinned to core receiving interrupts)
-> $ netperf -H 10.221.81.118 -T 80,9 -P 0 -l 60 -- -m 256K -M 256K
->  87380  16384 262144    60.01    32547.82
->
-> (netserver pinned to adjacent core receiving interrupts)
-> $ netperf -H 10.221.81.118 -T 80,10 -P 0 -l 60 -- -m 256K -M 256K
->  87380  16384 262144    60.00    52531.67
->
-> AFTER:
-> =3D=3D=3D=3D=3D=3D
-> (netserver pinned to core receiving interrupts)
-> $ netperf -H 10.221.81.118 -T 80,9 -P 0 -l 60 -- -m 256K -M 256K
->  87380  16384 262144    60.00    52896.06
->
-> (netserver pinned to adjacent core receiving interrupts)
->  $ netperf -H 10.221.81.118 -T 80,10 -P 0 -l 60 -- -m 256K -M 256K
->  87380  16384 262144    60.00    85094.90
->
-> Additional tests across a larger range of parameters w/ and w/o LRO, w/
-> and w/o IPv6-encapsulation, different MTUs (1500, 4096, 9000), different
-> TCP read/write-sizes as well as UDP benchmarks, all have shown equal or
-> better performance with this patch.
->
-> Signed-off-by: Christoph Paasch <cpaasch@openai.com>
-> ---
+From: Rong Tao <rongtao@cestc.cn>
 
-Reviewed-by: Eric Dumazet <edumazet@google.com>
+Fix bpf_strnstr() wrong 'len' parameter, bpf_strnstr("open", "open", 4)
+should return 0 instead of -ENOENT. And fix a more general case when s2
+is a suffix of the first len characters of s1.
+
+Rong Tao (2):
+  bpf/helpers: bpf_strnstr: Exact match length
+  selftests/bpf: Add tests for bpf_strnstr
+
+ kernel/bpf/helpers.c                                     | 9 ++++++++-
+ .../testing/selftests/bpf/progs/string_kfuncs_success.c  | 8 ++++++--
+ 2 files changed, 14 insertions(+), 3 deletions(-)
+
+---
+v5: Add more commit message and change the patch 0001's comment;
+v4: Add comment and more selftests;
+    https://lore.kernel.org/all/tencent_CBD40091C14056E8298BE3725B65EE156405@qq.com/
+v3: Fix selftests/bpf error in v2, sorry about that;
+    https://lore.kernel.org/lkml/tencent_69BD268FBA201219240B51661D5E96A8D80A@qq.com/
+v2: Follow Andrii Nakryiko's advise, fix the 'wrong fix';
+    https://lore.kernel.org/lkml/tencent_DF4DA83EEBFB9246E5E3357BB40911CCA005@qq.com/
+v1: https://lore.kernel.org/lkml/tencent_65E5988AD52BEC280D22964189505CD6ED06@qq.com/
+-- 
+2.51.0
+
