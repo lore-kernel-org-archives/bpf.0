@@ -1,224 +1,87 @@
-Received: from fllvem-ot03.ext.ti.com (fllvem-ot03.ext.ti.com [198.47.19.245])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60C5A30DEC0;
-	Mon,  1 Sep 2025 10:03:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.245
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6990225BF13
+	for <bpf@vger.kernel.org>; Mon,  1 Sep 2025 10:13:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756721021; cv=none; b=GXbDw6Ks90sVfa9R4Tbfp+wOSNSJKHswjf8HLZvCtYpvlye3IgVhr1M/az5jXD3s7dZZM2ikpQPIQ1uIxXCLoqyEjlJFterXEw7oblEghnV9ALx3r9S/mdrCZQNhOa24QsoVryBc7NrQrf+cTLjRgqNJk0jeMwhVtDrFlCA7K28=
+	t=1756721630; cv=none; b=UDxveFp5ZtaSl4EOkQP9cpgPxIWvqyMNEX0l53FQvfnzSrFmC1XPgA9Y1qaYVGKmxzfdlnw54JkOP96sZ9TSlGSPl2NZiYD52G7WxFQl1JlE1XN+IfwmJTQP0PvxH4IIAJHJ0pktz+CUZZonER2GtbQ6PhjtsN5WweB6RvZWVU0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756721021; c=relaxed/simple;
-	bh=M2z8vbFDM9NyYD0Bv0Vu1l9ERk+YMPT29wbpqNGHaMs=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=aUxhGqwkJWWRKten+J7WA2vuBYS02zjf5zuW87OB14XoGWySUos97kMJHi0hEk/Z6n8ERXxZaCU1kJ8jD5YwexBkJppNL6Q9y3vFvTvvImLHGKSTqdBGKpfEdMYruEIaAw5Op7WN8UKhAThr42F4ruj/qkRrBTeGcZ+JsZ9/bwE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=uD2YItbg; arc=none smtp.client-ip=198.47.19.245
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+	s=arc-20240116; t=1756721630; c=relaxed/simple;
+	bh=6ig6aoqp0iKRAHo/L1Oxu9tI0SR60pc/w8TsTlaI/uU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=nVNqVDmzLCu87N6GTnVsucR8nxv9PtdHZOsVU9wgQTrt7vUS9zNakfKgEWmvMT2oaT78FglFJK7sNEQN1idkuArAS+aeru++HyorSs5Q/g7KvIilyp5UxU9EaacmC2ZYiDJiBy1uq6Hb3uy0PREdhZKu+J8Yu2wwzYfJ4nHd834=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G2zTsCzn; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="uD2YItbg"
-Received: from lelvem-sh01.itg.ti.com ([10.180.77.71])
-	by fllvem-ot03.ext.ti.com (8.15.2/8.15.2) with ESMTP id 581A2j9c2291725;
-	Mon, 1 Sep 2025 05:02:45 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1756720965;
-	bh=l4BEtC2iiTf9PgfSAlq1KXiyiD3sXjre9TgCdb6pzZw=;
-	h=From:To:CC:Subject:Date:In-Reply-To:References;
-	b=uD2YItbgYuh2QxdAvNKiToKMu0I1rMesDjGmnKudIDGqc6ADTpZqVod8qkmAJon+8
-	 deL3IZ63hRGCP7Kz1zdGv5zTbPHbDRh01EPzqu/6rcFCil2/bXzrO+GhnTvxTv9UYK
-	 u1Lj3AAFnkuNBeCXLDjbo+2lthQycvldOysrlPl8=
-Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
-	by lelvem-sh01.itg.ti.com (8.18.1/8.18.1) with ESMTPS id 581A2jvU1467229
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-SHA256 bits=128 verify=FAIL);
-	Mon, 1 Sep 2025 05:02:45 -0500
-Received: from DFLE114.ent.ti.com (10.64.6.35) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.55; Mon, 1
- Sep 2025 05:02:44 -0500
-Received: from lelvem-mr06.itg.ti.com (10.180.75.8) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.55 via
- Frontend Transport; Mon, 1 Sep 2025 05:02:44 -0500
-Received: from fllv0122.itg.ti.com (fllv0122.itg.ti.com [10.247.120.72])
-	by lelvem-mr06.itg.ti.com (8.18.1/8.18.1) with ESMTP id 581A2iKc2020985;
-	Mon, 1 Sep 2025 05:02:44 -0500
-Received: from localhost (meghana-pc.dhcp.ti.com [10.24.69.13] (may be forged))
-	by fllv0122.itg.ti.com (8.14.7/8.14.7) with ESMTP id 581A2hRB011184;
-	Mon, 1 Sep 2025 05:02:44 -0500
-From: Meghana Malladi <m-malladi@ti.com>
-To: <namcao@linutronix.de>, <jacob.e.keller@intel.com>, <m-malladi@ti.com>,
-        <christian.koenig@amd.com>, <sumit.semwal@linaro.org>,
-        <sdf@fomichev.me>, <john.fastabend@gmail.com>, <hawk@kernel.org>,
-        <daniel@iogearbox.net>, <ast@kernel.org>, <pabeni@redhat.com>,
-        <kuba@kernel.org>, <edumazet@google.com>, <davem@davemloft.net>,
-        <andrew+netdev@lunn.ch>
-CC: <linaro-mm-sig@lists.linaro.org>, <dri-devel@lists.freedesktop.org>,
-        <linux-media@vger.kernel.org>, <bpf@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>,
-        Vignesh Raghavendra
-	<vigneshr@ti.com>,
-        Roger Quadros <rogerq@kernel.org>, <danishanwar@ti.com>
-Subject: [PATCH net-next v2 4/6] net: ti: icssg-prueth: Make emac_run_xdp function independent of page
-Date: Mon, 1 Sep 2025 15:32:25 +0530
-Message-ID: <20250901100227.1150567-5-m-malladi@ti.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250901100227.1150567-1-m-malladi@ti.com>
-References: <20250901100227.1150567-1-m-malladi@ti.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G2zTsCzn"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE83FC4CEF0;
+	Mon,  1 Sep 2025 10:13:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1756721630;
+	bh=6ig6aoqp0iKRAHo/L1Oxu9tI0SR60pc/w8TsTlaI/uU=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=G2zTsCznYo/2Mhsxqr5P06YYcRZCDHri99Qej1LDDWIalxbscdg4KfhUw9e7/9mqC
+	 voETXi6f0eojQz8Hm8cJaUeviykBYgSD0Yx/ztp9vcfnQSnxevfByyWk+3wrbMVsn7
+	 hYVQb8VZ35joj+RkVQlh0lf+ct4tY9EsntBFKDvEXyTw/zx5I3nK63R1TRFBNPRrhM
+	 u9FbpLBxZCzIMYAa/R8EqWRXJVLiagufQy4061SFvBa1e/9iA9ZMX8CtK6fJ4RWgh3
+	 w8d9QIBUMbsfe9lZZRMgi1Efy17s1iJSNOtYT6Kg5OxiUU2J7lOoKZ7l+UjgplndUV
+	 kHn1czFCrqGdw==
+Message-ID: <3035adbe-926f-45dc-a424-ef42b12c1067@kernel.org>
+Date: Mon, 1 Sep 2025 11:13:46 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] tools/bpf/bpftool: fix buffer handling in get_fd_type()
+To: Kaushlendra Kumar <kaushlendra.kumar@intel.com>, ast@kernel.org,
+ daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev
+Cc: bpf@vger.kernel.org
+References: <20250901092234.3974937-1-kaushlendra.kumar@intel.com>
+From: Quentin Monnet <qmo@kernel.org>
+Content-Language: en-GB
+In-Reply-To: <20250901092234.3974937-1-kaushlendra.kumar@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-emac_run_xdp function runs xdp program, at a given hook point
-in the Rx path of the driver in NAPI context and returns
-XDP return codes. In zero copy mode the driver receives
-packets using UMEM frames instead of pages (native XDP).
-Decouple the usage of page in this function.
+On 01/09/2025 10:22, Kaushlendra Kumar wrote:
+> The current check "if (n == sizeof(buf))" is incorrect for detecting
+> buffer overflow from readlink(). When readlink() fills the entire
+> buffer, it returns sizeof(buf) but does not null-terminate the string,
+> leading to potential buffer overrun in subsequent string operations.
+> 
+> Fix by changing the condition to "n >= sizeof(buf)" to properly detect
+> when the buffer is completely filled, ensuring space is reserved for
+> null termination.
+> 
+> Signed-off-by: Kaushlendra Kumar <kaushlendra.kumar@intel.com>
+> ---
+>  tools/bpf/bpftool/common.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/bpf/bpftool/common.c b/tools/bpf/bpftool/common.c
+> index b07317d2842f..eebaa6896bd1 100644
+> --- a/tools/bpf/bpftool/common.c
+> +++ b/tools/bpf/bpftool/common.c
+> @@ -464,7 +464,7 @@ int get_fd_type(int fd)
+>  		p_err("can't read link type: %s", strerror(errno));
+>  		return -1;
+>  	}
+> -	if (n == sizeof(buf)) {
+> +	if (n >= sizeof(buf)) {
+>  		p_err("can't read link type: path too long!");
+>  		return -1;
+>  	}
 
-Signed-off-by: Meghana Malladi <m-malladi@ti.com>
----
- drivers/net/ethernet/ti/icssg/icssg_common.c | 28 +++++++++++++-------
- drivers/net/ethernet/ti/icssg/icssg_prueth.c |  3 ++-
- drivers/net/ethernet/ti/icssg/icssg_prueth.h |  9 +++++--
- 3 files changed, 27 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/net/ethernet/ti/icssg/icssg_common.c b/drivers/net/ethernet/ti/icssg/icssg_common.c
-index 8ff1707a2328..529172e231dc 100644
---- a/drivers/net/ethernet/ti/icssg/icssg_common.c
-+++ b/drivers/net/ethernet/ti/icssg/icssg_common.c
-@@ -647,15 +647,15 @@ void emac_rx_timestamp(struct prueth_emac *emac,
-  * emac_xmit_xdp_frame - transmits an XDP frame
-  * @emac: emac device
-  * @xdpf: data to transmit
-- * @page: page from page pool if already DMA mapped
-  * @q_idx: queue id
-+ * @buff_type: Type of buffer to be transmitted
-  *
-  * Return: XDP state
-  */
- u32 emac_xmit_xdp_frame(struct prueth_emac *emac,
- 			struct xdp_frame *xdpf,
--			struct page *page,
--			unsigned int q_idx)
-+			unsigned int q_idx,
-+			enum prueth_tx_buff_type buff_type)
- {
- 	struct cppi5_host_desc_t *first_desc;
- 	struct net_device *ndev = emac->ndev;
-@@ -663,6 +663,7 @@ u32 emac_xmit_xdp_frame(struct prueth_emac *emac,
- 	struct prueth_tx_chn *tx_chn;
- 	dma_addr_t desc_dma, buf_dma;
- 	struct prueth_swdata *swdata;
-+	struct page *page;
- 	u32 *epib;
- 	int ret;
- 
-@@ -679,7 +680,12 @@ u32 emac_xmit_xdp_frame(struct prueth_emac *emac,
- 		return ICSSG_XDP_CONSUMED;	/* drop */
- 	}
- 
--	if (page) { /* already DMA mapped by page_pool */
-+	if (buff_type == PRUETH_TX_BUFF_TYPE_XDP_TX) { /* already DMA mapped by page_pool */
-+		page = virt_to_head_page(xdpf->data);
-+		if (unlikely(!page)) {
-+			netdev_err(ndev, "xdp tx: failed to get page from xdpf\n");
-+			goto drop_free_descs;
-+		}
- 		buf_dma = page_pool_get_dma_addr(page);
- 		buf_dma += xdpf->headroom + sizeof(struct xdp_frame);
- 	} else { /* Map the linear buffer */
-@@ -734,13 +740,11 @@ EXPORT_SYMBOL_GPL(emac_xmit_xdp_frame);
-  * emac_run_xdp - run an XDP program
-  * @emac: emac device
-  * @xdp: XDP buffer containing the frame
-- * @page: page with RX data if already DMA mapped
-  * @len: Rx descriptor packet length
-  *
-  * Return: XDP state
-  */
--static u32 emac_run_xdp(struct prueth_emac *emac, struct xdp_buff *xdp,
--			struct page *page, u32 *len)
-+static u32 emac_run_xdp(struct prueth_emac *emac, struct xdp_buff *xdp, u32 *len)
- {
- 	struct net_device *ndev = emac->ndev;
- 	struct netdev_queue *netif_txq;
-@@ -767,7 +771,8 @@ static u32 emac_run_xdp(struct prueth_emac *emac, struct xdp_buff *xdp,
- 		q_idx = cpu % emac->tx_ch_num;
- 		netif_txq = netdev_get_tx_queue(ndev, q_idx);
- 		__netif_tx_lock(netif_txq, cpu);
--		result = emac_xmit_xdp_frame(emac, xdpf, page, q_idx);
-+		result = emac_xmit_xdp_frame(emac, xdpf, q_idx,
-+					     PRUETH_TX_BUFF_TYPE_XDP_TX);
- 		__netif_tx_unlock(netif_txq);
- 		if (result == ICSSG_XDP_CONSUMED) {
- 			ndev->stats.tx_dropped++;
-@@ -792,7 +797,6 @@ static u32 emac_run_xdp(struct prueth_emac *emac, struct xdp_buff *xdp,
- 		fallthrough; /* handle aborts by dropping packet */
- 	case XDP_DROP:
- 		ndev->stats.rx_dropped++;
--		page_pool_recycle_direct(emac->rx_chns.pg_pool, page);
- 		return ICSSG_XDP_CONSUMED;
- 	}
- }
-@@ -859,7 +863,11 @@ static int emac_rx_packet(struct prueth_emac *emac, u32 flow_id, u32 *xdp_state)
- 		xdp_init_buff(&xdp, PAGE_SIZE, &rx_chn->xdp_rxq);
- 		xdp_prepare_buff(&xdp, pa, PRUETH_HEADROOM, pkt_len, false);
- 
--		*xdp_state = emac_run_xdp(emac, &xdp, page, &pkt_len);
-+		*xdp_state = emac_run_xdp(emac, &xdp, &pkt_len);
-+		if (*xdp_state == ICSSG_XDP_CONSUMED) {
-+			page_pool_recycle_direct(pool, page);
-+			goto requeue;
-+		}
- 		if (*xdp_state != ICSSG_XDP_PASS)
- 			goto requeue;
- 		headroom = xdp.data - xdp.data_hard_start;
-diff --git a/drivers/net/ethernet/ti/icssg/icssg_prueth.c b/drivers/net/ethernet/ti/icssg/icssg_prueth.c
-index 5d2896f74987..6d31a13d9f2a 100644
---- a/drivers/net/ethernet/ti/icssg/icssg_prueth.c
-+++ b/drivers/net/ethernet/ti/icssg/icssg_prueth.c
-@@ -1154,7 +1154,8 @@ static int emac_xdp_xmit(struct net_device *dev, int n, struct xdp_frame **frame
- 	__netif_tx_lock(netif_txq, cpu);
- 	for (i = 0; i < n; i++) {
- 		xdpf = frames[i];
--		err = emac_xmit_xdp_frame(emac, xdpf, NULL, q_idx);
-+		err = emac_xmit_xdp_frame(emac, xdpf, q_idx,
-+					  PRUETH_TX_BUFF_TYPE_XDP_NDO);
- 		if (err != ICSSG_XDP_TX) {
- 			ndev->stats.tx_dropped++;
- 			break;
-diff --git a/drivers/net/ethernet/ti/icssg/icssg_prueth.h b/drivers/net/ethernet/ti/icssg/icssg_prueth.h
-index d8b068194fb6..eb76df7b5187 100644
---- a/drivers/net/ethernet/ti/icssg/icssg_prueth.h
-+++ b/drivers/net/ethernet/ti/icssg/icssg_prueth.h
-@@ -153,6 +153,11 @@ enum prueth_swdata_type {
- 	PRUETH_SWDATA_XSK,
- };
- 
-+enum prueth_tx_buff_type {
-+	PRUETH_TX_BUFF_TYPE_XDP_TX,
-+	PRUETH_TX_BUFF_TYPE_XDP_NDO,
-+};
-+
- struct prueth_swdata {
- 	enum prueth_swdata_type type;
- 	union prueth_data {
-@@ -501,8 +506,8 @@ void prueth_put_cores(struct prueth *prueth, int slice);
- u64 icssg_ts_to_ns(u32 hi_sw, u32 hi, u32 lo, u32 cycle_time_ns);
- u32 emac_xmit_xdp_frame(struct prueth_emac *emac,
- 			struct xdp_frame *xdpf,
--			struct page *page,
--			unsigned int q_idx);
-+			unsigned int q_idx,
-+			enum prueth_tx_buff_type buff_type);
- void prueth_rx_cleanup(void *data, dma_addr_t desc_dma);
- void prueth_tx_cleanup(void *data, dma_addr_t desc_dma);
- static inline bool prueth_xdp_is_enabled(struct prueth_emac *emac)
--- 
-2.43.0
+Hi and thanks, but I don't understand the change. On success, readlink()
+returns the number of bytes placed in the buffer, which is at most
+sizeof(buf) in our case, given that it silently truncates the string if
+the buffer is too small. So we can never have "n > sizeof(buf)" here?
+The current code looks correct to me.
 
+Did you actually hit the buffer overflow you describe?
+
+Quentin
