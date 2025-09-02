@@ -1,83 +1,167 @@
-Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
+Received: from out162-62-57-252.mail.qq.com (out162-62-57-252.mail.qq.com [162.62.57.252])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C13B280309
-	for <bpf@vger.kernel.org>; Tue,  2 Sep 2025 23:36:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C39B2E9EBA;
+	Tue,  2 Sep 2025 23:49:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.57.252
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756856199; cv=none; b=skh6Tbr/d/32igbUIzxx6LtzNCrn9czpcXkbYcg0DxtaDwRIwN8yylmFJF+TUFv9MFUPQ1JbomD0D7NTP0U5RGZ81WBaP/utCHjyvTDJrXIXNTA1YGss0+M3Jyn+0YhdcaWYnTIJpr//YBF8x8inwQPXiK8/3iIgnUgOie9/nqQ=
+	t=1756856962; cv=none; b=KggZS8IdxxD1x5ZvEM6QFIMiojE0oilx1PVYzOLfJo2GgpsnVBun1iNGp/6orFzP2b06nMl8MMTWLPZHHmcxl1GGNNSxcNO8TSUymjx3MPVXCfkXDi9lAfx95he0AiOyPZwI2zgA6Ni8qXqg4CnhyXWx8sRb841LEUGLUeLf4NE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756856199; c=relaxed/simple;
-	bh=4VRotmPacgDSBhrhKHEwQvLwXAIZ2QzWSVjur4ooG6I=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=NuWZslnpdbTHrpDP2ol14TW/cXU0OLoC3VbB81U9QImJZL1DliOCFu+5TrDzvbBONilZPrUcP71cy5H/Sf/N70FnvoexlBzY8TlJAAG3Szzvi7VXP8TKcqGZsD8LPtd9qXvfNcaUAdit2s34dfVVfwI3wxf8svGKFDwXkM319DQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=d7+z3KRj; arc=none smtp.client-ip=91.218.175.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1756856962; c=relaxed/simple;
+	bh=GOf9LZLLQ2q5Q93T28kTqYJJclpPeEMzOpGWjHU5iZQ=;
+	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
+	 MIME-Version; b=jJw08V7UieaaIGqJenq/s4TIB+I7g35I7uQllW7Gn1XRbFu1HejBu/Wh0PJVdAzg1zGVEAQUURut7jFvFiCuiEDL+M4wFY5NcX93gCU4U2IW373ss/+O7CPx8tq3Lj5EK9uyzN/euMU7DAEmYUJe5Z2FuU6vJK6JDhagZBZDbrE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=tp+8jCKf; arc=none smtp.client-ip=162.62.57.252
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="d7+z3KRj"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1756856195;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=4VRotmPacgDSBhrhKHEwQvLwXAIZ2QzWSVjur4ooG6I=;
-	b=d7+z3KRjKnYgIE8FVboMNcu7cNJ22o0DwNdthxu9cPcAnsobQBApJF/8cftXd51mtBvxBk
-	oNje22SYw/0i4sNoY4RKXd8pZxN4Yo2xT3ys5FFmFFvr41PRc8X6zPCH6lHOGwVv0PBKtI
-	CL58h7dU/uh1AGcCuCtqP1r4DrEqgQE=
-From: Roman Gushchin <roman.gushchin@linux.dev>
-To: Martin KaFai Lau <martin.lau@linux.dev>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,  Kumar Kartikeya
- Dwivedi <memxor@gmail.com>,  linux-mm <linux-mm@kvack.org>,  bpf
- <bpf@vger.kernel.org>,  Suren Baghdasaryan <surenb@google.com>,  Johannes
- Weiner <hannes@cmpxchg.org>,  Michal Hocko <mhocko@suse.com>,  David
- Rientjes <rientjes@google.com>,  Matt Bobrowski
- <mattbobrowski@google.com>,  Song Liu <song@kernel.org>,  Alexei
- Starovoitov <ast@kernel.org>,  Andrew Morton <akpm@linux-foundation.org>,
-  LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1 01/14] mm: introduce bpf struct ops for OOM handling
-In-Reply-To: <a76ad1e9-07d5-4ba1-83e4-22fe36a32df0@linux.dev> (Martin KaFai
-	Lau's message of "Tue, 2 Sep 2025 15:30:04 -0700")
-References: <20250818170136.209169-1-roman.gushchin@linux.dev>
-	<20250818170136.209169-2-roman.gushchin@linux.dev>
-	<CAP01T76AUkN_v425s5DjCyOg_xxFGQ=P1jGBDv6XkbL5wwetHA@mail.gmail.com>
-	<87ms7tldwo.fsf@linux.dev>
-	<1f2711b1-d809-4063-804b-7b2a3c8d933e@linux.dev>
-	<87wm6rwd4d.fsf@linux.dev>
-	<ef890e96-5c2a-4023-bcb2-7ffd799155be@linux.dev>
-	<CAADnVQ+LGbXXHHTbBB9b-RjAXO4B6=3Z=G0=7ToZVuH61OONWA@mail.gmail.com>
-	<87iki0n4lm.fsf@linux.dev>
-	<a76ad1e9-07d5-4ba1-83e4-22fe36a32df0@linux.dev>
-Date: Tue, 02 Sep 2025 16:36:27 -0700
-Message-ID: <87ms7c5sw4.fsf@linux.dev>
+	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="tp+8jCKf"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+	s=s201512; t=1756856954;
+	bh=eui+lHKYd2DznXFc/Y0MXUOvULuqsgiVsJKZMCgi9rw=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=tp+8jCKfV96TyXNU3gM1SeN8t0nhngjhyb2Wj5xecuMCOTJDBe1oNgU3ocSxgk5op
+	 K4QG5mSI66ukM8ON2fZYmDvQSdBF+78MYKvUUNyR3sBmc7w8piU0/5WdIf8WRQeXYl
+	 CFla/aqcVuPyGh5ufZsHAuPfclMq4cCLryhuBnz0=
+Received: from NUC10 ([39.156.73.10])
+	by newxmesmtplogicsvrsza56-0.qq.com (NewEsmtp) with SMTP
+	id C4A1EA5B; Wed, 03 Sep 2025 07:49:10 +0800
+X-QQ-mid: xmsmtpt1756856950tizblv9xh
+Message-ID: <tencent_81A1A0ACC04B68158C57C4D151C46A832B07@qq.com>
+X-QQ-XMAILINFO: NC/J3CrDtaBbKIsy3VxpTrKIJW8W98+rBshspiPLUzR2uyMbCRounbxMLhNClP
+	 nxqTpN+Ofe6yu9JNnoGISObPFKWUJKewUpp/bt3i14bBhnJmF8jH3pHwonRRZhotPFGg5+kfgPgX
+	 KUG8f5u/nb6Rhr+kzD82jx2tISZ+omolKlrn2RlYPewPFqIsIIuanPbRoWuhXKXZPY+tL1jp2nLk
+	 Zf+6seuPokFGuR6uZXzFuv9/V/TvztSsGkrZ8UsRbUx7/l829tq7SIa2G4zdGAFZKApy6swY0bag
+	 JsL6V3ZmzzdFnzxTRAK7R+1N90kfrrQECtRD2z/I4+vMqKD57KqM6aw9ManPbcpWrahX3mrHZjZk
+	 yZof3uLvZeClz20ij9HFxNgjn9NhoI+q+ItZ5AjmFr6BcGTPJgZHoKGoP4yDp4slV5sgoZ+IpV6/
+	 VqJ3KeJv+8KdKNjTJ8vSGLbGGmiauTSBCh7DgYr3oEnC0Td+wMwTfBbF2rUqR0m62ATM1owZPxUP
+	 OR0X4eLu2DwLYk0YHOR4gIj6K/qVV/sC2sBLbRZPd5+wW4g1U/olXTIow6JHlVSyLPi2JUvqE+em
+	 +TkrGoCcFlWKWd91/1sqxmYqESGxZji6LoSYkiPETqpN4iKkRz550V7QUXrZ6AeuTqAKEImH7Yzm
+	 2tZ5Czu3XDDn9toP3VP5JaqEWlO/BFJDY9NtiW+yVY4Ij2q3FqGlgqkJkDMNi+zji3ysqg+GBJGP
+	 D3D9ReRVWQp10QZ0/r8V2cwGRZF1o0XzVIYunfOBOXSUJhCkk+9+hHclBCrqcQxfLxZLg1jZ94nt
+	 Ok3qQV207sOil9jm6hQuS4TiPtHuhMVWDCJefjZDYVrZ8NInwCXKTwgDOXCaEpa1GNDNm0qPeHeI
+	 EVARb9eFl0CD/gBKuZTHJSH85q1cAHt+vxGpv3DPEK/eR9XUejOwCaJcZBiVDn+1zUFVIR3YYlbP
+	 E5UPjA+QB40nnUlvDj/CMFLt/WbBeftpdaGFRH52KtBemG183THPBEc3JpAdQg7AZ2FG0YN8953I
+	 A5MhzyeGtOXL99PHAIkKlyDESZ6mEJLAPenipxuQ==
+X-QQ-XMRINFO: OD9hHCdaPRBwq3WW+NvGbIU=
+From: Rong Tao <rtoax@foxmail.com>
+To: yonghong.song@linux.dev,
+	andrii@kernel.org,
+	ast@kernel.org,
+	vmalik@redhat.com
+Cc: rtoax@foxmail.com,
+	Rong Tao <rongtao@cestc.cn>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Mykola Lysenko <mykolal@fb.com>,
+	Shuah Khan <shuah@kernel.org>,
+	bpf@vger.kernel.org (open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)),
+	linux-kernel@vger.kernel.org (open list),
+	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
+Subject: [PATCH bpf-next v4 2/2] selftests/bpf: Test kfunc bpf_strcasecmp
+Date: Wed,  3 Sep 2025 07:48:36 +0800
+X-OQ-MSGID: <73ae449045d23c96dd1f0da9a694cb203659eb27.1756856613.git.rtoax@foxmail.com>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <cover.1756856613.git.rtoax@foxmail.com>
+References: <cover.1756856613.git.rtoax@foxmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
 
-Martin KaFai Lau <martin.lau@linux.dev> writes:
+From: Rong Tao <rongtao@cestc.cn>
 
-> On 9/2/25 10:31 AM, Roman Gushchin wrote:
->> Btw, what's the right way to attach struct ops to a cgroup, if there is
->> one? Add a cgroup_id field to the struct and use it in the .reg()
->
-> Adding a cgroup id/fd field to the struct bpf_oom_ops will be hard to
-> attach the same bpf_oom_ops to multiple cgroups.
+Add testsuites for kfunc bpf_strcasecmp.
 
-Yeah, this is what I thought too, it doesn't look as an attractive path.
+Signed-off-by: Rong Tao <rongtao@cestc.cn>
+---
+ tools/testing/selftests/bpf/prog_tests/string_kfuncs.c     | 1 +
+ tools/testing/selftests/bpf/progs/string_kfuncs_failure1.c | 6 ++++++
+ tools/testing/selftests/bpf/progs/string_kfuncs_failure2.c | 1 +
+ tools/testing/selftests/bpf/progs/string_kfuncs_success.c  | 5 +++++
+ 4 files changed, 13 insertions(+)
 
->
->> callback? Or there is something better?
->
-> There is a link_create.target_fd in the "union bpf_attr". The
-> cgroup_bpf_link_attach() is using it as cgroup fd. May be it can be
-> used here also. This will limit it to link attach only. Meaning the
-> SEC(".struct_ops.link") is supported but not the older
-> SEC(".struct_ops"). I think this should be fine.
+diff --git a/tools/testing/selftests/bpf/prog_tests/string_kfuncs.c b/tools/testing/selftests/bpf/prog_tests/string_kfuncs.c
+index 35af8044d059..4d66fad3c8bd 100644
+--- a/tools/testing/selftests/bpf/prog_tests/string_kfuncs.c
++++ b/tools/testing/selftests/bpf/prog_tests/string_kfuncs.c
+@@ -8,6 +8,7 @@
+ 
+ static const char * const test_cases[] = {
+ 	"strcmp",
++	"strcasecmp",
+ 	"strchr",
+ 	"strchrnul",
+ 	"strnchr",
+diff --git a/tools/testing/selftests/bpf/progs/string_kfuncs_failure1.c b/tools/testing/selftests/bpf/progs/string_kfuncs_failure1.c
+index 53af438bd998..99d72c68f76a 100644
+--- a/tools/testing/selftests/bpf/progs/string_kfuncs_failure1.c
++++ b/tools/testing/selftests/bpf/progs/string_kfuncs_failure1.c
+@@ -31,6 +31,8 @@ char *invalid_kern_ptr = (char *)-1;
+ /* Passing NULL to string kfuncs (treated as a userspace ptr) */
+ SEC("syscall") __retval(USER_PTR_ERR) int test_strcmp_null1(void *ctx) { return bpf_strcmp(NULL, "hello"); }
+ SEC("syscall")  __retval(USER_PTR_ERR)int test_strcmp_null2(void *ctx) { return bpf_strcmp("hello", NULL); }
++SEC("syscall") __retval(USER_PTR_ERR) int test_strcasecmp_null1(void *ctx) { return bpf_strcasecmp(NULL, "HELLO"); }
++SEC("syscall")  __retval(USER_PTR_ERR)int test_strcasecmp_null2(void *ctx) { return bpf_strcasecmp("HELLO", NULL); }
+ SEC("syscall")  __retval(USER_PTR_ERR)int test_strchr_null(void *ctx) { return bpf_strchr(NULL, 'a'); }
+ SEC("syscall")  __retval(USER_PTR_ERR)int test_strchrnul_null(void *ctx) { return bpf_strchrnul(NULL, 'a'); }
+ SEC("syscall")  __retval(USER_PTR_ERR)int test_strnchr_null(void *ctx) { return bpf_strnchr(NULL, 1, 'a'); }
+@@ -49,6 +51,8 @@ SEC("syscall")  __retval(USER_PTR_ERR)int test_strnstr_null2(void *ctx) { return
+ /* Passing userspace ptr to string kfuncs */
+ SEC("syscall") __retval(USER_PTR_ERR) int test_strcmp_user_ptr1(void *ctx) { return bpf_strcmp(user_ptr, "hello"); }
+ SEC("syscall") __retval(USER_PTR_ERR) int test_strcmp_user_ptr2(void *ctx) { return bpf_strcmp("hello", user_ptr); }
++SEC("syscall") __retval(USER_PTR_ERR) int test_strcasecmp_user_ptr1(void *ctx) { return bpf_strcasecmp(user_ptr, "HELLO"); }
++SEC("syscall") __retval(USER_PTR_ERR) int test_strcasecmp_user_ptr2(void *ctx) { return bpf_strcasecmp("HELLO", user_ptr); }
+ SEC("syscall") __retval(USER_PTR_ERR) int test_strchr_user_ptr(void *ctx) { return bpf_strchr(user_ptr, 'a'); }
+ SEC("syscall") __retval(USER_PTR_ERR) int test_strchrnul_user_ptr(void *ctx) { return bpf_strchrnul(user_ptr, 'a'); }
+ SEC("syscall") __retval(USER_PTR_ERR) int test_strnchr_user_ptr(void *ctx) { return bpf_strnchr(user_ptr, 1, 'a'); }
+@@ -69,6 +73,8 @@ SEC("syscall") __retval(USER_PTR_ERR) int test_strnstr_user_ptr2(void *ctx) { re
+ /* Passing invalid kernel ptr to string kfuncs should always return -EFAULT */
+ SEC("syscall") __retval(-EFAULT) int test_strcmp_pagefault1(void *ctx) { return bpf_strcmp(invalid_kern_ptr, "hello"); }
+ SEC("syscall") __retval(-EFAULT) int test_strcmp_pagefault2(void *ctx) { return bpf_strcmp("hello", invalid_kern_ptr); }
++SEC("syscall") __retval(-EFAULT) int test_strcasecmp_pagefault1(void *ctx) { return bpf_strcasecmp(invalid_kern_ptr, "HELLO"); }
++SEC("syscall") __retval(-EFAULT) int test_strcasecmp_pagefault2(void *ctx) { return bpf_strcasecmp("HELLO", invalid_kern_ptr); }
+ SEC("syscall") __retval(-EFAULT) int test_strchr_pagefault(void *ctx) { return bpf_strchr(invalid_kern_ptr, 'a'); }
+ SEC("syscall") __retval(-EFAULT) int test_strchrnul_pagefault(void *ctx) { return bpf_strchrnul(invalid_kern_ptr, 'a'); }
+ SEC("syscall") __retval(-EFAULT) int test_strnchr_pagefault(void *ctx) { return bpf_strnchr(invalid_kern_ptr, 1, 'a'); }
+diff --git a/tools/testing/selftests/bpf/progs/string_kfuncs_failure2.c b/tools/testing/selftests/bpf/progs/string_kfuncs_failure2.c
+index 89fb4669b0e9..e41cc5601994 100644
+--- a/tools/testing/selftests/bpf/progs/string_kfuncs_failure2.c
++++ b/tools/testing/selftests/bpf/progs/string_kfuncs_failure2.c
+@@ -7,6 +7,7 @@
+ char long_str[XATTR_SIZE_MAX + 1];
+ 
+ SEC("syscall") int test_strcmp_too_long(void *ctx) { return bpf_strcmp(long_str, long_str); }
++SEC("syscall") int test_strcasecmp_too_long(void *ctx) { return bpf_strcasecmp(long_str, long_str); }
+ SEC("syscall") int test_strchr_too_long(void *ctx) { return bpf_strchr(long_str, 'b'); }
+ SEC("syscall") int test_strchrnul_too_long(void *ctx) { return bpf_strchrnul(long_str, 'b'); }
+ SEC("syscall") int test_strnchr_too_long(void *ctx) { return bpf_strnchr(long_str, sizeof(long_str), 'b'); }
+diff --git a/tools/testing/selftests/bpf/progs/string_kfuncs_success.c b/tools/testing/selftests/bpf/progs/string_kfuncs_success.c
+index 46697f381878..67830456637b 100644
+--- a/tools/testing/selftests/bpf/progs/string_kfuncs_success.c
++++ b/tools/testing/selftests/bpf/progs/string_kfuncs_success.c
+@@ -12,6 +12,11 @@ char str[] = "hello world";
+ /* Functional tests */
+ __test(0) int test_strcmp_eq(void *ctx) { return bpf_strcmp(str, "hello world"); }
+ __test(1) int test_strcmp_neq(void *ctx) { return bpf_strcmp(str, "hello"); }
++__test(0) int test_strcasecmp_eq1(void *ctx) { return bpf_strcasecmp(str, "hello world"); }
++__test(0) int test_strcasecmp_eq2(void *ctx) { return bpf_strcasecmp(str, "HELLO WORLD"); }
++__test(0) int test_strcasecmp_eq3(void *ctx) { return bpf_strcasecmp(str, "HELLO world"); }
++__test(1) int test_strcasecmp_neq1(void *ctx) { return bpf_strcasecmp(str, "hello"); }
++__test(1) int test_strcasecmp_neq2(void *ctx) { return bpf_strcasecmp(str, "HELLO"); }
+ __test(1) int test_strchr_found(void *ctx) { return bpf_strchr(str, 'e'); }
+ __test(11) int test_strchr_null(void *ctx) { return bpf_strchr(str, '\0'); }
+ __test(-ENOENT) int test_strchr_notfound(void *ctx) { return bpf_strchr(str, 'x'); }
+-- 
+2.51.0
 
-I'll take a look, thank you!
