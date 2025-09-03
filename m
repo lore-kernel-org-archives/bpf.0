@@ -1,119 +1,157 @@
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA9082FC00C;
-	Wed,  3 Sep 2025 23:50:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 354DC288D6
+	for <bpf@vger.kernel.org>; Wed,  3 Sep 2025 23:54:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756943419; cv=none; b=GPmIJYkR3s0eCVntc+2gv9T7XXpI7ej3aPO6ptQyxlXa5uOg4piiSRISC75jMEJrtImiI8yfw4XUW+J12bv4QMVvbl4/7Le7TQ36ulGIooolaE5lW/eCu5Jp37CNFATE+ZVzAts3hiPoXBBZp4nbMFbQ5BPdmNAhfZzw1xXxVSI=
+	t=1756943650; cv=none; b=Uag8PxA80pGvJXx8OUXU+gzlM7zRaNgtnI/D6HEoAhtRwBS8Goq9R0ek8+fen2WV2tCcfp715WNlcFdupIDsm3WmgPvjKFGzWL/C2BLdK6E/QCg7ynxZVIeyirXr8Z+qpzyOVLAINs6YPYMXwicnQIXUpzU60h+ZLkNa74mUlsg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756943419; c=relaxed/simple;
-	bh=BqkLCnP3oR6UuS7FXhVR1ZvXxz/7DRQNIuUoOfipT44=;
+	s=arc-20240116; t=1756943650; c=relaxed/simple;
+	bh=wGdS++qIVh90z69ux1JySIF4o5UbJCYEUUxbrv0v9Lo=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=as+mO+mMPIjGQDAJb6wfY5Z94YslXK6LpC5KtvTvfPXMZ0DzL3W5RUXjGUBxtfZdnivwSxujyC1K8vBhtN0mIV6sGxuGEwq4kCkAevf1ZjkCGWM8/DERmxNxT55SdKvKBEHGpsE/G9TC58bZ7WxNFBlFid+BeXfFDIB99sWeboI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TppK43Dv; arc=none smtp.client-ip=209.85.210.172
+	 To:Cc:Content-Type; b=EKWGUVMwIdcon1cX6+a+Bm2heAy7svD+KuQ8yDVNPspapR0dX2LAIS3vhkzG5293HNr84KvvYecqfbGxkSaboB437X+A4AX1cqKJFt/6E3YvP/NLcGQ9wHLuXSMF3a+TkyIHtpAYoI3Mf7ypUROK1RiKbEdyxX+Br+vaDq+UIe0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=K4fj7CYq; arc=none smtp.client-ip=209.85.216.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TppK43Dv"
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-7724cacc32bso407996b3a.0;
-        Wed, 03 Sep 2025 16:50:15 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K4fj7CYq"
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-327ceef65afso442298a91.0
+        for <bpf@vger.kernel.org>; Wed, 03 Sep 2025 16:54:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756943415; x=1757548215; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1756943648; x=1757548448; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/eOCiwclm9k9gMd8SjgNITsnepC3MetxeXscE2+ZlhA=;
-        b=TppK43DvH4MtqYM5788M8Kt/9pHLBDT05bD4YLqnIpDMJAmDFxSQ3I+OZbBToQB4Wi
-         fJoEF/Su8qAsWqO/2A/0qOADjNxUB/J1zjNRPxkBv8PlMUQgE1whwE9eV261HOXUsS7s
-         bAviOwFj+R2mdBVwCYvH27nD/Kj8OCAUEgAcIOTOh/v5FloqyPMQhLEZRoFl8TEX8bFS
-         BiNn15atbIiEJ841AERLsjDZQ2w63Aiab+0XRmjWPzKZ5qm0kBWjxeH0lB1ssHQAsbGl
-         xiIe9pHAhKvKA+IaRFkELlB72NDueECorNwQ55iMo+W50LS3jNF4JQL0fuyGgIDyEn3D
-         LpRw==
+        bh=a9ckkGRsvv0bM+6Xri5W5j6AEsz8eWxKcVzTnc2ewkE=;
+        b=K4fj7CYquyW9LbioCg+yKuceg7oVxTj1p0oyeQdzESCdYCNdp/aUbBoQ4tsw5l/9j1
+         PzOTUtVeKvk/GvRCu/iMOqdvBXh4iG3iRviSm2BbPr32d7oOzjcuxHMT46AUB0KFwF6l
+         sOn0Eg7hP70aeGMbI7Y935hR4NX4Eww8iyOggSGE4K1hzhfyyCQqAy5MlFAVsZcqLwRt
+         egxUQ56Z3zDE7q4eUuFCa9jY6fcegEvrzHs8l5nSbyhWTcAEOZ5mFYLd62+bs5j9UIsJ
+         FS0IMSpoAI3HztPwfF5FDRls5ExXlcfbDY0FjHsZos0D9kcuU6bpHlP3ERbsZL6wR+SZ
+         /NQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756943415; x=1757548215;
+        d=1e100.net; s=20230601; t=1756943648; x=1757548448;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=/eOCiwclm9k9gMd8SjgNITsnepC3MetxeXscE2+ZlhA=;
-        b=bN/N0iTf0pClx7XXRe8/NrAJh62WutyxrERZb17KPmpepcnvf6iuDAscWxrY/NEqoX
-         6wvBecyxPbCBywtSxQEqjwjR1oof7s/Q2veBdnfNHaK8xAzQIOYD/g/AKpEoXk7UW/yk
-         3R1A088OlAK1F9IzBhGEBH3bXIXll+9+9BjiJ6fP2Eyl2/R8bTuDeXKlzn77HQwcLpB3
-         S9KbGJLMd/K7P2fvyea1CkY67YfF0J5OWyKWtNl0SkJN3N+ioWnDHhigpNMIWRqR1y1F
-         jDB6DrymcUnMK0jKvQL2Fm4ArQ2BqoDgR6BSf16uzZhfKLH0/aOq5mNPxt6L0/Jua1IZ
-         8eOQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUf7fFkVx0+4v5UNm9yUj5PTrzV3q9Lzpc7TFhtL1qmVUN2VzlZ1sVfaS375Az5FDTDjxSqVi9BxogzQYVKybdU@vger.kernel.org, AJvYcCWQbUNubMa4+rJ3xfICztrxlO0MFaekP+8nl3sc/DIX+QPcr3i6rekWJ8p8Qn10kjK2+o/wqz0nlusoGkpI@vger.kernel.org, AJvYcCWaMkqkjloPJyuo0c70+I/tm0B/Qx2+MuJ2acuPO/jMFxm383YJnW/JpOft4GGKmKBkKtU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxd7cDcb2lYllNrvz9bM9xa9juyKh/Wk8YDeT+yxL89DZPJ9RYh
-	NFn1F9H0wyF3++FPL+AgXa1Rf2+2S9LCQWydFp7krT3WdwKEOC+7cTw+qk+ZzB0BVwXTBxkZsr6
-	rIubbo8WHg32qqpVX7sVi1o+PK/t5EYw=
-X-Gm-Gg: ASbGncsKAJoZR8I7D45H3M4VSl4syMovtyhHmZAx2oXz1aQ0+aYE3pRC0GUSPmb23Ps
-	bivxbb1rR3LMCrVD9AZHjidi0955H2KVQJzTSADF8h0vlzeKN6sftZZ4OAJ2XmOWRQKXzMfvEAI
-	/wliDARQIKDVe7rKftQFp01D3IYqcG7n2sT9Vr8hztV0jEC+Hqm8NWMbnYWKnfjs7DOivUFyRkF
-	RWU0Odbz5EI2j67gcvk8cw=
-X-Google-Smtp-Source: AGHT+IEbvD30j5zQqt7UwIVsxOfkapLt99TiC2+GXC139JaN4tqHx3/ZpTFskOrD/zA4xj3hXn9Q0Z+H7N/iEhZs1ss=
-X-Received: by 2002:a17:902:cf08:b0:249:2d84:f406 with SMTP id
- d9443c01a7336-24944870965mr254374065ad.3.1756943414969; Wed, 03 Sep 2025
- 16:50:14 -0700 (PDT)
+        bh=a9ckkGRsvv0bM+6Xri5W5j6AEsz8eWxKcVzTnc2ewkE=;
+        b=c40a8ebRX51iuecmSjefJyyKMQ+MbNF8fZgJmACqIFRfUO836A/HFob3QA6v0ygBvZ
+         /Ouxw/TxeuEzkng01dvlWsIsIp+vpMjyt6A0/oYBoiUg0f6ybLKWLORHzb0JNYypXvwH
+         fIj0qyFEueVqkkgbWVQmjuCl1Bd08qOuzSaL/R8Gwrn2FuDl7OmpvwW43AtvWyONhFMv
+         4UHOZ5MmyMPeS6MT9Ygya46o0U4S7p+yxQDPKOlDF9dOchtopQ39MstNPmW5qEeu0FNd
+         ijqrvZ+ArXiHmsBnBwtF2XohyDTuNrZHXIbmGm8brC9UmV6tbkzKO3BIJ4UEwACwSrKv
+         Fgkg==
+X-Gm-Message-State: AOJu0YxwRtZ4dMw4kIbqHnWfLjSfIysQIz1K/h0b8VhviwmXN5EgN+2y
+	ZhXkWtbJZj+wNKMeQZ6w7vJwaf5cj9lKIqL8kPWAWAvbHZ7N8wYeYbzjXdt1/CcMD3O5npYs+yM
+	1G7HC8bdCXpqxBSUvYaFnQCvUxToj9VU=
+X-Gm-Gg: ASbGncvJ2VpiRvQPkPhAEr9MgidAeMarMhjgnAbBTJteHTXJj4wKGDNAFOzevHoZrhO
+	0hXByan8zIJqe/VW3Aip8Ayenti0J3IqSDg847L7B3aogNIjys+6wqEBheMourDIpbqYD+phRPd
+	9D+vixa+dunuOHL295vEVvn90ZDS7olyxDFXLETbbFGkrCaWXCLlKYaIsmUsPa1gutUhtX4I0ue
+	EL6WcAjw4Eobj5VdKCQv1w=
+X-Google-Smtp-Source: AGHT+IFDBgFIRrBQ4+GCler/FFkUzNk45hG0lYBlnw5as2aGmC9n18hmi9Tqi8MNsEsACLjDQUEWP8ajvpSYCT2xJU0=
+X-Received: by 2002:a17:90b:2245:b0:32b:90a5:ed2c with SMTP id
+ 98e67ed59e1d1-32b90a5f1f2mr1261339a91.20.1756943648295; Wed, 03 Sep 2025
+ 16:54:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250901034252.26121-1-dongml2@chinatelecom.cn>
-In-Reply-To: <20250901034252.26121-1-dongml2@chinatelecom.cn>
+References: <20250827164509.7401-1-leon.hwang@linux.dev> <20250827164509.7401-3-leon.hwang@linux.dev>
+ <CAEf4BzaUw868nNG3ngMci4fLPDGsaffQ-O3YrPOEo7N5QEkM_w@mail.gmail.com> <DCJ8H98X6UL4.3O75SJOM2WWRG@linux.dev>
+In-Reply-To: <DCJ8H98X6UL4.3O75SJOM2WWRG@linux.dev>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Wed, 3 Sep 2025 16:50:00 -0700
-X-Gm-Features: Ac12FXy_S7ElHWHvyy3ZkXbr4arXUIIENhZqC8u6zhUCjSyx8ViFHMQrJkbrzRg
-Message-ID: <CAEf4BzZVTr26Uogf8uh=7HmgG6Qo_uVy3fX8bQgC+Xs63wZcCA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 0/3] selftests/bpf: benchmark all symbols for kprobe-multi
-To: Menglong Dong <menglong8.dong@gmail.com>
-Cc: andrii@kernel.org, olsajiri@gmail.com, eddyz87@gmail.com, mykolal@fb.com, 
-	ast@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org, 
-	yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org, 
-	sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, shuah@kernel.org, 
-	yikai.lin@vivo.com, memxor@gmail.com, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Date: Wed, 3 Sep 2025 16:53:53 -0700
+X-Gm-Features: Ac12FXwg8YTGYgpE0lvp9j-IWowIQoLX7W8WOGvJYCWHCi_9N_AjLKNOh2UT5w0
+Message-ID: <CAEf4BzZOVtHu6NMFpEToC5C_Rf1qZ=HLqN5UntG-+PxG2dOn5g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v4 2/7] bpf: Introduce BPF_F_CPU and
+ BPF_F_ALL_CPUS flags
+To: Leon Hwang <leon.hwang@linux.dev>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
+	daniel@iogearbox.net, jolsa@kernel.org, yonghong.song@linux.dev, 
+	song@kernel.org, eddyz87@gmail.com, dxu@dxuuu.xyz, deso@posteo.net, 
+	kernel-patches-bot@fb.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sun, Aug 31, 2025 at 8:43=E2=80=AFPM Menglong Dong <menglong8.dong@gmail=
-.com> wrote:
+On Wed, Sep 3, 2025 at 7:27=E2=80=AFAM Leon Hwang <leon.hwang@linux.dev> wr=
+ote:
 >
-> Add the benchmark testcase "kprobe-multi-all", which will hook all the
-> kernel functions during the testing.
+> On Thu Aug 28, 2025 at 7:18 AM +08, Andrii Nakryiko wrote:
+> > On Wed, Aug 27, 2025 at 9:45=E2=80=AFAM Leon Hwang <leon.hwang@linux.de=
+v> wrote:
+> >>
 >
-> This series is separated out from [1].
+> [...]
 >
-> Changes since V2:
-> * add some comment to attach_ksyms_all, which notes that don't run the
->   testing on a debug kernel
+> >>
+> >> +#ifdef CONFIG_BPF_SYSCALL
+> >> +static inline void bpf_percpu_copy_to_user(struct bpf_map *map, void =
+__percpu *pptr, void *value,
+> >> +                                          u32 size, u64 flags)
+> >> +{
+> >> +       int current_cpu =3D raw_smp_processor_id();
+> >> +       int cpu, off =3D 0;
+> >> +
+> >> +       if (flags & BPF_F_CPU) {
+> >> +               cpu =3D flags >> 32;
+> >> +               copy_map_value_long(map, value, cpu !=3D current_cpu ?=
+ per_cpu_ptr(pptr, cpu) :
+> >> +                                   this_cpu_ptr(pptr));
+> >> +               check_and_init_map_value(map, value);
+> >
+> > I'm not sure it's the question to you, but why would we
+> > "check_and_init_map_value" when copying data to user space?... this is
+> > so confusing...
+> >
 >
-> Changes since V1:
-> * introduce trace_blacklist instead of copy-pasting strcmp in the 2nd
->   patch
-> * use fprintf() instead of printf() in 3rd patch
->
-> Link: https://lore.kernel.org/bpf/20250817024607.296117-1-dongml2@chinate=
-lecom.cn/ [1]
-> Menglong Dong (3):
->   selftests/bpf: move get_ksyms and get_addrs to trace_helpers.c
->   selftests/bpf: skip recursive functions for kprobe_multi
->   selftests/bpf: add benchmark testing for kprobe-multi-all
->
+> After reading its code, I think it's to hide some kernel details from
+> user space, e.g. refcount, list nodes, rb nodes.
 
-this doesn't apply cleanly over bpf-next, can you please rebase and
-resend to let CI run?
+we don't copy those details, so there is nothing to hide, so no, I
+think it's just weird that we do this, unless there is some
+non-obvious reasoning behind this
 
->  tools/testing/selftests/bpf/bench.c           |   4 +
->  .../selftests/bpf/benchs/bench_trigger.c      |  61 +++++
->  .../selftests/bpf/benchs/run_bench_trigger.sh |   4 +-
->  .../bpf/prog_tests/kprobe_multi_test.c        | 220 +---------------
->  .../selftests/bpf/progs/trigger_bench.c       |  12 +
->  tools/testing/selftests/bpf/trace_helpers.c   | 234 ++++++++++++++++++
->  tools/testing/selftests/bpf/trace_helpers.h   |   3 +
->  7 files changed, 319 insertions(+), 219 deletions(-)
 >
-> --
-> 2.51.0
+> >> +       } else {
+> >> +               for_each_possible_cpu(cpu) {
+> >> +                       copy_map_value_long(map, value + off, per_cpu_=
+ptr(pptr, cpu));
+> >> +                       check_and_init_map_value(map, value + off);
+> >> +                       off +=3D size;
+> >> +               }
+> >> +       }
+> >> +}
+> >> +
+> >> +void bpf_obj_free_fields(const struct btf_record *rec, void *obj);
+> >> +
+> >> +static inline void bpf_percpu_copy_from_user(struct bpf_map *map, voi=
+d __percpu *pptr, void *value,
+> >> +                                            u32 size, u64 flags)
+> >> +{
 >
+> [...]
+>
+> >> +}
+> >> +#endif
+> >
+> > hm... these helpers are just here with no way to validate that they
+> > generalize existing logic correctly... Do a separate patch where you
+> > introduce this helper before adding per-CPU flags *and* make use of
+> > them in existing code? Then we can check that you didn't introduce any
+> > subtle differences? Then in this patch you can adjust helpers to
+> > handle BPF_F_CPU and BPF_F_ALL_CPUS?
+> >
+>
+> Get it.
+>
+> I'll send a separate patch later.
+
+separate patch as part of the patch set to show the value of this refactori=
+ng :)
+
+>
+> Thanks,
+> Leon
