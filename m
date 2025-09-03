@@ -1,121 +1,105 @@
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4B8228314B;
-	Wed,  3 Sep 2025 12:02:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8898428467D
+	for <bpf@vger.kernel.org>; Wed,  3 Sep 2025 12:05:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756900932; cv=none; b=EEArAplpUcA1PTTLmJjrsTNqrOav0q1EUoz0M/G/lKA+/2fHG2voVY6iR6QUBYr86FvQWMybNq6WIWK2c15J+Vp3Mhw55eN4ImeVC0Lk956NzBOoQShgyVZ/QhEoOkVqL2KVz7PDRzxCLJcSAT5IEQu27enxmGcTHBUvFid4Dcs=
+	t=1756901146; cv=none; b=VL4IjM/bEPG8J1FcXZBLW54BK8K4kvNcRV22B41jWKV64D0Rg+/88ONFxvrI3r/k7SHavs/I0d7560ekVwgqQjmr7v5CEQIi+5M9UOQHVM9MSH2LcqajcecLfp0dSVXpMwQUTc1ZUtB4cSfZ1Ta9+h7XztIeUwhOUmPu86FeLcA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756900932; c=relaxed/simple;
-	bh=RHN5oEkTfn3JsAe+GpiE4nW5aWlzMvqAKSPR5QlfZ7A=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZpVrKM+BA1bRUVMfjqE5bFJGlFI+IAdvfK/552Or0I7IfXs9QbtX2d490hIohW7p8OaCdrpqA4HH1qGuT7aCRz2AYmnH6OTxafY+YKboa0r/O8cWMbqc7ryEq9o8BE0ushLijvb2ck3FNJ32ZmXIBTR3psCgkWsqun/dcGg9kFg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WMOrIeEw; arc=none smtp.client-ip=209.85.218.48
+	s=arc-20240116; t=1756901146; c=relaxed/simple;
+	bh=f8N5DIYzoUBoEio1+AEddeH7BI1EjC+5LFt8y7V6Q/c=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XoSmiKMT9LG647Im/0GoMrBIPgQqirCqlwCKMElp56zOBbAfgRMuzF4r097rS8RgPnvFmOAdYCynP6D5X/m7114xtQ7y6DEUypY6OICulE4H8SGw+54aK/5SvIk7jrmUAH6PjUrA5XMen1p7u9OM7WtvMwp7EX6Mqwfg/gc97ys=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Chha8Jgg; arc=none smtp.client-ip=209.85.210.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WMOrIeEw"
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-b0473327e70so34874066b.3;
-        Wed, 03 Sep 2025 05:02:10 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Chha8Jgg"
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-772843b6057so361141b3a.3
+        for <bpf@vger.kernel.org>; Wed, 03 Sep 2025 05:05:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756900929; x=1757505729; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=X1gjB8mQ7w+HuSdS/LNDCGeThnfKSvvTg9EfJrll2aY=;
-        b=WMOrIeEwMYaBrEkV/CgL+xAbbB3G7a+G91CEK9ek+pWk0+NM/ThH6iLyHJpuGGbwpi
-         V2GTDrRzkTMTr13kPV5MgLorJOdWJnMFbmjgTltXtc3y8NmayEYVNJCrORv9KyiVsnHD
-         VBXY928jTrOu4FaAQBcxc1hTvOFfvyAB5q/clETmmebW2FwYk2H37h8xEK/bhCAnB9lK
-         +8u4hICMlHs4hAIFY3tRwI7d9K9LWH+Ud1I71LUzI2POExDOHTjmUnRDlDR+i/EZGiMd
-         Pmm/mXMfpOVhaMeC1NR3uNnO78xJaKAczGuiRGIbifDp/94RyfgddjQs/mVCrL11F4Va
-         xoNw==
+        d=gmail.com; s=20230601; t=1756901144; x=1757505944; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=4Qykk0xQthpe0RRYOkXWUZrDmHJY/as+WNnOR6DEJK4=;
+        b=Chha8JggRt9SkzjGGfJoEhkNRF7x42whOtCGpT5fyU6orIkbRnWr1GM3mPpPEiNoIz
+         xPem222n26fTQ5SsfRC+Vr99HdDJbpYOL9wk0N4LXyOEyb9edyELOC2aL5NPkDjR5VTt
+         qDONtF7QrEf4EBpUx+Wq0dL1CIGTqHmN6AMxdK2g2zji9BNV1ikEB1FiBNDPRN9U7swS
+         oDfY3OiI9Qs8tb+G89i9xlaWsTUdJkpws2MSH07Y+n64gMrtwsvNetAsFJXyDO7DZoma
+         WPNgAUgiKL796jQ4JqEaC8wL8l5Sb21F/FZKj3rX43+s7r68vYjM9Lcr6Zut0yxci4i0
+         WMeg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756900929; x=1757505729;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=X1gjB8mQ7w+HuSdS/LNDCGeThnfKSvvTg9EfJrll2aY=;
-        b=ZEFxNTjXAHdhWXqcD+d+4nsF9K2Ac+Qbau2rGtlQJaxDDqZgAAJs9VYaT+JRYgfdvd
-         TH2T04BPq9SKDOdJAB4e2HRtAyx6eox3KJR4AjTfWM2yW41jNZ/AYWBIHKT7TvDMbljB
-         G1PM2MefBLpdXKlu4iAT9EBqH87FEbYU7qBxvA74HNkXNcs92JizRPcYe8VEGSs04t22
-         /p8EYSesxSu67vvrQPzaFMxABO+GBKEydGzqGbEjlQRzaW02ciZgn/5qWx0EBFBcoN+F
-         TAKCCzAeksBXoIqjMjpbk1ohm9bcyPYNGHgD5cSOIG3Hwhi0kq0FpQYGU5g/qsxNX8Zd
-         6A6A==
-X-Forwarded-Encrypted: i=1; AJvYcCVhBN3XHCSasLWzcke9K9fBFCLRwRJ+lk5i1+ScF6atNGSjKcwhRIDxtOlO32yQRQPSCys=@vger.kernel.org, AJvYcCWYwYOfbo0x38h3PjOBaDkIJYqIOxfUYRZjMr8OxwUn7rQEllw6kuWimqxFEY1Cr0pXNNWH+nM58LnUi+O4@vger.kernel.org, AJvYcCXRfeQNoRq3iFEmqedQzw2htucCt/P82GSLidp64v+eM1u14N0Sw6myyF2EgENml3d0dy0HesFDNYvwvS1gt/ckRd/+@vger.kernel.org
-X-Gm-Message-State: AOJu0YzOrRs2ESYfc2DGcqcE3JYGPzZPc/FgZfNDQNz8NEAAbD9kRvmo
-	okPrvRvCpejUJNifag6Vv6J6An106ZdGDkDb00cYKGeQN+uj679mrW/lVc88g7Vs
-X-Gm-Gg: ASbGnctUDUzpkgI/ZYXaTuoxY8t1Lamsg6ytXz4S8k4+HpnVwwxojHi8Dw+nZeDbzfl
-	JQXT2owLwNBCOAYoRr+KQiSRM0iOlmA6b4wPEr/mhZ/L5v7K8hzFFKxMrYaCuadP61HQZiaxFBu
-	P7LRDvjSKT1Pn8WlwIja2N2F3Zt/cNWiIyeQeeGueNM/YsHB9QHzAn6NCg4E0uQUqiwpe7VcUNf
-	jZ/COrwRErmOIy5NWnSsZjwYTiT4u8eEZ6hU5JMvByPZOLD8cjy5qibX4MRot3MLHInYPK9b+Be
-	W3iJMK6E/6bLmIgWLYMCMFitz0tkO9eyIMp3A2av1NyVZm/V/LlAE80KvixEVDWIqKGY7I6ok4i
-	IzCqeXovcq5bPqwtQED9qmGk9hECKK2ANwq7dW2/YUHR7oP4e3Dk=
-X-Google-Smtp-Source: AGHT+IG9DyL34GVO4GIs+oue3ZsqNCivtiVZQCJjLvba3WtVSEqWZD/5goexi5Z22OTJYifTNTVQ4w==
-X-Received: by 2002:a17:907:7ea8:b0:b04:53cc:441c with SMTP id a640c23a62f3a-b0453cc4688mr566717466b.28.1756900928868;
-        Wed, 03 Sep 2025 05:02:08 -0700 (PDT)
-Received: from krava (ip-86-49-253-11.bb.vodafone.cz. [86.49.253.11])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b017e4b9ed7sm1077649466b.90.2025.09.03.05.02.07
+        d=1e100.net; s=20230601; t=1756901144; x=1757505944;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4Qykk0xQthpe0RRYOkXWUZrDmHJY/as+WNnOR6DEJK4=;
+        b=T/8IK4Y7EmbG4+QUaitvu4QzMTpSKR/DZyUiX0MtWy1q9zb3RlAW79Q+jn7IrAEtGP
+         z6xtIROprfaNTZICJNPqqhyAWh2ORmBy5Qvv287Aj+jFTDK879oftINdXKlUnhLs4iBq
+         oKonx9rSR3e8uZq3rfMWXGYVUogcnpme8BPYcnx8GUTE8jGaMtbwF2kyx9oKLjZEd78d
+         cdi8ppHUGbxSl4TywtaR6CdrUaeqTEcnfqgZC34I2bCdulIZIhXoAgVQUwafzRMkF6vQ
+         Y5F+3FX4qkA4hed49EvPUwDJfE0nrXQCyYjGaGbS2dBTHwAcGON2fJwaPOoj1/jBAWMT
+         M2bg==
+X-Forwarded-Encrypted: i=1; AJvYcCXaXsIQspCY2MXDjx/y8KVmWfDWZ1XcucPcP5k5T5ci2o2E73x15SuNM/VmPJW7d0tCXeg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzGcChmgjqB8eKnMju5xeEAaAYx8NcwHp2qRHr762x7GbX2DOYg
+	0ts0Px5OxWwBSf94j3u3Fcyl0LBfoCNff1OUXW997h0ete0XnXIQORoS
+X-Gm-Gg: ASbGncshBUTXTwaMmOLk33e1yiYoaWnJrExejHz26idK/KUERqr9VKuQJkSIAzb/Lfg
+	50G9o/F2Ft1VAs0SR8dRkMKKyI4VB4hsNr+fXKpdPIFYiGts0WBt7Q/A/E6UboYCXVWoB7MaKHf
+	+iM8MBBbzzq4eQLoSOnA+yjlL6z883zd6hWTLjx90tbVrghbr4JNjD0lHeshB5DYzA4BIr+yKZo
+	lNBtobwWCd3b+MTsOMkDMZ1SmQvIZkvVBXj4pgIlDUi+K/0sYDT2OIH44MG/PAq3v8nEsvonDZh
+	80Jkg3yV/hnN2MUp0VEOKJ4xzw9r/NcOFepIaZBgaYwIOZW6dvw/YZqJMCqMulOhG3nVRKFHiJL
+	0QBc4NQuFOegCcMSXpfRvqHYO5v0KsKkm2ufPdgOmxzPp3ooAGpo=
+X-Google-Smtp-Source: AGHT+IF9pVOHyDnykUAgAHhoztq3yyto5TS2UIr0a5IaKVOEo/rPYlHUXdNXwZG9HhNFzr/X66iUUQ==
+X-Received: by 2002:a17:902:f642:b0:248:6860:80dd with SMTP id d9443c01a7336-2494485d541mr217919425ad.1.1756901143664;
+        Wed, 03 Sep 2025 05:05:43 -0700 (PDT)
+Received: from devbox.. ([43.132.141.28])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7722a5014desm16615899b3a.92.2025.09.03.05.05.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Sep 2025 05:02:08 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Wed, 3 Sep 2025 14:02:05 +0200
-To: Oleg Nesterov <oleg@redhat.com>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-	x86@kernel.org, Song Liu <songliubraving@fb.com>,
-	Yonghong Song <yhs@fb.com>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Hao Luo <haoluo@google.com>, Steven Rostedt <rostedt@goodmis.org>,
-	Ingo Molnar <mingo@kernel.org>
-Subject: Re: [PATCH perf/core 01/11] uprobes: Add unique flag to uprobe
- consumer
-Message-ID: <aLguPcQFauCX5Wfp@krava>
-References: <20250902143504.1224726-1-jolsa@kernel.org>
- <20250902143504.1224726-2-jolsa@kernel.org>
- <20250903104933.GB18799@redhat.com>
+        Wed, 03 Sep 2025 05:05:43 -0700 (PDT)
+From: Hengqi Chen <hengqi.chen@gmail.com>
+To: chenhuacai@kernel.org,
+	yangtiezhu@loongson.cn,
+	vincent.mc.li@gmail.com,
+	hejinyang@loongson.cn
+Cc: loongarch@lists.linux.dev,
+	bpf@vger.kernel.org,
+	Hengqi Chen <hengqi.chen@gmail.com>
+Subject: [PATCH v4 0/8] LoongArch: Fix BPF trampoline related issues
+Date: Wed,  3 Sep 2025 07:01:05 +0000
+Message-ID: <20250903070113.42215-1-hengqi.chen@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250903104933.GB18799@redhat.com>
+Content-Transfer-Encoding: 8bit
 
-On Wed, Sep 03, 2025 at 12:49:33PM +0200, Oleg Nesterov wrote:
-> On 09/02, Jiri Olsa wrote:
-> >
-> > +static bool consumer_can_add(struct list_head *head, struct uprobe_consumer *uc)
-> > +{
-> > +	/* Uprobe has no consumer, we can add any. */
-> > +	if (list_empty(head))
-> > +		return true;
-> > +	/* Uprobe has consumer/s, we can't add unique one. */
-> > +	if (uc->is_unique)
-> > +		return false;
-> > +	/*
-> > +	 * Uprobe has consumer/s, we can add nother consumer only if the
-> > +	 * current consumer is not unique.
-> > +	 **/
-> > +	return !list_first_entry(head, struct uprobe_consumer, cons_node)->is_unique;
-> > +}
-> 
-> Since you are going to send V2 anyway... purely cosmetic and subjective nit,
-> but somehow I can't resist,
-> 
-> 	bool consumer_can_add(struct list_head *head, struct uprobe_consumer *new)
-> 	{
-> 		struct uprobe_consumer *old = list_first_entry_or_null(...);
-> 
-> 		return !old || (!old->exclusive && !new->exclusive);
-> 	}
-> 
-> looks a bit more readable to me. Please ignore if you like your version more.
+The following two selftest cases triggers oops on LoongArch:
 
-yep, looks better, thanks
+    $ ./test_progs -a ns_bpf_qdisc -a tracing_struct
 
-jirka
+This series tries to fix/workaround these issues.
+See individual commit for details.
+
+v3 -> v4:
+* Completely rework of previous version
+* Fix more subtle issues
+
+Hengqi Chen (8):
+  LoongArch: BPF: Remove duplicated flags check
+  LoongArch: BPF: Remove duplicated bpf_flush_icache()
+  LoongArch: BPF: No support of struct argument in trampoline programs
+  LoongArch: BPF: No text_poke() for kernel text
+  LoongArch: BPF: Don't assume trampoline size is page aligned
+  LoongArch: BPF: Make trampoline size stable
+  LoongArch: BPF: Make error handling robust in
+    arch_prepare_bpf_trampoline()
+  LoongArch: BPF: Sign extend struct ops return values properly
+
+ arch/loongarch/net/bpf_jit.c | 67 +++++++++++++++++++++++++++---------
+ 1 file changed, 51 insertions(+), 16 deletions(-)
+
+--
+2.43.5
