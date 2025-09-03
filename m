@@ -1,153 +1,182 @@
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73ED52D8DD3;
-	Wed,  3 Sep 2025 06:48:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47C5A2E62B3;
+	Wed,  3 Sep 2025 08:07:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756882133; cv=none; b=LlWUy3eAgXkR8bL5UIjPrqVqTD4fS0UOurgG+keMNeHZ5ZvUPvItI59b+wdjSYdiVILDJutFmJ1frCg8gA0LmWCXcBv699CJRjkJgUsjoEjHbACpfGHHUx4EVFjajSlNUprOcc7CFX4BM91WRLTeYx5X/TMhQEZ2GQDQXqRqTLM=
+	t=1756886826; cv=none; b=YqnkZvQ4YWJ0wb6IKDLBLSnmu8FAgrH8Lb8nj4Ts2swfqkR//6Eso5qrZuu192s/aWr0edd0pXeZSYvw7+F/WNgJlutn4ZPHVaDrdj7LK+IjVJ/DUSCsVi2NvXywPqMitW/yb+iKRV7Q9tsg8W7ocWHnUAN0YwMXcb44aptZWig=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756882133; c=relaxed/simple;
-	bh=qjmB1RAA7F0wVqM7zHKXMSrfTZRfahNUiS26O3cUvT8=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=crmQeBb42bQyHs7v2kVAB1lsd8YgB2Dcl+p8YB7ESTfswmBLikqG3a5/tclRFNKYuUIjqfVkIdMq8798IehMObYElOF9l3UmX1aU0sxeyLeIoJvGwjpzl9VE4HVD9gbOlUU8E+Mdw1ChTrpaZx4I0Kc32woNiX07jnndPSY2GOQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Mii0Lrdn; arc=none smtp.client-ip=209.85.218.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1756886826; c=relaxed/simple;
+	bh=CeCM/HmjZliMLnHkBvZkg72p0Kg5C8W0aOUbx0JRgAk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=WSnj0SvAiePvq7qD2vmXQ2THCW95jH+8SdFfqWMpMFkov+aUQuactAPXvCeboa3Eu/42DL78y966chWBNP4RWqmtM0UiFkhJnYCEYXuiAz3pYkRy6FESFiH4tbVbDf2QzydUhHsumkq2c2E4EGS4gvOZvNuYWXMfQduvuE7f2Hc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=l+qdVHF0; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Mii0Lrdn"
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-b0428b537e5so495770366b.3;
-        Tue, 02 Sep 2025 23:48:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756882130; x=1757486930; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=AtIpceXnZjTA0NBZG6Ie6QAq4Kp296Wp3sK1PNsV79w=;
-        b=Mii0LrdnafKb/oR90tMideGmfM7fo7biNUIqMT+T7BNzQ0+PD81W3AAUFk4gHhztui
-         5y26v6URdaBWwti0PboYWuqz+5Y/FyYyPRHDI0+/BvP7nq/pJe2HX1/15plMLFFhvBdL
-         XMg7eFvWeZpgmadqJLKKfhYGp6Xku4p2Lr3SQuS6WJXWGfRT0Nl1deit3NO3NhiRKDY+
-         jbVf2PbomBcylAsR3Tc4c5X8QiKRCSrtNylk18cfP7mVZfNWOSIAG63hGLyYcMjUiyL2
-         a3P53sWpL0s64TXi7yHCw639h47micFGz3v4zz8OinlwX+FGm639h2GZ06mXWV9WG3tq
-         xVZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756882130; x=1757486930;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AtIpceXnZjTA0NBZG6Ie6QAq4Kp296Wp3sK1PNsV79w=;
-        b=mEuVooSaZkBYRGGCd4vQMRkuu/GyQZKmwkP5hlFHLg5ouNNqYAj0e5Svm7AM0Wsjav
-         WtFCalZ/BXkAtGToMuQ/fwPKffYOajuqi75BCVUscmDVFpGPKfy8VhvhzrU2775SAwL6
-         QFfxGv4uskgmrQ1ga+ycR3iy1DqG5hihiaHlRMNQhX0uD1VdasVTTubeP7sUovIeHitq
-         cJVA0RDGUr7oQsB/bMeSbH+/BhvdZh09P/iCUNz8BvaiDBz+16iZzbEpHlPfzxOFeWkM
-         v7+Z52NRQ9dUr6kSbHXnxBEUOuX2P7sLB/hVwL68CGggnxn7eB2IUxElYQz/bhCb2quC
-         lpMg==
-X-Forwarded-Encrypted: i=1; AJvYcCVJU88Bw8DQVKEopUqx1orb0XoH1cnf6ObpPh7zq1vh5/dBOm5yNoVHq7oYjQPT1zyB99Q=@vger.kernel.org, AJvYcCVnEsatd++BSV7mowcOLHib28vWTul6h9cYwjWin0JgfFcpk9y3DBrWXbo65VQEiX8pRJMu+/MR7WLiqmvbnhV1fngL@vger.kernel.org, AJvYcCWyk1gfd8UwFPcWhn3WkcmA8RARSOD1MKgsJ2DnodU1iN6UWG46YC1d+JCsV4IVQNi+RogzD+xokqQjbsOn@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxw4jzOUEu3s1gaUU38rVnErXQOlXqFqrfylKeu8mNyuO7giDeG
-	OH+FiCNMWl1s8uJHq8QFAC9KuVPPk+gmwPL8u+AgmKrFyfk/mzmxRlCX
-X-Gm-Gg: ASbGncvpayB7uO1IwT6dYpyN4YQ3L6Q7FsublQ4KPN9INkPBBbJiHBiZVWwS+Q/qAYe
-	2aCqBmNUtpjTGDAw73OX/Zs2S6ZWcc1+HtlcXsfDHjGpFwXK5T7LLzx8Fwvzt1Cn4fhoKzn5CZC
-	7ic+Jk7ZYhvCgjsFFz+UtATqtTNEwgN811aa0hb1reaQhzZda7gV75CWu4+fM7G0Ot2ZVnwj9DR
-	RSndhCrS9aJdGau1wr8J6RAszHXXUaiX5Rj3+AFR8md0yg+A4pJtbkW+bt8vnszs69sSY9mtrTj
-	Hgt/wZEoGzWcFA8kP8SFHCZLLDpVGgfp0A8zRkNE+G2l8/QAFnvkxm4F/xvJA/CeLP2lyW/I4Q2
-	+j3iSOLR9AuWlvmZ8s+8xMw==
-X-Google-Smtp-Source: AGHT+IGVu836mQO+y8+vS80i0WjWO4Im+/HFsaRS2Q1h4C91RiD8hiCYlHBjxai2RlpQHTzTdhDbBQ==
-X-Received: by 2002:a17:907:94d2:b0:ae0:d1f3:f7f4 with SMTP id a640c23a62f3a-b01d8a2fd89mr1355062166b.13.1756882129612;
-        Tue, 02 Sep 2025 23:48:49 -0700 (PDT)
-Received: from krava ([176.74.159.170])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b04252103f2sm730511366b.50.2025.09.02.23.48.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Sep 2025 23:48:49 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Wed, 3 Sep 2025 08:48:44 +0200
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Oleg Nesterov <oleg@redhat.com>, Andrii Nakryiko <andrii@kernel.org>,
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, x86@kernel.org,
-	Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Hao Luo <haoluo@google.com>, Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Alan Maguire <alan.maguire@oracle.com>,
-	David Laight <David.Laight@aculab.com>,
-	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas@t-8ch.de>,
-	Ingo Molnar <mingo@kernel.org>
-Subject: Re: [PATCHv6 perf/core 10/22] uprobes/x86: Add support to optimize
- uprobes
-Message-ID: <aLfkzE_eMYE40QjD@krava>
-References: <20250720112133.244369-1-jolsa@kernel.org>
- <20250720112133.244369-11-jolsa@kernel.org>
- <20250819191515.GM3289052@noisy.programming.kicks-ass.net>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="l+qdVHF0"
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 582Nffc4004032;
+	Wed, 3 Sep 2025 08:06:48 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=
+	content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=mJRYJJ
+	iGP3O9OmhSaZUakyOS2WjUvaQxrQqD8pIfL50=; b=l+qdVHF0vDyRMtwaebUoIj
+	z2iDp0yC30Zvzlx4E1dtOGBP2UUtPm68/zYHrMxaBDyImWaQC5pOkapvOEWuPkm0
+	Wa/maFl4XV8LUqY/kCnJg1kbFU9GCqfPK1Nax6Z/YEGgi6ix2GKhYVH4UGEln+Im
+	OuMAxum2fDIBxU8avLT29fWaLxHyqlkF18sK79qNHqZQCpDXhjFXbmk/3euQw1Da
+	M/xGDIKt/RMZPcLkd8pR6W6ML8tjCvcyTEDW1ka84745/Qz2JaPuCJk45fVHByiG
+	Ar3yGRktQRmUABSVI7XT4gdyKrsP+5Clew6+xJ4gSx63XzTKwamlQ5CVstMUDtUg
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 48usvftp2d-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 03 Sep 2025 08:06:48 +0000 (GMT)
+Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 5837pAAa012647;
+	Wed, 3 Sep 2025 08:06:47 GMT
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 48usvftp29-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 03 Sep 2025 08:06:47 +0000 (GMT)
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5836IqKV019404;
+	Wed, 3 Sep 2025 08:06:46 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 48vd4mxcv4-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 03 Sep 2025 08:06:46 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 58386jfv60752372
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 3 Sep 2025 08:06:45 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 5CCE92004B;
+	Wed,  3 Sep 2025 08:06:45 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id EBD7B20040;
+	Wed,  3 Sep 2025 08:06:44 +0000 (GMT)
+Received: from [9.152.212.92] (unknown [9.152.212.92])
+	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Wed,  3 Sep 2025 08:06:44 +0000 (GMT)
+Message-ID: <03b13088-8dae-4d68-8594-6523b4aee406@linux.ibm.com>
+Date: Wed, 3 Sep 2025 10:06:44 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250819191515.GM3289052@noisy.programming.kicks-ass.net>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 00/15] Legacy hardware/cache events as json
+To: Ian Rogers <irogers@google.com>, Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>, Adrian Hunter <adrian.hunter@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        James Clark <james.clark@linaro.org>, Xu Yang <xu.yang_2@nxp.com>,
+        Thomas Falcon <thomas.falcon@intel.com>,
+        Andi Kleen <ak@linux.intel.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, bpf@vger.kernel.org,
+        Atish Patra <atishp@rivosinc.com>, Beeman Strong <beeman@rivosinc.com>,
+        Leo Yan <leo.yan@arm.com>, Vince Weaver <vincent.weaver@maine.edu>
+References: <20250828205930.4007284-1-irogers@google.com>
+Content-Language: en-US
+From: Thomas Richter <tmricht@linux.ibm.com>
+Organization: IBM
+In-Reply-To: <20250828205930.4007284-1-irogers@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Authority-Analysis: v=2.4 cv=behrUPPB c=1 sm=1 tr=0 ts=68b7f718 cx=c_pps
+ a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
+ a=IkcTkHD0fZMA:10 a=yJojWOMRYYMA:10 a=VwQbUJbxAAAA:8 a=1XWaLZrsAAAA:8
+ a=h0uksLzaAAAA:8 a=7CQSdrXTAAAA:8 a=VnNF1IyMAAAA:8 a=KByoUL483hSIROooWq4A:9
+ a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=MSi_79tMYmZZG2gvAgS0:22
+ a=a-qgeE7W1pNrGK8U0ZQC:22
+X-Proofpoint-ORIG-GUID: y5jHuvcz1AvdARQJzfuyJqumQ_eV1ZXa
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODMwMDAzNCBTYWx0ZWRfX1kek//mDJGNd
+ TmMxhEX7iwrmfwBFMFWnTVNlXuoKChTkUkqA78axxAm43Flnt5eW7uUGaRh0GLgUpBVY+0WaX3J
+ 5KWn5Jl0UkjswVxxqzL9nZBleXR3cfH7wtclGw6Bk0R5Szk2lY+/MzOf8N+3EfsRemld13Ql9hk
+ RVN5qr/hLKlxZKvwMzYXEfik1cd4BiPmJ/L/t8BkyWa+9ZihmqFUPglPO8OJ1maoecGUmt/Z92g
+ SgjZ1KHXARlYmYFmnPYn0BopVW9kXg809Lnetz7AEX4wAeS1TKdu0XoOU1kbNzNW5Th9Eh85dOC
+ Z6d0EMDCbkCBHLqPrHLK6OfiTYYcrIF/pQow2VoSGrlDAfGouwkLgOiy0EWRdFDL7fmIVf3+9og
+ L6Vw68VN
+X-Proofpoint-GUID: cjcZczKn9cVb7gI_Smn-YkYgwY_C4PT9
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-09-03_04,2025-08-28_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ malwarescore=0 impostorscore=0 spamscore=0 clxscore=1011 phishscore=0
+ priorityscore=1501 adultscore=0 bulkscore=0 suspectscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2507300000 definitions=main-2508300034
 
-On Tue, Aug 19, 2025 at 09:15:15PM +0200, Peter Zijlstra wrote:
-> On Sun, Jul 20, 2025 at 01:21:20PM +0200, Jiri Olsa wrote:
+On 8/28/25 22:59, Ian Rogers wrote:
+> Mirroring similar work for software events in commit 6e9fa4131abb
+> ("perf parse-events: Remove non-json software events"). These changes
+> migrate the legacy hardware and cache events to json.  With no hard
+> coded legacy hardware or cache events the wild card, case
+> insensitivity, etc. is consistent for events. This does, however, mean
+> events like cycles will wild card against all PMUs. A change doing the
+> same was originally posted and merged from:
+> https://lore.kernel.org/r/20240416061533.921723-10-irogers@google.com
+> and reverted by Linus in commit 4f1b067359ac ("Revert "perf
+> parse-events: Prefer sysfs/JSON hardware events over legacy"") due to
+> his dislike for the cycles behavior on ARM with perf record. Earlier
+> patches in this series make perf record event opening failures
+> non-fatal and hide the cycles event's failure to open on ARM in perf
+> record, so it is expected the behavior will now be transparent in perf
+> record on ARM. perf stat with a cycles event will wildcard open the
+> event on all PMUs.
 > 
-> > +static bool __is_optimized(uprobe_opcode_t *insn, unsigned long vaddr)
-> > +{
-> > +	struct __packed __arch_relative_insn {
-> > +		u8 op;
-> > +		s32 raddr;
-> > +	} *call = (struct __arch_relative_insn *) insn;
+> The change to support legacy events with PMUs was done to clean up
+> Intel's hybrid PMU implementation. Having sysfs/json events with
+> increased priority to legacy was requested by Mark Rutland
+>  <mark.rutland@arm.com> to fix Apple-M PMU issues wrt broken legacy
+> events on that PMU. It is believed the PMU driver is now fixed, but
+> this has only been confirmed on ARM Juno boards. It was requested that
+> RISC-V be able to add events to the perf tool json so the PMU driver
+> didn't need to map legacy events to config encodings:
+> https://lore.kernel.org/lkml/20240217005738.3744121-1-atishp@rivosinc.com/
+> This patch series achieves this.
 > 
-> Not something you need to clean up now I suppose, but we could do with
-> unifying this thing. we have a bunch of instances around.
+> A previous series of patches decreasing legacy hardware event
+> priorities was posted in:
+> https://lore.kernel.org/lkml/20250416045117.876775-1-irogers@google.com/
+> Namhyung Kim <namhyung@kernel.org> mentioned that hardware and
+> software events can be implemented similarly:
+> https://lore.kernel.org/lkml/aIJmJns2lopxf3EK@google.com/
+> and this patch series achieves this.
+> 
+> Note, patch 1 (perf parse-events: Fix legacy cache events if event is
+> duplicated in a PMU) fixes a function deleted by patch 15 (perf
+> parse-events: Remove hard coded legacy hardware and cache
+> parsing). Adding the json exposed an issue when legacy cache (not
+> legacy hardware) and sysfs/json events exist. The fix is necessary to
+> keep tests passing through the series. It is also posted for backports
+> to stable trees.
+> 
+> The perf list behavior includes a lot more information and events. The
+> before behavior on a hybrid alderlake is:
 
-found two below, maybe we could use 'union text_poke_insn' instead like below?
 
-jirka
+.....
 
+For s390 the whole series:
 
----
-diff --git a/arch/x86/kernel/kprobes/core.c b/arch/x86/kernel/kprobes/core.c
-index 6079d15dab8c..7fd03897d776 100644
---- a/arch/x86/kernel/kprobes/core.c
-+++ b/arch/x86/kernel/kprobes/core.c
-@@ -109,14 +109,10 @@ const int kretprobe_blacklist_size = ARRAY_SIZE(kretprobe_blacklist);
- static nokprobe_inline void
- __synthesize_relative_insn(void *dest, void *from, void *to, u8 op)
- {
--	struct __arch_relative_insn {
--		u8 op;
--		s32 raddr;
--	} __packed *insn;
--
--	insn = (struct __arch_relative_insn *)dest;
--	insn->raddr = (s32)((long)(to) - ((long)(from) + 5));
--	insn->op = op;
-+	union text_poke_insn *insn = dest;
-+
-+	insn->disp = (s32)((long)(to) - ((long)(from) + 5));
-+	insn->opcode = op;
- }
- 
- /* Insert a jump instruction at address 'from', which jumps to address 'to'.*/
-diff --git a/arch/x86/kernel/uprobes.c b/arch/x86/kernel/uprobes.c
-index 0a8c0a4a5423..bac14f3165c3 100644
---- a/arch/x86/kernel/uprobes.c
-+++ b/arch/x86/kernel/uprobes.c
-@@ -1046,14 +1046,11 @@ static int copy_from_vaddr(struct mm_struct *mm, unsigned long vaddr, void *dst,
- 
- static bool __is_optimized(uprobe_opcode_t *insn, unsigned long vaddr)
- {
--	struct __packed __arch_relative_insn {
--		u8 op;
--		s32 raddr;
--	} *call = (struct __arch_relative_insn *) insn;
-+	union text_poke_insn *call = (union text_poke_insn *) insn;
- 
- 	if (!is_call_insn(insn))
- 		return false;
--	return __in_uprobe_trampoline(vaddr + 5 + call->raddr);
-+	return __in_uprobe_trampoline(vaddr + 5 + call->disp);
- }
- 
- static int is_optimized(struct mm_struct *mm, unsigned long vaddr)
+Tested-by: Thomas Richter <tmricht@linux.ibm.com>
+-- 
+Thomas Richter, Dept 3303, IBM s390 Linux Development, Boeblingen, Germany
+--
+IBM Deutschland Research & Development GmbH
+
+Vorsitzender des Aufsichtsrats: Wolfgang Wendt
+
+Geschäftsführung: David Faller
+
+Sitz der Gesellschaft: Böblingen / Registergericht: Amtsgericht Stuttgart, HRB 243294
