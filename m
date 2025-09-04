@@ -1,512 +1,301 @@
-Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07437253F05
-	for <bpf@vger.kernel.org>; Thu,  4 Sep 2025 20:27:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B020327FD6E
+	for <bpf@vger.kernel.org>; Thu,  4 Sep 2025 20:29:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757017657; cv=none; b=o3m8SbtUuo3FOr6noaaezLFkpbCIQtdwYAg7mX9iWPiKsAIqM1nmBIH26DaSGLF5HiALqMwqCQ+3mm8Vi4V3gewe+xapmeondBi5yDEH0QHcWB+82aR++efQefixmKHPyNjIGParHK/BQ0hxYqd45lF8do8ixVjSe6jDNofwWNk=
+	t=1757017765; cv=none; b=cd6xP+3twyvxW8RzlAgqlW68jMlYzvrkm+OpwXrCj4ioaZVHBnhNCF+Fma1YfIpNg3KZrWEFUoDq5pPLV+RZ+yvF6dpyRfZHaUl/b246PL+IBkWCgdHyMJ/f3CZ73ubyrsy72lr5t3bdj45qIVUS0/i68KCNCyIwbJGx2gXH5dA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757017657; c=relaxed/simple;
-	bh=Z5JjN9mCwFvcks1Mhymd7TTcqdH8SQnlByPxlycpaMw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=utT6/ipnr/rLjhgHh/7CVRHzxyE1TpychF6pCiQNAImrW3jiSl4Mm+ax/HrnHSkRcb0QV9X/5O3xq1k1GOqW6DlLWHmt4BaQsgfnLztJLvdogHIcDTbPoPFEIrEoIWyjZSO9Sk+SUiGYkQyZKd0sk02I3mGJ0ntp7MqubH8sR/Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=hPhmN8Uc; arc=none smtp.client-ip=91.218.175.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1757017765; c=relaxed/simple;
+	bh=se8SYT0zJTJAzPl7zJgMNfbY7t89aC3dE7YmRyqLsBo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=BelLt6lmmomjkgOI8G8FnRAgqbZXOFUJ44XsYfFfSVX1DdUKj6f22ufNjGhwShBaeZf8ZOZNgXKtGseKfNRvTH3PG2Dk3X9IgOV3/gMYO2qEMA9C4j1uQPBjbu2HT2QemOb+ljAhqszfuOh+ggCkQGkyS7oqN3qFwuU51JfhXwU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=YsvzQEgu; arc=none smtp.client-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="hPhmN8Uc"
-Message-ID: <d75eb424-b399-4e17-800e-ca59d39cc10d@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1757017651;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=4Q+xs8MBpst4BAhwZ37TRA0Py4ruiugrQDP0m5qxl0g=;
-	b=hPhmN8UcDyIvRz0efOtp+sAzE7sqOWKEc03aiADtsmCfY3L1a9DsvbyfpmH6QUtIXhYoqQ
-	sCwBVETj5cyllnqYeTvCG4mhwNRhttq1nXYBOB6/7b5E0YJ5DHLtNW60QbI8+I5xY0nKms
-	mMl+Q9p4KB1FChFVLyC1Aj+NPEiJ1KY=
-Date: Thu, 4 Sep 2025 13:27:26 -0700
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="YsvzQEgu"
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-24cdbeca71eso5619695ad.2
+        for <bpf@vger.kernel.org>; Thu, 04 Sep 2025 13:29:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1757017761; x=1757622561; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hAfDLvW/qtjfI9Qhx/Ik6vG7JX89+OS8OERkeUrIYts=;
+        b=YsvzQEgukuZRYTvYKXfLV90DHCHPL3+vNmzYz9Pd2i8Hb7MMONZQjq3kcIzlmRhi5F
+         eOcEUTnCGCgdbatwlQfX2+4pYxFxNSjuEiyH3E6jVGzl3A6kgnbc7vKMjvXDlkhrJ6dr
+         /DmCcYnYoHHWUtP/pQTwFr7jhghKVhDel/ViiYcL3zYlbPRkVnPTkZXfiVdioKY4extr
+         hPABRLkr1qXi5+rSrdriFhKuQ6bMigxwoDafcmqY/ghVeM+WiWx6eofleLh9kTEweGRW
+         iTQl8w78QotrZbhMg2DcuySP1zRdvVEEozP0lYnXFveGDnIkXb6AWgiblEfZyQcgj08b
+         /VFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757017761; x=1757622561;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=hAfDLvW/qtjfI9Qhx/Ik6vG7JX89+OS8OERkeUrIYts=;
+        b=NRpYWEQHqDyPyXp59e+NqadQsrE7UKAYL3bcb81XVVNMwo3pJcGdrdceWzvRUKDDVg
+         ltGNM3npe8UAmTy6P1N+22pUzWYFlW5Y76bbhz7bjlbdenoVO4gRPrPPBITr9Dngq57T
+         4tOrZjc8HdbHSmcDK7p7v1+YAeSal0Wv85DHh1A7fKCxHmaMnW0+KeIROP5xKVe4LaU1
+         vXLsYg9SGn3N4u8GZOhV3u5NVYXMtd4SDIPzb5kaZlpkfsZyGz36XOuhG3zlCZiOChEg
+         RdYLPrMkNYdXvpvf6K0nzBzaSrqQ5taswOWmuA6f3vbe/4lL/4EWqnu9RP7iIPrB+Pwe
+         zo5w==
+X-Forwarded-Encrypted: i=1; AJvYcCXt/xP/eE8HvkTDunCzHgSYrA7ZZg4DdvmFoKOgREQob3WlWf3HNavXb7RxgB4656kWsKU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw8GNY8uOU/DUnCT8qRrNyV9d+VCx756UhXfs3QVidL9tYAHJ+1
+	r6yTtCChNm9iePj1QE541jTZsRdXASl9Qtr/5T6/50zfTtze4zF+iHyzdYjK6U40/iuXNA0Wr5I
+	jr/fh3vbOfB3hMRWgqsyP8sksTCAlagFYFykQEtPf
+X-Gm-Gg: ASbGncvO2rebwL8h9bObQSyoFgeM4JyeueNRgOEJCJmODmKf923hszxTlvM3fOVIG1s
+	560l5ls1x6iyKseReEMuukfvj+u4C5K4U99YpuLNcAyYt3UKHk7VzCSViufZguak+YrlCXB3Koa
+	cLI7BYWG7VuwAm4L/oH11uqwWD3S2umuxBWAYdgCyvSx2N8c+WDTM3aiIg8rj5Mn7s4AVrwThRA
+	FB4HC7kQGHy1DXeLZuQdVybYm4J1BtyxDb4CO4UagaoMRGBmrh4o5SVhsRXZB0T5Xi++OWYOQxN
+	cXaxavBgJfcCEQ==
+X-Google-Smtp-Source: AGHT+IG7u/5pNUo6AGseBbewB6ZMWSPZIPLT2gzvnsWk7gjT7XkAa3BdoLd0c+79Nd24DzFn1rS0d8g5f5ufNJ8utKE=
+X-Received: by 2002:a17:902:ced2:b0:248:79d4:93bb with SMTP id
+ d9443c01a7336-24944b0dc40mr321307565ad.31.1757017760476; Thu, 04 Sep 2025
+ 13:29:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v1 bpf-next 00/11] BPF indirect jumps
-Content-Language: en-GB
-To: Anton Protopopov <a.s.protopopov@gmail.com>, bpf@vger.kernel.org,
- Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Anton Protopopov <aspsk@isovalent.com>,
- Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman
- <eddyz87@gmail.com>, Quentin Monnet <qmo@kernel.org>
-References: <20250816180631.952085-1-a.s.protopopov@gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <20250816180631.952085-1-a.s.protopopov@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+References: <20250829010026.347440-1-kuniyu@google.com> <20250829010026.347440-6-kuniyu@google.com>
+ <904c1ffb-107e-4f14-89b7-d42ac9a5aa14@linux.dev> <CAAVpQUDfQwb2nfGBV8NEONwaBAMVi_5F8+OPFX3=z+W8X9n9ZQ@mail.gmail.com>
+ <CAAVpQUBWsVDu07xrQcqGMo4cHRu41zvb5CWuiUdJx9m6A+_2AQ@mail.gmail.com>
+ <CAAVpQUCyPPO1dfkkU4Hxz67JFcW6dhSfYnmUp0foNMYua_doyg@mail.gmail.com>
+ <40ed29b3-84d7-4812-890d-3676957d503f@linux.dev> <CAAVpQUCLpi+6w1SP=FKVaXwdDHQC_P6B1hzzDC5y4brsf3_UnQ@mail.gmail.com>
+ <26939fec-b70f-4beb-8895-427db69c38a0@linux.dev>
+In-Reply-To: <26939fec-b70f-4beb-8895-427db69c38a0@linux.dev>
+From: Kuniyuki Iwashima <kuniyu@google.com>
+Date: Thu, 4 Sep 2025 13:29:08 -0700
+X-Gm-Features: Ac12FXwyUXPN3jzgq63teCICDbAFgEj6jSPQihZ_ljUixFf9lFT57vRUe7vUKnA
+Message-ID: <CAAVpQUB8DzEjfc42dMRmGA0mgsHrCtXkPnQXZpG+EQq28xOXCg@mail.gmail.com>
+Subject: Re: [PATCH v4 bpf-next/net 5/5] selftest: bpf: Add test for SK_BPF_MEMCG_SOCK_ISOLATED.
+To: Martin KaFai Lau <martin.lau@linux.dev>
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Johannes Weiner <hannes@cmpxchg.org>, Michal Hocko <mhocko@kernel.org>, 
+	Roman Gushchin <roman.gushchin@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Neal Cardwell <ncardwell@google.com>, Willem de Bruijn <willemb@google.com>, 
+	Mina Almasry <almasrymina@google.com>, Kuniyuki Iwashima <kuni1840@gmail.com>, bpf@vger.kernel.org, 
+	netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-
-
-On 8/16/25 11:06 AM, Anton Protopopov wrote:
-> This patchset implements a new type of map, instruction set, and uses
-> it to build support for indirect branches in BPF (on x86). (The same
-> map will be later used to provide support for indirect calls and static
-> keys.) See [1], [2] for more context.
+On Thu, Sep 4, 2025 at 12:48=E2=80=AFPM Martin KaFai Lau <martin.lau@linux.=
+dev> wrote:
 >
-> This patch set is a follow-up on the initial RFC [3], now converted to
-> normal version to trigger CI. Note that GCC and non-x86 archs are not
-> supposed to work.
+> On 9/4/25 9:45 AM, Kuniyuki Iwashima wrote:
+> > On Wed, Sep 3, 2025 at 10:51=E2=80=AFPM Martin KaFai Lau <martin.lau@li=
+nux.dev> wrote:
+> >>
+> >> On 9/3/25 10:08 AM, Kuniyuki Iwashima wrote:
+> >>> On Wed, Sep 3, 2025 at 9:59=E2=80=AFAM Kuniyuki Iwashima <kuniyu@goog=
+le.com> wrote:
+> >>>>
+> >>>> On Tue, Sep 2, 2025 at 1:49=E2=80=AFPM Kuniyuki Iwashima <kuniyu@goo=
+gle.com> wrote:
+> >>>>>
+> >>>>> On Tue, Sep 2, 2025 at 1:26=E2=80=AFPM Martin KaFai Lau <martin.lau=
+@linux.dev> wrote:
+> >>>>>>
+> >>>>>> On 8/28/25 6:00 PM, Kuniyuki Iwashima wrote:
+> >>>>>>> The test does the following for IPv4/IPv6 x TCP/UDP sockets
+> >>>>>>> with/without BPF prog.
+> >>>>>>>
+> >>>>>>>      1. Create socket pairs
+> >>>>>>>      2. Send a bunch of data that requires more than 256 pages
+> >>>>>>>      3. Read memory_allocated from the 3rd column in /proc/net/pr=
+otocols
+> >>>>>>>      4. Check if unread data is charged to memory_allocated
+> >>>>>>>
+> >>>>>>> If BPF prog is attached, memory_allocated should not be changed,
+> >>>>>>> but we allow a small error (up to 10 pages) in case other process=
+es
+> >>>>>>> on the host use some amounts of TCP/UDP memory.
+> >>>>>>>
+> >>>>>>> At 2., the test actually sends more than 1024 pages because the s=
+ysctl
+> >>>>>>> net.core.mem_pcpu_rsv is 256 is by default, which means 256 pages=
+ are
+> >>>>>>> buffered per cpu before reporting to sk->sk_prot->memory_allocate=
+d.
+> >>>>>>>
+> >>>>>>>      BUF_SINGLE (1024) * NR_SEND (64) * NR_SOCKETS (64) / 4096
+> >>>>>>>      =3D 1024 pages
+> >>>>>>>
+> >>>>>>> When I reduced it to 512 pages, the following assertion for the
+> >>>>>>> non-isolated case got flaky.
+> >>>>>>>
+> >>>>>>>      ASSERT_GT(memory_allocated[1], memory_allocated[0] + 256, ..=
+.)
+> >>>>>>>
+> >>>>>>> Another contributor to slowness is 150ms sleep to make sure 1 RCU
+> >>>>>>> grace period passes because UDP recv queue is destroyed after tha=
+t.
+> >>>>>>
+> >>>>>> There is a kern_sync_rcu() in testing_helpers.c.
+> >>>>>
+> >>>>> Nice helper :)  Will use it.
+> >>>>>
+> >>>>>>
+> >>>>>>>
+> >>>>>>>      # time ./test_progs -t sk_memcg
+> >>>>>>>      #370/1   sk_memcg/TCP       :OK
+> >>>>>>>      #370/2   sk_memcg/UDP       :OK
+> >>>>>>>      #370/3   sk_memcg/TCPv6     :OK
+> >>>>>>>      #370/4   sk_memcg/UDPv6     :OK
+> >>>>>>>      #370     sk_memcg:OK
+> >>>>>>>      Summary: 1/4 PASSED, 0 SKIPPED, 0 FAILED
+> >>>>>>>
+> >>>>>>>      real       0m1.214s
+> >>>>>>>      user       0m0.014s
+> >>>>>>>      sys        0m0.318s
+> >>>>>>
+> >>>>>> Thanks. It finished much faster in my setup also comparing with th=
+e earlier
+> >>>>>> revision. However, it is a bit flaky when I run it in a loop:
+> >>>>>>
+> >>>>>> check_isolated:FAIL:not isolated unexpected not isolated: actual 8=
+61 <=3D expected 861
+> >>>>>>
+> >>>>>> I usually can hit this at ~40-th iteration.
+> >>>>>
+> >>>>> Oh.. I tested ~10 times manually but will try in a tight loop.
+> >>>>
+> >>>> This didn't reproduce on my QEMU with/without --enable-kvm.
+> >>>>
+> >>>> Changing the assert from _GT to _GE will address the very case
+> >>>> above, but I'm not sure if it's enough.
+> >>>
+> >>> I doubled NR_SEND and it was still faster with kern_sync_rcu()
+> >>> than usleep(), so I'll simply double NR_SEND in v5
+> >>>
+> >>> # time ./test_progs -t sk_memcg
+> >>> ...
+> >>> Summary: 1/4 PASSED, 0 SKIPPED, 0 FAILED
+> >>> real 0m0.483s
+> >>> user 0m0.010s
+> >>> sys 0m0.191s
+> >>>
+> >>>
+> >>>>
+> >>>> Does the bpf CI run tests repeatedly or is this only a manual
+> >>>> scenario ?
+> >>
+> >> I haven't seen bpf CI hit it yet. It is in my manual bash while loop. =
+It should
+> >> not be dismissed so easily. Some flaky CI tests were eventually reprod=
+uced in a
+> >> loop before and fixed. I kept the bash loop continue this time until g=
+rep-ed a
+> >> "0" from the error output:
+> >>
+> >> check_isolated:FAIL:not isolated unexpected not isolated: actual 0 <=
+=3D expected 256
+> >>
+> >> The "long memory_allocated[2]" read from /proc/net/protocols are print=
+ed as 0
+> >> but it is probably actually negative:
+> >>
+> >> static inline long
+> >> proto_memory_allocated(const struct proto *prot)
+> >> {
+> >>           return max(0L, atomic_long_read(prot->memory_allocated));
+> >> }
+> >>
+> >> prot->memory_allocated could be negative afaict but printed as 0 in
+> >> /proc/net/protocols. Even the machine is network quiet after test_prog=
+s started,
+> >> the "prot->memory_allocated" and the "proto->per_cpu_fw_alloc" could b=
+e in some
+> >> random states before the test_progs start.  When I hit "0", it will ta=
+ke some
+> >> efforts to send some random traffic to the machine to get the test wor=
+king again. :(
+> >>
+> >> Also, after reading the selftest closer, I am not sure I understand wh=
+y "+ 256".
+> >> The "proto-> per_cpu_fw_alloc" can start with -255 or +255.
+> >
+> > Actually I didn't expect the random state and assumed the test's
+> > local communication would complete on the same CPU thus 0~255.
+> >
+> > Do you see the flakiness with net.core.mem_pcpu_rsv=3D0 ?
+> >
+> > The per-cpu cache is just for performance and I think it's not
+> > critical for testing and it's fine to set it to 0 during the test.
+> >
+> >
+> >>
+> >> I don't think changing NR_SEND help here. It needs a better way. May b=
+e some
+> >> functions can be traced such that prot->memory_allocated can be read d=
+irectly?
+> >> If fentry and fexit of that function has different memory_allocated va=
+lues, then
+> >> the test could also become more straight forward.
+> >
+> > Maybe like this ?  Not yet tested, but we could attach a prog to
+> > sock_init_data() or somewhere else and trigger it by additional socket(=
+2).
+> >
+> >          memory_allocated =3D sk->sk_prot->memory_allocated;
+> >          nr_cpu =3D bpf_num_possible_cpus();
+> >
+> >          for (i =3D 0; i < nr_cpu; i++) {
+> >                  per_cpu_fw_alloc =3D
+> > bpf_per_cpu_ptr(sk->sk_prot->per_cpu_fw_alloc, i);
 >
-> Short table of contents:
+> I suspect passing per_cpu_fw_alloc to bpf_per_cpu_ptr won't work for now.=
+ sk is
+> trusted if it is a "tp_btf" but I don't think the verifier recognizes the
+> sk->sk_prot is a trusted ptr. I haven't tested it though. If the above do=
+es not
+> work, try to directly use the global percpu tcp_memory_per_cpu_fw_alloc. =
+Take a
+> look at how "bpf_prog_active" is used in test_ksyms_btf.c.
+
+Thanks for the pointer !
+I was looking for a way to read global vars.
+
 >
->    * Patches 1-6 implement the new map of type
->      BPF_MAP_TYPE_INSN_SET and corresponding selftests. This map can
->      be used to track the "original -> xlated -> jitted mapping" for
->      a given program. Patches 5,6 add support for "blinded" variant.
+> >                  if (per_cpu_fw_alloc)
+> >                          memory_allocated +=3D *per_cpu_fw_alloc;
 >
->    * Patches 7,8,9 implement the support for indirect jumps
+> Yeah. I think figuring out the true memory_allocated value and use it as =
+the
+> before/after value should be good enough. Then no need to worry about the
+> initial states. I wonder why proto_memory_allocated() does not do that fo=
+r
+> /proc/net/protocols but I guess it may not be accurate for a lot of cores=
+.
+
+Probably, and per_cpu_fw_alloc is expected to flip quickly.
+
 >
->    * Patches 10,11 add support for LLVM-compiled programs containing
->      indirect jumps.
+> >          }
+> >
+> > per_cpu_fw_alloc might have been added to sk_prot->memory_allocated
+> > during loop, so it's not 100% accurate still.
+> >
+> > Probably we should set net.core.mem_pcpu_rsv=3D0 and stress
+> > memory_allocated before the actual test to drain per_cpu_fw_alloc
+> > (at least on the testing CPU).
+> I think the best is if a suitable kernel func can be traced or figure out=
+ the
+> true memory_allocated value. At least figuring out the true memory_alloca=
+ted
+> seems doable. If nothing of the above works out, mem_pcpu_rsv=3D0 and
+> pre-stress/pre-flush should help by getting the per_cpu_fw_alloc and
+> memory_allocated to some certain states before using it in the before/aft=
+er result.
 >
-> A special LLVM should be used for that, see [4] for the details and
-> some related discussions. Due to this fact, selftests for indirect
-> jumps which directly use `goto *rX` are commented out (such that
-> CI can run).
->
-> There is a list of TBDs (mostly, more selftests + some limitations
-> like maximal map size), however, all the selftests which compile
-> to contain an indirect jump work with this patchset.
->
-> See individual patches for more details on implementation details.
->
-> Changes since RFC:
->
->    * I've tried to address all the comments provided by Alexei and
->      Eduard in RFC. Will try to list the most important of them below.
->
->    * One big change: move from older LLVM version [5] to newer [4].
->      Now LLVM generates jump tables as symbols in the new special
->      section ".jumptables". Another part of this change is that
->      libbpf now doesn't try to link map load and goto *rX, as
->      1) this is absolutely not reliable 2) for some use cases this
->      is impossible (namely, when more than one jump table can be used
->      in the same gotox instruction).
->
->    * Added insn_successors() support (Alexei, Eduard). This includes
->      getting rid of the ugly bpf_insn_set_iter_xlated_offset()
->      interface (Eduard).
->
->    * Removed hack for the unreachable instruction, as new LLVM thank to
->      Eduard doesn't generate it.
->
->    * Set mem_size for direct map access properly instead of hacking.
->      Remove off>0 check. (Alexei)
->
->    * Do not allocate new memory for min_index/max_index (Alexei, Eduard)
->
->    * Information required during check_cfg is now cached to be reused
->      later (Alexei + general logic for supporting multiple JT per jump)
->
->    * Properly compare registers in regsafe (Alexei, Eduard)
->
->    * Remove support for JMP32 (Eduard)
->
->    * Better checks in adjust_ptr_min_max_vals (Eduard)
->
->    * More selftests were added (but still there's room for more) which
->      directly use gotox (Alexei)
->
->    * More checks and verbose messages added
->
->    * "unique pointers" are no more in the map
->
-> Links:
->    1. https://lpc.events/event/18/contributions/1941/
->    2. https://lwn.net/Articles/1017439/
->    3. https://lore.kernel.org/bpf/20250615085943.3871208-1-a.s.protopopov@gmail.com/
->    4. https://github.com/llvm/llvm-project/pull/149715
->
-> Anton Protopopov (11):
->    bpf: fix the return value of push_stack
->    bpf: save the start of functions in bpf_prog_aux
->    bpf, x86: add new map type: instructions array
->    selftests/bpf: add selftests for new insn_array map
->    bpf: support instructions arrays with constants blinding
->    selftests/bpf: test instructions arrays with blinding
->    bpf, x86: allow indirect jumps to r8...r15
->    bpf, x86: add support for indirect jumps
->    bpf: disasm: add support for BPF_JMP|BPF_JA|BPF_X
->    libbpf: support llvm-generated indirect jumps
->    selftests/bpf: add selftests for indirect jumps
->
->   arch/x86/net/bpf_jit_comp.c                   |  39 +-
->   include/linux/bpf.h                           |  30 +
->   include/linux/bpf_types.h                     |   1 +
->   include/linux/bpf_verifier.h                  |  20 +-
->   include/uapi/linux/bpf.h                      |  11 +
->   kernel/bpf/Makefile                           |   2 +-
->   kernel/bpf/bpf_insn_array.c                   | 350 ++++++++++
->   kernel/bpf/core.c                             |  20 +
->   kernel/bpf/disasm.c                           |   9 +
->   kernel/bpf/syscall.c                          |  22 +
->   kernel/bpf/verifier.c                         | 603 ++++++++++++++++--
->   .../bpf/bpftool/Documentation/bpftool-map.rst |   2 +-
->   tools/bpf/bpftool/map.c                       |   2 +-
->   tools/include/uapi/linux/bpf.h                |  11 +
->   tools/lib/bpf/libbpf.c                        | 159 ++++-
->   tools/lib/bpf/libbpf_probes.c                 |   4 +
->   tools/lib/bpf/linker.c                        |  12 +-
->   tools/testing/selftests/bpf/Makefile          |   4 +-
->   .../selftests/bpf/prog_tests/bpf_goto_x.c     | 132 ++++
->   .../selftests/bpf/prog_tests/bpf_insn_array.c | 498 +++++++++++++++
->   .../testing/selftests/bpf/progs/bpf_goto_x.c  | 384 +++++++++++
->   21 files changed, 2230 insertions(+), 85 deletions(-)
->   create mode 100644 kernel/bpf/bpf_insn_array.c
->   create mode 100644 tools/testing/selftests/bpf/prog_tests/bpf_goto_x.c
->   create mode 100644 tools/testing/selftests/bpf/prog_tests/bpf_insn_array.c
->   create mode 100644 tools/testing/selftests/bpf/progs/bpf_goto_x.c
->
-After indirect jumps, the next natural steps will be supporting callx
-and static key in bpf programs.
+> [ Before re-spinning, need to conclude/resolve the on-going discussion in=
+ v5 first ]
 
-For static keys, currently, llvm supports gotol_or_nop/nop_or_gotol insns
-(https://github.com/llvm/llvm-project/compare/main...aspsk:llvm-project:static-keys)
-and these insns can only be used in inline asm.
-
-For callx, there are two patterns, one is calling a particular func with
-flow sensitive analysis, another is calling through call stable.
-
-The following two examples are to call a partuclar func with current
-variable to tracing register.
-
-Example 1:
-
-typedef int (*op_t)(int, int); static int add(int a, int b) { return a + 
-b; } static int mul(int a, int b) { return a * b; } static int 
-apply(op_t f, int a, int b) { // indirect call via function pointer 
-return f(a, b); } int result(int i, int j) { op_t f; if (i + j) f = add; 
-else f = mul; return apply(f, i, j); } The asm code:
-result:                                 # @result
-# %bb.0:
-         w4 = w2
-         w4 = -w4
-         r3 = mul ll
-         if w1 == w4 goto LBB0_2
-# %bb.1:
-         r3 = add ll
-LBB0_2:
-         callx r3
-         exit
-
-Example 2:
-
-typedef int (*op_t)(int, int);
-
-__attribute__((section("_add"))) static int add(int a, int b) { return a + b; }
-__attribute__((section("_mul"))) static int mul(int a, int b) { return a * b; }
-
-struct ctx {
-   op_t f;
-};
-
-__attribute__((noinline)) static int apply(struct ctx *ctx, int a, int b) {
-     // indirect call via function pointer
-     return ctx->f(a, b);
-}
-
-int result(int i, int j) {
-     int x = 2, y = 3;
-     struct ctx ctx;
-
-     if (i&2) ctx.f = add;
-     else ctx.f = mul;
-     int r1 = apply(&ctx, x, y);
-     int r2 = apply(&ctx, x, y);
-
-     return r1 + r2;
-}
-
-asm code:
-
-result:                                 # @result
-# %bb.0:
-         w1 &= 2
-         r2 = mul ll
-         if w1 == 0 goto LBB0_2
-# %bb.1:
-         r2 = add ll
-LBB0_2:
-         *(u64 *)(r10 - 8) = r2
-         r6 = r10
-         r6 += -8
-         r1 = r6
-         call apply
-         w7 = w0
-         r1 = r6
-         call apply
-         w0 += w7
-         exit
-...
-apply:                                  # @apply
-# %bb.0:
-         r3 = *(u64 *)(r1 + 0)
-         w1 = 2
-         w2 = 3
-         callx r3
-         exit
-
-In the above two cases, current verifier can be enhanced to
-track functions and eventuall 'callx r3' can find proper
-targets.
-
-Another pattern is to have a calltable (similar to jump table)
-and callx will call one of functions based on calltable base
-and an index. The example is below:
-
-typedef int (*op_t)(int, int);
-
-__attribute__((section("_add"))) static int add(int a, int b) { return a + b; }
-__attribute__((section("_mul"))) static int mul(int a, int b) { return a * b; }
-
-__attribute__((noinline)) static int apply(op_t *ops, int index, int a, int b) {
-     // indirect call via function pointer
-     return ops[index](a, b);
-}
-
-int result(int i, int j) {
-     op_t ops[] = { add, mul, add, add, mul, mul };
-     int x = 2, y = 3;
-
-     int r1 = apply(ops, 0, x, y);
-     int r2 = apply(ops, 4, x, y);
-
-     return r1 + r2;
-}
-
-int result2(int i, int j) {
-     op_t ops[] = { add, add, add, mul, mul };
-     int x = 3, y = 2;
-
-     int r1 = apply(ops, 1, x, y);
-     int r2 = apply(ops, 2, x, y);
-
-     return r1 + r2;
-}
-
-
-The related llvm IR:
-
-@__const.result.ops = private unnamed_addr constant [6 x ptr] [ptr @add, ptr @mul, ptr @add, ptr @add, ptr @mul, ptr @mul], align 8
-@__const.result2.ops = private unnamed_addr constant [5 x ptr] [ptr @add, ptr @add, ptr @add, ptr @mul, ptr @mul], align 8
-
-; Function Attrs: nounwind
-define dso_local i32 @result(i32 noundef %0, i32 noundef %1) local_unnamed_addr #0 {
-   %3 = tail call fastcc i32 @apply(ptr noundef @__const.result.ops, i32 noundef 0, i32 noundef 2, i32 noundef 3)
-   %4 = tail call fastcc i32 @apply(ptr noundef @__const.result.ops, i32 noundef 4, i32 noundef 2, i32 noundef 3)
-   %5 = add nsw i32 %4, %3
-   ret i32 %5
-}
-...
-; Function Attrs: noinline nounwind
-define internal fastcc i32 @apply(ptr noundef nonnull readonly captures(none) %0, i32 noundef range(i32 0, 5) %1, i32 noundef range(i32 2, 4) %2, i32 noundef range(i32 2, 4) %3) unnamed_addr #2 {
-   %5 = zext nneg i32 %1 to i64
-   %6 = getelementptr inbounds nuw ptr, ptr %0, i64 %5
-   %7 = load ptr, ptr %6, align 8, !tbaa !3
-   %8 = tail call i32 %7(i32 noundef %2, i32 noundef %3) #3
-   ret i32 %8
-}
-
-; Function Attrs: nounwind
-define dso_local i32 @result2(i32 noundef %0, i32 noundef %1) local_unnamed_addr #0 {
-   %3 = tail call fastcc i32 @apply(ptr noundef @__const.result2.ops, i32 noundef 1, i32 noundef 3, i32 noundef 2)
-   %4 = tail call fastcc i32 @apply(ptr noundef @__const.result2.ops, i32 noundef 2, i32 noundef 3, i32 noundef 2)
-   %5 = add nsw i32 %4, %3
-   ret i32 %5
-}
-
-To make
-    @__const.result.ops = private unnamed_addr constant [6 x ptr] [ptr @add, ptr @mul, ptr @add, ptr @add, ptr @mul, ptr @mul], align 8
-explicit for call table, the llvm changed the call table name (with a llvm hack) to be like
-    BPF.__const.result.ops
-
-The llvm hack on top of https://github.com/llvm/llvm-project/pull/149715:
-
-commit 7b3d21831d2e2ccc77ec09553297e955e480eb96 (HEAD -> jumptable-v17-callx)
-Author: Yonghong Song <yonghong.song@linux.dev>
-Date:   Thu Sep 4 10:02:56 2025 -0700
-
-     callx
-
-diff --git a/llvm/lib/Target/BPF/BPFCheckAndAdjustIR.cpp b/llvm/lib/Target/BPF/BPFCheckAndAdjustIR.cpp
-index b202b20291af..3d6a2c047d7b 100644
---- a/llvm/lib/Target/BPF/BPFCheckAndAdjustIR.cpp
-+++ b/llvm/lib/Target/BPF/BPFCheckAndAdjustIR.cpp
-@@ -55,6 +55,7 @@ private:
-    bool sinkMinMax(Module &M);
-    bool removeGEPBuiltins(Module &M);
-    bool insertASpaceCasts(Module &M);
-+  bool renameCallTableGlobal(Module &M);
-  };
-  } // End anonymous namespace
-  
-@@ -527,12 +528,39 @@ bool BPFCheckAndAdjustIR::insertASpaceCasts(Module &M) {
-    return Changed;
-  }
-  
-+bool BPFCheckAndAdjustIR::renameCallTableGlobal(Module &M) {
-+  bool Changed = false;
-+  for (GlobalVariable &Global : M.globals()) {
-+    if (Global.getLinkage() != GlobalValue::PrivateLinkage)
-+      continue;
-+    if (!Global.isConstant() || !Global.hasInitializer())
-+      continue;
-+
-+    Constant *CV = dyn_cast<Constant>(Global.getInitializer());
-+    if (!CV)
-+      continue;
-+    ConstantArray *CA = dyn_cast<ConstantArray>(CV);
-+    if (!CA)
-+      continue;
-+
-+    for (unsigned i = 1, e = CA->getNumOperands(); i != e; ++i) {
-+      if (!dyn_cast<Function>(CA->getOperand(i)))
-+        continue;
-+    }
-+    Global.setName("BPF." + Global.getName());
-+    Global.setLinkage(GlobalValue::LinkageTypes::InternalLinkage);
-+    Global.setSection(".calltables");
-+    Changed = true;
-+  }
-+
-+  return Changed;
-+}
-+
-  bool BPFCheckAndAdjustIR::adjustIR(Module &M) {
-    bool Changed = removePassThroughBuiltin(M);
-    Changed = removeCompareBuiltin(M) || Changed;
-    Changed = sinkMinMax(M) || Changed;
-    Changed = removeGEPBuiltins(M) || Changed;
-    Changed = insertASpaceCasts(M) || Changed;
-+  Changed = renameCallTableGlobal(M) || Changed;
-    return Changed;
-  }
-
-
-At the end, we will have asm code:
-
-result:                                 # @result
-# %bb.0:
-         r1 = BPF.__const.result.ops ll
-         w2 = 0
-         w3 = 2
-         w4 = 3
-         call apply
-         w6 = w0
-         r1 = BPF.__const.result.ops ll
-         w2 = 4
-         w3 = 2
-         w4 = 3
-         call apply
-         w0 += w6
-         exit
-.Lfunc_end0:
-         .size   result, .Lfunc_end0-result
-...
-  apply:                                  # @apply
-# %bb.0:
-         r2 = w2
-         r2 <<= 3
-         r1 += r2
-         r5 = *(u64 *)(r1 + 0)
-         w1 = w3
-         w2 = w4
-         callx r5
-         exit
-.Lfunc_end3:
-         .size   apply, .Lfunc_end3-apply
-...
-         .section        .calltables,"a",@progbits
-         .p2align        3, 0x0
-BPF.__const.result.ops:
-         .quad   add
-         .quad   mul
-         .quad   add
-         .quad   add
-         .quad   mul
-         .quad   mul
-         .size   BPF.__const.result.ops, 48
-
-         .type   BPF.__const.result2.ops,@object # @BPF.__const.result2.ops
-         .p2align        3, 0x0
-BPF.__const.result2.ops:
-         .quad   add
-         .quad   add
-         .quad   add
-         .quad   mul
-         .quad   mul
-         .size   BPF.__const.result2.ops, 40
-
-$ llvm-readelf -s t.o
-...
-      2: 0000000000000000    48 OBJECT  LOCAL  DEFAULT     6 BPF.__const.result.ops
-      8: 0000000000000030    40 OBJECT  LOCAL  DEFAULT     6 BPF.__const.result2.ops
-      9: 0000000000000000     0 SECTION LOCAL  DEFAULT     6 .calltables
-
-0000000000000000 <result>:
-        0:       18 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 r1 = 0x0 ll
-                 0000000000000000:  R_BPF_64_64  .calltables
-        2:       b4 02 00 00 00 00 00 00 w2 = 0x0
-        3:       b4 03 00 00 02 00 00 00 w3 = 0x2
-        4:       b4 04 00 00 03 00 00 00 w4 = 0x3
-        5:       85 10 00 00 09 00 00 00 call 0x9
-        6:       bc 06 00 00 00 00 00 00 w6 = w0
-        7:       18 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 r1 = 0x0 ll
-                 0000000000000038:  R_BPF_64_64  .calltables
-        9:       b4 02 00 00 04 00 00 00 w2 = 0x4
-       10:       b4 03 00 00 02 00 00 00 w3 = 0x2
-       11:       b4 04 00 00 03 00 00 00 w4 = 0x3
-       12:       85 10 00 00 02 00 00 00 call 0x2
-       13:       0c 60 00 00 00 00 00 00 w0 += w6
-       14:       95 00 00 00 00 00 00 00 exit
-...
-00000000000000b8 <result2>:
-       23:       18 01 00 00 30 00 00 00 00 00 00 00 00 00 00 00 r1 = 0x30 ll
-                 00000000000000b8:  R_BPF_64_64  .calltables
-       25:       b4 02 00 00 01 00 00 00 w2 = 0x1
-       26:       b4 03 00 00 03 00 00 00 w3 = 0x3
-       27:       b4 04 00 00 02 00 00 00 w4 = 0x2
-       28:       85 10 00 00 f2 ff ff ff call -0xe
-       29:       bc 06 00 00 00 00 00 00 w6 = w0
-       30:       18 01 00 00 30 00 00 00 00 00 00 00 00 00 00 00 r1 = 0x30 ll
-                 00000000000000f0:  R_BPF_64_64  .calltables
-       32:       b4 02 00 00 02 00 00 00 w2 = 0x2
-       33:       b4 03 00 00 03 00 00 00 w3 = 0x3
-       34:       b4 04 00 00 02 00 00 00 w4 = 0x2
-       35:       85 10 00 00 eb ff ff ff call -0x15
-       36:       0c 60 00 00 00 00 00 00 w0 += w6
-       37:       95 00 00 00 00 00 00 00 exit
-
-
-Relocation section '.rel.calltables' at offset 0x3d0 contains 11 entries:
-     Offset             Info             Type               Symbol's Value  Symbol's Name
-0000000000000000  0000000400000002 R_BPF_64_ABS64         0000000000000000 _add
-0000000000000008  0000000600000002 R_BPF_64_ABS64         0000000000000000 _mul
-0000000000000010  0000000400000002 R_BPF_64_ABS64         0000000000000000 _add
-0000000000000018  0000000400000002 R_BPF_64_ABS64         0000000000000000 _add
-0000000000000020  0000000600000002 R_BPF_64_ABS64         0000000000000000 _mul
-0000000000000028  0000000600000002 R_BPF_64_ABS64         0000000000000000 _mul
-0000000000000030  0000000400000002 R_BPF_64_ABS64         0000000000000000 _add
-0000000000000038  0000000400000002 R_BPF_64_ABS64         0000000000000000 _add
-0000000000000040  0000000400000002 R_BPF_64_ABS64         0000000000000000 _add
-0000000000000048  0000000600000002 R_BPF_64_ABS64         0000000000000000 _mul
-0000000000000050  0000000600000002 R_BPF_64_ABS64         0000000000000000 _mul
-
-For the disasm code, the first two relocations clearly points to
-BPF.__const.result.ops, and the next two relocations point to
-BPF.__const.result2.ops.
-
+I'll wait for Shakeel's response for v5.
