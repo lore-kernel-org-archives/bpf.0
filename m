@@ -1,46 +1,46 @@
-Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
+Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A8FA34575B
-	for <bpf@vger.kernel.org>; Fri,  5 Sep 2025 11:12:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.38
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A41234F474;
+	Fri,  5 Sep 2025 11:12:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757070730; cv=none; b=hOpRONh9Yr69QW26C7t80aCbtu46ADGY4sJhEZJRMGEyecouoWyUhvRjgOXD1KxT276BTVfb9BUrjjOGj/vZRYtALRvkb6qe9GHPX+eaFzOJy8yBD+DewDuMTqsctPGCgpUL2ICmUGhNbTork7JMcuZuQIDMMu7T7NYsysDnL+I=
+	t=1757070732; cv=none; b=SWdq3oGt66iwCluAiz8c5IbePo2tdKTyVj8StYwpxj5/AAbuP2PaRADmEWNI1SRJz35SGdWdqH47QDnhfzok5ULhRAaVWkas0LX1wnsPh3Fa/dQZ89sR2Y6a0JV7MCdY3qrlT8MP/GEPqVcout69O4Pj6Zct6/6Hy5w2Y/LOrbQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757070730; c=relaxed/simple;
-	bh=Dp9qrhweroc3zKnQINaoYc9xx4s5tbRN5FpOMFLYIe4=;
+	s=arc-20240116; t=1757070732; c=relaxed/simple;
+	bh=7Tsy7ROVoOHxxVMAnzKBn0Y5eMA7rE7joEcmL2lJBVk=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=DGVvpMVLTifSgkn3Ya8KcLzkwgIqIaB79ap5twXQm71X2cwm9nNwJpvEaHEnXADCVtpfvt+lqi0TTuRUVDpwK+PTlEMWbzIwWwiZwFNwIz8UGzpWVjkn+5+zokH43pODCpgNuXeljJ8on49q1iwM4SCGp1IQzq1upZwmTKFVVIo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=VDDUzwc5; arc=none smtp.client-ip=185.226.149.38
+	 In-Reply-To:To:Cc; b=aLPf3TIOYSsqBw6PQx/Obt7zYzQT0uJ+zS2AwedBgvSXxGI5SOFYIoAt9GVLFI/qJfSASRTd/pI1MfbcCom4HX3oCAtusKiDJvW+IuvdpKjmelEpNhJnKlUyOE4sq1bnLzcAVyedrmc43PCg1/LWpdd10f+6Ss6Hu5OVKVPfi80=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=daZ+R/x2; arc=none smtp.client-ip=185.226.149.37
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="VDDUzwc5"
+	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="daZ+R/x2"
 Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
-	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
 	(Exim 4.93)
 	(envelope-from <mhal@rbox.co>)
-	id 1uuUMO-003TFn-M0; Fri, 05 Sep 2025 13:12:04 +0200
+	id 1uuUMQ-003UR9-83; Fri, 05 Sep 2025 13:12:06 +0200
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
 	s=selector1; h=Cc:To:In-Reply-To:References:Message-Id:
 	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From;
-	bh=rVsHhBOsXNiF0cE1EN8PVJpEUHIXi3i0lXd+CCf7ckk=; b=VDDUzwc5WEdL4k2SWHKgpkMWQk
-	Hq9+AFZy7IU5yAgP+Kks7dxRKbVc1k2koyTjzh4INf50UR8IA+m3XSQqzh2odgbIyl/xll4K+EckN
-	6snWGSijYVEMeygL/u8uuUO0h8wIhjKd/ufKcY4ucp5/mmxPCyY7a0ThrUXu2Ysmg9ShYG7Fpm3mw
-	dIvc3eY8Y+UBbWxyMjRvvXal6i8jkqQ2acWdVLkqT7cUoQhewG7kTspPo+yJoQfKktOkOSPpDaZ/k
-	yPYy2tc2YLZrKZu5V/kxIg/WcOA0vNe4KqBmAVcrDSzJE62+hsL3r14lY73Nx4WJ8O6TQ+wyqkGkG
-	PaAMsHxw==;
+	bh=+pRX1EHWIu4uVLS1iKQ0e4UmcUny8V+/+FbSvwtoeV8=; b=daZ+R/x2+DfqwfHt7UmEv0f802
+	4zzpGOT3I0NOlRE6zmjhR4NBnX5u67d99vXvu0HMVURiQzhp/IOOAMGkwxSolHYkqHDwcipT3n6hC
+	r9cAo/E2e93lksbAf92fBlQWLAjZYwFfxd0gQiouIs3Jo0ky9sPZY7GFx7NbegiBxJcJswT9nk0K8
+	bUNpMG0+NDLYRhDcqieQ1ScSvg9ZcRj1x6fQcbLYp6Wp+oKvBc9CtGX1C7Xm9HPZUCOGzbC8Ao6Yi
+	V4URgJKchAebB+b8xMDbgKIVhmPnept/zuSZ7Y/rq/qUx8rZSCIFzcafJoUllhOl0/xQRPv2yt+pP
+	96BvdtYg==;
 Received: from [10.9.9.73] (helo=submission02.runbox)
 	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
 	(envelope-from <mhal@rbox.co>)
-	id 1uuUMN-0002Ie-Aw; Fri, 05 Sep 2025 13:12:04 +0200
+	id 1uuUMP-0002Jd-OB; Fri, 05 Sep 2025 13:12:06 +0200
 Received: by submission02.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim 4.93)
-	id 1uuUMC-002yZ1-Ur; Fri, 05 Sep 2025 13:11:53 +0200
+	id 1uuUMA-002yZ1-19; Fri, 05 Sep 2025 13:11:50 +0200
 From: Michal Luczaj <mhal@rbox.co>
-Date: Fri, 05 Sep 2025 13:11:44 +0200
-Subject: [PATCH bpf-next 4/5] selftests/bpf: sockmap_redir: Let test
- specify skel's redirect_type
+Date: Fri, 05 Sep 2025 13:11:41 +0200
+Subject: [PATCH bpf-next 1/5] selftests/bpf: sockmap_redir: Simplify
+ try_recv()
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -49,7 +49,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250905-redir-test-pass-drop-v1-4-9d9e43ff40df@rbox.co>
+Message-Id: <20250905-redir-test-pass-drop-v1-1-9d9e43ff40df@rbox.co>
 References: <20250905-redir-test-pass-drop-v1-0-9d9e43ff40df@rbox.co>
 In-Reply-To: <20250905-redir-test-pass-drop-v1-0-9d9e43ff40df@rbox.co>
 To: Alexei Starovoitov <ast@kernel.org>, 
@@ -65,55 +65,80 @@ Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
  linux-kernel@vger.kernel.org, Michal Luczaj <mhal@rbox.co>
 X-Mailer: b4 0.14.2
 
-Preparatory patch before adding SK_PASS/SK_DROP support: allow to
-dynamically switch BPF program's redirect_type. This way, after setting up
-for a redirection, test can make the BPF program skip the actual
-bpf_{sk,msg}_redirect_{map,hash} part and return a specified verdict.
+try_recv() was meant to support both @expect_success cases, but all the
+callers use @expect_success=false anyway. Drop the unused logic and fold in
+MSG_DONTWAIT. Adapt callers.
+
+Subtle change here: recv() return value of 0 will also be considered (an
+unexpected) success.
 
 Signed-off-by: Michal Luczaj <mhal@rbox.co>
 ---
- tools/testing/selftests/bpf/prog_tests/sockmap_redir.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ .../selftests/bpf/prog_tests/sockmap_redir.c       | 25 +++++++++-------------
+ 1 file changed, 10 insertions(+), 15 deletions(-)
 
 diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_redir.c b/tools/testing/selftests/bpf/prog_tests/sockmap_redir.c
-index 9fc5b4dd323d8554e6dc89d06be9054612e41020..f89df1ca1174800d801f221a819b099abf911450 100644
+index 9c461d93113db20de65ac353f92dfdbe32ffbd3b..c1bf1076e8152b7d83c3e07e2dce746b5a39cf7e 100644
 --- a/tools/testing/selftests/bpf/prog_tests/sockmap_redir.c
 +++ b/tools/testing/selftests/bpf/prog_tests/sockmap_redir.c
-@@ -371,7 +371,7 @@ static void test_redir(enum bpf_map_type type, struct redir_spec *redir,
+@@ -144,17 +144,14 @@ static void get_redir_params(struct redir_spec *redir,
+ 		*redirect_flags = 0;
  }
  
- static void test_sockets(enum bpf_map_type type, struct redir_spec *redir,
--			 struct maps *maps)
-+			 struct maps *maps, int *skel_redir_type)
+-static void try_recv(const char *prefix, int fd, int flags, bool expect_success)
++static void fail_recv(const char *prefix, int fd, int more_flags)
  {
- 	struct socket_spec *s, sockets[] = {
- 		{ AF_INET, SOCK_STREAM },
-@@ -392,6 +392,8 @@ static void test_sockets(enum bpf_map_type type, struct redir_spec *redir,
- 		if (socket_spec_pairs(s))
- 			goto out;
+ 	ssize_t n;
+ 	char buf;
  
-+	*skel_redir_type = type;
-+
- 	/* Intra-proto */
- 	for (s = sockets; s < sockets + ARRAY_SIZE(sockets); s++)
- 		test_redir(type, redir, maps, s, s);
-@@ -451,7 +453,6 @@ static void test_map(enum bpf_map_type type)
- 			return;
- 		}
+-	errno = 0;
+-	n = recv(fd, &buf, 1, flags);
+-	if (n < 0 && expect_success)
+-		FAIL_ERRNO("%s: unexpected failure: retval=%zd", prefix, n);
+-	if (!n && !expect_success)
+-		FAIL("%s: expected failure: retval=%zd", prefix, n);
++	n = recv(fd, &buf, 1, MSG_DONTWAIT | more_flags);
++	if (n >= 0)
++		FAIL("%s: unexpected success: retval=%zd", prefix, n);
+ }
  
--		skel->bss->redirect_type = type;
- 		maps.verd = bpf_map__fd(skel->maps.verdict_map);
- 		get_redir_params(r, skel, &prog_fd, &attach_type,
- 				 &skel->bss->redirect_flags);
-@@ -459,7 +460,7 @@ static void test_map(enum bpf_map_type type)
- 		if (xbpf_prog_attach(prog_fd, maps.in, attach_type, 0))
- 			return;
+ static void handle_unsupported(int sd_send, int sd_peer, int sd_in, int sd_out,
+@@ -188,13 +185,13 @@ static void handle_unsupported(int sd_send, int sd_peer, int sd_in, int sd_out,
+ 	}
  
--		test_sockets(type, r, &maps);
-+		test_sockets(type, r, &maps, &skel->bss->redirect_type);
+ 	/* Ensure queues are empty */
+-	try_recv("bpf.recv(sd_send)", sd_send, MSG_DONTWAIT, false);
++	fail_recv("bpf.recv(sd_send)", sd_send, 0);
+ 	if (sd_in != sd_send)
+-		try_recv("bpf.recv(sd_in)", sd_in, MSG_DONTWAIT, false);
++		fail_recv("bpf.recv(sd_in)", sd_in, 0);
  
- 		if (xbpf_prog_detach2(prog_fd, maps.in, attach_type))
- 			return;
+-	try_recv("bpf.recv(sd_out)", sd_out, MSG_DONTWAIT, false);
++	fail_recv("bpf.recv(sd_out)", sd_out, 0);
+ 	if (sd_recv != sd_out)
+-		try_recv("bpf.recv(sd_recv)", sd_recv, MSG_DONTWAIT, false);
++		fail_recv("bpf.recv(sd_recv)", sd_recv, 0);
+ }
+ 
+ static void test_send_redir_recv(int sd_send, int send_flags, int sd_peer,
+@@ -257,15 +254,13 @@ static void test_send_redir_recv(int sd_send, int send_flags, int sd_peer,
+ 
+ 	if (send_flags & MSG_OOB) {
+ 		/* Fail reading OOB while in sockmap */
+-		try_recv("bpf.recv(sd_out, MSG_OOB)", sd_out,
+-			 MSG_OOB | MSG_DONTWAIT, false);
++		fail_recv("bpf.recv(sd_out, MSG_OOB)", sd_out, MSG_OOB);
+ 
+ 		/* Remove sd_out from sockmap */
+ 		xbpf_map_delete_elem(maps->out, &u32(0));
+ 
+ 		/* Check that OOB was dropped on redirect */
+-		try_recv("recv(sd_out, MSG_OOB)", sd_out,
+-			 MSG_OOB | MSG_DONTWAIT, false);
++		fail_recv("recv(sd_out, MSG_OOB)", sd_out, MSG_OOB);
+ 
+ 		goto del_in;
+ 	}
 
 -- 
 2.50.1
