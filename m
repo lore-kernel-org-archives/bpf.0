@@ -1,95 +1,126 @@
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F5E92E7651
-	for <bpf@vger.kernel.org>; Fri,  5 Sep 2025 21:31:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2E5C280325
+	for <bpf@vger.kernel.org>; Fri,  5 Sep 2025 21:31:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757107909; cv=none; b=AMfm/l4n+zVLWRF/nmuR1OL5AWKLi1beuug+wqnhuKRvOdcakYAQy9BfODGhcDeYGEAa6H22NiYTt6XlK6MQpLdPAAxvyBqmPdR55wXLt0mmRx4WhiCkeZ5EmtV0JL3/AAQXnRJ+QAH3WR+6MyzvwDYWIeCa5WBHOvLZpAtJh/c=
+	t=1757107913; cv=none; b=DWeuBN4Yk273+cRyFjfmHAvG4o0YxRkicpFFSqo+Kb1mDMpLyubQGxpAz+wnS/7wgqZs/PMEoyFFzQte6cW8kryOoIIy9JAMhbVtXdUfQeW3C8vw74fIEsCF9ENlK+/x2l//a8TOxL7SfdrEgm6TgGHV6vXIb7KQ/o14VKYRfq4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757107909; c=relaxed/simple;
-	bh=Kg6TAzD2LZtVAHpNY4DJGCly+hgxT8K2FwByy+402n4=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=oKGv1WN1zBYvQDGBD05fvMbYAJNLPaYDpD4WEPasWnklJIHSwy1FlY81RMr87i0w7XwHBmUldo5npDB+6zQE1Cg3pkoI979t4EBWv5/zeI96YjuvroMox7kqDk1wlgbtynBnvhjnYWtmr274YehUb3T5mlO2XIHtcOCJYlGsE8A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GXjOCics; arc=none smtp.client-ip=209.85.216.44
+	s=arc-20240116; t=1757107913; c=relaxed/simple;
+	bh=SLK9rr4x11vpEiqE+hHybWqMaPNoDmkfaG/MSpol94A=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=FH2tp2hOX/XkY1iJNnSbCVQh+FwSpEROLPDwiihE1qBwymvW/ALb/6AtuDJ7UJyI/kD+6/55Q2fspZvzKwZFt/uPuQsq3XvB45XRfBbtuUIrtEfGzfjE8s7LTvcH1GhRkBfD98lAjCqiHi2t03r73yczcFyvqHxXhTehZKdgEOU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=khNQ+Gc4; arc=none smtp.client-ip=209.85.216.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GXjOCics"
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-329e47dfa3eso2299196a91.1
-        for <bpf@vger.kernel.org>; Fri, 05 Sep 2025 14:31:47 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="khNQ+Gc4"
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-3280264a6e8so1987163a91.3
+        for <bpf@vger.kernel.org>; Fri, 05 Sep 2025 14:31:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757107907; x=1757712707; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=Kg6TAzD2LZtVAHpNY4DJGCly+hgxT8K2FwByy+402n4=;
-        b=GXjOCicsc34Wq8hunl4t18mc0HL4ejr3iPd7NZyHgwN2xKUTPUbE5y4hUCSNJvSi2X
-         w3QjWoWHWtHry7kyw9qqE11YCucT8bjMEwD6dZN5F71grvGVNQE6e2o/3EuXPDXUspVr
-         OGFnqeSvgKWtHH360i3/SYInkh8lwV+pyhdpiyaTHdQKxHmbrGqvuJ8porj/xD08PEhj
-         P7Ao+XGMb8LO1XDwYMfowCBWmE9FiQqOz0goFgcQvBT31IpMvQZVAe7Mz5aeDWSz1X0L
-         LQGPfSQzlI2BK8Zn0nUKYFmLorNKVBLYk/cyDmKpHi56ZSu/qzM34UhlP6qdbNAEBguf
-         glow==
+        d=gmail.com; s=20230601; t=1757107911; x=1757712711; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=j6iYxxEGAvkeFWpNvrGKAXUXP2TUk++WAmz0ItvoFSA=;
+        b=khNQ+Gc4l+RCF2dwmjhmoVtoASeCBXnx2u/0QlM4Kr8p23TVmaoKw1cGOy/fkH2723
+         tgCgL4OFUloAphn4v82GOU81NhtnPLJgHNPYjhPL6iuJLSrkZ+xJ0O+2zs8TijrLU3E1
+         K0SiJGoX9w/ubwZfEgNgJ3pdZvK7wu4F3gc1GnmN2EdZUyqfftxLy8P9jPNg9r+Ciw9L
+         niTnKYS2TLaNFoqdiSwMJ6tAxEemlUMrTocdk7CSALwKPcV+CmOH7nB7JKXAasTa292F
+         snxrmwvEF5kB3iJPlFtP0UIZbmGehzL7+nUfZlnUwZszbZppWQvK2BzW2C2VvRdSj5m/
+         6fMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757107907; x=1757712707;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Kg6TAzD2LZtVAHpNY4DJGCly+hgxT8K2FwByy+402n4=;
-        b=Lt1VZxiK+Cur4ASCdPKmGiYI2k1ojSGXQdnpC5s8HlpyB1STht4+VpjksAd4RdHm/Y
-         oDfcrmHvL0WGUq1lgtLUpW5Qs7+X+SqJ5nhU8oZqLJZXt8RFkaXvYgtO2Ow76CWD9q+Y
-         GWwRuFWoO732e0wZzSi6++AilsyvLO9gpAGCOvMDUg+3NU/l/E3vgMZg9xWbhzzTFvw5
-         S5UFxDA1UgTrZT9hAZNzyHY7NEMO/q2D+x9zVnoQWde94RwjlRQUrsiGSkyc+yibGexg
-         VaRydlzl1i1RCOzAyZHFCkBzDIo0Qr4cOJJa3pcgZiIItpMdG0RsPTQO8FDsH//xtNCu
-         A5VQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWMc2s31uLoeFYqS+YqRBipIAtjcACXxse57U9fb4VIZ2jvWZHA9ZkTRQP+S6hMsgFzl9U=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxX+1A2EU+0mysteJ7S6RHd3BlGcUDMP0sskBS7d/Wkhdkzzjt+
-	rQ4gmvWxhQG4qX6IZuqZWkX5hY/3xNTjEq2zcAyqNEY717DULSfy7ndaGCirbQ==
-X-Gm-Gg: ASbGncuQbDwbplImV1WICg+bksmh1e6QUUXUaEcy5sKakSLRn/sVOa70qIEKUo0BEPS
-	10Nq+PBAo7PF6CMtYFbt6UHcBRs4EBvmw/0xBZOmyuhx81fBwDk1kE+WLEFZkI0JvGx2x3Wra3z
-	n+vzwW2HWrxfBbByGSvBd1f+CSkogM9MRE0ySsZdyI/JVob8Jp6tzigAgPzA13/uEo7Sv5w6T6c
-	/IpEdE5vfaNrCHzjn/SnuL+fEokG6vzWF9lwAZ8/7/bykbYbJwI1NaRSGvBM/1slAkK36s/+7u8
-	knwz/OQfy4498NFsTeL4jbwSNQlJSDjXXRFuCCpJ4DkUuQs4M7MUFJ5aDh1WF6ZPDQM1mrN5pR5
-	3FgwfP5OjrcziE7eMag==
-X-Google-Smtp-Source: AGHT+IHbBHJJc4IUEV4Jypo+/1JbdQampEow4L8hMMEP+K4Ha/gvsWKVCfrYKD+iKgrTObgx4C+Xhg==
-X-Received: by 2002:a17:90b:5810:b0:32b:90a5:ed2c with SMTP id 98e67ed59e1d1-32d43f77614mr355494a91.20.1757107906673;
-        Fri, 05 Sep 2025 14:31:46 -0700 (PDT)
-Received: from [192.168.0.56] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3276f57b227sm29772402a91.6.2025.09.05.14.31.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Sep 2025 14:31:46 -0700 (PDT)
-Message-ID: <8412dce96c7f13f8d3c8fce69fa3aa19cae62b54.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v3 3/7] bpf: htab: extract helper for freeing
- special structs
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, bpf@vger.kernel.org, 
-	ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net, kafai@meta.com, 
-	kernel-team@meta.com, memxor@gmail.com
-Cc: Mykyta Yatsenko <yatsenko@meta.com>
-Date: Fri, 05 Sep 2025 14:31:42 -0700
-In-Reply-To: <20250905164508.1489482-4-mykyta.yatsenko5@gmail.com>
-References: <20250905164508.1489482-1-mykyta.yatsenko5@gmail.com>
-	 <20250905164508.1489482-4-mykyta.yatsenko5@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2 (3.56.2-1.fc42) 
+        d=1e100.net; s=20230601; t=1757107911; x=1757712711;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=j6iYxxEGAvkeFWpNvrGKAXUXP2TUk++WAmz0ItvoFSA=;
+        b=IiIjLYTju5nDd86/KEIOIb7Bs1pPIE1W9UpUImmPcfCtdDmBn5LmQDgy1QSyDtHb8v
+         YCXKtBU3R5Z14MQO4j51BvJ+4HNycwfMw6Qng7hqqhb1L0VAw1N3EXpFiVgknYvb6Rl4
+         xT+YnPH7n68SVTVypiYTkNvQ99+EYFeeDDbAFGqCbdTwi/e+/iwfEJpoNb1R49tjlYVW
+         1HIzXPG0kz8Z+8B84A7AEiJjI4TXIQ1CNiNtGLmQ7aWxFxfnuZDhYqCuxHnDFJnL9pFd
+         uu2gHh2Oxxi1AGdpjhXaL1T1JKo0OVR5LhDI/DyhQXNtEFAQNLL2cEMMkTf0unXADqfF
+         spwg==
+X-Gm-Message-State: AOJu0YyW6VakccolslhrDl9Kqz7AFkkFidJFwX58SrWwBsJcgHVtqtMV
+	hO+hTsZUxRUf/gsXCjIBfrv8dI4b5PgqGgfVQ//7iJ6lCxe0cSvH6zgrkn8/ZFcToCEnK+UEelx
+	D/C5N1vw8j/ekojD8PSBxi9xjfxgJWAg=
+X-Gm-Gg: ASbGncuW6hYcY/kbWrDag+xnJKDreTLGehebdfAZTL0N0XNPgHM7vtlAwa8n1II0b9d
+	SJ7VPD3pUK51u7p9Xvznd0kK9iBZXCD5Y+Vrc49Vs9dFaGYWjjqyZBdnEqRZPxDUQEwSW4D5x6z
+	2TvMaoZaYozU9R6fOsDOWDSGdtW69AwwtpdwlVLCezAoKkNdq0ssVGcX0hJYFTZZjOR60UxrtB6
+	gl1bry8O0RrZ9M=
+X-Google-Smtp-Source: AGHT+IEtygoiUgYDCdxkqTZ2dSWnEiJVvCVC11AofEiIfN5RLbKQ9Tp/sPym+gbmlGv9lfuDkQQX6H5/WWzuRpDQwys=
+X-Received: by 2002:a17:90b:1d4c:b0:32c:c40e:db12 with SMTP id
+ 98e67ed59e1d1-32d43f973e6mr428701a91.17.1757107910821; Fri, 05 Sep 2025
+ 14:31:50 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20250905164508.1489482-1-mykyta.yatsenko5@gmail.com> <20250905164508.1489482-5-mykyta.yatsenko5@gmail.com>
+In-Reply-To: <20250905164508.1489482-5-mykyta.yatsenko5@gmail.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Fri, 5 Sep 2025 14:31:33 -0700
+X-Gm-Features: Ac12FXz8TuIajHhlf23X05R2rbtA0SEl4gsu-dVN7A8pzJfpLa8P7fbLXCkAKqc
+Message-ID: <CAEf4Bzb2u5C2Ckc7RZ4RzHRWDsaTPqxgoVdeQVmX-ddNnuNS6w@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 4/7] bpf: bpf task work plumbing
+To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
+	daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com, eddyz87@gmail.com, 
+	memxor@gmail.com, Mykyta Yatsenko <yatsenko@meta.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, 2025-09-05 at 17:45 +0100, Mykyta Yatsenko wrote:
+On Fri, Sep 5, 2025 at 9:45=E2=80=AFAM Mykyta Yatsenko
+<mykyta.yatsenko5@gmail.com> wrote:
+>
 > From: Mykyta Yatsenko <yatsenko@meta.com>
->=20
-> Extract the cleanup of known embedded structs into the dedicated helper.
-> Remove duplication and introduce a single source of truth for freeing
-> special embedded structs in hashtab.
->=20
+>
+> This patch adds necessary plumbing in verifier, syscall and maps to
+> support handling new kfunc bpf_task_work_schedule and kernel structure
+> bpf_task_work. The idea is similar to how we already handle bpf_wq and
+> bpf_timer.
+> verifier changes validate calls to bpf_task_work_schedule to make sure
+> it is safe and expected invariants hold.
+> btf part is required to detect bpf_task_work structure inside map value
+> and store its offset, which will be used in the next patch to calculate
+> key and value addresses.
+> arraymap and hashtab changes are needed to handle freeing of the
+> bpf_task_work: run code needed to deinitialize it, for example cancel
+> task_work callback if possible.
+> The use of bpf_task_work and proper implementation for kfuncs are
+> introduced in the next patch.
+>
 > Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
 > ---
+>  include/linux/bpf.h            | 11 ++++
+>  include/uapi/linux/bpf.h       |  4 ++
+>  kernel/bpf/arraymap.c          |  8 +--
+>  kernel/bpf/btf.c               |  9 +++-
+>  kernel/bpf/hashtab.c           | 19 ++++---
+>  kernel/bpf/helpers.c           | 40 ++++++++++++++
+>  kernel/bpf/syscall.c           | 16 +++++-
+>  kernel/bpf/verifier.c          | 97 +++++++++++++++++++++++++++++++++-
+>  tools/include/uapi/linux/bpf.h |  4 ++
+>  9 files changed, 193 insertions(+), 15 deletions(-)
+>
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+LGMT
+
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
+
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index 8f6e87f0f3a8..febb4ca68401 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -206,6 +206,7 @@ enum btf_field_type {
+>         BPF_WORKQUEUE  =3D (1 << 10),
+>         BPF_UPTR       =3D (1 << 11),
+>         BPF_RES_SPIN_LOCK =3D (1 << 12),
+> +       BPF_TASK_WORK  =3D (1 << 13),
+>  };
+>
 
 [...]
