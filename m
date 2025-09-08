@@ -1,37 +1,38 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 758F913C8E8;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6157313520;
 	Mon,  8 Sep 2025 17:53:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757354024; cv=none; b=G5bn/fu3tVKFGFtueuETd1v5lT1mEV7JQujgCm037yjl5NBOZFZSxT56t7rXBlxXHrY9wPUod09chMTlGuHkENOTuXgLbq55eppSl4oBXkMoxjGQmrfDhtIb5pX/zEDllCLi0k/qLot/A3liPhy3DnQzNUMRWAc3DdiEROPq3lQ=
+	t=1757354024; cv=none; b=ki32PfgVP2V/7mtxVDxrbBQiUE4Q+S+lwENxrIXxLH7BUCy8+Vwml/VJnAB+zoRHYaM5T+JYSN7syzwn4n5HliVJ5gT7qU7KVE/s276RizO8yhQSSV0ZGJQPMDLBu/V9+5t5Efv3orJNK1Nj2DGBSsjptIgDVi7vcENMZi9SW2o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1757354024; c=relaxed/simple;
-	bh=L4T7PdWR77h8wPb0TRSRQqBSx4nSQc+aT0+pK6PLhIw=;
-	h=Message-ID:Date:From:To:Cc:Subject; b=HX+wKDGB1N3NwPUxsX35OquXTNt/jqb41G3JeCtbqFwEin/SVjeMsuR4eAnylHp+srgBOHAjPCSfhGukugq1m+I9yizLeGaazZFPvEYVcQaOBw7D7SVa3xYYGDCn0jSl9L9YNMuF6LueMmXfM2r2a8uBofLCLK/R6EifLR88sEM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WzMv/EDR; arc=none smtp.client-ip=10.30.226.201
+	bh=yjVRm7qoaDEwxBX+tn5L8eAZpS2gap8hvaYEm/BHnlI=;
+	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
+	 Content-Type; b=ePfvr341+Sc+g3KSIGVexngIYafcSYdz74GFDaMN8MHaZ22RSgb8474cQaV78zlvinfox14A8CmvQ7HAFQaB5vNIg9izG1+LnYbPL6LCi57OsCfv7XuEOKwvVZp7qS5D1DC896XsdaahBxzPHz7SNWfP+oSlOPLS74ZAGJr4wGA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OvyK2i7I; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WzMv/EDR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41D9EC4CEF1;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OvyK2i7I"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DCB9C4CEF7;
 	Mon,  8 Sep 2025 17:53:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1757354024;
-	bh=L4T7PdWR77h8wPb0TRSRQqBSx4nSQc+aT0+pK6PLhIw=;
-	h=Date:From:To:Cc:Subject:From;
-	b=WzMv/EDRHTQQOF57dDwqnUl2sMfIcXy29UKLDgmNptRtlDvJW9aQAvjblc/bA9Ohc
-	 f3xVCn+6OL+M7kBaAeHSvA/J3LhZQIJE6bA/9/bkNABf47PywHCmaM3Q2Qs5dmjq7H
-	 nlpsFQdOZrakMCfm25l3VjS8OOMsiHOMXFXUI5ZxZJF+nzf2RpyPFv+GWiu0e53QN2
-	 /nBKj3+CNn2TbatSCE1TrlDOvDJE9MKIBxoLGDSIEDsq1Y9ETqJxPvu6KFBPJ7yvqE
-	 8c+GMQcpwPtHMiBM+2Hcc7dMbfQYtlqMEHtnYY7lv/yVad0Jy68cZTK1c3HaOpMBtQ
-	 6r47wsPKB1R4w==
+	bh=yjVRm7qoaDEwxBX+tn5L8eAZpS2gap8hvaYEm/BHnlI=;
+	h=Date:From:To:Cc:Subject:References:From;
+	b=OvyK2i7Itr0DJu4jz35tL/gAK6FTZTkvA8+vLxf55g9rq5HfStp6F/BSbWCz6SZoI
+	 ySa0st4p9aBVIjslXLL7Ppvt/EJKl38DBi6NM8uJ1XWBDCBQiqc97oqff8ahJRefv3
+	 EB/KqV19mJw6KXNK0Usp90M1bujEKDBbYmQjd8pnYzboo6dY8lsEev6sUaOWuqdIx5
+	 MymS0VHrBhei2vzqoivQwIT0LWfs8+8E2EEZ7NLvsu+2oDSkmvYgMEzyRExeOYRn95
+	 IhvzQ6yypb+mh2lZ/B4aBIjdFAz2pgm0t6W55iAK3UtvTyVi5lGhLrNaicF7M/aWgK
+	 w2vMGBJJN9noQ==
 Received: from rostedt by gandalf with local (Exim 4.98.2)
 	(envelope-from <rostedt@kernel.org>)
-	id 1uvg4U-0000000769c-0Rpz;
+	id 1uvg4U-000000076Ad-1scA;
 	Mon, 08 Sep 2025 13:54:30 -0400
-Message-ID: <20250908175319.841517121@kernel.org>
+Message-ID: <20250908175430.303280181@kernel.org>
 User-Agent: quilt/0.68
-Date: Mon, 08 Sep 2025 13:53:19 -0400
+Date: Mon, 08 Sep 2025 13:53:21 -0400
 From: Steven Rostedt <rostedt@kernel.org>
 To: linux-kernel@vger.kernel.org,
  linux-trace-kernel@vger.kernel.org,
@@ -57,48 +58,126 @@ Cc: Masami Hiramatsu <mhiramat@kernel.org>,
  Sam James <sam@gentoo.org>,
  Kees Cook <kees@kernel.org>,
  "Carlos O'Donell" <codonell@redhat.com>
-Subject: [PATCH v16 0/4] perf tool: Support the deferred unwinding infrastructure
+Subject: [PATCH v16 2/4] perf record: Enable defer_callchain for user callchains
+References: <20250908175319.841517121@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+
+From: Namhyung Kim <namhyung@kernel.org>
+
+And add the missing feature detection logic to clear the flag on old
+kernels.
+
+  $ perf record -g -vv true
+  ...
+  ------------------------------------------------------------
+  perf_event_attr:
+    type                             0 (PERF_TYPE_HARDWARE)
+    size                             136
+    config                           0 (PERF_COUNT_HW_CPU_CYCLES)
+    { sample_period, sample_freq }   4000
+    sample_type                      IP|TID|TIME|CALLCHAIN|PERIOD
+    read_format                      ID|LOST
+    disabled                         1
+    inherit                          1
+    mmap                             1
+    comm                             1
+    freq                             1
+    enable_on_exec                   1
+    task                             1
+    sample_id_all                    1
+    mmap2                            1
+    comm_exec                        1
+    ksymbol                          1
+    bpf_event                        1
+    defer_callchain                  1
+  ------------------------------------------------------------
+  sys_perf_event_open: pid 162755  cpu 0  group_fd -1  flags 0x8
+  sys_perf_event_open failed, error -22
+  switching off deferred callchain support
+
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+---
+ tools/perf/util/evsel.c | 24 ++++++++++++++++++++++++
+ tools/perf/util/evsel.h |  1 +
+ 2 files changed, 25 insertions(+)
+
+diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
+index 7512b9fb877d..438343dbb1c9 100644
+--- a/tools/perf/util/evsel.c
++++ b/tools/perf/util/evsel.c
+@@ -1061,6 +1061,14 @@ static void __evsel__config_callchain(struct evsel *evsel, struct record_opts *o
+ 		}
+ 	}
+ 
++	if (param->record_mode == CALLCHAIN_FP && !attr->exclude_callchain_user) {
++		/*
++		 * Enable deferred callchains optimistically.  It'll be switched
++		 * off later if the kernel doesn't support it.
++		 */
++		attr->defer_callchain = 1;
++	}
++
+ 	if (function) {
+ 		pr_info("Disabling user space callchains for function trace event.\n");
+ 		attr->exclude_callchain_user = 1;
+@@ -2121,6 +2129,8 @@ static int __evsel__prepare_open(struct evsel *evsel, struct perf_cpu_map *cpus,
+ 
+ static void evsel__disable_missing_features(struct evsel *evsel)
+ {
++	if (perf_missing_features.defer_callchain)
++		evsel->core.attr.defer_callchain = 0;
+ 	if (perf_missing_features.inherit_sample_read && evsel->core.attr.inherit &&
+ 	    (evsel->core.attr.sample_type & PERF_SAMPLE_READ))
+ 		evsel->core.attr.inherit = 0;
+@@ -2395,6 +2405,15 @@ static bool evsel__detect_missing_features(struct evsel *evsel, struct perf_cpu
+ 
+ 	/* Please add new feature detection here. */
+ 
++	attr.defer_callchain = true;
++	attr.sample_type = PERF_SAMPLE_CALLCHAIN;
++	if (has_attr_feature(&attr, /*flags=*/0))
++		goto found;
++	perf_missing_features.defer_callchain = true;
++	pr_debug2("switching off deferred callchain support\n");
++	attr.defer_callchain = false;
++	attr.sample_type = 0;
++
+ 	attr.inherit = true;
+ 	attr.sample_type = PERF_SAMPLE_READ;
+ 	if (has_attr_feature(&attr, /*flags=*/0))
+@@ -2506,6 +2525,11 @@ static bool evsel__detect_missing_features(struct evsel *evsel, struct perf_cpu
+ 	errno = old_errno;
+ 
+ check:
++	if (evsel->core.attr.defer_callchain &&
++	    evsel->core.attr.sample_type & PERF_SAMPLE_CALLCHAIN &&
++	    perf_missing_features.defer_callchain)
++		return true;
++
+ 	if (evsel->core.attr.inherit &&
+ 	    (evsel->core.attr.sample_type & PERF_SAMPLE_READ) &&
+ 	    perf_missing_features.inherit_sample_read)
+diff --git a/tools/perf/util/evsel.h b/tools/perf/util/evsel.h
+index 5797a02e5d6a..d9559d29e345 100644
+--- a/tools/perf/util/evsel.h
++++ b/tools/perf/util/evsel.h
+@@ -221,6 +221,7 @@ struct perf_missing_features {
+ 	bool branch_counters;
+ 	bool aux_action;
+ 	bool inherit_sample_read;
++	bool defer_callchain;
+ };
+ 
+ extern struct perf_missing_features perf_missing_features;
+-- 
+2.50.1
 
 
-This is the user space side of perf changes to handle deferred unwinding.
-It is based on the kernel side of perf patch series here:
-
-  https://lore.kernel.org/linux-trace-kernel/20250908171412.268168931@kernel.org/
-
-Changes since v15: https://lore.kernel.org/linux-trace-kernel/20250825180638.877627656@kernel.org/
-
-- Separate out the kernel changes from the user space changes of perf.
-
-- Have the matching deferred code only skip when TID does not match.
-  Otherwise, process the sample but do not merge if the cookies do not match.
-  (Namhyung Kim)
-
-Namhyung Kim (4):
-      perf tools: Minimal CALLCHAIN_DEFERRED support
-      perf record: Enable defer_callchain for user callchains
-      perf script: Display PERF_RECORD_CALLCHAIN_DEFERRED
-      perf tools: Merge deferred user callchains
-
-----
- tools/lib/perf/include/perf/event.h       |  8 +++
- tools/perf/Documentation/perf-script.txt  |  5 ++
- tools/perf/builtin-script.c               | 92 +++++++++++++++++++++++++++++++
- tools/perf/util/callchain.c               | 24 ++++++++
- tools/perf/util/callchain.h               |  3 +
- tools/perf/util/event.c                   |  1 +
- tools/perf/util/evlist.c                  |  1 +
- tools/perf/util/evlist.h                  |  1 +
- tools/perf/util/evsel.c                   | 42 ++++++++++++++
- tools/perf/util/evsel.h                   |  1 +
- tools/perf/util/machine.c                 |  1 +
- tools/perf/util/perf_event_attr_fprintf.c |  1 +
- tools/perf/util/sample.h                  |  4 +-
- tools/perf/util/session.c                 | 81 +++++++++++++++++++++++++++
- tools/perf/util/tool.c                    |  2 +
- tools/perf/util/tool.h                    |  4 +-
- 16 files changed, 269 insertions(+), 2 deletions(-)
