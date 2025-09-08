@@ -1,104 +1,137 @@
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay.hostedemail.com (smtprelay0013.hostedemail.com [216.40.44.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE007C8E6
-	for <bpf@vger.kernel.org>; Mon,  8 Sep 2025 17:18:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE1E6215F4A;
+	Mon,  8 Sep 2025 17:20:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757351930; cv=none; b=Wn0SsAIKeDgsBJbdWupav7KOsRs0wliWzI6c2oIZ0Hc9JysAsFrFTMghmWmiS+hPV8KsiZENItXV8lcAKqS0RCgfJQj2hRFi5mcIDbjZIVXfUpWVvQ4GItk5bq7oycmaJpSZSWugPZmjdIyDueszK2DBuWsTw8r6OWfRmJlFuWo=
+	t=1757352038; cv=none; b=ipJ1Fw/khAXR5f6mGsMjFfxSrFUQEU/bmgL2e8TK2pbAvvr383UadV6+7dDfWm8oN3pkajTaapLbd3SHV5AhjsDn5RLeiUtdUWJpe0h8OblI1X+Gc5J+V56d+mFLOUMA+i7DgbUbvoTEtxTeu5pAdLbFnlRXlEF7PWAZa6p0eMU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757351930; c=relaxed/simple;
-	bh=dW9+OEMjOm6envSUh0WyM+qzWWUUkWIz5pqYzHWmxck=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=loTn3EJgk0t9L/zwz4N7WnTGgETlBKCsummDh6lfweOQM03W+I4mZaQDAK5hE2aIv1SRaf/79OpUPcC3f3Jr4yJKDkGeHYQQYGek9LPqodCFYBycPK6pU5ARRbGuazhtIsYP5CfkLqhMgxh45DkUUz0al4goqZbYpESuryDL1/4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=amgx6JbG; arc=none smtp.client-ip=209.85.210.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="amgx6JbG"
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-77256e75eacso4177337b3a.0
-        for <bpf@vger.kernel.org>; Mon, 08 Sep 2025 10:18:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757351928; x=1757956728; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=dW9+OEMjOm6envSUh0WyM+qzWWUUkWIz5pqYzHWmxck=;
-        b=amgx6JbGk+ptW1mixT5B9erri64mrBXhd/5lklPsaLkDZrub7yPN68RRg0X6hiReYW
-         nlCUrtvjDvdbgDSl2uvMjJgYuRsZIgN0zwDWzbhOGzt6rhunx2Z7N1XYZSrdqqpNDS3b
-         DtLGZcjmXMWIw/V90mRh/HnjpfIQOC3QOxMW5PLbzX25pR0x5NMaaVXfEPusxtRDp6UB
-         HQu9qvgZE6NkaMxUoqcptrvJO+g5xlOeG3EH0rCBNqtUXdANyw0o5HfJWuPIy3IlRtmx
-         hslNTlgfBmCBsbTWECjXNlkIvOsYwOJ7PkHtCTeYfNtTxr79FbparRcVop5H4Dhz0SSt
-         7FEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757351928; x=1757956728;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dW9+OEMjOm6envSUh0WyM+qzWWUUkWIz5pqYzHWmxck=;
-        b=LdN7NVu7Epvl6GMIkG9m4/t6DQSj/xjqJ/+qKvxWx2W+rVs09/IomTai0c3MkM96iM
-         T00ZirfpOj4/gdDutiJezNgp0M/+R8Vl8Qb0G7jWcfTuRWFc6VTo6rfe1YvERLm6fS/u
-         hhRtv5eQmPGSR6MfjwlMNJw3fYbHRGIXoVKETvHab7VpY+ww3om9+ltbza9DfZmfWaj5
-         +bFy/Wy7i0NbvEDWyR/hgJiBzoqJHXVQon6zrusjf45UT1+shjGJKxPT81SAW4qyOG3O
-         7SbjliigX2SHGP0cWkjd3Rb412x+1cqSJw5baYk6ENJ5l7xQpaSVqtfN8RZVtS3E8owA
-         r7kw==
-X-Forwarded-Encrypted: i=1; AJvYcCUnCk4HW0Q6kleI2+yFwGL56EtlHoZNQ4ekSc4vE83gfWEgJMoN12zrl+u1ooabs0TuQsI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwFkAKc9EFSIXWBOdr4j9sRGmFyfQqq3u2LOK+VrzOXHPlIYD6g
-	74OApWZdp3Ffu3kAB2kcGca6aQ74ZCI/RhQaaNrEZ0OkW4AJv0Ec+Zo1
-X-Gm-Gg: ASbGncud59ghhdfkv6b8/uwWO1S8/lm9beS4GcDbNMX+EXvGnqNnVRNL9OpDxFdaExA
-	bbIrZ2iruB7iHLc4yy0IlKT71WmW7ekVl2qfArwUenJlUbDvaajbWsGDaDcIHCmOJwQe4iR++Pb
-	Kypw+ZyzsKUEoTWWFx93xlZ4ev+IgyoCdxT2NoANlgNw+VEIOgyS/Y5k0pyT+n2vOutrxKaZ/DB
-	3WsAJhON+urgR9Wdm4fWYxXnISHWsxG24HYoMYwwpLgOXcfGxv3zP6SxOZhayIN7pANq7cR7S5F
-	JSGCQIEeNG7QOQyVh11KsfAF0P7v6Sl1MbIOAZevucDlodizG8543K2IKoxZBSPvXL0jcvT6Ej8
-	i+gGFf8dU1tKjoNq/S/dDoHGf72tfHPpkLj6k6aCPhFzlQvWIXoa6bnSgwo2bHpNyJvFj
-X-Google-Smtp-Source: AGHT+IEas8nqwYhq+MBPxFMJ6m1+PrkHBFxiW16bMfXn/CW64H1LE2rTgFQ5y9rd4/WdO3zCxaBn/Q==
-X-Received: by 2002:a17:902:f681:b0:244:99aa:5488 with SMTP id d9443c01a7336-251731194ecmr126321235ad.30.1757351927924;
-        Mon, 08 Sep 2025 10:18:47 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:115c:1:613:2710:d29c:cd12? ([2620:10d:c090:500::5:c621])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-24b11becab2sm181682365ad.61.2025.09.08.10.18.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Sep 2025 10:18:47 -0700 (PDT)
-Message-ID: <4fd6d0a9bfa380a4c2422d57df058207d056bc87.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v3 5/7] bpf: extract map key pointer calculation
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, bpf@vger.kernel.org, 
-	ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net, kafai@meta.com, 
-	kernel-team@meta.com, memxor@gmail.com
-Cc: Mykyta Yatsenko <yatsenko@meta.com>
-Date: Mon, 08 Sep 2025 10:18:45 -0700
-In-Reply-To: <07b33757-7ba7-4ddf-a4a2-3e4fc77bfecd@gmail.com>
-References: <20250905164508.1489482-1-mykyta.yatsenko5@gmail.com>
-	 <20250905164508.1489482-6-mykyta.yatsenko5@gmail.com>
-	 <453b077245a1d42385f00ae9a30916e88b07164b.camel@gmail.com>
-	 <07b33757-7ba7-4ddf-a4a2-3e4fc77bfecd@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2 (3.56.2-1.fc42) 
+	s=arc-20240116; t=1757352038; c=relaxed/simple;
+	bh=CS/zVkAdwqJuw1dmgpUdwoAji4piFHhOZapySBMokZM=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=VfD4o7Lzc57bTZsyRK1xjAc258hPWikOeF5i8fUqpwGJ4seH8yCb/wVK9ur6UjPa8cW1ZaQPpF9gwIgonEWxhyGtkeR/3b3KMcfg4Pjpw0vCv++2hkRQDOcfQuF0ZnAQBLF3ctvQMAbFi/YFTOxzl2dSjkYisiN+aLTQM2MZQxY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+Received: from omf05.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay10.hostedemail.com (Postfix) with ESMTP id BB2CFC01FE;
+	Mon,  8 Sep 2025 17:20:25 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf05.hostedemail.com (Postfix) with ESMTPA id 96AC820016;
+	Mon,  8 Sep 2025 17:20:20 +0000 (UTC)
+Date: Mon, 8 Sep 2025 13:21:06 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ bpf@vger.kernel.org, x86@kernel.org, Masami Hiramatsu
+ <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Josh Poimboeuf <jpoimboe@kernel.org>, Ingo Molnar <mingo@kernel.org>, Jiri
+ Olsa <jolsa@kernel.org>, Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+ Andrii Nakryiko <andrii@kernel.org>, Indu Bhagat <indu.bhagat@oracle.com>,
+ "Jose E. Marchesi" <jemarch@gnu.org>, Beau Belgrave
+ <beaub@linux.microsoft.com>, Jens Remus <jremus@linux.ibm.com>, Linus
+ Torvalds <torvalds@linux-foundation.org>, Andrew Morton
+ <akpm@linux-foundation.org>, Florian Weimer <fweimer@redhat.com>, Sam James
+ <sam@gentoo.org>, Kees Cook <kees@kernel.org>, "Carlos O'Donell"
+ <codonell@redhat.com>
+Subject: Re: [RESEND][PATCH v15 0/4] perf: Support the deferred unwinding
+ infrastructure
+Message-ID: <20250908132106.435b0e6f@gandalf.local.home>
+In-Reply-To: <20250908171412.268168931@kernel.org>
+References: <20250908171412.268168931@kernel.org>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Stat-Signature: 4kt1e6fk88dmkbfxpwi3d8tn3ndriaq3
+X-Rspamd-Server: rspamout08
+X-Rspamd-Queue-Id: 96AC820016
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX1+2yHLmgm+7ni2h79Iu8dQa9mquDqjI9Es=
+X-HE-Tag: 1757352020-988652
+X-HE-Meta: U2FsdGVkX1/JNFh5XfDKE39cK5sgjeJ4mGcnRUWIEUmw/WScinmxEFigJZmIr2drxN/LC4Ar5tCW9rO01AbV6eaV7hrxSCtQ1Cuw20eJfnoWF6bmHbKNlJzD29YjJLRhHPCQCVLZCkI2iJUH7gNdU9NmgjpUfAooy5KXNsBvxbddEkW8im2UG2P+MQuyNFCsc1w4SEADQjUVWUREbdUazNXCLHtrP8vbDYztQWcpnwgT+JcfCSxBVLwU9wOaWWUGYeqDzQAeKMlUllG/+X9zzz4ZopQ/wUip/auivXVlgeDB7s9M+UEqEsxV0VMU3lARBiKOsGeom9ovqtttcWXan21JJijMw/9E
 
-On Mon, 2025-09-08 at 14:39 +0100, Mykyta Yatsenko wrote:
 
-[...]
+Peter, can you take a look at these patches please. I believe you're the
+only one that really maintains this code today.
 
-> this function returns the pointer to map key; in case of array map, map=
-=20
-> key is an array index,
-> which is not stored anywhere in the map explicitly.
-> arr_idx is a container for the array map key, we need to pass it from=20
-> the outside so that the
-> lifetime is long enough.
-> In case of hash map, we return the pointer to the actual key, stored in=
-=20
-> the map,
-> arr_idx is not needed then.
+-- Steve
 
-Oh, I get it, `arr_idx` is a temporary storage. Sorry for the noise.
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+On Mon, 08 Sep 2025 13:14:12 -0400
+Steven Rostedt <rostedt@kernel.org> wrote:
 
-[...]
+> [
+>   This is simply a resend of version 15 of this patch series
+>   but with only the kernel changes. I'm separating out the user space
+>   changes to their own series.
+>   The original v15 is here:
+>     https://lore.kernel.org/linux-trace-kernel/20250825180638.877627656@kernel.org/
+> ]
+> 
+> This patch set is based off of perf/core of the tip tree:
+>   git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git
+> 
+> To run this series, you can checkout this repo that has this series as well as the above:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace.git  unwind/perf-test
+> 
+> This series implements the perf interface to use deferred user space stack
+> tracing.
+> 
+> Patch 1 adds a new API interface to the user unwinder logic to allow perf to
+> get the current context cookie for it's task event tracing. Perf's task event
+> tracing maps a single task per perf event buffer and it follows the task
+> around, so it only needs to implement its own task_work to do the deferred
+> stack trace. Because it can still suffer not knowing which user stack trace
+> belongs to which kernel stack due to dropped events, having the cookie to
+> create a unique identifier for each user space stack trace to know which
+> kernel stack to append it to is useful.
+> 
+> Patch 2 adds the per task deferred stack traces to perf. It adds a new event
+> type called PERF_RECORD_CALLCHAIN_DEFERRED that is recorded when a task is
+> about to go back to user space and happens in a location that pages may be
+> faulted in. It also adds a new callchain context called PERF_CONTEXT_USER_DEFERRED
+> that is used as a place holder in a kernel callchain to append the deferred
+> user space stack trace to.
+> 
+> Patch 3 adds the user stack trace context cookie in the kernel callchain right
+> after the PERF_CONTEXT_USER_DEFERRED context so that the user space side can
+> map the request to the deferred user space stack trace.
+> 
+> Patch 4 adds support for the per CPU perf events that will allow the kernel to
+> associate each of the per CPU perf event buffers to a single application. This
+> is needed so that when a request for a deferred stack trace happens on a task
+> that then migrates to another CPU, it will know which CPU buffer to use to
+> record the stack trace on. It is possible to have more than one perf user tool
+> running and a request made by one perf tool should have the deferred trace go
+> to the same perf tool's perf CPU event buffer. A global list of all the
+> descriptors representing each perf tool that is using deferred stack tracing
+> is created to manage this.
+> 
+> 
+> Josh Poimboeuf (1):
+>       perf: Support deferred user callchains
+> 
+> Steven Rostedt (3):
+>       unwind deferred: Add unwind_user_get_cookie() API
+>       perf: Have the deferred request record the user context cookie
+>       perf: Support deferred user callchains for per CPU events
+> 
+> ----
+>  include/linux/perf_event.h            |  11 +-
+>  include/linux/unwind_deferred.h       |   5 +
+>  include/uapi/linux/perf_event.h       |  25 +-
+>  kernel/bpf/stackmap.c                 |   4 +-
+>  kernel/events/callchain.c             |  14 +-
+>  kernel/events/core.c                  | 421 +++++++++++++++++++++++++++++++++-
+>  kernel/unwind/deferred.c              |  21 ++
+>  tools/include/uapi/linux/perf_event.h |  25 +-
+>  8 files changed, 518 insertions(+), 8 deletions(-)
+
