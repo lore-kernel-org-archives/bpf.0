@@ -1,143 +1,202 @@
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E35071D514E
-	for <bpf@vger.kernel.org>; Tue,  9 Sep 2025 00:55:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05269223702
+	for <bpf@vger.kernel.org>; Tue,  9 Sep 2025 01:00:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757379351; cv=none; b=VhP+PjaTMbX8O73CfKLESSakyH2s9WH51q9ZwdPyyx8zHK6XgyR93lr+jwtUlMWLVMkWa8pjj98dmlH2xR+ZpB1Dvem6DKWz/VgGg7fBU1Hyqin1sfblK49q63pM9xRLLbBkNCFmD7LBkx3cAn3uLfPU9mEv+Yak3nq7p1D3CuU=
+	t=1757379612; cv=none; b=afQHSX3/0LiCbpRouksy3WY37aqUd7v4xYel3KOogvkCt1O3ghua0KnsS1B7gAL/w77L6wReeFmU76kaWJsNnQJxbGfUdABY64FVPSdMgLBwiN2DDLDu/0yLqGxEfFHIRCz16wdyXgGF8W81aYjxSvDxM7cfC5lww113RjUeoIQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757379351; c=relaxed/simple;
-	bh=yYo7IzJbU6Z6mx7RODDFYoPjW98xKDBaTEKzFt7LVPU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uRckSZySvp9aaopzLLXd/eg2eZT8ukbJMgaxkA1/mnFURlwMrN3jowf1Z7rn5uWaPjRJWmXJ3jerlophoKUWoiAz38co/Ru8C7QG2BnNgd7EGbXwksqh4KcL7+NwR3nB4siQB3Mi6sNqiGfe30mtCYLXHF5rd2eyZWgA/aNc0LQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=IXVUmUd4; arc=none smtp.client-ip=209.85.215.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1757379612; c=relaxed/simple;
+	bh=Xpz4Q3HgOThYXgXXsQSg4qUb3z3ioTsrrBuBFUdAxv0=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=GnejeIFg1XTwcNGQqL1an90H5pH5NnpJeinGtrE0P25lHpCqIv4VAAeXyDFqSsIxM8wdQgQqgPzeJ6jTPp6Xp88h76JHbRF0s/rFVTjoHsCv08BlNsmf1uegjuYDfk71Sw6/vLdos0CzUumD2o6hBDpEsHMKCIw5eitDkN7FdCs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=B0N1qsIn; arc=none smtp.client-ip=209.85.215.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="IXVUmUd4"
-Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-b4fb8d3a2dbso3133400a12.3
-        for <bpf@vger.kernel.org>; Mon, 08 Sep 2025 17:55:49 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B0N1qsIn"
+Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-b4d5886f825so4370283a12.0
+        for <bpf@vger.kernel.org>; Mon, 08 Sep 2025 18:00:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1757379349; x=1757984149; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/cJBxAEvachaOK44sfQK1ayR3C7n/EK/ryGUnykQsow=;
-        b=IXVUmUd4Iv6z53FbCOFMvuE5jBVFJmay2QylI8V4LvX8LUNySQijxt4QjeG38NDC3O
-         1T+VOH8efBS3piyReglAWKgf67Yw+mDUNvaDTOBd+i74g8170AxFCSHe2CwKgHnUOmMK
-         xO7kAieCAJLR8VfaxQlE5W17RT3zT/0IGrn/EKspulk3xyPB8PEbwBGDouj1v96Sffd1
-         avlXwKp0ZQ9f5XYP9eCkKzg/xFNoXN39Q+hx6z4WcVvZjW2h6SF4v6c0K4sqjYq+Uvx3
-         sN78BBjlQpgJjGxgPRKDBanGl6Jz2/LyuAwCsZe3+XJXn16hFUOisZokWyTWNfkKAKLi
-         dGvA==
+        d=gmail.com; s=20230601; t=1757379610; x=1757984410; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=3I0VmGs2kpEbMcr5q5JKcZdoO9Oa/TvNmRGysVtq0no=;
+        b=B0N1qsInpquPJJMvuFHg50ptm2LabdQxbo/pbejC4hk0oDD46czET6rzi7kyqFHaH+
+         bG70Ub8KrfonzMbqfBioJVXeAE6yH3PSaLmUV8fbR90x4yFG6Z8HTqatkga+UtLdu3x6
+         JehuAdxTMVxQxwtEe7ARm05gk9bqbC7h4VlQleoFPcLvedAXuCTZ8Smq2EA/1GXlg74M
+         LSoHWcpZsyCx5gg7Fy3+spYlC6i0t9H9FrBaLoHt8QQLZhpfj43b3ZooCmgV3da3MFAx
+         2ulE2794PoY8R+SNpK87AuWZVu0DaH2CP14k6t765lRkRoCzva8EAHcmRITE+BFxCNho
+         OYVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757379349; x=1757984149;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/cJBxAEvachaOK44sfQK1ayR3C7n/EK/ryGUnykQsow=;
-        b=ADrEfsi3+u5nRVwxe8drVTjJxaLMNbh2tOIIVXzgyNCTLKcaNxKncHgMdVvXA4yH+U
-         xrXBhBD3HVh5JAbtFRpDq0xe18D7INT0f5on18DZciTX300rpdY/WDQjTgmCe5QKLvGs
-         Pjy3WWrHEWTNyVpm7PL9r6Q4YqMPJvk/qOZR65/jHIASSUnNsg1pfZsS7cEyMYrO0J9f
-         nxvYcm6UJwmrcDbwBN0IKIaQGIHEKdsZk+FKMe7XwtLbsCw09UGrJHUUkTIy/XeBugR9
-         Lf8yM6dnnj3GLzLcPQQq7ejZWPLRy6NpXzf8zID+Abl9Sbg5j1O20eeMeQEo3TEnz7Px
-         nUQg==
-X-Forwarded-Encrypted: i=1; AJvYcCVs107QCpEyNVxqswTrAwpBP63nmrawuS2ZpivlzHQJ2qjeHSsR1cWna5f8V3UiQXR9wm4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyqKoSUX2zbKdmyxRUQeVpTUsNNZP65UnAg5uAm03IQ8Y6N4QZA
-	HGP2fnfHIomoyVANCt61v1tsyg6n/YkOgAMaAD4b9wzGvxvcg4sx2wo8uiSVo+AfpOvrygopS25
-	aBf3kPGvuXPLSQtns45vN7Edx6n9lz09ELyeZh72z
-X-Gm-Gg: ASbGncunaTmDwI+pvSqH2g+Jk5+3gOi4R/r2aJHdXuVo7c/l3DVATNjPuV1yR4Ig4tb
-	Ps4Z0vxoZlgHgQyWwUeyqNM8136ejwhD2asywPMrXKAecjKeSWDyhevbyne2A1ZKZfAvQME4GcC
-	KEIqhyT8mpX8Ekwh/bNPFI44+V7+5SCLfhbCvLAR7/7DcVyd7ElrNdFbIeVOXEuBd1Zhz73XbTK
-	3PkjxfUH+dIkWIrllBFqCUheOPc0fYHCd6fQhPAsMc9gwrVhdg=
-X-Google-Smtp-Source: AGHT+IEe5vFzXTZoRUvMqOuRmHzLn12OaUZoPOT/hwkLqob1mpYmqc43GujGhTWLgDwZw16W77b5Y8QtWA5EWP21sJE=
-X-Received: by 2002:a17:903:1a30:b0:24e:2b3d:bb08 with SMTP id
- d9443c01a7336-2516fbdd4c2mr119092605ad.20.1757379348947; Mon, 08 Sep 2025
- 17:55:48 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1757379610; x=1757984410;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3I0VmGs2kpEbMcr5q5JKcZdoO9Oa/TvNmRGysVtq0no=;
+        b=HjznoWzy4jEPfGhxjARzDFPWJsn1ruQjciB1aV9TQ6txaTCnmLvphPEfd0xIiyGWdr
+         P6zRwBojU6EZML4hxMwNbCRcpYxE/zuOtus+TwiX/mZdDRQDSFk5e/LwYPLKj4mqMzMP
+         K7IbHo1fp/sKs7dAmXOw5WqnvoKr3LFzaqJTyi0BlXxsNQE+GfIusDv4kuLQuojKMGJT
+         4/vJZ3DNKOzj5rziiX/+NiD/wOV0pUkid0NhAY97w7+wpwmlyDTEZ90LRl7w6GngGqEJ
+         ghY+JrsDFvYMR3LfiDy5e7tw4fH2wAtO80M3OJ1wXADFe+l5/91lRQtG7vOCsSiDA4lK
+         +XDg==
+X-Gm-Message-State: AOJu0YxyshIbDodhXgBJGTs5Rl2aKwzHUsJWv0+U1/f52dqRwM6K2a3C
+	I/udz3vtjrWli9UuDX1A6yMv2sVcz1yvSG+0MbvHTXybF0Tlbm1VHa4IYLamCQ==
+X-Gm-Gg: ASbGncsOfshcBqIgP/QJyWEGzreRi7ZCG7yeWig07Clnz9vefyXbZT1BJzegtoT6mWn
+	vA83DLITkvY2qGDEwKcHDQrcilEsNE0ieLylPHUrTwfrrIIWp+l3/9a81p9CVEmU3koacS9xXCw
+	GashRAM0OTIbvN1lEdJfCykIRfiEe7AzHzfRjGRJeQHfZjp2hgUPubAWlJjFESSTXuiKTeEulUv
+	UsYfcClrUn9+8Z0rNsld4/iYgHVMn0LTBNq+AaPpjt4P2KvIxCCk/YGqAjGia+SNcQj8wg7A47k
+	2gb8hK8l+Hj2B2/vYfB3uErFx05M6ONGwliq3gV+iY/guZJ60j/BXllWpaTHCKbRLx4ugOlPO7x
+	I1KMaMcnedMte1Em1LFHbEDUWqSo7rCKHs8x44u/9h8INBReufJl8EL1en4ejGF9sNL/v/BHZL/
+	hBMU/2+k+v
+X-Google-Smtp-Source: AGHT+IEM2XoQeUfxViqxHUBGb9ymPiInaAJmBJ0r2R3U73+XlaqvewD+wzVN2Y2P6L12bEYs46pCRg==
+X-Received: by 2002:a17:903:1b64:b0:24b:4a9a:703a with SMTP id d9443c01a7336-2516e4aeb33mr144178765ad.17.1757379609741;
+        Mon, 08 Sep 2025 18:00:09 -0700 (PDT)
+Received: from localhost.localdomain ([2001:558:600a:7:44e6:767e:cc5a:a060])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-24cb28c30f4sm135606085ad.110.2025.09.08.18.00.08
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Mon, 08 Sep 2025 18:00:09 -0700 (PDT)
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To: bpf@vger.kernel.org,
+	linux-mm@kvack.org
+Cc: vbabka@suse.cz,
+	harry.yoo@oracle.com,
+	shakeel.butt@linux.dev,
+	mhocko@suse.com,
+	bigeasy@linutronix.de,
+	andrii@kernel.org,
+	memxor@gmail.com,
+	akpm@linux-foundation.org,
+	peterz@infradead.org,
+	rostedt@goodmis.org,
+	hannes@cmpxchg.org
+Subject: [PATCH slab v5 0/6] slab: Re-entrant kmalloc_nolock() 
+Date: Mon,  8 Sep 2025 18:00:01 -0700
+Message-Id: <20250909010007.1660-1-alexei.starovoitov@gmail.com>
+X-Mailer: git-send-email 2.39.5 (Apple Git-154)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250908223750.3375376-1-kuniyu@google.com> <hlxtpscuxjjzgsiom4yh6r7zj4vpiuibqod7mkvceqzabhqeba@zsybr6aadn3c>
-In-Reply-To: <hlxtpscuxjjzgsiom4yh6r7zj4vpiuibqod7mkvceqzabhqeba@zsybr6aadn3c>
-From: Kuniyuki Iwashima <kuniyu@google.com>
-Date: Mon, 8 Sep 2025 17:55:37 -0700
-X-Gm-Features: Ac12FXyqQhG5nuTIx8tfds3pQmQ2VcQBVbSOrZvKYPalpd022CkZjOvgHEHN60A
-Message-ID: <CAAVpQUC1tm+rYE07_5ur+x8eh0x7RZ2sR1PGHG9oRhdeAGBdrQ@mail.gmail.com>
-Subject: Re: [PATCH v6 bpf-next/net 0/5] bpf: Allow decoupling memcg from sk->sk_prot->memory_allocated.
-To: Shakeel Butt <shakeel.butt@linux.dev>
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, 
-	Johannes Weiner <hannes@cmpxchg.org>, Michal Hocko <mhocko@kernel.org>, 
-	Roman Gushchin <roman.gushchin@linux.dev>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Neal Cardwell <ncardwell@google.com>, Willem de Bruijn <willemb@google.com>, 
-	Mina Almasry <almasrymina@google.com>, Kuniyuki Iwashima <kuni1840@gmail.com>, bpf@vger.kernel.org, 
-	netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Mon, Sep 8, 2025 at 4:47=E2=80=AFPM Shakeel Butt <shakeel.butt@linux.dev=
-> wrote:
->
-> Let me quickly give couple of high level comments.
->
-> On Mon, Sep 08, 2025 at 10:34:34PM +0000, Kuniyuki Iwashima wrote:
-> > Some protocols (e.g., TCP, UDP) have their own memory accounting for
-> > socket buffers and charge memory to global per-protocol counters such
-> > as /proc/net/ipv4/tcp_mem.
-> >
-> > When running under a non-root cgroup,
->
-> Remove this non-root cgroup as we may change in future to also associate
-> with root memcg for stat purpose. In addition, we may switch sk pointing
-> to objcg instead of memcg.
+From: Alexei Starovoitov <ast@kernel.org>
 
-Makes sense.  Will remove the part.
+Overview:
 
->
-> > this memory is also charged to
-> > the memcg as sock in memory.stat.
-> >
-> > We do not need to pay costs for two orthogonal memory accounting
-> > mechanisms.
-> >
-> > This series allows decoupling memcg from the global memory accounting
-> > (memcg + tcp_mem -> memcg) if socket is configured as such by BPF prog.
-> >
->
-> I understand that you need fine grained control but I see more users
-> interested in system level settings i.e. either through config, boot
-> param or sysctl, let the user/admin disable protocol specific accounting
-> if memcg is enabled.
+This patch set introduces kmalloc_nolock() which is the next logical
+step towards any context allocation necessary to remove bpf_mem_alloc
+and get rid of preallocation requirement in BPF infrastructure.
+In production BPF maps grew to gigabytes in size. Preallocation wastes
+memory. Alloc from any context addresses this issue for BPF and
+other subsystems that are forced to preallocate too.
+This long task started with introduction of alloc_pages_nolock(),
+then memcg and objcg were converted to operate from any context
+including NMI, this set completes the task with kmalloc_nolock()
+that builds on top of alloc_pages_nolock() and memcg changes.
+After that BPF subsystem will gradually adopt it everywhere.
 
-Considering tcp/udp/sctp sockets are not created in the early
-boot stage, I think sysctl would be enough and we don't need to
-control the default value with a boot param (sysctl.conf would be
-early enough).
+The patch set is on top of slab/for-next that already has
+pre-patch "locking/local_lock: Expose dep_map in local_trylock_t." applied.
+I think the patch set should be routed via vbabka/slab.git.
 
+v4->v5:
+- New patch "Reuse first bit for OBJEXTS_ALLOC_FAIL" to free up a bit
+  and use it to mark slabobj_ext vector allocated with kmalloc_nolock(),
+  so that freeing of the vector can be done with kfree_nolock()
+- Call kasan_slab_free() directly from kfree_nolock() instead of deferring to
+  do_slab_free() to avoid double poisoning
+- Addressed other minor issues spotted by Harry
 
->
-> Please rename SK_BPF_MEMCG_SOCK_ISOLATED to something more appropriate.
-> The isolated word is giving wrong impression. We want something which
-> specify that the kernel is only doing memcg accounting and not protocol
-> specific accounting for this socket. So, something like
-> SK_BPF_MEMCG_ONLY make more sense.
+v4:
+https://lore.kernel.org/all/20250718021646.73353-1-alexei.starovoitov@gmail.com/
 
-Maybe _EXCLUSIVE would be a bit clearer ?
+v3->v4:
+- Converted local_lock_cpu_slab() to macro
+- Reordered patches 5 and 6
+- Emphasized that kfree_nolock() shouldn't be used on kmalloc()-ed objects
+- Addressed other comments and improved commit logs
+- Fixed build issues reported by bots
 
-net.core.memcg_exclusive (sysctl)
-SK_BPF_MEMCG_EXCLUSIVE
+v3:
+https://lore.kernel.org/bpf/20250716022950.69330-1-alexei.starovoitov@gmail.com/
 
-or much clearer but lengthy ones ?
+v2->v3:
+- Adopted Sebastian's local_lock_cpu_slab(), but dropped gfpflags
+  to avoid extra branch for performance reasons,
+  and added local_unlock_cpu_slab() for symmetry.
+- Dropped local_lock_lockdep_start/end() pair and switched to
+  per kmem_cache lockdep class on PREEMPT_RT to silence false positive
+  when the same cpu/task acquires two local_lock-s.
+- Refactorred defer_free per Sebastian's suggestion
+- Fixed slab leak when it needs to be deactivated via irq_work and llist
+  as Vlastimil proposed. Including defer_free_barrier().
+- Use kmem_cache->offset for llist_node pointer when linking objects
+  instead of zero offset, since whole object could be used for slabs
+  with ctors and other cases.
+- Fixed "cnt = 1; goto redo;" issue.
+- Fixed slab leak in alloc_single_from_new_slab().
+- Retested with slab_debug, RT, !RT, lockdep, kasan, slab_tiny
+- Added acks to patches 1-4 that should be good to go.
 
-net.core.memcg_no_per_protocol_account
-SK_BPF_MEMCG_NO_PER_PROTOCOL_ACCOUNT
+v2:
+https://lore.kernel.org/bpf/20250709015303.8107-1-alexei.starovoitov@gmail.com/
 
-net.core.memcg_no_global_account
-SK_BPF_MEMCG_NO_GLOBAL_ACCOUNT
+v1->v2:
+Added more comments for this non-trivial logic and addressed earlier comments.
+In particular:
+- Introduce alloc_frozen_pages_nolock() to avoid refcnt race
+- alloc_pages_nolock() defaults to GFP_COMP
+- Support SLUB_TINY
+- Added more variants to stress tester to discover that kfree_nolock() can
+  OOM, because deferred per-slab llist won't be serviced if kfree_nolock()
+  gets unlucky long enough. Scraped previous approach and switched to
+  global per-cpu llist with immediate irq_work_queue() to process all
+  object sizes.
+- Reentrant kmalloc cannot deactivate_slab(). In v1 the node hint was
+  downgraded to NUMA_NO_NODE before calling slab_alloc(). Realized it's not
+  good enough. There are odd cases that can trigger deactivate. Rewrote
+  this part.
+- Struggled with SLAB_NO_CMPXCHG. Thankfully Harry had a great suggestion:
+  https://lore.kernel.org/bpf/aFvfr1KiNrLofavW@hyeyoo/
+  which was adopted. So slab_debug works now.
+- In v1 I had to s/local_lock_irqsave/local_lock_irqsave_check/ in a bunch
+  of places in mm/slub.c to avoid lockdep false positives.
+  Came up with much cleaner approach to silence invalid lockdep reports
+  without sacrificing lockdep coverage. See local_lock_lockdep_start/end().
 
-I'm bad at naming.  Do you have any preference ?
+v1:
+https://lore.kernel.org/bpf/20250501032718.65476-1-alexei.starovoitov@gmail.com/
+
+Alexei Starovoitov (6):
+  locking/local_lock: Introduce local_lock_is_locked().
+  mm: Allow GFP_ACCOUNT to be used in alloc_pages_nolock().
+  mm: Introduce alloc_frozen_pages_nolock()
+  slab: Make slub local_(try)lock more precise for LOCKDEP
+  slab: Reuse first bit for OBJEXTS_ALLOC_FAIL
+  slab: Introduce kmalloc_nolock() and kfree_nolock().
+
+ include/linux/gfp.h                 |   2 +-
+ include/linux/kasan.h               |  13 +-
+ include/linux/local_lock.h          |   2 +
+ include/linux/local_lock_internal.h |   7 +
+ include/linux/memcontrol.h          |  12 +-
+ include/linux/rtmutex.h             |  10 +
+ include/linux/slab.h                |   4 +
+ kernel/bpf/stream.c                 |   2 +-
+ kernel/bpf/syscall.c                |   2 +-
+ kernel/locking/rtmutex_common.h     |   9 -
+ mm/Kconfig                          |   1 +
+ mm/internal.h                       |   4 +
+ mm/kasan/common.c                   |   5 +-
+ mm/page_alloc.c                     |  55 ++--
+ mm/slab.h                           |   7 +
+ mm/slab_common.c                    |   3 +
+ mm/slub.c                           | 495 +++++++++++++++++++++++++---
+ 17 files changed, 541 insertions(+), 92 deletions(-)
+
+-- 
+2.47.3
+
