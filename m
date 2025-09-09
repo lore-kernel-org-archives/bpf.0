@@ -1,63 +1,63 @@
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F49920F08C
-	for <bpf@vger.kernel.org>; Tue,  9 Sep 2025 17:00:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD13336CDE7
+	for <bpf@vger.kernel.org>; Tue,  9 Sep 2025 17:00:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757437228; cv=none; b=VoZpERSAXL8jXtPV7K08w5hu/fB0q1XsjxwWXzEcbTboUI9uyYx6QZs+W5OEwdzPo+rubVsxxNItUZF4KlF9HWknkQvhQyLnu8Q+GujbxxYIsMwbj8uUfSX/gilSy6LNEFQv6xnZ76rUwdEvTt+E523ruetQ8ht/2p4cPYAfFGA=
+	t=1757437229; cv=none; b=MzIMMsg1g0vHeAEOb6S0pFMBdf3//gYUW+LvfQDqQs4dG+IaDk4G0U4WYro9rmLf/cmormZxrdv9UkvF5Q0pFheSzoVTSB4KZIjwxAlOglhad7NZCyDDsaI/BIcDb2gMpEWbAuoZqRT4j/4gvtTJB0WKLpiwaYiq2DA4oxAa2aI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757437228; c=relaxed/simple;
-	bh=YOheNea8w4oFvaJYrcoKVJ05SYnlnHJweU0Z+hN4aqU=;
+	s=arc-20240116; t=1757437229; c=relaxed/simple;
+	bh=i9ei76HZWXEGFxtJrVdE8n0QQk9q0CIQwkPYsw8lY9E=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=oso9pXFJBHMxxm1Sb2cp5PWrfTdR99XL6gF1ApKxZ/CzvJ13LqeJcH0k2Hq+JcttRfT3DcoDlES86cmkCc7XbN2amDZsK+DINwwH2MTMuFmBneiq6cFc55Sf+I3dMzCN/h7z2jJsCH7e0gL+p0x8fvcKINM3nb1NL99uDU0cjUQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jrife.io; spf=none smtp.mailfrom=jrife.io; dkim=pass (2048-bit key) header.d=jrife-io.20230601.gappssmtp.com header.i=@jrife-io.20230601.gappssmtp.com header.b=N285UPjI; arc=none smtp.client-ip=209.85.215.177
+	 MIME-Version; b=YM29ci8mCkqmdjsktESyvCt1+D0mUAOPeJCu9LT9vZoEAlmF/Y8CyFJoeTXHHWLVNSl8d/l0P91RXRr4G8y4fPf/qPH3ChVvGwxGQAjUNK6mvzm+6bVAgWLQFeAjL6LkaybZSzWl/qDd253ZQy1lRPJ2WCiQUWJ1HyXidgaxKz8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jrife.io; spf=none smtp.mailfrom=jrife.io; dkim=pass (2048-bit key) header.d=jrife-io.20230601.gappssmtp.com header.i=@jrife-io.20230601.gappssmtp.com header.b=PqwfAM1N; arc=none smtp.client-ip=209.85.215.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jrife.io
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=jrife.io
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=jrife-io.20230601.gappssmtp.com header.i=@jrife-io.20230601.gappssmtp.com header.b="N285UPjI"
-Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-b5232a989a9so72514a12.1
-        for <bpf@vger.kernel.org>; Tue, 09 Sep 2025 10:00:24 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=jrife-io.20230601.gappssmtp.com header.i=@jrife-io.20230601.gappssmtp.com header.b="PqwfAM1N"
+Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-b5232a989a9so72515a12.1
+        for <bpf@vger.kernel.org>; Tue, 09 Sep 2025 10:00:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jrife-io.20230601.gappssmtp.com; s=20230601; t=1757437223; x=1758042023; darn=vger.kernel.org;
+        d=jrife-io.20230601.gappssmtp.com; s=20230601; t=1757437227; x=1758042027; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=aqze7iwG5Ry+dDBARlSyhuUqRONuSWeSjCIo66sdoYI=;
-        b=N285UPjI5uT8wPT9LdT8CKMfrgJTX+vJOqWX1awm+E4mRW68tns5QjLu9TrAIC3D0A
-         +UBuhNEHDYl8eW2N7s7JL7ysTNxQTBO87u/Cy00TQwVGPhyLuPpi4MJBM0bn3Icpqq9K
-         K/j5wwr8c4KzWstseJRILsmV0dlGgwS954mdtpeYAurjZcAc2Q/n55nNK/cB83qh/Liy
-         BGMs3Z3w4UW49yglQyX/LBqOeFfYH4bS5n/gDkWkU9yOSNu+O4hbO2lfrP5NGbX7VWq/
-         vi9CAc9FNvqdhVwMq1/27raeeB+f96Fd+T9FdzlQFyKVHEKME7CxRQCZjACD9EaocWd1
-         BgSg==
+        bh=ntPkdum4JIas65l2vIjgWtP7aF/9GTTAGBMQDfY89wY=;
+        b=PqwfAM1NWp9oA4UyykJC0oUnvQ/T99Z4CSxP18cC5vM0ZKsWbGieaZBiuCLGvHU9N0
+         +CcP+gXZZcRaBwPSQ+92gnvdX9A8gnLvlGNm3/XF5IQiZJLTqB0e8UKtu/RM1u4hp7Mg
+         wqV2X2TB5pbpe8Ijng1ietwperHhdwxcQl0vVIkPADq300i6Ah0/MtcPHujmPFJ8P5Sv
+         hVBVZ0k8xY9KHc+uB7imkq5AZnVLmltK/IcCk6U3b+ErBNSLhFgcLYXDY6u0fySYMiMl
+         7JJEYEfK0K1qUVyJoYyDwn84+iMmmtrpuUOl5W0tpRXdxFTlVMbCi7NuZ/GEHOouf4r9
+         XC6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757437223; x=1758042023;
+        d=1e100.net; s=20230601; t=1757437227; x=1758042027;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=aqze7iwG5Ry+dDBARlSyhuUqRONuSWeSjCIo66sdoYI=;
-        b=IaeFo6nZxIqC6DlpLBo6dJkhu80dUp81ldVGIy7rBejwhbBtLd6SwXEEXHMTkvCU8P
-         e9/aDHmxjierozGXm4cj22BPskC9j3TRkr04gVpQjeNCJJbds6TA11HENuhw8SswbIVC
-         k6ahM0hJHvy2QxL0Poc0LE9j60OBNesb9r1ITau4otXw5wwpZF4nkASMCSWRCkRRuROo
-         5EbfZWJlE9Dk4oUh013iIxH6DkVseTbnZ0oIkFlUhRL3Q5sS0jkjWHOE5FsqY/Q+m1lS
-         buL04HQbgyihACGnV1oUD1gyf7IT37QNI6pSl6a3QVwB2a0k7cSQI9kkToyg8shJJtZj
-         jWZQ==
-X-Gm-Message-State: AOJu0Yx1hr+q+8qTvhY9traTHbzYhK3JnCVPcDakRvO4xoi6xpbVarky
-	05+JUG/473sketTpnRA//MbeiiCQbRf/PQr09ZDX6KC/CEIqryJzytlimGVGt7K2xBRFww5Pxj8
-	pCXmC
-X-Gm-Gg: ASbGncvy3gMnIVyY4JVupVQ2pn5RvQ5KkabOjn7z8GAc+J04/Uu9Zq0t4KjHeNBnjMo
-	jUNdA8B5LWvaMtjirwEQgIRxNZ7a2Fz+qtS7QTSWvLESqzQjzu2PYIiAd7WmzrCs1rRNuYy3bfy
-	D+kIiNeCe2RJAxlxvh36ErtBOSa4GtolNfi/QX3BQ+cZOJW4HF8DpPK63AA81mJS1bHVj8BjUV7
-	cjCm6aAN1zeXqMpsrf5JWhXAE/4tYT21kr9WpnWf28zzeCOrZI89KR/8JFjULhMkId0C8wemicy
-	UVcg1H+Dg9peXK3TZcJwM4zeAOtEIX0plU2u216Ykf6AbmRKvck8TQe2Fh/fgRHUGSYg5FPJaT4
-	knf0Q2KK8GVuyLq8hrzq8mA9D
-X-Google-Smtp-Source: AGHT+IGgBbvSKHyPB+9E0Dr0eVfimKEokb7a96nOk+yHQ1AsR/F/uGf1DXWJ1JgkdL3C3K+6oI879g==
-X-Received: by 2002:a05:6a20:4322:b0:24a:3b34:19cb with SMTP id adf61e73a8af0-2534441f6cdmr11016881637.3.1757437223313;
-        Tue, 09 Sep 2025 10:00:23 -0700 (PDT)
+        bh=ntPkdum4JIas65l2vIjgWtP7aF/9GTTAGBMQDfY89wY=;
+        b=mqmhLWqdUNu999/JLKp3vHBQYAOUPIdRox0ZVU61oMjgYMxJuFwlL1qMvmUCP+JLRR
+         xiEFqhg3G+OCQGkG/lzy+++GeVRsE9vZykbTBqfW2rWfK+fkwUXbLn9ZPYDt2T9NSEEJ
+         Vj0GNHzLeM9+H+ufd76tKdzb6nHKWikP1fW8nK9DD5ErJiWcE19nox2H3oa6+CgiZXyF
+         tXz0QbbuY2HwIQOW0PicPc0gh6cT+bU/w02ATDw1ASF0mLiLpChPQBx94eDNRRSZQwxA
+         T6IPGeMOyvoN/iKYz6Vs8JmNbpxkcZ6UgNbA9Y17SYdPySpOWrHndFGPHESYN2Y9oey+
+         6BPw==
+X-Gm-Message-State: AOJu0YzkRErsd0tVSqPct1uaNemUi4f57fOr/xz9S8QYDVMEIvyu01pi
+	Sc2Hvu3ac2y41p7HA607PrFhzxj+3sVEeH9mbjERLG5vaf5EHaN8BJ4OVIM5D6YOylH+YjaTWfn
+	OFl7D
+X-Gm-Gg: ASbGncuhjNoZBM+uaBkpniLbM7HcAhQCM8/fVLOYRjsIODqI2RFJxcxmCdOQ7kAFZeP
+	9qpcGEnU9UJdEP+7siD4uzobDw3XPQIDfeNUCRSbRVWUJECgjIls7M8VtuA7pIYJ6KuT0IEblKn
+	qGB6WVm21x8GbHIISulp1CmqNs/IKJ50AtHKBzAesX4OfQKvKoDZ7R9nCawN69E3WPv6fmGRUdq
+	YXJg2Xvqqn4DBcILblA5sT77WIaiPzbxmYGqkiIYBhskVCIGN4zjojczafMk9KBjlq3iZicNT9o
+	KvYfi6sK49263I5Tb/o7ssy4WAOrt6WAh9q7kfCOT1LNdrVrgqCQwTIMLgFnPHmZ9R+W/CpHcud
+	hkj72epoEyhv8Z3xdR46LF0Z+b/FnHxGw5U0=
+X-Google-Smtp-Source: AGHT+IEQmlU7EzM4zglr0GOpZvMozjjX/W2WHFTus6ChRNLVwg4aNDOe25tOH1775VMpAunjMzwSTQ==
+X-Received: by 2002:a05:6a21:6da1:b0:252:3a33:660f with SMTP id adf61e73a8af0-2534441f65amr9965270637.4.1757437226661;
+        Tue, 09 Sep 2025 10:00:26 -0700 (PDT)
 Received: from t14.. ([104.133.198.228])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b548a6a814esm251733a12.29.2025.09.09.10.00.21
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b548a6a814esm251733a12.29.2025.09.09.10.00.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Sep 2025 10:00:22 -0700 (PDT)
+        Tue, 09 Sep 2025 10:00:26 -0700 (PDT)
 From: Jordan Rife <jordan@jrife.io>
 To: bpf@vger.kernel.org,
 	netdev@vger.kernel.org
@@ -69,9 +69,9 @@ Cc: Jordan Rife <jordan@jrife.io>,
 	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
 	Kuniyuki Iwashima <kuniyu@google.com>,
 	Aditi Ghag <aditi.ghag@isovalent.com>
-Subject: [RFC PATCH bpf-next 01/14] bpf: Use reference counting for struct bpf_shtab_elem
-Date: Tue,  9 Sep 2025 09:59:55 -0700
-Message-ID: <20250909170011.239356-2-jordan@jrife.io>
+Subject: [RFC PATCH bpf-next 03/14] bpf: Hold socket lock in socket map iterator
+Date: Tue,  9 Sep 2025 09:59:57 -0700
+Message-ID: <20250909170011.239356-4-jordan@jrife.io>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250909170011.239356-1-jordan@jrife.io>
 References: <20250909170011.239356-1-jordan@jrife.io>
@@ -83,151 +83,106 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Use reference counting to decide when to free socket hash elements
-instead of freeing them immediately after they are unlinked from a
-bucket's list. In the next patch this is essential, allowing socket
-hash iterators to hold a reference to a `struct bpf_shtab_elem` outside
-of an RCU read-side critical section.
-
-sock_hash_put_elem() follows the list, scheduling elements to be freed
-until it hits an element where the reference count is two or greater.
-This does nothing yet; in this patch the loop will never iterate more
-than once, since we always take a reference to the next element in
-sock_hash_unlink_elem() before calling sock_hash_put_elem(), and in
-general, the reference count to any element is always one except during
-these transitions. However, in the next patch it's possible for an
-iterator to hold a reference to an element that has been unlinked from
-a bucket's list. In this context, sock_hash_put_elem() may free
-several unlinked elements up until the point where it finds an element
-that is still in the bucket's list.
+Similar to socket hash iterators, decouple reading from processing to
+enable bpf_iter_run_prog to run while holding the socket lock and take
+a reference to the current socket to ensure that it isn't freed outside
+of the RCU read-side critical section.
 
 Signed-off-by: Jordan Rife <jordan@jrife.io>
 ---
- net/core/sock_map.c | 67 +++++++++++++++++++++++++++++++++------------
- 1 file changed, 50 insertions(+), 17 deletions(-)
+ net/core/sock_map.c | 33 ++++++++++++++++++++++++---------
+ 1 file changed, 24 insertions(+), 9 deletions(-)
 
 diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-index 5947b38e4f8b..005112ba19fd 100644
+index 9d972069665b..f33bfce96b9e 100644
 --- a/net/core/sock_map.c
 +++ b/net/core/sock_map.c
-@@ -847,6 +847,7 @@ struct bpf_shtab_elem {
- 	u32 hash;
- 	struct sock *sk;
- 	struct hlist_node node;
-+	refcount_t ref;
- 	u8 key[];
- };
+@@ -723,30 +723,39 @@ static void *sock_map_seq_lookup_elem(struct sock_map_seq_info *info)
+ 	if (unlikely(info->index >= info->map->max_entries))
+ 		return NULL;
  
-@@ -906,11 +907,46 @@ static struct sock *__sock_hash_lookup_elem(struct bpf_map *map, void *key)
- 	return elem ? elem->sk : NULL;
++	rcu_read_lock();
+ 	info->sk = __sock_map_lookup_elem(info->map, info->index);
++	if (info->sk)
++		sock_hold(info->sk);
++	rcu_read_unlock();
+ 
+ 	/* can't return sk directly, since that might be NULL */
+ 	return info;
  }
  
--static void sock_hash_free_elem(struct bpf_shtab *htab,
--				struct bpf_shtab_elem *elem)
-+static void sock_hash_free_elem(struct rcu_head *rcu_head)
- {
-+	struct bpf_shtab_elem *elem = container_of(rcu_head,
-+						   struct bpf_shtab_elem, rcu);
-+
-+	/* Matches sock_hold() in sock_hash_alloc_elem(). */
-+	sock_put(elem->sk);
-+	kfree(elem);
-+}
-+
-+static void sock_hash_put_elem(struct bpf_shtab_elem *elem)
++static void sock_map_seq_put_elem(struct sock_map_seq_info *info)
 +{
-+	while (elem && refcount_dec_and_test(&elem->ref)) {
-+		call_rcu(&elem->rcu, sock_hash_free_elem);
-+		elem = hlist_entry_safe(rcu_dereference(hlist_next_rcu(&elem->node)),
-+					struct bpf_shtab_elem, node);
++	if (info->sk) {
++		sock_put(info->sk);
++		info->sk = NULL;
 +	}
 +}
 +
-+static bool sock_hash_hold_elem(struct bpf_shtab_elem *elem)
-+{
-+	return refcount_inc_not_zero(&elem->ref);
-+}
-+
-+static void sock_hash_unlink_elem(struct bpf_shtab *htab,
-+				  struct bpf_shtab_elem *elem)
-+{
-+	struct bpf_shtab_elem *elem_next;
-+
-+	elem_next = hlist_entry_safe(rcu_dereference(hlist_next_rcu(&elem->node)),
-+				     struct bpf_shtab_elem, node);
-+	hlist_del_rcu(&elem->node);
-+	sock_map_unref(elem->sk, elem);
-+	/* Take a reference to the next element first to make sure it's not
-+	 * freed by the call to sock_hash_put_elem().
-+	 */
-+	if (elem_next)
-+		sock_hash_hold_elem(elem_next);
-+	sock_hash_put_elem(elem);
- 	atomic_dec(&htab->count);
--	kfree_rcu(elem, rcu);
+ static void *sock_map_seq_start(struct seq_file *seq, loff_t *pos)
+-	__acquires(rcu)
+ {
+ 	struct sock_map_seq_info *info = seq->private;
+ 
+ 	if (*pos == 0)
+ 		++*pos;
+ 
+-	/* pairs with sock_map_seq_stop */
+-	rcu_read_lock();
+ 	return sock_map_seq_lookup_elem(info);
  }
  
- static void sock_hash_delete_from_link(struct bpf_map *map, struct sock *sk,
-@@ -930,11 +966,8 @@ static void sock_hash_delete_from_link(struct bpf_map *map, struct sock *sk,
- 	spin_lock_bh(&bucket->lock);
- 	elem_probe = sock_hash_lookup_elem_raw(&bucket->head, elem->hash,
- 					       elem->key, map->key_size);
--	if (elem_probe && elem_probe == elem) {
--		hlist_del_rcu(&elem->node);
--		sock_map_unref(elem->sk, elem);
--		sock_hash_free_elem(htab, elem);
--	}
-+	if (elem_probe && elem_probe == elem)
-+		sock_hash_unlink_elem(htab, elem);
- 	spin_unlock_bh(&bucket->lock);
+ static void *sock_map_seq_next(struct seq_file *seq, void *v, loff_t *pos)
+-	__must_hold(rcu)
+ {
+ 	struct sock_map_seq_info *info = seq->private;
+ 
++	sock_map_seq_put_elem(info);
+ 	++*pos;
+ 	++info->index;
+ 
+@@ -754,12 +763,12 @@ static void *sock_map_seq_next(struct seq_file *seq, void *v, loff_t *pos)
  }
  
-@@ -952,9 +985,7 @@ static long sock_hash_delete_elem(struct bpf_map *map, void *key)
- 	spin_lock_bh(&bucket->lock);
- 	elem = sock_hash_lookup_elem_raw(&bucket->head, hash, key, key_size);
- 	if (elem) {
--		hlist_del_rcu(&elem->node);
--		sock_map_unref(elem->sk, elem);
--		sock_hash_free_elem(htab, elem);
-+		sock_hash_unlink_elem(htab, elem);
- 		ret = 0;
+ static int sock_map_seq_show(struct seq_file *seq, void *v)
+-	__must_hold(rcu)
+ {
+ 	struct sock_map_seq_info *info = seq->private;
+ 	struct bpf_iter__sockmap ctx = {};
+ 	struct bpf_iter_meta meta;
+ 	struct bpf_prog *prog;
++	int ret;
+ 
+ 	meta.seq = seq;
+ 	prog = bpf_iter_get_info(&meta, !v);
+@@ -773,17 +782,23 @@ static int sock_map_seq_show(struct seq_file *seq, void *v)
+ 		ctx.sk = info->sk;
  	}
- 	spin_unlock_bh(&bucket->lock);
-@@ -985,6 +1016,11 @@ static struct bpf_shtab_elem *sock_hash_alloc_elem(struct bpf_shtab *htab,
- 	memcpy(new->key, key, key_size);
- 	new->sk = sk;
- 	new->hash = hash;
-+	refcount_set(&new->ref, 1);
-+	/* Matches sock_put() in sock_hash_free_elem(). Ensure that sk is not
-+	 * freed until elem is.
-+	 */
-+	sock_hold(sk);
- 	return new;
+ 
+-	return bpf_iter_run_prog(prog, &ctx);
++	if (ctx.sk)
++		lock_sock(ctx.sk);
++	ret = bpf_iter_run_prog(prog, &ctx);
++	if (ctx.sk)
++		release_sock(ctx.sk);
++
++	return ret;
  }
  
-@@ -1038,11 +1074,8 @@ static int sock_hash_update_common(struct bpf_map *map, void *key,
- 	 * concurrent search will find it before old elem.
- 	 */
- 	hlist_add_head_rcu(&elem_new->node, &bucket->head);
--	if (elem) {
--		hlist_del_rcu(&elem->node);
--		sock_map_unref(elem->sk, elem);
--		sock_hash_free_elem(htab, elem);
--	}
-+	if (elem)
-+		sock_hash_unlink_elem(htab, elem);
- 	spin_unlock_bh(&bucket->lock);
- 	return 0;
- out_unlock:
-@@ -1182,7 +1215,7 @@ static void sock_hash_free(struct bpf_map *map)
- 			rcu_read_unlock();
- 			release_sock(elem->sk);
- 			sock_put(elem->sk);
--			sock_hash_free_elem(htab, elem);
-+			call_rcu(&elem->rcu, sock_hash_free_elem);
- 		}
- 		cond_resched();
- 	}
+ static void sock_map_seq_stop(struct seq_file *seq, void *v)
+-	__releases(rcu)
+ {
++	struct sock_map_seq_info *info = seq->private;
++
+ 	if (!v)
+ 		(void)sock_map_seq_show(seq, NULL);
+ 
+-	/* pairs with sock_map_seq_start */
+-	rcu_read_unlock();
++	sock_map_seq_put_elem(info);
+ }
+ 
+ static const struct seq_operations sock_map_seq_ops = {
 -- 
 2.43.0
 
