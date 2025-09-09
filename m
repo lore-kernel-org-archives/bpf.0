@@ -1,66 +1,146 @@
-Received: from out-176.mta1.migadu.com (out-176.mta1.migadu.com [95.215.58.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE082223337
-	for <bpf@vger.kernel.org>; Tue,  9 Sep 2025 01:00:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35E1721C9E5
+	for <bpf@vger.kernel.org>; Tue,  9 Sep 2025 01:00:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757379624; cv=none; b=Z2PBQX8esyBMPT4uBNevGcXhoBotFQTOIQuNBstRp+zc8eA9XELjzEHbF9eucE7oYkyGN98UWqnGmnPVvobjSrB4IYzeRqom3OR+EL5GMo08IQ18Rx6Hl1DFCaG1NjOtvNqqjT1Hn84uSeri1/6h0VfqxsSatbbg/0TdRCRF/CA=
+	t=1757379631; cv=none; b=f9TEhQ7awmOi+TLAwMOAPoxMXfqdrKjRw7wIYcSuMJMzWNEJsmELEYv4JFgt+zbbptHEtFY5yCx8Pb70NQvrSA913ZPMoYZ9HjxG07lvlyIkzU5gHodW+ToY/Q/dehHqFrTk2HY4bLvNFyHV+yVXUFJC8+nRLBlq4QTer+PZg+s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757379624; c=relaxed/simple;
-	bh=N55aMnkplfXqNiODJZgRgz4gVnP2qM6tJQcGwsCXi+k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EWxPX1sE5XS4lgUO6KOL0aODo0ZTP6hQ31+kWTULYxREl4/4sPS9DVc2N4yrTEi6vYbaDDaNTvejn4DzA8AN2qCn52rszic3unZfCrcnKG9mbeJAtT1sQWqgImXX37qpyAeD5UM+khkEp+J0TX//RVRS1x970KQ4dkRo9By09EI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=FfAFYMSP; arc=none smtp.client-ip=95.215.58.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1757379631; c=relaxed/simple;
+	bh=4UcLZuCae8FTnFGQm1X9lnZGVSgxyWXY2Ge0iKX34SU=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=SPCPXbeXi0k1gUTynJz+4jbg3y92ZXYiTSK69MRq+J6gEtJ60eVPHZeFJ6comiVfa0lXQ4/44aSq2rIK35LM6/ZFB7TPqh8b10YLnoTrhIDjYA1ts1tkIAbb3+YJW7TLc3XfK6YDlpoksR7sky3uFXoF5kDscPMZCh8DuROIWTU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DVjR2i7n; arc=none smtp.client-ip=209.85.216.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="FfAFYMSP"
-Date: Mon, 8 Sep 2025 17:59:42 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1757379616;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=fbVVaAOUJ40iam4w0jOVYBsTb3Pkyp33aIkriVY47M4=;
-	b=FfAFYMSP3E/sB3/4YOEPOASZx0Ig5m8YLZMD9KCABVR6aNZqbF/93T3NQVzASOEwNFnCRq
-	8aXEJIOYMzt1tTeCu+I6jZihYmkzaKWqi7pgu6HawEketr1w5r56bjMdMDH8yfL4v/Z3s0
-	X3bKIc7fgz7uzFJGPBe3e/prKjPZuss=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Shakeel Butt <shakeel.butt@linux.dev>
-To: Kuniyuki Iwashima <kuniyu@google.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Johannes Weiner <hannes@cmpxchg.org>, 
-	Michal Hocko <mhocko@kernel.org>, Roman Gushchin <roman.gushchin@linux.dev>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Neal Cardwell <ncardwell@google.com>, Willem de Bruijn <willemb@google.com>, 
-	Mina Almasry <almasrymina@google.com>, Kuniyuki Iwashima <kuni1840@gmail.com>, bpf@vger.kernel.org, 
-	netdev@vger.kernel.org
-Subject: Re: [PATCH v6 bpf-next/net 0/5] bpf: Allow decoupling memcg from
- sk->sk_prot->memory_allocated.
-Message-ID: <r2lh33nhc5pyx7crfahdeijd5vdq74abcmrbqkls2zwnih76fk@opua7takczmc>
-References: <20250908223750.3375376-1-kuniyu@google.com>
- <hlxtpscuxjjzgsiom4yh6r7zj4vpiuibqod7mkvceqzabhqeba@zsybr6aadn3c>
- <CAAVpQUC1tm+rYE07_5ur+x8eh0x7RZ2sR1PGHG9oRhdeAGBdrQ@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DVjR2i7n"
+Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-327f87275d4so4911049a91.1
+        for <bpf@vger.kernel.org>; Mon, 08 Sep 2025 18:00:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1757379628; x=1757984428; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bxrQ50WwxcJf+ZNsWb3xAkAINo/uoo8WPlO+broFxXY=;
+        b=DVjR2i7nwAzCyvsRFL0kIpzoYaDxJUnGfX7qOlCGiLZw7GksUsShF4QDjkxgZyDJv1
+         G2WVdOH/Rg3GzzQbbaYSEQ2m5FRK4pd/kS1IZSwwa4PamwYTR3zkUqg7Kel+EwijeP90
+         ZwnKbEoFukPyulsWOn+ACi8VcqoXOTd4HKBNOGGNg9IiyXuOzBBKKNnOixTj/DbSLsr+
+         XXFowPeCrtIjBJGW3ZfP3oqsvKrionFWPO9xgfi4IB0DA9mwAzGgvCETr3swO/X8gy7c
+         sujJR8v/fQShz6m6j1CxkJspMcOK0WoEkkxBPGOwcp6q/BBcYyGZw0YmnH1hN0KPt9ot
+         U8lw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757379628; x=1757984428;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bxrQ50WwxcJf+ZNsWb3xAkAINo/uoo8WPlO+broFxXY=;
+        b=gFg8epReJhrVNg63zMgfF9+jKTKF9ELhBJBh/itnLSt8xESXk4Kkakxb0BsnO1SX7k
+         zBHnT4jTZ01dTnMLji2PGOMG1FYOQkBhM197xc327NJPRJtAKSTDj8GgdscvzbFlnR6Q
+         I8Vbi/umYn82aRZCyv3XeKg/Szaf5NXW7fGd/EdIfhs8BYyg67N6ni9ToXMJ7X5upbJo
+         2Ww1Q7YKAJ32vUgePeZSvkhztsbjGNmH+NpN9qf9genTa6Ht3Ua9iBxdkmD839SbZPXe
+         z4QZ70PAMdi7vSHKNoBF3GetMyE9jikAnHywVt4eI4NPLvxverZ8vIMKxRbiHQYBTxGF
+         W0rw==
+X-Gm-Message-State: AOJu0Yz4UzckUq5yE4+fzj3PdR+Uc6kn76NQsWOf6Xmm3kUdueLOm/7y
+	pGMQeigqC2zO9q4TlkyVXfHB5Jc7BaCiw4ym7sax9eVnuERYTplIvDrwCSPjpQ==
+X-Gm-Gg: ASbGncs5WgCNozy+IfL2NtWQKbkdz5tzds8UAtr00w5orHv64Jri16khN0ijTfYYssO
+	L5niJ/H2ouKAzUKPbWkl0iQDlwIkm/w0VY6k/BcvfozF+WgBHqLeKspqiJeTnWbRURnoIr/9USN
+	wNBkN5kPizHcWW+jGrOWSzMDwLym5VUCLGap02KDhQucbBBnAixOabwRrgtnDVqmd6PQNiJMq20
+	PZT2N95lo6Y2OxRnvJxnSpjwga2aKISelb0EcMCZ6Py0ACcQY8ibACVv98us9QA4/YHajKS4BBV
+	Dfh2Tya+WOda5Zkd/s64ficolFDJ00U7deK8rKsK01W2lMFpjGqkPcAdh0Q72bGHivxwoDVocPr
+	XesL++A3dnYH5zmpLYo/7Wl9DRuenqf2epVqFI6jy9eM9cEGcU2FqinDmUUpZLRw=
+X-Google-Smtp-Source: AGHT+IFeNRsm2QUYba1YavtLTYPQrodCKr9T+9C2GXnH04y7bOF/iflwDTL9GGDN4Q/Rcq7n4vEJ1Q==
+X-Received: by 2002:a17:90b:3d81:b0:32b:8edb:12ce with SMTP id 98e67ed59e1d1-32d43f18b0bmr16536473a91.15.1757379623296;
+        Mon, 08 Sep 2025 18:00:23 -0700 (PDT)
+Received: from localhost.localdomain ([2001:558:600a:7:44e6:767e:cc5a:a060])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b4e673ad423sm24264403a12.50.2025.09.08.18.00.22
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Mon, 08 Sep 2025 18:00:22 -0700 (PDT)
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To: bpf@vger.kernel.org,
+	linux-mm@kvack.org
+Cc: vbabka@suse.cz,
+	harry.yoo@oracle.com,
+	shakeel.butt@linux.dev,
+	mhocko@suse.com,
+	bigeasy@linutronix.de,
+	andrii@kernel.org,
+	memxor@gmail.com,
+	akpm@linux-foundation.org,
+	peterz@infradead.org,
+	rostedt@goodmis.org,
+	hannes@cmpxchg.org
+Subject: [PATCH slab v5 5/6] slab: Reuse first bit for OBJEXTS_ALLOC_FAIL
+Date: Mon,  8 Sep 2025 18:00:06 -0700
+Message-Id: <20250909010007.1660-6-alexei.starovoitov@gmail.com>
+X-Mailer: git-send-email 2.39.5 (Apple Git-154)
+In-Reply-To: <20250909010007.1660-1-alexei.starovoitov@gmail.com>
+References: <20250909010007.1660-1-alexei.starovoitov@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAAVpQUC1tm+rYE07_5ur+x8eh0x7RZ2sR1PGHG9oRhdeAGBdrQ@mail.gmail.com>
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
 
-On Mon, Sep 08, 2025 at 05:55:37PM -0700, Kuniyuki Iwashima wrote:
-> Maybe _EXCLUSIVE would be a bit clearer ?
-> 
-> net.core.memcg_exclusive (sysctl)
-> SK_BPF_MEMCG_EXCLUSIVE
+From: Alexei Starovoitov <ast@kernel.org>
 
-Let's go with the exclusive one.
+Since the combination of valid upper bits in slab->obj_exts with
+OBJEXTS_ALLOC_FAIL bit can never happen,
+use OBJEXTS_ALLOC_FAIL == (1ull << 0) as a magic sentinel
+instead of (1ull << 2) to free up bit 2.
+
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+---
+ include/linux/memcontrol.h | 10 ++++++++--
+ mm/slub.c                  |  2 +-
+ 2 files changed, 9 insertions(+), 3 deletions(-)
+
+diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
+index 785173aa0739..d254c0b96d0d 100644
+--- a/include/linux/memcontrol.h
++++ b/include/linux/memcontrol.h
+@@ -341,17 +341,23 @@ enum page_memcg_data_flags {
+ 	__NR_MEMCG_DATA_FLAGS  = (1UL << 2),
+ };
+ 
++#define __OBJEXTS_ALLOC_FAIL	MEMCG_DATA_OBJEXTS
+ #define __FIRST_OBJEXT_FLAG	__NR_MEMCG_DATA_FLAGS
+ 
+ #else /* CONFIG_MEMCG */
+ 
++#define __OBJEXTS_ALLOC_FAIL	(1UL << 0)
+ #define __FIRST_OBJEXT_FLAG	(1UL << 0)
+ 
+ #endif /* CONFIG_MEMCG */
+ 
+ enum objext_flags {
+-	/* slabobj_ext vector failed to allocate */
+-	OBJEXTS_ALLOC_FAIL = __FIRST_OBJEXT_FLAG,
++	/*
++	 * Use bit 0 with zero other bits to signal that slabobj_ext vector
++	 * failed to allocate. The same bit 0 with valid upper bits means
++	 * MEMCG_DATA_OBJEXTS.
++	 */
++	OBJEXTS_ALLOC_FAIL = __OBJEXTS_ALLOC_FAIL,
+ 	/* the next bit after the last actual flag */
+ 	__NR_OBJEXTS_FLAGS  = (__FIRST_OBJEXT_FLAG << 1),
+ };
+diff --git a/mm/slub.c b/mm/slub.c
+index 212161dc0f29..61841ba72120 100644
+--- a/mm/slub.c
++++ b/mm/slub.c
+@@ -2051,7 +2051,7 @@ static inline void handle_failed_objexts_alloc(unsigned long obj_exts,
+ 	 * objects with no tag reference. Mark all references in this
+ 	 * vector as empty to avoid warnings later on.
+ 	 */
+-	if (obj_exts & OBJEXTS_ALLOC_FAIL) {
++	if (obj_exts == OBJEXTS_ALLOC_FAIL) {
+ 		unsigned int i;
+ 
+ 		for (i = 0; i < objects; i++)
+-- 
+2.47.3
 
