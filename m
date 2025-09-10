@@ -1,260 +1,256 @@
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 863BC1DFD8F;
-	Wed, 10 Sep 2025 02:51:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AB75199BC;
+	Wed, 10 Sep 2025 03:17:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757472717; cv=none; b=iZ4t2BnS6r2sKO2VzSri9VS0fRgtA8HgBIcueePvajMnxCOUXCAkkrqo82632Lu7t2g28AoCN9HBgeFELUgxl6xpN1V/nKXIKvTp0+u7kxLzKMbLXklpU9/6pB1Cp5KsiZGaDcqSTnPO4rvHEQxziz05c2W4hgEolTm5Hi824BU=
+	t=1757474259; cv=none; b=MNybIsRcd+raWiiUfH8/y2r/YnFp6VbsyW7rfgPJT6iHC2IVfhQi+yv+g07EjyZsXEjwP7rXxWLK3J8HnGXl3ZkcuI8ohCgXsH3gJwwvS5FqxX87ybeh1eq39D5lkI6x4qwHChTYB4ugPP/5+H7cZJX+FU9OOqKprDxR9JSYoxM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757472717; c=relaxed/simple;
-	bh=3KTOccWMzr8DxZPfBNk641Us82FbHT4BEw3lrJOsNTs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KAfXIW8Z4+vbcr4MpkSF+NXEhFi2G+ctVBn9VDNrSX5Ods06yL0oJRKp9zrYQnh3KBu6NN9iXuTV9x9lClq6cif7NpoquZszIXpbcnIb8ioAbN5RL2yFXFBYsczgoMv2vca44CDC7+DOOt9RSeQPrIP+ljY54McV6VQCepqeExc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OdsvlRB5; arc=none smtp.client-ip=209.85.210.180
+	s=arc-20240116; t=1757474259; c=relaxed/simple;
+	bh=MD2+xj2LptpSdVsILFkm0RQcgTGiqOOna/dN+j941Lg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=RsXlHI6UN6yaB2p/0UpuDtQ8+Z5UG/fJHRKyJN/s1l47N7W6hrm82xNkjdaiJSh1ak+9elUe5T2q1cwUva4bCAw0EtDcWm3r40dfooZCl7KPtljHwPrKMnt4lDJWz8DeJQpxJGXX/RLBSrfdoswDaVEaEu1uhiBF8aqp/mVa/ug=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=U4CJbwic; arc=none smtp.client-ip=209.85.128.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OdsvlRB5"
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-76e2ea933b7so152237b3a.1;
-        Tue, 09 Sep 2025 19:51:55 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U4CJbwic"
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-71d71bcab6fso58928787b3.0;
+        Tue, 09 Sep 2025 20:17:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757472715; x=1758077515; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1757474256; x=1758079056; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=e2TiZwTLryn0Z2XdO8OaBNvuenSuTUZNT9oHE0TAuq4=;
-        b=OdsvlRB5HOQOkeknasjsr2yiiVvTu2iRfA/by2SOvpU2cGvvx1Pl0lr+xgm6zNEZnW
-         q2v+cOh2Qk2rhQ5umxIzQ19I86OqkXpTJeLb905nKp4+VWSC6PbW8OkeaIHJtse+Rplu
-         pzORfpg81ajsy/wou4Ntj+fVVPKMDUCYVtFJSd8skWkx/sBI5A+e3U5kbgl2M7Ch2JUn
-         kLKzpeqOMcuC5CrUA8OsA+hoBCaou8tFy5Lw66fFY29C6R8P1mySS8setxcUoQQ1tjpA
-         xbF3ZJacTsiqL0Gjcrk3/G6kpJBD+GFWu6wzJyiSVdamg89bxeLLEDVR7jVH7sXuWOPR
-         P/2A==
+        bh=GdI4wzAI+F6qqND7zFZEoC8SvB3//aPvuhJS3lQ10OM=;
+        b=U4CJbwic+erYx+fSkSHwfEXeG7mguFDrDpUAZPH++ceJm7Z8SfS1oOT13ywXdn5YT5
+         3UKAx0y+imvk4YIaC1MMO7D+NVgu2Vl5NHdM3+Ymuw9Dflz/FE3qfRFKiR8gYQ1v5PHD
+         TmmTVRx+QFAgXAhxe9Mr4BalrK800gXJ/+g2QwTdTWHMpiE9wWGwOEvlzjp8Q0tySwYa
+         zeKnj4UATElIuMdtLMKUgzOQxT5xu8nB8MHOpxjTYCfBzrtEQ8H9emU5XtQXcCTGVaIm
+         aXlyh3jMdevrDC2wZF83LQb3uD8Py3Ao3NMlLb876Swg6FyqRQ/fHEDz3PsoINE5/B3P
+         MCyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757472715; x=1758077515;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1757474256; x=1758079056;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=e2TiZwTLryn0Z2XdO8OaBNvuenSuTUZNT9oHE0TAuq4=;
-        b=NyG0zRqzn5Wm3wJ2b+5GizEN7XCXB6x/sahPk3W4cD8F7uxkOYT6BbNr0DH7EhptBO
-         QLftOlnVXt+B6GFUqrGdticvQD2Ll5zorn2hu31ghJVN2op/6v5NqLEAQQWQEn27rZCX
-         qqq6q1rW9vV0WPfJbxsk31a8uzZFlROAbgXZjMce9qECs5otNxWdEwI5k27vV12bzk+x
-         gQYX9noonEZcOIbCAKtjijqnPBZuHO1kGbxRcuf+ZjsdF5hZtnU4BBkLvX4TvawvyHZp
-         SfsJLjQ7b6qcuUB5sJeIwxn0qglaT5HiVdBG6SnXue6doX00RlmOSWRGqsmrn7zcmrUg
-         ov2Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUIrWvx+UPqYe7SsXQIfsbIt4LQ2BrGv1xX3sBDcmYludFzeyG3i6rjuFk+SGNjLb144tBcEhSg96oL@vger.kernel.org, AJvYcCUkmVMzYYcgcCug/zJ2iF9yiETGuRLIOCSEwpUCBC5BgJCc+8HGPhhPntulCZaTaiO8YKLVn2UoJeQ=@vger.kernel.org, AJvYcCV6XFLBieh/v2nG2cbeReaxKuEff/NPPxHWCHqAV0MKs5NzVD8CB8Ab77oWKruO6PHaDB+rozF2L3hjpVc=@vger.kernel.org, AJvYcCVbEVq3eiqq5/Xe0xMNQaOgIrFdEJFm2IMPGYydd8wdH2gegEBhBRiGZtq+8rbTnW5crL/fWvNbJdcoz/co@vger.kernel.org, AJvYcCVnasjWXdxqdHMEcnXz6XmVR9hajXeDbhvHVmEkMvTt2rUpqtj7vesN0t2cBDVtAQgaPjx+0zAl@vger.kernel.org, AJvYcCVpitWN7tS40avVubwTnlL+s+hehfQ5ydrI8amSQ5fNf8PVc39COYmyIo37gIojnIJFkrw=@vger.kernel.org, AJvYcCW0VLTac3ELBXEBio4RauJ/WwHRtgWqphh3xV+IP8CXTGTb2KOkJ1H4pfHWzqZk8MMyx6+Yt5BiyrV2ghE=@vger.kernel.org, AJvYcCWgR3DcXl7aSs/mqCKb3yo5d9EM72TyNYo2BKjpZwlohy8OSL7GyiPSuOAiu0imeGyPozDWb3x4l0zJ@vger.kernel.org, AJvYcCXmSeCGS0mbDbHfA8TX56c3Y48PIw/3KPXee3SKL0g2//g+YyZnP6yWGdK/0PBGwJlJS+vbS6+PjXZ68Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwEP5GU5fz8M7ignn53vwvMAajpehQrlkdueM04+13h4N+VEG/r
-	g76rE/68jUHxLA5IrdXGmdkBmF24Ao2GVEelVB1SOhRNXlwUQXDsR3pY
-X-Gm-Gg: ASbGncuGVdVl3Ih6nBRXgfkxp5IstmIMhAE9lY5JNQ5JQji10fq2OSGHfcCMChe8MFT
-	OM8uEn8S0xvyeFiKSalnt3Dj3xusDnUuiNGKPiOxWdPoOtyodGR3Z7fZlhhjTFaIF4Y9muG2P4y
-	GPzty9mwHPbyVYnVYMvwbCXrvbeISv1eN27Uc3HGs9AUB/eERobPWYmv0/ovGv+6bmgjyACLngj
-	GRoD9RVywOi+PlstH/cu6GnQ18eSbGtzdqapfWnfqz/sZjWoaEl0tqQOMPL+5tV5Nq/lG19NW3b
-	zDqtYg8kIlhmwPq4q9UOgxcQhhWD7oFLemqoqHjW+P7Sn/JBesoCLUk1e5LWkOUAu9bcC2DtS8E
-	pdaf1F1QJok2Uq/acL7MpLnkak+sloBpH9GZy
-X-Google-Smtp-Source: AGHT+IFTyhfnUg3CqVtgOKW3+2pEfzFWWNjw1TnoTWF2WDPCy8Lg+0w3QYglyJRg7NnUo5SJL/6TsA==
-X-Received: by 2002:a05:6a00:882:b0:770:4753:b984 with SMTP id d2e1a72fcca58-7742e4bf142mr18186197b3a.16.1757472714666;
-        Tue, 09 Sep 2025 19:51:54 -0700 (PDT)
-Received: from archie.me ([103.124.138.155])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-77466293757sm3470498b3a.63.2025.09.09.19.51.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Sep 2025 19:51:53 -0700 (PDT)
-Received: by archie.me (Postfix, from userid 1000)
-	id F395041BDD47; Wed, 10 Sep 2025 09:43:52 +0700 (WIB)
-From: Bagas Sanjaya <bagasdotme@gmail.com>
-To: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Documentation <linux-doc@vger.kernel.org>,
-	Linux DAMON <damon@lists.linux.dev>,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Linux Power Management <linux-pm@vger.kernel.org>,
-	Linux Block Devices <linux-block@vger.kernel.org>,
-	Linux BPF <bpf@vger.kernel.org>,
-	Linux Kernel Workflows <workflows@vger.kernel.org>,
-	Linux KASAN <kasan-dev@googlegroups.com>,
-	Linux Devicetree <devicetree@vger.kernel.org>,
-	Linux fsverity <fsverity@lists.linux.dev>,
-	Linux MTD <linux-mtd@lists.infradead.org>,
-	Linux DRI Development <dri-devel@lists.freedesktop.org>,
-	Linux Kernel Build System <linux-kbuild@vger.kernel.org>,
-	Linux Networking <netdev@vger.kernel.org>,
-	Linux Sound <linux-sound@vger.kernel.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>,
-	Borislav Petkov <bp@alien8.de>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	SeongJae Park <sj@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@redhat.com>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Vlastimil Babka <vbabka@suse.cz>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>,
-	Huang Rui <ray.huang@amd.com>,
-	"Gautham R. Shenoy" <gautham.shenoy@amd.com>,
-	Mario Limonciello <mario.limonciello@amd.com>,
-	Perry Yuan <perry.yuan@amd.com>,
-	Jens Axboe <axboe@kernel.dk>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Dwaipayan Ray <dwaipayanray1@gmail.com>,
-	Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-	Joe Perches <joe@perches.com>,
-	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-	Alexander Potapenko <glider@google.com>,
-	Andrey Konovalov <andreyknvl@gmail.com>,
-	Dmitry Vyukov <dvyukov@google.com>,
-	Vincenzo Frascino <vincenzo.frascino@arm.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Eric Biggers <ebiggers@kernel.org>,
-	tytso@mit.edu,
-	Richard Weinberger <richard@nod.at>,
-	Zhihao Cheng <chengzhihao1@huawei.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>,
-	Simona Vetter <simona@ffwll.ch>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nicolas.schier@linux.dev>,
-	Ingo Molnar <mingo@redhat.com>,
-	Will Deacon <will@kernel.org>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	Waiman Long <longman@redhat.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Shay Agroskin <shayagr@amazon.com>,
-	Arthur Kiyanovski <akiyano@amazon.com>,
-	David Arinzon <darinzon@amazon.com>,
-	Saeed Bishara <saeedb@amazon.com>,
-	Andrew Lunn <andrew@lunn.ch>,
-	Alexandru Ciobotaru <alcioa@amazon.com>,
-	The AWS Nitro Enclaves Team <aws-nitro-enclaves-devel@amazon.com>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	Bagas Sanjaya <bagasdotme@gmail.com>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Ranganath V N <vnranganath.20@gmail.com>,
-	Steve French <stfrench@microsoft.com>,
-	Meetakshi Setiya <msetiya@microsoft.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>,
-	Bart Van Assche <bvanassche@acm.org>,
-	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-	Jani Nikula <jani.nikula@intel.com>
-Subject: [PATCH v2 11/13] Documentation: net: Convert external kernel networking docs
-Date: Wed, 10 Sep 2025 09:43:26 +0700
-Message-ID: <20250910024328.17911-12-bagasdotme@gmail.com>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20250910024328.17911-1-bagasdotme@gmail.com>
-References: <20250910024328.17911-1-bagasdotme@gmail.com>
+        bh=GdI4wzAI+F6qqND7zFZEoC8SvB3//aPvuhJS3lQ10OM=;
+        b=IviOHkOSIXgDI7hyAVBMUW7QVUzniCcus6Z6RgtdshU8u74BZZEzVWWJa6EySxbdY/
+         eMJWY7hmNNLheaJE9BlnVh5CfgjqtwecrGSZuTNY/vEiNsv8AyHI/wAd65RcJMH+A2zP
+         PYFuwmpefSclHZ3cvONHf2NbUlWcKGfYYajZtwJrKKs11zA2cpykAAli+Jq2E7QpiWZT
+         5rrGlnOB8elhcGemtYJNeBL225Vi8Fs2A94IGUM00X0Af8CI9USEuDwVtX4VdLqBOBLa
+         Wi1t/i4CdW+UAuR70kr2Lzs2ok6WXphuh8GNoqDYJhsg255edlZnxSUXCmmw4vrgVROz
+         vt2w==
+X-Forwarded-Encrypted: i=1; AJvYcCV+WtPW1TsfAZvR9YYVbjCNhvcABhV5SCzB0lkknVGxkLOKVuAZlkW465roh+nPu8l3unEmiaT8@vger.kernel.org, AJvYcCV9/mzCPrsSwpQIvoyafOI2rX7tcpJlBTik+gm/EyqkSy0eAVkLHIbt2kPfif8EORBnxVvpkZNt3SbUxw==@vger.kernel.org, AJvYcCXWgo5wm21339uzSk4hYPDX52leBff48SSu4c/0sP0sURxD4gPg4Ry+WIUEmtrrLoL08D8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwIGFu0xFtDdejXStI4Jqp0Af12UyrfvIHZG0VgAxGMBlUxXm7d
+	troN+KSd8C66xkNlk8ejC4H6ouKJEL+EfwerNqqBiMBupRScwUyI5leqxdw/NmLu00VLgb/0R5x
+	VhdkvRilB3DPcA99kQOEmbgXAkjvSN94=
+X-Gm-Gg: ASbGnct4YIe69kmkeO1dykHHdNV/+YfByu0rYOra0ILDz+Ydty3T3K7VVsmYBHZhcUR
+	u+8xin2M2oQUUMDj7Rv0jMLppUG5WTVxy+LmxFwwrD7QTJbKMrH3/2VPh46WM+WRDwueHzGf8Ri
+	T36SU+mnLjWG0cn4wl3nab3pmF3qnJNIu6mEChI+yZtqCRHabQP3BMatUHHGzMwDoWElJxrkar6
+	4R6CJuRRglGUGSWyESf
+X-Google-Smtp-Source: AGHT+IEUCGKrpE7FE1JAPbWV8dpAZuhmkJbSMhAAD3bq86SM5SCNUsFLsaTmPjCRUvCHRSRV4qrDmcB2C5sWCNW2O7s=
+X-Received: by 2002:a05:690c:6d0a:b0:726:9be4:97d3 with SMTP id
+ 00721157ae682-727f447af12mr120179977b3.24.1757474256261; Tue, 09 Sep 2025
+ 20:17:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4165; i=bagasdotme@gmail.com; h=from:subject; bh=3KTOccWMzr8DxZPfBNk641Us82FbHT4BEw3lrJOsNTs=; b=owGbwMvMwCX2bWenZ2ig32LG02pJDBkHniglPN1/l+G0b3W08+an+40OlbWa5hi83XTh+GX/4 C8C1xeFdZSyMIhxMciKKbJMSuRrOr3LSORC+1pHmDmsTCBDGLg4BWAiBZEM/4u927OPq/vretv+ eb/f6YB5Kk/Laj31K1IKboVhiko7uxj+pxYZGDy7rZrM+OWh+Y5vk3hP+ti0xKVJLGg67/x7TvV +PgA=
-X-Developer-Key: i=bagasdotme@gmail.com; a=openpgp; fpr=701B806FDCA5D3A58FFB8F7D7C276C64A5E44A1D
-Content-Transfer-Encoding: 8bit
+References: <20250904-cpaasch-pf-927-netmlx5-avoid-copying-the-payload-to-the-malloced-area-v5-0-ea492f7b11ac@openai.com>
+ <20250904-cpaasch-pf-927-netmlx5-avoid-copying-the-payload-to-the-malloced-area-v5-2-ea492f7b11ac@openai.com>
+ <CAMB2axO4ySD2Lo9xzkkYdUqL2tHPcO02-h2HZiWT993wsU3NtA@mail.gmail.com>
+ <CADg4-L92GbxSXaqg1KuoGxt2c_yC=gbmKywVPvcAjHY_7v2H1g@mail.gmail.com> <CADg4-L8dLtzPL-x8o1HAHrbQ2fQ0MxB3Gm68HVj9Jp3-YunwrA@mail.gmail.com>
+In-Reply-To: <CADg4-L8dLtzPL-x8o1HAHrbQ2fQ0MxB3Gm68HVj9Jp3-YunwrA@mail.gmail.com>
+From: Amery Hung <ameryhung@gmail.com>
+Date: Tue, 9 Sep 2025 23:17:25 -0400
+X-Gm-Features: AS18NWCkk4n1M_STsN_x9r8s01l9XdNlMPwVL1F5X0UzpeMOtk3OLSvTVDcHSlE
+Message-ID: <CAMB2axO3d9Wr64RRxYQd8rg5QVxt5MO=ZzRtJG8njeDYNBW-tw@mail.gmail.com>
+Subject: Re: [PATCH net-next v5 2/2] net/mlx5: Avoid copying payload to the
+ skb's linear part
+To: Christoph Paasch <cpaasch@openai.com>
+Cc: Gal Pressman <gal@nvidia.com>, Dragos Tatulea <dtatulea@nvidia.com>, 
+	Saeed Mahameed <saeedm@nvidia.com>, Tariq Toukan <tariqt@nvidia.com>, Mark Bloch <mbloch@nvidia.com>, 
+	Leon Romanovsky <leon@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, netdev@vger.kernel.org, 
+	linux-rdma@vger.kernel.org, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Convert cross-references to kernel networking docs that use external
-links into internal ones.
+On Tue, Sep 9, 2025 at 11:18=E2=80=AFAM Christoph Paasch <cpaasch@openai.co=
+m> wrote:
+>
+> On Mon, Sep 8, 2025 at 9:00=E2=80=AFPM Christoph Paasch <cpaasch@openai.c=
+om> wrote:
+> >
+> > On Thu, Sep 4, 2025 at 4:30=E2=80=AFPM Amery Hung <ameryhung@gmail.com>=
+ wrote:
+> > >
+> > > On Thu, Sep 4, 2025 at 3:57=E2=80=AFPM Christoph Paasch via B4 Relay
+> > > <devnull+cpaasch.openai.com@kernel.org> wrote:
+> > > >
+> > > > From: Christoph Paasch <cpaasch@openai.com>
+> > > >
+> > > > mlx5e_skb_from_cqe_mpwrq_nonlinear() copies MLX5E_RX_MAX_HEAD (256)
+> > > > bytes from the page-pool to the skb's linear part. Those 256 bytes
+> > > > include part of the payload.
+> > > >
+> > > > When attempting to do GRO in skb_gro_receive, if headlen > data_off=
+set
+> > > > (and skb->head_frag is not set), we end up aggregating packets in t=
+he
+> > > > frag_list.
+> > > >
+> > > > This is of course not good when we are CPU-limited. Also causes a w=
+orse
+> > > > skb->len/truesize ratio,...
+> > > >
+> > > > So, let's avoid copying parts of the payload to the linear part. We=
+ use
+> > > > eth_get_headlen() to parse the headers and compute the length of th=
+e
+> > > > protocol headers, which will be used to copy the relevant bits ot t=
+he
+> > > > skb's linear part.
+> > > >
+> > > > We still allocate MLX5E_RX_MAX_HEAD for the skb so that if the netw=
+orking
+> > > > stack needs to call pskb_may_pull() later on, we don't need to real=
+locate
+> > > > memory.
+> > > >
+> > > > This gives a nice throughput increase (ARM Neoverse-V2 with CX-7 NI=
+C and
+> > > > LRO enabled):
+> > > >
+> > > > BEFORE:
+> > > > =3D=3D=3D=3D=3D=3D=3D
+> > > > (netserver pinned to core receiving interrupts)
+> > > > $ netperf -H 10.221.81.118 -T 80,9 -P 0 -l 60 -- -m 256K -M 256K
+> > > >  87380  16384 262144    60.01    32547.82
+> > > >
+> > > > (netserver pinned to adjacent core receiving interrupts)
+> > > > $ netperf -H 10.221.81.118 -T 80,10 -P 0 -l 60 -- -m 256K -M 256K
+> > > >  87380  16384 262144    60.00    52531.67
+> > > >
+> > > > AFTER:
+> > > > =3D=3D=3D=3D=3D=3D
+> > > > (netserver pinned to core receiving interrupts)
+> > > > $ netperf -H 10.221.81.118 -T 80,9 -P 0 -l 60 -- -m 256K -M 256K
+> > > >  87380  16384 262144    60.00    52896.06
+> > > >
+> > > > (netserver pinned to adjacent core receiving interrupts)
+> > > >  $ netperf -H 10.221.81.118 -T 80,10 -P 0 -l 60 -- -m 256K -M 256K
+> > > >  87380  16384 262144    60.00    85094.90
+> > > >
+> > > > Additional tests across a larger range of parameters w/ and w/o LRO=
+, w/
+> > > > and w/o IPv6-encapsulation, different MTUs (1500, 4096, 9000), diff=
+erent
+> > > > TCP read/write-sizes as well as UDP benchmarks, all have shown equa=
+l or
+> > > > better performance with this patch.
+> > > >
+> > > > Reviewed-by: Eric Dumazet <edumazet@google.com>
+> > > > Reviewed-by: Saeed Mahameed <saeedm@nvidia.com>
+> > > > Signed-off-by: Christoph Paasch <cpaasch@openai.com>
+> > > > ---
+> > > >  drivers/net/ethernet/mellanox/mlx5/core/en_rx.c | 5 +++++
+> > > >  1 file changed, 5 insertions(+)
+> > > >
+> > > > diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c b/driv=
+ers/net/ethernet/mellanox/mlx5/core/en_rx.c
+> > > > index 8bedbda522808cbabc8e62ae91a8c25d66725ebb..0ac31c7fb64cd60720d=
+390de45a5b6b453ed0a3f 100644
+> > > > --- a/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c
+> > > > +++ b/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c
+> > > > @@ -2047,6 +2047,8 @@ mlx5e_skb_from_cqe_mpwrq_nonlinear(struct mlx=
+5e_rq *rq, struct mlx5e_mpw_info *w
+> > > >                 dma_sync_single_for_cpu(rq->pdev, addr + head_offse=
+t, headlen,
+> > > >                                         rq->buff.map_dir);
+> > > >
+> > > > +               headlen =3D eth_get_headlen(rq->netdev, head_addr, =
+headlen);
+> > > > +
+> > > >                 frag_offset +=3D headlen;
+> > > >                 byte_cnt -=3D headlen;
+> > > >                 linear_hr =3D skb_headroom(skb);
+> > > > @@ -2123,6 +2125,9 @@ mlx5e_skb_from_cqe_mpwrq_nonlinear(struct mlx=
+5e_rq *rq, struct mlx5e_mpw_info *w
+> > > >                                 pagep->frags++;
+> > > >                         while (++pagep < frag_page);
+> > > >                 }
+> > > > +
+> > > > +               headlen =3D eth_get_headlen(rq->netdev, mxbuf->xdp.=
+data, headlen);
+> > > > +
+> > >
+> > > The size of mxbuf->xdp.data is most likely not headlen here.
+> > >
+> > > The driver currently generates a xdp_buff with empty linear data, pas=
+s
+> > > it to the xdp program and assumes the layout If the xdp program does
+> > > not change the layout of the xdp_buff through bpf_xdp_adjust_head() o=
+r
+> > > bpf_xdp_adjust_tail(). The assumption is not correct and I am working
+> > > on a fix. But, if we keep that assumption for now, mxbuf->xdp.data
+> > > will not contain any headers or payload. The thing that you try to do
+> > > probably should be:
+> > >
+> > >         skb_frag_t *frag =3D &sinfo->frags[0];
+> > >
+> > >         headlen =3D eth_get_headlen(rq->netdev, skb_frag_address(frag=
+),
+> > > skb_frag_size(frag));
+>
+> So, when I look at the headlen I get, it is correct (even with my old
+> code using mxbuf->xdp.data).
+>
+> To make sure I test the right thing, which scenario would
+> mxbuf->xdp.data not contain any headers or payload ? What do I need to
+> do to reproduce that ?
 
-Reviewed-by: Arthur Kiyanovski <akiyano@amazon.com> # ena driver
-Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
----
- .../device_drivers/can/ctu/ctucanfd-driver.rst       |  3 +--
- .../device_drivers/ethernet/amazon/ena.rst           |  4 ++--
- Documentation/networking/ethtool-netlink.rst         |  3 +--
- Documentation/networking/snmp_counter.rst            | 12 +++++-------
- 4 files changed, 9 insertions(+), 13 deletions(-)
+A quick look at the code, could it be that
+skb_flow_dissect_flow_keys_basic() returns false so that
+eth_get_headlen() always returns sizeof(*eth)? The linear part
+contains nothing meaning before __psk_pull_tail(), so it is possible
+for skb_flow_dissect_flow_keys_basic() to fail.
 
-diff --git a/Documentation/networking/device_drivers/can/ctu/ctucanfd-driver.rst b/Documentation/networking/device_drivers/can/ctu/ctucanfd-driver.rst
-index 1661d13174d5b8..4f9f36414333fd 100644
---- a/Documentation/networking/device_drivers/can/ctu/ctucanfd-driver.rst
-+++ b/Documentation/networking/device_drivers/can/ctu/ctucanfd-driver.rst
-@@ -40,8 +40,7 @@ About SocketCAN
- SocketCAN is a standard common interface for CAN devices in the Linux
- kernel. As the name suggests, the bus is accessed via sockets, similarly
- to common network devices. The reasoning behind this is in depth
--described in `Linux SocketCAN <https://www.kernel.org/doc/html/latest/networking/can.html>`_.
--In short, it offers a
-+described in Documentation/networking/can.rst. In short, it offers a
- natural way to implement and work with higher layer protocols over CAN,
- in the same way as, e.g., UDP/IP over Ethernet.
- 
-diff --git a/Documentation/networking/device_drivers/ethernet/amazon/ena.rst b/Documentation/networking/device_drivers/ethernet/amazon/ena.rst
-index 14784a0a6a8a10..b7b314de857b01 100644
---- a/Documentation/networking/device_drivers/ethernet/amazon/ena.rst
-+++ b/Documentation/networking/device_drivers/ethernet/amazon/ena.rst
-@@ -366,9 +366,9 @@ RSS
- 
- DEVLINK SUPPORT
- ===============
--.. _`devlink`: https://www.kernel.org/doc/html/latest/networking/devlink/index.html
- 
--`devlink`_ supports reloading the driver and initiating re-negotiation with the ENA device
-+:doc:`devlink </networking/devlink/index>` supports reloading the driver and
-+initiating re-negotiation with the ENA device
- 
- .. code-block:: shell
- 
-diff --git a/Documentation/networking/ethtool-netlink.rst b/Documentation/networking/ethtool-netlink.rst
-index ab20c644af2485..3445b575cb5d39 100644
---- a/Documentation/networking/ethtool-netlink.rst
-+++ b/Documentation/networking/ethtool-netlink.rst
-@@ -1100,8 +1100,7 @@ This feature is mainly of interest for specific USB devices which does not cope
- well with frequent small-sized URBs transmissions.
- 
- ``ETHTOOL_A_COALESCE_RX_PROFILE`` and ``ETHTOOL_A_COALESCE_TX_PROFILE`` refer
--to DIM parameters, see `Generic Network Dynamic Interrupt Moderation (Net DIM)
--<https://www.kernel.org/doc/Documentation/networking/net_dim.rst>`_.
-+to DIM parameters, see Documentation/networking/net_dim.rst.
- 
- COALESCE_SET
- ============
-diff --git a/Documentation/networking/snmp_counter.rst b/Documentation/networking/snmp_counter.rst
-index ff1e6a8ffe2164..c51d6ca9eff2c7 100644
---- a/Documentation/networking/snmp_counter.rst
-+++ b/Documentation/networking/snmp_counter.rst
-@@ -782,13 +782,11 @@ TCP ACK skip
- ============
- In some scenarios, kernel would avoid sending duplicate ACKs too
- frequently. Please find more details in the tcp_invalid_ratelimit
--section of the `sysctl document`_. When kernel decides to skip an ACK
--due to tcp_invalid_ratelimit, kernel would update one of below
--counters to indicate the ACK is skipped in which scenario. The ACK
--would only be skipped if the received packet is either a SYN packet or
--it has no data.
--
--.. _sysctl document: https://www.kernel.org/doc/Documentation/networking/ip-sysctl.rst
-+section of the Documentation/networking/ip-sysctl.rst. When kernel
-+decides to skip an ACK due to tcp_invalid_ratelimit, kernel would
-+update one of below counters to indicate the ACK is skipped in
-+which scenario. The ACK would only be skipped if the received
-+packet is either a SYN packet or it has no data.
- 
- * TcpExtTCPACKSkippedSynRecv
- 
--- 
-An old man doll... just what I always wanted! - Clara
+>
+> Thanks,
+> Christoph
+>
+> >
+> > Ok, I think I understand what you mean! Thanks for taking the time to e=
+xplain!
+> >
+> > I will do some tests on my side to make sure I get it right.
+> >
+> > As your change goes to net and mine to netnext, I can wait until yours
+> > is in the tree so that there aren't any conflicts that need to be
+> > taken care of.
 
+Will Copy you in the mlx5 non-linear xdp fixing patchset.
+
+> >
+> >
+> > Christoph
+> >
+> > >
+> > >
+> > >
+> > > >                 __pskb_pull_tail(skb, headlen);
+> > > >         } else {
+> > > >                 if (xdp_buff_has_frags(&mxbuf->xdp)) {
+> > > >
+> > > > --
+> > > > 2.50.1
+> > > >
+> > > >
