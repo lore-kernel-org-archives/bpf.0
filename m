@@ -1,22 +1,21 @@
 Received: from plesk.hostmyservers.fr (plesk.hostmyservers.fr [45.145.164.37])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4209128489D;
-	Fri, 12 Sep 2025 23:36:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F32426D4EF;
+	Fri, 12 Sep 2025 23:40:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.145.164.37
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757720170; cv=none; b=h/H47QwYl0jsejsXu+pEW6EAXnw72476d47+rLbCf/6n3F95MA89vMNsQNF2iV866xmF8CooBu4KREyv+P1JPnpXHhIm2cnA/gdFBK/2m7+7tixPFoOH1TviMH3iWSUGtcTFBFjDgCite8Ff9lTVeFaI6ST7KZga/nSSQAtSm14=
+	t=1757720411; cv=none; b=ZJapoUq67s0LH56HuarRimlrQ4xMqaOQQmpSYoiQ9mckwsSv240Sv5SmAZykSAkoAQe7ZSo9uf1kcTwuRnO2+dxtNRqJ5iBNk+8Tky3W6u0A4Q9p/dHgqT2HxgmhPVq9+G7Co2ptE6gb1kRXOeg6X3CZmftw+eppQDO2Eqc1plI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757720170; c=relaxed/simple;
-	bh=6uGhFrL17N+32Nuc6ZMq/+AyTyb52dRPz7G0SdniNKM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=u6Xmv8QgH70DY5lfy8mw/OfMF3SfWw/YeCdCn/oIz1jIroCRZnosc6cAlsfygTYt7VVvLNMK+U47/8ao+T5RrKP+ICPOyqK9JfFvsQ7XT+BrZyddJGdsu4Hn8Hsxb5HnXBra7InAgNNvFn5gJ94z5zNfhpbBK+mp41QVg/qgjeQ=
+	s=arc-20240116; t=1757720411; c=relaxed/simple;
+	bh=ALrO9M8gBNByn8rkQ0DpqNVGoyHxIJFif9e88v21F7A=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CTEXKgoiETZmPB+J1Jnuvo8ceociJ0QTd8VgYTPJuwtVgRdOM/bVxu1GRdj2asxVXkqR61jPIdz3VdA2MjuzKI3pYDfG1yjyJ7qI+eQMWkdIOyaKg9uLIKfQQM8y6MxqDd0FVs3XTUhoWWTq7n7YHtLu34Rjekp1++F54he3ZAQ=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=arnaud-lcm.com; spf=pass smtp.mailfrom=arnaud-lcm.com; arc=none smtp.client-ip=45.145.164.37
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=arnaud-lcm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arnaud-lcm.com
 Received: from arnaudlcm-X570-UD.. (unknown [IPv6:2a02:8084:255b:aa00:186b:e316:24ee:afec])
-	by plesk.hostmyservers.fr (Postfix) with ESMTPSA id ADF9741666;
-	Fri, 12 Sep 2025 23:36:05 +0000 (UTC)
+	by plesk.hostmyservers.fr (Postfix) with ESMTPSA id 656424022C;
+	Fri, 12 Sep 2025 23:34:16 +0000 (UTC)
 Authentication-Results: Plesk;
 	spf=pass (sender IP is 2a02:8084:255b:aa00:186b:e316:24ee:afec) smtp.mailfrom=contact@arnaud-lcm.com smtp.helo=arnaudlcm-X570-UD..
 Received-SPF: pass (Plesk: connection is authenticated)
@@ -39,13 +38,11 @@ Cc: andrii@kernel.org,
 	syzbot+c9b724fbb41cf2538b7b@syzkaller.appspotmail.com,
 	syzkaller-bugs@googlegroups.com,
 	contact@arnaud-lcm.com
-Subject: [PATCH bpf-next v9 3/3] bpf: fix stackmap overflow check in
- __bpf_get_stackid()
-Date: Sat, 13 Sep 2025 00:35:58 +0100
-Message-ID: <20250912233558.75076-1-contact@arnaud-lcm.com>
+Subject: [PATCH bpf-next v9 1/3] bpf: refactor max_depth computation in
+ bpf_get_stack()
+Date: Sat, 13 Sep 2025 00:34:09 +0100
+Message-ID: <20250912233409.74900-1-contact@arnaud-lcm.com>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250912233509.74996-1-contact@arnaud-lcm.com>
-References: <20250912233509.74996-1-contact@arnaud-lcm.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -53,114 +50,134 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-PPP-Message-ID: <175772016664.3971.581423742891501353@Plesk>
+X-PPP-Message-ID: <175772005728.2166.1193317056877954951@Plesk>
 X-PPP-Vhost: arnaud-lcm.com
 
-Syzkaller reported a KASAN slab-out-of-bounds write in __bpf_get_stackid()
-when copying stack trace data. The issue occurs when the perf trace
- contains more stack entries than the stack map bucket can hold,
- leading to an out-of-bounds write in the bucket's data array.
+A new helper function stack_map_calculate_max_depth() that
+computes the max depth for a stackmap.
 
-Reported-by: syzbot+c9b724fbb41cf2538b7b@syzkaller.appspotmail.com
-Closes: https://syzkaller.appspot.com/bug?extid=c9b724fbb41cf2538b7b
-Fixes: ee2a098851bf ("bpf: Adjust BPF stack helper functions to accommodate skip > 0")
 Acked-by: Yonghong Song <yonghong.song@linux.dev>
 Acked-by: Song Liu <song@kernel.org>
 Signed-off-by: Arnaud Lecomte <contact@arnaud-lcm.com>
 ---
 Changes in v2:
- - Fixed max_depth names across get stack id
+ - Removed the checking 'map_size % map_elem_size' from
+   stack_map_calculate_max_depth
+ - Changed stack_map_calculate_max_depth params name to be more generic
+
+Changes in v3:
+ - Changed map size param to size in max depth helper
 
 Changes in v4:
- - Removed unnecessary empty line in __bpf_get_stackid
+ - Fixed indentation in max depth helper for args
+
+Changes in v5:
+ - Bound back trace_nr to num_elem in __bpf_get_stack
+ - Make a copy of sysctl_perf_event_max_stack
+   in stack_map_calculate_max_depth
 
 Changes in v6:
- - Added back trace_len computation in __bpf_get_stackid
+ - Restrained max_depth computation only when required
+ - Additional cleanup from Song in __bpf_get_stack
 
 Changes in v7:
- - Removed usefull trace->nr assignation in bpf_get_stackid_pe
- - Added restoration of trace->nr for both kernel and user traces
-   in bpf_get_stackid_pe
+ - Removed additional cleanup from v6
 
 Changes in v9:
- - Fixed variable declarations in bpf_get_stackid_pe
- - Added the missing truncate of trace_nr in __bpf_getstackid
+ - Fixed incorrect removal of num_elem in get stack
 
-Link to v8: https://lore.kernel.org/all/20250905134833.26791-1-contact@arnaud-lcm.com/
+Link to v8: https://lore.kernel.org/all/20250905134625.26531-1-contact@arnaud-lcm.com/
 ---
 ---
- kernel/bpf/stackmap.c | 21 ++++++++++++++++-----
- 1 file changed, 16 insertions(+), 5 deletions(-)
+ kernel/bpf/stackmap.c | 39 +++++++++++++++++++++++++++------------
+ 1 file changed, 27 insertions(+), 12 deletions(-)
 
 diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
-index 9a86b5acac10..ac5ec3253ce6 100644
+index 3615c06b7dfa..a794e04f5ae9 100644
 --- a/kernel/bpf/stackmap.c
 +++ b/kernel/bpf/stackmap.c
-@@ -251,8 +251,8 @@ static long __bpf_get_stackid(struct bpf_map *map,
- {
- 	struct bpf_stack_map *smap = container_of(map, struct bpf_stack_map, map);
- 	struct stack_map_bucket *bucket, *new_bucket, *old_bucket;
-+	u32 hash, id, trace_nr, trace_len, i, max_storable;
- 	u32 skip = flags & BPF_F_SKIP_FIELD_MASK;
--	u32 hash, id, trace_nr, trace_len, i;
- 	bool user = flags & BPF_F_USER_STACK;
- 	u64 *ips;
- 	bool hash_matches;
-@@ -261,7 +261,9 @@ static long __bpf_get_stackid(struct bpf_map *map,
- 		/* skipping more than usable stack trace */
- 		return -EFAULT;
- 
-+	max_storable = map->value_size / stack_map_data_size(map);
- 	trace_nr = trace->nr - skip;
-+	trace_nr = min_t(u32, trace_nr, max_storable);
- 	trace_len = trace_nr * sizeof(u64);
- 	ips = trace->ip + skip;
- 	hash = jhash2((u32 *)ips, trace_len / sizeof(u32), 0);
-@@ -369,6 +371,7 @@ BPF_CALL_3(bpf_get_stackid_pe, struct bpf_perf_event_data_kern *, ctx,
- {
- 	struct perf_event *event = ctx->event;
- 	struct perf_callchain_entry *trace;
-+	u32 elem_size, max_depth;
- 	bool kernel, user;
- 	__u64 nr_kernel;
- 	int ret;
-@@ -390,15 +393,16 @@ BPF_CALL_3(bpf_get_stackid_pe, struct bpf_perf_event_data_kern *, ctx,
- 		return -EFAULT;
- 
- 	nr_kernel = count_kernel_ip(trace);
-+	elem_size = stack_map_data_size(map);
-+	__u64 nr = trace->nr; /* save original */
- 
- 	if (kernel) {
--		__u64 nr = trace->nr;
--
- 		trace->nr = nr_kernel;
-+		max_depth =
-+			stack_map_calculate_max_depth(map->value_size, elem_size, flags);
-+		trace->nr = min_t(u32, nr_kernel, max_depth);
- 		ret = __bpf_get_stackid(map, trace, flags);
- 
--		/* restore nr */
--		trace->nr = nr;
- 	} else { /* user */
- 		u64 skip = flags & BPF_F_SKIP_FIELD_MASK;
- 
-@@ -407,8 +411,15 @@ BPF_CALL_3(bpf_get_stackid_pe, struct bpf_perf_event_data_kern *, ctx,
- 			return -EFAULT;
- 
- 		flags = (flags & ~BPF_F_SKIP_FIELD_MASK) | skip;
-+		max_depth =
-+			stack_map_calculate_max_depth(map->value_size, elem_size, flags);
-+		trace->nr = min_t(u32, trace->nr, max_depth);
- 		ret = __bpf_get_stackid(map, trace, flags);
- 	}
-+
-+	/* restore nr */
-+	trace->nr = nr;
-+
- 	return ret;
+@@ -42,6 +42,28 @@ static inline int stack_map_data_size(struct bpf_map *map)
+ 		sizeof(struct bpf_stack_build_id) : sizeof(u64);
  }
  
++/**
++ * stack_map_calculate_max_depth - Calculate maximum allowed stack trace depth
++ * @size:  Size of the buffer/map value in bytes
++ * @elem_size:  Size of each stack trace element
++ * @flags:  BPF stack trace flags (BPF_F_USER_STACK, BPF_F_USER_BUILD_ID, ...)
++ *
++ * Return: Maximum number of stack trace entries that can be safely stored
++ */
++static u32 stack_map_calculate_max_depth(u32 size, u32 elem_size, u64 flags)
++{
++	u32 skip = flags & BPF_F_SKIP_FIELD_MASK;
++	u32 max_depth;
++	u32 curr_sysctl_max_stack = READ_ONCE(sysctl_perf_event_max_stack);
++
++	max_depth = size / elem_size;
++	max_depth += skip;
++	if (max_depth > curr_sysctl_max_stack)
++		return curr_sysctl_max_stack;
++
++	return max_depth;
++}
++
+ static int prealloc_elems_and_freelist(struct bpf_stack_map *smap)
+ {
+ 	u64 elem_size = sizeof(struct stack_map_bucket) +
+@@ -300,20 +322,17 @@ static long __bpf_get_stackid(struct bpf_map *map,
+ BPF_CALL_3(bpf_get_stackid, struct pt_regs *, regs, struct bpf_map *, map,
+ 	   u64, flags)
+ {
+-	u32 max_depth = map->value_size / stack_map_data_size(map);
+-	u32 skip = flags & BPF_F_SKIP_FIELD_MASK;
++	u32 elem_size = stack_map_data_size(map);
+ 	bool user = flags & BPF_F_USER_STACK;
+ 	struct perf_callchain_entry *trace;
+ 	bool kernel = !user;
++	u32 max_depth;
+ 
+ 	if (unlikely(flags & ~(BPF_F_SKIP_FIELD_MASK | BPF_F_USER_STACK |
+ 			       BPF_F_FAST_STACK_CMP | BPF_F_REUSE_STACKID)))
+ 		return -EINVAL;
+ 
+-	max_depth += skip;
+-	if (max_depth > sysctl_perf_event_max_stack)
+-		max_depth = sysctl_perf_event_max_stack;
+-
++	max_depth = stack_map_calculate_max_depth(map->value_size, elem_size, flags);
+ 	trace = get_perf_callchain(regs, 0, kernel, user, max_depth,
+ 				   false, false);
+ 
+@@ -406,7 +425,7 @@ static long __bpf_get_stack(struct pt_regs *regs, struct task_struct *task,
+ 			    struct perf_callchain_entry *trace_in,
+ 			    void *buf, u32 size, u64 flags, bool may_fault)
+ {
+-	u32 trace_nr, copy_len, elem_size, num_elem, max_depth;
++	u32 trace_nr, copy_len, elem_size, max_depth;
+ 	bool user_build_id = flags & BPF_F_USER_BUILD_ID;
+ 	bool crosstask = task && task != current;
+ 	u32 skip = flags & BPF_F_SKIP_FIELD_MASK;
+@@ -438,10 +457,7 @@ static long __bpf_get_stack(struct pt_regs *regs, struct task_struct *task,
+ 		goto clear;
+ 	}
+ 
+-	num_elem = size / elem_size;
+-	max_depth = num_elem + skip;
+-	if (sysctl_perf_event_max_stack < max_depth)
+-		max_depth = sysctl_perf_event_max_stack;
++	max_depth = stack_map_calculate_max_depth(size, elem_size, flags);
+ 
+ 	if (may_fault)
+ 		rcu_read_lock(); /* need RCU for perf's callchain below */
+@@ -461,7 +477,6 @@ static long __bpf_get_stack(struct pt_regs *regs, struct task_struct *task,
+ 	}
+ 
+ 	trace_nr = trace->nr - skip;
+-	trace_nr = (trace_nr <= num_elem) ? trace_nr : num_elem;
+ 	copy_len = trace_nr * elem_size;
+ 
+ 	ips = trace->ip + skip;
 -- 
 2.43.0
 
