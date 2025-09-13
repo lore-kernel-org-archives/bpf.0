@@ -1,62 +1,62 @@
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 190AD24A078
-	for <bpf@vger.kernel.org>; Sat, 13 Sep 2025 19:33:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9129B24A078
+	for <bpf@vger.kernel.org>; Sat, 13 Sep 2025 19:33:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757792028; cv=none; b=uyG0aBYZ9e2OgEfxQ1dlq8Jil3h0xDiemtcJ1v573MP9Cy1Ep5T5psXAErKpwOZAgKYRg3eijEg/PnczD6LkyYZNWhoeg3+ssf4Lbr4FRx2doVxyqSYawlNDaEDmhFBebiBaNAjXK7dmvpxcBdIABXfKJmBFiK+dFG/P5o55Veg=
+	t=1757792031; cv=none; b=eQZ1Uy6KuKzb8UEDHyddGwDSej7lzWTjU2xlLMtxfULMjFNKyv2ywbk9sYYD7T/d6c/LzaAQVdtEpap4vPPXmvY3D2nI2lSDxkADeO3aIQojREfXcffahILE4E1uHTTJ8wcjL18LUQMHW8asqgTGRqdUDOojOd3h73peCcOE9iY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757792028; c=relaxed/simple;
-	bh=ZBu0hxEf8gBQIW9phpB5YWnHl1+ES4a+3qN7zp3D+sc=;
+	s=arc-20240116; t=1757792031; c=relaxed/simple;
+	bh=p+1tb0+ufMR8mi9KHSlxFMXhJqZ6E01JDFhbXdcFfrg=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=HbeRl+O8vvI1f8ZRDVOxlxGHSMhSPl2YVdpIRht8Z8/HgG13tdMfcJBo5UMqiSaMigITIq1Aigf4gvHFiSaza1dCw22YXwI9E6g/MC244a3tjqh7A2nRgkX8t344v/vAN4xEYVfkFIAxefcNoDmT+l1ilTu3PAZJ0l5sOHN17eQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MpRV/qJ+; arc=none smtp.client-ip=209.85.128.51
+	 MIME-Version; b=lR6G6i9eBOiHk9ggaqVfnQbzESOhAvQEZScqAo2XyDVlixtN6y6k69BDLqsqTeNhm7CasJ9yiCIZqG6IhroXOiALfP4GpepMWwl87d3m/flNi9HmlMm9J2AQXS8xiGeDDgQvnpXdQ2SW1sVgRkjrbGqStQlyjvnQWh5jef5+kaY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AWGOUB23; arc=none smtp.client-ip=209.85.128.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MpRV/qJ+"
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-45dec026c78so28869915e9.0
-        for <bpf@vger.kernel.org>; Sat, 13 Sep 2025 12:33:46 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AWGOUB23"
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-45f29d2357aso2073315e9.2
+        for <bpf@vger.kernel.org>; Sat, 13 Sep 2025 12:33:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757792025; x=1758396825; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1757792027; x=1758396827; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=fCf39Yeh2Rl3Ijb+ZRoCRxmNecYknQI1W/2SSguxpUQ=;
-        b=MpRV/qJ+knEnye5p0FZ0HKNUQS3aNJsosGo/SOMTZdZNZOQfe6lxZszzgSIR9UH1+L
-         rVcEROhGd0fsw9DEljF7TliRwhzFtTvnVx8XCvBE66h+ayAgaMAGIXKqxEzM70em32hq
-         t5WHwSjX8a+/5STJCXUeKHdkYUL+O8ZBaLxcvs3hYclkTIETbV9odS/AwzaZlMpOMLC9
-         Or/leDaE9S209h2KylpIsviT8K+Q/s97wYEhnpBGNpSMPhHBxsBYK9vuFtjwVkr+GWyt
-         tzyYP/qCbfCs4ONNEtOZ9MH8Bhaca8LY/MdgiaOG+EMNzdIiKv3E7urmKaBMEIKbCrPF
-         7Hrg==
+        bh=HGFmglX9ntkMa21X1QYrI4OYcQl0TXe/Uyvf274nJOE=;
+        b=AWGOUB23wHQw39EZJSzdUjGYSNRExlZnValbEogzsMPspf/z3YZdw2k3ZzUMk1KLqC
+         XYzWHXlxgO/yANL5qiA7FUTlbwi8eyzEZMpVQv68W2xaxbrULvdOlyAQrtvgGhfcrmvK
+         NF/QIRmksyjusgUWxEzh2Za04STG4VszI+yXtevgixL/FCPEzI6+CwLIKB4dCrHsU51+
+         Wk7plYnkmFoOjqqRglXrU2XZd2DRaMjCnpYjgUzqONcs6/kZPJRLzk7LVSqX8TbednpI
+         VTu7oP9l1zGixItWiC5MSfFTV/YeuN7/hijodPzL6W4Rn0g3SKxUard/8ih8XfeSjRVW
+         8Hzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757792025; x=1758396825;
+        d=1e100.net; s=20230601; t=1757792027; x=1758396827;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=fCf39Yeh2Rl3Ijb+ZRoCRxmNecYknQI1W/2SSguxpUQ=;
-        b=jsvYL3SpZFnYbyg8HGXf0ySLa6a+3ZiqNF3Rzo/5IIxdaQd0RGcG2nvZMG0Vehentj
-         xm9KzQkUL0P+LLBtii+Mg7B5qWRPT4A88LDx9+U3I7Q7v9Cz6TRVnM57Hu/owK8ctfgO
-         QX/iWCtCM2gJ7UwiGszYxpdW8Gx9oxJNbajxTQY9e0u0DMvcz2wYYwgwH3SYjyIdfGIK
-         2gz3Ap/fSmpJHVZ8ksjFSaNabaBAyAQXrPc/o6plXTeKcv1AxL1tKLdZzr+2uMPUr/vl
-         XVmVzxPe0k+3+fYwcElz58DDCgHaIs1O/mdLn49PzvXljKBEja4GqWTdrOscAdIrl5Wo
-         mVPQ==
-X-Gm-Message-State: AOJu0Yx5K9hMputYINEgsUof/Al5O1RXVGQQ6cRnGwOkPmZnhQaZnak6
-	6ylPxhLVtx0BgpYkJmrFzgA+4Tbff5B62XFhv19H4vsDPa39BCUwQuUhjCizFg==
-X-Gm-Gg: ASbGnctf5mf/F747Rf/hOJAJPjpKbzH42DljaVyQt7D6SFCesMJSiYGIeLhnj3IRcTU
-	eBgNeuYkwoNCzPHWkjI99TSEckQOCU2qb/vziIxi1RzX9bRUGPWGvvDc1Z2zIeF1T5OW6s1cGKP
-	Ct5rOyi+FqsQrhapXROtfjyxuC5JJIHDkxc6vNboFwkPggc96L5qfWlPR2SD8yIB4qI6oYBpa8E
-	NfAgOy4lV4euaehUwc9jXKNMPw6dG64OjRfuUHOWzH0FtEs2TajrdLnZM7zYIw+Nxig836kZFuK
-	9rIDQqi64SpWMOZ5aMJmryatHQYZYPPiuVkahwd4Ijqdxdus7VNiORGphG9icrPKz8KIm9xhYMO
-	fzNm4wEuSvXz5yJg+ZObXTxcMrHhesHe5XRxpy3L4zY6Aiideg3dVneq435LB8gc=
-X-Google-Smtp-Source: AGHT+IF/v1LQIIXIldn0/Ys0lpKyz4HOes/o2KSeebazhnwmOPbUyA8ja7XXF89lf79LxefKMmpnfg==
-X-Received: by 2002:a05:600c:1d0f:b0:453:6ca:16b1 with SMTP id 5b1f17b1804b1-45f21ed4986mr67007765e9.26.1757792025097;
-        Sat, 13 Sep 2025 12:33:45 -0700 (PDT)
+        bh=HGFmglX9ntkMa21X1QYrI4OYcQl0TXe/Uyvf274nJOE=;
+        b=KH9Dw1bI1KM1uF8Jx280TCwlLcdfI+btusnlYIVTMJJSlBjH7YQGncO2+zcYV5s8xX
+         JhblOSftkWXSH1vG2K7r/TpttxnX8+QCtHCjx0A0WtReDECgiIUMUEVzc81yEVwcjlaN
+         HrgGwjzezglxwUNvA9yYoC6SF01n5KCtToGVB4aO7+x1XaGo0nvVAamdpJtwywfbHBX+
+         GR91Aio+wT1msVP5/J0SJOzbu33jDMTfzDAWTlVU04hieK6KmHvus4pBQJqTY9t977kj
+         Fn8+R1fvmoy7jPV6EsH6FO0b1ln8PHQmHFxxuHIt/nIzpTRkEec1BDam3NV/c6tvu04+
+         FYvw==
+X-Gm-Message-State: AOJu0Yw4TG8RfYkpfom1xZRqDscjjtCnn3R7953u+VMBwl+o1Z2sy/et
+	6dhnrUZo1ez5gSwZgqd6hXgJna6E0WiBqzu/bEkOQgmKxCBJweg6zfmsuWE3vw==
+X-Gm-Gg: ASbGncs6sWaOHCf31we3ZJEh+p/J7HoJHXPgAIlJBKXkv9iVf1KePtSpd92CYjf5meT
+	szwWtUrbCLYk0JevglHy9Z6y0rVnTbK03w9cBF/netyApIKbDjjp8c4ALdAyixX5BidLesap6Qu
+	bMTK/W/lFfCop37HDJ+FyjE5goSlS2N/zWV4KNsYBUvO94TyIyYEtW0QBUFzCXBPzQMmNAfIx3S
+	eNW03gwrShJfM4NnhcVPLjvn9I3ugANVIHiAj+4r4y1rSbwq8WWz7iyxGpgs59PYnGeiwlTftYc
+	0Uco+9m6o/KAQWQL7eWEB6t106t5OBWKL8rdyh1+G9ceTCG6zPcfGHW8g1sMZ2hDfUogjD/UlFc
+	LVLHXKeHRIzucVmMyg2d7nOerBPsPiHX3lJwbA5myYH8t7anB7PBv
+X-Google-Smtp-Source: AGHT+IGi4+UkGKdKqIQbnfMSMU6sxf9e8CDL/X67x7ZSzUD3DKs22+PSi2mEqsrjd7e2ACUzKDsbTA==
+X-Received: by 2002:a05:600c:c8d:b0:45d:f7e4:87a3 with SMTP id 5b1f17b1804b1-45f214ac212mr49799005e9.3.1757792027445;
+        Sat, 13 Sep 2025 12:33:47 -0700 (PDT)
 Received: from localhost.localdomain ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3e7ff9f77c4sm4948753f8f.27.2025.09.13.12.33.44
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3e7ff9f77c4sm4948753f8f.27.2025.09.13.12.33.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 13 Sep 2025 12:33:44 -0700 (PDT)
+        Sat, 13 Sep 2025 12:33:46 -0700 (PDT)
 From: Anton Protopopov <a.s.protopopov@gmail.com>
 To: bpf@vger.kernel.org,
 	Alexei Starovoitov <ast@kernel.org>,
@@ -67,9 +67,9 @@ To: bpf@vger.kernel.org,
 	Quentin Monnet <qmo@kernel.org>,
 	Yonghong Song <yonghong.song@linux.dev>
 Cc: Anton Protopopov <a.s.protopopov@gmail.com>
-Subject: [PATCH v2 bpf-next 07/13] bpf, x86: allow indirect jumps to r8...r15
-Date: Sat, 13 Sep 2025 19:39:16 +0000
-Message-Id: <20250913193922.1910480-8-a.s.protopopov@gmail.com>
+Subject: [PATCH v2 bpf-next 09/13] bpf: disasm: add support for BPF_JMP|BPF_JA|BPF_X
+Date: Sat, 13 Sep 2025 19:39:18 +0000
+Message-Id: <20250913193922.1910480-10-a.s.protopopov@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20250913193922.1910480-1-a.s.protopopov@gmail.com>
 References: <20250913193922.1910480-1-a.s.protopopov@gmail.com>
@@ -81,83 +81,50 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Currently the emit_indirect_jump() function only accepts one of the
-RAX, RCX, ..., RBP registers as the destination. Make it to accept
-R8, R9, ..., R15 as well, and make callers to pass BPF registers, not
-native registers. This is required to enable indirect jumps support
-in eBPF.
+Add support for indirect jump instruction.
+
+Example output from bpftool:
+
+   0: (79) r3 = *(u64 *)(r1 +0)
+   1: (25) if r3 > 0x4 goto pc+666
+   2: (67) r3 <<= 3
+   3: (18) r1 = 0xffffbeefspameggs
+   5: (0f) r1 += r3
+   6: (79) r1 = *(u64 *)(r1 +0)
+   7: (0d) gotox r1
 
 Signed-off-by: Anton Protopopov <a.s.protopopov@gmail.com>
 ---
- arch/x86/net/bpf_jit_comp.c | 28 +++++++++++++++++++++-------
- 1 file changed, 21 insertions(+), 7 deletions(-)
+ kernel/bpf/disasm.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index 8792d7f371d3..fcebb48742ae 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -660,24 +660,38 @@ int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type t,
+diff --git a/kernel/bpf/disasm.c b/kernel/bpf/disasm.c
+index 20883c6b1546..4a1ecc6f7582 100644
+--- a/kernel/bpf/disasm.c
++++ b/kernel/bpf/disasm.c
+@@ -183,6 +183,13 @@ static inline bool is_mov_percpu_addr(const struct bpf_insn *insn)
+ 	return insn->code == (BPF_ALU64 | BPF_MOV | BPF_X) && insn->off == BPF_ADDR_PERCPU;
+ }
  
- #define EMIT_LFENCE()	EMIT3(0x0F, 0xAE, 0xE8)
- 
--static void emit_indirect_jump(u8 **pprog, int reg, u8 *ip)
-+static void __emit_indirect_jump(u8 **pprog, int reg, bool ereg)
- {
- 	u8 *prog = *pprog;
- 
-+	if (ereg)
-+		EMIT1(0x41);
-+
-+	EMIT2(0xFF, 0xE0 + reg);
-+
-+	*pprog = prog;
++static void print_bpf_ja_indirect(bpf_insn_print_t verbose,
++				  void *private_data,
++				  const struct bpf_insn *insn)
++{
++	verbose(private_data, "(%02x) gotox r%d\n", insn->code, insn->dst_reg);
 +}
 +
-+static void emit_indirect_jump(u8 **pprog, int bpf_reg, u8 *ip)
-+{
-+	u8 *prog = *pprog;
-+	int reg = reg2hex[bpf_reg];
-+	bool ereg = is_ereg(bpf_reg);
-+
- 	if (cpu_feature_enabled(X86_FEATURE_INDIRECT_THUNK_ITS)) {
- 		OPTIMIZER_HIDE_VAR(reg);
- 		emit_jump(&prog, its_static_thunk(reg), ip);
- 	} else if (cpu_feature_enabled(X86_FEATURE_RETPOLINE_LFENCE)) {
- 		EMIT_LFENCE();
--		EMIT2(0xFF, 0xE0 + reg);
-+		__emit_indirect_jump(pprog, reg, ereg);
- 	} else if (cpu_feature_enabled(X86_FEATURE_RETPOLINE)) {
- 		OPTIMIZER_HIDE_VAR(reg);
- 		if (cpu_feature_enabled(X86_FEATURE_CALL_DEPTH))
--			emit_jump(&prog, &__x86_indirect_jump_thunk_array[reg], ip);
-+			emit_jump(&prog, &__x86_indirect_jump_thunk_array[reg + 8*ereg], ip);
- 		else
--			emit_jump(&prog, &__x86_indirect_thunk_array[reg], ip);
-+			emit_jump(&prog, &__x86_indirect_thunk_array[reg + 8*ereg], ip);
- 	} else {
--		EMIT2(0xFF, 0xE0 + reg);	/* jmp *%\reg */
-+		__emit_indirect_jump(pprog, reg, ereg);
- 		if (IS_ENABLED(CONFIG_MITIGATION_RETPOLINE) || IS_ENABLED(CONFIG_MITIGATION_SLS))
- 			EMIT1(0xCC);		/* int3 */
- 	}
-@@ -797,7 +811,7 @@ static void emit_bpf_tail_call_indirect(struct bpf_prog *bpf_prog,
- 	 * rdi == ctx (1st arg)
- 	 * rcx == prog->bpf_func + X86_TAIL_CALL_OFFSET
- 	 */
--	emit_indirect_jump(&prog, 1 /* rcx */, ip + (prog - start));
-+	emit_indirect_jump(&prog, BPF_REG_4 /* R4 -> rcx */, ip + (prog - start));
- 
- 	/* out: */
- 	ctx->tail_call_indirect_label = prog - start;
-@@ -3517,7 +3531,7 @@ static int emit_bpf_dispatcher(u8 **pprog, int a, int b, s64 *progs, u8 *image,
- 		if (err)
- 			return err;
- 
--		emit_indirect_jump(&prog, 2 /* rdx */, image + (prog - buf));
-+		emit_indirect_jump(&prog, BPF_REG_3 /* R3 -> rdx */, image + (prog - buf));
- 
- 		*pprog = prog;
- 		return 0;
+ void print_bpf_insn(const struct bpf_insn_cbs *cbs,
+ 		    const struct bpf_insn *insn,
+ 		    bool allow_ptr_leaks)
+@@ -358,6 +365,8 @@ void print_bpf_insn(const struct bpf_insn_cbs *cbs,
+ 		} else if (insn->code == (BPF_JMP | BPF_JA)) {
+ 			verbose(cbs->private_data, "(%02x) goto pc%+d\n",
+ 				insn->code, insn->off);
++		} else if (insn->code == (BPF_JMP | BPF_JA | BPF_X)) {
++			print_bpf_ja_indirect(verbose, cbs->private_data, insn);
+ 		} else if (insn->code == (BPF_JMP | BPF_JCOND) &&
+ 			   insn->src_reg == BPF_MAY_GOTO) {
+ 			verbose(cbs->private_data, "(%02x) may_goto pc%+d\n",
 -- 
 2.34.1
 
