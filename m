@@ -1,62 +1,62 @@
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32C60253B67
-	for <bpf@vger.kernel.org>; Sat, 13 Sep 2025 19:33:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35B57258EE1
+	for <bpf@vger.kernel.org>; Sat, 13 Sep 2025 19:33:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757792031; cv=none; b=KBlPsED6Msc7J2jAMt6Y85TWRqiekKgf222xosprxCGRUilRzNcW6orkUKZs4rm3iPZ5jUb+oI2wlcp6tf9WE/zrwcI35/JkBSYKkRhOCtrPAawCaLD6PkmmTaC9Ux8epWYTQ8Mq4a/dGkQ/2KkXFMN5ymmqINqf+5n8omPQQpY=
+	t=1757792033; cv=none; b=iaQxS1vrCEOeAngcBuufH6BLTzULqiWtVKkn2tUGouG1m1aWXz86Pqvo7rATUtMd0x7J4lfTK4JgPZTAAxobAZlg5QQpaBXMD0vMx/F6yXsnAmIwk54idqfh2dGZ2taGc+q/7Cg5BSeK6vCzFWshc30y0oXJeitaNjCUzrMTMgs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757792031; c=relaxed/simple;
-	bh=g0e4y6z+YU3g2XF/m7bpAkGBaWFTm9fugdBfA67Sle4=;
+	s=arc-20240116; t=1757792033; c=relaxed/simple;
+	bh=HihYLs2gIxnLftGd/1/oW3vzu2WhlYnPlcrAY6ztk+A=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=s+3jqPWADd8WgscTVLzbiJ0YBL8/XcO0bgR0smef89nepckra6V21JTrtiIajGB/s4XAANBtHGvSeDXs5cFDtGWvPnRxWBqJ764sNSjur6K846dP8RxZXIXRf1pYpgpEY9Cz0yLVFdOn8W3laSNBfWFNZDFvMKOw05fdx2L5sZ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IKkj26Gz; arc=none smtp.client-ip=209.85.128.50
+	 MIME-Version; b=OQj56AWVERnqYiveKG8ZVO1ePhwjo+zKkSbw0ap/+/X1ITm9ze/VVUzD6l70VdTT6cP4vMMjm8EtlPlzq+JydRXXy55vBjfp7ARaGE3bAA2C0o14U9OUMB8vsZE/tAhfUTB2eAbpec+WdrBWmmVeVinndGgHjFTr5f3S/auq/nA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G+mwjLYe; arc=none smtp.client-ip=209.85.221.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IKkj26Gz"
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-45b9853e630so27877085e9.0
-        for <bpf@vger.kernel.org>; Sat, 13 Sep 2025 12:33:49 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G+mwjLYe"
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-3e7643b0ab4so1974666f8f.2
+        for <bpf@vger.kernel.org>; Sat, 13 Sep 2025 12:33:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757792028; x=1758396828; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1757792030; x=1758396830; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=zdFKvvA7uHqidwjHtAQUeNBDXVgzdDVaYKaGFmu7V6U=;
-        b=IKkj26GzMIwYg6k0VnT8sZBcrqcDaS0eoCCpLPaU0Jy5YnyHD0gCsRvF4Sw3SH6hkB
-         xqdU6plfZjXx4hCwiFB2ZKNmptp451yVLtWZAfo5bxl3nauuMOI1n870WuvLUlXRIdKx
-         ASj1xOVIi5bIdmZXvBmeoziQOpXB2OfAXkZtLqLHd8492ybNDe/qIYMi3YnsQVFErSt7
-         gvhmjf4J0NNaq0UTqO46B15v+RccLU0NjjycSdW/0OZpL3erWLi5CTEYNJB6wZNDGGww
-         4H+dXXP4dKSxDcM0tsSWZ93ZzghuiHnfZqYOQeAsCtN9HCNFaz3dEuYp7JZLGEPFuUPk
-         pajg==
+        bh=oY2NlcjLIHdh6oV54v02TaMgAkrON+dzvBXsgSYx/qI=;
+        b=G+mwjLYelH/RnVl03cv8l6WMqIoJMYPkjlztNAD3mQBCYqZpJ0z/EFVVZKgYjogSHZ
+         ba1QwcGXOQ7K91hU25q7BwQ2KgPIzcMq4Pw6r6dVbSlMOaA31Q72W65LYU9sz3NMOe72
+         bDqhu1naANi9xzfOKFaLx1V9My0C+uNsnLDhj1g1U5ye5K+Qm28huTwGKbUJYVW4Lq38
+         yHNP59h6zvkW5oQ6gKa/u5ofmjUmfZd3t9D4G5w9pIpYHWCuI9jEPVFH34gyT/3L0t+a
+         06wEr4mB7npTDmRqnCTjMHyF/I2tLqEzfFd3MVmb/vCqHh39edM3TncTKqJHxv/jLw/h
+         CI9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757792028; x=1758396828;
+        d=1e100.net; s=20230601; t=1757792030; x=1758396830;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=zdFKvvA7uHqidwjHtAQUeNBDXVgzdDVaYKaGFmu7V6U=;
-        b=BfhqO9dY1Jo44/W5KwO77TMD8XgcG24kxVsxEs0i+ft+j0d51UkxsA61Z3ur51vI2j
-         hdZoRBT+6ZmM41r1qKyucxHfv301Zy7F0ZpaImptkfQkT5MhJcnFXgxBjOZBKKxsZxHa
-         1G6xjPob9hjPsFDHwd+JSo5oiZCcI1IwlIC2IqI3VCl3eC3KkffQVKRdCCjRt2JPWaI7
-         4/DTWA7AhrIFclXKB/lQ441fR3Box+hdhaZKIlybs7wRI7C7nDLtQRholwY85RXR9+dP
-         tV1clWPELpsqGLbo9WeEv33QqkEo6YDaWhWtdIlq/DrX9JcJ3l2dVjJWbqHCh96Ng5nP
-         1s7Q==
-X-Gm-Message-State: AOJu0Yzubt6GR7HNHa7vVY+ojuq9DUPXZQYHFgOaJmL64pg/amXLb/Ps
-	OhTPnfLKhNR/LD4NYVNiGyy0jG5x+5H7L0X7XhJt4ADN7hcq0RExVa40OeCjtA==
-X-Gm-Gg: ASbGncsaPR3YACK5MfaP86BamYuwWsBm6yecW9dIC+ivj2UNwI4ju16p8XgMFVY8+zE
-	jETjO0hozavuXPFuHCAmcTtxaxChvVBrG+UZ3xPxhTGk27S62zgZ/859ERk6fnCHG/sKFE0LmJD
-	L4K/6MQ0/B9xfuQISRirHfFGfl5QF2WzdsDsfSQRRDUWLraPZaOgpkkOVTF0z4WiILmBoXGikRF
-	tAOlv9zezto6s1MnNkzPcbiXEw+gy5QAazScRCkzUnUnAH5jbOwGwB2VqC0xUapUfxWePOZJa3X
-	hrJgTbylr+rY7tKf/9Bdw/Ioj3iOoI9Wb0oY4cbq9+FAJP/xbKmvyzY5E7c26VOP8gPaeOFEqLP
-	sCXq6wli+yTuYVY3k6OvL62jXo/Yn4fwyncllFbFNIQ==
-X-Google-Smtp-Source: AGHT+IGNz09hTlrvu/h/17NAtJpxGh6tESwdreeyumQ6xiQrZI/k8AxZu3yq6ehvNOBIlsOJ094h6w==
-X-Received: by 2002:a05:6000:118f:b0:3e7:e0a2:1478 with SMTP id ffacd0b85a97d-3e7e0a215damr4029184f8f.26.1757792028145;
-        Sat, 13 Sep 2025 12:33:48 -0700 (PDT)
+        bh=oY2NlcjLIHdh6oV54v02TaMgAkrON+dzvBXsgSYx/qI=;
+        b=BKQd6juyHkKueNXZileIgg4UF7WqTi9vnDUow7j5X58CcyvvX+E82J2CGFbV2GKpvk
+         2UYsS+OOzbdQCtXeishx8/fPCePQggfrw59No6U/5k4zhTAO9+wwOt43Njn8v0ADcYbM
+         ZEOrE2PbAoAHotXrIXopREk7SI6cHIzZN5VkID4xLM64aLBGN/aoex3ocwS9rPn0Iw/J
+         1L66ugmGzpu60/q0vxoZXWVFz0JtQKKKVlfkdIvq+/oyXPeIzTrX4Jd+lH5qGjAL0pK5
+         bjMRzTpq+OxhCWMGQtSWhHtgKvyCjFj8iS5OqxR4glvmcqIsTXjxTCAoXwD5rBwUCHAj
+         QoNg==
+X-Gm-Message-State: AOJu0YyDCtgt9f5Fm8rRF4xmUyqfXWgDSAMVm2pXKfn+fruK2mpSi2Zl
+	1QsjGXXodXATevOtoQvlwtK5no88fFhbjYWXhHJnUEjtj11BrfkeJ/ctftTzZA==
+X-Gm-Gg: ASbGncu7BWjWeHuCrCrbSS4VLCcBHD/NkzhUa0rzpxtCQyi5JigNHaJJeHwA0RIoXec
+	7qC33hUHjU1rUYgEAO0PpFkWo2oeBpipnhdnOl6PESPpu5LGIhzBGAKWFiBWtWfw/063kNxVETW
+	3nbiMP1PRtNHqAdSmARfepVujLjLNKE6MherUB2wAKaSNhdhvpGa4pPke/FQyE+HaGwZGprZ4b4
+	krnyBauPC6TbUJ5aMRmxN3flsURr4FTgxdrOMVfldyKJRVbkShYfP5rk5qDpadfDojWPn7zH+xm
+	uI7Y/vCw1HXzgDwK9LyJJJJk8HVZphs5pq8msWcv3ekQuBp8jPjLcg+WDCaqqSBKniRMhjPKD/g
+	yquhYsquGkoV95/98bNrXwSsvJ1OYXl6V8evPCrbvIA==
+X-Google-Smtp-Source: AGHT+IEqeh9Or1pdmNi7drNLU/+IVAjQ4TaKkS8TJWypjcSYCvx1RIATie2eLnjsgrgfQiOt6uDzxQ==
+X-Received: by 2002:a05:6000:2012:b0:3e7:4835:8eeb with SMTP id ffacd0b85a97d-3e765a225cdmr7060553f8f.53.1757792030006;
+        Sat, 13 Sep 2025 12:33:50 -0700 (PDT)
 Received: from localhost.localdomain ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3e7ff9f77c4sm4948753f8f.27.2025.09.13.12.33.47
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3e7ff9f77c4sm4948753f8f.27.2025.09.13.12.33.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 13 Sep 2025 12:33:47 -0700 (PDT)
+        Sat, 13 Sep 2025 12:33:49 -0700 (PDT)
 From: Anton Protopopov <a.s.protopopov@gmail.com>
 To: bpf@vger.kernel.org,
 	Alexei Starovoitov <ast@kernel.org>,
@@ -67,9 +67,9 @@ To: bpf@vger.kernel.org,
 	Quentin Monnet <qmo@kernel.org>,
 	Yonghong Song <yonghong.song@linux.dev>
 Cc: Anton Protopopov <a.s.protopopov@gmail.com>
-Subject: [PATCH v2 bpf-next 10/13] libbpf: fix formatting of bpf_object__append_subprog_code
-Date: Sat, 13 Sep 2025 19:39:19 +0000
-Message-Id: <20250913193922.1910480-11-a.s.protopopov@gmail.com>
+Subject: [PATCH v2 bpf-next 12/13] bpftool: Recognize insn_array map type
+Date: Sat, 13 Sep 2025 19:39:21 +0000
+Message-Id: <20250913193922.1910480-13-a.s.protopopov@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20250913193922.1910480-1-a.s.protopopov@gmail.com>
 References: <20250913193922.1910480-1-a.s.protopopov@gmail.com>
@@ -81,78 +81,40 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The commit 6c918709bd30 ("libbpf: Refactor bpf_object__reloc_code")
-added the bpf_object__append_subprog_code() with incorrect indentations.
-Use tabs instead. (This also makes a consequent commit better readable.)
+Teach bpftool to recognize instruction array map type.
 
 Signed-off-by: Anton Protopopov <a.s.protopopov@gmail.com>
 ---
- tools/lib/bpf/libbpf.c | 52 +++++++++++++++++++++---------------------
- 1 file changed, 26 insertions(+), 26 deletions(-)
+ tools/bpf/bpftool/Documentation/bpftool-map.rst | 2 +-
+ tools/bpf/bpftool/map.c                         | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index fe4fc5438678..2c1f48f77680 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -6393,32 +6393,32 @@ static int
- bpf_object__append_subprog_code(struct bpf_object *obj, struct bpf_program *main_prog,
- 				struct bpf_program *subprog)
- {
--       struct bpf_insn *insns;
--       size_t new_cnt;
--       int err;
--
--       subprog->sub_insn_off = main_prog->insns_cnt;
--
--       new_cnt = main_prog->insns_cnt + subprog->insns_cnt;
--       insns = libbpf_reallocarray(main_prog->insns, new_cnt, sizeof(*insns));
--       if (!insns) {
--               pr_warn("prog '%s': failed to realloc prog code\n", main_prog->name);
--               return -ENOMEM;
--       }
--       main_prog->insns = insns;
--       main_prog->insns_cnt = new_cnt;
--
--       memcpy(main_prog->insns + subprog->sub_insn_off, subprog->insns,
--              subprog->insns_cnt * sizeof(*insns));
--
--       pr_debug("prog '%s': added %zu insns from sub-prog '%s'\n",
--                main_prog->name, subprog->insns_cnt, subprog->name);
--
--       /* The subprog insns are now appended. Append its relos too. */
--       err = append_subprog_relos(main_prog, subprog);
--       if (err)
--               return err;
--       return 0;
-+	struct bpf_insn *insns;
-+	size_t new_cnt;
-+	int err;
-+
-+	subprog->sub_insn_off = main_prog->insns_cnt;
-+
-+	new_cnt = main_prog->insns_cnt + subprog->insns_cnt;
-+	insns = libbpf_reallocarray(main_prog->insns, new_cnt, sizeof(*insns));
-+	if (!insns) {
-+		pr_warn("prog '%s': failed to realloc prog code\n", main_prog->name);
-+		return -ENOMEM;
-+	}
-+	main_prog->insns = insns;
-+	main_prog->insns_cnt = new_cnt;
-+
-+	memcpy(main_prog->insns + subprog->sub_insn_off, subprog->insns,
-+	       subprog->insns_cnt * sizeof(*insns));
-+
-+	pr_debug("prog '%s': added %zu insns from sub-prog '%s'\n",
-+		 main_prog->name, subprog->insns_cnt, subprog->name);
-+
-+	/* The subprog insns are now appended. Append its relos too. */
-+	err = append_subprog_relos(main_prog, subprog);
-+	if (err)
-+		return err;
-+	return 0;
- }
+diff --git a/tools/bpf/bpftool/Documentation/bpftool-map.rst b/tools/bpf/bpftool/Documentation/bpftool-map.rst
+index 252e4c538edb..3377d4a01c62 100644
+--- a/tools/bpf/bpftool/Documentation/bpftool-map.rst
++++ b/tools/bpf/bpftool/Documentation/bpftool-map.rst
+@@ -55,7 +55,7 @@ MAP COMMANDS
+ |     | **devmap** | **devmap_hash** | **sockmap** | **cpumap** | **xskmap** | **sockhash**
+ |     | **cgroup_storage** | **reuseport_sockarray** | **percpu_cgroup_storage**
+ |     | **queue** | **stack** | **sk_storage** | **struct_ops** | **ringbuf** | **inode_storage**
+-|     | **task_storage** | **bloom_filter** | **user_ringbuf** | **cgrp_storage** | **arena** }
++|     | **task_storage** | **bloom_filter** | **user_ringbuf** | **cgrp_storage** | **arena** | **insn_array** }
  
- static int
+ DESCRIPTION
+ ===========
+diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
+index c9de44a45778..79b90f274bef 100644
+--- a/tools/bpf/bpftool/map.c
++++ b/tools/bpf/bpftool/map.c
+@@ -1477,7 +1477,7 @@ static int do_help(int argc, char **argv)
+ 		"                 devmap | devmap_hash | sockmap | cpumap | xskmap | sockhash |\n"
+ 		"                 cgroup_storage | reuseport_sockarray | percpu_cgroup_storage |\n"
+ 		"                 queue | stack | sk_storage | struct_ops | ringbuf | inode_storage |\n"
+-		"                 task_storage | bloom_filter | user_ringbuf | cgrp_storage | arena }\n"
++		"                 task_storage | bloom_filter | user_ringbuf | cgrp_storage | arena | insn_array }\n"
+ 		"       " HELP_SPEC_OPTIONS " |\n"
+ 		"                    {-f|--bpffs} | {-n|--nomount} }\n"
+ 		"",
 -- 
 2.34.1
 
