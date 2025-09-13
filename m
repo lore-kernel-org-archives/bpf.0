@@ -1,183 +1,155 @@
-Received: from plesk.hostmyservers.fr (plesk.hostmyservers.fr [45.145.164.37])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-189.mta1.migadu.com (out-189.mta1.migadu.com [95.215.58.189])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F32426D4EF;
-	Fri, 12 Sep 2025 23:40:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.145.164.37
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 393474A3C
+	for <bpf@vger.kernel.org>; Sat, 13 Sep 2025 00:02:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757720411; cv=none; b=ZJapoUq67s0LH56HuarRimlrQ4xMqaOQQmpSYoiQ9mckwsSv240Sv5SmAZykSAkoAQe7ZSo9uf1kcTwuRnO2+dxtNRqJ5iBNk+8Tky3W6u0A4Q9p/dHgqT2HxgmhPVq9+G7Co2ptE6gb1kRXOeg6X3CZmftw+eppQDO2Eqc1plI=
+	t=1757721728; cv=none; b=ZuG7CQL9YlIS8jgvIpYvCIkgpKPGdlH+lLYbcRN5gZ8kWenRjhW8kvgiB2rkU5YseN70cUBBRA7lEu8Mgs6duQJQu0MS/gigNP+eE5KuVqNjmZCkWBy4VKvt4GatvBHP6Eymf/+itTEEUffAadXxqGWOAUjIDxMlJcxgY0tqK/I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757720411; c=relaxed/simple;
-	bh=ALrO9M8gBNByn8rkQ0DpqNVGoyHxIJFif9e88v21F7A=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CTEXKgoiETZmPB+J1Jnuvo8ceociJ0QTd8VgYTPJuwtVgRdOM/bVxu1GRdj2asxVXkqR61jPIdz3VdA2MjuzKI3pYDfG1yjyJ7qI+eQMWkdIOyaKg9uLIKfQQM8y6MxqDd0FVs3XTUhoWWTq7n7YHtLu34Rjekp1++F54he3ZAQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=arnaud-lcm.com; spf=pass smtp.mailfrom=arnaud-lcm.com; arc=none smtp.client-ip=45.145.164.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=arnaud-lcm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arnaud-lcm.com
-Received: from arnaudlcm-X570-UD.. (unknown [IPv6:2a02:8084:255b:aa00:186b:e316:24ee:afec])
-	by plesk.hostmyservers.fr (Postfix) with ESMTPSA id 656424022C;
-	Fri, 12 Sep 2025 23:34:16 +0000 (UTC)
-Authentication-Results: Plesk;
-	spf=pass (sender IP is 2a02:8084:255b:aa00:186b:e316:24ee:afec) smtp.mailfrom=contact@arnaud-lcm.com smtp.helo=arnaudlcm-X570-UD..
-Received-SPF: pass (Plesk: connection is authenticated)
-From: Arnaud Lecomte <contact@arnaud-lcm.com>
-To: alexei.starovoitov@gmail.com,
-	yonghong.song@linux.dev,
-	song@kernel.org
-Cc: andrii@kernel.org,
-	ast@kernel.org,
-	bpf@vger.kernel.org,
-	daniel@iogearbox.net,
-	eddyz87@gmail.com,
-	haoluo@google.com,
-	john.fastabend@gmail.com,
-	jolsa@kernel.org,
-	kpsingh@kernel.org,
-	linux-kernel@vger.kernel.org,
-	martin.lau@linux.dev,
-	sdf@fomichev.me,
-	syzbot+c9b724fbb41cf2538b7b@syzkaller.appspotmail.com,
-	syzkaller-bugs@googlegroups.com,
-	contact@arnaud-lcm.com
-Subject: [PATCH bpf-next v9 1/3] bpf: refactor max_depth computation in
- bpf_get_stack()
-Date: Sat, 13 Sep 2025 00:34:09 +0100
-Message-ID: <20250912233409.74900-1-contact@arnaud-lcm.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1757721728; c=relaxed/simple;
+	bh=2IOls+5ihE/wpDfGelo+iaCbrrFYTVgu11uZx6OhzTE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oYaFoD/faQvyZuD/bIAGPUdk/U1FP5wd/OV0qYTOPK/SipKBUjWRtP0NjZmdvybpnHRcMxExrctOqFwEpsPkp8CZzhJZ5HyEZg2dt2NFbZJ1mHHrRvmHjTP4UMlYrpQuskCBSf6ovhEJOAvUG8++Ew4wfGyrDmgJQXLjXYsr3ns=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=kteSnbAB; arc=none smtp.client-ip=95.215.58.189
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="kteSnbAB"
+Date: Fri, 12 Sep 2025 17:01:54 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1757721723;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=G1V4E7beL3tEQcs5f1ZIdNtN51ThW+D+Dg6V3YUAVog=;
+	b=kteSnbABvHadBqke0lEmhPuZhA3Nws7R0djm5uvx197+4I4lR/J3g13H82QcB++JKyBXvg
+	/JudcGo/uA1xMk7pNur6IzYVR8jQy0Qf580r7nupFsPOcs7wO5vpfsW9JOCGorZzhrt8N8
+	aiS/QToB6TQvnULaHZddJvc8QtfEVS4=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Shakeel Butt <shakeel.butt@linux.dev>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Suren Baghdasaryan <surenb@google.com>, bpf <bpf@vger.kernel.org>, 
+	linux-mm <linux-mm@kvack.org>, Vlastimil Babka <vbabka@suse.cz>, 
+	Harry Yoo <harry.yoo@oracle.com>, Michal Hocko <mhocko@suse.com>, 
+	Sebastian Sewior <bigeasy@linutronix.de>, Andrii Nakryiko <andrii@kernel.org>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Johannes Weiner <hannes@cmpxchg.org>, Roman Gushchin <roman.gushchin@linux.dev>
+Subject: Re: [PATCH slab v5 5/6] slab: Reuse first bit for OBJEXTS_ALLOC_FAIL
+Message-ID: <e7nh3cxyhmlxds4b2ko36gnxbdfclcxu3eae5irvrd2m6qzqoj@gor7vopfe47z>
+References: <20250909010007.1660-1-alexei.starovoitov@gmail.com>
+ <20250909010007.1660-6-alexei.starovoitov@gmail.com>
+ <jftidhymri2af5u3xtcqry3cfu6aqzte3uzlznhlaylgrdztsi@5vpjnzpsemf5>
+ <CAJuCfpGUjaZcs1r9ADKck_Ni7f41kHaiejR01Z0bE8pG0K1uXA@mail.gmail.com>
+ <CAADnVQJu-mU-Px0FvHqZdTTP+x8ROTXaqHKSXdeS7Gc4LV9zsQ@mail.gmail.com>
+ <shfysi62hb5g7lo44mw4htwxdsdljcp3usu2wvsjpd2a57vvid@tuhj63dixxpn>
+ <CAADnVQ+eD7p4i0B9Q2T-OS_n=AqcrrvYZGY57QOOqKEof6SkDQ@mail.gmail.com>
+ <lv2tkehyh4pihbczb7ghvbkkl4l75ksdx2xjtxf2r7lgzam76h@ekkrlady2et3>
+ <CAADnVQLX_mi9WLygRxwp5PtBFG7L_sqm9sL93ejENWqVO3ar7g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-PPP-Message-ID: <175772005728.2166.1193317056877954951@Plesk>
-X-PPP-Vhost: arnaud-lcm.com
+In-Reply-To: <CAADnVQLX_mi9WLygRxwp5PtBFG7L_sqm9sL93ejENWqVO3ar7g@mail.gmail.com>
+X-Migadu-Flow: FLOW_OUT
 
-A new helper function stack_map_calculate_max_depth() that
-computes the max depth for a stackmap.
+On Fri, Sep 12, 2025 at 02:59:08PM -0700, Alexei Starovoitov wrote:
+> On Fri, Sep 12, 2025 at 2:44 PM Shakeel Butt <shakeel.butt@linux.dev> wrote:
+> >
+> > On Fri, Sep 12, 2025 at 02:31:47PM -0700, Alexei Starovoitov wrote:
+> > > On Fri, Sep 12, 2025 at 2:29 PM Shakeel Butt <shakeel.butt@linux.dev> wrote:
+> > > >
+> > > > On Fri, Sep 12, 2025 at 02:24:26PM -0700, Alexei Starovoitov wrote:
+> > > > > On Fri, Sep 12, 2025 at 2:03 PM Suren Baghdasaryan <surenb@google.com> wrote:
+> > > > > >
+> > > > > > On Fri, Sep 12, 2025 at 12:27 PM Shakeel Butt <shakeel.butt@linux.dev> wrote:
+> > > > > > >
+> > > > > > > +Suren, Roman
+> > > > > > >
+> > > > > > > On Mon, Sep 08, 2025 at 06:00:06PM -0700, Alexei Starovoitov wrote:
+> > > > > > > > From: Alexei Starovoitov <ast@kernel.org>
+> > > > > > > >
+> > > > > > > > Since the combination of valid upper bits in slab->obj_exts with
+> > > > > > > > OBJEXTS_ALLOC_FAIL bit can never happen,
+> > > > > > > > use OBJEXTS_ALLOC_FAIL == (1ull << 0) as a magic sentinel
+> > > > > > > > instead of (1ull << 2) to free up bit 2.
+> > > > > > > >
+> > > > > > > > Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+> > > > > > >
+> > > > > > > Are we low on bits that we need to do this or is this good to have
+> > > > > > > optimization but not required?
+> > > > > >
+> > > > > > That's a good question. After this change MEMCG_DATA_OBJEXTS and
+> > > > > > OBJEXTS_ALLOC_FAIL will have the same value and they are used with the
+> > > > > > same field (page->memcg_data and slab->obj_exts are aliases). Even if
+> > > > > > page_memcg_data_flags can never be used for slab pages I think
+> > > > > > overlapping these bits is not a good idea and creates additional
+> > > > > > risks. Unless there is a good reason to do this I would advise against
+> > > > > > it.
+> > > > >
+> > > > > Completely disagree. You both missed the long discussion
+> > > > > during v4. The other alternative was to increase alignment
+> > > > > and waste memory. Saving the bit is obviously cleaner.
+> > > > > The next patch is using the saved bit.
+> > > >
+> > > > I will check out that discussion and it would be good to summarize that
+> > > > in the commit message.
+> > >
+> > > Disgaree. It's not a job of a small commit to summarize all options
+> > > that were discussed on the list. That's what the cover letter is for
+> > > and there there are links to all previous threads.
+> >
+> > Currently the commit message is only telling what the patch is doing and
+> > is missing the 'why' part and I think adding the 'why' part would make it
+> > better for future readers i.e. less effort to find why this is being
+> > done this way. (Anyways this is just a nit from me)
+> 
+> I think 'why' here is obvious. Free the bit to use it later.
+> From time to time people add a sentence like
+> "this bit will be used in the next patch",
+> but I never do this and sometimes remove it from other people's
+> commits, since "in the next patch" is plenty ambiguous and not helpful.
 
-Acked-by: Yonghong Song <yonghong.song@linux.dev>
-Acked-by: Song Liu <song@kernel.org>
-Signed-off-by: Arnaud Lecomte <contact@arnaud-lcm.com>
----
-Changes in v2:
- - Removed the checking 'map_size % map_elem_size' from
-   stack_map_calculate_max_depth
- - Changed stack_map_calculate_max_depth params name to be more generic
+Yes, the part about the freed bit being used in later patch was clear.
+The part about if we really need it was not obvious and if I understand
+the discussion at [1] (relevant text below), it was not required but
+good to have.
+```
+	> I was going to say "add a new flag to enum objext_flags",
+	> but all lower 3 bits of slab->obj_exts pointer are already in use? oh...
+	>
+	> Maybe need a magic trick to add one more flag,
+	> like always align the size with 16?
+	>
+	> In practice that should not lead to increase in memory consumption
+	> anyway because most of the kmalloc-* sizes are already at least
+	> 16 bytes aligned.
 
-Changes in v3:
- - Changed map size param to size in max depth helper
+	Yes. That's an option, but I think we can do better.
+	OBJEXTS_ALLOC_FAIL doesn't need to consume the bit.
+```
 
-Changes in v4:
- - Fixed indentation in max depth helper for args
+Anyways no objection from me but Harry had a followup request [2]:
+```
+	This will work, but it would be helpful to add a comment clarifying that
+	when bit 0 is set with valid upper bits, it indicates
+	MEMCG_DATA_OBJEXTS, but when the upper bits are all zero, it indicates
+	OBJEXTS_ALLOC_FAIL.
 
-Changes in v5:
- - Bound back trace_nr to num_elem in __bpf_get_stack
- - Make a copy of sysctl_perf_event_max_stack
-   in stack_map_calculate_max_depth
+	When someone looks at the code without checking history it might not
+	be obvious at first glance.
+```
 
-Changes in v6:
- - Restrained max_depth computation only when required
- - Additional cleanup from Song in __bpf_get_stack
+I think the above requested comment would be really useful. Suren is
+fixing the condition of VM_BUG_ON_PAGE() in slab_obj_exts(). With this
+patch, I think, that condition will need to be changed again.
 
-Changes in v7:
- - Removed additional cleanup from v6
-
-Changes in v9:
- - Fixed incorrect removal of num_elem in get stack
-
-Link to v8: https://lore.kernel.org/all/20250905134625.26531-1-contact@arnaud-lcm.com/
----
----
- kernel/bpf/stackmap.c | 39 +++++++++++++++++++++++++++------------
- 1 file changed, 27 insertions(+), 12 deletions(-)
-
-diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
-index 3615c06b7dfa..a794e04f5ae9 100644
---- a/kernel/bpf/stackmap.c
-+++ b/kernel/bpf/stackmap.c
-@@ -42,6 +42,28 @@ static inline int stack_map_data_size(struct bpf_map *map)
- 		sizeof(struct bpf_stack_build_id) : sizeof(u64);
- }
- 
-+/**
-+ * stack_map_calculate_max_depth - Calculate maximum allowed stack trace depth
-+ * @size:  Size of the buffer/map value in bytes
-+ * @elem_size:  Size of each stack trace element
-+ * @flags:  BPF stack trace flags (BPF_F_USER_STACK, BPF_F_USER_BUILD_ID, ...)
-+ *
-+ * Return: Maximum number of stack trace entries that can be safely stored
-+ */
-+static u32 stack_map_calculate_max_depth(u32 size, u32 elem_size, u64 flags)
-+{
-+	u32 skip = flags & BPF_F_SKIP_FIELD_MASK;
-+	u32 max_depth;
-+	u32 curr_sysctl_max_stack = READ_ONCE(sysctl_perf_event_max_stack);
-+
-+	max_depth = size / elem_size;
-+	max_depth += skip;
-+	if (max_depth > curr_sysctl_max_stack)
-+		return curr_sysctl_max_stack;
-+
-+	return max_depth;
-+}
-+
- static int prealloc_elems_and_freelist(struct bpf_stack_map *smap)
- {
- 	u64 elem_size = sizeof(struct stack_map_bucket) +
-@@ -300,20 +322,17 @@ static long __bpf_get_stackid(struct bpf_map *map,
- BPF_CALL_3(bpf_get_stackid, struct pt_regs *, regs, struct bpf_map *, map,
- 	   u64, flags)
- {
--	u32 max_depth = map->value_size / stack_map_data_size(map);
--	u32 skip = flags & BPF_F_SKIP_FIELD_MASK;
-+	u32 elem_size = stack_map_data_size(map);
- 	bool user = flags & BPF_F_USER_STACK;
- 	struct perf_callchain_entry *trace;
- 	bool kernel = !user;
-+	u32 max_depth;
- 
- 	if (unlikely(flags & ~(BPF_F_SKIP_FIELD_MASK | BPF_F_USER_STACK |
- 			       BPF_F_FAST_STACK_CMP | BPF_F_REUSE_STACKID)))
- 		return -EINVAL;
- 
--	max_depth += skip;
--	if (max_depth > sysctl_perf_event_max_stack)
--		max_depth = sysctl_perf_event_max_stack;
--
-+	max_depth = stack_map_calculate_max_depth(map->value_size, elem_size, flags);
- 	trace = get_perf_callchain(regs, 0, kernel, user, max_depth,
- 				   false, false);
- 
-@@ -406,7 +425,7 @@ static long __bpf_get_stack(struct pt_regs *regs, struct task_struct *task,
- 			    struct perf_callchain_entry *trace_in,
- 			    void *buf, u32 size, u64 flags, bool may_fault)
- {
--	u32 trace_nr, copy_len, elem_size, num_elem, max_depth;
-+	u32 trace_nr, copy_len, elem_size, max_depth;
- 	bool user_build_id = flags & BPF_F_USER_BUILD_ID;
- 	bool crosstask = task && task != current;
- 	u32 skip = flags & BPF_F_SKIP_FIELD_MASK;
-@@ -438,10 +457,7 @@ static long __bpf_get_stack(struct pt_regs *regs, struct task_struct *task,
- 		goto clear;
- 	}
- 
--	num_elem = size / elem_size;
--	max_depth = num_elem + skip;
--	if (sysctl_perf_event_max_stack < max_depth)
--		max_depth = sysctl_perf_event_max_stack;
-+	max_depth = stack_map_calculate_max_depth(size, elem_size, flags);
- 
- 	if (may_fault)
- 		rcu_read_lock(); /* need RCU for perf's callchain below */
-@@ -461,7 +477,6 @@ static long __bpf_get_stack(struct pt_regs *regs, struct task_struct *task,
- 	}
- 
- 	trace_nr = trace->nr - skip;
--	trace_nr = (trace_nr <= num_elem) ? trace_nr : num_elem;
- 	copy_len = trace_nr * elem_size;
- 
- 	ips = trace->ip + skip;
--- 
-2.43.0
-
+[1] https://lore.kernel.org/all/CAADnVQLrTJ7hu0Au-XzBu9=GUKHeobnvULsjZtYO3JHHd75MTA@mail.gmail.com/
+[2] https://lore.kernel.org/all/aJtZrgcylnWgfR9r@hyeyoo/
