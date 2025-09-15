@@ -1,149 +1,131 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07FDF302CC9
-	for <bpf@vger.kernel.org>; Mon, 15 Sep 2025 11:50:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BC022FE069
+	for <bpf@vger.kernel.org>; Mon, 15 Sep 2025 12:02:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757937041; cv=none; b=C+B/YFJykBYsipynKsR8uB92E2lRd3VNsCh5YoSy864J4GeLxd2vJapfu7e82rva0zApAwqMpCdMuPBAtABbUK5LPx8nODXDW/Sd99ArPPtty8Bo83lF/uUSbzycvHOdNWOvkgwU7tMS0+oEZOUeNoVCGmj8CkFWXCfB5CIpQmo=
+	t=1757937770; cv=none; b=d36Rb5vdvA2bqMo51USwUUymTb+ueWvsHjnA5TWm70d9qAldXX6kLrjfM+hLH6VNjZzlt32mK/A17VDSKLeOTD310OG22AHkZhLHTJckYLLukVmX5Bm9ujNDRZYaeoILuQLWPPw5+eyrCtOI3l7fVO3oPAS7FOs4biwFWCYe6O0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757937041; c=relaxed/simple;
-	bh=GoAhkNOPlRriDwXvY3XuDu8SPjOqVa5ggTiPgrn1M2M=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TOq1SiXwLCrDbnhF2uHE8Wm4Tklg7v4nNbM2+fiJCsFgtXMjPsGOTF7kKoUozb934Z8RfjcsF3wFR8UuQpoSznNttOjY5FOmoQga9IChRizTkqE8d9ImxVqcPxHJm1k/97qnkq3HqWfa6ijTb9LYTtL8Zh/MEJEHMToxMW1RIwg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=E83b+U/X; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1757937770; c=relaxed/simple;
+	bh=cUwrirv14DBboYnsPVskwlwITnPzhHN0hLBk26HJT4Q=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=qMWifqbM3sk1y/Ude3YRFzVVY3g6jOKYd3gw+TOJsMcndvLE0gjoTZm6Rap3Je2v873rDhMxEkOiReulwy+oS80bL7CD1yKDJvOa93IYIxuEiCV+lZ0kJJAUuDJr5fAhcF8tywlhwOuj5UEScp/gc0yyVqvOM/BWjtbH+a6J+pQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WC8+z+NF; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="E83b+U/X"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=KsEmW8A3Twso6pY3gac7D6TvwdWlUcR8wIhJKzLFY30=; b=E83b+U/XIWL+e2lzEZ4Q7Q8yAP
-	DsBiWKrjRlS2glca3S0UqcAhb/r0r1YKhfncViohMLTqCWhGbbZgbLzKen8CWsADhlbKLHyQatB3S
-	WsfxESVaCwic34j/z1wpQ5r4eeWXmevoBu8zcbPWbjbMOM6UScJLAD/jwiFRZVeRf9ekm0l733/Sp
-	oil6zRyTb9Ysx9SoD5APSGbowiNTcz2ETmSjhYLR9VnTqX19qg8U+QvgqIvW634lDIXczkVpZYh37
-	35gmPHRHuvT1SZoaewA4l8jbC9zeYnLmrbSNMGbp8ATPirPsm3beT7flJY2q+AD2KAy7l246hwD1z
-	Odnt1H1g==;
-Received: from sslproxy01.your-server.de ([78.46.139.224])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1uy7T4-000DmO-0W;
-	Mon, 15 Sep 2025 13:33:58 +0200
-Received: from localhost ([127.0.0.1])
-	by sslproxy01.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1uy7T2-0006gv-2J;
-	Mon, 15 Sep 2025 13:33:57 +0200
-Message-ID: <055e1c7a-410f-4843-bec4-e545f032b145@iogearbox.net>
-Date: Mon, 15 Sep 2025 13:33:56 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WC8+z+NF"
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-45de1084868so22142105e9.2
+        for <bpf@vger.kernel.org>; Mon, 15 Sep 2025 05:02:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1757937766; x=1758542566; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Co9ePXVYONhWQLJUpPDEvS8RJui2bsGLbg4TDMCSs/I=;
+        b=WC8+z+NFdaso5wl9COsFOt2enyiDF49oL7ufXwcsEispwLHd7pNYjCtvFn21q23kxS
+         LTWj5jEbsOk1VhkeOjjMLxjIRuWQDoZFA/0g3Bzv1YzJ+AhgdeA0xoXTxXxdCth6wrx9
+         FoJfHmlGEZbBZen4KeEdi1GL37zszwcep6A8JP+qq9B1Kh7RLYL0DpSYlpgF7BRNBvbw
+         qgKhpwNBm1JRsP2vNr0lch8lbfzVo0AgWTYPS5qvyileBmruxIze/8HIqE6KA/3P2nua
+         fFliXDeNhnNH5BIIhylw54dRkOw1FtRHGQDg9KQS6zyI/Lw5Vsyf2dXmsj+4wGhuIaL9
+         inFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757937766; x=1758542566;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Co9ePXVYONhWQLJUpPDEvS8RJui2bsGLbg4TDMCSs/I=;
+        b=PzxzHGqrhRtp1c/9/5exvDUeisTOhY3adrsAQRb1XFzm2XZL1++UvTxqA6gxcps3KJ
+         wnUtC0l4T0mMrwrgE3c/5V3vv49g7inACXe6f5zs/ELOZYJWt8/ofZeW9cEAZkdIeyP7
+         3/xVp/0GpRDAB0nxcC2oWs7CzBkDrHCmHpLoXQKVb6FggGKzzpshOtBA7gpKJNs/6PrE
+         yEJxo57seJNbHOk6FRcC0Sw+qcuqaQgXaWMizGV1nXa1YRZXlteEoA08hU3exxnRpD2x
+         GDMjC1R3UvbnN6zcnM4Fs80P2t3Bw5kyKz0apzJNP9/yejglQmY1bKraF3TbGqaS02Xn
+         Cw9g==
+X-Forwarded-Encrypted: i=1; AJvYcCUhoJmHMZOA+3hd1vEkYxgVoHKb0yufRYlHfqU9TjbtXV89RNjsdfF7TRwnO/oDu/3qzbY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz8TKNO5qMDAneJb0p/g1pEdX2RXeR5dBEDSh2X+XOMJWXcM3RW
+	fAOgq5E42C1gwMu3kPMHo12O+JAn/Q2s1yaQxcSF/dHZB1yuYFEVP7Yy
+X-Gm-Gg: ASbGncuwxxnFdCe9SFYyrpKqcjtkK1HiofM0EuXWkfCJaeyCSUheJQPMB3BhLQoVTjT
+	JUDH7BrvonhOk3XWAimN18Bd2sXPhXOZ4FHHYajvaOEag9Jh2mROtmeyPgCGbgQ5oJZ33NewuSD
+	/Nkn//ZDSpVZ2qBVMj65UdsqyKXDE+JxPE3QzhfSUvzxP6AuuZaKKiPj1ytCcelE1hGwjIGc1U0
+	hOIoqzq2ANRHGTf+B+rgfl4HoUC80bwD8Ivc+k88DBpdugUR8ZVv+sp/NubeuinsEq2lwDQSLBu
+	SA6+Wb7fYejLnxfkqOJnbey+chB6kjxH+xTGxVEnh5lGGE/+La0SxgK1DrUyKt0uPqIVLDAzFJb
+	OjmaxzhQrCdjVnfAf1G6c2UDZQFtxG384iFFTIfITdWm//6Q+rREohkQGTObSPFrJz+Hy+2KMJL
+	MNGJUbiF05czA0EEOlYekcZiyxr3X/0ZnoQyY=
+X-Google-Smtp-Source: AGHT+IEuHi+LL9mdUJP/ePM8DLlcg6AV4xdLkySUG3V1VhzJzzhIAA8SXDdJ8L1ra60yKZp61XRXWQ==
+X-Received: by 2002:a05:600c:1911:b0:459:d5d1:d602 with SMTP id 5b1f17b1804b1-45f211c8371mr104236825e9.3.1757937765866;
+        Mon, 15 Sep 2025 05:02:45 -0700 (PDT)
+Received: from VM.ger.corp.intel.com (h-158-174-22-45.NA.cust.bahnhof.se. [158.174.22.45])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3e80da7f335sm11051443f8f.8.2025.09.15.05.02.44
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 15 Sep 2025 05:02:45 -0700 (PDT)
+From: Magnus Karlsson <magnus.karlsson@gmail.com>
+To: magnus.karlsson@intel.com,
+	bjorn@kernel.org,
+	maciej.fijalkowski@intel.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	netdev@vger.kernel.org,
+	bpf@vger.kernel.org,
+	jonathan.lemon@gmail.com,
+	sdf@fomichev.me,
+	andrii@kernel.org
+Subject: [PATCH bpf] MAINTAINERS: delete inactive maintainers from AF_XDP
+Date: Mon, 15 Sep 2025 14:01:44 +0200
+Message-ID: <20250915120148.2922-1-magnus.karlsson@gmail.com>
+X-Mailer: git-send-email 2.45.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next] bpftool: Search for tracefs at
- /sys/kernel/tracing first
-To: Quentin Monnet <qmo@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Andrii Nakryiko <andrii@kernel.org>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>,
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
- bpf@vger.kernel.org
-References: <20250912104343.58555-1-qmo@kernel.org>
-Content-Language: en-US
-From: Daniel Borkmann <daniel@iogearbox.net>
-Autocrypt: addr=daniel@iogearbox.net; keydata=
- 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
-In-Reply-To: <20250912104343.58555-1-qmo@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: Clear (ClamAV 1.0.9/27764/Mon Sep 15 10:26:33 2025)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On 9/12/25 12:43 PM, Quentin Monnet wrote:
-[...]
-> diff --git a/tools/bpf/bpftool/tracelog.c b/tools/bpf/bpftool/tracelog.c
-> index 31d806e3bdaa..49828a4f60c2 100644
-> --- a/tools/bpf/bpftool/tracelog.c
-> +++ b/tools/bpf/bpftool/tracelog.c
-> @@ -57,10 +57,8 @@ find_tracefs_mnt_single(unsigned long magic, char *mnt, const char *mntpt)
->   static bool get_tracefs_pipe(char *mnt)
->   {
->   	static const char * const known_mnts[] = {
-> -		"/sys/kernel/debug/tracing",
->   		"/sys/kernel/tracing",
-> -		"/tracing",
-> -		"/trace",
-> +		"/sys/kernel/debug/tracing",
->   	};
->   	const char *pipe_name = "/trace_pipe";
->   	const char *fstype = "tracefs";
-> @@ -96,11 +94,11 @@ static bool get_tracefs_pipe(char *mnt)
->   
->   	p_info("could not find tracefs, attempting to mount it now");
->   	/* Most of the time, tracefs is automatically mounted by debugfs at
-> -	 * /sys/kernel/debug/tracing when we try to access it. If we could not
-> +	 * /sys/kernel/tracing when we try to access it. If we could not
->   	 * find it, it is likely that debugfs is not mounted. Let's give one
+From: Magnus Karlsson <magnus.karlsson@intel.com>
 
-nit: Should this comment be tweaked further, or maybe even removed completely
-given the now stale references to debugfs there?
+Delete Björn Töpel and Jonathan Lemon as maintainer and reviewer,
+respectively, as they have not been contributing towards AF_XDP for
+several years. I have spoken to Björn and he is ok with his removal.
 
->   	 * attempt at mounting just tracefs at /sys/kernel/tracing.
->   	 */
-> -	strcpy(mnt, known_mnts[1]);
-> +	strcpy(mnt, known_mnts[0]);
->   	if (mount_tracefs(mnt))
->   		return false;
->   
+Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
+---
+ CREDITS     | 6 ++++++
+ MAINTAINERS | 2 --
+ 2 files changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/CREDITS b/CREDITS
+index a687c3c35c4c..e47df5e74abe 100644
+--- a/CREDITS
++++ b/CREDITS
+@@ -3912,6 +3912,12 @@ S: C/ Federico Garcia Lorca 1 10-A
+ S: Sevilla 41005
+ S: Spain
+ 
++N: Björn Töpel
++E: bjorn@kernel.org
++D: AF_XDP
++S: Gothenburg
++S: Sweden
++
+ N: Linus Torvalds
+ E: torvalds@linux-foundation.org
+ D: Original kernel hacker
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 9b85bd818b25..dacc5b86886f 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -27453,10 +27453,8 @@ F:	tools/testing/selftests/bpf/*xdp*
+ K:	(?:\b|_)xdp(?:\b|_)
+ 
+ XDP SOCKETS (AF_XDP)
+-M:	Björn Töpel <bjorn@kernel.org>
+ M:	Magnus Karlsson <magnus.karlsson@intel.com>
+ M:	Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+-R:	Jonathan Lemon <jonathan.lemon@gmail.com>
+ R:	Stanislav Fomichev <sdf@fomichev.me>
+ L:	netdev@vger.kernel.org
+ L:	bpf@vger.kernel.org
+
+base-commit: 22f20375f5b71f30c0d6896583b93b6e4bba7279
+-- 
+2.45.1
 
