@@ -1,62 +1,62 @@
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6562F3126AF
-	for <bpf@vger.kernel.org>; Wed, 17 Sep 2025 22:55:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F100311C33
+	for <bpf@vger.kernel.org>; Wed, 17 Sep 2025 22:55:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758149721; cv=none; b=q/GKEblqT8iP//n7adt6FomomHRPu+zlA5P65Apob6n4xCK7o+DE+FdP0JmOJSfUX4t1YELO4h42G1ovMxT0YUkVDMXJQ++Uj6DIaF4egEJkZ4fDZFjIsG5PYOeGsrC+ChILJcj96gD/+2r7el0j5KF21uY9id6XfZXDmq62t5M=
+	t=1758149723; cv=none; b=nqC8RW+PpOZcZL4rWXjMagzdDwUuV0FQQJu+yq/uiiXMzj4IjUEH0QiOGwqyF7i/RBCsTcf7yM5h4pT8AbKTO2y8GZliqinsELBV11gukBe8uow2+l4KYvLC0sHT1ay80fgbVdhkUdRtF77MlRmW/ZUFS13cyrTIYeDweAFp17o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758149721; c=relaxed/simple;
-	bh=pcXardvoZJ5x13AoTWxdTEydJ2BB1/tUU6LaU849Aws=;
+	s=arc-20240116; t=1758149723; c=relaxed/simple;
+	bh=nDmjbXMAaaARovoem/jblg2PIL/t10TLTSxc9dzhj3Y=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=P3qUQ3yAYdxkyaS8GjW39JYXyYkfa73z8Way2y7Bf/Dad0KWrHXwtYIj8sD+LnSFTZvDvupvVxMieA0qztk9hKpW+4MISDwfVSH8HT3kkElmvXHN0cXWzYXRkDJEgpz5dUlosIWpETB541xnsR1jmm1oFId5iKE+NiSyOzLRLK8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DItdIes6; arc=none smtp.client-ip=209.85.210.174
+	 MIME-Version; b=UTrddzS+vj6t5V6IORa32pwGwmS5HSKLNVy5W/TLUcjBcKud8q1HBpjIHcGn3NxtJuMmUTuLnQ+ndv4jhd5sEqthOQX6rNqL21G2QRwdMuhXRH05+TRCppjdgCx8MnaFx/k63LFBjA5N7Vq7AONnYjcKMWXSgmGfB81j/OsfOio=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Wcm29txn; arc=none smtp.client-ip=209.85.210.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DItdIes6"
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-7761b392d50so486759b3a.0
-        for <bpf@vger.kernel.org>; Wed, 17 Sep 2025 15:55:18 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Wcm29txn"
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-7762021c574so389927b3a.0
+        for <bpf@vger.kernel.org>; Wed, 17 Sep 2025 15:55:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1758149717; x=1758754517; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1758149721; x=1758754521; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=u/eWmQdzp2gJMKzDrupQRH1sPNWHwWwHav7oa7B7Mo0=;
-        b=DItdIes6yb2LEXKS4T6o14J47XkhH7sHd2L/cf9P+mL72f1mcpqVNlLUfA6VK4uG5q
-         Z1b2bLQF+BSA3GwazBUyDup3Oj93Z3mFWaUESsJeTQQR7JyqghCtCL1mVZ0ROz75xzF9
-         frdOLemMLb5FqCHACWEzxQZpn4BIBBCd9IJIo6KzMvwJrNSH8WlXHZ9xp3M+1gDBa1yd
-         l2YVH9KDXOEgIHO/R3VIQpPXGa6rHZRey67ARc9ade8WfoI9dNBIIhPdhxHe2I8Y6Yf6
-         fdbYC6Ns4Byih+kKcZI4d0e2/KHGX3S05xUb+/LZ6gi6SEU5j1jXTGQyc+M5kDszEfc9
-         RVCA==
+        bh=OETsLPmcZGNpLSshaaiLeOj8LUgrE6er4wP4vFEBZK0=;
+        b=Wcm29txnjyVorSHkwZbnTaZYJzRa3FLlubyV01e/GG1cNwKpp3VPLfVJfnJjxMi1G5
+         vaBTDQil4pTStp5XAG9JwZpS9flNVuV/RRk613F7+Y6jxIWePxi6SosWF4tuqQ9Mfrfg
+         lfHKD6xnozw/t6ZHcVzyj89NP2Xx5aPjh3sqQT2Z/bGGYcrRxlKown/8aCCVonJ7Zn5s
+         xtUBwek/TaR4TjL5mJLUrQkPFO9c+iwpB3IVTw07ZgWsRVxje6Ytzyx19VzLop8FqyZr
+         q4g9YBHYjMNsZK/WAQoJzc7uOBGU6+/P/UB2epRo9qySyy7OGX4UeEVwb9EkzD0Bc35G
+         Dppw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758149717; x=1758754517;
+        d=1e100.net; s=20230601; t=1758149721; x=1758754521;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=u/eWmQdzp2gJMKzDrupQRH1sPNWHwWwHav7oa7B7Mo0=;
-        b=kZrCfnQRloAdJqQlS8BNTZmURzJ4NAvf1pTDo/iEgV2RkOf45JuYMRWFG1RnB/5QQn
-         e2Ez3qOyNZVFqqURHtNej567p8MNyPZVkf978WXSzCjdCLwCwn1Ioh44KHy6+xzcY5VH
-         XAQPnRmcQmO5Zr34ek/pR2WOINUxrmP47fS5weOUO4xwGvaE7Z7/Faz0mFFO81qcPUqb
-         JeuQ4PKmzX6daFgYBbpZzixIEvAsgo+8/YDjBKfJNs35Ojpt8cNPN6whtATqg3hQLrCD
-         NksRRHGqMfAcHzy6MtRPbgkRcV2dZlIQGsNXBwqTPWUEa/LrOHwVZaBUuC2IR9bCwSRC
-         Ow1A==
-X-Gm-Message-State: AOJu0YwQOpEtdHRXDQ8vqGTAkEyG1wnLsKiPmtjcgxetcoAwqfgqfhWU
-	/m+J2isoH3OcsyS3ZY9EGZZj4HUtH5c2KvdVhf47iUE4fucKIx/BiskLuZz03Q==
-X-Gm-Gg: ASbGnctXAFSRAk+RtTHSStTcg3M04c2AEHrI2f+5hhKx9e4IieRK4cD0YGrlhQ6aq4U
-	9ZGmzoJI3QF1JCbT2cMRuthSfRemm6BxgRjvU8HmDisaiATByQcCPb2/71OR/2ergovwcNg9UL3
-	ZtKc8uSGiJXgCl27XrYhK+U9KTwGd8ZxZ0jzO6sAegMGYzgR858RjbA7VPNNVFPcYGy273w1uDA
-	jI/gWyRpWKWNRpXNPy1RVmPBxXKP+w0XJwCJERz8lxRCRaGlsXtjXCkhZWEBEoy3cAH05Z74g8d
-	/SfgQWevsQ7seiHvra5wk9duKvYsX6b5fsz6CrKRBaoMuldVLdCR96E1LWqH03zuCVX6XQstS//
-	9xA2kSvGgEGJ8tinHSsLWw67fX8N4RYmUDU/myzcEUYE=
-X-Google-Smtp-Source: AGHT+IGf4dMR+5wRnSzr9VNnkG+v2fzxz7wCOoftR/K3LFxTrmZBg/cv+EnRZcOkZ8GZjcX+SnyzVw==
-X-Received: by 2002:a05:6a20:3d05:b0:251:1b8c:565c with SMTP id adf61e73a8af0-27aaf1ce7admr5424585637.31.1758149717492;
-        Wed, 17 Sep 2025 15:55:17 -0700 (PDT)
-Received: from localhost ([2a03:2880:ff:59::])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-77cff22bdb5sm443892b3a.94.2025.09.17.15.55.16
+        bh=OETsLPmcZGNpLSshaaiLeOj8LUgrE6er4wP4vFEBZK0=;
+        b=JRkeO6K6cS4CYJwqbigYGvOn2LXbJjiVRl/2tjddEYmfrdA4c/B/78rh4PWLI4bcxD
+         K91hVv+NcLH/QFSjEMowpIz00SWxMtubCMdVFys1+I6J1N5PXo4OQRcgcSl0IkymjZ8S
+         xB0kV8eF+rUqOL24LJSFHTr+Vq07Sk0o1Agl/EnGLdm3lwG7pw7ruI3I+Z7ADGzW/4Pj
+         VpMzfHHBLe7hYu3Q9jceFspeVfpRGtdMMjlO5YM17S1mzym9NCSp71UI8RF5Rg/Y42Pk
+         Cjt38+SKgoXVPvH8UBn4vjT10KzNf/qjv3/40zjyWLIiUMaqkpU3pJkkYfjvI9cT/nk7
+         3B5A==
+X-Gm-Message-State: AOJu0YzMUuW1qg9Q9Kz5HIZlAt6uDudCFGt+L/aiB6mSFSfGg1FAUmJj
+	WSU1rTBUqr4gF0K2k9XoXd7cGX5U7UbNGanp0FhoRoCxy9tHkpT2imKaguLOmA==
+X-Gm-Gg: ASbGncvQJ70jFFPSup5jSaYxgqePVlTl8EmO9KiptqGGrOG5m7jcHyAvptFq+HSSf28
+	KLqDvtNiYsX33p+TLrqhe03phoZlkW6DNH026NPWfIvgRNDpeHjtGNxin/VLhxTwrmTQoWgD3m+
+	NYxtuwS73OMpNu0DgNGGxxdq/unTqRl8oJsRSrJhtJsRWRfJYJ6qtMavXcQ4pbhQe1V/GeiAuaI
+	gCKkERXBKPIgrAmbN19w2+wRCHjkcDyTvDwCDCUDI7vvwD84da2sHtLCt8q7R7fVGGgygoHu/Hb
+	MtxDJSo/Fm0GFIFwTtpB2ErBlxY8FuqkblBFB6rbaxCAws2G7ClnhV01xtqYdH+/PATfsO+g7f5
+	RT5f9utlbEir1bWbXEUNFA7g9LidheDU=
+X-Google-Smtp-Source: AGHT+IF1zrNoixTvs/C1WaUcnMEKlIKBQMV+ZH/VhsbHfBv7/cSmvVUFPi/g5VwLcrWqz5jQFdrfsA==
+X-Received: by 2002:a17:902:e54a:b0:269:6e73:b90a with SMTP id d9443c01a7336-2696e82fe56mr26439655ad.15.1758149720630;
+        Wed, 17 Sep 2025 15:55:20 -0700 (PDT)
+Received: from localhost ([2a03:2880:ff:a::])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-269802debfcsm6053555ad.86.2025.09.17.15.55.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Sep 2025 15:55:16 -0700 (PDT)
+        Wed, 17 Sep 2025 15:55:20 -0700 (PDT)
 From: Amery Hung <ameryhung@gmail.com>
 To: bpf@vger.kernel.org
 Cc: netdev@vger.kernel.org,
@@ -75,9 +75,9 @@ Cc: netdev@vger.kernel.org,
 	mbloch@nvidia.com,
 	maciej.fijalkowski@intel.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v4 3/6] bpf: Clear packet pointers after changing packet data in kfuncs
-Date: Wed, 17 Sep 2025 15:55:10 -0700
-Message-ID: <20250917225513.3388199-4-ameryhung@gmail.com>
+Subject: [PATCH bpf-next v4 6/6] selftests: drv-net: Pull data before parsing headers
+Date: Wed, 17 Sep 2025 15:55:13 -0700
+Message-ID: <20250917225513.3388199-7-ameryhung@gmail.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20250917225513.3388199-1-ameryhung@gmail.com>
 References: <20250917225513.3388199-1-ameryhung@gmail.com>
@@ -89,72 +89,176 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-bpf_xdp_pull_data() may change packet data and therefore packet pointers
-need to be invalidated. Add bpf_xdp_pull_data() to the special kfunc
-list instead of introducing a new KF_ flag until there are more kfuncs
-changing packet data.
+It is possible for drivers to generate xdp packets with data residing
+entirely in fragments. To keep parsing headers using direcy packet
+access, call bpf_xdp_pull_data() to pull headers into the linear data
+area.
 
 Signed-off-by: Amery Hung <ameryhung@gmail.com>
 ---
- kernel/bpf/verifier.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ .../selftests/net/lib/xdp_native.bpf.c        | 89 +++++++++++++++----
+ 1 file changed, 74 insertions(+), 15 deletions(-)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 1029380f84db..ed493d1dd2e3 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -12239,6 +12239,7 @@ enum special_kfunc_type {
- 	KF_bpf_dynptr_from_skb,
- 	KF_bpf_dynptr_from_xdp,
- 	KF_bpf_dynptr_from_skb_meta,
-+	KF_bpf_xdp_pull_data,
- 	KF_bpf_dynptr_slice,
- 	KF_bpf_dynptr_slice_rdwr,
- 	KF_bpf_dynptr_clone,
-@@ -12289,10 +12290,12 @@ BTF_ID(func, bpf_rbtree_right)
- BTF_ID(func, bpf_dynptr_from_skb)
- BTF_ID(func, bpf_dynptr_from_xdp)
- BTF_ID(func, bpf_dynptr_from_skb_meta)
-+BTF_ID(func, bpf_xdp_pull_data)
- #else
- BTF_ID_UNUSED
- BTF_ID_UNUSED
- BTF_ID_UNUSED
-+BTF_ID_UNUSED
- #endif
- BTF_ID(func, bpf_dynptr_slice)
- BTF_ID(func, bpf_dynptr_slice_rdwr)
-@@ -12362,6 +12365,11 @@ static bool is_kfunc_bpf_preempt_enable(struct bpf_kfunc_call_arg_meta *meta)
- 	return meta->func_id == special_kfunc_list[KF_bpf_preempt_enable];
- }
+diff --git a/tools/testing/selftests/net/lib/xdp_native.bpf.c b/tools/testing/selftests/net/lib/xdp_native.bpf.c
+index 521ba38f2ddd..df4eea5c192b 100644
+--- a/tools/testing/selftests/net/lib/xdp_native.bpf.c
++++ b/tools/testing/selftests/net/lib/xdp_native.bpf.c
+@@ -14,6 +14,8 @@
+ #define MAX_PAYLOAD_LEN 5000
+ #define MAX_HDR_LEN 64
  
-+static bool is_kfunc_pkt_changing(struct bpf_kfunc_call_arg_meta *meta)
-+{
-+	return meta->func_id == special_kfunc_list[KF_bpf_xdp_pull_data];
-+}
++extern int bpf_xdp_pull_data(struct xdp_md *xdp, __u32 len) __ksym __weak;
 +
- static enum kfunc_ptr_arg_type
- get_kfunc_ptr_arg_type(struct bpf_verifier_env *env,
- 		       struct bpf_kfunc_call_arg_meta *meta,
-@@ -14081,6 +14089,9 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 		}
+ enum {
+ 	XDP_MODE = 0,
+ 	XDP_PORT = 1,
+@@ -68,30 +70,57 @@ static void record_stats(struct xdp_md *ctx, __u32 stat_type)
+ 
+ static struct udphdr *filter_udphdr(struct xdp_md *ctx, __u16 port)
+ {
+-	void *data_end = (void *)(long)ctx->data_end;
+-	void *data = (void *)(long)ctx->data;
+ 	struct udphdr *udph = NULL;
+-	struct ethhdr *eth = data;
++	void *data, *data_end;
++	struct ethhdr *eth;
++	int err;
++
++	err = bpf_xdp_pull_data(ctx, sizeof(*eth));
++	if (err)
++		return NULL;
++
++	data_end = (void *)(long)ctx->data_end;
++	data = eth = (void *)(long)ctx->data;
+ 
+ 	if (data + sizeof(*eth) > data_end)
+ 		return NULL;
+ 
+ 	if (eth->h_proto == bpf_htons(ETH_P_IP)) {
+-		struct iphdr *iph = data + sizeof(*eth);
++		struct iphdr *iph;
++
++		err = bpf_xdp_pull_data(ctx, sizeof(*eth) + sizeof(*iph) +
++					     sizeof(*udph));
++		if (err)
++			return NULL;
++
++		data_end = (void *)(long)ctx->data_end;
++		data = (void *)(long)ctx->data;
++
++		iph = data + sizeof(*eth);
+ 
+ 		if (iph + 1 > (struct iphdr *)data_end ||
+ 		    iph->protocol != IPPROTO_UDP)
+ 			return NULL;
+ 
+-		udph = (void *)eth + sizeof(*iph) + sizeof(*eth);
+-	} else if (eth->h_proto  == bpf_htons(ETH_P_IPV6)) {
+-		struct ipv6hdr *ipv6h = data + sizeof(*eth);
++		udph = data + sizeof(*iph) + sizeof(*eth);
++	} else if (eth->h_proto == bpf_htons(ETH_P_IPV6)) {
++		struct ipv6hdr *ipv6h;
++
++		err = bpf_xdp_pull_data(ctx, sizeof(*eth) + sizeof(*ipv6h) +
++					     sizeof(*udph));
++		if (err)
++			return NULL;
++
++		data_end = (void *)(long)ctx->data_end;
++		data = (void *)(long)ctx->data;
++
++		ipv6h = data + sizeof(*eth);
+ 
+ 		if (ipv6h + 1 > (struct ipv6hdr *)data_end ||
+ 		    ipv6h->nexthdr != IPPROTO_UDP)
+ 			return NULL;
+ 
+-		udph = (void *)eth + sizeof(*ipv6h) + sizeof(*eth);
++		udph = data + sizeof(*ipv6h) + sizeof(*eth);
+ 	} else {
+ 		return NULL;
  	}
+@@ -145,17 +174,34 @@ static void swap_machdr(void *data)
  
-+	if (is_kfunc_pkt_changing(&meta))
-+		clear_all_pkt_pointers(env);
+ static int xdp_mode_tx_handler(struct xdp_md *ctx, __u16 port)
+ {
+-	void *data_end = (void *)(long)ctx->data_end;
+-	void *data = (void *)(long)ctx->data;
+ 	struct udphdr *udph = NULL;
+-	struct ethhdr *eth = data;
++	void *data, *data_end;
++	struct ethhdr *eth;
++	int err;
 +
- 	nargs = btf_type_vlen(meta.func_proto);
- 	args = (const struct btf_param *)(meta.func_proto + 1);
- 	for (i = 0; i < nargs; i++) {
-@@ -17802,6 +17813,8 @@ static int visit_insn(int t, struct bpf_verifier_env *env)
- 			 */
- 			if (ret == 0 && is_kfunc_sleepable(&meta))
- 				mark_subprog_might_sleep(env, t);
-+			if (ret == 0 && is_kfunc_pkt_changing(&meta))
-+				mark_subprog_changes_pkt_data(env, t);
- 		}
- 		return visit_func_call_insn(t, insns, env, insn->src_reg == BPF_PSEUDO_CALL);
++	err = bpf_xdp_pull_data(ctx, sizeof(*eth));
++	if (err)
++		return XDP_PASS;
++
++	data_end = (void *)(long)ctx->data_end;
++	data = eth = (void *)(long)ctx->data;
  
+ 	if (data + sizeof(*eth) > data_end)
+ 		return XDP_PASS;
+ 
+ 	if (eth->h_proto == bpf_htons(ETH_P_IP)) {
+-		struct iphdr *iph = data + sizeof(*eth);
+-		__be32 tmp_ip = iph->saddr;
++		struct iphdr *iph;
++		__be32 tmp_ip;
++
++		err = bpf_xdp_pull_data(ctx, sizeof(*eth) + sizeof(*iph) +
++					     sizeof(*udph));
++		if (err)
++			return XDP_PASS;
++
++		data_end = (void *)(long)ctx->data_end;
++		data = (void *)(long)ctx->data;
++
++		iph = data + sizeof(*eth);
+ 
+ 		if (iph + 1 > (struct iphdr *)data_end ||
+ 		    iph->protocol != IPPROTO_UDP)
+@@ -169,8 +215,10 @@ static int xdp_mode_tx_handler(struct xdp_md *ctx, __u16 port)
+ 			return XDP_PASS;
+ 
+ 		record_stats(ctx, STATS_RX);
++		eth = data;
+ 		swap_machdr((void *)eth);
+ 
++		tmp_ip = iph->saddr;
+ 		iph->saddr = iph->daddr;
+ 		iph->daddr = tmp_ip;
+ 
+@@ -178,9 +226,19 @@ static int xdp_mode_tx_handler(struct xdp_md *ctx, __u16 port)
+ 
+ 		return XDP_TX;
+ 
+-	} else if (eth->h_proto  == bpf_htons(ETH_P_IPV6)) {
+-		struct ipv6hdr *ipv6h = data + sizeof(*eth);
++	} else if (eth->h_proto == bpf_htons(ETH_P_IPV6)) {
+ 		struct in6_addr tmp_ipv6;
++		struct ipv6hdr *ipv6h;
++
++		err = bpf_xdp_pull_data(ctx, sizeof(*eth) + sizeof(*ipv6h) +
++					     sizeof(*udph));
++		if (err)
++			return XDP_PASS;
++
++		data_end = (void *)(long)ctx->data_end;
++		data = (void *)(long)ctx->data;
++
++		ipv6h = data + sizeof(*eth);
+ 
+ 		if (ipv6h + 1 > (struct ipv6hdr *)data_end ||
+ 		    ipv6h->nexthdr != IPPROTO_UDP)
+@@ -194,6 +252,7 @@ static int xdp_mode_tx_handler(struct xdp_md *ctx, __u16 port)
+ 			return XDP_PASS;
+ 
+ 		record_stats(ctx, STATS_RX);
++		eth = data;
+ 		swap_machdr((void *)eth);
+ 
+ 		__builtin_memcpy(&tmp_ipv6, &ipv6h->saddr, sizeof(tmp_ipv6));
 -- 
 2.47.3
 
