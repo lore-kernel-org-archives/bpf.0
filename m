@@ -1,343 +1,578 @@
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-185.mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97F5E313271
-	for <bpf@vger.kernel.org>; Wed, 17 Sep 2025 22:55:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0005D329500
+	for <bpf@vger.kernel.org>; Wed, 17 Sep 2025 23:38:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.185
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758149724; cv=none; b=j/uMGb546ljN5UPjVxjO0kCtNpcx7ByEqAHCRTL35NJoOASRH9uw+kNFYeqUs+leWDzK8D4SIOo6N1UFBCoidTFvsAAFOojhR22ax/khJi1gK/TET/AEQXeFvkR49oreo0oAJPrw5kVpQfm4psuOzSxNitChWQA8xxPqzidpieQ=
+	t=1758152306; cv=none; b=Ngb1rg3YzPu0Gg3PGVTx4jDbQOQMXZ6q4G69HEXL66dWuheXaic141HGolBwgj11buvhovdszIBX7e+BwgzuPSLuVOYQ3ct2R1zoRZyO0YxykDPF79JmldAVrm3371WnsTb2vEkzUG842Ku0PasX9FSVehNDSeh+wr3JbMJsPV4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758149724; c=relaxed/simple;
-	bh=ebEe9IkyQgkamx37VBlEmeJSVSG9SRHubSWbTb9SAwA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=VT6tVx4om1Q1q8X6G0lIFZi6mIiOHn5ZlFVDjA/mVTtbxn3v2ohsldYvKc3zPvMtn2AP+MlRfd0cs/zRWNqXX9p0TZffRjrhFE47pa16FIwdNmTvWLWvgVQsscuNTkNF1uK/tzO12WA6rk8M0cBBWFuYWVh1iDAm9EpvdGa6kK0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HZ8DnD7E; arc=none smtp.client-ip=209.85.210.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1758152306; c=relaxed/simple;
+	bh=lrTHq0RZKlXNr12IIHcf/QuBQ8dQbTXenh1lsayWT2I=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=PPin7ZED491I20zz/jnFPHII9GQ0AbmBd+0Rf4QCILKFExc378DWDHU72M1u85q8NvQCbUrsoCrumsD7i+OEnUMPQxI+s+hZYg2MR3oce1oAfBF1nFy4+6sZCgHstVSEXGTc8LnnKMfFU4IM+YQHnIpeJCAlbV/qpiuHhG/XOeI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=J95J5G0K; arc=none smtp.client-ip=91.218.175.185
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HZ8DnD7E"
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-77251d7cca6so388604b3a.3
-        for <bpf@vger.kernel.org>; Wed, 17 Sep 2025 15:55:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1758149720; x=1758754520; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TAxzi5B6cBNAyJn1tXCxSzkoEcVVhnXO76uSYmveprE=;
-        b=HZ8DnD7EVc45xC7ATf1FosBBcHlSrFTeFVSY/MuhCFlGh/+RADU4C5wNGUAQroQ6DC
-         LIF+2xpH30LPA/HiW5XjP2YEPdZxuXELhVCAL26wTtyq5diZJgpWzdwvMWM/bNr38ans
-         p3Buw5zgXjnPyoXYhTms9CNQuqwKXfcvY1Vr/5d4XWSYns4LS6oVNZyHPUe2iMFxzs3t
-         3Wt5KbNjiXG+MT1MaT91RR/5ray41c95X3jFjT9IH73hna3bzjeAEvNiq92AHiR1T5b5
-         z6oW5lN/5NfMYZHxMx60tRLo87TWj1OovcdEJIlRny7ofKUYuW1OCOp0HvsUHc1OFgV/
-         sqZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758149720; x=1758754520;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TAxzi5B6cBNAyJn1tXCxSzkoEcVVhnXO76uSYmveprE=;
-        b=auLaIaQpBBoA7x5RSVwLkheUKIe4zbzT0WniXAqCvelSRThPOXkLJb/ikqKugNdJ+U
-         7D3onXNPFFb0GE0OpobpB27bXA1vYXzrRO7BXp5wD5hdIo+aFdaHzWD1aQoozHFXJfGh
-         nXpKnrcOwmY3Ymh90nDdhHuK2PykFAFs1WbbqH/7xcnkp6EMQyx2RnwYurJ4bbblj+g7
-         GbPYgxoP1unRMGBgi2oNF5iGniPOhEMpv+o30S3EDJVB6/S6ZlUFFmRdy6MdmWQRFsbc
-         oBRLl668Os1EWIFTuHfit62i5oGwxE2WMkAL9V84zo6xZwXL0lHtL7gkEcyFWJHzzTyD
-         najw==
-X-Gm-Message-State: AOJu0YyDVrNiKXXYiVU+9mkD2muXIyJc38st2v2P/RVegdm72h//pJx2
-	ER6KF2ZdBM3nXT6/AZTW+Nc/KGmV3nOGOdGpPcUO1ZmGrBCpIq+zIh2KojKC1g==
-X-Gm-Gg: ASbGncsKghItLuejOCYHNpBxWl3M6ibmRRXEnuYHHcSyEyZGjz77E4rhzsDcA/76Bt3
-	fhIFrt/ySbXneepjbvYRgcyaUojlPkzKP3N1XfO2OvEGuOT1nc+EXak1HvF2MpJNBdbvpJJK66/
-	y3vQRihvT+zS4CKKSezUiOLShJfX+yVmhE/53e7gOQJXWn+Ty0sHzK+5DI3tO5YsXTcfZiNnGBQ
-	vonvtqw0BE+Ur1fb81US+YnEw9jWnBfHmARollg1qve6iphm9lUWPrRujkAKybVFoS3kcFWLSrA
-	DPIDfp3JDkJdQIazdhnrr2BuCDWcabVVkqEcXaAYGXzoQNuuyFDHVgqQejw/z/ej0dCsloxj9uX
-	PGi515G7kTRSFFcPGRGSZcvgXgo8d60vZ
-X-Google-Smtp-Source: AGHT+IFhAX57mtlI6Qb0COvLGqAT7KFCCcaEWfPcYP/pCDZm8t40kZlXcygtHOJGBxlQh8BKjQc6tw==
-X-Received: by 2002:a05:6a00:3d0f:b0:776:277f:f687 with SMTP id d2e1a72fcca58-77bf8c76f22mr5072938b3a.15.1758149719611;
-        Wed, 17 Sep 2025 15:55:19 -0700 (PDT)
-Received: from localhost ([2a03:2880:ff:5e::])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-77cfbb7c127sm458672b3a.21.2025.09.17.15.55.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Sep 2025 15:55:19 -0700 (PDT)
-From: Amery Hung <ameryhung@gmail.com>
-To: bpf@vger.kernel.org
-Cc: netdev@vger.kernel.org,
-	alexei.starovoitov@gmail.com,
-	andrii@kernel.org,
-	daniel@iogearbox.net,
-	paul.chaignon@gmail.com,
-	kuba@kernel.org,
-	stfomichev@gmail.com,
-	martin.lau@kernel.org,
-	mohsin.bashr@gmail.com,
-	noren@nvidia.com,
-	dtatulea@nvidia.com,
-	saeedm@nvidia.com,
-	tariqt@nvidia.com,
-	mbloch@nvidia.com,
-	maciej.fijalkowski@intel.com,
-	kernel-team@meta.com
-Subject: [PATCH bpf-next v4 5/6] selftests/bpf: Test bpf_xdp_pull_data
-Date: Wed, 17 Sep 2025 15:55:12 -0700
-Message-ID: <20250917225513.3388199-6-ameryhung@gmail.com>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20250917225513.3388199-1-ameryhung@gmail.com>
-References: <20250917225513.3388199-1-ameryhung@gmail.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="J95J5G0K"
+Message-ID: <a706bb87-46e1-4524-8d35-8f22569a73e7@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1758152299;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=slS7VafjOvasitxCHtJrhEeq6XWzVWafcmogWCG+nCQ=;
+	b=J95J5G0KYuSu5/ZRohC8ixTS2Cv5u1SyMOf/kXXN1fbHlSpO5RpO9KYnesYeZLnrZyYpeb
+	etiK5JIrDZ3L5F0ulrtw/TVmJ3auVBf7L3w0wL6ikULVDoNwnMgb2cRqodp1Pr3lqguUtt
+	ep1hB/WdIw9Jde8GBbx4F4tMTHHYvaw=
+Date: Wed, 17 Sep 2025 16:38:11 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v9 bpf-next/net 6/6] selftest: bpf: Add test for
+ SK_MEMCG_EXCLUSIVE.
+To: Kuniyuki Iwashima <kuniyu@google.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, Johannes Weiner <hannes@cmpxchg.org>,
+ Michal Hocko <mhocko@kernel.org>, Roman Gushchin <roman.gushchin@linux.dev>,
+ Shakeel Butt <shakeel.butt@linux.dev>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Neal Cardwell <ncardwell@google.com>, Willem de Bruijn <willemb@google.com>,
+ Mina Almasry <almasrymina@google.com>, Kuniyuki Iwashima
+ <kuni1840@gmail.com>, bpf@vger.kernel.org, netdev@vger.kernel.org
+References: <20250917191417.1056739-1-kuniyu@google.com>
+ <20250917191417.1056739-7-kuniyu@google.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+Content-Language: en-US
+In-Reply-To: <20250917191417.1056739-7-kuniyu@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-Test bpf_xdp_pull_data() with xdp packets with different layouts. The
-xdp bpf program first checks if the layout is as expected. Then, it
-calls bpf_xdp_pull_data(). Finally, it checks the 0xbb marker at offset
-1024 using directly packet access.
+On 9/17/25 12:14 PM, Kuniyuki Iwashima wrote:
+> The test does the following for IPv4/IPv6 x TCP/UDP sockets
+> with/without SK_MEMCG_EXCLUSIVE, which can be turned on by
+> net.core.memcg_exclusive or bpf_setsockopt(SK_BPF_MEMCG_EXCLUSIVE).
+> 
+>    1. Create socket pairs
+>    2. Send a bunch of data that requires more than 1024 pages
+>    3. Read memory_allocated from sk->sk_prot->memory_allocated and
+>       sk->sk_prot->memory_per_cpu_fw_alloc
+>    4. Check if unread data is charged to memory_allocated
+> 
+> If SK_MEMCG_EXCLUSIVE is set, memory_allocated should not be
+> changed, but we allow a small error (up to 10 pages) in case
+> other processes on the host use some amounts of TCP/UDP memory.
+> 
+> The amount of allocated pages are buffered to per-cpu variable
+> {tcp,udp}_memory_per_cpu_fw_alloc up to +/- net.core.mem_pcpu_rsv
+> before reported to {tcp,udp}_memory_allocated.
+> 
+> At 3., memory_allocated is calculated from the 2 variables twice
+> at fentry and fexit of socket create function to check if the per-cpu
+> value is drained during calculation.  In that case, 3. is retried.
+> 
+> We use kern_sync_rcu() for UDP because UDP recv queue is destroyed
+> after RCU grace period.
+> 
+> The test takes ~2s on QEMU (64 CPUs) w/ KVM but takes 6s w/o KVM.
+> 
+>    # time ./test_progs -t sk_memcg
+>    #370/1   sk_memcg/TCP  :OK
+>    #370/2   sk_memcg/UDP  :OK
+>    #370/3   sk_memcg/TCPv6:OK
+>    #370/4   sk_memcg/UDPv6:OK
+>    #370     sk_memcg:OK
+>    Summary: 1/4 PASSED, 0 SKIPPED, 0 FAILED
+> 
+>    real	0m1.623s
+>    user	0m0.165s
+>    sys	0m0.366s
+> 
+> Signed-off-by: Kuniyuki Iwashima <kuniyu@google.com>
+> ---
+> v7:
+>    * Add test for sysctl
+> 
+> v6:
+>    * Trace sk_prot->memory_allocated + sk_prot->memory_per_cpu_fw_alloc
+> 
+> v5:
+>    * Use kern_sync_rcu()
+>    * Double NR_SEND to 128
+> 
+> v4:
+>    * Only use inet_create() hook
+>    * Test bpf_getsockopt()
+>    * Add serial_ prefix
+>    * Reduce sleep() and the amount of sent data
+> ---
+>   .../selftests/bpf/prog_tests/sk_memcg.c       | 261 ++++++++++++++++++
+>   tools/testing/selftests/bpf/progs/sk_memcg.c  | 146 ++++++++++
+>   2 files changed, 407 insertions(+)
+>   create mode 100644 tools/testing/selftests/bpf/prog_tests/sk_memcg.c
+>   create mode 100644 tools/testing/selftests/bpf/progs/sk_memcg.c
+> 
+> diff --git a/tools/testing/selftests/bpf/prog_tests/sk_memcg.c b/tools/testing/selftests/bpf/prog_tests/sk_memcg.c
+> new file mode 100644
+> index 000000000000..777fb81e9365
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/sk_memcg.c
+> @@ -0,0 +1,261 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/* Copyright 2025 Google LLC */
+> +
+> +#include <test_progs.h>
+> +#include "sk_memcg.skel.h"
+> +#include "network_helpers.h"
+> +
+> +#define NR_SOCKETS	64
+> +#define NR_SEND		128
+> +#define BUF_SINGLE	1024
+> +#define BUF_TOTAL	(BUF_SINGLE * NR_SEND)
+> +
+> +struct test_case {
+> +	char name[8];
+> +	int family;
+> +	int type;
+> +	int (*create_sockets)(struct test_case *test_case, int sk[], int len);
+> +	long (*get_memory_allocated)(struct test_case *test_case, struct sk_memcg *skel);
+> +};
+> +
+> +static int tcp_create_sockets(struct test_case *test_case, int sk[], int len)
+> +{
+> +	int server, i;
+> +
+> +	server = start_server(test_case->family, test_case->type, NULL, 0, 0);
+> +	ASSERT_GE(server, 0, "start_server_str");
+> +
+> +	for (i = 0; i < len / 2; i++) {
+> +		sk[i * 2] = connect_to_fd(server, 0);
+> +		if (!ASSERT_GE(sk[i * 2], 0, "connect_to_fd"))
+> +			return sk[i * 2];
+> +
+> +		sk[i * 2 + 1] = accept(server, NULL, NULL);
+> +		if (!ASSERT_GE(sk[i * 2 + 1], 0, "accept"))
+> +			return sk[i * 2 + 1];
+> +	}
+> +
+> +	close(server);
+> +
+> +	return 0;
+> +}
+> +
+> +static int udp_create_sockets(struct test_case *test_case, int sk[], int len)
+> +{
+> +	int i, err, rcvbuf = BUF_TOTAL;
+> +
+> +	for (i = 0; i < len / 2; i++) {
 
-Signed-off-by: Amery Hung <ameryhung@gmail.com>
----
- .../selftests/bpf/prog_tests/xdp_pull_data.c  | 176 ++++++++++++++++++
- .../selftests/bpf/progs/test_xdp_pull_data.c  |  48 +++++
- 2 files changed, 224 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/xdp_pull_data.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_xdp_pull_data.c
+nit. How about "for (i = 0; i < len; i += 2) {" once here instead of "i * 2" 
+below. Same for the tcp_create_sockets() above.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_pull_data.c b/tools/testing/selftests/bpf/prog_tests/xdp_pull_data.c
-new file mode 100644
-index 000000000000..c16801b73fed
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_pull_data.c
-@@ -0,0 +1,176 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <test_progs.h>
-+#include <network_helpers.h>
-+#include "test_xdp_pull_data.skel.h"
-+
-+#define PULL_MAX	(1 << 31)
-+#define PULL_PLUS_ONE	(1 << 30)
-+
-+#define XDP_PACKET_HEADROOM 256
-+
-+/* Find sizes of struct skb_shared_info and struct xdp_frame so that
-+ * we can calculate the maximum pull lengths for test cases
-+ */
-+static int find_xdp_sizes(struct test_xdp_pull_data *skel, int frame_sz)
-+{
-+	LIBBPF_OPTS(bpf_test_run_opts, topts);
-+	struct xdp_md ctx = {};
-+	int prog_fd, err;
-+	__u8 *buf;
-+
-+	buf = calloc(frame_sz, sizeof(__u8));
-+	if (!ASSERT_OK_PTR(buf, "calloc buf"))
-+		return -ENOMEM;
-+
-+	topts.data_in = buf;
-+	topts.data_out = buf;
-+	topts.data_size_in = frame_sz;
-+	topts.data_size_out = frame_sz;
-+	/* Pass a data_end larger than the linear space available to make sure
-+	 * bpf_prog_test_run_xdp() will fill the linear data area so that
-+	 * xdp_find_data_hard_end can infer the size of struct skb_shared_info
-+	 */
-+	ctx.data_end = frame_sz;
-+	topts.ctx_in = &ctx;
-+	topts.ctx_out = &ctx;
-+	topts.ctx_size_in = sizeof(ctx);
-+	topts.ctx_size_out = sizeof(ctx);
-+
-+	prog_fd = bpf_program__fd(skel->progs.xdp_find_sizes);
-+	err = bpf_prog_test_run_opts(prog_fd, &topts);
-+	ASSERT_OK(err, "bpf_prog_test_run_opts");
-+
-+	free(buf);
-+
-+	return err;
-+}
-+
-+/* xdp_pull_data_prog will directly read a marker 0xbb stored at buf[1024]
-+ * so caller expecting XDP_PASS should always pass pull_len no less than 1024
-+ */
-+static void run_test(struct test_xdp_pull_data *skel, int retval,
-+		     int frame_sz, int buff_len, int meta_len, int data_len,
-+		     int pull_len)
-+{
-+	LIBBPF_OPTS(bpf_test_run_opts, topts);
-+	struct xdp_md ctx = {};
-+	int prog_fd, err;
-+	__u8 *buf;
-+
-+	buf = calloc(buff_len, sizeof(__u8));
-+	if (!ASSERT_OK_PTR(buf, "calloc buf"))
-+		return;
-+
-+	buf[meta_len + 1023] = 0xaa;
-+	buf[meta_len + 1024] = 0xbb;
-+	buf[meta_len + 1025] = 0xcc;
-+
-+	topts.data_in = buf;
-+	topts.data_out = buf;
-+	topts.data_size_in = buff_len;
-+	topts.data_size_out = buff_len;
-+	ctx.data = meta_len;
-+	ctx.data_end = meta_len + data_len;
-+	topts.ctx_in = &ctx;
-+	topts.ctx_out = &ctx;
-+	topts.ctx_size_in = sizeof(ctx);
-+	topts.ctx_size_out = sizeof(ctx);
-+
-+	skel->bss->data_len = data_len;
-+	if (pull_len & PULL_MAX) {
-+		int headroom = XDP_PACKET_HEADROOM - meta_len - skel->bss->xdpf_sz;
-+		int tailroom = frame_sz - XDP_PACKET_HEADROOM -
-+			       data_len - skel->bss->sinfo_sz;
-+
-+		pull_len = pull_len & PULL_PLUS_ONE ? 1 : 0;
-+		pull_len += headroom + tailroom + data_len;
-+	}
-+	skel->bss->pull_len = pull_len;
-+
-+	prog_fd = bpf_program__fd(skel->progs.xdp_pull_data_prog);
-+	err = bpf_prog_test_run_opts(prog_fd, &topts);
-+	ASSERT_OK(err, "bpf_prog_test_run_opts");
-+	ASSERT_EQ(topts.retval, retval, "xdp_pull_data_prog retval");
-+
-+	if (retval == XDP_DROP)
-+		goto out;
-+
-+	ASSERT_EQ(ctx.data_end, meta_len + pull_len, "linear data size");
-+	ASSERT_EQ(topts.data_size_out, buff_len, "linear + non-linear data size");
-+	/* Make sure data around xdp->data_end was not messed up by
-+	 * bpf_xdp_pull_data()
-+	 */
-+	ASSERT_EQ(buf[meta_len + 1023], 0xaa, "data[1023]");
-+	ASSERT_EQ(buf[meta_len + 1024], 0xbb, "data[1024]");
-+	ASSERT_EQ(buf[meta_len + 1025], 0xcc, "data[1025]");
-+out:
-+	free(buf);
-+}
-+
-+static void test_xdp_pull_data_basic(void)
-+{
-+	u32 pg_sz, max_meta_len, max_data_len;
-+	struct test_xdp_pull_data *skel;
-+
-+	skel = test_xdp_pull_data__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "test_xdp_pull_data__open_and_load"))
-+		return;
-+
-+	pg_sz = sysconf(_SC_PAGE_SIZE);
-+
-+	if (find_xdp_sizes(skel, pg_sz))
-+		goto out;
-+
-+	max_meta_len = XDP_PACKET_HEADROOM - skel->bss->xdpf_sz;
-+	max_data_len = pg_sz - XDP_PACKET_HEADROOM - skel->bss->sinfo_sz;
-+
-+	/* linear xdp pkt, pull 0 byte */
-+	run_test(skel, XDP_PASS, pg_sz, 2048, 0, 2048, 2048);
-+
-+	/* multi-buf pkt, pull results in linear xdp pkt */
-+	run_test(skel, XDP_PASS, pg_sz, 2048, 0, 1024, 2048);
-+
-+	/* multi-buf pkt, pull 1 byte to linear data area */
-+	run_test(skel, XDP_PASS, pg_sz, 9000, 0, 1024, 1025);
-+
-+	/* multi-buf pkt, pull 0 byte to linear data area */
-+	run_test(skel, XDP_PASS, pg_sz, 9000, 0, 1025, 1025);
-+
-+	/* multi-buf pkt, empty linear data area, pull requires memmove */
-+	run_test(skel, XDP_PASS, pg_sz, 9000, 0, 0, PULL_MAX);
-+
-+	/* multi-buf pkt, no headroom */
-+	run_test(skel, XDP_PASS, pg_sz, 9000, max_meta_len, 1024, PULL_MAX);
-+
-+	/* multi-buf pkt, no tailroom, pull requires memmove */
-+	run_test(skel, XDP_PASS, pg_sz, 9000, 0, max_data_len, PULL_MAX);
-+
-+
-+	/* linear xdp pkt, pull more than total data len */
-+	run_test(skel, XDP_DROP, pg_sz, 2048, 0, 2048, 2049);
-+
-+	/* multi-buf pkt with no space left in linear data area */
-+	run_test(skel, XDP_DROP, pg_sz, 9000, max_meta_len, max_data_len,
-+		 PULL_MAX | PULL_PLUS_ONE);
-+
-+	/* multi-buf pkt, empty linear data area */
-+	run_test(skel, XDP_DROP, pg_sz, 9000, 0, 0, PULL_MAX | PULL_PLUS_ONE);
-+
-+	/* multi-buf pkt, no headroom */
-+	run_test(skel, XDP_DROP, pg_sz, 9000, max_meta_len, 1024,
-+		 PULL_MAX | PULL_PLUS_ONE);
-+
-+	/* multi-buf pkt, no tailroom */
-+	run_test(skel, XDP_DROP, pg_sz, 9000, 0, max_data_len,
-+		 PULL_MAX | PULL_PLUS_ONE);
-+
-+out:
-+	test_xdp_pull_data__destroy(skel);
-+}
-+
-+void test_xdp_pull_data(void)
-+{
-+	if (test__start_subtest("xdp_pull_data"))
-+		test_xdp_pull_data_basic();
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_xdp_pull_data.c b/tools/testing/selftests/bpf/progs/test_xdp_pull_data.c
-new file mode 100644
-index 000000000000..dd901bb109b6
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_xdp_pull_data.c
-@@ -0,0 +1,48 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include  "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+
-+int xdpf_sz;
-+int sinfo_sz;
-+int data_len;
-+int pull_len;
-+
-+#define XDP_PACKET_HEADROOM 256
-+
-+SEC("xdp.frags")
-+int xdp_find_sizes(struct xdp_md *ctx)
-+{
-+	xdpf_sz = sizeof(struct xdp_frame);
-+	sinfo_sz = __PAGE_SIZE - XDP_PACKET_HEADROOM -
-+		   (ctx->data_end - ctx->data);
-+
-+	return XDP_PASS;
-+}
-+
-+SEC("xdp.frags")
-+int xdp_pull_data_prog(struct xdp_md *ctx)
-+{
-+	__u8 *data_end = (void *)(long)ctx->data_end;
-+	__u8 *data = (void *)(long)ctx->data;
-+	__u8 *val_p;
-+	int err;
-+
-+	if (data_len != data_end - data)
-+		return XDP_DROP;
-+
-+	err = bpf_xdp_pull_data(ctx, pull_len);
-+	if (err)
-+		return XDP_DROP;
-+
-+	val_p = (void *)(long)ctx->data + 1024;
-+	if (val_p + 1 > (void *)(long)ctx->data_end)
-+		return XDP_DROP;
-+
-+	if (*val_p != 0xbb)
-+		return XDP_DROP;
-+
-+	return XDP_PASS;
-+}
-+
-+char _license[] SEC("license") = "GPL";
--- 
-2.47.3
+> +		sk[i * 2] = start_server(test_case->family, test_case->type, NULL, 0, 0);
+> +		if (!ASSERT_GE(sk[i * 2], 0, "start_server"))
+> +			return sk[i * 2];
+> +
+> +		sk[i * 2 + 1] = connect_to_fd(sk[i * 2], 0);
+> +		if (!ASSERT_GE(sk[i * 2 + 1], 0, "connect_to_fd"))
+> +			return sk[i * 2 + 1];
+> +
+> +		err = connect_fd_to_fd(sk[i * 2], sk[i * 2 + 1], 0);
+> +		if (!ASSERT_EQ(err, 0, "connect_fd_to_fd"))
+> +			return err;
+> +
+> +		err = setsockopt(sk[i * 2], SOL_SOCKET, SO_RCVBUF, &rcvbuf, sizeof(int));
+> +		if (!ASSERT_EQ(err, 0, "setsockopt(SO_RCVBUF)"))
+> +			return err;
+> +
+> +		err = setsockopt(sk[i * 2 + 1], SOL_SOCKET, SO_RCVBUF, &rcvbuf, sizeof(int));
+> +		if (!ASSERT_EQ(err, 0, "setsockopt(SO_RCVBUF)"))
+> +			return err;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static long get_memory_allocated(struct test_case *test_case,
+> +				 bool *activated, bool *stable,
+> +				 long *memory_allocated)
+> +{
+> +	*stable = false;
+> +
+> +	do {
+> +		*activated = true;
+> +
+> +		/* AF_INET and AF_INET6 share the same memory_allocated.
+> +		 * tcp_init_sock() is called by AF_INET and AF_INET6,
+> +		 * but udp_lib_init_sock() is inline.
+> +		 */
+> +		socket(AF_INET, test_case->type, 0);
+
+fd is leaked.
+
+> +	} while (!*stable);
+
+cannot loop forever. The test needs to assume the machine is relatively network 
+quiet anyway (so serial_). Things can still change after the stable test also. I 
+think having a way (the fentry in the progs/sk_memcg.c) to account for the 
+percpu fw alloc is good enough, and this should help if there is some light 
+background traffic that suddenly flush the hidden +255 percpu counter to the 
+global one and another percpu counter still has a -254 for example.
+
+> +
+> +	return *memory_allocated;
+> +}
+> +
+> +static long tcp_get_memory_allocated(struct test_case *test_case, struct sk_memcg *skel)
+> +{
+> +	return get_memory_allocated(test_case,
+> +				    &skel->bss->tcp_activated,
+> +				    &skel->bss->tcp_stable,
+> +				    &skel->bss->tcp_memory_allocated);
+> +}
+> +
+> +static long udp_get_memory_allocated(struct test_case *test_case, struct sk_memcg *skel)
+> +{
+> +	return get_memory_allocated(test_case,
+> +				    &skel->bss->udp_activated,
+> +				    &skel->bss->udp_stable,
+> +				    &skel->bss->udp_memory_allocated);
+> +}
+> +
+> +static int check_exclusive(struct test_case *test_case,
+> +			   struct sk_memcg *skel, bool exclusive)
+> +{
+> +	char buf[BUF_SINGLE] = {};
+> +	long memory_allocated[2];
+> +	int sk[NR_SOCKETS] = {};
+> +	int err, i, j;
+> +
+> +	err = test_case->create_sockets(test_case, sk, ARRAY_SIZE(sk));
+> +	if (err)
+> +		goto close;
+> +
+> +	memory_allocated[0] = test_case->get_memory_allocated(test_case, skel);
+> +
+> +	/* allocate pages >= 1024 */
+> +	for (i = 0; i < ARRAY_SIZE(sk); i++) {
+> +		for (j = 0; j < NR_SEND; j++) {
+> +			int bytes = send(sk[i], buf, sizeof(buf), 0);
+> +
+> +			/* Avoid too noisy logs when something failed. */
+> +			if (bytes != sizeof(buf)) {
+> +				ASSERT_EQ(bytes, sizeof(buf), "send");
+> +				if (bytes < 0) {
+> +					err = bytes;
+> +					goto close;
+> +				}
+> +			}
+> +		}
+> +	}
+> +
+> +	memory_allocated[1] = test_case->get_memory_allocated(test_case, skel);
+> +
+> +	if (exclusive)
+> +		ASSERT_LE(memory_allocated[1], memory_allocated[0] + 10, "exclusive");
+> +	else
+> +		ASSERT_GT(memory_allocated[1], memory_allocated[0] + 1024, "not exclusive");The test is taking >10s in my environemnt. Although it has kasan and other dbg 
+turned on, my environment is not a slow one tbh. The WATCHDOG > 10s warning is 
+hit pretty often. The exclusive case is expecting +10. May be we just need to 
+check +128 for non-exclusive which should be subtle enough to contrast with the 
+exclusive case? With +128, NR_SEND 32 is more than enough?
+
+> +
+> +close:
+> +	for (i = 0; i < ARRAY_SIZE(sk); i++)
+> +		close(sk[i]);
+> +
+> +	if (test_case->type == SOCK_DGRAM) {
+> +		/* UDP recv queue is destroyed after RCU grace period.
+> +		 * With one kern_sync_rcu(), memory_allocated[0] of the
+> +		 * isoalted case often matches with memory_allocated[1]
+> +		 * of the preceding non-exclusive case.
+> +		 */
+
+I don't think I understand the double kern_sync_rcu() below.
+
+> +		kern_sync_rcu();
+> +		kern_sync_rcu();> +	}
+> +
+> +	return err;
+> +}
+> +
+> +void run_test(struct test_case *test_case)
+
+static
+
+> +{
+> +	struct nstoken *nstoken;
+> +	struct sk_memcg *skel;
+> +	int cgroup, err;
+> +
+> +	skel = sk_memcg__open_and_load();
+> +	if (!ASSERT_OK_PTR(skel, "open_and_load"))
+> +		return;
+> +
+> +	skel->bss->nr_cpus = libbpf_num_possible_cpus();
+> +
+> +	err = sk_memcg__attach(skel);
+> +	if (!ASSERT_OK(err, "attach"))
+> +		goto destroy_skel;
+> +
+> +	cgroup = test__join_cgroup("/sk_memcg");
+> +	if (!ASSERT_GE(cgroup, 0, "join_cgroup"))
+> +		goto destroy_skel;
+> +
+> +	err = make_netns("sk_memcg");
+> +	if (!ASSERT_EQ(err, 0, "make_netns"))
+> +		goto close_cgroup;
+> +
+> +	nstoken = open_netns("sk_memcg");
+> +	if (!ASSERT_OK_PTR(nstoken, "open_netns"))
+> +		goto remove_netns;
+> +
+> +	err = check_exclusive(test_case, skel, false);
+> +	if (!ASSERT_EQ(err, 0, "test_exclusive(false)"))
+> +		goto close_netns;
+> +
+> +	err = write_sysctl("/proc/sys/net/core/memcg_exclusive", "1");
+> +	if (!ASSERT_EQ(err, 0, "write_sysctl(1)"))
+> +		goto close_netns;
+> +
+> +	err = check_exclusive(test_case, skel, true);
+> +	if (!ASSERT_EQ(err, 0, "test_exclusive(true by sysctl)"))
+> +		goto close_netns;
+> +
+> +	err = write_sysctl("/proc/sys/net/core/memcg_exclusive", "0");
+> +	if (!ASSERT_EQ(err, 0, "write_sysctl(0)"))
+> +		goto close_netns;
+> +
+> +	skel->links.sock_create = bpf_program__attach_cgroup(skel->progs.sock_create, cgroup);
+> +	if (!ASSERT_OK_PTR(skel->links.sock_create, "attach_cgroup(sock_create)"))
+> +		goto close_netns;
+> +
+> +	err = check_exclusive(test_case, skel, true);
+> +	ASSERT_EQ(err, 0, "test_exclusive(true by bpf)");
+> +
+> +close_netns:
+> +	close_netns(nstoken);
+> +remove_netns:
+> +	remove_netns("sk_memcg");
+> +close_cgroup:
+> +	close(cgroup);
+> +destroy_skel:
+> +	sk_memcg__destroy(skel);
+> +}
+> +
+> +struct test_case test_cases[] = {
+> +	{
+> +		.name = "TCP  ",
+> +		.family = AF_INET,
+> +		.type = SOCK_STREAM,
+> +		.create_sockets = tcp_create_sockets,
+> +		.get_memory_allocated = tcp_get_memory_allocated,
+> +	},
+> +	{
+> +		.name = "UDP  ",
+> +		.family = AF_INET,
+> +		.type = SOCK_DGRAM,
+> +		.create_sockets = udp_create_sockets,
+> +		.get_memory_allocated = udp_get_memory_allocated,
+> +	},
+> +	{
+> +		.name = "TCPv6",
+> +		.family = AF_INET6,
+> +		.type = SOCK_STREAM,
+> +		.create_sockets = tcp_create_sockets,
+> +		.get_memory_allocated = tcp_get_memory_allocated,
+> +	},
+> +	{
+> +		.name = "UDPv6",
+> +		.family = AF_INET6,
+> +		.type = SOCK_DGRAM,
+> +		.create_sockets = udp_create_sockets,
+> +		.get_memory_allocated = udp_get_memory_allocated,
+> +	},
+> +};
+> +
+> +void serial_test_sk_memcg(void)
+> +{
+> +	int i;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(test_cases); i++) {
+> +		test__start_subtest(test_cases[i].name);
+
+This is not doing anything without "if".
+
+> +		run_test(&test_cases[i]);
+> +	}
+> +}
+> diff --git a/tools/testing/selftests/bpf/progs/sk_memcg.c b/tools/testing/selftests/bpf/progs/sk_memcg.c
+> new file mode 100644
+> index 000000000000..6b1a928a0c90
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/sk_memcg.c
+> @@ -0,0 +1,146 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/* Copyright 2025 Google LLC */
+> +
+> +#include "bpf_tracing_net.h"
+> +#include <bpf/bpf_helpers.h>
+> +#include <bpf/bpf_tracing.h>
+> +#include <errno.h>
+> +
+> +extern int tcp_memory_per_cpu_fw_alloc __ksym;
+> +extern int udp_memory_per_cpu_fw_alloc __ksym;
+> +
+> +int nr_cpus;
+> +bool tcp_activated, tcp_stable, udp_activated, udp_stable;
+> +long tcp_memory_allocated, udp_memory_allocated;
+> +static struct sock *tcp_sk_tracing, *udp_sk_tracing;
+> +
+> +struct sk_prot {
+> +	long *memory_allocated;
+> +	int *memory_per_cpu_fw_alloc;
+> +};
+> +
+> +static int drain_memory_per_cpu_fw_alloc(__u32 i, struct sk_prot *sk_prot_ctx)
+> +{
+> +	int *memory_per_cpu_fw_alloc;
+> +
+> +	memory_per_cpu_fw_alloc = bpf_per_cpu_ptr(sk_prot_ctx->memory_per_cpu_fw_alloc, i);
+> +	if (memory_per_cpu_fw_alloc)
+> +		*sk_prot_ctx->memory_allocated += *memory_per_cpu_fw_alloc;
+> +
+> +	return 0;
+> +}
+> +
+> +static long get_memory_allocated(struct sock *_sk, int *memory_per_cpu_fw_alloc)
+> +{
+> +	struct sock *sk = bpf_core_cast(_sk, struct sock);
+> +	struct sk_prot sk_prot_ctx;
+> +	long memory_allocated;
+> +
+> +	/* net_aligned_data.{tcp,udp}_memory_allocated was not available. */
+> +	memory_allocated = sk->__sk_common.skc_prot->memory_allocated->counter;
+> +
+> +	sk_prot_ctx.memory_allocated = &memory_allocated;
+> +	sk_prot_ctx.memory_per_cpu_fw_alloc = memory_per_cpu_fw_alloc;
+> +
+> +	bpf_loop(nr_cpus, drain_memory_per_cpu_fw_alloc, &sk_prot_ctx, 0);
+> +
+> +	return memory_allocated;
+> +}
+> +
+> +static void fentry_init_sock(struct sock *sk, struct sock **sk_tracing,
+> +			     long *memory_allocated, int *memory_per_cpu_fw_alloc,
+> +			     bool *activated)
+> +{
+> +	if (!*activated)
+> +		return;
+> +
+> +	if (__sync_val_compare_and_swap(sk_tracing, NULL, sk))
+> +		return;
+> +
+> +	*activated = false;
+> +	*memory_allocated = get_memory_allocated(sk, memory_per_cpu_fw_alloc);
+> +}
+> +
+> +static void fexit_init_sock(struct sock *sk, struct sock **sk_tracing,
+> +			    long *memory_allocated, int *memory_per_cpu_fw_alloc,
+> +			    bool *stable)
+> +{
+> +	long new_memory_allocated;
+> +
+> +	if (sk != *sk_tracing)
+> +		return;
+> +
+> +	new_memory_allocated = get_memory_allocated(sk, memory_per_cpu_fw_alloc);
+> +	if (new_memory_allocated == *memory_allocated)
+> +		*stable = true;
+
+I am not sure that help. The total memory_allocated can still change after this. 
+I would just grab the total in fentry once and then move on without confirming 
+in fexit.
+
+> +
+> +	*sk_tracing = NULL;
+> +}
+> +
+> +SEC("fentry/tcp_init_sock")
+> +int BPF_PROG(fentry_tcp_init_sock, struct sock *sk)
+> +{
+> +	fentry_init_sock(sk, &tcp_sk_tracing,
+> +			 &tcp_memory_allocated, &tcp_memory_per_cpu_fw_alloc,
+> +			 &tcp_activated);
+> +	return 0;
+> +}
+> +
+> +SEC("fexit/tcp_init_sock")
+> +int BPF_PROG(fexit_tcp_init_sock, struct sock *sk)
+> +{
+> +	fexit_init_sock(sk, &tcp_sk_tracing,
+> +			&tcp_memory_allocated, &tcp_memory_per_cpu_fw_alloc,
+> +			&tcp_stable);
+> +	return 0;
+> +}
+> +
+> +SEC("fentry/udp_init_sock")
+> +int BPF_PROG(fentry_udp_init_sock, struct sock *sk)
+> +{
+> +	fentry_init_sock(sk, &udp_sk_tracing,
+> +			 &udp_memory_allocated, &udp_memory_per_cpu_fw_alloc,
+> +			 &udp_activated);
+> +	return 0;
+> +}
+> +
+> +SEC("fexit/udp_init_sock")
+> +int BPF_PROG(fexit_udp_init_sock, struct sock *sk)
+> +{
+> +	fexit_init_sock(sk, &udp_sk_tracing,
+> +			&udp_memory_allocated, &udp_memory_per_cpu_fw_alloc,
+> +			&udp_stable);
+> +	return 0;
+> +}
+> +
+> +SEC("cgroup/sock_create")
+> +int sock_create(struct bpf_sock *ctx)
+> +{
+> +	u32 flags = SK_BPF_MEMCG_EXCLUSIVE;
+> +	int err;
+> +
+> +	err = bpf_setsockopt(ctx, SOL_SOCKET, SK_BPF_MEMCG_FLAGS,
+> +			     &flags, sizeof(flags));
+> +	if (err)
+> +		goto err;
+> +
+> +	flags = 0;
+> +
+> +	err = bpf_getsockopt(ctx, SOL_SOCKET, SK_BPF_MEMCG_FLAGS,
+> +			     &flags, sizeof(flags));
+> +	if (err)
+> +		goto err;
+> +
+> +	if (flags != SK_BPF_MEMCG_EXCLUSIVE) {
+> +		err = -EINVAL;
+> +		goto err;
+> +	}
+> +
+> +	return 1;
+> +
+> +err:
+> +	bpf_set_retval(err);
+> +	return 0;
+> +}
+> +
+> +char LICENSE[] SEC("license") = "GPL";
+
 
