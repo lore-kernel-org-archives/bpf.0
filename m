@@ -1,126 +1,133 @@
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C43412F3C32
-	for <bpf@vger.kernel.org>; Thu, 18 Sep 2025 08:08:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E3F1226173
+	for <bpf@vger.kernel.org>; Thu, 18 Sep 2025 08:47:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758182887; cv=none; b=B5RLEgjNgkTcfyLilPu/39x6VTgkX/Z2YDvhSrElUwI9WpwgDFOUXfo2JQrXWlDbvnfDZFbfu4JzqhSe/rGW6EkGZETZVjSQ3AgkaDJ4/4AZnFJPlWIw+FIT5hW3bIMMNipoAs2CCu369XYi8sqwt3tDJeqnLI+PWl7O9dHu2ng=
+	t=1758185253; cv=none; b=rp24YXTBZFJd/WjkjALA5ew5iGrUKjpYGxO4qqFSuFczNFyAAjS4AghBxqVb01aTCsgK5eKXSdFvqPKVFkjGFCCzNLYPe6Eukql1c0yKsuhnMBxgtxe0VaNfJ/d91sNj+X97HnqcyBJTmXHVXpFDICXBo5LnoqLMaWcKYdlzu9g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758182887; c=relaxed/simple;
-	bh=1yC27wxXhKzjbkzZpZR3Ai96oSEiCjx7Z+SO0xTeWt0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lVYo34dtDEqurr88fJyy9pkvZcM0vQqA0rfTM/lqp9+aB1enMmavsf5irG4bvp5/g8WgmPEB0UpwzqflUK9419+23zV5aonc0Vxik/yMXx7T5iZUfTyPtgTOdPATldW4N2mwW/Kqjy8GiaymVHXxO84tcpLWQv2d08AjWrhLLwc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=hFIUlkbm; arc=none smtp.client-ip=185.246.84.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1758185253; c=relaxed/simple;
+	bh=L45ZHUW76JMrGXCpZTDkbXpqy+oHe8GXZEgOVfexB8o=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hZlH8nEEeoNL8UHZA9MUVuGLONqmAp6XmTPOUa9EF0FbJavaRP6amkpRVzjtJ+5wBHjktoxaxYgUh+eN5lxBF4/zP8NHSfcSEVWoPRQ5OSE7aHKN3xvc3b2bx/5D5MPH/g6lFsv859HS9y2pb1jgLK97Xl/mQOJSaIqLO/um6VY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M0cR9NE0; arc=none smtp.client-ip=209.85.218.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="hFIUlkbm"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id 1334B1A0E8D;
-	Thu, 18 Sep 2025 08:08:03 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id D27D56062C;
-	Thu, 18 Sep 2025 08:08:02 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 13040102F1818;
-	Thu, 18 Sep 2025 10:07:48 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1758182881; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:content-language:in-reply-to:references;
-	bh=NUIQ6q5npgVP/axVpG0xCOPzetUw8W0RvK8A/nQzlw0=;
-	b=hFIUlkbmI55oIwEzk9k1G/kcOFNdJO/vkCWLWKCMLFiTXTvDSAFaicR8XxupBDsn/bSqgJ
-	foA0BdU1dlIzw2iUVOvM9GQvOuatXUEpWQNNVm0IILlA7dOpMcLPBkJ4RgEEvE6t8k+xH9
-	rT2wzVKuFajqOh+Fsb2nmUjogZhljUxwrHfcQbrxW0f/FXFEaovDHgP38HRsmCTnGPzHwr
-	fCaljv1gxc9UEMHoAK/KDxR9SDlUee+9nPRbIf88tzAnIaBR0HV8k+RNLvMc5laHI/0fK+
-	Wxlmnujl93gKe+jwBuViXKTn/oHsIy0cCnHGb9XEvkCvjytsoqPc3NU1nfOnOA==
-Message-ID: <9c96720e-091c-434e-9060-c47ea59ad91e@bootlin.com>
-Date: Thu, 18 Sep 2025 10:07:47 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M0cR9NE0"
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-b03fa5c5a89so137223366b.2
+        for <bpf@vger.kernel.org>; Thu, 18 Sep 2025 01:47:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1758185250; x=1758790050; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=4dUuZLCrIMKFDhECHW6CRsaOlZAc9dyj1qs/1GGZce0=;
+        b=M0cR9NE0W9Y1xN7+c4xlGTZwwhVigM/FIVmgKAIyZvwqF3Np4p7DxnWa2VF+gezaFy
+         svZvKYCwUdmmAyap3TRZCZTt0eHvCqiX+5uMjpoX6Dp9KLOLcH/pD5INZwpurGQ9ZbXP
+         vRobPnSAwwQ5I/V+z3lQ32nk0GeSoJHXbVB/WZrUX8WinuxqUdZdp4HcG2rvvVNfLnrb
+         X+HxqJhjEPs9oHLaKCYMB6hgsPHKB3DMzSWKIM/MHV6GHofzL6XA/3RRzGQLMxlLtAw9
+         aOS2FP2noNdiE/Zlk8JvO0Zb8Erbwee2waGIetr0UyAVy/whOhE8sSBQ/qe5zt/hJ6kp
+         TgHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758185250; x=1758790050;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4dUuZLCrIMKFDhECHW6CRsaOlZAc9dyj1qs/1GGZce0=;
+        b=EFoR0yajbtloHlOkGsvMlnlJqYZr5GnaDTG1IKvx/oc23r2jytCGN6ODF70vatKwG/
+         7fg1sjLlX2R5QEOgbscACliqngZzud8M0QTx7m/ws0YR84bQSvD318/CHmNnjKgQE5Fv
+         VF4ivcVjeHzZ3HgYYjO9qPPCM67879YT+a24rxTxMremN8SqfU8yXUkQsTkNiDDNVgNN
+         oVTdMAtSunGsxI976d/s+jTTaGb1KMv9QWsvCCnlF3pSSLHI32DDQjX2E8chl4uxgHSF
+         bhvrPOO/gJ3yuZF/LLaATGwk4Ox260AfVzd1SlNLpmKwaI+m4ltkkf/ZX2gy4ZUhrD4n
+         6fjw==
+X-Forwarded-Encrypted: i=1; AJvYcCUP053qUVuI/LdhuFg0ll11EoaF3pI1lafohYgw/Ckm3TPNXrdSj67FcHa7V9TNn7NS4ck=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy5t7AhAue7pBOl10SK2x0ORKP7kO5ip7L7XtXx26ALlKQIqEQC
+	OZc0U58bQcmxwoHYeakFTS2aVtpFltyEnEhbkFVarkv4O6JNsV3UndjB
+X-Gm-Gg: ASbGncutZJEtnhez91IkjiCT3K9U4v5ofeBNd2oSHp3uFTL16givQ3eHsUI4JUdqdLK
+	zIb2mL6pt2d2ef7D/v+t+YivMR9aYar4xBCh4rUkT7a/gezKSqVdQwXjmJ8WAAVQ4aZpoKEBgW8
+	amtr9tbEq/SbTWVRMjDPTBF6f6fNgwvyU6ce5rIasoWQfxDrmwo8im3QYgBCQ1kwrqr3KkPTgTI
+	2iaRvXU2QTa3EK6dcYykb7oBTWsowgRRMgxjMBgJjGVWy6+tOVCn1No6ff/cltTD51mpIbafTtX
+	US2RwmvFizBvngJJBrM5PU+ZQL1zIu+JVyXY0Xm2cPcIWjhyMWRpp7MYiyhwL5JQ9uEdscgqjh9
+	3RzlgeEi9LmjNJzfOphVL9Eh1UwThbEY/I37ucajZJIo5QswoJGxrVg==
+X-Google-Smtp-Source: AGHT+IGSY6T0zgBstKzdppw+beER6+Ou6Xf+HZr5uZODjknR4sf0RTrkDM+Z+jzltMePgD/ZZBp0rA==
+X-Received: by 2002:a17:907:3e8c:b0:b04:76ed:3ff5 with SMTP id a640c23a62f3a-b1bb6802513mr591131566b.40.1758185250193;
+        Thu, 18 Sep 2025 01:47:30 -0700 (PDT)
+Received: from krava (37-188-233-225.red.o2.cz. [37.188.233.225])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b1fc5f44bb1sm148036466b.21.2025.09.18.01.47.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Sep 2025 01:47:29 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Thu, 18 Sep 2025 10:47:15 +0200
+To: Fuyu Zhao <zhaofuyu@vivo.com>
+Cc: Song Liu <song@kernel.org>, ast@kernel.org, daniel@iogearbox.net,
+	andrii@kernel.org, martin.lau@linux.dev, yonghong.song@linux.dev,
+	haoluo@google.com, eddyz87@gmail.com, kpsingh@kernel.org,
+	sdf@fomichev.me, rostedt@goodmis.org, mhiramat@kernel.org,
+	mathieu.desnoyers@efficios.com, shuah@kernel.org,
+	willemb@google.com, kerneljasonxing@gmail.com,
+	paul.chaignon@gmail.com, chen.dylane@linux.dev, memxor@gmail.com,
+	martin.kelly@crowdstrike.com, ameryhung@gmail.com,
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	yikai.lin@vivo.com
+Subject: Re: [RFC PATCH bpf-next v1 0/3] bpf: Add BPF program type for
+ overriding tracepoint probes
+Message-ID: <aMvHE-iW5eAwf4km@krava>
+References: <20250917072242.674528-1-zhaofuyu@vivo.com>
+ <CAPhsuW47BVGsszGU=27gKa1XOYLH+de1FgrHPVL4mftB2CvX9g@mail.gmail.com>
+ <b23ef4e0-afa1-4d94-b4aa-28c02c3499c6@vivo.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v3 03/14] selftests/bpf: test_xsk: Fix memory
- leaks
-To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Cc: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
- Magnus Karlsson <magnus.karlsson@intel.com>,
- Jonathan Lemon <jonathan.lemon@gmail.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
- Shuah Khan <shuah@kernel.org>, "David S. Miller" <davem@davemloft.net>,
- Jakub Kicinski <kuba@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Alexis Lothore <alexis.lothore@bootlin.com>, netdev@vger.kernel.org,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250904-xsk-v3-0-ce382e331485@bootlin.com>
- <20250904-xsk-v3-3-ce382e331485@bootlin.com> <aMmlNc1z5ULnOjJY@boxer>
- <6ac21f07-45ef-4e80-bedf-c0470df47bc7@bootlin.com> <aMr+/NDFQsGChdI4@boxer>
-From: Bastien Curutchet <bastien.curutchet@bootlin.com>
-Content-Language: en-US
-In-Reply-To: <aMr+/NDFQsGChdI4@boxer>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <b23ef4e0-afa1-4d94-b4aa-28c02c3499c6@vivo.com>
 
-On 9/17/25 8:33 PM, Maciej Fijalkowski wrote:
-> On Wed, Sep 17, 2025 at 05:32:55PM +0200, Bastien Curutchet wrote:
->> Hi Maciej
->>
->> On 9/16/25 7:58 PM, Maciej Fijalkowski wrote:
->>> On Thu, Sep 04, 2025 at 12:10:18PM +0200, Bastien Curutchet (eBPF Foundation) wrote:
->>>> Some tests introduce memory leaks by not freeing all the pkt_stream
->>>> objects they're creating.
->>>>
->>>> Fix these memory leaks.
->>>
->>> I would appreciate being more explicit here as I've been scratching my
->>> head here.
->>>
->>
->> Indeed it lacks details sorry. IIRC I spotted these with valgrind, maybe I
->> can add valgrind's output to the commit log in next iteration.
->>
->>>   From what I see the problem is with testapp_stats_rx_dropped() as it's the
->>> one case that uses replace and receive half of pkt streams, both of which
->>> overwrite the default pkt stream. So we lose a pointer to one of pkt
->>> streams and leak it eventually.
->>>
->>
->> Exactly, we lose pointers in some cases when xsk->pkt_stream gets replaced
->> by a new stream. testapp_stats_rx_dropped() is the most convoluted of these
->> cases.
+On Thu, Sep 18, 2025 at 04:05:51PM +0800, Fuyu Zhao wrote:
 > 
-> pkt_stream_restore_default() is supposed to delete overwritten pkt_stream
-> and set ::pkt_stream to default one, explicit pkt_stream_delete() in bunch
-> of tests is redundant IMHO.
 > 
-> Per my understanding testapp_stats_rx_dropped() and
-> testapp_xdp_shared_umem() need fixing. First generate pkt_stream twice and
-> second generates pkt_stream on each xsk from xsk_arr, where normally
-> xsk_arr[0] gets pkt_streams and xsk_arr[1] have them NULLed.
+> On 9/18/2025 4:02 AM, Song Liu wrote:
+> > On Wed, Sep 17, 2025 at 12:23 AM Fuyu Zhao <zhaofuyu@vivo.com> wrote:
+> >>
+> >> Hi everyone,
+> >>
+> >> This patchset introduces a new BPF program type that allows overriding
+> >> a tracepoint probe function registered via register_trace_*.
+> >>
+> >> Motivation
+> >> ----------
+> >> Tracepoint probe functions registered via register_trace_* in the kernel
+> >> cannot be dynamically modified, changing a probe function requires recompiling
+> >> the kernel and rebooting. Nor can BPF programs change an existing
+> >> probe function.
+> >>
+> >> Overiding tracepoint supports a way to apply patches into kernel quickly
+> >> (such as applying security ones), through predefined static tracepoints,
+> >> without waiting for upstream integration.
+> > 
+> > IIUC, this work solves the same problem as raw tracepoint (raw_tp) or raw
+> > tracepoint with btf (tp_btf).
+> > 
+> > Did I miss something?
+> > 
+> > Thanks,
+> > Song
 > 
+> As I understand it, raw tracepoints (raw_tp) and raw tracepoint (raw_tp)
+> are designed mainly for tracing the kernel. The goal of this work is to
+> provide a way to override the tracepoint callback, so that kernel behavior
+> can be adjusted dynamically.
 
-I took another look at it, and I agree with you: the pkt_stream_delete() 
-calls I added in testapp_stats_rx_full() and testapp_stats_fill_empty() 
-don't seem necessary.
-It still feels a bit strange to overwrite a pointer without freeing it 
-right away, but I don't have a strong opinion on this. I'm fine with 
-only fixing testapp_stats_rx_dropped() and testapp_xdp_shared_umem() in 
-the next iteration.
+hi,
+what's the use case for this? also I'd think you can do that just by
+unregister the callback you want to override and register new one?
 
-
-Best regards,
--- 
-Bastien Curutchet, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
-
+thanks,
+jirka
