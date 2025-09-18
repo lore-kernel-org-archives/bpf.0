@@ -1,50 +1,84 @@
-Received: from out-181.mta1.migadu.com (out-181.mta1.migadu.com [95.215.58.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f196.google.com (mail-pf1-f196.google.com [209.85.210.196])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49AA82C15B1;
-	Thu, 18 Sep 2025 12:09:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DEE82C08B2
+	for <bpf@vger.kernel.org>; Thu, 18 Sep 2025 12:09:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758197372; cv=none; b=SSy4Tp+k3ZAfR6IcezNRtdiR7MeYYcM7HCrn8CVGE6clL32hzab0n91vPJNO/sd/MPOUTi9N44E+Ezx9JBn3ERD09Bxkg9IzU0h5F0NZ5VrRVX79cqufU1InIxHn8TfzXQKvb6wjiWZzSzqZkWScUrfr7aixEKT4mOiwOwma9gA=
+	t=1758197389; cv=none; b=nDE8e+v1RKjnSDyFoOjM/3GJA8t5Jgw6pI7yzUtyUg63p4RA/syzcqOnfZ90o1cyVT3EiUIlSnOBNBi9OMj5csETzAAyQe9tInlTNv3M/oFZ4z1c6SA7P2sDIwcKBBKVCelr/qktfBn0XCOmPGZ3KiaX3XJadvCUxsUUBadhW24=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758197372; c=relaxed/simple;
-	bh=Pm+a6Q7xpNIHOKWIzc/xndugAQgcN6yfZuDpYSlvBCo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=oI+wbLV6OHC7qToV8XV12CjdXOJD9JmTCAWTWBofRhqK0AfvQws8NQ8yAp9Q26CrE83flHSmptFYJ945lQqo5zAb/BDgKjz/n8NPNODK43O3kMiJcU1dSbyYdBW7H8wwYJJmayMasveUcpk0gVdiNHhmPhEKT0Fnx8RzQoIsk8c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=W/lAz8a6; arc=none smtp.client-ip=95.215.58.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1758197389; c=relaxed/simple;
+	bh=uR6j2EI8vTJoitLgXegekwk2YTw8pGvuxdnnjAUKfms=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XRlWoGJCUOS3UamBP4SYoF5gSFzNabaRghvj7Nhp4gNCx7T2mBbB7prZ4iIUj3Ip+e2uqNe9lbwftIhwPKASWVt3m3ObBUQjkHoHlvvxTPjRRUl3nGiwMsSMCwLLEilgDGMcl8gf1uQYl6XLCxPXkwU7f99Wnciq/BQ4cnr1rI8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kATMjDeK; arc=none smtp.client-ip=209.85.210.196
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="W/lAz8a6"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1758197366;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=C8KiQcQZe7L3hdXFWlg9zHWgPeNnbXvSaHLe2wFAz6g=;
-	b=W/lAz8a683L/StYl/EkGk74TfqBJ10hbPAr2+QEtyV6UJ1gYv/5lIMd/LFp4s2uY91/6mM
-	BXHB6aiMWZ2o39KPG/y7WNTdSvtX0DGTACFtHeqZQftwLmPDh3tLZs73R8zmI29eXwuXgY
-	TWLvt5mvKmChIm8g5FCF9w08QLRSAJ0=
-From: Tao Chen <chen.dylane@linux.dev>
-To: qmo@kernel.org,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kATMjDeK"
+Received: by mail-pf1-f196.google.com with SMTP id d2e1a72fcca58-7762021c574so890247b3a.0
+        for <bpf@vger.kernel.org>; Thu, 18 Sep 2025 05:09:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1758197387; x=1758802187; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=apBO0lUAo4XQGQFELSGuX1XqULu8eavmm8XQfxmpWOU=;
+        b=kATMjDeKtMLxZfYBpA9LgWzrOhdR9rNOT6L/2Drw1sbgHOLNAW5fFkKjRMh7xK8Wfr
+         IFCatHD9rf6ESLYi80yE+jlkZvVyLZthILLJsEAVuTQdnfv9xkEXQ3BRwNqBgzCyH637
+         Z220j9hbnZUIusmHcnhAsn3da9DPCzXPNRrT0EJtS4pmf99NoygrxeOok+MOveoaZ5er
+         9KSzdvveOsuCoaGcnKtJXJss79+Yem7NJX9IsBhzP4MjCWo16lsyHP0oxNhkyMl3RhOY
+         47LtBpZNGh/2fu5VaSw2yFlJv7tASHQXRTD4Z+kmj+OD6x7MMq+jyxxRHKqgrfSouaNS
+         2vvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758197387; x=1758802187;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=apBO0lUAo4XQGQFELSGuX1XqULu8eavmm8XQfxmpWOU=;
+        b=QVLO86dRST8dlDc3jbMjlKPNm/h9jIKkdohN0NY9eWpInnrhJ9Hqc7iexaLQHtiqZX
+         92oGTCz0e4TEWmVANWhj2jHEtiqxqhXiAwN/PSCas3L4Tzykcv9zQMJthDRIt8RzeEoh
+         iwh4FXPd1T11RTKWTjt7AQxCwxOLuBerDvh/1Um0KOFtrG4dkwzJBAB7pNJ9TsueBuDu
+         eN0H6R5k7/TUv3wweMJsY2QHZcadPqt4U0fx9u8CXBreTHs+hmhoNEMqTM2eAd+E9EKI
+         b7qLiPIKlKIGrhfRvVPqFUOLtgBUHIKQqIozygISN2h38eIBiThdZ9vKvu5WY3d+3ePJ
+         RIlg==
+X-Forwarded-Encrypted: i=1; AJvYcCUgfCYJzw88jGkhjH1Tr4+ODgPSjw9OpbvQQe8jLYq+nCINQu/0zbcljnIThOxbJoUZmiM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxHR5r9GH8uPQrto0laELOGRfQJo17ec5dk48vsT82ATTcmhv8n
+	yh/GcA28ax/NKoh8MGiVh0n99/51/E4/SZEYleDr9zxQsGiJIBMwS8CE
+X-Gm-Gg: ASbGncuPlLeamAM7IJLvf9GThzJIQB28fL4NJP7rpTJ4PoiYY1hbnEpnm6zljYP1GAK
+	IfFKCm0lkM5JQW/yXydEzQRbUifnOPmSESoj8BRYqtryLNI/ktq8iLKvCYxHIDlWwp05CcB/SBs
+	O8X/teEInOMBegVrzNJ1G0qLlsha4CNuDCLEAb9x0gdGPlL0K7cssXxKjQXofunur/ggGKnaxiG
+	+w+z9gdRgc6bJq2SRCGDoM9M0wrOSI6JMq7g9Hc2k/eFf1RyzZRkjjNl5yp6Ew3Rk4IbprnJOT+
+	aZwBcbvhDKMjHS1yNoH9ueeKHpvbax6eddhsoXYNZS9H+Ik+wB1LwaFaaLlYG3OnyAFTMRqqjLE
+	vYC2LhT9JcTYa7D26QZJ7w8XVqoHZfY98d5kJlgV1ytQkJswm
+X-Google-Smtp-Source: AGHT+IEsYwm3B6RDBp2oMmV3j80laKyE+tnM2aRhu87m3A6NMl6JmMBBppRgaStOGsvvVnsPTnLlPg==
+X-Received: by 2002:a05:6a00:887:b0:772:638e:5f61 with SMTP id d2e1a72fcca58-77bf98553b2mr5706486b3a.30.1758197386658;
+        Thu, 18 Sep 2025 05:09:46 -0700 (PDT)
+Received: from 7940hx ([43.129.244.20])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-77cfed379a2sm2184065b3a.86.2025.09.18.05.09.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Sep 2025 05:09:46 -0700 (PDT)
+From: Menglong Dong <menglong8.dong@gmail.com>
+X-Google-Original-From: Menglong Dong <dongml2@chinatelecom.cn>
+To: peterz@infradead.org,
+	jolsa@kernel.org
+Cc: tglx@linutronix.de,
+	mingo@redhat.com,
+	bp@alien8.de,
+	dave.hansen@linux.intel.com,
+	x86@kernel.org,
+	hpa@zytor.com,
+	kees@kernel.org,
+	samitolvanen@google.com,
+	rppt@kernel.org,
+	luto@kernel.org,
+	mhiramat@kernel.org,
 	ast@kernel.org,
-	daniel@iogearbox.net,
 	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	chen.dylane@linux.dev
-Cc: bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v3 1/2] bpftool: Add HELP_SPEC_OPTIONS in token.c
-Date: Thu, 18 Sep 2025 20:09:07 +0800
-Message-ID: <20250918120908.1255263-1-chen.dylane@linux.dev>
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: [PATCH] x86/ibt: make is_endbr() notrace
+Date: Thu, 18 Sep 2025 20:09:39 +0800
+Message-ID: <20250918120939.1706585-1-dongml2@chinatelecom.cn>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -52,42 +86,33 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 
-$ ./bpftool token help
+is_endbr() is called in __ftrace_return_to_handler -> fprobe_return ->
+kprobe_multi_link_exit_handler -> is_endbr.
 
-Usage: bpftool token { show | list }
-       bpftool token help
-       OPTIONS := { {-j|--json} [{-p|--pretty}] | {-d|--debug} }
+It is not protected by the "bpf_prog_active", so it can't be traced by
+kprobe-multi, which can cause recurring and panic the kernel. Fix it by
+make it notrace.
 
-Fixes: 2d812311c2b2 ("bpftool: Add bpf_token show")
-Signed-off-by: Tao Chen <chen.dylane@linux.dev>
+Fixes: 72e213a7ccf9 ("x86/ibt: Clean up is_endbr()")
+Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
 ---
- tools/bpf/bpftool/token.c | 1 +
- 1 file changed, 1 insertion(+)
+ arch/x86/kernel/alternative.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Change list:
- v1 -> v2:
-  - strdup(mntent->mnt_opts) once per cmd/map/prog and
-    remove another strdrup/free in print_items_per_line
-    in patch2.(Alexei)
-  v1: https://lore.kernel.org/bpf/20250916054111.1151487-1-chen.dylane@linux.dev
- v2 -> v3:
-  - Replace PRINT_DELEGATE_OPT* macros with functions.(Quentin)
-  v2: https://lore.kernel.org/bpf/20250917034732.1185429-2-chen.dylane@linux.dev
-
-diff --git a/tools/bpf/bpftool/token.c b/tools/bpf/bpftool/token.c
-index 6312e662a12..82b829e44c8 100644
---- a/tools/bpf/bpftool/token.c
-+++ b/tools/bpf/bpftool/token.c
-@@ -206,6 +206,7 @@ static int do_help(int argc, char **argv)
- 	fprintf(stderr,
- 		"Usage: %1$s %2$s { show | list }\n"
- 		"       %1$s %2$s help\n"
-+		"       " HELP_SPEC_OPTIONS " }\n"
- 		"\n"
- 		"",
- 		bin_name, argv[-2]);
+diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
+index 69fb818df2ee..f67a31c77c89 100644
+--- a/arch/x86/kernel/alternative.c
++++ b/arch/x86/kernel/alternative.c
+@@ -1108,7 +1108,7 @@ void __init_or_module noinline apply_returns(s32 *start, s32 *end) { }
+ 
+ #ifdef CONFIG_X86_KERNEL_IBT
+ 
+-__noendbr bool is_endbr(u32 *val)
++__noendbr notrace bool is_endbr(u32 *val)
+ {
+ 	u32 endbr;
+ 
 -- 
-2.48.1
+2.51.0
 
