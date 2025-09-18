@@ -1,247 +1,105 @@
-Received: from out-180.mta0.migadu.com (out-180.mta0.migadu.com [91.218.175.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57D843112B4
-	for <bpf@vger.kernel.org>; Thu, 18 Sep 2025 16:09:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCAD5312814
+	for <bpf@vger.kernel.org>; Thu, 18 Sep 2025 16:21:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758211765; cv=none; b=qZsABhfWRudVj6mZPOqRe2sTcavDL4JhkcCG9sHbIynF+955Hdd+s7rqpFP/kpR92u8pS7/uB9nLuuvBE0HiNAKdsAbV4ZurfHFV0drSNQe+qBq/WnF/4pGT+FPMrV47Cr5hsh7i16nOWaU8n1UdX+wMmsHFcWRCvTQuptbw+Fk=
+	t=1758212488; cv=none; b=LHx0bFZuUVM9iseUWznTXAdhFb4iqh4vsFbPnxtlKfFapBGRecnkZhxmR8bd55XLutEtlydKknuhBUi4fPmTNS0GFscqKfVn6RleNEwFvCYRun+2ZE1rmotpyFGgOsZYE5DDemriAP1L/aGL0/0vj0N12ZCEHo8QV1gHfdjOgs0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758211765; c=relaxed/simple;
-	bh=gv/fnGF2e3yrQmrZP/Sqj+9SQ69Xmh5suEdNy99nMQI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BHUTUqy+ek/H/CulwcMINzxAXaGpuqjby1QLX537z3pNYRuKp7I1PwsGqCFxxMqe2xsEV8fhdqXTS+tnvHv8sASRjy2AgDw0B36GQl7924FTOYeOmQmGjQnIRGj9tIsn7iKG1/ZgzJQkOD7nz8IpXRVZEjQuo/oCv9fcYhahnVU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=PzkRqSfj; arc=none smtp.client-ip=91.218.175.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1758212488; c=relaxed/simple;
+	bh=x1QnhRo4NDS30n89NtZPGr3Wtna/fdvKeoPG8BieR4Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qWX8aX+0pZHZqeS81q1/uC29GcP3Wc8tUzPPOu7+Jx6qK1SpGSYVV1v9nPXQMXaVwQmC57deZcBTEMSyPDtJ8tbFQZks/HYG0Dzk5D9MJqFfFRmmHP4LNqNs/MrZAlK5wJ6Cb2iYGezp2Ryyllr9Ydccug1aimAS7gsoR/31Aiw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RLHKE4oS; arc=none smtp.client-ip=209.85.221.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="PzkRqSfj"
-Message-ID: <dbea9a14-e010-4e2f-a34d-4e2fd14a31f6@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1758211761;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=w1TWlDtYCxWcxhvCHcRdPXSMSA7gCc30GGMDrJv929c=;
-	b=PzkRqSfjXYlYpjSxvXmZWuaQQSeh05z6URhBj8CqGtA4q5QQ04+F2ap3JcYgJ+PppsXJH5
-	DLMZli8P/sqmwznzjpwllneBCONpQiiMTTbLLYOx1zoBtccwIE31q5Kt7cQmSTbMkNI93i
-	qMyRh5whf74kP1SQrDIQPGbGdHqyMys=
-Date: Fri, 19 Sep 2025 00:09:12 +0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RLHKE4oS"
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-3e98c5adbbeso780112f8f.0
+        for <bpf@vger.kernel.org>; Thu, 18 Sep 2025 09:21:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1758212485; x=1758817285; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=1UF2l9oJfaIkWEg932bzggZno8bIHmiX4kcDQgqd+ls=;
+        b=RLHKE4oS1lsPlLHw4VkS4YoKw+rThVmx8Hi0x72oGhWSacPGP0mTKUd9HwlacQxVkw
+         yvFMd+yzEHr4bfRTiNZ7ObMqUL9ttkoKubGJxQOEDZLXmUG394rek5zEhLD24iWf8fNe
+         4H5RN4zg2y26HdyMuUkNP6iXvzJSaf7XjLL88l2/x0GodDns0se13WhsZZj6pNifdv9H
+         XfrfDswkI4IWqm5TECx09J/3AG6Aa3iTBzB/zoQG4G8qRKEs9TYmnmmM3vhtG4COc2bV
+         5DxlQWiQwSoGtvctJwc9rLJOij4Uxi3g2xPLx9mV14bs8MrSrceODFGy4iESQC/wllKc
+         R61A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758212485; x=1758817285;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1UF2l9oJfaIkWEg932bzggZno8bIHmiX4kcDQgqd+ls=;
+        b=AB51bk0jd6tZoBGz4lOWXsc4RnQlwI1TufjQ/X7pRP3StQQC65bK4fOBH5Yh2dA65s
+         sT8TshbppBMUcfWvOMxoFOrv+T+sf6vWST3jEy9QmND4pB5uWeprRDgbByDpy5dWEsle
+         hLChjGvQGMPhVSLzXgr9p7EIwIuVCPlNpA+eLUwIhkm2hsICRSi7p83+sHBDC8dNvz8F
+         hIUr+fxOZ8Lef1ajybzc8u8Hk5Czejn6EJwt45L3E/Hf8Xt8YREi9LSHLOBmS398gm5j
+         2lCB+B4wgmfg77ledojzZdOrIQD6CX+fR9LWbqyA4jxspuvZ/mZTVQ8cUP2aEZbetqNR
+         QTPg==
+X-Gm-Message-State: AOJu0YxjHRnbVyeSmTQDR5pNmPnmY803n3Bjj90WmNR4NSPSDhrVPpAO
+	V7GnIZF62xAi7EMnA72GDtdKDz0d1SfyDjpbqz8ZyEVv3z6yBbImifOK5THmUg==
+X-Gm-Gg: ASbGncszD43/XfnvPc0s/2kI42QKVIWbOxPqlKuPiucuttH6k4NEPw5WGKxNuuunW9c
+	OryWQwmfxGjHxb0kME7z06TlWbK3XInHU3M++mRGqcfXeLUe6ow365bmdcXPGBIzlb5eHIqqOet
+	zEtWNqWnpjlp6MXi88MrubWF8jVhTBMOTN4ffFmBN7vqC65m2N3bbKAWTkOIDzz6gUehEzNXkTT
+	S9pBeUtbsyZHVY8tcpBC5iG+XqsfSZzoV2TD4b7ETyM7GhuWHW9HA8DEmSzgk9FdZP9PGIJ/vTM
+	UYoflduqglxuc4vxx6fOVCs18sdyyE5dBKvkRIweWUgLu0VUOXHMOPwJ5XacXJFfxXE/sRTnfdB
+	buDmgO9H2snLdZjD0/w3xeLqnWdh65Orx+PePX7BZ6ds/ndzk2IA=
+X-Google-Smtp-Source: AGHT+IHhUnWSGR0rmIoVLOw+F8Sexip3PxUIKF4ZQ2dlIa7WKxAMK3oF+0TM+C1lGcxAKssM5fZdNA==
+X-Received: by 2002:a05:6000:40cb:b0:3ee:1461:1659 with SMTP id ffacd0b85a97d-3ee146119c6mr1643126f8f.31.1758212484850;
+        Thu, 18 Sep 2025 09:21:24 -0700 (PDT)
+Received: from mail.gmail.com ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4613d14d212sm102344105e9.12.2025.09.18.09.21.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Sep 2025 09:21:24 -0700 (PDT)
+Date: Thu, 18 Sep 2025 16:27:38 +0000
+From: Anton Protopopov <a.s.protopopov@gmail.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, Puranjay Mohan <puranjay@kernel.org>
+Subject: Re: [PATCH bpf-next] selftests/bpf: fix build with new LLVM
+Message-ID: <aMwy+pt+Rg1eNr0z@mail.gmail.com>
+References: <20250918093606.454541-1-a.s.protopopov@gmail.com>
+ <CAADnVQLso776xFQTzPFahmV=JbE3Ca8jQ7UdPuMChjJAK_echg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v2 3/3] selftests/bpf: Add union argument tests
- using fexit programs
-To: Leon Hwang <leon.hwang@linux.dev>, bpf@vger.kernel.org
-Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
- martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, yatsenko@meta.com, puranjay@kernel.org,
- davidzalman.101@gmail.com, cheick.traore@foss.st.com,
- mika.westerberg@linux.intel.com, ameryhung@gmail.com,
- menglong8.dong@gmail.com, kernel-patches-bot@fb.com
-References: <20250916155211.61083-1-leon.hwang@linux.dev>
- <20250916155211.61083-4-leon.hwang@linux.dev>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Tao Chen <chen.dylane@linux.dev>
-In-Reply-To: <20250916155211.61083-4-leon.hwang@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+In-Reply-To: <CAADnVQLso776xFQTzPFahmV=JbE3Ca8jQ7UdPuMChjJAK_echg@mail.gmail.com>
 
-在 2025/9/16 23:52, Leon Hwang 写道:
-> By referencing
-> commit 1642a3945e223 ("selftests/bpf: Add struct argument tests with fentry/fexit programs."),
-> test the following cases for union argument support:
+On 25/09/18 08:02AM, Alexei Starovoitov wrote:
+> On Thu, Sep 18, 2025 at 2:30 AM Anton Protopopov
+> <a.s.protopopov@gmail.com> wrote:
+> >
+> > The progs/stream.c BPF program now uses arena helpers, so it includes
+> > bpf_arena_common.h, which conflicts with the declarations generated
+> > in vmlinux.h. This leads to the following build errors with the recent
+> > LLVM:
+> >
+> >     In file included from progs/stream.c:8:
+> >     .../tools/testing/selftests/bpf/bpf_arena_common.h:47:15: error: conflicting types for 'bpf_arena_alloc_pages'
+> >        47 | void __arena* bpf_arena_alloc_pages(void *map, void __arena *addr, __u32 page_cnt,
+> >           |               ^
+> >     .../tools/testing/selftests/bpf/tools/include/vmlinux.h:229284:14: note: previous declaration is here
+> >      229284 | extern void *bpf_arena_alloc_pages(void *p__map, void *addr__ign, u32 page_cnt, int node_id, u64 flags) __weak __ksym;
+> >             |              ^
+> >
+> >     ... etc
 > 
+> I suspect you're using old pahole.
+> New one can transfer __arena tags into vmlinux.h
 
-Can we use ‘commit 1642a3945e22’ with 12 chars, maybe it's minor nit 
-anyways or not.
+Ok, TIL about CONFIG_PAHOLE_VERSION (before I've sent the patch,
+I've updated the pahole, re-built the kernel, but didn't do `make
+oldconfig` after updating pahole.)
 
-> * 8B union argument.
-> * 16B union argument.
-> 
-> cd tools/testing/selftests/bpf
-> ./test_progs -t tracing_struct/union_args
-> 472/3   tracing_struct/union_args:OK
-> 472     tracing_struct:OK
-> Summary: 1/1 PASSED, 0 SKIPPED, 0 FAILED
-> 
-> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
-> ---
->   .../selftests/bpf/prog_tests/tracing_struct.c | 29 ++++++++++++++++
->   .../selftests/bpf/progs/tracing_struct.c      | 33 +++++++++++++++++++
->   .../selftests/bpf/test_kmods/bpf_testmod.c    | 31 +++++++++++++++++
->   3 files changed, 93 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/tracing_struct.c b/tools/testing/selftests/bpf/prog_tests/tracing_struct.c
-> index 19e68d4b35327..6f8c0bfb04155 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/tracing_struct.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/tracing_struct.c
-> @@ -112,10 +112,39 @@ static void test_struct_many_args(void)
->   	tracing_struct_many_args__destroy(skel);
->   }
->   
-> +static void test_union_args(void)
-> +{
-> +	struct tracing_struct *skel;
-> +	int err;
-> +
-> +	skel = tracing_struct__open_and_load();
-> +	if (!ASSERT_OK_PTR(skel, "tracing_struct__open_and_load"))
-> +		return;
-> +
-> +	err = tracing_struct__attach(skel);
-> +	if (!ASSERT_OK(err, "tracing_struct__attach"))
-> +		goto out;
-> +
-> +	ASSERT_OK(trigger_module_test_read(256), "trigger_read");
-> +
-> +	ASSERT_EQ(skel->bss->ut1_a_a, 1, "ut1:a.arg.a");
-> +	ASSERT_EQ(skel->bss->ut1_b, 4, "ut1:b");
-> +	ASSERT_EQ(skel->bss->ut1_c, 5, "ut1:c");
-> +
-> +	ASSERT_EQ(skel->bss->ut2_a, 6, "ut2:a");
-> +	ASSERT_EQ(skel->bss->ut2_b_a, 2, "ut2:b.arg.a");
-> +	ASSERT_EQ(skel->bss->ut2_b_b, 3, "ut2:b.arg.b");
-> +
-> +out:
-> +	tracing_struct__destroy(skel);
-> +}
-> +
->   void test_tracing_struct(void)
->   {
->   	if (test__start_subtest("struct_args"))
->   		test_struct_args();
->   	if (test__start_subtest("struct_many_args"))
->   		test_struct_many_args();
-> +	if (test__start_subtest("union_args"))
-> +		test_union_args();
->   }
-> diff --git a/tools/testing/selftests/bpf/progs/tracing_struct.c b/tools/testing/selftests/bpf/progs/tracing_struct.c
-> index c435a3a8328ab..d460732e20239 100644
-> --- a/tools/testing/selftests/bpf/progs/tracing_struct.c
-> +++ b/tools/testing/selftests/bpf/progs/tracing_struct.c
-> @@ -18,6 +18,18 @@ struct bpf_testmod_struct_arg_3 {
->   	int b[];
->   };
->   
-> +union bpf_testmod_union_arg_1 {
-> +	char a;
-> +	short b;
-> +	struct bpf_testmod_struct_arg_1 arg;
-> +};
-> +
-> +union bpf_testmod_union_arg_2 {
-> +	int a;
-> +	long b;
-> +	struct bpf_testmod_struct_arg_2 arg;
-> +};
-> +
->   long t1_a_a, t1_a_b, t1_b, t1_c, t1_ret, t1_nregs;
->   __u64 t1_reg0, t1_reg1, t1_reg2, t1_reg3;
->   long t2_a, t2_b_a, t2_b_b, t2_c, t2_ret;
-> @@ -26,6 +38,9 @@ long t4_a_a, t4_b, t4_c, t4_d, t4_e_a, t4_e_b, t4_ret;
->   long t5_ret;
->   int t6;
->   
-> +long ut1_a_a, ut1_b, ut1_c;
-> +long ut2_a, ut2_b_a, ut2_b_b;
-> +
->   SEC("fentry/bpf_testmod_test_struct_arg_1")
->   int BPF_PROG2(test_struct_arg_1, struct bpf_testmod_struct_arg_2, a, int, b, int, c)
->   {
-> @@ -130,4 +145,22 @@ int BPF_PROG2(test_struct_arg_11, struct bpf_testmod_struct_arg_3 *, a)
->   	return 0;
->   }
->   
-> +SEC("fexit/bpf_testmod_test_union_arg_1")
-> +int BPF_PROG2(test_union_arg_1, union bpf_testmod_union_arg_1, a, int, b, int, c)
-> +{
-> +	ut1_a_a = a.arg.a;
-> +	ut1_b = b;
-> +	ut1_c = c;
-> +	return 0;
-> +}
-> +
-> +SEC("fexit/bpf_testmod_test_union_arg_2")
-> +int BPF_PROG2(test_union_arg_2, int, a, union bpf_testmod_union_arg_2, b)
-> +{
-> +	ut2_a = a;
-> +	ut2_b_a = b.arg.a;
-> +	ut2_b_b = b.arg.b;
-> +	return 0;
-> +}
-> +
->   char _license[] SEC("license") = "GPL";
-> diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-> index 2beb9b2fcbd87..9cd28de05960c 100644
-> --- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-> +++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-> @@ -62,6 +62,18 @@ struct bpf_testmod_struct_arg_5 {
->   	long d;
->   };
->   
-> +union bpf_testmod_union_arg_1 {
-> +	char a;
-> +	short b;
-> +	struct bpf_testmod_struct_arg_1 arg;
-> +};
-> +
-> +union bpf_testmod_union_arg_2 {
-> +	int a;
-> +	long b;
-> +	struct bpf_testmod_struct_arg_2 arg;
-> +};
-> +
->   __bpf_hook_start();
->   
->   noinline int
-> @@ -128,6 +140,20 @@ bpf_testmod_test_struct_arg_9(u64 a, void *b, short c, int d, void *e, char f,
->   	return bpf_testmod_test_struct_arg_result;
->   }
->   
-> +noinline int
-> +bpf_testmod_test_union_arg_1(union bpf_testmod_union_arg_1 a, int b, int c)
-> +{
-> +	bpf_testmod_test_struct_arg_result = a.arg.a + b + c;
-> +	return bpf_testmod_test_struct_arg_result;
-> +}
-> +
-> +noinline int
-> +bpf_testmod_test_union_arg_2(int a, union bpf_testmod_union_arg_2 b)
-> +{
-> +	bpf_testmod_test_struct_arg_result = a + b.arg.a + b.arg.b;
-> +	return bpf_testmod_test_struct_arg_result;
-> +}
-> +
->   noinline int
->   bpf_testmod_test_arg_ptr_to_struct(struct bpf_testmod_struct_arg_1 *a) {
->   	bpf_testmod_test_struct_arg_result = a->a;
-> @@ -398,6 +424,8 @@ bpf_testmod_test_read(struct file *file, struct kobject *kobj,
->   	struct bpf_testmod_struct_arg_3 *struct_arg3;
->   	struct bpf_testmod_struct_arg_4 struct_arg4 = {21, 22};
->   	struct bpf_testmod_struct_arg_5 struct_arg5 = {23, 24, 25, 26};
-> +	union bpf_testmod_union_arg_1 union_arg1 = { .arg = {1} };
-> +	union bpf_testmod_union_arg_2 union_arg2 = { .arg = {2, 3} };
->   	int i = 1;
->   
->   	while (bpf_testmod_return_ptr(i))
-> @@ -415,6 +443,9 @@ bpf_testmod_test_read(struct file *file, struct kobject *kobj,
->   	(void)bpf_testmod_test_struct_arg_9(16, (void *)17, 18, 19, (void *)20,
->   					    21, 22, struct_arg5, 27);
->   
-> +	(void)bpf_testmod_test_union_arg_1(union_arg1, 4, 5);
-> +	(void)bpf_testmod_test_union_arg_2(6, union_arg2);
-> +
->   	(void)bpf_testmod_test_arg_ptr_to_struct(&struct_arg1_2);
->   
->   	(void)trace_bpf_testmod_test_raw_tp_null_tp(NULL);
-
-
--- 
-Best Regards
-Tao Chen
+> pw-bot: cr
