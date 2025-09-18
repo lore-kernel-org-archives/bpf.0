@@ -1,114 +1,117 @@
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97CB72192E3
-	for <bpf@vger.kernel.org>; Thu, 18 Sep 2025 16:26:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D5FD34BA38
+	for <bpf@vger.kernel.org>; Thu, 18 Sep 2025 16:46:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758212800; cv=none; b=ei9olQV8Pip3tF73nqA3VxDFDlS841186gYeqhqjKLm0pkDMWRg421gmRWkOB9TKWJk9OJOybipU1bLTrKqhBPo1tiOsAulRYjfsPcRkMgtnUKRGnsWOyzPCWoMZ9PzQ8Hj2IwixSLjCz+J0ZSWp40jRYAlQsfy7sx0QA+rkeos=
+	t=1758213966; cv=none; b=QKJglfxbiZJofwQaJumG2PdOvU2/kmitlgTfIystOPY1BYeq0ZRWzE+7BCkl2WeZzGeviPA+TlFt8rrE+nzUfe3C6oew6kT3LdbebECNU2C8NLaUDw/KfkMMIfg2J3mkwZ+6/S18WpwPI1rxY9zUyJAXp8ZfSQFIp0bx8o3/LpI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758212800; c=relaxed/simple;
-	bh=9+Mq+YcHakC1aonqWSsqaqkLLTr4FLrcP95BRzRfzZw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gAgE9zXKN9lNgR6YQ6VX4ZVpIWqTy2K1QzmWOwWE9b6z0oOQuGNyGOvLh76rLv/9NVl918xXz+K3gHU59UltRq+Lpyaenb+hXgRGk5d16X3/V8Q86/S8t7XvS2oOtVtF+AdxKiv9A01raBtqVGZrKHOE1lmmv7Fa/TkJmRKkPK4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AfmtERof; arc=none smtp.client-ip=209.85.128.50
+	s=arc-20240116; t=1758213966; c=relaxed/simple;
+	bh=8LYbcXr/+XHpm38r5jjnqbhILiCAJUmlbeUEVMBcyXo=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=c67jUHfwazRnLOR1IMdvuYsCtjMknjj5CFIWmi1o3fjHeM2ANcW+kFo2z35d7lgwOJLRNhtsirKV+8WfFO/FjqWA9whIQ0c2Is96mVgZwFlu3QWqODJnI9FfEPp6Z3K4/YTqUS1U2bvlvO6IPNrpK8LUJuVtzSlE8WbpHrzj2Hs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ClQ5msBg; arc=none smtp.client-ip=209.85.128.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AfmtERof"
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-45f2cf99bbbso7206175e9.0
-        for <bpf@vger.kernel.org>; Thu, 18 Sep 2025 09:26:38 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ClQ5msBg"
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-45df0cde41bso7829235e9.3
+        for <bpf@vger.kernel.org>; Thu, 18 Sep 2025 09:46:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1758212797; x=1758817597; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Wbiof32HOUHhC6r3EOORVrui2edZ5pz+Ms95ogDj4rg=;
-        b=AfmtERofcysbV11ghnwvCHWyFoXvPyStl6w3ob7P2kDOQ8ehQmilqZ+7WfgCu3Rq/F
-         kpPGV9Cmfd/iyh8qKS1bkP0741pZDacCn0f37MP/ox4izZ8waUACTl1RTskM5XArSspQ
-         jAvx636NGo/3FAVmnB8C5v4yy4z7dkoC6Bhadr9ZnwAZpkcPZBgcMMgXBAJkaJ31SgRd
-         +S7Mik/EuDUgxEVTkF7GF7uAE6XqV1ixRTwbmQHYxuIzEmk+f+ITY8y88pZLGTGb5Mjo
-         pUgT0mpHVffeDFdyH3j6e5G+d3hWWYm36FXgsPC3sGn2VA+IJ1r5ieyGC8kJCX9X3kha
-         orNA==
+        d=gmail.com; s=20230601; t=1758213963; x=1758818763; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mJFGe2cUHDlRVwVGwNX+f0oXKgApUFAhcUeWwI7FA+o=;
+        b=ClQ5msBgP31F94xKtzAm2G+APonRA9FynpmCW3d4XJUyshen1EKhicqxH3cyrs/ulD
+         O0kIm0ilXxWRZvAzmX+aUG3rP3LmgqYcr+j02zsPudn0lkMHVi6dEkp9YoMXsdxQ2MKL
+         kRHg1iS1L8A075rSINQlO6nCY5/1j/Ull30kYXO7bodmSPZCVgYnwV2GJgl8UeZ1c/iO
+         N3Brkk+QoPJHlsjy5Ls6BK8fAl06rJo2weRBqojmuAQplhpDlsVwXcTETn/lyIcJvTK7
+         7gPMvd8WVWX2aW/TxpK0ETEwJWBAH1qSybKFJQgm9xArzpMNNsVJGHCBMqXHSAv4I3du
+         Pelw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758212797; x=1758817597;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Wbiof32HOUHhC6r3EOORVrui2edZ5pz+Ms95ogDj4rg=;
-        b=vqbJy5bI0320VmJabtMUj+INCceNEUZUMcqq+Qb+45XPBdk8/W6XopKlUmdF2QMwxK
-         I3LI/OUQatyC50NjFmHq0GXXQBV2J+pYrZDha1jqFclnmp8wWRyampXhNj6c1A0Pd9YC
-         0LJ+1NO8WCCHzYpz5JBRzwe+NFDbRVD64qnUMXsyX4fAKjTt4xOmzaM/Cwnq2z1bl/5j
-         VjOaLcecKacVeiLXfX4lcXMM8H1LecGy7B+x0mjQl3/Pd6tq5A2ODUPHKItY1LTBgtC3
-         LUbxymKXGZVgaiOSTRcVnzEYOGfbSb2Jqs1AHhnaA3pbalwSG6v7XlVKvoYN43gydc5E
-         G0oQ==
-X-Gm-Message-State: AOJu0Yzc7dk9DkcP9vxg879bBxoGIDE4KmzQV3Jzxai0Hfcv8ZPoMPFE
-	1i3ryUeT2Fp+SamlVUo6xeQDv+R/qpwFUArJIR0BuUMQIaA3ibC5ZSMupAaab+5ww1WN/xeQNEE
-	hBnuI+4ECpl18YWeFjPAXrT+mit1mLakAXC10
-X-Gm-Gg: ASbGnctzjSZs/6jQc2wQPjtByZl8q8VKYXgbE4NROKJsJVqLGwxn2EDkHjL+Sppnrxz
-	JCsLCW8wfxRftBKORIiKLCo/8BUi+bx+DALjym7R+gKrBzwHik1z8QJexPsNkacv02UpTSPcnKq
-	2BVaZWrj/YlqvrQ3DEzQ4aAi5SbLc5MtSq+050FUcrbNLeoslBwrz10qGGP2b3eDpEcekmz3oi4
-	V/vr1CPpFvH/mxIyFGpZweNUxNJwjkLA0x770W9DQ==
-X-Google-Smtp-Source: AGHT+IGkA89p9YjER9dFRystLowpNPwOsVNXiTd/Xy8ecOf8LhWSp+oooa4bJnKnVVe4p9eb9qPqSAmt19AFZO8z2zk=
-X-Received: by 2002:a05:600c:314c:b0:45c:b549:2241 with SMTP id
- 5b1f17b1804b1-46206842a9amr56726415e9.27.1758212796642; Thu, 18 Sep 2025
- 09:26:36 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1758213963; x=1758818763;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mJFGe2cUHDlRVwVGwNX+f0oXKgApUFAhcUeWwI7FA+o=;
+        b=Lm4l5zV4j6C1DdNWRBzJXSVIJ90/eeKqW/2mZtYbcOBn8rc8+0uVBVViUDMlaKVLzI
+         hO/1kdbn4enn082l452i/kkUBieVGnW2wbdHSX7WerrFg4t1Xf758lGQ5cSivUjvl81h
+         iugiQKxJoCmte8DRA0zD7ZoWVcQuDUJUhVhMNAZ3zutEhe5Qzwg8mGjYm9xFml/0CN7R
+         LJSa68QRayU7tcGbPbLoq5d5ZxacVoQxNWlwkbaf0SGL6fwlFfB57/YoiVLDjciPX3da
+         ilI6GXt0tq+khFLeqMnmT36bkJa/MwoYH6sA7s/0XEFd2l4ByLM32zR4gwh4xtytQb/H
+         T2Lw==
+X-Gm-Message-State: AOJu0YxQukAuVvic9YKpISI2i7VFrk/1yhXXNaB2Lfz8K4EaDLoZ0oIF
+	fVKR+zkj2cehurMGunUkuAmhfgeok7KLVALAzGn704tX/Xv/XMFBvuDj6mOB4NYT
+X-Gm-Gg: ASbGncsP5ogLSSaPFpuIyKidoKWEAsZTwTDz481Wy3CCApHAEjvKrlyzzlFQ7KVhVNr
+	C0r7tZumVU3uzdJTNDNKtiD4q87hmk542/9JJVyxt1Q/uYH5meruvISMWm6PRfzmpv0vxYkOTM1
+	52BdlI77aUUyoQ7DRvKxJpx5hD91tGEJQ0NHGOxAmsfjPzTM4XWpZrbrJg3zHtmEBRAVwzJ067/
+	uyppp5YTifE6TQhOfkeXMo9fkye+DmH6OGJs3g5/9Y/M/PLw2NlITSQl+4/5v/Tsd9aIAl3QAQL
+	MTS5i4x/zPhYk8UPAa4Vr9Og156vsqfguqeIIbIvbn3KtiosMx8fpzAX1GbjSra+KgtSAcOMPMm
+	DV6LxEMwym/TsBL2Dye2TVHR4XsEXx0cHvOVspcMMOn8EvJIFcB6arvcaFE/t0hU6bl3/3cie49
+	gHmwVV3ZS8OCBJ+ItbWH58vHGIIGqC1k8wtAvT3A==
+X-Google-Smtp-Source: AGHT+IEvftHXaxOodJCxlx27ZzJ2dDvp5DE5gqYdOiIlhapnTfaKrX3307Y+9/eWZSC1TTkO9Sr8gw==
+X-Received: by 2002:a05:600c:1c87:b0:456:fc1:c26d with SMTP id 5b1f17b1804b1-46201f8aa4bmr61988575e9.2.1758213962306;
+        Thu, 18 Sep 2025 09:46:02 -0700 (PDT)
+Received: from mail.gmail.com (2a01cb0889497e00c3e9035ed76de3f3.ipv6.abo.wanadoo.fr. [2a01:cb08:8949:7e00:c3e9:35e:d76d:e3f3])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3ee07412111sm4352483f8f.28.2025.09.18.09.46.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Sep 2025 09:46:01 -0700 (PDT)
+Date: Thu, 18 Sep 2025 18:45:59 +0200
+From: Paul Chaignon <paul.chaignon@gmail.com>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Amery Hung <ameryhung@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>
+Subject: [PATCH bpf-next v3 0/5] bpf: Support non-linear skbs for
+ BPF_PROG_TEST_RUN
+Message-ID: <cover.1758213407.git.paul.chaignon@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250918093606.454541-1-a.s.protopopov@gmail.com>
- <CAADnVQLso776xFQTzPFahmV=JbE3Ca8jQ7UdPuMChjJAK_echg@mail.gmail.com> <aMwy+pt+Rg1eNr0z@mail.gmail.com>
-In-Reply-To: <aMwy+pt+Rg1eNr0z@mail.gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Thu, 18 Sep 2025 09:26:22 -0700
-X-Gm-Features: AS18NWC3QWbMrrqvbFcI4HUShh5l1YCTy2_KJOi6XJx8rFaYZmfvHIbEN9kXyiY
-Message-ID: <CAADnVQ+2ic2gWyvqp4qFCwZpKqV+7BDnovL08Jp0tFSaC4pm9g@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] selftests/bpf: fix build with new LLVM
-To: Anton Protopopov <a.s.protopopov@gmail.com>
-Cc: bpf <bpf@vger.kernel.org>, Puranjay Mohan <puranjay@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Thu, Sep 18, 2025 at 9:21=E2=80=AFAM Anton Protopopov
-<a.s.protopopov@gmail.com> wrote:
->
-> On 25/09/18 08:02AM, Alexei Starovoitov wrote:
-> > On Thu, Sep 18, 2025 at 2:30=E2=80=AFAM Anton Protopopov
-> > <a.s.protopopov@gmail.com> wrote:
-> > >
-> > > The progs/stream.c BPF program now uses arena helpers, so it includes
-> > > bpf_arena_common.h, which conflicts with the declarations generated
-> > > in vmlinux.h. This leads to the following build errors with the recen=
-t
-> > > LLVM:
-> > >
-> > >     In file included from progs/stream.c:8:
-> > >     .../tools/testing/selftests/bpf/bpf_arena_common.h:47:15: error: =
-conflicting types for 'bpf_arena_alloc_pages'
-> > >        47 | void __arena* bpf_arena_alloc_pages(void *map, void __are=
-na *addr, __u32 page_cnt,
-> > >           |               ^
-> > >     .../tools/testing/selftests/bpf/tools/include/vmlinux.h:229284:14=
-: note: previous declaration is here
-> > >      229284 | extern void *bpf_arena_alloc_pages(void *p__map, void *=
-addr__ign, u32 page_cnt, int node_id, u64 flags) __weak __ksym;
-> > >             |              ^
-> > >
-> > >     ... etc
-> >
-> > I suspect you're using old pahole.
-> > New one can transfer __arena tags into vmlinux.h
->
-> Ok, TIL about CONFIG_PAHOLE_VERSION (before I've sent the patch,
-> I've updated the pahole, re-built the kernel, but didn't do `make
-> oldconfig` after updating pahole.)
+This patchset adds support for non-linear skbs when running tc programs
+with BPF_PROG_TEST_RUN.
 
-Yeah. It's a footgun that few people are aware of :(
-I was bitten by it too.
-We have a small section about pahole in bpf_devel_QA.rst.
-We should probably expand it and list the common issues and how to fix them=
-.
-Every week somebody sends a patch due to old pahole :(
+We've had multiple bugs in the past few years in Cilium caused by
+missing calls to bpf_skb_pull_data(). Daniel suggested this new
+BPF_PROG_TEST_RUN flag as a way to uncover these bugs in our BPF tests.
+
+Changes in v3:
+  - Dropped BPF_F_TEST_SKB_NON_LINEAR and used the ctx->data_end to
+    determine if the user wants non-linear skb, as suggested by Amery.
+  - Introduced a second commit with a bit of refactoring to allow for
+    the above requested change.
+  - Fix bug found by syzkaller on third commit.
+  - Rebased.
+Changes in v2:
+  - Made the linear size configurable via ctx->data_end, as suggested
+    by Amery.
+  - Reworked the selftests to allow testing the configurable linear
+    size.
+  - Fix warnings reported by kernel test robot on first commit.
+  - Rebased.
+
+Paul Chaignon (5):
+  bpf: Refactor cleanup of bpf_prog_test_run_skb
+  bpf: Reorder bpf_prog_test_run_skb initialization
+  bpf: Craft non-linear skbs in BPF_PROG_TEST_RUN
+  selftests/bpf: Support non-linear flag in test loader
+  selftests/bpf: Test direct packet access on non-linear skbs
+
+ net/bpf/test_run.c                            | 124 ++++++++++++------
+ tools/testing/selftests/bpf/progs/bpf_misc.h  |   4 +
+ .../bpf/progs/verifier_direct_packet_access.c |  54 ++++++++
+ tools/testing/selftests/bpf/test_loader.c     |  19 ++-
+ 4 files changed, 162 insertions(+), 39 deletions(-)
+
+-- 
+2.43.0
+
