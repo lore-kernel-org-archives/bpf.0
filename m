@@ -1,38 +1,38 @@
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 550732BE051;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9111D2C029C;
 	Fri, 19 Sep 2025 21:32:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758317530; cv=none; b=rPe6vT9VPdlptEod0wRsukoT9z43l/tK80ZunngrAL5KKx8jCfB0kLq79pR+LQpJZbbiATQ7u7rVMtuHU/B84j3WwfFiqn0DO2hm9Ymf6aGCo0D+XP66wc6XVjegamEOoe8NRj9CX0QYA72pm8OkxO9Va60cN++yk5WX68fBMKg=
+	t=1758317531; cv=none; b=jakvYi2IMDQwTvqQvisklmY9MSenVs83QIPOZG2vFiFo+ay1oorY4ZAGC2W/5wbFUOjBYE5QSnuUQL9MllIjpmixHCknWwnX0E2ShkT7M8MCzLVoo5hk9rx/0bPtbpA5eNOZD2fl/LYqU3vCgKHti9ZikMKN5QosRu3KeojURwc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758317530; c=relaxed/simple;
-	bh=/KGmccBEbD9e+Ru/qRtHgoDCRCZAG8J1k6KadeqMcXo=;
+	s=arc-20240116; t=1758317531; c=relaxed/simple;
+	bh=Odu2cbCnp787JaTYJJTVkAGeCswNgCv46XCig/OHxX0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=npP3FBW3vGr5ASBscnFaGE7m6gIRIA0t2lQvbe1tI15c3/jedgkq6i/TpRq6Okon66aSkAIsYSK6y6CjfbbnGlbJAqx8KmXI2LYfiWIXytVVMOp1iq0o0sBajnOlcFsdS00FTziHC4exF+rRN4rhBDUGXyQBVKpOtP/B8WDHr8A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=X/TfwB0z; arc=none smtp.client-ip=213.133.104.62
+	 MIME-Version; b=tyPpYRDx7B9HjcP1jqzjLjrI055KXylnEnLkV+2eqgDzRdgP1Xb7RLJw2AChY32Mcie81inJhYBFGsoOxko50k/59SgLXq5fj/IEkLaUW6oQNbDcPjn59Hdwc7qQMy2qpDdTENufbqL/Jo0Of4F6D2+AxDp7NpmufvZaccuMOQg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=N3JoIo34; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="X/TfwB0z"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="N3JoIo34"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
 	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
 	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=wOsfpZJWwn45iOS1PcjYeXGCpH6y4Eyqy3BpRjkd/k0=; b=X/TfwB0zhshDNL/tTexrCp/iQb
-	d+nw0rkhkr7+kQOlun9SC/NL6fqzaJf9TaDdjrxJC05NZ9QCeYHpKTXCAgA2jCZORj+cu6+6sr6YU
-	qG80x3IHobj4prt4K5nKzlIeY/piKji12jZRn+ghEiM/K3wvtklfNp/QHkBCOoNF3dy2XABbleV99
-	VdqgA0ym+o392SdxFbWc6DahJH28bWtNTFStHZZLpIph3rGVGvmak2rS0k+WitRHxxoJ8hdzYFi/q
-	Ot7Oz+3ArsGMUif9YWOWD2YrB2LvaIyuBX5PLz+c3ZlKk557a9eodtoiWoKSbHTwOjcmCeULEp0Ib
-	A9U0Ea6g==;
+	bh=9TOxTiJg//vS9gtm6X3V3jz1BAHoN+xI3f9f2tp03ZQ=; b=N3JoIo34BHhZNsmcIICk9PBL5u
+	bWO+oHzx2YzaWxiIzx1xjJMDNZAem1Iq3ud/BJjuYHjsxWR/7COOZ43SxzxsntXiPn8Hl/WiQ/mNQ
+	duir4PsXOjOOBq1ofm0nhQzQQZRZ4vHn8ZdJCg9ACKBXX+Zjtx14NianrEPnrHjJo2sKFf+LDkW+g
+	6dc+x/lJ9D1mlj6fUtU8XuZgogqCuQukT+riEQ8kJxSNsyN7B1xJKsSnaRnjgUrOT8/iWIIuzZd/e
+	zP7aJNLpQwwoeIdnrJVbCD0e6NqLP6z/NsXZ+VcgMGGBOiTLXsmElY7CMKimDhg+wnksarm95C0ah
+	MpVG4lQA==;
 Received: from localhost ([127.0.0.1])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1uzihx-000Npr-27;
-	Fri, 19 Sep 2025 23:31:57 +0200
+	id 1uzii1-000NqO-2X;
+	Fri, 19 Sep 2025 23:32:01 +0200
 From: Daniel Borkmann <daniel@iogearbox.net>
 To: netdev@vger.kernel.org
 Cc: bpf@vger.kernel.org,
@@ -48,9 +48,9 @@ Cc: bpf@vger.kernel.org,
 	maciej.fijalkowski@intel.com,
 	magnus.karlsson@intel.com,
 	David Wei <dw@davidwei.uk>
-Subject: [PATCH net-next 03/20] net: Add ndo_queue_create callback
-Date: Fri, 19 Sep 2025 23:31:36 +0200
-Message-ID: <20250919213153.103606-4-daniel@iogearbox.net>
+Subject: [PATCH net-next 07/20] net, ethtool: Disallow mapped real rxqs to be resized
+Date: Fri, 19 Sep 2025 23:31:40 +0200
+Message-ID: <20250919213153.103606-8-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250919213153.103606-1-daniel@iogearbox.net>
 References: <20250919213153.103606-1-daniel@iogearbox.net>
@@ -63,33 +63,49 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Virus-Scanned: Clear (ClamAV 1.0.9/27767/Fri Sep 19 10:26:55 2025)
 
-From: David Wei <dw@davidwei.uk>
+Similar to AF_XDP, do not allow queues in a physical netdev to be
+resized by ethtool -L when they are peered.
 
-Add ndo_queue_create() to netdev_queue_mgmt_ops that will create a new
-rxq specifically for mapping to a real rxq. The intent is for only
-virtual netdevs i.e. netkit and veth to implement this ndo. This will
-be called from ynl netdev fam bind-queue op to atomically create a
-mapped rxq and bind it to a real rxq.
-
-Signed-off-by: David Wei <dw@davidwei.uk>
-Co-developed-by: Daniel Borkmann <daniel@iogearbox.net>
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Co-developed-by: David Wei <dw@davidwei.uk>
+Signed-off-by: David Wei <dw@davidwei.uk>
 ---
- include/net/netdev_queues.h | 1 +
- 1 file changed, 1 insertion(+)
+ net/ethtool/channels.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/include/net/netdev_queues.h b/include/net/netdev_queues.h
-index cd00e0406cf4..6b0d2416728d 100644
---- a/include/net/netdev_queues.h
-+++ b/include/net/netdev_queues.h
-@@ -149,6 +149,7 @@ struct netdev_queue_mgmt_ops {
- 						  int idx);
- 	struct device *		(*ndo_queue_get_dma_dev)(struct net_device *dev,
- 							 int idx);
-+	int			(*ndo_queue_create)(struct net_device *dev);
- };
+diff --git a/net/ethtool/channels.c b/net/ethtool/channels.c
+index ca4f80282448..0ede1075e016 100644
+--- a/net/ethtool/channels.c
++++ b/net/ethtool/channels.c
+@@ -1,5 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0-only
  
- bool netif_rxq_has_unreadable_mp(struct net_device *dev, int idx);
++#include <net/netdev_rx_queue.h>
+ #include <net/xdp_sock_drv.h>
+ 
+ #include "netlink.h"
+@@ -169,14 +170,19 @@ ethnl_set_channels(struct ethnl_req_info *req_info, struct genl_info *info)
+ 	if (ret)
+ 		return ret;
+ 
+-	/* Disabling channels, query zero-copy AF_XDP sockets */
++	/* ensure channels are not busy at the moment */
+ 	from_channel = channels.combined_count +
+ 		       min(channels.rx_count, channels.tx_count);
+-	for (i = from_channel; i < old_total; i++)
++	for (i = from_channel; i < old_total; i++) {
++		if (netdev_rx_queue_peered(dev, i)) {
++			GENL_SET_ERR_MSG(info, "requested channel counts are too low due to existing queue peering");
++			return -EINVAL;
++		}
+ 		if (xsk_get_pool_from_qid(dev, i)) {
+ 			GENL_SET_ERR_MSG(info, "requested channel counts are too low for existing zerocopy AF_XDP sockets");
+ 			return -EINVAL;
+ 		}
++	}
+ 
+ 	ret = dev->ethtool_ops->set_channels(dev, &channels);
+ 	return ret < 0 ? ret : 1;
 -- 
 2.43.0
 
