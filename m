@@ -1,38 +1,38 @@
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B208329BDAD;
-	Fri, 19 Sep 2025 21:51:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0DC925BEF1;
+	Fri, 19 Sep 2025 21:52:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758318721; cv=none; b=lENWIUZMYaT99Tqzf0w8/WfAtByJii6S8klzOjitn3GZNoE5jfmo+YwGh7MxGzPD0JQXb3KPQNhzPmCWTYUrRxAcFsAvATOW9dSwQjnSZjw7RS4rHdfzV1DvZ9kvIXCfR1IR7UYm6Q7RX/o8ed0GXF9k2xv/nR4zD4BxAXISoaI=
+	t=1758318730; cv=none; b=o6Nrz+gg2V4JwWVjt4N0vdnar06t+U9c3KHdKoeMsd5S3PchOG81LAnIkbKjac592hiIIBZ2NDvi7p2HH1s0Qqgab5tF57SiyP5Y3uakHTNHp6X9DkExbd6u9ofmVuOqBl5m2nQqYU9ZeWu6W4Q15KX64AqikYGf4hqsxl87MEY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758318721; c=relaxed/simple;
-	bh=2EVjPPsETt4vCu1U1tGB5XWVqwzHUIMbtBxOsfDMSR0=;
+	s=arc-20240116; t=1758318730; c=relaxed/simple;
+	bh=4OaDL3zrRtaDStHRe6/1Biq2t/Nf1mV/1JFDrJJGNfg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=TrU3k/O//MNYgxZsjndyDvqxB0rt3RY5hXno46qOJqqYv8lfKR+Ux3XvgsYF3QWe+SjK26ixvwcCzofZfz0s+G29wrS1LgobqU1UAzWAG3Qn+w9w8ZOMcPLSkJJWS6P+lZ2NZhW1Yl8PQ9Rrbi7FS95PwotH356rW+BMJRVx1EA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=kBCbtzIe; arc=none smtp.client-ip=213.133.104.62
+	 MIME-Version; b=khDePJ296MH8sGoHVf2uSA2mP6estHIc7PvyO53kcW28V+rY36WsSEum+N5lMhiXTql35Z2uLtu/i8T+W0IrMi48wB+qHCtu3TQAWwa19luVxHWlLo0NZTXnF1qAmb6pVao/Tjqqv5tPHSjeLZHmPX6ekiLcDL/JW019o6ciREI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=aui9D0by; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="kBCbtzIe"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="aui9D0by"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
 	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
 	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=lyRqrEMsHvOhn4r28CCS8pXo1b8QifmmgOJDo10lStY=; b=kBCbtzIePp07sWdFPU39tuJNz5
-	ZkoLH6fAkvgPl3oERGYn1d2jB7L2gYT2FiYaL5YFHntDSU4e1F4hZdMkDcXpKWuPJtwjO0gNqkuII
-	5NDbUU4+NQyhj3GNB1nK7SqUo3alLPas7oMLh+RWV9h+J4lCjUjH0Bj4FIoe6RZm2QM5JTfW+spmq
-	BJkvny+wSl27G5t3nqJTPYxS6lrHjUJoJL/vl97lRKFz1uHD0KW5OehPFgeiGeOKIMmyE+GsIztgN
-	GYlrFtOzxDmVmH6PYIBJZrgzOLqbfYH15QbIRXgESntnG/WzAtbBn28SeKCRwAb210gEAAc765SJc
-	Xm6f5rRw==;
+	bh=Tq+s3moi4aETY4tdJE1DrMRVk78qBpcdzGrGspHui+c=; b=aui9D0byxJR7P0X6HSPzzA5phm
+	7KoSANnmlgyHiNonMrmhAtJc9Feq+/nENyIvX07WjbQrIFDVye+WnV+gKaawuOaQEmDsZmHzoHXjZ
+	pV5eVtbjP4un1fJgLRt+ipm9tDE/zE014I98CbW/pntMYeIZm9JcQlt+hBFsOxzylQOJu7D9D7L8Q
+	MZRk2wwwqZnsWD+s++GOScqmpZSDr73ABpcxQ4zi7Rqg81dF7HOHwhFkGn7dFkOOnbNM99b0kTKDT
+	Gsix1I0rk8SWjJINzwIsHKBHxuD3NXkDQDHZ7T2gZunwJfme51H/03n23I+IlzH0hpkYCrtjMIww0
+	7vRqUEQQ==;
 Received: from localhost ([127.0.0.1])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1uzii7-000NsM-0j;
-	Fri, 19 Sep 2025 23:32:07 +0200
+	id 1uziiB-000NtK-2P;
+	Fri, 19 Sep 2025 23:32:11 +0200
 From: Daniel Borkmann <daniel@iogearbox.net>
 To: netdev@vger.kernel.org
 Cc: bpf@vger.kernel.org,
@@ -48,9 +48,9 @@ Cc: bpf@vger.kernel.org,
 	maciej.fijalkowski@intel.com,
 	magnus.karlsson@intel.com,
 	David Wei <dw@davidwei.uk>
-Subject: [PATCH net-next 13/20] xsk: Proxy pool management for mapped queues
-Date: Fri, 19 Sep 2025 23:31:46 +0200
-Message-ID: <20250919213153.103606-14-daniel@iogearbox.net>
+Subject: [PATCH net-next 18/20] netkit: Add io_uring zero-copy support for TCP
+Date: Fri, 19 Sep 2025 23:31:51 +0200
+Message-ID: <20250919213153.103606-19-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250919213153.103606-1-daniel@iogearbox.net>
 References: <20250919213153.103606-1-daniel@iogearbox.net>
@@ -63,127 +63,91 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Virus-Scanned: Clear (ClamAV 1.0.9/27767/Fri Sep 19 10:26:55 2025)
 
-Similarly what we do for net_mp_{open,close}_rxq for mapped queues,
-proxy also the xsk_{reg,clear}_pool_at_qid via __netif_get_rx_queue_peer
-such that when a virtual netdev picked a mapped rxq, the request gets
-through to the real rxq in the physical netdev.
+From: David Wei <dw@davidwei.uk>
 
-Change the function signatures for queue_id to unsigned int in order
-to pass the queue_id parameter into __netif_get_rx_queue_peer. The
-proxying is only relevant for queue_id < dev->real_num_rx_queues since
-right now its only supported for rxqs.
+This adds the last missing bit to netkit for supporting io_uring with
+zero-copy mode [0]. Up until this point it was not possible to consume
+the latter out of containers or Kubernetes Pods where applications are
+in their own network namespace.
 
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Co-developed-by: David Wei <dw@davidwei.uk>
+Thus, as a last missing bit, implement ndo_queue_get_dma_dev() in netkit
+to return the physical device of the real rxq for DMA. This allows memory
+providers like io_uring zero-copy or devmem to bind to the physically
+mapped rxq in netkit.
+
+io_uring example with eth0 being a physical device with 16 queues where
+netkit is bound to the last queue, iou-zcrx.c is binary from selftests.
+Flow steering to that queue is based on the service VIP:port of the
+server utilizing io_uring:
+
+  # ethtool -X eth0 start 0 equal 15
+  # ethtool -X eth0 start 15 equal 1 context new
+  # ethtool --config-ntuple eth0 flow-type tcp4 dst-ip 1.2.3.4 dst-port 5000 action 15
+  # ip netns add foo
+  # ip link add numrxqueues 2 type netkit
+  # ynl-bind eth0 15 nk0
+  # ip link set nk0 netns foo
+  # ip link set nk1 up
+  # ip netns exec foo ip link set lo up
+  # ip netns exec foo ip link set nk0 up
+  # ip netns exec foo ip addr add 1.2.3.4/32 dev nk0
+  [ ... setup routing etc to get external traffic into the netns ... ]
+  # ip netns exec foo ./iou-zcrx -s -p 5000 -i nk0 -q 1
+
+Remote io_uring client:
+
+  # ./iou-zcrx -c -h 1.2.3.4 -p 5000 -l 12840 -z 65536
+
+We have tested the above against a dual-port Nvidia ConnectX-6 (mlx5)
+100G NIC as well as Broadcom BCM957504 (bnxt_en) 100G NIC, both
+supporting TCP header/data split. For Cilium, the plan is to open
+up support for io_uring in zero-copy mode for regular Kubernetes Pods
+when Cilium is configured with netkit datapath mode.
+
 Signed-off-by: David Wei <dw@davidwei.uk>
+Co-developed-by: Daniel Borkmann <daniel@iogearbox.net>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Link: https://kernel-recipes.org/en/2024/schedule/efficient-zero-copy-networking-using-io_uring [0]
 ---
- include/net/xdp_sock_drv.h |  4 ++--
- net/xdp/xsk.c              | 16 +++++++++++-----
- net/xdp/xsk.h              |  5 ++---
- 3 files changed, 15 insertions(+), 10 deletions(-)
+ drivers/net/netkit.c | 18 +++++++++++++++++-
+ 1 file changed, 17 insertions(+), 1 deletion(-)
 
-diff --git a/include/net/xdp_sock_drv.h b/include/net/xdp_sock_drv.h
-index 47120666d8d6..709af292cba7 100644
---- a/include/net/xdp_sock_drv.h
-+++ b/include/net/xdp_sock_drv.h
-@@ -29,7 +29,7 @@ bool xsk_tx_peek_desc(struct xsk_buff_pool *pool, struct xdp_desc *desc);
- u32 xsk_tx_peek_release_desc_batch(struct xsk_buff_pool *pool, u32 max);
- void xsk_tx_release(struct xsk_buff_pool *pool);
- struct xsk_buff_pool *xsk_get_pool_from_qid(struct net_device *dev,
--					    u16 queue_id);
-+					    unsigned int queue_id);
- void xsk_set_rx_need_wakeup(struct xsk_buff_pool *pool);
- void xsk_set_tx_need_wakeup(struct xsk_buff_pool *pool);
- void xsk_clear_rx_need_wakeup(struct xsk_buff_pool *pool);
-@@ -286,7 +286,7 @@ static inline void xsk_tx_release(struct xsk_buff_pool *pool)
- }
+diff --git a/drivers/net/netkit.c b/drivers/net/netkit.c
+index 27ff84833f28..5129b27a7c3c 100644
+--- a/drivers/net/netkit.c
++++ b/drivers/net/netkit.c
+@@ -274,6 +274,21 @@ static const struct ethtool_ops netkit_ethtool_ops = {
+ 	.get_channels		= netkit_get_channels,
+ };
  
- static inline struct xsk_buff_pool *
--xsk_get_pool_from_qid(struct net_device *dev, u16 queue_id)
-+xsk_get_pool_from_qid(struct net_device *dev, unsigned int queue_id)
- {
- 	return NULL;
- }
-diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-index cf40c70ee59f..b9efa6d8a112 100644
---- a/net/xdp/xsk.c
-+++ b/net/xdp/xsk.c
-@@ -23,6 +23,8 @@
- #include <linux/netdevice.h>
- #include <linux/rculist.h>
- #include <linux/vmalloc.h>
++static struct device *netkit_queue_get_dma_dev(struct net_device *dev, int idx)
++{
++	struct netdev_rx_queue *rxq, *peer_rxq;
++	unsigned int peer_idx;
 +
-+#include <net/netdev_queues.h>
- #include <net/xdp_sock_drv.h>
- #include <net/busy_poll.h>
- #include <net/netdev_lock.h>
-@@ -111,19 +113,20 @@ bool xsk_uses_need_wakeup(struct xsk_buff_pool *pool)
- EXPORT_SYMBOL(xsk_uses_need_wakeup);
- 
- struct xsk_buff_pool *xsk_get_pool_from_qid(struct net_device *dev,
--					    u16 queue_id)
-+					    unsigned int queue_id)
++	rxq = __netif_get_rx_queue(dev, idx);
++	if (!rxq->peer)
++		return NULL;
++
++	peer_rxq = rxq->peer;
++	peer_idx = get_netdev_rx_queue_index(peer_rxq);
++
++	return netdev_queue_get_dma_dev(peer_rxq->dev, peer_idx);
++}
++
+ static int netkit_queue_create(struct net_device *dev)
  {
- 	if (queue_id < dev->real_num_rx_queues)
- 		return dev->_rx[queue_id].pool;
- 	if (queue_id < dev->real_num_tx_queues)
- 		return dev->_tx[queue_id].pool;
--
- 	return NULL;
- }
- EXPORT_SYMBOL(xsk_get_pool_from_qid);
- 
--void xsk_clear_pool_at_qid(struct net_device *dev, u16 queue_id)
-+void xsk_clear_pool_at_qid(struct net_device *dev, unsigned int queue_id)
- {
-+	if (queue_id < dev->real_num_rx_queues)
-+		__netif_get_rx_queue_peer(&dev, &queue_id);
- 	if (queue_id < dev->num_rx_queues)
- 		dev->_rx[queue_id].pool = NULL;
- 	if (queue_id < dev->num_tx_queues)
-@@ -135,7 +138,7 @@ void xsk_clear_pool_at_qid(struct net_device *dev, u16 queue_id)
-  * This might also change during run time.
-  */
- int xsk_reg_pool_at_qid(struct net_device *dev, struct xsk_buff_pool *pool,
--			u16 queue_id)
-+			unsigned int queue_id)
- {
- 	if (queue_id >= max_t(unsigned int,
- 			      dev->real_num_rx_queues,
-@@ -143,6 +146,10 @@ int xsk_reg_pool_at_qid(struct net_device *dev, struct xsk_buff_pool *pool,
- 		return -EINVAL;
- 	if (xsk_get_pool_from_qid(dev, queue_id))
- 		return -EBUSY;
-+	if (queue_id < dev->real_num_rx_queues)
-+		__netif_get_rx_queue_peer(&dev, &queue_id);
-+	if (xsk_get_pool_from_qid(dev, queue_id))
-+		return -EBUSY;
- 
- 	pool->netdev = dev;
- 	pool->queue_id = queue_id;
-@@ -151,7 +158,6 @@ int xsk_reg_pool_at_qid(struct net_device *dev, struct xsk_buff_pool *pool,
- 		dev->_rx[queue_id].pool = pool;
- 	if (queue_id < dev->real_num_tx_queues)
- 		dev->_tx[queue_id].pool = pool;
--
- 	return 0;
+ 	struct netkit *nk = netkit_priv(dev);
+@@ -299,7 +314,8 @@ static int netkit_queue_create(struct net_device *dev)
  }
  
-diff --git a/net/xdp/xsk.h b/net/xdp/xsk.h
-index a4bc4749faac..54d9a7736fd2 100644
---- a/net/xdp/xsk.h
-+++ b/net/xdp/xsk.h
-@@ -41,8 +41,7 @@ static inline struct xdp_sock *xdp_sk(struct sock *sk)
+ static const struct netdev_queue_mgmt_ops netkit_queue_mgmt_ops = {
+-	.ndo_queue_create = netkit_queue_create,
++	.ndo_queue_get_dma_dev		= netkit_queue_get_dma_dev,
++	.ndo_queue_create		= netkit_queue_create,
+ };
  
- void xsk_map_try_sock_delete(struct xsk_map *map, struct xdp_sock *xs,
- 			     struct xdp_sock __rcu **map_entry);
--void xsk_clear_pool_at_qid(struct net_device *dev, u16 queue_id);
-+void xsk_clear_pool_at_qid(struct net_device *dev, unsigned int queue_id);
- int xsk_reg_pool_at_qid(struct net_device *dev, struct xsk_buff_pool *pool,
--			u16 queue_id);
--
-+			unsigned int queue_id);
- #endif /* XSK_H_ */
+ static struct net_device *netkit_alloc(struct nlattr *tb[],
 -- 
 2.43.0
 
