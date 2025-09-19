@@ -1,37 +1,38 @@
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70E1529BDAD;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1FC22BD5A1;
 	Fri, 19 Sep 2025 21:32:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758317530; cv=none; b=Gcvic9Oc0HOPg8Ldy0R8ZUsxHt2sOxzQXv8yVy+jiIYY7NsUyiW/i/Mf+1x+yly6JhEuQLq3T2q6RH6Cgu2CYwMyse3BLEn9H+HZ3F5oucYt5OT6TABwZEw7MCV4o+s69SJRDJwmQSQDgBRsbkbiOhLGBm7UdOYP2MFJL8nBxXk=
+	t=1758317530; cv=none; b=A25UOyP3yiniCiDB+nzZDZOsLFNHutamm+EEAFKTxvr9aqBCyhPYhJh9g6pWvEFprMgZ/ftXA5pyRUCKbmkwDXArHwMAp90/HWE/yQrkV1mHvi89E7xVkdhEOisozXVYx3fPApk2QRpzr/QmtXyqtLV+r5tosH6BbQwrG1ct4bc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1758317530; c=relaxed/simple;
-	bh=1zLJrqegpzA8usYuymvT/Lt9C1d4kpC+uKnAo9UESAo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pUT4AgFOtovXrroO12JkevrD1k9FyqO0T90Wf832KAfJWv87J80gGnCUsWaoG9BvvOJ6hHi53/h1YSCT/7LehAaGs0shm5sZUc0CP6xxqz5Gw7oL+37s35/BZynNBA2eCckEB6ZxAXfOtSLrpkFQNrUOwwldjH2azxe/ZisR90I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=JUZ/vuyz; arc=none smtp.client-ip=213.133.104.62
+	bh=/E77UpHv/HKwE/YmkWEdxCihzq+S1kHmFYr7hK7b5G4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=F6B7AH5Ad7oSR6QHAgcSGNuQ2wani1mu7K7NIfivYm+mPakm0HyS5o64XHsdyd7NB6K2E95DAKUnRA6Bl9w+somB7GpH4kh0MiMreenfCEEmoA9tk8bASAzxINJbTqloO9AyEqybICi+WXxpwOlB+ndpA4uad3OfealP7SGLSYs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=adBndu3I; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="JUZ/vuyz"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="adBndu3I"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
-	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:In-Reply-To:References;
-	bh=ofVTDNaeXlFfj4t9Mgc6jAqO2rL3ttz6rKTuuSKot3g=; b=JUZ/vuyzVIIEfN6UvA2WD7cijd
-	Hp7aoLJWqXyOWjnwXiDD9As8Dw5nPQUwo0N7krYWvVc5p/mQOwt4roKbMYePQ0P8/khn2g5GTo4sm
-	AfQkRW73295G11eXwnhj2jk+COT9W6m4Ilkhe3Sh1Kag2xPhpjT7WH1gwkNz9Zx6HkT5yxp8sk5pe
-	WU6FgIhywt1K20vu5cOOzQmr5gQzDeIz6gvmNZqlnVDANEHTK/2jI/N3GeUlHNcv2EdOWXzrip5ot
-	BuAGu3xuslG6gHv5cL6dHFhvRWPTekGEpMs0DYCadnnAi5jyagcNbb/ttv07T8FbrQCKk5P67/F4h
-	n88/J3Sg==;
+	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
+	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=g9nPKTWZafwAz6Th6419DPE6gjosXLUGUoGbmMvZly8=; b=adBndu3I4k5kSG/oy0ejWxF+U7
+	7QLGDKJZmR5m4zf6iSt7m2B8zjGDuctcjNnt/QGBBCnbyVEDNJqFHm2SxxLIjT3j7Sx+sC5FagzYW
+	uTZrI1Y/yxaDUqfL9QXjV3TQaWWWjhpBuQS9z3rHszd01rRDZn3FLs7kURz40HuwBRq7IUeU54IAx
+	U7QveCilRaA48FZSLMTgUb9csFtUxALMLAa5tCFgIQkxl9uNAaUQTz1jc1JqoEF6g6sgoYZrEkPgf
+	+Z6qlI7Y58EV2jt6qDu2rgD1mYU7gkS9ho28+iK5ciYyPqO+0Pl49q6+dC2Qf45Woc+3gZKuBigOQ
+	89yOM1bA==;
 Received: from localhost ([127.0.0.1])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1uzihu-000NpU-0a;
-	Fri, 19 Sep 2025 23:31:54 +0200
+	id 1uzihz-000Nq5-2Q;
+	Fri, 19 Sep 2025 23:31:59 +0200
 From: Daniel Borkmann <daniel@iogearbox.net>
 To: netdev@vger.kernel.org
 Cc: bpf@vger.kernel.org,
@@ -45,11 +46,14 @@ Cc: bpf@vger.kernel.org,
 	martin.lau@kernel.org,
 	jordan@jrife.io,
 	maciej.fijalkowski@intel.com,
-	magnus.karlsson@intel.com
-Subject: [PATCH net-next 00/20] netkit: Support for io_uring zero-copy and AF_XDP
-Date: Fri, 19 Sep 2025 23:31:33 +0200
-Message-ID: <20250919213153.103606-1-daniel@iogearbox.net>
+	magnus.karlsson@intel.com,
+	David Wei <dw@davidwei.uk>
+Subject: [PATCH net-next 05/20] net, ynl: Implement netdev_nl_bind_queue_doit
+Date: Fri, 19 Sep 2025 23:31:38 +0200
+Message-ID: <20250919213153.103606-6-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20250919213153.103606-1-daniel@iogearbox.net>
+References: <20250919213153.103606-1-daniel@iogearbox.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -59,71 +63,147 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Virus-Scanned: Clear (ClamAV 1.0.9/27767/Fri Sep 19 10:26:55 2025)
 
-Containers use virtual netdevs to route traffic from a physical netdev
-in the host namespace. They do not have access to the physical netdev
-in the host and thus can't use memory providers or AF_XDP that require
-reconfiguring/restarting queues in the physical netdev.
+From: David Wei <dw@davidwei.uk>
 
-This patchset adds the concept of queue peering to virtual netdevs that
-allow containers to use memory providers and AF_XDP at _native speed_!
-These mapped queues are bound to a real queue in a physical netdev and
-act as a proxy.
+Implement netdev_nl_bind_queue_doit() that creates a mapped rxq in a
+virtual netdev and then binds it to a real rxq in a physical netdev
+by setting the peer pointer in netdev_rx_queue.
 
-Memory providers and AF_XDP operations takes an ifindex and queue id,
-so containers would pass in an ifindex for a virtual netdev and a queue
-id of a mapped queue, which then gets proxied to the underlying real
-queue. Peered queues are created and bound to a real queue atomically
-through a generic ynl netdev operation.
+Signed-off-by: David Wei <dw@davidwei.uk>
+Co-developed-by: Daniel Borkmann <daniel@iogearbox.net>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+---
+ net/core/netdev-genl.c | 117 +++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 117 insertions(+)
 
-We have implemented support for this concept in netkit and tested the
-latter against Nvidia ConnectX-6 (mlx5) as well as Broadcom BCM957504
-(bnxt_en) 100G NICs. For more details see the individual patches.
-
-Daniel Borkmann (10):
-  net: Add ndo_{peer,unpeer}_queues callback
-  net, ethtool: Disallow mapped real rxqs to be resized
-  xsk: Move NETDEV_XDP_ACT_ZC into generic header
-  xsk: Move pool registration into single function
-  xsk: Add small helper xp_pool_bindable
-  xsk: Change xsk_rcv_check to check netdev/queue_id from pool
-  xsk: Proxy pool management for mapped queues
-  netkit: Add single device mode for netkit
-  netkit: Document fast vs slowpath members via macros
-  netkit: Add xsk support for af_xdp applications
-
-David Wei (10):
-  net, ynl: Add bind-queue operation
-  net: Add peer to netdev_rx_queue
-  net: Add ndo_queue_create callback
-  net, ynl: Implement netdev_nl_bind_queue_doit
-  net, ynl: Add peer info to queue-get response
-  net: Proxy net_mp_{open,close}_rxq for mapped queues
-  netkit: Implement rtnl_link_ops->alloc
-  netkit: Implement ndo_queue_create
-  netkit: Add io_uring zero-copy support for TCP
-  tools, ynl: Add queue binding ynl sample application
-
- Documentation/netlink/specs/netdev.yaml |  54 ++++
- drivers/net/netkit.c                    | 362 ++++++++++++++++++++----
- include/linux/netdevice.h               |  15 +-
- include/net/netdev_queues.h             |   1 +
- include/net/netdev_rx_queue.h           |  55 ++++
- include/net/xdp_sock_drv.h              |   8 +-
- include/uapi/linux/if_link.h            |   6 +
- include/uapi/linux/netdev.h             |  20 ++
- net/core/netdev-genl-gen.c              |  14 +
- net/core/netdev-genl-gen.h              |   1 +
- net/core/netdev-genl.c                  | 144 +++++++++-
- net/core/netdev_rx_queue.c              |  15 +-
- net/ethtool/channels.c                  |  10 +-
- net/xdp/xsk.c                           |  27 +-
- net/xdp/xsk.h                           |   5 +-
- net/xdp/xsk_buff_pool.c                 |  29 +-
- tools/include/uapi/linux/netdev.h       |  20 ++
- tools/net/ynl/samples/bind.c            |  56 ++++
- 18 files changed, 750 insertions(+), 92 deletions(-)
- create mode 100644 tools/net/ynl/samples/bind.c
-
+diff --git a/net/core/netdev-genl.c b/net/core/netdev-genl.c
+index b0aea27bf84e..ed0ce3dbfc6f 100644
+--- a/net/core/netdev-genl.c
++++ b/net/core/netdev-genl.c
+@@ -1122,6 +1122,123 @@ int netdev_nl_bind_tx_doit(struct sk_buff *skb, struct genl_info *info)
+ 
+ int netdev_nl_bind_queue_doit(struct sk_buff *skb, struct genl_info *info)
+ {
++	u32 src_ifidx, src_qid, dst_ifidx, dst_qid;
++	struct netdev_rx_queue *src_rxq, *dst_rxq;
++	struct net_device *src_dev, *dst_dev;
++	struct netdev_nl_sock *priv;
++	struct sk_buff *rsp;
++	int err = 0;
++	void *hdr;
++
++	if (GENL_REQ_ATTR_CHECK(info, NETDEV_A_QUEUE_PAIR_SRC_IFINDEX) ||
++	    GENL_REQ_ATTR_CHECK(info, NETDEV_A_QUEUE_PAIR_SRC_QUEUE_ID) ||
++	    GENL_REQ_ATTR_CHECK(info, NETDEV_A_QUEUE_PAIR_DST_IFINDEX))
++		return -EINVAL;
++
++	src_ifidx = nla_get_u32(info->attrs[NETDEV_A_QUEUE_PAIR_SRC_IFINDEX]);
++	src_qid = nla_get_u32(info->attrs[NETDEV_A_QUEUE_PAIR_SRC_QUEUE_ID]);
++	dst_ifidx = nla_get_u32(info->attrs[NETDEV_A_QUEUE_PAIR_DST_IFINDEX]);
++	if (dst_ifidx == src_ifidx) {
++		NL_SET_ERR_MSG(info->extack,
++			       "Destination driver cannot be same as source driver");
++		return -EOPNOTSUPP;
++	}
++
++	priv = genl_sk_priv_get(&netdev_nl_family, NETLINK_CB(skb).sk);
++	if (IS_ERR(priv))
++		return PTR_ERR(priv);
++
++	rsp = genlmsg_new(GENLMSG_DEFAULT_SIZE, GFP_KERNEL);
++	if (!rsp)
++		return -ENOMEM;
++
++	hdr = genlmsg_iput(rsp, info);
++	if (!hdr) {
++		err = -EMSGSIZE;
++		goto err_genlmsg_free;
++	}
++
++	mutex_lock(&priv->lock);
++
++	src_dev = netdev_get_by_index_lock(genl_info_net(info), src_ifidx);
++	if (!src_dev) {
++		err = -ENODEV;
++		goto err_unlock_sock;
++	}
++	if (!netif_device_present(src_dev)) {
++		err = -ENODEV;
++		goto err_unlock_src_dev;
++	}
++	if (!src_dev->dev.parent) {
++		err = -EOPNOTSUPP;
++		NL_SET_ERR_MSG(info->extack,
++			       "Source driver is a virtual device");
++		goto err_unlock_src_dev;
++	}
++	if (!src_dev->queue_mgmt_ops) {
++		err = -EOPNOTSUPP;
++		NL_SET_ERR_MSG(info->extack,
++			       "Source driver does not support queue management operations");
++		goto err_unlock_src_dev;
++	}
++	if (src_qid >= src_dev->num_rx_queues) {
++		err = -ERANGE;
++		NL_SET_ERR_MSG(info->extack,
++			       "Source driver queue out of range");
++		goto err_unlock_src_dev;
++	}
++
++	src_rxq = __netif_get_rx_queue(src_dev, src_qid);
++	if (src_rxq->peer) {
++		err = -EBUSY;
++		NL_SET_ERR_MSG(info->extack,
++			       "Source driver queue already bound");
++		goto err_unlock_src_dev;
++	}
++
++	dst_dev = netdev_get_by_index_lock(genl_info_net(info), dst_ifidx);
++	if (!dst_dev) {
++		err = -ENODEV;
++		goto err_unlock_src_dev;
++	}
++	if (!dst_dev->queue_mgmt_ops ||
++	    !dst_dev->queue_mgmt_ops->ndo_queue_create) {
++		err = -EOPNOTSUPP;
++		NL_SET_ERR_MSG(info->extack,
++			       "Destination driver does not support queue management operations");
++		goto err_unlock_dst_dev;
++	}
++
++	err = dst_dev->queue_mgmt_ops->ndo_queue_create(dst_dev);
++	if (err <= 0) {
++		NL_SET_ERR_MSG(info->extack,
++			       "Destination driver unable to create a new queue");
++		goto err_unlock_dst_dev;
++	}
++
++	dst_qid = err - 1;
++	dst_rxq = __netif_get_rx_queue(dst_dev, dst_qid);
++
++	netdev_rx_queue_peer(src_dev, src_rxq, dst_rxq);
++
++	nla_put_u32(rsp, NETDEV_A_QUEUE_PAIR_DST_QUEUE_ID, dst_qid);
++	genlmsg_end(rsp, hdr);
++
++	netdev_unlock(dst_dev);
++	netdev_unlock(src_dev);
++	mutex_unlock(&priv->lock);
++
++	return genlmsg_reply(rsp, info);
++
++err_unlock_dst_dev:
++	netdev_unlock(dst_dev);
++err_unlock_src_dev:
++	netdev_unlock(src_dev);
++err_unlock_sock:
++	mutex_unlock(&priv->lock);
++err_genlmsg_free:
++	nlmsg_free(rsp);
++	return err;
+ }
+ 
+ void netdev_nl_sock_priv_init(struct netdev_nl_sock *priv)
 -- 
 2.43.0
 
