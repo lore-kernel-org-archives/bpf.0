@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 461C32D8790;
-	Sat, 20 Sep 2025 01:00:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 178FF2D8384;
+	Sat, 20 Sep 2025 01:00:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758330005; cv=none; b=PK8Bt1CKykx4La9MiQMQa/Ma3f3gpgPVkkzPqcNVqbarv+zJrKkj8i0AVuthuAx972N/v2SbRT52VfI69clvIzAs84YWyF5LyOTQEJVA/Y/ufmC9Ri/PS+pcbpAv/qyJ7ioa++bWzwoHRGWhEPE0qBgMgLx8nAY0H8zsJ8Qt3bg=
+	t=1758330006; cv=none; b=LxvZLGXwGmhLG7QHJi+5sB01pJGFo8OjrhzQkbhRfIKXsifii87I7SECq8hKLJtU9fpIBH9jGSdJbZ0GDReGKg8YeHmJVhGb6Ly8cq0kiyRGCFvScOYkwnVhf7BVtCtMaAE12Uqkt7tYR8yZgMtEh9R1PLX4KRgvhqWAqjiBn0k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758330005; c=relaxed/simple;
-	bh=89c9zAH/+dHZlxw6LPDCO/c2nhxHQ/d377ubuJKjUBk=;
+	s=arc-20240116; t=1758330006; c=relaxed/simple;
+	bh=RV2lKnbKasLL8XBa1/urB9OQioreYAEazKM1P/oyQMY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=YCMIG3vWHVNwpxNDyzPTNlZwMtFMBZCU3lPLDe2CZ6T5S2SLvHvPOp6KV3iasop9E54AqS8jjNI396tc66BRfEnKh7cN0BZDeyxEkem9cEt63Kq4GKvmdx1fHSXs9C3J0TFvxCqBTfEpMkQLWlTrzjrkRwUH0eIYZG8sKjU1msk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hpP+bp5N; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=tYdIoWY9PG3wYUfnJLjto3W29cpBaqkHVOpsHabfe8dS74YwtcKU4EUiBZXZNUSGtbaZ2uCkvn3bk9xno0bvIdYA8ao8d9R7mphIuisDkvalzT9OzE1R0Gjf3R4HQZT+aWHApQg0kPBFXP/KBqVycN2q0xQsRcEbd8nSH20aWFU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RxrusEcW; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hpP+bp5N"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDF55C4CEF0;
-	Sat, 20 Sep 2025 01:00:03 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RxrusEcW"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC748C4CEF5;
+	Sat, 20 Sep 2025 01:00:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758330003;
-	bh=89c9zAH/+dHZlxw6LPDCO/c2nhxHQ/d377ubuJKjUBk=;
+	s=k20201202; t=1758330005;
+	bh=RV2lKnbKasLL8XBa1/urB9OQioreYAEazKM1P/oyQMY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=hpP+bp5N8RXGMVWPa+mKZEKOJAA7vit4PFUZ6jHyYEnr+DQzwmy8+gaSJgC1H/Gfh
-	 a1GOl4Zu0zmszNDo/q3PwrhEu9/OXaxL1+3HN76m0YYGMuqpwb7J8khePDzmrAiXO3
-	 9R0tjilruKrko9WMUb03ZDiGPI4TqC8TUZrlfJwe5VcVE2b7f2RMT5zcSkFuKt15Wz
-	 3mI/gGBfeR6z2a5y3f5qkmVVckxFmV3AI7gjEWvzE+M46/BiKDs6WMsS/fznsdJf2L
-	 2CxXKQvRnGAOfAxx1XWnZmg7ujclZJi/9RKG+Z4BbQFklLM6tlO7IBnfdz7gjHxz5d
-	 o95UkP52iOXxQ==
+	b=RxrusEcWdaUkt/JKrKK2owyEdTQUC3Qvw6EeCj0A4GLU6+sMxUG0YMeSh17+5agqh
+	 UyW6BgdhVMkWnv4a5rNsUmw1WnabOINNr27Q/Idqit6LZ6xJhDo5IWe+MY2z+VTOB6
+	 V8jX/yTxtXuQD7wWl4qdhBnqhHAyMe73hSMga6rYzKdChIOrumaI0dBqIDVKawbZEg
+	 /0EveV0uERDAnX2ya++Jwmx8qDVXvhxGujPbZpGmnsR+2c+rKTRmEt1BFgbjMVxqM6
+	 kWGyX9ZKO/bcmsGE+4SDMO0+gqjCjFt23Ln9LsniCYvbrSmZ0Lmj34rbGcJkFDwbGb
+	 pre0rc80ZxMRQ==
 From: Tejun Heo <tj@kernel.org>
 To: void@manifault.com,
 	arighi@nvidia.com,
@@ -35,9 +35,9 @@ Cc: linux-kernel@vger.kernel.org,
 	memxor@gmail.com,
 	bpf@vger.kernel.org,
 	Tejun Heo <tj@kernel.org>
-Subject: [PATCH 27/46] sched_ext: Ignore insertions of not-owned tasks into DSQs
-Date: Fri, 19 Sep 2025 14:58:50 -1000
-Message-ID: <20250920005931.2753828-28-tj@kernel.org>
+Subject: [PATCH 29/46] sched_ext: Refactor task init/exit helpers
+Date: Fri, 19 Sep 2025 14:58:52 -1000
+Message-ID: <20250920005931.2753828-30-tj@kernel.org>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20250920005931.2753828-1-tj@kernel.org>
 References: <20250920005931.2753828-1-tj@kernel.org>
@@ -49,81 +49,214 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-As BPF schedulers are allowed to ignore dequeues, after a sub-sched
-enabling moved tasks out of the parent scheduler, the parent scheduler may
-try to dispatch an already moved task. As this doesn't necessarily
-indicate a malfunction, ignore and count such attempts.
+- Add the @sch parameter to scx_init_task() and drop @tg as it can be
+  obtained from @p. Separate out __scx_init_task() which does everything
+  except for the task state transition.
+
+- Add the @sch parameter to scx_enable_task(). Separate out
+  __scx_enable_task() which does everything except for the task state
+  transition.
+
+- Add the @sch parameter to scx_disable_task().
+
+- Rename scx_exit_task() to scx_disable_and_exit_task() and separate out
+  __scx_disable_and_exit_task() which does everything except for the task
+  state transition.
+
+While some task state transitions are relocated, no meaningful behavior
+changes are expected.
 
 Signed-off-by: Tejun Heo <tj@kernel.org>
 ---
- kernel/sched/ext.c          |  9 +++++++++
- kernel/sched/ext_internal.h | 12 ++++++++++++
- 2 files changed, 21 insertions(+)
+ kernel/sched/ext.c | 60 ++++++++++++++++++++++++++++++----------------
+ 1 file changed, 39 insertions(+), 21 deletions(-)
 
 diff --git a/kernel/sched/ext.c b/kernel/sched/ext.c
-index b5f5106ddbf8..891b956a92b6 100644
+index c60b58341d24..5b02903ba3bb 100644
 --- a/kernel/sched/ext.c
 +++ b/kernel/sched/ext.c
-@@ -2125,6 +2125,12 @@ static void finish_dispatch(struct scx_sched *sch, struct rq *rq,
- 		if ((opss & SCX_OPSS_QSEQ_MASK) != qseq_at_dispatch)
- 			return;
- 
-+		/* see SCX_EV_INSERT_NOT_OWNED definition */
-+		if (unlikely(sch != rcu_access_pointer(p->scx.sched))) {
-+			__scx_add_event(sch, SCX_EV_INSERT_NOT_OWNED, 1);
-+			return;
-+		}
-+
- 		/*
- 		 * While we know @p is accessible, we don't yet have a claim on
- 		 * it - the BPF scheduler is allowed to dispatch tasks
-@@ -3739,6 +3745,7 @@ static ssize_t scx_attr_events_show(struct kobject *kobj,
- 	at += scx_attr_event_show(buf, at, &events, SCX_EV_BYPASS_DURATION);
- 	at += scx_attr_event_show(buf, at, &events, SCX_EV_BYPASS_DISPATCH);
- 	at += scx_attr_event_show(buf, at, &events, SCX_EV_BYPASS_ACTIVATE);
-+	at += scx_attr_event_show(buf, at, &events, SCX_EV_INSERT_NOT_OWNED);
- 	return at;
+@@ -2901,9 +2901,9 @@ static void scx_set_task_state(struct task_struct *p, enum scx_task_state state)
+ 	p->scx.flags |= state << SCX_TASK_STATE_SHIFT;
  }
- SCX_ATTR(events);
-@@ -4631,6 +4638,7 @@ static void scx_dump_state(struct scx_exit_info *ei, size_t dump_len)
- 	scx_dump_event(s, &events, SCX_EV_BYPASS_DURATION);
- 	scx_dump_event(s, &events, SCX_EV_BYPASS_DISPATCH);
- 	scx_dump_event(s, &events, SCX_EV_BYPASS_ACTIVATE);
-+	scx_dump_event(s, &events, SCX_EV_INSERT_NOT_OWNED);
  
- 	if (seq_buf_has_overflowed(&s) && dump_len >= sizeof(trunc_marker))
- 		memcpy(ei->dump + dump_len - sizeof(trunc_marker),
-@@ -7247,6 +7255,7 @@ static void scx_read_events(struct scx_sched *sch, struct scx_event_stats *event
- 		scx_agg_event(events, e_cpu, SCX_EV_BYPASS_DURATION);
- 		scx_agg_event(events, e_cpu, SCX_EV_BYPASS_DISPATCH);
- 		scx_agg_event(events, e_cpu, SCX_EV_BYPASS_ACTIVATE);
-+		scx_agg_event(events, e_cpu, SCX_EV_INSERT_NOT_OWNED);
+-static int scx_init_task(struct task_struct *p, struct task_group *tg, bool fork)
++static int __scx_init_task(struct scx_sched *sch, struct task_struct *p, bool fork)
+ {
+-	struct scx_sched *sch = scx_root;
++	struct task_group *tg = task_group(p);
+ 	int ret;
+ 
+ 	p->scx.disallow = false;
+@@ -2922,8 +2922,6 @@ static int scx_init_task(struct task_struct *p, struct task_group *tg, bool fork
+ 		}
+ 	}
+ 
+-	scx_set_task_state(p, SCX_TASK_INIT);
+-
+ 	if (p->scx.disallow) {
+ 		if (unlikely(scx_parent(sch))) {
+ 			scx_error(sch, "non-root ops.init_task() set task->scx.disallow for %s[%d]",
+@@ -2957,9 +2955,18 @@ static int scx_init_task(struct task_struct *p, struct task_group *tg, bool fork
+ 	return 0;
+ }
+ 
+-static void scx_enable_task(struct task_struct *p)
++static int scx_init_task(struct scx_sched *sch, struct task_struct *p, bool fork)
++{
++	int ret;
++
++	ret = __scx_init_task(sch, p, fork);
++	if (!ret)
++		scx_set_task_state(p, SCX_TASK_INIT);
++	return ret;
++}
++
++static void __scx_enable_task(struct scx_sched *sch, struct task_struct *p)
+ {
+-	struct scx_sched *sch = scx_root;
+ 	struct rq *rq = task_rq(p);
+ 	u32 weight;
+ 
+@@ -2978,16 +2985,20 @@ static void scx_enable_task(struct task_struct *p)
+ 
+ 	if (SCX_HAS_OP(sch, enable))
+ 		SCX_CALL_OP_TASK(sch, SCX_KF_REST, enable, rq, p);
+-	scx_set_task_state(p, SCX_TASK_ENABLED);
+ 
+ 	if (SCX_HAS_OP(sch, set_weight))
+ 		SCX_CALL_OP_TASK(sch, SCX_KF_REST, set_weight, rq,
+ 				 p, p->scx.weight);
+ }
+ 
+-static void scx_disable_task(struct task_struct *p)
++static void scx_enable_task(struct scx_sched *sch, struct task_struct *p)
++{
++	__scx_enable_task(sch, p);
++	scx_set_task_state(p, SCX_TASK_ENABLED);
++}
++
++static void scx_disable_task(struct scx_sched *sch, struct task_struct *p)
+ {
+-	struct scx_sched *sch = scx_root;
+ 	struct rq *rq = task_rq(p);
+ 
+ 	lockdep_assert_rq_held(rq);
+@@ -2998,9 +3009,9 @@ static void scx_disable_task(struct task_struct *p)
+ 	scx_set_task_state(p, SCX_TASK_READY);
+ }
+ 
+-static void scx_exit_task(struct task_struct *p)
++static void __scx_disable_and_exit_task(struct scx_sched *sch,
++					struct task_struct *p)
+ {
+-	struct scx_sched *sch = scx_task_sched(p);
+ 	struct scx_exit_task_args args = {
+ 		.cancelled = false,
+ 	};
+@@ -3017,7 +3028,7 @@ static void scx_exit_task(struct task_struct *p)
+ 	case SCX_TASK_READY:
+ 		break;
+ 	case SCX_TASK_ENABLED:
+-		scx_disable_task(p);
++		scx_disable_task(sch, p);
+ 		break;
+ 	default:
+ 		WARN_ON_ONCE(true);
+@@ -3027,6 +3038,13 @@ static void scx_exit_task(struct task_struct *p)
+ 	if (SCX_HAS_OP(sch, exit_task))
+ 		SCX_CALL_OP_TASK(sch, SCX_KF_REST, exit_task, task_rq(p),
+ 				 p, &args);
++}
++
++static void scx_disable_and_exit_task(struct scx_sched *sch,
++				      struct task_struct *p)
++{
++	__scx_disable_and_exit_task(sch, p);
++
+ 	scx_set_task_sched(p, NULL);
+ 	scx_set_task_state(p, SCX_TASK_NONE);
+ }
+@@ -3062,7 +3080,7 @@ int scx_fork(struct task_struct *p, struct kernel_clone_args *kargs)
+ 	percpu_rwsem_assert_held(&scx_fork_rwsem);
+ 
+ 	if (scx_init_task_enabled) {
+-		ret = scx_init_task(p, task_group(p), true);
++		ret = scx_init_task(scx_root, p, true);
+ 		if (!ret)
+ 			scx_set_task_sched(p, scx_root);
+ 		return ret;
+@@ -3086,7 +3104,7 @@ void scx_post_fork(struct task_struct *p)
+ 			struct rq *rq;
+ 
+ 			rq = task_rq_lock(p, &rf);
+-			scx_enable_task(p);
++			scx_enable_task(scx_task_sched(p), p);
+ 			task_rq_unlock(rq, p, &rf);
+ 		}
+ 	}
+@@ -3106,7 +3124,7 @@ void scx_cancel_fork(struct task_struct *p)
+ 
+ 		rq = task_rq_lock(p, &rf);
+ 		WARN_ON_ONCE(scx_get_task_state(p) >= SCX_TASK_READY);
+-		scx_exit_task(p);
++		scx_disable_and_exit_task(scx_task_sched(p), p);
+ 		task_rq_unlock(rq, p, &rf);
+ 	}
+ 
+@@ -3137,7 +3155,7 @@ void sched_ext_free(struct task_struct *p)
+ 		struct rq *rq;
+ 
+ 		rq = task_rq_lock(p, &rf);
+-		scx_exit_task(p);
++		scx_disable_and_exit_task(scx_task_sched(p), p);
+ 		task_rq_unlock(rq, p, &rf);
  	}
  }
+@@ -3163,7 +3181,7 @@ static void switching_to_scx(struct rq *rq, struct task_struct *p)
+ {
+ 	struct scx_sched *sch = scx_task_sched(p);
  
-diff --git a/kernel/sched/ext_internal.h b/kernel/sched/ext_internal.h
-index 64d0f0787c8e..154993921c38 100644
---- a/kernel/sched/ext_internal.h
-+++ b/kernel/sched/ext_internal.h
-@@ -895,6 +895,18 @@ struct scx_event_stats {
- 	 * The number of times the bypassing mode has been activated.
+-	scx_enable_task(p);
++	scx_enable_task(sch, p);
+ 
+ 	/*
+ 	 * set_cpus_allowed_scx() is not called while @p is associated with a
+@@ -3176,7 +3194,7 @@ static void switching_to_scx(struct rq *rq, struct task_struct *p)
+ 
+ static void switched_from_scx(struct rq *rq, struct task_struct *p)
+ {
+-	scx_disable_task(p);
++	scx_disable_task(scx_task_sched(p), p);
+ }
+ 
+ static void wakeup_preempt_scx(struct rq *rq, struct task_struct *p,int wake_flags) {}
+@@ -4201,7 +4219,7 @@ static void scx_root_disable(struct scx_sched *sch)
+ 
+ 	/*
+ 	 * Shut down cgroup support before tasks so that the cgroup attach path
+-	 * doesn't race against scx_exit_task().
++	 * doesn't race against scx_disable_and_exit_task().
  	 */
- 	s64		SCX_EV_BYPASS_ACTIVATE;
-+
-+	/*
-+	 * The number of times the scheduler attempted to insert a task that it
-+	 * doesn't own into a DSQ. Such attempts are ignored.
-+	 *
-+	 * As BPF schedulers are allowed to ignore dequeues, it's difficult to
-+	 * tell whether such an attempt is from a scheduler malfunction or an
-+	 * ignored dequeue around sub-sched enabling. If this count keeps going
-+	 * up regardless of sub-sched enabling, it likely indicates a bug in the
-+	 * scheduler.
-+	 */
-+	s64		SCX_EV_INSERT_NOT_OWNED;
- };
+ 	scx_cgroup_lock();
+ 	scx_cgroup_exit(sch);
+@@ -4234,7 +4252,7 @@ static void scx_root_disable(struct scx_sched *sch)
+ 		sched_enq_and_set_task(&ctx);
  
- struct scx_sched_pcpu {
+ 		check_class_changed(task_rq(p), p, old_class, p->prio);
+-		scx_exit_task(p);
++		scx_disable_and_exit_task(scx_task_sched(p), p);
+ 	}
+ 	scx_task_iter_stop(&sti);
+ 
+@@ -5022,7 +5040,7 @@ static int scx_root_enable(struct sched_ext_ops *ops, struct bpf_link *link)
+ 
+ 		scx_task_iter_unlock(&sti);
+ 
+-		ret = scx_init_task(p, task_group(p), false);
++		ret = scx_init_task(sch, p, false);
+ 		if (ret) {
+ 			put_task_struct(p);
+ 			scx_task_iter_stop(&sti);
 -- 
 2.51.0
 
