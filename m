@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89FE32E2EE4;
-	Sat, 20 Sep 2025 01:00:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E35B2E3B16;
+	Sat, 20 Sep 2025 01:00:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758330015; cv=none; b=Zj5LKHjOojT/xPwV3MXrBCmPRbZmyu+JQSme8Z+ggK9qIjzSeNnifCsI4rW0uJsoksPfitNmYVghSTfi0eR71WQOExKYv5JPZnwOJDy54inPI/IiZXKVkU9u2jZDQAsbOtOWv0IaMEmKtWwOuMEqrs2fzHqD9xK3rv0QpKfXmGE=
+	t=1758330016; cv=none; b=QBrJ7kwNBcxC63BCUz7cV8CFx2Vmf9Fu1WF+twfsd5o9CBGl8xyu/xKMYp8r0ydi+ooqrbvFzJZrsc7eWC4bbNHHu4izsnwb5NleYV2z7b46L+MQv3pCsJZCYXmxBtambzukdda8oMIBAqfkCZ84y90fBcII8FCddxPrtqbTX/A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758330015; c=relaxed/simple;
-	bh=nDwxlQ/VWRnh1gYFUOYk+Wryle09FJlPXMgq+fZYZdw=;
+	s=arc-20240116; t=1758330016; c=relaxed/simple;
+	bh=IHujVRW/s5LLsGTI5u/4vhmSvu7RvgIEI8PbbZb/3b8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=cf+7C1QqxePECB3i+eVoJ03bwtryWcPoQCbCbY5StTnNagzWnuT48LCiUopBvvO0bz38r89tcLcy9rTi7UE0+DDJGx70B1e2LSCJXhqwfZ9Weo5HKqg/VVpBpg+xoNYaLe48pWejfdg2OpPNs2pmf5nWoz2R9Ek+kC2S1p28TRk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DDxlo68j; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=sylacMCX+6h8JVIEjk9HRRG4ANZxljfv/gHk2Q4nGFEMsmxbGGiDC8ekcQeYuV0iYI+8db1fuD2/14OCXEOJVmOtwr9fxlgyb7ygGHJT4iClIWRtmEQKaAa124G/gnCRDpz3wIdiiDcqeh91pI+KIlAPBP7YjVgHpa4l/JgJscU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HFziMckI; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DDxlo68j"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBD9FC4CEF5;
-	Sat, 20 Sep 2025 01:00:13 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HFziMckI"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E895DC4CEF0;
+	Sat, 20 Sep 2025 01:00:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758330014;
-	bh=nDwxlQ/VWRnh1gYFUOYk+Wryle09FJlPXMgq+fZYZdw=;
+	s=k20201202; t=1758330016;
+	bh=IHujVRW/s5LLsGTI5u/4vhmSvu7RvgIEI8PbbZb/3b8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=DDxlo68jaSTNOTUeLYb/eaWG651hGAhXpqEeUi8ruRCPxGEQ0avRkexc2XuQ+xSS3
-	 qOd8nWlyA7DGJG4jUwTkI/eAghq+XPJ8FPKeKtdA/oEPBCitzrXFNC83JDgfaPl9ym
-	 P+szxs4PIvj4WispOwoVS+UwTCaaFBNKY6JUwpSSLOcOGUyqB+Z7S8nWTGx+8ZJHjH
-	 R7Kqn+EEUKiPO+Hug8Kw7GNGJW5fr4kNOm7xm0s/ymbzesBNMYK923LaA6+VzhZrpx
-	 HG5hNDhc1sSyaPFMHqeTDFFAayqvX8CXnT65gteQ0IAMbvajzk8hqmeYKxi1b2SuDi
-	 cUgSuOmnaBDRQ==
+	b=HFziMckI9nlWYZkZ5pQ3W8c6Z4WygVzkDV1bwobQp1tIJIs7lW7JhOy+lN455jwb5
+	 T+/8tO8judnv36iWLHOSzmxLL0F7j716DtQ3EXi+wasHWa5KmTWOPMB1Da+FcVdz+C
+	 oso86yTa8bg2Hqh7y7Y8CFTdKZuV73XSCJYhtjrxpaN/VGHbC7dIDMBC43SNawRYPe
+	 VY+GgzBS98ZIBEo6TpQZv5rdRySps+eEk71pOPId8vZioxPR+mnJMDLilf8xWaVY2J
+	 bRSkpoH95z0rBm0vExYO1gG0MFmJ400RkbSMjC6MV7Kcl1Rqqwx1wgCgSE1P41bExF
+	 T/hdth1Pf+wYw==
 From: Tejun Heo <tj@kernel.org>
 To: void@manifault.com,
 	arighi@nvidia.com,
@@ -35,9 +35,9 @@ Cc: linux-kernel@vger.kernel.org,
 	memxor@gmail.com,
 	bpf@vger.kernel.org,
 	Tejun Heo <tj@kernel.org>
-Subject: [PATCH 37/46] sched_ext: Make watchdog sub-sched aware
-Date: Fri, 19 Sep 2025 14:59:00 -1000
-Message-ID: <20250920005931.2753828-38-tj@kernel.org>
+Subject: [PATCH 39/46] sched_ext: Support dumping multiple schedulers and add scheduler identification
+Date: Fri, 19 Sep 2025 14:59:02 -1000
+Message-ID: <20250920005931.2753828-40-tj@kernel.org>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20250920005931.2753828-1-tj@kernel.org>
 References: <20250920005931.2753828-1-tj@kernel.org>
@@ -49,223 +49,144 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Currently, the watchdog checks all tasks as if they are all on scx_root.
-Move scx_watchdog_timeout inside scx_sched and make check_rq_for_timeouts()
-use the timeout from the scx_sched associated with each task.
-refresh_watchdog() is added, which determines the timer interval as half of
-the shortest watchdog timeouts of all scheds and arms or disarms it as
-necessary. Every scx_sched instance has equivalent or better detection
-latency while sharing the same timer.
+Extend scx_dump_state() to support multiple schedulers and improve task
+identification in dumps. The function now takes a specific scheduler to
+dump and can optionally filter tasks by scheduler.
+
+scx_dump_task() now displays which scheduler each task belongs to, using
+"*" to mark tasks owned by the scheduler being dumped. Sub-schedulers
+are identified with their level and cgroup ID.
+
+The SysRq-D handler now iterates through all active schedulers under
+scx_sched_lock and dumps each one separately. For SysRq-D dumps, only
+tasks owned by each scheduler are dumped to avoid redundancy since all
+schedulers are being dumped. Error-triggered dumps continue to dump all
+tasks since only that specific scheduler is being dumped.
 
 Signed-off-by: Tejun Heo <tj@kernel.org>
 ---
- kernel/sched/ext.c          | 74 ++++++++++++++++++++++++-------------
- kernel/sched/ext_internal.h |  7 ++++
- 2 files changed, 56 insertions(+), 25 deletions(-)
+ kernel/sched/ext.c | 54 ++++++++++++++++++++++++++++++++++++----------
+ 1 file changed, 43 insertions(+), 11 deletions(-)
 
 diff --git a/kernel/sched/ext.c b/kernel/sched/ext.c
-index 3fcf6cd7fa00..4dc82afb7016 100644
+index fafffe3ee812..1a48510e6f98 100644
 --- a/kernel/sched/ext.c
 +++ b/kernel/sched/ext.c
-@@ -66,11 +66,10 @@ static atomic_long_t scx_hotplug_seq = ATOMIC_LONG_INIT(0);
- static atomic_long_t scx_enable_seq = ATOMIC_LONG_INIT(0);
+@@ -4520,22 +4520,34 @@ static void ops_dump_exit(void)
+ 	scx_dump_data.cpu = -1;
+ }
  
- /*
-- * The maximum amount of time in jiffies that a task may be runnable without
-- * being scheduled on a CPU. If this timeout is exceeded, it will trigger
-- * scx_error().
-+ * Watchdog interval. All scx_sched's share a single watchdog timer and the
-+ * interval is half of the shortest sch->watchdog_timeout.
-  */
--static unsigned long scx_watchdog_timeout;
-+static unsigned long scx_watchdog_interval;
- 
- /*
-  * The last time the delayed work was run. This delayed work relies on
-@@ -2761,10 +2760,11 @@ static bool check_rq_for_timeouts(struct rq *rq)
- 		goto out_unlock;
- 
- 	list_for_each_entry(p, &rq->scx.runnable_list, scx.runnable_node) {
-+		struct scx_sched *sch = scx_task_sched(p);
- 		unsigned long last_runnable = p->scx.runnable_at;
- 
- 		if (unlikely(time_after(jiffies,
--					last_runnable + scx_watchdog_timeout))) {
-+					last_runnable + sch->watchdog_timeout))) {
- 			u32 dur_ms = jiffies_to_msecs(jiffies - last_runnable);
- 
- 			scx_exit(sch, SCX_EXIT_ERROR_STALL, 0,
-@@ -2781,6 +2781,7 @@ static bool check_rq_for_timeouts(struct rq *rq)
- 
- static void scx_watchdog_workfn(struct work_struct *work)
+-static void scx_dump_task(struct seq_buf *s, struct scx_dump_ctx *dctx,
++static void scx_dump_task(struct scx_sched *sch,
++			  struct seq_buf *s, struct scx_dump_ctx *dctx,
+ 			  struct task_struct *p, char marker)
  {
-+	unsigned long intv;
- 	int cpu;
+ 	static unsigned long bt[SCX_EXIT_BT_LEN];
+-	struct scx_sched *sch = scx_root;
++	struct scx_sched *task_sch = scx_task_sched(p);
++	const char *own_marker;
++	char sch_id_buf[32];
+ 	char dsq_id_buf[19] = "(n/a)";
+ 	unsigned long ops_state = atomic_long_read(&p->scx.ops_state);
+ 	unsigned int bt_len = 0;
  
- 	WRITE_ONCE(scx_watchdog_timestamp, jiffies);
-@@ -2791,28 +2792,31 @@ static void scx_watchdog_workfn(struct work_struct *work)
- 
- 		cond_resched();
- 	}
--	queue_delayed_work(system_unbound_wq, to_delayed_work(work),
--			   scx_watchdog_timeout / 2);
++	own_marker = task_sch == sch ? "*" : "";
 +
-+	intv = READ_ONCE(scx_watchdog_interval);
-+	if (intv < ULONG_MAX)
-+		queue_delayed_work(system_unbound_wq, to_delayed_work(work),
-+				   intv);
++	if (task_sch->level == 0)
++		scnprintf(sch_id_buf, sizeof(sch_id_buf), "root");
++	else
++		scnprintf(sch_id_buf, sizeof(sch_id_buf), "sub%d-%llu",
++			  task_sch->level, task_sch->ops.sub_cgroup_id);
++
+ 	if (p->scx.dsq)
+ 		scnprintf(dsq_id_buf, sizeof(dsq_id_buf), "0x%llx",
+ 			  (unsigned long long)p->scx.dsq->id);
+ 
+ 	dump_newline(s);
+-	dump_line(s, " %c%c %s[%d] %+ldms",
++	dump_line(s, " %c%c %s[%d] %s%s %+ldms",
+ 		  marker, task_state_to_char(p), p->comm, p->pid,
++		  own_marker, sch_id_buf,
+ 		  jiffies_delta_msecs(p->scx.runnable_at, dctx->at_jiffies));
+ 	dump_line(s, "      scx_state/flags=%u/0x%x dsq_flags=0x%x ops_state/qseq=%lu/%lu",
+ 		  scx_get_task_state(p), p->scx.flags & ~SCX_TASK_STATE_MASK,
+@@ -4563,11 +4575,18 @@ static void scx_dump_task(struct seq_buf *s, struct scx_dump_ctx *dctx,
+ 	}
  }
  
- void scx_tick(struct rq *rq)
+-static void scx_dump_state(struct scx_exit_info *ei, size_t dump_len)
++/*
++ * Dump scheduler state. If @dump_all_tasks is true, dump all tasks regardless
++ * of which scheduler they belong to. If false, only dump tasks owned by @sch.
++ * For SysRq-D dumps, @dump_all_tasks=false since all schedulers are dumped
++ * separately. For error dumps, @dump_all_tasks=true since only the failing
++ * scheduler is dumped.
++ */
++static void scx_dump_state(struct scx_sched *sch, struct scx_exit_info *ei,
++			   size_t dump_len, bool dump_all_tasks)
  {
--	struct scx_sched *sch;
-+	struct scx_sched *root;
- 	unsigned long last_check;
+ 	static DEFINE_RAW_SPINLOCK(dump_lock);
+ 	static const char trunc_marker[] = "\n\n~~~~ TRUNCATED ~~~~\n";
+-	struct scx_sched *sch = scx_root;
+ 	struct scx_dump_ctx dctx = {
+ 		.kind = ei->kind,
+ 		.exit_code = ei->exit_code,
+@@ -4584,6 +4603,14 @@ static void scx_dump_state(struct scx_exit_info *ei, size_t dump_len)
  
- 	if (!scx_enabled())
- 		return;
+ 	seq_buf_init(&s, ei->dump, dump_len);
  
--	sch = rcu_dereference_bh(scx_root);
--	if (unlikely(!sch))
-+	root = rcu_dereference_bh(scx_root);
-+	if (unlikely(!root))
- 		return;
++#ifdef CONFIG_EXT_SUB_SCHED
++	if (sch->level == 0)
++		dump_line(&s, "%s: root", sch->ops.name);
++	else
++		dump_line(&s, "%s: sub%d-%llu %s",
++			  sch->ops.name, sch->level, sch->ops.sub_cgroup_id,
++			  sch->cgrp_path);
++#endif
+ 	if (ei->kind == SCX_EXIT_NONE) {
+ 		dump_line(&s, "Debug dump triggered by %s", ei->reason);
+ 	} else {
+@@ -4676,11 +4703,13 @@ static void scx_dump_state(struct scx_exit_info *ei, size_t dump_len)
+ 				seq_buf_set_overflow(&s);
+ 		}
  
- 	last_check = READ_ONCE(scx_watchdog_timestamp);
- 	if (unlikely(time_after(jiffies,
--				last_check + READ_ONCE(scx_watchdog_timeout)))) {
-+				last_check + READ_ONCE(root->watchdog_timeout)))) {
- 		u32 dur_ms = jiffies_to_msecs(jiffies - last_check);
+-		if (rq->curr->sched_class == &ext_sched_class)
+-			scx_dump_task(&s, &dctx, rq->curr, '*');
++		if (rq->curr->sched_class == &ext_sched_class &&
++		    (dump_all_tasks || scx_task_sched(rq->curr) == sch))
++			scx_dump_task(sch, &s, &dctx, rq->curr, '*');
  
--		scx_exit(sch, SCX_EXIT_ERROR_STALL, 0,
-+		scx_exit(root, SCX_EXIT_ERROR_STALL, 0,
- 			 "watchdog failed to check in for %u.%03us",
- 			 dur_ms / 1000, dur_ms % 1000);
+ 		list_for_each_entry(p, &rq->scx.runnable_list, scx.runnable_node)
+-			scx_dump_task(&s, &dctx, p, ' ');
++			if (dump_all_tasks || scx_task_sched(p) == sch)
++				scx_dump_task(sch, &s, &dctx, p, ' ');
+ 	next:
+ 		rq_unlock(rq, &rf);
  	}
-@@ -4108,6 +4112,26 @@ static const char *scx_exit_reason(enum scx_exit_kind kind)
- 	}
+@@ -4712,7 +4741,7 @@ static void scx_error_irq_workfn(struct irq_work *irq_work)
+ 	struct scx_exit_info *ei = sch->exit_info;
+ 
+ 	if (ei->kind >= SCX_EXIT_ERROR)
+-		scx_dump_state(ei, sch->ops.exit_dump_len);
++		scx_dump_state(sch, ei, sch->ops.exit_dump_len, true);
+ 
+ 	kthread_queue_work(sch->helper, &sch->disable_work);
  }
- 
-+static void refresh_watchdog(void)
-+{
+@@ -5662,9 +5691,12 @@ static const struct sysrq_key_op sysrq_sched_ext_reset_op = {
+ static void sysrq_handle_sched_ext_dump(u8 key)
+ {
+ 	struct scx_exit_info ei = { .kind = SCX_EXIT_NONE, .reason = "SysRq-D" };
 +	struct scx_sched *sch;
-+	unsigned long intv = ULONG_MAX;
+ 
+-	if (scx_enabled())
+-		scx_dump_state(&ei, 0);
++	guard(raw_spinlock_irqsave)(&scx_sched_lock);
 +
-+	/* take the shortest timeout and use its half for watchdog interval */
-+	rcu_read_lock();
 +	list_for_each_entry_rcu(sch, &scx_sched_all, all)
-+		intv = max(min(intv, sch->watchdog_timeout / 2), 1);
-+	rcu_read_unlock();
-+
-+	WRITE_ONCE(scx_watchdog_timestamp, jiffies);
-+	WRITE_ONCE(scx_watchdog_interval, intv);
-+
-+	if (intv < ULONG_MAX)
-+		mod_delayed_work(system_unbound_wq, &scx_watchdog_work, intv);
-+	else
-+		cancel_delayed_work_sync(&scx_watchdog_work);
-+}
-+
- #ifdef CONFIG_EXT_SUB_SCHED
- static DECLARE_WAIT_QUEUE_HEAD(scx_unlink_waitq);
++		scx_dump_state(sch, &ei, 0, false);
+ }
  
-@@ -4159,6 +4183,8 @@ static void scx_sub_disable(struct scx_sched *sch)
- 	list_del_rcu(&sch->all);
- 	raw_spin_unlock_irq(&scx_sched_lock);
- 
-+	refresh_watchdog();
-+
- 	mutex_unlock(&scx_enable_mutex);
- 
- 	/*
-@@ -4316,12 +4342,12 @@ static void scx_root_disable(struct scx_sched *sch)
- 	if (sch->ops.exit)
- 		SCX_CALL_OP(sch, SCX_KF_UNLOCKED, exit, NULL, ei);
- 
--	cancel_delayed_work_sync(&scx_watchdog_work);
--
- 	raw_spin_lock_irq(&scx_sched_lock);
- 	list_del_rcu(&sch->all);
- 	raw_spin_unlock_irq(&scx_sched_lock);
- 
-+	refresh_watchdog();
-+
- 	/*
- 	 * scx_root clearing must be inside cpus_read_lock(). See
- 	 * handle_hotplug().
-@@ -4780,6 +4806,11 @@ static struct scx_sched *scx_alloc_and_add_sched(struct sched_ext_ops *ops,
- 	sch->ancestors[level] = sch;
- 	sch->level = level;
- 
-+	if (ops->timeout_ms)
-+		sch->watchdog_timeout = msecs_to_jiffies(ops->timeout_ms);
-+	else
-+		sch->watchdog_timeout = SCX_WATCHDOG_MAX_TIMEOUT;
-+
- 	atomic_set(&sch->exit_kind, SCX_EXIT_NONE);
- 	init_irq_work(&sch->error_irq_work, scx_error_irq_workfn);
- 	kthread_init_work(&sch->disable_work, scx_disable_workfn);
-@@ -4899,7 +4930,6 @@ static int scx_root_enable(struct sched_ext_ops *ops, struct bpf_link *link)
- 	struct scx_sched *sch;
- 	struct scx_task_iter sti;
- 	struct task_struct *p;
--	unsigned long timeout;
- 	int i, cpu, ret;
- 
- 	if (!cpumask_equal(housekeeping_cpumask(HK_TYPE_DOMAIN),
-@@ -4953,6 +4983,8 @@ static int scx_root_enable(struct sched_ext_ops *ops, struct bpf_link *link)
- 	list_add_tail_rcu(&sch->all, &scx_sched_all);
- 	raw_spin_unlock_irq(&scx_sched_lock);
- 
-+	refresh_watchdog();
-+
- 	scx_idle_enable(ops);
- 
- 	if (sch->ops.init) {
-@@ -4979,16 +5011,6 @@ static int scx_root_enable(struct sched_ext_ops *ops, struct bpf_link *link)
- 	if (ret)
- 		goto err_disable;
- 
--	if (ops->timeout_ms)
--		timeout = msecs_to_jiffies(ops->timeout_ms);
--	else
--		timeout = SCX_WATCHDOG_MAX_TIMEOUT;
--
--	WRITE_ONCE(scx_watchdog_timeout, timeout);
--	WRITE_ONCE(scx_watchdog_timestamp, jiffies);
--	queue_delayed_work(system_unbound_wq, &scx_watchdog_work,
--			   scx_watchdog_timeout / 2);
--
- 	/*
- 	 * Once __scx_enabled is set, %current can be switched to SCX anytime.
- 	 * This can lead to stalls as some BPF schedulers (e.g. userspace
-@@ -5215,6 +5237,8 @@ static int scx_sub_enable(struct sched_ext_ops *ops, struct bpf_link *link)
- 	list_add_tail_rcu(&sch->all, &scx_sched_all);
- 	raw_spin_unlock_irq(&scx_sched_lock);
- 
-+	refresh_watchdog();
-+
- 	if (sch->level >= SCX_SUB_MAX_DEPTH) {
- 		scx_error(sch, "max nesting depth %d violated",
- 			  SCX_SUB_MAX_DEPTH);
-diff --git a/kernel/sched/ext_internal.h b/kernel/sched/ext_internal.h
-index 8dbdae910564..4399c003c15f 100644
---- a/kernel/sched/ext_internal.h
-+++ b/kernel/sched/ext_internal.h
-@@ -974,6 +974,13 @@ struct scx_sched {
- 	struct kset		*sub_kset;
- #endif	/* CONFIG_EXT_SUB_SCHED */
- 
-+	/*
-+	 * The maximum amount of time in jiffies that a task may be runnable
-+	 * without being scheduled on a CPU. If this timeout is exceeded, it
-+	 * will trigger scx_error().
-+	 */
-+	unsigned long		watchdog_timeout;
-+
- 	atomic_t		exit_kind;
- 	struct scx_exit_info	*exit_info;
- 
+ static const struct sysrq_key_op sysrq_sched_ext_dump_op = {
 -- 
 2.51.0
 
