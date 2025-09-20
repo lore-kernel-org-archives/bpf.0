@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33B1626B0A9;
-	Sat, 20 Sep 2025 00:59:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E34B12C11E5;
+	Sat, 20 Sep 2025 00:59:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758329996; cv=none; b=fBUKjqURl5XK3cTaZcYsT4SVLUCbCduL1amvx6qLqm5yMxDbDBpIm4wEyr7P945dQ/VmaMK/i5uXDGFUi249GV8wdZFsm4+aHRXjzv30xEG7P+0H5Xj3ecvjnwreuJ/CpDwo+ZzgHr/rRfKo2Ibmh/H8pSZnCgcoD1Lwn46uH24=
+	t=1758329997; cv=none; b=qiYbjSwgx6/kNULk7ItckvOLRQcTh7SRJdkmh+57vMniTgV5/i9VYrgtTLLIQujajShmd0tPwL/KwfxsnfQJfpaxb6UhVZQpJbx+foNyXB9lGQl2baa1hR/RM5ase8y0ULh2/I/5cJ+xHXu+l5tEF0xQRSMXw4qX4yBxHwNO27o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758329996; c=relaxed/simple;
-	bh=9Z3WNgXqW4CAIaAZOBX6UH4rwdoBjVrajjmyb9Z+Xu4=;
+	s=arc-20240116; t=1758329997; c=relaxed/simple;
+	bh=o1SMsZdkzvH0cbMc1xDF7m+UJCXrcwarUk6PkPxqhDs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bRUZc6w39NiOrVBhxwUvm325VLyUGpuxeRC4J9jcYPP19T6ntkMNp7+t9bn7TD2Q2w+dnCTGCWFr37y51r3NyBezHmdAjedwQo0qtJOE98/g0i3DyJ7OiRZ2wKrz/MnBRnqUknHyURP16GpW9UjmDKxCFBlUs6Wy7IHHlyPT34o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Upf1Fs+w; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=OtYKwcXlDkserxYyFntLnN/87Cl4ITZw3k4GTbJrzih2e2iznzvd5Qwevk3n3uyD5OcCg1m4SRrOo52dR1pkvvMsBO//Jy/xmaKySgtLDbDLJqF2wRWT4XlGbkGJdSSg+5TLdBlvLnXUZBVmCNt5lm9u0JV0xUp2VVD3EJwlJyQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E0keoYFM; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Upf1Fs+w"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2FEEC4CEF5;
-	Sat, 20 Sep 2025 00:59:54 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E0keoYFM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9B03C4CEF0;
+	Sat, 20 Sep 2025 00:59:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758329994;
-	bh=9Z3WNgXqW4CAIaAZOBX6UH4rwdoBjVrajjmyb9Z+Xu4=;
+	s=k20201202; t=1758329996;
+	bh=o1SMsZdkzvH0cbMc1xDF7m+UJCXrcwarUk6PkPxqhDs=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Upf1Fs+wvvvPVZ0MiUWyHPScT9C4GbdVeuQiSBYzpMZ/6xkcmDV/Cxw399p2XiIyx
-	 DdUXsgDt78jIEWl5LOPj7EFLcl2YjgbuYB5wpWUHrHwWFPNwbUVaS/f8aAZMJ3NHI6
-	 OWGoo3hr4j6vLPFuD2kcobBnN5HA/1QnV9oIQIZ96+oeRBvJtRIxYcR+RMrzF+drEM
-	 Wn6ZQ696BWfFBUP/sq2AlJb1TywcIAZKJRY1h0nbJe04Yfv5BBWuVGSeGLNSbNaHlj
-	 FgIxwi+hbD7Tq3Tr045eKVJabMqiHJUhV4CShaI1KY/J9oamD8ANDSBE6/o1eR1v7k
-	 FhDtc7RKIqS5Q==
+	b=E0keoYFMnlure5tXMqeTk3KO/kCr7Lc6n0LC/ujUovrbw6L1OXYqGip57EOSYJTkd
+	 rEhxs38Tk8/pU/dCbbCqjBV+zRMJtfYvd5GNNqncdbNgJrSNvzNlg2q37sM94l4YnK
+	 9yR1CS3pRmfgERFVl5Wh6M94JxFgpPRwrSDRUSTHL5gu7rSJiRAtxU0peFlCTt+jNn
+	 djJ8GJNv8c6vu/HhQe19aDdojtCGotjtOtLX6IreM+X7rec/fYVUwKQ9ncYOiA0pW4
+	 7qT9mLWtGaaqRZvaJzqY81gAD6WTmzMeyYIgTVTswCOxBqKhmHcJaPHdB+jzoobgSj
+	 +M4HoolN+fQMg==
 From: Tejun Heo <tj@kernel.org>
 To: void@manifault.com,
 	arighi@nvidia.com,
@@ -35,9 +35,9 @@ Cc: linux-kernel@vger.kernel.org,
 	memxor@gmail.com,
 	bpf@vger.kernel.org,
 	Tejun Heo <tj@kernel.org>
-Subject: [PATCH 20/46] sched_ext: Update p->scx.disallow warning in scx_init_task()
-Date: Fri, 19 Sep 2025 14:58:43 -1000
-Message-ID: <20250920005931.2753828-21-tj@kernel.org>
+Subject: [PATCH 22/46] sched_ext: Factor out scx_claim_exit() from scx_disable()
+Date: Fri, 19 Sep 2025 14:58:45 -1000
+Message-ID: <20250920005931.2753828-23-tj@kernel.org>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20250920005931.2753828-1-tj@kernel.org>
 References: <20250920005931.2753828-1-tj@kernel.org>
@@ -49,42 +49,55 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-- Always trigger the warning if p->scx.disallow is set for fork inits. There
-  is no reason to set it during forks.
-
-- Flip the positions of if/else arms to ease adding error conditions.
+Both scx_disable() and scx_vexit() use cmpxchg on sch->exit_kind to claim
+exit ownership but the latter lacks some sanity checks. Factor out
+scx_claim_exit() from scx_disable() and use it in both places. This will
+also be used to implement sub-sched disabling.
 
 Signed-off-by: Tejun Heo <tj@kernel.org>
 ---
- kernel/sched/ext.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ kernel/sched/ext.c | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
 
 diff --git a/kernel/sched/ext.c b/kernel/sched/ext.c
-index ddceae539e11..0ee716ff4dab 100644
+index 54f65a196d94..b608c2c04730 100644
 --- a/kernel/sched/ext.c
 +++ b/kernel/sched/ext.c
-@@ -2825,7 +2825,10 @@ static int scx_init_task(struct task_struct *p, struct task_group *tg, bool fork
- 	scx_set_task_state(p, SCX_TASK_INIT);
+@@ -4086,15 +4086,20 @@ static void scx_disable_workfn(struct kthread_work *work)
+ 	scx_root_disable(sch);
+ }
  
- 	if (p->scx.disallow) {
--		if (!fork) {
-+		if (unlikely(fork)) {
-+			scx_error(sch, "ops.init_task() set task->scx.disallow for %s[%d] during fork",
-+				  p->comm, p->pid);
-+		} else {
- 			struct rq *rq;
- 			struct rq_flags rf;
+-static void scx_disable(struct scx_sched *sch, enum scx_exit_kind kind)
++static bool scx_claim_exit(struct scx_sched *sch, enum scx_exit_kind kind)
+ {
+ 	int none = SCX_EXIT_NONE;
  
-@@ -2844,9 +2847,6 @@ static int scx_init_task(struct task_struct *p, struct task_group *tg, bool fork
- 			}
+ 	if (WARN_ON_ONCE(kind == SCX_EXIT_NONE || kind == SCX_EXIT_DONE))
+ 		kind = SCX_EXIT_ERROR;
  
- 			task_rq_unlock(rq, p, &rf);
--		} else if (p->policy == SCHED_EXT) {
--			scx_error(sch, "ops.init_task() set task->scx.disallow for %s[%d] during fork",
--				  p->comm, p->pid);
- 		}
- 	}
+-	atomic_try_cmpxchg(&sch->exit_kind, &none, kind);
+-	kthread_queue_work(sch->helper, &sch->disable_work);
++	return atomic_try_cmpxchg(&sch->exit_kind, &none, kind);
++}
++
++static void scx_disable(struct scx_sched *sch, enum scx_exit_kind kind)
++{
++	if (scx_claim_exit(sch, kind))
++		kthread_queue_work(sch->helper, &sch->disable_work);
+ }
  
+ static void dump_newline(struct seq_buf *s)
+@@ -4412,9 +4417,8 @@ static void scx_vexit(struct scx_sched *sch,
+ 		      const char *fmt, va_list args)
+ {
+ 	struct scx_exit_info *ei = sch->exit_info;
+-	int none = SCX_EXIT_NONE;
+ 
+-	if (!atomic_try_cmpxchg(&sch->exit_kind, &none, kind))
++	if (!scx_claim_exit(sch, kind))
+ 		return;
+ 
+ 	ei->exit_code = exit_code;
 -- 
 2.51.0
 
