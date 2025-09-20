@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19AD6260592;
-	Sat, 20 Sep 2025 00:59:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E219E264F96;
+	Sat, 20 Sep 2025 00:59:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758329989; cv=none; b=tAHcfkyFqJH+wadVCpJXTqFiN0VZE0i5ANcq25j5V7rAxuFb4B+QZBa2GmEzEMVwJ/9HRSxHMIGnJXKDx0dZRFgCLZ097DIykPZgzLyEZCHRPX6fabqc8K+9s/OuHShrqee8MTO5ArnvqphpsroxYVGUHvUbD4FjlDd9i4yTP2g=
+	t=1758329990; cv=none; b=L8Z6xKsczFTcIUtZ0oPO3saZL3WPlYYkqKXA2aFiGx6HJ7ysR1w6eTfmFEBH54eWkrqQs63OFonsIcOxSbeYP0CMbY/dbgErEzIlDMHF/VXACvV7tkIRoSlMq0S0TWx0U6kocdpU8d86mV9Cq71IJI2LleALgHgWmbm7kNUaJvA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758329989; c=relaxed/simple;
-	bh=ZovXVgvJbgne57qv36tXiuhbvu6li5QdYOL0paZtyu0=;
+	s=arc-20240116; t=1758329990; c=relaxed/simple;
+	bh=bBerLODwZe/5/M+G4P1dLF8pLaspUup+2kegtusMO3U=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GV0YXfDmeR/ZsmnT7HQBKq0Eyoorp6A3jjeqy7U+VivskcMAHCLGqgC3joW+boxqIgpWScTkpBV59rdlimM5Hp3+mpDaZYE3sBarJiEm4q3lA6OCUBgq1LAOAlSBHNy8Lu/6CSIeQJz5vvg0ZiM2wf9lwUC22ZJzPWLYlMGcTaQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qZL28fDK; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=UQfN9DYG0MXljMgVttPCzuOweXQL3v2PcHolVg7D/3IjqQa7SI1zbMx/aXjeKgTzf0Ck1b3XeaeFCV/qmhrWImXJ1txr0LIHLPtnfJwpWAPAy6NIHLNL3ruTkh578BiuChdc+GSu+E/2K+KXsYQHizF9NJWD3vB+QXl/9zbIEfc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G+X/sJw/; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qZL28fDK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 871A5C4CEF0;
-	Sat, 20 Sep 2025 00:59:47 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G+X/sJw/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E3D4C4CEF0;
+	Sat, 20 Sep 2025 00:59:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758329987;
-	bh=ZovXVgvJbgne57qv36tXiuhbvu6li5QdYOL0paZtyu0=;
+	s=k20201202; t=1758329989;
+	bh=bBerLODwZe/5/M+G4P1dLF8pLaspUup+2kegtusMO3U=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=qZL28fDK/gQWG59/KydwPH0b4KaDoidanoDQxh5P0bmvJ5Jfpg2HfDm4dUg3qas9c
-	 obzznMC7d3HGNU2Kadd61XzOCYOn4w7tZ0cNLsVevTqSnyiTvaNzNmHIl7fYWOVWeQ
-	 XwjvYO9Roe+JvfemlHbVvEVKt4mlRNQ5/OOggq7bvZBk6ET9B8eZCGw4LD2D1LQiU4
-	 o6FAvBCzc9LM1QoDG9VKSUMGW5DAryLWaJqxA7U4Udm1UqFFUL28yCCbhPPtF8xLmA
-	 +o5dxSvkHG97t52AlHMRYOH/SXSzRm5+awu1OOsOSxJLAk7EaIAHFXQPKUpoKUZd8d
-	 gCCLNJpSub8zQ==
+	b=G+X/sJw/ZccufdUjS8lv7med6kaTb1zsy7+2pvo5hooaTIgQyNJe1haqn2cn4EtRq
+	 L1OncUzuGSn7hsd9C6Q2vvTYd8x7Zb2rWUdLEQOjmwjG3zEKommYZGbG/6hU8CNWaF
+	 /nMYTQ9LPjswQMgge4tBK7FBGbxBfmNXi2lKxxApXb1hkx+vdEQ+TEjfUi8PSWlOFL
+	 l646kM+8XnAaCK4VT/PXpvBSSz3x14oiDaJIdIBFjH8FwjuDZtwu4cSganaa2PO+57
+	 jwQ+dB7w8uLJYZ6qf4qmy8Bf7q7B2tmLGKBsyWD1dypnk/FaWZQCkrra5UHeHskUXU
+	 1ASZfXhrBNN0A==
 From: Tejun Heo <tj@kernel.org>
 To: void@manifault.com,
 	arighi@nvidia.com,
@@ -35,9 +35,9 @@ Cc: linux-kernel@vger.kernel.org,
 	memxor@gmail.com,
 	bpf@vger.kernel.org,
 	Tejun Heo <tj@kernel.org>
-Subject: [PATCH 13/46] sched_ext: Drop scx_kf_exit() and scx_kf_error()
-Date: Fri, 19 Sep 2025 14:58:36 -1000
-Message-ID: <20250920005931.2753828-14-tj@kernel.org>
+Subject: [PATCH 15/46] sched_ext: Keep dying tasks on a separate list
+Date: Fri, 19 Sep 2025 14:58:38 -1000
+Message-ID: <20250920005931.2753828-16-tj@kernel.org>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20250920005931.2753828-1-tj@kernel.org>
 References: <20250920005931.2753828-1-tj@kernel.org>
@@ -49,467 +49,232 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The intention behind scx_kf_exit/error() was that when called from kfuncs,
-scx_kf_exit/error() would be able to implicitly determine the scx_sched
-instance being operated on and thus wouldn't need the @sch parameter passed
-in explicitly. This turned out to be unnecessarily complicated to implement
-and not have enough practical benefits. Replace scx_kf_exit/error() usages
-with scx_exit/error() which take an explicit @sch parameter.
+sched_ext needs to be able to iterate all tasks until the task finishes its
+final scheduling event which can be after it is dropped out of pid hash. The
+scx_tasks list keeps track of all tasks between fork and free for this
+purpose.
 
-- Add the @sch parameter to scx_kf_allowed(), scx_kf_allowed_on_arg_tasks,
-  mark_direct_dispatch() and other intermediate functions transitively.
+The planned cgroup sub-scheduler support requires selectively iterating
+tasks belonging to cgroup subtrees. While the live tasks can be iterated
+using css_task_iter, there is a similar gap after removal from css. As there
+won't be too many tasks between release and free at any moment, this can be
+reasonably addressed by scanning dying tasks looking for tasks which are
+inside the cgroup subtree.
 
-- In callers that don't already have @sch available, grab RCU, read
-  $scx_root, verify it's not NULL and use it.
+In preparation, split out scx_tasks lists into two - scx_live_tasks and
+scx_dying_tasks. scx_task_iter is updated to first iterate scx_live_tasks
+and then scx_dying_tasks. As tasks can only move from the former to the
+latter, tasks can't escape iteration; however, it's possible for newly dying
+tasks to appear twice during iteration. The users of scx_task_iter are
+updated to handle duplicate iterations.
 
 Signed-off-by: Tejun Heo <tj@kernel.org>
 ---
- kernel/sched/ext.c      | 126 +++++++++++++++++++++++-----------------
- kernel/sched/ext_idle.c |  25 +++++---
- 2 files changed, 88 insertions(+), 63 deletions(-)
+ include/linux/sched/ext.h |  2 ++
+ kernel/exit.c             |  1 +
+ kernel/sched/ext.c        | 70 +++++++++++++++++++++++++++++----------
+ 3 files changed, 55 insertions(+), 18 deletions(-)
 
-diff --git a/kernel/sched/ext.c b/kernel/sched/ext.c
-index 1455f8c56d5c..0c99a55f199b 100644
---- a/kernel/sched/ext.c
-+++ b/kernel/sched/ext.c
-@@ -151,24 +151,7 @@ static __printf(4, 5) void scx_exit(struct scx_sched *sch,
- 	va_end(args);
- }
+diff --git a/include/linux/sched/ext.h b/include/linux/sched/ext.h
+index d82b7a9b0658..7290c4354ad6 100644
+--- a/include/linux/sched/ext.h
++++ b/include/linux/sched/ext.h
+@@ -207,6 +207,7 @@ struct sched_ext_entity {
+ 	struct list_head	tasks_node;
+ };
  
--static __printf(3, 4) void scx_kf_exit(enum scx_exit_kind kind, s64 exit_code,
--				       const char *fmt, ...)
--{
--	struct scx_sched *sch;
--	va_list args;
--
--	rcu_read_lock();
--	sch = rcu_dereference(scx_root);
--	if (sch) {
--		va_start(args, fmt);
--		scx_vexit(sch, kind, exit_code, fmt, args);
--		va_end(args);
--	}
--	rcu_read_unlock();
--}
--
- #define scx_error(sch, fmt, args...)	scx_exit((sch), SCX_EXIT_ERROR, 0, fmt, ##args)
--#define scx_kf_error(fmt, args...)	scx_kf_exit(SCX_EXIT_ERROR, 0, fmt, ##args)
++void sched_ext_exit(struct task_struct *p);
+ void sched_ext_free(struct task_struct *p);
+ void print_scx_info(const char *log_lvl, struct task_struct *p);
+ void scx_softlockup(u32 dur_s);
+@@ -214,6 +215,7 @@ bool scx_rcu_cpu_stall(void);
  
- #define SCX_HAS_OP(sch, op)	test_bit(SCX_OP_IDX(op), (sch)->has_op)
+ #else	/* !CONFIG_SCHED_CLASS_EXT */
  
-@@ -329,11 +312,11 @@ do {										\
- })
++static inline void sched_ext_exit(struct task_struct *p) {}
+ static inline void sched_ext_free(struct task_struct *p) {}
+ static inline void print_scx_info(const char *log_lvl, struct task_struct *p) {}
+ static inline void scx_softlockup(u32 dur_s) {}
+diff --git a/kernel/exit.c b/kernel/exit.c
+index 343eb97543d5..0bdbaa85ef43 100644
+--- a/kernel/exit.c
++++ b/kernel/exit.c
+@@ -962,6 +962,7 @@ void __noreturn do_exit(long code)
+ 	exit_thread(tsk);
  
- /* @mask is constant, always inline to cull unnecessary branches */
--static __always_inline bool scx_kf_allowed(u32 mask)
-+static __always_inline bool scx_kf_allowed(struct scx_sched *sch, u32 mask)
- {
- 	if (unlikely(!(current->scx.kf_mask & mask))) {
--		scx_kf_error("kfunc with mask 0x%x called from an operation only allowing 0x%x",
--			     mask, current->scx.kf_mask);
-+		scx_error(sch, "kfunc with mask 0x%x called from an operation only allowing 0x%x",
-+			  mask, current->scx.kf_mask);
- 		return false;
- 	}
- 
-@@ -346,13 +329,13 @@ static __always_inline bool scx_kf_allowed(u32 mask)
- 	 */
- 	if (unlikely(highest_bit(mask) == SCX_KF_CPU_RELEASE &&
- 		     (current->scx.kf_mask & higher_bits(SCX_KF_CPU_RELEASE)))) {
--		scx_kf_error("cpu_release kfunc called from a nested operation");
-+		scx_error(sch, "cpu_release kfunc called from a nested operation");
- 		return false;
- 	}
- 
- 	if (unlikely(highest_bit(mask) == SCX_KF_DISPATCH &&
- 		     (current->scx.kf_mask & higher_bits(SCX_KF_DISPATCH)))) {
--		scx_kf_error("dispatch kfunc called from a nested operation");
-+		scx_error(sch, "dispatch kfunc called from a nested operation");
- 		return false;
- 	}
- 
-@@ -360,15 +343,16 @@ static __always_inline bool scx_kf_allowed(u32 mask)
- }
- 
- /* see SCX_CALL_OP_TASK() */
--static __always_inline bool scx_kf_allowed_on_arg_tasks(u32 mask,
-+static __always_inline bool scx_kf_allowed_on_arg_tasks(struct scx_sched *sch,
-+							u32 mask,
- 							struct task_struct *p)
- {
--	if (!scx_kf_allowed(mask))
-+	if (!scx_kf_allowed(sch, mask))
- 		return false;
- 
- 	if (unlikely((p != current->scx.kf_tasks[0] &&
- 		      p != current->scx.kf_tasks[1]))) {
--		scx_kf_error("called on a task not being operated on");
-+		scx_error(sch, "called on a task not being operated on");
- 		return false;
- 	}
- 
-@@ -1115,7 +1099,8 @@ static struct scx_dispatch_q *find_dsq_for_dispatch(struct scx_sched *sch,
- 	return dsq;
- }
- 
--static void mark_direct_dispatch(struct task_struct *ddsp_task,
-+static void mark_direct_dispatch(struct scx_sched *sch,
-+				 struct task_struct *ddsp_task,
- 				 struct task_struct *p, u64 dsq_id,
- 				 u64 enq_flags)
- {
-@@ -1129,10 +1114,10 @@ static void mark_direct_dispatch(struct task_struct *ddsp_task,
- 	/* @p must match the task on the enqueue path */
- 	if (unlikely(p != ddsp_task)) {
- 		if (IS_ERR(ddsp_task))
--			scx_kf_error("%s[%d] already direct-dispatched",
-+			scx_error(sch, "%s[%d] already direct-dispatched",
- 				  p->comm, p->pid);
- 		else
--			scx_kf_error("scheduling for %s[%d] but trying to direct-dispatch %s[%d]",
-+			scx_error(sch, "scheduling for %s[%d] but trying to direct-dispatch %s[%d]",
- 				  ddsp_task->comm, ddsp_task->pid,
- 				  p->comm, p->pid);
- 		return;
-@@ -5243,18 +5228,18 @@ void __init init_sched_ext_class(void)
- static bool scx_dsq_insert_preamble(struct scx_sched *sch, struct task_struct *p,
- 				    u64 enq_flags)
- {
--	if (!scx_kf_allowed(SCX_KF_ENQUEUE | SCX_KF_DISPATCH))
-+	if (!scx_kf_allowed(sch, SCX_KF_ENQUEUE | SCX_KF_DISPATCH))
- 		return false;
- 
- 	lockdep_assert_irqs_disabled();
- 
- 	if (unlikely(!p)) {
--		scx_kf_error("called with NULL task");
-+		scx_error(sch, "called with NULL task");
- 		return false;
- 	}
- 
- 	if (unlikely(enq_flags & __SCX_ENQ_INTERNAL_MASK)) {
--		scx_kf_error("invalid enq_flags 0x%llx", enq_flags);
-+		scx_error(sch, "invalid enq_flags 0x%llx", enq_flags);
- 		return false;
- 	}
- 
-@@ -5269,12 +5254,12 @@ static void scx_dsq_insert_commit(struct scx_sched *sch, struct task_struct *p,
- 
- 	ddsp_task = __this_cpu_read(direct_dispatch_task);
- 	if (ddsp_task) {
--		mark_direct_dispatch(ddsp_task, p, dsq_id, enq_flags);
-+		mark_direct_dispatch(sch, ddsp_task, p, dsq_id, enq_flags);
- 		return;
- 	}
- 
- 	if (unlikely(dspc->cursor >= scx_dsp_max_batch)) {
--		scx_kf_error("dispatch buffer overflow");
-+		scx_error(sch, "dispatch buffer overflow");
- 		return;
- 	}
- 
-@@ -5410,7 +5395,8 @@ static bool scx_dsq_move(struct bpf_iter_scx_dsq_kern *kit,
- 	bool in_balance;
- 	unsigned long flags;
- 
--	if (!scx_kf_allowed_if_unlocked() && !scx_kf_allowed(SCX_KF_DISPATCH))
-+	if (!scx_kf_allowed_if_unlocked() &&
-+	    !scx_kf_allowed(sch, SCX_KF_DISPATCH))
- 		return false;
+ 	sched_autogroup_exit_task(tsk);
++	sched_ext_exit(tsk);
+ 	cgroup_exit(tsk);
  
  	/*
-@@ -5495,7 +5481,15 @@ __bpf_kfunc_start_defs();
+diff --git a/kernel/sched/ext.c b/kernel/sched/ext.c
+index 32306203fba5..6ae9ee5b9a50 100644
+--- a/kernel/sched/ext.c
++++ b/kernel/sched/ext.c
+@@ -20,13 +20,21 @@
+ static struct scx_sched __rcu *scx_root;
+ 
+ /*
+- * During exit, a task may schedule after losing its PIDs. When disabling the
+- * BPF scheduler, we need to be able to iterate tasks in every state to
+- * guarantee system safety. Maintain a dedicated task list which contains every
+- * task between its fork and eventual free.
++ * - We want to visit and perform sleepable operations on every task.
++ *
++ * - During exit, a task may schedule after losing its PIDs. When disabling the
++ *   BPF scheduler, we need to be able to iterate tasks in every state to
++ *   guarantee system safety.
++ *
++ * Maintain a dedicated task list which contains every task between its fork and
++ * eventual free. Live and exiting tasks are kept on separate lists so that the
++ * dying task iteration can be combined with cgroup task iteration. This leads
++ * to occasional double visiting of existing tasks but those aren't difficult
++ * to handle from users.
   */
- __bpf_kfunc u32 scx_bpf_dispatch_nr_slots(void)
+ static DEFINE_SPINLOCK(scx_tasks_lock);
+-static LIST_HEAD(scx_tasks);
++static LIST_HEAD(scx_live_tasks);
++static LIST_HEAD(scx_dying_tasks);
+ 
+ /* ops enable/disable */
+ static DEFINE_MUTEX(scx_enable_mutex);
+@@ -436,6 +444,7 @@ struct bpf_iter_scx_dsq {
+  * SCX task iterator.
+  */
+ struct scx_task_iter {
++	struct list_head		*head;
+ 	struct sched_ext_entity		cursor;
+ 	struct task_struct		*locked_task;
+ 	struct rq			*rq;
+@@ -458,7 +467,8 @@ struct scx_task_iter {
+  * RCU read lock or obtaining a reference count.
+  *
+  * All tasks which existed when the iteration started are guaranteed to be
+- * visited as long as they still exist.
++ * visited as long as they still exist. Tasks which exit while iteration is in
++ * progress may be visited twice. The caller must be able to handle such cases.
+  */
+ static void scx_task_iter_start(struct scx_task_iter *iter)
  {
--	if (!scx_kf_allowed(SCX_KF_DISPATCH))
-+	struct scx_sched *sch;
-+
-+	guard(rcu)();
-+
-+	sch = rcu_dereference(scx_root);
-+	if (unlikely(!sch))
-+		return 0;
-+
-+	if (!scx_kf_allowed(sch, SCX_KF_DISPATCH))
- 		return 0;
+@@ -467,8 +477,9 @@ static void scx_task_iter_start(struct scx_task_iter *iter)
  
- 	return scx_dsp_max_batch - __this_cpu_read(scx_dsp_ctx->cursor);
-@@ -5510,14 +5504,21 @@ __bpf_kfunc u32 scx_bpf_dispatch_nr_slots(void)
- __bpf_kfunc void scx_bpf_dispatch_cancel(void)
+ 	spin_lock_irq(&scx_tasks_lock);
+ 
++	iter->head = &scx_live_tasks;
+ 	iter->cursor = (struct sched_ext_entity){ .flags = SCX_TASK_CURSOR };
+-	list_add(&iter->cursor.tasks_node, &scx_tasks);
++	list_add(&iter->cursor.tasks_node, &scx_live_tasks);
+ 	iter->locked_task = NULL;
+ 	iter->cnt = 0;
+ 	iter->list_locked = true;
+@@ -527,9 +538,11 @@ static void scx_task_iter_stop(struct scx_task_iter *iter)
+  * scx_task_iter_next - Next task
+  * @iter: iterator to walk
+  *
+- * Visit the next task. See scx_task_iter_start() for details. Locks are dropped
+- * and re-acquired every %SCX_TASK_ITER_BATCH iterations to avoid causing stalls
+- * by holding scx_tasks_lock for too long.
++ * Visit the next task. Existing tasks may be visited twice. See
++ * scx_task_iter_start() for details.
++ *
++ * Locks are dropped and re-acquired every %SCX_TASK_ITER_BATCH iterations to
++ * avoid causing stalls by holding scx_tasks_lock for too long.
+  */
+ static struct task_struct *scx_task_iter_next(struct scx_task_iter *iter)
  {
- 	struct scx_dsp_ctx *dspc = this_cpu_ptr(scx_dsp_ctx);
-+	struct scx_sched *sch;
+@@ -543,18 +556,23 @@ static struct task_struct *scx_task_iter_next(struct scx_task_iter *iter)
+ 		cond_resched();
+ 		__scx_task_iter_maybe_relock(iter);
+ 	}
+-
++retry:
+ 	list_for_each_entry(pos, cursor, tasks_node) {
+-		if (&pos->tasks_node == &scx_tasks)
+-			return NULL;
++		if (&pos->tasks_node == iter->head)
++			break;
+ 		if (!(pos->flags & SCX_TASK_CURSOR)) {
+ 			list_move(cursor, &pos->tasks_node);
+ 			return container_of(pos, struct task_struct, scx);
+ 		}
+ 	}
  
--	if (!scx_kf_allowed(SCX_KF_DISPATCH))
-+	guard(rcu)();
+-	/* can't happen, should always terminate at scx_tasks above */
+-	BUG();
++	if (iter->head == &scx_live_tasks) {
++		iter->head = &scx_dying_tasks;
++		list_move(cursor, iter->head);
++		goto retry;
++	}
 +
-+	sch = rcu_dereference(scx_root);
-+	if (unlikely(!sch))
-+		return;
-+
-+	if (!scx_kf_allowed(sch, SCX_KF_DISPATCH))
- 		return;
- 
- 	if (dspc->cursor > 0)
- 		dspc->cursor--;
- 	else
--		scx_kf_error("dispatch buffer underflow");
-+		scx_error(sch, "dispatch buffer underflow");
++	return NULL;
  }
  
  /**
-@@ -5540,7 +5541,7 @@ __bpf_kfunc bool scx_bpf_dsq_move_to_local(u64 dsq_id)
- 	struct scx_dsp_ctx *dspc = this_cpu_ptr(scx_dsp_ctx);
- 	struct scx_dispatch_q *dsq;
- 
--	if (!scx_kf_allowed(SCX_KF_DISPATCH))
-+	if (!scx_kf_allowed(sch, SCX_KF_DISPATCH))
- 		return false;
- 
- 	flush_dispatch_buf(sch, dspc->rq);
-@@ -5687,12 +5688,18 @@ __bpf_kfunc_start_defs();
+@@ -562,8 +580,8 @@ static struct task_struct *scx_task_iter_next(struct scx_task_iter *iter)
+  * @iter: iterator to walk
+  *
+  * Visit the non-idle task with its rq lock held. Allows callers to specify
+- * whether they would like to filter out dead tasks. See scx_task_iter_start()
+- * for details.
++ * whether they would like to filter out dead tasks. Exiting tasks may be
++ * visited twice. See scx_task_iter_start() for details.
   */
- __bpf_kfunc u32 scx_bpf_reenqueue_local(void)
+ static struct task_struct *scx_task_iter_next_locked(struct scx_task_iter *iter)
  {
-+	struct scx_sched *sch;
- 	LIST_HEAD(tasks);
- 	u32 nr_enqueued = 0;
- 	struct rq *rq;
- 	struct task_struct *p, *n;
- 
--	if (!scx_kf_allowed(SCX_KF_CPU_RELEASE))
-+	guard(rcu)();
-+	sch = rcu_dereference(scx_root);
-+	if (unlikely(!sch))
-+		return 0;
-+
-+	if (!scx_kf_allowed(sch, SCX_KF_CPU_RELEASE))
- 		return 0;
- 
- 	rq = cpu_rq(smp_processor_id());
-@@ -5837,7 +5844,7 @@ static void scx_kick_cpu(struct scx_sched *sch, s32 cpu, u64 flags)
- 		struct rq *target_rq = cpu_rq(cpu);
- 
- 		if (unlikely(flags & (SCX_KICK_PREEMPT | SCX_KICK_WAIT)))
--			scx_kf_error("PREEMPT/WAIT cannot be used with SCX_KICK_IDLE");
-+			scx_error(sch, "PREEMPT/WAIT cannot be used with SCX_KICK_IDLE");
- 
- 		if (raw_spin_rq_trylock(target_rq)) {
- 			if (can_skip_idle_kick(target_rq)) {
-@@ -6070,20 +6077,20 @@ static s32 __bstr_format(struct scx_sched *sch, u64 *data_buf, char *line_buf,
- 
- 	if (data__sz % 8 || data__sz > MAX_BPRINTF_VARARGS * 8 ||
- 	    (data__sz && !data)) {
--		scx_kf_error("invalid data=%p and data__sz=%u", (void *)data, data__sz);
-+		scx_error(sch, "invalid data=%p and data__sz=%u", (void *)data, data__sz);
- 		return -EINVAL;
+@@ -2905,7 +2923,7 @@ void scx_post_fork(struct task_struct *p)
  	}
  
- 	ret = copy_from_kernel_nofault(data_buf, data, data__sz);
- 	if (ret < 0) {
--		scx_kf_error("failed to read data fields (%d)", ret);
-+		scx_error(sch, "failed to read data fields (%d)", ret);
- 		return ret;
- 	}
+ 	spin_lock_irq(&scx_tasks_lock);
+-	list_add_tail(&p->scx.tasks_node, &scx_tasks);
++	list_add_tail(&p->scx.tasks_node, &scx_live_tasks);
+ 	spin_unlock_irq(&scx_tasks_lock);
  
- 	ret = bpf_bprintf_prepare(fmt, UINT_MAX, data_buf, data__sz / 8,
- 				  &bprintf_data);
- 	if (ret < 0) {
--		scx_kf_error("format preparation failed (%d)", ret);
-+		scx_error(sch, "format preparation failed (%d)", ret);
- 		return ret;
- 	}
- 
-@@ -6091,7 +6098,7 @@ static s32 __bstr_format(struct scx_sched *sch, u64 *data_buf, char *line_buf,
- 			  bprintf_data.bin_args);
- 	bpf_bprintf_cleanup(&bprintf_data);
- 	if (ret < 0) {
--		scx_kf_error("(\"%s\", %p, %u) failed to format", fmt, data, data__sz);
-+		scx_error(sch, "(\"%s\", %p, %u) failed to format", fmt, data, data__sz);
- 		return ret;
- 	}
- 
-@@ -6127,7 +6134,7 @@ __bpf_kfunc void scx_bpf_exit_bstr(s64 exit_code, char *fmt,
- 	sch = rcu_dereference_bh(scx_root);
- 	if (likely(sch) &&
- 	    bstr_format(sch, &scx_exit_bstr_buf, fmt, data, data__sz) >= 0)
--		scx_kf_exit(SCX_EXIT_UNREG_BPF, exit_code, "%s", scx_exit_bstr_buf.line);
-+		scx_exit(sch, SCX_EXIT_UNREG_BPF, exit_code, "%s", scx_exit_bstr_buf.line);
- 	raw_spin_unlock_irqrestore(&scx_exit_bstr_buf_lock, flags);
+ 	percpu_up_read(&scx_fork_rwsem);
+@@ -2926,6 +2944,13 @@ void scx_cancel_fork(struct task_struct *p)
+ 	percpu_up_read(&scx_fork_rwsem);
  }
  
-@@ -6150,7 +6157,7 @@ __bpf_kfunc void scx_bpf_error_bstr(char *fmt, unsigned long long *data,
- 	sch = rcu_dereference_bh(scx_root);
- 	if (likely(sch) &&
- 	    bstr_format(sch, &scx_exit_bstr_buf, fmt, data, data__sz) >= 0)
--		scx_kf_exit(SCX_EXIT_ERROR_BPF, 0, "%s", scx_exit_bstr_buf.line);
-+		scx_exit(sch, SCX_EXIT_ERROR_BPF, 0, "%s", scx_exit_bstr_buf.line);
- 	raw_spin_unlock_irqrestore(&scx_exit_bstr_buf_lock, flags);
- }
- 
-@@ -6181,7 +6188,7 @@ __bpf_kfunc void scx_bpf_dump_bstr(char *fmt, unsigned long long *data,
- 		return;
- 
- 	if (raw_smp_processor_id() != dd->cpu) {
--		scx_kf_error("scx_bpf_dump() must only be called from ops.dump() and friends");
-+		scx_error(sch, "scx_bpf_dump() must only be called from ops.dump() and friends");
- 		return;
- 	}
- 
-@@ -6285,7 +6292,7 @@ __bpf_kfunc void scx_bpf_cpuperf_set(s32 cpu, u32 perf)
- 		return;
- 
- 	if (unlikely(perf > SCX_CPUPERF_ONE)) {
--		scx_kf_error("Invalid cpuperf target %u for CPU %d", perf, cpu);
-+		scx_error(sch, "Invalid cpuperf target %u for CPU %d", perf, cpu);
- 		return;
- 	}
- 
-@@ -6298,7 +6305,7 @@ __bpf_kfunc void scx_bpf_cpuperf_set(s32 cpu, u32 perf)
- 		 * to the corresponding CPU to prevent ABBA deadlocks.
- 		 */
- 		if (locked_rq && rq != locked_rq) {
--			scx_kf_error("Invalid target CPU %d", cpu);
-+			scx_error(sch, "Invalid target CPU %d", cpu);
- 			return;
- 		}
- 
-@@ -6422,16 +6429,20 @@ __bpf_kfunc struct rq *scx_bpf_cpu_rq(s32 cpu)
-  */
- __bpf_kfunc struct rq *scx_bpf_locked_rq(void)
++void sched_ext_exit(struct task_struct *p)
++{
++	spin_lock_irq(&scx_tasks_lock);
++	list_move_tail(&p->scx.tasks_node, &scx_dying_tasks);
++	spin_unlock_irq(&scx_tasks_lock);
++}
++
+ void sched_ext_free(struct task_struct *p)
  {
-+	struct scx_sched *sch;
- 	struct rq *rq;
+ 	unsigned long flags;
+@@ -3913,6 +3938,7 @@ static void scx_disable_workfn(struct kthread_work *work)
  
--	preempt_disable();
-+	guard(preempt)();
+ 	scx_task_iter_start(&sti);
+ 	while ((p = scx_task_iter_next_locked(&sti))) {
++		/* @p may be being visited twice, doesn't matter */
+ 		const struct sched_class *old_class = p->sched_class;
+ 		const struct sched_class *new_class =
+ 			__setscheduler_class(p->policy, p->prio);
+@@ -4615,6 +4641,13 @@ static int scx_enable(struct sched_ext_ops *ops, struct bpf_link *link)
+ 
+ 	scx_task_iter_start(&sti);
+ 	while ((p = scx_task_iter_next_locked(&sti))) {
++		/*
++		 * Task iteration may visit the same task twice when racing
++		 * against exiting. Skip if @p is already initialized.
++		 */
++		if (scx_get_task_state(p) == SCX_TASK_READY)
++			continue;
 +
-+	sch = rcu_dereference_sched(scx_root);
-+	if (unlikely(!sch))
-+		return NULL;
-+
- 	rq = scx_locked_rq();
- 	if (!rq) {
--		preempt_enable();
--		scx_kf_error("accessing rq without holding rq lock");
-+		scx_error(sch, "accessing rq without holding rq lock");
- 		return NULL;
- 	}
--	preempt_enable();
- 
- 	return rq;
- }
-@@ -6474,8 +6485,15 @@ __bpf_kfunc struct cgroup *scx_bpf_task_cgroup(struct task_struct *p)
- {
- 	struct task_group *tg = p->sched_task_group;
- 	struct cgroup *cgrp = &cgrp_dfl_root.cgrp;
-+	struct scx_sched *sch;
-+
-+	guard(rcu)();
-+
-+	sch = rcu_dereference(scx_root);
-+	if (unlikely(!sch))
-+		goto out;
- 
--	if (!scx_kf_allowed_on_arg_tasks(__SCX_KF_RQ_LOCKED, p))
-+	if (!scx_kf_allowed_on_arg_tasks(sch, __SCX_KF_RQ_LOCKED, p))
- 		goto out;
- 
- 	cgrp = tg_cgrp(tg);
-diff --git a/kernel/sched/ext_idle.c b/kernel/sched/ext_idle.c
-index a576ec10522e..c57779f0ad57 100644
---- a/kernel/sched/ext_idle.c
-+++ b/kernel/sched/ext_idle.c
-@@ -822,7 +822,7 @@ void scx_idle_disable(void)
- static int validate_node(struct scx_sched *sch, int node)
- {
- 	if (!static_branch_likely(&scx_builtin_idle_per_node)) {
--		scx_kf_error("per-node idle tracking is disabled");
-+		scx_error(sch, "per-node idle tracking is disabled");
- 		return -EOPNOTSUPP;
- 	}
- 
-@@ -832,13 +832,13 @@ static int validate_node(struct scx_sched *sch, int node)
- 
- 	/* Make sure node is in a valid range */
- 	if (node < 0 || node >= nr_node_ids) {
--		scx_kf_error("invalid node %d", node);
-+		scx_error(sch, "invalid node %d", node);
- 		return -EINVAL;
- 	}
- 
- 	/* Make sure the node is part of the set of possible nodes */
- 	if (!node_possible(node)) {
--		scx_kf_error("unavailable node %d", node);
-+		scx_error(sch, "unavailable node %d", node);
- 		return -EINVAL;
- 	}
- 
-@@ -852,7 +852,7 @@ static bool check_builtin_idle_enabled(struct scx_sched *sch)
- 	if (static_branch_likely(&scx_builtin_idle_enabled))
- 		return true;
- 
--	scx_kf_error("built-in idle tracking is disabled");
-+	scx_error(sch, "built-in idle tracking is disabled");
- 	return false;
- }
- 
-@@ -880,7 +880,7 @@ static s32 select_cpu_from_kfunc(struct scx_sched *sch, struct task_struct *p,
- 	if (scx_kf_allowed_if_unlocked()) {
- 		rq = task_rq_lock(p, &rf);
- 	} else {
--		if (!scx_kf_allowed(SCX_KF_SELECT_CPU | SCX_KF_ENQUEUE))
-+		if (!scx_kf_allowed(sch, SCX_KF_SELECT_CPU | SCX_KF_ENQUEUE))
- 			return -EPERM;
- 		rq = scx_locked_rq();
- 	}
-@@ -1048,7 +1048,7 @@ __bpf_kfunc const struct cpumask *scx_bpf_get_idle_cpumask(void)
- 		return cpu_none_mask;
- 
- 	if (static_branch_unlikely(&scx_builtin_idle_per_node)) {
--		scx_kf_error("SCX_OPS_BUILTIN_IDLE_PER_NODE enabled");
-+		scx_error(sch, "SCX_OPS_BUILTIN_IDLE_PER_NODE enabled");
- 		return cpu_none_mask;
- 	}
- 
-@@ -1107,7 +1107,7 @@ __bpf_kfunc const struct cpumask *scx_bpf_get_idle_smtmask(void)
- 		return cpu_none_mask;
- 
- 	if (static_branch_unlikely(&scx_builtin_idle_per_node)) {
--		scx_kf_error("SCX_OPS_BUILTIN_IDLE_PER_NODE enabled");
-+		scx_error(sch, "SCX_OPS_BUILTIN_IDLE_PER_NODE enabled");
- 		return cpu_none_mask;
- 	}
- 
-@@ -1235,7 +1235,7 @@ __bpf_kfunc s32 scx_bpf_pick_idle_cpu(const struct cpumask *cpus_allowed,
- 		return -ENODEV;
- 
- 	if (static_branch_maybe(CONFIG_NUMA, &scx_builtin_idle_per_node)) {
--		scx_kf_error("per-node idle tracking is enabled");
-+		scx_error(sch, "per-node idle tracking is enabled");
- 		return -EBUSY;
- 	}
- 
-@@ -1316,10 +1316,17 @@ __bpf_kfunc s32 scx_bpf_pick_any_cpu_node(const struct cpumask *cpus_allowed,
- __bpf_kfunc s32 scx_bpf_pick_any_cpu(const struct cpumask *cpus_allowed,
- 				     u64 flags)
- {
-+	struct scx_sched *sch;
- 	s32 cpu;
- 
-+	guard(rcu)();
-+
-+	sch = rcu_dereference(scx_root);
-+	if (unlikely(!sch))
-+		return -ENODEV;
-+
- 	if (static_branch_maybe(CONFIG_NUMA, &scx_builtin_idle_per_node)) {
--		scx_kf_error("per-node idle tracking is enabled");
-+		scx_error(sch, "per-node idle tracking is enabled");
- 		return -EBUSY;
- 	}
- 
+ 		/*
+ 		 * @p may already be dead, have lost all its usages counts and
+ 		 * be waiting for RCU grace period before being freed. @p can't
+@@ -4657,6 +4690,7 @@ static int scx_enable(struct sched_ext_ops *ops, struct bpf_link *link)
+ 	percpu_down_write(&scx_fork_rwsem);
+ 	scx_task_iter_start(&sti);
+ 	while ((p = scx_task_iter_next_locked(&sti))) {
++		/* @p may be being visited twice, doesn't matter */
+ 		const struct sched_class *old_class = p->sched_class;
+ 		const struct sched_class *new_class =
+ 			__setscheduler_class(p->policy, p->prio);
 -- 
 2.51.0
 
