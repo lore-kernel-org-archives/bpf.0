@@ -1,133 +1,164 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1D582EAB64;
-	Mon, 22 Sep 2025 18:43:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D12AC2D739F
+	for <bpf@vger.kernel.org>; Mon, 22 Sep 2025 19:17:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758566584; cv=none; b=I2Fue5bFctN30Bsk03lesuTLUIdLO6e4yIpomX7UA8D1tyJuMMPFw4y7wKcox4mCGzZ9A94wI1UsQIox0WJ39g7tDvEm1hufXz9GWu3vzZpt5h8B67QXsEsEEiTKbNjf35kQmCEYpJvr5Cg2WgnjcLJKJrudAbWCkOde5ETp3BE=
+	t=1758568636; cv=none; b=KU1bnIklWQe8PCVygwuJrQPyDISgOsvWBNsEdC+uQowSKq5aJVEl9J2F3ldTEkzCVCag+XtzDZNLnV9dsXCg6SMATL3n5OqT61yZ1asRszHKjccj8zmywhFORmP3x0KtphQRh/AViYGbkzWzwKGBCO9yVrIlXffsfK9/EY2uYQs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758566584; c=relaxed/simple;
-	bh=qm3J5mkFrGKfPF1omLK3iztVBBidbUHl6CL2q28/Yos=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jQZEloyOCaNvI+3Nghve++kf1WBq9eUREn9OHG55lpo7cbrG5Bhpr5zN1DShm7m660nURy7ufivbh2dF8TsHHZmT0jBU1G3qpf6GJwa0tDJlSRK+7d/AzBealscnv6xWO0ds87mjxum4/JQkdiQK7TkyQEMTP0pNaIrDO+B949c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=Jut3o+ns; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1758568636; c=relaxed/simple;
+	bh=LvKHJW6iDa//JoIyoTM3NYfh8xhZuv6wwpmLeRi828k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dy2w6Yk7A21mwmYQa2VPTd45d+rhEmNtNHRTdAOzQjT0cVAJcO4xY7GTdT6DrQIOhxVOQnG170Ky8304fdvS0palbROtmO0CIK6WgmxL5xEECcI3hqn9IIlD1DqEoMUHubOfVf90+tXdIC9JDpXDJ3Vm2Nv/E1d0p1UlVWMJbrs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HnuSbsmv; arc=none smtp.client-ip=209.85.221.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="Jut3o+ns"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=v3/CPyS+FxMcyL4CLehcp8HdoGb6j7GodguKS7gF+R0=; b=Jut3o+nspldapbWcHfcqpmIfnZ
-	REPhmBncD2z4scTCa2eGuZUddkkan5cz/pVH+v1XquPqN0weQilmBH1inbFYzALPoH5yJ9lsrQ4J0
-	ByiCW/Vk5r+u83RbL+8IKbkOqK6IrKUST0f59eWl3zsQSVZHDAB7HjKrP6mqCzKsUFg34XVoCABVL
-	zKHtOaZgUM4M55ze36saafs7/fIdTQsCVAJcIB+QzVZ3CrbuXj6S5MuiAQiznE6b1KzQHD4E/rJw5
-	aqSDWnmHWRAQpNBei6MT6p0TEuaRmpO9ixuc5nFK+3CdRilHCT7hQ3LjS07I0ALAbsv2UvEWU0cen
-	Wy8mPrEg==;
-Received: from sslproxy08.your-server.de ([78.47.166.52])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1v0lV4-0007YH-1R;
-	Mon, 22 Sep 2025 20:42:58 +0200
-Received: from localhost ([127.0.0.1])
-	by sslproxy08.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1v0lUP-0009kt-0E;
-	Mon, 22 Sep 2025 20:42:58 +0200
-Message-ID: <6517f080-1753-4466-adf3-e908a4d58a36@iogearbox.net>
-Date: Mon, 22 Sep 2025 20:42:57 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HnuSbsmv"
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-3ee155e0c08so2957224f8f.2
+        for <bpf@vger.kernel.org>; Mon, 22 Sep 2025 12:17:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1758568633; x=1759173433; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=m2XqxnGjrspvC9W/YBnJP5cm4TXFPvfZMqevIq9yP3I=;
+        b=HnuSbsmvddQ5Ty5zcEr7mIhp+MtfG/XBc0Me/kL9f2PN+eT1gWvSOnS8zAB/6SeZOv
+         ObtlOnuLEUG/FAUDHt/FUrdOLTkBdsuqrtQfBpyfmCUeqtO6wylbf5ihrfw6I6zDqOox
+         MIudlSW7RRiZZX/oknvVvP1tqMEURy1YHQsr+ItOiAEpaqNCZJB0aZGhBpPxmzbKsdlN
+         M92qFCapFA8eD0mFfDszodPt7mYLimYd4ocQvK2txDJRcPZ7mOMOIAuJ7s3TlN5pOfnv
+         dwXm8SFSueGAzP+r+c1ih1M3QvAkDfOQjlz2txoCFKCmdY1oYaLQofot99CfIRFV3R2T
+         Ma4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758568633; x=1759173433;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=m2XqxnGjrspvC9W/YBnJP5cm4TXFPvfZMqevIq9yP3I=;
+        b=jc2eDIX/0bJyNYfyy4c5SiMZocaD+WPSy4i+z6gsiNemyEqPj6tyd7juVZsGVjQ7JK
+         zcrpLsyr4UGvUsJ/Cjdre/fZJZx/kizXaeCqVuq7tpGrjGbKEA0j2pGgRCmp8jbp+y5j
+         3NDrOihJwgjRntYdrBRLOJNhfZcLsW28IJfIr7p+e074ee2iiM6ecoMSnfPx9Vv9ldVh
+         +7m7WrNvmEW0kBh71txROhjvDhZZtjpusiAQumzSr5PdEPRbCO3ZQtuDBZsMLxPpMenq
+         Rl2w8LDSslMCmqZTLhg4jr9Bh0To3hcXpjIqCsIupbDFXKteEkxGvzuFIkscZcffENJg
+         kFTA==
+X-Gm-Message-State: AOJu0YziqGz0B45WEnx+lQwYQioh2l1ch/caim3tZVG8sKXYYU9BV/rN
+	DqwoRSwD2ZkyD0zNEVY4Os0JQaXcOw8Y3ycShY7wMo8W4jyd3Lq6urDi
+X-Gm-Gg: ASbGnctWoO4+pk2Ekdts+Tr0y+3/l/8hpCnox8acSdQawjadSIvt2LVoEquTqJkBLPW
+	Y6bphlPC9p3wvGNpajP8pDBxayb3xYZefhRe/az8WQO7m9ucL9od2IkOMbW696c+TBks8BLeG4v
+	cXcDIl/O7vAdEwnAAIUyfWoEDUWOAIH3fGETgpSmMD4hVppwt2wJ8QJWG+33dkIp+1oGON/jDlo
+	oWWNA0uAePi74a1CbjfosVBmAsZv3SMcT1K/YgVk17OTKLUPcFufEvohvv/gDcHHLVMBSxcYu60
+	qa/ZYwQRca9PNjSNjfOrkMIyEHbYVcKhmMXy/dihIuIg6x0q7VYDLa0Lyj12HIt+eG/8baJz6PP
+	HT+RzJwYM8GyOT0Z7e+Y1QMHsRw1YCjME
+X-Google-Smtp-Source: AGHT+IEuSH5XJ+D5YwRlblH9T/G/7S4Wi6hWseFIOkCh9Z1IBR0gj0LclHggWLTqsWZ28JfxMrWdkA==
+X-Received: by 2002:a5d:5f89:0:b0:3ee:11d1:29e5 with SMTP id ffacd0b85a97d-3ee8481fdf2mr11268989f8f.33.1758568632808;
+        Mon, 22 Sep 2025 12:17:12 -0700 (PDT)
+Received: from mail.gmail.com ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3f1549285c9sm13980017f8f.52.2025.09.22.12.17.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Sep 2025 12:17:12 -0700 (PDT)
+Date: Mon, 22 Sep 2025 19:23:14 +0000
+From: Anton Protopopov <a.s.protopopov@gmail.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Anton Protopopov <aspsk@isovalent.com>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Quentin Monnet <qmo@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>
+Subject: Re: [PATCH v2 bpf-next 03/13] bpf, x86: add new map type:
+ instructions array
+Message-ID: <aNGiIgC7+t+YIM8j@mail.gmail.com>
+References: <20250913193922.1910480-1-a.s.protopopov@gmail.com>
+ <20250913193922.1910480-4-a.s.protopopov@gmail.com>
+ <CAADnVQJsuxh5HrNKW_-_yuO5FqLQ8S4A4YN9bZfRHhO5pt5Dtg@mail.gmail.com>
+ <aNEnLZzOyEuNOtXu@mail.gmail.com>
+ <CAADnVQKK80Vvph7W7PSwG_GAPwXZO_wNYOKt6h9LHjHhPcjHPA@mail.gmail.com>
+ <aNGJT6IosAI7HP+B@mail.gmail.com>
+ <CAADnVQJ=qN+x9vTwU=yskvwoe7vAqe=c7U6nLaKmP1u+jn0s3w@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: [ANNOUNCEMENT] LPC 2025 BPF Track CFP
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: "open list:BPF [RINGBUF]" <bpf@vger.kernel.org>,
- Xdp <xdp-newbies@vger.kernel.org>
-References: <a37ee461-1df8-4cdb-afea-ac104d81eb4a@iogearbox.net>
- <CAADnVQJuK-Pe0Pt18O+iy-3XawRX_N7AULbo-t85tvk58zeEcA@mail.gmail.com>
-Content-Language: en-US
-From: Daniel Borkmann <daniel@iogearbox.net>
-Autocrypt: addr=daniel@iogearbox.net; keydata=
- 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
-In-Reply-To: <CAADnVQJuK-Pe0Pt18O+iy-3XawRX_N7AULbo-t85tvk58zeEcA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: Clear (ClamAV 1.0.9/27770/Mon Sep 22 10:26:19 2025)
+In-Reply-To: <CAADnVQJ=qN+x9vTwU=yskvwoe7vAqe=c7U6nLaKmP1u+jn0s3w@mail.gmail.com>
 
-On 9/9/25 6:37 PM, Alexei Starovoitov wrote:
-> On Wed, Jul 16, 2025 at 10:59 AM Daniel Borkmann <daniel@iogearbox.net> wrote:
->>
->> We are pleased to announce the Call for Proposals (CFP) for the BPF track at
->> the 2025 edition of the Linux Plumbers Conference (LPC), which is taking place
->> in Tokyo, Japan, from December 11th to 13th, 2025.
->>
->> Note that the conference is planned to be primarily in person. CFP submitters
->> should be able to give their presentation in person to minimize technical issues,
->> although presenting remotely will be possible as a last resort.
->>
->> We are seeking proposals of 30 minutes in length (including Q&A discussion).
->>
->> Please submit your proposals through the official LPC website at:
->>
->>        https://lpc.events/event/19/abstracts/
->>
->> Make sure to select "eBPF Track" in the track pull-down menu.
->>
->> Proposals must be submitted by September 29th, and submitters will be notified of
->> acceptance by October 6th. Final slides (as PDF) are due on the first day of the
->> conference.
+On 25/09/22 10:57AM, Alexei Starovoitov wrote:
+> On Mon, Sep 22, 2025 at 10:31 AM Anton Protopopov
+> <a.s.protopopov@gmail.com> wrote:
+> >
+> > On 25/09/22 09:16AM, Alexei Starovoitov wrote:
+> > > On Mon, Sep 22, 2025 at 3:32 AM Anton Protopopov
+> > > <a.s.protopopov@gmail.com> wrote:
+> > > > > > +int bpf_insn_array_init(struct bpf_map *map, const struct bpf_prog *prog)
+> > > > > > +{
+> > > > > > +       struct bpf_insn_array *insn_array = cast_insn_array(map);
+> > > > > > +       int i;
+> > > > > > +
+> > > > > > +       if (!valid_offsets(insn_array, prog))
+> > > > > > +               return -EINVAL;
+> > > > > > +
+> > > > > > +       /*
+> > > > > > +        * There can be only one program using the map
+> > > > > > +        */
+> > > > > > +       mutex_lock(&insn_array->state_mutex);
+> > > > > > +       if (insn_array->state != INSN_ARRAY_STATE_FREE) {
+> > > > > > +               mutex_unlock(&insn_array->state_mutex);
+> > > > > > +               return -EBUSY;
+> > > > > > +       }
+> > > > > > +       insn_array->state = INSN_ARRAY_STATE_INIT;
+> > > > > > +       mutex_unlock(&insn_array->state_mutex);
+> > > > >
+> > > > > only verifier calls this helpers, no?
+> > > > > Why all the mutexes here and below ?
+> > > > > All the mutexes is a big red flag to me.
+> > > > > Will stop any further comments here.
+> > > >
+> > > > Mutex came here from the future patch for static keys.
+> > > > I will see how to rewrite this with just an atomic state.
+> > >
+> > > I don't follow. Who will be calling them other than the verifier?
+> > > Some kfunc? I couldn't find that in the patch set.
+> > > If so, add synchronization logic in the patch set that
+> > > actually needs it. This one doesn't not. So don't add
+> > > any mutex or atomics here.
+> >
+> > The usage of this map is as follows:
+> >
+> >   1. A user creates it and fills in the values using the map_update_element (syscall)
+> >   2. Then the program is loaded
+> >
+> > The map <-> program is 1:1 relation, so I want to prevent users from
+> >
+> >   1. Updating the map after the program started loading
+> >   2. Allowing two programs to use the same map (while, say, loading simultaneously)
 > 
-> A reminder that deadline is approaching fast.
-> Please don't wait till the last day to submit a talk proposal.
+> Then the user space should freeze the map after updating and
+> before loading.
+> As far as 1-1 relation, we just landed exclusive map support
+> that ties a map to one specific program.
+> This mechanism can be used or 1-1 can be established by the kernel
+> internally.
 
-[ final reminder for the CFP deadline - 1 week left for submissions ]
+I've actually first did it via frozen, and then removed it after Andrii's
+comments. Will get it back and remove all other mutexes
+
+> > At the same time I want map to be reusable for the same program for the case
+> > when the program failed to load and is reloaded with the log buffer.
+> > So there should be some synchronisation mechanism.
+> >
+> > (In future patchset, the bpf(STATIC_KEY_UPDATE) syscall needs to execute. It
+> > needs to be sure that the map was successfully loaded with the program. But
+> > you're right that this doesn't make sense to leak part of this patch into this
+> > patchset.)
+> 
+> Even when that bit will be available it won't be modifying the map.
+> At best it will flip flag or bit whether the branch is nop or jmp.
+> I still don't see a need for mutexes.
+
+ok
