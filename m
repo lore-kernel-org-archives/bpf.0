@@ -1,191 +1,373 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E390F2882BD;
-	Mon, 22 Sep 2025 10:32:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA381287510
+	for <bpf@vger.kernel.org>; Mon, 22 Sep 2025 10:32:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758537135; cv=none; b=ICFHA9iywFcBfg+ReKfGMzK3StITNBVMj/mOhkeOBqeCFKYZE8ZocfvCACDztBsucTqeQ+MYc7kLWAwyRRgNb8sg2byDN2XNUdG0AYfSWZKW9QBN0nxTvwgI+RGG/J6bvkOBfWoXcj16cHBo0BbPjxiS/mef/rYRizGwqqhOgwI=
+	t=1758537158; cv=none; b=qbWBxbt27021ln6zdTGKOR680gHq5zonP7M3upSEnOrme08tm2Yoe/qSmv+LCxaizFtBRtTww0nJoCc94nCwUNwMXl2WuvRNIbaKzaJZoWFxHSQVzqyk0XjkjLlyjjgcfgyvgXi+IWZ5ygaVChe8D92zcVQaMce6FJVGlXnBTiY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758537135; c=relaxed/simple;
-	bh=B9O+nSY4hY0MXqA71yFEvWYGoOuvl+qfDkdqhXGasd8=;
+	s=arc-20240116; t=1758537158; c=relaxed/simple;
+	bh=dX/E4Kck3t8c6qyfR/Z5LFKUwf0aHU3NbPKIauNd9F8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=L6/tZ/k+hAFpaCDR9qpOTA/Z9bFhboYFHvcN0PBT3sGq4jzULPY9pi2BP8KUsUXya1zGW+gBUGFIEPMB/bBcV65Y5JHdcnNOVsidjVtV0woUIz4f8XfbIMB077k4vzybdruP77P1WaQEUGdMJvSldIDHOJJ07HcCwhGyyLbte7E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U6MHeGFd; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=HCFzTg8GBFA8hBvEuipE4tV8W9pPsiSE5lUcTu56YPDuCO7zoahtg33BWJRX/ByuYlRWXjAtQ7yESMR7tJ6zrS5faSEGdelhLbUdbua7yx0Nxovb0IkwtduuHlw/qbA8QXhRtyYb/fbwJaUvhURDVH/k7x4yQ4LkZhItgA6ymEM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NCEBsmGv; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U6MHeGFd"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A28AC4CEF0;
-	Mon, 22 Sep 2025 10:32:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758537134;
-	bh=B9O+nSY4hY0MXqA71yFEvWYGoOuvl+qfDkdqhXGasd8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=U6MHeGFde4gXsJlwWZ4GpD0ZI1gd7bvPC02oM40wF8aCOaZ3HCCBYsLUcuhPobnQh
-	 uaN8F8rAOJY7niRsT09DA/Wh19O+Jqrb+igkhP7SaJ69vvox8xcsap36g1nXKgmvTf
-	 3e/BiURFcvu9epA95EMsbLuJP1SBcSJouEdfqW7DvWiQKPj8e6XIfn4WUxa6WmShgU
-	 fj7hxR7YM71u3SSjQ+X4T51bN2mpi9VI36HHSEVzNgi6dhRdWMjPpl4/cza9p/7S9Q
-	 KLj6txjndlBUNnbeehkE84yNFY3i1DCMc9DQbkVDAt9gLw8uHGilGSbyb00svY9vzj
-	 s3c6Wqx/Rznpg==
-Date: Mon, 22 Sep 2025 12:32:12 +0200
-From: Lorenzo Bianconi <lorenzo@kernel.org>
-To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Cc: Donald Hunter <donald.hunter@gmail.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Tony Nguyen <anthony.l.nguyen@intel.com>,
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
-	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NCEBsmGv"
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-46d40c338b8so5719885e9.0
+        for <bpf@vger.kernel.org>; Mon, 22 Sep 2025 03:32:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1758537154; x=1759141954; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=c6GnOjHq4cn8eihHQCq8cdi4niKzKzQD9LrX0OY57rw=;
+        b=NCEBsmGvLcSzv3pkIEnKQ/5P8bfgnSIwgBzgOjmZC9G26jDjLV/i718fKTJFtSlC6z
+         Da7sgWZJtAMGokEb8pj+x1b7UjUSr3c0ypTNr5HTMphVKKFVyy9eW0+JpXpEoIZJSKQt
+         wWnXhn4IBR7nmcwaGjEGuAeWvaOJFDoAFfK1f4UcJHVBFb3xkTbkYT/9wn56Hu2ogrMa
+         X3mmQAbClXISSc40oVs6kNYww1/VVnXzqDAFQLpqBuAe5IlTfvv12Dx12M3oarIMgbqA
+         61p8gbPuERzU7vsQuQJ/sdazk1EdGqCbGIQ6YS2K2lBZ/GA0lYVGENMQsUYcDBEp69dB
+         GTDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758537154; x=1759141954;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=c6GnOjHq4cn8eihHQCq8cdi4niKzKzQD9LrX0OY57rw=;
+        b=TnJC/1A7nn6o996VL4eWiOLpIl0YK+JwDNQyeOdulkkRFs23puDkLKqz0bPQlMLB8d
+         GxvbOT2i96zrVQ4SwkFhoDvYj5uGq1B0Vk8DISo9h8paEDqwgA8qjZzJbvjU/PwFuXX5
+         6djl/rLUe1lBmxmV6a48bCki1DR3H7uDzyH5iwt4ZRNGxbVcrxvmhTQwCfewJVdhqOh8
+         tG0P0pNzvJ6juhC8BvjtzmGWVvhttg4lMfzCaaWEQ1aIqtqB7vOI2UP//pH2HoV0mDRd
+         x5UuHvl7iAk3FFWCph4NEvHbT5VdktXxP6gPLtXEZosKn4tOpJWd/x2OTY8raQZDFddL
+         aFIg==
+X-Gm-Message-State: AOJu0YyUTkftOPd9KPmuOq+6z0zuLheAo84MbJPoRyIzApqGMwJ7y3lz
+	34Q/Ux6dCYQdblmPzvO23/gq+CTUU7fbD2ZUXIeTnB/6uouwr3zfXClKhfqjUw==
+X-Gm-Gg: ASbGnctU4BdhkNjIhtQLgPqyLvKZEou1uuskjbDw8zQiWQGVzUeIEp5ZWRKT+3kc0vo
+	7bJkkTOFl+UP/uFKjVbru/LNL1F3c/4X1gd0eo2JZzNF3wmVYKMhqxWtSftzFrcBY8gGT9xz/Km
+	QnLXAKIt+vKpGsQCcsB0jHm/Y7qvgjLTCVPBObfuNmHwiiMYMlWMmFYWPc5h2o00p594suQzH5p
+	k5j2dxijS6opsnaxM86l/JUkYsQtaCVWFbfBau+IrF8e9lGpTIy+jQkNecIb/R+2k1F55hdTXSK
+	gQBRVNhs+GBtGxZy7Qo0JXGxRNa4xBSGfsZ4BTU8jRstO0cZ0Keuvff6dCAWYVRDbyKImQYnEyK
+	6Kd/PrR5/Wy6K8g3BeVNURaQzIpOyp3LO
+X-Google-Smtp-Source: AGHT+IFfocSYeTfqOrwavfsv+srD73ObrwRz3KskHo9VFKVZ4wJpgqOco/qpkTgllVedmWK3On2nfw==
+X-Received: by 2002:a05:600c:4451:b0:459:db69:56bd with SMTP id 5b1f17b1804b1-467ead682c5mr97908075e9.20.1758537153925;
+        Mon, 22 Sep 2025 03:32:33 -0700 (PDT)
+Received: from mail.gmail.com ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-464f4f9f4e4sm219976715e9.13.2025.09.22.03.32.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Sep 2025 03:32:33 -0700 (PDT)
+Date: Mon, 22 Sep 2025 10:38:37 +0000
+From: Anton Protopopov <a.s.protopopov@gmail.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	netdev@vger.kernel.org, bpf@vger.kernel.org,
-	intel-wired-lan@lists.osuosl.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH RFC bpf-next 4/6] net: ice: Add xmo_rx_checksum callback
-Message-ID: <aNElrLdHoh__L1xj@lore-desk>
-References: <20250920-xdp-meta-rxcksum-v1-0-35e76a8a84e7@kernel.org>
- <20250920-xdp-meta-rxcksum-v1-4-35e76a8a84e7@kernel.org>
- <aNEh5Q1c93J0p9TN@boxer>
+	Anton Protopopov <aspsk@isovalent.com>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Quentin Monnet <qmo@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>
+Subject: Re: [PATCH v2 bpf-next 03/13] bpf, x86: add new map type:
+ instructions array
+Message-ID: <aNEnLZzOyEuNOtXu@mail.gmail.com>
+References: <20250913193922.1910480-1-a.s.protopopov@gmail.com>
+ <20250913193922.1910480-4-a.s.protopopov@gmail.com>
+ <CAADnVQJsuxh5HrNKW_-_yuO5FqLQ8S4A4YN9bZfRHhO5pt5Dtg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="qM5OlCJeilOSMSrU"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <aNEh5Q1c93J0p9TN@boxer>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAADnVQJsuxh5HrNKW_-_yuO5FqLQ8S4A4YN9bZfRHhO5pt5Dtg@mail.gmail.com>
 
+On 25/09/19 05:30PM, Alexei Starovoitov wrote:
+> On Sat, Sep 13, 2025 at 12:33 PM Anton Protopopov
+> <a.s.protopopov@gmail.com> wrote:
+> > --- /dev/null
+> > +++ b/kernel/bpf/bpf_insn_array.c
+> > @@ -0,0 +1,336 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +
+> 
+> add copyright?
 
---qM5OlCJeilOSMSrU
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Yes, thanks!
 
-[...]
->=20
-> Hi Lorenzo,
->=20
-> any chance we could have some common code used both here and in
-> ice_rx_csum() ?
+> > +#include <linux/bpf.h>
+> > +#include <linux/sort.h>
+> > +
+> > +#define MAX_INSN_ARRAY_ENTRIES 256
+> > +
+> > +struct bpf_insn_array {
+> > +       struct bpf_map map;
+> > +       struct mutex state_mutex;
+> > +       int state;
+> > +       long *ips;
+> > +       DECLARE_FLEX_ARRAY(struct bpf_insn_ptr, ptrs);
+> > +};
+> > +
+> > +enum {
+> > +       INSN_ARRAY_STATE_FREE = 0,
+> > +       INSN_ARRAY_STATE_INIT,
+> > +       INSN_ARRAY_STATE_READY,
+> > +};
+> > +
+> > +#define cast_insn_array(MAP_PTR) \
+> > +       container_of(MAP_PTR, struct bpf_insn_array, map)
+> 
+> container_of((MAP_PTR)
+> checkpatch will be happier.
 
-Hi Maciej,
+Thanks, fixed
 
-ack, I will look into it.
-
-Regards,
-Lorenzo
-
->=20
+> > +
+> > +#define INSN_DELETED ((u32)-1)
+> > +
+> > +static inline u32 insn_array_alloc_size(u32 max_entries)
 > > +{
-> > +	const struct ice_xdp_buff *xdp_ext =3D (void *)ctx;
-> > +	const union ice_32b_rx_flex_desc *rx_desc =3D xdp_ext->eop_desc;
-> > +	u16 rx_status0, rx_status1, ptype =3D ice_get_ptype(rx_desc);
-> > +	struct libeth_rx_pt decoded =3D libie_rx_pt_parse(ptype);
-> > +	bool ipv4, ipv6;
+> > +       const u32 base_size = sizeof(struct bpf_insn_array);
+> > +       const u32 entry_size = sizeof(struct bpf_insn_ptr);
 > > +
-> > +	if (!libeth_rx_pt_has_checksum(xdp_ext->xdp_buff.rxq->dev, decoded))
-> > +		goto checksum_none;
-> > +
-> > +	rx_status0 =3D le16_to_cpu(rx_desc->wb.status_error0);
-> > +	rx_status1 =3D le16_to_cpu(rx_desc->wb.status_error1);
-> > +	if ((xdp_ext->pkt_ctx->rxq_flags & ICE_RX_FLAGS_RING_GCS) &&
-> > +	    rx_desc->wb.rxdid =3D=3D ICE_RXDID_FLEX_NIC &&
-> > +	    (decoded.inner_prot =3D=3D LIBETH_RX_PT_INNER_TCP ||
-> > +	     decoded.inner_prot =3D=3D LIBETH_RX_PT_INNER_UDP ||
-> > +	     decoded.inner_prot =3D=3D LIBETH_RX_PT_INNER_ICMP)) {
-> > +		const struct ice_32b_rx_flex_desc_nic *desc;
-> > +		u16 csum;
-> > +
-> > +		desc =3D (struct ice_32b_rx_flex_desc_nic *)rx_desc;
-> > +		*ip_summed =3D CHECKSUM_COMPLETE;
-> > +		csum =3D (__force u16)desc->raw_csum;
-> > +		*cksum_meta =3D csum_unfold((__force __sum16)swab16(csum));
-> > +		return 0;
-> > +	}
-> > +
-> > +	/* check if HW has decoded the packet and checksum */
-> > +	if (!(rx_status0 & BIT(ICE_RX_FLEX_DESC_STATUS0_L3L4P_S)))
-> > +		goto checksum_none;
-> > +
-> > +	ipv4 =3D libeth_rx_pt_get_ip_ver(decoded) =3D=3D LIBETH_RX_PT_OUTER_I=
-PV4;
-> > +	if (ipv4 && (rx_status0 & (BIT(ICE_RX_FLEX_DESC_STATUS0_XSUM_EIPE_S))=
-))
-> > +		goto checksum_none;
-> > +
-> > +	if (ipv4 && (rx_status0 & (BIT(ICE_RX_FLEX_DESC_STATUS0_XSUM_IPE_S))))
-> > +		goto checksum_none;
-> > +
-> > +	ipv6 =3D libeth_rx_pt_get_ip_ver(decoded) =3D=3D LIBETH_RX_PT_OUTER_I=
-PV6;
-> > +	if (ipv6 && (rx_status0 & (BIT(ICE_RX_FLEX_DESC_STATUS0_IPV6EXADD_S))=
-))
-> > +		goto checksum_none;
-> > +
-> > +	/* check for L4 errors and handle packets that were not able to be
-> > +	 * checksummed due to arrival speed
-> > +	 */
-> > +	if (rx_status0 & BIT(ICE_RX_FLEX_DESC_STATUS0_XSUM_L4E_S))
-> > +		goto checksum_none;
-> > +
-> > +	/* check for outer UDP checksum error in tunneled packets */
-> > +	if ((rx_status1 & BIT(ICE_RX_FLEX_DESC_STATUS1_NAT_S)) &&
-> > +	    (rx_status0 & BIT(ICE_RX_FLEX_DESC_STATUS0_XSUM_EUDPE_S)))
-> > +		goto checksum_none;
-> > +
-> > +	/* If there is an outer header present that might contain a checksum
-> > +	 * we need to bump the checksum level by 1 to reflect the fact that
-> > +	 * we are indicating we validated the inner checksum.
-> > +	 */
-> > +	if (decoded.tunnel_type >=3D LIBETH_RX_PT_TUNNEL_IP_GRENAT)
-> > +		*cksum_meta =3D 1;
-> > +
-> > +	*ip_summed =3D CHECKSUM_UNNECESSARY;
-> > +	return 0;
-> > +
-> > +checksum_none:
-> > +	*ip_summed =3D CHECKSUM_NONE;
-> > +	*cksum_meta =3D 0;
-> > +
-> > +	return 0;
+> > +       return base_size + entry_size * max_entries;
 > > +}
 > > +
-> >  /**
-> >   * ice_xdp_rx_vlan_tag - VLAN tag XDP hint handler
-> >   * @ctx: XDP buff pointer
-> > @@ -584,4 +665,5 @@ const struct xdp_metadata_ops ice_xdp_md_ops =3D {
-> >  	.xmo_rx_timestamp		=3D ice_xdp_rx_hw_ts,
-> >  	.xmo_rx_hash			=3D ice_xdp_rx_hash,
-> >  	.xmo_rx_vlan_tag		=3D ice_xdp_rx_vlan_tag,
-> > +	.xmo_rx_checksum		=3D ice_xdp_rx_checksum,
-> >  };
-> >=20
-> > --=20
-> > 2.51.0
-> >=20
-> >=20
+> > +static int insn_array_alloc_check(union bpf_attr *attr)
+> > +{
+> > +       if (attr->max_entries == 0 ||
+> > +           attr->key_size != 4 ||
+> > +           attr->value_size != 8 ||
+> > +           attr->map_flags != 0)
+> > +               return -EINVAL;
+> 
+> Use single line or two, instead of 4.
 
---qM5OlCJeilOSMSrU
-Content-Type: application/pgp-signature; name=signature.asc
+Done
 
------BEGIN PGP SIGNATURE-----
+> > +
+> > +       if (attr->max_entries > MAX_INSN_ARRAY_ENTRIES)
+> > +               return -E2BIG;
+> > +
+> > +       return 0;
+> > +}
+> > +
+> > +static void insn_array_free(struct bpf_map *map)
+> > +{
+> > +       struct bpf_insn_array *insn_array = cast_insn_array(map);
+> > +
+> > +       kfree(insn_array->ips);
+> > +       bpf_map_area_free(insn_array);
+> > +}
+> > +
+> > +static struct bpf_map *insn_array_alloc(union bpf_attr *attr)
+> > +{
+> > +       u64 size = insn_array_alloc_size(attr->max_entries);
+> > +       struct bpf_insn_array *insn_array;
+> > +
+> > +       insn_array = bpf_map_area_alloc(size, NUMA_NO_NODE);
+> > +       if (!insn_array)
+> > +               return ERR_PTR(-ENOMEM);
+> > +
+> > +       insn_array->ips = kcalloc(attr->max_entries, sizeof(long), GFP_KERNEL);
+> > +       if (!insn_array->ips) {
+> > +               insn_array_free(&insn_array->map);
+> > +               return ERR_PTR(-ENOMEM);
+> > +       }
+> > +
+> > +       bpf_map_init_from_attr(&insn_array->map, attr);
+> > +
+> > +       mutex_init(&insn_array->state_mutex);
+> > +       insn_array->state = INSN_ARRAY_STATE_FREE;
+> > +
+> > +       return &insn_array->map;
+> > +}
+> > +
+> > +static int insn_array_get_next_key(struct bpf_map *map, void *key, void *next_key)
+> > +{
+> > +       struct bpf_insn_array *insn_array = cast_insn_array(map);
+> > +       u32 index = key ? *(u32 *)key : U32_MAX;
+> > +       u32 *next = (u32 *)next_key;
+> > +
+> > +       if (index >= insn_array->map.max_entries) {
+> > +               *next = 0;
+> > +               return 0;
+> > +       }
+> > +
+> > +       if (index == insn_array->map.max_entries - 1)
+> > +               return -ENOENT;
+> > +
+> > +       *next = index + 1;
+> > +       return 0;
+> > +}
+> 
+> Full copy paste of array_map_get_next_key() is a bit too much.
+> Pls refactor array_map_get_next_key() to avoid casting
+> to struct bpf_array, then such a helper can work for both maps.
 
-iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCaNElrAAKCRA6cBh0uS2t
-rFcoAP9aT3PFRGa6yS1AxMmdlGIGO/DoAgJ7vQ4PFQYAk4xNDQEAtBXT+YT8A6UI
-p8pZCyMVt0y6JOY5aiUWR5eJIMOO9Ak=
-=bSu6
------END PGP SIGNATURE-----
+Ok, thank, will do.
 
---qM5OlCJeilOSMSrU--
+> > +
+> > +static void *insn_array_lookup_elem(struct bpf_map *map, void *key)
+> > +{
+> > +       struct bpf_insn_array *insn_array = cast_insn_array(map);
+> > +       u32 index = *(u32 *)key;
+> > +
+> > +       if (unlikely(index >= insn_array->map.max_entries))
+> > +               return NULL;
+> > +
+> > +       return &insn_array->ptrs[index].user_value;
+> > +}
+> > +
+> > +static long insn_array_update_elem(struct bpf_map *map, void *key, void *value, u64 map_flags)
+> > +{
+> > +       struct bpf_insn_array *insn_array = cast_insn_array(map);
+> > +       u32 index = *(u32 *)key;
+> > +       struct bpf_insn_array_value val = {};
+> > +       int err = 0;
+> > +
+> > +       if (unlikely((map_flags & ~BPF_F_LOCK) > BPF_EXIST))
+> > +               return -EINVAL;
+> 
+> copy paste gone wrong. BPF_F_LOCK is not supported here.
+
+thanks, removed
+
+> > +
+> > +       if (unlikely(index >= insn_array->map.max_entries))
+> > +               return -E2BIG;
+> > +
+> > +       if (unlikely(map_flags & BPF_NOEXIST))
+> > +               return -EEXIST;
+> > +
+> > +       /* No updates for maps in use */
+> > +       if (!mutex_trylock(&insn_array->state_mutex))
+> > +               return -EBUSY;
+> 
+> trylock ?!
+> 
+> If I'm reading it correctly
+> check_map_func_compatibility() prevents usage of this helper
+> from the prog, so this is syscall only,
+> but trylock?!
+
+See the comment below.
+
+> > +
+> > +       if (insn_array->state != INSN_ARRAY_STATE_FREE) {
+> > +               err = -EBUSY;
+> > +               goto unlock;
+> > +       }
+> > +
+> > +       copy_map_value(map, &val, value);
+> > +       if (val.jitted_off || val.xlated_off == INSN_DELETED) {
+> > +               err = -EINVAL;
+> > +               goto unlock;
+> > +       }
+> > +
+> > +       insn_array->ptrs[index].orig_xlated_off = val.xlated_off;
+> > +       insn_array->ptrs[index].user_value.xlated_off = val.xlated_off;
+> > +
+> > +unlock:
+> > +       mutex_unlock(&insn_array->state_mutex);
+> > +       return err;
+> > +}
+> > +
+> > +static long insn_array_delete_elem(struct bpf_map *map, void *key)
+> > +{
+> > +       return -EINVAL;
+> > +}
+> > +
+> > +static int insn_array_check_btf(const struct bpf_map *map,
+> > +                             const struct btf *btf,
+> > +                             const struct btf_type *key_type,
+> > +                             const struct btf_type *value_type)
+> > +{
+> > +       if (!btf_type_is_i32(key_type))
+> > +               return -EINVAL;
+> > +
+> > +       if (!btf_type_is_i64(value_type))
+> > +               return -EINVAL;
+> > +
+> > +       return 0;
+> > +}
+> > +
+> > +static u64 insn_array_mem_usage(const struct bpf_map *map)
+> > +{
+> > +       u64 extra_size = 0;
+> > +
+> > +       extra_size += sizeof(long) * map->max_entries; /* insn_array->ips */
+> > +
+> > +       return insn_array_alloc_size(map->max_entries) + extra_size;
+> > +}
+> > +
+> > +BTF_ID_LIST_SINGLE(insn_array_btf_ids, struct, bpf_insn_array)
+> > +
+> > +const struct bpf_map_ops insn_array_map_ops = {
+> > +       .map_alloc_check = insn_array_alloc_check,
+> > +       .map_alloc = insn_array_alloc,
+> > +       .map_free = insn_array_free,
+> > +       .map_get_next_key = insn_array_get_next_key,
+> > +       .map_lookup_elem = insn_array_lookup_elem,
+> > +       .map_update_elem = insn_array_update_elem,
+> > +       .map_delete_elem = insn_array_delete_elem,
+> > +       .map_check_btf = insn_array_check_btf,
+> > +       .map_mem_usage = insn_array_mem_usage,
+> > +       .map_btf_id = &insn_array_btf_ids[0],
+> > +};
+> > +
+> > +static bool is_insn_array(const struct bpf_map *map)
+> > +{
+> > +       return map->map_type == BPF_MAP_TYPE_INSN_ARRAY;
+> > +}
+> > +
+> > +static inline bool valid_offsets(const struct bpf_insn_array *insn_array,
+> > +                                const struct bpf_prog *prog)
+> > +{
+> > +       u32 off;
+> > +       int i;
+> > +
+> > +       for (i = 0; i < insn_array->map.max_entries; i++) {
+> > +               off = insn_array->ptrs[i].orig_xlated_off;
+> > +
+> > +               if (off >= prog->len)
+> > +                       return false;
+> > +
+> > +               if (off > 0) {
+> > +                       if (prog->insnsi[off-1].code == (BPF_LD | BPF_DW | BPF_IMM))
+> > +                               return false;
+> > +               }
+> > +       }
+> > +
+> > +       return true;
+> > +}
+> > +
+> > +int bpf_insn_array_init(struct bpf_map *map, const struct bpf_prog *prog)
+> > +{
+> > +       struct bpf_insn_array *insn_array = cast_insn_array(map);
+> > +       int i;
+> > +
+> > +       if (!valid_offsets(insn_array, prog))
+> > +               return -EINVAL;
+> > +
+> > +       /*
+> > +        * There can be only one program using the map
+> > +        */
+> > +       mutex_lock(&insn_array->state_mutex);
+> > +       if (insn_array->state != INSN_ARRAY_STATE_FREE) {
+> > +               mutex_unlock(&insn_array->state_mutex);
+> > +               return -EBUSY;
+> > +       }
+> > +       insn_array->state = INSN_ARRAY_STATE_INIT;
+> > +       mutex_unlock(&insn_array->state_mutex);
+> 
+> only verifier calls this helpers, no?
+> Why all the mutexes here and below ?
+> All the mutexes is a big red flag to me.
+> Will stop any further comments here.
+
+Mutex came here from the future patch for static keys.
+I will see how to rewrite this with just an atomic state.
+(Try lock came from fixing some robot report which I struggle to find now...)
