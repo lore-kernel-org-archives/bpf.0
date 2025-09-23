@@ -1,45 +1,46 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D939F266B46;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2B5F267B02;
 	Tue, 23 Sep 2025 14:21:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758637302; cv=none; b=Y7x/ub5EHZFTBBlJDea8Gvz45Xha8OVumtBM0RbPymNK0BfbN2NMd/jlDY54K9xuV3NEvw8U1/qyws4Z2FUAW9smtsRNuTGF8XYrO83kdHcHQW4XhO4v1lnfXbU3xjtXGu5q3qbIfsFkHmTx41IP8JTR24dCLg6r3vP7jDA7Hc0=
+	t=1758637303; cv=none; b=qxKshdvlg7CqLwJ8JxN8TOKRGlbEegYgItzmfSaR/8xHEQ/owY2nXbQxc3zJtSc06LFSXwkyQvO+RMPBduo/2igqkIHt9Ea4a+rExswRafhiBERWZRrZsw8WNMFLpgfA3ZZLuMMx6T/UmToe2cQLVvP1aP1rwpG2FnREWFyWRNU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758637302; c=relaxed/simple;
-	bh=Ko1cw61hU1PAAj+U3rTa7B+e/zegi9QjEUcXug5eMKI=;
+	s=arc-20240116; t=1758637303; c=relaxed/simple;
+	bh=egf5O4384GKLj9kiAAW/t23M4cxF514rK1fhEiB3mLc=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=WGGQ3y4oANLWypWuZ/U/5yc9gQqSWArZJWff86+TgGMtEy1SQ5TFEhtw5wZhZXpfWYmoBz8WoFlh6Zie7GtPfn/jplFVNqm2QSitj2phZdsZ5aDTK4enfekaDq2N91gIHDzgfFPybImbUk7RrX2W+XW30RkCFHSks4qp8sjO1p0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NyaO48o5; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=p1Ck8vq5biFk/JSsjBWFFnQoTldtcXVEq2uDoa6AUn2BEoLFMmJw1rTkv/6NGkaKQYlURzHxFGG783NEyub24za4sAAWr+1llzsx1yZWeywPWi7uCczyCpLBXw5MsTK8MPG63oeI17Q70wFhlErQukN3WvFaBDF0fsvM4EzE6go=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DJL4QXit; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NyaO48o5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6B4AC4AF09;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DJL4QXit"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE43DC19421;
 	Tue, 23 Sep 2025 14:21:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1758637302;
-	bh=Ko1cw61hU1PAAj+U3rTa7B+e/zegi9QjEUcXug5eMKI=;
+	bh=egf5O4384GKLj9kiAAW/t23M4cxF514rK1fhEiB3mLc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=NyaO48o57k4+Agc6ginPdjeD+MQkDVMSHNF5EBoDbN2LWLdOFpicNnOhl3z2XmnbZ
-	 iyNcNLewqEpPhAIop/a4WEmikqLPghjJe0N7IWk7uinvUCWx73uUTGTwu40OcB1bOX
-	 nB9wNhK744xCd1DcblpVxN6OLfyX2bREK1ZBUCWxHsiDS88K9SP381Zv4ly+uxWl5Z
-	 Xd4uJZ6Npx2ag43HqKGmq4NxUTHJn2csgmS/Vy0PPcqoM0Ib+1Ugq0+TX00RFKECIi
-	 5zr1oT2G9YKT2p/0lbUzm5s3KjgjSSCf6yvKWpv/pnLazKNYilkila9pbUA3/zpVTZ
-	 P46muwfMqjFRg==
+	b=DJL4QXit1l6Kem2Ql0r3Nj2CJr1/6HBINjQfcxUij3p95z5OeQPdF8L4ApeXNXmwt
+	 oihJA1dQTbk4l1fBCHQnpjaXYW4A7RC0BF/JnJexJ81rP3iivrs8zKxAHyCtw0I/mb
+	 IaXv2HmiQ7uToiHvAaPRd4fOgRbiq+scr7Rz1OWXYq0aoBjaCrdG9LELiMXhB8Wd9t
+	 SCjsAjP+zhtRDA14e9SC9W9wQcFfniq+vUrUSLGl+TMzgoUf0O40V8PwN5yQi4lGVI
+	 oqIIdvHezL9Kf4l2dpLBR2zHw2N66DFUUc3IDCWmpkAldbUcDWKaPmwAd0b/Wu8Ak7
+	 T5ALFd/ruQh4Q==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 0A17BCE172F; Tue, 23 Sep 2025 07:20:38 -0700 (PDT)
+	id D9E99CE1427; Tue, 23 Sep 2025 07:20:37 -0700 (PDT)
 From: "Paul E. McKenney" <paulmck@kernel.org>
 To: rcu@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org,
 	kernel-team@meta.com,
 	rostedt@goodmis.org,
 	"Paul E. McKenney" <paulmck@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
 	bpf@vger.kernel.org
-Subject: [PATCH 27/34] srcu: Make DEFINE_SRCU_FAST() available to modules
-Date: Tue, 23 Sep 2025 07:20:29 -0700
-Message-Id: <20250923142036.112290-27-paulmck@kernel.org>
+Subject: [PATCH 14/34] rcu: Move rcu_tasks_trace_srcu_struct out of #ifdef CONFIG_TASKS_RCU_GENERIC
+Date: Tue, 23 Sep 2025 07:20:16 -0700
+Message-Id: <20250923142036.112290-14-paulmck@kernel.org>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <580ea2de-799a-4ddc-bde9-c16f3fb1e6e7@paulmck-laptop>
 References: <580ea2de-799a-4ddc-bde9-c16f3fb1e6e7@paulmck-laptop>
@@ -51,153 +52,87 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This commit makes DEFINE_SRCU_FAST() available to modules.  The trick
-is that DEFINE_SRCU_FAST() does not allocate the per-CPU data structure
-when used within a module (by design), which means that it is not possible
-to compile-time-initialize any of the fields in this structure, including
-in particular the ->srcu_reader_flavor field.
-
-This commit therefore creates an ->srcu_reader_flavor field in the
-srcu_struct structure, adds arguments to the DEFINE_SRCU()-related
-macros to initialize this new field, and extending the checks in the
-__srcu_check_read_flavor() function to include this new field.
+Moving rcu_tasks_trace_srcu_struct out the CONFIG_TASKS_RCU_GENERIC
+removed, and also permits the CONFIG_TASKS_TRACE_RCU Kconfig option to
+stop enabling the CONFIG_TASKS_RCU_GENERIC Kconfig option.  This commit
+therefore makes it so.
 
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: Andrii Nakryiko <andrii@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
 Cc: <bpf@vger.kernel.org>
 ---
- include/linux/notifier.h |  2 +-
- include/linux/srcutiny.h | 10 ++++++----
- include/linux/srcutree.h | 24 +++++++++++++-----------
- kernel/rcu/srcutree.c    |  3 +++
- 4 files changed, 23 insertions(+), 16 deletions(-)
+ kernel/rcu/Kconfig |  2 +-
+ kernel/rcu/tasks.h | 38 +++++++++++++-------------------------
+ 2 files changed, 14 insertions(+), 26 deletions(-)
 
-diff --git a/include/linux/notifier.h b/include/linux/notifier.h
-index b42e6473496882..01b6c9d9956f90 100644
---- a/include/linux/notifier.h
-+++ b/include/linux/notifier.h
-@@ -109,7 +109,7 @@ extern void srcu_init_notifier_head(struct srcu_notifier_head *nh);
- 		.mutex = __MUTEX_INITIALIZER(name.mutex),	\
- 		.head = NULL,					\
- 		.srcuu = __SRCU_USAGE_INIT(name.srcuu),		\
--		.srcu = __SRCU_STRUCT_INIT(name.srcu, name.srcuu, pcpu), \
-+		.srcu = __SRCU_STRUCT_INIT(name.srcu, name.srcuu, pcpu, 0), \
- 	}
+diff --git a/kernel/rcu/Kconfig b/kernel/rcu/Kconfig
+index ceaf6594f634cd..eeaa1cd47c6c4c 100644
+--- a/kernel/rcu/Kconfig
++++ b/kernel/rcu/Kconfig
+@@ -82,7 +82,7 @@ config NEED_SRCU_NMI_SAFE
+ 	def_bool HAVE_NMI && !ARCH_HAS_NMI_SAFE_THIS_CPU_OPS && !TINY_SRCU
  
- #define ATOMIC_NOTIFIER_HEAD(name)				\
-diff --git a/include/linux/srcutiny.h b/include/linux/srcutiny.h
-index 941e8210479607..b5f62259d56fb1 100644
---- a/include/linux/srcutiny.h
-+++ b/include/linux/srcutiny.h
-@@ -31,7 +31,7 @@ struct srcu_struct {
+ config TASKS_RCU_GENERIC
+-	def_bool TASKS_RCU || TASKS_RUDE_RCU || TASKS_TRACE_RCU
++	def_bool TASKS_RCU || TASKS_RUDE_RCU
+ 	help
+ 	  This option enables generic infrastructure code supporting
+ 	  task-based RCU implementations.  Not for manual selection.
+diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
+index e70609c85ece5d..a3c16e65e16812 100644
+--- a/kernel/rcu/tasks.h
++++ b/kernel/rcu/tasks.h
+@@ -1444,31 +1444,6 @@ EXPORT_SYMBOL_GPL(rcu_tasks_rude_get_gp_data);
  
- void srcu_drive_gp(struct work_struct *wp);
+ #endif /* #ifdef CONFIG_TASKS_RUDE_RCU */
  
--#define __SRCU_STRUCT_INIT(name, __ignored, ___ignored)			\
-+#define __SRCU_STRUCT_INIT(name, __ignored, ___ignored, ____ignored)	\
- {									\
- 	.srcu_wq = __SWAIT_QUEUE_HEAD_INITIALIZER(name.srcu_wq),	\
- 	.srcu_cb_tail = &name.srcu_cb_head,				\
-@@ -44,10 +44,12 @@ void srcu_drive_gp(struct work_struct *wp);
-  * Tree SRCU, which needs some per-CPU data.
-  */
- #define DEFINE_SRCU(name) \
--	struct srcu_struct name = __SRCU_STRUCT_INIT(name, name, name)
--#define DEFINE_SRCU_FAST(name) DEFINE_SRCU(name)
-+	struct srcu_struct name = __SRCU_STRUCT_INIT(name, name, name, name)
- #define DEFINE_STATIC_SRCU(name) \
--	static struct srcu_struct name = __SRCU_STRUCT_INIT(name, name, name)
-+	static struct srcu_struct name = __SRCU_STRUCT_INIT(name, name, name, name)
-+#define DEFINE_SRCU_FAST(name) DEFINE_SRCU(name)
-+#define DEFINE_STATIC_SRCU_FAST(name) \
-+	static struct srcu_struct name = __SRCU_STRUCT_INIT(name, name, name, name)
- 
- // Dummy structure for srcu_notifier_head.
- struct srcu_usage { };
-diff --git a/include/linux/srcutree.h b/include/linux/srcutree.h
-index 4a5d1c0e7db361..05400f70baa40a 100644
---- a/include/linux/srcutree.h
-+++ b/include/linux/srcutree.h
-@@ -104,6 +104,7 @@ struct srcu_usage {
- struct srcu_struct {
- 	struct srcu_ctr __percpu *srcu_ctrp;
- 	struct srcu_data __percpu *sda;		/* Per-CPU srcu_data array. */
-+	u8 srcu_reader_flavor;
- 	struct lockdep_map dep_map;
- 	struct srcu_usage *srcu_sup;		/* Update-side data. */
- };
-@@ -162,20 +163,21 @@ struct srcu_struct {
- 	.work = __DELAYED_WORK_INITIALIZER(name.work, NULL, 0),					\
- }
- 
--#define __SRCU_STRUCT_INIT_COMMON(name, usage_name)						\
-+#define __SRCU_STRUCT_INIT_COMMON(name, usage_name, fast)					\
- 	.srcu_sup = &usage_name,								\
-+	.srcu_reader_flavor = fast,								\
- 	__SRCU_DEP_MAP_INIT(name)
- 
--#define __SRCU_STRUCT_INIT_MODULE(name, usage_name)						\
-+#define __SRCU_STRUCT_INIT_MODULE(name, usage_name, fast)					\
- {												\
--	__SRCU_STRUCT_INIT_COMMON(name, usage_name)						\
-+	__SRCU_STRUCT_INIT_COMMON(name, usage_name, fast)					\
- }
- 
--#define __SRCU_STRUCT_INIT(name, usage_name, pcpu_name)						\
-+#define __SRCU_STRUCT_INIT(name, usage_name, pcpu_name, fast)					\
- {												\
- 	.sda = &pcpu_name,									\
- 	.srcu_ctrp = &pcpu_name.srcu_ctrs[0],							\
--	__SRCU_STRUCT_INIT_COMMON(name, usage_name)						\
-+	__SRCU_STRUCT_INIT_COMMON(name, usage_name, fast)						\
- }
- 
- /*
-@@ -207,22 +209,22 @@ struct srcu_struct {
- #ifdef MODULE
- # define __DEFINE_SRCU(name, fast, is_static)							\
- 	static struct srcu_usage name##_srcu_usage = __SRCU_USAGE_INIT(name##_srcu_usage);	\
--	is_static struct srcu_struct name = __SRCU_STRUCT_INIT_MODULE(name, name##_srcu_usage);	\
-+	is_static struct srcu_struct name = __SRCU_STRUCT_INIT_MODULE(name, name##_srcu_usage,	\
-+								      fast);			\
- 	extern struct srcu_struct * const __srcu_struct_##name;					\
- 	struct srcu_struct * const __srcu_struct_##name						\
- 		__section("___srcu_struct_ptrs") = &name
- #else
- # define __DEFINE_SRCU(name, fast, is_static)							\
--	static DEFINE_PER_CPU(struct srcu_data, name##_srcu_data) = {				\
--		.srcu_reader_flavor = fast,							\
--	};											\
-+	static DEFINE_PER_CPU(struct srcu_data, name##_srcu_data);				\
- 	static struct srcu_usage name##_srcu_usage = __SRCU_USAGE_INIT(name##_srcu_usage);	\
- 	is_static struct srcu_struct name =							\
--		__SRCU_STRUCT_INIT(name, name##_srcu_usage, name##_srcu_data)
--#define DEFINE_SRCU_FAST(name)		__DEFINE_SRCU(name, SRCU_READ_FLAVOR_FAST, /* not static */)
-+		__SRCU_STRUCT_INIT(name, name##_srcu_usage, name##_srcu_data, fast)
- #endif
- #define DEFINE_SRCU(name)		__DEFINE_SRCU(name, 0, /* not static */)
- #define DEFINE_STATIC_SRCU(name)	__DEFINE_SRCU(name, 0, static)
-+#define DEFINE_SRCU_FAST(name)		__DEFINE_SRCU(name, SRCU_READ_FLAVOR_FAST, /* not static */)
-+#define DEFINE_STATIC_SRCU_FAST(name)	__DEFINE_SRCU(name, SRCU_READ_FLAVOR_FAST, static)
- 
- int __srcu_read_lock(struct srcu_struct *ssp) __acquires(ssp);
- void synchronize_srcu_expedited(struct srcu_struct *ssp);
-diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
-index f2f11492e6936e..7c8b39d4dd3162 100644
---- a/kernel/rcu/srcutree.c
-+++ b/kernel/rcu/srcutree.c
-@@ -734,6 +734,9 @@ void __srcu_check_read_flavor(struct srcu_struct *ssp, int read_flavor)
- 
- 	sdp = raw_cpu_ptr(ssp->sda);
- 	old_read_flavor = READ_ONCE(sdp->srcu_reader_flavor);
-+	WARN_ON_ONCE(ssp->srcu_reader_flavor && read_flavor != ssp->srcu_reader_flavor);
-+	WARN_ON_ONCE(old_read_flavor && ssp->srcu_reader_flavor &&
-+		     old_read_flavor != ssp->srcu_reader_flavor);
- 	if (!old_read_flavor) {
- 		old_read_flavor = cmpxchg(&sdp->srcu_reader_flavor, 0, read_flavor);
- 		if (!old_read_flavor)
+-////////////////////////////////////////////////////////////////////////
+-//
+-// Tracing variant of Tasks RCU.  This variant is designed to be used
+-// to protect tracing hooks, including those of BPF.  This variant
+-// is implemented via a straightforward mapping onto SRCU-fast.
+-
+-#ifdef CONFIG_TASKS_TRACE_RCU
+-
+-DEFINE_SRCU(rcu_tasks_trace_srcu_struct);
+-EXPORT_SYMBOL_GPL(rcu_tasks_trace_srcu_struct);
+-
+-// Placeholder to suppress build errors through transition period.
+-void __init rcu_tasks_trace_suppress_unused(void)
+-{
+-	show_rcu_tasks_generic_gp_kthread(NULL, NULL);
+-	rcu_spawn_tasks_kthread_generic(NULL);
+-	synchronize_rcu_tasks_generic(NULL);
+-	call_rcu_tasks_generic(NULL, NULL, NULL);
+-	call_rcu_tasks_iw_wakeup(NULL);
+-	cblist_init_generic(NULL);
+-	rcu_tasks_torture_stats_print_generic(NULL, NULL, NULL, NULL);
+-}
+-
+-#endif /* #else #ifdef CONFIG_TASKS_TRACE_RCU */
+-
+ #ifndef CONFIG_TINY_RCU
+ void show_rcu_tasks_gp_kthreads(void)
+ {
+@@ -1622,3 +1597,16 @@ core_initcall(rcu_init_tasks_generic);
+ #else /* #ifdef CONFIG_TASKS_RCU_GENERIC */
+ static inline void rcu_tasks_bootup_oddness(void) {}
+ #endif /* #else #ifdef CONFIG_TASKS_RCU_GENERIC */
++
++#ifdef CONFIG_TASKS_TRACE_RCU
++
++////////////////////////////////////////////////////////////////////////
++//
++// Tracing variant of Tasks RCU.  This variant is designed to be used
++// to protect tracing hooks, including those of BPF.  This variant
++// is implemented via a straightforward mapping onto SRCU-fast.
++
++DEFINE_SRCU(rcu_tasks_trace_srcu_struct);
++EXPORT_SYMBOL_GPL(rcu_tasks_trace_srcu_struct);
++
++#endif /* #else #ifdef CONFIG_TASKS_TRACE_RCU */
 -- 
 2.40.1
 
