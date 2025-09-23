@@ -1,78 +1,87 @@
-Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57904258CF9
-	for <bpf@vger.kernel.org>; Tue, 23 Sep 2025 09:52:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A431B13B797;
+	Tue, 23 Sep 2025 10:01:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758621144; cv=none; b=g2+Ah+/KWvUGswnXvyP8GpaLWRTkB6CdLyOUK88OxFmZJfgDnr0cBUo3v9tsr9ycHgdYI+UuXwh4wc3k7Mh4Ynu/cbAdvKDvD5ZS7FRIuRL2MTdn+Hznknu2KXrb6hpaOZMISFrcoXQE8p7sWzdIufx+yLzQ3scjOFN8XDpb5bQ=
+	t=1758621710; cv=none; b=BuhvGye+aSaosVYTK/in0e5FSv8ToBwuEo/y1epvP6XtN0w0HOfkqqymoQih9fUCBgYfxHJUOc6IdT+h+9HPskt2meeE3uKRiOSsHdg6dPSTKke2kQqbGp7/qGStpl0e14IgiB6LvBRYWCdMYFPeD75strelpFh5V6HeTSYIHOo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758621144; c=relaxed/simple;
-	bh=E110EFHk2snli7qzu3U7zBFvZi8n/Y++QmIK2DM15hY=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=ROj3QHu93NFTSuJ6fdRO9W2UbTJezAbFsTIRyTI1WaI1eBxSaSxrSxVRht6U5Bh7Wbs0d5ALkUWPomdWeHJx1bbfu6ok+2j2+A/N6VjKWZzzeWYqcJG5ODrkLQQQ3Ia+6+go8sAm3xNLEhq2Ns4s5Wv35hvEFie/duc9QWIPXBc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WSCbgL/Q; arc=none smtp.client-ip=209.85.210.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1758621710; c=relaxed/simple;
+	bh=H66pboQoJo8IfGy7SEDJFTFcAXDk7qmARTyg7LlRVCg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nRfJgmRCBldGsakVxZdXVN965zt5AySm+gInG92z9uN8tDP94y/rohzOaxs0Z0AHDpOkVJUuaX6S9Y3BnrHdTt5MoBEyRI0/ACP/kz9vKif6anr/cD8I3rv1VjJuUsXSDtLINXRN6k1wv463V+p1xUYq8NPG6ZJtIgYjAd7QnK0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=cwlNGojy; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WSCbgL/Q"
-Received: by mail-ot1-f47.google.com with SMTP id 46e09a7af769-7939ac99c29so255638a34.0
-        for <bpf@vger.kernel.org>; Tue, 23 Sep 2025 02:52:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1758621142; x=1759225942; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=E110EFHk2snli7qzu3U7zBFvZi8n/Y++QmIK2DM15hY=;
-        b=WSCbgL/Q4mvgf43RcQHJriAs57wJ4dXfSwGd3nK2madHVeagu/hgpH+j4Pm6gZLZhH
-         gIIiacxIezSN/ItXCeICA5xTkoQLIwyyefsqtBmWtxmcRnp69duDL4uWvMh/jrJJbzu/
-         J2N7cfjMKp5iWM9iYfIKqUkNyDJz4KQswXY/PWjd7/Isv0A9/KfyNmRTVyzag7SpF7FT
-         luTZlpiUp6I8i7TDa+Qcw3A9d5NjsJxo8zwG5nru7mRIBHR4H+ghgaAQlCRmJ4U8P3Sg
-         iVr4AAkYrISjoAE7YEQzj+rSJogK66GTK3+3z5/u/UtUfANYVZ8vF7AjH3cHyYQeozpL
-         WCEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758621142; x=1759225942;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=E110EFHk2snli7qzu3U7zBFvZi8n/Y++QmIK2DM15hY=;
-        b=Wc+A8DQefRQD+MAFu3h23y0irp2HfT/FXz7cFhFUXcr7wly1gqm6jhaq/jIKeM1Cdi
-         QmXxDDPLCTpUPEiEnNJlvOsL/lSuuqFtUyQXTbwmZQ1RyVjUcZTJSFs8AUIQDMf41XVl
-         4vL3NzGqmzXdpmKSLCBOf+u1vjOn9QFHAoUudJKkLL0ZgItrbvHGFJQUJmeicqVBzzhF
-         2YcbsAzHLqQYyQ6HuTNmGf/wtuY6MozcPTYyqyBYgsGPAVYIdJGJwNRgzEgRUlXQQajy
-         K+YowfaITRSidK190qh4HRTytVNfziuzVL+dcbyw4csb9laNxRusS/+DMSR5yezWKwK8
-         mNhg==
-X-Gm-Message-State: AOJu0YzWdUuVURgmwJCqMP6aCuilNfDBsXLAaUctbXCNPmouDkPe3rqV
-	fO1vTHh5w/waivfEHOxby+cVWDfT/OguhBdD7ob6GjheBSpYb/4LKLXRwLo3PdWGVeYToilcupn
-	ImdrcfIW0N4e/NqvTJ7h1MRNGIEGeLVI=
-X-Gm-Gg: ASbGnctaZhvp9x8THtk7sqiCE22qK7WxO5NJyyWVd5wBF4TUBHIcYC7tM3wNfBUiUft
-	Vxdy1/esW8f+XY83EIOqVVD4SeHjTSsauoY4vW7Kc5C9rbAMC/TlUye4W8hYA2zc4mkmIamkkz8
-	SGByQ9WWYhQ4fmydlvmJxX9NsvmCubFPT0OPIdrCcbL+ldwwoNplrEx+mkzrmJ2hCxtQ2HdrOPq
-	O9vEvI=
-X-Google-Smtp-Source: AGHT+IGn9G+g9KcKdeDqAQEYD1d/WG0VVkXO1S3tVxU5Y4KEzxQ15VxhK3LS26x3q3KWY3feF3/i3eMSnIQdELizFhA=
-X-Received: by 2002:a05:6808:228b:b0:43a:2e17:3ba8 with SMTP id
- 5614622812f47-43f2d10d9c2mr975431b6e.0.1758621142430; Tue, 23 Sep 2025
- 02:52:22 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="cwlNGojy"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=ZJB/cAN/NZ934Eo6FWgaO0JE3BoJmkJPozs04WZwYr8=; b=cwlNGojyeXZkx1IDwcDvXrJ1w0
+	Ho0qAHQV8sMu2BD2cf4CHBuh83EGUUHL0rgtwpme1MxXaYg9y5xwEHe1MjE3HHTdgjsnmaH10lnsY
+	CBwRv1ksl3B3VuJyiPmwqB121G9AVfp5H9Q2MFDRwJV9A1+xKGb9Lk10NpJ86X14KkZ0riYgfK0L5
+	YcXj7QJs5S7mUhIVfkmlBk6ghEaTNs/HpPOIzOAFIkZM4+RzOlmZG4Pyw4afjuqm5Qi+ZqCR8Euz+
+	lVtmbn5F//doA+RkSYiQnZ9fSa6J+aengGUpvfH4aENuCuv/UJVff83Zygzwpgcc8/dMT5Nh8q/5C
+	P1zZaBeA==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1v0zq6-00000009YwE-1iUF;
+	Tue, 23 Sep 2025 10:01:39 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 6334830049C; Tue, 23 Sep 2025 12:01:37 +0200 (CEST)
+Date: Tue, 23 Sep 2025 12:01:37 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Steven Rostedt <rostedt@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+	bpf@vger.kernel.org, x86@kernel.org,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Ingo Molnar <mingo@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Indu Bhagat <indu.bhagat@oracle.com>,
+	"Jose E. Marchesi" <jemarch@gnu.org>,
+	Beau Belgrave <beaub@linux.microsoft.com>,
+	Jens Remus <jremus@linux.ibm.com>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Florian Weimer <fweimer@redhat.com>, Sam James <sam@gentoo.org>,
+	Kees Cook <kees@kernel.org>, Carlos O'Donell <codonell@redhat.com>
+Subject: Re: [RESEND][PATCH v15 2/4] perf: Support deferred user callchains
+Message-ID: <20250923100137.GC3419281@noisy.programming.kicks-ass.net>
+References: <20250908171412.268168931@kernel.org>
+ <20250908171524.605637238@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Hengqi Chen <hengqi.chen@gmail.com>
-Date: Tue, 23 Sep 2025 17:52:11 +0800
-X-Gm-Features: AS18NWD_ORGgJ4o902_F9th9fMD3Z548kXGSC1yox5XsEgpllf6iDCcPrxmfz40
-Message-ID: <CAEyhmHTvj4cDRfu1FXSEXmdCqyWfs3ehw5gtB9qJCrThuUy2Kw@mail.gmail.com>
-Subject: Some unpriv verifier tests failed due to bpf_jit_bypass_spec_v1
-To: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, luis.gerhorst@fau.de, 
-	Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc: bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250908171524.605637238@kernel.org>
 
-Some unpriv verifier tests (e.g. bounds_map_value_variant_2) failed
-on LoongArch which implements bpf_jit_bypass_spec_v1().
+On Mon, Sep 08, 2025 at 01:14:14PM -0400, Steven Rostedt wrote:
+> +	/*
+> +	 * All accesses related to the event are within the same RCU section in
+> +	 * perf_event_callchain_deferred(). The RCU grace period before the
+> +	 * event is freed will make sure all those accesses are complete by then.
+> +	 */
+> +	rcuwait_wait_event(&event->pending_unwind_wait, !event->pending_unwind_callback, TASK_UNINTERRUPTIBLE);
 
-This is because some verifier paths do can_skip_alu_sanitation().
-So for such cases, the priv/unpriv test cases will have the same
-verifier error messages and the tests failed with unexpected error
-messages.
+You need a narrower terminal, this is again excessive. I mostly code
+with my screen split in 4 columns (3 if I can't find my glasses), and
+that gets me around 90 character columns.
 
-How can we fix them?
+> +	if (event->attr.defer_callchain)
+> +		init_task_work(&event->pending_unwind_work,
+> +			       perf_event_callchain_deferred);
+
+And let me hand you a bucket of {}, I've heard they're getting expensive
+over in the US due to this tariff nonsense :-)
