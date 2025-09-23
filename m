@@ -1,32 +1,32 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFC411386B4;
-	Tue, 23 Sep 2025 01:22:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE5EB1FDE01;
+	Tue, 23 Sep 2025 01:22:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758590529; cv=none; b=JyKqdOOoI5gOJqNdt9R9Ud9GXqcGpP/zk8BCYwbA6VR9xO0SAyYO277K3XqN40COZItOvbfqO64N1IdjM83nyBjlbUcl6s356xeRKe0hidArYsWZqhXx7hpMz5wcsgFFxY1mxoH5K/lZrGSJ76Dd0t5PJBfh3zZT+JpC1awfbeQ=
+	t=1758590553; cv=none; b=MgPbhd0VZvti4KwNGM+WHy8cOygZ/locY/J+jcG9tHea1TUVft6V9THS0KMcbIN3w/SJh0FC5QVoeXvu5Ye1y+zkfRTyn+Idarxyw4XAjeHcpgK5BszyrP/da6VHC1mw3YYTcWjRkvQF/m6NDmp1VehpMzTybhDt1PbWA2bPrBI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758590529; c=relaxed/simple;
-	bh=lK9XsHuQsnplJwxlc7eNhK47sKfffyqPYZUyHElo0aI=;
+	s=arc-20240116; t=1758590553; c=relaxed/simple;
+	bh=EumMEY/UUWWTjUdtuoHUk7W5cMhDw4YKRiV76rZwtdo=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=TWWSQVvUFjOk8DWgPv2dN3SAp0T2GNt3TtxRv8wDLoB0tAr6Nc3yf7Ts44eLB8LyaQOGetplh8jpjC5PINUA16X3t6amNeb11k2yuyJK6w3Wy3e5zfPLlt+dSlOss2Xmzs/oQxsGxB18ALwiJlsAcbBLrqoY+b9cenBEimL0M0g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dWtndbIj; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version:Content-Type; b=YAsHbugKu8XBZDmGon+sFD7dE7aUBpIU6RyFzvybBlvtlbQ7XI4UxazReTJGf4yZP1JuByUGfZ2bK/wvapyQ82GU4e0sIaK/BVDXuUaXI/37YCd1Hvc4FiRCh07XN4W/SW7IzlkoXnKxq/VVmZCltOia0CVsezLHYH9fucIPpxE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ht6LKRRh; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dWtndbIj"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B863AC113D0;
-	Tue, 23 Sep 2025 01:22:08 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ht6LKRRh"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D841FC4CEF0;
+	Tue, 23 Sep 2025 01:22:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758590529;
-	bh=lK9XsHuQsnplJwxlc7eNhK47sKfffyqPYZUyHElo0aI=;
+	s=k20201202; t=1758590552;
+	bh=EumMEY/UUWWTjUdtuoHUk7W5cMhDw4YKRiV76rZwtdo=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=dWtndbIjHVAA6g0COjFYRQDhU8zIfXqr6Bv0HbgHwWXqAiZQ99GtfsX2IN8vQmf1L
-	 bs6FlmwGzjuKFVUaAHE9+L3GcgnoaXB1CLOBL9J6Edosdz29PsmxGfyozMuO1TMUFG
-	 x35fq3Vpv/RIfxZwYLc9BOLD1HZnFzNSJlQsyzz1obuYyB+pWw0t/t22cOP6PJlrTB
-	 /p5gf1Ru4CvaR2ze1i7yi88hBeJNVVx1qlDQ5A+ELSvIyQZZVvqQNlAI3DgrC/mSJs
-	 V5lEpxmergUzNOAn8fyldMY20tCBT7XZC5O8Oum/43wbjgZ0SIZ+KEGIbCdtjOhSMr
-	 FUXjnTnRGtvHA==
-Date: Mon, 22 Sep 2025 18:22:07 -0700
+	b=ht6LKRRhRMfIMuPvcmQqLGsOtEJPSPXFrFCUYiX0FmwJ9C6JsE7DaD1hnzD6GIkjK
+	 Ii1+QYGRC08SGe1k66TSuLoEwC1JioRDRCpjyf4SjvefQhANuwfXnboor2rWYIC03a
+	 dY1tjxKyrDgM3UoURtXsKsc8Yp0aCA1CU/mbjHDP07Co/myxe27af2G3lYsXn+vpXh
+	 4n66j8n6glpVsLDQ2oo8skum+B+gYU1sYdGf04ccS3QnGenhQ9cmGEx8jyG32Zw0cL
+	 4+/N7hfbmQogU1166b1eIBOwFSgU3mAIPwH8cVt/RhqGzVrjFZl+2z+q9N5kD/MmZP
+	 JeCWiWIiuDz/w==
+Date: Mon, 22 Sep 2025 18:22:31 -0700
 From: Jakub Kicinski <kuba@kernel.org>
 To: Daniel Borkmann <daniel@iogearbox.net>
 Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, davem@davemloft.net,
@@ -34,11 +34,11 @@ Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, davem@davemloft.net,
  sdf@fomichev.me, john.fastabend@gmail.com, martin.lau@kernel.org,
  jordan@jrife.io, maciej.fijalkowski@intel.com, magnus.karlsson@intel.com,
  David Wei <dw@davidwei.uk>
-Subject: Re: [PATCH net-next 02/20] net: Add peer to netdev_rx_queue
-Message-ID: <20250922182207.1121556a@kernel.org>
-In-Reply-To: <20250919213153.103606-3-daniel@iogearbox.net>
+Subject: Re: [PATCH net-next 03/20] net: Add ndo_queue_create callback
+Message-ID: <20250922182231.197635c1@kernel.org>
+In-Reply-To: <20250919213153.103606-4-daniel@iogearbox.net>
 References: <20250919213153.103606-1-daniel@iogearbox.net>
-	<20250919213153.103606-3-daniel@iogearbox.net>
+	<20250919213153.103606-4-daniel@iogearbox.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -48,16 +48,33 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Fri, 19 Sep 2025 23:31:35 +0200 Daniel Borkmann wrote:
-> +static inline void netdev_rx_queue_peer(struct net_device *src_dev,
-> +					struct netdev_rx_queue *src_rxq,
-> +					struct netdev_rx_queue *dst_rxq)
-> +{
-> +	dev_hold(src_dev);
+On Fri, 19 Sep 2025 23:31:36 +0200 Daniel Borkmann wrote:
+> From: David Wei <dw@davidwei.uk>
+> 
+> Add ndo_queue_create() to netdev_queue_mgmt_ops that will create a new
+> rxq specifically for mapping to a real rxq. The intent is for only
+> virtual netdevs i.e. netkit and veth to implement this ndo. This will
+> be called from ynl netdev fam bind-queue op to atomically create a
+> mapped rxq and bind it to a real rxq.
+> 
+> Signed-off-by: David Wei <dw@davidwei.uk>
+> Co-developed-by: Daniel Borkmann <daniel@iogearbox.net>
+> Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+> ---
+>  include/net/netdev_queues.h | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/include/net/netdev_queues.h b/include/net/netdev_queues.h
+> index cd00e0406cf4..6b0d2416728d 100644
+> --- a/include/net/netdev_queues.h
+> +++ b/include/net/netdev_queues.h
+> @@ -149,6 +149,7 @@ struct netdev_queue_mgmt_ops {
+>  						  int idx);
+>  	struct device *		(*ndo_queue_get_dma_dev)(struct net_device *dev,
+>  							 int idx);
+> +	int			(*ndo_queue_create)(struct net_device *dev);
+>  };
+>  
+>  bool netif_rxq_has_unreadable_mp(struct net_device *dev, int idx);
 
-netdev_hold() is required for all new code
-
-> +	__netdev_rx_queue_peer(src_rxq, dst_rxq);
-
-Also please avoid static inlines if you need to call a func from
-another header. It complicates header dependencies.
+This patch is meaningless, please squash it into something that matters.
