@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 558A1328996;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55822328995;
 	Tue, 23 Sep 2025 14:21:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758637316; cv=none; b=qG2Stg0fj1PNNguqlVB+s3zfj3X+lWvDzqy5PNGfKTJyGy/Q8LM/KahSrhEJbrK4/MfDaXBEP+y6QY6fm0Kpw+pi4hBhxaMPHvESPncfkL/p5d3KbwT0UKC5PiYNdNgN9ng50WzvJ0NMXNNOHStK/IJnoHt2UsMyWpTWcGE8WBU=
+	t=1758637316; cv=none; b=RkYgyi07e4mLtMHImiXzuhD5asQZu8aZb6ou0Fyhl4w2gx8dQx45VqXsubPmr9RnaUbOGoIOxy1x5NsoAGsfup5ysU4+BSD2eZD345c7+C+qH0OA7DBtZ3wByTpMN8xiIM/WsBtDO3u0skpBRWpmlxfq6rcvVEaF6/QoQND5iYg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1758637316; c=relaxed/simple;
-	bh=UWhSG3+L9kGDuQv4d75Qlf1/uqGMYN1a+rwGs+aTo7s=;
+	bh=dnfn0DMyZqHCyXyDBX7gMCl/aLGTGuiQmNJ7YTCoJDk=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Q8PBK816CZiM6fA3ban7Dq9NO52S7rr1xUB5rk2LPTjo4FaCKdYsVVG4mQBeMbNHMcN+xos6r6gchMJZjEuuFDMJglzq+ZDwoxD7uGT+4DxReSIRih2Aas9QCKvzGaGVBqyspMGmEG5yyOXteedplpTSu3khJu2ujYwoz45hlQM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bWV3n/IF; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=oDpH6GrVeLyjPnXM8vtGGZDme181ZFh6hNTw9kZje6dmCcCcjqefrpcP1KvLrWvIqqedbWNzWbuuOzpFJojravS8/Aa/foYKD0JBxxVlS4/rPPXMR4Fmb3wyKw3U7B8ssRHnutS0wBsrvlcj5vp4jVfufCQjzllYigrx4JrWowY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ParMViib; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bWV3n/IF"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A398EC2BCB0;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ParMViib"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A49DAC2BCB2;
 	Tue, 23 Sep 2025 14:21:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1758637316;
-	bh=UWhSG3+L9kGDuQv4d75Qlf1/uqGMYN1a+rwGs+aTo7s=;
+	bh=dnfn0DMyZqHCyXyDBX7gMCl/aLGTGuiQmNJ7YTCoJDk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=bWV3n/IFCRYk0ertJZgeB+IZS5IrwdockOH6qZT87qpRdq+RFjThQ47I6aTDKvG/z
-	 zcc+cXvbCx9AS+UW1tZntqbYm4R8TIxQfnmChHnXESyW6ZlFlbof3a2iycgdncSh/f
-	 bWTaMyT951D2nTS7HQms1VptnQV0ElehZErjpCQ+ZY+TWGjLiSBvDjHgNqKVQSDV3J
-	 lOxmy7voQYa+bgWz0vBUmYF9hFLizOyHwASI7/sgfpGQMp4PV/7QJYqxVShSR9o1YN
-	 LZPBnnr9M7vj91px5G48xSwdxAeNvtzokQfgt8j5VcukZNpuwOUopSM79goMuhY6YT
-	 d5EiY5XJNW2dg==
+	b=ParMViibAmTiqgmB/IaxzQprSDe/SSYbMrxjZuNxLy6Idjo9dZ7kQRw5NzLellG2E
+	 hdKH2/297Ey+6gSGkBjDXb4/ZDFRBrQzOY9vXUK2yxKxg+3gPPSMIo2x8xbxFuQ/5v
+	 r0fp5fj4bGXlHXxTf7x14SxjGtQlO7ghIBG6/YSqqC8Ogg1UE3CBQNuPi+t83qCLgE
+	 tkxOWoIDWawKIiXakty6VpJhY74sIQ6ZwH1dJ84lgAFTg/Bs87rdGGqOuo39B8shU0
+	 mckXAWK0ZLywViwmRrPaYRUZ8xDOFZyypZDu+y7phQ29h+HW+aOFoArhKjmm5GNt7J
+	 Rzili71TsYQQg==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id C93FECE12C3; Tue, 23 Sep 2025 07:20:37 -0700 (PDT)
+	id D7442CE1418; Tue, 23 Sep 2025 07:20:37 -0700 (PDT)
 From: "Paul E. McKenney" <paulmck@kernel.org>
 To: rcu@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org,
@@ -38,9 +38,9 @@ Cc: linux-kernel@vger.kernel.org,
 	Alexei Starovoitov <ast@kernel.org>,
 	Peter Zijlstra <peterz@infradead.org>,
 	bpf@vger.kernel.org
-Subject: [PATCH 08/34] rcu: Remove now-empty RCU Tasks Trace functions and calls to them
-Date: Tue, 23 Sep 2025 07:20:10 -0700
-Message-Id: <20250923142036.112290-8-paulmck@kernel.org>
+Subject: [PATCH 13/34] rcu: Remove now-empty get_rcu_tasks_trace_gp_kthread() function
+Date: Tue, 23 Sep 2025 07:20:15 -0700
+Message-Id: <20250923142036.112290-13-paulmck@kernel.org>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <580ea2de-799a-4ddc-bde9-c16f3fb1e6e7@paulmck-laptop>
 References: <580ea2de-799a-4ddc-bde9-c16f3fb1e6e7@paulmck-laptop>
@@ -52,9 +52,9 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This commit removes the now-empty functions rcu_tasks_trace_qs_blkd(),
-exit_tasks_rcu_finish_trace(), and rcu_spawn_tasks_trace_kthread(),
-along with all calls to them.
+The get_rcu_tasks_trace_gp_kthread() is used by rcuscale to diagnose
+bugs involving the RCU Tasks Trace grace-period kthread, which now no
+longer exists.  This commit therefore removes this function.
 
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 Cc: Andrii Nakryiko <andrii@kernel.org>
@@ -62,103 +62,52 @@ Cc: Alexei Starovoitov <ast@kernel.org>
 Cc: Peter Zijlstra <peterz@infradead.org>
 Cc: <bpf@vger.kernel.org>
 ---
- include/linux/rcupdate.h |  1 -
- kernel/rcu/tasks.h       | 28 +---------------------------
- 2 files changed, 1 insertion(+), 28 deletions(-)
+ include/linux/rcupdate_trace.h | 1 -
+ kernel/rcu/rcuscale.c          | 1 -
+ kernel/rcu/tasks.h             | 6 ------
+ 3 files changed, 8 deletions(-)
 
-diff --git a/include/linux/rcupdate.h b/include/linux/rcupdate.h
-index 879525c5764a0c..7611730e34bc33 100644
---- a/include/linux/rcupdate.h
-+++ b/include/linux/rcupdate.h
-@@ -176,7 +176,6 @@ void rcu_tasks_torture_stats_print(char *tt, char *tf);
- # endif
+diff --git a/include/linux/rcupdate_trace.h b/include/linux/rcupdate_trace.h
+index ffd4dcd6339ae4..0bd47f12ecd17b 100644
+--- a/include/linux/rcupdate_trace.h
++++ b/include/linux/rcupdate_trace.h
+@@ -137,7 +137,6 @@ static inline void rcu_barrier_tasks_trace(void)
  
- # ifdef CONFIG_TASKS_TRACE_RCU
--void rcu_tasks_trace_qs_blkd(struct task_struct *t);
- void rcu_tasks_trace_torture_stats_print(char *tt, char *tf);
- # endif
+ // Placeholders to enable stepwise transition.
+ void __init rcu_tasks_trace_suppress_unused(void);
+-struct task_struct *get_rcu_tasks_trace_gp_kthread(void);
+ 
+ #else
+ /*
+diff --git a/kernel/rcu/rcuscale.c b/kernel/rcu/rcuscale.c
+index 16ba9050dab66b..17d038e26b65de 100644
+--- a/kernel/rcu/rcuscale.c
++++ b/kernel/rcu/rcuscale.c
+@@ -411,7 +411,6 @@ static struct rcu_scale_ops tasks_tracing_ops = {
+ 	.gp_barrier	= rcu_barrier_tasks_trace,
+ 	.sync		= synchronize_rcu_tasks_trace,
+ 	.exp_sync	= synchronize_rcu_tasks_trace,
+-	.rso_gp_kthread	= get_rcu_tasks_trace_gp_kthread,
+ 	.name		= "tasks-tracing"
+ };
  
 diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
-index 967c43b1937bae..25dc49ebad251d 100644
+index 4fb61b3c78283d..e70609c85ece5d 100644
 --- a/kernel/rcu/tasks.h
 +++ b/kernel/rcu/tasks.h
-@@ -800,8 +800,6 @@ static void rcu_tasks_torture_stats_print_generic(struct rcu_tasks *rtp, char *t
- 
- #endif // #ifndef CONFIG_TINY_RCU
- 
--static void exit_tasks_rcu_finish_trace(struct task_struct *t);
--
- #if defined(CONFIG_TASKS_RCU)
- 
- ////////////////////////////////////////////////////////////////////////
-@@ -1321,13 +1319,11 @@ void exit_tasks_rcu_finish(void)
- 	raw_spin_lock_irqsave_rcu_node(rtpcp, flags);
- 	list_del_init(&t->rcu_tasks_exit_list);
- 	raw_spin_unlock_irqrestore_rcu_node(rtpcp, flags);
--
--	exit_tasks_rcu_finish_trace(t);
- }
- 
- #else /* #ifdef CONFIG_TASKS_RCU */
- void exit_tasks_rcu_start(void) { }
--void exit_tasks_rcu_finish(void) { exit_tasks_rcu_finish_trace(current); }
-+void exit_tasks_rcu_finish(void) { }
- #endif /* #else #ifdef CONFIG_TASKS_RCU */
- 
- #ifdef CONFIG_TASKS_RUDE_RCU
-@@ -1471,12 +1467,6 @@ void __init rcu_tasks_trace_suppress_unused(void)
+@@ -1467,12 +1467,6 @@ void __init rcu_tasks_trace_suppress_unused(void)
  	rcu_tasks_torture_stats_print_generic(NULL, NULL, NULL, NULL);
  }
  
--/* Add a newly blocked reader task to its CPU's list. */
--void rcu_tasks_trace_qs_blkd(struct task_struct *t)
+-struct task_struct *get_rcu_tasks_trace_gp_kthread(void)
 -{
+-	return NULL;
 -}
--EXPORT_SYMBOL_GPL(rcu_tasks_trace_qs_blkd);
+-EXPORT_SYMBOL_GPL(get_rcu_tasks_trace_gp_kthread);
 -
- /* Communicate task state back to the RCU tasks trace stall warning request. */
- struct trc_stall_chk_rdr {
- 	int nesting;
-@@ -1484,19 +1474,9 @@ struct trc_stall_chk_rdr {
- 	u8 needqs;
- };
- 
--/* Report any needed quiescent state for this exiting task. */
--static void exit_tasks_rcu_finish_trace(struct task_struct *t)
--{
--}
--
- int rcu_tasks_trace_lazy_ms = -1;
- module_param(rcu_tasks_trace_lazy_ms, int, 0444);
- 
--static int __init rcu_spawn_tasks_trace_kthread(void)
--{
--	return 0;
--}
--
- #if !defined(CONFIG_TINY_RCU)
- void show_rcu_tasks_trace_gp_kthread(void)
- {
-@@ -1520,8 +1500,6 @@ void rcu_tasks_trace_get_gp_data(int *flags, unsigned long *gp_seq)
- }
- EXPORT_SYMBOL_GPL(rcu_tasks_trace_get_gp_data);
- 
--#else /* #ifdef CONFIG_TASKS_TRACE_RCU */
--static void exit_tasks_rcu_finish_trace(struct task_struct *t) { }
  #endif /* #else #ifdef CONFIG_TASKS_TRACE_RCU */
  
  #ifndef CONFIG_TINY_RCU
-@@ -1668,10 +1646,6 @@ static int __init rcu_init_tasks_generic(void)
- 	rcu_spawn_tasks_rude_kthread();
- #endif
- 
--#ifdef CONFIG_TASKS_TRACE_RCU
--	rcu_spawn_tasks_trace_kthread();
--#endif
--
- 	// Run the self-tests.
- 	rcu_tasks_initiate_self_tests();
- 
 -- 
 2.40.1
 
