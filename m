@@ -1,41 +1,42 @@
 Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BC1E27456;
-	Wed, 24 Sep 2025 14:50:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B95230AAC2;
+	Wed, 24 Sep 2025 14:50:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758725406; cv=none; b=h2ru1X+CtsT3VIWdgXmEr01WCDbV3ndK/URm/HU90KsMMkVLCk5/2gwPdomJVHCUBmUqFaM/BIAC7wt2SUmG5Yo7tCYDF85+qMNtt94l7g4IB1EUPhPokRDXyzEktcyadat2LQKZQUQgEo6+yaHGh3qTSXqIlnMznu5uiXWsjTU=
+	t=1758725409; cv=none; b=qXDnb4s9MQZXYq15/X4RNn/ixmQaJyG91MGedZlgCC2HKgVMmh7/KFz6p3kIbbraIfKM67+NE8ADsFXOQ1JbTKBmFzCmjAOkhLJW1JrdA+Nt0OX38tj3ToH9rwYWCCz01kKsoApbeN3cMCZ8bxuh25xbVDqh8BhHMfdHigIcqR4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758725406; c=relaxed/simple;
-	bh=nqIIO7txybV7R91UDPW32xrfVvjRQAGIDMf2qgiDNzM=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=QzlrUPPkTd7fLB2IrU8/4BZpET7xtgbAf7A04SYAR8pjtj9KhZNY11qZO+KPSqGJkyhb6AARprI+PJIhuq8A5JXfigCM00+l7sIOT67z51rTCq8LCR1aj4YPhgcIjFcUZ3bOTDbAM2ZC+aZHQQrLuKXF0+aUBIN2SvCr8NMBGbg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=xcbeB/MI; arc=none smtp.client-ip=185.246.84.56
+	s=arc-20240116; t=1758725409; c=relaxed/simple;
+	bh=2nZ+xS75+GYRbPbEr1s2AotVB+FzRxeAkPwF05aNpcg=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=UKMVhgqjST4i1ltD93xEsr37OuUkQWPl4aFvynOYhOTtqk3ZN0oCFwW2brNdkw2VlHhNSQegCX+6eeBSk0daY23JjWdFacVbpTP7SvF6TajSOKwjNtrHegrXhewAGamY5/yJe3s+/aJ+uyvNCSIGAPEy36IBRpykAK7zlERZnts=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=qqhpxicJ; arc=none smtp.client-ip=185.246.84.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="xcbeB/MI"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="qqhpxicJ"
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id 3B6861A0F81;
-	Wed, 24 Sep 2025 14:50:00 +0000 (UTC)
+	by smtpout-02.galae.net (Postfix) with ESMTPS id B00E01A0F84;
+	Wed, 24 Sep 2025 14:50:05 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 00BD460634;
-	Wed, 24 Sep 2025 14:50:00 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id C441E102F18D8;
-	Wed, 24 Sep 2025 16:49:40 +0200 (CEST)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 84DA560634;
+	Wed, 24 Sep 2025 14:50:05 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 3FA22102F18D8;
+	Wed, 24 Sep 2025 16:50:02 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1758725398; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding; bh=5Yy6cV7CI+4JraO3JP09oFw2D7jO5gkDGtxirbXHjaM=;
-	b=xcbeB/MI+amkstuwxBY1vgM1i16KDyFZwzbh1A3A0wKjy+8lBJpjX0CHaQU9iD15Y2vmgQ
-	4n/6aK/Bf4p8sviXKJS0i2D9qVvcXqTZt5pz0R0ZQYhlTmIhSSr6iCxUoLLovmdn9IqMEL
-	ovYGLtEkC6vzLM4Bh2G60xL5iTBUhn8bzrq8KnN5OE0VrbFkUSrws4/JPTHhbO0tg2M7g1
-	67ylyYBvWDtD0jRExy1B4qLJF/sGNG8D4KuZmVW0Uhh7FtEIp8gOwougR5nJfBQHqLRFtP
-	8WJUOnOqK5AcPBeMMS8Uv9fFGe7/GIbH4sP7aOyuijXyd9sIa2xntSZ3WzjgYA==
+	t=1758725404; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=3RHLVmk5+u09dFacYEQB1nNTSpeaQW6IgPoQKUHTSJA=;
+	b=qqhpxicJ3nT6tP8vOjipWOKU9C6vNsKRfUJfZf7w5wdRiQYVkFR+8ap2g2hJsp6hq1zPvy
+	+Hq8VVkEXVgGue85JcdaLgo7dLMy4s6r/Pq+DO5xR/KGvhfozEBZjwL27OgZeXrRYiTGW4
+	TThSZAepZ0w4o5uNCqh7aVC4kPYHSq9UoSPt5zWVmiLIOqZ2x5TGlgYM92vBP3YL2BM9uX
+	TktR5cjDV9ABu0LfV4gv23UGgIEevWOLXjrB8vMFQsO5PqGByYxg84sGxyaAzpdMbuBlL3
+	4TZH5zQG7W7ZJsQl7+hEjjAoyB9dI82A7LkTBsIu4hGVMyrQ7VPCQfp6oje06w==
 From: "Bastien Curutchet (eBPF Foundation)" <bastien.curutchet@bootlin.com>
-Subject: [PATCH bpf-next v4 00/15] selftests/bpf: Integrate test_xsk.c to
- test_progs framework
-Date: Wed, 24 Sep 2025 16:49:35 +0200
-Message-Id: <20250924-xsk-v4-0-20e57537b876@bootlin.com>
+Date: Wed, 24 Sep 2025 16:49:37 +0200
+Subject: [PATCH bpf-next v4 02/15] selftests/bpf: test_xsk: Initialize
+ bitmap before use
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -44,11 +45,9 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAP8E1GgC/2XMQQ6CMBCF4auYrq1pZ1pLXXkP4wLKII1KCSUEQ
- 7i7TVlodDl58/0LizR4iuy0W9hAk48+dOlQ+x1zbdndiPs63QwEaAGy4HO8c+EaK8gaXUvF0mc
- /UOPnXLmwqm94R/PIrmlpfRzD8Mr5SeY9l1BiLk2SC27QKAO2tFjZcxXC+PDdwYVnLkzwUVbAp
- iApadwRla41SP2v8FupTWFSjrAAQpSq+FHrur4B2SMApw4BAAA=
-X-Change-ID: 20250218-xsk-0cf90e975d14
+Message-Id: <20250924-xsk-v4-2-20e57537b876@bootlin.com>
+References: <20250924-xsk-v4-0-20e57537b876@bootlin.com>
+In-Reply-To: <20250924-xsk-v4-0-20e57537b876@bootlin.com>
 To: =?utf-8?q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@kernel.org>, 
  Magnus Karlsson <magnus.karlsson@intel.com>, 
  Maciej Fijalkowski <maciej.fijalkowski@intel.com>, 
@@ -71,87 +70,38 @@ Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
 X-Mailer: b4 0.14.2
 X-Last-TLS-Session-Version: TLSv1.3
 
-Hi all,
+bitmap is used before being initialized.
 
-The test_xsk.sh script covers many AF_XDP use cases. The tests it runs
-are defined in xksxceiver.c. Since this script is used to test real
-hardware, the goal here is to leave it as it is, and only integrate the
-tests that run on veth peers into the test_progs framework.
-
-Some tests are flaky so they can't be integrated in the CI as they are.
-I think that fixing their flakyness would require a significant amount of
-work. So, as first step, I've excluded them from the list of tests
-migrated to the CI (cf PATCH 14). If these tests get fixed at some
-point, integrating them into the CI will be straightforward.
-
-I noticed a small error on a function's return value while investigating
-on the report's summary issue pointed out by Maciej in previous iteration,
-the new PATCH 3 fixes it.
-
-PATCH 1 extracts test_xsk[.c/.h] from xskxceiver[.c/.h] to make the
-tests available to test_progs.
-PATCH 2 to 7 fix small issues in the current test
-PATCH 8 to 13 handle all errors to release resources instead of calling
-exit() when any error occurs.
-PATCH 14 isolates some flaky tests
-PATCH 15 integrate the non-flaky tests to the test_progs framework
+Initialize it to zero before using it.
 
 Signed-off-by: Bastien Curutchet (eBPF Foundation) <bastien.curutchet@bootlin.com>
 ---
-Changes in v4:
-- Fix test_xsk.sh's summary report.
-- Merge PATCH 11 & 12 together, otherwise PATCH 11 fails to build.
-- Split old PATCH 3 in two patches. The first one fixes
-  testapp_stats_rx_dropped(), the second one fixes
-  testapp_xdp_shared_umem(). The unecessary frees (in
-  testapp_stats_rx_full() and testapp_stats_fill_empty() are removed)
-- Link to v3: https://lore.kernel.org/r/20250904-xsk-v3-0-ce382e331485@bootlin.com
+ tools/testing/selftests/bpf/test_xsk.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Changes in v3:
-- Rebase on latest bpf-next_base to integrate commit c9110e6f7237 ("selftests/bpf:
-Fix count write in testapp_xdp_metadata_copy()").
-- Move XDP_METADATA_COPY_* tests from flaky-tests to nominal tests
-- Link to v2: https://lore.kernel.org/r/20250902-xsk-v2-0-17c6345d5215@bootlin.com
+diff --git a/tools/testing/selftests/bpf/test_xsk.c b/tools/testing/selftests/bpf/test_xsk.c
+index 02250f29f9946d1ca701e30a900617056d91587b..679491b6b9dd80ccb2b92729141fb8715b874c6d 100644
+--- a/tools/testing/selftests/bpf/test_xsk.c
++++ b/tools/testing/selftests/bpf/test_xsk.c
+@@ -1069,6 +1069,8 @@ static int receive_pkts(struct test_spec *test)
+ 	u32 sock_num = 0;
+ 	int res, ret;
+ 
++	bitmap_zero(bitmap, test->nb_sockets);
++
+ 	ret = gettimeofday(&tv_now, NULL);
+ 	if (ret)
+ 		exit_with_error(errno);
+@@ -1259,6 +1261,8 @@ static int send_pkts(struct test_spec *test, struct ifobject *ifobject)
+ 	DECLARE_BITMAP(bitmap, test->nb_sockets);
+ 	u32 i, ret;
+ 
++	bitmap_zero(bitmap, test->nb_sockets);
++
+ 	while (!(all_packets_sent(test, bitmap))) {
+ 		for (i = 0; i < test->nb_sockets; i++) {
+ 			struct pkt_stream *pkt_stream;
 
-Changes in v2:
-- Rebase on the latest bpf-next_base and integrate the newly added tests
-  to the work (adjust_tail* and tx_queue_consumer tests)
-- Re-order patches to split xkxceiver sooner.
-- Fix the bug reported by Maciej.
-- Fix verbose mode in test_xsk.sh by keeping kselftest (remove PATCH 1,
-  7 and 8)
-- Link to v1: https://lore.kernel.org/r/20250313-xsk-v1-0-7374729a93b9@bootlin.com
-
----
-Bastien Curutchet (eBPF Foundation) (15):
-      selftests/bpf: test_xsk: Split xskxceiver
-      selftests/bpf: test_xsk: Initialize bitmap before use
-      selftests/bpf: test_xsk: Fix __testapp_validate_traffic()'s return value
-      selftests/bpf: test_xsk: fix memory leak in testapp_stats_rx_dropped()
-      selftests/bpf: test_xsk: fix memory leak in testapp_xdp_shared_umem()
-      selftests/bpf: test_xsk: Wrap test clean-up in functions
-      selftests/bpf: test_xsk: Release resources when swap fails
-      selftests/bpf: test_xsk: Add return value to init_iface()
-      selftests/bpf: test_xsk: Don't exit immediately when xsk_attach fails
-      selftests/bpf: test_xsk: Don't exit immediately when gettimeofday fails
-      selftests/bpf: test_xsk: Don't exit immediately when workers fail
-      selftests/bpf: test_xsk: Don't exit immediately if validate_traffic fails
-      selftests/bpf: test_xsk: Don't exit immediately on allocation failures
-      selftests/bpf: test_xsk: Isolate flaky tests
-      selftests/bpf: test_xsk: Integrate test_xsk.c to test_progs framework
-
- tools/testing/selftests/bpf/Makefile              |   11 +-
- tools/testing/selftests/bpf/prog_tests/test_xsk.c | 2595 ++++++++++++++++++++
- tools/testing/selftests/bpf/prog_tests/test_xsk.h |  294 +++
- tools/testing/selftests/bpf/prog_tests/xsk.c      |  146 ++
- tools/testing/selftests/bpf/xskxceiver.c          | 2696 +--------------------
- tools/testing/selftests/bpf/xskxceiver.h          |  156 --
- 6 files changed, 3174 insertions(+), 2724 deletions(-)
----
-base-commit: 1bd67e08d0f3fcb8cc69a73fb7aab9f048be4b8e
-change-id: 20250218-xsk-0cf90e975d14
-
-Best regards,
 -- 
-Bastien Curutchet (eBPF Foundation) <bastien.curutchet@bootlin.com>
+2.51.0
 
