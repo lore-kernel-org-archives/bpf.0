@@ -1,197 +1,173 @@
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A0DC2F60CB
-	for <bpf@vger.kernel.org>; Thu, 25 Sep 2025 11:11:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54E192EB5B5
+	for <bpf@vger.kernel.org>; Thu, 25 Sep 2025 11:38:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758798688; cv=none; b=VQqbINcACO1DRCe1VyuS2Ve30jn+QFZgA8/Q5fGaX7ZCQzt44L6U/3l9cri7GAv+CoRQt++DJ1B/gxz7PKj/2uc2byQHOjqub0H9t90yXQGEqwfyRa2sFj8vKBNjiEv15uwlXUHdPtleg2Il+tNMr+8G/VGwPMySIq56Jc6WFxk=
+	t=1758800321; cv=none; b=Q4gJZuXT3ILLuFPvcUybqKEKBopv8yLH1m+nPGGV7Kj8M7kLWBnGhh24H/wEVuHk8NGBwxtrXF3ScfIOEwnGXetqs8z06+S7SHCxR4hWsFfIyhkkQvFS9BBv+S5CVGj8h1E7ixIHHK2PsTCaXbtLaMrtnvgww+ttG2odCSJG4x4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758798688; c=relaxed/simple;
-	bh=aFS8/Z+4YfMdijSZ5GrdCI0jNYlHJMYb3wHEbERFPAU=;
-	h=From:Content-Type:Mime-Version:Subject:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=SVcx9WmFVWLs/ndzW+IO3xzXvuVO5uSQli1Lo6WaThIr0wx9T+NmmlJRe+yiuHgPyf3FOXJ2CQbLO9fCwlhxYcYIyGoirptMkv4TiHWBFJNtmvehHsP3Y0hZenbjphgZR1NzJmkCs+h/lYWOMJjiQ5JgWrzsol1AJM9VrFz06qY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HCZJ7YF3; arc=none smtp.client-ip=209.85.218.49
+	s=arc-20240116; t=1758800321; c=relaxed/simple;
+	bh=MPmpW9KjecilXj0o57I2sOWYamYKOiiwJaTMsr/IhRo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=lD0r7LDoiEWd4sMSkZ/ZzXu7RVQu+T3XA+HCjm8r3PeH8E+mkddNJll5DSoltWF2ecwxPWIzdKueJXG6ggfWiJsdYMGVTttPEeQ9/acQkr5VKmcBS2yOa1jbbow41SG3YaEtAcfUj4meqn3/CgVTErx5zPbmGDnHQMcFWEcWGdg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XeIL2a5R; arc=none smtp.client-ip=209.85.222.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HCZJ7YF3"
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-b29ebf9478bso116379866b.0
-        for <bpf@vger.kernel.org>; Thu, 25 Sep 2025 04:11:26 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XeIL2a5R"
+Received: by mail-qk1-f176.google.com with SMTP id af79cd13be357-856701dc22aso84331885a.3
+        for <bpf@vger.kernel.org>; Thu, 25 Sep 2025 04:38:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1758798685; x=1759403485; darn=vger.kernel.org;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:subject:mime-version:from:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1758800318; x=1759405118; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=QvQogmF7KDfaqKuZyAZb/az+I8jfHzFzp3VlhyK97YQ=;
-        b=HCZJ7YF3Q909CDICAekGBg8Q0ndeSNJptwkftzTBHcPtM4RnEPdE0wj17CzUQ1u7sW
-         ozj461GUwcvFblsLshqybv2Q2xzlXu1Pm3A93hsx9uqL9ZRB4EGNQ6mwDCkFnvBbf2Xj
-         ffej7fr42xNWDp5i7MODVswjeNlaOqfRuyueoqFdeGuDpO9rUiW1eeo3+LEMWKqWluKK
-         WupMecxBQsU//E8txJD66RlyBIrkXAFhLY2J5tjsWJVKaHiky+paSjuEgwbcC+BC5H+J
-         5Z/mhZQsMdnWhOx+rGKOX/pUnYSU5AdVNygXNdFyBB9RtOngcveiKQyOBVUoGcnYRSxw
-         gcnQ==
+        bh=dxqroIT0bJ4gLlcnSWTcG5okvXIsZwteqLXkgpBpuRM=;
+        b=XeIL2a5RQJ5n8jZntrgyvcAMUK6NqAscvEFjbwXK6epKeAxVf+d2PfzsUj/kYBi4m+
+         5bwV/6eB7edGWr5vWsGB1HKbL0G04mp6XdEVIDs3uGraS4KZF3HcOO7eC/gDcN6tCcnI
+         AOcsgITC/GkKOnmaUaDxzK7W0mYiXxcNlZMoBjDtHhZn5dE12RDgYM0/GJv8le5yDR+I
+         Va/RVmFbLlHtgBwhIpCPPWWwdag8AdhUnBSy5ClHnSFvren4Fhij+op/B0hfLiOH57cf
+         I7IPHE2KkxK7eQ3zkWd3S9KeoU4H/bz/KJcCSf6H4dQb8JH/MZOao+IW3PyyNacIQCZl
+         /THQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758798685; x=1759403485;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:subject:mime-version:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1758800318; x=1759405118;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=QvQogmF7KDfaqKuZyAZb/az+I8jfHzFzp3VlhyK97YQ=;
-        b=b7CPDmnKi+/9RUmWZ6thm1RkeDgRIszJQ7OGZq3274a27+RdKU/5W63M6/p8aE0DlO
-         Jhwcq2UJp3Fql1MJsNBmnD4AdnUz7URm3p9QwLo+3JPuE1kY+Xx8LXA+smcDjBiQD87z
-         aeLuM7dfYpnYd2Qa68d1A1ShfzuUtPgZKucUvUYI6Gktf+V11589pEZ2NwqPAXSA63Tv
-         9KoiL9cXBPNjE+FonzYP09Z/rxwgEMg2arOIdwTusR48XpznsXw4jgMbTjZ1rs+kDogI
-         h8MjPe+39vdqWTfRmhaAtP3lDr3t9DQ3iXLYzGoygwKbsd7JXrBeeEnesNbZcK75J7RA
-         ZhuQ==
-X-Gm-Message-State: AOJu0Yx1NEIwZ9fVfcaji4DHFihT2OQfk5ENY19OH9W+/ThYCuiy9sdk
-	3daZmQmVgYrcgLmULv4cqd/c6868qu+NSjFbu1qRboKfFr8NTKTtt64k
-X-Gm-Gg: ASbGnctj/qwTuIbZvKjKle8NkUa+0DQDIhWhsGjVFMn7xpR6FAal4LYo6PCID0roq5+
-	+B/vbUnBkDQ+f3hy8G9AftYuA44IKlWJvnIGr3SY30R31T4wBfy/tx7wPOoSlhWmBFgmEpnRBvN
-	VZXqKkB2xYEJRjliwpG9Zd1FFdN7QZa2R2/FYfAktUFaGQRp3iX86cfajWtXL6gzDW0Mi/wHTII
-	o9p/R83NRmLDlYaNTJfXMduonfV6m6AZHSCh9ML03LGlUqpnQbRjHpNi4OT0Erzt7M9hPxO0S0W
-	/L6fqIRPGhi6IC6qF44SqvFZZZAe8Zaan45bLsJvDld4xGSb5vIV1+CMyDHPihkW3lp7ZC16fQo
-	zDo4uXMAtnc+sxBXq3OMU4w9iYaIJ/Wm1LdI=
-X-Google-Smtp-Source: AGHT+IF7e6v1oucsOSMv2oJagF2isfYqo1TpOa4sH3qFriZ86IF0GVua3IC15lrQKP5GEg8vTGrCTw==
-X-Received: by 2002:a17:907:9405:b0:b10:1af1:dc2a with SMTP id a640c23a62f3a-b34bb9ea00bmr344466266b.38.1758798684375;
-        Thu, 25 Sep 2025 04:11:24 -0700 (PDT)
-Received: from smtpclient.apple ([209.38.224.166])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b353e5d7351sm148481466b.7.2025.09.25.04.11.22
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 25 Sep 2025 04:11:23 -0700 (PDT)
-From: Nick Zavaritsky <mejedi@gmail.com>
-X-Google-Original-From: Nick Zavaritsky <MeJedi@gmail.com>
-Content-Type: text/plain;
-	charset=utf-8
+        bh=dxqroIT0bJ4gLlcnSWTcG5okvXIsZwteqLXkgpBpuRM=;
+        b=QbfMQxNeG8mDF+LjkMFtToFuEtnCTsePAU9GdYbo4k5HU8Z0Hluq8mEmtjxKXGWx7c
+         7U4S454SeUSR4jGczGsN7dDItXx/KsHjf0wSJY/vw5/K+zuaeOHpTBGiEHdxaorhkiw7
+         /LN8OqILBuSE20elV7dqzQzV4H8XSlq0DdzFEJa9JLnyfZa4UDPjm/odXmMBZpl1oFYs
+         9hhaDN3EzuL3JSbkB4fyll5D4fgd6uiunnL6iNqVKQIDB88XyzzohSnC5VddwA08pBYP
+         9+vbJSrqIANHMa9ytxYRoCoBu/JXK3N8NvS7I8+z5u+Ug60FwxVEBJ0ZB8OHW2IemA+g
+         d3vg==
+X-Forwarded-Encrypted: i=1; AJvYcCXU6MfbUKDBoY2e3DS7Eejj2ET+ikK/MPzSMQaFOiiC7Pzb/h4mxlV8jFh/9UruZ22177A=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwnUqZfvFCBiP/MOFrzZ6GJ3OxPzllAqe8v9kFj2lnlU3or2CJc
+	gRRISq0lW+iFtJNCF8YpJeVdtN9GhZIdam4g+KZyUofL/TSSMyT0aVaqRPlg9uLs2fTStbmaM2Z
+	1Sko0GzDurfJkCwwkZlPaJ4R3h9WZ4Jc=
+X-Gm-Gg: ASbGnctpWfZerF889JaJGiEVI2QR4Bt+NmpDStcAJJA4qPWoDxdzWYrXiOP2F9TfAbI
+	J82M6Ejfjv9w9I688/TRkw9LEk3nJesFksGttSLybJLUi3txh7PdWGgWaKUtaXnWyMJGPOmARCE
+	e5QKRTr262EsD0TILMqsNeTd8LmfD3fws8GY4jhShMRF4rSmiebiLfOR6FsrMlzmskpksKywRC3
+	C+bd+DWU9PVsSLtd9E9wRP6Dnxoa2lnBySS2DQs
+X-Google-Smtp-Source: AGHT+IEjqFiMZ84yVMmL8aqHzutnqyfPVAvHhHZi1w2Zyv0MzO2zv3PyHq0KNksiUWqn8ZVtvz5/v5ORndsZtS+GvZ0=
+X-Received: by 2002:ad4:5742:0:b0:7e4:ee39:738 with SMTP id
+ 6a1803df08f44-7fc45d03d94mr42335986d6.67.1758800317940; Thu, 25 Sep 2025
+ 04:38:37 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3826.700.81\))
-Subject: Re: [PATCH 1/1] bpftool: Formatting defined by user:fmt: decl tag
-In-Reply-To: <fccfa1f1-75a6-4094-9389-7e01b20833b2@kernel.org>
-Date: Thu, 25 Sep 2025 13:11:11 +0200
-Cc: bpf@vger.kernel.org,
- Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>,
- Yonghong Song <yonghong.song@linux.dev>
+MIME-Version: 1.0
+References: <20250910024447.64788-1-laoar.shao@gmail.com> <20250910024447.64788-3-laoar.shao@gmail.com>
+ <CABzRoyaFv4ciJwcdU=1qQNvSWE_PPQonn7ehE7Zz_PHNHfN4gA@mail.gmail.com>
+In-Reply-To: <CABzRoyaFv4ciJwcdU=1qQNvSWE_PPQonn7ehE7Zz_PHNHfN4gA@mail.gmail.com>
+From: Yafang Shao <laoar.shao@gmail.com>
+Date: Thu, 25 Sep 2025 19:38:01 +0800
+X-Gm-Features: AS18NWAPI6UtnnMnTVeKsaXnI6UeT7SK4r6__DsbeZCo6L2UhwRp_pLiTM-6Da0
+Message-ID: <CALOAHbA=On41GnxAQOh__5ff20NSCO3bzG6trOd=+tymeJndbg@mail.gmail.com>
+Subject: Re: [PATCH v7 mm-new 02/10] mm: thp: add support for BPF based THP
+ order selection
+To: Lance Yang <lance.yang@linux.dev>
+Cc: akpm@linux-foundation.org, david@redhat.com, ziy@nvidia.com, 
+	baolin.wang@linux.alibaba.com, lorenzo.stoakes@oracle.com, 
+	Liam.Howlett@oracle.com, npache@redhat.com, ryan.roberts@arm.com, 
+	dev.jain@arm.com, hannes@cmpxchg.org, usamaarif642@gmail.com, 
+	gutierrez.asier@huawei-partners.com, willy@infradead.org, ast@kernel.org, 
+	daniel@iogearbox.net, andrii@kernel.org, ameryhung@gmail.com, 
+	rientjes@google.com, corbet@lwn.net, 21cnbao@gmail.com, 
+	shakeel.butt@linux.dev, bpf@vger.kernel.org, linux-mm@kvack.org, 
+	linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Message-Id: <3EB389B2-437D-40AF-8D6A-9332795C0587@gmail.com>
-References: <20250921132503.9384-1-mejedi@gmail.com>
- <20250921132503.9384-2-mejedi@gmail.com>
- <fccfa1f1-75a6-4094-9389-7e01b20833b2@kernel.org>
-To: Quentin Monnet <qmo@kernel.org>
-X-Mailer: Apple Mail (2.3826.700.81)
 
+On Thu, Sep 25, 2025 at 6:06=E2=80=AFPM Lance Yang <lance.yang@linux.dev> w=
+rote:
+>
+> On Wed, Sep 10, 2025 at 10:53=E2=80=AFAM Yafang Shao <laoar.shao@gmail.co=
+m> wrote:
+> >
+> > This patch introduces a new BPF struct_ops called bpf_thp_ops for dynam=
+ic
+> > THP tuning. It includes a hook bpf_hook_thp_get_order(), allowing BPF
+> > programs to influence THP order selection based on factors such as:
+> > - Workload identity
+> >   For example, workloads running in specific containers or cgroups.
+> > - Allocation context
+> >   Whether the allocation occurs during a page fault, khugepaged, swap o=
+r
+> >   other paths.
+> > - VMA's memory advice settings
+> >   MADV_HUGEPAGE or MADV_NOHUGEPAGE
+> > - Memory pressure
+> >   PSI system data or associated cgroup PSI metrics
+> >
+> > The kernel API of this new BPF hook is as follows,
+> >
+> > /**
+> >  * @thp_order_fn_t: Get the suggested THP orders from a BPF program for=
+ allocation
+> >  * @vma: vm_area_struct associated with the THP allocation
+> >  * @vma_type: The VMA type, such as BPF_THP_VM_HUGEPAGE if VM_HUGEPAGE =
+is set
+> >  *            BPF_THP_VM_NOHUGEPAGE if VM_NOHUGEPAGE is set, or BPF_THP=
+_VM_NONE if
+> >  *            neither is set.
+> >  * @tva_type: TVA type for current @vma
+> >  * @orders: Bitmask of requested THP orders for this allocation
+> >  *          - PMD-mapped allocation if PMD_ORDER is set
+> >  *          - mTHP allocation otherwise
+> >  *
+> >  * Return: The suggested THP order from the BPF program for allocation.=
+ It will
+> >  *         not exceed the highest requested order in @orders. Return -1=
+ to
+> >  *         indicate that the original requested @orders should remain u=
+nchanged.
+> >  */
+> > typedef int thp_order_fn_t(struct vm_area_struct *vma,
+> >                            enum bpf_thp_vma_type vma_type,
+> >                            enum tva_type tva_type,
+> >                            unsigned long orders);
+> >
+> > Only a single BPF program can be attached at any given time, though it =
+can
+> > be dynamically updated to adjust the policy. The implementation support=
+s
+> > anonymous THP, shmem THP, and mTHP, with future extensions planned for
+> > file-backed THP.
+> >
+> > This functionality is only active when system-wide THP is configured to
+> > madvise or always mode. It remains disabled in never mode. Additionally=
+,
+> > if THP is explicitly disabled for a specific task via prctl(), this BPF
+> > functionality will also be unavailable for that task.
+> >
+> > This feature requires CONFIG_BPF_GET_THP_ORDER (marked EXPERIMENTAL) to=
+ be
+> > enabled. Note that this capability is currently unstable and may underg=
+o
+> > significant changes=E2=80=94including potential removal=E2=80=94in futu=
+re kernel versions.
+> >
+> > Suggested-by: David Hildenbrand <david@redhat.com>
+> > Suggested-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+> > Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
+>
+> I've tested this patch on my machine, and it works as expected. Using BPF
+> hooks to control THP is a great step forward!
+>
+> Tested-by: Lance Yang <lance.yang@linux.dev>
 
+Thanks for your test. I will post a new version ASAP.
 
-> On 23. Sep 2025, at 13:22, Quentin Monnet <qmo@kernel.org> wrote:
->=20
-> Note: For future submissions please make sure to add the maintainers =
-in
-> copy for your message, "./scripts/get_maintainer.pl =
-tools/bpf/bpftool/"
-> will give you the list.
->=20
->=20
-> 2025-09-21 13:24 UTC+0000 ~ Nick Zavaritsky <mejedi@gmail.com>
->> Certain data types get exceptionally unwieldy when formatted by =
-bpftool,
->> e.g. IP6 addresses.
->>=20
->> Introduce custom formatting in bpftool driven by user:fmt: decl tag.
->> When a type is tagged user:fmt:ip, the value is formatted as IP4 or =
-IP6
->> address depending on the value size.
->>=20
->> When a type is tagged user:fmt:be, the value is interpreted as a
->> big-endian integer (2, 4 or 8 bytes).
->=20
->=20
-> Hi, thanks for this!
->=20
-> I'm not sure I understand correctly. The 'user:fmt:*' tags are not =
-used
-> yet, correct? So you're proposing to add it to existing code to get a
-> fancier bpftool output. Do you mean adding it to your own executables?
-> Or to existing kernel structures/types?
+>
+> This work also inspires some ideas for another useful hook for THP that I
+> might propose in the future, once this series is settled and merged ;)
 
-I don=E2=80=99t intend to touch existing kernel types. This feature =
-targets ebpf
-projects that wish to make it easier for humans to process bpftool dumps
-of their maps.
+Excited to see it!
 
-By having it in bpftool, we eliminate the need for custom post
-processing. Bpftool can =E2=80=9Cmake it easier for humans=E2=80=9D more =
-reliably since
-it has access to BTF (and tags). It is hard to write a generic post
-processor that improves the presentation of e.g. IP addresses.
-Pattern-matching will work for IPv6 addresses. For ports and IPv4
-addresses not so much, unless wrapper structures are introduced (e.g.
-struct{__be32 ip4addr;}). Wrapper structures will make ebpf code using
-them look funny.
-
-How can this feature get discovered? Having annotated types declared in
-bpftool headers will surely help.
-
->=20
->=20
->>=20
->> Example:
->>=20
->> typedef struct in6_addr bpf_in6_addr
->>    __attribute__((__btf_decl_tag__("user:fmt:ip")));
->> bpf_in6_addr in6;
->>=20
->> $ bpftool map dump name .data
->> [{
->>        "value": {
->>            ".data": [{
->>                    "in6": "2001:db8:130f::9c0:876a:130b"
->>                }
->>            ]
->>        }
->>    }
->> ]
->>=20
->> versus
->>=20
->> $ bpftool map dump name .data
->> [{
->>        "value": {
->>            ".data": [{
->>                    "in6": {
->>                        "in6_u": {
->>                            "u6_addr8": =
-[32,1,13,184,19,15,0,0,0,0,9,192,135,106,19,11
->>                            ],
->>                            "u6_addr16": =
-[288,47117,3859,0,0,49161,27271,2835
->>                            ],
->>                            "u6_addr32": =
-[3087860000,3859,3221815296,185821831
->>                            ]
->>                        }
->>                    }
->>                }
->>            ]
->>        }
->>    }
->> ]
->=20
-> My concern with the example above is that 1) this may be a breaking
-> change for existing scripts parsing map dumps, and 2) we lose the
-> structure and byte representation for in6 (in this example), which =
-means
-> less post-processing for humans, but potentially more for tooling.
->=20
-> If you mean to use the BTF tags as opt-in in your own maps, then =
-that's
-> probably OK. If you mean to change it in existing structures, I don't
-> know - maybe I'd add the custom representation _in addition_ to the
-> existing one, rather than in place.
->=20
-> Quentin
-
-
+--=20
+Regards
+Yafang
