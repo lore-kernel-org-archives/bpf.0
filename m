@@ -1,235 +1,166 @@
-Received: from out-181.mta0.migadu.com (out-181.mta0.migadu.com [91.218.175.181])
+Received: from out-173.mta0.migadu.com (out-173.mta0.migadu.com [91.218.175.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F016303C9B
-	for <bpf@vger.kernel.org>; Thu, 25 Sep 2025 15:32:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E663224B05
+	for <bpf@vger.kernel.org>; Thu, 25 Sep 2025 15:38:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758814339; cv=none; b=rKdFWE4hodWvYjP5iN/wWNhRdpLhJFGzaKXlO4+ECr6+D1FMA8jKf/J8ljux1L7nbQCdQEZ+0YAfSvla2cQ3oAaGVRpUmMpGaWpuBB+RVWL3JRJa4ahGhMvTnIImBB6JCbLcMj67fe0wFyX4+Yaa/0MjOb1ezTTbZLzIbiaf/JY=
+	t=1758814702; cv=none; b=raai2TtL3cWLCvJL1t2Sn0sSnCyUp1DDmqz2WhFsPYffVOomjaHWBCSVoGpFSRXxo9G0tK01GtbEK2HvNZkzUJm4QCb26be6uYLH27C/obIOwWKd9CYypEt4NsjZt4booFGDaQeUZfARS5BSRx0eDbxm1lbhRWZ7nZ0zUHrLv5U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758814339; c=relaxed/simple;
-	bh=NgT10FpEpSYYmbnmgt3MhuxO1JnJEvfawqPO+Byo8xI=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=u96ufgAlvIaJVUtIXBX2+OOAriEInPXBImDF52mzBdHhR1toJG9hHHMjiwL5iGVPiPPJnRkO33eLlTYUG2rlxA1zV0E5U1ePDtMirk66ttEijg//ZnVgkhGbquxJZdHVRiH6yb2AZRtYyljSTbCHkr3HRrr+qye+7/WDNK97Ku4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Y7dbd/IP; arc=none smtp.client-ip=91.218.175.181
+	s=arc-20240116; t=1758814702; c=relaxed/simple;
+	bh=+FF1ryzKweVsdOSWCJFa+2+Bn7qzAnxqJPElYzCC9I8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XVoZvYRLRRaxdKVv90eG9PbGPDI5bIWYcY2kMTrBtfz8yC9JcHbSnkNwQ95pFX+pNXc6azycJlsVBAG9yxYAJ9c7ungiaKdxr5hZs7rwZZ0oXjmHodmhHaCWa7WLnL4wXeEWTzEZMwI8ck5VjRJYhCyWGlKQ3e9KAX6Qv+O0CnE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=lqnVh8JG; arc=none smtp.client-ip=91.218.175.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Y7dbd/IP"
-Message-ID: <933a66f3e0e1f642ef53726abe617c4d138a91fa.camel@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1758814325;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=IVM3/TjrAx73b+FFU6cSE3KCrtsxDRhadpXezuUiniY=;
-	b=Y7dbd/IP+lKkGHLIMsxvGvDQN+1VTUeP2StrY8X6sHD1Kd0cnjplNEVjwvAMXKMLL5+suv
-	rERCckBKYVHnK0EZJCLgPViCOQ8VfQg+2bERKw2mIuiowcFBYJSl5GqF/wcHJ5Q31aYCgr
-	RWDAWjp1VXVduDScsJh34vVJ6g/6gds=
-Subject: Re: [PATCH v2] bpf: fix NULL pointer dereference in
- print_reg_state()
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="lqnVh8JG"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: KaFai Wan <kafai.wan@linux.dev>
-To: Brahmajit Das <listout@listout.xyz>, Alexei Starovoitov
-	 <alexei.starovoitov@gmail.com>
-Cc: syzbot+d36d5ae81e1b0a53ef58@syzkaller.appspotmail.com, Andrii Nakryiko
- <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>, bpf
- <bpf@vger.kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Eduard
- <eddyz87@gmail.com>, Hao Luo <haoluo@google.com>, John Fastabend
- <john.fastabend@gmail.com>, Jiri Olsa <jolsa@kernel.org>, KP Singh
- <kpsingh@kernel.org>, LKML <linux-kernel@vger.kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Stanislav Fomichev <sdf@fomichev.me>, Song Liu
- <song@kernel.org>, syzkaller-bugs <syzkaller-bugs@googlegroups.com>, 
- Yonghong Song <yonghong.song@linux.dev>
-Date: Thu, 25 Sep 2025 23:31:41 +0800
-In-Reply-To: <wz6god46aom7lfyuvhju67w47czdznzflec3ilqs6f7fpyf3di@k5wliusgqlut>
-References: <68d26227.a70a0220.1b52b.02a4.GAE@google.com>
-	 <20250923174738.1713751-1-listout@listout.xyz>
-	 <CAADnVQ+SkF2jL6NZLTF7ZKwNOfOtpMqr0ubjXpF1K0+EkHdJHw@mail.gmail.com>
-	 <qj5y7pjdx2f5alp7sfx2gepfylkk2bytiyeoiapyp3dpzwloyk@aljz7o77tt3m>
-	 <9051652cf548271da9c349758cbd70aaa3cee444.camel@linux.dev>
-	 <wz6god46aom7lfyuvhju67w47czdznzflec3ilqs6f7fpyf3di@k5wliusgqlut>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1758814696;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=eOJ8UE71iw1U0sBvg8Ur+znz2rDvC+2n17rjfVXFV2k=;
+	b=lqnVh8JGP70LUzbMHHOIBmEr0cYSS0HxMH/aYLP6b2CkQPIN9MeysLuknZfaQjFtIvFK8r
+	i5LkYJ13vhpySpLxORx9794k8oeHjJ5QEEs3qhH6I3d+ASVWNCh4pwtXqq9ZcK/eEIQQXZ
+	KxIhpB5Cq5AzPthoY+dpEQPV1hA31HU=
+From: Leon Hwang <leon.hwang@linux.dev>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	andrii@kernel.org,
+	daniel@iogearbox.net,
+	jolsa@kernel.org,
+	yonghong.song@linux.dev,
+	song@kernel.org,
+	eddyz87@gmail.com,
+	dxu@dxuuu.xyz,
+	deso@posteo.net,
+	leon.hwang@linux.dev,
+	kernel-patches-bot@fb.com
+Subject: [PATCH bpf-next v8 0/7] bpf: Introduce BPF_F_CPU and BPF_F_ALL_CPUS flags for percpu maps
+Date: Thu, 25 Sep 2025 23:37:39 +0800
+Message-ID: <20250925153746.96154-1-leon.hwang@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-On Wed, 2025-09-24 at 23:58 +0530, Brahmajit Das wrote:
-> On 25.09.2025 01:38, KaFai Wan wrote:
-> > On Wed, 2025-09-24 at 21:10 +0530, Brahmajit Das wrote:
-> > > On 24.09.2025 09:32, Alexei Starovoitov wrote:
-> > > > On Wed, Sep 24, 2025 at 1:43=E2=80=AFAM Brahmajit Das
-> > > > <listout@listout.xyz>
-> > > > wrote:
-> > > > >=20
-> > > > > Syzkaller reported a general protection fault due to a NULL
-> > > > > pointer
-> > > > > dereference in print_reg_state() when accessing reg->map_ptr
-> > > > > without
-> > > > > checking if it is NULL.
-> > > > >=20
-> > > ...snip...
-> > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (type_is_map_ptr(t)) {
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (type_is_map_ptr(t) && r=
-eg->map_ptr) {
-> > > >=20
-> > > > You ignored earlier feedback.
-> > > > Fix the root cause, not the symptom.
-> > > >=20
-> > > > pw-bot: cr
-> > >=20
-> > > I'm not sure if I'm headed the write direction but it seems like
-> > > in
-> > > check_alu_op, we are calling adjust_scalar_min_max_vals when we
-> > > get
-> > > an
-> > > BPF_NEG as opcode. Which has a call to __mark_reg_known when
-> > > opcode
-> > > is
-> > > BPF_NEG. And __mark_reg_known clears map_ptr with
-> > >=20
-> > > 	/* Clear off and union(map_ptr, range) */
-> > > 	memset(((u8 *)reg) + sizeof(reg->type), 0,
-> > > 	=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 offsetof(struct bpf_reg_state, =
-var_off) -
-> > > sizeof(reg-
-> > > > type));
-> > >=20
-> >=20
-> > I think you are right. The following code can reproduce the error.
-> >=20
-> > 	asm volatile ("					\
-> > 	r0 =3D %[map_hash_48b] ll;			\
-> > 	r0 =3D -r0;					\
-> > 	exit;						\
-> > "	:
-> > 	: __imm_addr(map_hash_48b)
-> > 	: __clobber_all);
-> >=20
-> >=20
-> > BPF_NEG calls __mark_reg_known(dst_reg, 0) which clears the 'off'
-> > and
-> > 'union(map_ptr, range)' of dst_reg, but keeps the 'type', which is
-> > CONST_PTR_TO_MAP.
-> >=20
-> > Perhaps we can only allow the SCALAR_VALUE type to run BPF_NEG as
-> > an
-> > opcode, while for other types same as the before BPF_NEG.
-> >=20
-> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> > index e892df386eed..dbf9f1efc6e7 100644
-> > --- a/kernel/bpf/verifier.c
-> > +++ b/kernel/bpf/verifier.c
-> > @@ -15346,13 +15346,15 @@ static bool
-> > is_safe_to_compute_dst_reg_range(struct bpf_insn *insn,
-> > =C2=A0	switch (BPF_OP(insn->code)) {
-> > =C2=A0	case BPF_ADD:
-> > =C2=A0	case BPF_SUB:
-> > -	case BPF_NEG:
-> > =C2=A0	case BPF_AND:
-> > =C2=A0	case BPF_XOR:
-> > =C2=A0	case BPF_OR:
-> > =C2=A0	case BPF_MUL:
-> > =C2=A0		return true;
-> > =C2=A0
-> > +	case BPF_NEG:
-> > +		return base_type(src_reg->type) =3D=3D SCALAR_VALUE;
-> > +
-> >=20
-> >=20
-> > --=20
-> > Thanks,
-> > KaFai
->=20
-> Before even going into adjust_scalar_min_max_vals we have a check in
-> check_alu_op, which I think is not being respected. Going to expand
-> on
-> this below as response to Alexei.
->=20
-> On 24.09.2025 18:28, Alexei Starovoitov wrote:
-> > On Wed, Sep 24, 2025 at 4:41=E2=80=AFPM Brahmajit Das <listout@listout.=
-xyz>
-> > wrote:
-> > >=20
-> > > On 24.09.2025 09:32, Alexei Starovoitov wrote:
-> > > > On Wed, Sep 24, 2025 at 1:43=E2=80=AFAM Brahmajit Das
-> > > > <listout@listout.xyz> wrote:
-> > > > >=20
-> > > > > Syzkaller reported a general protection fault due to a NULL
-> > > > > pointer
-> > > > > dereference in print_reg_state() when accessing reg->map_ptr
-> > > > > without
-> > > > > checking if it is NULL.
-> > > > >=20
-> > > ...snip...
-> > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (type_is_map_ptr(t)) {
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (type_is_map_ptr(t) && r=
-eg->map_ptr) {
-> > > >=20
-> > > > You ignored earlier feedback.
-> > > > Fix the root cause, not the symptom.
-> > > >=20
-> > > > pw-bot: cr
-> > >=20
-> > > I'm not sure if I'm headed the write direction but it seems like
-> > > in
-> > > check_alu_op, we are calling adjust_scalar_min_max_vals when we
-> > > get an
-> > > BPF_NEG as opcode. Which has a call to __mark_reg_known when
-> > > opcode is
-> > > BPF_NEG. And __mark_reg_known clears map_ptr with
-> >=20
-> > Looks like we're getting somewhere.
-> > It seems the verifier is not clearing reg->type.
-> > adjust_scalar_min_max_vals() should be called on scalar types only.
->=20
-> Right, there is a check in check_alu_op
->=20
-> 		if (is_pointer_value(env, insn->dst_reg)) {
-> 			verbose(env, "R%d pointer arithmetic
-> prohibited\n",
-> 				insn->dst_reg);
-> 			return -EACCES;
-> 		}
->=20
-> is_pointer_value calls __is_pointer_value which takes bool
-> allow_ptr_leaks as the first argument. Now for some reason in this
-> case
-> allow_ptr_leaks is being passed as true, as a result
-> __is_pointer_value
-> (and in turn is_pointer_value) returns false when even when register
-> type is CONST_PTR_TO_MAP.
->=20
+This patch set introduces the BPF_F_CPU and BPF_F_ALL_CPUS flags for
+percpu maps, as the requirement of BPF_F_ALL_CPUS flag for percpu_array
+maps was discussed in the thread of
+"[PATCH bpf-next v3 0/4] bpf: Introduce global percpu data"[1].
 
-IIUC, `env->allow_ptr_leaks` set true means privileged mode (
-CAP_PERFMON or CAP_SYS_ADMIN ), false for unprivileged mode.=20
+The goal of BPF_F_ALL_CPUS flag is to reduce data caching overhead in light
+skeletons by allowing a single value to be reused to update values across all
+CPUs. This avoids the M:N problem where M cached values are used to update a
+map on N CPUs kernel.
 
+The BPF_F_CPU flag is accompanied by *flags*-embedded cpu info, which
+specifies the target CPU for the operation:
 
-We can use __is_pointer_value to check if the register type is a
-pointer. For pointers, we check as before (before checking BPF_NEG
-separately), and for scalars, it remains unchanged.=C2=A0Perhaps this way w=
-e
-can fix the error.
+* For lookup operations: the flag field alongside cpu info enable querying
+  a value on the specified CPU.
+* For update operations: the flag field alongside cpu info enable
+  updating value for specified CPU.
 
-if (opcode =3D=3D BPF_NEG) {
-	if (__is_pointer_value(false, &regs[insn->dst_reg])) {
-		err =3D check_reg_arg(env, insn->dst_reg, DST_OP);
-	} else {
-		err =3D check_reg_arg(env, insn->dst_reg,
-DST_OP_NO_MARK);
-		err =3D err ?: adjust_scalar_min_max_vals(env, insn,
-						&regs[insn->dst_reg],
-						regs[insn->dst_reg]);
-	}
-} else {
+Links:
+[1] https://lore.kernel.org/bpf/20250526162146.24429-1-leon.hwang@linux.dev/
 
+Changes:
+v7 -> v8:
+* Address comments from Andrii:
+  * Check BPF_F_LOCK when update percpu_array, percpu_hash and
+    lru_percpu_hash maps.
+  * Refactor flags check in __htab_map_lookup_and_delete_batch().
+  * Keep value_size unaligned and copy value using copy_map_value() in
+    __htab_map_lookup_and_delete_batch() when BPF_F_CPU is specified.
+  * Update warn message in libbpf's validate_map_op().
+  * Update comment of libbpf's bpf_map__lookup_elem().
 
---=20
-Thanks,
-KaFai
+v6 -> v7:
+* Get correct value size for percpu_hash and lru_percpu_hash in
+  update_batch API.
+* Set 'count' as 'max_entries' in test cases for lookup_batch API.
+* Address comment from Alexei:
+  * Move cpu flags check into bpf_map_check_op_flags().
+
+v5 -> v6:
+* Move bpf_map_check_op_flags() from 'bpf.h' to 'syscall.c'.
+* Address comments from Alexei:
+  * Drop the refactoring code of data copying logic for percpu maps.
+  * Drop bpf_map_check_op_flags() wrappers.
+
+v4 -> v5:
+* Address comments from Andrii:
+  * Refactor data copying logic for all percpu maps.
+  * Drop this_cpu_ptr() micro-optimization.
+  * Drop cpu check in libbpf's validate_map_op().
+  * Enhance bpf_map_check_op_flags() using *allowed flags* instead of
+    'extra_flags_mask'.
+
+v3 -> v4:
+* Address comments from Andrii:
+  * Remove unnecessary map_type check in bpf_map_value_size().
+  * Reduce code churn.
+  * Remove unnecessary do_delete check in
+    __htab_map_lookup_and_delete_batch().
+  * Introduce bpf_percpu_copy_to_user() and bpf_percpu_copy_from_user().
+  * Rename check_map_flags() to bpf_map_check_op_flags() with
+    extra_flags_mask.
+  * Add human-readable pr_warn() explanations in validate_map_op().
+  * Use flags in bpf_map__delete_elem() and
+    bpf_map__lookup_and_delete_elem().
+  * Drop "for alignment reasons".
+v3 link: https://lore.kernel.org/bpf/20250821160817.70285-1-leon.hwang@linux.dev/
+
+v2 -> v3:
+* Address comments from Alexei:
+  * Use BPF_F_ALL_CPUS instead of BPF_ALL_CPUS magic.
+  * Introduce these two cpu flags for all percpu maps.
+* Address comments from Jiri:
+  * Reduce some unnecessary u32 cast.
+  * Refactor more generic map flags check function.
+  * A code style issue.
+v2 link: https://lore.kernel.org/bpf/20250805163017.17015-1-leon.hwang@linux.dev/
+
+v1 -> v2:
+* Address comments from Andrii:
+  * Embed cpu info as high 32 bits of *flags* totally.
+  * Use ERANGE instead of E2BIG.
+  * Few format issues.
+
+Leon Hwang (7):
+  bpf: Introduce internal bpf_map_check_op_flags helper function
+  bpf: Introduce BPF_F_CPU and BPF_F_ALL_CPUS flags
+  bpf: Add BPF_F_CPU and BPF_F_ALL_CPUS flags support for percpu_array
+    maps
+  bpf: Add BPF_F_CPU and BPF_F_ALL_CPUS flags support for percpu_hash
+    and lru_percpu_hash maps
+  bpf: Add BPF_F_CPU and BPF_F_ALL_CPUS flags support for
+    percpu_cgroup_storage maps
+  libbpf: Add BPF_F_CPU and BPF_F_ALL_CPUS flags support for percpu maps
+  selftests/bpf: Add cases to test BPF_F_CPU and BPF_F_ALL_CPUS flags
+
+ include/linux/bpf-cgroup.h                    |   4 +-
+ include/linux/bpf.h                           |  44 +++-
+ include/uapi/linux/bpf.h                      |   2 +
+ kernel/bpf/arraymap.c                         |  24 +-
+ kernel/bpf/hashtab.c                          |  79 ++++--
+ kernel/bpf/local_storage.c                    |  22 +-
+ kernel/bpf/syscall.c                          |  65 +++--
+ tools/include/uapi/linux/bpf.h                |   2 +
+ tools/lib/bpf/bpf.h                           |   8 +
+ tools/lib/bpf/libbpf.c                        |  26 +-
+ tools/lib/bpf/libbpf.h                        |  21 +-
+ .../selftests/bpf/prog_tests/percpu_alloc.c   | 234 ++++++++++++++++++
+ .../selftests/bpf/progs/percpu_alloc_array.c  |  32 +++
+ 13 files changed, 473 insertions(+), 90 deletions(-)
+
+--
+2.50.1
+
