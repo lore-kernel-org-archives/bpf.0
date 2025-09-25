@@ -1,144 +1,197 @@
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27E7B266EEA
-	for <bpf@vger.kernel.org>; Thu, 25 Sep 2025 11:03:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A0DC2F60CB
+	for <bpf@vger.kernel.org>; Thu, 25 Sep 2025 11:11:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758798198; cv=none; b=m3ssddxgUZ9vZIe7QqUHcQCeHCA6y7bBM3WAxicUy3dtiloJ1gQqTj4HAV0Qp3XMLd4eOpTCsYLA7MJbQyBOHwoimzU7inly8YtNHtzUwz+xS6WMB3dUbnl7WRyGGHQv1U+1Pbl+r1BlVGdlmvHNh5Zlcf/7fr3HxzalKF+4VZU=
+	t=1758798688; cv=none; b=VQqbINcACO1DRCe1VyuS2Ve30jn+QFZgA8/Q5fGaX7ZCQzt44L6U/3l9cri7GAv+CoRQt++DJ1B/gxz7PKj/2uc2byQHOjqub0H9t90yXQGEqwfyRa2sFj8vKBNjiEv15uwlXUHdPtleg2Il+tNMr+8G/VGwPMySIq56Jc6WFxk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758798198; c=relaxed/simple;
-	bh=5f5jzmY/8z4+Z/yXxNdh/MioRwPbuZwA+8mB7aWl2NQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GtgG8y6miTZrkAe7JF/grQNNBc/Ndp8XCULUeRWPwxMR0RNI5iHqNpOT6M/Sf+ulFPn3gzn13G2ArduUa7Br/bTG/cRbd3eDoVVn0iEkd+NMdl/KtGh+iMsN+TQBv3w7cj77QGdBVxFdnBhjsBO2G/wJt30y4MSJg7UowBEoGBc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ObxWacTp; arc=none smtp.client-ip=209.85.218.43
+	s=arc-20240116; t=1758798688; c=relaxed/simple;
+	bh=aFS8/Z+4YfMdijSZ5GrdCI0jNYlHJMYb3wHEbERFPAU=;
+	h=From:Content-Type:Mime-Version:Subject:In-Reply-To:Date:Cc:
+	 Message-Id:References:To; b=SVcx9WmFVWLs/ndzW+IO3xzXvuVO5uSQli1Lo6WaThIr0wx9T+NmmlJRe+yiuHgPyf3FOXJ2CQbLO9fCwlhxYcYIyGoirptMkv4TiHWBFJNtmvehHsP3Y0hZenbjphgZR1NzJmkCs+h/lYWOMJjiQ5JgWrzsol1AJM9VrFz06qY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HCZJ7YF3; arc=none smtp.client-ip=209.85.218.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ObxWacTp"
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-b2ad83fe986so14387966b.3
-        for <bpf@vger.kernel.org>; Thu, 25 Sep 2025 04:03:16 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HCZJ7YF3"
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-b29ebf9478bso116379866b.0
+        for <bpf@vger.kernel.org>; Thu, 25 Sep 2025 04:11:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1758798195; x=1759402995; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Kbayy13shJENppb8XOVzKg697zuEvFkUeRfz0DCdeZk=;
-        b=ObxWacTpU7Po3m5cDA2rCo7GRT5kKJHL3jxsWrtdYiMkwiGoMhZxEEmboziMo9JJFh
-         OWlXBt6dh4pUWNLU+RNNPGRI0gJBnvlLOuOOG8oM0xIhGVohcCUErFBFV+9Hhq9jL5fK
-         Hd2G9Hk3f/ZXgVp/McpZwVl5YO99Ook1E6onuuJ/rPxWkk2iVwQdYcAHZ4qTBKV0HHf9
-         ki7wvGfeiMUMuxXkWBdnFolxs0+xSydebIfhcfPBzH6Qbko5/mNRaVadckYwdNrJ3dSe
-         DHRj6jVf3qcgIEVaFQKVLgxGAGXFf3X/yehHOLmJlFP5B82RZiawoPsGsLw8YsHbuH+T
-         ptzQ==
+        d=gmail.com; s=20230601; t=1758798685; x=1759403485; darn=vger.kernel.org;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:subject:mime-version:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QvQogmF7KDfaqKuZyAZb/az+I8jfHzFzp3VlhyK97YQ=;
+        b=HCZJ7YF3Q909CDICAekGBg8Q0ndeSNJptwkftzTBHcPtM4RnEPdE0wj17CzUQ1u7sW
+         ozj461GUwcvFblsLshqybv2Q2xzlXu1Pm3A93hsx9uqL9ZRB4EGNQ6mwDCkFnvBbf2Xj
+         ffej7fr42xNWDp5i7MODVswjeNlaOqfRuyueoqFdeGuDpO9rUiW1eeo3+LEMWKqWluKK
+         WupMecxBQsU//E8txJD66RlyBIrkXAFhLY2J5tjsWJVKaHiky+paSjuEgwbcC+BC5H+J
+         5Z/mhZQsMdnWhOx+rGKOX/pUnYSU5AdVNygXNdFyBB9RtOngcveiKQyOBVUoGcnYRSxw
+         gcnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758798195; x=1759402995;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Kbayy13shJENppb8XOVzKg697zuEvFkUeRfz0DCdeZk=;
-        b=koGg1f7x3VkgKWniiVp62bdWBo6Ssk44uUt0sbkXsIc8rCm3Y5LlSs3WAq3r9JZFFp
-         5IafLQpYFJZsphPcM5Mi8cyy+v5gQMNdTTpdWy4OG67R6NIPkaAagFqqjDb935OCcQXO
-         MLoDmpER2J0v6B5gN2TGfFk+HgXqYt1WUc82qlPrb863CMLndLyfu9ei2Bq8r82TSYFx
-         X7/LSFEv43qeTGQZNFPjEnauPuZdqrE5SYg4i65lt968HcwdCd4PF6GYo6jXAG1Ujj9O
-         A3dJ6N+Fj4UDna72TU05XHlI+W5shq/F0+40P28zFwdEGdk26YLZ4DgZbtdE/xp9CJDG
-         UbRg==
-X-Forwarded-Encrypted: i=1; AJvYcCXXgUpwzJPKTDGifabTCnxTZsQRtdXBTrqd/nr9hhxw3r/T0LqTYSUq5MtZteFNfGsd+WA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz6a6KCp7V0pINoFpwQvjylgUxSxStWBtNJovAHwIHo/eb7dLnf
-	lrHCDNTPGTXF4Hfgk3DFtM349MAPu1FdcxYdgWfk8G3rzPZ+P4B2OPfo
-X-Gm-Gg: ASbGnctCUWj05enLSyqGY1Z4PmdRvHKXeMceItf8A+6Vg4E39f5O24uZ+ftQhbIREI0
-	JyiI/yfiNS3+t/IhkmNcR6nQTRoMS07NPfuWDjnXdhSiC37UqR3lQgKvcohV3Tj/XtBxbdQurwh
-	pJ61BLwuo+Td5ZGTEWnqt2nZbFD14B05CxuwATCwPzCBI8eVbWG9p7jF4fLA/sqXdGLbmb4qds6
-	xaBNkJqGQFnxtjvWNUeWSSSAE9ARqtFQ3HJr1Jz6ej/4jZWkQHwXDbJZaGrNGpxV/qstd7ucCM3
-	a2uZK+B78SQqSyFgcmaWxQM5hF/+77n1YPlCTEQEop5YoJ0Uq/54IHiEdD8Nx2epEmmI+JmwkpA
-	EsceGn3ZgCQ8AVxJu7AUdTkEqMs8J1uMctDHIGaMg2mgOpexWGKMPlZEz7ZjQIQ==
-X-Google-Smtp-Source: AGHT+IE+FDIp8REoReNlisltZxekgZurykBl8HQME4zI0tHguqI3KAp9IuApteihHX89I/9CUSSgZw==
-X-Received: by 2002:a17:907:868d:b0:afe:88ac:ab9 with SMTP id a640c23a62f3a-b34bbeba6d0mr166541366b.9.1758798195396;
-        Thu, 25 Sep 2025 04:03:15 -0700 (PDT)
-Received: from [192.168.1.105] ([165.50.112.244])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b35446f7806sm147331066b.70.2025.09.25.04.03.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 Sep 2025 04:03:15 -0700 (PDT)
-Message-ID: <941fece6-9660-4aa8-91ed-346b0c2d97c1@gmail.com>
-Date: Thu, 25 Sep 2025 13:03:11 +0100
+        d=1e100.net; s=20230601; t=1758798685; x=1759403485;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:subject:mime-version:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QvQogmF7KDfaqKuZyAZb/az+I8jfHzFzp3VlhyK97YQ=;
+        b=b7CPDmnKi+/9RUmWZ6thm1RkeDgRIszJQ7OGZq3274a27+RdKU/5W63M6/p8aE0DlO
+         Jhwcq2UJp3Fql1MJsNBmnD4AdnUz7URm3p9QwLo+3JPuE1kY+Xx8LXA+smcDjBiQD87z
+         aeLuM7dfYpnYd2Qa68d1A1ShfzuUtPgZKucUvUYI6Gktf+V11589pEZ2NwqPAXSA63Tv
+         9KoiL9cXBPNjE+FonzYP09Z/rxwgEMg2arOIdwTusR48XpznsXw4jgMbTjZ1rs+kDogI
+         h8MjPe+39vdqWTfRmhaAtP3lDr3t9DQ3iXLYzGoygwKbsd7JXrBeeEnesNbZcK75J7RA
+         ZhuQ==
+X-Gm-Message-State: AOJu0Yx1NEIwZ9fVfcaji4DHFihT2OQfk5ENY19OH9W+/ThYCuiy9sdk
+	3daZmQmVgYrcgLmULv4cqd/c6868qu+NSjFbu1qRboKfFr8NTKTtt64k
+X-Gm-Gg: ASbGnctj/qwTuIbZvKjKle8NkUa+0DQDIhWhsGjVFMn7xpR6FAal4LYo6PCID0roq5+
+	+B/vbUnBkDQ+f3hy8G9AftYuA44IKlWJvnIGr3SY30R31T4wBfy/tx7wPOoSlhWmBFgmEpnRBvN
+	VZXqKkB2xYEJRjliwpG9Zd1FFdN7QZa2R2/FYfAktUFaGQRp3iX86cfajWtXL6gzDW0Mi/wHTII
+	o9p/R83NRmLDlYaNTJfXMduonfV6m6AZHSCh9ML03LGlUqpnQbRjHpNi4OT0Erzt7M9hPxO0S0W
+	/L6fqIRPGhi6IC6qF44SqvFZZZAe8Zaan45bLsJvDld4xGSb5vIV1+CMyDHPihkW3lp7ZC16fQo
+	zDo4uXMAtnc+sxBXq3OMU4w9iYaIJ/Wm1LdI=
+X-Google-Smtp-Source: AGHT+IF7e6v1oucsOSMv2oJagF2isfYqo1TpOa4sH3qFriZ86IF0GVua3IC15lrQKP5GEg8vTGrCTw==
+X-Received: by 2002:a17:907:9405:b0:b10:1af1:dc2a with SMTP id a640c23a62f3a-b34bb9ea00bmr344466266b.38.1758798684375;
+        Thu, 25 Sep 2025 04:11:24 -0700 (PDT)
+Received: from smtpclient.apple ([209.38.224.166])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b353e5d7351sm148481466b.7.2025.09.25.04.11.22
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 25 Sep 2025 04:11:23 -0700 (PDT)
+From: Nick Zavaritsky <mejedi@gmail.com>
+X-Google-Original-From: Nick Zavaritsky <MeJedi@gmail.com>
+Content-Type: text/plain;
+	charset=utf-8
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC 0/4] Add XDP RX queue index metadata via kfuncs
-To: Jakub Sitnicki <jakub@cloudflare.com>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, donald.hunter@gmail.com, andrew+netdev@lunn.ch,
- ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
- john.fastabend@gmail.com, matttbe@kernel.org, chuck.lever@oracle.com,
- jdamato@fastly.com, skhawaja@google.com, dw@davidwei.uk,
- mkarsten@uwaterloo.ca, yoong.siang.song@intel.com,
- david.hunter.linux@gmail.com, skhan@linuxfoundation.org, horms@kernel.org,
- sdf@fomichev.me, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org, linux-kernel-mentees@lists.linuxfoundation.org
-References: <20250923210026.3870-1-mehdi.benhadjkhelifa@gmail.com>
- <87h5wq50l0.fsf@cloudflare.com>
- <0cddb596-a70b-48d4-9d8e-c6cb76abd9d2@gmail.com>
- <87348a4yyd.fsf@cloudflare.com>
- <e85e7bb2-6229-4b04-9c2a-7a7b79497c6c@gmail.com>
- <87y0q23j2w.fsf@cloudflare.com>
-Content-Language: en-US
-From: Mehdi Ben Hadj Khelifa <mehdi.benhadjkhelifa@gmail.com>
-In-Reply-To: <87y0q23j2w.fsf@cloudflare.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3826.700.81\))
+Subject: Re: [PATCH 1/1] bpftool: Formatting defined by user:fmt: decl tag
+In-Reply-To: <fccfa1f1-75a6-4094-9389-7e01b20833b2@kernel.org>
+Date: Thu, 25 Sep 2025 13:11:11 +0200
+Cc: bpf@vger.kernel.org,
+ Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>,
+ Yonghong Song <yonghong.song@linux.dev>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <3EB389B2-437D-40AF-8D6A-9332795C0587@gmail.com>
+References: <20250921132503.9384-1-mejedi@gmail.com>
+ <20250921132503.9384-2-mejedi@gmail.com>
+ <fccfa1f1-75a6-4094-9389-7e01b20833b2@kernel.org>
+To: Quentin Monnet <qmo@kernel.org>
+X-Mailer: Apple Mail (2.3826.700.81)
 
-On 9/25/25 11:47 AM, Jakub Sitnicki wrote:
-> On Thu, Sep 25, 2025 at 12:28 PM +01, Mehdi Ben Hadj Khelifa wrote:
->> On 9/25/25 11:18 AM, Jakub Sitnicki wrote:
->>> On Thu, Sep 25, 2025 at 11:54 AM +01, Mehdi Ben Hadj Khelifa wrote:
->>>> On 9/25/25 10:43 AM, Jakub Sitnicki wrote:
->>>>> On Tue, Sep 23, 2025 at 10:00 PM +01, Mehdi Ben Hadj Khelifa wrote:
->>>>>>     This patch series is intended to make a base for setting
->>>>>>     queue_index in the xdp_rxq_info struct in bpf/cpumap.c to
->>>>>>     the right index. Although that part I still didn't figure
->>>>>>     out yet,I m searching for my guidance to do that as well
->>>>>>     as for the correctness of the patches in this series.
->>>>> What is the use case/movtivation behind this work?
->>>>
->>>> The goal of the work is to have xdp programs have the correct packet RX queue
->>>> index after being redirected through cpumap because currently the queue_index
->>>> gets unset or more accurately set to 0 as a default in xdp_rxq_info. This is my
->>>> current understanding.I still have to know how I can propogate that HW hint from
->>>> the NICs to the function where I need it.
->>> This explains what this series does, the desired end state of
->>> information passing, but not why is does it - how that information is
->>> going to be consumed? To what end?
->>
->> In my vision,The queue index propagated correctly through cpumap can help xdp
->> programs use it for things such as per queue load balancing,Adaptive RSS tuning
->> and even maybe for DDoS mitigation where they can drop traffic per queue.I mean
->> if these aren't correct intents or if they don't justify the added code, I can
->> abort working on it. Even if they weren't I need more guidance on how I can have
->> that metadata from HW hints...
-> 
-> Both filtering or load balancing you'd want to do early on - in the XDP
-> program invoked on receive from NIC, which as Stanislav pointed out
-> already has access to the RX queue index in its context. Not on the
-> remote CPU after spending cycles on a redirect.
-> 
-> And even if you wanted to pass that information to the remote XDP
-> program, to do something with it, you can already store it in custom XDP
-> metadata [1].
-> 
-> So while perhaps there is something that you can't do today but would be
-> useful, I don't know what it is. Hence my question about the use case.
-> 
-> [1] https://docs.ebpf.io/linux/helper-function/bpf_xdp_adjust_meta/
-> 
-Very clear,
-I will abort working on this since it can be passed as a custom XDP 
-metadata [1] until further valid use cases or when it proves to be more 
-useful.
-Thank you for your review and time.
-Best Regards,
-Mehdi
 
-[1] https://docs.ebpf.io/linux/helper-function/bpf_xdp_adjust_meta/
+
+> On 23. Sep 2025, at 13:22, Quentin Monnet <qmo@kernel.org> wrote:
+>=20
+> Note: For future submissions please make sure to add the maintainers =
+in
+> copy for your message, "./scripts/get_maintainer.pl =
+tools/bpf/bpftool/"
+> will give you the list.
+>=20
+>=20
+> 2025-09-21 13:24 UTC+0000 ~ Nick Zavaritsky <mejedi@gmail.com>
+>> Certain data types get exceptionally unwieldy when formatted by =
+bpftool,
+>> e.g. IP6 addresses.
+>>=20
+>> Introduce custom formatting in bpftool driven by user:fmt: decl tag.
+>> When a type is tagged user:fmt:ip, the value is formatted as IP4 or =
+IP6
+>> address depending on the value size.
+>>=20
+>> When a type is tagged user:fmt:be, the value is interpreted as a
+>> big-endian integer (2, 4 or 8 bytes).
+>=20
+>=20
+> Hi, thanks for this!
+>=20
+> I'm not sure I understand correctly. The 'user:fmt:*' tags are not =
+used
+> yet, correct? So you're proposing to add it to existing code to get a
+> fancier bpftool output. Do you mean adding it to your own executables?
+> Or to existing kernel structures/types?
+
+I don=E2=80=99t intend to touch existing kernel types. This feature =
+targets ebpf
+projects that wish to make it easier for humans to process bpftool dumps
+of their maps.
+
+By having it in bpftool, we eliminate the need for custom post
+processing. Bpftool can =E2=80=9Cmake it easier for humans=E2=80=9D more =
+reliably since
+it has access to BTF (and tags). It is hard to write a generic post
+processor that improves the presentation of e.g. IP addresses.
+Pattern-matching will work for IPv6 addresses. For ports and IPv4
+addresses not so much, unless wrapper structures are introduced (e.g.
+struct{__be32 ip4addr;}). Wrapper structures will make ebpf code using
+them look funny.
+
+How can this feature get discovered? Having annotated types declared in
+bpftool headers will surely help.
+
+>=20
+>=20
+>>=20
+>> Example:
+>>=20
+>> typedef struct in6_addr bpf_in6_addr
+>>    __attribute__((__btf_decl_tag__("user:fmt:ip")));
+>> bpf_in6_addr in6;
+>>=20
+>> $ bpftool map dump name .data
+>> [{
+>>        "value": {
+>>            ".data": [{
+>>                    "in6": "2001:db8:130f::9c0:876a:130b"
+>>                }
+>>            ]
+>>        }
+>>    }
+>> ]
+>>=20
+>> versus
+>>=20
+>> $ bpftool map dump name .data
+>> [{
+>>        "value": {
+>>            ".data": [{
+>>                    "in6": {
+>>                        "in6_u": {
+>>                            "u6_addr8": =
+[32,1,13,184,19,15,0,0,0,0,9,192,135,106,19,11
+>>                            ],
+>>                            "u6_addr16": =
+[288,47117,3859,0,0,49161,27271,2835
+>>                            ],
+>>                            "u6_addr32": =
+[3087860000,3859,3221815296,185821831
+>>                            ]
+>>                        }
+>>                    }
+>>                }
+>>            ]
+>>        }
+>>    }
+>> ]
+>=20
+> My concern with the example above is that 1) this may be a breaking
+> change for existing scripts parsing map dumps, and 2) we lose the
+> structure and byte representation for in6 (in this example), which =
+means
+> less post-processing for humans, but potentially more for tooling.
+>=20
+> If you mean to use the BTF tags as opt-in in your own maps, then =
+that's
+> probably OK. If you mean to change it in existing structures, I don't
+> know - maybe I'd add the custom representation _in addition_ to the
+> existing one, rather than in place.
+>=20
+> Quentin
+
+
