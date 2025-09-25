@@ -1,111 +1,106 @@
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4FEF2874E4
-	for <bpf@vger.kernel.org>; Thu, 25 Sep 2025 09:53:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3C06286D73
+	for <bpf@vger.kernel.org>; Thu, 25 Sep 2025 09:55:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758793999; cv=none; b=OQREa1uPLTbTOnwinmP/AvLMStZOmX6ug8aDmGo1yRdvHEicxasseosf7KhZC0vr1N3Uv+2zQ1/h+H3Ylo2yb6x84bYz8at462cEIkxWIOvLZeu7kDHJlg0ntcxPN8if80cAtMKi0imkm8QOfl/Tzkq0lJ2BWEtcFNGoPnhiWc0=
+	t=1758794106; cv=none; b=qvv6WRBiHP8h+LWdgb6I0JJA0qHM5R1fjyRVFUEeTQvlRlNePVQ+Ev0iCbCIlx0GgbuHyrrCquKVksszCHsyh6es2ctwnA/IKtximXPzwTT/Lqb2JFiPWoodUt6UF7OFsYkDbMPV1O5XjnOZ7nSGbmhk+pLvF4YrDgmbzMsEh78=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758793999; c=relaxed/simple;
-	bh=lu9Tc9pURgZ0381dUEwXBCbkX3e5TEeN4qRYRoLV158=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=aldyctXvQOomN8dbRIqDDjSijWGQ5ln9fNAWUSGQrwlDC8lqhcIFQBczFu2uNzfvSjJMTrZx949WxwXYVSpMVjMVs4HUerp81z+kjnGl9n2GSkogsEdBFWVHftanCfJfeWCHBX1NFa4v2gQqp9xtT06lpOnfR2S4o4qTkyVYFbs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UHklCjot; arc=none smtp.client-ip=209.85.221.53
+	s=arc-20240116; t=1758794106; c=relaxed/simple;
+	bh=gYz7iV05DSw4pVhAWjhV3Q0zzhj5V+j80F263wxEhK0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=tth+8QOm4Q1g2dwS5puUq/fbHoo2qNzixMakRDBaJ3oI6TNfayLY9seSefIASxzCdKR8wyeYX4G+XXzaUJuV9TXqNJunxDQRIf+A98u8J3wPt8VDSm+GPDr9pd5+6AAr7Pv27wx1uQU+5vkHXLJ4WY4mHCh9xosGAeWcGK1uiG0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CvrQvBfR; arc=none smtp.client-ip=209.85.208.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UHklCjot"
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-3f2ae6fadb4so778770f8f.1
-        for <bpf@vger.kernel.org>; Thu, 25 Sep 2025 02:53:17 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CvrQvBfR"
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-633b4861b79so91522a12.1
+        for <bpf@vger.kernel.org>; Thu, 25 Sep 2025 02:55:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1758793996; x=1759398796; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YZcpU2w/VB5YKX06iIgQfBUU6i35jTYfqMGO23xOBP4=;
-        b=UHklCjotzVCgszSSsq1v32EDLcxKlRu4szU1a2b3oaBr9pZhVGP0NIOY64YBiSGtzQ
-         H8lYKnwa1VzQFAtLSHuTZ6/sBQ9II9ThxzRy6kBMWtokey5FALe2AxmtQfgiI3b7CRZA
-         +EsbO0lIzzsSTEu9kL0peL068UUyjUSflva/xP0G+oYhQVN7UcP9PILSimUf5DbdgW6P
-         T/uLENxBPymw+kq5ZNQzlitN0miER0HWXlhE8uco4YU/E9zDR80guRW5h+tlRRnMcuc/
-         yaAPZc93j6gR9Q7kOpVlojdVVj8bLun/Ta4geqfG0mR4SP6T8Z70ZesYD2Hn9WzGEOSP
-         0I+A==
+        d=gmail.com; s=20230601; t=1758794103; x=1759398903; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=D6dvovCLm5rvYDjRuqlZ0v6O+tZDtYwybR22eRO2w/w=;
+        b=CvrQvBfR60pjYrt0JNov/JUzBIu7LqSKR/md3Vk/16C2BVFDFidGXudncHq/2Ns5d1
+         iQioOLx9l0wtXcnHvsuBg8DIiHKBFus7lnQhgdGTZZo3ibU3LNyoOI60TEJoONJ2V+3/
+         z9btmhvZnnbvl3TYlEKOP7BE9e2juxFDHABQe9IJ/KACOsO22CCr2zx4ho0Q0WNSqjqw
+         QoC2/NUuoftjd9OiJbTJxykezYo2T+MQDH9EyMtt1tnNT9PAh64bqeA3QQ8c8zGu6tCm
+         NcyC9Jli7v+vPVunCHe6KAOr3QHyjhfsGtQRcPoOm83Kc3LqmcGPcot4rzpInR237yYM
+         BChQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758793996; x=1759398796;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YZcpU2w/VB5YKX06iIgQfBUU6i35jTYfqMGO23xOBP4=;
-        b=XUf+DIHNubEjHDd27E9WQ/45XE1P+G4RaPIP3T5S4EGwH43/Hp6h2KzR0lE9B7PVch
-         O86JjfP6K6pdlQ+B0tTkPfZ3q01sLQVKvtTZ5REzyAMmVgpmQq5zpijC7Yhc5TtxqDi8
-         R7bemdfaZaASGs0pO7hlqQsfKBQfVgkMY9Ufy9sUkDcisf7ozDTlCbCZfhCMLLbH4Wvn
-         GlxGRa6n5Yj8fqDSLJ/HbygdS2j9uZGl0QwlRqBNYVCf2ICTKytmVDkX+U9F6bNTeqZH
-         mLA8PsSH6V5Gxw0jsdzxuaR+gsu4LqZ7QOxKykSv760n4H5y/8AuMFJGJDkFZliIAwkL
-         D2Dw==
-X-Gm-Message-State: AOJu0YwhNykR6EFlF6F9h8ufcDoLqdBYnTdYWhNEAtDQ4f1R2HhUIjJZ
-	aKBAXc7OfeawGI4ZzrTReeEabfoL/1L9fVUNQXNWK/23REThhwJadJl49Jq15oQgu7BTkPd7esn
-	9+OGs7kPdq+CHIwtcjrryatOoji/SDKhn4/dD3qfAAA==
-X-Gm-Gg: ASbGncueWwUIUefcz+GrNz3eZ47K65SLWis/Si/4ujacr4Ys2e7gzhSD3iOdTh8Ra3/
-	5S77PbtalaEzfcuQvPfCop/drdYRQrj/N/rhLLQCBK/jgmRytl+6hCjRH21BKaMTowkW0js+1Zb
-	vCfpoqiZgR5eL68bLxxefXlrZLgl5ELQpwgtmgSkxljfXQXMiM6G9R21Ndh9C4STosCiLMAeVLz
-	jAXqsDWhz+9u2aU
-X-Google-Smtp-Source: AGHT+IEmU8rnXWa62/3qZo+R7CiKruEkD4ZCa9MZ8GPj2WiUPf+P7ttT+U2icSZcwgkOfcyw7mPkVrfynUcxItvgZY4=
-X-Received: by 2002:a05:6000:25c3:b0:3b7:8da6:1bb4 with SMTP id
- ffacd0b85a97d-40e4accc86fmr2650916f8f.58.1758793995865; Thu, 25 Sep 2025
- 02:53:15 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1758794103; x=1759398903;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=D6dvovCLm5rvYDjRuqlZ0v6O+tZDtYwybR22eRO2w/w=;
+        b=ibXeZq9X6+UocqA0oBoc1iAuRp9BCMreJiw1N1Ixy+3WQZitAFRp6FKxsU32or2Obx
+         I1CC8N+wIhmjiKd727fxDHHZgRe6bEyYz28RucOhse/yaMgb4SQh42ac/K/VVqBTEDhu
+         CblHTT7S35RJHgoeZefm3uETs0WTCW/rK2NZSln3ZAhTfzpzdT7AuY4962txH4uT1GBJ
+         PsLORVs7HPtrydOuF5xudGe3ZmDVP3DcAXU0AKgGO/aZCDlJq4OpFEPO7sSdGAAGykTr
+         HFCxTWpcu2aZsiAiiEB7lQLFePO4IXZbIzqGEBXaMxfYHdycMYO+Gr+N9RHoCPaHYWYa
+         b89w==
+X-Forwarded-Encrypted: i=1; AJvYcCVz9HEZh2w2vWqooLxuXIibVrd62GDzH+GXJN00HPzviDOjTJuzKREMJcrS0zxuxTYhe2s=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxLqeurOeOLyS/v8YmL52rvr6lu5bjj4Ix7eBbECSkhPZClVT/S
+	iN4bJy9AQkhJdbj2CpJuSJQrbySFG6pJv2DhlHyawNPD2n5IDZXnaG2L
+X-Gm-Gg: ASbGncu0YjGWcEadGrpNm8AMop+JdnZ+ccy/8wJ7Vfy+qUi5arcsWVhKeI1sVCteetn
+	6AlHOvXJu4m3BPRa1fqD2VpOpqxzb/LpFDyFkM9g1aQiJKeA6hWxWkZvxcPRyoB45mmm5Eq7yfO
+	gSX/IssdETSesESWPjTlKvO9bG1pSbVnIgyJcjN6B/y5VoECEUTJqsNqYnSUVgG1vIj+YE1kF55
+	8Xbn6sTWnTFsI+BBU50Op5qQ7hkRENJ7PTlbAqsqR363UaQ+pIYyA1mVZIIjljns9fFr31XI9CU
+	PURe+xxvENTDZM/TDB07zKwQOVG+W39xuBEjSGzh2o09Ep/eD0unajaWPPGKhjOtBWHd4addd0m
+	RtaYLtNAsi64iK2X+4Q5CNreSNeMNq7yWLCOxQ6GMIm8=
+X-Google-Smtp-Source: AGHT+IFTuGy+/aqTWUBxQswnc2Pa/G9YhWnP1H9BAmagYPQwBxO49Up+XtOmxAKd1meYws/OfWOHBA==
+X-Received: by 2002:a05:6402:239a:b0:634:9e76:9997 with SMTP id 4fb4d7f45d1cf-6349faa4975mr860990a12.7.1758794103190;
+        Thu, 25 Sep 2025 02:55:03 -0700 (PDT)
+Received: from [192.168.1.105] ([165.50.112.244])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-634a3ae31cfsm919842a12.33.2025.09.25.02.55.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 25 Sep 2025 02:55:02 -0700 (PDT)
+Message-ID: <0cddb596-a70b-48d4-9d8e-c6cb76abd9d2@gmail.com>
+Date: Thu, 25 Sep 2025 11:54:59 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250924211716.1287715-1-ihor.solodrai@linux.dev> <20250924211716.1287715-4-ihor.solodrai@linux.dev>
-In-Reply-To: <20250924211716.1287715-4-ihor.solodrai@linux.dev>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Thu, 25 Sep 2025 10:53:03 +0100
-X-Gm-Features: AS18NWDbLB5YJC0TDfFpCPIYOHpFNKW8roC_ShfUbE2jyM3iqoVhOozM0foMtQw
-Message-ID: <CAADnVQLG1=xr9OWKZna0hjfswZ+pZ8RM3fAtsVd+aYW7xaFFcQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v1 3/6] selftests/bpf: update bpf_wq_set_callback macro
-To: Ihor Solodrai <ihor.solodrai@linux.dev>
-Cc: bpf <bpf@vger.kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, dwarves <dwarves@vger.kernel.org>, 
-	Alan Maguire <alan.maguire@oracle.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, Eduard <eddyz87@gmail.com>, 
-	Tejun Heo <tj@kernel.org>, Kernel Team <kernel-team@meta.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC 0/4] Add XDP RX queue index metadata via kfuncs
+To: Jakub Sitnicki <jakub@cloudflare.com>
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, donald.hunter@gmail.com, andrew+netdev@lunn.ch,
+ ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
+ john.fastabend@gmail.com, matttbe@kernel.org, chuck.lever@oracle.com,
+ jdamato@fastly.com, skhawaja@google.com, dw@davidwei.uk,
+ mkarsten@uwaterloo.ca, yoong.siang.song@intel.com,
+ david.hunter.linux@gmail.com, skhan@linuxfoundation.org, horms@kernel.org,
+ sdf@fomichev.me, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kernel-mentees@lists.linuxfoundation.org
+References: <20250923210026.3870-1-mehdi.benhadjkhelifa@gmail.com>
+ <87h5wq50l0.fsf@cloudflare.com>
+Content-Language: en-US
+From: Mehdi Ben Hadj Khelifa <mehdi.benhadjkhelifa@gmail.com>
+In-Reply-To: <87h5wq50l0.fsf@cloudflare.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Sep 24, 2025 at 10:17=E2=80=AFPM Ihor Solodrai <ihor.solodrai@linux=
-.dev> wrote:
->
-> Subsequent patch introduces bpf_wq_set_callback kfunc with an
-> implicit bpf_prog_aux argument.
->
-> To ensure backward compatibility add a weak declaration and make
-> bpf_wq_set_callback macro to check for the new kfunc first.
->
-> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
-> ---
->  tools/testing/selftests/bpf/bpf_experimental.h | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
->
-> diff --git a/tools/testing/selftests/bpf/bpf_experimental.h b/tools/testi=
-ng/selftests/bpf/bpf_experimental.h
-> index d89eda3fd8a3..341408d017ea 100644
-> --- a/tools/testing/selftests/bpf/bpf_experimental.h
-> +++ b/tools/testing/selftests/bpf/bpf_experimental.h
-> @@ -583,8 +583,13 @@ extern int bpf_wq_start(struct bpf_wq *wq, unsigned =
-int flags) __weak __ksym;
->  extern int bpf_wq_set_callback_impl(struct bpf_wq *wq,
->                 int (callback_fn)(void *map, int *key, void *value),
->                 unsigned int flags__k, void *aux__ign) __ksym;
-> +extern int bpf_wq_set_callback(struct bpf_wq *wq,
-> +               int (callback_fn)(void *map, int *key, void *value),
-> +               unsigned int flags) __weak __ksym;
->  #define bpf_wq_set_callback(timer, cb, flags) \
-> -       bpf_wq_set_callback_impl(timer, cb, flags, NULL)
-> +       (bpf_wq_set_callback ? \
-> +               bpf_wq_set_callback(timer, cb, flags) : \
-> +               bpf_wq_set_callback_impl(timer, cb, flags, NULL))
+On 9/25/25 10:43 AM, Jakub Sitnicki wrote:
+> On Tue, Sep 23, 2025 at 10:00 PM +01, Mehdi Ben Hadj Khelifa wrote:
+>>   This patch series is intended to make a base for setting
+>>   queue_index in the xdp_rxq_info struct in bpf/cpumap.c to
+>>   the right index. Although that part I still didn't figure
+>>   out yet,I m searching for my guidance to do that as well
+>>   as for the correctness of the patches in this series.
+> 
+> What is the use case/movtivation behind this work?
 
-There is also drivers/hid/bpf/progs/hid_bpf_helpers.h
-Pls double check that hid-bpf still compiles and works.
+The goal of the work is to have xdp programs have the correct packet RX 
+queue index after being redirected through cpumap because currently the 
+queue_index gets unset or more accurately set to 0 as a default in 
+xdp_rxq_info. This is my current understanding.I still have to know how 
+I can propogate that HW hint from the NICs to the function where I need it.
+
+Regards,
+Mehdi
