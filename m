@@ -1,170 +1,169 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E0842F28F5;
-	Thu, 25 Sep 2025 09:31:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E988225EF97
+	for <bpf@vger.kernel.org>; Thu, 25 Sep 2025 09:36:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758792662; cv=none; b=QNevxldnUeoF8/rCRZZZTyofN58QvqrvAvBvSe+hkSPWJ2g6tynFuftXpr5Bsfdf+KssYcNvc4TNlFLxfcmTQBH08QeBfUeYKM0hcR7/ZSjXZ3QOsUSM7Nc5rVhjgPAY4I/sKEAWRhgDJ+fsQZV1znvUCxo5gCVg/lCmk6OeL84=
+	t=1758792972; cv=none; b=XTEFogwIokbGodpgWqmid1q+317CG8fio0RYck6JmgpSrXStQBPV3829LoR1Cr7V2CC2AciO7oidiynrKTTpxvK4FHugwtEUlOZjpx8P8P0hXFpgnsXRGSfrG4d3SY0XsI1Mr+SSy3cM+41tGdPseugY9xmBUyeO+DJlUtM4bgo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758792662; c=relaxed/simple;
-	bh=A/kw6ABjlORAJ4bHqHYqQaWGu/ghxT9gXYNn89u1s3o=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=YY1Md8UHRnX2VL/4ESlZRtXS5PuDUBrmj3qTPwezs0dnPNxprh7ULnOysgmsCeCOjb1fiOfvpO5k0HttLMTwD5at+IiUT8HMmJVko03SA7kmDVt5E8+qm4+sDvwZu93NakwNLAc4c907SEl4Bida1yeA074GAcMyma1JIuTycBo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S3kyCq8W; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1758792972; c=relaxed/simple;
+	bh=rvmn/9fNBwLXiR/naWUZlKBH+/yw0HMGHd9myyptFrE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JB5eZtFs+NcPeK7J0QzVOqVmNSF1Qyz8+sp8jCKYfRK2nfEiq9teGu7pB8kYhhyFFlJIdwNDDrfMQduQ2QOfH0Dby8MxQDhbIKp3Y99XI88Si1oyKbI1ZjRvPO5GzjDu8U7RW4rt1qqEctJVLREPPnGsQvl6JMzI9cJP0e1PLSw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hsHSPkon; arc=none smtp.client-ip=209.85.208.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S3kyCq8W"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85AF1C113D0;
-	Thu, 25 Sep 2025 09:31:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758792662;
-	bh=A/kw6ABjlORAJ4bHqHYqQaWGu/ghxT9gXYNn89u1s3o=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=S3kyCq8WWF6rc43eSZrUktddD358zsDnqLp9sbZz4t5UN0utI3AOyhQovZtaekKHa
-	 BxIVJJTeuIwY/RtEunatUlYdpVRL6ZeCcpEbVOA26zlVXbu5rJ9bSK8+3l5QQoMWL7
-	 JHr+M+5YiEGs+c1A8OiZwHwJDKcpHr196YJRxS489J3mSxI0U8p0l+0qn0bDNRevVb
-	 6vp3oBczFH3GJMo+1okXeKKFKglqyNt68xo+TVZ5ztqrrqQoqvEyA3cX6ZQsc7TMlJ
-	 /DMd4JObfpPwabqpbQBKW7Z4xAZTiWvqYlNqHvfqU+SlPGhb8CQtiYbWn+mGDIgFuw
-	 hBIcbDPZ0G1JQ==
-From: Lorenzo Bianconi <lorenzo@kernel.org>
-Date: Thu, 25 Sep 2025 11:30:37 +0200
-Subject: [PATCH RFC bpf-next v2 5/5] selftests/bpf: Add
- bpf_xdp_metadata_rx_checksum support to xdp_hw_metadat prog
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hsHSPkon"
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-634578d2276so72373a12.3
+        for <bpf@vger.kernel.org>; Thu, 25 Sep 2025 02:36:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1758792969; x=1759397769; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=JrLk5BVUfi64hDu8MSXp4iRz7KC+EB7RrIoytg966TM=;
+        b=hsHSPkoniy4OM3osSYrthKjNlU3U8eRIKniZJr+FZNd9fkcLB/uwwvTJd3uKtY8c1E
+         YUE2361b46Ye8Lr0720uCToRQEc6e8+4Wl+aGmLcr1iIYE0WMnklFDXmyMeQAyeYzbQQ
+         uaRVeEKdAcoCQTu4N2kau8It8VrdxJWkBtfVnA+QzPrcDwWc23VwnhgOBTslar2Qukk8
+         c5Vzfo3X1Ys4yQ7UKdJSg27RgDXt1XmFMPsAXDqr6tg4JUk7gKh5GkOI29KEPS+nOLQn
+         4R1rHedWPpuUC4DXV7BA6DcZOpM5Go3jQgxhGLr1NO8m/jhhRtenf9evBMgW/nxx6RfN
+         FBpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758792969; x=1759397769;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JrLk5BVUfi64hDu8MSXp4iRz7KC+EB7RrIoytg966TM=;
+        b=qdgPiwjoWJaz5YByKO/ddcBURC1SVvQIxX/92I4+AKUiU9op1fSJJ+31zoJkbNP7KI
+         EGJFvZDWB5riZIcFSeNa6ZAoJIS2u9t3BaLtguckiSbEaOlUQUiX5hMKiOyWsMiRPPFJ
+         9vdazYmwjOtS/mgiY3n9fROVnUYW5BEI+ecbpORaA9vZpBpgiiEcPQCs6ZK6clbh38nD
+         Dtf1AkzTS57M/5GPqdZL+/DaxxuHdT3ostF/FZOFz+G77jOkImIO2BYsIrCaleYirPJh
+         m7dUQ4kPMsNZSLV2kB3Dr5fBN9/EN1nflYO1iKesBfjBoib5gZt6mJqFghZ1N4fi6XhW
+         5j/g==
+X-Gm-Message-State: AOJu0YxDmhxZlsvtP8lpVHxnPoyROWLQL5wwjEsnkspAl1hV1ECKTVDm
+	LthW4kb8vLjSLkZh30Ih7IJXtQyYoSoPP10mnCQAaO0+BAtCde7UsDrE
+X-Gm-Gg: ASbGnctp7TsqYWSW8YlI0I2nC0SlKwjw/nPWDTD/Ikx0xR2qhWIpoEJccloDY3MjEyF
+	CgHfsvkpjnQzy/TwMkhgLk0UfvcxpSsDFfwceVHb/YsbElb3BDHTYYPKqLHjgO3rKk10IFAeQP5
+	72UHZN55GDOIowcN9odXemZivc9iZA6euO6IMarvTf0YlafKfvo+9TlJCxuthZ2sZADee9hdZfh
+	yOqXzCJ7F/DfK6PMLhEXAQJTYUz5eqJoP+1nQ15C8nxqmEQGQqO/FUmBTU0wKtM9GFzU0uQYZiP
+	mX/q09P0GgrR8GnXrgDsv8NpKQROZZpEYhDOVRTV7wsLcRa49r71U6QuDfLgtgyi2IfBqiygCMJ
+	zy6nDELLx7ST9vXdlt0YeDJSDcisw5PLuSM17+g==
+X-Google-Smtp-Source: AGHT+IEn+TRY3f3rNpLqKcwo/IFO0X1TqRBrGc61qVTD+XlR37lk96NhcpagZXDaWeHbktL+5wxb3A==
+X-Received: by 2002:a05:6402:4389:b0:628:d1b5:d207 with SMTP id 4fb4d7f45d1cf-6349f9d26b0mr1238596a12.2.1758792969099;
+        Thu, 25 Sep 2025 02:36:09 -0700 (PDT)
+Received: from bhk ([165.50.112.244])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-634a3ae321csm941225a12.24.2025.09.25.02.36.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Sep 2025 02:36:08 -0700 (PDT)
+From: Mehdi Ben Hadj Khelifa <mehdi.benhadjkhelifa@gmail.com>
+To: andrii@kernel.org,
+	eddyz87@gmail.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	john.fastabend@gmail.com,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	shuah@kernel.org,
+	matttbe@kernel.org,
+	martineau@kernel.org,
+	geliang@kernel.org,
+	davem@davemloft.net,
+	kuba@kernel.org,
+	hawk@kernel.org,
+	linux@jordanrome.com,
+	ameryhung@gmail.com,
+	toke@redhat.com,
+	houtao1@huawei.com,
+	emil@etsalapatis.com,
+	yatsenko@meta.com,
+	isolodrai@meta.com,
+	a.s.protopopov@gmail.com,
+	dxu@dxuuu.xyz,
+	memxor@gmail.com,
+	vmalik@redhat.com,
+	bigeasy@linutronix.de,
+	tj@kernel.org,
+	gregkh@linuxfoundation.org,
+	paul@paul-moore.com,
+	bboscaccy@linux.microsoft.com,
+	James.Bottomley@HansenPartnership.com,
+	mrpre@163.com,
+	jakub@cloudflare.com
+Cc: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	netdev@vger.kernel.org,
+	mptcp@lists.linux.dev,
+	linux-kernel-mentees@lists.linuxfoundation.org,
+	skhan@linuxfoundation.org,
+	david.hunter.linux@gmail.com,
+	Mehdi Ben Hadj Khelifa <mehdi.benhadjkhelifa@gmail.com>
+Subject: [PATCH v3 0/3] selftests/bpf: Prepare to add -Wsign-compare for bpf selftests
+Date: Thu, 25 Sep 2025 11:35:38 +0100
+Message-ID: <20250925103559.14876-1-mehdi.benhadjkhelifa@gmail.com>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250925-bpf-xdp-meta-rxcksum-v2-5-6b3fe987ce91@kernel.org>
-References: <20250925-bpf-xdp-meta-rxcksum-v2-0-6b3fe987ce91@kernel.org>
-In-Reply-To: <20250925-bpf-xdp-meta-rxcksum-v2-0-6b3fe987ce91@kernel.org>
-To: Donald Hunter <donald.hunter@gmail.com>, 
- Jakub Kicinski <kuba@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, 
- Simon Horman <horms@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, 
- Jesper Dangaard Brouer <hawk@kernel.org>, 
- John Fastabend <john.fastabend@gmail.com>, 
- Stanislav Fomichev <sdf@fomichev.me>, Andrew Lunn <andrew+netdev@lunn.ch>, 
- Tony Nguyen <anthony.l.nguyen@intel.com>, 
- Przemek Kitszel <przemyslaw.kitszel@intel.com>, 
- Alexander Lobakin <aleksander.lobakin@intel.com>, 
- Andrii Nakryiko <andrii@kernel.org>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
- Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
- Shuah Khan <shuah@kernel.org>, 
- Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, 
- intel-wired-lan@lists.osuosl.org, linux-kselftest@vger.kernel.org, 
- Lorenzo Bianconi <lorenzo@kernel.org>
-X-Mailer: b4 0.14.2
+Content-Transfer-Encoding: 8bit
 
-Introduce the capability to dump HW rx checksum in xdp_hw_metadat
-program via bpf_xdp_metadata_rx_checksum() kfunc.
+This series is preparing to add the -Wsign-compare C compilation flag to
+the Makefile for bpf selftests as requested by a TODO to help avoid
+implicit type conversions and have predictable behavior.
 
-Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
----
- .../testing/selftests/bpf/progs/xdp_hw_metadata.c  |  7 ++++++
- tools/testing/selftests/bpf/xdp_hw_metadata.c      | 27 ++++++++++++++++++++++
- tools/testing/selftests/bpf/xdp_metadata.h         | 10 +++++---
- 3 files changed, 41 insertions(+), 3 deletions(-)
+Changelog:
 
-diff --git a/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c b/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
-index 330ece2eabdb454da2bb2cbd297d2b2dd6efddc0..dc62d572e3ac6e2ef173b330da515757ea543415 100644
---- a/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
-+++ b/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
-@@ -110,6 +110,13 @@ int rx(struct xdp_md *ctx)
- 	else
- 		meta->hint_valid |= XDP_META_FIELD_VLAN_TAG;
- 
-+	err = bpf_xdp_metadata_rx_checksum(ctx, &meta->ip_summed,
-+					   &meta->cksum_meta);
-+	if (err)
-+		meta->rx_cksum_err = err;
-+	else
-+		meta->hint_valid |= XDP_META_FIELD_CHECKSUM;
-+
- 	__sync_add_and_fetch(&pkts_redir, 1);
- 	return bpf_redirect_map(&xsk, ctx->rx_queue_index, XDP_PASS);
- }
-diff --git a/tools/testing/selftests/bpf/xdp_hw_metadata.c b/tools/testing/selftests/bpf/xdp_hw_metadata.c
-index 3d8de0d4c96a7afdf5f60b2fdff73c22b876ce54..c8c25ef383b1fe5613540b09a52bcdc264e316b4 100644
---- a/tools/testing/selftests/bpf/xdp_hw_metadata.c
-+++ b/tools/testing/selftests/bpf/xdp_hw_metadata.c
-@@ -219,6 +219,28 @@ static void print_vlan_tci(__u16 tag)
- 	printf("PCP=%u, DEI=%d, VID=0x%X\n", pcp, dei, vlan_id);
- }
- 
-+static void print_rx_cksum(__u8 ip_summed, __u32 cksum_meta)
-+{
-+	const char *cksum = "CHECKSUM_NONE";
-+
-+	switch (ip_summed) {
-+	case XDP_CHECKSUM_UNNECESSARY:
-+		cksum = "CHECKSUM_UNNECESSARY";
-+		break;
-+	case XDP_CHECKSUM_COMPLETE:
-+		cksum = "CHECKSUM_COMPLETE";
-+		break;
-+	case XDP_CHECKSUM_PARTIAL:
-+		cksum = "CHECKSUM_PARTIAL";
-+		break;
-+	case XDP_CHECKSUM_NONE:
-+	default:
-+		break;
-+	}
-+
-+	printf("rx-cksum: %s, csum_meta=0x%x\n", cksum, cksum_meta);
-+}
-+
- static void verify_xdp_metadata(void *data, clockid_t clock_id)
- {
- 	struct xdp_meta *meta;
-@@ -254,6 +276,11 @@ static void verify_xdp_metadata(void *data, clockid_t clock_id)
- 		printf("No rx_vlan_tci or rx_vlan_proto, err=%d\n",
- 		       meta->rx_vlan_tag_err);
- 	}
-+
-+	if (meta->hint_valid & XDP_META_FIELD_CHECKSUM)
-+		print_rx_cksum(meta->ip_summed, meta->cksum_meta);
-+	else
-+		printf("No rx_chsum, err=%d\n", meta->rx_cksum_err);
- }
- 
- static void verify_skb_metadata(int fd)
-diff --git a/tools/testing/selftests/bpf/xdp_metadata.h b/tools/testing/selftests/bpf/xdp_metadata.h
-index a16f71488a34e6df23fec6dd7dde7b7989774618..b7ab112da8032405ec0e3d699499f4a9c5cb91dc 100644
---- a/tools/testing/selftests/bpf/xdp_metadata.h
-+++ b/tools/testing/selftests/bpf/xdp_metadata.h
-@@ -28,6 +28,7 @@ enum xdp_meta_field {
- 	XDP_META_FIELD_TS	= BIT(0),
- 	XDP_META_FIELD_RSS	= BIT(1),
- 	XDP_META_FIELD_VLAN_TAG	= BIT(2),
-+	XDP_META_FIELD_CHECKSUM = BIT(3),
- };
- 
- #define XDP_CHECKSUM_NONE		0
-@@ -53,9 +54,12 @@ struct xdp_meta {
- 		};
- 		__s32 rx_vlan_tag_err;
- 	};
--	struct {
--		__u8 ip_summed;
--		__u32 cksum_meta;
-+	union {
-+		struct {
-+			__u8 ip_summed;
-+			__u32 cksum_meta;
-+		};
-+		__s32 rx_cksum_err;
- 	};
- 	enum xdp_meta_field hint_valid;
- };
+Changes from v2:
+
+-Split up the patch into a patch series as suggested by vivek
+
+-Include only changes to variable types with no casting by my mentor
+david
+
+-Removed the -Wsign-compare in Makefile to avoid compilation errors
+until adding casting for rest of comparisons.
+
+Link:https://lore.kernel.org/bpf/20250924195731.6374-1-mehdi.benhadjkhelifa@gmail.com/T/#u
+
+Changes from v1:
+
+- Fix CI failed builds where it failed due to do missing .c and
+.h files in my patch for working in mainline.
+
+Link:https://lore.kernel.org/bpf/20250924162408.815137-1-mehdi.benhadjkhelifa@gmail.com/T/#u
+
+Mehdi Ben Hadj Khelifa (3):
+  selftests/bpf: Prepare to add -Wsign-compare for bpf tests
+  selftests/bpf: Prepare to add -Wsign-compare for bpf tests
+  selftests/bpf: Prepare to add -Wsign-compare for bpf tests
+
+ tools/testing/selftests/bpf/progs/test_global_func11.c       | 2 +-
+ tools/testing/selftests/bpf/progs/test_global_func12.c       | 2 +-
+ tools/testing/selftests/bpf/progs/test_global_func13.c       | 2 +-
+ tools/testing/selftests/bpf/progs/test_global_func9.c        | 2 +-
+ tools/testing/selftests/bpf/progs/test_map_init.c            | 2 +-
+ tools/testing/selftests/bpf/progs/test_parse_tcp_hdr_opt.c   | 2 +-
+ .../selftests/bpf/progs/test_parse_tcp_hdr_opt_dynptr.c      | 2 +-
+ tools/testing/selftests/bpf/progs/test_skb_ctx.c             | 2 +-
+ tools/testing/selftests/bpf/progs/test_snprintf.c            | 2 +-
+ tools/testing/selftests/bpf/progs/test_sockmap_strp.c        | 2 +-
+ tools/testing/selftests/bpf/progs/test_tc_tunnel.c           | 2 +-
+ tools/testing/selftests/bpf/progs/test_xdp.c                 | 2 +-
+ tools/testing/selftests/bpf/progs/test_xdp_dynptr.c          | 2 +-
+ tools/testing/selftests/bpf/progs/test_xdp_loop.c            | 2 +-
+ tools/testing/selftests/bpf/progs/test_xdp_noinline.c        | 4 ++--
+ tools/testing/selftests/bpf/progs/uprobe_multi.c             | 4 ++--
+ .../selftests/bpf/progs/uprobe_multi_session_recursive.c     | 5 +++--
+ .../selftests/bpf/progs/verifier_iterating_callbacks.c       | 2 +-
+ 18 files changed, 22 insertions(+), 21 deletions(-)
 
 -- 
 2.51.0
