@@ -1,295 +1,128 @@
-Received: from mail-il1-f170.google.com (mail-il1-f170.google.com [209.85.166.170])
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB0153C01
-	for <bpf@vger.kernel.org>; Thu, 25 Sep 2025 08:17:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7BF9E55A
+	for <bpf@vger.kernel.org>; Thu, 25 Sep 2025 08:57:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758788269; cv=none; b=aDk2NbrRgpBRZIVI0pPFMMEp1SN62AAfx2CDHijbJ02aCKr38LdhNe+FBOtUfHp9YGceJsH0lY/SObQVGij/jL7n4rERBOsp+uxeEA0wURwdkC/e32/BoI0pnEPSn1CtyI0TOzh3bTQHifwIHGKTz+aUzJGB6K0S0HsXAmIes7I=
+	t=1758790658; cv=none; b=g9qj40/qRn/DZ20mDK2USfHGLJW9C/bIKtWJzqGnc32n0ZsJMv/o9hpmkaixwqrF/fOFnIcRt1yTc1abD3SAQejfdELgKvzy2njO+dR0G8TyKVt+C3whBWOMGs2WKUxVdHrh8brjfPQ2GcUiDeGGl5IMsYWLjfJRMbmslMLCUus=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758788269; c=relaxed/simple;
-	bh=H0fbgH7DJPth+W9ZqITE2SoYOiWoqj9BDnVJsQSQkMw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=o7P9nnMMo6l8AdNwg+BFwlAl56pTTTGM53C4Kua7vQhRaaqKyuDxCHlJQ2+mx13Nxg9U8FWHA1bZ255jWVibXss4BG2vZ6uCVOr7l3k9V2fqmTSMPYFRCoh2TyMgI4Mo2XDB9zoT3i0f0KmENwAfvN5/u9K5T6PXpkpNH2+TyqI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kGtZsNvi; arc=none smtp.client-ip=209.85.166.170
+	s=arc-20240116; t=1758790658; c=relaxed/simple;
+	bh=QQ2vjrQn/Zieqm61suYuD8VfLZgZWU8v8LJfcKU4ZZk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=JTY6ZHg7jgnO+LpXKb1ziumrEx6adoGgnHXkoVRMNjQgW5HKT0YNVoXJjVUNjBWADdfzSk6kw4lZZP5cGDNydEtH2K98BUyL6iEGdQUWSa7C7pXxdV5ThtkTbIJ1ywzh1NGbUPDjOzv/obPM2EH3QAAw8XHbJTWMdqrFAmBiFMY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BHDiEPeN; arc=none smtp.client-ip=209.85.218.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kGtZsNvi"
-Received: by mail-il1-f170.google.com with SMTP id e9e14a558f8ab-42576a07eeeso6404285ab.0
-        for <bpf@vger.kernel.org>; Thu, 25 Sep 2025 01:17:47 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BHDiEPeN"
+Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-b2b8b6a1429so10165266b.1
+        for <bpf@vger.kernel.org>; Thu, 25 Sep 2025 01:57:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1758788267; x=1759393067; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=j8N4ZuEqPCGod1NU9zpeLpepfC8w/KeKKKiSkfCh5XA=;
-        b=kGtZsNviBzayU41nHhUoPQPsfH7eEqtk1+SIcXJ4lBFtU43jiUr7AfGAIkwkqKhWGM
-         g5Xz9KxLmO55La5j5wVTg7Eec17zN/RmM35uvRUJIUXIsU2oovAEB+0Hmu49OVKDKslZ
-         ba1eyj43Qqj8r01RbxVvBvcIr3VdsicmBCfUD0yUKam1JANo9RG6MKkdlIv1QUe10DIZ
-         pz71o2xMjtlMvxorj246Dz3VkNrmgV1btBwYva20qpoNnyVndg9DB/AW+Ecyd1hL5s63
-         GWZ9jZvEC3W+doIgr59J1MUf6nBU1xtLl6PAaAeFZRHRQQTJcjhWGjy9ly1+kZeWYnIH
-         WQ8w==
+        d=gmail.com; s=20230601; t=1758790654; x=1759395454; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=J1ieKdh8ZnL9X5ENVHhQYpO7ehaHx1VKRXFWr/P98Bs=;
+        b=BHDiEPeNjx7s5Cw3qnHAcG0G2+VJpqG7zkFKViiXqASTpsPj9NnKR0r2JoUMFJ1n1E
+         talS9PQKEpCbAx3F0qNbbK08xrzMYWixi9M9YKcwA/LlLnAgklC7o+koibOOz6yU42ha
+         yKaVew5HXBImky6/Uwobgbqx5XY0fuyfHmwwuX8wczaNVCQR16x4w8DPRKH4g4uqGAFa
+         HpmQuLV9NDczZDLsKs+ksFLI+uXPZiawxPV9mrJYC66J6iezcY2hOyh6i+4t7Rdagnqs
+         aWXtfl4qcia0yL4pF+yVYw9cgKBh4g2573Dmv1MIGsZt+qsEqp2maXMiUxiyEc63Otpy
+         6Xug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758788267; x=1759393067;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=j8N4ZuEqPCGod1NU9zpeLpepfC8w/KeKKKiSkfCh5XA=;
-        b=JXJ2GNfQKSeeyQlEAkRxqI0Q5bh7SsYfKJT0kQmmgTijFbF/ISpWKLyQVi979cc7P5
-         OIP3KmqxMWzPvqkr4QZ64Pf+tfflST7KI1Dj3MHQuqFugt3j5UicY5t/G1OldSxPizMu
-         80esdm0f/UWt+9jtMVHmTbQSTEIIqxGgvLIz9DFKDY/PV96Ptzzc38+M137ZhU1m7ajd
-         zWfB+FuUGQvk7Ide1wQl1sbRSxSaM7lvpSjWw5bWa+fe52X1DgbUN+MRxRaP9Zs7JlEz
-         CjF6PgCwGwDnYlv8W0n738uxb+oiI7SC7bRc77ef5ytA9hMf8o1vkZPIowx/aQBvGU2t
-         rTKA==
-X-Forwarded-Encrypted: i=1; AJvYcCV6lMLUCV19b9rHY9BHnJBVgm5xbafLUMQKsMiIK0Cp+el6NVKYxpCXZkeSy9zb+ZYGJFk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzy5zaXQ9leG+xHV2pUsjkqxVzei2n45EJxXpElVP5ryFnWu9gc
-	JpaX4tYPcjskXZQiK1DOzSlG2wrDY2DMJPgRL9YUQFo2D74mcEAMkooM/VilpafY3ClhIORGtJb
-	rU9hgo+QTV0bt0qjGXfGFpHpCARYcQd0=
-X-Gm-Gg: ASbGnctqKXJ6ndukPKOE1zUZ8CLBFtjgP3wSFx6hQkDxYec+OUGsHIywxgJuKRR0Ce6
-	MfALTgLpHmGxwqIlzcUWqeh4UFGr5Qls0kCM1J2TPvUSaZQvBft7hiIfPiCphHzBfUdJffM+4b0
-	mo+hG3B8ZWVS4sCKg7OcgDaUWtDrSQfafVcIOCh5/1lnevpNMrNZsDPB4JXbl+wsUUKIuO93Vd7
-	KBOGw==
-X-Google-Smtp-Source: AGHT+IFrRHVJbHV0X71ZH6nhqx8zPSxjiS/Xeyf35SVCxEP8dKn08ft7srGJJZ4wGZl203i6WNtdnN9c3GuigZ1+ZG4=
-X-Received: by 2002:a92:c70f:0:b0:425:80d0:82c6 with SMTP id
- e9e14a558f8ab-42595654edemr34892585ab.26.1758788266872; Thu, 25 Sep 2025
- 01:17:46 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1758790654; x=1759395454;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=J1ieKdh8ZnL9X5ENVHhQYpO7ehaHx1VKRXFWr/P98Bs=;
+        b=n3BR3eteN5JhEsM4IxOQfVN7OmH+CaJ6LdZyJ7zFmcjvwV6rM+k2PCP0vhKY/ZVORV
+         Icbt8PrD2uiBcigzq+KBb9P3RUDW+Ah2H+wvfU5DbCdjr8BVSQyRaQA4LlY6fzZicSES
+         5ayz7392OkQJM2KSldGpNk2uJQKNXRbE5MzUn+y30O13CQXfJgJvgHvHnmEitg11Dp4h
+         sIjrq2HsLCzZYDbPhpULqqlh3k1/981i9+wbmIQn37939oM63HYAORHxI8zGjNMd0sHc
+         zjxxHvlh1zSxpZpemY9BZRSKpz3wwD3Y5w1cbC+bohR93pqvSNyJg8+a+trc6RDmmYcT
+         zZTg==
+X-Forwarded-Encrypted: i=1; AJvYcCXqfRAaub0kGgQFYMasN+wpduxiYFQt4JsfYQvH8DxfDCgAwp5bn4xrExRziBVXyUc7+3s=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyomZniff/GF+93iH8fG7zESrgAYmYZbL3/2PI+Z4sJcjnH1vAM
+	/LB0dIIQzaSrTf1yaJzN8n88v753BcemI1/lArZMb+GlW/Be3u83To0R
+X-Gm-Gg: ASbGncs4n1HkfWYOuo8W1AJYm6O0PO8oYzBAj8984Iq82O8jesqS7/vjsTTqvESkFyg
+	GFZKNb/5CM/uZuO+VAFd/tM0R10cbosgQHTYlQFjfwgZ7QV7Y54bCKq5dXVYZlKgczYDgegwEV+
+	XgmSMUsl7/z1xZyYr6Ay5NrhdtCJqvE5APfFPxSWEDOMrWYuLqwBMmPc6jP5nUhq5G2XPM8Prkf
+	dGaQQyHxEuXaXTJI0teF8c66VmM2y98fDVnQ+Z7ZwTYhOKZfZbbG9YjMGNWctp7QpKzlhW0iryj
+	AaRRYgF1qzspoaaZb2WVP+dIKpSDci7gOTaBUfJOxEnLrcBBB6te4P3gtu9NZ+QdAAd15OM0o9N
+	zUNL8x2u4aHksEsfiosOdOMRZieEOXTHW9oy7YqfcLqU=
+X-Google-Smtp-Source: AGHT+IHgxhg/8L0HWZrIRreMxlREkgm0qw2qxTqKaDyvZUongIqmZ+eF5XRwzrB4DjOfUfKpvkk3Ig==
+X-Received: by 2002:a17:906:f599:b0:b0c:ac7d:474f with SMTP id a640c23a62f3a-b34bfe4619bmr131647766b.10.1758790653822;
+        Thu, 25 Sep 2025 01:57:33 -0700 (PDT)
+Received: from [192.168.1.105] ([165.50.112.244])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b353efb8903sm123418466b.33.2025.09.25.01.57.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 25 Sep 2025 01:57:33 -0700 (PDT)
+Message-ID: <9773fb16-d497-4d67-804d-0c6e70def886@gmail.com>
+Date: Thu, 25 Sep 2025 10:57:30 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250922152600.2455136-1-maciej.fijalkowski@intel.com>
- <20250922152600.2455136-3-maciej.fijalkowski@intel.com> <aNGL5qS8aIfcSDnD@mini-arch>
- <CAL+tcoDp0k74jJtUo179J7mkcf1KCAPMy+fWh-Mn7oC236n-kQ@mail.gmail.com>
- <aNQBuQYHGHuekAhV@boxer> <CAL+tcoDkcKNKCe9B1bQvsZEiKmJEVSKJy_gQ-PONu9qqUXF9AQ@mail.gmail.com>
-In-Reply-To: <CAL+tcoDkcKNKCe9B1bQvsZEiKmJEVSKJy_gQ-PONu9qqUXF9AQ@mail.gmail.com>
-From: Jason Xing <kerneljasonxing@gmail.com>
-Date: Thu, 25 Sep 2025 16:17:10 +0800
-X-Gm-Features: AS18NWAKk4Xsqie09CRcZXrJaEdBBojlkrGnuYQKdbk9c4QkpLwJ8hPKc_FZU2Q
-Message-ID: <CAL+tcoD6AhCS-LMKm9R77-ajm0v+Qq9E9JA0KdFuiwJQxCJ1iA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 2/3] xsk: remove @first_frag from xsk_build_skb()
-To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Cc: Stanislav Fomichev <stfomichev@gmail.com>, bpf@vger.kernel.org, ast@kernel.org, 
-	daniel@iogearbox.net, andrii@kernel.org, netdev@vger.kernel.org, 
-	magnus.karlsson@intel.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC 0/4] Add XDP RX queue index metadata via kfuncs
+To: Stanislav Fomichev <stfomichev@gmail.com>, lorenzo@kernel.org
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, donald.hunter@gmail.com, andrew+netdev@lunn.ch,
+ ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
+ john.fastabend@gmail.com, matttbe@kernel.org, chuck.lever@oracle.com,
+ jdamato@fastly.com, skhawaja@google.com, dw@davidwei.uk,
+ mkarsten@uwaterloo.ca, yoong.siang.song@intel.com,
+ david.hunter.linux@gmail.com, skhan@linuxfoundation.org, horms@kernel.org,
+ sdf@fomichev.me, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kernel-mentees@lists.linuxfoundation.org
+References: <20250923210026.3870-1-mehdi.benhadjkhelifa@gmail.com>
+ <aNMG2X2GLDLBIjzB@mini-arch> <f103da72-0973-4a45-af81-ec1537422433@gmail.com>
+ <aNRxRRSfjOzSPNks@mini-arch>
+Content-Language: en-US
+From: Mehdi Ben Hadj Khelifa <mehdi.benhadjkhelifa@gmail.com>
+In-Reply-To: <aNRxRRSfjOzSPNks@mini-arch>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Thu, Sep 25, 2025 at 8:17=E2=80=AFAM Jason Xing <kerneljasonxing@gmail.c=
-om> wrote:
->
-> On Wed, Sep 24, 2025 at 10:36=E2=80=AFPM Maciej Fijalkowski
-> <maciej.fijalkowski@intel.com> wrote:
-> >
-> > On Tue, Sep 23, 2025 at 05:25:01PM +0800, Jason Xing wrote:
-> > > On Tue, Sep 23, 2025 at 1:48=E2=80=AFAM Stanislav Fomichev <stfomiche=
-v@gmail.com> wrote:
-> > > >
-> > > > On 09/22, Maciej Fijalkowski wrote:
-> > > > > Devices that set IFF_TX_SKB_NO_LINEAR will not execute branch tha=
-t
-> > > > > handles metadata, as we set @first_frag only for !IFF_TX_SKB_NO_L=
-INEAR
-> > > > > code in xsk_build_skb().
-> > > > >
-> > > > > Same functionality can be achieved with checking if xsk_get_num_d=
-esc()
-> > > > > returns 0. To replace current usage of @first_frag with
-> > > > > XSKCB(skb)->num_descs check, pull out the code from
-> > > > > xsk_set_destructor_arg() that initializes sk_buff::cb and call it=
- before
-> > > > > skb_store_bits() in branch that creates skb against first process=
-ed
-> > > > > frag. This so error path has the XSKCB(skb)->num_descs initialize=
-d and
-> > > > > can free skb in case skb_store_bits() failed.
-> > > > >
-> > > > > Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-> > > > > ---
-> > > > >  net/xdp/xsk.c | 20 +++++++++++---------
-> > > > >  1 file changed, 11 insertions(+), 9 deletions(-)
-> > > > >
-> > > > > diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-> > > > > index 72194f0a3fc0..064238400036 100644
-> > > > > --- a/net/xdp/xsk.c
-> > > > > +++ b/net/xdp/xsk.c
-> > > > > @@ -605,6 +605,13 @@ static u32 xsk_get_num_desc(struct sk_buff *=
-skb)
-> > > > >       return XSKCB(skb)->num_descs;
-> > > > >  }
-> > > > >
-> > > > > +static void xsk_init_cb(struct sk_buff *skb)
-> > > > > +{
-> > > > > +     BUILD_BUG_ON(sizeof(struct xsk_addr_head) > sizeof(skb->cb)=
-);
-> > > > > +     INIT_LIST_HEAD(&XSKCB(skb)->addrs_list);
-> > > > > +     XSKCB(skb)->num_descs =3D 0;
-> > > > > +}
-> > > > > +
-> > > > >  static void xsk_destruct_skb(struct sk_buff *skb)
-> > > > >  {
-> > > > >       struct xsk_tx_metadata_compl *compl =3D &skb_shinfo(skb)->x=
-sk_meta;
-> > > > > @@ -620,9 +627,6 @@ static void xsk_destruct_skb(struct sk_buff *=
-skb)
-> > > > >
-> > > > >  static void xsk_set_destructor_arg(struct sk_buff *skb, u64 addr=
-)
-> > > > >  {
-> > > > > -     BUILD_BUG_ON(sizeof(struct xsk_addr_head) > sizeof(skb->cb)=
-);
-> > > > > -     INIT_LIST_HEAD(&XSKCB(skb)->addrs_list);
-> > > > > -     XSKCB(skb)->num_descs =3D 0;
-> > > > >       skb_shinfo(skb)->destructor_arg =3D (void *)(uintptr_t)addr=
-;
-> > > > >  }
-> > > > >
-> > > > > @@ -672,7 +676,7 @@ static struct sk_buff *xsk_build_skb_zerocopy=
-(struct xdp_sock *xs,
-> > > > >                       return ERR_PTR(err);
-> > > > >
-> > > > >               skb_reserve(skb, hr);
-> > > > > -
-> > > > > +             xsk_init_cb(skb);
-> > > > >               xsk_set_destructor_arg(skb, desc->addr);
-> > > > >       } else {
-> > > > >               xsk_addr =3D kmem_cache_zalloc(xsk_tx_generic_cache=
-, GFP_KERNEL);
-> > > > > @@ -725,7 +729,6 @@ static struct sk_buff *xsk_build_skb(struct x=
-dp_sock *xs,
-> > > > >       struct xsk_tx_metadata *meta =3D NULL;
-> > > > >       struct net_device *dev =3D xs->dev;
-> > > > >       struct sk_buff *skb =3D xs->skb;
-> > > > > -     bool first_frag =3D false;
-> > > > >       int err;
-> > > > >
-> > > > >       if (dev->priv_flags & IFF_TX_SKB_NO_LINEAR) {
-> > > > > @@ -742,8 +745,6 @@ static struct sk_buff *xsk_build_skb(struct x=
-dp_sock *xs,
-> > > > >               len =3D desc->len;
-> > > > >
-> > > > >               if (!skb) {
-> > > > > -                     first_frag =3D true;
-> > > > > -
-> > > > >                       hr =3D max(NET_SKB_PAD, L1_CACHE_ALIGN(dev-=
->needed_headroom));
-> > > > >                       tr =3D dev->needed_tailroom;
-> > > > >                       skb =3D sock_alloc_send_skb(&xs->sk, hr + l=
-en + tr, 1, &err);
-> > > > > @@ -752,6 +753,7 @@ static struct sk_buff *xsk_build_skb(struct x=
-dp_sock *xs,
-> > > > >
-> > > > >                       skb_reserve(skb, hr);
-> > > > >                       skb_put(skb, len);
-> > > > > +                     xsk_init_cb(skb);
-> > > > >
-> > > > >                       err =3D skb_store_bits(skb, 0, buffer, len)=
-;
-> > > > >                       if (unlikely(err))
-> > > > > @@ -797,7 +799,7 @@ static struct sk_buff *xsk_build_skb(struct x=
-dp_sock *xs,
-> > > > >                       list_add_tail(&xsk_addr->addr_node, &XSKCB(=
-skb)->addrs_list);
-> > > > >               }
-> > > > >
-> > > > > -             if (first_frag && desc->options & XDP_TX_METADATA) =
-{
-> > > > > +             if (!xsk_get_num_desc(skb) && desc->options & XDP_T=
-X_METADATA) {
-> > > > >                       if (unlikely(xs->pool->tx_metadata_len =3D=
-=3D 0)) {
-> > > > >                               err =3D -EINVAL;
-> > > > >                               goto free_err;
-> > > > > @@ -839,7 +841,7 @@ static struct sk_buff *xsk_build_skb(struct x=
-dp_sock *xs,
-> > > > >       return skb;
-> > > > >
-> > > > >  free_err:
-> > > > > -     if (first_frag && skb)
-> > > >
-> > > > [..]
-> > > >
-> > > > > +     if (skb && !xsk_get_num_desc(skb))
-> > > > >               kfree_skb(skb);
-> > > > >
-> > > > >       if (err =3D=3D -EOVERFLOW) {
-> > > >
-> > > > For IFF_TX_SKB_NO_LINEAR case, the 'goto free_err' is super confusi=
-ng.
-> > > > xsk_build_skb_zerocopy either returns skb or an IS_ERR. Can we
-> > > > add a separate label to jump directly to 'if err =3D=3D -EOVERFLOW'=
- for
-> > > > the IFF_TX_SKB_NO_LINEAR case?
-> >
-> > Right, I got hit with this when running xdpsock within VM now against
-> > virtio-net driver. Since I removed @first_frag and sock_alloc_send_skb(=
-)
-> > managed to give me -EAGAIN at start, skb was treated as valid pointer a=
-nd
-> > then I got splat when accessing either cb or skb_shared_info.
-> >
-> > So either we NULL the skb for xsk_build_skb_zerocopy() error path (whic=
-h
-> > would be fine even for -EOVERFLOW as error path uses xs->skb pointer, n=
-ot
-> > the local one) or we introduce separate label as you suggest. No strong
-> > opinions here.
-> >
-> > > >
-> > > > diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-> > > > index 72e34bd2d925..f56182c61c99 100644
-> > > > --- a/net/xdp/xsk.c
-> > > > +++ b/net/xdp/xsk.c
-> > > > @@ -732,7 +732,7 @@ static struct sk_buff *xsk_build_skb(struct xdp=
-_sock *xs,
-> > > >                 skb =3D xsk_build_skb_zerocopy(xs, desc);
-> > > >                 if (IS_ERR(skb)) {
-> > > >                         err =3D PTR_ERR(skb);
-> > > > -                       goto free_err;
-> > > > +                       goto out;
-> > > >                 }
-> > > >         } else {
-> > > >                 u32 hr, tr, len;
-> > > > @@ -842,6 +842,7 @@ static struct sk_buff *xsk_build_skb(struct xdp=
-_sock *xs,
-> > > >         if (first_frag && skb)
-> > > >                 kfree_skb(skb);
-> > > >
-> > > > +out:
-> > > >         if (err =3D=3D -EOVERFLOW) {
-> > > >                 /* Drop the packet */
-> > > >                 xsk_inc_num_desc(xs->skb);
-> > > >
-> > > > After that, it seems we can look at skb_shinfo(skb)->nr_frags? Inst=
-ead
-> > > > of adding new xsk_init_cb, seems more robust?
-> >
-> > Thanks! I'll do it.
-> >
-> > >
-> > > +1. It would be simpler.
-> > >
-> > > And I think this patch should be a standalone one because it actually
-> > > supports the missing feature for the VM scenario.
-> >
-> > Hi Jason,
-> > in commit message, I wrote about enabling tx metadata for
-> > xsk_build_skb_zerocopy() but code did not reflect that as you point out=
- in
-> > your later reply.
-> >
-> > Unless there are any objections I will actually enable it there.
->
-> Oh, if you made up your mind enabling it in the next version, how
-> about changing the title of this series because the core changes are
+On 9/24/25 11:31 PM, Stanislav Fomichev wrote:
+> On 09/24, Mehdi Ben Hadj Khelifa wrote:
+>> On 9/23/25 9:45 PM, Stanislav Fomichev wrote:
+>>> On 09/23, Mehdi Ben Hadj Khelifa wrote:
+>>>> ---
+>>>> Mehdi Ben Hadj Khelifa (4):
+>>>>     netlink: specs: Add XDP RX queue index to XDP metadata
+>>>>     net: xdp: Add xmo_rx_queue_index callback
+>>>>     uapi: netdev: Add XDP RX queue index metadata flags
+>>>>     net: veth: Implement RX queue index XDP hint
+>>>>
+>>>>    Documentation/netlink/specs/netdev.yaml |  5 +++++
+>>>>    drivers/net/veth.c                      | 12 ++++++++++++
+>>>>    include/net/xdp.h                       |  5 +++++
+>>>>    include/uapi/linux/netdev.h             |  3 +++
+>>>>    net/core/xdp.c                          | 15 +++++++++++++++
+>>>>    tools/include/uapi/linux/netdev.h       |  3 +++
+>>>>    6 files changed, 43 insertions(+)
+>>>>    ---
+>>>>    base-commit: 07e27ad16399afcd693be20211b0dfae63e0615f
+>>>>    this is the commit of tag: v6.17-rc7 on the mainline.
+>>>>    This patch series is intended to make a base for setting
+>>>>    queue_index in the xdp_rxq_info struct in bpf/cpumap.c to
+>>>>    the right index. Although that part I still didn't figure
+>>>>    out yet,I m searching for my guidance to do that as well
+>>>>    as for the correctness of the patches in this series.
+>>
+>>>
+> I don't really understand what queue_index means for the cpu map. It is
+> a kernel thread doing work, there is no queue. Maybe whoever added
+> the todo can clarify?
 
-Well, don't bother to modify it since in fact the related non linear
-driver (for now that is only virtio_net) doesn't support it, I assume
-:)
+Hi Lorenzo,
+Can you help us clarify the todo added in cpu_map_bpf_prog_run_xdp() in 
+this commit: 
+github.com/torvalds/linux/commit/9216477449f33cdbc9c9a99d49f500b7fbb81702 ?
 
-Please go ahead.
-
-Thanks,
-Jason
+Regards,
+Mehdi
