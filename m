@@ -1,234 +1,203 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from out-174.mta0.migadu.com (out-174.mta0.migadu.com [91.218.175.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D25E2F2611;
-	Thu, 25 Sep 2025 16:00:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B30593596B
+	for <bpf@vger.kernel.org>; Thu, 25 Sep 2025 16:13:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758816055; cv=none; b=nl4gOwZUVzfOEy8zIqOI/x8UV4uCpE8oGq3kJ6nLlUJDHXKN3aFKi3ETL5ARiLkI8G9E5ziExEeYtKKugHRY0zoKrO8yFs5hp9FyeEzg30t+y3j8dtTp0bl4HczlChQZVBjhdumAx11mGUYLeRQCKbvuuH7cLC5dx17o4iLuGbA=
+	t=1758816807; cv=none; b=Yhle7Dg5uaSVsD1fhAIk4a1/e/xXSJ+r0RSYLTRj9Nbl3tB4gZT4iJmXDbqiU73zzJnMMfy+w2/HDkOVSZtRTZXMf/KRGd5Z/whlBBJCHo9b3pZBe9bW/3z0ooo8kgh9BCWKFEbXEieWrIbGC2g2t4d8UfYa0bIDvxmzWOYuYkE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758816055; c=relaxed/simple;
-	bh=fMZ9pDkVKjK47hn36tt0DCxnyx57G4AESffknPyF/hM=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=dnN6rG+AjYzpYpuD9coRLxKgjHUvHPFOIi6oewfV7mflN7NhndJRfVzwqfZF+QfunhiMwZchD21l558Oh/0qbcTESShLbdldkUVjTX1TnbqRj2oViLKOw34SC+1vW65gBrnPn0biVOGJefopUTuxPRKQMRUiqt4YW6VfD8ZHpGQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jCXCiHEO; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1758816807; c=relaxed/simple;
+	bh=jXFdzTOLovsJrN9Nfs//Q5qxLuBEFEGKhi+yA65myVY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ZpY/NJEJiu7C59EygAL2BfAXvRpZ8sPFAuASSRIcSfIE+Z/TOUo6zSwYtdhh5oxkuX+ANyCKX5rdbjtmPvQLOWMCRiVV6klgpjEwtJddQ7s63Cj9/CSoVh6QgHGiYAB4SNnn7ZJrjxUF8jYlmk+efin+rJhGER5RLxZM/GYamwI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=cJMWqO0w; arc=none smtp.client-ip=91.218.175.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jCXCiHEO"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1758816051; x=1790352051;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=fMZ9pDkVKjK47hn36tt0DCxnyx57G4AESffknPyF/hM=;
-  b=jCXCiHEOIm3+/wb+8MXHEopB3HYBZo6vMC240XBF1CppwiQnytAF2csM
-   SYz4IiH5qXbT6vsyak3Lh4hG4MYxyl/IG4qrgcGHn1lXv10sMUD7YYcWr
-   MvXHjAHQ4uUPt0gCsUV9To73L1lq+2VrVrLfhFSt+G9f1jMeLKAMsohZ+
-   +P492U//exzVLqoNIwq7X/Pb3m1O1vNJvyPuIDTtWWXwt4b2YamwhwLPC
-   1ySgvfcqln5VeYlWd3oFl1N1adNkhdHiFiMBFionTHDq8KskCrP5tGocf
-   yENS5B7LnlObLCpisIRl7PfQeHTzg9fxEX0lNaFPw/vIQ0DPrOYrFgArk
-   g==;
-X-CSE-ConnectionGUID: itok4C2LS9iYgv5dRarDyw==
-X-CSE-MsgGUID: M6hm33jKQS67Ui6HHXRZNg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11564"; a="71759865"
-X-IronPort-AV: E=Sophos;i="6.18,292,1751266800"; 
-   d="scan'208";a="71759865"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2025 09:00:50 -0700
-X-CSE-ConnectionGUID: kiEikI7NQGqYwPS+mDtTmQ==
-X-CSE-MsgGUID: qkQNymMYRWOUtVSqi/Y+UA==
-X-ExtLoop1: 1
-Received: from boxer.igk.intel.com ([10.102.20.173])
-  by fmviesa003.fm.intel.com with ESMTP; 25 Sep 2025 09:00:48 -0700
-From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-To: bpf@vger.kernel.org,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org
-Cc: netdev@vger.kernel.org,
-	magnus.karlsson@intel.com,
-	stfomichev@gmail.com,
-	kerneljasonxing@gmail.com,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-	Stanislav Fomichev <sdf@fomichev.me>
-Subject: [PATCH v2 bpf-next 3/3] xsk: wrap generic metadata handling onto separate function
-Date: Thu, 25 Sep 2025 18:00:09 +0200
-Message-Id: <20250925160009.2474816-4-maciej.fijalkowski@intel.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20250925160009.2474816-1-maciej.fijalkowski@intel.com>
-References: <20250925160009.2474816-1-maciej.fijalkowski@intel.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="cJMWqO0w"
+Message-ID: <6a6403ec-166a-4d48-8bf5-f43ae1759e5f@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1758816802;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=v1lzzFfCMcFF938iOkK2Z663LjuwV7KmPYm7+6fFCMc=;
+	b=cJMWqO0wO5K4Q+rErfGLe/ps9Tt5Se2RTOHUZ525iSrHg5r1IzqWt1BMLdlPZc+GAWCm8i
+	FiUWAwEKpHfGyWgev6FgVAnAuDcft6cKnn2yq/79/Sdz7djcvIPC1AUR2QqiWOzDowktEr
+	AN0CBjLP9Xmu7iLrnoQr51q89qO4MVY=
+Date: Thu, 25 Sep 2025 09:13:17 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Subject: Re: [PATCH bpf-next v1 1/6] bpf: implement KF_IMPLICIT_PROG_AUX_ARG
+ flag
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+ Eduard <eddyz87@gmail.com>, Andrii Nakryiko <andrii@kernel.org>
+Cc: bpf <bpf@vger.kernel.org>, dwarves <dwarves@vger.kernel.org>,
+ Alan Maguire <alan.maguire@oracle.com>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>, Tejun Heo <tj@kernel.org>,
+ Kernel Team <kernel-team@meta.com>
+References: <20250924211716.1287715-1-ihor.solodrai@linux.dev>
+ <20250924211716.1287715-2-ihor.solodrai@linux.dev>
+ <CAADnVQLvuubey0A0Fk=bzN-=JG2UUQHRqBijZpuvqMQ+xy4W4g@mail.gmail.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <CAADnVQLvuubey0A0Fk=bzN-=JG2UUQHRqBijZpuvqMQ+xy4W4g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-xsk_build_skb() has gone wild with its size and one of the things we can
-do about it is to pull out a branch that takes care of metadata handling
-and make it a separate function.
 
-While at it, let us add metadata SW support for devices supporting
-IFF_TX_SKB_NO_LINEAR flag, that happen to have separate logic for
-building skb in xsk's generic xmit path.
 
-Acked-by: Stanislav Fomichev <sdf@fomichev.me>
-Reviewed-by: Jason Xing <kerneljasonxing@gmail.com>
-Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
----
- net/xdp/xsk.c | 92 +++++++++++++++++++++++++++++----------------------
- 1 file changed, 53 insertions(+), 39 deletions(-)
+On 9/25/25 2:49 AM, Alexei Starovoitov wrote:
+> On Wed, Sep 24, 2025 at 10:17 PM Ihor Solodrai <ihor.solodrai@linux.dev> wrote:
+>>
+>> Define KF_IMPLICIT_PROG_AUX_ARG and handle it in the BPF verifier.
+>>
+>> The mechanism of patching is exactly the same as for __prog parameter
+>> annotation: in check_kfunc_args() detect the relevant parameter and
+>> remember regno in cur_aux(env)->arg_prog.
+>>
+>> Then the (unchanged in this patch) fixup_kfunc_call() adds a mov
+>> instruction to set the actual pointer to prog_aux.
+>>
+>> The caveat for KF_IMPLICIT_PROG_AUX_ARG is in implicitness. We have to
+>> separately check that the number of arguments is under
+>> MAX_BPF_FUNC_REG_ARGS.
+>>
+>> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+>> ---
+>>  include/linux/btf.h   |  3 +++
+>>  kernel/bpf/verifier.c | 43 ++++++++++++++++++++++++++++++++++++-------
+>>  2 files changed, 39 insertions(+), 7 deletions(-)
+>>
+>> diff --git a/include/linux/btf.h b/include/linux/btf.h
+>> index f06976ffb63f..479ee96c2c97 100644
+>> --- a/include/linux/btf.h
+>> +++ b/include/linux/btf.h
+>> @@ -79,6 +79,9 @@
+>>  #define KF_ARENA_RET    (1 << 13) /* kfunc returns an arena pointer */
+>>  #define KF_ARENA_ARG1   (1 << 14) /* kfunc takes an arena pointer as its first argument */
+>>  #define KF_ARENA_ARG2   (1 << 15) /* kfunc takes an arena pointer as its second argument */
+>> +/* kfunc takes a pointer to struct bpf_prog_aux as the last argument,
+>> + * passed implicitly in BPF */
+> 
+> This is neither networking nor kernel comment style.
+> Pls use proper kernel comment style in a new code,
+> and reformat old net/bpf style when adjusting old comments.
+> 
+>> +#define KF_IMPLICIT_PROG_AUX_ARG (1 << 16)
+> 
+> The name is too verbose imo.
+> How about
+> KF_HIDDEN_PROG_ARG
+> or
+> KF_PROG_LAST_ARG
+> 
+> "Implicit" is not 100% correct, since it's very explicit
+> in kfunc definition in C, but removed from BTF.
+> "Hidden" is also not an exact fit for the same reasons.
+> Hence my preference is KF_PROG_LAST_ARG.
+> 
+> "aux" part is also an implementation detail.
+> 
+>>  /*
+>>   * Tag marking a kernel function as a kfunc. This is meant to minimize the
+>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>> index e892df386eed..f1f9ea21f99b 100644
+>> --- a/kernel/bpf/verifier.c
+>> +++ b/kernel/bpf/verifier.c
+>> @@ -11948,6 +11948,11 @@ static bool is_kfunc_rcu_protected(struct bpf_kfunc_call_arg_meta *meta)
+>>         return meta->kfunc_flags & KF_RCU_PROTECTED;
+>>  }
+>>
+>> +static bool is_kfunc_with_implicit_prog_aux_arg(struct bpf_kfunc_call_arg_meta *meta)
+>> +{
+>> +       return meta->kfunc_flags & KF_IMPLICIT_PROG_AUX_ARG;
+>> +}
+>> +
+>>  static bool is_kfunc_arg_mem_size(const struct btf *btf,
+>>                                   const struct btf_param *arg,
+>>                                   const struct bpf_reg_state *reg)
+>> @@ -12029,6 +12034,18 @@ static bool is_kfunc_arg_prog(const struct btf *btf, const struct btf_param *arg
+>>         return btf_param_match_suffix(btf, arg, "__prog");
+>>  }
+>>
+>> +static int set_kfunc_arg_prog_regno(struct bpf_verifier_env *env, struct bpf_kfunc_call_arg_meta *meta, u32 regno)
+>> +{
+>> +       if (meta->arg_prog) {
+>> +               verifier_bug(env, "Only 1 prog->aux argument supported per-kfunc");
+>> +               return -EFAULT;
+>> +       }
+>> +       meta->arg_prog = true;
+>> +       cur_aux(env)->arg_prog = regno;
+>> +
+>> +       return 0;
+>> +}
+>> +
+>>  static bool is_kfunc_arg_scalar_with_name(const struct btf *btf,
+>>                                           const struct btf_param *arg,
+>>                                           const char *name)
+>> @@ -13050,6 +13067,21 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
+>>                 return -EINVAL;
+>>         }
+>>
+>> +       /* KF_IMPLICIT_PROG_AUX_ARG means that the kfunc has one less argument in BTF,
+>> +        * so we have to set_kfunc_arg_prog_regno() outside the arg check loop.
+>> +        */
+> 
+> Use kernel comment style.
+> 
+>> +       if (is_kfunc_with_implicit_prog_aux_arg(meta)) {
+>> +               if (nargs + 1 > MAX_BPF_FUNC_REG_ARGS) {
+>> +                       verifier_bug(env, "A kfunc with KF_IMPLICIT_PROG_AUX_ARG flag has %d > %d args",
+>> +                                    nargs + 1, MAX_BPF_FUNC_REG_ARGS);
+>> +                       return -EFAULT;
+>> +               }
+>> +               u32 regno = nargs + 1;
+> 
+> Variable declaration should be first in the block
+> followed by a blank line.
+> 
+> Also I would remove this double "> MAX_BPF_FUNC_REG_ARGS" check.
+> Move if (is_kfunc_with_prog_last_arg(meta))
+> couple lines above before the check,
+> and actual_nargs = nargs + 1;
+> if (actual_nargs > MAX_BPF_FUNC_REG_ARGS)
+> to cover both cases.
+> I wouldn't worry that verbose() isn't too specific.
+> If it prints nargs and actual_nargs whoever develops a kfunc
+> can get an idea.
+> Also in the future there is a good chance we will add more
+> KF_FOO_LAST_ARG flags to cleanup other *_impl() kfuncs
+> that have a special last argument, like bpf_rbtree_add_impl.
+> If all of them copy paste "> MAX_BPF_FUNC_REG_ARGS" check
+> it will be too verbose. Hence one nargs check for them all.
 
-diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-index f7e0d254a723..7b0c68a70888 100644
---- a/net/xdp/xsk.c
-+++ b/net/xdp/xsk.c
-@@ -657,6 +657,45 @@ static void xsk_drop_skb(struct sk_buff *skb)
- 	xsk_consume_skb(skb);
- }
- 
-+static int xsk_skb_metadata(struct sk_buff *skb, void *buffer,
-+			    struct xdp_desc *desc, struct xsk_buff_pool *pool,
-+			    u32 hr)
-+{
-+	struct xsk_tx_metadata *meta = NULL;
-+
-+	if (unlikely(pool->tx_metadata_len == 0))
-+		return -EINVAL;
-+
-+	meta = buffer - pool->tx_metadata_len;
-+	if (unlikely(!xsk_buff_valid_tx_metadata(meta)))
-+		return -EINVAL;
-+
-+	if (meta->flags & XDP_TXMD_FLAGS_CHECKSUM) {
-+		if (unlikely(meta->request.csum_start +
-+			     meta->request.csum_offset +
-+			     sizeof(__sum16) > desc->len))
-+			return -EINVAL;
-+
-+		skb->csum_start = hr + meta->request.csum_start;
-+		skb->csum_offset = meta->request.csum_offset;
-+		skb->ip_summed = CHECKSUM_PARTIAL;
-+
-+		if (unlikely(pool->tx_sw_csum)) {
-+			int err;
-+
-+			err = skb_checksum_help(skb);
-+			if (err)
-+				return err;
-+		}
-+	}
-+
-+	if (meta->flags & XDP_TXMD_FLAGS_LAUNCH_TIME)
-+		skb->skb_mstamp_ns = meta->request.launch_time;
-+	xsk_tx_metadata_to_compl(meta, &skb_shinfo(skb)->xsk_meta);
-+
-+	return 0;
-+}
-+
- static struct sk_buff *xsk_build_skb_zerocopy(struct xdp_sock *xs,
- 					      struct xdp_desc *desc)
- {
-@@ -669,6 +708,9 @@ static struct sk_buff *xsk_build_skb_zerocopy(struct xdp_sock *xs,
- 	int err, i;
- 	u64 addr;
- 
-+	addr = desc->addr;
-+	buffer = xsk_buff_raw_get_data(pool, addr);
-+
- 	if (!skb) {
- 		hr = max(NET_SKB_PAD, L1_CACHE_ALIGN(xs->dev->needed_headroom));
- 
-@@ -679,6 +721,11 @@ static struct sk_buff *xsk_build_skb_zerocopy(struct xdp_sock *xs,
- 		skb_reserve(skb, hr);
- 
- 		xsk_skb_init_misc(skb, xs, desc->addr);
-+		if (desc->options & XDP_TX_METADATA) {
-+			err = xsk_skb_metadata(skb, buffer, desc, pool, hr);
-+			if (unlikely(err))
-+				return ERR_PTR(err);
-+		}
- 	} else {
- 		xsk_addr = kmem_cache_zalloc(xsk_tx_generic_cache, GFP_KERNEL);
- 		if (!xsk_addr)
-@@ -692,11 +739,9 @@ static struct sk_buff *xsk_build_skb_zerocopy(struct xdp_sock *xs,
- 		list_add_tail(&xsk_addr->addr_node, &XSKCB(skb)->addrs_list);
- 	}
- 
--	addr = desc->addr;
- 	len = desc->len;
- 	ts = pool->unaligned ? len : pool->chunk_size;
- 
--	buffer = xsk_buff_raw_get_data(pool, addr);
- 	offset = offset_in_page(buffer);
- 	addr = buffer - pool->addrs;
- 
-@@ -727,7 +772,6 @@ static struct sk_buff *xsk_build_skb_zerocopy(struct xdp_sock *xs,
- static struct sk_buff *xsk_build_skb(struct xdp_sock *xs,
- 				     struct xdp_desc *desc)
- {
--	struct xsk_tx_metadata *meta = NULL;
- 	struct net_device *dev = xs->dev;
- 	struct sk_buff *skb = xs->skb;
- 	int err;
-@@ -761,6 +805,12 @@ static struct sk_buff *xsk_build_skb(struct xdp_sock *xs,
- 				goto free_err;
- 
- 			xsk_skb_init_misc(skb, xs, desc->addr);
-+			if (desc->options & XDP_TX_METADATA) {
-+				err = xsk_skb_metadata(skb, buffer, desc,
-+						       xs->pool, hr);
-+				if (unlikely(err))
-+					goto free_err;
-+			}
- 		} else {
- 			int nr_frags = skb_shinfo(skb)->nr_frags;
- 			struct xsk_addr_node *xsk_addr;
-@@ -795,42 +845,6 @@ static struct sk_buff *xsk_build_skb(struct xdp_sock *xs,
- 			xsk_addr->addr = desc->addr;
- 			list_add_tail(&xsk_addr->addr_node, &XSKCB(skb)->addrs_list);
- 		}
--
--		if (!skb_shinfo(skb)->nr_frags && desc->options & XDP_TX_METADATA) {
--			if (unlikely(xs->pool->tx_metadata_len == 0)) {
--				err = -EINVAL;
--				goto free_err;
--			}
--
--			meta = buffer - xs->pool->tx_metadata_len;
--			if (unlikely(!xsk_buff_valid_tx_metadata(meta))) {
--				err = -EINVAL;
--				goto free_err;
--			}
--
--			if (meta->flags & XDP_TXMD_FLAGS_CHECKSUM) {
--				if (unlikely(meta->request.csum_start +
--					     meta->request.csum_offset +
--					     sizeof(__sum16) > len)) {
--					err = -EINVAL;
--					goto free_err;
--				}
--
--				skb->csum_start = hr + meta->request.csum_start;
--				skb->csum_offset = meta->request.csum_offset;
--				skb->ip_summed = CHECKSUM_PARTIAL;
--
--				if (unlikely(xs->pool->tx_sw_csum)) {
--					err = skb_checksum_help(skb);
--					if (err)
--						goto free_err;
--				}
--			}
--
--			if (meta->flags & XDP_TXMD_FLAGS_LAUNCH_TIME)
--				skb->skb_mstamp_ns = meta->request.launch_time;
--			xsk_tx_metadata_to_compl(meta, &skb_shinfo(skb)->xsk_meta);
--		}
- 	}
- 
- 	xsk_inc_num_desc(skb);
--- 
-2.43.0
+Hi Alexei, thank you for the review.
+
+Sorry for the styling mistakes, forgot to run patches through
+checkpatch.pl
+
+In the other thread Eduard proposes a different approach to the
+implementation [1].  Basically, leave BTF unmodified and move argument
+hiding logic to bpftool's vmlinux.h generation.
+
+IMO modifying BTF is more straightforward, but if the main goal is to
+have a nice BPF C interface, maybe Eduard is onto something.
+
+Curious to hear yours and Andrii's opinion on that.
+
+Thanks.
+
+[1] https://lore.kernel.org/bpf/b92d892f6a09fc7a411838ccf03dfebbba96384b.camel@gmail.com/
+
+> 
+> pw-bot: cr
 
