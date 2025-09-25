@@ -1,46 +1,46 @@
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECD7C25B67D;
-	Thu, 25 Sep 2025 11:58:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 695A32FD1B9;
+	Thu, 25 Sep 2025 12:09:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758801543; cv=none; b=mIF55fjHFjCY2yFyXtEzJPO8CE6TX/8iHaSr81VHp/GCSsYMJOr2Xa95gs6Sna+kCa3xZ4gjhR8LqUhTou9rWdh3rIZWDXY2TB7dsw+0KyqObX3VdFt8kImWVdk7f0NxLARvOAOYqBuRWD4C/wjIzN/hWY1RiPECn/aCmqZFRKM=
+	t=1758802173; cv=none; b=oBa4kimVwVnj29+DPqeyehOxIR5ihH7PoasaGQALC1/0ZMSKqmZ+yszsdVDTm5w1Wc+oRErOOHbu9PFCalTTI+cLkXNw79hPncGviJ03GY5oQ8nk2CrJxOPxsPBVQXevmvjMo3cGWBI37Updq4E/ynTGFnX+KqRn7srYCnIaRuU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758801543; c=relaxed/simple;
-	bh=+IY2OXXnsRKbkGAIpo4vaVP6VC/er3FaJDr3rMxY6QM=;
+	s=arc-20240116; t=1758802173; c=relaxed/simple;
+	bh=7Tsb+XA8TFpG51zI+jJLmiyBNl7angpQYvTjUcjYMhs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cMvg+XHNM8FcklpuSJ8oOmCns8nGjjuDh7EKcifzJDwLiqsl39Eo37JX8cfgjzFRFiGvf+jkgHwqicHjCLOHg4SmxTPECPoKHpGPS6wj2CftmDUAV0amHCw2c5FNUgR8wwIDTgyMYYuMRYJmcTOYSJcsDVRHbAfPARbcvFcg67w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=lO9k8AfL; arc=none smtp.client-ip=213.133.104.62
+	 In-Reply-To:Content-Type; b=Mklf+ifq3EKW5ItoKIF0aK+TRH5+CL3bzPog5HPl69rvLffDg3rlxoN30gic7DJkShiAkZ/uxC2Q2CQ7e800jnViW9pbDLWzDaSJB+/kr7dvfDAI+8vkZIhT+JTrq6x/eqvckqqJx9IAbv2SurQLRo4VgZJ/HkIebBIejG0cqvM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=KlOQdi/q; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="lO9k8AfL"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="KlOQdi/q"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
 	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
 	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=/1G5FUDQpvZvuASdzQAKejgHTSFRJSHzx2wHymQgnpA=; b=lO9k8AfLGlZrBE2HyV1pQtekmf
-	s/tGoCLfQi2HkmQX5fwM/N2UaaXYnIVqwzWi4Co9VA2pU6G/q81Qkp9SUV835YkljwvcLOGsng4+G
-	OVCLDKRLG5W2OtDRKnXOD+Tld9KPwKXXjCLZkcQpPTJSnp+8IdK8yS0GscZcH2ARxglAuZthsenff
-	TZ6HOW61qfz20F89bGipaW6+XZ2QIm5d/xl5JkSslv/CWbsPy1pvDj62FTM6gVCD2lv1idNmsXJx5
-	ty+NThmAgXFIY7GQLR3EYuKdmn436FLRhZDYO+nsb3Qgo3RdUy8ofmoZikdpStqY2P50WtotTwe+W
-	G8LHcp9w==;
-Received: from sslproxy07.your-server.de ([78.47.199.104])
+	bh=Ic4H64lhZfkkUoDYQMXgPEUScW5j8SmZRMWc4NkTB7I=; b=KlOQdi/qYdL+Apj+iTyzS8febJ
+	l6C6Ts4+zhTq13htdqd4Xa1drDpR9gznGh+gYwK5gevEuiu8p7rmlqawahFeTNA7hzsu4HC6QLQQA
+	Oc9ikRXETzeL2w74BrvwrzOJ3ClA/zO27o2W8SVsN1xcuHMrYdS4VSELOkqO1g0RI501h0MLrCSls
+	j7MRoLlmg7o4LB7zCNrNwWQ+HzO5aLfbMdIcPkdysjqf9vSbARYYMcWVvglM7EOm/Uss/g+qj3q75
+	hHLCuF5SbQQ32BBcV69Ne0YR+/5s+tcn+q4GF+tf+74YNLtctKkawQB+AiPGsuWVgE3Nf5ivNbacD
+	GS4xU04Q==;
+Received: from sslproxy04.your-server.de ([78.46.152.42])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1v1kcW-000MhS-1u;
-	Thu, 25 Sep 2025 13:58:44 +0200
+	id 1v1kmv-000OaU-1b;
+	Thu, 25 Sep 2025 14:09:29 +0200
 Received: from localhost ([127.0.0.1])
-	by sslproxy07.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	by sslproxy04.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1v1kcU-000ICJ-1m;
-	Thu, 25 Sep 2025 13:58:42 +0200
-Message-ID: <b05e5979-2c62-4de5-ba29-e3b9e9167da8@iogearbox.net>
-Date: Thu, 25 Sep 2025 13:58:41 +0200
+	id 1v1kmu-0004XP-2P;
+	Thu, 25 Sep 2025 14:09:28 +0200
+Message-ID: <00b1a35f-f944-47a6-9195-52438753c051@iogearbox.net>
+Date: Thu, 25 Sep 2025 14:09:28 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -48,26 +48,15 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2] selftests/bpf: Add -Wsign-compare C
- compilation flag
-To: Mehdi Ben Hadj Khelifa <mehdi.benhadjkhelifa@gmail.com>,
- andrii@kernel.org, eddyz87@gmail.com, ast@kernel.org, martin.lau@linux.dev,
- song@kernel.org, yonghong.song@linux.dev, john.fastabend@gmail.com,
- kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
- shuah@kernel.org, matttbe@kernel.org, martineau@kernel.org,
- geliang@kernel.org, davem@davemloft.net, kuba@kernel.org, hawk@kernel.org,
- linux@jordanrome.com, ameryhung@gmail.com, toke@redhat.com,
- houtao1@huawei.com, emil@etsalapatis.com, yatsenko@meta.com,
- isolodrai@meta.com, a.s.protopopov@gmail.com, dxu@dxuuu.xyz,
- memxor@gmail.com, vmalik@redhat.com, bigeasy@linutronix.de, tj@kernel.org,
- gregkh@linuxfoundation.org, paul@paul-moore.com,
- bboscaccy@linux.microsoft.com, James.Bottomley@HansenPartnership.com,
- mrpre@163.com, jakub@cloudflare.com
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
- mptcp@lists.linux.dev, linux-kernel-mentees@lists.linuxfoundation.org,
- skhan@linuxfoundation.org, david.hunter.linux@gmail.com
-References: <20250924195731.6374-1-mehdi.benhadjkhelifa@gmail.com>
+Subject: Re: [PATCH bpf-next v5 3/3] selftests/bpf: Add stacktrace map
+ lookup_and_delete_elem test case
+To: Tao Chen <chen.dylane@linux.dev>, ast@kernel.org,
+ john.fastabend@gmail.com, andrii@kernel.org, martin.lau@linux.dev,
+ eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev,
+ kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20250923165849.1524622-1-chen.dylane@linux.dev>
+ <20250923165849.1524622-3-chen.dylane@linux.dev>
 Content-Language: en-US
 From: Daniel Borkmann <daniel@iogearbox.net>
 Autocrypt: addr=daniel@iogearbox.net; keydata=
@@ -113,90 +102,32 @@ Autocrypt: addr=daniel@iogearbox.net; keydata=
  rUD9YI1Je/WifL/HbIubHCCdK8/N7rblgUrZJMG3W+7vAvZsOh/6VTZeP4wCe7Gs/cJhE2gI
  DmGcR+7rQvbFQC4zQxEjo8fNaTwjpzLM9NIp4vG9SDIqAm20MXzLBAeVkofixCsosUWUODxP
  owLbpg7pFRJGL9YyEHpS7MGPb3jSLzucMAFXgoI8rVqoq6si2sxr2l0VsNH5o3NgoAgJNIg=
-In-Reply-To: <20250924195731.6374-1-mehdi.benhadjkhelifa@gmail.com>
+In-Reply-To: <20250923165849.1524622-3-chen.dylane@linux.dev>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Virus-Scanned: Clear (ClamAV 1.0.9/27773/Thu Sep 25 10:27:35 2025)
 
-On 9/24/25 9:57 PM, Mehdi Ben Hadj Khelifa wrote:
-> -Change all the source files and the corresponding headers
-> to having matching sign comparisons.
+On 9/23/25 6:58 PM, Tao Chen wrote:
+> Add tests for stacktrace map lookup and delete:
+> 1. use bpf_map_lookup_and_delete_elem to lookup and delete the target
+>     stack_id,
+> 2. lookup the deleted stack_id again to double check.
 > 
-> Signed-off-by: Mehdi Ben Hadj Khelifa <mehdi.benhadjkhelifa@gmail.com>
+> Signed-off-by: Tao Chen <chen.dylane@linux.dev>
 > ---
-> Changelog:
-> 
-> Changes since v1:
-> - Fix CI failed builds where it failed due to do missing .c and
-> .h files in my patch for working in mainline.
-> https://lore.kernel.org/bpf/20250924162408.815137-1-mehdi.benhadjkhelifa@gmail.com/T/#u
-> ---
->   tools/lib/bpf/usdt.bpf.h                         |  4 ++--
->   tools/testing/selftests/bpf/Makefile             |  4 ++--
->   tools/testing/selftests/bpf/bpf_arena_htab.h     |  2 +-
->   tools/testing/selftests/bpf/progs/arena_list.c   |  2 +-
->   .../bpf/progs/bench_local_storage_create.c       |  2 +-
->   tools/testing/selftests/bpf/progs/bind_perm.c    |  2 +-
->   tools/testing/selftests/bpf/progs/bpf_cc_cubic.c |  2 +-
->   tools/testing/selftests/bpf/progs/bpf_cubic.c    |  8 ++++----
->   .../bpf/progs/bpf_iter_bpf_percpu_array_map.c    |  2 +-
->   .../selftests/bpf/progs/bpf_iter_task_stack.c    |  2 +-
->   .../testing/selftests/bpf/progs/bpf_iter_tasks.c |  3 ++-
->   .../selftests/bpf/progs/bpf_iter_vma_offset.c    |  4 ++--
->   .../testing/selftests/bpf/progs/bpf_qdisc_fifo.c |  2 +-
->   tools/testing/selftests/bpf/progs/bpf_qdisc_fq.c |  4 ++--
->   .../bpf/progs/cgroup_getset_retval_getsockopt.c  |  6 +++---
->   .../selftests/bpf/progs/connect4_dropper.c       |  2 +-
->   .../selftests/bpf/progs/cpumask_success.c        |  4 ++--
->   .../testing/selftests/bpf/progs/dynptr_success.c |  8 ++++----
->   tools/testing/selftests/bpf/progs/iters.c        | 16 ++++++++--------
->   .../selftests/bpf/progs/kfunc_call_test.c        |  2 +-
->   tools/testing/selftests/bpf/progs/linked_list.c  | 10 +++++-----
->   tools/testing/selftests/bpf/progs/lsm.c          |  2 +-
->   .../testing/selftests/bpf/progs/map_in_map_btf.c |  2 +-
->   tools/testing/selftests/bpf/progs/map_ptr_kern.c |  2 +-
->   .../selftests/bpf/progs/mmap_inner_array.c       |  2 +-
->   .../testing/selftests/bpf/progs/mptcp_subflow.c  |  2 +-
->   .../selftests/bpf/progs/netif_receive_skb.c      |  4 ++--
->   tools/testing/selftests/bpf/progs/profiler.inc.h |  6 +++---
->   .../testing/selftests/bpf/progs/rcu_read_lock.c  |  4 ++--
->   .../bpf/progs/sk_storage_omem_uncharge.c         |  6 +++---
->   .../selftests/bpf/progs/sockopt_inherit.c        |  4 ++--
->   tools/testing/selftests/bpf/progs/sockopt_sk.c   |  4 ++--
->   tools/testing/selftests/bpf/progs/strobemeta.h   |  2 +-
->   .../selftests/bpf/progs/task_local_data.bpf.h    |  6 +++---
->   .../selftests/bpf/progs/test_bpf_cookie.c        |  2 +-
->   .../testing/selftests/bpf/progs/test_check_mtu.c |  4 ++--
->   .../selftests/bpf/progs/test_core_extern.c       |  2 +-
->   .../testing/selftests/bpf/progs/test_get_xattr.c |  4 ++--
->   .../selftests/bpf/progs/test_global_func11.c     |  2 +-
->   .../selftests/bpf/progs/test_global_func12.c     |  2 +-
->   .../selftests/bpf/progs/test_global_func13.c     |  2 +-
->   .../selftests/bpf/progs/test_global_func14.c     |  2 +-
->   .../selftests/bpf/progs/test_global_func9.c      |  2 +-
->   .../selftests/bpf/progs/test_lwt_seg6local.c     |  4 ++--
->   .../testing/selftests/bpf/progs/test_map_init.c  |  2 +-
->   .../selftests/bpf/progs/test_parse_tcp_hdr_opt.c |  2 +-
->   .../bpf/progs/test_parse_tcp_hdr_opt_dynptr.c    |  2 +-
->   .../selftests/bpf/progs/test_pkt_access.c        |  6 +++---
->   .../testing/selftests/bpf/progs/test_seg6_loop.c |  4 ++--
->   tools/testing/selftests/bpf/progs/test_skb_ctx.c |  2 +-
->   .../testing/selftests/bpf/progs/test_snprintf.c  |  2 +-
->   .../selftests/bpf/progs/test_sockmap_kern.h      |  2 +-
->   .../selftests/bpf/progs/test_sockmap_strp.c      |  2 +-
->   .../testing/selftests/bpf/progs/test_tc_tunnel.c |  2 +-
->   tools/testing/selftests/bpf/progs/test_xdp.c     |  2 +-
->   .../selftests/bpf/progs/test_xdp_dynptr.c        |  2 +-
->   .../testing/selftests/bpf/progs/test_xdp_loop.c  |  2 +-
->   .../selftests/bpf/progs/test_xdp_noinline.c      |  4 ++--
->   tools/testing/selftests/bpf/progs/udp_limit.c    |  2 +-
->   tools/testing/selftests/bpf/progs/uprobe_multi.c |  4 ++--
->   .../bpf/progs/uprobe_multi_session_recursive.c   |  5 +++--
->   .../selftests/bpf/progs/verifier_arena_large.c   |  4 ++--
->   .../bpf/progs/verifier_iterating_callbacks.c     |  2 +-
->   63 files changed, 109 insertions(+), 107 deletions(-)
+>   .../testing/selftests/bpf/prog_tests/stacktrace_map.c | 11 ++++++++++-
+>   tools/testing/selftests/bpf/progs/stacktrace_map.c    |  2 ++
+>   2 files changed, 12 insertions(+), 1 deletion(-)
+BPF CI fails with:
 
-Big churn all over the place :/ Either way, it looks like you haven't run
-the tests locally before submitting, some are failing:
+Notice: Success: 644/5645, Skipped: 82, Failed: 1
+Error: #402 stacktrace_map_raw_tp
+   Error: #402 stacktrace_map_raw_tp
+   libbpf: elf: failed to open ./test_stacktrace_map.bpf.o: -ENOENT
+   test_stacktrace_map_raw_tp:FAIL:prog_load raw tp err -2 errno 2
+Test Results:
+              bpftool: PASS
+           test_progs: FAIL (returned 1)
+Error: Process completed with exit code 1.
 
-https://github.com/kernel-patches/bpf/actions/runs/17993782331
+https://github.com/kernel-patches/bpf/actions/runs/17993777572
