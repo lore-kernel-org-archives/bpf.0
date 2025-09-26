@@ -1,160 +1,166 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E797F1EEE6;
-	Fri, 26 Sep 2025 12:55:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA7F3199FAB
+	for <bpf@vger.kernel.org>; Fri, 26 Sep 2025 13:50:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758891353; cv=none; b=ccKFpmC41e6+ESMURPKBkfQvlP/SiUjM0gjXwZMtBRSoJEDU32hWk3zfT8aukuuSooiaP+fkog+j+Oh7VbQUtys9QyTZoAbSUVkftPpROAAxqJgWRqblQBx6EzOtzmDu7cwqZRrycdptOS+9wZ/m4mHzfgpwPBZzTSc6sZ5plb8=
+	t=1758894623; cv=none; b=eFuKRRNs2mNQ04ItY3LsN04/eQ1RAUcczfaGM45568EuEenvEbv2hdXPK6dy7W5B6he03KQJ/sOZYgVvz927yFVUTVO6iWVfSd8pKfXiMKloRHlVjHV22eotjcXeVRJ19f0azqK3rsFgonkCfb/LIqsWQDu4L99ZmTW38PLxLhA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758891353; c=relaxed/simple;
-	bh=duSa904xzX7uTYjxszUBwrwGR3o5pCjjI0NEhThlExo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KgtKXyTThTK0SGoNKfMFrG9VeY42o5Mu9EUb2gG7T+tLcNxcJ4RH+Maa0NrmNBcmw8bGa0GoErPSEGEcRpLAYs1xUeyQFqTfGH+Mc59iU/oUzZuVq5C8FIWXX4Z95PYm+OHDRMvgx0KltCrBbDM88vcJAZZQReWg+qPgzkmYldQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AIwrH/Fw; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1758894623; c=relaxed/simple;
+	bh=g+Zw3LyIAc4Ils1XDPmPHfC5nhnb2Xw/aKtErKjotHE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=dqnBH22u2hLuBTkP8654nok4akk85NliaYKBLS7eYNdpR9AHaTslHghP3pBP2wrB3NMeyyQolsrK8nLPlCkUPPaJaBVV+r2iysMx7USvTZc8r2NB4XIH7c5mio/A7fKfwgCqkiwgyk9teHh/7nrq1mmb477CItSg0SGzrf/PP+0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=dC7C5WYL; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AIwrH/Fw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 467C7C4CEF4;
-	Fri, 26 Sep 2025 12:55:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758891352;
-	bh=duSa904xzX7uTYjxszUBwrwGR3o5pCjjI0NEhThlExo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=AIwrH/FwH+7LYFdACvS1oqcYl+azT3xaZoOGIaQZlPbaYUtrM/14fw9uvvPM2LUMa
-	 U0T10X4/wNwuq2T2+KbyQlPSJiqfX9/UZJF9HhbVQ9kKHH757ekObZGQsjnxhSJTM2
-	 ORYD1PKdQC63B5kujlklKMPuaVbagyRm5dfu1rnfBFP30KeTsNwizF2pnEZHRKnSu9
-	 /7FQRL1GJhqUq7gnAV3GvyU+h2kL/qQ1LfT3PctsoMjLFqbJhQ13ZHaH63Er7O2c7v
-	 JwHzUYVGcQLk684+s9sJN+WY/iPaGIfn7Cv1iNaOdRpOq2K2fXO1bR44fIbLlfnMKz
-	 4wJ4ZVHvY4Ssw==
-Date: Fri, 26 Sep 2025 14:55:50 +0200
-From: Lorenzo Bianconi <lorenzo@kernel.org>
-To: Jakub Sitnicki <jakub@cloudflare.com>
-Cc: Jesper Dangaard Brouer <hawk@kernel.org>,
-	Donald Hunter <donald.hunter@gmail.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Tony Nguyen <anthony.l.nguyen@intel.com>,
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
-	Alexander Lobakin <aleksander.lobakin@intel.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-	netdev@vger.kernel.org, bpf@vger.kernel.org,
-	intel-wired-lan@lists.osuosl.org, linux-kselftest@vger.kernel.org,
-	kernel-team <kernel-team@cloudflare.com>
-Subject: Re: [PATCH RFC bpf-next v2 0/5] Add the the capability to load HW RX
- checsum in eBPF programs
-Message-ID: <aNaNVl13LV_HWbP3@lore-desk>
-References: <20250925-bpf-xdp-meta-rxcksum-v2-0-6b3fe987ce91@kernel.org>
- <87bjmy508n.fsf@cloudflare.com>
- <aNUb2rB8QAJj-aUX@lore-desk>
- <87tt0q3ik9.fsf@cloudflare.com>
- <fdb8a364-a12d-4c1f-9591-9dac3e27b321@kernel.org>
- <87ldm12zoq.fsf@cloudflare.com>
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="dC7C5WYL"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
+	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
+	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=DIoPHMw05n1YbAOGDHEFFGtoXhvc/a0BonXSDzgxqNo=; b=dC7C5WYL4obwoLhPdmzasxO7dY
+	vHQRC/RXOdjjQRommU78LJNEvNP+/shRcuDV0Ix8S53ZKfWf0yDbuFyVmISoXVNBE9cqnLU/102CW
+	x4b68ytyKVcMdriL0c63i8FzNKJ7iV/2jygH4bfwz6l425wg3OyGGg0Bke7TFE5Rz0cUI34ILZV3n
+	1xziHiZPfF1al74l1YTl7DyEr0eRvuphGyUVb3Hu/FQG9N/Xek/BzcAs+lNKxqZNp/OkHAfOv2SKQ
+	p8N8JUU1e/1naIZZ06vk5zSFDmKnfKMxPbjHc2uITOTXoDGsg5xo40OeltYEtgn7k7BG5O9CyUBBG
+	nfmtJPqA==;
+Received: from localhost ([127.0.0.1])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1v28pv-000HNB-1S;
+	Fri, 26 Sep 2025 15:50:11 +0200
+From: Daniel Borkmann <daniel@iogearbox.net>
+To: bpf@vger.kernel.org
+Cc: alexei.starovoitov@gmail.com,
+	andrii.nakryiko@gmail.com
+Subject: [PATCH bpf-next 2/2] selftests/bpf: Add test case for different expected_attach_type
+Date: Fri, 26 Sep 2025 15:50:10 +0200
+Message-ID: <20250926135010.185569-2-daniel@iogearbox.net>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20250926135010.185569-1-daniel@iogearbox.net>
+References: <20250926135010.185569-1-daniel@iogearbox.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="+8nn4MSiO0Z4/+w5"
-Content-Disposition: inline
-In-Reply-To: <87ldm12zoq.fsf@cloudflare.com>
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: Clear (ClamAV 1.0.9/27774/Fri Sep 26 10:27:36 2025)
 
+Add a small test case which adds two programs - one calling the other
+through a tailcall - and check that BPF rejects them in case of different
+expected_attach_type values:
 
---+8nn4MSiO0Z4/+w5
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+  # ./vmtest.sh -- ./test_progs -t xdp_devmap
+  [...]
+  #641/1   xdp_devmap_attach/Verifier check of DEVMAP programs:OK
+  #641     xdp_devmap_attach:OK
+  Summary: 1/1 PASSED, 0 SKIPPED, 0 FAILED
 
-> On Fri, Sep 26, 2025 at 01:45 PM +02, Jesper Dangaard Brouer wrote:
-> > On 25/09/2025 12.58, Jakub Sitnicki wrote:
-> >> On Thu, Sep 25, 2025 at 12:39 PM +02, Lorenzo Bianconi wrote:
-> >>>> On Thu, Sep 25, 2025 at 11:30 AM +02, Lorenzo Bianconi wrote:
-> >>>>> Introduce bpf_xdp_metadata_rx_checksum() kfunc in order to load the=
- HW
-> >>>>> RX cheksum results in the eBPF program binded to the NIC.
-> >>>>> Implement xmo_rx_checksum callback for veth and ice drivers.
-> >>>>
-> >>>> What are going to do with HW RX checksum once XDP prog can access it?
-> >>>
-> >>> I guess there are multiple use-cases for bpf_xdp_metadata_rx_checksum=
-()
-> >>> kfunc. The first the I have in mind is when packets are received by a=
-n af_xdp
-> >>> application. In this case I think we currently do not have any way to=
- check if
-> >>> the packet checksum is correct, right?
-> >>> I think Jesper has other use-cases in mind, I will let him comment
-> >>> here.
-> >> Can you share more details on what the AF_XDP application would that
-> >> info?
-> >
-> > Today the AF_XDP application need to verify the packet checksum, as it
-> > gets raw xdp_frame packets directly from hardware (no layer in-between
-> > checked this).  Getting the RX-checksum validation from hardware info
-> > will be very useful for AF_XDP, as it can avoid doing this in software.
-> >
-> >
-> >> Regarding the use cases that Jesper is trying to unlock, as things sta=
-nd
-> >> we don't have a way, or an agreement on how to inject/propagate even t=
-he
-> >> already existing NIC hints back into the network stack.
-> >>=20
-> >
-> > This patchset have its own merits and shouldn't be connected with my
-> > use-case of (optionally) including hardware offloads in the xdp_frame.
-> > Sure, I obviously also want this RX-checksum added, but this patchset is
-> > useful on it's own.
-> >
-> >> Hence my question - why do we want to expose another NIC hint to XDP
-> >> that we can't consume in any useful way yet?
-> >>=20
-> >
-> > Well here *are* useful ways to use this RX-checksum info on its own.
-> > See my explanation of the DDoS use-case here[1] in other email.
-> >
-> > Cloudflare actually also have a concrete use-case for needing this.
-> > Our XDP based Unimog[2] load-balancer (and DDoS) encapsulate all
-> > packets when they are XDP_TX forwarded. The encap receiving NIC lacking
-> > inner-packet checksum validation make us loose this hardware offload.
-> > This would allow us to save some checksum validation or even just DDOS =
-drop
-> > based on hardware checksum validation prior to encap (as in [1]).
->=20
-> Thanks for filling in the blanks, Jesper. That's the context that I was
-> missing.
->=20
-> Lorenzo, this motivaton seems worth including in the cover letter.
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+---
+ .../bpf/prog_tests/xdp_devmap_attach.c        | 31 ++++++++++++++++++-
+ .../bpf/progs/test_xdp_devmap_tailcall.c      | 29 +++++++++++++++++
+ 2 files changed, 59 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/test_xdp_devmap_tailcall.c
 
-ack, I will do.
+diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_devmap_attach.c b/tools/testing/selftests/bpf/prog_tests/xdp_devmap_attach.c
+index 461ab18705d5..a8ab05216c38 100644
+--- a/tools/testing/selftests/bpf/prog_tests/xdp_devmap_attach.c
++++ b/tools/testing/selftests/bpf/prog_tests/xdp_devmap_attach.c
+@@ -7,6 +7,7 @@
+ #include <test_progs.h>
+ 
+ #include "test_xdp_devmap_helpers.skel.h"
++#include "test_xdp_devmap_tailcall.skel.h"
+ #include "test_xdp_with_devmap_frags_helpers.skel.h"
+ #include "test_xdp_with_devmap_helpers.skel.h"
+ 
+@@ -107,6 +108,29 @@ static void test_neg_xdp_devmap_helpers(void)
+ 	}
+ }
+ 
++static void test_xdp_devmap_tailcall(enum bpf_attach_type prog_dev,
++				     enum bpf_attach_type prog_tail,
++				     bool expect_reject)
++{
++	struct test_xdp_devmap_tailcall *skel;
++	int err;
++
++	skel = test_xdp_devmap_tailcall__open();
++	if (!ASSERT_OK_PTR(skel, "test_xdp_devmap_tailcall__open"))
++		return;
++
++	bpf_program__set_expected_attach_type(skel->progs.xdp_devmap, prog_dev);
++	bpf_program__set_expected_attach_type(skel->progs.xdp_entry, prog_tail);
++
++	err = test_xdp_devmap_tailcall__load(skel);
++	if (expect_reject)
++		ASSERT_ERR(err, "test_xdp_devmap_tailcall__load");
++	else
++		ASSERT_OK(err, "test_xdp_devmap_tailcall__load");
++
++	test_xdp_devmap_tailcall__destroy(skel);
++}
++
+ static void test_xdp_with_devmap_frags_helpers(void)
+ {
+ 	struct test_xdp_with_devmap_frags_helpers *skel;
+@@ -238,8 +262,13 @@ void serial_test_xdp_devmap_attach(void)
+ 	if (test__start_subtest("DEVMAP with frags programs in entries"))
+ 		test_xdp_with_devmap_frags_helpers();
+ 
+-	if (test__start_subtest("Verifier check of DEVMAP programs"))
++	if (test__start_subtest("Verifier check of DEVMAP programs")) {
+ 		test_neg_xdp_devmap_helpers();
++		test_xdp_devmap_tailcall(BPF_XDP_DEVMAP, BPF_XDP_DEVMAP, false);
++		test_xdp_devmap_tailcall(0, 0, true);
++		test_xdp_devmap_tailcall(BPF_XDP_DEVMAP, 0, true);
++		test_xdp_devmap_tailcall(0, BPF_XDP_DEVMAP, true);
++	}
+ 
+ 	if (test__start_subtest("DEVMAP with programs in entries on veth"))
+ 		test_xdp_with_devmap_helpers_veth();
+diff --git a/tools/testing/selftests/bpf/progs/test_xdp_devmap_tailcall.c b/tools/testing/selftests/bpf/progs/test_xdp_devmap_tailcall.c
+new file mode 100644
+index 000000000000..ea2d4912e499
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_xdp_devmap_tailcall.c
+@@ -0,0 +1,29 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++
++SEC("xdp")
++int xdp_devmap(struct xdp_md *ctx)
++{
++	return ctx->egress_ifindex;
++}
++
++struct {
++	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
++	__uint(max_entries, 1);
++	__uint(key_size, sizeof(__u32));
++	__array(values, int (void *));
++} xdp_map SEC(".maps") = {
++	.values = {
++		[0] = (void *)&xdp_devmap,
++	},
++};
++
++SEC("xdp")
++int xdp_entry(struct xdp_md *ctx)
++{
++	bpf_tail_call(ctx, &xdp_map, 0);
++	return 0;
++}
+-- 
+2.43.0
 
-Regards,
-Lorenzo
-
-
---+8nn4MSiO0Z4/+w5
-Content-Type: application/pgp-signature; name=signature.asc
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCaNaNVgAKCRA6cBh0uS2t
-rL3XAQD8GN9wvWAXagWwB1Sz8I/terYM2elqSFXzjHbVzB4I9gD+K7WMUCpKHc20
-3uWnZNrOOHV0R5Qjh7lK1nf04Gg9kQk=
-=UrqH
------END PGP SIGNATURE-----
-
---+8nn4MSiO0Z4/+w5--
