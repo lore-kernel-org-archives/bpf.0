@@ -1,55 +1,55 @@
 Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A51F28489B
-	for <bpf@vger.kernel.org>; Mon, 29 Sep 2025 19:09:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43E402517A5
+	for <bpf@vger.kernel.org>; Mon, 29 Sep 2025 19:09:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759172960; cv=none; b=hPfaDkaoGOAhS1rwc8ankdIynqb1l10PUhuAqXtuc9FZHVot7MzDySQJbF+iKlKrFcWcLXRIQiJyY0aOciSk4LDoUbtUachZO0jOB1pUd3lVXaZ9mp30RjaT8XVIMTieJxpRjrdEc5QRljw4aOWJn8Svm+Q7V2MS87BBiWet/Sk=
+	t=1759172966; cv=none; b=Mcf/zfpuin+0KvhWA93ANPZUZB6jyHidAlQmLGLZSLv+N2FHbtRJ1tIj/kj7d1FG6Q9cekSVGtFIss4cC/8mv4Kf3mvCxdLrkztlWYTBdSglc3QfpzzEAfHO5/RgRnlxUj5yv5XBJ1jzFXoDqZ4veIr9aenvQCdkm92qPFKjhrQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759172960; c=relaxed/simple;
-	bh=QAMXMzzdI9MdutH7eQN4wd9SUdKYuTS3iFPzHIudd8c=;
+	s=arc-20240116; t=1759172966; c=relaxed/simple;
+	bh=AdUfJ3+HbRhbK7PtlXvfEfALYxdhT7u77r7aSN4uwZk=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Content-Type; b=GPXbMk51HkGK25T52IZq/+xNw2hSrSHVDzndHwj8U26Gg6WgX/Uaih8Tx5/jBvkEa/ULBwac88v3ArvdaVePJZ4lkQWcyAmRzNm4TZZn3R+Rd04LTRTjAOwU4sXHjKTPADJbkRlb1dBBVsRA/cwwcH1D/baqq/DLiaBuup06EkU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=jJ4QBprE; arc=none smtp.client-ip=209.85.214.202
+	 To:Content-Type; b=J13YBJZriCfO96nhCUCDB084qud11lmmNyl+JU6ymlFfEgnYATHjZNsiSE0JLd3QUfKTDJKR+qy8OCy6Onag3TZc+6Bixv1y42LUbukKW45euoglXSqi2ZOwne6MFvMEYCoeJt+APdECfN+WPW1wGR+4NAyNj2a8Oaoc5fBFx/M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=L9yQeoMo; arc=none smtp.client-ip=209.85.214.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="jJ4QBprE"
-Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-28a5b8b12bbso33430975ad.2
-        for <bpf@vger.kernel.org>; Mon, 29 Sep 2025 12:09:17 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="L9yQeoMo"
+Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-27eeb9730d9so40566685ad.0
+        for <bpf@vger.kernel.org>; Mon, 29 Sep 2025 12:09:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1759172956; x=1759777756; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1759172964; x=1759777764; darn=vger.kernel.org;
         h=to:from:subject:message-id:references:mime-version:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=rdcK/lBU6rEBVQg0qeNeqiUObE1KDszjje3klwu/MCM=;
-        b=jJ4QBprEh0GjwKLc355Pi1mY26EcEmTi7iCE4S00B6KaqGD5baYxXDwtc3AlPpkDVl
-         vhrcV+InhA5v847pZKpVfvITBifN/MlDGr45BrM57H4RI3ZI7l8y6bhFrgXcI2yTrQTw
-         59f2waLEANfJhi3Ze+xc8kMDy56U4D11MBobrRgm8KmDNPATx+7/T1RJ9jmOw9bk+Mlb
-         p4G7ui5gq8o2CcZFWCpjsh1Zq+K5RUALYZ6NhtvbnmUk7KPeSzzE7kG5ZVqkhhRAEd9P
-         KCjICOUJ3UutStHz3uxtH8o+d9wULCnKEpx6I37onzYNGyMP9SuXoSRa8ivC0huoi0dQ
-         aB8Q==
+        bh=4971M/0zABDO+i83fcQEQWVemuah1MT0Et0WsfrEZzk=;
+        b=L9yQeoMoPkXg5d5lT2D7Ra4n++RDy2SE9MSuD1eTVbKyNZt8WSLkEloIFCzXNqO3cf
+         wgo7N6WOlI3EbhXo5y3QghXVKhaL+Zvz8smMzTX6PYl9BbIVf1GEj4T9C4wjsBNEy4Q1
+         KlOwLH5/fBorFi9cSI8qqlETXPIa4jpkZ8BNK0uEtWK6NZAVH6EQ+bKbkY9YGqEsyc6E
+         BLs/sdBbGMY+DbRGhMRogroFvjoCF9NtRqAFJi8SLM2GPrX1fIc/hJ4vsLdpOiDW5Wft
+         CCZEQXne39KFIdsPDNuxX8Nvhvcr9ivaFvj2gSVR3Mwpc54sE3l3Kzq5pqKdVIvy3Gzj
+         r7NA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759172956; x=1759777756;
+        d=1e100.net; s=20230601; t=1759172964; x=1759777764;
         h=to:from:subject:message-id:references:mime-version:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rdcK/lBU6rEBVQg0qeNeqiUObE1KDszjje3klwu/MCM=;
-        b=Rlj0HFnM9bSp5Nzin+zVrpBaDHXi/i6SVGOadYchN8b+yN0a85bZSiDvyIy2nFwzgH
-         Gm1XesHz2U+BNeHct4zk6cim2/BONMlBwStVvIAGkJgO75z/FdlsuwgGJLMSl7yo/azG
-         ea5h2FwgRwLwro0dDoEBqQJ8SmUsbPtCVJJnckb4xf43uRgzQ9ghLNTIUwn+ehGaXazy
-         6J8V/p0ayO5fGVp0uPEEomEJ+/fbEJAdfpioxgQva6ZH34+WSBCITiuRYrPcLPt0D+qi
-         WGPkXiNm4mNIJdzWiHlbB2LDbMQrS/GcCBj4VInwm1RyjOxAIaRbDzesRKJzXzgiDo/6
-         IlKA==
-X-Forwarded-Encrypted: i=1; AJvYcCW+BEG5iPIKD5CrLtMEEYUxK4IXsAe55vGhqy9IYG2A59JcitKJYLT3VOkz4Y2hy4EDOfg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzZG3x9crTWqRaQXSQVF6EHs09dvrvpHGFzceAwFAyqFLl0nSoP
-	OgybNfVSfa3aBuJnN6VZYFbaFFGg66zmK5oxUQDex+8Lfv/otBAYw54CaDYJ4/3UD5oJ2bf0iDf
-	6sCpSwjNzQA==
-X-Google-Smtp-Source: AGHT+IEJX47iOtVtrshwBHm4+RSHE5OXtXWHjA4rxRxxI9/ipxBIUfnBsBl2AQARp8ZA4p+cWOFp5/eQGOfA
-X-Received: from plko4.prod.google.com ([2002:a17:902:6b04:b0:234:c104:43f1])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:ea0a:b0:24b:62ef:9d38
- with SMTP id d9443c01a7336-27ed49d2948mr197295705ad.19.1759172956552; Mon, 29
- Sep 2025 12:09:16 -0700 (PDT)
-Date: Mon, 29 Sep 2025 12:08:03 -0700
+        bh=4971M/0zABDO+i83fcQEQWVemuah1MT0Et0WsfrEZzk=;
+        b=LInmBcjGfQccefOZwmbqY1h9fyFbge5dX/92y+SXdyyzrmBGlKRR91JrEARVNUdVKh
+         uluP+dBCgdST4K+DDF6V02D2/Q/uPckB0vOuKLtmujaxxL1JBwQKrP/MmtCUdT2iR3vW
+         exJSrEEgJv03d5SiK6vhPYXSNsgmWdddM/e3zB8ICql3aauAmTXQHP5gtbqZATzQrnSM
+         DjkkXG2RqKyBcyJzmEeuLRbw2PbzAiTMIE+yyHodIkYvxq89BRtoDC1WQ04zIlKCqiHn
+         6RT/MClIFXVwyyxupsu09NxdFzXV8zNUcHpOzTPefDeB+iE2Ym35OHEAVnK+Rrvw3EIz
+         KKJQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUiKv11DIzgfhOzBnaST+CdliL6hU9r/DqAi9F2fOjHgyLaBH7sKmxq0FRIKqd/YsRyOKM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxx/olNUo6LY0WCwyV7ZbCezwhvhYK8bcruveeaphQSIqOK5vgG
+	f5y9g3pFcGuAyFglXEQmN0TDwBYr3p9S1TGfGiCrVlpjdYkONnKmVJYRZSBD1Zr/UKen+JOankJ
+	BmyzTrBxcxA==
+X-Google-Smtp-Source: AGHT+IGSCDVx0cLNNfPAO34F5NCMZLpRD91/a9vLPfmnYqOXMggPFusn25YIXzpM5IEFpb7ikaAU0IUITXOR
+X-Received: from pgar25.prod.google.com ([2002:a05:6a02:2e99:b0:b58:4e62:6f3d])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:acf:b0:274:5030:2906
+ with SMTP id d9443c01a7336-27ed4ab8df8mr196816435ad.46.1759172963586; Mon, 29
+ Sep 2025 12:09:23 -0700 (PDT)
+Date: Mon, 29 Sep 2025 12:08:05 -0700
 In-Reply-To: <20250929190805.201446-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -59,8 +59,8 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20250929190805.201446-1-irogers@google.com>
 X-Mailer: git-send-email 2.51.0.570.gb178f27e6d-goog
-Message-ID: <20250929190805.201446-14-irogers@google.com>
-Subject: [PATCH v6 13/15] perf disasm: Make ins__scnprintf and ins__is_nop static
+Message-ID: <20250929190805.201446-16-irogers@google.com>
+Subject: [PATCH v6 15/15] perf disasm: Remove unused evsel from annotate_args
 From: Ian Rogers <irogers@google.com>
 To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
 	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
@@ -80,57 +80,38 @@ To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
 	Song Liu <song@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 
-Reduce the scope of ins__scnprintf and ins__is_nop that aren't used
-outside of disasm.c.
+Set in symbol__annotate but never used.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/util/disasm.c | 6 +++---
- tools/perf/util/disasm.h | 3 ---
- 2 files changed, 3 insertions(+), 6 deletions(-)
+ tools/perf/util/annotate.c | 1 -
+ tools/perf/util/disasm.h   | 1 -
+ 2 files changed, 2 deletions(-)
 
-diff --git a/tools/perf/util/disasm.c b/tools/perf/util/disasm.c
-index e64902e520ab..50b9433f3f8e 100644
---- a/tools/perf/util/disasm.c
-+++ b/tools/perf/util/disasm.c
-@@ -247,8 +247,8 @@ static int ins__raw_scnprintf(struct ins *ins, char *bf, size_t size,
- 	return scnprintf(bf, size, "%-*s %s", max_ins_name, ins->name, ops->raw);
- }
- 
--int ins__scnprintf(struct ins *ins, char *bf, size_t size,
--		   struct ins_operands *ops, int max_ins_name)
-+static int ins__scnprintf(struct ins *ins, char *bf, size_t size,
-+			  struct ins_operands *ops, int max_ins_name)
- {
- 	if (ins->ops->scnprintf)
- 		return ins->ops->scnprintf(ins, bf, size, ops, max_ins_name);
-@@ -828,7 +828,7 @@ static struct ins_ops ret_ops = {
- 	.scnprintf = ins__raw_scnprintf,
- };
- 
--bool ins__is_nop(const struct ins *ins)
-+static bool ins__is_nop(const struct ins *ins)
- {
- 	return ins->ops == &nop_ops;
- }
+diff --git a/tools/perf/util/annotate.c b/tools/perf/util/annotate.c
+index c9b220d9f924..a2e34f149a07 100644
+--- a/tools/perf/util/annotate.c
++++ b/tools/perf/util/annotate.c
+@@ -1015,7 +1015,6 @@ int symbol__annotate(struct map_symbol *ms, struct evsel *evsel,
+ 	struct symbol *sym = ms->sym;
+ 	struct annotation *notes = symbol__annotation(sym);
+ 	struct annotate_args args = {
+-		.evsel		= evsel,
+ 		.options	= &annotate_opts,
+ 	};
+ 	struct arch *arch = NULL;
 diff --git a/tools/perf/util/disasm.h b/tools/perf/util/disasm.h
-index 2cb4e1a6bd30..09c86f540f7f 100644
+index 09c86f540f7f..d2cb555e4a3b 100644
 --- a/tools/perf/util/disasm.h
 +++ b/tools/perf/util/disasm.h
-@@ -110,13 +110,10 @@ struct arch *arch__find(const char *name);
- bool arch__is(struct arch *arch, const char *name);
- 
- struct ins_ops *ins__find(struct arch *arch, const char *name, struct disasm_line *dl);
--int ins__scnprintf(struct ins *ins, char *bf, size_t size,
--		   struct ins_operands *ops, int max_ins_name);
- 
- bool ins__is_call(const struct ins *ins);
- bool ins__is_jump(const struct ins *ins);
- bool ins__is_fused(struct arch *arch, const char *ins1, const char *ins2);
--bool ins__is_nop(const struct ins *ins);
- bool ins__is_ret(const struct ins *ins);
- bool ins__is_lock(const struct ins *ins);
- 
+@@ -98,7 +98,6 @@ struct ins_ops {
+ struct annotate_args {
+ 	struct arch		  *arch;
+ 	struct map_symbol	  ms;
+-	struct evsel		  *evsel;
+ 	struct annotation_options *options;
+ 	s64			  offset;
+ 	char			  *line;
 -- 
 2.51.0.570.gb178f27e6d-goog
 
