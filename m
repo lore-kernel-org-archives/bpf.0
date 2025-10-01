@@ -1,47 +1,46 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D0232550D4;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D104256C76;
 	Wed,  1 Oct 2025 14:48:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759330117; cv=none; b=ezpM+OzqX+Qv/Kwz4NHzis3SRaRVUovudGP/grPxE85mDCUQi/KtlhBVNdd2v8tvy8vkQsD86hRr4QfFAKJox7s6DR31rLsyBqMDFbUfNOSf9Fi8hc9hPMUti+LKcg9yegeSGsMiarXXWvbsUPLpJgljhZ020A0ACQ90gAebPtU=
+	t=1759330117; cv=none; b=JRqyEWNuFUCXvL/n8i0PEAjdBD3HGnN+3DwW2agbOwzOdgiRChoA0xwgUZJN5IwN14HraOa3AV8SVCFOlmeLJ37N+PlUTrzPSmPiHzQngTFLFXlX9+VNLTKEezRclJR2+sXxHK6206pWnjhVt4EJ065Tf51fdYDUzJ+oi11AteI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1759330117; c=relaxed/simple;
-	bh=gORzw/K5miRE/rNReHV1tjj65oo9eOSliJxhQHUaXtc=;
+	bh=7msjYfr0Kv43ez5IZwT7gg8cr4MufUyBGd2HMG5qBx8=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=m8ogYNaBFCWfeq8RdEdTVEKjsFXgO5HfK+B8HdnHJcTwIrEY7LzXkW/DteGC+eq89/UdpqwMjLom9VqLMw+YJeiY8DpuAq8jJmZY2aWUIWwn9qGghsR4HkW7igb3INlvRVl37O4Ycs2E17+GPK5UGTgMvYeIu7Otg9me2ixoAXw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TAjk6kgo; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=j6GGeTtIszPKUif5hi8to23yt0tIIledmq7CLPvE5xxgASkNeACS4x2QBEvRWXYLskyYm5LFcNvmqHSvnmWHXy3x5p05fHLXzN0tH2H8rYrc4Pn988B48hZraxhUzhhvQVoQCVmGaBtHbUgibjlNDFRmnxtFpRd+d75EbNVu+qc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vBxNV/QM; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TAjk6kgo"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBA60C4CEF1;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vBxNV/QM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF4B1C4CEF9;
 	Wed,  1 Oct 2025 14:48:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1759330117;
-	bh=gORzw/K5miRE/rNReHV1tjj65oo9eOSliJxhQHUaXtc=;
+	bh=7msjYfr0Kv43ez5IZwT7gg8cr4MufUyBGd2HMG5qBx8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=TAjk6kgoN0vOc2F0MkIZtzNr7hH4kTxjfAyN/4fVnEOvFSXXNfHvbBtn1rXkw5DjZ
-	 YXNsEI/ph4XsHnjkmHjPryT3fASSsNefGPzmPJ1EHwqrWrpm82yhlUB8lKMGlZIIXN
-	 kQsF8svNELpG7AUexB8v1tTConjdElRG9zjdyJ3j7TUZ7YhUK1gVKh0mFS+qYoqXU6
-	 lEJM58sgpLQZBoEs3/kaZwYHDbCFMguvdHZ2LCeVAnApaW1uC4U32eJRzcXGbHv6bO
-	 dL2iI7gfjXo4EFMMfaSkiYZEiAj0ozo/qDJOeooxunJ9bzaexSDHVxR+867XQC1p1R
-	 zALpxcOb3+CNQ==
+	b=vBxNV/QMK3vrkwVsCv58npjpNtxaxi9C1UgimyViknw3CkgkMAKUtbOozk/UQjZZB
+	 isDTKH3+aR5bW1A7SEfrKPqBdUx0r1NglQFOBQ2mRJxbAbDZ1vPJ2jITkt2S99jDPc
+	 BSSeNhT0cTRRi837jqXcYFsxzlwrY/C55foKsghvcNfFTN+tTb6keR5UuwPHpyXGIR
+	 ZtKyVWpBhDF3PKFVcDjrcaP3d8D34Kgl1DVH7yOYZVmQkNZKypauFeluAfkJTSZ8YM
+	 KF08WxneuP8tBIvfXIxuHqWappUwfeV+rK5ke+XHyIfW/+r36LxLZa7m/LYs3wpsI4
+	 4f7FeHPISw3gw==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 677A3CE10DB; Wed,  1 Oct 2025 07:48:34 -0700 (PDT)
+	id 6D3F4CE1148; Wed,  1 Oct 2025 07:48:34 -0700 (PDT)
 From: "Paul E. McKenney" <paulmck@kernel.org>
 To: rcu@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org,
 	kernel-team@meta.com,
 	rostedt@goodmis.org,
 	"Paul E. McKenney" <paulmck@kernel.org>,
-	Frederic Weisbecker <frederic@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Alexei Starovoitov <ast@kernel.org>,
 	Peter Zijlstra <peterz@infradead.org>,
 	bpf@vger.kernel.org
-Subject: [PATCH v2 03/21] context_tracking: Remove rcu_task_trace_heavyweight_{enter,exit}()
-Date: Wed,  1 Oct 2025 07:48:14 -0700
-Message-Id: <20251001144832.631770-3-paulmck@kernel.org>
+Subject: [PATCH v2 05/21] rcu: Move rcu_tasks_trace_srcu_struct out of #ifdef CONFIG_TASKS_RCU_GENERIC
+Date: Wed,  1 Oct 2025 07:48:16 -0700
+Message-Id: <20251001144832.631770-5-paulmck@kernel.org>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <7fa58961-2dce-4e08-8174-1d1cc592210f@paulmck-laptop>
 References: <7fa58961-2dce-4e08-8174-1d1cc592210f@paulmck-laptop>
@@ -53,66 +52,88 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Because SRCU-fast does not use IPIs for its grace periods, there is
-no need for real-time workloads to switch to an IPI-free mode, and
-there is in turn no need for either rcu_task_trace_heavyweight_enter()
-or rcu_task_trace_heavyweight_exit().  This commit therefore removes them.
+Moving the rcu_tasks_trace_srcu_struct structure instance out
+from under the CONFIG_TASKS_RCU_GENERIC Kconfig option permits
+the CONFIG_TASKS_TRACE_RCU Kconfig option to stop enabling this
+CONFIG_TASKS_RCU_GENERIC Kconfig option.  This commit also therefore
+makes it so.
 
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-Cc: Frederic Weisbecker <frederic@kernel.org>
 Cc: Andrii Nakryiko <andrii@kernel.org>
 Cc: Alexei Starovoitov <ast@kernel.org>
 Cc: Peter Zijlstra <peterz@infradead.org>
 Cc: <bpf@vger.kernel.org>
 ---
- kernel/context_tracking.c | 20 --------------------
- 1 file changed, 20 deletions(-)
+ kernel/rcu/Kconfig |  2 +-
+ kernel/rcu/tasks.h | 38 +++++++++++++-------------------------
+ 2 files changed, 14 insertions(+), 26 deletions(-)
 
-diff --git a/kernel/context_tracking.c b/kernel/context_tracking.c
-index fb5be6e9b423f2..a743e7ffa6c00f 100644
---- a/kernel/context_tracking.c
-+++ b/kernel/context_tracking.c
-@@ -54,24 +54,6 @@ static __always_inline void rcu_task_enter(void)
- #endif /* #if defined(CONFIG_TASKS_RCU) && defined(CONFIG_NO_HZ_FULL) */
- }
+diff --git a/kernel/rcu/Kconfig b/kernel/rcu/Kconfig
+index 54b4c4aa553a4a..73a6cc364628b5 100644
+--- a/kernel/rcu/Kconfig
++++ b/kernel/rcu/Kconfig
+@@ -82,7 +82,7 @@ config NEED_SRCU_NMI_SAFE
+ 	def_bool HAVE_NMI && !ARCH_HAS_NMI_SAFE_THIS_CPU_OPS && !TINY_SRCU
  
--/* Turn on heavyweight RCU tasks trace readers on kernel exit. */
--static __always_inline void rcu_task_trace_heavyweight_enter(void)
--{
+ config TASKS_RCU_GENERIC
+-	def_bool TASKS_RCU || TASKS_RUDE_RCU || TASKS_TRACE_RCU
++	def_bool TASKS_RCU || TASKS_RUDE_RCU
+ 	help
+ 	  This option enables generic infrastructure code supporting
+ 	  task-based RCU implementations.  Not for manual selection.
+diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
+index fd1fe80ddde484..833e180db744f2 100644
+--- a/kernel/rcu/tasks.h
++++ b/kernel/rcu/tasks.h
+@@ -1439,31 +1439,6 @@ EXPORT_SYMBOL_GPL(rcu_tasks_rude_get_gp_data);
+ 
+ #endif /* #ifdef CONFIG_TASKS_RUDE_RCU */
+ 
+-////////////////////////////////////////////////////////////////////////
+-//
+-// Tracing variant of Tasks RCU.  This variant is designed to be used
+-// to protect tracing hooks, including those of BPF.  This variant
+-// is implemented via a straightforward mapping onto SRCU-fast.
+-
 -#ifdef CONFIG_TASKS_TRACE_RCU
--	if (IS_ENABLED(CONFIG_TASKS_TRACE_RCU_READ_MB))
--		current->trc_reader_special.b.need_mb = true;
--#endif /* #ifdef CONFIG_TASKS_TRACE_RCU */
+-
+-DEFINE_SRCU(rcu_tasks_trace_srcu_struct);
+-EXPORT_SYMBOL_GPL(rcu_tasks_trace_srcu_struct);
+-
+-// Placeholder to suppress build errors through transition period.
+-void __init rcu_tasks_trace_suppress_unused(void)
+-{
+-	show_rcu_tasks_generic_gp_kthread(NULL, NULL);
+-	rcu_spawn_tasks_kthread_generic(NULL);
+-	synchronize_rcu_tasks_generic(NULL);
+-	call_rcu_tasks_generic(NULL, NULL, NULL);
+-	call_rcu_tasks_iw_wakeup(NULL);
+-	cblist_init_generic(NULL);
+-	rcu_tasks_torture_stats_print_generic(NULL, NULL, NULL, NULL);
 -}
 -
--/* Turn off heavyweight RCU tasks trace readers on kernel entry. */
--static __always_inline void rcu_task_trace_heavyweight_exit(void)
--{
--#ifdef CONFIG_TASKS_TRACE_RCU
--	if (IS_ENABLED(CONFIG_TASKS_TRACE_RCU_READ_MB))
--		current->trc_reader_special.b.need_mb = false;
--#endif /* #ifdef CONFIG_TASKS_TRACE_RCU */
--}
+-#endif /* #else #ifdef CONFIG_TASKS_TRACE_RCU */
 -
- /*
-  * Record entry into an extended quiescent state.  This is only to be
-  * called when not already in an extended quiescent state, that is,
-@@ -85,7 +67,6 @@ static noinstr void ct_kernel_exit_state(int offset)
- 	 * critical sections, and we also must force ordering with the
- 	 * next idle sojourn.
- 	 */
--	rcu_task_trace_heavyweight_enter();  // Before CT state update!
- 	// RCU is still watching.  Better not be in extended quiescent state!
- 	WARN_ON_ONCE(IS_ENABLED(CONFIG_RCU_EQS_DEBUG) && !rcu_is_watching_curr_cpu());
- 	(void)ct_state_inc(offset);
-@@ -108,7 +89,6 @@ static noinstr void ct_kernel_enter_state(int offset)
- 	 */
- 	seq = ct_state_inc(offset);
- 	// RCU is now watching.  Better not be in an extended quiescent state!
--	rcu_task_trace_heavyweight_exit();  // After CT state update!
- 	WARN_ON_ONCE(IS_ENABLED(CONFIG_RCU_EQS_DEBUG) && !(seq & CT_RCU_WATCHING));
- }
- 
+ #ifndef CONFIG_TINY_RCU
+ void show_rcu_tasks_gp_kthreads(void)
+ {
+@@ -1617,3 +1592,16 @@ core_initcall(rcu_init_tasks_generic);
+ #else /* #ifdef CONFIG_TASKS_RCU_GENERIC */
+ static inline void rcu_tasks_bootup_oddness(void) {}
+ #endif /* #else #ifdef CONFIG_TASKS_RCU_GENERIC */
++
++#ifdef CONFIG_TASKS_TRACE_RCU
++
++////////////////////////////////////////////////////////////////////////
++//
++// Tracing variant of Tasks RCU.  This variant is designed to be used
++// to protect tracing hooks, including those of BPF.  This variant
++// is implemented via a straightforward mapping onto SRCU-fast.
++
++DEFINE_SRCU(rcu_tasks_trace_srcu_struct);
++EXPORT_SYMBOL_GPL(rcu_tasks_trace_srcu_struct);
++
++#endif /* #else #ifdef CONFIG_TASKS_TRACE_RCU */
 -- 
 2.40.1
 
