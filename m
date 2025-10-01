@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5C5B3074A6;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6A633074AA;
 	Wed,  1 Oct 2025 14:48:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759330122; cv=none; b=R9duA4foB5zymlbpUlD95rqxfd+Dh1qnigTEoAjuc2kPR4uAPGeEW969wardZTVPFlckf5ApAML6NbqjImmit55pJ2wLbMCojzKBGmVuHVuqHrBXFFLuQLwTHO5Y+UIo1JjZx6DXFiu48rQHEwdMznFsQS5oG/doo6KhtT7Ijgw=
+	t=1759330122; cv=none; b=SknlEzXxg2NcZkqBM1+CG5FOxpPolKuXWFr953OdIxiXcHgBEu/tXFK/PPbk1ucTR0+4MyzdfPBxozVWOOhGGh+EoXqiFbyIHY9/voR77xPioxhjx4BJlz8mUXfyFjbcuEZZAOj4Uu7BN7F7ezNGiGcef3xmaKOkxkhr9pr8hRM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1759330122; c=relaxed/simple;
-	bh=sjVFcWrDJfqVEdr4Iyjd1Hv55BK3Tses2HzyitawB4I=;
+	bh=LScGsjhQ8gC4uQeaMP9aDvziuKzyoZfiTdtxTzt+6cM=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=mVq6qBjDMbndIPjYCX2T7bXANLy92K+SAnxdHYf1TbZgPjiWgqEcbszm8/TOBGVT9NIQAfXGEv/Ri/IlIKFZPRc1Ho/mYwPTNXZibs1JZUWXrRlNr4DVZzsDdUrAQDqbujg3/b+GE4v6AkkqDVCYpBEcvIeCmXFuZVdZ6wWse2M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LIfuwIs3; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=jXfQ0k2DMF8N5BIGC1LmxrUS2wtJ6a4iCHPraxHTSXVgrc4OEa2g981JZtl277kufXTOIJH+fwC/VVoK0gRBIpg1nlx7z7WFYxbpwQj5Rzyr11Rv+7wGlNlLder/cyRwo5embATJOzq4CNgg4xXtnNeKiEf1R6ak1NtwM17gjUc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N0djdl6Y; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LIfuwIs3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CD4AC4AF09;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N0djdl6Y"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D0B0C4AF0C;
 	Wed,  1 Oct 2025 14:48:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1759330122;
-	bh=sjVFcWrDJfqVEdr4Iyjd1Hv55BK3Tses2HzyitawB4I=;
+	bh=LScGsjhQ8gC4uQeaMP9aDvziuKzyoZfiTdtxTzt+6cM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=LIfuwIs3aWwSw2fZBWkAnzRnXv+k1JyVpn9nvELRLD+XrCbTp3xJQlVJ5AOQnkn/S
-	 N2ZFBKIHueCPm/Q+X3+r3DTeX9DyD5zsBSo4dy3Lhbzv31fUjZPH2Nl96XlZrgFRHd
-	 3wQimfsYFMMPBq9AGaSCktCHONkS53+/pBkX6XGZp8Y4mzBbTQBuBpykezOmq5x1Oo
-	 QLZyzF8Rxyo+IUfASIn51sTK0Ztjz77VUOp6ccN7n38yRHqL1P3wbC+MG4rEwh2P3p
-	 2pbtDNlKHomwZsxgYbbxT3xr9sjsaoFT/AhAM90m/uLHjiNCXgYlaJ7ZEEJgBU3l6I
-	 OjhDuS5eQ3QFA==
+	b=N0djdl6YiJv2vY+1kcyDfo7HXbOY+Pb88LsyZuWnKHI6kgfoBWs08cQyvh8dSQjPs
+	 mSbQTRgLMcZEAKMFPKOsgaIafXDDCLbCBXPwP7Eh7B/sCd5fML6sdeQxAnwKE7ZkMk
+	 G74P+wzipD+BhOCyT47mly4ECQHYoG55lkNOHGNxmQVvV3Io5u6xkaCFyqq6cwDsQb
+	 PeVGbM2y2By7VGNjOWF+f6I8qsw7ujUa6ylQR34NL45WS2vIMerKdZmnt1lsCcM8em
+	 EJ5+avfVgbFXnj9844ONMDS6kG2Mq3WNMi9t8/8+Tg5amAfD6XyEYDE8658v3+szXF
+	 0Tlw4Q4tL8Z+g==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 94B29CE152F; Wed,  1 Oct 2025 07:48:34 -0700 (PDT)
+	id 8CF7CCE14DF; Wed,  1 Oct 2025 07:48:34 -0700 (PDT)
 From: "Paul E. McKenney" <paulmck@kernel.org>
 To: rcu@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org,
@@ -37,9 +37,9 @@ Cc: linux-kernel@vger.kernel.org,
 	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
 	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
 	bpf@vger.kernel.org
-Subject: [PATCH v2 20/21] tracing: Guard __DECLARE_TRACE() use of __DO_TRACE_CALL() with SRCU-fast
-Date: Wed,  1 Oct 2025 07:48:31 -0700
-Message-Id: <20251001144832.631770-20-paulmck@kernel.org>
+Subject: [PATCH v2 17/21] srcu: Require special srcu_struct define/init for SRCU-fast readers
+Date: Wed,  1 Oct 2025 07:48:28 -0700
+Message-Id: <20251001144832.631770-17-paulmck@kernel.org>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <7fa58961-2dce-4e08-8174-1d1cc592210f@paulmck-laptop>
 References: <7fa58961-2dce-4e08-8174-1d1cc592210f@paulmck-laptop>
@@ -51,250 +51,89 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The current use of guard(preempt_notrace)() within __DECLARE_TRACE()
-to protect invocation of __DO_TRACE_CALL() means that BPF programs
-attached to tracepoints are non-preemptible.  This is unhelpful in
-real-time systems, whose users apparently wish to use BPF while also
-achieving low latencies.  (Who knew?)
+This commit adds CONFIG_PROVE_RCU=y checking to enforce the new rule that
+srcu_struct structures passed to srcu_read_lock_fast() and other SRCU-fast
+read-side markers be either initialized with init_srcu_struct_fast()
+on the one hand or defined using either DEFINE_SRCU_FAST() or
+DEFINE_STATIC_SRCU_FAST().  This will enable removal of the non-debug
+read-side checks from srcu_read_lock_fast() and friends, which on my
+laptop provides a 25% speedup (which admittedly amounts to about half
+a nanosecond, but when tracing fastpaths...)
 
-One option would be to use preemptible RCU, but this introduces
-many opportunities for infinite recursion, which many consider to
-be counterproductive, especially given the relatively small stacks
-provided by the Linux kernel.  These opportunities could be shut down
-by sufficiently energetic duplication of code, but this sort of thing
-is considered impolite in some circles.
-
-Therefore, use the shiny new SRCU-fast API, which provides somewhat faster
-readers than those of preemptible RCU, at least on my laptop, where
-task_struct access is more expensive than access to per-CPU variables.
-And SRCU fast provides way faster readers than does SRCU, courtesy of
-being able to avoid the read-side use of smp_mb().  Also, it is quite
-straightforward to create srcu_read_{,un}lock_fast_notrace() functions.
-
-While in the area, SRCU now supports early boot call_srcu().  Therefore,
-remove the checks that used to avoid such use from rcu_free_old_probes()
-before this commit was applied:
-
-e53244e2c893 ("tracepoint: Remove SRCU protection")
-
-The current commit can be thought of as an approximate revert of that
-commit, with some compensating additions of preemption disabling pointed
-out by Steven Rostedt (thank you, Steven!).  This preemption disabling
-uses guard(preempt_notrace)(), and while in the area a couple of other
-use cases were also converted to guards.
-
-However, Yonghong Song points out that BPF expects non-sleepable BPF
-programs to remain on the same CPU, which means that migration must
-be disabled whenever preemption remains enabled.  In addition, non-RT
-kernels have performance expectations on BPF that would be violated
-by allowing the BPF programs to be preempted.
-
-Therefore, continue to disable preemption in non-RT kernels, and protect
-the BPF program with both SRCU and migration disabling for RT kernels,
-and even then only if preemption is not already disabled.
-
-[ paulmck: Apply kernel test robot and Yonghong Song feedback. ]
-
-Link: https://lore.kernel.org/all/20250613152218.1924093-1-bigeasy@linutronix.de/
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Cc: Steven Rostedt <rostedt@goodmis.org>
 Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 Cc: <bpf@vger.kernel.org>
 ---
- include/linux/tracepoint.h   | 45 ++++++++++++++++++++++--------------
- include/trace/perf.h         |  4 ++--
- include/trace/trace_events.h |  4 ++--
- kernel/tracepoint.c          | 21 ++++++++++++++++-
- 4 files changed, 52 insertions(+), 22 deletions(-)
+ include/linux/srcu.h  | 34 ++++++++++++++++++++++------------
+ kernel/rcu/srcutree.c |  1 +
+ 2 files changed, 23 insertions(+), 12 deletions(-)
 
-diff --git a/include/linux/tracepoint.h b/include/linux/tracepoint.h
-index 826ce3f8e1f851..9f8b19cd303acc 100644
---- a/include/linux/tracepoint.h
-+++ b/include/linux/tracepoint.h
-@@ -33,6 +33,8 @@ struct trace_eval_map {
- 
- #define TRACEPOINT_DEFAULT_PRIO	10
- 
-+extern struct srcu_struct tracepoint_srcu;
-+
- extern int
- tracepoint_probe_register(struct tracepoint *tp, void *probe, void *data);
- extern int
-@@ -115,7 +117,10 @@ void for_each_tracepoint_in_module(struct module *mod,
- static inline void tracepoint_synchronize_unregister(void)
+diff --git a/include/linux/srcu.h b/include/linux/srcu.h
+index 26de47820c58cd..2982b5a6930fa6 100644
+--- a/include/linux/srcu.h
++++ b/include/linux/srcu.h
+@@ -271,17 +271,26 @@ static inline int srcu_read_lock(struct srcu_struct *ssp) __acquires(ssp)
+  * @ssp: srcu_struct in which to register the new reader.
+  *
+  * Enter an SRCU read-side critical section, but for a light-weight
+- * smp_mb()-free reader.  See srcu_read_lock() for more information.
+- *
+- * If srcu_read_lock_fast() is ever used on an srcu_struct structure,
+- * then none of the other flavors may be used, whether before, during,
+- * or after.  Note that grace-period auto-expediting is disabled for _fast
+- * srcu_struct structures because auto-expedited grace periods invoke
+- * synchronize_rcu_expedited(), IPIs and all.
+- *
+- * Note that srcu_read_lock_fast() can be invoked only from those contexts
+- * where RCU is watching, that is, from contexts where it would be legal
+- * to invoke rcu_read_lock().  Otherwise, lockdep will complain.
++ * smp_mb()-free reader.  See srcu_read_lock() for more information.  This
++ * function is NMI-safe, in a manner similar to srcu_read_lock_nmisafe().
++ *
++ * For srcu_read_lock_fast() to be used on an srcu_struct structure,
++ * that structure must have been defined using either DEFINE_SRCU_FAST()
++ * or DEFINE_STATIC_SRCU_FAST() on the one hand or initialized with
++ * init_srcu_struct_fast() on the other.  Such an srcu_struct structure
++ * cannot be passed to any non-fast variant of srcu_read_{,un}lock() or
++ * srcu_{down,up}_read().  In kernels built with CONFIG_PROVE_RCU=y,
++ * __srcu_check_read_flavor() will complain bitterly if you ignore this
++ * restriction.
++ *
++ * Grace-period auto-expediting is disabled for SRCU-fast srcu_struct
++ * structures because SRCU-fast expedited grace periods invoke
++ * synchronize_rcu_expedited(), IPIs and all.  If you need expedited
++ * SRCU-fast grace periods, use synchronize_srcu_expedited().
++ *
++ * The srcu_read_lock_fast() function can be invoked only from those
++ * contexts where RCU is watching, that is, from contexts where it would
++ * be legal to invoke rcu_read_lock().  Otherwise, lockdep will complain.
+  */
+ static inline struct srcu_ctr __percpu *srcu_read_lock_fast(struct srcu_struct *ssp) __acquires(ssp)
  {
- 	synchronize_rcu_tasks_trace();
--	synchronize_rcu();
-+	if (IS_ENABLED(CONFIG_PREEMPT_RT))
-+		synchronize_srcu(&tracepoint_srcu);
-+	else
-+		synchronize_rcu();
- }
- static inline bool tracepoint_is_faultable(struct tracepoint *tp)
+@@ -317,7 +326,8 @@ static inline struct srcu_ctr __percpu *srcu_read_lock_fast_notrace(struct srcu_
+  * srcu_down_read() for more information.
+  *
+  * The same srcu_struct may be used concurrently by srcu_down_read_fast()
+- * and srcu_read_lock_fast().
++ * and srcu_read_lock_fast().  However, the same definition/initialization
++ * requirements called out for srcu_read_lock_safe() apply.
+  */
+ static inline struct srcu_ctr __percpu *srcu_down_read_fast(struct srcu_struct *ssp) __acquires(ssp)
  {
-@@ -266,23 +271,29 @@ static inline struct tracepoint *tracepoint_ptr_deref(tracepoint_ptr_t *p)
- 		return static_branch_unlikely(&__tracepoint_##name.key);\
- 	}
- 
--#define __DECLARE_TRACE(name, proto, args, cond, data_proto)		\
-+#define __DECLARE_TRACE(name, proto, args, cond, data_proto)			\
- 	__DECLARE_TRACE_COMMON(name, PARAMS(proto), PARAMS(args), PARAMS(data_proto)) \
--	static inline void __do_trace_##name(proto)			\
--	{								\
--		if (cond) {						\
--			guard(preempt_notrace)();			\
--			__DO_TRACE_CALL(name, TP_ARGS(args));		\
--		}							\
--	}								\
--	static inline void trace_##name(proto)				\
--	{								\
--		if (static_branch_unlikely(&__tracepoint_##name.key))	\
--			__do_trace_##name(args);			\
--		if (IS_ENABLED(CONFIG_LOCKDEP) && (cond)) {		\
--			WARN_ONCE(!rcu_is_watching(),			\
--				  "RCU not watching for tracepoint");	\
--		}							\
-+	static inline void __do_trace_##name(proto)				\
-+	{									\
-+		if (cond) {							\
-+			if (IS_ENABLED(CONFIG_PREEMPT_RT) && preemptible()) {	\
-+				guard(srcu_fast_notrace)(&tracepoint_srcu);	\
-+				guard(migrate)();				\
-+				__DO_TRACE_CALL(name, TP_ARGS(args));		\
-+			} else {						\
-+				guard(preempt_notrace)();			\
-+				__DO_TRACE_CALL(name, TP_ARGS(args));		\
-+			}							\
-+		}								\
-+	}									\
-+	static inline void trace_##name(proto)					\
-+	{									\
-+		if (static_branch_unlikely(&__tracepoint_##name.key))		\
-+			__do_trace_##name(args);				\
-+		if (IS_ENABLED(CONFIG_LOCKDEP) && (cond)) {			\
-+			WARN_ONCE(!rcu_is_watching(),				\
-+				  "RCU not watching for tracepoint");		\
-+		}								\
- 	}
- 
- #define __DECLARE_TRACE_SYSCALL(name, proto, args, data_proto)		\
-diff --git a/include/trace/perf.h b/include/trace/perf.h
-index a1754b73a8f55b..348ad1d9b5566e 100644
---- a/include/trace/perf.h
-+++ b/include/trace/perf.h
-@@ -71,6 +71,7 @@ perf_trace_##call(void *__data, proto)					\
- 	u64 __count __attribute__((unused));				\
- 	struct task_struct *__task __attribute__((unused));		\
- 									\
-+	guard(preempt_notrace)();					\
- 	do_perf_trace_##call(__data, args);				\
- }
- 
-@@ -85,9 +86,8 @@ perf_trace_##call(void *__data, proto)					\
- 	struct task_struct *__task __attribute__((unused));		\
- 									\
- 	might_fault();							\
--	preempt_disable_notrace();					\
-+	guard(preempt_notrace)();					\
- 	do_perf_trace_##call(__data, args);				\
--	preempt_enable_notrace();					\
- }
- 
- /*
-diff --git a/include/trace/trace_events.h b/include/trace/trace_events.h
-index 4f22136fd4656c..fbc07d353be6b6 100644
---- a/include/trace/trace_events.h
-+++ b/include/trace/trace_events.h
-@@ -436,6 +436,7 @@ __DECLARE_EVENT_CLASS(call, PARAMS(proto), PARAMS(args), PARAMS(tstruct), \
- static notrace void							\
- trace_event_raw_event_##call(void *__data, proto)			\
- {									\
-+	guard(preempt_notrace)();					\
- 	do_trace_event_raw_event_##call(__data, args);			\
- }
- 
-@@ -447,9 +448,8 @@ static notrace void							\
- trace_event_raw_event_##call(void *__data, proto)			\
- {									\
- 	might_fault();							\
--	preempt_disable_notrace();					\
-+	guard(preempt_notrace)();					\
- 	do_trace_event_raw_event_##call(__data, args);			\
--	preempt_enable_notrace();					\
- }
- 
- /*
-diff --git a/kernel/tracepoint.c b/kernel/tracepoint.c
-index 62719d2941c900..21bb6779821476 100644
---- a/kernel/tracepoint.c
-+++ b/kernel/tracepoint.c
-@@ -25,6 +25,9 @@ enum tp_func_state {
- extern tracepoint_ptr_t __start___tracepoints_ptrs[];
- extern tracepoint_ptr_t __stop___tracepoints_ptrs[];
- 
-+DEFINE_SRCU_FAST(tracepoint_srcu);
-+EXPORT_SYMBOL_GPL(tracepoint_srcu);
-+
- enum tp_transition_sync {
- 	TP_TRANSITION_SYNC_1_0_1,
- 	TP_TRANSITION_SYNC_N_2_1,
-@@ -34,6 +37,7 @@ enum tp_transition_sync {
- 
- struct tp_transition_snapshot {
- 	unsigned long rcu;
-+	unsigned long srcu_gp;
- 	bool ongoing;
- };
- 
-@@ -46,6 +50,7 @@ static void tp_rcu_get_state(enum tp_transition_sync sync)
- 
- 	/* Keep the latest get_state snapshot. */
- 	snapshot->rcu = get_state_synchronize_rcu();
-+	snapshot->srcu_gp = start_poll_synchronize_srcu(&tracepoint_srcu);
- 	snapshot->ongoing = true;
- }
- 
-@@ -56,6 +61,8 @@ static void tp_rcu_cond_sync(enum tp_transition_sync sync)
- 	if (!snapshot->ongoing)
- 		return;
- 	cond_synchronize_rcu(snapshot->rcu);
-+	if (!poll_state_synchronize_srcu(&tracepoint_srcu, snapshot->srcu_gp))
-+		synchronize_srcu(&tracepoint_srcu);
- 	snapshot->ongoing = false;
- }
- 
-@@ -101,17 +108,29 @@ static inline void *allocate_probes(int count)
- 	return p == NULL ? NULL : p->probes;
- }
- 
--static void rcu_free_old_probes(struct rcu_head *head)
-+static void srcu_free_old_probes(struct rcu_head *head)
- {
- 	kfree(container_of(head, struct tp_probes, rcu));
- }
- 
-+static void rcu_free_old_probes(struct rcu_head *head)
-+{
-+	call_srcu(&tracepoint_srcu, head, srcu_free_old_probes);
-+}
-+
- static inline void release_probes(struct tracepoint *tp, struct tracepoint_func *old)
- {
- 	if (old) {
- 		struct tp_probes *tp_probes = container_of(old,
- 			struct tp_probes, probes[0]);
- 
-+		/*
-+		 * Tracepoint probes are protected by either RCU or
-+		 * Tasks Trace RCU and also by SRCU.  By calling the SRCU
-+		 * callback in the [Tasks Trace] RCU callback we cover
-+		 * both cases. So let us chain the SRCU and [Tasks Trace]
-+		 * RCU callbacks to wait for both grace periods.
-+		 */
- 		if (tracepoint_is_faultable(tp))
- 			call_rcu_tasks_trace(&tp_probes->rcu, rcu_free_old_probes);
- 		else
+diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
+index c29203b23d1ad7..2f8aa280911e19 100644
+--- a/kernel/rcu/srcutree.c
++++ b/kernel/rcu/srcutree.c
+@@ -766,6 +766,7 @@ void __srcu_check_read_flavor(struct srcu_struct *ssp, int read_flavor)
+ 	WARN_ON_ONCE(ssp->srcu_reader_flavor && read_flavor != ssp->srcu_reader_flavor);
+ 	WARN_ON_ONCE(old_read_flavor && ssp->srcu_reader_flavor &&
+ 		     old_read_flavor != ssp->srcu_reader_flavor);
++	WARN_ON_ONCE(read_flavor == SRCU_READ_FLAVOR_FAST && !ssp->srcu_reader_flavor);
+ 	if (!old_read_flavor) {
+ 		old_read_flavor = cmpxchg(&sdp->srcu_reader_flavor, 0, read_flavor);
+ 		if (!old_read_flavor)
 -- 
 2.40.1
 
