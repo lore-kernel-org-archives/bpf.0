@@ -1,50 +1,45 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1405F303C8B;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95716304BB2;
 	Wed,  1 Oct 2025 14:48:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759330120; cv=none; b=tbsfOXySrYzRcMvjjgvEU7oTWY9a0M7Ggw3R//0zoxD//Xr4kB9lOTEx08j9S9hWZMd/r5W3ok3MePs4xDFpDKYkgY6EhvHT9SYTww1QnCLmt4FAnFtzYL0lUfdB7sZjmngm7K9cIf+RlJ7pRYwHW9zRA50jIvqRiIMH73iCBE4=
+	t=1759330120; cv=none; b=jpQnfe0z/O7pKuRzLT8vuNbltewzv1x4KrHPVAJ3afj7nenCegMxmGyKcNeW8RCJOoKXWyegzFjev0xVHElXt1xvWzVxASD66e9Dt8YhFB/vMnz/kHPedcmixoKbI+KC6ulYeiuG0k15hyl9U1ypccCPeghnTcbaZM2c6fUKuq8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1759330120; c=relaxed/simple;
-	bh=B7b7Gx1mcM4EGN2sMoC77cGW6QCZYuX1KTpiyMpYpx8=;
+	bh=M6lQK/a51z9FSyLcsJB4DdYne3vYn3DuAPGWx5z897o=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=f8c9P+GO/8N08akBy/MOOjSx5LJIsh+ZhgPwTI0LsBALFNWrzGpI2b6amNKApTe7nMTK6MZQ5nte+xNLcb0CQhaq2eW3MOdq2evwgjWcQRW2Yk3yV+ntHcjNL6SwdmH2pEs0rLtdEp4403/Gz9dQ7l/QJNPygVD3qtK7++3jnVk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Dlvg7uXA; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=XC2dBok36tLUZwYpOfzP85IBUBjo+XGxUVKA+Hz2Ts4WLUTo+7nc5J9Bu4DgEF8IWxrFRJJJyzy8yrnAXAD589VDm1yh1ot0vYMf+cDCOguOjM/M4aPXVLKSPlTTCOD/JYCZuF9A7pOoF2wRwtJJew4d6ULVx3vjIUjHKwh3MI8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pR2M9STP; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Dlvg7uXA"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EAD2C4CEFE;
-	Wed,  1 Oct 2025 14:48:39 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pR2M9STP"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04E0BC19423;
+	Wed,  1 Oct 2025 14:48:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1759330119;
-	bh=B7b7Gx1mcM4EGN2sMoC77cGW6QCZYuX1KTpiyMpYpx8=;
+	s=k20201202; t=1759330120;
+	bh=M6lQK/a51z9FSyLcsJB4DdYne3vYn3DuAPGWx5z897o=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Dlvg7uXAg5rWZQQ4kDnogLgvbX+Lp0+tarH4OhgI5HhhEyZh92TTtccnO7MZW/wvS
-	 vRUMu4h31lTdZzhC/Usv4YHo3KEhi6QlGuT2ALJFTHGLlkkE3td2Sx8O0xOUi5Yshr
-	 MTiUdSolUxQ5JRDI70nkw2u++7rSVHA4DEKl7GeJWwsCI0LymePhEs4Irhjt/plA+m
-	 9gPaPY1cKB/Xqg6FgTt9VbhbJJoHz+BB0c0km+HeRSIw7ki5pLxQ/mVuiGNbgOs25P
-	 20kHq34ia3nZ0DRcXCUebnWb+jlMLLNnK/rUCfe57gric6TtxtcJqbDYdufai/8thK
-	 GJAlbs4dWrYYA==
+	b=pR2M9STPcyv9NFEEZTT+27ROyeObWB77NHAWfHQ6us7no1FuLckHXZdb4ZAIj1BpO
+	 iv2/1/dtWhZRs2NK9J7FC/FHVzyJ051TC8fJBs9+WmXXkThuoQkpxWCX/K3JoPxfSW
+	 dWzSc207aRBqeTfYTqs8s6b87OtGAlcPz8RcfhfbTqztUl15/pb+H0oemKzKLPdZ9g
+	 NAXYNfXfydCLBco3wkjroY0MfZk79fdOqYi0dV2EV/grxZFZyZp9rQ7rbP1ZSSd8rw
+	 YCKqW6druRuOaJRTV5mMQAYcMegU0BGzZ0+oAAzZZqo/A+PenER5Sqll3n+FwEfWw9
+	 vgQc55qIB3CiQ==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 7AA38CE12CD; Wed,  1 Oct 2025 07:48:34 -0700 (PDT)
+	id 87EF6CE14BF; Wed,  1 Oct 2025 07:48:34 -0700 (PDT)
 From: "Paul E. McKenney" <paulmck@kernel.org>
 To: rcu@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org,
 	kernel-team@meta.com,
 	rostedt@goodmis.org,
 	"Paul E. McKenney" <paulmck@kernel.org>,
-	Joe Perches <joe@perches.com>,
-	Andy Whitcroft <apw@canonical.com>,
-	Dwaipayan Ray <dwaipayanray1@gmail.com>,
-	Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
 	bpf@vger.kernel.org
-Subject: [PATCH v2 10/21] checkpatch: Deprecate rcu_read_{,un}lock_trace()
-Date: Wed,  1 Oct 2025 07:48:21 -0700
-Message-Id: <20251001144832.631770-10-paulmck@kernel.org>
+Subject: [PATCH v2 15/21] rcutorture: Exercise DEFINE_STATIC_SRCU_FAST() and init_srcu_struct_fast()
+Date: Wed,  1 Oct 2025 07:48:26 -0700
+Message-Id: <20251001144832.631770-15-paulmck@kernel.org>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <7fa58961-2dce-4e08-8174-1d1cc592210f@paulmck-laptop>
 References: <7fa58961-2dce-4e08-8174-1d1cc592210f@paulmck-laptop>
@@ -56,37 +51,76 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Uses of rcu_read_lock_trace() and rcu_read_unlock_trace()
-are better served by the new rcu_read_lock_tasks_trace() and
-rcu_read_unlock_tasks_trace() APIs.  Therefore, mark the old APIs as
-deprecated.
+This commit updates the initialization for the "srcu" and "srcud" torture
+types to use DEFINE_STATIC_SRCU_FAST() and init_srcu_struct_fast(),
+respectively, when reader_flavor is equal to SRCU_READ_FLAVOR_FAST.
 
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-Acked-by: Joe Perches <joe@perches.com>
-Cc: Andy Whitcroft <apw@canonical.com>
-Cc: Dwaipayan Ray <dwaipayanray1@gmail.com>
-Cc: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 Cc: <bpf@vger.kernel.org>
 ---
- scripts/checkpatch.pl | 2 ++
- 1 file changed, 2 insertions(+)
+ kernel/rcu/rcutorture.c | 19 +++++++++++++++----
+ 1 file changed, 15 insertions(+), 4 deletions(-)
 
-diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-index e722dd6fa8ef3d..3bb7d35a5cfcba 100755
---- a/scripts/checkpatch.pl
-+++ b/scripts/checkpatch.pl
-@@ -860,6 +860,8 @@ our %deprecated_apis = (
- 	"kunmap"				=> "kunmap_local",
- 	"kmap_atomic"				=> "kmap_local_page",
- 	"kunmap_atomic"				=> "kunmap_local",
-+	"rcu_read_lock_trace"			=> "rcu_read_lock_tasks_trace",
-+	"rcu_read_unlock_trace"			=> "rcu_read_unlock_tasks_trace",
- );
+diff --git a/kernel/rcu/rcutorture.c b/kernel/rcu/rcutorture.c
+index 2e3806b996a80a..e859a1ca7dc841 100644
+--- a/kernel/rcu/rcutorture.c
++++ b/kernel/rcu/rcutorture.c
+@@ -692,10 +692,18 @@ static struct rcu_torture_ops rcu_busted_ops = {
+  */
  
- #Create a search pattern for all these strings to speed up a loop below
+ DEFINE_STATIC_SRCU(srcu_ctl);
++DEFINE_STATIC_SRCU_FAST(srcu_ctlf);
+ static struct srcu_struct srcu_ctld;
+ static struct srcu_struct *srcu_ctlp = &srcu_ctl;
+ static struct rcu_torture_ops srcud_ops;
+ 
++static void srcu_torture_init(void)
++{
++	rcu_sync_torture_init();
++	if (reader_flavor & SRCU_READ_FLAVOR_FAST)
++		srcu_ctlp = &srcu_ctlf;
++}
++
+ static void srcu_get_gp_data(int *flags, unsigned long *gp_seq)
+ {
+ 	srcutorture_get_gp_data(srcu_ctlp, flags, gp_seq);
+@@ -865,7 +873,7 @@ static void srcu_torture_expedite_current(void)
+ 
+ static struct rcu_torture_ops srcu_ops = {
+ 	.ttype		= SRCU_FLAVOR,
+-	.init		= rcu_sync_torture_init,
++	.init		= srcu_torture_init,
+ 	.readlock	= srcu_torture_read_lock,
+ 	.read_delay	= srcu_read_delay,
+ 	.readunlock	= srcu_torture_read_unlock,
+@@ -897,10 +905,13 @@ static struct rcu_torture_ops srcu_ops = {
+ 	.name		= "srcu"
+ };
+ 
+-static void srcu_torture_init(void)
++static void srcud_torture_init(void)
+ {
+ 	rcu_sync_torture_init();
+-	WARN_ON(init_srcu_struct(&srcu_ctld));
++	if (reader_flavor & SRCU_READ_FLAVOR_FAST)
++		WARN_ON(init_srcu_struct_fast(&srcu_ctld));
++	else
++		WARN_ON(init_srcu_struct(&srcu_ctld));
+ 	srcu_ctlp = &srcu_ctld;
+ }
+ 
+@@ -913,7 +924,7 @@ static void srcu_torture_cleanup(void)
+ /* As above, but dynamically allocated. */
+ static struct rcu_torture_ops srcud_ops = {
+ 	.ttype		= SRCU_FLAVOR,
+-	.init		= srcu_torture_init,
++	.init		= srcud_torture_init,
+ 	.cleanup	= srcu_torture_cleanup,
+ 	.readlock	= srcu_torture_read_lock,
+ 	.read_delay	= srcu_read_delay,
 -- 
 2.40.1
 
