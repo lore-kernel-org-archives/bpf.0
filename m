@@ -1,39 +1,39 @@
-Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [80.241.56.171])
+Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [80.241.56.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5428728C5BE;
-	Wed,  1 Oct 2025 09:57:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2B8A28C5BE;
+	Wed,  1 Oct 2025 10:05:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.151
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759312624; cv=none; b=W8cGGHtPysRzzEsSFcdI2Hbt4+AQCg6JBaaGfLvExbWYKZiY/XvXAkwgZYzAGgNm5OBZvo4FNkUsQELp/Us8Q8Net/ZThEQqGgKDezpVN3ZG1j2AR5RfICrXIJEUBBUO/3Z++e/UneGduc6ZRpcc6qaAw9ZChWAN/HcbQUQ54Vg=
+	t=1759313123; cv=none; b=kcY57nmqDct4mmdWnve6hbaWSvfqsUbbpTg+/0lCF3DAggPJyNOiT80ZxUoYWF0vm39IuJ8EXVlD+0OgujsXi/cmXpFIPszwkUFH7AGh5jOLSfF44jDWOPs400XaSNsrDT7O1137iBYdZBWq+s18IO/l3O8nEJgJVcGA/JQiIlw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759312624; c=relaxed/simple;
-	bh=HLYhW50XHaRj/9ZRdiTUSGg8dvCftmf3opE4NOaKOFI=;
+	s=arc-20240116; t=1759313123; c=relaxed/simple;
+	bh=EeZ2kT9K03baj9mnb5Sp5ZkcLYfpDyoTRehkVuytbcY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=AudaG/hHzWMeyJMIPbpnUrkLodcIH3jurgSlEp66XSnhRLYA1OzgZonSPkV0LhXYgOGrhHrLqBE8JCkj6qZbEfom3pU71vz5NRxKsDuQdy38BzT7MxvhsayhUOXJICL0AaPxFgxlwYH1KkZvSa6r+S1jqCrwjJHJZwjo3i3U6U8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=listout.xyz; spf=pass smtp.mailfrom=listout.xyz; dkim=pass (2048-bit key) header.d=listout.xyz header.i=@listout.xyz header.b=OPaM3tXx; arc=none smtp.client-ip=80.241.56.171
+	 MIME-Version; b=HkIkdc/ir7saU6oEs/5ERxXzxi43m4JedrKpRNMTwJWEvHh4tNAxYG35Xgz1ZIQ1t5F2d6jLF3GgU6g+lt+9pnJBSTZMUJGm9nAdF5eO8aIYuOV+aPjfFRW2o/ssMRrNcpLL+FJFmgiAuAww+NGhWfDIM9Wji/tH7XBZYH7yacY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=listout.xyz; spf=pass smtp.mailfrom=listout.xyz; dkim=pass (2048-bit key) header.d=listout.xyz header.i=@listout.xyz header.b=1j3KHYsF; arc=none smtp.client-ip=80.241.56.151
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=listout.xyz
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=listout.xyz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=listout.xyz header.i=@listout.xyz header.b="OPaM3tXx"
+	dkim=pass (2048-bit key) header.d=listout.xyz header.i=@listout.xyz header.b="1j3KHYsF"
 Received: from smtp2.mailbox.org (smtp2.mailbox.org [10.196.197.2])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4cc9Ly46cPz9svd;
-	Wed,  1 Oct 2025 11:56:58 +0200 (CEST)
+	by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4cc9Lp2M5Dz9tJ0;
+	Wed,  1 Oct 2025 11:56:50 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=listout.xyz; s=MBO0001;
-	t=1759312618;
+	t=1759312610;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=mFOt7Q6Yh4zU6HGqC4KBvS7uM2NDq7KoM7BsVGIWIDU=;
-	b=OPaM3tXxwqFYeforC7OSLfoe/1PgSh+M/aTg91Y5lVIqrdZ9ek6cvWUBeZmiOPZYs/PU/5
-	S5VLqHOdIOa95yPe1isUIonMsGV+Gjmr9TdzK4MrziRzgcDYqSjVV/iLXa+7nUFEJ3o+17
-	jvKSHGCF37sET/Ab9jBb1Ypp0vJ2KaeOCjMKzFPWbjnndxiNep7BDC+H3goBjTurrAh8Mh
-	w0jF1QsacIW2C73/SeLFOD0kpvB2aw4RWmvbhQhuvQavYCO3awMe9FBj78DoG8hBJDxUt+
-	1WVoF7gpqkySf/X+HOKLdPx2skzxR334X03l81GflKkAJ1kKUL6YJEuch5zbxw==
+	bh=RhsTKtjFJe1vkO0ON/iAHYtNsvnVj09dnXPTU8Nc+YE=;
+	b=1j3KHYsFq7txLDUJt1odXBbaxnKrpMyXe1isTpP9QbQmyDnKQ7JdsaBuKRARJgQsZBXdnB
+	RebTuzUactFB4ejQX1vXw7xzvsLFG4SQ/InHmo0KZOTt8pl/wjjx/f9Oukg6LBN59jd6BG
+	kqzrI321xA0rPzwgDJ9DKeruXWHe2bXdd4+3C8/DeX4ajmJnGvjPX/aeuJ1wbKXoWVNL5T
+	CjkbI7CV07eQh5Ep7lwl5HYgALUKjrSun3QCciqmKDvPVNJP2tsOGFz2WpyV8B6N1cZNZR
+	tYzk83reniW9oIwbIJdcvzY+38Z8mLsiJnUeyGsmetk8d20SrI2KEk8XdckItw==
 From: Brahmajit Das <listout@listout.xyz>
 To: syzbot+d36d5ae81e1b0a53ef58@syzkaller.appspotmail.com
 Cc: andrii@kernel.org,
@@ -52,9 +52,9 @@ Cc: andrii@kernel.org,
 	syzkaller-bugs@googlegroups.com,
 	yonghong.song@linux.dev,
 	kafai.wan@linux.dev
-Subject: [PATCH v3 2/2] selftests/bpf: Add test for BPF_NEG alu on CONST_PTR_TO_MAP
-Date: Wed,  1 Oct 2025 15:26:13 +0530
-Message-ID: <20251001095613.267475-3-listout@listout.xyz>
+Subject: [PATCH v3 1/2] bpf: Skip scalar adjustment for BPF_NEG if dst is a pointer
+Date: Wed,  1 Oct 2025 15:26:12 +0530
+Message-ID: <20251001095613.267475-2-listout@listout.xyz>
 In-Reply-To: <20251001095613.267475-1-listout@listout.xyz>
 References: <68d26227.a70a0220.1b52b.02a4.GAE@google.com>
  <20251001095613.267475-1-listout@listout.xyz>
@@ -66,46 +66,37 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: KaFai Wan <kafai.wan@linux.dev>
+In check_alu_op(), the verifier currently calls check_reg_arg() and
+adjust_scalar_min_max_vals() unconditionally for BPF_NEG operations.
+However, if the destination register holds a pointer, these scalar
+adjustments are unnecessary and potentially incorrect.
 
-Add a test case for BPF_NEG operation on CONST_PTR_TO_MAP. Tests if
-BPF_NEG operation on map_ptr is rejected in unprivileged mode and is a
-scalar value and do not trigger Oops in privileged mode.
+This patch adds a check to skip the adjustment logic when the destination
+register contains a pointer.
 
-Signed-off-by: KaFai Wan <kafai.wan@linux.dev>
+Reported-by: syzbot+d36d5ae81e1b0a53ef58@syzkaller.appspotmail.com
+Closes: https://syzkaller.appspot.com/bug?extid=d36d5ae81e1b0a53ef58
+Fixes: aced132599b3 ("bpf: Add range tracking for BPF_NEG")
+Suggested-by: KaFai Wan <kafai.wan@linux.dev>
+Signed-off-by: Brahmajit Das <listout@listout.xyz>
 ---
- .../bpf/progs/verifier_value_illegal_alu.c     | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+ kernel/bpf/verifier.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_value_illegal_alu.c b/tools/testing/selftests/bpf/progs/verifier_value_illegal_alu.c
-index a9ab37d3b9e2..dcaab61a11a0 100644
---- a/tools/testing/selftests/bpf/progs/verifier_value_illegal_alu.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_value_illegal_alu.c
-@@ -146,6 +146,24 @@ l0_%=:	exit;						\
- 	: __clobber_all);
- }
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index e892df386eed..4b0924c38657 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -15645,7 +15645,8 @@ static int check_alu_op(struct bpf_verifier_env *env, struct bpf_insn *insn)
+ 		}
  
-+SEC("socket")
-+__description("map_ptr illegal alu op, map_ptr = -map_ptr")
-+__failure __msg("R0 invalid mem access 'scalar'")
-+__failure_unpriv __msg_unpriv("R0 pointer arithmetic prohibited")
-+__flag(BPF_F_ANY_ALIGNMENT)
-+__naked void map_ptr_illegal_alu_op(void)
-+{
-+	asm volatile ("					\
-+	r0 = %[map_hash_48b] ll;			\
-+	r0 = -r0;					\
-+	r1 = 22;					\
-+	*(u64*)(r0 + 0) = r1;				\
-+	exit;						\
-+"	:
-+	: __imm_addr(map_hash_48b)
-+	: __clobber_all);
-+}
-+
- SEC("flow_dissector")
- __description("flow_keys illegal alu op with variable offset")
- __failure __msg("R7 pointer arithmetic on flow_keys prohibited")
+ 		/* check dest operand */
+-		if (opcode == BPF_NEG) {
++		if (opcode == BPF_NEG &&
++		    !__is_pointer_value(false, &regs[insn->dst_reg])) {
+ 			err = check_reg_arg(env, insn->dst_reg, DST_OP_NO_MARK);
+ 			err = err ?: adjust_scalar_min_max_vals(env, insn,
+ 							 &regs[insn->dst_reg],
 -- 
 2.51.0
 
