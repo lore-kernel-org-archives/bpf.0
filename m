@@ -1,161 +1,114 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 973F9307487;
-	Wed,  1 Oct 2025 14:48:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82DC746BF
+	for <bpf@vger.kernel.org>; Wed,  1 Oct 2025 15:17:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759330122; cv=none; b=p19SIer6YT+0cmF8o7a4HQhxrP0gR92vVYhzUuo/3EFQAygrFVI2UZxy3rIwJNsehFbq3fxHs3buB1BUWY4lUar5RJWW2u7O3HmAzZyndCKf+MkAQAAUBg6CWmhtANeItm2uKkoxUJiD1hN+XsUZKeQwVIJ2NlAkX2Pqdr27c6U=
+	t=1759331830; cv=none; b=pl7PsCvxOU2nWPPfLLLhgabAE/VueuqxbjXUyV1ASJHWcT797KjWePneF3SCG5GDBuF6+SSW+K02XL6GJtr3rW7UsOuFbsARPhbbmXLqcAyWD37pznMV4MZ5VrlQWjzP1CDsRb1cX/MPo00Cl+v24Iu5D5Q/9E+SITzh0fjUcEM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759330122; c=relaxed/simple;
-	bh=81BLq8+oPnPePeqC2bm5XK2/WvvBNdRPQuuI5LrZL9M=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=H9LdMdhDTjQmebPgaiyv9+IuzIDZQqjsJ5XlIrfAIcnFTDvQYLGwcygkyKMGHYapR39Xi2cVegqv0BXTyJGminYNKJ5o0ptRDNbq017VryyG3HggNK51amwpJ6AruFSC9axhdPz7aXr8IO2YbdLvdZ+aSOspRaepjax17gxYCSU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZV7DNIaW; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1759331830; c=relaxed/simple;
+	bh=xsKi9Pi+QT5fVL6eQFIu6l7eEF5T3oEwY+NILjBv18s=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=uB1TI/MI/WOAl+i+q99dd4O9S6LEjDb90q4JfPligmeeM4oFREh+SwZOWXpQcpQj6xwmP8a+cMxdwqAuyvrabx2ZwiTNgAvTZkEul525FmmN6CkmXj3rGKkXHUm9KmYidAlCqNBgI9IBUGNdFPp7F6UP8b+gs6mTNU0dKeBVGZc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=PWFHKz0b; arc=none smtp.client-ip=209.85.218.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZV7DNIaW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CF1EC4AF0B;
-	Wed,  1 Oct 2025 14:48:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1759330122;
-	bh=81BLq8+oPnPePeqC2bm5XK2/WvvBNdRPQuuI5LrZL9M=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ZV7DNIaWcrlojWlA3X9ZPb/9vaOqUIRRr/b+Mg643ai0OqJ88s5P/XvBdWIINDEGU
-	 9PcWKT7K9IXv+J950K32IJpGKGfQuHhofS3AvSjIJtabEdNoqua93mjXWNNIceFHbf
-	 Q5tNxIRqroWCNYfGdJ0ch72lKFwxAM7Ukr1lEgDyyBJx87m/feF1YP0oQiXHg3Rz49
-	 FeaswbGPbUorsETo4yAk4OsCVbHAGEI7V2vQoSa9t+a7dh+vNBasWOAnANgi6zpDkb
-	 RzxvLNh0ccgwN0LqW3HHxGsoc4kfHIL4uRu7fnYTDpPJroipsZI1aBrPZgQsDnK15S
-	 Ub9hqLOCzcAWQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 92237CE14F5; Wed,  1 Oct 2025 07:48:34 -0700 (PDT)
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: rcu@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	kernel-team@meta.com,
-	rostedt@goodmis.org,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	bpf@vger.kernel.org
-Subject: [PATCH v2 19/21] doc: Update for SRCU-fast definitions and initialization
-Date: Wed,  1 Oct 2025 07:48:30 -0700
-Message-Id: <20251001144832.631770-19-paulmck@kernel.org>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <7fa58961-2dce-4e08-8174-1d1cc592210f@paulmck-laptop>
-References: <7fa58961-2dce-4e08-8174-1d1cc592210f@paulmck-laptop>
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="PWFHKz0b"
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-b3d5088259eso624619266b.1
+        for <bpf@vger.kernel.org>; Wed, 01 Oct 2025 08:17:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1759331826; x=1759936626; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Z2EhHzMOVl/r7mbcD+woryFmIGoIQn5oJw5TlWrUoNg=;
+        b=PWFHKz0bFWJ113CCQSZzIRRYOuyGnxQfjub6XyTqKMSKk1pV7+acqFSdPdKWYWJAAF
+         isXJFSxDNlN+YKYB+4TI+vAAex0NC6voRcABzALpwyIaAcP5UHmjCzaSL0Qm1Ae0Z0iV
+         Md53d4un0OzpO2Con385FjvclTDffKFoqR2/U=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1759331826; x=1759936626;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Z2EhHzMOVl/r7mbcD+woryFmIGoIQn5oJw5TlWrUoNg=;
+        b=uqLGomfXO7vK1B2uR0b67KSWctsLhLnvHQtw6tcIIe7VfrXG0gspmQEw4ZShaghonW
+         0ebLP5xCT+S3CDf5BjmhUxc+GTiAIRljBD/wJejXKQFVBtaAV4Zs98vFlKGDsSqHoVYr
+         kz3Tey/fK11eAvZSiy21HMwrGBuUfDacWoiDowTortan+2Jl1XMBUJMsAHuMlOmbgGeK
+         ddijnIH2M8LJ8ajUENic2SFsU4DPrfbhzZ1HF/AvRZDfcRAQvdjxfP4X2Rw6ACYlLQns
+         Mb2Fy+onfcWt9xVwq5TmrPL1VAudFiZKF+60+Z4QE2UiPCDPXHVmBInkslDhpVbKUGR/
+         OCLA==
+X-Forwarded-Encrypted: i=1; AJvYcCVXszQ4wq8ZnyADnmPY4RcCFwcMF6sCdjJZp0gC9SPmg8fU14i6tZRDZFKR86zwbbemOro=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxU7YW1I1/OAr2cnnX7kfwiChHCOpwi/2nw9qzyNyyQYeoQWzfN
+	jaLiZ32sx1xTMjAuD4gDUO6cMLw8ss68SDrP5sqwwOurl4cMD3qyqOacCd4w+xlUn7PajGhNg4Z
+	w3tTzv4I=
+X-Gm-Gg: ASbGncsGJ5tfLrpW9w8YIZA4Z7yPSb7pvjU/XhWNo5KFCNHICBE5fDbsIYK1ZwpzdBU
+	m4Pj2PbOVnKyo5x3RTrjaoa+awv0VCZILO6JY8Re/baqC3WUBvsBr1SbRdGOJD49ddOsXVjjOQf
+	OPqoplc3p1qKP7Nz09iCQZOgpcVynjf1BYXfVfC1ZNnUIe7CwuRatbA0iV+a8hg1wSgynWOoLUX
+	JUKQ6Mvx4U1qDgi/1ip+EpeO2bjEgKVL1qTvwlpU4728l0sVYKPag1KS1Mpac2y/cW6yIDWHHov
+	ZLZZH7JetgZv9iGVpx6uGPhsNBykRFNc+zCCvsTQq/CboYO0kVLRTMYQe4d8aRuiUFaMbBd9hF9
+	1/S1wwP+5Y/QqmAmvPj/G+5/oTeB5LhY21wkZ4MPsQzM0lXTQEKF3G0eZ58nLPIkHIRZjorIcXI
+	6Z6ZnTLFbCRAXVv0Y8Gcal
+X-Google-Smtp-Source: AGHT+IGvHWmbRmQjWqUSu1TNHOlejByEUSnCtxZXqKQaA1LBAnrFCYYv3ImeuHGQqAzjes+1MkBERg==
+X-Received: by 2002:a17:907:86a6:b0:b45:b078:c52f with SMTP id a640c23a62f3a-b46e68109c1mr481098866b.61.1759331826483;
+        Wed, 01 Oct 2025 08:17:06 -0700 (PDT)
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com. [209.85.218.52])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b3c9ab5d70esm803156866b.21.2025.10.01.08.17.05
+        for <bpf@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Oct 2025 08:17:05 -0700 (PDT)
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-afcb7a16441so1199915266b.2
+        for <bpf@vger.kernel.org>; Wed, 01 Oct 2025 08:17:05 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCU1xjAGBIo27Q7xSuFuwWhnEr9kJoeWpe21e8xm1Tk4+uG5mjpwXKZ5dqnmOPfftycIlyc=@vger.kernel.org
+X-Received: by 2002:a17:907:a08a:b0:b0c:1701:bf77 with SMTP id
+ a640c23a62f3a-b46e1951101mr469679966b.18.1759331824949; Wed, 01 Oct 2025
+ 08:17:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250928154606.5773-1-alexei.starovoitov@gmail.com>
+ <CAHk-=whR4OLqN_h1Er14wwS=FcETU9wgXVpgvdzh09KZwMEsBA@mail.gmail.com> <aN0JVRynHxqKy4lw@krava>
+In-Reply-To: <aN0JVRynHxqKy4lw@krava>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Wed, 1 Oct 2025 08:16:48 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wj=JCe-4exEH=kJmhf4FfRmbhSqHxMiKiuhL5NWho_4hg@mail.gmail.com>
+X-Gm-Features: AS18NWCVZEu0EKX7iTlguIB8o3ke5c2XEXaIJTu7y5nDPGE83H1_P9z9kj4Br4A
+Message-ID: <CAHk-=wj=JCe-4exEH=kJmhf4FfRmbhSqHxMiKiuhL5NWho_4hg@mail.gmail.com>
+Subject: Re: [GIT PULL] BPF changes for 6.18
+To: Jiri Olsa <olsajiri@gmail.com>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org, daniel@iogearbox.net, 
+	andrii@kernel.org, martin.lau@kernel.org, peterz@infradead.org, 
+	kuba@kernel.org, linux-kernel@vger.kernel.org, mingo@kernel.org, 
+	netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-This commit documents the DEFINE_SRCU_FAST(), DEFINE_STATIC_SRCU_FAST(),
-and init_srcu_struct_fast() API members.
+On Wed, 1 Oct 2025 at 03:58, Jiri Olsa <olsajiri@gmail.com> wrote:
+>
+> yes, either way will work fine, but perhaps the other way round to
+> first optimize and then skip uprobe if needed is less confusing
 
-Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: <bpf@vger.kernel.org>
----
- .../RCU/Design/Requirements/Requirements.rst  | 33 ++++++++++---------
- Documentation/RCU/checklist.rst               | 12 ++++---
- Documentation/RCU/whatisRCU.rst               |  3 ++
- 3 files changed, 27 insertions(+), 21 deletions(-)
+Yes, thanks, that was how I felt looking at that resolution too.
 
-diff --git a/Documentation/RCU/Design/Requirements/Requirements.rst b/Documentation/RCU/Design/Requirements/Requirements.rst
-index 4a116d7a564edc..b5cdbba3ec2e71 100644
---- a/Documentation/RCU/Design/Requirements/Requirements.rst
-+++ b/Documentation/RCU/Design/Requirements/Requirements.rst
-@@ -2637,15 +2637,16 @@ synchronize_srcu() for some other domain ``ss1``, and if an
- that was held across as ``ss``-domain synchronize_srcu(), deadlock
- would again be possible. Such a deadlock cycle could extend across an
- arbitrarily large number of different SRCU domains. Again, with great
--power comes great responsibility.
-+power comes great responsibility, though lockdep is now able to detect
-+this sort of deadlock.
- 
--Unlike the other RCU flavors, SRCU read-side critical sections can run
--on idle and even offline CPUs. This ability requires that
--srcu_read_lock() and srcu_read_unlock() contain memory barriers,
--which means that SRCU readers will run a bit slower than would RCU
--readers. It also motivates the smp_mb__after_srcu_read_unlock() API,
--which, in combination with srcu_read_unlock(), guarantees a full
--memory barrier.
-+Unlike the other RCU flavors, SRCU read-side critical sections can run on
-+idle and even offline CPUs, with the exception of srcu_read_lock_fast()
-+and friends.  This ability requires that srcu_read_lock() and
-+srcu_read_unlock() contain memory barriers, which means that SRCU
-+readers will run a bit slower than would RCU readers. It also motivates
-+the smp_mb__after_srcu_read_unlock() API, which, in combination with
-+srcu_read_unlock(), guarantees a full memory barrier.
- 
- Also unlike other RCU flavors, synchronize_srcu() may **not** be
- invoked from CPU-hotplug notifiers, due to the fact that SRCU grace
-@@ -2681,15 +2682,15 @@ run some tests first. SRCU just might need a few adjustment to deal with
- that sort of load. Of course, your mileage may vary based on the speed
- of your CPUs and the size of your memory.
- 
--The `SRCU
--API <https://lwn.net/Articles/609973/#RCU%20Per-Flavor%20API%20Table>`__
-+The `SRCU API
-+<https://lwn.net/Articles/609973/#RCU%20Per-Flavor%20API%20Table>`__
- includes srcu_read_lock(), srcu_read_unlock(),
--srcu_dereference(), srcu_dereference_check(),
--synchronize_srcu(), synchronize_srcu_expedited(),
--call_srcu(), srcu_barrier(), and srcu_read_lock_held(). It
--also includes DEFINE_SRCU(), DEFINE_STATIC_SRCU(), and
--init_srcu_struct() APIs for defining and initializing
--``srcu_struct`` structures.
-+srcu_dereference(), srcu_dereference_check(), synchronize_srcu(),
-+synchronize_srcu_expedited(), call_srcu(), srcu_barrier(),
-+and srcu_read_lock_held(). It also includes DEFINE_SRCU(),
-+DEFINE_STATIC_SRCU(), DEFINE_SRCU_FAST(), DEFINE_STATIC_SRCU_FAST(),
-+init_srcu_struct(), and init_srcu_struct_fast() APIs for defining and
-+initializing ``srcu_struct`` structures.
- 
- More recently, the SRCU API has added polling interfaces:
- 
-diff --git a/Documentation/RCU/checklist.rst b/Documentation/RCU/checklist.rst
-index c9bfb2b218e525..4b30f701225fdb 100644
---- a/Documentation/RCU/checklist.rst
-+++ b/Documentation/RCU/checklist.rst
-@@ -417,11 +417,13 @@ over a rather long period of time, but improvements are always welcome!
- 	you should be using RCU rather than SRCU, because RCU is almost
- 	always faster and easier to use than is SRCU.
- 
--	Also unlike other forms of RCU, explicit initialization and
--	cleanup is required either at build time via DEFINE_SRCU()
--	or DEFINE_STATIC_SRCU() or at runtime via init_srcu_struct()
--	and cleanup_srcu_struct().  These last two are passed a
--	"struct srcu_struct" that defines the scope of a given
-+	Also unlike other forms of RCU, explicit initialization
-+	and cleanup is required either at build time via
-+	DEFINE_SRCU(), DEFINE_STATIC_SRCU(), DEFINE_SRCU_FAST(),
-+	or DEFINE_STATIC_SRCU_FAST() or at runtime via either
-+	init_srcu_struct() or init_srcu_struct_fast() and
-+	cleanup_srcu_struct().	These last three are passed a
-+	`struct srcu_struct` that defines the scope of a given
- 	SRCU domain.  Once initialized, the srcu_struct is passed
- 	to srcu_read_lock(), srcu_read_unlock() synchronize_srcu(),
- 	synchronize_srcu_expedited(), and call_srcu().	A given
-diff --git a/Documentation/RCU/whatisRCU.rst b/Documentation/RCU/whatisRCU.rst
-index cf0b0ac9f4636a..a1582bd653d115 100644
---- a/Documentation/RCU/whatisRCU.rst
-+++ b/Documentation/RCU/whatisRCU.rst
-@@ -1227,7 +1227,10 @@ SRCU: Initialization/cleanup/ordering::
- 
- 	DEFINE_SRCU
- 	DEFINE_STATIC_SRCU
-+	DEFINE_SRCU_FAST        // for srcu_read_lock_fast() and friends
-+	DEFINE_STATIC_SRCU_FAST // for srcu_read_lock_fast() and friends
- 	init_srcu_struct
-+	init_srcu_struct_fast
- 	cleanup_srcu_struct
- 	smp_mb__after_srcu_read_unlock
- 
--- 
-2.40.1
+> I ended up with changes below, should I send formal patches?
 
+Please.
+
+> --- a/tools/testing/selftests/bpf/prog_tests/usdt.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/usdt.c
+> @@ -142,7 +142,7 @@ static void subtest_basic_usdt(bool optimized)
+>                 goto cleanup;
+>  #endif
+>
+> -       alled = TRIGGER(1);
+> +       called = TRIGGER(1);
+
+Oops. That's me having fat-fingered things. Sorry.
+
+I would have seen that silly mistake had I gotten the tests to build,
+but as mentioned, there were multiple small issues that had unhelpful
+error messages that I had given up.
+
+              Linus
