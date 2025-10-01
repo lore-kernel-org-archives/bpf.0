@@ -1,45 +1,46 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95716304BB2;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17DE5303C8E;
 	Wed,  1 Oct 2025 14:48:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759330120; cv=none; b=jpQnfe0z/O7pKuRzLT8vuNbltewzv1x4KrHPVAJ3afj7nenCegMxmGyKcNeW8RCJOoKXWyegzFjev0xVHElXt1xvWzVxASD66e9Dt8YhFB/vMnz/kHPedcmixoKbI+KC6ulYeiuG0k15hyl9U1ypccCPeghnTcbaZM2c6fUKuq8=
+	t=1759330120; cv=none; b=QEV3Ds1Skz2Z5qkme603le74Vngfyo8S+kcYpCqWLxPxYNNesVfJOdK8TV37p4qyuIH4Yo6Xz0cR7zSj9Nr5oRtpvnq8DFsEPnEvM/NKspv5LngmCdu9xXJ+h3lrFTSgKKS2uetP1vo1jJbFBrTpISZyq0AoCvnnQaJKUNqEFSc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1759330120; c=relaxed/simple;
-	bh=M6lQK/a51z9FSyLcsJB4DdYne3vYn3DuAPGWx5z897o=;
+	bh=tAtrCD0Q6r51wlJ/YZUSgYxDBqaTmpmjPK/LBZzejX4=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=XC2dBok36tLUZwYpOfzP85IBUBjo+XGxUVKA+Hz2Ts4WLUTo+7nc5J9Bu4DgEF8IWxrFRJJJyzy8yrnAXAD589VDm1yh1ot0vYMf+cDCOguOjM/M4aPXVLKSPlTTCOD/JYCZuF9A7pOoF2wRwtJJew4d6ULVx3vjIUjHKwh3MI8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pR2M9STP; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=KV9topWwSRww8CBGkgoGc63KMF4hWuBjgS2WcfrMcL2WPFJMFxldctzaVt1j74zsonaRzVyDOPEqUU9Zi1GeqgUeSPjk/f3+3JHyc4qvV6HVfT/XTgSY9xvvl7xJrEC4sFQQLx0V7j4npISMZMEhmLf2dz16+L4fWFmj12xkS/Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=csTgdgUS; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pR2M9STP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04E0BC19423;
-	Wed,  1 Oct 2025 14:48:40 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="csTgdgUS"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94989C4CEFB;
+	Wed,  1 Oct 2025 14:48:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1759330120;
-	bh=M6lQK/a51z9FSyLcsJB4DdYne3vYn3DuAPGWx5z897o=;
+	s=k20201202; t=1759330119;
+	bh=tAtrCD0Q6r51wlJ/YZUSgYxDBqaTmpmjPK/LBZzejX4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=pR2M9STPcyv9NFEEZTT+27ROyeObWB77NHAWfHQ6us7no1FuLckHXZdb4ZAIj1BpO
-	 iv2/1/dtWhZRs2NK9J7FC/FHVzyJ051TC8fJBs9+WmXXkThuoQkpxWCX/K3JoPxfSW
-	 dWzSc207aRBqeTfYTqs8s6b87OtGAlcPz8RcfhfbTqztUl15/pb+H0oemKzKLPdZ9g
-	 NAXYNfXfydCLBco3wkjroY0MfZk79fdOqYi0dV2EV/grxZFZyZp9rQ7rbP1ZSSd8rw
-	 YCKqW6druRuOaJRTV5mMQAYcMegU0BGzZ0+oAAzZZqo/A+PenER5Sqll3n+FwEfWw9
-	 vgQc55qIB3CiQ==
+	b=csTgdgUSMTy232HN+CTaEbv4J1Xi+gxUOITEFgFKGEAXeTFWSYXivUcBiiaMWKNO6
+	 L/DrANeKLzG55seYzDAUNBzMgZCBMdSdSKaeAloQhD7gZLdRJEiLz7UXBYEoQsQV6O
+	 JVVv38BECH+91AugcmcSGEEP+zJ18mnG4mm0IU9pzVtO5r8a1uC6VAjhOlKstZg4kp
+	 DCP5cpX5qHOu/G5MeHxZSi72/o6oFozHlGcV7jy5psjJDQFPpSEf1SQo2PodWH7TOz
+	 PY2gZxfu0WgF1ZLAzkLWwUgs2I4xZTJyWK2GUY8vORtMj8h0T6NiYht569BeQVDh/H
+	 5QdA796+ihPGQ==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 87EF6CE14BF; Wed,  1 Oct 2025 07:48:34 -0700 (PDT)
+	id 7FDBECE1427; Wed,  1 Oct 2025 07:48:34 -0700 (PDT)
 From: "Paul E. McKenney" <paulmck@kernel.org>
 To: rcu@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org,
 	kernel-team@meta.com,
 	rostedt@goodmis.org,
 	"Paul E. McKenney" <paulmck@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
 	bpf@vger.kernel.org
-Subject: [PATCH v2 15/21] rcutorture: Exercise DEFINE_STATIC_SRCU_FAST() and init_srcu_struct_fast()
-Date: Wed,  1 Oct 2025 07:48:26 -0700
-Message-Id: <20251001144832.631770-15-paulmck@kernel.org>
+Subject: [PATCH v2 12/21] srcu: Create an rcu_tasks_trace_expedite_current() function
+Date: Wed,  1 Oct 2025 07:48:23 -0700
+Message-Id: <20251001144832.631770-12-paulmck@kernel.org>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <7fa58961-2dce-4e08-8174-1d1cc592210f@paulmck-laptop>
 References: <7fa58961-2dce-4e08-8174-1d1cc592210f@paulmck-laptop>
@@ -51,76 +52,48 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This commit updates the initialization for the "srcu" and "srcud" torture
-types to use DEFINE_STATIC_SRCU_FAST() and init_srcu_struct_fast(),
-respectively, when reader_flavor is equal to SRCU_READ_FLAVOR_FAST.
+This commit creates an rcu_tasks_trace_expedite_current() function
+that expedites the current (and possibly the next) RCU Tasks Trace
+grace period.
+
+If the current RCU Tasks Trace grace period is already waiting, that wait
+will complete before the expediting takes effect.  If there is no RCU
+Tasks Trace  grace period in flight, this function might well create one.
 
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: Andrii Nakryiko <andrii@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
 Cc: <bpf@vger.kernel.org>
 ---
- kernel/rcu/rcutorture.c | 19 +++++++++++++++----
- 1 file changed, 15 insertions(+), 4 deletions(-)
+ include/linux/rcupdate_trace.h | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-diff --git a/kernel/rcu/rcutorture.c b/kernel/rcu/rcutorture.c
-index 2e3806b996a80a..e859a1ca7dc841 100644
---- a/kernel/rcu/rcutorture.c
-+++ b/kernel/rcu/rcutorture.c
-@@ -692,10 +692,18 @@ static struct rcu_torture_ops rcu_busted_ops = {
-  */
- 
- DEFINE_STATIC_SRCU(srcu_ctl);
-+DEFINE_STATIC_SRCU_FAST(srcu_ctlf);
- static struct srcu_struct srcu_ctld;
- static struct srcu_struct *srcu_ctlp = &srcu_ctl;
- static struct rcu_torture_ops srcud_ops;
- 
-+static void srcu_torture_init(void)
-+{
-+	rcu_sync_torture_init();
-+	if (reader_flavor & SRCU_READ_FLAVOR_FAST)
-+		srcu_ctlp = &srcu_ctlf;
-+}
-+
- static void srcu_get_gp_data(int *flags, unsigned long *gp_seq)
- {
- 	srcutorture_get_gp_data(srcu_ctlp, flags, gp_seq);
-@@ -865,7 +873,7 @@ static void srcu_torture_expedite_current(void)
- 
- static struct rcu_torture_ops srcu_ops = {
- 	.ttype		= SRCU_FLAVOR,
--	.init		= rcu_sync_torture_init,
-+	.init		= srcu_torture_init,
- 	.readlock	= srcu_torture_read_lock,
- 	.read_delay	= srcu_read_delay,
- 	.readunlock	= srcu_torture_read_unlock,
-@@ -897,10 +905,13 @@ static struct rcu_torture_ops srcu_ops = {
- 	.name		= "srcu"
- };
- 
--static void srcu_torture_init(void)
-+static void srcud_torture_init(void)
- {
- 	rcu_sync_torture_init();
--	WARN_ON(init_srcu_struct(&srcu_ctld));
-+	if (reader_flavor & SRCU_READ_FLAVOR_FAST)
-+		WARN_ON(init_srcu_struct_fast(&srcu_ctld));
-+	else
-+		WARN_ON(init_srcu_struct(&srcu_ctld));
- 	srcu_ctlp = &srcu_ctld;
+diff --git a/include/linux/rcupdate_trace.h b/include/linux/rcupdate_trace.h
+index f47ba9c074601c..cee89e51e45cbb 100644
+--- a/include/linux/rcupdate_trace.h
++++ b/include/linux/rcupdate_trace.h
+@@ -184,6 +184,20 @@ static inline void rcu_barrier_tasks_trace(void)
+ 	srcu_barrier(&rcu_tasks_trace_srcu_struct);
  }
  
-@@ -913,7 +924,7 @@ static void srcu_torture_cleanup(void)
- /* As above, but dynamically allocated. */
- static struct rcu_torture_ops srcud_ops = {
- 	.ttype		= SRCU_FLAVOR,
--	.init		= srcu_torture_init,
-+	.init		= srcud_torture_init,
- 	.cleanup	= srcu_torture_cleanup,
- 	.readlock	= srcu_torture_read_lock,
- 	.read_delay	= srcu_read_delay,
++/**
++ * rcu_tasks_trace_expedite_current - Expedite the current Tasks Trace RCU grace period
++ *
++ * Cause the current Tasks Trace RCU grace period to become expedited.
++ * The grace period following the current one might also be expedited.
++ * If there is no current grace period, one might be created.  If the
++ * current grace period is currently sleeping, that sleep will complete
++ * before expediting will take effect.
++ */
++static inline void rcu_tasks_trace_expedite_current(void)
++{
++	srcu_expedite_current(&rcu_tasks_trace_srcu_struct);
++}
++
+ // Placeholders to enable stepwise transition.
+ void __init rcu_tasks_trace_suppress_unused(void);
+ 
 -- 
 2.40.1
 
