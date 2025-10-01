@@ -1,226 +1,133 @@
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01CC231194C
-	for <bpf@vger.kernel.org>; Wed,  1 Oct 2025 21:37:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6914175A5
+	for <bpf@vger.kernel.org>; Wed,  1 Oct 2025 21:39:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759354648; cv=none; b=UAlPJOKFwzBchGNX/874Rf3LyNAc4dQxOJx1nlqLg2fR7RSQkgJRWxE8hxljFKgRKXoUN3MkBrKlN0w0QkK4RaAPPiOq4ltVl1U/3zCCzfI/fkZqE02yFsCx5MqWkr/yPoysOzVVo+Tl0MFxY5iODQgx3vbtce1PMFp0RagTlHI=
+	t=1759354791; cv=none; b=KqdL230j+bVyHzA4E9H87Snis5nDOyb+w0lPiAH6FqAON2RcGE2ZNDs15aGpMSUeTw7Og/vdhQ6k5uW9m1dXNqnfL178YHxdUHJ+DczJ7C9H2Z+UgCV0dGcm6wsvE/yYsZQUof9qAf5RerzviulsI42q2LtvkSoCPSGJeq+aJ0Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759354648; c=relaxed/simple;
-	bh=iFyDmrTpJPn3O5Jm0DiFlsoGIjiYcQ0eix8rULOQfqE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=NguEIRjXH9AC7f9/r6vZYhcFtcXcNr3DUMniJhI0PgnGdJ/v5YHociQV2n3zrJogMlPUdt312eB75ehZVfKw4o1OPUNpSSeGudK8VPoTa/2I3hj/FBBanlDU4n4j6IXFOy73RxzRRgAmJjpdYqR3GOxrhAKbjbYPnCUVMot+Doo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=b0irXLLk; arc=none smtp.client-ip=209.85.210.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	s=arc-20240116; t=1759354791; c=relaxed/simple;
+	bh=+umo9iYlAl9HyOsL0Zu8iFAKyMfLmtwseKIu+cV7dEo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hJ2732m63XYfrBmsRUknYkpj+tp6xmFpvUrLN6vaPSsrpgs7EkqmpofmkewwXWSEPH8cXykUUg+66FhVwZEK/VS51dbVsQs3cJBTGb0JIiW133hC6nWWB1TvH/rW50/t44x1H+Hqdcq/VbI6kw9R3BEso38OuMFki5IpkB03ohY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VHdaPD3L; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="b0irXLLk"
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-78af9ebe337so321322b3a.1
-        for <bpf@vger.kernel.org>; Wed, 01 Oct 2025 14:37:25 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VHdaPD3L"
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-46e4473d7f6so1827505e9.1
+        for <bpf@vger.kernel.org>; Wed, 01 Oct 2025 14:39:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1759354645; x=1759959445; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oxC2SRILcIhvhYJSacG5k45JmWXFy5mn/GYdj9KKCzs=;
-        b=b0irXLLkWNeUv0EUcBJHIe0dQaKvWHGyNwiashlrFjOjkRCgBozSmlo/M3TKjh1d0Z
-         nA4LWYDOVTR8ICWjH7kX1LKKerFSAEtwipWyuAqCJMkgHak0PVxYUnFWP40y9eLNt1h4
-         1z3Wy80fmc5VFKv12B242HuCi8SUK+EUqB1NngMAyvYkwAXQBj92xZu17LTRpA7D+Ids
-         pGhssmbbflmmtMMXMrlKdCgXrPVPn7GNVEMHdfHum6N17LUb5+59BmEjgkP3Pnf6MmnM
-         R3jsV2MtMC9GFkY7yTXLcDWrUQteU1oPr+TOpR4/sDReEpVnUZEj7Af+YfiLu/p41IBS
-         Fuiw==
+        d=gmail.com; s=20230601; t=1759354788; x=1759959588; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=oMzzaaIhw7Zer1fbUlD9qWrEm2MkdilmJorBO5Wtltc=;
+        b=VHdaPD3Lh2chB+5+Q6tbljR6r9MRe6kkf/DIRyGwdJnfin1ttJujiiruSIuqks2pf4
+         6XDEeZJjCP3kq+uRspSwdglMmx/Czguwh4XxqAyyTTtEgs0wnTSO5NfOJY9yKzXWd6CZ
+         g2awLOBZDoEJAq7Fgq5bN/kP96GGCTJmK8cdTUtahRbJKNbtp10cr9PHOz6/hH2EGezi
+         lOHubsseL97pE33qZOoLIaBUN/GeycP18QeUhCrWwKD++X6DfaDnTSLKqKOBRk6QvPwJ
+         SdDGGiTSVHDHmW7nZsPi8oOCeusSj8tOn8MGD8+DYXpEI5S+OVrS/se/Q375mw8PFP/p
+         kW0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759354645; x=1759959445;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oxC2SRILcIhvhYJSacG5k45JmWXFy5mn/GYdj9KKCzs=;
-        b=HU2t27fkdQjt0zxbt/3jk9GT9emISbNa26XGki0llMXbUTlZ93Asbv/rj7bdLIzdi/
-         JLHsk+Lhaw+WC/cHJnESuT1xhYlHF/2PEUbIGskqMG+rAcZUpQwHPBnKnQEbMCmmt1Xp
-         XfZwT6uNsYX1vzyJ7eWNqK7K6kowmxaZucR5zSA6NDMwdBqo12TtNC8QWE12TwLj0TgC
-         IeR403fRY4gSnUHQK5mAzLpOIu00RDUICiEOtCAttqP8MknqyYDr4L0b+F81tsFRdw/F
-         hwZZXxXEdsXaAfL6j4gi2xrze5wkQZUrZyY8R0piwk7ubpB4wHtIMxynvg9oM4WMTK4l
-         dM8A==
-X-Gm-Message-State: AOJu0YzXyLZTjlge4PQFyX6PYtB4FsUgPgqBlpFZR9eRxdT/PRUOKDKN
-	hG8Onf/CV0tm5eHb0EZZd5Qx8X6SvqNE6FB+IGMbgH8BMInEE3rEi5l4zeUKzUeQcqoaWnSrgWS
-	rqRT6IWMYRZqdWEaX/583ATZc0I9cAhV8Eh4oDSr7
-X-Gm-Gg: ASbGncvx0KAg6i9e4cAI7bwrQ0RAydS033/83uPxEifbu2h5c5neHLNsI/9uOunueyC
-	tdboxDzt1Bf2NTKLwKzZgqIsf0IoXVwUai0HTjh98aHFITasckg9KJ5+cQPCla12+GFmG4LCXwb
-	ax6E5sVp6WfS0Xp8UO9ZBepGgSkzpikPgHZszIAtSbjYLbiwxKJx6ffAYb6G/T0UvrkNO1QO6FX
-	VzJgm1+TsGLf0I4GNp4Xcdwkf3RIhUyXzwlerK7wQ==
-X-Google-Smtp-Source: AGHT+IGk55n67nvdF5H9WDAnmQzjLuubvNZPSSXOyJoe/oFJDGVfHrkafTJCSWt65p+AC3QkUld/UJ3aBwDda9Rv30E=
-X-Received: by 2002:a17:90b:4a87:b0:32e:d600:4fdb with SMTP id
- 98e67ed59e1d1-339a6f37ce0mr5541188a91.18.1759354645111; Wed, 01 Oct 2025
- 14:37:25 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1759354788; x=1759959588;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oMzzaaIhw7Zer1fbUlD9qWrEm2MkdilmJorBO5Wtltc=;
+        b=WJmdXHFWC+EfjxQ/qT8TnlcqDT5JaqJJi8Z9VHNQIA6vc4tZHf34ixmAI4KUH+E5Sg
+         sc4Sh8kRwsVPmu9FtejW9hjsnKheCWE6KCMTJ8hB4YwdMFyZCoGDZfIGfEeIjvBthQzG
+         tkzrxGViZ/dBSCQV/9P00Tt+WSrWeOQEevVp1MbLgVY34RdeJZiBXVMXaXXiNb+wcbeo
+         z08QSz3DF8v5cbCKcY3tEnScPMIOq2UC+oq6ZlPd8y5JuZ83t7E/1O+T8TVt7VFNRIjK
+         xF2ObDZdC2nS8HLo4ZZ+JIq0pMZLTP5O0/xnERcQm575l+OCCN+NgVB3/6Lowec5jpOe
+         CXPQ==
+X-Gm-Message-State: AOJu0YxvslRNVk+LfUK4CAQFv2cjq4+Wjqn79IRcS0BT3EPyWEfQ5jiX
+	5VdvBoSoWfJpeGaCwbF99OCxyKH+O/8qewmkWGkXASzqwLVuC+FnRRaI
+X-Gm-Gg: ASbGnctAkCey+ynixp06AAte4ebemmYwFQ9nFfRAUr/JENgWnxCNAlfJEw3CNg71dF/
+	LLsWGZZ4SB3dyEiKGu1Mt/DjSYfslWn/DtNyHozany54j1EymxjBoj5B8fq2vIxF20lKQwysH+R
+	PTKJpDyPounmD0lLLSsStEYt3XqHtVhchWaxqk47fOctvhyXpQT2o3GGUkUEhk6j9Q8NSJMUf+E
+	JvFNjIqTY4wYC17JggRBFwqDhpeZWMeWJRsUw0Br8vjCnHIzU6KfhFxc0cf225zGFvxds/sOLQ3
+	VwbldNDxEWqKqxzMVCoPnN9t3ZAYqvC/xN+nyZee8llOlshElDoA4dqtNR7i72ecAjJ4bGWQQws
+	ovhWQV4b6jinZFEkw5uTsfKaebHgW3WpgzGWPAmj5F6oGFm7Y9LjNDr55+/xbH9HhwAmjHp8vY0
+	MozL1Sv9lByvH36KyDAWt9089e0or84pP4Ws+FFt2zgWcc
+X-Google-Smtp-Source: AGHT+IGbW8CvbbShF8lbVj5ojEYZ0ihuP2ib+7HdQu04gCcxJdB66SMi03Dp2wH/F3bxXO7bO98uKA==
+X-Received: by 2002:a05:600c:1d1a:b0:45d:cfee:7058 with SMTP id 5b1f17b1804b1-46e612be155mr36385905e9.22.1759354787996;
+        Wed, 01 Oct 2025 14:39:47 -0700 (PDT)
+Received: from mail.gmail.com (2a01cb0889497e006ac507786c22ef92.ipv6.abo.wanadoo.fr. [2a01:cb08:8949:7e00:6ac5:778:6c22:ef92])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-46e693bcc2csm7666845e9.12.2025.10.01.14.39.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Oct 2025 14:39:47 -0700 (PDT)
+Date: Wed, 1 Oct 2025 23:39:45 +0200
+From: Paul Chaignon <paul.chaignon@gmail.com>
+To: Martin KaFai Lau <martin.lau@linux.dev>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Amery Hung <ameryhung@gmail.com>
+Subject: Re: [PATCH bpf-next v3 3/5] bpf: Craft non-linear skbs in
+ BPF_PROG_TEST_RUN
+Message-ID: <aN2foao59lLr2RUI@mail.gmail.com>
+References: <cover.1758213407.git.paul.chaignon@gmail.com>
+ <41b200d749ff0c1171b7f2ea60531126ba5e7a62.1758213407.git.paul.chaignon@gmail.com>
+ <85545d76-1177-408e-8224-2fb98ffe8a2f@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250929213520.1821223-1-bboscaccy@linux.microsoft.com>
-In-Reply-To: <20250929213520.1821223-1-bboscaccy@linux.microsoft.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Wed, 1 Oct 2025 17:37:13 -0400
-X-Gm-Features: AS18NWCqxt9xU6eK1mny_V1J2q-UmT1yVLsEnrMcuGdYWYeMFG2BEOGlK06TRJk
-Message-ID: <CAHC9VhTQ_DR=ANzoDBjcCtrimV7XcCZVUsANPt=TjcvM4d-vjg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 0/3] BPF signature hash chains
-To: Linus Torvalds <torvalds@linux-foundation.org>, 
-	Blaise Boscaccy <bboscaccy@linux.microsoft.com>, ast@kernel.org, kpsingh@kernel.org, 
-	james.bottomley@hansenpartnership.com
-Cc: bpf@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	kys@microsoft.com, daniel@iogearbox.net, andrii@kernel.org, 
-	wufan@linux.microsoft.com, qmo@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <85545d76-1177-408e-8224-2fb98ffe8a2f@linux.dev>
 
-On Mon, Sep 29, 2025 at 5:35=E2=80=AFPM Blaise Boscaccy
-<bboscaccy@linux.microsoft.com> wrote:
->
-> This patchset extends the currently proposed signature verification
-> patchset
-> https://lore.kernel.org/linux-security-module/20250813205526.2992911-1-kp=
-singh@kernel.org/
-> with hash-chain functionality to verify the contents of arbitrary
-> maps.
->
-> The currently proposed loader + map signature verification
-> scheme=E2=80=94requested by Alexei and KP=E2=80=94is simple to implement =
-and
-> acceptable if users/admins are satisfied with it. However, verifying
-> both the loader and the maps offers additional benefits beyond just
-> verifying the loader:
->
-> 1. Simplified Loader Logic: The lskel loader becomes simpler since it
->    doesn=E2=80=99t need to verify program maps=E2=80=94this is already ha=
-ndled by
->    bpf_check_signature().
->
-> 2. Security and Audit Integrity: A key advantage is that the LSM
->   (Linux Security Module) hook for authorizing BPF program loads can
->   operate after signature verification. This ensures:
->
->   * Access control decisions can be based on verified signature
->   * status.  Accurate system state measurement and logging.  Log
->   * events claiming a verified signature are fully truthful, avoiding
->   * misleading entries that only the loader was verified while the
->   * actual BPF program verification happens later without logging.
->
-> This approach addresses concerns from users who require strict audit
-> trails and verification guarantees, especially in security-sensitive
-> environments.
->
-> A working tree with this patchset is being maintained at
-> https://github.com/blaiseboscaccy/linux/tree/bpf-hash-chains
->
-> bpf CI tests passed as well
-> https://github.com/kernel-patches/bpf/actions/runs/18110352925
->
-> v2 -> v1:
->    - Fix regression found by syzkaller
->    - Add bash auto-complete support for new command line switch
->
-> Blaise Boscaccy (3):
->   bpf: Add hash chain signature support for arbitrary maps
->   selftests/bpf: Enable map verification for some lskel tests
->   bpftool: Add support for signing program and map hash chains
->
->  include/uapi/linux/bpf.h                      |  6 ++
->  kernel/bpf/syscall.c                          | 73 ++++++++++++++++++-
->  .../bpf/bpftool/Documentation/bpftool-gen.rst |  7 +-
->  tools/bpf/bpftool/bash-completion/bpftool     |  2 +-
->  tools/bpf/bpftool/gen.c                       | 27 ++++++-
->  tools/bpf/bpftool/main.c                      |  9 ++-
->  tools/bpf/bpftool/main.h                      |  1 +
->  tools/bpf/bpftool/sign.c                      | 16 +++-
->  tools/include/uapi/linux/bpf.h                |  6 ++
->  tools/lib/bpf/libbpf.h                        |  3 +-
->  tools/lib/bpf/skel_internal.h                 |  6 +-
->  tools/testing/selftests/bpf/Makefile          | 18 ++++-
->  12 files changed, 159 insertions(+), 15 deletions(-)
+On Thu, Sep 18, 2025 at 11:50:22AM -0700, Martin KaFai Lau wrote:
+> On 9/18/25 9:47 AM, Paul Chaignon wrote:
+> > This patch adds support for crafting non-linear skbs in BPF test runs
+> 
+> I think it is useful. Thanks for working on it.
 
-During a discussion of one of Blaise's earlier BPF signature
-verification proposals Alexei mentioned that it sounded like I was
-looking for Linus' opinion on our debate[1].  At the time I replied
-that I was more interested in trying to find out what the BPF devs
-wanted for a BPF program signing solution, and working towards making
-sure we had something that worked for everyone[2].  That was almost
-five months ago, and while Alexei and KP have provided an example of
-their ideal solution, it can now be found in Linus' tree, they have
-ignored the larger issues brought up by the LSM community and have
-refused to review or comment on Blaise's many attempts[3][4][5][6] to
-reconcile the needs of the two communities.
+Thanks for the review Martin!
 
-With the lack of engagement from the BPF devs, I'm now at the point
-where I'm asking Linus to comment on the current situation around
-Blaise's patchset.  I recognize that Alexei and KP have a strong
-affinity for the signature scheme implemented in KP's patchset, which
-is fine, but if we are going to be serious about implementing BPF
-signature verification that can be used by a number of different user
-groups, we also need to support the signature scheme that Blaise is
-proposing[6].
+> 
+> > for tc programs, via a new flag BPF_F_TEST_SKB_NON_LINEAR. When this
+> This commit message needs to be updated.
+> 
+> > flag is set, the size of the linear area is given by ctx->data_end, with
+> > a minimum of ETH_HLEN always pulled in the linear area.
+> > 
+> > This is particularly useful to test support for non-linear skbs in large
+> > codebases such as Cilium. We've had multiple bugs in the past few years
+> > where we were missing calls to bpf_skb_pull_data(). This support in
+> > BPF_PROG_TEST_RUN would allow us to automatically cover this case in our
+> > BPF tests.
+> > 
+> > In addition to the selftests introduced later in the series, this patch
+> > was tested by setting BPF_F_TEST_SKB_NON_LINEAR for all tc selftests
+> > programs and checking test failures were expected.
+> > 
+> > Tested-by: syzbot@syzkaller.appspotmail.com> Suggested-by: Daniel Borkmann <daniel@iogearbox.net>
+> > Signed-off-by: Paul Chaignon <paul.chaignon@gmail.com>
+> > ---
+> >   net/bpf/test_run.c | 82 ++++++++++++++++++++++++++++++++++++----------
+> >   1 file changed, 65 insertions(+), 17 deletions(-)
+> > 
+> > diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+> > index 00b12d745479..222a54c24c70 100644
+> > --- a/net/bpf/test_run.c
+> > +++ b/net/bpf/test_run.c
+> > @@ -660,21 +660,30 @@ BTF_ID_FLAGS(func, bpf_kfunc_call_memb_release, KF_RELEASE)
+> >   BTF_KFUNCS_END(test_sk_check_kfunc_ids)
+> >   static void *bpf_test_init(const union bpf_attr *kattr, u32 user_size,
+> > -			   u32 size, u32 headroom, u32 tailroom)
+> > +			   u32 size, u32 headroom, u32 tailroom, bool nonlinear)
+> 
+> test_run_xdp() already has support for multi-frag/buf and doesn't need "bool
+> nonlinear". It also does not have the one-page limitation. Is there a reason
+> that test_run_skb() cannot follow what the test_run_xdp() does?
 
-To make it clear at the start, Blaise's patchset does not change,
-block, or otherwise prevent the BPF program signature scheme
-implemented in KP's patchset.  Blaise intentionally designed his
-patches such that the two signature schemes can coexist together in
-the same kernel, allowing users to select which scheme to use on each
-BPF program load, enabling the kernel to support policy to selectively
-enforce rules around which signature scheme is permitted for each BPF
-program load.
+You're absolutely right, following the XDP approach made things a lot
+simpler. I'm not sure why I was trying to keep all data copy in
+bpf_test_init. I've sent a v4 for this. Sorry it took a while to get to
+your review.
 
-Blaise's patch implements an alternate BPF program signature scheme,
-using the same basic concepts as KP's design (light skeletons, hash
-chaining, etc.), but does so in such a way that the kernel verifies
-all relevant parts of the BPF program load prior to calling the
-security_bpf_prog_load() LSM hook.  KP's signature scheme only
-verifies the light skeleton prior to calling the LSM hook and relies
-on the BPF code in the light skeleton to verify the original BPF
-program.
-
-Relying on a light skeleton to verify the BPF program means that any
-verification failures in the light skeleton will be "lost" as there is
-no way to convey an error code back to the user who is attempting the
-BPF program load.  Blaise's approach to verifying the full signature
-in the kernel, and not relying on the light skeleton for verification,
-means that verification failures can be returned to the user; there
-are no silent signature verification failures like one can experience
-with KP's verification scheme.
-
-KP's signature verification scheme is a two-part scheme with the
-security_bpf_prog_load() LSM hook being called after the light
-skeleton signature has been verified, but before the light skeleton
-verifies the BPF program.  Aside from breaking with typical
-conventions around the placement of LSM hooks, this "halfway" approach
-makes it difficult for LSMs to log anything about the signature status
-of a BPF program being loaded, or use the signature status in any type
-of access decision.  This is important for a number of user groups
-that use LSM based security policies as a way to help reason about the
-security properties of a system, as KP's scheme would require the
-users to analyze the signature verification code in every BPF light
-skeleton they authorize as well as the LSM policy in order to reason
-about the security mechanisms involved in BPF program loading.
-
-Blaise's signature scheme also has the nice property that BPF ELF
-objects created using his scheme are backwards compatible with
-existing released kernels that do not support any BPF signature
-verification schemes, of course without any signature verification.
-Loading a BPF ELF object using KP's signature scheme will likely fail
-when loaded on existing released kernels.
-
-[1] https://lore.kernel.org/linux-security-module/CAADnVQ+C2KNR1ryRtBGOZTNk=
-961pF+30FnU9n3dt3QjaQu_N6Q@mail.gmail.com/
-[2] https://lore.kernel.org/linux-security-module/CAHC9VhRjKV4AbSgqb4J_-xhk=
-WAp_VAcKDfLJ4GwhBNPOr+cvpg@mail.gmail.com/
-[3] https://lore.kernel.org/linux-security-module/87sei58vy3.fsf@microsoft.=
-com/
-[4] https://lore.kernel.org/linux-security-module/20250909162345.569889-2-b=
-boscaccy@linux.microsoft.com/
-[5] https://lore.kernel.org/linux-security-module/20250926203111.1305999-1-=
-bboscaccy@linux.microsoft.com/
-[6] https://lore.kernel.org/linux-security-module/20250929213520.1821223-1-=
-bboscaccy@linux.microsoft.com/
-
---=20
-paul-moore.com
