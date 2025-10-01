@@ -1,39 +1,39 @@
-Received: from mout-p-103.mailbox.org (mout-p-103.mailbox.org [80.241.56.161])
+Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [80.241.56.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03CFE28C5BE;
-	Wed,  1 Oct 2025 09:56:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.161
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5428728C5BE;
+	Wed,  1 Oct 2025 09:57:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759312613; cv=none; b=h2Zb4t2gLAnx6tAkYMUit7FpOCNCIorIA9qhQNqaEwptUjQ1UAB+O6QbBDMcxXvpK/BpzpqzC4xJRXPapXl3Qm9uUcsbmt4yJV/gFu4GtdVTUm1Mhy5eI9TK9zTFreSdt7M4URYYZ+GEqzgiXgK/PEvrlS0R46yqvwuYod9dOdg=
+	t=1759312624; cv=none; b=W8cGGHtPysRzzEsSFcdI2Hbt4+AQCg6JBaaGfLvExbWYKZiY/XvXAkwgZYzAGgNm5OBZvo4FNkUsQELp/Us8Q8Net/ZThEQqGgKDezpVN3ZG1j2AR5RfICrXIJEUBBUO/3Z++e/UneGduc6ZRpcc6qaAw9ZChWAN/HcbQUQ54Vg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759312613; c=relaxed/simple;
-	bh=b+/c4W+RzknpNkDay02LrrvdC3AQVy2QaY78zoLH9j8=;
+	s=arc-20240116; t=1759312624; c=relaxed/simple;
+	bh=HLYhW50XHaRj/9ZRdiTUSGg8dvCftmf3opE4NOaKOFI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=UNdlutJPWf9u4ojG8zZePlmZdaJbEqpkAZsGT9DOIxbItviwgyPIcPw9CjGQwtmawyKDSEEm97Eyfq8r2SwjViCRjaw9fUstFGni1m2BQidtb8CISshRQEJ+s2cfq5wkso+PYaB1zy+BmFy2yg7oyMt8PkqaAnb5FsPFg30Dc+Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=listout.xyz; spf=pass smtp.mailfrom=listout.xyz; dkim=pass (2048-bit key) header.d=listout.xyz header.i=@listout.xyz header.b=kvmv4k3D; arc=none smtp.client-ip=80.241.56.161
+	 MIME-Version; b=AudaG/hHzWMeyJMIPbpnUrkLodcIH3jurgSlEp66XSnhRLYA1OzgZonSPkV0LhXYgOGrhHrLqBE8JCkj6qZbEfom3pU71vz5NRxKsDuQdy38BzT7MxvhsayhUOXJICL0AaPxFgxlwYH1KkZvSa6r+S1jqCrwjJHJZwjo3i3U6U8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=listout.xyz; spf=pass smtp.mailfrom=listout.xyz; dkim=pass (2048-bit key) header.d=listout.xyz header.i=@listout.xyz header.b=OPaM3tXx; arc=none smtp.client-ip=80.241.56.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=listout.xyz
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=listout.xyz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=listout.xyz header.i=@listout.xyz header.b="kvmv4k3D"
+	dkim=pass (2048-bit key) header.d=listout.xyz header.i=@listout.xyz header.b="OPaM3tXx"
 Received: from smtp2.mailbox.org (smtp2.mailbox.org [10.196.197.2])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mout-p-103.mailbox.org (Postfix) with ESMTPS id 4cc9Lc5fzsz9tgh;
-	Wed,  1 Oct 2025 11:56:40 +0200 (CEST)
+	by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4cc9Ly46cPz9svd;
+	Wed,  1 Oct 2025 11:56:58 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=listout.xyz; s=MBO0001;
-	t=1759312600;
+	t=1759312618;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=YZAuF+EBwynVPrSFcy+C7ZyNzvXJyx6NhxkrvAlXADY=;
-	b=kvmv4k3DWz3QHJwM/6VkxaPyOCg+rLUyR+GvkOp/0Qf6II5evj5XTY8vdr7c2Shb1o+5YK
-	TLaknGgeAOq3GQklqr2vS6S6Ge45jH8krDQgm7wUKz0p8mM/vC9yk8DQyZtkEsJ9TwPhKc
-	rs1MxQXljSySIDWfOGQG5BSPjiOdfTKnBMlD3f7XJaTSk4hpTcqiS4niVTY3YL+oxWahVq
-	gjiq9/FP9mBE2czx4B8opp78OMZ/79oUBnvNBMBvpAHbDmLRo/RqYhZyCfKZsHR5zGh/Ep
-	xg+r9FWLMmoMIRUsF9WCe2l94FzLIBuB/GGV8F8zXEy9V8Cqm1RX6XCUasn+Hg==
+	bh=mFOt7Q6Yh4zU6HGqC4KBvS7uM2NDq7KoM7BsVGIWIDU=;
+	b=OPaM3tXxwqFYeforC7OSLfoe/1PgSh+M/aTg91Y5lVIqrdZ9ek6cvWUBeZmiOPZYs/PU/5
+	S5VLqHOdIOa95yPe1isUIonMsGV+Gjmr9TdzK4MrziRzgcDYqSjVV/iLXa+7nUFEJ3o+17
+	jvKSHGCF37sET/Ab9jBb1Ypp0vJ2KaeOCjMKzFPWbjnndxiNep7BDC+H3goBjTurrAh8Mh
+	w0jF1QsacIW2C73/SeLFOD0kpvB2aw4RWmvbhQhuvQavYCO3awMe9FBj78DoG8hBJDxUt+
+	1WVoF7gpqkySf/X+HOKLdPx2skzxR334X03l81GflKkAJ1kKUL6YJEuch5zbxw==
 From: Brahmajit Das <listout@listout.xyz>
 To: syzbot+d36d5ae81e1b0a53ef58@syzkaller.appspotmail.com
 Cc: andrii@kernel.org,
@@ -52,11 +52,12 @@ Cc: andrii@kernel.org,
 	syzkaller-bugs@googlegroups.com,
 	yonghong.song@linux.dev,
 	kafai.wan@linux.dev
-Subject: [PATCH v3 0/2] bpf: Fix verifier crash on BPF_NEG with pointer register
-Date: Wed,  1 Oct 2025 15:26:11 +0530
-Message-ID: <20251001095613.267475-1-listout@listout.xyz>
-In-Reply-To: <68d26227.a70a0220.1b52b.02a4.GAE@google.com>
+Subject: [PATCH v3 2/2] selftests/bpf: Add test for BPF_NEG alu on CONST_PTR_TO_MAP
+Date: Wed,  1 Oct 2025 15:26:13 +0530
+Message-ID: <20251001095613.267475-3-listout@listout.xyz>
+In-Reply-To: <20251001095613.267475-1-listout@listout.xyz>
 References: <68d26227.a70a0220.1b52b.02a4.GAE@google.com>
+ <20251001095613.267475-1-listout@listout.xyz>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -65,24 +66,46 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This patch fixes a crash in the BPF verifier triggered when the BPF_NEG
-operation is applied to a pointer-typed register. The verifier now
-checks that the destination register is not a pointer before performing
-the operation.
+From: KaFai Wan <kafai.wan@linux.dev>
 
-Tested with syzkaller reproducer and new BPF sefltest.
-Closes: https://syzkaller.appspot.com/bug?extid=d36d5ae81e1b0a53ef58
+Add a test case for BPF_NEG operation on CONST_PTR_TO_MAP. Tests if
+BPF_NEG operation on map_ptr is rejected in unprivileged mode and is a
+scalar value and do not trigger Oops in privileged mode.
 
-Brahmajit Das (1):
-  bpf: Skip scalar adjustment for BPF_NEG if dst is a pointer
-
-KaFai Wan (1):
-  selftests/bpf: Add test for BPF_NEG alu on CONST_PTR_TO_MAP
-
- kernel/bpf/verifier.c                          |  3 ++-
+Signed-off-by: KaFai Wan <kafai.wan@linux.dev>
+---
  .../bpf/progs/verifier_value_illegal_alu.c     | 18 ++++++++++++++++++
- 2 files changed, 20 insertions(+), 1 deletion(-)
+ 1 file changed, 18 insertions(+)
 
+diff --git a/tools/testing/selftests/bpf/progs/verifier_value_illegal_alu.c b/tools/testing/selftests/bpf/progs/verifier_value_illegal_alu.c
+index a9ab37d3b9e2..dcaab61a11a0 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_value_illegal_alu.c
++++ b/tools/testing/selftests/bpf/progs/verifier_value_illegal_alu.c
+@@ -146,6 +146,24 @@ l0_%=:	exit;						\
+ 	: __clobber_all);
+ }
+ 
++SEC("socket")
++__description("map_ptr illegal alu op, map_ptr = -map_ptr")
++__failure __msg("R0 invalid mem access 'scalar'")
++__failure_unpriv __msg_unpriv("R0 pointer arithmetic prohibited")
++__flag(BPF_F_ANY_ALIGNMENT)
++__naked void map_ptr_illegal_alu_op(void)
++{
++	asm volatile ("					\
++	r0 = %[map_hash_48b] ll;			\
++	r0 = -r0;					\
++	r1 = 22;					\
++	*(u64*)(r0 + 0) = r1;				\
++	exit;						\
++"	:
++	: __imm_addr(map_hash_48b)
++	: __clobber_all);
++}
++
+ SEC("flow_dissector")
+ __description("flow_keys illegal alu op with variable offset")
+ __failure __msg("R7 pointer arithmetic on flow_keys prohibited")
 -- 
 2.51.0
 
