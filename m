@@ -1,62 +1,62 @@
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C63A729D270
-	for <bpf@vger.kernel.org>; Thu,  2 Oct 2025 22:54:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E2DF2C0276
+	for <bpf@vger.kernel.org>; Thu,  2 Oct 2025 22:54:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759445647; cv=none; b=PAurfVdzjjQ+S6a4SzpYMmul0+bK4Xnwx3QHGooy7gpt86/jpq/RU1bt3pZT336hLLYGSghwSpra/acrH3MifrxbDDfcpCh0+hmWVOciwjOKdTZbBlrOGr8uxtKlvX1TFuglPhQxN6XyadMQ3E+iWSXu4qb+7mT53XBiHLzE3Wc=
+	t=1759445648; cv=none; b=fPJFdJv4eF+2Jfz9+HG802iiGIKpQs67ev6y+5f4U/rXZqjvuu8UgPXNlRe6Kr016EJ+BF0V99wqjNB5Db9gfApm44kqr3HfKwxSUmlLv1JdJCA7cN6sEfG3MOiFNLS6cT79y8ZiAPkOixVI9Fm5EFq9r6uR8cpZNCUhIh5d8XE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759445647; c=relaxed/simple;
-	bh=pLrfMiel/PhVN/dHv7/eoW7k7UUe8P0ttl/K1LJbfQo=;
+	s=arc-20240116; t=1759445648; c=relaxed/simple;
+	bh=zAQ5ubKPKove2VdF9p5kOqbb5Ij41CZ9vyaqNg8m5vk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=oadHPTzPhQdtd5YrkUGlaIypfpMXWV0cPKaCHB1SJxWcU8JwimeQwtf0dzR+0Wt8z7yF3wa+/VEUJLqP71XxxIisTjvUvj6bTlMUrYxubIThaLHLNjLpZ5HCm24wbKZdf+pY0vZhDfk0MbBGUyyRjs3qQPkTwcXprwj7Zsvvq5c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BxQlQHkB; arc=none smtp.client-ip=209.85.210.170
+	 MIME-Version; b=bbLO9OGCBigAKwsPmpVwibnhts1BMmIoGl+chzf9jklch1uZk3PrYDK6DCEySmp1BR7Z5mEIT91ceYji+L/VWIkrmEvjkJnlL0Qcnk9ZCFDqhqPZZ7r8U36Y59jgecD3Z6TuYpmh58EiTdG8JMGzW8ArZRfTrvqsYugbnYH9s9o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RdCW0YzM; arc=none smtp.client-ip=209.85.216.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BxQlQHkB"
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-781db5068b8so1419353b3a.0
-        for <bpf@vger.kernel.org>; Thu, 02 Oct 2025 15:54:04 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RdCW0YzM"
+Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-3304dd2f119so1355107a91.2
+        for <bpf@vger.kernel.org>; Thu, 02 Oct 2025 15:54:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1759445644; x=1760050444; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1759445646; x=1760050446; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Xw2zcqzYzgPbtxgPVOwcUHl0DW+HEXkaLeobcAu8rUY=;
-        b=BxQlQHkBifgxB5jRovGz01Ew3wqRB4bOYEKEUDZ5Svi8ky2tC4jxS6S++itapFCKTr
-         rbJFLis5IC3AfO6j3WZRkJNFr25ZwA3wG/I1swUgsvaiePKsYf92bsWbL/87cujSP44z
-         ueWiKR35nRRpddmKGlyxOdJgOSAZgCPRcbO19A0nIZWuYnGHKGpNSrWUuSCxieW8yyeN
-         cZs1C43MIefQVbMNWdWJNQeyElgz9A3BtcfMUkxqTDLkBLGW52qCF5ccVXh1IsV0vucD
-         Su9AUPcpZf6QFrlWeIfTfTYOZMqQSuppTymAkCqcVG2wLsZlP1s8FoWVlQ1VAA/WcZbv
-         WM2A==
+        bh=1rU8XxuS09On1+d2XIUmC4XcClm0Yd0oYj9m+pQryRI=;
+        b=RdCW0YzMcTAVZSiqrWq4k0TZgyw3wrxKyPlUoJ6NTPtV6H9XjNG5orDWW9lxPEANT2
+         Nxy/hXZvtiVjZwv1hBSp/YrLntB4BXXhBtb6n+drjUeH8MMmbUcYv4qaM27IWK0EDzOM
+         p+8EcESxVQQnm8SOxCfI89tyCwSnoIYY1JzdrYKld4WEY7IYNcrM77JYb6ugnecqN8ju
+         +GLO4W8euUJjKQ4wHRSY6Ru5NsawPfLyEuBq8N0XPxFdLWr9VLxRU5Zs5QdKiVsoWNtG
+         e7trB6U2zsb7IZ+1Uop0Q+2zgL4YSsvA4l7hNrJOGkhFq191bW4IZkzPIzDwWcs0TSKo
+         FXaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759445644; x=1760050444;
+        d=1e100.net; s=20230601; t=1759445646; x=1760050446;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Xw2zcqzYzgPbtxgPVOwcUHl0DW+HEXkaLeobcAu8rUY=;
-        b=IJ2q2TFockh7wb9Q2KOlVEYWzZtmoj07+I73iahhnVTzpnsLbu8CE7hu6EHccgEjsf
-         MuRTF4t8/ql5DqC2cKKoaSgf7G+amMEg+oqhVobAw9ZUa5asK7tx96zmY+xpI2vnRjQG
-         0Ry3/BSLZ+D6c0g9CtjZUHugiipq+Y+IyVB1XZ56vCS6zJ7/UG01iA8pKw8+mVBLhjPu
-         ogZJNJuSdCky9LmnhH38mTWADVOXrv8SuYCLjyx69BYB296bmGN0lLwFYrjyX8mBRPik
-         1tbLOHG3MGme+9DiezE5DJXY6s8xUfuXgANX9eyIy/4OqGN5jorNNG/YOCG9Rp+9UbYZ
-         bvRQ==
-X-Gm-Message-State: AOJu0Yy4SL9nbvoh1eUPUtjfqT/4WhBpIh56j/E9BZv/q++ejzDHOIzv
-	4JBA1Q/j1waJT7HcdCTOlk65uHJXwyygFrGtzG8KpZ2/UPa6d03nDetpzO34kA==
-X-Gm-Gg: ASbGnctX6e20nTFjyALtLv2FwN6yvaghuoXDUiHyycEeJVIHPgqh7zS3hrXJTahL9sZ
-	/FrzMcGx5BpfhOZ1Z47xiRPncAm8/Vssn3nMfaDnXp2Qk0lRpGoH1SPfWSn29LjCDXWZbzA7dVZ
-	qaqn5scHGGyOyGIzt6L0voliB50itbwnET/I2BgIINxObeMh7OQIH2o+839G0GBFhW75F8hFnZl
-	E/tF4OSLj5vO+Iy/lQDL6yk6/jLCUwTu1RHV5srCOHGef8OEizPtqaxec5mtRRgGtWR5PWPgT4b
-	celBuBGhH8D6s0IthQkWAXkNyEfMEXM1UZUcSJvNR9M51IwIGSQKr+4UXxmuVAun3MdU1V6iihd
-	/tO02VLq+yM4iDxDhpYONuzvnlMj3xdvGLJgTinpTC4fKeKfD
-X-Google-Smtp-Source: AGHT+IGE6H90hATwcwhEHWF66vakZM7TstkTfiXkNMSeZj0ze+O1JghlUpP0IxXtm75WzWKqsVd79A==
-X-Received: by 2002:a17:90b:1a87:b0:334:3286:8fe2 with SMTP id 98e67ed59e1d1-339c277fabamr1150302a91.10.1759445643787;
-        Thu, 02 Oct 2025 15:54:03 -0700 (PDT)
-Received: from localhost ([2a03:2880:ff:1d::])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-339c4924c47sm142001a91.0.2025.10.02.15.54.03
+        bh=1rU8XxuS09On1+d2XIUmC4XcClm0Yd0oYj9m+pQryRI=;
+        b=LUMlDuasVP9BM4n/GM7dGYrhC6W2j2IJJx2gI/nHZdZAybR7BW+Vs1v4wbmj0OCPtV
+         U8WkaMWoSoBPBb1i1++BAw5U/r3qYOX99U+ujOde+3Tc3bUA3lLPFiqW+VAcCxVS9tGT
+         GQWGHIq9+/e+HIfIBmccfdlsDeRhM/oPJzDhX6Yx1UkjMeDksu627kQN6P3FbDjsb1+I
+         O+48qf9ytdWw5y3AgCZCI2VUsgfE0oASZE48Jkf4Jwn/89cyVx2z0ha260wLBUzmQuxI
+         P6wow8KgCryZKhvU65ZdSNyb2ZKZa6L8vMbxgP5AHbYpYF50ga/d8zt861zq8WvdfGDw
+         hMXA==
+X-Gm-Message-State: AOJu0YyJs+gExJss0BVP3B5TbiSQ1RPlBwC8vby/6pD2BQ4ozDoS0N0s
+	f0i+rpsiUaszEZ/6iwc44RPf7hsuVZnxZK/K1a3myWEA2kgrMgMJUkYI74FJag==
+X-Gm-Gg: ASbGnct64qIWX25VVhuecDN2bV3U7bHoSJv7scDqWqMLqNTYeVFt+m+4FHFys8zfduY
+	D8bmFdEw/z+zbC7ks1tC92FfyVjrkJ1kwPlBBVeJZi6Vtk2HauZMvro6tOLRjGa1ome7OZORLSV
+	kbBpG51vhzcF2cX5pKaZKgnpPeC10V7Bhv3mqPAijCkgxqV/b82CKpp3HIaNbMmABOcLShDxE4F
+	xhvLKhdMDXl2PzfWLsBlnIL2RilxjJZyObCDzAwsFqKQjMXUsT8E5K4kLLCx0H+HPlrO23X50WY
+	HfZdE04oBhkVh/rPH+DioqL88ugh5WB+KBzJ6WRszmutLe9HZu/W0asMQza7tUD/i3oYHa71+7v
+	TSWXNEKqagx/7C+Ro55uNsLn5rTMHkgyRoCpRQQ==
+X-Google-Smtp-Source: AGHT+IHqR6H6hGlhBIo+llhw/Xp62JQQganbeUcGmSTUmxj07G0xPfMfOfCq/hwVCYGyRadAYliVeA==
+X-Received: by 2002:a17:90b:1e10:b0:32e:6019:5d19 with SMTP id 98e67ed59e1d1-339c27bf6c3mr944772a91.34.1759445645587;
+        Thu, 02 Oct 2025 15:54:05 -0700 (PDT)
+Received: from localhost ([2a03:2880:ff:5e::])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-339a6ebe5f2sm5955236a91.11.2025.10.02.15.54.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Oct 2025 15:54:03 -0700 (PDT)
+        Thu, 02 Oct 2025 15:54:05 -0700 (PDT)
 From: Amery Hung <ameryhung@gmail.com>
 To: bpf@vger.kernel.org
 Cc: netdev@vger.kernel.org,
@@ -71,9 +71,9 @@ Cc: netdev@vger.kernel.org,
 	haoluo@google.com,
 	ameryhung@gmail.com,
 	kernel-team@meta.com
-Subject: [RFC PATCH bpf-next v2 07/12] bpf: Remove task local storage percpu counter
-Date: Thu,  2 Oct 2025 15:53:46 -0700
-Message-ID: <20251002225356.1505480-8-ameryhung@gmail.com>
+Subject: [RFC PATCH bpf-next v2 09/12] bpf: Remove unused percpu counter from bpf_local_storage_map_free
+Date: Thu,  2 Oct 2025 15:53:48 -0700
+Message-ID: <20251002225356.1505480-10-ameryhung@gmail.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251002225356.1505480-1-ameryhung@gmail.com>
 References: <20251002225356.1505480-1-ameryhung@gmail.com>
@@ -85,305 +85,113 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The percpu counter in task local storage is no longer needed as the
-underlying bpf_local_storage can now handle deadlock with the help of
-rqspinlock. Remove the percpu counter and related migrate_{disable,
-enable}.
-
-Since the percpu counter is removed, merge back bpf_task_storage_get()
-and bpf_task_storage_get_recur(). This will allow the bpf syscalls and
-helpers to run concurrently on the same CPU, removing the spurious
--EBUSY error. bpf_task_storage_get(..., F_CREATE) will now always
-succeed with enough free memory unless being called recursively.
+Percpu locks have been removed from cgroup and task local storage. Now
+that all local storage no longer use percpu variables as locks preventing
+recursion, there is no need to pass them to bpf_local_storage_map_free().
+Remove the argument from the function.
 
 Signed-off-by: Amery Hung <ameryhung@gmail.com>
 ---
- kernel/bpf/bpf_task_storage.c | 150 ++++------------------------------
- kernel/bpf/helpers.c          |   4 -
- 2 files changed, 18 insertions(+), 136 deletions(-)
+ include/linux/bpf_local_storage.h | 3 +--
+ kernel/bpf/bpf_cgrp_storage.c     | 2 +-
+ kernel/bpf/bpf_inode_storage.c    | 2 +-
+ kernel/bpf/bpf_local_storage.c    | 7 +------
+ kernel/bpf/bpf_task_storage.c     | 2 +-
+ net/core/bpf_sk_storage.c         | 2 +-
+ 6 files changed, 6 insertions(+), 12 deletions(-)
 
+diff --git a/include/linux/bpf_local_storage.h b/include/linux/bpf_local_storage.h
+index 2a0aae5168fa..5888e012dfe3 100644
+--- a/include/linux/bpf_local_storage.h
++++ b/include/linux/bpf_local_storage.h
+@@ -170,8 +170,7 @@ bpf_local_storage_lookup(struct bpf_local_storage *local_storage,
+ void bpf_local_storage_destroy(struct bpf_local_storage *local_storage);
+ 
+ void bpf_local_storage_map_free(struct bpf_map *map,
+-				struct bpf_local_storage_cache *cache,
+-				int __percpu *busy_counter);
++				struct bpf_local_storage_cache *cache);
+ 
+ int bpf_local_storage_map_check_btf(const struct bpf_map *map,
+ 				    const struct btf *btf,
+diff --git a/kernel/bpf/bpf_cgrp_storage.c b/kernel/bpf/bpf_cgrp_storage.c
+index 4f9cfa032870..a57abb2956d5 100644
+--- a/kernel/bpf/bpf_cgrp_storage.c
++++ b/kernel/bpf/bpf_cgrp_storage.c
+@@ -119,7 +119,7 @@ static struct bpf_map *cgroup_storage_map_alloc(union bpf_attr *attr)
+ 
+ static void cgroup_storage_map_free(struct bpf_map *map)
+ {
+-	bpf_local_storage_map_free(map, &cgroup_cache, NULL);
++	bpf_local_storage_map_free(map, &cgroup_cache);
+ }
+ 
+ /* *gfp_flags* is a hidden argument provided by the verifier */
+diff --git a/kernel/bpf/bpf_inode_storage.c b/kernel/bpf/bpf_inode_storage.c
+index cedc99184dad..470f4b02c79e 100644
+--- a/kernel/bpf/bpf_inode_storage.c
++++ b/kernel/bpf/bpf_inode_storage.c
+@@ -184,7 +184,7 @@ static struct bpf_map *inode_storage_map_alloc(union bpf_attr *attr)
+ 
+ static void inode_storage_map_free(struct bpf_map *map)
+ {
+-	bpf_local_storage_map_free(map, &inode_cache, NULL);
++	bpf_local_storage_map_free(map, &inode_cache);
+ }
+ 
+ const struct bpf_map_ops inode_storage_map_ops = {
+diff --git a/kernel/bpf/bpf_local_storage.c b/kernel/bpf/bpf_local_storage.c
+index 572956e2a72d..3ce4dd7e7fc6 100644
+--- a/kernel/bpf/bpf_local_storage.c
++++ b/kernel/bpf/bpf_local_storage.c
+@@ -917,8 +917,7 @@ bpf_local_storage_map_alloc(union bpf_attr *attr,
+ }
+ 
+ void bpf_local_storage_map_free(struct bpf_map *map,
+-				struct bpf_local_storage_cache *cache,
+-				int __percpu *busy_counter)
++				struct bpf_local_storage_cache *cache)
+ {
+ 	struct bpf_local_storage_map_bucket *b;
+ 	struct bpf_local_storage_elem *selem;
+@@ -951,11 +950,7 @@ void bpf_local_storage_map_free(struct bpf_map *map,
+ 		while ((selem = hlist_entry_safe(
+ 				rcu_dereference_raw(hlist_first_rcu(&b->list)),
+ 				struct bpf_local_storage_elem, map_node))) {
+-			if (busy_counter)
+-				this_cpu_inc(*busy_counter);
+ 			while (bpf_selem_unlink(selem, true));
+-			if (busy_counter)
+-				this_cpu_dec(*busy_counter);
+ 			cond_resched_rcu();
+ 		}
+ 		rcu_read_unlock();
 diff --git a/kernel/bpf/bpf_task_storage.c b/kernel/bpf/bpf_task_storage.c
-index ab902364ac23..dd858226ada2 100644
+index dd858226ada2..4d53aebe6784 100644
 --- a/kernel/bpf/bpf_task_storage.c
 +++ b/kernel/bpf/bpf_task_storage.c
-@@ -20,29 +20,6 @@
- 
- DEFINE_BPF_STORAGE_CACHE(task_cache);
- 
--static DEFINE_PER_CPU(int, bpf_task_storage_busy);
--
--static void bpf_task_storage_lock(void)
--{
--	cant_migrate();
--	this_cpu_inc(bpf_task_storage_busy);
--}
--
--static void bpf_task_storage_unlock(void)
--{
--	this_cpu_dec(bpf_task_storage_busy);
--}
--
--static bool bpf_task_storage_trylock(void)
--{
--	cant_migrate();
--	if (unlikely(this_cpu_inc_return(bpf_task_storage_busy) != 1)) {
--		this_cpu_dec(bpf_task_storage_busy);
--		return false;
--	}
--	return true;
--}
--
- static struct bpf_local_storage __rcu **task_storage_ptr(void *owner)
- {
- 	struct task_struct *task = owner;
-@@ -70,17 +47,15 @@ void bpf_task_storage_free(struct task_struct *task)
- {
- 	struct bpf_local_storage *local_storage;
- 
--	rcu_read_lock_dont_migrate();
-+	rcu_read_lock();
- 
- 	local_storage = rcu_dereference(task->bpf_storage);
- 	if (!local_storage)
- 		goto out;
- 
--	bpf_task_storage_lock();
- 	bpf_local_storage_destroy(local_storage);
--	bpf_task_storage_unlock();
- out:
--	rcu_read_unlock_migrate();
-+	rcu_read_unlock();
- }
- 
- static void *bpf_pid_task_storage_lookup_elem(struct bpf_map *map, void *key)
-@@ -106,9 +81,7 @@ static void *bpf_pid_task_storage_lookup_elem(struct bpf_map *map, void *key)
- 		goto out;
- 	}
- 
--	bpf_task_storage_lock();
- 	sdata = task_storage_lookup(task, map, true);
--	bpf_task_storage_unlock();
- 	put_pid(pid);
- 	return sdata ? sdata->data : NULL;
- out:
-@@ -143,11 +116,9 @@ static long bpf_pid_task_storage_update_elem(struct bpf_map *map, void *key,
- 		goto out;
- 	}
- 
--	bpf_task_storage_lock();
- 	sdata = bpf_local_storage_update(
- 		task, (struct bpf_local_storage_map *)map, value, map_flags,
- 		true, GFP_ATOMIC);
--	bpf_task_storage_unlock();
- 
- 	err = PTR_ERR_OR_ZERO(sdata);
- out:
-@@ -155,8 +126,7 @@ static long bpf_pid_task_storage_update_elem(struct bpf_map *map, void *key,
- 	return err;
- }
- 
--static int task_storage_delete(struct task_struct *task, struct bpf_map *map,
--			       bool nobusy)
-+static int task_storage_delete(struct task_struct *task, struct bpf_map *map)
- {
- 	struct bpf_local_storage_data *sdata;
- 
-@@ -164,9 +134,6 @@ static int task_storage_delete(struct task_struct *task, struct bpf_map *map,
- 	if (!sdata)
- 		return -ENOENT;
- 
--	if (!nobusy)
--		return -EBUSY;
--
- 	return bpf_selem_unlink(SELEM(sdata), false);
- }
- 
-@@ -192,111 +159,50 @@ static long bpf_pid_task_storage_delete_elem(struct bpf_map *map, void *key)
- 		goto out;
- 	}
- 
--	bpf_task_storage_lock();
--	err = task_storage_delete(task, map, true);
--	bpf_task_storage_unlock();
-+	err = task_storage_delete(task, map);
- out:
- 	put_pid(pid);
- 	return err;
- }
- 
--/* Called by bpf_task_storage_get*() helpers */
--static void *__bpf_task_storage_get(struct bpf_map *map,
--				    struct task_struct *task, void *value,
--				    u64 flags, gfp_t gfp_flags, bool nobusy)
-+/* *gfp_flags* is a hidden argument provided by the verifier */
-+BPF_CALL_5(bpf_task_storage_get, struct bpf_map *, map, struct task_struct *,
-+	   task, void *, value, u64, flags, gfp_t, gfp_flags)
- {
- 	struct bpf_local_storage_data *sdata;
- 
--	sdata = task_storage_lookup(task, map, nobusy);
-+	WARN_ON_ONCE(!bpf_rcu_lock_held());
-+	if (flags & ~BPF_LOCAL_STORAGE_GET_F_CREATE || !task)
-+		return (unsigned long)NULL;
-+
-+	sdata = task_storage_lookup(task, map, true);
- 	if (sdata)
--		return sdata->data;
-+		return (unsigned long)sdata->data;
- 
- 	/* only allocate new storage, when the task is refcounted */
- 	if (refcount_read(&task->usage) &&
--	    (flags & BPF_LOCAL_STORAGE_GET_F_CREATE) && nobusy) {
-+	    (flags & BPF_LOCAL_STORAGE_GET_F_CREATE)) {
- 		sdata = bpf_local_storage_update(
- 			task, (struct bpf_local_storage_map *)map, value,
- 			BPF_NOEXIST, false, gfp_flags);
--		return IS_ERR(sdata) ? NULL : sdata->data;
-+		return IS_ERR(sdata) ? (unsigned long)NULL : (unsigned long)sdata->data;
- 	}
- 
--	return NULL;
--}
--
--/* *gfp_flags* is a hidden argument provided by the verifier */
--BPF_CALL_5(bpf_task_storage_get_recur, struct bpf_map *, map, struct task_struct *,
--	   task, void *, value, u64, flags, gfp_t, gfp_flags)
--{
--	bool nobusy;
--	void *data;
--
--	WARN_ON_ONCE(!bpf_rcu_lock_held());
--	if (flags & ~BPF_LOCAL_STORAGE_GET_F_CREATE || !task)
--		return (unsigned long)NULL;
--
--	nobusy = bpf_task_storage_trylock();
--	data = __bpf_task_storage_get(map, task, value, flags,
--				      gfp_flags, nobusy);
--	if (nobusy)
--		bpf_task_storage_unlock();
--	return (unsigned long)data;
--}
--
--/* *gfp_flags* is a hidden argument provided by the verifier */
--BPF_CALL_5(bpf_task_storage_get, struct bpf_map *, map, struct task_struct *,
--	   task, void *, value, u64, flags, gfp_t, gfp_flags)
--{
--	void *data;
--
--	WARN_ON_ONCE(!bpf_rcu_lock_held());
--	if (flags & ~BPF_LOCAL_STORAGE_GET_F_CREATE || !task)
--		return (unsigned long)NULL;
--
--	bpf_task_storage_lock();
--	data = __bpf_task_storage_get(map, task, value, flags,
--				      gfp_flags, true);
--	bpf_task_storage_unlock();
--	return (unsigned long)data;
--}
--
--BPF_CALL_2(bpf_task_storage_delete_recur, struct bpf_map *, map, struct task_struct *,
--	   task)
--{
--	bool nobusy;
--	int ret;
--
--	WARN_ON_ONCE(!bpf_rcu_lock_held());
--	if (!task)
--		return -EINVAL;
--
--	nobusy = bpf_task_storage_trylock();
--	/* This helper must only be called from places where the lifetime of the task
--	 * is guaranteed. Either by being refcounted or by being protected
--	 * by an RCU read-side critical section.
--	 */
--	ret = task_storage_delete(task, map, nobusy);
--	if (nobusy)
--		bpf_task_storage_unlock();
--	return ret;
-+	return (unsigned long)NULL;
- }
- 
- BPF_CALL_2(bpf_task_storage_delete, struct bpf_map *, map, struct task_struct *,
- 	   task)
- {
--	int ret;
--
- 	WARN_ON_ONCE(!bpf_rcu_lock_held());
- 	if (!task)
- 		return -EINVAL;
- 
--	bpf_task_storage_lock();
- 	/* This helper must only be called from places where the lifetime of the task
- 	 * is guaranteed. Either by being refcounted or by being protected
- 	 * by an RCU read-side critical section.
- 	 */
--	ret = task_storage_delete(task, map, true);
--	bpf_task_storage_unlock();
--	return ret;
-+	return task_storage_delete(task, map);
- }
- 
- static int notsupp_get_next_key(struct bpf_map *map, void *key, void *next_key)
-@@ -311,7 +217,7 @@ static struct bpf_map *task_storage_map_alloc(union bpf_attr *attr)
+@@ -217,7 +217,7 @@ static struct bpf_map *task_storage_map_alloc(union bpf_attr *attr)
  
  static void task_storage_map_free(struct bpf_map *map)
  {
--	bpf_local_storage_map_free(map, &task_cache, &bpf_task_storage_busy);
-+	bpf_local_storage_map_free(map, &task_cache, NULL);
+-	bpf_local_storage_map_free(map, &task_cache, NULL);
++	bpf_local_storage_map_free(map, &task_cache);
  }
  
  BTF_ID_LIST_GLOBAL_SINGLE(bpf_local_storage_map_btf_id, struct, bpf_local_storage_map)
-@@ -330,17 +236,6 @@ const struct bpf_map_ops task_storage_map_ops = {
- 	.map_owner_storage_ptr = task_storage_ptr,
- };
+diff --git a/net/core/bpf_sk_storage.c b/net/core/bpf_sk_storage.c
+index 7b3d44667cee..7037b841cf11 100644
+--- a/net/core/bpf_sk_storage.c
++++ b/net/core/bpf_sk_storage.c
+@@ -62,7 +62,7 @@ void bpf_sk_storage_free(struct sock *sk)
  
--const struct bpf_func_proto bpf_task_storage_get_recur_proto = {
--	.func = bpf_task_storage_get_recur,
--	.gpl_only = false,
--	.ret_type = RET_PTR_TO_MAP_VALUE_OR_NULL,
--	.arg1_type = ARG_CONST_MAP_PTR,
--	.arg2_type = ARG_PTR_TO_BTF_ID_OR_NULL,
--	.arg2_btf_id = &btf_tracing_ids[BTF_TRACING_TYPE_TASK],
--	.arg3_type = ARG_PTR_TO_MAP_VALUE_OR_NULL,
--	.arg4_type = ARG_ANYTHING,
--};
--
- const struct bpf_func_proto bpf_task_storage_get_proto = {
- 	.func = bpf_task_storage_get,
- 	.gpl_only = false,
-@@ -352,15 +247,6 @@ const struct bpf_func_proto bpf_task_storage_get_proto = {
- 	.arg4_type = ARG_ANYTHING,
- };
+ static void bpf_sk_storage_map_free(struct bpf_map *map)
+ {
+-	bpf_local_storage_map_free(map, &sk_cache, NULL);
++	bpf_local_storage_map_free(map, &sk_cache);
+ }
  
--const struct bpf_func_proto bpf_task_storage_delete_recur_proto = {
--	.func = bpf_task_storage_delete_recur,
--	.gpl_only = false,
--	.ret_type = RET_INTEGER,
--	.arg1_type = ARG_CONST_MAP_PTR,
--	.arg2_type = ARG_PTR_TO_BTF_ID_OR_NULL,
--	.arg2_btf_id = &btf_tracing_ids[BTF_TRACING_TYPE_TASK],
--};
--
- const struct bpf_func_proto bpf_task_storage_delete_proto = {
- 	.func = bpf_task_storage_delete,
- 	.gpl_only = false,
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index c9fab9a356df..1d83f29a8986 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -2040,12 +2040,8 @@ bpf_base_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- 		return &bpf_get_cgroup_classid_curr_proto;
- #endif
- 	case BPF_FUNC_task_storage_get:
--		if (bpf_prog_check_recur(prog))
--			return &bpf_task_storage_get_recur_proto;
- 		return &bpf_task_storage_get_proto;
- 	case BPF_FUNC_task_storage_delete:
--		if (bpf_prog_check_recur(prog))
--			return &bpf_task_storage_delete_recur_proto;
- 		return &bpf_task_storage_delete_proto;
- 	default:
- 		break;
+ static struct bpf_map *bpf_sk_storage_map_alloc(union bpf_attr *attr)
 -- 
 2.47.3
 
