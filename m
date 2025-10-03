@@ -1,95 +1,177 @@
-Received: from mx-rz-3.rrze.uni-erlangen.de (mx-rz-3.rrze.uni-erlangen.de [131.188.11.22])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED41A204F93
-	for <bpf@vger.kernel.org>; Fri,  3 Oct 2025 20:07:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=131.188.11.22
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF08817A2E1
+	for <bpf@vger.kernel.org>; Fri,  3 Oct 2025 20:10:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759522024; cv=none; b=qz6dD+vWJ7yl04NgbYPyh5BzaUyyFr72+s18JzRMfXjQTLNeDk/u9aUlcwZA/tQvXvCW94m3INTOJpTRkmsuLqUtyC2IaHKGPUjLofpduDXSE7puhReFEBNr3Z5d+Qw1+gxkvdOoY5F8vkT3z1e57g6XM9GgVRzvj5bAE60c8Ww=
+	t=1759522256; cv=none; b=u/pSxdYkzwaD9bwvvxg8JASzevDkZV+k6qNPA/a1oO0P/L8/LKX6A+vFbsgiiVeoZlGHmILuBN4IeHek3GW/Z9uh6mFotSwfhRzV61KqyF5/iDJ8vjMum+La/4hhFXpcBR6+Z6nGDAMTFEuo9xC9gEFMuUwB0yVc/dl6WWw5ViQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759522024; c=relaxed/simple;
-	bh=TWxN4otPp0pz8coB2LWoyR1N8EqwEQNr9xccToEnb6c=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=uHyucJqAn9kQZdq9t+WNrTUi8CqyuO2Wu7fayDvIZDzd6GtmYII1gjMPT3IQR4z6VCga0Z0cRopYAB2Zk8C/bLi2wOJESSVNoVXsO/9NYYTf7ke0N+nJREe17onshugwlfZYvw+hvsVNEgRUO72xr2brS2a0f9N0H6JV7mCJdVw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fau.de; spf=pass smtp.mailfrom=fau.de; dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.b=BPdnfDUN; arc=none smtp.client-ip=131.188.11.22
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fau.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fau.de
+	s=arc-20240116; t=1759522256; c=relaxed/simple;
+	bh=urObtDD5oH34ww8s6lXaMMX/VbZQ/LzWAl2P1pfnF88=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=b6Hom1Z5/1028Eg30nqqkbJvtpkNJemb9S1TvxTarQ4gPvsL25HLftrnKWw8Y1KOkBdpV6zkA6z79GG2AellBjgTWz78DXZ/qk2fhwOBuTFsNtDZ7g0cKTFgBaU5Y92wp43b/Ljqm28TRVztGRhX4NVTJgTJs1Lf2OxndUBnetk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S933iWS3; arc=none smtp.client-ip=209.85.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.b="BPdnfDUN"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fau.de; s=fau-2021;
-	t=1759521596; bh=TWxN4otPp0pz8coB2LWoyR1N8EqwEQNr9xccToEnb6c=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From:To:CC:
-	 Subject;
-	b=BPdnfDUNarLqrW8zBDhTmlQ+HohuG16UUBvs9jWNjgLSMWxAiMYHvZqXYex6tZen0
-	 TDRtw1myRPKi2vzoBpDYVrZ+G1fR4CIt/mtIA5oesOiO01DDsEZiE8lQjeKxtUXC2z
-	 Txm54R4VoaR06QTI8RbWsOF9Fv6fKZH07iIfl2+m67bPqGP1DgNG26H2JuvGX1Li6W
-	 O7Tl/mVXIpcX+KMflMhCKFSBl7YgmV2lNdmEuHsSXkAIfLkhnqifcbpEWUvQJDaIJX
-	 tAhFeRK7V16hj4Nv2d1ixO4BrFzKr9w4MHd666WpKZdvuDuiCY3sXFR/uD/Q1onF9D
-	 KnPkP3LfoDr6Q==
-Received: from mx-rz-smart.rrze.uni-erlangen.de (mx-rz-smart.rrze.uni-erlangen.de [IPv6:2001:638:a000:1025::1e])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-rz-3.rrze.uni-erlangen.de (Postfix) with ESMTPS id 4cdfdm1dpMz1y2m;
-	Fri,  3 Oct 2025 21:59:56 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at boeck2.rrze.uni-erlangen.de (RRZE)
-X-RRZE-Flag: Not-Spam
-X-RRZE-Submit-IP: 2001:9e8:3625:e000:56ed:e747:251a:4bef
-Received: from localhost (unknown [IPv6:2001:9e8:3625:e000:56ed:e747:251a:4bef])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: U2FsdGVkX19XDJ+MJ108UTWpr1Qf5TKL+2wPO3kUVMI=)
-	by smtp-auth.uni-erlangen.de (Postfix) with ESMTPSA id 4cdfdj1F7Dz1y2V;
-	Fri,  3 Oct 2025 21:59:53 +0200 (CEST)
-From: Luis Gerhorst <luis.gerhorst@fau.de>
-To: Hengqi Chen <hengqi.chen@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>,  Andrii Nakryiko
- <andrii@kernel.org>,  Yonghong Song <yonghong.song@linux.dev>,  Eduard
- Zingerman <eddyz87@gmail.com>,  Tiezhu Yang <yangtiezhu@loongson.cn>,  bpf
- <bpf@vger.kernel.org>
-Subject: Re: Some unpriv verifier tests failed due to bpf_jit_bypass_spec_v1
-In-Reply-To: <CAEyhmHTvj4cDRfu1FXSEXmdCqyWfs3ehw5gtB9qJCrThuUy2Kw@mail.gmail.com>
-	(Hengqi Chen's message of "Tue, 23 Sep 2025 17:52:11 +0800")
-References: <CAEyhmHTvj4cDRfu1FXSEXmdCqyWfs3ehw5gtB9qJCrThuUy2Kw@mail.gmail.com>
-User-Agent: mu4e 1.12.12; emacs 30.2
-Date: Fri, 03 Oct 2025 21:59:52 +0200
-Message-ID: <878qhr69jb.fsf@fau.de>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S933iWS3"
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-46e4f2696bdso33519355e9.0
+        for <bpf@vger.kernel.org>; Fri, 03 Oct 2025 13:10:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1759522253; x=1760127053; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=b6mkwrJIdW6D/cUTCAA5qQestljE8ufXYwuKYNfHl5E=;
+        b=S933iWS31CMk8NO/h9qRRDxYDDdAQK+JQ1rhkfgHyO6+50o/N+BrLa2ZY4a3ph7s1a
+         oB8JDh5qNZGt+SuYxS9qoq8c8hIZYmdR1Qt7j2zBwzR2dbMx/j2Xz/edCH0mhLXGmAjU
+         9OvyIdGGXAlfFcNjRxN/dv5DNAkHYLW6MoXXI7g6CMXJYqEKOyUT9Y59IAVd+jhtAju+
+         +690G4YBSLUchqBsz8c1RNdxYbJf0cR4IyH3fiM/OEYHv6jWjxULzQACdN8QVyKnGqEB
+         J9GBwMLkjfYcG0j1dAFkaQvdh/cVRutaebfvzvzqcvASwozezsuM8LH6cHLPHxOCB74q
+         /J6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1759522253; x=1760127053;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=b6mkwrJIdW6D/cUTCAA5qQestljE8ufXYwuKYNfHl5E=;
+        b=slkLlhXSaoNh0ipru/cbPGCe4PeK5iartOpI0s/o8gsV84xdLmvxFUVp043OVKvlMV
+         lqeaXMVHpSnSKOmoHjF0JsKM2Tt1xV79LzduDe8b4STsUShIOvbCJhREE0PLU8KMqVcL
+         4Zo0X1GXNoVC6LTS/MzsI0JCGcJIXzvZk8RBxYvn/z9GGW809WYybkwoNJ7fTJSQhxNw
+         7ZywcN9uQE6ME+0fIlcombMvC3gLIZ/opQxGQ9bNvb9oeU5Hw8Q35c3XICYG3bvnDNlX
+         7vr7GhHQCSlT2Y7vN6xqmuVaiKcLo6DUVtVP+5Xre3ikCqxz/ZN4R1gCzdea70EUHJJM
+         gP9A==
+X-Gm-Message-State: AOJu0YwVmWt82eykX+oXx+hy8dA1PoGSdD4dolMwlAyh6ku32PUmxR9Q
+	rI6xQegqON141/LHWX8K2TeyWpAE4FwCEwJqRgH+Dm6wNC8r6Dnd8EPahYDzUKfGrXGZqcquyGZ
+	lavEswAu3zo/s1shSBYqrRngCJB1KPMs=
+X-Gm-Gg: ASbGncvV/CTv/0U733BXQTq21hG+fUo696tb7V6HkhFFUwWtTrTlRH1Yeytrt1TYxi/
+	SMiQqbzd7UqE/PuMGKY+i2KUezbnT60kfOhNuxBi+gtFXGbaoxKpGKZVIVYvmUbcjQXu6dR3fLq
+	9DK+ZSKkSim+ITdJpWkiIlQYcDQ/agX0Ml9VqDPUZkvUHIMkMWywO7y1jPK91snx8i8nC1fRuMJ
+	yga/RNMTPXNX7tZegnOZ+q9PmUBHK9cTiAbdDsW/OCX1R7SmID05IBJtw==
+X-Google-Smtp-Source: AGHT+IFqDuZ+vWbfoEIhaxC0rWSP/qcvvNTse4FyV6tA+cGlHyZd2dZtm/+8TV4zBQJ02wR5I6pDl2ioewubLELOmWk=
+X-Received: by 2002:a05:600c:3d90:b0:46e:3d5a:d15d with SMTP id
+ 5b1f17b1804b1-46e7114dea1mr29139365e9.26.1759522253048; Fri, 03 Oct 2025
+ 13:10:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20251003160416.585080-1-mykyta.yatsenko5@gmail.com> <20251003160416.585080-10-mykyta.yatsenko5@gmail.com>
+In-Reply-To: <20251003160416.585080-10-mykyta.yatsenko5@gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Fri, 3 Oct 2025 13:10:38 -0700
+X-Gm-Features: AS18NWBc_izJinUXPM9B5glQMsco_vARhL0YCAL3URrfnMcpBXtPJLiu97zuo88
+Message-ID: <CAADnVQ+o8Q3Xiq2K=UPXEqBy0snkHEhTDuhg3J1u_nnRCHk5Uw@mail.gmail.com>
+Subject: Re: [RFC PATCH v1 09/10] bpf: dispatch to sleepable file dynptr
+To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Martin Lau <kafai@meta.com>, 
+	Kernel Team <kernel-team@meta.com>, Eduard <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Mykyta Yatsenko <yatsenko@meta.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hengqi Chen <hengqi.chen@gmail.com> writes:
-
-> Some unpriv verifier tests (e.g. bounds_map_value_variant_2) failed
-> on LoongArch which implements bpf_jit_bypass_spec_v1().
+On Fri, Oct 3, 2025 at 9:04=E2=80=AFAM Mykyta Yatsenko
+<mykyta.yatsenko5@gmail.com> wrote:
 >
-> This is because some verifier paths do can_skip_alu_sanitation().
-> So for such cases, the priv/unpriv test cases will have the same
-> verifier error messages and the tests failed with unexpected error
-> messages.
+> From: Mykyta Yatsenko <yatsenko@meta.com>
 >
-> How can we fix them?
+> File dynptr reads may sleep when the requested folios are not in
+> the page cache. To avoid sleeping in non-sleepable contexts while still
+> supporting valid sleepable use, given that dynptrs are non-sleepable by
+> default, enable sleeping only when bpf_dynptr_from_file() is invoked
+> from a sleepable context.
+>
+> This change:
+>   * Introduces a sleepable constructor: bpf_dynptr_from_file_sleepable()
+>   * Detects whether the kfunc is called in a sleepable context and
+>   stores the result in bpf_insn_aux_data (kfunc_in_sleepable_ctx)
+>   * Rewrites bpf_dynptr_from_file() calls to the sleepable variant when
+>   kfunc_in_sleepable_ctx is set
+>
+> Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
+> ---
+>  include/linux/bpf.h          |  3 +++
+>  include/linux/bpf_verifier.h |  2 ++
+>  kernel/bpf/helpers.c         |  5 +++++
+>  kernel/bpf/verifier.c        | 12 +++++++++---
+>  4 files changed, 19 insertions(+), 3 deletions(-)
+>
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index bd70117b8e84..9da7460e078c 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -663,6 +663,9 @@ int map_check_no_btf(const struct bpf_map *map,
+>  bool bpf_map_meta_equal(const struct bpf_map *meta0,
+>                         const struct bpf_map *meta1);
+>
+> +int bpf_dynptr_from_file_sleepable(struct file *file, u32 flags,
+> +                                  struct bpf_dynptr *ptr__uninit);
+> +
+>  extern const struct bpf_map_ops bpf_map_offload_ops;
+>
+>  /* bpf_type_flag contains a set of flags that are applicable to the valu=
+es of
+> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+> index 4c497e839526..6078d5e9b535 100644
+> --- a/include/linux/bpf_verifier.h
+> +++ b/include/linux/bpf_verifier.h
+> @@ -581,6 +581,8 @@ struct bpf_insn_aux_data {
+>         u32 scc;
+>         /* registers alive before this instruction. */
+>         u16 live_regs_before;
+> +       /* kfunc is called in sleepable context */
+> +       bool kfunc_in_sleepable_ctx;
+>  };
+>
+>  #define MAX_USED_MAPS 64 /* max number of maps accessed by one eBPF prog=
+ram */
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index 4bba516599c7..f452e22333fe 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+> @@ -4288,6 +4288,11 @@ __bpf_kfunc int bpf_dynptr_from_file(struct file *=
+file, u32 flags, struct bpf_dy
+>         return make_file_dynptr(file, flags, MAY_NOT_SLEEP, (struct bpf_d=
+ynptr_kern *)ptr__uninit);
+>  }
+>
+> +int bpf_dynptr_from_file_sleepable(struct file *file, u32 flags, struct =
+bpf_dynptr *ptr__uninit)
+> +{
+> +       return make_file_dynptr(file, flags, MAY_SLEEP, (struct bpf_dynpt=
+r_kern *)ptr__uninit);
+> +}
+> +
+>  __bpf_kfunc int bpf_dynptr_file_discard(struct bpf_dynptr *dynptr)
+>  {
+>         struct bpf_dynptr_kern *ptr =3D (struct bpf_dynptr_kern *)dynptr;
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index aacefa3d0544..82762eab3f17 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -3105,7 +3105,8 @@ struct bpf_kfunc_btf_tab {
+>
+>  static unsigned long kfunc_call_imm(unsigned long func_addr, u32 func_id=
+);
+>
+> -static void specialize_kfunc(struct bpf_verifier_env *env, struct bpf_kf=
+unc_desc *desc);
+> +static void specialize_kfunc(struct bpf_verifier_env *env, struct bpf_kf=
+unc_desc *desc,
+> +                            int insn_idx);
+>
+>  static int kfunc_desc_cmp_by_id_off(const void *a, const void *b)
+>  {
+> @@ -13833,6 +13834,7 @@ static int check_kfunc_call(struct bpf_verifier_e=
+nv *env, struct bpf_insn *insn,
+>         insn_aux =3D &env->insn_aux_data[insn_idx];
+>
+>         insn_aux->is_iter_next =3D is_iter_next_kfunc(&meta);
+> +       insn_aux->kfunc_in_sleepable_ctx =3D in_sleepable(env);
 
-Please excuse the late reply.
-
-The most simple fix would be to add the missing '#ifdef SPEC_V1' to
-these tests, however, I anyway intend to send a new version of [1] which
-removes some of these errors altogether. The patch did not get merged
-with the rest of the series earlier because there was a merge conflict
-with another fix (now resolved).
-
-I ran the CI with bypass_spec_v1 set for x86 to reproduce your issue [2]
-and the patch fixes some of the tests as expected [3]. Can you confirm
-this is the same for LoongArch?
-
-Some test still fail because the '#ifdef SPEC_V1' is still missing for
-them. I will prepare a patch to resolve this.
-
-[1] https://lore.kernel.org/all/CAADnVQLC_zViaCs5Huu63Jr2oCx1NGY3f_VCkJhrKvqst7HL=g@mail.gmail.com/
-[2] https://github.com/kernel-patches/bpf/pull/9929
-[3] https://github.com/kernel-patches/bpf/pull/9927
+Let's use u8:1 bit instead of bool and combine with storage_get_func_atomic
+which seems to be the same intent.
