@@ -1,37 +1,37 @@
-Received: from mx-rz-2.rrze.uni-erlangen.de (mx-rz-2.rrze.uni-erlangen.de [131.188.11.21])
+Received: from mx-rz-1.rrze.uni-erlangen.de (mx-rz-1.rrze.uni-erlangen.de [131.188.11.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCC162343BE
-	for <bpf@vger.kernel.org>; Sun,  5 Oct 2025 10:42:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=131.188.11.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44EF635949
+	for <bpf@vger.kernel.org>; Sun,  5 Oct 2025 10:45:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=131.188.11.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759660925; cv=none; b=B6YcSSbJaixCAo2vNgUWO4LDU1hgbs/zLUekRAhOX0Q05awIC1G3PzogxF0W+ATNUd085lU7S/qgLfkTNF0DhgWjJGTJFR9dUKBjKXRIvOupoUUCJ0VDn1sOaI0R09iZdq0R88cZ4SKsIUcbH4WOC4EPnOenNmaMSB2vzicYvEA=
+	t=1759661116; cv=none; b=Y1uSR50l+2PwYu5JS0DSUQZp+aCsLVH8S48M1ejrlsmiaCu043CX5BRi9E4WdK570EMcFSqUraJRZ5jtX+OIy6+qWt5rsstmgvQZ8nQ0lBRzFMnJbHcnGlDZ4C5mHrU1H1tk0eY0ggdj5/o1NTLc0TsP/oOGDzx15p79/NsSm/Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759660925; c=relaxed/simple;
-	bh=ZQa/MIKFXOP4kj4c26LbMZuWz2ddzSFlLjEGAqPtIjU=;
+	s=arc-20240116; t=1759661116; c=relaxed/simple;
+	bh=RaEeNmedz8apFntNe4h0na+6oqupULgXN5lZyQSaJBQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=U2K+JDk2XYN+hex4wxwpvLaUHdQj0hj3/WLzt2bABvI0f8eKCboMZhPyvmK+IGX6ukTXKXVgtXA+s3P4QYUtCDLJXFOvdIjOf8zBnsHp5Ww0YPhUgjFkZCeS3Eqirkjz2C0w4orWQERweubE4G2Fk1U5HlZ/tzmrfD9NYEmM4Pc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fau.de; spf=pass smtp.mailfrom=fau.de; dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.b=EYbriPVe; arc=none smtp.client-ip=131.188.11.21
+	 MIME-Version; b=BsONkEkGf9WnugdJRwg0UeUOrY3NQQb8yZimmhrvFH2LEpmYWG0aarVPjbkWC2payZepEd46AoxX3cmmmY4lNs6YHFjt5mW2HTfcGi7ns0+SHQ3TLKXfEGdO8wptug9g2s00nSFm4Olz55ocJoHFV0wpTgD5ctaMwJLSM/QNqfs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fau.de; spf=pass smtp.mailfrom=fau.de; dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.b=X1F35vR1; arc=none smtp.client-ip=131.188.11.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fau.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fau.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.b="EYbriPVe"
+	dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.b="X1F35vR1"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fau.de; s=fau-2021;
-	t=1759660550; bh=QV4cgBm7MMoZA21cmcEP+It+97CMAcEXYlCuOSQquv4=;
+	t=1759661112; bh=W4zAd3n/TZwNV1i6kGSPOeB5Z8d33z+uCjDNOtVIBR0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From:To:CC:
 	 Subject;
-	b=EYbriPVeMM9svZxMm9ANHJiipWWeRnetcN8DzaD8l9yWspOLN5G3nxpdA/0FkdLZr
-	 uD/oU/3Si1uOsdFcNfl51ZATMJAqTTbHhX34MUPyFEShunvapAn7z0Ym5mp8SK09TI
-	 N37jd2iw0ydyMQp83xzTrhQqXllkcJqI/Kp6Gm5h1oIXWDvrAx/H0yF3sa/QoFUJw2
-	 I8Y2cWWgJrbxein5lr6NKvSnLGvfFVPfYH/uuqQWmWuxTlGOtjd6sB9Za9yrYHyFfb
-	 0siSoe6SpLmFedOAYe345krkJu8CIMtGChlTpEmosObbL0zBdqWy9hQhNvDcECM6qA
-	 Yb8JPsvuBhPcQ==
+	b=X1F35vR12zJyiwiGFV3nfh2dFKOF6E60oU32BYd0rfgG/XPp+rBv6Txn9AceeJocP
+	 oBVGtxQVkwr4qgj9mli1rUS5gSqy3QtblvNhh0R/pXlGAXanfME95DZ5FV8LbYFrOo
+	 +z/dvokwvZ8jWwLeHzR8mlxtYhckofcYWmuSSP2ukpLoVirVG13+EVNNe1N9YpzCZz
+	 AqKv4iLqT+fB+ub65Dcu/VGhicXQFabms0ZiDwcZiWwyzp2vSDTgpDnUyzSx0LBS5o
+	 koP7Lp2n8IAVxq5xs+glBIYnk3/JT5oxpeXOLnvraWCkDifqgQgjDBDZZAhsRpfNlJ
+	 xUulb76dBvXxA==
 Received: from mx-rz-smart.rrze.uni-erlangen.de (mx-rz-smart.rrze.uni-erlangen.de [IPv6:2001:638:a000:1025::1e])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-rz-2.rrze.uni-erlangen.de (Postfix) with ESMTPS id 4cff1y1Tl8zPkCR;
-	Sun,  5 Oct 2025 12:35:50 +0200 (CEST)
+	by mx-rz-1.rrze.uni-erlangen.de (Postfix) with ESMTPS id 4cffDm2ZT7z8sfZ;
+	Sun,  5 Oct 2025 12:45:12 +0200 (CEST)
 X-Virus-Scanned: amavisd-new at boeck1.rrze.uni-erlangen.de (RRZE)
 X-RRZE-Flag: Not-Spam
 X-RRZE-Submit-IP: 2001:9e8:3632:e00:f174:1ae7:eb66:61e6
@@ -39,23 +39,21 @@ Received: from luis-tp.fritz.box (unknown [IPv6:2001:9e8:3632:e00:f174:1ae7:eb66
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	(Authenticated sender: U2FsdGVkX18iL5GdxpQjUaQADVJn71Ma3FubxqLEADQ=)
-	by smtp-auth.uni-erlangen.de (Postfix) with ESMTPSA id 4cff1t1g43zPkR1;
-	Sun,  5 Oct 2025 12:35:46 +0200 (CEST)
+	(Authenticated sender: U2FsdGVkX19bAy/f62/7zjyX5SuvilHRALqnARDxk60=)
+	by smtp-auth.uni-erlangen.de (Postfix) with ESMTPSA id 4cffDh68LNz8sm9;
+	Sun,  5 Oct 2025 12:45:08 +0200 (CEST)
 From: Luis Gerhorst <luis.gerhorst@fau.de>
-To: Hengqi Chen <hengqi.chen@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Tiezhu Yang <yangtiezhu@loongson.cn>,
-	bpf <bpf@vger.kernel.org>
-Cc: Luis Gerhorst <luis.gerhorst@fau.de>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Henriette Herzog <henriette.herzog@rub.de>
-Subject: [RFC 1/3] bpf: Fall back to nospec for sanitization-failures
-Date: Sun,  5 Oct 2025 12:35:18 +0200
-Message-ID: <20251005103518.996383-1-luis.gerhorst@fau.de>
+To: luis.gerhorst@fau.de
+Cc: andrii@kernel.org,
+	ast@kernel.org,
+	bpf@vger.kernel.org,
+	eddyz87@gmail.com,
+	hengqi.chen@gmail.com,
+	yangtiezhu@loongson.cn,
+	yonghong.song@linux.dev
+Subject: [RFC 3/3] selftests/bpf: Add missing SPEC_V1-ifdefs
+Date: Sun,  5 Oct 2025 12:45:00 +0200
+Message-ID: <20251005104500.999626-1-luis.gerhorst@fau.de>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <87plb17ijl.fsf@fau.de>
 References: <87plb17ijl.fsf@fau.de>
@@ -67,693 +65,457 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-ALU sanitization was introduced to ensure that a subsequent ptr access
-can never go OOB, even under speculation. This is required because we
-currently allow speculative scalar confusion. Spec. scalar confusion is
-possible because Spectre v4 sanitization only adds a nospec after
-critical stores (e.g., scalar overwritten with a pointer).
+For errors that only occur if bpf_jit_bypass_spec_v1() is set (e.g., on
+LoongArch), add the missing '#ifdef SPEC_V1' to the selftests.
 
-If we add a nospec before the ALU op, none of the operands can be
-subject to scalar confusion. As an ADD/SUB can not introduce scalar
-confusion itself, the result will also not be subject to scalar
-confusion. Therefore, the subsequent ptr access is always safe.
-
-We directly fall back to nospec for the sanitization errors
-REASON_BOUNDS, _TYPE, _PATHS, and _LIMIT, even if we are not on a
-speculative path. For REASON_STACK, we return the error directly now.
-
-Decided to directly set cur_aux(env)->nospec to implement the fallback
-instead of (conceptually) making the nospec part of the ALU sanitization
-state and therefore potentially dragging it through info.aux before
-copying it over into cur_aux(env). This has the drawback that the usage
-of cur_aux(env) and aux in these functions might be confusing, but it
-has the upside that it does not needlessly complicate the dataflow for
-nospec. Also the presence of cur_aux() might make it more obvious that
-aux might not equal cur_aux() here. In the commit window,
-sanitize_ptr_alu() will bail out early because can_skip_alu_sanitation()
-checks cur_aux(env)->nospec.
-
-Regarding commit 97744b4971d81 ("bpf: Clarify sanitize_check_bounds()"),
-having the assertion trigger if alu_state is set on a non-speculative
-path makes the most sense, because the masking would truncate the bounds
-on that path when executed and sanitize_check_bounds() exists to ensure
-this trucation does not happen. Two cases are relevant:
-
-- First, if a case in sanitize_check_bounds() is omitted, it fails with
-  EOPNOTSUPP but retrieve_ptr_limit() returns 0 (thereby potentially not
-  setting cur_aux(env)->nospec instead of setting alu_state). With the
-  old/new assertion, this is cought.
-
-- Second, if a case is omitted from retrieve_ptr_limit() but not from
-  sanitize_check_bounds(), bounds_ret equals 0 or -EACCES. If it is 0
-  and the default case in retrieve_ptr_limit() runs errorously, we mark
-  the insn for nospec-sanitization. This is not really a security
-  problem and it could also only be detected by adding a
-  verifier_bug_if(bounds_ret != -EOPNOTSUPP) into the default case in
-  retrieve_ptr_limit(). It is not cought by the old/new assertion.
-
-Because it remove the possibility for these errors altogether, this
-change also fixes some unwarranted test failures on architectures that
-have bpf_jit_bypass_spec_v1 set (e.g., LoongArch).
-
+Fixes: 03c68a0f8c68 ("bpf, arm64, powerpc: Add bpf_jit_bypass_spec_v1/v4()")
+Reported-by: Hengqi Chen <hengqi.chen@gmail.com>
+Closes: https://lore.kernel.org/bpf/CAEyhmHTvj4cDRfu1FXSEXmdCqyWfs3ehw5gtB9qJCrThuUy2Kw@mail.gmail.com/
 Signed-off-by: Luis Gerhorst <luis.gerhorst@fau.de>
-Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Acked-by: Henriette Herzog <henriette.herzog@rub.de>
-Cc: Hengqi Chen <hengqi.chen@gmail.com>
 ---
+ .../selftests/bpf/progs/verifier_bounds.c     |  6 ++++
+ .../verifier_direct_stack_access_wraparound.c |  2 ++
+ .../bpf/progs/verifier_map_ptr_mixing.c       |  5 +++-
+ .../bpf/progs/verifier_runtime_jit.c          | 12 ++++++--
+ .../selftests/bpf/progs/verifier_stack_ptr.c  | 30 ++++++++++++++++---
+ .../selftests/bpf/progs/verifier_unpriv.c     | 12 +++++---
+ .../bpf/progs/verifier_value_ptr_arith.c      | 30 +++++++++++++++----
+ .../selftests/bpf/progs/verifier_var_off.c    | 25 ++++++++++++----
+ 8 files changed, 100 insertions(+), 22 deletions(-)
 
-Changes since v4 of series:
-- Rebase and resolve merge conflicts with 97744b4971d81 ("bpf: Clarify
-  sanitize_check_bounds()").
-- Change update_alu_sanitation_state() and sanitize_val_alu() to return
-  void as they now never fail.
-- Link to v4 of series: https://lore.kernel.org/all/20250603213232.339242-1-luis.gerhorst@fau.de/
-
-...
----
- kernel/bpf/verifier.c                         | 128 +++++++-----------
- .../selftests/bpf/progs/verifier_bounds.c     |   5 +-
- .../bpf/progs/verifier_bounds_deduction.c     |  45 +++---
- .../selftests/bpf/progs/verifier_map_ptr.c    |  20 ++-
- .../bpf/progs/verifier_value_ptr_arith.c      |  97 ++++++++++---
- 5 files changed, 180 insertions(+), 115 deletions(-)
-
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index e892df386eed..c5c1956f1aee 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -14195,14 +14195,6 @@ static bool check_reg_sane_offset(struct bpf_verifier_env *env,
- 	return true;
- }
- 
--enum {
--	REASON_BOUNDS	= -1,
--	REASON_TYPE	= -2,
--	REASON_PATHS	= -3,
--	REASON_LIMIT	= -4,
--	REASON_STACK	= -5,
--};
--
- static int retrieve_ptr_limit(const struct bpf_reg_state *ptr_reg,
- 			      u32 *alu_limit, bool mask_to_left)
- {
-@@ -14225,11 +14217,13 @@ static int retrieve_ptr_limit(const struct bpf_reg_state *ptr_reg,
- 			     ptr_reg->umax_value) + ptr_reg->off;
- 		break;
- 	default:
--		return REASON_TYPE;
-+		/* Register has pointer with unsupported alu operation. */
-+		return -EOPNOTSUPP;
- 	}
- 
-+	/* Register tried access beyond pointer bounds. */
- 	if (ptr_limit >= max)
--		return REASON_LIMIT;
-+		return -EOPNOTSUPP;
- 	*alu_limit = ptr_limit;
- 	return 0;
- }
-@@ -14242,32 +14236,38 @@ static bool can_skip_alu_sanitation(const struct bpf_verifier_env *env,
- 		cur_aux(env)->nospec;
- }
- 
--static int update_alu_sanitation_state(struct bpf_insn_aux_data *aux,
--				       u32 alu_state, u32 alu_limit)
-+static void update_alu_sanitation_state(struct bpf_verifier_env *env,
-+					struct bpf_insn_aux_data *aux,
-+					u32 alu_state, u32 alu_limit)
- {
- 	/* If we arrived here from different branches with different
- 	 * state or limits to sanitize, then this won't work.
- 	 */
- 	if (aux->alu_state &&
- 	    (aux->alu_state != alu_state ||
--	     aux->alu_limit != alu_limit))
--		return REASON_PATHS;
-+	     aux->alu_limit != alu_limit)) {
-+		/* Tried to perform alu op from different maps, paths or
-+		 * scalars.
-+		 */
-+		cur_aux(env)->nospec = true;
-+		cur_aux(env)->alu_state = 0;
-+		return;
-+	}
- 
- 	/* Corresponding fixup done in do_misc_fixups(). */
- 	aux->alu_state = alu_state;
- 	aux->alu_limit = alu_limit;
--	return 0;
- }
- 
--static int sanitize_val_alu(struct bpf_verifier_env *env,
--			    struct bpf_insn *insn)
-+static void sanitize_val_alu(struct bpf_verifier_env *env,
-+			     struct bpf_insn *insn)
- {
- 	struct bpf_insn_aux_data *aux = cur_aux(env);
- 
- 	if (can_skip_alu_sanitation(env, insn))
--		return 0;
-+		return;
- 
--	return update_alu_sanitation_state(aux, BPF_ALU_NON_POINTER, 0);
-+	update_alu_sanitation_state(env, aux, BPF_ALU_NON_POINTER, 0);
- }
- 
- static bool sanitize_needed(u8 opcode)
-@@ -14332,16 +14332,29 @@ static int sanitize_ptr_alu(struct bpf_verifier_env *env,
- 
- 	if (!commit_window) {
- 		if (!tnum_is_const(off_reg->var_off) &&
--		    (off_reg->smin_value < 0) != (off_reg->smax_value < 0))
--			return REASON_BOUNDS;
-+		    (off_reg->smin_value < 0) != (off_reg->smax_value < 0)) {
-+			/* Register has unknown scalar with mixed signed
-+			 * bounds.
-+			 */
-+			cur_aux(env)->alu_state = 0;
-+			cur_aux(env)->nospec = true;
-+			return 0;
-+		}
- 
- 		info->mask_to_left = (opcode == BPF_ADD &&  off_is_neg) ||
- 				     (opcode == BPF_SUB && !off_is_neg);
- 	}
- 
- 	err = retrieve_ptr_limit(ptr_reg, &alu_limit, info->mask_to_left);
--	if (err < 0)
--		return err;
-+	if (err) {
-+		if (verifier_bug_if(err != -EOPNOTSUPP, env,
-+				    "Fall back to BPF_NOSPEC for error %d might not be safe",
-+				    err))
-+			return -EFAULT;
-+		cur_aux(env)->alu_state = 0;
-+		cur_aux(env)->nospec = true;
-+		return 0;
-+	}
- 
- 	if (commit_window) {
- 		/* In commit phase we narrow the masking window based on
-@@ -14362,9 +14375,7 @@ static int sanitize_ptr_alu(struct bpf_verifier_env *env,
- 			env->explore_alu_limits = true;
- 	}
- 
--	err = update_alu_sanitation_state(aux, alu_state, alu_limit);
--	if (err < 0)
--		return err;
-+	update_alu_sanitation_state(env, aux, alu_state, alu_limit);
- do_sim:
- 	/* If we're in commit phase, we're done here given we already
- 	 * pushed the truncated dst_reg into the speculative verification
-@@ -14373,8 +14384,9 @@ static int sanitize_ptr_alu(struct bpf_verifier_env *env,
- 	 * Also, when register is a known constant, we rewrite register-based
- 	 * operation to immediate-based, and thus do not need masking (and as
- 	 * a consequence, do not need to simulate the zero-truncation either).
-+	 * Same is true if we did a fallback to a nospec.
- 	 */
--	if (commit_window || off_is_imm)
-+	if (commit_window || off_is_imm || cur_aux(env)->nospec)
- 		return 0;
- 
- 	/* Simulate and find potential out-of-bounds access under
-@@ -14394,7 +14406,7 @@ static int sanitize_ptr_alu(struct bpf_verifier_env *env,
- 					env->insn_idx);
- 	if (!ptr_is_dst_reg && ret)
- 		*dst_reg = tmp;
--	return !ret ? REASON_STACK : 0;
-+	return !ret ? -ENOMEM : 0;
- }
- 
- static void sanitize_mark_insn_seen(struct bpf_verifier_env *env)
-@@ -14410,44 +14422,6 @@ static void sanitize_mark_insn_seen(struct bpf_verifier_env *env)
- 		env->insn_aux_data[env->insn_idx].seen = env->pass_cnt;
- }
- 
--static int sanitize_err(struct bpf_verifier_env *env,
--			const struct bpf_insn *insn, int reason,
--			const struct bpf_reg_state *off_reg,
--			const struct bpf_reg_state *dst_reg)
--{
--	static const char *err = "pointer arithmetic with it prohibited for !root";
--	const char *op = BPF_OP(insn->code) == BPF_ADD ? "add" : "sub";
--	u32 dst = insn->dst_reg, src = insn->src_reg;
--
--	switch (reason) {
--	case REASON_BOUNDS:
--		verbose(env, "R%d has unknown scalar with mixed signed bounds, %s\n",
--			off_reg == dst_reg ? dst : src, err);
--		break;
--	case REASON_TYPE:
--		verbose(env, "R%d has pointer with unsupported alu operation, %s\n",
--			off_reg == dst_reg ? src : dst, err);
--		break;
--	case REASON_PATHS:
--		verbose(env, "R%d tried to %s from different maps, paths or scalars, %s\n",
--			dst, op, err);
--		break;
--	case REASON_LIMIT:
--		verbose(env, "R%d tried to %s beyond pointer bounds, %s\n",
--			dst, op, err);
--		break;
--	case REASON_STACK:
--		verbose(env, "R%d could not be pushed for speculative verification, %s\n",
--			dst, err);
--		return -ENOMEM;
--	default:
--		verifier_bug(env, "unknown reason (%d)", reason);
--		break;
--	}
--
--	return -EACCES;
--}
--
- /* check that stack access falls within stack limits and that 'reg' doesn't
-  * have a variable offset.
-  *
-@@ -14620,7 +14594,7 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env,
- 		ret = sanitize_ptr_alu(env, insn, ptr_reg, off_reg, dst_reg,
- 				       &info, false);
- 		if (ret < 0)
--			return sanitize_err(env, insn, ret, off_reg, dst_reg);
-+			return ret;
- 	}
- 
- 	switch (opcode) {
-@@ -14748,15 +14722,15 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env,
- 	if (sanitize_needed(opcode)) {
- 		ret = sanitize_ptr_alu(env, insn, dst_reg, off_reg, dst_reg,
- 				       &info, true);
--		if (verifier_bug_if(!can_skip_alu_sanitation(env, insn)
--				    && !env->cur_state->speculative
--				    && bounds_ret
--				    && !ret,
--				    env, "Pointer type unsupported by sanitize_check_bounds() not rejected by retrieve_ptr_limit() as required")) {
--			return -EFAULT;
--		}
- 		if (ret < 0)
--			return sanitize_err(env, insn, ret, off_reg, dst_reg);
-+			return ret;
-+		if (verifier_bug_if(cur_aux(env)->alu_state &&
-+				    cur_aux(env)->alu_state != BPF_ALU_NON_POINTER &&
-+				    !env->cur_state->speculative &&
-+				    bounds_ret, env,
-+				    "Pointer type unsupported by sanitize_check_bounds() (error %d) not rejected by retrieve_ptr_limit() as required",
-+				    bounds_ret))
-+			return -EFAULT;
- 	}
- 
- 	return 0;
-@@ -15385,9 +15359,7 @@ static int adjust_scalar_min_max_vals(struct bpf_verifier_env *env,
- 	}
- 
- 	if (sanitize_needed(opcode)) {
--		ret = sanitize_val_alu(env, insn);
--		if (ret < 0)
--			return sanitize_err(env, insn, ret, NULL, NULL);
-+		sanitize_val_alu(env, insn);
- 	}
- 
- 	/* Calculate sign/unsigned bounds and tnum for alu32 and alu64 bit ops.
 diff --git a/tools/testing/selftests/bpf/progs/verifier_bounds.c b/tools/testing/selftests/bpf/progs/verifier_bounds.c
-index 0a72e0228ea9..a8fc9b38633b 100644
+index a8fc9b38633b..033211c3f486 100644
 --- a/tools/testing/selftests/bpf/progs/verifier_bounds.c
 +++ b/tools/testing/selftests/bpf/progs/verifier_bounds.c
-@@ -48,9 +48,12 @@ SEC("socket")
+@@ -48,7 +48,9 @@ SEC("socket")
  __description("subtraction bounds (map value) variant 2")
  __failure
  __msg("R0 min value is negative, either use unsigned index or do a if (index >=0) check.")
--__msg_unpriv("R1 has unknown scalar with mixed signed bounds")
-+__msg_unpriv("R0 pointer arithmetic of map value goes out of range, prohibited for !root")
++#ifdef SPEC_V1
+ __msg_unpriv("R0 pointer arithmetic of map value goes out of range, prohibited for !root")
++#endif
  __naked void bounds_map_value_variant_2(void)
  {
-+	/* unpriv: nospec inserted to prevent "R1 has unknown scalar with mixed
-+	 * signed bounds".
-+	 */
- 	asm volatile ("					\
- 	r1 = 0;						\
- 	*(u64*)(r10 - 8) = r1;				\
-diff --git a/tools/testing/selftests/bpf/progs/verifier_bounds_deduction.c b/tools/testing/selftests/bpf/progs/verifier_bounds_deduction.c
-index 260a6df264e3..bd18ad60d8ee 100644
---- a/tools/testing/selftests/bpf/progs/verifier_bounds_deduction.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_bounds_deduction.c
-@@ -8,22 +8,26 @@
+ 	/* unpriv: nospec inserted to prevent "R1 has unknown scalar with mixed
+@@ -545,7 +547,9 @@ l1_%=:	exit;						\
  SEC("socket")
- __description("check deducing bounds from const, 1")
- __failure __msg("R0 tried to subtract pointer from scalar")
--__msg_unpriv("R1 has pointer with unsupported alu operation")
-+__failure_unpriv
- __naked void deducing_bounds_from_const_1(void)
+ __description("bounds check map access with off+size signed 32bit overflow. test2")
+ __failure __msg("pointer offset 1073741822")
++#ifdef SPEC_V1
+ __msg_unpriv("R0 pointer arithmetic of map value goes out of range")
++#endif
+ __naked void size_signed_32bit_overflow_test2(void)
  {
  	asm volatile ("					\
- 	r0 = 1;						\
- 	if r0 s>= 1 goto l0_%=;				\
--l0_%=:	r0 -= r1;					\
-+l0_%=:	/* unpriv: nospec (inserted to prevent `R1 has pointer with unsupported alu operation`) */\
-+	r0 -= r1;					\
- 	exit;						\
- "	::: __clobber_all);
- }
+@@ -572,7 +576,9 @@ l1_%=:	exit;						\
+ SEC("socket")
+ __description("bounds check map access with off+size signed 32bit overflow. test3")
+ __failure __msg("pointer offset -1073741822")
++#ifdef SPEC_V1
+ __msg_unpriv("R0 pointer arithmetic of map value goes out of range")
++#endif
+ __naked void size_signed_32bit_overflow_test3(void)
+ {
+ 	asm volatile ("					\
+diff --git a/tools/testing/selftests/bpf/progs/verifier_direct_stack_access_wraparound.c b/tools/testing/selftests/bpf/progs/verifier_direct_stack_access_wraparound.c
+index c538c6893552..5f39ceb6ce2b 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_direct_stack_access_wraparound.c
++++ b/tools/testing/selftests/bpf/progs/verifier_direct_stack_access_wraparound.c
+@@ -40,7 +40,9 @@ __naked void with_32_bit_wraparound_test2(void)
+ SEC("socket")
+ __description("direct stack access with 32-bit wraparound. test3")
+ __failure __msg("fp pointer offset 1073741822")
++#ifdef SPEC_V1
+ __msg_unpriv("R1 stack pointer arithmetic goes out of range")
++#endif
+ __naked void with_32_bit_wraparound_test3(void)
+ {
+ 	asm volatile ("					\
+diff --git a/tools/testing/selftests/bpf/progs/verifier_map_ptr_mixing.c b/tools/testing/selftests/bpf/progs/verifier_map_ptr_mixing.c
+index c5a7c1ddc562..2a380a5f52b0 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_map_ptr_mixing.c
++++ b/tools/testing/selftests/bpf/progs/verifier_map_ptr_mixing.c
+@@ -218,7 +218,10 @@ void lookup_hash_map_in_map__2(void)
  
  SEC("socket")
- __description("check deducing bounds from const, 2")
--__success __failure_unpriv
--__msg_unpriv("R1 has pointer with unsupported alu operation")
-+__success __success_unpriv
+ __description("cond: two branches returning different map pointers for lookup (tail, tail)")
+-__success __failure_unpriv __msg_unpriv("tail_call abusing map_ptr")
++__success
++#ifdef SPEC_V1
++__failure_unpriv __msg_unpriv("tail_call abusing map_ptr")
++#endif
+ __retval(42)
+ __naked void pointers_for_lookup_tail_tail_1(void)
+ {
+diff --git a/tools/testing/selftests/bpf/progs/verifier_runtime_jit.c b/tools/testing/selftests/bpf/progs/verifier_runtime_jit.c
+index 27ebfc1fd9ee..ab093d0930c6 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_runtime_jit.c
++++ b/tools/testing/selftests/bpf/progs/verifier_runtime_jit.c
+@@ -252,7 +252,10 @@ l1_%=:	call %[bpf_tail_call];				\
+ 
+ SEC("socket")
+ __description("runtime/jit: tail_call within bounds, different maps, first branch")
+-__success __failure_unpriv __msg_unpriv("tail_call abusing map_ptr")
++__success
++#ifdef SPEC_V1
++__failure_unpriv __msg_unpriv("tail_call abusing map_ptr")
++#endif
  __retval(1)
-+#ifdef SPEC_V1
-+__xlated_unpriv("nospec") /* inserted to prevent `R1 has pointer with unsupported alu operation` */
-+__xlated_unpriv("r1 -= r0")
-+#endif
- __naked void deducing_bounds_from_const_2(void)
+ __naked void bounds_different_maps_first_branch(void)
  {
- 	asm volatile ("					\
-@@ -40,22 +44,26 @@ l1_%=:	r1 -= r0;					\
- SEC("socket")
- __description("check deducing bounds from const, 3")
- __failure __msg("R0 tried to subtract pointer from scalar")
--__msg_unpriv("R1 has pointer with unsupported alu operation")
-+__failure_unpriv
- __naked void deducing_bounds_from_const_3(void)
- {
- 	asm volatile ("					\
- 	r0 = 0;						\
- 	if r0 s<= 0 goto l0_%=;				\
--l0_%=:	r0 -= r1;					\
-+l0_%=:	/* unpriv: nospec (inserted to prevent `R1 has pointer with unsupported alu operation`) */\
-+	r0 -= r1;					\
- 	exit;						\
- "	::: __clobber_all);
- }
+@@ -279,7 +282,10 @@ l1_%=:	call %[bpf_tail_call];				\
  
  SEC("socket")
- __description("check deducing bounds from const, 4")
--__success __failure_unpriv
--__msg_unpriv("R6 has pointer with unsupported alu operation")
-+__success __success_unpriv
- __retval(0)
+ __description("runtime/jit: tail_call within bounds, different maps, second branch")
+-__success __failure_unpriv __msg_unpriv("tail_call abusing map_ptr")
++__success
 +#ifdef SPEC_V1
-+__xlated_unpriv("nospec") /* inserted to prevent `R6 has pointer with unsupported alu operation` */
-+__xlated_unpriv("r6 -= r0")
++__failure_unpriv __msg_unpriv("tail_call abusing map_ptr")
 +#endif
- __naked void deducing_bounds_from_const_4(void)
+ __retval(42)
+ __naked void bounds_different_maps_second_branch(void)
  {
- 	asm volatile ("					\
-@@ -73,12 +81,13 @@ l1_%=:	r6 -= r0;					\
+@@ -341,8 +347,10 @@ __naked void negative_index_to_tail_call(void)
  SEC("socket")
- __description("check deducing bounds from const, 5")
- __failure __msg("R0 tried to subtract pointer from scalar")
--__msg_unpriv("R1 has pointer with unsupported alu operation")
-+__failure_unpriv
- __naked void deducing_bounds_from_const_5(void)
+ __description("runtime/jit: pass > 32bit index to tail_call")
+ __success __success_unpriv __retval(42)
++#ifdef SPEC_V1
+ /* Verifier rewrite for unpriv skips tail call here. */
+ __retval_unpriv(2)
++#endif
+ __naked void _32bit_index_to_tail_call(void)
  {
  	asm volatile ("					\
- 	r0 = 0;						\
- 	if r0 s>= 1 goto l0_%=;				\
-+	/* unpriv: nospec (inserted to prevent `R1 has pointer with unsupported alu operation`) */\
- 	r0 -= r1;					\
- l0_%=:	exit;						\
- "	::: __clobber_all);
-@@ -87,14 +96,15 @@ l0_%=:	exit;						\
+diff --git a/tools/testing/selftests/bpf/progs/verifier_stack_ptr.c b/tools/testing/selftests/bpf/progs/verifier_stack_ptr.c
+index 24aabc6083fd..ed74bd593a0f 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_stack_ptr.c
++++ b/tools/testing/selftests/bpf/progs/verifier_stack_ptr.c
+@@ -70,7 +70,9 @@ __naked void load_bad_alignment_on_reg(void)
  SEC("socket")
- __description("check deducing bounds from const, 6")
- __failure __msg("R0 tried to subtract pointer from scalar")
--__msg_unpriv("R1 has pointer with unsupported alu operation")
-+__failure_unpriv
- __naked void deducing_bounds_from_const_6(void)
+ __description("PTR_TO_STACK store/load - out of bounds low")
+ __failure __msg("invalid write to stack R1 off=-79992 size=8")
++#ifdef SPEC_V1
+ __msg_unpriv("R1 stack pointer arithmetic goes out of range")
++#endif
+ __naked void load_out_of_bounds_low(void)
  {
  	asm volatile ("					\
- 	r0 = 0;						\
- 	if r0 s>= 0 goto l0_%=;				\
- 	exit;						\
--l0_%=:	r0 -= r1;					\
-+l0_%=:	/* unpriv: nospec (inserted to prevent `R1 has pointer with unsupported alu operation`) */\
-+	r0 -= r1;					\
- 	exit;						\
- "	::: __clobber_all);
- }
-@@ -102,14 +112,15 @@ l0_%=:	r0 -= r1;					\
- SEC("socket")
- __description("check deducing bounds from const, 7")
- __failure __msg("dereference of modified ctx ptr")
--__msg_unpriv("R1 has pointer with unsupported alu operation")
-+__failure_unpriv
- __flag(BPF_F_ANY_ALIGNMENT)
- __naked void deducing_bounds_from_const_7(void)
- {
- 	asm volatile ("					\
- 	r0 = %[__imm_0];				\
- 	if r0 s>= 0 goto l0_%=;				\
--l0_%=:	r1 -= r0;					\
-+l0_%=:	/* unpriv: nospec (inserted to prevent `R1 has pointer with unsupported alu operation`) */\
-+	r1 -= r0;					\
- 	r0 = *(u32*)(r1 + %[__sk_buff_mark]);		\
- 	exit;						\
- "	:
-@@ -121,13 +132,14 @@ l0_%=:	r1 -= r0;					\
- SEC("socket")
- __description("check deducing bounds from const, 8")
- __failure __msg("negative offset ctx ptr R1 off=-1 disallowed")
--__msg_unpriv("R1 has pointer with unsupported alu operation")
-+__failure_unpriv
- __flag(BPF_F_ANY_ALIGNMENT)
- __naked void deducing_bounds_from_const_8(void)
- {
- 	asm volatile ("					\
- 	r0 = %[__imm_0];				\
- 	if r0 s>= 0 goto l0_%=;				\
-+	/* unpriv: nospec (inserted to prevent `R1 has pointer with unsupported alu operation`) */\
- 	r1 += r0;					\
- l0_%=:	r0 = *(u32*)(r1 + %[__sk_buff_mark]);		\
- 	exit;						\
-@@ -140,13 +152,14 @@ l0_%=:	r0 = *(u32*)(r1 + %[__sk_buff_mark]);		\
- SEC("socket")
- __description("check deducing bounds from const, 9")
- __failure __msg("R0 tried to subtract pointer from scalar")
--__msg_unpriv("R1 has pointer with unsupported alu operation")
-+__failure_unpriv
- __naked void deducing_bounds_from_const_9(void)
- {
- 	asm volatile ("					\
- 	r0 = 0;						\
- 	if r0 s>= 0 goto l0_%=;				\
--l0_%=:	r0 -= r1;					\
-+l0_%=:	/* unpriv: nospec (inserted to prevent `R1 has pointer with unsupported alu operation`) */\
-+	r0 -= r1;					\
- 	exit;						\
- "	::: __clobber_all);
- }
-diff --git a/tools/testing/selftests/bpf/progs/verifier_map_ptr.c b/tools/testing/selftests/bpf/progs/verifier_map_ptr.c
-index e2767d27d8aa..d7ab165fdc82 100644
---- a/tools/testing/selftests/bpf/progs/verifier_map_ptr.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_map_ptr.c
-@@ -113,9 +113,17 @@ __naked void ptr_read_ops_field_accepted(void)
+@@ -130,8 +132,10 @@ __naked void to_stack_check_high_2(void)
  
  SEC("socket")
- __description("bpf_map_ptr: r = 0, map_ptr = map_ptr + r")
+ __description("PTR_TO_STACK check high 3")
 -__success __failure_unpriv
--__msg_unpriv("R1 has pointer with unsupported alu operation")
-+__success __success_unpriv
- __retval(0)
+-__msg_unpriv("R1 stack pointer arithmetic goes out of range")
++__success
 +#ifdef SPEC_V1
-+__xlated_unpriv("r1 = 0x") /* r0 = %[map_hash_16b] ll */
-+/* This nospec is not really needed here, because there is no bypassable
-+ * branch/store that could lead to r0 not containing 0 when `r1 += r0` executes.
-+ * We still keep it like this to not complicate the verifier.
-+ */
-+__xlated_unpriv("nospec") /* inserted to prevent `R1 has pointer with unsupported alu operation` */
-+__xlated_unpriv("r1 += r0")
++__failure_unpriv __msg_unpriv("R1 stack pointer arithmetic goes out of range")
 +#endif
- __naked void map_ptr_map_ptr_r(void)
+ __retval(42)
+ __naked void to_stack_check_high_3(void)
+ {
+@@ -148,7 +152,9 @@ __naked void to_stack_check_high_3(void)
+ SEC("socket")
+ __description("PTR_TO_STACK check high 4")
+ __failure __msg("invalid write to stack R1 off=0 size=1")
++#ifdef SPEC_V1
+ __msg_unpriv("R1 stack pointer arithmetic goes out of range")
++#endif
+ __naked void to_stack_check_high_4(void)
  {
  	asm volatile ("					\
-@@ -137,9 +145,13 @@ __naked void map_ptr_map_ptr_r(void)
+@@ -164,7 +170,9 @@ __naked void to_stack_check_high_4(void)
+ SEC("socket")
+ __description("PTR_TO_STACK check high 5")
+ __failure __msg("invalid write to stack R1")
++#ifdef SPEC_V1
+ __msg_unpriv("R1 stack pointer arithmetic goes out of range")
++#endif
+ __naked void to_stack_check_high_5(void)
+ {
+ 	asm volatile ("					\
+@@ -182,7 +190,9 @@ __naked void to_stack_check_high_5(void)
+ SEC("socket")
+ __description("PTR_TO_STACK check high 6")
+ __failure __msg("invalid write to stack")
++#ifdef SPEC_V1
+ __msg_unpriv("R1 stack pointer arithmetic goes out of range")
++#endif
+ __naked void to_stack_check_high_6(void)
+ {
+ 	asm volatile ("					\
+@@ -201,7 +211,9 @@ __naked void to_stack_check_high_6(void)
+ SEC("socket")
+ __description("PTR_TO_STACK check high 7")
+ __failure __msg("fp pointer offset")
++#ifdef SPEC_V1
+ __msg_unpriv("R1 stack pointer arithmetic goes out of range")
++#endif
+ __naked void to_stack_check_high_7(void)
+ {
+ 	asm volatile ("					\
+@@ -235,8 +247,10 @@ __naked void to_stack_check_low_1(void)
  
  SEC("socket")
- __description("bpf_map_ptr: r = 0, r = r + map_ptr")
+ __description("PTR_TO_STACK check low 2")
 -__success __failure_unpriv
--__msg_unpriv("R0 has pointer with unsupported alu operation")
-+__success __success_unpriv
- __retval(0)
+-__msg_unpriv("R1 stack pointer arithmetic goes out of range")
++__success
 +#ifdef SPEC_V1
-+__xlated_unpriv("r0 = 0x") /* r0 = %[map_hash_16b] ll */
-+__xlated_unpriv("nospec") /* inserted to prevent `R0 has pointer with unsupported alu operation` */
-+__xlated_unpriv("r1 += r0")
++__failure_unpriv __msg_unpriv("R1 stack pointer arithmetic goes out of range")
 +#endif
- __naked void _0_r_r_map_ptr(void)
+ __retval(42)
+ __naked void to_stack_check_low_2(void)
+ {
+@@ -253,7 +267,9 @@ __naked void to_stack_check_low_2(void)
+ SEC("socket")
+ __description("PTR_TO_STACK check low 3")
+ __failure __msg("invalid write to stack R1 off=-513 size=1")
++#ifdef SPEC_V1
+ __msg_unpriv("R1 stack pointer arithmetic goes out of range")
++#endif
+ __naked void to_stack_check_low_3(void)
  {
  	asm volatile ("					\
+@@ -287,7 +303,9 @@ __naked void to_stack_check_low_4(void)
+ SEC("socket")
+ __description("PTR_TO_STACK check low 5")
+ __failure __msg("invalid write to stack")
++#ifdef SPEC_V1
+ __msg_unpriv("R1 stack pointer arithmetic goes out of range")
++#endif
+ __naked void to_stack_check_low_5(void)
+ {
+ 	asm volatile ("					\
+@@ -305,7 +323,9 @@ __naked void to_stack_check_low_5(void)
+ SEC("socket")
+ __description("PTR_TO_STACK check low 6")
+ __failure __msg("invalid write to stack")
++#ifdef SPEC_V1
+ __msg_unpriv("R1 stack pointer arithmetic goes out of range")
++#endif
+ __naked void to_stack_check_low_6(void)
+ {
+ 	asm volatile ("					\
+@@ -324,7 +344,9 @@ __naked void to_stack_check_low_6(void)
+ SEC("socket")
+ __description("PTR_TO_STACK check low 7")
+ __failure __msg("fp pointer offset")
++#ifdef SPEC_V1
+ __msg_unpriv("R1 stack pointer arithmetic goes out of range")
++#endif
+ __naked void to_stack_check_low_7(void)
+ {
+ 	asm volatile ("					\
+diff --git a/tools/testing/selftests/bpf/progs/verifier_unpriv.c b/tools/testing/selftests/bpf/progs/verifier_unpriv.c
+index 28b4f7035ceb..4022a12f19c6 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_unpriv.c
++++ b/tools/testing/selftests/bpf/progs/verifier_unpriv.c
+@@ -699,8 +699,10 @@ l0_%=:	r0 = 0;						\
+ 
+ SEC("socket")
+ __description("unpriv: adding of fp, reg")
+-__success __failure_unpriv
+-__msg_unpriv("R1 stack pointer arithmetic goes out of range")
++__success
++#ifdef SPEC_V1
++__failure_unpriv __msg_unpriv("R1 stack pointer arithmetic goes out of range")
++#endif
+ __retval(0)
+ __naked void unpriv_adding_of_fp_reg(void)
+ {
+@@ -715,8 +717,10 @@ __naked void unpriv_adding_of_fp_reg(void)
+ 
+ SEC("socket")
+ __description("unpriv: adding of fp, imm")
+-__success __failure_unpriv
+-__msg_unpriv("R1 stack pointer arithmetic goes out of range")
++__success
++#ifdef SPEC_V1
++__failure_unpriv __msg_unpriv("R1 stack pointer arithmetic goes out of range")
++#endif
+ __retval(0)
+ __naked void unpriv_adding_of_fp_imm(void)
+ {
 diff --git a/tools/testing/selftests/bpf/progs/verifier_value_ptr_arith.c b/tools/testing/selftests/bpf/progs/verifier_value_ptr_arith.c
-index af7938ce56cb..b545f2b420b8 100644
+index b545f2b420b8..933b44d41c80 100644
 --- a/tools/testing/selftests/bpf/progs/verifier_value_ptr_arith.c
 +++ b/tools/testing/selftests/bpf/progs/verifier_value_ptr_arith.c
-@@ -41,9 +41,17 @@ struct {
+@@ -379,8 +379,10 @@ l2_%=:	r0 = 1;						\
  
  SEC("socket")
- __description("map access: known scalar += value_ptr unknown vs const")
+ __description("map access: value_ptr -= known scalar from different maps")
 -__success __failure_unpriv
--__msg_unpriv("R1 tried to add from different maps, paths or scalars")
-+__success __success_unpriv
- __retval(1)
+-__msg_unpriv("R0 min value is outside of the allowed memory range")
++__success
 +#ifdef SPEC_V1
-+__xlated_unpriv("r1 &= 7")
-+__xlated_unpriv("goto pc+1")
-+/* l3_%=: */
-+__xlated_unpriv("r1 = 3")
-+/* l4_%=: */
-+__xlated_unpriv("nospec") /* inserted to prevent `R1 tried to add from different maps, paths or scalars` */
-+__xlated_unpriv("r1 += r0")
++__failure_unpriv __msg_unpriv("R0 min value is outside of the allowed memory range")
 +#endif
- __naked void value_ptr_unknown_vs_const(void)
+ __retval(1)
+ __naked void known_scalar_from_different_maps(void)
+ {
+@@ -669,8 +671,11 @@ __naked void alu_with_different_scalars_3(void)
+ 
+ SEC("socket")
+ __description("map access: value_ptr += known scalar, upper oob arith, test 1")
+-__success __failure_unpriv
++__success 
++#ifdef SPEC_V1
++__failure_unpriv
+ __msg_unpriv("R0 pointer arithmetic of map value goes out of range")
++#endif
+ __retval(1)
+ __naked void upper_oob_arith_test_1(void)
+ {
+@@ -696,8 +701,11 @@ l0_%=:	r0 = 1;						\
+ 
+ SEC("socket")
+ __description("map access: value_ptr += known scalar, upper oob arith, test 2")
+-__success __failure_unpriv
++__success 
++#ifdef SPEC_V1
++__failure_unpriv
+ __msg_unpriv("R0 pointer arithmetic of map value goes out of range")
++#endif
+ __retval(1)
+ __naked void upper_oob_arith_test_2(void)
+ {
+@@ -749,8 +757,10 @@ l0_%=:	r0 = 1;						\
+ SEC("socket")
+ __description("map access: value_ptr -= known scalar, lower oob arith, test 1")
+ __failure __msg("R0 min value is outside of the allowed memory range")
++#ifdef SPEC_V1
+ __failure_unpriv
+ __msg_unpriv("R0 pointer arithmetic of map value goes out of range")
++#endif
+ __naked void lower_oob_arith_test_1(void)
  {
  	asm volatile ("					\
-@@ -79,9 +87,14 @@ l2_%=:	r0 = 1;						\
+@@ -776,8 +786,11 @@ l0_%=:	r0 = 1;						\
  
  SEC("socket")
- __description("map access: known scalar += value_ptr const vs unknown")
+ __description("map access: value_ptr -= known scalar, lower oob arith, test 2")
 -__success __failure_unpriv
--__msg_unpriv("R1 tried to add from different maps, paths or scalars")
-+__success __success_unpriv
- __retval(1)
++__success
 +#ifdef SPEC_V1
-+__xlated_unpriv("r1 &= 7")
-+/* l4_%=: */
-+__xlated_unpriv("nospec") /* inserted to prevent `R1 tried to add from different maps, paths or scalars` */
-+__xlated_unpriv("r1 += r0")
++__failure_unpriv
+ __msg_unpriv("R0 pointer arithmetic of map value goes out of range")
 +#endif
- __naked void value_ptr_const_vs_unknown(void)
- {
- 	asm volatile ("					\
-@@ -117,9 +130,16 @@ l2_%=:	r0 = 1;						\
- 
- SEC("socket")
- __description("map access: known scalar += value_ptr const vs const (ne)")
--__success __failure_unpriv
--__msg_unpriv("R1 tried to add from different maps, paths or scalars")
-+__success __success_unpriv
  __retval(1)
-+#ifdef SPEC_V1
-+__xlated_unpriv("goto pc+1") /* to l4, must not be pc+2 as this would skip nospec */
-+/* l3_%=: */
-+__xlated_unpriv("r1 = 5")
-+/* l4_%=: */
-+__xlated_unpriv("nospec") /* inserted to prevent `R1 tried to add from different maps, paths or scalars` */
-+__xlated_unpriv("r1 += r0")
-+#endif
- __naked void ptr_const_vs_const_ne(void)
+ __naked void lower_oob_arith_test_2(void)
  {
- 	asm volatile ("					\
-@@ -225,9 +245,18 @@ l2_%=:	r0 = 1;						\
+@@ -1084,8 +1097,11 @@ l0_%=:	exit;						\
  
  SEC("socket")
- __description("map access: known scalar += value_ptr unknown vs unknown (lt)")
+ __description("map access: unknown scalar += value_ptr, 3")
 -__success __failure_unpriv
--__msg_unpriv("R1 tried to add from different maps, paths or scalars")
-+__success __success_unpriv
- __retval(1)
++__success
 +#ifdef SPEC_V1
-+__xlated_unpriv("r1 &= 3")
-+__xlated_unpriv("goto pc+3") /* must go to l4 (nospec) */
-+__xlated_unpriv("r1 = 6")
-+__xlated_unpriv("r1 = r9")
-+__xlated_unpriv("r1 &= 7")
-+/* l4_%=: */
-+__xlated_unpriv("nospec") /* inserted to prevent `R1 tried to add from different maps, paths or scalars` */
-+__xlated_unpriv("r1 += r0")
++__failure_unpriv
+ __msg_unpriv("R0 pointer arithmetic of map value goes out of range")
 +#endif
- __naked void ptr_unknown_vs_unknown_lt(void)
+ __retval(0xabcdef12) __flag(BPF_F_ANY_ALIGNMENT)
+ __naked void unknown_scalar_value_ptr_3(void)
  {
- 	asm volatile ("					\
-@@ -270,9 +299,14 @@ l2_%=:	r0 = 1;						\
- 
+@@ -1115,7 +1131,9 @@ l0_%=:	exit;						\
  SEC("socket")
- __description("map access: known scalar += value_ptr unknown vs unknown (gt)")
--__success __failure_unpriv
--__msg_unpriv("R1 tried to add from different maps, paths or scalars")
-+__success __success_unpriv
- __retval(1)
+ __description("map access: unknown scalar += value_ptr, 4")
+ __failure __msg("R1 max value is outside of the allowed memory range")
 +#ifdef SPEC_V1
-+__xlated_unpriv("r1 &= 3")
-+/* l4_%=: */
-+__xlated_unpriv("nospec") /* inserted to prevent `R1 tried to add from different maps, paths or scalars` */
-+__xlated_unpriv("r1 += r0")
+ __msg_unpriv("R1 pointer arithmetic of map value goes out of range")
 +#endif
- __naked void ptr_unknown_vs_unknown_gt(void)
+ __flag(BPF_F_ANY_ALIGNMENT)
+ __naked void unknown_scalar_value_ptr_4(void)
  {
- 	asm volatile ("					\
-@@ -408,9 +442,27 @@ l2_%=:	r0 = 1;						\
+diff --git a/tools/testing/selftests/bpf/progs/verifier_var_off.c b/tools/testing/selftests/bpf/progs/verifier_var_off.c
+index f345466bca68..042f2cafc576 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_var_off.c
++++ b/tools/testing/selftests/bpf/progs/verifier_var_off.c
+@@ -34,8 +34,10 @@ __naked void variable_offset_ctx_access(void)
  
- SEC("socket")
- __description("map access: mixing value pointer and scalar, 1")
+ SEC("cgroup/skb")
+ __description("variable-offset stack read, priv vs unpriv")
 -__success __failure_unpriv
--__msg_unpriv("R2 tried to add from different maps, paths or scalars, pointer arithmetic with it prohibited for !root")
-+__success __success_unpriv
+-__msg_unpriv("R2 variable stack access prohibited for !root")
++__success
++#ifdef SPEC_V1
++__failure_unpriv __msg_unpriv("R2 variable stack access prohibited for !root")
++#endif
  __retval(0)
+ __naked void stack_read_priv_vs_unpriv(void)
+ {
+@@ -62,7 +64,9 @@ __naked void stack_read_priv_vs_unpriv(void)
+ SEC("cgroup/skb")
+ __description("variable-offset stack read, uninitialized")
+ __success
 +#ifdef SPEC_V1
-+__xlated_unpriv("goto pc+2") /* to l2, must not be pc+3 as this would skip nospec */
-+__xlated_unpriv("r2 = 0")
-+__xlated_unpriv("r3 = 1048576")
-+/* l2_%=: */
-+__xlated_unpriv("nospec") /* inserted to prevent `R2 tried to add from different maps, paths or scalars, pointer arithmetic with it prohibited for !root` */
-+__xlated_unpriv("r2 += r3")
-+__xlated_unpriv("if r1 != 0x0 goto pc+1")
-+__xlated_unpriv("goto pc+5") /* to l4 */
-+/* l3_%=: */
-+__xlated_unpriv("r0 = 322376503")
-+__xlated_unpriv("nospec") /* inserted to prevent `R2 pointer comparison prohibited` */
-+__xlated_unpriv("if r2 != 0x100000 goto pc+2") /* to l4 */
-+__xlated_unpriv("r0 = 0")
-+__xlated_unpriv("exit")
-+/* l4_%=: */
-+__xlated_unpriv("nospec")
-+__xlated_unpriv("r0 = *(u8 *)(r0 +0)")
+ __failure_unpriv __msg_unpriv("R2 variable stack access prohibited for !root")
 +#endif
- __naked void value_pointer_and_scalar_1(void)
+ __naked void variable_offset_stack_read_uninitialized(void)
  {
  	asm volatile ("					\
-@@ -444,7 +496,6 @@ l2_%=:	/* common instruction */			\
- l3_%=:	/* branch B */					\
- 	r0 = 0x13371337;				\
- 	/* verifier follows fall-through */		\
--	/* unpriv: nospec (inserted to prevent `R2 pointer comparison prohibited`) */\
- 	if r2 != 0x100000 goto l4_%=;			\
- 	r0 = 0;						\
- 	exit;						\
-@@ -462,9 +513,24 @@ l4_%=:	/* fake-dead code; targeted from branch A to	\
- 
- SEC("socket")
- __description("map access: mixing value pointer and scalar, 2")
--__success __failure_unpriv
--__msg_unpriv("R2 tried to add from different maps, paths or scalars, pointer arithmetic with it prohibited for !root")
-+__success __success_unpriv
+@@ -89,10 +93,13 @@ __success
+  * maximum possible variable offset.
+  */
+ __log_level(4) __msg("stack depth 16")
++#ifdef SPEC_V1
+ __failure_unpriv
+-/* Variable stack access is rejected for unprivileged.
++/* Variable stack access is rejected for unprivileged due to Spectre v1
++ * mitigations.
+  */
+ __msg_unpriv("R2 variable stack access prohibited for !root")
++#endif
  __retval(0)
+ __naked void stack_write_priv_vs_unpriv(void)
+ {
+@@ -129,8 +136,10 @@ __success
+  * maximum possible variable offset.
+  */
+ __log_level(4) __msg("stack depth 16")
 +#ifdef SPEC_V1
-+__xlated_unpriv("goto pc+2")
-+__xlated_unpriv("r2 = r0")
-+__xlated_unpriv("r3 = 0")
-+__xlated_unpriv("nospec")
-+__xlated_unpriv("r2 += r3")
-+__xlated_unpriv("if r1 != 0x0 goto pc+1")
-+__xlated_unpriv("goto pc+5")
-+__xlated_unpriv("r0 = 322376503")
-+__xlated_unpriv("nospec")
-+__xlated_unpriv("if r2 != 0x100000 goto pc+2")
-+__xlated_unpriv("r0 = 0")
-+__xlated_unpriv("exit")
-+__xlated_unpriv("nospec") /* inserted to prevent `R0 invalid mem access 'scalar'` */
-+__xlated_unpriv("r0 = *(u8 *)(r0 +0)")
+ __failure_unpriv
+ __msg_unpriv("R2 variable stack access prohibited for !root")
 +#endif
- __naked void value_pointer_and_scalar_2(void)
+ __retval(0)
+ __naked void stack_write_followed_by_read(void)
+ {
+@@ -163,11 +172,13 @@ __failure
+  * of the spilled register when we analyze the write).
+  */
+ __msg("R2 invalid mem access 'scalar'")
++#ifdef SPEC_V1
+ __failure_unpriv
+ /* The unprivileged case is not too interesting; variable
+  * stack access is rejected.
+  */
+ __msg_unpriv("R2 variable stack access prohibited for !root")
++#endif
+ __naked void stack_write_clobbers_spilled_regs(void)
  {
  	asm volatile ("					\
-@@ -505,7 +571,6 @@ l4_%=:	/* fake-dead code; targeted from branch A to	\
- 	 * prevent dead code sanitization, rejected	\
- 	 * via branch B however				\
- 	 */						\
--	/* unpriv: nospec (inserted to prevent `R0 invalid mem access 'scalar'`) */\
- 	r0 = *(u8*)(r0 + 0);				\
- 	r0 = 0;						\
- 	exit;						\
+@@ -324,7 +335,9 @@ __naked void access_min_out_of_bound(void)
+ SEC("cgroup/skb")
+ __description("indirect variable-offset stack access, min_off < min_initialized")
+ __success
++#ifdef SPEC_V1
+ __failure_unpriv __msg_unpriv("R2 variable stack access prohibited for !root")
++#endif
+ __naked void access_min_off_min_initialized(void)
+ {
+ 	asm volatile ("					\
+@@ -353,8 +366,10 @@ __naked void access_min_off_min_initialized(void)
+ 
+ SEC("cgroup/skb")
+ __description("indirect variable-offset stack access, priv vs unpriv")
+-__success __failure_unpriv
+-__msg_unpriv("R2 variable stack access prohibited for !root")
++__success
++#ifdef SPEC_V1
++__failure_unpriv __msg_unpriv("R2 variable stack access prohibited for !root")
++#endif
+ __retval(0)
+ __naked void stack_access_priv_vs_unpriv(void)
+ {
 -- 
 2.51.0
 
