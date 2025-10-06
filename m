@@ -1,152 +1,216 @@
-Received: from out-182.mta1.migadu.com (out-182.mta1.migadu.com [95.215.58.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 018CE2D73A1
-	for <bpf@vger.kernel.org>; Mon,  6 Oct 2025 20:20:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 040E017DFE7
+	for <bpf@vger.kernel.org>; Mon,  6 Oct 2025 20:33:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759782004; cv=none; b=bRIgBcKpjVNvasqDB8T/3b/xdHkvPBBLQ/abUqbMa+YU0Huuq04XeOpV48wUhUDYaXrunfQJdfOiQW8aBXYenb+nYEvX9ScTxC/TlrhsIwo++mvqK3mEyBOMqrzVE1Bg8a9vwhJbes8Cwzmol7nieDSde1JSi+JBK6ZYALfqLtU=
+	t=1759782791; cv=none; b=ZG6Y4r6tQj1WmlrobkNAJw2R0QOMLHP3kc+I/Gcw690Ykn6RqCpYIHlL0rnBJYR9KVD5ZwDYV551Iq5NutX7ueyv3YDd72VRoSJYURKPBKBK9DRbqZ4DBvsZwWDp2eS2JHYhVf3gUr5Xl33nvtyL0llxJ52XZwkRs7yp32fFarg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759782004; c=relaxed/simple;
-	bh=SQlc/yrGAX9hmo3SfLH4AECETZDXLCtokCVF3sm4WK0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UJTZG1BBN0muXH3CKWoTQ4UEzqeq2N74+ptQ4d0TICMhaMxR5fwP28ZKS7Zfokhh3nOr1ZNWKMVDfUgdE48Bk5PpTFkv3DRxNdWazzGKqDJclKJh7F6xw4AX7uKwHqCVoqnytzKPphMTk3QbScBFPfCBK+ymu57vTxbdStMe1T4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ovlTV1jW; arc=none smtp.client-ip=95.215.58.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1759782791; c=relaxed/simple;
+	bh=htMAYDLDpp4f3g3S9y2VdKjyj7MTOVFS9ubsd0Tq4l4=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=PdfTeQrL+0IKNRAYFE8KDONwLyUY4oBfCQqFDxwaATTDChZOy7F2Md2iUpEcKRh7rEwGbx9drN/p4EYXzhRp0nvjXXDTOKvSG741gPQbW8opWi90NRZaOgb7hpeskDXOzq/NhEZBEgBv1XQZpWloec1nLuoXRIrG1leZi2jXb6k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mJ8fwaM8; arc=none smtp.client-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ovlTV1jW"
-Message-ID: <d88addc3-bd10-4923-9ded-10fd999f39e7@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1759781989;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=H25UD2zYRPwdqIMTTOsqvjFnpku+oOdMSbrffDJoc1A=;
-	b=ovlTV1jWZkWhWZ8BCHisF3RGMbpfyerSfxz8CaeBcPS1duwE4XR8S+bTbNXwyB/erwovXS
-	MWV/HcFMHp5ilBoq+y79eifeYvIokCZH/y1iezjTv23PtYDlCAt/goF/IOqvLLBKjyhwju
-	CjrSAyT1Q9v2X7Es8Jy3nByqJZJZdf0=
-Date: Mon, 6 Oct 2025 13:19:43 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mJ8fwaM8"
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-27d69771e3eso37441525ad.3
+        for <bpf@vger.kernel.org>; Mon, 06 Oct 2025 13:33:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1759782789; x=1760387589; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=jTuvAWVj1xNY2RCe1+5+6DP2geal1bbUoeJ33CVd4DU=;
+        b=mJ8fwaM8bVTN2OyuMmZuTQHd9x3wbNQn3m+uJz5jyFyeeT4ykOgoN6Og0lY4qUf2uj
+         2RIQTAe84GiSIRNhvHnrO26LDHEXs9qdmY1FvDCv7CijrgmztT46oDKwfsljk2yaZHVN
+         Y9NkQXmcPXpA0Jewptm0S6uTgpW48aNM9rEVjKeIJkstR/bjaYDd9iT3Lj0vAv8miazF
+         L/OlH5VjOWpnF7vh6JAx4DFi+YYPaB9jh10fIWgROdtRNnIDL8fuFy31XeFgYJo4iFmb
+         O/MlVfDABBWIWHm9nhM1pfp1Gp82bAqSP5Feh94tdlkZWZAdgnqWwA2yiK3HVITQbTgl
+         wlVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1759782789; x=1760387589;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jTuvAWVj1xNY2RCe1+5+6DP2geal1bbUoeJ33CVd4DU=;
+        b=Gy1azh8jMD8CMumshEhxsfjlD5TnWtRbLNVRXNZVOJqqdbEUAdRB0hh1RNRMnDpDnS
+         EY74zHlKn0izikFRrqwUOFqRbQx4sgX/DRYnmKO0aZ0Vf3/jg1Sp/NnpgQDYI8DHQDjc
+         xfCeLOySzj+LRMdsZ39y9+ZtE+lmOpsJv3eItRGFmOGfr61LY/O0Z5dQOQurkO0XbASR
+         EgRc/FfQYEWPII0DKfCefJi03zSU4W88nomHHqv/WxcCZrE7Qb5tB7T7iAh8bmaWPqWL
+         NtZyYrsjEUdTRzUALj7RPY65PA2XoSYUyJ6JSYf5TzGoD9fGKG5cT4IrfBGHkuwAZa3Z
+         FSHA==
+X-Forwarded-Encrypted: i=1; AJvYcCVM+OvtSz+EDBT/ZN68u30hV+cVUT7XP3D+6J/lwG514CV1U79sOZDrMjmSgEc8hSHMc3c=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwH2cjxnREsfS3KxPgSlZtjFL3Vbe5pCvGKKuf7TJlxv1yijsJ1
+	B80ibrQuZo5urdOl1Ge0Iv3U6q9uO3MUnuE10DUckO3hY8hD+ZE+gaFE
+X-Gm-Gg: ASbGncvbn2+ZwemMpJLBN22LzMSqjmZRidlKh1c63b3txh//i6jyE0V6X40nOxA2OPd
+	PzQAm7J9lBlMWhg7e7ywlVFdtTa//IkpCKL6mrHhFeNJDK4tpJqoJS8qm/pco3Rw7lW0rQsTW6a
+	1qfVMeWXq+Y13epRKpUTew1J70iH/Yi9YKEltu4K7rNzh/tXtA82GUcjco0NLq+uNYE1AAHYNgt
+	hnWe1VzatiN46eYxkUilnp1BZp1X9MzlKF+pxAB7Rr2hcg5bcN7DpubBQ1yg4OsJy9uOdhPoq+c
+	MDCxh8YdbsDdkRy9ncVhnu7G9WIrYPyxrsl2fPNAaBld9/TYJ6R8sWeow9h4xqF8sLbD976zyFZ
+	TbOBWLjfHq7GHHDlgIXzx/z1JE2eW7HvbnuaUJ9Yioesd2aunBilnE8enJle/ov+uFtda6vtrkf
+	5pR8Sc
+X-Google-Smtp-Source: AGHT+IE/MvX+CuLujIbF0sgN/kXRntG3wFGfdpL/t6ZHiDkab3quyg+ufA6rxyIuFBes0xT9d3Is4A==
+X-Received: by 2002:a17:903:1b43:b0:267:a8d0:7ab3 with SMTP id d9443c01a7336-28e9a693f40mr159740215ad.61.1759782789065;
+        Mon, 06 Oct 2025 13:33:09 -0700 (PDT)
+Received: from ?IPV6:2a03:83e0:1151:15:6b87:8abb:5d27:d3d8? ([2620:10d:c090:500::6:c573])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-28e8d1dc00esm140825475ad.117.2025.10.06.13.33.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Oct 2025 13:33:08 -0700 (PDT)
+Message-ID: <82c392dc-e750-43d9-9394-1df00a366ae0@gmail.com>
+Date: Mon, 6 Oct 2025 13:33:07 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [RFC PATCH bpf-next v2 06/12] bpf: Change local_storage->lock and
- b->lock to rqspinlock
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
- Amery Hung <ameryhung@gmail.com>
-Cc: bpf <bpf@vger.kernel.org>, Network Development <netdev@vger.kernel.org>,
- Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@kernel.org>, KP Singh <kpsingh@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Song Liu <song@kernel.org>,
- Hao Luo <haoluo@google.com>, Kernel Team <kernel-team@meta.com>
-References: <20251002225356.1505480-1-ameryhung@gmail.com>
- <20251002225356.1505480-7-ameryhung@gmail.com>
- <CAADnVQ+X1Otu+hrBeCq6Zr9vAaH5vGU42s6jLdBiDiLQcwpj4Q@mail.gmail.com>
- <CAMB2axOUU5J4Ec=tuBDYePzucw1QQLciFWC01=eVQdPOhT1BGQ@mail.gmail.com>
- <CAADnVQ+=F5SkoRA4LU+JE+u87TLFp-mTS4bv+u9MUST2+CX8AA@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+From: JP Kobryn <inwardvessel@gmail.com>
+Subject: Re: [PATCH] memcg: introduce kfuncs for fetching memcg stats
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Shakeel Butt <shakeel.butt@linux.dev>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
+ <mkoutny@suse.com>, Yosry Ahmed <yosryahmed@google.com>,
+ Johannes Weiner <hannes@cmpxchg.org>, Tejun Heo <tj@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ LKML <linux-kernel@vger.kernel.org>,
+ "open list:CONTROL GROUP (CGROUP)" <cgroups@vger.kernel.org>,
+ linux-mm <linux-mm@kvack.org>, bpf <bpf@vger.kernel.org>,
+ Kernel Team <kernel-team@meta.com>
+References: <20251001045456.313750-1-inwardvessel@gmail.com>
+ <CAADnVQKQpEsgoR5xw0_32deMqT4Pc7ZOo8jwJWkarcOrZijPzw@mail.gmail.com>
 Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <CAADnVQ+=F5SkoRA4LU+JE+u87TLFp-mTS4bv+u9MUST2+CX8AA@mail.gmail.com>
+In-Reply-To: <CAADnVQKQpEsgoR5xw0_32deMqT4Pc7ZOo8jwJWkarcOrZijPzw@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 
-On 10/6/25 10:58 AM, Alexei Starovoitov wrote:
-> On Fri, Oct 3, 2025 at 3:03 PM Amery Hung <ameryhung@gmail.com> wrote:
+On 10/1/25 3:25 PM, Alexei Starovoitov wrote:
+> On Tue, Sep 30, 2025 at 9:57 PM JP Kobryn <inwardvessel@gmail.com> wrote:
+[..]
 >>
->> On Thu, Oct 2, 2025 at 4:37 PM Alexei Starovoitov
->> <alexei.starovoitov@gmail.com> wrote:
->>>
->>> On Thu, Oct 2, 2025 at 3:54 PM Amery Hung <ameryhung@gmail.com> wrote:
->>>>
->>>>          bpf_selem_free_list(&old_selem_free_list, false);
->>>>          if (alloc_selem) {
->>>>                  mem_uncharge(smap, owner, smap->elem_size);
->>>> @@ -791,7 +812,7 @@ void bpf_local_storage_destroy(struct bpf_local_storage *local_storage)
->>>>           * when unlinking elem from the local_storage->list and
->>>>           * the map's bucket->list.
->>>>           */
->>>> -       raw_spin_lock_irqsave(&local_storage->lock, flags);
->>>> +       while (raw_res_spin_lock_irqsave(&local_storage->lock, flags));
->>>
->>> This pattern and other while(foo) doesn't make sense to me.
->>> res_spin_lock will fail only on deadlock or timeout.
->>> We should not spin, since retry will likely produce the same
->>> result. So the above pattern just enters into infinite spin.
+>> There is a significant perf benefit when using this approach. In terms of
+>> elapsed time, the kfuncs allow a bpf cgroup iterator program to outperform
+>> the traditional file reading method, saving almost 80% of the time spent in
+>> kernel.
 >>
->> I only spin in destroy() and map_free(), which cannot deadlock with
->> itself or each other. However, IIUC, a head waiter that detects
->> deadlock will cause other queued waiters to also return -DEADLOCK. I
->> think they should be able to make progress with a retry.
+>> control: elapsed time
+>> real    0m14.421s
+>> user    0m0.183s
+>> sys     0m14.184s
+>>
+>> experiment: elapsed time
+>> real    0m3.250s
+>> user    0m0.225s
+>> sys     0m2.916s
 > 
-> If it's in map_free() path then why are we taking the lock at all?
-> There are supposed to be no active users of it.
+> Nice, but github repo somewhere doesn't guarantee that
+> the work is equivalent.
+> Please add it as a selftest/bpf instead.
+> Like was done in commit
+> https://lore.kernel.org/bpf/20200509175921.2477493-1-yhs@fb.com/
+> to demonstrate equivalence of 'cat /proc' vs iterator approach.
 
-There is no user from the syscall or from the bpf prog.
+Sure, I'll relocate the test code there.
 
-There are still kernel users, bpf_cgrp_storage_free() and bpf_sk_storage_free(), 
-that can race with map_free().
-
-> If there are users and we actually need that lock then the deadlock
-> is possible and retrying will deadlock the same way.
-> I feel AI explained it better:
-> "
-> raw_res_spin_lock_irqsave() can return -ETIMEDOUT (after 250ms) or
-> -EDEADLK. Both are non-zero, so the while() loop continues. The commit
-> message says "it cannot deadlock with itself or
-> bpf_local_storage_map_free", but:
+[..]
+>> ---
+>>   mm/memcontrol.c | 67 +++++++++++++++++++++++++++++++++++++++++++++++++
+>>   1 file changed, 67 insertions(+)
+>>
+>> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+>> index 8dd7fbed5a94..aa8cbf883d71 100644
+>> --- a/mm/memcontrol.c
+>> +++ b/mm/memcontrol.c
+>> @@ -870,6 +870,73 @@ unsigned long memcg_events_local(struct mem_cgroup *memcg, int event)
+>>   }
+>>   #endif
+>>
+>> +static inline struct mem_cgroup *memcg_from_cgroup(struct cgroup *cgrp)
+>> +{
+>> +       return cgrp ? mem_cgroup_from_css(cgrp->subsys[memory_cgrp_id]) : NULL;
+>> +}
+>> +
+>> +__bpf_kfunc static void memcg_flush_stats(struct cgroup *cgrp)
+>> +{
+>> +       struct mem_cgroup *memcg = memcg_from_cgroup(cgrp);
+>> +
+>> +       if (!memcg)
+>> +               return;
+>> +
+>> +       mem_cgroup_flush_stats(memcg);
+>> +}
 > 
-> 1. If -ETIMEDOUT is returned because the lock holder is taking too long,
->     retrying immediately won't help. The timeout means progress isn't
->     being made, and spinning in a retry loop without any backoff or
->     limit will prevent other work from proceeding.
-> 
-> 2. If -EDEADLK is returned, it means the deadlock detector found a
->     cycle. Retrying immediately without any state change won't break the
->     deadlock cycle.
-> "
-> 
->> Or better if
->> rqspinlock does not force queued waiters to exit the queue if it is
->> deadlock not timeout.
-> 
-> If a deadlock is detected, it's the same issue for all waiters.
-> I don't see the difference between timeout and deadlock.
-> Both are in the "do-not-retry" category.
-> Both mean that there is a bug somewhere.
+> css_rstat_flush() is sleepable, so this kfunc must be sleepable too.
+> Not sure about the rest.
 
-Both bpf_cgrp_storage_free() and map_free() are the only remaining kernel users 
-of the locks, so no deadlock is expected unless there is a bug. The busy percpu 
-counter is currently not used in both of them also. Theoretically, the 
-res_spin_lock (and the current regular spin_lock) should never fail here in 
-bpf_cgrp_storage_free() and map_free(). If res_spin_lock returns error, there is 
-a bug somewhere.
+Good catch. I'll add the sleepable flag where it's needed.
 
 > 
->>>
->>> If it should never fail in practice then pr_warn_once and goto out
->>> leaking memory. Better yet defer to irq_work and cleanup there.>>
-
-Not sure how to handle the bug. yeah, maybe just leak it and then splat.
-I think deferring it still need to take the lock.
-
->> Hmm, both functions are already called in some deferred callbacks.
->> Even if we defer the cleanup again, they still need to grab locks and
->> still might fail, no?
+>> +
+>> +__bpf_kfunc static unsigned long memcg_node_stat_fetch(struct cgroup *cgrp,
+>> +               enum node_stat_item item)
+>> +{
+>> +       struct mem_cgroup *memcg = memcg_from_cgroup(cgrp);
+>> +
+>> +       if (!memcg)
+>> +               return 0;
+>> +
+>> +       return memcg_page_state_output(memcg, item);
+>> +}
+>> +
+>> +__bpf_kfunc static unsigned long memcg_stat_fetch(struct cgroup *cgrp,
+>> +               enum memcg_stat_item item)
+>> +{
+>> +       struct mem_cgroup *memcg = memcg_from_cgroup(cgrp);
+>> +
+>> +       if (!memcg)
+>> +               return 0;
+>> +
+>> +       return memcg_page_state_output(memcg, item);
+>> +}
+>> +
+>> +__bpf_kfunc static unsigned long memcg_vm_event_fetch(struct cgroup *cgrp,
+>> +               enum vm_event_item item)
+>> +{
+>> +       struct mem_cgroup *memcg = memcg_from_cgroup(cgrp);
+>> +
+>> +       if (!memcg)
+>> +               return 0;
+>> +
+>> +       return memcg_events(memcg, item);
+>> +}
+>> +
+>> +BTF_KFUNCS_START(bpf_memcontrol_kfunc_ids)
+>> +BTF_ID_FLAGS(func, memcg_flush_stats)
+>> +BTF_ID_FLAGS(func, memcg_node_stat_fetch)
+>> +BTF_ID_FLAGS(func, memcg_stat_fetch)
+>> +BTF_ID_FLAGS(func, memcg_vm_event_fetch)
+>> +BTF_KFUNCS_END(bpf_memcontrol_kfunc_ids)
 > 
-> If it's a map destroy path and we waited for RCU GP, there shouldn't be
-> a need to take a lock.
-> The css_free_rwork_fn() -> bpf_cgrp_storage_free() path
-> is currently implemented like it's similar to:
-> bpf_cgrp_storage_delete() which needs a lock.
-> But bpf_cgrp_storage_free() doesn't have to.
-> In css_free_rwork_fn() no prog or user space
-> should see 'cgrp' pointer, since we're about to kfree(cgrp); it.
-> I could be certainly missing something.
+> At least one of them must be sleepable and the rest probably too?
+> All of them must be KF_TRUSTED_ARGS too.
 
+Thanks, I'll include the trusted args flag. As to which are sleepable,
+only memcg_flush_stats can block.
+
+> 
+>> +
+>> +static const struct btf_kfunc_id_set bpf_memcontrol_kfunc_set = {
+>> +       .owner          = THIS_MODULE,
+>> +       .set            = &bpf_memcontrol_kfunc_ids,
+>> +};
+>> +
+>> +static int __init bpf_memcontrol_kfunc_init(void)
+>> +{
+>> +       return register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING,
+>> +                                        &bpf_memcontrol_kfunc_set);
+>> +}
+> 
+> Why tracing only?
+
+Hmmm, initially I didn't think about use cases outside of the cgroup
+iterator programs. After discussing with teammates though, some other
+potential use cases could be within sched_ext or (future) bpf-oom. I'm
+thinking I'll go with the "UNSPEC" type in v2.
