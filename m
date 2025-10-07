@@ -1,101 +1,128 @@
-Received: from xmbghk7.mail.qq.com (xmbghk7.mail.qq.com [43.163.128.54])
+Received: from out203-205-221-155.mail.qq.com (out203-205-221-155.mail.qq.com [203.205.221.155])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75A1416F288;
-	Tue,  7 Oct 2025 03:00:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=43.163.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7EBEDDD2;
+	Tue,  7 Oct 2025 03:07:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.155
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759806005; cv=none; b=cjglv1hdmavwbEALVlHmV3ywx8Sg/bYQ2TiufrYfrqx+/82OxpeZEM9JfrmkQJJAtYtAmbN8K8k2PP3OckZz+W6v05PGr5uvpL688koOb+g6Ybe6MLxSUQr0WkvL1n41/hRiIvga3VyMPDJFSJ6C3ChLHVwhcwVF21U5eKHWORw=
+	t=1759806430; cv=none; b=r6Hu/JjxGK5skQKehqE5PD03rxBdy1/ORC+47yg4ULlC/6CyW7JcoNfdSIFQ08b/vtbh+o9OpwPAhSTbJrFscF7YTDa3qPvnl4xTfNFVNtP1mp2/mwImNfhghRAm9do2UGpIhzU6h+4/OF3B4Xy8D9A3TXmfint1IMkVwVjzu1U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759806005; c=relaxed/simple;
-	bh=/vlPcppKnGJ+lW+fcnPdTnUXgjsbxcARfgThppHSPsI=;
-	h=Message-ID:From:To:Cc:Subject:Date:MIME-Version; b=QH73Jj7hyFRdnA7X+yZVpOAuWf31trf8kwgrCmi3EPPxpKVUnV74TFwSHl6uzVSFHgb7Pv+xknf7zEbsdVZ5UQxcDPfaU0wT6dc4bli49wtmfJ86BIdWu0Kn4imhpflS8mbMnPUxVdL80mhviNsyEb+QCS2gRNhJSiAC0dfj/64=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=nXRZ5aT/; arc=none smtp.client-ip=43.163.128.54
+	s=arc-20240116; t=1759806430; c=relaxed/simple;
+	bh=iWuHg+XDKIsqfl1L27XrdXTMvtJhHJk7nPTk37qQmd8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=CPLp+cmqJkRLzEfAswSyzeiCOt7K0gJ4VyimB7ZjlqQBCPw+Jw4UCSE3Ohp8+6v5upD1sqyNO1Tc5UAfG8xxLCqJ1pSGQhBA9tflttJEMzgT5tokcSRA3ZWPQZHQ2QNC8qxDH7WGa+JCZ3OpYFIIVQpIPXWfHtV4hyC2dehU6vs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=E1S6GdYV; arc=none smtp.client-ip=203.205.221.155
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="nXRZ5aT/"
+	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="E1S6GdYV"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-	s=s201512; t=1759805998;
-	bh=HFlDB8BZr5BFQQSrOj+U3Shf7L1iVHMAKdZeBl2bj9k=;
-	h=From:To:Cc:Subject:Date;
-	b=nXRZ5aT/WPIk/fvBexoV74g2YZdB8nuF6HbBX5opc16cpzJITClxcF5PbxQhLd3s/
-	 lr+HCEhQnAFrI1Pn9G4TdLRF23qzTPnFHSV09VEnCI4bm1LK2B724NRK3JqOUWOIM/
-	 rbhHur79jU7FwCcrWVHYIlSccFPgn49OMUaddlVg=
-Received: from rtoax ([183.198.135.10])
-	by newxmesmtplogicsvrszc13-0.qq.com (NewEsmtp) with SMTP
-	id EF6A0012; Tue, 07 Oct 2025 10:59:54 +0800
-X-QQ-mid: xmsmtpt1759805994t3ps3mief
-Message-ID: <tencent_15BBCAE66BDD681D629FC197104C56D46506@qq.com>
-X-QQ-XMAILINFO: MyirvGjpKb1jzQXL55XH0cEBIDzApW4UBEbjjnudb84o3fzG5QGOgBuUG9NFcb
-	 zF63ViWooPEgulZDkorwyR4Wb1ANIqqnABapVtOFBojHyOz6xn/A2lRjit9JR64pKWWXzeteMe4o
-	 NN+lMXYUutxnXI+hh2ff48sQGM8bhXfYA3zcvnKPrr3AHtq+ZCwTuRY77bGbLTSnsQtPaHb/axOQ
-	 zSR3vMvEaMwUbm2rVx6i47csjT31SpYN/pjD4y1fpfBbU+3R4Du+Po0ki0LlWAUK0Kp8/aRFup0g
-	 m3PsaPw6oM6lO3Nro6gUd1yNZalDnm9CBjMi78cOTJODnuQfYITSUK0xKGcLCSB4KBrewVETJCS3
-	 IN2bCmtUDZAcXDbPaeU1m41iRg4DfqLIzvk8IAPS4R6YxKK2OTm9GgOLmlmGHlNs7kuIKJF69exN
-	 sfQm8Xxp7PJ2cgVjQzJQw72CD1gRFK5hXMHo8PMdILsCOGVhAricE7XVAz506JrIXIJ1Sct+F8YW
-	 /X+wvi2vZhqxQ+H3gxhhYgQkfgeh7J3/XY9Z3RzCaMZ9YCPMmBqqLooql3ZOAwj7HCmL6eIRYMz/
-	 POg2ghJzSmRyCmHu/gV6BSrYD4x6+af/kl1lFmkBK/WGDSW+EngjD8wmup2VvZLVYsw1aMb01Qba
-	 CBh1y8PstBEA0ImjLV8g74qvkN62xmotpsB4dGdohJFYoINj9+AX6gktUIOuI8SJmRrs3L25RXYa
-	 SUdmzXko9iz+MCOzsm2pG+7/hXBpis9pPPSAryNdz6rhdXK7yBz1Hnw1ebBWtaycwn7t2TjjviP7
-	 +zM1W3I6epzQAEvxA+m8OzJy06RZZzcNqpnUkN42xyeWCEPuwvjj1imeXZeaopRk3kW4lF00faDx
-	 rIFw/OPfov5k5TaqrVhOczzO9Q8WLqffs84VrKtVjEi64Y/rXCngkURXx7R6plaL+SKcW6MNENs5
-	 BT1Nw3RygeL+Q7I87YMuzC9f/3m5IpTtF+88L6jZEGyIXKzlP8KStEcNG71tsmi+Idr/T6MCU7Wb
-	 Tt/OKs0HNwIe9IeAFcc71lEShMzT0hl3P9f0LyFQ==
-X-QQ-XMRINFO: OD9hHCdaPRBwq3WW+NvGbIU=
-From: Rong Tao <rtoax@foxmail.com>
-To: vmalik@redhat.com,
-	ast@kernel.org,
-	eddyz87@gmail.com
-Cc: rtoax@foxmail.com,
-	Rong Tao <rongtao@cestc.cn>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	bpf@vger.kernel.org (open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)),
-	linux-kernel@vger.kernel.org (open list),
-	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
-Subject: [PATCH bpf-next v3 0/2] Add kfuncs bpf_strcasestr and bpf_strncasestr
-Date: Tue,  7 Oct 2025 10:59:27 +0800
-X-OQ-MSGID: <cover.1759804822.git.rongtao@cestc.cn>
-X-Mailer: git-send-email 2.51.0
+	s=s201512; t=1759806117;
+	bh=SE2gaV290pNnHcKMRBAA66T1AeRJNMP1p2qNpVR1Cg0=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=E1S6GdYVRdjfO8SlDcSgYpm7EmH2dRezjUjBTo339kSbaawTeAliMVJ/++rSc3X7E
+	 9r0dUokA18qVPX1Phc7bGJyCXgGALPfSJOMKZVvo6wWH0bcVLb+q4yAQaVJbM2jIO0
+	 6i83QxbZhK2qEMQ/aW+xIf4FAiywKK6YG96N40Fk=
+Received: from [192.168.2.104] ([183.198.135.10])
+	by newxmesmtplogicsvrszb20-1.qq.com (NewEsmtp) with SMTP
+	id 759E202; Tue, 07 Oct 2025 11:01:53 +0800
+X-QQ-mid: xmsmtpt1759806113tg0lobh9b
+Message-ID: <tencent_89BDE28D22220E1B0409E564455D0EA8D80A@qq.com>
+X-QQ-XMAILINFO: NT7uTz3cNku2V7TxWyb1zVcKAIoA0D4V9D/5nPN8x1MqtHVfetHpVcHSYzNAv4
+	 3JB2Hkkco64/49q6XgsJf2mBmqfqyP7PMphexpC2zwhvL4wJX1Z0dJFSNFcNfTshwCjPQrddvbg7
+	 Cc1kwm0ZO3dvLxQsRhRP96k6eKDVtCufU19KovToRHsFkmstIwlV7VHAT3xUo7EZke4lRz+dW+Gw
+	 Mc3XznMGjFyaG6U0lu6K8nUUm0oxYQVhmXNjK1EY+PKkxxtha5ZzwCx+e7B/E3X20INfVLoa5+At
+	 zlHxArRsvWV9GiMhBKz8VIus6C5PAkXrqOkgX81q+gxgGi8s6XbIumb+qCIDNN6HU74Efv6txRBX
+	 kDg+l6YO8BBIEmKCwtnPPCtcN7vm0/nCVWE5CoqCoA0irHS9pWlPNUtN1tfxA1F/+i1+UR0INJ2D
+	 M3A4OePl9kyJDaL7RMxarjtSNt7U5WvV3HwlXQ5TTBDPljcVGPYQ6/RkbldWWIX4qwLest3uBLgE
+	 TjJhrtI+tHuscaD22IfvlO3L3RbVo4xjgUKvNuYK5whVHbxWSob/sJJI3GlSbEYZvkIP09ZGJ1eD
+	 tasxfXXiyfjelnQWaAEEvfPV9j2Kg64yU8OOUZ7FuCcbGocKEXji2jd57FmgDSaQ9q3z8YJXP0rW
+	 G1wbC+OnjeajXzFTpdC/CMSIGAazptXus1oNzxDV1JYNdM2xBV3QZtWZXpyThFK1Y359qKOMOdwJ
+	 fZ8pyffgD1A6KR9JLl3H206F0sXcRH+5pSAvxPH4v2rxuKgjRwc9qIsO9ei4o3Ml0TMaryemcUBp
+	 3ekoswAGmEtWmZriudf1O6szbmCoeIJsk1h1CIm4n6wGRDYwb7MHn6+esebQyC+VLgtXuSC1Nscq
+	 FCtXa0nkH84jUAF/bQUaZ4KtCTSWwvKqL+/qG2oFANzcFH6Of/NFB2bDPZ/15RXUSJx+OCdJkeML
+	 U5YtQwjdDvO0gXhsGDoxGqc5l7HVcQe6Ti3haFQQEM0dUZuEIWSvAfGi2b7AWFIrLgz+Xmfg8JoV
+	 uAWK8bIAhDjQIbxhyZFTmh/zvv4I4=
+X-QQ-XMRINFO: OCYC/FIMav1X1DvLmR6nDkA=
+X-OQ-MSGID: <8423b6f9-1057-48a8-a55d-bd80e18b5389@foxmail.com>
+Date: Tue, 7 Oct 2025 11:01:53 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v2 1/2] bpf: add bpf_strcasestr,bpf_strncasestr
+ kfuncs
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: vmalik@redhat.com, ast@kernel.org, Rong Tao <rongtao@cestc.cn>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ "open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)"
+ <bpf@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>,
+ "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
+References: <cover.1759588929.git.rongtao@cestc.cn>
+ <tencent_6D228941AB904DD6E1E58C8ACDEBEC280C06@qq.com>
+ <CAEf4BzaEjv1Nc6VK9sAW2y3cGvyKx9WUpOugWn6vZkFW-k7wCA@mail.gmail.com>
+Content-Language: en-US
+From: "rtoax@foxmail.com" <rtoax@foxmail.com>
+In-Reply-To: <CAEf4BzaEjv1Nc6VK9sAW2y3cGvyKx9WUpOugWn6vZkFW-k7wCA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-From: Rong Tao <rongtao@cestc.cn>
 
-Add kfuncs bpf_strcasestr and bpf_strncasestr, which are extensions of
-bpf_strstr and bpf_strnstr, suitable for more scenarios.
+On 10/7/25 7:23 AM, Andrii Nakryiko wrote:
+> On Sat, Oct 4, 2025 at 7:52 AM Rong Tao <rtoax@foxmail.com> wrote:
+>> From: Rong Tao <rongtao@cestc.cn>
+>>
+>> bpf_strcasestr() and bpf_strncasestr() functions perform same like
+>> bpf_strstr() and bpf_strnstr() except ignoring the case of the
+>> characters.
+>>
+>> Signed-off-by: Rong Tao <rongtao@cestc.cn>
+>> ---
+>>   kernel/bpf/helpers.c | 96 ++++++++++++++++++++++++++++++++++----------
+>>   1 file changed, 75 insertions(+), 21 deletions(-)
+>>
+>> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+>> index c9fab9a356df..4df902e5f208 100644
+>> --- a/kernel/bpf/helpers.c
+>> +++ b/kernel/bpf/helpers.c
+>> @@ -3675,34 +3675,20 @@ __bpf_kfunc int bpf_strcspn(const char *s__ign, const char *reject__ign)
+>>          return -EFAULT;
+>>   }
+>>
+>> -/**
+>> - * bpf_strnstr - Find the first substring in a length-limited string
+>> - * @s1__ign: The string to be searched
+>> - * @s2__ign: The string to search for
+>> - * @len: the maximum number of characters to search
+>> - *
+>> - * Return:
+>> - * * >=0      - Index of the first character of the first occurrence of @s2__ign
+>> - *              within the first @len characters of @s1__ign
+>> - * * %-ENOENT - @s2__ign not found in the first @len characters of @s1__ign
+>> - * * %-EFAULT - Cannot read one of the strings
+>> - * * %-E2BIG  - One of the strings is too large
+>> - * * %-ERANGE - One of the strings is outside of kernel address space
+>> - */
+>> -__bpf_kfunc int bpf_strnstr(const char *s1__ign, const char *s2__ign, size_t len)
+>> +int __bpf_strnstr(const char *s1, const char *s2, size_t len, bool ignore_case)
+> keep it static?
 
-Rong Tao (2):
-  bpf: add bpf_strcasestr,bpf_strncasestr kfuncs
-  selftests/bpf: Test bpf_strcasestr,bpf_strncasestr kfuncs
+Thanks, fixed in v3, please review.
 
- kernel/bpf/helpers.c                          | 97 +++++++++++++++----
- .../selftests/bpf/prog_tests/string_kfuncs.c  |  2 +
- .../bpf/progs/string_kfuncs_failure1.c        | 12 +++
- .../bpf/progs/string_kfuncs_failure2.c        |  2 +
- .../bpf/progs/string_kfuncs_success.c         | 10 ++
- 5 files changed, 102 insertions(+), 21 deletions(-)
+Rong Tao
 
---- 
-v3: keep __bpf_strnstr() static and compress some tests.
-v2: remove extra __bpf_kfunc and fix comment of bpf_strncasestr().
-    https://lore.kernel.org/all/tencent_6D228941AB904DD6E1E58C8ACDEBEC280C06@qq.com/
-v1: https://lore.kernel.org/all/tencent_8AF4D15B4475031E2185ACDE4B1495995707@qq.com/
--- 
-2.51.0
+>
+> pw-bot: cr
+>
+>
+> [...]
 
