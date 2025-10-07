@@ -1,193 +1,127 @@
-Received: from out203-205-221-231.mail.qq.com (out203-205-221-231.mail.qq.com [203.205.221.231])
+Received: from out-177.mta1.migadu.com (out-177.mta1.migadu.com [95.215.58.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37DF934BA3C;
-	Tue,  7 Oct 2025 03:14:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.231
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 552C520322;
+	Tue,  7 Oct 2025 03:49:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759806893; cv=none; b=JT2nUQUUMPM7G9S0XQvigwLzqEkWoM39MZsq2zbmAFRw8WZkJepSNnlJlE/eDCJUela8N56tpCrKxTgHft7UnwsPHj7bDfPm0fsIpfV2CkSxmzRWttDUcz9OKpTPnN8cBNwCcmAUAB5j6Jai9bijaiAKdsfEk8MguxO2EVseQyg=
+	t=1759808999; cv=none; b=pS4VVmPE8xkTVWZrQ1nFY+yMJ1RNrw2PqVWoUrFNKjpv53aXpoC8MHV45Zq65OYTIKprOzE9EHb0paFpGP9s+jA3tSqnJ822Bu1+kGT+jKilRv8QJYTkbAbthKuO148SP/aQSNo/I7D6p3DEAuEyZHLejen0Bev/WOvFoYUUdgw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759806893; c=relaxed/simple;
-	bh=vEH+1puoPl8mYeTHPHAu6znRUHW6Zubs6K+kU9p783A=;
-	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
-	 MIME-Version; b=YMdVvwKznUIHtw/g2yczvmxDPn2SWDJEhLVJ3uJv8ZLT8PcPOdnSAl88bqHNKeZqDM1u/+srdUZCPAOVxKjKN2+LNmCZyVjZoprEscNya/bkNIG2PEOGDoYaiblM2A79+bMeT34iCe6DrhBHAI+QsFSENiwFTYxxHtbSYp8aGuM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=O3C7vstI; arc=none smtp.client-ip=203.205.221.231
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
+	s=arc-20240116; t=1759808999; c=relaxed/simple;
+	bh=cNlI9bHI/ylXQMlNzU+Ogaqapl/G/HUfveqiYuJSf9w=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Eo72pXW0AAGod40o9kL3Ent3G44I/oNog9TT9ZPdOEHpBLzDNgMZ8o3wk83kVQEC/PUXwRXZNcd89vRQ74wse8MMSmHhy5NLG6XfCp+frreT87+imLn4LGgbKguFoAZ+5Pvxpc3EVG5/GeW2geS0HJZfrPOnPSw9Yl1b8qFJn9s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=sHtHr9+4; arc=none smtp.client-ip=95.215.58.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="O3C7vstI"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-	s=s201512; t=1759806878;
-	bh=fEz4fk7jBSbmE1HYpn3tjFnZHoLb7r0ZS14ykGQI/28=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=O3C7vstI9XhtEqrbBqoFcxpAhLxfMUDxK8E3sPecyRncOb2QmAUuAETQJOTB2IgJI
-	 M7086rcpmD4dFW0H0dbO6315bdsJhAdGkPKAudnxpLfCzLuCfxZGDWxnNjFCWKzgkm
-	 N+bHIN+fyOoRhf15T1XEVmFftBhjufMSPMiVWq4A=
-Received: from rtoax ([183.198.135.10])
-	by newxmesmtplogicsvrsza36-0.qq.com (NewEsmtp) with SMTP
-	id 532E0C6; Tue, 07 Oct 2025 11:01:19 +0800
-X-QQ-mid: xmsmtpt1759806079tuf0a8ecd
-Message-ID: <tencent_0F19C408C167655C0AAA5CBCBE8DC621FA0A@qq.com>
-X-QQ-XMAILINFO: MllZffuBkEb5xbBHGaRejfdFgUeZwVzdRQwECtPESsC3D/9QBKvN13yGOVXHle
-	 2nXNVQwEqV75L0X48axpkelV8Ha8ftM/Msyyns+8d/Bg2vfgCWnZZey90J9EuFhZdFMNCUT03d7E
-	 iakCZYj/1+pSR25zMIssv8mAp+S14n7O3wQCsmCf/I3SD2lHbg3WZNvBmIvBTs38KEp+QmhlIO5S
-	 Jozk0JMhZ4yoxMWQjxhlAqWs4gJIk0beiWXFXl3bdNYv2zfFBweq2m/1i14XZcRvtpqRqc4Jb25+
-	 wc+3nbAtIAJI1NrWFukWYGjL/WyjSqw3MWSh2vU8OzEDKhafuR8TJSRUorauGlOosZnbg0mIJjRQ
-	 2FhxF7m7sah6YdFc1HDuxa7yKexfPsNdVUEt91TbelcHoOjucL9Q/kxfeGZHSvJtWacaoxGD64wV
-	 wtMJA9lmyXSomyfRqr0/k6+F+xngX0+D9mKAyXvLqZd8wNNKy8rBLkTg7iv058y+VGmn5uaLI9y7
-	 k/ze3Tm/LaljgIUve+Ii38AFfkIw2FyOh+uqIG7J4/CKC7NKRiRjaMgV6xHl+4CleSp+Hn850O7E
-	 I4re1ACAST1Lt+vZxCyOxzLglx0BOmuUlSyPPSnMIiTI9TxT6IJPeTonRRcJOKD4iE2oHaTVU35i
-	 NPoDD7a0AKxZXifuzWDRF9v93d1aet62cXKG6zvz4EwSW7Tf8XhuYF1d1kWljXQaczx+jzrjfWQ9
-	 F3ADzCEmUvm4toYDMfO5l+uyBt8Pc3R3YzJFItxu8Jw/ICWn9FwR0oGDxXWJQxggnsTcEjZu+wkQ
-	 +DNP7PZh0gDafqQdPRi7Rc/zZjEnUd/kYQkU7f1LVksvjAo2i8Y3/k3ubJGRCsR+5I1Mo9QhwciF
-	 RLnRLKwqJ1oPDh7+0kafMIKasztgxTxJpFWIqyAjuMMPZAbTIUEnW9YRYYOrusoWdbU8lPigh4gB
-	 h+U0gsexfWgxVpy6bXfd8Qq3MXbQz9eNYp8UkZbBPu89yGnvS6k4powLB8F3LAFMzRSjFa0MHca0
-	 refIRcVlFOnSpgFubJArC0OcaJEI34qJVcgDp1NH1IpufnvQvj2hr2IK8rK8s=
-X-QQ-XMRINFO: Nq+8W0+stu50PRdwbJxPCL0=
-From: Rong Tao <rtoax@foxmail.com>
-To: vmalik@redhat.com,
-	ast@kernel.org,
-	eddyz87@gmail.com
-Cc: rtoax@foxmail.com,
-	Rong Tao <rongtao@cestc.cn>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	bpf@vger.kernel.org (open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)),
-	linux-kernel@vger.kernel.org (open list),
-	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
-Subject: [PATCH bpf-next v3 2/2] selftests/bpf: Test bpf_strcasestr,bpf_strncasestr kfuncs
-Date: Tue,  7 Oct 2025 11:00:41 +0800
-X-OQ-MSGID: <cc36f824ae961824e80ff9a9284483aa1db674d1.1759804822.git.rongtao@cestc.cn>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <cover.1759804822.git.rongtao@cestc.cn>
-References: <cover.1759804822.git.rongtao@cestc.cn>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="sHtHr9+4"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1759808994;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=4Hiokzts7PCRKt1OVuEkEGfOq4GhsmdPG6MMIx7taoM=;
+	b=sHtHr9+4cBBh32A4cQH2VvK5uHIQpnTYzLql6prkqaJLjI/AtwzFWxpGRZTH188yEsCX9e
+	fe7RzXPZ0LP/zmMJludJbuFqY8x/U2qXtxpqTaSgGuiFLKxT6OGYnGFHPY+Yx97OOjFqVU
+	/tv2iMaa4OYCXP5muCy+TCQcYvYIUho=
+From: Menglong Dong <menglong.dong@linux.dev>
+To: Fushuai Wang <wangfushuai@baidu.com>
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, horms@kernel.org, ast@kernel.org, martin.lau@kernel.org,
+ houtao1@huawei.com, jkangas@redhat.com, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Fushuai Wang <wangfushuai@baidu.com>,
+ bpf@vger.kernel.org
+Subject:
+ Re: [PATCH bpf-next] bpf: Use rcu_read_lock_dont_migrate() and and
+ rcu_read_unlock_migrate()
+Date: Tue, 07 Oct 2025 11:49:42 +0800
+Message-ID: <3379803.44csPzL39Z@7950hx>
+In-Reply-To: <20251005150816.38799-1-wangfushuai@baidu.com>
+References: <20251005150816.38799-1-wangfushuai@baidu.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="utf-8"
+X-Migadu-Flow: FLOW_OUT
 
-From: Rong Tao <rongtao@cestc.cn>
+On 2025/10/5 23:08, Fushuai Wang wrote:
+> Replace the combination of migrate_disable()/migrate_enable() and rcu_read_lock()/rcu_read_unlock()
+> with rcu_read_lock_dont_migrate()/rcu_read_unlock_migrate() in bpf_sk_storage.c.
 
-Add tests for new kfuncs bpf_strcasestr() and bpf_strncasestr().
+Hi, Fushuai. There are some nits in you patch:
 
-Signed-off-by: Rong Tao <rongtao@cestc.cn>
----
- .../testing/selftests/bpf/prog_tests/string_kfuncs.c |  2 ++
- .../selftests/bpf/progs/string_kfuncs_failure1.c     | 12 ++++++++++++
- .../selftests/bpf/progs/string_kfuncs_failure2.c     |  2 ++
- .../selftests/bpf/progs/string_kfuncs_success.c      | 10 ++++++++++
- 4 files changed, 26 insertions(+)
+1. The title is too fuzzy. It can be
+    "bpf: Use rcu_read_lock_dont_migrate in bpf_sk_storage.c"
+2. You can wrap the commit log and don't exceed 75 character per line.
+    This is not necessary, but it can stop the check_patch from
+    complaining.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/string_kfuncs.c b/tools/testing/selftests/bpf/prog_tests/string_kfuncs.c
-index 4d66fad3c8bd..0f3bf594e7a5 100644
---- a/tools/testing/selftests/bpf/prog_tests/string_kfuncs.c
-+++ b/tools/testing/selftests/bpf/prog_tests/string_kfuncs.c
-@@ -20,7 +20,9 @@ static const char * const test_cases[] = {
- 	"strcspn_str",
- 	"strcspn_reject",
- 	"strstr",
-+	"strcasestr",
- 	"strnstr",
-+	"strncasestr",
- };
- 
- void run_too_long_tests(void)
-diff --git a/tools/testing/selftests/bpf/progs/string_kfuncs_failure1.c b/tools/testing/selftests/bpf/progs/string_kfuncs_failure1.c
-index 99d72c68f76a..826e6b6aff7e 100644
---- a/tools/testing/selftests/bpf/progs/string_kfuncs_failure1.c
-+++ b/tools/testing/selftests/bpf/progs/string_kfuncs_failure1.c
-@@ -45,8 +45,12 @@ SEC("syscall")  __retval(USER_PTR_ERR)int test_strcspn_null1(void *ctx) { return
- SEC("syscall")  __retval(USER_PTR_ERR)int test_strcspn_null2(void *ctx) { return bpf_strcspn("hello", NULL); }
- SEC("syscall")  __retval(USER_PTR_ERR)int test_strstr_null1(void *ctx) { return bpf_strstr(NULL, "hello"); }
- SEC("syscall")  __retval(USER_PTR_ERR)int test_strstr_null2(void *ctx) { return bpf_strstr("hello", NULL); }
-+SEC("syscall")  __retval(USER_PTR_ERR)int test_strcasestr_null1(void *ctx) { return bpf_strcasestr(NULL, "hello"); }
-+SEC("syscall")  __retval(USER_PTR_ERR)int test_strcasestr_null2(void *ctx) { return bpf_strcasestr("hello", NULL); }
- SEC("syscall")  __retval(USER_PTR_ERR)int test_strnstr_null1(void *ctx) { return bpf_strnstr(NULL, "hello", 1); }
- SEC("syscall")  __retval(USER_PTR_ERR)int test_strnstr_null2(void *ctx) { return bpf_strnstr("hello", NULL, 1); }
-+SEC("syscall")  __retval(USER_PTR_ERR)int test_strncasestr_null1(void *ctx) { return bpf_strncasestr(NULL, "hello", 1); }
-+SEC("syscall")  __retval(USER_PTR_ERR)int test_strncasestr_null2(void *ctx) { return bpf_strncasestr("hello", NULL, 1); }
- 
- /* Passing userspace ptr to string kfuncs */
- SEC("syscall") __retval(USER_PTR_ERR) int test_strcmp_user_ptr1(void *ctx) { return bpf_strcmp(user_ptr, "hello"); }
-@@ -65,8 +69,12 @@ SEC("syscall") __retval(USER_PTR_ERR) int test_strcspn_user_ptr1(void *ctx) { re
- SEC("syscall") __retval(USER_PTR_ERR) int test_strcspn_user_ptr2(void *ctx) { return bpf_strcspn("hello", user_ptr); }
- SEC("syscall") __retval(USER_PTR_ERR) int test_strstr_user_ptr1(void *ctx) { return bpf_strstr(user_ptr, "hello"); }
- SEC("syscall") __retval(USER_PTR_ERR) int test_strstr_user_ptr2(void *ctx) { return bpf_strstr("hello", user_ptr); }
-+SEC("syscall") __retval(USER_PTR_ERR) int test_strcasestr_user_ptr1(void *ctx) { return bpf_strcasestr(user_ptr, "hello"); }
-+SEC("syscall") __retval(USER_PTR_ERR) int test_strcasestr_user_ptr2(void *ctx) { return bpf_strcasestr("hello", user_ptr); }
- SEC("syscall") __retval(USER_PTR_ERR) int test_strnstr_user_ptr1(void *ctx) { return bpf_strnstr(user_ptr, "hello", 1); }
- SEC("syscall") __retval(USER_PTR_ERR) int test_strnstr_user_ptr2(void *ctx) { return bpf_strnstr("hello", user_ptr, 1); }
-+SEC("syscall") __retval(USER_PTR_ERR) int test_strncasestr_user_ptr1(void *ctx) { return bpf_strncasestr(user_ptr, "hello", 1); }
-+SEC("syscall") __retval(USER_PTR_ERR) int test_strncasestr_user_ptr2(void *ctx) { return bpf_strncasestr("hello", user_ptr, 1); }
- 
- #endif /* __TARGET_ARCH_s390 */
- 
-@@ -87,7 +95,11 @@ SEC("syscall") __retval(-EFAULT) int test_strcspn_pagefault1(void *ctx) { return
- SEC("syscall") __retval(-EFAULT) int test_strcspn_pagefault2(void *ctx) { return bpf_strcspn("hello", invalid_kern_ptr); }
- SEC("syscall") __retval(-EFAULT) int test_strstr_pagefault1(void *ctx) { return bpf_strstr(invalid_kern_ptr, "hello"); }
- SEC("syscall") __retval(-EFAULT) int test_strstr_pagefault2(void *ctx) { return bpf_strstr("hello", invalid_kern_ptr); }
-+SEC("syscall") __retval(-EFAULT) int test_strcasestr_pagefault1(void *ctx) { return bpf_strcasestr(invalid_kern_ptr, "hello"); }
-+SEC("syscall") __retval(-EFAULT) int test_strcasestr_pagefault2(void *ctx) { return bpf_strcasestr("hello", invalid_kern_ptr); }
- SEC("syscall") __retval(-EFAULT) int test_strnstr_pagefault1(void *ctx) { return bpf_strnstr(invalid_kern_ptr, "hello", 1); }
- SEC("syscall") __retval(-EFAULT) int test_strnstr_pagefault2(void *ctx) { return bpf_strnstr("hello", invalid_kern_ptr, 1); }
-+SEC("syscall") __retval(-EFAULT) int test_strncasestr_pagefault1(void *ctx) { return bpf_strncasestr(invalid_kern_ptr, "hello", 1); }
-+SEC("syscall") __retval(-EFAULT) int test_strncasestr_pagefault2(void *ctx) { return bpf_strncasestr("hello", invalid_kern_ptr, 1); }
- 
- char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/string_kfuncs_failure2.c b/tools/testing/selftests/bpf/progs/string_kfuncs_failure2.c
-index e41cc5601994..05e1da1f250f 100644
---- a/tools/testing/selftests/bpf/progs/string_kfuncs_failure2.c
-+++ b/tools/testing/selftests/bpf/progs/string_kfuncs_failure2.c
-@@ -19,6 +19,8 @@ SEC("syscall") int test_strspn_accept_too_long(void *ctx) { return bpf_strspn("b
- SEC("syscall") int test_strcspn_str_too_long(void *ctx) { return bpf_strcspn(long_str, "b"); }
- SEC("syscall") int test_strcspn_reject_too_long(void *ctx) { return bpf_strcspn("b", long_str); }
- SEC("syscall") int test_strstr_too_long(void *ctx) { return bpf_strstr(long_str, "hello"); }
-+SEC("syscall") int test_strcasestr_too_long(void *ctx) { return bpf_strcasestr(long_str, "hello"); }
- SEC("syscall") int test_strnstr_too_long(void *ctx) { return bpf_strnstr(long_str, "hello", sizeof(long_str)); }
-+SEC("syscall") int test_strncasestr_too_long(void *ctx) { return bpf_strncasestr(long_str, "hello", sizeof(long_str)); }
- 
- char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/string_kfuncs_success.c b/tools/testing/selftests/bpf/progs/string_kfuncs_success.c
-index 2e3498e37b9c..a8513964516b 100644
---- a/tools/testing/selftests/bpf/progs/string_kfuncs_success.c
-+++ b/tools/testing/selftests/bpf/progs/string_kfuncs_success.c
-@@ -33,8 +33,11 @@ __test(11) int test_strnlen(void *ctx) { return bpf_strnlen(str, 12); }
- __test(5) int test_strspn(void *ctx) { return bpf_strspn(str, "ehlo"); }
- __test(2) int test_strcspn(void *ctx) { return bpf_strcspn(str, "lo"); }
- __test(6) int test_strstr_found(void *ctx) { return bpf_strstr(str, "world"); }
-+__test(6) int test_strcasestr_found(void *ctx) { return bpf_strcasestr(str, "woRLD"); }
- __test(-ENOENT) int test_strstr_notfound(void *ctx) { return bpf_strstr(str, "hi"); }
-+__test(-ENOENT) int test_strcasestr_notfound(void *ctx) { return bpf_strcasestr(str, "hi"); }
- __test(0) int test_strstr_empty(void *ctx) { return bpf_strstr(str, ""); }
-+__test(0) int test_strcasestr_empty(void *ctx) { return bpf_strcasestr(str, ""); }
- __test(0) int test_strnstr_found1(void *ctx) { return bpf_strnstr("", "", 0); }
- __test(0) int test_strnstr_found2(void *ctx) { return bpf_strnstr(str, "hello", 5); }
- __test(0) int test_strnstr_found3(void *ctx) { return bpf_strnstr(str, "hello", 6); }
-@@ -42,5 +45,12 @@ __test(-ENOENT) int test_strnstr_notfound1(void *ctx) { return bpf_strnstr(str,
- __test(-ENOENT) int test_strnstr_notfound2(void *ctx) { return bpf_strnstr(str, "hello", 4); }
- __test(-ENOENT) int test_strnstr_notfound3(void *ctx) { return bpf_strnstr("", "a", 0); }
- __test(0) int test_strnstr_empty(void *ctx) { return bpf_strnstr(str, "", 1); }
-+__test(0) int test_strncasestr_found1(void *ctx) { return bpf_strncasestr("", "", 0); }
-+__test(0) int test_strncasestr_found2(void *ctx) { return bpf_strncasestr(str, "heLLO", 5); }
-+__test(0) int test_strncasestr_found3(void *ctx) { return bpf_strncasestr(str, "heLLO", 6); }
-+__test(-ENOENT) int test_strncasestr_notfound1(void *ctx) { return bpf_strncasestr(str, "hi", 10); }
-+__test(-ENOENT) int test_strncasestr_notfound2(void *ctx) { return bpf_strncasestr(str, "hello", 4); }
-+__test(-ENOENT) int test_strncasestr_notfound3(void *ctx) { return bpf_strncasestr("", "a", 0); }
-+__test(0) int test_strncasestr_empty(void *ctx) { return bpf_strncasestr(str, "", 1); }
- 
- char _license[] SEC("license") = "GPL";
--- 
-2.51.0
+And I think you shoud CC bpf@vger.kernel.org too. Before you
+send the patch, you can check it with ./scripts/checkpatch.pl to
+find potential problems.
+
+Thanks!
+Menglong Dong
+
+> 
+> Signed-off-by: Fushuai Wang <wangfushuai@baidu.com>
+> ---
+>  net/core/bpf_sk_storage.c | 12 ++++--------
+>  1 file changed, 4 insertions(+), 8 deletions(-)
+> 
+> diff --git a/net/core/bpf_sk_storage.c b/net/core/bpf_sk_storage.c
+> index 2e538399757f..bdb70cf89ae1 100644
+> --- a/net/core/bpf_sk_storage.c
+> +++ b/net/core/bpf_sk_storage.c
+> @@ -50,16 +50,14 @@ void bpf_sk_storage_free(struct sock *sk)
+>  {
+>  	struct bpf_local_storage *sk_storage;
+>  
+> -	migrate_disable();
+> -	rcu_read_lock();
+> +	rcu_read_lock_dont_migrate();
+>  	sk_storage = rcu_dereference(sk->sk_bpf_storage);
+>  	if (!sk_storage)
+>  		goto out;
+>  
+>  	bpf_local_storage_destroy(sk_storage);
+>  out:
+> -	rcu_read_unlock();
+> -	migrate_enable();
+> +	rcu_read_unlock_migrate();
+>  }
+>  
+>  static void bpf_sk_storage_map_free(struct bpf_map *map)
+> @@ -161,8 +159,7 @@ int bpf_sk_storage_clone(const struct sock *sk, struct sock *newsk)
+>  
+>  	RCU_INIT_POINTER(newsk->sk_bpf_storage, NULL);
+>  
+> -	migrate_disable();
+> -	rcu_read_lock();
+> +	rcu_read_lock_dont_migrate();
+>  	sk_storage = rcu_dereference(sk->sk_bpf_storage);
+>  
+>  	if (!sk_storage || hlist_empty(&sk_storage->list))
+> @@ -213,9 +210,8 @@ int bpf_sk_storage_clone(const struct sock *sk, struct sock *newsk)
+>  	}
+>  
+>  out:
+> -	rcu_read_unlock();
+> -	migrate_enable();
+>  
+> +	rcu_read_unlock_migrate();
+>  	/* In case of an error, don't free anything explicitly here, the
+>  	 * caller is responsible to call bpf_sk_storage_free.
+>  	 */
+> 
+
+
+
 
