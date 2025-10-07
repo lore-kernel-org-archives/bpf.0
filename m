@@ -1,541 +1,163 @@
-Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
+Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E40845C0B
-	for <bpf@vger.kernel.org>; Tue,  7 Oct 2025 00:11:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F7E31A254E
+	for <bpf@vger.kernel.org>; Tue,  7 Oct 2025 00:29:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759795896; cv=none; b=mBKMUwWrexZBoM4cwthTJs2cWnAFRnGztPeT6DOah6AwXOCiaZ6AqfshorI17Ri6k7iQhHod1HLrqatGl+olf5f73orpETtfjDrsKgfabI7YCYHcdPiMYyGE8kDWCgIhN+uw3PioL47g4DJElRwiKUFmEpsALJz/NiVILBYgxBU=
+	t=1759796978; cv=none; b=ZBPq/diHgTZ0aGGHF8b0MREnmDNmGdLWb43KHbrsLqJ5Z1QfC6zsb5/abaaE2ofZxbu9zXailSdBrgXYfJLpIgnyEz+zx4wKnfA2yawln61bfhsdhKzFhVtRX0BCqWbsvLdQ3JWe6Ms687it4CU0yml/C9+hg6mLYIG7AbhMitE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759795896; c=relaxed/simple;
-	bh=p4BNYVf8bj6QBsYFk21IqiONkoCZv1bc3noLYcc2VT4=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=iiKxBQSghbKexOtuB8UHiXYZKQH1dIckS/QsAeZyEiycYlZaFz/20aIR8Ob9qOXA8cF/TsDGBVeYcGKxCLId+IG0aQ7WcTfd/6vX543IASMPxnBfHHQaWEcuRXbdMN8maUsdcoi/oheynuoa8T6zr4HZswGDqwRraTkaGAzjgmI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=FOgK7Rg6; arc=none smtp.client-ip=209.85.214.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com
+	s=arc-20240116; t=1759796978; c=relaxed/simple;
+	bh=VhE3lEq1z32eklFQuWsYnAJ9lZnTGtD7Yhza8TRvObM=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=nxAb3en5wCxlgOGw4qNfdVsijTdt7fvVtR8lqm1ZhLlQHI/vkxtV/7z/cR+MkvKvtwKKDbCQvqBMeodYn1i9EoKDJR7RDpcRboizWsTT2gvXhTpW0i96Kdtm2dpxjh80d0uyXRRSIpMDmeKfpWRmM/k1y/aaeSp0R2rjrrGIGXM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FWNQ7Yzb; arc=none smtp.client-ip=209.85.215.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="FOgK7Rg6"
-Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-277f0ea6fbaso73143915ad.0
-        for <bpf@vger.kernel.org>; Mon, 06 Oct 2025 17:11:33 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FWNQ7Yzb"
+Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-b55517e74e3so6544580a12.2
+        for <bpf@vger.kernel.org>; Mon, 06 Oct 2025 17:29:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1759795893; x=1760400693; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=kcFTqjRwMOM0fY6/qjvt5YA2CCbFUbVK6jNxAxhZM7U=;
-        b=FOgK7Rg6vcdPACvrsKIxVp2EB8NIXR/4DmcxI91nW5dubQuc9lSNjiIdXUm/+4ESWU
-         FU59zL48ByWNakBUajienW/T/kBEbYirFxvUvFh3dGN9+3aw7r+7Nz/LHPbsDWDwPKd3
-         7ZHLj/dpEYyHQV4uRT2+Ge31UeUgF6NVjXxTJIOZj4+1tH2PzKTWuZZVlN597NpRVMbr
-         0OUAMi0SChnX3sWHnTxAwDh7cDeUJai0+JkoZr2W8KlRxeFpKq1A9LloiVu0qWiM4k7V
-         FXVCeSZfIUvQVu7GA9ipUhzELtAeCQ47fItua6WFnBN3TZC5+ow33KCla05V1Q6hlfHX
-         pffw==
+        d=gmail.com; s=20230601; t=1759796976; x=1760401776; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=P1hcAc7s4XhYQRH+R2s8ZmE/7qgDIwbOMHGuS8cxmck=;
+        b=FWNQ7YzbPGGVtDv8QM3eamo20TyaTXxDNzZAA/9wLALc51sDgYd5+vZw8Z/cN+J/0L
+         WzzjlJovjDRnsHCIBzzYwslNodV/GbKCzNZoC4ci5+3cKdIckLISeO/0+VKraWxMoCYu
+         ExeWMWIySW5A0Bh1UN2cEWnVEdwoiGnsvAfWrk2l2PfVXMe4Hk/u+5B3bHsYSg8exAoL
+         mvIanMj/R8f9uqpVfooHp18ROTgI9LzvKDcQ8LpPF9J0R9MVxb/3uhxZDvB7mHq7i/ce
+         JDx+IcCTiNFtGqwCAMYoZieCywpKELLyMyhG5X54dcyVKQmRS15fiTA2ngWSoie1XTKB
+         kpQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759795893; x=1760400693;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kcFTqjRwMOM0fY6/qjvt5YA2CCbFUbVK6jNxAxhZM7U=;
-        b=XA3wKvjLq6y6fwUexEX+wC1FSdlV5DZ1ac09zI00r1BL5vlpOXBki1Klt7iTYPOYbF
-         cGxJAC2YiMCKeVuC1gWwvNchBAjNXaxycLvRtSDyhzXD5n5WUY36kAkmFkwvxv4iQStx
-         IzSai7MWVtk4gs1v9aBCJe4EjnMeZyxO0t77PCigMlMH7wBYSDkeP3++i/JV7FeCwNeq
-         6W53UeiRsvvHvJ+b1LPaam69KpZm6kpk+7Nj2+467buL+GwT+JAqVzSRFHjsFsXI108T
-         ExAOsmSUxQZRDk3+xJJsHtCMGPPpBY4DLGty7qh5SMLPm1Sj9xqpzq7HOvNKSmbMAc4L
-         aI1A==
-X-Forwarded-Encrypted: i=1; AJvYcCUaxo8dEyoLZcw3hVA/olLS0ZuHepEtLqPQki3WiG8DVg2PflOLJLuzo6bI6a4ubwkgjrc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YygrUkffnFk1Dx9ByiaqcDXT93r1NAMz6TlyA/68RPvhtQ+Pi4g
-	22CsoLcUfo7NJzqCtRYX0AIZdP7tKKkRLdJCPRBP9jn/ZWxmURCYr25sCGcCFPhSJ0O1md/STAE
-	lc6+Scg==
-X-Google-Smtp-Source: AGHT+IGovfQZtUpoy7F2jsy8lgngBQfkkIKGpQHXce4RXu2dAOmdMY58q+xLWKcT8RLV45Yiu2/0oVCpR+o=
-X-Received: from pjzh5.prod.google.com ([2002:a17:90a:ea85:b0:32d:e264:a78e])
- (user=kuniyu job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:98b:b0:254:70cb:5b36
- with SMTP id d9443c01a7336-28e9a51345bmr161609845ad.8.1759795893316; Mon, 06
- Oct 2025 17:11:33 -0700 (PDT)
-Date: Tue,  7 Oct 2025 00:07:31 +0000
-In-Reply-To: <20251007001120.2661442-1-kuniyu@google.com>
+        d=1e100.net; s=20230601; t=1759796976; x=1760401776;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=P1hcAc7s4XhYQRH+R2s8ZmE/7qgDIwbOMHGuS8cxmck=;
+        b=gROWuzICej1ZSnf4nMx+SGmSXVaif66EZC6cgluacTbnhW+rpu28SSHhM1O11ZX6ku
+         Qbc/X54xrbKNL8HJTo+70hqr7J7ikLnJ6XtDwzvrUF3VvGa+76sFo1Dx6KZ+GuZxKyWk
+         J4UOfqVm/7OLDQiSPLD8PPcv62iJ4TkDotgIjWPVnxcR3pnJcoT+YtDahgGPgyxrVgnS
+         lJ1681Hi3mtRDUSOZiCoP1CJANeZRgxxUUprs8E8/AFFTPmQRd98BIQ17mFGvciLMXu9
+         j52l6Hk23FndbPNAVu+bYYO19GRP5Q9NftLxpZOY+AAprR1fRNfn+7XJ4Qr5XuH2d456
+         ZZdQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW1RbrH+SXhmdI8ARjnXeZeV243lyPK+0Le3iw3CKH29WMy2pq9Nu7aRvHRvKytaJZFlhY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzb2bFrOH01PiaPw4qBUhnKXaJFFzC5UZAk8v0Id99N55bK/Tzd
+	A2OgC/yTQ1Vt5XRDZCTuhXf6JpXVjti5Q5AGb6qsHi1yiiVj2vvFxwpq
+X-Gm-Gg: ASbGncujCkDp73UVezkxNxCWa06O950oZDHFEb11vbCC5Vb04mnMpUZ+CmRZ2nqlDIR
+	lHSxeohMAm9tDBK7Fl3kbyNUr3rCizXh3lWWEsWiIzCTlTVEqsITk8agGgX455zh8f7z7YoUFIH
+	716DGrzwUzqw49zBeqkGxZ8sed3zrudB7RPazDxb1rq3b7N6Py6ic4OdP7xI0GqvCGBE1f3uvRI
+	vVNbMBSd5eQbj6qyMQ6V1KUaED0KojjKcRYpA+6oG+pMk8oMAsAJV39J6WKqzmm6g9zFmW/7aH6
+	VHj8Ag3kr/DhH/u3QC9rn7bEDknysKQuTpNAXz0Qg8PU1Hxt0cHdy1ObmbgaizFbmwX3tgLk1rI
+	vlzlnQ2iNTe5WrFdmUccyfZNMfp4lYmPGYxrqrB6b7jK33MvCWIeDFy6kEMoULOYPRUZjNqU8
+X-Google-Smtp-Source: AGHT+IEHDV8lJwxzCwsyHrfSYwJV2pBhYeFFmns7zfDlhAwW+nJPp4T/QHVKbEtSEmo+3rnHX8uZ2g==
+X-Received: by 2002:a17:903:3c66:b0:26c:2e56:ec27 with SMTP id d9443c01a7336-28e9a5ec80bmr168213335ad.19.1759796976151;
+        Mon, 06 Oct 2025 17:29:36 -0700 (PDT)
+Received: from ?IPv6:2a03:83e0:115c:1:d60a:adc8:135e:572b? ([2620:10d:c090:500::5:b20b])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-28e8d1b87e7sm146377475ad.82.2025.10.06.17.29.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Oct 2025 17:29:35 -0700 (PDT)
+Message-ID: <405da03e33853622da3a70ad88df3396c85926e4.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: Test
+ bpf_strcasestr,bpf_strncasestr kfuncs
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Rong Tao <rtoax@foxmail.com>, vmalik@redhat.com, ast@kernel.org
+Cc: Rong Tao <rongtao@cestc.cn>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Song Liu <song@kernel.org>,  Yonghong Song
+ <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, KP
+ Singh	 <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo	
+ <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, Shuah Khan
+ <shuah@kernel.org>,  "open list:BPF [GENERAL] (Safe Dynamic Programs and
+ Tools)"	 <bpf@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>,
+ "open list:KERNEL SELFTEST FRAMEWORK"	 <linux-kselftest@vger.kernel.org>
+Date: Mon, 06 Oct 2025 17:29:33 -0700
+In-Reply-To: <tencent_FC91DA604BE83F2BE3524865EA956DB41A05@qq.com>
+References: <cover.1759588929.git.rongtao@cestc.cn>
+	 <tencent_FC91DA604BE83F2BE3524865EA956DB41A05@qq.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2 (3.56.2-1.fc42) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20251007001120.2661442-1-kuniyu@google.com>
-X-Mailer: git-send-email 2.51.0.710.ga91ca5db03-goog
-Message-ID: <20251007001120.2661442-7-kuniyu@google.com>
-Subject: [PATCH bpf-next/net 6/6] selftest: bpf: Add test for sk->sk_bypass_prot_mem.
-From: Kuniyuki Iwashima <kuniyu@google.com>
-To: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>
-Cc: John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Neal Cardwell <ncardwell@google.com>, Willem de Bruijn <willemb@google.com>, 
-	Mina Almasry <almasrymina@google.com>, Roman Gushchin <roman.gushchin@linux.dev>, 
-	Kuniyuki Iwashima <kuniyu@google.com>, Kuniyuki Iwashima <kuni1840@gmail.com>, bpf@vger.kernel.org, 
-	netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
 
-The test does the following for IPv4/IPv6 x TCP/UDP sockets
-with/without sk->sk_bypass_prot_mem, which can be turned on by
-net.core.bypass_prot_mem or bpf_setsockopt(SK_BPF_BYPASS_PROT_MEM).
+On Sat, 2025-10-04 at 22:47 +0800, Rong Tao wrote:
+> From: Rong Tao <rongtao@cestc.cn>
+>=20
+> Add tests for new kfuncs bpf_strcasestr() and bpf_strncasestr().
+>=20
+> Signed-off-by: Rong Tao <rongtao@cestc.cn>
+> ---
 
-  1. Create socket pairs
-  2. Send NR_PAGES (32) of data (TCP consumes around 35 pages,
-     and UDP consuems 66 pages due to skb overhead)
-  3. Read memory_allocated from sk->sk_prot->memory_allocated and
-     sk->sk_prot->memory_per_cpu_fw_alloc
-  4. Check if unread data is charged to memory_allocated
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 
-If sk->sk_bypass_prot_mem is set, memory_allocated should not be
-changed, but we allow a small error (up to 10 pages) in case
-other processes on the host use some amounts of TCP/UDP memory.
+[...]
 
-The amount of allocated pages are buffered to per-cpu variable
-{tcp,udp}_memory_per_cpu_fw_alloc up to +/- net.core.mem_pcpu_rsv
-before reported to {tcp,udp}_memory_allocated.
+> diff --git a/tools/testing/selftests/bpf/progs/string_kfuncs_success.c b/=
+tools/testing/selftests/bpf/progs/string_kfuncs_success.c
+> index 2e3498e37b9c..d21330b4cc3b 100644
+> --- a/tools/testing/selftests/bpf/progs/string_kfuncs_success.c
+> +++ b/tools/testing/selftests/bpf/progs/string_kfuncs_success.c
+> @@ -33,8 +33,12 @@ __test(11) int test_strnlen(void *ctx) { return bpf_st=
+rnlen(str, 12); }
+>  __test(5) int test_strspn(void *ctx) { return bpf_strspn(str, "ehlo"); }
+>  __test(2) int test_strcspn(void *ctx) { return bpf_strcspn(str, "lo"); }
+>  __test(6) int test_strstr_found(void *ctx) { return bpf_strstr(str, "wor=
+ld"); }
+> +__test(6) int test_strcasestr_found1(void *ctx) { return bpf_strcasestr(=
+str, "world"); }
+> +__test(6) int test_strcasestr_found2(void *ctx) { return bpf_strcasestr(=
+str, "WORLD"); }
 
-At 3., memory_allocated is calculated from the 2 variables at
-fentry of socket create function.
+Nit: I'd compress these two tests into one:
+     __test(6) int test_strcasestr_found1(void *ctx) { return bpf_strcasest=
+r(str, "woRLD"); }
+     (and did the same for (str, "hello") variants below).
 
-We drain the receive queue only for UDP before close() because UDP
-recv queue is destroyed after RCU grace period.  When I printed
-memory_allocated, UDP bypass cases sometimes saw the no-bypass
-case's leftover, but it's still in the small error range (<10 pages).
-
-  bpf_trace_printk: memory_allocated: 0   <-- TCP no-bypass
-  bpf_trace_printk: memory_allocated: 35
-  bpf_trace_printk: memory_allocated: 0   <-- TCP w/ sysctl
-  bpf_trace_printk: memory_allocated: 0
-  bpf_trace_printk: memory_allocated: 0   <-- TCP w/ bpf
-  bpf_trace_printk: memory_allocated: 0
-  bpf_trace_printk: memory_allocated: 0   <-- UDP no-bypass
-  bpf_trace_printk: memory_allocated: 66
-  bpf_trace_printk: memory_allocated: 2   <-- UDP w/ sysctl (2 pages leftover)
-  bpf_trace_printk: memory_allocated: 2
-  bpf_trace_printk: memory_allocated: 2   <-- UDP w/ bpf (2 pages leftover)
-  bpf_trace_printk: memory_allocated: 2
-
-We prefer finishing tests faster than oversleeping for call_rcu()
- + sk_destruct().
-
-The test completes within 2s on QEMU (64 CPUs) w/ KVM.
-
-  # time ./test_progs -t sk_bypass
-  #371/1   sk_bypass_prot_mem/TCP  :OK
-  #371/2   sk_bypass_prot_mem/UDP  :OK
-  #371/3   sk_bypass_prot_mem/TCPv6:OK
-  #371/4   sk_bypass_prot_mem/UDPv6:OK
-  #371     sk_bypass_prot_mem:OK
-  Summary: 1/4 PASSED, 0 SKIPPED, 0 FAILED
-
-  real	0m1.481s
-  user	0m0.181s
-  sys	0m0.441s
-
-Signed-off-by: Kuniyuki Iwashima <kuniyu@google.com>
----
- .../bpf/prog_tests/sk_bypass_prot_mem.c       | 282 ++++++++++++++++++
- .../selftests/bpf/progs/sk_bypass_prot_mem.c  | 104 +++++++
- 2 files changed, 386 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/sk_bypass_prot_mem.c
- create mode 100644 tools/testing/selftests/bpf/progs/sk_bypass_prot_mem.c
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/sk_bypass_prot_mem.c b/tools/testing/selftests/bpf/prog_tests/sk_bypass_prot_mem.c
-new file mode 100644
-index 000000000000..ce4fc47b6bdb
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/sk_bypass_prot_mem.c
-@@ -0,0 +1,282 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright 2025 Google LLC */
-+
-+#include <test_progs.h>
-+#include "sk_bypass_prot_mem.skel.h"
-+#include "network_helpers.h"
-+
-+#define NR_PAGES	32
-+#define NR_SOCKETS	2
-+#define BUF_TOTAL	(NR_PAGES * 4096 / NR_SOCKETS)
-+#define BUF_SINGLE	1024
-+#define NR_SEND		(BUF_TOTAL / BUF_SINGLE)
-+
-+struct test_case {
-+	char name[8];
-+	int family;
-+	int type;
-+	int (*create_sockets)(struct test_case *test_case, int sk[], int len);
-+	long (*get_memory_allocated)(struct test_case *test_case, struct sk_bypass_prot_mem *skel);
-+};
-+
-+static int tcp_create_sockets(struct test_case *test_case, int sk[], int len)
-+{
-+	int server, i;
-+
-+	server = start_server(test_case->family, test_case->type, NULL, 0, 0);
-+	ASSERT_GE(server, 0, "start_server_str");
-+
-+	/* Keep for-loop so we can change NR_SOCKETS easily. */
-+	for (i = 0; i < len; i += 2) {
-+		sk[i] = connect_to_fd(server, 0);
-+		if (sk[i] < 0) {
-+			ASSERT_GE(sk[i], 0, "connect_to_fd");
-+			return sk[i];
-+		}
-+
-+		sk[i + 1] = accept(server, NULL, NULL);
-+		if (sk[i + 1] < 0) {
-+			ASSERT_GE(sk[i + 1], 0, "accept");
-+			return sk[i + 1];
-+		}
-+	}
-+
-+	close(server);
-+
-+	return 0;
-+}
-+
-+static int udp_create_sockets(struct test_case *test_case, int sk[], int len)
-+{
-+	int i, j, err, rcvbuf = BUF_TOTAL;
-+
-+	/* Keep for-loop so we can change NR_SOCKETS easily. */
-+	for (i = 0; i < len; i += 2) {
-+		sk[i] = start_server(test_case->family, test_case->type, NULL, 0, 0);
-+		if (sk[i] < 0) {
-+			ASSERT_GE(sk[i], 0, "start_server");
-+			return sk[i];
-+		}
-+
-+		sk[i + 1] = connect_to_fd(sk[i], 0);
-+		if (sk[i + 1] < 0) {
-+			ASSERT_GE(sk[i + 1], 0, "connect_to_fd");
-+			return sk[i + 1];
-+		}
-+
-+		err = connect_fd_to_fd(sk[i], sk[i + 1], 0);
-+		if (err) {
-+			ASSERT_EQ(err, 0, "connect_fd_to_fd");
-+			return err;
-+		}
-+
-+		for (j = 0; j < 2; j++) {
-+			err = setsockopt(sk[i + j], SOL_SOCKET, SO_RCVBUF, &rcvbuf, sizeof(int));
-+			if (err) {
-+				ASSERT_EQ(err, 0, "setsockopt(SO_RCVBUF)");
-+				return err;
-+			}
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+static long get_memory_allocated(struct test_case *test_case,
-+				 bool *activated, long *memory_allocated)
-+{
-+	int sk;
-+
-+	*activated = true;
-+
-+	/* AF_INET and AF_INET6 share the same memory_allocated.
-+	 * tcp_init_sock() is called by AF_INET and AF_INET6,
-+	 * but udp_lib_init_sock() is inline.
-+	 */
-+	sk = socket(AF_INET, test_case->type, 0);
-+	if (!ASSERT_GE(sk, 0, "get_memory_allocated"))
-+		return -1;
-+
-+	close(sk);
-+
-+	return *memory_allocated;
-+}
-+
-+static long tcp_get_memory_allocated(struct test_case *test_case, struct sk_bypass_prot_mem *skel)
-+{
-+	return get_memory_allocated(test_case,
-+				    &skel->bss->tcp_activated,
-+				    &skel->bss->tcp_memory_allocated);
-+}
-+
-+static long udp_get_memory_allocated(struct test_case *test_case, struct sk_bypass_prot_mem *skel)
-+{
-+	return get_memory_allocated(test_case,
-+				    &skel->bss->udp_activated,
-+				    &skel->bss->udp_memory_allocated);
-+}
-+
-+static int check_bypass(struct test_case *test_case,
-+			struct sk_bypass_prot_mem *skel, bool bypass)
-+{
-+	char buf[BUF_SINGLE] = {};
-+	long memory_allocated[2];
-+	int sk[NR_SOCKETS] = {};
-+	int err, i, j;
-+
-+	err = test_case->create_sockets(test_case, sk, ARRAY_SIZE(sk));
-+	if (err)
-+		goto close;
-+
-+	memory_allocated[0] = test_case->get_memory_allocated(test_case, skel);
-+
-+	/* allocate pages >= NR_PAGES */
-+	for (i = 0; i < ARRAY_SIZE(sk); i++) {
-+		for (j = 0; j < NR_SEND; j++) {
-+			int bytes = send(sk[i], buf, sizeof(buf), 0);
-+
-+			/* Avoid too noisy logs when something failed. */
-+			if (bytes != sizeof(buf)) {
-+				ASSERT_EQ(bytes, sizeof(buf), "send");
-+				if (bytes < 0) {
-+					err = bytes;
-+					goto drain;
-+				}
-+			}
-+		}
-+	}
-+
-+	memory_allocated[1] = test_case->get_memory_allocated(test_case, skel);
-+
-+	if (bypass)
-+		ASSERT_LE(memory_allocated[1], memory_allocated[0] + 10, "bypass");
-+	else
-+		ASSERT_GT(memory_allocated[1], memory_allocated[0] + NR_PAGES, "no bypass");
-+
-+drain:
-+	if (test_case->type == SOCK_DGRAM) {
-+		/* UDP starts purging sk->sk_receive_queue after one RCU
-+		 * grace period, then udp_memory_allocated goes down,
-+		 * so drain the queue before close().
-+		 */
-+		for (i = 0; i < ARRAY_SIZE(sk); i++) {
-+			for (j = 0; j < NR_SEND; j++) {
-+				int bytes = recv(sk[i], buf, 1, MSG_DONTWAIT | MSG_TRUNC);
-+
-+				if (bytes == sizeof(buf))
-+					continue;
-+				if (bytes != -1 || errno != EAGAIN)
-+					PRINT_FAIL("bytes: %d, errno: %s\n", bytes, strerror(errno));
-+				break;
-+			}
-+		}
-+	}
-+
-+close:
-+	for (i = 0; i < ARRAY_SIZE(sk); i++)
-+		close(sk[i]);
-+
-+	return err;
-+}
-+
-+static void run_test(struct test_case *test_case)
-+{
-+	struct sk_bypass_prot_mem *skel;
-+	struct nstoken *nstoken;
-+	int cgroup, err;
-+
-+	skel = sk_bypass_prot_mem__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-+		return;
-+
-+	skel->bss->nr_cpus = libbpf_num_possible_cpus();
-+
-+	err = sk_bypass_prot_mem__attach(skel);
-+	if (!ASSERT_OK(err, "attach"))
-+		goto destroy_skel;
-+
-+	cgroup = test__join_cgroup("/sk_bypass_prot_mem");
-+	if (!ASSERT_GE(cgroup, 0, "join_cgroup"))
-+		goto destroy_skel;
-+
-+	err = make_netns("sk_bypass_prot_mem");
-+	if (!ASSERT_EQ(err, 0, "make_netns"))
-+		goto close_cgroup;
-+
-+	nstoken = open_netns("sk_bypass_prot_mem");
-+	if (!ASSERT_OK_PTR(nstoken, "open_netns"))
-+		goto remove_netns;
-+
-+	err = check_bypass(test_case, skel, false);
-+	if (!ASSERT_EQ(err, 0, "test_bypass(false)"))
-+		goto close_netns;
-+
-+	err = write_sysctl("/proc/sys/net/core/bypass_prot_mem", "1");
-+	if (!ASSERT_EQ(err, 0, "write_sysctl(1)"))
-+		goto close_netns;
-+
-+	err = check_bypass(test_case, skel, true);
-+	if (!ASSERT_EQ(err, 0, "test_bypass(true by sysctl)"))
-+		goto close_netns;
-+
-+	err = write_sysctl("/proc/sys/net/core/bypass_prot_mem", "0");
-+	if (!ASSERT_EQ(err, 0, "write_sysctl(0)"))
-+		goto close_netns;
-+
-+	skel->links.sock_create = bpf_program__attach_cgroup(skel->progs.sock_create, cgroup);
-+	if (!ASSERT_OK_PTR(skel->links.sock_create, "attach_cgroup(sock_create)"))
-+		goto close_netns;
-+
-+	err = check_bypass(test_case, skel, true);
-+	ASSERT_EQ(err, 0, "test_bypass(true by bpf)");
-+
-+close_netns:
-+	close_netns(nstoken);
-+remove_netns:
-+	remove_netns("sk_bypass_prot_mem");
-+close_cgroup:
-+	close(cgroup);
-+destroy_skel:
-+	sk_bypass_prot_mem__destroy(skel);
-+}
-+
-+struct test_case test_cases[] = {
-+	{
-+		.name = "TCP  ",
-+		.family = AF_INET,
-+		.type = SOCK_STREAM,
-+		.create_sockets = tcp_create_sockets,
-+		.get_memory_allocated = tcp_get_memory_allocated,
-+	},
-+	{
-+		.name = "UDP  ",
-+		.family = AF_INET,
-+		.type = SOCK_DGRAM,
-+		.create_sockets = udp_create_sockets,
-+		.get_memory_allocated = udp_get_memory_allocated,
-+	},
-+	{
-+		.name = "TCPv6",
-+		.family = AF_INET6,
-+		.type = SOCK_STREAM,
-+		.create_sockets = tcp_create_sockets,
-+		.get_memory_allocated = tcp_get_memory_allocated,
-+	},
-+	{
-+		.name = "UDPv6",
-+		.family = AF_INET6,
-+		.type = SOCK_DGRAM,
-+		.create_sockets = udp_create_sockets,
-+		.get_memory_allocated = udp_get_memory_allocated,
-+	},
-+};
-+
-+void serial_test_sk_bypass_prot_mem(void)
-+{
-+	int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(test_cases); i++) {
-+		if (test__start_subtest(test_cases[i].name))
-+			run_test(&test_cases[i]);
-+	}
-+}
-diff --git a/tools/testing/selftests/bpf/progs/sk_bypass_prot_mem.c b/tools/testing/selftests/bpf/progs/sk_bypass_prot_mem.c
-new file mode 100644
-index 000000000000..09a00d11ffcc
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/sk_bypass_prot_mem.c
-@@ -0,0 +1,104 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright 2025 Google LLC */
-+
-+#include "bpf_tracing_net.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include <errno.h>
-+
-+extern int tcp_memory_per_cpu_fw_alloc __ksym;
-+extern int udp_memory_per_cpu_fw_alloc __ksym;
-+
-+int nr_cpus;
-+bool tcp_activated, udp_activated;
-+long tcp_memory_allocated, udp_memory_allocated;
-+
-+struct sk_prot {
-+	long *memory_allocated;
-+	int *memory_per_cpu_fw_alloc;
-+};
-+
-+static int drain_memory_per_cpu_fw_alloc(__u32 i, struct sk_prot *sk_prot_ctx)
-+{
-+	int *memory_per_cpu_fw_alloc;
-+
-+	memory_per_cpu_fw_alloc = bpf_per_cpu_ptr(sk_prot_ctx->memory_per_cpu_fw_alloc, i);
-+	if (memory_per_cpu_fw_alloc)
-+		*sk_prot_ctx->memory_allocated += *memory_per_cpu_fw_alloc;
-+
-+	return 0;
-+}
-+
-+static long get_memory_allocated(struct sock *_sk, int *memory_per_cpu_fw_alloc)
-+{
-+	struct sock *sk = bpf_core_cast(_sk, struct sock);
-+	struct sk_prot sk_prot_ctx;
-+	long memory_allocated;
-+
-+	/* net_aligned_data.{tcp,udp}_memory_allocated was not available. */
-+	memory_allocated = sk->__sk_common.skc_prot->memory_allocated->counter;
-+
-+	sk_prot_ctx.memory_allocated = &memory_allocated;
-+	sk_prot_ctx.memory_per_cpu_fw_alloc = memory_per_cpu_fw_alloc;
-+
-+	bpf_loop(nr_cpus, drain_memory_per_cpu_fw_alloc, &sk_prot_ctx, 0);
-+
-+	return memory_allocated;
-+}
-+
-+static void fentry_init_sock(struct sock *sk, bool *activated,
-+			     long *memory_allocated, int *memory_per_cpu_fw_alloc)
-+{
-+	if (!*activated)
-+		return;
-+
-+	*memory_allocated = get_memory_allocated(sk, memory_per_cpu_fw_alloc);
-+	*activated = false;
-+}
-+
-+SEC("fentry/tcp_init_sock")
-+int BPF_PROG(fentry_tcp_init_sock, struct sock *sk)
-+{
-+	fentry_init_sock(sk, &tcp_activated,
-+			 &tcp_memory_allocated, &tcp_memory_per_cpu_fw_alloc);
-+	return 0;
-+}
-+
-+SEC("fentry/udp_init_sock")
-+int BPF_PROG(fentry_udp_init_sock, struct sock *sk)
-+{
-+	fentry_init_sock(sk, &udp_activated,
-+			 &udp_memory_allocated, &udp_memory_per_cpu_fw_alloc);
-+	return 0;
-+}
-+
-+SEC("cgroup/sock_create")
-+int sock_create(struct bpf_sock *ctx)
-+{
-+	int err, val = 1;
-+
-+	err = bpf_setsockopt(ctx, SOL_SOCKET, SK_BPF_BYPASS_PROT_MEM,
-+			     &val, sizeof(val));
-+	if (err)
-+		goto err;
-+
-+	val = 0;
-+
-+	err = bpf_getsockopt(ctx, SOL_SOCKET, SK_BPF_BYPASS_PROT_MEM,
-+			     &val, sizeof(val));
-+	if (err)
-+		goto err;
-+
-+	if (val != 1) {
-+		err = -EINVAL;
-+		goto err;
-+	}
-+
-+	return 1;
-+
-+err:
-+	bpf_set_retval(err);
-+	return 0;
-+}
-+
-+char LICENSE[] SEC("license") = "GPL";
--- 
-2.51.0.710.ga91ca5db03-goog
-
+>  __test(-ENOENT) int test_strstr_notfound(void *ctx) { return bpf_strstr(=
+str, "hi"); }
+> +__test(-ENOENT) int test_strcasestr_notfound(void *ctx) { return bpf_str=
+casestr(str, "hi"); }
+>  __test(0) int test_strstr_empty(void *ctx) { return bpf_strstr(str, "");=
+ }
+> +__test(0) int test_strcasestr_empty(void *ctx) { return bpf_strcasestr(s=
+tr, ""); }
+>  __test(0) int test_strnstr_found1(void *ctx) { return bpf_strnstr("", ""=
+, 0); }
+>  __test(0) int test_strnstr_found2(void *ctx) { return bpf_strnstr(str, "=
+hello", 5); }
+>  __test(0) int test_strnstr_found3(void *ctx) { return bpf_strnstr(str, "=
+hello", 6); }
+> @@ -42,5 +46,14 @@ __test(-ENOENT) int test_strnstr_notfound1(void *ctx) =
+{ return bpf_strnstr(str,
+>  __test(-ENOENT) int test_strnstr_notfound2(void *ctx) { return bpf_strns=
+tr(str, "hello", 4); }
+>  __test(-ENOENT) int test_strnstr_notfound3(void *ctx) { return bpf_strns=
+tr("", "a", 0); }
+>  __test(0) int test_strnstr_empty(void *ctx) { return bpf_strnstr(str, ""=
+, 1); }
+> +__test(0) int test_strncasestr_found1(void *ctx) { return bpf_strncasest=
+r("", "", 0); }
+> +__test(0) int test_strncasestr_found2(void *ctx) { return bpf_strncasest=
+r(str, "hello", 5); }
+> +__test(0) int test_strncasestr_found3(void *ctx) { return bpf_strncasest=
+r(str, "hello", 6); }
+> +__test(0) int test_strncasestr_found4(void *ctx) { return bpf_strncasest=
+r(str, "HELLO", 5); }
+> +__test(0) int test_strncasestr_found5(void *ctx) { return bpf_strncasest=
+r(str, "HELLO", 6); }
+> +__test(-ENOENT) int test_strncasestr_notfound1(void *ctx) { return bpf_s=
+trncasestr(str, "hi", 10); }
+> +__test(-ENOENT) int test_strncasestr_notfound2(void *ctx) { return bpf_s=
+trncasestr(str, "hello", 4); }
+> +__test(-ENOENT) int test_strncasestr_notfound3(void *ctx) { return bpf_s=
+trncasestr("", "a", 0); }
+> +__test(0) int test_strncasestr_empty(void *ctx) { return bpf_strncasestr=
+(str, "", 1); }
+> =20
+>  char _license[] SEC("license") =3D "GPL";
