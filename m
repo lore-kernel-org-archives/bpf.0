@@ -1,82 +1,123 @@
-Received: from out-188.mta1.migadu.com (out-188.mta1.migadu.com [95.215.58.188])
+Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1794EF9C1
-	for <bpf@vger.kernel.org>; Tue,  7 Oct 2025 01:10:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED49E196C7C
+	for <bpf@vger.kernel.org>; Tue,  7 Oct 2025 01:23:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759799426; cv=none; b=Ku9HGJ62e6ejBFVqRT2zINyiC0zhbLgNr2bb263SiTJzZl7g773o4TnaAKx14s4E+hRy20T2YbaaKAe4+71xZ0ob4UbvBDK5Hwv9R6ViQ5S8qIJn0XmErM1K3NloFujsLr3IRedcBPVtsu2O6uWyNB5cMSxPfBThjfnmZcVtFxE=
+	t=1759800209; cv=none; b=EYkp+9T9TITloBqKA+jp530SilhBVibY4i2PEZJXyKOlERsiAv1BhgepKj8GuLy8XgBRbtWT3AyYFHPuonTTM8KRgBBTzPpXI0jSmP6xxc4ygtvgXyTS+B4otj8LtAzP4m/U8WLgV2SmMyltioiu7zq2xEWDiO3YSnTkR/AWArY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759799426; c=relaxed/simple;
-	bh=JlSaKWGuV5dim81gtrAXDpQsohCMts943PFDEhkU/Ao=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=vCrxoidozkwZS/5+SSvOxGrs/lJO3aK3Du+hpWIDVCIdfRmZT8lvwRjcoXbl+IuINYoTzvswmpwNavSKUflcr72wY+jrfO29vYlQxjzGVhoSIimvoGO3ggbfjYHel3WjjM5T3Xs4WtYv6JQv4YaOxMG1qodFEJgb2CPlDmaoc8w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=V4XBo5R9; arc=none smtp.client-ip=95.215.58.188
+	s=arc-20240116; t=1759800209; c=relaxed/simple;
+	bh=o7/UHuxurP12islo46WPIV7Js05Pg3uCRb86T0t3gfo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=mAy5wijIfiiVJHVXx+iCRdPr7G1zioB12rJd7lBoyGB3a8FqO+x4yJZUQWqqDMdXP1Hn1DfRSL1f42cIUp3S7QFTSglk39BNp7AHHSOBYB3iWYz28tX6BwoM4Hb3CJ9NpqFlYjf0HCXmGNzGQpX7BjEjuMdtoknl2Fpc86msF6E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ZsduBCru; arc=none smtp.client-ip=91.218.175.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="V4XBo5R9"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ZsduBCru"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1759799417;
+	t=1759800205;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=4IYA9vOqgZNsg468nDc3Sy33/MTaTQ7pzXXNVegBBCg=;
-	b=V4XBo5R9e3GtTvE4tPnliRP7jzbjOuOLkj6jk04LW+fO4OraRRkoGe4U/Tj2BdSxpcegUv
-	9Zy+DfP9kELq4uUtjkTjzB4V9VOVOfq3O9s1AbH0xMBryQVXPfio1m2yHO9mXGkEcckROO
-	NALsV4+6wrPwFGLI2P74KaiWqAu6ur0=
-From: Roman Gushchin <roman.gushchin@linux.dev>
-To: Kuniyuki Iwashima <kuniyu@google.com>
-Cc: Alexei Starovoitov <ast@kernel.org>,  Andrii Nakryiko
- <andrii@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>,  Martin
- KaFai Lau <martin.lau@linux.dev>,  John Fastabend
- <john.fastabend@gmail.com>,  Stanislav Fomichev <sdf@fomichev.me>,  "David
- S. Miller" <davem@davemloft.net>,  Eric Dumazet <edumazet@google.com>,
-  Jakub Kicinski <kuba@kernel.org>,  Paolo Abeni <pabeni@redhat.com>,  Neal
- Cardwell <ncardwell@google.com>,  Willem de Bruijn <willemb@google.com>,
-  Mina Almasry <almasrymina@google.com>,  Kuniyuki Iwashima
- <kuni1840@gmail.com>,  bpf@vger.kernel.org,  netdev@vger.kernel.org
-Subject: Re: [PATCH bpf-next/net 0/6] bpf: Allow opt-out from
- sk->sk_prot->memory_allocated.
-In-Reply-To: <20251007001120.2661442-1-kuniyu@google.com> (Kuniyuki Iwashima's
-	message of "Tue, 7 Oct 2025 00:07:25 +0000")
-References: <20251007001120.2661442-1-kuniyu@google.com>
-Date: Mon, 06 Oct 2025 18:10:09 -0700
-Message-ID: <87ldlnfrf2.fsf@linux.dev>
+	bh=dcoZIh074dnysWiuf/6geNRTmp79x+1jXXy5Hj0soP0=;
+	b=ZsduBCrummHRKDRpMZYuxvb8v7dZrsakqJ0nw8bEJkvk/3A7R+pE5GDKIMPMO/cR+EFV2f
+	MK5YxxGzVUTAemMqL+GG5z2hp8NKZdQMUHD5CJLgRvXx0TKmchOPCK6Uk3RuRXano7AsE8
+	qjMuZBJAhgpIWS9Puohu26k6ZEJvW5o=
+From: KaFai Wan <kafai.wan@linux.dev>
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	john.fastabend@gmail.com,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	shuah@kernel.org,
+	kafai.wan@linux.dev,
+	toke@redhat.com,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Cc: Le Chen <tom2cat@sjtu.edu.cn>
+Subject: [PATCH bpf v2 1/2] bpf: Avoid RCU context warning when unpinning htab with internal structs
+Date: Tue,  7 Oct 2025 09:22:33 +0800
+Message-ID: <20251007012235.755853-2-kafai.wan@linux.dev>
+In-Reply-To: <20251007012235.755853-1-kafai.wan@linux.dev>
+References: <20251007012235.755853-1-kafai.wan@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-Kuniyuki Iwashima <kuniyu@google.com> writes:
+When unpinning a BPF hash table (htab or htab_lru) that contains internal
+structures (timer, workqueue, or task_work) in its values, a BUG warning
+is triggered:
+ BUG: sleeping function called from invalid context at kernel/bpf/hashtab.c:244
+ in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 14, name: ksoftirqd/0
+ ...
 
-> This series allows opting out of the global per-protocol memory
-> accounting if socket is configured as such by sysctl or BPF prog.
->
-> This series is v11 of the series below [0], but I start as a new series
-> because the changes now fall in net and bpf subsystems only.
->
-> I discussed with Roman Gushchin offlist, and he suggested not mixing
-> two independent subsystems and it would be cleaner not to depend on
-> memcg.
->
-> So, sk->sk_memcg and memcg code are no longer touched, and instead we
-> use another hole near sk->sk_prot to store a flag for the net feature.
->
-> Overview of the series:
->
->   patch 1 is misc cleanup
->   patch 2 allows opt-out from sk->sk_prot->memory_allocated
->   patch 3 introduces net.core.bypass_prot_mem
->   patch 4 & 5 supports flagging sk->sk_bypass_prot_mem via bpf_setsockopt()
->   patch 6 is selftest
+The issue arises from the interaction between BPF object unpinning and
+RCU callback mechanisms:
+1. BPF object unpinning uses ->free_inode() which schedules cleanup via
+   call_rcu(), deferring the actual freeing to an RCU callback that
+   executes within the RCU_SOFTIRQ context.
+2. During cleanup of hash tables containing internal structures,
+   htab_map_free_internal_structs() is invoked, which includes
+   cond_resched() or cond_resched_rcu() calls to yield the CPU during
+   potentially long operations.
 
-Acked-by: Roman Gushchin <roman.gushchin@linux.dev>
-for the series.
+However, cond_resched() or cond_resched_rcu() cannot be safely called from
+atomic RCU softirq context, leading to the BUG warning when attempting
+to reschedule.
 
-Thanks!
+Fix this by changing from ->free_inode() to ->destroy_inode() and rename
+bpf_free_inode() to bpf_destroy_inode() for BPF objects (prog, map, link).
+This allows direct inode freeing without RCU callback scheduling,
+avoiding the invalid context warning.
+
+Reported-by: Le Chen <tom2cat@sjtu.edu.cn>
+Closes: https://lore.kernel.org/all/1444123482.1827743.1750996347470.JavaMail.zimbra@sjtu.edu.cn/
+Fixes: 68134668c17f ("bpf: Add map side support for bpf timers.")
+Suggested-by: Alexei Starovoitov <ast@kernel.org>
+Signed-off-by: KaFai Wan <kafai.wan@linux.dev>
+---
+ kernel/bpf/inode.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/bpf/inode.c b/kernel/bpf/inode.c
+index f90bdcc0a047..81780bcf8d25 100644
+--- a/kernel/bpf/inode.c
++++ b/kernel/bpf/inode.c
+@@ -775,7 +775,7 @@ static int bpf_show_options(struct seq_file *m, struct dentry *root)
+ 	return 0;
+ }
+ 
+-static void bpf_free_inode(struct inode *inode)
++static void bpf_destroy_inode(struct inode *inode)
+ {
+ 	enum bpf_type type;
+ 
+@@ -790,7 +790,7 @@ const struct super_operations bpf_super_ops = {
+ 	.statfs		= simple_statfs,
+ 	.drop_inode	= inode_just_drop,
+ 	.show_options	= bpf_show_options,
+-	.free_inode	= bpf_free_inode,
++	.destroy_inode	= bpf_destroy_inode,
+ };
+ 
+ enum {
+-- 
+2.43.0
+
