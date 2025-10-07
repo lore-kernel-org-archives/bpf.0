@@ -1,114 +1,117 @@
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 127582441A6
-	for <bpf@vger.kernel.org>; Tue,  7 Oct 2025 22:16:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67A4B46BF
+	for <bpf@vger.kernel.org>; Tue,  7 Oct 2025 22:19:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759875395; cv=none; b=qwu90WqJw7iolplQuMCiuo0GNBS6zmvRXMVWp2SaWdqYc3DEC/s4ignJf4j16KQUO1Lez2Z1L7Nj3StpXpxCS52Tm4ROzv3AkfVmmHAnWWHI24hY1eby8k6xHwRDDT+FeMvksGZ7QHRNedrfT0k5NcjNHYr2P3Yj861YjSXfm/M=
+	t=1759875570; cv=none; b=kVf1sYqO37a/NFw0AphM1X80mN+CQ3RWZhXfjPddZhrztgPhUVWwyOEmCb/BrYyYm+gY5tzaPIs+ugFO+6xrb2jZbN63L8tjfBevBDwtpddUu2Rw5jn8M4PLoA5qm3uQrV7ItWVDDybj7EJFGDDhviT6/79ZAPDZiSPqDy2lfDw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759875395; c=relaxed/simple;
-	bh=PfPm2PDr+Yv+Jq8RFu1Xe/Vre6LI0xWe7Y1eqZTzpwo=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=iU/xGsknmoZ7j/4rRyDjhEd4ZkxK7aTvVJB9A7XkYu3gakwLPRwMJNu4a+mg9KwWrZXlpe8F+fJ2oNIRznmwkhUv1P7w+zTjy2I4ie+eHLZxTkhjMEpRx4ZiTP2e32l8DszW4erzkEjzYdqj3TkxDg/yWcuuD0UQtwL0NKqP1MQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Nnj0YDmZ; arc=none smtp.client-ip=209.85.210.173
+	s=arc-20240116; t=1759875570; c=relaxed/simple;
+	bh=0BrTKfzfWmn/Pi/Zu5OIVoErZRfX91UTWNPIBIWRjEY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=u0kDfdXzSAkNTwXxzlp1t2WNZdNcBQ7G4ATqFNwP1Jrd0ITjwIpAc+Vs3W3gfGAUDCiisGWVtnn7gH+HV0+mZm2XcQ7b1egJtDp8N5X5nTJp5eWkV6DRBQQIXMkeQBNGuDQNPgEMaze5vwnzFv22LO9NxVUkHtF4XctvcgSpkdc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QCUXaPFq; arc=none smtp.client-ip=209.85.128.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Nnj0YDmZ"
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-77f67ba775aso8983582b3a.3
-        for <bpf@vger.kernel.org>; Tue, 07 Oct 2025 15:16:33 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QCUXaPFq"
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-46e47cca387so70930005e9.3
+        for <bpf@vger.kernel.org>; Tue, 07 Oct 2025 15:19:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1759875393; x=1760480193; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=xzF29J4G8Z/A+OjoSK//EYOMjWTz6udya17Lbfuay60=;
-        b=Nnj0YDmZu+drfwMwa4LKNppvYSoUWd076w1CZYRTVoIqiaVPX/0RTiKyvdd4SdHShe
-         Yb30L4oDYGIB07Wj3NzxnKWU30026CDmVzZo2vzuqKX5R5pUBuEG/p43yuivaqOJ+Dea
-         NVhFhTI3GR3d0aLkb8H3u4IzlEFlamR/5Cv0BvLF3zla06ZVZTQqRXIXJr7vmeMhBpfb
-         vccbgCA6oez1u/91VXCyAlukN3U5oohK4wV0kiKVoQL4F7bWxfkQqi4TCqeYuwo129Vz
-         lTVrmPWAPTLJK4lvSD9h84GlB2ZbLVIQU95TJfFoOoqMF6t0AIUJSj2pISYma6JmoCWU
-         Yhbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759875393; x=1760480193;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+        d=gmail.com; s=20230601; t=1759875567; x=1760480367; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=xzF29J4G8Z/A+OjoSK//EYOMjWTz6udya17Lbfuay60=;
-        b=Sj5dZtOxbnix9lSJcTMkPyE5HRlF9A+YtLIPHUfkHuIQY8q0gHL3uC2dM56opYR1HA
-         vmY1b1tI6Jl8Cyv8+kQ4NtnccDPquZoRjZX3HjjfZKWeQ8ROk3RskLLFKBeY8ODlXnQC
-         kDiS+5Tjf8JsHNFaR/QgXEgNGXW2YKyC8urW9qv7plaCCuawpWRNoPEDwi5yl0bubLES
-         p08q48oGPnH9qgGcu17eHj1U2SwJuSuVW/lC/gBsQp6fVqTFdEsm1dmIpYneCQWcFU/w
-         NAo9slqHGBFmztIXxUK2wEZPo5kk2hQPoNKlYKLuj7YDkwvsOgWPGWjCnVRoysbjOW57
-         cYDA==
-X-Forwarded-Encrypted: i=1; AJvYcCVtg8laDTUYZcqUVYjV7SUs49R7Wi8bDXnUyHjb4blrmxJnGp3+tBpdRH+EEAM+UsLdTck=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw31Laz0A8Nep46QBK6NFsgL/3Pg3ovTdpvLXwHWBgUoAIpx20E
-	lzaYK7fOfBCuDv75T8MsO+A03hXYQfFQXrUzasF/m4y1Jx9KI0V4Gz6E
-X-Gm-Gg: ASbGncsj1DVcE/P+UIfH2j11m4vp4zTZT+/GXitLUlTY/AbBPlWSRZni38jD3mMIyJy
-	XUESBO5pH+qKDabvM6y/CUuJikBnVk0xG386wP02FriMW5utDbLEttBmfd5YA0C6JFHwpEeoV4+
-	c0oa2y0kZnmb4G4/hZNdr7LAvpwhNbd3MZ9dGhf3BiopC3WFRVxDQRe0HfD6Am+VcpIOnk1DfV9
-	6HKep+260bktniynqxZN7cV/BMXxENV6Lswpr8qJmlryKWlnhzzo+ohWSzAXW6yLdorIcgA62tt
-	d8MJDezHMiAP9y2wi71ot0clZNR4ArJ9FrMhGlu/8TNKhGshSLil4Y/sNwzb6Kn4KYFQHyUOsua
-	waBOcCo8eFxKVdkkAyfcT56PaOqu9Ys7l7HIGfV5wkWPgNThUQRMSI3UcX9r/DwEHMkR6RPY0
-X-Google-Smtp-Source: AGHT+IH+hnAxTGz76bbcqRUiN2z79AijpRf2YSP+LG9f8Eb4UUqDInrbF5yof6GPuHUci77wYdwi8w==
-X-Received: by 2002:a05:6a20:2589:b0:2d3:8d14:7fcc with SMTP id adf61e73a8af0-32da80c4a7cmr1309034637.6.1759875393157;
-        Tue, 07 Oct 2025 15:16:33 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:115c:1:8bd3:2c4e:e9b8:4ad1? ([2620:10d:c090:500::5:b7ce])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-78b01fb1d27sm16877912b3a.36.2025.10.07.15.16.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Oct 2025 15:16:32 -0700 (PDT)
-Message-ID: <cfdb482d1b4b59f49cfedd76957f24aa9fcc5152.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v2 2/3] bpf: Refactor storage_get_func_atomic
- to generic non_sleepable flag
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
-Cc: Mykyta Yatsenko <yatsenko@meta.com>, Alexei Starovoitov
- <ast@kernel.org>,  Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>, Martin KaFai Lau	 <martin.lau@kernel.org>,
- kkd@meta.com, kernel-team@meta.com
-Date: Tue, 07 Oct 2025 15:16:31 -0700
-In-Reply-To: <20251007220349.3852807-3-memxor@gmail.com>
-References: <20251007220349.3852807-1-memxor@gmail.com>
-	 <20251007220349.3852807-3-memxor@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2 (3.56.2-1.fc42) 
+        bh=ULOpCHpuzNrV19zhGgpQ5JcoiAZqb22xif0k/8B0pl0=;
+        b=QCUXaPFqm7JpTmCH8PHjd8C08XpY6UmqcuIxP161xjlziKONYT2fgn1efIa/aTKs75
+         ZMJXNidx/1pobQDH7yAn8Mav2ZNHJK7RZwyXFzrqa5k7bBIf8gx8wYOIp1KhMV5xFhV1
+         c53yJuZdBvfX+sTNJ4jGNi0jLu3WKhUNiLOrch9RVo2AwmEfF5JH7UC0hgWRe6hgdeqJ
+         SQomfRk8lv0Kh2F0cjVQs5QQ6XT4e93qhU0nJ9bMTeLtrWl6q1h1J+Hf2lVaxF5dhPuE
+         JlpBmSJ0v6RZQTBjE1SfAJW+jxQH06WSjtsUHfmZ2H4wIcYgCrDWok3QAzp0LtugBHuQ
+         8YBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1759875567; x=1760480367;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ULOpCHpuzNrV19zhGgpQ5JcoiAZqb22xif0k/8B0pl0=;
+        b=uhOI2JfGiD16h1eJToMJ6IC6oBrCXxal5y331VLooJEQcKmvPCw71j6GwLvhLjJl/f
+         O0uGGHrEb1qsndd+8dLITBT49jD9iW2+ZF7j1oCvfUFHIdVq2j+DOg4QglcSXD2QxcHR
+         MpVm6dsUzWS7bv+/YjHEGzXNkRUWC5/m1wC3xJy7gTQskVq0izaALj3GClqXXC5uN6h+
+         kgowYOhtRd0bJ20Yk8geAgJolqYrXKe1Bk/BiruNnZ0U4wW/rlhqF/Km8s7p7UFGOoZu
+         jlZ4qIOLuKdbdeZLXkq+0CZZr+pAJOEEvt76uB24cc5hCzBdZx0zmgG+tFVkLElWLqSO
+         vSSg==
+X-Forwarded-Encrypted: i=1; AJvYcCVz2519BnccZmwdJf/h/Y999XwS1kOfba54LGJa4qSOnvLPP3i67KmiSL0sUWj3R/Dr4+E=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzd7Z8P8YZ9UHmrzja4jPFbZMmH/cBQF3bNZdFvJm3x72KvfJ3V
+	aUFMjwDjSBBjMzxdn00khnsOQUk1+7Dlldx8H5zoTwhiksE5OdOiFSgj
+X-Gm-Gg: ASbGncvA701/8eR939c84JM+ZBW5gpZzI3YTqzGE7PZSVGhUGU9JJzFzbk8C05+ZlJe
+	5Qdv8sH/zgurfq6C5jQxEczm4PWEKNwS+2/LMNK65402a2NzjVenqCqSWbuHnr27zTjFc87vUuI
+	nYikqn7aLre9+bdwu0u8pzawTl+l7lfd37UfpV6u3kkdNYRSGoo1zueC6b7jVUP8GDEZfxcEspF
+	a7yaBhHiAQ96sQaHrdlzoYQFxf0WJat7Fg+VR4ufhhdebWsJP4Db4emUPYAOx4X+pk5qvWIecaE
+	KsXtFngeGzfA7ow3AVme529EN31MKc9ESPHJRJtURX8IQrMQbLzP5gfj3G5XHEVKkESKK2NS30Y
+	qX1KcQtdWbqx3yAYojkqkdLSD4RnSq8tj4plZpXWjNbrUmh4zDetNn3c15wp1fbzesotgiYUs7C
+	IOTG0obAEFrxuayVXEkYw4QG5f1ycoyAY=
+X-Google-Smtp-Source: AGHT+IEDEGLMNnwGgvVBfc4QERoDMV+mpYeq7qdLHaAOcddStnLJrxV8oDLrLzZbgg+SgAGAxcOlXA==
+X-Received: by 2002:a05:600c:a02:b0:46e:4499:ba30 with SMTP id 5b1f17b1804b1-46fa9b052f2mr8818265e9.30.1759875566598;
+        Tue, 07 Oct 2025 15:19:26 -0700 (PDT)
+Received: from ?IPV6:2a01:4b00:bd1f:f500:e85d:a828:282d:d5c7? ([2a01:4b00:bd1f:f500:e85d:a828:282d:d5c7])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4255d869d50sm27930786f8f.0.2025.10.07.15.19.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Oct 2025 15:19:26 -0700 (PDT)
+Message-ID: <acb151dc-d65d-434e-913b-7e3d61ea6c85@gmail.com>
+Date: Tue, 7 Oct 2025 23:19:25 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v2 2/3] bpf: Refactor storage_get_func_atomic to
+ generic non_sleepable flag
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
+Cc: Mykyta Yatsenko <yatsenko@meta.com>, Alexei Starovoitov <ast@kernel.org>,
+ Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Martin KaFai Lau <martin.lau@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>, kkd@meta.com, kernel-team@meta.com
+References: <20251007220349.3852807-1-memxor@gmail.com>
+ <20251007220349.3852807-3-memxor@gmail.com>
+Content-Language: en-US
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+In-Reply-To: <20251007220349.3852807-3-memxor@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, 2025-10-07 at 22:03 +0000, Kumar Kartikeya Dwivedi wrote:
+On 10/7/25 23:03, Kumar Kartikeya Dwivedi wrote:
 > Rename the storage_get_func_atomic flag to a more generic non_sleepable
 > flag that tracks whether a helper or kfunc may be called from a
 > non-sleepable context. This makes the flag more broadly applicable
 > beyond just storage_get helpers. See [0] for more context.
->=20
+>
 > The flag is now set unconditionally for all helpers and kfuncs when:
 > - RCU critical section is active.
 > - Preemption is disabled.
 > - IRQs are disabled.
 > - In a non-sleepable context within a sleepable program (e.g., timer
->   callbacks), which is indicated by !in_sleepable().
->=20
+>    callbacks), which is indicated by !in_sleepable().
+>
 > Previously, the flag was only set for storage_get helpers in these
 > contexts. With this change, it can be used by any code that needs to
 > differentiate between sleepable and non-sleepable contexts at the
 > per-instruction level.
->=20
+>
 > The existing usage in do_misc_fixups() for storage_get helpers is
 > preserved by checking is_storage_get_function() before using the flag.
->=20
->   [0]: https://lore.kernel.org/bpf/CAP01T76cbaNi4p-y8E0sjE2NXSra2S=3DUja8=
-G4hSQDu_SbXxREQ@mail.gmail.com
->=20
+>
+>    [0]: https://lore.kernel.org/bpf/CAP01T76cbaNi4p-y8E0sjE2NXSra2S=Uja8G4hSQDu_SbXxREQ@mail.gmail.com
+>
 > Cc: Mykyta Yatsenko <yatsenko@meta.com>
 > Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 > ---
-
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
-
-[...]
+>   include/linux/bpf_verifier.h |  2 +-
+>   kernel/bpf/verifier.c        | 33 +++++++++++++++++----------------
+>   2 files changed, 18 insertions(+), 17 deletions(-)
+>
+>
+Acked-by: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
