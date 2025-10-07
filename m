@@ -1,30 +1,32 @@
-Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
+Received: from out-174.mta0.migadu.com (out-174.mta0.migadu.com [91.218.175.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1F081F8677
-	for <bpf@vger.kernel.org>; Tue,  7 Oct 2025 01:23:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 198B71EEA49;
+	Tue,  7 Oct 2025 01:23:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759800212; cv=none; b=doFMOmutOoT2Y0Snos5UdOYhtQa6GbqcnNHYWPy5Hf2ygamXtJNvEpJlrnkb+Fbr/wsCVuVOLNt7XXO+JLEVVEuYOKVlhQ4xy/vhg3hCZbAd/q9dTQDwA1eNJTdCm6YsfORbHTqeKALqTv2TD/hEReXNQEeue0XzjktgdZr0T7A=
+	t=1759800215; cv=none; b=ByeGQzuoQXyp4JBnCRbeHZyfSBfFH8SBJmqZX6GTZQ8S87zQyNYeCva4PNL63q5GQVEnjGz4oD+O6Oz2qF2NlD3bW5J/R4jglSzdxofylKQjLvgq4EfjXYT8fasaEClTZp/PlOkkB95RaFafsVdGU86mo9hUZMs09bz7U9Mutuk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759800212; c=relaxed/simple;
-	bh=Zkg/4/M1W90opEFaeUqTox6cu1LMdIBOwiPvGzQMLZs=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version; b=U2wsWzy3ZYTOv4F0G/w+Tp4fgxmbY0mCq6JGcdSjuJU8JcyJQe96mTnLnuC5tLy6qpHI2yalLjyXcqElQQVjc1XB+JC8hI7/XPC5DzPWU1ioxa/SBE2qHOM4B/UG8iqd7mPGQu5dldhi85hg6jCRDwVLwEkuX7FK+SthuPoqzBo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=pmHTqhIE; arc=none smtp.client-ip=91.218.175.171
+	s=arc-20240116; t=1759800215; c=relaxed/simple;
+	bh=XLodWl1Mnqi6n+xmZaM4r4KxwmmAoji2W6kZJLMVLA8=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=vBYXiXv2j5NLIOfoop4aqxDjtmArAhLYAJCOXlUvYcNGFsYHkWBzDigj34qBFsNwSu5Rv7OuAXJNrNeEiAsQr0JgO+SSznhr6sngvA6bG9u9acxkpNu5TBgj+ML4x5OpeKrJVo52OPjYUmvJ3h9hU728FPa7K4j30wuj9cnwzQE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=AM4kwegh; arc=none smtp.client-ip=91.218.175.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="pmHTqhIE"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="AM4kwegh"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1759800198;
+	t=1759800211;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=13Tbayb7LRIEib3J/XQk5H3VZSA57m10o5ojkPGrK3o=;
-	b=pmHTqhIEGN3RBY0xaKXnEMnzDn+4FR6eZxGeDbWQZsJQCSBpyEgFtNVmktSdMmSG32xqD5
-	dlLKCjv5QcAhlX4tCf8v5RNVwd9TOmabzc5TnfkxrXONxgk+F8HvjMQOyIpm89lgAWiVm0
-	PysZy4YQ4N2oTlWsgJG7Vi5hofPOUi4=
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=CZM6bExjDs8jz6TVsKvY1N151Suvl2rvzQSjV8ALYIE=;
+	b=AM4kweghQ+CWc94h5E0GCs/nQhadm3vmfcHXwEyENIaxZe6+SP/0Q+1Jj9ZYC5iy1dGrDL
+	u6q+VYtfl3PHiNUfoAewqIXbhFbgdJfpycBynsli9Cu5QV1dPwW3xxGDDtSJHX0hxXXl/c
+	XBz11y8VxEbTwkhERAMKnyqMItJdKHk=
 From: KaFai Wan <kafai.wan@linux.dev>
 To: ast@kernel.org,
 	daniel@iogearbox.net,
@@ -44,9 +46,11 @@ To: ast@kernel.org,
 	linux-kernel@vger.kernel.org,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf v2 0/2] bpf: Avoid RCU context warning when unpinning htab with internal structs
-Date: Tue,  7 Oct 2025 09:22:32 +0800
-Message-ID: <20251007012235.755853-1-kafai.wan@linux.dev>
+Subject: [PATCH bpf v2 2/2] selftests/bpf: Add test for unpinning htab with internal timer struct
+Date: Tue,  7 Oct 2025 09:22:34 +0800
+Message-ID: <20251007012235.755853-3-kafai.wan@linux.dev>
+In-Reply-To: <20251007012235.755853-1-kafai.wan@linux.dev>
+References: <20251007012235.755853-1-kafai.wan@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -56,28 +60,95 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-This small patchset is about avoid RCU context warning when unpinning
-htab with internal structs (timer, workqueue, or task_work).
+Add test to verify that unpinning hash tables containing internal timer
+structures does not trigger context warnings.
 
-v2:
-  - rename bpf_free_inode() to bpf_destroy_inode() (Andrii)
+Each subtest (timer_prealloc and timer_no_prealloc) can trigger the
+context warning when unpinning, but the warning cannot be triggered
+twice within a short time interval (a HZ), which is expected behavior.
 
-v1:
- https://lore.kernel.org/all/20251003084528.502518-1-kafai.wan@linux.dev/
-
+Signed-off-by: KaFai Wan <kafai.wan@linux.dev>
 ---
-KaFai Wan (2):
-  bpf: Avoid RCU context warning when unpinning htab with internal
-    structs
-  selftests/bpf: Add test for unpinning htab with internal timer struct
-
- kernel/bpf/inode.c                            |  4 +-
  .../selftests/bpf/prog_tests/pinning_htab.c   | 37 +++++++++++++++++++
  .../selftests/bpf/progs/test_pinning_htab.c   | 25 +++++++++++++
- 3 files changed, 64 insertions(+), 2 deletions(-)
+ 2 files changed, 62 insertions(+)
  create mode 100644 tools/testing/selftests/bpf/prog_tests/pinning_htab.c
  create mode 100644 tools/testing/selftests/bpf/progs/test_pinning_htab.c
 
+diff --git a/tools/testing/selftests/bpf/prog_tests/pinning_htab.c b/tools/testing/selftests/bpf/prog_tests/pinning_htab.c
+new file mode 100644
+index 000000000000..fc804bb87b26
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/pinning_htab.c
+@@ -0,0 +1,37 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <test_progs.h>
++#include "test_pinning_htab.skel.h"
++
++static void unpin_map(const char *map_name, const char *pin_path)
++{
++	struct test_pinning_htab *skel;
++	struct bpf_map *map;
++	int err;
++
++	skel = test_pinning_htab__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "skel open_and_load"))
++		return;
++
++	map = bpf_object__find_map_by_name(skel->obj, map_name);
++	if (!ASSERT_OK_PTR(map, "bpf_object__find_map_by_name"))
++		goto out;
++
++	err = bpf_map__pin(map, pin_path);
++	if (!ASSERT_OK(err, "bpf_map__pin"))
++		goto out;
++
++	err = bpf_map__unpin(map, pin_path);
++	if (!ASSERT_OK(err, "bpf_map__unpin"))
++		goto out;
++out:
++	test_pinning_htab__destroy(skel);
++}
++
++void test_pinning_htab(void)
++{
++	if (test__start_subtest("timer_prealloc"))
++		unpin_map("timer_prealloc", "/sys/fs/bpf/timer_prealloc");
++	if (test__start_subtest("timer_no_prealloc"))
++		unpin_map("timer_no_prealloc", "/sys/fs/bpf/timer_no_prealloc");
++}
+diff --git a/tools/testing/selftests/bpf/progs/test_pinning_htab.c b/tools/testing/selftests/bpf/progs/test_pinning_htab.c
+new file mode 100644
+index 000000000000..ae227930c73c
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_pinning_htab.c
+@@ -0,0 +1,25 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++
++char _license[] SEC("license") = "GPL";
++
++struct timer_val {
++	struct bpf_timer timer;
++};
++
++struct {
++	__uint(type, BPF_MAP_TYPE_HASH);
++	__type(key, __u32);
++	__type(value, struct timer_val);
++	__uint(max_entries, 1);
++} timer_prealloc SEC(".maps");
++
++struct {
++	__uint(type, BPF_MAP_TYPE_HASH);
++	__type(key, __u32);
++	__type(value, struct timer_val);
++	__uint(max_entries, 1);
++	__uint(map_flags, BPF_F_NO_PREALLOC);
++} timer_no_prealloc SEC(".maps");
 -- 
 2.43.0
 
