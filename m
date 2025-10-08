@@ -1,187 +1,251 @@
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 629202E229A
-	for <bpf@vger.kernel.org>; Wed,  8 Oct 2025 17:36:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB5B128504F
+	for <bpf@vger.kernel.org>; Wed,  8 Oct 2025 18:27:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759944980; cv=none; b=n05VKz8dvHLNeCotwWMYPt8EeMN9YwhIZeYHfRrVpkknJEHU+6RStj37FVi6ix2cyaYV7BpDBrDFJS4KA+uFRyE2rz+PWxxd80LPkcu/OfO3CPv8BvbnWVeH19nQEFsbokmdHvOMdp9KEYfqtTzYwWI6HnKnxlLlyYPCMV/MTEQ=
+	t=1759948042; cv=none; b=OT/aWFfbFzTXqwARBGhr5hFvKY6b5PXLjWNuh9PwRFmHRWtFbApFO/BObeadnSTvLB0cPmCTwhVMD0GmxLMFlkvZBenJmbLCzFfspu2XUXZx+3B+9IxunOMtLMGwD9ZoqqQ9u39nWkhdoKmubtNC5gpU8QgKk0EU9tFWz7GRM00=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759944980; c=relaxed/simple;
-	bh=GbpG2FqRVnBF9n+ZZUr8sO0mPmZE85T/nNYL9p4h80E=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=I72bW4CKWp2YcdSxOFEQ89c7AIkjRRgpnSdMQwUEzByJzkk+XFEp7Pd5ORG/JPPzjICjB/rzgTLFmXcNXikU3fidpBZNnfNJ+xGSGU+q1GC8uYe5uY0C7fDmM9ePETxQ5dIadhvvf+k3C4/70X09ivlGtX/NFje+td4s/XaZPRQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=ecAJ9+qy; arc=none smtp.client-ip=205.220.165.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+	s=arc-20240116; t=1759948042; c=relaxed/simple;
+	bh=5kipz1u5jAGIpDeRwTOusX73sqlNTD1ija8uMjGlIzU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=IesR4aHmuZLGPhSoc/2OUJy5mcIQ3sUMPF0o1LktRVSq/5CdoCejzZa0Nd/UjE17o9hferFSJIwjhE64d34UX7sHWTBa9WL93j0M9mVdBQS02/U77ZMBnuKcD2ccH7u7uABt8gLbb/glo5Eor7mIeE8VQ1xdhJm1gWD3MIrYNxc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UdjzIMZt; arc=none smtp.client-ip=209.85.221.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="ecAJ9+qy"
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 598HEUij032746;
-	Wed, 8 Oct 2025 17:35:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=corp-2025-04-25; bh=UVgW2
-	MXcXU+Szym6BvfgkDA+NuWOoG9Qi8a472DXBjY=; b=ecAJ9+qyB+QRxi3SNLNM3
-	93QUR0WRZHeQvzAUq0QKS6zXpXmdLo3q/d4Q1HvQxZkekXxLbLwmfQByVKDtyBm9
-	qwJMYKLLZTKeR+GNRxzf+oSX9TrMGJRlgkeuQ6W3rQb5fuadzgLM12RwRIa6tNB5
-	UWFWD5s4l9s7tFB8x81tnwk/+CarTR2lm+OdGxwnuPIBBZohNsWdYv9HDMuNahYC
-	TMEd3BhzAZXC/4s3+eiFNWe1ZZEgryJ0G33Aa+4g/4Pwxe6jAEN04szcO92PVWtt
-	ADdUR7Xu1+vHxRomN1ONMwtADBc8AoWgvI2/qv38FxxEi7uRkg19eGUR2Ctx/Ylb
-	g==
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 49nv6br1c1-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 08 Oct 2025 17:35:44 +0000 (GMT)
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 598HDrV2036952;
-	Wed, 8 Oct 2025 17:35:43 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 49nv62rq18-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 08 Oct 2025 17:35:43 +0000
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 598HZFV2031138;
-	Wed, 8 Oct 2025 17:35:42 GMT
-Received: from bpf.uk.oracle.com (dhcp-10-154-53-90.vpn.oracle.com [10.154.53.90])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 49nv62rpmb-11;
-	Wed, 08 Oct 2025 17:35:42 +0000
-From: Alan Maguire <alan.maguire@oracle.com>
-To: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org
-Cc: martin.lau@linux.dev, acme@kernel.org, ttreyer@meta.com,
-        yonghong.song@linux.dev, song@kernel.org, john.fastabend@gmail.com,
-        kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com,
-        jolsa@kernel.org, qmo@kernel.org, ihor.solodrai@linux.dev,
-        david.faust@oracle.com, jose.marchesi@oracle.com, bpf@vger.kernel.org,
-        Alan Maguire <alan.maguire@oracle.com>
-Subject: [RFC bpf-next 10/15] selftests/bpf: BTF distill tests to ensure LOC[_PARAM|_PROTO] add to split BTF
-Date: Wed,  8 Oct 2025 18:35:06 +0100
-Message-ID: <20251008173512.731801-11-alan.maguire@oracle.com>
-X-Mailer: git-send-email 2.43.5
-In-Reply-To: <20251008173512.731801-1-alan.maguire@oracle.com>
-References: <20251008173512.731801-1-alan.maguire@oracle.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UdjzIMZt"
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-3ee130237a8so233568f8f.0
+        for <bpf@vger.kernel.org>; Wed, 08 Oct 2025 11:27:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1759948039; x=1760552839; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JeECzwpw9IdOxCcB5VeqcoOix8jUd/JN0HvMrOkC2+4=;
+        b=UdjzIMZtFpqcZt60AQz1Mvync3XMA5Vlu2isTSLuEUyVYrPi0vEI3Va8kCnj65sd8k
+         BNJFNWMmnSYGtt3ScimrlnvsCFciGHt/DTRwl9T4a029z/Bch8t1AlifUJen8RhNtEGn
+         K+iZMgonRU3rvJ0yRvW9PjAPtsZJRhSrPd0TwYdLUKYqcM43PrqTS5gRxOtguEsI2pow
+         zWarJMRgBqgEzgSBLcI98rpd6XFoa8ZvY/bzFYwQsd1E4itcvOvBWddoloSii+5Cmuhf
+         rwUoWeqJY8kTNTNpEzFW2Sb2+t/Cipou4fFZjOiO81YzSqXiIdGgPRYGlDkdmY66jG5G
+         gjYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1759948039; x=1760552839;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JeECzwpw9IdOxCcB5VeqcoOix8jUd/JN0HvMrOkC2+4=;
+        b=u+iwb41SFlbmUqu3FtFMDEnscugq6na5laaqQ7PverUlAV+KpQj8ZLm4KvRsbmCHjQ
+         RP7oTxNpV8CnSfI9q9aspUa16tGuP1JLFeOpl/9Eue5MN2TNR7eBrBtaPpyxPet/2AYF
+         2RVXscvkzxYc3r9xUS6yfpBEP0pVdICSRqPYHOKDeJxq/IfwnNkFC3vB5jG8KdFq+OrU
+         J0HLDtNzwSjD5GlHq6QMNmXQhlmck0070S8+auG1zm2mtVjnNVDqgfB0inIAZEXK5iwU
+         rIz4OOlp+3MD/ETiykCfom/c6AL5hNVerJzFsleE3jXM5NNjz/MHo+k5LJ2GTf9G7EDI
+         PBoQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUVAxPWXNsvErd73cvOmzbL0Yxct34FyYZXv6aripOsBRXTZIT10xZXWbPN+6Jb077NI40=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy1pNxP94T9ZrTz60UwJi6WllPDTBGVyNHHOSsdXOKbnMkvXjHV
+	3thR/433gqG/CcVVbLqscoMERXTJhAKcvP8P8Vju6ptPOnx0Mfn1n1s6
+X-Gm-Gg: ASbGnctDCu2AVqEcSbTczOQS+h+OSjYJn/atvQIxk6Bia8sLBCZf7vkDpvtiLrMO3wX
+	F5YCH+lnjoklTARIkqhPe3QdChb2R4Zk0NQtPwCrsBfbBGbo2/wwvyKOzAzLwyCkb6ZFM0C1blt
+	7a1QWagqKAAdmMoY0BheGvCUylWpxLA0TitoKZ4JHiebvq66liqE5bdsPYmgW3Um0SDffFgHLbz
+	mHAgbasTHSeBieklKdg2K+i9QrTQvdw8Iq5Y9qT8EzEble8XbRsMzOAxracCfLbpWmz/h75ctdb
+	/9RfITLrUDM0uFCOiZzji+rxMA3C6g+HGeNRB0pjyOKcMf8ZGwAlj95Ct//UDBGGnOqqeDCil8V
+	oo0vQWdT5j1X2V3dj54i5ed+h7sCpPyZTB5X/s2FDHTrPk5i14lyxDi1MP93xXKnx9NM=
+X-Google-Smtp-Source: AGHT+IGgZvRiVoRrS6j5mGKGu8h5lWC6nSYuLqE0C4QEQxexGzGp0UEVrxqTaHmmHtQQ9R8Z5GURdg==
+X-Received: by 2002:a05:6000:603:b0:401:41a9:524f with SMTP id ffacd0b85a97d-4266e7d452bmr3035612f8f.29.1759948038834;
+        Wed, 08 Oct 2025 11:27:18 -0700 (PDT)
+Received: from ?IPV6:2620:10d:c0c3:1130::122e? ([2620:10d:c092:400::5:6a7f])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4255d8a6bbesm30864788f8f.12.2025.10.08.11.27.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Oct 2025 11:27:18 -0700 (PDT)
+Message-ID: <bb2eac7d-fe07-4e44-bd21-74115fed02bb@gmail.com>
+Date: Wed, 8 Oct 2025 19:27:17 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-10-08_05,2025-10-06_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 bulkscore=0 mlxlogscore=999
- phishscore=0 spamscore=0 adultscore=0 suspectscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2510020000
- definitions=main-2510080123
-X-Authority-Analysis: v=2.4 cv=BLO+bVQG c=1 sm=1 tr=0 ts=68e6a0f0 b=1 cx=c_pps
- a=e1sVV491RgrpLwSTMOnk8w==:117 a=e1sVV491RgrpLwSTMOnk8w==:17
- a=x6icFKpwvdMA:10 a=yPCof4ZbAAAA:8 a=hf7FfUZL3eI-ZkDr0lIA:9 cc=ntf
- awl=host:13625
-X-Proofpoint-ORIG-GUID: rpP5ALPsj1EbZWBpq_QHpHsERpX3k7iN
-X-Proofpoint-GUID: rpP5ALPsj1EbZWBpq_QHpHsERpX3k7iN
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMDA4MDEyMSBTYWx0ZWRfX4zlWSmcviRqh
- aw4BzbcRJfCNN8hxHwJ7imokm2WNrGLVZkEB+lTFLRAsAjnW9VYC4uOHBpz/aZKhzLcPWKjBrm2
- LE78As9jTrN2YHHu5OLJskmc5803YkkIl3M06hR99ZWx//xXyGsd1LAxSE/PuvO73OCqXVDbIWy
- Yc+p4Ad4lAc6JN30qLKeqf1oe1ly8F3vlmxIx5wt0vP3mglrjhO1zOMd79Sz/L8xZLHvdKebiDI
- JvtISF8a3Vsm5yFeRpFJexZTovHOtNiB1tifZnwSVT5W/x8cAPaLPzgoXxUNA6wV3C5RpbzoBLn
- Y2oMH3lYVRIPA2bqqaJrj7pbWj64ciVes+jnS8zoTdKXD5O2vnzvBM7aZHDXHReQ4yUMQ9QxGze
- +X/4ltAQc8TshiGjiHc3ag7nmlkyXW+SleVGb2QjxvA6UWmzC8E=
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH v1 08/10] bpf: verifier: refactor kfunc specialization
+To: Eduard Zingerman <eddyz87@gmail.com>, bpf@vger.kernel.org,
+ ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net, kafai@meta.com,
+ kernel-team@meta.com, memxor@gmail.com
+Cc: Mykyta Yatsenko <yatsenko@meta.com>
+References: <20251003160416.585080-1-mykyta.yatsenko5@gmail.com>
+ <20251003160416.585080-9-mykyta.yatsenko5@gmail.com>
+ <bf0c87d7c378f033dd2efc193c86789cfd2604f3.camel@gmail.com>
+Content-Language: en-US
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+In-Reply-To: <bf0c87d7c378f033dd2efc193c86789cfd2604f3.camel@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-When creating distilled BTF, BTF_KIND_LOC_PARAM and BTF_KIND_LOC_PROTO
-should be added to split BTF.  This means potentially some duplication
-of location information, but only for out-of-tree modules that use
-distilled base/split BTF.
-
-Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
----
- .../selftests/bpf/prog_tests/btf_distill.c    | 68 +++++++++++++++++++
- 1 file changed, 68 insertions(+)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/btf_distill.c b/tools/testing/selftests/bpf/prog_tests/btf_distill.c
-index fb67ae195a73..1dd26ec79b69 100644
---- a/tools/testing/selftests/bpf/prog_tests/btf_distill.c
-+++ b/tools/testing/selftests/bpf/prog_tests/btf_distill.c
-@@ -671,6 +671,72 @@ static void test_distilled_base_embedded_err(void)
- 	btf__free(btf1);
- }
- 
-+/* LOC_PARAM, LOC_PROTO should be added to split BTF. */
-+static void test_distilled_loc(void)
-+{
-+	struct btf *btf1 = NULL, *btf2 = NULL, *btf3 = NULL, *btf4 = NULL;
-+
-+	btf1 = btf__new_empty();
-+	if (!ASSERT_OK_PTR(btf1, "empty_main_btf"))
-+		return;
-+
-+	btf__add_int(btf1, "int", 4, BTF_INT_SIGNED);	/* [1] int */
-+	btf__add_func_proto(btf1, 1);                   /* [2] int (*)(int); */
-+	btf__add_func_param(btf1, "p1", 1);
-+	btf__add_loc_param(btf1, -4, true, -1, 0, 0, 0);/* [3] loc value */
-+
-+	VALIDATE_RAW_BTF(
-+		btf1,
-+		"[1] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED",
-+		"[2] FUNC_PROTO '(anon)' ret_type_id=1 vlen=1\n"
-+		"\t'p1' type_id=1",
-+		"[3] LOC_PARAM '(anon)' size=-4 value=-1");
-+
-+	btf2 = btf__new_empty_split(btf1);
-+	if (!ASSERT_OK_PTR(btf2, "empty_split_btf"))
-+		goto cleanup;
-+
-+	btf__add_loc_proto(btf2);			/* [4] loc proto */
-+	btf__add_loc_proto_param(btf2, 3);		/*  param value */
-+
-+	btf__add_locsec(btf2, ".locs");			/* [5] locsec */
-+	btf__add_locsec_loc(btf2, "foo", 2, 4, 256);	/* "foo" offset 256 */
-+	VALIDATE_RAW_BTF(
-+		btf2,
-+		"[1] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED",
-+		"[2] FUNC_PROTO '(anon)' ret_type_id=1 vlen=1\n"
-+		"\t'p1' type_id=1",
-+		"[3] LOC_PARAM '(anon)' size=-4 value=-1",
-+		"[4] LOC_PROTO '(anon)' vlen=1\n"
-+		"\ttype_id=3",
-+		"[5] LOCSEC '.locs' vlen=1\n"
-+		"\t'foo' func_proto_type_id=2 loc_proto_type_id=4 offset=256");
-+
-+	if (!ASSERT_EQ(0, btf__distill_base(btf2, &btf3, &btf4),
-+		       "distilled_base") ||
-+	    !ASSERT_OK_PTR(btf3, "distilled_base") ||
-+	    !ASSERT_OK_PTR(btf4, "distilled_split") ||
-+	    !ASSERT_EQ(2, btf__type_cnt(btf3), "distilled_base_type_cnt"))
-+		goto cleanup;
-+
-+	VALIDATE_RAW_BTF(
-+		btf4,
-+		"[1] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED",
-+		/* remainder is split BTF */
-+		"[2] LOC_PROTO '(anon)' vlen=1\n"
-+		"\ttype_id=5",
-+		"[3] LOCSEC '.locs' vlen=1\n"
-+		"\t'foo' func_proto_type_id=4 loc_proto_type_id=2 offset=256",
-+		"[4] FUNC_PROTO '(anon)' ret_type_id=1 vlen=1\n"
-+		"\t'p1' type_id=1",
-+		"[5] LOC_PARAM '(anon)' size=-4 value=-1");
-+cleanup:
-+	btf__free(btf4);
-+	btf__free(btf3);
-+	btf__free(btf2);
-+	btf__free(btf1);
-+}
-+
- void test_btf_distill(void)
- {
- 	if (test__start_subtest("distilled_base"))
-@@ -689,4 +755,6 @@ void test_btf_distill(void)
- 		test_distilled_base_vmlinux();
- 	if (test__start_subtest("distilled_endianness"))
- 		test_distilled_endianness();
-+	if (test__start_subtest("distilled_loc"))
-+		test_distilled_loc();
- }
--- 
-2.39.3
+On 10/3/25 23:08, Eduard Zingerman wrote:
+> On Fri, 2025-10-03 at 17:04 +0100, Mykyta Yatsenko wrote:
+>
+> [...]
+>
+>> @@ -3354,18 +3344,29 @@ static int add_kfunc_call(struct bpf_verifier_env *env, u32 func_id, s16 offset)
+>>   			return err;
+>>   	}
+>>   
+>> +	err = btf_distill_func_proto(&env->log, desc_btf,
+>> +				     func_proto, func_name,
+>> +				     &func_model);
+>> +	if (err)
+>> +		return err;
+>> +
+>> +	call_imm = kfunc_call_imm(addr, func_id);
+>> +	/* Check whether the relative offset overflows desc->imm */
+>> +	if ((unsigned long)(s32)call_imm != call_imm) {
+> This error was previously reported only when !bpf_jit_supports_far_kfunc_call().
+Sorry for the delayed response.
+This condition can only be true if call_imm is a 64 bit address. But if
+bpf_jit_supports_far_kfunc_call() is true, call_imm holds func_id which 
+is u32,
+anyway, so we can't hit this error.
+>
+>> +		verbose(env, "address of kernel function %s is out of range\n",
+>> +			func_name);
+>> +		return -EINVAL;
+>> +	}
+>> +
+>>   	desc = &tab->descs[tab->nr_descs++];
+>>   	desc->func_id = func_id;
+>> -	desc->imm = call_imm;
+> Nit: no need to move this assignment.
+>
+>>   	desc->offset = offset;
+>>   	desc->addr = addr;
+>> -	err = btf_distill_func_proto(&env->log, desc_btf,
+>> -				     func_proto, func_name,
+>> -				     &desc->func_model);
+>> -	if (!err)
+>> -		sort(tab->descs, tab->nr_descs, sizeof(tab->descs[0]),
+>> -		     kfunc_desc_cmp_by_id_off, NULL);
+>> -	return err;
+>> +	desc->imm = call_imm;
+>> +	desc->func_model = func_model;
+>> +	sort(tab->descs, tab->nr_descs, sizeof(tab->descs[0]),
+>> +	     kfunc_desc_cmp_by_id_off, NULL);
+>> +	return 0;
+>>   }
+>>   
+>>   static int kfunc_desc_cmp_by_imm_off(const void *a, const void *b)
+>> @@ -21822,21 +21823,32 @@ static int fixup_call_args(struct bpf_verifier_env *env)
+>>   	return err;
+>>   }
+>>   
+>> +static unsigned long kfunc_call_imm(unsigned long func_addr, u32 func_id)
+>> +{
+>> +	if (bpf_jit_supports_far_kfunc_call())
+>> +		return func_id;
+>> +
+>> +	return BPF_CALL_IMM(func_addr);
+>> +}
+>> +
+>>   /* replace a generic kfunc with a specialized version if necessary */
+>> -static void specialize_kfunc(struct bpf_verifier_env *env,
+>> -			     u32 func_id, u16 offset, unsigned long *addr)
+>> +static void specialize_kfunc(struct bpf_verifier_env *env, struct bpf_kfunc_desc *desc)
+>>   {
+>> +	struct bpf_prog_aux *prog_aux = env->prog->aux;
+>> +	struct bpf_kfunc_desc_tab *tab = prog_aux->kfunc_tab;
+>>   	struct bpf_prog *prog = env->prog;
+>>   	bool seen_direct_write;
+>>   	void *xdp_kfunc;
+>>   	bool is_rdonly;
+>> +	u32 func_id = desc->func_id;
+>> +	u16 offset = desc->offset;
+>> +	unsigned long call_imm;
+>> +	unsigned long addr = 0;
+>>   
+>>   	if (bpf_dev_bound_kfunc_id(func_id)) {
+>>   		xdp_kfunc = bpf_dev_bound_resolve_kfunc(prog, func_id);
+>> -		if (xdp_kfunc) {
+>> -			*addr = (unsigned long)xdp_kfunc;
+>> -			return;
+>> -		}
+>> +		if (xdp_kfunc)
+>> +			addr = (unsigned long)xdp_kfunc;
+>>   		/* fallback to default kfunc when not supported by netdev */
+>>   	}
+> Note: right after this line there is:
+>
+> 	if (offset)      // this checks if kernel or module BTF is used
+> 		return;
+>
+> The refactoring changes behavior at this point:
+> previously if `offset != 0` the `addr` computed for dev bound kfunc
+> would be assigned to `desc->addr`, after the refactoring this is not
+> the case.
+>
+> On the other hand, bpf_dev_bound_kfunc_id() looks up func_id in set8
+> xdp_metadata_kfunc_ids, that contains functions only defined for
+> kernel BTF.
+>
+> Hence, I suggest moving this `if (offset) return` as the first check
+> in the function, to avoid confusion.
+>
+>>   
+>> @@ -21848,21 +21860,28 @@ static void specialize_kfunc(struct bpf_verifier_env *env,
+>>   		is_rdonly = !may_access_direct_pkt_data(env, NULL, BPF_WRITE);
+>>   
+>>   		if (is_rdonly)
+>> -			*addr = (unsigned long)bpf_dynptr_from_skb_rdonly;
+>> +			addr = (unsigned long)bpf_dynptr_from_skb_rdonly;
+>>   
+>>   		/* restore env->seen_direct_write to its original value, since
+>>   		 * may_access_direct_pkt_data mutates it
+>>   		 */
+>>   		env->seen_direct_write = seen_direct_write;
+>> +	} else if (func_id == special_kfunc_list[KF_bpf_set_dentry_xattr]) {
+>> +		if (bpf_lsm_has_d_inode_locked(prog))
+>> +			addr = (unsigned long)bpf_set_dentry_xattr_locked;
+>> +	} else if (func_id == special_kfunc_list[KF_bpf_remove_dentry_xattr]) {
+>> +		if (bpf_lsm_has_d_inode_locked(prog))
+>> +			addr = (unsigned long)bpf_remove_dentry_xattr_locked;
+>>   	}
+>>   
+>> -	if (func_id == special_kfunc_list[KF_bpf_set_dentry_xattr] &&
+>> -	    bpf_lsm_has_d_inode_locked(prog))
+>> -		*addr = (unsigned long)bpf_set_dentry_xattr_locked;
+>> +	if (!addr) /* Nothing to patch with */
+>> +		return;
+>>   
+>> -	if (func_id == special_kfunc_list[KF_bpf_remove_dentry_xattr] &&
+>> -	    bpf_lsm_has_d_inode_locked(prog))
+>> -		*addr = (unsigned long)bpf_remove_dentry_xattr_locked;
+>> +	call_imm = kfunc_call_imm(addr, func_id);
+>> +	desc->imm = call_imm;
+> Nit:	desc->imm = kfunc_call_imm(addr, func_id);
+>
+>> +	desc->addr = addr;
+>> +	sort(tab->descs, tab->nr_descs, sizeof(tab->descs[0]),
+>> +	     kfunc_desc_cmp_by_id_off, NULL);
+> Why sorting again?
+> Neither `func_id` nor `offset` fields change.
+>
+>>   }
+>>   
+>>   static void __fixup_collection_insert_kfunc(struct bpf_insn_aux_data *insn_aux,
+>> @@ -21885,7 +21904,7 @@ static void __fixup_collection_insert_kfunc(struct bpf_insn_aux_data *insn_aux,
+>>   static int fixup_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+>>   			    struct bpf_insn *insn_buf, int insn_idx, int *cnt)
+>>   {
+>> -	const struct bpf_kfunc_desc *desc;
+>> +	struct bpf_kfunc_desc *desc;
+>>   
+>>   	if (!insn->imm) {
+>>   		verbose(env, "invalid kernel function call not eliminated in verifier pass\n");
+>> @@ -21905,6 +21924,8 @@ static int fixup_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+>>   		return -EFAULT;
+>>   	}
+>>   
+>> +	specialize_kfunc(env, desc);
+>> +
+>>   	if (!bpf_jit_supports_far_kfunc_call())
+>>   		insn->imm = BPF_CALL_IMM(desc->addr);
+>>   	if (insn->off)
 
