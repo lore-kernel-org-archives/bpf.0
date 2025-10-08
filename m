@@ -1,51 +1,51 @@
 Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8DBE2BEFF8
-	for <bpf@vger.kernel.org>; Wed,  8 Oct 2025 17:35:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3A7E2BEFF8
+	for <bpf@vger.kernel.org>; Wed,  8 Oct 2025 17:35:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759944955; cv=none; b=CdVs3TpTeywsy2wHmPhfSLQutLDyjEwWYZUXcx3XewvBqZdBDQfXidMcJILvls1Q7F6j1GiljZQi4lhmGvh7sMB7LefGQvfmDuCy1DuiCyAWdlp+UlS6F+4pCgnqtbEKHuh0KMObm6d71jdgu8+ukxEvSCWl9mrBmJuLRLu2jXI=
+	t=1759944958; cv=none; b=TQsSh5RvUNV8kKYvQ2eHTLWK6fGvNMKXcbGDuWDOQlU7l0oMEmzeH2RUkQUtE0AP5Xn8jb86I9UsZiUuYsumJg7lmVPE2zcaISOLSFrfN5zNEvSc/UBwbYLMMwEzUWuQfketjT0JkU22hpDuwDzJWl8ExcKNtql6rRyPEhsG/K4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759944955; c=relaxed/simple;
-	bh=L2cWYRzaubGqLKWLSZyJP8IbiSVCB9H4qzxwijh1cZ0=;
+	s=arc-20240116; t=1759944958; c=relaxed/simple;
+	bh=1n3ebqrEIijErNmboET1Ait7fQMVgzaHLmyeYHR1efw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=F18CeYJKyK/gNb7Yuz+8BvqXl8PjCKrlV9ESNoRxjZXGXVPZPqvRmag8+9CAogVweMh778WNzLE7i3OxC6Xov7DcpCry+7sey6ozN+fEpKmcMFgXnO3niB2cwe38Q7N5LbKiQPWlN4/c00Po/pvQiIipqIxtKLjfVJ5bp+VHH38=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=afgTfeIN; arc=none smtp.client-ip=205.220.165.32
+	 MIME-Version; b=V7MKkf9yXocSp7EggSEgnyTwYtb8qi6L5qxN06PDjjPg9qgyqOPhq5ZZOZKGOF5hf7xtna/FS5BxgEUASXKq9SjvJtb2zjwXq1PyeNoMY9ClP0Eysm/FNjG5bGc+/H46+XhqyhmaMSspMWXG1D80C+Iz2FYiDg4fhcN1Fh5D7ak=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=fY8rlcDW; arc=none smtp.client-ip=205.220.165.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="afgTfeIN"
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 598HJQ7m018480;
-	Wed, 8 Oct 2025 17:35:25 GMT
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="fY8rlcDW"
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 598HETFA029244;
+	Wed, 8 Oct 2025 17:35:36 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=corp-2025-04-25; bh=K3M8Y
-	q7iFVuMyrEMK0NEuMMofI6UTRU3YJRcsofDF+A=; b=afgTfeINQ/yHOLuMsebPs
-	pbNPkDZ48iQ2XQhO6vkvPlmiEPqqMosezZsvqYkf47wocOZ3aQ5bfO8YC2C5FptW
-	QP8Bx59Or05bmVFOZ70hUcsvicktpqNa3wqwpoq5ycYRl6J7N6Kzfi8bdlxfteDC
-	yO7i6KAbq3WAz8emZNs+PPKL1lTyqDDHuvLKZMV7n9F2ZoRk3ET73zQXrHugoscU
-	bfe4OXdby+yoMPkgFizpAFuqoaql8aMCpbh1+6MBRYkMwZ8wI2HcTiShPswRZ37F
-	Ac/dbi72EAESBuE9YM/iBUkiaGjNz+ti3fXKMMHENLwVHK1oFzw91CBaUNxVB2tP
-	A==
+	:mime-version:references:subject:to; s=corp-2025-04-25; bh=NyeZO
+	SQww4JwUDKAkl05RQXP0TQmQhdeeniGPQAVHNQ=; b=fY8rlcDWjnq8Urx8gSYgH
+	WCElr0tTSY1N7cd+f+tU+mTKzNnnVzHbV3/YGaZ6ydmROZfyK8v0jEuvdVWedcEN
+	+kRCwqmkidYvZ9b4FERixLN1RFvYjPiaw8nNoET+hsUPR58h/nqHdIyHk05x/VQP
+	wsy161ZGwFPZpuHchXTOQ8NleTAD6bpMuNSCcScq4cmis4Qehc6YNgYEAVswkwSy
+	u5Z2ldWB36yZqwOlGBxbFVPgerovZbBFCB2gfRjWQik0Xo4gnoEeJqpa2EVLwpjX
+	/7Q95piayQIWFgCeZFHLnX3tOaC+FSTzftcHqDT+3Fm/+VGp3pkqzktr0mhplZIA
+	Q==
 Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 49nv8pr0wh-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 49nv6b81b1-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 08 Oct 2025 17:35:25 +0000 (GMT)
+	Wed, 08 Oct 2025 17:35:36 +0000 (GMT)
 Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 598HDtMV037058;
-	Wed, 8 Oct 2025 17:35:24 GMT
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 598HDxV6037196;
+	Wed, 8 Oct 2025 17:35:34 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 49nv62rptx-1
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 49nv62rpxw-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 08 Oct 2025 17:35:23 +0000
+	Wed, 08 Oct 2025 17:35:34 +0000
 Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 598HZFUm031138;
-	Wed, 8 Oct 2025 17:35:23 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 598HZFUu031138;
+	Wed, 8 Oct 2025 17:35:34 GMT
 Received: from bpf.uk.oracle.com (dhcp-10-154-53-90.vpn.oracle.com [10.154.53.90])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 49nv62rpmb-4;
-	Wed, 08 Oct 2025 17:35:23 +0000
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 49nv62rpmb-8;
+	Wed, 08 Oct 2025 17:35:34 +0000
 From: Alan Maguire <alan.maguire@oracle.com>
 To: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org
 Cc: martin.lau@linux.dev, acme@kernel.org, ttreyer@meta.com,
@@ -54,9 +54,9 @@ Cc: martin.lau@linux.dev, acme@kernel.org, ttreyer@meta.com,
         jolsa@kernel.org, qmo@kernel.org, ihor.solodrai@linux.dev,
         david.faust@oracle.com, jose.marchesi@oracle.com, bpf@vger.kernel.org,
         Alan Maguire <alan.maguire@oracle.com>
-Subject: [RFC bpf-next 03/15] libbpf: Add option to retrieve map from old->new ids from btf__dedup()
-Date: Wed,  8 Oct 2025 18:34:59 +0100
-Message-ID: <20251008173512.731801-4-alan.maguire@oracle.com>
+Subject: [RFC bpf-next 07/15] selftests/bpf: Test helper support for BTF_KIND_LOC[_PARAM|_PROTO|SEC]
+Date: Wed,  8 Oct 2025 18:35:03 +0100
+Message-ID: <20251008173512.731801-8-alan.maguire@oracle.com>
 X-Mailer: git-send-email 2.43.5
 In-Reply-To: <20251008173512.731801-1-alan.maguire@oracle.com>
 References: <20251008173512.731801-1-alan.maguire@oracle.com>
@@ -74,138 +74,117 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 bulksc
  phishscore=0 spamscore=0 adultscore=0 suspectscore=0 malwarescore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2510020000
  definitions=main-2510080123
-X-Proofpoint-GUID: URnl0XlpqhXefgNaamGzMWo-Z75NvvCF
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMDA4MDEyMiBTYWx0ZWRfX+aMuQgL1NgB+
- Hs5IbuGH217i/ug+TIYkVcnyTriPo276L8LPqfbGgUbttBQ28VW/vllewmvSZ0UchH68u0QVCTE
- z+xhRC/21YFA91h5Gxo4AbWuWpfX/knDGvq/+HhL78iUj71W+VPXYKVVixBhv6IBgmnX0AWpqLd
- 96PLmhdwndAaG5zikwIN8bdSttWBkexIsVSZMNNKlW9rqE+wJKRvynZW9vsT5TJtMmXTXGzbiaF
- WuEtthtmOXoIMNJMfPTsi3w10rtDgTiTGRvl89enUjARQFp/YpMarOteX3Fzivalqu/Yc4M/FOh
- r0bkvBlEdkgIqI+bSltBn2VBblMG4Sx8mdRiZpbThlag4Qx1lGkeckpKIz7s05lZu9rtrTRDsHo
- BKG+Mqwt5Fz3/XrRvH+Gpr0VO85VGuigteTSn2o1S0FKobg14ic=
-X-Proofpoint-ORIG-GUID: URnl0XlpqhXefgNaamGzMWo-Z75NvvCF
-X-Authority-Analysis: v=2.4 cv=U6SfzOru c=1 sm=1 tr=0 ts=68e6a0dd b=1 cx=c_pps
+X-Proofpoint-GUID: koNHCYv65vDW8eQh2kNlc9UHCrO5GFVw
+X-Authority-Analysis: v=2.4 cv=Nb7rFmD4 c=1 sm=1 tr=0 ts=68e6a0e8 b=1 cx=c_pps
  a=e1sVV491RgrpLwSTMOnk8w==:117 a=e1sVV491RgrpLwSTMOnk8w==:17
- a=x6icFKpwvdMA:10 a=yPCof4ZbAAAA:8 a=UVjqitbAw_J0JPDCJggA:9 cc=ntf
+ a=x6icFKpwvdMA:10 a=yPCof4ZbAAAA:8 a=O_h5xKu9hMPxhoEXHG0A:9 cc=ntf
  awl=host:13625
+X-Proofpoint-ORIG-GUID: koNHCYv65vDW8eQh2kNlc9UHCrO5GFVw
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMDA4MDEyMSBTYWx0ZWRfX7jQ6jymAEDYb
+ JYguxWck8X0EG0E9xPivXcouhEs9RiMGdFQ4bC8C/F5kkWMUVTHAyUDv0JvY0WtHdr/eHTJxJwX
+ 2qe33+g0n8+Lwcl198Jz7c5USXvUROWjALVTyn3tXHPo50I6tBr8py/FcpHL2GbFjmqONK473NS
+ zspfQIJc/mVeNNkMfFpqKhIu9W5SG1+ECLzczrgIx1bDgNU0fPe6RXmvP7t+pqx+Sd+crM5BNPM
+ h1pvbxeGJOUoAIu88Rm/5C63laGVhTqpTw/3VsZVc2B0RVkVeqTMMjILmXLNJGho66N1YanSQQ/
+ m4BbFL/+F2c0F4wNW1/vb1HZhxaPp0TFrZ/rDQB8K3NO+XDxCVhb7wzuogat7rtAjTLBA9wjQlf
+ rhc10RsOpcg+dddxIvzLsVoECjonfxBQfxlob/R/f3E27J4D0NE=
 
-When creating split BTF for the .BTF.extra section to record location
-information, we need to add function prototypes that refer to base BTF
-(vmlinux) types.  However since .BTF.extra is split BTF we have a
-problem; since collecting those type ids for the parameters, the base
-vmlinux BTF has been deduplicated so the type ids are stale.  As a
-result it is valuable to be able to access the map from old->new type
-ids that is constructed as part of deduplication.  This allows us to
-update the out-of-date type ids in the FUNC_PROTOs.
-
-In order to pass the map back, we need to fill out all of the hypot
-map mappings; as an optimization normal dedup only computes type id
-mappings needed in existing BTF type id references.
+Add support to dump, encode and validate new location-related kinds.
 
 Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
 ---
- tools/lib/bpf/btf.c | 35 ++++++++++++++++++++++++++++++++++-
- tools/lib/bpf/btf.h |  5 ++++-
- 2 files changed, 38 insertions(+), 2 deletions(-)
+ tools/testing/selftests/bpf/btf_helpers.c | 43 ++++++++++++++++++++++-
+ tools/testing/selftests/bpf/test_btf.h    | 15 ++++++++
+ 2 files changed, 57 insertions(+), 1 deletion(-)
 
-diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-index 0abd7831d6b4..6b06fb60d39a 100644
---- a/tools/lib/bpf/btf.c
-+++ b/tools/lib/bpf/btf.c
-@@ -3650,6 +3650,8 @@ static int btf_dedup_ref_types(struct btf_dedup *d);
- static int btf_dedup_resolve_fwds(struct btf_dedup *d);
- static int btf_dedup_compact_types(struct btf_dedup *d);
- static int btf_dedup_remap_types(struct btf_dedup *d);
-+static int btf_dedup_remap_type_id(__u32 *type_id, void *ctx);
-+static int btf_dedup_save_map(struct btf_dedup *d, __u32 **save_map);
- 
- /*
-  * Deduplicate BTF types and strings.
-@@ -3850,6 +3852,15 @@ int btf__dedup(struct btf *btf, const struct btf_dedup_opts *opts)
- 	}
- 
- done:
-+	if (!err) {
-+		if (opts && opts->dedup_map && opts->dedup_map_sz) {
-+			err = btf_dedup_save_map(d, opts->dedup_map);
-+			if (err >= 0) {
-+				*opts->dedup_map_sz = err;
-+				err = 0;
-+			}
-+		}
-+	}
- 	btf_dedup_free(d);
- 	return libbpf_err(err);
- }
-@@ -3880,6 +3891,7 @@ struct btf_dedup {
- 	__u32 *hypot_list;
- 	size_t hypot_cnt;
- 	size_t hypot_cap;
-+	size_t hypot_map_cnt;
- 	/* Whether hypothetical mapping, if successful, would need to adjust
- 	 * already canonicalized types (due to a new forward declaration to
- 	 * concrete type resolution). In such case, during split BTF dedup
-@@ -4010,6 +4022,7 @@ static struct btf_dedup *btf_dedup_new(struct btf *btf, const struct btf_dedup_o
- 		err = -ENOMEM;
- 		goto done;
- 	}
-+	d->hypot_map_cnt = type_cnt;
- 	for (i = 0; i < type_cnt; i++)
- 		d->hypot_map[i] = BTF_UNPROCESSED_ID;
- 
-@@ -5628,7 +5641,6 @@ static int btf_dedup_remap_type_id(__u32 *type_id, void *ctx)
- 	new_type_id = d->hypot_map[resolved_type_id];
- 	if (new_type_id > BTF_MAX_NR_TYPES)
- 		return -EINVAL;
--
- 	*type_id = new_type_id;
- 	return 0;
- }
-@@ -5678,6 +5690,27 @@ static int btf_dedup_remap_types(struct btf_dedup *d)
- 	return 0;
- }
- 
-+/* retrieve a copy of map and avoid it being freed during btf_dedup_free(). */
-+static int btf_dedup_save_map(struct btf_dedup *d, __u32 **save_map)
-+{
-+	__u32 i, resolved_id;
-+
-+	/* only existing references in BTF that needed to be adjusted are
-+	 * mapped in the hypot map; fill in the rest.
-+	 */
-+	for (i = 0; i < d->hypot_map_cnt; i++) {
-+		if (d->hypot_map[i] <= BTF_MAX_NR_TYPES)
-+			continue;
-+		resolved_id = resolve_type_id(d, i);
-+		d->hypot_map[i] = d->hypot_map[resolved_id];
-+	}
-+	*save_map = d->hypot_map;
-+	/* ensure btf_dedup_free() will not free hypot map; it belongs to caller */
-+	d->hypot_map = NULL;
-+
-+	return d->hypot_map_cnt;
-+}
-+
- /*
-  * Probe few well-known locations for vmlinux kernel image and try to load BTF
-  * data out of it to use for target BTF.
-diff --git a/tools/lib/bpf/btf.h b/tools/lib/bpf/btf.h
-index 0f55518a2be0..082b010c0228 100644
---- a/tools/lib/bpf/btf.h
-+++ b/tools/lib/bpf/btf.h
-@@ -265,9 +265,12 @@ struct btf_dedup_opts {
- 	struct btf_ext *btf_ext;
- 	/* force hash collisions (used for testing) */
- 	bool force_collisions;
-+	/* return dedup mapping array (from original -> new id) */
-+	__u32 **dedup_map;
-+	size_t *dedup_map_sz;
- 	size_t :0;
+diff --git a/tools/testing/selftests/bpf/btf_helpers.c b/tools/testing/selftests/bpf/btf_helpers.c
+index 1c1c2c26690a..90455ef8ab0f 100644
+--- a/tools/testing/selftests/bpf/btf_helpers.c
++++ b/tools/testing/selftests/bpf/btf_helpers.c
+@@ -27,11 +27,14 @@ static const char * const btf_kind_str_mapping[] = {
+ 	[BTF_KIND_DECL_TAG]	= "DECL_TAG",
+ 	[BTF_KIND_TYPE_TAG]	= "TYPE_TAG",
+ 	[BTF_KIND_ENUM64]	= "ENUM64",
++	[BTF_KIND_LOC_PARAM]	= "LOC_PARAM",
++	[BTF_KIND_LOC_PROTO]	= "LOC_PROTO",
++	[BTF_KIND_LOCSEC]	= "LOCSEC",
  };
--#define btf_dedup_opts__last_field force_collisions
-+#define btf_dedup_opts__last_field dedup_map_sz
  
- LIBBPF_API int btf__dedup(struct btf *btf, const struct btf_dedup_opts *opts);
+ static const char *btf_kind_str(__u16 kind)
+ {
+-	if (kind > BTF_KIND_ENUM64)
++	if (kind > BTF_KIND_LOCSEC)
+ 		return "UNKNOWN";
+ 	return btf_kind_str_mapping[kind];
+ }
+@@ -203,6 +206,44 @@ int fprintf_btf_type_raw(FILE *out, const struct btf *btf, __u32 id)
+ 		fprintf(out, " type_id=%u component_idx=%d",
+ 			t->type, btf_decl_tag(t)->component_idx);
+ 		break;
++	case BTF_KIND_LOC_PARAM: {
++		struct btf_loc_param *p = btf_loc_param(t);
++		__s32 sz = (__s32)t->size;
++
++		if (btf_kflag(t)) {
++			__u64 uval = btf_loc_param_value(t);
++
++			if (sz >= 0) {
++				fprintf(out, " size=%d value=%llu", sz, uval);
++			} else {
++				__s64 sval = (__s64)uval;
++
++				fprintf(out, " size=%d value=%lld", sz, sval);
++			}
++		} else {
++			fprintf(out, " size=%d reg=%u flags=0x%x offset=%d",
++				sz, p->reg, p->flags, p->offset);
++		}
++		break;
++	}
++	case BTF_KIND_LOC_PROTO: {
++		const __u32 *p = btf_loc_proto_params(t);
++
++		fprintf(out, " vlen=%u", vlen);
++		for (i = 0; i < vlen; i++, p++)
++			fprintf(out, "\n\ttype_id=%u", *p);
++		break;
++	}
++	case BTF_KIND_LOCSEC: {
++		const struct btf_loc *l = btf_locsec_locs(t);
++
++		fprintf(out, " vlen=%u", vlen);
++		for (i = 0; i < vlen; i++, l++) {
++			fprintf(out, "\n\t'%s' func_proto_type_id=%u loc_proto_type_id=%u offset=%d",
++				btf_str(btf, l->name_off), l->func_proto, l->loc_proto, l->offset);
++		}
++		break;
++	}
+ 	default:
+ 		break;
+ 	}
+diff --git a/tools/testing/selftests/bpf/test_btf.h b/tools/testing/selftests/bpf/test_btf.h
+index e65889ab4adf..6e9bc6fe6702 100644
+--- a/tools/testing/selftests/bpf/test_btf.h
++++ b/tools/testing/selftests/bpf/test_btf.h
+@@ -84,4 +84,19 @@
+ #define BTF_TYPE_TAG_ENC(value, type)	\
+ 	BTF_TYPE_ENC(value, BTF_INFO_ENC(BTF_KIND_TYPE_TAG, 0, 0), type)
  
++#define BTF_LOC_PARAM_ENC(sz, kflag, value) \
++	BTF_TYPE_ENC(0, BTF_INFO_ENC(BTF_KIND_LOC, kflag, 0), (__u32)sz), \
++	(value >> 32), (value & 0xffffffff)
++
++#define BTF_LOC_PROTO_ENC(nargs) \
++	BTF_TYPE_ENC(0, BTF_INFO_ENC(BTF_KIND_LOC_PROTO, 0, nargs), 0)
++
++#define BTF_LOC_PROTO_PARAM_ENCODE(param) (param)
++
++#define BTF_LOCSEC_ENC(name, nlocs) \
++	BTF_TYPE_ENC(name, BTF_INFO_ENC(BTF_KIND_LOCSEC, 0, nlocs), 0)
++
++#define BTF_LOCSEC_LOC_ENCODE(name, func_proto, loc_proto, offset) \
++	(name), (func_proto), (loc_proto), (offset)
++
+ #endif /* _TEST_BTF_H */
 -- 
 2.39.3
 
