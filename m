@@ -1,51 +1,51 @@
 Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94EDE2BEFEB
-	for <bpf@vger.kernel.org>; Wed,  8 Oct 2025 17:36:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B099A2BEFF3
+	for <bpf@vger.kernel.org>; Wed,  8 Oct 2025 17:36:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759944966; cv=none; b=MU39N0MuoO2ELj1NJ387IjKmexzJvSnD3K3Nhu08bVVICdDudkrk+2p+2P3erJFh0nbtnMfFM0YKuToajNMud51YzbskEIxXGB7DJJ+JxW4PA+Gaw7x3TD15QGuoWDpKR4vFXpoMIMzBezde6x8P/4J1wMMy+NX/RHboaS8C+1o=
+	t=1759944967; cv=none; b=TJXhDoXrCDL+WQPebJBixCDZwVrIRllQHf52QTSju2CAu1kpumhXXsjfHaUGmiXNa1yCRfRqWa6AuAWlSlZ0aZyf7RXgEwUuVmFv8Zvpgi2ZJ2BVWXtckpLgL/LC9uUuOYOaHKKDHfXQiAeYf05usGbKUUJZS5equOsFFWEMQi0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759944966; c=relaxed/simple;
-	bh=a+BlhbGV3CO3mxKfUMBK0iqfAab9E+xqoGGTTKxE6Sc=;
+	s=arc-20240116; t=1759944967; c=relaxed/simple;
+	bh=6TQxpy92xTveoFNFMfoY4Mng/L5KY8rlt0y3MqeHS8U=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=d9qFf0f0pKJ+TOAZ5wc4lPTOC6uFLfl3JH6CyF5Qc+OwBXwLc8RGLVO7j+VGJiXhiEQr4lHPdp6EztCOUdlKPhBAEmZh65w2MJZ66yDIS836zdEBKFEUuEU+GJVw3CerQ7t9L5EYZr5BVxLHhehGFGzN23sDfV455jEl1YxDxlg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=KulsQZI+; arc=none smtp.client-ip=205.220.165.32
+	 MIME-Version; b=gncJNEq6R81gIXG75xF+aiGAzxdstm3zbySbFASUxWkQby3c0INK1CI3Dj0HpKXh6X8dmbJX4AU4IwTKQGRz6izfegPOunJ95BopZTCiSyKZZWIbx9MdujqRcV/YHrLT/x1pSSjTZGg+ANAZ1QtScLcOB38oncSvPN9tft2gX7Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=HFHouGr4; arc=none smtp.client-ip=205.220.165.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="KulsQZI+"
-Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 598HEUPl014051;
-	Wed, 8 Oct 2025 17:35:39 GMT
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="HFHouGr4"
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 598HERQc029135;
+	Wed, 8 Oct 2025 17:35:47 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=corp-2025-04-25; bh=qAS/b
-	Id44cXOkn+p3JRzYkmfW5241elB36sMvFJrSA8=; b=KulsQZI+Df0IVpK36aAWD
-	iF4YTX3I/jEdbg+aZm+NC3OKntaMe1ftQFP5+aTEG1ptqJ+IspUSvrSbDJOFTvKm
-	L9HME3z7eO9neZafViTTvDg+zbxIIOQrgipi+kmM+cPs0MpNTM7F7eHXPIejFKYE
-	2FaiMatqgIMZoK4idyXaqR4TQuDZalubZ+AsZH9TYSu9HzXHsehgxYrLoLiIWy39
-	jDWQ0tA2rc5AR+uS8zP1lIRMTLI/kSRBbb8G6JXNKRFCf7xbXWJtGdFwvWN1LIlU
-	sw/16rFiriaTE6ssi2fMAAtq1EExabg/DKx+oz+N8n01S87AsnDu9yrjKMyYbQib
-	g==
+	:mime-version:references:subject:to; s=corp-2025-04-25; bh=d8B6c
+	An/nKky1vFIWJ4fK/VEn4czP9FfC2PECORWqGE=; b=HFHouGr4mpFVva1LkjWE+
+	9t6Jq1fkQB7Y5pdOZbE+IazETANyXrzSoo9Fha+sTZSlEJl7Px883nU9/Nh7QKBq
+	3VFfb3XNOXRsU/LWny8j2HMW+ne90NctvJbJRdCb+Tm9u2yBTPop4THcry+KxWCf
+	6Eim0SfSuBC5tDmLSejtHNKtNHgai9QR6yIHRZD8CLLpVXHNOVywDc9L4rwBsQt+
+	8O+nmN54TpOYf0Fil4XQyZRWa1IplQVAPnNX4x7uVVdrh41YasqEr2s6gm5DyOhD
+	ry+yD3EC5jowlEWiP6nE5PXK/VxdankzeGb8gG8mmtUgVknRpt/E4rX8ytJDlf4M
+	Q==
 Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 49nv6c81d0-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 49nv6b81bv-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 08 Oct 2025 17:35:38 +0000 (GMT)
+	Wed, 08 Oct 2025 17:35:47 +0000 (GMT)
 Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 598HDsts036975;
-	Wed, 8 Oct 2025 17:35:37 GMT
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 598HDrV4036952;
+	Wed, 8 Oct 2025 17:35:46 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 49nv62rpyx-1
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 49nv62rq1w-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 08 Oct 2025 17:35:37 +0000
+	Wed, 08 Oct 2025 17:35:46 +0000
 Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 598HZFUw031138;
-	Wed, 8 Oct 2025 17:35:37 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 598HZFV4031138;
+	Wed, 8 Oct 2025 17:35:45 GMT
 Received: from bpf.uk.oracle.com (dhcp-10-154-53-90.vpn.oracle.com [10.154.53.90])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 49nv62rpmb-9;
-	Wed, 08 Oct 2025 17:35:36 +0000
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 49nv62rpmb-12;
+	Wed, 08 Oct 2025 17:35:45 +0000
 From: Alan Maguire <alan.maguire@oracle.com>
 To: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org
 Cc: martin.lau@linux.dev, acme@kernel.org, ttreyer@meta.com,
@@ -54,9 +54,9 @@ Cc: martin.lau@linux.dev, acme@kernel.org, ttreyer@meta.com,
         jolsa@kernel.org, qmo@kernel.org, ihor.solodrai@linux.dev,
         david.faust@oracle.com, jose.marchesi@oracle.com, bpf@vger.kernel.org,
         Alan Maguire <alan.maguire@oracle.com>
-Subject: [RFC bpf-next 08/15] selftests/bpf: Add LOC_PARAM, LOC_PROTO, LOCSEC to field iter tests
-Date: Wed,  8 Oct 2025 18:35:04 +0100
-Message-ID: <20251008173512.731801-9-alan.maguire@oracle.com>
+Subject: [RFC bpf-next 11/15] kbuild: Add support for extra BTF
+Date: Wed,  8 Oct 2025 18:35:07 +0100
+Message-ID: <20251008173512.731801-12-alan.maguire@oracle.com>
 X-Mailer: git-send-email 2.43.5
 In-Reply-To: <20251008173512.731801-1-alan.maguire@oracle.com>
 References: <20251008173512.731801-1-alan.maguire@oracle.com>
@@ -74,80 +74,158 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 bulksc
  phishscore=0 spamscore=0 adultscore=0 suspectscore=0 malwarescore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2510020000
  definitions=main-2510080123
-X-Proofpoint-GUID: iheZKKMJuLGUDWINRI9ROufG_PMw-h6C
-X-Proofpoint-ORIG-GUID: iheZKKMJuLGUDWINRI9ROufG_PMw-h6C
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMDA4MDEyMSBTYWx0ZWRfX1i4V16KLtCPM
- KdX3hEF5UcQ0CXbZjpdzoXSyNi7pFvFURyxsOxHYL5SNOqSNmcZBcqlcD7vjkShZdI5BdnXgofD
- gxA/jC7ksxKxc2GuS8N76x+fIcY/j5qdl4P90rrGA9IPEE4mMonnAF7te7FTGyXY9AIFhn5oF3O
- DVe09YI8PyayrOAZ0IQQBuNNlkLbQUl9rCZMDZ6xuVP33AFYz0m51e0YdrI3j+ecarmltYZmdxQ
- 4bPHTONyJCibUvlhtWOIHA2pigqlvBIjIaZcTnTJ3PWmVbPvnHq/5/JHR2Uww+O5tl8MjeCEvLb
- Qe48MHizKGvuUNlrv4C7Q1idtWC+8/rVbCuIJKQiedC8aCothdNXegTe+HQ0YmbpsQLordxbA0B
- BcA+JP2ddc8J+bWNzcVofAQnnYECiuzzNngxYBVsmfUM1D8gjSA=
-X-Authority-Analysis: v=2.4 cv=FYA6BZ+6 c=1 sm=1 tr=0 ts=68e6a0eb b=1 cx=c_pps
+X-Proofpoint-GUID: eE7J4DEEM_pFxKp4zC97aG1GLmU0KcOz
+X-Authority-Analysis: v=2.4 cv=Nb7rFmD4 c=1 sm=1 tr=0 ts=68e6a0f3 b=1 cx=c_pps
  a=e1sVV491RgrpLwSTMOnk8w==:117 a=e1sVV491RgrpLwSTMOnk8w==:17
- a=x6icFKpwvdMA:10 a=yPCof4ZbAAAA:8 a=P1WRmwLrVkm1f4vsXGUA:9 cc=ntf
+ a=x6icFKpwvdMA:10 a=yPCof4ZbAAAA:8 a=98Ek4A6AJ6fSjteOX4QA:9 cc=ntf
  awl=host:13625
+X-Proofpoint-ORIG-GUID: eE7J4DEEM_pFxKp4zC97aG1GLmU0KcOz
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMDA4MDEyMSBTYWx0ZWRfX+5qtx2ABIcZK
+ eEo01uOjllKqiaYt9VGd7vcv5i0RyqVs8a4y6cVCyfgvRGkI+ypZ5riNcVGc1P3y+jkfwc/QlqJ
+ FBazkJ0rEgUlb4/ZRFKJPTEs5IlHXtp9ZDiTs3geHijd3eaYkDf95WNesKq0lPgEJYOIISLpDMj
+ 0tvMd/CbV1VnGIF5HXn+u/RI46j5cjG8ZoJrZWCnfiz+deIyaw1VWTEgSppclfimjXvTwfli4Tu
+ nr4WA5S1BTnUIZUx8wskkzSLEmg2QSjHFjHog0MvXZyQIxzkXT/gKMi800Xi54tm6gusRdCXDj3
+ PGDOv/9I4mX6tIIsgE/g/yPsrORodC1Tc3akmcQvt5UcysS9gp/kRFin4Zp/cHepYIWHBz6gLI0
+ 3XTl8XDX0uO9zBDVlMUaD99kwwoaK79fcTdWi+coG0MrIsv0gBQ=
 
-BTF_KIND_LOC[_PARAM|_PROTO|SEC] need to work with field iteration, so extend
-the selftest to cover these and ensure iteration over all types
-and names succeeds.
+information
+
+.BTF.extra sections wil be used to add additional BTF information
+for inlines etc.  .BTF.extra sections are split BTF relative to
+kernel/module BTF and are enabled via CONFIG_DEBUG_INFO_BTF_EXTRA.
+It is bool for now but will become tristate in a later patch when
+support for a separate module is added (vmlinux .BTF.extra is
+9Mb so 'y' is not a good option for most cases since it will
+bloat vmlinux size).
 
 Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
 ---
- .../selftests/bpf/prog_tests/btf_field_iter.c | 26 ++++++++++++++++---
- 1 file changed, 23 insertions(+), 3 deletions(-)
+ include/asm-generic/vmlinux.lds.h |  4 ++++
+ lib/Kconfig.debug                 | 18 ++++++++++++++++++
+ scripts/Makefile.btf              |  8 ++++++++
+ scripts/link-vmlinux.sh           | 13 ++++++++++---
+ 4 files changed, 40 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/btf_field_iter.c b/tools/testing/selftests/bpf/prog_tests/btf_field_iter.c
-index 32159d3eb281..12f8030dd31a 100644
---- a/tools/testing/selftests/bpf/prog_tests/btf_field_iter.c
-+++ b/tools/testing/selftests/bpf/prog_tests/btf_field_iter.c
-@@ -31,8 +31,11 @@ struct field_data {
- 	{ .ids = { 11 },	.strs = { "decltag" } },
- 	{ .ids = { 6 },		.strs = { "typetag" } },
- 	{ .ids = {},		.strs = { "e64", "eval1", "eval2", "eval3" } },
--	{ .ids = { 15, 16 },	.strs = { "datasec1" } }
--
-+	{ .ids = { 15, 16 },	.strs = { "datasec1" } },
-+	{ .ids = {},		.strs = { "" } },
-+	{ .ids = {},		.strs = { "" } },
-+	{ .ids = { 22, 23 },.strs = { "" } },
-+	{ .ids = { 13, 24 },.strs = { ".loc", "func" } }
- };
+diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+index 8a9a2e732a65..523cf20327c1 100644
+--- a/include/asm-generic/vmlinux.lds.h
++++ b/include/asm-generic/vmlinux.lds.h
+@@ -675,6 +675,10 @@ defined(CONFIG_AUTOFDO_CLANG) || defined(CONFIG_PROPELLER_CLANG)
+ 	. = ALIGN(PAGE_SIZE);						\
+ 	.BTF_ids : AT(ADDR(.BTF_ids) - LOAD_OFFSET) {			\
+ 		*(.BTF_ids)						\
++	}								\
++	. = ALIGN(PAGE_SIZE);						\
++	.BTF.extra : AT(ADDR(.BTF.extra) - LOAD_OFFSET) {		\
++		BOUNDED_SECTION_BY(.BTF.extra, _BTF_extra)		\
+ 	}
+ #else
+ #define BTF
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index 3034e294d50d..0d8b713c94ea 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -409,6 +409,13 @@ config PAHOLE_HAS_LANG_EXCLUDE
+ 	  otherwise it would emit malformed kernel and module binaries when
+ 	  using DEBUG_INFO_BTF_MODULES.
  
- /* Fabricate BTF with various types and check BTF field iteration finds types,
-@@ -88,6 +91,16 @@ void test_btf_field_iter(void)
- 	btf__add_datasec_var_info(btf, 15, 0, 4);
- 	btf__add_datasec_var_info(btf, 16, 4, 8);
++config PAHOLE_HAS_INLINE
++	def_bool PAHOLE_VERSION >= 130
++	help
++	   Support for the "inline" feature in BTF is available; it supports
++	   encoding information about inline sites in BTF; their location
++	   and information to help retrieve their associated parameters.
++
+ config DEBUG_INFO_BTF_MODULES
+ 	bool "Generate BTF type information for kernel modules"
+ 	default y
+@@ -426,6 +433,17 @@ config MODULE_ALLOW_BTF_MISMATCH
+ 	  this option will still load module BTF where possible but ignore
+ 	  it when a mismatch is found.
  
-+	btf__add_loc_param(btf, -4, true, -1, 0, 0, 0);	/* [22] loc value -1 */
-+	btf__add_loc_param(btf, 8, false, 0, 1, 0, 0);	/* [23] loc reg 1 */
++config DEBUG_INFO_BTF_EXTRA
++	bool "Provide extra information about inline sites in BTF"
++	default n
++	depends on DEBUG_INFO_BTF && PAHOLE_HAS_INLINE
++	help
++	   Generate information about inline sites in .BTF.extra sections
++	   which consist of split BTF relative to kernel/module BTF;
++	   this BTF is made available to the user in /sys/kernel/btf.extra
++	   where the filename corresponds to the kernel (vmlinux) or the
++	   module the inline info refers to.
 +
-+	btf__add_loc_proto(btf);			/* [24] loc proto */
-+	btf__add_loc_proto_param(btf, 22);		/*  param value -1, */
-+	btf__add_loc_proto_param(btf, 23);		/*  param reg 1 */
-+
-+	btf__add_locsec(btf, ".loc");			/* [25] locsec ".loc" */
-+	btf__add_locsec_loc(btf, "func", 13, 24, 128);	/* "func" */
-+
- 	VALIDATE_RAW_BTF(
- 		btf,
- 		"[1] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED",
-@@ -123,7 +136,14 @@ void test_btf_field_iter(void)
- 		"\t'eval3' val=3000",
- 		"[21] DATASEC 'datasec1' size=12 vlen=2\n"
- 		"\ttype_id=15 offset=0 size=4\n"
--		"\ttype_id=16 offset=4 size=8");
-+		"\ttype_id=16 offset=4 size=8",
-+		"[22] LOC_PARAM '(anon)' size=-4 value=-1",
-+		"[23] LOC_PARAM '(anon)' size=8 reg=1 flags=0x0 offset=0",
-+		"[24] LOC_PROTO '(anon)' vlen=2\n"
-+		"\ttype_id=22\n"
-+		"\ttype_id=23",
-+		"[25] LOCSEC '.loc' vlen=1\n"
-+		"\t'func' func_proto_type_id=13 loc_proto_type_id=24 offset=128");
+ config GDB_SCRIPTS
+ 	bool "Provide GDB scripts for kernel debugging"
+ 	help
+diff --git a/scripts/Makefile.btf b/scripts/Makefile.btf
+index db76335dd917..5ca98446d8b5 100644
+--- a/scripts/Makefile.btf
++++ b/scripts/Makefile.btf
+@@ -2,6 +2,7 @@
  
- 	for (id = 1; id < btf__type_cnt(btf); id++) {
- 		struct btf_type *t = btf_type_by_id(btf, id);
+ pahole-ver := $(CONFIG_PAHOLE_VERSION)
+ pahole-flags-y :=
++btf-extra :=
+ 
+ JOBS := $(patsubst -j%,%,$(filter -j%,$(MAKEFLAGS)))
+ 
+@@ -25,8 +26,14 @@ pahole-flags-$(call test-ge, $(pahole-ver), 126)  = -j$(JOBS) --btf_features=enc
+ 
+ pahole-flags-$(call test-ge, $(pahole-ver), 130) += --btf_features=attributes
+ 
++btf-extra =
+ ifneq ($(KBUILD_EXTMOD),)
+ module-pahole-flags-$(call test-ge, $(pahole-ver), 128) += --btf_features=distilled_base
++else
++ifneq ($(CONFIG_DEBUG_INFO_BTF_EXTRA),)
++pahole-flags-$(call test-ge, $(pahole-ver), 130) += --btf_features=inline.extra
++btf-extra := y
++endif
+ endif
+ 
+ endif
+@@ -35,3 +42,4 @@ pahole-flags-$(CONFIG_PAHOLE_HAS_LANG_EXCLUDE)		+= --lang_exclude=rust
+ 
+ export PAHOLE_FLAGS := $(pahole-flags-y)
+ export MODULE_PAHOLE_FLAGS := $(module-pahole-flags-y)
++export BTF_EXTRA := $(btf-extra)
+diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
+index 433849ff7529..f88b356fe270 100755
+--- a/scripts/link-vmlinux.sh
++++ b/scripts/link-vmlinux.sh
+@@ -105,22 +105,29 @@ vmlinux_link()
+ 		${kallsymso} ${btf_vmlinux_bin_o} ${arch_vmlinux_o} ${ldlibs}
+ }
+ 
+-# generate .BTF typeinfo from DWARF debuginfo
++# generate .BTF typeinfo from DWARF debuginfo.  Optionally add .BTF.extra
++# section if BTF_EXTRA is set.
+ # ${1} - vmlinux image
+ gen_btf()
+ {
+ 	local btf_data=${1}.btf.o
++	local btf_extra_flags=
+ 
+ 	info BTF "${btf_data}"
+ 	LLVM_OBJCOPY="${OBJCOPY}" ${PAHOLE} -J ${PAHOLE_FLAGS} ${1}
+ 
+-	# Create ${btf_data} which contains just .BTF section but no symbols. Add
++
++	if [ -n "${BTF_EXTRA}" ]; then
++		btf_extra_flags="--only-section=.BTF.extra --set-section-flags .BTF.extra=alloc,readonly"
++	fi
++
++	# Create ${btf_data} which contains just .BTF sections but no symbols. Add
+ 	# SHF_ALLOC because .BTF will be part of the vmlinux image. --strip-all
+ 	# deletes all symbols including __start_BTF and __stop_BTF, which will
+ 	# be redefined in the linker script. Add 2>/dev/null to suppress GNU
+ 	# objcopy warnings: "empty loadable segment detected at ..."
+ 	${OBJCOPY} --only-section=.BTF --set-section-flags .BTF=alloc,readonly \
+-		--strip-all ${1} "${btf_data}" 2>/dev/null
++		${btf_extra_flags} --strip-all ${1} "${btf_data}" 2>/dev/null
+ 	# Change e_type to ET_REL so that it can be used to link final vmlinux.
+ 	# GNU ld 2.35+ and lld do not allow an ET_EXEC input.
+ 	if is_enabled CONFIG_CPU_BIG_ENDIAN; then
 -- 
 2.39.3
 
