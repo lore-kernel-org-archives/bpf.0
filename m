@@ -1,118 +1,118 @@
-Received: from s1-ba86.socketlabs.email-od.com (s1-ba86.socketlabs.email-od.com [142.0.186.134])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEF65271440
-	for <bpf@vger.kernel.org>; Thu,  9 Oct 2025 20:29:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=142.0.186.134
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CED6326F462
+	for <bpf@vger.kernel.org>; Thu,  9 Oct 2025 20:47:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760041753; cv=none; b=eab1XngEe4YTRzR+bnD0VY00VgnMH38O3+8ksCsp1t0SZ7u6VVF4XoViCwSw/CLK23FX/aBM0U5dgtLyzPJsg7NUXdwl4FUaAQ6ThPnA65os9SuhXyOQbAlTGezqndZQP0cgK7ve0g/skOymJf4aGfl61Bt9YZYsn/IZQQDbuGU=
+	t=1760042847; cv=none; b=IVsjvM5lIxCp9cLyjjVcFKk1yLibXVGyfT/4uGiYiAZTwiyirdG173zgNNR7weSRHh2IaHWiF3TE+LhkKHGPJXK6zsKCVHWRrRwWouRGvY30l0MpKNZWRlaon2d4bqWUIl0HVV1pxou0Tq/hkiJTTE3+bFEvyuWI1ihhLqLosmI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760041753; c=relaxed/simple;
-	bh=RX1K5KPSFGA72/LrpHxaAbZJRQpoejZVuU8GJ1Oylko=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=kA/Hx3zWNSyKr6PXXWZyFxQFl/eg2eELP9P+W3DPZpIe2r4BJAtf2pSpv0fhqqfIkNXh7ihQ0hDNAe5E9MLw3RwULiA/56mfHDx1rkbERzfnrthnymINZziAZe5cdIt0DRdqIkWge+bOYhR19o7wfZbLttL1QhH9ChukBFLLigo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nalramli.com; spf=pass smtp.mailfrom=email-od.com; dkim=pass (1024-bit key) header.d=email-od.com header.i=@email-od.com header.b=JIoAowX0; arc=none smtp.client-ip=142.0.186.134
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nalramli.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=email-od.com
+	s=arc-20240116; t=1760042847; c=relaxed/simple;
+	bh=q9saZzPxKQgNmhZe1nTPbgY4fDxl3Xft1oscVp8TQKk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=l0CmGOxw+tEmG3OhYvouzvGQCBiNtQ0tDDCWOsON0AnPFSZOxPl9P9+jPcqO6yghMM8wj51agy4iW68evtjbs1WQY9av7/z1QPL4Pe8JDjkE1m2FOBlpF0eVZzD4lCq0NM7t5BX99+nU1kA4W7p3aiDNiSVxWzwZiiC3Blttk0E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=V+HOenhW; arc=none smtp.client-ip=209.85.216.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=email-od.com header.i=@email-od.com header.b="JIoAowX0"
-DKIM-Signature: v=1; a=rsa-sha256; d=email-od.com;i=@email-od.com;s=dkim;
-	c=relaxed/relaxed; q=dns/txt; t=1760041752; x=1762633752;
-	h=content-transfer-encoding:mime-version:references:in-reply-to:message-id:date:subject:cc:to:from:x-thread-info:subject:to:from:cc:reply-to;
-	bh=ofx1rW2+30KvORCW7saFUEf3E1N+8nsWWjpSDi6TtgA=;
-	b=JIoAowX0+u6HnepSQykeV6sU4m98QjTaFIjNilulit2woNAVfwa5F7rsTWOIg+nW1EE4PFna2xpN58Au7ey64mtkYwFqjQTmU4simmEILctoVNkDIIo6Wdi1E1paLPWo7Zi47KnWgl06Be+oJHyr9L20WBXhp65PtpyZzUeoHIA=
-X-Thread-Info: NDUwNC4xMi43MGEyMTAwMDBiMDc0NjYuYnBmPXZnZXIua2VybmVsLm9yZw==
-x-xsSpam: eyJTY29yZSI6MCwiRGV0YWlscyI6bnVsbH0=
-Received: from nalramli-fst-tp.. (d4-50-191-215.clv.wideopenwest.com [50.4.215.191])
-	by nalramli.com (Postfix) with ESMTPSA id 2AA012CE05A3;
-	Thu,  9 Oct 2025 15:28:41 -0400 (EDT)
-From: "Nabil S. Alramli" <dev@nalramli.com>
-To: anthony.l.nguyen@intel.com,
-	przemyslaw.kitszel@intel.com
-Cc: andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	hawk@kernel.org,
-	john.fastabend@gmail.com,
-	lishujin@kuaishou.com,
-	xingwanli@kuaishou.com,
-	intel-wired-lan@lists.osuosl.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	team-kernel@fastly.com,
-	khubert@fastly.com,
-	nalramli@fastly.com,
-	dev@nalramli.com
-Subject: [RFC ixgbe 2/2] ixgbe: Fix CPU to ring assignment
-Date: Thu,  9 Oct 2025 15:28:31 -0400
-Message-ID: <20251009192831.3333763-3-dev@nalramli.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20251009192831.3333763-1-dev@nalramli.com>
-References: <20251009192831.3333763-1-dev@nalramli.com>
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="V+HOenhW"
+Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-339e71ccf48so1978855a91.3
+        for <bpf@vger.kernel.org>; Thu, 09 Oct 2025 13:47:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1760042845; x=1760647645; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=z6K/zr+mhgRMW1dEHBSBrEj+cHx1AJJEsB7Xi5fFruA=;
+        b=V+HOenhW1D10V5BvnlJoRBteyJanDQugh+2TZIC6oFcES306iSSVzfX5s9RpcVKmNR
+         hgl4/uuiOMkTR89DAfok46sekE3MC/gAa49JNM4Y9S6eVDjgBi3peGlRkKvgmX4+Gugj
+         VGpnR6nqEdDK0TtvVLbmwDp+FYmaeH7ZAT4MshntwfTEsyFqTt/36k05RU7Awdcah5g3
+         zvjU8fPbtvGBOJXXIyGqQSYN2/HNQouVdtLTXcVFreEkmQL7E2eNQ53e7+qdMM8r8vNd
+         fDIExpxMWI3SvItzBwTTg0dSUZBktTAfwD0Bo/MT+6lwb6/FfhK9CvvJgDKObEapDKxm
+         cx+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760042845; x=1760647645;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=z6K/zr+mhgRMW1dEHBSBrEj+cHx1AJJEsB7Xi5fFruA=;
+        b=xFL9HU+aVTbSdmAESb0wSMdFCgteAebO9BsRaWtlS4mv6tYObj8L38dn0QGouapUW2
+         eQ+D85r7m8BkFQnEksIsG3ikwIA3g2jwfaD1gt/TFlgGpvkDkZkFkbcyHvDBo835WDDd
+         QUfIZrZC/6TU9nCQOJgowDuY2fZ42qhuJMfouUZbQBNyfctHcjH+E8DcTWmvyP0h2Qal
+         DW19kUihyeBnwk3AxjSHIQ9uuMG1hak7miq0ZoUpM/Ii+9Cf4QiFuJz15xZl3vE7KuUi
+         VoCFi+NbDImccmZ+2tGEwZwwQli1+1+DRzGpG7OLVDwWYoElBuo0rcoP3ofwT0De4CZ3
+         kVeA==
+X-Forwarded-Encrypted: i=1; AJvYcCVORvf4lrAiZQULpZvQARlDSpP0aYwTqBQDlzBWKjpYo1nB3gIHrycCo2M3E1W3Die8ghE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyyZI5a40TE+xXjnFQG4YJaaEZJbOccptGw5A/k2NpaJaV/NRHt
+	ugLcBKQtM00ALSLZ6fgo7OGUwZfVJiDQfTZc7RmCD3wpOVlw3HHTQzNJhFIpwgU0s2+L4nJM/kb
+	Wt4K1W2jHglIw379tkWoDh4WuijoMHtwY2Yk0M9wk
+X-Gm-Gg: ASbGncuoGYr6V8kP2NUncPVQLtllueUVG/ji14bCV5hy/XnS8NijbpXz56KzDuJtCoK
+	AFhBEU7ygHXvn+gFoizYzOB3DJspj92WMTovmHtbUIvvOGIYZY5EbhnGuoRwpsE4bVCCvejdOh3
+	cJOibTY51KzwE9h8u+e0Fw9uydUwfmFiWHDOO39war883fod1WTTlcgCxEsrBBVOQP7sHpma6ZP
+	etlip0wKOrm5xYmvVtEcnlLTPLMcqE=
+X-Google-Smtp-Source: AGHT+IHwcV2uuUwAl2OswF6usdNngeVHs1OU6Qv4WDIoDMFlQQoJQ6qMYB4lYZ4rU5CeU4FuempUIEnPg0uLmZuIgiE=
+X-Received: by 2002:a17:90b:1d8b:b0:332:793e:c2d1 with SMTP id
+ 98e67ed59e1d1-33b5139a37amr11731621a91.36.1760042845003; Thu, 09 Oct 2025
+ 13:47:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20250929213520.1821223-1-bboscaccy@linux.microsoft.com>
+ <CAHC9VhTQ_DR=ANzoDBjcCtrimV7XcCZVUsANPt=TjcvM4d-vjg@mail.gmail.com>
+ <CACYkzJ4yG1d8ujZ8PVzsRr_PWpyr6goD9DezQTu8ydaf-skn6g@mail.gmail.com>
+ <CAHC9VhR2Ab8Rw8RBm9je9-Ss++wufstxh4fB3zrZXnBoZpSi_Q@mail.gmail.com>
+ <CACYkzJ7u_wRyknFjhkzRxgpt29znoTWzz+ZMwmYEE-msc2GSUw@mail.gmail.com>
+ <CAHC9VhSDkwGgPfrBUh7EgBKEJj_JjnY68c0YAmuuLT_i--GskQ@mail.gmail.com> <CACYkzJ4mJ6eJBzTLgbPG9A6i_dN2e0B=1WNp6XkAr-WmaEyzkA@mail.gmail.com>
+In-Reply-To: <CACYkzJ4mJ6eJBzTLgbPG9A6i_dN2e0B=1WNp6XkAr-WmaEyzkA@mail.gmail.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Thu, 9 Oct 2025 16:47:13 -0400
+X-Gm-Features: AS18NWArdmWPZMqLgFQiddXgH5voBO_n-fQZZPwVAAdYJ003C0ZIeYDQyt1C9GA
+Message-ID: <CAHC9VhRyG9ooMz6wVA17WKA9xkDy=UEPVkD4zOJf5mqrANMR9g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 0/3] BPF signature hash chains
+To: ast@kernel.org, KP Singh <kpsingh@kernel.org>, 
+	Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Blaise Boscaccy <bboscaccy@linux.microsoft.com>, james.bottomley@hansenpartnership.com, 
+	bpf@vger.kernel.org, linux-security-module@vger.kernel.org, kys@microsoft.com, 
+	daniel@iogearbox.net, andrii@kernel.org, wufan@linux.microsoft.com, 
+	qmo@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-The ixgbe driver uses ixgbe_determine_*_ring to determine the CPU mapping
-of transmit rings. Those helper functions have a hard-coded number of
-rings equal to IXGBE_MAX_XDP_QS, which is set to 64. However, this does
-not take into account the number of actual rings configured, which could
-be lower. This results in NULL being returned, if the modulus operation
-falls into a ring that is not configured. Instead, use the actual number
-of configured rings.
+On Tue, Oct 7, 2025 at 9:53=E2=80=AFAM KP Singh <kpsingh@kernel.org> wrote:
+> On Mon, Oct 6, 2025 at 5:08=E2=80=AFAM Paul Moore <paul@paul-moore.com> w=
+rote:
+> > On Fri, Oct 3, 2025 at 12:25=E2=80=AFPM KP Singh <kpsingh@kernel.org> w=
+rote:
+> > > On Fri, Oct 3, 2025 at 4:36=E2=80=AFAM Paul Moore <paul@paul-moore.co=
+m> wrote:
+> > > > On Thu, Oct 2, 2025 at 9:48=E2=80=AFAM KP Singh <kpsingh@kernel.org=
+> wrote:
+> > > > > On Wed, Oct 1, 2025 at 11:37=E2=80=AFPM Paul Moore <paul@paul-moo=
+re.com> wrote:
 
-Signed-off-by: Nabil S. Alramli <dev@nalramli.com>
-Fixes: 4fe815850bdc ("ixgbe: let the xdpdrv work with more than 64 cpus")
----
- drivers/net/ethernet/intel/ixgbe/ixgbe.h | 12 ++----------
- 1 file changed, 2 insertions(+), 10 deletions(-)
+...
 
-diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe.h b/drivers/net/ether=
-net/intel/ixgbe/ixgbe.h
-index 26c378853755..e2c09545bad1 100644
---- a/drivers/net/ethernet/intel/ixgbe/ixgbe.h
-+++ b/drivers/net/ethernet/intel/ixgbe/ixgbe.h
-@@ -830,18 +830,10 @@ struct ixgbe_adapter {
- 	spinlock_t vfs_lock;
- };
-=20
--static inline int ixgbe_determine_xdp_q_idx(int cpu)
--{
--	if (static_key_enabled(&ixgbe_xdp_locking_key))
--		return cpu % IXGBE_MAX_XDP_QS;
--	else
--		return cpu;
--}
--
- static inline
- struct ixgbe_ring *ixgbe_determine_xdp_ring(struct ixgbe_adapter *adapte=
-r)
- {
--	int index =3D ixgbe_determine_xdp_q_idx(smp_processor_id());
-+	int index =3D smp_processor_id() % adapter->num_xdp_queues;
-=20
- 	return adapter->xdp_ring[index];
- }
-@@ -849,7 +841,7 @@ struct ixgbe_ring *ixgbe_determine_xdp_ring(struct ix=
-gbe_adapter *adapter)
- static inline
- struct ixgbe_ring *ixgbe_determine_tx_ring(struct ixgbe_adapter *adapter=
-)
- {
--	int index =3D ixgbe_determine_xdp_q_idx(smp_processor_id());
-+	int index =3D smp_processor_id() % adapter->num_tx_queues;
-=20
- 	return adapter->tx_ring[index];
- }
+> I feel we will keep going in circles on this and I will leave it up to
+> the maintainers to resolve this.
+
+Yes, I think we can all agree that the discussion has reached a point
+where both sides are simply repeating ourselves.
+
+I believe we've outlined why the code merged into Linus' tree during
+this merge window does not meet the BPF signature verification
+requirements of a number of different user groups, with Blaise
+proposing an addition to KP's code to satisfy those needs.  Further, I
+believe that either Blaise, James, or I have responded to all of KP's
+concerns regarding Blaise's patchset, and while KP may not be happy
+with those answers, no one has yet to offer an alternative solution to
+Blaise's patchset.
+
+With that in mind, I agree with KP that it's time for "the maintainers
+to resolve this".  Alexei, will you be merging Blaise's patchset and
+sending it up to Linus?
+
 --=20
-2.43.0
-
+paul-moore.com
