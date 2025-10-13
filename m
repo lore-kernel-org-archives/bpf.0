@@ -1,36 +1,35 @@
 Received: from mail1.fiberby.net (mail1.fiberby.net [193.104.135.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8A9B2989A2;
-	Mon, 13 Oct 2025 16:51:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9B54296BD4;
+	Mon, 13 Oct 2025 16:51:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.104.135.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760374308; cv=none; b=UHtcMB2bfyGFuxtO3lteBid+IzvbjGJ51FUpbcx8gXAi5QOBxlPv6v2vJFzAScltKUgH+HtTLKp/P3UeSF0Wbq4E1mDBgU3oVdbJva4i+Qq+gupeOIHSrWzMOBUnXGI8Tn0AYJhFq+26BBwUT0MDgQWKLTt0V3lvzjKD2JYRPYA=
+	t=1760374308; cv=none; b=qAiMwLoyL8ySCdJbXMHSq6m7O7S0S2Ef5Ng3NA7/hCOstsKmOVD0mxHyJYnJ2KkK39KAcd7uTGotrKSViXXEyrFA5RKyjsbLe2s+dpICoOqIljK/Rc0ARAezRK/6glGo6V4kIoFvrK63WT2JALpe3yaA/rbdgfBiUUVEI7lWoqc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1760374308; c=relaxed/simple;
-	bh=p8sDry/r93YpiCyDay4HUdBBvRo6dP4j8o/JiZT6IY8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=IQ3ReubT4ew3p/2t/VgfkkEm73HH6dIKqN8lg0UfzNTTfG1yYpQy00bypU+/f7pYvNRuYdXkF2uFljJNVYTzQYOimojH0JRkYkBbtPjjDQbDquhPisM6q5tr6Z7zO7ehRp4qg9cIyDZe298OQLWOHB9tFJ7qE+PveYdKpdJ9Vmg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fiberby.net; spf=pass smtp.mailfrom=fiberby.net; dkim=pass (2048-bit key) header.d=fiberby.net header.i=@fiberby.net header.b=CeNDYgRo; arc=none smtp.client-ip=193.104.135.124
+	bh=etctfT5bJS7hMdWOBeKKV/EXgbxxnq1nm3ffRaajVQ4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=oU4D8zfoMuxKzGVx6Euhl9liftxQsKdv6NLyYbct3EsDSBO2fStRy49bwbQKSFUyJ1cTC1J1X9LYSZy9PxFXaGvZvsvTvogG4IcxwEiWP2sSU8B2WvXI+Oi3YDuI1quomqD8Y9yNcKuuDNN4ujumROUj/qdD06Luxyl29PqnyaM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fiberby.net; spf=pass smtp.mailfrom=fiberby.net; dkim=pass (2048-bit key) header.d=fiberby.net header.i=@fiberby.net header.b=sUr4Q2S/; arc=none smtp.client-ip=193.104.135.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fiberby.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fiberby.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fiberby.net header.i=@fiberby.net header.b="CeNDYgRo"
+	dkim=pass (2048-bit key) header.d=fiberby.net header.i=@fiberby.net header.b="sUr4Q2S/"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fiberby.net;
 	s=202008; t=1760374303;
-	bh=p8sDry/r93YpiCyDay4HUdBBvRo6dP4j8o/JiZT6IY8=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=CeNDYgRoOc4ApNqJSBJ07rEsBATyNRNTkiJiU0Kh7gdHykA5KL+rnwLWrddp7WK/a
-	 ewjf8NVUWd1Xo6p+R69jpNuMDIaYZu/u3dbuEexISIUVaUzcGdP41UWMa9MAD+nOzq
-	 Tub9QkJ1QqdUelLYVhjOO9CsDhIZJK7jokWz/w8SivaPzHkzqpOYIe5E5T5pWwJaX4
-	 QGokedRi54mxcJnsjUOydDqOqnRKo31+baL77whKoNTqcjXVx9O4/nWzbC4ZMPz7pW
-	 ZrO7Qry/cU6RkwVN1ZsTP+Sf2N8WxQpkjy6ivnRFLWRxw5IY35LUif+S9yWHskdd5a
-	 il7lwTXJDtmvQ==
+	bh=etctfT5bJS7hMdWOBeKKV/EXgbxxnq1nm3ffRaajVQ4=;
+	h=From:To:Cc:Subject:Date:From;
+	b=sUr4Q2S/PPM/95hQPr5I57QevO5qM/XqZH6T5QJz2/fRkiUoefmK7iRp2hUgHmH0M
+	 mhFpfl2qq0Wjdf1g73UJ4X5ejEdihoZvS57TU+YoJcJMDmIklUbStAVPHzmlLEJbu/
+	 JK5wjCqqQeTuOegDplsrZtaoB6bLipoMl1Y5XQR1zDgbJBJWdzKtQ8PUqWaBgqZrUF
+	 yAaT0JWQbvV+LKK1uGN4lo/MbSx+aymi90xs5iBX6VXgYXLcH/i5flO5cU8S4E4jkQ
+	 O+YWuHlObDE2VXWK4Qbspf1eultdq9g94uec1diMdOdCHO8laObbFgkRJYorfeO1uW
+	 XZtLhKPFNO04g==
 Received: from x201s (193-104-135-243.ip4.fiberby.net [193.104.135.243])
-	by mail1.fiberby.net (Postfix) with ESMTPSA id A105A600C1;
+	by mail1.fiberby.net (Postfix) with ESMTPSA id 9C60F60075;
 	Mon, 13 Oct 2025 16:50:35 +0000 (UTC)
 Received: by x201s (Postfix, from userid 1000)
-	id 83C60201F40; Mon, 13 Oct 2025 16:50:27 +0000 (UTC)
+	id 836782011CC; Mon, 13 Oct 2025 16:50:18 +0000 (UTC)
 From: =?UTF-8?q?Asbj=C3=B8rn=20Sloth=20T=C3=B8nnesen?= <ast@fiberby.net>
 To: "David S. Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@google.com>,
@@ -58,12 +57,10 @@ Cc: =?UTF-8?q?Asbj=C3=B8rn=20Sloth=20T=C3=B8nnesen?= <ast@fiberby.net>,
 	netdev@vger.kernel.org,
 	linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH net-next 5/6] tools: ynl-gen: construct bitflag masks in generated headers
-Date: Mon, 13 Oct 2025 16:50:02 +0000
-Message-ID: <20251013165005.83659-6-ast@fiberby.net>
+Subject: [PATCH net-next 0/6] tools: ynl-gen: generate flags better
+Date: Mon, 13 Oct 2025 16:49:57 +0000
+Message-ID: <20251013165005.83659-1-ast@fiberby.net>
 X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20251013165005.83659-1-ast@fiberby.net>
-References: <20251013165005.83659-1-ast@fiberby.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -73,78 +70,32 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Instead of pre-computing the bitflag mask within the code generator,
-then generate the code to combine all the flags in the generated code.
+This series focusses on increasing the quality of
+the C code generated by ynl-gen for flags.
 
-This patch uses the new p_wrap() method to wrap long lines.
+NB: I included a note in patch 6, on usage of the private
+NETDEV_XDP_ACT_MASK in user-space.
 
-This IMHO makes the generated code read more like handwritten code.
+Asbjørn Sloth Tønnesen (6):
+  tools: ynl-gen: bitshift the flag values in the generated code
+  tools: ynl-gen: refactor render-max enum generation
+  tools: ynl-gen: use uapi mask definition in NLA_POLICY_MASK
+  tools: ynl-gen: add generic p_wrap() helper
+  tools: ynl-gen: construct bitflag masks in generated headers
+  tools: ynl-gen: allow custom naming of render-max definitions
 
-No functional changes.
+ Documentation/netlink/genetlink-c.yaml        |  3 +
+ Documentation/netlink/genetlink-legacy.yaml   |  3 +
+ .../userspace-api/netlink/c-code-gen.rst      |  7 +-
+ include/uapi/linux/dpll.h                     |  6 +-
+ .../uapi/linux/ethtool_netlink_generated.h    | 20 ++---
+ include/uapi/linux/netdev.h                   | 34 ++++----
+ net/psp/psp-nl-gen.h                          |  4 +-
+ tools/include/uapi/linux/netdev.h             | 34 ++++----
+ tools/net/ynl/pyynl/lib/nlspec.py             |  7 +-
+ tools/net/ynl/pyynl/ynl_gen_c.py              | 79 +++++++++++--------
+ 10 files changed, 117 insertions(+), 80 deletions(-)
 
-Signed-off-by: Asbjørn Sloth Tønnesen <ast@fiberby.net>
----
- include/uapi/linux/netdev.h       | 6 +++++-
- tools/include/uapi/linux/netdev.h | 6 +++++-
- tools/net/ynl/pyynl/ynl_gen_c.py  | 7 +++++--
- 3 files changed, 15 insertions(+), 4 deletions(-)
-
-diff --git a/include/uapi/linux/netdev.h b/include/uapi/linux/netdev.h
-index db0526cb6672d..337f444178bbb 100644
---- a/include/uapi/linux/netdev.h
-+++ b/include/uapi/linux/netdev.h
-@@ -35,7 +35,11 @@ enum netdev_xdp_act {
- 	NETDEV_XDP_ACT_NDO_XMIT_SG = 1U << 6,
- 
- 	/* private: */
--	NETDEV_XDP_ACT_MASK = 127,
-+	NETDEV_XDP_ACT_MASK = NETDEV_XDP_ACT_BASIC | NETDEV_XDP_ACT_REDIRECT |
-+			      NETDEV_XDP_ACT_NDO_XMIT |
-+			      NETDEV_XDP_ACT_XSK_ZEROCOPY |
-+			      NETDEV_XDP_ACT_HW_OFFLOAD | NETDEV_XDP_ACT_RX_SG |
-+			      NETDEV_XDP_ACT_NDO_XMIT_SG,
- };
- 
- /**
-diff --git a/tools/include/uapi/linux/netdev.h b/tools/include/uapi/linux/netdev.h
-index db0526cb6672d..337f444178bbb 100644
---- a/tools/include/uapi/linux/netdev.h
-+++ b/tools/include/uapi/linux/netdev.h
-@@ -35,7 +35,11 @@ enum netdev_xdp_act {
- 	NETDEV_XDP_ACT_NDO_XMIT_SG = 1U << 6,
- 
- 	/* private: */
--	NETDEV_XDP_ACT_MASK = 127,
-+	NETDEV_XDP_ACT_MASK = NETDEV_XDP_ACT_BASIC | NETDEV_XDP_ACT_REDIRECT |
-+			      NETDEV_XDP_ACT_NDO_XMIT |
-+			      NETDEV_XDP_ACT_XSK_ZEROCOPY |
-+			      NETDEV_XDP_ACT_HW_OFFLOAD | NETDEV_XDP_ACT_RX_SG |
-+			      NETDEV_XDP_ACT_NDO_XMIT_SG,
- };
- 
- /**
-diff --git a/tools/net/ynl/pyynl/ynl_gen_c.py b/tools/net/ynl/pyynl/ynl_gen_c.py
-index 1201c2ac352ea..5e1c702143d86 100755
---- a/tools/net/ynl/pyynl/ynl_gen_c.py
-+++ b/tools/net/ynl/pyynl/ynl_gen_c.py
-@@ -3232,12 +3232,15 @@ def render_uapi(family, cw):
-                 cw.p('/* private: */')
-                 max_name = c_upper(enum.enum_max_name)
-                 if const['type'] == 'flags':
--                    max_val = f'{enum.get_mask()},'
-+                    values = list(enum.entries.values())
-+                    parts = [f'{val.c_name} |' for val in values[:-1]]
-+                    parts.append(f'{values[-1].c_name},')
-+                    cw.p_wrap(f'{max_name} = ', parts)
-                 else:
-                     cnt_name = c_upper(enum.enum_cnt_name)
-                     cw.p(f'{cnt_name},')
-                     max_val = f'({cnt_name} - 1)'
--                cw.p(f'{max_name} = {max_val}')
-+                    cw.p(f'{max_name} = {max_val}')
-             cw.block_end(line=';')
-             cw.nl()
-         elif const['type'] == 'const':
 -- 
 2.51.0
 
