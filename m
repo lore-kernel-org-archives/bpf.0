@@ -1,194 +1,81 @@
-Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org [80.241.56.172])
+Received: from relay.hostedemail.com (smtprelay0016.hostedemail.com [216.40.44.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B49CE29D266;
-	Mon, 13 Oct 2025 17:11:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEA232BE646;
+	Mon, 13 Oct 2025 17:18:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760375511; cv=none; b=cSiR9s72t3V5rqp0TvkpXsVNxLpIOMBHoo30/ML21Vhhn9sSUNcrmvsyUNZTx++ApRvusNEPqE3JyBj5uUT0Hp1HjghyhLmhH/5YtaKHSxDAQovKOZVkmD7CgvZrOx3eYkJEo0Of7y2MxuYKEGxkYdYzBW312EvRy2R2tWHIf6o=
+	t=1760375925; cv=none; b=H/POI1duCwpfrrETTe0EvKrV4C245BjUTfEYj4tIUK+v11hWBsuCkKXpIofQue2e1U9jVQhBCNci6droeU25X8+QV0hSqOKD+9xVnHwEWv+hyp7V/3ESoauvW1ALiQ0Lj4IG2gc+HWzqmV4tYF9A2ffsFZ1PtdINHgxJRWfjF6Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760375511; c=relaxed/simple;
-	bh=40CFjh9kzA9585REHD+cA2lYowQDDOU8sCgEpVNrgYM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=LDy+U6Uci1J51TIhNCGlbyHNdOYF/BBkxQozU7FPLXfYlxl8kRxlvHu9ulp5eKa84diXXtlxsjWEN869fiHVaM+XuXWl/ZBg0krj3XVtMXGpzCwxAWrwxD/tajc0hgb6AvRy7dGF9w03esoW1cSdS6Iz/cVfZC1qJ8/5AWHO9u0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=listout.xyz; spf=pass smtp.mailfrom=listout.xyz; dkim=pass (2048-bit key) header.d=listout.xyz header.i=@listout.xyz header.b=eyLEq8e0; arc=none smtp.client-ip=80.241.56.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=listout.xyz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=listout.xyz
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=listout.xyz header.i=@listout.xyz header.b="eyLEq8e0"
-Received: from smtp1.mailbox.org (smtp1.mailbox.org [10.196.197.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4clkQy4k8Tz9tQS;
-	Mon, 13 Oct 2025 19:11:38 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=listout.xyz; s=MBO0001;
-	t=1760375498;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=3wOr6yUFCcqirizRFMqUeU95gmF6JtVB3tD/YiBrl5s=;
-	b=eyLEq8e0zwq7q1RjPRySRc4b6mZTc5fcaHVaUopkm66qJlDOVuYfLay8kf71/Dm/iNFgHu
-	cHkuYBMF3DlzMUS8Q3lHvEs5vB6XDzyra4rQnyUFSGQRO6S1AyY7dfoWvbnsRlxkzlS5G4
-	zgzDghCo87CXTvOQztMSVt12BoxU7ddMq2BMiJkN9IG0WBWs7q+aIL/4xIi3lLmcknRnBL
-	ZbvpzuVVmvqpYZ2NhZ421WmGDDQRBdDll4iH2ueourg4dIfqWBKxkeYurftTR6NqfjhlIn
-	BotItPmc9oKj8yzYimBbUqBIQoloBbytVsvXJ52wOU65UkGY+NaJSZChnF01Tw==
-From: Brahmajit Das <listout@listout.xyz>
-To: syzbot+1f1fbecb9413cdbfbef8@syzkaller.appspotmail.com
-Cc: listout@listout.xyz,
-	andrii@kernel.org,
-	ast@kernel.org,
-	bpf@vger.kernel.org,
-	daniel@iogearbox.net,
-	davem@davemloft.net,
-	eddyz87@gmail.com,
-	edumazet@google.com,
-	haoluo@google.com,
-	horms@kernel.org,
-	john.fastabend@gmail.com,
-	jolsa@kernel.org,
-	kpsingh@kernel.org,
-	kuba@kernel.org,
-	linux-kernel@vger.kernel.org,
-	martin.lau@linux.dev,
-	netdev@vger.kernel.org,
-	pabeni@redhat.com,
-	sdf@fomichev.me,
-	song@kernel.org,
-	syzkaller-bugs@googlegroups.com,
-	yonghong.song@linux.dev,
-	Menglong Dong <menglong.dong@linux.dev>,
-	Sahil Chandna <chandna.linuxkernel@gmail.com>
-Subject: [PATCH v2] bpf: avoid sleeping in invalid context during sock_map_delete_elem path
-Date: Mon, 13 Oct 2025 22:41:22 +0530
-Message-ID: <20251013171122.1403859-1-listout@listout.xyz>
-In-Reply-To: <68af9b2b.a00a0220.2929dc.0008.GAE@google.com>
-References: <68af9b2b.a00a0220.2929dc.0008.GAE@google.com>
+	s=arc-20240116; t=1760375925; c=relaxed/simple;
+	bh=X1ECpOFyAV6pxLT6cbqBwCY6elp/LHZ2ADubx8yLh4c=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=gHjMFa109XTJEpFan9QKZnRCok2kvuVPE9ArbNo3wKp5ZAMdqWQFa8uDwsv5Vu6lM5cyXV4Vz5Szh/upFasJ9/bbdwniuPrGHMKIi6OxPBSE/50BMTNxGz1aovcFf2pC33cQ16yqPgw+Hag+NJt7NC8wzBO75oU9gMHmTJP3J0E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+Received: from omf16.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay01.hostedemail.com (Postfix) with ESMTP id 4296246FAE;
+	Mon, 13 Oct 2025 17:10:54 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf16.hostedemail.com (Postfix) with ESMTPA id 303662000E;
+	Mon, 13 Oct 2025 17:10:52 +0000 (UTC)
+Date: Mon, 13 Oct 2025 13:10:55 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Jiri Olsa <olsajiri@gmail.com>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>, Josh Poimboeuf
+ <jpoimboe@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Andrii
+ Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, x86@kernel.org, Yonghong Song
+ <yhs@fb.com>
+Subject: Re: [BUG] no ORC stacktrace from kretprobe.multi bpf program
+Message-ID: <20251013131055.441e7d08@gandalf.local.home>
+In-Reply-To: <aObSyt3qOnS_BMcy@krava>
+References: <aObSyt3qOnS_BMcy@krava>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Server: rspamout04
+X-Rspamd-Queue-Id: 303662000E
+X-Stat-Signature: 8qu63kcghfwuckzaq74dqyeyrbadaigg
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX190lcQLBqeloDwjMn9zAV8H8OE2YWhIsIM=
+X-HE-Tag: 1760375452-483043
+X-HE-Meta: U2FsdGVkX18DzcttsJhpL+KmwPnzciELiLfsCTYX0iLh50JPY1t3ubF+vvI3Pj+Z0155s4yIvbKzd3wbkReiI2WYMAP3kD4p/ObEXegkHKUVVHrBqOEDTnOcQpHelo0bBSGtKtRgyeJKn+ec6nFhqsP5xaRB/ntLKOY1ABEjkNmW0OLmOg9Bnr4DTTYiQCH+zkwmigjap6ertNurq2tAYDdYHWC5EzIbPKjvduhr6EaYNXQMhhIS971pOUc6v3UD+mxVZt2CzTIEdqnfkeQ2fF8iWFXQ/lP1Q8FuGed8Box+jLTayanrD5hOCk2fR8+ngQGXXgWVMwQX6AxzOUJiUOeR1U1GtO36KHCeFez8dxeMPJdwS7K+1w==
 
-The syzkaller report exposed a BUG: “sleeping function called from
-invalid context” in sock_map_delete_elem, which happens when
-`bpf_test_timer_enter()` disables preemption but the delete path later
-invokes a sleeping function while still in that context. Specifically:
+On Wed, 8 Oct 2025 23:08:26 +0200
+Jiri Olsa <olsajiri@gmail.com> wrote:
 
-- The crash trace shows `bpf_test_timer_enter()` acquiring a
-  preempt_disable path (via t->mode == NO_PREEMPT), but the symmetric
-  release path always calls migrate_enable(), mismatching the earlier
-  disable.
-- As a result, preemption remains disabled across the
-  sock_map_delete_elem path, leading to a sleeping call under an invalid
-  context. :contentReference[oaicite:0]{index=0}
+> hi,
+> I'm getting no stacktrace from bpf program attached on kretprobe.multi probe
+> (which means on top of return fprobe) on x86.
+> 
+> I think we need some kind of treatment we do for rethook, AFAICS the ORC unwind
+> stops on return_to_handler, because the stack and the function itself are not
+> adjusted for unwind_recover_ret_addr call
 
-To fix this, normalize the disable/enable pairing: always use
-migrate_disable()/migrate_enable() regardless of t->mode. This ensures
-that we never remain with preemption disabled unintentionally when
-entering the delete path, and avoids invalid-context sleeping.
+Hmm, we do have a way to retrieve the actual return caller from a location
+for return_to_handler:
 
-Reported-by: syzbot+1f1fbecb9413cdbfbef8@syzkaller.appspotmail.com
-Closes: https://syzkaller.appspot.com/bug?extid=1f1fbecb9413cdbfbef8
-Suggested-by: Yonghong Song <yonghong.song@linux.dev>
-Suggested-by: Menglong Dong <menglong.dong@linux.dev>
-Co-authored-by: Sahil Chandna <chandna.linuxkernel@gmail.com>
-Signed-off-by: Brahmajit Das <listout@listout.xyz>
----
-Changes in v2:
-        - remove enum { NO_PREEMPT, NO_MIGRATE } mode
-        - Using rcu_read_lock_dont_migrate/rcu_read_unlock_migrate
+  See kernel/trace/fgraph.c: ftrace_graph_get_ret_stack()
 
-Changes in v1:
-        - Changes on top of Sahil's initial work based on feedback from
-        Yonghong's. i.e. remove NO_PREEMPT/NO_MIGRATE in test_run.c and use
-        migrate_disable()/migrate_enable() universally.
-        Link: https://lore.kernel.org/all/d0fdced7-a9a5-473e-991f-4f5e4c13f616@linux.dev/
+Hmm, I think the x86 ORC unwinder needs to use this.
 
-Please also find Sahil's v2 patch:
-        Link: https://lore.kernel.org/all/20251010075923.408195-1-chandna.linuxkernel@gmail.com/T/
----
- net/bpf/test_run.c | 21 ++++++---------------
- 1 file changed, 6 insertions(+), 15 deletions(-)
+-- Steve
 
-diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-index dfb03ee0bb62..83f97ee34419 100644
---- a/net/bpf/test_run.c
-+++ b/net/bpf/test_run.c
-@@ -29,7 +29,6 @@
- #include <trace/events/bpf_test_run.h>
- 
- struct bpf_test_timer {
--	enum { NO_PREEMPT, NO_MIGRATE } mode;
- 	u32 i;
- 	u64 time_start, time_spent;
- };
-@@ -37,11 +36,7 @@ struct bpf_test_timer {
- static void bpf_test_timer_enter(struct bpf_test_timer *t)
- 	__acquires(rcu)
- {
--	rcu_read_lock();
--	if (t->mode == NO_PREEMPT)
--		preempt_disable();
--	else
--		migrate_disable();
-+	rcu_read_lock_dont_migrate();
- 
- 	t->time_start = ktime_get_ns();
- }
-@@ -51,11 +46,7 @@ static void bpf_test_timer_leave(struct bpf_test_timer *t)
- {
- 	t->time_start = 0;
- 
--	if (t->mode == NO_PREEMPT)
--		preempt_enable();
--	else
--		migrate_enable();
--	rcu_read_unlock();
-+	rcu_read_unlock_migrate();
- }
- 
- static bool bpf_test_timer_continue(struct bpf_test_timer *t, int iterations,
-@@ -374,7 +365,7 @@ static int bpf_test_run_xdp_live(struct bpf_prog *prog, struct xdp_buff *ctx,
- 
- {
- 	struct xdp_test_data xdp = { .batch_size = batch_size };
--	struct bpf_test_timer t = { .mode = NO_MIGRATE };
-+	struct bpf_test_timer t = {};
- 	int ret;
- 
- 	if (!repeat)
-@@ -404,7 +395,7 @@ static int bpf_test_run(struct bpf_prog *prog, void *ctx, u32 repeat,
- 	struct bpf_prog_array_item item = {.prog = prog};
- 	struct bpf_run_ctx *old_ctx;
- 	struct bpf_cg_run_ctx run_ctx;
--	struct bpf_test_timer t = { NO_MIGRATE };
-+	struct bpf_test_timer t = {};
- 	enum bpf_cgroup_storage_type stype;
- 	int ret;
- 
-@@ -1377,7 +1368,7 @@ int bpf_prog_test_run_flow_dissector(struct bpf_prog *prog,
- 				     const union bpf_attr *kattr,
- 				     union bpf_attr __user *uattr)
- {
--	struct bpf_test_timer t = { NO_PREEMPT };
-+	struct bpf_test_timer t = {};
- 	u32 size = kattr->test.data_size_in;
- 	struct bpf_flow_dissector ctx = {};
- 	u32 repeat = kattr->test.repeat;
-@@ -1445,7 +1436,7 @@ int bpf_prog_test_run_flow_dissector(struct bpf_prog *prog,
- int bpf_prog_test_run_sk_lookup(struct bpf_prog *prog, const union bpf_attr *kattr,
- 				union bpf_attr __user *uattr)
- {
--	struct bpf_test_timer t = { NO_PREEMPT };
-+	struct bpf_test_timer t = {};
- 	struct bpf_prog_array *progs = NULL;
- 	struct bpf_sk_lookup_kern ctx = {};
- 	u32 repeat = kattr->test.repeat;
--- 
-2.51.0
+
+> 
+> If it's any help I pushed the bpf/selftest for that in here:
+>   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git/log/?h=stacktrace_test
+> 
+> just execute:
+>   # test_progs -t stacktrace_map/kretprobe_multi
+> 
+> thanks,
+> jirka
 
