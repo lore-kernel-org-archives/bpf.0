@@ -1,81 +1,106 @@
-Received: from relay.hostedemail.com (smtprelay0016.hostedemail.com [216.40.44.16])
+Received: from out-181.mta0.migadu.com (out-181.mta0.migadu.com [91.218.175.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEA232BE646;
-	Mon, 13 Oct 2025 17:18:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8691A2D193C
+	for <bpf@vger.kernel.org>; Mon, 13 Oct 2025 17:48:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760375925; cv=none; b=H/POI1duCwpfrrETTe0EvKrV4C245BjUTfEYj4tIUK+v11hWBsuCkKXpIofQue2e1U9jVQhBCNci6droeU25X8+QV0hSqOKD+9xVnHwEWv+hyp7V/3ESoauvW1ALiQ0Lj4IG2gc+HWzqmV4tYF9A2ffsFZ1PtdINHgxJRWfjF6Y=
+	t=1760377689; cv=none; b=KyiYZNpRN/YjMI+jF/425c6hCwu+9FAUpuB7uC/d7nEG0U2yTEPiAJqhfBaz77YhhJGuQt/CwSmOFD6DI5cXnodaZQnbRqR2m6x7drvccbdzTwnrs0LkDhqdoc3CoULo4VLdPmLF2dDYexoIR3GO1jx/v+BJlwQk/3sX4iQjzVU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760375925; c=relaxed/simple;
-	bh=X1ECpOFyAV6pxLT6cbqBwCY6elp/LHZ2ADubx8yLh4c=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=gHjMFa109XTJEpFan9QKZnRCok2kvuVPE9ArbNo3wKp5ZAMdqWQFa8uDwsv5Vu6lM5cyXV4Vz5Szh/upFasJ9/bbdwniuPrGHMKIi6OxPBSE/50BMTNxGz1aovcFf2pC33cQ16yqPgw+Hag+NJt7NC8wzBO75oU9gMHmTJP3J0E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf16.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay01.hostedemail.com (Postfix) with ESMTP id 4296246FAE;
-	Mon, 13 Oct 2025 17:10:54 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf16.hostedemail.com (Postfix) with ESMTPA id 303662000E;
-	Mon, 13 Oct 2025 17:10:52 +0000 (UTC)
-Date: Mon, 13 Oct 2025 13:10:55 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Jiri Olsa <olsajiri@gmail.com>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>, Josh Poimboeuf
- <jpoimboe@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Andrii
- Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, x86@kernel.org, Yonghong Song
- <yhs@fb.com>
-Subject: Re: [BUG] no ORC stacktrace from kretprobe.multi bpf program
-Message-ID: <20251013131055.441e7d08@gandalf.local.home>
-In-Reply-To: <aObSyt3qOnS_BMcy@krava>
-References: <aObSyt3qOnS_BMcy@krava>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1760377689; c=relaxed/simple;
+	bh=Fz2Z0NVg/DpxS1jweNIyZgePAu4cm4J9w/NK89KwvTo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=j5aI4VqOjJNffryBbpmTXpgFxhbCj9DUNU68TGW+3nJmP5RY4QHTnWqHReEY1Ze0XhnsKewF3WDTi/2GABhbEBEArHd4cWJVBY6JE5h7ndEiqvD67R+xEPNZwtzCLp+9BLqeS7EX8EdOSm2bttu4aZ8N6PZOPBaWIeVyzu8Fv+g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=VxzJxKIC; arc=none smtp.client-ip=91.218.175.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="VxzJxKIC"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1760377675;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=dQog++Z4DABPXGobwnLJdN42FYEo1zhiAYhURAKlFOI=;
+	b=VxzJxKICuu2V++rKVk+ZLlHlcziBjDWagVThwUkaCtfBN/Y7aJ0ivBFRXpZz05k6xpy8c5
+	xR4H4gPdQuOcUUiTsAeWifhnn4AV1wthnL304+12V5T7qzviNz329dKXh4BjsI7Q4e5pZd
+	keogQh+6AEcYloTIOsY1Y3ZrscMkOnk=
+From: Tao Chen <chen.dylane@linux.dev>
+To: peterz@infradead.org,
+	mingo@redhat.com,
+	acme@kernel.org,
+	namhyung@kernel.org,
+	mark.rutland@arm.com,
+	alexander.shishkin@linux.intel.com,
+	jolsa@kernel.org,
+	irogers@google.com,
+	adrian.hunter@intel.com,
+	kan.liang@linux.intel.com,
+	song@kernel.org,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	yonghong.song@linux.dev,
+	john.fastabend@gmail.com,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com
+Cc: linux-perf-users@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	Tao Chen <chen.dylane@linux.dev>
+Subject: [PATCH bpf-next RFC 0/2] Pass external callchain entry to get_perf_callchain
+Date: Tue, 14 Oct 2025 01:47:19 +0800
+Message-ID: <20251013174721.2681091-1-chen.dylane@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Server: rspamout04
-X-Rspamd-Queue-Id: 303662000E
-X-Stat-Signature: 8qu63kcghfwuckzaq74dqyeyrbadaigg
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX190lcQLBqeloDwjMn9zAV8H8OE2YWhIsIM=
-X-HE-Tag: 1760375452-483043
-X-HE-Meta: U2FsdGVkX18DzcttsJhpL+KmwPnzciELiLfsCTYX0iLh50JPY1t3ubF+vvI3Pj+Z0155s4yIvbKzd3wbkReiI2WYMAP3kD4p/ObEXegkHKUVVHrBqOEDTnOcQpHelo0bBSGtKtRgyeJKn+ec6nFhqsP5xaRB/ntLKOY1ABEjkNmW0OLmOg9Bnr4DTTYiQCH+zkwmigjap6ertNurq2tAYDdYHWC5EzIbPKjvduhr6EaYNXQMhhIS971pOUc6v3UD+mxVZt2CzTIEdqnfkeQ2fF8iWFXQ/lP1Q8FuGed8Box+jLTayanrD5hOCk2fR8+ngQGXXgWVMwQX6AxzOUJiUOeR1U1GtO36KHCeFez8dxeMPJdwS7K+1w==
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Wed, 8 Oct 2025 23:08:26 +0200
-Jiri Olsa <olsajiri@gmail.com> wrote:
+Background
+==========
+Alexei noted we should use preempt_disable to protect get_perf_callchain
+in bpf stackmap.
+https://lore.kernel.org/bpf/CAADnVQ+s8B7-fvR1TNO-bniSyKv57cH_ihRszmZV7pQDyV=VDQ@mail.gmail.com
 
-> hi,
-> I'm getting no stacktrace from bpf program attached on kretprobe.multi probe
-> (which means on top of return fprobe) on x86.
-> 
-> I think we need some kind of treatment we do for rethook, AFAICS the ORC unwind
-> stops on return_to_handler, because the stack and the function itself are not
-> adjusted for unwind_recover_ret_addr call
+A previous patch was submitted to attempt fixing this issue. And Andrii
+suggested teach get_perf_callchain to let us pass that buffer directly to
+avoid that unnecessary copy.
+https://lore.kernel.org/bpf/20250926153952.1661146-1-chen.dylane@linux.dev
 
-Hmm, we do have a way to retrieve the actual return caller from a location
-for return_to_handler:
+Proposed Solution
+=================
+Add external perf_callchain_entry parameter for get_perf_callchain to
+allow us to use external buffer from BPF side. The biggest advantage is
+that it can reduce unnecessary copies.
 
-  See kernel/trace/fgraph.c: ftrace_graph_get_ret_stack()
+Todo
+====
+If the above changes are reasonable, it seems that get_callchain_entry_for_task
+could also use an external perf_callchain_entry.
 
-Hmm, I think the x86 ORC unwinder needs to use this.
+But I'm not sure if this modification is appropriate. After all, the
+implementation of get_callchain_entry in the perf subsystem seems much more
+complex than directly using an external buffer.
 
--- Steve
+Comments and suggestions are always welcome.
 
+Tao Chen (2):
+  perf: Use extern perf_callchain_entry for get_perf_callchain
+  bpf: Pass external callchain entry to get_perf_callchain
 
-> 
-> If it's any help I pushed the bpf/selftest for that in here:
->   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git/log/?h=stacktrace_test
-> 
-> just execute:
->   # test_progs -t stacktrace_map/kretprobe_multi
-> 
-> thanks,
-> jirka
+ include/linux/perf_event.h |  5 +++--
+ kernel/bpf/stackmap.c      | 19 +++++++++++--------
+ kernel/events/callchain.c  | 18 ++++++++++++------
+ kernel/events/core.c       |  2 +-
+ 4 files changed, 27 insertions(+), 17 deletions(-)
+
+-- 
+2.48.1
 
