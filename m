@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 160BD2FE07B;
-	Tue, 14 Oct 2025 22:43:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43A8B30DD3F;
+	Tue, 14 Oct 2025 22:43:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760481815; cv=none; b=QXzeZi+6267Fw0MSzw3E42Ve7x32DE9Tq1uFLFOgOevL3aIDCSvaCV9WEsDtFjpzMSha2CJsOl4rIaXiJooal1g2iGuwwoKVhrrl1ce3h6cfs53yBnW7Ygwcxw1/pp9lZ3AM4p1c1Jm6bupFqRIZf+2znLG7otAzBkUOOACBNkE=
+	t=1760481815; cv=none; b=tNuUkW4N8BCea/syuS/V4OVSHCJEKdnj/i8/rbjPyv2AmXc6yDAbD3SJccKSayc5kl6lm6/GSZgA/SB/8rS2mH81SX/CThn+IFd3tJcfKSPGcTFsOXGL3UzF6Rn1phD1OaAhBL8rp9GJmWcLDZ+kl+ZH6K5Pc0bUp3kxGhFjGl8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1760481815; c=relaxed/simple;
-	bh=SCu74n1QPb+l2An5uCSZFkG0ZSJa3rxMAjAeYpfmuRs=;
+	bh=UlFmiz3ZaocOcZ90TzBsi7a0twjzEqEnfHpnPajPIAo=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=XfzJkSzZIoK3Fh8OUQY6SwGEAepnhqBoH1cP0TQgJ4yrJiKzwDciHLnHF1rhQsY597WBvVrmNSu5oDDNM9+0czF1SGu9QSWe2QV+a5C+zDAdKKfM4lKo9PXmEfWOEKeoOhMTOXOQ3y7MTZOzN2v8KI/YP3tLJJ4NpXklDZmkFA4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aSQXqy8A; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=VJ8b5Z/O+tjW5GnGEtYyAlYxbVY6/W4nNM5KnDfF8Nyb4Nxtx9fsLZnniW4Zy7hEX9hi7oJrr5WQAxobbdXwsq6IzEwe0pi0nf0ptxQNzVMbvl4QfMXqA6Ow8cSSr4klAb6DKFKx1b/9z0jVcZzYjOHsgGEh2lSKcHZFMugoaSU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VjZAsvrh; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aSQXqy8A"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1D56C2BCB4;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VjZAsvrh"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1E81C2BC9E;
 	Tue, 14 Oct 2025 22:43:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1760481814;
-	bh=SCu74n1QPb+l2An5uCSZFkG0ZSJa3rxMAjAeYpfmuRs=;
+	bh=UlFmiz3ZaocOcZ90TzBsi7a0twjzEqEnfHpnPajPIAo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=aSQXqy8AUKC5UtJny77311sXYVq1AUY7VuBjdZiQ4c/KsTDrwZVJXe5wGNUOBzSWg
-	 QI6reDaaKtF5gKyuVskA8NEVj7819ABywl72FoEMsrA7KkpVoZ5SwsoHYPJ2k+nFxf
-	 GLMxNzgHb2wi+skpXBiJNtHY2V95WPhdWGwPuQP5mAFUP4B1Px+f2l02Go2LKU/YRK
-	 Lket5ITuS3H/pP880YX/ErXPPOfO5zimbBDjnfQNpyRK9nzhyfnCqE2xqBBqTm9F43
-	 K0rV9ff+iUubu9CK9jGNLjvalsTWn2gKVzXJy7jjNSuWv1AeNZdOLwpKRpquyY8zCd
-	 HUlt7Qy/USmgw==
+	b=VjZAsvrhL49JAgjAzTTKZJM0ET9NDVFkEkfq8clxX7PulFOoOcZ8n1kBjJrysTAU3
+	 Jb37zfalZ98vfLzOfrTvDTeuV3iFX4jVnZmaGVPnB5qaIi+rkrtkIPdWHZFOuHrpvE
+	 lLQpdUYT/XxzyePmbqSbSoHimzJUZq4+MU6jnkQ0BSQ0TVdbT0NoOO1E5HYI+ahvgd
+	 Bl1uOZpEVuUthI2XonbMX1OGfr/Yq3WsVImIj3nOVSavqhLlLNw/WmaHPh2NsWzYXB
+	 YscumGaC6HrP2hB9Tut1B7J/XkyimJA5RQKx86pxSu8UpJEu411FNmT4W2MnXMCWoJ
+	 vN0u3KeMZ76kQ==
 From: Kees Cook <kees@kernel.org>
 To: Jakub Kicinski <kuba@kernel.org>
 Cc: Kees Cook <kees@kernel.org>,
@@ -43,9 +43,9 @@ Cc: Kees Cook <kees@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	bpf@vger.kernel.org,
 	linux-hardening@vger.kernel.org
-Subject: [PATCH v2 10/10] net: Convert struct sockaddr to fixed-size "sa_data[14]"
-Date: Tue, 14 Oct 2025 15:43:32 -0700
-Message-Id: <20251014224334.2344521-10-kees@kernel.org>
+Subject: [PATCH v2 05/10] net: Remove struct sockaddr from net.h
+Date: Tue, 14 Oct 2025 15:43:27 -0700
+Message-Id: <20251014224334.2344521-5-kees@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20251014223349.it.173-kees@kernel.org>
 References: <20251014223349.it.173-kees@kernel.org>
@@ -55,146 +55,29 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5439; i=kees@kernel.org; h=from:subject; bh=SCu74n1QPb+l2An5uCSZFkG0ZSJa3rxMAjAeYpfmuRs=; b=owGbwMvMwCVmps19z/KJym7G02pJDBnvLglHni+0KhBxmfq1hiHc+Z380vp3eaJBtjMdM85M0 pT7cOBoRykLgxgXg6yYIkuQnXuci8fb9nD3uYowc1iZQIYwcHEKwESCeBgZzvpU3FvHdUNJ96Hi DkVFpoVGXGb7Eg/M1wzeJztjiWy6GSPDYuFzd13uCnxb6ZdtPIl9+87IwCP/Nznbfg9UOTvt+Y9 dDAA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=494; i=kees@kernel.org; h=from:subject; bh=UlFmiz3ZaocOcZ90TzBsi7a0twjzEqEnfHpnPajPIAo=; b=owGbwMvMwCVmps19z/KJym7G02pJDBnvLgm2z9jub5+4Lvsry/+88IN8l08aMr+YOyM1eIvfv vXeC+8odpSyMIhxMciKKbIE2bnHuXi8bQ93n6sIM4eVCWQIAxenAEzEJ5jhf+2EPzeMXrb5eG06 uH2PiqjH5BsnPj3UNup+O3NuRW065wSGv2IdgXZXjeVq9lbETpp4QUdUYm9bUfO9zUdfb5uw11D kKCcA
 X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 
-Revert struct sockaddr from flexible array to fixed 14-byte "sa_data",
-solves over 36,000 -Wflex-array-member-not-at-end warnings, since struct
-sockaddr is embedded within many network structs.
+Now that struct sockaddr is no longer used by net.h, remove it.
 
-With socket/proto sockaddr-based internal APIs switched to use struct
-sockaddr_unspec, there should be no more uses of struct sockaddr that
-depend on reading beyond the end of struct sockaddr::sa_data that might
-trigger bounds checking.
-
-Comparing an x86_64 "allyesconfig" vmlinux build before and after this
-patch showed no new "ud1" instructions from CONFIG_UBSAN_BOUNDS nor any
-explicit "field-spanning" memcpy CONFIG_FORTIFY_SOURCE instrumentations.
-
-Cc: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
 Signed-off-by: Kees Cook <kees@kernel.org>
 ---
- include/linux/socket.h                         |  6 ++----
- tools/perf/trace/beauty/include/linux/socket.h |  5 +----
- net/core/dev.c                                 |  2 +-
- net/core/dev_ioctl.c                           |  2 +-
- net/ipv4/arp.c                                 |  2 +-
- net/packet/af_packet.c                         | 10 +++++-----
- 6 files changed, 11 insertions(+), 16 deletions(-)
+ include/linux/net.h | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/include/linux/socket.h b/include/linux/socket.h
-index 27f57c7ee02a..5e9d83cec850 100644
---- a/include/linux/socket.h
-+++ b/include/linux/socket.h
-@@ -32,12 +32,10 @@ typedef __kernel_sa_family_t	sa_family_t;
-  *	1003.1g requires sa_family_t and that sa_data is char.
-  */
+diff --git a/include/linux/net.h b/include/linux/net.h
+index 44cbec673741..e94f219ea309 100644
+--- a/include/linux/net.h
++++ b/include/linux/net.h
+@@ -148,7 +148,6 @@ typedef struct {
  
-+/* Deprecated for in-kernel use. Use struct sockaddr_unspec instead. */
- struct sockaddr {
- 	sa_family_t	sa_family;	/* address family, AF_xxx	*/
--	union {
--		char sa_data_min[14];		/* Minimum 14 bytes of protocol address	*/
--		DECLARE_FLEX_ARRAY(char, sa_data);
--	};
-+	char		sa_data[14];	/* 14 bytes of protocol address	*/
- };
- 
- /**
-diff --git a/tools/perf/trace/beauty/include/linux/socket.h b/tools/perf/trace/beauty/include/linux/socket.h
-index 3b262487ec06..77d7c59f5d8b 100644
---- a/tools/perf/trace/beauty/include/linux/socket.h
-+++ b/tools/perf/trace/beauty/include/linux/socket.h
-@@ -34,10 +34,7 @@ typedef __kernel_sa_family_t	sa_family_t;
- 
- struct sockaddr {
- 	sa_family_t	sa_family;	/* address family, AF_xxx	*/
--	union {
--		char sa_data_min[14];		/* Minimum 14 bytes of protocol address	*/
--		DECLARE_FLEX_ARRAY(char, sa_data);
--	};
-+	char		sa_data[14];	/* 14 bytes of protocol address	*/
- };
- 
- struct linger {
-diff --git a/net/core/dev.c b/net/core/dev.c
-index a64cef2c537e..6dc5861f87b0 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -9885,7 +9885,7 @@ DECLARE_RWSEM(dev_addr_sem);
- /* "sa" is a true struct sockaddr with limited "sa_data" member. */
- int netif_get_mac_address(struct sockaddr *sa, struct net *net, char *dev_name)
- {
--	size_t size = sizeof(sa->sa_data_min);
-+	size_t size = sizeof(sa->sa_data);
- 	struct net_device *dev;
- 	int ret = 0;
- 
-diff --git a/net/core/dev_ioctl.c b/net/core/dev_ioctl.c
-index ad54b12d4b4c..b3ce0fb24a69 100644
---- a/net/core/dev_ioctl.c
-+++ b/net/core/dev_ioctl.c
-@@ -596,7 +596,7 @@ static int dev_ifsioc(struct net *net, struct ifreq *ifr, void __user *data,
- 		if (ifr->ifr_hwaddr.sa_family != dev->type)
- 			return -EINVAL;
- 		memcpy(dev->broadcast, ifr->ifr_hwaddr.sa_data,
--		       min(sizeof(ifr->ifr_hwaddr.sa_data_min),
-+		       min(sizeof(ifr->ifr_hwaddr.sa_data),
- 			   (size_t)dev->addr_len));
- 		netdev_lock_ops(dev);
- 		call_netdevice_notifiers(NETDEV_CHANGEADDR, dev);
-diff --git a/net/ipv4/arp.c b/net/ipv4/arp.c
-index 833f2cf97178..8316ca59088a 100644
---- a/net/ipv4/arp.c
-+++ b/net/ipv4/arp.c
-@@ -1189,7 +1189,7 @@ static int arp_req_get(struct net *net, struct arpreq *r)
- 
- 	read_lock_bh(&neigh->lock);
- 	memcpy(r->arp_ha.sa_data, neigh->ha,
--	       min(dev->addr_len, sizeof(r->arp_ha.sa_data_min)));
-+	       min(dev->addr_len, sizeof(r->arp_ha.sa_data)));
- 	r->arp_flags = arp_state_to_flags(neigh);
- 	read_unlock_bh(&neigh->lock);
- 
-diff --git a/net/packet/af_packet.c b/net/packet/af_packet.c
-index 73bea76ea45d..d21483cae94f 100644
---- a/net/packet/af_packet.c
-+++ b/net/packet/af_packet.c
-@@ -3284,7 +3284,7 @@ static int packet_bind_spkt(struct socket *sock, struct sockaddr_unspec *uaddr,
- {
- 	struct sock *sk = sock->sk;
- 	struct sockaddr *sa = (struct sockaddr *)uaddr;
--	char name[sizeof(sa->sa_data_min) + 1];
-+	char name[sizeof(sa->sa_data) + 1];
- 
- 	/*
- 	 *	Check legality
-@@ -3295,8 +3295,8 @@ static int packet_bind_spkt(struct socket *sock, struct sockaddr_unspec *uaddr,
- 	/* uaddr->sa_data comes from the userspace, it's not guaranteed to be
- 	 * zero-terminated.
- 	 */
--	memcpy(name, sa->sa_data, sizeof(sa->sa_data_min));
--	name[sizeof(sa->sa_data_min)] = 0;
-+	memcpy(name, sa->sa_data, sizeof(sa->sa_data));
-+	name[sizeof(sa->sa_data)] = 0;
- 
- 	return packet_do_bind(sk, name, 0, 0);
- }
-@@ -3581,11 +3581,11 @@ static int packet_getname_spkt(struct socket *sock, struct sockaddr *uaddr,
- 		return -EOPNOTSUPP;
- 
- 	uaddr->sa_family = AF_PACKET;
--	memset(uaddr->sa_data, 0, sizeof(uaddr->sa_data_min));
-+	memset(uaddr->sa_data, 0, sizeof(uaddr->sa_data));
- 	rcu_read_lock();
- 	dev = dev_get_by_index_rcu(sock_net(sk), READ_ONCE(pkt_sk(sk)->ifindex));
- 	if (dev)
--		strscpy(uaddr->sa_data, dev->name, sizeof(uaddr->sa_data_min));
-+		strscpy(uaddr->sa_data, dev->name, sizeof(uaddr->sa_data));
- 	rcu_read_unlock();
- 
- 	return sizeof(*uaddr);
+ struct vm_area_struct;
+ struct page;
+-struct sockaddr;
+ struct msghdr;
+ struct module;
+ struct sk_buff;
 -- 
 2.34.1
 
