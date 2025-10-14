@@ -1,117 +1,102 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mail1.fiberby.net (mail1.fiberby.net [193.104.135.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 511CD28150F
-	for <bpf@vger.kernel.org>; Tue, 14 Oct 2025 16:53:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B0F93016FD;
+	Tue, 14 Oct 2025 17:29:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.104.135.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760460799; cv=none; b=GPvGkkM2ZjNLJdryKA+E1D32b4Id6uf8QbYmBnYPvblXZQf8cy7XyEwtZND3/ch02Hd5VnQYvLmvnkipZxN5OQmyBhrEoK+mcbu/Un0U3/z9RG3X2jtRFkci9J4gvm09esT0SFcPM29ixGLf5K7gjrnGZcAsJscwRkHbHVRTgAc=
+	t=1760462991; cv=none; b=XXEDJAp5nP7E1KVI1qVv5v2Jg/GqNh3s9vO1u+vNuwqWNfXNzrd0wvtimAMm8Pu7mmoPVnnkrfW6DOfvLtySTRIwglwNyQNP3QvDWuWHbAoG7FN8sqpyBW1D7NNUNoTXnCqSp9eXi27Q3vBoLZcR1HKNaI+0AbIkN3n0oEEeCzk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760460799; c=relaxed/simple;
-	bh=IjSEs5UDstWgk3sazx+/L1A6xCj9XyekBAS4mMZ3jPQ=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=SBfAdmKgcYUbXZMm2dyYpRqUs/i9vZhHaFqypJ1zvb9NtT0D5jgIFBmbu5Q+qssptAEgf3AIkUyCDlpn/+Y/Kw6wHW0LDeu35QT4w/zAfrlNw0PiRLQbIgSFqSmf4MDtPbKHKN9NxCiGn1PA0O7C19aWedIoQhTOV5WLrqIjX+4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=JznmYc7t; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1760462991; c=relaxed/simple;
+	bh=lDjuXCExYFk19/NGzi68q3S7dGAQ5tJ0UHZhqIDkIG4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=E45kOezuxs9iZziu3/7ScdYl2wfYtjNeYBIr19kX+jUnW5lKWdGw7euOUSMLHC/6eAe7qP3yLi3JkJ44Wz+kfra3Kt/RJXF/iOaVzPRRBcJ3u8VRvEOYNvJmDKSSLRXyrSU03+l/XSSMRugqtuzB3/dPmA1MJr4j3cFKyq5YRVQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fiberby.net; spf=pass smtp.mailfrom=fiberby.net; dkim=pass (2048-bit key) header.d=fiberby.net header.i=@fiberby.net header.b=RP5bjAah; arc=none smtp.client-ip=193.104.135.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fiberby.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fiberby.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="JznmYc7t"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1760460797;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=f/4kVeAo0V1Wd9MyzWaBsN4+1ag8AoVte3K6v/U9rb8=;
-	b=JznmYc7tJk38u6unSkgPeYpujW4SL2zmVGeFapOZKO+DvmKrMIRuWxcRhdD30XA/Y5+5+h
-	htunQ9JGS1PykdcOlDo2uz6yKOdTY4T8Wgv6ChJ7m1lc55WiW4MNqwC8Nw7LrUVzAWP7ox
-	ij5kedAfNCpcrwHmL1UDdSKSuY8NUE8=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-412-gHRM85Z1OlO5oZADsy5L3A-1; Tue, 14 Oct 2025 12:53:15 -0400
-X-MC-Unique: gHRM85Z1OlO5oZADsy5L3A-1
-X-Mimecast-MFC-AGG-ID: gHRM85Z1OlO5oZADsy5L3A_1760460794
-Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-b2f9dc3264bso1010487666b.1
-        for <bpf@vger.kernel.org>; Tue, 14 Oct 2025 09:53:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760460794; x=1761065594;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=f/4kVeAo0V1Wd9MyzWaBsN4+1ag8AoVte3K6v/U9rb8=;
-        b=DVft4bCdz/fx6MZkhabLm7mbJ6Mh85aujd0DWBX8EAkNIGy5+y12dBLNdOMVPpBi4L
-         pfPn3N+EOaMPUmGOnAx0N3XSrs5nS9N6g81cOxs2EcmwBcv+ZZuU61DMUFDiBQjJsHC3
-         8kq/KrCwq5Yh235rhQHPfdcItPxLeYw0jiLWuJfw63NcEwoGM3akkI2EnN4Zkuj/VjQu
-         B2sdVWdRMwS8IyRnmFeGd2ckTqi+7x36S+J7Lq3abtb8hIn12ydmn4BtLT4V/mBvzY2N
-         WtoUa0hbve6a2MB7ilBb8KnqBCSQTCuYwiFmuIeiP5Cd/Folu1imH11GDlsh/egw4wke
-         WPxw==
-X-Gm-Message-State: AOJu0Yzpxv5bDsxYvsfPD4rIpR/TOlEItiBBO98+TujF9gjQ1DAE2cmy
-	4AO/Zd61d/iK8YOVgnYsJwlyjcPiIo/dsvNa1vbaR3Ey5cjfGf3OR8BSkex1zOM2NjLRMxbl+zU
-	XkRBm7/MKIrkc6A5Y7a0SeZ5fHDdvq/5krCUHBdVBRBFpQeBo7zr/mA==
-X-Gm-Gg: ASbGncuwRq3pIn0nspzwcNcuzN/yvuz9HVqZlHmRgjNz+HOxSjdm8dJ0uQL7O4GtvU5
-	JP0krE+fxt0K3iEVBrR/J0rBnjSp9RmW+ONBF2Mn6HoRw0JzK23k4J3IIBR4zSpk2bzUHVKvRmX
-	283jbB2Vhldw2isogXHtuSULE+cHEwURX6IHw0qG6jLiZ+CjYuI8U0/Q4M0c4d7wfW8g5xR7WxQ
-	QY6tuuNoFKdbeh+qkIiiEObF2RMjQhqQTzOmcJZEyRIiwNE52i8uID6LBcKMn+iGoMXkmr2TwbY
-	0ctJCkJNiIL9IXkOcdxGai6yJB6g10t45nBWaZDx+5jTU3WGMH3Pp8/5UFL9UMEGJ8E=
-X-Received: by 2002:a17:907:7fa4:b0:b47:70bf:645 with SMTP id a640c23a62f3a-b50ac5d1dfbmr2897740266b.58.1760460794419;
-        Tue, 14 Oct 2025 09:53:14 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IE72MbITs6aqq1b0ioYKB4ybW/wbW9L4R5RQuxA3PGjn0GXoyF08d49eY/9ah1CliNG8B+5Yg==
-X-Received: by 2002:a17:907:7fa4:b0:b47:70bf:645 with SMTP id a640c23a62f3a-b50ac5d1dfbmr2897735866b.58.1760460793954;
-        Tue, 14 Oct 2025 09:53:13 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk (alrua-x1.borgediget.toke.dk. [2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b5ccd2a63b1sm18729366b.66.2025.10.14.09.53.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Oct 2025 09:53:13 -0700 (PDT)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-	id 6C30C278B98; Tue, 14 Oct 2025 18:53:12 +0200 (CEST)
-From: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To: Jakub Kicinski <kuba@kernel.org>, Maciej Fijalkowski
- <maciej.fijalkowski@intel.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
- hawk@kernel.org, ilias.apalodimas@linaro.org, lorenzo@kernel.org,
- netdev@vger.kernel.org, magnus.karlsson@intel.com, andrii@kernel.org,
- stfomichev@gmail.com, aleksander.lobakin@intel.com
-Subject: Re: [PATCH bpf 2/2] veth: update mem type in xdp_buff
-In-Reply-To: <20251013162408.76200e17@kernel.org>
-References: <20251003140243.2534865-1-maciej.fijalkowski@intel.com>
- <20251003140243.2534865-3-maciej.fijalkowski@intel.com>
- <20251003161026.5190fcd2@kernel.org> <aOUqyXZvmxjhJnEe@boxer>
- <20251007181153.5bfa78f8@kernel.org> <aOYtUmUiplUpj2Pj@boxer>
- <aOY+4qpQ+tzIWS5Q@boxer> <20251013162408.76200e17@kernel.org>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date: Tue, 14 Oct 2025 18:53:12 +0200
-Message-ID: <87v7kh4e87.fsf@toke.dk>
+	dkim=pass (2048-bit key) header.d=fiberby.net header.i=@fiberby.net header.b="RP5bjAah"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fiberby.net;
+	s=202008; t=1760462979;
+	bh=lDjuXCExYFk19/NGzi68q3S7dGAQ5tJ0UHZhqIDkIG4=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=RP5bjAahHILoBRIuJAG+KGPL08a/B+GkvunRQW09wtRGQV1Ry8J+ZVT3ipilnScKo
+	 ESLYxDhWdsK4SPwX+nvtzpplA7pJ4DQ4clSM6jb11QCnmkxDPhjsZq9bzXsn/2gPdO
+	 8DFSWyA0v9r6eV83k2D2j1wvgCZX6Xs622nnp48GxtOFCtmNgvj/OeliIL3idOTmE4
+	 fKPRZYeqrVJZOOMXcZDsNzJd4pw3LNgWj0eWqR1bvKMLHl/MwduCb7/MNQY4CqGyw1
+	 yCgdZQnpX4iqBLir5jr1k1AeEmS4JSMWDKwDXnU4Q+DiutsGtcQRXZRMcdh8Tk/qDg
+	 Q95hNLp5JWvhA==
+Received: from x201s (193-104-135-243.ip4.fiberby.net [193.104.135.243])
+	by mail1.fiberby.net (Postfix) with ESMTPSA id 7C23B6000C;
+	Tue, 14 Oct 2025 17:29:38 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+	by x201s (Postfix) with ESMTP id 9E6062005BE;
+	Tue, 14 Oct 2025 17:29:30 +0000 (UTC)
+Message-ID: <bbbdd1a0-2835-44c4-8b9f-942d2309e067@fiberby.net>
+Date: Tue, 14 Oct 2025 17:29:30 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next 3/6] tools: ynl-gen: use uapi mask definition in
+ NLA_POLICY_MASK
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+ Alexei Starovoitov <ast@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>,
+ Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>,
+ Daniel Borkmann <daniel@iogearbox.net>, Daniel Zahka
+ <daniel.zahka@gmail.com>, Donald Hunter <donald.hunter@gmail.com>,
+ Jacob Keller <jacob.e.keller@intel.com>,
+ Jesper Dangaard Brouer <hawk@kernel.org>, Jiri Pirko <jiri@resnulli.us>,
+ Joe Damato <jdamato@fastly.com>, John Fastabend <john.fastabend@gmail.com>,
+ Jonathan Corbet <corbet@lwn.net>, Simon Horman <horms@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>,
+ =?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+ Vadim Fedorenko <vadim.fedorenko@linux.dev>,
+ Willem de Bruijn <willemb@google.com>, bpf@vger.kernel.org,
+ netdev@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, "Jason A. Donenfeld" <Jason@zx2c4.com>
+References: <20251013165005.83659-1-ast@fiberby.net>
+ <20251013165005.83659-4-ast@fiberby.net> <20251013175956.7a2fcf6d@kernel.org>
+Content-Language: en-US
+From: =?UTF-8?Q?Asbj=C3=B8rn_Sloth_T=C3=B8nnesen?= <ast@fiberby.net>
+In-Reply-To: <20251013175956.7a2fcf6d@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Jakub Kicinski <kuba@kernel.org> writes:
+On 10/14/25 12:59 AM, Jakub Kicinski wrote:
+> On Mon, 13 Oct 2025 16:50:00 +0000 Asbjørn Sloth Tønnesen wrote:
+>> Currently when generating policies using NLA_POLICY_MASK(), then
+>> we emit a pre-computed decimal mask.
+>>
+>> When render-max is set, then we can re-use the mask definition,
+>> that has been generated in the uapi header.
+> 
+> This will encourage people to render masks in uAPI which just pollutes
+> the uAPI files.
 
-> On Wed, 8 Oct 2025 12:37:22 +0200 Maciej Fijalkowski wrote:
->> > > I guess we're slipping into a philosophical discussion but I'd say 
->> > > that the problem is that rxq stores part of what is de facto xdp buff
->> > > state. It is evacuated into the xdp frame when frame is constructed,
->> > > as packet is detached from driver context. We need to reconstitute it
->> > > when we convert frame (skb, or anything else) back info an xdp buff.  
->> > 
->> > So let us have mem type per xdp_buff then. Feels clunky anyways to change
->> > it on whole rxq on xdp_buff basis. Maybe then everyone will be happy?  
->> 
->> ...however would we be fine with taking a potential performance hit?
->
-> I'd think the perf hit will be a blocker, supposedly it's in rxq for
-> a reason. We are updating it per packet in the few places that are
-> coded up correctly (cpumap) so while it is indeed kinda weird we're
-> not making it any worse?
->
-> Maybe others disagree. I don't feel super strongly. My gut feeling is
-> what I drafted is best we can do in a fix.
+It might, but is that a problem, given that most flag-sets are rather small?
 
-I'd tend to agree, although I don't have a good intuition for how much
-of a performance hit this would end up being.
+Example from include/uapi/linux/wireguard.h:
+ > enum wgpeer_flag {
+ >     WGPEER_F_REMOVE_ME = 1U << 0,
+ >     WGPEER_F_REPLACE_ALLOWEDIPS = 1U << 1,
+ >     WGPEER_F_UPDATE_ONLY = 1U << 2,
+ >     __WGPEER_F_ALL = WGPEER_F_REMOVE_ME | WGPEER_F_REPLACE_ALLOWEDIPS |
+ >                      WGPEER_F_UPDATE_ONLY
+ > };
 
--Toke
+I agree that a private "WGPEER_F_ALL" would be pollution, but "__WGPEER_F_ALL"
+is less likely to accidentally be used by user-space.
 
+I get why Jason likes having the __WGPEER_F_ALL in a place where it is easy
+to review that it has contains all flags, and why he don't like a policy like
+NLA_POLICY_MASK(.., 0x7).
+
+We could do the mask definition in the kernel code, like many handwritten
+netlink families does, but we still need to keep NETDEV_XDP_ACT_MASK in
+netdev.h or remove it's YNL-GEN header for some time.
