@@ -1,132 +1,117 @@
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D130262A6
-	for <bpf@vger.kernel.org>; Tue, 14 Oct 2025 15:02:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 511CD28150F
+	for <bpf@vger.kernel.org>; Tue, 14 Oct 2025 16:53:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760454143; cv=none; b=Zoz0cKdeQcg0rBD7pKIntME/yMkdgnQGLRJqKxLZ4IVGA9etuRgMgq+qszLFCMrPnvtB9vPvVuPVx7cNEm7vRjY4H+I21Ox4Kea75zVu6BhPzLkiTip8ckMj9JAzNdrnkw/JCThsqbLWT3WgY5jEIPcNraaasBJnQjv+MMvhzI8=
+	t=1760460799; cv=none; b=GPvGkkM2ZjNLJdryKA+E1D32b4Id6uf8QbYmBnYPvblXZQf8cy7XyEwtZND3/ch02Hd5VnQYvLmvnkipZxN5OQmyBhrEoK+mcbu/Un0U3/z9RG3X2jtRFkci9J4gvm09esT0SFcPM29ixGLf5K7gjrnGZcAsJscwRkHbHVRTgAc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760454143; c=relaxed/simple;
-	bh=wLBVcnPZguAYTgTwsKiwtS3FxogrqpWpBa8CDXH8zpY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kV3i/ljq/28MRUBWDg3qCLJqHwSqxu4lFsetTVlZ64orz2zGFlmTaCnupY2MCAwT/y70bBRhStg1pw0XdoPKRnpTtgE4yMU9BI7jcPLPoKHDNcuGklUj7W95f1shwrcOpYoqctjy6lUpvHiPQBz+vc/GIzg2VnAz5UFgkaGQyMw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GVv/VASc; arc=none smtp.client-ip=209.85.221.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1760460799; c=relaxed/simple;
+	bh=IjSEs5UDstWgk3sazx+/L1A6xCj9XyekBAS4mMZ3jPQ=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=SBfAdmKgcYUbXZMm2dyYpRqUs/i9vZhHaFqypJ1zvb9NtT0D5jgIFBmbu5Q+qssptAEgf3AIkUyCDlpn/+Y/Kw6wHW0LDeu35QT4w/zAfrlNw0PiRLQbIgSFqSmf4MDtPbKHKN9NxCiGn1PA0O7C19aWedIoQhTOV5WLrqIjX+4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=JznmYc7t; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GVv/VASc"
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-42557c5cedcso2955158f8f.0
-        for <bpf@vger.kernel.org>; Tue, 14 Oct 2025 08:02:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1760454139; x=1761058939; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2Z3LeGxNpykW8QPBBmWGZO+eW3eGppBCAhBgpeK39tg=;
-        b=GVv/VAScI0yT7zJtxlMoy7phM4rxnAkX4Y9gZIG90BQ65CNFU8a/j4JEkbCeW7qkem
-         U1OCaHVbD6ksOtIyMjZXR3RCBB/P36VVRjkiwO7s3SCIPXcFFQRCOFjcZ8EJkqVt2Gai
-         w2GVUahsgg82q0n/d3/9czo0p5qeL6RqX8Ttfg+Ft/Is9xlOvhlU/KjjYflEk5h9dcv4
-         jCWTn1Yxf/OHw/GhEK+18EUshxteGoj50rpsYwYyFrzYd18CAlibMllWw/ljXHoBrN7I
-         16ZS55xcd678S92ZL87v50g7CY49pc4bf6p4/LnL5KxKqzAr5GqVXsD8eC7DX5O67lNd
-         EixA==
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="JznmYc7t"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1760460797;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=f/4kVeAo0V1Wd9MyzWaBsN4+1ag8AoVte3K6v/U9rb8=;
+	b=JznmYc7tJk38u6unSkgPeYpujW4SL2zmVGeFapOZKO+DvmKrMIRuWxcRhdD30XA/Y5+5+h
+	htunQ9JGS1PykdcOlDo2uz6yKOdTY4T8Wgv6ChJ7m1lc55WiW4MNqwC8Nw7LrUVzAWP7ox
+	ij5kedAfNCpcrwHmL1UDdSKSuY8NUE8=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-412-gHRM85Z1OlO5oZADsy5L3A-1; Tue, 14 Oct 2025 12:53:15 -0400
+X-MC-Unique: gHRM85Z1OlO5oZADsy5L3A-1
+X-Mimecast-MFC-AGG-ID: gHRM85Z1OlO5oZADsy5L3A_1760460794
+Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-b2f9dc3264bso1010487666b.1
+        for <bpf@vger.kernel.org>; Tue, 14 Oct 2025 09:53:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760454139; x=1761058939;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2Z3LeGxNpykW8QPBBmWGZO+eW3eGppBCAhBgpeK39tg=;
-        b=ipwboLCDTVpwI6z5MOQcfp7BLk4wehfWqzpHDt/Mmg+OnHc0XV4Q9YOBiUtjxKuuL3
-         ceIA8YiKq0hYQTK9709dgSZp4E9VqvgIrxfogTA1Sr3pj+x2P8LG+uVLnTsSvMQqOXvH
-         iM1Bm5sob4U5AMFCEaKR3mBvLT7F5CgFuwdZbq0FH6B70aj3pQZx+rX1vjVE9V49tNTc
-         OlNZyTUcLaAwwpiAJPUkW1t2Ze79Bs+MvLMgTLVZuHvoUrFjvi8nAi9Q9gt35wLlHjIb
-         UyU2j1rZ32T/LwlI3Xz4m0Kz7gyMbznP27JsIkLqxJ6q4558+7Qj4RO5/01+9Ph+zfTw
-         xpBQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUn7xrVSGjgTfrALGkud0DBanx6rVlHLddzCiIcv8HtoCsW+Yd6u6x7UrpJInib5yFOV7s=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz8sEUYTDXyw8XMqge1zIZ7MZHz8WGOoQ9NE+KI21ljFZ0u53PW
-	xD9O0k/0pCe0T4mq3PefxSHP5uwfa0GH+RQrvHrTaKlrsoV2C2MWHx5VSxtXtjNC8EKUeF2h2CK
-	9kDeq1JeUi+e5eZF1rPvnzl6bsyI/jZc=
-X-Gm-Gg: ASbGncsm4ZFMdYyWgyX54zMkkhm6AVcquI43aLPCzxPsS1pMK4n7cBDA4DSMan0CrZn
-	1WryYMGtvfSy8ivLCcxM3LZxyieGCz901aUgKw/pEGC6pGh2rbyXp6A7zdgqwPJp7e8cg2jRTSf
-	JlbYyeX4qw/aoLvuLB7d2xsSskiR0wqIuIBhDgnyr962xuNEoMrCrfNm/s5Ct62jfHBJgGPLHVc
-	i+XdvKTWXMnrWWqkzoNdkxzYH+HmnhfWvVYEHt10Q==
-X-Google-Smtp-Source: AGHT+IFZ4oUDp4AWLyXSPzY6UsUd433FoGP+hnvIbGLoK7umHXXDi0LbPYh5b/NE1SjwjjD79z/uWjqAoIeYogU1rOw=
-X-Received: by 2002:a05:6000:22c5:b0:3fd:bf1d:15d1 with SMTP id
- ffacd0b85a97d-4266e8dde71mr15298478f8f.49.1760454139020; Tue, 14 Oct 2025
- 08:02:19 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1760460794; x=1761065594;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=f/4kVeAo0V1Wd9MyzWaBsN4+1ag8AoVte3K6v/U9rb8=;
+        b=DVft4bCdz/fx6MZkhabLm7mbJ6Mh85aujd0DWBX8EAkNIGy5+y12dBLNdOMVPpBi4L
+         pfPn3N+EOaMPUmGOnAx0N3XSrs5nS9N6g81cOxs2EcmwBcv+ZZuU61DMUFDiBQjJsHC3
+         8kq/KrCwq5Yh235rhQHPfdcItPxLeYw0jiLWuJfw63NcEwoGM3akkI2EnN4Zkuj/VjQu
+         B2sdVWdRMwS8IyRnmFeGd2ckTqi+7x36S+J7Lq3abtb8hIn12ydmn4BtLT4V/mBvzY2N
+         WtoUa0hbve6a2MB7ilBb8KnqBCSQTCuYwiFmuIeiP5Cd/Folu1imH11GDlsh/egw4wke
+         WPxw==
+X-Gm-Message-State: AOJu0Yzpxv5bDsxYvsfPD4rIpR/TOlEItiBBO98+TujF9gjQ1DAE2cmy
+	4AO/Zd61d/iK8YOVgnYsJwlyjcPiIo/dsvNa1vbaR3Ey5cjfGf3OR8BSkex1zOM2NjLRMxbl+zU
+	XkRBm7/MKIrkc6A5Y7a0SeZ5fHDdvq/5krCUHBdVBRBFpQeBo7zr/mA==
+X-Gm-Gg: ASbGncuwRq3pIn0nspzwcNcuzN/yvuz9HVqZlHmRgjNz+HOxSjdm8dJ0uQL7O4GtvU5
+	JP0krE+fxt0K3iEVBrR/J0rBnjSp9RmW+ONBF2Mn6HoRw0JzK23k4J3IIBR4zSpk2bzUHVKvRmX
+	283jbB2Vhldw2isogXHtuSULE+cHEwURX6IHw0qG6jLiZ+CjYuI8U0/Q4M0c4d7wfW8g5xR7WxQ
+	QY6tuuNoFKdbeh+qkIiiEObF2RMjQhqQTzOmcJZEyRIiwNE52i8uID6LBcKMn+iGoMXkmr2TwbY
+	0ctJCkJNiIL9IXkOcdxGai6yJB6g10t45nBWaZDx+5jTU3WGMH3Pp8/5UFL9UMEGJ8E=
+X-Received: by 2002:a17:907:7fa4:b0:b47:70bf:645 with SMTP id a640c23a62f3a-b50ac5d1dfbmr2897740266b.58.1760460794419;
+        Tue, 14 Oct 2025 09:53:14 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IE72MbITs6aqq1b0ioYKB4ybW/wbW9L4R5RQuxA3PGjn0GXoyF08d49eY/9ah1CliNG8B+5Yg==
+X-Received: by 2002:a17:907:7fa4:b0:b47:70bf:645 with SMTP id a640c23a62f3a-b50ac5d1dfbmr2897735866b.58.1760460793954;
+        Tue, 14 Oct 2025 09:53:13 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk (alrua-x1.borgediget.toke.dk. [2a0c:4d80:42:443::2])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b5ccd2a63b1sm18729366b.66.2025.10.14.09.53.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Oct 2025 09:53:13 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+	id 6C30C278B98; Tue, 14 Oct 2025 18:53:12 +0200 (CEST)
+From: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To: Jakub Kicinski <kuba@kernel.org>, Maciej Fijalkowski
+ <maciej.fijalkowski@intel.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ hawk@kernel.org, ilias.apalodimas@linaro.org, lorenzo@kernel.org,
+ netdev@vger.kernel.org, magnus.karlsson@intel.com, andrii@kernel.org,
+ stfomichev@gmail.com, aleksander.lobakin@intel.com
+Subject: Re: [PATCH bpf 2/2] veth: update mem type in xdp_buff
+In-Reply-To: <20251013162408.76200e17@kernel.org>
+References: <20251003140243.2534865-1-maciej.fijalkowski@intel.com>
+ <20251003140243.2534865-3-maciej.fijalkowski@intel.com>
+ <20251003161026.5190fcd2@kernel.org> <aOUqyXZvmxjhJnEe@boxer>
+ <20251007181153.5bfa78f8@kernel.org> <aOYtUmUiplUpj2Pj@boxer>
+ <aOY+4qpQ+tzIWS5Q@boxer> <20251013162408.76200e17@kernel.org>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date: Tue, 14 Oct 2025 18:53:12 +0200
+Message-ID: <87v7kh4e87.fsf@toke.dk>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251014100128.2721104-1-chen.dylane@linux.dev>
- <20251014100128.2721104-3-chen.dylane@linux.dev> <aO4-jAA5RIUY2yxc@krava>
-In-Reply-To: <aO4-jAA5RIUY2yxc@krava>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Tue, 14 Oct 2025 08:02:06 -0700
-X-Gm-Features: AS18NWCSgrnY4KPRrkJ5eguwWeliltY9wxstLdBBs-NEBFqW5W6tT8iypfQAxiM
-Message-ID: <CAADnVQLoF49pu8CT81FV1ddvysQzvYT4UO1P21fVxnafnO5vrQ@mail.gmail.com>
-Subject: Re: [RFC PATCH bpf-next v2 2/2] bpf: Pass external callchain entry to get_perf_callchain
-To: Jiri Olsa <olsajiri@gmail.com>
-Cc: Tao Chen <chen.dylane@linux.dev>, Peter Zijlstra <peterz@infradead.org>, 
-	Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Ian Rogers <irogers@google.com>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Kan Liang <kan.liang@linux.intel.com>, 
-	Song Liu <song@kernel.org>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Eduard <eddyz87@gmail.com>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	"linux-perf-use." <linux-perf-users@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 
-On Tue, Oct 14, 2025 at 5:14=E2=80=AFAM Jiri Olsa <olsajiri@gmail.com> wrot=
-e:
->
-> On Tue, Oct 14, 2025 at 06:01:28PM +0800, Tao Chen wrote:
-> > As Alexei noted, get_perf_callchain() return values may be reused
-> > if a task is preempted after the BPF program enters migrate disable
-> > mode. Drawing on the per-cpu design of bpf_perf_callchain_entries,
-> > stack-allocated memory of bpf_perf_callchain_entry is used here.
-> >
-> > Signed-off-by: Tao Chen <chen.dylane@linux.dev>
-> > ---
-> >  kernel/bpf/stackmap.c | 19 +++++++++++--------
-> >  1 file changed, 11 insertions(+), 8 deletions(-)
-> >
-> > diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
-> > index 94e46b7f340..acd72c021c0 100644
-> > --- a/kernel/bpf/stackmap.c
-> > +++ b/kernel/bpf/stackmap.c
-> > @@ -31,6 +31,11 @@ struct bpf_stack_map {
-> >       struct stack_map_bucket *buckets[] __counted_by(n_buckets);
-> >  };
-> >
-> > +struct bpf_perf_callchain_entry {
-> > +     u64 nr;
-> > +     u64 ip[PERF_MAX_STACK_DEPTH];
-> > +};
-> > +
-> >  static inline bool stack_map_use_build_id(struct bpf_map *map)
-> >  {
-> >       return (map->map_flags & BPF_F_STACK_BUILD_ID);
-> > @@ -305,6 +310,7 @@ BPF_CALL_3(bpf_get_stackid, struct pt_regs *, regs,=
- struct bpf_map *, map,
-> >       bool user =3D flags & BPF_F_USER_STACK;
-> >       struct perf_callchain_entry *trace;
-> >       bool kernel =3D !user;
-> > +     struct bpf_perf_callchain_entry entry =3D { 0 };
->
-> so IIUC having entries on stack we do not need to do preempt_disable
-> you had in the previous version, right?
->
-> I saw Andrii's justification to have this on the stack, I think it's
-> fine, but does it have to be initialized? it seems that only used
-> entries are copied to map
+Jakub Kicinski <kuba@kernel.org> writes:
 
-No. We're not adding 1k stack consumption.
+> On Wed, 8 Oct 2025 12:37:22 +0200 Maciej Fijalkowski wrote:
+>> > > I guess we're slipping into a philosophical discussion but I'd say 
+>> > > that the problem is that rxq stores part of what is de facto xdp buff
+>> > > state. It is evacuated into the xdp frame when frame is constructed,
+>> > > as packet is detached from driver context. We need to reconstitute it
+>> > > when we convert frame (skb, or anything else) back info an xdp buff.  
+>> > 
+>> > So let us have mem type per xdp_buff then. Feels clunky anyways to change
+>> > it on whole rxq on xdp_buff basis. Maybe then everyone will be happy?  
+>> 
+>> ...however would we be fine with taking a potential performance hit?
+>
+> I'd think the perf hit will be a blocker, supposedly it's in rxq for
+> a reason. We are updating it per packet in the few places that are
+> coded up correctly (cpumap) so while it is indeed kinda weird we're
+> not making it any worse?
+>
+> Maybe others disagree. I don't feel super strongly. My gut feeling is
+> what I drafted is best we can do in a fix.
 
-pw-bot: cr
+I'd tend to agree, although I don't have a good intuition for how much
+of a performance hit this would end up being.
+
+-Toke
+
