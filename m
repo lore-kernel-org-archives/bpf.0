@@ -1,143 +1,133 @@
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 779CD2BDC00
-	for <bpf@vger.kernel.org>; Tue, 14 Oct 2025 15:00:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25BC3248F57;
+	Tue, 14 Oct 2025 15:01:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760454015; cv=none; b=GBYFp/UZm1LyrCOohWtGIwptf6aWH3xQsazC7xMvf5bo4U7bYqw2WMjp60HpEuEgpZPOJ8YP06M+NwKkNPi+uLPvaDrF6vfzM2EmPMBjCL5D19zGHFvUP9xxLP2JjvUPUqeSzaYkkxNnHnKCQzGA/6aH9MLHunE2DW5xWM9xJds=
+	t=1760454097; cv=none; b=KpDVhd+ZdmBCN3eG6Dmu+yaQMEMmk70B5hMkbEfXqFRvnhfLbG+5/YsG9AjUL3LBGKWYprPrmp1Zoz5o5yQmp8VCnALmdY8dzE9F9dJotKJN30uVgg3aRPSwBDJNs6UWyAzjvXk2IRtpdjQixgNLdD/Sk0DW98xTWYThgKj14Yg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760454015; c=relaxed/simple;
-	bh=0x3UrsBPVETTwBRwCnhgBbhM6qnsudgwu+ZzzVr0Ebw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Gq441hIXR6tZP5O4aZ9+BHHJ3Q2qYee924uZJUc0EQhSJXgQvtq6xnoSoSw/jlyG3UUC6mL19MIpdcHSL4IWyvHEcpxloDXiC125btnljn2NSQ454ZUo9BkpCuAA+lqjJjOiP578uVOchaS9Gv4qYT5Y8L6qNveuHdaG3mIutCE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R63G216R; arc=none smtp.client-ip=209.85.221.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1760454097; c=relaxed/simple;
+	bh=+ujCgxgAAIF4L1KvIGIUshzkJZHITRYMYqfQjfVGgyE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=mqAi1j1Um9JaQKsrUKsZmwGN9AdKYvoZ6EEDzPF8zBg9MlxJI3QDeLJhn4oqDTPxph/RfFlLkTsk8lJ0iXmsescA3WmwQW0Su+MM8PCLBaTxkMcJcRCXIykMBUyRElSElFoLQuQnURptftUAo1lIyHxS72n6VgVuO5UFSIK0ne4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=L/UY+e4p; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R63G216R"
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-3ed20bdfdffso4709475f8f.2
-        for <bpf@vger.kernel.org>; Tue, 14 Oct 2025 08:00:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1760454011; x=1761058811; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=r/xcWPqQvGv38fpENJkFXKlfs9/4HkC5weY5m/7dyuo=;
-        b=R63G216RsGvn0rm21gCzhIhoLdW9FNuxrFwmHQno9PODDtpl/fBmRuaIDwol9B6uHa
-         fbVJiiRi31idfGndw5zVQcmuG+ls8l4DtmTV0/+qwk/AmHKqUqyfxuEWjmhgHlfeNrfR
-         pM3wJDuyhhqAvYRY7hpjAExBQk61ObXRO6vA2ufG2smSWS6SEbyFbeHSSavsiAHqnrs2
-         uT220mWEOP4rTmJQI/zaSpw7lBDBZT3LfbtsjKy8Otj1C4LPZzqCL7jyv+uFR5agxMPB
-         imGfE3CjmugE1Xauxngii3RzFM/mEaH4DBpl/yHSsjuKsoz/TeVc9ZNZ1f87+T4eN+mb
-         WkQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760454011; x=1761058811;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=r/xcWPqQvGv38fpENJkFXKlfs9/4HkC5weY5m/7dyuo=;
-        b=BCpjA0boAmoq4riaoW58P3jtHegp0/OJ9uJJGb6W8jxEtAZUg3fJeDYp0aZ3LkBEpf
-         wO8wn6XnHnZ1JMF0SOMbaUHEOH7HCZgSt7uF6+UnTg075pEQmJBIPU9cHmkhWM53iz0o
-         Q50dKuIUVLceBZwUc7YMBG/4HYQH6pFQVzVJKRTU3/01qUtEbmal0ZuARgjkHfLvMjdQ
-         ZMfu9xby/qz4ws1RwLcifFmmvDSC6L3mPO0x+vO/6jvBpPqzoc183lYZ1wjuUzlYKdGX
-         ar09+dF2JoSnE2Xmkgmo+MXsX+rE5V5KePV5NGia8VEU6y7k0hO2yYWa87yWJOx15hiC
-         pWqg==
-X-Forwarded-Encrypted: i=1; AJvYcCUoP3xz2fk2hM+zQ6TuKJ3Oy12QvRp7Aj1YvEEJ4Nk7GMF+5MF4iZVvEG8KofLST11VxkA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwbOlOLcIQUES7GnHkvZB+96GjIcsIX3hURgnOnIXSRBph/G3F4
-	/ZUeBdKsLhYmTvQ9qVl/dkojfk8toAPjTBtxeV/u8LnpuTRJvfBPY1sMHh/DF24M3id3ZP26uvV
-	2DwmoDWcBGtWrcR9axS2ins5NQfB4IqY=
-X-Gm-Gg: ASbGncu2ifaelGbLRkcBTb1xPJVzD8rcN5Uiiv/+AEFKXQ7aln49S4hIcizZLbwkv3m
-	6sz3VyDnEXb7j8UzXjIc8LO3/tqkgwwhxEKu6JY7sNgrOIEvLV+o/JEnMbd+vpc3Tmjeb7eXgYG
-	F6TxEXa9AYwZsfcHc3MaF1totE3Q0iWGALR5kcxjiwV/u8916Jl6vwthIKnLlr0IisR5n4Pv+bP
-	0IR71K2lV6hb0Yu13Od+bMi7MPHgAOJpq1Qyl7xFOQd0D09HE0PKu7U+UpuXKM=
-X-Google-Smtp-Source: AGHT+IEL+XKbdnyLYTXdmxGHy9YwikjzfkbvX4vY3C6sFX76Rp6uYlL4tbzFCJI5Gg9WzOlbXIXA8roQvkXUi7xUH98=
-X-Received: by 2002:a05:6000:26cc:b0:425:7590:6a1f with SMTP id
- ffacd0b85a97d-4266e8d9301mr16784354f8f.49.1760454010511; Tue, 14 Oct 2025
- 08:00:10 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="L/UY+e4p"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=5q2iC5zPcXK3xlUDOAaWe2+B0c/tJD3Z4QsVnNBkokg=; b=L/UY+e4pUMqNrNX9X5xwINWFEq
+	Q80imNTlWqy9zHYWtPXr75Ad7BQwWR6gAToCW8hS2fgQ3jQkhas4nS95EKtdvHX07WWWXL86sebVk
+	11iH7kaTxNLa7LUcO8EMfcdi+LyyIm6rrZ13fEv41oxoI3TtZGMQjbYyTf1fHt8NxnQRThFCjb8Ph
+	88SSvLvRixSaI+/gNhozwTxtfhhiayTNKMqF3k1AehCLG9AeKBs+50Wdk/QnpFsZXWR91U3EPiDpF
+	StJ1fvfo2ne7UhQtmc22r2phvOdSiPOa3q+LS0Ny5Dq0hAP9zWWXiPaR5t+bHBcdsZBfkC+M8MD+R
+	ObcZs3sQ==;
+Received: from sslproxy03.your-server.de ([88.198.220.132])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1v8gGx-00023C-1r;
+	Tue, 14 Oct 2025 16:45:07 +0200
+Received: from localhost ([127.0.0.1])
+	by sslproxy03.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1v8gGw-000N8c-1U;
+	Tue, 14 Oct 2025 16:45:06 +0200
+Message-ID: <95cf5afd-7e93-4a4f-b01e-3cfec094ddd4@iogearbox.net>
+Date: Tue, 14 Oct 2025 16:45:05 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251014112640.261770-1-dongml2@chinatelecom.cn> <20251014112640.261770-2-dongml2@chinatelecom.cn>
-In-Reply-To: <20251014112640.261770-2-dongml2@chinatelecom.cn>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Tue, 14 Oct 2025 07:59:59 -0700
-X-Gm-Features: AS18NWA2q98sWLkB5P0TlTxcTup2CzSuwp44HByL-Q7jhn1Gi58d-E1VqVOUgzE
-Message-ID: <CAADnVQJygR6Pb1SQq=tJUpHVx7wwnSX1A78mXGha+bQArowtHQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 1/4] rcu: factor out migrate_enable_rcu and migrate_disable_rcu
-To: Menglong Dong <menglong8.dong@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, "Paul E. McKenney" <paulmck@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Jakub Sitnicki <jakub@cloudflare.com>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	jiang.biao@linux.dev, bpf <bpf@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, Network Development <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf 1/1] bpf: test_run: fix ctx leak in
+ bpf_prog_test_run_xdp error path
+To: Shardul Bankar <shardulsb08@gmail.com>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+ "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
+ open list <linux-kernel@vger.kernel.org>
+References: <20251014120037.1981316-1-shardulsb08@gmail.com>
+Content-Language: en-US
+From: Daniel Borkmann <daniel@iogearbox.net>
+Autocrypt: addr=daniel@iogearbox.net; keydata=
+ xsFNBGNAkI0BEADiPFmKwpD3+vG5nsOznvJgrxUPJhFE46hARXWYbCxLxpbf2nehmtgnYpAN
+ 2HY+OJmdspBntWzGX8lnXF6eFUYLOoQpugoJHbehn9c0Dcictj8tc28MGMzxh4aK02H99KA8
+ VaRBIDhmR7NJxLWAg9PgneTFzl2lRnycv8vSzj35L+W6XT7wDKoV4KtMr3Szu3g68OBbp1TV
+ HbJH8qe2rl2QKOkysTFRXgpu/haWGs1BPpzKH/ua59+lVQt3ZupePpmzBEkevJK3iwR95TYF
+ 06Ltpw9ArW/g3KF0kFUQkGXYXe/icyzHrH1Yxqar/hsJhYImqoGRSKs1VLA5WkRI6KebfpJ+
+ RK7Jxrt02AxZkivjAdIifFvarPPu0ydxxDAmgCq5mYJ5I/+BY0DdCAaZezKQvKw+RUEvXmbL
+ 94IfAwTFA1RAAuZw3Rz5SNVz7p4FzD54G4pWr3mUv7l6dV7W5DnnuohG1x6qCp+/3O619R26
+ 1a7Zh2HlrcNZfUmUUcpaRPP7sPkBBLhJfqjUzc2oHRNpK/1mQ/+mD9CjVFNz9OAGD0xFzNUo
+ yOFu/N8EQfYD9lwntxM0dl+QPjYsH81H6zw6ofq+jVKcEMI/JAgFMU0EnxrtQKH7WXxhO4hx
+ 3DFM7Ui90hbExlFrXELyl/ahlll8gfrXY2cevtQsoJDvQLbv7QARAQABzSZEYW5pZWwgQm9y
+ a21hbm4gPGRhbmllbEBpb2dlYXJib3gubmV0PsLBkQQTAQoAOxYhBCrUdtCTcZyapV2h+93z
+ cY/jfzlXBQJjQJCNAhsDBQkHhM4ACAsJCAcNDAsKBRUKCQgLAh4BAheAAAoJEN3zcY/jfzlX
+ dkUQAIFayRgjML1jnwKs7kvfbRxf11VI57EAG8a0IvxDlNKDcz74mH66HMyhMhPqCPBqphB5
+ ZUjN4N5I7iMYB/oWUeohbuudH4+v6ebzzmgx/EO+jWksP3gBPmBeeaPv7xOvN/pPDSe/0Ywp
+ dHpl3Np2dS6uVOMnyIsvmUGyclqWpJgPoVaXrVGgyuer5RpE/a3HJWlCBvFUnk19pwDMMZ8t
+ 0fk9O47HmGh9Ts3O8pGibfdREcPYeGGqRKRbaXvcRO1g5n5x8cmTm0sQYr2xhB01RJqWrgcj
+ ve1TxcBG/eVMmBJefgCCkSs1suriihfjjLmJDCp9XI/FpXGiVoDS54TTQiKQinqtzP0jv+TH
+ 1Ku+6x7EjLoLH24ISGyHRmtXJrR/1Ou22t0qhCbtcT1gKmDbTj5TcqbnNMGWhRRTxgOCYvG0
+ 0P2U6+wNj3HFZ7DePRNQ08bM38t8MUpQw4Z2SkM+jdqrPC4f/5S8JzodCu4x80YHfcYSt+Jj
+ ipu1Ve5/ftGlrSECvy80ZTKinwxj6lC3tei1bkI8RgWZClRnr06pirlvimJ4R0IghnvifGQb
+ M1HwVbht8oyUEkOtUR0i0DMjk3M2NoZ0A3tTWAlAH8Y3y2H8yzRrKOsIuiyKye9pWZQbCDu4
+ ZDKELR2+8LUh+ja1RVLMvtFxfh07w9Ha46LmRhpCzsFNBGNAkI0BEADJh65bNBGNPLM7cFVS
+ nYG8tqT+hIxtR4Z8HQEGseAbqNDjCpKA8wsxQIp0dpaLyvrx4TAb/vWIlLCxNu8Wv4W1JOST
+ wI+PIUCbO/UFxRy3hTNlb3zzmeKpd0detH49bP/Ag6F7iHTwQQRwEOECKKaOH52tiJeNvvyJ
+ pPKSKRhmUuFKMhyRVK57ryUDgowlG/SPgxK9/Jto1SHS1VfQYKhzMn4pWFu0ILEQ5x8a0RoX
+ k9p9XkwmXRYcENhC1P3nW4q1xHHlCkiqvrjmWSbSVFYRHHkbeUbh6GYuCuhqLe6SEJtqJW2l
+ EVhf5AOp7eguba23h82M8PC4cYFl5moLAaNcPHsdBaQZznZ6NndTtmUENPiQc2EHjHrrZI5l
+ kRx9hvDcV3Xnk7ie0eAZDmDEbMLvI13AvjqoabONZxra5YcPqxV2Biv0OYp+OiqavBwmk48Z
+ P63kTxLddd7qSWbAArBoOd0wxZGZ6mV8Ci/ob8tV4rLSR/UOUi+9QnkxnJor14OfYkJKxot5
+ hWdJ3MYXjmcHjImBWplOyRiB81JbVf567MQlanforHd1r0ITzMHYONmRghrQvzlaMQrs0V0H
+ 5/sIufaiDh7rLeZSimeVyoFvwvQPx5sXhjViaHa+zHZExP9jhS/WWfFE881fNK9qqV8pi+li
+ 2uov8g5yD6hh+EPH6wARAQABwsF8BBgBCgAmFiEEKtR20JNxnJqlXaH73fNxj+N/OVcFAmNA
+ kI0CGwwFCQeEzgAACgkQ3fNxj+N/OVfFMhAA2zXBUzMLWgTm6iHKAPfz3xEmjtwCF2Qv/TT3
+ KqNUfU3/0VN2HjMABNZR+q3apm+jq76y0iWroTun8Lxo7g89/VDPLSCT0Nb7+VSuVR/nXfk8
+ R+OoXQgXFRimYMqtP+LmyYM5V0VsuSsJTSnLbJTyCJVu8lvk3T9B0BywVmSFddumv3/pLZGn
+ 17EoKEWg4lraXjPXnV/zaaLdV5c3Olmnj8vh+14HnU5Cnw/dLS8/e8DHozkhcEftOf+puCIl
+ Awo8txxtLq3H7KtA0c9kbSDpS+z/oT2S+WtRfucI+WN9XhvKmHkDV6+zNSH1FrZbP9FbLtoE
+ T8qBdyk//d0GrGnOrPA3Yyka8epd/bXA0js9EuNknyNsHwaFrW4jpGAaIl62iYgb0jCtmoK/
+ rCsv2dqS6Hi8w0s23IGjz51cdhdHzkFwuc8/WxI1ewacNNtfGnorXMh6N0g7E/r21pPeMDFs
+ rUD9YI1Je/WifL/HbIubHCCdK8/N7rblgUrZJMG3W+7vAvZsOh/6VTZeP4wCe7Gs/cJhE2gI
+ DmGcR+7rQvbFQC4zQxEjo8fNaTwjpzLM9NIp4vG9SDIqAm20MXzLBAeVkofixCsosUWUODxP
+ owLbpg7pFRJGL9YyEHpS7MGPb3jSLzucMAFXgoI8rVqoq6si2sxr2l0VsNH5o3NgoAgJNIg=
+In-Reply-To: <20251014120037.1981316-1-shardulsb08@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: Clear (ClamAV 1.0.9/27792/Tue Oct 14 11:28:49 2025)
 
-On Tue, Oct 14, 2025 at 4:27=E2=80=AFAM Menglong Dong <menglong8.dong@gmail=
-.com> wrote:
->
-> Factor out migrate_enable_rcu/migrate_disable_rcu from
-> rcu_read_lock_dont_migrate/rcu_read_unlock_migrate.
->
-> These functions will be used in the following patches.
->
-> It's a little weird to define them in rcupdate.h. Maybe we should move
-> them to sched.h?
->
-> Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
-> ---
->  include/linux/rcupdate.h | 20 +++++++++++++++++---
->  1 file changed, 17 insertions(+), 3 deletions(-)
->
-> diff --git a/include/linux/rcupdate.h b/include/linux/rcupdate.h
-> index c5b30054cd01..43626ccc07e2 100644
-> --- a/include/linux/rcupdate.h
-> +++ b/include/linux/rcupdate.h
-> @@ -988,18 +988,32 @@ static inline notrace void rcu_read_unlock_sched_no=
-trace(void)
->         preempt_enable_notrace();
->  }
->
-> -static __always_inline void rcu_read_lock_dont_migrate(void)
-> +/* This can only be used with rcu_read_lock held */
-> +static inline void migrate_enable_rcu(void)
-> +{
-> +       WARN_ON_ONCE(!rcu_read_lock_held());
-> +       if (IS_ENABLED(CONFIG_PREEMPT_RCU))
-> +               migrate_enable();
-> +}
-> +
-> +/* This can only be used with rcu_read_lock held */
-> +static inline void migrate_disable_rcu(void)
->  {
-> +       WARN_ON_ONCE(!rcu_read_lock_held());
->         if (IS_ENABLED(CONFIG_PREEMPT_RCU))
->                 migrate_disable();
-> +}
-> +
-> +static __always_inline void rcu_read_lock_dont_migrate(void)
-> +{
->         rcu_read_lock();
-> +       migrate_disable_rcu();
->  }
->
->  static inline void rcu_read_unlock_migrate(void)
->  {
-> +       migrate_enable_rcu();
->         rcu_read_unlock();
-> -       if (IS_ENABLED(CONFIG_PREEMPT_RCU))
-> -               migrate_enable();
->  }
-
-Sorry. I don't like any of it. It obfuscates the code
-without adding any benefits.
-
-pw-bot: cr
+On 10/14/25 2:00 PM, Shardul Bankar wrote:
+> Fix a memory leak in bpf_prog_test_run_xdp() where the context buffer
+> allocated by bpf_ctx_init() is not freed when the function returns early
+> due to a data size check.
+> 
+> On the failing path:
+>    ctx = bpf_ctx_init(...);
+>    if (kattr->test.data_size_in - meta_sz < ETH_HLEN)
+>        return -EINVAL;
+> 
+> The early return bypasses the cleanup label that kfree()s ctx, leading to a
+> leak detectable by kmemleak under fuzzing. Change the return to jump to the
+> existing free_ctx label.
+> 
+> Fixes: fe9544ed1a2e ("bpf: Support specifying linear xdp packet data size for BPF_PROG_TEST_RUN")
+> Reported-by: BPF Runtime Fuzzer (BRF)
+> Signed-off-by: Shardul Bankar <shardulsb08@gmail.com>
+Acked-by: Daniel Borkmann <daniel@iogearbox.net>
