@@ -1,49 +1,49 @@
 Received: from fllvem-ot04.ext.ti.com (fllvem-ot04.ext.ti.com [198.47.19.246])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 527D52FBE1C;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 528442FC00A;
 	Tue, 14 Oct 2025 10:57:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.246
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760439428; cv=none; b=YoxofZ4kR40Lzm1TJC6j7+frJXyepbmQYMCpH3dgu8P20PW/DfuzzRsOfToTTHUmXfXfoCXB9OaFoOkxNRHuRXEg9lpI143ICeDCsxmqrDM9jDMV7bICAtLXw83DEe2KK/Dk60Zc0nrJRNilY0mzn8sV7QfOUi8/kSoC/iNxxlY=
+	t=1760439428; cv=none; b=qQC60w/QcsRwzAfQjY6V3205VxTymubi+6mM576Xn1FTXooGy/qiV3kXNJVIdT3Ycn8lg0WFcA8ngoqfWVcxhU1lKXMuyz1gw0YRgRLKDROQ2lPIrMKEwM3MQqBHfbLUaChgSA7aQ9/JhAwAiAZC2B1kzzdHPFyDZ/j2ntn5VOM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1760439428; c=relaxed/simple;
-	bh=s6LEpSEmZR96RRkKT6oB/PoDfhsykSh64w6O+251HOU=;
+	bh=VPvvz3282QcOhK7lONBTsC4bDe1tritlKbpPpdQDLCY=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=cdFttJW2zlJ8gaFoD77ugRZ+NbuQ9k8ROOJu+SE358OnaQB3rVqemRzhhqVX7SjHuO3B2DvvF/bHYM4MlCq0SSjVFFZ3nv1HqR8cXPbGZc9iRhLZFwdW1Z/HwDXZjuy6L4ubF5u8HzxmgHSa3fqCoYKkpeKNYW7qTXDvlkYllXg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=UyJBzcey; arc=none smtp.client-ip=198.47.19.246
+	 MIME-Version:Content-Type; b=hI0taPMnMNKJtIZJqqvxxY6bZSte6VSQkNtg0ShKjRV5gzbOY0OnaVErl11a2+QpxxEy9Z5DAr1WQyYB36EW/HjQmpW0nfT17yYswGq6+7K/fUqHLzThiBcIPGAq9RHXXdlareb172uttGGK7CDtcie2djHXtock0otnE/iIFpo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=TaQWbaiA; arc=none smtp.client-ip=198.47.19.246
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="UyJBzcey"
-Received: from lelvem-sh02.itg.ti.com ([10.180.78.226])
-	by fllvem-ot04.ext.ti.com (8.15.2/8.15.2) with ESMTP id 59EAuPAB1487469;
-	Tue, 14 Oct 2025 05:56:25 -0500
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="TaQWbaiA"
+Received: from fllvem-sh03.itg.ti.com ([10.64.41.86])
+	by fllvem-ot04.ext.ti.com (8.15.2/8.15.2) with ESMTP id 59EAuYKc1487477;
+	Tue, 14 Oct 2025 05:56:34 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1760439385;
-	bh=4flJ28Uy0tUwV/vcdcZ6Sr08Y9viQlPZ6aay8Dd8gKA=;
+	s=ti-com-17Q1; t=1760439394;
+	bh=E5QpUFMFiEs5iSDW04JcLooE8n4A4WDaIC5ja/pLTiQ=;
 	h=From:To:CC:Subject:Date:In-Reply-To:References;
-	b=UyJBzceyXcccsv+/Ng4cLZm3uiP3b9qISzK47VSfaUy110cuGAgChVDRJDYWKjdPc
-	 EJUWwzfRLusQnehv0QTbJjPBe67mWRLX9PTxos72QOIhSz/CJ6JrxmFyMUABenvAyb
-	 UWQk5DT+UWAoH1TpQbdTYPOZHXdRrHcqssi6+83Y=
-Received: from DFLE213.ent.ti.com (dfle213.ent.ti.com [10.64.6.71])
-	by lelvem-sh02.itg.ti.com (8.18.1/8.18.1) with ESMTPS id 59EAuPh8386981
+	b=TaQWbaiA0ATpu9/yd2lEHe8rrU6sQ1XfcHuMPja0EmcC0hnPk+KVlrXKLMkqS6xyv
+	 vQpEvlXmq5jmUIxdAhLez+s064OencpsMWZ30zMpe1uQ1W5MElugW+oqxKCjhivJb8
+	 J9n1eRsqVkS6y5qNcopiOjx+i3B9BQV4dJtcVVHA=
+Received: from DLEE215.ent.ti.com (dlee215.ent.ti.com [157.170.170.118])
+	by fllvem-sh03.itg.ti.com (8.18.1/8.18.1) with ESMTPS id 59EAuYn21005254
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Tue, 14 Oct 2025 05:56:25 -0500
-Received: from DFLE207.ent.ti.com (10.64.6.65) by DFLE213.ent.ti.com
- (10.64.6.71) with Microsoft SMTP Server (version=TLS1_2,
+	Tue, 14 Oct 2025 05:56:34 -0500
+Received: from DLEE215.ent.ti.com (157.170.170.118) by DLEE215.ent.ti.com
+ (157.170.170.118) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Tue, 14 Oct
- 2025 05:56:24 -0500
-Received: from lelvem-mr05.itg.ti.com (10.180.75.9) by DFLE207.ent.ti.com
- (10.64.6.65) with Microsoft SMTP Server (version=TLS1_2,
+ 2025 05:56:33 -0500
+Received: from fllvem-mr08.itg.ti.com (10.64.41.88) by DLEE215.ent.ti.com
+ (157.170.170.118) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20 via Frontend
- Transport; Tue, 14 Oct 2025 05:56:24 -0500
-Received: from fllv0122.itg.ti.com (fllv0122.itg.ti.com [10.247.120.72])
-	by lelvem-mr05.itg.ti.com (8.18.1/8.18.1) with ESMTP id 59EAuO313673070;
-	Tue, 14 Oct 2025 05:56:24 -0500
+ Transport; Tue, 14 Oct 2025 05:56:33 -0500
+Received: from lelv0854.itg.ti.com (lelv0854.itg.ti.com [10.181.64.140])
+	by fllvem-mr08.itg.ti.com (8.18.1/8.18.1) with ESMTP id 59EAuXQ52927180;
+	Tue, 14 Oct 2025 05:56:33 -0500
 Received: from localhost (meghana-pc.dhcp.ti.com [10.24.69.13] (may be forged))
-	by fllv0122.itg.ti.com (8.14.7/8.14.7) with ESMTP id 59EAuNhE009024;
-	Tue, 14 Oct 2025 05:56:24 -0500
+	by lelv0854.itg.ti.com (8.14.7/8.14.7) with ESMTP id 59EAuW3Y010688;
+	Tue, 14 Oct 2025 05:56:33 -0500
 From: Meghana Malladi <m-malladi@ti.com>
 To: <horms@kernel.org>, <namcao@linutronix.de>, <jacob.e.keller@intel.com>,
         <m-malladi@ti.com>, <christian.koenig@amd.com>,
@@ -58,9 +58,9 @@ CC: <linaro-mm-sig@lists.linaro.org>, <dri-devel@lists.freedesktop.org>,
         Vignesh Raghavendra
 	<vigneshr@ti.com>,
         Roger Quadros <rogerq@kernel.org>, <danishanwar@ti.com>
-Subject: [PATCH net-next v3 2/6] net: ti: icssg-prueth: Add XSK pool helpers
-Date: Tue, 14 Oct 2025 16:26:08 +0530
-Message-ID: <20251014105613.2808674-3-m-malladi@ti.com>
+Subject: [PATCH net-next v3 5/6] net: ti: icssg-prueth: Add AF_XDP zero copy for RX
+Date: Tue, 14 Oct 2025 16:26:11 +0530
+Message-ID: <20251014105613.2808674-6-m-malladi@ti.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20251014105613.2808674-1-m-malladi@ti.com>
 References: <20251014105613.2808674-1-m-malladi@ti.com>
@@ -74,279 +74,594 @@ Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 
-Implement XSK NDOs (setup, wakeup) and create XSK
-Rx and Tx queues. xsk_qid stores the queue id for
-a given port which has been registered for zero copy
-AF_XDP and used to acquire UMEM pointer if registered.
+Use xsk_pool inside rx_chn to check if a given Rx queue id
+is registered for xsk zero copy, which gets populated during
+xsk enable.
 
-Based on the xsk_qid and the xsk_pool (umem) the driver
-is either in copy or zero copy mode. In case of copy mode
-the xsk_qid value will be invalid and will be set to valid
-queue id when enabling zero copy. To enable zero copy, the
-Rx queues are destroyed, i.e., descriptors pushed to fq
-and cq are freed to remap them to xdp buffers from the umem.
+Update prueth_create_xdp_rxqs to register and support two different
+memory models (xsk and page) for a given Rx queue, if registered for
+zero copy.
+
+If xsk_pool is registered, allocate buffers from UMEM and map them
+to the hardware Rx descriptors. In NAPI context, run the XDP program
+for each packet and process the xsk buffer according to the XDP
+result codes. Also allocate new set of buffers from UMEM for the
+next batch of NAPI Rx processing. Add XDK_WAKEUP_RX support to support
+xsk wakeup for Rx.
+
+Move prueth_create_page_pool to prueth_init_rx_chns to avoid freeing
+and re-allocating the system memory every time there is a transition
+from zero copy to copy and prevents any type of memory fragmentation
+or leak.
 
 Signed-off-by: Meghana Malladi <m-malladi@ti.com>
 ---
 Changes from v2(v3-v2):
-- Revert destroy/create for Rx/Tx from XDP_SETUP_PROG ndo_bpf() call
+- Create/destroy page_pool only when bringing up/down the interfaces
+  to avoid freeing the rx memory during zerocopy<->copy transitions
   as suggested by Jakub Kicinski <kuba@kernel.org>
 
- drivers/net/ethernet/ti/icssg/icssg_common.c |   2 +-
- drivers/net/ethernet/ti/icssg/icssg_prueth.c | 138 +++++++++++++++++++
- drivers/net/ethernet/ti/icssg/icssg_prueth.h |  10 ++
- 3 files changed, 149 insertions(+), 1 deletion(-)
+ drivers/net/ethernet/ti/icssg/icssg_common.c | 324 +++++++++++++++----
+ drivers/net/ethernet/ti/icssg/icssg_prueth.c |  60 +++-
+ drivers/net/ethernet/ti/icssg/icssg_prueth.h |   2 +
+ 3 files changed, 314 insertions(+), 72 deletions(-)
 
 diff --git a/drivers/net/ethernet/ti/icssg/icssg_common.c b/drivers/net/ethernet/ti/icssg/icssg_common.c
-index 580a968594fc..cbe898af3b4c 100644
+index bc6dc7bf3f6a..95474eb61d3c 100644
 --- a/drivers/net/ethernet/ti/icssg/icssg_common.c
 +++ b/drivers/net/ethernet/ti/icssg/icssg_common.c
-@@ -754,7 +754,7 @@ static int emac_rx_packet(struct prueth_emac *emac, u32 flow_id, u32 *xdp_state)
+@@ -465,6 +465,29 @@ int prueth_init_tx_chns(struct prueth_emac *emac)
+ }
+ EXPORT_SYMBOL_GPL(prueth_init_tx_chns);
+ 
++static struct page_pool *prueth_create_page_pool(struct prueth_emac *emac,
++						 struct device *dma_dev,
++						 int size)
++{
++	struct page_pool_params pp_params = { 0 };
++	struct page_pool *pool;
++
++	pp_params.order = 0;
++	pp_params.flags = PP_FLAG_DMA_MAP | PP_FLAG_DMA_SYNC_DEV;
++	pp_params.pool_size = size;
++	pp_params.nid = dev_to_node(emac->prueth->dev);
++	pp_params.dma_dir = DMA_BIDIRECTIONAL;
++	pp_params.dev = dma_dev;
++	pp_params.napi = &emac->napi_rx;
++	pp_params.max_len = PAGE_SIZE;
++
++	pool = page_pool_create(&pp_params);
++	if (IS_ERR(pool))
++		netdev_err(emac->ndev, "cannot create rx page pool\n");
++
++	return pool;
++}
++
+ int prueth_init_rx_chns(struct prueth_emac *emac,
+ 			struct prueth_rx_chn *rx_chn,
+ 			char *name, u32 max_rflows,
+@@ -474,6 +497,7 @@ int prueth_init_rx_chns(struct prueth_emac *emac,
+ 	struct device *dev = emac->prueth->dev;
+ 	struct net_device *ndev = emac->ndev;
+ 	u32 fdqring_id, hdesc_size;
++	struct page_pool *pool;
+ 	int i, ret = 0, slice;
+ 	int flow_id_base;
+ 
+@@ -516,6 +540,14 @@ int prueth_init_rx_chns(struct prueth_emac *emac,
+ 		goto fail;
  	}
  
- 	pa = page_address(page);
--	if (emac->xdp_prog) {
-+	if (prueth_xdp_is_enabled(emac)) {
- 		xdp_init_buff(&xdp, PAGE_SIZE, &rx_chn->xdp_rxq);
- 		xdp_prepare_buff(&xdp, pa, PRUETH_HEADROOM, pkt_len, false);
++	pool = prueth_create_page_pool(emac, rx_chn->dma_dev, rx_chn->descs_num);
++	if (IS_ERR(pool)) {
++		ret = PTR_ERR(pool);
++		goto fail;
++	}
++
++	rx_chn->pg_pool = pool;
++
+ 	flow_id_base = k3_udma_glue_rx_get_flow_id_base(rx_chn->rx_chn);
+ 	if (emac->is_sr1 && !strcmp(name, "rxmgm")) {
+ 		emac->rx_mgm_flow_id_base = flow_id_base;
+@@ -797,12 +829,189 @@ static u32 emac_run_xdp(struct prueth_emac *emac, struct xdp_buff *xdp, u32 *len
+ 		fallthrough; /* handle aborts by dropping packet */
+ 	case XDP_DROP:
+ 		ndev->stats.rx_dropped++;
+-		page_pool_recycle_direct(emac->rx_chns.pg_pool,
+-					 virt_to_head_page(xdp->data));
+ 		return ICSSG_XDP_CONSUMED;
+ 	}
+ }
+ 
++static int prueth_dma_rx_push_mapped_zc(struct prueth_emac *emac,
++					struct prueth_rx_chn *rx_chn,
++					struct xdp_buff *xdp)
++{
++	struct net_device *ndev = emac->ndev;
++	struct cppi5_host_desc_t *desc_rx;
++	struct prueth_swdata *swdata;
++	dma_addr_t desc_dma;
++	dma_addr_t buf_dma;
++	int buf_len;
++
++	buf_dma = xsk_buff_xdp_get_dma(xdp);
++	desc_rx = k3_cppi_desc_pool_alloc(rx_chn->desc_pool);
++	if (!desc_rx) {
++		netdev_err(ndev, "rx push: failed to allocate descriptor\n");
++		return -ENOMEM;
++	}
++	desc_dma = k3_cppi_desc_pool_virt2dma(rx_chn->desc_pool, desc_rx);
++
++	cppi5_hdesc_init(desc_rx, CPPI5_INFO0_HDESC_EPIB_PRESENT,
++			 PRUETH_NAV_PS_DATA_SIZE);
++	k3_udma_glue_rx_dma_to_cppi5_addr(rx_chn->rx_chn, &buf_dma);
++	buf_len = xsk_pool_get_rx_frame_size(rx_chn->xsk_pool);
++	cppi5_hdesc_attach_buf(desc_rx, buf_dma, buf_len, buf_dma, buf_len);
++	swdata = cppi5_hdesc_get_swdata(desc_rx);
++	swdata->type = PRUETH_SWDATA_XSK;
++	swdata->data.xdp = xdp;
++
++	return k3_udma_glue_push_rx_chn(rx_chn->rx_chn, PRUETH_RX_FLOW_DATA,
++					desc_rx, desc_dma);
++
++	return 0;
++}
++
++static int prueth_rx_alloc_zc(struct prueth_emac *emac, int budget)
++{
++	struct prueth_rx_chn *rx_chn = &emac->rx_chns;
++	struct xdp_buff *xdp;
++	int i, ret;
++
++	for (i = 0; i < budget; i++) {
++		xdp = xsk_buff_alloc(rx_chn->xsk_pool);
++		if (!xdp)
++			break;
++
++		ret = prueth_dma_rx_push_mapped_zc(emac, rx_chn, xdp);
++		if (ret) {
++			netdev_err(emac->ndev, "rx alloc: failed to map descriptors to xdp buff\n");
++			xsk_buff_free(xdp);
++			break;
++		}
++	}
++
++	return i;
++}
++
++static void emac_dispatch_skb_zc(struct prueth_emac *emac, struct xdp_buff *xdp, u32 *psdata)
++{
++	unsigned int pkt_len = xdp->data_end - xdp->data;
++	struct net_device *ndev = emac->ndev;
++	struct sk_buff *skb;
++
++	skb = napi_alloc_skb(&emac->napi_rx, xdp->data_end - xdp->data_hard_start);
++	if (unlikely(!skb)) {
++		ndev->stats.rx_dropped++;
++		return;
++	}
++
++	skb_reserve(skb, PRUETH_HEADROOM);
++	skb_put(skb, pkt_len);
++	skb->dev = ndev;
++
++	/* RX HW timestamp */
++	if (emac->rx_ts_enabled)
++		emac_rx_timestamp(emac, skb, psdata);
++
++	if (emac->prueth->is_switch_mode)
++		skb->offload_fwd_mark = emac->offload_fwd_mark;
++	skb->protocol = eth_type_trans(skb, ndev);
++
++	skb_mark_for_recycle(skb);
++	napi_gro_receive(&emac->napi_rx, skb);
++	ndev->stats.rx_bytes += pkt_len;
++	ndev->stats.rx_packets++;
++}
++
++static int emac_rx_packet_zc(struct prueth_emac *emac, u32 flow_id,
++			     int budget)
++{
++	struct prueth_rx_chn *rx_chn = &emac->rx_chns;
++	u32 buf_dma_len, pkt_len, port_id = 0;
++	struct net_device *ndev = emac->ndev;
++	struct cppi5_host_desc_t *desc_rx;
++	struct prueth_swdata *swdata;
++	dma_addr_t desc_dma, buf_dma;
++	struct xdp_buff *xdp;
++	int xdp_status = 0;
++	int count = 0;
++	u32 *psdata;
++	int ret;
++
++	while (count < budget) {
++		ret = k3_udma_glue_pop_rx_chn(rx_chn->rx_chn, flow_id, &desc_dma);
++		if (ret) {
++			if (ret != -ENODATA)
++				netdev_err(ndev, "rx pop: failed: %d\n", ret);
++			break;
++		}
++
++		if (cppi5_desc_is_tdcm(desc_dma)) {
++			complete(&emac->tdown_complete);
++			break;
++		}
++
++		desc_rx = k3_cppi_desc_pool_dma2virt(rx_chn->desc_pool, desc_dma);
++		swdata = cppi5_hdesc_get_swdata(desc_rx);
++		if (swdata->type != PRUETH_SWDATA_XSK) {
++			netdev_err(ndev, "rx_pkt: invalid swdata->type %d\n", swdata->type);
++			k3_cppi_desc_pool_free(rx_chn->desc_pool, desc_rx);
++			break;
++		}
++
++		xdp = swdata->data.xdp;
++		cppi5_hdesc_get_obuf(desc_rx, &buf_dma, &buf_dma_len);
++		k3_udma_glue_rx_cppi5_to_dma_addr(rx_chn->rx_chn, &buf_dma);
++		pkt_len = cppi5_hdesc_get_pktlen(desc_rx);
++		/* firmware adds 4 CRC bytes, strip them */
++		pkt_len -= 4;
++		cppi5_desc_get_tags_ids(&desc_rx->hdr, &port_id, NULL);
++		psdata = cppi5_hdesc_get_psdata(desc_rx);
++		k3_cppi_desc_pool_free(rx_chn->desc_pool, desc_rx);
++		count++;
++		xsk_buff_set_size(xdp, pkt_len);
++		xsk_buff_dma_sync_for_cpu(xdp);
++
++		if (prueth_xdp_is_enabled(emac)) {
++			ret = emac_run_xdp(emac, xdp, &pkt_len);
++			switch (ret) {
++			case ICSSG_XDP_PASS:
++				/* prepare skb and send to n/w stack */
++				emac_dispatch_skb_zc(emac, xdp, psdata);
++				xsk_buff_free(xdp);
++				break;
++			case ICSSG_XDP_CONSUMED:
++				xsk_buff_free(xdp);
++				break;
++			case ICSSG_XDP_TX:
++			case ICSSG_XDP_REDIR:
++				xdp_status |= ret;
++				break;
++			}
++		} else {
++			/* prepare skb and send to n/w stack */
++			emac_dispatch_skb_zc(emac, xdp, psdata);
++			xsk_buff_free(xdp);
++		}
++	}
++
++	if (xdp_status & ICSSG_XDP_REDIR)
++		xdp_do_flush();
++
++	/* Allocate xsk buffers from the pool for the "count" number of
++	 * packets processed in order to be able to receive more packets.
++	 */
++	ret = prueth_rx_alloc_zc(emac, count);
++
++	if (xsk_uses_need_wakeup(rx_chn->xsk_pool)) {
++		/* If the user space doesn't provide enough buffers then it must
++		 * explicitly wake up the kernel when new buffers are available
++		 */
++		if (ret < count)
++			xsk_set_rx_need_wakeup(rx_chn->xsk_pool);
++		else
++			xsk_clear_rx_need_wakeup(rx_chn->xsk_pool);
++	}
++
++	return count;
++}
++
+ static int emac_rx_packet(struct prueth_emac *emac, u32 flow_id, u32 *xdp_state)
+ {
+ 	struct prueth_rx_chn *rx_chn = &emac->rx_chns;
+@@ -849,7 +1058,6 @@ static int emac_rx_packet(struct prueth_emac *emac, u32 flow_id, u32 *xdp_state)
+ 	/* firmware adds 4 CRC bytes, strip them */
+ 	pkt_len -= 4;
+ 	cppi5_desc_get_tags_ids(&desc_rx->hdr, &port_id, NULL);
+-
+ 	k3_cppi_desc_pool_free(rx_chn->desc_pool, desc_rx);
+ 
+ 	/* if allocation fails we drop the packet but push the
+@@ -921,12 +1129,16 @@ void prueth_rx_cleanup(void *data, dma_addr_t desc_dma)
+ 	struct cppi5_host_desc_t *desc_rx;
+ 	struct prueth_swdata *swdata;
+ 	struct page_pool *pool;
++	struct xdp_buff *xdp;
+ 	struct page *page;
+ 
+ 	pool = rx_chn->pg_pool;
+ 	desc_rx = k3_cppi_desc_pool_dma2virt(rx_chn->desc_pool, desc_dma);
+ 	swdata = cppi5_hdesc_get_swdata(desc_rx);
+-	if (swdata->type == PRUETH_SWDATA_PAGE) {
++	if (rx_chn->xsk_pool) {
++		xdp = swdata->data.xdp;
++		xsk_buff_free(xdp);
++	} else {
+ 		page = swdata->data.page;
+ 		page_pool_recycle_direct(pool, page);
+ 	}
+@@ -1174,6 +1386,7 @@ irqreturn_t prueth_rx_irq(int irq, void *dev_id)
+ {
+ 	struct prueth_emac *emac = dev_id;
+ 
++	emac->rx_chns.irq_disabled = true;
+ 	disable_irq_nosync(irq);
+ 	napi_schedule(&emac->napi_rx);
+ 
+@@ -1201,6 +1414,7 @@ int icssg_napi_rx_poll(struct napi_struct *napi_rx, int budget)
+ 		PRUETH_RX_FLOW_DATA_SR1 : PRUETH_RX_FLOW_DATA;
+ 	int flow = emac->is_sr1 ?
+ 		PRUETH_MAX_RX_FLOWS_SR1 : PRUETH_MAX_RX_FLOWS;
++	struct prueth_rx_chn *rx_chn = &emac->rx_chns;
+ 	int xdp_state_or = 0;
+ 	int num_rx = 0;
+ 	int cur_budget;
+@@ -1208,14 +1422,18 @@ int icssg_napi_rx_poll(struct napi_struct *napi_rx, int budget)
+ 	int ret;
+ 
+ 	while (flow--) {
+-		cur_budget = budget - num_rx;
+-
+-		while (cur_budget--) {
+-			ret = emac_rx_packet(emac, flow, &xdp_state);
+-			xdp_state_or |= xdp_state;
+-			if (ret)
+-				break;
+-			num_rx++;
++		if (rx_chn->xsk_pool) {
++			num_rx = emac_rx_packet_zc(emac, flow, budget);
++		} else {
++			cur_budget = budget - num_rx;
++
++			while (cur_budget--) {
++				ret = emac_rx_packet(emac, flow, &xdp_state);
++				xdp_state_or |= xdp_state;
++				if (ret)
++					break;
++				num_rx++;
++			}
+ 		}
+ 
+ 		if (num_rx >= budget)
+@@ -1231,7 +1449,11 @@ int icssg_napi_rx_poll(struct napi_struct *napi_rx, int budget)
+ 				      ns_to_ktime(emac->rx_pace_timeout_ns),
+ 				      HRTIMER_MODE_REL_PINNED);
+ 		} else {
+-			enable_irq(emac->rx_chns.irq[rx_flow]);
++			if (emac->rx_chns.irq_disabled) {
++				/* re-enable the RX IRQ */
++				emac->rx_chns.irq_disabled = false;
++				enable_irq(emac->rx_chns.irq[rx_flow]);
++			}
+ 		}
+ 	}
+ 
+@@ -1239,62 +1461,48 @@ int icssg_napi_rx_poll(struct napi_struct *napi_rx, int budget)
+ }
+ EXPORT_SYMBOL_GPL(icssg_napi_rx_poll);
+ 
+-static struct page_pool *prueth_create_page_pool(struct prueth_emac *emac,
+-						 struct device *dma_dev,
+-						 int size)
+-{
+-	struct page_pool_params pp_params = { 0 };
+-	struct page_pool *pool;
+-
+-	pp_params.order = 0;
+-	pp_params.flags = PP_FLAG_DMA_MAP | PP_FLAG_DMA_SYNC_DEV;
+-	pp_params.pool_size = size;
+-	pp_params.nid = dev_to_node(emac->prueth->dev);
+-	pp_params.dma_dir = DMA_BIDIRECTIONAL;
+-	pp_params.dev = dma_dev;
+-	pp_params.napi = &emac->napi_rx;
+-	pp_params.max_len = PAGE_SIZE;
+-
+-	pool = page_pool_create(&pp_params);
+-	if (IS_ERR(pool))
+-		netdev_err(emac->ndev, "cannot create rx page pool\n");
+-
+-	return pool;
+-}
+-
+ int prueth_prepare_rx_chan(struct prueth_emac *emac,
+ 			   struct prueth_rx_chn *chn,
+ 			   int buf_size)
+ {
+-	struct page_pool *pool;
+ 	struct page *page;
++	int desc_avail;
+ 	int i, ret;
+ 
+-	pool = prueth_create_page_pool(emac, chn->dma_dev, chn->descs_num);
+-	if (IS_ERR(pool))
+-		return PTR_ERR(pool);
+-
+-	chn->pg_pool = pool;
++	desc_avail = k3_cppi_desc_pool_avail(chn->desc_pool);
++	if (desc_avail < chn->descs_num)
++		netdev_warn(emac->ndev,
++			    "not enough RX descriptors available %d < %d\n",
++			    desc_avail, chn->descs_num);
+ 
+-	for (i = 0; i < chn->descs_num; i++) {
+-		/* NOTE: we're not using memory efficiently here.
+-		 * 1 full page (4KB?) used here instead of
+-		 * PRUETH_MAX_PKT_SIZE (~1.5KB?)
++	if (chn->xsk_pool) {
++		/* get pages from xsk_pool and push to RX ring
++		 * queue as much as possible
+ 		 */
+-		page = page_pool_dev_alloc_pages(pool);
+-		if (!page) {
+-			netdev_err(emac->ndev, "couldn't allocate rx page\n");
+-			ret = -ENOMEM;
++		ret = prueth_rx_alloc_zc(emac, desc_avail);
++		if (!ret)
+ 			goto recycle_alloc_pg;
+-		}
++	} else {
++		for (i = 0; i < desc_avail; i++) {
++			/* NOTE: we're not using memory efficiently here.
++			 * 1 full page (4KB?) used here instead of
++			 * PRUETH_MAX_PKT_SIZE (~1.5KB?)
++			 */
++			page = page_pool_dev_alloc_pages(chn->pg_pool);
++			if (!page) {
++				netdev_err(emac->ndev, "couldn't allocate rx page\n");
++				ret = -ENOMEM;
++				goto recycle_alloc_pg;
++			}
+ 
+-		ret = prueth_dma_rx_push_mapped(emac, chn, page, buf_size);
+-		if (ret < 0) {
+-			netdev_err(emac->ndev,
+-				   "cannot submit page for rx chan %s ret %d\n",
+-				   chn->name, ret);
+-			page_pool_recycle_direct(pool, page);
+-			goto recycle_alloc_pg;
++			ret = prueth_dma_rx_push_mapped(emac, chn, page, buf_size);
++			if (ret < 0) {
++				netdev_err(emac->ndev,
++					   "cannot submit page for rx chan %s ret %d\n",
++					   chn->name, ret);
++				page_pool_recycle_direct(chn->pg_pool, page);
++				goto recycle_alloc_pg;
++			}
+ 		}
+ 	}
  
 diff --git a/drivers/net/ethernet/ti/icssg/icssg_prueth.c b/drivers/net/ethernet/ti/icssg/icssg_prueth.c
-index 5e9926699805..2c18b561a46c 100644
+index 296034ab6c67..92f2c33affda 100644
 --- a/drivers/net/ethernet/ti/icssg/icssg_prueth.c
 +++ b/drivers/net/ethernet/ti/icssg/icssg_prueth.c
-@@ -47,6 +47,9 @@
- 						 NETIF_F_HW_HSR_TAG_INS | \
- 						 NETIF_F_HW_HSR_TAG_RM)
+@@ -395,7 +395,11 @@ static enum hrtimer_restart emac_rx_timer_callback(struct hrtimer *timer)
+ 			container_of(timer, struct prueth_emac, rx_hrtimer);
+ 	int rx_flow = PRUETH_RX_FLOW_DATA;
  
-+#define PRUETH_RX_DMA_ATTR			(DMA_ATTR_SKIP_CPU_SYNC |\
-+						 DMA_ATTR_WEAK_ORDERING)
-+
- /* CTRLMMR_ICSSG_RGMII_CTRL register bits */
- #define ICSSG_CTRL_RGMII_ID_MODE                BIT(24)
- 
-@@ -727,6 +730,20 @@ static int icssg_update_vlan_mcast(struct net_device *vdev, int vid,
- 	return 0;
+-	enable_irq(emac->rx_chns.irq[rx_flow]);
++	if (emac->rx_chns.irq_disabled) {
++		/* re-enable the RX IRQ */
++		emac->rx_chns.irq_disabled = false;
++		enable_irq(emac->rx_chns.irq[rx_flow]);
++	}
+ 	return HRTIMER_NORESTART;
  }
  
-+static void prueth_set_xsk_pool(struct prueth_emac *emac, u16 queue_id)
+@@ -569,31 +573,41 @@ const struct icss_iep_clockops prueth_iep_clockops = {
+ 	.perout_enable = prueth_perout_enable,
+ };
+ 
++static void prueth_destroy_xdp_rxqs(struct prueth_emac *emac)
 +{
-+	struct prueth_tx_chn *tx_chn = &emac->tx_chns[queue_id];
-+	struct prueth_rx_chn *rx_chn = &emac->rx_chns;
++	struct xdp_rxq_info *rxq = &emac->rx_chns.xdp_rxq;
 +
-+	if (emac->xsk_qid != queue_id) {
-+		rx_chn->xsk_pool = NULL;
-+		tx_chn->xsk_pool = NULL;
-+	} else {
-+		rx_chn->xsk_pool = xsk_get_pool_from_qid(emac->ndev, queue_id);
-+		tx_chn->xsk_pool = xsk_get_pool_from_qid(emac->ndev, queue_id);
-+	}
++	if (xdp_rxq_info_is_reg(rxq))
++		xdp_rxq_info_unreg(rxq);
 +}
 +
- static void prueth_destroy_txq(struct prueth_emac *emac)
+ static int prueth_create_xdp_rxqs(struct prueth_emac *emac)
  {
- 	int ret, i;
-@@ -867,6 +884,7 @@ static int emac_ndo_open(struct net_device *ndev)
- 		return ret;
- 	}
+ 	struct xdp_rxq_info *rxq = &emac->rx_chns.xdp_rxq;
+ 	struct page_pool *pool = emac->rx_chns.pg_pool;
++	struct prueth_rx_chn *rx_chn = &emac->rx_chns;
+ 	int ret;
  
-+	emac->xsk_qid = -EINVAL;
- 	init_completion(&emac->cmd_complete);
- 	ret = prueth_init_tx_chns(emac);
- 	if (ret) {
-@@ -1192,6 +1210,109 @@ static int emac_xdp_setup(struct prueth_emac *emac, struct netdev_bpf *bpf)
- 	return 0;
+ 	ret = xdp_rxq_info_reg(rxq, emac->ndev, 0, emac->napi_rx.napi_id);
+ 	if (ret)
+ 		return ret;
+ 
+-	ret = xdp_rxq_info_reg_mem_model(rxq, MEM_TYPE_PAGE_POOL, pool);
+-	if (ret)
+-		xdp_rxq_info_unreg(rxq);
+-
+-	return ret;
+-}
+-
+-static void prueth_destroy_xdp_rxqs(struct prueth_emac *emac)
+-{
+-	struct xdp_rxq_info *rxq = &emac->rx_chns.xdp_rxq;
++	if (rx_chn->xsk_pool) {
++		ret = xdp_rxq_info_reg_mem_model(rxq, MEM_TYPE_XSK_BUFF_POOL, NULL);
++		if (ret)
++			goto xdp_unreg;
++		xsk_pool_set_rxq_info(rx_chn->xsk_pool, rxq);
++	} else {
++		ret = xdp_rxq_info_reg_mem_model(rxq, MEM_TYPE_PAGE_POOL, pool);
++		if (ret)
++			goto xdp_unreg;
++	}
+ 
+-	if (!xdp_rxq_info_is_reg(rxq))
+-		return;
++	return 0;
+ 
+-	xdp_rxq_info_unreg(rxq);
++xdp_unreg:
++	prueth_destroy_xdp_rxqs(emac);
++	return ret;
  }
  
-+static int prueth_xsk_pool_enable(struct prueth_emac *emac,
-+				  struct xsk_buff_pool *pool, u16 queue_id)
-+{
+ static int icssg_prueth_add_mcast(struct net_device *ndev, const u8 *addr)
+@@ -1341,6 +1355,12 @@ int prueth_xsk_wakeup(struct net_device *ndev, u32 qid, u32 flags)
+ {
+ 	struct prueth_emac *emac = netdev_priv(ndev);
+ 	struct prueth_tx_chn *tx_chn = &emac->tx_chns[qid];
 +	struct prueth_rx_chn *rx_chn = &emac->rx_chns;
-+	u32 frame_size;
-+	int ret;
 +
-+	if (queue_id >= PRUETH_MAX_RX_FLOWS ||
-+	    queue_id >= emac->tx_ch_num) {
-+		netdev_err(emac->ndev, "Invalid XSK queue ID %d\n", queue_id);
++	if (emac->xsk_qid != qid) {
++		netdev_err(ndev, "XSK queue %d not registered\n", qid);
 +		return -EINVAL;
 +	}
-+
-+	frame_size = xsk_pool_get_rx_frame_size(pool);
-+	if (frame_size < PRUETH_MAX_PKT_SIZE)
-+		return -EOPNOTSUPP;
-+
-+	ret = xsk_pool_dma_map(pool, rx_chn->dma_dev, PRUETH_RX_DMA_ATTR);
-+	if (ret) {
-+		netdev_err(emac->ndev, "Failed to map XSK pool: %d\n", ret);
-+		return ret;
-+	}
-+
-+	if (netif_running(emac->ndev)) {
-+		/* stop packets from wire for graceful teardown */
-+		ret = icssg_set_port_state(emac, ICSSG_EMAC_PORT_DISABLE);
-+		if (ret)
-+			return ret;
-+		prueth_destroy_rxq(emac);
-+	}
-+
-+	emac->xsk_qid = queue_id;
-+	prueth_set_xsk_pool(emac, queue_id);
-+
-+	if (netif_running(emac->ndev)) {
-+		ret = prueth_create_rxq(emac);
-+		if (ret) {
-+			netdev_err(emac->ndev, "Failed to create RX queue: %d\n", ret);
-+			return ret;
-+		}
-+		ret = icssg_set_port_state(emac, ICSSG_EMAC_PORT_FORWARD);
-+		if (ret) {
-+			prueth_destroy_rxq(emac);
-+			return ret;
-+		}
-+		ret = prueth_xsk_wakeup(emac->ndev, queue_id, XDP_WAKEUP_RX);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static int prueth_xsk_pool_disable(struct prueth_emac *emac, u16 queue_id)
-+{
-+	struct xsk_buff_pool *pool;
-+	int ret;
-+
-+	if (queue_id >= PRUETH_MAX_RX_FLOWS ||
-+	    queue_id >= emac->tx_ch_num) {
-+		netdev_err(emac->ndev, "Invalid XSK queue ID %d\n", queue_id);
-+		return -EINVAL;
-+	}
-+
-+	if (emac->xsk_qid != queue_id) {
-+		netdev_err(emac->ndev, "XSK queue ID %d not registered\n", queue_id);
-+		return -EINVAL;
-+	}
-+
-+	pool = xsk_get_pool_from_qid(emac->ndev, queue_id);
-+	if (!pool) {
-+		netdev_err(emac->ndev, "No XSK pool registered for queue %d\n", queue_id);
-+		return -EINVAL;
-+	}
-+
-+	if (netif_running(emac->ndev)) {
-+		/* stop packets from wire for graceful teardown */
-+		ret = icssg_set_port_state(emac, ICSSG_EMAC_PORT_DISABLE);
-+		if (ret)
-+			return ret;
-+		prueth_destroy_rxq(emac);
-+	}
-+
-+	xsk_pool_dma_unmap(pool, PRUETH_RX_DMA_ATTR);
-+	emac->xsk_qid = -EINVAL;
-+	prueth_set_xsk_pool(emac, queue_id);
-+
-+	if (netif_running(emac->ndev)) {
-+		ret = prueth_create_rxq(emac);
-+		if (ret) {
-+			netdev_err(emac->ndev, "Failed to create RX queue: %d\n", ret);
-+			return ret;
-+		}
-+		ret = icssg_set_port_state(emac, ICSSG_EMAC_PORT_FORWARD);
-+		if (ret) {
-+			prueth_destroy_rxq(emac);
-+			return ret;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
- /**
-  * emac_ndo_bpf - implements ndo_bpf for icssg_prueth
-  * @ndev: network adapter device
-@@ -1206,11 +1327,27 @@ static int emac_ndo_bpf(struct net_device *ndev, struct netdev_bpf *bpf)
- 	switch (bpf->command) {
- 	case XDP_SETUP_PROG:
- 		return emac_xdp_setup(emac, bpf);
-+	case XDP_SETUP_XSK_POOL:
-+		return bpf->xsk.pool ?
-+			prueth_xsk_pool_enable(emac, bpf->xsk.pool, bpf->xsk.queue_id) :
-+			prueth_xsk_pool_disable(emac, bpf->xsk.queue_id);
- 	default:
+ 
+ 	if (qid >= PRUETH_MAX_RX_FLOWS || qid >= emac->tx_ch_num) {
+ 		netdev_err(ndev, "Invalid XSK queue ID %d\n", qid);
+@@ -1352,6 +1372,11 @@ int prueth_xsk_wakeup(struct net_device *ndev, u32 qid, u32 flags)
  		return -EINVAL;
  	}
- }
  
-+int prueth_xsk_wakeup(struct net_device *ndev, u32 qid, u32 flags)
-+{
-+	struct prueth_emac *emac = netdev_priv(ndev);
-+
-+	if (qid >= PRUETH_MAX_RX_FLOWS || qid >= emac->tx_ch_num) {
-+		netdev_err(ndev, "Invalid XSK queue ID %d\n", qid);
++	if (!rx_chn->xsk_pool) {
++		netdev_err(ndev, "XSK pool not registered for RX queue %d\n", qid);
 +		return -EINVAL;
 +	}
 +
-+	return 0;
-+}
-+
- static const struct net_device_ops emac_netdev_ops = {
- 	.ndo_open = emac_ndo_open,
- 	.ndo_stop = emac_ndo_stop,
-@@ -1227,6 +1364,7 @@ static const struct net_device_ops emac_netdev_ops = {
- 	.ndo_vlan_rx_kill_vid = emac_ndo_vlan_rx_del_vid,
- 	.ndo_bpf = emac_ndo_bpf,
- 	.ndo_xdp_xmit = emac_xdp_xmit,
-+	.ndo_xsk_wakeup = prueth_xsk_wakeup,
- };
+ 	if (flags & XDP_WAKEUP_TX) {
+ 		if (!napi_if_scheduled_mark_missed(&tx_chn->napi_tx)) {
+ 			if (likely(napi_schedule_prep(&tx_chn->napi_tx)))
+@@ -1359,6 +1384,13 @@ int prueth_xsk_wakeup(struct net_device *ndev, u32 qid, u32 flags)
+ 		}
+ 	}
  
- static int prueth_netdev_init(struct prueth *prueth,
++	if (flags & XDP_WAKEUP_RX) {
++		if (!napi_if_scheduled_mark_missed(&emac->napi_rx)) {
++			if (likely(napi_schedule_prep(&emac->napi_rx)))
++				__napi_schedule(&emac->napi_rx);
++		}
++	}
++
+ 	return 0;
+ }
+ 
 diff --git a/drivers/net/ethernet/ti/icssg/icssg_prueth.h b/drivers/net/ethernet/ti/icssg/icssg_prueth.h
-index e0dadbfca45a..50f40eaa103a 100644
+index 74a0e5ed2a47..540caf5de5fd 100644
 --- a/drivers/net/ethernet/ti/icssg/icssg_prueth.h
 +++ b/drivers/net/ethernet/ti/icssg/icssg_prueth.h
-@@ -38,6 +38,8 @@
- #include <net/devlink.h>
- #include <net/xdp.h>
- #include <net/page_pool/helpers.h>
-+#include <net/xsk_buff_pool.h>
-+#include <net/xdp_sock_drv.h>
- 
- #include "icssg_config.h"
- #include "icss_iep.h"
-@@ -126,6 +128,7 @@ struct prueth_tx_chn {
- 	char name[32];
- 	struct hrtimer tx_hrtimer;
- 	unsigned long tx_pace_timeout_ns;
-+	struct xsk_buff_pool *xsk_pool;
- };
- 
- struct prueth_rx_chn {
-@@ -138,6 +141,7 @@ struct prueth_rx_chn {
- 	char name[32];
+@@ -143,6 +143,7 @@ struct prueth_rx_chn {
  	struct page_pool *pg_pool;
  	struct xdp_rxq_info xdp_rxq;
-+	struct xsk_buff_pool *xsk_pool;
+ 	struct xsk_buff_pool *xsk_pool;
++	bool irq_disabled;
  };
  
  enum prueth_swdata_type {
-@@ -241,6 +245,7 @@ struct prueth_emac {
- 	struct netdev_hw_addr_list vlan_mcast_list[MAX_VLAN_ID];
- 	struct bpf_prog *xdp_prog;
- 	struct xdp_attachment_info xdpi;
-+	int xsk_qid;
+@@ -166,6 +167,7 @@ struct prueth_swdata {
+ 		struct page *page;
+ 		u32 cmd;
+ 		struct xdp_frame *xdpf;
++		struct xdp_buff *xdp;
+ 	} data;
  };
  
- /* The buf includes headroom compatible with both skb and xdpf */
-@@ -499,5 +504,10 @@ u32 emac_xmit_xdp_frame(struct prueth_emac *emac,
- 			unsigned int q_idx);
- void prueth_rx_cleanup(void *data, dma_addr_t desc_dma);
- void prueth_tx_cleanup(void *data, dma_addr_t desc_dma);
-+int prueth_xsk_wakeup(struct net_device *ndev, u32 qid, u32 flags);
-+static inline bool prueth_xdp_is_enabled(struct prueth_emac *emac)
-+{
-+	return !!READ_ONCE(emac->xdp_prog);
-+}
- 
- #endif /* __NET_TI_ICSSG_PRUETH_H */
 -- 
 2.43.0
 
