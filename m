@@ -1,157 +1,182 @@
 Received: from unicom146.biz-email.net (unicom146.biz-email.net [210.51.26.146])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 293A729BDB8;
-	Tue, 14 Oct 2025 05:53:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E14721ABD0;
+	Tue, 14 Oct 2025 06:08:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.51.26.146
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760421191; cv=none; b=qj6Mql2yJx4viHi9nEaIrPSvdmhaRcX6ytv8QK23IIW0Lj9TmHFvvUKC/t7scCorOel7fXpkx5TUJRC/m6u5WIy9vTKn5Zp/4AwwgF804dQb0i+km8yypmur0CNoh3eY/Wo8D2S4hhxzZoD1WPSdSfifaaL2UOE8+Utg1iDEoZg=
+	t=1760422141; cv=none; b=isiKQ+dzN2y9kCXjmrjyg+05pPul8mBQVzJ3p4ZEE/TVqsz1I1kA46stU7Ayz247VXxK/E5oYoQYJXjoCuiSYgZaM27ZH2/fPEWeFwf2b9CpIZL6pSbbR5LCpWkLg6xfGDNSeJEhqnydpzuYpQr1Ye5Dg+g2ID+gxMbqSfuIbYw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760421191; c=relaxed/simple;
-	bh=3G+157xk86k/K+kQZDUYX0P/G7QlPVFuOjaSEJoFp3Y=;
-	h=Date:Subject:From:To:CC:Message-ID:MIME-Version:In-Reply-To:
-	 References:Content-Type; b=Xa8xIZFqABjn/VPN7D5Y8ajkkVEbfDT3nmLDdnO8xRNS0pIydp54Ft77C4toAI9UbXIVW4gcetLPN6mOcF0l7WFtWrNiim2gEC4DsjO4NXcpTuLOele5XRd2elfE+3gYyvfayohVax9qB+c+8pANYRaXPKi0dPoh5bnqJXhhJH0=
+	s=arc-20240116; t=1760422141; c=relaxed/simple;
+	bh=8MAfBChkzlsQKc7cXfRZuprMVR1rdt6h+eePGWaejB0=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Y1qzyLxLYEztJwsJ/VxXT16NPEQlByYBuHPIFe6PCYmv2Yy0eahc8u7EvsMzG0eyM2vb701+dun4bJf7tQXLe/VMPplB4dfn+DgtN2hh0A1tqz4VVwtxXK8mpTo0apjr2Ih/cgELiqzpba4YIAWXLM+/TY8UAoFPiPMyPgdG8HM=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=inspur.com; spf=pass smtp.mailfrom=inspur.com; arc=none smtp.client-ip=210.51.26.146
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=inspur.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=inspur.com
-Received: from jtjnmail201608.home.langchao.com
-        by unicom146.biz-email.net ((D)) with ASMTP (SSL) id 202510141353001786;
-        Tue, 14 Oct 2025 13:53:00 +0800
-Received: from jtjnmailAR01.home.langchao.com (10.100.2.42) by
- jtjnmail201608.home.langchao.com (10.100.2.8) with Microsoft SMTP Server
+Received: from Jtjnmail201617.home.langchao.com
+        by unicom146.biz-email.net ((D)) with ASMTP (SSL) id 202510141408523858;
+        Tue, 14 Oct 2025 14:08:52 +0800
+Received: from jtjnmailAR02.home.langchao.com (10.100.2.43) by
+ Jtjnmail201617.home.langchao.com (10.100.2.17) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.58; Tue, 14 Oct 2025 13:53:00 +0800
-Received: from inspur.com (10.100.2.96) by jtjnmailAR01.home.langchao.com
- (10.100.2.42) with Microsoft SMTP Server id 15.1.2507.58 via Frontend
- Transport; Tue, 14 Oct 2025 13:53:00 +0800
-Received: from chuguangqing$inspur.com ( [10.94.17.151] ) by
- ajax-webmail-app1 (Coremail) ; Tue, 14 Oct 2025 13:53:00 +0800 (GMT+08:00)
-Date: Tue, 14 Oct 2025 13:53:00 +0800
-Subject: Re: Re: [PATCH 0/5] Some spelling error fixes in samples directory
-From: =?UTF-8?Q?Gary_Chu=28=E6=A5=9A=E5=85=89=E5=BA=86=29?=
-	<chuguangqing@inspur.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-CC: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
-	<daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
-	<martin.lau@linux.dev>, Eduard <eddyz87@gmail.com>, Song Liu
-	<song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend
-	<john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav Fomichev
-	<sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	kwankhede <kwankhede@nvidia.com>, bpf <bpf@vger.kernel.org>, LKML
-	<linux-kernel@vger.kernel.org>, kvm <kvm@vger.kernel.org>
-Message-ID: <68ede500.1.I5a5cMEoHajJ5a5c@inspur.com>
-X-Mailer: Coremail Webmail Server Version 2025.1-cmXT6 build
- 20250610(aeb0f7c4) Copyright (c) 2002-2025 www.mailtech.cn
- mispb-39078be8-44f8-459d-aa33-411e3e3b0787-inspur.com
-X-CMClient-Version: Coremail cmclient(4.2.0.1062 win64.exe)
+ 15.1.2507.58; Tue, 14 Oct 2025 14:08:52 +0800
+Received: from inspur.com (10.100.2.96) by jtjnmailAR02.home.langchao.com
+ (10.100.2.43) with Microsoft SMTP Server id 15.1.2507.58 via Frontend
+ Transport; Tue, 14 Oct 2025 14:08:52 +0800
+Received: from localhost.localdomain.com (unknown [10.94.17.151])
+	by app1 (Coremail) with SMTP id YAJkCsDwHnXz6O1oTdkWAA--.474S5;
+	Tue, 14 Oct 2025 14:08:52 +0800 (CST)
+From: Chu Guangqing <chuguangqing@inspur.com>
+To: <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+	<martin.lau@linux.dev>, <eddyz87@gmail.com>, <song@kernel.org>,
+	<yonghong.song@linux.dev>, <john.fastabend@gmail.com>, <kpsingh@kernel.org>,
+	<sdf@fomichev.me>, <haoluo@google.com>, <jolsa@kernel.org>,
+	<kwankhede@nvidia.com>
+CC: <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<kvm@vger.kernel.org>, Chu Guangqing <chuguangqing@inspur.com>
+Subject: [PATCH v2 1/1] samples/bpf: Fix spelling typo in samples/bpf
+Date: Tue, 14 Oct 2025 14:08:49 +0800
+Message-ID: <20251014060849.3074-2-chuguangqing@inspur.com>
+X-Mailer: git-send-email 2.43.7
+In-Reply-To: <20251014060849.3074-1-chuguangqing@inspur.com>
+References: <20251014060849.3074-1-chuguangqing@inspur.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Priority: 3
-X-Coremail-Locale: zh_CN
-X-CM-HeaderCharset: UTF-8
-In-Reply-To: <CAADnVQKMgbDV2poeHYmJg0=GD-F2zDTcjSxcUDZSO3Y5EwD17Q@mail.gmail.com>
-References: <906d79e906812eba2cf73fb5e7e6ddba14-10-25gmail.com@g.corp-email.com>
- <CAADnVQKMgbDV2poeHYmJg0=GD-F2zDTcjSxcUDZSO3Y5EwD17Q@mail.gmail.com>
-x-cm-smime: signed,cmsm
-x-cm-smime-version: cmsm openssl OpenSSL 3.3.1 4 Jun 2024(gm:GmSSL 3.1.1) v1
-Content-Type: multipart/signed; protocol="application/x-pkcs7-signature";
-	micalg=cmsm; boundary="----=_Part_1_G5a5cMEoHajH5a5c_20251014135200=----"
-X-CM-TRANSID: YAJkCsDwDXU85e1oD84WAA--.17814W
-X-CM-SenderInfo: 5fkxw35dqj1xlqj6x0hvsx2hhfrp/1tbiAQEPDmjtIIspYAABsn
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-	CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-	daVFxhVjvjDU=
-X-CM-DELIVERINFO: =?B?N9pETpRRTeOiUs3aOqHZ50hzsfHKF9Ds6CbXmDm38RucXu3D1QS02c2pkXQFDIGuCv
-	ry82gJnDZpQEYdRut3ttFMxxITN1UU1tADN0SVFaZA3YckaxLmYF0I3BebHP3TkeOW9StX
-	29SErP86rVbUovyq+ifyKGfRBHF+CSEbK1UHwaZY
-tUid: 202510141353005711d2a96d4981f3f38dfd38a1266168
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: YAJkCsDwHnXz6O1oTdkWAA--.474S5
+X-Coremail-Antispam: 1UD129KBjvJXoWxCr4rGF17Wr1UZF4fCw4fAFb_yoWrJFWDpF
+	4kWa4xKFnYvr17WF9rZF48Ww1avwn3WrW7Gr4Fvry5J3ZIgF95JFW5try5trs8JFW3Aa9I
+	qF4qg345Wa4rW37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUHvb7Iv0xC_KF4lb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I2
+	0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI
+	8067AKxVWUGwA2048vs2IY020Ec7CjxVAFwI0_Gr0_Xr1l8cAvFVAK0II2c7xJM28CjxkF
+	64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcV
+	CY1x0267AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY
+	1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4
+	xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCa
+	FVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI4
+	02YVCY1x02628vn2kIc2xKxwCY1x0262kKe7AKxVW8ZVWrXwCF04k20xvY0x0EwIxGrwCF
+	54CYxVCY1x0262kKe7AKxVW8ZVWrXwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F4
+	0E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_Wryl
+	IxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxV
+	AFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j
+	6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjTRwL
+	0rUUUUU
+X-CM-SenderInfo: 5fkxw35dqj1xlqj6x0hvsx2hhfrp/
+X-CM-DELIVERINFO: =?B?XIdzPZRRTeOiUs3aOqHZ50hzsfHKF9Ds6CbXmDm38RucXu3DYXJR7Zlh9zE0nt/Iac
+	D+KdD34qlwgDMhQUTbe3jVCvDTH8BjlZN8Xb40qGeYEZWaGDDKkVxAZIy3q7TL3FM6J9Iw
+	tMf1kD17Bf48WbbH5tA=
+Content-Type: text/plain
+tUid: 202510141408527be03802e14eed88f509fc0e8fe5cc88
 X-Abuse-Reports-To: service@corp-email.com
 Abuse-Reports-To: service@corp-email.com
 X-Complaints-To: service@corp-email.com
 X-Report-Abuse-To: service@corp-email.com
 
-------=_Part_1_G5a5cMEoHajH5a5c_20251014135200=----
-Content-Type: text/plain;
-	charset="UTF-8"
-Content-Transfer-Encoding: base64
+do_hbm_test.sh:
+The comment incorrectly used "upcomming" instead of "upcoming".
 
-Pk9uIE1vbiwgT2N0IDEzLCAyMDI1IGF0IDc6MzXigK9QTSBDaHUgR3VhbmdxaW5nIDxjaHVn
-dWFuZ3FpbmdAaW5zcHVyLmNvbT4gd3JvdGU6Cj4+Cj4+IEZpeGVzIGZvciBzb21lIHNwZWxs
-aW5nIGVycm9ycyBpbiBzYW1wbGVzIGRpcmVjdG9yeQo+Pgo+PiBDaHUgR3VhbmdxaW5nICg1
-KToKPj4gICBzYW1wbGVzL2JwZjogRml4IGEgc3BlbGxpbmcgdHlwbyBpbiBkb19oYm1fdGVz
-dC5zaAo+PiAgIHNhbXBsZXM6IGJwZjogRml4IGEgc3BlbGxpbmcgdHlwbyBpbiBoYm0uYwo+
-PiAgIHNhbXBsZXMvYnBmOiBGaXggYSBzcGVsbGluZyB0eXBvIGluIHRyYWNleDEuYnBmLmMK
-Pj4gICBzYW1wbGVzL2JwZjogRml4IGEgc3BlbGxpbmcgdHlwbyBpbiB0Y3BfY29uZ19rZXJu
-LmMKPj4gICB2ZmlvLW1kZXY6IEZpeCBhIHNwZWxsaW5nIHR5cG8gaW4gbXR0eS5jCj4+Cj4+
-ICBzYW1wbGVzL2JwZi9kb19oYm1fdGVzdC5zaCAgfCAyICstCj4+ICBzYW1wbGVzL2JwZi9o
-Ym0uYyAgICAgICAgICAgfCA0ICsrLS0KPj4gIHNhbXBsZXMvYnBmL3RjcF9jb25nX2tlcm4u
-YyB8IDIgKy0KPj4gIHNhbXBsZXMvYnBmL3RyYWNleDEuYnBmLmMgICB8IDIgKy0KPj4gIHNh
-bXBsZXMvdmZpby1tZGV2L210dHkuYyAgICB8IDIgKy0KPj4gIDUgZmlsZXMgY2hhbmdlZCwg
-NiBpbnNlcnRpb25zKCspLCA2IGRlbGV0aW9ucygtKQoKPlRyeWluZyB0byBpbXByb3ZlIHlv
-dXIgcGF0Y2hlcy1pbi10aGUta2VybmVsIHNjb3JlPwo+Tm90IGdvaW5nIHRvIGhhcHBlbi4g
-T25lIHBhdGNoIGZvciBhbGwgdHlwb3MgcGxzLgo+Cj5wdy1ib3Q6IGNyCgpPa2F5LCBJJ2xs
-IG1lcmdlIHRoZW0uCgo=
+hbm.c
+The comment incorrectly used "Managment" instead of "Management".
+The comment incorrectly used "Currrently" instead of "Currently".
 
+tcp_cong_kern.c
+The comment incorrectly used "deteremined" instead of "determined".
 
+tracex1.bpf.c
+The comment incorrectly used "loobpack" instead of "loopback".
 
-------=_Part_1_G5a5cMEoHajH5a5c_20251014135200=----
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
+mtty.c
+The comment incorrectly used "atleast" instead of "at least".
 
-MIIKdwYJKoZIhvcNAQcCoIIKaDCCCmQCAQExDTALBglghkgBZQMEAgEwCwYJKoZIhvcNAQcB
-oIIHvTCCB7kwggahoAMCAQICE34AAkSWdsZNK1EPE5IAAQACRJYwDQYJKoZIhvcNAQELBQAw
-WTETMBEGCgmSJomT8ixkARkWA2NvbTEYMBYGCgmSJomT8ixkARkWCGxhbmdjaGFvMRQwEgYK
-CZImiZPyLGQBGRYEaG9tZTESMBAGA1UEAxMJSU5TUFVSLUNBMB4XDTI0MDkxMjAyMzIxM1oX
-DTI5MDkxMTAyMzIxM1owgbYxEzARBgoJkiaJk/IsZAEZFgNjb20xGDAWBgoJkiaJk/IsZAEZ
-FghsYW5nY2hhbzEUMBIGCgmSJomT8ixkARkWBGhvbWUxMzAxBgNVBAsMKua1qua9rueUteWt
-kOS/oeaBr+S6p+S4muiCoeS7veaciemZkOWFrOWPuDESMBAGA1UEAwwJ5qWa5YWJ5bqGMSYw
-JAYJKoZIhvcNAQkBFhdjaHVndWFuZ3FpbmdAaW5zcHVyLmNvbTCCASIwDQYJKoZIhvcNAQEB
-BQADggEPADCCAQoCggEBAKYDFgmitHYS5YOYSpMY26zG6pgktLXqOlSHGXmq5UZxsjEpQHP1
-BY4eeUE7+pgfqN1518yfCL6nHIlkQms6pCy2CbJpFMQLSIlNNt1lDnPqOdGXylYV2F/tk33C
-bwMjcL8y8brq/HrnD38lA58kUOjuEQaV38jn0coIfbkC8QScz3uBtbuOdI4jSct+liP9tgCy
-KI662Lnt9376q+iLLXvbwmrTbCdWTjMNMJjLqBWikMYTKJhTiYe2S4HxI4zKqrEee3SxA6Qe
-Yd+Ku8thY2kWMMwXETx5DYr6jGeTSfVnqmzVGESunLualJFkAfWGLEESKXhtT9Yu1q1Y+7Hb
-OPUCAwEAAaOCBBowggQWMAsGA1UdDwQEAwIFoDA9BgkrBgEEAYI3FQcEMDAuBiYrBgEEAYI3
-FQiC8qkfhIHXeoapkT2GgPcVg9iPXIFK/YsmgZSnTQIBZAIBYTBEBgkqhkiG9w0BCQ8ENzA1
-MA4GCCqGSIb3DQMCAgIAgDAOBggqhkiG9w0DBAICAIAwBwYFKw4DAgcwCgYIKoZIhvcNAwcw
-HQYDVR0OBBYEFBEL8h6Bd8FOflxman0I5rRuiXFQMB8GA1UdIwQYMBaAFF5ZA6a0TFhgkU72
-HrWlOaYywTVqMIIBDwYDVR0fBIIBBjCCAQIwgf+ggfyggfmGgbpsZGFwOi8vL0NOPUlOU1BV
-Ui1DQSxDTj1KVENBMjAxMixDTj1DRFAsQ049UHVibGljJTIwS2V5JTIwU2VydmljZXMsQ049
-U2VydmljZXMsQ049Q29uZmlndXJhdGlvbixEQz1ob21lLERDPWxhbmdjaGFvLERDPWNvbT9j
-ZXJ0aWZpY2F0ZVJldm9jYXRpb25MaXN0P2Jhc2U/b2JqZWN0Q2xhc3M9Y1JMRGlzdHJpYnV0
-aW9uUG9pbnSGOmh0dHA6Ly9KVENBMjAxMi5ob21lLmxhbmdjaGFvLmNvbS9DZXJ0RW5yb2xs
-L0lOU1BVUi1DQS5jcmwwggEsBggrBgEFBQcBAQSCAR4wggEaMIGxBggrBgEFBQcwAoaBpGxk
-YXA6Ly8vQ049SU5TUFVSLUNBLENOPUFJQSxDTj1QdWJsaWMlMjBLZXklMjBTZXJ2aWNlcyxD
-Tj1TZXJ2aWNlcyxDTj1Db25maWd1cmF0aW9uLERDPWhvbWUsREM9bGFuZ2NoYW8sREM9Y29t
-P2NBQ2VydGlmaWNhdGU/YmFzZT9vYmplY3RDbGFzcz1jZXJ0aWZpY2F0aW9uQXV0aG9yaXR5
-MGQGCCsGAQUFBzAChlhodHRwOi8vSlRDQTIwMTIuaG9tZS5sYW5nY2hhby5jb20vQ2VydEVu
-cm9sbC9KVENBMjAxMi5ob21lLmxhbmdjaGFvLmNvbV9JTlNQVVItQ0EoMSkuY3J0MCkGA1Ud
-JQQiMCAGCCsGAQUFBwMCBggrBgEFBQcDBAYKKwYBBAGCNwoDBDA1BgkrBgEEAYI3FQoEKDAm
-MAoGCCsGAQUFBwMCMAoGCCsGAQUFBwMEMAwGCisGAQQBgjcKAwQwSwYDVR0RBEQwQqAnBgor
-BgEEAYI3FAIDoBkMF2NodWd1YW5ncWluZ0BpbnNwdXIuY29tgRdjaHVndWFuZ3FpbmdAaW5z
-cHVyLmNvbTBQBgkrBgEEAYI3GQIEQzBBoD8GCisGAQQBgjcZAgGgMQQvUy0xLTUtMjEtMTYw
-Njk4MDg0OC03MDY2OTk4MjYtMTgwMTY3NDUzMS01NjA0MDYwDQYJKoZIhvcNAQELBQADggEB
-AENGHBz0J97mfrnLF1054QNBs0hM8iO39D4x/QqrMf53ghwe3sc0DxmGs6lhAmIWCMlj146j
-j6UAEF9BNZUrcysiIFPN/UwHwxFecspHX4WFmQOP41FB0oNXovWtw75GwImsszbUwaSGoWWl
-cIfGXI+35PXxhJdIPRx4nlClDcD783an45PF7Mcvkao9IlPTnUfjeKRkLnEKlkxZp+4HQbLK
-suW+/N63gqjvpjiNYMvrUQRqR7FRH1GA9w+FgUeI1/1/fCLd9zUBbQnWyaH7eub0g0j7pfH+
-DqAQeYh4FZl84NOuE/oUYyUwwmUtChIBls8Fp2FSeywopNaDLmtPipQxggKAMIICfAIBATBw
-MFkxEzARBgoJkiaJk/IsZAEZFgNjb20xGDAWBgoJkiaJk/IsZAEZFghsYW5nY2hhbzEUMBIG
-CgmSJomT8ixkARkWBGhvbWUxEjAQBgNVBAMTCUlOU1BVUi1DQQITfgACRJZ2xk0rUQ8TkgAB
-AAJEljALBglghkgBZQMEAgGggeQwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG
-9w0BCQUxDxcNMjUxMDE0MDU1MjAwWjAvBgkqhkiG9w0BCQQxIgQgd+r2G9w5SGL/9Uu34ORr
-J6lMtuNQsLZSCduOc3GWSfsweQYJKoZIhvcNAQkPMWwwajALBglghkgBZQMEASowCwYJYIZI
-AWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzAOBggqhkiG9w0DAgICAIAwDQYIKoZI
-hvcNAwICAUAwBwYFKw4DAgcwDQYIKoZIhvcNAwICASgwDQYJKoZIhvcNAQEBBQAEggEAZX0B
-bEktRhq6IBkRCiXwOx9N0Rsvu8LbsfcyE2FY6DrnzI5xKG2ooerqoRZz83DA8gMLp2gZ4VLB
-iUrFq66jWV5Qw63vaLIvR+u34tUiacGANhPb/XETuGwjiUfvHEUwM2yuerFrb+3t0TEiQoeN
-MeBX23eFhNtk4EIOx18kgAUH4t5HgvY+yof0MePLC/jSfNpIf+HfQm7td2RuiK2fzO3Lbc2S
-UHHPTZu2uIX5opXjqQR9g/a1eVMW5XEkBnqe5NPW72paonhCOdDuPiC+kBbXlEbjYiGZlFmS
-tkCa0fzbOHOYnIz5mVG5iDN6okXQBlg8ALNJW1Gi4IfVC05sNQ==
+Signed-off-by: Chu Guangqing <chuguangqing@inspur.com>
+---
+ samples/bpf/do_hbm_test.sh  | 2 +-
+ samples/bpf/hbm.c           | 4 ++--
+ samples/bpf/tcp_cong_kern.c | 2 +-
+ samples/bpf/tracex1.bpf.c   | 2 +-
+ samples/vfio-mdev/mtty.c    | 2 +-
+ 5 files changed, 6 insertions(+), 6 deletions(-)
 
-------=_Part_1_G5a5cMEoHajH5a5c_20251014135200=------
+diff --git a/samples/bpf/do_hbm_test.sh b/samples/bpf/do_hbm_test.sh
+index 38e4599350db..7f4f722787d5 100755
+--- a/samples/bpf/do_hbm_test.sh
++++ b/samples/bpf/do_hbm_test.sh
+@@ -112,7 +112,7 @@ function start_hbm () {
+ processArgs () {
+   for i in $args ; do
+     case $i in
+-    # Support for upcomming ingress rate limiting
++    # Support for upcoming ingress rate limiting
+     #in)         # support for upcoming ingress rate limiting
+     #  dir="-i"
+     #  dir_name="in"
+diff --git a/samples/bpf/hbm.c b/samples/bpf/hbm.c
+index bf66277115e2..fc88d4dbdf48 100644
+--- a/samples/bpf/hbm.c
++++ b/samples/bpf/hbm.c
+@@ -5,7 +5,7 @@
+  * modify it under the terms of version 2 of the GNU General Public
+  * License as published by the Free Software Foundation.
+  *
+- * Example program for Host Bandwidth Managment
++ * Example program for Host Bandwidth Management
+  *
+  * This program loads a cgroup skb BPF program to enforce cgroup output
+  * (egress) or input (ingress) bandwidth limits.
+@@ -24,7 +24,7 @@
+  *		beyond the rate limit specified while there is available
+  *		bandwidth. Current implementation assumes there is only
+  *		NIC (eth0), but can be extended to support multiple NICs.
+- *		Currrently only supported for egress.
++ *		Currently only supported for egress.
+  *    -h	Print this info
+  *    prog	BPF program file name. Name defaults to hbm_out_kern.o
+  */
+diff --git a/samples/bpf/tcp_cong_kern.c b/samples/bpf/tcp_cong_kern.c
+index 2311fc9dde85..339415eac477 100644
+--- a/samples/bpf/tcp_cong_kern.c
++++ b/samples/bpf/tcp_cong_kern.c
+@@ -5,7 +5,7 @@
+  * License as published by the Free Software Foundation.
+  *
+  * BPF program to set congestion control to dctcp when both hosts are
+- * in the same datacenter (as deteremined by IPv6 prefix).
++ * in the same datacenter (as determined by IPv6 prefix).
+  *
+  * Use "bpftool cgroup attach $cg sock_ops $prog" to load this BPF program.
+  */
+diff --git a/samples/bpf/tracex1.bpf.c b/samples/bpf/tracex1.bpf.c
+index 0ab39d76ff8f..ceedf0b1d479 100644
+--- a/samples/bpf/tracex1.bpf.c
++++ b/samples/bpf/tracex1.bpf.c
+@@ -20,7 +20,7 @@ SEC("kprobe.multi/__netif_receive_skb_core*")
+ int bpf_prog1(struct pt_regs *ctx)
+ {
+ 	/* attaches to kprobe __netif_receive_skb_core,
+-	 * looks for packets on loobpack device and prints them
++	 * looks for packets on loopback device and prints them
+ 	 * (wildcard is used for avoiding symbol mismatch due to optimization)
+ 	 */
+ 	char devname[IFNAMSIZ];
+diff --git a/samples/vfio-mdev/mtty.c b/samples/vfio-mdev/mtty.c
+index 59eefe2fed10..6cb3e5974990 100644
+--- a/samples/vfio-mdev/mtty.c
++++ b/samples/vfio-mdev/mtty.c
+@@ -624,7 +624,7 @@ static void handle_bar_read(unsigned int index, struct mdev_state *mdev_state,
+ 		u8 lsr = 0;
+ 
+ 		mutex_lock(&mdev_state->rxtx_lock);
+-		/* atleast one char in FIFO */
++		/* at least one char in FIFO */
+ 		if (mdev_state->s[index].rxtx.head !=
+ 				 mdev_state->s[index].rxtx.tail)
+ 			lsr |= UART_LSR_DR;
+-- 
+2.43.7
+
