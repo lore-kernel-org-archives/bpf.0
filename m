@@ -1,31 +1,32 @@
 Received: from unicom146.biz-email.net (unicom146.biz-email.net [210.51.26.146])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C07426E70B;
-	Tue, 14 Oct 2025 02:36:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91DCA304BC1;
+	Tue, 14 Oct 2025 02:36:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.51.26.146
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760409374; cv=none; b=ZX5RfcyHtIGUG6huazyW0QS7Q8xFbvTXgNhIWgglRoMSoLqNYDoZdkm4wM2tvnEtSq88k0Er+PO6MpXD7wHaBzkJYsNJFMEbl2B9Z0BYkIOwo5cLSNNvAYiOL6p8pbBnRq6L2qlrDqTKcCXUEr4qctk5AKnI4Wq95SyErAWEhR4=
+	t=1760409380; cv=none; b=N2JIvoqVAYHPQpr1RjMbqMINli16xFfAha3xAZg+wWVd36CHukCyXKEk1UGlUBz0Z4+kylsyy3W1sgEizYPRkmkV3hnrZBS578mxjqxeSVnAqFpSGyUqj2Cd6CZcTF0PQiFLdY2dxQnYpjS4JsABRAHGyfBHK+m0AdXgQArYVoM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760409374; c=relaxed/simple;
-	bh=UOBLRDWP3KfLWh9KvekABQaGY+mxS8RLhrBRxuq5cqM=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=SCe52hZCH9jrOCwjjthrNJ5hdf+RwLif2aWWvlGrc8dacBzp3oEpIsie+eFmLC7AkiGaDcLGXe+r3AtvnKm8jlxzrR24to9203lwuQGcsYRL3BKatFJ5O9y0DSjTUtyGEhOnAqwpSo82v7mBQyGoPn6s+p7coDHNq+ZgEpL+Orc=
+	s=arc-20240116; t=1760409380; c=relaxed/simple;
+	bh=KTYWcpDSD9LDHcrOTKXWXnrwHPWqYzkLX4imcf2IfHM=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=OsDGiuXUrBScuOTIpA5FqVJHbtZU4XLPEGwS+NzqrPf4R7IOZ0cn3qmoiGR5llULcdXNOGbiRQx1aJgct6UKoIv7sUYjPBOt37BI2o76rrQTyrNLHxbG3/OE+8rwsaRpy3iwD6o2g18iynQn+yLPSdMfLwqGMtANZSbKOb0PXr0=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=inspur.com; spf=pass smtp.mailfrom=inspur.com; arc=none smtp.client-ip=210.51.26.146
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=inspur.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=inspur.com
 Received: from Jtjnmail201616.home.langchao.com
-        by unicom146.biz-email.net ((D)) with ASMTP (SSL) id 202510141034531290;
-        Tue, 14 Oct 2025 10:34:53 +0800
+        by unicom146.biz-email.net ((D)) with ASMTP (SSL) id 202510141034561351;
+        Tue, 14 Oct 2025 10:34:56 +0800
 Received: from jtjnmailAR02.home.langchao.com (10.100.2.43) by
  Jtjnmail201616.home.langchao.com (10.100.2.16) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.58; Tue, 14 Oct 2025 10:34:52 +0800
+ 15.1.2507.58; Tue, 14 Oct 2025 10:34:54 +0800
 Received: from inspur.com (10.100.2.96) by jtjnmailAR02.home.langchao.com
  (10.100.2.43) with Microsoft SMTP Server id 15.1.2507.58 via Frontend
- Transport; Tue, 14 Oct 2025 10:34:52 +0800
+ Transport; Tue, 14 Oct 2025 10:34:54 +0800
 Received: from localhost.localdomain.com (unknown [10.94.17.151])
-	by app1 (Coremail) with SMTP id YAJkCsDwEnbMtu1ojngWAA--.532S4;
-	Tue, 14 Oct 2025 10:34:52 +0800 (CST)
+	by app1 (Coremail) with SMTP id YAJkCsDwEnbMtu1ojngWAA--.532S8;
+	Tue, 14 Oct 2025 10:34:53 +0800 (CST)
 From: Chu Guangqing <chuguangqing@inspur.com>
 To: <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
 	<martin.lau@linux.dev>, <eddyz87@gmail.com>, <song@kernel.org>,
@@ -34,10 +35,12 @@ To: <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
 	<kwankhede@nvidia.com>
 CC: <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
 	<kvm@vger.kernel.org>, Chu Guangqing <chuguangqing@inspur.com>
-Subject: [PATCH 0/5] Some spelling error fixes in samples directory
-Date: Tue, 14 Oct 2025 10:34:45 +0800
-Message-ID: <20251014023450.1023-1-chuguangqing@inspur.com>
+Subject: [PATCH 4/5] samples/bpf: Fix a spelling typo in tcp_cong_kern.c
+Date: Tue, 14 Oct 2025 10:34:49 +0800
+Message-ID: <20251014023450.1023-5-chuguangqing@inspur.com>
 X-Mailer: git-send-email 2.43.7
+In-Reply-To: <20251014023450.1023-1-chuguangqing@inspur.com>
+References: <20251014023450.1023-1-chuguangqing@inspur.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -45,48 +48,55 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: YAJkCsDwEnbMtu1ojngWAA--.532S4
-X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
-	VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY97AC8VAFwI0_Xr0_Wr1l1xkIjI8I6I8E
-	6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28Cjx
-	kF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8I
-	cVCY1x0267AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aV
-	CY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAq
-	x4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6x
-	CaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwAC
-	I402YVCY1x02628vn2kIc2xKxwCF04k20xvY0x0EwIxGrwCF54CYxVCY1x0262kKe7AKxV
-	W8ZVWrXwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E
-	7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcV
-	C0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF
-	04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7
-	CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUQvtAUUUUU=
+X-CM-TRANSID: YAJkCsDwEnbMtu1ojngWAA--.532S8
+X-Coremail-Antispam: 1UD129KBjvdXoW7Wr4DKr4UGFW3Gw1xKw43trb_yoW3Xrg_Zr
+	4rtFWktr98XFyYvF1Ygr47tFySg3y5uFW8Gr4DJryjy3Z5ZFWDXr93ZryDu3s7Wws0ka47
+	uwnaqry5Zr1a9jkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUIcSsGvfJTRUUUbQAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+	6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAVCq3wA2048vs2
+	IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28E
+	F7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW0oVCq3w
+	A2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS
+	0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
+	IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
+	Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kIc2
+	xKxwCY1x0262kKe7AKxVW8ZVWrXwCF04k20xvY0x0EwIxGrwCF54CYxVCY1x0262kKe7AK
+	xVW8ZVWrXwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I
+	0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAI
+	cVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UMIIF0x
+	vE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
+	6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjTRNdb1DUUUU
 X-CM-SenderInfo: 5fkxw35dqj1xlqj6x0hvsx2hhfrp/
-X-CM-DELIVERINFO: =?B?Ux3sQJRRTeOiUs3aOqHZ50hzsfHKF9Ds6CbXmDm38RucXu3DYXJR7Zlh9zE0nt/Iac
-	D+KbL+mgpZCA5XI2yvXw9hUGLYCkjExQ2ACPWY91Y3ubonMZ2Gz+fLeWXyfAFC8MhSS8+4
-	d2r5OB+GZ4nMHdN3nYQ=
+X-CM-DELIVERINFO: =?B?+lw6ZJRRTeOiUs3aOqHZ50hzsfHKF9Ds6CbXmDm38RucXu3DYXJR7Zlh9zE0nt/Iac
+	D+KZ+xhDL0iWWlVse5jThrzF3YCkjExQ2ACPWY91Y3ubonMZ2Gz+fLeWXyfAFC8MhSS5Y6
+	PeMXpIiD44fF4p7fh+g=
 Content-Type: text/plain
-tUid: 20251014103453247b529822dfc325ba2395e2ca27cfc9
+tUid: 20251014103456d8c47a85b1908007157f9622855fc38b
 X-Abuse-Reports-To: service@corp-email.com
 Abuse-Reports-To: service@corp-email.com
 X-Complaints-To: service@corp-email.com
 X-Report-Abuse-To: service@corp-email.com
 
-Fixes for some spelling errors in samples directory
+This patch fixes a spelling typo in tcp_cong_kern.c
 
-Chu Guangqing (5):
-  samples/bpf: Fix a spelling typo in do_hbm_test.sh
-  samples: bpf: Fix a spelling typo in hbm.c
-  samples/bpf: Fix a spelling typo in tracex1.bpf.c
-  samples/bpf: Fix a spelling typo in tcp_cong_kern.c
-  vfio-mdev: Fix a spelling typo in mtty.c
-
- samples/bpf/do_hbm_test.sh  | 2 +-
- samples/bpf/hbm.c           | 4 ++--
+Signed-off-by: Chu Guangqing <chuguangqing@inspur.com>
+---
  samples/bpf/tcp_cong_kern.c | 2 +-
- samples/bpf/tracex1.bpf.c   | 2 +-
- samples/vfio-mdev/mtty.c    | 2 +-
- 5 files changed, 6 insertions(+), 6 deletions(-)
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/samples/bpf/tcp_cong_kern.c b/samples/bpf/tcp_cong_kern.c
+index 2311fc9dde85..339415eac477 100644
+--- a/samples/bpf/tcp_cong_kern.c
++++ b/samples/bpf/tcp_cong_kern.c
+@@ -5,7 +5,7 @@
+  * License as published by the Free Software Foundation.
+  *
+  * BPF program to set congestion control to dctcp when both hosts are
+- * in the same datacenter (as deteremined by IPv6 prefix).
++ * in the same datacenter (as determined by IPv6 prefix).
+  *
+  * Use "bpftool cgroup attach $cg sock_ops $prog" to load this BPF program.
+  */
 -- 
 2.47.3
 
