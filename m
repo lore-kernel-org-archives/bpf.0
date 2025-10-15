@@ -1,38 +1,38 @@
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A504C26B0AE;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E677326CE06;
 	Wed, 15 Oct 2025 14:02:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760536935; cv=none; b=Rr8irM11i8TlSmCEM2/JMKyKrU0Ojvb4PYuf8ukACP7ouSqKVXYZ6GGRNdGbXgC0w1/TXP8xSY18YuVgzFQuCDeJ5xdlC0bU+yz/7HrqC2ou9bAgpjMa5r/12QwgHDAfD5wYQ1TM26727CifVhF1sIlb5GFIPDUnvwhKUevVfEw=
+	t=1760536935; cv=none; b=CGjZbPFRd6psuxdsSnxtx0v3ZxBYpN4rFifRlmfTgdB31KxwOjUXHtETDdSautDnz5GOJ/ESVCALeGmo9fxM82lYjXinT6DSLLQsOx5Qxm/5o6NVahCZHmpN/Co2Ch9xPpQFxFfBTpVg2mBgtGapdMToKFhN2+/IdxB8ujh4ISQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1760536935; c=relaxed/simple;
-	bh=OdkcLCeD99XL5md1owpcPM+ldZS5obh3dUjtpEqzPgA=;
+	bh=gr8O0VsCfYfZALirpf7AUd+XpB1bCSYsnvjxnsxxtFw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RTJjDwEKS8DQyoTziR7afTX9yIBwqh+HCWZrwjJdTnfRjdZ0mXMerPZFQYwrop6gciwgN/0XuspHap9fitmZ77lvhNxl9VCEhPn0qWSrP1d20uEiN1IDq9EPOKhNpKgwtPoEkl7HMFUiMfvW0jbSktIjA8FrBq7YqAdNtvmmc4s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=p8PP+8Wk; arc=none smtp.client-ip=213.133.104.62
+	 MIME-Version; b=R6dUYV2HC4sTkvX4j94mjIpedM2aXpnuVfBFqVHiaNDTZ3yRkAHGFBNamWQfaIXzKQNXRT6i9kTr2b2FYd8RHL/MYyZdCVEIpscgo18xCnVPrBGdEl/eGkBNY9S7tff3gMhLJ05cgcqLAljQUmA8NpRmhjQxh5a5zW9CcQdngAk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=BffDpNCP; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="p8PP+8Wk"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="BffDpNCP"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
 	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
 	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=VOU8YA/WLiVWqyna2qWF3IA/KUiduL+6BE5o8MojQjI=; b=p8PP+8Wk+B+FlSk2FnFYQFrZH3
-	ceQAfVcLCBY8yyKk1YIQwPCaHdJjN5PsEmMbQKgZ/YlF5nJjQ5ZbKVQtjBQ33lgUrD0frdmLrEXvv
-	ISCqaeTXCNfYsc+psTRboLckhUbzf8Q2frIorNZVMeAsYVonyZ7M0MD7jWqMMz5HvizwxakyQl12y
-	M+86/SwQErZvpyvRM4HDRngIM/kAJ6dkx35GeLgQiIchGoOlsR64t/0CKKkbSpznM+uSMDHr1C0ds
-	xj8S3acPUUmyMUkv+D6tMBvZb8s9Xa2YlFnalCp/cj8PqYgNy2J4SEyzdTBWUM/pLhCLB3I4tswYv
-	9hZ15Q8g==;
+	bh=HNnxENWGqBSWT9FDD0dF29tJGPlXNMRMa5HKFPBDmOY=; b=BffDpNCPLdk2KJO8iwdJOAI3xL
+	kCMyYUubTmXxt+SoJ7uNGXYjErQ8bvMTo6xRZ66FgB9Znt4TFPO6eyGxqvc8r1Bm4v9+iT+vX2sCP
+	JSWEJ2RKxC8vkilPhyMny3sHTD9HKJLwHJ47zlGmeL424WpOjBedMf04a031s5Pf7FTI8uMVq0s0O
+	IXDVEjqyOlRMigvG+2Hvv0T1c2RYpRHAy+EISbFNTS6on/IS6s7dBhU7aPI/CuOwk//ZP1EA9hi1A
+	EYl5neuFrnCNdESWKm/KcbHEdJrzsBEh+qMHyikqxjfS0mruBK3N8Ky4KkTGQMSmRbOXs1f1vsb1U
+	40BUXeIQ==;
 Received: from localhost ([127.0.0.1])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1v924e-000H7x-1Y;
-	Wed, 15 Oct 2025 16:01:52 +0200
+	id 1v924h-000H8Q-2R;
+	Wed, 15 Oct 2025 16:01:55 +0200
 From: Daniel Borkmann <daniel@iogearbox.net>
 To: netdev@vger.kernel.org
 Cc: bpf@vger.kernel.org,
@@ -51,9 +51,9 @@ Cc: bpf@vger.kernel.org,
 	toke@redhat.com,
 	yangzhenze@bytedance.com,
 	wangdongdong.6@bytedance.com
-Subject: [PATCH net-next v2 09/15] xsk: Change xsk_rcv_check to check netdev/queue_id from pool
-Date: Wed, 15 Oct 2025 16:01:34 +0200
-Message-ID: <20251015140140.62273-10-daniel@iogearbox.net>
+Subject: [PATCH net-next v2 12/15] netkit: Document fast vs slowpath members via macros
+Date: Wed, 15 Oct 2025 16:01:37 +0200
+Message-ID: <20251015140140.62273-13-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20251015140140.62273-1-daniel@iogearbox.net>
 References: <20251015140140.62273-1-daniel@iogearbox.net>
@@ -66,40 +66,43 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Virus-Scanned: Clear (ClamAV 1.0.9/27793/Wed Oct 15 11:29:40 2025)
 
-Change the xsk_rcv_check test for inbound packets to use the xs->pool->netdev
-and xs->pool->queue_id of the bound socket rather than xs->dev and xs->queue_id
-since the latter could point to a virtual device with mapped rxq rather than
-the physical backing device of the pool.
+Instead of a comment, just use two cachline groups to document the intent
+for members often accessed in fast or slow path.
 
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 Co-developed-by: David Wei <dw@davidwei.uk>
 Signed-off-by: David Wei <dw@davidwei.uk>
 ---
- net/xdp/xsk.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/net/netkit.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-index 0e9a385f5680..985e0cac965d 100644
---- a/net/xdp/xsk.c
-+++ b/net/xdp/xsk.c
-@@ -340,15 +340,13 @@ static int xsk_rcv_check(struct xdp_sock *xs, struct xdp_buff *xdp, u32 len)
- {
- 	if (!xsk_is_bound(xs))
- 		return -ENXIO;
--
--	if (xs->dev != xdp->rxq->dev || xs->queue_id != xdp->rxq->queue_index)
-+	if (xs->pool->netdev   != xdp->rxq->dev ||
-+	    xs->pool->queue_id != xdp->rxq->queue_index)
- 		return -EINVAL;
--
- 	if (len > xsk_pool_get_rx_frame_size(xs->pool) && !xs->sg) {
- 		xs->rx_dropped++;
- 		return -ENOSPC;
- 	}
--
- 	return 0;
- }
+diff --git a/drivers/net/netkit.c b/drivers/net/netkit.c
+index e3a2445d83fc..96734828bfb8 100644
+--- a/drivers/net/netkit.c
++++ b/drivers/net/netkit.c
+@@ -16,18 +16,20 @@
+ #define DRV_NAME "netkit"
  
+ struct netkit {
+-	/* Needed in fast-path */
++	__cacheline_group_begin(netkit_fastpath);
+ 	struct net_device __rcu *peer;
+ 	struct bpf_mprog_entry __rcu *active;
+ 	enum netkit_action policy;
+ 	enum netkit_scrub scrub;
+ 	struct bpf_mprog_bundle	bundle;
++	__cacheline_group_end(netkit_fastpath);
+ 
+-	/* Needed in slow-path */
++	__cacheline_group_begin(netkit_slowpath);
+ 	enum netkit_mode mode;
+ 	enum netkit_pairing pair;
+ 	bool primary;
+ 	u32 headroom;
++	__cacheline_group_end(netkit_slowpath);
+ };
+ 
+ struct netkit_link {
 -- 
 2.43.0
 
