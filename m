@@ -1,253 +1,190 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A76C8281370;
-	Wed, 15 Oct 2025 14:02:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82552205E2F
+	for <bpf@vger.kernel.org>; Wed, 15 Oct 2025 14:17:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760536939; cv=none; b=USufrnTfvAlpghJd1HlDMnvYJ6XCq2U+h/WyqmIYxtq5kzHYEYEusLqAuLQXeCRynHlQ4cwAlH7SbIUqvUYR0J7x5xaMbckdHxrrV4qXw/Qh21qVXwnqUXKrbZ8KPxo7Q9auVeqcWJxRQBcmJB+3KWlX3AbKrTKZW6swVVdZm64=
+	t=1760537845; cv=none; b=s8cFwup6L7LrLzpTeVHSbSFUKdbI6tulUTxx81KWVwXMuQwaiWPAPmufc5xK3MKr9fh7CqEytWQNaG9vkjtMwcGHzeEWnPCFTcRxouZYRqO9J85TWjIH6VObkfUOUNw3RI1zuj8uWn0Ot3OGIC0u7nUxTKck8jDlGp59NzDLY44=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760536939; c=relaxed/simple;
-	bh=vDuddxKDKfuRa5uZb2BTTgdzpnwGbouQzlPO+IFBaQ8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=CGu6WLgRI2GwZ3OUiirV6EZz3HCoZHepA9PLnBjdGoj4EiQ+hE9MPLkNKh3Dz6UlVma1Ru+aE94B1Xh5UqK1HRpbDIJ51DvDgVzeKAM32EfND2mWBHVd8bqx0697FtCiTq1XwVeWg53GgjjwsI4lOgRi4IJzG9BDodEbtsDC5P0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=aO0+Qm/c; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1760537845; c=relaxed/simple;
+	bh=PMPgjaM4tai1aH3RrEPvEhgN2mlK6u4/6DtXqiPaths=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WM8AFqn6ethChusXPm5TJdiA7rOG72V6gjEoySQWNlFkEno6a0/Mpfd8HmNL11vejFDMRRIXWKVWua1FGjiN1T+ZjFXXtDSSoOB3uRNroXiyP3whS639he7724PXHHVWx1xGGXuf3qZUHqWZN7wacWDedwDDwrX0vJZhiU/Rr0M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Xu1DiAwM; arc=none smtp.client-ip=209.85.218.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="aO0+Qm/c"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
-	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
-	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=o31ouC9o8L0ZOuDXmkhH3liZxZE3/bUFbGm/4K5bh+s=; b=aO0+Qm/cyxlHcyX/7HDANQ+Rlf
-	hSTVgC/y4/LJ3HwkoEzmAlyxbf1QGvH4nCX2DFiGYcKp7Awlr5U25p8DSDwO9ni5jkQmzZtj4t2pX
-	fOQjJnMFK+Ksguhx/I4Z5ydDrixN1r7BQYTbNRgcQTetpvvSNINjpegl/OINihFRS22lAuodraz1x
-	EzbbSrxQRDhkFoSj1/IcKU/xn3pw2ldN3QeSpHO6SeD0w/wRm0xfv8USKAwzjNvoUh7ZysYtd7Cbu
-	J0e2zy5nFW/c4KyG3JLbJeKOp3McWqzxSUXb2MEyM2iQBLvd10Ym7CvyoGZ+a9DzpyA26xLBIFpI9
-	pK1mQt9w==;
-Received: from localhost ([127.0.0.1])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1v924l-000H9K-00;
-	Wed, 15 Oct 2025 16:01:59 +0200
-From: Daniel Borkmann <daniel@iogearbox.net>
-To: netdev@vger.kernel.org
-Cc: bpf@vger.kernel.org,
-	kuba@kernel.org,
-	davem@davemloft.net,
-	razor@blackwall.org,
-	pabeni@redhat.com,
-	willemb@google.com,
-	sdf@fomichev.me,
-	john.fastabend@gmail.com,
-	martin.lau@kernel.org,
-	jordan@jrife.io,
-	maciej.fijalkowski@intel.com,
-	magnus.karlsson@intel.com,
-	dw@davidwei.uk,
-	toke@redhat.com,
-	yangzhenze@bytedance.com,
-	wangdongdong.6@bytedance.com
-Subject: [PATCH net-next v2 15/15] netkit: Add xsk support for af_xdp applications
-Date: Wed, 15 Oct 2025 16:01:40 +0200
-Message-ID: <20251015140140.62273-16-daniel@iogearbox.net>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20251015140140.62273-1-daniel@iogearbox.net>
-References: <20251015140140.62273-1-daniel@iogearbox.net>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Xu1DiAwM"
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-b4f323cf89bso1196595666b.2
+        for <bpf@vger.kernel.org>; Wed, 15 Oct 2025 07:17:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1760537842; x=1761142642; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=pR4zRJs6D7uKpxqX7s0BAvh2cnecIUAOMCtEFFIOH70=;
+        b=Xu1DiAwMoJ6VRPuaSqh92AxKNTJu/jIpGjAphmG+6deq1x7b2D7mphI+AAH8irVfbw
+         2mRe7FsSdOsw1enjwGZBSRdoNJjuySGHPmElmomWp5lvHKeKPun8za6JMsUorqPrtko9
+         lsL0W3adgsdlSP76w7ohhXIvyWLd4vPrZ7SF0VbcsI6nGETcjuer5XgrlSI1L7O/OBya
+         ObJw2tMB46keCii9s70yoJ39M8Nd2q5wotclfhfyDNisHiPTJxrEwugx1sZbkjbtE+bT
+         0NCv+9HLS0NQQrIPQ9MjX3U0PB1sFal7Bby006pINklSHjJr77YFTOVBW6XJWgTaxZC+
+         /0Uw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760537842; x=1761142642;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=pR4zRJs6D7uKpxqX7s0BAvh2cnecIUAOMCtEFFIOH70=;
+        b=SF7OPt4057pBKn0lq9gIkZYw+gRB41Ge7O4rwqJn70OROvMIVVJHzkaNhWis6eaWuz
+         BJgQ8lttl+UG63SZKkltqinkkDJHHjz8nYLTxbZZj71Ii+btLnvqzb+4Tp+9DYOcZhcE
+         G2aTvZ5AdCi8JBsT15lTnK+WTO0nKv/KHavmvQatLsWPipM5ReaaAMgf4vTnmhEbYnZT
+         6txJAAdfFQA8i7LkmHdyoOshIFRz3uo+9bSV8sOTKyvxJrvH8YE1JXv6K2wtU0FnV4A7
+         t6o6oXVdOYNHv9ISKkhAxOqVEvR+MqWgCmSm3wJkRHV3JSfLBT3v/PghzCLsMnfz7a96
+         WQng==
+X-Forwarded-Encrypted: i=1; AJvYcCU6RFtab8CIXtKfHRzyr3i4iwIDvJwYQSOPdgwnE4rbvRdxHcAEz0bx2dUlXwihKhuuJJQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzR4ioLpPWWnyf9zZMGQVX+adRNnrQldaMsS8/8cKStz395tYfH
+	DTrYmDL1QnwWH5dZlgMEL90nPnYfGLbuU5Fed6jxW+XN6mWktwvtgAjd
+X-Gm-Gg: ASbGncta7f7b6qeGanBH0u/3im4/pJYQ970IRlbBQASvivohz0n9xNRnikJCxRO/xNQ
+	ygGdFVaXKXbbScB+ik6li0oy5gUkXcVHBVbyhcoyIjlzAbJm7JSE6ssoS9OBpJPMkIX+yxRQkUb
+	6v1UUM1JF5U8gQam8ibg1LRTKg3/hOkWmq878vAIsu8ZC/eorrD9NrlHLdZck9ig3lAgzkZe73Y
+	YsogBO236a11rXwLkPZdylD9qQ3QpZCe6hsjauo4bT5S7kwMEib/8zd7McdI8NuueqiQTn6whIp
+	EiivXhVfucGc78KhIliZ617fbzwC4ePyD2hF3EJbZlCkk8KajBOQfNaLFWko/RXnWhGGizqCPFh
+	ur547R37KSzOTvYpl27ooVSbwK4m+3Njbf94xhvCy
+X-Google-Smtp-Source: AGHT+IEg8evgXEvgVB8TMjd2Jcb4HDR/qE4VXC+23ha7vInJk55WwPoZ9gmeErGGrCvzZGOQZWjmSw==
+X-Received: by 2002:a17:907:2da3:b0:b46:11fc:c9c9 with SMTP id a640c23a62f3a-b50abaacf2emr2612626366b.42.1760537841358;
+        Wed, 15 Oct 2025 07:17:21 -0700 (PDT)
+Received: from krava ([176.74.159.170])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b5ccd6b95bdsm237091266b.79.2025.10.15.07.17.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Oct 2025 07:17:20 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Wed, 15 Oct 2025 16:17:19 +0200
+To: Alan Maguire <alan.maguire@oracle.com>
+Cc: Jiri Olsa <olsajiri@gmail.com>,
+	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Thierry Treyer <ttreyer@meta.com>,
+	Yonghong Song <yonghong.song@linux.dev>, Song Liu <song@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>, Quentin Monnet <qmo@kernel.org>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	David Faust <david.faust@oracle.com>,
+	"Jose E. Marchesi" <jose.marchesi@oracle.com>,
+	bpf <bpf@vger.kernel.org>, Masami Hiramatsu <mhiramat@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [RFC bpf-next 00/15] support inline tracing with BTF
+Message-ID: <aO-s74SN8YDqoEWQ@krava>
+References: <20251008173512.731801-1-alan.maguire@oracle.com>
+ <CAADnVQLN3jQLfkjs-AG2GqsG5Ffw_nefYczvSVmiZZm5X9sd=A@mail.gmail.com>
+ <b4cd1254-59b4-4bac-9742-49968109c8af@oracle.com>
+ <CAADnVQ+yYeX7G--X4eCSW_cyK_DH3xnS-s2tyQLeBYf=NnzUEQ@mail.gmail.com>
+ <aO45ZjLlUM0O5NAe@krava>
+ <6a3dfd7d-00de-4215-9bdb-f6ffab899730@oracle.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: Clear (ClamAV 1.0.9/27793/Wed Oct 15 11:29:40 2025)
+In-Reply-To: <6a3dfd7d-00de-4215-9bdb-f6ffab899730@oracle.com>
 
-Enable support for AF_XDP applications to operate on a netkit device.
-The goal is that AF_XDP applications can natively consume AF_XDP
-from network namespaces. The use-case from Cilium side is to support
-Kubernetes KubeVirt VMs through QEMU's AF_XDP backend. KubeVirt is a
-virtual machine management add-on for Kubernetes which aims to provide
-a common ground for virtualization. KubeVirt spawns the VMs inside
-Kubernetes Pods which reside in their own network namespace just like
-regular Pods.
+On Tue, Oct 14, 2025 at 03:55:53PM +0100, Alan Maguire wrote:
+> On 14/10/2025 12:52, Jiri Olsa wrote:
+> > On Mon, Oct 13, 2025 at 05:12:45PM -0700, Alexei Starovoitov wrote:
+> >> On Mon, Oct 13, 2025 at 12:38 AM Alan Maguire <alan.maguire@oracle.com> wrote:
+> >>>
+> >>>
+> >>> I was trying to avoid being specific about inlines since the same
+> >>> approach works for function sites with optimized-out parameters and they
+> >>> could be easily added to the representation (and probably should be in a
+> >>> future version of this series). Another "extra" source of info
+> >>> potentially is the (non per-cpu) global variables that Stephen sent
+> >>> patches for a while back and the feeling was it was too big to add to
+> >>> vmlinux BTF proper.
+> >>>
+> >>> But extra is a terrible name. .BTF.aux for auxiliary info perhaps?
+> >>
+> >> aux is too abstract and doesn't convey any meaning.
+> >> How about "BTF.func_info" ? It will cover inlined and optimized funcs.
+> >>
+> >> Thinking more about reuse of struct btf_type for these...
+> >> After sleeping on it it feels a bit awkward today, since if they're
+> >> types they suppose to be in one table with other types,
+> >> searchable and so on, but we actually don't want them there.
+> >> btf_find_*() isn't fast and people are trying to optimize it.
+> >> Also if we teach the kernel to use these loc-s they probably
+> >> should be in a separate table.
+> >>
+> >> global non per-cpu vars fit into current BTF's datasec concept,
+> >> so they can be another kernel module with a different name.
+> >>
+> >> I guess one can argue that LOCSEC is similar to DATASEC.
+> >> Both need their own search tables separate from the main type table.
+> >>
+> >>>
+> >>>> The partially inlined functions were the biggest footgun so far.
+> >>>> Missing fully inlined is painful, but it's not a footgun.
+> >>>> So I think doing "kloc" and usdt-like bpf_loc_arg() completely in
+> >>>> user space is not enough. It's great and, probably, can be supported,
+> >>>> but the kernel should use this "BTF.inline_info" as well to
+> >>>> preserve "backward compatibility" for functions that were
+> >>>> not-inlined in an older kernel and got partially inlined in a new kernel.
+> >>>>
+> >>>
+> >>> That would be great; we'd need to teach the kernel to handle multi-split
+> >>> BTF but I would hope that wouldn't be too tricky.
+> >>>
+> >>>> If we could use kprobe-multi then usdt-like bpf_loc_arg() would
+> >>>> make a lot of sense, but since libbpf has to attach a bunch
+> >>>> of regular kprobes it seems to me the kernel support is more appropriate
+> >>>> for the whole thing.
+> >>>
+> >>> I'm happy with either a userspace or kernel-based approach; the main aim
+> >>> is to provide this functionality in as straightforward a form as
+> >>> possible to tracers/libbpf. I have to confess I didn't follow the whole
+> >>> kprobe multi progress, but at one stage that was more kprobe-based
+> >>> right? Would there be any value in exploring a flavour of kprobe-multi
+> >>> that didn't use fprobe and might work for this sort of use case? As you
+> >>> say if we had that keeping a user-space based approach might be more
+> >>> attractive as an option.
+> >>
+> >> Agree.
+> >>
+> >> Jiri,
+> >> how hard would it be to make multi-kprobe work on arbitrary IPs ?
+> > 
+> > multi-kprobe uses fprobe which uses ftrace/fgraph fast api to attach,
+> > but it can do that only on the entry of ftrace-able functions which
+> > have nop5 hooks at the entry
+> > 
+> > attaching anywhere else requires standard kprobe and the attach time
+> > (and execution time) will be bad
+> > 
+> > would be great if inlined functions kept the nop5/fentry hooks ;-)
+> > but that's probably not that simple
+> >
+> 
+> Yeah, if it was doable - and with metadata about inline sites it
+> certainly _seems_ possible - it does seem to work against the reason we
+> inline stuff (saving overheads). Steve mentioned this as a possibility
+> at GNU cauldron too if I remember, so worth discussing of course!
+> 
+> I was thinking about something simpler to be honest; a flavour of kprobe
+> multi that used kprobes under the hood in kernel to be suitable for
+> inline sites without any tweaking of the sites. So there is a kprobe
+> performance penalty if you're tracing, but none otherwise.
 
-Raw QEMU AF_XDP backend example with eth0 being a physical device with
-16 queues where netkit is bound to the last queue (for multi-queue RSS
-context can be used if supported by the driver):
+so you mean we'd still use kprobe_multi api and its code would use fprobe
+for ftrace-able functions and standard kprobe for the rest?
 
-  # ethtool -X eth0 start 0 equal 15
-  # ethtool -X eth0 start 15 equal 1 context new
-  # ethtool --config-ntuple eth0 flow-type ether \
-            src 00:00:00:00:00:00 \
-            src-mask ff:ff:ff:ff:ff:ff \
-            dst $mac dst-mask 00:00:00:00:00:00 \
-            proto 0 proto-mask 0xffff action 15
-  [ ... setup BPF/XDP prog on eth0 to steer into shared xsk map ... ]
-  # ip netns add foo
-  # ip link add numrxqueues 2 nk type netkit single
-  # ./pyynl/cli.py --spec ~/netlink/specs/netdev.yaml \
-                   --do bind-queue \
-                   --json "{"src-ifindex": $(ifindex eth0), "src-queue-id": 15, \
-                            "dst-ifindex": $(ifindex nk), "queue-type": "rx"}"
-  {'dst-queue-id': 1}
-  # ip link set nk netns foo
-  # ip netns exec foo ip link set lo up
-  # ip netns exec foo ip link set nk up
-  # ip netns exec foo qemu-system-x86_64 \
-          -kernel $kernel \
-          -drive file=${image_name},index=0,media=disk,format=raw \
-          -append "root=/dev/sda rw console=ttyS0" \
-          -cpu host \
-          -m $memory \
-          -enable-kvm \
-          -device virtio-net-pci,netdev=net0,mac=$mac \
-          -netdev af-xdp,ifname=nk,id=net0,mode=native,queues=1,start-queue=1,inhibit=on,map-path=$dir/xsks_map \
-          -nographic
-
-We have tested the above against a dual-port Nvidia ConnectX-6 (mlx5)
-100G NIC with successful network connectivity out of QEMU. An earlier
-iteration of this work was presented at LSF/MM/BPF [0].
-
-For getting to a first starting point to connect all things with
-KubeVirt, bind mounting the xsk map from Cilium into the VM launcher
-Pod which acts as a regular Kubernetes Pod while not perfect, is not
-a big problem given its out of reach from the application sitting
-inside the VM (and some of the control plane aspects are baked in
-the launcher Pod already), so the isolation barrier is still the VM.
-Eventually the goal is to have a XDP/XSK redirect extension where
-there is no need to have the xsk map, and the BPF program can just
-derive the target xsk through the queue where traffic was received
-on.
-
-The exposure through netkit is because Cilium should not act as a
-proxy handing out xsk sockets. Existing applications expect a netdev
-from kernel side and should not need to rewrite just to implement
-against a CNI's protocol. Also, all the memory should not be accounted
-against Cilium but rather the application Pod itself which is consuming
-AF_XDP. Further, on up/downgrades we expect the data plane to being
-completely decoupled from the control plane; if Cilium would own the
-sockets that would be disruptive. Another use-case which opens up and
-is regularly asked from users would be to have DPDK applications on
-top of AF_XDP in regular Kubernetes Pods.
-
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Co-developed-by: David Wei <dw@davidwei.uk>
-Signed-off-by: David Wei <dw@davidwei.uk>
-Link: https://bpfconf.ebpf.io/bpfconf2025/bpfconf2025_material/lsfmmbpf_2025_netkit_borkmann.pdf [0]
----
- drivers/net/netkit.c | 71 +++++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 70 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/net/netkit.c b/drivers/net/netkit.c
-index 2f591d1ac61d..f6a73c828e2e 100644
---- a/drivers/net/netkit.c
-+++ b/drivers/net/netkit.c
-@@ -11,6 +11,7 @@
- 
- #include <net/netdev_queues.h>
- #include <net/netdev_rx_queue.h>
-+#include <net/xdp_sock_drv.h>
- #include <net/netkit.h>
- #include <net/dst.h>
- #include <net/tcx.h>
-@@ -234,6 +235,71 @@ static void netkit_get_stats(struct net_device *dev,
- 	stats->tx_dropped = DEV_STATS_READ(dev, tx_dropped);
- }
- 
-+static bool netkit_xsk_supported_at_phys(const struct net_device *dev)
-+{
-+	if (!dev->netdev_ops->ndo_bpf ||
-+	    !dev->netdev_ops->ndo_xdp_xmit ||
-+	    !dev->netdev_ops->ndo_xsk_wakeup)
-+		return false;
-+	if ((dev->xdp_features & NETDEV_XDP_ACT_XSK) != NETDEV_XDP_ACT_XSK)
-+		return false;
-+	return true;
-+}
-+
-+static int netkit_xsk(struct net_device *dev, struct netdev_bpf *xdp)
-+{
-+	struct netkit *nk = netkit_priv(dev);
-+	struct netdev_bpf xdp_lower;
-+	struct netdev_rx_queue *rxq;
-+	struct net_device *phys;
-+
-+	switch (xdp->command) {
-+	case XDP_SETUP_XSK_POOL:
-+		if (nk->pair == NETKIT_DEVICE_PAIR)
-+			return -EOPNOTSUPP;
-+		if (xdp->xsk.queue_id >= dev->real_num_rx_queues)
-+			return -EINVAL;
-+
-+		rxq = __netif_get_rx_queue(dev, xdp->xsk.queue_id);
-+		if (!rxq->peer)
-+			return -EOPNOTSUPP;
-+
-+		phys = rxq->peer->dev;
-+		if (!netkit_xsk_supported_at_phys(phys))
-+			return -EOPNOTSUPP;
-+
-+		memcpy(&xdp_lower, xdp, sizeof(xdp_lower));
-+		xdp_lower.xsk.queue_id = get_netdev_rx_queue_index(rxq->peer);
-+		break;
-+	case XDP_SETUP_PROG:
-+		return -EPERM;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	return phys->netdev_ops->ndo_bpf(phys, &xdp_lower);
-+}
-+
-+static int netkit_xsk_wakeup(struct net_device *dev, u32 queue_id, u32 flags)
-+{
-+	struct netdev_rx_queue *rxq;
-+	struct net_device *phys;
-+
-+	if (queue_id >= dev->real_num_rx_queues)
-+		return -EINVAL;
-+
-+	rxq = __netif_get_rx_queue(dev, queue_id);
-+	if (!rxq->peer)
-+		return -EOPNOTSUPP;
-+
-+	phys = rxq->peer->dev;
-+	if (!netkit_xsk_supported_at_phys(phys))
-+		return -EOPNOTSUPP;
-+
-+	return phys->netdev_ops->ndo_xsk_wakeup(phys,
-+			get_netdev_rx_queue_index(rxq->peer), flags);
-+}
-+
- static void netkit_uninit(struct net_device *dev);
- 
- static const struct net_device_ops netkit_netdev_ops = {
-@@ -247,6 +313,8 @@ static const struct net_device_ops netkit_netdev_ops = {
- 	.ndo_get_peer_dev	= netkit_peer_dev,
- 	.ndo_get_stats64	= netkit_get_stats,
- 	.ndo_uninit		= netkit_uninit,
-+	.ndo_bpf		= netkit_xsk,
-+	.ndo_xsk_wakeup		= netkit_xsk_wakeup,
- 	.ndo_features_check	= passthru_features_check,
- };
- 
-@@ -401,10 +469,11 @@ static void netkit_setup(struct net_device *dev)
- 	dev->hw_enc_features = netkit_features;
- 	dev->mpls_features = NETIF_F_HW_CSUM | NETIF_F_GSO_SOFTWARE;
- 	dev->vlan_features = dev->features & ~netkit_features_hw_vlan;
--
- 	dev->needs_free_netdev = true;
- 
- 	netif_set_tso_max_size(dev, GSO_MAX_SIZE);
-+
-+	xdp_set_features_flag_locked(dev, NETDEV_XDP_ACT_XSK);
- }
- 
- static struct net *netkit_get_link_net(const struct net_device *dev)
--- 
-2.43.0
-
+jirka
