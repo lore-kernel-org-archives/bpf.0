@@ -1,38 +1,37 @@
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6153E24E4A1;
-	Wed, 15 Oct 2025 14:02:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DACA0257854;
+	Wed, 15 Oct 2025 14:02:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760536929; cv=none; b=DFukBRnj//G9k7nMRXn08MU6dVmMmPO5LDQSPjWATleLb/KabxRuO6032t/KUDxSmOOJMs1kUpRbqIe2kCN992oLafxa3Lurd7sNyxCHSey8tbQm/luPpK5Ld+jXPZqJvWijdA0ISCnzYYCXg23wNQYh0cLrkE3RQLmaWaZwaoA=
+	t=1760536930; cv=none; b=LSnAeupus774LDVgK50WtnC/yByKBXYKPLqOBf/SGJTf2M+bfIiNkrroruMMof8l9lzqU4kKsFxxi/u8VWvcTK3MEXYHoVkjDHzINXL4HkLNu8Waf0C4YsHJC7IHELZZmbjIl57IySRMeh/X1p/1gX7pBp0tM2wv9J5Wmk0H2Gs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760536929; c=relaxed/simple;
-	bh=ephbr14DTpoYz8oTPUExNj8az6gmw722mgCP0i1UAvw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=e//VdNARBlmGy3gAcDv1zsLb3e+9tAMr1KMIfzHX8M7e3D0aPkJoSH9VBh6T7D19Z2ryTcRe5gYE2KPWrIl4kZLuGZ5IwVXOTFNkZKMZMMxXHpbP/7FjqEiwWbT2X+CgpaSevLX2mQI+yICAUXLF0sS3ZaIVCVIsqssj8DVgkzw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=JFF9lD9E; arc=none smtp.client-ip=213.133.104.62
+	s=arc-20240116; t=1760536930; c=relaxed/simple;
+	bh=IRQQwv3rZa/3BwVGaxQkE/wPBX4G8aUTl9Ce2CC+nqs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OOhp9nXS6ECzbggpfMkNCsJnmNwx2pi1hqmwjLOzVBjV8NnPEGW1vlPkygt0bsQ9cpVB4LhChkL4Kw+O6ypNxM6VZRvprjd9MaBL4rqBZQvNfmt6C0tLQew777OtJGFFwDpcITK4E2nH6PviODW+O1LgwB+gWNxHourHLC7xb7U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=Fk2yojXh; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="JFF9lD9E"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="Fk2yojXh"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
-	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
-	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=7MbfubbxhQTDHUhFVnUq60KdAZlHqPc4GWu0BcoqO14=; b=JFF9lD9EhYruVf39qTJp5atjOF
-	FQIG7L4/BXp73FrShdmHmeBDBFEWSDOZR19KNPl+tn7sA3Z7RAkoV/xlJvYue43SUfzr2kHWacT69
-	rDJKifDAf3r4nNwPQo1ErE88vbuRo2rfCn6szK7J0P+oZp8FtakUi+HEFQC6YPdC+BuVdhkLbVEb5
-	3iMRN25uaJcv63XcWbZaTisZhFH0uDyF9r/EVKXOk3dbs+NafyUFfehCB0FnCTq7NliGCcGyy+i/0
-	BdJRNXeA27yuKGyWKpEBlsz8ScW7F9vBMZjBe0wrOFL8TqO8Oevet8YY4iw4afglc93lTbk1XKiga
-	jbx1Q9Fw==;
+	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:In-Reply-To:References;
+	bh=W7stEHj/iyk/0U+ga81vQNdoV5lY2i50FXa4d53DvwA=; b=Fk2yojXhd9jvTzazhku0PTM7sM
+	oytd8uX78YlFcIUoR6O+uOWk8KZyLcTB0kG/i1UpfAsp999f7pwz0IRjWfzrZpB4Xq3xCc0Vmna7Z
+	wXBJC7vsLyuRYUODHLGqGIkrc/riAoj28JDQJxGrJwxs9r/zwedUS+hR8oIzYtHJ9yHQwp6FOgXUB
+	Gpp0oKWTsd8wK1aOWjeQoqJSy7DZ/ZNlbWxovAiPCsMXxOgO+iE42zhCpcl+g0hV+I3qrpeBDIt8/
+	DvZ7Zn3WQKrdTpZdOKvJ0QJPQnhflCFSnnWcYncbcxxW5E5DSoo0JdWoEBA5rYCvVW0yLyQjTCHQT
+	ZfqLQVGg==;
 Received: from localhost ([127.0.0.1])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1v924Z-000H6x-2e;
-	Wed, 15 Oct 2025 16:01:47 +0200
+	id 1v924T-000H5s-2U;
+	Wed, 15 Oct 2025 16:01:41 +0200
 From: Daniel Borkmann <daniel@iogearbox.net>
 To: netdev@vger.kernel.org
 Cc: bpf@vger.kernel.org,
@@ -51,12 +50,10 @@ Cc: bpf@vger.kernel.org,
 	toke@redhat.com,
 	yangzhenze@bytedance.com,
 	wangdongdong.6@bytedance.com
-Subject: [PATCH net-next v2 05/15] net: Proxy net_mp_{open,close}_rxq for mapped queues
-Date: Wed, 15 Oct 2025 16:01:30 +0200
-Message-ID: <20251015140140.62273-6-daniel@iogearbox.net>
+Subject: [PATCH net-next v2 00/15] netkit: Support for io_uring zero-copy and AF_XDP
+Date: Wed, 15 Oct 2025 16:01:25 +0200
+Message-ID: <20251015140140.62273-1-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20251015140140.62273-1-daniel@iogearbox.net>
-References: <20251015140140.62273-1-daniel@iogearbox.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -66,175 +63,89 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Virus-Scanned: Clear (ClamAV 1.0.9/27793/Wed Oct 15 11:29:40 2025)
 
-From: David Wei <dw@davidwei.uk>
+Containers use virtual netdevs to route traffic from a physical netdev
+in the host namespace. They do not have access to the physical netdev
+in the host and thus can't use memory providers or AF_XDP that require
+reconfiguring/restarting queues in the physical netdev.
 
-When a process in a container wants to setup a memory provider, it will
-use the virtual netdev and a mapped rxq, and call net_mp_{open,close}_rxq
-to try and restart the queue. At this point, proxy the queue restart on
-the real rxq in the physical netdev.
+This patchset adds the concept of queue peering to virtual netdevs that
+allow containers to use memory providers and AF_XDP at native speed.
+These mapped queues are bound to a real queue in a physical netdev and
+act as a proxy.
 
-For memory providers (io_uring zero-copy rx and devmem), it causes the
-real rxq in the physical netdev to be filled from a memory provider that
-has DMA mapped memory from a process within a container.
+Memory providers and AF_XDP operations takes an ifindex and queue id,
+so containers would pass in an ifindex for a virtual netdev and a queue
+id of a mapped queue, which then gets proxied to the underlying real
+queue. Peered queues are created and bound to a real queue atomically
+through a generic ynl netdev operation.
 
-Signed-off-by: David Wei <dw@davidwei.uk>
-Co-developed-by: Daniel Borkmann <daniel@iogearbox.net>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
----
- include/net/page_pool/memory_provider.h |  4 +-
- net/core/netdev_rx_queue.c              | 57 +++++++++++++++++--------
- 2 files changed, 41 insertions(+), 20 deletions(-)
+We have implemented support for this concept in netkit and tested the
+latter against Nvidia ConnectX-6 (mlx5) as well as Broadcom BCM957504
+(bnxt_en) 100G NICs. For more details see the individual patches.
 
-diff --git a/include/net/page_pool/memory_provider.h b/include/net/page_pool/memory_provider.h
-index ada4f968960a..b6f811c3416b 100644
---- a/include/net/page_pool/memory_provider.h
-+++ b/include/net/page_pool/memory_provider.h
-@@ -23,12 +23,12 @@ bool net_mp_niov_set_dma_addr(struct net_iov *niov, dma_addr_t addr);
- void net_mp_niov_set_page_pool(struct page_pool *pool, struct net_iov *niov);
- void net_mp_niov_clear_page_pool(struct net_iov *niov);
- 
--int net_mp_open_rxq(struct net_device *dev, unsigned ifq_idx,
-+int net_mp_open_rxq(struct net_device *dev, unsigned int rxq_idx,
- 		    struct pp_memory_provider_params *p);
- int __net_mp_open_rxq(struct net_device *dev, unsigned int rxq_idx,
- 		      const struct pp_memory_provider_params *p,
- 		      struct netlink_ext_ack *extack);
--void net_mp_close_rxq(struct net_device *dev, unsigned ifq_idx,
-+void net_mp_close_rxq(struct net_device *dev, unsigned int rxq_idx,
- 		      struct pp_memory_provider_params *old_p);
- void __net_mp_close_rxq(struct net_device *dev, unsigned int rxq_idx,
- 			const struct pp_memory_provider_params *old_p);
-diff --git a/net/core/netdev_rx_queue.c b/net/core/netdev_rx_queue.c
-index 686a6300df78..7d25a6014926 100644
---- a/net/core/netdev_rx_queue.c
-+++ b/net/core/netdev_rx_queue.c
-@@ -168,48 +168,63 @@ int __net_mp_open_rxq(struct net_device *dev, unsigned int rxq_idx,
- 		      struct netlink_ext_ack *extack)
- {
- 	struct netdev_rx_queue *rxq;
-+	bool needs_unlock = false;
- 	int ret;
- 
- 	if (!netdev_need_ops_lock(dev))
- 		return -EOPNOTSUPP;
--
- 	if (rxq_idx >= dev->real_num_rx_queues) {
- 		NL_SET_ERR_MSG(extack, "rx queue index out of range");
- 		return -ERANGE;
- 	}
--	rxq_idx = array_index_nospec(rxq_idx, dev->real_num_rx_queues);
- 
-+	rxq_idx = array_index_nospec(rxq_idx, dev->real_num_rx_queues);
-+	rxq = netif_get_rx_queue_peer_locked(&dev, &rxq_idx, &needs_unlock);
-+	if (!rxq) {
-+		NL_SET_ERR_MSG(extack, "rx queue peered to a virtual netdev");
-+		return -EBUSY;
-+	}
-+	if (!dev->dev.parent) {
-+		NL_SET_ERR_MSG(extack, "rx queue is mapped to a virtual netdev");
-+		ret = -EBUSY;
-+		goto out;
-+	}
- 	if (dev->cfg->hds_config != ETHTOOL_TCP_DATA_SPLIT_ENABLED) {
- 		NL_SET_ERR_MSG(extack, "tcp-data-split is disabled");
--		return -EINVAL;
-+		ret = -EINVAL;
-+		goto out;
- 	}
- 	if (dev->cfg->hds_thresh) {
- 		NL_SET_ERR_MSG(extack, "hds-thresh is not zero");
--		return -EINVAL;
-+		ret = -EINVAL;
-+		goto out;
- 	}
- 	if (dev_xdp_prog_count(dev)) {
- 		NL_SET_ERR_MSG(extack, "unable to custom memory provider to device with XDP program attached");
--		return -EEXIST;
-+		ret = -EEXIST;
-+		goto out;
- 	}
--
--	rxq = __netif_get_rx_queue(dev, rxq_idx);
- 	if (rxq->mp_params.mp_ops) {
- 		NL_SET_ERR_MSG(extack, "designated queue already memory provider bound");
--		return -EEXIST;
-+		ret = -EEXIST;
-+		goto out;
- 	}
- #ifdef CONFIG_XDP_SOCKETS
- 	if (rxq->pool) {
- 		NL_SET_ERR_MSG(extack, "designated queue already in use by AF_XDP");
--		return -EBUSY;
-+		ret = -EBUSY;
-+		goto out;
- 	}
- #endif
--
- 	rxq->mp_params = *p;
- 	ret = netdev_rx_queue_restart(dev, rxq_idx);
- 	if (ret) {
- 		rxq->mp_params.mp_ops = NULL;
- 		rxq->mp_params.mp_priv = NULL;
- 	}
-+out:
-+	if (needs_unlock)
-+		netdev_unlock(dev);
- 	return ret;
- }
- 
-@@ -224,38 +239,44 @@ int net_mp_open_rxq(struct net_device *dev, unsigned int rxq_idx,
- 	return ret;
- }
- 
--void __net_mp_close_rxq(struct net_device *dev, unsigned int ifq_idx,
-+void __net_mp_close_rxq(struct net_device *dev, unsigned int rxq_idx,
- 			const struct pp_memory_provider_params *old_p)
- {
- 	struct netdev_rx_queue *rxq;
-+	bool needs_unlock = false;
- 	int err;
- 
--	if (WARN_ON_ONCE(ifq_idx >= dev->real_num_rx_queues))
-+	if (WARN_ON_ONCE(rxq_idx >= dev->real_num_rx_queues))
- 		return;
- 
--	rxq = __netif_get_rx_queue(dev, ifq_idx);
-+	rxq = netif_get_rx_queue_peer_locked(&dev, &rxq_idx, &needs_unlock);
-+	if (WARN_ON_ONCE(!rxq))
-+		return;
- 
- 	/* Callers holding a netdev ref may get here after we already
- 	 * went thru shutdown via dev_memory_provider_uninstall().
- 	 */
- 	if (dev->reg_state > NETREG_REGISTERED &&
- 	    !rxq->mp_params.mp_ops)
--		return;
-+		goto out;
- 
- 	if (WARN_ON_ONCE(rxq->mp_params.mp_ops != old_p->mp_ops ||
- 			 rxq->mp_params.mp_priv != old_p->mp_priv))
--		return;
-+		goto out;
- 
- 	rxq->mp_params.mp_ops = NULL;
- 	rxq->mp_params.mp_priv = NULL;
--	err = netdev_rx_queue_restart(dev, ifq_idx);
-+	err = netdev_rx_queue_restart(dev, rxq_idx);
- 	WARN_ON(err && err != -ENETDOWN);
-+out:
-+	if (needs_unlock)
-+		netdev_unlock(dev);
- }
- 
--void net_mp_close_rxq(struct net_device *dev, unsigned ifq_idx,
-+void net_mp_close_rxq(struct net_device *dev, unsigned int rxq_idx,
- 		      struct pp_memory_provider_params *old_p)
- {
- 	netdev_lock(dev);
--	__net_mp_close_rxq(dev, ifq_idx, old_p);
-+	__net_mp_close_rxq(dev, rxq_idx, old_p);
- 	netdev_unlock(dev);
- }
+v1->v2:
+ - Removed bind sample ynl code (Stan)
+ - Reworked netdev locking to have consistent order (Stan, Kuba)
+ - Return 'not supported' in API patch (Stan)
+ - Improved ynl documentation (Kuba)
+ - Added 'max: s32-max' in ynl spec for ifindex (Kuba)
+ - Added also queue type in ynl to have user specify rx to make
+   it obvious (Kuba)
+ - Use of netdev_hold (Kuba)
+ - Avoid static inlines from another header (Kuba)
+ - Squashed some commits (Kuba, Stan)
+ - Removed ndo_{peer,unpeer}_queues callback and simplified
+   code (Kuba)
+ - Improved commit messages (Toke, Kuba, Stan, zf)
+ - Got rid of locking genl_sk_priv_get (Stan)
+ - Removed af_xdp cleanup churn (Maciej)
+ - Added netdev locking asserts (Stan)
+ - Reject ethtool ioctl path queue resizing (Kuba)
+ - Added kdoc for ndo_queue_create (Stan)
+ - Uninvert logic in netkit single dev mode (Jordan)
+ - Added binding support for multiple queues
+
+Daniel Borkmann (9):
+  net, ethtool: Disallow peered real rxqs to be resized
+  xsk: Move NETDEV_XDP_ACT_ZC into generic header
+  xsk: Move pool registration into single function
+  xsk: Add small helper xp_pool_bindable
+  xsk: Change xsk_rcv_check to check netdev/queue_id from pool
+  xsk: Proxy pool management for mapped queues
+  netkit: Add single device mode for netkit
+  netkit: Document fast vs slowpath members via macros
+  netkit: Add xsk support for af_xdp applications
+
+David Wei (6):
+  net: Add bind-queue operation
+  net: Implement netdev_nl_bind_queue_doit
+  net: Add peer info to queue-get response
+  net: Proxy net_mp_{open,close}_rxq for mapped queues
+  netkit: Implement rtnl_link_ops->alloc and ndo_queue_create
+  netkit: Add io_uring zero-copy support for TCP
+
+ Documentation/netlink/specs/netdev.yaml |  84 +++++++
+ drivers/net/netkit.c                    | 314 ++++++++++++++++++++----
+ include/linux/ethtool.h                 |   1 +
+ include/net/netdev_queues.h             |   5 +
+ include/net/netdev_rx_queue.h           |  39 ++-
+ include/net/page_pool/memory_provider.h |   4 +-
+ include/net/xdp_sock_drv.h              |   8 +-
+ include/uapi/linux/if_link.h            |   6 +
+ include/uapi/linux/netdev.h             |  22 ++
+ net/core/netdev-genl-gen.c              |  25 ++
+ net/core/netdev-genl-gen.h              |   1 +
+ net/core/netdev-genl.c                  | 177 ++++++++++++-
+ net/core/netdev_rx_queue.c              | 124 ++++++++--
+ net/ethtool/channels.c                  |  12 +-
+ net/ethtool/common.c                    |  10 +-
+ net/ethtool/ioctl.c                     |   4 +-
+ net/xdp/xsk.c                           |  44 +++-
+ net/xdp/xsk.h                           |   5 +-
+ net/xdp/xsk_buff_pool.c                 |  18 +-
+ tools/include/uapi/linux/netdev.h       |  22 ++
+ 20 files changed, 816 insertions(+), 109 deletions(-)
+
 -- 
 2.43.0
 
