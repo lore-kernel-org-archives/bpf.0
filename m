@@ -1,38 +1,38 @@
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DB3426CE25;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE81326E6F7;
 	Wed, 15 Oct 2025 14:02:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760536936; cv=none; b=fvkxRsz2uVnNZFfUoEui2TUQyMJ5LxsW5wojE0aY8YT/IgjKqhyyyT3JZhiYtvEWNdIMIHg0lOVx/YqnHnjZY3IjdDsBoZZ8zTcgesPI9HMO8TKSqHjQ5OA/aSdF9Cg9oxdP2PGFWJvb2Li6qMYxRL5p+N3EfRJ6JnWMuGQAtCs=
+	t=1760536936; cv=none; b=s+RhHwt61Y0u7ubB1XVHbWbFDyqHIHDHNZbtT5EqpSGBd0GsOZZvGI0ys8DNMLq7s+qREA3ns2HIKJvukyDaMgzYMRgqhA2G4f5Y3S+l+uIPHQbLGepjG96FC6RcdJydvDJkV6/VQFo8fZ5HltJMo0bokt7aHEeV/dlBRbhA980=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1760536936; c=relaxed/simple;
-	bh=HmnuS8WJEAo0y6suyjL9PY/0eUC9uyLCiKMA0PGw2c8=;
+	bh=vymWn7LjR7psZXPJnvuzHS3JL/j9XZ1IU/Dkl4Fb/6w=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QZV3oJdUnci0ClOPYjH3ll2v1qcd0APsdKdlnsLlaSsWG5CB5eNyoVzxIMBzTvzP+jigPFuY8oZ9/eV+mJYF0S3wn6cvwAhtdAfjEZ2T3e9jwt64qhR3UhUIKUCKmHdmjDaYa4Zlo0AnrcrJxVW6PwglgqKvCHEd+25RUzXboso=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=a1wBUXnd; arc=none smtp.client-ip=213.133.104.62
+	 MIME-Version; b=C1RzEnjhkQa19+j7haX7tUkKxgnGBIVl4KzK4inUFyGkUvsRYyWVnUwVxruz/k0dM/atgMfkori9cqbfs813h7swhJa3Wzy8I3rzi09sOaTJXoc8KHI0kbBabiRPH+FccY1J/pnCfFryJmdv1Zl+AI+nAWdVfkmiCU7kZvVScrY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=EXavgsLq; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="a1wBUXnd"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="EXavgsLq"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
 	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
 	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=kE4vjuSQe4atG0UjXuuUzQzj19tI0DmrFqgfngPttl8=; b=a1wBUXndHPylcMU7cHlSjcu+3o
-	f0k6QR3RUm9vHDb/PbKhBvigFyL2u+9HevdPjIOpORnd60kkJVawzx0UXLScjkMmy1/7gYMinU/AX
-	GiR6bxvBIeiu73l9hZcQLbHgZqEVaYhIab4iBF05/u90y6CcDlLWRkMh7WTeEvRXdvvX+nu4xLSWy
-	SCbLyACaiTB7D5c2yWhw4DsW6FYVoKbba9OOlWaMztCCX1xABz2HssV6fh67GR94O8ANJ8aCkaMka
-	f4ZxKPmPf+erSMkzmC9taCmc0wZzT4+6UsjPRtjE/gtZ9XdmS37gvz+nvyaH+2q41puEkcgT//wTE
-	nQv+6Q9Q==;
+	bh=oCfZ1UxBlMv9OPwXl+Z6GrdWySTfYlXhNYbwpeTj6sk=; b=EXavgsLqv5dTtJdNCCj1/UL4tD
+	r1VLY2aByI2NZdpMTZ4CzEHCsiKJYW13dj1bw1id6Rp9HfocPH1VKA9WrZNLHSZZIJ06KeaWomhF3
+	J7S9zaOUCFFIYrkYW1jsWr5kaCHyCy1CNcsxhBqDb/9qexfJ2IdcYJZwCUV/E/W15WEbnqVtg/8DV
+	UMTmRjtOA7xaOss4wjCc5hMgrAcXCG6r7j9FwsTLRqLUE7+pf/8cs39jmH5VJyzgBG6s42X3MVknz
+	sQM/twZko5SBRJYdWV562+d1GDLjEuqsMMLoc/7scKBULBNlZodBQwUUyZrxGhZMFjp5+q6RQEyOT
+	uSDduPZQ==;
 Received: from localhost ([127.0.0.1])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1v924i-000H8p-2i;
-	Wed, 15 Oct 2025 16:01:56 +0200
+	id 1v924j-000H95-2z;
+	Wed, 15 Oct 2025 16:01:57 +0200
 From: Daniel Borkmann <daniel@iogearbox.net>
 To: netdev@vger.kernel.org
 Cc: bpf@vger.kernel.org,
@@ -51,9 +51,9 @@ Cc: bpf@vger.kernel.org,
 	toke@redhat.com,
 	yangzhenze@bytedance.com,
 	wangdongdong.6@bytedance.com
-Subject: [PATCH net-next v2 13/15] netkit: Implement rtnl_link_ops->alloc and ndo_queue_create
-Date: Wed, 15 Oct 2025 16:01:38 +0200
-Message-ID: <20251015140140.62273-14-daniel@iogearbox.net>
+Subject: [PATCH net-next v2 14/15] netkit: Add io_uring zero-copy support for TCP
+Date: Wed, 15 Oct 2025 16:01:39 +0200
+Message-ID: <20251015140140.62273-15-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20251015140140.62273-1-daniel@iogearbox.net>
 References: <20251015140140.62273-1-daniel@iogearbox.net>
@@ -68,215 +68,102 @@ X-Virus-Scanned: Clear (ClamAV 1.0.9/27793/Wed Oct 15 11:29:40 2025)
 
 From: David Wei <dw@davidwei.uk>
 
-Implement rtnl_link_ops->alloc that allows the number of rx queues to be
-set when netkit is created. By default, netkit has only a single rxq (and
-single txq). The number of queues is deliberately not allowed to be changed
-via ethtool -L and is fixed for the lifetime of a netkit instance.
+This adds the last missing bit to netkit for supporting io_uring with
+zero-copy mode [0]. Up until this point it was not possible to consume
+the latter out of containers or Kubernetes Pods where applications are
+in their own network namespace.
 
-For netkit device creation, numrxqueues with larger than one rxq can be
-specified. These rxqs are then mappable to real rxqs in physical netdevs:
+Thus, as a last missing bit, implement ndo_queue_get_dma_dev() in netkit
+to return the physical device of the real rxq for DMA. This allows memory
+providers like io_uring zero-copy or devmem to bind to the physically
+mapped rxq in netkit.
 
-  ip link add type netkit peer numrxqueues 64      # for device pair
-  ip link add numrxqueues 64 type netkit single    # for single device
+io_uring example with eth0 being a physical device with 16 queues where
+netkit is bound to the last queue, iou-zcrx.c is binary from selftests.
+Flow steering to that queue is based on the service VIP:port of the
+server utilizing io_uring:
 
-The limit of numrxqueues for netkit is currently set to 256, which allows
-binding multiple real rxqs from physical netdevs.
+  # ethtool -X eth0 start 0 equal 15
+  # ethtool -X eth0 start 15 equal 1 context new
+  # ethtool --config-ntuple eth0 flow-type tcp4 dst-ip 1.2.3.4 dst-port 5000 action 15
+  # ip netns add foo
+  # ip link add type netkit peer numrxqueues 2
+  # ./pyynl/cli.py --spec ~/netlink/specs/netdev.yaml \
+                   --do bind-queue \
+                   --json "{"src-ifindex": $(ifindex eth0), "src-queue-id": 15, \
+                            "dst-ifindex": $(ifindex nk0), "queue-type": "rx"}"
+  {'dst-queue-id': 1}
+  # ip link set nk0 netns foo
+  # ip link set nk1 up
+  # ip netns exec foo ip link set lo up
+  # ip netns exec foo ip link set nk0 up
+  # ip netns exec foo ip addr add 1.2.3.4/32 dev nk0
+  [ ... setup routing etc to get external traffic into the netns ... ]
+  # ip netns exec foo ./iou-zcrx -s -p 5000 -i nk0 -q 1
 
-The implementation of ndo_queue_create() adds a new rxq during the bind
-queue operation. We allow to create queues either in single device mode or
-for the case of dual device mode for the netkit peer device which gets
-placed into the target network namespace. For dual device mode the bind
-against the primary device does not make sense for the targeted use cases,
-and therefore gets rejected.
+Remote io_uring client:
+
+  # ./iou-zcrx -c -h 1.2.3.4 -p 5000 -l 12840 -z 65536
+
+We have tested the above against a Broadcom BCM957504 (bnxt_en)
+100G NIC, supporting TCP header/data split.
+
+Similarly, this also works for devmem which we tested using ncdevmem:
+
+  # ip netns exec foo ./ncdevmem -s 1.2.3.4 -l -p 5000 -f nk0 -t 1 -q 1
+
+And on the remote client:
+
+  # ./ncdevmem -s 1.2.3.4 -p 5000 -f eth0
+
+For Cilium, the plan is to open up support for the various memory providers
+for regular Kubernetes Pods when Cilium is configured with netkit datapath
+mode.
 
 Signed-off-by: David Wei <dw@davidwei.uk>
 Co-developed-by: Daniel Borkmann <daniel@iogearbox.net>
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Link: https://kernel-recipes.org/en/2024/schedule/efficient-zero-copy-networking-using-io_uring [0]
 ---
- drivers/net/netkit.c | 113 ++++++++++++++++++++++++++++++++++++++++---
- 1 file changed, 105 insertions(+), 8 deletions(-)
+ drivers/net/netkit.c | 18 +++++++++++++++++-
+ 1 file changed, 17 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/net/netkit.c b/drivers/net/netkit.c
-index 96734828bfb8..31235aa3379a 100644
+index 31235aa3379a..2f591d1ac61d 100644
 --- a/drivers/net/netkit.c
 +++ b/drivers/net/netkit.c
-@@ -9,11 +9,19 @@
- #include <linux/bpf_mprog.h>
- #include <linux/indirect_call_wrapper.h>
- 
-+#include <net/netdev_queues.h>
-+#include <net/netdev_rx_queue.h>
- #include <net/netkit.h>
- #include <net/dst.h>
- #include <net/tcx.h>
- 
--#define DRV_NAME "netkit"
-+#define NETKIT_DRV_NAME	"netkit"
-+
-+#define NETKIT_NUM_RX_QUEUES_MAX  256
-+#define NETKIT_NUM_TX_QUEUES_MAX  1
-+
-+#define NETKIT_NUM_RX_QUEUES_REAL 1
-+#define NETKIT_NUM_TX_QUEUES_REAL 1
- 
- struct netkit {
- 	__cacheline_group_begin(netkit_fastpath);
-@@ -37,6 +45,8 @@ struct netkit_link {
- 	struct net_device *dev;
+@@ -274,6 +274,21 @@ static const struct ethtool_ops netkit_ethtool_ops = {
+ 	.get_channels		= netkit_get_channels,
  };
  
-+static struct rtnl_link_ops netkit_link_ops;
++static struct device *netkit_queue_get_dma_dev(struct net_device *dev, int idx)
++{
++	struct netdev_rx_queue *rxq, *peer_rxq;
++	unsigned int peer_idx;
 +
- static __always_inline int
- netkit_run(const struct bpf_mprog_entry *entry, struct sk_buff *skb,
- 	   enum netkit_action ret)
-@@ -243,13 +253,99 @@ static const struct net_device_ops netkit_netdev_ops = {
- static void netkit_get_drvinfo(struct net_device *dev,
- 			       struct ethtool_drvinfo *info)
- {
--	strscpy(info->driver, DRV_NAME, sizeof(info->driver));
-+	strscpy(info->driver, NETKIT_DRV_NAME, sizeof(info->driver));
++	rxq = __netif_get_rx_queue(dev, idx);
++	if (!rxq->peer)
++		return NULL;
++
++	peer_rxq = rxq->peer;
++	peer_idx = get_netdev_rx_queue_index(peer_rxq);
++
++	return netdev_queue_get_dma_dev(peer_rxq->dev, peer_idx);
 +}
 +
-+static void netkit_get_channels(struct net_device *dev,
-+				struct ethtool_channels *channels)
-+{
-+	channels->max_rx = dev->num_rx_queues;
-+	channels->max_tx = dev->num_tx_queues;
-+	channels->max_other = 0;
-+	channels->max_combined = 1;
-+	channels->rx_count = dev->real_num_rx_queues;
-+	channels->tx_count = dev->real_num_tx_queues;
-+	channels->other_count = 0;
-+	channels->combined_count = 0;
+ static int netkit_queue_create(struct net_device *dev)
+ {
+ 	struct netkit *nk = netkit_priv(dev);
+@@ -299,7 +314,8 @@ static int netkit_queue_create(struct net_device *dev)
  }
  
- static const struct ethtool_ops netkit_ethtool_ops = {
- 	.get_drvinfo		= netkit_get_drvinfo,
-+	.get_channels		= netkit_get_channels,
+ static const struct netdev_queue_mgmt_ops netkit_queue_mgmt_ops = {
+-	.ndo_queue_create = netkit_queue_create,
++	.ndo_queue_get_dma_dev		= netkit_queue_get_dma_dev,
++	.ndo_queue_create		= netkit_queue_create,
  };
  
-+static int netkit_queue_create(struct net_device *dev)
-+{
-+	struct netkit *nk = netkit_priv(dev);
-+	u32 rxq_count_old, rxq_count_new;
-+	int err;
-+
-+	rxq_count_old = dev->real_num_rx_queues;
-+	rxq_count_new = rxq_count_old + 1;
-+
-+	/* Only allow to bind in single device mode or to bind against
-+	 * the peer device which then ends up in the target netns.
-+	 */
-+	if (nk->pair == NETKIT_DEVICE_PAIR && nk->primary)
-+		return -EOPNOTSUPP;
-+
-+	if (netif_running(dev))
-+		netif_carrier_off(dev);
-+	err = netif_set_real_num_rx_queues(dev, rxq_count_new);
-+	if (netif_running(dev))
-+		netif_carrier_on(dev);
-+
-+	return err ? err : rxq_count_new;
-+}
-+
-+static const struct netdev_queue_mgmt_ops netkit_queue_mgmt_ops = {
-+	.ndo_queue_create = netkit_queue_create,
-+};
-+
-+static struct net_device *netkit_alloc(struct nlattr *tb[],
-+				       const char *ifname,
-+				       unsigned char name_assign_type,
-+				       unsigned int num_tx_queues,
-+				       unsigned int num_rx_queues)
-+{
-+	const struct rtnl_link_ops *ops = &netkit_link_ops;
-+	struct net_device *dev;
-+
-+	if (num_tx_queues > NETKIT_NUM_TX_QUEUES_MAX ||
-+	    num_rx_queues > NETKIT_NUM_RX_QUEUES_MAX)
-+		return ERR_PTR(-EOPNOTSUPP);
-+
-+	dev = alloc_netdev_mqs(ops->priv_size, ifname,
-+			       name_assign_type, ops->setup,
-+			       num_tx_queues, num_rx_queues);
-+	if (dev) {
-+		dev->real_num_tx_queues = NETKIT_NUM_TX_QUEUES_REAL;
-+		dev->real_num_rx_queues = NETKIT_NUM_RX_QUEUES_REAL;
-+	}
-+	return dev;
-+}
-+
-+static void netkit_queue_unpeer(struct net_device *dev)
-+{
-+	struct netdev_rx_queue *src_rxq, *dst_rxq;
-+	struct net_device *src_dev;
-+	int i;
-+
-+	if (dev->real_num_rx_queues == 1)
-+		return;
-+	netdev_lock(dev);
-+	for (i = 1; i < dev->real_num_rx_queues; i++) {
-+		dst_rxq = __netif_get_rx_queue(dev, i);
-+		src_rxq = dst_rxq->peer;
-+		src_dev = src_rxq->dev;
-+
-+		netdev_lock(src_dev);
-+		netdev_rx_queue_unpeer(src_dev, src_rxq, dst_rxq);
-+		netdev_unlock(src_dev);
-+	}
-+	netdev_unlock(dev);
-+}
-+
- static void netkit_setup(struct net_device *dev)
- {
- 	static const netdev_features_t netkit_features_hw_vlan =
-@@ -280,8 +376,9 @@ static void netkit_setup(struct net_device *dev)
- 	dev->priv_flags |= IFF_DISABLE_NETPOLL;
- 	dev->lltx = true;
- 
--	dev->ethtool_ops = &netkit_ethtool_ops;
--	dev->netdev_ops  = &netkit_netdev_ops;
-+	dev->netdev_ops     = &netkit_netdev_ops;
-+	dev->ethtool_ops    = &netkit_ethtool_ops;
-+	dev->queue_mgmt_ops = &netkit_queue_mgmt_ops;
- 
- 	dev->features |= netkit_features;
- 	dev->hw_features = netkit_features;
-@@ -330,8 +427,6 @@ static int netkit_validate(struct nlattr *tb[], struct nlattr *data[],
- 	return 0;
- }
- 
--static struct rtnl_link_ops netkit_link_ops;
--
- static int netkit_new_link(struct net_device *dev,
- 			   struct rtnl_newlink_params *params,
- 			   struct netlink_ext_ack *extack)
-@@ -865,6 +960,7 @@ static void netkit_release_all(struct net_device *dev)
- static void netkit_uninit(struct net_device *dev)
- {
- 	netkit_release_all(dev);
-+	netkit_queue_unpeer(dev);
- }
- 
- static void netkit_del_link(struct net_device *dev, struct list_head *head)
-@@ -1005,8 +1101,9 @@ static const struct nla_policy netkit_policy[IFLA_NETKIT_MAX + 1] = {
- };
- 
- static struct rtnl_link_ops netkit_link_ops = {
--	.kind		= DRV_NAME,
-+	.kind		= NETKIT_DRV_NAME,
- 	.priv_size	= sizeof(struct netkit),
-+	.alloc		= netkit_alloc,
- 	.setup		= netkit_setup,
- 	.newlink	= netkit_new_link,
- 	.dellink	= netkit_del_link,
-@@ -1042,4 +1139,4 @@ MODULE_DESCRIPTION("BPF-programmable network device");
- MODULE_AUTHOR("Daniel Borkmann <daniel@iogearbox.net>");
- MODULE_AUTHOR("Nikolay Aleksandrov <razor@blackwall.org>");
- MODULE_LICENSE("GPL");
--MODULE_ALIAS_RTNL_LINK(DRV_NAME);
-+MODULE_ALIAS_RTNL_LINK(NETKIT_DRV_NAME);
+ static struct net_device *netkit_alloc(struct nlattr *tb[],
 -- 
 2.43.0
 
