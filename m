@@ -1,38 +1,38 @@
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE81326E6F7;
-	Wed, 15 Oct 2025 14:02:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E50427A91D;
+	Wed, 15 Oct 2025 14:02:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760536936; cv=none; b=s+RhHwt61Y0u7ubB1XVHbWbFDyqHIHDHNZbtT5EqpSGBd0GsOZZvGI0ys8DNMLq7s+qREA3ns2HIKJvukyDaMgzYMRgqhA2G4f5Y3S+l+uIPHQbLGepjG96FC6RcdJydvDJkV6/VQFo8fZ5HltJMo0bokt7aHEeV/dlBRbhA980=
+	t=1760536938; cv=none; b=GjQDSRH2zxY01UzclG/wde0GQtsPV9l5OegANY1AWPDjCYG/l5/w6S2KjopYIzn4pRC+b8pDS/QUO5t1pTA64idkZas+md418Q2+Fv+uGKbyLLAm7E30YEwV8SsFbei+8BwAa5LHAgWINBdAsLMDmKcSLbawxA9dS2ZoiLouFgA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760536936; c=relaxed/simple;
-	bh=vymWn7LjR7psZXPJnvuzHS3JL/j9XZ1IU/Dkl4Fb/6w=;
+	s=arc-20240116; t=1760536938; c=relaxed/simple;
+	bh=v//9FhWfw6qyKrGEtF9u5BanJY7egLJ+MpBOb4qEkjg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=C1RzEnjhkQa19+j7haX7tUkKxgnGBIVl4KzK4inUFyGkUvsRYyWVnUwVxruz/k0dM/atgMfkori9cqbfs813h7swhJa3Wzy8I3rzi09sOaTJXoc8KHI0kbBabiRPH+FccY1J/pnCfFryJmdv1Zl+AI+nAWdVfkmiCU7kZvVScrY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=EXavgsLq; arc=none smtp.client-ip=213.133.104.62
+	 MIME-Version; b=JVsdmuyS1DwQ3BRytsWtlJCCNWrLwXIqy2cIi1Vd0CXSzGyuaJbqETUdoNPLwtetUKOSJ2ZxpjDVfRrAQIcBaLLIQe8UDuyq0YlXAopO9Ca7tXDqN95QsbrHgFGF8PmYE7RTFAI0u1xURk8rUavvYCcsYmjdRQUegix+DeXCKY0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=BN2q6xKG; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="EXavgsLq"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="BN2q6xKG"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
 	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
 	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=oCfZ1UxBlMv9OPwXl+Z6GrdWySTfYlXhNYbwpeTj6sk=; b=EXavgsLqv5dTtJdNCCj1/UL4tD
-	r1VLY2aByI2NZdpMTZ4CzEHCsiKJYW13dj1bw1id6Rp9HfocPH1VKA9WrZNLHSZZIJ06KeaWomhF3
-	J7S9zaOUCFFIYrkYW1jsWr5kaCHyCy1CNcsxhBqDb/9qexfJ2IdcYJZwCUV/E/W15WEbnqVtg/8DV
-	UMTmRjtOA7xaOss4wjCc5hMgrAcXCG6r7j9FwsTLRqLUE7+pf/8cs39jmH5VJyzgBG6s42X3MVknz
-	sQM/twZko5SBRJYdWV562+d1GDLjEuqsMMLoc/7scKBULBNlZodBQwUUyZrxGhZMFjp5+q6RQEyOT
-	uSDduPZQ==;
+	bh=ioqZ5xXI5MymnaQTGznv4dmvRm+JadJ0INiqrmzTJTY=; b=BN2q6xKGHZdGQhsDAX922M92zI
+	a3J5yZvTvu8eL2PEewg6iLVjTeSNXVdYS4qqza9dB91EFygjBJMDZhFMvKi7cgLtj1RcfAWYTIKth
+	ck5pjZjGjU9OJEE82NcojqvB5dKMLn0Q9VaGSBp0xEJSjuKlJXzZ9Y0WXBzxYzIjnG+/4eYiCAx2u
+	cIEPO63Tqh3ssbIEQnzPqCZvtbyEEExpPWQAwXW3Tll6DcXCS/NQy6xcQrPhrbHwMsg8SqTSg70if
+	8BwLnBmBFMSx2fWxW+GTtc1RzJB1dS9weeJlTSTyV2pC8GsDUUhOIhmG3Z05yX3lLN0i+J+xMp9PP
+	Bdx9nTvw==;
 Received: from localhost ([127.0.0.1])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1v924j-000H95-2z;
-	Wed, 15 Oct 2025 16:01:57 +0200
+	id 1v924d-000H7a-0k;
+	Wed, 15 Oct 2025 16:01:51 +0200
 From: Daniel Borkmann <daniel@iogearbox.net>
 To: netdev@vger.kernel.org
 Cc: bpf@vger.kernel.org,
@@ -51,9 +51,9 @@ Cc: bpf@vger.kernel.org,
 	toke@redhat.com,
 	yangzhenze@bytedance.com,
 	wangdongdong.6@bytedance.com
-Subject: [PATCH net-next v2 14/15] netkit: Add io_uring zero-copy support for TCP
-Date: Wed, 15 Oct 2025 16:01:39 +0200
-Message-ID: <20251015140140.62273-15-daniel@iogearbox.net>
+Subject: [PATCH net-next v2 08/15] xsk: Add small helper xp_pool_bindable
+Date: Wed, 15 Oct 2025 16:01:33 +0200
+Message-ID: <20251015140140.62273-9-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20251015140140.62273-1-daniel@iogearbox.net>
 References: <20251015140140.62273-1-daniel@iogearbox.net>
@@ -66,104 +66,42 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Virus-Scanned: Clear (ClamAV 1.0.9/27793/Wed Oct 15 11:29:40 2025)
 
-From: David Wei <dw@davidwei.uk>
+Add another small helper called xp_pool_bindable and move the current
+dev_get_min_mp_channel_count test into this helper. Pass in the pool
+object, such that we derive the netdev from the prior registered pool.
 
-This adds the last missing bit to netkit for supporting io_uring with
-zero-copy mode [0]. Up until this point it was not possible to consume
-the latter out of containers or Kubernetes Pods where applications are
-in their own network namespace.
-
-Thus, as a last missing bit, implement ndo_queue_get_dma_dev() in netkit
-to return the physical device of the real rxq for DMA. This allows memory
-providers like io_uring zero-copy or devmem to bind to the physically
-mapped rxq in netkit.
-
-io_uring example with eth0 being a physical device with 16 queues where
-netkit is bound to the last queue, iou-zcrx.c is binary from selftests.
-Flow steering to that queue is based on the service VIP:port of the
-server utilizing io_uring:
-
-  # ethtool -X eth0 start 0 equal 15
-  # ethtool -X eth0 start 15 equal 1 context new
-  # ethtool --config-ntuple eth0 flow-type tcp4 dst-ip 1.2.3.4 dst-port 5000 action 15
-  # ip netns add foo
-  # ip link add type netkit peer numrxqueues 2
-  # ./pyynl/cli.py --spec ~/netlink/specs/netdev.yaml \
-                   --do bind-queue \
-                   --json "{"src-ifindex": $(ifindex eth0), "src-queue-id": 15, \
-                            "dst-ifindex": $(ifindex nk0), "queue-type": "rx"}"
-  {'dst-queue-id': 1}
-  # ip link set nk0 netns foo
-  # ip link set nk1 up
-  # ip netns exec foo ip link set lo up
-  # ip netns exec foo ip link set nk0 up
-  # ip netns exec foo ip addr add 1.2.3.4/32 dev nk0
-  [ ... setup routing etc to get external traffic into the netns ... ]
-  # ip netns exec foo ./iou-zcrx -s -p 5000 -i nk0 -q 1
-
-Remote io_uring client:
-
-  # ./iou-zcrx -c -h 1.2.3.4 -p 5000 -l 12840 -z 65536
-
-We have tested the above against a Broadcom BCM957504 (bnxt_en)
-100G NIC, supporting TCP header/data split.
-
-Similarly, this also works for devmem which we tested using ncdevmem:
-
-  # ip netns exec foo ./ncdevmem -s 1.2.3.4 -l -p 5000 -f nk0 -t 1 -q 1
-
-And on the remote client:
-
-  # ./ncdevmem -s 1.2.3.4 -p 5000 -f eth0
-
-For Cilium, the plan is to open up support for the various memory providers
-for regular Kubernetes Pods when Cilium is configured with netkit datapath
-mode.
-
-Signed-off-by: David Wei <dw@davidwei.uk>
-Co-developed-by: Daniel Borkmann <daniel@iogearbox.net>
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Link: https://kernel-recipes.org/en/2024/schedule/efficient-zero-copy-networking-using-io_uring [0]
+Co-developed-by: David Wei <dw@davidwei.uk>
+Signed-off-by: David Wei <dw@davidwei.uk>
 ---
- drivers/net/netkit.c | 18 +++++++++++++++++-
- 1 file changed, 17 insertions(+), 1 deletion(-)
+ net/xdp/xsk_buff_pool.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/netkit.c b/drivers/net/netkit.c
-index 31235aa3379a..2f591d1ac61d 100644
---- a/drivers/net/netkit.c
-+++ b/drivers/net/netkit.c
-@@ -274,6 +274,21 @@ static const struct ethtool_ops netkit_ethtool_ops = {
- 	.get_channels		= netkit_get_channels,
- };
- 
-+static struct device *netkit_queue_get_dma_dev(struct net_device *dev, int idx)
-+{
-+	struct netdev_rx_queue *rxq, *peer_rxq;
-+	unsigned int peer_idx;
-+
-+	rxq = __netif_get_rx_queue(dev, idx);
-+	if (!rxq->peer)
-+		return NULL;
-+
-+	peer_rxq = rxq->peer;
-+	peer_idx = get_netdev_rx_queue_index(peer_rxq);
-+
-+	return netdev_queue_get_dma_dev(peer_rxq->dev, peer_idx);
-+}
-+
- static int netkit_queue_create(struct net_device *dev)
- {
- 	struct netkit *nk = netkit_priv(dev);
-@@ -299,7 +314,8 @@ static int netkit_queue_create(struct net_device *dev)
+diff --git a/net/xdp/xsk_buff_pool.c b/net/xdp/xsk_buff_pool.c
+index 62a176996f02..701be6a5b074 100644
+--- a/net/xdp/xsk_buff_pool.c
++++ b/net/xdp/xsk_buff_pool.c
+@@ -54,6 +54,11 @@ int xp_alloc_tx_descs(struct xsk_buff_pool *pool, struct xdp_sock *xs)
+ 	return 0;
  }
  
- static const struct netdev_queue_mgmt_ops netkit_queue_mgmt_ops = {
--	.ndo_queue_create = netkit_queue_create,
-+	.ndo_queue_get_dma_dev		= netkit_queue_get_dma_dev,
-+	.ndo_queue_create		= netkit_queue_create,
- };
++static bool xp_pool_bindable(struct xsk_buff_pool *pool)
++{
++	return dev_get_min_mp_channel_count(pool->netdev) == 0;
++}
++
+ struct xsk_buff_pool *xp_create_and_assign_umem(struct xdp_sock *xs,
+ 						struct xdp_umem *umem)
+ {
+@@ -204,7 +209,7 @@ int xp_assign_dev(struct xsk_buff_pool *pool,
+ 		goto err_unreg_pool;
+ 	}
  
- static struct net_device *netkit_alloc(struct nlattr *tb[],
+-	if (dev_get_min_mp_channel_count(netdev)) {
++	if (!xp_pool_bindable(pool)) {
+ 		err = -EBUSY;
+ 		goto err_unreg_pool;
+ 	}
 -- 
 2.43.0
 
