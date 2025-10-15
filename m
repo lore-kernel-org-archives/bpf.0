@@ -1,38 +1,38 @@
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FD5423AB8D;
-	Wed, 15 Oct 2025 14:02:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BDB0263F3C;
+	Wed, 15 Oct 2025 14:02:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760536931; cv=none; b=Frb6nAIRqnNZ+P1nwoDMLV51jESY5SB6iKbaTy0o57so2RpgS+V0zar5nrW08r2Q6d6gJ20vImRRSQgQ33xgZVgQXkfzi5OhM9xClTf/AqvYxGkeJKJABJXUnO3cvcIWxdu0jE89x1HS1WMd9ItXUA6iojDRrx2FcuasgmvGoCI=
+	t=1760536933; cv=none; b=teZhmrchCynun0Tdgo1PhTx0zacL0gcMDt1UtGuIXSw5xb19nTE3ocypN/6PDITA62keL6khMW1nnHzg7QVsYAuNGIk/amlXXDckAOyUrPN7Ry1Syn9lKI66cY1g52PUuk7OrYAcrgrGzylcpv++tZKY5BkiVe1u2kXC+mnxdoU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760536931; c=relaxed/simple;
-	bh=fUD9ghDt4E3CEY6u4Tmxn9Op8aRkIiPkLfL752IM0E8=;
+	s=arc-20240116; t=1760536933; c=relaxed/simple;
+	bh=P2G1O8+99gfkQWwU0+MVuDdxRl/eXLJqCTUfxyg//Tw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QlPIzLZsLBXudVB5IxKFf5gFid/c4mpxdwNgOu2ixMM733LtuHJ+z3KNm6Ri3seqEwLfNZOfwd8isZwR4y+hsk8HtyQGrHnzBjbi2JbGhKEtSsUzPhulPya6hYYDYHXQqm/FSY7V4vavyBrFgX9LU3rS5n77f1tlnHd3yWuQowM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=XqPaZN8o; arc=none smtp.client-ip=213.133.104.62
+	 MIME-Version; b=ZrqHOl0EOGwITfkredlj1RAvcSo3G6AnyHJYthiWKJAWFJB+Q6BlQ7AUQuJCPiy/uwQ2yQxSFwhNAVOFa2OxKCbtoEf06C2EDhz06YK0H/okwX6sWsgwhCxjXt1dzGpsenezPVvtqllsrQPY3ToH2xnZYpufMHYbKb7EV6HfMZg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=PzZX3Qs7; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="XqPaZN8o"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="PzZX3Qs7"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
 	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
 	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=kKYd+5PbpyQi++/hDhcsCgmhorksnRLXjYa/FFHfW0Y=; b=XqPaZN8o4llmMWce1Xgjz7IhTX
-	C/uqwsax1sq4dweqCTPGtXjDROmDiyce9kYlvUmF3TK3Hq+EABXZCX0hm6IQWsyQZHi5nYETPfCk1
-	YCAAeJQwVLl9r9/6wYuS1MHdrDYEDnErNC78JAsIKPZP42go8NLfgHVuZu5FAgciy7oBFemcD4f3d
-	ufFa8hbT7aYlHEFK4jG1OEp3WKAvSFC4mnQ0TZEbGEZQ4b0dhZmqBgxi6ZfL3larrf4j12jPTDgKx
-	OR0yjVC8ZSu9UdKy5wSb0gRYkod2uQPMXjJY4Cp6io8DtEKghJCRmNc3agB1g4PYXgH5W4+avUkpc
-	p7brGo6A==;
+	bh=kqaiPMdUkAj81Mh7kQ/VluPNCDbJE/SMqEj4MzPie88=; b=PzZX3Qs77JPLT4Ss5iH24akh6A
+	SzZtfxkjJyVHZCcEES99h5xj/iRjuCLz8qX0fvTuPuMi669cE08V9ZjXdw0sU2qDMLDkiwoTd2MtT
+	DskJAw25vD0FF11liEGHZSz7iaNUkjuUJeOwbPqrc+PKHWvq2kOglTaYduUESQ7L9YkOiw6JpCJOA
+	4m44gB8o+qQOwTwvPWSOTmJDggQwooXesv2+sNhWizsqTUA46lWS4S91/oG1/MssTBagvmxJI2Ta4
+	Fbyoj3aC7BQLp1P+dxIwhMBOu52s47r91jIasPvOYTcQAIsBnujTatwiNcrNorSBzFpFUKEMXzVnW
+	VR1xJuFA==;
 Received: from localhost ([127.0.0.1])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1v924a-000H7K-2r;
-	Wed, 15 Oct 2025 16:01:48 +0200
+	id 1v924V-000H6E-0p;
+	Wed, 15 Oct 2025 16:01:43 +0200
 From: Daniel Borkmann <daniel@iogearbox.net>
 To: netdev@vger.kernel.org
 Cc: bpf@vger.kernel.org,
@@ -51,9 +51,9 @@ Cc: bpf@vger.kernel.org,
 	toke@redhat.com,
 	yangzhenze@bytedance.com,
 	wangdongdong.6@bytedance.com
-Subject: [PATCH net-next v2 06/15] xsk: Move NETDEV_XDP_ACT_ZC into generic header
-Date: Wed, 15 Oct 2025 16:01:31 +0200
-Message-ID: <20251015140140.62273-7-daniel@iogearbox.net>
+Subject: [PATCH net-next v2 01/15] net: Add bind-queue operation
+Date: Wed, 15 Oct 2025 16:01:26 +0200
+Message-ID: <20251015140140.62273-2-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20251015140140.62273-1-daniel@iogearbox.net>
 References: <20251015140140.62273-1-daniel@iogearbox.net>
@@ -66,57 +66,254 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Virus-Scanned: Clear (ClamAV 1.0.9/27793/Wed Oct 15 11:29:40 2025)
 
-Move NETDEV_XDP_ACT_ZC into xdp_sock_drv.h header such that external code
-can reuse it, and rename it into more generic NETDEV_XDP_ACT_XSK.
+From: David Wei <dw@davidwei.uk>
 
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Co-developed-by: David Wei <dw@davidwei.uk>
+Add a ynl netdev family operation called bind-queue that creates a new
+rx queue in a virtual netdev (i.e. netkit or veth) and binds it to an rx
+queue in a real netdev. This forms a queue pair, where the peer queue of
+the pair in the virtual netdev acts as a proxy for the peer queue in the
+real netdev. Thus, the peer queue in the virtual netdev can be used by
+processes running in a container to use both memory providers (io_uring
+zero-copy rx and devmem) and AF_XDP. An early implementation had only
+driver-specific integration [0], but in order for other virtual devices
+to reuse, it makes sense to have this as a generic API.
+
+src-ifindex and src-queue-id is the real netdev and its rx queue id
+respectively. dst-ifindex is the virtual netdev. Note that this op doesn't
+take dst-queue-id because a new rx queue is created. The virtual netdev
+must have real_num_rx_queues less than num_rx_queues at the time of
+calling bind-queue. The queue-type must be rx as only rx queues are
+supported for now.
+
 Signed-off-by: David Wei <dw@davidwei.uk>
-Reviewed-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Co-developed-by: Daniel Borkmann <daniel@iogearbox.net>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Link: https://bpfconf.ebpf.io/bpfconf2025/bpfconf2025_material/lsfmmbpf_2025_netkit_borkmann.pdf [0]
 ---
- include/net/xdp_sock_drv.h | 4 ++++
- net/xdp/xsk_buff_pool.c    | 6 +-----
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ Documentation/netlink/specs/netdev.yaml | 60 +++++++++++++++++++++++++
+ include/uapi/linux/netdev.h             | 12 +++++
+ net/core/netdev-genl-gen.c              | 25 +++++++++++
+ net/core/netdev-genl-gen.h              |  1 +
+ net/core/netdev-genl.c                  |  5 +++
+ tools/include/uapi/linux/netdev.h       | 12 +++++
+ 6 files changed, 115 insertions(+)
 
-diff --git a/include/net/xdp_sock_drv.h b/include/net/xdp_sock_drv.h
-index 4f2d3268a676..242e34f771cc 100644
---- a/include/net/xdp_sock_drv.h
-+++ b/include/net/xdp_sock_drv.h
-@@ -12,6 +12,10 @@
- #define XDP_UMEM_MIN_CHUNK_SHIFT 11
- #define XDP_UMEM_MIN_CHUNK_SIZE (1 << XDP_UMEM_MIN_CHUNK_SHIFT)
+diff --git a/Documentation/netlink/specs/netdev.yaml b/Documentation/netlink/specs/netdev.yaml
+index e00d3fa1c152..20bb00b7e9ac 100644
+--- a/Documentation/netlink/specs/netdev.yaml
++++ b/Documentation/netlink/specs/netdev.yaml
+@@ -561,6 +561,46 @@ attribute-sets:
+         type: u32
+         checks:
+           min: 1
++  -
++    name: queue-pair
++    attributes:
++      -
++        name: queue-type
++        doc: |
++          Queue type as rx, tx, for src-queue-id and dst-queue-id.
++          Currently only pairing queues of type rx is supported.
++        type: u32
++        enum: queue-type
++      -
++        name: src-ifindex
++        doc: |
++          Specifies the netdev ifindex of the physical device to pair
++          src-queue-id from.
++        type: u32
++        checks:
++          min: 1
++          max: s32-max
++      -
++        name: src-queue-id
++        doc: |
++          Specifies the netdev queue id of the physical device with
++          src-ifindex to pair a queue from.
++        type: u32
++      -
++        name: dst-ifindex
++        doc: |
++          Specifies the netdev ifindex of the virtual device to pair
++          a new queue with the src-queue-id from src-ifindex.
++        type: u32
++        checks:
++          min: 1
++          max: s32-max
++      -
++        name: dst-queue-id
++        doc: |
++          Specifies the new netdev queue id of the virtual device after
++          a successful pairing operation.
++        type: u32
  
-+#define NETDEV_XDP_ACT_XSK	(NETDEV_XDP_ACT_BASIC |		\
-+				 NETDEV_XDP_ACT_REDIRECT |	\
-+				 NETDEV_XDP_ACT_XSK_ZEROCOPY)
+ operations:
+   list:
+@@ -772,6 +812,26 @@ operations:
+           attributes:
+             - id
+ 
++    -
++      name: bind-queue
++      doc: |
++        Bind a physical netdevice queue to a virtual one. The binding
++        creates a queue pair, where a queue can reference its peer queue.
++        This is useful for memory providers and AF_XDP operations which
++        take an ifindex and queue id to allow auch applications to bind
++        against virtual devices in containers.
++      attribute-set: queue-pair
++      do:
++        request:
++          attributes:
++            - queue-type
++            - src-ifindex
++            - src-queue-id
++            - dst-ifindex
++        reply:
++          attributes:
++            - dst-queue-id
 +
- struct xsk_cb_desc {
- 	void *src;
- 	u8 off;
-diff --git a/net/xdp/xsk_buff_pool.c b/net/xdp/xsk_buff_pool.c
-index aa9788f20d0d..26165baf99f4 100644
---- a/net/xdp/xsk_buff_pool.c
-+++ b/net/xdp/xsk_buff_pool.c
-@@ -158,10 +158,6 @@ static void xp_disable_drv_zc(struct xsk_buff_pool *pool)
- 	}
+ kernel-family:
+   headers: ["net/netdev_netlink.h"]
+   sock-priv: struct netdev_nl_sock
+diff --git a/include/uapi/linux/netdev.h b/include/uapi/linux/netdev.h
+index 48eb49aa03d4..4ef04d0bc412 100644
+--- a/include/uapi/linux/netdev.h
++++ b/include/uapi/linux/netdev.h
+@@ -210,6 +210,17 @@ enum {
+ 	NETDEV_A_DMABUF_MAX = (__NETDEV_A_DMABUF_MAX - 1)
+ };
+ 
++enum {
++	NETDEV_A_QUEUE_PAIR_QUEUE_TYPE = 1,
++	NETDEV_A_QUEUE_PAIR_SRC_IFINDEX,
++	NETDEV_A_QUEUE_PAIR_SRC_QUEUE_ID,
++	NETDEV_A_QUEUE_PAIR_DST_IFINDEX,
++	NETDEV_A_QUEUE_PAIR_DST_QUEUE_ID,
++
++	__NETDEV_A_QUEUE_PAIR_MAX,
++	NETDEV_A_QUEUE_PAIR_MAX = (__NETDEV_A_QUEUE_PAIR_MAX - 1)
++};
++
+ enum {
+ 	NETDEV_CMD_DEV_GET = 1,
+ 	NETDEV_CMD_DEV_ADD_NTF,
+@@ -226,6 +237,7 @@ enum {
+ 	NETDEV_CMD_BIND_RX,
+ 	NETDEV_CMD_NAPI_SET,
+ 	NETDEV_CMD_BIND_TX,
++	NETDEV_CMD_BIND_QUEUE,
+ 
+ 	__NETDEV_CMD_MAX,
+ 	NETDEV_CMD_MAX = (__NETDEV_CMD_MAX - 1)
+diff --git a/net/core/netdev-genl-gen.c b/net/core/netdev-genl-gen.c
+index e9a2a6f26cb7..69f8126c3e42 100644
+--- a/net/core/netdev-genl-gen.c
++++ b/net/core/netdev-genl-gen.c
+@@ -26,6 +26,16 @@ static const struct netlink_range_validation netdev_a_napi_defer_hard_irqs_range
+ 	.max	= S32_MAX,
+ };
+ 
++static const struct netlink_range_validation netdev_a_queue_pair_src_ifindex_range = {
++	.min	= 1ULL,
++	.max	= S32_MAX,
++};
++
++static const struct netlink_range_validation netdev_a_queue_pair_dst_ifindex_range = {
++	.min	= 1ULL,
++	.max	= S32_MAX,
++};
++
+ /* Common nested types */
+ const struct nla_policy netdev_page_pool_info_nl_policy[NETDEV_A_PAGE_POOL_IFINDEX + 1] = {
+ 	[NETDEV_A_PAGE_POOL_ID] = NLA_POLICY_FULL_RANGE(NLA_UINT, &netdev_a_page_pool_id_range),
+@@ -106,6 +116,14 @@ static const struct nla_policy netdev_bind_tx_nl_policy[NETDEV_A_DMABUF_FD + 1]
+ 	[NETDEV_A_DMABUF_FD] = { .type = NLA_U32, },
+ };
+ 
++/* NETDEV_CMD_BIND_QUEUE - do */
++static const struct nla_policy netdev_bind_queue_nl_policy[NETDEV_A_QUEUE_PAIR_DST_IFINDEX + 1] = {
++	[NETDEV_A_QUEUE_PAIR_QUEUE_TYPE] = NLA_POLICY_MAX(NLA_U32, 1),
++	[NETDEV_A_QUEUE_PAIR_SRC_IFINDEX] = NLA_POLICY_FULL_RANGE(NLA_U32, &netdev_a_queue_pair_src_ifindex_range),
++	[NETDEV_A_QUEUE_PAIR_SRC_QUEUE_ID] = { .type = NLA_U32, },
++	[NETDEV_A_QUEUE_PAIR_DST_IFINDEX] = NLA_POLICY_FULL_RANGE(NLA_U32, &netdev_a_queue_pair_dst_ifindex_range),
++};
++
+ /* Ops table for netdev */
+ static const struct genl_split_ops netdev_nl_ops[] = {
+ 	{
+@@ -204,6 +222,13 @@ static const struct genl_split_ops netdev_nl_ops[] = {
+ 		.maxattr	= NETDEV_A_DMABUF_FD,
+ 		.flags		= GENL_CMD_CAP_DO,
+ 	},
++	{
++		.cmd		= NETDEV_CMD_BIND_QUEUE,
++		.doit		= netdev_nl_bind_queue_doit,
++		.policy		= netdev_bind_queue_nl_policy,
++		.maxattr	= NETDEV_A_QUEUE_PAIR_DST_IFINDEX,
++		.flags		= GENL_CMD_CAP_DO,
++	},
+ };
+ 
+ static const struct genl_multicast_group netdev_nl_mcgrps[] = {
+diff --git a/net/core/netdev-genl-gen.h b/net/core/netdev-genl-gen.h
+index cf3fad74511f..309248fe2b9e 100644
+--- a/net/core/netdev-genl-gen.h
++++ b/net/core/netdev-genl-gen.h
+@@ -35,6 +35,7 @@ int netdev_nl_qstats_get_dumpit(struct sk_buff *skb,
+ int netdev_nl_bind_rx_doit(struct sk_buff *skb, struct genl_info *info);
+ int netdev_nl_napi_set_doit(struct sk_buff *skb, struct genl_info *info);
+ int netdev_nl_bind_tx_doit(struct sk_buff *skb, struct genl_info *info);
++int netdev_nl_bind_queue_doit(struct sk_buff *skb, struct genl_info *info);
+ 
+ enum {
+ 	NETDEV_NLGRP_MGMT,
+diff --git a/net/core/netdev-genl.c b/net/core/netdev-genl.c
+index 470fabbeacd9..ce1018ea390f 100644
+--- a/net/core/netdev-genl.c
++++ b/net/core/netdev-genl.c
+@@ -1120,6 +1120,11 @@ int netdev_nl_bind_tx_doit(struct sk_buff *skb, struct genl_info *info)
+ 	return err;
  }
  
--#define NETDEV_XDP_ACT_ZC	(NETDEV_XDP_ACT_BASIC |		\
--				 NETDEV_XDP_ACT_REDIRECT |	\
--				 NETDEV_XDP_ACT_XSK_ZEROCOPY)
--
- int xp_assign_dev(struct xsk_buff_pool *pool,
- 		  struct net_device *netdev, u16 queue_id, u16 flags)
++int netdev_nl_bind_queue_doit(struct sk_buff *skb, struct genl_info *info)
++{
++	return -EOPNOTSUPP;
++}
++
+ void netdev_nl_sock_priv_init(struct netdev_nl_sock *priv)
  {
-@@ -203,7 +199,7 @@ int xp_assign_dev(struct xsk_buff_pool *pool,
- 		/* For copy-mode, we are done. */
- 		return 0;
+ 	INIT_LIST_HEAD(&priv->bindings);
+diff --git a/tools/include/uapi/linux/netdev.h b/tools/include/uapi/linux/netdev.h
+index 48eb49aa03d4..4ef04d0bc412 100644
+--- a/tools/include/uapi/linux/netdev.h
++++ b/tools/include/uapi/linux/netdev.h
+@@ -210,6 +210,17 @@ enum {
+ 	NETDEV_A_DMABUF_MAX = (__NETDEV_A_DMABUF_MAX - 1)
+ };
  
--	if ((netdev->xdp_features & NETDEV_XDP_ACT_ZC) != NETDEV_XDP_ACT_ZC) {
-+	if ((netdev->xdp_features & NETDEV_XDP_ACT_XSK) != NETDEV_XDP_ACT_XSK) {
- 		err = -EOPNOTSUPP;
- 		goto err_unreg_pool;
- 	}
++enum {
++	NETDEV_A_QUEUE_PAIR_QUEUE_TYPE = 1,
++	NETDEV_A_QUEUE_PAIR_SRC_IFINDEX,
++	NETDEV_A_QUEUE_PAIR_SRC_QUEUE_ID,
++	NETDEV_A_QUEUE_PAIR_DST_IFINDEX,
++	NETDEV_A_QUEUE_PAIR_DST_QUEUE_ID,
++
++	__NETDEV_A_QUEUE_PAIR_MAX,
++	NETDEV_A_QUEUE_PAIR_MAX = (__NETDEV_A_QUEUE_PAIR_MAX - 1)
++};
++
+ enum {
+ 	NETDEV_CMD_DEV_GET = 1,
+ 	NETDEV_CMD_DEV_ADD_NTF,
+@@ -226,6 +237,7 @@ enum {
+ 	NETDEV_CMD_BIND_RX,
+ 	NETDEV_CMD_NAPI_SET,
+ 	NETDEV_CMD_BIND_TX,
++	NETDEV_CMD_BIND_QUEUE,
+ 
+ 	__NETDEV_CMD_MAX,
+ 	NETDEV_CMD_MAX = (__NETDEV_CMD_MAX - 1)
 -- 
 2.43.0
 
