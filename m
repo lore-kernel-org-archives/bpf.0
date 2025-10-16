@@ -1,123 +1,133 @@
-Received: from out-185.mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C62972DF139
-	for <bpf@vger.kernel.org>; Thu, 16 Oct 2025 20:45:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.185
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A29FE2E06C9
+	for <bpf@vger.kernel.org>; Thu, 16 Oct 2025 20:51:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760647561; cv=none; b=nDtz+a7b2DOBamjDTq5r517JeUPRhlQPKyTYp6ngAN5ePe7PX/uempb7LS4XyQ3ALIF2ZaenMKoDS0Qxe1OtXYBirbTEltyRcCttIH/mPusc1PUya6oG0xyIj5F8nlTZQkM19EKQzZP39cbgKiDa68xPHeHRU/08M7OuMsp6xdg=
+	t=1760647888; cv=none; b=ZqOOkuByO1ksZGE1HYIzXQ5D1A6ee9BDNMBVczig47tQPKWsztNxmbqPGAfxN/BfHY9lPzCU6mAjCoFDyUrJwVVIkQX/cSLOMgJfni06jx3e7rJWhAqq7w8AFvo4pqO60c4MeQuAvRU2iO1IEhHkqxBQxJIntOc0bXSb6ik8nJY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760647561; c=relaxed/simple;
-	bh=uPiRufTru4Cw/BXb7fyHHt8/LdAZGFCJrYCPL6AZsdw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DpLgbhcmIx19qZbjAy+cBIpl4zs4f/w8YcUv5w6Tk0ZmJYO3cze5wnyYzV8eyiKXW3qm6S21a4euH5mp/P2RS3/Bz2o+k1+PtrGbB7wfbgvov4cld9KzPRSkUaGlAsLpDFxHhI3A4AbRQMm2gzAKbm/Dp/tvOgBvYPELAhAaklM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=dto6BePv; arc=none smtp.client-ip=91.218.175.185
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1760647888; c=relaxed/simple;
+	bh=ZnvMvv3Uyc9J3C8aWBzZjwlgOw6eIgWOGxBQRkiX5pA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=rBKR7HT9n7nQnVg/gvhS8jn2BrDjcGoVRyBB75GuErpboldJeCAuV79Tj7TE9rI5nxjz6C2W2tTvtL2o2jo4/wBrBTUvcKAv42otvEHvyRn221p11fzeqFKbSQOUnpeD3gQW4UHUGPvPdoerImFu3YJPh7HL44cYxbsY037O204=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=Jdz2QpcY; arc=none smtp.client-ip=209.85.216.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="dto6BePv"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1760647547;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=yfSLM4BxLDXSTtvggk83X6KgpFlWpsImSmzLOrT8U4Y=;
-	b=dto6BePvR8fqsRREiZ5Qa05uSFWN0dxq7OkFTV9b+Dfyz0r5aFW1LwBiZg11mgYK8f5J4/
-	MEkhj7cFnJyoH/tDEwDZYwnLhFP5JXJJBwWEnniHQ9K5gT9Kcp4v2e2jF8uhhwwQav8s+r
-	w4CmC7FUw9CxsofiJnvZsuhQbHGGXqA=
-From: Martin KaFai Lau <martin.lau@linux.dev>
-To: David Miller <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Eric Dumazet <edumazet@google.com>,
-	Paolo Abeni <pabeni@redhat.com>
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@kernel.org>,
-	netdev@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: pull-request: bpf-next 2025-10-16
-Date: Thu, 16 Oct 2025 13:45:39 -0700
-Message-ID: <20251016204539.773707-1-martin.lau@linux.dev>
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="Jdz2QpcY"
+Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-33bbc4e81dfso1047127a91.1
+        for <bpf@vger.kernel.org>; Thu, 16 Oct 2025 13:51:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1760647883; x=1761252683; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3slFqNAkYoyM4phFl5MHIcyAdrPRdCqrsNsGFA+mZ0E=;
+        b=Jdz2QpcY4OpiPz3kkXPLHz+stKntk/gBksswr+3BgEjD5xsnx/mCjFzes8rHkvvygI
+         MDPQ9ykYU6Rz2G+Qe9zqf0RZNpGxlWd5kk7IQjzoQA7rSPDhZtrcgohKo8Ba6tUb1BP8
+         mUo96v6IzNns2GlDRzCpDjdoqVtWa3yT2NKNcNjsJfwedozmGu0ec1gvZMAlf0M5RgpE
+         X0psJolrWqGC5CAhNR0FiYS5ilfXzYYy+8iUCwC5/yqe01SL2fFR9ztXEvcXpwqSLo4W
+         gmbXemxzV6wFll52/AFvT612vZmjSD0lhLWVo4fHqrNgs4nb8dnuY/5Mp1WU4NM95WRQ
+         a8rQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760647883; x=1761252683;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3slFqNAkYoyM4phFl5MHIcyAdrPRdCqrsNsGFA+mZ0E=;
+        b=V+pnMT1mbFnvY5J9Cwbb29zHqS79cKS4ere0eBElDDtBNLHS1KxGWYRUK0rBESmeAF
+         0+D84Y0OiYSd6yBzDHl3Mkis0tTSWXDjbN/PHELYAzd6WEB2iakqKZqxgQQRo3sb6y3t
+         VxZTq8FkVTO1SfMfwxEjNuc9cvKGXjxv2aHFgL1LUDDCH6Hhm9XzKprA2rnqyMJ//IV4
+         L8AVRAyBWc3OdiBqt26In3uOTO83oLHIIQLYsJX/AybBa6wCFKhYcVV4PlCSt4z2e5wx
+         YzwacPmV5Sj0gGlw/pP7evIOA8rWCDFB3+NDKACm6Mb5F1pls8Iu+BB24Hm9xC8dp8AL
+         x+Cw==
+X-Forwarded-Encrypted: i=1; AJvYcCVmom4wKOTCYfQjQvFgvPqoB8ghRqH0HXVOePecWHitcyd/clZq7iL8WwKlyUS7eAQvHpA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwBEColqhP62Ee6Ev4DbvSU+oPN2KuaEWuyhfuBOb0c/RgYYMVL
+	T0RD97L01sk2LMf7r83noPjlnDGa1TQ28ANujKMeu3ZHA6N0bEZPkHiGdWOSIMRoaXDBoxcGKzG
+	j+Myrc+yheeeadstU+vSuV8nVwi9T2GOxNnTHEv5N7atbV+psvjoqUA==
+X-Gm-Gg: ASbGncsRjECOTkHthRJvT3N0LEaKNQf/v8+ZITs31W+5BzgwOwEbsz7l9iNc945Xfcp
+	zAyqQ6l5r1kwfG+Mq7/Z4lMxeGbEnJ2jyDosZos1dCzqi4Pu3Ov9IhNJ1VUDdXZnYYR/IzkwU7v
+	i6JDc36VjcGOhPadGiSXSIt+9+RX+42sv06tvB/dAJyocdvPunoFgJKwh9ycrQhqQDLOW1O1xDA
+	5HC4wDIgTHZ4pDxazkUaJFtzU96gnZ+2mfh82QXhIi7NEjEuf6HRpmJsdgxJLDNAH8bEw0=
+X-Google-Smtp-Source: AGHT+IGFIpKOlM2KUWDCAFw2XNXedYO+QecNe/SHAxRhF4qF1dGBt4GgYLt1H/17WGv0giFrM1LZJhri7d5LlfFp9Ws=
+X-Received: by 2002:a17:90b:2887:b0:32e:5cba:ae26 with SMTP id
+ 98e67ed59e1d1-33bcf8fa1aamr1286108a91.23.1760647882993; Thu, 16 Oct 2025
+ 13:51:22 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+References: <20250929213520.1821223-1-bboscaccy@linux.microsoft.com>
+ <CAHC9VhTQ_DR=ANzoDBjcCtrimV7XcCZVUsANPt=TjcvM4d-vjg@mail.gmail.com>
+ <CACYkzJ4yG1d8ujZ8PVzsRr_PWpyr6goD9DezQTu8ydaf-skn6g@mail.gmail.com>
+ <CAHC9VhR2Ab8Rw8RBm9je9-Ss++wufstxh4fB3zrZXnBoZpSi_Q@mail.gmail.com>
+ <CACYkzJ7u_wRyknFjhkzRxgpt29znoTWzz+ZMwmYEE-msc2GSUw@mail.gmail.com>
+ <CAHC9VhSDkwGgPfrBUh7EgBKEJj_JjnY68c0YAmuuLT_i--GskQ@mail.gmail.com>
+ <CACYkzJ4mJ6eJBzTLgbPG9A6i_dN2e0B=1WNp6XkAr-WmaEyzkA@mail.gmail.com>
+ <CAHC9VhRyG9ooMz6wVA17WKA9xkDy=UEPVkD4zOJf5mqrANMR9g@mail.gmail.com>
+ <CAADnVQLfyh=qby02AFe+MfJYr2sPExEU0YGCLV9jJk=cLoZoaA@mail.gmail.com>
+ <88703f00d5b7a779728451008626efa45e42db3d.camel@HansenPartnership.com>
+ <CAADnVQKdsF5_9Vb_J+z27y5Of3P6J3gPNZ=hXKFi=APm6AHX3w@mail.gmail.com>
+ <42bc677e031ed3df4f379cd3d6c9b3e1e8fadd87.camel@HansenPartnership.com>
+ <CAADnVQ+M+_zLaqmd6As0z95A5BwGR8n8oFto-X-i4BgMvuhrXQ@mail.gmail.com>
+ <fe538d3d723b161ee5354bb2de8e3a2ac7cf8255.camel@HansenPartnership.com> <CAHC9VhSU0UCHW9ApHsVQLX9ar6jTEfAW4b4bBi5-fbbsOaashg@mail.gmail.com>
+In-Reply-To: <CAHC9VhSU0UCHW9ApHsVQLX9ar6jTEfAW4b4bBi5-fbbsOaashg@mail.gmail.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Thu, 16 Oct 2025 16:51:11 -0400
+X-Gm-Features: AS18NWCQabATt66LFXD87ybMXRR70yXNmQjQY1MqvhEq_Lvy7iGwxN8QWoiencU
+Message-ID: <CAHC9VhTvxgufmxHZFBd023xgkOyp9Cmq-hA-Gv8sJF1xYQBFSA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 0/3] BPF signature hash chains
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, 
+	Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Alexei Starovoitov <ast@kernel.org>, KP Singh <kpsingh@kernel.org>, 
+	Blaise Boscaccy <bboscaccy@linux.microsoft.com>, 
+	James Bottomley <james.bottomley@hansenpartnership.com>, bpf <bpf@vger.kernel.org>, 
+	LSM List <linux-security-module@vger.kernel.org>, 
+	"K. Y. Srinivasan" <kys@microsoft.com>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, wufan@linux.microsoft.com, 
+	Quentin Monnet <qmo@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi David, hi Jakub, hi Paolo, hi Eric,
+On Sun, Oct 12, 2025 at 10:12=E2=80=AFPM Paul Moore <paul@paul-moore.com> w=
+rote:
+> On Sat, Oct 11, 2025 at 1:09=E2=80=AFPM James Bottomley
+> <James.Bottomley@hansenpartnership.com> wrote:
+> > On Sat, 2025-10-11 at 09:31 -0700, Alexei Starovoitov wrote:
+> > > On Sat, Oct 11, 2025 at 7:52=E2=80=AFAM James Bottomley
+> > > <James.Bottomley@hansenpartnership.com> wrote:
+> > > >
+> > > > It doesn't need to, once we check both the loader and the map, the
+> > > > integrity is verified and the loader can be trusted to run and
+> > > > relocate the map into the bpf program
+> > >
+> > > You should read KP's cover letter again and then research trusted
+> > > hash chains. Here is a quote from the first googled link:
+> > >
+> > > "A trusted hash chain is a cryptographic process used to verify the
+> > > integrity and authenticity of data by creating a sequence of hash
+> > > values, where each hash is linked to the next".
+> > >
+> > > In addition KP's algorithm was vetted by various security teams.
+> > > There is nothing novel here. It's a classic algorithm used
+> > > to verify integrity and that's what was implemented.
+> >
+> > Both KP and Blaise's patch sets are implementations of trusted hash
+> > chains.  The security argument isn't about whether the hash chain
+> > algorithm works, it's about where, in relation to the LSM hook, the
+> > hash chain verification completes.
+>
+> Alexei, considering the discussion from the past few days, and the
+> responses to all of your objections, I'm not seeing a clear reason why
+> you are opposed to sending Blaise's patchset up to Linus.  What is
+> preventing you from sending Blaise's patch up to Linus?
 
-The following pull-request contains BPF updates for your *net-next* tree.
+With the merge window behind us, and the link tag discussion winding
+down ;) , I thought it might be worthwhile to bubble this thread back
+up to the top of everyone's inbox.
 
-We've added 6 non-merge commits during the last 1 day(s) which contain
-a total of 18 files changed, 577 insertions(+), 38 deletions(-).
-
-The main changes are:
-
-1) Bypass the global per-protocol memory accounting either by setting
-   a netns sysctl or using bpf_setsockopt in a bpf program,
-   from Kuniyuki Iwashima.
-
-Please consider pulling these changes from:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git tags/for-netdev
-
-Thanks a lot!
-
-Also thanks to reporters, reviewers and testers of commits in this pull-request:
-
-Eric Dumazet, Roman Gushchin, Shakeel Butt
-
-----------------------------------------------------------------
-
-The following changes since commit 55db64ddd6a12c5157a61419a11a18fc727e8286:
-
-  Merge git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net (2025-10-16 11:06:28 -0700)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git tags/for-netdev
-
-for you to fetch changes up to 03de843bd0806184505f1e8099ff4ca9a8665dbb:
-
-  Merge branch 'bpf-allow-opt-out-from-sk-sk_prot-memory_allocated' (2025-10-16 12:15:10 -0700)
-
-----------------------------------------------------------------
-bpf-next-for-netdev
-
-----------------------------------------------------------------
-Kuniyuki Iwashima (6):
-      tcp: Save lock_sock() for memcg in inet_csk_accept().
-      net: Allow opt-out from global protocol memory accounting.
-      net: Introduce net.core.bypass_prot_mem sysctl.
-      bpf: Support bpf_setsockopt() for BPF_CGROUP_INET_SOCK_CREATE.
-      bpf: Introduce SK_BPF_BYPASS_PROT_MEM.
-      selftests/bpf: Add test for sk->sk_bypass_prot_mem.
-
-Martin KaFai Lau (1):
-      Merge branch 'bpf-allow-opt-out-from-sk-sk_prot-memory_allocated'
-
- Documentation/admin-guide/sysctl/net.rst           |   8 +
- include/net/netns/core.h                           |   1 +
- include/net/proto_memory.h                         |   3 +
- include/net/sock.h                                 |   3 +
- include/net/tcp.h                                  |   3 +
- include/uapi/linux/bpf.h                           |   2 +
- net/core/filter.c                                  |  85 ++++++
- net/core/sock.c                                    |  37 ++-
- net/core/sysctl_net_core.c                         |   9 +
- net/ipv4/af_inet.c                                 |  22 ++
- net/ipv4/inet_connection_sock.c                    |  25 --
- net/ipv4/tcp.c                                     |   3 +-
- net/ipv4/tcp_output.c                              |   7 +-
- net/mptcp/protocol.c                               |   7 +-
- net/tls/tls_device.c                               |   3 +-
- tools/include/uapi/linux/bpf.h                     |   1 +
- .../selftests/bpf/prog_tests/sk_bypass_prot_mem.c  | 292 +++++++++++++++++++++
- .../selftests/bpf/progs/sk_bypass_prot_mem.c       | 104 ++++++++
- 18 files changed, 577 insertions(+), 38 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/sk_bypass_prot_mem.c
- create mode 100644 tools/testing/selftests/bpf/progs/sk_bypass_prot_mem.c
+--=20
+paul-moore.com
