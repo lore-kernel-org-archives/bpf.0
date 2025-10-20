@@ -1,30 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A42233375D;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A39C33374E;
 	Mon, 20 Oct 2025 21:26:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760995600; cv=none; b=DxMrWqWr0Mri9q3Q5I2S8Kq3AAQzpd6jmD+3uO+PRTvKh/2le7V+SsIZcB+kC/xSnHqhoiScGWf1LkCi1Q1dPO0zoQca7lRW38bLK6QHM3ooIPj13ioG3YJD0ZPLWjEzQcRPsfv4/yoetHAU8HXS3MyLIrygb91I/Lvwn5Hfj3w=
+	t=1760995600; cv=none; b=f2L5SNeYxpmxNlO0ipQA36nm7CI+z0fDueBaU5MjC0WD1VadoCG80+aklviu4/RlFdL7UWwEAmMsW3mTirfTi0uoo3lyc8iRX06qvAFDNR0vgO7k3wuNcRlSTwla64fbrqj7PoK7HuqNNCtr6vZvdotu7DtlGqkbr/bs8E62AsM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1760995600; c=relaxed/simple;
-	bh=Vl0LkZmcqdOilJhaw5cYs+K+TtJi8z4nn49piM4Us7I=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=bvDsEM8sSLDOZDt/3fviYF/7HbUBxCpYhlq8Fi08uDEDWOe+MQJvRFRhVoTw95fGT215OnCQ0QCdvOG3lpGHxmgXkUAwOahNbtfmIKptbHJgzaDVnyVlcOtG3NDBRjAUGncBjj9msdpNuqUXPe4O96gsPeOb//n3HOh7glM+7Yo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gdMDObck; arc=none smtp.client-ip=10.30.226.201
+	bh=LapY9CVctM9BRAvd8QjQH1ljjXM/ABSMR24t1Vu69IU=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=m0n7jWsR/Rw/BglNyhtRf8Xbzy2C0/wqp2JXUTIy1kRdTgfhVy+YqW5HMsKyg7EOKJPUmd/IyEgvp7p6hjKgRKc0y9tRAMKKCqOaBzwt+Z7rSQ/7k+8pXTJYIuJhqDja/UlAXrlJZOXWXxaCe+31PePKEI2et58/03OriR/QLVs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Uikv6kM2; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gdMDObck"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9979C116C6;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Uikv6kM2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7957C113D0;
 	Mon, 20 Oct 2025 21:26:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1760995599;
-	bh=Vl0LkZmcqdOilJhaw5cYs+K+TtJi8z4nn49piM4Us7I=;
-	h=From:To:Cc:Subject:Date:From;
-	b=gdMDObckHy+NxEkwxjfSkC7R1bwKgRt2UNZignA+OoLCAWbAYp+OhAzNHSMmbpMs7
-	 HLSgLrHUJZWcAME4snDcfIh+oG4LxZykpg/gcaE1zAXJ5ttIFw4XS+jvJnKBnjNlIg
-	 CJp6qcST0bPbFueQp6iOeEZdRRsRm9ojt5GJXNAmsNY5nM2W7XLFhFFnbxZZnX/6dX
-	 tsqpJtEQ8bpnHFP2yr5S5A148Jp51UV4VLm2k5RSm2nwqt9T8j7hlVHN3qTU1CqE9j
-	 WugVpCaqtnkDWexRiOnGPvxAJbAE3hEm7jaXMHsgt0nhyHEnsvhxvJ8nO5BWp0Qgfw
-	 WZppfnH7scWow==
+	bh=LapY9CVctM9BRAvd8QjQH1ljjXM/ABSMR24t1Vu69IU=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=Uikv6kM2IsCr+p0iEr1+NpMNj8Pp3z+rOnlv+JPJu+on6Doo7CDMh/+HBr+LncMIl
+	 4rPJk2fv3CsNgg8V3Gl2KlM+jmr6Ptl/1s52duPHrogT2NoVJTgHVnrM7RORxSH+KS
+	 emCM9DJ+2mG910zL/AjhSYtrFlhiDJHGarsu2W5YyaYDFjhndPGYL2IoAtlaQnfWvw
+	 wMaZZYPlZp+3ZSnJER36OHqwJJk44lPggxSeQhQm+l2w+wXVF0+XptV4siFw7yT+l/
+	 KdQNhEPzgqvQ0VQ4OF9cgva002Tqo6YjMyaWX/KBRTsLWah/J7rNiMzJxWhxJeSZzc
+	 +oftgR0Gi49vA==
 From: Kees Cook <kees@kernel.org>
 To: Jakub Kicinski <kuba@kernel.org>
 Cc: Kees Cook <kees@kernel.org>,
@@ -42,191 +43,57 @@ Cc: Kees Cook <kees@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	bpf@vger.kernel.org,
 	linux-hardening@vger.kernel.org
-Subject: [PATCH v3 0/9] net: Introduce struct sockaddr_unspec
-Date: Mon, 20 Oct 2025 14:26:29 -0700
-Message-Id: <20251020212125.make.115-kees@kernel.org>
+Subject: [PATCH v3 2/9] net/l2tp: Add missing sa_family validation in pppol2tp_sockaddr_get_info
+Date: Mon, 20 Oct 2025 14:26:31 -0700
+Message-Id: <20251020212639.1223484-2-kees@kernel.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20251020212125.make.115-kees@kernel.org>
+References: <20251020212125.make.115-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=9326; i=kees@kernel.org; h=from:subject:message-id; bh=Vl0LkZmcqdOilJhaw5cYs+K+TtJi8z4nn49piM4Us7I=; b=owGbwMvMwCVmps19z/KJym7G02pJDBnfVnJl/DwsUdZ9cxejif1zEa2nrxi/VHE/mfgs9eHWP Ee5C3mFHaUsDGJcDLJiiixBdu5xLh5v28Pd5yrCzGFlAhnCwMUpABOpd2Bk+LOLs/rFF36W7c4L 3/2W+V9/ZIH525XME0XXCfWFxT2QPMPwkzEoWC0oanvAnR1eU2bksRpXTFi+KK582Ub9fzsjv79 fyQMA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1265; i=kees@kernel.org; h=from:subject; bh=LapY9CVctM9BRAvd8QjQH1ljjXM/ABSMR24t1Vu69IU=; b=owGbwMvMwCVmps19z/KJym7G02pJDBnfVnIfnjxLVegHi7yMHxfPDbn88oJ9nW+a1j6fssR+5 anvT65Vd5SyMIhxMciKKbIE2bnHuXi8bQ93n6sIM4eVCWQIAxenAExEdAEjw40r15N3HZzZzfa2 +ofhgQCN50/ucW+fFu/xj/Nnr/Un/kyG/ymaO07zev6utlBU1ym3zb0/XVBvgf7kvaFFt1JObEn +xAEA
 X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 
-Hi!
+While reviewing the struct proto_ops connect() and bind() callback
+implementations, I noticed that there doesn't appear to be any
+validation that AF_PPPOX sockaddr structures actually have sa_family set
+to AF_PPPOX. The pppol2tp_sockaddr_get_info() checks only look at the
+sizes.
 
- v3:
-   - fix missed kernel_connect/bind casts in bpf selftests
-   - fix missed kernel_connect cast in samples/
-   - drop "bpf: Add size validation to bpf_sock_addr_set_sun_path()",
-     which is technically unrelated to the sockaddr conversion
- v2: https://lore.kernel.org/linux-hardening/20251014223349.it.173-kees@kernel.org/
- v1: https://lore.kernel.org/all/20250723230354.work.571-kees@kernel.org/
+I don't see any way that this might actually cause problems as specific
+info fields are being populated, for which the existing size checks are
+correct, but it stood out as a missing address family check.
 
-The historically fixed-size struct sockaddr is part of UAPI and embedded
-in many existing structures. The kernel uses struct sockaddr extensively
-within the kernel to represent arbitrarily sized sockaddr structures,
-which caused problems with the compiler's ability to determine object
-sizes correctly. The "temporary" solution was to make sockaddr explicitly
-use a flexible array, but this causes problems for embedding struct
-sockaddr in structures, where once again the compiler has to guess about
-the size of such objects, and causes thousands of warnings under the
-coming -Wflex-array-member-not-at-end warning.
+Add the check and return -EAFNOSUPPORT on mismatch.
 
-Switching to sockaddr_storage internally everywhere wastes a lot of memory,
-so we are left with needing two changes:
-- introduction of an explicitly arbitrarily sized sockaddr struct
-- switch struct sockaddr back to being fixed size
+Signed-off-by: Kees Cook <kees@kernel.org>
+---
+ net/l2tp/l2tp_ppp.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Doing the latter step requires all "arbitrarily sized" uses of struct
-sockaddr to be replaced with the new struct from the first step.
-
-So, introduce the new struct and do enough conversions that we can
-switch sockaddr back to a fixed-size sa_data.
-
-Thanks!
-
--Kees
-
-Kees Cook (9):
-  net: Add struct sockaddr_unspec for sockaddr of unknown length
-  net/l2tp: Add missing sa_family validation in
-    pppol2tp_sockaddr_get_info
-  net: Convert proto_ops bind() callbacks to use sockaddr_unspec
-  net: Convert proto_ops connect() callbacks to use sockaddr_unspec
-  net: Remove struct sockaddr from net.h
-  net: Convert proto callbacks from sockaddr to sockaddr_unspec
-  bpf: Convert cgroup sockaddr filters to use sockaddr_unspec
-    consistently
-  bpf: Convert bpf_sock_addr_kern "uaddr" to sockaddr_unspec
-  net: Convert struct sockaddr to fixed-size "sa_data[14]"
-
- include/linux/bpf-cgroup.h                    | 17 ++++++++------
- include/linux/filter.h                        |  2 +-
- include/linux/net.h                           |  9 ++++----
- include/linux/socket.h                        | 23 +++++++++++++++----
- include/net/inet_common.h                     | 13 +++++------
- include/net/ip.h                              |  4 ++--
- include/net/ipv6.h                            | 10 ++++----
- include/net/ipv6_stubs.h                      |  2 +-
- include/net/ping.h                            |  2 +-
- include/net/sctp/sctp.h                       |  2 +-
- include/net/sock.h                            | 14 +++++------
- include/net/tcp.h                             |  2 +-
- include/net/udp.h                             |  2 +-
- include/net/vsock_addr.h                      |  2 +-
- net/rds/rds.h                                 |  2 +-
- net/smc/smc.h                                 |  4 ++--
- .../perf/trace/beauty/include/linux/socket.h  |  5 +---
- crypto/af_alg.c                               |  2 +-
- drivers/block/drbd/drbd_receiver.c            |  6 ++---
- drivers/infiniband/hw/erdma/erdma_cm.c        |  6 ++---
- drivers/infiniband/sw/siw/siw_cm.c            |  8 +++----
- drivers/isdn/mISDN/l1oip_core.c               |  2 +-
- drivers/isdn/mISDN/socket.c                   |  4 ++--
- drivers/net/ppp/pppoe.c                       |  4 ++--
- drivers/net/ppp/pptp.c                        |  8 +++----
- drivers/net/wireless/ath/ath10k/qmi.c         |  2 +-
- drivers/net/wireless/ath/ath11k/qmi.c         |  2 +-
- drivers/net/wireless/ath/ath12k/qmi.c         |  2 +-
- drivers/nvme/host/tcp.c                       |  4 ++--
- drivers/nvme/target/tcp.c                     |  2 +-
- drivers/slimbus/qcom-ngd-ctrl.c               |  2 +-
- drivers/target/iscsi/iscsi_target_login.c     |  2 +-
- drivers/xen/pvcalls-back.c                    |  4 ++--
- fs/afs/rxrpc.c                                |  6 ++---
- fs/coredump.c                                 |  2 +-
- fs/dlm/lowcomms.c                             |  8 +++----
- fs/ocfs2/cluster/tcp.c                        |  6 ++---
- fs/smb/client/connect.c                       |  4 ++--
- fs/smb/server/transport_tcp.c                 |  4 ++--
- kernel/bpf/cgroup.c                           |  8 +++----
- net/9p/trans_fd.c                             |  8 +++----
- net/appletalk/ddp.c                           |  4 ++--
- net/atm/pvc.c                                 |  4 ++--
- net/atm/svc.c                                 |  4 ++--
- net/ax25/af_ax25.c                            |  4 ++--
- net/bluetooth/hci_sock.c                      |  2 +-
- net/bluetooth/iso.c                           |  6 ++---
- net/bluetooth/l2cap_sock.c                    |  4 ++--
- net/bluetooth/rfcomm/core.c                   |  6 ++---
- net/bluetooth/rfcomm/sock.c                   |  5 ++--
- net/bluetooth/sco.c                           |  4 ++--
- net/caif/caif_socket.c                        |  2 +-
- net/can/bcm.c                                 |  2 +-
- net/can/isotp.c                               |  2 +-
- net/can/j1939/socket.c                        |  4 ++--
- net/can/raw.c                                 |  2 +-
- net/ceph/messenger.c                          |  2 +-
- net/core/dev.c                                |  2 +-
- net/core/dev_ioctl.c                          |  2 +-
- net/core/filter.c                             |  5 ++--
- net/core/sock.c                               |  6 ++---
- net/ieee802154/socket.c                       | 12 +++++-----
- net/ipv4/af_inet.c                            | 16 ++++++-------
- net/ipv4/arp.c                                |  2 +-
- net/ipv4/datagram.c                           |  4 ++--
- net/ipv4/ping.c                               |  8 +++----
- net/ipv4/raw.c                                |  3 ++-
- net/ipv4/tcp.c                                |  2 +-
- net/ipv4/tcp_ipv4.c                           |  4 ++--
- net/ipv4/udp.c                                |  6 +++--
- net/ipv4/udp_tunnel_core.c                    |  4 ++--
- net/ipv6/af_inet6.c                           |  6 ++---
- net/ipv6/datagram.c                           |  8 +++----
- net/ipv6/ip6_udp_tunnel.c                     |  4 ++--
- net/ipv6/ping.c                               |  2 +-
- net/ipv6/raw.c                                |  3 ++-
- net/ipv6/tcp_ipv6.c                           |  6 ++---
- net/ipv6/udp.c                                |  5 ++--
- net/iucv/af_iucv.c                            |  6 ++---
- net/l2tp/l2tp_core.c                          |  8 +++----
- net/l2tp/l2tp_ip.c                            |  6 +++--
- net/l2tp/l2tp_ip6.c                           |  5 ++--
- net/l2tp/l2tp_ppp.c                           |  9 +++++++-
- net/llc/af_llc.c                              |  4 ++--
- net/mctp/af_mctp.c                            |  4 ++--
- net/mctp/test/route-test.c                    |  2 +-
- net/mctp/test/utils.c                         |  5 ++--
- net/mptcp/pm_kernel.c                         |  4 ++--
- net/mptcp/protocol.c                          |  5 ++--
- net/mptcp/subflow.c                           |  4 ++--
- net/netfilter/ipvs/ip_vs_sync.c               |  6 ++---
- net/netlink/af_netlink.c                      |  4 ++--
- net/netrom/af_netrom.c                        |  6 ++---
- net/nfc/llcp_sock.c                           |  6 ++---
- net/nfc/rawsock.c                             |  2 +-
- net/packet/af_packet.c                        | 15 ++++++------
- net/phonet/pep.c                              |  3 ++-
- net/phonet/socket.c                           | 10 ++++----
- net/qrtr/af_qrtr.c                            |  4 ++--
- net/qrtr/ns.c                                 |  2 +-
- net/rds/af_rds.c                              |  2 +-
- net/rds/bind.c                                |  2 +-
- net/rds/tcp_connect.c                         |  4 ++--
- net/rds/tcp_listen.c                          |  2 +-
- net/rose/af_rose.c                            |  4 ++--
- net/rxrpc/af_rxrpc.c                          |  4 ++--
- net/rxrpc/rxperf.c                            |  2 +-
- net/sctp/socket.c                             | 13 ++++++-----
- net/smc/af_smc.c                              |  6 ++---
- net/socket.c                                  | 14 +++++------
- net/sunrpc/clnt.c                             |  6 ++---
- net/sunrpc/svcsock.c                          |  2 +-
- net/sunrpc/xprtsock.c                         |  9 ++++----
- net/tipc/socket.c                             |  6 ++---
- net/unix/af_unix.c                            | 12 +++++-----
- net/vmw_vsock/af_vsock.c                      |  6 ++---
- net/vmw_vsock/vsock_addr.c                    |  2 +-
- net/x25/af_x25.c                              |  4 ++--
- net/xdp/xsk.c                                 |  2 +-
- samples/qmi/qmi_sample_client.c               |  2 +-
- .../selftests/bpf/test_kmods/bpf_testmod.c    |  4 ++--
- 121 files changed, 326 insertions(+), 290 deletions(-)
-
+diff --git a/net/l2tp/l2tp_ppp.c b/net/l2tp/l2tp_ppp.c
+index 5e12e7ce17d8..b7a9c224520f 100644
+--- a/net/l2tp/l2tp_ppp.c
++++ b/net/l2tp/l2tp_ppp.c
+@@ -535,6 +535,13 @@ struct l2tp_connect_info {
+ static int pppol2tp_sockaddr_get_info(const void *sa, int sa_len,
+ 				      struct l2tp_connect_info *info)
+ {
++	const struct sockaddr_unspec *sockaddr = sa;
++
++	if (sa_len < offsetofend(struct sockaddr, sa_family))
++		return -EINVAL;
++	if (sockaddr->sa_family != AF_PPPOX)
++		return -EAFNOSUPPORT;
++
+ 	switch (sa_len) {
+ 	case sizeof(struct sockaddr_pppol2tp):
+ 	{
 -- 
 2.34.1
 
