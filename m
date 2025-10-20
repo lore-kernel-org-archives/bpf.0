@@ -1,181 +1,225 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66EBB2641C3
-	for <bpf@vger.kernel.org>; Mon, 20 Oct 2025 11:58:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F0D3313E22
+	for <bpf@vger.kernel.org>; Mon, 20 Oct 2025 12:32:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760961539; cv=none; b=Sx3FZtmDbvB0mQsGjnWHhsGb5t8+j0t3gTxMXPxWsqpE2lMfZ8FTfKLeN075giZov6Ag8QWrlPQxcWGrGf/afECL0Y++15pWb2O2983RUObE6+ZhZVM2qv+vnpswbb7yBmWeBkTrlcls3mW9f7eCZQVtoNRXMOQ2WC4g/WivYXA=
+	t=1760963533; cv=none; b=mufRW5O78YMQeUY6TiYgN6MQU+9GGuPI2jWNhpza8dChGrebNVuD5p7qZzGgbjg52MOcoTk9gIRb0kEXMoss7rhxcykCHd0kiP1Ss33KPMBImONpK9nxSao+PdOs/zPP64EozU4aovsGiO75Zip3t+mvu/AgRlhbMbDFddkvYfo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760961539; c=relaxed/simple;
-	bh=prBsS/3TdnqRdZW7jgJaElFuOWg9kNn6hLTHuRKrO4g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DFAl2BPOtvCNwBg03+aeWvuo5Nl0lt3syTxZ3tXtrg2FTNzN2uoQRAN7ufDSYpmlUAcbqmGCHVeX+eQiepvE3jdZS9+IyBxY9ytyGrF/bhOu5mgyS4mUC6TotFI83hNhi/3Qp/JebngGyHYeZ6RQ2dXXyPS4vjZ1o1YqJLIyXL4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=MmkU7qmw; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1760963533; c=relaxed/simple;
+	bh=yEU8OlJ4rnmeVIIFVpJYprNmuPl3V5iccAvk0qJgLRg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZHBUfUNN8kOcoZ88HAR2nXNbkXYKX579R/q2IuWDWxYJQUI6hGGLr72rth9dpXifW2junWLnvihUUAB+/88BiPSRW8iLWIZ+1w5e1wTdWqiy6xcsTv6d9pA0PWWj949zuRyWeRshq8raOc4kgz0fqKLB9zlG/b5tzC3YdiGKTQ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ONVT9Vem; arc=none smtp.client-ip=209.85.218.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="MmkU7qmw"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1760961536;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=3DGWABDIIB0dwmhK6Y7TeY6zhcql3nAwcUWHRom4zEg=;
-	b=MmkU7qmwmztaS+EXaTxdSUt4G+mHq/mXvspn6c4EM1XpvyKqtJqiIbKPcfTMiuc4f2LFA2
-	7uL7HK/17p394llxTba0UOAzrUZ/CeRjqbtE2+BqSyWPnLpY+NtPlrScn7o7zttbIhdy1E
-	22ZnwW3gw54M9+3WnizVhzVlcEUxwHI=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-564-7hH3-YcXOKuTI8zXK7LB5A-1; Mon, 20 Oct 2025 07:58:55 -0400
-X-MC-Unique: 7hH3-YcXOKuTI8zXK7LB5A-1
-X-Mimecast-MFC-AGG-ID: 7hH3-YcXOKuTI8zXK7LB5A_1760961534
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-47108163eeaso20781275e9.3
-        for <bpf@vger.kernel.org>; Mon, 20 Oct 2025 04:58:55 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ONVT9Vem"
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-b3f5a6e114dso78868666b.0
+        for <bpf@vger.kernel.org>; Mon, 20 Oct 2025 05:32:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1760963529; x=1761568329; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZrHAmJjxM6ewOAgZH2FCw4tTUkBr/4mUYIaDeASxNLM=;
+        b=ONVT9VemBlrEqqp4Xe3nEV5dhTX6ME9wfl4OBehvQuaMtUGhye1knQ1EoG3GVNntMW
+         XjlLO3UTF4BTiNmuz0bhQUnn+PFKcjcAPL3BEjMewa0/K+7EyIO0VeljkaUOlCTYfHNE
+         VM8RdVaKISDhcq5JjZkZMpThcVLen4BtZXJTrO1gVY0tWmm0/FtO+bzBHGk1O83Yvu/A
+         hgyjG5sgoMtB9sc4PsKHeVBR7wfFCjloB7NTOs5z4dVO/lXYvR7/y7sw3aP7CwJ/Kfyr
+         2KgqCocl0TeDBsiUu74qMOJbQQ0PkcY8qF4ptooz7eyzbhE2Pusr3XCiV8jtbYxZsetT
+         3wAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760961534; x=1761566334;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3DGWABDIIB0dwmhK6Y7TeY6zhcql3nAwcUWHRom4zEg=;
-        b=nZO1mIqw59aYE5KA4K8lLdMNJ4d3w0yazPBK709TgEN/wDzHDTGij+OFZsbEmrHTi9
-         PqsXtx6ocbmLRAJx996KRMaoVU6WnJA3kJCSsKty6knoFvGw7e3i0yRCnMMrRdWoK5ko
-         BzGSDlbmFmPOMKCEtbKLdpAV8b6JuTDtnC7O9H9aTJJ/VyPfRiej27X0IQ4WErbxdxj6
-         f859YojEWNxQMtX++xbzpAJPOGkjNU3dqxkUJWIfYLja4c4EdlfBFVJsRlkHc7/jL83X
-         2BrWswScw6o/+4mai7n4idK4XoJuwd7WtPkMpJ91zuJfdMdsUfGOieFBH1CEzncPpDpK
-         guZQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVaxg0mA/VdtMhIhTkrEgutKbkM6jhCnW0pRM6k1iXH1bt6U+d2pIoRjxkN0FH++JF3pDk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzeq3eXkpanrzU7Xo8n1j7D0cMz60+eAKa6v4BdZZurKlHu8p4V
-	MUj7iEUfyc+z84LQKIIoJRe+wT+6di2dcDbyK6Wdn9a9p3AekwhOUkNEZ8EiRmKQmsUR9ESNF9Z
-	7CnfYfCsBYhqW2dcNlIfnCrFchs1v4NN0LmJ9CBuD/ldATXHa3Fj3fg==
-X-Gm-Gg: ASbGnct0oGRGykgF5FPzb9nqqJkuipredr2umcaXpcZYxvb7VcA0bLitCXk85IYDNmj
-	9d8RhBxhzBnm1kfUKclnG+LNJ28gB7JUr0mAVc9RSm3tRmQLWUV/jGmwtndRkX1MkMaUGFzjAvO
-	tC4jUic1rMFPprbJrvTykj1yZmFxnS4fsemz5/Yxd7TScSTAvB8brqqQVkATzdoffXZBOBG/DsS
-	vanvThZjQzhYs6cysVB0z9YwL0TcOjnM4LkRjv36yd+hEziCBTShHxzoM5RWC3IoDYyhdfXzgy1
-	xswFTu69mVvZLKdiJvVvzDE5FTY0cdBnUPhZKkdZP3jmgDL0XGGROW0F7yPeTz+HwkQYHV5DFnH
-	TgtUcwINhMOQo2AWwHMJWTchjJDtoSBQ=
-X-Received: by 2002:a05:600c:828a:b0:46e:39e1:fc3c with SMTP id 5b1f17b1804b1-4711787617amr91944605e9.5.1760961533609;
-        Mon, 20 Oct 2025 04:58:53 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IG3bJRkDnTNsDoLX27C6wNA7H7qPmCVso88dp9ehs0+zp2XESQa1XmzDa+Csu2dj2eVZorh8A==
-X-Received: by 2002:a05:600c:828a:b0:46e:39e1:fc3c with SMTP id 5b1f17b1804b1-4711787617amr91944415e9.5.1760961533236;
-        Mon, 20 Oct 2025 04:58:53 -0700 (PDT)
-Received: from jlelli-thinkpadt14gen4.remote.csb ([176.206.13.103])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-471144c900asm229469775e9.16.2025.10.20.04.58.51
+        d=1e100.net; s=20230601; t=1760963529; x=1761568329;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZrHAmJjxM6ewOAgZH2FCw4tTUkBr/4mUYIaDeASxNLM=;
+        b=llOoPbPpWINKgomMDcARt4zHto3H1RC5To2HwEcttXyu7WbzqGaSLL9dGf5QPo/lLp
+         Lwp5U50VIRErqEfZbKQapZbLlA3QF+ntVZbZMumoZCLzmTGPAOjSv1h771X4VrLLPhBk
+         gCfyRTOvafaxmZ2AVt+Y0pPjbodaHRZouk/UYVB+oKVk40ak+4WUnRgoLOeSGzBEuTxC
+         hflFki9OqC4o+sD+/jS8gFN3HEaKuct+QTglod4EG2OdqLW4L4+IB7R0nu2OUPQYncan
+         vDaycdYnSqrA5dExFgLUMtDUYp5gOiVunZ15YgjQd8wSozmn4QE3lr1nHa81crN1ptWw
+         ERZQ==
+X-Gm-Message-State: AOJu0Ywj1Wot0evIj67mQtlu76/2bqFd9gEztuRFmhrQOnQIbsO3k6n9
+	82ahrU/T9PwClQBumSlWkSxSu11PrYTP1HYAI4qM8ybHPGyl4asFxpOP
+X-Gm-Gg: ASbGncv/HMDo5chytciqDaJVxsKMzkLPNhR0Z99rC8wf1X8oUYfEN61EEIAhseoOzw/
+	jFHdfFtHevqwk6IPIAYBLknn42x3Ye3VdVu3PjFkYuzYOy4T9wzEivMZn3ETnJmdG9LKCWF5oEI
+	7Rdd+uOuxcVkozerL6oC5gBqZvZXt1b6On3W0PDetDj/OVIHWqhVCEaB6VP1Vt+bac8KAvhFprJ
+	sIbw8VfatcauGbDYK/OKhyanGHOu2ivpjQuRaSton53DpjCtnC2v7qnrwLCNVRAegq4QI0Vqskg
+	G0sDYqYnpAj4IgOKN5wKnV64CIJBCbzuAkD7dE0cde1pywfJCRoFt2NnySMxEqKvX/icfhwAx+z
+	h0AxCaVLq94JOw13P5wGE4qtOodjJIgsvzgqdDNRpv8i+o1ndZ+QoD0u4lqnPuBR/EebgAFK8vk
+	gnAOI=
+X-Google-Smtp-Source: AGHT+IHeviqrSd93w8iK4mCEl/S4LfRu1LVX2pbSgOi06QmgOak3XwTymoUDcoiO7hQie9VFAZ5kLw==
+X-Received: by 2002:a17:906:641:b0:b65:c8b8:144f with SMTP id a640c23a62f3a-b65c8b81515mr400301266b.6.1760963528918;
+        Mon, 20 Oct 2025 05:32:08 -0700 (PDT)
+Received: from bhk ([165.50.81.231])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b65ebb499dasm787095166b.73.2025.10.20.05.32.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Oct 2025 04:58:52 -0700 (PDT)
-Date: Mon, 20 Oct 2025 13:58:50 +0200
-From: Juri Lelli <juri.lelli@redhat.com>
-To: Andrea Righi <arighi@nvidia.com>
-Cc: Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	Joel Fernandes <joelagnelf@nvidia.com>, Tejun Heo <tj@kernel.org>,
-	David Vernet <void@manifault.com>,
-	Changwoo Min <changwoo@igalia.com>, Shuah Khan <shuah@kernel.org>,
-	sched-ext@lists.linux.dev, bpf@vger.kernel.org,
+        Mon, 20 Oct 2025 05:32:08 -0700 (PDT)
+From: Mehdi Ben Hadj Khelifa <mehdi.benhadjkhelifa@gmail.com>
+To: andrii@kernel.org,
+	eddyz87@gmail.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	john.fastabend@gmail.com,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	shuah@kernel.org,
+	nathan@kernel.org,
+	nick.desaulniers+lkml@gmail.com,
+	morbo@google.com,
+	justinstitt@google.com,
+	ameryhung@gmail.com,
+	toke@redhat.com
+Cc: bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Luigi De Matteis <ldematteis123@gmail.com>
-Subject: Re: [PATCH 06/14] sched_ext: Add a DL server for sched_ext tasks
-Message-ID: <aPYj-iOdvgUYQFpn@jlelli-thinkpadt14gen4.remote.csb>
-References: <20251017093214.70029-1-arighi@nvidia.com>
- <20251017093214.70029-7-arighi@nvidia.com>
+	llvm@lists.linux.dev,
+	skhan@linuxfoundation.org,
+	david.hunter.linux@gmail.com,
+	khalid@kernel.org,
+	linux-kernel-mentees@lists.linuxfoundation.org,
+	Mehdi Ben Hadj Khelifa <mehdi.benhadjkhelifa@gmail.com>
+Subject: [PATCH v4] selftests/bpf: Change variable types for -Wsign-compare
+Date: Mon, 20 Oct 2025 14:31:33 +0100
+Message-ID: <20251020133156.215326-1-mehdi.benhadjkhelifa@gmail.com>
+X-Mailer: git-send-email 2.51.1.dirty
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251017093214.70029-7-arighi@nvidia.com>
+Content-Transfer-Encoding: 8bit
 
-Hi!
+This is a follow up patch for commit 495d2d8133fd("selftests/bpf: Attempt
+to build BPF programs with -Wsign-compare") from Alexei Starovoitov[1]
+to be able to enable -Wsign-compare C compilation flag for clang since
+-Wall doesn't add it and BPF programs are built with clang.This has the
+benefit to catch problematic comparisons in future tests as quoted from
+the commit message:"
+  int i = -1;
+  unsigned int j = 1;
+  if (i < j) // this is false.
 
-On 17/10/25 11:25, Andrea Righi wrote:
-> From: Joel Fernandes <joelagnelf@nvidia.com>
-> 
-> sched_ext currently suffers starvation due to RT. The same workload when
-> converted to EXT can get zero runtime if RT is 100% running, causing EXT
-> processes to stall. Fix it by adding a DL server for EXT.
-> 
-> A kselftest is also provided later to verify:
-> 
-> ./runner -t rt_stall
-> ===== START =====
-> TEST: rt_stall
-> DESCRIPTION: Verify that RT tasks cannot stall SCHED_EXT tasks
-> OUTPUT:
-> TAP version 13
-> 1..1
-> ok 1 PASS: CFS task got more than 4.00% of runtime
-> 
-> [ arighi: drop ->balance() now that pick_task() has an rf argument ]
-> 
-> Cc: Luigi De Matteis <ldematteis123@gmail.com>
-> Co-developed-by: Andrea Righi <arighi@nvidia.com>
-> Signed-off-by: Andrea Righi <arighi@nvidia.com>
-> Signed-off-by: Joel Fernandes <joelagnelf@nvidia.com>
-> ---
->  kernel/sched/core.c     |  3 +++
->  kernel/sched/deadline.c |  2 +-
->  kernel/sched/ext.c      | 51 +++++++++++++++++++++++++++++++++++++++--
->  kernel/sched/sched.h    |  2 ++
->  4 files changed, 55 insertions(+), 3 deletions(-)
-> 
-> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> index 096e8d03d85e7..31a9c9381c63f 100644
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -8679,6 +8679,9 @@ void __init sched_init(void)
->  		hrtick_rq_init(rq);
->  		atomic_set(&rq->nr_iowait, 0);
->  		fair_server_init(rq);
-> +#ifdef CONFIG_SCHED_CLASS_EXT
-> +		ext_server_init(rq);
-> +#endif
->  
->  #ifdef CONFIG_SCHED_CORE
->  		rq->core = rq;
-> diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
-> index 0680e0186577a..3c1fd2190949e 100644
-> --- a/kernel/sched/deadline.c
-> +++ b/kernel/sched/deadline.c
-> @@ -1504,7 +1504,7 @@ static void update_curr_dl_se(struct rq *rq, struct sched_dl_entity *dl_se, s64
->  	 * The fair server (sole dl_server) does not account for real-time
+  long i = -1;
+  unsigned int j = 1;
+  if (i < j) // this is true.
 
-Fair server is not alone anymore. :))
+C standard for reference:
 
-Please update the comment as well.
+- If either operand is unsigned long the other shall be converted to 
+unsigned long.
 
->  	 * workload because it is running fair work.
->  	 */
-> -	if (dl_se == &rq->fair_server)
-> +	if (dl_se->dl_server)
->  		return;
->  
->  #ifdef CONFIG_RT_GROUP_SCHED
+- Otherwise, if one operand is a long int and the other unsigned int,
+then if a long int can represent all the values of an unsigned int,
+the unsigned int shall be converted to a long int;
+otherwise both operands shall be converted to unsigned long int.
 
-...
+- Otherwise, if either operand is long, the other shall be 
+converted to long.
 
-> @@ -1487,6 +1499,11 @@ static bool dequeue_task_scx(struct rq *rq, struct task_struct *p, int deq_flags
->  	sub_nr_running(rq, 1);
->  
->  	dispatch_dequeue(rq, p);
-> +
-> +	/* Stop the server if this was the last task */
-> +	if (rq->scx.nr_running == 0)
-> +		dl_server_stop(&rq->ext_server);
-> +
+- Otherwise, if either operand is unsigned, the other shall be
+converted to unsigned.
 
-Do we want to use the delayed stop behavior for scx-server as we have
-for fair-server? Wonder if it's a matter of removing this explicit stop
-and wait for a full period to elapse as we do for fair. It should reduce
-timer reprogramming overhead for scx as well.
+Unfortunately clang's -Wsign-compare is very noisy.
+It complains about (s32)a == (u32)b which is safe and doen't
+have surprising behavior."
 
-Thanks,
-Juri
+This specific patch supresses the following warnings when
+-Wsign-compare is enabled:
+
+1 warning generated.
+
+progs/bpf_iter_bpf_percpu_array_map.c:35:16: warning: comparison of 
+integers of different signs: 'int' and 'const volatile __u32' 
+(aka 'const volatile unsigned int') [-Wsign-compare]
+   35 |         for (i = 0; i < num_cpus; i++) {
+      |                     ~ ^ ~~~~~~~~
+
+1 warning generated.
+
+progs/bpf_qdisc_fifo.c:93:2: warning: comparison of integers of 
+different signs: 'int' and '__u32' 
+(aka 'unsigned int') [-Wsign-compare]
+   93 |         bpf_for(i, 0, sch->q.qlen) {
+      |         ^       ~     ~~~~~~~~~~~
+
+Should be noted that many more similar changes are still needed in order
+to be able to enable the -Wsign-compare flag since -Werror is enabled and
+would cause compilation of bpf selftests to fail.
+
+[1].
+Link:https://github.com/torvalds/linux/commit/495d2d8133fd1407519170a5238f455abbd9ec9b
+
+Signed-off-by: Mehdi Ben Hadj Khelifa <mehdi.benhadjkhelifa@gmail.com>
+---
+Changelog:
+
+Changes from v3:
+
+-Downsized the patch as suggested by vivek yadav[2].
+
+-Changed the commit message as suggested by Daniel Borkmann[3].
+
+Link:https://lore.kernel.org/all/20250925103559.14876-1-mehdi.benhadjkhelifa@gmail.com/#r
+
+Changes from v2:
+
+-Split up the patch into a patch series as suggested by vivek
+
+-Include only changes to variable types with no casting by my mentor
+david
+
+-Removed the -Wsign-compare in Makefile to avoid compilation errors
+until adding casting for rest of comparisons.
+
+Link:https://lore.kernel.org/bpf/20250924195731.6374-1-mehdi.benhadjkhelifa@gmail.com/T/#u
+
+Changes from v1:
+
+- Fix CI failed builds where it failed due to do missing .c and
+.h files in my patch for working in mainline.
+
+Link:https://lore.kernel.org/bpf/20250924162408.815137-1-mehdi.benhadjkhelifa@gmail.com/T/#u
+
+[2]:https://lore.kernel.org/all/CABPSWR7_w3mxr74wCDEF=MYYuG2F_vMJeD-dqotc8MDmaS_FpQ@mail.gmail.com/
+[3]:https://lore.kernel.org/all/5ad26663-a3cc-4bf4-9d6f-8213ac8e8ce6@iogearbox.net/
+ .../testing/selftests/bpf/progs/bpf_iter_bpf_percpu_array_map.c | 2 +-
+ tools/testing/selftests/bpf/progs/bpf_qdisc_fifo.c              | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_bpf_percpu_array_map.c b/tools/testing/selftests/bpf/progs/bpf_iter_bpf_percpu_array_map.c
+index 9fdea8cd4c6f..0baf00463f35 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_iter_bpf_percpu_array_map.c
++++ b/tools/testing/selftests/bpf/progs/bpf_iter_bpf_percpu_array_map.c
+@@ -24,7 +24,7 @@ int dump_bpf_percpu_array_map(struct bpf_iter__bpf_map_elem *ctx)
+ 	__u32 *key = ctx->key;
+ 	void *pptr = ctx->value;
+ 	__u32 step;
+-	int i;
++	__u32 i;
+ 
+ 	if (key == (void *)0 || pptr == (void *)0)
+ 		return 0;
+diff --git a/tools/testing/selftests/bpf/progs/bpf_qdisc_fifo.c b/tools/testing/selftests/bpf/progs/bpf_qdisc_fifo.c
+index 1de2be3e370b..7a639dcb23a9 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_qdisc_fifo.c
++++ b/tools/testing/selftests/bpf/progs/bpf_qdisc_fifo.c
+@@ -88,7 +88,7 @@ void BPF_PROG(bpf_fifo_reset, struct Qdisc *sch)
+ {
+ 	struct bpf_list_node *node;
+ 	struct skb_node *skbn;
+-	int i;
++	__u32 i;
+ 
+ 	bpf_for(i, 0, sch->q.qlen) {
+ 		struct sk_buff *skb = NULL;
+-- 
+2.51.1.dirty
 
