@@ -1,117 +1,218 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from out-174.mta1.migadu.com (out-174.mta1.migadu.com [95.215.58.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CFC22EB873
-	for <bpf@vger.kernel.org>; Mon, 20 Oct 2025 08:36:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23D131F1517;
+	Mon, 20 Oct 2025 08:41:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760949385; cv=none; b=A6AGUhIs/2pvTS6rMt/jKHt0xFrqLVYzjA7EN+FQjTFI16WJdMca4QUOt4FiRVHLiLN53+/7lzZXMZi9Jo8eRA/JuXEUsiVL+D0jAzIAl/pxbBi1vlLIqAkYG2xlt7WCqUEFf3K1X+Eovp9vMsmWH4SBSe0jGEphIzgPa3eiDMA=
+	t=1760949668; cv=none; b=kwVSVv8l8xTWxZ6ljdCavttSBbmn3ZtqA24cmj+xK/gvJYq0XLzxIk1rvPWHt0jToX+Zi7Y9PbLi3Ka9EU37iiW9ygA3BgjZReRTZW+q7oQaXSzGe+PAkkuvaSB487O1Bcyg10UQYR+DhovQ7xJRqsOVKD8s8pc7j8AfU4FhmLI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760949385; c=relaxed/simple;
-	bh=wzYeKe8llsS8xH05UqQBqkk5pJepcdnzGoYD0EgvANs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SdW4vH6EQ7TeX4sLS+K6ri9vZtjyotRzpMtuENKa3/DJ0a7C92oGadLfrHO+9ynUu9BN0ys8/yXy/l4KBoSa0CI8Ya90oJhmu5+2+b/jS+/MTHw5gF8KDQ4IV4E59t1narZOoGFTQ092BFjQwd8lkTWhj1wI3szKI9NERfvBngc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=JE+T+XCA; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1760949668; c=relaxed/simple;
+	bh=j9yEkHBaZTQHcGD0XBLUbfsvIwG+WLkyVW8M9OqBigQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=DohddONyk4EhEOqXrroaoQd+jo2fKWGxy/fgtsgnOCeWPIDSZ+P9SETucbR+uzOCgAf6xcou44DpFEp3WvtxwP8QMWP9u0NfQiSx0Jh3nH/4hgLIYWGc6r9vLs3VXjk98g06B6aEfPQmUD0m+TuZQcu++EnfBZg9vAtqt1acV8o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=g++C1C8v; arc=none smtp.client-ip=95.215.58.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="JE+T+XCA"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1760949382;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="g++C1C8v"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1760949654;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=LDPZ0ul7eThbecq+UNdvM4KlBx5eDgTRibaStyKpTWQ=;
-	b=JE+T+XCApnvv31aq5BvuV65PVpgUeen3+KaEzi97ptpHJn2BP9vaNG0j/Oqhx9GDWS1prq
-	/FU/qLkRTRloi4Vae+1VlXRIvf4r7XdWqKsEIiiWs6sl1xxmZPZTHppEaNSLegqwQgVdM8
-	G8DEBYa8qQsc2RANavpO+gntlW2gn5c=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-443-DFK4c_3mMRGFUX8mncxo5A-1; Mon, 20 Oct 2025 04:36:20 -0400
-X-MC-Unique: DFK4c_3mMRGFUX8mncxo5A-1
-X-Mimecast-MFC-AGG-ID: DFK4c_3mMRGFUX8mncxo5A_1760949379
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-46e4cb3e4deso14314395e9.1
-        for <bpf@vger.kernel.org>; Mon, 20 Oct 2025 01:36:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760949379; x=1761554179;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LDPZ0ul7eThbecq+UNdvM4KlBx5eDgTRibaStyKpTWQ=;
-        b=c9VKDfP2mNf90lITj0xXnUL6XdBoJRnTy1tKA+NJUURk1opNq49b3BajFnvOQbWJlo
-         KTPNTv4BRjHKyHxm06fZ/VgSLsgP8ju2g8gO2v13jguW8rf9NHW8P4Hhsi0Uf7LW5EVo
-         qV36R/8Y2ypRiNJyEyhFmYfKJ0sMpS0tJh5QqYdJq7UJeodFuRATyHWautmVGOIE6Bfp
-         zLrktVhaOicY5cSlAEFo+E+QoUxEKVO0aEuzc+gGwU+KknWWEDly42iDDhJ6qks6skp3
-         YpTvvE+qA/ETsJ0LKTYWLI7sPsvRtWs8OchIiEbi5xmxYjNTig58ha5B+G/h2KI8wN1G
-         DyTw==
-X-Forwarded-Encrypted: i=1; AJvYcCWTCuLoov1PD2yom7+J9+Ryw4Fgg7C3KAigFZZYAnn/CwspmuAEjv+h4feIlO9MEK+2qTM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YypLo70m+WF1uXt3JL+YsA0weCqGK3mgk3EAM4Yd97J/FtPGPFa
-	0PB8cZJ5zRGKFv7egu1O/Q0RmJ3uZ6gPXxygO98iE8xAaWqJ2jmwJPZDX8KjKu5mWvQ7BCjUWin
-	1gm209FRus7vRVdfWrY0tDIed8qGAq9bl8I4j/6l+WKo8ym1/qt693A==
-X-Gm-Gg: ASbGnctsYOwtCd0tDRb3JfJwCvGV55mGZN1l4+JQloj0LlIJY3klPLSqJEaa5Dwfxav
-	hFu/Eut/GMUeW8WBUoRCs0Kgy0g+5kHUzN5DPoG+gFShgHQ0q8ZOs40r14tNMOBMNAccZsfrcrQ
-	CahGwY9WJJBpFYyvhrw3U6AEnBWbWKjRhRUV7TiuZfJVOtNZCE+Mj7boOtAQ6zyvP8FWzVeVHiD
-	r6RLvkCiv+5gQCfIcDJZRDCjUuSjUqVCmf1mQuCnyYQzje3JayyYknwOlP0gapOgg2MsSbcLctY
-	dQNqkLcrowN47HvyZWpaso3/P370ThwYKw3CV91Cv+Zn27OLaXpRRHMROauv7JgppFobKrpm/XB
-	ZF4yKvYCnKsv9eDjEr95SVN/RwcX6Csg=
-X-Received: by 2002:a05:600c:6290:b0:46f:b42e:e38f with SMTP id 5b1f17b1804b1-47117345ffdmr107954745e9.19.1760949378905;
-        Mon, 20 Oct 2025 01:36:18 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IG9PwoSk43ABFo5essiejYiBkUkNUIQWrYCuPXPAmRDQtUNGUR37Zqt6yI37QTO1Cp76s6VKA==
-X-Received: by 2002:a05:600c:6290:b0:46f:b42e:e38f with SMTP id 5b1f17b1804b1-47117345ffdmr107954455e9.19.1760949378471;
-        Mon, 20 Oct 2025 01:36:18 -0700 (PDT)
-Received: from jlelli-thinkpadt14gen4.remote.csb ([176.206.13.103])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4710ed9e7d7sm112564395e9.3.2025.10.20.01.36.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Oct 2025 01:36:17 -0700 (PDT)
-Date: Mon, 20 Oct 2025 10:36:15 +0200
-From: Juri Lelli <juri.lelli@redhat.com>
-To: Andrea Righi <arighi@nvidia.com>
-Cc: Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	Joel Fernandes <joelagnelf@nvidia.com>, Tejun Heo <tj@kernel.org>,
-	David Vernet <void@manifault.com>,
-	Changwoo Min <changwoo@igalia.com>, Shuah Khan <shuah@kernel.org>,
-	sched-ext@lists.linux.dev, bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 01/14] sched/debug: Fix updating of ppos on server write
- ops
-Message-ID: <aPX0fwMfPi1M9SL_@jlelli-thinkpadt14gen4.remote.csb>
-References: <20251017093214.70029-1-arighi@nvidia.com>
- <20251017093214.70029-2-arighi@nvidia.com>
+	bh=d2ASlFl8CZjWKl3AeuWdFgcOERTPwTmFTKMyRlTsQbM=;
+	b=g++C1C8v24WDqr9GGUDcKFTgHO62v13d1uXca2eTAfV2jsuIKtdL6Sp8stnwi1co7315ns
+	452UZnaNonN8zXG1+PhwXHGmsLgfLofrzOQEz6PWN7CFenNk6y31Tw2EigaSYxxuM1vIaY
+	oLe+eh5TC1SsUc5rMjohqwnTB1v0Rv8=
+From: Menglong Dong <menglong.dong@linux.dev>
+To: Menglong Dong <menglong8.dong@gmail.com>, Jiri Olsa <olsajiri@gmail.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
+ andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, kpsingh@kernel.org, sdf@fomichev.me,
+ haoluo@google.com, mattbobrowski@google.com, rostedt@goodmis.org,
+ mhiramat@kernel.org, mathieu.desnoyers@efficios.com, leon.hwang@linux.dev,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org
+Subject:
+ Re: [PATCH RFC bpf-next 5/5] selftests/bpf: add testcases for tracing session
+Date: Mon, 20 Oct 2025 16:40:17 +0800
+Message-ID: <2243183.irdbgypaU6@7950hx>
+In-Reply-To: <aPXwo0puQI3t0CXC@krava>
+References:
+ <20251018142124.783206-1-dongml2@chinatelecom.cn>
+ <20251018142124.783206-6-dongml2@chinatelecom.cn> <aPXwo0puQI3t0CXC@krava>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251017093214.70029-2-arighi@nvidia.com>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="utf-8"
+X-Migadu-Flow: FLOW_OUT
 
-Hi!
-
-On 17/10/25 11:25, Andrea Righi wrote:
-> From: Joel Fernandes <joelagnelf@nvidia.com>
+On 2025/10/20 16:19, Jiri Olsa wrote:
+> On Sat, Oct 18, 2025 at 10:21:24PM +0800, Menglong Dong wrote:
 > 
-> Updating "ppos" on error conditions does not make much sense. The pattern
-> is to return the error code directly without modifying the position, or
-> modify the position on success and return the number of bytes written.
+> SNIP
 > 
-> Since on success, the return value of apply is 0, there is no point in
-> modifying ppos either. Fix it by removing all this and just returning
-> error code or number of bytes written on success.
+> > +static void test_fsession_reattach(void)
+> > +{
+> > +	struct fsession_test *skel = NULL;
+> > +	int err, prog_fd;
+> > +	LIBBPF_OPTS(bpf_test_run_opts, topts);
+> > +
+> > +	skel = fsession_test__open_and_load();
+> > +	if (!ASSERT_OK_PTR(skel, "fsession_test__open_and_load"))
+> > +		goto cleanup;
+> > +
+> > +	/* First attach */
+> > +	err = fsession_test__attach(skel);
+> > +	if (!ASSERT_OK(err, "fsession_first_attach"))
+> > +		goto cleanup;
+> > +
+> > +	/* Trigger test function calls */
+> > +	prog_fd = bpf_program__fd(skel->progs.test1);
+> > +	err = bpf_prog_test_run_opts(prog_fd, &topts);
+> > +	if (!ASSERT_OK(err, "test_run_opts err"))
+> > +		return;
 > 
-> Acked-by: Tejun Heo <tj@kernel.org>
-> Reviewed-by: Andrea Righi <arighi@nvidia.com>
-> Signed-off-by: Joel Fernandes <joelagnelf@nvidia.com>
+> goto cleanup
 
-Reviewed-by: Juri Lelli <juri.lelli@redhat.com>
+ACK.
 
-Thanks,
-Juri
+> 
+> > +	if (!ASSERT_OK(topts.retval, "test_run_opts retval"))
+> > +		return;
+> 
+> goto cleanup
+
+ACK.
+
+> 
+> > +
+> > +	/* Verify first call */
+> > +	ASSERT_EQ(skel->bss->test1_entry_called, 1, "test1_entry_first");
+> > +	ASSERT_EQ(skel->bss->test1_exit_called, 1, "test1_exit_first");
+> > +
+> > +	/* Detach */
+> > +	fsession_test__detach(skel);
+> > +
+> > +	/* Reset counters */
+> > +	memset(skel->bss, 0, sizeof(*skel->bss));
+> > +
+> > +	/* Second attach */
+> > +	err = fsession_test__attach(skel);
+> > +	if (!ASSERT_OK(err, "fsession_second_attach"))
+> > +		goto cleanup;
+> > +
+> > +	err = bpf_prog_test_run_opts(prog_fd, &topts);
+> > +	if (!ASSERT_OK(err, "test_run_opts err"))
+> > +		return;
+> 
+> goto cleanup
+
+ACK.
+
+> 
+> > +	if (!ASSERT_OK(topts.retval, "test_run_opts retval"))
+> > +		return;
+> 
+> goto cleanup
+
+ACK.
+
+> 
+> > +
+> > +	/* Verify second call */
+> > +	ASSERT_EQ(skel->bss->test1_entry_called, 1, "test1_entry_second");
+> > +	ASSERT_EQ(skel->bss->test1_exit_called, 1, "test1_exit_second");
+> > +
+> > +cleanup:
+> > +	fsession_test__destroy(skel);
+> > +}
+> > +
+> > +void test_fsession_test(void)
+> > +{
+> > +#if !defined(__x86_64__)
+> > +	test__skip();
+> > +	return;
+> > +#endif
+> > +	if (test__start_subtest("fsession_basic"))
+> > +		test_fsession_basic();
+> > +	if (test__start_subtest("fsession_reattach"))
+> > +		test_fsession_reattach();
+> > +}
+> > diff --git a/tools/testing/selftests/bpf/progs/fsession_test.c b/tools/testing/selftests/bpf/progs/fsession_test.c
+> > new file mode 100644
+> > index 000000000000..cce2b32f7c2c
+> > --- /dev/null
+> > +++ b/tools/testing/selftests/bpf/progs/fsession_test.c
+> > @@ -0,0 +1,178 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/* Copyright (c) 2025 ChinaTelecom */
+> > +#include <vmlinux.h>
+> > +#include <bpf/bpf_helpers.h>
+> > +#include <bpf/bpf_tracing.h>
+> > +
+> > +char _license[] SEC("license") = "GPL";
+> > +
+> > +__u64 test1_entry_result = 0;
+> > +__u64 test1_exit_result = 0;
+> > +__u64 test1_entry_called = 0;
+> > +__u64 test1_exit_called = 0;
+> > +
+> > +SEC("fsession/bpf_fentry_test1")
+> > +int BPF_PROG(test1, int a)
+> > +{
+> 
+> I guess we can access return argument directly but it makes sense only
+> for exit session program, or we could use bpf_get_func_ret
+
+Yeah, we can access the return value directly here or use
+bpf_get_func_ret(). For fentry, it is also allow to access the return value.
+It makes no sense to obtain the return value in the fentry, and
+what it gets is just the previous fsession-fentry returned.
+And it needs more effort in the verifier to forbid such operation.
+
+The testcases is not complete, and I'll add more testcases in the
+next version to cover more cases.
+
+Thanks!
+Menglong Dong
+
+> 
+> jirka
+> 
+> 
+> > +	bool is_exit = bpf_tracing_is_exit(ctx);
+> > +
+> > +	if (!is_exit) {
+> > +		/* This is entry */
+> > +		test1_entry_called = 1;
+> > +		test1_entry_result = a == 1;
+> > +		return 0; /* Return 0 to allow exit to be called */
+> > +	}
+> > +
+> > +	/* This is exit */
+> > +	test1_exit_called = 1;
+> > +	test1_exit_result = a == 1;
+> > +	return 0;
+> > +}
+> > +
+> > +__u64 test2_entry_result = 0;
+> > +__u64 test2_exit_result = 0;
+> > +__u64 test2_entry_called = 0;
+> > +__u64 test2_exit_called = 0;
+> > +
+> 
+> SNIP
+> 
+> 
+
+
+
 
