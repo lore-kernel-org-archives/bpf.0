@@ -1,103 +1,119 @@
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 794741643B;
-	Mon, 20 Oct 2025 08:55:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EE4C1643B
+	for <bpf@vger.kernel.org>; Mon, 20 Oct 2025 08:55:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760950511; cv=none; b=eAxs7oODDHFHvTKVUOEAOodcp94ZOib9lW40jvkQRgWrbmGL3y4uJtUlU7FTkRkZP/IZPvO6VRBFrMHxWL9LxgNBF9t6t11N9mDUTFMCRRwD3SWZ6moGSU5sWtd7hQQAMVqkG1Iw8TO4/EAv/3ZNEEib6465NPK0GqOsZaCYvTI=
+	t=1760950539; cv=none; b=BjioT5450SQf9dxOsshr+W2QXih1yyeM8es7Xgle5sZHK6AVBRPd978bGIaRNXz8STtgeFXvs6lpNTKYFCYeda9oO6OvUBIFaBLW7PAfA5bFMxNo53dm20TXSyEKJQvZVbWNbbWKkmtNC1IT6ju6j5xL8oUljYPMGTc3CXjd9HI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760950511; c=relaxed/simple;
-	bh=wU69FWg0HnxDv6ekq3BFRwg1waREh/mUKaxeSy9S7QU=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Subject:Cc:
-	 References:In-Reply-To; b=W111cHSAWZ39GC/eLPwM0mqdqwp3nrGHLeoR58zDC/HfJheUPDRoMQMoS/RLQoPOr1RjuO+Hct8VE4iT8/I0ygiksztMgvNeCP3bBkQhCn6vkdJz8s25CWghnYT68pqAA4BAzgMhoKXcD2dIL+k15FJacm121PRtqNPMbyksSEI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=PQ/pB4pm; arc=none smtp.client-ip=185.246.84.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1760950539; c=relaxed/simple;
+	bh=DYoMtqXAd1bYjN9ifJuuyABxTo2xM9ZgqMGXjS6AdLg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=BrQ/q/oj4kk63nG3vDVLWYKrw/x09oK26c8Bpk42dppJdRkg9SAHnJgmSE6ZlVH3KISN5/B5U0fu1OvmIkkAmtiEazZmOIPQmhjmvrejAZOZxzOz7gqO49GepQiQ8VIHN0WG0JdFkyVgMUojbsrsN3sM4CC0YheiICgHYXCZC00=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=AlB9iHNE; arc=none smtp.client-ip=91.218.175.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="PQ/pB4pm"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id ADBFF1A1533;
-	Mon, 20 Oct 2025 08:55:00 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 8243D606D5;
-	Mon, 20 Oct 2025 08:55:00 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 9D53C102F23A9;
-	Mon, 20 Oct 2025 10:54:40 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1760950495; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=wU69FWg0HnxDv6ekq3BFRwg1waREh/mUKaxeSy9S7QU=;
-	b=PQ/pB4pmgNCRHVAktZEPxdSjsFln8znIep9nVHYg0FN3yjap5mnMRj7EN0NH0KYjolciuP
-	p/xR3bUJDhAwNc2gFTfPwedGqaUA67zh09BL9bffEXWZ1D/T078oTOhwNuHqKMJE+ohmAB
-	Kd0f/pR2Ac4wTl3uY0wt+1H6x7eJ/BsEzDZ0F3cA895sAvfj5SvK6PwdxGgQuKmTynKgQx
-	9lTRvAwCa/2VEGnemb+143wjJDRJWFOm8UETAh29tJsKilPKyrVI2ZqO+wPCWtPgyFmB4X
-	b9RlL4FfH94f41DzhKL4IosQVLP8I3I4YdPHzaiVT+Mi3RJjYnB8clyIgg++6w==
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="AlB9iHNE"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1760950534;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=hlNK4xzyZp6bH52zfvmLf5/eAknw81lWxyjNV/nWbvQ=;
+	b=AlB9iHNEuWsJwo5qdj8hjVlzG2TtJrknazorNxtB3iL8DXqfvte/6Q9QxQE1QepvgU6gDe
+	ER7ddtUdLldUBN/OicP/pAeLl4IXE9j7cZ16lZgSKlrtMAVgd9JXi//nqC8aCsIK4GuBNR
+	z7mv8QWctiIfTRaODpd9nfvTVz2JssI=
+From: Menglong Dong <menglong.dong@linux.dev>
+To: Menglong Dong <menglong8.dong@gmail.com>, Jiri Olsa <olsajiri@gmail.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
+ andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, kpsingh@kernel.org, sdf@fomichev.me,
+ haoluo@google.com, mattbobrowski@google.com, rostedt@goodmis.org,
+ mhiramat@kernel.org, mathieu.desnoyers@efficios.com, leon.hwang@linux.dev,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC bpf-next 0/5] bpf: tracing session supporting
+Date: Mon, 20 Oct 2025 16:55:22 +0800
+Message-ID: <3379104.aeNJFYEL58@7950hx>
+In-Reply-To: <aPXwbQgGOqAQfxbq@krava>
+References:
+ <20251018142124.783206-1-dongml2@chinatelecom.cn> <aPXwbQgGOqAQfxbq@krava>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 20 Oct 2025 10:54:40 +0200
-Message-Id: <DDN0UIQ05A22.1SDXOW1K83VYY@bootlin.com>
-From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-To: "Martin KaFai Lau" <martin.lau@linux.dev>,
- =?utf-8?b?QWxleGlzIExvdGhvcsOpIChlQlBGIEZvdW5kYXRpb24p?=
- <alexis.lothore@bootlin.com>
-Subject: Re: [PATCH bpf-next 2/5] selftests/bpf: add tc helpers
-Cc: "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Eduard
- Zingerman" <eddyz87@gmail.com>, "Song Liu" <song@kernel.org>, "Yonghong
- Song" <yonghong.song@linux.dev>, "John Fastabend"
- <john.fastabend@gmail.com>, "KP Singh" <kpsingh@kernel.org>, "Stanislav
- Fomichev" <sdf@fomichev.me>, "Hao Luo" <haoluo@google.com>, "Jiri Olsa"
- <jolsa@kernel.org>, "Shuah Khan" <shuah@kernel.org>,
- <ebpf@linuxfoundation.org>, "Thomas Petazzoni"
- <thomas.petazzoni@bootlin.com>, "Bastien Curutchet"
- <bastien.curutchet@bootlin.com>, <bpf@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20251017-tc_tunnel-v1-0-2d86808d86b2@bootlin.com>
- <20251017-tc_tunnel-v1-2-2d86808d86b2@bootlin.com>
- <a49ebaad-cc79-4ade-aa4a-ad37fcf81dee@linux.dev>
-In-Reply-To: <a49ebaad-cc79-4ade-aa4a-ad37fcf81dee@linux.dev>
-X-Last-TLS-Session-Version: TLSv1.3
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="utf-8"
+X-Migadu-Flow: FLOW_OUT
 
-On Sat Oct 18, 2025 at 1:26 AM CEST, Martin KaFai Lau wrote:
->
->
-> On 10/17/25 7:29 AM, Alexis Lothor=C3=A9 (eBPF Foundation) wrote:
->> diff --git a/tools/testing/selftests/bpf/tc_helpers.c b/tools/testing/se=
-lftests/bpf/tc_helpers.c
->> new file mode 100644
->> index 0000000000000000000000000000000000000000..d668e10e3ebad8f8e04862f5=
-c2b3ccd487fe8fa6
->> --- /dev/null
->> +++ b/tools/testing/selftests/bpf/tc_helpers.c
->> @@ -0,0 +1,87 @@
->> +// SPDX-License-Identifier: GPL-2.0-only
->> +#define _GNU_SOURCE
->> +
->> +#include <net/if.h>
->> +#include "tc_helpers.h"
->> +#include "test_progs.h"
->> +
->> +static int attach_tc_prog(int ifindex, int igr_fd, int egr_fd)
->
-> This one looks good but change it to "int tc_prog_attach(const char=20
-> *dev, int ingress_fd, int egress_fd)". Remove static. Take "const char=20
-> *dev" as the arg. Add it to network_helpers.[ch] instead of creating a=20
-> new source file.
+On 2025/10/20 16:18, Jiri Olsa wrote:
+> On Sat, Oct 18, 2025 at 10:21:19PM +0800, Menglong Dong wrote:
+> > Sometimes, we need to hook both the entry and exit of a function with
+> > TRACING. Therefore, we need define a FENTRY and a FEXIT for the target
+> > function, which is not convenient.
+> > 
+> > Therefore, we add a tracing session support for TRACING. Generally
+> > speaking, it's similar to kprobe session, which can hook both the entry
+> > and exit of a function with a single BPF program. Meanwhile, it can also
+> > control the execution of the fexit with the return value of the fentry.
+> > session cookie is not supported yet, and I'm not sure if it's necessary.
+> 
+> hi,
+> I think it'd be useful to have support for cookie, people that use kprobe
+> session because of multi attach, could easily migrate to trampolines once
+> we have fast multi attach for trampolines
 
-Nice, thanks for the hint, I missed this header
+OK, I'll implement it in the next version.
 
-Alexis
+> 
+> jirka
+> 
+> 
+> > 
+> > For now, only x86_64 is supported. Other architectures will be supported
+> > later.
+> > 
+> > Menglong Dong (5):
+> >   bpf: add tracing session support
+> >   bpf: add kfunc bpf_tracing_is_exit for TRACE_SESSION
+> >   bpf,x86: add tracing session supporting for x86_64
+> >   libbpf: add support for tracing session
+> >   selftests/bpf: add testcases for tracing session
+> > 
+> >  arch/arm64/net/bpf_jit_comp.c                 |   3 +
+> >  arch/loongarch/net/bpf_jit.c                  |   3 +
+> >  arch/powerpc/net/bpf_jit_comp.c               |   3 +
+> >  arch/riscv/net/bpf_jit_comp64.c               |   3 +
+> >  arch/s390/net/bpf_jit_comp.c                  |   3 +
+> >  arch/x86/net/bpf_jit_comp.c                   | 115 ++++++++++-
+> >  include/linux/bpf.h                           |   1 +
+> >  include/uapi/linux/bpf.h                      |   1 +
+> >  kernel/bpf/btf.c                              |   2 +
+> >  kernel/bpf/syscall.c                          |   2 +
+> >  kernel/bpf/trampoline.c                       |   5 +-
+> >  kernel/bpf/verifier.c                         |  17 +-
+> >  kernel/trace/bpf_trace.c                      |  43 ++++-
+> >  net/bpf/test_run.c                            |   1 +
+> >  net/core/bpf_sk_storage.c                     |   1 +
+> >  tools/bpf/bpftool/common.c                    |   1 +
+> >  tools/include/uapi/linux/bpf.h                |   1 +
+> >  tools/lib/bpf/bpf.c                           |   2 +
+> >  tools/lib/bpf/libbpf.c                        |   3 +
+> >  .../selftests/bpf/prog_tests/fsession_test.c  | 132 +++++++++++++
+> >  .../selftests/bpf/progs/fsession_test.c       | 178 ++++++++++++++++++
+> >  21 files changed, 511 insertions(+), 9 deletions(-)
+> >  create mode 100644 tools/testing/selftests/bpf/prog_tests/fsession_test.c
+> >  create mode 100644 tools/testing/selftests/bpf/progs/fsession_test.c
+> > 
+> 
+> 
 
---=20
-Alexis Lothor=C3=A9, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+
+
 
