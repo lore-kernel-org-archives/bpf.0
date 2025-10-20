@@ -1,83 +1,72 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AF263370F1;
-	Mon, 20 Oct 2025 21:26:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from www.nop.hu (www.nop.hu [80.211.201.218])
+	by smtp.subspace.kernel.org (Postfix) with SMTP id 987C1274B5F
+	for <bpf@vger.kernel.org>; Mon, 20 Oct 2025 21:31:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.211.201.218
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760995601; cv=none; b=WjYMUuUdEi3yJ+cR/7GP8N/yuoB8gLvZNQX2Xi2lC+oJPMkb+c0omb87gdvJqBiMe1WUi2lFPh8qyprom/80ossLyYBEx45l1IpgBsnYw/dtpQgd4i648GxbDPi4M97qQoAmat3IEqj+/vclf3BSFrau2jdLZ/8L3hKPNYIWcNQ=
+	t=1760995901; cv=none; b=s35tSyDNMTkj3Mvl57WaJ5MY9yODRp3ws/Mb3NoVa9XaKsv6HmtSG72jcxGt5h6u8/EJBmyBMQtVG8EpN9wex0yUsYxOMh+clM0v7B36JcCM9hADrt7gZiR6p0obZzWicrRPOariSLUklwUhU17FQk5PBAZX6nGFVsVb4mOzK6k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760995601; c=relaxed/simple;
-	bh=UlFmiz3ZaocOcZ90TzBsi7a0twjzEqEnfHpnPajPIAo=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=kXz4kLX2NpY2NsajaLhRHuw5XQyoL6vCDmoCN6VHYWVcpcYxlAtk9HZ0FD/Q6a1NpUYmfKsQhGPsEIENcLIlf4BsvUN5XEFpkgdXewv58YO1Qek7Y2plthNzy7zAlS5nu7qhBH+ryVOm3zRrtVNq5/sYuByIpHCfM9D1gqiGU4g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cRLhm3fB; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cRLhm3fB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0394DC16AAE;
-	Mon, 20 Oct 2025 21:26:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760995601;
-	bh=UlFmiz3ZaocOcZ90TzBsi7a0twjzEqEnfHpnPajPIAo=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=cRLhm3fByi1+c2B63WfTkr6Ks4AS7LV0zCJfbCzvb2w1lvvq/deyAJvHgVGD8X+UD
-	 P0KkQ8sTuww0RgLGbMnWimohTKEGIXwCXkKi7L7s5jQCdhXSFra/fBWJ1NBB7T9MYA
-	 BWyyz+sMoX9bPE8y6pjKrUrdqRrjXvgqqW6ongctcmcT2grL1myGvHjpfxag+QH5IL
-	 xZD9eDtcEekN0nWJcI1Ff/IJjR1wqhgY4kWM9PHJxPrPmXorI2YW9/oMakMpwvY3rm
-	 HiJFG8oY1OeJqjg1EAoZxurP4pXRJaQoB1vHiWcPB5FjolpXnbHTD9criXpHxJilvv
-	 SQl/4bVb1LDZg==
-From: Kees Cook <kees@kernel.org>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Kees Cook <kees@kernel.org>,
-	"Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	Willem de Bruijn <willemb@google.com>,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-hardening@vger.kernel.org
-Subject: [PATCH v3 5/9] net: Remove struct sockaddr from net.h
-Date: Mon, 20 Oct 2025 14:26:34 -0700
-Message-Id: <20251020212639.1223484-5-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20251020212125.make.115-kees@kernel.org>
-References: <20251020212125.make.115-kees@kernel.org>
+	s=arc-20240116; t=1760995901; c=relaxed/simple;
+	bh=VDj0O6rdW6j2j1l/EFV+jKOr5tWdxLisolXoFJWH7Ps=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=C8sZnR5Q9+mjyukH5wJtAsEhAJJz6RjlI5J9/A2+Nv4f9ZOO9LqZOHFxIH+VoFx/Juk/1ccoM9YGS7VirasGytUaoDqCBPW6hlUowYSn6lofncXg7PHBaLE354fPMRHRQcBPLmKRmli/N6iR2S1I63c76UBggsTijxS3GuHd3aY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nop.hu; spf=pass smtp.mailfrom=nop.hu; arc=none smtp.client-ip=80.211.201.218
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nop.hu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nop.hu
+Received: from 2001:db8:8319::200:11ff:fe11:2222 (helo [IPV6:2001:db8:8319:0:200:11ff:fe11:2222])
+    (reverse as null)
+    by 2001:db8:1101::18 (helo www.nop.hu)
+    (envelope-from csmate@nop.hu) with smtp (freeRouter v25.10.20-cur)
+    for kerneljasonxing@gmail.com alekcejk@googlemail.com jonathan.lemon@gmail.com sdf@fomichev.me maciej.fijalkowski@intel.com magnus.karlsson@intel.com bjorn@kernel.org 1118437@bugs.debian.org netdev@vger.kernel.org bpf@vger.kernel.org ; Mon, 20 Oct 2025 23:31:38 +0200
+Message-ID: <d8808206-0951-4512-91cb-58839ba9b8c4@nop.hu>
+Date: Mon, 20 Oct 2025 23:31:37 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=494; i=kees@kernel.org; h=from:subject; bh=UlFmiz3ZaocOcZ90TzBsi7a0twjzEqEnfHpnPajPIAo=; b=owGbwMvMwCVmps19z/KJym7G02pJDBnfVvK0z9jub5+4Lvsry/+88IN8l08aMr+YOyM1eIvfv vXeC+8odpSyMIhxMciKKbIE2bnHuXi8bQ93n6sIM4eVCWQIAxenAExEx5Dhf/D2o70TVaZwXT2s a8HQ/cz6n8jBrEePSo64GOWcNVQ5tYaRYXP06qakZOFY1gjVl6rNT9Q/Zc09UXH3C0/RlPk9k18 cYAMA
-X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: null pointer dereference in interrupt after receiving an ip
+ packet on veth from xsk from user space
+To: Jason Xing <kerneljasonxing@gmail.com>, alekcejk@googlemail.com
+Cc: Jonathan Lemon <jonathan.lemon@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>,
+ Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+ Magnus Karlsson <magnus.karlsson@intel.com>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?=
+ <bjorn@kernel.org>, 1118437@bugs.debian.org, netdev@vger.kernel.org,
+ bpf@vger.kernel.org
+References: <0435b904-f44f-48f8-afb0-68868474bf1c@nop.hu>
+ <CAL+tcoA5qDAcnZpmULsnD=X6aVP-ztRxPv5z1OSP-nvtNEk+-w@mail.gmail.com>
+ <643fbe8f-ba76-49b4-9fb7-403535fd5638@nop.hu>
+ <CAL+tcoDqgQbs20xV34RFWDoE5YPXS-ne3FBns2n9t4eggx8LAQ@mail.gmail.com>
+Content-Language: en-US
+From: mc36 <csmate@nop.hu>
+In-Reply-To: <CAL+tcoDqgQbs20xV34RFWDoE5YPXS-ne3FBns2n9t4eggx8LAQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Now that struct sockaddr is no longer used by net.h, remove it.
+hi,
 
-Signed-off-by: Kees Cook <kees@kernel.org>
----
- include/linux/net.h | 1 -
- 1 file changed, 1 deletion(-)
+On 10/20/25 11:04, Jason Xing wrote:
+> 
+> I followed your steps you attached in your code:
+> ////// gcc xskInt.c -lxdp
+> ////// sudo ip link add veth1 type veth
+> ////// sudo ip link set veth0 up
+> ////// sudo ip link set veth1 up
 
-diff --git a/include/linux/net.h b/include/linux/net.h
-index 44cbec673741..e94f219ea309 100644
---- a/include/linux/net.h
-+++ b/include/linux/net.h
-@@ -148,7 +148,6 @@ typedef struct {
- 
- struct vm_area_struct;
- struct page;
--struct sockaddr;
- struct msghdr;
- struct module;
- struct sk_buff;
--- 
-2.34.1
+ip link set dev veth1 address 3a:10:5c:53:b3:5c
+
+> ////// sudo ./a.out
+> 
+that will do the trick on a recent kerlek....
+
+its the destination mac in the c code....
+
+ps: chaining in the original reporter from the fedora land.....
+
+
+have a nice day,
+
+cs
 
