@@ -1,211 +1,90 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E145C296159;
-	Mon, 20 Oct 2025 16:24:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A595328A72F
+	for <bpf@vger.kernel.org>; Mon, 20 Oct 2025 16:28:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760977464; cv=none; b=O8H4G4NHEOhVE3jmCELS4L6YUfHEPEG/fZaOuDL5xLU2j8foA7JYQKnuIGfFJr+1tVNyoP8w+ng84/kV7traKYhLnE7zSFbAC3wLca1fe5OlAC01KX8l0eQ8jxSUbpI8/TFctH3vifT/jk9OE2i/eiTDlL6k6Q3LMOsmgePtxDs=
+	t=1760977703; cv=none; b=DRI5a7kh6p82BqgtibKr6rtmH3P3YNeJkFommyu5+HftTiXX4jdqSpLZMJMj0wb10lobKYjI1y1J89TlVQFF3olHriBIN4l1iNag9p5Kf840m0KfgwJX7yyjeQPNxo0/OoDGOIi4fxySkQ6M+ryzpWojSumc2EjtIetZFSH79HM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760977464; c=relaxed/simple;
-	bh=4KlQgj+DLiOQIwLN5XTRdpWwMGdGKfB0pUZWbzQeYUM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qyLkHstm5s+AKcopAZHhSW3FopxUBFqERvs0fuJ857s1R349rw89W44fjT0BAcjJx7xlKMJkQuLio/eFkyyGjp4hMnUqrUkvvK2FuuRD3TiPXbo4+JpmGUscKCxnKUZiDVXoRnTGeco/gg4HzJW3r35TqzDkSNKN5Ow7O6wIouQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=ctZ6xT7J; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1760977703; c=relaxed/simple;
+	bh=BEZaggrBBd4b0AfjBpwDK0R+fV7p40QB8e5rEKn57B8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=XNyyF2LnLKiA98HKEq0GdfQa+4t3O5Z4WWHNxQpUC9j9n7VJYe5EMxf98NG4CgbTgOC3NKVp/VgPBZUvQDZYrbtJtoSbg32s8sMHST/3mMLxyMgOcfmRyRsXk8+Wls9uCatkIzv7VbSSWorl954G03UOuqpfWDPm0AXlQunTAFk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RjfM3gm2; arc=none smtp.client-ip=209.85.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="ctZ6xT7J"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
-	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
-	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=XiGP8f3g9vVj9cBrvrA+o8ajrH9d7uAxQXSyy9tGfYg=; b=ctZ6xT7J+xa61iG0SnogqA47AG
-	ZpVOIJOdLchFxb/6x3kpM/RWYIN/zpPwxMBCZEFbTksQdcLgYtnABNAJz0HPwpPXJmMjhPXI7kNmI
-	gB00pT5Ke3iOc339Z9fipu6rY6wUpl028UPpL2isI0Fyb0dlFjWnNE3XdLyc/lJ2Cl3phdxrgh14h
-	t494PposEx0oftadC7LHpf57oBhEQPmWoZOSY0OqoVkgJn5I4UWTKLg02rdjTqNEGp0EVOmgZfgpq
-	EPbqjuzGhaxoxZX+7qqMQr7h6PviN4JXezcezJ+MEBvuZjcsHaNQCTIaDwF+x+Slo9+RId0vrAthr
-	o5SfKjzQ==;
-Received: from localhost ([127.0.0.1])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1vAsg3-000Jl4-2s;
-	Mon, 20 Oct 2025 18:24:07 +0200
-From: Daniel Borkmann <daniel@iogearbox.net>
-To: netdev@vger.kernel.org
-Cc: bpf@vger.kernel.org,
-	kuba@kernel.org,
-	davem@davemloft.net,
-	razor@blackwall.org,
-	pabeni@redhat.com,
-	willemb@google.com,
-	sdf@fomichev.me,
-	john.fastabend@gmail.com,
-	martin.lau@kernel.org,
-	jordan@jrife.io,
-	maciej.fijalkowski@intel.com,
-	magnus.karlsson@intel.com,
-	dw@davidwei.uk,
-	toke@redhat.com,
-	yangzhenze@bytedance.com,
-	wangdongdong.6@bytedance.com
-Subject: [PATCH net-next v3 10/15] xsk: Proxy pool management for mapped queues
-Date: Mon, 20 Oct 2025 18:23:50 +0200
-Message-ID: <20251020162355.136118-11-daniel@iogearbox.net>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20251020162355.136118-1-daniel@iogearbox.net>
-References: <20251020162355.136118-1-daniel@iogearbox.net>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RjfM3gm2"
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-47157119d8bso5448655e9.3
+        for <bpf@vger.kernel.org>; Mon, 20 Oct 2025 09:28:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1760977696; x=1761582496; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BEZaggrBBd4b0AfjBpwDK0R+fV7p40QB8e5rEKn57B8=;
+        b=RjfM3gm28U5ghZSqu2mnef+2Jt4MrrtHHtl1+Suw86NPNckFD1eHRdxFiZ4yJRaqgM
+         IK/81AFPbKx6RKPlfugMIH004AL2JvFPO5h8MW1XOgvOiyvDXN0/fYvZMCi9u7qMvgn9
+         hOkNQ61hk1RmT4IJ7LarCDYFBf0M20yMcaiBB8/EqF02ToE6y41pwTgeFXCydMB/y5XX
+         jUegSRqohqZry9qvTTpw/DRIL7s0qVEacP9y7hS0LVPXWASp8oM9ftKBSLSE0Ynxn2wb
+         oiz4pig+tZ+IeTJxxTWclBIR/ojL70CyI8nx3ibmD7uirBpW2stXejV6cKGplM0mDtwt
+         bGTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760977696; x=1761582496;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=BEZaggrBBd4b0AfjBpwDK0R+fV7p40QB8e5rEKn57B8=;
+        b=B/yaKJ6LDD8EDYqiV0hd8ThNWze1huIU0b6AoNdDuX3j7bSFkh+vZePpCDAXiG3Ugy
+         SaNYy66mLmDe5g+QnpaG2uwXzH5eak1HMOtKb6/3QMKWMNUemuPL46v4Psb8scF70muq
+         kN6tuxoKYhSYptFtQimKX5gwh9ZKLFElFW9wRk8PEw1nStztMdL79580ofEkrQ2qJoqS
+         l+2yzwaLSiMzrQcB1jCUbNr8Mli+0iYQDwJJ5f7b5I5fYUvcAxbdRG5qFICF63oxoC9F
+         iWl0vbdwQEDCEi+4PNXReGjYQ46po9EeQZMJ6FVxgJHHZb5ext+hDWJ/FEA3kgAa+nOL
+         35Gg==
+X-Forwarded-Encrypted: i=1; AJvYcCWOxdtIXBK57mXd4bvMHJj/WQj3KYOBPiv1/ZKbbjwtj5aegKmezToDgnKTQsLpDa3r3ko=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwtHMU1Cpjb2gBOTgimCcAKji50rCay7IYXa4t7hJHQeJzNlOpA
+	iEaynKbcaHBu1UUyBGmIzb7z7G94T0E/M3Z6ISsOJVLFdiyXUDb3FFbO99tgFu4c3sREQYeGnEo
+	US8Cb31QmDhnOPD1WoAiSmRo7OVyqDb8=
+X-Gm-Gg: ASbGncsi9ar8P5xocdKQqoyIF8tzmHEpTwttEXo0sV3zJkTLcHlBpBNb91xC8WAe9qb
+	l3IS8jzB8lcW39J4N1imV87eaquYA8LfNXc4S0RV/WStClaAF9Eq42I5lu3J+rFEBFEwFv3o6dx
+	SzgdXCfKZrpLX+AMnAyyL3aJ61ekUtKjaVHzEqXa286tSmYYam805+syGoYkFSyN90RQqSwa+W0
+	oWY+gvR4CB7QpHUdPLvDgtaDvSajDB932yQgIr3KVDUM894wdRQuNENrHv70/nWRm0xkcfzeQZs
+X-Google-Smtp-Source: AGHT+IGgsb23uLOYmPtswWrzHBvsGatayTaNyrZEWVwipxccOWsj2/tNIa+9q5qhrVZNBeJYMzzwLQsvnR4FFMLm6S8=
+X-Received: by 2002:a05:600c:19d4:b0:46e:4a13:e6c6 with SMTP id
+ 5b1f17b1804b1-47117907234mr107718165e9.19.1760977696264; Mon, 20 Oct 2025
+ 09:28:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: Clear (ClamAV 1.0.9/27798/Mon Oct 20 11:37:28 2025)
+References: <CAEf4Bza6ynjUHanEEqQZ_mke3oBCzSitxBt9Jb5tx8rxt8q4vg@mail.gmail.com>
+ <20251020085918.1604034-1-higuoxing@gmail.com>
+In-Reply-To: <20251020085918.1604034-1-higuoxing@gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Mon, 20 Oct 2025 09:28:03 -0700
+X-Gm-Features: AS18NWAYQpOtsQ2xgj0ICvDQj1f9fYVEjTCZgyvRi5tfiwjitQ9rlcRw3bERhgg
+Message-ID: <CAADnVQLDQpNEa0bT6nyX3UfGTE94YxrM4gPD+PirmqHwXRB15Q@mail.gmail.com>
+Subject: Re: strace log before the fix, with fsync fix and with fclose fix.
+To: Xing Guo <higuoxing@gmail.com>
+Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, Jiri Olsa <olsajiri@gmail.com>, sveiss@meta.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Similarly what we do for net_mp_{open,close}_rxq for mapped queues,
-proxy also the xsk_{reg,clear}_pool_at_qid via __netif_get_rx_queue_peer
-such that when a virtual netdev picked a mapped rxq, the request gets
-through to the real rxq in the physical netdev.
+On Mon, Oct 20, 2025 at 1:59=E2=80=AFAM Xing Guo <higuoxing@gmail.com> wrot=
+e:
+>
+> Test with fsync:
 
-Change the function signatures for queue_id to unsigned int in order
-to pass the queue_id parameter into __netif_get_rx_queue_peer. The
-proxying is only relevant for queue_id < dev->real_num_rx_queues since
-right now its only supported for rxqs.
-
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Co-developed-by: David Wei <dw@davidwei.uk>
-Signed-off-by: David Wei <dw@davidwei.uk>
----
- include/net/xdp_sock_drv.h |  4 ++--
- net/xdp/xsk.c              | 33 ++++++++++++++++++++++++++++-----
- net/xdp/xsk.h              |  5 ++---
- 3 files changed, 32 insertions(+), 10 deletions(-)
-
-diff --git a/include/net/xdp_sock_drv.h b/include/net/xdp_sock_drv.h
-index 242e34f771cc..25c37fab00bc 100644
---- a/include/net/xdp_sock_drv.h
-+++ b/include/net/xdp_sock_drv.h
-@@ -29,7 +29,7 @@ bool xsk_tx_peek_desc(struct xsk_buff_pool *pool, struct xdp_desc *desc);
- u32 xsk_tx_peek_release_desc_batch(struct xsk_buff_pool *pool, u32 max);
- void xsk_tx_release(struct xsk_buff_pool *pool);
- struct xsk_buff_pool *xsk_get_pool_from_qid(struct net_device *dev,
--					    u16 queue_id);
-+					    unsigned int queue_id);
- void xsk_set_rx_need_wakeup(struct xsk_buff_pool *pool);
- void xsk_set_tx_need_wakeup(struct xsk_buff_pool *pool);
- void xsk_clear_rx_need_wakeup(struct xsk_buff_pool *pool);
-@@ -296,7 +296,7 @@ static inline void xsk_tx_release(struct xsk_buff_pool *pool)
- }
- 
- static inline struct xsk_buff_pool *
--xsk_get_pool_from_qid(struct net_device *dev, u16 queue_id)
-+xsk_get_pool_from_qid(struct net_device *dev, unsigned int queue_id)
- {
- 	return NULL;
- }
-diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-index 985e0cac965d..9e55ea0f5fde 100644
---- a/net/xdp/xsk.c
-+++ b/net/xdp/xsk.c
-@@ -23,6 +23,8 @@
- #include <linux/netdevice.h>
- #include <linux/rculist.h>
- #include <linux/vmalloc.h>
-+
-+#include <net/netdev_queues.h>
- #include <net/xdp_sock_drv.h>
- #include <net/busy_poll.h>
- #include <net/netdev_lock.h>
-@@ -111,7 +113,7 @@ bool xsk_uses_need_wakeup(struct xsk_buff_pool *pool)
- EXPORT_SYMBOL(xsk_uses_need_wakeup);
- 
- struct xsk_buff_pool *xsk_get_pool_from_qid(struct net_device *dev,
--					    u16 queue_id)
-+					    unsigned int queue_id)
- {
- 	if (queue_id < dev->real_num_rx_queues)
- 		return dev->_rx[queue_id].pool;
-@@ -122,12 +124,19 @@ struct xsk_buff_pool *xsk_get_pool_from_qid(struct net_device *dev,
- }
- EXPORT_SYMBOL(xsk_get_pool_from_qid);
- 
--void xsk_clear_pool_at_qid(struct net_device *dev, u16 queue_id)
-+void xsk_clear_pool_at_qid(struct net_device *dev, unsigned int queue_id)
- {
-+	bool needs_unlock = false;
-+
-+	if (queue_id < dev->real_num_rx_queues)
-+		WARN_ON_ONCE(!netif_get_rx_queue_peer_locked(&dev, &queue_id,
-+							     &needs_unlock));
- 	if (queue_id < dev->num_rx_queues)
- 		dev->_rx[queue_id].pool = NULL;
- 	if (queue_id < dev->num_tx_queues)
- 		dev->_tx[queue_id].pool = NULL;
-+	if (needs_unlock)
-+		netdev_unlock(dev);
- }
- 
- /* The buffer pool is stored both in the _rx struct and the _tx struct as we do
-@@ -135,14 +144,26 @@ void xsk_clear_pool_at_qid(struct net_device *dev, u16 queue_id)
-  * This might also change during run time.
-  */
- int xsk_reg_pool_at_qid(struct net_device *dev, struct xsk_buff_pool *pool,
--			u16 queue_id)
-+			unsigned int queue_id)
- {
-+	bool needs_unlock = false;
-+	int ret = 0;
-+
- 	if (queue_id >= max_t(unsigned int,
- 			      dev->real_num_rx_queues,
- 			      dev->real_num_tx_queues))
- 		return -EINVAL;
- 	if (xsk_get_pool_from_qid(dev, queue_id))
- 		return -EBUSY;
-+	if (queue_id < dev->real_num_rx_queues) {
-+		if (!netif_get_rx_queue_peer_locked(&dev, &queue_id,
-+						    &needs_unlock))
-+			return -EBUSY;
-+	}
-+	if (xsk_get_pool_from_qid(dev, queue_id)) {
-+		ret = -EBUSY;
-+		goto out;
-+	}
- 
- 	pool->netdev = dev;
- 	pool->queue_id = queue_id;
-@@ -151,8 +172,10 @@ int xsk_reg_pool_at_qid(struct net_device *dev, struct xsk_buff_pool *pool,
- 		dev->_rx[queue_id].pool = pool;
- 	if (queue_id < dev->real_num_tx_queues)
- 		dev->_tx[queue_id].pool = pool;
--
--	return 0;
-+out:
-+	if (needs_unlock)
-+		netdev_unlock(dev);
-+	return ret;
- }
- 
- static int __xsk_rcv_zc(struct xdp_sock *xs, struct xdp_buff_xsk *xskb, u32 len,
-diff --git a/net/xdp/xsk.h b/net/xdp/xsk.h
-index a4bc4749faac..54d9a7736fd2 100644
---- a/net/xdp/xsk.h
-+++ b/net/xdp/xsk.h
-@@ -41,8 +41,7 @@ static inline struct xdp_sock *xdp_sk(struct sock *sk)
- 
- void xsk_map_try_sock_delete(struct xsk_map *map, struct xdp_sock *xs,
- 			     struct xdp_sock __rcu **map_entry);
--void xsk_clear_pool_at_qid(struct net_device *dev, u16 queue_id);
-+void xsk_clear_pool_at_qid(struct net_device *dev, unsigned int queue_id);
- int xsk_reg_pool_at_qid(struct net_device *dev, struct xsk_buff_pool *pool,
--			u16 queue_id);
--
-+			unsigned int queue_id);
- #endif /* XSK_H_ */
--- 
-2.43.0
-
+I doubt people will be reading this giant log.
+Please bisect it instead.
+Since it's not reproducible when /tmp is backed by tmpfs
+it's probably some change in vfs or in the file system that
+your laptop is using for /tmp.
+It changes a user visible behavior of the file system and
+needs to be investigated, since it may affect more code than
+just this selftest.
