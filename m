@@ -1,56 +1,54 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87C9A34D4FB;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0256534E743;
 	Tue, 21 Oct 2025 17:19:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761067148; cv=none; b=klJWpZutBrUeh8YT8WVA2g9C5WrME8HFAEwUS9WOfjT3lzoJERy62T9yggUmn6RiEBkOJVuRNU80jOpix7tua8somVeBLqJufiUE1ThfQssqovbX5sRI4fqf/jkxOstfS7up2Si7sLmH3fEC6OvJWXc6GebVyuqnLvCkSpdCvaM=
+	t=1761067148; cv=none; b=ltXiFKW1iJ+Itk54v1eIGtYsVEq16c32x7w87ddfQBbEOvNT0iIJT+EgFHikzoBXaqBTLveyZDnAryAeQ3Elhv/+N/Orl3A4aL2NhKp8rr7hT6GLGdkwTIuO5AVaJWMLzzD0YKXeh6hdv7DFzdOvJwo5A8qI3l4g4BfWSQv22pk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1761067148; c=relaxed/simple;
-	bh=yURzac9KMzB9ZsEyg8nrlXPtNzXKKYJPZ7C2cpnL6EU=;
+	bh=2YDkoOJDBp9Nbjj2vW2HkcQGmRFOiFoNvp3AjR0IkaY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=r5JoB2pManh3Nvvz+BA+jY7fbup00YgtoiTouEATu6LUKVanVNt+p1Rvcjz6EqDzcRrZ2NS1z8xSoLn8JHygeaYrGMlO1Wc8rfTHHDLEHBTs18pNkKnKg0rblG5Hi71a6YZdawfLYpIQORF/I97Z8Usxo3Cm2d/Md0xYrWUhtaE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=iBWJ4DlF; arc=none smtp.client-ip=90.155.92.199
+	 Content-Type:Content-Disposition:In-Reply-To; b=hFlvlsh6t+7tVDMO+zy6NlRA9fIU1W93V1ospTrQyOGs+hJ7DMJTe9vTbPQoLwxgqCQpAcE1Jpm/J7CyW+OiZMEveRZiZXEsJysMuXSbNNACZpc62tX6kLLSPkCfmvMa3WC9PPE+DR8DSmBhECNM9dWMf/15P2fCGascyue0oEE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=OjISmd9r; arc=none smtp.client-ip=90.155.50.34
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="iBWJ4DlF"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="OjISmd9r"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
 	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
 	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=711OZIflRvId5Y2Hiv2KpTzjypqNjJv75tCJMSUJMYg=; b=iBWJ4DlFOrW6evyRXJdF0R1xMj
-	6NY1xP7tsSHBE6YzKeHCwpSR73+1Wcl/ToAIFTrjsZZILcJ2cbfpkmStQ9D+d3dKpfSKRDaAoOGNV
-	6Bin2UVMRsc0dRljK99FSbOMxpHUCvw3eCMvvrtrtq64NtZiQpYk0oh0TYln7SJ+M0V4r88cRgFVs
-	990H+q1eqQ4MqeXz4xsVpYuQSAAVY+i0elPZ54jdy71aOkP7tgUWmquR+oPDQxdg1hvUpGSew8WkN
-	tlxmTA0aIOmeuSBF4+UyGltFD9WiH/cb1vrFbEl4PDHRwwxIJk38oIlV+9Q0AvPeWmh2BzqPC7HZw
-	VcEQpvnw==;
+	bh=gHFywIhXem6Wo6k3BOTsD13pvTGelkbwQt/Im/rNtDY=; b=OjISmd9r25aLSPCGLiW3hqoolQ
+	JBoz3xniO5N9k4GGhDuHiY6HF/Q5HZmpdcJLKJ/QyoLs+rq/OMEjwdAI1B/aX6IpFXdVcsXupvQx1
+	OOygZtWMsE4EkPbI6ncy14zLzJ0xfd7ty7crnY8ZRjSvv3+Qecbo1RN3FaD4AxKypsv29ke2KwIOS
+	qpGtgEBL5EUVgfsivtaFYZfTCWnvWaOVJL6d+hODrScePjweqcVIY/We4OInxr+AejkZZSpzP36N+
+	mA8k+D6fOdLyZspaXYwPwK5r4GAS4/or+2mNAvCKqmdEH/1WOpo/gQIOvsi/l4I1f2QNsr0cSK34g
+	650ac66g==;
 Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1vBF8u-00000000tC3-17fx;
-	Tue, 21 Oct 2025 16:23:25 +0000
+	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1vBG0c-0000000DsWZ-1B8U;
+	Tue, 21 Oct 2025 17:18:55 +0000
 Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 1FAF33030EB; Mon, 20 Oct 2025 14:49:50 +0200 (CEST)
-Date: Mon, 20 Oct 2025 14:49:50 +0200
+	id 89D023030D0; Mon, 20 Oct 2025 13:03:03 +0200 (CEST)
+Date: Mon, 20 Oct 2025 13:03:03 +0200
 From: Peter Zijlstra <peterz@infradead.org>
-To: Andrea Righi <arighi@nvidia.com>
-Cc: Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	Joel Fernandes <joelagnelf@nvidia.com>, Tejun Heo <tj@kernel.org>,
-	David Vernet <void@manifault.com>,
-	Changwoo Min <changwoo@igalia.com>, Shuah Khan <shuah@kernel.org>,
-	sched-ext@lists.linux.dev, bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 05/14] sched: Add a server arg to
- dl_server_update_idle_time()
-Message-ID: <20251020124950.GF4067720@noisy.programming.kicks-ass.net>
-References: <20251017093214.70029-1-arighi@nvidia.com>
- <20251017093214.70029-6-arighi@nvidia.com>
+To: Tao Chen <chen.dylane@linux.dev>
+Cc: mingo@redhat.com, acme@kernel.org, namhyung@kernel.org,
+	mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+	jolsa@kernel.org, irogers@google.com, adrian.hunter@intel.com,
+	kan.liang@linux.intel.com, song@kernel.org, ast@kernel.org,
+	daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
+	eddyz87@gmail.com, yonghong.song@linux.dev,
+	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
+	haoluo@google.com, linux-perf-users@vger.kernel.org,
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH bpf-next v3 2/2] bpf: Use per-cpu BPF callchain entry to
+ save callchain
+Message-ID: <20251020110303.GS3419281@noisy.programming.kicks-ass.net>
+References: <20251019170118.2955346-1-chen.dylane@linux.dev>
+ <20251019170118.2955346-3-chen.dylane@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -59,16 +57,31 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251017093214.70029-6-arighi@nvidia.com>
+In-Reply-To: <20251019170118.2955346-3-chen.dylane@linux.dev>
 
-On Fri, Oct 17, 2025 at 11:25:52AM +0200, Andrea Righi wrote:
-> From: Joel Fernandes <joelagnelf@nvidia.com>
-> 
-> Since we are adding more servers, make dl_server_update_idle_time()
-> accept a server argument than a specific server.
-> 
-> Reviewed-by: Andrea Righi <arighi@nvidia.com>
-> Signed-off-by: Joel Fernandes <joelagnelf@nvidia.com>
+On Mon, Oct 20, 2025 at 01:01:18AM +0800, Tao Chen wrote:
+> As Alexei noted, get_perf_callchain() return values may be reused
+> if a task is preempted after the BPF program enters migrate disable
+> mode. Drawing on the per-cpu design of bpf_bprintf_buffers,
+> per-cpu BPF callchain entry is used here.
 
-Can you run s/rq_dl_server/dl_server/g on the thing please?
+And now you can only unwind 3 tasks, and then start failing. This is
+acceptable, why?
+
+> -	if (may_fault)
+> -		rcu_read_lock(); /* need RCU for perf's callchain below */
+> -
+
+I know you propose to remove this code; but how was that correct? The
+perf callchain code hard relies on non-preemptible context, RCU does not
+imply such a thing.
+
+>  	if (trace_in)
+>  		trace = trace_in;
+> -	else if (kernel && task)
+>  		trace = get_callchain_entry_for_task(task, max_depth);
+> -	else
+> -		trace = get_perf_callchain(regs, NULL, kernel, user, max_depth,
+> -					   crosstask, false);
+
 
