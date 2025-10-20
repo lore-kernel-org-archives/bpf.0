@@ -1,37 +1,38 @@
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC0A5286422;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8B8E28504F;
 	Mon, 20 Oct 2025 16:24:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760977459; cv=none; b=YeBrDsR2krVA6YFbWwZu4MPcw6lontHysB7sXDJrdy3Ri2eBzVXTiE8hT763EcChmJt6lZ89VqaDabjNHgRWPL/axvZDt5lR45/6e87wSgMhMsi7tMb1lZGY/mir61yXnnUJWq6twvypyj2aqWuX9Cb8JjcWGN7M3nhgttVwO7w=
+	t=1760977459; cv=none; b=RXDr3veOse3/s+h1JB3elyMd4yT/2i0WSMIUHw3TkhvuzUahnjsMuKMfydTlLGgx656KIANVefDPSegmo6MCrdPkZZ7P4DoksQIlmtw+/XAzsYozzhJR30izqTT3JfHjsVYBi8A1dkb7b+Ka5EtB6s7zcDEuCm2FgTPqj0IWKvc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1760977459; c=relaxed/simple;
-	bh=Z4UT22EGyvlEG1tl2tPWz5AKAW8ctXe9I+yn5eN28bU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JZNzwhx6QTpv1pX2sfi+IhOp92opjpa/Ck5oWcH2miChdB5Wts7BaXgTOatFVe9aT4nTuPRs020rym7qj5yfbQ6zd3Ed5Qav6e9vwHTXqtaedBNUtrbYD08IxY0T9ua6b30rY71QicmbkDAfvLUYeT6VXZCHD6uZ43ZPak1AS/Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=axmQzGe+; arc=none smtp.client-ip=213.133.104.62
+	bh=WD2n69XZR58OEhICnjwP/shHQLduaiisQ0RidQldT/Q=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=b4sEq0voW951Ur2HGkEF95IiPJH1voMFRTbg/SCNayqz/zWpkwcDcK48PXGZoDrQ0Ohgro1vKMSxbTsauwAQlt/r7tMlOowGlFi8exEZ5sFkBXgYuVbCx2nCCi7cjqtqcZgEoL+mhRr3imaKfbZZgkxwhxNZurNvDrWikEGj8fk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=WS8ZlLzq; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="axmQzGe+"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="WS8ZlLzq"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
-	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:In-Reply-To:References;
-	bh=zMQLgJjxGNREMvSiUsrqy2mt5zVHgiDcqKcyCwADK3Y=; b=axmQzGe+tJZnIL9mTVbOUmk/1U
-	qyHt7UVn1a3cHQSRedVCD8JOqPdN6S7mllnigoo1acACnGFSJF9BovaYRgpIIrVyvuEst8ddUje3F
-	pHvWyYlWPO0xIqIQDrP/XoSlfWwbA64lDdMtHw6n15U860BLzIO8EQcoezzzqP9FuezSSxzfNRpp8
-	kl+QMc/1K2K/3oY6g70VeGldQ1O9Mu+L7/fjg6wvzXwfSBvsg2mkQ/aAKhvLuofMMGCyap+dEpt60
-	oEORRXLZm3o64bZwTLJ/O2GA6RHpiTdP2TGqjPf+Db/bYq7X3uX3K2iVhhtqW7aY+gkSeRsv+N78i
-	iKvnFfSw==;
+	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
+	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=iQep+LJD+MoD+/Z8nqH0V4AMAyaAfYgmLkpNaHp8z48=; b=WS8ZlLzqnvL6DULf+7woYwDEDc
+	IdKvip1sooP+lBdvE70CBVilOWjxKsIqu1Mr6juHWSdFBTNDBU86+VQqKBrA5bTRjM09Aq/UCrXWC
+	QjHYI2jBvevcOYJbNSgN5JHaJGerVnbJibmOjOkFWvFiODs7xfDF4WNeUM22qkXT6qui2DsKFG/j5
+	PFn+3KaoU0PMOPYypiSsi+FvcotoqxSCpnaoRYqz11XcdvPxDovfT9GW0UtlgUELytBY448hpOtfr
+	qOf5k3ddfJTDbTIgmLJIvRjbYt0mljiQT2mddTEpdeLAg3idI3OEbmT0Ie2uG1S0qrfotcsMp0e+n
+	P5SlQ8Gw==;
 Received: from localhost ([127.0.0.1])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1vAsfs-000JiL-1n;
-	Mon, 20 Oct 2025 18:23:56 +0200
+	id 1vAsg0-000JkY-2C;
+	Mon, 20 Oct 2025 18:24:04 +0200
 From: Daniel Borkmann <daniel@iogearbox.net>
 To: netdev@vger.kernel.org
 Cc: bpf@vger.kernel.org,
@@ -50,10 +51,12 @@ Cc: bpf@vger.kernel.org,
 	toke@redhat.com,
 	yangzhenze@bytedance.com,
 	wangdongdong.6@bytedance.com
-Subject: [PATCH net-next v3 00/15] netkit: Support for io_uring zero-copy and AF_XDP
-Date: Mon, 20 Oct 2025 18:23:40 +0200
-Message-ID: <20251020162355.136118-1-daniel@iogearbox.net>
+Subject: [PATCH net-next v3 07/15] xsk: Move pool registration into single function
+Date: Mon, 20 Oct 2025 18:23:47 +0200
+Message-ID: <20251020162355.136118-8-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20251020162355.136118-1-daniel@iogearbox.net>
+References: <20251020162355.136118-1-daniel@iogearbox.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -63,92 +66,50 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Virus-Scanned: Clear (ClamAV 1.0.9/27798/Mon Oct 20 11:37:28 2025)
 
-Containers use virtual netdevs to route traffic from a physical netdev
-in the host namespace. They do not have access to the physical netdev
-in the host and thus can't use memory providers or AF_XDP that require
-reconfiguring/restarting queues in the physical netdev.
+Small refactor to move the pool registration into xsk_reg_pool_at_qid,
+such that the netdev and queue_id can be registered there. No change
+in functionality.
 
-This patchset adds the concept of queue peering to virtual netdevs that
-allow containers to use memory providers and AF_XDP at native speed.
-These mapped queues are bound to a real queue in a physical netdev and
-act as a proxy.
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Co-developed-by: David Wei <dw@davidwei.uk>
+Signed-off-by: David Wei <dw@davidwei.uk>
+---
+ net/xdp/xsk.c           | 5 +++++
+ net/xdp/xsk_buff_pool.c | 5 -----
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-Memory providers and AF_XDP operations takes an ifindex and queue id,
-so containers would pass in an ifindex for a virtual netdev and a queue
-id of a mapped queue, which then gets proxied to the underlying real
-queue. Peered queues are created and bound to a real queue atomically
-through a generic ynl netdev operation.
-
-We have implemented support for this concept in netkit and tested the
-latter against Nvidia ConnectX-6 (mlx5) as well as Broadcom BCM957504
-(bnxt_en) 100G NICs. For more details see the individual patches.
-
-v2->v3:
- - Use netdev_ops_assert_locked instead of netdev_assert_locked (syzbot)
- - Add missing netdev_lockdep_set_classes in netkit
-v1->v2:
- - Removed bind sample ynl code (Stan)
- - Reworked netdev locking to have consistent order (Stan, Kuba)
- - Return 'not supported' in API patch (Stan)
- - Improved ynl documentation (Kuba)
- - Added 'max: s32-max' in ynl spec for ifindex (Kuba)
- - Added also queue type in ynl to have user specify rx to make
-   it obvious (Kuba)
- - Use of netdev_hold (Kuba)
- - Avoid static inlines from another header (Kuba)
- - Squashed some commits (Kuba, Stan)
- - Removed ndo_{peer,unpeer}_queues callback and simplified
-   code (Kuba)
- - Improved commit messages (Toke, Kuba, Stan, zf)
- - Got rid of locking genl_sk_priv_get (Stan)
- - Removed af_xdp cleanup churn (Maciej)
- - Added netdev locking asserts (Stan)
- - Reject ethtool ioctl path queue resizing (Kuba)
- - Added kdoc for ndo_queue_create (Stan)
- - Uninvert logic in netkit single dev mode (Jordan)
- - Added binding support for multiple queues
-
-Daniel Borkmann (9):
-  net, ethtool: Disallow peered real rxqs to be resized
-  xsk: Move NETDEV_XDP_ACT_ZC into generic header
-  xsk: Move pool registration into single function
-  xsk: Add small helper xp_pool_bindable
-  xsk: Change xsk_rcv_check to check netdev/queue_id from pool
-  xsk: Proxy pool management for mapped queues
-  netkit: Add single device mode for netkit
-  netkit: Document fast vs slowpath members via macros
-  netkit: Add xsk support for af_xdp applications
-
-David Wei (6):
-  net: Add bind-queue operation
-  net: Implement netdev_nl_bind_queue_doit
-  net: Add peer info to queue-get response
-  net: Proxy net_mp_{open,close}_rxq for mapped queues
-  netkit: Implement rtnl_link_ops->alloc and ndo_queue_create
-  netkit: Add io_uring zero-copy support for TCP
-
- Documentation/netlink/specs/netdev.yaml |  84 ++++++
- drivers/net/netkit.c                    | 330 ++++++++++++++++++++----
- include/linux/ethtool.h                 |   1 +
- include/net/netdev_queues.h             |   5 +
- include/net/netdev_rx_queue.h           |  39 ++-
- include/net/page_pool/memory_provider.h |   4 +-
- include/net/xdp_sock_drv.h              |   8 +-
- include/uapi/linux/if_link.h            |   6 +
- include/uapi/linux/netdev.h             |  22 ++
- net/core/netdev-genl-gen.c              |  25 ++
- net/core/netdev-genl-gen.h              |   1 +
- net/core/netdev-genl.c                  | 177 ++++++++++++-
- net/core/netdev_rx_queue.c              | 126 +++++++--
- net/ethtool/channels.c                  |  12 +-
- net/ethtool/common.c                    |  10 +-
- net/ethtool/ioctl.c                     |   4 +-
- net/xdp/xsk.c                           |  44 +++-
- net/xdp/xsk.h                           |   5 +-
- net/xdp/xsk_buff_pool.c                 |  18 +-
- tools/include/uapi/linux/netdev.h       |  22 ++
- 20 files changed, 830 insertions(+), 113 deletions(-)
-
+diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+index 7b0c68a70888..0e9a385f5680 100644
+--- a/net/xdp/xsk.c
++++ b/net/xdp/xsk.c
+@@ -141,6 +141,11 @@ int xsk_reg_pool_at_qid(struct net_device *dev, struct xsk_buff_pool *pool,
+ 			      dev->real_num_rx_queues,
+ 			      dev->real_num_tx_queues))
+ 		return -EINVAL;
++	if (xsk_get_pool_from_qid(dev, queue_id))
++		return -EBUSY;
++
++	pool->netdev = dev;
++	pool->queue_id = queue_id;
+ 
+ 	if (queue_id < dev->real_num_rx_queues)
+ 		dev->_rx[queue_id].pool = pool;
+diff --git a/net/xdp/xsk_buff_pool.c b/net/xdp/xsk_buff_pool.c
+index 26165baf99f4..62a176996f02 100644
+--- a/net/xdp/xsk_buff_pool.c
++++ b/net/xdp/xsk_buff_pool.c
+@@ -173,11 +173,6 @@ int xp_assign_dev(struct xsk_buff_pool *pool,
+ 	if (force_zc && force_copy)
+ 		return -EINVAL;
+ 
+-	if (xsk_get_pool_from_qid(netdev, queue_id))
+-		return -EBUSY;
+-
+-	pool->netdev = netdev;
+-	pool->queue_id = queue_id;
+ 	err = xsk_reg_pool_at_qid(netdev, pool, queue_id);
+ 	if (err)
+ 		return err;
 -- 
 2.43.0
 
