@@ -1,62 +1,62 @@
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC0E02F12D9
-	for <bpf@vger.kernel.org>; Mon, 20 Oct 2025 22:25:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5E202F1FCA
+	for <bpf@vger.kernel.org>; Mon, 20 Oct 2025 22:25:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760999150; cv=none; b=oJUbS7rtZHYiHkEqgoMU6Uhi7WIzjn0BdOQGb3cINTmockW0X8eBMjMyVn8ar9o0ezoVE90fugQyny8NJZr8FiPOku4qxzGtKuvU6rO1DPSNnX0AX20s6Vee5NRTKc7TNyWiJymeQ6q6+Vh+BMIlW7+DXlqg+nKGXgMSH3fQF1c=
+	t=1760999151; cv=none; b=fvf5A2ej+fPhp4EpejMs0l8e5F8xrk2FbpvUFgsoVgDxybucikwbkf1mTLmhr2II77WcKTns46M1bLHrT3r8X6f6nMOldAdFsmXO9ikM6q4tq7wforzWnadFLBIWNaMcjhCPikfUV5Cu4RJjkQQzz0t+L9kEEnqqyN6r66sIVRA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760999150; c=relaxed/simple;
-	bh=S7wR7aZg7Tjl3o7Oqf0exsC+eBwpfOYtGuNSbYyxGDs=;
+	s=arc-20240116; t=1760999151; c=relaxed/simple;
+	bh=uEftEbXwvp8w9flWvBB+7yaSoLMlfedOsaB9YYBtIiw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=J3zTNMfeIOI4G6KMFvrJzrTIYCpJsOSnVuMf4KWHYjHxF2JSfLuYbSWTGFa0ZAA3wQhb7jToTchRFOY5TZ9ukZ1/A6U5GFxTG2UOdbKFi3tIGJRe6k5cgorH2gLNqTtQVJXHWiXssgFCCdNm5CXkroAmHs4KRJueMYF3GjJUTRc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=b1wCbMUy; arc=none smtp.client-ip=209.85.221.51
+	 MIME-Version; b=as6nEB/RyatVhJgBF+3blauP5ipxUGH774EBPjs32hCBdAj7V3DYLpAx3/Zis+sTkhvQ7vFwZ6zXihL5C9Na/scrxBGNr83OJwrvwPpqnDeft6dqlCPzlpJcBSOFSOEWqhKkT2Pk80jn0YY1IZw411kViG162U6CCBbgQG2ClqE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QFVoctVG; arc=none smtp.client-ip=209.85.128.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b1wCbMUy"
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-3ece0e4c5faso4860571f8f.1
-        for <bpf@vger.kernel.org>; Mon, 20 Oct 2025 15:25:47 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QFVoctVG"
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-471191ac79dso40027905e9.3
+        for <bpf@vger.kernel.org>; Mon, 20 Oct 2025 15:25:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1760999146; x=1761603946; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1760999148; x=1761603948; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=879X/wWgmNgdWJ+TiOg8p7qqMzA9yE+P722ipbE+i44=;
-        b=b1wCbMUyaABAr1jMwJ6M6XHh3hcT3eSuRUU5h1iW6k90E4dQcgV5Ywa6AUfh9geAvz
-         sFyiWa3RMTsDKtxoit/HM+7dc3Sbn16l52+mR0HhCEc6qrADwAX2kZcVIaxypkM7+g2i
-         SXvXgr3xEetdusJtym6tAiz+pRoLecazY8T6P5ShtjvaIym+qoSospuBhA5yGuHwai2S
-         2PzowdMZzWxTlzUAKa5FJEDJJwti+zwA9zYc4IIq0BUZ1CRZf2xgPF6qf4WWC9A9i6gN
-         5+ovPg91ke/oUX9JcAiyAzP7CtAgRlA4x7qhIDsuUyeBixUsXeV8XLBNnnZIWe7x8S7+
-         ytDQ==
+        bh=1O4jMfEotJt0uEpRkTiHUBTteoE/4zTKfKOJ6aa25R4=;
+        b=QFVoctVGuBYDZF30t+YbkAJOp++GFojkaNK/zA/HjluGXngPOU3h4xr5m20V6WeTmS
+         wCmbrs2X7reje71Wimfm1Ei/ktzqq6HS1czmIEmQvlTGqxOuiE9LwFIw5pjhfosLv9KW
+         1hkIfAWBGExDFP2nzYXzNstYLANC+R5U9isGttENcBgmd8O3mjoeEBVJV63AzBav4/FA
+         7omQQF9M/p5VmFyG4ANl5G4Q/HMvQsiSiFqbsVAkuem1TuvoghgCVHTe/hag93wRxvS9
+         rDxhOb0w05aKmH8lnw8YuK9n5Apz1bTxNBerrPLN5aPoEEmIFBcBoog3LCvpIUEHposY
+         1RXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760999146; x=1761603946;
+        d=1e100.net; s=20230601; t=1760999148; x=1761603948;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=879X/wWgmNgdWJ+TiOg8p7qqMzA9yE+P722ipbE+i44=;
-        b=iSVEgT9lEJrA4294NELETjL52MdrcJMvSE3cCfOmNY6QcdLcbnldVc+EHUT6vTgaYC
-         5B/zufTTQD+OdAC3WT20GT9ptwMC489ddROPR8ICKWsN6FifSg7eOauhkh5SdgwmhGFt
-         I4LGW5k8+ifz+QRdfYKbF4AI5i/ZSRSyTIhC8vLgde01GyNayUJz6O+eVJLqDu4xk/u+
-         Yq5YEZYid9c7d4w4qq9TVI2K88zy2SpWUfCJYFWC65bDx9INCf0g/H0NiuFoTp51xkvh
-         uDb4lHl2fybZoPg4d28q3eta6MO7odecR+gJEBqQdalbvNU37rPDKE1o8imIAG3BWFD3
-         Mytg==
-X-Gm-Message-State: AOJu0YxSrSXKddUc8jgt0M7kpU09laemofus5wkFVzH7rYX+uXii5p0j
-	cnM3c3+oKtbBhZbqrYZOwdh4yl/q4bViUycFvrpOvlWoA/v1l8tI9B5EYyrQFQ==
-X-Gm-Gg: ASbGncvJtlyqiW/MRjy3WrPyvuZ9Qs7B/DozoCs4SJaKruCoBKpATF5U0lzItxvFGqJ
-	Bew3qMa+FRB23FO0dk/h3hM7oC0KlkCuK9n/aSGn3bcXmuuHIAonY8bfyQKCqnb8CtVnBstk3iF
-	yI6f3cYofc0p+9AJD9Ltej56Y0tt5LsAeE2GvwPppRQwHaRklhATcn7GM3ywaruRixPQA3w0CmK
-	HZbIizuPw4i/XrP5CK3JQPzZ6sVvR2WzsDZ5P4oSxCCnHRga3GWulhFxAMUTpaQPmPKxgNlXj2w
-	jUM3lV+UeY0yqHdnFmzZNArx19iibCQNGSLklZdQkM2czG6FbfQMchiTf26eSAJ0Joub8htEfJS
-	EBA0kio+3E5ErUDsN83URTnfpoIxwj2r8UVcDKYpMiuNMseYOeh5c6a+qYdeyrmYCQgF3+g==
-X-Google-Smtp-Source: AGHT+IHJ3MmlmZXMkeliXcLeUYYvt3L6F/cvjrGZZLG27COI61EshayZlDj4aX+nqmc2FvnDsD3R8A==
-X-Received: by 2002:a05:6000:2911:b0:425:8bc2:9c43 with SMTP id ffacd0b85a97d-42704d7e987mr9175804f8f.1.1760999146200;
-        Mon, 20 Oct 2025 15:25:46 -0700 (PDT)
+        bh=1O4jMfEotJt0uEpRkTiHUBTteoE/4zTKfKOJ6aa25R4=;
+        b=cRMQj7AS8jjs9tngCJHhO3uhViGfKHm5wkQ1IFWSr2bXFbFECpWSnE3+vOkYa9xImS
+         AXAaqgS7LOQxy3Zbh1j0OHYurRSn3zhFOVhLTTlgGqjlF593JonZd+O6xLoUnjk+A2Oc
+         mGGJ2D2xGzy6oLjJa3flh/+WpH/C6MAPJJ9/pu7JoIcdz8IlkYHUG/iDaB9GL1wO7YI7
+         NzXfAVAWZ2Rb+M5hlGUpOkeSh2CS9jbDktT/i2r2SP6jQ5kSzGId4jUkrRXfl/5uWiFW
+         vTNhAM76bM7jotVhma3e2o/mai9vSc/vvhWMmM3QAtHbjgIspmDxphaRk5s+u9ImDScd
+         KZwQ==
+X-Gm-Message-State: AOJu0Yyy2d5bm7rH4VIcK75KxYCi+aLulZaUcIW5nNBHErpOikFad4tq
+	GDJPps15Q9KFPnr6EA4v+F+uBhsw+Dagfnf6RzvkGnSDmufYDOoVEz7qwkCo6g==
+X-Gm-Gg: ASbGncs5c4NOyY/H+P1jGIm2XGFdqKewKI0RqqScQuGGbc+uKIVEZg11HGkgcjNRPsr
+	dYHPYrFPCo285wNb3no0Yucx+RyoPzVKTRWExaz72PZNv+ECHwrUqI5WaazwGDX2Iito4IFyeE2
+	exu42tgBUynVddwRnBddcvd112yYWfkvu8oqHTmu/tjzKaCIHmGPAz6PeLemS0BfVENEr5El1uf
+	uZwks5ewE6LThvUFxuR9kz4heS21bsc/pMMoWv+46FU8NUVPAfTgPoKnqbLg1yAkEJIDjDen3EH
+	PCilKJB+58dJZjBeNU0TshMSxGwm37iu074UoYoWS4zoatkWQyPL/HWMYQa8hR9JANv8lHvCC2y
+	/Do9Z4mKjPGEamI7+Ubr2PAM7QMfN8R5sDKUJMEEjPsd0jkONzueGcee1TD3Z2E8ztiyg+Q==
+X-Google-Smtp-Source: AGHT+IFvVd/4Tj+9zSuc4oil7yRkPEU6Fu8P3IA6uuZj2vi0YUV4MnalzcSOuRW/jZfi9TGr5k251w==
+X-Received: by 2002:a05:6000:2889:b0:428:3fbb:83fd with SMTP id ffacd0b85a97d-4283fbb8f3dmr6192792f8f.38.1760999148165;
+        Mon, 20 Oct 2025 15:25:48 -0700 (PDT)
 Received: from localhost ([2620:10d:c092:400::5:2617])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-427f00ce178sm17068024f8f.46.2025.10.20.15.25.44
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-471144b5c91sm248850095e9.11.2025.10.20.15.25.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Oct 2025 15:25:45 -0700 (PDT)
+        Mon, 20 Oct 2025 15:25:47 -0700 (PDT)
 From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org,
@@ -67,9 +67,9 @@ To: bpf@vger.kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
 Cc: Mykyta Yatsenko <yatsenko@meta.com>
-Subject: [PATCH bpf-next v3 01/10] selftests/bpf: remove unnecessary kfunc prototypes
-Date: Mon, 20 Oct 2025 23:25:29 +0100
-Message-ID: <20251020222538.932915-2-mykyta.yatsenko5@gmail.com>
+Subject: [PATCH bpf-next v3 03/10] lib: move freader into buildid.h
+Date: Mon, 20 Oct 2025 23:25:31 +0100
+Message-ID: <20251020222538.932915-4-mykyta.yatsenko5@gmail.com>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20251020222538.932915-1-mykyta.yatsenko5@gmail.com>
 References: <20251020222538.932915-1-mykyta.yatsenko5@gmail.com>
@@ -83,48 +83,126 @@ Content-Transfer-Encoding: 8bit
 
 From: Mykyta Yatsenko <yatsenko@meta.com>
 
-Remove unnecessary kfunc prototypes from test programs, these are
-provided by vmlinux.h
+Move struct freader and prototypes of the functions operating on it into
+the buildid.h.
+
+This allows reusing freader outside buildid, e.g. for file dynptr
+support added later.
 
 Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- tools/testing/selftests/bpf/progs/ip_check_defrag.c        | 5 -----
- tools/testing/selftests/bpf/progs/verifier_netfilter_ctx.c | 5 -----
- 2 files changed, 10 deletions(-)
+ MAINTAINERS             |  1 +
+ include/linux/buildid.h | 25 +++++++++++++++++++++++++
+ lib/buildid.c           | 29 +++++------------------------
+ 3 files changed, 31 insertions(+), 24 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/ip_check_defrag.c b/tools/testing/selftests/bpf/progs/ip_check_defrag.c
-index 645b2c9f7867..0e87ad1ebcfa 100644
---- a/tools/testing/selftests/bpf/progs/ip_check_defrag.c
-+++ b/tools/testing/selftests/bpf/progs/ip_check_defrag.c
-@@ -12,11 +12,6 @@
- #define IP_OFFSET		0x1FFF
- #define NEXTHDR_FRAGMENT	44
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 545a4776795e..7564692f2f3c 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -4648,6 +4648,7 @@ F:	Documentation/userspace-api/ebpf/
+ F:	arch/*/net/*
+ F:	include/linux/bpf*
+ F:	include/linux/btf*
++F:	include/linux/buildid.h
+ F:	include/linux/filter.h
+ F:	include/trace/events/xdp.h
+ F:	include/uapi/linux/bpf*
+diff --git a/include/linux/buildid.h b/include/linux/buildid.h
+index 014a88c41073..831c1b4b626c 100644
+--- a/include/linux/buildid.h
++++ b/include/linux/buildid.h
+@@ -18,4 +18,29 @@ void init_vmlinux_build_id(void);
+ static inline void init_vmlinux_build_id(void) { }
+ #endif
  
--extern int bpf_dynptr_from_skb(struct __sk_buff *skb, __u64 flags,
--			      struct bpf_dynptr *ptr__uninit) __ksym;
--extern void *bpf_dynptr_slice(const struct bpf_dynptr *ptr, uint32_t offset,
--			      void *buffer, uint32_t buffer__sz) __ksym;
++struct freader {
++	void *buf;
++	u32 buf_sz;
++	int err;
++	union {
++		struct {
++			struct file *file;
++			struct folio *folio;
++			void *addr;
++			loff_t folio_off;
++			bool may_fault;
++		};
++		struct {
++			const char *data;
++			u64 data_sz;
++		};
++	};
++};
++
++void freader_init_from_file(struct freader *r, void *buf, u32 buf_sz,
++			    struct file *file, bool may_fault);
++void freader_init_from_mem(struct freader *r, const char *data, u64 data_sz);
++const void *freader_fetch(struct freader *r, loff_t file_off, size_t sz);
++void freader_cleanup(struct freader *r);
++
+ #endif
+diff --git a/lib/buildid.c b/lib/buildid.c
+index c4b0f376fb34..df06e492810d 100644
+--- a/lib/buildid.c
++++ b/lib/buildid.c
+@@ -11,27 +11,8 @@
+ 
+ #define MAX_PHDR_CNT 256
+ 
+-struct freader {
+-	void *buf;
+-	u32 buf_sz;
+-	int err;
+-	union {
+-		struct {
+-			struct file *file;
+-			struct folio *folio;
+-			void *addr;
+-			loff_t folio_off;
+-			bool may_fault;
+-		};
+-		struct {
+-			const char *data;
+-			u64 data_sz;
+-		};
+-	};
+-};
 -
- volatile int shootdowns = 0;
- 
- static bool is_frag_v4(struct iphdr *iph)
-diff --git a/tools/testing/selftests/bpf/progs/verifier_netfilter_ctx.c b/tools/testing/selftests/bpf/progs/verifier_netfilter_ctx.c
-index ab9f9f2620ed..e2cbc5bda65e 100644
---- a/tools/testing/selftests/bpf/progs/verifier_netfilter_ctx.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_netfilter_ctx.c
-@@ -79,11 +79,6 @@ int with_invalid_ctx_access_test5(struct bpf_nf_ctx *ctx)
- 	return NF_ACCEPT;
+-static void freader_init_from_file(struct freader *r, void *buf, u32 buf_sz,
+-				   struct file *file, bool may_fault)
++void freader_init_from_file(struct freader *r, void *buf, u32 buf_sz,
++			    struct file *file, bool may_fault)
+ {
+ 	memset(r, 0, sizeof(*r));
+ 	r->buf = buf;
+@@ -40,7 +21,7 @@ static void freader_init_from_file(struct freader *r, void *buf, u32 buf_sz,
+ 	r->may_fault = may_fault;
  }
  
--extern int bpf_dynptr_from_skb(struct __sk_buff *skb, __u64 flags,
--                               struct bpf_dynptr *ptr__uninit) __ksym;
--extern void *bpf_dynptr_slice(const struct bpf_dynptr *ptr, uint32_t offset,
--                                   void *buffer, uint32_t buffer__sz) __ksym;
--
- SEC("netfilter")
- __description("netfilter test prog with skb and state read access")
- __success __failure_unpriv
+-static void freader_init_from_mem(struct freader *r, const char *data, u64 data_sz)
++void freader_init_from_mem(struct freader *r, const char *data, u64 data_sz)
+ {
+ 	memset(r, 0, sizeof(*r));
+ 	r->data = data;
+@@ -92,7 +73,7 @@ static int freader_get_folio(struct freader *r, loff_t file_off)
+ 	return 0;
+ }
+ 
+-static const void *freader_fetch(struct freader *r, loff_t file_off, size_t sz)
++const void *freader_fetch(struct freader *r, loff_t file_off, size_t sz)
+ {
+ 	size_t folio_sz;
+ 
+@@ -147,7 +128,7 @@ static const void *freader_fetch(struct freader *r, loff_t file_off, size_t sz)
+ 	return r->addr + (file_off - r->folio_off);
+ }
+ 
+-static void freader_cleanup(struct freader *r)
++void freader_cleanup(struct freader *r)
+ {
+ 	if (!r->buf)
+ 		return; /* non-file-backed mode */
 -- 
 2.51.0
 
