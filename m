@@ -1,197 +1,122 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F225B34029B;
-	Tue, 21 Oct 2025 11:48:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54E2432F763
+	for <bpf@vger.kernel.org>; Tue, 21 Oct 2025 11:59:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761047293; cv=none; b=oLOUDV3XgbbEQmlN42VHx6o7fGnyH2aLEo+Sp27VPyiZ7HZ8NPNKDIByFsw+Cgt577GLN3Q6LBihYekO2soI9Em4jP3i+h/lglzVeHuwwCUq8qPRd8KjRR1MHGFXqgMR7B5r/47pma3pcSoU5gec9iI2iTAl6Iz8iiH8PqDK/Dc=
+	t=1761047965; cv=none; b=pBmxNpquLRUzankRggngQoZDvTiZJdKv7XofENs19g9VpFY0Zp5i5VBUVXRo/VxdsEhkrNRrMsBpucAvSrKbILLrcNdEq30Lr+w6QIs+SibhzNprN8VXCvp04HMc7kS31YsEsbfp/t5/uchoEgsoLLB02SQToE7yr4MXGZ2uA7o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761047293; c=relaxed/simple;
-	bh=Jz2qZpRe8+RR2mHCIjuTDi9/gaS5B8ErVeSfakXzmUk=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Cor0cmAvOjx6qYcz4n2beO2ZpAchv6Ub5u7EG67/bSPpY5X9DU7R1NseaSpmiEeXlvrVIE9MMv42Lq/IQvM4SgCQprtb6JlDF+7z94Y0yZX0wK7qzRFxUKBKFWs1xwbRi2AuB3jmbpnnEICMWX7FhdxVORh7genhkIJ19JNHZWY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C4mlpyhI; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1761047965; c=relaxed/simple;
+	bh=J7Ulolm4JsI5khtidb2gJNmzrjEEWbhnN3+I9Rt/mm8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kfUIpvZxUXJ7ldKMGMTlnIvYbzKesmkxNl6/u2RdEy8fBURZiA+37CfpPA8O4+qklyiIFSmnc+G+VEruaJrvJ3sgyEAjfXfOKOKJ/S7255z2nNuiSEQwdjWKzY4ERbCk3Z3q1yZ3gVM4nxHcRw6bCyp7txtwb1f4S3XDIPoCjE0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FG/BLJ8M; arc=none smtp.client-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C4mlpyhI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E1DFC4CEF1;
-	Tue, 21 Oct 2025 11:48:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761047292;
-	bh=Jz2qZpRe8+RR2mHCIjuTDi9/gaS5B8ErVeSfakXzmUk=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=C4mlpyhIGvKUgqqLYymipY+q92Q0Y6a8LxZZHPWt8Q9Ms8fcpxI+zKHIRhAGNSY0v
-	 2sFBTo0bbJ/mGEr7zSeIZjxwolrW3hmf5ndAKnPD6nms66SRweZDmq3kEDC4QTQJoJ
-	 b3AJJztU7NwjCMT/r/77QwrjfWQmicCSrGNIqCLKxYytRhWPcddLdkMyh7GmTamXMT
-	 xvnQRhKlQDkhV6bi+K1bg5IxXOUkbBGBzQPZKdgHxptAutGLmlVSmHbJbiMiJsYmad
-	 lcZ2tGpq3i3W59BlICyKrkcgJ4DyN/OKQ04KFg8GtmSRXQu2AhsYnw6stvPUjjue0V
-	 iDR251KCbcthA==
-From: Christian Brauner <brauner@kernel.org>
-Date: Tue, 21 Oct 2025 13:43:56 +0200
-Subject: [PATCH RFC DRAFT 50/50] selftests/namespaces: seventh listns()
- permission test
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FG/BLJ8M"
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-4710a1f9e4cso40960675e9.0
+        for <bpf@vger.kernel.org>; Tue, 21 Oct 2025 04:59:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1761047961; x=1761652761; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=h9hpfYt5EFzc02ERX1hD5+rSyqsCx124+1sgPY772PY=;
+        b=FG/BLJ8MqimtStdMdgu4Xjp0rSTqm2o1IbC1BB8YW/10unHl/anM1m8vNq8TdRTGWg
+         DdlXZl5cgl+FgsoTWEYdGD4kdkKR2YP9fiMqS+0eA3Rz+JtEUzmJjY7zI9HsxyOoAIlt
+         CSf0qEhEevdnQVpKGmbBkR3odEEfeOelFkJDBo9wvRTggbzgTWMNiy6BnJravXDooD6B
+         HDYv002wm9HRXjVcn/Ymzz43qtIicFq/J29Qt+6uCEysbchzjJSYGKI2z/WAgHhZAv0Q
+         ppB7IyEfwxB3Hx9oqxcmCKm6nbkmf949vRF2U39c9IGmskLe3nb/eZqQSMZfSf/hhz7F
+         ZQQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761047961; x=1761652761;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=h9hpfYt5EFzc02ERX1hD5+rSyqsCx124+1sgPY772PY=;
+        b=b4my5DtwR9tipESNqF3ElXho6YiekQvV96TPXvPtXERtDGZI37WWkvfUz/4I9eJsXo
+         4uvkPRBLL6sU7uLe8sZojSvbM8OuXnV1s2yD21VXxg8jmc7pLRAWNYYhDxC/JK9rycrM
+         VjEh3GtyJSK/11I0Vo7Ue3Vmcmfex6qFtWHmRFiLT++TAuGAEha5zeugyYjdcwpNtBg3
+         IomJuXwLiBOoTsfacbMVtv3S44/KbNxhaNchP2gKzGvY0RBSAE3hsoGnkKRCs72sS2e3
+         soDh/MZTHVcdbN9/WhLl51pPvMtdzhO30TKyGgHCwwlosZKqsVqbc0Jp45UA0Ugc/bLf
+         AH3g==
+X-Forwarded-Encrypted: i=1; AJvYcCUOJwOFXzo8KtebKDVGUmR1ChLEI+YjZPT/Uxp727sQa1HD3PgpDBFMeSz7nPex4lD6fWA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yws8DDg1jxCBoM+V9mLfpUz6y7hQNV4m2DHOQncoCEuWPcB1vGM
+	fHUI9S3g3GpLRO4X6WLI4FmesAOI9cL7fu0lLG1JoFQC3IOJZvjCVK+h
+X-Gm-Gg: ASbGnctyUo70oKwpgpP39k1709eREPmmEyN4f2w4lyXiasivUwa/YwuO/eYkQ4p5qZL
+	pEBjfOcsgbIR5D+ChOnayX0NJyllcX1AvxP02DMFU8cv/jbALEi7UFImE2FBi8XHPFwHHBF2wk3
+	9EWbtMoyQODr/ZgcvVOP6LGQSfMvjmKd63Rwr2PQ2T2U+6kiCay82ejAL27CKzTaIP0XWUULwEC
+	LDId/+VlQe0J6pjrs7q3Wer7G1913irHFDdCJIq9wwn3OjkiDP+mKjUI7VWzd7yApNXOEHegzkQ
+	+0zoeWdRHW5ZtejRdYzv5GF0tlptuRDzizbseSjiroa+oAdlFRDsTwI13d1REtmBHH79OOFVmtM
+	rHrVMFPN5PvyJggrG35jN8WL9DLWGH/bPQ5cdkz/dOm9GyxCMWRulCjWuKS5CsPDBJar3w8YZpM
+	TWLj1hVGheqV/URxNusubDnIuuLFyrv0JvvDEnL+tL
+X-Google-Smtp-Source: AGHT+IEFzO9DuAcUCZ77by9/Qtc9pNvIUJ7swtZeETWh7I+s4Pb62jaP0wVe6PyeSjmrEVy1hIR5/Q==
+X-Received: by 2002:a05:600c:310e:b0:471:14f5:1268 with SMTP id 5b1f17b1804b1-47117907a77mr127571345e9.25.1761047961325;
+        Tue, 21 Oct 2025 04:59:21 -0700 (PDT)
+Received: from ?IPV6:2a03:83e0:1126:4:4c57:4e9:b55b:f327? ([2620:10d:c092:500::6:c0ff])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-471144b5c29sm280456455e9.12.2025.10.21.04.59.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Oct 2025 04:59:20 -0700 (PDT)
+Message-ID: <aaa45f2c-749b-44bb-8ccc-fe5dfed2eadc@gmail.com>
+Date: Tue, 21 Oct 2025 12:59:15 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251021-work-namespace-nstree-listns-v1-50-ad44261a8a5b@kernel.org>
-References: <20251021-work-namespace-nstree-listns-v1-0-ad44261a8a5b@kernel.org>
-In-Reply-To: <20251021-work-namespace-nstree-listns-v1-0-ad44261a8a5b@kernel.org>
-To: linux-fsdevel@vger.kernel.org, Josef Bacik <josef@toxicpanda.com>, 
- Jeff Layton <jlayton@kernel.org>
-Cc: Jann Horn <jannh@google.com>, Mike Yuan <me@yhndnzj.com>, 
- =?utf-8?q?Zbigniew_J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>, 
- Lennart Poettering <mzxreary@0pointer.de>, 
- Daan De Meyer <daan.j.demeyer@gmail.com>, Aleksa Sarai <cyphar@cyphar.com>, 
- Amir Goldstein <amir73il@gmail.com>, Tejun Heo <tj@kernel.org>, 
- Johannes Weiner <hannes@cmpxchg.org>, Thomas Gleixner <tglx@linutronix.de>, 
- Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
- linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, bpf@vger.kernel.org, 
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
- netdev@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>, 
- Christian Brauner <brauner@kernel.org>
-X-Mailer: b4 0.15-dev-96507
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3549; i=brauner@kernel.org;
- h=from:subject:message-id; bh=Jz2qZpRe8+RR2mHCIjuTDi9/gaS5B8ErVeSfakXzmUk=;
- b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWR8L3x/e8KebWaLVN8qlM2KcXcwOs+8WPUeZ5KJ736P1
- 34Vc35c7ShlYRDjYpAVU2RxaDcJl1vOU7HZKFMDZg4rE8gQBi5OAZiI4xZGhqvfppWEf9T0mB3s
- 6D9V+Yqkd1LimZ0not0c7//a8X1Clhsjw31D/3O7BCdOus2g/WHNqwtr5yv8fn5KX+iupP6xmU5
- SubwA
-X-Developer-Key: i=brauner@kernel.org; a=openpgp;
- fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v3 02/10] bpf: widen dynptr size/offset to 64 bit
+To: Eduard Zingerman <eddyz87@gmail.com>, bpf@vger.kernel.org,
+ ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net, kafai@meta.com,
+ kernel-team@meta.com, memxor@gmail.com
+Cc: Mykyta Yatsenko <yatsenko@meta.com>
+References: <20251020222538.932915-1-mykyta.yatsenko5@gmail.com>
+ <20251020222538.932915-3-mykyta.yatsenko5@gmail.com>
+ <6bf95bb54fdc4048854951270fc22972da1e1b4f.camel@gmail.com>
+Content-Language: en-US
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+In-Reply-To: <6bf95bb54fdc4048854951270fc22972da1e1b4f.camel@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Test that dropping CAP_SYS_ADMIN restricts what we can see.
-
-Signed-off-by: Christian Brauner <brauner@kernel.org>
----
- .../selftests/namespaces/listns_permissions_test.c | 111 +++++++++++++++++++++
- 1 file changed, 111 insertions(+)
-
-diff --git a/tools/testing/selftests/namespaces/listns_permissions_test.c b/tools/testing/selftests/namespaces/listns_permissions_test.c
-index 709250ce1542..9d1767e8b804 100644
---- a/tools/testing/selftests/namespaces/listns_permissions_test.c
-+++ b/tools/testing/selftests/namespaces/listns_permissions_test.c
-@@ -663,4 +663,115 @@ TEST(listns_cap_sys_admin_inside_userns)
- 	TH_LOG("Process can see user namespace it has CAP_SYS_ADMIN inside of");
- }
- 
-+/*
-+ * Test that dropping CAP_SYS_ADMIN restricts what we can see.
-+ */
-+TEST(listns_drop_cap_sys_admin)
-+{
-+	cap_t caps;
-+	cap_value_t cap_list[1] = { CAP_SYS_ADMIN };
-+
-+	/* This test needs to start with CAP_SYS_ADMIN */
-+	caps = cap_get_proc();
-+	if (!caps) {
-+		SKIP(return, "Cannot get capabilities");
-+	}
-+
-+	cap_flag_value_t cap_val;
-+	if (cap_get_flag(caps, CAP_SYS_ADMIN, CAP_EFFECTIVE, &cap_val) < 0) {
-+		cap_free(caps);
-+		SKIP(return, "Cannot check CAP_SYS_ADMIN");
-+	}
-+
-+	if (cap_val != CAP_SET) {
-+		cap_free(caps);
-+		SKIP(return, "Test needs CAP_SYS_ADMIN to start");
-+	}
-+	cap_free(caps);
-+
-+	int pipefd[2];
-+	pid_t pid;
-+	int status;
-+	bool correct;
-+	ssize_t count_before, count_after;
-+
-+	ASSERT_EQ(pipe(pipefd), 0);
-+
-+	pid = fork();
-+	ASSERT_GE(pid, 0);
-+
-+	if (pid == 0) {
-+		struct ns_id_req req = {
-+			.size = sizeof(req),
-+			.spare = 0,
-+			.ns_id = 0,
-+			.ns_type = CLONE_NEWNET,
-+			.spare2 = 0,
-+			.user_ns_id = LISTNS_CURRENT_USER,
-+		};
-+		__u64 ns_ids_before[100];
-+		ssize_t count_before;
-+		__u64 ns_ids_after[100];
-+		ssize_t count_after;
-+		bool correct;
-+
-+		close(pipefd[0]);
-+
-+		/* Create user namespace */
-+		if (setup_userns() < 0) {
-+			close(pipefd[1]);
-+			exit(1);
-+		}
-+
-+		/* Count namespaces with CAP_SYS_ADMIN */
-+		count_before = sys_listns(&req, ns_ids_before, ARRAY_SIZE(ns_ids_before), 0);
-+
-+		/* Drop CAP_SYS_ADMIN */
-+		caps = cap_get_proc();
-+		if (caps) {
-+			cap_set_flag(caps, CAP_EFFECTIVE, 1, cap_list, CAP_CLEAR);
-+			cap_set_flag(caps, CAP_PERMITTED, 1, cap_list, CAP_CLEAR);
-+			cap_set_proc(caps);
-+			cap_free(caps);
-+		}
-+
-+		/* Ensure we can't regain the capability */
-+		prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0);
-+
-+		/* Count namespaces without CAP_SYS_ADMIN */
-+		count_after = sys_listns(&req, ns_ids_after, ARRAY_SIZE(ns_ids_after), 0);
-+
-+		/* Without CAP_SYS_ADMIN, we should see same or fewer namespaces */
-+		correct = (count_after <= count_before);
-+
-+		write(pipefd[1], &correct, sizeof(correct));
-+		write(pipefd[1], &count_before, sizeof(count_before));
-+		write(pipefd[1], &count_after, sizeof(count_after));
-+		close(pipefd[1]);
-+		exit(0);
-+	}
-+
-+	/* Parent */
-+	close(pipefd[1]);
-+
-+	correct = false;
-+	count_before = 0;
-+	count_after = 0;
-+	read(pipefd[0], &correct, sizeof(correct));
-+	read(pipefd[0], &count_before, sizeof(count_before));
-+	read(pipefd[0], &count_after, sizeof(count_after));
-+	close(pipefd[0]);
-+
-+	waitpid(pid, &status, 0);
-+	ASSERT_TRUE(WIFEXITED(status));
-+
-+	if (WEXITSTATUS(status) != 0) {
-+		SKIP(return, "Child failed to setup namespace");
-+	}
-+
-+	ASSERT_TRUE(correct);
-+	TH_LOG("With CAP_SYS_ADMIN: %zd namespaces, without: %zd namespaces",
-+			count_before, count_after);
-+}
-+
- TEST_HARNESS_MAIN
-
--- 
-2.47.3
-
+On 10/21/25 00:01, Eduard Zingerman wrote:
+> On Mon, 2025-10-20 at 23:25 +0100, Mykyta Yatsenko wrote:
+>> From: Mykyta Yatsenko <yatsenko@meta.com>
+>>
+>> Dynptr currently caps size and offset at 24 bits, which isn’t sufficient
+>> for file-backed use cases; even 32 bits can be limiting. Refactor dynptr
+>> helpers/kfuncs to use 64-bit size and offset, ensuring consistency
+>> across the APIs.
+>>
+>> This change does not affect internals of xdp, skb or other dynptrs,
+>> which continue to behave as before, and does not break binary
+>> compatibility.
+>>
+>> The widening enables large-file access support via dynptr, implemented
+>> in the next patches.
+>>
+>> Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
+>> ---
+> Hi Mykyta,
+>
+> Please don't drop acks.  Each time you drop ack, I need to compare old
+> and new patch versions to see if anything changed.
+>
+> And I'll repeat myself, in case there would be a v4:
+>
+>    > Nit: still think that mentioning that this change does not break
+>           binary compatibility is important.
+>
+> This was a question we had to think through before taking this route.
+> And given that AI got confused with v2 regarding this, the fact is not
+> obvious.
+>
+> Thanks,
+> Eduard
+>
+> [...]
+Hey, sorry for dropping that ack. I did mention binary
+compatibility in the commit summary.
