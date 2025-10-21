@@ -1,142 +1,136 @@
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A149E221FC8
-	for <bpf@vger.kernel.org>; Tue, 21 Oct 2025 10:47:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33EC623D7FB
+	for <bpf@vger.kernel.org>; Tue, 21 Oct 2025 10:49:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761043655; cv=none; b=GOJ3dj9/c+bMum7R+t7hqujO6KCmWNb+g3HEbmONxXJo73E4HdOCixLTee3G2ZKbxkazVky10P0Alp4VzUUNjmCvaswVUE4Yv9q8voDFncNCO0o5iNbU2WsvoDtTKH08Mkvh3Lg3ztMVrnQ5NzCTq0xyzsGq6VB8aJil42aPS08=
+	t=1761043765; cv=none; b=lC1tRglKQjrQVE9qfJXwHP0KxIK69L+WSBs6UMd8HlgtAMVViqv7xVaEpKnJLLFEOQ3fgMFJ/V4W1WVRfsYMnC1QYSH0bBSrqGsTkWnuwP0fyVu0Y7aiEBgzX15selZbTRqYuti+9VtmRfukG3wISur2TFcTPZaRfxue+ux470o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761043655; c=relaxed/simple;
-	bh=u3x+mZ9WYaMzDykMD4wrOaaWSHSxUpyWrVYfEbgeV3s=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fV5CYlSBOrsP9Z/D3RPl6/UEgLuooaiGeru/4NP5Ef05j5Evt4fT+wuEtYoTLhGRovZE3L5hbak43YWBCFe78mMfvagU0+Bi9rhbFJS6kesO1FZT32qheTl9UN1CiOQRv0IGt3BmlMshR3gLMVRaQywlseYkg11g7z51jXvRy50=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LV0b1/D9; arc=none smtp.client-ip=209.85.218.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1761043765; c=relaxed/simple;
+	bh=hrF0LCmElQ4WpX5W62bYMJ+jvZnpkYWbqiea2O+smAw=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=qw2p73IRoqkAO6CASzvNHKTLk401TIqgp33Gt91vlYN0powJYh3Ryr5EinmBScifJdmkzVd37q1oya2y3WjKkOXgZCHiZ5SwdydbqJPSQtyuTx6u5IfVtU+pLjASxwSvI+JHwd28gxP2cbTnnQOpY9CMhPsKZFRlanRoL0/euyc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=ChnEU0FF; arc=none smtp.client-ip=209.85.218.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LV0b1/D9"
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-b3e8f400f79so92836766b.1
-        for <bpf@vger.kernel.org>; Tue, 21 Oct 2025 03:47:32 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="ChnEU0FF"
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-b3d5088259eso841529466b.1
+        for <bpf@vger.kernel.org>; Tue, 21 Oct 2025 03:49:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761043651; x=1761648451; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=hYQSYXxT3vBEQ3060Gmkoau5FySMDvalsTXJ7MNV5UM=;
-        b=LV0b1/D95OJkJLKTxOL0hM48Qp9nyNgkGGl0y2QALvRjfJOVW65LHLubfJjLT7XdKV
-         yt7yWfZfGL30LuOe/jTElJFWM55nwk5w/Z1FP4li/UyJu4nB7tD+ZYByotrXkDcoJQuT
-         AMf9OkW1rWNJ5Ot2/F8hMOHKzhkwc2NjyWIUeakRq7U0cclGwUv99S9QS5CsyuOnmfN9
-         rh+GvZHS0597r8iYDzBP6lZCYM/KcHPdBacK14QoIJ/MAKsQBn3NekmwuuGADvdyEYPL
-         T++csfR2qqXSh50+Vyy671WVM+byd8Z7ZZ8x/e+g8lsMl0eSAPNMlnXMGMlyYJggZAvw
-         j2xA==
+        d=cloudflare.com; s=google09082023; t=1761043761; x=1761648561; darn=vger.kernel.org;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=7EOHmK2OfLfwzNiHBksUI9w2NZOUojlK5wP3wAwmdUc=;
+        b=ChnEU0FF2MBGOqWLekXisSjna5eNyAi/g7y7+pWsBzT+/GkhltvS4OgQ9nA5zuUr1U
+         IFLooonoNDeXoajSkb3prNRHm6TwqZFYgAejnP4ksdDwixBcv8344/JvpF/FWHuU+gCw
+         eGV22EtHpMnzAPzkWxTWaySDw4GbQQN5PETcJhsYDehrigkHuoAKxqGvsUAWHt2DhHZ3
+         NM1EGCJcAZAr9sqt6RAUtPKbMkm6gUQdGg0ba7nvi2KLdWlHqBQ+A0/gHSl/rgk/4OmG
+         ic5jgPQs54mKjT2ng05T8j3L80wd+9zgOdLbY9UlGQ2E+gAvPRoz56TjsT+c7RQxRyr9
+         2ysw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761043651; x=1761648451;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hYQSYXxT3vBEQ3060Gmkoau5FySMDvalsTXJ7MNV5UM=;
-        b=PtptAVrTSrgAVOXC8ZNbUZj8IboYj3ZEszs2vrBm07Z3zgdhHxXPyHmyjNtl0QkJw7
-         x4n4XES4NNIApsWt67KU5IK5/81RIA5AIEOaXw6JLCzUl684vNaUf4LvUARmGH/9fsh7
-         ohCHZw9u6lb9xOoemw81FsVM4Ubw+i8iMrhBFZIkCPPb5l0MC9+3cUJF+mpTPDeJPNaq
-         H6DDY7q0ViMQKXd3MJx9BPtRhe93hmJYyEE79q2Xfy4vhqZpOg89YOeHYlcpXP9UgsmI
-         S8nPe45j3OyQ01lqkrpuswm9IxcqKKioN9C8OsuL6u+92fsEgm8XLb09Ax5qYFEWmfBc
-         j0pQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU2BppWuC8Tpo/fxBB/dmvf5HGfyM52XDhbtJ5XzGo8MRVQCgr3cmwyFt1SwSf8KBdo6as=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwYD9Bua6Z6BnTqSBRfFtcSbx4SXeU92lbqly6cV2OL6MdSIECg
-	98hiou7n6RAj6kgVwYq6B/d3Sm44nfgdvfRF7L9rfLkUB67CugoIBGyU
-X-Gm-Gg: ASbGncvL+3qP3BdcgGb/Cx1+CqMs1QNxIp8CP6HmJjevjZ+2Dmc5AX66IzsIJpGf1w+
-	mrbJIHNz/8H3JVUF522iTQnVgPWzACvMoTNy5juO7fuUSLM1n1hJmMKDUJLEBbYumWNMYYns84T
-	pnaS/fotSGcyxH99NDs9nSdnVgelchccx1XEf5I9CBuv5d8w76Pwc4khOSo4EHdfgwh5fz1NaAl
-	vBO1Pg6wvBiGlMmVFEnicC+ZHP8kkXQCTc2LDhNf5BCh8QCMSsHFYwO25CcoGAKd/Thtq/WrXjp
-	ng/38rxL/sw5Vd1yVFVZUK6u7X92Ycy9BvPPI8o0qKB6dtd2/QLq5mc920yNjbdsH2Jw4dulARx
-	d9tob8NR++tE8JujtNU5R53frjbNQHAjqDUwbRK0x9crg3gIoGA1V9oQHgst9CCUII2qikWqq33
-	0Gab/FvJ5rZS5L
-X-Google-Smtp-Source: AGHT+IEVgz7zYtsnpcehMAmhlB3OUMARV4++YtUV332nKXGeBC2HoEB9fppwF5GU/sp0jIUet5ebFg==
-X-Received: by 2002:a17:906:4fd5:b0:afe:a7e3:522e with SMTP id a640c23a62f3a-b6c798e7a68mr191581266b.8.1761043650805;
-        Tue, 21 Oct 2025 03:47:30 -0700 (PDT)
-Received: from bhk ([165.50.73.64])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b65e7da2c5dsm1029123566b.15.2025.10.21.03.47.28
+        d=1e100.net; s=20230601; t=1761043761; x=1761648561;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7EOHmK2OfLfwzNiHBksUI9w2NZOUojlK5wP3wAwmdUc=;
+        b=QU9IER2TkNehXzZAUaNYeDkB7bniisjDmw4Dwi41sUw3KJnjD1GNhg9OZAAwtDjP2T
+         B5ga2T02SkIlCyJjxyW1ABpV4cr2PTul+qinhnfOwCJDJfmH8Q7y+aggOYGWC4EwU12m
+         mWqP++4v8dALWahFNVyhivEJDGLHGK3ft+s2YriPN968peT/iXq3MzrehJWJcpQ2Xi6q
+         JeiF+RzRcgRS5/XCvVPsgMng2EJx+PFqkaFaWTxlrraZAwjIdc1nzYi78jiPePqKzkmK
+         YDj6GuLu7mrf4AQkP53Os2IvgkFVq5K3rG4s8HNYNu0Cjt1NlSv1ugmuJfdBbQ8o4nCR
+         WXtw==
+X-Forwarded-Encrypted: i=1; AJvYcCXwh4yeTDkaE9NRIESqx9bl3h7penfbSy6ke1bkgJrbp7aUwky92eg6DmgKTJ53k0zduCc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzivaxENM+ihxFHqj/amRHJq2rNNWgF3/hnuTxnGXM6WOInYWe7
+	3ozPKtwydlPZ2OTaY6fBt4fNvfjS69NL0ZOZHFzQ3pbgfwFzaF0/cKiCXR++RkICLY8=
+X-Gm-Gg: ASbGnctflAQSOcJLzFqy2gXRtX2lJ2B51PJMk9x9ObLge+qOIJSrtnQ4/DXPXOynIIc
+	S/QIDumjXRmZQrnQ3BN0TpDOD8DWcXR9HVaY6VO/HbieqCVJqU2OSwvTG1eKcMPIhvCXzI0RDxd
+	AXU4y0+PHV3VK7XKWSXIdjbDMpBSGnP2i23BOa1mqRu8Ua7AZyGYUwIDh6LUZwcN10r/dxC+GRK
+	NI5mPg80o1YJYckKXFcqrWt6yQspx4/7c3xn/R6FZ5C4K6zqUyRrwowvoyYIhFm97/4piPIHloh
+	OGbO3+l3KYH1raqgqxuIgzIxBW4/GAja8Mq4io7qhxehC1JyacW8zfVSLODJmJe/Kzf9FyRGz3W
+	XiKpEwIknLT2ORLz/rHKRVpNgIMPziSbzB01L02zj2AFhJ4AbBIKpCKi52IkFlp22ZxAkJByMK8
+	R3lV4=
+X-Google-Smtp-Source: AGHT+IHy8op2SrI/lJue90xZTdUE8jYPVJKT9x3Xt5nh13yYcQucOr2Oqx/NtzVh356uT2+TUQAh8g==
+X-Received: by 2002:a17:907:3f11:b0:b42:7c2:1f9f with SMTP id a640c23a62f3a-b6475706f53mr1757165566b.62.1761043761371;
+        Tue, 21 Oct 2025 03:49:21 -0700 (PDT)
+Received: from cloudflare.com ([2a09:bac5:5063:2432::39b:d0])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b65eb036a3esm1068920266b.46.2025.10.21.03.49.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Oct 2025 03:47:30 -0700 (PDT)
-From: Mehdi Ben Hadj Khelifa <mehdi.benhadjkhelifa@gmail.com>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	davem@davemloft.net,
-	kuba@kernel.org,
-	hawk@kernel.org,
-	john.fastabend@gmail.com,
-	sdf@fomichev.me,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	kpsingh@kernel.org,
-	haoluo@google.com,
-	jolsa@kernel.org
-Cc: netdev@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	skhan@linuxfoundation.org,
-	david.hunter.linux@gmail.com,
-	khalid@kernel.org,
-	linux-kernel-mentees@lists.linuxfoundation.org,
-	Mehdi Ben Hadj Khelifa <mehdi.benhadjkhelifa@gmail.com>
-Subject: [PATCH bpf-next v3] bpf/cpumap.c: Remove unnecessary TODO comment
-Date: Tue, 21 Oct 2025 12:41:24 +0100
-Message-ID: <20251021114714.1757372-1-mehdi.benhadjkhelifa@gmail.com>
-X-Mailer: git-send-email 2.51.1.dirty
+        Tue, 21 Oct 2025 03:49:20 -0700 (PDT)
+From: Jakub Sitnicki <jakub@cloudflare.com>
+To: Jiayuan Chen <jiayuan.chen@linux.dev>
+Cc: mptcp@lists.linux.dev,  netdev@vger.kernel.org,  bpf@vger.kernel.org,
+  Eric Dumazet <edumazet@google.com>,  Kuniyuki Iwashima
+ <kuniyu@google.com>,  Paolo Abeni <pabeni@redhat.com>,  Willem de Bruijn
+ <willemb@google.com>,  John Fastabend <john.fastabend@gmail.com>,  "David
+ S. Miller" <davem@davemloft.net>,  Jakub Kicinski <kuba@kernel.org>,
+  Simon Horman <horms@kernel.org>,  Matthieu Baerts <matttbe@kernel.org>,
+  Mat Martineau <martineau@kernel.org>,  Geliang Tang <geliang@kernel.org>,
+  Alexei Starovoitov <ast@kernel.org>,  Daniel Borkmann
+ <daniel@iogearbox.net>,  Andrii Nakryiko <andrii@kernel.org>,  Martin
+ KaFai Lau <martin.lau@linux.dev>,  Eduard Zingerman <eddyz87@gmail.com>,
+  Song Liu <song@kernel.org>,  Yonghong Song <yonghong.song@linux.dev>,  KP
+ Singh <kpsingh@kernel.org>,  Stanislav Fomichev <sdf@fomichev.me>,  Hao
+ Luo <haoluo@google.com>,  Jiri Olsa <jolsa@kernel.org>,  Shuah Khan
+ <shuah@kernel.org>,  Florian Westphal <fw@strlen.de>,
+  linux-kernel@vger.kernel.org,  linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net v2 2/3] bpf,sockmap: disallow MPTCP sockets from
+ sockmap updates
+In-Reply-To: <20251020060503.325369-3-jiayuan.chen@linux.dev> (Jiayuan Chen's
+	message of "Mon, 20 Oct 2025 14:04:47 +0800")
+References: <20251020060503.325369-1-jiayuan.chen@linux.dev>
+	<20251020060503.325369-3-jiayuan.chen@linux.dev>
+Date: Tue, 21 Oct 2025 12:49:19 +0200
+Message-ID: <87cy6gwmvk.fsf@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-After discussion with bpf maintainers[1], queue_index could
-be propagated to the remote XDP program by the xdp_md struct[2]
-which makes this todo a misguide for future effort.
+On Mon, Oct 20, 2025 at 02:04 PM +08, Jiayuan Chen wrote:
+> MPTCP creates subflows for data transmission, and these sockets should not
+> be added to sockmap because MPTCP sets specialized data_ready handlers
+> that would be overridden by sockmap.
+>
+> Additionally, for the parent socket of MPTCP subflows (plain TCP socket),
+> MPTCP sk requires specific protocol handling that conflicts with sockmap's
+> operation(mptcp_prot).
+>
+> This patch adds proper checks to reject MPTCP subflows and their parent
+> sockets from being added to sockmap, while preserving compatibility with
+> reuseport functionality for listening MPTCP sockets.
+>
+> Fixes: 0b4f33def7bb ("mptcp: fix tcp fallback crash")
+> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+> ---
+>  net/core/sock_map.c | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+>
+> diff --git a/net/core/sock_map.c b/net/core/sock_map.c
+> index 5947b38e4f8b..da21deb970b3 100644
+> --- a/net/core/sock_map.c
+> +++ b/net/core/sock_map.c
+> @@ -535,6 +535,15 @@ static bool sock_map_redirect_allowed(const struct sock *sk)
+>  
+>  static bool sock_map_sk_is_suitable(const struct sock *sk)
+>  {
+> +	if ((sk_is_tcp(sk) && sk_is_mptcp(sk)) /* subflow */ ||
+> +	    (sk->sk_protocol == IPPROTO_MPTCP && sk->sk_state != TCP_LISTEN)) {
+> +		/* Disallow MPTCP subflows and their parent socket.
+> +		 * However, a TCP_LISTEN MPTCP socket is permitted because
+> +		 * sockmap can also serve for reuseport socket selection.
+> +		 */
+> +		pr_err_once("sockmap: MPTCP sockets are not supported\n");
+> +		return false;
+> +	}
+>  	return !!sk->sk_prot->psock_update_sk_prot;
+>  }
 
-[1]:https://lore.kernel.org/all/87y0q23j2w.fsf@cloudflare.com/
-[2]:https://docs.ebpf.io/linux/helper-function/bpf_xdp_adjust_meta/
+You're checking sk_state without sk_lock held. That doesn't seem right.
+Take a look how we always call sock_map_sk_state_allowed() after
+grabbing the lock.
 
-Signed-off-by: Mehdi Ben Hadj Khelifa <mehdi.benhadjkhelifa@gmail.com>
----
-Changelog:
-
-Changes from v2:
-
--Corrected the new comment
-
-Link:https://lore.kernel.org/all/20251020170254.14622-1-mehdi.benhadjkhelifa@gmail.com/
-
-Changes from v1:
-
--Added a comment to clarify that RX queue_index is lost after the frame
-redirection.
-
-Link:https://lore.kernel.org/bpf/d9819687-5b0d-4bfa-9aec-aef71b847383@gmail.com/T/#mcb6a0315f174d02db3c9bc4fa556cc939c87a706
-
- kernel/bpf/cpumap.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/kernel/bpf/cpumap.c b/kernel/bpf/cpumap.c
-index 703e5df1f4ef..ee37186fea35 100644
---- a/kernel/bpf/cpumap.c
-+++ b/kernel/bpf/cpumap.c
-@@ -195,8 +195,10 @@ static int cpu_map_bpf_prog_run_xdp(struct bpf_cpu_map_entry *rcpu,
- 
- 		rxq.dev = xdpf->dev_rx;
- 		rxq.mem.type = xdpf->mem_type;
--		/* TODO: report queue_index to xdp_rxq_info */
--
-+		/* RX queue_index is not preserved after redirection.
-+		 * If needed, the sender can embed it in XDP metadata
-+		 * (via bpf_xdp_adjust_meta) for the remote program.
-+		 */
- 		xdp_convert_frame_to_buff(xdpf, &xdp);
- 
- 		act = bpf_prog_run_xdp(rcpu->prog, &xdp);
--- 
-2.51.1.dirty
-
+Same might apply to sk_is_mptcp(). Please double check.
