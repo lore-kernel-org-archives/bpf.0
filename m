@@ -1,99 +1,139 @@
-Received: from mail-il1-f171.google.com (mail-il1-f171.google.com [209.85.166.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 327F22E6CBE
-	for <bpf@vger.kernel.org>; Tue, 21 Oct 2025 11:02:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9929E2F39C1
+	for <bpf@vger.kernel.org>; Tue, 21 Oct 2025 11:41:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761044565; cv=none; b=UTPhwTss7Lm5dV7mIN734aoWtaVgztSOmRDQEGcfyvCXMTP9fDpwUPFswIMYRTr2fnHTamvmpQhZv5o+aWDTb07bOm5ArXsdYeztZNEowkAedrBIs4AcxnQa+ahEsHKoLoe1/bi1ISz0/qOhM8H16kckGcq0rQ/WW8wDkfjWm4s=
+	t=1761046876; cv=none; b=kKEPoR8NTS1MXdCuyiEcvSfExDDAvCAVfmQ2VG+5FMOTyBa/KufDfVSTGpIIcRVw3Y0hg1rExlR00TiHL1kpiCbMCxINMK2srlBhCLNtKUuzg7acBYeUp1dRLYCQrMRwjf+ni8hYjC8fEH46VtWNSzeo/sNbfGtGN4FdZA7V2io=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761044565; c=relaxed/simple;
-	bh=Cmlt8NumtSJsa31SmZDdXrhoNC6ZwQkLlZeCoQNExr0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jd38jgqwTkYxTvjiLXfWTsUhoKR5ObufaHxLtfGYl7/Rmhvo9FqNYUOQ1Gm9la6ccSLvL9sIdXkcxz4cv0tVsH5lo3MbHlBlmcwc38hxcS7Q7Gx3uynyZBsz3zmGsMMhmC59MyyWzuFXJMr+kP29Hdmba9b43qfUDyocH+LhDAg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ltTJAwUu; arc=none smtp.client-ip=209.85.166.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1761046876; c=relaxed/simple;
+	bh=9sYuvI7CEeyOifAAPVDV+AmPzekD759B0QYeLpEGUCI=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=EMmkhc1ZQl8cbdjwTUHEedTWdl2yA7UNimsjHIVGGFjvpa4+aL8YuKhGQhzAnqzq8W+J6rGEp1OB1lEZEgJ9xrCcqP5BscAwWGybSFiWRrdk8+y1mAuFt4R1rVjoZNQQ0Vd/banhGVTU2nb0Ffo2r/qFzy9gD6HH0TZ0+s8jO0Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=KREqtfoj; arc=none smtp.client-ip=185.171.202.116
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ltTJAwUu"
-Received: by mail-il1-f171.google.com with SMTP id e9e14a558f8ab-430ca4647c7so18945685ab.3
-        for <bpf@vger.kernel.org>; Tue, 21 Oct 2025 04:02:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761044563; x=1761649363; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Cmlt8NumtSJsa31SmZDdXrhoNC6ZwQkLlZeCoQNExr0=;
-        b=ltTJAwUufV/rwJu+SJ23F3MkB7y5hfoy1+Om0/YBaLUhTfIThIOF4d2cK5cSLEMwLI
-         Lys3AVNaAufGGNEzUsd2/VuARMnMgk5B1RlqDBbMhJFKO/O601nFISblNssn6p2TsL8u
-         Ni3lVsHDrFcVLG5fkhpTxiycuqGytzAiMgNJgTUO9h1Qk7ktJK0pbsX/4Bln04Diwm5P
-         u0IkGs8R8B9UFofpCsTV2/zbYbb43cW7IRuVd/FvX82I32jXKa4OW35dcrZ5MPBHkPDq
-         QpCxoiB0CvIqtidP6RhT+5TpfP9l2yoXUB5Ddy3j8CoJT3Z4M3j8MN9+UeEt7hdIfedC
-         6UEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761044563; x=1761649363;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Cmlt8NumtSJsa31SmZDdXrhoNC6ZwQkLlZeCoQNExr0=;
-        b=ALACetAFSxlG3ucfAF1NAUBYmHTyP4vjZbE03fky29VZqxZch/x3Wi3TjZnVCBkHI2
-         pJerY5CzuK2rLYPloFCbeIDRgE69xwuLLrdVunZA1vEWb3Rs3oGTuQyROj7j8IAFip34
-         CzbzyO4i6WkOHVUaDid6ydtMxEvtJZ4ph4YRfQbTxHHZpzCneAJeEL0h6FBbZIuL0k8V
-         I971lWnYHVcVrrcbP1ApLpsWXK81Kx2ePhE4ymU1CrsFW59R5cMgs9ZO9FHVjGrMfG8p
-         0S6VGfi+Q+aqcUf+/Mg0JzHASB84S6xYEaGCAwiTOJGr3SPKqxmUCCBWf+o2Cn0oD77q
-         98qw==
-X-Forwarded-Encrypted: i=1; AJvYcCXtxE+0pgqIyimJHXWI3FUFx5izjj91mgMFc/YfY+koCVUx5fWxeVe/YFR3y6yBT9PtjjA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzkBDwzBx28Xa/35l/IrXjx86iYxiWG5AOKCUNO/K5INpK9ARYf
-	tvY4+eD9XxuX37j3sghbsmIIxspUXkHpb/MVmt4JrhVnwjhE7CMZTeqHpEKBin+iXabXwPGyhHL
-	WagV1DJB04bEKph6ezpmGtw5Z2t0YIs4=
-X-Gm-Gg: ASbGncvBtGno68ZZOWNrTJC/SCxWl/O3Gn13UcFKNjLW9cFL0Q1Mn8AkKPL7r/tKA+d
-	H7y3NKQwHAscsUbAx2/xrKxjoARJ0xQed/HyBVS/AlK5sq8Mr0ciz1d/HbeITLdkE95f6ueE6UR
-	8mU0SYyu3NP/vMcL9DOIQ4CyZRUKffgazfsyarMZAMERYa2np07o8U2I6AddNDuccsn00/fIS9f
-	PLYZVakbRt+J/c3v6xbZ5MwgBqFKipk2VERQOJMx+bGt6Ae+ZMB2UN5G1UE
-X-Google-Smtp-Source: AGHT+IHDvByBOPVYHIM7/SpMKaHb9J7qIjNeZ2MsVhMaPnXi82oD7w6a2DPK+veb6OO14N7/6t0e3oYgls0HP9mG/KM=
-X-Received: by 2002:a05:6e02:1a42:b0:430:b338:e55 with SMTP id
- e9e14a558f8ab-430c53068c3mr258026025ab.29.1761044563024; Tue, 21 Oct 2025
- 04:02:43 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="KREqtfoj"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-04.galae.net (Postfix) with ESMTPS id 00E27C0B88D;
+	Tue, 21 Oct 2025 11:40:50 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 95D0F60680;
+	Tue, 21 Oct 2025 11:41:09 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 65A7A102F23E9;
+	Tue, 21 Oct 2025 13:40:53 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1761046868; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:content-language:in-reply-to:references;
+	bh=/aZ90aQifoTGdx/4SW58GhR5Eihj+AcxbbGAfR/vODk=;
+	b=KREqtfojYKz+RqSJdaE5Q9ChNT9xLrT3xG810Ty2/IqKj+039qfFpPNtBnC6ppesSHTW+i
+	km5xE+YWGWWwpZ2tEgwPPfMJ4jhbMH9tIvGOqUfXHRa18kcVvn78N2+j1zUtmDtSrpyx6V
+	JFb/Wu5Z7ZPpCH3OaFqqvv403sgv8PeqLhVlgw7YT+c3v4gwixn1J0WyzU1LqdLh+o4n6k
+	K4O+kfQmUj7K36l4m5svE1GomH3AeXFnb0kx2hlE4BJiBekEPsRGqkBjeTU7Sr8oJ7OUsu
+	JrqA3+Kt9FevtqAOV9UxEEA5jzvDakd+aO5fumJR4Ug661kwliKPHv1yCVx2tg==
+Message-ID: <eb98c4ea-6f12-42b0-a2a2-1f53963d4e52@bootlin.com>
+Date: Tue, 21 Oct 2025 13:40:52 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <0435b904-f44f-48f8-afb0-68868474bf1c@nop.hu> <CAL+tcoA5qDAcnZpmULsnD=X6aVP-ztRxPv5z1OSP-nvtNEk+-w@mail.gmail.com>
- <643fbe8f-ba76-49b4-9fb7-403535fd5638@nop.hu> <CAL+tcoDqgQbs20xV34RFWDoE5YPXS-ne3FBns2n9t4eggx8LAQ@mail.gmail.com>
- <d8808206-0951-4512-91cb-58839ba9b8c4@nop.hu>
-In-Reply-To: <d8808206-0951-4512-91cb-58839ba9b8c4@nop.hu>
-From: Jason Xing <kerneljasonxing@gmail.com>
-Date: Tue, 21 Oct 2025 19:02:06 +0800
-X-Gm-Features: AS18NWCp3gMZ-vHw7hgTUJk16mOhgcBAjCX7S1cJLh5bN_2YLJL2QzmYE9tiq-s
-Message-ID: <CAL+tcoA0TKWQY4oP4jJ5BHmEnA+HzHRrgsnQL9vRpnaqb+_8Ag@mail.gmail.com>
-Subject: Re: null pointer dereference in interrupt after receiving an ip
- packet on veth from xsk from user space
-To: mc36 <csmate@nop.hu>
-Cc: alekcejk@googlemail.com, Jonathan Lemon <jonathan.lemon@gmail.com>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Maciej Fijalkowski <maciej.fijalkowski@intel.com>, 
-	Magnus Karlsson <magnus.karlsson@intel.com>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>, 
-	1118437@bugs.debian.org, netdev@vger.kernel.org, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+From: Bastien Curutchet <bastien.curutchet@bootlin.com>
+Subject: Re: [PATCH bpf-next v5 00/15] selftests/bpf: Integrate test_xsk.c to
+ test_progs framework
+To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+ Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+ Magnus Karlsson <magnus.karlsson@intel.com>,
+ Jonathan Lemon <jonathan.lemon@gmail.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
+ Shuah Khan <shuah@kernel.org>, "David S. Miller" <davem@davemloft.net>,
+ Jakub Kicinski <kuba@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Alexis Lothore <alexis.lothore@bootlin.com>,
+ Network Development <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+ "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+ LKML <linux-kernel@vger.kernel.org>
+References: <20251016-xsk-v5-0-662c95eb8005@bootlin.com>
+ <CAADnVQLLBrawW6N4BcPvhYD2Cg_qaxSZDRU53Jq31QxR3mPDkw@mail.gmail.com>
+ <aPN1dy1OVaNiB5IB@boxer>
+Content-Language: en-US
+In-Reply-To: <aPN1dy1OVaNiB5IB@boxer>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Last-TLS-Session-Version: TLSv1.3
 
-On Tue, Oct 21, 2025 at 5:31=E2=80=AFAM mc36 <csmate@nop.hu> wrote:
->
-> hi,
->
-> On 10/20/25 11:04, Jason Xing wrote:
-> >
-> > I followed your steps you attached in your code:
-> > ////// gcc xskInt.c -lxdp
-> > ////// sudo ip link add veth1 type veth
-> > ////// sudo ip link set veth0 up
-> > ////// sudo ip link set veth1 up
->
-> ip link set dev veth1 address 3a:10:5c:53:b3:5c
+Hi
 
-Great, it indeed helps me reproduce the issue, so I managed to see the
-exact same stack. Let me dig into it more deeply.
+On 10/18/25 1:09 PM, Maciej Fijalkowski wrote:
+> On Fri, Oct 17, 2025 at 11:27:26AM -0700, Alexei Starovoitov wrote:
+>> On Thu, Oct 16, 2025 at 12:45 AM Bastien Curutchet (eBPF Foundation)
+>> <bastien.curutchet@bootlin.com> wrote:
+>>>
+>>> Hi all,
+>>>
+>>> Now that the merge window is over, here's a respin of the previous
+>>> iteration rebased on the latest bpf-next_base. The bug triggering the
+>>> XDP_ADJUST_TAIL_SHRINK_MULTI_BUFF failure when CONFIG_DEBUG_VM is
+>>> enabled hasn't been fixed yet so I've moved the test to the flaky
+>>> table.
+>>>
+>>> The test_xsk.sh script covers many AF_XDP use cases. The tests it runs
+>>> are defined in xksxceiver.c. Since this script is used to test real
+>>> hardware, the goal here is to leave it as it is, and only integrate the
+>>> tests that run on veth peers into the test_progs framework.
+>>>
+>>> Some tests are flaky so they can't be integrated in the CI as they are.
+>>> I think that fixing their flakyness would require a significant amount of
+>>> work. So, as first step, I've excluded them from the list of tests
+>>> migrated to the CI (cf PATCH 14). If these tests get fixed at some
+>>> point, integrating them into the CI will be straightforward.
+>>>
+>>> PATCH 1 extracts test_xsk[.c/.h] from xskxceiver[.c/.h] to make the
+>>> tests available to test_progs.
+>>> PATCH 2 to 7 fix small issues in the current test
+>>> PATCH 8 to 13 handle all errors to release resources instead of calling
+>>> exit() when any error occurs.
+>>> PATCH 14 isolates some flaky tests
+>>> PATCH 15 integrate the non-flaky tests to the test_progs framework
+>>
+>> Looks good, but why does it take so long to run?
+>>
+>> time ./test_progs -t xsk
+>> Summary: 2/66 PASSED, 0 SKIPPED, 0 FAILED
+>>
+>> real    0m29.031s
+>> user    0m4.414s
+>> sys     0m20.893s
+>>
+>> That's a big addition to overall test_progs time.
+>> Could you reduce it to a couple seconds?
+> 
+> it's because veth pair is setup per each test case from what i recall when
+> i was pointing this out during review. it does not scale. it would be
+> better to have veth created once for whole test suite. HTH.
+> 
 
-Thanks,
-Jason
+The initial test_xsk.sh was already quite long, the test migration 
+hasn't affected its execution time on my side.
+I've tried setting up the veth peers once for all the subtests, as 
+suggested by Maciej; this results in about a 35% speed gain on my setup, 
+but unfortunately, it’s still not enough to bring it down to a couple of 
+seconds.
+
+I'll investigate it further.
+
+
+Best regards,
+Bastien
+
