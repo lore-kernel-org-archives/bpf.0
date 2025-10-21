@@ -1,213 +1,154 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4626234E760
-	for <bpf@vger.kernel.org>; Tue, 21 Oct 2025 18:25:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 365193451DF
+	for <bpf@vger.kernel.org>; Tue, 21 Oct 2025 18:26:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761071123; cv=none; b=WkltPCZXpZyE4zq7Lzlku8e9rnVIURd0uAVHyMJZqIWzzGLl7nZos531S7+IEyB0ZMEJe1H4Vjs/K6qaVuBV/ZtWeCwWnFEcb2NlTI3pusuUwi31NgYTwdSRbE4xx1qpwYydt5nDNkz2yVx2RY+3Nhu2YxWgPXR8GENU4IOiBHw=
+	t=1761071164; cv=none; b=OzRSGFKmleg1RipBCu0GujJNzXsRQmcFlDL/SIMymP/SVmqbpNw2kT0pwBGy3cLam6RWLJifp4Obw6n1XQxlFqMhwvVnx2SEsRL42LMd6sxmrosX7Ws1w2edKGEnS7sJgWyOF/4XP/7Oaz978qYchtM9aea8YFHTA36atILhi2s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761071123; c=relaxed/simple;
-	bh=qzOZ0xEqZr41ShEs0F75G1i6qz3j4pAqSl1NS/UW7Vw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=D5qftOiIWX1zD1nJ4GUyx4rcNnXm2ROXlkS/66KWrJSopPe1bwI/oVVaphmQAGBBRrYzpXO2LHimK9Hf4v/+1S9KWlg8IiVlh2Ka9OE+yJ/3kuBL3IAxi2OpU43d8u0eiBUtacQZ+JQPw+kyr0WiOfXBYqRXaCz/+LR6hzwsE+c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=VEtJkEw4; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=BLaUuuH/; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=Sm1typx3; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=gvkiQ3mn; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+	s=arc-20240116; t=1761071164; c=relaxed/simple;
+	bh=kpj6aLukt/YKBoGEQxbQjwL4VOk/WvbRVbmsgNiMwik=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bLPvpblrz7msby1Cl+zXrAMVwg2nW7BDkWBXQ4S0FjY7yqWq2KjZV6tqgteOFsT53f9tX9ka37l6Rvg1Hne2FNdOg66gQwbLA1EuAw+lb7HNlb/CG+HPS8Qyr/YYGezBFBUYC7FNiciATm01ZKFXdJZ0WrP/cvZaXK0CNhY7yHg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Smyh9A02; arc=none smtp.client-ip=209.85.128.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="VEtJkEw4";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="BLaUuuH/";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="Sm1typx3";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="gvkiQ3mn"
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 3BF112119B;
-	Tue, 21 Oct 2025 18:25:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1761071115; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=5laJCGigRWB3O63qPhWFyh2ZtIa70D/0VNdf/PQZCLE=;
-	b=VEtJkEw4fYSBpnsoyzArsjKKrZXg2wKiQHgEWCtYA0fgltI1UKmKotqCrJLN4qKVdkHoCS
-	sdmKRP1taD+cfj33BIaMbqgCW4ClfxeFifpchfz47BBZFTBMnOwunLoc5Azjw8h23M9QOA
-	TfXtVafPBSvrdmFUvhokJ+tirjDxtpk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1761071115;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=5laJCGigRWB3O63qPhWFyh2ZtIa70D/0VNdf/PQZCLE=;
-	b=BLaUuuH/ykbf/g2Sx+hH9yD0qA0muG4QfS/ZT7eDqDDrtg5bJwhyeuPjDNmvRz4iDLae8b
-	zgFRA4/78kEAbjDg==
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=Sm1typx3;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=gvkiQ3mn
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1761071111; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=5laJCGigRWB3O63qPhWFyh2ZtIa70D/0VNdf/PQZCLE=;
-	b=Sm1typx36jZYYu/VF0cV91k9XmuEDrN55KaCQRk/20uYBs4A4akOa/E2nv31MslmVrg3ke
-	HODuoRlsUyiJKoVecMwhrlS7lEcjlm553/xArl7rcYQ71h+ewbKFCpe4nlfCd4qirxrMS1
-	HiW2F1gVSYN+VsCwAFOHVDUHav6gJto=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1761071111;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=5laJCGigRWB3O63qPhWFyh2ZtIa70D/0VNdf/PQZCLE=;
-	b=gvkiQ3mnOf3Z9AwKEbqGWIr9M+pKnZFrEBjAQioUmDvyQq7B8/OauagrWbeFp1v6slmzkW
-	7nBijquPcS+wwfBg==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id B7E36139B1;
-	Tue, 21 Oct 2025 18:25:10 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id bx0JKgbQ92gAUAAAD6G6ig
-	(envelope-from <fmancera@suse.de>); Tue, 21 Oct 2025 18:25:10 +0000
-Message-ID: <32086239-2fd5-42bd-a554-d0e3c263bb0c@suse.de>
-Date: Tue, 21 Oct 2025 20:25:00 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Smyh9A02"
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-47495477241so10991835e9.3
+        for <bpf@vger.kernel.org>; Tue, 21 Oct 2025 11:26:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1761071160; x=1761675960; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=ANsTxB4TdfBvBgFJRqmuGWNDtJE+ywQjEhMagi1EgVo=;
+        b=Smyh9A02MwshjSrdeKAEFS8NyO8HUmBZzZ315bDs9LOp4aazr77fi/73v4lsXj6TKt
+         SOoocbMRseVFwZP17GpTnTL4Typgyw0ElrnS+TKuSQwZthfO95LSBdSTuLs1hZpt908Q
+         EhFZulP8mShjBvE0LOVC9nli4wzVChpcphYSkDow/sxFgq5kTArNf8d6CA+z+xJD3pIW
+         sX0LU+PreugYcyHxP/HZsJGWIna//hSLyaVDNBvY9OkWa7kRLk5rjXN0RPpzGKGeLAJQ
+         5izadryNPorYEbwGuvt2ZWm4ymTcySaA5DYZH09EJdsYUjfBL9idKJ4nrwJr/jEOZlNV
+         Udgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761071160; x=1761675960;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ANsTxB4TdfBvBgFJRqmuGWNDtJE+ywQjEhMagi1EgVo=;
+        b=E8+f7HTvWYlGt1Jiq9nuYSU7tFbyVKWcF5Wb4DYr57nb6kj5NPzoENYciNo2OrCBGS
+         hmClnyb2mRzpFNyf30frkVZHnJy9cxDeF1G1jOr2PhV+GQoNkRzMgy3LuLX/2/zzytr+
+         lUurAJarHcM8j5Bdl/7R3X/jmnOFYMW9MrcBr1pLHX7K99ShYvU+aKV2wO3V7H+E41JD
+         oHPjNyRB/IIeA6LlsJNSzmiBLIKwVN58Rdhc19ZoX9aXGO4aU5S6rkWUMfETCPiA9mr2
+         Uqh77Jm4IZ5pQctshwlQsMt/l0+d+I4o95Em+Q4o5NJNOgasDxuSTZ9RhTpqoYA0FmR7
+         gkTw==
+X-Gm-Message-State: AOJu0YyAWNFoyFCfjI6NC0rO/PudWkXXwv0FTlHA7n5qjLXn2AmHTUiS
+	DN0GzpOcA2SU1UTWAdZ6ulPbNur3O/MLHlw66bsoKzqG4tECI3kx3yP1
+X-Gm-Gg: ASbGncvEDqJ5CCeefN1M3HNMcgoD+rHf68d+uefGVOM/psH/4YF2hsyEzxayKEYuzR1
+	AahagTFGMXQDPTLuyiBBjJpK8k344zlnrAHhsE3Yga/lLl9QusqlspD8IGXANk9THovOw9ihowa
+	MAf9YtJX4Y6c885YeoDsjCfky/55dodyjUe063wl0xovThwhHGlBfihlmuOKpWQ0GOVO752HN2b
+	uaASMVJb0FwB+feT5WVc/647wQUoWuvJafNndZ9lWIJ7ht96glFWX4uamfjFtrZiryQykpgc1n8
+	Ogl+bs5r/veoal0C5+DZxX/wM7VfL/9fAPoE3SFmuzGQhGir46jyqE1dL/xVbUEa+be35Rrhl/Y
+	eodGiiZTXrON90pbz9JKlDxT+wfufJNyz9nq7CkLWSu2Acus7be62hkoxFpDd2RMASorElMjaKp
+	1FG3hdwbp+lEWdOy8ANITb
+X-Google-Smtp-Source: AGHT+IGA9ec1iouUvWHeUsZYV37jpQq7eEQAwrODHGIAVFsv2X+t+7y5uEqN0uNlsVfRDemug/GFBw==
+X-Received: by 2002:a05:600c:4e93:b0:471:9da:524c with SMTP id 5b1f17b1804b1-4711789e39emr125989155e9.12.1761071160196;
+        Tue, 21 Oct 2025 11:26:00 -0700 (PDT)
+Received: from mail.gmail.com ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-475c42b1260sm5727805e9.13.2025.10.21.11.25.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Oct 2025 11:25:59 -0700 (PDT)
+Date: Tue, 21 Oct 2025 18:32:40 +0000
+From: Anton Protopopov <a.s.protopopov@gmail.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Anton Protopopov <aspsk@isovalent.com>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Quentin Monnet <qmo@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>
+Subject: Re: [PATCH v6 bpf-next 04/17] bpf, x86: add new map type:
+ instructions array
+Message-ID: <aPfRyNQVP53swJ0l@mail.gmail.com>
+References: <20251019202145.3944697-1-a.s.protopopov@gmail.com>
+ <20251019202145.3944697-5-a.s.protopopov@gmail.com>
+ <CAADnVQLOtQWMb4eOtLXyXhWrkPV8DKdYajb+DbG=sSucEbtJFw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net] xsk: avoid data corruption on cq descriptor number
-To: Simon Horman <horms@kernel.org>
-Cc: netdev@vger.kernel.org, csmate@nop.hu, kerneljasonxing@gmail.com,
- maciej.fijalkowski@intel.com, bjorn@kernel.org, sdf@fomichev.me,
- jonathan.lemon@gmail.com, bpf@vger.kernel.org
-References: <20251021150656.6704-1-fmancera@suse.de>
- <aPez6DYh13kmY9NF@horms.kernel.org>
-Content-Language: en-US
-From: Fernando Fernandez Mancera <fmancera@suse.de>
-In-Reply-To: <aPez6DYh13kmY9NF@horms.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: 3BF112119B
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Spamd-Result: default: False [-2.98 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.17)[-0.867];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	ARC_NA(0.00)[];
-	URIBL_BLOCKED(0.00)[suse.de:mid,suse.de:dkim,imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[vger.kernel.org,nop.hu,gmail.com,intel.com,kernel.org,fomichev.me];
-	DKIM_TRACE(0.00)[suse.de:+];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns,suse.de:mid,suse.de:dkim]
-X-Rspamd-Action: no action
-X-Spam-Flag: NO
-X-Spam-Score: -2.98
-X-Spam-Level: 
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAADnVQLOtQWMb4eOtLXyXhWrkPV8DKdYajb+DbG=sSucEbtJFw@mail.gmail.com>
 
-
-
-On 10/21/25 6:25 PM, Simon Horman wrote:
-> On Tue, Oct 21, 2025 at 05:06:56PM +0200, Fernando Fernandez Mancera wrote:
+On 25/10/21 10:49AM, Alexei Starovoitov wrote:
+> On Sun, Oct 19, 2025 at 1:15 PM Anton Protopopov
+> <a.s.protopopov@gmail.com> wrote:
+> > diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+> > index d4c93d9e73e4..c8e628410d2c 100644
+> > --- a/arch/x86/net/bpf_jit_comp.c
+> > +++ b/arch/x86/net/bpf_jit_comp.c
+> > @@ -1691,6 +1691,7 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image, u8 *rw_image
+> >         prog = temp;
+> >
+> >         for (i = 1; i <= insn_cnt; i++, insn++) {
+> > +               u32 abs_xlated_off = bpf_prog->aux->subprog_start + i - 1;
+> >                 const s32 imm32 = insn->imm;
+> >                 u32 dst_reg = insn->dst_reg;
+> >                 u32 src_reg = insn->src_reg;
+> > @@ -2751,6 +2752,13 @@ st:                      if (is_imm8(insn->off))
+> >                                 return -EFAULT;
+> >                         }
+> >                         memcpy(rw_image + proglen, temp, ilen);
+> > +
+> > +                       /*
+> > +                        * Instruction arrays need to know how xlated code
+> > +                        * maps to jitted code
+> > +                        */
+> > +                       bpf_prog_update_insn_ptr(bpf_prog, abs_xlated_off, proglen,
+> > +                                                image + proglen);
 > 
 > ...
 > 
->> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+> > +void bpf_prog_update_insn_ptr(struct bpf_prog *prog,
+> > +                             u32 xlated_off,
+> > +                             u32 jitted_off,
+> > +                             void *jitted_ip)
+> > +{
+> > +       struct bpf_insn_array *insn_array;
+> > +       struct bpf_map *map;
+> > +       int i, j;
+> > +
+> > +       for (i = 0; i < prog->aux->used_map_cnt; i++) {
+> > +               map = prog->aux->used_maps[i];
+> > +               if (!is_insn_array(map))
+> > +                       continue;
+> > +
+> > +               insn_array = cast_insn_array(map);
+> > +               for (j = 0; j < map->max_entries; j++) {
+> > +                       if (insn_array->ptrs[j].user_value.xlated_off == xlated_off) {
+> > +                               insn_array->ips[j] = (long)jitted_ip;
+> > +                               insn_array->ptrs[j].jitted_ip = jitted_ip;
+> > +                               insn_array->ptrs[j].user_value.jitted_off = jitted_off;
+> > +                       }
+> > +               }
+> > +       }
+> > +}
 > 
-> ...
-> 
->> @@ -774,6 +777,7 @@ static struct sk_buff *xsk_build_skb(struct xdp_sock *xs,
->>   {
->>   	struct net_device *dev = xs->dev;
->>   	struct sk_buff *skb = xs->skb;
->> +	struct page *page;
->>   	int err;
->>   
->>   	if (dev->priv_flags & IFF_TX_SKB_NO_LINEAR) {
->> @@ -791,6 +795,8 @@ static struct sk_buff *xsk_build_skb(struct xdp_sock *xs,
->>   		len = desc->len;
->>   
->>   		if (!skb) {
->> +			struct xsk_addr_node *head_addr;
->> +
->>   			hr = max(NET_SKB_PAD, L1_CACHE_ALIGN(dev->needed_headroom));
->>   			tr = dev->needed_tailroom;
->>   			skb = sock_alloc_send_skb(&xs->sk, hr + len + tr, 1, &err);
->> @@ -804,7 +810,13 @@ static struct sk_buff *xsk_build_skb(struct xdp_sock *xs,
->>   			if (unlikely(err))
->>   				goto free_err;
->>   
->> -			xsk_skb_init_misc(skb, xs, desc->addr);
->> +			head_addr = kmem_cache_zalloc(xsk_tx_generic_cache, GFP_KERNEL);
->> +			if (!head_addr) {
->> +				__free_page(page);
-> 
-> Hi Fernando,
-> 
-> Perhaps the page changes to xsk_build_skb() aren't needed
-> because page seems to be uninitialised here.
-> 
-> Flagged by W=1 builds with Clang 21.1.1, and Smatch.
-> 
+> This algorithm doesn't scale.
+> You're calling bpf_prog_update_insn_ptr() for every insn
+> and doing it as many times as they're JIT passes.
+> There could be up to 20 passes and hundreds of thousands of insns.
+> x86 JIT already keeps the mapping from insn to IP in jit_datat->addrs[].
+> Use it. Roughly like:
+> insn_array = cast_insn_array(map);
+> for (j = 0; j < map->max_entries; j++) {
+>    ip = addrs[insn_array->ptrs[j].user_value.xlated_off -
+> subprog_start] + image;
+> And this is done once per insn_array after JIT is done.
 
-Ah, I don't know know what I was thinking about.. but yes, that page 
-handling isn't needed of course as it isn't initialized. (I even needed 
-the page struct because it wasn't available in that context).
-
-I will send a V2 patch if the proposed solution is accepted. In additon, 
-the performance impact isn't as bad as I thought.. just 4 bytes pero 
-skb.. as the cache must be initialized anyway.
-
->> +				err = -ENOMEM;
->> +				goto free_err;
->> +			}
->> +			xsk_skb_init_misc(skb, xs, head_addr, desc->addr);
->>   			if (desc->options & XDP_TX_METADATA) {
->>   				err = xsk_skb_metadata(skb, buffer, desc,
->>   						       xs->pool, hr);
->> @@ -814,7 +826,6 @@ static struct sk_buff *xsk_build_skb(struct xdp_sock *xs,
->>   		} else {
->>   			int nr_frags = skb_shinfo(skb)->nr_frags;
->>   			struct xsk_addr_node *xsk_addr;
->> -			struct page *page;
->>   			u8 *vaddr;
->>   
->>   			if (unlikely(nr_frags == (MAX_SKB_FRAGS - 1) && xp_mb_desc(desc))) {
->> @@ -843,7 +854,7 @@ static struct sk_buff *xsk_build_skb(struct xdp_sock *xs,
->>   			refcount_add(PAGE_SIZE, &xs->sk.sk_wmem_alloc);
->>   
->>   			xsk_addr->addr = desc->addr;
->> -			list_add_tail(&xsk_addr->addr_node, &XSKCB(skb)->addrs_list);
->> +			list_add_tail(&xsk_addr->addr_node, &XSK_TX_HEAD(skb)->addr_node);
->>   		}
->>   	}
->>   
->> -- 
->> 2.51.0
->>
->>
-
+Thanks! Will do.
