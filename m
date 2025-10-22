@@ -1,687 +1,205 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C563385593;
-	Wed, 22 Oct 2025 16:11:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 260E4274B55
+	for <bpf@vger.kernel.org>; Wed, 22 Oct 2025 16:18:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761149501; cv=none; b=LOdAWUn5+uQ7/kwfTvpnQoFtVWuaf8yTjGH7RxnoAIF2Obt3KmaSHrRLRK0/OPmtflaeQW9sefphWPlW99ZZNtF9M4WyAgWzl7O6duj+Q2QipIXvuxsGeHVOgBudDpwRroak/gxKmcwl0CW3h1fuPTya3iKqKRTKTS7ucXKRoHA=
+	t=1761149889; cv=none; b=Ao1uOg7ciP5kZXwhsI4aEmJ+nEJQd9A3iCZy+6iOxDW9mW3aP0/zgr12WsuJnWoXLDGIEPs8l0/xXAlRpwaQpsVUNuHHzjLbHsmQE1PnCo3hiB1T59SID/QefJfaMD+qH4tCmhbxRmGAftQvbOdlo9EQtx0DmkdagsngO2syYS0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761149501; c=relaxed/simple;
-	bh=hCsvfSo30jvB5RwCOJL1MYMpSNtYBU0UYAUtNvQDowU=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Z22cASH9spxIW+xMyHAIzmETaM5MZlWzJ9SBi9RvedKJiXP20NZ9IP9vhnEFIkz9Y/bPIceQkabYpHztpPZBDc1fRfJBZZkgP9L8ezcLaNIEjOmhLG5DKwmXIgqY9ymCYdhdLn2N0/orZdhl4YlAy+1y2gaO7FDnjkKNdEYK6W4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j9weLslz; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1761149889; c=relaxed/simple;
+	bh=4jHXjbabXeSFPpF/fqCcgJ6XdNu0nQpkS0GreRBSQ6s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MEnsHDtyzeBAhl+bTQ9tW9GD3yNEsFAR7tFs9yNwwT7Ce+joMR/1WJQKZu0+5gdAV857IeLdam/zGd2mVV40KttGBR0nsmP3i7Z28bCPjQtuNA9ukzsZ9HWfb0eoSa7P2v/7rYkhMWVZfyN9aM5ghYpvLa7atVh//ba4RjnTL7U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iavnuc7c; arc=none smtp.client-ip=209.85.215.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j9weLslz"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 308D5C4CEF7;
-	Wed, 22 Oct 2025 16:11:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761149501;
-	bh=hCsvfSo30jvB5RwCOJL1MYMpSNtYBU0UYAUtNvQDowU=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=j9weLslzwz8F6T8Y0qJtOKkaXQvpuBn+FrHJsbK5gKoOOY0q5ylVSU8THr2molHGg
-	 VqEJFq0VZznX50AWltvGG63XWmMpFNcTgoxrT0NQF5YfPjr6RyZ0xCYe7m1yNbwvBy
-	 Ej+C/bIvKQTPrYIjoXUscsaTZOmVKCDPKILm4nhza89gQv7vAnXoulja2AfzKawROm
-	 5sZ6ADSoxGcV6bw2eBlVtut9+yto2eQ/JChQhBYcAXj/Uyzp6tnhU1CCwGFNhdWYQR
-	 2ZMTQBToUuoRA7m4kwV/vjgygvkEzdm+jrO4jXC06n8OMpJ/EYtn9V7/V+fele9YX4
-	 2NyqS7e/uv9sw==
-From: Christian Brauner <brauner@kernel.org>
-Date: Wed, 22 Oct 2025 18:06:41 +0200
-Subject: [PATCH v2 63/63] selftests/namespaces: twelth inactive namespace
- resurrection test
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iavnuc7c"
+Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-b6cf07258e8so234476a12.1
+        for <bpf@vger.kernel.org>; Wed, 22 Oct 2025 09:18:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1761149887; x=1761754687; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=RLP+bpkdPGjagGTgRPPp7+rOmgDtjlSKoZhywvA67RM=;
+        b=iavnuc7ceDYkWYY2LGIpqjQXKEQ/HQggb818cJjqa8TfhFd9HtVYKPL5yt5Od7lSbr
+         L6U3bQTTj0NLwRLARhG9kv5+ofSW+pru6UcY7/5ugfSk0RPn6gH1uycqPQpwEyNOio4c
+         zKQS+JRfkLJGhTCoMjNT6ugt3AL3a+WY+duIwcXSvPJOSnX3GfH5Vj1jBPVkmXWM+Igl
+         LJU7TMbIJXUTxs7PZhGMWYns+bblL16qeD5VC6cviObR6suYrNnsGOfQ/NMCFG5PsfIg
+         yhLswtxX4cHNInZO7Ojd/fHOCI2MzgG7opQpn0iHnGp2pf5P1EaoSD/QfEh4ovD6GaRR
+         NQ2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761149887; x=1761754687;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RLP+bpkdPGjagGTgRPPp7+rOmgDtjlSKoZhywvA67RM=;
+        b=kY2AMh8zxf6tkkX6a6K4x8eXJ7EC/X4XygLltWtdhP2CH7ZGjp/tUl/c6Al+MkOgbt
+         U1aaDLjsFGI4iWhlmqLk33e+Wvy401S8l9rsyx1QfCvNojYLTN886/4/kiGrb0uTKGRu
+         a7gTL7YvTuDJkmId/zwejDZXz6oAKTZxxNNqRI3ykYwErfOF7fLMx5cpOqVN0IuGVl91
+         iYJ3PP3UXLoNpEVhTG3JVzC8unrGGNIUaRRrJPf07QYEAD7ZQoROyeQWCBlVFXvDDZrH
+         InJTrk0JwTbLBzv4FjKF4kRiItgBc471Fq0b8yxy/ItrB15hSO7pF55jy9pvbWoncyf/
+         WGVQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUUTvhKVM3JvMtUyn3EAKSUKiNUa6qpaauVQgIwO9p4+VXbxS/6FV4SKe31f8qAxcKAU3I=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzekkjcFLnFZvgmSGUKwqfH5rVEjt/vzP9VY7HnOiPI8jnYVQsr
+	Zzz2hswtmEBTVb42F5nYNEvJ/WWkANmxLodpNRJW04eHEJm7DL3PH5aa
+X-Gm-Gg: ASbGncteyULwwRNdmEcHIGxTzu+LDwS4Oit5hHlfxJbYc8TOKqVowjPpCBx3eHTUjV7
+	4xCLR/hajiIRHPEVIayWTnzaFhrBYHVeaVe/eok5yt+8xx8+NP6cin0361tIc+FBVgswnvPCVkx
+	16nOpNfQ4tbceEwnEVVIZQ2G0gnu6Ofxnh78is2E5QRfwS05L4qP4IXh22BNC6QRLiIkus0LyBU
+	KeK4cnG++ZdOIPYdPjWo2kWJ/wq01tuCh8UOBd2fh3EbvnEMm0DBl2OQxpBYxODHDKqV2AmIq0+
+	ld6QuctcFFQL+FA4kXNl6DKpqNarmnZlKjB0TX2VXDnp1RA+Ek0dsLyIHy/vnKvFHkprLV/yXMm
+	iLRGonRnNA2Ik+5OJTC/yIrm3ViU8IEfNIcTKLqRh3H5hGOOj5tdDRNnjqenQgbzQnkWSfni5MI
+	6QfxbM
+X-Google-Smtp-Source: AGHT+IHfAOCNJGgUXhdj6sgYkuAO4xsbyh4B6nGpWidzyORSpqM0a8O04rj58jJ6k/uvjC5jyroU0w==
+X-Received: by 2002:a17:903:19f0:b0:264:5c06:4d7b with SMTP id d9443c01a7336-290cba4f065mr257718945ad.32.1761149887296;
+        Wed, 22 Oct 2025 09:18:07 -0700 (PDT)
+Received: from lima-default ([104.28.246.147])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-292472193a1sm142156625ad.106.2025.10.22.09.18.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Oct 2025 09:18:06 -0700 (PDT)
+Date: Thu, 23 Oct 2025 03:17:58 +1100
+From: Alessandro Decina <alessandro.d@gmail.com>
+To: Jason Xing <kerneljasonxing@gmail.com>
+Cc: Alessandro Decina <alessandro.d@gmail.com>, netdev@vger.kernel.org,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Tirthendu Sarkar <tirthendu.sarkar@intel.com>,
+	Tony Nguyen <anthony.l.nguyen@intel.com>, bpf@vger.kernel.org,
+	intel-wired-lan@lists.osuosl.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net v2 1/1] i40e: xsk: advance next_to_clean on status
+ descriptors
+Message-ID: <aPkDtuVgbS4J-Og_@lima-default>
+References: <20251021173200.7908-1-alessandro.d@gmail.com>
+ <20251021173200.7908-2-alessandro.d@gmail.com>
+ <CAL+tcoCwGQyNSv9BZ_jfsia6YFoyT790iknqxG7bB7wVi3C_vQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251022-work-namespace-nstree-listns-v2-63-71a588572371@kernel.org>
-References: <20251022-work-namespace-nstree-listns-v2-0-71a588572371@kernel.org>
-In-Reply-To: <20251022-work-namespace-nstree-listns-v2-0-71a588572371@kernel.org>
-To: linux-fsdevel@vger.kernel.org, Josef Bacik <josef@toxicpanda.com>, 
- Jeff Layton <jlayton@kernel.org>
-Cc: Jann Horn <jannh@google.com>, Mike Yuan <me@yhndnzj.com>, 
- =?utf-8?q?Zbigniew_J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>, 
- Lennart Poettering <mzxreary@0pointer.de>, 
- Daan De Meyer <daan.j.demeyer@gmail.com>, Aleksa Sarai <cyphar@cyphar.com>, 
- Amir Goldstein <amir73il@gmail.com>, Tejun Heo <tj@kernel.org>, 
- Johannes Weiner <hannes@cmpxchg.org>, Thomas Gleixner <tglx@linutronix.de>, 
- Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
- linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, bpf@vger.kernel.org, 
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
- netdev@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>, 
- Christian Brauner <brauner@kernel.org>
-X-Mailer: b4 0.15-dev-96507
-X-Developer-Signature: v=1; a=openpgp-sha256; l=18202; i=brauner@kernel.org;
- h=from:subject:message-id; bh=hCsvfSo30jvB5RwCOJL1MYMpSNtYBU0UYAUtNvQDowU=;
- b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWT8ZHghq+O/xf5D9q0r8buFt3y7+V3A5/mRWIsVpy0Vk
- 1OZG+v5OkpZGMS4GGTFFFkc2k3C5ZbzVGw2ytSAmcPKBDKEgYtTACby7STD/xiWWypR5VJHRWxr
- ou11vm2r3Ht7A2fGTGH57hye8JxIf0aGwxoLmRqMxH48tdNX/yFUknw7j7Hsld17ffHEBX1/3+7
- lAQA=
-X-Developer-Key: i=brauner@kernel.org; a=openpgp;
- fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAL+tcoCwGQyNSv9BZ_jfsia6YFoyT790iknqxG7bB7wVi3C_vQ@mail.gmail.com>
 
-Test multi-level namespace resurrection across three user namespace levels.
+On Wed, Oct 22, 2025 at 11:11:01AM +0800, Jason Xing wrote:
+> On Wed, Oct 22, 2025 at 1:33 AM Alessandro Decina
+> <alessandro.d@gmail.com> wrote:
+> > diff --git a/drivers/net/ethernet/intel/i40e/i40e_xsk.c b/drivers/net/ethernet/intel/i40e/i40e_xsk.c
+> > index 9f47388eaba5..dbc19083bbb7 100644
+> > --- a/drivers/net/ethernet/intel/i40e/i40e_xsk.c
+> > +++ b/drivers/net/ethernet/intel/i40e/i40e_xsk.c
+> > @@ -441,13 +441,18 @@ int i40e_clean_rx_irq_zc(struct i40e_ring *rx_ring, int budget)
+> >                 dma_rmb();
+> >
+> >                 if (i40e_rx_is_programming_status(qword)) {
+> > +                       u16 ntp;
+> > +
+> >                         i40e_clean_programming_status(rx_ring,
+> >                                                       rx_desc->raw.qword[0],
+> >                                                       qword);
+> >                         bi = *i40e_rx_bi(rx_ring, next_to_process);
+> >                         xsk_buff_free(bi);
+> > -                       if (++next_to_process == count)
+> > +                       ntp = next_to_process++;
+> > +                       if (next_to_process == count)
+> >                                 next_to_process = 0;
+> > +                       if (next_to_clean == ntp)
+> > +                               next_to_clean = next_to_process;
+> >                         continue;
+> >                 }
+> >
+> > --
+> > 2.43.0
+> >
+> >
+> 
+> I'm copying your reply from v1 as shown below so that we can continue
+> with the discussion :)
+> 
+> > It really depends on whether a status descriptor can be received in the
+> > middle of multi-buffer packet. Based on the existing code, I assumed it
+> > can. Therefore, consider this case:
+> >
+> > [valid_1st_packet][status_descriptor][valid_2nd_packet]
+> >
+> > In this case you want to skip status_descriptor but keep the existing
+> > logic that leads to:
+> >
+> >     first = next_to_clean = valid_1st_packet
+> >
+> > so then you can go and add valid_2nd_packet as a fragment to the first.
+> 
+> Sorry, honestly, I still don't follow you.
+> 
+> Looking at the case you provided, I think @first always pointing to
+> valid_1st_packet is valid which does not bring any trouble. You mean
+> the case is what you're trying to handle?
 
-This test creates a complex namespace hierarchy with three levels of user
-namespaces and a network namespace at the deepest level. It verifies that
-the resurrection semantics work correctly when SIOCGSKNS is called on a
-socket from an inactive namespace tree, and that listns() and
-open_by_handle_at() correctly respect visibility rules.
-
-Hierarchy after child processes exit (all with 0 active refcount):
-
-         net_L3A (0)                <- Level 3 network namespace
-             |
-             +
-         userns_L3 (0)              <- Level 3 user namespace
-             |
-             +
-         userns_L2 (0)              <- Level 2 user namespace
-             |
-             +
-         userns_L1 (0)              <- Level 1 user namespace
-             |
-             x
-         init_user_ns
-
-The test verifies:
-1. SIOCGSKNS on a socket from inactive net_L3A resurrects the entire chain
-2. After resurrection, all namespaces are visible in listns()
-3. Resurrected namespaces can be reopened via file handles
-4. Closing the netns FD cascades down: the entire ownership chain
-   (userns_L3 -> userns_L2 -> userns_L1) becomes inactive again
-5. Inactive namespaces disappear from listns() and cannot be reopened
-6. Calling SIOCGSKNS again on the same socket resurrects the tree again
-7. After second resurrection, namespaces are visible and can be reopened
-
-Signed-off-by: Christian Brauner <brauner@kernel.org>
----
- .../testing/selftests/namespaces/siocgskns_test.c  | 569 +++++++++++++++++++++
- 1 file changed, 569 insertions(+)
-
-diff --git a/tools/testing/selftests/namespaces/siocgskns_test.c b/tools/testing/selftests/namespaces/siocgskns_test.c
-index a5a96509661e..90af54062ab8 100644
---- a/tools/testing/selftests/namespaces/siocgskns_test.c
-+++ b/tools/testing/selftests/namespaces/siocgskns_test.c
-@@ -1275,4 +1275,573 @@ TEST(siocgskns_listns_and_file_handle)
- 	free(handle);
- }
+Yes, I mean this case needs to keep working, so we can't move
+next_to_clean unconditionally, we can only move it when
+next_to_clean == ntp, which is equivalent to checking that
+first == NULL. See below.
  
-+/*
-+ * Test multi-level namespace resurrection across three user namespace levels.
-+ *
-+ * This test creates a complex namespace hierarchy with three levels of user
-+ * namespaces and a network namespace at the deepest level. It verifies that
-+ * the resurrection semantics work correctly when SIOCGSKNS is called on a
-+ * socket from an inactive namespace tree, and that listns() and
-+ * open_by_handle_at() correctly respect visibility rules.
-+ *
-+ * Hierarchy after child processes exit (all with 0 active refcount):
-+ *
-+ *          net_L3A (0)                <- Level 3 network namespace
-+ *              |
-+ *              +
-+ *          userns_L3 (0)              <- Level 3 user namespace
-+ *              |
-+ *              +
-+ *          userns_L2 (0)              <- Level 2 user namespace
-+ *              |
-+ *              +
-+ *          userns_L1 (0)              <- Level 1 user namespace
-+ *              |
-+ *              x
-+ *          init_user_ns
-+ *
-+ * The test verifies:
-+ * 1. SIOCGSKNS on a socket from inactive net_L3A resurrects the entire chain
-+ * 2. After resurrection, all namespaces are visible in listns()
-+ * 3. Resurrected namespaces can be reopened via file handles
-+ * 4. Closing the netns FD cascades down: the entire ownership chain
-+ *    (userns_L3 -> userns_L2 -> userns_L1) becomes inactive again
-+ * 5. Inactive namespaces disappear from listns() and cannot be reopened
-+ * 6. Calling SIOCGSKNS again on the same socket resurrects the tree again
-+ * 7. After second resurrection, namespaces are visible and can be reopened
-+ */
-+TEST(siocgskns_multilevel_resurrection)
-+{
-+	int ipc_sockets[2];
-+	pid_t pid_l1, pid_l2, pid_l3;
-+	int status;
-+
-+	/* Namespace file descriptors to be received from child */
-+	int sock_L3A_fd = -1;
-+	int netns_L3A_fd = -1;
-+	__u64 netns_L3A_id;
-+	__u64 userns_L1_id, userns_L2_id, userns_L3_id;
-+
-+	/* For listns() and file handle testing */
-+	struct ns_id_req req = {
-+		.size = sizeof(req),
-+		.spare = 0,
-+		.ns_id = 0,
-+		.ns_type = CLONE_NEWNET | CLONE_NEWUSER,
-+		.spare2 = 0,
-+		.user_ns_id = 0,
-+	};
-+	__u64 ns_ids[256];
-+	int ret, i;
-+	struct file_handle *handle;
-+	struct nsfs_file_handle *nsfs_fh;
-+	int reopened_fd;
-+
-+	/* Allocate file handle for testing */
-+	handle = malloc(sizeof(struct file_handle) + sizeof(struct nsfs_file_handle));
-+	ASSERT_NE(handle, NULL);
-+	handle->handle_bytes = sizeof(struct nsfs_file_handle);
-+	handle->handle_type = FILEID_NSFS;
-+
-+	EXPECT_EQ(socketpair(AF_LOCAL, SOCK_STREAM | SOCK_CLOEXEC, 0, ipc_sockets), 0);
-+
-+	/*
-+	 * Fork level 1 child that creates userns_L1
-+	 */
-+	pid_l1 = fork();
-+	ASSERT_GE(pid_l1, 0);
-+
-+	if (pid_l1 == 0) {
-+		/* Level 1 child */
-+		int ipc_L2[2];
-+		close(ipc_sockets[0]);
-+
-+		/* Create userns_L1 */
-+		if (setup_userns() < 0) {
-+			close(ipc_sockets[1]);
-+			exit(1);
-+		}
-+
-+		/* Create socketpair for communicating with L2 child */
-+		if (socketpair(AF_LOCAL, SOCK_STREAM | SOCK_CLOEXEC, 0, ipc_L2) < 0) {
-+			close(ipc_sockets[1]);
-+			exit(1);
-+		}
-+
-+		/*
-+		 * Fork level 2 child that creates userns_L2
-+		 */
-+		pid_l2 = fork();
-+		if (pid_l2 < 0) {
-+			close(ipc_sockets[1]);
-+			close(ipc_L2[0]);
-+			close(ipc_L2[1]);
-+			exit(1);
-+		}
-+
-+		if (pid_l2 == 0) {
-+			/* Level 2 child */
-+			int ipc_L3[2];
-+			close(ipc_L2[0]);
-+
-+			/* Create userns_L2 (nested inside userns_L1) */
-+			if (setup_userns() < 0) {
-+				close(ipc_L2[1]);
-+				exit(1);
-+			}
-+
-+			/* Create socketpair for communicating with L3 child */
-+			if (socketpair(AF_LOCAL, SOCK_STREAM | SOCK_CLOEXEC, 0, ipc_L3) < 0) {
-+				close(ipc_L2[1]);
-+				exit(1);
-+			}
-+
-+			/*
-+			 * Fork level 3 child that creates userns_L3 and network namespaces
-+			 */
-+			pid_l3 = fork();
-+			if (pid_l3 < 0) {
-+				close(ipc_L2[1]);
-+				close(ipc_L3[0]);
-+				close(ipc_L3[1]);
-+				exit(1);
-+			}
-+
-+			if (pid_l3 == 0) {
-+				/* Level 3 child - the deepest level */
-+				int sock_fd;
-+				close(ipc_L3[0]);
-+
-+				/* Create userns_L3 (nested inside userns_L2) */
-+				if (setup_userns() < 0) {
-+					close(ipc_L3[1]);
-+					exit(1);
-+				}
-+
-+				/* Create network namespace at level 3 */
-+				if (unshare(CLONE_NEWNET) < 0) {
-+					close(ipc_L3[1]);
-+					exit(1);
-+				}
-+
-+				/* Create socket in net_L3A */
-+				sock_fd = socket(AF_INET, SOCK_DGRAM, 0);
-+				if (sock_fd < 0) {
-+					close(ipc_L3[1]);
-+					exit(1);
-+				}
-+
-+				/* Send socket FD to L2 parent */
-+				struct msghdr msg = {0};
-+				struct iovec iov = {0};
-+				char buf[1] = {'X'};
-+				char cmsg_buf[CMSG_SPACE(sizeof(int))];
-+
-+				iov.iov_base = buf;
-+				iov.iov_len = 1;
-+				msg.msg_iov = &iov;
-+				msg.msg_iovlen = 1;
-+				msg.msg_control = cmsg_buf;
-+				msg.msg_controllen = sizeof(cmsg_buf);
-+
-+				struct cmsghdr *cmsg = CMSG_FIRSTHDR(&msg);
-+				cmsg->cmsg_level = SOL_SOCKET;
-+				cmsg->cmsg_type = SCM_RIGHTS;
-+				cmsg->cmsg_len = CMSG_LEN(sizeof(int));
-+				memcpy(CMSG_DATA(cmsg), &sock_fd, sizeof(int));
-+
-+				if (sendmsg(ipc_L3[1], &msg, 0) < 0) {
-+					close(sock_fd);
-+					close(ipc_L3[1]);
-+					exit(1);
-+				}
-+
-+				close(sock_fd);
-+				close(ipc_L3[1]);
-+				exit(0);
-+			}
-+
-+			/* Level 2 child - receive from L3 and forward to L1 */
-+			close(ipc_L3[1]);
-+
-+			struct msghdr msg = {0};
-+			struct iovec iov = {0};
-+			char buf[1];
-+			char cmsg_buf[CMSG_SPACE(sizeof(int))];
-+			int received_fd;
-+
-+			iov.iov_base = buf;
-+			iov.iov_len = 1;
-+			msg.msg_iov = &iov;
-+			msg.msg_iovlen = 1;
-+			msg.msg_control = cmsg_buf;
-+			msg.msg_controllen = sizeof(cmsg_buf);
-+
-+			ssize_t n = recvmsg(ipc_L3[0], &msg, 0);
-+			close(ipc_L3[0]);
-+
-+			if (n != 1) {
-+				close(ipc_L2[1]);
-+				waitpid(pid_l3, NULL, 0);
-+				exit(1);
-+			}
-+
-+			struct cmsghdr *cmsg = CMSG_FIRSTHDR(&msg);
-+			if (!cmsg) {
-+				close(ipc_L2[1]);
-+				waitpid(pid_l3, NULL, 0);
-+				exit(1);
-+			}
-+			memcpy(&received_fd, CMSG_DATA(cmsg), sizeof(int));
-+
-+			/* Wait for L3 child */
-+			waitpid(pid_l3, NULL, 0);
-+
-+			/* Forward the socket FD to L1 parent */
-+			memset(&msg, 0, sizeof(msg));
-+			buf[0] = 'Y';
-+			iov.iov_base = buf;
-+			iov.iov_len = 1;
-+			msg.msg_iov = &iov;
-+			msg.msg_iovlen = 1;
-+			msg.msg_control = cmsg_buf;
-+			msg.msg_controllen = sizeof(cmsg_buf);
-+
-+			cmsg = CMSG_FIRSTHDR(&msg);
-+			cmsg->cmsg_level = SOL_SOCKET;
-+			cmsg->cmsg_type = SCM_RIGHTS;
-+			cmsg->cmsg_len = CMSG_LEN(sizeof(int));
-+			memcpy(CMSG_DATA(cmsg), &received_fd, sizeof(int));
-+
-+			if (sendmsg(ipc_L2[1], &msg, 0) < 0) {
-+				close(received_fd);
-+				close(ipc_L2[1]);
-+				exit(1);
-+			}
-+
-+			close(received_fd);
-+			close(ipc_L2[1]);
-+			exit(0);
-+		}
-+
-+		/* Level 1 child - receive from L2 and forward to parent */
-+		close(ipc_L2[1]);
-+
-+		struct msghdr msg = {0};
-+		struct iovec iov = {0};
-+		char buf[1];
-+		char cmsg_buf[CMSG_SPACE(sizeof(int))];
-+		int received_fd;
-+
-+		iov.iov_base = buf;
-+		iov.iov_len = 1;
-+		msg.msg_iov = &iov;
-+		msg.msg_iovlen = 1;
-+		msg.msg_control = cmsg_buf;
-+		msg.msg_controllen = sizeof(cmsg_buf);
-+
-+		ssize_t n = recvmsg(ipc_L2[0], &msg, 0);
-+		close(ipc_L2[0]);
-+
-+		if (n != 1) {
-+			close(ipc_sockets[1]);
-+			waitpid(pid_l2, NULL, 0);
-+			exit(1);
-+		}
-+
-+		struct cmsghdr *cmsg = CMSG_FIRSTHDR(&msg);
-+		if (!cmsg) {
-+			close(ipc_sockets[1]);
-+			waitpid(pid_l2, NULL, 0);
-+			exit(1);
-+		}
-+		memcpy(&received_fd, CMSG_DATA(cmsg), sizeof(int));
-+
-+		/* Wait for L2 child */
-+		waitpid(pid_l2, NULL, 0);
-+
-+		/* Forward the socket FD to parent */
-+		memset(&msg, 0, sizeof(msg));
-+		buf[0] = 'Z';
-+		iov.iov_base = buf;
-+		iov.iov_len = 1;
-+		msg.msg_iov = &iov;
-+		msg.msg_iovlen = 1;
-+		msg.msg_control = cmsg_buf;
-+		msg.msg_controllen = sizeof(cmsg_buf);
-+
-+		cmsg = CMSG_FIRSTHDR(&msg);
-+		cmsg->cmsg_level = SOL_SOCKET;
-+		cmsg->cmsg_type = SCM_RIGHTS;
-+		cmsg->cmsg_len = CMSG_LEN(sizeof(int));
-+		memcpy(CMSG_DATA(cmsg), &received_fd, sizeof(int));
-+
-+		if (sendmsg(ipc_sockets[1], &msg, 0) < 0) {
-+			close(received_fd);
-+			close(ipc_sockets[1]);
-+			exit(1);
-+		}
-+
-+		close(received_fd);
-+		close(ipc_sockets[1]);
-+		exit(0);
-+	}
-+
-+	/* Parent - receive the socket from the deepest level */
-+	close(ipc_sockets[1]);
-+
-+	struct msghdr msg = {0};
-+	struct iovec iov = {0};
-+	char buf[1];
-+	char cmsg_buf[CMSG_SPACE(sizeof(int))];
-+
-+	iov.iov_base = buf;
-+	iov.iov_len = 1;
-+	msg.msg_iov = &iov;
-+	msg.msg_iovlen = 1;
-+	msg.msg_control = cmsg_buf;
-+	msg.msg_controllen = sizeof(cmsg_buf);
-+
-+	ssize_t n = recvmsg(ipc_sockets[0], &msg, 0);
-+	close(ipc_sockets[0]);
-+
-+	if (n != 1) {
-+		free(handle);
-+		waitpid(pid_l1, NULL, 0);
-+		SKIP(return, "Failed to receive socket from child");
-+	}
-+
-+	struct cmsghdr *cmsg = CMSG_FIRSTHDR(&msg);
-+	if (!cmsg) {
-+		free(handle);
-+		waitpid(pid_l1, NULL, 0);
-+		SKIP(return, "Failed to receive socket from child");
-+	}
-+	memcpy(&sock_L3A_fd, CMSG_DATA(cmsg), sizeof(int));
-+
-+	/* Wait for L1 child */
-+	waitpid(pid_l1, &status, 0);
-+	ASSERT_TRUE(WIFEXITED(status));
-+	if (WEXITSTATUS(status) != 0) {
-+		free(handle);
-+		if (sock_L3A_fd >= 0)
-+			close(sock_L3A_fd);
-+		SKIP(return, "Child process failed to create namespace hierarchy");
-+	}
-+
-+	/*
-+	 * At this point, all child processes have exited. The socket itself
-+	 * doesn't keep the namespace active - we need to call SIOCGSKNS which
-+	 * will resurrect the entire namespace tree by taking active references.
-+	 */
-+
-+	/* Get network namespace from socket - this resurrects the tree */
-+	netns_L3A_fd = ioctl(sock_L3A_fd, SIOCGSKNS);
-+	if (netns_L3A_fd < 0) {
-+		free(handle);
-+		close(sock_L3A_fd);
-+		if (errno == ENOTTY || errno == EINVAL)
-+			SKIP(return, "SIOCGSKNS not supported");
-+		ASSERT_GE(netns_L3A_fd, 0);
-+	}
-+
-+	/* Get namespace ID for net_L3A */
-+	ret = ioctl(netns_L3A_fd, NS_GET_ID, &netns_L3A_id);
-+	if (ret < 0) {
-+		free(handle);
-+		close(sock_L3A_fd);
-+		close(netns_L3A_fd);
-+		if (errno == ENOTTY || errno == EINVAL)
-+			SKIP(return, "NS_GET_ID not supported");
-+		ASSERT_EQ(ret, 0);
-+	}
-+
-+	/* Get owner user namespace chain: userns_L3 -> userns_L2 -> userns_L1 */
-+	int userns_L3_fd = ioctl(netns_L3A_fd, NS_GET_USERNS);
-+	if (userns_L3_fd < 0) {
-+		free(handle);
-+		close(sock_L3A_fd);
-+		close(netns_L3A_fd);
-+		if (errno == ENOTTY || errno == EINVAL)
-+			SKIP(return, "NS_GET_USERNS not supported");
-+		ASSERT_GE(userns_L3_fd, 0);
-+	}
-+
-+	ret = ioctl(userns_L3_fd, NS_GET_ID, &userns_L3_id);
-+	ASSERT_EQ(ret, 0);
-+
-+	int userns_L2_fd = ioctl(userns_L3_fd, NS_GET_USERNS);
-+	ASSERT_GE(userns_L2_fd, 0);
-+	ret = ioctl(userns_L2_fd, NS_GET_ID, &userns_L2_id);
-+	ASSERT_EQ(ret, 0);
-+
-+	int userns_L1_fd = ioctl(userns_L2_fd, NS_GET_USERNS);
-+	ASSERT_GE(userns_L1_fd, 0);
-+	ret = ioctl(userns_L1_fd, NS_GET_ID, &userns_L1_id);
-+	ASSERT_EQ(ret, 0);
-+
-+	close(userns_L1_fd);
-+	close(userns_L2_fd);
-+	close(userns_L3_fd);
-+
-+	TH_LOG("Multi-level hierarchy: net_L3A (id=%llu) -> userns_L3 (id=%llu) -> userns_L2 (id=%llu) -> userns_L1 (id=%llu)",
-+	       netns_L3A_id, userns_L3_id, userns_L2_id, userns_L1_id);
-+
-+	/*
-+	 * Test 1: Verify net_L3A is visible in listns() after resurrection.
-+	 * The entire ownership chain should be resurrected and visible.
-+	 */
-+	ret = sys_listns(&req, ns_ids, ARRAY_SIZE(ns_ids), 0);
-+	if (ret < 0) {
-+		free(handle);
-+		close(sock_L3A_fd);
-+		close(netns_L3A_fd);
-+		if (errno == ENOSYS)
-+			SKIP(return, "listns() not supported");
-+		ASSERT_GE(ret, 0);
-+	}
-+
-+	bool found_netns_L3A = false;
-+	bool found_userns_L1 = false;
-+	bool found_userns_L2 = false;
-+	bool found_userns_L3 = false;
-+
-+	for (i = 0; i < ret; i++) {
-+		if (ns_ids[i] == netns_L3A_id)
-+			found_netns_L3A = true;
-+		if (ns_ids[i] == userns_L1_id)
-+			found_userns_L1 = true;
-+		if (ns_ids[i] == userns_L2_id)
-+			found_userns_L2 = true;
-+		if (ns_ids[i] == userns_L3_id)
-+			found_userns_L3 = true;
-+	}
-+
-+	ASSERT_TRUE(found_netns_L3A);
-+	ASSERT_TRUE(found_userns_L1);
-+	ASSERT_TRUE(found_userns_L2);
-+	ASSERT_TRUE(found_userns_L3);
-+	TH_LOG("Resurrection verified: all namespaces in hierarchy visible in listns()");
-+
-+	/*
-+	 * Test 2: Verify net_L3A can be reopened via file handle.
-+	 */
-+	nsfs_fh = (struct nsfs_file_handle *)handle->f_handle;
-+	nsfs_fh->ns_id = netns_L3A_id;
-+	nsfs_fh->ns_type = 0;
-+	nsfs_fh->ns_inum = 0;
-+
-+	reopened_fd = open_by_handle_at(FD_NSFS_ROOT, handle, O_RDONLY);
-+	if (reopened_fd < 0) {
-+		free(handle);
-+		close(sock_L3A_fd);
-+		close(netns_L3A_fd);
-+		if (errno == EOPNOTSUPP || errno == ENOSYS || errno == EBADF)
-+			SKIP(return, "open_by_handle_at with FD_NSFS_ROOT not supported");
-+		TH_LOG("open_by_handle_at failed: %s", strerror(errno));
-+		ASSERT_GE(reopened_fd, 0);
-+	}
-+
-+	close(reopened_fd);
-+	TH_LOG("File handle test passed: net_L3A can be reopened");
-+
-+	/*
-+	 * Test 3: Verify that when we close the netns FD (dropping the last
-+	 * active reference), the entire tree becomes inactive and disappears
-+	 * from listns(). The cascade goes: net_L3A drops -> userns_L3 drops ->
-+	 * userns_L2 drops -> userns_L1 drops.
-+	 */
-+	close(netns_L3A_fd);
-+
-+	ret = sys_listns(&req, ns_ids, ARRAY_SIZE(ns_ids), 0);
-+	ASSERT_GE(ret, 0);
-+
-+	found_netns_L3A = false;
-+	found_userns_L1 = false;
-+	found_userns_L2 = false;
-+	found_userns_L3 = false;
-+
-+	for (i = 0; i < ret; i++) {
-+		if (ns_ids[i] == netns_L3A_id)
-+			found_netns_L3A = true;
-+		if (ns_ids[i] == userns_L1_id)
-+			found_userns_L1 = true;
-+		if (ns_ids[i] == userns_L2_id)
-+			found_userns_L2 = true;
-+		if (ns_ids[i] == userns_L3_id)
-+			found_userns_L3 = true;
-+	}
-+
-+	ASSERT_FALSE(found_netns_L3A);
-+	ASSERT_FALSE(found_userns_L1);
-+	ASSERT_FALSE(found_userns_L2);
-+	ASSERT_FALSE(found_userns_L3);
-+	TH_LOG("Cascade test passed: all namespaces disappeared after netns FD closed");
-+
-+	/*
-+	 * Test 4: Verify file handle no longer works for inactive namespace.
-+	 */
-+	reopened_fd = open_by_handle_at(FD_NSFS_ROOT, handle, O_RDONLY);
-+	if (reopened_fd >= 0) {
-+		close(reopened_fd);
-+		free(handle);
-+		ASSERT_TRUE(false); /* Should have failed */
-+	}
-+	TH_LOG("Inactive namespace correctly cannot be reopened via file handle");
-+
-+	/*
-+	 * Test 5: Verify that calling SIOCGSKNS again resurrects the tree again.
-+	 * The socket is still valid, so we can call SIOCGSKNS on it to resurrect
-+	 * the namespace tree once more.
-+	 */
-+	netns_L3A_fd = ioctl(sock_L3A_fd, SIOCGSKNS);
-+	ASSERT_GE(netns_L3A_fd, 0);
-+
-+	TH_LOG("Called SIOCGSKNS again to resurrect the namespace tree");
-+
-+	/* Verify the namespace tree is resurrected and visible in listns() */
-+	ret = sys_listns(&req, ns_ids, ARRAY_SIZE(ns_ids), 0);
-+	ASSERT_GE(ret, 0);
-+
-+	found_netns_L3A = false;
-+	found_userns_L1 = false;
-+	found_userns_L2 = false;
-+	found_userns_L3 = false;
-+
-+	for (i = 0; i < ret; i++) {
-+		if (ns_ids[i] == netns_L3A_id)
-+			found_netns_L3A = true;
-+		if (ns_ids[i] == userns_L1_id)
-+			found_userns_L1 = true;
-+		if (ns_ids[i] == userns_L2_id)
-+			found_userns_L2 = true;
-+		if (ns_ids[i] == userns_L3_id)
-+			found_userns_L3 = true;
-+	}
-+
-+	ASSERT_TRUE(found_netns_L3A);
-+	ASSERT_TRUE(found_userns_L1);
-+	ASSERT_TRUE(found_userns_L2);
-+	ASSERT_TRUE(found_userns_L3);
-+	TH_LOG("Second resurrection verified: all namespaces in hierarchy visible in listns() again");
-+
-+	/* Verify we can reopen via file handle again */
-+	reopened_fd = open_by_handle_at(FD_NSFS_ROOT, handle, O_RDONLY);
-+	if (reopened_fd < 0) {
-+		free(handle);
-+		close(sock_L3A_fd);
-+		close(netns_L3A_fd);
-+		TH_LOG("open_by_handle_at failed after second resurrection: %s", strerror(errno));
-+		ASSERT_GE(reopened_fd, 0);
-+	}
-+
-+	close(reopened_fd);
-+	TH_LOG("File handle test passed: net_L3A can be reopened after second resurrection");
-+
-+	/* Final cleanup */
-+	close(sock_L3A_fd);
-+	close(netns_L3A_fd);
-+	free(handle);
-+}
-+
- TEST_HARNESS_MAIN
+> You patch updates next_to_clean that is only used at the very
+> beginning, so it will not affect @first. Imaging the following case:
+> 
+>      [status_descriptor][valid_1st_packet][valid_2nd_packet]
+> 
+> Even if the next_to_clean is updated, the @first still points to
+> [status_descriptor] that is invalid and that will later cause the
+> panic when constructing the skb.
 
--- 
-2.47.3
+Exactly - the key is to make sure we never get into this state :)
 
+At the beginning of the function - outside the loop - first is only
+assigned if (next_to_process != next_to_clean). This condition means: if
+we previously exited the function in the middle of a multi-buffer
+packet, we must resume from the start of that packet (next_to_clean) and
+process the next fragment in it (next_to_process).
+
+Consider the case you just gave:
+
+> [status_descriptor][valid_1st_mb_packet][valid_2nd_mb_packet]
+
+Assume we enter the function and next_to_process == next_to_clean, we
+don't assign first, so first = NULL.
+
+We find the status descriptor: without this patch, we increment
+next_to_process, don't increment next_to_clean, say we run out of budget
+and break the loop, the next time the function is entered we set first =
+status_descriptor because next_to_process != next_to_clean. This is
+exactly what we want to avoid.
+
+With this patch upon processing the status descriptor, we see
+next_to_clean == ntp, we increment next_to_clean, the next time the
+function is entered next_to_process == next_to_clean, first is correctly
+set to NULL and the next packet starts from valid_1st_mb_packet.
+
+So I've covered both the scenarios:
+
+a) [status][mb_packet1][mb_packet2]
+b) [mb_packet1][status][mb_packet2]
+
+The last case
+
+c) [packet1][packet2][status] is actually just a), because at packet2
+we'd find the EOP marker and close off the previous multi-buffer packet.
+
+I hope I was more clear and please check my logic :)
+
+Ciao,
+Alessandro
