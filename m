@@ -1,93 +1,118 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDD11329C51;
-	Wed, 22 Oct 2025 14:04:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A7B2346E4C
+	for <bpf@vger.kernel.org>; Wed, 22 Oct 2025 14:07:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761141844; cv=none; b=mw9/HoI6prDQJGQ8baOShyqKAxy+tuPziwkxeV4yujiDQM4srEa8H9tdabzgLcw1ELWrBSsjcjzPY2zCmWXcVt4Is1ifeMdILPWRhw9U/0X8VUhSjBKqeRoUktamRKW6PHO9xT9hP4R7deZi1TuOZ7CnoxUA3xm6fVv51lrD4mA=
+	t=1761142036; cv=none; b=Z7H4v62X3XiT0dHF62b8QoT4Lwy2r0zSF20c1t2hm7fqZYS9x2mcclJzmlu+wfQHl41lDIvxSU2WpzZ+n5dIcsVcHTw25ej1vKjwDjEBvOxzi2V4Qa9FAEnkSPmrrO2POmvmj0kt1WtPcCRjgYep14kJ3l5tJN4yW8pLSuIXpEk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761141844; c=relaxed/simple;
-	bh=djPYKjLNpujT9UWSdxS+LwDKZXuToGzFEeI/1zO8Gbw=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=WyHftCvxH2F2raIOmYWlsbZLflZIg6RjXNwuqPHFkr/sEujIfO1T3wPphbsOznb7qTDX5x0zVaC4EtKYI7Fr5yzGn4GoMBaogBbTlRXEgtSwDDz2wn/HGxh3kaM/avZU5xWdZREaLzFBuRPxv7r9/d2il7MyDvWmNbPEy7r1IQU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ni0FVWAM; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1761142036; c=relaxed/simple;
+	bh=gkKxWd8KXiGvH+KUsUV9MZ+OqANpdvOiI5kNn5PJkzQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Lf2lQDP+eD8ta1YLnSIWyy7Uqs5bz1lvMKExrW5WhD1d6kTAgbMAcU9Xoc4myBdS2zLDQfgiDdVyKKIHpLwitlnjhPP8CINZuyuO3upErfJQrjE16s/U+W5vxCaJ+O6MrdVg09wGpBb6ZTRYjwLoD+WtHalPKtuPfwg3xXNywls=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Nn79Aa0Y; arc=none smtp.client-ip=209.85.221.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ni0FVWAM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFC5CC4CEE7;
-	Wed, 22 Oct 2025 14:04:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761141843;
-	bh=djPYKjLNpujT9UWSdxS+LwDKZXuToGzFEeI/1zO8Gbw=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=Ni0FVWAMjvNHBXwT70nTiJspsXgatH+BWkNmvKVvMiBPR+jHH4Dv/czd3xgn1MV8u
-	 HHXlZZwYnWIoiiK9rDWP24tMD9xnWrntcSVU/abClr0RFCnhNoSDz5x0uxumQ+cXmf
-	 SK0uqh8duCWqsAV47F/fazxNDzQhaeDRiZbMzLgBXISHu8xGObSQCaXFiWvgIh/PMQ
-	 ohX2f4gBpOnyfU+BzInaqm5xjvdlH8IiyBzloaylUGzltJfQh2S61I25Q8vjP04YrE
-	 jVT8xIvAy2XRPJDaDKEPdnLI5+vV51lqfOxjiXRHFQ5I2VaMNpFvx+QlBcjd3uHWgS
-	 PPhjHinF9F1yw==
-Date: Wed, 22 Oct 2025 07:04:01 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Cc: Alexander Lobakin <aleksander.lobakin@intel.com>, Jesper Dangaard Brouer
- <hawk@kernel.org>, <bpf@vger.kernel.org>, <ast@kernel.org>,
- <daniel@iogearbox.net>, <ilias.apalodimas@linaro.org>, <toke@redhat.com>,
- <lorenzo@kernel.org>, <netdev@vger.kernel.org>,
- <magnus.karlsson@intel.com>, <andrii@kernel.org>, <stfomichev@gmail.com>,
- <syzbot+ff145014d6b0ce64a173@syzkaller.appspotmail.com>, Ihor Solodrai
- <ihor.solodrai@linux.dev>, Octavian Purdila <tavip@google.com>
-Subject: Re: [PATCH v2 bpf 1/2] xdp: update xdp_rxq_info's mem type in XDP
- generic hook
-Message-ID: <20251022070401.0a02452d@kernel.org>
-In-Reply-To: <aPi+cfwuGq2r+8RZ@boxer>
-References: <20251017143103.2620164-1-maciej.fijalkowski@intel.com>
-	<20251017143103.2620164-2-maciej.fijalkowski@intel.com>
-	<50cbda75-9e0c-4d04-8d01-75dc533b8bb9@kernel.org>
-	<025d2281-caf0-4f88-8f31-b0bfa5596aec@intel.com>
-	<aPZ3FvcIVOPVxQum@boxer>
-	<20251021180136.39431ed3@kernel.org>
-	<aPi+cfwuGq2r+8RZ@boxer>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Nn79Aa0Y"
+Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-4270a3464bcso3790553f8f.2
+        for <bpf@vger.kernel.org>; Wed, 22 Oct 2025 07:07:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1761142032; x=1761746832; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=z2UgKBjJ/YJZKDPgcuy8ak/6UsSZ2YjC/v80oIn1egU=;
+        b=Nn79Aa0Y08wjz/duqZkPPEq5qxUyNbPgCuVJ5bbzcwtV7AUE1HlAMtrpqP1GGvmZ3S
+         U6Q28yMqXzcJJ8ioOMvx1Pyv8GtPNywBNkIvpEbVT69kn+LZhb8rAMmQ2OLDLlJ1kzll
+         XgdD6DKIY7S3Ut9JlnmWKUv8bsZZ9s2yldx0LOlDRWSNt2bMNSblQDDaqyalvjQ3XpDv
+         nv9LmTlb7vp+xSO28ybBTITSnpjoDaqb8gILNo0RAFNeid8ZcG3t85dhbav8QypV8paj
+         QYmyEWSy/igtP1SXjMYjuh2cVZCT6LOdn2ZBhCHqla4i4bX+ZtHB+clcOanwwBT1CQH1
+         YL7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761142032; x=1761746832;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=z2UgKBjJ/YJZKDPgcuy8ak/6UsSZ2YjC/v80oIn1egU=;
+        b=xOJQ0MokvIctenOtNHf7Cyg8m45Hb+zI5InMiQaFZVLX9DV26I0d++ZLbyPEwlbnlR
+         Beat/WnkFl3/6+9IxeJ02LqrkTts2f0laTDRw2wWXIfvri/dvTawZS+FWXL4rjVI+Sta
+         0qutO8zU2jGHr9BMAweu4zD8koCsr3+eJVJiWLmBn7vLz4kkEGfD4rkBfzNyEggRz3H8
+         Ev5PrtEQs/mpiGD4qvhcdJiXA3m1Hnp9uk2j6bRt7X1G8KXo7FBurJwY2WzMsYk07md8
+         93XgBgY/lQhrjgwDi2vER9RyEPvODUnDtqBUtet7KixQQ5X52NBdZZc2Y4TTgUXtCVT5
+         Oppg==
+X-Gm-Message-State: AOJu0YyFtFZB9naGIJf1d0fJbUD4kK0JAdwtdhGz8UY8QoCC+5PcTKDS
+	4LN5rtokOnO/78joKvAWVFmtCJ3r74Yy1w1Ay6OdhpJBH4Hj1uKbU04j
+X-Gm-Gg: ASbGnct74uNNI4ljBTAwVvOpuSkJePV7ccHqsyV+M1VrMSCYqRg9loU34Aof6lll9T0
+	2KgOhNUtSnwmCpaLLDE0kv4cdLW+X17eLSne3rKXss52MU9KbabfBulny9C3vqywZ73iTdnTNoe
+	QDkgPmw5Z/OyeRokSgOxWcX7qxDcQSIzPM/gurDtSKwatY0hPKBqVw6smdWb1/82wF0ip7/ytsd
+	nyCiWVGmoLmWhmTU6pp+zPjdw0km2bCCqbqe8I9bweS6dKqfgkQhivUPf8YAApk2CHRHvnlrB1B
+	ONK49Nc0qxRL+C5UcXrAAObCxb/sWZwgQ1QZ4sBE7jdphM9kuUw/eyqY7nOpXK9qtljyWI3UVhP
+	1a22YBbtx6VpErzgTfSlmlv4p2FZ/MQHlhCb+U+kHapeHzT3Q4a8ARUARdE3EysJagPhz7SKQze
+	ex8LvCzYdeUNaqQgYoKHmH
+X-Google-Smtp-Source: AGHT+IH3ur4Z1kgiluA8uX65x/tvCY+VwJtp/9tWK9qA9avvSe6u4Qn/a3j8wcLC04qda72YmwcmcA==
+X-Received: by 2002:a5d:64e8:0:b0:427:7b7:dbdc with SMTP id ffacd0b85a97d-42707b7dc04mr12731208f8f.24.1761142031716;
+        Wed, 22 Oct 2025 07:07:11 -0700 (PDT)
+Received: from mail.gmail.com ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-427ea5a0e9csm25475632f8f.5.2025.10.22.07.07.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Oct 2025 07:07:09 -0700 (PDT)
+Date: Wed, 22 Oct 2025 14:13:48 +0000
+From: Anton Protopopov <a.s.protopopov@gmail.com>
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Anton Protopopov <aspsk@isovalent.com>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Quentin Monnet <qmo@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>
+Subject: Re: [PATCH v6 bpf-next 05/17] selftests/bpf: add selftests for new
+ insn_array map
+Message-ID: <aPjmnJo+ClGgOkBL@mail.gmail.com>
+References: <20251019202145.3944697-1-a.s.protopopov@gmail.com>
+ <20251019202145.3944697-6-a.s.protopopov@gmail.com>
+ <9660d7d3d3348bdf84c0a1a2861b66db9e2cc980.camel@gmail.com>
+ <aPjfuZd+370hXFLJ@mail.gmail.com>
+ <0e98a654792b6ab8002b0cf7ddf604e20b2f8f5e.camel@gmail.com>
+ <aPjlANnS+hj09w2s@mail.gmail.com>
+ <d5babd1d0a1ff4b1d5f11a95bde7881f7c970272.camel@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d5babd1d0a1ff4b1d5f11a95bde7881f7c970272.camel@gmail.com>
 
-On Wed, 22 Oct 2025 13:22:25 +0200 Maciej Fijalkowski wrote:
-> > > veth's pp works on order-0 pages well, however I agree it would be better
-> > > to use virt_to_head_page() here.  
+On 25/10/22 07:03AM, Eduard Zingerman wrote:
+> On Wed, 2025-10-22 at 14:06 +0000, Anton Protopopov wrote:
+> 
+> [...]
+> 
+> > > > > > diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_insn_array.c b/tools/testing/selftests/bpf/prog_tests/bpf_insn_array.c
+> > > > > > new file mode 100644
+> > > > > > index 000000000000..a4304ef5be13
+> > > > > > --- /dev/null
+> > > > > > +++ b/tools/testing/selftests/bpf/prog_tests/bpf_insn_array.c
+> > > > > 
+> > > > > [...]
+> > > > > 
+> > > > > > +static void check_bpf_no_lookup(void)
+> > > > > 
+> > > > > This one can be moved to prog_tests/bpf_insn_array.c, I think.
+> > > > 
+> > > > A typo? (This is a patch for the prog_tests/bpf_insn_array.c)
+> > > 
+> > > Yes, I mean progs/verifier_gotox.c, the one with inline assembly.
 > > 
-> > In this case the mem.type update is for consuming frags only, right?
-> > We can't free the head itself since the skb is attached to it.
-> > So running the predicates on xdp->data is probably wrong.  
+> > I think it should stay here. There will be other usages of the
+> > instruction array, and neither should allow operations on it from
+> > a BPF prog (indirect calls, static keys).
 > 
-> See the veth patch where we bump refcount of related pages in order to
-> keep the data as skb is consumed.
+> It will be functionally identical and like 3x-4x time shorter in that file.
 
-That one is wrong too. In veth's case since we care about refs on
-individual frags you _should_ actually use skb->pp_recycle for the
-condition. And you need to test whether each individual fragment
-is from the PP. Basically call skb_pp_frag_ref() like
-skb_try_coalesce() does?
-
-BTW it is _not_ legal to call get_page() on slab pages any more
-so all of this code should probably fail when head_frag=0.
-But let's leave that problem to someone else.
-
-> > Is it possible to get to bpf_prog_run_generic_xdp() (with frags)
-> > and without going thru netif_skb_check_for_xdp() ? If no then
-> > frags must have come from skb_pp_cow(). 
-> > And the type is always MEM_TYPE_PAGE_POOL ?  
-> 
-> We have a fallback path netif_skb_check_for_xdp() that linearizes skb, in
-> case COW code failed. But bare in mind that bpf_prog_run_generic_xdp() has
-> other callsites, besides generic XDP itself (cpumap and devmap). That is
-> why I wouldn't like to base this helper on assumptions such as frags
-> presence -> mem_type is pp.
-
-I assumed cpumap and devmap must be hit from a generic XDP handler.
-Ergo we also much have gone thru the COW.
-
+Ok, I see. I will either move it there, or add another
+verifier_insn_array (if I see how to convert/create more "insn array
+level" tests like this).
