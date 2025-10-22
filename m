@@ -1,108 +1,116 @@
-Received: from out-185.mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D2C03587CC
-	for <bpf@vger.kernel.org>; Wed, 22 Oct 2025 16:09:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.185
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E74BB3587CD;
+	Wed, 22 Oct 2025 16:09:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761149389; cv=none; b=HSUPNL7RyawasbRulAnkJDZGw3pmzKd/YKrce27n3fM5BKhFUvX20cCcdnIlacub/8xzgmYbyyJIfLqSSp7YrZKf4ndCJ8qQHl2pEW2ikAZZiBeirFmm7MJDGoEzPNMaa2eXSsz8dcAIwoE2B7HtOh5WluO9K9W2xdWi1n2WECc=
+	t=1761149390; cv=none; b=iDR//icmcKSc3LztYSeNG41Y3sI/SaIwhAf5fbH0UcAAiEY49TXpK26fHODL2QFn8tgP38/GukV4GKt5cuehNAiUUQqE+b7kLfrOZ2ImpRN5CWBQrSopf57nsr5VtsnAUPwWEpjPfpqbmlOGvyq5aMLMTeV3Ailm6FbqyPoBZhM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761149389; c=relaxed/simple;
-	bh=kCv5GZq3aXFKjf+qpb+MVrtS6nZnSsKamPeJnxcujeI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aDoyiPme32NCnd4D02R6kr3DcVlsfjRDRqgUSyHLhORT5A19jATVU/pGrm5vJaFg4aOWXjpU6ha1aeNkkhUOXw3F8lRT4TjQGGwu4H03tH+mbSURdmikdj5WjZ/G7QLH6LBvoIK5Kpd1uCc6xAVZc2Qx4KLltM+ROjFD6Cy0xX8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=tUminb+T; arc=none smtp.client-ip=91.218.175.185
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1761149390; c=relaxed/simple;
+	bh=zSBiD0DmDYcPFHCmh4S9YgYEBZCkP3T4DUO3iD7+Aw0=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=sF7C/qLwD6EXaQl0GLX6eKeBCWwcLlP8gfgpqjaJmFxLDtEWOYgU1Bh68uanAlni9rCgUcN48FHVHRj773uqtnllhQyvoPBCN1mC1XquZyT7Z+8nXp4Uv5SkRcqbmYI771qsLTS6WcjqUcNiSNS5Ox4B1uGFHvIDVwuDJyRn4XA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JWuMwFcf; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="tUminb+T"
-Message-ID: <e2e9b239-784f-411f-bd1b-8fcf103609ff@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1761149375;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=h+0kkqV8nNznZBElyk26pXakcabrm8PG0JX9d48AtfQ=;
-	b=tUminb+TWDKYU6LcCoz+iY2hUJVKaArB5uQrLkFnzOV1rSKYF4nFzcobQJ1tV9sJgp6M5J
-	zd3wjncFIrF6ctmnrzNOoL85fSSKUGDjjJbzALthdTP2aCnvFUFGkH50JZjFVaKoYaSHxL
-	5pLa08nwYoq8MUhb3s4iv3LwdZ+v7GU=
-Date: Thu, 23 Oct 2025 00:08:32 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JWuMwFcf"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5DF5C4CEE7;
+	Wed, 22 Oct 2025 16:09:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1761149389;
+	bh=zSBiD0DmDYcPFHCmh4S9YgYEBZCkP3T4DUO3iD7+Aw0=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=JWuMwFcfFVHeohkDUR7yKhVbNjItZsw7rpK1Fg8MObxzX+C+i1Vvnf4ghdAty6TIv
+	 JhlqZS3z5NUEV56kHwkN8L5daIlecaMhX3RQk89Y7hUddeVmDqQpa67dDw4FutnnhZ
+	 tGy9gI8oYjq9UCTv2XgbR4cxma4N4DPVkS/LSKsxUQf1y5ACjqSYGR6pgparv3C1BR
+	 0qbD5m5vqEZ8m2l3QA/MDaV/MPv4vD3iu0BNjU70/oT5VHLb2TW31sD52bZ6jwMMEr
+	 OgtSoR0OLns/YnwNhgNkiBE9eb9di8UvFLVLNIewwLgw5f1yE8T7NjNz+2XWS23CVz
+	 iyxfM3z51xeSQ==
+From: Christian Brauner <brauner@kernel.org>
+Date: Wed, 22 Oct 2025 18:06:20 +0200
+Subject: [PATCH v2 42/63] selftests/namespaces: seventh listns() test
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v4 2/2] bpf: Use per-cpu BPF callchain entry to
- save callchain
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
- Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
- Adrian Hunter <adrian.hunter@intel.com>,
- Kan Liang <kan.liang@linux.intel.com>, Song Liu <song@kernel.org>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard <eddyz87@gmail.com>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- "linux-perf-use." <linux-perf-users@vger.kernel.org>,
- LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>
-References: <20251021160633.3046301-1-chen.dylane@linux.dev>
- <20251021160633.3046301-3-chen.dylane@linux.dev>
- <CAADnVQJ2BrLy1FVEQmnN33ZqNZn0Nge1n6V89=p4NptjQNyHog@mail.gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Tao Chen <chen.dylane@linux.dev>
-In-Reply-To: <CAADnVQJ2BrLy1FVEQmnN33ZqNZn0Nge1n6V89=p4NptjQNyHog@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20251022-work-namespace-nstree-listns-v2-42-71a588572371@kernel.org>
+References: <20251022-work-namespace-nstree-listns-v2-0-71a588572371@kernel.org>
+In-Reply-To: <20251022-work-namespace-nstree-listns-v2-0-71a588572371@kernel.org>
+To: linux-fsdevel@vger.kernel.org, Josef Bacik <josef@toxicpanda.com>, 
+ Jeff Layton <jlayton@kernel.org>
+Cc: Jann Horn <jannh@google.com>, Mike Yuan <me@yhndnzj.com>, 
+ =?utf-8?q?Zbigniew_J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>, 
+ Lennart Poettering <mzxreary@0pointer.de>, 
+ Daan De Meyer <daan.j.demeyer@gmail.com>, Aleksa Sarai <cyphar@cyphar.com>, 
+ Amir Goldstein <amir73il@gmail.com>, Tejun Heo <tj@kernel.org>, 
+ Johannes Weiner <hannes@cmpxchg.org>, Thomas Gleixner <tglx@linutronix.de>, 
+ Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
+ linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, bpf@vger.kernel.org, 
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+ netdev@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>, 
+ Christian Brauner <brauner@kernel.org>
+X-Mailer: b4 0.15-dev-96507
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1404; i=brauner@kernel.org;
+ h=from:subject:message-id; bh=zSBiD0DmDYcPFHCmh4S9YgYEBZCkP3T4DUO3iD7+Aw0=;
+ b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWT8ZHh27XyDevCyzhX1fhkcfj6LKvdob1qQ9e3cr7zY1
+ mdMsqzyHaUsDGJcDLJiiiwO7Sbhcst5KjYbZWrAzGFlAhnCwMUpABORnsbIsKdg+um162OzBYRu
+ zXx0YfO9BaJZ03TWlmzWz1RbE3YjeC0jw5HOL8rfn5loR+x4foJznUU/T62J9roz61kWJ7Cs89o
+ 8gREA
+X-Developer-Key: i=brauner@kernel.org; a=openpgp;
+ fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 
-在 2025/10/22 01:28, Alexei Starovoitov 写道:
-> On Tue, Oct 21, 2025 at 9:07 AM Tao Chen <chen.dylane@linux.dev> wrote:
->>
->> As Alexei noted, get_perf_callchain() return values may be reused
->> if a task is preempted after the BPF program enters migrate disable
->> mode. Drawing on the per-cpu design of bpf_bprintf_buffers,
->> per-cpu BPF callchain entry is used here.
->>
->> Signed-off-by: Tao Chen <chen.dylane@linux.dev>
->> ---
->>   kernel/bpf/stackmap.c | 98 ++++++++++++++++++++++++++++++++-----------
->>   1 file changed, 73 insertions(+), 25 deletions(-)
->>
->> diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
->> index 94e46b7f340..97028d39df1 100644
->> --- a/kernel/bpf/stackmap.c
->> +++ b/kernel/bpf/stackmap.c
->> @@ -31,6 +31,52 @@ struct bpf_stack_map {
->>          struct stack_map_bucket *buckets[] __counted_by(n_buckets);
->>   };
->>
->> +struct bpf_perf_callchain_entry {
->> +       u64 nr;
->> +       u64 ip[PERF_MAX_STACK_DEPTH];
->> +};
->> +
->> +#define MAX_PERF_CALLCHAIN_PREEMPT 3
->> +static DEFINE_PER_CPU(struct bpf_perf_callchain_entry[MAX_PERF_CALLCHAIN_PREEMPT],
->> +                     bpf_perf_callchain_entries);
->> +static DEFINE_PER_CPU(int, bpf_perf_callchain_preempt_cnt);
-> 
-> This is too much extra memory. Above adds 1k * 3 * num_cpus.
-> Let's reuse perf callchains.
-> Especially since they're controlled by perf_event_max_stack sysctl.
-> See Peter's suggestion in v3.
-> And for the future don't respin so quickly.
+Test listns() with multiple namespace types filter.
 
-Ok, let's base our discussion on v3, sorry for the overly rapid version 
-iterations impacted the maintainers' review process, i will respin 
-slowly, thanks.
+Signed-off-by: Christian Brauner <brauner@kernel.org>
+---
+ tools/testing/selftests/namespaces/listns_test.c | 31 ++++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
+
+diff --git a/tools/testing/selftests/namespaces/listns_test.c b/tools/testing/selftests/namespaces/listns_test.c
+index e1e90ef933cf..6afffddf9764 100644
+--- a/tools/testing/selftests/namespaces/listns_test.c
++++ b/tools/testing/selftests/namespaces/listns_test.c
+@@ -436,4 +436,35 @@ TEST(listns_specific_userns)
+ 	waitpid(pid, &status, 0);
+ }
+ 
++/*
++ * Test listns() with multiple namespace types filter.
++ */
++TEST(listns_multiple_types)
++{
++	struct ns_id_req req = {
++		.size = sizeof(req),
++		.spare = 0,
++		.ns_id = 0,
++		.ns_type = CLONE_NEWNET | CLONE_NEWUTS,  /* Network and UTS */
++		.spare2 = 0,
++		.user_ns_id = 0,
++	};
++	__u64 ns_ids[100];
++	ssize_t ret;
++
++	ret = sys_listns(&req, ns_ids, ARRAY_SIZE(ns_ids), 0);
++	if (ret < 0) {
++		if (errno == ENOSYS)
++			SKIP(return, "listns() not supported");
++		TH_LOG("listns failed: %s (errno=%d)", strerror(errno), errno);
++		ASSERT_TRUE(false);
++	}
++	ASSERT_GE(ret, 0);
++
++	TH_LOG("Found %zd active network/UTS namespaces", ret);
++
++	for (ssize_t i = 0; i < ret; i++)
++		TH_LOG("  [%zd] ns_id: %llu", i, (unsigned long long)ns_ids[i]);
++}
++
+ TEST_HARNESS_MAIN
 
 -- 
-Best Regards
-Tao Chen
+2.47.3
+
