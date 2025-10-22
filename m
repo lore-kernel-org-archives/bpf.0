@@ -1,195 +1,108 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-185.mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF2052773D2;
-	Wed, 22 Oct 2025 16:09:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D2C03587CC
+	for <bpf@vger.kernel.org>; Wed, 22 Oct 2025 16:09:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.185
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761149384; cv=none; b=LlB3kVqhpcIVuHPrggLivEchkXD23b+3MihBWAUv0LHOsjAYQudPXqupaV+al70DVrpleERTI+xeWQMor9iasUE0+GqDeV4nqJYPW+l35/vivZvE/hKX1YzBG+f8idrgK6B+MvW65ZOmK259JRG4JoopJ2UBGcb1FAE+BGwy03s=
+	t=1761149389; cv=none; b=HSUPNL7RyawasbRulAnkJDZGw3pmzKd/YKrce27n3fM5BKhFUvX20cCcdnIlacub/8xzgmYbyyJIfLqSSp7YrZKf4ndCJ8qQHl2pEW2ikAZZiBeirFmm7MJDGoEzPNMaa2eXSsz8dcAIwoE2B7HtOh5WluO9K9W2xdWi1n2WECc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761149384; c=relaxed/simple;
-	bh=4vBs0iC1GliO+F4XrLBJxRIywFUw/24vdpBSDdc51/s=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ZDqvT4dtN6YuUTVhCxP8yiBkgFDhWcbMqk3Yek7B2Pe6viz0bHZ8aoAdcRUDiDsE3OfxHWk7vFb7PF3o/vkpEW9X7VFyM8Rk570aYoQgTsiotdMMUnpfyzaTlALhOVN9HqrZJ99wRun3hFNyq79aTi1Y9aEdeCCfQgZy9z664Ic=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=segBop61; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1761149389; c=relaxed/simple;
+	bh=kCv5GZq3aXFKjf+qpb+MVrtS6nZnSsKamPeJnxcujeI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=aDoyiPme32NCnd4D02R6kr3DcVlsfjRDRqgUSyHLhORT5A19jATVU/pGrm5vJaFg4aOWXjpU6ha1aeNkkhUOXw3F8lRT4TjQGGwu4H03tH+mbSURdmikdj5WjZ/G7QLH6LBvoIK5Kpd1uCc6xAVZc2Qx4KLltM+ROjFD6Cy0xX8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=tUminb+T; arc=none smtp.client-ip=91.218.175.185
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="segBop61"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 487EFC116B1;
-	Wed, 22 Oct 2025 16:09:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761149384;
-	bh=4vBs0iC1GliO+F4XrLBJxRIywFUw/24vdpBSDdc51/s=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=segBop61K5CiFuINcw38i+jzw/Ejfd4any0YnKLytyJjAfjWwfjj5bsytutEQzXOH
-	 NZ8UK/ak2PNLzajBn3fTTcmW1lOWkae1lcRCFl6L4GcHsTO5kJMyAmOlsMtB0XNGr+
-	 vGGF3bv2Vrt8ZUDNZmA9qOJ5rweRGu+vmt/hIZg144J4CiYp1vGUXEhM/wyYzyFJke
-	 zDVNmznDs7z7sReoyEoy0V74F2pLhd/Ncrio0CpfCTroeFW4EWtgsVJ5nbRTaIgOMu
-	 2grX3+W2pRWCoG7JwY+mGJo+7e8yTGWn1bWu9rKFbC+5B/tZ8qUv5CfIxMRyxhkXDF
-	 2GFFzEcc/g8qQ==
-From: Christian Brauner <brauner@kernel.org>
-Date: Wed, 22 Oct 2025 18:06:19 +0200
-Subject: [PATCH v2 41/63] selftests/namespaces: sixth listns() test
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="tUminb+T"
+Message-ID: <e2e9b239-784f-411f-bd1b-8fcf103609ff@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1761149375;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=h+0kkqV8nNznZBElyk26pXakcabrm8PG0JX9d48AtfQ=;
+	b=tUminb+TWDKYU6LcCoz+iY2hUJVKaArB5uQrLkFnzOV1rSKYF4nFzcobQJ1tV9sJgp6M5J
+	zd3wjncFIrF6ctmnrzNOoL85fSSKUGDjjJbzALthdTP2aCnvFUFGkH50JZjFVaKoYaSHxL
+	5pLa08nwYoq8MUhb3s4iv3LwdZ+v7GU=
+Date: Thu, 23 Oct 2025 00:08:32 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251022-work-namespace-nstree-listns-v2-41-71a588572371@kernel.org>
-References: <20251022-work-namespace-nstree-listns-v2-0-71a588572371@kernel.org>
-In-Reply-To: <20251022-work-namespace-nstree-listns-v2-0-71a588572371@kernel.org>
-To: linux-fsdevel@vger.kernel.org, Josef Bacik <josef@toxicpanda.com>, 
- Jeff Layton <jlayton@kernel.org>
-Cc: Jann Horn <jannh@google.com>, Mike Yuan <me@yhndnzj.com>, 
- =?utf-8?q?Zbigniew_J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>, 
- Lennart Poettering <mzxreary@0pointer.de>, 
- Daan De Meyer <daan.j.demeyer@gmail.com>, Aleksa Sarai <cyphar@cyphar.com>, 
- Amir Goldstein <amir73il@gmail.com>, Tejun Heo <tj@kernel.org>, 
- Johannes Weiner <hannes@cmpxchg.org>, Thomas Gleixner <tglx@linutronix.de>, 
- Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
- linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, bpf@vger.kernel.org, 
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
- netdev@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>, 
- Christian Brauner <brauner@kernel.org>
-X-Mailer: b4 0.15-dev-96507
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3170; i=brauner@kernel.org;
- h=from:subject:message-id; bh=4vBs0iC1GliO+F4XrLBJxRIywFUw/24vdpBSDdc51/s=;
- b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWT8ZHgm+EP3RaW4VNXkwo8RsRkOefM1N1h9Wn1w4p8n6
- xoLD5xv7ChlYRDjYpAVU2RxaDcJl1vOU7HZKFMDZg4rE8gQBi5OAZjIkfWMDGe/iu68J+63qmn7
- Wa2Mtw/+cd6ZyBzy4Al/xdy92R/eljAx/E+NvrDqfVfew6Xie0KTrMp+hc63edu27YqF7qke9V1
- bZ7ADAA==
-X-Developer-Key: i=brauner@kernel.org; a=openpgp;
- fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
+Subject: Re: [PATCH bpf-next v4 2/2] bpf: Use per-cpu BPF callchain entry to
+ save callchain
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+ Adrian Hunter <adrian.hunter@intel.com>,
+ Kan Liang <kan.liang@linux.intel.com>, Song Liu <song@kernel.org>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard <eddyz87@gmail.com>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ "linux-perf-use." <linux-perf-users@vger.kernel.org>,
+ LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>
+References: <20251021160633.3046301-1-chen.dylane@linux.dev>
+ <20251021160633.3046301-3-chen.dylane@linux.dev>
+ <CAADnVQJ2BrLy1FVEQmnN33ZqNZn0Nge1n6V89=p4NptjQNyHog@mail.gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Tao Chen <chen.dylane@linux.dev>
+In-Reply-To: <CAADnVQJ2BrLy1FVEQmnN33ZqNZn0Nge1n6V89=p4NptjQNyHog@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Test listns() with specific user namespace ID.
-Create a user namespace and list namespaces it owns.
+在 2025/10/22 01:28, Alexei Starovoitov 写道:
+> On Tue, Oct 21, 2025 at 9:07 AM Tao Chen <chen.dylane@linux.dev> wrote:
+>>
+>> As Alexei noted, get_perf_callchain() return values may be reused
+>> if a task is preempted after the BPF program enters migrate disable
+>> mode. Drawing on the per-cpu design of bpf_bprintf_buffers,
+>> per-cpu BPF callchain entry is used here.
+>>
+>> Signed-off-by: Tao Chen <chen.dylane@linux.dev>
+>> ---
+>>   kernel/bpf/stackmap.c | 98 ++++++++++++++++++++++++++++++++-----------
+>>   1 file changed, 73 insertions(+), 25 deletions(-)
+>>
+>> diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
+>> index 94e46b7f340..97028d39df1 100644
+>> --- a/kernel/bpf/stackmap.c
+>> +++ b/kernel/bpf/stackmap.c
+>> @@ -31,6 +31,52 @@ struct bpf_stack_map {
+>>          struct stack_map_bucket *buckets[] __counted_by(n_buckets);
+>>   };
+>>
+>> +struct bpf_perf_callchain_entry {
+>> +       u64 nr;
+>> +       u64 ip[PERF_MAX_STACK_DEPTH];
+>> +};
+>> +
+>> +#define MAX_PERF_CALLCHAIN_PREEMPT 3
+>> +static DEFINE_PER_CPU(struct bpf_perf_callchain_entry[MAX_PERF_CALLCHAIN_PREEMPT],
+>> +                     bpf_perf_callchain_entries);
+>> +static DEFINE_PER_CPU(int, bpf_perf_callchain_preempt_cnt);
+> 
+> This is too much extra memory. Above adds 1k * 3 * num_cpus.
+> Let's reuse perf callchains.
+> Especially since they're controlled by perf_event_max_stack sysctl.
+> See Peter's suggestion in v3.
+> And for the future don't respin so quickly.
 
-Signed-off-by: Christian Brauner <brauner@kernel.org>
----
- tools/testing/selftests/namespaces/listns_test.c | 109 +++++++++++++++++++++++
- 1 file changed, 109 insertions(+)
-
-diff --git a/tools/testing/selftests/namespaces/listns_test.c b/tools/testing/selftests/namespaces/listns_test.c
-index e854794abe56..e1e90ef933cf 100644
---- a/tools/testing/selftests/namespaces/listns_test.c
-+++ b/tools/testing/selftests/namespaces/listns_test.c
-@@ -327,4 +327,113 @@ TEST(listns_only_active)
- 	}
- }
- 
-+/*
-+ * Test listns() with specific user namespace ID.
-+ * Create a user namespace and list namespaces it owns.
-+ */
-+TEST(listns_specific_userns)
-+{
-+	struct ns_id_req req = {
-+		.size = sizeof(req),
-+		.spare = 0,
-+		.ns_id = 0,
-+		.ns_type = 0,
-+		.spare2 = 0,
-+		.user_ns_id = 0,  /* Will be filled with created userns ID */
-+	};
-+	__u64 ns_ids[100];
-+	int pipefd[2];
-+	pid_t pid;
-+	int status;
-+	__u64 user_ns_id = 0;
-+	int bytes;
-+	ssize_t ret;
-+
-+	ASSERT_EQ(pipe(pipefd), 0);
-+
-+	pid = fork();
-+	ASSERT_GE(pid, 0);
-+
-+	if (pid == 0) {
-+		int fd;
-+		__u64 ns_id;
-+		char buf;
-+
-+		close(pipefd[0]);
-+
-+		/* Create new user namespace */
-+		if (setup_userns() < 0) {
-+			close(pipefd[1]);
-+			exit(1);
-+		}
-+
-+		/* Get user namespace ID */
-+		fd = open("/proc/self/ns/user", O_RDONLY);
-+		if (fd < 0) {
-+			close(pipefd[1]);
-+			exit(1);
-+		}
-+
-+		if (ioctl(fd, NS_GET_ID, &ns_id) < 0) {
-+			close(fd);
-+			close(pipefd[1]);
-+			exit(1);
-+		}
-+		close(fd);
-+
-+		/* Send ID to parent */
-+		write(pipefd[1], &ns_id, sizeof(ns_id));
-+
-+		/* Create some namespaces owned by this user namespace */
-+		unshare(CLONE_NEWNET);
-+		unshare(CLONE_NEWUTS);
-+
-+		/* Wait for parent signal */
-+		read(pipefd[1], &buf, 1);
-+		close(pipefd[1]);
-+		exit(0);
-+	}
-+
-+	/* Parent */
-+	close(pipefd[1]);
-+	bytes = read(pipefd[0], &user_ns_id, sizeof(user_ns_id));
-+
-+	if (bytes != sizeof(user_ns_id)) {
-+		close(pipefd[0]);
-+		kill(pid, SIGKILL);
-+		waitpid(pid, NULL, 0);
-+		SKIP(return, "Failed to get user namespace ID from child");
-+	}
-+
-+	TH_LOG("Child created user namespace with ID %llu", (unsigned long long)user_ns_id);
-+
-+	/* List namespaces owned by this user namespace */
-+	req.user_ns_id = user_ns_id;
-+	ret = sys_listns(&req, ns_ids, ARRAY_SIZE(ns_ids), 0);
-+
-+	if (ret < 0) {
-+		TH_LOG("listns failed: %s (errno=%d)", strerror(errno), errno);
-+		close(pipefd[0]);
-+		kill(pid, SIGKILL);
-+		waitpid(pid, NULL, 0);
-+		if (errno == ENOSYS) {
-+			SKIP(return, "listns() not supported");
-+		}
-+		ASSERT_GE(ret, 0);
-+	}
-+
-+	TH_LOG("Found %zd namespaces owned by user namespace %llu", ret,
-+	       (unsigned long long)user_ns_id);
-+
-+	/* Should find at least the network and UTS namespaces we created */
-+	if (ret > 0) {
-+		for (ssize_t i = 0; i < ret && i < 10; i++)
-+			TH_LOG("  [%zd] ns_id: %llu", i, (unsigned long long)ns_ids[i]);
-+	}
-+
-+	/* Signal child to exit */
-+	close(pipefd[0]);
-+	waitpid(pid, &status, 0);
-+}
-+
- TEST_HARNESS_MAIN
+Ok, let's base our discussion on v3, sorry for the overly rapid version 
+iterations impacted the maintainers' review process, i will respin 
+slowly, thanks.
 
 -- 
-2.47.3
-
+Best Regards
+Tao Chen
