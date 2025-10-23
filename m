@@ -1,163 +1,79 @@
-Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 760F13093AB
-	for <bpf@vger.kernel.org>; Thu, 23 Oct 2025 14:39:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA750331A43;
+	Thu, 23 Oct 2025 14:59:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761230349; cv=none; b=TBA2wzHiSc5sGSx8KQhL16rzYfUyeOGSZx1FrCo+kj5yeKv3HFO93CWxsAZ+qKyamBLhS7J5BF8azsYc6alqu63P5asjKdsNndeor2GOa7bc5jDo42sPXoa+JuMdhSz2rw8hUgTYJ0ZuRnLbIvOWiO/sB1TUd7Z8Ckj7zsvfWU4=
+	t=1761231570; cv=none; b=AfohWi4eAePnZB7l2RtXB4M7TX4wk18KC9Ir2dZ8KFbKW0zDMLKXGaex6SvqyHUIwxPv0skoNBpOsh1JMHMCiR97URgCQLhsZyuyyAozfOt+ZVZAUfQac23bJOhwd3+1z20eiZKZtY7gSJsHVFjn04kALvnxnq4KnH/OTUoNvxE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761230349; c=relaxed/simple;
-	bh=QhwyrjBpjgfOnL3bdRWqdkRQ3slK04/PCvNpP+0vgrA=;
-	h=MIME-Version:Date:Content-Type:From:Message-ID:Subject:To:Cc:
-	 In-Reply-To:References; b=hqdJ6MK0JiLfJFmQUL+jToPq+Qy3vssBdaeyfQVtdOsZZaJDQT9IVEhglyieTaJvaGnwWGvDMDyzuc6LW8URC/58x6rnK3HH4sh8rpa3OMvkdJp/+2pByCCgvTRUp7vb445hs1a/GZuc4CDoTvbZOCqZAsD1SekfKOPG5aY5ScM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=kXXlt/Pm; arc=none smtp.client-ip=91.218.175.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1761231570; c=relaxed/simple;
+	bh=GPdBabhVMz00PmjPDHJUDEisRq2eynd1CMSKt9Sw9TA=;
+	h=Subject:From:To:Cc:Date:Message-ID:MIME-Version:Content-Type; b=mPTqmzO6dKXAeNulO/7XSvKu94F4eDPg4mvmjIsluwxGp0W4RC8GksK0aIis3flnBjMlwAV+3Dwpg/ImkjrJ0yzSH+0/P9rqVLD8PwwD0B/MB0lltBnIKkaJclxpwW2O1barZ6W5/I8rueycC7H7oHxESFH3SXRilVcPnlxQ0S4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M+ppGgVp; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="kXXlt/Pm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M+ppGgVp"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AE1AC4CEE7;
+	Thu, 23 Oct 2025 14:59:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1761231570;
+	bh=GPdBabhVMz00PmjPDHJUDEisRq2eynd1CMSKt9Sw9TA=;
+	h=Subject:From:To:Cc:Date:From;
+	b=M+ppGgVphmKfECZdCOOPQfYPGmq/JPz6FfeRfP2Bz8vorg294mFTgWW7YG3sAqJJC
+	 xUufkWyFPYsFnG3oKONq3swouaevuvb5L6v33YLzTqGE9/Nxjx/VWkgS4uyU79VuyL
+	 Ugq3imSvxQBD4xO5WQARzQuukwGAU0dPTh2SWUVskCAzs04fySl80h+z5Y1qEIkuOY
+	 hC5OL4wKw7HwOEFchrNh5V46Bx9G4fI+ZDTl6SQM+2WRh9rUUri2/eORCbtiODCwcm
+	 9dAPE4llvruXFVhOycDDlqA+jG2fIWz/6eL3H+AsiR/DRJANDSX5nMI0h+Fu8sTaVm
+	 /8v2DlEwGLDOw==
+Subject: [PATCH net V1 0/3] veth: Fix TXQ stall race condition and add
+ recovery
+From: Jesper Dangaard Brouer <hawk@kernel.org>
+To: netdev@vger.kernel.org, makita.toshiaki@lab.ntt.co.jp
+Cc: Jesper Dangaard Brouer <hawk@kernel.org>,
+ Eric Dumazet <eric.dumazet@gmail.com>,
+ "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, ihor.solodrai@linux.dev,
+ toshiaki.makita1@gmail.com, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, kernel-team@cloudflare.com
+Date: Thu, 23 Oct 2025 16:59:24 +0200
+Message-ID: <176123150256.2281302.7000617032469740443.stgit@firesoul>
+User-Agent: StGit/1.5
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1761230335;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=HXi8UPiE0uzXnPOltiRRjCeAETESSly9AvRlExTJgIA=;
-	b=kXXlt/PmnGWBhr/8YGbWQbhMTVtkCX75zpERQmSDEVaSjJ5XMSBNMm/FjDodgaCz1DGrgQ
-	68VSl35ipqt3t7pTFE/H3zuXGp4j744g1Fns2ErFrq6kQXzvml8yC13aQWoDgP8RNswLTi
-	PSJKoEQLTt2TMZ8UsJO3tpKhi+nTk9Y=
-Date: Thu, 23 Oct 2025 14:38:48 +0000
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: "Jiayuan Chen" <jiayuan.chen@linux.dev>
-Message-ID: <b722c37528e6f94bef828d6ca478a9fa8d33501a@linux.dev>
-TLS-Required: No
-Subject: Re: [PATCH net v3 1/3] net,mptcp: fix proto fallback detection with
- BPF sockmap
-To: "Matthieu Baerts" <matttbe@kernel.org>, mptcp@lists.linux.dev
-Cc: stable@vger.kernel.org, "Jakub Sitnicki" <jakub@cloudflare.com>, "John
- Fastabend" <john.fastabend@gmail.com>, "Eric Dumazet"
- <edumazet@google.com>, "Kuniyuki Iwashima" <kuniyu@google.com>, "Paolo
- Abeni" <pabeni@redhat.com>, "Willem de Bruijn" <willemb@google.com>,
- "David S. Miller" <davem@davemloft.net>, "Jakub Kicinski"
- <kuba@kernel.org>, "Simon Horman" <horms@kernel.org>, "Mat Martineau"
- <martineau@kernel.org>, "Geliang Tang" <geliang@kernel.org>, "Andrii
- Nakryiko" <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>,
- "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Song
- Liu" <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "KP
- Singh" <kpsingh@kernel.org>, "Stanislav Fomichev" <sdf@fomichev.me>, "Hao
- Luo" <haoluo@google.com>, "Jiri Olsa" <jolsa@kernel.org>, "Shuah Khan"
- <shuah@kernel.org>, "Florian Westphal" <fw@strlen.de>,
- linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
-In-Reply-To: <cc923a56-cf2d-4c3a-b1bd-90dbc3075ef2@kernel.org>
-References: <20251023125450.105859-1-jiayuan.chen@linux.dev>
- <20251023125450.105859-2-jiayuan.chen@linux.dev>
- <cc923a56-cf2d-4c3a-b1bd-90dbc3075ef2@kernel.org>
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 7bit
 
-October 23, 2025 at 22:10, "Matthieu Baerts" <matttbe@kernel.org mailto:m=
-atttbe@kernel.org?to=3D%22Matthieu%20Baerts%22%20%3Cmatttbe%40kernel.org%=
-3E > wrote:
+This patchset addresses a race condition introduced in commit dc82a33297fc
+("veth: apply qdisc backpressure on full ptr_ring to reduce TX drops"). In
+production, this has been observed to cause a permanently stalled transmit
+queue (TXQ) on ARM64 (Ampere Altra Max) systems, leading to a "lost wakeup"
+scenario where the TXQ remains in the QUEUE_STATE_DRV_XOFF state and traffic
+halts.
+
+The root cause, which is fixed in patch 3, is a racy use of the
+__ptr_ring_empty() API from the producer side (veth_xmit). The producer
+stops the queue and then checks the ptr_ring consumer's head, but this is
+not guaranteed to be correct, when observed from the producer side,
+when the NAPI consumer on another CPU has just finished consuming.
+
+This series fixes the bug and make the driver more resilient to recover.
+The patches are ordered to first add recovery mechanisms, then fix the
+underlying race.
+
+---
+
+Jesper Dangaard Brouer (3):
+      veth: enable dev_watchdog for detecting stalled TXQs
+      veth: stop and start all TX queue in netdev down/up
+      veth: more robust handing of race to avoid txq getting stuck
 
 
->=20
->=20Hi Jiayuan,
->=20
->=20On 23/10/2025 14:54, Jiayuan Chen wrote:
->=20
->=20>=20
->=20> When the server has MPTCP enabled but receives a non-MP-capable req=
-uest
-> >  from a client, it calls mptcp_fallback_tcp_ops().
-> >=20=20
->=20>  Since non-MPTCP connections are allowed to use sockmap, which repl=
-aces
-> >  sk->sk_prot, using sk->sk_prot to determine the IP version in
-> >  mptcp_fallback_tcp_ops() becomes unreliable. This can lead to assign=
-ing
-> >  incorrect ops to sk->sk_socket->ops.
-> >=20=20
->=20>  Additionally, when BPF Sockmap modifies the protocol handlers, the
-> >  original WARN_ON_ONCE(sk->sk_prot !=3D &tcp_prot) check would falsel=
-y
-> >  trigger warnings.
-> >=20=20
->=20>  Fix this by using the more stable sk_family to distinguish between=
- IPv4
-> >  and IPv6 connections, ensuring correct fallback protocol operations =
-are
-> >  selected even when BPF Sockmap has modified the socket protocol hand=
-lers.
-> >=20=20
->=20>  Fixes: 0b4f33def7bb ("mptcp: fix tcp fallback crash")
-> >  Cc: <stable@vger.kernel.org>
-> >  Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
-> >  Reviewed-by: Jakub Sitnicki <jakub@cloudflare.com>
-> >  ---
-> >  net/mptcp/protocol.c | 9 +++++++--
-> >  1 file changed, 7 insertions(+), 2 deletions(-)
-> >=20=20
->=20>  diff --git a/net/mptcp/protocol.c b/net/mptcp/protocol.c
-> >  index 0292162a14ee..2393741bc310 100644
-> >  --- a/net/mptcp/protocol.c
-> >  +++ b/net/mptcp/protocol.c
-> >  @@ -61,11 +61,16 @@ static u64 mptcp_wnd_end(const struct mptcp_sock=
- *msk)
-> >=20=20
->=20>  static const struct proto_ops *mptcp_fallback_tcp_ops(const struct=
- sock *sk)
-> >  {
-> >  + /* When BPF sockmap is used, it may replace sk->sk_prot.
-> >  + * Using sk_family is a reliable way to determine the IP version.
-> >  + */
-> >  + unsigned short family =3D READ_ONCE(sk->sk_family);
-> >  +
-> >  #if IS_ENABLED(CONFIG_MPTCP_IPV6)
-> >  - if (sk->sk_prot =3D=3D &tcpv6_prot)
-> >  + if (family =3D=3D AF_INET6)
-> >  return &inet6_stream_ops;
-> >  #endif
-> >  - WARN_ON_ONCE(sk->sk_prot !=3D &tcp_prot);
-> >  + WARN_ON_ONCE(family !=3D AF_INET);
-> >  return &inet_stream_ops;
-> >=20
->=20Just to be sure: is there anything in BPF modifying sk->sk_socket->op=
-s?
-> Because that's what mptcp_fallback_tcp_ops() will do somehow.
->=20
->=20In other words, is it always fine to set inet(6)_stream_ops? (I guess
-> yes, but better to be sure while we are looking at that :) )
+ drivers/net/veth.c | 59 +++++++++++++++++++++++++++++++---------------
+ 1 file changed, 40 insertions(+), 19 deletions(-)
 
+--
 
-
-Hi Matt,
-
-I can confirm that on the BPF side, the only special operations targeting
-sockets currently are sockmap/sockhash. Their implementations do not modi=
-fy
-sk->sk_socket->ops. Currently, they only modify sk->prot, because the BPF
-side typically operates on 'struct sock' and does not concern itself with
-'struct socket'.
-
-Therefore, setting inet(6)_stream_ops is fine.
-
-Thanks,
-Jiayuan
-
-> >=20
->=20> }
-> >=20
->=20Cheers,
-> Matt
-> --=20
->=20Sponsored by the NGI0 Core fund.
->
