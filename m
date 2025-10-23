@@ -1,60 +1,48 @@
-Received: from localhost.localdomain (unknown [147.136.157.3])
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BCBE314B6B;
-	Thu, 23 Oct 2025 12:55:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=147.136.157.3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F4E83148C6;
+	Thu, 23 Oct 2025 12:55:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761224109; cv=none; b=HheaBcaN6sBWy5IwN2jp9HGIleRrB/YWWFlsPl4eZ6xRO3ZqB7zMWLBWWMZdxkbLUWb/W0YLQPOYA+2drbyac0tc3L4itxy5E4pNKF1O/EXh3AAiuT6RlejV16pS6tGEcvCxoY2Y8maHDzAAoJZWe4nfyeHwGnZAiyYmq4SBzLA=
+	t=1761224139; cv=none; b=pmuJFWkaa/UXVySaiGx1dT5wXfZkWGciPgxKBVq3HayUtDQn5WD2RmWIEeRfhniAjxcBnYAghvWkqtOGZpkHAMctsT5HqJQZkWRFFy7Qv9ba6sCXtyqmM/gg83Js8v8QN0v8QVRIHT4F5GOdbcAFiQcdh9WxE18OXsK4juDbJ7Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761224109; c=relaxed/simple;
-	bh=W/LmQZFaC0hZ9FJnFTGtsVB8aix+jqzlSqyvRbr2McM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=MVOx7MSBYoyDN0fFcnYSaDzPZY/5fKtPnEA7f0nniqcXaHekwa7GkbZD7oqF3uCE9FqOE3Ti3Q1xo7PJWN7UqguWtrJ73jNe9mYgAThiAnbQHxIGboEj+DkKF1rn2D+beqC+8jr1KwamQ2s/SqKLOLIVOYoDX45n7CFQavrPMT8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=none smtp.mailfrom=localhost.localdomain; arc=none smtp.client-ip=147.136.157.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=localhost.localdomain
-Received: by localhost.localdomain (Postfix, from userid 1007)
-	id 8C4249291FF; Thu, 23 Oct 2025 20:55:00 +0800 (+08)
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-To: mptcp@lists.linux.dev
-Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
-	stable@vger.kernel.org,
-	Jakub Sitnicki <jakub@cloudflare.com>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Eric Dumazet <edumazet@google.com>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Willem de Bruijn <willemb@google.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Simon Horman <horms@kernel.org>,
-	Matthieu Baerts <matttbe@kernel.org>,
-	Mat Martineau <martineau@kernel.org>,
-	Geliang Tang <geliang@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Florian Westphal <fw@strlen.de>,
-	linux-kernel@vger.kernel.org,
+	s=arc-20240116; t=1761224139; c=relaxed/simple;
+	bh=CCrD+zL0i7TsZmVaHnMdyzwd9zDVAfQITT4beZIkG3Q=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=b2jiHgN/UDp+babV4222Hj2USfhmGft5QaYvNTZnqKw+VfEOYb9i0ZC63chm6XtlsFUDDVOkNP6FJWKgguSqxlkwVbSXi84X+IBKfMqX2qNG6LNu1zrLGOKkDRNV43j56IDkoTYrCtLdWhKk8MC2oLuszBxMmNoJ0ISDCcbEwDA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=G+KHs4ao; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="G+KHs4ao"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
+	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:In-Reply-To:References;
+	bh=sxnVyJf+Cj0EvdJChyG147AAxhoJqCkGEQp7nP4SPS8=; b=G+KHs4aoKTecXJih1UbSuhUveI
+	c6XadbTptJ0iWnD37llzNtYNcWnIjXL7ZRfCuPNrDrZotV5osxOr3RhzhGxdLzD5WP/VZOwKHxU8r
+	fnB7Kgp6eyjAEAhBl1Q71R9vOTz08LUhTavw6TzYfTFSNIGN7CynfmYJddnZbc58qkCqdfazD0y4s
+	NzEKnP1Bhhelp/eeSkckF9Tm7sewXmETzLBbsRwOzgSEwRmIjOVSYYM5acS+gT+jvACjkujR2I3UX
+	O5Uf7kITvg/Va2IBHVvxN2EjVexSG5DLCV7fxMnGHxWe7+nAT6kB1Y9AZglu2QDNFBSE10zWmAvUh
+	1ZOflCEA==;
+Received: from localhost ([127.0.0.1])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1vBuqr-0006AA-03;
+	Thu, 23 Oct 2025 14:55:33 +0200
+From: Daniel Borkmann <daniel@iogearbox.net>
+To: martin.lau@linux.dev
+Cc: bpf@vger.kernel.org,
 	netdev@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH net v3 2/3] bpf,sockmap: disallow MPTCP sockets from sockmap
-Date: Thu, 23 Oct 2025 20:54:33 +0800
-Message-ID: <20251023125450.105859-3-jiayuan.chen@linux.dev>
+	Yinhao Hu <dddddd@hust.edu.cn>,
+	Kaiyan Mei <M202472210@hust.edu.cn>,
+	Dongliang Mu <dzm91@hust.edu.cn>
+Subject: [PATCH bpf] bpf: Reject negative head_room in __bpf_skb_change_head
+Date: Thu, 23 Oct 2025 14:55:32 +0200
+Message-ID: <20251023125532.182262-1-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20251023125450.105859-1-jiayuan.chen@linux.dev>
-References: <20251023125450.105859-1-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -62,85 +50,57 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: Clear (ClamAV 1.0.9/27801/Thu Oct 23 11:45:29 2025)
 
-MPTCP creates subflows for data transmission, and these sockets should not
-be added to sockmap because MPTCP sets specialized data_ready handlers
-that would be overridden by sockmap.
+Yinhao et al. recently reported:
 
-Additionally, for the parent socket of MPTCP subflows (plain TCP socket),
-MPTCP sk requires specific protocol handling that conflicts with sockmap's
-operation(mptcp_prot).
+  Our fuzzing tool was able to create a BPF program which triggered
+  the below BUG condition inside pskb_expand_head.
 
-This patch adds proper checks to reject MPTCP subflows and their parent
-sockets from being added to sockmap, while preserving compatibility with
-reuseport functionality for listening MPTCP sockets.
+  [   23.016047][T10006] kernel BUG at net/core/skbuff.c:2232!
+  [...]
+  [   23.017301][T10006] RIP: 0010:pskb_expand_head+0x1519/0x1530
+  [...]
+  [   23.021249][T10006] Call Trace:
+  [   23.021387][T10006]  <TASK>
+  [   23.021507][T10006]  ? __pfx_pskb_expand_head+0x10/0x10
+  [   23.021725][T10006]  __bpf_skb_change_head+0x22a/0x520
+  [   23.021939][T10006]  bpf_skb_change_head+0x34/0x1b0
+  [   23.022143][T10006]  ___bpf_prog_run+0xf70/0xb670
+  [   23.022342][T10006]  __bpf_prog_run32+0xed/0x140
+  [...]
 
-We cannot add this logic to sock_map_sk_state_allowed() because the sockops
-path doesn't execute this function, and the socket state coming from
-sockops might be in states like SYN_RECV. So moving
-sock_map_sk_state_allowed() to sock_{map,hash}_update_common() is not
-appropriate. Instead, we introduce a new function to handle MPTCP checks.
+The problem is that in __bpf_skb_change_head() we need to reject a
+negative head_room as otherwise this propagates all the way to the
+pskb_expand_head() from skb_cow(). For example, if the BPF test infra
+passes a skb with gso_skb:1 to the BPF helper with a negative head_room
+of -22, then this gets passed into skb_cow(). __skb_cow() in this
+example calculates a delta of -86 which gets aligned to -64, and then
+triggers BUG_ON(nhead < 0). Thus, reject malformed negative input.
 
-Fixes: 0b4f33def7bb ("mptcp: fix tcp fallback crash")
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
-Suggested-by: Jakub Sitnicki <jakub@cloudflare.com>
+Fixes: 3a0af8fd61f9 ("bpf: BPF for lightweight tunnel infrastructure")
+Reported-by: Yinhao Hu <dddddd@hust.edu.cn>
+Reported-by: Kaiyan Mei <M202472210@hust.edu.cn>
+Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 ---
- net/core/sock_map.c | 27 +++++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
+ net/core/filter.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-index 5947b38e4f8b..5be38cdfb5cc 100644
---- a/net/core/sock_map.c
-+++ b/net/core/sock_map.c
-@@ -467,6 +467,27 @@ static int sock_map_get_next_key(struct bpf_map *map, void *key, void *next)
- 	return 0;
- }
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 76628df1fc82..fa06c5a08e22 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -3877,7 +3877,8 @@ static inline int __bpf_skb_change_head(struct sk_buff *skb, u32 head_room,
+ 	u32 new_len = skb->len + head_room;
+ 	int ret;
  
-+/* Disallow MPTCP subflows and their parent sockets. However, a TCP_LISTEN
-+ * MPTCP socket is permitted because sockmap can also serve for reuseport
-+ * socket selection.
-+ */
-+static inline bool sock_map_sk_type_allowed(const struct sock *sk)
-+{
-+	/* MPTCP subflows are not intended for data I/O by user */
-+	if (sk_is_tcp(sk) && sk_is_mptcp(sk))
-+		goto disallow;
-+
-+	/* MPTCP parents use mptcp_prot - not supported with sockmap yet */
-+	if (sk->sk_protocol == IPPROTO_MPTCP && sk->sk_state != TCP_LISTEN)
-+		goto disallow;
-+
-+	return true;
-+
-+disallow:
-+	pr_err_once("sockmap/sockhash: MPTCP sockets are not supported\n");
-+	return false;
-+}
-+
- static int sock_map_update_common(struct bpf_map *map, u32 idx,
- 				  struct sock *sk, u64 flags)
- {
-@@ -482,6 +503,9 @@ static int sock_map_update_common(struct bpf_map *map, u32 idx,
- 	if (unlikely(idx >= map->max_entries))
- 		return -E2BIG;
- 
-+	if (!sock_map_sk_type_allowed(sk))
-+		return -EOPNOTSUPP;
-+
- 	link = sk_psock_init_link();
- 	if (!link)
- 		return -ENOMEM;
-@@ -1003,6 +1027,9 @@ static int sock_hash_update_common(struct bpf_map *map, void *key,
- 	if (unlikely(flags > BPF_EXIST))
+-	if (unlikely(flags || (!skb_is_gso(skb) && new_len > max_len) ||
++	if (unlikely(flags || (int)head_room < 0 ||
++		     (!skb_is_gso(skb) && new_len > max_len) ||
+ 		     new_len < skb->len))
  		return -EINVAL;
  
-+	if (!sock_map_sk_type_allowed(sk))
-+		return -EOPNOTSUPP;
-+
- 	link = sk_psock_init_link();
- 	if (!link)
- 		return -ENOMEM;
 -- 
 2.43.0
 
