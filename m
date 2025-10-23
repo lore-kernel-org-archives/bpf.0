@@ -1,82 +1,40 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A73A732C933
-	for <bpf@vger.kernel.org>; Thu, 23 Oct 2025 13:53:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CDCA32144A
+	for <bpf@vger.kernel.org>; Thu, 23 Oct 2025 13:53:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761227618; cv=none; b=RC14ecJVtfhVWMX5bpcQvbvLRRjbeSO5lKB2+2W0cfWRltE/BbfSsmFpXb4ZNy5yOVq+E9Dkon7vrAa4aKXt+YoMsPQsI5eXzBJANd7QxEDDlYCuQwu855t2Xwv/QOaUgGWg7aMsPnF4uKgznfBm/XNmpZ+9dul5Pc4y/cHQaz0=
+	t=1761227621; cv=none; b=EJt3rwPTMNEO+ccOtUd9/xMQU0Zk/Ly12UmcY2pr8VyPJ7fEvQhEt93DliwTbmG92GIOSM7P8bJU5dUzJry6dovB0wTKnSHADJ98Wj3ptaerNTiTluY8hYeO8yVXy8P9j60KcjDEIrGKgOrNbl659toc1yOi05Au8wCLCPXGyfI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761227618; c=relaxed/simple;
-	bh=kGlyss7yiKflS0OqDJoFDJV4rSVeHfAEYl0ytzW/v5o=;
+	s=arc-20240116; t=1761227621; c=relaxed/simple;
+	bh=vx1wW9DLHRJV5gzusVwZw+FGAKUmsrqzn78ZmvdiWmA=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=JUDQTZaSn0cY2zykt58iWdULSoUk7w/49eRUQ6nz14tsOmULnVt8ICkMxWGKr3mYBRRr4JccQfsSHkntKkUCzSOINv4cFwnmcUjT2+ePbfVo2NHbrnvPIfCDYGSvu87Ju1XLce+JdaUw0PFG1yU6Ll87fVZfBmjm8/JsawprFE4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=MOGWAwma; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=r0KxwQdA; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=mOq003rK; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=G2xmdjNN; arc=none smtp.client-ip=195.135.223.130
+	 In-Reply-To:To:Cc; b=PJyUI/BOiSdrYOuomyvrwqiKCTF70PseAd4R603AnbZPjo6y0XiqKiZPvDU6DgIIglIB8AuC0nPlHHmG8Qmago9N9BTMlNQdVyWzwzktft5C7LJ9d5f9V6Jyw1q1Tu/wobMyUlQRu0eU6xQRq0s/bAaEkT+yvZ59ATXHeCX9NIQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; arc=none smtp.client-ip=195.135.223.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="MOGWAwma";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="r0KxwQdA";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="mOq003rK";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="G2xmdjNN"
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 7F26121254;
-	Thu, 23 Oct 2025 13:52:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1761227577; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=CDkwJ98STTAq4ia+HrB8vgXHgqJB0sa+3LSjpxlnzDw=;
-	b=MOGWAwmaoxKEnh8vs74Hcm4pw0oIiAYpsXZriSfUVqTO/TTa8aNIVXta266scg2cOMd8Qv
-	t0qZZ1IcDUG8vgfvKosfoeXzmGfX2CYXEvSHE8e0Li/jkQWECrSx8AwJAlNCCVznLZgFvm
-	x/lEzypTjtiF6PJSDGm4mtligfLvMgM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1761227577;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=CDkwJ98STTAq4ia+HrB8vgXHgqJB0sa+3LSjpxlnzDw=;
-	b=r0KxwQdAaUdUL4Xo2aWfDNJ8mH2RKeMubLYcyQhUHULjZ+J+e0eb5HEK0MXimGt8QpDGSr
-	B+knkOqEOuW2NXDA==
-Authentication-Results: smtp-out1.suse.de;
+	by smtp-out2.suse.de (Postfix) with ESMTPS id AB7B41F7CD;
+	Thu, 23 Oct 2025 13:53:01 +0000 (UTC)
+Authentication-Results: smtp-out2.suse.de;
 	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1761227573; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=CDkwJ98STTAq4ia+HrB8vgXHgqJB0sa+3LSjpxlnzDw=;
-	b=mOq003rKXktTSzUTadRVLVn+t7Jn4gCK9rN8teDDA5fd73LlacqNoctDMLg0dFwi71e3qd
-	J9RHX5su+pP2opVCJ2x9Hu6RYb4+HFHiTIdXgd4LYOONkTfEJcFE4wHb8dzkLFYTn+okwI
-	mBJLCh5CGmyCJBOkIVIPfuixg8XbQ5M=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1761227573;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=CDkwJ98STTAq4ia+HrB8vgXHgqJB0sa+3LSjpxlnzDw=;
-	b=G2xmdjNN0GsWMJ3Iha/JmZA9J9YOZT7o/B2QC0VLw6OCrLfwqlMPo5Dbd8VJ7+qsYZj41S
-	UN/NXM8hjUDvw8DA==
 Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 61FE713AE7;
-	Thu, 23 Oct 2025 13:52:53 +0000 (UTC)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 73D6613B0C;
+	Thu, 23 Oct 2025 13:52:54 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
 	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id aBahFzUz+mjvQQAAD6G6ig
-	(envelope-from <vbabka@suse.cz>); Thu, 23 Oct 2025 13:52:53 +0000
+	id AKv3GzYz+mjvQQAAD6G6ig
+	(envelope-from <vbabka@suse.cz>); Thu, 23 Oct 2025 13:52:54 +0000
 From: Vlastimil Babka <vbabka@suse.cz>
-Date: Thu, 23 Oct 2025 15:52:26 +0200
-Subject: [PATCH RFC 04/19] slab: prevent recursive kmalloc() in
- alloc_empty_sheaf()
+Date: Thu, 23 Oct 2025 15:52:36 +0200
+Subject: [PATCH RFC 14/19] slab: simplify kmalloc_nolock()
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -85,7 +43,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251023-sheaves-for-all-v1-4-6ffa2c9941c0@suse.cz>
+Message-Id: <20251023-sheaves-for-all-v1-14-6ffa2c9941c0@suse.cz>
 References: <20251023-sheaves-for-all-v1-0-6ffa2c9941c0@suse.cz>
 In-Reply-To: <20251023-sheaves-for-all-v1-0-6ffa2c9941c0@suse.cz>
 To: Andrew Morton <akpm@linux-foundation.org>, 
@@ -100,140 +58,217 @@ Cc: Uladzislau Rezki <urezki@gmail.com>,
  bpf@vger.kernel.org, kasan-dev@googlegroups.com, 
  Vlastimil Babka <vbabka@suse.cz>
 X-Mailer: b4 0.14.3
-X-Spam-Level: 
-X-Spamd-Result: default: False [-8.30 / 50.00];
-	REPLY(-4.00)[];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	RCVD_TLS_ALL(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[16];
-	ARC_NA(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[gmail.com,oracle.com,google.com,linutronix.de,kernel.org,kvack.org,vger.kernel.org,lists.linux.dev,googlegroups.com,suse.cz];
-	R_RATELIMIT(0.00)[to_ip_from(RLwn5r54y1cp81no5tmbbew5oc)];
-	FROM_EQ_ENVFROM(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:email,suse.cz:mid,imap1.dmz-prg2.suse.org:helo]
+X-Rspamd-Pre-Result: action=no action;
+	module=replies;
+	Message is reply to one we originated
+X-Rspamd-Queue-Id: AB7B41F7CD
+X-Rspamd-Pre-Result: action=no action;
+	module=replies;
+	Message is reply to one we originated
+X-Rspamd-Action: no action
 X-Spam-Flag: NO
-X-Spam-Score: -8.30
+X-Spam-Score: -4.00
+X-Spam-Level: 
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Spamd-Result: default: False [-4.00 / 50.00];
+	REPLY(-4.00)[]
 
-We want to expand usage of sheaves to all non-boot caches, including
-kmalloc caches. Since sheaves themselves are also allocated by
-kmalloc(), we need to prevent excessive or infinite recursion -
-depending on sheaf size, the sheaf can be allocated from smaller, same
-or larger kmalloc size bucket, there's no particular constraint.
+The kmalloc_nolock() implementation has several complications and
+restrictions due to SLUB's cpu slab locking, lockless fastpath and
+PREEMPT_RT differences. With cpu slab usage removed, we can simplify
+things:
 
-This is similar to allocating the objext arrays so let's just reuse the
-existing mechanisms for those. __GFP_NO_OBJ_EXT in alloc_empty_sheaf()
-will prevent a nested kmalloc() from allocating a sheaf itself - it will
-either have sheaves already, or fallback to a non-sheaf-cached
-allocation (so bootstrap of sheaves in a kmalloc cache that allocates
-sheaves from its own size bucket is possible). Additionally, reuse
-OBJCGS_CLEAR_MASK to clear unwanted gfp flags from the nested
-allocation.
+- the local_lock_cpu_slab() macros became unused, remove them
+
+- we no longer need to set up lockdep classes on PREEMPT_RT
+
+- we no longer need to annotate ___slab_alloc as NOKPROBE_SYMBOL
+  since there's no lockless cpu freelist manipulation anymore
+
+- __slab_alloc_node() can be called from kmalloc_nolock_noprof()
+  unconditionally
+
+Note that we still need __CMPXCHG_DOUBLE, because while it was removed
+we don't use cmpxchg16b on cpu freelist anymore, we still use it on
+slab freelist, and the alternative is slab_lock() which can be
+interrupted by a nmi. Clarify the comment to mention it specifically.
 
 Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
 ---
- include/linux/gfp_types.h |  6 ------
- mm/slub.c                 | 36 ++++++++++++++++++++++++++----------
- 2 files changed, 26 insertions(+), 16 deletions(-)
+ mm/slab.h |   1 -
+ mm/slub.c | 100 ++++----------------------------------------------------------
+ 2 files changed, 6 insertions(+), 95 deletions(-)
 
-diff --git a/include/linux/gfp_types.h b/include/linux/gfp_types.h
-index 65db9349f905..3de43b12209e 100644
---- a/include/linux/gfp_types.h
-+++ b/include/linux/gfp_types.h
-@@ -55,9 +55,7 @@ enum {
- #ifdef CONFIG_LOCKDEP
- 	___GFP_NOLOCKDEP_BIT,
- #endif
--#ifdef CONFIG_SLAB_OBJ_EXT
- 	___GFP_NO_OBJ_EXT_BIT,
--#endif
- 	___GFP_LAST_BIT
- };
- 
-@@ -98,11 +96,7 @@ enum {
- #else
- #define ___GFP_NOLOCKDEP	0
- #endif
--#ifdef CONFIG_SLAB_OBJ_EXT
- #define ___GFP_NO_OBJ_EXT       BIT(___GFP_NO_OBJ_EXT_BIT)
--#else
--#define ___GFP_NO_OBJ_EXT       0
--#endif
- 
- /*
-  * Physical address zone modifiers (see linux/mmzone.h - low four bits)
+diff --git a/mm/slab.h b/mm/slab.h
+index b2663cc594f3..7dde0b56a7b0 100644
+--- a/mm/slab.h
++++ b/mm/slab.h
+@@ -208,7 +208,6 @@ struct kmem_cache_order_objects {
+  */
+ struct kmem_cache {
+ 	struct kmem_cache_cpu __percpu *cpu_slab;
+-	struct lock_class_key lock_key;
+ 	struct slub_percpu_sheaves __percpu *cpu_sheaves;
+ 	/* Used for retrieving partial slabs, etc. */
+ 	slab_flags_t flags;
 diff --git a/mm/slub.c b/mm/slub.c
-index 68867cd52c4f..f2b2a6180759 100644
+index 6f5ca26bbb00..6dd7fd153391 100644
 --- a/mm/slub.c
 +++ b/mm/slub.c
-@@ -2031,6 +2031,14 @@ static bool freelist_corrupted(struct kmem_cache *s, struct slab *slab,
+@@ -3679,29 +3679,12 @@ static inline unsigned int init_tid(int cpu)
+ 
+ static void init_kmem_cache_cpus(struct kmem_cache *s)
+ {
+-#ifdef CONFIG_PREEMPT_RT
+-	/*
+-	 * Register lockdep key for non-boot kmem caches to avoid
+-	 * WARN_ON_ONCE(static_obj(key))) in lockdep_register_key()
+-	 */
+-	bool finegrain_lockdep = !init_section_contains(s, 1);
+-#else
+-	/*
+-	 * Don't bother with different lockdep classes for each
+-	 * kmem_cache, since we only use local_trylock_irqsave().
+-	 */
+-	bool finegrain_lockdep = false;
+-#endif
+ 	int cpu;
+ 	struct kmem_cache_cpu *c;
+ 
+-	if (finegrain_lockdep)
+-		lockdep_register_key(&s->lock_key);
+ 	for_each_possible_cpu(cpu) {
+ 		c = per_cpu_ptr(s->cpu_slab, cpu);
+ 		local_trylock_init(&c->lock);
+-		if (finegrain_lockdep)
+-			lockdep_set_class(&c->lock, &s->lock_key);
+ 		c->tid = init_tid(cpu);
+ 	}
  }
- #endif /* CONFIG_SLUB_DEBUG */
- 
-+/*
-+ * The allocated objcg pointers array is not accounted directly.
-+ * Moreover, it should not come from DMA buffer and is not readily
-+ * reclaimable. So those GFP bits should be masked off.
-+ */
-+#define OBJCGS_CLEAR_MASK	(__GFP_DMA | __GFP_RECLAIMABLE | \
-+				__GFP_ACCOUNT | __GFP_NOFAIL)
-+
- #ifdef CONFIG_SLAB_OBJ_EXT
- 
- #ifdef CONFIG_MEM_ALLOC_PROFILING_DEBUG
-@@ -2081,14 +2089,6 @@ static inline void handle_failed_objexts_alloc(unsigned long obj_exts,
- 
- #endif /* CONFIG_MEM_ALLOC_PROFILING_DEBUG */
+@@ -3792,47 +3775,6 @@ static void deactivate_slab(struct kmem_cache *s, struct slab *slab,
+ 	}
+ }
  
 -/*
-- * The allocated objcg pointers array is not accounted directly.
-- * Moreover, it should not come from DMA buffer and is not readily
-- * reclaimable. So those GFP bits should be masked off.
+- * ___slab_alloc()'s caller is supposed to check if kmem_cache::kmem_cache_cpu::lock
+- * can be acquired without a deadlock before invoking the function.
+- *
+- * Without LOCKDEP we trust the code to be correct. kmalloc_nolock() is
+- * using local_lock_is_locked() properly before calling local_lock_cpu_slab(),
+- * and kmalloc() is not used in an unsupported context.
+- *
+- * With LOCKDEP, on PREEMPT_RT lockdep does its checking in local_lock_irqsave().
+- * On !PREEMPT_RT we use trylock to avoid false positives in NMI, but
+- * lockdep_assert() will catch a bug in case:
+- * #1
+- * kmalloc() -> ___slab_alloc() -> irqsave -> NMI -> bpf -> kmalloc_nolock()
+- * or
+- * #2
+- * kmalloc() -> ___slab_alloc() -> irqsave -> tracepoint/kprobe -> bpf -> kmalloc_nolock()
+- *
+- * On PREEMPT_RT an invocation is not possible from IRQ-off or preempt
+- * disabled context. The lock will always be acquired and if needed it
+- * block and sleep until the lock is available.
+- * #1 is possible in !PREEMPT_RT only.
+- * #2 is possible in both with a twist that irqsave is replaced with rt_spinlock:
+- * kmalloc() -> ___slab_alloc() -> rt_spin_lock(kmem_cache_A) ->
+- *    tracepoint/kprobe -> bpf -> kmalloc_nolock() -> rt_spin_lock(kmem_cache_B)
+- *
+- * local_lock_is_locked() prevents the case kmem_cache_A == kmem_cache_B
 - */
--#define OBJCGS_CLEAR_MASK	(__GFP_DMA | __GFP_RECLAIMABLE | \
--				__GFP_ACCOUNT | __GFP_NOFAIL)
+-#if defined(CONFIG_PREEMPT_RT) || !defined(CONFIG_LOCKDEP)
+-#define local_lock_cpu_slab(s, flags)	\
+-	local_lock_irqsave(&(s)->cpu_slab->lock, flags)
+-#else
+-#define local_lock_cpu_slab(s, flags)					       \
+-	do {								       \
+-		bool __l = local_trylock_irqsave(&(s)->cpu_slab->lock, flags); \
+-		lockdep_assert(__l);					       \
+-	} while (0)
+-#endif
 -
- static inline void init_slab_obj_exts(struct slab *slab)
+-#define local_unlock_cpu_slab(s, flags)	\
+-	local_unlock_irqrestore(&(s)->cpu_slab->lock, flags)
+-
+ static inline void flush_slab(struct kmem_cache *s, struct kmem_cache_cpu *c)
  {
- 	slab->obj_exts = 0;
-@@ -2590,8 +2590,24 @@ static void *setup_object(struct kmem_cache *s, void *object)
+ 	unsigned long flags;
+@@ -4320,19 +4262,6 @@ static void *___slab_alloc(struct kmem_cache *s, gfp_t gfpflags, int node,
  
- static struct slab_sheaf *alloc_empty_sheaf(struct kmem_cache *s, gfp_t gfp)
- {
--	struct slab_sheaf *sheaf = kzalloc(struct_size(sheaf, objects,
--					s->sheaf_capacity), gfp);
-+	struct slab_sheaf *sheaf;
-+	size_t sheaf_size;
-+
-+	if (gfp & __GFP_NO_OBJ_EXT)
-+		return NULL;
-+
-+	gfp &= ~OBJCGS_CLEAR_MASK;
-+
-+	/*
-+	 * Prevent recursion to the same cache, or a deep stack of kmallocs of
-+	 * varying sizes (sheaf capacity might differ for each kmalloc size
-+	 * bucket)
-+	 */
-+	if (s->flags & SLAB_KMALLOC)
-+		gfp |= __GFP_NO_OBJ_EXT;
-+
-+	sheaf_size = struct_size(sheaf, objects, s->sheaf_capacity);
-+	sheaf = kzalloc(sheaf_size, gfp);
+ 	return freelist;
+ }
+-/*
+- * We disallow kprobes in ___slab_alloc() to prevent reentrance
+- *
+- * kmalloc() -> ___slab_alloc() -> local_lock_cpu_slab() protected part of
+- * ___slab_alloc() manipulating c->freelist -> kprobe -> bpf ->
+- * kmalloc_nolock() or kfree_nolock() -> __update_cpu_freelist_fast()
+- * manipulating c->freelist without lock.
+- *
+- * This does not prevent kprobe in functions called from ___slab_alloc() such as
+- * local_lock_irqsave() itself, and that is fine, we only need to protect the
+- * c->freelist manipulation in ___slab_alloc() itself.
+- */
+-NOKPROBE_SYMBOL(___slab_alloc);
  
- 	if (unlikely(!sheaf))
+ static __always_inline void *__slab_alloc_node(struct kmem_cache *s,
+ 		gfp_t gfpflags, int node, unsigned long addr, size_t orig_size)
+@@ -5201,10 +5130,11 @@ void *kmalloc_nolock_noprof(size_t size, gfp_t gfp_flags, int node)
+ 	if (!(s->flags & __CMPXCHG_DOUBLE) && !kmem_cache_debug(s))
+ 		/*
+ 		 * kmalloc_nolock() is not supported on architectures that
+-		 * don't implement cmpxchg16b, but debug caches don't use
+-		 * per-cpu slab and per-cpu partial slabs. They rely on
+-		 * kmem_cache_node->list_lock, so kmalloc_nolock() can
+-		 * attempt to allocate from debug caches by
++		 * don't implement cmpxchg16b and thus need slab_lock()
++		 * which could be preempted by a nmi.
++		 * But debug caches don't use that and only rely on
++		 * kmem_cache_node->list_lock, so kmalloc_nolock() can attempt
++		 * to allocate from debug caches by
+ 		 * spin_trylock_irqsave(&n->list_lock, ...)
+ 		 */
  		return NULL;
+@@ -5214,27 +5144,13 @@ void *kmalloc_nolock_noprof(size_t size, gfp_t gfp_flags, int node)
+ 	if (ret)
+ 		goto success;
+ 
+-	ret = ERR_PTR(-EBUSY);
+-
+ 	/*
+ 	 * Do not call slab_alloc_node(), since trylock mode isn't
+ 	 * compatible with slab_pre_alloc_hook/should_failslab and
+ 	 * kfence_alloc. Hence call __slab_alloc_node() (at most twice)
+ 	 * and slab_post_alloc_hook() directly.
+-	 *
+-	 * In !PREEMPT_RT ___slab_alloc() manipulates (freelist,tid) pair
+-	 * in irq saved region. It assumes that the same cpu will not
+-	 * __update_cpu_freelist_fast() into the same (freelist,tid) pair.
+-	 * Therefore use in_nmi() to check whether particular bucket is in
+-	 * irq protected section.
+-	 *
+-	 * If in_nmi() && local_lock_is_locked(s->cpu_slab) then it means that
+-	 * this cpu was interrupted somewhere inside ___slab_alloc() after
+-	 * it did local_lock_irqsave(&s->cpu_slab->lock, flags).
+-	 * In this case fast path with __update_cpu_freelist_fast() is not safe.
+ 	 */
+-	if (!in_nmi() || !local_lock_is_locked(&s->cpu_slab->lock))
+-		ret = __slab_alloc_node(s, alloc_gfp, node, _RET_IP_, size);
++	ret = __slab_alloc_node(s, alloc_gfp, node, _RET_IP_, size);
+ 
+ 	if (PTR_ERR(ret) == -EBUSY) {
+ 		if (can_retry) {
+@@ -7250,10 +7166,6 @@ void __kmem_cache_release(struct kmem_cache *s)
+ {
+ 	cache_random_seq_destroy(s);
+ 	pcs_destroy(s);
+-#ifdef CONFIG_PREEMPT_RT
+-	if (s->cpu_slab)
+-		lockdep_unregister_key(&s->lock_key);
+-#endif
+ 	free_percpu(s->cpu_slab);
+ 	free_kmem_cache_nodes(s);
+ }
 
 -- 
 2.51.1
