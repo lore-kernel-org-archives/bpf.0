@@ -1,82 +1,40 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6DF2320CA8
-	for <bpf@vger.kernel.org>; Thu, 23 Oct 2025 13:53:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAF91325489
+	for <bpf@vger.kernel.org>; Thu, 23 Oct 2025 13:53:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761227594; cv=none; b=g+1GCRxwrelut1GuAaJPSU6dQZ9BQ38kPm5V6HitDEWvzKghIlkWlyLQEw4vS6xBAaulZ7s9bsWgeZRAweBPF8fqxS9+NULHHmFrCPW3X0G3enmuS4xtUkn3N4EBdIzoNNvF+vrpyf9VHzR3RV9KX81f6ak7Cfu4T2tKHSjJdbs=
+	t=1761227600; cv=none; b=ktDc9LPufnrGdFwj8a17rK+3IfYwwDGm/6CeB+7GWtHBdfj66MWGBjSgDDEkq34Z+nUJjKN3Hy1mW9KTtOIFPVHmbae0ZMlgo34I0h4rvczC7diE9vHp7knHodHMfNWCKIrrHX6wcg0t53Chck6BPOpiHL20xr7qNsDgJp8Ul6c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761227594; c=relaxed/simple;
-	bh=6Iiz3AHt1Z1Af2WpTwoU9QnqqUvhGzaiRG7A77s07W8=;
+	s=arc-20240116; t=1761227600; c=relaxed/simple;
+	bh=KQiwdjlWi+QU+CtmEumm8wTca3KOEzviLAnxspZHrds=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=scu93iV8k2Dd34KUqyaC8td35fzN/EbH7aJGtq6vUsdiMUgyBCwW7qExumOJn8iY0arHRDIuUfWbfI8RMIu2XCdirAys6yRcK8iDWMpBMCXIS2A+YMgqd4eHSWxxWKINsVXQfQ55c0cjcXbnC/WJIkmSZqxyTT6QsZyE/ZrCMAE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=Mdy9BKbL; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=+uOlwOB7; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=EPf6Y90J; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=P0Lui0/h; arc=none smtp.client-ip=195.135.223.131
+	 In-Reply-To:To:Cc; b=louxgTJ1GN+fJdl0gyJpKM722EmfLKViqatyYljZUvMjm0V8vYZfgKLuV327z1obaPs/6ylRLTBXu/Kg4P7GNUWGbmMBRFITfS+2Cswwy1OjhHlivr4g1ERUwsI/6hVjuwggVCsvYEH5A4T9SeIORlVs2sNY4pCHn0xQvu5rhMs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; arc=none smtp.client-ip=195.135.223.130
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="Mdy9BKbL";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="+uOlwOB7";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="EPf6Y90J";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="P0Lui0/h"
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 356491F7E1;
-	Thu, 23 Oct 2025 13:52:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1761227577; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=BMsUktfL5WtFwPCNB5fqm7HAiF7pw4pM7Su8oc/8OIE=;
-	b=Mdy9BKbLm2lN1RACuTP3IEWpgAFVa7Fshte+HriO9fKIlEuuHazko/HNUO+TrJCgysS6DP
-	qbMkOSPnAP/Vc0fvnG7qJZY442AWC0MLCqAkwZuFx2sHw/wyTOc+6YgPhSLN2lLdrUj0Ip
-	gGDRhrZlP/wqYtKY9DGJUZXjMoYobRQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1761227577;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=BMsUktfL5WtFwPCNB5fqm7HAiF7pw4pM7Su8oc/8OIE=;
-	b=+uOlwOB7G6UnQ7VofjGwWpSWB1tS3X/MTsf0Mh39EL30Li3sFkbLqfoTr0+SKSACmSseLj
-	v75xnLK2L6+NXeCw==
-Authentication-Results: smtp-out2.suse.de;
+	by smtp-out1.suse.de (Postfix) with ESMTPS id AD1382124D;
+	Thu, 23 Oct 2025 13:53:01 +0000 (UTC)
+Authentication-Results: smtp-out1.suse.de;
 	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1761227573; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=BMsUktfL5WtFwPCNB5fqm7HAiF7pw4pM7Su8oc/8OIE=;
-	b=EPf6Y90JOImCC0jua9VvOIFRXsPvKG0JuNSvVby2rlaB3k8Xbx7Jhme7+aJ2qa/lBKSjDQ
-	mZokjHpOlgVfrSoTzRwMAY7Hs+WayoqduU/NJiVdK1sSb+gGEm0ZveoYdySE3r2ODfmuDS
-	ThembSqD8ecUvAKO2Y+xRGATadJj/yg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1761227573;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=BMsUktfL5WtFwPCNB5fqm7HAiF7pw4pM7Su8oc/8OIE=;
-	b=P0Lui0/h5SvlSmXMW6h8A4EhWC9Ya74OAhUoHOBv352Z7+wG0GrnqfP5cCtHxbpB0f+Jg1
-	IO7ol//+pdxU3YDQ==
 Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 11D48139D2;
-	Thu, 23 Oct 2025 13:52:53 +0000 (UTC)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 8CD2913B0D;
+	Thu, 23 Oct 2025 13:52:54 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
 	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id 6O8UBDUz+mjvQQAAD6G6ig
-	(envelope-from <vbabka@suse.cz>); Thu, 23 Oct 2025 13:52:53 +0000
+	id 8PcTIjYz+mjvQQAAD6G6ig
+	(envelope-from <vbabka@suse.cz>); Thu, 23 Oct 2025 13:52:54 +0000
 From: Vlastimil Babka <vbabka@suse.cz>
-Date: Thu, 23 Oct 2025 15:52:23 +0200
-Subject: [PATCH RFC 01/19] slab: move kfence_alloc() out of internal bulk
- alloc
+Date: Thu, 23 Oct 2025 15:52:37 +0200
+Subject: [PATCH RFC 15/19] slab: remove struct kmem_cache_cpu
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -85,7 +43,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251023-sheaves-for-all-v1-1-6ffa2c9941c0@suse.cz>
+Message-Id: <20251023-sheaves-for-all-v1-15-6ffa2c9941c0@suse.cz>
 References: <20251023-sheaves-for-all-v1-0-6ffa2c9941c0@suse.cz>
 In-Reply-To: <20251023-sheaves-for-all-v1-0-6ffa2c9941c0@suse.cz>
 To: Andrew Morton <akpm@linux-foundation.org>, 
@@ -98,161 +56,511 @@ Cc: Uladzislau Rezki <urezki@gmail.com>,
  Alexei Starovoitov <ast@kernel.org>, linux-mm@kvack.org, 
  linux-kernel@vger.kernel.org, linux-rt-devel@lists.linux.dev, 
  bpf@vger.kernel.org, kasan-dev@googlegroups.com, 
- Vlastimil Babka <vbabka@suse.cz>, Alexander Potapenko <glider@google.com>, 
- Marco Elver <elver@google.com>, Dmitry Vyukov <dvyukov@google.com>
+ Vlastimil Babka <vbabka@suse.cz>
 X-Mailer: b4 0.14.3
-X-Spamd-Result: default: False [-8.30 / 50.00];
-	REPLY(-4.00)[];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	RCVD_TLS_ALL(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[19];
-	ARC_NA(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[gmail.com,oracle.com,google.com,linutronix.de,kernel.org,kvack.org,vger.kernel.org,lists.linux.dev,googlegroups.com,suse.cz];
-	R_RATELIMIT(0.00)[to_ip_from(RLwn5r54y1cp81no5tmbbew5oc)];
-	FROM_EQ_ENVFROM(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,suse.cz:mid,suse.cz:email]
-X-Spam-Flag: NO
-X-Spam-Score: -8.30
+X-Rspamd-Pre-Result: action=no action;
+	module=replies;
+	Message is reply to one we originated
 X-Spam-Level: 
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Spamd-Result: default: False [-4.00 / 50.00];
+	REPLY(-4.00)[]
+X-Rspamd-Queue-Id: AD1382124D
+X-Rspamd-Pre-Result: action=no action;
+	module=replies;
+	Message is reply to one we originated
+X-Rspamd-Action: no action
+X-Spam-Flag: NO
+X-Spam-Score: -4.00
 
-SLUB's internal bulk allocation __kmem_cache_alloc_bulk() can currently
-allocate some objects from KFENCE, i.e. when refilling a sheaf. It works
-but it's conceptually the wrong layer, as KFENCE allocations should only
-happen when objects are actually handed out from slab to its users.
+The cpu slab is not used anymore for allocation or freeing, the
+remaining code is for flushing, but it's effectively dead.  Remove the
+whole struct kmem_cache_cpu, the flushing code and other orphaned
+functions.
 
-Currently for sheaf-enabled caches, slab_alloc_node() can return KFENCE
-object via kfence_alloc(), but also via alloc_from_pcs() when a sheaf
-was refilled with KFENCE objects. Continuing like this would also
-complicate the upcoming sheaf refill changes.
+The remaining used field of kmem_cache_cpu is the stat array with
+CONFIG_SLUB_STATS. Put it instead in a new struct kmem_cache_stats.
+In struct kmem_cache, the field is cpu_stats and placed near the
+end of the struct.
 
-Thus remove KFENCE allocation from __kmem_cache_alloc_bulk() and move it
-to the places that return slab objects to users. slab_alloc_node() is
-already covered (see above). Add kfence_alloc() to
-kmem_cache_alloc_from_sheaf() to handle KFENCE allocations from
-prefilled sheafs, with a comment that the caller should not expect the
-sheaf size to decrease after every allocation because of this
-possibility.
-
-For kmem_cache_alloc_bulk() implement a different strategy to handle
-KFENCE upfront and rely on internal batched operations afterwards.
-Assume there will be at most once KFENCE allocation per bulk allocation
-and then assign its index in the array of objects randomly.
-
-Cc: Alexander Potapenko <glider@google.com>
-Cc: Marco Elver <elver@google.com>
-Cc: Dmitry Vyukov <dvyukov@google.com>
 Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
 ---
- mm/slub.c | 44 ++++++++++++++++++++++++++++++++++++--------
- 1 file changed, 36 insertions(+), 8 deletions(-)
+ mm/slab.h |   7 +-
+ mm/slub.c | 298 +++++---------------------------------------------------------
+ 2 files changed, 24 insertions(+), 281 deletions(-)
 
+diff --git a/mm/slab.h b/mm/slab.h
+index 7dde0b56a7b0..62db8a347edf 100644
+--- a/mm/slab.h
++++ b/mm/slab.h
+@@ -21,14 +21,12 @@
+ # define system_has_freelist_aba()	system_has_cmpxchg128()
+ # define try_cmpxchg_freelist		try_cmpxchg128
+ # endif
+-#define this_cpu_try_cmpxchg_freelist	this_cpu_try_cmpxchg128
+ typedef u128 freelist_full_t;
+ #else /* CONFIG_64BIT */
+ # ifdef system_has_cmpxchg64
+ # define system_has_freelist_aba()	system_has_cmpxchg64()
+ # define try_cmpxchg_freelist		try_cmpxchg64
+ # endif
+-#define this_cpu_try_cmpxchg_freelist	this_cpu_try_cmpxchg64
+ typedef u64 freelist_full_t;
+ #endif /* CONFIG_64BIT */
+ 
+@@ -207,7 +205,6 @@ struct kmem_cache_order_objects {
+  * Slab cache management.
+  */
+ struct kmem_cache {
+-	struct kmem_cache_cpu __percpu *cpu_slab;
+ 	struct slub_percpu_sheaves __percpu *cpu_sheaves;
+ 	/* Used for retrieving partial slabs, etc. */
+ 	slab_flags_t flags;
+@@ -256,6 +253,10 @@ struct kmem_cache {
+ 	unsigned int usersize;		/* Usercopy region size */
+ #endif
+ 
++#ifdef CONFIG_SLUB_STATS
++	struct kmem_cache_stats __percpu *cpu_stats;
++#endif
++
+ 	struct kmem_cache_node *node[MAX_NUMNODES];
+ };
+ 
 diff --git a/mm/slub.c b/mm/slub.c
-index 87a1d2f9de0d..4731b9e461c2 100644
+index 6dd7fd153391..dcf28fc3a112 100644
 --- a/mm/slub.c
 +++ b/mm/slub.c
-@@ -5530,6 +5530,9 @@ int kmem_cache_refill_sheaf(struct kmem_cache *s, gfp_t gfp,
+@@ -403,24 +403,11 @@ enum stat_item {
+ 	NR_SLUB_STAT_ITEMS
+ };
+ 
+-/*
+- * When changing the layout, make sure freelist and tid are still compatible
+- * with this_cpu_cmpxchg_double() alignment requirements.
+- */
+-struct kmem_cache_cpu {
+-	union {
+-		struct {
+-			void **freelist;	/* Pointer to next available object */
+-			unsigned long tid;	/* Globally unique transaction id */
+-		};
+-		freelist_aba_t freelist_tid;
+-	};
+-	struct slab *slab;	/* The slab from which we are allocating */
+-	local_trylock_t lock;	/* Protects the fields above */
+ #ifdef CONFIG_SLUB_STATS
++struct kmem_cache_stats {
+ 	unsigned int stat[NR_SLUB_STAT_ITEMS];
+-#endif
+ };
++#endif
+ 
+ static inline void stat(const struct kmem_cache *s, enum stat_item si)
+ {
+@@ -429,7 +416,7 @@ static inline void stat(const struct kmem_cache *s, enum stat_item si)
+ 	 * The rmw is racy on a preemptible kernel but this is acceptable, so
+ 	 * avoid this_cpu_add()'s irq-disable overhead.
+ 	 */
+-	raw_cpu_inc(s->cpu_slab->stat[si]);
++	raw_cpu_inc(s->cpu_stats->stat[si]);
+ #endif
+ }
+ 
+@@ -437,7 +424,7 @@ static inline
+ void stat_add(const struct kmem_cache *s, enum stat_item si, int v)
+ {
+ #ifdef CONFIG_SLUB_STATS
+-	raw_cpu_add(s->cpu_slab->stat[si], v);
++	raw_cpu_add(s->cpu_stats->stat[si], v);
+ #endif
+ }
+ 
+@@ -1158,20 +1145,6 @@ static void object_err(struct kmem_cache *s, struct slab *slab,
+ 	WARN_ON(1);
+ }
+ 
+-static bool freelist_corrupted(struct kmem_cache *s, struct slab *slab,
+-			       void **freelist, void *nextfree)
+-{
+-	if ((s->flags & SLAB_CONSISTENCY_CHECKS) &&
+-	    !check_valid_pointer(s, slab, nextfree) && freelist) {
+-		object_err(s, slab, *freelist, "Freechain corrupt");
+-		*freelist = NULL;
+-		slab_fix(s, "Isolate corrupted freechain");
+-		return true;
+-	}
+-
+-	return false;
+-}
+-
+ static void __slab_err(struct slab *slab)
+ {
+ 	if (slab_in_kunit_test())
+@@ -1949,11 +1922,6 @@ static inline void inc_slabs_node(struct kmem_cache *s, int node,
+ 							int objects) {}
+ static inline void dec_slabs_node(struct kmem_cache *s, int node,
+ 							int objects) {}
+-static bool freelist_corrupted(struct kmem_cache *s, struct slab *slab,
+-			       void **freelist, void *nextfree)
+-{
+-	return false;
+-}
+ #endif /* CONFIG_SLUB_DEBUG */
+ 
+ /*
+@@ -3640,195 +3608,6 @@ static void *get_partial(struct kmem_cache *s, int node,
+ 	return get_any_partial(s, pc);
+ }
+ 
+-#ifdef CONFIG_PREEMPTION
+-/*
+- * Calculate the next globally unique transaction for disambiguation
+- * during cmpxchg. The transactions start with the cpu number and are then
+- * incremented by CONFIG_NR_CPUS.
+- */
+-#define TID_STEP  roundup_pow_of_two(CONFIG_NR_CPUS)
+-#else
+-/*
+- * No preemption supported therefore also no need to check for
+- * different cpus.
+- */
+-#define TID_STEP 1
+-#endif /* CONFIG_PREEMPTION */
+-
+-static inline unsigned long next_tid(unsigned long tid)
+-{
+-	return tid + TID_STEP;
+-}
+-
+-#ifdef SLUB_DEBUG_CMPXCHG
+-static inline unsigned int tid_to_cpu(unsigned long tid)
+-{
+-	return tid % TID_STEP;
+-}
+-
+-static inline unsigned long tid_to_event(unsigned long tid)
+-{
+-	return tid / TID_STEP;
+-}
+-#endif
+-
+-static inline unsigned int init_tid(int cpu)
+-{
+-	return cpu;
+-}
+-
+-static void init_kmem_cache_cpus(struct kmem_cache *s)
+-{
+-	int cpu;
+-	struct kmem_cache_cpu *c;
+-
+-	for_each_possible_cpu(cpu) {
+-		c = per_cpu_ptr(s->cpu_slab, cpu);
+-		local_trylock_init(&c->lock);
+-		c->tid = init_tid(cpu);
+-	}
+-}
+-
+-/*
+- * Finishes removing the cpu slab. Merges cpu's freelist with slab's freelist,
+- * unfreezes the slabs and puts it on the proper list.
+- * Assumes the slab has been already safely taken away from kmem_cache_cpu
+- * by the caller.
+- */
+-static void deactivate_slab(struct kmem_cache *s, struct slab *slab,
+-			    void *freelist)
+-{
+-	struct kmem_cache_node *n = get_node(s, slab_nid(slab));
+-	int free_delta = 0;
+-	void *nextfree, *freelist_iter, *freelist_tail;
+-	int tail = DEACTIVATE_TO_HEAD;
+-	unsigned long flags = 0;
+-	struct slab new;
+-	struct slab old;
+-
+-	if (READ_ONCE(slab->freelist)) {
+-		stat(s, DEACTIVATE_REMOTE_FREES);
+-		tail = DEACTIVATE_TO_TAIL;
+-	}
+-
+-	/*
+-	 * Stage one: Count the objects on cpu's freelist as free_delta and
+-	 * remember the last object in freelist_tail for later splicing.
+-	 */
+-	freelist_tail = NULL;
+-	freelist_iter = freelist;
+-	while (freelist_iter) {
+-		nextfree = get_freepointer(s, freelist_iter);
+-
+-		/*
+-		 * If 'nextfree' is invalid, it is possible that the object at
+-		 * 'freelist_iter' is already corrupted.  So isolate all objects
+-		 * starting at 'freelist_iter' by skipping them.
+-		 */
+-		if (freelist_corrupted(s, slab, &freelist_iter, nextfree))
+-			break;
+-
+-		freelist_tail = freelist_iter;
+-		free_delta++;
+-
+-		freelist_iter = nextfree;
+-	}
+-
+-	/*
+-	 * Stage two: Unfreeze the slab while splicing the per-cpu
+-	 * freelist to the head of slab's freelist.
+-	 */
+-	do {
+-		old.freelist = READ_ONCE(slab->freelist);
+-		old.counters = READ_ONCE(slab->counters);
+-		VM_BUG_ON(!old.frozen);
+-
+-		/* Determine target state of the slab */
+-		new.counters = old.counters;
+-		new.frozen = 0;
+-		if (freelist_tail) {
+-			new.inuse -= free_delta;
+-			set_freepointer(s, freelist_tail, old.freelist);
+-			new.freelist = freelist;
+-		} else {
+-			new.freelist = old.freelist;
+-		}
+-	} while (!slab_update_freelist(s, slab,
+-		old.freelist, old.counters,
+-		new.freelist, new.counters,
+-		"unfreezing slab"));
+-
+-	/*
+-	 * Stage three: Manipulate the slab list based on the updated state.
+-	 */
+-	if (!new.inuse && n->nr_partial >= s->min_partial) {
+-		stat(s, DEACTIVATE_EMPTY);
+-		discard_slab(s, slab);
+-		stat(s, FREE_SLAB);
+-	} else if (new.freelist) {
+-		spin_lock_irqsave(&n->list_lock, flags);
+-		add_partial(n, slab, tail);
+-		spin_unlock_irqrestore(&n->list_lock, flags);
+-		stat(s, tail);
+-	} else {
+-		stat(s, DEACTIVATE_FULL);
+-	}
+-}
+-
+-static inline void flush_slab(struct kmem_cache *s, struct kmem_cache_cpu *c)
+-{
+-	unsigned long flags;
+-	struct slab *slab;
+-	void *freelist;
+-
+-	local_lock_irqsave(&s->cpu_slab->lock, flags);
+-
+-	slab = c->slab;
+-	freelist = c->freelist;
+-
+-	c->slab = NULL;
+-	c->freelist = NULL;
+-	c->tid = next_tid(c->tid);
+-
+-	local_unlock_irqrestore(&s->cpu_slab->lock, flags);
+-
+-	if (slab) {
+-		deactivate_slab(s, slab, freelist);
+-		stat(s, CPUSLAB_FLUSH);
+-	}
+-}
+-
+-static inline void __flush_cpu_slab(struct kmem_cache *s, int cpu)
+-{
+-	struct kmem_cache_cpu *c = per_cpu_ptr(s->cpu_slab, cpu);
+-	void *freelist = c->freelist;
+-	struct slab *slab = c->slab;
+-
+-	c->slab = NULL;
+-	c->freelist = NULL;
+-	c->tid = next_tid(c->tid);
+-
+-	if (slab) {
+-		deactivate_slab(s, slab, freelist);
+-		stat(s, CPUSLAB_FLUSH);
+-	}
+-}
+-
+-static inline void flush_this_cpu_slab(struct kmem_cache *s)
+-{
+-	struct kmem_cache_cpu *c = this_cpu_ptr(s->cpu_slab);
+-
+-	if (c->slab)
+-		flush_slab(s, c);
+-}
+-
+-static bool has_cpu_slab(int cpu, struct kmem_cache *s)
+-{
+-	struct kmem_cache_cpu *c = per_cpu_ptr(s->cpu_slab, cpu);
+-
+-	return c->slab;
+-}
+-
+ static bool has_pcs_used(int cpu, struct kmem_cache *s)
+ {
+ 	struct slub_percpu_sheaves *pcs;
+@@ -3842,7 +3621,7 @@ static bool has_pcs_used(int cpu, struct kmem_cache *s)
+ }
+ 
+ /*
+- * Flush cpu slab.
++ * Flush percpu sheaves
   *
-  * The gfp parameter is meant only to specify __GFP_ZERO or __GFP_ACCOUNT
-  * memcg charging is forced over limit if necessary, to avoid failure.
-+ *
-+ * It is possible that the allocation comes from kfence and then the sheaf
-+ * size is not decreased.
+  * Called from CPU work handler with migration disabled.
   */
- void *
- kmem_cache_alloc_from_sheaf_noprof(struct kmem_cache *s, gfp_t gfp,
-@@ -5541,7 +5544,10 @@ kmem_cache_alloc_from_sheaf_noprof(struct kmem_cache *s, gfp_t gfp,
- 	if (sheaf->size == 0)
+@@ -3857,8 +3636,6 @@ static void flush_cpu_slab(struct work_struct *w)
+ 
+ 	if (s->sheaf_capacity)
+ 		pcs_flush_all(s);
+-
+-	flush_this_cpu_slab(s);
+ }
+ 
+ static void flush_all_cpus_locked(struct kmem_cache *s)
+@@ -3871,7 +3648,7 @@ static void flush_all_cpus_locked(struct kmem_cache *s)
+ 
+ 	for_each_online_cpu(cpu) {
+ 		sfw = &per_cpu(slub_flush, cpu);
+-		if (!has_cpu_slab(cpu, s) && !has_pcs_used(cpu, s)) {
++		if (!has_pcs_used(cpu, s)) {
+ 			sfw->skip = true;
+ 			continue;
+ 		}
+@@ -3976,7 +3753,6 @@ static int slub_cpu_dead(unsigned int cpu)
+ 
+ 	mutex_lock(&slab_mutex);
+ 	list_for_each_entry(s, &slab_caches, list) {
+-		__flush_cpu_slab(s, cpu);
+ 		if (s->sheaf_capacity)
+ 			__pcs_flush_all_cpu(s, cpu);
+ 	}
+@@ -7036,26 +6812,21 @@ init_kmem_cache_node(struct kmem_cache_node *n, struct node_barn *barn)
+ 		barn_init(barn);
+ }
+ 
+-static inline int alloc_kmem_cache_cpus(struct kmem_cache *s)
++#ifdef CONFIG_SLUB_STATS
++static inline int alloc_kmem_cache_stats(struct kmem_cache *s)
+ {
+ 	BUILD_BUG_ON(PERCPU_DYNAMIC_EARLY_SIZE <
+ 			NR_KMALLOC_TYPES * KMALLOC_SHIFT_HIGH *
+-			sizeof(struct kmem_cache_cpu));
++			sizeof(struct kmem_cache_stats));
+ 
+-	/*
+-	 * Must align to double word boundary for the double cmpxchg
+-	 * instructions to work; see __pcpu_double_call_return_bool().
+-	 */
+-	s->cpu_slab = __alloc_percpu(sizeof(struct kmem_cache_cpu),
+-				     2 * sizeof(void *));
++	s->cpu_stats = alloc_percpu(struct kmem_cache_stats);
+ 
+-	if (!s->cpu_slab)
++	if (!s->cpu_stats)
+ 		return 0;
+ 
+-	init_kmem_cache_cpus(s);
+-
+ 	return 1;
+ }
++#endif
+ 
+ static int init_percpu_sheaves(struct kmem_cache *s)
+ {
+@@ -7166,7 +6937,9 @@ void __kmem_cache_release(struct kmem_cache *s)
+ {
+ 	cache_random_seq_destroy(s);
+ 	pcs_destroy(s);
+-	free_percpu(s->cpu_slab);
++#ifdef CONFIG_SLUB_STATS
++	free_percpu(s->cpu_stats);
++#endif
+ 	free_kmem_cache_nodes(s);
+ }
+ 
+@@ -7847,12 +7620,6 @@ static struct kmem_cache * __init bootstrap(struct kmem_cache *static_cache)
+ 
+ 	memcpy(s, static_cache, kmem_cache->object_size);
+ 
+-	/*
+-	 * This runs very early, and only the boot processor is supposed to be
+-	 * up.  Even if it weren't true, IRQs are not up so we couldn't fire
+-	 * IPIs around.
+-	 */
+-	__flush_cpu_slab(s, smp_processor_id());
+ 	for_each_kmem_cache_node(s, node, n) {
+ 		struct slab *p;
+ 
+@@ -8092,8 +7859,10 @@ int do_kmem_cache_create(struct kmem_cache *s, const char *name,
+ 	if (!init_kmem_cache_nodes(s))
  		goto out;
  
--	ret = sheaf->objects[--sheaf->size];
-+	ret = kfence_alloc(s, s->object_size, gfp);
-+
-+	if (likely(!ret))
-+		ret = sheaf->objects[--sheaf->size];
+-	if (!alloc_kmem_cache_cpus(s))
++#ifdef CONFIG_SLUB_STATS
++	if (!alloc_kmem_cache_stats(s))
+ 		goto out;
++#endif
  
- 	init = slab_want_init_on_alloc(gfp, s);
+ 	err = init_percpu_sheaves(s);
+ 	if (err)
+@@ -8412,33 +8181,6 @@ static ssize_t show_slab_objects(struct kmem_cache *s,
+ 	if (!nodes)
+ 		return -ENOMEM;
  
-@@ -7361,14 +7367,8 @@ int __kmem_cache_alloc_bulk(struct kmem_cache *s, gfp_t flags, size_t size,
- 	local_lock_irqsave(&s->cpu_slab->lock, irqflags);
- 
- 	for (i = 0; i < size; i++) {
--		void *object = kfence_alloc(s, s->object_size, flags);
+-	if (flags & SO_CPU) {
+-		int cpu;
 -
--		if (unlikely(object)) {
--			p[i] = object;
--			continue;
+-		for_each_possible_cpu(cpu) {
+-			struct kmem_cache_cpu *c = per_cpu_ptr(s->cpu_slab,
+-							       cpu);
+-			int node;
+-			struct slab *slab;
+-
+-			slab = READ_ONCE(c->slab);
+-			if (!slab)
+-				continue;
+-
+-			node = slab_nid(slab);
+-			if (flags & SO_TOTAL)
+-				x = slab->objects;
+-			else if (flags & SO_OBJECTS)
+-				x = slab->inuse;
+-			else
+-				x = 1;
+-
+-			total += x;
+-			nodes[node] += x;
+-
 -		}
-+		void *object = c->freelist;
- 
--		object = c->freelist;
- 		if (unlikely(!object)) {
- 			/*
- 			 * We may have removed an object from c->freelist using
-@@ -7449,6 +7449,7 @@ int kmem_cache_alloc_bulk_noprof(struct kmem_cache *s, gfp_t flags, size_t size,
- 				 void **p)
- {
- 	unsigned int i = 0;
-+	void *kfence_obj;
- 
- 	if (!size)
- 		return 0;
-@@ -7457,6 +7458,20 @@ int kmem_cache_alloc_bulk_noprof(struct kmem_cache *s, gfp_t flags, size_t size,
- 	if (unlikely(!s))
- 		return 0;
- 
-+	/*
-+	 * to make things simpler, only assume at most once kfence allocated
-+	 * object per bulk allocation and choose its index randomly
-+	 */
-+	kfence_obj = kfence_alloc(s, s->object_size, flags);
-+
-+	if (unlikely(kfence_obj)) {
-+		if (unlikely(size == 1)) {
-+			p[0] = kfence_obj;
-+			goto out;
-+		}
-+		size--;
-+	}
-+
- 	if (s->cpu_sheaves)
- 		i = alloc_from_pcs_bulk(s, size, p);
- 
-@@ -7468,10 +7483,23 @@ int kmem_cache_alloc_bulk_noprof(struct kmem_cache *s, gfp_t flags, size_t size,
- 		if (unlikely(__kmem_cache_alloc_bulk(s, flags, size - i, p + i) == 0)) {
- 			if (i > 0)
- 				__kmem_cache_free_bulk(s, i, p);
-+			if (kfence_obj)
-+				__kfence_free(kfence_obj);
- 			return 0;
- 		}
- 	}
- 
-+	if (unlikely(kfence_obj)) {
-+		int idx = get_random_u32_below(size + 1);
-+
-+		if (idx != size)
-+			p[size] = p[idx];
-+		p[idx] = kfence_obj;
-+
-+		size++;
-+	}
-+
-+out:
+-	}
+-
  	/*
- 	 * memcg and kmem_cache debug support and memory initialization.
- 	 * Done outside of the IRQ disabled fastpath loop.
+ 	 * It is impossible to take "mem_hotplug_lock" here with "kernfs_mutex"
+ 	 * already held which will conflict with an existing lock order:
+@@ -8809,7 +8551,7 @@ static int show_stat(struct kmem_cache *s, char *buf, enum stat_item si)
+ 		return -ENOMEM;
+ 
+ 	for_each_online_cpu(cpu) {
+-		unsigned x = per_cpu_ptr(s->cpu_slab, cpu)->stat[si];
++		unsigned x = per_cpu_ptr(s->cpu_stats, cpu)->stat[si];
+ 
+ 		data[cpu] = x;
+ 		sum += x;
+@@ -8835,7 +8577,7 @@ static void clear_stat(struct kmem_cache *s, enum stat_item si)
+ 	int cpu;
+ 
+ 	for_each_online_cpu(cpu)
+-		per_cpu_ptr(s->cpu_slab, cpu)->stat[si] = 0;
++		per_cpu_ptr(s->cpu_stats, cpu)->stat[si] = 0;
+ }
+ 
+ #define STAT_ATTR(si, text) 					\
 
 -- 
 2.51.1
