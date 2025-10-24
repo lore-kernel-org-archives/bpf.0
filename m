@@ -1,126 +1,143 @@
-Received: from out-180.mta0.migadu.com (out-180.mta0.migadu.com [91.218.175.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 787311F03EF;
-	Fri, 24 Oct 2025 16:13:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D16FF22541B
+	for <bpf@vger.kernel.org>; Fri, 24 Oct 2025 16:15:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761322417; cv=none; b=Ix/ihqNBMZgTq0pQtB3NNoqaMiY31kMzjBYs2a6Fd2e2hTQpkodl5s3ZxPDvDpmww1Rp7KjHjqj9minkeck/0JCnimeYyBi29kduSQNhfGa0vEYy0Qtfi144ixDEGr/NJhyFZ6muApIajNZen5J1g3akLeNmS27tcC+oHEvXrvU=
+	t=1761322518; cv=none; b=TkQ3ewOR4kdUKJwwOLmJkqsC76AI6AYHjW/vvp+1fVD6RjJT9ZCWKcTAGyiVwx0yY1p4yCUyX/1+GMhYyH/SU9Tl8HsdBNsc0GNB3CVF0mm0Igcrk4DVjqs0LFTAABcvKcTUKOyR+XuifNSkRL7hSCVhuA2JRwYgi1DI2FgU4xc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761322417; c=relaxed/simple;
-	bh=CpGJCR5GrHZAy/E9dvgxNwyLC6bZSH7ZV1VpCx8P21g=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=EFQLbJzwk8Irg+HDG+DkNc33ZZ5EPF/k82waZfQrkTSykagWVzNEpsbXZBRlY76iMXbErgAVwuni8SpvRGVGvKYU0olt16GRcG7sAlJ40Fh8FVD2byXtqoPiuMh9bI2TlZO8ujw+taiNnSdm0ZmYtPqz0lKciISNkwyPGGYO2sE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=XyG+AKVJ; arc=none smtp.client-ip=91.218.175.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1761322518; c=relaxed/simple;
+	bh=t2xB5w2D/C9kbb7Bzl1tMo0JOvGXNQKckLTMhZRtTuA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=jz+hhGXgJSgWdgMmRGAyoMzL8YyvFaw2yfzmxdH5YEifTxHL4qOpDrk+TkfM6KnQmZDbysPg5DqUP2IQef+VOnFX/HH9wcGS8QPttO+LwdKvkVM5uCupFeHzdfSPCWBU4PRNETwOaI3CMs4GK+a/mNDoZ/RI+B+SZa7RqT+x4iI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cYF0a2j3; arc=none smtp.client-ip=209.85.221.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="XyG+AKVJ"
-Message-ID: <b190c9b2837b28cf579aa38126de50e29e0add32.camel@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1761322412;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=CpGJCR5GrHZAy/E9dvgxNwyLC6bZSH7ZV1VpCx8P21g=;
-	b=XyG+AKVJzongeO1way5/7Nhm+FdVRnCzUvd2DCS0MRmr1FJ8msK7RDMCE0xvJoIwMObCnS
-	yyhrUFMLxJmROnaJZzNtIEjxpqx1lWDm0VmozsUQBUVgqhvs2WkKwefneii26eskxpRhcs
-	3uv/TlMG+qoKrJ4agvkYRXaygai4MTE=
-Subject: Re: [PATCH bpf-next 1/2] bpf: Skip bounds adjustment for
- conditional jumps on same register
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: KaFai Wan <kafai.wan@linux.dev>
-To: Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov
-	 <alexei.starovoitov@gmail.com>
-Cc: Yonghong Song <yonghong.song@linux.dev>, Alexei Starovoitov
- <ast@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>, John Fastabend
- <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, Martin
- KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, KP Singh
- <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo
- <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,  Shuah Khan
- <shuah@kernel.org>, Paul Chaignon <paul.chaignon@gmail.com>, Matan Shachnai
- <m.shachnai@gmail.com>, Luis Gerhorst <luis.gerhorst@fau.de>, 
- colin.i.king@gmail.com, Harishankar Vishwanathan
- <harishankar.vishwanathan@gmail.com>, bpf <bpf@vger.kernel.org>, LKML
- <linux-kernel@vger.kernel.org>, "open list:KERNEL SELFTEST FRAMEWORK"
- <linux-kselftest@vger.kernel.org>, Kaiyan Mei <M202472210@hust.edu.cn>, 
- Yinhao Hu <dddddd@hust.edu.cn>
-Date: Sat, 25 Oct 2025 00:13:19 +0800
-In-Reply-To: <f0a52150bc99aa4da1a25d6181975cd3c80a717f.camel@gmail.com>
-References: <20251022164457.1203756-1-kafai.wan@linux.dev>
-	 <20251022164457.1203756-2-kafai.wan@linux.dev>
-	 <39af9321-fb9b-4cee-84f1-77248a375e85@linux.dev>
-	 <1d03174dfe2a7eab1166596c85a6b586a660dffc.camel@gmail.com>
-	 <CAADnVQKdMcOkkqNa3LbGWqsz9iHAODFSinokj6htbGi0N66h_Q@mail.gmail.com>
-	 <abe1bd5def7494653d52425818815baa54a3628a.camel@gmail.com>
-	 <0d267da41178f3ac4669621516888a06d6aa5665.camel@linux.dev>
-	 <f0a52150bc99aa4da1a25d6181975cd3c80a717f.camel@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cYF0a2j3"
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-3f0ae439b56so1140352f8f.3
+        for <bpf@vger.kernel.org>; Fri, 24 Oct 2025 09:15:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1761322515; x=1761927315; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SX2wgXyhOFI2HLBtCIVzdgo/PaSKpitLRDyKKLcKuCo=;
+        b=cYF0a2j3+66lD8a9BZLpc03nLS8aOpIBqYGLHawJBswQzU875AvKVqifFqJo52QnBB
+         bj+aJMyjWhwIwGZ1HjsdecgUePoRwpp+H8SMqv8tgQBewNcTKZqFkX+67XLN0qv/elvB
+         fETsS9EJEHpfJEuLATxaT082lpkTS3bVZZsxqBa6jXboajU9xkSbSobgIDs17DwWAr0P
+         lORGwN9T0kp3LhQ+50prP7eRnC1IEtQwJzSz32tTpa6ezlDuqIwqvOZrDCheFsSsF24B
+         9G6t+VdLCAgDMFf+EnkWoic0TWJovp77Md8ke50V72nmtAOywCz4Is2Zphu0E9FDrxt5
+         acCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761322515; x=1761927315;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SX2wgXyhOFI2HLBtCIVzdgo/PaSKpitLRDyKKLcKuCo=;
+        b=l+If0NNoEDcNLhaAHNEIZEmg+QJI61YfeJJCdfN/7k7bZh7XURu7fvEUaVsoreEAc1
+         aG2TU7/YDokaliLCg8zFxDdAR+UkBEtJDe0xDJkmw5ICYzdvjqEHcZNPgeJP4w45DWqX
+         bUc7V7qmdkEHTHF8eT5C0jR/0u6CMrSpNob/l//fg+81UtSKGqgLf+lajGHEPJFsC+DR
+         pXvCSmxsnfKHWJQZPPFzJuYr3k//8HXkDfq7u9q6FYFGP6+CN8ecdP5nqLE0Y4vlcM2k
+         dn7X9JpZF/5KrBdSu273SnswGEmMeqZA1l/xcMtgE1ufeDHSlsp1ERz62HH0F/VFcv37
+         IxaA==
+X-Forwarded-Encrypted: i=1; AJvYcCWMeoPyU0JYF0QynYm32EGW4n4TdPOAg0KaQQq4nodwNvKFiY7cZjk5Rvl9klKCdJS3yLE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz/s5wQlis+M0GelYHEKgCAI7rlzhLOJIHBWa8kGN+E2dZpvEPT
+	K1lxo4GLj+1KOfsiCYl3Ps70YcMyvCRKEswFieKcxjB1Mlax0LbBLt9xkWe9duYPMyNv55w6QVE
+	ewTLMuytwC6diSaQJzDMg4loLenujkKc=
+X-Gm-Gg: ASbGncuZPBmYtaoan30piY/ZhYufqsAORjBH2C0o2DfB3386wRmIeR2cD5Gl7G7C065
+	WO0q9Wb25pDnP4cHHRpnx+1PCpUD4+GUjn99AmesHH8Z/prY88htghxgjA9AoE/oa9OvXgvultH
+	vIpO+v3u6i95W8Pa8IuIBhcaMGy7cVrOSR8RrpM1uy1zOV9TP3GsnU0eliTG0FDOTj8adyiXaME
+	Js+IDlt2aAJA7fovmgA/eXvoL81fG/SdW7jE/4xq3WeXOmRT0MIW+sm2jfe6GgurZd/EGphxyue
+	BCLOEOxenGYf5JYX2w==
+X-Google-Smtp-Source: AGHT+IHYhQieymijbR97ThEWtTUuWIeWwcW7dASpktkOfhyJVrh56p292orZ26GtXJFfL041HGk3fWOBdTQaTUxeamY=
+X-Received: by 2002:a05:6000:2008:b0:3df:c5e3:55fe with SMTP id
+ ffacd0b85a97d-42704d9895amr20799373f8f.29.1761322514888; Fri, 24 Oct 2025
+ 09:15:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Migadu-Flow: FLOW_OUT
+References: <20251022-tc_tunnel-v2-0-a44a0bd52902@bootlin.com>
+ <20251022-tc_tunnel-v2-3-a44a0bd52902@bootlin.com> <DDOOS5LR0GZH.ITEM5495FPOX@bootlin.com>
+ <CAADnVQJ6zKbThz8B5bqBpwz=gyqeindZb1kwCmM90PsR4-7iQQ@mail.gmail.com> <DDQCVG55KXN7.3P6MCQTNID8K9@bootlin.com>
+In-Reply-To: <DDQCVG55KXN7.3P6MCQTNID8K9@bootlin.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Fri, 24 Oct 2025 09:15:02 -0700
+X-Gm-Features: AWmQ_bmLtVyHMC53pSRSYOJH_a_wCczVDxu-UPW_QXlFnFx1oBh0bRcOV9rTc7Q
+Message-ID: <CAADnVQKQRCC8KJZewRsakDYsFmGZBYuEVYV6xEL2X1Kg06+AYw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 3/4] selftests/bpf: integrate
+ test_tc_tunnel.sh tests into test_progs
+To: =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, ebpf@linuxfoundation.org, 
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+	Bastien Curutchet <bastien.curutchet@bootlin.com>, bpf <bpf@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-T24gVGh1LCAyMDI1LTEwLTIzIGF0IDEwOjM4IC0wNzAwLCBFZHVhcmQgWmluZ2VybWFuIHdyb3Rl
-Ogo+IE9uIFRodSwgMjAyNS0xMC0yMyBhdCAxOToyNiArMDgwMCwgS2FGYWkgV2FuIHdyb3RlOgo+
-IAo+IFsuLi5dCj4gCj4gPiA+IEBAIC0xNjE3Myw2ICsxNjE3MywyNSBAQCBzdGF0aWMgaW50IGlz
-X3BrdF9wdHJfYnJhbmNoX3Rha2VuKHN0cnVjdAo+ID4gPiBicGZfcmVnX3N0YXRlICpkc3RfcmVn
-LAo+ID4gPiDCoHN0YXRpYyBpbnQgaXNfYnJhbmNoX3Rha2VuKHN0cnVjdCBicGZfcmVnX3N0YXRl
-ICpyZWcxLCBzdHJ1Y3QgYnBmX3JlZ19zdGF0ZQo+ID4gPiAqcmVnMiwKPiA+ID4gwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB1OCBvcGNvZGUsIGJv
-b2wgaXNfam1wMzIpCj4gPiA+IMKgewo+ID4gPiArwqDCoMKgwqDCoMKgIGlmIChyZWcxID09IHJl
-ZzIpIHsKPiA+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgc3dpdGNoIChvcGNvZGUp
-IHsKPiA+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgY2FzZSBCUEZfSkdFOgo+ID4g
-PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBjYXNlIEJQRl9KTEU6Cj4gPiA+ICvCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGNhc2UgQlBGX0pTR0U6Cj4gPiA+ICvCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgIGNhc2UgQlBGX0pTTEU6Cj4gPiA+ICvCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgIGNhc2UgQlBGX0pFUToKPiA+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqAgY2FzZSBCUEZfSlNFVDoKPiA+IAo+ID4gT3RoZXJzIGFyZSBmaW5lLCBidXQgQlBGX0pT
-RVQgb24gdGhlIHNhbWUgcmVnaXN0ZXIgY291bGQgYmUgMCAoaWYgdmFsdWUgaXMgMCkuCj4gPiBB
-bmQgaXQncyB1bmtub3duIHRvIHRha2UgdGhlIGJyYW5jaCBpZiAwIHdpdGhpbiB0aGUgcmFuZ2Uu
-Cj4gCj4gUmlnaHQsIG1pc3NlZCB0aGF0IG9uZS4KPiAKPiA+IAo+ID4gPiArwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgcmV0dXJuIDE7Cj4gPiA+ICvCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgIGNhc2UgQlBGX0pHVDoKPiA+ID4gK8KgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqAgY2FzZSBCUEZfSkxUOgo+ID4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoCBjYXNlIEJQRl9KU0dUOgo+ID4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oCBjYXNlIEJQRl9KU0xUOgo+ID4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBjYXNl
-IEJQRl9KTkU6Cj4gPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoCByZXR1cm4gMDsKPiA+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgZGVmYXVs
-dDoKPiA+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHJl
-dHVybiAtMTsKPiA+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgfQo+ID4gPiArwqDC
-oMKgwqDCoMKgIH0KPiA+ID4gCj4gPiA+IEJ1dCB0aGF0J3MgdG9vIG11Y2ggY29kZSBmb3IgYW4g
-YXJ0aWZpY2lhbCBjYXNlLgo+ID4gPiBJZGssIGVpdGhlciB3YXkgaXMgZmluZSB3aXRoIG1lLgo+
-ID4gCj4gPiBUaGVyZSBpcyBpc19zY2FsYXJfYnJhbmNoX3Rha2VuKCkgaW4gaXNfYnJhbmNoX3Rh
-a2VuKCksIEkgbWlzc2VkIGl0LiBJJ2xsIGEpCj4gPiBjaGVjayB0aGUgb3Bjb2RlIG9uZSBieSBv
-bmUgaW4gaXNfc2NhbGFyX2JyYW5jaF90YWtlbigpLCBhbmQgYikga2VlcCB0aGlzIHBhdGNoCj4g
-PiBmb3IgdW5rbm93biBCUEZfSlNFVCBicmFuY2guCj4gCj4gU291bmRzIGdvb2QgdG8gbWUuIE5v
-dGUgdGhhdCB0aGUgbG9naWMgaXMgY29ycmVjdCBmb3IgYm90aCBzY2FsYXIgYW5kCj4gbm9uLXNj
-YWxhciBjYXNlcywgc28gSSBkb24ndCB0aGluayB3ZSBoYXZlIHRvIGNvbnN0cmFpbiBpdCB0bwo+
-IGlzX3NjYWxhcl9icmFuY2hfdGFrZW4oKSAoZG9uJ3QgdGhpbmsgdGhlcmUgaXMgYSBuZWVkIHRv
-IGNoZWNrIGlmCj4gcG9pbnRlciBjb21wYXJpc29ucyBhcmUgYWxsb3dlZCwgYXMgbm8gbmV3IGlu
-Zm9ybWF0aW9uIGlzIGluZmVycmVkCj4gZnJvbSBjb21wYXJpc29ucyB3aXRoIHNlbGYpLgoKRm9y
-IG5vbi1zY2FsYXIgY2FzZXMgd2Ugb25seSBhbGxvdyBwb2ludGVyIGNvbXBhcmlzb24gb24gcGt0
-X3B0ciwgdGhpcyBjaGVjayBpcyBiZWZvcmUKaXNfYnJhbmNoX3Rha2VuKCkKCglzcmNfcmVnID0g
-JnJlZ3NbaW5zbi0+c3JjX3JlZ107CglpZiAoIShyZWdfaXNfcGt0X3BvaW50ZXJfYW55KGRzdF9y
-ZWcpICYmIHJlZ19pc19wa3RfcG9pbnRlcl9hbnkoc3JjX3JlZykpICYmCgkgICAgaXNfcG9pbnRl
-cl92YWx1ZShlbnYsIGluc24tPnNyY19yZWcpKSB7CgkJdmVyYm9zZShlbnYsICJSJWQgcG9pbnRl
-ciBjb21wYXJpc29uIHByb2hpYml0ZWRcbiIsCgkJCWluc24tPnNyY19yZWcpOwoJCXJldHVybiAt
-RUFDQ0VTOwoJfSAKCmFuZCBpbiB0aGUgZW5kIG9mIGNoZWNrX2NvbmRfam1wX29wKCkgKGFmdGVy
-IGlzX2JyYW5jaF90YWtlbigpKSwgd2UgY2hlY2tlZCBhZ2FpbgoKCX0gZWxzZSBpZiAoIXRyeV9t
-YXRjaF9wa3RfcG9pbnRlcnMoaW5zbiwgZHN0X3JlZywgJnJlZ3NbaW5zbi0+c3JjX3JlZ10sCgkJ
-CQkJICAgdGhpc19icmFuY2gsIG90aGVyX2JyYW5jaCkgJiYKCQkgICBpc19wb2ludGVyX3ZhbHVl
-KGVudiwgaW5zbi0+ZHN0X3JlZykpIHsKCQl2ZXJib3NlKGVudiwgIlIlZCBwb2ludGVyIGNvbXBh
-cmlzb24gcHJvaGliaXRlZFxuIiwKCQkJaW5zbi0+ZHN0X3JlZyk7CgkJcmV0dXJuIC1FQUNDRVM7
-Cgl9Cgp0aGlzIHRpbWUgd2XCoGNoZWNrIGlmIGl0IGlzIHZhbGlkIGNvbXBhcmlzb24gb24gcGt0
-X3B0ciBpbiB0cnlfbWF0Y2hfcGt0X3BvaW50ZXJzKCkuwqAKCkN1cnJlbnRseSB3ZSBqdXN0IGFs
-bG93IDQgb3Bjb2RlIChCUEZfSkdULCBCUEZfSkxULCBCUEZfSkdFLCBCUEZfSkxFKSBvbiBwa3Rf
-cHRyLCBhbmQgd2l0aApjb25kaXRpb25zLiBCdXQgd2UgYnlwYXNzIHRoZXNlIHByb2hpYml0cyBp
-biBwcml2aWxlZ2VkIG1vZGUgKGlzX3BvaW50ZXJfdmFsdWUoKSBhbHdheXPCoApyZXR1cm4gZmFs
-c2UgaW4gcHJpdmlsZWdlZCBtb2RlKS4KClNvIHRoZSBsb2dpYyBza2lwIHRoZXNlIHByb2hpYml0
-cyBmb3IgcGt0X3B0ciBpbiB1bnByaXZpbGVnZWQgbW9kZS4KCi0tIApUaGFua3MsCkthRmFpCg==
+On Thu, Oct 23, 2025 at 11:58=E2=80=AFPM Alexis Lothor=C3=A9
+<alexis.lothore@bootlin.com> wrote:
+>
+> Hi Alexei,
+>
+> On Wed Oct 22, 2025 at 6:44 PM CEST, Alexei Starovoitov wrote:
+> > On Wed, Oct 22, 2025 at 12:52=E2=80=AFAM Alexis Lothor=C3=A9
+> > <alexis.lothore@bootlin.com> wrote:
+>
+> [...]
+>
+> >> A note about test duration:
+> >> the overall test duration, in my setup (x86 qemu-based setup, running =
+on
+> >> x86), is around 13s. Reviews on similar series ([1]) shows that such a
+> >> duration is not really desirable for CI integration. I checked how to
+> >> reduce it, and it appears that most of it is due to the fact that for =
+each
+> >> subtest, we verify that if we insert bpf encapsulation (egress) progra=
+m,
+> >> and nothing on server side, we properly fail to connect client to serv=
+er.
+> >> This test then relies on timeout connection,  and I already reduced it=
+ as
+> >> much as possible, but I guess going below the current value (500ms) wi=
+ll
+> >> just start to make the whole test flaky.
+> >>
+> >> I took this "check connection failure" from the original script, and k=
+ind
+> >> of like it for its capacity to detect false negatives, but should I
+> >> eventually get rid of it ?
+> >
+> > I vote to get rid of it.
+> > I'd rather have test_progs that are quick enough to execute for CI and
+> > for all developers then more in depth coverage for the corner case.
+>
+> ACK. I' ll get rid of it. For the record, I drop down to ~3s in my testin=
+g
+> setup instead of ~13s when removing this "ensure connection failure test"=
+.
 
+Good. 3s is fine.
+
+> > Note that for the verifier range test we randomize the test coverage,
+> > since the whole permutation takes hours to run. Instead we randomly
+> > pick a couple tests and run only those. Since CI runs for every patch
+> > the overall coverage is good enough.
+> > Would something like that possible here ? and in the other xsk test?
+>
+> I see that test_verifier takes some "to" and "from" indexes, selecting th=
+e
+> range of tests that we are able to run. Is this the mechanism you are
+> referring to ? (and if so, I guess the rand part is handled by the CI
+> runner ?)
+
+I'm talking about SLOW_TESTS=3D1 in reg_bounds.c
