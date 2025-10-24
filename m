@@ -1,124 +1,142 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63B651DC997;
-	Fri, 24 Oct 2025 16:17:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F311627CB02
+	for <bpf@vger.kernel.org>; Fri, 24 Oct 2025 16:21:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761322671; cv=none; b=tRIihwugBAxzB4La0XuLI0CD+NKWzOetd5FZOJLtuFVd/Vr02FzQPKxexf+bN8U7M4dXrF8ENFthMrcLyauVMbrg8PbCR8/Y+16YPVOl4MX/pLugMsfcr3saIkc81BJLiRhlyfYBIsam71kAyu9ICuUEtg0ju3ujKqlawGCO1Xw=
+	t=1761322877; cv=none; b=qbEogttPUSgCjxKdxoxIGWiS+LKP+zPVznf+o0Jcea0p1PDNX2NA+ANU/SeOONAYlfBSN/qMSBsvX0DAVaBJmlxXqx11eK5sq7WmM8f9z+H5dBvy5HsAOgmmmsAgBFWWpTnoXEBCjo4fSNmgb3+hxm3p/EvYwvP3kUHn2VAXgAM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761322671; c=relaxed/simple;
-	bh=wk66qIygkkbUUS4Vseh1sg6teJA5/ZT5GoMUU6R4qwg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nNEi7vl7pHPbato9mJlZPWzY+G6M7Ep4qT0BEamPD/cwjSrjH7zg/HDV7kHsZmZ0XNw+b3OMwoZTn5UG+OoJV1y4NNWRnBOQuD630+DopEmlmmmmxHy4j4VSxzcp1vk4OFJI0s+CI4lULWvfKYbPLQKgev9X1SywSSqv9ZBIFo8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=S9e/39w/; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1761322877; c=relaxed/simple;
+	bh=Q7C41lhBihbO6eY7lJVLyPsZrE6vKqwzWp8W165x1GY=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=QuXGqT2bvd+1dtfs5tDFkkyyO4YjwvNiScZh5iryTUCpG+GohDaUl2Z6YpXNBZLKjTQ6XuqwLruNTInO3mlMQcGwDKGwp9ANbBILDcokAmMhEhGU5o8wdAn+cMaOP21QQgTxFcTTFrRoV/UxTaWLDuxyX64oWnW16ISF1aumjw8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OLryaIUk; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="S9e/39w/"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761322670; x=1792858670;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=wk66qIygkkbUUS4Vseh1sg6teJA5/ZT5GoMUU6R4qwg=;
-  b=S9e/39w/1ASlPnXtSKu/WcGkTQZcG5b21wnI9KDxAr/3R2iXvU1aVd2L
-   Q8t1TtWA5AV2UhRhbXIsrxBMng/Uz4R32JZ6iqoVZckv2ekH6aqDGsPpq
-   /iYJpolBT7sMxTTj6Srm8CtiD0bggx81NYropnM6ZcyHDQh9hdjWwFb0B
-   o6zI1Xnvo4/Kj8MOBOmQN5+r4fF8WKf7KEst3uUUysXkZuFAHfyWR284e
-   N5lOfbKaDllFeoq1vbpDPrkbzRAWN9t8cxdj0U/D+OjDhb84AQ831VPU0
-   viZENhOAxuSKgKpMoDC304uI/YaVN+b7hWnzU4bamqB3tTfs0BXkqwVHC
-   w==;
-X-CSE-ConnectionGUID: RLw1A/tISsSQHsHa9f9qSw==
-X-CSE-MsgGUID: kCdlq5ZrQjGMYyg4+eAh9A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="63412299"
-X-IronPort-AV: E=Sophos;i="6.19,252,1754982000"; 
-   d="scan'208";a="63412299"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2025 09:17:47 -0700
-X-CSE-ConnectionGUID: rox9pthtT9qkicVmkF+xRw==
-X-CSE-MsgGUID: OqN+FRlvSO2q/H4Vl8klIA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,252,1754982000"; 
-   d="scan'208";a="183643221"
-Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by orviesa006.jf.intel.com with ESMTP; 24 Oct 2025 09:17:38 -0700
-Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vCKS1-000Een-0H;
-	Fri, 24 Oct 2025 16:17:01 +0000
-Date: Sat, 25 Oct 2025 00:14:45 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jiayuan Chen <jiayuan.chen@linux.dev>, bpf@vger.kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, Jiayuan Chen <jiayuan.chen@linux.dev>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf-next v1 1/2] bpf: Add kfuncs for detecting execution
- context
-Message-ID: <202510242353.hCaLzqVt-lkp@intel.com>
-References: <20251022113412.352307-2-jiayuan.chen@linux.dev>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OLryaIUk"
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-26e68904f0eso24625825ad.0
+        for <bpf@vger.kernel.org>; Fri, 24 Oct 2025 09:21:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1761322875; x=1761927675; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=0jzYBOFf8ftFu+Gij8GYatzFYpDKEy+Zox8T/U74UNk=;
+        b=OLryaIUkz3yqs27H+kPdvODDhKCSq5jbqaJg6wuFPtz11VWaAAW1z0NDWwp3df0I1M
+         qxuqg6tl+5fkvz/wB2quCq6nic+7J/oTR/FYoH6TaRvvAWI1CvF4g3VZ6bByJhSSE2wE
+         7BdnUhFkCBRwQO7OgUWQbY6mvBya6LWrCxsY3GD78FlER2aEvY3hvknmlrtEImWhfSok
+         eqzRsjSF8cWuAXk6iPqS21tRU5xEBxCvfhPyzSB5KvQFNm9RZj1ctuBO6x0X1aUHcBME
+         v3r9BQS6vCkKawaS+v6p6iJ2pBYD8/b48S0efJEoJTiXoEnvJkjLu+UOg7BXEPE3huqQ
+         VjXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761322875; x=1761927675;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0jzYBOFf8ftFu+Gij8GYatzFYpDKEy+Zox8T/U74UNk=;
+        b=YzgoRScz2aia1uliMNl2t9upHNbz9LPqxhe9umsmeEHzCm2Osi9203aoHPmvz+wD66
+         25RtJSTXOhPvLZ2THpjQGQM3Y1xikoeK0cXx60R3h9JdD2VFu+VPxVEUlN9Vu8f3xKv2
+         qK6j2sEb42QE7TP46ApHA8Rdww4Jq86I007CPWcUyHmv/q2+U4tI/qBD6zgj+UgXaUes
+         orVjbCZ9kdMsgudk5jd7O9NObEAUaNJT/7mKUXWulU2VFMYAwBGIuMy3QWgqj+gYnni/
+         /gosQPHIJCm4TRuyjAtDjRC8SxO5KzQsqU7IiB5hwtJQM/Be15XUw+ZRM92SY2GyPmDI
+         y4Og==
+X-Forwarded-Encrypted: i=1; AJvYcCVlQV5GasqmT5vr+P4n4ZgWD+pcDaDPn8HJ/8+mGFDUUwsnvTXCD0ND2y3o4fNHv6f9kJ4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxi2AdisgWn3HpoIOygixkwjhU7fl0M5BGwcnJrTdCdAdCKKiKk
+	aG74gylwpijXri+lUigiupC3pGLDH7O+uL3uVu4B7mpHYH/mdw0ezmlC
+X-Gm-Gg: ASbGncsTuw0DFgFmmB3919UKmHCAwbQhTMLtcuPsdl/iaxEV6JaqaOYccEam/JyKoqh
+	P8lcZJtDmFZHBFWefeVBFiQZ4orBKkug9e+jM//+3R68TwuIERWwPv8OsKhFO4rdq2Cq72tgTNg
+	7dUSEN8SewriG03+uGEzEKUHZhGIV+/9woXzIg18a0KuUInkq3hOZvtXnfC/rid6HGXSy2o/4oQ
+	A7z0Q28AFKTdcIXAlIhQoNsw91Isw/jW5BJIMqvvi4ajW6aUaNwys25p7g06mN68Kl4Gq9ru/TD
+	+vQGgLxA68CmFMUgSOy4SiZhg7K2MKBopbn7TaLfMLQYbCFCWvBpAxfHOgvhab7hzI53yaLLi+V
+	lAZVrzp9lsTPCCpBs8OX0I21bViD+AAZ98vlLaWa5Bl/bKO4199R2VGXmaj+00DmSdsepeRIh8g
+	==
+X-Google-Smtp-Source: AGHT+IFAgmYZ/QLJ2Js+LmpShKlirSGqfh1OuAaWLnctGpxxoW2mPPd9DPWroK3Bbm/J7OAwkt62Hw==
+X-Received: by 2002:a17:902:c942:b0:293:623:3241 with SMTP id d9443c01a7336-293062336a1mr135331655ad.58.1761322875085;
+        Fri, 24 Oct 2025 09:21:15 -0700 (PDT)
+Received: from [192.168.0.226] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2946de15fc6sm61018635ad.42.2025.10.24.09.21.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Oct 2025 09:21:14 -0700 (PDT)
+Message-ID: <0d98a2c754884e94c3367209680c071a8df4279d.camel@gmail.com>
+Subject: Re: [PATCH bpf-next 1/2] bpf: Skip bounds adjustment for
+ conditional jumps on same register
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: KaFai Wan <kafai.wan@linux.dev>, Alexei Starovoitov
+	 <alexei.starovoitov@gmail.com>
+Cc: Yonghong Song <yonghong.song@linux.dev>, Alexei Starovoitov
+ <ast@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>, John Fastabend
+ <john.fastabend@gmail.com>, Andrii Nakryiko	 <andrii@kernel.org>, Martin
+ KaFai Lau <martin.lau@linux.dev>, Song Liu	 <song@kernel.org>, KP Singh
+ <kpsingh@kernel.org>, Stanislav Fomichev	 <sdf@fomichev.me>, Hao Luo
+ <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,  Shuah Khan
+ <shuah@kernel.org>, Paul Chaignon <paul.chaignon@gmail.com>, Matan Shachnai
+	 <m.shachnai@gmail.com>, Luis Gerhorst <luis.gerhorst@fau.de>, 
+	colin.i.king@gmail.com, Harishankar Vishwanathan	
+ <harishankar.vishwanathan@gmail.com>, bpf <bpf@vger.kernel.org>, LKML	
+ <linux-kernel@vger.kernel.org>, "open list:KERNEL SELFTEST FRAMEWORK"	
+ <linux-kselftest@vger.kernel.org>, Kaiyan Mei <M202472210@hust.edu.cn>, 
+ Yinhao Hu <dddddd@hust.edu.cn>
+Date: Fri, 24 Oct 2025 09:21:11 -0700
+In-Reply-To: <b190c9b2837b28cf579aa38126de50e29e0add32.camel@linux.dev>
+References: <20251022164457.1203756-1-kafai.wan@linux.dev>
+		 <20251022164457.1203756-2-kafai.wan@linux.dev>
+		 <39af9321-fb9b-4cee-84f1-77248a375e85@linux.dev>
+		 <1d03174dfe2a7eab1166596c85a6b586a660dffc.camel@gmail.com>
+		 <CAADnVQKdMcOkkqNa3LbGWqsz9iHAODFSinokj6htbGi0N66h_Q@mail.gmail.com>
+		 <abe1bd5def7494653d52425818815baa54a3628a.camel@gmail.com>
+		 <0d267da41178f3ac4669621516888a06d6aa5665.camel@linux.dev>
+		 <f0a52150bc99aa4da1a25d6181975cd3c80a717f.camel@gmail.com>
+	 <b190c9b2837b28cf579aa38126de50e29e0add32.camel@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2 (3.56.2-1.fc42) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251022113412.352307-2-jiayuan.chen@linux.dev>
 
-Hi Jiayuan,
+On Sat, 2025-10-25 at 00:13 +0800, KaFai Wan wrote:
 
-kernel test robot noticed the following build warnings:
+[...]
 
-[auto build test WARNING on bpf-next/master]
+> For non-scalar cases we only allow pointer comparison on pkt_ptr, this ch=
+eck is before
+> is_branch_taken()
+>=20
+> 	src_reg =3D &regs[insn->src_reg];
+> 	if (!(reg_is_pkt_pointer_any(dst_reg) && reg_is_pkt_pointer_any(src_reg)=
+) &&
+> 	    is_pointer_value(env, insn->src_reg)) {
+> 		verbose(env, "R%d pointer comparison prohibited\n",
+> 			insn->src_reg);
+> 		return -EACCES;
+> 	}=20
+>=20
+> and in the end of check_cond_jmp_op() (after is_branch_taken()), we check=
+ed again
+>=20
+> 	} else if (!try_match_pkt_pointers(insn, dst_reg, &regs[insn->src_reg],
+> 					   this_branch, other_branch) &&
+> 		   is_pointer_value(env, insn->dst_reg)) {
+> 		verbose(env, "R%d pointer comparison prohibited\n",
+> 			insn->dst_reg);
+> 		return -EACCES;
+> 	}
+>=20
+> this time we=C2=A0check if it is valid comparison on pkt_ptr in try_match=
+_pkt_pointers().=C2=A0
+>=20
+> Currently we just allow 4 opcode (BPF_JGT, BPF_JLT, BPF_JGE, BPF_JLE) on =
+pkt_ptr, and with
+> conditions. But we bypass these prohibits in privileged mode (is_pointer_=
+value() always=C2=A0
+> return false in privileged mode).
+>=20
+> So the logic skip these prohibits for pkt_ptr in unprivileged mode.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jiayuan-Chen/bpf-Add-kfuncs-for-detecting-execution-context/20251022-193551
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-patch link:    https://lore.kernel.org/r/20251022113412.352307-2-jiayuan.chen%40linux.dev
-patch subject: [PATCH bpf-next v1 1/2] bpf: Add kfuncs for detecting execution context
-config: alpha-randconfig-r123-20251023 (https://download.01.org/0day-ci/archive/20251024/202510242353.hCaLzqVt-lkp@intel.com/config)
-compiler: alpha-linux-gcc (GCC) 11.5.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251024/202510242353.hCaLzqVt-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510242353.hCaLzqVt-lkp@intel.com/
-
-sparse warnings: (new ones prefixed by >>)
-   kernel/bpf/helpers.c:1199:21: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected unsigned long long ( *[usertype] callback_fn )( ... ) @@     got void [noderef] __rcu * @@
-   kernel/bpf/helpers.c:1199:21: sparse:     expected unsigned long long ( *[usertype] callback_fn )( ... )
-   kernel/bpf/helpers.c:1199:21: sparse:     got void [noderef] __rcu *
-   kernel/bpf/helpers.c:2480:18: sparse: sparse: symbol 'bpf_task_release_dtor' was not declared. Should it be static?
-   kernel/bpf/helpers.c:2510:18: sparse: sparse: symbol 'bpf_cgroup_release_dtor' was not declared. Should it be static?
->> kernel/bpf/helpers.c:4260:18: sparse: sparse: symbol 'bpf_in_nmi_context' was not declared. Should it be static?
-   kernel/bpf/helpers.c:2976:18: sparse: sparse: context imbalance in 'bpf_rcu_read_lock' - wrong count at exit
-   kernel/bpf/helpers.c:2981:18: sparse: sparse: context imbalance in 'bpf_rcu_read_unlock' - unexpected unlock
-
-vim +/bpf_in_nmi_context +4260 kernel/bpf/helpers.c
-
-  4254	
-  4255	/**
-  4256	 * bpf_in_nmi_context - Check whether we are serving NMI
-  4257	 *
-  4258	 * Return: true if we are serving NMI
-  4259	 */
-> 4260	__bpf_kfunc bool bpf_in_nmi_context(void)
-  4261	{
-  4262		return in_nmi();
-  4263	}
-  4264	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Well, yes, but do you really need to do forbid `if r0 > r0 goto ...` in unp=
+riv?
