@@ -1,167 +1,154 @@
-Received: from mail-il1-f177.google.com (mail-il1-f177.google.com [209.85.166.177])
+Received: from plesk.hostmyservers.fr (plesk.hostmyservers.fr [45.145.164.37])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2FA91531C1
-	for <bpf@vger.kernel.org>; Sat, 25 Oct 2025 09:28:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 845584A1E;
+	Sat, 25 Oct 2025 14:15:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.145.164.37
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761384520; cv=none; b=NlEKT3u4W7LqyjVM7CTOk/wAPaVdJlRFD9qw7m93/t2r6OL+k/pcABwiPaAN5YGtDFPm/OXu9IE9ajo8ikvEQ+fjIOdPFVc22ZHgiwY4ItwP32KhAf0iQklcP+1rhaLfS0BU4AngMcnYPscTPBGWYK8H8Oxu+Eln1LvPemUn+40=
+	t=1761401724; cv=none; b=YrbKzsxN+z//3qeNVp9MKiWLQsV7kZgWL5duIj9NIRaZRZA+c2I4ESnJOHJORXhpYaPAsmS039zW1tldrXjNfd0nQ+7whMn5oz2NhkgpP/NjRUDcEPJEND9Au616czVwhQMBel/5DG0Eg00yfhVJ9tYr4+B4B9aqQw5XCyCgpZE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761384520; c=relaxed/simple;
-	bh=vkmTLMpvpm/Qa6GR83vugp7lS0yOQgGxQYJ58GDReT4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=o9UYiilSHJJQpO68nfNED6PzJrqEvN+ua36y3rPydmiMfxparhZm4ThoPZmzz4yWcoawbrPcWYLy+13AgkUbxfKj7ZIlgrZq09deJTsaT6fsIeBgQVAIiQVF68pyv30fgdrLJugyJGlC4Dv+fAMbLn2eMa/aT++zbsdvmvLG+gw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BjkoloqU; arc=none smtp.client-ip=209.85.166.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BjkoloqU"
-Received: by mail-il1-f177.google.com with SMTP id e9e14a558f8ab-430c97cbe0eso29028575ab.2
-        for <bpf@vger.kernel.org>; Sat, 25 Oct 2025 02:28:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761384518; x=1761989318; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HHS+rYA72OACrxZRCGvYNKYLOg/36EJkZI8te9neMR0=;
-        b=BjkoloqUoTgzTbOxZJFzL1o6OrrIVXzhxRwCEdyPPwlL1OSx1cjxH5hCS5+KHfe6j7
-         t6AF/yIXQHSEMk2IFVVEhfKq7VjkYrlyfYuuktbdWeG3Ps5/o+85XmyJlthnCw38DBYO
-         jV1Ag3upZxSkOnTLlQf3NL2kzlqkuizmJxkfeI4iMDCW+bpgmW3AtvJl/cMBeK0YmNWc
-         iKjIcWUyPsBR6BdvyEHel2Y9XyqI3BKxVMzsa8ZFqTDFqQj15PAfbJZlpJsr7nlu/oxD
-         ax8PekEYV0WgTl8BaN46o4Qol0TlLgJszvvKgrRy9gUGgolvLlbUBz0DjIUuUyeU9eQX
-         YzoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761384518; x=1761989318;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HHS+rYA72OACrxZRCGvYNKYLOg/36EJkZI8te9neMR0=;
-        b=UxvqkpZoArk13c38HzkvZl2MIAeqZ1qUgAeFpIlkECZMG/eZ+A+hz5S7xxrvJ39A+n
-         /z/j4fSFVUDzuCUbX2kNOh86BZt21bzvf8kZUxYq6F5+jED/TvzKPPCRenTvji5siMgU
-         R5FaYBgkeEjNiEpqRdBigW+cqBpFoHwME8hygwqnepufztMKaB1QsNxEv7lAMXOdSfpn
-         c/8dX4ZvLC6i0Uy/H36zptT2kywsl8N9OdNk+6kqVOtiapnW8d24bqkejX1m/KVblDgA
-         ixs4mgVYs6I5tDeEU+hXmMOBfFYfXHBBX/y1v1obGJ70NVud0qIXMpcogFe+w82BjTme
-         oV1g==
-X-Forwarded-Encrypted: i=1; AJvYcCUmLAhxKZREulWWUjCVRsqLP+qzaRptAA4SXOLeX5ix2TkUuzFqnqcE0pwxScDOTUUXcpA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyiV13J7R1iCm/6fRYaLQrT9e9LUAOU+IghpugJa70T2QDPx2Tk
-	7jQN8RsF3KT/bnVqN2kV1xhOMJozVOl8h8yV2f9fTwteHB5DiRmqk6okQwsRA25gIfYOo09UPf2
-	v0Su1Ldia7CNP817N3Ra1zEGVGg3/Szk=
-X-Gm-Gg: ASbGncshFOLgYwduB3ulTud6t1cNRZEobkb6XOAK4x8KFyN+kV236ZdcTd6/f3S8jol
-	y5J+3OdkqrNI3Ai7R+JhKCXK6SbOvZrZ8uJmLYK0niQNlzWsP0uac5SPr2PPZLNPvNioSvBs243
-	VRAsq+PQy2RaaDJ4mVF7IcSCIYP7EIvkKp0LW3yyRA3U7Kn8KsR/6YQ4j1M+FEkv8uIfbypwD43
-	SOYjtGaJHdGTLYqjU4qWAplo+3tZYQ4FKFufH1eW/FnSdWB71tucQyitaKRlxRvg5+AAQ==
-X-Google-Smtp-Source: AGHT+IFrWh7z4CTVFu9vQ+xrjaz9LS2N1hcONurg46hZNqNrD28GNm/jDCqkOjutDT1/E7m6lZeIKMuGVQSjjz/6S/I=
-X-Received: by 2002:a05:6e02:164b:b0:430:a8c5:fdad with SMTP id
- e9e14a558f8ab-431dc139f37mr127440375ab.6.1761384517763; Sat, 25 Oct 2025
- 02:28:37 -0700 (PDT)
+	s=arc-20240116; t=1761401724; c=relaxed/simple;
+	bh=g+nS8UFm68WP0j4E2Vncre+h4U5ts4FJmVq56OPtd+Y=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=es6t6b2S/l1bkzd5aMLl/ujeBzSbF33EMSKN0dtV6xig45mIo+j5YGbkndJ6B5/t08k24qaFkbPgukDuomLLiZ7d7gXrQsSTJeYj0L9n8uGfole2pQ4FN62ZK5LaA2n5JjqEupPClGVVgdrL061I1OJqOROeyAXegtCumPtET+M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=arnaud-lcm.com; spf=pass smtp.mailfrom=arnaud-lcm.com; arc=none smtp.client-ip=45.145.164.37
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=arnaud-lcm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arnaud-lcm.com
+Received: from dev-dsk-arnaudlc-1a-b66eeb5f.eu-west-1.amazon.com (54-240-197-230.amazon.com [54.240.197.230])
+	by plesk.hostmyservers.fr (Postfix) with ESMTPSA id 077A341C67;
+	Sat, 25 Oct 2025 14:15:19 +0000 (UTC)
+Authentication-Results: Plesk;
+	spf=pass (sender IP is 54.240.197.230) smtp.mailfrom=contact@arnaud-lcm.com smtp.helo=dev-dsk-arnaudlc-1a-b66eeb5f.eu-west-1.amazon.com
+Received-SPF: pass (Plesk: connection is authenticated)
+From: Arnaud Lecomte <contact@arnaud-lcm.com>
+To: contact@arnaud-lcm.com,
+	alexei.starovoitov@gmail.com,
+	andrii.nakryiko@gmail.com,
+	andrii@kernel.org
+Cc: ast@kernel.org,
+	bpf@vger.kernel.org,
+	daniel@iogearbox.net,
+	eddyz87@gmail.com,
+	haoluo@google.com,
+	john.fastabend@gmail.com,
+	jolsa@kernel.org,
+	kpsingh@kernel.org,
+	linux-kernel@vger.kernel.org,
+	martin.lau@linux.dev,
+	sdf@fomichev.me,
+	song@kernel.org,
+	syzbot+c9b724fbb41cf2538b7b@syzkaller.appspotmail.com,
+	syzkaller-bugs@googlegroups.com,
+	yonghong.song@linux.dev
+Subject: [PATCH bpf-next 2/2] bpf: fix stackmap overflow check in
+ __bpf_get_stackid()
+Date: Sat, 25 Oct 2025 14:15:12 +0000
+Message-ID: <20251025141512.18911-1-contact@arnaud-lcm.com>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20251025141403.14188-1-contact@arnaud-lcm.com>
+References: <20251025141403.14188-1-contact@arnaud-lcm.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251021131209.41491-1-kerneljasonxing@gmail.com>
- <20251021131209.41491-9-kerneljasonxing@gmail.com> <aPvK0pFuBpplxbXX@mini-arch>
-In-Reply-To: <aPvK0pFuBpplxbXX@mini-arch>
-From: Jason Xing <kerneljasonxing@gmail.com>
-Date: Sat, 25 Oct 2025 17:28:00 +0800
-X-Gm-Features: AWmQ_bmu26OzQyT-TKJbwhXorr2a6Rp88JdSnJEBmxfy2w_9MDKpR8qmaP4z0GA
-Message-ID: <CAL+tcoDssz0zPY3iKS5Zv6C0zq1ChbTZhRbwTPRq_6F0U6Jc8A@mail.gmail.com>
-Subject: Re: [PATCH net-next v3 8/9] xsk: support generic batch xmit in copy mode
-To: Stanislav Fomichev <stfomichev@gmail.com>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
-	pabeni@redhat.com, bjorn@kernel.org, magnus.karlsson@intel.com, 
-	maciej.fijalkowski@intel.com, jonathan.lemon@gmail.com, sdf@fomichev.me, 
-	ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org, 
-	john.fastabend@gmail.com, joe@dama.to, willemdebruijn.kernel@gmail.com, 
-	bpf@vger.kernel.org, netdev@vger.kernel.org, 
-	Jason Xing <kernelxing@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-PPP-Message-ID: <176140171981.23921.16996471263390109903@Plesk>
+X-PPP-Vhost: arnaud-lcm.com
 
-On Sat, Oct 25, 2025 at 2:52=E2=80=AFAM Stanislav Fomichev <stfomichev@gmai=
-l.com> wrote:
->
-> On 10/21, Jason Xing wrote:
-> > From: Jason Xing <kernelxing@tencent.com>
-> >
-> > - Move xs->mutex into xsk_generic_xmit to prevent race condition when
-> >   application manipulates generic_xmit_batch simultaneously.
-> > - Enable batch xmit eventually.
-> >
-> > Make the whole feature work eventually.
-> >
-> > Signed-off-by: Jason Xing <kernelxing@tencent.com>
-> > ---
-> >  net/xdp/xsk.c | 17 ++++++++---------
-> >  1 file changed, 8 insertions(+), 9 deletions(-)
-> >
-> > diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-> > index 1fa099653b7d..3741071c68fd 100644
-> > --- a/net/xdp/xsk.c
-> > +++ b/net/xdp/xsk.c
-> > @@ -891,8 +891,6 @@ static int __xsk_generic_xmit_batch(struct xdp_sock=
- *xs)
-> >       struct sk_buff *skb;
-> >       int err =3D 0;
-> >
-> > -     mutex_lock(&xs->mutex);
-> > -
-> >       /* Since we dropped the RCU read lock, the socket state might hav=
-e changed. */
-> >       if (unlikely(!xsk_is_bound(xs))) {
-> >               err =3D -ENXIO;
-> > @@ -982,21 +980,17 @@ static int __xsk_generic_xmit_batch(struct xdp_so=
-ck *xs)
-> >       if (sent_frame)
-> >               __xsk_tx_release(xs);
-> >
-> > -     mutex_unlock(&xs->mutex);
-> >       return err;
-> >  }
-> >
-> > -static int __xsk_generic_xmit(struct sock *sk)
-> > +static int __xsk_generic_xmit(struct xdp_sock *xs)
-> >  {
-> > -     struct xdp_sock *xs =3D xdp_sk(sk);
-> >       bool sent_frame =3D false;
-> >       struct xdp_desc desc;
-> >       struct sk_buff *skb;
-> >       u32 max_batch;
-> >       int err =3D 0;
-> >
-> > -     mutex_lock(&xs->mutex);
-> > -
-> >       /* Since we dropped the RCU read lock, the socket state might hav=
-e changed. */
-> >       if (unlikely(!xsk_is_bound(xs))) {
-> >               err =3D -ENXIO;
-> > @@ -1071,17 +1065,22 @@ static int __xsk_generic_xmit(struct sock *sk)
-> >       if (sent_frame)
-> >               __xsk_tx_release(xs);
-> >
-> > -     mutex_unlock(&xs->mutex);
-> >       return err;
-> >  }
-> >
-> >  static int xsk_generic_xmit(struct sock *sk)
-> >  {
-> > +     struct xdp_sock *xs =3D xdp_sk(sk);
-> >       int ret;
-> >
-> >       /* Drop the RCU lock since the SKB path might sleep. */
-> >       rcu_read_unlock();
-> > -     ret =3D __xsk_generic_xmit(sk);
-> > +     mutex_lock(&xs->mutex);
-> > +     if (xs->batch.generic_xmit_batch)
-> > +             ret =3D __xsk_generic_xmit_batch(xs);
-> > +     else
-> > +             ret =3D __xsk_generic_xmit(xs);
->
-> What's the point of keeping __xsk_generic_xmit? Can we have batch=3D1 by
-> default and always use __xsk_generic_xmit_batch?
+Syzkaller reported a KASAN slab-out-of-bounds write in __bpf_get_stackid()
+when copying stack trace data. The issue occurs when the perf trace
+ contains more stack entries than the stack map bucket can hold,
+ leading to an out-of-bounds write in the bucket's data array.
 
-Spot on. Thanks. Then I can fully replace it with the new function.
+Reported-by: syzbot+c9b724fbb41cf2538b7b@syzkaller.appspotmail.com
+Closes: https://syzkaller.appspot.com/bug?extid=c9b724fbb41cf2538b7b
+Fixes: ee2a098851bf ("bpf: Adjust BPF stack helper functions to accommodate skip > 0")
+Acked-by: Yonghong Song <yonghong.song@linux.dev>
+Acked-by: Song Liu <song@kernel.org>
+Signed-off-by: Arnaud Lecomte <contact@arnaud-lcm.com>
+---
+Changes in v2:
+ - Fixed max_depth names across get stack id
 
-Thanks,
-Jason
+Changes in v4:
+ - Removed unnecessary empty line in __bpf_get_stackid
+
+Changes in v6:
+ - Added back trace_len computation in __bpf_get_stackid
+
+Changes in v7:
+ - Removed usefull trace->nr assignation in bpf_get_stackid_pe
+ - Added restoration of trace->nr for both kernel and user traces
+   in bpf_get_stackid_pe
+
+Changes in v9:
+ - Fixed variable declarations in bpf_get_stackid_pe
+ - Added the missing truncate of trace_nr in __bpf_getstackid
+
+Changes in v10:
+ - Remove not required trace->nr = nr_kernel; in bpf_get_stackid_pe
+
+Link to v9:
+https://lore.kernel.org/all/20250912233558.75076-1-contact@arnaud-lcm.com/
+---
+---
+ kernel/bpf/stackmap.c | 15 ++++++++-------
+ 1 file changed, 8 insertions(+), 7 deletions(-)
+
+diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
+index 9a86b5acac10..c0ee51db8eed 100644
+--- a/kernel/bpf/stackmap.c
++++ b/kernel/bpf/stackmap.c
+@@ -251,8 +251,8 @@ static long __bpf_get_stackid(struct bpf_map *map,
+ {
+ 	struct bpf_stack_map *smap = container_of(map, struct bpf_stack_map, map);
+ 	struct stack_map_bucket *bucket, *new_bucket, *old_bucket;
++	u32 hash, id, trace_nr, trace_len, i, max_depth;
+ 	u32 skip = flags & BPF_F_SKIP_FIELD_MASK;
+-	u32 hash, id, trace_nr, trace_len, i;
+ 	bool user = flags & BPF_F_USER_STACK;
+ 	u64 *ips;
+ 	bool hash_matches;
+@@ -261,7 +261,8 @@ static long __bpf_get_stackid(struct bpf_map *map,
+ 		/* skipping more than usable stack trace */
+ 		return -EFAULT;
+ 
+-	trace_nr = trace->nr - skip;
++	max_depth = stack_map_calculate_max_depth(map->value_size, stack_map_data_size(map), flags);
++	trace_nr = min_t(u32, trace->nr - skip, max_depth - skip);
+ 	trace_len = trace_nr * sizeof(u64);
+ 	ips = trace->ip + skip;
+ 	hash = jhash2((u32 *)ips, trace_len / sizeof(u32), 0);
+@@ -390,15 +391,11 @@ BPF_CALL_3(bpf_get_stackid_pe, struct bpf_perf_event_data_kern *, ctx,
+ 		return -EFAULT;
+ 
+ 	nr_kernel = count_kernel_ip(trace);
++	__u64 nr = trace->nr; /* save original */
+ 
+ 	if (kernel) {
+-		__u64 nr = trace->nr;
+-
+ 		trace->nr = nr_kernel;
+ 		ret = __bpf_get_stackid(map, trace, flags);
+-
+-		/* restore nr */
+-		trace->nr = nr;
+ 	} else { /* user */
+ 		u64 skip = flags & BPF_F_SKIP_FIELD_MASK;
+ 
+@@ -409,6 +406,10 @@ BPF_CALL_3(bpf_get_stackid_pe, struct bpf_perf_event_data_kern *, ctx,
+ 		flags = (flags & ~BPF_F_SKIP_FIELD_MASK) | skip;
+ 		ret = __bpf_get_stackid(map, trace, flags);
+ 	}
++
++	/* restore nr */
++	trace->nr = nr;
++
+ 	return ret;
+ }
+ 
+-- 
+2.47.3
+
