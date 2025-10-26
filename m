@@ -1,85 +1,55 @@
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-176.mta1.migadu.com (out-176.mta1.migadu.com [95.215.58.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 042B31DF99C
-	for <bpf@vger.kernel.org>; Sun, 26 Oct 2025 14:58:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D0B51A3164
+	for <bpf@vger.kernel.org>; Sun, 26 Oct 2025 15:40:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761490713; cv=none; b=XbcxWYD9p37znGv47R/BZQT/HfaoQJh8Yd9XSpQcc9H47rf7vGOlHX70MO3qhewGke8ibrKaPH3ECwjwn0SY98GYPVjzNVvx8lSlscVZYB6b9CKD3QH164z5f54sfljzRgKRPYYY1kPynH9FKbGCGmOxMY93bU0Vl710NDtuc80=
+	t=1761493244; cv=none; b=uPntEisf3KbVSnO1PbBA4sa89AB23REh6+mVkgPh//cAb989JLhqcVepF/rtrDhTwdrN6Z1NkuYmTRKKXWWTP5RyZLwt3dL+bGV1dGjRtXPGv0n6b8aRjytu16+iUxy8i27cjf8tUBu2UlZe/pmJYP1up5S7tEi092X1M3adDw0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761490713; c=relaxed/simple;
-	bh=fOaXASGzPYRLKIKCaWs5h26msLXfDZajF2c1OqkACO0=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=stFHgdp6zj7bDT1VV/9NEr5zE+Iuni9uuGLUOR+TrVHgWEvtBdIYKUwR338P1ZKMcsCvrun14Fz0L1NMy6sxpIWxmocPjiq1mKA2eHleSD1uoUN5qU7D6Rvp6LahIkKy858Gj7nsVdFcftfxo9DaZlFKDbTpr14egGzjykRsLFY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QNU4eAqs; arc=none smtp.client-ip=209.85.210.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1761493244; c=relaxed/simple;
+	bh=s3IR1Rj8Ag8368KG/w3P+8z2VWNFjQ++UP5BSrFxkz4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=eOsb4uzFdiDU+Sg4mZ6zyiHKtfjxAYRTpoDIyKZhZ7XFi4G6E1WTAOJLGBYfmoM5tEe1f9MotExfVaRQBhQLjHDXWMIrtA6YlodjTcBPhIynVJ0zVBZBgCydLjWdfA94I8J82B9sTund5VBvaKz703KnDKgobkzYtyWrhzKnshM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=UQaFgV0j; arc=none smtp.client-ip=95.215.58.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QNU4eAqs"
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-78af743c232so3456258b3a.1
-        for <bpf@vger.kernel.org>; Sun, 26 Oct 2025 07:58:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761490711; x=1762095511; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=aqIwpgJ07rQkvt2nZ5lIXE4EoBFW2x/X3HrdwhoU2mk=;
-        b=QNU4eAqshzx/8v7LkCnZbb8cuP2rRZ0yd0Ivpo+cDZeg+J/2zTorH6imup/Mw3cUUY
-         xHOf5FtLvxqqgedHn//OmEaE3uGYEOGCEIfN7FukFUeFEHSSTl87Ij/1KkBglnIbCcHW
-         11gLk61P4XV7TBx7lHK9r3W2Mn6Sg4qqxveCvDhtE2Gwdxd5G6F1R1r3R4oURLnCDEPa
-         mPT6hpYieX1XbgfrgbN8B29bOVg8NZ4FY08RZxhHc6MwDqtk7UFtr11q1gsPK75GFk7b
-         bf+dnAeDCrN3/DoAV/obCJegljbIkfvuRSVnN4wc014eCW6KiziveTEfvjiYXJ5bGx65
-         yABw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761490711; x=1762095511;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=aqIwpgJ07rQkvt2nZ5lIXE4EoBFW2x/X3HrdwhoU2mk=;
-        b=lZnHLlo2hADNei5+WWYhF1qgEMU4VABckkja0sLZZIzWtk+PCE78C7s5LweiUYocgu
-         mZ2oCtR1cPzFMYWtct8iMUWv3GqEmQ8sLypJI3d3ypo12B8tnOwyGz3OcXjYrzwI/zEC
-         BYDME/Udn0ljtGxVoQKG/CPnUu7dbCiIdFB4eQu6m1qYqhJECPgPrdKzWDqSD8hw2oAo
-         3Xo+sU33jWX+Pfaf/sy/87EoXBGPWlMrU6y/DM7EW0qpAASAQYXjKzwY1o2+jJLtSjD8
-         iJbgUcrTn3dJV8MNttqd3DE7FUOKnyD4tSO8dJSxLp2jOEuuPsYXnLzcN91TldJgHG7+
-         pbGw==
-X-Gm-Message-State: AOJu0YwyfEdckly1/z7Uyz50PsmbsF+ws9TM0CnIEf/TtPaRGJuhbrcL
-	plb+yBIMqIgi2g8QoC/sTr4NOyIKsaKEpiUyaCek7ejt9XMGTrPxs4G/
-X-Gm-Gg: ASbGncv/R0tOsdJjxe2VWC8VgRljt7G7/U1Ieztckp3QhkwE7OvhV289xw3mjVp7Fa6
-	lptnEVX3XwreiIOYaU1XIVJ1W85dMPtV7IMFAMDF4/kakx90vG+l2PNfNqBe+MJVfqx3uCZ5TnD
-	vPZ/z7oKq95FMdySPnjd7hJCS5f7RUVAQeDQ46wi4hqG2eLyRbQzU7ULxLUOnAwmg/jPRRzyMcd
-	VFldUcXPI4msXhBSPi2qRqiNpZ0GJ4jk0eFwVCl8zc9QIpfCHadjex4RFad50qI8YzHqdt/zfaW
-	/ati2mn9mv1QZrJ8x1eW18PZb7WaBKdk2saVZaYcyhM7jpkR/4fkTLqxbqPnChbEjMFgrGTltfx
-	mdP8htkjz1JI9VLqaqxnZ9WjKACds/ycxcOOLaSnD7Y6owqE8sc5xTJpc6FbELlHkvfIFR8Oeu/
-	QbHuigsmIlswBFV7dn+FJb0q4Csb1f47ns9BbdUFnESa0R4Xal
-X-Google-Smtp-Source: AGHT+IG8/iwduXCVBk4ZRhZXTaP9XnVd9i3l9BxjZI7IzYSp7wsypo59lJDx5LnVEsBzLeLrdk9BJg==
-X-Received: by 2002:a05:6a20:914a:b0:341:4dc7:6ac7 with SMTP id adf61e73a8af0-3414dc76bf0mr5033243637.17.1761490711268;
-        Sun, 26 Oct 2025 07:58:31 -0700 (PDT)
-Received: from KERNELXING-MC1.tencent.com ([111.201.29.154])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7a427684bddsm1956042b3a.31.2025.10.26.07.58.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Oct 2025 07:58:30 -0700 (PDT)
-From: Jason Xing <kerneljasonxing@gmail.com>
-To: davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	bjorn@kernel.org,
-	magnus.karlsson@intel.com,
-	maciej.fijalkowski@intel.com,
-	jonathan.lemon@gmail.com,
-	sdf@fomichev.me,
-	ast@kernel.org,
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="UQaFgV0j"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1761493240;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=aN8oN34iZoLpzlmFeG3uFVvEYqjiK8nko/J9BQXfRs0=;
+	b=UQaFgV0j7ML9bj3I2e0WrNsGpkRYULMaUbidt6LMoqhzh3nA3pqLkKV+S017bfuXE2cPyX
+	PTQ2Hql8YFXCEEa1YQM3xHo8jm2cxTRr3zCF2H5aUUfpE6G0N/Kyfzptq4PDMYzoqeItBy
+	yhU3rP3z9MXWPNiPAG5IB/gP/ue5QmM=
+From: Leon Hwang <leon.hwang@linux.dev>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	andrii@kernel.org,
 	daniel@iogearbox.net,
-	hawk@kernel.org,
+	martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
 	john.fastabend@gmail.com,
-	joe@dama.to,
-	willemdebruijn.kernel@gmail.com
-Cc: bpf@vger.kernel.org,
-	netdev@vger.kernel.org,
-	Jason Xing <kernelxing@tencent.com>,
-	Alexander Lobakin <aleksander.lobakin@intel.com>
-Subject: [PATCH net-next v2] xsk: add indirect call for xsk_destruct_skb
-Date: Sun, 26 Oct 2025 22:58:24 +0800
-Message-Id: <20251026145824.81675-1-kerneljasonxing@gmail.com>
-X-Mailer: git-send-email 2.33.0
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	memxor@gmail.com,
+	linux-kernel@vger.kernel.org,
+	kernel-patches-bot@fb.com,
+	Leon Hwang <leon.hwang@linux.dev>
+Subject: [PATCH bpf v3 1/4] bpf: Free special fields when update [lru_,]percpu_hash maps
+Date: Sun, 26 Oct 2025 23:39:57 +0800
+Message-ID: <20251026154000.34151-2-leon.hwang@linux.dev>
+In-Reply-To: <20251026154000.34151-1-leon.hwang@linux.dev>
+References: <20251026154000.34151-1-leon.hwang@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -87,106 +57,41 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-From: Jason Xing <kernelxing@tencent.com>
+As [lru_,]percpu_hash maps support BPF_KPTR_{REF,PERCPU}, missing
+calls to 'bpf_obj_free_fields()' in 'pcpu_copy_value()' could cause the
+memory referenced by BPF_KPTR_{REF,PERCPU} fields to be held until the
+map gets freed.
 
-Since Eric proposed an idea about adding indirect call for UDP and
-managed to see a huge improvement[1], the same situation can also be
-applied in xsk scenario.
+Fix this by calling 'bpf_obj_free_fields()' after
+'copy_map_value[,_long]()' in 'pcpu_copy_value()'.
 
-This patch adds an indirect call for xsk and helps current copy mode
-improve the performance by around 1% stably which was observed with
-IXGBE at 10Gb/sec loaded. If the throughput grows, the positive effect
-will be magnified. I applied this patch on top of batch xmit series[2],
-and was able to see <5% improvement from our internal application
-which is a little bit unstable though.
-
-Use INDIRECT wrappers to keep xsk_destruct_skb static as it used to
-be when the mitigation config is off.
-
-[1]: https://lore.kernel.org/netdev/20251006193103.2684156-2-edumazet@google.com/
-[2]: https://lore.kernel.org/all/20251021131209.41491-1-kerneljasonxing@gmail.com/
-
-Suggested-by: Alexander Lobakin <aleksander.lobakin@intel.com>
-Signed-off-by: Jason Xing <kernelxing@tencent.com>
+Fixes: 65334e64a493 ("bpf: Support kptrs in percpu hashmap and percpu LRU hashmap")
+Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
 ---
-v2
-Link: https://lore.kernel.org/all/20251023085843.25619-1-kerneljasonxing@gmail.com/
-1. use INDIRECT helpers (Alexander)
----
- include/net/xdp_sock.h | 7 +++++++
- net/core/skbuff.c      | 8 +++++---
- net/xdp/xsk.c          | 3 ++-
- 3 files changed, 14 insertions(+), 4 deletions(-)
+ kernel/bpf/hashtab.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/include/net/xdp_sock.h b/include/net/xdp_sock.h
-index ce587a225661..23e8861e8b25 100644
---- a/include/net/xdp_sock.h
-+++ b/include/net/xdp_sock.h
-@@ -125,6 +125,7 @@ struct xsk_tx_metadata_ops {
- int xsk_generic_rcv(struct xdp_sock *xs, struct xdp_buff *xdp);
- int __xsk_map_redirect(struct xdp_sock *xs, struct xdp_buff *xdp);
- void __xsk_map_flush(struct list_head *flush_list);
-+INDIRECT_CALLABLE_DECLARE(void xsk_destruct_skb(struct sk_buff *));
+diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+index c2fcd0cd51e51..26308adc9ccb3 100644
+--- a/kernel/bpf/hashtab.c
++++ b/kernel/bpf/hashtab.c
+@@ -950,12 +950,14 @@ static void pcpu_copy_value(struct bpf_htab *htab, void __percpu *pptr,
+ 	if (!onallcpus) {
+ 		/* copy true value_size bytes */
+ 		copy_map_value(&htab->map, this_cpu_ptr(pptr), value);
++		bpf_obj_free_fields(htab->map.record, this_cpu_ptr(pptr));
+ 	} else {
+ 		u32 size = round_up(htab->map.value_size, 8);
+ 		int off = 0, cpu;
  
- /**
-  *  xsk_tx_metadata_to_compl - Save enough relevant metadata information
-@@ -218,6 +219,12 @@ static inline void __xsk_map_flush(struct list_head *flush_list)
- {
- }
- 
-+#ifdef CONFIG_MITIGATION_RETPOLINE
-+static inline void xsk_destruct_skb(struct sk_buff *skb)
-+{
-+}
-+#endif
-+
- static inline void xsk_tx_metadata_to_compl(struct xsk_tx_metadata *meta,
- 					    struct xsk_tx_metadata_compl *compl)
- {
-diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-index 5b4bc8b1c7d5..00ea38248bd6 100644
---- a/net/core/skbuff.c
-+++ b/net/core/skbuff.c
-@@ -81,6 +81,7 @@
- #include <net/page_pool/helpers.h>
- #include <net/psp/types.h>
- #include <net/dropreason.h>
-+#include <net/xdp_sock.h>
- 
- #include <linux/uaccess.h>
- #include <trace/events/skb.h>
-@@ -1140,12 +1141,13 @@ void skb_release_head_state(struct sk_buff *skb)
- 	if (skb->destructor) {
- 		DEBUG_NET_WARN_ON_ONCE(in_hardirq());
- #ifdef CONFIG_INET
--		INDIRECT_CALL_3(skb->destructor,
-+		INDIRECT_CALL_4(skb->destructor,
- 				tcp_wfree, __sock_wfree, sock_wfree,
-+				xsk_destruct_skb,
- 				skb);
- #else
--		INDIRECT_CALL_1(skb->destructor,
--				sock_wfree,
-+		INDIRECT_CALL_2(skb->destructor,
-+				sock_wfree, xsk_destruct_skb,
- 				skb);
- 
- #endif
-diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-index 7b0c68a70888..9451b090db16 100644
---- a/net/xdp/xsk.c
-+++ b/net/xdp/xsk.c
-@@ -605,7 +605,8 @@ static u32 xsk_get_num_desc(struct sk_buff *skb)
- 	return XSKCB(skb)->num_descs;
- }
- 
--static void xsk_destruct_skb(struct sk_buff *skb)
-+INDIRECT_CALLABLE_SCOPE
-+void xsk_destruct_skb(struct sk_buff *skb)
- {
- 	struct xsk_tx_metadata_compl *compl = &skb_shinfo(skb)->xsk_meta;
- 
+ 		for_each_possible_cpu(cpu) {
+ 			copy_map_value_long(&htab->map, per_cpu_ptr(pptr, cpu), value + off);
++			bpf_obj_free_fields(htab->map.record, per_cpu_ptr(pptr, cpu));
+ 			off += size;
+ 		}
+ 	}
 -- 
-2.41.3
+2.51.0
 
