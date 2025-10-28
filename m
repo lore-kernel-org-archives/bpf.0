@@ -1,107 +1,68 @@
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCDBC1662E7
-	for <bpf@vger.kernel.org>; Tue, 28 Oct 2025 05:40:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.43
+Received: from cmccmta2.chinamobile.com (cmccmta2.chinamobile.com [111.22.67.135])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F165E29293D
+	for <bpf@vger.kernel.org>; Tue, 28 Oct 2025 06:36:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=111.22.67.135
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761630044; cv=none; b=CaX+SYpfPkhFv3WYVyJ/pzSeGT6IBnFEWhvGOk/Ldt1u2b/01bAGiUKB+0Y64uN/UwzDOysVOpaCSwkjfhoePqRlZsFbOBQUHVdhXE+0zjgHINrLiA3UYBUOpvBVvoqX+BZb2z9Yx3Q2FNjhTInyEqVyaLyH3+/VF9VhXE2R4ck=
+	t=1761633424; cv=none; b=OnO2mZ5bbszMOBCNhQGJtN6dYUqP9vmphD1y56jp2DaM3GufMbM3UlNRlF1p0ZrSjQJgBTm+JWtLOEvidoAbPhatEOC11RzOE8+Cse0VEr2P/6REHVjXVd+N7ohXeIsOaasxyddlFk1bUqaYfEj0adRHCbXpvwwmpSou1JvRk/4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761630044; c=relaxed/simple;
-	bh=MBBUGXoG1YUz44tfK9dC7obCvP9yR1LjZ/0B16rOeOU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=IwgZaQa4r+buuCSW5nAcEuqo35cTFJQZQi5KXrfToXm1IQKc8FMSbTHvOE1iFqMr+OrzCJ0pvvmxSAh4u1KRE9WJRV/aouSrr9eUl8zbs0IOesnGwjb+JVDefykO9dsejA0Rf/hniK54Dx9rwjcz7r5QgPaHBEjN1MYwNG6DmXU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=G0ADjVhp; arc=none smtp.client-ip=209.85.167.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="G0ADjVhp"
-Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-586883eb9fbso6859107e87.1
-        for <bpf@vger.kernel.org>; Mon, 27 Oct 2025 22:40:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1761630041; x=1762234841; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=3Wy1ynDaI6taIoYDlBwI1sYFOXKyWHxR4eO6K9jXR3Y=;
-        b=G0ADjVhpjlx9iSiWvBM95/bfjyD1ej/fFGo9FyRZDI3VYU2X1Y3LBwch6HMhtqRh6L
-         Wf58nustjZ8r3mtmWkqcqQTniOzwk9TednnKWVmzKzdtxgbmhQG5scuS5YyafJ6vk4lR
-         hWZCFquxGEv/jO3zKr3bkF3rpPLOzlu7g1HBk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761630041; x=1762234841;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3Wy1ynDaI6taIoYDlBwI1sYFOXKyWHxR4eO6K9jXR3Y=;
-        b=tvoiSVWVKYZPbIuhFXBLAfdA2BwnfG+4px0WjrUqFbtkP3AGgfgKidi6aHNizWIhUG
-         4xtQr25XVu9Y52CVP1XV65ws9ssfz5ntZ6SHVGYru8lDGPHAniP2QnQQtp3OuBMJ8v4e
-         fONy5AywOrhoB3FL+ZMNVBj/mcUTYdMyIQqLbuwUFyvZcfUiZF9mtXVIe5vkVs5NIVpN
-         w84xDtnUYvAdAS4/6N6DcDqt0fMU3o+Yg2akK4nYoP1qpvFhVN8Z1kYYlxjybnShJ5lV
-         SEUQpFZcs8SlxiiPBRjRg0qfajYGD9H25Jwtfu0PubhUbA1jVH+3HgdfOsUzNJSHuUiG
-         n7KQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUSEju0qGgUWFFQH0ScJSmNEfw1mi6GxsYKxJFiyxIsNbmZRXNWf37+mZOlfSvLK43P35Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwY/OdEVmJO7ICvGhwuUsHPqZk61HSyzyFmlbUzMyBkayf747cL
-	6dnTYsNrmpKMeNUg1m1J6UX4Zh6ffTCtuSn+pNNao4MrjJw4DYyUrFrWmCkpFWQhgZVjHlCnPTH
-	DW5zv3r4fEA==
-X-Gm-Gg: ASbGncshO2aPq//Fwrd2Dy71CMpe6tKE8H0RKDsqJIhBvLqghs9YQwXvDKg30oz6JVk
-	KinlQtKHcpUQ4f8ph3PMdTmC5y8mH7I9qjFjBw9Uw3mNo+9xzMEQpKa7wU1KPPq1JEYl3DlRKxV
-	1CY6BXfayJjtpzPkuQdRgAT5iPlRNjYoumRwCPV0u9vpmIGzfzE0JR6TN9g+rCmFZWFurOlO7gt
-	ldQRTSrifqNMguwtR27AxepcojRv2C2Ul2K16v8aGS15WJR5dto6Jaj/daCmxE+z+jwEdYuRIm0
-	ZgZ36pIZ1uRgTsgABdLxSJGqdnne9Qn8TuvsS9qG2/sDIaYER7Ybyn/J2ELN9JI+FWDePCtqIpp
-	pBFgSxLnb+MHLNyBqLinkjP34CfyxS7UeKgyH+q/5ARl+9FNG1YTtG7RFCdc/5iR5CQcysK8bRB
-	FZKnxKy8TOrFDBj6yYcSUyDmTpCN6OtiUScIWv7ywjTsMr66sQEkrCjw==
-X-Google-Smtp-Source: AGHT+IEFrKuE/TIviRphIyDDaPxkBae6h58aY9riLV8g2iFtTjO65pz7Gk33skC8qOQcDLAPGPNsgA==
-X-Received: by 2002:a05:6512:39ca:b0:592:ef1b:da70 with SMTP id 2adb3069b0e04-5930e9d82b7mr974711e87.49.1761630040751;
-        Mon, 27 Oct 2025 22:40:40 -0700 (PDT)
-Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com. [209.85.208.177])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-59301f60dfasm2813690e87.61.2025.10.27.22.40.39
-        for <bpf@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Oct 2025 22:40:39 -0700 (PDT)
-Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-3761e5287c9so64942401fa.2
-        for <bpf@vger.kernel.org>; Mon, 27 Oct 2025 22:40:39 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWpX6BssfQit1iV7deOKLLBxot7kf0+zp0Wz6XjURekgvoPDOG6fKiacHAXotVH4yj2laE=@vger.kernel.org
-X-Received: by 2002:a05:6402:5346:20b0:63c:1e15:b9fb with SMTP id
- 4fb4d7f45d1cf-63ed84d11b8mr1725392a12.22.1761629565035; Mon, 27 Oct 2025
- 22:32:45 -0700 (PDT)
+	s=arc-20240116; t=1761633424; c=relaxed/simple;
+	bh=Ln0eEjqd5MJgKySWvc33us1BhZgJkUypawNCo7DyBVY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fBWPd4CXwvQ5xQpZDkM5+T+NhA+WSIEy4+SvETau6JukUu4dMRYhIroONaxABpZJVaZbP7+7oNrpvMwooN+Q6MqYdhF9Si7mTuy2cbESzfKZbEmFkzstTj6Cc57kXQdmYtkm8ugCEd9MlNiFY1jhoVRL45R633kbR9IePf8HWdA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com; spf=pass smtp.mailfrom=cmss.chinamobile.com; arc=none smtp.client-ip=111.22.67.135
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG:00000000
+Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
+	by rmmx-syy-dmz-app07-12007 (RichMail) with SMTP id 2ee7690063cdb13-52be2;
+	Tue, 28 Oct 2025 14:33:50 +0800 (CST)
+X-RM-TRANSID:2ee7690063cdb13-52be2
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG:00000000
+Received:from FHB-W5100149 (unknown[36.137.216.21])
+	by rmsmtp-syy-appsvr05-12005 (RichMail) with SMTP id 2ee5690063ccc07-cb4ed;
+	Tue, 28 Oct 2025 14:33:50 +0800 (CST)
+X-RM-TRANSID:2ee5690063ccc07-cb4ed
+From: Zhang Chujun <zhangchujun@cmss.chinamobile.com>
+To: bpf@vger.kernel.org
+Cc: Zhang Chujun <zhangchujun@cmss.chinamobile.com>
+Subject: [PATCH] tools:bpf: fix missing closing parethesis for BTF_KIND_UNKN
+Date: Tue, 28 Oct 2025 14:33:45 +0800
+Message-ID: <20251028063345.1911-1-zhangchujun@cmss.chinamobile.com>
+X-Mailer: git-send-email 2.50.1.windows.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251028004614.393374-1-viro@zeniv.linux.org.uk>
- <20251028004614.393374-32-viro@zeniv.linux.org.uk> <20251028015553.GM2441659@ZenIV>
-In-Reply-To: <20251028015553.GM2441659@ZenIV>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Mon, 27 Oct 2025 22:32:28 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whCnWNXcmZAgxfV9p8rKJfjxcceNzaxia41f675+yEdfA@mail.gmail.com>
-X-Gm-Features: AWmQ_bkREqIMu_f1B9dwguEOjRWmmtrQM-BuU5ACiXPx-fVfEkz6aAECfx6yPOQ
-Message-ID: <CAHk-=whCnWNXcmZAgxfV9p8rKJfjxcceNzaxia41f675+yEdfA@mail.gmail.com>
-Subject: Re: [PATCH v2 31/50] convert autofs
-To: Al Viro <viro@zeniv.linux.org.uk>
-Cc: linux-fsdevel@vger.kernel.org, brauner@kernel.org, jack@suse.cz, 
-	raven@themaw.net, miklos@szeredi.hu, neil@brown.name, a.hindborg@kernel.org, 
-	linux-mm@kvack.org, linux-efi@vger.kernel.org, ocfs2-devel@lists.linux.dev, 
-	kees@kernel.org, rostedt@goodmis.org, gregkh@linuxfoundation.org, 
-	linux-usb@vger.kernel.org, paul@paul-moore.com, casey@schaufler-ca.com, 
-	linuxppc-dev@lists.ozlabs.org, john.johansen@canonical.com, 
-	selinux@vger.kernel.org, borntraeger@linux.ibm.com, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-On Mon, 27 Oct 2025 at 18:55, Al Viro <viro@zeniv.linux.org.uk> wrote:
->
-> BTW, is there any reason why autofs_dir_unlink() does not update
-> ctime of the parent directory?
+In the btf_dumper_do_type function, the debug print statement for
+BTF_KIND_UNKN was missing a closing parenthesis in the output format.
+This patch adds the missing ')' to ensure proper formatting of the
+dump output.
 
-An autofs 'rmdir' is really just an expire, isn't it? It doesn't
-really change anything in the parent, and a lookup will just reinstate
-the directory.
+Signed-off-by: Zhang Chujun <zhangchujun@cmss.chinamobile.com>
+---
+ tools/bpf/bpftool/btf_dumper.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-So I'd go the other way, and say that the strange thing is that it
-changes mtime...
+diff --git a/tools/bpf/bpftool/btf_dumper.c b/tools/bpf/bpftool/btf_dumper.c
+index ff12628593ae..def297e879f4 100644
+--- a/tools/bpf/bpftool/btf_dumper.c
++++ b/tools/bpf/bpftool/btf_dumper.c
+@@ -590,7 +590,7 @@ static int btf_dumper_do_type(const struct btf_dumper *d, __u32 type_id,
+ 	case BTF_KIND_DATASEC:
+ 		return btf_dumper_datasec(d, type_id, data);
+ 	default:
+-		jsonw_printf(d->jw, "(unsupported-kind");
++		jsonw_printf(d->jw, "(unsupported-kind)");
+ 		return -EINVAL;
+ 	}
+ }
+-- 
+2.50.1.windows.1
 
-That said, exactly *because* it changes mtime, I think the real answer
-is that none of this matters, and it's probably just an oversight, and
-it could easily go either way.
 
-               Linus
+
