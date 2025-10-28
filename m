@@ -1,153 +1,128 @@
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF51D345751
-	for <bpf@vger.kernel.org>; Tue, 28 Oct 2025 18:03:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B37F34C9A3
+	for <bpf@vger.kernel.org>; Tue, 28 Oct 2025 18:03:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761674610; cv=none; b=tCvX3WvIXJEe5H+AYc9j00mOwy5/dRjm1Y6qV/6sTekLuBhNE6wBLanis3g2dB8JrdX/WskPLDHca9HgaK/NN85c7kjnUgcnplyiyeR/iSLMmcTFntZvP1hOpMCykidZ4iXukYFqweGUGUeHZdzkMv8uAW4toG+sKxcYGbEjA7k=
+	t=1761674630; cv=none; b=jAfBAiUYuvg+gEqYDnheTrGuPQHcDJubGCOw1JnY3GL93FPeQhj93DBnQCg1WvFZJYI0mOlcnh7rEDlg6DOcVQR/Exztj3M80entMlSKxQQW22sFLOp75q9eUneWMVZC9bh5Qp0+2vMs1jsjwQv+ehrESE+eFCHT+DZbO79O3Dc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761674610; c=relaxed/simple;
-	bh=N/2n9//+KW7oF6yBywFQdC6s1W8qi+KuEL6BiBiuSSo=;
+	s=arc-20240116; t=1761674630; c=relaxed/simple;
+	bh=Tj8ZvhTz97/8amvz01XKhun3eDCFY803CdI9bwOU1JQ=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fl17P4BYveeYvzEu2lR34dDtlJxNteZAhq2h4yvso8ApuqYMUYXl3I4X3kYWmjpy/pTk1Jux5IcttUrQEpSq02KSgkTOjRPGd19Cb5EGDjqCVoKPquAyNTh+EbnCTqeZjKTmbykZCMZeQBrvQSBZGcRv1jiYzvuA6piGAuX5qq0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZTaJHWwp; arc=none smtp.client-ip=209.85.216.46
+	 To:Cc:Content-Type; b=Ybu/f1LVM58eW55pXoydLrImpVXCbPTnnLrQkmO0ns32jDVohRFZ3AeoVZzHIbY+O1krxlUqIf07nFOSsbGzTBmoY2ig6zC70oFNZtepBGiQjwLcojseBIsVbjqqp28oJvfpEX6xQ+7upn3BWt71U37xFutixUwD0Abjk7Fu3wA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LqTaHq9K; arc=none smtp.client-ip=209.85.214.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZTaJHWwp"
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-33e0008d3b3so6396423a91.3
-        for <bpf@vger.kernel.org>; Tue, 28 Oct 2025 11:03:28 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LqTaHq9K"
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-290d4d421f6so59254585ad.2
+        for <bpf@vger.kernel.org>; Tue, 28 Oct 2025 11:03:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761674608; x=1762279408; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1761674626; x=1762279426; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=4YUIz8wwdRGbzeLmUHhGiVZlg3eCd3kY9ZjME39qTq8=;
-        b=ZTaJHWwpI43QriePMm2vLipy+s8KeR1idVe01X4/H+cxgNNlFwXJd0enZGXcx2AHfd
-         0nC5D2s7O3Jr5Bk8Efqrx19rGhEo74U85xfSPSzhieSOkVNwvzCC+o0anH+wTRXSLnCc
-         JAr23flMCLbd+C5J02N5N5zvJmkjG4jgBep6VgOz61KRd83CK+OY4uwF4TNf0KDrff0T
-         +doIEDg9KDWF5wpfLD5TwgqMJ8Vv4MfhkYhAJDDSge/1UbZXFD8YuUiPYLZFGvwlWpl8
-         xA+8J7fTumBZwY0tlKOGzHlE03QusHDraWLFAaky1GDD6ltLJiLsE7wiEWkCeXyHAkgU
-         aQ4Q==
+        bh=mF5TM62qsWY0KYgalRztsNCpOTJySBlQjc+dN+egIAg=;
+        b=LqTaHq9KoWdTUKmE5KONE51B97dz5QEHczG9XHqmszZcF+9xP4akT9WWmj5y/sTYjA
+         +74ddGJEsyd7EtI2dpKL0IUJXzITATPZWhfrHGtKUNTh7C6T2r76x7odTelhDvySVkFv
+         UyWv+5NkltGfAWg6Srs9GrvfiPdAEdqY85Ai5RVmtJTprTV4ZH+dlVEQwMFcde6gK4rJ
+         9MYk0FqJRF7kvXiJEjwnz8veym27xIuEAC0KU5fhkIjIJiS0DRf1c6hlzqV1e2BiFPuN
+         aj3FFUaqLtPuJP+R2nNMGtQuG9ZMDiTPOhiHPGF0bNp7zg6tIOV+mHmvGzg+i0r1xagQ
+         s6wA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761674608; x=1762279408;
+        d=1e100.net; s=20230601; t=1761674626; x=1762279426;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=4YUIz8wwdRGbzeLmUHhGiVZlg3eCd3kY9ZjME39qTq8=;
-        b=ZkrwHTGioOAXCDVyCl2c8H20qozo2vnF53FIeWzL7At/DwNI/TPXeiJtMDKGW4TbjF
-         bZtIblkqGegLm9c2alo6I/JBZ+W2eNwCa/LAPziM5WVKBE5zqgTF8SGe9yNw10i6B/JI
-         ozqMIJKwv/r0+LoUAwdaleQMHdKMvkk7w2NbbaUvtOcZnTQcvZrUI2zRArThxoc9e2h9
-         b8t3QBPB+3Tzc+67Kk6rLFrvqb7IS8p5+Ymm01VToYAn552Eqm755R3bbes0hjmL90Eo
-         1YvVNTD0bteX+KaDHcekQlRa4zL9zCQRLsQz2l6j0zMLCakmSYhE2jZtCbKbQwXZeVaa
-         usXA==
-X-Forwarded-Encrypted: i=1; AJvYcCXG3t33L/CIXIZvHKDaKZcjdEU2TjX+WutCHGUUfyoEUgTAeYJ6pVMhpOGPRzn6Dkoxsgs=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxg638hT/oY1tW9Nj3Ctud3IKLiEwpuDLIFxNYHarSIvNZzGpCw
-	vRMx+ctU414P2vGpnmqa2g4/yA9XT9y2H5fD3nVEc48gYTHDGYGn03iD/05SB9hxqPeGGcJ/4tU
-	Zx4v0IfvASCmZv7UeTy3E8J8yoQrTrXs=
-X-Gm-Gg: ASbGncvT/j6YPdnLPZTbxhTt+8XepGjIKw3+3Fdvb2WkIxKKxSSBxEjjnn/wVrp5zPP
-	oF+NyJRWxTtzLJAknIg09UalRzMTXEnMZI/Mi8hpJNO/9Bdj89Bj/Y6OWOrWkgLTFjtDpo0CmQF
-	u2O230A/BFrSim3Y4yF5kVxwh82atBk3r2uUbEqOqdvyWgQGolI0uiUWPm9QoJenLhnU89jxjaH
-	hzLhfK02sEwRbXQCC8cdKgimamZSjnA81gkLMAwHlRUwUtLQ/TI3Ehxmgp/3qveN8aaPJnJiVJ3
-X-Google-Smtp-Source: AGHT+IF5uRUmVRMsdvmXnOQ/s58+NuQywR1+H1ilzd8u0z1tYFeDtb+IxVChGYm8w5VEsZPqM/8uTgNLgmV5PnDy1Rk=
-X-Received: by 2002:a17:90b:582f:b0:32e:9f1e:4ee4 with SMTP id
- 98e67ed59e1d1-34027bd6b5cmr6501813a91.17.1761674607530; Tue, 28 Oct 2025
- 11:03:27 -0700 (PDT)
+        bh=mF5TM62qsWY0KYgalRztsNCpOTJySBlQjc+dN+egIAg=;
+        b=oHP+OjAXf+KdmRnb0gLH8Q0k+gdce9BEnoegmsi7V0FH9XPjCeayHT5JuDEgU+UyGt
+         GeEncQGDHutPTrXQUUonqyWofUylDgQn43Hnq9nwjNg5PDshKKMmt9HdBD9WZiCPB+Jk
+         zq7P2oh3G3qitolOiBFh+PnstXWP5Lo8xeoQWh592k43jATZsuYf+PeoVhfhfriSH+mS
+         GQ9FcgiONF4OmqwTsY9nI8+oCScrw1y7OUmPyudKpYmpcg+pbzSf8XIpC50f4MnKeRwI
+         Zfyd8MJp2XTT/aYuT3zD6S+ko4gQrAo7EEQNzroDQVMb3hZJyv/tKAVfjr5Tne2gBKc6
+         SHbA==
+X-Gm-Message-State: AOJu0Yw3qfuSkiz+LFuUH4aI7zVyhqAn7o/HoXs0Vv9Eh7JLOS2Q6u6o
+	Zoc5RwGeG4p+DKa0N2Qr9ucjoc+9BtwmB3ekYfqvPrwWu0NxaC9Vz62KGo2dV6UmrsBJMRsdqkW
+	+4P1YKr+IZkXRvx571Toi/Pr3cm8tNuY=
+X-Gm-Gg: ASbGncv//K4eBtKPFrLxig/gnsLWgTBF6tsl7hdFNzKz1uiNRZHVI+wCFr/0AZwbXKz
+	xXkp5m8EYFYfT8h/RKxlLYxbN72Cv4pYWpdKq8S5OgXOJlujZTTKddi7Kj81z0acE4YptvEom4A
+	2vs6F11sSx2pdNeK2zzxnpFxzxTGrmVQ76efg2zY54HSGooLSB9HQlqKMwBiGv0VEOuAp1u2ZZb
+	FnwLc8QPo1/IumWxYX8dnyBgBfzFjtQqVmsVsdAq6vZBbtFqQBa/2K960DznPTt8lWx5yLXpa9s
+X-Google-Smtp-Source: AGHT+IFEBly4eLU2eMtrpHdWDwUWq3jIOQKd58DzgQ3u8neDEg4iOH++Ap+sBfMU/91tfTmuT/8gb217U8qyaHQbJ4U=
+X-Received: by 2002:a17:903:24d:b0:27e:ef09:4ab6 with SMTP id
+ d9443c01a7336-294deb25bc7mr1425415ad.0.1761674625931; Tue, 28 Oct 2025
+ 11:03:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251026154000.34151-1-leon.hwang@linux.dev> <20251026154000.34151-4-leon.hwang@linux.dev>
- <CAMB2axPhcYctJYz0bH032-Kc1h2LcJL74O5iS5g=8Qp74GPK_g@mail.gmail.com>
- <377791b5-2294-4ced-a0d3-918c7e078b2b@linux.dev> <CAMB2axPx2RajLzhoOsnffhrOxkw7Zy=D=vHam_Y_5wKS0cqf0g@mail.gmail.com>
- <971495da-bc0e-46d4-bda4-5e9b8310ca3e@linux.dev>
-In-Reply-To: <971495da-bc0e-46d4-bda4-5e9b8310ca3e@linux.dev>
+References: <20251026154000.34151-1-leon.hwang@linux.dev> <20251026154000.34151-2-leon.hwang@linux.dev>
+In-Reply-To: <20251026154000.34151-2-leon.hwang@linux.dev>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 28 Oct 2025 11:03:13 -0700
-X-Gm-Features: AWmQ_bnRheSYG69jQZH0dkLn0sMywDw0oGtZbRALO7WE3C87j6rV9LzVKZj-sx4
-Message-ID: <CAEf4BzbRA1Ka1piTiQjBfG2z8tp2ucJh_YuazFWNqAVtOhD48g@mail.gmail.com>
-Subject: Re: [PATCH bpf v3 3/4] bpf: Free special fields when update local
- storage maps
+Date: Tue, 28 Oct 2025 11:03:30 -0700
+X-Gm-Features: AWmQ_blOGTMhHAR4mFgi-mzpm7Mwgmbx48rSRLx0IY5MkekEooV1tyvh3TpbvC0
+Message-ID: <CAEf4BzZWzxkUvUc+3ufLahSsGi+BrAv7xQBGhZPCNuy-ZYji-w@mail.gmail.com>
+Subject: Re: [PATCH bpf v3 1/4] bpf: Free special fields when update
+ [lru_,]percpu_hash maps
 To: Leon Hwang <leon.hwang@linux.dev>
-Cc: Amery Hung <ameryhung@gmail.com>, bpf@vger.kernel.org, ast@kernel.org, 
-	andrii@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev, 
-	eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev, 
-	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me, 
-	haoluo@google.com, jolsa@kernel.org, memxor@gmail.com, 
-	linux-kernel@vger.kernel.org, kernel-patches-bot@fb.com
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
+	daniel@iogearbox.net, martin.lau@linux.dev, eddyz87@gmail.com, 
+	song@kernel.org, yonghong.song@linux.dev, john.fastabend@gmail.com, 
+	kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, 
+	memxor@gmail.com, linux-kernel@vger.kernel.org, kernel-patches-bot@fb.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Oct 28, 2025 at 7:48=E2=80=AFAM Leon Hwang <leon.hwang@linux.dev> w=
+On Sun, Oct 26, 2025 at 8:40=E2=80=AFAM Leon Hwang <leon.hwang@linux.dev> w=
 rote:
 >
+> As [lru_,]percpu_hash maps support BPF_KPTR_{REF,PERCPU}, missing
+> calls to 'bpf_obj_free_fields()' in 'pcpu_copy_value()' could cause the
+> memory referenced by BPF_KPTR_{REF,PERCPU} fields to be held until the
+> map gets freed.
 >
+> Fix this by calling 'bpf_obj_free_fields()' after
+> 'copy_map_value[,_long]()' in 'pcpu_copy_value()'.
 >
-> On 2025/10/28 01:04, Amery Hung wrote:
-> > On Mon, Oct 27, 2025 at 9:15=E2=80=AFAM Leon Hwang <leon.hwang@linux.de=
-v> wrote:
-> >>
-> >> Hi Amery,
-> >>
-> >> On 2025/10/27 23:44, Amery Hung wrote:
-> >>> On Sun, Oct 26, 2025 at 8:41=E2=80=AFAM Leon Hwang <leon.hwang@linux.=
-dev> wrote:
+> Fixes: 65334e64a493 ("bpf: Support kptrs in percpu hashmap and percpu LRU=
+ hashmap")
+> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+> ---
+>  kernel/bpf/hashtab.c | 2 ++
+>  1 file changed, 2 insertions(+)
 >
-> [...]
->
-> >>>>                 selem =3D SELEM(old_sdata);
-> >>>>                 goto unlock;
-> >>>>         }
-> >>>> @@ -654,6 +656,7 @@ bpf_local_storage_update(void *owner, struct bpf=
-_local_storage_map *smap,
-> >>>>
-> >>>>         /* Third, remove old selem, SELEM(old_sdata) */
-> >>>>         if (old_sdata) {
-> >>>> +               bpf_obj_free_fields(smap->map.record, old_sdata->dat=
-a);
-> >>>
-> >>> Is this really needed? bpf_selem_free_list() later should free specia=
-l
-> >>> fields in this selem.
-> >>>
-> >>
-> >> Yes, it=E2=80=99s needed. The new selftest confirms that the special f=
-ields are
-> >> not freed when updating a local storage map.
-> >>
-> >
-> > Hmmm. I don't think so.
-> >
-> >> Also, bpf_selem_unlink_storage_nolock() doesn=E2=80=99t invoke
-> >> bpf_selem_free_list(), unlike bpf_selem_unlink_storage(). So we need t=
-o
-> >> call bpf_obj_free_fields() here explicitly to free those fields.
-> >>
-> >
-> > bpf_selem_unlink_storage_nolock() unlinks the old selem and adds it to
-> > old_selem_free_list. Later, bpf_selem_free_list() will call
-> > bpf_selem_free() to free selem in bpf_selem_free_list, which should
-> > also free special fields in the selem.
-> >
-> > The selftests may have checked the refcount before an task trace RCU
-> > gp and thought it is a leak. I added a 300ms delay before the checking
-> > program runs and the test did not detect any leak even without this
-> > specific bpf_obj_free_fields().
->
-> Yeah, you're right. Thanks for the clear explanation.
->
-> I also verified it by adding a 300ms delay.
->
-> So this bpf_obj_free_fields() call isn't needed =E2=80=94 I'll drop it in=
- the
-> next revision.
+> diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+> index c2fcd0cd51e51..26308adc9ccb3 100644
+> --- a/kernel/bpf/hashtab.c
+> +++ b/kernel/bpf/hashtab.c
+> @@ -950,12 +950,14 @@ static void pcpu_copy_value(struct bpf_htab *htab, =
+void __percpu *pptr,
+>         if (!onallcpus) {
+>                 /* copy true value_size bytes */
+>                 copy_map_value(&htab->map, this_cpu_ptr(pptr), value);
+> +               bpf_obj_free_fields(htab->map.record, this_cpu_ptr(pptr))=
+;
 
-I've dropped it while applying, no need to resend.
+would make sense to assign this_cpu_ptr() result in a local variable
+and reuse it between copy_map_value and bpf_obj_free_fields().
+Consider that for a follow up.
 
+
+>         } else {
+>                 u32 size =3D round_up(htab->map.value_size, 8);
+>                 int off =3D 0, cpu;
 >
-> Thanks,
-> Leon
+>                 for_each_possible_cpu(cpu) {
+>                         copy_map_value_long(&htab->map, per_cpu_ptr(pptr,=
+ cpu), value + off);
+> +                       bpf_obj_free_fields(htab->map.record, per_cpu_ptr=
+(pptr, cpu));
+>                         off +=3D size;
+>                 }
+>         }
+> --
+> 2.51.0
 >
