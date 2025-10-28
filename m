@@ -1,34 +1,34 @@
 Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7394321FF4C;
-	Tue, 28 Oct 2025 00:46:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2721220B7ED;
+	Tue, 28 Oct 2025 00:46:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761612389; cv=none; b=Jk0pmLuBc/9uaZ+b2GVEwP8aLPoWDdo4H71C5AdY2FX6wzbavLuYwMv5SfoTdFJEWNeQS9fcmqtEYhbKvHLz7bn/PqCZDHdXddYIb9hNxbBn+syKllZPBABC0nx6y9BbiNwREuJL+OIGBvxokKs4FkrdK+4Gk99oF61JJbowE/c=
+	t=1761612388; cv=none; b=VMakCGLXXD8hHjqJYzRjt4RElTxgZoLmR69SD+bK2fM5ABlIjN3eXj7GfkmWcvbcC4rjjAUKxo4X8iQFMS94Zi+E/6MIMGCCkZ+O21+9enqO4qgc8FGNXY6cQ+I4qqMutwAcdEb0Uxq5NAO44PIa+4tMIMzQdMcrsbKTCsCdgHQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761612389; c=relaxed/simple;
-	bh=WwFHCuQtytil9cvgc+ldg87rrIX/Mu55UMJ+9wTv5BQ=;
+	s=arc-20240116; t=1761612388; c=relaxed/simple;
+	bh=WxSgeuo0ahJRBpa5cCoszsU7LKgd5x5Hzdw5+x6gsRk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=p+2LVFLJYKtSdxvfv5DWxBd4aOoxY/ykXWK+XjP8jvFFU7miu4zwx77mhOtV8FpSldAb0nrUycZoFYmVnttk7sX+SpzSFD79iSQEWz/Lem9TOj/nZFCqVh5MQqaB9yk7tOkVXezjKV/JcPVmSKw9ahLEy3tQLzq1mfmNASbncrA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=v6jWSJiq; arc=none smtp.client-ip=62.89.141.173
+	 MIME-Version; b=UYOGXlq9boOfGh2SkOn7V4pHbKtT3jFNr/N6m5SWnEKbZOWUGNSDPVfYDbRFvzryAz+MVE8esC92OvDK/FVNEW/b4o+2kn6j3ro2monRtybNIq/7vUfzGrg04e2d+IgNunVJspkeLva402hgykFe56AawzYzp97T6MZ5eTzxkms=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=cWKXwiJR; arc=none smtp.client-ip=62.89.141.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="v6jWSJiq"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="cWKXwiJR"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
 	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
 	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=NN/33ifYl1WumRWtJ01j5wECnyYUZIw+8lYgHF3pdkY=; b=v6jWSJiqb9fbWS7IvwWDHA9cMT
-	beAXKgY3mYkmJ9R/Yfd2zbK6OnGvRVpEdXZXMc5poQhne20tISSL6b62YeKtuoMd5qVJ2bx0HpH77
-	rsL/dEX7pxpoTWZ+cdhTZiv7pZVgdjM5+RsvktFGCFW/mpmSmziRlL9qAEqEku2aQNXzGQ775AMhY
-	Z8YameiFR+Ci0RZNgb4fEn8/sZSdXhuEjtuiZQUpCKqJNjbQtNdQ/ejrYfh7vLoUkMs8wIRx2nFNu
-	Nx/HjWzJJnzW5eJ6siXJ8N5umjkl0ALbIpi1DX+rtNKvt1EbRYDUsgjuWLya4P5Pp8OLqkVWGfjT7
-	H5Gbeoqg==;
+	bh=eoHAGF5loUqH0LAFPRC8F4kXyPuIEz0vDtopK5rWb5o=; b=cWKXwiJRgmyUaWc4btZ5WzGz3e
+	P1d4pU2PnDGwHyXYYC3Sgwm/WPpNg6KTwV5sROPVde7FceyNHhhUc0N4X81SxgJMRZaYvSs5qCoF/
+	0usQSfZLUxv2nUlR2Jfp5JWmBh+5fu1PIOG0mXjNiaHsbpZuvnuCBQsXL9AKNKoUcXX02D2qMvWqk
+	qnAOvMK+sofvaE+oth2FQB23/OCTjk4qP5LStexB4zj8DV7NnUUQGzcMZAJfRFTfyrPeKSt6B6Q3u
+	q06p5RvGSDJEqongOiLQqYlkX46ecZiHjCeRWGwudoHTsnkOUbcR71MM5KOW07SuplgdFJG4EF3Ct
+	Kh0HmJcQ==;
 Received: from viro by zeniv.linux.org.uk with local (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1vDXqv-00000001enR-0ZXY;
-	Tue, 28 Oct 2025 00:46:21 +0000
+	id 1vDXqr-00000001eZ5-2N4G;
+	Tue, 28 Oct 2025 00:46:17 +0000
 From: Al Viro <viro@zeniv.linux.org.uk>
 To: linux-fsdevel@vger.kernel.org
 Cc: torvalds@linux-foundation.org,
@@ -52,9 +52,9 @@ Cc: torvalds@linux-foundation.org,
 	selinux@vger.kernel.org,
 	borntraeger@linux.ibm.com,
 	bpf@vger.kernel.org
-Subject: [PATCH v2 45/50] convert nfsctl
-Date: Tue, 28 Oct 2025 00:46:04 +0000
-Message-ID: <20251028004614.393374-46-viro@zeniv.linux.org.uk>
+Subject: [PATCH v2 28/50] binderfs_binder_ctl_create(): kill a bogus check
+Date: Tue, 28 Oct 2025 00:45:47 +0000
+Message-ID: <20251028004614.393374-29-viro@zeniv.linux.org.uk>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20251028004614.393374-1-viro@zeniv.linux.org.uk>
 References: <20251028004614.393374-1-viro@zeniv.linux.org.uk>
@@ -67,92 +67,34 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Al Viro <viro@ftp.linux.org.uk>
 
-One instance per net-ns.  There's a fixed subset (several files in root,
-an optional symlink in root + initially empty /clients/) + per-client
-subdirectory in /clients/.  Clients can appear only after the filesystem
-is there and they are all gone before it gets through ->kill_sb().
+It's called once, during binderfs mount, right after allocating
+root dentry.  Checking that it hadn't been already called is
+only obfuscating things.
 
-Fixed subset created in fill_super(), regular files by simple_fill_super(),
-then a subdirectory and a symlink - manually.  It is removed by
-kill_litter_super().
-
-Per-client subdirectories are created by nfsd_client_mkdir() (populated
-with client-supplied list of files in them).  Removed by nfsd_client_rmdir(),
-which is simple_recursive_removal().
-
-All dentries except for the ones from simple_fill_super() come from
-	* nfsd_mkdir() (subdirectory, dentry from simple_start_creating()).
-	  Called from fill_super() (creates initially empty /clients)
-	  and from nfsd_client_mkdir (creates a per-client subdirectory
-	  in /clients).
-	* _nfsd_symlink() (symlink, dentry from simple_start_creating()), called
-	  from fill_super().
-	* nfsdfs_create_files() (regulars, dentry from simple_start_creating()),
-	  called only from nfsd_client_mkdir().
-
-Turn d_instatiate() + inode_unlock() into d_make_persistent() + simple_done_creating()
-in nfsd_mkdir(), _nfsd_symlink() and nfsdfs_create_files() and we are done.
+Looks like that bogosity had been copied from devpts...
 
 Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 ---
- fs/nfsd/nfsctl.c | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+ drivers/android/binderfs.c | 6 ------
+ 1 file changed, 6 deletions(-)
 
-diff --git a/fs/nfsd/nfsctl.c b/fs/nfsd/nfsctl.c
-index 2b79129703d5..5ce9a49e76ba 100644
---- a/fs/nfsd/nfsctl.c
-+++ b/fs/nfsd/nfsctl.c
-@@ -1137,11 +1137,11 @@ static struct dentry *nfsd_mkdir(struct dentry *parent, struct nfsdfs_client *nc
- 		inode->i_private = ncl;
- 		kref_get(&ncl->cl_ref);
- 	}
--	d_instantiate(dentry, inode);
-+	d_make_persistent(dentry, inode);
- 	inc_nlink(dir);
- 	fsnotify_mkdir(dir, dentry);
--	inode_unlock(dir);
--	return dentry;
-+	simple_done_creating(dentry);
-+	return dentry;	// borrowed
- }
+diff --git a/drivers/android/binderfs.c b/drivers/android/binderfs.c
+index a7b0a773d47f..8253e517ab6c 100644
+--- a/drivers/android/binderfs.c
++++ b/drivers/android/binderfs.c
+@@ -397,12 +397,6 @@ static int binderfs_binder_ctl_create(struct super_block *sb)
+ 	if (!device)
+ 		return -ENOMEM;
  
- #if IS_ENABLED(CONFIG_SUNRPC_GSS)
-@@ -1170,9 +1170,9 @@ static void _nfsd_symlink(struct dentry *parent, const char *name,
- 	inode->i_link = (char *)content;
- 	inode->i_size = strlen(content);
- 
--	d_instantiate(dentry, inode);
-+	d_make_persistent(dentry, inode);
- 	fsnotify_create(dir, dentry);
--	inode_unlock(dir);
-+	simple_done_creating(dentry);
- }
- #else
- static inline void _nfsd_symlink(struct dentry *parent, const char *name,
-@@ -1228,11 +1228,11 @@ static int nfsdfs_create_files(struct dentry *root,
- 		kref_get(&ncl->cl_ref);
- 		inode->i_fop = files->ops;
- 		inode->i_private = ncl;
--		d_instantiate(dentry, inode);
-+		d_make_persistent(dentry, inode);
- 		fsnotify_create(dir, dentry);
- 		if (fdentries)
--			fdentries[i] = dentry;
--		inode_unlock(dir);
-+			fdentries[i] = dentry; // borrowed
-+		simple_done_creating(dentry);
- 	}
- 	return 0;
- }
-@@ -1346,7 +1346,7 @@ static void nfsd_umount(struct super_block *sb)
- 
- 	nfsd_shutdown_threads(net);
- 
--	kill_litter_super(sb);
-+	kill_anon_super(sb);
- 	put_net(net);
- }
- 
+-	/* If we have already created a binder-control node, return. */
+-	if (info->control_dentry) {
+-		ret = 0;
+-		goto out;
+-	}
+-
+ 	ret = -ENOMEM;
+ 	inode = new_inode(sb);
+ 	if (!inode)
 -- 
 2.47.3
 
