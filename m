@@ -1,155 +1,255 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB21A3090F1
-	for <bpf@vger.kernel.org>; Tue, 28 Oct 2025 10:57:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23A3630AD0A
+	for <bpf@vger.kernel.org>; Tue, 28 Oct 2025 11:29:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761649076; cv=none; b=qa9OswDXGxN8H+xbMwNj18m9fGnewU6lGA3BAy/CoIeF9mRYYx11K+nx15ZwWxHf/2zVdo6aFx6lKtSX7KaFSgcNQC6XAXmTGJAbYGk6NzuKQKwZ8ZxsHFDCEX/lTOIyyAIEjUzZJc2FrfjVRE0lKAtCs5+XJNakD4YPQG8hdkM=
+	t=1761650991; cv=none; b=mE0tvSQEXK8/gIQgaSD8IB2aDoxnWoLLxvpZE8VL9plA1StqaP0lxOjCWZWR9TSqzwDgz2E/ItitKxxEDrXnHQuP3nslUWfBR5cFUqZIUmMfMtZPZ/jovrUNWZW4PvrBv3aZw0iXGBZRjTmY5ovKwETzfftpbe8Ile0/Hyk2E6E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761649076; c=relaxed/simple;
-	bh=dhQt0bKJ9jTDhVK4Se77dIyzwulKfyFM8IP6do1bd2Y=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=g4FzPYmJgyGrbCVOp7Z1C9s5rqH2VJtTd7Mhpt+aCo8Mcw1K2uhUOWkQRa4OhohaNA7FSwJpChUY9/2VlRiBB470Rqllbw3hrD5Am3lz5ljjFCdRTxC/3QTYJyCYiNGg7EK1vsaUSzSmrAYnGrtQDHtYv+DGtF7/WFhxFmtT92o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=GoX60KGy; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1761650991; c=relaxed/simple;
+	bh=yW8g7Nz5mEz0pFXVGxkC5gGDPd7vI7fusbZ2qqMTwwQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TmCjDgam91yGFlehKqYVGfSeuWsBwVfMnVs9xa39k1Oui6qK99iKHnNssMmkWKzk7N/RowQHXycFEzCvWck+ULQ24GjN8CaNYK6pSpXxmgd4RBbmG59A2m+XckgGVRo0QUNfuaQfr8ObEqkPdk/Gf/E8E7aImaeYepLpMq3xPYM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Bl+PkCHh; arc=none smtp.client-ip=209.85.221.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="GoX60KGy"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1761649073;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ss7g9OPGrAkY9kUcGCclPiLcw52MVKuR0CuNg2oTpdY=;
-	b=GoX60KGyBU7TaI352OE0Ic9ZAlHFkRFOugnC/z/ujAlg5NvjtAiSj88+61XRw1nuXR+yGB
-	T/68B741Q7uOr0fjluU/s+fmHlKCRgGl0S5Zhsx7lwvrDUjbOVy3jV2kFL16qHcBr03flA
-	BylgLV1b4MzMPmzKFSs2jZx8sGOyO1g=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-418-WZFlO5n2NguJevv4Csi9qA-1; Tue, 28 Oct 2025 06:57:52 -0400
-X-MC-Unique: WZFlO5n2NguJevv4Csi9qA-1
-X-Mimecast-MFC-AGG-ID: WZFlO5n2NguJevv4Csi9qA_1761649071
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-475ddd57999so26716055e9.1
-        for <bpf@vger.kernel.org>; Tue, 28 Oct 2025 03:57:52 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Bl+PkCHh"
+Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-4285169c005so2700338f8f.0
+        for <bpf@vger.kernel.org>; Tue, 28 Oct 2025 04:29:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1761650987; x=1762255787; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=YjCgLDxLk72QdxTNsmTRBmor2rVOHL35E2u7lpIiizw=;
+        b=Bl+PkCHhg04NI5cLYed5MaEVBvZLFcANusjMa7+XES3LZrPWggeqC6s4iXnqE9CF0E
+         R7HMML/+n8JvdiyBoG3ltOWUKbb4olyVDpWFh64dFwaqOSsOqnwZsGlbMBqPGZDBokMW
+         f7GeEgxy1e+H0l2P+hDqM27Liqzk04aTfuT3Aq4RuYggPS3A+5jcCLM/dzibiVsL0NKh
+         kbgEUA9mKI4ajkIYHullML+JCywRkDDT+RzT7WACLQQjKFPSpr0TjIdNiq9cGMLc3Ht3
+         NPgPfes0QaH3oMVcpZtjtHaWS9U6cOCEzgHx0TO6yCDFedT5LvWnIW5zbZzwyjaeOMpF
+         jihQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761649071; x=1762253871;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ss7g9OPGrAkY9kUcGCclPiLcw52MVKuR0CuNg2oTpdY=;
-        b=pjboi1j040Yiz8mgcuEKhJiTOxa1eP8I4A47jtWjIYD6UM/lAk/5WWqE7tpg4/R5sG
-         iOMcvJWqzQAUDtOqztpUlWL0BRDYMjJRynDivR7KZxFoLcIxS/KVk0/ebnA5o5O1RmHF
-         OV7f8GifXWg7BBsbDaE3c/fnCuRFx1qFS5TnhYZv8qUbRcv12UdRUvQ3CpWDhl5ZjJZe
-         mLft8V9We8QpjTglSQrFj2QgkAMrw2d3H5o1+NnRsLeuc7ZRHKE2l1bmxqU9GvD0bR0z
-         6CmH7dWoEhU++WB0uVBxM3UEF51rnXTvwOVSTrbJLTE9SyWA2EVnHEwbRemW0W8JxBn8
-         WLsA==
-X-Forwarded-Encrypted: i=1; AJvYcCVx76joA+viqsI0g8m85f4MRqJir4JzESAmWjkVDezkZzzSWSQDNY5QYPnBo00uFVX5oiw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw4T51QRGV7XpiZOfnGD1kVQK3sstUsULk9XK9Jrm34wAAE6GIa
-	0znpDJ2pKE9Pqqt+ec5n9WRU7tRdRM3WgP0SYLsRfdoomEWSHg3jUMPca7BrPyPqUspBBfGT4+T
-	V+8b0yMHx7GKXcRmwsOxLmpQsUFaiyltph2CaACmdM4M357/OVVwffQ==
-X-Gm-Gg: ASbGncvdCBGeiCVtR0n39Zci9kbDt7Qd47EkyJmMCGO4unYgoQOUHdmH8u+KbWQmt4+
-	/IYrtJQ9ZM+3gCB2Iel1znXuLGC2x69VPN5KfqCRjQq80v9na5zDTyDY8gKgFLfGA/e5WyVPPVe
-	6h+ikPgNH6xh+KTPXDKNn2XdW5h5u0+1KldPVC7R2Im1Y5bRUW/Om0SEpnTJIJvQYy3Zg4A90mm
-	0bq5lXQvqwPTYgweSTdDUUxYoYQUSlg09R7pfMLZwPreSCK8Ju6bqkS/H6PSXKUf283iztiP1/H
-	P4v09RAU/n5CJZMTmtmA8BxaGGZIQ1eA+eQReXUANfRF3NT7Srmij5AW2s547bhpHFL3XFDEpM6
-	VjMt4hfk8gKdC3kUTVIejgxLo2rDEgpkJwSQpfhfDUFQ/H14=
-X-Received: by 2002:a05:600c:34c7:b0:475:e067:f23d with SMTP id 5b1f17b1804b1-47717e30340mr24822305e9.25.1761649071053;
-        Tue, 28 Oct 2025 03:57:51 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IErU20c2eSasDdwQZzdlRNWvVKDbbva3lmpIExHrHtMT8SPwj/9JiHFRH8lMSjet+8CB83SCA==
-X-Received: by 2002:a05:600c:34c7:b0:475:e067:f23d with SMTP id 5b1f17b1804b1-47717e30340mr24821915e9.25.1761649070539;
-        Tue, 28 Oct 2025 03:57:50 -0700 (PDT)
-Received: from ?IPV6:2a0d:3344:2712:7e10:4d59:d956:544f:d65c? ([2a0d:3344:2712:7e10:4d59:d956:544f:d65c])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-475dd47853csm191118005e9.13.2025.10.28.03.57.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Oct 2025 03:57:50 -0700 (PDT)
-Message-ID: <05efdc9a-8704-476e-8179-1a9fc0ada749@redhat.com>
-Date: Tue, 28 Oct 2025 11:57:47 +0100
+        d=1e100.net; s=20230601; t=1761650987; x=1762255787;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YjCgLDxLk72QdxTNsmTRBmor2rVOHL35E2u7lpIiizw=;
+        b=DRzRTtNnizUt+d5nf3l4U8XB8IYC9wHJtu2jOpKqTzYLlJm0WtPmBEymFPC8I9SFOX
+         K6Yn4/JwnPQJHfGlgsnIOpgg6MvnUM1lrsEiEeMWHp9kRIord0SKtBMKAVB/4YNlZd2x
+         WHsaB8HC1U6QpN/fED2Msg/iGmHk8UMbbmsAr43yYc0ZZomkz4suEdZAWC8zXMSSMnhV
+         77IjF9BYxHUvJ4SwIOTVrfkEIVJYymiyGPGMRquBIwUrvHTxLZw1LXg2fm/N46zjAxnC
+         QJk/4uMznERmuoIwWigekzfjkrPJ1SQ+xRnlnAMX2RjbrvsLNufuTJ0Rq3MsR7SDgQrg
+         FfSg==
+X-Gm-Message-State: AOJu0YzuwG07+ncLTnpykZupv16LHQohhV63SPUl4SYF0Cq0AkNYM0/9
+	VTC2rr3zbhvbh03Z6g8FlKQWWZNSX5aRRSCYSflVjQ5aK/9Shxea++MY
+X-Gm-Gg: ASbGncv9m+LpoOQ192aUm6erEdwCgY2FRr4wm72n71Jj0afZSu5OpJcsTRJ96i8VLxx
+	ziq7XDUcRVxFdlnsfnkJHdgrOCHgJZ0y+e7XFOFRJNg7lAI0qPlhmkfUWr2briSTQsEQ5KxDSlc
+	QOifyGiPEZBg/jIfb97uTsMXUW1ZxIIZJ5aO+rPZJ1OWL9arhnj0H1vHehPllMKvHb/67bTKj5C
+	8sR+/X8DWyxPueWKOT3IU4wnBFKZcZJilTTtT2ATC2cnXe0nqlSgg8z95HY1dlwbAdTxM2QllY1
+	wL6+lwHJxvQbxqem6nMw54NcsEQjJqJkEC7rqGF2jW3Gk3miIBiHUgzyAb38Z9ANO3rP28i9OLH
+	bfIyzrmvFG/q97Cih3spRvPmjQr5anzmmyF9g0BNQZXr0gvSBvStXuFvbmGT2TRowHJ7yemsD6h
+	YoB0MFmenKyw==
+X-Google-Smtp-Source: AGHT+IE5qq891CxveQGBhHUICR+3eb9kcVrHrIk0YPelQtP3jGpg4pfaRa5eOtHmYzGbbU321v2SjQ==
+X-Received: by 2002:a05:6000:144e:b0:3ee:154e:4f9 with SMTP id ffacd0b85a97d-429a7e569c1mr2624429f8f.20.1761650987153;
+        Tue, 28 Oct 2025 04:29:47 -0700 (PDT)
+Received: from mail.gmail.com ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-429952da12dsm20186971f8f.29.2025.10.28.04.29.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Oct 2025 04:29:46 -0700 (PDT)
+Date: Tue, 28 Oct 2025 11:36:22 +0000
+From: Anton Protopopov <a.s.protopopov@gmail.com>
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Anton Protopopov <aspsk@isovalent.com>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Quentin Monnet <qmo@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>
+Subject: Re: [PATCH v7 bpf-next 09/12] libbpf: support llvm-generated
+ indirect jumps
+Message-ID: <aQCqtmlebrAngJTf@mail.gmail.com>
+References: <20251026192709.1964787-1-a.s.protopopov@gmail.com>
+ <20251026192709.1964787-10-a.s.protopopov@gmail.com>
+ <dd184cdb0593392c6ad6c19111bfa17ac56bcb1f.camel@gmail.com>
+ <b6f1be926ea382a9d4d30bdb8d09fa6b06d00165.camel@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v4 2/6] net: ti: icssg-prueth: Add XSK pool
- helpers
-To: Meghana Malladi <m-malladi@ti.com>, horms@kernel.org,
- namcao@linutronix.de, vadim.fedorenko@linux.dev, jacob.e.keller@intel.com,
- christian.koenig@amd.com, sumit.semwal@linaro.org, sdf@fomichev.me,
- john.fastabend@gmail.com, hawk@kernel.org, daniel@iogearbox.net,
- ast@kernel.org, kuba@kernel.org, edumazet@google.com, davem@davemloft.net,
- andrew+netdev@lunn.ch
-Cc: linaro-mm-sig@lists.linaro.org, dri-devel@lists.freedesktop.org,
- linux-media@vger.kernel.org, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, srk@ti.com,
- Vignesh Raghavendra <vigneshr@ti.com>, Roger Quadros <rogerq@kernel.org>,
- danishanwar@ti.com
-References: <20251023093927.1878411-1-m-malladi@ti.com>
- <20251023093927.1878411-3-m-malladi@ti.com>
-Content-Language: en-US
-From: Paolo Abeni <pabeni@redhat.com>
-In-Reply-To: <20251023093927.1878411-3-m-malladi@ti.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b6f1be926ea382a9d4d30bdb8d09fa6b06d00165.camel@gmail.com>
 
-On 10/23/25 11:39 AM, Meghana Malladi wrote:
-> @@ -1200,6 +1218,109 @@ static int emac_xdp_setup(struct prueth_emac *emac, struct netdev_bpf *bpf)
->  	return 0;
->  }
->  
-> +static int prueth_xsk_pool_enable(struct prueth_emac *emac,
-> +				  struct xsk_buff_pool *pool, u16 queue_id)
-> +{
-> +	struct prueth_rx_chn *rx_chn = &emac->rx_chns;
-> +	u32 frame_size;
-> +	int ret;
-> +
-> +	if (queue_id >= PRUETH_MAX_RX_FLOWS ||
-> +	    queue_id >= emac->tx_ch_num) {
-> +		netdev_err(emac->ndev, "Invalid XSK queue ID %d\n", queue_id);
-> +		return -EINVAL;
-> +	}
-> +
-> +	frame_size = xsk_pool_get_rx_frame_size(pool);
-> +	if (frame_size < PRUETH_MAX_PKT_SIZE)
-> +		return -EOPNOTSUPP;
-> +
-> +	ret = xsk_pool_dma_map(pool, rx_chn->dma_dev, PRUETH_RX_DMA_ATTR);
-> +	if (ret) {
-> +		netdev_err(emac->ndev, "Failed to map XSK pool: %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	if (netif_running(emac->ndev)) {
-> +		/* stop packets from wire for graceful teardown */
-> +		ret = icssg_set_port_state(emac, ICSSG_EMAC_PORT_DISABLE);
-> +		if (ret)
-> +			return ret;
-> +		prueth_destroy_rxq(emac);
-> +	}
-> +
-> +	emac->xsk_qid = queue_id;
-> +	prueth_set_xsk_pool(emac, queue_id);
-> +
-> +	if (netif_running(emac->ndev)) {
-> +		ret = prueth_create_rxq(emac);
+On 25/10/27 03:59PM, Eduard Zingerman wrote:
+> On Mon, 2025-10-27 at 15:38 -0700, Eduard Zingerman wrote:
+> > [...]
+> >
+> > > +static int create_jt_map(struct bpf_object *obj, struct bpf_program *prog, struct reloc_desc *relo)
+> > > +{
+> > > +	const __u32 jt_entry_size = 8;
+> > > +	int sym_off = relo->sym_off;
+> > > +	int jt_size = relo->sym_size;
+> > > +	__u32 max_entries = jt_size / jt_entry_size;
+> > > +	__u32 value_size = sizeof(struct bpf_insn_array_value);
+> > > +	struct bpf_insn_array_value val = {};
+> > > +	int subprog_idx;
+> > > +	int map_fd, err;
+> > > +	__u64 insn_off;
+> > > +	__u64 *jt;
+> > > +	__u32 i;
+> > > +
+> > > +	map_fd = find_jt_map(obj, prog, sym_off);
+> > > +	if (map_fd >= 0)
+> > > +		return map_fd;
+> > > +
+> > > +	if (sym_off % jt_entry_size) {
+> > > +		pr_warn("jumptable start %d should be multiple of %u\n",
+> > > +			sym_off, jt_entry_size);
+> > > +		return -EINVAL;
+> > > +	}
+> > > +
+> > > +	if (jt_size % jt_entry_size) {
+> > > +		pr_warn("jumptable size %d should be multiple of %u\n",
+> > > +			jt_size, jt_entry_size);
+> > > +		return -EINVAL;
+> > > +	}
+> > > +
+> > > +	map_fd = bpf_map_create(BPF_MAP_TYPE_INSN_ARRAY, ".jumptables",
+> > > +				4, value_size, max_entries, NULL);
+> > > +	if (map_fd < 0)
+> > > +		return map_fd;
+> > > +
+> > > +	if (!obj->jumptables_data) {
+> > > +		pr_warn("map '.jumptables': ELF file is missing jump table data\n");
+> > > +		err = -EINVAL;
+> > > +		goto err_close;
+> > > +	}
+> > > +	if (sym_off + jt_size > obj->jumptables_data_sz) {
+> > > +		pr_warn("jumptables_data size is %zd, trying to access %d\n",
+> > > +			obj->jumptables_data_sz, sym_off + jt_size);
+> > > +		err = -EINVAL;
+> > > +		goto err_close;
+> > > +	}
+> > > +
+> > > +	jt = (__u64 *)(obj->jumptables_data + sym_off);
+> > > +	for (i = 0; i < max_entries; i++) {
+> > > +		/*
+> > > +		 * The offset should be made to be relative to the beginning of
+> > > +		 * the main function, not the subfunction.
+> > > +		 */
+> > > +		insn_off = jt[i]/sizeof(struct bpf_insn);
+> > > +		if (!prog->subprogs) {
+> > > +			insn_off -= prog->sec_insn_off;
+> > > +		} else {
+> > > +			subprog_idx = find_subprog_idx(prog, relo->insn_idx);
+> >
+> > Nit: find_subprog_idx(prog, relo->insn_idx) can be moved outside of the loop, I think.
+> >
+> > > +			if (subprog_idx < 0) {
+> > > +				pr_warn("invalid jump insn idx[%d]: %d, no subprog found\n",
+> > > +					i, relo->insn_idx);
+> > > +				err = -EINVAL;
+> > > +			}
+> > > +			insn_off -= prog->subprogs[subprog_idx].sec_insn_off;
+> > > +			insn_off += prog->subprogs[subprog_idx].sub_insn_off;
+> > > +		}
+> 
+> I think I found a bug, related to this code path.
+> Consider the following test case:
+> 
+> 	SEC("socket")
+> 	__naked void foo(void)
+> 	{
+> 	        asm volatile ("                                         \
+> 	        .pushsection .jumptables,\"\",@progbits;                \
+> 	jt0_%=:                                                         \
+> 	        .quad ret0_%=;                                          \
+> 	        .quad ret1_%=;                                          \
+> 	        .size jt0_%=, 16;                                       \
+> 	        .global jt0_%=;                                         \
+> 	        .popsection;                                            \
+> 	                                                                \
+> 	        r0 = jt0_%= ll;                                         \
+> 	        r0 += 8;                                                \
+> 	        r0 = *(u64 *)(r0 + 0);                                  \
+> 	        .8byte %[gotox_r0];                                     \
+> 	        ret0_%=:                                                \
+> 	        r0 = 0;                                                 \
+> 	        exit;                                                   \
+> 	        ret1_%=:                                                \
+> 	        r0 = 1;                                                 \
+> 	        call bar;                                               \
+> 	        exit;                                                   \
+> 	"       :                                                       \
+> 	        : __imm_insn(gotox_r0, BPF_RAW_INSN(BPF_JMP | BPF_JA | BPF_X, BPF_REG_0, 0, 0 , 0))
+> 	        : __clobber_all);
+> 	}
+> 	
+> 	__used
+> 	static int bar(void)
+> 	{
+> 	        return 0;
+> 	}
+> 
+> Note a call instruction referring bar().  It triggers the code path
+> above (we need a test case with subprograms in verifier_gotox).
+> The test case fails to load with the following error:
+> 
+>   libbpf: invalid jump insn idx[0]: 0, no subprog found
+>   libbpf: prog 'foo': relo #0: can't create jump table: sym_off 368
+>   libbpf: prog 'foo': failed to relocate data references: -EINVAL
+> 
+> If I remove the `call bar;`, test case loads and passes.
 
-It looks like this falls short of Jakub's request on v2:
+Yes, looks like this was introduced with that latest refactor: just checked
+that the main program in libbpf is not a subprog[0] (as in verifier). Will
+re-re-factor as follows:
 
-https://lore.kernel.org/netdev/20250903174847.5d8d1c9f@kernel.org/
+        subprog_idx = -1; /* main program */
+        if (relo->insn_idx < 0 || relo->insn_idx >= prog->insns_cnt) {
+                pr_warn("invalid instruction index %d\n", relo->insn_idx);
+                err = -EINVAL;
+                goto err_close;
+        }
+        if (prog->subprogs)
+                subprog_idx = find_subprog_idx(prog, relo->insn_idx);
 
-about not freeing the rx queue for reconfig.
+        jt = (__u64 *)(obj->jumptables_data + sym_off);
+        for (i = 0; i < max_entries; i++) {
+                /*
+                 * The offset should be made to be relative to the beginning of
+                 * the main function, not the subfunction.
+                 */
+                insn_off = jt[i]/sizeof(struct bpf_insn);
+                if (subprog_idx >= 0) {
+                        insn_off -= prog->subprogs[subprog_idx].sec_insn_off;
+                        insn_off += prog->subprogs[subprog_idx].sub_insn_off;
+                } else {
+                        insn_off -= prog->sec_insn_off;
+                }
 
-I think you should:
-- stop the H/W from processing incoming packets,
-- spool all the pending packets
-- attach/detach the xsk_pool
-- refill the ring
-- re-enable the H/W
-
-/P
-
+> > > +
+> > > +		/*
+> > > +		 * LLVM-generated jump tables contain u64 records, however
+> > > +		 * should contain values that fit in u32.
+> > > +		 */
+> > > +		if (insn_off > UINT32_MAX) {
+> > > +			pr_warn("invalid jump table value %llx at offset %d\n",
+>                                                           ^^^^
+> Nit:                                              maybe add 0x prefix here?
+> 
+> > > +				jt[i], sym_off + i);
+> > > +			err = -EINVAL;
+> > > +			goto err_close;
+> > > +		}
+> > > +
+> > > +		val.orig_off = insn_off;
+> > > +		err = bpf_map_update_elem(map_fd, &i, &val, 0);
+> > > +		if (err)
+> > > +			goto err_close;
+> > > +	}
+> >
+> > [...]
