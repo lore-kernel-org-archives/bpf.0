@@ -1,123 +1,111 @@
-Received: from out-179.mta1.migadu.com (out-179.mta1.migadu.com [95.215.58.179])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8F2633FE10;
-	Tue, 28 Oct 2025 15:20:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71ED8343D6E;
+	Tue, 28 Oct 2025 15:32:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761664832; cv=none; b=vFE+1MiW3gA7X7hkEg0qsLZ7eHgX3Ie0GR4N1bH6KWG6Mwc5Cv85x5YioDLEYDFXxk/VC+GUs6n3DRecmETL4N35IUcxrL//qWMcAxtpe76MZKCZuyfxiIkraX5Y8AZXhO6m+XMpz0flIni0tJV10XAJtMu+GBSyA1Oc93C8/LM=
+	t=1761665569; cv=none; b=N2njzF162ImV53B0YgtFU0yBliXaLuktlWtfUb7krzH4GmuXvytXfgO2rgxSWj3KPThleQIRcx1wOLfaKoLOacbHHKOxar+M9qb0LlLig7jXEh3DFaU0Di6QiQD3IthE3miYQk4hHMs/GUxtcqjBXgxZ6pfmpcX4vwuVIPZw964=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761664832; c=relaxed/simple;
-	bh=HYd2qH7FWSYKEo+EVxagg1RUtl38TekujFQnRYEMBtY=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=jS6M6HfgWajnhYo9/6l7Scv9D2+TXciaUsw/0ok2o96XUEWY8jKv1m+9BpQag4gPElyrGeJ/BuNxrlG2fdg+766/MKy+LDuyKHXqYIsvQ5ZUd5pD2VMuLCFnJe8+22MRXkn13yuCMAVI5tZx24In61PbUwRRCIGRlK6U1NwnaLs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ZVlRfk5d; arc=none smtp.client-ip=95.215.58.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1761665569; c=relaxed/simple;
+	bh=PcklBCIpdApk37VX398hbDbhHd8SZs223+sTupKizTo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Y5YYxPCtkb5CebiPtQWx1qg/sO5tAOT8BQpCDKt2YcAwtCUCWi6ajFF76EJOa2sF/Pvn4kC4fPYJZD4tGnEffVJuKOm+CONNuk2Z0yieONNJl3WX35Ubg1lCtk7JfwGA2bDUkjKQ6SknmZkz3ElCfwZf63qcMtd4m6xjF8dTbhg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y58s+EuF; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ZVlRfk5d"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1761664829;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=FBxBqu3N+DlOX27bsFsVYIxqbBpbd6ybHXvJvZNNT5E=;
-	b=ZVlRfk5d74WPMBIH8ldQdIY8hxKmUlxbUA639saRb9HsLjkj5W/H2wzvsovLXZCn2jeoqc
-	2zFv0ACVKfYwSjpC2wv/xLwWOjqMhs9Yb+JaoKBuVsO9prkrAKL1KaUzgOeV04DmdE1z4t
-	ZXcDrxnAeNJOCUSTmGWi/q7BAZnlG8s=
-From: KaFai Wan <kafai.wan@linux.dev>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	john.fastabend@gmail.com,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	shuah@kernel.org,
-	paul.chaignon@gmail.com,
-	m.shachnai@gmail.com,
-	kafai.wan@linux.dev,
-	harishankar.vishwanathan@gmail.com,
-	colin.i.king@gmail.com,
-	luis.gerhorst@fau.de,
-	shung-hsi.yu@suse.com,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v2 2/2] selftests/bpf: Range analysis test case for JEQ
-Date: Tue, 28 Oct 2025 23:19:38 +0800
-Message-ID: <20251028151938.3872003-3-kafai.wan@linux.dev>
-In-Reply-To: <20251028151938.3872003-1-kafai.wan@linux.dev>
-References: <20251028151938.3872003-1-kafai.wan@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y58s+EuF"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE4F0C4CEE7;
+	Tue, 28 Oct 2025 15:32:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1761665567;
+	bh=PcklBCIpdApk37VX398hbDbhHd8SZs223+sTupKizTo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Y58s+EuFr87aGntK4Vg3Ku0XIUj3PgVfoHAp1XEmD2yfm3jlw5qWpgQcryCkARs14
+	 BQQZEUPAkbUMCLplS3v/xugvI250S4z8lAfiHqiJd38Pa1XnsJGv+zhLjJpGCao6LJ
+	 Fp86pWW/Jx0wXvQkDmEP01FrOGRYdnol5jt8tP336tlirNXTPFgQbEUSoc5qg89Bu6
+	 41YKQLC0zMXGQaCZa7XQRHlnQuiT0T3tpxXqBR4M/+PZDM7l5EoO44mdh9TCgGQU8A
+	 O46docCd/ez55B9QZenOvRdrhopClqM64rW9at1hGJ6rF9lqe8rQhGDzLwe9DxosIm
+	 uKQwmVq3atxxw==
+Date: Tue, 28 Oct 2025 16:32:39 +0100
+From: Christian Brauner <brauner@kernel.org>
+To: Simon Horman <horms@kernel.org>
+Cc: linux-fsdevel@vger.kernel.org, Josef Bacik <josef@toxicpanda.com>, 
+	Jeff Layton <jlayton@kernel.org>, Jann Horn <jannh@google.com>, Mike Yuan <me@yhndnzj.com>, 
+	Zbigniew =?utf-8?Q?J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>, Lennart Poettering <mzxreary@0pointer.de>, 
+	Daan De Meyer <daan.j.demeyer@gmail.com>, Aleksa Sarai <cyphar@cyphar.com>, 
+	Amir Goldstein <amir73il@gmail.com>, Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Jan Kara <jack@suse.cz>, linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, 
+	bpf@vger.kernel.org, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [PATCH v3 11/70] ns: add active reference count
+Message-ID: <20251028-fernweh-prasseln-b066fb441ee6@brauner>
+References: <20251024-work-namespace-nstree-listns-v3-0-b6241981b72b@kernel.org>
+ <20251024-work-namespace-nstree-listns-v3-11-b6241981b72b@kernel.org>
+ <aQCbLrYf_KTdxZjU@horms.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <aQCbLrYf_KTdxZjU@horms.kernel.org>
 
-This patch adds coverage for the warning detected by syzkaller and fixed
-in the previous patch. Without the previous patch, this test fails with:
+On Tue, Oct 28, 2025 at 10:30:06AM +0000, Simon Horman wrote:
+> On Fri, Oct 24, 2025 at 12:52:40PM +0200, Christian Brauner wrote:
+> 
+> ...
+> 
+> > diff --git a/kernel/nsproxy.c b/kernel/nsproxy.c
+> 
+> ...
+> 
+> > +void get_cred_namespaces(struct task_struct *tsk)
+> > +{
+> > +	ns_ref_active_get(tsk->real_cred->user_ns);
+> 
+> Hi Christian,
+> 
+> real_cred is protected by RCU, but this code doesn't seem to take
+> that into account. Or, at least Sparse doesn't think so:
+> 
+> .../nsproxy.c:264:9: error: no generic selection for 'struct user_namespace *const [noderef] __rcu user_ns'
+> .../nsproxy.c:264:9: warning: dereference of noderef expression
+> 
+> > +}
+> > +
+> > +void exit_cred_namespaces(struct task_struct *tsk)
+> > +{
+> > +	ns_ref_active_put(tsk->real_cred->user_ns);
+> 
+> Likewise here.
 
-  verifier bug: REG INVARIANTS VIOLATION (true_reg1): range bounds
-  violation u64=[0xffffffffffffff01, 0xffffffffffffff00]
-  s64=[0xffffffffffffff01, 0xffffffffffffff00]
-  u32=[0xffffff01, 0xffffff00] s32=[0xffffff00, 0xffffff00]
-  var_off=(0xffffffffffffff00, 0x0)
-  verifier bug: REG INVARIANTS VIOLATION (true_reg2): range bounds
-  violation u64=[0xffffffffffffff01, 0xffffffffffffff00]
-  s64=[0xffffffffffffff01, 0xffffffffffffff00]
-  u32=[0xffffff01, 0xffffff00] s32=[0xffffff01, 0xffffff00]
-  var_off=(0xffffffffffffff00, 0x0)
+get_cred_namespaces() is called during copy_creds() which is called
+during process creation aka from copy_process(). So copy_creds() always
+takes the creds of current (the parent process in this case) which can't
+change in any way.
 
-Signed-off-by: KaFai Wan <kafai.wan@linux.dev>
----
- .../selftests/bpf/progs/verifier_bounds.c     | 23 +++++++++++++++++++
- 1 file changed, 23 insertions(+)
+Simplifying a bit:
+Either we created a thread via CLONE_THREAD in which case we can't
+specify CLONE_NEWUSER (little know fact, I guess) and so we just bump
+the reference count on the existing user namespace from the parent's
+creds, or we're creating a new set of credentials that no one has ever
+seen before possibly even a new user namespace if CLONE_NEWUSER has been
+specified.
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_bounds.c b/tools/testing/selftests/bpf/progs/verifier_bounds.c
-index 0a72e0228ea9..304ab5a07a3b 100644
---- a/tools/testing/selftests/bpf/progs/verifier_bounds.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_bounds.c
-@@ -1550,6 +1550,29 @@ l0_%=:	r0 = 0;				\
- 	: __clobber_all);
- }
- 
-+SEC("socket")
-+__description("dead branch on jeq, does not result in invariants violation error")
-+__success __log_level(2)
-+__retval(0) __flag(BPF_F_TEST_REG_INVARIANTS)
-+__naked void jeq_range_analysis(void)
-+{
-+	asm volatile ("			\
-+	call %[bpf_get_prandom_u32];	\
-+	r6 = r0;			\
-+	r6 &= 0xFFFFFFFFFFFFFFF0;	\
-+	r7 = r0;			\
-+	r7 &= 0x07;			\
-+	r7 -= 0xFF;			\
-+	if r6 == r7 goto l1_%=;		\
-+l0_%=:  r0 = 0;				\
-+	exit;				\
-+l1_%=:  r0 = 1;				\
-+	exit;				\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
- /* This test covers the bounds deduction on 64bits when the s64 and u64 ranges
-  * overlap on the negative side. At instruction 7, the ranges look as follows:
-  *
--- 
-2.43.0
+In both case the credentials are completely stable. The call to
+exit_cred_namespaces() has similar reasoning when called from the
+cleanup/failure path of copy_process().
 
+The other callsite is release_task() which is called - simplifying -
+after the task has been reaped. That thing is deader than dead and
+nothing can mess with its creds anymore.
+
+In other words, the get/put patterns for namespace management generally
+happens at edges where the relevant structures are stable and can't be
+changed by anyone other than the calling thread. And at no point are we
+putting references on creds themselves.
+
+Let me know if I missed something obvious.
