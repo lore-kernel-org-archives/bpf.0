@@ -1,34 +1,34 @@
 Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42D8F218AA0;
-	Tue, 28 Oct 2025 00:46:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70D6021B9E2;
+	Tue, 28 Oct 2025 00:46:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761612391; cv=none; b=lK/ZbS5N0y5IsWF+KW2KEYB4Di63z+jk951CwU4aDlbljkJcrYjURrvsIw9wdDWKDcHTznU/PC1RLkWMGN6U6kMg0PN5wn0lEuYtTKAg5aVFwx2rBM9ORaZt4oxqPvrWsYClNFP8cIa6xss/GjoSv9okvrZ+R/lIvvZdZLA6Be8=
+	t=1761612389; cv=none; b=Ccf/zLepulAevPNmfNWsjWuLKDHH+gTGxptYTom+OzKkror3xmy1vPVjBkO2Ez0wwCZMVVTS3ZGf/fUCBAI0STDUUgWVAGg/8v5ybzf7lSJpeIHZ+vGSoPZYem4lavdPMy0r/A9OfqyGa4stZEYqSPxPyc48v+rKvPLt7IaMmnI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761612391; c=relaxed/simple;
-	bh=lcNLAzLuYJsLPQt0kyhM44TBTtasCTL6nAU8E5zEjhQ=;
+	s=arc-20240116; t=1761612389; c=relaxed/simple;
+	bh=ucxyEiSixCkFp4vnrdVek/gGWBQjJAc6YDDrn5D9f+Y=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ezAtSAU1sMppsZ1xcJZjD+8TqkU+rjgr+B+ciAX4VJbpdaBIbC6aYVJ+LVylINoVDKN50CEUzJ6F/8B5RXr40hBBQw+VNj2ksEwTk9gwZFmIK01mB2C/hVfZE8jCXHPUu0bJq4temVi2NMA5slnwrSObZ8qNAdA44AVHf6N99Rk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=q74Ernaa; arc=none smtp.client-ip=62.89.141.173
+	 MIME-Version; b=DbCjvQnDvMFaufXHnnTd6u7xofUqDRERRx6TQzN1KsOyIQpOCGXt2FgSuIdLiGTxo/N4FnZnhxmUmIbf6Woyxf+qatMbrQ4kbxtVeF1R78qbA6J+AU7P9tH8pPSlqRm4c1AYTouwL2h9y7o7JVOFhH+UMjj+k8Qgfxqa1rHhwyY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=KSdnFP3U; arc=none smtp.client-ip=62.89.141.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="q74Ernaa"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="KSdnFP3U"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
 	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
 	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=7CVyMMSGpWWe9qxlGuUIv4nZNRk8bTkfMsk1yIBX5YM=; b=q74Ernaa6Vz0JzQmiS0FDEAt8j
-	kBck1RKqVwdal7HJjQCcaOsEZPY5G7j3uep4wdUix9V3Z5GahrT6a+KN8LvIZXQEgWWSPJ5vJi0KW
-	9OUmKcXsAHigqIDku9/TVRMW+IS/OquuipUdkitBRNj3Tey+pbGzLlqHeN+XsVBONm182L8ophRJR
-	h7iStQrTjUP7C7DKvvYrkrNqCpRbrhUCgOMMnpVIsCHZ6iXSeDNZ4UHmO4CnXCFQpsdLx3xFW5jEv
-	K6oo6NNc88cxIJvbzkSKly6rCngbmBvrDa0F2ad02gJA+SFzIi296I0IhhF7a+KvUaZ0wn3GAW7Wg
-	gd8e/cXg==;
+	bh=nhVZHCo/8A/9+8ahzyAjs/jwjY1fv4im71qjOl+I68U=; b=KSdnFP3Uf3Gc2L4P8+gVMs6NaY
+	8h5KjzipOzsvfCYyKmYQWnr1215L9QiltbKbSAfCPYdtlxMvACmdkXsIgY0pjbW9IlTCw7R5euqlf
+	g4OjTenHpmrfytwtkD3r6u1UwgCJ5oZSi9cPTgRBCQE1gyYExNmDo7jRg3oVBxODuZVblG2gX8XBd
+	ycgKmhaVVXcLZm3EiuzHfXap48uE3rSIXV1wfdda5TIC/DQ33D1NhmBAYzICXl85XUA5Wg4ACHEud
+	WW48GlAeR1l8HYwngXSXiHsEkgHl1SZtGhWagy+xkzsAjw6/nrvDLptr4d60gllKfhf1mfy78zba7
+	IJmWfHYw==;
 Received: from viro by zeniv.linux.org.uk with local (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1vDXqp-00000001eW2-0x14;
-	Tue, 28 Oct 2025 00:46:15 +0000
+	id 1vDXqv-00000001ens-15Pf;
+	Tue, 28 Oct 2025 00:46:21 +0000
 From: Al Viro <viro@zeniv.linux.org.uk>
 To: linux-fsdevel@vger.kernel.org
 Cc: torvalds@linux-foundation.org,
@@ -52,9 +52,9 @@ Cc: torvalds@linux-foundation.org,
 	selinux@vger.kernel.org,
 	borntraeger@linux.ibm.com,
 	bpf@vger.kernel.org
-Subject: [PATCH v2 06/50] primitives for maintaining persisitency
-Date: Tue, 28 Oct 2025 00:45:25 +0000
-Message-ID: <20251028004614.393374-7-viro@zeniv.linux.org.uk>
+Subject: [PATCH v2 46/50] convert rust_binderfs
+Date: Tue, 28 Oct 2025 00:46:05 +0000
+Message-ID: <20251028004614.393374-47-viro@zeniv.linux.org.uk>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20251028004614.393374-1-viro@zeniv.linux.org.uk>
 References: <20251028004614.393374-1-viro@zeniv.linux.org.uk>
@@ -67,170 +67,197 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Al Viro <viro@ftp.linux.org.uk>
 
-* d_make_persistent(dentry, inode) - bump refcount, mark persistent and
-make hashed positive.  Return value is a borrowed reference to dentry;
-it can be used until something removes persistency (at the very least,
-until the parent gets unlocked, but some filesystems may have stronger
-exclusion).
-
-* d_make_discardable() - remove persistency mark and drop reference.
-
-d_make_persistent() is similar to combination of d_instantiate(), dget()
-and setting flag.  The only difference is that unlike d_instantiate()
-it accepts hashed and unhashed negatives alike.  It is always called in
-strong locking environment (parent held exclusive, or, in some cases,
-dentry coming from d_alloc_name()); if we ever start using it with parent
-held only shared and dentry coming from d_alloc_parallel(), we'll need
-to copy the in-lookup logics from __d_add().
-
-d_make_discardable() is eqiuvalent to combination of removing flag and
-dput(); since flag removal requires ->d_lock, there's no point trying
-to avoid taking that for refcount decrement as fast_dput() does.
-The slow path of dput() has been taken into a helper and reused in
-d_make_discardable() instead.
+Parallel to binderfs stuff:
+	* use simple_start_creating()/simple_done_creating()/d_make_persistent()
+instead of manual inode_lock()/lookup_noperm()/d_instanitate()/inode_unlock().
+	* allocate inode first - simpler cleanup that way.
+	* use simple_recursive_removal() instead of open-coding it.
+	* switch to kill_anon_super()
 
 Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 ---
- fs/dcache.c            | 66 ++++++++++++++++++++++++++++++++----------
- include/linux/dcache.h |  2 ++
- 2 files changed, 53 insertions(+), 15 deletions(-)
+ drivers/android/binder/rust_binderfs.c | 121 +++++++------------------
+ 1 file changed, 33 insertions(+), 88 deletions(-)
 
-diff --git a/fs/dcache.c b/fs/dcache.c
-index f2c9f4fef2a2..3e26039ceca1 100644
---- a/fs/dcache.c
-+++ b/fs/dcache.c
-@@ -869,6 +869,24 @@ static inline bool fast_dput(struct dentry *dentry)
- 	return false;
- }
- 
-+static void finish_dput(struct dentry *dentry)
-+	__releases(dentry->d_lock)
-+	__releases(RCU)
-+{
-+	while (lock_for_kill(dentry)) {
-+		rcu_read_unlock();
-+		dentry = __dentry_kill(dentry);
-+		if (!dentry)
-+			return;
-+		if (retain_dentry(dentry, true)) {
-+			spin_unlock(&dentry->d_lock);
-+			return;
-+		}
-+		rcu_read_lock();
-+	}
-+	rcu_read_unlock();
-+	spin_unlock(&dentry->d_lock);
-+}
- 
- /* 
-  * This is dput
-@@ -906,22 +924,20 @@ void dput(struct dentry *dentry)
- 		rcu_read_unlock();
- 		return;
+diff --git a/drivers/android/binder/rust_binderfs.c b/drivers/android/binder/rust_binderfs.c
+index 6b497146b698..c69026df775c 100644
+--- a/drivers/android/binder/rust_binderfs.c
++++ b/drivers/android/binder/rust_binderfs.c
+@@ -178,28 +178,17 @@ static int binderfs_binder_device_create(struct inode *ref_inode,
  	}
--	while (lock_for_kill(dentry)) {
--		rcu_read_unlock();
--		dentry = __dentry_kill(dentry);
--		if (!dentry)
--			return;
--		if (retain_dentry(dentry, true)) {
--			spin_unlock(&dentry->d_lock);
--			return;
--		}
--		rcu_read_lock();
+ 
+ 	root = sb->s_root;
+-	inode_lock(d_inode(root));
+-
+-	/* look it up */
+-	dentry = lookup_noperm(&QSTR(req->name), root);
++	dentry = simple_start_creating(root, req->name);
+ 	if (IS_ERR(dentry)) {
+-		inode_unlock(d_inode(root));
+ 		ret = PTR_ERR(dentry);
+ 		goto err;
+ 	}
+ 
+-	if (d_really_is_positive(dentry)) {
+-		/* already exists */
+-		dput(dentry);
+-		inode_unlock(d_inode(root));
+-		ret = -EEXIST;
+-		goto err;
 -	}
--	rcu_read_unlock();
--	spin_unlock(&dentry->d_lock);
-+	finish_dput(dentry);
- }
- EXPORT_SYMBOL(dput);
- 
-+void d_make_discardable(struct dentry *dentry)
-+{
-+	spin_lock(&dentry->d_lock);
-+	dentry->d_flags &= ~DCACHE_PERSISTENT;
-+	dentry->d_lockref.count--;
-+	rcu_read_lock();
-+	finish_dput(dentry);
-+}
-+EXPORT_SYMBOL(d_make_discardable);
+-
+ 	inode->i_private = device;
+-	d_instantiate(dentry, inode);
++	d_make_persistent(dentry, inode);
 +
- static void to_shrink_list(struct dentry *dentry, struct list_head *list)
- __must_hold(&dentry->d_lock)
+ 	fsnotify_create(root->d_inode, dentry);
+-	inode_unlock(d_inode(root));
++	simple_done_creating(dentry);
+ 
+ 	return 0;
+ 
+@@ -472,37 +461,9 @@ static struct inode *binderfs_make_inode(struct super_block *sb, int mode)
+ 	return ret;
+ }
+ 
+-static struct dentry *binderfs_create_dentry(struct dentry *parent,
+-					     const char *name)
+-{
+-	struct dentry *dentry;
+-
+-	dentry = lookup_noperm(&QSTR(name), parent);
+-	if (IS_ERR(dentry))
+-		return dentry;
+-
+-	/* Return error if the file/dir already exists. */
+-	if (d_really_is_positive(dentry)) {
+-		dput(dentry);
+-		return ERR_PTR(-EEXIST);
+-	}
+-
+-	return dentry;
+-}
+-
+ void rust_binderfs_remove_file(struct dentry *dentry)
  {
-@@ -1939,7 +1955,6 @@ static void __d_instantiate(struct dentry *dentry, struct inode *inode)
- 	unsigned add_flags = d_flags_for_inode(inode);
- 	WARN_ON(d_in_lookup(dentry));
- 
--	spin_lock(&dentry->d_lock);
- 	/*
- 	 * The negative counter only tracks dentries on the LRU. Don't dec if
- 	 * d_lru is on another list.
-@@ -1952,7 +1967,6 @@ static void __d_instantiate(struct dentry *dentry, struct inode *inode)
- 	__d_set_inode_and_type(dentry, inode, add_flags);
- 	raw_write_seqcount_end(&dentry->d_seq);
- 	fsnotify_update_flags(dentry);
--	spin_unlock(&dentry->d_lock);
+-	struct inode *parent_inode;
+-
+-	parent_inode = d_inode(dentry->d_parent);
+-	inode_lock(parent_inode);
+-	if (simple_positive(dentry)) {
+-		dget(dentry);
+-		simple_unlink(parent_inode, dentry);
+-		d_delete(dentry);
+-		dput(dentry);
+-	}
+-	inode_unlock(parent_inode);
++	simple_recursive_removal(dentry, NULL);
  }
  
- /**
-@@ -1976,7 +1990,9 @@ void d_instantiate(struct dentry *entry, struct inode * inode)
- 	if (inode) {
- 		security_d_instantiate(entry, inode);
- 		spin_lock(&inode->i_lock);
-+		spin_lock(&entry->d_lock);
- 		__d_instantiate(entry, inode);
-+		spin_unlock(&entry->d_lock);
- 		spin_unlock(&inode->i_lock);
- 	}
- }
-@@ -1995,7 +2011,9 @@ void d_instantiate_new(struct dentry *entry, struct inode *inode)
- 	lockdep_annotate_inode_mutex_key(inode);
- 	security_d_instantiate(entry, inode);
- 	spin_lock(&inode->i_lock);
-+	spin_lock(&entry->d_lock);
- 	__d_instantiate(entry, inode);
-+	spin_unlock(&entry->d_lock);
- 	WARN_ON(!(inode->i_state & I_NEW));
- 	inode->i_state &= ~I_NEW & ~I_CREATING;
- 	/*
-@@ -2754,6 +2772,24 @@ void d_add(struct dentry *entry, struct inode *inode)
- }
- EXPORT_SYMBOL(d_add);
+ static struct dentry *rust_binderfs_create_file(struct dentry *parent, const char *name,
+@@ -510,31 +471,23 @@ static struct dentry *rust_binderfs_create_file(struct dentry *parent, const cha
+ 						void *data)
+ {
+ 	struct dentry *dentry;
+-	struct inode *new_inode, *parent_inode;
+-	struct super_block *sb;
+-
+-	parent_inode = d_inode(parent);
+-	inode_lock(parent_inode);
+-
+-	dentry = binderfs_create_dentry(parent, name);
+-	if (IS_ERR(dentry))
+-		goto out;
+-
+-	sb = parent_inode->i_sb;
+-	new_inode = binderfs_make_inode(sb, S_IFREG | 0444);
+-	if (!new_inode) {
+-		dput(dentry);
+-		dentry = ERR_PTR(-ENOMEM);
+-		goto out;
+-	}
++	struct inode *new_inode;
  
-+struct dentry *d_make_persistent(struct dentry *dentry, struct inode *inode)
-+{
-+	WARN_ON(!hlist_unhashed(&dentry->d_u.d_alias));
-+	WARN_ON(!inode);
-+	security_d_instantiate(dentry, inode);
-+	spin_lock(&inode->i_lock);
-+	spin_lock(&dentry->d_lock);
-+	__d_instantiate(dentry, inode);
-+	dentry->d_flags |= DCACHE_PERSISTENT;
-+	dget_dlock(dentry);
-+	if (d_unhashed(dentry))
-+		__d_rehash(dentry);
-+	spin_unlock(&dentry->d_lock);
-+	spin_unlock(&inode->i_lock);
-+	return dentry;
-+}
-+EXPORT_SYMBOL(d_make_persistent);
++	new_inode = binderfs_make_inode(parent->d_sb, S_IFREG | 0444);
++	if (!new_inode)
++		return ERR_PTR(-ENOMEM);
+ 	new_inode->i_fop = fops;
+ 	new_inode->i_private = data;
+-	d_instantiate(dentry, new_inode);
+-	fsnotify_create(parent_inode, dentry);
+ 
+-out:
+-	inode_unlock(parent_inode);
++	dentry = simple_start_creating(parent, name);
++	if (IS_ERR(dentry)) {
++		iput(new_inode);
++		return dentry;
++	}
 +
- static void swap_names(struct dentry *dentry, struct dentry *target)
- {
- 	if (unlikely(dname_external(target))) {
-diff --git a/include/linux/dcache.h b/include/linux/dcache.h
-index 94b58655322a..6ec4066825e3 100644
---- a/include/linux/dcache.h
-+++ b/include/linux/dcache.h
-@@ -611,5 +611,7 @@ static inline struct dentry *d_next_sibling(const struct dentry *dentry)
++	d_make_persistent(dentry, new_inode);
++	fsnotify_create(parent->d_inode, dentry);
++	simple_done_creating(dentry);
+ 	return dentry;
  }
  
- void set_default_d_op(struct super_block *, const struct dentry_operations *);
-+struct dentry *d_make_persistent(struct dentry *, struct inode *);
-+void d_make_discardable(struct dentry *dentry);
+@@ -556,34 +509,26 @@ static struct dentry *binderfs_create_dir(struct dentry *parent,
+ 					  const char *name)
+ {
+ 	struct dentry *dentry;
+-	struct inode *new_inode, *parent_inode;
+-	struct super_block *sb;
+-
+-	parent_inode = d_inode(parent);
+-	inode_lock(parent_inode);
+-
+-	dentry = binderfs_create_dentry(parent, name);
+-	if (IS_ERR(dentry))
+-		goto out;
++	struct inode *new_inode;
  
- #endif	/* __LINUX_DCACHE_H */
+-	sb = parent_inode->i_sb;
+-	new_inode = binderfs_make_inode(sb, S_IFDIR | 0755);
+-	if (!new_inode) {
+-		dput(dentry);
+-		dentry = ERR_PTR(-ENOMEM);
+-		goto out;
+-	}
++	new_inode = binderfs_make_inode(parent->d_sb, S_IFDIR | 0755);
++	if (!new_inode)
++		return ERR_PTR(-ENOMEM);
+ 
+ 	new_inode->i_fop = &simple_dir_operations;
+ 	new_inode->i_op = &simple_dir_inode_operations;
+ 
+-	set_nlink(new_inode, 2);
+-	d_instantiate(dentry, new_inode);
+-	inc_nlink(parent_inode);
+-	fsnotify_mkdir(parent_inode, dentry);
++	dentry = simple_start_creating(parent, name);
++	if (IS_ERR(dentry)) {
++		iput(new_inode);
++		return dentry;
++	}
+ 
+-out:
+-	inode_unlock(parent_inode);
++	inc_nlink(parent->d_inode);
++	set_nlink(new_inode, 2);
++	d_make_persistent(dentry, new_inode);
++	fsnotify_mkdir(parent->d_inode, dentry);
++	simple_done_creating(dentry);
+ 	return dentry;
+ }
+ 
+@@ -802,7 +747,7 @@ static void binderfs_kill_super(struct super_block *sb)
+ 	 * During inode eviction struct binderfs_info is needed.
+ 	 * So first wipe the super_block then free struct binderfs_info.
+ 	 */
+-	kill_litter_super(sb);
++	kill_anon_super(sb);
+ 
+ 	if (info && info->ipc_ns)
+ 		put_ipc_ns(info->ipc_ns);
 -- 
 2.47.3
 
