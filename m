@@ -1,173 +1,298 @@
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1739E1A9B46
-	for <bpf@vger.kernel.org>; Tue, 28 Oct 2025 15:18:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69CA733F8DC;
+	Tue, 28 Oct 2025 15:20:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761664709; cv=none; b=JS+f1wgg3AkOG+Rg4ddnL4t5wSQZeBogWCMqZaRtgP3+xUbn9j6AE6NaMwTaHcS4PXmcQE7OVkC04VWXYGt+cihx4GIpCkAQEQTrSem3fqMlmlnNHqoVnBI96UAg384IIwk5Ax1DxhBeXoOJpKfryU2D4nfg9syQFVGnOSOIDTA=
+	t=1761664812; cv=none; b=U4QxA6zwuaIZVu8bbOnGlL+ZHIEMfqAZzipnKW6ZolmLo8vcPnTGruwCoVMHvJHTa3/x9aLly2LKn31IAsaAqjCQZYbA3RVQP3KEwzxdxJ1DQC4JDnXxuwTza3OZPbQCq1FSQQa3m06PTGIno1U7q2KsWaGKJwquUDL7o4NnL/I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761664709; c=relaxed/simple;
-	bh=F8e8WmGYtiSIz2ZPl4Tlwz5ZEbUBxeuWsXenRkSuRIM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jnPtND6mbrnlA1FLi8hUvTYQG77BAHf8KtrXmRcoCcq42p0sVKEpvXL1tYnWW0cFympZbVjXlo7M40SNVEbF2k9xMcHE0FM5bnlXW+f5883tbXK+0f7BqySiSUZy6azMGdcwriBU04dVBMa2S50+PODyWbUCviwC2cKNA61BzCI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=aPgIESFU; arc=none smtp.client-ip=209.85.216.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	s=arc-20240116; t=1761664812; c=relaxed/simple;
+	bh=v9Rv1HV3ikERpxpW7AFoVZzI5l2h0fNjA8LM+9vK5U4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HnXQHB4OBCQzqBTJebwgXNdIs3hUPL8QPzGH81+DX2aTHOW/uKpxNT9lH/WO6h1oVHh1DIh8IWT4zciDz0tvQKPr18uBGWD4tIdoYWY/Yl7pSJakorMtg9WK1G1p79RdBcxwuHdmD9dJLpe46QQc7++nl1MojpZOQZtTONR1tA8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Qq+aDogl; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="aPgIESFU"
-Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-330b4739538so6185544a91.3
-        for <bpf@vger.kernel.org>; Tue, 28 Oct 2025 08:18:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1761664707; x=1762269507; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OyP7cdj89rMrrTPrjzZN0zWB9L8ktToD2ZCaFwPw6WM=;
-        b=aPgIESFULDDgUYkTMzXh1LVWLZXkfPhgmMC0b6JL04+T71TF8ZT5auySl1c1TC+gRs
-         OG6oHowTlgk8T7SzC/oeFOM1D9jNW68FrgJXrPTnleZf6ZVe+TdjYW0OhjqvwGuDP5sX
-         hQks2fRbRuaLcPDeBd45qRIzb/V8rtE9sIhZDgIGmTD6H77c90jLcU81CrBgc7o36j3X
-         Pds5HTbNrwbtUJbsQ48AHX3o2I6ke98XuwTvrqFeEdQfZ/1mY29GoedIt/erHpRp1RaL
-         CHfz08y6LpQ1OKI4g+ZdqzFYNmJF7FujXPmbMPdMrfibSFId4ofgfXcVWnWTCkBaUuPE
-         A4qg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761664707; x=1762269507;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OyP7cdj89rMrrTPrjzZN0zWB9L8ktToD2ZCaFwPw6WM=;
-        b=a970fDSzjY1/iV8hAdho/A4dQLa4d3VJCgHYwJwe2iS1AjhBrVo5nUGJrsXr+0lBpg
-         1+r6J6xXugFD9oQ8ABGgw/RJNpaznBz17Z/4JAasF9GZ3/90bJjcjOMsH/zQZBgNZLvw
-         1rgzN3rQdaG68QufZmqKM13w96r0x0Ijn1Y32FbMbn49KtW3IKd3Ys5kv4bNvi2e20Ue
-         C5jounBswEf70gvIJP+NrBcIzomldDxiodFMcoTTg35XWp0O1x14Dq6XoZGPLqNXYB44
-         kEEm0T2fga9cL60nSMPCwRRs3BrdfH8O8zAtPt9+3wC8YQfSebGBHpHDdH3vUOMW1GT5
-         9smA==
-X-Forwarded-Encrypted: i=1; AJvYcCW1VLn6MgOhcYmdCJbwcFGgshXPhULvi6tk0Lhbzsuk3TVsG6YSrBai2333FZlixOhmUJQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwtsUZeumuehDRr/N4t912t+v2rszuQtGUppA7fQ9ySEm+LMw1V
-	ihd1QTCSJ5URJDzMEKyZu19k19P9IkcPPeE9pykcMIgScXMiWJaRy4SaZ1LNAdTg68ejXjqF4Lc
-	ysBzeSt9jRsT+8DkRpHAyIW5O54tSZbKSH2mu7byn
-X-Gm-Gg: ASbGnct8kWpz1HOLGqxY2GZMRH4UHgWMxj8uO3fdFIZlWKvPfvPS+wDO1H8r/Dxj1lI
-	cuz5vCBvX54jlmLOedCx/0NzgWhI3tA/aFuyIrSrnjj0OyVHMuMDGi/G+5NjjV7ZuZH5ZjWcA3v
-	TbUSmZt0FcfgP9tVsKTEx+DBQgekpzbRCpwZS9ZTmmHqtNZrCLSpGKLLqzXY0DtPC+LO9om8etN
-	zQtDoiVIegZTDOP68eB49oXa2mBf4TRPRyUdU0slU1YH2DhqCKPaU581SO/r2c8UqClluU=
-X-Google-Smtp-Source: AGHT+IGlNBZmXJK4qpsxQZzDRtVN03T2ZwyYcgh4TjwsGO4aVJnWhY7BZRGZ5o3S/2uKbp5fs3jAsBMy6IWDGwXqTfc=
-X-Received: by 2002:a17:90b:5825:b0:33e:30b2:d20 with SMTP id
- 98e67ed59e1d1-34027c0528dmr4786413a91.33.1761664707233; Tue, 28 Oct 2025
- 08:18:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Qq+aDogl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11D2CC4CEE7;
+	Tue, 28 Oct 2025 15:20:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1761664812;
+	bh=v9Rv1HV3ikERpxpW7AFoVZzI5l2h0fNjA8LM+9vK5U4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Qq+aDoglEAEQeZj43j1Ad6bErXdWun4BUqRgwXwoPFKAf/z011GLNFY7bIPgOKkBw
+	 0xwuuW7/3ijghyDkNnHVsZVgy+w2I86WF+S0DFH6R6pou2EiYfmwr1OR+91OsYR2cC
+	 YzsGU/+kV1g+48Y9C2KzvIeVZ8bpGhcgJbx+hdSZIgRcSTo3ye1jcxTBgPLG+538s7
+	 tvNOfs8wSga3jNoEnPPnBTYKW7kSRn40U5+aWQEF0jb8/kccNi01lfrQRf/VbEOg1O
+	 ZmAFI+7NoT6i575j/FD4+FLa4JZ1mOfawv9/MV9efOtLb7W99c5tz5Mbv03wOPlsVW
+	 Fh4aS/RkNfevg==
+Date: Tue, 28 Oct 2025 16:20:04 +0100
+From: Christian Brauner <brauner@kernel.org>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: linux-fsdevel@vger.kernel.org, Josef Bacik <josef@toxicpanda.com>, 
+	Jeff Layton <jlayton@kernel.org>, Jann Horn <jannh@google.com>, Mike Yuan <me@yhndnzj.com>, 
+	Zbigniew =?utf-8?Q?J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>, Lennart Poettering <mzxreary@0pointer.de>, 
+	Daan De Meyer <daan.j.demeyer@gmail.com>, Aleksa Sarai <cyphar@cyphar.com>, 
+	Amir Goldstein <amir73il@gmail.com>, Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Jan Kara <jack@suse.cz>, linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, 
+	bpf@vger.kernel.org, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Netdev <netdev@vger.kernel.org>
+Subject: Re: [PATCH v3 17/70] nstree: add listns()
+Message-ID: <20251028-landhaus-akademie-875cd140fbbb@brauner>
+References: <20251024-work-namespace-nstree-listns-v3-0-b6241981b72b@kernel.org>
+ <20251024-work-namespace-nstree-listns-v3-17-b6241981b72b@kernel.org>
+ <481c973c-3ae5-4184-976e-96ab633dd09a@app.fastmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251025001022.1707437-1-song@kernel.org> <CAHC9VhTb2p3DL_knRgFyDv396BwH-KhwR0cBhqLQ-KdgcA1yLw@mail.gmail.com>
- <CAPhsuW6O96aJbZptVY754tQ1-C_JtH8PwS1oZX6a1Tch7ehEkg@mail.gmail.com>
- <CAHC9VhRzjkTSUPS9odXRruAuSNbv44Atxj2sreQgcVpDu5pL-Q@mail.gmail.com> <aQCE0WwGlOADI5xT@google.com>
-In-Reply-To: <aQCE0WwGlOADI5xT@google.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Tue, 28 Oct 2025 11:18:15 -0400
-X-Gm-Features: AWmQ_bmm4t5z9CNEiMIeS2ttD9ySj8RRIc6jeSHuj0OZ3k34EbYuCM5QR53_mCE
-Message-ID: <CAHC9VhRTN_PD9f4gNdwZFk2QjYZ3_Vc6Jfmircr2cS49CZ005A@mail.gmail.com>
-Subject: Re: [RFC bpf-next] lsm: bpf: Remove lsm_prop_bpf
-To: Matt Bobrowski <mattbobrowski@google.com>
-Cc: Song Liu <song@kernel.org>, bpf@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, jmorris@namei.org, serge@hallyn.com, 
-	casey@schaufler-ca.com, kpsingh@kernel.org, ast@kernel.org, 
-	daniel@iogearbox.net, andrii@kernel.org, john.johansen@canonical.com, 
-	eparis@redhat.com, audit@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <481c973c-3ae5-4184-976e-96ab633dd09a@app.fastmail.com>
 
-On Tue, Oct 28, 2025 at 4:54=E2=80=AFAM Matt Bobrowski <mattbobrowski@googl=
-e.com> wrote:
-> On Mon, Oct 27, 2025 at 09:50:11PM -0400, Paul Moore wrote:
-> > On Mon, Oct 27, 2025 at 6:45=E2=80=AFPM Song Liu <song@kernel.org> wrot=
-e:
-> > > On Mon, Oct 27, 2025 at 2:14=E2=80=AFPM Paul Moore <paul@paul-moore.c=
-om> wrote:
-> > > > On Fri, Oct 24, 2025 at 8:10=E2=80=AFPM Song Liu <song@kernel.org> =
-wrote:
-> > > > >
-> > > > > lsm_prop_bpf is not used in any code. Remove it.
-> > > > >
-> > > > > Signed-off-by: Song Liu <song@kernel.org>
-> > > > >
-> > > > > ---
-> > > > >
-> > > > > Or did I miss any user of it?
-> > > > > ---
-> > > > >  include/linux/lsm/bpf.h  | 16 ----------------
-> > > > >  include/linux/security.h |  2 --
-> > > > >  2 files changed, 18 deletions(-)
-> > > > >  delete mode 100644 include/linux/lsm/bpf.h
-> > > >
-> > > > You probably didn't miss any direct reference to lsm_prop_bpf, but =
-the
-> > > > data type you really should look for when deciding on this is
-> > > > lsm_prop.  There are a number of LSM hooks that operate on a lsm_pr=
-op
-> > > > struct instead of secid tokens, and without a lsm_prop_bpf
-> > > > struct/field in the lsm_prop struct a BPF LSM will be limited compa=
-red
-> > > > to other LSMs.  Perhaps that limitation is okay, but it is somethin=
-g
-> > >
-> > > I think audit is the only user of lsm_prop (via audit_names and
-> > > audit_context). For BPF based LSM or audit, I don't think we need
-> > > specific lsm_prop. If anything is needed, we can implement it with
-> > > task local storage or inode local storage.
-> > >
-> > > CC audit@ and Eric Paris for more comments on audit side.
-> >
-> > You might not want to wait on a comment from Eric :)
-> >
-> > > > that should be discussed; I see you've added KP to the To/CC line, =
-I
-> > > > would want to see an ACK from him before I merge anything removing
-> > > > lsm_prop_bpf.
-> > >
-> > > Matt Bobrowski is the co-maintainer of BPF LSM. I think we are OK
-> > > with his Reviewed-by?
-> >
-> > Good to know, I wasn't aware that Matt was also listed as a maintainer
-> > for the BPF LSM.  In that case as long as there is an ACK, not just a
-> > reviewed tag, I think that should be sufficient.
->
-> ACK.
->
-> > > > I haven't checked to see if the LSM hooks associated with a lsm_pro=
-p
-> > > > struct are currently allowed for a BPF LSM, but I would expect a pa=
-tch
-> > > > removing the lsm_prop_bpf struct/field to also disable those LSM ho=
-oks
-> > > > for BPF LSM use.
-> > >
-> > > I don't think we need to disable anything here. When lsm_prop was
-> > > first introduced in [1], nothing was added to handle BPF.
-> >
-> > If the BPF LSM isn't going to maintain any state in the lsm_prop
-> > struct, I'd rather see the associated LSM interfaces disabled from
-> > being used in a BPF LSM just so we don't run into odd expectations in
-> > the future.  Maybe they are already disabled, I haven't checked.
->
-> Well, it doesn't ATM, but nothing goes to say that this will change in
-> the future. Until then though, I have no objections around removing
-> lsm_prop_bpf from lsm_prop as there's currently no infrastructure in
-> place allowing a BPF LSM to properly harness lsm_prop/lsm_prop_bpf. By
-> harness, I mean literaly using lsm_prop/lsm_prop_bpf as some form of
-> context storage mechanism.
->
-> As for the disablement of the associated interfaces, I don't feel like
-> this warranted at this point? Doing so might break some out-of-tree
-> BPF LSM implementations, specifically those that might be using these
-> associated LSM interfaces purely for instrumentation purposes at this
-> point?
+On Fri, Oct 24, 2025 at 04:06:57PM +0200, Arnd Bergmann wrote:
+> On Fri, Oct 24, 2025, at 12:52, Christian Brauner wrote:
+> > Add a new listns() system call that allows userspace to iterate through
+> > namespaces in the system. This provides a programmatic interface to
+> > discover and inspect namespaces, enhancing existing namespace apis.
+> 
+> I double-checked that the ABI is well-formed and works the same
+> way on all supported architectures, though I did not check the functional
+> aspects.
+> 
+> Acked-by: Arnd Bergmann <arnd@arndb.de>
+> 
+> One small thing I noticed:
+> 
+> > +SYSCALL_DEFINE4(listns, const struct ns_id_req __user *, req,
+> > +		u64 __user *, ns_ids, size_t, nr_ns_ids, unsigned int, flags)
+> > +{
+> > +	struct klistns klns __free(klistns_free) = {};
+> > +	const size_t maxcount = 1000000;
+> > +	struct ns_id_req kreq;
+> > +	ssize_t ret;
+> > +
+> > +	if (flags)
+> > +		return -EINVAL;
+> > +
+> > +	if (unlikely(nr_ns_ids > maxcount))
+> > +		return -EOVERFLOW;
+> > +
+> > +	if (!access_ok(ns_ids, nr_ns_ids * sizeof(*ns_ids)))
+> > +		return -EFAULT;
+> 
+> I'm a bit worried about hardcoding the maxcount value here, which
+> seems to limit both the size of the allocation and prevent overflowing
+> the multiplication of the access_ok() argument, though that isn't
+> completely clear from the implementation.
+> 
+> Allowing 8MB of vmalloc space to be filled can be bad on 32-bit
+> systems that may only have 100MB in total. The access_ok() check
+> looks like it tries to provide an early-fail error return but
+> should not actually be needed since there is a single copy_to_user()
+> in the end, and that is more likely to fail for unmapped memory than
+> an access_ok() failure.
+> 
+> Would it make sense to just drop the kvmalloc() completely and
+> instead put_user() the output values individually? That way you
+> can avoid both a hardwired limit and a potential DoS from vmalloc
+> exhaustion.
 
-Okay, let's leave things as-is for right now.  The lsm_prop struct is
-an important part of those APIs, and if there is a need for those APIs
-in a BPF LSM then we should preserve all of the API, including the
-lsm_prop component.
+Initially this wasn't possible because we walked all of this completely
+with only rcu protection. But now that we always have to take a passive
+reference its possible to do what you suggest. This would mean
+ping-ponging the rcu_read_lock()/rcu_read_unlock() but that's probably
+fine. How do you feel about the following?: 
 
---=20
-paul-moore.com
+diff --git a/kernel/nstree.c b/kernel/nstree.c
+index 1455573e774e..e4c8508e97c7 100644
+--- a/kernel/nstree.c
++++ b/kernel/nstree.c
+@@ -382,7 +382,7 @@ u64 __ns_tree_gen_id(struct ns_common *ns, u64 id)
+ }
+ 
+ struct klistns {
+-	u64 *kns_ids;
++	u64 __user *uns_ids;
+ 	u32 nr_ns_ids;
+ 	u64 last_ns_id;
+ 	u64 user_ns_id;
+@@ -395,9 +395,8 @@ static void __free_klistns_free(const struct klistns *kls)
+ {
+ 	if (kls->user_ns_id != LISTNS_CURRENT_USER)
+ 		put_user_ns(kls->user_ns);
+-	if (kls->first_ns)
++	if (kls->first_ns && kls->first_ns->ops)
+ 		kls->first_ns->ops->put(kls->first_ns);
+-	kvfree(kls->kns_ids);
+ }
+ 
+ #define NS_ALL (PID_NS | USER_NS | MNT_NS | UTS_NS | IPC_NS | NET_NS | CGROUP_NS | TIME_NS)
+@@ -429,18 +428,13 @@ static int copy_ns_id_req(const struct ns_id_req __user *req,
+ }
+ 
+ static inline int prepare_klistns(struct klistns *kls, struct ns_id_req *kreq,
+-				  size_t nr_ns_ids)
++				  u64 __user *ns_ids, size_t nr_ns_ids)
+ {
+ 	kls->last_ns_id = kreq->ns_id;
+ 	kls->user_ns_id = kreq->user_ns_id;
+-	kls->nr_ns_ids = nr_ns_ids;
+-	kls->ns_type = kreq->ns_type;
+-
+-	kls->kns_ids = kvmalloc_array(nr_ns_ids, sizeof(*kls->kns_ids),
+-				      GFP_KERNEL_ACCOUNT);
+-	if (!kls->kns_ids)
+-		return -ENOMEM;
+-
++	kls->nr_ns_ids	= nr_ns_ids;
++	kls->ns_type	= kreq->ns_type;
++	kls->uns_ids	= ns_ids;
+ 	return 0;
+ }
+ 
+@@ -459,8 +453,9 @@ static struct ns_common *lookup_ns_owner_at(u64 ns_id, struct ns_common *owner)
+ 	node = owner->ns_owner_tree.rb_node;
+ 
+ 	while (node) {
+-		struct ns_common *ns = node_to_ns_owner(node);
++		struct ns_common *ns;
+ 
++		ns = node_to_ns_owner(node);
+ 		if (ns_id <= ns->ns_id) {
+ 			ret = ns;
+ 			if (ns_id == ns->ns_id)
+@@ -494,7 +489,7 @@ static struct ns_common *lookup_ns_id(u64 mnt_ns_id, int ns_type)
+ 
+ static ssize_t do_listns_userns(struct klistns *kls)
+ {
+-	u64 *ns_ids = kls->kns_ids;
++	u64 __user *ns_ids = kls->uns_ids;
+ 	size_t nr_ns_ids = kls->nr_ns_ids;
+ 	struct ns_common *ns = NULL, *first_ns = NULL;
+ 	const struct list_head *head;
+@@ -525,7 +520,9 @@ static ssize_t do_listns_userns(struct klistns *kls)
+ 	ret = 0;
+ 	head = &to_ns_common(kls->user_ns)->ns_owner;
+ 	userns_capable = ns_capable_noaudit(kls->user_ns, CAP_SYS_ADMIN);
+-	guard(rcu)();
++
++	rcu_read_lock();
++
+ 	if (!first_ns)
+ 		first_ns = list_entry_rcu(head->next, typeof(*ns), ns_owner_entry);
+ 	for (ns = first_ns; &ns->ns_owner_entry != head && nr_ns_ids;
+@@ -534,19 +531,28 @@ static ssize_t do_listns_userns(struct klistns *kls)
+ 			continue;
+ 		if (!ns_get_unless_inactive(ns))
+ 			continue;
++
++		rcu_read_unlock();
++
+ 		if (userns_capable || is_current_namespace(ns) ||
+ 		    ((ns->ns_type == CLONE_NEWUSER) && ns_capable_noaudit(to_user_ns(ns), CAP_SYS_ADMIN))) {
+-			*ns_ids = ns->ns_id;
+-			ns_ids++;
++			if (put_user(ns->ns_id, ns_ids + ret))
++				return -EINVAL;
+ 			nr_ns_ids--;
+ 			ret++;
+ 		}
++
+ 		if (need_resched())
+-			cond_resched_rcu();
++			cond_resched();
++
++		rcu_read_lock();
++
+ 		/* doesn't sleep */
+-		ns->ops->put(ns);
++		if (ns->ops)
++			ns->ops->put(ns);
+ 	}
+ 
++	rcu_read_unlock();
+ 	return ret;
+ }
+ 
+@@ -626,7 +632,7 @@ static inline bool ns_common_is_head(struct ns_common *ns,
+ 
+ static ssize_t do_listns(struct klistns *kls)
+ {
+-	u64 *ns_ids = kls->kns_ids;
++	u64 __user *ns_ids = kls->uns_ids;
+ 	size_t nr_ns_ids = kls->nr_ns_ids;
+ 	struct ns_common *ns, *first_ns = NULL;
+ 	struct ns_tree *ns_tree = NULL;
+@@ -659,7 +665,8 @@ static ssize_t do_listns(struct klistns *kls)
+ 	else
+ 		head = &ns_unified_list;
+ 
+-	guard(rcu)();
++	rcu_read_lock();
++
+ 	if (!first_ns)
+ 		first_ns = first_ns_common(head, ns_tree);
+ 
+@@ -669,6 +676,9 @@ static ssize_t do_listns(struct klistns *kls)
+ 			continue;
+ 		if (!ns_get_unless_inactive(ns))
+ 			continue;
++
++		rcu_read_unlock();
++
+ 		/* Check permissions */
+ 		if (!ns->ops)
+ 			user_ns = NULL;
+@@ -679,16 +689,22 @@ static ssize_t do_listns(struct klistns *kls)
+ 		if (ns_capable_noaudit(user_ns, CAP_SYS_ADMIN) ||
+ 		    is_current_namespace(ns) ||
+ 		    ((ns->ns_type == CLONE_NEWUSER) && ns_capable_noaudit(to_user_ns(ns), CAP_SYS_ADMIN))) {
+-			*ns_ids++ = ns->ns_id;
++			if (put_user(ns->ns_id, ns_ids + ret))
++				return -EINVAL;
+ 			nr_ns_ids--;
+ 			ret++;
+ 		}
+ 		if (need_resched())
+-			cond_resched_rcu();
++			cond_resched();
++
++		rcu_read_lock();
++
+ 		/* doesn't sleep */
+-		ns->ops->put(ns);
++		if (ns->ops)
++			ns->ops->put(ns);
+ 	}
+ 
++	rcu_read_unlock();
+ 	return ret;
+ }
+ 
+@@ -713,19 +729,12 @@ SYSCALL_DEFINE4(listns, const struct ns_id_req __user *, req,
+ 	if (ret)
+ 		return ret;
+ 
+-	ret = prepare_klistns(&klns, &kreq, nr_ns_ids);
++	ret = prepare_klistns(&klns, &kreq, ns_ids, nr_ns_ids);
+ 	if (ret)
+ 		return ret;
+ 
+ 	if (kreq.user_ns_id)
+-		ret = do_listns_userns(&klns);
+-	else
+-		ret = do_listns(&klns);
+-	if (ret <= 0)
+-		return ret;
++		return do_listns_userns(&klns);
+ 
+-	if (copy_to_user(ns_ids, klns.kns_ids, ret * sizeof(*ns_ids)))
+-		return -EFAULT;
+-
+-	return ret;
++	return do_listns(&klns);
+ }
