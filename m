@@ -1,34 +1,34 @@
 Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33D702144CF;
-	Tue, 28 Oct 2025 00:46:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEA4D21A95D;
+	Tue, 28 Oct 2025 00:46:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761612390; cv=none; b=G+gnYRbUbPyTWnVqZf342z0waiCXw9Z8OCjQNXajxFnQIr40cPvI7hkDkNTPvqM93VBQkH+HgU9gEZtHG92pkjKuPVHMycKXoSbTFBUjPFX1RW1JLZl4bCXUzLnGJpyzmGN1pRIeBh/oAbsSED4mvFl0ZcA3rhAsDd6ttFWXyzk=
+	t=1761612389; cv=none; b=l9ja1S9+p547oF4C2Wbk0wfEmq4+2YCSueyBYPXiNXdmlbiDzPHbFLDgRBAYEO2IaEVt3ulYvquw9Rm8ssFr+jwL/+S+OEeeBe09AmMY+dBrkC3mEioYM+PeUHrBPrYZsGa29Denk8VLnCXAuL+aaTJOpXMTQnL5Tf4sas21DFo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761612390; c=relaxed/simple;
-	bh=aQb2qy2J1pCZ1132PoicrKjRnzTEBFPwnGLeE5EsJfc=;
+	s=arc-20240116; t=1761612389; c=relaxed/simple;
+	bh=zPYbbdJMbimCH8CGuafAZf5bHfgge+LaaShYJQxoDwY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Zfv+mHAdvChpwc7Yv0Hc4xGUV8yAc8KljlB4o12SHpC1fLP3jc0GBwxgXJFm4wGBmF5y+wF5cvxkctAp5Bn07G1uI2gIuPYJznjQ35RWloFrPUU4D214HkiFhRZ5r7u++uyRysdMxFu9sXe8lRvjpFXoMigkAuL99h80NzZhm/g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=uy6yCSmK; arc=none smtp.client-ip=62.89.141.173
+	 MIME-Version; b=GU4eAF1hBt5GSZ/+uVpwQpzJTfCQHmqOu7hPln5u8w8WaeJsqP+rGAGi6W6ZqzfBN1l7yn/3jKOthsu1R8/BcFyUfIQf8wUj7jGp0gQZsYxm2+uDZndOzDHVV2lYgGxyP5yg/V1vSUNII5cojJQsjXogTpBGZioJwIIkW/uHUIc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=aezvGRHC; arc=none smtp.client-ip=62.89.141.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="uy6yCSmK"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="aezvGRHC"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
 	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
 	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=JiG9nHcsxcwZpHb/L0Tx41DaV7imD29tLb/ai1sU578=; b=uy6yCSmKcS+lDQ9yS3I0kkadjO
-	MomsFzmhLaBK2huX54Avbto6nY9SitzSncGkbtogsfBNo9tXrkJ1CmW/b2IUyPd7xtkVXzPANIs8x
-	1pp+RCIkBnPzLazOP4ZqLnfM3fqZ1RmT3ZtzuUtP9Fzcntv5GmnwcUhp5X0sJxMOicH36YKp/uwlK
-	5G/Oicf+u19OYeqF7PSBgKm5Xbz0464+HAh3HAbXyc8Dn58al/Y/KKVIQLMsfYdjFgYpyo/u9BtY0
-	Amywa21TljAAEjyMoyuxn7FKTOOk4hKq/q8BtCxwwuapWcESPiEqaLV9iKF3OwrZvWelyauABPOrD
-	EPdmjzzg==;
+	bh=sU0Rwyb1f70hxWqGLaDrX9gfHmhzhxjXEuqfS3xyBnk=; b=aezvGRHCAvghStX3Ot6akRYpUE
+	1NYciV5CtxHpLzJAoEByhqUGZCqM2jR9V9yjSv5TtgO478v10dNgSG45eYSF4vEiepoN4lND+f1cp
+	xw3HAEKFsvAEXsrc3hs7rvl7cA6u2BsRlakJSCpTDl3WcNXb1vZ6qaNk4ZZ2LXWmHqEGjfpWB5puv
+	RLpIbUkW9d/NrEw3RCyXWcw/XhPdPXgCObU59mjLpO6JAiZ466tyzKUwZBn0YeQSggWYHCi+SzqQa
+	9FzpN28Wy5jziRDlq1AnNJD0iePGY6o2wVoBpbkOQJAhgTITpW1PqiazuaQmUq3GB8dy/pJ0VmaS4
+	Hf4MMDyg==;
 Received: from viro by zeniv.linux.org.uk with local (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1vDXqq-00000001eXL-0Fbk;
-	Tue, 28 Oct 2025 00:46:16 +0000
+	id 1vDXqt-00000001eha-4Bho;
+	Tue, 28 Oct 2025 00:46:20 +0000
 From: Al Viro <viro@zeniv.linux.org.uk>
 To: linux-fsdevel@vger.kernel.org
 Cc: torvalds@linux-foundation.org,
@@ -52,9 +52,9 @@ Cc: torvalds@linux-foundation.org,
 	selinux@vger.kernel.org,
 	borntraeger@linux.ibm.com,
 	bpf@vger.kernel.org
-Subject: [PATCH v2 14/50] convert mqueue
-Date: Tue, 28 Oct 2025 00:45:33 +0000
-Message-ID: <20251028004614.393374-15-viro@zeniv.linux.org.uk>
+Subject: [PATCH v2 43/50] convert hypfs
+Date: Tue, 28 Oct 2025 00:46:02 +0000
+Message-ID: <20251028004614.393374-44-viro@zeniv.linux.org.uk>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20251028004614.393374-1-viro@zeniv.linux.org.uk>
 References: <20251028004614.393374-1-viro@zeniv.linux.org.uk>
@@ -67,56 +67,64 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Al Viro <viro@ftp.linux.org.uk>
 
-All modifications via normal VFS codepaths; just take care of making
-persistent in in mqueue_create_attr() and discardable in mqueue_unlink()
-and it doesn't need kill_litter_super() at all.
-
-mqueue_unlink() side is best handled by having it call simple_unlink()
-rather than duplicating its guts...
+just have hypfs_create_file() do the usual simple_start_creating()/
+d_make_persistent()/simple_done_creating() and that's it
 
 Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 ---
- ipc/mqueue.c | 12 +++---------
- 1 file changed, 3 insertions(+), 9 deletions(-)
+ arch/s390/hypfs/inode.c | 23 +++++++++--------------
+ 1 file changed, 9 insertions(+), 14 deletions(-)
 
-diff --git a/ipc/mqueue.c b/ipc/mqueue.c
-index 093551fe66a7..5737130137bf 100644
---- a/ipc/mqueue.c
-+++ b/ipc/mqueue.c
-@@ -599,8 +599,7 @@ static int mqueue_create_attr(struct dentry *dentry, umode_t mode, void *arg)
- 	dir->i_size += DIRENT_SIZE;
- 	simple_inode_init_ts(dir);
+diff --git a/arch/s390/hypfs/inode.c b/arch/s390/hypfs/inode.c
+index 6a80ab2692be..98952543d593 100644
+--- a/arch/s390/hypfs/inode.c
++++ b/arch/s390/hypfs/inode.c
+@@ -311,7 +311,7 @@ static void hypfs_kill_super(struct super_block *sb)
+ 	struct hypfs_sb_info *sb_info = sb->s_fs_info;
  
--	d_instantiate(dentry, inode);
--	dget(dentry);
-+	d_make_persistent(dentry, inode);
- 	return 0;
- out_unlock:
- 	spin_unlock(&mq_lock);
-@@ -617,13 +616,8 @@ static int mqueue_create(struct mnt_idmap *idmap, struct inode *dir,
- 
- static int mqueue_unlink(struct inode *dir, struct dentry *dentry)
- {
--	struct inode *inode = d_inode(dentry);
--
--	simple_inode_init_ts(dir);
- 	dir->i_size -= DIRENT_SIZE;
--	drop_nlink(inode);
--	dput(dentry);
--	return 0;
-+	return simple_unlink(dir, dentry);
+ 	hypfs_last_dentry = NULL;
+-	kill_litter_super(sb);
++	kill_anon_super(sb);
+ 	kfree(sb_info);
  }
  
- /*
-@@ -1638,7 +1632,7 @@ static const struct fs_context_operations mqueue_fs_context_ops = {
- static struct file_system_type mqueue_fs_type = {
- 	.name			= "mqueue",
- 	.init_fs_context	= mqueue_init_fs_context,
--	.kill_sb		= kill_litter_super,
-+	.kill_sb		= kill_anon_super,
- 	.fs_flags		= FS_USERNS_MOUNT,
- };
+@@ -321,17 +321,13 @@ static struct dentry *hypfs_create_file(struct dentry *parent, const char *name,
+ 	struct dentry *dentry;
+ 	struct inode *inode;
  
+-	inode_lock(d_inode(parent));
+-	dentry = lookup_noperm(&QSTR(name), parent);
+-	if (IS_ERR(dentry)) {
+-		dentry = ERR_PTR(-ENOMEM);
+-		goto fail;
+-	}
++	dentry = simple_start_creating(parent, name);
++	if (IS_ERR(dentry))
++		return ERR_PTR(-ENOMEM);
+ 	inode = hypfs_make_inode(parent->d_sb, mode);
+ 	if (!inode) {
+-		dput(dentry);
+-		dentry = ERR_PTR(-ENOMEM);
+-		goto fail;
++		simple_done_creating(dentry);
++		return ERR_PTR(-ENOMEM);
+ 	}
+ 	if (S_ISREG(mode)) {
+ 		inode->i_fop = &hypfs_file_ops;
+@@ -346,10 +342,9 @@ static struct dentry *hypfs_create_file(struct dentry *parent, const char *name,
+ 	} else
+ 		BUG();
+ 	inode->i_private = data;
+-	d_instantiate(dentry, inode);
+-fail:
+-	inode_unlock(d_inode(parent));
+-	return dentry;
++	d_make_persistent(dentry, inode);
++	simple_done_creating(dentry);
++	return dentry;	 // borrowed
+ }
+ 
+ struct dentry *hypfs_mkdir(struct dentry *parent, const char *name)
 -- 
 2.47.3
 
