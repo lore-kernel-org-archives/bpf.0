@@ -1,161 +1,91 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FE062E5B09;
-	Wed, 29 Oct 2025 22:59:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF58B2EDD76;
+	Wed, 29 Oct 2025 23:12:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761778778; cv=none; b=mjyb6DNM6Br0lJjGLPlBaLtHhTzSTJPmgYCJJKJf9FlpejvrcPTwTS0ZMwjiZW1DifX0clqKgx6O5NZxnUy+untv6wn902BNPqx/Bn3gxmpqnFOnmS+fh99P1wbiv5jdObO4RfLIgkKOEGK95moeWMs32PIdmqr3WmkMyE9rBQ4=
+	t=1761779540; cv=none; b=CeEqM4iS2DyAum0jqI9O9EHwhzvD+Xqzis4RaNlDZKgVALeZbEDBcMVMieL/Xq6ttaCMDW4EQvQuo2KfxFHvoEqciz1Timl3vb0rrTIUFhOoEl7Qd2ZSH69T1H9xc8cnVBTQrSTv8JNniIRAkxOHT8c+KeosvlQa0Db1PrZ5+Ho=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761778778; c=relaxed/simple;
-	bh=vsALvB66YS+oJy282YuBqx/N0hfKCbNNomExS9wRJt8=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=JFA+W2ng789wTJ0/p1Z72Gt5EqoVOWJrB9UpUIS8ZE9EzpgRBi3RXo9iKT+Wan3DdORdtF4UYVmD2YXeEWltx0NV2fmVMzn/k/098LrRA5aYf9LGvTM2cIa1IYSPddgnNxWIKSTcDn2yVH3JctNZkSgWmLFwXtEkotYzbqU6BJc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VW+cqAVC; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1761779540; c=relaxed/simple;
+	bh=6BSN0rcgs0DzYKrINPAj7MX3VIGewgEfCuLdqxbHYy0=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=e4y1hTpBxcWA8gdZZsxzCUUWJExwPsSxoX1Iq62YrYRTkSwq2bqhHlbwDYtMcTYrI+BGTRt8aAw29yZQufjzf6BtBojt09QSxfSUlGWP0YVPaM9pRmmXbZt9g/WC2uxwpnwOy9xTXKkhKPp6IR1Vee/YDWoeYEcn58ft2jGIrFk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TIWpBivi; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VW+cqAVC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABF48C4CEF7;
-	Wed, 29 Oct 2025 22:59:36 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TIWpBivi"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E19EC4CEFD;
+	Wed, 29 Oct 2025 23:12:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761778778;
-	bh=vsALvB66YS+oJy282YuBqx/N0hfKCbNNomExS9wRJt8=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=VW+cqAVChbcju/OS+KUzpStrv2sueDIYN9CDWXmcyU6K80XvHR5bH/bvA4geaO3DL
-	 mXSsdy4o3zXxC8laWH8Ep2ziTb0BJ3UmVMUWrKgmdmjiN9ibuCh4BZh2NK8NXHuBoe
-	 6H/xDPLgK0SFm39rE0XG8KAxuE8Kmix6baMVLLz4O2cLOxiLdfUP+I5FY6LgHYaSk+
-	 lFNks44MYgpMFkF1inhro/puyOjhPF0i4nO3xGN2YrKOg82ZDKGzn2jrfaqgD41yiE
-	 nbEEF2ZdwzqL53BwAhWdd5T5Ppd3UD9bc/5oY5WbOx65bRwHO817ivw4ousKa/+i4M
-	 fG/7jrJfjFVeA==
-Content-Type: multipart/mixed; boundary="===============7878305878613788522=="
+	s=k20201202; t=1761779540;
+	bh=6BSN0rcgs0DzYKrINPAj7MX3VIGewgEfCuLdqxbHYy0=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=TIWpBiviwQBhOUhXDzqDUdup8/QMGxvPROL3Axo0HLdi0+uNAo7e0NPmiF4jf18hp
+	 Ykbt83g34Uz7CAfh81KcMaE8wzb+eUWnFc7V8yU5E9i22oUoxyenpCTBA3S1wQ2DTQ
+	 ubAMBMBlbLKZ0OIx6ID2Habv5I2lPlWD3g0NM3eFTxyW2mkMQWe9GB31AahtVGfdf6
+	 OJfeRgcv+XiphoWVqMKewDBTR9SGne0SP5NUUoue8koZBiVrWp+z0rQh01bVLwRQ0u
+	 xYpS7kzBaPXwr3jEbKcNovb7X0T4btOx1GiJ022H3VSPyfE806h/kMiDOuNAHo0Uck
+	 qpEhEwg4MH0VA==
+Date: Wed, 29 Oct 2025 16:12:18 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Cc: Jesper Dangaard Brouer <hawk@kernel.org>, <bpf@vger.kernel.org>,
+ <ast@kernel.org>, <daniel@iogearbox.net>, <netdev@vger.kernel.org>,
+ <magnus.karlsson@intel.com>, <aleksander.lobakin@intel.com>,
+ <ilias.apalodimas@linaro.org>, <toke@redhat.com>, <lorenzo@kernel.org>,
+ <syzbot+ff145014d6b0ce64a173@syzkaller.appspotmail.com>, Ihor Solodrai
+ <ihor.solodrai@linux.dev>, Octavian Purdila <tavip@google.com>
+Subject: Re: [PATCH v4 bpf 1/2] xdp: introduce xdp_convert_skb_to_buff()
+Message-ID: <20251029161218.15aef43e@kernel.org>
+In-Reply-To: <aQH5+ojHJ1V9jfk8@boxer>
+References: <20251027121318.2679226-1-maciej.fijalkowski@intel.com>
+	<20251027121318.2679226-2-maciej.fijalkowski@intel.com>
+	<11142984-9bbe-4611-bbe7-fa5494036b8f@kernel.org>
+	<20251028185314.1ad62578@kernel.org>
+	<aQH5+ojHJ1V9jfk8@boxer>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <e9f13992d679d08d193cb40c15c70fbf4adfe9d94a6235b20858fbe161be58a1@mail.kernel.org>
-In-Reply-To: <20251029221315.2694841-3-maciej.fijalkowski@intel.com>
-References: <20251029221315.2694841-3-maciej.fijalkowski@intel.com>
-Subject: Re: [PATCH v5 bpf 2/2] veth: update mem type in xdp_buff
-From: bot+bpf-ci@kernel.org
-To: maciej.fijalkowski@intel.com,bpf@vger.kernel.org,ast@kernel.org,daniel@iogearbox.net,hawk@kernel.org
-Cc: netdev@vger.kernel.org,magnus.karlsson@intel.com,aleksander.lobakin@intel.com,ilias.apalodimas@linaro.org,toke@redhat.com,lorenzo@kernel.org,kuba@kernel.org,maciej.fijalkowski@intel.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Wed, 29 Oct 2025 22:59:36 +0000 (UTC)
-
---===============7878305878613788522==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
+On Wed, 29 Oct 2025 12:26:50 +0100 Maciej Fijalkowski wrote:
+> > I still think _all_ frags which may end up here are from the per CPU PP
+> > since we CoW the skbs. So:  
+> 
+> Agree!
+> 
+> > 
+> > 	DEBUG_NET_WARN_ON_ONCE(!skb->pp_recycle);
+> > 	xdp->rxq->mem.type = MEM_TYPE_PAGE_POOL;  
+> 
+> This has to be conditional as it is fine to use this helper for
+> MEM_TYPE_PAGE_SHARED, plus the mem type has to be updated per packet.
+> 
+> > ? It is legal to have pp and non-pp frags in a single skb AFAIK.  
+> 
+> Ok, but not in this case where data origins from CoW path.
 
-```
-commit 96d6e22337a81e8606de33d22173ff80ab961bc8
-Author: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Right.
 
-veth: update mem type in xdp_buff
+I guess what I'm saying is that right now we have 4 callers:
+ - XDP generic
+ - veth
+ - devmap 
+ - cpumap
+these all go thru skb_pp_cow_data() if skb has frags.
 
-The commit fixes a page_pool leak by properly detecting page_pool memory
-and using appropriate reference counting APIs. The xdp_buff mem type is
-now dynamically set based on skb->pp_recycle instead of always using
-MEM_TYPE_PAGE_SHARED.
+You're right that in theory someone can call this function
+on a private skb they just constructed (IOW they know they 
+don't need to CoW). But IIUC (1) such caller doesn't exist
+today; (2) why wouldn't that caller run XDP before allocating
+the skb..
 
-Closes: https://lore.kernel.org/bpf/CAADnVQ+bBofJDfieyOYzSmSujSfJwDTQhiz3aJw7hE+4E2_iPA@mail.gmail.com/
+So my thinking was to keep this simple for now, used fixed
+MEM_TYPE_PAGE_POOL. Add that DEBUG_WARN() and in the kdoc
+say that we expect the skbs to have gone thru skb_pp_cow_data().
 
-> diff --git a/drivers/net/veth.c b/drivers/net/veth.c
-> index a3046142c..187f30e2c 100644
-> --- a/drivers/net/veth.c
-> +++ b/drivers/net/veth.c
-
-[ ... ]
-
-> @@ -733,7 +733,7 @@ static void veth_xdp_rcv_bulk_skb(struct veth_rq *rq, void **frames,
->  	}
->  }
->
-> -static void veth_xdp_get(struct xdp_buff *xdp)
-> +static void veth_xdp_get_shared(struct xdp_buff *xdp)
->  {
->  	struct skb_shared_info *sinfo = xdp_get_shared_info_from_buff(xdp);
->  	int i;
-> @@ -746,12 +746,33 @@ static void veth_xdp_get(struct xdp_buff *xdp)
->  		__skb_frag_ref(&sinfo->frags[i]);
->  }
->
-> +static void veth_xdp_get_pp(struct xdp_buff *xdp)
-> +{
-> +	struct skb_shared_info *sinfo = xdp_get_shared_info_from_buff(xdp);
-> +	int i;
-> +
-> +	page_pool_ref_page(virt_to_page(xdp->data));
-> +	if (likely(!xdp_buff_has_frags(xdp)))
-> +		return;
-> +
-> +	for (i = 0; i < sinfo->nr_frags; i++) {
-> +		skb_frag_t *frag = &sinfo->frags[i];
-> +
-> +		page_pool_ref_page(netmem_to_page(frag->netmem));
-> +	}
-> +}
-> +
-> +static void veth_xdp_get(struct xdp_buff *xdp)
-> +{
-> +	xdp->rxq->mem.type == MEM_TYPE_PAGE_POOL ?
-> +		veth_xdp_get_pp(xdp) : veth_xdp_get_shared(xdp);
-> +}
-> +
-
-[ ... ]
-
-> @@ -822,24 +831,24 @@ static struct sk_buff *veth_xdp_rcv_skb(struct veth_rq *rq,
->  	case XDP_TX:
->  		veth_xdp_get(xdp);
->  		consume_skb(skb);
-> -		xdp->rxq->mem = rq->xdp_mem;
->  		if (unlikely(veth_xdp_tx(rq, xdp, bq) < 0)) {
->  			trace_xdp_exception(rq->dev, xdp_prog, act);
->  			stats->rx_drops++;
->  			goto err_xdp;
->  		}
-
-Can veth_xdp_rcv_skb() leak page references in the XDP_TX error path?
-When veth_xdp_tx() fails, the code jumps to err_xdp without releasing
-the page references acquired by veth_xdp_get(). The skb was already
-consumed, so the pages still have the extra references from either
-veth_xdp_get_pp() or veth_xdp_get_shared().
-
-veth_xdp_tx() can return -EOVERFLOW when xdp_convert_buff_to_frame()
-returns NULL, which is a reachable error path.
-
->  		stats->xdp_tx++;
-> +		rq->xdp_rxq.mem = rq->xdp_mem;
->  		rcu_read_unlock();
->  		goto xdp_xmit;
->  	case XDP_REDIRECT:
->  		veth_xdp_get(xdp);
->  		consume_skb(skb);
-> -		xdp->rxq->mem = rq->xdp_mem;
->  		if (xdp_do_redirect(rq->dev, xdp, xdp_prog)) {
->  			stats->rx_drops++;
->  			goto err_xdp;
->  		}
-
-Similar question for the XDP_REDIRECT case - when xdp_do_redirect()
-fails, does this also leak the page references taken by veth_xdp_get()?
-
->  		stats->xdp_redirect++;
-> +		rq->xdp_rxq.mem = rq->xdp_mem;
->  		rcu_read_unlock();
->  		goto xdp_xmit;
->  	default:
-
-
-```
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-In-Reply-To-Subject: `veth: update mem type in xdp_buff`
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/18923812102
-
---===============7878305878613788522==--
+Worry about conditionals when the odd new user appears.
