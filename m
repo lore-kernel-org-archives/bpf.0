@@ -1,178 +1,273 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87EAE279DAD;
-	Wed, 29 Oct 2025 14:25:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A933629E0F7
+	for <bpf@vger.kernel.org>; Wed, 29 Oct 2025 14:38:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761747957; cv=none; b=tCGMkbH0V0IzXg8+zcI+mHjnpq8xeqGpJ98gAiCPd5hYKIW09Mf20hzyUKHFLOSZoIdSeiiEdXuvBz3GyuBjdSLBs4xRpxXWK0S4N9PLbalSOkMzTMutdeP/VFGdUPAbqaJWWzqM9lOSdwcdqx+W52VfaUa6ESQ3/S+dN/lnftk=
+	t=1761748702; cv=none; b=NFDq25ZeDbvR97d6/vrWVw9/PJMdoQgwVHIz8LvL+Fdi7X9oOQvqjayvNGTKLt5JXgArnyelcXCkGwmYFiLRNwyxsgHXwFO8h3cR3rzgTzASxASMg3oNyhb0ZyIRiVO9zURofJV+L18IeQCHXZ67W+r7AT9BA3PkLZR5cvN8XIA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761747957; c=relaxed/simple;
-	bh=/+m6iaLC0y8uWmkcCY6x46zjKoMEvP59Em2DnUNlUQQ=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=diA7VjPN++5vTwB68fQ9EfJuG5a5cuUzKZqkwu1/XX9TQ0y1PPnp+UKVIHa2TuofyXycddgTOwk02NA9RI+s64kHhU1wFppl6KqAyCj1mfgJFbmbdSc/fyj310GEVMtq7yERC07f9hrxIfQCj4IKHKFzbpt6tPVAbX1Obp/kwok=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tyzeamCx; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1761748702; c=relaxed/simple;
+	bh=+OYNezwCdHPcIa2xj8N5yM4i1P7ax/j/IBNi13xhreE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=eMzDo1vUo9bi7GL9Kd51fDaFQflGcDJ2mqr44R1opd5iVp6aLBU1NdpXPgCkkDnBa5/26yulogp4RuaP2bzuCYnF3oURvkF2JlDxL0EI7ZjXTyvh4l1tRx9AC3yyAmUo9PqPxIGMXQvOe0gLDQ/vMxbgY9Gu7FAdR6p7S8hySXg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=Dy2ejHyb; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=YXvv7lfk; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=Dy2ejHyb; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=YXvv7lfk; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tyzeamCx"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5AEAC4CEF8;
-	Wed, 29 Oct 2025 14:25:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761747957;
-	bh=/+m6iaLC0y8uWmkcCY6x46zjKoMEvP59Em2DnUNlUQQ=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=tyzeamCxzKQNjRoRx/GdN3bKl+3qM4dQEvmBtQC9RnsBFsXj+OmD29nwII9XnqHHS
-	 yp4CVGDsaxCKMYQbhRcdjjzWfmzs2aszsf/DSeQUoqIqftsQ6LCGdQiVwcbpx4p6Vh
-	 +4iu2EorZg668PD06pWjAmISJoPmG73YPbc4lZNhmkobdgjdii5pYAfGeENbiyNBsj
-	 c8JyOVD78DBgAf0RYVCyuAvRH8zoUWsUfcNLZuT8sbNH4WGqNaHT9xHbSKCGobzECi
-	 mor1Fg+QN/K51Q4Ki0r6X546M5fM12Oqo9VClqs08BWs6KaaYaBKHDOTcqIHI9V70S
-	 1eUYT3bn41r7w==
-Content-Type: multipart/mixed; boundary="===============3524767868395641498=="
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="Dy2ejHyb";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="YXvv7lfk";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="Dy2ejHyb";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="YXvv7lfk"
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id B80E020E00;
+	Wed, 29 Oct 2025 14:38:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1761748698; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=/w3MRB+TOS2yBG8/nTaTk+4AfwEGJiuVEcv9DVs4O0w=;
+	b=Dy2ejHybghJItGmopa/mI7O5bjUrZCtn3b4fnZGRLGrPLEOkqsmOrS5cP0XTNuPIWJaCQr
+	yPGkp+x0d9V4weD10d9dD5TuxNIxhCR0zxzJZp+8Dm+W/inaVh+TXmqekiOf5DWHR/y6ui
+	zIUvY2G25Azrbf2zHT4q8LcEg5VZuGg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1761748698;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=/w3MRB+TOS2yBG8/nTaTk+4AfwEGJiuVEcv9DVs4O0w=;
+	b=YXvv7lfku3lTexPm4eW8ZyAx/WioeWafv3duPsNvEUqN1pgAIKXLHSx5HQH1JkQo+myXA9
+	2ul1Eue4yN0YgrAA==
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=Dy2ejHyb;
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=YXvv7lfk
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1761748698; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=/w3MRB+TOS2yBG8/nTaTk+4AfwEGJiuVEcv9DVs4O0w=;
+	b=Dy2ejHybghJItGmopa/mI7O5bjUrZCtn3b4fnZGRLGrPLEOkqsmOrS5cP0XTNuPIWJaCQr
+	yPGkp+x0d9V4weD10d9dD5TuxNIxhCR0zxzJZp+8Dm+W/inaVh+TXmqekiOf5DWHR/y6ui
+	zIUvY2G25Azrbf2zHT4q8LcEg5VZuGg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1761748698;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=/w3MRB+TOS2yBG8/nTaTk+4AfwEGJiuVEcv9DVs4O0w=;
+	b=YXvv7lfku3lTexPm4eW8ZyAx/WioeWafv3duPsNvEUqN1pgAIKXLHSx5HQH1JkQo+myXA9
+	2ul1Eue4yN0YgrAA==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 9980F1349D;
+	Wed, 29 Oct 2025 14:38:18 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id TG6wJNomAmldPgAAD6G6ig
+	(envelope-from <vbabka@suse.cz>); Wed, 29 Oct 2025 14:38:18 +0000
+Message-ID: <0f630d2a-3057-49f7-a505-f16866e1ed08@suse.cz>
+Date: Wed, 29 Oct 2025 15:38:18 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <5c1c4101d42cc486366273556492d9be559f521d16629bbcd6b3adc6a4b746f0@mail.kernel.org>
-In-Reply-To: <20251029-xsk-v6-11-5a63a64dff98@bootlin.com>
-References: <20251029-xsk-v6-11-5a63a64dff98@bootlin.com>
-Subject: Re: [PATCH bpf-next v6 11/15] selftests/bpf: test_xsk: Don't exit immediately when workers fail
-From: bot+bpf-ci@kernel.org
-To: bastien.curutchet@bootlin.com,bjorn@kernel.org,magnus.karlsson@intel.com,maciej.fijalkowski@intel.com,jonathan.lemon@gmail.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,mykolal@fb.com,shuah@kernel.org,davem@davemloft.net,kuba@kernel.org,hawk@kernel.org
-Cc: thomas.petazzoni@bootlin.com,alexis.lothore@bootlin.com,netdev@vger.kernel.org,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,bastien.curutchet@bootlin.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Wed, 29 Oct 2025 14:25:54 +0000 (UTC)
-
---===============3524767868395641498==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC 01/19] slab: move kfence_alloc() out of internal bulk
+ alloc
+Content-Language: en-US
+To: Marco Elver <elver@google.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+ Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>,
+ Roman Gushchin <roman.gushchin@linux.dev>, Harry Yoo <harry.yoo@oracle.com>,
+ Uladzislau Rezki <urezki@gmail.com>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+ Suren Baghdasaryan <surenb@google.com>,
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+ Alexei Starovoitov <ast@kernel.org>, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, linux-rt-devel@lists.linux.dev,
+ bpf@vger.kernel.org, kasan-dev@googlegroups.com,
+ Alexander Potapenko <glider@google.com>, Dmitry Vyukov <dvyukov@google.com>
+References: <20251023-sheaves-for-all-v1-0-6ffa2c9941c0@suse.cz>
+ <20251023-sheaves-for-all-v1-1-6ffa2c9941c0@suse.cz>
+ <CANpmjNM06dVYKrraAb-XfF02u8+Jnh-rA5rhCEws4XLqVxdfWg@mail.gmail.com>
+From: Vlastimil Babka <vbabka@suse.cz>
+Autocrypt: addr=vbabka@suse.cz; keydata=
+ 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
+ m6M14QORSWTLRg==
+In-Reply-To: <CANpmjNM06dVYKrraAb-XfF02u8+Jnh-rA5rhCEws4XLqVxdfWg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: B80E020E00
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Spamd-Result: default: False [-4.51 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	MIME_TRACE(0.00)[0:+];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	ARC_NA(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[18];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	TO_DN_SOME(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[linux-foundation.org,gentwo.org,google.com,linux.dev,oracle.com,gmail.com,linutronix.de,kernel.org,kvack.org,vger.kernel.org,lists.linux.dev,googlegroups.com];
+	MID_RHS_MATCH_FROM(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	DKIM_TRACE(0.00)[suse.cz:+]
+X-Rspamd-Action: no action
+X-Spam-Flag: NO
+X-Spam-Score: -4.51
+X-Spam-Level: 
 
+On 10/23/25 17:20, Marco Elver wrote:
+> On Thu, 23 Oct 2025 at 15:53, Vlastimil Babka <vbabka@suse.cz> wrote:
+>>
+>> SLUB's internal bulk allocation __kmem_cache_alloc_bulk() can currently
+>> allocate some objects from KFENCE, i.e. when refilling a sheaf. It works
+>> but it's conceptually the wrong layer, as KFENCE allocations should only
+>> happen when objects are actually handed out from slab to its users.
+>>
+>> Currently for sheaf-enabled caches, slab_alloc_node() can return KFENCE
+>> object via kfence_alloc(), but also via alloc_from_pcs() when a sheaf
+>> was refilled with KFENCE objects. Continuing like this would also
+>> complicate the upcoming sheaf refill changes.
+>>
+>> Thus remove KFENCE allocation from __kmem_cache_alloc_bulk() and move it
+>> to the places that return slab objects to users. slab_alloc_node() is
+>> already covered (see above). Add kfence_alloc() to
+>> kmem_cache_alloc_from_sheaf() to handle KFENCE allocations from
+>> prefilled sheafs, with a comment that the caller should not expect the
+>> sheaf size to decrease after every allocation because of this
+>> possibility.
+>>
+>> For kmem_cache_alloc_bulk() implement a different strategy to handle
+>> KFENCE upfront and rely on internal batched operations afterwards.
+>> Assume there will be at most once KFENCE allocation per bulk allocation
+>> and then assign its index in the array of objects randomly.
+>>
+>> Cc: Alexander Potapenko <glider@google.com>
+>> Cc: Marco Elver <elver@google.com>
+>> Cc: Dmitry Vyukov <dvyukov@google.com>
+>> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
+>> ---
+>> @@ -7457,6 +7458,20 @@ int kmem_cache_alloc_bulk_noprof(struct kmem_cache *s, gfp_t flags, size_t size,
+>>         if (unlikely(!s))
+>>                 return 0;
+>>
+>> +       /*
+>> +        * to make things simpler, only assume at most once kfence allocated
+>> +        * object per bulk allocation and choose its index randomly
+>> +        */
 
-```
-commit f89231e503dc0b97c81f4bb32d28532fb3471acd
-Author: Bastien Curutchet (eBPF Foundation) <bastien.curutchet@bootlin.com>
+Here's a comment...
 
-selftests/bpf: test_xsk: Don't exit immediately when workers fail
+>> +       kfence_obj = kfence_alloc(s, s->object_size, flags);
+>> +
+>> +       if (unlikely(kfence_obj)) {
+>> +               if (unlikely(size == 1)) {
+>> +                       p[0] = kfence_obj;
+>> +                       goto out;
+>> +               }
+>> +               size--;
+>> +       }
+>> +
+>>         if (s->cpu_sheaves)
+>>                 i = alloc_from_pcs_bulk(s, size, p);
+>>
+>> @@ -7468,10 +7483,23 @@ int kmem_cache_alloc_bulk_noprof(struct kmem_cache *s, gfp_t flags, size_t size,
+>>                 if (unlikely(__kmem_cache_alloc_bulk(s, flags, size - i, p + i) == 0)) {
+>>                         if (i > 0)
+>>                                 __kmem_cache_free_bulk(s, i, p);
+>> +                       if (kfence_obj)
+>> +                               __kfence_free(kfence_obj);
+>>                         return 0;
+>>                 }
+>>         }
+>>
+>> +       if (unlikely(kfence_obj)) {
+> 
+> Might be nice to briefly write a comment here in code as well instead
+> of having to dig through the commit logs.
 
-This commit converts the test program from using exit_with_error()
-(which immediately terminates) to proper error propagation through
-return values. This allows the test suite to continue running after
-failures.
+... is the one above enough? The commit log doesn't have much more on this
+aspect. Or what would you add?
 
-> diff --git a/tools/testing/selftests/bpf/test_xsk.c b/tools/testing/selftests/bpf/test_xsk.c
-> index 2c955e109..2c392d5b9 100644
-> --- a/tools/testing/selftests/bpf/test_xsk.c
-> +++ b/tools/testing/selftests/bpf/test_xsk.c
+> The tests still pass? (CONFIG_KFENCE_KUNIT_TEST=y)
 
-[ ... ]
+They do.
 
-> @@ -759,7 +761,7 @@ static bool is_metadata_correct(struct pkt *pkt, void *buffer, u64 addr)
->  	return true;
->  }
->
-> -static bool is_adjust_tail_supported(struct xsk_xdp_progs *skel_rx)
-> +static int is_adjust_tail_supported(struct xsk_xdp_progs *skel_rx, bool *supported)
->  {
->  	struct bpf_map *data_map;
->  	int adjust_value = 0;
-> @@ -769,19 +771,21 @@ static bool is_adjust_tail_supported(struct xsk_xdp_progs *skel_rx)
->  	data_map = bpf_object__find_map_by_name(skel_rx->obj, "xsk_xdp_.bss");
->  	if (!data_map || !bpf_map__is_internal(data_map)) {
->  		ksft_print_msg("Error: could not find bss section of XDP program\n");
-> -		exit_with_error(errno);
-> +		return -EINVAL;
->  	}
->
->  	ret = bpf_map_lookup_elem(bpf_map__fd(data_map), &key, &adjust_value);
->  	if (ret) {
->  		ksft_print_msg("Error: bpf_map_lookup_elem failed with error %d\n", ret);
-> -		exit_with_error(errno);
-> +		return ret;
->  	}
->
->  	/* Set the 'adjust_value' variable to -EOPNOTSUPP in the XDP program if the adjust_tail
->  	 * helper is not supported. Skip the adjust_tail test case in this scenario.
->  	 */
-> -	return adjust_value != -EOPNOTSUPP;
-> +	*supported = adjust_value != -EOPNOTSUPP;
-> +
-> +	return 0;
->  }
+Thanks,
+Vlastimil
 
-[ ... ]
+>> +               int idx = get_random_u32_below(size + 1);
+>> +
+>> +               if (idx != size)
+>> +                       p[size] = p[idx];
+>> +               p[idx] = kfence_obj;
+>> +
+>> +               size++;
+>> +       }
+>> +
+>> +out:
+>>         /*
+>>          * memcg and kmem_cache debug support and memory initialization.
+>>          * Done outside of the IRQ disabled fastpath loop.
+>>
+>> --
+>> 2.51.1
 
-> @@ -1584,29 +1614,41 @@ void *worker_testapp_validate_rx(void *arg)
->  	int err;
->
->  	if (test->current_step == 1) {
-> -		thread_common_ops(test, ifobject);
-> +		err = thread_common_ops(test, ifobject);
->  	} else {
->  		xsk_clear_xskmap(ifobject->xskmap);
->  		err = xsk_update_xskmap(ifobject->xskmap, ifobject->xsk->xsk, 0);
-> -		if (err) {
-> +		if (err)
->  			ksft_print_msg("Error: Failed to update xskmap, error %s\n",
->  				       strerror(-err));
-> -			exit_with_error(-err);
-> -		}
->  	}
->
->  	pthread_barrier_wait(&barr);
->
-> +	/* We leave only now in case of error to avoid getting stuck in the barrier */
-> +	if (err) {
-> +		test->fail = true;
-> +		pthread_exit(NULL);
-> +	}
-> +
->  	err = receive_pkts(test);
->
->  	if (!err && ifobject->validation_func)
->  		err = ifobject->validation_func(ifobject);
->
->  	if (err) {
-> -		if (test->adjust_tail && !is_adjust_tail_supported(ifobject->xdp_progs))
-> -			test->adjust_tail_support = false;
-> -		else
-> +		if (!test->adjust_tail) {
->  			test->fail = true;
-> +		} else {
-> +			bool supported;
-> +
-> +			if (is_adjust_tail_supported(ifobject->xdp_progs, &supported))
-> +				test->fail = true;
-> +			if (!supported)
-> +				test->adjust_tail_support = false;
-> +			else
-> +				test->fail = true;
-> +		}
->  	}
-
-Can the 'supported' variable be read uninitialized here? When
-is_adjust_tail_supported() returns an error (non-zero), it doesn't
-write to the *supported output parameter. The function returns early
-from either the data_map check or bpf_map_lookup_elem() failure without
-setting *supported. Then the code unconditionally checks "if (!supported)"
-which would read uninitialized stack memory.
-
-The control flow is:
-  is_adjust_tail_supported() returns error
-  -> test->fail = true is set
-  -> execution continues to "if (!supported)"
-  -> reads uninitialized 'supported' variable
-
-Should this be structured with an else clause to only check 'supported'
-when is_adjust_tail_supported() returns success?
-
-
-```
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-In-Reply-To-Subject: `selftests/bpf: test_xsk: Don't exit immediately when workers fail`
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/18910697393
-
---===============3524767868395641498==--
