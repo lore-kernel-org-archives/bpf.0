@@ -1,179 +1,219 @@
-Received: from out-178.mta0.migadu.com (out-178.mta0.migadu.com [91.218.175.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DA1828469E
-	for <bpf@vger.kernel.org>; Wed, 29 Oct 2025 14:59:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 164F92D2387
+	for <bpf@vger.kernel.org>; Wed, 29 Oct 2025 15:00:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761749955; cv=none; b=tarh4C5Yk0ECr05lz5lRjDCnujMKRYMjyZv5Nk/z5C4M3FdC753M98WOpH4OOq1pMzrOimnuO5lSuUp63X1/c9g99RUI1bK/12kHJzJca1H3bFZl0JlzymBYZtct+XaQ6iUdQJr3xVsOV0LZdGmmq8cpbS1NGPRcGuHRVd7YgAs=
+	t=1761750041; cv=none; b=ZGl2bMyHQ48pUYXrLDrNM4s1vMndMrDfmSDYKQGx/yAGfi+NOigaMmtp0qbcpHIghQKNS4HEVsmrx9YBsgQf+Gwuu1RAnCD0YKiDs0K8ckVIISCxJzaZocQADx954kSHFs62g76rxweJAseXmkEbq4Gm7iDMuBT/065DQGyrSs0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761749955; c=relaxed/simple;
-	bh=il83HUFisxYaHb+3aHy2CKREbiZN8XyIVWIzvVft0MY=;
+	s=arc-20240116; t=1761750041; c=relaxed/simple;
+	bh=0eVbXcuQazPzlidOygAs+egyz7CM4wQlConRPxJk9Jo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WYxZCzdKhk6dCeNXm2O2xpbHkMUYK6IxnMn9zbugxmmDXGTi3sz3JwVQuqnJBfYZK2TvbmhsF7aHRg9jNppEBxvWabWSEMy4qYU0MGr10EVpqb8mVnygUIDDBcrj+Y/CKn6+YWT/VFtlatD5Ne+OqKKsw4uDO7mcMp8F/Z2s7Bo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=k42z7LLh; arc=none smtp.client-ip=91.218.175.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	 In-Reply-To:Content-Type; b=X2kAykgi3CrjZmefJlGiG63a/y8Zv/5WmX1KZFig6UlPwSUtgXPnMmWy4x3AVxv84OdUhzVPAXzwZSILJVd3XQFoeMVJ9wzRmRG0M/nkdN5EsuLnyAA/GTpQjo6lJTQNPlt8v0x9XleKFL93xUk12HHvmCnUlv4eP18tOeSf6mA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=yBeuD/9Y; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=x3QG3XOo; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=yBeuD/9Y; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=x3QG3XOo; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="k42z7LLh"
-Message-ID: <a798d47e-4ab8-423a-b8ef-e42ff9760324@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1761749939;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="yBeuD/9Y";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="x3QG3XOo";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="yBeuD/9Y";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="x3QG3XOo"
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 4A0E920DA0;
+	Wed, 29 Oct 2025 15:00:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1761750037; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=3GBtMnyXtOy6IbhuD6W3L/20izTM7y/rPg3EMOICW6o=;
-	b=k42z7LLh/xIZfFTqvRTH8lwSP1acaTkA/+2+/XcdMa1O/sF3l00ko5HHyxNGl3njtHwV3V
-	vaviUQNbSIQrXv7uX/f5/NIz+xGK4eFttRYJmGUekZBBmH9b3w+v8lHW03c2CVvMNPApfC
-	PrvUIHZai58CUVTSevF2XCyaN2ygoMw=
-Date: Wed, 29 Oct 2025 22:58:42 +0800
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=/UPS7wTW//mEiHwtYoijDeEHmtxYAPJacr3wZrmWnhE=;
+	b=yBeuD/9Y9l/So3fKT8oTz63oGc18sCCd8qij/eb2gtuUzLNSRR3OoEK7PrzRQHIiiE2Z0c
+	AjBDoSzn20PJJErU9Qs1J3winwSC0D2qHywrvOZ1cqVrlJ/syDxMkCnuA1lArWMvZmQ7dy
+	CkmRSZSmTP+gQV++Q3ZdOHiAxBs21Bg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1761750037;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=/UPS7wTW//mEiHwtYoijDeEHmtxYAPJacr3wZrmWnhE=;
+	b=x3QG3XOojeOesUaemgW/C2It7laYG47dKYEPwKKc5IEosp9Z2OQYtW3ULooG0WXB5Y5Fcg
+	tzl+gVh/Te1tCFDQ==
+Authentication-Results: smtp-out2.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1761750037; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=/UPS7wTW//mEiHwtYoijDeEHmtxYAPJacr3wZrmWnhE=;
+	b=yBeuD/9Y9l/So3fKT8oTz63oGc18sCCd8qij/eb2gtuUzLNSRR3OoEK7PrzRQHIiiE2Z0c
+	AjBDoSzn20PJJErU9Qs1J3winwSC0D2qHywrvOZ1cqVrlJ/syDxMkCnuA1lArWMvZmQ7dy
+	CkmRSZSmTP+gQV++Q3ZdOHiAxBs21Bg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1761750037;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=/UPS7wTW//mEiHwtYoijDeEHmtxYAPJacr3wZrmWnhE=;
+	b=x3QG3XOojeOesUaemgW/C2It7laYG47dKYEPwKKc5IEosp9Z2OQYtW3ULooG0WXB5Y5Fcg
+	tzl+gVh/Te1tCFDQ==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 2BAAC1349D;
+	Wed, 29 Oct 2025 15:00:37 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id JPhEChUsAmlgVAAAD6G6ig
+	(envelope-from <vbabka@suse.cz>); Wed, 29 Oct 2025 15:00:37 +0000
+Message-ID: <51cfb267-f4f4-42b2-b0ea-d29d62bb1151@suse.cz>
+Date: Wed, 29 Oct 2025 16:00:36 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf v3 4/4] selftests/bpf: Add tests to verify freeing the
- special fields when update hash and local storage maps
-To: Amery Hung <ameryhung@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
- daniel@iogearbox.net, martin.lau@linux.dev, eddyz87@gmail.com,
- song@kernel.org, yonghong.song@linux.dev, john.fastabend@gmail.com,
- kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
- memxor@gmail.com, linux-kernel@vger.kernel.org, kernel-patches-bot@fb.com
-References: <20251026154000.34151-1-leon.hwang@linux.dev>
- <20251026154000.34151-5-leon.hwang@linux.dev>
- <CAMB2axN6bsrMH6_qVz9eHY1HLp6SQmM-nOUEXUOOiibZFMzXMw@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC 02/19] slab: handle pfmemalloc slabs properly with
+ sheaves
 Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <CAMB2axN6bsrMH6_qVz9eHY1HLp6SQmM-nOUEXUOOiibZFMzXMw@mail.gmail.com>
+To: Chris Mason <clm@meta.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+ Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>,
+ Roman Gushchin <roman.gushchin@linux.dev>, Harry Yoo <harry.yoo@oracle.com>,
+ Uladzislau Rezki <urezki@gmail.com>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+ Suren Baghdasaryan <surenb@google.com>,
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+ Alexei Starovoitov <ast@kernel.org>, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, linux-rt-devel@lists.linux.dev,
+ bpf@vger.kernel.org, kasan-dev@googlegroups.com
+References: <20251024142137.739555-1-clm@meta.com>
+From: Vlastimil Babka <vbabka@suse.cz>
+Autocrypt: addr=vbabka@suse.cz; keydata=
+ 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
+ m6M14QORSWTLRg==
+In-Reply-To: <20251024142137.739555-1-clm@meta.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 7bit
+X-Spamd-Result: default: False [-4.30 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ARC_NA(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	MID_RHS_MATCH_FROM(0.00)[];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[linux-foundation.org,gentwo.org,google.com,linux.dev,oracle.com,gmail.com,linutronix.de,kernel.org,kvack.org,vger.kernel.org,lists.linux.dev,googlegroups.com];
+	RCPT_COUNT_TWELVE(0.00)[16];
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_DN_SOME(0.00)[]
+X-Spam-Flag: NO
+X-Spam-Score: -4.30
+X-Spam-Level: 
 
-
-
-On 2025/10/28 00:34, Amery Hung wrote:
-> On Sun, Oct 26, 2025 at 8:42 AM Leon Hwang <leon.hwang@linux.dev> wrote:
+On 10/24/25 16:21, Chris Mason wrote:
+> On Thu, 23 Oct 2025 15:52:24 +0200 Vlastimil Babka <vbabka@suse.cz> wrote:
+>> @@ -5497,7 +5528,7 @@ int kmem_cache_refill_sheaf(struct kmem_cache *s, gfp_t gfp,
 >>
->> Add tests to verify that updating hash and local storage maps decrements
->> refcount when BPF_KPTR_REF objects are involved.
+>>  	if (likely(sheaf->capacity >= size)) {
+>>  		if (likely(sheaf->capacity == s->sheaf_capacity))
+>> -			return refill_sheaf(s, sheaf, gfp);
+>> +			return __prefill_sheaf_pfmemalloc(s, sheaf, gfp);
 >>
->> The tests perform the following steps:
->>
->> 1. Call update_elem() to insert an initial value.
->> 2. Use bpf_refcount_acquire() to increment the refcount.
->> 3. Store the node pointer in the map value.
->> 4. Add the node to a linked list.
->> 5. Probe-read the refcount and verify it is *2*.
->> 6. Call update_elem() again to trigger refcount decrement.
->> 7. Probe-read the refcount and verify it is *1*.
->>
->> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
->> ---
->>  .../bpf/prog_tests/refcounted_kptr.c          | 178 +++++++++++++++++-
->>  .../selftests/bpf/progs/refcounted_kptr.c     | 160 ++++++++++++++++
->>  2 files changed, 337 insertions(+), 1 deletion(-)
->>
+>>  		if (!__kmem_cache_alloc_bulk(s, gfp, sheaf->capacity - sheaf->size,
+>>  					     &sheaf->objects[sheaf->size])) {
+>                                              ^^^
+> 
+> In kmem_cache_refill_sheaf(), does the oversize sheaf path (when
+> sheaf->capacity != s->sheaf_capacity) need __GFP_NOMEMALLOC too?
+> 
+> The commit message says "When refilling sheaves, use __GFP_NOMEMALLOC
+> to override any pfmemalloc context", and the normal capacity path now
+> calls __prefill_sheaf_pfmemalloc() which adds __GFP_NOMEMALLOC.
+> 
+> But this oversize path still calls __kmem_cache_alloc_bulk() with the
+> raw gfp flags. If the calling context is pfmemalloc-enabled (e.g.,
+> during swap or network operations), could pfmemalloc objects be
+> allocated into the sheaf? Those objects would then be returned via
 
-[...]
+Yes.
 
->> @@ -44,3 +44,179 @@ void test_refcounted_kptr_wrong_owner(void)
->>         ASSERT_OK(opts.retval, "rbtree_wrong_owner_remove_fail_a2 retval");
->>         refcounted_kptr__destroy(skel);
->>  }
->> +
->> +static void test_refcnt_leak(void *values, size_t values_sz, u64 flags, struct bpf_map *map,
->> +                            struct bpf_program *prog_leak, struct bpf_program *prog_check)
->> +{
+> kmem_cache_alloc_from_sheaf() to potentially non-pfmemalloc callers.
 
-[...]
+The assumption is the caller will use the prefilled sheaf for its purposes
+and not pass it to other callers. The reason for caring about pfmemalloc and
+setting sheaf->pfmemalloc is only to recognize them when the prefilled sheaf
+is returned - so that it's flushed+freed and not attached as pcs->spare -
+that would then be available to other non-pfmemalloc callers.
 
->> +}
->
-> Just use syscall BPF programs across different subtests, and you can
-> share this test_refcnt_leak() across subtests.
->
-> It also saves you some code setting up bpf_test_run_opts. You can just
-> call bpf_prog_test_run_opts(prog_fd, NULL) as you don't pass any input
-> from ctx.
->
->> +
->> +static void test_percpu_hash_refcount_leak(void)
->> +{
-
-[...]
-
->> +out:
->> +       close(cgroup);
->> +       refcounted_kptr__destroy(skel);
->> +       if (client_fd >= 0)
->> +               close(client_fd);
->> +       if (server_fd >= 0)
->> +               close(server_fd);
->> +}
->
-> Then, you won't need to set up server, connection.... just to
-> read/write cgroup local storage. Just call test_refcnt_leak() that
-> runs the two BPF syscall programs for cgroup local storage.
->
-
-[...]
-
->
->
-> And in syscall BPF program, you can simply get the cgroup through the
-> current task
->
-> SEC("syscall")
-> int syscall_prog(void *ctx)
-> {
->         struct task_struct *task = bpf_get_current_task_btf();
->
->         v = bpf_cgrp_storage_get(&cgrp_strg, task->cgroups->dfl_cgrp, 0,
->                                BPF_LOCAL_STORAGE_GET_F_CREATE);
->         ...
-> }
->
-
-Hi Amery,
-
-Thanks for the suggestion.
-
-I tried your approach, but the verifier rejected it with the following
-error:
-
-0: R1=ctx() R10=fp0
-; task = bpf_get_current_task_btf(); @ refcounted_kptr.c:686
-0: (85) call bpf_get_current_task_btf#158     ; R0=trusted_ptr_task_struct()
-; v = bpf_cgrp_storage_get(&cgrp_strg, task->cgroups->dfl_cgrp, 0, @
-refcounted_kptr.c:687
-1: (79) r1 = *(u64 *)(r0 +4856)       ; R0=trusted_ptr_task_struct()
-R1=untrusted_ptr_css_set()
-2: (79) r2 = *(u64 *)(r1 +96)         ; R1=untrusted_ptr_css_set()
-R2=untrusted_ptr_cgroup()
-3: (18) r1 = 0xffffa1b442a4b800       ; R1=map_ptr(map=cgrp_strg,ks=4,vs=16)
-5: (b7) r3 = 0                        ; R3=0
-6: (b7) r4 = 1                        ; R4=1
-7: (85) call bpf_cgrp_storage_get#210
-R2 type=untrusted_ptr_ expected=ptr_, trusted_ptr_, rcu_ptr_
-processed 7 insns (limit 1000000) max_states_per_insn 0 total_states 0
-peak_states 0 mark_read 0
-
-The issue is that dereferencing task->cgroups->dfl_cgrp results in an
-untrusted pointer, which bpf_cgrp_storage_get() doesn't accept in
-syscall programs. I will investigate the issue later.
-
-However, while searching for 'task->cgroups->dfl_cgrp' usage in the
-selftests, I found that bpf_cgrp_storage_get() works fine in fentry
-programs. This approach also has the benefit of avoiding the cgroup
-setup and client/server infrastructure.
-
-I'll respin the selftest using fentry programs instead.
+But we always flush oversize sheaves when those are returned, so it's not
+necessary to also track pfmemalloc for them. I'll add a comment about it.
 
 Thanks,
-Leon
+Vlastimil
 
-[...]
+> Similar issue exists in kmem_cache_prefill_sheaf() for the oversize
+> path at the function's start, though that code wasn't modified by this
+> patch.
+> 
+>>  			return -ENOMEM;
+>>  		}
+>>  		sheaf->size = sheaf->capacity;
+> 
+> [ ... ]
+> 
+> 
+
