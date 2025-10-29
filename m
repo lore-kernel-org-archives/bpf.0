@@ -1,32 +1,30 @@
-Received: from out-176.mta1.migadu.com (out-176.mta1.migadu.com [95.215.58.176])
+Received: from out-177.mta1.migadu.com (out-177.mta1.migadu.com [95.215.58.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D095307ACA
-	for <bpf@vger.kernel.org>; Wed, 29 Oct 2025 19:01:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 321B32EC54D
+	for <bpf@vger.kernel.org>; Wed, 29 Oct 2025 19:01:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761764508; cv=none; b=tuUeOSWazJ8WW1zn7R0L3+dtSiBJZBOkyUc/dGe2Ehy8T4LbOX0pGKU3hTVXmxrwRpyG7172BOSDN9fdDLBAdThc0wgFz9aQ1veSKxqkGdk8A4zJjCkrp6c8QDvdSRtA36Yzp5vG64dtc+a8UuFkMCDTxma1t1b7Q92wFb3Z48I=
+	t=1761764512; cv=none; b=F3Hg0Lmq7MnLSY7vNZQloUD80LPtOoDChET5azGhkoWZ0XmMHfg+PiaVfcITQB3ff+hrgVzRJlVDsRL0jvAAdnAwQ+yj9U2Rh/c/uRZ+kF6yQ+SeHQHsGA+ZEfvk+Ss8ObwemJNNZAKe7MxaEfDzSy0jwRmPwYsaX4tbsdmhjfQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761764508; c=relaxed/simple;
-	bh=W1TReNxz1kPa3xn0UZL0KTHpKw3SV/fOBbxAQ7Q3MYU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=cLMTHuoX7u1V2VNiDLc7zfNY8ZKN1lImxgPEomWs0mRHSQrvAkanxarWQuYQg3xg8ZyKHeSBWfY2c6r2Ic3rYfF3wEPO5qbEWj5M8MAmCZcHqoMOhbSjYFkpyEdKr2iCnCVkYuHhPlbu5gSbW/PQQazatUqxsc3u4LBOHT6H5hw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=uijZlh5r; arc=none smtp.client-ip=95.215.58.176
+	s=arc-20240116; t=1761764512; c=relaxed/simple;
+	bh=xiw0bLp2c9JOEViF91IHFYF97wRlPghXrbTLiPT5DB4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KP7YoKVDIly/BJoH4YKILCeF9aXkxjVSXPqX8oybm/lOSWPGY2A7irhTb8Aw4gGWrz2cdwzOSvnxz2BDgpbPRATF2laN6jNIZ0cHkzhssr6wiRnLO5ALQjAs2XacXyaktr4SY5ngHVO5j7WFQ9u48gMMpQzRrUZD+xejrzQuzTc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=aNv7PI6u; arc=none smtp.client-ip=95.215.58.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="uijZlh5r"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="aNv7PI6u"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1761764504;
+	t=1761764498;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ndOGLoJeWjtIlTgSGcAUA5qZ3dzeQiiZkuCwMzLhBN8=;
-	b=uijZlh5rgxiFp+QMu9Qe7Ds//HbL3BqRQzRKmV4GKuDRMPmhbjXuNswFaNPOp2cR9JX837
-	J72Qiz89OiEEHpxfLfPo1PXRnoWPzcOZsP3HGRxJ/NLClqJtXXFAoy4sLeaa+zsmmwoBgy
-	aOowNLmrWPMCkg9AWCO3B3gIKqPXxKI=
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=2+yoMLfXN+6jzBrw5Ltl075BE23WDMCSRzN6Q6zJ73Y=;
+	b=aNv7PI6uzl/KNeuHtYXm2UNQRJ/H9l5CxZ7uiDGp1IZMhpdoeF/I3jS4qa+73W6BfYR6ko
+	febcLWBwExnEVIh4rUwRTJb19Gzl94IE8KPvnr8yIDBSzDwyLip/bsrh5qwxiYcVjDpS6S
+	dWiN9CYVgTJQd+4p0SSlFM3v9ZTAq9Y=
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
 To: bpf@vger.kernel.org,
 	andrii@kernel.org,
@@ -37,11 +35,9 @@ Cc: dwarves@vger.kernel.org,
 	eddyz87@gmail.com,
 	tj@kernel.org,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 2/8] bpf: Refactor btf_kfunc_id_set_contains
-Date: Wed, 29 Oct 2025 12:01:07 -0700
-Message-ID: <20251029190113.3323406-3-ihor.solodrai@linux.dev>
-In-Reply-To: <20251029190113.3323406-1-ihor.solodrai@linux.dev>
-References: <20251029190113.3323406-1-ihor.solodrai@linux.dev>
+Subject: [PATCH bpf-next v1 0/8] bpf: magic kernel functions
+Date: Wed, 29 Oct 2025 12:01:05 -0700
+Message-ID: <20251029190113.3323406-1-ihor.solodrai@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -51,193 +47,131 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-btf_kfunc_id_set_contains() is called by fetch_kfunc_meta() in the BPF
-verifier to get the kfunc flags stored in the .BTF_ids ELF section.
-If it returns NULL instead of a valid pointer, it's interpreted by the
-verifier as an illegal kfunc usage which fails the verification.
+This series develops the idea of implicit prog_aux argument for kfuncs
+[1] into a generic "magic kfuncs" feature.
 
-Conceptually, there are two potential reasons for
-btf_kfunc_id_set_contains() to return NULL:
+A mechanism is created for kfuncs to have arguments that are not
+visible to the BPF programs, and are provided to the kernel function
+implementation by the verifier.
 
-  1. Provided kfunc BTF id is not present in relevant kfunc id sets.
-  2. The kfunc is not allowed, as determined by the program type
-     specific filter [1].
+This mechanism is then used in kfuncs that have an argument with
+__prog annotation [2], which is the current way of passing struct
+bpf_prog_aux pointer to kfuncs.
 
-The filter functions accept a pointer to `struct bpf_prog`, so they
-might implicitly depend on earlier stages of verification, when
-bpf_prog members are set.
+==== "Magic" ???
 
-For example, bpf_qdisc_kfunc_filter() in linux/net/sched/bpf_qdisc.c
-inspects prog->aux->st_ops [2], which is initialized in:
+The usage of term "magic" is up for debate of course, I am open to
+suggestions. I used it as a placeholder first and now it weirdly makes
+sense. After all, "bpf" by itself doesn't mean anything either.
 
-    check_attach_btf_id() -> check_struct_ops_btf_id()
+The feature effectively produces two variants of a kfunc
+signature/prototype: one with the full argument list, and another with
+particular arguments omitted.
 
-So far this hasn't been an issue, because fetch_kfunc_meta() is the
-only place where lookup + filter logic is applied to a kfunc id.
+There are many terms that in other contexts are used to describe
+similar properties: implicit, optional, virtual, overloaded,
+polymorphic, interface etc.  None of them is quite right for this use
+case in BPF, and may trigger incorrect intuition if used.
 
-However in subsequent patches of this series it is necessary to
-inspect kfunc flags earlier in BPF verifier, in the add_kfunc_call().
+An accurate term could be something like "verifier provided arguments"
+and "kfuncs with verifier provided arguments", but that's too long for
+usage in the identifiers.  "Magic" on the other hand is a short and
+ambiguous adjective, which hopefully will prompt people to check the
+documentation.
 
-To resolve this, refactor btf_kfunc_id_set_contains() into two
-interface functions: btf_kfunc_flags() that does not apply the
-filters, and btf_kfunc_flags_if_allowed() that does.
+==== Implementation
 
-[1] https://lore.kernel.org/all/20230519225157.760788-7-aditi.ghag@isovalent.com/
-[2] https://lore.kernel.org/all/20250409214606.2000194-4-ameryhung@gmail.com/
+pahole's BTF encoding is changed [3] to detect magic kfuncs and emit
+two BTF functions from a single kfunc declaration:
+  * kfunc_impl() with the arguments matching kernel declaration
+  * kfunc() with __magic arguments omitted
 
-Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
----
- include/linux/btf.h   |  6 ++--
- kernel/bpf/btf.c      | 70 ++++++++++++++++++++++++++++++++-----------
- kernel/bpf/verifier.c |  2 +-
- 3 files changed, 58 insertions(+), 20 deletions(-)
+BPF programs then can use both variants of the kfunc (to preserve
+backwards compatibility for BPF programs that include vmlinux.h),
+although non-_impl variant would be a preferred API.
 
-diff --git a/include/linux/btf.h b/include/linux/btf.h
-index f06976ffb63f..9c64bc5e5789 100644
---- a/include/linux/btf.h
-+++ b/include/linux/btf.h
-@@ -575,8 +575,10 @@ const char *btf_name_by_offset(const struct btf *btf, u32 offset);
- const char *btf_str_by_offset(const struct btf *btf, u32 offset);
- struct btf *btf_parse_vmlinux(void);
- struct btf *bpf_prog_get_target_btf(const struct bpf_prog *prog);
--u32 *btf_kfunc_id_set_contains(const struct btf *btf, u32 kfunc_btf_id,
--			       const struct bpf_prog *prog);
-+u32 *btf_kfunc_flags(const struct btf *btf, u32 kfunc_btf_id, const struct bpf_prog *prog);
-+u32 *btf_kfunc_flags_if_allowed(const struct btf *btf,
-+				u32 kfunc_btf_id,
-+				const struct bpf_prog *prog);
- u32 *btf_kfunc_is_modify_return(const struct btf *btf, u32 kfunc_btf_id,
- 				const struct bpf_prog *prog);
- int register_btf_kfunc_id_set(enum bpf_prog_type prog_type,
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 0de8fc8a0e0b..4d31b8061daf 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -8640,24 +8640,17 @@ static int btf_populate_kfunc_set(struct btf *btf, enum btf_kfunc_hook hook,
- 	return ret;
- }
- 
--static u32 *__btf_kfunc_id_set_contains(const struct btf *btf,
--					enum btf_kfunc_hook hook,
--					u32 kfunc_btf_id,
--					const struct bpf_prog *prog)
-+static u32 *btf_kfunc_id_set_contains(const struct btf *btf,
-+				      enum btf_kfunc_hook hook,
-+				      u32 kfunc_btf_id)
- {
--	struct btf_kfunc_hook_filter *hook_filter;
- 	struct btf_id_set8 *set;
--	u32 *id, i;
-+	u32 *id;
- 
- 	if (hook >= BTF_KFUNC_HOOK_MAX)
- 		return NULL;
- 	if (!btf->kfunc_set_tab)
- 		return NULL;
--	hook_filter = &btf->kfunc_set_tab->hook_filters[hook];
--	for (i = 0; i < hook_filter->nr_filters; i++) {
--		if (hook_filter->filters[i](prog, kfunc_btf_id))
--			return NULL;
--	}
- 	set = btf->kfunc_set_tab->sets[hook];
- 	if (!set)
- 		return NULL;
-@@ -8668,6 +8661,28 @@ static u32 *__btf_kfunc_id_set_contains(const struct btf *btf,
- 	return id + 1;
- }
- 
-+static bool btf_kfunc_is_allowed(const struct btf *btf,
-+				 enum btf_kfunc_hook hook,
-+				 u32 kfunc_btf_id,
-+				 const struct bpf_prog *prog)
-+{
-+	struct btf_kfunc_hook_filter *hook_filter;
-+	int i;
-+
-+	if (hook >= BTF_KFUNC_HOOK_MAX)
-+		return false;
-+	if (!btf->kfunc_set_tab)
-+		return false;
-+
-+	hook_filter = &btf->kfunc_set_tab->hook_filters[hook];
-+	for (i = 0; i < hook_filter->nr_filters; i++) {
-+		if (hook_filter->filters[i](prog, kfunc_btf_id))
-+			return false;
-+	}
-+
-+	return true;
-+}
-+
- static int bpf_prog_type_to_kfunc_hook(enum bpf_prog_type prog_type)
- {
- 	switch (prog_type) {
-@@ -8721,26 +8736,47 @@ static int bpf_prog_type_to_kfunc_hook(enum bpf_prog_type prog_type)
-  * keeping the reference for the duration of the call provides the necessary
-  * protection for looking up a well-formed btf->kfunc_set_tab.
-  */
--u32 *btf_kfunc_id_set_contains(const struct btf *btf,
--			       u32 kfunc_btf_id,
--			       const struct bpf_prog *prog)
-+u32 *btf_kfunc_flags(const struct btf *btf, u32 kfunc_btf_id, const struct bpf_prog *prog)
- {
- 	enum bpf_prog_type prog_type = resolve_prog_type(prog);
- 	enum btf_kfunc_hook hook;
- 	u32 *kfunc_flags;
- 
--	kfunc_flags = __btf_kfunc_id_set_contains(btf, BTF_KFUNC_HOOK_COMMON, kfunc_btf_id, prog);
-+	kfunc_flags = btf_kfunc_id_set_contains(btf, BTF_KFUNC_HOOK_COMMON, kfunc_btf_id);
- 	if (kfunc_flags)
- 		return kfunc_flags;
- 
- 	hook = bpf_prog_type_to_kfunc_hook(prog_type);
--	return __btf_kfunc_id_set_contains(btf, hook, kfunc_btf_id, prog);
-+	return btf_kfunc_id_set_contains(btf, hook, kfunc_btf_id);
-+}
-+
-+u32 *btf_kfunc_flags_if_allowed(const struct btf *btf,
-+				u32 kfunc_btf_id,
-+				const struct bpf_prog *prog)
-+{
-+	enum bpf_prog_type prog_type = resolve_prog_type(prog);
-+	enum btf_kfunc_hook hook;
-+	u32 *kfunc_flags;
-+
-+	kfunc_flags = btf_kfunc_id_set_contains(btf, BTF_KFUNC_HOOK_COMMON, kfunc_btf_id);
-+	if (kfunc_flags && btf_kfunc_is_allowed(btf, BTF_KFUNC_HOOK_COMMON, kfunc_btf_id, prog))
-+		return kfunc_flags;
-+
-+	hook = bpf_prog_type_to_kfunc_hook(prog_type);
-+	kfunc_flags = btf_kfunc_id_set_contains(btf, hook, kfunc_btf_id);
-+	if (kfunc_flags && btf_kfunc_is_allowed(btf, hook, kfunc_btf_id, prog))
-+		return kfunc_flags;
-+
-+	return NULL;
- }
- 
- u32 *btf_kfunc_is_modify_return(const struct btf *btf, u32 kfunc_btf_id,
- 				const struct bpf_prog *prog)
- {
--	return __btf_kfunc_id_set_contains(btf, BTF_KFUNC_HOOK_FMODRET, kfunc_btf_id, prog);
-+	if (!btf_kfunc_is_allowed(btf, BTF_KFUNC_HOOK_FMODRET, kfunc_btf_id, prog))
-+		return NULL;
-+
-+	return btf_kfunc_id_set_contains(btf, BTF_KFUNC_HOOK_FMODRET, kfunc_btf_id);
- }
- 
- static int __register_btf_kfunc_id_set(enum btf_kfunc_hook hook,
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 542e23fb19c7..cb1b483be0fa 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -13631,7 +13631,7 @@ static int fetch_kfunc_meta(struct bpf_verifier_env *env,
- 		*kfunc_name = func_name;
- 	func_proto = btf_type_by_id(desc_btf, func->type);
- 
--	kfunc_flags = btf_kfunc_id_set_contains(desc_btf, func_id, env->prog);
-+	kfunc_flags = btf_kfunc_flags_if_allowed(desc_btf, func_id, env->prog);
- 	if (!kfunc_flags) {
- 		return -EACCES;
- 	}
+To achieve this a few pieces of information must be possible to
+decode in pahole from kernel side kfunc declaration:
+  * which kfuncs are magic
+  * what arguments should be omitted
+
+A simple way to mark magic kfuncs is with a KF_MAGIC_ARGS flag.
+
+As for the arguments, I considered a couple of options:
+  * look at argument types and hardcode a list of types in pahole
+  * have multiple KF_MAGIC_ARGS_<N> flags, which would indicate the
+    number of arguments omitted
+  * use a special arg name suffix (annotation), i.e. "__magic"
+
+Of the three, the last one seems to be the simplest and most flexible.
+
+It is also necessary for pahole to use conventional names for the
+emitted kfunc pair for the verifier to be able to recognize them.
+
+These changes in BTF create discrepancies in the verifier:
+  * kfunc() now has an incorrect BTF function prototype
+  * kfunc_impl() doesn't have a corresponding ksym and BTF flags
+
+In order to handle them correctly, it's necessary to be able to lookup
+kfunc() <-> kfunc_impl() pairs efficiently. Naive string lookup in BTF
+is possible, but it is slow, which may negatively impact verification
+performance for programs using relevant kfuncs.
+
+Since the magic kfuncs are constant within a kernel, and their names
+in BTF are conventional, we can define a constant table of magic
+kfuncs using existing BTF_ID_LIST mechanism. A `magic_kfuncs` BTF ids
+table is therefore defined and used for efficient lookups.
+
+An inconvenience of the implementation described above is that the
+writers of a magic kfunc have to do a couple of things:
+  * mark the kfunc with KF_MAGIC_ARGS
+  * mark the args with __magic annotation
+  * add kfunc to magic_kfuncs table
+
+Another one is that for special kfuncs the relevant checks in the
+verifier must test for both original and _impl funcs. See changes to
+bpf_wq_set_callback_impl for an example.
+
+==== Testing
+
+A number of selftests are already using aux__prog -> magic kfuncs.
+
+Successful BPF CI run with modified pahole:
+https://github.com/kernel-patches/bpf/actions/runs/18918350607
+
+[1] https://lore.kernel.org/bpf/20250924211716.1287715-1-ihor.solodrai@linux.dev/
+[2] https://docs.kernel.org/bpf/kfuncs.html#prog-annotation
+[3] https://github.com/theihor/dwarves/tree/magic-args.draft
+
+Ihor Solodrai (8):
+  bpf: Add BTF_ID_LIST_END and BTF_ID_LIST_SIZE macros
+  bpf: Refactor btf_kfunc_id_set_contains
+  bpf: Support for kfuncs with KF_MAGIC_ARGS
+  bpf: Support __magic prog_aux arguments for kfuncs
+  bpf: Re-define bpf_wq_set_callback as magic kfunc
+  bpf,docs: Document KF_MAGIC_ARGS flag and __magic annotation
+  bpf: Re-define bpf_task_work_schedule_* kfuncs as magic
+  bpf: Re-define bpf_stream_vprintk as a magic kfunc
+
+ Documentation/bpf/kfuncs.rst                  |  49 ++++-
+ include/linux/btf.h                           |   7 +-
+ include/linux/btf_ids.h                       |  10 ++
+ kernel/bpf/btf.c                              |  70 ++++++--
+ kernel/bpf/helpers.c                          |  31 ++--
+ kernel/bpf/stream.c                           |   9 +-
+ kernel/bpf/verifier.c                         | 167 ++++++++++++++++--
+ tools/lib/bpf/bpf_helpers.h                   |   7 +-
+ .../testing/selftests/bpf/bpf_experimental.h  |   5 -
+ .../testing/selftests/bpf/progs/file_reader.c |   2 +-
+ .../testing/selftests/bpf/progs/stream_fail.c |   6 +-
+ tools/testing/selftests/bpf/progs/task_work.c |   6 +-
+ .../selftests/bpf/progs/task_work_fail.c      |   8 +-
+ .../selftests/bpf/progs/task_work_stress.c    |   2 +-
+ .../bpf/progs/verifier_async_cb_context.c     |   4 +-
+ tools/testing/selftests/bpf/progs/wq.c        |   2 +-
+ .../testing/selftests/bpf/progs/wq_failures.c |   4 +-
+ 17 files changed, 312 insertions(+), 77 deletions(-)
+
 -- 
 2.51.1
 
