@@ -1,95 +1,132 @@
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 958712F0676
-	for <bpf@vger.kernel.org>; Wed, 29 Oct 2025 16:38:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B621625A359;
+	Wed, 29 Oct 2025 16:46:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761755907; cv=none; b=KbRgj7D4yK7p46USLU58zZO5+RmgzeOTKg2wl8N5bwMUzysXg854PZdDYtWc4Th3CkgA+oTJIM7/pWn0pmc5MAUuj60fRrQoTaUEU0FmrAAFMWCWy201m6ZW3QlJhAjX5XDN/drbtomBDOFLA0YQg09QDhgx51HaVScOn3aAeMo=
+	t=1761756409; cv=none; b=DUr+n10AkJxdoObF+KdeM49M1NVvh8rPcclFsrov1iaC0tIGL7/WDglVQi3892zk91cwfAhxOc7TZAON5UuEiiFbS0LELOdhVFyGlu+hKyd+kV6+OtN6+3oiMwBeA89+Y36OroxgiA5R89cWutaqh5dT4zhLQgQgPX4Oe5lG6Ug=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761755907; c=relaxed/simple;
-	bh=Jwdv6/9meoYUWvOfN7SO9jrpugknEVlmkhDpfiFHKn8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kJ6fNmiQBf1K2rOrMhRgoEib3BkXttmpn7JdjXX6W2uxpPjg/a19LEOB/C3VbaGjeelU6BPzv81XM4zwTVBhs5sUkbXESQGuZk9/dzXnQLU2c4+UFWjrR3zBL4uNDjgTq6vJy0sY8vI3NlvdCxdrr3L1sKnqNrvFhi8adu5FGes=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W1nadL5U; arc=none smtp.client-ip=209.85.221.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1761756409; c=relaxed/simple;
+	bh=TDXvwBfHT+9Q+fyL3LUDJND5eqVMnrq1CTZDEBVx7kc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=pW1IahNki/uJ1jPh/pFHVApTpXI+wuOBlrEhqNHRxKiT4AW+T9E+DJBt+O6/mv51iKXb3Jt0L679y02bV4etOZaGQF3E9m0oiE8U/ttxMNPTEBXtiocPzmlf5cEEgD4X8+t6lykINrQ2TgwX9Dj/xuoWcpfLxUiT5Nok2hDK8R0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=YW2HyLaR; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W1nadL5U"
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-4298b865f84so17129f8f.3
-        for <bpf@vger.kernel.org>; Wed, 29 Oct 2025 09:38:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761755904; x=1762360704; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Jwdv6/9meoYUWvOfN7SO9jrpugknEVlmkhDpfiFHKn8=;
-        b=W1nadL5U2bSeY+TcybSfsiTmgoOo1IBL3eWyzAmk+ejKJLex8rTwklOpr5Wp6tbIF7
-         vlCCnk9+GP9GAVg6ht+UoYBWX7I9eKQR6e+Jwh78ZZKd7W860tD3onMfHsE984SionrB
-         aHU+/2Irpe7vs+rq1CaWv3kMktI99CgtgB7vpKQx/25dRFefirSHj4bGdQFtStBr/aCK
-         /luzX45L1aDfa8+Gs5PzSfj67m58UpTCvyN0WBUpc6rHg5+ueLKSqBegSV92jrpsUexs
-         zffEuiqF+t+IPqoWUEdYAJnU76BdL4/Vr0xXp42MHCyoy3hWuKPemWM7vXYwE6hN48wX
-         6zjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761755904; x=1762360704;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Jwdv6/9meoYUWvOfN7SO9jrpugknEVlmkhDpfiFHKn8=;
-        b=KEyc+s15GZ0RrncHL4C4VNAseaJtra9tW1pG2y4aYnj+tcGgtjKfMYKPZZRUcCKefp
-         jLi72LZ+JvFyQIxAXiQQsuBlMZY4bhWRilVMkPTZ0gGzeyRxO/eD23Hm5tDlwOPdBWSn
-         EQ1bPnnuuDGb3Ycnr42Bc3ah0Y3DfbsVWXH7nhERVNta5LwHqs4yMS5dlvIdarf8EvIi
-         IQk5jxxRyIK5VwtBUrBmHJiziZYE7SBRHMrmAd/fJKpiyieUkqZU1Erre0njiJAv8Ikh
-         t12BSeIFVYOe01cyCiBefm6zCcdCDe3qJT3xwXp7fLbjhZfEIB5nparBykObadsodUip
-         FkAw==
-X-Forwarded-Encrypted: i=1; AJvYcCXVjXrjIGswZ5I62ArXUem5FADwJceJf8T3/MdNtDfGjRLeZEDLH0JXcPARly+wIZ+bY9Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzO1i7NlKApiQlorUpjqTvTbDpgvfE69lGriOR33JbFu/7uBvHU
-	iUC5XCDPWZTLIWAvyyYIC0CttNDMk3dLFPlBlO19dSEj/3JeL4wNowDcbCUfLCIE83LBNqlG3tH
-	eCnK0MKYPvIzxrCQc9p/EFrBwQvlA0M8=
-X-Gm-Gg: ASbGncu8alwC3OzkN3TMJZSmQidEAbKhnnr2yKBpOF1iSu/QwumDNoXpj+C7Dvsq6NM
-	3mack2NnmpL+cDgjCx/XJdyz9pEgG51lmj502vNXNP/EcNA9ftk+bI8TuxtZ0vFaXl0WNuYecGy
-	30xfEJ7gxrZms+Fd0n5wa41QL5BMOTEd6HVmRsRvmGgZg99N7Ug6X0wsErVTORLnRGJviEpCz7y
-	332cGqOqQ9BOjmFqkSwsigk9JvNPUzQaODFDYA95oS9dONyiaWoF2MNL5/aV0fqedL8uRQ8Wlw0
-	2stLrGGifbNg4wXbIpVyJpPJKLwn
-X-Google-Smtp-Source: AGHT+IHOKbYQRjb7noEtg9viqdiV0KOSoE8fwPGm5DiruA+2k83MA/tyzn39j/Xj8DclgnRtviyPtE2Cakz8DDAsYdo=
-X-Received: by 2002:a05:6000:144d:b0:429:8b44:57b7 with SMTP id
- ffacd0b85a97d-429aefca83emr2893529f8f.51.1761755903765; Wed, 29 Oct 2025
- 09:38:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="YW2HyLaR"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=ezBqsnAVQOjC1ykpTlU6d2On8atja4ltAjGiclusszY=; b=YW2HyLaRK7BVrvPyVqgQf5r2at
+	us2HpLLk1XAm4QIvFH9TMlYA8iEzLGNie8E3+PvYpWmV4jrHejUlGSUyVywe8NijODSWPFQHLmO/x
+	Se4Gh3p46aChCz0Qarn+rMbSaXB/PLMy+i50U5RUNy14ufqwQfnIW4O1imMOxNayHJW0oI69/juk1
+	wbf9j09n9MmuMS5dpdaMvt9T3WM3sjEkKDrVkB1YvmRBQ8ZknKgvMvHsFRaCROA0ge6kgbj1kJF9O
+	Y3AkwFS3aczh/ZgKVBZW8EHKt3Jrjjfy7jqSP5oZ7G5Wo2obSpn0kxFaliP31eOJ9yltwq48XTrEZ
+	igcWDBnw==;
+Received: from sslproxy01.your-server.de ([78.46.139.224])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1vE9JR-0001Wb-1M;
+	Wed, 29 Oct 2025 17:46:17 +0100
+Received: from localhost ([127.0.0.1])
+	by sslproxy01.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1vE9JQ-00051F-1R;
+	Wed, 29 Oct 2025 17:46:16 +0100
+Message-ID: <ceda0507-e25a-43af-bad6-e9ede474ff94@iogearbox.net>
+Date: Wed, 29 Oct 2025 17:46:15 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251026154000.34151-1-leon.hwang@linux.dev> <176167501101.2338015.15567107608462065375.git-patchwork-notify@kernel.org>
- <CAEf4BzbTJCUx0D=zjx6+5m5iiGhwLzaP94hnw36ZMDHAf4-U_w@mail.gmail.com> <23eddad8-aae3-44ce-948a-f3a8808c1e24@linux.dev>
-In-Reply-To: <23eddad8-aae3-44ce-948a-f3a8808c1e24@linux.dev>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Wed, 29 Oct 2025 09:38:12 -0700
-X-Gm-Features: AWmQ_blZBI4M6hqka-WDWjrJS6mwNo50xI2IEFe-TA0xh4CdlMem_GYEsm3tD7A
-Message-ID: <CAADnVQJHAxKmhDdJ_SkgHMf3adiS8MmD5MJCfiFfxU+8peT9-Q@mail.gmail.com>
-Subject: Re: [PATCH bpf v3 0/4] bpf: Free special fields when update hash and
- local storage maps
-To: Leon Hwang <leon.hwang@linux.dev>
-Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>, patchwork-bot+netdevbpf@kernel.org, 
-	Menglong Dong <menglong8.dong@gmail.com>, bpf <bpf@vger.kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, Eduard <eddyz87@gmail.com>, 
-	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
-	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, LKML <linux-kernel@vger.kernel.org>, 
-	kernel-patches-bot@fb.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v3 02/15] net: Implement
+ netdev_nl_bind_queue_doit
+To: David Wei <dw@davidwei.uk>, Jakub Kicinski <kuba@kernel.org>
+Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, davem@davemloft.net,
+ razor@blackwall.org, pabeni@redhat.com, willemb@google.com, sdf@fomichev.me,
+ john.fastabend@gmail.com, martin.lau@kernel.org, jordan@jrife.io,
+ maciej.fijalkowski@intel.com, magnus.karlsson@intel.com, toke@redhat.com,
+ yangzhenze@bytedance.com, wangdongdong.6@bytedance.com
+References: <20251020162355.136118-1-daniel@iogearbox.net>
+ <20251020162355.136118-3-daniel@iogearbox.net>
+ <20251023192842.31a2efc0@kernel.org>
+ <2f2333fb-707a-4d21-a32d-776489ddc343@davidwei.uk>
+Content-Language: en-US
+From: Daniel Borkmann <daniel@iogearbox.net>
+Autocrypt: addr=daniel@iogearbox.net; keydata=
+ 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
+In-Reply-To: <2f2333fb-707a-4d21-a32d-776489ddc343@davidwei.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: Clear (ClamAV 1.0.9/27807/Wed Oct 29 10:50:39 2025)
 
-On Tue, Oct 28, 2025 at 11:50=E2=80=AFPM Leon Hwang <leon.hwang@linux.dev> =
-wrote:
->
->
-> Right, this is the classic NMI vs spinlock deadlock:
+On 10/28/25 11:41 PM, David Wei wrote:
+> On 2025-10-23 19:28, Jakub Kicinski wrote:
+>> On Mon, 20 Oct 2025 18:23:42 +0200 Daniel Borkmann wrote:
+>>> +void netdev_rx_queue_peer(struct net_device *src_dev,
+>>> +              struct netdev_rx_queue *src_rxq,
+>>> +              struct netdev_rx_queue *dst_rxq)
+>>> +{
+>>> +    netdev_assert_locked(src_dev);
+>>> +    netdev_assert_locked(dst_rxq->dev);
+>>> +
+>>> +    netdev_hold(src_dev, &src_rxq->dev_tracker, GFP_KERNEL);
+>>
+>> Isn't ->dev_tracker already used by sysfs?
+> 
+> You're right, it is. Can netdevice_tracker not be shared?
+Given this is not common practice, I've added a peer_tracker (given
+this is also only enabled / takes space on debug kernels).
 
-Leon,
-
-please stop copy pasting what AI told you.
-I'd rather see a human with typos and grammar mistakes.
+Thanks,
+Daniel
