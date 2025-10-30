@@ -1,119 +1,123 @@
-Received: from mail-vs1-f68.google.com (mail-vs1-f68.google.com [209.85.217.68])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92D7117C77
-	for <bpf@vger.kernel.org>; Thu, 30 Oct 2025 00:39:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.68
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F7EE17A318;
+	Thu, 30 Oct 2025 00:43:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761784800; cv=none; b=UTz+bcVt+1RmBHoo/9r/RGv2Rh0bcoqJVOjhVnAEeFS+ZWR5Z9I3qoa2Qtxg7j4YcgITFs/7n0/hRYT+UdQEuw6Y93LXjX4DCzkuFNbaXpy7M781AfzAN92wdC+ySvnJx0vA/ySE2HWuJO+5YJ5yYBxZKgBtRtonzNuT/gi/Njg=
+	t=1761784998; cv=none; b=WM8NA+u/9paOZaAUGUuCiM8eCUNoZT0G1lANApaeJfj0GyB3AEexZSDBg5ozULrQCWj5vnWMRJ7MJ2JCiJZPdQlSnGZ8RGQwoYpaVvEuZg9Z5/g1ARtrTtgdSLUyiXjapnsAant+PNr0dyyxA8gifK1VccGa0jNn/ewsCn8quQw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761784800; c=relaxed/simple;
-	bh=F+1dmMPKU1EhsOPIiAUwiJ0ziaxA3hjqAkVzPYv5gKs=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Rm84wiEVVdssoCf9CHa/j9EA47yCbWPKgH16BUPAkc15XLqHrD+A7z27YMifIEvH/vCzijdyE31Uv2RdRt44NjrrEVA6MhSd39aSiiFqeMlby2s8i3hWLTj3b9fUWvMRPr79Oa49eUzmEOUB0nb/bsoEkBXLkLdG2HGYl7Qnblc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UX9Vf/mt; arc=none smtp.client-ip=209.85.217.68
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1761784998; c=relaxed/simple;
+	bh=RPsWrulHFeHXbQMdfczHRBXPMspKZ82TpoNbHRZZZLY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=hpaqjOzpfTGdv9p/mqueXPd4qgUihG0apvfv3RlAWNAq8MPr5jovh1GwQRSn3C845W0X4tgJmaJcQxonp4oHWttz2IJnrdWsaVM2/4MJxJaqke/dcqs9Zatlh3f4k7QXZ/hOIbwpqjywFmWr9LDa1a4KQGiQ8lSmLuuh0V1O2DY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ULiUj4m2; arc=none smtp.client-ip=91.218.175.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UX9Vf/mt"
-Received: by mail-vs1-f68.google.com with SMTP id ada2fe7eead31-5d967b67003so580578137.2
-        for <bpf@vger.kernel.org>; Wed, 29 Oct 2025 17:39:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761784797; x=1762389597; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=1C+kpg11Lr3Fa6qP5rxUJKauqkyrQ3fXbk25+xhKPiA=;
-        b=UX9Vf/mtcyxa33z9qTFl8KzC4O3ICOkSVgUFjMD1Yy/mJoSAU5S940NpniBCCBy/qM
-         4q+wo56bhoZOFI74nkFKB9o6qOK7JSalUdhQf44pgyRbim0OEsYj2Zm96xFlgwoN1qn1
-         ypdsz4+fDhVEKwffYVYs1b771DCpj0N7uXrQEIa91+5tx5hEz6WoW7yG/Gqyn8zQ8FCa
-         IGZ5jdIylgvMbYg1OJICgaTUuY7q8o/rWBoD8LL0FLoUASEKdSFG5WvP3/X6Tjw2wmn9
-         6WX38zWmQc/frKwhOMX+vqBk+J71b4LYjUd5XWytkv3H3zC6fDs2KDKha8/5PSOZ24QB
-         Jh7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761784797; x=1762389597;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1C+kpg11Lr3Fa6qP5rxUJKauqkyrQ3fXbk25+xhKPiA=;
-        b=cuAvEh8Uxba8BsM0DigFMlBQ7tU9k04FQBmPH2Z3yxfsWeUo9SQ8aTrKxL8KQRmkXY
-         cn3pE9q7a7rCTsY9R2LQWRgQA+FwlTtM4U1piwYnkrzznMZr5y8dAhaCf+dQIGApD+Bt
-         CT3vRj2IGJBHAYqQpcE12mk1u7WIfrsqJ7sJA2HhY6TWPj1G5BiB2rL5yRz/fL5f2wgt
-         dfp5Dz+TjG2MNAdc+ZDoQ7BHc7+aPUSjg/Rsh5qb0uHbrhWcznh+8X6WB2mn2pyUvr9m
-         n+I4N/5cIC5H0OcgjAIc/8eCy6rVKUKVVAalFmSTz1t/HaQG8JVvKXvBk6dBFna3XoCq
-         hqFw==
-X-Forwarded-Encrypted: i=1; AJvYcCU8tMe0br23grsvt7C6ctyEyD0JECjwLkBN++v4nBNpdwTY+1N5vFljvcIGbu4YEAjR8p8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwFXkDu16FrEcUsi1ZfqPhVoGTx6hzrzF3ZIeEFInT8d1blOr0F
-	BUG/5msGoQmv8fOZCp0efM3gXOV5sNw+GEzq/H6kikqAjlLfG8gk7ZIZ5qyp1+R1
-X-Gm-Gg: ASbGnctXLoKgYnhz9t4j83bnly5UDR3htyIxk78S8yRE6NPNsuGF55llVll4wU9Bv4n
-	hN8uWnGIAkUskl6HVFZfVY83eZD2yme19tBHF39LfpqVvVXd2shZ5TwoI7Um5voD1iFvnZfqmRO
-	pho7K1CMkkMCLRCFwViCFCooBXORt0S/HNrX1P49SbMIu4Ef5aWJr9AiuIH60ZTl60XJbBtLpK+
-	9IZywZy2QkZ7rY8grNz/UW1vy+sRw9p04XAqrNsEy9R1AfEDWCvkY16K92qQez2GaQ7X+BZakPx
-	sGry2LZLGN6ZrLNx1yPPKnAofv/6SNMe0irLxmQ2KO9p3tj/5Qvd1vq7kbaZtNSn0uFjGCktiNM
-	UpfrWSyQ4sIoC4WYyBXZOqwnecq44z0MXzNAr26AN9T6cxl+x6bmf6PZk7nu1BVQTIFIiULn9fF
-	7elTQbQlY+IMkhn7BBbfdzl8ORwpsI
-X-Google-Smtp-Source: AGHT+IEhCsgLDZ33oU7eKu5WmrCrdlI4CH0spBUGDjecXX03bKx9ED6BN00mwBebude5G/b3JmN9RQ==
-X-Received: by 2002:a05:6a20:2586:b0:341:6844:bd9d with SMTP id adf61e73a8af0-34785230af3mr1789958637.13.1761784390679;
-        Wed, 29 Oct 2025 17:33:10 -0700 (PDT)
-Received: from E07P150077.ecarx.com.cn ([103.52.189.23])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b712d3fc7b0sm15419683a12.29.2025.10.29.17.33.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Oct 2025 17:33:10 -0700 (PDT)
-From: Jianyun Gao <jianyungao89@gmail.com>
-To: linux-kernel@vger.kernel.org
-Cc: Jianyun Gao <jianyungao89@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	bpf@vger.kernel.org (open list:BPF [LIBRARY] (libbpf))
-Subject: [PATCH] libbpf: Update the comment to remove the reference to the deprecated interface bpf_program__load().
-Date: Thu, 30 Oct 2025 08:32:35 +0800
-Message-Id: <20251030003235.1131213-1-jianyungao89@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ULiUj4m2"
+Message-ID: <dc66b416-6d35-4e7f-af9c-6a0831dc1fb7@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1761784989;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=prXThHTV0GDAwL3oDEaWG8s/Dj6lCyEPeFRl/UXwls4=;
+	b=ULiUj4m2ZADrpZISUHsciB+yZ7PKa6iclQpmxGVtWMVHGj6KYXWwkoKCZXXY9Uits03dv4
+	vupgCZLkEk8MYN4sAipt4OJzgrznJx+C4i2+XdgM1k/plomzacRE4NBqO+zq8iMFDoad9k
+	yH8o9Eo8jbJOdnnYDOj5Jw2VA3b/1RY=
+Date: Wed, 29 Oct 2025 17:43:02 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2 02/23] bpf: initial support for attaching struct ops to
+ cgroups
+To: Roman Gushchin <roman.gushchin@linux.dev>
+Cc: linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@kernel.org>,
+ Shakeel Butt <shakeel.butt@linux.dev>, Johannes Weiner <hannes@cmpxchg.org>,
+ Andrii Nakryiko <andrii@kernel.org>, JP Kobryn <inwardvessel@gmail.com>,
+ linux-mm@kvack.org, cgroups@vger.kernel.org, bpf@vger.kernel.org,
+ Martin KaFai Lau <martin.lau@kernel.org>, Song Liu <song@kernel.org>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Tejun Heo <tj@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>
+References: <20251027231727.472628-1-roman.gushchin@linux.dev>
+ <20251027231727.472628-3-roman.gushchin@linux.dev>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <20251027231727.472628-3-roman.gushchin@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-Commit be2f2d1680df(Deprecate bpf_program__load() API) marked
-bpf_program__load() as deprecated starting with libbpf v0.6. And later
-in commit 146bf811f5ac(remove most other deprecated high-level APIs)
-actually removed the bpf_program__load() implementation and related old
-high-level APIs.
 
-This patch update the comment in bpf_program__set_attach_target() to
-remove the reference to the deprecated interface bpf_program__load().
 
-Signed-off-by: Jianyun Gao <jianyungao89@gmail.com>
----
- tools/lib/bpf/libbpf.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On 10/27/25 4:17 PM, Roman Gushchin wrote:
+> When a struct ops is being attached and a bpf link is created,
+> allow to pass a cgroup fd using bpf attr, so that struct ops
+> can be attached to a cgroup instead of globally.
+> 
+> Attached struct ops doesn't hold a reference to the cgroup,
+> only preserves cgroup id.
+> 
+> Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
+> ---
+>   include/linux/bpf.h         |  1 +
+>   kernel/bpf/bpf_struct_ops.c | 13 +++++++++++++
+>   2 files changed, 14 insertions(+)
+> 
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index eae907218188..7205b813e25f 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -1849,6 +1849,7 @@ struct bpf_struct_ops_link {
+>   	struct bpf_link link;
+>   	struct bpf_map __rcu *map;
+>   	wait_queue_head_t wait_hup;
+> +	u64 cgroup_id;
+>   };
+>   
+>   struct bpf_link_primer {
+> diff --git a/kernel/bpf/bpf_struct_ops.c b/kernel/bpf/bpf_struct_ops.c
+> index 45cc5ee19dc2..58664779a2b6 100644
+> --- a/kernel/bpf/bpf_struct_ops.c
+> +++ b/kernel/bpf/bpf_struct_ops.c
+> @@ -13,6 +13,7 @@
+>   #include <linux/btf_ids.h>
+>   #include <linux/rcupdate_wait.h>
+>   #include <linux/poll.h>
+> +#include <linux/cgroup.h>
+>   
+>   struct bpf_struct_ops_value {
+>   	struct bpf_struct_ops_common_value common;
+> @@ -1359,6 +1360,18 @@ int bpf_struct_ops_link_create(union bpf_attr *attr)
+>   	}
+>   	bpf_link_init(&link->link, BPF_LINK_TYPE_STRUCT_OPS, &bpf_struct_ops_map_lops, NULL,
+>   		      attr->link_create.attach_type);
+> +#ifdef CONFIG_CGROUPS
+> +	if (attr->link_create.cgroup.relative_fd) {
+> +		struct cgroup *cgrp;
+> +
+> +		cgrp = cgroup_get_from_fd(attr->link_create.cgroup.relative_fd);
+> +		if (IS_ERR(cgrp))
+> +			return PTR_ERR(cgrp);
+> +
+> +		link->cgroup_id = cgroup_id(cgrp);
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index fbe74686c97d..27a07782bd72 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -13858,8 +13858,8 @@ int bpf_program__set_attach_target(struct bpf_program *prog,
- 		return libbpf_err(-EINVAL);
- 
- 	if (attach_prog_fd && !attach_func_name) {
--		/* remember attach_prog_fd and let bpf_program__load() find
--		 * BTF ID during the program load
-+		/* Store attach_prog_fd. The BTF ID will be resolved later during
-+		 * the normal object/program load phase.
- 		 */
- 		prog->attach_prog_fd = attach_prog_fd;
- 		return 0;
--- 
-2.34.1
+Not sure storing the cgroup_id or storing the memcg/cgroup pointer is 
+better here. Regardless, link->cgroup_id should be cleared in 
+bpf_struct_ops_map_link_detach(). The cgroup_id probably is useful to 
+bpf_struct_ops_map_link_show_fdinfo().
+
+> +		cgroup_put(cgrp);
+> +	}
+> +#endif /* CONFIG_CGROUPS */
+>   
+>   	err = bpf_link_prime(&link->link, &link_primer);
+>   	if (err)
 
