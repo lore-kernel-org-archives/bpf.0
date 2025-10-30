@@ -1,125 +1,115 @@
-Received: from mail-pj1-f67.google.com (mail-pj1-f67.google.com [209.85.216.67])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 331B528488F
-	for <bpf@vger.kernel.org>; Thu, 30 Oct 2025 04:15:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.67
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1148D218AA0
+	for <bpf@vger.kernel.org>; Thu, 30 Oct 2025 04:32:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761797709; cv=none; b=kzLxOUi2dm/tqK6JcShgFJ8DGxG3qAOXdDX4FC9YRzwgDyZhMAdvsLFDMAHPXM9w+8Bcxo6i40fxaAegTLYf9Dz6xb39f23BtGE7QSrE37QJpWPQifQvmWty90BjARA+qzryW1Wt+ZfUYRQCDY1N2IjlRoGFdnVVddOIS4X1sf0=
+	t=1761798777; cv=none; b=uh8aMzcmMO2XgN8OURg8vBa3cVqxZM4BKrTckUrYhqNI2C5c9Lln79H+nznLhrKhx/yOD7dlvcPwa804uYSD31k3ZoY+timZBYa19r5zf9SdHgbKHRdI6aRK7gzABNx7TIecSd/MmVF15UfymAzHUQWbpJY/tzeXVA3nmcSqbKI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761797709; c=relaxed/simple;
-	bh=aBRTdJV/Cutznnm5Vnl/Wt1QdN+f9b7CRXwerleKGHg=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=oB2+u5QEsfZqz7MBa7dVElOoOanxR2ePerRWKb+BwLFtzdKSOiefH0gGnYO4ilW6+9y7t72iXJvVgWyb0nzPh3n3ILbwllcNKB8fWuS7lvZru6blCuslmSsyXYguAInGzxVPgaX5VtIaytmSV+tZyMh2OeolTZH0r7tpsJcvDLQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bOBS1ihg; arc=none smtp.client-ip=209.85.216.67
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1761798777; c=relaxed/simple;
+	bh=2+HmoIuuPHdF46s6IU1j+vbuARn+2oyq4R4SBJ4cmyM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=rJ/IAhrCWeYXO6Rujd9JZgX9xVf7q8vKnRrbxrEMtfZlcRyR6nl1VHLwqOVfFm89eTz1NemHbSx47EAriIRknL1PIE4iNeAKpX2cRO3L/LLRutgHX8P6+ENeftHR7+7fu6krHHvQfQkLpHenYS0gfnt0jOPKiOJBfyleLWfy5IU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WeJnR1uN; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bOBS1ihg"
-Received: by mail-pj1-f67.google.com with SMTP id 98e67ed59e1d1-33e27a3b153so697823a91.3
-        for <bpf@vger.kernel.org>; Wed, 29 Oct 2025 21:15:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761797707; x=1762402507; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=WywPhK8rX8KYdEGPRDNQCxYargrpyo9AoIMZ6I9iyXM=;
-        b=bOBS1ihg2Tu7rDWPWoGhSTxcJNY0kPySOZ+K6VlWGDDGMCmnzAGQH4WDoIQN0JX8Gb
-         UJ6XNLtm7AwN+AHLsNUnELXut9bJRj3ate6gRsN4d3gJumz8efR0icQv7MHCIg65oSks
-         CfnB13Sd/26+JG8JtC7i7Um+nLuoYv0FB/54Fmrnq9Px3op6wZAf7akty+rx+pzG8PJi
-         G/kn55n5pUhD2c2+mDvjGY+i1obx7scbYZpGK0EkLEfi91rrKk68S9/NtmSSMvGonHbR
-         CROWF+/ToyJ507VcjQFijqAA94OlFx1FmBJf1waY07HAX3SB2Cs1Js/2Ci0fsFyqpsvY
-         E6MQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761797707; x=1762402507;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WywPhK8rX8KYdEGPRDNQCxYargrpyo9AoIMZ6I9iyXM=;
-        b=qHhkIIQKUjIE6WTrHLki1UXHwuunxWrZGKjNDkTkJxNXElckZ+UKs8HrRrZScGvo3s
-         X0EEyqETX6pW/tPGDKZhBdd1Iiq4GH/dHQQZ0sr3UjReq6LKsLOEhxhMMmUWWSaCzpad
-         8bGmtR6mw2d+nz3TlNH8SoLfHPZpLdOTFUz6tVVn/u3rCGkQA5bgfb4J97vsT05TJW9y
-         U3yZtCsMduPmLYI7sOnMnN+28GalKHTGJAS6hzE25qUM0RTaQ/GzjeJga+HBvrB36hJc
-         mVz2HbCs6KGULGWbf57px7QdWmvCYn+DF2J1jPLDqrWVxiyQmI4lPBkspLD/lLrMuTy1
-         EW4A==
-X-Forwarded-Encrypted: i=1; AJvYcCXu7AS1W/sWEIeQ1G6PbMKjjqcUALb+4txr9YhNf225Qg7rcN/uUJRgPa/7eRAF45XUh00=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzmTdFlViXOnnHG59FPDK2vP6DlnmEJtxoGJYRwAfzbKInWFCj0
-	ka6ItWY6JoGXrAO2mxx2d0TJi1l8NkTNHIofQRdVi58a/Oq2s9G5SOnH
-X-Gm-Gg: ASbGncvRUyK0yHrEEc1WHShQn4vj6+zwt1ODk1GWljXtjPQARmyLGQiSsfHAodQhzEi
-	zVSbi/zzbV6CSeuA3mA2kL1fxxGWXmofJws95uk94UB9zvd87sxraiLVUUExgj7+cneF1LVBB/H
-	C3RBxB7T9PaWgkjsZKCFLIWFy/1ZevAceqMEeWjf02wEaCVix6SqCMOzosdATnQa5g9SsPWlMVh
-	YMZm1wtfN7PZfk4Pdhr3aLPnxbtJx/UHN//hxU9MJfjc6D/QllD6GsEnDRtJR2HRApjiLpwfwML
-	BVYnNdmHmauIl9GRNtSVC0swC0836dRYSPUQOh1UUxyiOk7SkjVAScfmeIq9hrLobKUQ0enVpsE
-	AaZ0yLPeWeUpAXmsbaXbYD9ymabwys4QJ0wp2ISKhyHFo4a+Cz63GNCD/Se6bywIqGQVo4+1Inf
-	UEEhx6SV3KuIj/MVlukw==
-X-Google-Smtp-Source: AGHT+IHmVRX2SSN8xFtoHIWs97eLO18pwBpAmDhLc/ti/WeUODi1bpmpP+p4Z1+qnjhH3BvJpXhGUA==
-X-Received: by 2002:a17:90b:570f:b0:33b:c853:2d95 with SMTP id 98e67ed59e1d1-3403a2fe505mr6536937a91.33.1761797707315;
-        Wed, 29 Oct 2025 21:15:07 -0700 (PDT)
-Received: from E07P150077.ecarx.com.cn ([103.52.189.23])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-34050992f92sm877375a91.6.2025.10.29.21.15.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Oct 2025 21:15:06 -0700 (PDT)
-From: Jianyun Gao <jianyungao89@gmail.com>
-To: linux-kernel@vger.kernel.org
-Cc: Jianyun Gao <jianyungao89@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	bpf@vger.kernel.org (open list:BPF [LIBRARY] (libbpf))
-Subject: [PATCH v2] libbpf: update the comment to remove the reference to the deprecated interface bpf_program__load().
-Date: Thu, 30 Oct 2025 12:14:57 +0800
-Message-Id: <20251030041457.1172744-1-jianyungao89@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WeJnR1uN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7EF7C19423
+	for <bpf@vger.kernel.org>; Thu, 30 Oct 2025 04:32:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1761798776;
+	bh=2+HmoIuuPHdF46s6IU1j+vbuARn+2oyq4R4SBJ4cmyM=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=WeJnR1uNJXyR/VIiggqLZKlHmEWtr8PryGvaMIFmduLJwWzm1WB3bNYZDNsL28ECc
+	 MhDcS0HqaDu4a+jGMxGWRcOc3a9c3WeORfl68Q8MIVrn/3glItC3V/l8jPsSnetLWV
+	 jgSiFHeJxzZfa4EdmfRpJBG4t0FtKzgdapHdkjBW7cXdWT+4JnANg3Y3vtkIsobS4G
+	 QRziJ5k7RnLY1yelWNmBiZBFq2AxEhu1fa7zdDP4W3M3oplHLpwgHXEML3DEnepGmx
+	 4+E3yX35xj2+E7UGfsPtOvB1r4EB9OTEHnDncfql3sxs+0VthaZ7+TzKGffw1AIwEf
+	 eXybCRuKBpJRA==
+Received: by mail-qv1-f53.google.com with SMTP id 6a1803df08f44-87c13813464so11125886d6.1
+        for <bpf@vger.kernel.org>; Wed, 29 Oct 2025 21:32:56 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVatiQlbZegz9qEsG2FW2Fi+bzDZKtkRcIy50BozHeiHFJZwg1/eT1+r6+UVYl+cu8xmQc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy4z6b8Q93WY9ZTEXxAn7UzgvBdP9ZLiIQ0yTpNI7IkTq7CiTPG
+	300rlIZRe+h5wlmj+qJqhHvNlvyF8fR1Jvs15QsLUF6Q6LtZCoXd7rjYFVPHQu/GDoK3Ut+OsJM
+	+moJbmv/LIjLFwUVQ6ePSx2gOn5jRjiI=
+X-Google-Smtp-Source: AGHT+IHloxlOPCQ2Ts01dfa61gbcBoNiGNoZLr759SYfOuTvCEnTg7bX+Fomvk0pFNs84BbMxKlEaTxyHv6uOFm83Y0=
+X-Received: by 2002:a05:6214:d4a:b0:798:95da:611f with SMTP id
+ 6a1803df08f44-880099a7c5amr62818076d6.0.1761798775656; Wed, 29 Oct 2025
+ 21:32:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20251027231727.472628-1-roman.gushchin@linux.dev>
+ <20251027231727.472628-3-roman.gushchin@linux.dev> <aQJZgd8-xXpK-Af8@slm.duckdns.org>
+ <87ldkte9pr.fsf@linux.dev> <aQJ61wC0mvzc7qIU@slm.duckdns.org>
+ <CAHzjS_vhk6RM6pkfKNrDNeEC=eObofL=f9FZ51tyqrFFz9tn1w@mail.gmail.com>
+ <aQKGrqAf2iKZQD_q@slm.duckdns.org> <CAHzjS_tEYA2oboJ-SPq5wJLJTpJDNiA2Fk1wMRgyEpH0gjZRJw@mail.gmail.com>
+ <aQKLCuX5v5aO3fDa@slm.duckdns.org>
+In-Reply-To: <aQKLCuX5v5aO3fDa@slm.duckdns.org>
+From: Song Liu <song@kernel.org>
+Date: Wed, 29 Oct 2025 21:32:44 -0700
+X-Gmail-Original-Message-ID: <CAHzjS_uqFLEzvU0PTQiXajdFDsjC4gfk0Z4qMoiRQJ2uVPw6BA@mail.gmail.com>
+X-Gm-Features: AWmQ_bl3_-nL5SrQXZYMREaXDnsMqEHzXuINIJP6UEpQTMQi_qleUcR8dgaKd7g
+Message-ID: <CAHzjS_uqFLEzvU0PTQiXajdFDsjC4gfk0Z4qMoiRQJ2uVPw6BA@mail.gmail.com>
+Subject: Re: [PATCH v2 02/23] bpf: initial support for attaching struct ops to cgroups
+To: Tejun Heo <tj@kernel.org>
+Cc: Song Liu <song@kernel.org>, Roman Gushchin <roman.gushchin@linux.dev>, 
+	Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org, 
+	Alexei Starovoitov <ast@kernel.org>, Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@kernel.org>, 
+	Shakeel Butt <shakeel.butt@linux.dev>, Johannes Weiner <hannes@cmpxchg.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, JP Kobryn <inwardvessel@gmail.com>, linux-mm@kvack.org, 
+	cgroups@vger.kernel.org, bpf@vger.kernel.org, 
+	Martin KaFai Lau <martin.lau@kernel.org>, Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Commit be2f2d1680df ("libbpf: Deprecate bpf_program__load() API") marked
-bpf_program__load() as deprecated starting with libbpf v0.6. And later
-in commit 146bf811f5ac ("libbpf: remove most other deprecated high-level
-APIs") actually removed the bpf_program__load() implementation and
-related old high-level APIs.
+On Wed, Oct 29, 2025 at 2:45=E2=80=AFPM Tejun Heo <tj@kernel.org> wrote:
+>
+> Hello,
+>
+> On Wed, Oct 29, 2025 at 02:37:38PM -0700, Song Liu wrote:
+> > On Wed, Oct 29, 2025 at 2:27=E2=80=AFPM Tejun Heo <tj@kernel.org> wrote=
+:
+> > > Doesn't that assume that the programs are more or less stateless? Wou=
+ldn't
+> > > oom handlers want to track historical information, running averages, =
+which
+> > > process expanded the most and so on?
+> >
+> > Yes, this does mean the program needs to store data in some BPF maps.
+> > Do we have concern with the performance of BPF maps?
+>
+> It's just a lot more awkward to do and I have a difficult time thinking u=
+p
+> reasons why one would need to do that. If you attach a single struct_ops
+> instance to one cgroup, you can use global variables, maps, arena to trac=
+k
+> what's happening with the cgroup. If you share the same struct_ops across
+> multiple cgroups, each operation has to scope per-cgroup states. I can se=
+e
+> how that probably makes sense for sockets but cgroups aren't sockets. The=
+re
+> are a lot fewer cgroups and they are organized in a tree.
 
-This patch update the comment in bpf_program__set_attach_target() to
-remove the reference to the deprecated interface bpf_program__load().
+If the use case is to attach a single struct_ops to a single cgroup, the au=
+thor
+of that BPF program can always ignore the memcg parameter and use
+global variables, etc. We waste a register in BPF ISA to save the pointer t=
+o
+memcg,  but JiT may recover that in native instructions.
 
-Signed-off-by: Jianyun Gao <jianyungao89@gmail.com>
----
-v1->v2:
-Modify the commit message in v1.
-The v1 version is here:
+OTOH, starting without a memcg parameter, it will be impossible to allow
+attaching the same struct_ops to different cgroups. I still think it is a v=
+alid
+use case that the sysadmin loads a set of OOM handlers for users in the
+containers to choose from is a valid use case.
 
-https://lore.kernel.org/lkml/20251030003235.1131213-1-jianyungao89@gmail.com/
+Also, a per cgroup oom handler may need to access the memcg information
+anyway. Without a dedicated memcg argument, the user need to fetch it
+somewhere else.
 
- tools/lib/bpf/libbpf.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index fbe74686c97d..27a07782bd72 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -13858,8 +13858,8 @@ int bpf_program__set_attach_target(struct bpf_program *prog,
- 		return libbpf_err(-EINVAL);
- 
- 	if (attach_prog_fd && !attach_func_name) {
--		/* remember attach_prog_fd and let bpf_program__load() find
--		 * BTF ID during the program load
-+		/* Store attach_prog_fd. The BTF ID will be resolved later during
-+		 * the normal object/program load phase.
- 		 */
- 		prog->attach_prog_fd = attach_prog_fd;
- 		return 0;
--- 
-2.34.1
-
+Thanks,
+Song
