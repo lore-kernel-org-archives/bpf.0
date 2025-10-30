@@ -1,28 +1,28 @@
-Received: from AM0PR02CU008.outbound.protection.outlook.com (mail-westeuropeazon11013061.outbound.protection.outlook.com [52.101.72.61])
+Received: from AM0PR83CU005.outbound.protection.outlook.com (mail-westeuropeazon11010052.outbound.protection.outlook.com [52.101.69.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA3C3274B4A;
-	Thu, 30 Oct 2025 14:35:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.72.61
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02FBE2750FE;
+	Thu, 30 Oct 2025 14:35:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.69.52
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761834903; cv=fail; b=jpHFFodvDgxtTMm1bx8doDEL7FdV1hAWsVZSruylAFTGXy2hmDQwj7YUtWgwwf4lGOpyqlbYE3ndgvahAgsKD/wu2EHagNR8iGIDCbsaBgFDr/03YhYyg/9K6bK3aR2CxAE/iTWns5vQhPPChL1x12Wsdf/Iz2hGn29UIBGVZYI=
+	t=1761834908; cv=fail; b=A26GmOkKHSeyOnF6qhXQQiGiQpezWRvww6bB9qT+ieMNG9LMxlxmFa8w0wCZHkJi/neSi9RAF9fDRGPo8karnooj0xRQwR2FJRFO+Mv2Nz1FjYkUDsDaZRF+02LG2WUfZI5O2OlpwsJFiL3GDtqgzovoXntvy1QL8N7fSCQs/Ns=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761834903; c=relaxed/simple;
-	bh=q9RZpqVrffaV3J+sagRjq+CHlYViTFY4M440rBIvC3M=;
+	s=arc-20240116; t=1761834908; c=relaxed/simple;
+	bh=L/9syWY5Uc0f6dVV5fOe19D+Lnvl9WF1Tjpw0JAHevg=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=DJdqwVIxJ/YIw3BW4kM6eFDjM5+u317vNvj0NDbgdYpOBSLeZug5ADyBHimdjiaAi/TlrEHp3IwlpKBpCfBklCEqPvLvzx8VWBtFERuxLyx+qP1sHHCBAQDkVEYy/73wctWanCkEWP8b2prYwv+gMwvZ2jLN+AVI7d0JGFqyAPY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com; spf=fail smtp.mailfrom=nokia-bell-labs.com; dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b=cjjrZi/g; arc=fail smtp.client-ip=52.101.72.61
+	 MIME-Version:Content-Type; b=RJAYe8H6gnvA2kWO3qv+l2toVaOvHXUsX8B4tdIXs/LDNZQXBWDLYGhnvHOzk3jY4CrvgFMPK4/Qhbvpmi597RIyb+KWEM6BsphsWgMcLJB7IMV0oBEVIAtvP1GAwXKiylkk7KO4K+fwpr8Fez15gzD4IySYkkvG2Vnrn58fqmM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com; spf=fail smtp.mailfrom=nokia-bell-labs.com; dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b=e3n1+xfA; arc=fail smtp.client-ip=52.101.69.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nokia-bell-labs.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b="cjjrZi/g"
+	dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b="e3n1+xfA"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Mtkmi8Q6f/LvDSjTHsTDJQLiXgZlL4yicxcASqhNs7HnukUaF4pBVBatqXhPDdP2ZNcj5rSyyPAt6oXge2kAJV+9pUCU8L9X7R5SLKZSC8W2m10hmXbWgrTaOBBQsswLeBo5FfUNTw0uAjfqtMg7pZ+KrHgKlRIB9Wnpodw0GRpyqaLLB3VM0TFutgcZSrv1i/eCFCZIXvjscovV639Tr92l3y+TN+3LBBN3F4GcjEgeoGKC7EV/ZfRbTVmOXsIlWszrepvX/OvtLa3dv/d1Hn1WQPLeMpiQxvPL6Tv+mbi16gg60UOt3y1/AvzTSPNGWOeEohYkHiiRLjpmk0YzTQ==
+ b=D7Thbe4SpAbggrnagAZzpVo11ItehZCTLKyQLpce2x6mo9Pq4Okb2raVDOG3mMUEmx5ti8xTBYZVOFRWpPNlPtX26afa5j1jB9ewxkL5bSxN+JwGWTWKidns4ZwDpKFsatrHCepRGj4Ubt82XF9X+1U4vEq/xE7E+Hlj951bqA6wmrJKoaeZzXbKDij/cdObU+joqE5OLkOJDOD2E91Fsez5JIg4JMH/yJoDA/hRp9FHhK9yJnyBHSzAmhWhwGkitxW3cXFA4B9O7zv0rX9EFRoEjGrzwk+LUxWRAd+Bb4/Pqpz5dHKhYoauNY7VynBDoeLO/Uyy7Acub9omPVTpDg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uf2aQmvVsDpMNMoczWwROPUgccz2e/xvLLgSVBce2G8=;
- b=WaOrCb7+zBcIkcv8KNQDn4SWRh8+Iek4bLWeFa2D4wslfVMleZIOVFbeWIdzETm6xXtbYILSTMLQtXFOk/C7FWGBUnVsCR+bbKcPnMbrLzNduAeBZGtIYDMpxtfhSVPgWxdEfXtaRfdqnTWEjesqcR/EOoa1mSLemMz9M7zxM4QmBsEdDyqCZnqp37Xd2yy1U9q9P6j+Qqlw9LmU1WU14DSqALaPdZq8yGTVgGZ5DefiZB5081mdUjmcIwpHrLk+BbWKAEpB4rDA+EWqFuD4fAE6fE/er+c0xV+c1uil0c055aEVALrBnbsZUvaEry1Godix/JTZM1AqCpxC2hrATw==
+ bh=uO0M59Rnpsh7uQlqMipDNASdfTD5FHcmFDaC761vsYo=;
+ b=SxuFzk+i1qPI7awCP7AQImhZW0Zj2pNcCct18OBUeR9IeEwofDjv1PKwe578WWkCGgoTVZJoMOMus5tY+OtfnR/3zVWDgAqcB1eNI+pUMdGrwnh/oMRCDOVOomamOpMtH5E4Ez9gPwAEeRe92vyMUY6bFkdn4Nh2R+R0JzhUw1c4cJGPOYKJP2n8J3bCnu0BZsZvSdSXNVBdl0b4ZpxeX9sxPPUJglh2R/80LzSKPkDtu7akRjSylphbu6umX+oZ+gBTiBCCQ0Bq9WVx3NY6d/G1bBmJ0iV5zvak1awBtmnzIjkGjt4dnU04gaCsBDgDF//7bvg75qPAa9yi82wPIA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  131.228.2.241) smtp.rcpttodomain=apple.com smtp.mailfrom=nokia-bell-labs.com;
  dmarc=pass (p=reject sp=reject pct=100) action=none
@@ -30,18 +30,18 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia-bell-labs.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uf2aQmvVsDpMNMoczWwROPUgccz2e/xvLLgSVBce2G8=;
- b=cjjrZi/gn85/rE41w4P2e8SydjQclXX8tbD32asjAs1DPlGNNWwmm4SuWAyG+yx+Qgmy23McEJnvy4MGPKHWV8mVMTyjgRFTsneFWnTwDwsmJLQG/D4qOueGP/wm/xmCC3mgQD/hbE7xrxsHJiOhWRZ9lAQAk3eTEX6Jg5XQM8quH6RtpaMMfqygC6PpaR/o9rOWxK0Jf2x5WpACT3Ko5bie0fjLCJOoIUotXZyYiSdLTtjd8yFtw8I6F5RRMER4Km7hiYK7sZ1e/vzIc9XbnZ/72Q5M2O3WBQOoxTiGj2qBgr4NIZwRVH3Zd7FhU0H44g27s8aG2wpBjmn4J2hwTA==
-Received: from DU2PR04CA0014.eurprd04.prod.outlook.com (2603:10a6:10:3b::19)
- by AM9PR07MB7266.eurprd07.prod.outlook.com (2603:10a6:20b:2c4::10) with
+ bh=uO0M59Rnpsh7uQlqMipDNASdfTD5FHcmFDaC761vsYo=;
+ b=e3n1+xfATu25lni1AnYdtxtmja3i+qR+GW8Ps7Q4c87+ZbSl43ptwKWiVJS4BHo9XuqYKVqkUW+r5c9dRMP9ZBLJ7ajO1lf+QfcC8RvrlNhgU9rGHLhOLAAq1+AyLa+dtpCOHzTlSUfOnvO+nZHSNEA6I7AO8udGAFMBQSud2riTNtFSD+Pn+hM/DtChXs2FdLHnM3kIgp1FjPtyF0n9pxns2yGwVbLbdp7WE2u5BXCqBMslFpX8ZJr/5Nz3scbF15hz98/nxnxjvU6Izu3SYBKVjIq6OhnziDa6YMlQ+jcINk4PU+2IKSLs6RJQWQB2+PHQsbS2JuGgGXYqmHI5+A==
+Received: from DUZP191CA0034.EURP191.PROD.OUTLOOK.COM (2603:10a6:10:4f8::11)
+ by AS8PR07MB7878.eurprd07.prod.outlook.com (2603:10a6:20b:394::22) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9275.13; Thu, 30 Oct
- 2025 14:34:59 +0000
-Received: from DB1PEPF000509E2.eurprd03.prod.outlook.com
- (2603:10a6:10:3b:cafe::32) by DU2PR04CA0014.outlook.office365.com
- (2603:10a6:10:3b::19) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9253.19 via Frontend Transport; Thu,
- 30 Oct 2025 14:34:59 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9275.14; Thu, 30 Oct
+ 2025 14:35:02 +0000
+Received: from DB5PEPF00014B97.eurprd02.prod.outlook.com
+ (2603:10a6:10:4f8:cafe::a2) by DUZP191CA0034.outlook.office365.com
+ (2603:10a6:10:4f8::11) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9275.14 via Frontend Transport; Thu,
+ 30 Oct 2025 14:35:00 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 131.228.2.241)
  smtp.mailfrom=nokia-bell-labs.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nokia-bell-labs.com;
@@ -50,12 +50,12 @@ Received-SPF: Pass (protection.outlook.com: domain of nokia-bell-labs.com
  receiver=protection.outlook.com; client-ip=131.228.2.241;
  helo=fihe3nok0734.emea.nsn-net.net; pr=C
 Received: from fihe3nok0734.emea.nsn-net.net (131.228.2.241) by
- DB1PEPF000509E2.mail.protection.outlook.com (10.167.242.52) with Microsoft
+ DB5PEPF00014B97.mail.protection.outlook.com (10.167.8.235) with Microsoft
  SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.9275.10
- via Frontend Transport; Thu, 30 Oct 2025 14:34:58 +0000
+ via Frontend Transport; Thu, 30 Oct 2025 14:35:02 +0000
 Received: from sarah.nbl.nsn-rdnet.net (sarah.nbl.nsn-rdnet.net [10.0.73.150])
-	by fihe3nok0734.emea.nsn-net.net (Postfix) with ESMTP id 494FC200E9;
-	Thu, 30 Oct 2025 16:34:57 +0200 (EET)
+	by fihe3nok0734.emea.nsn-net.net (Postfix) with ESMTP id C519F20094;
+	Thu, 30 Oct 2025 16:35:00 +0200 (EET)
 From: chia-yu.chang@nokia-bell-labs.com
 To: pabeni@redhat.com,
 	edumazet@google.com,
@@ -91,9 +91,9 @@ To: pabeni@redhat.com,
 	Jason_Livingood@comcast.com,
 	vidhi_goel@apple.com
 Cc: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
-Subject: [PATCH v5 net-next 12/14] tcp: accecn: fallback outgoing half link to non-AccECN
-Date: Thu, 30 Oct 2025 15:34:33 +0100
-Message-Id: <20251030143435.13003-13-chia-yu.chang@nokia-bell-labs.com>
+Subject: [PATCH v5 net-next 14/14] tcp: accecn: enable AccECN
+Date: Thu, 30 Oct 2025 15:34:35 +0100
+Message-Id: <20251030143435.13003-15-chia-yu.chang@nokia-bell-labs.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20251030143435.13003-1-chia-yu.chang@nokia-bell-labs.com>
 References: <20251030143435.13003-1-chia-yu.chang@nokia-bell-labs.com>
@@ -106,88 +106,95 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DB1PEPF000509E2:EE_|AM9PR07MB7266:EE_
+X-MS-TrafficTypeDiagnostic: DB5PEPF00014B97:EE_|AS8PR07MB7878:EE_
 Content-Type: text/plain
-X-MS-Office365-Filtering-Correlation-Id: a48a9fd2-d80d-491b-a244-08de17c180c3
+X-MS-Office365-Filtering-Correlation-Id: a7f392b4-4b24-4c31-fb8a-08de17c182d7
 X-LD-Processed: 5d471751-9675-428d-917b-70f44f9630b0,ExtAddr
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
- BCL:0;ARA:13230040|1800799024|376014|7416014|36860700013|82310400026|921020;
+ BCL:0;ARA:13230040|7416014|1800799024|376014|36860700013|82310400026|921020;
 X-Microsoft-Antispam-Message-Info:
- =?us-ascii?Q?U01stFE3B4/sqrngmuCPY/BKfRkYQIjwa+PdaMd+jlPxUzXYyxjERMUHglcY?=
- =?us-ascii?Q?InNge8v+WC/Sh4ra3q1UZpLXI3oOM5IfnhTcugLvenhW27WGODPYoNmCXOV7?=
- =?us-ascii?Q?lb5hCagt02qK7k4LWXIQ/5M4k79wQIibBXy78CByvpFSFKDNW6hKEw4T+/3J?=
- =?us-ascii?Q?1IDiCFwMw7zTqvmga5i6ov1l+mkEzXE6CK6NGL+9eJXAyIqeRN4PKvv1VfKZ?=
- =?us-ascii?Q?Huw7bo9APYGiOt6HW8GyhvqgDXmHFsFM1wtiOxHnSbTdsfMZ6diy/0FL+CQP?=
- =?us-ascii?Q?9vLAzPIqE2L6155nkKDZWUUHmLd69OTov2Y0Af+/l24uCCuKpNTTn0QYY7fX?=
- =?us-ascii?Q?mfVgP/zxmVIOnSmWEco/uxCrDYx0Q7TPlw/Cq7wlUEOttU/9iAzFPUfDPd2t?=
- =?us-ascii?Q?eQ4dco0+wKH1YF5kAJImbsxl+MbiPAkWPmjeMDfSyEB2XSvPjM5hqlVrI1iX?=
- =?us-ascii?Q?aP3yB7QhCrxs6aYirt4dPAv0kH8a8LaDz6myYg+19aeEAw6DATEcYKYcUvE9?=
- =?us-ascii?Q?63KZudcuDJrGt5jm6Jx3qJo+Qa/h1B8P9IIAG+qZizqSJN1gnbms6WJ1mUgA?=
- =?us-ascii?Q?hRcz57LCyk7nZDkOp5F/ityQNQrAYYxQkZZ2BmgqisY0dwZfwm81MFc4ZuV2?=
- =?us-ascii?Q?slFFic8kJeMc3bDaZteXlqK7C4JpiQv+G7uobRNAsYHyLOs5dLxkL6ZWIGma?=
- =?us-ascii?Q?Pyrz8Ojvz1UqlLsd8gnYRbqovGLjqqipjd8XP3CEirJxJBeVEoLMt84YNN9/?=
- =?us-ascii?Q?nPGfQNY5mz22YdzOYrG/lWq8kzNaHIKmYwU+tGpJoZinpDx+2SLbjfKpBwTn?=
- =?us-ascii?Q?xgoC3occ7SpEjgHK/XsFjdxjJ66+VMiMdlh7gBcNtN2aYtTUmA3eGQt0xawg?=
- =?us-ascii?Q?zGkgvoEV8BdnrluQ+RS268PUCc/q6xlJ2mc3hLsF63sWw7hGdl0sD9y9d0k+?=
- =?us-ascii?Q?Aa81qo/SNSAclFFsLFq7h7QA/JOIIMRv+dhcnbET0SE+r4tw3M/CNN6joYFU?=
- =?us-ascii?Q?qLTMPFXNODmIk18e69JZbfP0QDGXHlpfbLd5BsDuZf0AowE73qlYW6T02PRb?=
- =?us-ascii?Q?h2ngP8LT6WIkB1zcTBRiauwCLlO2De0ZaQfFwRY2r+mS2R+m70oLcVKpEbu8?=
- =?us-ascii?Q?ufy1375PO9eu3n+TKKCXHvGlm65KdVOh2VpTDDAHj4TlmRcglvDrGfXFLxK+?=
- =?us-ascii?Q?cY+Di5gijOcv4U/bCvOODZd1I3PYaHubdIoPC61tBJZKMOti6pim2e9m6j+Y?=
- =?us-ascii?Q?3AsUIWPkEO4jGfK64/pgsVhvSA8SvJxguGF00eGO6fuGMUuaYRHKeC17cbK1?=
- =?us-ascii?Q?CYPi6mtb0LEIaHEj9kbkaxZ6PcO6EE/VQBndcHfqa/MSQbYMW4Ac5PCf0AJF?=
- =?us-ascii?Q?N3EfxVhALBUyVZAYI0wCvV96srKejSwlxxplgpBDY0+ourx0udlEGnj1mCqY?=
- =?us-ascii?Q?6xfAQSJZM3Lbdqc+YGZgcLQcq/8dKbq/oK2J+tieIRSXWwaJT8KXtS36yCwA?=
- =?us-ascii?Q?Z3g4HJgZ994arxglWB6gZ2UZ4y+EoH6pt/Slq7X35gwxGt4ogdL6VijDnCiv?=
- =?us-ascii?Q?tE89dHevCj6aEOOvDw6Ny5ObESloti1xw68gCfBO?=
+ =?us-ascii?Q?mYFaIGGQLzor2dycKZ+oTH1YIeMJ3g72b3p/WtFu2suffOmHJtH0Di6lUtRU?=
+ =?us-ascii?Q?xe1di4DuWSVkGuT9GLDBGilBraQ8pion90imI7hfbYT5VdpbN+dWDLoSlL9G?=
+ =?us-ascii?Q?kYWkV66dAcP4E01fmVxVSZOCDmQ+rZtXXR9XhNvdWKPN76jLuNF/FLT/NRda?=
+ =?us-ascii?Q?fZu8OI3xN7uL62Ntwd5N7xmExDbKIgnLR4qcOALn5/pYpTEzy5IgV+XvRaDm?=
+ =?us-ascii?Q?IiY5zwkSVseKGAhoZerirF2b89SpBXgXcqS6fhg4fR0Ii5OyeIBovJPeSwAC?=
+ =?us-ascii?Q?ES0csNxv7KYlyeje2iH9L2Q9RWHYwbBDZaAX9ohwuTYWhgYQ2/k5kTwlvLVY?=
+ =?us-ascii?Q?PvTUJzIfJa77jEIiJcQWj30nknCYGUkVPMzqmIaRTq2mGrZ15EB0czU/dBYk?=
+ =?us-ascii?Q?vtmjsKhUbQchiEvpnlH/j4o1RmeYHccdv/QB+6cuNPTHcikoedOI3UhtnoV+?=
+ =?us-ascii?Q?JTLvZEQ1ZnRbROpqu6kdPQ0VDd2EBIXibNLqYQK/Xx1Fo+7yjU2i1LkR59OD?=
+ =?us-ascii?Q?l0/K18e8ruWji5IXbfBGlS2X2kAeh8PKVojSfmRHMda8h1sHpfY8SUnhe4iA?=
+ =?us-ascii?Q?Z4VyQDnw+fJzzLtAto2SWOXtvuwgd9xpjih3UvVmJJAZY1VYIRF3A0OQfD9W?=
+ =?us-ascii?Q?m5+8mLuEcUWcoZFcSszsEvRmpMi2zWQt+1IueepTLLA059xHO5ahDYY/HGy+?=
+ =?us-ascii?Q?f0yMgiRi9uAi5IaciozbypRlgbhPKTQaZnVRODXDrlK04b+AC0mFsc+QLS8m?=
+ =?us-ascii?Q?Eb6KRRXmD/AHSMXsp5sOGA1QZTal6P+v42c/gRbywnXREkND8zEJbmUZeZXQ?=
+ =?us-ascii?Q?aWeF7gC+NvcFb4uumd8+60/UDVv+Oy0vm+dIACb9r+MyCJuHmnl0Avt5K5n4?=
+ =?us-ascii?Q?uFh3gWQrgTM76g4sf/Zy0dRMC2JY8cjUMZM/GwrqoFDxRCuX+0BhGFQjgaKx?=
+ =?us-ascii?Q?bfbNvDFQ4vatOItqKetPPCK2uxDOiCQki23crDw311/cL9Wlrn9vh2GA522A?=
+ =?us-ascii?Q?B85q3g2qoegxR81qmr/R2Vg2QqnHnInjtAbEMCsigkd0kjO/ZDKW1vODsTtb?=
+ =?us-ascii?Q?RHZ9vPqKQxcVYX92ebZQ/9lG/Hq0+FAix3KjcI74oGvgQOwkmSooqqlB0VvX?=
+ =?us-ascii?Q?fKfKqMCqZaCBNB/znrI/OduVOKM/7IVtg/SKrjeuP+0qlUSefKFIyj1CtF7q?=
+ =?us-ascii?Q?yN67iuiBTNs9TLYddXbBAlhQmb+/1a3CCat+VEQHuwpI3VvXIJWAG3oN+C4x?=
+ =?us-ascii?Q?mQY6I1IMDgrfzhWTxxm6Q8nwG5q4sDHoyXb8pl0bgL5l5zYpgpbk1nGmJMgY?=
+ =?us-ascii?Q?uaQkQjvCrUCWUD482cKhOOhhN5T/AMyf5Dh4ukByh52swslgoj8p8idAOqfW?=
+ =?us-ascii?Q?VKjNfUpwsrloKbbyRpt8ylULLN7y7uIEO7gMMvQyrNNSupqEkS3sqeDBl8kU?=
+ =?us-ascii?Q?bAKxWXHfb7rvqmQsj1vEBmcYEwsyTeUHsjUghokOsVgQl/QhNJBUj8tC9Gi6?=
+ =?us-ascii?Q?i2y5Z6tjan0RFSgZzKKZjezjBwTVYM8H4kQSmTOLJHpXpztsNldxc4/3FqHF?=
+ =?us-ascii?Q?HitjyijMkh1iQQMz9EkPIJbopoCjrKdEIP0EpnbK?=
 X-Forefront-Antispam-Report:
- CIP:131.228.2.241;CTRY:FI;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:fihe3nok0734.emea.nsn-net.net;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(36860700013)(82310400026)(921020);DIR:OUT;SFP:1101;
+ CIP:131.228.2.241;CTRY:FI;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:fihe3nok0734.emea.nsn-net.net;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(7416014)(1800799024)(376014)(36860700013)(82310400026)(921020);DIR:OUT;SFP:1101;
 X-OriginatorOrg: nokia-bell-labs.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Oct 2025 14:34:58.8771
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Oct 2025 14:35:02.3696
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: a48a9fd2-d80d-491b-a244-08de17c180c3
+X-MS-Exchange-CrossTenant-Network-Message-Id: a7f392b4-4b24-4c31-fb8a-08de17c182d7
 X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=5d471751-9675-428d-917b-70f44f9630b0;Ip=[131.228.2.241];Helo=[fihe3nok0734.emea.nsn-net.net]
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TreatMessagesAsInternal-DB1PEPF000509E2.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: TreatMessagesAsInternal-DB5PEPF00014B97.eurprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR07MB7266
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR07MB7878
 
 From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
 
-According to Section 3.2.2.1 of AccECN spec (RFC9768), if the Server
-is in AccECN mode and in SYN-RCVD state, and if it receives a value of
-zero on a pure ACK with SYN=0 and no SACK blocks, for the rest of the
-connection the Server MUST NOT set ECT on outgoing packets and MUST
-NOT respond to AccECN feedback. Nonetheless, as a Data Receiver it
-MUST NOT disable AccECN feedback.
+Enable Accurate ECN negotiation and request for incoming and
+outgoing connection by setting sysctl_tcp_ecn:
+
++==============+===========================================+
+|              |  Highest ECN variant (Accurate ECN, ECN,  |
+|   tcp_ecn    |  or no ECN) to be negotiated & requested  |
+|              +---------------------+---------------------+
+|              | Incoming connection | Outgoing connection |
++==============+=====================+=====================+
+|      0       |        No ECN       |        No ECN       |
+|      1       |         ECN         |         ECN         |
+|      2       |         ECN         |        No ECN       |
++--------------+---------------------+---------------------+
+|      3       |     Accurate ECN    |     Accurate ECN    |
+|      4       |     Accurate ECN    |         ECN         |
+|      5       |     Accurate ECN    |        No ECN       |
++==============+=====================+=====================+
+
+Refer Documentation/networking/ip-sysctl.rst for more details.
 
 Signed-off-by: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
-
 ---
-v3:
-- Remove unnecessary brackets.
----
- include/net/tcp_ecn.h | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ net/ipv4/sysctl_net_ipv4.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/net/tcp_ecn.h b/include/net/tcp_ecn.h
-index 88a328e7bcde..c82b5a35db28 100644
---- a/include/net/tcp_ecn.h
-+++ b/include/net/tcp_ecn.h
-@@ -175,7 +175,9 @@ static inline void tcp_accecn_third_ack(struct sock *sk,
- 	switch (ace) {
- 	case 0x0:
- 		/* Invalid value */
--		tcp_accecn_fail_mode_set(tp, TCP_ACCECN_ACE_FAIL_RECV);
-+		if (!TCP_SKB_CB(skb)->sacked)
-+			tcp_accecn_fail_mode_set(tp, TCP_ACCECN_ACE_FAIL_RECV |
-+						     TCP_ACCECN_OPT_FAIL_RECV);
- 		break;
- 	case 0x7:
- 	case 0x5:
+diff --git a/net/ipv4/sysctl_net_ipv4.c b/net/ipv4/sysctl_net_ipv4.c
+index 6695a6022539..7edba98a91cb 100644
+--- a/net/ipv4/sysctl_net_ipv4.c
++++ b/net/ipv4/sysctl_net_ipv4.c
+@@ -47,7 +47,7 @@ static unsigned int udp_child_hash_entries_max = UDP_HTABLE_SIZE_MAX;
+ static int tcp_plb_max_rounds = 31;
+ static int tcp_plb_max_cong_thresh = 256;
+ static unsigned int tcp_tw_reuse_delay_max = TCP_PAWS_MSL * MSEC_PER_SEC;
+-static int tcp_ecn_mode_max = 2;
++static int tcp_ecn_mode_max = 5;
+ static u32 icmp_errors_extension_mask_all =
+ 	GENMASK_U8(ICMP_ERR_EXT_COUNT - 1, 0);
+ 
 -- 
 2.34.1
 
