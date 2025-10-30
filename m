@@ -1,194 +1,156 @@
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+Received: from mail-il1-f179.google.com (mail-il1-f179.google.com [209.85.166.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F5FE1C2BD
-	for <bpf@vger.kernel.org>; Thu, 30 Oct 2025 00:57:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D32D266A7
+	for <bpf@vger.kernel.org>; Thu, 30 Oct 2025 01:06:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761785844; cv=none; b=TEvAFPY2V97ktWH980LLUmxqp5HcHhSBSwVDBM/QjBSB+2JVFP2IaM3g0IeFkauVIKsLkL+SWkYj6CS7kONH/SWWTl8FZYKn7pgMG3EhE7Npnl2+61W5zkIy4GO4xcm3D/5E5fR7GdSu8qd9EF395yNTIdLr6qaVeYVGg+DrtMQ=
+	t=1761786370; cv=none; b=h0wBCY8HoVeTmznJTT+LjU5SWPl1ifJIdOHH3DlZ8O/OkY+mjz0x+jJ+wpfZru8zUae9fcy8BEgGHznZqaNjV1z+3upJbiGIkwLXtk9dwMNKxnARsrh6QdF/EguNXoh/wGIitQvfIm7KGsUo0hts4WXAEF01tADXfwtpoBiD4GU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761785844; c=relaxed/simple;
-	bh=HCBqT6c9oEmlOq+w8pWXt9F7ZD8iSND1Iy+pqe2VdBk=;
+	s=arc-20240116; t=1761786370; c=relaxed/simple;
+	bh=L8krtgX+6ralJcIjlTbaje2g+J4vDEGDOdySbO0kb5Q=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=nEtFjlUyTga62AuVl9/qhn0wjaLuxzYEpS6zQlPJFJzrWE+OJw8nGMjZldvDJOQBevUzG4EwzVPY7JntthiZw7VCmta51SWzrCQz7U+WyiEnB/NKMiNdYt7se21TuDTbnNM9C5ibrEkefNJ/y0YVCj4ZsuuFUQLaG/l34DMnO+c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WE1r/S04; arc=none smtp.client-ip=209.85.128.54
+	 To:Cc:Content-Type; b=KwwWHBwQOdFGNb2zA2CL0uCpHmXQ0QAsZsNHtzKUTckNVboLYS3tCyPV5476/MhcdamKdhGug6EntLLhU0NSxRTp5SXiSYaRh3UMlCUJ4TCtvwMKJu8ufW0SpMR9SyiBkSCWFFIzmk/luw4q1WwSJSkjy12wQOgrOj2Wn/4s0Js=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XMjLIlyE; arc=none smtp.client-ip=209.85.166.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WE1r/S04"
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4711b95226dso5554565e9.0
-        for <bpf@vger.kernel.org>; Wed, 29 Oct 2025 17:57:22 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XMjLIlyE"
+Received: by mail-il1-f179.google.com with SMTP id e9e14a558f8ab-4330121a885so1971875ab.3
+        for <bpf@vger.kernel.org>; Wed, 29 Oct 2025 18:06:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761785840; x=1762390640; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1761786367; x=1762391167; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=GGOSLQUTALcsgNMy+aMsU9t+nwOQ+f3KSncHX5+6nPo=;
-        b=WE1r/S04nSz74W28OGCOI0BmfUAT2kogRonQADh9WS/Z66leMeeLRGO6EzuRIJohdT
-         v0vseCjtt20JJJXng3o2UWbwhUwq7X+4QAKuX9eI7BLHmUELY9hN6mqHYKeh9HCYiAWk
-         PL3Pwdnl7w556wtaITV+ud8Ujm6tLl9mjbMCH+X+lnXWvn3D8R9IORAvaXXqMI4d3xsZ
-         XLatZTprLU+yo3wPWQGPJuYiszXyFt19mS9LdLe924s74a0Nh5+kZil4jVC+41pGlo6D
-         2eX8s0Y6Cj7KnoDvGXRxuNXBdE8slAjlmxA1GxZXpaTJTBDi0t/KnCRBlLfApU8NTFI5
-         CdjQ==
+        bh=xAObxcR4HKyNDmTkYhPM7UMETIyPvjEyFOejPzT6as0=;
+        b=XMjLIlyE/NnxsRrKXjSvRqV+Ab7g5KWKpvu2nzK+Vu1EHJQIfnq/urXT4kQ/7LlI4x
+         jCjHB0rYrWNl4H4JcXG7fNzgKToG497GBq5I3ZpBsB0v9qGqH/sTp4rJozyXLvfeNSMR
+         MAJgLOGS2iSScR4xPQ3tyki6+pLE+x0aTZDwkcnnX624/JUZ4oHcsCKeMEJinslhyO/k
+         rYe/QbzMRrbr/Hll1p0Mwab6JbzcBT2VEM+oFPU1Tf9qMl0m93BaXszMJsk9FmDW3/Ip
+         ucZ00WgR4u/ybAZJTPj3WpqboXqsJZMctywbjq2GCmTeeMZreAXSOkG1+T4DffB/zRtT
+         1eVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761785840; x=1762390640;
+        d=1e100.net; s=20230601; t=1761786367; x=1762391167;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=GGOSLQUTALcsgNMy+aMsU9t+nwOQ+f3KSncHX5+6nPo=;
-        b=EXQ3xoJ2MLFten0V8NGp+JGndztB5a4egDHZF88zEyD0LnzRwRfGBUKcfwnSIZTVCY
-         VCHqVAV27RUas0poF6OP+VcceuPBTmLeAct+oaDvlWzsu351bXhyJTfH7Ghssuj4OjIH
-         wRWUCbcYnjtK2WQVHUPqrEz2Hjw1LuPdue7i37OiKWastW59GmP/Cn9BoKld29AnlrV5
-         bJxAWTLwRyCGxZMy/+KuhOTkbUNyHanzDj6vHh9nJd4M/Qy+WV6fcPj8N78ZgLmRDxWu
-         pfngbBSeiQ8iEO8l07OLHUhWB64zJzRLqSX1CZ20Odrw/mDHuyBRvgTTenEC+bclebF1
-         PMrQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVD+7o3W/rZE0ZWt9f3XHB8pka+f9FZBKIYgUEIfC8FZDi+ER67GoEOcCBhYTzEaYu9BfI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzWmFqWsbpvbnfly4W1MhB4iUJ22mDDhwP1/RKTCG+gBfwxcF8v
-	Q5v2wxDi7ljWqidb8TeZjkq3y2gWYZ3qVVxv2tGI02tOm1FwecnyNAnPM2RHxoarOAYK5yx6t1s
-	OIj+NMW0ezV1YeRSedkeQWk1gXbYKCLw=
-X-Gm-Gg: ASbGncvzz34u27yS4FkBAeFZDiL4l0/tRQgEkuDl/0OGYKjLgT4gKmiO9NXBNi4FVKX
-	I2Ql26YutunngYQHOThnKHP0yQd3LrgQA0COB5WYq3t5vHX9VvKQv6r8M9fYb3G/LMGflos502O
-	ucNurIcdWkuV8iwhdMJDb739JH2UHRlfXknM+p0tJ0yc+TB/KJtRA2Qwo+Mb9yyP87Myn6fzK3P
-	lY99RO1vIClfdjVL0NvWWal5xw26Ch1Z9B5UApdlFL/kApPpx05I+yr0lp1wOuQckV7/+Vu/ef7
-	/puDIImP/kexhUHfnQ==
-X-Google-Smtp-Source: AGHT+IE8ujPhUrddhGr1ou5jGncEGSlrHU/1FNSJfOObUCYG1pNyel0Awu+5uZ4HHENyvHOHjZC7HyCZC9+zzKwILg8=
-X-Received: by 2002:a05:600c:3d98:b0:46e:36f8:1eb7 with SMTP id
- 5b1f17b1804b1-4771e39f7f7mr33114585e9.10.1761785840454; Wed, 29 Oct 2025
- 17:57:20 -0700 (PDT)
+        bh=xAObxcR4HKyNDmTkYhPM7UMETIyPvjEyFOejPzT6as0=;
+        b=iQpv5VEArLh8K1kKyYQHI3WCwEmDbsRjrCUo7asNdl4V5av4KPZO6HXIOUXi9RVcSz
+         Q0yFDVE8xcxWJNcQ9oQaNg6QYklsD6c7rpL9NayG1Z8RxeKwzCnTyuI+VmhlySyDIdi2
+         /lSNGmEOZokTPUNOZinL1NVkLvaBf5SzzIjQOyR8sLRqjt9FMKM3OZF9P8RAVBubnrjV
+         yiP6nG7jyv2OLeIPITxkITPSgpOtiYoB5O/+nrG2gfPc1BBnaCOwrzze3yJUQZvZdQVf
+         kZC8H6JksanPsW4bS4IcOBBSj5sYFau3d3U0oFuA6vSL5E0L2nYF0R7owVixMxkXg/pY
+         ZW9A==
+X-Gm-Message-State: AOJu0YxbId6WyBx/DI6+bCoUlNtUoD3ivKuw5zBDQFyfuvF4i0Jp9XQQ
+	vLFRYq55wBtZk9rzSzOx44MesIDfMM6kPQyuQmfnK22bFCgJZ1EwpaRbxXzouEhM8GyMQ9nZt3D
+	s/NC+yF6GyTo/eyMGRozHnMXOxGpJcEY=
+X-Gm-Gg: ASbGnctCe6YOn9xtskHMqOT1DMhKFJsNvUAqMSnu340kq/ewsozae9ntJTFuHhbD6QS
+	zT9abZdhvkcg4+g/b+KwoXDbOhJHR00k9hkq80+96mV7B9samnw6H/8tjk3I2a9rkpeYZUFKwwU
+	mFXM7E1yGObzZTzOYojWMkKWKef0oL3vgwjcY72GwlqhoVHX71kQ4anjeITu84/y7H8xJRVYsee
+	qtrknoDyNyhX7qaaShrxyfV3BHiDl+31VTMj0FTbowv4qrXPYrmEaTeUI+CiP6bfNHHFw==
+X-Google-Smtp-Source: AGHT+IGyU+e2TKks/GzIgeq6nuTulBw9VRG+BFu1zdSqlOgbKI7LBQM+eWqxleIKd9dXVO254PS20cDRmLtWHNoZhK8=
+X-Received: by 2002:a05:6e02:148a:b0:430:a183:85 with SMTP id
+ e9e14a558f8ab-433014dabcfmr21550535ab.1.1761786367485; Wed, 29 Oct 2025
+ 18:06:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251026100159.6103-1-laoar.shao@gmail.com> <20251026100159.6103-7-laoar.shao@gmail.com>
- <CAADnVQKziFmRiVjDpjtYcmxU74VjPg4Pqn2Ax=O2SsfjLLy5Zw@mail.gmail.com> <CALOAHbD+9gxukoZ3OQvH2fNH2Ff+an+Dx-fzx_+mhb=8fZZ+sw@mail.gmail.com>
-In-Reply-To: <CALOAHbD+9gxukoZ3OQvH2fNH2Ff+an+Dx-fzx_+mhb=8fZZ+sw@mail.gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Wed, 29 Oct 2025 17:57:09 -0700
-X-Gm-Features: AWmQ_bl2FRWYQe1q3u6mxOkWzHju5ssI-I6pfEKXXZzZ5UwL_V6B6USXxdaH9OQ
-Message-ID: <CAADnVQK9kp_5zh0gYvXdJ=3MSuXTbmZT+cah5uhZiGk5qYfckw@mail.gmail.com>
-Subject: Re: [PATCH v12 mm-new 06/10] mm: bpf-thp: add support for global mode
-To: Yafang Shao <laoar.shao@gmail.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	David Hildenbrand <david@redhat.com>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Zi Yan <ziy@nvidia.com>, 
-	Liam Howlett <Liam.Howlett@oracle.com>, npache@redhat.com, ryan.roberts@arm.com, 
-	dev.jain@arm.com, Johannes Weiner <hannes@cmpxchg.org>, usamaarif642@gmail.com, 
-	gutierrez.asier@huawei-partners.com, Matthew Wilcox <willy@infradead.org>, 
-	Amery Hung <ameryhung@gmail.com>, David Rientjes <rientjes@google.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Barry Song <21cnbao@gmail.com>, 
-	Shakeel Butt <shakeel.butt@linux.dev>, Tejun Heo <tj@kernel.org>, lance.yang@linux.dev, 
-	Randy Dunlap <rdunlap@infradead.org>, Chris Mason <clm@meta.com>, bpf <bpf@vger.kernel.org>, 
-	linux-mm <linux-mm@kvack.org>
+References: <20251028183032.5350-1-fmancera@suse.de> <20251028183032.5350-2-fmancera@suse.de>
+In-Reply-To: <20251028183032.5350-2-fmancera@suse.de>
+From: Jason Xing <kerneljasonxing@gmail.com>
+Date: Thu, 30 Oct 2025 09:05:31 +0800
+X-Gm-Features: AWmQ_bkuS7qmFAAnlHJ8e34dvDD7tihPHsebYl69q3OqYQP549CHRnIRSzkggtA
+Message-ID: <CAL+tcoD4es0WLbZRF+OhrfrL3XrkDw1rnr80bBxFJn9zZBJWGg@mail.gmail.com>
+Subject: Re: [PATCH 2/2 bpf v2] xsk: avoid data corruption on cq descriptor number
+To: Fernando Fernandez Mancera <fmancera@suse.de>
+Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, magnus.karlsson@intel.com, 
+	maciej.fijalkowski@intel.com, sdf@fomichev.me, fw@strlen.de
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Oct 28, 2025 at 7:14=E2=80=AFPM Yafang Shao <laoar.shao@gmail.com> =
-wrote:
+On Wed, Oct 29, 2025 at 2:30=E2=80=AFAM Fernando Fernandez Mancera
+<fmancera@suse.de> wrote:
 >
-> On Wed, Oct 29, 2025 at 9:33=E2=80=AFAM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
-> >
-> > On Sun, Oct 26, 2025 at 3:03=E2=80=AFAM Yafang Shao <laoar.shao@gmail.c=
-om> wrote:
-> > >
-> > > The per-process BPF-THP mode is unsuitable for managing shared resour=
-ces
-> > > such as shmem THP and file-backed THP. This aligns with known cgroup
-> > > limitations for similar scenarios [0].
-> > >
-> > > Introduce a global BPF-THP mode to address this gap. When registered:
-> > > - All existing per-process instances are disabled
-> > > - New per-process registrations are blocked
-> > > - Existing per-process instances remain registered (no forced unregis=
-tration)
-> > >
-> > > The global mode takes precedence over per-process instances. Updates =
-are
-> > > type-isolated: global instances can only be updated by new global
-> > > instances, and per-process instances by new per-process instances.
-> >
-> > ...
-> >
-> > >         spin_lock(&thp_ops_lock);
-> > > -       /* Each process is exclusively managed by a single BPF-THP. *=
-/
-> > > -       if (rcu_access_pointer(mm->bpf_mm.bpf_thp)) {
-> > > +       /* Each process is exclusively managed by a single BPF-THP.
-> > > +        * Global mode disables per-process instances.
-> > > +        */
-> > > +       if (rcu_access_pointer(mm->bpf_mm.bpf_thp) || rcu_access_poin=
-ter(bpf_thp_global)) {
-> > >                 err =3D -EBUSY;
-> > >                 goto out;
-> > >         }
-> >
-> > You didn't address the issue and instead doubled down
-> > on this broken global approach.
-> >
-> > This bait-and-switch patchset is frankly disingenuous.
-> > 'lets code up some per-mm hack, since people will hate it anyway,
-> > and I'm not going to use it either, and add this global mode
-> > as a fake "fallback"...'
-> >
-> > The way the previous thread evolved and this followup hack
-> > I don't see a genuine desire to find a solution.
-> > Just relentless push for global mode.
-> >
-> > Nacked-by: Alexei Starovoitov <ast@kernel.org>
-> >
-> > Please carry it in all future patches.
+> Since commit 30f241fcf52a ("xsk: Fix immature cq descriptor
+> production"), the descriptor number is stored in skb control block and
+> xsk_cq_submit_addr_locked() relies on it to put the umem addrs onto
+> pool's completion queue.
 >
-> To move forward, I'm happy to set the global mode aside for now and
-> potentially drop it in the next version. I'd really like to hear your
-> perspective on the per-process mode. Does this implementation meet
-> your needs?
+> skb control block shouldn't be used for this purpose as after transmit
+> xsk doesn't have control over it and other subsystems could use it. This
+> leads to the following kernel panic due to a NULL pointer dereference.
+>
+>  BUG: kernel NULL pointer dereference, address: 0000000000000000
+>  #PF: supervisor read access in kernel mode
+>  #PF: error_code(0x0000) - not-present page
+>  PGD 0 P4D 0
+>  Oops: Oops: 0000 [#1] SMP NOPTI
+>  CPU: 2 UID: 1 PID: 927 Comm: p4xsk.bin Not tainted 6.16.12+deb14-cloud-a=
+md64 #1 PREEMPT(lazy)  Debian 6.16.12-1
+>  Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.17.0-debia=
+n-1.17.0-1 04/01/2014
+>  RIP: 0010:xsk_destruct_skb+0xd0/0x180
+>  [...]
+>  Call Trace:
+>   <IRQ>
+>   ? napi_complete_done+0x7a/0x1a0
+>   ip_rcv_core+0x1bb/0x340
+>   ip_rcv+0x30/0x1f0
+>   __netif_receive_skb_one_core+0x85/0xa0
+>   process_backlog+0x87/0x130
+>   __napi_poll+0x28/0x180
+>   net_rx_action+0x339/0x420
+>   handle_softirqs+0xdc/0x320
+>   ? handle_edge_irq+0x90/0x1e0
+>   do_softirq.part.0+0x3b/0x60
+>   </IRQ>
+>   <TASK>
+>   __local_bh_enable_ip+0x60/0x70
+>   __dev_direct_xmit+0x14e/0x1f0
+>   __xsk_generic_xmit+0x482/0xb70
+>   ? __remove_hrtimer+0x41/0xa0
+>   ? __xsk_generic_xmit+0x51/0xb70
+>   ? _raw_spin_unlock_irqrestore+0xe/0x40
+>   xsk_sendmsg+0xda/0x1c0
+>   __sys_sendto+0x1ee/0x200
+>   __x64_sys_sendto+0x24/0x30
+>   do_syscall_64+0x84/0x2f0
+>   ? __pfx_pollwake+0x10/0x10
+>   ? __rseq_handle_notify_resume+0xad/0x4c0
+>   ? restore_fpregs_from_fpstate+0x3c/0x90
+>   ? switch_fpu_return+0x5b/0xe0
+>   ? do_syscall_64+0x204/0x2f0
+>   ? do_syscall_64+0x204/0x2f0
+>   ? do_syscall_64+0x204/0x2f0
+>   entry_SYSCALL_64_after_hwframe+0x76/0x7e
+>   </TASK>
+>  [...]
+>  Kernel panic - not syncing: Fatal exception in interrupt
+>  Kernel Offset: 0x1c000000 from 0xffffffff81000000 (relocation range: 0xf=
+fffffff80000000-0xffffffffbfffffff)
+>
+> Use the skb XDP extension to store the number of cq descriptors along
+> with a list of umem addresses.
+>
+> Fixes: 30f241fcf52a ("xsk: Fix immature cq descriptor production")
 
-Attaching st_ops to task_struct or to mm_struct is a can of worms.
-With cgroup-bpf we went through painful bugs with lifetime
-of cgroup vs bpf, dying cgroups, wq deadlock, etc. All these
-problems are behind us. With st_ops in mm_struct it will be more
-painful. I'd rather not go that route.
+It might be off topic a bit. I keep wondering if we can find another
+solution to fix the issue that the above patches tries to fix: how to
+avoid the wrong fallback in that corner case. It's unlikely to happen
+but the cost of correcting it is high because of adding memory
+allocation in the hot path and freeing memory when the irq is disabled
+in the irq context... Sure, for the latter, we can implement a
+workqueue to handle this to mitigate the impact. Here I have no
+intention of expanding another different topic.
 
-And revist cgroup instead, since you were way too quick
-to accept the pushback because all you wanted is global mode.
+Adding additional memory allocation or something like that is really
+not a promising direction we should take. In high performance features
+like copy mode in xsk, the biggest challenge is memory operations and
+the second one is various locks.
 
-The main reason for pushback was:
-"
-Cgroup was designed for resource management not for grouping processes and
-tune those processes
-"
-
-which was true when cgroup-v2 was designed, but that ship sailed
-years ago when we introduced cgroup-bpf.
-None of the progs are doing resource management and lots of infrastructure,
-container management, and open source projects use cgroup-bpf
-as a grouping of processes. bpf progs attached to cgroup/hook tuple
-only care about processes within that cgroup. No resource management.
-See __cgroup_bpf_check_dev_permission or __cgroup_bpf_run_filter_sysctl
-and others.
-The path is current->cgroup->bpf_progs and progs do exactly
-what cgroup wasn't designed to do. They tune a set of processes.
-
-You should do the same.
-
-Also I really don't see a compelling use case for bpf in THP.
-Your selftest is beyond primitive:
-+int pmd_order;
-+
-+SEC("struct_ops/thp_get_order")
-+int BPF_PROG(thp_not_eligible, struct vm_area_struct *vma, enum tva_type t=
-ype,
-+     unsigned long orders)
-+{
-+ /* THPeligible in /proc/pid/smaps is 0 */
-+ if (type =3D=3D TVA_SMAPS)
-+ return 0;
-+ return pmd_order;
-+}
-hard code this thing. Don't bother with bpf.
+Thanks,
+Jason
