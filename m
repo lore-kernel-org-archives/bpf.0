@@ -1,38 +1,38 @@
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F89030F818;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE64C3115BD;
 	Fri, 31 Oct 2025 21:21:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761945694; cv=none; b=euI9EJzmE6e4ZNakPwY8kPIaKRjKRd5aRcpONLM+w7i/zbsJRfoar1AcPmwxF9czg/J1bLMiBMwEx0cnoLtk3kfMgDjI9Aq59kXj/sZ1uMEvPxsYtD2m9kR0t6zynGyra1wCar4+uLwJbM9oHbFqQhFwuuuPS+s0MD8WCllPsaI=
+	t=1761945694; cv=none; b=jJizvW1PxGA+hA4wmlVBmcT+UCNws/8KBSzJaJtOnoGhch4cD+TYcXNT6FUtQm28VNEfpXPrTM4zzgPqCADSKRsy8URKanUnK7h+gSCkTjmdXwxtIVMSbicGScDWzXhnS5aG5BPAoe8oR7sGhIO5+sFyxKup4KBbF0t9tYroSOc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1761945694; c=relaxed/simple;
-	bh=snQ0neZMq/SrCCtySQYfezkAXeMFeR8qnBAZCKTrUWo=;
+	bh=i4dIoDewLy7YW/sa/Jh3PSwK95lGlz1O/NE1iVYybbA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=MxPKthm5z+HpCgf9eVj4OwLcEXRCgak56FblvzINj5V1sH7U8wiEk21zKPgu/uP3PlF01NJChIKsyBfMj1Fdc2qOrtADkvx8d0Yo2idYlr8Mt9ky1Snxze68xjpv+rPd2P6LhngQghVX+8v2WLn6nve76y4is+mzYwiiFQBDvfA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=lhYmRIEV; arc=none smtp.client-ip=213.133.104.62
+	 MIME-Version; b=X/h1el+zi5EJ2FxSgh2ob3Zvv06Agdrc1/9ouPu7IwcWauW003FE3OVXBTtWXoXJ44uSzruq0kJ2CUkZJxAFyyHk7AYuKZtzMh+WtmXmHrQEfp5jx3djX44vc2Co+dfrxfhbWImIVDa+IqCAHZnr1/3xRu+HKb6SL9Dg1pEY/O4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=U1bNwOTs; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="lhYmRIEV"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="U1bNwOTs"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
 	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
 	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=PXKETdnd9ka6Kgd7Df8Y20jvIe3AAmvb30pim1es7Bo=; b=lhYmRIEV0PppyHSv90WnGWjI8E
-	YwCgaknWY000E/BIn6cnvpJe+ybeFBHblYYummr/+jllmn+8fc1PDyJmR+ExNOPXmhN1nRvxaclTC
-	49P6HkLS4w3uz3Wh9cyPnSypaoZV7TiD0PiqgI169Vp8RaMq8Rn+I3M/wv1RimeIEICWM/UacO5r3
-	n9ybe3Zs1emAxXsIWVd/MB4JHh5pkFR8h4t/ml44XAguSWuWTq3G2EhDDB7RFJlhhYS6aMGRuYXkZ
-	xM9nMRka2bf2aq4P3Bsz+1rYYaa6rgPIMSMyE50BM9ENq9S0sdCllRsWBRCUY+Yi3MIxtFzIW7z3G
-	3p8ya53A==;
+	bh=KenxuivXkNoYU9PbXnX/DAtkA7cYSat4FhYUdAY9f00=; b=U1bNwOTszX+oe+eIDwBZy/H7U2
+	l6UewCzAnJO3je/jYwSCJPvgB8DWyqP/foYFTpIH5kZTE9r5jwnuTM4tp+VaHhEHaO0ZnuWov15hh
+	jiFz3gAXBq7qTnW8o9MX2dXwuQVQgS0KsDWIPERYyA5s9I545igf+ZTUHLpk0JQBFG0zV7MvFEWvh
+	+zeuHHy7GBgKMT8GZ7NqRbH0pjXzy58tiLqlWxLOIfy875rIpcf6Of5muVQ0hdT9amcoGv3dlGHZi
+	GlXah7x/wzexf5+7+DQH4OcbpNDkFDVi6fwiqZ9l1M9Dp++q8zKz5FXn/Lf6gsHeWy7AdCJgIsCrd
+	2lDezd/A==;
 Received: from localhost ([127.0.0.1])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1vEwYZ-0005cW-0O;
-	Fri, 31 Oct 2025 22:21:11 +0100
+	id 1vEwYh-0005ea-2Q;
+	Fri, 31 Oct 2025 22:21:19 +0100
 From: Daniel Borkmann <daniel@iogearbox.net>
 To: netdev@vger.kernel.org
 Cc: bpf@vger.kernel.org,
@@ -51,9 +51,9 @@ Cc: bpf@vger.kernel.org,
 	toke@redhat.com,
 	yangzhenze@bytedance.com,
 	wangdongdong.6@bytedance.com
-Subject: [PATCH net-next v4 05/14] net: Proxy net_mp_{open,close}_rxq for mapped queues
-Date: Fri, 31 Oct 2025 22:20:54 +0100
-Message-ID: <20251031212103.310683-6-daniel@iogearbox.net>
+Subject: [PATCH net-next v4 13/14] netkit: Add io_uring zero-copy support for TCP
+Date: Fri, 31 Oct 2025 22:21:02 +0100
+Message-ID: <20251031212103.310683-14-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20251031212103.310683-1-daniel@iogearbox.net>
 References: <20251031212103.310683-1-daniel@iogearbox.net>
@@ -68,173 +68,103 @@ X-Virus-Scanned: Clear (ClamAV 1.0.9/27809/Fri Oct 31 10:42:21 2025)
 
 From: David Wei <dw@davidwei.uk>
 
-When a process in a container wants to setup a memory provider, it will
-use the virtual netdev and a mapped rxq, and call net_mp_{open,close}_rxq
-to try and restart the queue. At this point, proxy the queue restart on
-the real rxq in the physical netdev.
+This adds the last missing bit to netkit for supporting io_uring with
+zero-copy mode [0]. Up until this point it was not possible to consume
+the latter out of containers or Kubernetes Pods where applications are
+in their own network namespace.
 
-For memory providers (io_uring zero-copy rx and devmem), it causes the
-real rxq in the physical netdev to be filled from a memory provider that
-has DMA mapped memory from a process within a container.
+Thus, as a last missing bit, implement ndo_queue_get_dma_dev() in netkit
+to return the physical device of the real rxq for DMA. This allows memory
+providers like io_uring zero-copy or devmem to bind to the physically
+mapped rxq in netkit.
+
+io_uring example with eth0 being a physical device with 16 queues where
+netkit is bound to the last queue, iou-zcrx.c is binary from selftests.
+Flow steering to that queue is based on the service VIP:port of the
+server utilizing io_uring:
+
+  # ethtool -X eth0 start 0 equal 15
+  # ethtool -X eth0 start 15 equal 1 context new
+  # ethtool --config-ntuple eth0 flow-type tcp4 dst-ip 1.2.3.4 dst-port 5000 action 15
+  # ip netns add foo
+  # ip link add type netkit peer numrxqueues 2
+  # ./pyynl/cli.py --spec ~/netlink/specs/netdev.yaml \
+                   --do bind-queue \
+                   --json "{"src-ifindex": $(ifindex eth0), "src-queue-id": 15, \
+                            "dst-ifindex": $(ifindex nk0), "queue-type": "rx"}"
+  {'dst-queue-id': 1}
+  # ip link set nk0 netns foo
+  # ip link set nk1 up
+  # ip netns exec foo ip link set lo up
+  # ip netns exec foo ip link set nk0 up
+  # ip netns exec foo ip addr add 1.2.3.4/32 dev nk0
+  [ ... setup routing etc to get external traffic into the netns ... ]
+  # ip netns exec foo ./iou-zcrx -s -p 5000 -i nk0 -q 1
+
+Remote io_uring client:
+
+  # ./iou-zcrx -c -h 1.2.3.4 -p 5000 -l 12840 -z 65536
+
+We have tested the above against a Broadcom BCM957504 (bnxt_en)
+100G NIC, supporting TCP header/data split.
+
+Similarly, this also works for devmem which we tested using ncdevmem:
+
+  # ip netns exec foo ./ncdevmem -s 1.2.3.4 -l -p 5000 -f nk0 -t 1 -q 1
+
+And on the remote client:
+
+  # ./ncdevmem -s 1.2.3.4 -p 5000 -f eth0
+
+For Cilium, the plan is to open up support for the various memory providers
+for regular Kubernetes Pods when Cilium is configured with netkit datapath
+mode.
 
 Signed-off-by: David Wei <dw@davidwei.uk>
 Co-developed-by: Daniel Borkmann <daniel@iogearbox.net>
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 Reviewed-by: Nikolay Aleksandrov <razor@blackwall.org>
+Link: https://kernel-recipes.org/en/2024/schedule/efficient-zero-copy-networking-using-io_uring [0]
 ---
- include/net/page_pool/memory_provider.h |  4 +-
- net/core/netdev_rx_queue.c              | 55 +++++++++++++++++--------
- 2 files changed, 39 insertions(+), 20 deletions(-)
+ drivers/net/netkit.c | 18 +++++++++++++++++-
+ 1 file changed, 17 insertions(+), 1 deletion(-)
 
-diff --git a/include/net/page_pool/memory_provider.h b/include/net/page_pool/memory_provider.h
-index ada4f968960a..b6f811c3416b 100644
---- a/include/net/page_pool/memory_provider.h
-+++ b/include/net/page_pool/memory_provider.h
-@@ -23,12 +23,12 @@ bool net_mp_niov_set_dma_addr(struct net_iov *niov, dma_addr_t addr);
- void net_mp_niov_set_page_pool(struct page_pool *pool, struct net_iov *niov);
- void net_mp_niov_clear_page_pool(struct net_iov *niov);
+diff --git a/drivers/net/netkit.c b/drivers/net/netkit.c
+index 2871d8b08f6d..f46b21f18700 100644
+--- a/drivers/net/netkit.c
++++ b/drivers/net/netkit.c
+@@ -282,6 +282,21 @@ static const struct ethtool_ops netkit_ethtool_ops = {
+ 	.get_channels		= netkit_get_channels,
+ };
  
--int net_mp_open_rxq(struct net_device *dev, unsigned ifq_idx,
-+int net_mp_open_rxq(struct net_device *dev, unsigned int rxq_idx,
- 		    struct pp_memory_provider_params *p);
- int __net_mp_open_rxq(struct net_device *dev, unsigned int rxq_idx,
- 		      const struct pp_memory_provider_params *p,
- 		      struct netlink_ext_ack *extack);
--void net_mp_close_rxq(struct net_device *dev, unsigned ifq_idx,
-+void net_mp_close_rxq(struct net_device *dev, unsigned int rxq_idx,
- 		      struct pp_memory_provider_params *old_p);
- void __net_mp_close_rxq(struct net_device *dev, unsigned int rxq_idx,
- 			const struct pp_memory_provider_params *old_p);
-diff --git a/net/core/netdev_rx_queue.c b/net/core/netdev_rx_queue.c
-index 889b7382cdb6..0e43254b64cd 100644
---- a/net/core/netdev_rx_queue.c
-+++ b/net/core/netdev_rx_queue.c
-@@ -174,49 +174,63 @@ int __net_mp_open_rxq(struct net_device *dev, unsigned int rxq_idx,
- 		      const struct pp_memory_provider_params *p,
- 		      struct netlink_ext_ack *extack)
++static struct device *netkit_queue_get_dma_dev(struct net_device *dev, int idx)
++{
++	struct netdev_rx_queue *rxq, *peer_rxq;
++	unsigned int peer_idx;
++
++	rxq = __netif_get_rx_queue(dev, idx);
++	if (!rxq->peer)
++		return NULL;
++
++	peer_rxq = rxq->peer;
++	peer_idx = get_netdev_rx_queue_index(peer_rxq);
++
++	return netdev_queue_get_dma_dev(peer_rxq->dev, peer_idx);
++}
++
+ static int netkit_queue_create(struct net_device *dev, int *idx)
  {
-+	struct net_device *orig_dev = dev;
- 	struct netdev_rx_queue *rxq;
- 	int ret;
- 
- 	if (!netdev_need_ops_lock(dev))
- 		return -EOPNOTSUPP;
--
- 	if (rxq_idx >= dev->real_num_rx_queues) {
- 		NL_SET_ERR_MSG(extack, "rx queue index out of range");
- 		return -ERANGE;
- 	}
--	rxq_idx = array_index_nospec(rxq_idx, dev->real_num_rx_queues);
- 
-+	rxq_idx = array_index_nospec(rxq_idx, dev->real_num_rx_queues);
-+	rxq = netif_get_rx_queue_peer_locked(&dev, &rxq_idx);
-+	if (!rxq) {
-+		NL_SET_ERR_MSG(extack, "rx queue peered to a virtual netdev");
-+		return -EBUSY;
-+	}
-+	if (!dev->dev.parent) {
-+		NL_SET_ERR_MSG(extack, "rx queue is mapped to a virtual netdev");
-+		ret = -EBUSY;
-+		goto out;
-+	}
- 	if (dev->cfg->hds_config != ETHTOOL_TCP_DATA_SPLIT_ENABLED) {
- 		NL_SET_ERR_MSG(extack, "tcp-data-split is disabled");
--		return -EINVAL;
-+		ret = -EINVAL;
-+		goto out;
- 	}
- 	if (dev->cfg->hds_thresh) {
- 		NL_SET_ERR_MSG(extack, "hds-thresh is not zero");
--		return -EINVAL;
-+		ret = -EINVAL;
-+		goto out;
- 	}
- 	if (dev_xdp_prog_count(dev)) {
- 		NL_SET_ERR_MSG(extack, "unable to custom memory provider to device with XDP program attached");
--		return -EEXIST;
-+		ret = -EEXIST;
-+		goto out;
- 	}
--
--	rxq = __netif_get_rx_queue(dev, rxq_idx);
- 	if (rxq->mp_params.mp_ops) {
- 		NL_SET_ERR_MSG(extack, "designated queue already memory provider bound");
--		return -EEXIST;
-+		ret = -EEXIST;
-+		goto out;
- 	}
- #ifdef CONFIG_XDP_SOCKETS
- 	if (rxq->pool) {
- 		NL_SET_ERR_MSG(extack, "designated queue already in use by AF_XDP");
--		return -EBUSY;
-+		ret = -EBUSY;
-+		goto out;
- 	}
- #endif
--
- 	rxq->mp_params = *p;
- 	ret = netdev_rx_queue_restart(dev, rxq_idx);
- 	if (ret) {
- 		rxq->mp_params.mp_ops = NULL;
- 		rxq->mp_params.mp_priv = NULL;
- 	}
-+out:
-+	netif_put_rx_queue_peer_locked(orig_dev, dev);
- 	return ret;
+ 	struct netkit *nk = netkit_priv(dev);
+@@ -308,7 +323,8 @@ static int netkit_queue_create(struct net_device *dev, int *idx)
  }
  
-@@ -231,38 +245,43 @@ int net_mp_open_rxq(struct net_device *dev, unsigned int rxq_idx,
- 	return ret;
- }
+ static const struct netdev_queue_mgmt_ops netkit_queue_mgmt_ops = {
+-	.ndo_queue_create = netkit_queue_create,
++	.ndo_queue_get_dma_dev		= netkit_queue_get_dma_dev,
++	.ndo_queue_create		= netkit_queue_create,
+ };
  
--void __net_mp_close_rxq(struct net_device *dev, unsigned int ifq_idx,
-+void __net_mp_close_rxq(struct net_device *dev, unsigned int rxq_idx,
- 			const struct pp_memory_provider_params *old_p)
- {
-+	struct net_device *orig_dev = dev;
- 	struct netdev_rx_queue *rxq;
- 	int err;
- 
--	if (WARN_ON_ONCE(ifq_idx >= dev->real_num_rx_queues))
-+	if (WARN_ON_ONCE(rxq_idx >= dev->real_num_rx_queues))
- 		return;
- 
--	rxq = __netif_get_rx_queue(dev, ifq_idx);
-+	rxq = netif_get_rx_queue_peer_locked(&dev, &rxq_idx);
-+	if (WARN_ON_ONCE(!rxq))
-+		return;
- 
- 	/* Callers holding a netdev ref may get here after we already
- 	 * went thru shutdown via dev_memory_provider_uninstall().
- 	 */
- 	if (dev->reg_state > NETREG_REGISTERED &&
- 	    !rxq->mp_params.mp_ops)
--		return;
-+		goto out;
- 
- 	if (WARN_ON_ONCE(rxq->mp_params.mp_ops != old_p->mp_ops ||
- 			 rxq->mp_params.mp_priv != old_p->mp_priv))
--		return;
-+		goto out;
- 
- 	rxq->mp_params.mp_ops = NULL;
- 	rxq->mp_params.mp_priv = NULL;
--	err = netdev_rx_queue_restart(dev, ifq_idx);
-+	err = netdev_rx_queue_restart(dev, rxq_idx);
- 	WARN_ON(err && err != -ENETDOWN);
-+out:
-+	netif_put_rx_queue_peer_locked(orig_dev, dev);
- }
- 
--void net_mp_close_rxq(struct net_device *dev, unsigned ifq_idx,
-+void net_mp_close_rxq(struct net_device *dev, unsigned int rxq_idx,
- 		      struct pp_memory_provider_params *old_p)
- {
- 	netdev_lock(dev);
--	__net_mp_close_rxq(dev, ifq_idx, old_p);
-+	__net_mp_close_rxq(dev, rxq_idx, old_p);
- 	netdev_unlock(dev);
- }
+ static struct net_device *netkit_alloc(struct nlattr *tb[],
 -- 
 2.43.0
 
