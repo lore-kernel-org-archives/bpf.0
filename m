@@ -1,101 +1,124 @@
-Received: from out-183.mta0.migadu.com (out-183.mta0.migadu.com [91.218.175.183])
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBC6C21CC4D
-	for <bpf@vger.kernel.org>; Fri, 31 Oct 2025 19:29:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FC8A30CD98;
+	Fri, 31 Oct 2025 21:21:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761938948; cv=none; b=Dcpm3GB240KzenOPd0EITYhs/jua0FYCLSX3++r+bCNnIngySqKm9S8keWd2tmZdYA3JPHp+i7E00Irr6ZjuPoW2ylAtoiUBLkJUeYANy4qs0NOjT3PrJua8hJP47QIG6/UEaKeXaUjnmQjZSvlSW5hKUW6VupDp8+9ZD95SWiU=
+	t=1761945693; cv=none; b=ogOvPae8qex7fnBbkjJ2N280SWJRdsqBBpl2STAHrVBU92rX2x5l6NtP0MLasT7NQz+zGPgTMV0bzlRqkNd6b2RSHOsVWwpQc/bsAkqjotqKjTTnwCXlIh0v9mke4jJ3N/pGNd2GFAE/DkHoh6zPfi/Hh262E+h9TtQ8BZ9JENc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761938948; c=relaxed/simple;
-	bh=tap3GZK35XqIeGc0MtuZbkLTyyOpeW4BuzXhKgfHbG4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kZknc/Ys2PMj0VvdGHBwZwkc0+o3GYXWLDFkoDAAooHYIAciF9uzgHAHrqdMHeKzWpw0z7/w8o0whB5E6ELrDNfSairaLGtEMq+EtQnAsHunudR76Mn6lL/LP1n+p64JXyH6JH7R6jpCM870r5vKqRuiMnr1z4VPNuhNiLYJcGk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=IEXhEahv; arc=none smtp.client-ip=91.218.175.183
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1761945693; c=relaxed/simple;
+	bh=Wu73lsr+AIZIozIAMk5uGbZq6C/TZ5dikIj4bVrKwFY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=sEbWUMGkkhHDQnqZ46woR/LiVi7OrDiWfHtVFcpQJoPmXhQcJu+o3SXjBcjw+LFZ7z5kGtPUPhPyz7Avbxw6YU9kZFt1+Z6Fbzb4o/+JvEvNrkJRhInHkXmvwl1/MJEH4EcXbGJwKbrbMHk5zLvWesTypu7dUtHFC+Lcfp0DT0U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=MJmD1kJu; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="IEXhEahv"
-Message-ID: <d886e631-851b-4e2f-aecb-ecdb541dfedc@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1761938938;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=8D2DjveBXCBvaI02wp6eCLUtpmu3etH8CmtWre82fK8=;
-	b=IEXhEahvBzCb9dsDqryxWKPeJMso0ZXHQY9gEyyNpqyl2hWF5u4qhEzAr0JRfRwCLqCIl1
-	HeCAPFGpEsGQIA//gcpJQ0XzjPttZU94W4D7OjE6FZ446D8MMTQ5ZLa0qTB/iNnEkJvQ9I
-	y+RDvv0IKt3SNjrcHkkaw2+ROSwlSv8=
-Date: Fri, 31 Oct 2025 12:28:50 -0700
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="MJmD1kJu"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
+	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
+	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=CC9GnH+IgpH+RWxzO9qvI21eQ7uf77c7n05WM9K2QGo=; b=MJmD1kJujGikbxfuFpQ2iEMPZR
+	cJymLatYgM+CX+BeD+LF8trau0VYcwVtXx1MRbJoBNHHz7JCHgn65LSTJxnQSrI8uLpn9JbedeLnJ
+	P4E5Jj+bb59PHIcIg6Dmt7mzaF8Y6i0cywnqdmre2QJHPyt39kHaEF4i4BYLm/zFxjMPtTOFdlR6f
+	wbEg5vVCA/DbPB4+wpFWQaXQXdSIlCoexwPG98lDrAV0eUvXfHJmTw2FxYjsAWCZ8EumJwD+UoatF
+	yt/Gq7wfzsfvXO9A0s7HRjLnDcaQiBLc4EM+4TdRSBnsPeEgdtLa08j7Sg7Z+LcCJwqTTXXDVLV4G
+	zHoC9rkA==;
+Received: from localhost ([127.0.0.1])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1vEwYb-0005dH-11;
+	Fri, 31 Oct 2025 22:21:13 +0100
+From: Daniel Borkmann <daniel@iogearbox.net>
+To: netdev@vger.kernel.org
+Cc: bpf@vger.kernel.org,
+	kuba@kernel.org,
+	davem@davemloft.net,
+	razor@blackwall.org,
+	pabeni@redhat.com,
+	willemb@google.com,
+	sdf@fomichev.me,
+	john.fastabend@gmail.com,
+	martin.lau@kernel.org,
+	jordan@jrife.io,
+	maciej.fijalkowski@intel.com,
+	magnus.karlsson@intel.com,
+	dw@davidwei.uk,
+	toke@redhat.com,
+	yangzhenze@bytedance.com,
+	wangdongdong.6@bytedance.com
+Subject: [PATCH net-next v4 07/14] xsk: Extend xsk_rcv_check validation
+Date: Fri, 31 Oct 2025 22:20:56 +0100
+Message-ID: <20251031212103.310683-8-daniel@iogearbox.net>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20251031212103.310683-1-daniel@iogearbox.net>
+References: <20251031212103.310683-1-daniel@iogearbox.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next 2/4] selftests/bpf: integrate test_tc_edt into
- test_progs
-To: alexis.lothore@bootlin.com
-Cc: ebpf@linuxfoundation.org, bastien.curutchet@bootlin.com,
- thomas.petazzoni@bootlin.com, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- martin.lau@kernel.org, clm@meta.com, ihor.solodrai@linux.dev,
- bot+bpf-ci@kernel.org, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, eddyz87@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, shuah@kernel.org
-References: <20251031-tc_edt-v1-2-5d34a5823144@bootlin.com>
- <09feef91b51f675195b5b1b9a854d844c9999c0cebb429d785fe60f6c787dc8b@mail.kernel.org>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <09feef91b51f675195b5b1b9a854d844c9999c0cebb429d785fe60f6c787dc8b@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: Clear (ClamAV 1.0.9/27809/Fri Oct 31 10:42:21 2025)
 
-On 10/31/25 9:20 AM, bot+bpf-ci@kernel.org wrote:
->> +static void run_test(void)
->> +{
->> +	__u64 rx_bytes_start, rx_bytes_end;
->> +	double rate_mbps, rate_error;
->> +	pthread_t server_thread = 0;
->> +	struct connection *conn;
->> +	__u64 ts_start, ts_end;
->> +	int ret;
->> +
->> +
->> +	conn = setup_connection();
->> +	if (!ASSERT_OK_PTR(conn, "setup client and server connection"))
->> +		return;
->> +
->> +	ret = pthread_create(&server_thread, NULL, run_server,
->> +			     (void *)(&conn->server_conn_fd));
->> +	if (!ASSERT_OK(ret, "start server rx thread"))
->> +		goto end_cleanup_conn;
->> +	if (!ASSERT_OK(read_rx_bytes(&rx_bytes_start), "read rx_bytes"))
->> +		goto end_kill_thread;
->> +	ts_start = get_time_ns();
->> +	while (true) {
->> +		send(conn->client_conn_fd, (void *)tx_buffer, BUFFER_LEN, 0);
->> +		ts_end = get_time_ns();
->> +		if ((ts_end - ts_start)/100000 >= TIMEOUT_MS) {
->                                           ^^^^^^
-> 
-> Does this time conversion use the correct divisor? The timeout check
-> appears to divide nanoseconds by 100000, but TIMEOUT_MS is 2000
-> milliseconds. Converting nanoseconds to milliseconds requires dividing
-> by 1000000, not 100000. With the current calculation, the timeout would
-> trigger after 200 milliseconds rather than 2000 milliseconds.
+xsk_rcv_check tests for inbound packets to see whether they match the bound
+AF_XDP socket. Refactor the test into a small helper xsk_dev_queue_valid and
+move the validation against xs->dev and xs->queue_id there. The fast-path
+case stays in place and allows for quick return in xsk_dev_queue_valid. If
+it fails, the validation is extended to check whether the AF_XDP socket is
+bound against a peered queue, and if the case then the test is redone.
 
-The report is correct, there is a typo in the denominator.
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Co-developed-by: David Wei <dw@davidwei.uk>
+Signed-off-by: David Wei <dw@davidwei.uk>
+---
+ net/xdp/xsk.c | 23 ++++++++++++++++++++---
+ 1 file changed, 20 insertions(+), 3 deletions(-)
 
-Use the send_recv_data() helper in network_helpers.c. It should simplify 
-this test and no need to pthread_create, while loop, ....etc. 
-send_recv_data limits by the number of bytes instead of the length of 
-time. There is a target rate in this test, so it should be easy to 
-convert from time limit to byte limit and reuse the send_recv_data.
-
-pw-bot: cr
+diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+index 7b0c68a70888..6ae9ad5f27ad 100644
+--- a/net/xdp/xsk.c
++++ b/net/xdp/xsk.c
+@@ -331,14 +331,31 @@ static bool xsk_is_bound(struct xdp_sock *xs)
+ 	return false;
+ }
+ 
++static bool xsk_dev_queue_valid(const struct xdp_sock *xs,
++				const struct xdp_rxq_info *info)
++{
++	struct net_device *dev = xs->dev;
++	u32 queue_index = xs->queue_id;
++	struct netdev_rx_queue *rxq;
++
++	if (info->dev == dev &&
++	    info->queue_index == queue_index)
++		return true;
++
++	rxq = READ_ONCE(__netif_get_rx_queue(dev, queue_index)->peer);
++	if (!rxq)
++		return false;
++
++	return info->dev == rxq->dev &&
++	       info->queue_index == get_netdev_rx_queue_index(rxq);
++}
++
+ static int xsk_rcv_check(struct xdp_sock *xs, struct xdp_buff *xdp, u32 len)
+ {
+ 	if (!xsk_is_bound(xs))
+ 		return -ENXIO;
+-
+-	if (xs->dev != xdp->rxq->dev || xs->queue_id != xdp->rxq->queue_index)
++	if (!xsk_dev_queue_valid(xs, xdp->rxq))
+ 		return -EINVAL;
+-
+ 	if (len > xsk_pool_get_rx_frame_size(xs->pool) && !xs->sg) {
+ 		xs->rx_dropped++;
+ 		return -ENOSPC;
+-- 
+2.43.0
 
