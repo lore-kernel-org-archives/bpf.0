@@ -1,51 +1,49 @@
 Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D051C288C25;
-	Sat,  1 Nov 2025 19:34:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73526296BB7;
+	Sat,  1 Nov 2025 19:34:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762025668; cv=none; b=e2n+LLshNsnIDbtyR4xuRQyA2k+NBCQB32iKs3pXo6qhDF8e6T8/vzUIcCuAFdmDKwdU9FLpw5QWHM8ACbJYCaYfF341UxpHJ6Y2lTBDRjZFVy2HgncTY+pmd2mSIbY8K77fAhgYz4yvEDOaHVx44kfN42ozWb2hPflV/4HMRSU=
+	t=1762025671; cv=none; b=sgvlBfxzakDgKevkTREbbSzxiUUi6Vnm43HUXF35NXlr2BxsKu0IaUdbqLNmqoOnVX7x1Niw5WUvjXpoV7IRiRpxBtTmjKx7gOdLuqQwWS4LA3QMCp2g8r0WVjh3k6/H3vrSHAkoJDUTD8TqnOjJ2GlRK1KIwCdxv82qs+nRo90=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762025668; c=relaxed/simple;
-	bh=+2DQeon6j9mTMYJK8OATLAYZm3wQvRAOPPkBzHYky3I=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QZQi53d3BhZLJOtGDF5vNynG525Q3EEv1k0onkYJka/DMqyNCfMUpYST7e+jCDM19768WxPmY9km1lTAXSmKoB2FERbF1DSbFVHKT/2FJHWZRTsCvzjAv9OJbXjg6y/0ZE03/R4mer7sn1ryud/6v4+N6qxiRnAO3uw5anL5kJ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=aXd5UAmX; arc=none smtp.client-ip=205.220.177.32
+	s=arc-20240116; t=1762025671; c=relaxed/simple;
+	bh=9q6vCz/5bPhsdaBKqGHSicsAwhDjoOHGYrh2mAOw+kI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=iAJpqG/SSMmZjTC/etb9JD6lRP8K7CZAF8LIrNEfivGMUuejpZnzRST94dEArLudpFAb0sLZ59PKYXZnApr4pNawgrBlLfnXVAeJkx9GpFUMwOEcNLFtFw+H5N83bKMujWbkZScpwdseBUZw9X1HG1fyedEe1v+eu+uWKGhFjMU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=Ir6BRqpi; arc=none smtp.client-ip=205.220.177.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="aXd5UAmX"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="Ir6BRqpi"
 Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5A1JU2lP004657;
-	Sat, 1 Nov 2025 19:34:06 GMT
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5A1JVhov006631;
+	Sat, 1 Nov 2025 19:34:02 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=corp-2025-04-25; bh=KrvkO
-	2IKd9SwvBGQEWCgmWIfW7DssO96nFyUoB/6uUs=; b=aXd5UAmXO249L5BVr2YXX
-	lInHVX/Nt/XCfJz4HrqCA4hJWamaYvfS8oXK4OZ3es+qAwVp/HKPwgMNpzAcEz7o
-	zekfu9wwFKMJmrCCtwInolR4+zwu3kMbInVmHYeCn+Q6xREAe30a5VDA16AG1Z2M
-	ImzCMGfk/N6T2b39ZNC8GCeL/SMWBKKrsOtasinOZlNOXdKcQI4I2lwmHxPtp5uo
-	2ny9BGbAUsWB7sLtl13Oh0pHQWbuSgSt+nOC3MFsCy8WiJsyzCZi1QrfIayaKTAX
-	a3Hy/0R0tF8ndle/9l3PBATF1uk9K1o2NDKN2kY0AoM+5h0uNtJzt5uq7c4w0+cH
-	Q==
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=corp-2025-04-25; bh=Dc9F5frfU26RSb9GNsKNqcQjAhpyN
+	/KoW+lW1Wj6Lxc=; b=Ir6BRqpifKKQeZJ+jhWM0gqsTcMMsgo1MQvR0bRqbdzsE
+	sbqxpdmz9roydbF+OM/OkbBCWOhmqE1k892SX7zoAsmPqie9IT/tq8NCkyDaACMp
+	59dOmTeEZsc3YbAQljU7Pq40iszUEaDgHGm4Bgjt0G5wlaak93RXulgpQ96sLUj7
+	ArItluvLCPNL9LAkSgV9fxz+rxNFWyYNUwyC3rI5XabO+/yFTVZpz/ASVB9xFLEg
+	x3r5R90sR4j6pVPKNVZqgg73VGIfCM/AvdwwaX5nvyoltJk0rzQn6+K/VWpIWMn/
+	Ae6aeae0gJwiei40GilxnScDE4NGTLrIHwkb/5XHA==
 Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4a5rdgr029-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4a5rdgr023-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Sat, 01 Nov 2025 19:34:06 +0000 (GMT)
+	Sat, 01 Nov 2025 19:34:01 +0000 (GMT)
 Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 5A1Gevin020910;
-	Sat, 1 Nov 2025 19:34:05 GMT
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 5A1HhnGD020948;
+	Sat, 1 Nov 2025 19:34:01 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4a58n6s26h-1
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4a58n6s24y-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Sat, 01 Nov 2025 19:34:05 +0000
+	Sat, 01 Nov 2025 19:34:01 +0000
 Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 5A1JY0Gk007914;
-	Sat, 1 Nov 2025 19:34:04 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 5A1JY0Gg007914;
+	Sat, 1 Nov 2025 19:34:00 GMT
 Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.129.136.47])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4a58n6s24r-3;
-	Sat, 01 Nov 2025 19:34:04 +0000
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4a58n6s24r-1;
+	Sat, 01 Nov 2025 19:34:00 +0000
 From: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
 To: bpf@vger.kernel.org
 Cc: alan.maguire@oracle.com,
@@ -61,12 +59,10 @@ Cc: alan.maguire@oracle.com,
         Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
         Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH v3 2/2] selftests/bpf: Add test for bpftool map ID printing
-Date: Sat,  1 Nov 2025 12:33:55 -0700
-Message-ID: <20251101193357.111186-3-harshit.m.mogalapalli@oracle.com>
+Subject: [PATCH v3 0/2] Print map ID on successful creation
+Date: Sat,  1 Nov 2025 12:33:53 -0700
+Message-ID: <20251101193357.111186-1-harshit.m.mogalapalli@oracle.com>
 X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20251101193357.111186-1-harshit.m.mogalapalli@oracle.com>
-References: <20251101193357.111186-1-harshit.m.mogalapalli@oracle.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -81,80 +77,56 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 bulk
  spamscore=0 suspectscore=0 mlxscore=0 adultscore=0 mlxlogscore=999
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2510240000
  definitions=main-2511010168
-X-Proofpoint-GUID: JPhcnXOkRQd1HFM52tCKxeZMdfEX3FHK
-X-Proofpoint-ORIG-GUID: JPhcnXOkRQd1HFM52tCKxeZMdfEX3FHK
-X-Authority-Analysis: v=2.4 cv=DoJbOW/+ c=1 sm=1 tr=0 ts=690660ae cx=c_pps
+X-Proofpoint-GUID: l-wTHLNXJ9g4ByYukzg-xBHhiJzgJx2y
+X-Proofpoint-ORIG-GUID: l-wTHLNXJ9g4ByYukzg-xBHhiJzgJx2y
+X-Authority-Analysis: v=2.4 cv=DoJbOW/+ c=1 sm=1 tr=0 ts=690660aa cx=c_pps
  a=OOZaFjgC48PWsiFpTAqLcw==:117 a=OOZaFjgC48PWsiFpTAqLcw==:17
- a=6UeiqGixMTsA:10 a=VkNPw1HP01LnGYTKEx00:22 a=yPCof4ZbAAAA:8
- a=zZ8rhmji2bsAaRzR-ewA:9 a=cPQSjfK2_nFv0Q5t_7PE:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTAxMDE2OCBTYWx0ZWRfXw/GaT5TC1qtj
- jmj8Ajma87A7MEQVisxUm1V6FQIZMP5Q72SAY0sbKTFP0nUzdsdGCG7g76Qt/Zk17YBXhXqrezN
- AASmktaNHgqd1oBXNV9+LB1c+2LSrT28Yg3YHBW5lz28QBsPIFt5AJW8Epz8xuCsWS+XAK38RFi
- dYzDgPP42UYKauCHGeAou9zHsQFqsn7R+86qcfXE5hdSuDpUlrtjCfauAO03z8Fvh8QXlm3g6Q+
- gmPXBIRGJfxNZhgAwlZDi9Nb0SO7Zf7cPUASoMWKKn/3AdT2Ld+7Q9zLzFSgQmp7rwsBwN5LRV7
- VuxoL0+E98/qZsceK/E1xO9V+gRAkihjZl+YffJjEU5SMChhHhcESj8/ImgxlZlGsDO1j+49Nue
- GARsrUBOK70b9KN3X1c3bUfj4wY3Yw==
+ a=6UeiqGixMTsA:10 a=VkNPw1HP01LnGYTKEx00:22 a=NEAV23lmAAAA:8
+ a=a9B3Gpd4lODhp7-wpV4A:9 a=cPQSjfK2_nFv0Q5t_7PE:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTAxMDE2OCBTYWx0ZWRfX4gvUmblxf5Y1
+ HaItr4o4bHjD6FB7ZLnOpG/nScdfzfotA0VdLrZmR/lwHyD0cP7CTUQeH+ztB6zhWPYlQfp1VvT
+ rYZfuktF7x1z22E5JsiS8rtxRkeMF99KiCG5IF7Y0rXoR4Xa44yQjz81W4ogjDkSI+KNPwrA2sV
+ ZO5nH9JwhwZbWz0LuJ5dZVErsDecCDqURu7v2jpJO5Gkd9JYfOnoIt6hfR3j8TWfZwo/OeI+oQI
+ K3y9KdmgSU1lw2BkGvLr9jzzO7mN3F83ha/mnkxWVzCSoeW9V+8fViFDda3ZdkNzRetQ3KtbU/G
+ c7Zgx2eLn6W83vfofbw/eJJG3qA3VrxF/tvpRpHb47Bz+eTumV5wATcPGf/8mTTz37tF8R1kDRc
+ GKpVieuREuh/99B+8xIlHDQKrDKjFQ==
 
-Add selftest to check if Map ID is printed on successful creation in
-both plain text and json formats.
+Hi all,
 
-Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
----
-v2-->v3: Removes printing for success cases following the pattern used
-in this script. Also remove "FAIL:" prefix for consistency. [ Thanks to
-Quentin for the suggestion]
----
+I have tried looking at an issue from the bpftool repository:
+https://github.com/libbpf/bpftool/issues/121 and this patch series
+tries to add that enhancement.
+
+Summary: Currently when a map creation is successful there is no message
+on the terminal, printing IDs on successful creation of maps can help
+notify the user and can be used in CI/CD.
+
+The first patch adds the logic for printing and the second patch adds a
+simple selftest for the same.
+
+Thank you very much.
+
+V1 --> V2: PATCH 1 updated [Thanks Yonghong for suggesting better way of
+error handling with a new label for close(fd); instead of calling
+multiple times]
+
+V2 --> V3: Thanks to Quentin.
+	PATCH1: drop \n in p_err statement
+	PATCH2: Remove messages in cases of successful ID printing. Also
+	remove message with a "FAIL:" prefix to make it more consistent.
+
+Regards,
+Harshit
+
+
+Harshit Mogalapalli (2):
+  bpftool: Print map ID upon creation and support JSON output
+  selftests/bpf: Add test for bpftool map ID printing
+
+ tools/bpf/bpftool/map.c                       | 21 +++++++++---
  .../testing/selftests/bpf/test_bpftool_map.sh | 32 +++++++++++++++++++
- 1 file changed, 32 insertions(+)
+ 2 files changed, 49 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/test_bpftool_map.sh b/tools/testing/selftests/bpf/test_bpftool_map.sh
-index 515b1df0501e..d65866497c1b 100755
---- a/tools/testing/selftests/bpf/test_bpftool_map.sh
-+++ b/tools/testing/selftests/bpf/test_bpftool_map.sh
-@@ -361,6 +361,36 @@ test_map_access_with_btf_list() {
- 	fi
- }
- 
-+# Function to test map ID printing
-+# Parameters:
-+#   $1: bpftool path
-+#   $2: BPF_DIR
-+test_map_id_printing() {
-+	local bpftool_path="$1"
-+	local bpf_dir="$2"
-+	local test_map_name="test_map_id"
-+	local test_map_path="$bpf_dir/$test_map_name"
-+
-+	local output
-+	output=$("$bpftool_path" map create "$test_map_path" type hash key 4 \
-+		value 8 entries 128 name "$test_map_name")
-+	if ! echo "$output" | grep -q "Map successfully created with ID:"; then
-+		echo "Map ID not printed in plain text output."
-+		exit 1
-+	fi
-+
-+	rm -f "$test_map_path"
-+
-+	output=$("$bpftool_path" map create "$test_map_path" type hash key 4 \
-+		value 8 entries 128 name "$test_map_name" --json)
-+	if ! echo "$output" | jq -e 'has("id")' >/dev/null 2>&1; then
-+		echo "Map ID not printed in JSON output."
-+		exit 1
-+	fi
-+
-+	rm -f "$test_map_path"
-+}
-+
- set -eu
- 
- trap cleanup_skip EXIT
-@@ -395,4 +425,6 @@ test_map_creation_and_map_of_maps "$BPFTOOL_PATH" "$BPF_DIR"
- 
- test_map_access_with_btf_list "$BPFTOOL_PATH"
- 
-+test_map_id_printing "$BPFTOOL_PATH" "$BPF_DIR"
-+
- exit 0
 -- 
 2.50.1
 
