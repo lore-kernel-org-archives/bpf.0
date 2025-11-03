@@ -1,80 +1,108 @@
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA93230DED4;
-	Mon,  3 Nov 2025 13:39:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.181.97.72
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 092D826F2B3;
+	Mon,  3 Nov 2025 14:07:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762177198; cv=none; b=qfVgpZ0vn/PpBlG8+mDk2O/AFwXpNr9KumtLqWcMQ3UDExH+JF2YL5hXOKPjxI9rH4pQjNBvxqKD3n/MliHLEYkuqwqmijZBj+YCV8xXPeB7/SDLnXHAnlhsEZVJyDWenAobt0GcB1zaHGjYeEwsAOFYbU7oEL2TtFvBFD5IUII=
+	t=1762178841; cv=none; b=htDefGYR3hTkCwZj9ILfxaT1X61Ne3CjVjNe+mUV6bv3yCKoqnIYLCaTHaH3c9KG99u+ZVfU8cVTwNGyYY2MpTqK3s3PEaFp8Uou7bVHLqAD4oBPeF5EchRQbLBiiqPj49Y1NEgUnNYB43Db0w0Wxx8o7uTEhtwTaHAzVSicPgg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762177198; c=relaxed/simple;
-	bh=vZQQeXvsMwwdNR+QwClddEdli/wv3INn7ueWC38q2kI=;
-	h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type; b=CVMmhnaKuyrdy7swb3bakztKGbnuY5aCLxNnj6eGB2LvmmghwSVDLP5TN4Q20QF+5pK+sqevrceoZugBohk4YvTbiATjrV6Lwt6zTJTSGqYstfKoT5n+b/i4Lsy8gfJ+zawOCk5JDtKczRZKInVXLAIyRVHGKiEeToIT0eCH8FU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=I-love.SAKURA.ne.jp; spf=pass smtp.mailfrom=I-love.SAKURA.ne.jp; arc=none smtp.client-ip=202.181.97.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=I-love.SAKURA.ne.jp
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=I-love.SAKURA.ne.jp
-Received: from www262.sakura.ne.jp (localhost [127.0.0.1])
-	by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 5A3Ddluc028933;
-	Mon, 3 Nov 2025 22:39:47 +0900 (JST)
-	(envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from [192.168.1.10] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-	(authenticated bits=0)
-	by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 5A3DdlFB028930
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-	Mon, 3 Nov 2025 22:39:47 +0900 (JST)
-	(envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <8b470fda-515e-4ca8-89d4-3dcd7088f58b@I-love.SAKURA.ne.jp>
-Date: Mon, 3 Nov 2025 22:39:45 +0900
+	s=arc-20240116; t=1762178841; c=relaxed/simple;
+	bh=8+XPYRjgyHWE/MdJWQFQT+2lG/J1s36k8W7o5bf1Z5g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PiOPsX007VSHBD6WGFaA2fBmReX9O9uUGTQa75/ND+M33+g732tBNIWcp+r3itSG8c6eXWCdXlqfS1gLVq5gBtnEsNTaMGxQJX/P/7zVsmuy4rSSDEKvd21MptEGsZjBxT0Rn4Qe4FXx1vc2N3paDp4ALL9AFUMOrLisZH8Ot0w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 666F7C4CEE7;
+	Mon,  3 Nov 2025 14:07:18 +0000 (UTC)
+Date: Mon, 3 Nov 2025 14:07:15 +0000
+From: Catalin Marinas <catalin.marinas@arm.com>
+To: Will Deacon <will@kernel.org>
+Cc: "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
+	linux-kernel@vger.kernel.org, kernel-team@meta.com,
+	rostedt@goodmis.org, Mark Rutland <mark.rutland@arm.com>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org
+Subject: Re: [PATCH 17/19] srcu: Optimize SRCU-fast-updown for arm64
+Message-ID: <aQi3E-3hoNWYocOl@arm.com>
+References: <082fb8ba-91b8-448e-a472-195eb7b282fd@paulmck-laptop>
+ <20251102214436.3905633-17-paulmck@kernel.org>
+ <aQilZAXQv2P-b2eI@willie-the-truck>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: Network Development <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
-From: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Subject: unregister_netdevice: waiting for lo to become free. Usage count =
- 6659
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Virus-Status: clean
-X-Anti-Virus-Server: fsav403.rs.sakura.ne.jp
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aQilZAXQv2P-b2eI@willie-the-truck>
 
-Hello.
+On Mon, Nov 03, 2025 at 12:51:48PM +0000, Will Deacon wrote:
+> On Sun, Nov 02, 2025 at 01:44:34PM -0800, Paul E. McKenney wrote:
+> > Some arm64 platforms have slow per-CPU atomic operations, for example,
+> > the Neoverse V2.  This commit therefore moves SRCU-fast from per-CPU
+> > atomic operations to interrupt-disabled non-read-modify-write-atomic
+> > atomic_read()/atomic_set() operations.  This works because
+> > SRCU-fast-updown is not invoked from read-side primitives, which
+> > means that if srcu_read_unlock_fast() NMI handlers.  This means that
+> > srcu_read_lock_fast_updown() and srcu_read_unlock_fast_updown() can
+> > exclude themselves and each other
+> > 
+> > This reduces the overhead of calls to srcu_read_lock_fast_updown() and
+> > srcu_read_unlock_fast_updown() from about 100ns to about 12ns on an ARM
+> > Neoverse V2.  Although this is not excellent compared to about 2ns on x86,
+> > it sure beats 100ns.
+> > 
+> > This command was used to measure the overhead:
+> > 
+> > tools/testing/selftests/rcutorture/bin/kvm.sh --torture refscale --allcpus --duration 5 --configs NOPREEMPT --kconfig "CONFIG_NR_CPUS=64 CONFIG_TASKS_TRACE_RCU=y" --bootargs "refscale.loops=100000 refscale.guest_os_delay=5 refscale.nreaders=64 refscale.holdoff=30 torture.disable_onoff_at_boot refscale.scale_type=srcu-fast-updown refscale.verbose_batched=8 torture.verbose_sleep_frequency=8 torture.verbose_sleep_duration=8 refscale.nruns=100" --trust-make
+> > 
+> > Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> > Cc: Catalin Marinas <catalin.marinas@arm.com>
+> > Cc: Will Deacon <will@kernel.org>
+> > Cc: Mark Rutland <mark.rutland@arm.com>
+> > Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> > Cc: Steven Rostedt <rostedt@goodmis.org>
+> > Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+> > Cc: <linux-arm-kernel@lists.infradead.org>
+> > Cc: <bpf@vger.kernel.org>
+> > ---
+> >  include/linux/srcutree.h | 56 ++++++++++++++++++++++++++++++++++++----
+> >  1 file changed, 51 insertions(+), 5 deletions(-)
+> 
+> [...]
+> 
+> > @@ -327,12 +355,23 @@ __srcu_read_unlock_fast(struct srcu_struct *ssp, struct srcu_ctr __percpu *scp)
+> >  static inline
+> >  struct srcu_ctr __percpu notrace *__srcu_read_lock_fast_updown(struct srcu_struct *ssp)
+> >  {
+> > -	struct srcu_ctr __percpu *scp = READ_ONCE(ssp->srcu_ctrp);
+> > +	struct srcu_ctr __percpu *scp;
+> >  
+> > -	if (!IS_ENABLED(CONFIG_NEED_SRCU_NMI_SAFE))
+> > +	if (IS_ENABLED(CONFIG_ARM64) && IS_ENABLED(CONFIG_ARM64_USE_LSE_PERCPU_ATOMICS)) {
+> > +		unsigned long flags;
+> > +
+> > +		local_irq_save(flags);
+> > +		scp = __srcu_read_lock_fast_na(ssp);
+> > +		local_irq_restore(flags); /* Avoids leaking the critical section. */
+> > +		return scp;
+> > +	}
+> 
+> Do we still need to pursue this after Catalin's prefetch suggestion for the
+> per-cpu atomics?
+> 
+> https://lore.kernel.org/r/aQU7l-qMKJTx4znJ@arm.com
+> 
+> Although disabling/enabling interrupts on your system seems to be
+> significantly faster than an atomic instruction, I'm worried that it's
+> all very SoC-specific and on a mobile part (especially with pseudo-NMI),
+> the relative costs could easily be the other way around.
 
-A syzbot report at 2025/11/03 12:00 in
-https://syzkaller.appspot.com/bug?extid=881d65229ca4f9ae8c84 showed
-a huge refcount leak. The kernel commit is v6.18-rc4 of linux.git tree.
-When is this refcount supposed to be released?
+My preference would be to go for the percpu atomic prefetch but we'd
+need to do a bit of benchmarking to see we don't break other platforms
+(unlikely though).
 
-unregister_netdevice: waiting for lo to become free. Usage count = 6659
-ref_tracker: netdev@ffff88805f84a618 has 6658/6658 users at
-     __netdev_tracker_alloc include/linux/netdevice.h:4375 [inline]
-     netdev_hold include/linux/netdevice.h:4404 [inline]
-     dst_init+0xda/0x580 net/core/dst.c:52
-     dst_alloc+0xbb/0x1a0 net/core/dst.c:93
-     rt_dst_alloc+0x35/0x3a0 net/ipv4/route.c:1646
-     ip_route_input_slow+0x16cb/0x3fa0 net/ipv4/route.c:2424
-     ip_route_input_rcu net/ipv4/route.c:2538 [inline]
-     ip_route_input_noref+0x120/0x2e0 net/ipv4/route.c:2549
-     ip_rcv_finish_core+0x46f/0x2290 net/ipv4/ip_input.c:368
-     ip_list_rcv_finish+0x1b8/0x780 net/ipv4/ip_input.c:619
-     ip_sublist_rcv net/ipv4/ip_input.c:644 [inline]
-     ip_list_rcv+0x335/0x450 net/ipv4/ip_input.c:678
-     __netif_receive_skb_list_ptype net/core/dev.c:6122 [inline]
-     __netif_receive_skb_list_core+0x752/0x950 net/core/dev.c:6169
-     __netif_receive_skb_list net/core/dev.c:6221 [inline]
-     netif_receive_skb_list_internal+0x75f/0xdc0 net/core/dev.c:6312
-     netif_receive_skb_list net/core/dev.c:6364 [inline]
-     netif_receive_skb_list+0x4d/0x4b0 net/core/dev.c:6354
-     xdp_recv_frames net/bpf/test_run.c:269 [inline]
-     xdp_test_run_batch.constprop.0+0x146b/0x1ad0 net/bpf/test_run.c:350
-     bpf_test_run_xdp_live+0x365/0x770 net/bpf/test_run.c:379
-     bpf_prog_test_run_xdp+0xd38/0x1660 net/bpf/test_run.c:1320
-     bpf_prog_test_run kernel/bpf/syscall.c:4688 [inline]
-     __sys_bpf+0x1035/0x4980 kernel/bpf/syscall.c:6167
-     __do_sys_bpf kernel/bpf/syscall.c:6259 [inline]
-     __se_sys_bpf kernel/bpf/syscall.c:6257 [inline]
-     __ia32_sys_bpf+0x76/0xe0 kernel/bpf/syscall.c:6257
+-- 
+Catalin
