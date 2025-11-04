@@ -1,32 +1,30 @@
-Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
+Received: from out-189.mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8864832E741;
-	Tue,  4 Nov 2025 23:35:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80D8C32E741
+	for <bpf@vger.kernel.org>; Tue,  4 Nov 2025 23:36:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762299361; cv=none; b=KjVDLB7S7RQbqvbgh1coagigwEWWe2WH17uv0b/l5D9SbGE9Bh1kmtWLeP7EXNVN1omwGZHS/kt+TBNWUtoUY+JOcMAgpZrhreykI50ej6bvpVXwDuIbbKRJ3/4nVnvp3NBb1r3tz0wXsEhhXiVdIbw0XRZtXD+qABmVxVqXPpY=
+	t=1762299366; cv=none; b=USQOeeAEyoiUJPWfGmDnRB3yi0FHX2pHxrBBfULCEm71mLxN94j5wMa7MVhcNICptqE3ptLD4XWGOmRzfkMhHPYqKQecUdBdD9beg8DjjHkGR05QlhGre05RceOdnkxdRTdU0e19N8dsNGTL/4bWYrMjJEmH7k38+cFGfqsWVB8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762299361; c=relaxed/simple;
-	bh=nVCZv7BDaADVPM+NUS7ZNu0z7wImAda6AlRFZGx41zE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ckvxJhY1JyjRO/Q0hTiJeWznsOaIycT3oLpOUOg25IGIAV2FXRFqVAqGnwtbRy+0JqqCe5L3UPiDl7TNJ2g3WqkfdPeFbBqdV4QFhqpyJFze3KmrmLcJy/4KiU/OY9xGYoLAdDJoNYaK49PUrLfISANoGYORDrlSicAygtbKpYc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=FPCmQ1DV; arc=none smtp.client-ip=91.218.175.172
+	s=arc-20240116; t=1762299366; c=relaxed/simple;
+	bh=j46UobsjmgOp4qid0EdYnVcLSVN1rB3AXlEpsUVP69o=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CuBy3vOYgowFP1+icjG6VLtgXELKssSzzZ/Yjb5DHQtuHidWdT7cQuCZdCUU+JBq25fPCDI0WE6msfnLOMBpNCNP3IpgUMBf4yd4yFFM/nAkhNJ4DhD3z+CsE65VZ5H2Oxr/vXDHNWN27ETxUoAqnOKu7VPpCIEYCtC19BrKdL8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=kum2pEpw; arc=none smtp.client-ip=91.218.175.189
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="FPCmQ1DV"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="kum2pEpw"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1762299357;
+	t=1762299350;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=qHztu5pNrbiBILt1YDLFsBjjPbkd4otCCvwHABdiiEo=;
-	b=FPCmQ1DVC5vOHiJHUjfb7VK8ypqqYlP2I8GoFnxqR1Jn67A6hGXyzMe1AEEw4tQaDEHMLJ
-	+z33te9+Rr31+b4UQJT/8rK+yToiZdrzrdkVpnzM1AfBgyfHZSFKaV6iBGqQ06b2pDIrLz
-	NpNNc/lQVZli5umNlxKdhUTNyh1K+Bk=
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=SdxXfOrHeutJFYGlsdMunkP+GNQ5NgQ13gCRunrLukY=;
+	b=kum2pEpwKiw+1t68UAuBfEW7zOYRpXLaAo0qNLAmdedx+YaxidKpZNAmNjSDDU+W8VhwSP
+	FtQpcFQh8g/LtWnT+DFaTkL4gso3FByDE1kDHqXK9w5Fc/OAm5LzDH4Vw4tmMDNSlBRYEW
+	tIm9UPaThDNX50bmJFRLviOT275m3BU=
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
 To: dwarves@vger.kernel.org,
 	alan.maguire@oracle.com,
@@ -36,11 +34,9 @@ Cc: bpf@vger.kernel.org,
 	andrii@kernel.org,
 	ast@kernel.org,
 	kernel-team@meta.com
-Subject: [PATCH dwarves v2 2/2] btf_encoder: factor out btf_encoder__add_bpf_kfunc()
-Date: Tue,  4 Nov 2025 15:35:32 -0800
-Message-ID: <20251104233532.196287-3-ihor.solodrai@linux.dev>
-In-Reply-To: <20251104233532.196287-1-ihor.solodrai@linux.dev>
-References: <20251104233532.196287-1-ihor.solodrai@linux.dev>
+Subject: [PATCH dwarves v2 0/2] btf_encoder: refactor emission of BTF funcs
+Date: Tue,  4 Nov 2025 15:35:30 -0800
+Message-ID: <20251104233532.196287-1-ihor.solodrai@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -50,106 +46,20 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-Emitting BTF for BPF kernel functions requires special
-handling. Consolidate this behavior into btf_encoder__add_bpf_kfunc()
-function, which uses simplified btf_encoder_add_func()
+This series refactors a few functions that handle how BTF functions
+are emitted. The first patch splits btf_encoder__add_func_proto() into
+two functions by input. The second patch separates BPF kfunc handling
+from generic function handling.
 
-No functional changes.
+v1: https://lore.kernel.org/dwarves/20251029190249.3323752-2-ihor.solodrai@linux.dev/
 
-Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
----
- btf_encoder.c | 43 +++++++++++++++++++++++++++----------------
- 1 file changed, 27 insertions(+), 16 deletions(-)
+Ihor Solodrai (2):
+  btf_encoder: refactor btf_encoder__add_func_proto
+  btf_encoder: factor out btf_encoder__add_bpf_kfunc()
 
-diff --git a/btf_encoder.c b/btf_encoder.c
-index d4ab5ec..7accaa0 100644
---- a/btf_encoder.c
-+++ b/btf_encoder.c
-@@ -774,6 +774,7 @@ static int btf__tag_bpf_arena_arg(struct btf *btf, struct btf_encoder_func_state
- 	return id;
- }
- 
-+/* Modifies state->ret_type_id and state->parms[i].type_id for flagged kfuncs */
- static int btf__add_bpf_arena_type_tags(struct btf *btf, struct btf_encoder_func_state *state)
- {
- 	uint32_t flags = state->elf->kfunc_flags;
-@@ -884,11 +885,6 @@ static int32_t func_state__add_func_proto(struct btf_encoder_func_state *state)
- 	const char *name;
- 	bool is_last;
- 
--	/* Beware: btf__add_bpf_arena_type_tags may change some members of the state */
--	if (is_kfunc_state(state) && encoder->tag_kfuncs && encoder->encode_attributes)
--		if (btf__add_bpf_arena_type_tags(encoder->btf, state) < 0)
--			return -1;
--
- 	type_id = state->ret_type_id;
- 	nr_params = state->nr_parms;
- 
-@@ -1367,7 +1363,6 @@ static int32_t btf_encoder__add_func(struct btf_encoder *encoder,
- 	const char *value;
- 	char tmp_value[KSYM_NAME_LEN];
- 	uint16_t idx;
--	int err;
- 
- 	btf_fnproto_id = func_state__add_func_proto(state);
- 	name = func->name;
-@@ -1380,15 +1375,6 @@ static int32_t btf_encoder__add_func(struct btf_encoder *encoder,
- 		return -1;
- 	}
- 
--	if (func->kfunc && encoder->tag_kfuncs && !encoder->skip_encoding_decl_tag) {
--		err = btf__tag_kfunc(encoder->btf, func, btf_fn_id);
--		if (err < 0)
--			return err;
--	}
--
--	if (state->nr_annots == 0)
--		return 0;
--
- 	for (idx = 0; idx < state->nr_annots; idx++) {
- 		struct btf_encoder_func_annot *a = &state->annots[idx];
- 
-@@ -1411,6 +1397,28 @@ static int32_t btf_encoder__add_func(struct btf_encoder *encoder,
- 		return -1;
- 	}
- 
-+	return btf_fn_id;
-+}
-+
-+static int btf_encoder__add_bpf_kfunc(struct btf_encoder *encoder,
-+				      struct btf_encoder_func_state *state)
-+{
-+	int btf_fn_id, err;
-+
-+	if (encoder->tag_kfuncs && encoder->encode_attributes)
-+		if (btf__add_bpf_arena_type_tags(encoder->btf, state) < 0)
-+			return -1;
-+
-+	btf_fn_id = btf_encoder__add_func(encoder, state);
-+	if (btf_fn_id < 0)
-+		return -1;
-+
-+	if (encoder->tag_kfuncs && !encoder->skip_encoding_decl_tag) {
-+		err = btf__tag_kfunc(encoder->btf, state->elf, btf_fn_id);
-+		if (err < 0)
-+			return -1;
-+	}
-+
- 	return 0;
- }
- 
-@@ -1508,7 +1516,10 @@ static int btf_encoder__add_saved_funcs(struct btf_encoder *encoder, bool skip_e
- 					0, 0);
- 
- 		if (add_to_btf) {
--			err = btf_encoder__add_func(state->encoder, state);
-+			if (is_kfunc_state(state))
-+				err = btf_encoder__add_bpf_kfunc(state->encoder, state);
-+			else
-+				err = btf_encoder__add_func(state->encoder, state);
- 			if (err < 0)
- 				goto out;
- 		}
+ btf_encoder.c | 171 +++++++++++++++++++++++++++++---------------------
+ 1 file changed, 101 insertions(+), 70 deletions(-)
+
 -- 
 2.51.1
 
