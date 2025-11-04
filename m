@@ -1,142 +1,117 @@
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36CEA337BA7
-	for <bpf@vger.kernel.org>; Tue,  4 Nov 2025 17:37:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A20A279DA2;
+	Tue,  4 Nov 2025 17:54:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762277872; cv=none; b=fzhqrL2WNcUMaC92OU7TwuzkLr/ivTWeem8E+OKbbpssar+HKKS/hGTsU/YIJLGBqarsGsbf+V5ZwSRraC/MUKZUrNZFeOIMqKdHPVb6yQGLRQzorFMyVvlSvlysadm0QBSyEDAx5gOTVsoJOQz7a2icNovhDuPSubQSW3U9lqw=
+	t=1762278894; cv=none; b=sTJ4HlNgFa3N1saBlL5jV3cCe+700NYM/t21FtV5hC8ydIcQBNUXE/qdgCwFtupYKwWjvIlGDkIuGwFUt/Oo9qiYTSr4Gw9XjHKJz2DwO0K9oru7kVj9u7oxCOUw4KSgHYk64oUWEMOL9BFVYMMraq8k3BNfqvo172vlDnnpNZM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762277872; c=relaxed/simple;
-	bh=WkWoFlzLWrtoonOriznUpRT7GVU0aUWQDi9dY7O8y/Y=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ppIi9qNdaw+tXBHr+EUwBTlIMBo/fQCkRxAuBe8cPvR/vKlU9NG/hACs409qFvwf6qtuWBsWyRvropdyEyIRnl5xWP3XEhUm1r1AQBVPnLbCHndAZwiTrQBHH7uKnTSH49rbpndtSfsMdMfhWtDMVLl1m6YbdpykQog2wrsZXDQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MM2//7nN; arc=none smtp.client-ip=209.85.221.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1762278894; c=relaxed/simple;
+	bh=oXV3ZPtbgwEKVizT1FYJBTXIT7LT8NAvR85URp09Tn4=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=YMUdYMGYA40aFgX5Niph5WvcQbv77gHFtLUzlojaD4YQn0twc0POlsgK/A+I4e0BCoA/tUpRl6jJNvjLz5vfuN7q0x7xvz3MNRk6C4tvT3e/2ETeQ7cEuficC+uFmwkMtZxF8jbhdW6b/dAvsAOgdRLkh4tqumjv88OHPpv+lHo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pFVjg8pp; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MM2//7nN"
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-429c7e438a8so764206f8f.2
-        for <bpf@vger.kernel.org>; Tue, 04 Nov 2025 09:37:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1762277868; x=1762882668; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=p1bvPtQqK5wJYevzmSRi7u47VtAKZQqTEATK+wkw8y8=;
-        b=MM2//7nNY5c1ERSSB+IWCV7YVTCdAxjaDLu3zK6ga2zWzYpCbnezFDEEvbJNr1fhEJ
-         +4bM8NOJFzNgekI+FM+OcJeIZLqSSpQrVJarrqb6AJYifhC1yBN4dIpgdzFHqUCF1qRY
-         HB8GW3dfz3ohiWnVTmAbhrytRJ+EBN0/iEOcFtXoQrvm/pav0lB4zeRCspmfxud70dKw
-         m5qcwti/Wv6Flm4jFm0TDrAB0lcaUGl2fp9/11lRYbi/f4x75ap/CcgTtJhQIj1Ct1tL
-         Q116MUU8mljddtco8DEFU/StyiM30DxjoJo1/oNYjfDjdWiBZ2X1nJgFcAmPQcR21RzD
-         qWfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762277868; x=1762882668;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=p1bvPtQqK5wJYevzmSRi7u47VtAKZQqTEATK+wkw8y8=;
-        b=WpFo2WqCiLnACILpg1eZ2Tl1M82tsgh4tHm42sNATcrR1u8/7OesyNDDQSR9LwNGc8
-         +IfXMewxTjazJ+7eecV7MGAWUFUCVcDPsTYqADu9RL/O5dnrsz646xiXoR9GJbozV5F2
-         hokoPmsELMrh97us7DRJQm6dZHzO0aXLk1VrAKLVartoOUDLUF54SOhUOrMIPIjoX4sw
-         Oqdxgr6AAmhVttRxXeaqL6acyM5HeQ99r96gxx8ux21oYdkMct2A5+DA6KYfTJTAmkA1
-         Dg6SNxNGFDyLsbTLbOYtbNCn17bGnbWI9xUjN7YCoo8ZZXjagzLRcfVSwVIMJhzteRO/
-         7zBg==
-X-Forwarded-Encrypted: i=1; AJvYcCXujz+SJTYttlF2wS3kFBLemlF4tOrkU0Vigbm6jkB027k6DgpeFKv6I87rUFE1J45b+F8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxezQ5o70ue65OpHULPtBKt1S64hnWtioIg47FBk1aK70V5udBP
-	LK2vbOn3f614tbXEbrQiftG9SMBtiihdhpeQUcTpkN7Ga8R6L81gmnBDCMd75mixufdfauMn7qV
-	yN26vTxbDrbuNhtw2VM9Bw43NbFbciPI=
-X-Gm-Gg: ASbGncsXc/acYbrj7JgLkkxT2L0iGKSpHX02ogaabQszscgMNv8d5C6V0gR69lbfKd8
-	KtQ505Xg7KXixtvcrVMInwx1vORnQSkOAhdithwUUNnsNJIhe8hwSjP7yeJ80HeS4f65APPn5NH
-	Re+AbZtJM8ohra3YJL/Ms5AG9Ic/tZ7Rqusny5awSiWdsJSFcK5Ri7E5RQDWiOrNBxL00p0S4Q6
-	kqnCYVxLeObSeDIoNOzEBM136wqXRZ4dYyH2ORAwjMA3nuUXCpkDDa2tegA5RbyIA3apO/ZGqs8
-X-Google-Smtp-Source: AGHT+IEGeBxngorLN6Ifh/aikMrr1qyEaX+vnV55U8kwz86ypB4XdSn2alRjM+h1icXtVOrxwg7AJA7lvCX8eaFdA5U=
-X-Received: by 2002:a05:6000:65c:b0:429:d348:bd8a with SMTP id
- ffacd0b85a97d-429e3275ad4mr129085f8f.0.1762277868412; Tue, 04 Nov 2025
- 09:37:48 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pFVjg8pp"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58EE5C4CEF7;
+	Tue,  4 Nov 2025 17:54:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1762278893;
+	bh=oXV3ZPtbgwEKVizT1FYJBTXIT7LT8NAvR85URp09Tn4=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=pFVjg8ppSqGe48n6XSiiDbASFvMHoeZXvYsxsvBg1kUPbBhc+tVWLdnx6wutw9q8A
+	 lu5M23+q+xwmv49yPzzgdz23tmplMfG1uDWXDEjdETI/gDewFDXVNJRwuIQrj9VMTT
+	 /xmuuO0A75H0DB97r+xvRsG1sdrMgcEiiKTGiY1sihM0x7kyZukWG+z1xdDR+j/YGt
+	 Ka+dbYZJrgzvckKOD63gwilyAy8NoM02MJfc2PFDGE/W3lQ+7A69DCXudjpBYAi7Fb
+	 Z55TH2ABU/zmOc0CqC+R9++WApCcIqu79digtU9zp/6nN+/rsX1LlJ2TZo5k9QjRlg
+	 bg7KdSeTjYs6g==
+Content-Type: multipart/mixed; boundary="===============6840592455215910572=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251104142714.99878-3-leon.hwang@linux.dev> <6099162df8322a2198497a8a27e1b0e1e5c017aeb74b20fc1eecde1e67826900@mail.kernel.org>
-In-Reply-To: <6099162df8322a2198497a8a27e1b0e1e5c017aeb74b20fc1eecde1e67826900@mail.kernel.org>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Tue, 4 Nov 2025 09:37:35 -0800
-X-Gm-Features: AWmQ_bnMMHRZbRDeos2doqIlTljmNjWGI5oy9xwOgSRLV1ionAebzkdsoVB-s_Y
-Message-ID: <CAADnVQJZbyQWaUTzB0=82mq+hSVqxGb679cW1=t=OFCRuCVdXQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v5 2/2] selftests/bpf: Add test to verify freeing
- the special fields when update [lru_,]percpu_hash maps
-To: bot+bpf-ci@kernel.org
-Cc: Leon Hwang <leon.hwang@linux.dev>, bpf <bpf@vger.kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, Eduard <eddyz87@gmail.com>, 
-	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
-	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Amery Hung <ameryhung@gmail.com>, 
-	LKML <linux-kernel@vger.kernel.org>, kernel-patches-bot@fb.com, 
-	Martin KaFai Lau <martin.lau@kernel.org>, Chris Mason <clm@meta.com>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Message-Id: <b4c70f2af7001ee36b8d3702f280ca11e3ba281ba29cdcb63434ee28e0a8060a@mail.kernel.org>
+In-Reply-To: <20251104172652.1746988-5-ameryhung@gmail.com>
+References: <20251104172652.1746988-5-ameryhung@gmail.com>
+Subject: Re: [PATCH bpf-next v5 4/7] libbpf: Add support for associating BPF program with struct_ops
+From: bot+bpf-ci@kernel.org
+To: ameryhung@gmail.com,bpf@vger.kernel.org
+Cc: netdev@vger.kernel.org,alexei.starovoitov@gmail.com,andrii@kernel.org,daniel@iogearbox.net,tj@kernel.org,martin.lau@kernel.org,ameryhung@gmail.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Tue,  4 Nov 2025 17:54:53 +0000 (UTC)
 
-On Tue, Nov 4, 2025 at 6:52=E2=80=AFAM <bot+bpf-ci@kernel.org> wrote:
->
-> > diff --git a/tools/testing/selftests/bpf/progs/refcounted_kptr.c b/tool=
-s/testing/selftests/bpf/progs/refcounted_kptr.c
-> > index 893a4fdb4..87b0cc018 100644
-> > --- a/tools/testing/selftests/bpf/progs/refcounted_kptr.c
-> > +++ b/tools/testing/selftests/bpf/progs/refcounted_kptr.c
->
-> [ ... ]
->
-> > @@ -568,4 +568,64 @@ int BPF_PROG(rbtree_sleepable_rcu_no_explicit_rcu_=
-lock,
-> >       return 0;
-> >  }
-> >
-> > +private(kptr_ref) u64 ref;
-> > +
-> > +static int probe_read_refcount(void)
-> > +{
-> > +     u32 refcount;
-> > +
-> > +     bpf_probe_read_kernel(&refcount, sizeof(refcount), (void *) ref);
-> > +     return refcount;
-> > +}
-> > +
-> > +static int __insert_in_list(struct bpf_list_head *head, struct bpf_spi=
-n_lock *lock,
-> > +                         struct node_data __kptr **node)
-> > +{
-> > +     struct node_data *n, *m;
-> > +
-> > +     n =3D bpf_obj_new(typeof(*n));
-> > +     if (!n)
-> > +             return -1;
-> > +
-> > +     m =3D bpf_refcount_acquire(n);
-> > +     n =3D bpf_kptr_xchg(node, n);
-> > +     if (n) {
-> > +             bpf_obj_drop(n);
-> > +             bpf_obj_drop(m);
-> > +             return -2;
-> > +     }
->
-> In __insert_in_list(), after bpf_kptr_xchg() stores the new object in
-> the map and returns the old value in n, can the error path drop both
-> n and m? At this point, the new object (pointed to by m) is already
-> referenced by the map. Dropping m here would free an object that the
-> map still points to, leaving a dangling pointer.
+--===============6840592455215910572==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-AI is wrong, but I bet it got confused by reuse of variable 'n'.
-It's hard for humans too.
-Leon,
-please use a different var.
-n =3D bpf_kptr_xchg(node, n); is a head scratcher.
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index fbe74686c..260e1feaa 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
 
-Also see Yonghong's comment on v4 which I suspect applies to v5.
+[ ... ]
 
-pw-bot: cr
+> @@ -13891,6 +13891,36 @@ int bpf_program__set_attach_target(struct bpf_program *prog,
+>  	return 0;
+>  }
+>
+> +int bpf_program__assoc_struct_ops(struct bpf_program *prog, struct bpf_map *map,
+> +				  struct bpf_prog_assoc_struct_ops_opts *opts)
+> +{
+> +	int prog_fd;
+> +
+> +	prog_fd = bpf_program__fd(prog);
+> +	if (prog_fd < 0) {
+> +		pr_warn("prog '%s': can't associate BPF program without FD (was it loaded?)\n",
+> +			prog->name);
+                     ^^^^^^^^^^
+
+Can prog be NULL here? If bpf_program__fd() returns -EINVAL because prog
+was NULL, this dereferences prog->name without a NULL check. Looking at
+bpf_program__set_attach_target() just above, it checks "if (!prog)"
+before any dereferences.
+
+> +		return -EINVAL;
+> +	}
+> +
+> +	if (prog->type == BPF_PROG_TYPE_STRUCT_OPS) {
+           ^^^^^^^^^^
+
+Same issue - prog->type is dereferenced without verifying prog is not
+NULL.
+
+> +		pr_warn("prog '%s': can't associate struct_ops program\n", prog->name);
+> +		return -EINVAL;
+> +	}
+> +
+> +	if (map->fd < 0) {
+           ^^^^^^
+
+Can map be NULL? There's no NULL check before dereferencing map->fd.
+Other map APIs like bpf_map__fd() and bpf_map__name() check for NULL
+before use.
+
+> +		pr_warn("map '%s': can't associate BPF map without FD (was it created?)\n", map->name);
+> +		return -EINVAL;
+> +	}
+> +
+> +	if (!bpf_map__is_struct_ops(map)) {
+> +		pr_warn("map '%s': can't associate non-struct_ops map\n", map->name);
+> +		return -EINVAL;
+> +	}
+> +
+> +	return bpf_prog_assoc_struct_ops(prog_fd, map->fd, opts);
+> +}
+> +
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/19077679684
+
+--===============6840592455215910572==--
