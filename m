@@ -1,151 +1,119 @@
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EE753396F3
-	for <bpf@vger.kernel.org>; Tue,  4 Nov 2025 17:55:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C18F28751A;
+	Tue,  4 Nov 2025 18:03:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762278905; cv=none; b=QF+u4kh7YQWWOd7C7R7XDLsZDOd6tHZBbU2G9rFia4DfvKiJVGO5jOgiepiGdpQRCQ1n9Oo7fT+4qEuekGrgOsz4OfuGerh4G90eXVLGFCp9CPlP0lHMZf5eQZYvOoRRLogZK26hUbpmGFQvv42XEKS8YnNRB/3UZG/pEbvjeyw=
+	t=1762279387; cv=none; b=Tj6wiHUlHc1X65oUdD7+EizlPnBA12K80uBxKwGEXU7cUE0NZaI56RJ7XZGxBmlzgvMYpg6vdlweODBSNhSpcMvpeu46M2WDrH6iq2Xlo1Zqhxp7ndEvpwPgP9AE1M72WPrz5Bt4egZ+GOSUl9WSFZdxANcL5W/pT6X0y2dE75k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762278905; c=relaxed/simple;
-	bh=Gga7dXHfeLZzklbXPavpEZ6reid9hn2IxaGkYVec1c0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=lKqYDDHlEtfP1MfCM2Y07o24r8y+bLGBtqghunmXkFGJ7aq6dAHzNYaa43xUHY73XT84/LvK8WFanfJEo7DjgEgLkaDueHxfdOoFgLyjXSaVvz9ma8sc9DKvwGCZ3K71wfN6FnZHvUA7aBVWytGuLamEIPIVnLXHF7Kh5rPlHv0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Q13PLcyz; arc=none smtp.client-ip=209.85.221.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1762279387; c=relaxed/simple;
+	bh=yTHmdD9YcsuOkkC1lavTwVmaXqQ6H2lnnnWWkhux+9I=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=m9Dh5osccNXVrAPUWN1bvwvmMPGfQl3GRBAqdckwgM90vWTnjZCkIT+pnV0nK1KH1erjWR4EbjlXXsCB52ehguSTTT1KuHgFnYBbJ5C6m7fYIVGvLBdfenhh1muN5YX7Q5lCGFEcMXMmwNzm8FQPAsy0Gx2jPoMswNYg0ltXDpE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U+RZJC63; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q13PLcyz"
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-426f1574a14so3565565f8f.3
-        for <bpf@vger.kernel.org>; Tue, 04 Nov 2025 09:55:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1762278902; x=1762883702; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=50v8erXAUCAdx13yfjVbwgmCtzNJs2FIBxB/mDOxFDY=;
-        b=Q13PLcyzU2m1i6h2vXE0m3pFQt4Vluus3MVSbQfcu6UKjfPInLoFGtQPsUB0G6Ct1A
-         BF5iw2IBtlDSe605vxYA3n0nxP/vsYU3j1kDXvUEYkbgN5jBpE4TJoGf8/3jdbWOTbJg
-         mmfRUTtOnCQkMeqQ2II8+jo6sBzgISQW1qkUyrsChK6UcxYrA3sLMEKWJoPSn2KvWtYc
-         EeIE0p0p0dSPrwomwoF+lWClg8AiFuR8zLPxhUSMXuPPKbSma3hdYSsBk+v31mqTbNvs
-         ojXzPf8m+Yelh/KS2b5KPSIjhYB95oPSsGcqd4JURpXNg13Q1OewWRKUhCgZTIeqnkWc
-         t8yg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762278902; x=1762883702;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=50v8erXAUCAdx13yfjVbwgmCtzNJs2FIBxB/mDOxFDY=;
-        b=xDZnMbIg56Ei6+oEB5YSOFvQdBWT/gNHwNNuoQRv9OHzelAN2vibatLuf6eGj5Kjz1
-         8FKNlttKQgUG2KYqmckWUdr4AYLMgxz9GCoLIYViR6GaZUQP0nf0KZAurhXkajlcsP5A
-         X4fM8CBku6rNz1keFm2wUmYy2jSTEjjiwFb4KrvQkLvzNKgFYEi9Vf8tt3Y2T/2TSuZJ
-         pJ9YWAhOHYnZAahlQy2ChAJf9VgWYdf4+RHZKkBI2ibcs/OqeoT6E78NFLCNa9aRyPyg
-         LOR1CSTLLcWuORY4zGmGNn9hW23ccHKd2NBxAX8tTpdlCrIGUehR9CKObaVUooYZs+fK
-         azvQ==
-X-Gm-Message-State: AOJu0YwrdRABaW7RAzy1KHTKFVC3Tuav2wVxhZZrPY5m3Cw98bI/0eFu
-	PMgyfOjXMXLXUmSD7uhzm9i/E4TK2RaaGG/nFg3MrAFaXk1qw7TrrCgdBF7Z+pER1wYIQB2i7J0
-	WVZ0gRJYVLDs7QJAPXQJo2bxyKrcrE1A=
-X-Gm-Gg: ASbGncvs1anfJzCI+yqZTj/+oGlrHanWNF1GtkMJq3Dqzww0fMi2ARx+ExwDqp8TQxl
-	RpkJPOYQro77OxQAUpFhrKgs8oEFxyHTbCTcGNsuycx2IQE2Qnro+8BJFeFDKAZr61RK34OXEBc
-	JTsb3BoBI2Q+vo0TD8cMhWjRqxoynH+KH5uQ4FYb8yW4VO8d8aZC5vlZezBVgwm+/9lHHp80XZz
-	Ib7hIt6GxBEhYFRAyRzIh4d6m/jH/fK2RAjTHl4Br+Rs0WF4sX/IAQwwtflNrrPy/iWcHtNkyQK
-X-Google-Smtp-Source: AGHT+IHe2cvX79ByF/XHXoC1AinxfdR+R2HeAxrfHYrpUAc4i7jUKc7LNBvEX5vIHDigGXEpVUk/JIQwCndvI8NbwXw=
-X-Received: by 2002:a05:6000:258a:b0:427:928:7888 with SMTP id
- ffacd0b85a97d-429e3311aeamr109738f8f.55.1762278901733; Tue, 04 Nov 2025
- 09:55:01 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U+RZJC63"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69ED8C4CEF7;
+	Tue,  4 Nov 2025 18:03:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1762279386;
+	bh=yTHmdD9YcsuOkkC1lavTwVmaXqQ6H2lnnnWWkhux+9I=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=U+RZJC63DC7DT4PMWm2eU0BQjJXH9nTWLM4ep9sVR0yLoD6gy8bhidThL1NJMi41k
+	 qRP7b4guDC9Oc5SifEgaHz4s3a5mUkNWIT8XiUY3J3r9EsWaFVdW+8vDMztMUmobjh
+	 f62fX0Z4Z2i52CPu3wN3tY+o+zMuFF/4kfPbmXj4e6AWxhu+6VxGMpmSmBbaOT4LbU
+	 iGjkflO/78prUL2RlhDzaPyjiI86qHUZj2j/CfC+BDA3I2dQVmqXpJT09D57RtwY/R
+	 15VATqaE4yh7zaxCVw3oNR6ILBX/FU1GdgjGYZUri6TfNBIoYLCFRAwjEfOalNmyPg
+	 zbcpevUVOuh0Q==
+Content-Type: multipart/mixed; boundary="===============0665663762606247832=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251101193357.111186-1-harshit.m.mogalapalli@oracle.com> <20251101193357.111186-2-harshit.m.mogalapalli@oracle.com>
-In-Reply-To: <20251101193357.111186-2-harshit.m.mogalapalli@oracle.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Tue, 4 Nov 2025 09:54:48 -0800
-X-Gm-Features: AWmQ_bl7Wg5Ky0fAkADoe6a4uQMdjWgFSAOgbvmIWoV-HRcw0uHzFSIXFgIJbpE
-Message-ID: <CAADnVQLe6a8Kae892sVaND-2p1DQDXGD5gqxHWHHUC85ntLCqw@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] bpftool: Print map ID upon creation and support
- JSON output
-To: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-Cc: bpf <bpf@vger.kernel.org>, Alan Maguire <alan.maguire@oracle.com>, 
-	Yonghong Song <yonghong.song@linux.dev>, Quentin Monnet <qmo@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Shuah Khan <shuah@kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Message-Id: <6fbae8b38c532ccd1accfa75df7614f56b6a49d6b4a851b525a59b7a07f33d25@mail.kernel.org>
+In-Reply-To: <20251104172652.1746988-4-ameryhung@gmail.com>
+References: <20251104172652.1746988-4-ameryhung@gmail.com>
+Subject: Re: [PATCH bpf-next v5 3/7] bpf: Pin associated struct_ops when registering async callback
+From: bot+bpf-ci@kernel.org
+To: ameryhung@gmail.com,bpf@vger.kernel.org
+Cc: netdev@vger.kernel.org,alexei.starovoitov@gmail.com,andrii@kernel.org,daniel@iogearbox.net,tj@kernel.org,martin.lau@kernel.org,ameryhung@gmail.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Tue,  4 Nov 2025 18:03:06 +0000 (UTC)
 
-On Sat, Nov 1, 2025 at 12:34=E2=80=AFPM Harshit Mogalapalli
-<harshit.m.mogalapalli@oracle.com> wrote:
->
-> It is useful to print map ID on successful creation.
->
-> JSON case:
-> $ ./bpftool -j map create /sys/fs/bpf/test_map4 type hash key 4 value 8 e=
-ntries 128 name map4
-> {"id":12}
->
-> Generic case:
-> $ ./bpftool  map create /sys/fs/bpf/test_map5 type hash key 4 value 8 ent=
-ries 128 name map5
-> Map successfully created with ID: 15
->
-> Bpftool Issue: https://github.com/libbpf/bpftool/issues/121
-> Acked-by: Yonghong Song <yonghong.song@linux.dev>
-> Reviewed-by: Quentin Monnet <qmo@kernel.org>
-> Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-> ---
-> v2->v3: remove a line break("\n" ) in p_err statement. [Thanks Quentin]
-> ---
->  tools/bpf/bpftool/map.c | 21 +++++++++++++++++----
->  1 file changed, 17 insertions(+), 4 deletions(-)
->
-> diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
-> index c9de44a45778..f32ae5476d76 100644
-> --- a/tools/bpf/bpftool/map.c
-> +++ b/tools/bpf/bpftool/map.c
-> @@ -1251,6 +1251,8 @@ static int do_create(int argc, char **argv)
->         LIBBPF_OPTS(bpf_map_create_opts, attr);
->         enum bpf_map_type map_type =3D BPF_MAP_TYPE_UNSPEC;
->         __u32 key_size =3D 0, value_size =3D 0, max_entries =3D 0;
-> +       struct bpf_map_info map_info =3D {};
-> +       __u32 map_info_len =3D sizeof(map_info);
->         const char *map_name =3D NULL;
->         const char *pinfile;
->         int err =3D -1, fd;
-> @@ -1353,13 +1355,24 @@ static int do_create(int argc, char **argv)
->         }
->
->         err =3D do_pin_fd(fd, pinfile);
-> -       close(fd);
->         if (err)
-> -               goto exit;
-> +               goto close_fd;
->
-> -       if (json_output)
-> -               jsonw_null(json_wtr);
-> +       err =3D bpf_obj_get_info_by_fd(fd, &map_info, &map_info_len);
-> +       if (err) {
-> +               p_err("Failed to fetch map info: %s", strerror(errno));
-> +               goto close_fd;
-> +       }
->
-> +       if (json_output) {
-> +               jsonw_start_object(json_wtr);
-> +               jsonw_int_field(json_wtr, "id", map_info.id);
-> +               jsonw_end_object(json_wtr);
-> +       } else {
-> +               printf("Map successfully created with ID: %u\n", map_info=
-.id);
-> +       }
+--===============0665663762606247832==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-bpftool doesn't print it today and some scripts may depend on that.
-Let's drop this 'printf'. Json can do it unconditionally, since
-json parsing scripts should filter things they care about.
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index 865b0dae3..557570479 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
 
-pw-bot: cr
+[ ... ]
+
+> +static int bpf_async_res_get(struct bpf_async_res *res, struct bpf_prog *prog)
+> +{
+> +	struct bpf_map *st_ops_assoc = NULL;
+> +	int err;
+> +
+> +	prog = bpf_prog_inc_not_zero(prog);
+> +	if (IS_ERR(prog))
+> +		return PTR_ERR(prog);
+> +
+> +	st_ops_assoc = READ_ONCE(prog->aux->st_ops_assoc);
+> +	if (prog->type == BPF_PROG_TYPE_STRUCT_OPS &&
+> +	    st_ops_assoc && st_ops_assoc != BPF_PTR_POISON) {
+> +		st_ops_assoc = bpf_map_inc_not_zero(st_ops_assoc);
+> +		if (IS_ERR(st_ops_assoc)) {
+> +			err = PTR_ERR(st_ops_assoc);
+> +			goto put_prog;
+> +		}
+> +	}
+
+Can this race with bpf_prog_disassoc_struct_ops()? Between reading
+st_ops_assoc and incrementing it, another thread could dissociate the
+map:
+
+  bpf_async_res_get():
+    READ_ONCE(prog->aux->st_ops_assoc)  // reads valid map pointer
+
+  bpf_prog_disassoc_struct_ops():
+    guard(mutex)(&prog->aux->st_ops_assoc_mutex)
+    WRITE_ONCE(prog->aux->st_ops_assoc, NULL)
+    bpf_map_put(st_ops_assoc)  // potentially frees map
+
+  bpf_async_res_get():
+    bpf_map_inc_not_zero(st_ops_assoc)  // use-after-free
+
+The map could be freed via RCU and memory reused before
+bpf_map_inc_not_zero() executes. Other functions that access
+st_ops_assoc (bpf_prog_assoc_struct_ops and bpf_prog_disassoc_struct_ops)
+hold prog->aux->st_ops_assoc_mutex. Additionally, bpf_map_inc_not_zero's
+documentation states "map_idr_lock should have been held or the map
+should have been protected by rcu read lock."
+
+Should bpf_async_res_get() hold the st_ops_assoc_mutex or an RCU read
+lock around the st_ops_assoc access?
+
+> +
+> +	res->prog = prog;
+> +	res->st_ops_assoc = st_ops_assoc;
+> +	return 0;
+> +put_prog:
+> +	bpf_prog_put(prog);
+> +	return err;
+> +}
+
+[ ... ]
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/19077679684
+
+--===============0665663762606247832==--
