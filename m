@@ -1,174 +1,214 @@
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from SJ2PR03CU001.outbound.protection.outlook.com (mail-westusazhn15012043.outbound.protection.outlook.com [52.102.128.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A9F3139579
-	for <bpf@vger.kernel.org>; Wed,  5 Nov 2025 06:30:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762324250; cv=none; b=k2k4ws+dHFa/fFc71twJewjyePAesYg3KR96Nw/ms0jDZ1veaMXe5ufZyi+lRlugn3bXmTZW9wnWkxLnjfFbFNr1Z30vLua6/X1EA5+DOJWVugiijj/HX2GaDObLuarc75cwE/96sq8suH5huqkvd30NKPXws1MPoy5tdM28YA4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762324250; c=relaxed/simple;
-	bh=Z26x65XH0JvMFVrGzQRGfCEMlF+dnmzNZBws3MYMQZY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Fn5gWoimiG3IdTOgGoy/2X4lbGU0nnxGEAJGAChA1B6uXkjlYQExEHAkXb/mPNWzT0vj7Tj22wwLlZTvP2dPPoXq1ELWaUNCAw1C8rFzprcgzZCwEkwludDJqyfRT/fhvFWEqAnYL+RzxWJhuMXHrS55nDizQsek1kxSnD3PWq0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=B4kVA9Cc; arc=none smtp.client-ip=209.85.218.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 553592C0F97;
+	Wed,  5 Nov 2025 06:42:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.102.128.43
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1762324945; cv=fail; b=Ddqc1LwvZSzMg8oQeS9jQqlzpNekS4wI3WFIY1YPxgLOZHWBh8xufxhUsvlk0S8YA8X2UAZWQ+CTie5uCusK1Jf3cGnN92iTs5UJ7EqXmS4Nbxx1Cf83M+PHeJB7VgS2e9qCHw2X+75e0K+WD5UVXSmHYJ0ZdclGteMTwZbPoxk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1762324945; c=relaxed/simple;
+	bh=DcPbnsFYJXiiIM2yUCtWl3Kzi7ZBRKrHNUO4g2GGo8s=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=rUL/ojoCSCmE/huVw2Kl3jOUWZKUoPj6MHk8WL4tD1U+tEZ5l3OuH7Pj2mQ4IgWN5XSzax2bh2T7gdJE+78Nyk4/LGJ/gqovqk2KlKDXvylKpXWNqPorwaqcR0Kgl0VhXXNFPZnyCeMtPHfzjuN5Q6dqpW+ewGemUDqRypgCeoU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=mmZJ2Aqh; arc=fail smtp.client-ip=52.102.128.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B4kVA9Cc"
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-b7272012d30so18451666b.2
-        for <bpf@vger.kernel.org>; Tue, 04 Nov 2025 22:30:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1762324246; x=1762929046; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uNamFYeKrgkfYpGqDEC4ISP3aOvnwP62I1mojV63yjQ=;
-        b=B4kVA9CckEGnSgUUxhOjVPQ4DSw7FVFLT0fg6vkFjYvtV+I49jJAOCQ9s/7mdAv4oC
-         vosS8eAf2/A0K0lghXBrVGQPPGsZ/zga0zkHCM0zt/7gNK/pUjbQZ33YwJS3UtU5afZf
-         5/nYDxFKGdYPAkHHDZQl3MOyZ9L2n6wkTN2SJyq+7ly3C6J0rB3jzBOTGUJa3U8hPowb
-         eLt9FbEhhT9wqK6sjjDZ81J3RJUlXA/J8xlgCYxNmPm+Z/hAbktg68OiTM3EeXJwlg+u
-         O5Gu6k+xqm0d+8acomlaE2cgw0zssWMwNLbQ4i3Wtd797X2IMtvnxZKa65y8uecux/aW
-         O80w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762324246; x=1762929046;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uNamFYeKrgkfYpGqDEC4ISP3aOvnwP62I1mojV63yjQ=;
-        b=npVa1eecjWPERD4jWu1FqYHooqwkKP2mhiE39dBhEe6sNPFyGtKVeNEQWjMB+6U/Dh
-         B7jwx4yKfXrfeRs1Sk6dT2K7lKAq4IGHf7IcwFGt2o+CcLqYcYPXglvQAK714mav2q2x
-         DozmCJ9XFMtf1hDE02lYe9Tjg1xpOY6r5LzlScW/xahAmi4kSpKwrc7P39WEVkxOGATF
-         7ukryDPgDE8i8bPcqo+Ktr+5rP3Zd1AS56ClND5HhHajmUamLwPdMOoJaOz3qVR2W4Kd
-         GRrR90mWdstUPUkHedS/wQnpB10JVtbwLw0jfnfgQAwCzV/0M32wpnQIAf/NwkHhMvlS
-         NU8A==
-X-Forwarded-Encrypted: i=1; AJvYcCVulXOxKtrbxp/jq8mFYcn/X9Ao9IGw3exZ9jMiL5n+ZeyK2OFBo9yrft2BU2e203p6noo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy6PUv3im48gxXVqOyFOypjTZOSPtzx70623eNHSKxQcz7SreFY
-	hGrbgBgnWpRVYvqPoXR4UQyM2ey/BRc1HiMOvxalNUGQN9/DLdeFhkfBTlox7UZNJz5Tj/xwxI8
-	q9nKfyfVAMZnlaRuI0iBfwNmdBWc3Rjw=
-X-Gm-Gg: ASbGncsdwW5iOvRXlWwzxhVYIQVp6wPH4opFiKJ3oyM4/Huvc0fGMcX4ClKTEJOrYLP
-	tqfvN3cSMSXv4kmbzRoPA9koU4bpyT5TYxI1sBxGtaUuuneJPq392VuoH0axM6JPTwZRHEFyw2b
-	+YaTEs4o0ZE+hDXAvEyCH5dSzgP1y1c6g5YTlg/RJE2tWupUJx4WnH1Z0ArZzHEv20KKIf2qSNE
-	N/xXlsKbpncQ/9b9TH5NyzWqhl7e4huC2AB2jgZZez5Ik/kPfTsQX/BJK1O6g==
-X-Google-Smtp-Source: AGHT+IFqGAYKg1ejlrjyHHac/R5Epzr/8vxUNR2hpLrsHc9aurh/urydqFAsyXfJZctx/1QWABChs5p7yxOyy5Zv9Sw=
-X-Received: by 2002:a17:906:f59b:b0:b6d:519f:2389 with SMTP id
- a640c23a62f3a-b72655b73f5mr169921266b.52.1762324246104; Tue, 04 Nov 2025
- 22:30:46 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="mmZJ2Aqh"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=RgUqongUnsDUJVckLYdaQMSWh0V5dQsb7fsw3XKg1PDdirsav44pKZ56c22zbA8I7vaLkHvLKKoaMQCCvOhj+CGds7gdbkOH92jE/U0EKwfpd1GvpTKnpoFCSZhEmFFlOiJ1s8tPexJDolPvxeKsplVKORl7BQl5p0mx1hpPJPJuJyjcv1ICS1DO+tjbXEbcfLJ15TPRgq5TMtvWBBeEisS2cNtps9trzrJCM7xibN3ivVPbiGN4kyRFtSxXz74AAjzCfNxMQTMvWSwEJNlZ3BykrGEmQ76pOChRi5I4hCGHjnWL27PNTUIeab4LWYtv3mHOVeapsubaa1efbajMKQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=G6+9KPfEJ5h+OEIBame0A/5A0RWvWSnYqew22Xfcc/w=;
+ b=B8HX07GtNjm3toJVmMCVJBVCwLYDp0RLACaaItsJSs3MuNIWuO7JFk/m2BonPBAGMlktZBHJikP06xNb+kSdy7cSMuVoMWdASfxGebUANRcLuWpZIoSeoCI8eT6ZycuxUc84UVx7G9voSFgrxqp+YmWRw4N+KvW95i9tDd7QecadLSZSJTl9wKQ3KxmwGxIDO4S56XpOiLt6gE4U1w2k0l0uLE2xwGDJdY3kvwrYXsSIyu4f90zMTx6WiNGFJ/l8oKNacUMoTHl3UJpN7VRke7wEXYG3psQN8yZvbSynwiRS9VdesEMxUYhAa0xrArDVI30V/mqzn6v0hjQNpoOkcQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 198.47.21.195) smtp.rcpttodomain=kernel.org smtp.mailfrom=ti.com; dmarc=pass
+ (p=quarantine sp=none pct=100) action=none header.from=ti.com; dkim=none
+ (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=G6+9KPfEJ5h+OEIBame0A/5A0RWvWSnYqew22Xfcc/w=;
+ b=mmZJ2AqhkC75CdWKwaXBR+vJIXZWJFUxHmbsYUQVdnCvK43bViOSztfm0iAL5PK6QMxtttizoVGBkIbdp4dGzRWX5e2Raia2P8odwZULq04Mku6vJRvMwyVtlqUAItCLueYLnIvVgfsbPTTpyvalhuTw3oRDzUDadiXeFgct54k=
+Received: from BN0PR03CA0015.namprd03.prod.outlook.com (2603:10b6:408:e6::20)
+ by CY5PR10MB5939.namprd10.prod.outlook.com (2603:10b6:930:e::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9298.7; Wed, 5 Nov
+ 2025 06:42:20 +0000
+Received: from BN2PEPF000044AB.namprd04.prod.outlook.com
+ (2603:10b6:408:e6:cafe::52) by BN0PR03CA0015.outlook.office365.com
+ (2603:10b6:408:e6::20) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9298.8 via Frontend Transport; Wed, 5
+ Nov 2025 06:42:20 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 198.47.21.195)
+ smtp.mailfrom=ti.com; dkim=none (message not signed) header.d=none;dmarc=pass
+ action=none header.from=ti.com;
+Received-SPF: Pass (protection.outlook.com: domain of ti.com designates
+ 198.47.21.195 as permitted sender) receiver=protection.outlook.com;
+ client-ip=198.47.21.195; helo=flwvzet201.ext.ti.com; pr=C
+Received: from flwvzet201.ext.ti.com (198.47.21.195) by
+ BN2PEPF000044AB.mail.protection.outlook.com (10.167.243.106) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9298.6 via Frontend Transport; Wed, 5 Nov 2025 06:42:17 +0000
+Received: from DFLE202.ent.ti.com (10.64.6.60) by flwvzet201.ext.ti.com
+ (10.248.192.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Wed, 5 Nov
+ 2025 00:42:14 -0600
+Received: from DFLE204.ent.ti.com (10.64.6.62) by DFLE202.ent.ti.com
+ (10.64.6.60) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Wed, 5 Nov
+ 2025 00:42:14 -0600
+Received: from lelvem-mr06.itg.ti.com (10.180.75.8) by DFLE204.ent.ti.com
+ (10.64.6.62) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20 via Frontend
+ Transport; Wed, 5 Nov 2025 00:42:14 -0600
+Received: from [10.24.69.13] (meghana-pc.dhcp.ti.com [10.24.69.13] (may be forged))
+	by lelvem-mr06.itg.ti.com (8.18.1/8.18.1) with ESMTP id 5A56g7JC3271680;
+	Wed, 5 Nov 2025 00:42:07 -0600
+Message-ID: <7fcb1434-2ff1-408c-934b-9b87cee926c8@ti.com>
+Date: Wed, 5 Nov 2025 12:12:06 +0530
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251104164948.33408-1-puranjay@kernel.org> <CAADnVQJabNCvyT_b2JcW6YdtwCaSs8YVPcdk1FacLJjpz=KFqQ@mail.gmail.com>
- <CAADnVQJtq7LeV2afFKVOd5VP8Mo12fZPhSF3-Y1U0UgMbDtafg@mail.gmail.com>
-In-Reply-To: <CAADnVQJtq7LeV2afFKVOd5VP8Mo12fZPhSF3-Y1U0UgMbDtafg@mail.gmail.com>
-From: Puranjay Mohan <puranjay12@gmail.com>
-Date: Wed, 5 Nov 2025 07:30:34 +0100
-X-Gm-Features: AWmQ_bnd7t_t1vVkOEIxd0EuaWEvhbwNDZiP7ubnxZu4N6XW7zZkIdMGstBAXcM
-Message-ID: <CANk7y0hHtEojP=Vt3rpGCt2OPctLcBR8HyYVrr4ZOdvzj-MDKQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] bpf: Optimize recursion detection for arm64
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Puranjay Mohan <puranjay@kernel.org>, bpf <bpf@vger.kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Kernel Team <kernel-team@meta.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [EXTERNAL] Re: [PATCH net-next v4 2/6] net: ti: icssg-prueth: Add
+ XSK pool helpers
+To: Jakub Kicinski <kuba@kernel.org>
+CC: Paolo Abeni <pabeni@redhat.com>, <horms@kernel.org>,
+	<namcao@linutronix.de>, <vadim.fedorenko@linux.dev>,
+	<jacob.e.keller@intel.com>, <christian.koenig@amd.com>,
+	<sumit.semwal@linaro.org>, <sdf@fomichev.me>, <john.fastabend@gmail.com>,
+	<hawk@kernel.org>, <daniel@iogearbox.net>, <ast@kernel.org>,
+	<edumazet@google.com>, <davem@davemloft.net>, <andrew+netdev@lunn.ch>,
+	<linaro-mm-sig@lists.linaro.org>, <dri-devel@lists.freedesktop.org>,
+	<linux-media@vger.kernel.org>, <bpf@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <srk@ti.com>, Vignesh Raghavendra
+	<vigneshr@ti.com>, Roger Quadros <rogerq@kernel.org>, <danishanwar@ti.com>
+References: <20251023093927.1878411-1-m-malladi@ti.com>
+ <20251023093927.1878411-3-m-malladi@ti.com>
+ <05efdc9a-8704-476e-8179-1a9fc0ada749@redhat.com>
+ <ba1b48dc-b544-4c4b-be8a-d39b104cda21@ti.com>
+ <c792f4da-3385-4c14-a625-e31b09675c32@ti.com>
+ <20251104154828.7aa20642@kernel.org>
+Content-Language: en-US
+From: Meghana Malladi <m-malladi@ti.com>
+In-Reply-To: <20251104154828.7aa20642@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN2PEPF000044AB:EE_|CY5PR10MB5939:EE_
+X-MS-Office365-Filtering-Correlation-Id: 001f4920-7315-47c4-f26e-08de1c3676d3
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|82310400026|36860700013|7416014|376014|1800799024|34020700016|12100799066;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?a1RsTGZSQ0tUc211MUdJWGhNWUkyNFc2ekp5MG05MEcvQlBRSFUvdHR1VnFi?=
+ =?utf-8?B?Yzk3NFJHM2NpTVpiVDJmOVdpM1RKaGZ2K29YZUlhdVlWdElDK2FpVEQ0N1pw?=
+ =?utf-8?B?Q0tseGdsalF4VDlBS2VUSFdjR2wyUjcwWkZKOHBMbDNVYzdwUHFGdE1mY2hS?=
+ =?utf-8?B?UThmbytvK3FqRys4RE9NVmFVSDNVZWdubDUvZlJFYVZvWFcxTFVsbHducS9l?=
+ =?utf-8?B?NTV3ZXp6RXpGemQ1Z08rODQ2VFNzMU1kMmtTNTlEYmljZDBHTDFBMXYxaDk0?=
+ =?utf-8?B?MzBjM1laaXhPVmtJeVBjbkhWZEh0YUFWWGNGcUxoUlpybFRiaEJRdklIN1Fr?=
+ =?utf-8?B?L1ROUUJjUGVHb3E1QmRxb1phRy9yYzJtRUxtaER3T2NDTFpocW1mMENHdHh2?=
+ =?utf-8?B?QmtxaXcxY2dkRHM1QWNGZTJKSUdLSjluMXYyZEhnTlZXNWZVMFQ1QlR2NlZJ?=
+ =?utf-8?B?bnptZjc1ZE5ZUjZFaGYwanpvNENIVFhTUTBlMnY4bkx4OTdpeDQrdE5vVjNF?=
+ =?utf-8?B?cUEvSWw5T0VDTGcxMU1XWEhQd1EwMDJRbzFaRk1sallLWGtQbXIxcHVXUXRC?=
+ =?utf-8?B?WnAwTitOWStpT2NlZjMxVUtKYWhTbjRkY0Z2ZG5DdmZmc2hweVgxSzFUeVNj?=
+ =?utf-8?B?a2lCc1l1UDlFTUJ6MmxiU0JSYjdQdWFSNHNaY292eDBQOWpLcEk2Vzh5dm91?=
+ =?utf-8?B?R2hPeVVEZTBCUUt2MTJWSmkzb2p6djIzRlBsU2VEQWk0LzJYNC9od3p1anpC?=
+ =?utf-8?B?NCtyM0Y0bGFQZEEwVldyMkJsZjlHZ0JLN2JjQ0s4L0pPQ0NmZ1JpY2w4T1NI?=
+ =?utf-8?B?ZFNyWndoMUlzRW1zN1c2VEpRazZvVzlQY3RUYnY2VmVneXM3TUljampiNHJD?=
+ =?utf-8?B?OXoxeFdJSTBhbzhpZFc4YmlHWEllVnZGVmtUVE1QRkpIUGpkOTg5b1NXcTh5?=
+ =?utf-8?B?MjNpQ0FTSDlnZFl5aXdUa2Z4R050NzlMeDd4eDV6UkQrUDJNRW53OElSck84?=
+ =?utf-8?B?Ry9YUEVRVEkwZnhCd1c4YkdZd0lVYWF2YVY4SVBoZXJFazk0bDJUTmRXYW9o?=
+ =?utf-8?B?ZlZkQ0pHSmJXaGtEQXkzWjlDS2hNTzBmU0FEb2tUQTBuTnhxaXBQK0JWVEpK?=
+ =?utf-8?B?UzdYQk1POFRiaDNOeUJONFBzNTU2d0tVQzNOeFNSRGZmU3lNL0FqQm5uSG4v?=
+ =?utf-8?B?di9hYlpJWlFtVWZoczhML1h6eDlYMEkzbTB3bkhuVWlSY2cvd1psN0ZaWDlv?=
+ =?utf-8?B?cHozSmJMeDFJY1M4d3FucU56dm9QSk1xSG4wV0dINE52enF2b0lybEIyQ1lQ?=
+ =?utf-8?B?aGVjbHJXLzE3L0hXRGVHRGM4ZzJ2WFB2ajVvUUxHTXVobXpsOTJpUlVqa0RV?=
+ =?utf-8?B?aVdTaFpHNVlnbHJnZmpzMEoxVGIzVzZ5WEJmaDBKcDN2R2E1VnFLQlBRaW9h?=
+ =?utf-8?B?Z3JoVG9rS3lXRDAzVGNWU3FpSkVvakJ0c2pUaDRucDliWGhkWjBiL1c4Ui9a?=
+ =?utf-8?B?ZFdROWQ3WWw5bkZZbDNza1lWNk9OSzhzdy8ycmxlc1pYRWR2d2poc0U2Vk01?=
+ =?utf-8?B?M3AvemZmQUJwU0tYTlJhMmZ4NzRUMHRTbnluRHZlY0FORmd1RUl1Z09YVTZP?=
+ =?utf-8?B?aXBrUWE3dVFiaVpyb0lzbDZ1VURjb1FKMVZYcjNBQmh0Q084aU9XY2h1MUdz?=
+ =?utf-8?B?WWMwSXVySGxoNGFWSkEzVU9wNDZMOXo4S3Q3R0loTkRKdndacEZ5cVlQUGVK?=
+ =?utf-8?B?dmpYVjQ3TVF2VXg1dTZId0pEaVoxMEYxclNnN1Ywc2UwVy9Cd2Zock43OG16?=
+ =?utf-8?B?RmcxdWtUVXEzRDJTcHBEMU5iWUlpR1J1UDdjUDJINGdRbTZzTElBQ0tBdlA1?=
+ =?utf-8?B?b2k4Y29yRGNQdnJQWEF4a2lyM2dpd215SVE5VGgwK0s3cWJBbHJxclkyTDFa?=
+ =?utf-8?B?SWhheUdBUDh0MTV6WWFWeVA2UFl5TlhRdXRsN0xYaW85djFPM1lyalg0Y2pN?=
+ =?utf-8?B?aGVCWnJlVXVSN0dOeTlqbndUeEFjVFcwQi94Smp2U1BpSTlsRGZqT3R0b1Az?=
+ =?utf-8?B?S0psUlh0dHZiM1FJYTZuZnNaN01HSnZyWnk5bnRJNlNEZm1ZcjVXanlLMEhr?=
+ =?utf-8?Q?l0t4=3D?=
+X-Forefront-Antispam-Report:
+	CIP:198.47.21.195;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:flwvzet201.ext.ti.com;PTR:ErrorRetry;CAT:NONE;SFS:(13230040)(82310400026)(36860700013)(7416014)(376014)(1800799024)(34020700016)(12100799066);DIR:OUT;SFP:1501;
+X-OriginatorOrg: ti.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Nov 2025 06:42:17.9367
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 001f4920-7315-47c4-f26e-08de1c3676d3
+X-MS-Exchange-CrossTenant-Id: e5b49634-450b-4709-8abb-1e2b19b982b7
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e5b49634-450b-4709-8abb-1e2b19b982b7;Ip=[198.47.21.195];Helo=[flwvzet201.ext.ti.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BN2PEPF000044AB.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR10MB5939
 
-On Wed, Nov 5, 2025 at 2:30=E2=80=AFAM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Tue, Nov 4, 2025 at 3:52=E2=80=AFPM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
-> >
-> > On Tue, Nov 4, 2025 at 8:49=E2=80=AFAM Puranjay Mohan <puranjay@kernel.=
-org> wrote:
-> > >
-> > > BPF programs detect recursion by a per-cpu active flag in struct
-> > > bpf_prog. This flag is set/unset in the trampoline using atomic
-> > > operations to prevent inter-context recursion.
-> > >
-> > > Some arm64 platforms have slow per-CPU atomic operations, for example=
-,
-> > > the Neoverse V2.  This commit therefore changes the recursion detecti=
-on
-> > > mechanism to allow four levels of recursion (normal -> softirq -> har=
-dirq
-> > > -> NMI). With allowing limited recursion, we can now stop using atomi=
-c
-> > > operations. This approach is similar to get_recursion_context() in pe=
-rf.
-> > >
-> > > Change active to a per-cpu array of four u8 values, one for each cont=
-ext
-> > > and use non-atomic increment/decrement on them.
-> > >
-> > > This improves the performance on ARM64 (64-CPU Neoverse-N1):
-> > >
-> > >  +----------------+-------------------+-------------------+---------+
-> > >  |    Benchmark   |     Base run      |   Patched run     |  =CE=94 (=
-%)  |
-> > >  +----------------+-------------------+-------------------+---------+
-> > >  | fentry         |  3.694 =C2=B1 0.003M/s |  3.828 =C2=B1 0.007M/s |=
- +3.63%  |
-> > >  | fexit          |  1.389 =C2=B1 0.006M/s |  1.406 =C2=B1 0.003M/s |=
- +1.22%  |
-> > >  | fmodret        |  1.366 =C2=B1 0.011M/s |  1.398 =C2=B1 0.002M/s |=
- +2.34%  |
-> > >  | rawtp          |  3.453 =C2=B1 0.026M/s |  3.714 =C2=B1 0.003M/s |=
- +7.56%  |
-> > >  | tp             |  2.596 =C2=B1 0.005M/s |  2.699 =C2=B1 0.006M/s |=
- +3.97%  |
-> > >  +----------------+-------------------+-------------------+---------+
-> >
-> > The gain is nice, but absolute numbers look very low.
-> > I see fentry doing 52M on the debug kernel with kasan inside VM.
-> >
-> > The patch itself looks good to me, but I realized that we cannot
-> > use this approach for progs with a private stack,
-> > since they require a strict one user per cpu.
-> >
-> > Also tracing progs might have conceptually similar restriction.
-> > A prog could use per-cpu map to store some data.
-> > If prog is attached to some function that may be called from
-> > task and irq context the irq execution will write over per-cpu data
-> > and when it returns the same prog in task context will see garbage.
-> > I'm afraid get_recursion_context() approach won't work. Sorry for
-> > not-thought-through suggestion.
->
-> Actually the get_recursion_context() approach can be salvaged.
-> Instead of:
-> +       active =3D this_cpu_ptr(prog->active);
-> +       if (unlikely(++active[rctx] !=3D 1)) {
->
-> how about
-> active =3D this_cpu_ptr(prog->active);
-> ++active[rctx];
-> if (unlikely(*(u32 *)active !=3D 1 << rctx * 8)) {
+Hi Jakub,
 
-Yes, I think this should work after changing it to be endianness safe.
+On 11/5/25 05:18, Jakub Kicinski wrote:
+> On Tue, 4 Nov 2025 14:23:24 +0530 Meghana Malladi wrote:
+>>> I tried honoring Jakub's comment to avoid freeing the rx memory wherever
+>>> necessary.
+>>>
+>>> "In case of icssg driver, freeing the rx memory is necessary as the
+>>> rx descriptor memory is owned by the cppi dma controller and can be
+>>> mapped to a single memory model (pages/xdp buffers) at a given time.
+>>> In order to remap it, the memory needs to be freed and reallocated."
+>>
+>> Just to make sure we are on the same page, does the above explanation
+>> make sense to you or do you want me to make any changes in this series
+>> for v5 ?
+> 
+> No. Based on your reply below you seem to understand what is being
+> asked, so you're expected to do it.
+> 
 
-This should be the fastest as it doesn't use any atomic operations.
+Yes, this series currently implements whatever Paolo mentioned below.
 
-> that should preserve single prog per cpu rule,
-> and hopefully have better performance than this_cpu_inc_return,
-> xchg, and this_cpu_xchg.
->
-> Also noticed that we use this_cpu_dec() which is probably just as slow.
-> So the first experiment to do is:
-> - this_cpu_dec(*(prog->active));
-> + this_cpu_dec_return(*(prog->active));
+>>>> I think you should:
+>>>> - stop the H/W from processing incoming packets,
+>>>> - spool all the pending packets
+>>>> - attach/detach the xsk_pool
+>>>> - refill the ring
+>>>> - re-enable the H/W
+>>>
+>>> Current implementation follows the same sequence:
+>>> 1. Does a channel teardown -> stop incoming traffic
+>>> 2. free the rx descriptors from free queue and completion queue -> spool
+>>> all pending packets/descriptors
+>>> 3. attach/detach the xsk pool
+>>> 4. allocate rx descriptors and fill the freeq after mapping them to the
+>>> correct memory buffers -> refill the ring
+>>> 5. restart the NAPI - re-enable the H/W to recv the traffic
+>>>
 
-Okay, I will try this first.
+Sorry for the confusion. Whatever I mentioned below might have given an 
+impression that there was additional required work; that wasn’t my 
+intention. What I described is only a possible design enhancement and 
+not mandatory. The current patch series is complete and does not have 
+gaps in its design.
 
->
-> Also as a pre-patch please wrap inc/dec into two helpers
-> and use them everywhere.
-> Will simplify all these experiments.
+>>> I am still working on skipping 2 and 4 steps but this will be a long
+>>> shot. Need to make sure all corner cases are getting covered. If this
+>>> approach looks doable without causing any regressions I might post it as
+>>> a followup patch later in the future.
 
-So, I will go ahead and test all the different setups on arm64 and see
-which is the best.
 
-Thanks,
-Puranjay
+
