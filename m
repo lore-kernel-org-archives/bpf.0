@@ -1,45 +1,49 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9D6934B192;
-	Wed,  5 Nov 2025 20:32:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 083EA34B420;
+	Wed,  5 Nov 2025 20:32:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762374740; cv=none; b=BL1heNAumVis6F3dGqFcA+9GQjNgYMX+SJFMiJifJZIulkU3diAhD/Tfqwh1KdXkoeT7LQJo817ELPJKc4P4DdLlLyPMWkfQLaeSjDXGc2oh7vvaYqZ5w+9RcNciW/dRdLZyMxmj5BpIk+HT6xcrhGyf+KXvjJtbWC5IVvaX4gE=
+	t=1762374741; cv=none; b=dHUJNPZ59I1VAXkZnrwAE3YTz89Dv+3JDJsly8zkXTh4beHu+Ob9tinPmvbEkQo/Je+M7/iHsZITAKOkOLEjl6s4XfWD72zm0EPhBjApUTs0v/De7La3d/mylUURDl3z3XFV7jUAaQDLIcVoMYdxagmGFEPIeMrY8KEkvTpgEho=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762374740; c=relaxed/simple;
-	bh=Iq5yf1ytJm34oKtGaJvxP71I3WkFsasL56D7JZi7uYs=;
+	s=arc-20240116; t=1762374741; c=relaxed/simple;
+	bh=3SQyEsKa4vegmpwnk5NwDoYKeDgsfEpb4R+BPinWNcE=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Prt5z5+9Nv91+hv9BlPlOqSDGoMrayRoifO355VuQ3WFuoRFwZfO97FDl43hFtARq8WTEn7q9up07dw9hriBfudzcC9dCY5bDZncaFvswBw5MuEws0PFsbKqyXTOVihNPZ8SsMbPmDiUmeR+fZskolKbuWahvwqKBcSLt45bdNs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NnbpbU9z; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=ZRRMqxjkF6dV3moqpj/fn5u5irXz4G/aKsFuCjsnxF3U6c9EvI9Tvcyupr0cweMi+eWH5zDNS/IKDFNBi/CyFbJgMSnhpggtAHlWJKCCzBfjRw8m+9xTV1DNXBrUkSLflABypfrnbmwN0fFr0EotH75yAidII4P5we+tbwbZRa4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Vhydh/tQ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NnbpbU9z"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A1D2C19422;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Vhydh/tQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 959E7C116B1;
 	Wed,  5 Nov 2025 20:32:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1762374740;
-	bh=Iq5yf1ytJm34oKtGaJvxP71I3WkFsasL56D7JZi7uYs=;
+	bh=3SQyEsKa4vegmpwnk5NwDoYKeDgsfEpb4R+BPinWNcE=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=NnbpbU9zgonUCD+g1k8V6B3Vb7Tnq9+ZT5Z9D35pM0/ezUfJDQNR1RCLMoLhGfvfP
-	 NLbdPna1nhaTon32nFH8XHdIJgd3vYMJno1JUHJN40jmrmwWN+uC0Gd80f5hL8WoCf
-	 9HjTfd675e55lSK+DztPZcGieXgA87N5FrZBmh+qc82Bq/WZjYiqF6hdZqu0Sva16j
-	 IASuuDBwu5ogPk9DMBYXXR0WRxs5HkbwB/Mm/Fgo2pG6Tx/dL5bcR5W3Ymv3n92aEf
-	 o3EfFzdYy0R6iRzLQ02LYWeb/oYbOlS6kKMMrFqqzZ0DPsxEU7GWWhRXU4T0nhP+jG
-	 NQIhCJ1TjNH+A==
+	b=Vhydh/tQI9xr/YlHbbUKT9zHxmVTJ6t+ba3rjA8qgpeoIQrB56U/+bcCd2s6qrqcY
+	 7smrOg/+KvBe9txgBp5nzq9uiPHthKUSp0Y1FkseYDmMJOaxtXvDhS/LIjP/Dq48Zs
+	 xQvCyBF+NMHrht2k7PfBH6lKyKYti6Mmw+z35Vj6jfcB3/fLg4xSxULoEOThhIROGP
+	 I8QQDYUlBgyVOLdMvCkVsZEx8TjNNee1O+JZEu0ff56JeVlfzMVKOIlXY+RP1Buuqp
+	 NMYt36OPnMYbB4RhUS49kGrl7D1D8q+lG8vmgaGqdKSUIHMYrafKfB3XDy8sMNbpSb
+	 nzlTTu9qmXFsw==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 9676FCE0F56; Wed,  5 Nov 2025 12:32:18 -0800 (PST)
+	id AB7C6CE0FF9; Wed,  5 Nov 2025 12:32:18 -0800 (PST)
 From: "Paul E. McKenney" <paulmck@kernel.org>
 To: rcu@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org,
 	kernel-team@meta.com,
 	rostedt@goodmis.org,
 	"Paul E. McKenney" <paulmck@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
 	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
 	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	linux-arm-kernel@lists.infradead.org,
 	bpf@vger.kernel.org
-Subject: [PATCH v2 07/16] srcu: Require special srcu_struct define/init for SRCU-fast readers
-Date: Wed,  5 Nov 2025 12:32:07 -0800
-Message-Id: <20251105203216.2701005-7-paulmck@kernel.org>
+Subject: [PATCH v2 15/16] srcu: Optimize SRCU-fast-updown for arm64
+Date: Wed,  5 Nov 2025 12:32:15 -0800
+Message-Id: <20251105203216.2701005-15-paulmck@kernel.org>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <bb177afd-eea8-4a2a-9600-e36ada26a500@paulmck-laptop>
 References: <bb177afd-eea8-4a2a-9600-e36ada26a500@paulmck-laptop>
@@ -51,89 +55,116 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This commit adds CONFIG_PROVE_RCU=y checking to enforce the new rule that
-srcu_struct structures passed to srcu_read_lock_fast() and other SRCU-fast
-read-side markers be either initialized with init_srcu_struct_fast()
-on the one hand or defined using either DEFINE_SRCU_FAST() or
-DEFINE_STATIC_SRCU_FAST().  This will enable removal of the non-debug
-read-side checks from srcu_read_lock_fast() and friends, which on my
-laptop provides a 25% speedup (which admittedly amounts to about half
-a nanosecond, but when tracing fastpaths...)
+Some arm64 platforms have slow per-CPU atomic operations, for example,
+the Neoverse V2.  This commit therefore moves SRCU-fast from per-CPU
+atomic operations to interrupt-disabled non-read-modify-write-atomic
+atomic_read()/atomic_set() operations.  This works because
+SRCU-fast-updown is not invoked from read-side primitives, which
+means that if srcu_read_unlock_fast() NMI handlers.  This means that
+srcu_read_lock_fast_updown() and srcu_read_unlock_fast_updown() can
+exclude themselves and each other
+
+This reduces the overhead of calls to srcu_read_lock_fast_updown() and
+srcu_read_unlock_fast_updown() from about 100ns to about 12ns on an ARM
+Neoverse V2.  Although this is not excellent compared to about 2ns on x86,
+it sure beats 100ns.
+
+This command was used to measure the overhead:
+
+tools/testing/selftests/rcutorture/bin/kvm.sh --torture refscale --allcpus --duration 5 --configs NOPREEMPT --kconfig "CONFIG_NR_CPUS=64 CONFIG_TASKS_TRACE_RCU=y" --bootargs "refscale.loops=100000 refscale.guest_os_delay=5 refscale.nreaders=64 refscale.holdoff=30 torture.disable_onoff_at_boot refscale.scale_type=srcu-fast-updown refscale.verbose_batched=8 torture.verbose_sleep_frequency=8 torture.verbose_sleep_duration=8 refscale.nruns=100" --trust-make
 
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
 Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Cc: Steven Rostedt <rostedt@goodmis.org>
 Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: <linux-arm-kernel@lists.infradead.org>
 Cc: <bpf@vger.kernel.org>
 ---
- include/linux/srcu.h  | 34 ++++++++++++++++++++++------------
- kernel/rcu/srcutree.c |  1 +
- 2 files changed, 23 insertions(+), 12 deletions(-)
+ include/linux/srcutree.h | 51 +++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 48 insertions(+), 3 deletions(-)
 
-diff --git a/include/linux/srcu.h b/include/linux/srcu.h
-index 26de47820c58..2982b5a6930f 100644
---- a/include/linux/srcu.h
-+++ b/include/linux/srcu.h
-@@ -271,17 +271,26 @@ static inline int srcu_read_lock(struct srcu_struct *ssp) __acquires(ssp)
-  * @ssp: srcu_struct in which to register the new reader.
-  *
-  * Enter an SRCU read-side critical section, but for a light-weight
-- * smp_mb()-free reader.  See srcu_read_lock() for more information.
-- *
-- * If srcu_read_lock_fast() is ever used on an srcu_struct structure,
-- * then none of the other flavors may be used, whether before, during,
-- * or after.  Note that grace-period auto-expediting is disabled for _fast
-- * srcu_struct structures because auto-expedited grace periods invoke
-- * synchronize_rcu_expedited(), IPIs and all.
-- *
-- * Note that srcu_read_lock_fast() can be invoked only from those contexts
-- * where RCU is watching, that is, from contexts where it would be legal
-- * to invoke rcu_read_lock().  Otherwise, lockdep will complain.
-+ * smp_mb()-free reader.  See srcu_read_lock() for more information.  This
-+ * function is NMI-safe, in a manner similar to srcu_read_lock_nmisafe().
-+ *
-+ * For srcu_read_lock_fast() to be used on an srcu_struct structure,
-+ * that structure must have been defined using either DEFINE_SRCU_FAST()
-+ * or DEFINE_STATIC_SRCU_FAST() on the one hand or initialized with
-+ * init_srcu_struct_fast() on the other.  Such an srcu_struct structure
-+ * cannot be passed to any non-fast variant of srcu_read_{,un}lock() or
-+ * srcu_{down,up}_read().  In kernels built with CONFIG_PROVE_RCU=y,
-+ * __srcu_check_read_flavor() will complain bitterly if you ignore this
-+ * restriction.
-+ *
-+ * Grace-period auto-expediting is disabled for SRCU-fast srcu_struct
-+ * structures because SRCU-fast expedited grace periods invoke
-+ * synchronize_rcu_expedited(), IPIs and all.  If you need expedited
-+ * SRCU-fast grace periods, use synchronize_srcu_expedited().
-+ *
-+ * The srcu_read_lock_fast() function can be invoked only from those
-+ * contexts where RCU is watching, that is, from contexts where it would
-+ * be legal to invoke rcu_read_lock().  Otherwise, lockdep will complain.
-  */
- static inline struct srcu_ctr __percpu *srcu_read_lock_fast(struct srcu_struct *ssp) __acquires(ssp)
+diff --git a/include/linux/srcutree.h b/include/linux/srcutree.h
+index d6f978b50472..0e06f87e1d7c 100644
+--- a/include/linux/srcutree.h
++++ b/include/linux/srcutree.h
+@@ -253,6 +253,34 @@ static inline struct srcu_ctr __percpu *__srcu_ctr_to_ptr(struct srcu_struct *ss
+ 	return &ssp->sda->srcu_ctrs[idx];
+ }
+ 
++/*
++ * Non-atomic manipulation of SRCU lock counters.
++ */
++static inline struct srcu_ctr __percpu notrace *__srcu_read_lock_fast_na(struct srcu_struct *ssp)
++{
++	atomic_long_t *scnp;
++	struct srcu_ctr __percpu *scp;
++
++	lockdep_assert_preemption_disabled();
++	scp = READ_ONCE(ssp->srcu_ctrp);
++	scnp = raw_cpu_ptr(&scp->srcu_locks);
++	atomic_long_set(scnp, atomic_long_read(scnp) + 1);
++	return scp;
++}
++
++/*
++ * Non-atomic manipulation of SRCU unlock counters.
++ */
++static inline void notrace
++__srcu_read_unlock_fast_na(struct srcu_struct *ssp, struct srcu_ctr __percpu *scp)
++{
++	atomic_long_t *scnp;
++
++	lockdep_assert_preemption_disabled();
++	scnp = raw_cpu_ptr(&scp->srcu_unlocks);
++	atomic_long_set(scnp, atomic_long_read(scnp) + 1);
++}
++
+ /*
+  * Counts the new reader in the appropriate per-CPU element of the
+  * srcu_struct.  Returns a pointer that must be passed to the matching
+@@ -327,8 +355,18 @@ __srcu_read_unlock_fast(struct srcu_struct *ssp, struct srcu_ctr __percpu *scp)
+ static inline
+ struct srcu_ctr __percpu notrace *__srcu_read_lock_fast_updown(struct srcu_struct *ssp)
  {
-@@ -317,7 +326,8 @@ static inline struct srcu_ctr __percpu *srcu_read_lock_fast_notrace(struct srcu_
-  * srcu_down_read() for more information.
-  *
-  * The same srcu_struct may be used concurrently by srcu_down_read_fast()
-- * and srcu_read_lock_fast().
-+ * and srcu_read_lock_fast().  However, the same definition/initialization
-+ * requirements called out for srcu_read_lock_safe() apply.
-  */
- static inline struct srcu_ctr __percpu *srcu_down_read_fast(struct srcu_struct *ssp) __acquires(ssp)
+-	struct srcu_ctr __percpu *scp = READ_ONCE(ssp->srcu_ctrp);
++	struct srcu_ctr __percpu *scp;
+ 
++	if (IS_ENABLED(CONFIG_ARM64) && IS_ENABLED(CONFIG_ARM64_USE_LSE_PERCPU_ATOMICS)) {
++		unsigned long flags;
++
++		local_irq_save(flags);
++		scp = __srcu_read_lock_fast_na(ssp);
++		local_irq_restore(flags); /* Avoids leaking the critical section. */
++		return scp;
++	}
++
++	scp = READ_ONCE(ssp->srcu_ctrp);
+ 	if (!IS_ENABLED(CONFIG_NEED_SRCU_NMI_SAFE))
+ 		this_cpu_inc(scp->srcu_locks.counter); // Y, and implicit RCU reader.
+ 	else
+@@ -350,10 +388,17 @@ static inline void notrace
+ __srcu_read_unlock_fast_updown(struct srcu_struct *ssp, struct srcu_ctr __percpu *scp)
  {
-diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
-index c29203b23d1a..2f8aa280911e 100644
---- a/kernel/rcu/srcutree.c
-+++ b/kernel/rcu/srcutree.c
-@@ -766,6 +766,7 @@ void __srcu_check_read_flavor(struct srcu_struct *ssp, int read_flavor)
- 	WARN_ON_ONCE(ssp->srcu_reader_flavor && read_flavor != ssp->srcu_reader_flavor);
- 	WARN_ON_ONCE(old_read_flavor && ssp->srcu_reader_flavor &&
- 		     old_read_flavor != ssp->srcu_reader_flavor);
-+	WARN_ON_ONCE(read_flavor == SRCU_READ_FLAVOR_FAST && !ssp->srcu_reader_flavor);
- 	if (!old_read_flavor) {
- 		old_read_flavor = cmpxchg(&sdp->srcu_reader_flavor, 0, read_flavor);
- 		if (!old_read_flavor)
+ 	barrier();  /* Avoid leaking the critical section. */
+-	if (!IS_ENABLED(CONFIG_NEED_SRCU_NMI_SAFE))
++	if (IS_ENABLED(CONFIG_ARM64)) {
++		unsigned long flags;
++
++		local_irq_save(flags);
++		 __srcu_read_unlock_fast_na(ssp, scp);
++		local_irq_restore(flags);
++	} else if (!IS_ENABLED(CONFIG_NEED_SRCU_NMI_SAFE)) {
+ 		this_cpu_inc(scp->srcu_unlocks.counter);  // Z, and implicit RCU reader.
+-	else
++	} else {
+ 		atomic_long_inc(raw_cpu_ptr(&scp->srcu_unlocks));  // Z, and implicit RCU reader.
++	}
+ }
+ 
+ void __srcu_check_read_flavor(struct srcu_struct *ssp, int read_flavor);
 -- 
 2.40.1
 
