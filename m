@@ -1,94 +1,192 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-172.mta1.migadu.com (out-172.mta1.migadu.com [95.215.58.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F09352836B5;
-	Wed,  5 Nov 2025 18:39:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18EE6307AF8;
+	Wed,  5 Nov 2025 18:59:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762367993; cv=none; b=u2FvasBcr6ao1W5kpwxCaa2hszfDnTTkq8R0V1urVAMUKZ0p6wOY9zCpEfoixMk6DAjd2JbyYLMlyzYXSPOMelCtfI4YNvI9vzBob0oXxMRXVH+qZ35qgAiRzWE4f3+tfIY/V3FP8QbEnSDdxbeFkeNKg+3aXSlSsMT3+Wvh7pc=
+	t=1762369190; cv=none; b=KmYztCQOuS8F3LxdOkwIRB8+d2yq70bOR1YBhUwsgrw7s7ZAoW6sLXa7nIdIlWpEj2Wt0CuNEoM77UVGki4wHm5Ua7at5zr0zXWAGYRBSOBhz6F3m+2mkj8VoAgtypgVZsaY6497nH+Q/w/5uXOGQZcUWLNvPKW9w8Jco9y83eM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762367993; c=relaxed/simple;
-	bh=7XDa5X5lmbUNgOnKU7PfOdgy4Ch0ycidqr0WWTqABIM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mSJbFXxdeEnDFa9yAqmm1YcasgtkJtm56oiTo8s4WBwG6WW7APOBsANWGJFmWg+4wn75W1jAuUqX8IpNSG3r9AbBNrHrt0G7xOshTeMMiVx9/1mF2yg3oZM1xJ3xVr4nnQs7mNPq4V04K9SZY79aG9obyKZv1W59we0m+xLdH+A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AzaObCME; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1762369190; c=relaxed/simple;
+	bh=nDh+dQpfVW4HskEhKroDLaBy66Lf/KANBSc7iKQIYbE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=FUUJb63yhXnRKVpPLop/e+jgrVW/mQrTDXphMbqrGHCXeZn50JxYWuH8bYAucXDcdNLjZ7gGVMHwyNioX78PFNDbpEOhnvO/vR3DrU6v+iwt2UppIjTkt48tJOBcHwOPe5/KUpvkZUK8HzgfkVJaMU7Bu0seRuAPmH3lpUaSTno=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=GAhCEG75; arc=none smtp.client-ip=95.215.58.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AzaObCME"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FFFAC116B1;
-	Wed,  5 Nov 2025 18:39:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762367991;
-	bh=7XDa5X5lmbUNgOnKU7PfOdgy4Ch0ycidqr0WWTqABIM=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=AzaObCMEOkPNWJblHA+XSNBv8eioXE7D8HzTI2sm196GLWUIiEcS91trLrbe8+TCw
-	 mmczy+qAGnYGNXI+E91lp6PYT05/h9ksu1TUPQ2WnXPXkukQBbar6P9/4pk3Hx8jcU
-	 sppIEtathxPvwGx0gbog6vaQYLXUvB/YTjXAR1ErNg8N1a66qdefkRZjUL268+4Wor
-	 i7xdIfCDfegfOAq4nbsR2zXmjnSmjp7uAJ7+9GKfMBfDv8oJiNkVySX/y7j6Q1DJ7W
-	 O56MmI771hr6UYprL0WYfRK++tM3cuVPl+P9FVqCgZkjp7UQLFtTaeHJma12GagMAH
-	 fF1XhXlwBjk3Q==
-Message-ID: <49edb9fa-56be-4853-aced-429f5b40b4be@kernel.org>
-Date: Wed, 5 Nov 2025 19:39:46 +0100
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="GAhCEG75"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1762369185;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=NqZMhlbOnirHNedmJnn0KsZWJg4OSjdHDi8nKl7z83s=;
+	b=GAhCEG75Lh7iVBtFE9N8hr8qYHU5nF976BRu7RZA4di76AyCneZvRbDNYh7UYP12gkUSt9
+	XBw/mxtuVJSYzAo9GxymRcQoQoBt0guQgTldqAwgqLZzBCqRtu+l5bYun7Pc7BZMzTT7JD
+	jW30ruzuTHzrH+0QawmgeiDCkm4kXBg=
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+To: dwarves@vger.kernel.org,
+	alan.maguire@oracle.com,
+	acme@kernel.org,
+	eddyz87@gmail.com
+Cc: bpf@vger.kernel.org,
+	andrii@kernel.org,
+	ast@kernel.org,
+	kernel-team@meta.com
+Subject: [PATCH dwarves v3 1/3] btf_encoder: Remove encoder pointer from btf_encoder_func_state
+Date: Wed,  5 Nov 2025 10:59:24 -0800
+Message-ID: <20251105185926.296539-2-ihor.solodrai@linux.dev>
+In-Reply-To: <20251105185926.296539-1-ihor.solodrai@linux.dev>
+References: <20251105185926.296539-1-ihor.solodrai@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 bpf 1/2] xdp: introduce xdp_convert_skb_to_buff()
-To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
- Jakub Kicinski <kuba@kernel.org>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
- netdev@vger.kernel.org, magnus.karlsson@intel.com,
- aleksander.lobakin@intel.com, ilias.apalodimas@linaro.org, toke@redhat.com,
- lorenzo@kernel.org, syzbot+ff145014d6b0ce64a173@syzkaller.appspotmail.com,
- Ihor Solodrai <ihor.solodrai@linux.dev>, Octavian Purdila <tavip@google.com>
-References: <20251029221315.2694841-1-maciej.fijalkowski@intel.com>
- <20251029221315.2694841-2-maciej.fijalkowski@intel.com>
- <20251029165020.26b5dd90@kernel.org> <aQNWlB5UL+rK8ZE5@boxer>
- <20251030082519.5db297f3@kernel.org> <aQPJCvBgR3d7lY+g@boxer>
- <20251030190511.62575480@kernel.org> <aQSfgQ9+Jc8dkdhg@boxer>
- <20251031114952.37d1cb1f@kernel.org> <aQidBn22H1UVxST5@boxer>
-Content-Language: en-US
-From: Jesper Dangaard Brouer <hawk@kernel.org>
-In-Reply-To: <aQidBn22H1UVxST5@boxer>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
+Since multithreading was moved to dwarf_loader [1], pahole maintains a
+single global btf_encoder instance. However parts of btf_encoder.c
+exist to manage mulitple encoders, which is not necessary anymore.
 
+This patch removes encoder pointer from struct btf_encoder_func_state.
+We create a state for every encountered instance of a function in
+DWARF, and currently they carry around the encoder unnecessarily.
 
-On 03/11/2025 13.16, Maciej Fijalkowski wrote:
-> On Fri, Oct 31, 2025 at 11:49:52AM -0700, Jakub Kicinski wrote:
->> On Fri, 31 Oct 2025 12:37:37 +0100 Maciej Fijalkowski wrote:
->>>>> would be fine for you? Plus AI reviewer has kicked me in the nuts on veth
->>>>> patch so have to send v6 anyways.
->>>>
->>>> The veth side unfortunately needs more work than Mr Robot points out.
->>>> For some reason veth tries to turn skb into an xdp_frame..
->>>
->>> That is beyond the scope of the fix that I started doing as you're
->>> undermining overall XDP support in veth, IMHO.
->>>
->>> I can follow up on this on some undefined future but right now I will
->>> have to switch to some other work.
->>>
->>> If you disagree and insist on addressing skb->xdp_frame in veth within
->>> this patchset then I'm sorry but I will have to postpone my activities
->>> here.
->>
->> Yeah, I understand. A lot of the skb<>XDP integration is a steaming
->> pile IMO, as mentioned elsewhere. I'd like to keep the core clean
->> tho, so if there's some corner cases in veth after your changes
->> I'll live. But I'm worried that the bugs in veth will make you
->> want to preserve the conditional in xdp_convert_skb_to_buff() :(
-> 
-> Probably the conditional would cover these corner cases, but I am not
-> insisting on it. skb_pp_cow_data() is called under certain circumstances
-> in veth but I have never seen a case on my side where it was skipped,
-> mostly because of headroom size being too small.
+[1] https://lore.kernel.org/all/20250109185950.653110-9-ihor.solodrai@pm.me/
 
-This reminds me that we should change/increase veth
-net_device.needed_headroom when there is an XDP prog attached.
-As you said, today all SKB will basically get mem reallocated.
+Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+---
+ btf_encoder.c | 34 +++++++++++++++-------------------
+ 1 file changed, 15 insertions(+), 19 deletions(-)
 
---Jesper
+diff --git a/btf_encoder.c b/btf_encoder.c
+index 03bc3c7..a6fdc58 100644
+--- a/btf_encoder.c
++++ b/btf_encoder.c
+@@ -79,7 +79,6 @@ struct btf_encoder_func_annot {
+ 
+ /* state used to do later encoding of saved functions */
+ struct btf_encoder_func_state {
+-	struct btf_encoder *encoder;
+ 	struct elf_function *elf;
+ 	uint32_t type_id_off;
+ 	uint16_t nr_parms;
+@@ -819,7 +818,7 @@ static int32_t btf_encoder__add_func_proto(struct btf_encoder *encoder, struct f
+ 					   struct btf_encoder_func_state *state)
+ {
+ 	const struct btf_type *t;
+-	struct btf *btf;
++	struct btf *btf = encoder->btf;
+ 	struct parameter *param;
+ 	uint16_t nr_params, param_idx;
+ 	int32_t id, type_id;
+@@ -834,12 +833,9 @@ static int32_t btf_encoder__add_func_proto(struct btf_encoder *encoder, struct f
+ 
+ 	/* add btf_type for func_proto */
+ 	if (ftype) {
+-		btf = encoder->btf;
+ 		nr_params = ftype->nr_parms + (ftype->unspec_parms ? 1 : 0);
+ 		type_id = btf_encoder__tag_type(encoder, ftype->tag.type);
+ 	} else if (state) {
+-		encoder = state->encoder;
+-		btf = state->encoder->btf;
+ 		nr_params = state->nr_parms;
+ 		type_id = state->ret_type_id;
+ 	} else {
+@@ -1123,13 +1119,12 @@ static bool types__match(struct btf_encoder *encoder,
+ 	return false;
+ }
+ 
+-static bool funcs__match(struct btf_encoder_func_state *s1,
++static bool funcs__match(struct btf_encoder *encoder,
++			 struct btf_encoder_func_state *s1,
+ 			 struct btf_encoder_func_state *s2)
+ {
+-	struct btf_encoder *encoder = s1->encoder;
+ 	struct elf_function *func = s1->elf;
+-	struct btf *btf1 = s1->encoder->btf;
+-	struct btf *btf2 = s2->encoder->btf;
++	struct btf *btf = encoder->btf;
+ 	uint8_t i;
+ 
+ 	if (s1->nr_parms != s2->nr_parms) {
+@@ -1138,7 +1133,7 @@ static bool funcs__match(struct btf_encoder_func_state *s1,
+ 					   s1->nr_parms, s2->nr_parms);
+ 		return false;
+ 	}
+-	if (!types__match(encoder, btf1, s1->ret_type_id, btf2, s2->ret_type_id)) {
++	if (!types__match(encoder, btf, s1->ret_type_id, btf, s2->ret_type_id)) {
+ 		btf_encoder__log_func_skip(encoder, func, "return type mismatch\n");
+ 		return false;
+ 	}
+@@ -1146,11 +1141,11 @@ static bool funcs__match(struct btf_encoder_func_state *s1,
+ 		return true;
+ 
+ 	for (i = 0; i < s1->nr_parms; i++) {
+-		if (!types__match(encoder, btf1, s1->parms[i].type_id,
+-				  btf2, s2->parms[i].type_id)) {
++		if (!types__match(encoder, btf, s1->parms[i].type_id,
++				  btf, s2->parms[i].type_id)) {
+ 			if (encoder->verbose) {
+-				const char *p1 = btf__name_by_offset(btf1, s1->parms[i].name_off);
+-				const char *p2 = btf__name_by_offset(btf2, s2->parms[i].name_off);
++				const char *p1 = btf__name_by_offset(btf, s1->parms[i].name_off);
++				const char *p2 = btf__name_by_offset(btf, s2->parms[i].name_off);
+ 
+ 				btf_encoder__log_func_skip(encoder, func,
+ 							   "param type mismatch for param#%d %s %s %s\n",
+@@ -1244,7 +1239,6 @@ static int32_t btf_encoder__save_func(struct btf_encoder *encoder, struct functi
+ 	if (!state)
+ 		return -ENOMEM;
+ 
+-	state->encoder = encoder;
+ 	state->elf = func;
+ 	state->nr_parms = ftype->nr_parms + (ftype->unspec_parms ? 1 : 0);
+ 	state->ret_type_id = ftype->tag.type == 0 ? 0 : encoder->type_id_off + ftype->tag.type;
+@@ -1410,7 +1404,9 @@ static int saved_functions_cmp(const void *_a, const void *_b)
+ 	return elf_function__name_cmp(a->elf, b->elf);
+ }
+ 
+-static int saved_functions_combine(struct btf_encoder_func_state *a, struct btf_encoder_func_state *b)
++static int saved_functions_combine(struct btf_encoder *encoder,
++				   struct btf_encoder_func_state *a,
++				   struct btf_encoder_func_state *b)
+ {
+ 	uint8_t optimized, unexpected, inconsistent, uncertain_parm_loc;
+ 
+@@ -1421,7 +1417,7 @@ static int saved_functions_combine(struct btf_encoder_func_state *a, struct btf_
+ 	unexpected = a->unexpected_reg | b->unexpected_reg;
+ 	inconsistent = a->inconsistent_proto | b->inconsistent_proto;
+ 	uncertain_parm_loc = a->uncertain_parm_loc | b->uncertain_parm_loc;
+-	if (!unexpected && !inconsistent && !funcs__match(a, b))
++	if (!unexpected && !inconsistent && !funcs__match(encoder, a, b))
+ 		inconsistent = 1;
+ 	a->optimized_parms = b->optimized_parms = optimized;
+ 	a->unexpected_reg = b->unexpected_reg = unexpected;
+@@ -1471,7 +1467,7 @@ static int btf_encoder__add_saved_funcs(struct btf_encoder *encoder, bool skip_e
+ 		 */
+ 		j = i + 1;
+ 
+-		while (j < nr_saved_fns && saved_functions_combine(&saved_fns[i], &saved_fns[j]) == 0)
++		while (j < nr_saved_fns && saved_functions_combine(encoder, &saved_fns[i], &saved_fns[j]) == 0)
+ 			j++;
+ 
+ 		/* do not exclude functions with optimized-out parameters; they
+@@ -1488,7 +1484,7 @@ static int btf_encoder__add_saved_funcs(struct btf_encoder *encoder, bool skip_e
+ 					0, 0);
+ 
+ 		if (add_to_btf) {
+-			err = btf_encoder__add_func(state->encoder, state);
++			err = btf_encoder__add_func(encoder, state);
+ 			if (err < 0)
+ 				goto out;
+ 		}
+-- 
+2.51.1
+
