@@ -1,30 +1,32 @@
-Received: from out-173.mta1.migadu.com (out-173.mta1.migadu.com [95.215.58.173])
+Received: from out-179.mta1.migadu.com (out-179.mta1.migadu.com [95.215.58.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CC633346BC
-	for <bpf@vger.kernel.org>; Wed,  5 Nov 2025 15:16:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A048334C10
+	for <bpf@vger.kernel.org>; Wed,  5 Nov 2025 15:16:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762355777; cv=none; b=d5/+lc7Rh9ukL2W+eXYs8T9DUNvQIoxBqnCPJqYdc9EXMU+zyEMrXq+zSGHO8KlaaKK5Zkvtev6J4T6aSCHSOPtP6ZQBwdSCbPjkjHLVqq9FK9XQq2DwDRf1SKzN51K8yQUpVgkcM0GqIQFZt0OZwUaCaOSk/lYiw3g1UFzW0vs=
+	t=1762355778; cv=none; b=bTWentcVNd7Q4jiBQKB+3+yZMFy85TmBA8MoAHCvt81buiI6skUsCKGwvDhCcnOlJV9T49xb9TlETzhIDtuXVBTW9UW2EBgOf21lPGDUJDsUiJfIILf0K8+F25jIsPNaIkf+GOpJZ4BuBK1nCeVNaar7drVZ3jpRL83YCLAUL0A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762355777; c=relaxed/simple;
-	bh=KwVGKyItxwHcDbibJdy6RGzeEt9wjoeI1M8MUoQKS7A=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=WQodnIEm4CzxFTvOr3/WXvqZYtt/uUT3HOCpxD+zUJmR64okcPg6FTOmQgIMBmDqXCs8/o5iSdJut79hKBBRwvKVIqL/2KEo12FE8VrPxpHHHbQGyYwdmeYIjCxPc8uIKyHH6nxL7hJhfhKu3VVm6hoKBNW/uw7NzWa7j6xf80M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=imR9MuJp; arc=none smtp.client-ip=95.215.58.173
+	s=arc-20240116; t=1762355778; c=relaxed/simple;
+	bh=rJTtHrK1MQ6wRfBIm0WngyG0NegtLpRqfoH9sizKqvk=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=vGVCgWk45HbX6v+2Z5EvWLAzSNFTqr5TzSEzjHjXFP2YSSr16rkroeRBe5WqeWNhPkdc1ZWPmeFJ4aRy5upH1zFL4pYEUc+tydtxU5btz1SCTX5ErI7FxKyPBxQtdqcozKNQFgLgF3e0zobrZ7LZyh5dK80oZHzspXA3uvKiClo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=GsIrZWgA; arc=none smtp.client-ip=95.215.58.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="imR9MuJp"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="GsIrZWgA"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1762355763;
+	t=1762355774;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=MJsT9hlhLTsvCKavMiWN98EUIoevbIGcLS4c0FMpc4g=;
-	b=imR9MuJpbtsgtdJyzlLIO0rXuzIEOPtTjDHCPPqsMoc3C4reloOxKTXeWx9R8R3Y9Izq49
-	X45/USNluFUT5/gEl6+OHDlCK8B9jf0eFhtykxrrax1RSEW/dm9LB0iav9FEiY6lHqQyy6
-	BXAefAoAE34JY6OF97u5dq6Dc/pltqI=
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=gGk84jQ2XkxWi5Eq+6YQXJlTeelSrNDS1DJNo0IH9Lw=;
+	b=GsIrZWgAELCkW+My7cw2E3qDRz8e36W1QnxgBb5fwGfs3SolTJs1BrJ8/JGQ26Lj90cVHc
+	HVgqDK18YBWL1g47wlW4uyLwltX/vrm32uI8YOAd23FJxChBbds9s+juMP9P3Zq/MM6tn7
+	O4FuGTKksDufPed440ymftsbY6PvfC0=
 From: Leon Hwang <leon.hwang@linux.dev>
 To: bpf@vger.kernel.org
 Cc: ast@kernel.org,
@@ -44,9 +46,11 @@ Cc: ast@kernel.org,
 	linux-kernel@vger.kernel.org,
 	kernel-patches-bot@fb.com,
 	Leon Hwang <leon.hwang@linux.dev>
-Subject: [PATCH bpf-next v6 0/2] bpf: Free special fields when update [lru_,]percpu_hash maps
-Date: Wed,  5 Nov 2025 23:14:05 +0800
-Message-ID: <20251105151407.12723-1-leon.hwang@linux.dev>
+Subject: [PATCH bpf-next v6 2/2] selftests/bpf: Add test to verify freeing the special fields when update [lru_,]percpu_hash maps
+Date: Wed,  5 Nov 2025 23:14:07 +0800
+Message-ID: <20251105151407.12723-3-leon.hwang@linux.dev>
+In-Reply-To: <20251105151407.12723-1-leon.hwang@linux.dev>
+References: <20251105151407.12723-1-leon.hwang@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -56,84 +60,159 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-In the discussion thread
-"[PATCH bpf-next v9 0/7] bpf: Introduce BPF_F_CPU and BPF_F_ALL_CPUS flags for percpu maps"[1],
-it was pointed out that missing calls to bpf_obj_free_fields() could
-lead to memory leaks.
+Add test to verify that updating [lru_,]percpu_hash maps decrements
+refcount when BPF_KPTR_REF objects are involved.
 
-A selftest was added to confirm that this is indeed a real issue - the
-refcount of BPF_KPTR_REF field is not decremented when
-bpf_obj_free_fields() is missing after copy_map_value[,_long]().
+The tests perform the following steps:
 
-Further inspection of copy_map_value[,_long]() call sites revealed two
-locations affected by this issue:
+1. Call update_elem() to insert an initial value.
+2. Use bpf_refcount_acquire() to increment the refcount.
+3. Store the node pointer in the map value.
+4. Add the node to a linked list.
+5. Probe-read the refcount and verify it is *2*.
+6. Call update_elem() again to trigger refcount decrement.
+7. Probe-read the refcount and verify it is *1*.
 
-1. pcpu_copy_value()
-2. htab_map_update_elem() when used with BPF_F_LOCK
-
-Similar case happens when update local storage maps with BPF_F_LOCK.
-
-This series fixes the cases where BPF_F_LOCK is not involved by
-properly calling bpf_obj_free_fields() after copy_map_value[,_long](),
-and adds a selftest to verify the fix.
-
-The remaining cases involving BPF_F_LOCK will be addressed in a
-separate patch set after the series
-"bpf: Introduce BPF_F_CPU and BPF_F_ALL_CPUS flags for percpu maps"
-is applied.
-
-Changes:
-v5 -> v6:
-* Update the test name to include "refcounted_kptr".
-* Update some local variables' name in the test (per Alexei).
-* v5: https://lore.kernel.org/bpf/20251104142714.99878-1-leon.hwang@linux.dev/
-
-v4 -> v5:
-* Use a local variable to store the this_cpu_ptr()/per_cpu_ptr() result,
-  and reuse it between copy_map_value[,_long]() and
-  bpf_obj_free_fields() in patch #1 (per Andrii).
-* Drop patch #2 and #3, because the combination of BPF_F_LOCK with other
-  special fields (except for BPF_SPIN_LOCK) will be disallowed on the
-  UAPI side in the future (per Alexei).
-* v4: https://lore.kernel.org/bpf/20251030152451.62778-1-leon.hwang@linux.dev/
-
-v3 -> v4:
-* Target bpf-next tree.
-* Address comments from Amery:
-  * Drop 'bpf_obj_free_fields()' in the path of updating local storage
-    maps without BPF_F_LOCK.
-  * Drop the corresponding self test.
-  * Respin the other test of local storage maps using syscall BPF
-    programs.
-* v3: https://lore.kernel.org/bpf/20251026154000.34151-1-leon.hwang@linux.dev/
-
-v2 -> v3:
-* Free special fields when update local storage maps without BPF_F_LOCK.
-* Add test to verify decrementing refcount when update cgroup local
-  storage maps without BPF_F_LOCK.
-* Address review from AI bot:
-  * Slow path with BPF_F_LOCK (around line 642-646) in
-    'bpf_local_storage.c'.
-* v2: https://lore.kernel.org/bpf/20251020164608.20536-1-leon.hwang@linux.dev/
-
-v1 -> v2:
-* Add test to verify decrementing refcount when update cgroup local
-  storage maps with BPF_F_LOCK.
-* Address review from AI bot:
-  * Fast path without bucket lock (around line 610) in
-    'bpf_local_storage.c'.
-* v1: https://lore.kernel.org/bpf/20251016145801.47552-1-leon.hwang@linux.dev/
-
-Leon Hwang (2):
-  bpf: Free special fields when update [lru_,]percpu_hash maps
-  selftests/bpf: Add test to verify freeing the special fields when
-    update [lru_,]percpu_hash maps
-
- kernel/bpf/hashtab.c                          | 10 +++-
+Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+---
  .../bpf/prog_tests/refcounted_kptr.c          | 57 ++++++++++++++++++
  .../selftests/bpf/progs/refcounted_kptr.c     | 60 +++++++++++++++++++
- 3 files changed, 125 insertions(+), 2 deletions(-)
+ 2 files changed, 117 insertions(+)
 
---
+diff --git a/tools/testing/selftests/bpf/prog_tests/refcounted_kptr.c b/tools/testing/selftests/bpf/prog_tests/refcounted_kptr.c
+index d6bd5e16e6372..086f679fa3f61 100644
+--- a/tools/testing/selftests/bpf/prog_tests/refcounted_kptr.c
++++ b/tools/testing/selftests/bpf/prog_tests/refcounted_kptr.c
+@@ -44,3 +44,60 @@ void test_refcounted_kptr_wrong_owner(void)
+ 	ASSERT_OK(opts.retval, "rbtree_wrong_owner_remove_fail_a2 retval");
+ 	refcounted_kptr__destroy(skel);
+ }
++
++void test_percpu_hash_refcounted_kptr_refcount_leak(void)
++{
++	struct refcounted_kptr *skel;
++	int cpu_nr, fd, err, key = 0;
++	struct bpf_map *map;
++	size_t values_sz;
++	u64 *values;
++	LIBBPF_OPTS(bpf_test_run_opts, opts,
++		    .data_in = &pkt_v4,
++		    .data_size_in = sizeof(pkt_v4),
++		    .repeat = 1,
++	);
++
++	cpu_nr = libbpf_num_possible_cpus();
++	if (!ASSERT_GT(cpu_nr, 0, "libbpf_num_possible_cpus"))
++		return;
++
++	values = calloc(cpu_nr, sizeof(u64));
++	if (!ASSERT_OK_PTR(values, "calloc values"))
++		return;
++
++	skel = refcounted_kptr__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "refcounted_kptr__open_and_load")) {
++		free(values);
++		return;
++	}
++
++	values_sz = cpu_nr * sizeof(u64);
++	memset(values, 0, values_sz);
++
++	map = skel->maps.percpu_hash;
++	err = bpf_map__update_elem(map, &key, sizeof(key), values, values_sz, 0);
++	if (!ASSERT_OK(err, "bpf_map__update_elem"))
++		goto out;
++
++	fd = bpf_program__fd(skel->progs.percpu_hash_refcount_leak);
++	err = bpf_prog_test_run_opts(fd, &opts);
++	if (!ASSERT_OK(err, "bpf_prog_test_run_opts"))
++		goto out;
++	if (!ASSERT_EQ(opts.retval, 2, "opts.retval"))
++		goto out;
++
++	err = bpf_map__update_elem(map, &key, sizeof(key), values, values_sz, 0);
++	if (!ASSERT_OK(err, "bpf_map__update_elem"))
++		goto out;
++
++	fd = bpf_program__fd(skel->progs.check_percpu_hash_refcount);
++	err = bpf_prog_test_run_opts(fd, &opts);
++	ASSERT_OK(err, "bpf_prog_test_run_opts");
++	ASSERT_EQ(opts.retval, 1, "opts.retval");
++
++out:
++	refcounted_kptr__destroy(skel);
++	free(values);
++}
++
+diff --git a/tools/testing/selftests/bpf/progs/refcounted_kptr.c b/tools/testing/selftests/bpf/progs/refcounted_kptr.c
+index 893a4fdb4b6e9..1aca85d86aebc 100644
+--- a/tools/testing/selftests/bpf/progs/refcounted_kptr.c
++++ b/tools/testing/selftests/bpf/progs/refcounted_kptr.c
+@@ -568,4 +568,64 @@ int BPF_PROG(rbtree_sleepable_rcu_no_explicit_rcu_lock,
+ 	return 0;
+ }
+ 
++private(kptr_ref) u64 ref;
++
++static int probe_read_refcount(void)
++{
++	u32 refcount;
++
++	bpf_probe_read_kernel(&refcount, sizeof(refcount), (void *) ref);
++	return refcount;
++}
++
++static int __insert_in_list(struct bpf_list_head *head, struct bpf_spin_lock *lock,
++			    struct node_data __kptr **node)
++{
++	struct node_data *node_new, *node_ref, *node_old;
++
++	node_new = bpf_obj_new(typeof(*node_new));
++	if (!node_new)
++		return -1;
++
++	node_ref = bpf_refcount_acquire(node_new);
++	node_old = bpf_kptr_xchg(node, node_new);
++	if (node_old) {
++		bpf_obj_drop(node_old);
++		bpf_obj_drop(node_ref);
++		return -2;
++	}
++
++	bpf_spin_lock(lock);
++	bpf_list_push_front(head, &node_ref->l);
++	ref = (u64)(void *) &node_ref->ref;
++	bpf_spin_unlock(lock);
++	return probe_read_refcount();
++}
++
++struct {
++	__uint(type, BPF_MAP_TYPE_PERCPU_HASH);
++	__type(key, int);
++	__type(value, struct map_value);
++	__uint(max_entries, 1);
++} percpu_hash SEC(".maps");
++
++SEC("tc")
++int percpu_hash_refcount_leak(void *ctx)
++{
++	struct map_value *v;
++	int key = 0;
++
++	v = bpf_map_lookup_elem(&percpu_hash, &key);
++	if (!v)
++		return 0;
++
++	return __insert_in_list(&head, &lock, &v->node);
++}
++
++SEC("tc")
++int check_percpu_hash_refcount(void *ctx)
++{
++	return probe_read_refcount();
++}
++
+ char _license[] SEC("license") = "GPL";
+-- 
 2.51.2
 
