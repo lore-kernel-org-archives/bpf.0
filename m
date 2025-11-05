@@ -1,146 +1,102 @@
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70F7F343D9C
-	for <bpf@vger.kernel.org>; Wed,  5 Nov 2025 19:51:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CFD2257AD1
+	for <bpf@vger.kernel.org>; Wed,  5 Nov 2025 20:10:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762372314; cv=none; b=QzyL2uD6M91w/m69Lj6bEGSve4CD7Z15YUG0a/0RTjNaSqMzg8rvL3Qsddkgweu+zauE/zdDy94evOAE5VtBGinzOYfcVtxhusMnMogCrldfKT8OQXCe43jHBNVeaI8e6YwJvo4V80G9/7LkODlAvZhCvcm6M9XpfzDW5MSQ9rU=
+	t=1762373409; cv=none; b=rx8VXWsTShWNhLgA6xERVc5t9jyh9h8b0vdR3mgZkclRfrA19/9FiW/I2f6uCYBlSjrNJndC6kpG6Fdxsq0kOnhWATKiZBE5Y+2oULMGKomJrtSTGdbA3Yx8XMuAlgh+MUuOHFHM3YVdNeQ0JpuqR0EhaarUTOxIi+h5BFvZBEM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762372314; c=relaxed/simple;
-	bh=SyjnyK2mM7BPl8arvIT1TqAsNFqJsg/GvV58Gk3CgP4=;
+	s=arc-20240116; t=1762373409; c=relaxed/simple;
+	bh=HSG3yyTFGMqKZ0cSpvp51BJAnBQZN+IrjtCtx86iIwI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=i9+9Cf9gGOo7O9uKMKEfIDd/ohuSo4vMHySX6rldpRtSL0p6ld391jMDRvMnw1oIe/ciSLEy+lITTnljdlVdVplyUJEQlPD2+p05GzNHo5DmMZTInuwLC9PN3VVrb7RSG0K8crCX8M2XYJQM5loZbJV4xPMwfE9BcM153qy3FVQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nALGEc/+; arc=none smtp.client-ip=209.85.214.172
+	 Content-Type:Content-Disposition:In-Reply-To; b=OvGu+YkiGTjeHXDnAJYpPGmN1pOJJtI0B7RHPJRoXNpHDxyesMU2pqV42AV1/Rfrp0GOyIJXdpDB2JfFriOzPUPnC+YLe9tC/lPpHyqW1Y7rPmsQL7vdxTX8Io6UhKYxsNQWu6peAGtF/jfh7df1VmrRnr1kAdWYtuzHsHJkq4I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nisTt9wn; arc=none smtp.client-ip=209.85.208.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nALGEc/+"
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-29558061c68so2786275ad.0
-        for <bpf@vger.kernel.org>; Wed, 05 Nov 2025 11:51:52 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nisTt9wn"
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-6399328ff1fso301258a12.0
+        for <bpf@vger.kernel.org>; Wed, 05 Nov 2025 12:10:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1762372312; x=1762977112; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1762373405; x=1762978205; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ksJDtaPRfEdf2wyhHYMWN9wPkaygRfw7CbDDkQ9lv28=;
-        b=nALGEc/+SZA0IY4vWvdqu/Tm0hLNqzvjXxAiOUhFBJ/YPAoWxmZv3pHjBkLJroXlDp
-         89/fu6UIEIyEdE6QDrRG8lPGSj9f3wL0sqr4NMW8MUQy6HXcFs1W1YtA5LBtBJ5WX5dm
-         KO8tay4nX9vTQi+7C0CrF5MS7oowmeSkxqXWUXYS7DTqmbowyYKV6eh7693WkweDIhNC
-         gndr3swjfK9qmg2JctGYrCHEEWra5zxcAkU/Akb2+AosAwF3DXc3siUICCCruHiaAiew
-         ecsiEYdTLVSLKPIimVsW6eecIL8jn3/QPdu2cspWQ9SFYAl/GGsLwNRHtYr7neHK2qTX
-         NGKw==
+        bh=w4NT9lfKj/E3SYNd0qsKIwheb3jqENbhsmTvnBecBgc=;
+        b=nisTt9wn2idwgKa5Df6ru5yUqzjabLX7FHRsv1kOORBZr617oY4epWIOrfvR8VATWz
+         hkR5fkJz3/W0Quy5CMsqDJ75PVvungyRe+hFWUt6YOvPEYeYBo0H9S3sCV+tkzH2/OWZ
+         1OComI8lBK1QLiLJBNaliVSlNslSjgvysN7Yxqucmj+bblWyze8kAR7u20ycyZunkc5u
+         jdtCXGALEjHKTgf7NWPgg0AGoUeTPR26RZgkRrSwEz6MDaFTDxB8ZTejgE1qr7sXlMDQ
+         FGh69ILAyMf4GCFm4tyjgOCj4gBFAXs0Bq3vABJE24UO2b2XbD+mgFrkLmsHOMkfkKG7
+         Fn+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762372312; x=1762977112;
+        d=1e100.net; s=20230601; t=1762373405; x=1762978205;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ksJDtaPRfEdf2wyhHYMWN9wPkaygRfw7CbDDkQ9lv28=;
-        b=PrbKE8EqznORgk4zTKTgZ97OLWkMNXW0kDlKKF0O6QgBK92KSGrv+cz2p0d56sH2sR
-         LYH63tR0r6ZHtVxmaYZdkU9HvmvH+xUhZBkXTIwXgnq/ceP9BBRk6GK70nfUgBJDHCF9
-         tYvoqQE2Ilj1kVbhmY6EzNDSBPVsy1GfXnc/YL5zz0s7n78kCG6mZOlQZGpqrMx/WfEh
-         YuMBOIUylt/Q7t6M5FGeYUdcsJpmLKXhdNhAhAyZp/PEHGUWu8EGhe0E6f37xU3G3OAh
-         vmgoJCzWyRVr7kYdD4Rzsw18W/neKc3z5By0io8sUeDB2ufq8fS3rGnAelFaXDMHR7fu
-         ewLg==
-X-Forwarded-Encrypted: i=1; AJvYcCW3VwtXiI14YUlI6np1jKCn0VqemM8bbY6VaTaaFH44keLLGYC3L9O0rM/iCBKK2lny3Tg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxO2vsPuzb9LGAmI/082FN4F+vxm41XRf4b4H5IXrT+9IZZPGE6
-	P1yMJyVQe7QRjubrXhvSmzaUPcwR1R6Y0W7qG/gP1c7ujm/rha+eTO0=
-X-Gm-Gg: ASbGnctRZBZbORhVTbPH/VSepwqf2LyOoOzEU1n9sTbx/bw/ALIU4Ad0zeURKiU3EkH
-	NVep9c6nD0scnJ5Mc/E3XWM2fl7oAiChp7P/8z4GPo/Eq0VfMhodVwbNhitrchft6vogkn3QW6h
-	zmQ6rxfUAvwqq/UKXjGjD2OutrSkQsk5XudVWnPmZ+SnCjsLCSsFTOJLFzey58CcZfeRMhWQz1s
-	TIcRXdvTUpCfUayJ+ULunt45W7eVF1LOy6L/9PfU9zLWyMdQ5FB/dxMNm8q0l5SQ9PsTh6j8QQs
-	sfWFj+Lfhzz98kp+IsKKGGn6FkG5Lmb11CQ97rhX32Awb5YU8TwTCHfANoa104KPGnKWRyYw1PR
-	vL4gMm/EBrSV2R+O7/ODI1mg8T9TMOp8wk3uBcJ1gmy4fQr4nQ5DX/WikPT2wcuq2dTEs5XOosK
-	vJUpdw3dbbEKFiCUenTidqB5YJn32OOsNwCi0x2A4zGtdy8INrYDJ9K7cc2EsfofmVe2EjbPEBU
-	lvSqMAcp5y9LjpZfRUDf19hqtw4v2EATTxnj+bGnVQKBfSY8DLXjHVa
-X-Google-Smtp-Source: AGHT+IHvedoObPI3pxxfxclSW2jn0qBK9jIAa7IzRD3SI3wu5p6eqVzGifMv2Q3vbiXXa0p/BG3eIA==
-X-Received: by 2002:a17:902:d4c7:b0:292:fe19:8896 with SMTP id d9443c01a7336-2962add623emr61147975ad.52.1762372311486;
-        Wed, 05 Nov 2025 11:51:51 -0800 (PST)
-Received: from localhost (c-76-102-12-149.hsd1.ca.comcast.net. [76.102.12.149])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29650c5d790sm3591555ad.26.2025.11.05.11.51.50
+        bh=w4NT9lfKj/E3SYNd0qsKIwheb3jqENbhsmTvnBecBgc=;
+        b=TpuIPftl5FineOobi4SaDmjpQgBrqNJYBrzt4KGgcsEpZycNSWELmDsUgeHVOlxQNP
+         K68vs2+qUOVNA2nHtzZ8mEH3YA/6VrkBaI4xKLcCwE3HKQjcFK+t3RaUH/FkAA5bVOcz
+         /FRHtGA9zOSJIH69PJwJy0p+csjnBywyO1zYumKsl1xV1o628Hmaetd3g/3/lNvmL/O/
+         yYShfCbqDTNsqrswxB7XqirGnh8o8d/+TxNulbo6kr6DPWSPfJ2oM11V1dYNaDh9xRIm
+         QAeaTDoU6ZdBCoUq4eTM4g10KBz2aS2ASKdd8wBd2cgoBByHsHJSzkCnKw6mN1fhquZ+
+         KAXA==
+X-Gm-Message-State: AOJu0YwwQRZHwByvf0YuPW0GDFLDjy48Iv5lkVujecPEX7c2/Revvf38
+	zDCewVsoD1Ir4TGgSy+51U9wGCOTBqLz5P7lM7Md3dxrnG+4hyssDyql
+X-Gm-Gg: ASbGncsHGiqptdcGcL5BIgjfRzowlVtYvZtMmaN1XiyOtFW4Lj3FVI2vPc9NAzOQh8D
+	tFkMR2ZjEHt3v3hKgE+IJ7VBVZE8wPWv2GOEN8ShCeFazwfdjgf9rgaaMLwZPX/Yra+O4fV/YP1
+	6OdVrvxj+t7lyFhLo8++g9xx4NRnKtd1auz8Y3ZKsXVIFRyPJierojpneES/9ov9bh/JEZjUqSY
+	IocqQ8mBfRaxt79USc4rHvpU/NY/xqAq9ZSpM3Jr83Z07vCikwv55aP7WTWcKxTWiDkh+gLVhAB
+	Jb/WeaHAww868mzRHOIsBkUB2MdalMMxmQWInqvN74nGJ4jzHBrgdtXE7CSqJo/EAhI0I3t/ehr
+	33l+11ExTQCp8cAXhqYZ8+zejctNZXaT4L8YFXkS2bTbDS2eS4mjqTOBTrTvYXnGYeiiYD6uTW2
+	Hx9ygBq1gUu9jyPV14vDyo
+X-Google-Smtp-Source: AGHT+IEk6eVlS5EUL7/Zv1RjS+NHqmXJv1LzNSgjfljYFl7OqvviBTF7ItzvE1saKfX+2F31gbdYCQ==
+X-Received: by 2002:a05:6402:51d1:b0:63c:2d72:56e3 with SMTP id 4fb4d7f45d1cf-64105a5d549mr3926212a12.23.1762373405381;
+        Wed, 05 Nov 2025 12:10:05 -0800 (PST)
+Received: from mail.gmail.com ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6411f8578ecsm27846a12.19.2025.11.05.12.10.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Nov 2025 11:51:51 -0800 (PST)
-Date: Wed, 5 Nov 2025 11:51:50 -0800
-From: Stanislav Fomichev <stfomichev@gmail.com>
-To: David Wei <dw@davidwei.uk>
-Cc: Daniel Borkmann <daniel@iogearbox.net>, netdev@vger.kernel.org,
-	bpf@vger.kernel.org, kuba@kernel.org, davem@davemloft.net,
-	razor@blackwall.org, pabeni@redhat.com, willemb@google.com,
-	sdf@fomichev.me, john.fastabend@gmail.com, martin.lau@kernel.org,
-	jordan@jrife.io, maciej.fijalkowski@intel.com,
-	magnus.karlsson@intel.com, toke@redhat.com,
-	yangzhenze@bytedance.com, wangdongdong.6@bytedance.com
-Subject: Re: [PATCH net-next v4 00/14] netkit: Support for io_uring zero-copy
- and AF_XDP
-Message-ID: <aQuq1mhm7cM8kkLY@mini-arch>
-References: <20251031212103.310683-1-daniel@iogearbox.net>
- <aQqKsGDdeYQqA91s@mini-arch>
- <458d088f-dace-4869-b4af-b381d6ca5af1@davidwei.uk>
+        Wed, 05 Nov 2025 12:10:04 -0800 (PST)
+Date: Wed, 5 Nov 2025 20:16:17 +0000
+From: Anton Protopopov <a.s.protopopov@gmail.com>
+To: Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Anton Protopopov <aspsk@isovalent.com>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Quentin Monnet <qmo@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>
+Subject: Re: [PATCH v11 bpf-next 08/12] bpf, x86: add support for indirect
+ jumps
+Message-ID: <aQuwkcGMI4yXYDTV@mail.gmail.com>
+References: <20251105090410.1250500-1-a.s.protopopov@gmail.com>
+ <20251105090410.1250500-9-a.s.protopopov@gmail.com>
+ <aQszqAyqdQZMlt3p@mail.gmail.com>
+ <7fa1213c-68b6-450c-b69f-1e8c9eac5250@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <458d088f-dace-4869-b4af-b381d6ca5af1@davidwei.uk>
+In-Reply-To: <7fa1213c-68b6-450c-b69f-1e8c9eac5250@linux.dev>
 
-On 11/04, David Wei wrote:
-> On 2025-11-04 15:22, Stanislav Fomichev wrote:
-> > On 10/31, Daniel Borkmann wrote:
-> > > Containers use virtual netdevs to route traffic from a physical netdev
-> > > in the host namespace. They do not have access to the physical netdev
-> > > in the host and thus can't use memory providers or AF_XDP that require
-> > > reconfiguring/restarting queues in the physical netdev.
-> > > 
-> > > This patchset adds the concept of queue peering to virtual netdevs that
-> > > allow containers to use memory providers and AF_XDP at native speed.
-> > > These mapped queues are bound to a real queue in a physical netdev and
-> > > act as a proxy.
-> > > 
-> > > Memory providers and AF_XDP operations takes an ifindex and queue id,
-> > > so containers would pass in an ifindex for a virtual netdev and a queue
-> > > id of a mapped queue, which then gets proxied to the underlying real
-> > > queue. Peered queues are created and bound to a real queue atomically
-> > > through a generic ynl netdev operation.
-> > > 
-> > > We have implemented support for this concept in netkit and tested the
-> > > latter against Nvidia ConnectX-6 (mlx5) as well as Broadcom BCM957504
-> > > (bnxt_en) 100G NICs. For more details see the individual patches.
-> > > 
-> > > v3->v4:
-> > >   - ndo_queue_create store dst queue via arg (Nikolay)
-> > >   - Small nits like a spelling issue + rev xmas (Nikolay)
-> > >   - admin-perm flag in bind-queue spec (Jakub)
-> > >   - Fix potential ABBA deadlock situation in bind (Jakub, Paolo, Stan)
-> > >   - Add a peer dev_tracker to not reuse the sysfs one (Jakub)
-> > >   - New patch (12/14) to handle the underlying device going away (Jakub)
-> > >   - Improve commit message on queue-get (Jakub)
-> > >   - Do not expose phys dev info from container on queue-get (Jakub)
-> > >   - Add netif_put_rx_queue_peer_locked to simplify code (Stan)
-> > >   - Rework xsk handling to simplify the code and drop a few patches
-> > >   - Rebase and retested everything with mlx5 + bnxt_en
+On 25/11/05 09:45AM, Ihor Solodrai wrote:
+> On 11/5/25 3:23 AM, Anton Protopopov wrote:
+> > On 25/11/05 09:04AM, Anton Protopopov wrote:
+> >> Add support for a new instruction
+> >> [...]
 > > 
-> > I mostly looked at patches 1-8 and they look good to me. Will it be
-> > possible to put your sample runs from 13 and 14 into a selftest form? Even
-> > if you require real hw, that should be doable, similar to
-> > tools/testing/selftests/drivers/net/hw/devmem.py, right?
+> > Interestingly, AI review is stuck with "Setting up Claude Code..."
+> > on this and libbpf patches of this series. Robot got tired? :-)
 > 
-> Thanks for taking a look. For io_uring at least, it requires both a
-> routable VIP that can be assigned to the netkit in a netns and a BPF
-> program for skb forwarding. I could add a selftest, but it'll be hard to
-> generalise across all envs. I'm hoping to get self contained QEMU VM
-> selftest support first. WDYT?
+> Robot got tired indeed.
+> 
+> Could be network issues during setup. Happens on CI.
+> 
+> Let me try restarting stuck jobs.
 
-You can start at least with having what you have in patch 3 as a
-selftest. NIPA runs with fbnic qemu model, you should be able to at
-least test the netns setup, make sure peer-info works as expected, etc.
-You can verify that things like changing the number of channels are
-blocked when you have the queued bound to netkit..
-
-But also, regarding the datapath test, not sure you need another qemu. Not
-even sure why you need a vip? You can carve a single port and share
-the same host ip in the netns? Alternatively I think you can carve
-out 192.168.x.y from /32 and assign it to the machine. We have datapath
-devmem tests working without any special qemu vms (besides, well,
-special fbnic qemu, but you should be able to test on it as well).
+Thanks!
