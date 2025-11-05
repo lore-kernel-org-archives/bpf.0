@@ -1,193 +1,290 @@
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C62A24B28
-	for <bpf@vger.kernel.org>; Wed,  5 Nov 2025 00:44:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7108237707
+	for <bpf@vger.kernel.org>; Wed,  5 Nov 2025 00:46:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762303451; cv=none; b=mfUXDQkAFqiH6yHnJvcpBsEFX7KLiRTitsLQ545/aE070gTtzfdsQlTCh4R7vXgTEgyqkZUY3+EFlF1tE95t/vvdjDrC0vHSRASmdloJQMvJr8qGGOvphsZffbWeWV9FuZ1Yxbt/iI67gFGudJSV+GqQhLLSRxWSCGwlf2IgtdI=
+	t=1762303595; cv=none; b=mPiQO2/ZJ4j3hhpn/C1LNz9oMbfqBpoKFuA7jGgBBEzbG+R59SoJBTMJBc9nTCWXkl3AEp+w6AKpGa1XB1/oMef/8Z5Yk1W6UpD5URIzFJflAFdlItvnTBiG058vWL0XsHool/n1cBMg6ZzJirqHYC+EzoNPcQO43GAdUveZPEo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762303451; c=relaxed/simple;
-	bh=dnZ22gMTJpvm0BFtHPge4QdB6qX0zzBXPAKGujJwbtk=;
+	s=arc-20240116; t=1762303595; c=relaxed/simple;
+	bh=QK7dX00M8Jg/onYsQPjhAdFQtssDUJ0UQljG+F4NwI4=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=iCj3OePC4gyYe1ndktq2AKLSfo093TmvYxPiCCw+h23vVibO7+Q96L31EAFoFG8IONb8Yfuj93WxeZIuL3saZSMtgYSGVa6yFFcosNOY4Z/rd0pKJCwKvybinHTl1/obm2c9jQ4Rh3oMZ3zocr+6dfUvC9nfpytWuV0/QTa+g1o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OKg+xjRu; arc=none smtp.client-ip=209.85.216.44
+	 To:Cc:Content-Type; b=B4TxQwWO+1pFiqvjb6mULUnshCFd1VDCI0NWfYGlPwWwekOtr30b5a2X+vDGMgAhh9OIi3/NEwpcOGjY1QvqhjbDvWG565lFxxIib76PywrbBdV+zMcDzcj2lnpFJdr1QfoNBvIqXuWDVTxea+UN5dSn4p/9SCOh8zb17mJdhIM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=akw19Abp; arc=none smtp.client-ip=209.85.216.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OKg+xjRu"
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-339d7c4039aso6078134a91.0
-        for <bpf@vger.kernel.org>; Tue, 04 Nov 2025 16:44:08 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="akw19Abp"
+Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-340299fe579so6045656a91.2
+        for <bpf@vger.kernel.org>; Tue, 04 Nov 2025 16:46:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1762303448; x=1762908248; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1762303593; x=1762908393; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=lcrLQiTzbg0Vl3V4jiTtouN0ZvPPzgeCA1Rl0FuV2jQ=;
-        b=OKg+xjRuQyZ392j2FVbS9YK1HMA6L5ELEjaRdMqDeVfhyzZXnNRUCaFleG6twuiNpd
-         9xy754VDWin1D26XW9jRn3aHtnGC8V4xcuplwGF6Yze4/y+o+9wTBjrBqBAxvm7eGtNu
-         0zwEv4QRelhE4+6QBuQPh8DFZvx+N3jr2jyMxyOkEIEY7WV7vK5hHNBrSxeUFTdqXQ56
-         GjQePlvEixwPtJtaRPzv38poV7yYiQvUUy5UeNi/8agf590a884kg63DEKA8dp/RuCfW
-         GhN5kSVEsTqYaHH8aFHa2Z+uksmkU7iiWB+ldCXnNSpjSbUax2zJexdQJFCGwnrCCqVQ
-         n8TA==
+        bh=xXdfuXEyYCSjpACOy8ivhFG7mh9YLIGOopMLdxt74zc=;
+        b=akw19AbpzHDaXfBCRYfqUGDx8coKx6J97HywA1LD29sdhvk3TAzmK3BkXHb/1FslKu
+         q4rF6J4tyGFnVHec6iyqUbKmoVKNMUNVOtjNinztQ02Z7pdYE3Tyz9RkFOuCm65odbZ3
+         q3UKK0VRzFRTBkB4VugdduWlM60mIUcmWnVs/g3aEXn2oIG9SUWJshylpwXVe9TBi9qo
+         hrWO6TGV/0jaWc4yDVnFxXzHnY+Nq1MNWrfESd0hpIlZWW24oLHq9NvYdJCGV8Go4dTw
+         EzwnZzCT0bRbOfP7k9J3KPgV4fXEAW3Vh4m2zk9cXw46EY4Hu7SdfoeTcm9z0+9YWWIi
+         AYcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762303448; x=1762908248;
+        d=1e100.net; s=20230601; t=1762303593; x=1762908393;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=lcrLQiTzbg0Vl3V4jiTtouN0ZvPPzgeCA1Rl0FuV2jQ=;
-        b=VOSQZqzwdJMCtHk0wftrcQl/3aZfhR1cJG49I97fzsRSoXIPuHAGYK/WEyZCj0IHX3
-         04y2/WxxYdj7mxg5fe2w6gSrtxguy0fkY4mt/V8KN4WqXGsHI/XUyU8i75P+xoTGWuUb
-         fDkmkJF41irw3GqleVcyciOrHO1+QPXCx+JXmrq3Qnp2y07aESG+AOCQ2WaXxvgSqJOS
-         Km0D+M3B5Zt42WC26Q7zPXksopjteB6Drdg9Y8QJ1mtuRC/HdtplmjGaA3uqbxwZBZNx
-         lTDvwBMxVlTlHJDvj86KoVNkOyXOoeXuKB/IOFrXMgQ6adP1uWJu1P+bdJ7RP9FOoFd8
-         k4jg==
-X-Forwarded-Encrypted: i=1; AJvYcCX9Edi0Va0rqx2RNC1a9YYm5rHBzAZ+6Lg6N7cOHmdM7U/JrmAmX2Umxiz+pA2Qr8NOUcs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YweOPRBbhh4SLeES6ytH8nhzB7BKOcEZ2/fuB273CpmBIoynJOM
-	/zmI+J+hSJLWeLAA4aCtyWzJrHN5YfxprYhbJxiY24aZNnqEwGVlaV+oZt2zpm63oBSmkjEAr97
-	8Lzcmn1a0DgV72+gTqYbKU4+UPAc63LQ=
-X-Gm-Gg: ASbGncu7EfHmVEeKEGBLFlXhJu1w/+lBZTTxhn0uMFlb3zOqwbvci6u5HugBmGLOST8
-	PfkF4SR+qrXjxbTrUD/M8Wbk8SPdEXzvy38Mhk/0TDhFxhEDUhtib/OncdmrqzXacBhfMVkV1/Y
-	lvhhoyABxxpA8ArU+0UPqfTriPnIL8r8zrql4heMEoayznZIstXQkBVL6dVknXvoLfdSmqqpoYa
-	oV0C3TgFHYviVp0AgCLPnsUc8MrtNiHvXiA3BUqbbyq/21H511Mp+AYa/rSH00VOxbLxZdlbMms
-X-Google-Smtp-Source: AGHT+IHkZxVxX7oIveIHs/NfSMQ39Tv57f/wdO/a0GUAxsHa6iQBFubysjA6aME+9Xc2JurICrX4LNzU7K5i/9Ax/rI=
-X-Received: by 2002:a17:90b:3501:b0:33b:bed8:891c with SMTP id
- 98e67ed59e1d1-341a6dc8cd8mr1443523a91.23.1762303447568; Tue, 04 Nov 2025
- 16:44:07 -0800 (PST)
+        bh=xXdfuXEyYCSjpACOy8ivhFG7mh9YLIGOopMLdxt74zc=;
+        b=TC2SJvIbNUes9cJjlqgBQ4S4+42VYKXSjcYwAV8Lu6IIS4SaMwkicmwPo4MHPgpGiN
+         XsJHzYLaByRjDh9i5UUo5C1u/fQOK5RCfz5lCNEJwt+NLC3L2Sq6q2DeOLnMh6VCU1JV
+         KCD9CQJSNcgJsl4avpPcZtphtail+EulxxdxmeHH0WdUIXksDXPDylTyY9s1nxHAJtxa
+         MQ0b7drJsty5jYWaNkiNt3saW6wLnUQCoEp8Vab+S1BqedyF1dd2bgIgtka7WrN7IsZs
+         1N0yIEfgkuIGoii8aDARZU15OfrB+XATDdj5sR5B+xXdpSVLACUlDVMvSgURm3ZH+ZTe
+         8bmA==
+X-Gm-Message-State: AOJu0Yw8dlTHiporsejjjJ/CroNJ/TD+M+cwCevT/qYax6Pv02uRD3rP
+	xFA06jV61sd8lsF2cJ043PJ4rqgYQE5KrTwyyBnvtzaaSkYkK4hvVvXJJSmEunaY62PNe9E+sLQ
+	s+Np6XDhpyqHQoOn037bJd2Add/6Li6U=
+X-Gm-Gg: ASbGncvbrhT3r/VizRE+2L3b/ThXyasbmBInkgkzV8Nr66K0d77tsBj/0G1w5a2cbIX
+	DXiS44SmYHk6ekgqRb0gnRhJQ5xoC5g5iacUUBABDSpMLVdrKNMwJExtEvFI6woIxQK+iNxCOxa
+	nyz5ir09XbWTIvl55JdTFyAxPMPKHEQ+3vW7/s6kpj6CHrlr56TTidiVb3gFCG9NNuOBiXev8Ax
+	sml8tsw+6NiwAmn7KzCAQAVprVOC9ao/kqZkqv8A2L0P4XPkpW898PWgRDXJwzONpkXeeZIWMbG
+X-Google-Smtp-Source: AGHT+IHqrPTO438NQAMkf/XDaqLLvBN91MM/ltPzOSvF9R3C/E74okJU9TRrQTl4J+eFhQEFIVIoxZMoj6Dwi1L5XuA=
+X-Received: by 2002:a17:90b:582e:b0:32e:6fae:ba52 with SMTP id
+ 98e67ed59e1d1-341a6c1e406mr1412213a91.6.1762303593093; Tue, 04 Nov 2025
+ 16:46:33 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251008173512.731801-1-alan.maguire@oracle.com>
- <20251008173512.731801-2-alan.maguire@oracle.com> <CAEf4BzZ-0POy7UyFbyN37Y6zx+_2Q0kKR3hrQffq+KW6MOkZ1w@mail.gmail.com>
- <f2e1fd61-7d3a-4aa6-9d36-a74987d040fe@oracle.com> <CAEf4Bza+zCKVHPHFDnNtKoYNGfeq+y7Oi96-+GGWOb8kop8tHA@mail.gmail.com>
- <3bcad9a2-5765-4db8-9488-f9cdaed7719a@oracle.com>
-In-Reply-To: <3bcad9a2-5765-4db8-9488-f9cdaed7719a@oracle.com>
+References: <20251104172652.1746988-1-ameryhung@gmail.com> <20251104172652.1746988-5-ameryhung@gmail.com>
+ <CAEf4BzbqEsZbO4AjKn7iRQCzKVSD0db9WdG7uKXMCA_4ueFYig@mail.gmail.com> <CAMB2axNi1SRT5=SuRZJayt+az6GM63w++T6stwHEHXHfdMce_Q@mail.gmail.com>
+In-Reply-To: <CAMB2axNi1SRT5=SuRZJayt+az6GM63w++T6stwHEHXHfdMce_Q@mail.gmail.com>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 4 Nov 2025 16:43:53 -0800
-X-Gm-Features: AWmQ_blK3Y94pMahCdx_1l-46de5yPDVC145UOpd87SM31p0ePiPy3tRzlAMKfI
-Message-ID: <CAEf4BzaaJC4CvaxmBEAeb1wN9Y75cF13z2FEV4Mn6KWOqKWysg@mail.gmail.com>
-Subject: Re: [RFC bpf-next 01/15] bpf: Extend UAPI to support location information
-To: Alan Maguire <alan.maguire@oracle.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
-	martin.lau@linux.dev, acme@kernel.org, ttreyer@meta.com, 
-	yonghong.song@linux.dev, song@kernel.org, john.fastabend@gmail.com, 
-	kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, 
-	qmo@kernel.org, ihor.solodrai@linux.dev, david.faust@oracle.com, 
-	jose.marchesi@oracle.com, bpf@vger.kernel.org
+Date: Tue, 4 Nov 2025 16:46:17 -0800
+X-Gm-Features: AWmQ_bnqCa_p9Fq8mNorYc26Xaa218oJDAFar8ROmG6oXG-GVkull2R4bCd_zuU
+Message-ID: <CAEf4BzaQ=z8qG0q5UgquzPuF5LwWB2wqUHtdnL72kN2PkmK_9Q@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v5 4/7] libbpf: Add support for associating BPF
+ program with struct_ops
+To: Amery Hung <ameryhung@gmail.com>
+Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, alexei.starovoitov@gmail.com, 
+	andrii@kernel.org, daniel@iogearbox.net, tj@kernel.org, martin.lau@kernel.org, 
+	kernel-team@meta.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Oct 23, 2025 at 1:17=E2=80=AFAM Alan Maguire <alan.maguire@oracle.c=
-om> wrote:
+On Tue, Nov 4, 2025 at 3:39=E2=80=AFPM Amery Hung <ameryhung@gmail.com> wro=
+te:
 >
-> On 20/10/2025 21:57, Andrii Nakryiko wrote:
-> > On Fri, Oct 17, 2025 at 1:43=E2=80=AFAM Alan Maguire <alan.maguire@orac=
-le.com> wrote:
-> >>
-> >> On 16/10/2025 19:36, Andrii Nakryiko wrote:
-> >>> On Wed, Oct 8, 2025 at 10:35=E2=80=AFAM Alan Maguire <alan.maguire@or=
-acle.com> wrote:
-> >>>>
-> >>>> Add BTF_KIND_LOC_PARAM, BTF_KIND_LOC_PROTO and BTF_KIND_LOCSEC
-> >>>> to help represent location information for functions.
-> >>>>
-> >>>> BTF_KIND_LOC_PARAM is used to represent how we retrieve data at a
-> >>>> location; either via a register, or register+offset or a
-> >>>> constant value.
-> >>>>
-> >>>> BTF_KIND_LOC_PROTO represents location information about a location
-> >>>> with multiple BTF_KIND_LOC_PARAMs.
-> >>>>
-> >>>> And finally BTF_KIND_LOCSEC is a set of location sites, each
-> >>>> of which has
-> >>>>
-> >>>> - a name (function name)
-> >>>> - a function prototype specifying which types are associated
-> >>>>   with parameters
-> >>>> - a location prototype specifying where to find those parameters
-> >>>> - an address offset
-> >>>>
-> >>>> This can be used to represent
-> >>>>
-> >>>> - a fully-inlined function
-> >>>> - a partially-inlined function where some _LOC_PROTOs represent
-> >>>>   inlined sites as above and others have normal _FUNC representation=
-s
-> >>>> - a function with optimized parameters; again the FUNC_PROTO
-> >>>>   represents the original function, with LOC info telling us
-> >>>>   where to obtain each parameter (or 0 if the parameter is
-> >>>>   unobtainable)
-> >>>>
-> >>>> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
-> >>>> ---
-> >>>>  include/linux/btf.h            |  29 +++++-
-> >>>>  include/uapi/linux/btf.h       |  85 ++++++++++++++++-
-> >>>>  kernel/bpf/btf.c               | 168 ++++++++++++++++++++++++++++++=
-++-
-> >>>>  tools/include/uapi/linux/btf.h |  85 ++++++++++++++++-
-> >>>>  4 files changed, 359 insertions(+), 8 deletions(-)
-
-[...]
-
-> >>
-> >>>
-> >>>> +
-> >>>> +/* helps libbpf know that location declarations are present; libbpf
-> >>>> + * can then work around absence if this value is not set.
-> >>>> + */
-> >>>> +#define BTF_KIND_LOC_UAPI_DEFINED 1
-> >>>> +
-> >>>
-> >>> you don't mention that in the commit, I'll have to figure this out
-> >>> from subsequent patches, but it would be nice to give an overview of
-> >>> the purpose of this in this patch
-> >>>
-> >>
-> >> This is a bit ugly, but is intended to help deal with the situation -
-> >> which happens a lot with distros where we might want to build libbpf
-> >> without latest UAPI headers (some distros may not get new UAPI headers
-> >> for a while). The libbpf patches check if the above is defined, and if
-> >> not supply their own location-related definitions. If in turn libbpf
-> >> needs to define them, it defines BTF_KIND_LOC_LIBBPF_DEFINED. Finally
-> >> pahole - which needs to compile both with a checkpointed libbpf commit
-> >> and a libbpf that may be older and not have location definitions -
-> >> checks for either, and if not present does a similar set of declaratio=
-ns
-> >> to ensure compilation still succeeds. We use weak declarations of libb=
-pf
-> >> location-related functions locally to check if they are available at
-> >> runtime; this dynamically determines if the inline feature is availabl=
-e.
-> >>
-> >> Not pretty, but it will help avioid some of the issues we had with BTF
-> >> enum64 and compilation.
+> On Tue, Nov 4, 2025 at 3:27=E2=80=AFPM Andrii Nakryiko
+> <andrii.nakryiko@gmail.com> wrote:
 > >
-> > um... all this is completely unnecessary because libbpf is supplying
-> > its own freshest UAPI headers it needs in Github mirror under
-> > include/uapi/linux subdir. Distros should use those UAPI headers to
-> > build libbpf from source.
+> > On Tue, Nov 4, 2025 at 9:27=E2=80=AFAM Amery Hung <ameryhung@gmail.com>=
+ wrote:
+> > >
+> > > Add low-level wrapper and libbpf API for BPF_PROG_ASSOC_STRUCT_OPS
+> > > command in the bpf() syscall.
+> > >
+> > > Signed-off-by: Amery Hung <ameryhung@gmail.com>
+> > > ---
+> > >  tools/lib/bpf/bpf.c      | 19 +++++++++++++++++++
+> > >  tools/lib/bpf/bpf.h      | 21 +++++++++++++++++++++
+> > >  tools/lib/bpf/libbpf.c   | 30 ++++++++++++++++++++++++++++++
+> > >  tools/lib/bpf/libbpf.h   | 16 ++++++++++++++++
+> > >  tools/lib/bpf/libbpf.map |  2 ++
+> > >  5 files changed, 88 insertions(+)
+> > >
+> > > diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
+> > > index b66f5fbfbbb2..21b57a629916 100644
+> > > --- a/tools/lib/bpf/bpf.c
+> > > +++ b/tools/lib/bpf/bpf.c
+> > > @@ -1397,3 +1397,22 @@ int bpf_prog_stream_read(int prog_fd, __u32 st=
+ream_id, void *buf, __u32 buf_len,
+> > >         err =3D sys_bpf(BPF_PROG_STREAM_READ_BY_FD, &attr, attr_sz);
+> > >         return libbpf_err_errno(err);
+> > >  }
+> > > +
+> > > +int bpf_prog_assoc_struct_ops(int prog_fd, int map_fd,
+> > > +                             struct bpf_prog_assoc_struct_ops_opts *=
+opts)
+> > > +{
+> > > +       const size_t attr_sz =3D offsetofend(union bpf_attr, prog_ass=
+oc_struct_ops);
+> > > +       union bpf_attr attr;
+> > > +       int err;
+> > > +
+> > > +       if (!OPTS_VALID(opts, bpf_prog_assoc_struct_ops_opts))
+> > > +               return libbpf_err(-EINVAL);
+> > > +
+> > > +       memset(&attr, 0, attr_sz);
+> > > +       attr.prog_assoc_struct_ops.map_fd =3D map_fd;
+> > > +       attr.prog_assoc_struct_ops.prog_fd =3D prog_fd;
+> > > +       attr.prog_assoc_struct_ops.flags =3D OPTS_GET(opts, flags, 0)=
+;
+> > > +
+> > > +       err =3D sys_bpf(BPF_PROG_ASSOC_STRUCT_OPS, &attr, attr_sz);
+> > > +       return libbpf_err_errno(err);
+> > > +}
+> > > diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
+> > > index e983a3e40d61..1f9c28d27795 100644
+> > > --- a/tools/lib/bpf/bpf.h
+> > > +++ b/tools/lib/bpf/bpf.h
+> > > @@ -733,6 +733,27 @@ struct bpf_prog_stream_read_opts {
+> > >  LIBBPF_API int bpf_prog_stream_read(int prog_fd, __u32 stream_id, vo=
+id *buf, __u32 buf_len,
+> > >                                     struct bpf_prog_stream_read_opts =
+*opts);
+> > >
+> > > +struct bpf_prog_assoc_struct_ops_opts {
+> > > +       size_t sz;
+> > > +       __u32 flags;
+> > > +       size_t :0;
+> > > +};
+> > > +#define bpf_prog_assoc_struct_ops_opts__last_field flags
+> > > +
+> > > +/**
+> > > + * @brief **bpf_prog_assoc_struct_ops** associates a BPF program wit=
+h a
+> > > + * struct_ops map.
+> > > + *
+> > > + * @param prog_fd FD for the BPF program
+> > > + * @param map_fd FD for the struct_ops map to be associated with the=
+ BPF program
+> > > + * @param opts optional options, can be NULL
+> > > + *
+> > > + * @return 0 on success; negative error code, otherwise (errno is al=
+so set to
+> > > + * the error code)
+> > > + */
+> > > +LIBBPF_API int bpf_prog_assoc_struct_ops(int prog_fd, int map_fd,
+> > > +                                        struct bpf_prog_assoc_struct=
+_ops_opts *opts);
+> > > +
+> > >  #ifdef __cplusplus
+> > >  } /* extern "C" */
+> > >  #endif
+> > > diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> > > index fbe74686c97d..260e1feaa665 100644
+> > > --- a/tools/lib/bpf/libbpf.c
+> > > +++ b/tools/lib/bpf/libbpf.c
+> > > @@ -13891,6 +13891,36 @@ int bpf_program__set_attach_target(struct bp=
+f_program *prog,
+> > >         return 0;
+> > >  }
+> > >
+> > > +int bpf_program__assoc_struct_ops(struct bpf_program *prog, struct b=
+pf_map *map,
+> > > +                                 struct bpf_prog_assoc_struct_ops_op=
+ts *opts)
+> > > +{
+> > > +       int prog_fd;
+> > > +
+> > > +       prog_fd =3D bpf_program__fd(prog);
+> > > +       if (prog_fd < 0) {
+> > > +               pr_warn("prog '%s': can't associate BPF program witho=
+ut FD (was it loaded?)\n",
+> > > +                       prog->name);
+> > > +               return -EINVAL;
+> > > +       }
+> > > +
+> > > +       if (prog->type =3D=3D BPF_PROG_TYPE_STRUCT_OPS) {
+> > > +               pr_warn("prog '%s': can't associate struct_ops progra=
+m\n", prog->name);
+> > > +               return -EINVAL;
+> > > +       }
+> > > +
+> > > +       if (map->fd < 0) {
 > >
-> > So the above BTF_KIND_LOC_UAPI_DEFINED hack is not necessary.
+> > heh, this is a bug. we use create_placeholder_fd() to create fixed FDs
+> > associated with maps, and later we replace them with the real
+> > underlying BPF map kernel objects. It's all details, but the point is
+> > that this won't detect map that wasn't created. Use bpf_map__fd()
+> > instead, it handles that correctly.
+>
+> I saw quite a few libbpf API doing this check (e.g., bpf_map__pin(),
+> bpf_link__update_map(), bpf_map__attach_struct_ops()). Should we also
+> fix them?
+
+yep, probably :)
+
+>
 > >
+> > > +               pr_warn("map '%s': can't associate BPF map without FD=
+ (was it created?)\n", map->name);
+> > > +               return -EINVAL;
+> > > +       }
+> > > +
+> > > +       if (!bpf_map__is_struct_ops(map)) {
+> > > +               pr_warn("map '%s': can't associate non-struct_ops map=
+\n", map->name);
+> > > +               return -EINVAL;
+> > > +       }
+> > > +
+> > > +       return bpf_prog_assoc_struct_ops(prog_fd, map->fd, opts);
+> > > +}
+> > > +
+> > >  int parse_cpu_mask_str(const char *s, bool **mask, int *mask_sz)
+> > >  {
+> > >         int err =3D 0, n, len, start, end =3D -1;
+> > > diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+> > > index 5118d0a90e24..45720b7c2aaa 100644
+> > > --- a/tools/lib/bpf/libbpf.h
+> > > +++ b/tools/lib/bpf/libbpf.h
+> > > @@ -1003,6 +1003,22 @@ LIBBPF_API int
+> > >  bpf_program__set_attach_target(struct bpf_program *prog, int attach_=
+prog_fd,
+> > >                                const char *attach_func_name);
+> > >
+> > > +struct bpf_prog_assoc_struct_ops_opts; /* defined in bpf.h */
+> > > +
+> > > +/**
+> > > + * @brief **bpf_program__assoc_struct_ops()** associates a BPF progr=
+am with a
+> > > + * struct_ops map.
+> > > + *
+> > > + * @param prog BPF program
+> > > + * @param map struct_ops map to be associated with the BPF program
+> > > + * @param opts optional options, can be NULL
+> > > + *
+> > > + * @return error code; or 0 if no error occurred.
+> >
+> > we normally specify returns like so:
+> >
+> > @return 0, on success; negative error code, otherwise
+> >
+> > keep it consistent?
 >
-> Ok sounds good, but we do still have a problem for pahole; it can be
-> built against an external shared library (i.e. non-embedded) libbpf. It
-> might make more sense for pahole to include uapi headers from the synced
-> commit in case it is using non-embedded libbpf (in the non-embedded
-> libbpf case we don't even pull the libbpf git submodule so might need a
-> local copy).
+> Okay. Will change.
+>
+> BTW. The return comment is copied from bpf_program__set_attach_target().
 
-In the years I've been around the BPF ecosystem, I haven't seen a
-single case outside of systemd's super dynamic plugin-like setup where
-libbpf as a shared library would make sense. I don't think we should
-add random #defines in kernel UAPI just to make such self-imposed
-painful setups easier. And yes, I know how distros love their shared
-libraries... :)
+well, we should strive for consistency :)
 
 >
-> Thanks!
->
-> Alan
+> >
+> > > + */
+> > > +LIBBPF_API int
+> > > +bpf_program__assoc_struct_ops(struct bpf_program *prog, struct bpf_m=
+ap *map,
+> > > +                             struct bpf_prog_assoc_struct_ops_opts *=
+opts);
+> > > +
+> > >  /**
+> > >   * @brief **bpf_object__find_map_by_name()** returns BPF map of
+> > >   * the given name, if it exists within the passed BPF object
+> > > diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+> > > index 8ed8749907d4..84fb90a016c9 100644
+> > > --- a/tools/lib/bpf/libbpf.map
+> > > +++ b/tools/lib/bpf/libbpf.map
+> > > @@ -451,4 +451,6 @@ LIBBPF_1.7.0 {
+> > >         global:
+> > >                 bpf_map__set_exclusive_program;
+> > >                 bpf_map__exclusive_program;
+> > > +               bpf_prog_assoc_struct_ops;
+> > > +               bpf_program__assoc_struct_ops;
+> > >  } LIBBPF_1.6.0;
+> > > --
+> > > 2.47.3
+> > >
