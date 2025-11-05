@@ -1,67 +1,67 @@
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75D0734D4CA
-	for <bpf@vger.kernel.org>; Wed,  5 Nov 2025 20:20:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24CC134DB79
+	for <bpf@vger.kernel.org>; Wed,  5 Nov 2025 20:20:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762374006; cv=none; b=HadVZt74iZZ1JhBFPkoWMPy9P8IpLkxLAKqQb7xed7gmkUBRRfZmgTbvlEQ3Bub2NtRASlhBF+peRDkGn81RkNxRJh9c0pXoFLYtn/99g5/gdxzqfyxqlp7AryQhvnE1DVERtQhjgvum4k5+gNu45ZcaICTkbnS4lI5Qii6NDYw=
+	t=1762374009; cv=none; b=gWUh60aezGnwO3jVKfT8iME/CQfUT/DVOIzCEY2rOwDP/4A86BOwknc/3UKjvv6EN0KDU86a6FbDQR7qwfGC91AI9znR9u0n9uTtjOtD3W0I/K4pWLHoHVioCY+xZMLwdklYtNnKVMQoW/eHBY9fjewMT2Lf6Dzij87rvrs5bSU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762374006; c=relaxed/simple;
-	bh=NFjiFGdeD6gzgMLbIdVyGosLHeh66otTeg/5tHoWKiw=;
+	s=arc-20240116; t=1762374009; c=relaxed/simple;
+	bh=Y2LdFSioG8g7ODW7ylq50FrnsN/jGmVNxn8bY70Dfxs=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=SZMcNEERzq+VD+w/O83tAZm65jJTlSPBPRJjHwMvbidc/u/caWEa9GzbHbLmoe6l5MT8YO/iuSRlThk9KU7C0mdxxCAFWxEARIJ8/OtAQyI4+59YOGPaLNsCaBRGlVO3POPPBOd8uUTKOQjeou9yHavTjgkBSYrMOKcr/+fW9KU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=bhT4TAQj; arc=none smtp.client-ip=209.85.218.51
+	 In-Reply-To:To:Cc; b=I/S/GaTRo5P0pgQTMzXUtcU3TE+8t5vOBpFHiN5hkcni7kXB1d/DJZBbuIQM+4Jj2/SSyNdfvDb4Z46BRTTYcJHgCf2O9OT7hgmtwCuR1362fYp9rkm10ZdyNipAuGgVYD8mo1mIxfMyJIEhcfIX2T9UQt/ODKOCjgbvX1bEDUk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=eMTJLRR+; arc=none smtp.client-ip=209.85.208.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="bhT4TAQj"
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-b714b1290aeso37952666b.2
-        for <bpf@vger.kernel.org>; Wed, 05 Nov 2025 12:20:04 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="eMTJLRR+"
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-640aaa89697so291209a12.3
+        for <bpf@vger.kernel.org>; Wed, 05 Nov 2025 12:20:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1762374003; x=1762978803; darn=vger.kernel.org;
+        d=cloudflare.com; s=google09082023; t=1762374005; x=1762978805; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=JutpWbdG9YYVnRwTeE3UQ1dwhCFVxmeYmgKPLzbCKA4=;
-        b=bhT4TAQj8GQjNoAZFuQDUAPlEeU/UDlGXiQh3mSkLOaWQGmSUKNoN1JX9nnXuspnCi
-         L605nGdsRocoA8+dkE6dJJTOOiEU1UBtEIFMGmia9aGWthpyQ0mIYT/23Y+PsfA1k+sj
-         rdSB7k8XkBsSvdaVr52snlForNVigGae1908WljZpAmraEUFsyg0zjZ7I7AqVRArmYvL
-         XI8qUzcL6Sx63pHm7m1WDO/qE5KNUPrN/9j4MgguKSWYlwyD4DAxH77ACRIWUGp3psA3
-         5pHYjdnMm3tpwJ6EJZNciUV9zVwCF44xrMEYLHkvGaXHQD5U+aXojG75NBO0XawZSGvc
-         lcjw==
+        bh=smKSa5PEnPQYiO/xTRww69R1IfUnmprG+VxEw4Hb8Ac=;
+        b=eMTJLRR+jkI/QUR5Jx15hzt07jmo4SiW8TdnB3gQ7ya6cnmTdu1oGJFTrZbtSbjCMG
+         1sxEcrTnha1qXPnQfNRj7rjIJV9X0m29jMogrhCEaz0oeanYim0EXiovHAWMy9uLO+J/
+         iU4VXemE9t0o2Lab/FGEPdNivcI9lncEM0Kx6Et6F+kndeqDzi5oE0WEM446zx3b+75z
+         aa8H4wwlf1lNCaCp8GceeZKF5IKOTcT8PhZWXT4L25jSuSoVWCmkmiFQadjFJgTaHmmi
+         g6R3T1qt4YziyL6f01MOWbEESvaqEr0iz8TBaweTcGBwYQZO0ei+BnpiU8T94qHtvsjl
+         7FOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762374003; x=1762978803;
+        d=1e100.net; s=20230601; t=1762374005; x=1762978805;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=JutpWbdG9YYVnRwTeE3UQ1dwhCFVxmeYmgKPLzbCKA4=;
-        b=tlT25QgtnkS5OMv1mkdi1lD7IQANJ1HnMlLfO0niCMOq0Ic7NsB6d1y5lrV+Ll02If
-         y6b99o8o9ZqQLU1IV/CCON/JUs+dy84qlmBXz7IBYfxkQOrsXJi9YWi+EVJTicPaiHa3
-         KRn+IhqPa+ZK94xskBgmNx3Lkf+7yIl2e6asjpUH05RFKQHGYR9HhoDZEwMEuuzpSQUv
-         rULvjr4R85wPZ22c4jw9xlND+fc2MrGOoBE8aPD28Z5KNUuQRj56Zu3nEcwbxJP/YF8n
-         2sKr+6/sBzyquQIs264nimkxDzzmJyCyW4E4/3WdHgVfSZLCxRGvDvDC3HcgB9xZn/pL
-         sVVQ==
-X-Gm-Message-State: AOJu0YymUfBVa6Ue+IIVI8bN8y6YqtEaYhFFoT7xC46zOSevSDgJOePC
-	umhoOShkLO2UBUUtl1lnPcCshnkzYTUv1DAS/4EVupJzfQ0NRk+wYLkJww4WE89Xa5w=
-X-Gm-Gg: ASbGncu8mi38BtNxSkGeDlA7SK7Aks5IEcHkCKoGYvqQs0IDyDu9nailNiYqD1w6Xcl
-	SGNqby5gI9ezRCDBA5JbW51powAtPyT54dpjTVC7PiaDbDFNJ3ciDJFWBYETiZiwjJf/z3EY4qG
-	XsLIeva75KWZxQV8vcdV5kxpSqKRHwg9YNA9yD5NCT9a2NvQHixh2rfzRz/+0NFPIOoj9sAARO9
-	FElAqbQ7SrXk5KSNswNZaTXcY0hhqBXmvW0eHxYc/YtmEXP6XB7PO3yFnY0C8u+KxffFkpOcqlN
-	mEcGSrusEKPy1vDq2VpZy0TYl+1dTuPdJ7jAYKUwsGmpMp+W0sati6Z+Nb/f9DMaCWFeA3SG9X4
-	peH/bm+HN2ZS66A6JaY+yjI5LTxHljQkpKWzX+/RkawRCK+kT6kEomM0AcFQeDvGBNSQKDh00Gu
-	EmFrp1jMHCvLwyEdxR/ofAVMDvwQ1/rZrshV2vy7+qsN9PzTjnrMFgVFNE
-X-Google-Smtp-Source: AGHT+IHFMoXQdNn0rpkh1brEWR+6TkVE/T1PalnlWvIK7M+5tiw5C4YVqbHrcCKAwjMcqk90jxUdDA==
-X-Received: by 2002:a17:907:d64a:b0:b72:5380:f655 with SMTP id a640c23a62f3a-b72654c23efmr411812166b.34.1762374002875;
-        Wed, 05 Nov 2025 12:20:02 -0800 (PST)
+        bh=smKSa5PEnPQYiO/xTRww69R1IfUnmprG+VxEw4Hb8Ac=;
+        b=ZEXq6gjN071BU3rV4tmDEPVb6jIWL2Za5Xc64VDsttFLTtBc94jVlu1PYVUVtg6JfH
+         lAKJMVPwCtpJgYKuTjWuUZdJCcAg09d8fVA8UqRWqEw3I1xb82xahCSAP4Y0Y10+mNhi
+         OwKoANrAaSsAGO4h9c8dmfNXGD/bO0R3PhztxqNAK67xUK6oe93vF7iLH8bVsi9OL/WE
+         DQcIcAi58Jh/jJAnifuAZNNdtrAVuHeRNwpFPJVRdwkTjG29LlV8XPfFRuYrJYG+CtEg
+         CDY2NMOFX/VXnKoestzrzTtqpiYYmcbVq8moOgdn6wg7nGVcjwZ584fYkhbWVXGwbIoE
+         U9zw==
+X-Gm-Message-State: AOJu0YyHOjfPe6bS4EwSBqgSOik8SWv2gH3/UXf+SEuBEkM6F2TwnRqu
+	h/S1EqBRnrxGEuPhq7QlhwRsRojOFLVUt1RJO4FYbZmj3Hf70TPlATCFnRoC6dg4I04=
+X-Gm-Gg: ASbGncsB4EZRs/Q9cJezsx34OVElYo5pc5VjS8bnBr1Yw8D0xJelJ2stClAb6YWTiKa
+	aInJ8bDH1f6J6+r5ww5emUPpx/e1WCqNmkVUdh7e/XD119T6soxrfVmrlQ9v8X1wAoW25U/bVet
+	x0R+MpNe+I4r3RKjrjPRXSkYhx5q+iarHQsXeJXhm559Zlv/x2PkX0NVNgbS0NBHV1pMBqZA4qM
+	wtgwrHXoUQJ4kdFCZ91F+otpsGS2WCSYPvaQUP7p0hRqKA48TaELeXXgaXh5+i8HYbVjGuxcB7o
+	ZL9J18PEkw4jwqb6CDegJXHI3As8UCb0W+ZZ7FPszuwjASIhtITRc6+DWRXvLvPbk5iOY2Rl2lU
+	dZv8kHV7WdY2NSsZnFukuZv90v+3Wbdkuz786ulcOXy7POa+FJyJO28HvtRmasvGOzdG8BO5830
+	NMSVVr3kRAy3SsYbYX85EFIZKuwGEvbOJb+w2L9jLcAOlRg7NmOcYwUenR
+X-Google-Smtp-Source: AGHT+IFNXQINzOeV4swYoRdovmW3cf+3ri/ZC3LWiqRh2j7kLPwbPrOZR0TyAh5EZR3b9uCSKLi0kA==
+X-Received: by 2002:a05:6402:35d6:b0:63c:690d:6a46 with SMTP id 4fb4d7f45d1cf-641058d0b39mr4080673a12.13.1762374005502;
+        Wed, 05 Nov 2025 12:20:05 -0800 (PST)
 Received: from cloudflare.com (79.184.211.13.ipv4.supernova.orange.pl. [79.184.211.13])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b728937cc82sm45049466b.21.2025.11.05.12.20.02
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6411f86e12fsm42874a12.34.2025.11.05.12.20.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Nov 2025 12:20:02 -0800 (PST)
+        Wed, 05 Nov 2025 12:20:05 -0800 (PST)
 From: Jakub Sitnicki <jakub@cloudflare.com>
-Date: Wed, 05 Nov 2025 21:19:46 +0100
-Subject: [PATCH bpf-next v4 09/16] bpf: Make bpf_skb_change_head helper
- metadata-safe
+Date: Wed, 05 Nov 2025 21:19:48 +0100
+Subject: [PATCH bpf-next v4 11/16] selftests/bpf: Dump skb metadata on
+ verification failure
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -70,7 +70,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251105-skb-meta-rx-path-v4-9-5ceb08a9b37b@cloudflare.com>
+Message-Id: <20251105-skb-meta-rx-path-v4-11-5ceb08a9b37b@cloudflare.com>
 References: <20251105-skb-meta-rx-path-v4-0-5ceb08a9b37b@cloudflare.com>
 In-Reply-To: <20251105-skb-meta-rx-path-v4-0-5ceb08a9b37b@cloudflare.com>
 To: bpf@vger.kernel.org
@@ -89,44 +89,138 @@ Cc: "David S. Miller" <davem@davemloft.net>,
  kernel-team@cloudflare.com
 X-Mailer: b4 0.15-dev-07fe9
 
-Although bpf_skb_change_head() doesn't move packet data after skb_push(),
-skb metadata still needs to be relocated. Use the dedicated helper to
-handle it.
+Add diagnostic output when metadata verification fails to help with
+troubleshooting test failures. Introduce a check_metadata() helper that
+prints both expected and received metadata to the BPF program's stderr
+stream on mismatch. The userspace test reads and dumps this stream on
+failure.
 
 Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
 ---
- net/core/filter.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ .../bpf/prog_tests/xdp_context_test_run.c          | 24 ++++++++++++++++++---
+ tools/testing/selftests/bpf/progs/test_xdp_meta.c  | 25 ++++++++++++++++++----
+ 2 files changed, 42 insertions(+), 7 deletions(-)
 
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 9d157d71277e..69c4e8fb402e 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -3882,6 +3882,7 @@ static const struct bpf_func_proto sk_skb_change_tail_proto = {
- static inline int __bpf_skb_change_head(struct sk_buff *skb, u32 head_room,
- 					u64 flags)
- {
-+	const u8 meta_len = skb_metadata_len(skb);
- 	u32 max_len = BPF_SKB_MAX_LEN;
- 	u32 new_len = skb->len + head_room;
- 	int ret;
-@@ -3891,7 +3892,7 @@ static inline int __bpf_skb_change_head(struct sk_buff *skb, u32 head_room,
- 		     new_len < skb->len))
- 		return -EINVAL;
+diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_context_test_run.c b/tools/testing/selftests/bpf/prog_tests/xdp_context_test_run.c
+index 93a1fbe6a4fd..db3027564261 100644
+--- a/tools/testing/selftests/bpf/prog_tests/xdp_context_test_run.c
++++ b/tools/testing/selftests/bpf/prog_tests/xdp_context_test_run.c
+@@ -171,6 +171,21 @@ static int write_test_packet(int tap_fd)
+ 	return 0;
+ }
  
--	ret = skb_cow(skb, head_room);
-+	ret = skb_cow(skb, meta_len + head_room);
- 	if (likely(!ret)) {
- 		/* Idea for this helper is that we currently only
- 		 * allow to expand on mac header. This means that
-@@ -3903,6 +3904,7 @@ static inline int __bpf_skb_change_head(struct sk_buff *skb, u32 head_room,
- 		 * for redirection into L2 device.
- 		 */
- 		__skb_push(skb, head_room);
-+		skb_postpush_data_move(skb, head_room, 0);
- 		memset(skb->data, 0, head_room);
- 		skb_reset_mac_header(skb);
- 		skb_reset_mac_len(skb);
++static void dump_err_stream(const struct bpf_program *prog)
++{
++	char buf[512];
++	int ret;
++
++	ret = 0;
++	do {
++		ret = bpf_prog_stream_read(bpf_program__fd(prog),
++					   BPF_STREAM_STDERR, buf, sizeof(buf),
++					   NULL);
++		if (ret > 0)
++			fwrite(buf, sizeof(buf[0]), ret, stderr);
++	} while (ret > 0);
++}
++
+ void test_xdp_context_veth(void)
+ {
+ 	LIBBPF_OPTS(bpf_tc_hook, tc_hook, .attach_point = BPF_TC_INGRESS);
+@@ -249,7 +264,8 @@ void test_xdp_context_veth(void)
+ 	if (!ASSERT_OK(ret, "send_test_packet"))
+ 		goto close;
+ 
+-	ASSERT_TRUE(skel->bss->test_pass, "test_pass");
++	if (!ASSERT_TRUE(skel->bss->test_pass, "test_pass"))
++		dump_err_stream(tc_prog);
+ 
+ close:
+ 	close_netns(nstoken);
+@@ -314,7 +330,8 @@ static void test_tuntap(struct bpf_program *xdp_prog,
+ 	if (!ASSERT_OK(ret, "write_test_packet"))
+ 		goto close;
+ 
+-	ASSERT_TRUE(*test_pass, "test_pass");
++	if (!ASSERT_TRUE(*test_pass, "test_pass"))
++		dump_err_stream(tc_prio_2_prog ? : tc_prio_1_prog);
+ 
+ close:
+ 	if (tap_fd >= 0)
+@@ -385,7 +402,8 @@ static void test_tuntap_mirred(struct bpf_program *xdp_prog,
+ 	if (!ASSERT_OK(ret, "write_test_packet"))
+ 		goto close;
+ 
+-	ASSERT_TRUE(*test_pass, "test_pass");
++	if (!ASSERT_TRUE(*test_pass, "test_pass"))
++		dump_err_stream(tc_prog);
+ 
+ close:
+ 	if (tap_fd >= 0)
+diff --git a/tools/testing/selftests/bpf/progs/test_xdp_meta.c b/tools/testing/selftests/bpf/progs/test_xdp_meta.c
+index 11288b20f56c..3b137c4eed6c 100644
+--- a/tools/testing/selftests/bpf/progs/test_xdp_meta.c
++++ b/tools/testing/selftests/bpf/progs/test_xdp_meta.c
+@@ -27,6 +27,23 @@ static const __u8 meta_want[META_SIZE] = {
+ 	0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38,
+ };
+ 
++static bool check_metadata(const char *file, int line, __u8 *meta_have)
++{
++	if (!__builtin_memcmp(meta_have, meta_want, META_SIZE))
++		return true;
++
++	bpf_stream_printk(BPF_STREAM_STDERR,
++			  "FAIL:%s:%d: metadata mismatch\n"
++			  "  have:\n    %pI6\n    %pI6\n"
++			  "  want:\n    %pI6\n    %pI6\n",
++			  file, line,
++			  &meta_have[0x00], &meta_have[0x10],
++			  &meta_want[0x00], &meta_want[0x10]);
++	return false;
++}
++
++#define check_metadata(meta_have) check_metadata(__FILE__, __LINE__, meta_have)
++
+ SEC("tc")
+ int ing_cls(struct __sk_buff *ctx)
+ {
+@@ -36,7 +53,7 @@ int ing_cls(struct __sk_buff *ctx)
+ 	if (meta_have + META_SIZE > data)
+ 		goto out;
+ 
+-	if (__builtin_memcmp(meta_want, meta_have, META_SIZE))
++	if (!check_metadata(meta_have))
+ 		goto out;
+ 
+ 	test_pass = true;
+@@ -54,7 +71,7 @@ int ing_cls_dynptr_read(struct __sk_buff *ctx)
+ 	bpf_dynptr_from_skb_meta(ctx, 0, &meta);
+ 	bpf_dynptr_read(meta_have, META_SIZE, &meta, 0, 0);
+ 
+-	if (__builtin_memcmp(meta_want, meta_have, META_SIZE))
++	if (!check_metadata(meta_have))
+ 		goto out;
+ 
+ 	test_pass = true;
+@@ -92,7 +109,7 @@ int ing_cls_dynptr_slice(struct __sk_buff *ctx)
+ 	if (!meta_have)
+ 		goto out;
+ 
+-	if (__builtin_memcmp(meta_want, meta_have, META_SIZE))
++	if (!check_metadata(meta_have))
+ 		goto out;
+ 
+ 	test_pass = true;
+@@ -153,7 +170,7 @@ int ing_cls_dynptr_offset_rd(struct __sk_buff *ctx)
+ 		goto out;
+ 	__builtin_memcpy(dst, src, chunk_len);
+ 
+-	if (__builtin_memcmp(meta_want, meta_have, META_SIZE))
++	if (!check_metadata(meta_have))
+ 		goto out;
+ 
+ 	test_pass = true;
 
 -- 
 2.43.0
