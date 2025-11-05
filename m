@@ -1,186 +1,107 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46E4D34B661;
-	Wed,  5 Nov 2025 20:32:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E90C334C0C;
+	Wed,  5 Nov 2025 20:42:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762374741; cv=none; b=N+ivOAElpW7nOw1WyanHPx//1KMhLSa20o8wylXB+Zq2Ia+yVn/pGIfwBYzlbFTB60Am6bgiz/vhGR7mErwlK9Y1m1+XVFX9KkNpxhSnhmUBlr9/QKNk3mPDQ9arWKDw+G+RW2ynJ1cvINV0RUKi/duvQgQihpG0bCIJ9lX2y6o=
+	t=1762375327; cv=none; b=KDs6VXKwB3hG8/EaPPMMP5Pk8jkZ0TvehAu0j2xOI95hx+cREzHPuAnT8k795a1XHdna5Dyq5SEOkdDdXRqzXbLpZVSIJwMUGrVbcxaHJedKkHmeg9XcJsgS+6nG+B1JXbT9sLrirAlngSscuHOylXdNNhvCccB7+y0CXHWBiIM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762374741; c=relaxed/simple;
-	bh=SxM5obABZJXPt/ymairqXuBar3neaMVGlr0dx2kNeSw=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=SdEmfr+2r2Z9S3G+CBgNRwOVghXJsVmgIjBojwkDjvLVfSmnyH6fUN/31cNtCBojEaIOPFD1Fj+0yZeRdJc4NSE96RwUPlbXuTaua1PbWvLppmtd0KroLZ5r9LhZxfBORAVYvu4akGmJuzn3/uRjHlGpMujDciJ7G2+OfQlyhkk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rQqWGwL2; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1762375327; c=relaxed/simple;
+	bh=Im3+M6VEUShgjHFS90zF37R75xXfZRG+1vjn785jgQ0=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=WiEZ+MX60ZH6R88+N0oEnG+GZaBL2xdb17iBeNC7LvRpoQJzVL/ecam+zxqpLZWKCaQ7DLtM0RsJHjQiQWMhqlJXLyZYHVexfMQ6BJfL+dS63TmrpYcGFo6mX0nJSW1+042uT+72Fxm9ldDtQ0q0O/ONyMpqX9wHPJ8Y26RHUqo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FZCqg35Y; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rQqWGwL2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C961C2BC9E;
-	Wed,  5 Nov 2025 20:32:20 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FZCqg35Y"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72490C4CEF5;
+	Wed,  5 Nov 2025 20:42:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762374740;
-	bh=SxM5obABZJXPt/ymairqXuBar3neaMVGlr0dx2kNeSw=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=rQqWGwL2o9drFtCx5CpwBGO7KB4JNdBRaUaq84ybIBhIli6XjwarMA25lLOonojmp
-	 hoMPAou4EpsZfVBlw6m0o2ir8YNHMNhJCqWjSaj+uCwe9f/lNG8OtBjpWo2YEijvuA
-	 8uHihImeTRkCBPpjlRKCVuOX/YZJcH0DNCyviZr3JwGITXptP45s2qXZEhRBrbfy5j
-	 0P0V4tkauD/K8qEim1Uld8pS+uDyHl+1TT6SFf1TcSj5ZF70TmW+OXc9GuXjfCRXgP
-	 Tk5emLbiN3J4KK+H2i5s5M3RdsLZLLyUDmC9tOmBe23MITswn59ephbHAtLYKvtzUD
-	 WS/Z0yMLdAGXQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id A3B00CE0F98; Wed,  5 Nov 2025 12:32:18 -0800 (PST)
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: rcu@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	kernel-team@meta.com,
-	rostedt@goodmis.org,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	bpf@vger.kernel.org
-Subject: [PATCH v2 12/16] srcu: Add SRCU_READ_FLAVOR_FAST_UPDOWN CPP macro
-Date: Wed,  5 Nov 2025 12:32:12 -0800
-Message-Id: <20251105203216.2701005-12-paulmck@kernel.org>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <bb177afd-eea8-4a2a-9600-e36ada26a500@paulmck-laptop>
-References: <bb177afd-eea8-4a2a-9600-e36ada26a500@paulmck-laptop>
+	s=k20201202; t=1762375323;
+	bh=Im3+M6VEUShgjHFS90zF37R75xXfZRG+1vjn785jgQ0=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=FZCqg35Y7S1+biHYJX9eFhRDxC6ccF/x9qz1yaEJL35BeVph6kuF0FFDJdzmcmKSJ
+	 efUkT9cWBRhrXA6//sTPzH7S3e44ZhZ7TMAEvGSTS6Xfl2VviiUqjcl9Yqk3BXultF
+	 FPpaIF8aOEVowV50evpK06yjK+bx/09o3ruV6n6p30z6nTXlr66InWStfK4NIDUq2T
+	 WINnQN2kDMDr0/JlAom8LXm805gO7V5idTZEnQFJFo3li9P6bZWXUiz8OIYVXWnmNZ
+	 MAxSEdAs0rqCxIiE8cs2DJg4XKik77xdOeAfAnezCjVmiwaqJnCq/BcK0vjoUmHSX4
+	 B4p5Hg0uVspZw==
+Content-Type: multipart/mixed; boundary="===============8991984138108816200=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-Id: <9b3ca8c01aac5510f1ff8738b3856e5e2bbe43075333c27642eb69a6847a50ef@mail.kernel.org>
+In-Reply-To: <20251105-skb-meta-rx-path-v4-7-5ceb08a9b37b@cloudflare.com>
+References: <20251105-skb-meta-rx-path-v4-7-5ceb08a9b37b@cloudflare.com>
+Subject: Re: [PATCH bpf-next v4 07/16] bpf: Make bpf_skb_adjust_room metadata-safe
+From: bot+bpf-ci@kernel.org
+To: jakub@cloudflare.com,bpf@vger.kernel.org
+Cc: davem@davemloft.net,edumazet@google.com,kuba@kernel.org,pabeni@redhat.com,horms@kernel.org,martin.lau@linux.dev,daniel@iogearbox.net,john.fastabend@gmail.com,sdf@fomichev.me,ast@kernel.org,andrii@kernel.org,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,kpsingh@kernel.org,haoluo@google.com,jolsa@kernel.org,arthur@arthurfabre.com,hawk@kernel.org,netdev@vger.kernel.org,kernel-team@cloudflare.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Wed,  5 Nov 2025 20:42:03 +0000 (UTC)
 
-This commit adds the SRCU_READ_FLAVOR_FAST_UPDOWN=0x8 macro
-and adjusts rcutorture to make use of it.  In this commit, both
-SRCU_READ_FLAVOR_FAST=0x4 and the new SRCU_READ_FLAVOR_FAST_UPDOWN
-test SRCU-fast.  When the SRCU-fast-updown is added, the new
-SRCU_READ_FLAVOR_FAST_UPDOWN macro will test it when passed to the
-rcutorture.reader_flavor module parameter.
+--===============8991984138108816200==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-The old SRCU_READ_FLAVOR_FAST macro's value changed from 0x8 to 0x4.
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index 96714eab9..370ddc61b 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -3260,11 +3260,11 @@ static void bpf_skb_change_protocol(struct sk_buff *skb, u16 proto)
+>
+>  static int bpf_skb_generic_push(struct sk_buff *skb, u32 off, u32 len)
+>  {
+> -	/* Caller already did skb_cow() with len as headroom,
+> +	/* Caller already did skb_cow() with meta_len+len as headroom,
+>  	 * so no need to do it here.
+>  	 */
+>  	skb_push(skb, len);
+> -	memmove(skb->data, skb->data + len, off);
+> +	skb_postpush_data_move(skb, len, off);
+>  	memset(skb->data + off, 0, len);
 
-Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: <bpf@vger.kernel.org>
+The comment update says callers provide meta_len+len as headroom, but
+is this true for all callers?
+
+bpf_skb_proto_4_to_6() calls skb_cow(skb, len_diff) then calls
+bpf_skb_net_hdr_push()->bpf_skb_generic_push(). Similarly,
+bpf_lwt_seg6_adjust_srh() calls skb_cow_head(skb, len) then calls
+bpf_skb_net_hdr_push()->bpf_skb_generic_push().
+
+Neither accounts for meta_len in their headroom calculation. When
+skb_postpush_data_move()->skb_data_move() runs, if meta_len >
+skb_headroom(skb) after the push, the metadata gets silently cleared
+(see the WARN_ON_ONCE check in skb_data_move() at skbuff.h).
+
+Can the metadata be lost when these functions are called on skbs with
+metadata?
+
+> @@ -3496,6 +3496,7 @@ static int bpf_skb_net_grow(struct sk_buff *skb, u32 off, u32 len_diff,
+>  	u8 inner_mac_len = flags >> BPF_ADJ_ROOM_ENCAP_L2_SHIFT;
+>  	bool encap = flags & BPF_F_ADJ_ROOM_ENCAP_L3_MASK;
+>  	u16 mac_len = 0, inner_net = 0, inner_trans = 0;
+> +	const u8 meta_len = skb_metadata_len(skb);
+>  	unsigned int gso_type = SKB_GSO_DODGY;
+>  	int ret;
+>
+> @@ -3506,7 +3507,7 @@ static int bpf_skb_net_grow(struct sk_buff *skb, u32 off, u32 len_diff,
+>  			return -ENOTSUPP;
+>  	}
+>
+> -	ret = skb_cow_head(skb, len_diff);
+> +	ret = skb_cow_head(skb, meta_len + len_diff);
+>  	if (unlikely(ret < 0))
+>  		return ret;
+
+
 ---
- include/linux/srcu.h    | 16 +++++++++-------
- kernel/rcu/rcutorture.c | 24 ++++++++++++++++++------
- 2 files changed, 27 insertions(+), 13 deletions(-)
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/include/linux/srcu.h b/include/linux/srcu.h
-index 41e27c1d917d..1dd6812aabe7 100644
---- a/include/linux/srcu.h
-+++ b/include/linux/srcu.h
-@@ -56,13 +56,15 @@ int init_srcu_struct_fast(struct srcu_struct *ssp);
- #endif /* #else #ifdef CONFIG_DEBUG_LOCK_ALLOC */
- 
- /* Values for SRCU Tree srcu_data ->srcu_reader_flavor, but also used by rcutorture. */
--#define SRCU_READ_FLAVOR_NORMAL	0x1		// srcu_read_lock().
--#define SRCU_READ_FLAVOR_NMI	0x2		// srcu_read_lock_nmisafe().
--//				0x4		// SRCU-lite is no longer with us.
--#define SRCU_READ_FLAVOR_FAST	0x8		// srcu_read_lock_fast().
--#define SRCU_READ_FLAVOR_ALL   (SRCU_READ_FLAVOR_NORMAL | SRCU_READ_FLAVOR_NMI | \
--				SRCU_READ_FLAVOR_FAST) // All of the above.
--#define SRCU_READ_FLAVOR_SLOWGP	SRCU_READ_FLAVOR_FAST
-+#define SRCU_READ_FLAVOR_NORMAL		0x1		// srcu_read_lock().
-+#define SRCU_READ_FLAVOR_NMI		0x2		// srcu_read_lock_nmisafe().
-+//					0x4		// SRCU-lite is no longer with us.
-+#define SRCU_READ_FLAVOR_FAST		0x4		// srcu_read_lock_fast().
-+#define SRCU_READ_FLAVOR_FAST_UPDOWN	0x8		// srcu_read_lock_fast().
-+#define SRCU_READ_FLAVOR_ALL		(SRCU_READ_FLAVOR_NORMAL | SRCU_READ_FLAVOR_NMI | \
-+					 SRCU_READ_FLAVOR_FAST | SRCU_READ_FLAVOR_FAST_UPDOWN)
-+						// All of the above.
-+#define SRCU_READ_FLAVOR_SLOWGP		(SRCU_READ_FLAVOR_FAST | SRCU_READ_FLAVOR_FAST_UPDOWN)
- 						// Flavors requiring synchronize_rcu()
- 						// instead of smp_mb().
- void __srcu_read_unlock(struct srcu_struct *ssp, int idx) __releases(ssp);
-diff --git a/kernel/rcu/rcutorture.c b/kernel/rcu/rcutorture.c
-index 8022d32be351..70ee838cab55 100644
---- a/kernel/rcu/rcutorture.c
-+++ b/kernel/rcu/rcutorture.c
-@@ -702,6 +702,8 @@ static void srcu_torture_init(void)
- 	rcu_sync_torture_init();
- 	if (reader_flavor & SRCU_READ_FLAVOR_FAST)
- 		srcu_ctlp = &srcu_ctlf;
-+	if (reader_flavor & SRCU_READ_FLAVOR_FAST_UPDOWN)
-+		srcu_ctlp = &srcu_ctlf;
- }
- 
- static void srcu_get_gp_data(int *flags, unsigned long *gp_seq)
-@@ -728,6 +730,12 @@ static int srcu_torture_read_lock(void)
- 		ret += idx << 1;
- 	}
- 	if (reader_flavor & SRCU_READ_FLAVOR_FAST) {
-+		scp = srcu_read_lock_fast(srcu_ctlp);
-+		idx = __srcu_ptr_to_ctr(srcu_ctlp, scp);
-+		WARN_ON_ONCE(idx & ~0x1);
-+		ret += idx << 2;
-+	}
-+	if (reader_flavor & SRCU_READ_FLAVOR_FAST_UPDOWN) {
- 		scp = srcu_read_lock_fast(srcu_ctlp);
- 		idx = __srcu_ptr_to_ctr(srcu_ctlp, scp);
- 		WARN_ON_ONCE(idx & ~0x1);
-@@ -758,8 +766,10 @@ srcu_read_delay(struct torture_random_state *rrsp, struct rt_read_seg *rtrsp)
- static void srcu_torture_read_unlock(int idx)
- {
- 	WARN_ON_ONCE((reader_flavor && (idx & ~reader_flavor)) || (!reader_flavor && (idx & ~0x1)));
--	if (reader_flavor & SRCU_READ_FLAVOR_FAST)
-+	if (reader_flavor & SRCU_READ_FLAVOR_FAST_UPDOWN)
- 		srcu_read_unlock_fast(srcu_ctlp, __srcu_ctr_to_ptr(srcu_ctlp, (idx & 0x8) >> 3));
-+	if (reader_flavor & SRCU_READ_FLAVOR_FAST)
-+		srcu_read_unlock_fast(srcu_ctlp, __srcu_ctr_to_ptr(srcu_ctlp, (idx & 0x8) >> 2));
- 	if (reader_flavor & SRCU_READ_FLAVOR_NMI)
- 		srcu_read_unlock_nmisafe(srcu_ctlp, (idx & 0x2) >> 1);
- 	if ((reader_flavor & SRCU_READ_FLAVOR_NORMAL) || !(reader_flavor & SRCU_READ_FLAVOR_ALL))
-@@ -793,7 +803,7 @@ static int srcu_torture_down_read(void)
- 		WARN_ON_ONCE(idx & ~0x1);
- 		return idx;
- 	}
--	if (reader_flavor & SRCU_READ_FLAVOR_FAST) {
-+	if (reader_flavor & SRCU_READ_FLAVOR_FAST_UPDOWN) {
- 		scp = srcu_down_read_fast(srcu_ctlp);
- 		idx = __srcu_ptr_to_ctr(srcu_ctlp, scp);
- 		WARN_ON_ONCE(idx & ~0x1);
-@@ -806,7 +816,7 @@ static int srcu_torture_down_read(void)
- static void srcu_torture_up_read(int idx)
- {
- 	WARN_ON_ONCE((reader_flavor && (idx & ~reader_flavor)) || (!reader_flavor && (idx & ~0x1)));
--	if (reader_flavor & SRCU_READ_FLAVOR_FAST)
-+	if (reader_flavor & SRCU_READ_FLAVOR_FAST_UPDOWN)
- 		srcu_up_read_fast(srcu_ctlp, __srcu_ctr_to_ptr(srcu_ctlp, (idx & 0x8) >> 3));
- 	else if ((reader_flavor & SRCU_READ_FLAVOR_NORMAL) ||
- 		 !(reader_flavor & SRCU_READ_FLAVOR_ALL))
-@@ -901,14 +911,16 @@ static struct rcu_torture_ops srcu_ops = {
- 	.no_pi_lock	= IS_ENABLED(CONFIG_TINY_SRCU),
- 	.debug_objects	= 1,
- 	.have_up_down	= IS_ENABLED(CONFIG_TINY_SRCU)
--				? 0 : SRCU_READ_FLAVOR_NORMAL | SRCU_READ_FLAVOR_FAST,
-+				? 0 : SRCU_READ_FLAVOR_NORMAL | SRCU_READ_FLAVOR_FAST_UPDOWN,
- 	.name		= "srcu"
- };
- 
- static void srcud_torture_init(void)
- {
- 	rcu_sync_torture_init();
--	if (reader_flavor & SRCU_READ_FLAVOR_FAST)
-+	if (reader_flavor & SRCU_READ_FLAVOR_FAST_UPDOWN)
-+		WARN_ON(init_srcu_struct_fast(&srcu_ctld));
-+	else if (reader_flavor & SRCU_READ_FLAVOR_FAST)
- 		WARN_ON(init_srcu_struct_fast(&srcu_ctld));
- 	else
- 		WARN_ON(init_srcu_struct(&srcu_ctld));
-@@ -953,7 +965,7 @@ static struct rcu_torture_ops srcud_ops = {
- 	.no_pi_lock	= IS_ENABLED(CONFIG_TINY_SRCU),
- 	.debug_objects	= 1,
- 	.have_up_down	= IS_ENABLED(CONFIG_TINY_SRCU)
--				? 0 : SRCU_READ_FLAVOR_NORMAL | SRCU_READ_FLAVOR_FAST,
-+				? 0 : SRCU_READ_FLAVOR_NORMAL | SRCU_READ_FLAVOR_FAST_UPDOWN,
- 	.name		= "srcud"
- };
- 
--- 
-2.40.1
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/19115341225
 
+--===============8991984138108816200==--
