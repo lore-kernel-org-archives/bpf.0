@@ -1,63 +1,63 @@
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F3C52EC563
-	for <bpf@vger.kernel.org>; Wed,  5 Nov 2025 08:58:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB31E2ECEA3
+	for <bpf@vger.kernel.org>; Wed,  5 Nov 2025 08:58:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762333090; cv=none; b=Hibo+jlnAZaVCmLVf8iao2hS3QzVvsSZyUDFbJ52KRyklNQ4TkYDFDGNTg6CIv8rQ7Q2ESX/LtBgMre8mJ5hu9t7stg+YiZt+MPI6bfxMtQSwxcoeZR7KON9ADHbOEz+XsyZAMF00gWtWI0OoXwmHwVOtJw3zv42LAvvD1BDBgM=
+	t=1762333091; cv=none; b=C+oPiQIUDIQpcATzQG8NuzJLAoL9iqPj4DGl441mV7BNVTm/ZcRo5DzT6LqBCToz2UBp+EejZoS+t5YRbySaTEU1XsX+osTKfQsrP8KEI+4SSoLgV0/oAlFXtJtiGNJEBqn5TvZIhkMmLXOUiH8g5ffMpq0rpFB+IIPFp4WPQ6M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762333090; c=relaxed/simple;
-	bh=5UcxZc9Q3HoGSHq0m4fAKbf826RHC8hYCxPKwG4bToU=;
+	s=arc-20240116; t=1762333091; c=relaxed/simple;
+	bh=qwhi0b6YFP8klaumdTILtoQjFuhTgWZhdreyO+ONBGE=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=a9rLhGtD0J+23Ff51oPDfEr3lapv9oEGrbJfrcedUIGsxHJszR9PXlBeW6zcsgGtbKJhaIOv7KjGsbVCvn2ARMY36igpccjYcdKMSEqUBMTYMn5z9wEqMW2vV3+Rsxtu4/uhOIhEu2msERq/X7BBoBLCAX2rUAG7z9tLv0cB4cc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QtTcifmZ; arc=none smtp.client-ip=209.85.208.52
+	 MIME-Version; b=pvSmTWOmB4y0rkRwMvXn1901bpJ5kqXN7MfOirkcrk+r38pCObnKyh6HPatPEGJSnWrEd/cMMbvf4TtndpOzRUR3XINyQh90/Z3xJBQ98O7z+Zab6N84Z/43SDUu6qAF/ZIsAsOtKM0DcLWsjD9Ze7v3NFsK+VsBtNlhJZpNA7E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=O7dVn7Sj; arc=none smtp.client-ip=209.85.208.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QtTcifmZ"
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-640b0639dabso6199682a12.3
-        for <bpf@vger.kernel.org>; Wed, 05 Nov 2025 00:58:07 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="O7dVn7Sj"
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-640ace5f283so3990003a12.2
+        for <bpf@vger.kernel.org>; Wed, 05 Nov 2025 00:58:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1762333086; x=1762937886; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1762333088; x=1762937888; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=jE9BwGe4xNPbWjfyKjFwJz+d2gzpIzEFshflvPbl0iE=;
-        b=QtTcifmZBusWxcvVE+YDMMQqgcsfKi1NX2DGcY9yz7nUqiRkvGQg9PC9JRwTQGG1Ew
-         3XJ7OnDWuXN10I+SFRyU6MXk02QXYh1wZmPLzBup0128u3xD01fFLPt84SzYSd4ieb8/
-         B9z/JoUQ9shPpejgwX1IoBgfyZvtfVhFX2AhnqZOlGZ9lZa6QNlfWJ7LRqGD8cg/T10M
-         NdfpeZQX9ILKnA/EA6udpe/vGE1rdWlakUYv+RpFZSnZu1+MMbQy4mzsXFxoNHym/Qm1
-         WoyJ7CdQtIdb5i4H9Uu3dyS3m67MTwYOlnhEfHFfsdDrwMLh4F0Iso+/9hSqWqRmzlDP
-         /fLQ==
+        bh=mfYYy0jKQUjJ4qyA+O5utWTymhK1M3DOyEZzNvsNisQ=;
+        b=O7dVn7SjoU9Rec/jW9uIux4SL0iSK3mCyS7uo8T9pYkfqCIG4V5aZd0BnrSSHohBZC
+         aNOaWSUb7CLVqEiFBJLGHPj0DYIZJuCqtiKtVn+hUHx9dW/FvCLREioCTN3/QD+z1Qw6
+         1yqghWT6PkRT/53H5b88jes/OuQ09cB3IQwH+K9DZVOYsJ7JL4grvgYulosYZwUGQ6wh
+         10ukUCta5ZOOi8PYNWZW3fhCA3by4Zd5De+txPBsI4bgfogMVhoZV6VGHoYzof9stgQm
+         S/bjQmCrc8aKcF0NLyPdhkovawOJaMgY1AP1qDiB8ay3mb8dMpAtaBZmHmqpzLHX+Nuu
+         GeYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762333086; x=1762937886;
+        d=1e100.net; s=20230601; t=1762333088; x=1762937888;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=jE9BwGe4xNPbWjfyKjFwJz+d2gzpIzEFshflvPbl0iE=;
-        b=WjqLFmS9oFeUgSptt1HB6hxETWFe4hjo3pBNoZKbR/TVVz7PGX+e/KU+Oz8ou97+ae
-         z8+fv/SaP0R8YlSHFarBJC6f4fMqc9QkTdvmWsAI1pFOZ8NiL9hSL00zt6j3qpw2205Y
-         lXV2ECt1YocdiUkWo0Zp6DMFfJVGUOFuVSBssUwIExMrnnDxYXrYWIN3/KNDpuLsZtrf
-         a870+XX/GqWN5rKc67sDb2Kah/yp4tieuoNqgInrRSC5+Uj6E5jJAaE6bUkagGzWs4lt
-         EQeaX2+ZwlTMtAHpGzJRV+Rm/PRIMEg8VenrA1nM/JxlM4b534CZBfKoJz6Oin0ge5Yd
-         q5xg==
-X-Gm-Message-State: AOJu0Yyr+X06aQLXZgYPteyZ7QYn28mSdgHLzMJb/tijnUGitFaoqEVU
-	DpX/G2q3gJc9kROLHpAlisSMY2Ufz4pBSSUIkWhi0CZc52e8SEj0FXFnL7g8Gw==
-X-Gm-Gg: ASbGncsPNc/pzUyKcRu/kdgWQWvMyevfYgIk7dJLErQb/M7/06Oh4gY7K07eYTvbRD4
-	9WWN+6EOI9QQOdF6YmTH6tNiq8QAoGvb8CyMMeYoUR9rrzOXP7yAIkaNzS2UlTzdyEiYP0A1yWM
-	GSzufS38V2pKCr+D3GdpoFSGe7NzW1yd30bfGA4Xuqc1l0KHKeOb3tGmLYoTdmLum3CJ2sYNkvj
-	SHVWe8z6u7o6AfEb03ZbCok2GRMfUBCj28orh/uVyHROgzMzt/vqtA7nde6BUVzka/WiPt0rQsy
-	PIAAMcEIlvXJRBRYi0KDi+bVXEsIbNekfTrCJDrb9lfJIN/1PpW9rn4A5YYSB5PCaxe9M7Ipikd
-	/Q/iCCwAm2WeHjf4m1DOudIxkSuXYhnc27rJ9HsaFBOZzy3xnghncG1AJFbWSEsli/SxP03KAhG
-	VxxMdkxlmzPvZ1uRj/8eHafSuWoixHVA==
-X-Google-Smtp-Source: AGHT+IGEj4l7016NWWQlWAvLZYjSxxf1oYMEFySAVumzbZ1ASe/NMyyioqkAitk99oh0Ww+PZgy0OQ==
-X-Received: by 2002:a17:907:6d1e:b0:b72:6400:1390 with SMTP id a640c23a62f3a-b72652981bcmr231353166b.16.1762333085621;
-        Wed, 05 Nov 2025 00:58:05 -0800 (PST)
+        bh=mfYYy0jKQUjJ4qyA+O5utWTymhK1M3DOyEZzNvsNisQ=;
+        b=NhAhnXQ9kRLg0glzN/VnDSBneHzRnpwJz7m50QVdsFkziIZ25Gb4SIzhCne81RFjNo
+         +wD0QA8hT3qB4zyldj1TNSFjMeSncYCPc9WzxDhCrKpUHZ5xHzAXwpnBF5UcN7pCUmiM
+         FDEbIo/lJTIkMxrSi+bocQdYpWtbr0Vf/UGH9kYSS/ECYU97/SJMzVmnAjoCJzcPWqV1
+         YBuS12amkyZH8whiHHTz9JuJ+hzFz7EADzcVRaXFiDSZjoxy8kPmqwW2TRYKm/lw8MOM
+         1cKt6WVA00Q2UQetJbaJ+Bsd+dl7ofNJyLc5Kz7VUyfUeL7SGwhYs4m5OrRIz0F2Sc7Q
+         FcAQ==
+X-Gm-Message-State: AOJu0YzkjpPevYRqFBOFn4pQQ6rqBTK1U1jfkBuEsWK6Jsbtx9YGTt7m
+	1fE9bVM4e4injUe+bml8kgkEaQyTi3dGTQF8WC+QUK8HZDMI9weaZbPaqZHvfg==
+X-Gm-Gg: ASbGnctRiEMGXqqB8uESZ+7U/Bl7ebOZJuwC7ldsyb4kgU9Z/7MCCCYjVFBd8tlhCAX
+	I/xYrpDux5PL8Hqv/fL8I0YgQNpWV0JTg378R9hlnpv4xLJfVuxnlvmxdccbsy/iXaK36ysSVpJ
+	z7h2VZOe1yu2V61VcpD1TNiKdUwWupytx2v0H9r/5vfcR7AdH1i1HKANlP4k2B5OfitslQm4w9X
+	TjI1Z4Jy/UlWjpczCOFdxRCcXNTgO3fPoGs+ecTAK+AvpkuErLj/kjAqmbxAs3nIDR4yfYTgbyy
+	0jJijXKYnpmfQywzPZYdHpQnc+A84y3+FpqwEMHNLhVAlT6e+0RykoJ/gqLW38I+71/B/cOw8I5
+	lwIiAiVy0FFWnFKCHmXls0B7xhHU7W7lpq0e9DyrgUO1lExIybfhc2F5C8pzHCsrggY68C1Yg9A
+	7Org/hkUh94jg9Td8ONk60pi26tw6zng==
+X-Google-Smtp-Source: AGHT+IHzBUhhoGL18NPGuDScVaUVpUPmGs9uipXsInLSzYYouWHW/Gz10bSIrSLkZRMpAwXqTpKVMA==
+X-Received: by 2002:a17:907:7245:b0:b70:aac5:c163 with SMTP id a640c23a62f3a-b72652bbe34mr224853966b.24.1762333087551;
+        Wed, 05 Nov 2025 00:58:07 -0800 (PST)
 Received: from localhost.localdomain ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b723db0fd12sm429685466b.32.2025.11.05.00.58.04
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b723db0fd12sm429685466b.32.2025.11.05.00.58.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Nov 2025 00:58:04 -0800 (PST)
+        Wed, 05 Nov 2025 00:58:06 -0800 (PST)
 From: Anton Protopopov <a.s.protopopov@gmail.com>
 To: bpf@vger.kernel.org,
 	Alexei Starovoitov <ast@kernel.org>,
@@ -68,9 +68,9 @@ To: bpf@vger.kernel.org,
 	Quentin Monnet <qmo@kernel.org>,
 	Yonghong Song <yonghong.song@linux.dev>
 Cc: Anton Protopopov <a.s.protopopov@gmail.com>
-Subject: [PATCH v11 bpf-next 08/12] bpf, x86: add support for indirect jumps
-Date: Wed,  5 Nov 2025 09:04:06 +0000
-Message-Id: <20251105090410.1250500-9-a.s.protopopov@gmail.com>
+Subject: [PATCH v11 bpf-next 10/12] libbpf: support llvm-generated indirect jumps
+Date: Wed,  5 Nov 2025 09:04:08 +0000
+Message-Id: <20251105090410.1250500-11-a.s.protopopov@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20251105090410.1250500-1-a.s.protopopov@gmail.com>
 References: <20251105090410.1250500-1-a.s.protopopov@gmail.com>
@@ -80,693 +80,407 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Add support for a new instruction
+For v4 instruction set LLVM is allowed to generate indirect jumps for
+switch statements and for 'goto *rX' assembly. Every such a jump will
+be accompanied by necessary metadata, e.g. (`llvm-objdump -Sr ...`):
 
-    BPF_JMP|BPF_X|BPF_JA, SRC=0, DST=Rx, off=0, imm=0
+       0:       r2 = 0x0 ll
+                0000000000000030:  R_BPF_64_64  BPF.JT.0.0
 
-which does an indirect jump to a location stored in Rx.  The register
-Rx should have type PTR_TO_INSN. This new type assures that the Rx
-register contains a value (or a range of values) loaded from a
-correct jump table – map of type instruction array.
+Here BPF.JT.1.0 is a symbol residing in the .jumptables section:
 
-For example, for a C switch LLVM will generate the following code:
+    Symbol table:
+       4: 0000000000000000   240 OBJECT  GLOBAL DEFAULT     4 BPF.JT.0.0
 
-    0:   r3 = r1                    # "switch (r3)"
-    1:   if r3 > 0x13 goto +0x666   # check r3 boundaries
-    2:   r3 <<= 0x3                 # adjust to an index in array of addresses
-    3:   r1 = 0xbeef ll             # r1 is PTR_TO_MAP_VALUE, r1->map_ptr=M
-    5:   r1 += r3                   # r1 inherits boundaries from r3
-    6:   r1 = *(u64 *)(r1 + 0x0)    # r1 now has type INSN_TO_PTR
-    7:   gotox r1                   # jit will generate proper code
-
-Here the gotox instruction corresponds to one particular map. This is
-possible however to have a gotox instruction which can be loaded from
-different maps, e.g.
-
-    0:   r1 &= 0x1
-    1:   r2 <<= 0x3
-    2:   r3 = 0x0 ll                # load from map M_1
-    4:   r3 += r2
-    5:   if r1 == 0x0 goto +0x4
-    6:   r1 <<= 0x3
-    7:   r3 = 0x0 ll                # load from map M_2
-    9:   r3 += r1
-    A:   r1 = *(u64 *)(r3 + 0x0)
-    B:   gotox r1                   # jump to target loaded from M_1 or M_2
-
-During check_cfg stage the verifier will collect all the maps which
-point to inside the subprog being verified. When building the config,
-the high 16 bytes of the insn_state are used, so this patch
-(theoretically) supports jump tables of up to 2^16 slots.
-
-During the later stage, in check_indirect_jump, it is checked that
-the register Rx was loaded from a particular instruction array.
+The -bpf-min-jump-table-entries llvm option may be used to control the
+minimal size of a switch which will be converted to an indirect jumps.
 
 Signed-off-by: Anton Protopopov <a.s.protopopov@gmail.com>
 Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- arch/x86/net/bpf_jit_comp.c  |   3 +
- include/linux/bpf.h          |   1 +
- include/linux/bpf_verifier.h |   9 +
- kernel/bpf/bpf_insn_array.c  |  15 ++
- kernel/bpf/core.c            |   1 +
- kernel/bpf/liveness.c        |   3 +
- kernel/bpf/log.c             |   1 +
- kernel/bpf/verifier.c        | 373 ++++++++++++++++++++++++++++++++++-
- 8 files changed, 400 insertions(+), 6 deletions(-)
+ tools/lib/bpf/libbpf.c          | 247 +++++++++++++++++++++++++++++++-
+ tools/lib/bpf/libbpf_internal.h |   2 +
+ tools/lib/bpf/linker.c          |   3 +
+ 3 files changed, 251 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index bbd2b03d2b74..36a0d4db9f68 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -2628,6 +2628,9 @@ st:			if (is_imm8(insn->off))
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 777c848ac097..706e7481bdf6 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -370,6 +370,7 @@ enum reloc_type {
+ 	RELO_EXTERN_CALL,
+ 	RELO_SUBPROG_ADDR,
+ 	RELO_CORE,
++	RELO_INSN_ARRAY,
+ };
  
- 			break;
- 
-+		case BPF_JMP | BPF_JA | BPF_X:
-+			emit_indirect_jump(&prog, insn->dst_reg, image + addrs[i - 1]);
-+			break;
- 		case BPF_JMP | BPF_JA:
- 		case BPF_JMP32 | BPF_JA:
- 			if (BPF_CLASS(insn->code) == BPF_JMP) {
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 9d41a6affcef..09d5dc541d1c 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1001,6 +1001,7 @@ enum bpf_reg_type {
- 	PTR_TO_ARENA,
- 	PTR_TO_BUF,		 /* reg points to a read/write buffer */
- 	PTR_TO_FUNC,		 /* reg points to a bpf program function */
-+	PTR_TO_INSN,		 /* reg points to a bpf program instruction */
- 	CONST_PTR_TO_DYNPTR,	 /* reg points to a const struct bpf_dynptr */
- 	__BPF_REG_TYPE_MAX,
- 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 6b820d8d77af..5441341f1ab9 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -527,6 +527,7 @@ struct bpf_insn_aux_data {
+ struct reloc_desc {
+@@ -380,7 +381,16 @@ struct reloc_desc {
  		struct {
- 			u32 map_index;		/* index into used_maps[] */
- 			u32 map_off;		/* offset from value base address */
-+			struct bpf_iarray *jt;	/* jump table for gotox instruction */
+ 			int map_idx;
+ 			int sym_off;
+-			int ext_idx;
++			/*
++			 * The following two fields can be unionized, as the
++			 * ext_idx field is used for extern symbols, and the
++			 * sym_size is used for jump tables, which are never
++			 * extern
++			 */
++			union {
++				int ext_idx;
++				int sym_size;
++			};
  		};
- 		struct {
- 			enum bpf_reg_type reg_type;	/* type of pseudo_btf_id */
-@@ -840,6 +841,7 @@ struct bpf_verifier_env {
- 	struct bpf_scc_info **scc_info;
- 	u32 scc_cnt;
- 	struct bpf_iarray *succ;
-+	struct bpf_iarray *gotox_tmp_buf;
+ 	};
+ };
+@@ -422,6 +432,11 @@ struct bpf_sec_def {
+ 	libbpf_prog_attach_fn_t prog_attach_fn;
  };
  
- static inline struct bpf_func_info_aux *subprog_aux(struct bpf_verifier_env *env, int subprog)
-@@ -1050,6 +1052,13 @@ static inline bool bpf_stack_narrow_access_ok(int off, int fill_size, int spill_
- 	return !(off % BPF_REG_SIZE);
- }
- 
-+static inline bool insn_is_gotox(struct bpf_insn *insn)
-+{
-+	return BPF_CLASS(insn->code) == BPF_JMP &&
-+	       BPF_OP(insn->code) == BPF_JA &&
-+	       BPF_SRC(insn->code) == BPF_X;
-+}
++struct bpf_light_subprog {
++	__u32 sec_insn_off;
++	__u32 sub_insn_off;
++};
 +
- const char *reg_type_str(struct bpf_verifier_env *env, enum bpf_reg_type type);
- const char *dynptr_type_str(enum bpf_dynptr_type type);
- const char *iter_type_str(const struct btf *btf, u32 btf_id);
-diff --git a/kernel/bpf/bpf_insn_array.c b/kernel/bpf/bpf_insn_array.c
-index 2053fda377bb..61ce52882632 100644
---- a/kernel/bpf/bpf_insn_array.c
-+++ b/kernel/bpf/bpf_insn_array.c
-@@ -114,6 +114,20 @@ static u64 insn_array_mem_usage(const struct bpf_map *map)
- 	return insn_array_alloc_size(map->max_entries);
- }
- 
-+static int insn_array_map_direct_value_addr(const struct bpf_map *map, u64 *imm, u32 off)
-+{
-+	struct bpf_insn_array *insn_array = cast_insn_array(map);
+ /*
+  * bpf_prog should be a better name but it has been used in
+  * linux/filter.h.
+@@ -495,6 +510,9 @@ struct bpf_program {
+ 	__u32 line_info_cnt;
+ 	__u32 prog_flags;
+ 	__u8  hash[SHA256_DIGEST_LENGTH];
 +
-+	if ((off % sizeof(long)) != 0 ||
-+	    (off / sizeof(long)) >= map->max_entries)
-+		return -EINVAL;
-+
-+	/* from BPF's point of view, this map is a jump table */
-+	*imm = (unsigned long)insn_array->ips + off;
-+
-+	return 0;
-+}
-+
- BTF_ID_LIST_SINGLE(insn_array_btf_ids, struct, bpf_insn_array)
- 
- const struct bpf_map_ops insn_array_map_ops = {
-@@ -126,6 +140,7 @@ const struct bpf_map_ops insn_array_map_ops = {
- 	.map_delete_elem = insn_array_delete_elem,
- 	.map_check_btf = insn_array_check_btf,
- 	.map_mem_usage = insn_array_mem_usage,
-+	.map_direct_value_addr = insn_array_map_direct_value_addr,
- 	.map_btf_id = &insn_array_btf_ids[0],
++	struct bpf_light_subprog *subprogs;
++	__u32 subprog_cnt;
  };
  
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 4b62a03d6df5..ef4448f18aad 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -1708,6 +1708,7 @@ bool bpf_opcode_in_insntable(u8 code)
- 		[BPF_LD | BPF_IND | BPF_B] = true,
- 		[BPF_LD | BPF_IND | BPF_H] = true,
- 		[BPF_LD | BPF_IND | BPF_W] = true,
-+		[BPF_JMP | BPF_JA | BPF_X] = true,
- 		[BPF_JMP | BPF_JCOND] = true,
- 	};
- #undef BPF_INSN_3_TBL
-diff --git a/kernel/bpf/liveness.c b/kernel/bpf/liveness.c
-index bffb495bc933..a7240013fd9d 100644
---- a/kernel/bpf/liveness.c
-+++ b/kernel/bpf/liveness.c
-@@ -485,6 +485,9 @@ bpf_insn_successors(struct bpf_verifier_env *env, u32 idx)
- 	struct bpf_iarray *succ;
- 	int insn_sz;
+ struct bpf_struct_ops {
+@@ -668,6 +686,7 @@ struct elf_state {
+ 	int symbols_shndx;
+ 	bool has_st_ops;
+ 	int arena_data_shndx;
++	int jumptables_data_shndx;
+ };
  
-+	if (unlikely(insn_is_gotox(insn)))
-+		return env->insn_aux_data[idx].jt;
+ struct usdt_manager;
+@@ -739,6 +758,16 @@ struct bpf_object {
+ 	void *arena_data;
+ 	size_t arena_data_sz;
+ 
++	void *jumptables_data;
++	size_t jumptables_data_sz;
 +
- 	/* pre-allocated array of size up to 2; reset cnt, as it may have been used already */
- 	succ = env->succ;
- 	succ->cnt = 0;
-diff --git a/kernel/bpf/log.c b/kernel/bpf/log.c
-index 70221aafc35c..a0c3b35de2ce 100644
---- a/kernel/bpf/log.c
-+++ b/kernel/bpf/log.c
-@@ -461,6 +461,7 @@ const char *reg_type_str(struct bpf_verifier_env *env, enum bpf_reg_type type)
- 		[PTR_TO_ARENA]		= "arena",
- 		[PTR_TO_BUF]		= "buf",
- 		[PTR_TO_FUNC]		= "func",
-+		[PTR_TO_INSN]		= "insn",
- 		[PTR_TO_MAP_KEY]	= "map_key",
- 		[CONST_PTR_TO_DYNPTR]	= "dynptr_ptr",
- 	};
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 781669f649f2..1268fa075d4c 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -6006,6 +6006,18 @@ static int check_map_kptr_access(struct bpf_verifier_env *env, u32 regno,
- 	return 0;
++	struct {
++		struct bpf_program *prog;
++		int sym_off;
++		int fd;
++	} *jumptable_maps;
++	size_t jumptable_map_cnt;
++
+ 	struct kern_feature_cache *feat_cache;
+ 	char *token_path;
+ 	int token_fd;
+@@ -765,6 +794,7 @@ void bpf_program__unload(struct bpf_program *prog)
+ 
+ 	zfree(&prog->func_info);
+ 	zfree(&prog->line_info);
++	zfree(&prog->subprogs);
  }
  
-+/*
-+ * Return the size of the memory region accessible from a pointer to map value.
-+ * For INSN_ARRAY maps whole bpf_insn_array->ips array is accessible.
-+ */
-+static u32 map_mem_size(const struct bpf_map *map)
-+{
-+	if (map->map_type == BPF_MAP_TYPE_INSN_ARRAY)
-+		return map->max_entries * sizeof(long);
-+
-+	return map->value_size;
-+}
-+
- /* check read/write into a map element with possible variable offset */
- static int check_map_access(struct bpf_verifier_env *env, u32 regno,
- 			    int off, int size, bool zero_size_allowed,
-@@ -6015,11 +6027,11 @@ static int check_map_access(struct bpf_verifier_env *env, u32 regno,
- 	struct bpf_func_state *state = vstate->frame[vstate->curframe];
- 	struct bpf_reg_state *reg = &state->regs[regno];
- 	struct bpf_map *map = reg->map_ptr;
-+	u32 mem_size = map_mem_size(map);
- 	struct btf_record *rec;
- 	int err, i;
- 
--	err = check_mem_region_access(env, regno, off, size, map->value_size,
--				      zero_size_allowed);
-+	err = check_mem_region_access(env, regno, off, size, mem_size, zero_size_allowed);
- 	if (err)
- 		return err;
- 
-@@ -7481,6 +7493,8 @@ static int check_mem_access(struct bpf_verifier_env *env, int insn_idx, u32 regn
- {
- 	struct bpf_reg_state *regs = cur_regs(env);
- 	struct bpf_reg_state *reg = regs + regno;
-+	bool insn_array = reg->type == PTR_TO_MAP_VALUE &&
-+			  reg->map_ptr->map_type == BPF_MAP_TYPE_INSN_ARRAY;
- 	int size, err = 0;
- 
- 	size = bpf_size_to_bytes(bpf_size);
-@@ -7488,7 +7502,7 @@ static int check_mem_access(struct bpf_verifier_env *env, int insn_idx, u32 regn
- 		return size;
- 
- 	/* alignment checks will add in reg->off themselves */
--	err = check_ptr_alignment(env, reg, off, size, strict_alignment_once);
-+	err = check_ptr_alignment(env, reg, off, size, strict_alignment_once || insn_array);
- 	if (err)
- 		return err;
- 
-@@ -7515,6 +7529,11 @@ static int check_mem_access(struct bpf_verifier_env *env, int insn_idx, u32 regn
- 			verbose(env, "R%d leaks addr into map\n", value_regno);
- 			return -EACCES;
- 		}
-+		if (t == BPF_WRITE && insn_array) {
-+			verbose(env, "writes into insn_array not allowed\n");
-+			return -EACCES;
-+		}
-+
- 		err = check_map_access_type(env, regno, off, size, t);
- 		if (err)
- 			return err;
-@@ -7543,6 +7562,14 @@ static int check_mem_access(struct bpf_verifier_env *env, int insn_idx, u32 regn
- 
- 				regs[value_regno].type = SCALAR_VALUE;
- 				__mark_reg_known(&regs[value_regno], val);
-+			} else if (map->map_type == BPF_MAP_TYPE_INSN_ARRAY) {
-+				if (bpf_size != BPF_DW) {
-+					verbose(env, "Invalid read of %d bytes from insn_array\n",
-+						     size);
-+					return -EACCES;
-+				}
-+				copy_register_state(&regs[value_regno], reg);
-+				regs[value_regno].type = PTR_TO_INSN;
+ static void bpf_program__exit(struct bpf_program *prog)
+@@ -3943,6 +3973,13 @@ static int bpf_object__elf_collect(struct bpf_object *obj)
+ 			} else if (strcmp(name, ARENA_SEC) == 0) {
+ 				obj->efile.arena_data = data;
+ 				obj->efile.arena_data_shndx = idx;
++			} else if (strcmp(name, JUMPTABLES_SEC) == 0) {
++				obj->jumptables_data = malloc(data->d_size);
++				if (!obj->jumptables_data)
++					return -ENOMEM;
++				memcpy(obj->jumptables_data, data->d_buf, data->d_size);
++				obj->jumptables_data_sz = data->d_size;
++				obj->efile.jumptables_data_shndx = idx;
  			} else {
- 				mark_reg_unknown(env, regs, value_regno);
- 			}
-@@ -17096,7 +17123,8 @@ static int check_ld_imm(struct bpf_verifier_env *env, struct bpf_insn *insn)
- 		}
- 		dst_reg->type = PTR_TO_MAP_VALUE;
- 		dst_reg->off = aux->map_off;
--		WARN_ON_ONCE(map->max_entries != 1);
-+		WARN_ON_ONCE(map->map_type != BPF_MAP_TYPE_INSN_ARRAY &&
-+			     map->max_entries != 1);
- 		/* We want reg->id to be same (0) as map_value is not distinct */
- 	} else if (insn->src_reg == BPF_PSEUDO_MAP_FD ||
- 		   insn->src_reg == BPF_PSEUDO_MAP_IDX) {
-@@ -17864,6 +17892,206 @@ static struct bpf_iarray *iarray_realloc(struct bpf_iarray *old, size_t n_elem)
- 	return new;
- }
- 
-+static int copy_insn_array(struct bpf_map *map, u32 start, u32 end, u32 *items)
-+{
-+	struct bpf_insn_array_value *value;
-+	u32 i;
-+
-+	for (i = start; i <= end; i++) {
-+		value = map->ops->map_lookup_elem(map, &i);
-+		if (!value)
-+			return -EINVAL;
-+		items[i - start] = value->xlated_off;
-+	}
-+	return 0;
-+}
-+
-+static int cmp_ptr_to_u32(const void *a, const void *b)
-+{
-+	return *(u32 *)a - *(u32 *)b;
-+}
-+
-+static int sort_insn_array_uniq(u32 *items, int cnt)
-+{
-+	int unique = 1;
-+	int i;
-+
-+	sort(items, cnt, sizeof(items[0]), cmp_ptr_to_u32, NULL);
-+
-+	for (i = 1; i < cnt; i++)
-+		if (items[i] != items[unique - 1])
-+			items[unique++] = items[i];
-+
-+	return unique;
-+}
-+
-+/*
-+ * sort_unique({map[start], ..., map[end]}) into off
-+ */
-+static int copy_insn_array_uniq(struct bpf_map *map, u32 start, u32 end, u32 *off)
-+{
-+	u32 n = end - start + 1;
-+	int err;
-+
-+	err = copy_insn_array(map, start, end, off);
-+	if (err)
-+		return err;
-+
-+	return sort_insn_array_uniq(off, n);
-+}
-+
-+/*
-+ * Copy all unique offsets from the map
-+ */
-+static struct bpf_iarray *jt_from_map(struct bpf_map *map)
-+{
-+	struct bpf_iarray *jt;
-+	int err;
-+	int n;
-+
-+	jt = iarray_realloc(NULL, map->max_entries);
-+	if (!jt)
-+		return ERR_PTR(-ENOMEM);
-+
-+	n = copy_insn_array_uniq(map, 0, map->max_entries - 1, jt->items);
-+	if (n < 0) {
-+		err = n;
-+		goto err_free;
-+	}
-+	if (n == 0) {
-+		err = -EINVAL;
-+		goto err_free;
-+	}
-+	jt->cnt = n;
-+	return jt;
-+
-+err_free:
-+	kvfree(jt);
-+	return ERR_PTR(err);
-+}
-+
-+/*
-+ * Find and collect all maps which fit in the subprog. Return the result as one
-+ * combined jump table in jt->items (allocated with kvcalloc)
-+ */
-+static struct bpf_iarray *jt_from_subprog(struct bpf_verifier_env *env,
-+					  int subprog_start, int subprog_end)
-+{
-+	struct bpf_iarray *jt = NULL;
-+	struct bpf_map *map;
-+	struct bpf_iarray *jt_cur;
-+	int i;
-+
-+	for (i = 0; i < env->insn_array_map_cnt; i++) {
-+		/*
-+		 * TODO (when needed): collect only jump tables, not static keys
-+		 * or maps for indirect calls
-+		 */
-+		map = env->insn_array_maps[i];
-+
-+		jt_cur = jt_from_map(map);
-+		if (IS_ERR(jt_cur)) {
-+			kvfree(jt);
-+			return jt_cur;
-+		}
-+
-+		/*
-+		 * This is enough to check one element. The full table is
-+		 * checked to fit inside the subprog later in create_jt()
-+		 */
-+		if (jt_cur->items[0] >= subprog_start && jt_cur->items[0] < subprog_end) {
-+			u32 old_cnt = jt ? jt->cnt : 0;
-+			jt = iarray_realloc(jt, old_cnt + jt_cur->cnt);
-+			if (!jt) {
-+				kvfree(jt_cur);
-+				return ERR_PTR(-ENOMEM);
-+			}
-+			memcpy(jt->items + old_cnt, jt_cur->items, jt_cur->cnt << 2);
-+		}
-+
-+		kvfree(jt_cur);
-+	}
-+
-+	if (!jt) {
-+		verbose(env, "no jump tables found for subprog starting at %u\n", subprog_start);
-+		return ERR_PTR(-EINVAL);
-+	}
-+
-+	jt->cnt = sort_insn_array_uniq(jt->items, jt->cnt);
-+	return jt;
-+}
-+
-+static struct bpf_iarray *
-+create_jt(int t, struct bpf_verifier_env *env)
-+{
-+	static struct bpf_subprog_info *subprog;
-+	int subprog_start, subprog_end;
-+	struct bpf_iarray *jt;
-+	int i;
-+
-+	subprog = bpf_find_containing_subprog(env, t);
-+	subprog_start = subprog->start;
-+	subprog_end = (subprog + 1)->start;
-+	jt = jt_from_subprog(env, subprog_start, subprog_end);
-+	if (IS_ERR(jt))
-+		return jt;
-+
-+	/* Check that the every element of the jump table fits within the given subprogram */
-+	for (i = 0; i < jt->cnt; i++) {
-+		if (jt->items[i] < subprog_start || jt->items[i] >= subprog_end) {
-+			verbose(env, "jump table for insn %d points outside of the subprog [%u,%u]\n",
-+					t, subprog_start, subprog_end);
-+			kvfree(jt);
-+			return ERR_PTR(-EINVAL);
-+		}
-+	}
-+
-+	return jt;
-+}
-+
-+/* "conditional jump with N edges" */
-+static int visit_gotox_insn(int t, struct bpf_verifier_env *env)
-+{
-+	int *insn_stack = env->cfg.insn_stack;
-+	int *insn_state = env->cfg.insn_state;
-+	bool keep_exploring = false;
-+	struct bpf_iarray *jt;
-+	int i, w;
-+
-+	jt = env->insn_aux_data[t].jt;
-+	if (!jt) {
-+		jt = create_jt(t, env);
-+		if (IS_ERR(jt))
-+			return PTR_ERR(jt);
-+
-+		env->insn_aux_data[t].jt = jt;
-+	}
-+
-+	mark_prune_point(env, t);
-+	for (i = 0; i < jt->cnt; i++) {
-+		w = jt->items[i];
-+		if (w < 0 || w >= env->prog->len) {
-+			verbose(env, "indirect jump out of range from insn %d to %d\n", t, w);
-+			return -EINVAL;
-+		}
-+
-+		mark_jmp_point(env, w);
-+
-+		/* EXPLORED || DISCOVERED */
-+		if (insn_state[w])
-+			continue;
-+
-+		if (env->cfg.cur_stack >= env->prog->len)
-+			return -E2BIG;
-+
-+		insn_stack[env->cfg.cur_stack++] = w;
-+		insn_state[w] |= DISCOVERED;
-+		keep_exploring = true;
-+	}
-+
-+	return keep_exploring ? KEEP_EXPLORING : DONE_EXPLORING;
-+}
-+
- /* Visits the instruction at index t and returns one of the following:
-  *  < 0 - an error occurred
-  *  DONE_EXPLORING - the instruction was fully explored
-@@ -17956,8 +18184,8 @@ static int visit_insn(int t, struct bpf_verifier_env *env)
- 		return visit_func_call_insn(t, insns, env, insn->src_reg == BPF_PSEUDO_CALL);
- 
- 	case BPF_JA:
--		if (BPF_SRC(insn->code) != BPF_K)
--			return -EINVAL;
-+		if (BPF_SRC(insn->code) == BPF_X)
-+			return visit_gotox_insn(t, env);
- 
- 		if (BPF_CLASS(insn->code) == BPF_JMP)
- 			off = insn->off;
-@@ -18886,6 +19114,10 @@ static bool regsafe(struct bpf_verifier_env *env, struct bpf_reg_state *rold,
- 		return regs_exact(rold, rcur, idmap) && rold->frameno == rcur->frameno;
- 	case PTR_TO_ARENA:
- 		return true;
-+	case PTR_TO_INSN:
-+		return memcmp(rold, rcur, offsetof(struct bpf_reg_state, var_off)) == 0 &&
-+			rold->off == rcur->off && range_within(rold, rcur) &&
-+			tnum_in(rold->var_off, rcur->var_off);
- 	default:
- 		return regs_exact(rold, rcur, idmap);
+ 				pr_info("elf: skipping unrecognized data section(%d) %s\n",
+ 					idx, name);
+@@ -4635,6 +4672,16 @@ static int bpf_program__record_reloc(struct bpf_program *prog,
+ 		return 0;
  	}
-@@ -19895,6 +20127,99 @@ static int process_bpf_exit_full(struct bpf_verifier_env *env,
- 	return PROCESS_BPF_EXIT;
+ 
++	/* jump table data relocation */
++	if (shdr_idx == obj->efile.jumptables_data_shndx) {
++		reloc_desc->type = RELO_INSN_ARRAY;
++		reloc_desc->insn_idx = insn_idx;
++		reloc_desc->map_idx = -1;
++		reloc_desc->sym_off = sym->st_value;
++		reloc_desc->sym_size = sym->st_size;
++		return 0;
++	}
++
+ 	/* generic map reference relocation */
+ 	if (type == LIBBPF_MAP_UNSPEC) {
+ 		if (!bpf_object__shndx_is_maps(obj, shdr_idx)) {
+@@ -6145,6 +6192,157 @@ static void poison_kfunc_call(struct bpf_program *prog, int relo_idx,
+ 	insn->imm = POISON_CALL_KFUNC_BASE + ext_idx;
  }
  
-+static int indirect_jump_min_max_index(struct bpf_verifier_env *env,
-+				       int regno,
-+				       struct bpf_map *map,
-+				       u32 *pmin_index, u32 *pmax_index)
++static int find_jt_map(struct bpf_object *obj, struct bpf_program *prog, int sym_off)
 +{
-+	struct bpf_reg_state *reg = reg_state(env, regno);
-+	u64 min_index, max_index;
-+	const u32 size = 8;
++	size_t i;
 +
-+	if (check_add_overflow(reg->umin_value, reg->off, &min_index) ||
-+		(min_index > (u64) U32_MAX * size)) {
-+		verbose(env, "the sum of R%u umin_value %llu and off %u is too big\n",
-+			     regno, reg->umin_value, reg->off);
-+		return -ERANGE;
-+	}
-+	if (check_add_overflow(reg->umax_value, reg->off, &max_index) ||
-+		(max_index > (u64) U32_MAX * size)) {
-+		verbose(env, "the sum of R%u umax_value %llu and off %u is too big\n",
-+			     regno, reg->umax_value, reg->off);
-+		return -ERANGE;
++	for (i = 0; i < obj->jumptable_map_cnt; i++) {
++		/*
++		 * This might happen that same offset is used for two different
++		 * programs (as jump tables can be the same). However, for
++		 * different programs different maps should be created.
++		 */
++		if (obj->jumptable_maps[i].sym_off == sym_off &&
++		    obj->jumptable_maps[i].prog == prog)
++			return obj->jumptable_maps[i].fd;
 +	}
 +
-+	min_index /= size;
-+	max_index /= size;
++	return -ENOENT;
++}
 +
-+	if (max_index >= map->max_entries) {
-+		verbose(env, "R%u points to outside of jump table: [%llu,%llu] max_entries %u\n",
-+			     regno, min_index, max_index, map->max_entries);
-+		return -EINVAL;
-+	}
++static int add_jt_map(struct bpf_object *obj, struct bpf_program *prog, int sym_off, int map_fd)
++{
++	size_t cnt = obj->jumptable_map_cnt;
++	size_t size = sizeof(obj->jumptable_maps[0]);
++	void *tmp;
 +
-+	*pmin_index = min_index;
-+	*pmax_index = max_index;
++	tmp = libbpf_reallocarray(obj->jumptable_maps, cnt + 1, size);
++	if (!tmp)
++		return -ENOMEM;
++
++	obj->jumptable_maps = tmp;
++	obj->jumptable_maps[cnt].prog = prog;
++	obj->jumptable_maps[cnt].sym_off = sym_off;
++	obj->jumptable_maps[cnt].fd = map_fd;
++	obj->jumptable_map_cnt++;
++
 +	return 0;
 +}
 +
-+/* gotox *dst_reg */
-+static int check_indirect_jump(struct bpf_verifier_env *env, struct bpf_insn *insn)
++static int find_subprog_idx(struct bpf_program *prog, int insn_idx)
 +{
-+	struct bpf_verifier_state *other_branch;
-+	struct bpf_reg_state *dst_reg;
-+	struct bpf_map *map;
-+	u32 min_index, max_index;
-+	int err = 0;
-+	int n;
 +	int i;
 +
-+	dst_reg = reg_state(env, insn->dst_reg);
-+	if (dst_reg->type != PTR_TO_INSN) {
-+		verbose(env, "R%d has type %s, expected PTR_TO_INSN\n",
-+			     insn->dst_reg, reg_type_str(env, dst_reg->type));
-+		return -EINVAL;
++	for (i = prog->subprog_cnt - 1; i >= 0; i--) {
++		if (insn_idx >= prog->subprogs[i].sub_insn_off)
++			return i;
 +	}
 +
-+	map = dst_reg->map_ptr;
-+	if (verifier_bug_if(!map, env, "R%d has an empty map pointer", insn->dst_reg))
-+		return -EFAULT;
-+
-+	if (verifier_bug_if(map->map_type != BPF_MAP_TYPE_INSN_ARRAY, env,
-+			    "R%d has incorrect map type %d", insn->dst_reg, map->map_type))
-+		return -EFAULT;
-+
-+	err = indirect_jump_min_max_index(env, insn->dst_reg, map, &min_index, &max_index);
-+	if (err)
-+		return err;
-+
-+	/* Ensure that the buffer is large enough */
-+	if (!env->gotox_tmp_buf || env->gotox_tmp_buf->cnt < max_index - min_index + 1) {
-+		env->gotox_tmp_buf = iarray_realloc(env->gotox_tmp_buf,
-+						    max_index - min_index + 1);
-+		if (!env->gotox_tmp_buf)
-+			return -ENOMEM;
-+	}
-+
-+	n = copy_insn_array_uniq(map, min_index, max_index, env->gotox_tmp_buf->items);
-+	if (n < 0)
-+		return n;
-+	if (n == 0) {
-+		verbose(env, "register R%d doesn't point to any offset in map id=%d\n",
-+			     insn->dst_reg, map->id);
-+		return -EINVAL;
-+	}
-+
-+	for (i = 0; i < n - 1; i++) {
-+		other_branch = push_stack(env, env->gotox_tmp_buf->items[i],
-+					  env->insn_idx, env->cur_state->speculative);
-+		if (IS_ERR(other_branch))
-+			return PTR_ERR(other_branch);
-+	}
-+	env->insn_idx = env->gotox_tmp_buf->items[n-1];
-+	return 0;
++	return -1;
 +}
 +
- static int do_check_insn(struct bpf_verifier_env *env, bool *do_print_state)
- {
- 	int err;
-@@ -19997,6 +20322,15 @@ static int do_check_insn(struct bpf_verifier_env *env, bool *do_print_state)
- 
- 			mark_reg_scratched(env, BPF_REG_0);
- 		} else if (opcode == BPF_JA) {
-+			if (BPF_SRC(insn->code) == BPF_X) {
-+				if (insn->src_reg != BPF_REG_0 ||
-+				    insn->imm != 0 || insn->off != 0) {
-+					verbose(env, "BPF_JA|BPF_X uses reserved fields\n");
-+					return -EINVAL;
-+				}
-+				return check_indirect_jump(env, insn);
-+			}
++static int create_jt_map(struct bpf_object *obj, struct bpf_program *prog, struct reloc_desc *relo)
++{
++	const __u32 jt_entry_size = 8;
++	int sym_off = relo->sym_off;
++	int jt_size = relo->sym_size;
++	__u32 max_entries = jt_size / jt_entry_size;
++	__u32 value_size = sizeof(struct bpf_insn_array_value);
++	struct bpf_insn_array_value val = {};
++	int subprog_idx;
++	int map_fd, err;
++	__u64 insn_off;
++	__u64 *jt;
++	__u32 i;
 +
- 			if (BPF_SRC(insn->code) != BPF_K ||
- 			    insn->src_reg != BPF_REG_0 ||
- 			    insn->dst_reg != BPF_REG_0 ||
-@@ -20513,6 +20847,7 @@ static int check_map_prog_compatibility(struct bpf_verifier_env *env,
- 		case BPF_MAP_TYPE_QUEUE:
- 		case BPF_MAP_TYPE_STACK:
- 		case BPF_MAP_TYPE_ARENA:
-+		case BPF_MAP_TYPE_INSN_ARRAY:
++	map_fd = find_jt_map(obj, prog, sym_off);
++	if (map_fd >= 0)
++		return map_fd;
++
++	if (sym_off % jt_entry_size) {
++		pr_warn("map '.jumptables': jumptable start %d should be multiple of %u\n",
++			sym_off, jt_entry_size);
++		return -EINVAL;
++	}
++
++	if (jt_size % jt_entry_size) {
++		pr_warn("map '.jumptables': jumptable size %d should be multiple of %u\n",
++			jt_size, jt_entry_size);
++		return -EINVAL;
++	}
++
++	map_fd = bpf_map_create(BPF_MAP_TYPE_INSN_ARRAY, ".jumptables",
++				4, value_size, max_entries, NULL);
++	if (map_fd < 0)
++		return map_fd;
++
++	if (!obj->jumptables_data) {
++		pr_warn("map '.jumptables': ELF file is missing jump table data\n");
++		err = -EINVAL;
++		goto err_close;
++	}
++	if (sym_off + jt_size > obj->jumptables_data_sz) {
++		pr_warn("map '.jumptables': jumptables_data size is %zd, trying to access %d\n",
++			obj->jumptables_data_sz, sym_off + jt_size);
++		err = -EINVAL;
++		goto err_close;
++	}
++
++	subprog_idx = -1; /* main program */
++	if (relo->insn_idx < 0 || relo->insn_idx >= prog->insns_cnt) {
++		pr_warn("map '.jumptables': invalid instruction index %d\n", relo->insn_idx);
++		err = -EINVAL;
++		goto err_close;
++	}
++	if (prog->subprogs)
++		subprog_idx = find_subprog_idx(prog, relo->insn_idx);
++
++	jt = (__u64 *)(obj->jumptables_data + sym_off);
++	for (i = 0; i < max_entries; i++) {
++		/*
++		 * The offset should be made to be relative to the beginning of
++		 * the main function, not the subfunction.
++		 */
++		insn_off = jt[i]/sizeof(struct bpf_insn);
++		if (subprog_idx >= 0) {
++			insn_off -= prog->subprogs[subprog_idx].sec_insn_off;
++			insn_off += prog->subprogs[subprog_idx].sub_insn_off;
++		} else {
++			insn_off -= prog->sec_insn_off;
++		}
++
++		/*
++		 * LLVM-generated jump tables contain u64 records, however
++		 * should contain values that fit in u32.
++		 */
++		if (insn_off > UINT32_MAX) {
++			pr_warn("map '.jumptables': invalid jump table value 0x%llx at offset %d\n",
++				(long long)jt[i], sym_off + i * jt_entry_size);
++			err = -EINVAL;
++			goto err_close;
++		}
++
++		val.orig_off = insn_off;
++		err = bpf_map_update_elem(map_fd, &i, &val, 0);
++		if (err)
++			goto err_close;
++	}
++
++	err = bpf_map_freeze(map_fd);
++	if (err)
++		goto err_close;
++
++	err = add_jt_map(obj, prog, sym_off, map_fd);
++	if (err)
++		goto err_close;
++
++	return map_fd;
++
++err_close:
++	close(map_fd);
++	return err;
++}
++
+ /* Relocate data references within program code:
+  *  - map references;
+  *  - global variable references;
+@@ -6236,6 +6434,20 @@ bpf_object__relocate_data(struct bpf_object *obj, struct bpf_program *prog)
+ 		case RELO_CORE:
+ 			/* will be handled by bpf_program_record_relos() */
  			break;
++		case RELO_INSN_ARRAY: {
++			int map_fd;
++
++			map_fd = create_jt_map(obj, prog, relo);
++			if (map_fd < 0) {
++				pr_warn("prog '%s': relo #%d: can't create jump table: sym_off %u\n",
++					prog->name, i, relo->sym_off);
++				return map_fd;
++			}
++			insn[0].src_reg = BPF_PSEUDO_MAP_VALUE;
++			insn->imm = map_fd;
++			insn->off = 0;
++		}
++			break;
  		default:
- 			verbose(env,
-@@ -21070,6 +21405,27 @@ static int bpf_adj_linfo_after_remove(struct bpf_verifier_env *env, u32 off,
+ 			pr_warn("prog '%s': relo #%d: bad relo type %d\n",
+ 				prog->name, i, relo->type);
+@@ -6433,6 +6645,24 @@ static int append_subprog_relos(struct bpf_program *main_prog, struct bpf_progra
  	return 0;
  }
  
-+/*
-+ * Clean up dynamically allocated fields of aux data for instructions [start, ...]
-+ */
-+static void clear_insn_aux_data(struct bpf_verifier_env *env, int start, int len)
++static int save_subprog_offsets(struct bpf_program *main_prog, struct bpf_program *subprog)
 +{
-+	struct bpf_insn_aux_data *aux_data = env->insn_aux_data;
-+	struct bpf_insn *insns = env->prog->insnsi;
-+	int end = start + len;
-+	int i;
++	size_t size = sizeof(main_prog->subprogs[0]);
++	int cnt = main_prog->subprog_cnt;
++	void *tmp;
 +
-+	for (i = start; i < end; i++) {
-+		if (insn_is_gotox(&insns[i])) {
-+			kvfree(aux_data[i].jt);
-+			aux_data[i].jt = NULL;
-+		}
++	tmp = libbpf_reallocarray(main_prog->subprogs, cnt + 1, size);
++	if (!tmp)
++		return -ENOMEM;
 +
-+		if (bpf_is_ldimm64(&insns[i]))
-+			i++;
-+	}
++	main_prog->subprogs = tmp;
++	main_prog->subprogs[cnt].sec_insn_off = subprog->sec_insn_off;
++	main_prog->subprogs[cnt].sub_insn_off = subprog->sub_insn_off;
++	main_prog->subprog_cnt++;
++
++	return 0;
 +}
 +
- static int verifier_remove_insns(struct bpf_verifier_env *env, u32 off, u32 cnt)
- {
- 	struct bpf_insn_aux_data *aux_data = env->insn_aux_data;
-@@ -21079,6 +21435,9 @@ static int verifier_remove_insns(struct bpf_verifier_env *env, u32 off, u32 cnt)
- 	if (bpf_prog_is_offloaded(env->prog->aux))
- 		bpf_prog_offload_remove_insns(env, off, cnt);
- 
-+	/* Should be called before bpf_remove_insns, as it uses prog->insnsi */
-+	clear_insn_aux_data(env, off, cnt);
-+
- 	err = bpf_remove_insns(env->prog, off, cnt);
+ static int
+ bpf_object__append_subprog_code(struct bpf_object *obj, struct bpf_program *main_prog,
+ 				struct bpf_program *subprog)
+@@ -6462,6 +6692,14 @@ bpf_object__append_subprog_code(struct bpf_object *obj, struct bpf_program *main
+ 	err = append_subprog_relos(main_prog, subprog);
  	if (err)
  		return err;
-@@ -24945,12 +25304,14 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr, __u3
- err_unlock:
- 	if (!is_priv)
- 		mutex_unlock(&bpf_verifier_lock);
-+	clear_insn_aux_data(env, 0, env->prog->len);
- 	vfree(env->insn_aux_data);
- err_free_env:
- 	bpf_stack_liveness_free(env);
- 	kvfree(env->cfg.insn_postorder);
- 	kvfree(env->scc_info);
- 	kvfree(env->succ);
-+	kvfree(env->gotox_tmp_buf);
- 	kvfree(env);
- 	return ret;
++
++	err = save_subprog_offsets(main_prog, subprog);
++	if (err) {
++		pr_warn("prog '%s': failed to add subprog offsets: %s\n",
++			main_prog->name, errstr(err));
++		return err;
++	}
++
+ 	return 0;
  }
+ 
+@@ -9229,6 +9467,13 @@ void bpf_object__close(struct bpf_object *obj)
+ 
+ 	zfree(&obj->arena_data);
+ 
++	zfree(&obj->jumptables_data);
++	obj->jumptables_data_sz = 0;
++
++	for (i = 0; i < obj->jumptable_map_cnt; i++)
++		close(obj->jumptable_maps[i].fd);
++	zfree(&obj->jumptable_maps);
++
+ 	free(obj);
+ }
+ 
+diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
+index 35b2527bedec..fc59b21b51b5 100644
+--- a/tools/lib/bpf/libbpf_internal.h
++++ b/tools/lib/bpf/libbpf_internal.h
+@@ -74,6 +74,8 @@
+ #define ELF64_ST_VISIBILITY(o) ((o) & 0x03)
+ #endif
+ 
++#define JUMPTABLES_SEC ".jumptables"
++
+ #define BTF_INFO_ENC(kind, kind_flag, vlen) \
+ 	((!!(kind_flag) << 31) | ((kind) << 24) | ((vlen) & BTF_MAX_VLEN))
+ #define BTF_TYPE_ENC(name, info, size_or_type) (name), (info), (size_or_type)
+diff --git a/tools/lib/bpf/linker.c b/tools/lib/bpf/linker.c
+index 56ae77047bc3..f4403e3cf994 100644
+--- a/tools/lib/bpf/linker.c
++++ b/tools/lib/bpf/linker.c
+@@ -2025,6 +2025,9 @@ static int linker_append_elf_sym(struct bpf_linker *linker, struct src_obj *obj,
+ 			obj->sym_map[src_sym_idx] = dst_sec->sec_sym_idx;
+ 			return 0;
+ 		}
++
++		if (strcmp(src_sec->sec_name, JUMPTABLES_SEC) == 0)
++			goto add_sym;
+ 	}
+ 
+ 	if (sym_bind == STB_LOCAL)
 -- 
 2.34.1
 
