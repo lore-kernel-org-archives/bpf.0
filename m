@@ -1,64 +1,65 @@
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A14B5314D29
-	for <bpf@vger.kernel.org>; Wed,  5 Nov 2025 15:59:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3EA8320CA7
+	for <bpf@vger.kernel.org>; Wed,  5 Nov 2025 15:59:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762358355; cv=none; b=HzzQJRTnZLr8t2u6ddSe3M1DsGb2yz+Hw0CxiyqxV0lo+437XO8xu1O2EyXr1hppTun5VB5pRaRZSOB+SG20I/lH7W+edmrLpr91WBe5sgwYA0mp2X3DaXBK1Hl+f1jy2pUy24EcfAs1qU7KAvvq1Mi8Q6sLZyhDQstLvrq4Y7Y=
+	t=1762358355; cv=none; b=MFYjp4dKDoCRW6SO4knLBmy6pdEGGxg35f21jTZnjjSsTV84GDWldJx7c45N53drz6lbGQRFrlOXNon3pY7xWsCOFDNeEiA4IqZNDuzqrRK6TMNYCiEQhODskpAON++jh+XLmAsbz2GBIVDIP+BjFPTzELC4CH+AFR+ygEH+F88=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1762358355; c=relaxed/simple;
-	bh=8cAvxL7f8vxFNNXMRtQ+xRH2cP84bfSHHJ50QaLYT8M=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=ULmKzf8DYZVELbfv+1jiyWOyfqCgeIAEglhYsCb3Tja5NkQjj8s/UlW6Ffrl3YLsgbcnrEcIuWkchIfa85MIEKjOp7p/XXwJjqXbJ2C30d+5mnAfRCBii4V0g1iJD70486fBFCLRBEwdz1xHJC4l6kdoelLVUWNFMBZEbPCylF4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CI4K1ONh; arc=none smtp.client-ip=209.85.221.47
+	bh=kzCG/ty3XCVRy6vFklLrG0H5PXeDxbkarAkmXzwEnXI=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=IisRK5ZxvG0sfi96NsHnl3A9WTEgcqZNyhoXZfzUUXANbFfRLj48k8Fd+JX0pzGF11HiWcpCGwCub2e7K6mFy9Yht+fBjKaZMn1kKzn19IJw7YZIMm7UBlMLF2Io3JJ9jum02AprB+9kjEghHYJ6l1/CWEx3KRN6gx6gXUwTDec=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bv1KhAku; arc=none smtp.client-ip=209.85.128.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CI4K1ONh"
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-4283be7df63so3799785f8f.1
-        for <bpf@vger.kernel.org>; Wed, 05 Nov 2025 07:59:11 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bv1KhAku"
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-4775a52e045so5656785e9.3
+        for <bpf@vger.kernel.org>; Wed, 05 Nov 2025 07:59:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1762358350; x=1762963150; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=RnZZmzXAYgb48h9KqOSoxBMd314ql7cvy8+1ipCqbBg=;
-        b=CI4K1ONhMlYCkMPlJ4RklxhO7MjS2jwK7K4kmGzps1lsS4n/vTDphJ7K8+/mLcfsMV
-         FgQ3RCGkaXGrpjZ7+L2Z0sjH1jbHoEIvQIFUcnDOWpLrB+f3/7LfaMJkWcNiY2ZlR3QZ
-         5NWFNTaJyOEDP0TvTCwFnOqtKwgww1FKKEe+V0ZkLItZA772b23DpMFxHhe89e9nnpjV
-         EhZmVVV5zo3MT1AMzK4IG+frFDI9R0+9LHwmkAoPw0UdbiqawhRCDEzoNTLyIvG0B4BW
-         kSmqESuQjiJe53r3DHwCxWn1zUV/P6awP3TKmpq+zpJQWxTBfvy3+lHGQeCgGYhSxJph
-         pmig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762358350; x=1762963150;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=gmail.com; s=20230601; t=1762358352; x=1762963152; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=RnZZmzXAYgb48h9KqOSoxBMd314ql7cvy8+1ipCqbBg=;
-        b=pmMMO53Y/EbJ8Y4t031Nuugv1LS5W/73B0AXuP4Ye5KVPLrBkVYEc0Ur5Iu/+kF9sK
-         NIMV2d1tQehBWdp2Mj5ScAr+Lkt+neWd4IFFnF4sAIcWL00yoeycdqzMVPOnWZq5IGvi
-         6SGc1zZisbux/E8+qlb+WkoKBNG4xGIZJIHRV6GJNurBz0Nu4SaBv0dEVWLKsdxlVitn
-         liFDRHnjBbfQQbKvfvojFFifxWc1c0i/2eQ/hrD+kuvzaWPiFsHIzvv7CGjvhLc6qpBA
-         743tVricfLaurWeIdEHqx8OQ3jqAcAbrEX8NQYS/FT3hbqwuJbG+mOd2LykfmFN2fP35
-         Yp5Q==
-X-Gm-Message-State: AOJu0YznqkShxJi3h0jiEmvNubSdefjQI2xVmPOhOr5BMc5cA/JVH5Y0
-	6/z4pZqtV/I2TGPTuwc2JF6w4rYbLnQEZO8yNbjfMz/gX8B2YTszy8t4
-X-Gm-Gg: ASbGncuLGwN7A/0Y1pMUM9O9i97C3kdgNFlmFkJSIVtLJqX2Aq+g7FxpdjSGGkeUfF9
-	H+AxQUUihldQAw7jBBcph/WTHkVJlP7O/5tuIFqoaM5UwRd7GMKwm3ZFlqxgejBNO6pIBztgiL5
-	BGwUlsgJZCvakPOSBdnrIZdWYI6CXb6rCB49OEABICPFX1J4r9zvZzoGAq2hfKawcthVUby8/oY
-	tDsgK3KSs6lo3156V/jvQlJ4T1aw2J32gbHbQONTXWj6ceSaae5E1wWNOYbbtZrLTR+X6+rRNeP
-	AoegrmxgKs9oq4QfpB8KnbIkgJY9FtYe7BgcYggGDRuQSR8PKdQRkH2ZJCKbz2hzqzbrcBWNM6E
-	SHOK+TxUujzNrMMV78VlxNFzVe4DxWTYDF5Vjzv4Wr+JDlFcaUzKoUxVX71jx
-X-Google-Smtp-Source: AGHT+IF9oxaM5p7P9QrsCR36zkZZg8mnmBDXWWoCUp6O3kLJ34BvPF38sNgdOQcdTTmh6kP9ixR8kw==
-X-Received: by 2002:a05:6000:4112:b0:429:8c3b:c4e2 with SMTP id ffacd0b85a97d-429e32c6c6dmr1887231f8f.7.1762358349302;
-        Wed, 05 Nov 2025 07:59:09 -0800 (PST)
+        bh=v1Z10XCdfDm0DR+TgFdi/ZCo8Vh10gFbtI402OzQUu0=;
+        b=bv1KhAkutFA928kFKu4g3C1abA7LWPYOQJEP6M+rfFL53bZ24LLh7aQifxcIeis3G2
+         8D1tvbANUrIeMkO0T3ctBx/YzMVNlz8wwPLjIA26e5C2YdoHYL7OG2AaVejLxtiCah0F
+         DpPySjTSXMiAc0cbFAHmJakfAlAYSZcpqZb5AAmlqrJXzQCESQD0b4x6hUWhwzDIGD+p
+         jm+Axm4iIeqwo99K2I86nDBGNkemkuBeSSvUCGt589Vg7B5EM6eXqOKSRhgis5tzUvxL
+         wSsl7+lyscVe1UspWW1y8+J3ngQ0gPgBghLmvr3dxPqmO+P5pfE8W0HAtVpgoJ1v4G5t
+         4egw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762358352; x=1762963152;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=v1Z10XCdfDm0DR+TgFdi/ZCo8Vh10gFbtI402OzQUu0=;
+        b=GYGolDnzu9zTiwg3tw894B32KMVXtSFBi8qyuznAYxIQ8/e+AsqLzACE/ZH//Qfgp8
+         s+lmlgy+wcfrHVuB8oyXkOeQoZ+y8t3VX1gjozW1ER5K1yQ3BtxTMtF+w2NCGzfAF/jo
+         GKNc13snqWYiSIA4cpsxdIh/KREYe23t4yXraco4g0kymtxzI3dXRtFZ13fOz9IsHXgl
+         rUjz5ZFs2iOAcRyF/1kAzwui0OZAF82V4stinYQ8uWYhtpodHJCQiMqR1jEEJK6HOWhm
+         ycDatnD19xM32o7zlTkWjUUuGSpATzqALjkx3z88G3nwr5QC7h3/HdbQpQVhiK8x/VoT
+         0S0A==
+X-Gm-Message-State: AOJu0YwYQvw/XbRpODJBad/F+EfGMWCIdnjzfqjjq8yf8PD0Dz5uz2t4
+	oRKVITgv4/lqSUL1i2T1Ihs3//ZK5E6Xflp7wbWnzdVsvGaCoZag4ric
+X-Gm-Gg: ASbGncu+zmJffMtSQs7CDWeZcSQHKwWJIdMTbdD84RLaVap0ukzSmPpb1HRbx9FLyOo
+	f3KFsdbOUd2nb14M0xRsoeGYQmqYSf2bZVLl3PJ9+Q9KhqsDqUArl3cgk0aqsGnpmKzFPuG0/1p
+	1rNjlOZEzduE1Em7Ags4QbPv7O69aIllgpEaKdowS0sBqPSlVJVYjk8ciXAPcYTrMYOShN4uDkU
+	tKAHLwbCd5XWdoyez42tdb/LAf0VaMuMTtY1ivZahYRo3g4bSQagM488vgWXhxYxjzl7IT+zOZx
+	lcPUFwoP6353BgPiK+76JxyvEzuZ8Bo6UzOpo+nfnTB+d2PvvKO7rvnIrZizUCFBO9DXUFOQZdW
+	UahffDd78lgdtjKqkcmO1CeTQ6zsuLum842AJAx8XL+47l4UaUUD7lRk7PPtf
+X-Google-Smtp-Source: AGHT+IEUFKbdPsQWtS3x7c+wIeYtZS+JeOHi0wBiPM8xKrd5S42kcYjAFZ/vNE12Xk83i7VaQVjbmg==
+X-Received: by 2002:a05:6000:430e:b0:429:cbba:b241 with SMTP id ffacd0b85a97d-429e32e44a1mr3291003f8f.17.1762358351429;
+        Wed, 05 Nov 2025 07:59:11 -0800 (PST)
 Received: from localhost ([2620:10d:c092:500::7:64d7])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-429dc1fbd1csm11342387f8f.38.2025.11.05.07.59.08
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-429dc1f9cdbsm11753771f8f.34.2025.11.05.07.59.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Nov 2025 07:59:08 -0800 (PST)
+        Wed, 05 Nov 2025 07:59:11 -0800 (PST)
 From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Subject: [PATCH RFC v2 0/5] bpf: avoid locks in bpf_timer and bpf_wq
-Date: Wed, 05 Nov 2025 15:59:02 +0000
-Message-Id: <20251105-timer_nolock-v2-0-32698db08bfa@meta.com>
+Date: Wed, 05 Nov 2025 15:59:04 +0000
+Subject: [PATCH RFC v2 2/5] bpf: refactor bpf_async_cb prog swap
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -66,71 +67,101 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAEZ0C2kC/1WNywrCMBREf6XctZEkTX2tBMEPcCtFkvTWXjSNJ
- CUopf9uiCuXZ4Y5M0PEQBjhUM0QMFEkP2aQqwrsoMc7Muoyg+SyEVzu2EQOw230T28fTDXbvjH
- 7TmuLkCevgD29i+4Kl/MJ2hwOFCcfPuUiiVL9bLX4tyXBODN8ozQqXpveHB1Oem29g3ZZli/5q
- u9ZrAAAAA==
-X-Change-ID: 20251028-timer_nolock-457f5b9daace
+Content-Transfer-Encoding: 7bit
+Message-Id: <20251105-timer_nolock-v2-2-32698db08bfa@meta.com>
+References: <20251105-timer_nolock-v2-0-32698db08bfa@meta.com>
+In-Reply-To: <20251105-timer_nolock-v2-0-32698db08bfa@meta.com>
 To: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
  daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com, 
  memxor@gmail.com, eddyz87@gmail.com
 Cc: Mykyta Yatsenko <yatsenko@meta.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1762358348; l=1797;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1762358348; l=2232;
  i=yatsenko@meta.com; s=20251031; h=from:subject:message-id;
- bh=8cAvxL7f8vxFNNXMRtQ+xRH2cP84bfSHHJ50QaLYT8M=;
- b=+t7GsTrAOHM/jO7NHKluwygARA5r9snpHhBt1VtvoGXz5cepX8Hh+5g5BTORk9bgYKazAuO/E
- Ceo8nw9xgkcDPxMXK9YV+7Jm1gEeQvkzK4faO84Ehe6H0cO24NZcmfu
+ bh=SHxjItg3UIF7UAV9Fv0skYaLz/H+eEoW6QpmPHoLy4c=;
+ b=shm/+Ql+n1/58pn1Krm9h6qL9gS4+KBoB9ZjAlx8mSI5iQQY+04vS96AGVc5Fw4ERchYy8QOk
+ ZHErUZdJglJDoZUdSiShjFdvDP3M/tID6Ca4cLc+UK6RmQf9NTFIY9A
 X-Developer-Key: i=yatsenko@meta.com; a=ed25519;
  pk=TFoLStOoH/++W4HJHRgNr8zj8vPFB1W+/QECPcQygzo=
 
-This series reworks implementation of BPF timer and workqueue APIs.
-The goal is to make both timers and wq non-blocking, enabling their use
-in NMI context.
-Today this code relies on a bpf_spin_lock embedded in the map element to
-serialize:
- * init of the async object,
- * setting/changing the callback and bpf_prog
- * starting/cancelling the timer/work
- * tearing down when the map element is deleted or the map’s user ref is
- dropped
+From: Mykyta Yatsenko <yatsenko@meta.com>
 
-The series apply design similar to existing bpf_task_work
-approach [1]: RCU and refcount to maintain lifetime guarantees and state
-machine to handle data races.
+Move the logic that swaps the bpf_prog in struct bpf_async_cb into a
+dedicated helper to make follow-up patches simpler.
 
-This RFC doesn’t yet fully add NMI support for timers
-and workqueue helpers and kfuncs, but it takes the first step by
-removing the spinlock from bpf_async_cb struct.
-
----
-1: https://lore.kernel.org/bpf/175864081800.1466288.3242104888617580131.git-patchwork-notify@kernel.org/
-
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
-
 ---
-Changes in v2:
-- Move refcnt initialization and put (from cancel_and_free())
-from patch 5 into the patch 4, so that patch 4 has more clear and full
-implementation and use of refcnt
-- Link to v1: https://lore.kernel.org/r/20251031-timer_nolock-v1-0-b064ae403bfb@meta.com
+ kernel/bpf/helpers.c | 45 ++++++++++++++++++++++++++++-----------------
+ 1 file changed, 28 insertions(+), 17 deletions(-)
 
----
-Mykyta Yatsenko (5):
-      bpf: refactor bpf_async_cb callback update
-      bpf: refactor bpf_async_cb prog swap
-      bpf: factor out timer deletion helper
-      bpf: add refcnt into struct bpf_async_cb
-      bpf: remove lock from bpf_async_cb
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index e60fea1330d40326459933170023ca3e6ffc5cee..d09c2b8989a123d6fd5a3b59efd40018c81d0149 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -1351,10 +1351,34 @@ static const struct bpf_func_proto bpf_timer_init_proto = {
+ 	.arg3_type	= ARG_ANYTHING,
+ };
+ 
++static int bpf_async_swap_prog(struct bpf_async_cb *cb, struct bpf_prog *prog)
++{
++	struct bpf_prog *prev;
++
++	prev = cb->prog;
++	if (prev == prog)
++		return 0;
++
++	if (prog) {
++		/*
++		 * Bump prog refcnt once. Every bpf_timer_set_callback()
++		 * can pick different callback_fn-s within the same prog.
++		 */
++		prog = bpf_prog_inc_not_zero(prog);
++		if (IS_ERR(prog))
++			return PTR_ERR(prog);
++	}
++	if (prev)
++		/* Drop prev prog refcnt when swapping with new prog */
++		bpf_prog_put(prev);
++
++	cb->prog = prog;
++	return 0;
++}
++
+ static int bpf_async_update_callback(struct bpf_async_kern *async, void *callback_fn,
+ 				     struct bpf_prog *prog)
+ {
+-	struct bpf_prog *prev;
+ 	struct bpf_async_cb *cb;
+ 	int err = 0;
+ 
+@@ -1374,22 +1398,9 @@ static int bpf_async_update_callback(struct bpf_async_kern *async, void *callbac
+ 		goto out;
+ 	}
+ 
+-	prev = cb->prog;
+-	if (prev != prog) {
+-		/* Bump prog refcnt once. Every bpf_timer_set_callback()
+-		 * can pick different callback_fn-s within the same prog.
+-		 */
+-		prog = bpf_prog_inc_not_zero(prog);
+-		if (IS_ERR(prog)) {
+-			err = PTR_ERR(prog);
+-			goto out;
+-		}
+-		if (prev)
+-			/* Drop prev prog refcnt when swapping with new prog */
+-			bpf_prog_put(prev);
+-		cb->prog = prog;
+-	}
+-	rcu_assign_pointer(cb->callback_fn, callback_fn);
++	err = bpf_async_swap_prog(cb, prog);
++	if (!err)
++		rcu_assign_pointer(cb->callback_fn, callback_fn);
+ out:
+ 	__bpf_spin_unlock_irqrestore(&async->lock);
+ 	return err;
 
- kernel/bpf/helpers.c | 309 +++++++++++++++++++++++++++++++--------------------
- 1 file changed, 189 insertions(+), 120 deletions(-)
----
-base-commit: 23f852daa4bab4d579110e034e4d513f7d490846
-change-id: 20251028-timer_nolock-457f5b9daace
-
-Best regards,
 -- 
-Mykyta Yatsenko <yatsenko@meta.com>
+2.51.1
 
