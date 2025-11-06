@@ -1,63 +1,63 @@
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E192330338
-	for <bpf@vger.kernel.org>; Thu,  6 Nov 2025 12:53:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98EF2338F39
+	for <bpf@vger.kernel.org>; Thu,  6 Nov 2025 12:53:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762433627; cv=none; b=U3TMh23qWgas4DOHVGxzGOVlSbTdN4jnEjVs6d7nAiPLO1My+dV7Mak4ecI/cJwTsLYgX+phe4vOeQJLNXa9smBYEU9eYojlLYIWHi7bgFK2CKkHHO9jhEVNX5/DjNwy0OQl/SqtSN3MRTBTUC/hg94kyW3jUaJB6DNTdYU9/VU=
+	t=1762433627; cv=none; b=FV85GXOzJOJSBjIgoAIsXVSwI8Njdq+F70R9N5Y+UnnQJDWs4Cu8pG5L32IujjkwUPnZUQuXxmnzka0GcahvMZizA5DMvMpzTel7bWG4QR/Jg1In1Xg3pVHQO/+pUUGWisj4Kdzr4h8mBTaJcbs0bZQ435keAq0nsOg9ydBL2J4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1762433627; c=relaxed/simple;
-	bh=VcMIYDcgbIp7gzck2lmzT1DdYedQDnPc1OGCfRsQ8Rw=;
+	bh=ic+gOBYrHkh39eOmG4GQwcvbU3ifr1hE78B2se07zwc=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=TtDtnNRQwOy5o3tAVpgkZyQJo0zzyRxnJ89+Xb57/kEhi4b/42OmebJyBTh5UQLdMV5jXMGeEDn5VMd2wA9kS1yFLxqr4tMG3ZPvo9jo/tpx8zo2WRPn5bEaXdAOpbmwiEb24i0x9AAsFk4E4TKSJ2J/h7YXEdA6dfPoVS+eq5E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Wg1bueW+; arc=none smtp.client-ip=209.85.221.54
+	 MIME-Version; b=OtcaFT+ZoQxX09eb8Q9qsEhQ+AC/rBzN45d1GPh7WS8yTjPhN1FkUVG+IQTet/0T5hm8rYPvwoxvcqvJToWxTmtnLa4Ju/JjAmS+dg5qtaL255OVf6TndQyTKD6x+eF+luBy7MdvfFA+Xcb1wWSl7M0i8kX1yV1lEfTOqwmGtY0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nfbcxNqy; arc=none smtp.client-ip=209.85.221.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Wg1bueW+"
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-429b9b6ce96so693804f8f.3
-        for <bpf@vger.kernel.org>; Thu, 06 Nov 2025 04:53:44 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nfbcxNqy"
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-421851bca51so768844f8f.1
+        for <bpf@vger.kernel.org>; Thu, 06 Nov 2025 04:53:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20230601; t=1762433623; x=1763038423; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=uAHXlerzYNMFVMdi3HCj0A57dbSsWmdWDXdM/zHlcgQ=;
-        b=Wg1bueW+3QVsiD1y43hZKpA9SiKfrNpOG1yhK41STqCEKrv/lZ1/Vp9hEeze79znuh
-         tox5FTE52Z3H3aQKgwQtr/r6WG/cqLzzu8tu4JdzP/XnBglw4uVWy3E4pQI4tWiwKiN7
-         2ny7j7ZT1Sg4hmag9Q2WRSFu9EPCcN6l1QQWnzBHHO4Y0RYqiM3JNP+LkurMTuKSZetH
-         j25fKmYZIB/Sd/96xt7sFDwZ/Gen0fWfABbi9A3psimBIH/wZpuNFzSr44pHks9Kg2wk
-         ESOLWWravQ3QhbgmhGKF0QmsbFVSA3e7zjcbxUr59K5p74Emv9lTOfecbF8WtPEfs3rE
-         U+oQ==
+        bh=8BVecavUPRiHXmHkxwJOxXNf9imfUNAzPBNe3t0kkm0=;
+        b=nfbcxNqyWvXuIrAjO8EePloZWZV6MsKkuS/ZeMGAkF1/D06PnkqKC3LNwC8zZI4Ccc
+         PvvWlPieXlBArGq5dVl2OjRNraIZHb+z6JbslivOJb95VJOAtRxyCepZ4GGZC2hYkdtC
+         Rhlbva5ZjJ1T290lpl4mFaIQbYI9HhgQQM71c6j5S2ab/aFyL/uVFCxZYakXgIg36QL0
+         yNvMX1lMpcSbWG3+zsw1ISFlXsGcMDD/mq96ih/nkQrP00AN+lyzxBKJfnXr30aQ+ukW
+         cjx5vbD64IAvjC2dxuSLv5B5o/266trnOrvRiKGYMy9+9hPOJQLS/49i7zGfqNpggcDS
+         vIbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20230601; t=1762433623; x=1763038423;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=uAHXlerzYNMFVMdi3HCj0A57dbSsWmdWDXdM/zHlcgQ=;
-        b=prsL0DATjY4flkI8n/I4h2QHCy0I1XKgRtG503Hf549Y4c71to4JG9xKFxStNuHhE0
-         cAryEQ5Y+y+APmy5bF9CHSUSQTeIq4MdD8SRjnrDblEPX32RP2/oyEiNC8SAga00yuLs
-         AfEJ+Rn/qvNZxz32t6b+iGZ539TAvZo+AyE30F0K5TUwT6iN056vHTmeC2H8MeCzmcDy
-         ei+zaygvPo4q5dOfUpaTgnj53cemCWMsIi9zyBX9LCzLVVW6Sn3VY15uuYw63oCqqT/8
-         qtWcVLVWw6WUH5n+BiN9rUMAFPPVyaZG3EhLacWVK7FNB+5LtQuvYhrED7mWIsy1KBoG
-         vhYg==
-X-Gm-Message-State: AOJu0Yxg8NuMpd8QdFVKhjwcBVBJRqyKu6EHrqsQO6/zctdCTRRqpZwO
-	PeJvG536srLMLE39zn6r5rUzB6+14fbZW13xLX5rM1jhUuhmQyzfo9XvhMNI
-X-Gm-Gg: ASbGncu1Rg/y3cBjO+/UBVSLJy9Tkvy+gEjRkarXFLTggSzs19LJWBiSa5cXVRW30gd
-	IJIIttuxyvl5QgOnGPV1OmOJsiBYsSBK1+gqszyqk0T+UwLMmxhHCDAU6Poj6OZOYF4jZ4EPhfZ
-	JqejPtnVYYL6e6XttclsvlUXMPCP0Pg5DfqYe3gOsqGRmkA7q7dHzfqr2PuUHWUrQY18ns7EYcy
-	0ERUkR2hlgujjDG0bfClS09AXa1bPmV9Q0Xx5WVanBS1RHOg2uaByjzWzPDP/yN2cVOzHHz1UI0
-	5ADeiBDoma6W0+c2REDoWuD81RL0W6HCm6iHSsUMqrc98ZnB9t0Mj4kksT2L5Dr+EA1hfVxUeZ4
-	2UrN4nFhdjbSsPIujN04aeLCbXy3Ur+OusW9Q+sS33A8EYiC18DuQx6AqM9NAFSX+R2WKO7CrfD
-	vJZ8F1fVvNLquXlNNSkl5EfjYt6aaz9CgW0GZmbKsYLaqrT6ZVbmIIiQE=
-X-Google-Smtp-Source: AGHT+IEpSkzz80Ete4RN99YnH1gQLlKEKMFwhAKzS6oQ8PF5tpjR7FJdfvzr60LpAUuxBGi+08V9xA==
-X-Received: by 2002:a5d:5f87:0:b0:429:bc93:9d8a with SMTP id ffacd0b85a97d-429e3307958mr6150736f8f.37.1762433622868;
-        Thu, 06 Nov 2025 04:53:42 -0800 (PST)
+        bh=8BVecavUPRiHXmHkxwJOxXNf9imfUNAzPBNe3t0kkm0=;
+        b=s8yHpTaoUkEHf5DvoA1AGiUx1zXGxsALSxkhvWVz/cHv8MZ73NdcBSdxF7Q0bnM/Fy
+         c29YlOijqNpZ63sSvkViD1LT3OzZ81ZLgWL4eRwlNYFO4ZDAV274I3MhHR5FreHpUd34
+         2mi5gkdXHZeBj8XWalejYodT2pPd6FhubxzpHx1059ED9pEZAtxZCB6e6juOu8su7EE0
+         3aCPW/tFowIXkpwE7byw3dtiLd7L1Cwr9XzlLzYpzhLUYDTky0CjBAlbvPKajumxAsA8
+         ksQ0nrJkvsp9gRfibPl1rD+pxd3TxGgzU4akzfUqJezRVukajJEuO0WuMh56G8xjIOYz
+         S3uA==
+X-Gm-Message-State: AOJu0YyCZ+tOWTh3ID59lpcWQMr4uKn15qACrkXbHdRm3Gx+JVsDW8Jw
+	akjmz7MFsxdE+SGvX0UftHyItwztq6xL0PRXmwJK6qR+gCdaWnRUq3u8UP96
+X-Gm-Gg: ASbGncuDOf7VaEK+yuHU1fPthnU4whlOOkuw+MRorPiuVv4ED4PJ2zEPTW9YD7syJAO
+	Sl5+zp+8ca65Qw6huN5UMDIultqgcVbiA8EKQUYbTFBQkW+jbtQbcIisHDApQl9hUO5+AyZaqTS
+	KqlnhAtxGWrp3yPh+AlJm5HTnlOxRkcAn0OS0nMVGgLoZWl3kjsiUWtsA9QTi/XxRthmnYky8iG
+	6hWN6pyMQcPQLE5bsoXkcemIfpnDTetbM2O0cEMVaZCKbIIK9VV+h/5nM4YOuc4Me2cxu38dL+7
+	VJ7Tzlso9pEHH/KSn7CC47EW2HpbQ2seVwxGpHinePKwT47zBHpwLQY6YNO5sdwew6PNd9f7XmF
+	B/S9ZDYNVt31CE/EUUMGUcaJG2LtjRbq5eNuDgprdwHhrbgtVyNU8iGkRuGzzX1mHylHPhVqUhS
+	kaLUS5TQHM8MliC/q4+U13xVjO15qh1rgszWt9aPRGyqFu9isi/l8KHyg+zNDMdJJZ8g==
+X-Google-Smtp-Source: AGHT+IHyCbG6Ib5B/hxvhvU1M9zTmkq15fseYuID4g2BHydDK2L/8J6Y6qTfp+dgmtEKmD6926vZsg==
+X-Received: by 2002:a05:6000:2502:b0:427:454:43b4 with SMTP id ffacd0b85a97d-429e330ab16mr6604348f8f.48.1762433623418;
+        Thu, 06 Nov 2025 04:53:43 -0800 (PST)
 Received: from ast-epyc5.inf.ethz.ch (ast-epyc5.inf.ethz.ch. [129.132.161.180])
         by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-429eb40379esm4788856f8f.9.2025.11.06.04.53.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Nov 2025 04:53:42 -0800 (PST)
+        Thu, 06 Nov 2025 04:53:43 -0800 (PST)
 From: Hao Sun <sunhao.th@gmail.com>
 X-Google-Original-From: Hao Sun <hao.sun@inf.ethz.ch>
 To: bpf@vger.kernel.org
@@ -72,9 +72,9 @@ Cc: ast@kernel.org,
 	linux-kernel@vger.kernel.org,
 	sunhao.th@gmail.com,
 	Hao Sun <hao.sun@inf.ethz.ch>
-Subject: [PATCH RFC 12/17] bpf: Track path constraint
-Date: Thu,  6 Nov 2025 13:52:50 +0100
-Message-Id: <20251106125255.1969938-13-hao.sun@inf.ethz.ch>
+Subject: [PATCH RFC 13/17] bpf: Skip state pruning for the parent states
+Date: Thu,  6 Nov 2025 13:52:51 +0100
+Message-Id: <20251106125255.1969938-14-hao.sun@inf.ethz.ch>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20251106125255.1969938-1-hao.sun@inf.ethz.ch>
 References: <20251106125255.1969938-1-hao.sun@inf.ethz.ch>
@@ -86,180 +86,79 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Record per-branch conditions during `bcf_track()` and build a single
-conjunction to represent the path suffix constraint.
+Different incoming paths to the same instruction may yield different path
+conditions; pruning by containment would drop paths with different constraints.
 
-- Add `record_path_cond()`: after processing each instruction under tracking,
-  examine the previous instruction; if it is a conditional jump over scalars,
-  construct a boolean condition that matches the taken/not-taken edge, and then
-  append the condition id to `env->bcf.br_conds`.
-
-- When tracking completes, if there are recorded conditions, build
-  `env->bcf.path_cond` as either the single condition or a BCF_BOOL|BCF_CONJ
-  of all collected conditions.
-
-- In `bcf_refine()`, if both `path_cond` and a refinement-specific
-  `refine_cond` exist, combine them via a 2-ary conjunction so userspace proves
-  exactly the path-specific condition.
+- Add `children_unsafe` flag to `struct bpf_verifier_state`.
+- In `is_state_visited()`, if a visited candidate has `children_unsafe`, treat
+  it as a miss.
+- Propagate `children_unsafe` to the next state on split and clear it in the
+  current state when pushing a new parent.
+- After a refinement request, clear all `bcf_expr` in registers and mark all
+  collected parents (except the base) as `children_unsafe` to avoid pruning
+  alternative suffixes that may build different path conditions.
 
 Signed-off-by: Hao Sun <hao.sun@inf.ethz.ch>
 ---
- kernel/bpf/verifier.c | 113 +++++++++++++++++++++++++++++++++++++++---
- 1 file changed, 107 insertions(+), 6 deletions(-)
+ include/linux/bpf_verifier.h |  1 +
+ kernel/bpf/verifier.c        | 18 ++++++++++++++++++
+ 2 files changed, 19 insertions(+)
 
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index b430702784e2..9b91353a86d7 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -422,6 +422,7 @@ struct bpf_verifier_state {
+ 	bool speculative;
+ 	bool in_sleepable;
+ 	bool cleaned;
++	bool children_unsafe;
+ 
+ 	/* first and last insn idx of this verifier state */
+ 	u32 first_insn_idx;
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 3f2981db1d40..f1e8e70f9f61 100644
+index f1e8e70f9f61..ec0e736f39c5 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -20589,6 +20589,70 @@ static int bcf_match_path(struct bpf_verifier_env *env)
- 	return PATH_MATCH;
- }
+@@ -19904,6 +19904,8 @@ static int is_state_visited(struct bpf_verifier_env *env, int insn_idx)
+ 		states_cnt++;
+ 		if (sl->state.insn_idx != insn_idx)
+ 			continue;
++		if (sl->state.children_unsafe)
++			goto miss;
  
-+static int record_path_cond(struct bpf_verifier_env *env)
-+{
-+	int prev_insn_idx = env->prev_insn_idx;
-+	struct bpf_reg_state *regs = cur_regs(env);
-+	struct bpf_reg_state *dst, *src;
-+	int dst_expr, src_expr;
-+	struct bpf_insn *insn;
-+	u8 class, op, bits;
-+	bool jmp32, non_taken;
-+	int cond_expr;
-+
-+	if (prev_insn_idx < 0)
-+		return 0;
-+
-+	insn = &env->prog->insnsi[prev_insn_idx];
-+	class = BPF_CLASS(insn->code);
-+	op = BPF_OP(insn->code);
-+	if (class != BPF_JMP && class != BPF_JMP32)
-+		return 0;
-+	if (op == BPF_CALL || op == BPF_EXIT || op == BPF_JA || op == BPF_JCOND)
-+		return 0;
-+	if (insn->off == 0)
-+		return 0;
-+
-+	dst = regs + insn->dst_reg;
-+	src = regs + insn->src_reg;
-+	if (BPF_SRC(insn->code) == BPF_K) {
-+		src = &env->fake_reg[0];
-+		memset(src, 0, sizeof(*src));
-+		src->type = SCALAR_VALUE;
-+		__mark_reg_known(src, insn->imm);
-+	}
-+	if (dst->type != SCALAR_VALUE || src->type != SCALAR_VALUE)
-+		return 0;
-+
-+	jmp32 = (class == BPF_JMP32);
-+	bits = jmp32 ? 32 : 64;
-+	dst_expr = bcf_reg_expr(env, dst, jmp32);
-+	src_expr = bcf_reg_expr(env, src, jmp32);
-+	if (dst_expr < 0 || src_expr < 0)
-+		return -ENOMEM;
-+
-+	non_taken = (prev_insn_idx + 1 == env->insn_idx);
-+	if (op == BPF_JSET) {
-+		int and_expr, zero_expr;
-+
-+		and_expr = bcf_build_expr(env, BCF_BV | BPF_AND, bits, 2,
-+					  dst_expr, src_expr);
-+		zero_expr = bcf_val(env, 0, jmp32);
-+		op = BPF_JNE;
-+		if (non_taken)
-+			op = BPF_JEQ;
-+		cond_expr = bcf_build_expr(env, BCF_BOOL | op, 0, 2,
-+					   and_expr, zero_expr);
-+	} else {
-+		if (non_taken)
-+			op = rev_opcode(op);
-+		cond_expr = bcf_build_expr(env, BCF_BOOL | op, 0, 2, dst_expr,
-+					   src_expr);
-+	}
-+
-+	return bcf_add_cond(env, cond_expr);
-+}
-+
- static int do_check(struct bpf_verifier_env *env)
- {
- 	bool pop_log = !(env->log.level & BPF_LOG_LEVEL2);
-@@ -20656,8 +20720,9 @@ static int do_check(struct bpf_verifier_env *env)
- 
- 			if (path == PATH_MISMATCH)
- 				goto process_bpf_exit;
--			else if (path == PATH_DONE)
--				return 0;
-+			err = record_path_cond(env);
-+			if (err || path == PATH_DONE)
-+				return err;
- 		}
- 
- 		if (signal_pending(current))
-@@ -24023,11 +24088,37 @@ static int bcf_track(struct bpf_verifier_env *env,
- 	if (!err && !same_callsites(env->cur_state, st))
- 		err = -EFAULT;
- 
--	if (!err) {
--		tracked_regs = cur_regs(env);
--		for (i = 0; i < BPF_REG_FP; i++)
--			regs[i].bcf_expr = tracked_regs[i].bcf_expr;
-+	if (err)
-+		goto out;
-+
-+	tracked_regs = cur_regs(env);
-+	for (i = 0; i < BPF_REG_FP; i++)
-+		regs[i].bcf_expr = tracked_regs[i].bcf_expr;
-+
-+	/* Build the path constraint. */
-+	if (bcf->br_cond_cnt == 1) {
-+		bcf->path_cond = *bcf->br_conds;
-+	} else if (bcf->br_cond_cnt > 1) {
-+		struct bcf_expr *cond_expr;
-+		int cond;
-+
-+		cond = bcf_alloc_expr(env, bcf->br_cond_cnt + 1);
-+		if (cond < 0) {
-+			err = cond;
-+			goto out;
-+		}
-+		cond_expr = bcf->exprs + cond;
-+		cond_expr->code = BCF_BOOL | BCF_CONJ;
-+		cond_expr->params = 0;
-+		cond_expr->vlen = bcf->br_cond_cnt;
-+		memcpy(cond_expr->args, bcf->br_conds,
-+		       sizeof(u32) * bcf->br_cond_cnt);
-+		bcf->path_cond = cond;
+ 		if (sl->state.branches) {
+ 			struct bpf_func_state *frame = sl->state.frame[sl->state.curframe];
+@@ -20216,6 +20218,8 @@ static int is_state_visited(struct bpf_verifier_env *env, int insn_idx)
+ 		return err;
  	}
-+out:
-+	kfree(bcf->br_conds);
-+	bcf->br_conds = NULL;
-+	bcf->br_cond_cnt = 0;
  
- 	free_verifier_state(env->cur_state, true);
- 	env->cur_state = NULL;
-@@ -24134,6 +24225,7 @@ static int __used bcf_refine(struct bpf_verifier_env *env,
- 			     refine_state_fn refine_cb, void *ctx)
- {
- 	struct bpf_reg_state *regs = st->frame[st->curframe]->regs;
-+	struct bcf_refine_state *bcf = &env->bcf;
- 	struct bpf_verifier_state *base;
- 	int i, err;
- 
-@@ -24168,6 +24260,15 @@ static int __used bcf_refine(struct bpf_verifier_env *env,
- 	if (!err && refine_cb)
- 		err = refine_cb(env, st, ctx);
- 
-+	/* The final condition is the conj of path_cond and refine_cond. */
-+	if (!err && bcf->refine_cond >= 0 && bcf->path_cond >= 0) {
-+		bcf->refine_cond = bcf_build_expr(env, BCF_BOOL | BCF_CONJ, 0,
-+						  2, bcf->path_cond,
-+						  bcf->refine_cond);
-+		if (bcf->refine_cond < 0)
-+			err = bcf->refine_cond;
-+	}
-+
++	new->children_unsafe = cur->children_unsafe;
++	cur->children_unsafe = false;
+ 	cur->parent = new;
+ 	cur->first_insn_idx = insn_idx;
+ 	cur->dfs_depth = new->dfs_depth + 1;
+@@ -24272,6 +24276,20 @@ static int __used bcf_refine(struct bpf_verifier_env *env,
  	if (!err && (env->bcf.refine_cond >= 0 || env->bcf.path_cond >= 0))
  		mark_bcf_requested(env);
  
++	for (i = 0; i < MAX_BPF_REG; i++)
++		regs[i].bcf_expr = -1;
++
++	/*
++	 * Mark the parents as children_unsafe, i.e., they are not safe for
++	 * state pruning anymore. Say s0 is contained in s1 (marked), then
++	 * exploring s0 will reach the same error state that triggers the
++	 * refinement. However, since the path they reach the pruning point
++	 * can be different, the path condition collected for s0 can be
++	 * different from s1's. Hence, pruning is not safe.
++	 */
++	for (i = 0; i < bcf->vstate_cnt - 1; i++)
++		bcf->parents[i]->children_unsafe = true;
++
+ 	kfree(env->bcf.parents);
+ 	return err ?: 1;
+ }
 -- 
 2.34.1
 
