@@ -1,346 +1,219 @@
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from CO1PR03CU002.outbound.protection.outlook.com (mail-westus2azon11010010.outbound.protection.outlook.com [52.101.46.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D07221A447
-	for <bpf@vger.kernel.org>; Thu,  6 Nov 2025 17:13:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762449189; cv=none; b=LoTZYZnci/QZcBEwR3D+nEaC+gvJlgjTOvPso9Am5vIevvUF441QFyP18PPnpLzX9dDwtANfsPFid4FCmtPqte4GNtTbWCzBobNtmgl4kZjExEXD8L5YPXvjoMzaEyI43UlJ5HZgwSv32HM89UUm90ZA5n3/1XVR1847Y1opt38=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762449189; c=relaxed/simple;
-	bh=7plaZMVJBTSYCEcQOzeNYKQroEkrWNKYavtWargYKCo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jK31IH3asQeMR/qXzm6drBkb350x8kjpBF1TRC6wF3Ctr5Jf6Y+N5pZbii73PUd0hKUM4XpPFzTkFwBJsDNg+Wq73RZFahw1x4ilFQflNAF3o0j6fW67nlwowLCzbKQEK7sc0/K03FCfgtyS8rmssgIMPuTFnq+dO1mbki7/4hc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XyXNp3Qo; arc=none smtp.client-ip=209.85.216.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E86B2D6608;
+	Thu,  6 Nov 2025 17:15:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.46.10
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1762449351; cv=fail; b=hjeWFKEeVJhv40+HFDbaikK/hem97piOTHAIdtWHYzmni3fXGfp/tc/MkXV9g2MzmAasX1g6se+4z/049CNaNug24PZqOt28WciJGLM9APzpU/07jjBJWfvbEFzT6pWEAQ5VZ77CEngSjRpb2TOYLPqkWoymCulEF0bDxZ6CSbM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1762449351; c=relaxed/simple;
+	bh=C3/hKlJKKJ7kIdWw0nnjDEwH+gRys7yXaLXPkAUw9ho=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=anBT6fkRKerqNvWLIIQbgYvrbuGAK5dHIRtexTeXTdxia9mZgjC6NCiBVSbvjeY9G7CVMBOpy9itD4WJyIHNB3VS3pOaU9mMMECbHXc5sFmRspnyX34cxY2NVwLjhmN93A0lDn2P1bjsuu/CcUHj/dPd8naPjKz8/eJMnlR4lkc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=ahhfTV3I; arc=fail smtp.client-ip=52.101.46.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XyXNp3Qo"
-Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-3304dd2f119so1040864a91.2
-        for <bpf@vger.kernel.org>; Thu, 06 Nov 2025 09:13:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1762449187; x=1763053987; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bQ0vS99MH51DIQEi/4lEFA0vAZuDEs4nuiBhiiP9BpQ=;
-        b=XyXNp3QoO1I4nYdY7QEHywdFt+T4gymYgBJ0yTQApGP/BLjrL9jUUOBXr3mNJiGX2u
-         wd3s76pmGDG6wxoCUpylcLgAXobw8dKbK/Wopw7xjGB037OPYTNt5YMx8FbZHSYiZ/6c
-         ajA83IQm9SAlSTaeP2KaR+t07wirgbSkhpq7Xnz0CXbbosOsK/ZyoZK7GWX41QV+8Wt4
-         VeTRishKwIkfDaHFNDfHmy+xo3TuqzwDyBeZBz+dzTXWZZXv2DUHI2FCS33g+A3IdHkX
-         +vc5AlNwQK2S/9pDKBTZ5YR7jbORDuqzev/Ahj3jd0TffQxAFkSaH8mz8f4xuk2hzyj4
-         i3UA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762449187; x=1763053987;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bQ0vS99MH51DIQEi/4lEFA0vAZuDEs4nuiBhiiP9BpQ=;
-        b=jrAV03ji40Wu9eXC9ItWZ7SjMJHwTpCvfpR5Vpj0Sy67JT/l0Gxy7ZuSvhRSLb13A8
-         wMag+gv243I7ByEuHyUMw1Kf6XuKLn3ZxLpnjkwm2c51xl9KIUtkbpSBLHNAv5B+sDU6
-         cYf7ARGCVWKImVeSZhAznxHpaZSoCV+s2Db50TyYejJZXVsJdJUI55UH4xJnoU/JpEXU
-         xEez4VykrWz6N8YONaH0jt3363qSTMV7CLcTaCKCiaf4w5w3IDMe5NVyHme1GD+3Mn32
-         GkjwhEJGnA6zUzJ4e0BW1pCtiN47L44au72SbAddKRQXPDmaeIsKe4CCa4U681hbm0l9
-         5syQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXhUZjHUoEWBK3srdVLJhc5+/SPKSCaWZU0mZYBYQE1bD8GppcIGr2BKCBxV8He1PSvZZY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwmzY8Yf5u7UM4AoOgO041QHBPoGqBRrNtIYhaZfeRKDH+nyHLV
-	EJgVXaAYdsMOZx9RGtzFbhDSRoLOWGv+GQL9G85yt6WJStGw14K9WlwEBFt1ta8+FPAKSXTSB4Z
-	Giz+Wf1wfTjrWpd9XyjzdaMQ880zwJOk=
-X-Gm-Gg: ASbGnctqtjPGNN/qMtkz5LXtAwFvEf5JRdOigq3v4dX8GmJZy7dtzqlMu08S8ERQhR9
-	bj247n0S/K/EibsbSy2vDTDvQ5WYCH9+3MJCzmBH49B+rc6IIzfQdvV+XQRSuJirbiqfOFHmcJQ
-	d03oM1wBMm0cyO9HNPJ2QQrjmR+AN7e1K9grMgRqEhUMi14gm+SAH3Q3w8jaLlUPjJErEobCgQL
-	+Es6dNFrpZOBoXlZ1VhklZzVAlWd76J4kW6hXZ4Ugt4vAG5OubK61jId/KIuNB45H9h6xQfOmui
-	rt9qPoG4HWU=
-X-Google-Smtp-Source: AGHT+IF1tyXh2VMRfi+PF4mWI7B7YlqcdbDXKhyxFy/RByI/ZqqTE31LNnMKzampDG9sS9KTk0JDuqLXRRhFqE5eQSI=
-X-Received: by 2002:a17:90b:5250:b0:33b:ba40:c3f with SMTP id
- 98e67ed59e1d1-341a6c091cfmr8826479a91.5.1762449186714; Thu, 06 Nov 2025
- 09:13:06 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="ahhfTV3I"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=ijp4NediN8TuRfbai8jQhO0TdJZmYC9CIZb1OB215FK44eSHPVR10dtJb0p+lDtTOQkNhmsPdLMuLtlpozVANcgL5tq6ukztOP0qszRRL4Rn8FgbQZAQhRALxGSfoSwXoLJkJet0u85bsR0YIAQVEM2ew3mfEGoBiKHcEw8ggFc5ljuR735eUjq1BcHZduYAfYi7Z9f7rlboKSYRl11rvNXUGz2SVxJ6sWhpGCR08+kCFiuEjkpYMWLhehkWUkI9D/hN20Y1jGF0zkktPfAW/P6gGPvZOSjfKbT+vAZ22e22YDsNF4zhJofDAwR6MeTxAN6yBC3WVgLOfsst38BpBA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=CJJeOcGwpqrMMeSJbtJzWtt7c8rHyAZ/lWBO8bBGJyE=;
+ b=n7q2QLKD0C8dCioRaxA1irrr3ND6iXtooVAoYMn6AVl8Aj6F21pcaxPdFzvlpv6bTf0HQHNrH1t2vPTfkCGWY2+HfVe81jeRA5nG1CdH1Jg3F1kkuVbHUEYYzYSzOLQl4ixzMjHzlnVJ5zCRd4lHHYglpB4WWqnJAvqOCLPGbPn7RV108Hzfk8rsztp2OAOfB02fCmXLtKSHHqnV4rLP59eOp7Q6PMpzYPYL+TKFFaVdJpWYF7rVzaCvqvJxw4ebSKZC7zigzk3RsOL/TXFWpyjGl7FcgigDJo5LguCEr8zMXzm6jSFiNMs1TKZiAlWznFxjcNrXffoWIkFOBw4XMQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=CJJeOcGwpqrMMeSJbtJzWtt7c8rHyAZ/lWBO8bBGJyE=;
+ b=ahhfTV3IVpxtZFK4WV9dW3DZ6jwCybUdHjsMaS0hb8nxiIOnfiNhvpbfZsA/HpEwFHxYjX6Lv7H9EREJOq7pfqNVB0IItJrTJAMP2oTILhFywK9xJndbEqQNMUxIPi+PRl1xEVb9hg4GM3ISETA/pQ/aUdRXMnCD/34745BQd8XVr3YYE4ZlfsNjJRU+PJEhju5SIt5unFMCM2gPchZoSFzzO+ZrLYlrbRCef/LBvtMWsyfw4IhDhxTeevAxhFO+zrKXimXqzbsYdOgtQs3z0pjCgUkeWpQKKL861SylkQvdwbiEZCtoWEesXXmI9uRCtHoiLSoSsu8bFahqyq+oHA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV8PR12MB9620.namprd12.prod.outlook.com (2603:10b6:408:2a1::19)
+ by DM4PR12MB6159.namprd12.prod.outlook.com (2603:10b6:8:a8::5) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9298.8; Thu, 6 Nov 2025 17:15:46 +0000
+Received: from LV8PR12MB9620.namprd12.prod.outlook.com
+ ([fe80::1b59:c8a2:4c00:8a2c]) by LV8PR12MB9620.namprd12.prod.outlook.com
+ ([fe80::1b59:c8a2:4c00:8a2c%3]) with mapi id 15.20.9298.010; Thu, 6 Nov 2025
+ 17:15:46 +0000
+Date: Thu, 6 Nov 2025 18:15:43 +0100
+From: Andrea Righi <arighi@nvidia.com>
+To: Juri Lelli <juri.lelli@redhat.com>
+Cc: Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+	Valentin Schneider <vschneid@redhat.com>, Tejun Heo <tj@kernel.org>,
+	David Vernet <void@manifault.com>,
+	Changwoo Min <changwoo@igalia.com>, Shuah Khan <shuah@kernel.org>,
+	Joel Fernandes <joelagnelf@nvidia.com>,
+	Christian Loehle <christian.loehle@arm.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Luigi De Matteis <ldematteis123@gmail.com>,
+	sched-ext@lists.linux.dev, bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 06/11] sched_ext: Add a DL server for sched_ext tasks
+Message-ID: <aQzXv0iW3A1W2yow@gpd4>
+References: <20251029191111.167537-1-arighi@nvidia.com>
+ <20251029191111.167537-7-arighi@nvidia.com>
+ <aQx_rJccmaJEOAUk@jlelli-thinkpadt14gen4.remote.csb>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aQx_rJccmaJEOAUk@jlelli-thinkpadt14gen4.remote.csb>
+X-ClientProxiedBy: MI1P293CA0003.ITAP293.PROD.OUTLOOK.COM
+ (2603:10a6:290:2::19) To LV8PR12MB9620.namprd12.prod.outlook.com
+ (2603:10b6:408:2a1::19)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251104134033.344807-1-dolinux.peng@gmail.com>
- <20251104134033.344807-3-dolinux.peng@gmail.com> <CAEf4BzaQ9k=_JwpmkjnbN8o0XaA=EGcP-=CBxmXLc3kzh3aY3A@mail.gmail.com>
- <CAErzpmv8eBjuX-RO0nopuy8qMV7wzVxa2e+HteXfFodwbBoALg@mail.gmail.com>
- <CAEf4Bza+pHVSGTC2vcjF-DmsVxKq2Ksq321E9CJEGdyT8hQn3g@mail.gmail.com> <CAErzpmvDk0Tvr9h772EDZk_4tRtLtAZv-r4yKCxEOM+_gc+G7A@mail.gmail.com>
-In-Reply-To: <CAErzpmvDk0Tvr9h772EDZk_4tRtLtAZv-r4yKCxEOM+_gc+G7A@mail.gmail.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Thu, 6 Nov 2025 09:12:51 -0800
-X-Gm-Features: AWmQ_blIHFX9GNS-rDIzgY4otEOEfAJPKsVT-KOUyJkJmjdyohuZxdJySJpqZ9w
-Message-ID: <CAEf4BzbYc+2T8BAyLyvT3kRWbJ8m1qxxwO6ZBHm=fsCucoWVQw@mail.gmail.com>
-Subject: Re: [RFC PATCH v4 2/7] libbpf: Add BTF permutation support for type reordering
-To: Donglin Peng <dolinux.peng@gmail.com>
-Cc: ast@kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
-	Eduard Zingerman <eddyz87@gmail.com>, Alan Maguire <alan.maguire@oracle.com>, Song Liu <song@kernel.org>, 
-	pengdonglin <pengdonglin@xiaomi.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV8PR12MB9620:EE_|DM4PR12MB6159:EE_
+X-MS-Office365-Filtering-Correlation-Id: a5f47f2a-b3e1-4588-9edd-08de1d581fd0
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|1800799024|376014|366016;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?/EUhuEIiQAtGXpTGVvFckYpvfK0TYQgGaUk7LscfasVmw/FZESVZx0zrXZHi?=
+ =?us-ascii?Q?bdEFANCaP5EA12+wD+K1xBZQdJS7UDJa5i8BuAyQibcwHkBI8eZ5yRQrbHM+?=
+ =?us-ascii?Q?PGmCJ/DYHbrsRkhQFZDLw6iQriR8J/1vfrVgEA9IyQLqDhB/hKcyRD5pGxh5?=
+ =?us-ascii?Q?XDmdzui6bai13XTnE3PxKwgyd3i9JRSQmFK7KRV+68muDcu1iHSxmCK8Hne1?=
+ =?us-ascii?Q?VouVzvbNDY3c1yunoNYbk9TvoHcGX4fTGO2c68yNVBcMZOTiFjDgG2fQv2J1?=
+ =?us-ascii?Q?q0H+UwANzTjRpl0gApaF6S/NDy2YqAcASMyVovt95M7ZmrfMPsAROyVtR3y7?=
+ =?us-ascii?Q?CzTwnYKscqYML0vKetQLtgw2iS2riKZaiRrwVFmrxlCaHMvtN7sdMKvyIPpx?=
+ =?us-ascii?Q?Wmk8kaCODhDh6hrjoBplPnRdp1GpsVIjd4uviz8Y1ORNyKbY2YGtEolvVpsz?=
+ =?us-ascii?Q?TDudz/5xgej22h4OJp/jcCELucJK8MzEayIFXIuMwjtOh88hfaPbztMTqSfG?=
+ =?us-ascii?Q?ze9I3a2T6PV8TTdtVO9iYtpmAB5/DszywZbkgMAu24DSVLPex+u1cPgAS2Sn?=
+ =?us-ascii?Q?9ejEkzwVluGb0peettJRnfEwzADzewkuQcv7A31C6Y23nwhHQVw6NvNVGwdJ?=
+ =?us-ascii?Q?vKmCZab+6wxSpHvOCJR63qBRzSIzRWZPC7Q+fmml+cLOzEskamhlKN9mwDbP?=
+ =?us-ascii?Q?UIqfmIH0Uuot1HX6X11xLSGL4J6aTvNFXjuHiU0PC7fOMVoQgowKH5IUDOl7?=
+ =?us-ascii?Q?9+BvL60OhxWwrIAtKJEDHruy1xogFlhmq+4QvP78xbiFQfj1Hb8Vap5GSmcf?=
+ =?us-ascii?Q?i5fGL/hl63N/LGXm/XiruDRFfd3DU2FGfkqWgQKb0GmPKjG5/IOVhyJs7AXJ?=
+ =?us-ascii?Q?UusN0CyGeIQjisIN1RWFWmH0vV2Uqo37Uca25qlPBuv+jRRmvoCwDX5LvvEW?=
+ =?us-ascii?Q?5Ifk6a1r8VLiU6YBfH4tvY+txC7uSXBmbltL5L+TXUc9W4vcX72YBnFHgZAd?=
+ =?us-ascii?Q?ZcBrNXSECP+LRclA2BTsMahO2mEvpDvGv3TFzhHUneUVenZ/iivr9kXunQRS?=
+ =?us-ascii?Q?PwpJ00aQRvD6lHmtaBn4SEcStn4Ag+44b2pXWGwwc5aPCl2FC8ujVuI7rA1k?=
+ =?us-ascii?Q?ky8a6aKwVCf9ho90SEfxCFpkkhpouuKsEHsDPTLlxw9HR1Eno/xsKERL1aoA?=
+ =?us-ascii?Q?FjYzQvqV/oMq4yWGmNRYXUgd1HBufd25sRj6LY+yNA47dB5sI/QjH4sBNMUK?=
+ =?us-ascii?Q?4BrQHPTlnyXKP+PSZjsH11ehWQX2BjxnNxctkTLmC7Y+hQyoqDduR3lgsqn1?=
+ =?us-ascii?Q?4fCFlhakWPYRNPjvDcRQ3w1YEJ9ljrdpyaxcyismsO26iOVDswFHz09acgMN?=
+ =?us-ascii?Q?OQ8RjI4YQHzAmO/J7k5c3Inm/gLq5zBqNLb6D0eGIot4o1etaVwueZvNFkui?=
+ =?us-ascii?Q?UZPplKkZsFjPWwygHMXcfRu+XTQq7GaU?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV8PR12MB9620.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(1800799024)(376014)(366016);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?A9mALIQz0qtP137RpYp3CS+iHjqGoykSU7Z3d1Hmy7u7tbhj+0Aay34YJeMm?=
+ =?us-ascii?Q?UkI5l7lygKJQCD2IM+FDK6k0mWn5aRRItkg/hfoNO8toWjTxdPqHCB8nVEAf?=
+ =?us-ascii?Q?0SsKLpXlfTU76QUgw5p2S23vxFyWtIY26i7RArP+hQrgUuYgKBY4X70LnjDX?=
+ =?us-ascii?Q?Bgn09xrSmLIeM7yt6eAHR+IDrvz+xwYaRMO1qJjMJZKsOSE3uJCB6P9foIZG?=
+ =?us-ascii?Q?6HOVk8b2CwJVU3k7EAHXDYno5BqS5ubI8q9xf5SCZ5f8/fSRVFUJJ25xawH/?=
+ =?us-ascii?Q?GgnTx+3KLfvu23dWV0V+biCAWSqRkw50VMJdEk3tFgZJpbaVGVs+PyQYwdpL?=
+ =?us-ascii?Q?IbMGv01nKofP8KqD6tR+gWO2fPf+g/XiUOGK7RQ3wxh2BNBEAIco3vfijvpt?=
+ =?us-ascii?Q?EhCFWBOI1hcxDKBGHKK3XCgXlnEjiOSEVcMKNcbENUUZbQop9l2UGNkFURsR?=
+ =?us-ascii?Q?go7yYjtDBPki+bkLvkpGrXoeYeVmb+bxviz56WVBzTpgQhB/+7haUTtTU3Yg?=
+ =?us-ascii?Q?8Udp3WQ5SB5pJvOnBpzZX+in4LW5wWcxHrjPIUFeHrxg3H4HdRTWAmCoENPD?=
+ =?us-ascii?Q?NZwKfLGCQSm1a3x63q/0Fa6c0cuxQxjh5zsk/AQTtIDMKNkMCcgMURYwCaua?=
+ =?us-ascii?Q?AspxQEbvb8dweNyU98rACooz8f6GPnQ179DXotso8cxhB359RZxBpcamFcUc?=
+ =?us-ascii?Q?g5hFZrfvTHB7+YkGPeWcbbDj1HboymBXZvkXGL7V9N31m1/QHOZ2HddACmlw?=
+ =?us-ascii?Q?GrbfM3zNqhZ79nI9LtfL9fP+zIxAiSUqT8ZFbRGvZhjQVcz8VbZF/NOPRemg?=
+ =?us-ascii?Q?CN30ftaCZu/GrYPOhll1pC+ULae8M8j1hRwdtJRDGzjLanC4WWRnGVCq0yHC?=
+ =?us-ascii?Q?4VVJq4IBJWP6caUqZ50fdcBeqs3Kq1fDXpnn9jhGqOOCwBsl640GbzMzx4ac?=
+ =?us-ascii?Q?nykvj1YohtZVRR2SSMIGxfxiH/HjXcaed1zURuQ29+pI47t8KaOgFLzHKYQ1?=
+ =?us-ascii?Q?aImRY+n3Zap8+xhQGNVp315h8ZSjapI1n5AJuwAajyW52gsxuFWhEIx4tIJH?=
+ =?us-ascii?Q?TuOHSD13F7nC00j5lH/2ORRkfICmelRYvgdGi+EfbvwsvKNfKv+5pWVNqERS?=
+ =?us-ascii?Q?B4W+fSP2iu3aZajRE6lpyyDZjKOUa0d7npvP076A0LHEyr7JgjJ0wfNwYCx1?=
+ =?us-ascii?Q?1URKMC2YumaokHLw3jgd7zgDJpRoXR4IJTc8ZggLyqRac6m7pe/jpi3MzuI2?=
+ =?us-ascii?Q?IkAr3fzE4scLMsHoTN260E49r7AU4copsGvIA7TqAoS0PfJOqHZNjHmKf5IU?=
+ =?us-ascii?Q?Lc5/13s314YnWqaPYppbWQJBtfjL/DsNslrNrLce/hh1QIlfZVGz45TnzT1J?=
+ =?us-ascii?Q?2ADXWvwuRZHqARkfZQzd8ThDW7eHre0iGH5y9uix+ayYL+aoCz/5TFWr4F6m?=
+ =?us-ascii?Q?4sFU8NMd84Nx4iC8eNkmyOa7vPWKjuoAYV0TmKX3tuD13V2aVIEH5+5vHCKh?=
+ =?us-ascii?Q?I2A4ig7vZmfKvTjPmPKCN8JPjbfT6OdCXi0r9fP+ZbbNH91dr9dE09U1KRzX?=
+ =?us-ascii?Q?irdupDcivB/p0eNwMQrvVA3S94oYEKCriFNugkxt?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a5f47f2a-b3e1-4588-9edd-08de1d581fd0
+X-MS-Exchange-CrossTenant-AuthSource: LV8PR12MB9620.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Nov 2025 17:15:46.2718
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: DIFmI0+XXKIPXaIvLlBFK4goevUT1xWzk6B4OYNbYHE7KzyItIzZcg7zMW6XIqaj9MAxlyIa4Qt+bh309rXh1A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6159
 
-On Wed, Nov 5, 2025 at 11:31=E2=80=AFPM Donglin Peng <dolinux.peng@gmail.co=
-m> wrote:
->
-> On Thu, Nov 6, 2025 at 2:29=E2=80=AFAM Andrii Nakryiko
-> <andrii.nakryiko@gmail.com> wrote:
-> >
-> > On Wed, Nov 5, 2025 at 4:53=E2=80=AFAM Donglin Peng <dolinux.peng@gmail=
-.com> wrote:
-> > >
-> > > On Wed, Nov 5, 2025 at 8:11=E2=80=AFAM Andrii Nakryiko
-> > > <andrii.nakryiko@gmail.com> wrote:
-> > > >
-> > > > On Tue, Nov 4, 2025 at 5:40=E2=80=AFAM Donglin Peng <dolinux.peng@g=
-mail.com> wrote:
-> > > > >
-> > > > > From: pengdonglin <pengdonglin@xiaomi.com>
-> > > > >
-> > > > > Introduce btf__permute() API to allow in-place rearrangement of B=
-TF types.
-> > > > > This function reorganizes BTF type order according to a provided =
-array of
-> > > > > type IDs, updating all type references to maintain consistency.
-> > > > >
-> > > > > The permutation process involves:
-> > > > > 1. Shuffling types into new order based on the provided ID mappin=
-g
-> > > > > 2. Remapping all type ID references to point to new locations
-> > > > > 3. Handling BTF extension data if provided via options
-> > > > >
-> > > > > This is particularly useful for optimizing type locality after BT=
-F
-> > > > > deduplication or for meeting specific layout requirements in spec=
-ialized
-> > > > > use cases.
-> > > > >
-> > > > > Cc: Eduard Zingerman <eddyz87@gmail.com>
-> > > > > Cc: Alexei Starovoitov <ast@kernel.org>
-> > > > > Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-> > > > > Cc: Alan Maguire <alan.maguire@oracle.com>
-> > > > > Cc: Song Liu <song@kernel.org>
-> > > > > Signed-off-by: pengdonglin <pengdonglin@xiaomi.com>
-> > > > > Signed-off-by: Donglin Peng <dolinux.peng@gmail.com>
-> > > > > ---
-> > > > >  tools/lib/bpf/btf.c      | 161 +++++++++++++++++++++++++++++++++=
-++++++
-> > > > >  tools/lib/bpf/btf.h      |  34 +++++++++
-> > > > >  tools/lib/bpf/libbpf.map |   1 +
-> > > > >  3 files changed, 196 insertions(+)
-> > > > >
-> > > > > diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-> > > > > index 5e1c09b5dce8..3bc03f7fe31f 100644
-> > > > > --- a/tools/lib/bpf/btf.c
-> > > > > +++ b/tools/lib/bpf/btf.c
-> > > > > @@ -5830,3 +5830,164 @@ int btf__relocate(struct btf *btf, const =
-struct btf *base_btf)
-> > > > >                 btf->owns_base =3D false;
-> > > > >         return libbpf_err(err);
-> > > > >  }
-> > > > > +
-> > > > > +struct btf_permute {
-> > > > > +       /* .BTF section to be permuted in-place */
-> > > > > +       struct btf *btf;
-> > > > > +       struct btf_ext *btf_ext;
-> > > > > +       /* Array of type IDs used for permutation. The array leng=
-th must equal
-> > > >
-> > > > /*
-> > > >  * Use this comment style
-> > > >  */
-> > >
-> > > Thanks.
-> > >
-> > > >
-> > > > > +        * the number of types in the BTF being permuted, excludi=
-ng the special
-> > > > > +        * void type at ID 0. For split BTF, the length correspon=
-ds to the
-> > > > > +        * number of types added on top of the base BTF.
-> > > >
-> > > > many words, but what exactly ids[i] means is still not clear, actua=
-lly...
-> > >
-> > > Thanks. I'll clarify the description. Is the following parameter
-> > > explanation acceptable?
-> > >
-> > > @param ids Array containing original type IDs (excluding VOID type ID
-> > > 0) in user-defined order.
-> > >                     The array size must match btf->nr_types, which
-> >
-> > Users don't have access to btf->nr_types, so referring to it in API
-> > description seems wrong.
-> >
-> > But also, this all will change if we allow removing types, because
-> > then array size might be smaller. But is it intentionally smaller or
-> > user made a mistake? Let's go with the ID map approach, please.
->
-> Thanks. I can implement both approaches, then we can assess their
-> pros and cons.
->
-> >
-> > > also excludes VOID type ID 0.
-> > >
-> > >
-> > > >
-> > > > > +        */
-> > > > > +       __u32 *ids;
-> > > > > +       /* Array of type IDs used to map from original type ID to=
- a new permuted
-> > > > > +        * type ID, its length equals to the above ids */
-> > > >
-> > > > wrong comment style
-> > >
-> > > Thanks, I will fix it in the next version.
-> > >
-> > > >
-> > > > > +       __u32 *map;
-> > > >
-> > > > "map" is a bit generic. What if we use s/ids/id_map/ and
-> > > > s/map/id_map_rev/ (for reverse)? I'd use "id_map" naming in the pub=
-lic
-> > > > API to make it clear that it's a mapping of IDs, not just some arra=
-y
-> > > > of IDs.
-> > >
-> > > Thank you for the suggestion. While I agree that renaming 'map' to 'i=
-d_map'
-> > > makes sense for clarity, but 'ids' seems correct as it denotes a coll=
-ection of
-> > > IDs, not a mapping structure.
-> > >
-> > > >
-> > > > > +};
-> > > > > +
-> > > > > +static int btf_permute_shuffle_types(struct btf_permute *p);
-> > > > > +static int btf_permute_remap_types(struct btf_permute *p);
-> > > > > +static int btf_permute_remap_type_id(__u32 *type_id, void *ctx);
-> > > > > +
-> > > > > +int btf__permute(struct btf *btf, __u32 *ids, const struct btf_p=
-ermute_opts *opts)
-> > > >
-> > > > Let's require user to pass id_map_cnt in addition to id_map itself.
-> > > > It's easy to get this wrong (especially with that special VOID 0 ty=
-pe
-> > > > that has to be excluded, which I can't even make up my mind if that=
-'s
-> > > > a good idea or not), so having user explicitly say what they think =
-is
-> > > > necessary for permutation is good.
-> > >
-> > > Thank you for your suggestion. However, I am concerned that introduci=
-ng
-> > > an additional `id_map_cnt` parameter could increase complexity. Speci=
-fically,
-> > > if `id_map_cnt` is less than `btf->nr_types`, we might need to consid=
-er whether
-> > > to resize the BTF. This could lead to missing types, potential ID rem=
-apping
-> > > failures, or even require BTF re-deduplication if certain name string=
-s are no
-> > > longer referenced by any types.
-> > >
-> >
-> > No, if the user provided a wrong id_map_cnt, it's an error and we
-> > return -EINVAL. No resizing.
-> >
-> > > >
-> > > > > +{
-> > > > > +       struct btf_permute p;
-> > > > > +       int i, err =3D 0;
-> > > > > +       __u32 *map =3D NULL;
-> > > > > +
-> > > > > +       if (!OPTS_VALID(opts, btf_permute_opts) || !ids)
-> > > >
-> >
-> > [...]
-> >
-> > > > > +               goto done;
-> > > > > +       }
-> > > > > +
-> > > > > +done:
-> > > > > +       free(map);
-> > > > > +       return libbpf_err(err);
-> > > > > +}
-> > > > > +
-> > > > > +/* Shuffle BTF types.
-> > > > > + *
-> > > > > + * Rearranges types according to the permutation map in p->ids. =
-The p->map
-> > > > > + * array stores the mapping from original type IDs to new shuffl=
-ed IDs,
-> > > > > + * which is used in the next phase to update type references.
-> > > > > + *
-> > > > > + * Validates that all IDs in the permutation array are valid and=
- unique.
-> > > > > + */
-> > > > > +static int btf_permute_shuffle_types(struct btf_permute *p)
-> > > > > +{
-> > > > > +       struct btf *btf =3D p->btf;
-> > > > > +       const struct btf_type *t;
-> > > > > +       __u32 *new_offs =3D NULL, *map;
-> > > > > +       void *nt, *new_types =3D NULL;
-> > > > > +       int i, id, len, err;
-> > > > > +
-> > > > > +       new_offs =3D calloc(btf->nr_types, sizeof(*new_offs));
-> > > >
-> > > > we don't really need to allocate memory and maintain this, we can j=
-ust
-> > > > shift types around and then do what btf_parse_type_sec() does -- ju=
-st
-> > > > go over types one by one and calculate offsets, and update them
-> > > > in-place inside btf->type_offs
-> > >
-> > > Thank you for the suggestion. However, this approach is not viable be=
-cause
-> > > the `btf__type_by_id()` function relies critically on the integrity o=
-f the
-> > > `btf->type_offs` data structure. Attempting to modify `type_offs` thr=
-ough
-> > > in-place operations could corrupt memory and lead to segmentation fau=
-lts
-> > > due to invalid pointer dereferencing.
-> >
-> > Huh? By the time this API returns, we'll fix up type_offs, users will
-> > never notice. And to recalculate new type_offs we don't need
-> > type_offs. One of us is missing something important, what is it?
->
-> Thanks, however the bad news is that the btf__type_by_id is indeed called
-> within the API.
->
-> static int btf_permute_shuffle_types(struct btf_permute *p)
-> {
->         struct btf *btf =3D p->btf;
->         const struct btf_type *t;
->         __u32 *new_offs =3D NULL, *ids_map;
->         void *nt, *new_types =3D NULL;
->         int i, id, len, err;
->
->         new_offs =3D calloc(btf->nr_types, sizeof(*new_offs));
->         new_types =3D calloc(btf->hdr->type_len, 1);
->         ......
->         nt =3D new_types;
->        for (i =3D 0; i < btf->nr_types; i++) {
->                 id =3D p->ids[i];
->                 ......
->                 /* must be a valid type ID */
->                 t =3D btf__type_by_id(btf, id);  <<<<<<<<<<<<<
+On Thu, Nov 06, 2025 at 11:59:56AM +0100, Juri Lelli wrote:
+> Hi,
+> 
+> On 29/10/25 20:08, Andrea Righi wrote:
+> > sched_ext currently suffers starvation due to RT. The same workload when
+> > converted to EXT can get zero runtime if RT is 100% running, causing EXT
+> > processes to stall. Fix it by adding a DL server for EXT.
+> > 
+> > A kselftest is also provided later to verify:
+> > 
+> >  # ./runner -t rt_stall
+> >  ===== START =====
+> >  TEST: rt_stall
+> >  DESCRIPTION: Verify that RT tasks cannot stall SCHED_EXT tasks
+> >  OUTPUT:
+> >  # Runtime of EXT task (PID 23338) is 0.250000 seconds
+> >  # Runtime of RT task (PID 23339) is 4.750000 seconds
+> >  # EXT task got 5.00% of total runtime
+> >  ok 1 PASS: EXT task got more than 4.00% of runtime
+> >  =====  END  =====
+> > 
+> > v3: - clarify that fair is not the only dl_server (Juri Lelli)
+> >     - remove explicit stop to reduce timer reprogramming overhead
+> >       (Juri Lelli)
+> >     - do not restart pick_task() when it's invoked by the dl_server
+> >       (Tejun Heo)
+> >     - depend on CONFIG_SCHED_CLASS_EXT (Andrea Righi)
+> > v2: - drop ->balance() now that pick_task() has an rf argument
+> >       (Andrea Righi)
+> > 
+> > Cc: Luigi De Matteis <ldematteis123@gmail.com>
+> > Co-developed-by: Joel Fernandes <joelagnelf@nvidia.com>
+> > Signed-off-by: Joel Fernandes <joelagnelf@nvidia.com>
+> > Signed-off-by: Andrea Righi <arighi@nvidia.com>
+> > ---
+> 
+> ...
+> 
+> > @@ -1409,6 +1412,15 @@ static void enqueue_task_scx(struct rq *rq, struct task_struct *p, int enq_flags
+> >  	if (enq_flags & SCX_ENQ_WAKEUP)
+> >  		touch_core_sched(rq, p);
+> >  
+> > +	if (rq->scx.nr_running == 1) {
+> > +		/* Account for idle runtime */
+> > +		if (!rq->nr_running)
+> 
+> Hummm, didn't we just add_nr_running(rq, 1) before gettng here?
 
-You are still on the old types layout and old type_offs at that point.
-You are not using your new_offs here *anyways*
+Oh, good catch, let me run some tests to see what happens here. :)
 
->                 ......
->                 len =3D btf_type_size(t);
->                 memcpy(nt, t, len);
->                 new_offs[i] =3D nt - new_types;
->                 *ids_map =3D btf->start_id + i;
->                 nt +=3D len;
->         }
-> ......
+But looking at the code, it seems that we definitely need to move
+add_nr_running() after this part.
 
-... you will recalculate and update type_offs here ... well past
-btf__type_by_id() usage ...
+Thanks!
+-Andrea
 
-> }
->
-> >
-> > [...]
+> 
+> > +			dl_server_update_idle_time(rq, rq->curr, &rq->ext_server);
+> > +
+> > +		/* Start dl_server if this is the first task being enqueued */
+> > +		dl_server_start(&rq->ext_server);
+> > +	}
+> > +
+> 
+> Thanks,
+> Juri
+> 
