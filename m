@@ -1,158 +1,277 @@
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from SN4PR2101CU001.outbound.protection.outlook.com (mail-southcentralusazon11012053.outbound.protection.outlook.com [40.93.195.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAB0734403F
-	for <bpf@vger.kernel.org>; Thu,  6 Nov 2025 17:08:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762448930; cv=none; b=F1FjEdzulDFJhxDqTpyisissnslyKnzy8xa8AJJpzqzF+/ZC3k0KS6J2m1rf3UvptS68qvc6f9Sg63ZE5m/mp7zHCNJj5jqfcP4WetlDJvBs/Xz4HrbMMk7PQ3n174GNWhfWj6nhGISABhlGmREOXwEL0QrbghoyhNcks2dftWc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762448930; c=relaxed/simple;
-	bh=FiQEJZHhrgWbk6SdVOwzhO/6yyO4SwtDkkRFnnDVwIk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gQJZXF5KYw9PdtmzrkzGyUgjGhkygJd2FlgJrHzUCZ17vB22Kzrjw6Jswxtl2ISRVHnJ47bvIZfZuTeMlJofiAI5+JSvd204rFpA6zp6P08rdzN2Hm59Z15edtGw5UDK+yvOwT1ZcnPenRmkjmAWdkXe405AtbO4+KbFEdUor9E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CvC3V9jI; arc=none smtp.client-ip=209.85.221.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3361234D4E4;
+	Thu,  6 Nov 2025 17:09:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.195.53
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1762448957; cv=fail; b=rIJtSU/rwzjlILWewK21DjuLZ92p/JjoyOFhNgXsnAeT5Btv/Oq2XUSrJkrKvzSjxZgTxAWamrdvNSK+JD7JqGavm3TVoMe+Z6oKORN6dXSL5QbqI7OKhSUwoXMcEhm3UIU9a1NkuNV1MSgWoKShRx7v7+g9XclD1Gemj9Yoce8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1762448957; c=relaxed/simple;
+	bh=ewwxdxoqatdUeU8YONMFq30EHqy6JNqQBsTMGAvZXZ0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=dlRbhg1rj8PGRHRe51rOHAxsCOJqhGnJ/bZly5UZkdlcPNGTdTvsqCqTsHkLgF6jxCgfw7YhXTQdpP6gC7B6UDwz0/y5H9JcXof33d0JNQ2xfPdQe56jWjU7/PuYjX3wRWcpI04UEvdIcxMMROjjTT8yfKn8f9AKCc3bzjbJTFg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=UP1ZNO+h; arc=fail smtp.client-ip=40.93.195.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CvC3V9jI"
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-3f99ac9acc4so891031f8f.3
-        for <bpf@vger.kernel.org>; Thu, 06 Nov 2025 09:08:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1762448927; x=1763053727; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YKYbclEruhZQm4cb2n/Yq4/t3+D+8hQeq1Nkcv2or2U=;
-        b=CvC3V9jIFj6wc6LOa62Db8271DGeizCTrQ/av/u6ovkrqFqp+GUxO7QzuJ9roWSNMR
-         aDOwoKyhHuIhusQI/EO8DdI4ASXv95zvNLg+kJagmVe06uLq5J6zh9i1ilVc1ku3yZ5U
-         ENYlHm5nAnj5yvDgtVzvkrZ6pCZwHwNY89nkkE/t1hGvSjIfnW+bDFi59APqUF7CEv+9
-         fGRS3cHveVX7GR1Il9k6gMRd0P4KAzOy2+yJQeWSI8WteUgh8mUXoiJxzgA1v1ww3vii
-         IyjxuQ47P8fF8kk/DsO3aaZiq0mHBJG2EOAwQpBSyzEgGLMGTrsUB4kwX+VURYJ9OjzH
-         D/Kw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762448927; x=1763053727;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YKYbclEruhZQm4cb2n/Yq4/t3+D+8hQeq1Nkcv2or2U=;
-        b=gNf6KkDsFli8KGDMyyRzJUd5Mj1H/62jJqmXmtvjIFEm0KPfcr8e6g0rQI9zMA/6px
-         53DRwBXEK0HAjWh1AaI9Hfnv8A8IKxEyR7S+lbYYC/QPqr9CqoUx4itKYAbKUfboS7Fl
-         sVaG59HoACsC+YAr/xe8OjMk5kjWnlcQyA+LLlJQIA0XfaFT1zgrhlWSlDuXKceEU6mZ
-         8SHhNStki4fps5ZnsTWW3Am3WM3ObT2AjqstDnuxKlj157fFGpQvW19oL9jMygLa80yn
-         n0mK8jRHQuGPf0371Huq+lq7JSilcxHdOr5BPt9zRtUfy+ecu9qpme5qsc38D/GEfSa9
-         zHiA==
-X-Gm-Message-State: AOJu0YxyamwYPxBqO2S+ye8E6db0mv1Jzi3tSs0IhFry4RnmMiiBVFQv
-	tYSIjNMg3NemqKtzH/TFe5WceAqTIzh4cDF5zLk3skY/SUQgm0PxnN7FmLRkfQZtYkLEwQ3U9Ai
-	HBX1Klo56xX2ASYkKS8ovao10zysx9oo=
-X-Gm-Gg: ASbGncsTQOIojERt33JMZviPl9JnzJ78p1AJvS2Ev8aG9fssQ/zDg9kvhkip55PKGZ8
-	UurwhuIHfD5cljyzh/Fs9FJx00hkgnEjbf1p4O+CuFhW3o6IpxIENzefTxlKZqb9koV+vKfXcqI
-	Z45dqi+VT/tUjpbXK/OUOtsVPCHyWJXV4gtRgGs4yfxBlzI7lendisLD6A/n3QRItOQRUmB8um4
-	MSTiHVtzf4vMQtppQq5frA/fz/ID6FaC8ILzjYAwxIwmBD6dbANWHJ9wLfmQaTQnbJiq6JWqzsp
-	Yn0Ohlc4Y7I=
-X-Google-Smtp-Source: AGHT+IEZdzkXy8zo+iICLVyIwQ1aZacbsRfjmPMCMylXGRi2gugIQvTpb9uRjXg+2GnfnkgOB1XfR7jzwAxE4F875xs=
-X-Received: by 2002:a05:6000:4210:b0:429:cba7:f773 with SMTP id
- ffacd0b85a97d-429e32e4853mr8592342f8f.19.1762448927249; Thu, 06 Nov 2025
- 09:08:47 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="UP1ZNO+h"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=shvQL0eYE5XSuQM/3ob7+QcZqRR8J31sCgygZiS8iW4fCcDG9x+G/PGsdYYSnMzcYcv2cNACSIgFTuUuzrQIHvQ7d60o7qnU/O3U+xJvoCPM7rjiYa7N3IdXOz50sRsDpcUF8Ss80+Ob/NIIMx9aFXAEgbAdGGsUkSFvel3bKJI49z3G1R2S+6KtpaPqt0YrOAVKTP5b9pUyNBlCeVTG41kNsse1CycqEogAv3tm2Z5kI9BYUYO/MOuuSnUpmqjaberxKu3PhShW+FOGmnCKPMGAlE+MzCz2yv8xhS6BYZ9DCMq+7LBreraJZt2vpNY6LM71AfYskdQmQS2IKQbYXg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/OZhTWwO4xAWVeD7O7pmtB3ZqU8N2brPeSGhzhjS9TU=;
+ b=wSjKqXONIzf5ow7aH1KIoF2vq7ca0+Cp3IIYiPQC0kYA1CvNKSdntILJFPzysT/HKRg1PsMwBTaDJcJltWAawnwSZu7Q/zZB755soGxkm5OEJEmdNnGFxdGLSqqaW6oiR5HXr3fBSSZafeJyYuEMfKrnU+6AnOzMM8U95iIOCT3+R7Qdk9xpAmCZBuoiGQRznWR9TRrx1Z1ZD//NzfOoFxlfIexdXld9QcIj2Fk6+AO64Ae2TAqFPk5q3Bsk4M0E3zYLGgvGFJCPs0B4yLMsDqT2ZPTQFwzS0IglGSrqIQ6aOKf8Mq/Z4Y9jtEBLjjGHTLU84larpX5ZiFtAN4FTow==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/OZhTWwO4xAWVeD7O7pmtB3ZqU8N2brPeSGhzhjS9TU=;
+ b=UP1ZNO+h5DpoSlaRmGjyR1ifdvODlYRP+IABxMiapRgj4qpcy5FUpn7/JcjUOhToMl14CAjXSHw1hb36tQwllfb43tY7Bwrvdd+nHp4NWBXZxeBITjm9IDWQpUH55F/5FzAEu5vqCaNbZPwAUbEXCgNlkQfLNuXZI4//r/caGBQbYan9T/XDHsM3G2rmFN0pTCM1znhLsyr9crvPKGD7TY4tD5V6DUPYfoKWdZZ0b4ox3kFcVPX1IzAWsh9vpm3CO6K4bjOZVLIb/iQDHwlbqm5OjHe+eDozEcuQK53IXCv+l+ak5dmyeiSoK0PsTCglB0k1uWQGMpQLFB2+rV1GVw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV8PR12MB9620.namprd12.prod.outlook.com (2603:10b6:408:2a1::19)
+ by PH0PR12MB7958.namprd12.prod.outlook.com (2603:10b6:510:285::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9298.12; Thu, 6 Nov
+ 2025 17:09:10 +0000
+Received: from LV8PR12MB9620.namprd12.prod.outlook.com
+ ([fe80::1b59:c8a2:4c00:8a2c]) by LV8PR12MB9620.namprd12.prod.outlook.com
+ ([fe80::1b59:c8a2:4c00:8a2c%3]) with mapi id 15.20.9298.010; Thu, 6 Nov 2025
+ 17:09:10 +0000
+Date: Thu, 6 Nov 2025 18:09:07 +0100
+From: Andrea Righi <arighi@nvidia.com>
+To: Juri Lelli <juri.lelli@redhat.com>
+Cc: Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+	Valentin Schneider <vschneid@redhat.com>, Tejun Heo <tj@kernel.org>,
+	David Vernet <void@manifault.com>,
+	Changwoo Min <changwoo@igalia.com>, Shuah Khan <shuah@kernel.org>,
+	Joel Fernandes <joelagnelf@nvidia.com>,
+	Christian Loehle <christian.loehle@arm.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Luigi De Matteis <ldematteis123@gmail.com>,
+	sched-ext@lists.linux.dev, bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 04/11] sched/deadline: Add support to initialize and
+ remove dl_server bandwidth
+Message-ID: <aQzWM4vv30etfhok@gpd4>
+References: <20251029191111.167537-1-arighi@nvidia.com>
+ <20251029191111.167537-5-arighi@nvidia.com>
+ <aQxvIBIwOCDDu60b@jlelli-thinkpadt14gen4.remote.csb>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aQxvIBIwOCDDu60b@jlelli-thinkpadt14gen4.remote.csb>
+X-ClientProxiedBy: MI0P293CA0006.ITAP293.PROD.OUTLOOK.COM
+ (2603:10a6:290:44::17) To LV8PR12MB9620.namprd12.prod.outlook.com
+ (2603:10b6:408:2a1::19)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251105090410.1250500-1-a.s.protopopov@gmail.com>
- <20251105090410.1250500-2-a.s.protopopov@gmail.com> <CAADnVQ+MmpDpSsQZW42K3nozcuM5yJMRRZRABjiTiybNQpBJRA@mail.gmail.com>
- <aQxx3Zphpu43l1/p@mail.gmail.com>
-In-Reply-To: <aQxx3Zphpu43l1/p@mail.gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Thu, 6 Nov 2025 09:08:33 -0800
-X-Gm-Features: AWmQ_bm3dACkYppIqmqqU83ZavDjmJxXG6oTxITLUSddx1edFf9DoDyGsmZVKr8
-Message-ID: <CAADnVQJmg17Z9jWWZ8ejCCNWcnSU0YeRiDHSp__+A0C8QtTMvg@mail.gmail.com>
-Subject: Re: [PATCH v11 bpf-next 01/12] bpf, x86: add new map type:
- instructions array
-To: Anton Protopopov <a.s.protopopov@gmail.com>
-Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, Anton Protopopov <aspsk@isovalent.com>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Quentin Monnet <qmo@kernel.org>, Yonghong Song <yonghong.song@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV8PR12MB9620:EE_|PH0PR12MB7958:EE_
+X-MS-Office365-Filtering-Correlation-Id: 15f2acbd-24c5-43a9-19af-08de1d573404
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|7416014|376014|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?BjBQX8EDTLRUgt06ZepC8d3dKczOw6AMZT2efz09G9dqdled3Wj/B6GzqCWd?=
+ =?us-ascii?Q?NYweJYfHSrqMXtozB6HrnPaCzieSJqRNZNf3842ALAqiY+xc7mqtWVmVWK6q?=
+ =?us-ascii?Q?zaf5fQAX6nLaTBsLb/PqMcR++AB45zMWmxdyP0iQWMKDbPBQrjrrPAU35u1f?=
+ =?us-ascii?Q?Y9Bnr+yv7f91NrILuUdomQan/1I69gyYKchAFvWh8LA+XifV+gkhckodiLEw?=
+ =?us-ascii?Q?YCn4qnJ8SnZpoTz3l8VFKA6tmpEdK900agypUSi4/7f6oQzy70tqn8WGug0D?=
+ =?us-ascii?Q?UIgO6ag5jSkklmUT1BzwdsoB6gue25ln6SCXGj39yDW0g535zqXzuKswd7z/?=
+ =?us-ascii?Q?/DSVQxjuWzKJoNreF+PgtyAJtL+WP1KY+PlRW0nBCHbfkytVbDZKNtAJvcP1?=
+ =?us-ascii?Q?k4b1o3vn3rSG8+EHzKQikPyBDz6IG3+qR7W5hFHPelXPMyh9qQYEXzgRS/sc?=
+ =?us-ascii?Q?R64bFhbw18nam+Y4DtL+mdXQhn4/RA1u+SPsK896/nMnvsRH4RpsGBRW5/Nl?=
+ =?us-ascii?Q?r0+keH529s0HQ+4iSpnRR26Is9tThN9HJMcj31yHqvMfWs+QopKe9n1KfRXY?=
+ =?us-ascii?Q?dDBy4TESfsvyqltkbK1qOiSkGYQPKvgY8HZhJ5/WRXgiaWF9VUoIPwfteRo0?=
+ =?us-ascii?Q?t8DHqoc9CXsHNVBMteD8P8h6Zjhx8Aae8sMhFmv8ggYxK93O63AMCpyZObmS?=
+ =?us-ascii?Q?PjPvn9aq5PGzrH9vDFehCF4z+/cFrm1oR0oYriD6lSvwuPsgvbIRakreQc+9?=
+ =?us-ascii?Q?T6sz5XkTpa3vpcX9jPqFa78A1/YyW/tx083cMlkD37+qGMYDjsl4oZzpJe9j?=
+ =?us-ascii?Q?KC/KHnxNzlDWqaT6+JwXcrVeCGu4+F/k41Gvn5p6XvN3yRNfSKUjA0ra+l7k?=
+ =?us-ascii?Q?nDCbOo+qirH9OQ5fTbSMCx2QRO0WQWT+uP3ZyM4e23NTKTtqFGy0Km2Bv5AI?=
+ =?us-ascii?Q?nSET8sMggfJGtBuefhi7F0PGLguRJSJVF+YW99xYM0NdZ0CSHMWe7LPbiJwZ?=
+ =?us-ascii?Q?7DhQPYyVdldKH0es3YQx8haizmZQM2rOxqPlGI8zs3u6QqZEw3IBAx7Qg2YE?=
+ =?us-ascii?Q?cILfegy2mSEEpe+6sZD7oWNj0+LNFB5JoShg1pD3Tq7cCp2pMSoNKDmnBBlR?=
+ =?us-ascii?Q?ZWy9XSf2FikZ/nqZzogzsoTASNJL3YyXnbscSlF+LNsTZKDZxMwuuCOo5JBH?=
+ =?us-ascii?Q?OuWo8PwzAo/uOZNhm1es0/DM09/+WJOC6c0Higqywyw6hQYu4PW6nhKmE6xo?=
+ =?us-ascii?Q?ZeazkvRifMCChsjbv6wnPUoC8xz5Lht0ZuwTERNGgPGTP2z5b/AmecGPYB4U?=
+ =?us-ascii?Q?LNw7BX9oiNFn4/5dZIP+Zb/YsV3vh/GLwV3Mfc/xiWasF7KgRKlpVi7JPWcI?=
+ =?us-ascii?Q?SFtm8dPe/c8iCLcg8kWQsemFHtj0vepW4fX8vnc8z7d3CCNn9uixztNxNvUw?=
+ =?us-ascii?Q?sqBGUuXHXwNljEhAc8mz95E+g2uUO5VB?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV8PR12MB9620.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(376014)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?y/wpb/P98Oawh5rJ007yrhtiAsCtycgFwZF/nTiatTaOsCWzstEPHJS9CgFM?=
+ =?us-ascii?Q?kzLBMyR26pHcvJxxSraTyYLzfQi67Qjk0sOoYriAEF1LL6lpFqIPm4rYoSRB?=
+ =?us-ascii?Q?isczMTtJARkp30IzXhTWsRz+TTyheLkfRlRcJKQlWOUgJ9zyqasXjftA1P0b?=
+ =?us-ascii?Q?jtjw5JLexZ6cHxw8wRyrLsL0n37jKxUcsijTD8wC94+XO3wM8dbKd3pBCo2b?=
+ =?us-ascii?Q?h+yC4PwcVWnKOfoD0hdn7qtn0C9ReMd5MBasqf1IuGL6ZhCvB69Cc3HsH+zo?=
+ =?us-ascii?Q?GEBlBLtAwZZmizIMgsI857+3rQ2jvqcXZ0zLaz+Ap6X17e4yDMSoxR78kpGZ?=
+ =?us-ascii?Q?SLbKcXn0Bx7/u0OUQpD4+CPmZ+R5k95afIG1c7aDlhnxiXaXlmVcLQeMh03A?=
+ =?us-ascii?Q?GI/tdypTB8dpLaBzYj0E1MuVT+1cOcMMHVNzUhHv/QhBQf2lhyYpmyKX4yxR?=
+ =?us-ascii?Q?0gOWf6N1R24cgQ2z3S/Cbn2tRevssDtea5jhP9hqPiuLE/z1v/DvaaApVI04?=
+ =?us-ascii?Q?5MnQeyr973jdON5OVanVjYqmI7oA+HWs98RhkdmMWEwXXj8WBdgrtSl/OgOa?=
+ =?us-ascii?Q?4blmawyKS/5Xh0HwgEm5Gc5QoAb7AqWcbje9BOtvYD1Dlu5a32LrGkXUCQiH?=
+ =?us-ascii?Q?Pe765ObETdaadNacCjYjFf7yn3p+YDdPWds/D8mwJjrZLbjrooYEgzg7baOT?=
+ =?us-ascii?Q?4PUdWl2UHp4QR4pXsvyOgK9lf3chFls9eWzGej8lMcAgt+En/cNnEXOhHh7R?=
+ =?us-ascii?Q?atJIsbUUzM9dYVtPslFRpmcprL4s6xXdwy5UNbLteODxt+FgW/RaZnnXG0ty?=
+ =?us-ascii?Q?ruQ7lnkjXno2zdxaRd+2WlC/64tauPiP9vgDEMPd2zEHtj6YTz0lGTKahfrv?=
+ =?us-ascii?Q?ke/KUr4aDStNBKx39YgET4IbUtBHn0GZF/xh/bB7IQOA+X4VRUidqpl4EtZG?=
+ =?us-ascii?Q?i39PVCWs42do55ukzMuPgoPI/yxefJJdUepFhRhpoCGU5Cw2oewM4Nabi5By?=
+ =?us-ascii?Q?H/IKojad0xAgLAG6LixA03wlBHAdPw2af+7koQztf14KVH6zEU5s9CKjA73L?=
+ =?us-ascii?Q?bmBgXuX8RkiVbksjiP5sUBE+bXOBUws/fTmmKUfRRXL24XK5FwAsgNPy7HAP?=
+ =?us-ascii?Q?ypoJ3KJP9zTSO2zolSrCeaJgSj8cVfAimJ/UEosli7obev+SOznGdNS4pH2Y?=
+ =?us-ascii?Q?piUVBxjPKwC4oEDlmwOpGKYLGpsK20JuNVh6Ck9tF3UfxQWKXIqexS9atM6l?=
+ =?us-ascii?Q?s44Tvc2Cxw3FfYUVEIpLvTSQTyS8RrTtjHEQCUMvpUtihXYpjt3K3S5NXumu?=
+ =?us-ascii?Q?xb4e9p8CsnUCqj1gFF+MXC158mm1nuhGc2UDMqj5FdK6drU0oDn00c98vgSk?=
+ =?us-ascii?Q?p0IamwEA9LkCiZqtoUS6wSX+vwBZ55B+D5dbfIZQaTMYLdluWb5ZYo9IjqII?=
+ =?us-ascii?Q?UUryDxHba+ovQL3ZNgx0SvqjJmn0YnUtzdPzQSmvtDOXc455W67wJBnp4OYd?=
+ =?us-ascii?Q?3dx0pSlo1t8MaM+YrsI5tLkFS3PGBdajhWshS5BoRpxY5T9pD41RZ4QVi+0I?=
+ =?us-ascii?Q?r81+eqIiMx3Bpg5FSwqvt38wGZC0K7NiEG3zzmOW?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 15f2acbd-24c5-43a9-19af-08de1d573404
+X-MS-Exchange-CrossTenant-AuthSource: LV8PR12MB9620.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Nov 2025 17:09:10.6817
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: vqkpWRs+fsHcxbUteoG5rO5iXKoH4x/II7Wm4m+VBmnLtu8XxNXcDG5j5hO/0K7QwnWDnx4kuhbVDUWpEr6NpQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB7958
 
-On Thu, Nov 6, 2025 at 1:54=E2=80=AFAM Anton Protopopov
-<a.s.protopopov@gmail.com> wrote:
->
-> On 25/11/05 06:03PM, Alexei Starovoitov wrote:
-> > On Wed, Nov 5, 2025 at 12:58=E2=80=AFAM Anton Protopopov
-> > <a.s.protopopov@gmail.com> wrote:
-> > > @@ -21695,6 +21736,8 @@ static int jit_subprogs(struct bpf_verifier_e=
-nv *env)
-> > >                 func[i]->aux->jited_linfo =3D prog->aux->jited_linfo;
-> > >                 func[i]->aux->linfo_idx =3D env->subprog_info[i].linf=
-o_idx;
-> > >                 func[i]->aux->arena =3D prog->aux->arena;
-> > > +               func[i]->aux->used_maps =3D env->used_maps;
-> > > +               func[i]->aux->used_map_cnt =3D env->used_map_cnt;
-> >
-> > ...
-> >
-> > > It might be called before the used_maps are copied into aux...
-> >
-> > wat?
->
-> It is called from fixup_call_arg() which happens before
-> the env->prog->aux->used_maps is populated as a copy of
-> env->used_maps.
->
-> In any case, I will take a closer look and follow up on
-> this after Kubecon (which is the next week).
+On Thu, Nov 06, 2025 at 10:49:20AM +0100, Juri Lelli wrote:
+> Hi,
+> 
+> On 29/10/25 20:08, Andrea Righi wrote:
+> > During switching from sched_ext to fair tasks and vice-versa, we need
+> > support for intializing and removing the bandwidth contribution of
+> > either DL server.
+> 
+> My first and more general/design question is do we strictly need this
+> automagic bandwidth management. We seem to agree [1] that we want to
+> move towards explicit dl-server(s) and tasks bandwidth handling, so we
+> might want to consider leaving the burden completely to whomever might
+> be configuring the system.
 
-Pls look at the diff
-and also
-line 22074:
-func[i]->aux->main_prog_aux =3D prog->aux;
-line 22099:
-func[i]->aux->used_maps =3D env->used_maps;
+I think we decided to take this approach because, once a sched_ext
+scheduler is loaded and all tasks are moved to the ext class, the fair
+class becomes "empty", but the fair dl-server would still keep its
+bandwidth reserved, so somehow we need to release that reservation,
+right?
 
-> > on top of the set:
-> > diff --git a/kernel/bpf/bpf_insn_array.c b/kernel/bpf/bpf_insn_array.c
-> > index 61ce52882632..97fcde6d7f07 100644
-> > --- a/kernel/bpf/bpf_insn_array.c
-> > +++ b/kernel/bpf/bpf_insn_array.c
-> > @@ -278,8 +278,8 @@ void bpf_prog_update_insn_ptrs(struct bpf_prog
-> > *prog, u32 *offsets, void *image)
-> >         if (!offsets || !image)
-> >                 return;
-> >
-> > -       for (i =3D 0; i < prog->aux->used_map_cnt; i++) {
-> > -               map =3D prog->aux->used_maps[i];
-> > +       for (i =3D 0; i < prog->aux->main_prog_aux->used_map_cnt; i++) =
-{
-> > +               map =3D prog->aux->main_prog_aux->used_maps[i];
-> >                 if (!is_insn_array(map))
-> >                         continue;
-> >
-> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> > index 1268fa075d4c..53b9a6cee156 100644
-> > --- a/kernel/bpf/verifier.c
-> > +++ b/kernel/bpf/verifier.c
-> > @@ -22096,8 +22096,6 @@ static int jit_subprogs(struct bpf_verifier_env=
- *env)
-> >                 func[i]->aux->jited_linfo =3D prog->aux->jited_linfo;
-> >                 func[i]->aux->linfo_idx =3D env->subprog_info[i].linfo_=
-idx;
-> >                 func[i]->aux->arena =3D prog->aux->arena;
-> > -               func[i]->aux->used_maps =3D env->used_maps;
-> > -               func[i]->aux->used_map_cnt =3D env->used_map_cnt;
-> >                 num_exentries =3D 0;
-> >                 insn =3D func[i]->insnsi;
-> >                 for (j =3D 0; j < func[i]->len; j++, insn++) {
-> >
-> >
-> > all tests still pass.
-> >
-> > If I'm not missing anything, please send a follow up.
-> >
-> > The plan is to split prog_aux into main and subprog,
-> > and subprog will be a fraction of main.
-> > Right now we copy more and more fields for no good reason.
-> > Let's avoid this.
+> 
+> > Add support for handling these transitions.
+> 
+> Anyway, if we still want to do this :) ...
+> 
+> > Moreover, remove references specific to the fair server, in preparation
+> > for adding the ext server.
+> > 
+> > v2: - wait for inactive_task_timer to fire before removing the bandwidth
+> >       reservation (Juri Lelli)
+> >     - add WARN_ON_ONCE(!cpus) sanity check in dl_server_apply_params()
+> >       (Andrea Righi)
+> > 
+> > Co-developed-by: Joel Fernandes <joelagnelf@nvidia.com>
+> > Signed-off-by: Joel Fernandes <joelagnelf@nvidia.com>
+> > Signed-off-by: Andrea Righi <arighi@nvidia.com>
+> > ---
+> 
+> ...
+> 
+> > +/**
+> > + * dl_server_remove_params - Remove bandwidth reservation for a DL server
+> > + * @dl_se: The DL server entity to remove bandwidth for
+> > + *
+> > + * This function removes the bandwidth reservation for a DL server entity,
+> > + * cleaning up all bandwidth accounting and server state.
+> > + *
+> > + * Returns: 0 on success, negative error code on failure
+> > + */
+> > +int dl_server_remove_params(struct sched_dl_entity *dl_se,
+> > +			    struct rq *rq, struct rq_flags *rf)
+> > +{
+> > +	if (!dl_se->dl_server)
+> > +		return 0; /* Already disabled */
+> > +
+> > +	/*
+> > +	 * First dequeue if still queued. It should not be queued since
+> > +	 * we call this only after the last dl_server_stop().
+> > +	 */
+> > +	if (WARN_ON_ONCE(on_dl_rq(dl_se)))
+> > +		dequeue_dl_entity(dl_se, DEQUEUE_SLEEP);
+> > +
+> > +	if (hrtimer_try_to_cancel(&dl_se->inactive_timer) == -1) {
+> > +		rq_unlock_irqrestore(rq, rf);
+> 
+> This seems racy. I fear the moment we release the rq lock something can
+> slip in and the server(s) state might change?
+
+Yeah, however, sched_ext is the only user of dl_server_remove_params() (at
+least for now), this is called when an scx scheduler is started/stopped and
+concurrent starts/stops can't happen, so maybe we're safe...? And in that
+case it'd be helpful to document this scenario clearly, unless we want to
+rethink this part and avoid cancelling the timer.
+
+> 
+> > +
+> > +		hrtimer_cancel(&dl_se->inactive_timer);
+> 
+> I am not sure we actually need to force cancel the timer (but still
+> contradicting myself every time I go back at staring at code :). The way
+> I believe this should work 'in theory' is
+> 
+>  - we remove a server (either automagic or user sets runtime to 0 -
+>    which is probably to fix/look at in current implementation as well
+>    btw)
+>  - current bandwidth is retained and only freed (and server reset) at
+>    0-lag (when inactive_timer fires)
+>  - if server is activated back before 0-lag it will use it's current
+>    parameters
+>  - after 0-lag it's a new instance with new parameters
+
+Hm... that means just setting the runtime to 0 IIUC. I think I tried that
+approach in the past, but I was seeing some inconsistencies with the
+total_bw kselftest, starting/stopping an scx scheduler multiple times
+seemed to gradually consume all the available bandwidth.
+
+But I can give it another try, maybe that behavior was caused by other
+issues, since we've fixed quite a few things since then.
+
+> 
+> In inactive_timer() we have this behavior for simple tasks, but we skip
+> __dl_sub() etc for servers (since we clear it up immediately).
+> 
+> In all this I essentially fear that if we clear parameters immediately
+> one could be able to trick the system by quickly disabling/enabling a
+> dl-server to let fair/scx tasks execute more than what requested (as
+> each new enable will be seen as a new instance). But, again, I wasn't
+> yet able to demonstrate this and I am still uncomfortably uncertain.
+> Please Peter and others keep me honest.
+> 
+> Also, server parameters changes are root only, so maybe not a big deal?
+> For scx automagic as well?
+
+Only root can start/stop scx schedulers, or better whoever has the CAP_BPF
+or CAP_SYS_ADMIN capabilities. There's also some natural throttling in the
+rate of scx restarts you can do, due to the overhead of switching to scx
+bypass mode, re-enqueue all the tasks, and so on.
+
+Maybe we could even explicitly throttle the rate of scx restarts if it
+raises concerns from a security or stability standpoint.
+
+Thanks,
+-Andrea
