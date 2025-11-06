@@ -1,63 +1,63 @@
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 117AB32ED39
-	for <bpf@vger.kernel.org>; Thu,  6 Nov 2025 12:53:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BD3332F75C
+	for <bpf@vger.kernel.org>; Thu,  6 Nov 2025 12:53:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762433621; cv=none; b=QPkpNLt4XGF7dTZjV4Y7GvUvEjVlWYYrilab89BwZzHWjinsXRCG5aih9K9FXk42nNHKCv4kXWaoijcfhlsI2Jea/rz8dhBp/xtyazZqwHqHkbZRweZP1Rm5IOT9QAp1LWe1DS1Ef0nJgDEMob3jKfO6YFd3lJFcvyCPgk4PeJg=
+	t=1762433622; cv=none; b=fiaXpPnj+UsbGDMlQz52h4It184xnJ9TbhIvPE6448geILbywgVJbOdZ6hXn62/MfQdnZAIo7efVGHqgoOGFSWg5Ma5E/WfCS9XmQ1Mmyhk81EMl50INMG105CncpSn5sAIllniYTIK5zeQdTM3DjAD62v1Y+RzWtTqEwd4xh7s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762433621; c=relaxed/simple;
-	bh=Wn62Zez1jdd7w4AVVJUjEc4EUS5oDZoivioEIfat5uw=;
+	s=arc-20240116; t=1762433622; c=relaxed/simple;
+	bh=EnSIiRq6VHyzg36EE4lisdtnJkdNAd019Xn1/RbfzCI=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=o8W3+DfOyqXE+1x/oSnu15DHRi39+r3LpjxXSPR9MzBZYhSHjg6pIyWbgdGonDSAxdYRAGQhsEnzyOF64Jw/uaaGOP+QoGNolmoZp7xvZV+faRtN+W+QGnODNI11NF6vMl/c88m3iCCERtQMRJTCtX1F4CMj+n4jeo4vLnraPX8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gd4FRocV; arc=none smtp.client-ip=209.85.221.48
+	 MIME-Version; b=MXoFC2OsHFZG7D6Qj+M18/oO/GQdHQv7SKaQvfKlozNLcpchONK4aJh6pn8IkwuzZuM5C3fOH4c2Bj11xfKxmpXDat9n7RXPC8BLG7JTLbG4d9tpEuT4YNTM7TFYfyVS/EXG2xfFjvBEoR+x12vEXnfUMkIEiJZsxedUdXQxHB4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YaojCmQB; arc=none smtp.client-ip=209.85.221.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gd4FRocV"
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-429c7869704so821218f8f.2
-        for <bpf@vger.kernel.org>; Thu, 06 Nov 2025 04:53:38 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YaojCmQB"
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-427007b1fe5so603125f8f.1
+        for <bpf@vger.kernel.org>; Thu, 06 Nov 2025 04:53:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1762433617; x=1763038417; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1762433618; x=1763038418; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=QjtDkhHcJRxmLbo+3NnqG1n70KbrxmZUo5oVszYsvH4=;
-        b=gd4FRocVNvDTcz6qPQrSEdwDKmDEKTtgqDpA+Oz5v9aDOcXWuKMrZc0hOh8njm7awe
-         4QqTf/aIigxwakvL9XUMq6/vaejFmSb91PhJ7jFv5jVjnRSByufGXp7/9xN/4EVo9+o5
-         Scb9o2U+TDbg8MS6GZXr1JpFigx2FaIW1FEtcsZgjmGFPdHI21UwoV23WnBezwWUuthb
-         nntfdAKJ7z2sibNz3HWBhayWscM1sg8dlinIkoYdI1P+Z3WTJRmxFSQnkKxZVGpz3cqN
-         jY1R5vu5YLI613ZUxyNlrTqWwcAGRmTz+jPXp/B5wWlI9EE0Ocsts5mamTLEUBVh9qql
-         jdiA==
+        bh=J5UtbFN3SeUqWauxQUFhPcEKoaIiq/3X5SZjNQXVMzY=;
+        b=YaojCmQB0Fg3OgZso8vv+nvyabzPAmSaWeZXdFQoQpHXACpMIxuVDBFMyyDfYFN8in
+         fVTRbo6/Acqj30Qio+HFABgeffUKSQzl5qvVdpRq8h4o7a3guo3QAw6RxWMPuY84wAuK
+         RWQaAHBdnDSkdsvs9N7ejWKx2coqRHezQkK3w4+2KESWJ7nOiZcAADXORDo8lqFCeQxa
+         DhQg2n3H3ERtmz6niWqEKNmCGUUHfFc3yUk63v3hfDbVOne8cvjRWV3KEELgRJ2Min+h
+         4ZDJU7sAsUJnc6VIXw8R4IKVdcFUf7c0VP47gN3RFpcJwqUkShrm8jcVeGL8PxVPIt1m
+         1EoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762433617; x=1763038417;
+        d=1e100.net; s=20230601; t=1762433618; x=1763038418;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=QjtDkhHcJRxmLbo+3NnqG1n70KbrxmZUo5oVszYsvH4=;
-        b=vmquRmTBPAKT1bzXswUru3qa21+iOqjfDJIRUxMiCNU3bM81mE+O4BVp7keueZRgq2
-         ZOyjM59TXdfMPhm5icU8ry4SJ9qHtWrtYYjtHbvFWKhzjA0cx8G6KROC68fjfEiNm8Zs
-         paAXD9zzGL4lG7xZO2mvlL/iB6EctNAcUlW6XUAXGP/VcLJz8jgrjGStGPvGGfl7/MtT
-         ff2aHXdwyilJ3cDraJr3ZnMjw+b4qGFa12wTw9ORyjS0N9r3JEZyBfiyhU6NeZ5ZLhCf
-         jZ2lNK6AB21AvptoOQQd+3EW28rd7REJ02RXnfXmvpcJrbYwMN1+Bjj9t0WeOtR/Sh0C
-         ltLA==
-X-Gm-Message-State: AOJu0YzF2V5TsRjRfchX0l+qCCN74M1kOCrAvCtsbI01SAVYdbKDZu97
-	uis4bkMZUi+J/E32g8pr9F8s/jw/SrzZnvrkRuXmZ6dNQPIVFLis35BsSaAO
-X-Gm-Gg: ASbGncs00U8Hm/OKm0p3y9I3ANDxQ/b7nPsc93uGeMPQHhaXtmYHezxP4vxudxZE5ra
-	HHtx6GKh30TEEtb1O9A63cRwasJMKRFY8sxHakt0huMsgIVqeIx8+zmOrU6ccbkthJmYMpAv6oF
-	pk/690YJHUuhUI4/CbJgEdCh3nBjA4LhUUaQOAzmUc2n7IR514lluVLxBO1b5jsIRGR3Mht1DzD
-	bTbt3d/dbDcAQ4Z1hDA/EAL3rSdar6/UAoTb/vz1jePy6+YoyiHnv8SwFZ76XAlyAWc3RZeHnHo
-	mkgVpDYkD8Uruz5nPaXsoIKpH4v3zggdS/ZSWEEObPtKyY/CFVP5zZ61u3jlj4LMTib+Dr0I/tx
-	bv3il78WzFJv1sWAacNPTwwuH6FpkwMtQb4iWVdDhvpmjB87lSEkjdvGKjPWT4lR7O/DV0Vb8jX
-	l3qzTHDtKsBTcijG8TfaEAoPlFiv7PQiwT3OCtx0vFmv+AyY5oAOFWuWWMiv86Ra59Jg==
-X-Google-Smtp-Source: AGHT+IGG+QFoVtb620WWFyrVxoAV2LS1/PGKzF2MVcldpxTRUrKcWwcJB+ZdIU69/0EzvgaWMLX4bQ==
-X-Received: by 2002:a05:6000:4308:b0:429:be56:e508 with SMTP id ffacd0b85a97d-429e3311e53mr6100201f8f.58.1762433616900;
-        Thu, 06 Nov 2025 04:53:36 -0800 (PST)
+        bh=J5UtbFN3SeUqWauxQUFhPcEKoaIiq/3X5SZjNQXVMzY=;
+        b=vqHDS8t4R5TOCpjUS2FbsAiTcVkWk+jUYPPeeIurIEquU+/kIaAJGMsVJW0Z+DETDI
+         qCSWH9O6NCw6GQkWfC6zigDweycA7zkkV1Y2kkXmhl3Qkt46j/J+gFs+YLbqUcEsvIms
+         OJkkvS5DjnVRsud20a2uAayzHlcZ+6gDcu/aN7etPJtcxha8rrvncwfWINKphEJVuP/Z
+         kWUXyMgfFx2xqPW5Jhg1MLqgyo678LE6uYOlbmAfh+ORfvsJACv/EhvVlvQvDkymO/z7
+         LeZCvkP2uPRxVEGLsKqzy6tC67JIoeAOiduLezzUu+HIxpy4Ob9qar3Sm9jkIABhfl7+
+         UhBQ==
+X-Gm-Message-State: AOJu0Yz7mkHBsWX9FOkbtkA1D1GlCWHAHWmebtYbGgfGplZit6iWDw1c
+	TTta6/llMCyqH3CcXTl+LTp7HSjVuqcDhf3wRvG/HT9wHWXdr3BJ/Vlszo89
+X-Gm-Gg: ASbGncsMNcUtgvSSjnUxYMT70nfasJLJjlLWliONjKFqDJal6YJM8wz5u3m9EoN34gc
+	2RMlvPSEaEkWvETXsiPs+X+eztN8o2CoNGR2dDptOamWNGhYp9YqDz2ecHNjJj/ok5Jiy+c9Tjl
+	FneFjf5Wc/qHYYWXS4CyE72pDk4luA0lkNLQyYSV0NJzJSNSwZvqmA8SEUOnhCk+a1n85FJeXWA
+	7gja+a9kxE2oUaYm+PnEguqELORuQ03Hed12BaIymSql6xvJjy0LTcvs8HsJB8F1JqmvtyTQvdE
+	An9fjXEXRjwGmY/uL5yl7mJO8XFLD8u3DwJcmqyxvBp55pmTnpGh6RywNyi3Q0cWLYN8q8Kdi6n
+	JMBqcm3fVZ2caYriEAGZbJHIr5Dzvw3vMgnTFp7V//f1si1tIs1efBNczwwqyywnKwij3OreH5d
+	OH54k3w34yU+VK6gXgdBwN8U6qFTd5L8c209oOfOsZ0tV24AjiBc2YcO0=
+X-Google-Smtp-Source: AGHT+IETLShyKsHT25JdeNK9Sz1/yzYm3e12YwX3zT1yZFekr4gNRNP0A8afPQDiZ+0+kfpa/ZLupA==
+X-Received: by 2002:adf:9d91:0:b0:429:ec94:67ec with SMTP id ffacd0b85a97d-429ec9469cbmr1719997f8f.1.1762433618072;
+        Thu, 06 Nov 2025 04:53:38 -0800 (PST)
 Received: from ast-epyc5.inf.ethz.ch (ast-epyc5.inf.ethz.ch. [129.132.161.180])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-429eb40379esm4788856f8f.9.2025.11.06.04.53.36
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-429eb40379esm4788856f8f.9.2025.11.06.04.53.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Nov 2025 04:53:36 -0800 (PST)
+        Thu, 06 Nov 2025 04:53:37 -0800 (PST)
 From: Hao Sun <sunhao.th@gmail.com>
 X-Google-Original-From: Hao Sun <hao.sun@inf.ethz.ch>
 To: bpf@vger.kernel.org
@@ -72,9 +72,9 @@ Cc: ast@kernel.org,
 	linux-kernel@vger.kernel.org,
 	sunhao.th@gmail.com,
 	Hao Sun <hao.sun@inf.ethz.ch>
-Subject: [PATCH RFC 02/17] bpf: Add bcf_checker top-level workflow
-Date: Thu,  6 Nov 2025 13:52:40 +0100
-Message-Id: <20251106125255.1969938-3-hao.sun@inf.ethz.ch>
+Subject: [PATCH RFC 04/17] bpf: Add top-level workflow of bcf_refine()
+Date: Thu,  6 Nov 2025 13:52:42 +0100
+Message-Id: <20251106125255.1969938-5-hao.sun@inf.ethz.ch>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20251106125255.1969938-1-hao.sun@inf.ethz.ch>
 References: <20251106125255.1969938-1-hao.sun@inf.ethz.ch>
@@ -86,541 +86,249 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Introduce the in-kernel BCF proof checker skeleton and public entry point.
-The checker validates userspace proofs of refinement conditions.
-Proof size hard limit: MAX_BCF_PROOF_SIZE 8M.
+Add the top-level refinement hook `bcf_refine()`:
 
-kernel/bpf/bcf_checker.c implements:
-- Buffer/header validation (check_hdr): enforces BCF_MAGIC, size alignment,
-  and overflow-safe size arithmetic for expr/step regions.
+- Add `struct bcf_refine_state` to `struct bpf_verifier_env`: stores the list
+  of parent states forming the relevant path suffix (`parents`, `vstate_cnt`),
+  and traversal cursors (`cur_vstate`, `cur_jmp_entry`). A boolean `available`
+  marks whether BCF can be used in this verification.
 
-- Expression arena load (check_exprs):
-  builds a bitmap of validated indices, enforces that each non-VAL argument
-  points to an earlier index, stubs type_check() for future semantic checks,
-  and records the arena size as the starting point for dynamic ids (id_gen).
+- Implement `backtrack_states()`: walking parents with `backtrack_insn()` and
+  recorded jump history and find a base state to start the symbolic
+  tracking.
 
-- Step load/validation (check_steps): copies steps, verifies per-step size,
-  rule class/id bounds via rule_class_max(), that all premises refer to
-  strictly earlier steps, records the single ASSUME step (check_assume stub),
-  computes last_ref for each step for lifetime mgmt, and requires every
-  non-final step to be referenced later.
+- Add a stub `bcf_track()` () and `bcf_refine()` routine that: (a) derives
+  default `reg_masks` when not provided by selecting interesting regs,
+  (b) backtracks parents, (c) runs `bcf_track()` and a refinement callback,
+  and (d) marks the aux flag to request a proof when a condition is produced.
 
-- Rule application loop (apply_rules): iterates steps in order, dispatches by
-  rule class to apply_core_rule/apply_bool_rule/apply_bv_rule (stubs now),
-
-- Memory management: bcf_checker_state owns copied arenas and per-step state;
-  dynamically created exprs (facts) are ref-counted, and tracked in an xarray
-  indexed by new ids >= expr_size, to be added in the next patch set.
-
-Rule semantics, type checking, and integration with the verifier appear in
-later patches; this change only defines the top-level checker structure.
+The actual symbolic tracking, condition build and concrete refinements
+appear in subsequent patches.
 
 Signed-off-by: Hao Sun <hao.sun@inf.ethz.ch>
 ---
- .clang-format               |   2 +
- include/linux/bcf_checker.h |  18 ++
- kernel/bpf/Makefile         |   2 +-
- kernel/bpf/bcf_checker.c    | 440 ++++++++++++++++++++++++++++++++++++
- 4 files changed, 461 insertions(+), 1 deletion(-)
- create mode 100644 include/linux/bcf_checker.h
- create mode 100644 kernel/bpf/bcf_checker.c
+ include/linux/bpf.h          |   1 +
+ include/linux/bpf_verifier.h |  13 +++
+ kernel/bpf/verifier.c        | 156 +++++++++++++++++++++++++++++++++++
+ 3 files changed, 170 insertions(+)
 
-diff --git a/.clang-format b/.clang-format
-index f371a13b4d19..7f2f85bc4c1f 100644
---- a/.clang-format
-+++ b/.clang-format
-@@ -747,6 +747,8 @@ ForEachMacros:
-   - 'ynl_attr_for_each_nested'
-   - 'ynl_attr_for_each_payload'
-   - 'zorro_for_each_dev'
-+  - 'bcf_for_each_arg'
-+  - 'bcf_for_each_pm_step'
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index a47d67db3be5..690b0b2b84ba 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1656,6 +1656,7 @@ struct bpf_prog_aux {
+ 	bool changes_pkt_data;
+ 	bool might_sleep;
+ 	bool kprobe_write_ctx;
++	bool bcf_requested;
+ 	u64 prog_array_member_cnt; /* counts how many times as member of prog_array */
+ 	struct mutex ext_mutex; /* mutex for is_extended and prog_array_member_cnt */
+ 	struct bpf_arena *arena;
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index c6eb68b6389c..090430168523 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -732,6 +732,18 @@ struct bpf_scc_info {
  
- IncludeBlocks: Preserve
- IncludeCategories:
-diff --git a/include/linux/bcf_checker.h b/include/linux/bcf_checker.h
-new file mode 100644
-index 000000000000..220552653c80
---- /dev/null
-+++ b/include/linux/bcf_checker.h
-@@ -0,0 +1,18 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+#ifndef __LINUX_BCF_CHECKER_H__
-+#define __LINUX_BCF_CHECKER_H__
-+
-+#include <uapi/linux/bcf.h>
-+#include <linux/stdarg.h>
-+#include <linux/bpfptr.h>
-+#include <linux/bpf_verifier.h> /* For log level. */
-+
-+#define MAX_BCF_PROOF_SIZE (8 * 1024 * 1024)
-+
-+typedef void (*bcf_logger_cb)(void *private, const char *fmt, va_list args);
-+
-+int bcf_check_proof(struct bcf_expr *goal_exprs, u32 goal, bpfptr_t proof,
-+		    u32 proof_size, bcf_logger_cb logger, u32 level,
-+		    void *private);
-+
-+#endif /* __LINUX_BCF_CHECKER_H__ */
-diff --git a/kernel/bpf/Makefile b/kernel/bpf/Makefile
-index 7fd0badfacb1..5084a0a918e4 100644
---- a/kernel/bpf/Makefile
-+++ b/kernel/bpf/Makefile
-@@ -6,7 +6,7 @@ cflags-nogcse-$(CONFIG_X86)$(CONFIG_CC_IS_GCC) := -fno-gcse
- endif
- CFLAGS_core.o += -Wno-override-init $(cflags-nogcse-yy)
+ struct bpf_liveness;
  
--obj-$(CONFIG_BPF_SYSCALL) += syscall.o verifier.o inode.o helpers.o tnum.o log.o token.o liveness.o
-+obj-$(CONFIG_BPF_SYSCALL) += syscall.o verifier.o inode.o helpers.o tnum.o log.o token.o liveness.o bcf_checker.o
- obj-$(CONFIG_BPF_SYSCALL) += bpf_iter.o map_iter.o task_iter.o prog_iter.o link_iter.o
- obj-$(CONFIG_BPF_SYSCALL) += hashtab.o arraymap.o percpu_freelist.o bpf_lru_list.o lpm_trie.o map_in_map.o bloom_filter.o
- obj-$(CONFIG_BPF_SYSCALL) += local_storage.o queue_stack_maps.o ringbuf.o
-diff --git a/kernel/bpf/bcf_checker.c b/kernel/bpf/bcf_checker.c
-new file mode 100644
-index 000000000000..33b6e5f04e7f
---- /dev/null
-+++ b/kernel/bpf/bcf_checker.c
-@@ -0,0 +1,440 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+#include <linux/kernel.h>
-+#include <linux/overflow.h>
-+#include <linux/errno.h>
-+#include <linux/export.h>
-+#include <linux/cleanup.h>
-+#include <linux/slab.h>
-+#include <linux/xarray.h>
-+#include <linux/refcount.h>
-+#include <linux/bitmap.h>
-+#include <linux/sched/signal.h>
-+#include <linux/sched.h>
-+#include <linux/bcf_checker.h>
-+
-+/* Per proof step state. */
-+struct bcf_step_state {
-+	/* The conclusion of the current step. */
-+	struct bcf_expr *fact;
-+	u32 fact_id;
-+	/*
-+	 * The last step referring to the current step. After `last_ref`, the
-+	 * `fact` is no longer used by any other steps and can be freed.
++struct bcf_refine_state {
++	/* The state list that decides the path suffix, on which bcf_track()
++	 * collects symbolic information for target registers.
 +	 */
-+	u32 last_ref;
++	struct bpf_verifier_state **parents;
++	u32 vstate_cnt;
++	u32 cur_vstate;
++	u32 cur_jmp_entry;
++
++	bool available; /* if bcf_buf is provided. */
 +};
 +
-+/*
-+ * The expr buffer `exprs` below as well as `steps` rely on the fact that the
-+ * size of each arg is the same as the size of the struct bcf_expr, and no
-+ * padings in between and after.
-+ */
-+static_assert(struct_size_t(struct bcf_expr, args, 1) ==
-+	      sizeof_field(struct bcf_expr, args[0]) * 2);
-+static_assert(struct_size_t(struct bcf_proof_step, args, 1) ==
-+	      sizeof_field(struct bcf_proof_step, args[0]) * 2);
+ /* single container for all structs
+  * one verifier_env per bpf_check() call
+  */
+@@ -838,6 +850,7 @@ struct bpf_verifier_env {
+ 	struct bpf_scc_info **scc_info;
+ 	u32 scc_cnt;
+ 	struct bpf_iarray *succ;
++	struct bcf_refine_state bcf;
+ };
+ 
+ static inline struct bpf_func_info_aux *subprog_aux(struct bpf_verifier_env *env, int subprog)
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index e4928846e763..7125f7434e6f 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -608,6 +608,23 @@ static bool is_atomic_load_insn(const struct bpf_insn *insn)
+ 	       insn->imm == BPF_LOAD_ACQ;
+ }
+ 
++typedef int (*refine_state_fn)(struct bpf_verifier_env *env,
++			       struct bpf_verifier_state *st, void *ctx);
 +
-+/* Size of expr/step in u32 plus the node itself */
-+#define EXPR_SZ(expr) ((expr)->vlen + 1)
-+#define STEP_SZ(step) ((step)->premise_cnt + (step)->param_cnt + 1)
++static int bcf_refine(struct bpf_verifier_env *env,
++		      struct bpf_verifier_state *st, u32 reg_masks,
++		      refine_state_fn refine_cb, void *ctx);
 +
-+#define bcf_for_each_arg(arg_id, expr)                                   \
-+	for (u32 ___i = 0;                                               \
-+	     ___i < (expr)->vlen && (arg_id = (expr)->args[___i], true); \
-+	     ___i++)
-+
-+#define bcf_for_each_pm_step(step_id, step)                      \
-+	for (u32 ___i = 0; ___i < (step)->premise_cnt &&         \
-+			   (step_id = (step)->args[___i], true); \
-+	     ___i++)
-+
-+struct bcf_checker_state {
-+	/*
-+	 * Exprs from the proof, referred to as `static expr`. They exist
-+	 * during the entire checking phase.
-+	 */
-+	struct bcf_expr *exprs;
-+	/*
-+	 * Each expr of `exprs` is followed by their arguments. The `valid_idx`
-+	 * bitmap records the valid indices of exprs.
-+	 */
-+	unsigned long *valid_idx;
-+	/* Size of exprs array. */
-+	u32 expr_size;
-+	/*
-+	 * For exprs that are allocated dynamically during proof checking, e.g.,
-+	 * conclusions from proof steps, they are refcounted, and each allocated
-+	 * expr has an id (increased after `expr_size`) and is stored in xarray.
-+	 *
-+	 * With this xarray, any routines below can exit early on any error
-+	 * without worrying about freeing the exprs allocated; they can be
-+	 * freed once when freeing the xarray, see free_checker_state().
-+	 */
-+	u32 id_gen;
-+	struct xarray expr_id_map; /* Id (u32) to `struct bcf_expr_ref` */
-+
-+	/* Step state tracking */
-+	struct bcf_proof_step *steps;
-+	struct bcf_step_state *step_state;
-+	u32 step_size; /* size of steps array */
-+	u32 step_cnt; /* valid number of steps */
-+	u32 cur_step;
-+	u32 cur_step_idx;
-+
-+	bcf_logger_cb logger;
-+	void *logger_private;
-+	u32 level;
-+
-+	u32 goal;
-+	struct bcf_expr *goal_exprs;
-+};
-+
-+static void free_checker_state(struct bcf_checker_state *st)
++static bool bcf_requested(const struct bpf_verifier_env *env)
 +{
-+	unsigned long id;
-+	void *expr;
-+
-+	kvfree(st->exprs);
-+	kvfree(st->valid_idx);
-+	xa_for_each(&st->expr_id_map, id, expr) {
-+		kfree(expr);
-+	}
-+	xa_destroy(&st->expr_id_map);
-+	kvfree(st->steps);
-+	kvfree(st->step_state);
-+
-+	kfree(st);
-+}
-+DEFINE_FREE(free_checker, struct bcf_checker_state *,
-+	    if (_T) free_checker_state(_T))
-+
-+__printf(2, 3) static void verbose(struct bcf_checker_state *st,
-+				   const char *fmt, ...)
-+{
-+	va_list args;
-+
-+	if (!st->logger || !st->level)
-+		return;
-+	va_start(args, fmt);
-+	st->logger(st->logger_private, fmt, args);
-+	va_end(args);
++	return env->prog->aux->bcf_requested;
 +}
 +
-+/*
-+ * Every expr has an id: (1) for static exprs, the idx to `exprs` is its id;
-+ * (2) dynamically-allocated ones get one from st->id_gen++.
-+ */
-+static bool is_static_expr_id(struct bcf_checker_state *st, u32 id)
++static void mark_bcf_requested(struct bpf_verifier_env *env)
 +{
-+	return id < st->expr_size;
++	env->prog->aux->bcf_requested = true;
 +}
 +
-+/*
-+ * Each arg of a bcf_expr must be an id, except for bv_val, which is a
-+ * sequence of u32 values.
-+ */
-+static bool expr_arg_is_id(u8 code)
-+{
-+	return code != (BCF_BV | BCF_VAL);
-+}
-+
-+static bool is_false(const struct bcf_expr *expr)
-+{
-+	return expr->code == (BCF_BOOL | BCF_VAL) &&
-+	       BCF_BOOL_LITERAL(expr->params) == BCF_FALSE;
-+}
-+
-+/*
-+ * Exprs referred to by the proof steps are static exprs from the proof.
-+ * Hence, must be valid id in st->exprs.
-+ */
-+static bool valid_arg_id(struct bcf_checker_state *st, u32 id)
-+{
-+	return is_static_expr_id(st, id) && test_bit(id, st->valid_idx);
-+}
-+
-+/*
-+ * Rather than using:
-+ *	if (!correct_condition0 or !correct_condition1)
-+ *		return err;
-+ * the `ENSURE` macro make this more readable:
-+ *	ENSURE(c0 && c1);
-+ */
-+#define ENSURE(cond)                    \
-+	do {                            \
-+		if (!(cond))            \
-+			return -EINVAL; \
-+	} while (0)
-+
-+static int type_check(struct bcf_checker_state *st, struct bcf_expr *expr)
+ static int __get_spi(s32 off)
+ {
+ 	return (-off - 1) / BPF_REG_SIZE;
+@@ -23378,6 +23395,145 @@ static int do_check_common(struct bpf_verifier_env *env, int subprog)
+ 	return ret;
+ }
+ 
++static int bcf_track(struct bpf_verifier_env *env,
++		     struct bpf_verifier_state *st,
++		     struct bpf_verifier_state *base)
 +{
 +	return -EOPNOTSUPP;
 +}
 +
-+static int check_exprs(struct bcf_checker_state *st, bpfptr_t bcf_buf,
-+		       u32 expr_size)
++/*
++ * Backtracks through parent verifier states to identify the suffix of the path
++ * that is relevant for register refinement in bcf_track(). Using backtrack_insn(),
++ * this routine locates the instructions that define the target registers and any
++ * registers that are transitively related. All states visited during this process
++ * collectively define the path suffix.
++ *
++ * Returns the parent state of the last visited state, which serves as the base
++ * state from which bcf_track() begins its analysis.
++ * The jump history from the collected states determines the suffix to follow.
++ */
++static struct bpf_verifier_state *
++backtrack_states(struct bpf_verifier_env *env, struct bpf_verifier_state *cur,
++		 u32 reg_masks)
 +{
-+	u32 idx = 0;
-+	int err;
++	struct bpf_verifier_state *base = NULL, *st = cur;
++	struct backtrack_state *bt = &env->bt;
++	struct bcf_refine_state *bcf = &env->bcf;
++	int first_idx = cur->first_insn_idx;
++	int last_idx = cur->insn_idx;
++	int subseq_idx = -1;
++	bool skip_first = true;
++	int i, err, log_level = 0;
++	u32 vstate_cnt;
 +
-+	st->exprs =
-+		kvmemdup_bpfptr(bcf_buf, expr_size * sizeof(struct bcf_expr));
-+	if (IS_ERR(st->exprs)) {
-+		err = PTR_ERR(st->exprs);
-+		st->exprs = NULL;
-+		return err;
-+	}
-+	st->expr_size = expr_size;
-+	st->id_gen = expr_size;
++	if (!reg_masks)
++		return ERR_PTR(-EFAULT);
 +
-+	st->valid_idx = kvzalloc(bitmap_size(expr_size), GFP_KERNEL);
-+	if (!st->valid_idx) {
-+		kvfree(st->exprs);
-+		st->exprs = NULL;
-+		return -ENOMEM;
-+	}
++	bt_init(bt, st->curframe);
++	bt->reg_masks[bt->frame] = reg_masks;
++	swap(env->log.level, log_level); /* Disable backtrack_insn() log. */
 +
-+	while (idx < expr_size) {
-+		struct bcf_expr *expr = st->exprs + idx;
-+		u32 expr_sz = EXPR_SZ(expr), arg_id;
++	for (;;) {
++		u32 history = st->jmp_history_cnt;
++		struct bpf_jmp_history_entry *hist;
 +
-+		ENSURE(idx + expr_sz <= expr_size);
++		if (last_idx < 0 || !st->parent)
++			break;
 +
-+		bcf_for_each_arg(arg_id, expr) {
-+			if (!expr_arg_is_id(expr->code))
++		for (i = last_idx;;) {
++			if (skip_first) {
++				err = 0;
++				skip_first = false;
++			} else {
++				hist = get_jmp_hist_entry(st, history, i);
++				err = backtrack_insn(env, i, subseq_idx, hist, bt);
++			}
++			if (err) /* Track the entire path. */
++				goto out;
++			if (bt_empty(bt)) { /* Base state found. */
++				base = st->parent;
++				goto out;
++			}
++			subseq_idx = i;
++			i = get_prev_insn_idx(st, i, &history);
++			if (i == -ENOENT)
 +				break;
-+			/*
-+			 * The bitmap enforces that each expr can refer only to
-+			 * valid, previous exprs.
-+			 */
-+			ENSURE(valid_arg_id(st, arg_id));
++			if (i >= env->prog->len)
++				goto out;
 +		}
 +
-+		err = type_check(st, expr);
-+		if (err)
-+			return err;
-+
-+		set_bit(idx, st->valid_idx);
-+		idx += expr_sz;
++		st = st->parent;
++		subseq_idx = first_idx;
++		last_idx = st->last_insn_idx;
++		first_idx = st->first_insn_idx;
 +	}
-+	ENSURE(idx == expr_size);
 +
-+	return 0;
++out:
++	bt_reset(bt);
++	swap(env->log.level, log_level);
++
++	/* Collect parents and follow their jmp history. */
++	vstate_cnt = 1;
++	st = cur->parent;
++	while (st != base) {
++		vstate_cnt++;
++		st = st->parent;
++	}
++	bcf->parents = kmalloc_array(vstate_cnt, sizeof(st), GFP_KERNEL_ACCOUNT);
++	if (!bcf->parents)
++		return ERR_PTR(-ENOMEM);
++	bcf->vstate_cnt = vstate_cnt;
++	st = cur;
++	while (vstate_cnt) {
++		bcf->parents[--vstate_cnt] = st;
++		st = st->parent;
++	}
++	bcf->cur_vstate = 0;
++	bcf->cur_jmp_entry = 0;
++	return base;
 +}
 +
-+static int check_assume(struct bcf_checker_state *st,
-+			struct bcf_proof_step *step)
++static int __used bcf_refine(struct bpf_verifier_env *env,
++			     struct bpf_verifier_state *st, u32 reg_masks,
++			     refine_state_fn refine_cb, void *ctx)
 +{
-+	return -EOPNOTSUPP;
-+}
++	struct bpf_reg_state *regs = st->frame[st->curframe]->regs;
++	struct bpf_verifier_state *base;
++	int i, err;
 +
-+static bool is_assume(u16 rule)
-+{
-+	return rule == (BCF_RULE_CORE | BCF_RULE_ASSUME);
-+}
-+
-+static u16 rule_class_max(u16 rule)
-+{
-+	switch (BCF_RULE_CLASS(rule)) {
-+	case BCF_RULE_CORE:
-+		return __MAX_BCF_CORE_RULES;
-+	case BCF_RULE_BOOL:
-+		return __MAX_BCF_BOOL_RULES;
-+	case BCF_RULE_BV:
-+		return __MAX_BCF_BV_RULES;
-+	default:
++	if (!env->bcf.available || st->speculative)
 +		return 0;
-+	}
-+}
-+
-+static int check_steps(struct bcf_checker_state *st, bpfptr_t bcf_buf,
-+		       u32 step_size)
-+{
-+	u32 pos = 0, cur_step = 0, rule, step_id;
-+	struct bcf_proof_step *step;
-+	bool goal_found = false;
-+	int err;
-+
-+	st->steps = kvmemdup_bpfptr(bcf_buf,
-+				    step_size * sizeof(struct bcf_proof_step));
-+	if (IS_ERR(st->steps)) {
-+		err = PTR_ERR(st->steps);
-+		st->steps = NULL;
-+		return err;
-+	}
-+	st->step_size = step_size;
-+
-+	/*
-+	 * First pass: validate each step and count how many there are.  While
-+	 * iterating we also ensure that premises only reference *earlier* steps.
-+	 */
-+	while (pos < step_size) {
-+		step = st->steps + pos;
-+		rule = BCF_STEP_RULE(step->rule);
-+
-+		ENSURE(pos + STEP_SZ(step) <= step_size);
-+		ENSURE(rule && rule < rule_class_max(step->rule));
-+
-+		/* Every step must only refer to previous established steps */
-+		bcf_for_each_pm_step(step_id, step)
-+			ENSURE(step_id < cur_step);
-+
-+		/* Must introduce a goal that is consistent to the one required */
-+		if (is_assume(step->rule)) {
-+			ENSURE(!goal_found); /* only one goal intro step */
-+			goal_found = true;
-+
-+			err = check_assume(st, step);
-+			if (err)
-+				return err;
-+		}
-+
-+		pos += STEP_SZ(step);
-+		cur_step++;
-+	}
-+
-+	/* No trailing garbage and at least two valid steps. */
-+	ENSURE(pos == step_size && cur_step >= 2 && goal_found);
-+
-+	st->step_cnt = cur_step;
-+	st->step_state =
-+		kvcalloc(cur_step, sizeof(*st->step_state), GFP_KERNEL);
-+	if (!st->step_state) {
-+		kvfree(st->steps);
-+		st->steps = NULL;
-+		return -ENOMEM;
-+	}
-+
-+	/* Second pass: fill in last reference index for each step. */
-+	for (pos = 0, cur_step = 0; pos < step_size; cur_step++) {
-+		step = st->steps + pos;
-+		bcf_for_each_pm_step(step_id, step)
-+			st->step_state[step_id].last_ref = cur_step;
-+
-+		pos += STEP_SZ(step);
-+	}
-+
-+	/*
-+	 * Every step (except the last one) must be referenced by at
-+	 * least one later step.
-+	 */
-+	for (cur_step = 0; cur_step < st->step_cnt - 1; cur_step++)
-+		ENSURE(st->step_state[cur_step].last_ref);
-+
-+	return 0;
-+}
-+
-+static int apply_core_rule(struct bcf_checker_state *st,
-+			   struct bcf_proof_step *step)
-+{
-+	return -EOPNOTSUPP;
-+}
-+
-+static int apply_bool_rule(struct bcf_checker_state *st,
-+			   struct bcf_proof_step *step)
-+{
-+	return -EOPNOTSUPP;
-+}
-+
-+static int apply_bv_rule(struct bcf_checker_state *st,
-+			 struct bcf_proof_step *step)
-+{
-+	return -EOPNOTSUPP;
-+}
-+
-+static int apply_rules(struct bcf_checker_state *st)
-+{
-+	struct bcf_expr *fact;
-+	int err;
-+
-+	verbose(st, "checking %u proof steps\n", st->step_cnt);
-+
-+	while (st->cur_step_idx < st->step_size) {
-+		struct bcf_proof_step *step = st->steps + st->cur_step_idx;
-+		u16 class = BCF_RULE_CLASS(step->rule);
-+
-+		if (signal_pending(current))
-+			return -EAGAIN;
-+		if (need_resched())
-+			cond_resched();
-+
-+		if (class == BCF_RULE_CORE)
-+			err = apply_core_rule(st, step);
-+		else if (class == BCF_RULE_BOOL)
-+			err = apply_bool_rule(st, step);
-+		else if (class == BCF_RULE_BV)
-+			err = apply_bv_rule(st, step);
-+		else {
-+			WARN_ONCE(1, "Unknown rule class: %u", class);
-+			err = -EFAULT;
-+		}
-+		if (err)
-+			return err;
-+
-+		st->cur_step_idx += STEP_SZ(step);
-+		st->cur_step++;
-+	}
-+
-+	/* The last step must refute the goal by concluding `false` */
-+	fact = st->step_state[st->step_cnt - 1].fact;
-+	ENSURE(is_false(fact));
-+	verbose(st, "proof accepted\n");
-+
-+	return 0;
-+}
-+
-+static int check_hdr(struct bcf_proof_header *hdr, bpfptr_t proof,
-+		     u32 proof_size)
-+{
-+	u32 expr_size, step_size, sz;
-+	bool overflow = false;
-+
-+	ENSURE(proof_size < MAX_BCF_PROOF_SIZE && proof_size > sizeof(*hdr) &&
-+	       (proof_size % sizeof(u32) == 0));
-+
-+	if (copy_from_bpfptr(hdr, proof, sizeof(*hdr)))
++	/* BCF requested multiple times in an error path. */
++	if (bcf_requested(env))
 +		return -EFAULT;
 +
-+	ENSURE(hdr->magic == BCF_MAGIC && hdr->expr_cnt && hdr->step_cnt > 1);
++	if (!reg_masks) {
++		for (i = 0; i < BPF_REG_FP; i++) {
++			if (regs[i].type == NOT_INIT)
++				continue;
++			if (regs[i].type != SCALAR_VALUE &&
++			    tnum_is_const(regs[i].var_off))
++				continue;
++			reg_masks |= (1 << i);
++		}
++	}
 +
-+	overflow |= check_mul_overflow(hdr->expr_cnt, sizeof(struct bcf_expr),
-+				       &expr_size);
-+	overflow |= check_mul_overflow(
-+		hdr->step_cnt, sizeof(struct bcf_proof_step), &step_size);
-+	overflow |= check_add_overflow(expr_size, step_size, &sz);
-+	ENSURE(!overflow && (proof_size - sizeof(*hdr)) == sz);
++	base = backtrack_states(env, st, reg_masks);
++	if (IS_ERR(base))
++		return PTR_ERR(base);
 +
-+	return 0;
++	err = bcf_track(env, st, base);
++	if (!err && refine_cb)
++		err = refine_cb(env, st, ctx);
++
++	if (!err)
++		mark_bcf_requested(env);
++
++	kfree(env->bcf.parents);
++	return err ?: 1;
 +}
 +
-+int bcf_check_proof(struct bcf_expr *goal_exprs, u32 goal, bpfptr_t proof,
-+		    u32 proof_size, bcf_logger_cb logger, u32 level,
-+		    void *private)
-+{
-+	struct bcf_checker_state *st __free(free_checker) = NULL;
-+	struct bcf_proof_header hdr;
-+	int err;
-+
-+	err = check_hdr(&hdr, proof, proof_size);
-+	if (err)
-+		return err;
-+
-+	st = kzalloc(sizeof(*st), GFP_KERNEL_ACCOUNT);
-+	if (!st)
-+		return -ENOMEM;
-+	xa_init(&st->expr_id_map);
-+	st->goal_exprs = goal_exprs;
-+	st->goal = goal;
-+	st->logger = logger;
-+	st->logger_private = private;
-+	st->level = level;
-+
-+	bpfptr_add(&proof, sizeof(struct bcf_proof_header));
-+	err = check_exprs(st, proof, hdr.expr_cnt);
-+
-+	bpfptr_add(&proof, hdr.expr_cnt * sizeof(struct bcf_expr));
-+	err = err ?: check_steps(st, proof, hdr.step_cnt);
-+	err = err ?: apply_rules(st);
-+	return err;
-+}
-+EXPORT_SYMBOL_GPL(bcf_check_proof);
+ /* Lazily verify all global functions based on their BTF, if they are called
+  * from main BPF program or any of subprograms transitively.
+  * BPF global subprogs called from dead code are not validated.
 -- 
 2.34.1
 
