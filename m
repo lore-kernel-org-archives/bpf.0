@@ -1,71 +1,71 @@
-Received: from mail-wm1-f65.google.com (mail-wm1-f65.google.com [209.85.128.65])
+Received: from mail-wr1-f68.google.com (mail-wr1-f68.google.com [209.85.221.68])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6420226E6E1
-	for <bpf@vger.kernel.org>; Thu,  6 Nov 2025 16:58:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FD5826E6E1
+	for <bpf@vger.kernel.org>; Thu,  6 Nov 2025 16:58:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.68
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762448302; cv=none; b=Zt++FMS6AdCZGQ4HQ+Roc/TVXBse4+fG9jLMwItPJ8Lwo9zVzSPg3lW66X7EZPCpBcDa6pJPfwaXOVLJnNs+NM0r4gfgetjEpGDp5bgmeBnssGljv+Iwj96C/FexQuDUrtadwrZ4Ef8hNXV1omvko3E8+H0YiG5pusZN79YXVlg=
+	t=1762448341; cv=none; b=Ukf538aobzAJofjkkLJckI/WZl/9aWJLnRY3qNX/H66Ujh1iz+kAud6olGT0qISqDHYUBxFL+hPzGXQTiH8KJTTFV7qqmewWE0f0PNNxeHVVGOr+9WaesPKsNPQx9jtaJBrraqIjqq0NkRyxbY8LXcC4uewmcUjHmHAYfYPpEeE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762448302; c=relaxed/simple;
-	bh=kqpThpdpCR24U65u3shZNMCSeHd1AWBJngrBJDxxEi8=;
+	s=arc-20240116; t=1762448341; c=relaxed/simple;
+	bh=xqqgssZ4oWteTyyLuvBKoFZSAaLAnMVLLgm1B4hykyA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=SlgaF9AHmtH2V0d7wSlGoP7UNAANdYXzZHjE+nwZTlMZAFKEjM1Lcv8RD+3qtD/2k4Mid4yLMTLYiI7/Fn8xxt6RAvGr7f5WaCdR8QCozo/7qXi4OLK25RiZ/z1KyknK4xOIT3KuN3OfPT3yL1Ab2fQm6k/4LmZ/UPLbdX/HKFc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Rtfj2ogm; arc=none smtp.client-ip=209.85.128.65
+	 To:Cc:Content-Type; b=pZjRyepvrxPy6FXOjh7vHp0g3UkAue5sJdey4AtRLP3E7471nXwzvRIjozpUxep3kKgYtUKMmbCUHRKh9D7p2IeKlsIFTBso73j+GCjuuaKIMQDJn+A5s0lpbipTe2Ka/UnW/qLBnHe+0UkMVVuq2NBxTqw75V/aQXHSOOKVwAE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ntUFrd7m; arc=none smtp.client-ip=209.85.221.68
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Rtfj2ogm"
-Received: by mail-wm1-f65.google.com with SMTP id 5b1f17b1804b1-47117f92e32so10113125e9.1
-        for <bpf@vger.kernel.org>; Thu, 06 Nov 2025 08:58:20 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ntUFrd7m"
+Received: by mail-wr1-f68.google.com with SMTP id ffacd0b85a97d-4298b49f103so507213f8f.2
+        for <bpf@vger.kernel.org>; Thu, 06 Nov 2025 08:58:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1762448299; x=1763053099; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1762448338; x=1763053138; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=wbX/VaVaJmq54B2qFPgebBeZKaiek/4l8XYUJ7XsEyE=;
-        b=Rtfj2ogmdIdJrAaAdYk0uRJBVlIXW6/7znAhSdElBkfHh5B3l8+Jo2NdPf7183elEH
-         IOkJE45qpoy75yshKmFKvjP3b6d+Wa2mLfkofk76yEpkUKe82ScqFqQF/zcCG7gdM/9W
-         2rtHnljJKcurWvhVCSqen3smB7FqJXT0rHjGSpT3XqxSP+KjcEkbM1lceXX6cBS1+tot
-         zo9Xl0UPLbVncQMrQwCkqM0QN2I+gQ9InnKISREv8il3cFsCilZ3lWLdUU64gr6Wbf4J
-         9+lvpT4ZV+iEkGp4eO2MibFnE5BLwgCyQHoT4T46rxXbtUmIDTzuFAFIQJP/fRx9GYE5
-         yccA==
+        bh=T1ykEgnEQMa67i2dn4lX8qtHALq32RtmFj5ElokQYKM=;
+        b=ntUFrd7m5PFqw5WIhK4Qzhr/Y0z5+lqQ0Z6SyUlkKQLSxg4VJUxk8N85g3/s+v4kyb
+         CKqS9MeFi2QWKnxD8VOZmytE+bwRJrv9YS5v1GHmh3L4/iP/iv7uCIsO31auCr3GHpeZ
+         DiER9CuPf4rLUlmlKkN25eDUYORAvrjfbdE/T6JbpleRHAV20n9YTyUwAGbTzP6Ys/mo
+         hEDhixAkUnGUnkB+Su4hHbb+pmACBteSCRan7Vk5wgdJ1MjZNgQSlALHYJlRAF3OUmXR
+         tlgXB7HDT2GrQU+22fm9Z5t3ymeKaqu6zDggyUoT7brrHVRBqKotwC4zN94ildWmP6vP
+         uQqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762448299; x=1763053099;
+        d=1e100.net; s=20230601; t=1762448338; x=1763053138;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=wbX/VaVaJmq54B2qFPgebBeZKaiek/4l8XYUJ7XsEyE=;
-        b=j+tsAg7GxcLTf65+U3/eEKmgaDvzy8kL1bzSZoDwYMGxl6x97zNa18QbQwuda3PZ5j
-         GiTycw3N0vX2MKJgVYSFwlaI981hBVxTUWYJ3ULagHZtjvtjmFPrhHCqF4r5WqDvS8gX
-         SGYt8I1F1U+tP3CxFtkKhs8ZlviwB+lKjxFFpljelPGiA9nqv35hSUR5leMjw/jmiH1y
-         7Df0XLF5QmO8cd9o4AaUqEbr9rnk1nT9ztm77tfN/OOEIkY5g0ileTawpeiBMjgHJg1p
-         jC3/pEq0U7uR2i9ws+XqxoDE1C6HvtMm5khGXioKhF1FzeLTLjibArr2qgp+JAE2rtIQ
-         wZ8w==
-X-Gm-Message-State: AOJu0Yz+tNl38X6O3GXvL1PgcznHTPHem2XvxPRjPssJnBebXoULIWni
-	Ks46MrKgU2slOO0+0Ue2X+f7lqrIC169wIh6pQ++qQwgob+aKUh0li3ZcH7ifgcinDWVQXWDZMK
-	bjq4dncen8reuPKZiDhY6V3nNefKfHVZShim7iQh5PA==
-X-Gm-Gg: ASbGncuNpEqBJcUBhwpBc9GdjKEJWyVfOcUYEQ4aNHtdCXYaBuTJLrwJMabQpE7UPma
-	0DHuSgrT4FbFwf+M9OmRB7+KsB2DL+lMxjys+oY7iycukSIrbFUMTwcqydI394iBGRFMZMMDohQ
-	UYo+9ohqbWfvKTBS0ee1PsjX79r5ih4PWyJJNZxIbf35g3pC81g1VXeiJbEqvyqiyNV7jKkwy+O
-	lPKyWdQJiPRU+SVP3VTmrcofTdXEMj4l+hgFt1GS0OpOIGdY3hE8XZcVoCsfWfoYjJunorFeUM+
-	mG7Mcl5kZobReLZyMqBIuXV/mPJPOW/h0PeE8SMA3xonOlRCFg==
-X-Google-Smtp-Source: AGHT+IHA3hjChE7t9NeXc2o4cBXaVfWgNJNVFc7EQmL+sVsEUKXhcITjC44Apy8+VnYxjak29O2/4PRqCBSxWnRliNs=
-X-Received: by 2002:a05:6000:615:b0:429:d6fa:da1e with SMTP id
- ffacd0b85a97d-429e32c5580mr7457476f8f.5.1762448298615; Thu, 06 Nov 2025
- 08:58:18 -0800 (PST)
+        bh=T1ykEgnEQMa67i2dn4lX8qtHALq32RtmFj5ElokQYKM=;
+        b=U45oTncMVDbRGN4UFMs/Q6lIEJugFdwkPsYYCm1/9AKBhqSbBbxMw13YpszDhSvXCS
+         iGzHmu3qIrh/e3iSYme0gk74jBL/5GZUkSupPgan1vFfm/a1iRmxtBAeofhOQ5oyK5eP
+         BNLDHis6Lcba0j9r7JYA/ifQ884MtWLhIYmSuSmzg7ItiPS5Rm9NwlSjeBkDn0NcdOf8
+         wXw5ulVsfvi0npVpvfS15CrKMjzLdahaSWta8LhDMbAJsDOgOBG7vBoLu0x4GjWuNDU8
+         9nqHGT2iXmzcmRlL+NbyRbL/+vPGqaDXpGooYRzbpDd1hpcOWbiX61IZdobb5sz4lYPM
+         nOXg==
+X-Gm-Message-State: AOJu0YyivRtfBZOcU/aokzNR7Ghisj4miESHnyIf7Vyr/77KlzsoLNo+
+	oaF6xauQmP9zVHo/ZgZJ8uvX4gyGt81zH047IK+ctdOJhE82m5yWR9PlNWWQueYXKGia257Ncx7
+	MgIQEpJsERknl5vF+F0YWrUsAsoCqzmE=
+X-Gm-Gg: ASbGncvj2CiQI477YywZ4a9TM7QHF2jEz6+K/YwqokDDWvlBMFlksZ8SC5j5C6tfRrU
+	QMiFpOr4XCLaDeHLwDvGjtvRrbg9yqCXuYHoER8YldZxrDwTeI3cCyyCIRPGQKxiNKRvv3KGhd+
+	tMIJ8P+Mglctek7eK3Yu3jYfPqqdiR0pIW2C3nHo11L8k8xf7oQOC/oBaUFFqfO3GbRLPdzeKBN
+	een7H/4iWm6A3alEqHGlfYL/eVuANdjIBriJnstYZrZbnvsLrzbz00Vi9HBnpXqF0rTYTL3VSpn
+	bmyo0xZm66d4YHM9j0FqoQpyMPtIPhaew3OSbsOPN1HHcvnZuA==
+X-Google-Smtp-Source: AGHT+IHsfjs6XbmxDIzAbJMQ922alGN+dX6PD2PCqd4bJxnjbQryi8f66Vro7SUMmN8AgCqde/C+NofOD3DZrcnHYGI=
+X-Received: by 2002:a05:6000:200b:b0:429:c774:dc00 with SMTP id
+ ffacd0b85a97d-429e330d579mr6837266f8f.52.1762448337805; Thu, 06 Nov 2025
+ 08:58:57 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251105-timer_nolock-v2-0-32698db08bfa@meta.com> <20251105-timer_nolock-v2-2-32698db08bfa@meta.com>
-In-Reply-To: <20251105-timer_nolock-v2-2-32698db08bfa@meta.com>
+References: <20251105-timer_nolock-v2-0-32698db08bfa@meta.com> <20251105-timer_nolock-v2-3-32698db08bfa@meta.com>
+In-Reply-To: <20251105-timer_nolock-v2-3-32698db08bfa@meta.com>
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date: Thu, 6 Nov 2025 17:57:40 +0100
-X-Gm-Features: AWmQ_bkgnr8ZE3wxAuNK4n_Zyamn9Vq1_wAkUYgJoRsuCGXfrbBnKTHWsq1GynU
-Message-ID: <CAP01T77bZrHM88XS5ZuT-po-em-NMns35afPomd4Wdzd8SWpAA@mail.gmail.com>
-Subject: Re: [PATCH RFC v2 2/5] bpf: refactor bpf_async_cb prog swap
+Date: Thu, 6 Nov 2025 17:58:21 +0100
+X-Gm-Features: AWmQ_bk8pDeHXWAoqTXNxoyALmclAgsJN2RnfUhbyCWwIUod4Cxj0_Py02xNcc4
+Message-ID: <CAP01T77fUJgFxVuPbTqdcQgzNwkZFhMGmYut4R0sB97rVSkp0g@mail.gmail.com>
+Subject: Re: [PATCH RFC v2 3/5] bpf: factor out timer deletion helper
 To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
 Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
 	daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com, eddyz87@gmail.com, 
@@ -76,8 +76,8 @@ On Wed, 5 Nov 2025 at 16:59, Mykyta Yatsenko <mykyta.yatsenko5@gmail.com> wrote:
 >
 > From: Mykyta Yatsenko <yatsenko@meta.com>
 >
-> Move the logic that swaps the bpf_prog in struct bpf_async_cb into a
-> dedicated helper to make follow-up patches simpler.
+> Move the timer deletion logic into a dedicated bpf_timer_delete()
+> helper so it can be reused by later patches.
 >
 > Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 > Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
