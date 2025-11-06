@@ -1,125 +1,158 @@
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-180.mta0.migadu.com (out-180.mta0.migadu.com [91.218.175.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A2A834E759
-	for <bpf@vger.kernel.org>; Thu,  6 Nov 2025 17:15:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44F8434B1A8
+	for <bpf@vger.kernel.org>; Thu,  6 Nov 2025 17:16:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762449357; cv=none; b=a1ct95ulLWJzwkcZDReS9yYNEK8eN26fUtQ2oLaBnu9+1k1lHLDW5cvPsdRunFwSnxABEw7Rh13OgVJS4EwvoYYoJ49+kpMFW4fFD/lehzOKanaUEMMoocgv8m+pfue0YeuDzGybvMwvxbcHMXXrCOSH8evrn4U/P5eG+S3F564=
+	t=1762449367; cv=none; b=OTyhG7FD2F715xpFmqbncw7OTPn1xHNkaCKqx1bIOaF9fmJI0clpnkyvbg6wM3E1BaeZJ2QZWOl1grVCMpoF9KaK+IZHxBo/IxLuXp+eHgP3jiCz8sOJlrIA/MDZWvODVpMufzTkVLdQcJsZoEocQO2Ty3NxVgAFqsG2k+vcRAU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762449357; c=relaxed/simple;
-	bh=H2cS17IPARzauQUtP+qWzfi7eoIsYAbWRbTvkXZaQTg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=l/A8vjherB2TA3RCO0W32O+3o+jzV3tBRIDw5AIlhZr7oi+fUKClTF8b4WW4C5eYnD/5Mtr6YhjHwYaFyHoRdGhvccRWnMGga+xjG/bzlt2SW/2wMwckqFHNBNQrVKd+lcU3VHxAhRm4X09DOW7fRXCCLOXU7YG8eB9bBoSwFv0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eA/qHfi9; arc=none smtp.client-ip=209.85.221.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1762449367; c=relaxed/simple;
+	bh=/tqiapIUWbTn7JSjOxYlsJYQVBW7fw0LQMUYqKA3eFw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=e88dOS8RhJfkcz8P6nMaBS4IO03ImzuGCIR2lMRupgD0W18oj/oCW92jRGJop7Bt4ylYwhZyihugc0oFqFIBvY0AZgSSKarI/hEtj1Tls/D32bQ8UqBsXodz/9Pqfc0mlQIwlOfkaiM6yx7/3bk51MlvZujI7hONl9vdOfvyg04=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=r2Vixb8U; arc=none smtp.client-ip=91.218.175.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eA/qHfi9"
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-421851bcb25so663261f8f.2
-        for <bpf@vger.kernel.org>; Thu, 06 Nov 2025 09:15:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1762449354; x=1763054154; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=blWgJL5IxiaRL16DgffEZwhTofGP5Amd3llZBVcR6wg=;
-        b=eA/qHfi9Jq8NpptxUxpaAL7fU1dAuDBcsbsYZjsECV0pqx5Alx9HVq42E76RtZeRJQ
-         OO59BPCfggs0+XIopTU2CYLQwj7gQLpbdUWBoIg4wwnAA7HfxFY6hoajg6hnU0BnEWoF
-         FAqs1CRyqchrplgrrRg9SJ1/npAMxe8Ln9wYlH8ecZzhadjCXkpT+1hsCfcTT9JZPkYW
-         piug8OOONU7UjG6Z2VoeWMeLMfrGjDDSg0f5C7oUU4XhwQ+lHLojTWSg7gaP07+JJ7My
-         Z2uxjqUO6DT7dNC1bI4LyrXE2mmVAfnJ10V9vNcDJVJVJBmZHhTUznpC/en67AVtf7/i
-         mWaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762449354; x=1763054154;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=blWgJL5IxiaRL16DgffEZwhTofGP5Amd3llZBVcR6wg=;
-        b=ENfk4Bkd4EvtVMj1Vz8XduXyekdNQrSWhrOXHPKI0WM74opO8Fvo8PP1G42as8zO6d
-         LJVDRJFHK68q5ydQ18iVkM04LSlTkc8Hge72kXJOBKaFQLoEuMWg69Ni/e/7QIUQsSx3
-         J2IDovsCT/qAajdBbpU9NIcYt0PDCwhhpn09CBwXyLz4gt91e8TQD7C08fUvcR2vLQ/v
-         miIuqBQtld7g+VrWVbXGRcd/atVELkV6HWdq6YvxJNP/OgtoxLNBmLb2czkUgI32D4ij
-         4iPgc25tcRQkyKt0Yyti3gsctWxpv+08qQOqzoC2yLJRhW36L6unpTh25Ypi+u75UeR0
-         rdRA==
-X-Gm-Message-State: AOJu0YwgLobzdiGSTmeqfRSXcmkgvPwE5ZFuO8gUAcVE6yd60ocU4v/x
-	2WiX38yTjpeNS8FZY8bSxkzpz3sqOujaETYKxIGm5KIcK4u8UsV+Aend8uUWxcBGxiFVquvDy7C
-	0jlbFZ03iz8fnsA6Wd/jhif2jLWbErPE=
-X-Gm-Gg: ASbGncsxRJzx8sjqlT1IhVSgVr86gLWXRl3+QeypyW5gopVucljv+S12hy7ta5K2ihS
-	YsW/Ua+Nl0CzjDppp7l9OAJ2OxshpCIuajxdB/a/KWYQRZDpX2/Y+yrdp8gfkJG37oC9XTcJ0wg
-	/2V0jC2GvjNokD63Ctpx/w6vym5922kDfcaz3hXKwGtITjnEjVkTL1cefTtmQ5a3frfSR/WHngv
-	yDaGSGB5LzHTh3klIWUFC6ShAYonMZkdnxKO4PZeSEqZ5X/ZFz3PJ2VyZhdo3Ww2ptgWnqOQWL0
-	ZPGxurWv094=
-X-Google-Smtp-Source: AGHT+IEkK0dq7MPy5gKtDs3GydYbk6HCGOnP+RQCC45EaWNnFendOZxIEe/PmbwzRNoV29lOxJ6e1gwjudaVlKrYwUg=
-X-Received: by 2002:a05:6000:402b:b0:401:5ad1:682 with SMTP id
- ffacd0b85a97d-429e32e3662mr6502221f8f.14.1762449353513; Thu, 06 Nov 2025
- 09:15:53 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="r2Vixb8U"
+Message-ID: <c4e481e6-570e-45bc-b390-fa21192782f8@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1762449361;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=kFjA5axoqhZvhTZ//Ppasioa8gS/l2K8N0jIR7SCV9w=;
+	b=r2Vixb8UTCSHRlBwfuCdPRax36X8bmhbl0QmrqLb1fMN+Mz5fLwSs6a0T1WvOGq91Bh/4S
+	u74u+pno4t629iEVGtsfcuKukAlNxNJWisvx2e1inmzhUoAc4tlH3sR7BfrIGmAKnkRAIB
+	ZP56sJQVu9iTnLTy7aeRDiAC95DT1Co=
+Date: Thu, 6 Nov 2025 09:15:54 -0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251106052628.349117-1-skb99@linux.ibm.com>
-In-Reply-To: <20251106052628.349117-1-skb99@linux.ibm.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Thu, 6 Nov 2025 09:15:39 -0800
-X-Gm-Features: AWmQ_bmSdrU6gIkuTnrWchxD2V9GU7o86PagWBY2wUCtwzPV40XsTw0vi6aljfo
-Message-ID: <CAADnVQL3njbb3ANFkDWYRC-EHqAqWSwYs4OSUeKiw4XOYa+UNQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] selftests/bpf: Fix htab_update/reenter_update
- selftest failure
-To: Saket Kumar Bhaskar <skb99@linux.ibm.com>
-Cc: bpf <bpf@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Hari Bathini <hbathini@linux.ibm.com>, sachinpb@linux.ibm.com, 
-	Venkat Rao Bagalkote <venkat88@linux.ibm.com>, Andrii Nakryiko <andrii@kernel.org>, Eduard <eddyz87@gmail.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH bpf-next v4 2/3] net/smc: bpf: Introduce generic hook for
+ handshake flow
+To: "D. Wythe" <alibuda@linux.alibaba.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ pabeni@redhat.com, song@kernel.org, sdf@google.com, haoluo@google.com,
+ yhs@fb.com, edumazet@google.com, john.fastabend@gmail.com,
+ kpsingh@kernel.org, jolsa@kernel.org, mjambigi@linux.ibm.com,
+ wenjia@linux.ibm.com, wintera@linux.ibm.com, dust.li@linux.alibaba.com,
+ tonylu@linux.alibaba.com, guwen@linux.alibaba.com, bpf@vger.kernel.org,
+ davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+ sidraya@linux.ibm.com, jaka@linux.ibm.com
+References: <20251103073124.43077-1-alibuda@linux.alibaba.com>
+ <20251103073124.43077-3-alibuda@linux.alibaba.com>
+ <4450b847-6b31-46f2-bc2d-a8b3197d15c7@linux.dev>
+ <20251105070140.GA31761@j66a10360.sqa.eu95>
+ <dfed97fb-4e0c-416e-b5d8-8de7b3edce69@linux.dev>
+ <20251106023302.GA44223@j66a10360.sqa.eu95>
+ <d6a53bed-b197-432c-84e5-ac324b36137e@linux.dev>
+ <20251106083429.GA35123@j66a10360.sqa.eu95>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <20251106083429.GA35123@j66a10360.sqa.eu95>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Wed, Nov 5, 2025 at 9:26=E2=80=AFPM Saket Kumar Bhaskar <skb99@linux.ibm=
-.com> wrote:
->
-> Since commit 31158ad02ddb ("rqspinlock: Add deadlock detection and recove=
-ry")
-> the updated path on re-entrancy now reports deadlock via
-> -EDEADLK instead of the previous -EBUSY.
->
-> The selftest is updated to align with expected errno
-> with the kernel=E2=80=99s current behavior.
->
-> Signed-off-by: Saket Kumar Bhaskar <skb99@linux.ibm.com>
-> ---
->  tools/testing/selftests/bpf/prog_tests/htab_update.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/htab_update.c b/tools=
-/testing/selftests/bpf/prog_tests/htab_update.c
-> index 2bc85f4814f4..98d52bb1446f 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/htab_update.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/htab_update.c
-> @@ -40,7 +40,7 @@ static void test_reenter_update(void)
->         if (!ASSERT_OK(err, "add element"))
->                 goto out;
->
-> -       ASSERT_EQ(skel->bss->update_err, -EBUSY, "no reentrancy");
-> +       ASSERT_EQ(skel->bss->update_err, -EDEADLK, "no reentrancy");
 
-Makes sense, but looks like the test was broken for quite some time.
-It fails with
-        /* lookup_elem_raw() may be inlined and find_kernel_btf_id()
-will return -ESRCH */
-        bpf_program__set_autoload(skel->progs.lookup_elem_raw, true);
-        err =3D htab_update__load(skel);
-        if (!ASSERT_TRUE(!err || err =3D=3D -ESRCH, "htab_update__load") ||=
- err)
 
-before reaching deadlk check.
-Pls make it more robust.
-__pcpu_freelist_pop() might be better alternative then lookup_elem_raw().
+On 11/6/25 12:34 AM, D. Wythe wrote:
+> On Wed, Nov 05, 2025 at 08:16:45PM -0800, Martin KaFai Lau wrote:
+>>
+>>
+>> On 11/5/25 6:33 PM, D. Wythe wrote:
+>>> On Wed, Nov 05, 2025 at 02:58:48PM -0800, Martin KaFai Lau wrote:
+>>>>
+>>>>
+>>>> On 11/4/25 11:01 PM, D. Wythe wrote:
+>>>>> On Tue, Nov 04, 2025 at 04:03:46PM -0800, Martin KaFai Lau wrote:
+>>>>>>
+>>>>>>
+>>>>>> On 11/2/25 11:31 PM, D. Wythe wrote:
+>>>>>>> +#if IS_ENABLED(CONFIG_SMC_HS_CTRL_BPF)
+>>>>>>> +#define smc_call_hsbpf(init_val, sk, func, ...) ({		\
+>>>>>>> +	typeof(init_val) __ret = (init_val);			\
+>>>>>>> +	struct smc_hs_ctrl *ctrl;				\
+>>>>>>> +	rcu_read_lock();					\
+>>>>>>> +	ctrl = rcu_dereference(sock_net(sk)->smc.hs_ctrl);	\
+>>>>>>
+>>>>>> The smc_hs_ctrl (and its ops) is called from the netns, so the
+>>>>>> bpf_struct_ops is attached to a netns. Attaching bpf_struct_ops to a
+>>>>>> netns has not been done before. More on this later.
+>>>>>>
+>>>>>>> +	if (ctrl && ctrl->func)					\
+>>>>>>> +		__ret = ctrl->func(__VA_ARGS__);		\
+>>>>>>> +
+>>>>>>> +	if (static_branch_unlikely(&tcp_have_smc) && tp->syn_smc) {
+>>>>>>> +		tp->syn_smc = !!smc_call_hsbpf(1, sk, syn_option, tp);
+>>>>>>
+>>>>>> ... so just pass tp instead of passing both sk and tp?
+>>>>>>
+>>>>>> [ ... ]
+>>>>>>
+>>>>>
+>>>>> You're right, it is a bit redundant. However, if we merge the parameters,
+>>>>> every user of this macro will be forced to pass tp. In fact, we’re
+>>>>> already considering adding some callback functions that don’t take tp as
+>>>>> a parameter.
+>>>>
+>>>> If the struct_ops callback does not take tp, then don't pass it to the
+>>>> callback. I have a hard time to imagine why the bpf prog will not be
+>>>> interested in the tp/sk pointer though.
+>>>>
+>>>> or you meant the caller does not have tp? and where is the future caller?
+>>>
+>>> My initial concern was that certain ctrl->func callbacks might
+>>> eventually need to operate on an smc_sock rather than a tcp_sock.
+>>
+>> hmm...in that case, I think it first needs to understand where else
+>> the smc struct_ops is planned to be called in the future. I thought
+>> the smc struct_ops is something unique to the af_smc address family
+>> but I suspect the future ops addition may not be the case. Can you
+>> share some details on where the future callback will be? e.g. in
+>> smc_{connect, sendmsg, recvmsg...} that has the smc_sock?
+> 
+> The design scope of hs_ctrl (handshake control) is limited to
+> the SMC protocol's handshake phase. This means it will not be involved
+> in data transmission functions like smc_sendmsg and smc_recvmsg, Instead,
+> its focus is on:
+> 
+> 1. During the TCP three-way handshake
+> 2. During the SMC protocol's own handshake. (proposal -> confirm ->
+> accept)
+> 
+> Within the SMC module, hs_ctrl's primary future call points are
+> concentrated within the __smc_connect() and smc_listen_work(). These
+> two functions cover the SMC protocol handshake process.
+> 
+> And we have a plan involving private extensions to the SMC protocol.
+> In the SMC protocol, different implementers can extend protocol functionality
+> based on their Vendor Organizationally Unique Identifier (vendor_oui). You might
+> notice that currently, the SMC implementation only has this vendor_oui field,
+> but without corresponding functionality. This is highly significant for our
+> applications, as many of our internal features rely on these private extensions.
+> However, due to their inherent nature, these private features cannot be
+> upstreamed. Therefore, BPF is the best way to implement these. Since
+> these private extensions are essentially part of the SMC handshake
+> process, hs_ctrl has become our first choice.
+> 
+> Beyond that, we are also considering other minor extensions to be
+> implemented via hs_ctrl. These include assisting in the selection of the
+> appropriate SMC device type and making decisions regarding which RDMA
+> GID to use. (also in __smc_connect() and smc_listen_work()).
 
-pw-bot: cr
+Thanks for the details.
+
+Regarding the "net" passing and the future smc_sock, the net can still 
+be obtained from smc_sock. It seems like a naming change on "tp" is 
+needed when it may be a smc_sock in the future. It is a nit, so I will 
+leave it as a fruit of thought for you and feel free to ignore.
+
+Please re-spin.
