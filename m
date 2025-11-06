@@ -1,61 +1,61 @@
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADAD033032D
-	for <bpf@vger.kernel.org>; Thu,  6 Nov 2025 12:53:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ABA4336EE3
+	for <bpf@vger.kernel.org>; Thu,  6 Nov 2025 12:53:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762433624; cv=none; b=gGzqUCQ15K04dnYv18hMhedNGgWJ9x9kVN+mEjBOzWqgfLN7RMiPI4A0eDQtJb1udi1OHMfDo+WzD9OpxZV/Z/PlWwvCqkwue8d2v7RD9SO9V+EhLLMbVLe41Jzc1TEv/epJwvuuPNYRtMxGMgIqXhNAjTDktDEvWzQBolJWAG0=
+	t=1762433625; cv=none; b=MaJ76YGg1rB+gqxd+U7nwTQzJsB/7RPZG4hNO+tel+gJRQUU0BUmbbNwOwg9osACtDDDbxOrD5rJvGLoVWLEJP9wSsi9k54zSPKuhEwbNg86kdPmHX6RpUq9ElGezGIqTe0ftQbMYHJbZ6t1C2rq+Kgp12zqF5qyLz4W1A51p0c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762433624; c=relaxed/simple;
-	bh=nJMaLGpKEmP3DsyD+IyFFczvrWgzDb+7/77EaIxg+NE=;
+	s=arc-20240116; t=1762433625; c=relaxed/simple;
+	bh=gYI3PPdY/pxVI3TQMaLHa1tG9D9Q3pX163qPj6Y+5JI=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=qNwiDU6Qi64eAa32krLq5jM8s6FLSjsAkLsB8811GVI4GuluzPrSNJZav0OhGz/pLdjH3JagmHL4N4YW4+h2tX0hVChQfwyMA81+V2ak7jMeovGEe3zXNzBpfNgd3jc9x+SVuahVWJOrW4Bqwdg37xTtiwN7ua7fBEGkCV6iD5Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Bx+O8LXv; arc=none smtp.client-ip=209.85.221.46
+	 MIME-Version; b=kKePRtJFC2JdXRov73R3upbfs/dMJa8ddlW44nUjRruZ1006Vd5Ovh6PRBn/dNQokwK+3JDVUJh0iOM3VowrVop7v8VPaiMLYf40Bv/LdtXcrNAEsNdBiK/dMzdcxGKj+vf+pItnJ70QNmVX7YIqaK2UHzz0I24BaDKEVnp3gDk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X2KG0TNH; arc=none smtp.client-ip=209.85.221.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Bx+O8LXv"
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-429c7f4f8a2so1098571f8f.0
-        for <bpf@vger.kernel.org>; Thu, 06 Nov 2025 04:53:41 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X2KG0TNH"
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-42421b1514fso516576f8f.2
+        for <bpf@vger.kernel.org>; Thu, 06 Nov 2025 04:53:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1762433619; x=1763038419; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1762433620; x=1763038420; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Gboyt37Ov9MOTTH/KPaW8uj5vESoPgNEDU8dO3DpPF0=;
-        b=Bx+O8LXvxiiSTcAE6E8Z0YHAr8UcvU4LFsOvQf/bttKd2WtVNM80bh9xYhBuQ7Scoy
-         WdIIb5Fa+y/+3p6Hy6T+viHpCkl55dsvdGLw9ZCBA0nI89NiCk3MBGMSR+aGDRIk1+Ic
-         hbPgXhSPulZ7VGIAtkFDUX7LRVayoa0gwRiSBazFfpCf5+M2Fx/EkJhBYYTUqM8SrMwK
-         0hCGuSS4wnPXikaQob3ZuWDPTFCrXuTvXceP66MxUNadN+3ToqJet1EnIkqJCD3SupQW
-         znBNlqMxmQOrqhbEp37Mf0NwSL64nsAgZX4OCyAkrBydRvfpPcuh6tvckDD1qht2HRxt
-         6i9g==
+        bh=8vW1pnqHWzKhRlujJQJ97tr37TfsN4Lo7m0CG+Gl/ro=;
+        b=X2KG0TNHHBut73oYurbxKGyoBsCoxsWO0/djDjSJhUdgXanM0xsOGO3BA5PG5pNDVA
+         i3UE5jWSPa0Q5y1za81R29fj/1WP+u8gidGRtxUz/c9diDzPTtuAFMyy7utdW4gjusiD
+         rI5Hl1KU2s4i67tn1sO7GoCpB/rNpLoQQyQfbn+ZlkC37kaT5RNjmhobqcb+y08JuUes
+         Yi4xcnZwHP2EGbUU+Gwe4HPf+lk7dfmmAITRJJtv1gFXJJNProD694zx0pwKQAaEctfg
+         I/Bu7hBIrgWRmSw21STgBleUqLpwJ9O4ITxaQDcpAykyTW2KTfN2v9a8JMMoRwaR4kKC
+         5PBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762433619; x=1763038419;
+        d=1e100.net; s=20230601; t=1762433620; x=1763038420;
         h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=Gboyt37Ov9MOTTH/KPaW8uj5vESoPgNEDU8dO3DpPF0=;
-        b=m5au9jw0JDpfK9vl0cJ29TMhAOhq2889vQ/FLUl52RY4n6Uv/iEt6y+colPWqImz5T
-         0U9ZbUhWd6R914ljgLYHO/rRTubeBnXt/EyQ5iN8cLOu8XLDPYfnfu6IFNN/hejVD4ju
-         smhVheqrvSs6rnyFO8Y+PM/VdqchJY3gbYS72yezQ5GcNBiuFFkaKieekvFtKQ2KcFIQ
-         OTdwI7EB6Q/jG/5tAx6blCyh1j2R2El5jr/loUHSMfpG+Qd7ahTfFD5vTnmLGtgr5Y6/
-         2AH94PKAKEQetMsyGxOK2s8AfIUhXnwZqaLRo73FmJOVLS9ooRY5Mct+C/OqUlBJcLQs
-         SVSg==
-X-Gm-Message-State: AOJu0YzSeQKef3Cs9mZXnmaBtVV+1RPERybGllCw3Um6r0IEEGu/R074
-	1WEEvEANPBtZMRY9mH4xsa3kNcEuBdaLZxSypXlE7JtYCVeq+/d4fhsm8rXq
-X-Gm-Gg: ASbGncvMvkZ5EkX0lwab9z6BAKjnFk883b6DSWMX0xXzRYTShuZYagYHLII94rWnNNb
-	X0h65hoFELf1IPIAiCCut9XVIjcJYSWyTWXDikfBM5/FvCeDyQ5JfhtX/PTHnZ/Grp/ehvVWTzB
-	vwFEu8/8NDd3A9B+Gu6UyhNBdy/MmfjAanksCu7h2/jeFquGrz98eJbfD+HGB7/gxwNVsgH9RS0
-	YPOI3URDIdMQxWiO5Y+c4RWoBuY333sYmvQekJpgv0VMqHWc9AXWyrM3Ckqq3Z8zE3Jbxk8iWtT
-	NpQLIUjuQyy9I1W5ZA40aHU5V+EFj1IPIPjDEWR5pL5os8lYqKpvUyebDTlKXIUnDKIze/lKHeP
-	/nTbP0AzgnZK+eaRtEKIfYnU2UyIfi+ChYplJWpfSA+UzjDZpYVKLTY0ujCTB1KfOjjKNplf4jI
-	KjqaEfI47PJbDZ5Qmt67uJP8POpcO9nS53CpQ8N2ZQxb5GC39RHHxIGM0=
-X-Google-Smtp-Source: AGHT+IE2d3CRUrs2Qxa0+9muOrmRjSuRP78wlr1433ZpQlc/ZIYdsLyGsliVtRU0kPFyTQ8p1N80tw==
-X-Received: by 2002:a5d:5f54:0:b0:429:bb77:5deb with SMTP id ffacd0b85a97d-429eb1d0d12mr3086191f8f.31.1762433619310;
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8vW1pnqHWzKhRlujJQJ97tr37TfsN4Lo7m0CG+Gl/ro=;
+        b=nIMxj3xXlK+b7eokCi0ycENoHpmY0q2lPIzh/g3ly57Cs1GK+zicJ81OxigM7ZvVM5
+         ZKILMR5VQ7lHkiLBAfZJYGYQ/B5lpRg2sspTqkLlRdyJUjENXdAlJh+R7+mYb/e9CNpT
+         dX51FreSI2AwDjPjGpDlKsHKn169AyyNv0QGXgx5LDi6K3gynn/2wkoJGMF+pMX/d06Y
+         SVOL/TwZEPM70cKKuBlNT+LTU3472k8p9hCjzLusX1sa0d0JMlC6jIi5zlZ6OqMTbx54
+         N4reMoBSW8mZ3BB/NJcRsk7hxrp9mL3OLNXGfXTiNxYCJeqBZ70K1PPYM61p9poEobLn
+         L/SA==
+X-Gm-Message-State: AOJu0YwcJiomK9hyGZdb5rRMBHit5VFKwCF3SijgIJQgL491wfAkxIEU
+	AF5M3rvKTbaJVHPc4ZsXxXMOMjt3/NaMRxdcZ1Q2xpmAeRWRCZvqTHyfVV/Y
+X-Gm-Gg: ASbGncuRjdc9EXtGGlhFMB6AZU49+NigYJZF5gHrhZosRGtj6j8cjZ+YERED//G90xf
+	hxr1qjZ8ZebbcwwXZ+i5dGvFu5bMvWbeuN6UtA9k4vRtn+9v8o0t1lZ0HH6joHzKN8l97GTu5Wv
+	FX9ORI/t5Mi63sybpBe0njXvRk3cZv0M3nRigozso3/nz0UXFIbOZxl6LEflt2cup8KSMf+Xdyy
+	OMQ8hRvJmTc+UGclwrQ6kT/AXAdbhBxLaVOc7YwPpbk9WL/v0h/FL1z5eTq3ueO+zzeEq0PcGJ/
+	7O2huX1tt2mBH9gl9KzkmII1JD/EfMc5OKyE+OZXdVLbQLITJQSP9UFsVbpVYn63WZn2U1J9QXx
+	UkdHVrokv/eYA9Nf2J5SMisob2W5VjtiSEonDoXkZVq41Ritfpe5JffCG40jNpdQGwpKsFfTVNa
+	dWsXym7iomt2etPf+H/ykGfvTZ4Jdpcwg7a13pjqf86lpoAaw7g7PzddY=
+X-Google-Smtp-Source: AGHT+IF67KTAG0Z+EcRSvv3TCoZ31iPTiYggpF50xcRnauZWBkj9PGoXZ+O8tYHDr6SE2qfIi6fvvw==
+X-Received: by 2002:a05:6000:3101:b0:429:8cda:dd4e with SMTP id ffacd0b85a97d-429e33079fbmr6395601f8f.32.1762433619927;
         Thu, 06 Nov 2025 04:53:39 -0800 (PST)
 Received: from ast-epyc5.inf.ethz.ch (ast-epyc5.inf.ethz.ch. [129.132.161.180])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-429eb40379esm4788856f8f.9.2025.11.06.04.53.38
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-429eb40379esm4788856f8f.9.2025.11.06.04.53.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Thu, 06 Nov 2025 04:53:39 -0800 (PST)
 From: Hao Sun <sunhao.th@gmail.com>
@@ -72,9 +72,9 @@ Cc: ast@kernel.org,
 	linux-kernel@vger.kernel.org,
 	sunhao.th@gmail.com,
 	Hao Sun <hao.sun@inf.ethz.ch>
-Subject: [PATCH RFC 06/17] bpf: Add bcf_match_path() to follow the path suffix
-Date: Thu,  6 Nov 2025 13:52:44 +0100
-Message-Id: <20251106125255.1969938-7-hao.sun@inf.ethz.ch>
+Subject: [PATCH RFC 07/17] bpf: Add bcf_expr management and binding
+Date: Thu,  6 Nov 2025 13:52:45 +0100
+Message-Id: <20251106125255.1969938-8-hao.sun@inf.ethz.ch>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20251106125255.1969938-1-hao.sun@inf.ethz.ch>
 References: <20251106125255.1969938-1-hao.sun@inf.ethz.ch>
@@ -84,114 +84,360 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Add `bcf_match_path()` to constrain `bcf_track()` to the recorded path suffix
-from parent states. The function consumes the per-state jump history arrays in
-order and compares each (prev_idx, idx) pair against the verifier’s current
-(prev_insn_idx, insn_idx):
+Add expression arena management for BCF tracking and lazy binding of symbolic
+expressions to registers during `bcf_track()`.
 
-- If the current pair matches the top entry, advance to the next history entry;
-  when the last entry is consumed and the last state's last_insn matches, stop
-  tracking (PATH_DONE).
-- If the pair mismatches at a branch point, abandon the current fork
-  (PATH_MISMATCH) so the tracker pops the path.
-- Otherwise, continue (PATH_MATCH).
+- Arena management: `bcf_alloc_expr()` grows `env->bcf.exprs` with
+  reallocation in chunks; `bcf_add_expr()` copies a built node; `bcf_build_expr()`
+  constructs nodes with varargs.
 
-`do_check()` is updated under tracking mode to call `bcf_match_path()` before
-processing each instruction and to terminate early on PATH_DONE, ensuring only
-suffix instructions are symbolically analyzed.
+- Predicates/constraints: `bcf_add_pred()` creates boolean comparisons with an
+  immediate RHS; `bcf_add_cond()` appends branch-condition ids into
+  `env->bcf.br_conds`.
+
+- Lazy binding: `reg->bcf_expr` starts at -1 and is set on first use via
+  `bcf_reg_expr()`. Binding leverages existing range info: if a reg fits in
+  u32/s32 ranges, allocate a 32-bit var, add range constraints (u/s min/max),
+  then extend to 64-bit with zero/sign extension; otherwise allocate a 64-bit
+  var and emit 64-bit bounds. `__check_reg_arg()` binds on first read when
+  tracking.
+
+This allows later instruction-specific tracking to refer to previously bound
+register expressions and accumulate path constraints.
 
 Signed-off-by: Hao Sun <hao.sun@inf.ethz.ch>
 ---
- kernel/bpf/verifier.c | 66 +++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 66 insertions(+)
+ kernel/bpf/verifier.c | 280 ++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 280 insertions(+)
 
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 725ea503c1c7..3ecee219605f 100644
+index 3ecee219605f..7b6d509c773a 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -20082,6 +20082,63 @@ static int do_check_insn(struct bpf_verifier_env *env, bool *do_print_state)
- 	return 0;
+@@ -4,6 +4,7 @@
+  * Copyright (c) 2018 Covalent IO, Inc. http://covalent.io
+  */
+ #include <uapi/linux/btf.h>
++#include <uapi/linux/bcf.h>
+ #include <linux/bpf-cgroup.h>
+ #include <linux/kernel.h>
+ #include <linux/types.h>
+@@ -625,6 +626,275 @@ static void mark_bcf_requested(struct bpf_verifier_env *env)
+ 	env->prog->aux->bcf_requested = true;
  }
  
-+static struct bpf_jmp_history_entry *
-+get_top_jmp_entry(struct bpf_verifier_env *env)
++static int bcf_alloc_expr(struct bpf_verifier_env *env, u32 cnt)
 +{
 +	struct bcf_refine_state *bcf = &env->bcf;
-+	struct bpf_verifier_state *vstate;
-+next:
-+	if (bcf->cur_vstate >= bcf->vstate_cnt)
-+		return NULL;
-+	vstate = bcf->parents[bcf->cur_vstate];
-+	if (bcf->cur_jmp_entry >= vstate->jmp_history_cnt) {
-+		bcf->cur_vstate++;
-+		bcf->cur_jmp_entry = 0;
-+		goto next;
++	int idx = bcf->expr_cnt;
++	struct bcf_expr *exprs;
++	u32 size, alloc_cnt;
++
++	bcf->expr_cnt += cnt;
++	if (bcf->expr_cnt <= bcf->expr_size)
++		return idx;
++
++	alloc_cnt = max_t(u32, 256, cnt);
++	size = size_mul(bcf->expr_size + alloc_cnt, sizeof(struct bcf_expr));
++	exprs = kvrealloc(bcf->exprs, size, GFP_KERNEL_ACCOUNT);
++	if (!exprs) {
++		kvfree(bcf->exprs);
++		bcf->exprs = NULL;
++		return -ENOMEM;
 +	}
-+	return &vstate->jmp_history[bcf->cur_jmp_entry];
++	bcf->exprs = exprs;
++	bcf->expr_size += alloc_cnt;
++
++	return idx;
 +}
 +
-+enum { PATH_MATCH, PATH_MISMATCH, PATH_DONE };
++static int bcf_add_expr(struct bpf_verifier_env *env, struct bcf_expr *expr)
++{
++	u32 cnt = (u32)expr->vlen + 1;
++	int idx;
 +
-+static int bcf_match_path(struct bpf_verifier_env *env)
++	idx = bcf_alloc_expr(env, cnt);
++	if (idx >= 0)
++		memcpy(env->bcf.exprs + idx, expr,
++		       sizeof(struct bcf_expr) * cnt);
++	return idx;
++}
++
++static int bcf_build_expr(struct bpf_verifier_env *env, u8 code, u16 params,
++			  u32 vlen, ...)
++{
++	DEFINE_RAW_FLEX(struct bcf_expr, expr, args, U8_MAX);
++	va_list args;
++	u32 i;
++
++	if (vlen > U8_MAX)
++		return -EFAULT;
++
++	expr->code = code;
++	expr->vlen = vlen;
++	expr->params = params;
++
++	va_start(args, vlen);
++	for (i = 0; i < vlen; i++) {
++		int arg = va_arg(args, int);
++
++		if (arg < 0)
++			return arg;
++		expr->args[i] = arg;
++	}
++	return bcf_add_expr(env, expr);
++}
++
++static int bcf_add_cond(struct bpf_verifier_env *env, int expr)
 +{
 +	struct bcf_refine_state *bcf = &env->bcf;
-+	struct bpf_jmp_history_entry *top = get_top_jmp_entry(env);
-+	struct bpf_verifier_state *last_state;
-+	int prev_idx;
++	u32 cnt = bcf->br_cond_cnt;
++	size_t size;
++	u32 *conds;
 +
-+	last_state = bcf->parents[bcf->vstate_cnt - 1];
-+	if (!top)
-+		return last_state->last_insn_idx == env->prev_insn_idx ?
-+			       PATH_DONE :
-+			       PATH_MATCH;
++	if (expr < 0)
++		return expr;
++	if (cnt >= U8_MAX)
++		return -E2BIG;
 +
-+	prev_idx = top->prev_idx;
-+	/* entry->prev_idx is u32:20, compiler does not sign extend this */
-+	if (prev_idx == 0xfffff)
-+		prev_idx = -1;
-+
-+	if (prev_idx == env->prev_insn_idx) {
-+		if (top->idx == env->insn_idx) {
-+			bcf->cur_jmp_entry++;
-+			/* Check if we have consumed the last entry */
-+			top = get_top_jmp_entry(env);
-+			if (!top &&
-+			    last_state->last_insn_idx == env->prev_insn_idx)
-+				return PATH_DONE;
-+			return PATH_MATCH;
-+		}
-+		return PATH_MISMATCH;
++	cnt++;
++	size = kmalloc_size_roundup(cnt * sizeof(u32));
++	conds = krealloc(bcf->br_conds, size, GFP_KERNEL_ACCOUNT);
++	if (!conds) {
++		kfree(bcf->br_conds);
++		bcf->br_conds = NULL;
++		return -ENOMEM;
 +	}
-+
-+	/* cur_state is branch taken, but the recorded one is not */
-+	if (is_jmp_point(env, env->insn_idx))
-+		return PATH_MISMATCH;
-+
-+	return PATH_MATCH;
++	bcf->br_conds = conds;
++	conds[bcf->br_cond_cnt++] = expr;
++	return 0;
 +}
 +
- static int do_check(struct bpf_verifier_env *env)
++static int bcf_val(struct bpf_verifier_env *env, u64 val, bool bit32)
++{
++	DEFINE_RAW_FLEX(struct bcf_expr, expr, args, 2);
++
++	expr->code = BCF_BV | BCF_VAL;
++	expr->vlen = bit32 ? 1 : 2;
++	expr->params = bit32 ? 32 : 64;
++	expr->args[0] = val;
++	if (!bit32)
++		expr->args[1] = val >> 32;
++	return bcf_add_expr(env, expr);
++}
++
++static int bcf_var(struct bpf_verifier_env *env, bool bit32)
++{
++	return bcf_build_expr(env, BCF_BV | BCF_VAR, bit32 ? 32 : 64, 0);
++}
++
++static int bcf_extend(struct bpf_verifier_env *env, u16 ext_sz, u16 bit_sz,
++		      bool sign_ext, int expr)
++{
++	u8 op = sign_ext ? BCF_SIGN_EXTEND : BCF_ZERO_EXTEND;
++
++	return bcf_build_expr(env, BCF_BV | op, (ext_sz << 8) | bit_sz, 1,
++			      expr);
++}
++
++static int bcf_extract(struct bpf_verifier_env *env, u16 sz, int expr)
++{
++	return bcf_build_expr(env, BCF_BV | BCF_EXTRACT, (sz - 1) << 8, 1,
++			      expr);
++}
++
++static int bcf_zext_32_to_64(struct bpf_verifier_env *env,
++			     struct bpf_reg_state *reg)
++{
++	reg->bcf_expr = bcf_extend(env, 32, 64, false, reg->bcf_expr);
++	return reg->bcf_expr;
++}
++
++static int bcf_sext_32_to_64(struct bpf_verifier_env *env,
++			     struct bpf_reg_state *reg)
++{
++	reg->bcf_expr = bcf_extend(env, 32, 64, true, reg->bcf_expr);
++	return reg->bcf_expr;
++}
++
++static bool is_zext_32_to_64(struct bcf_expr *expr)
++{
++	return expr->code == (BCF_BV | BCF_ZERO_EXTEND) &&
++	       expr->params == (((u16)32 << 8) | 64);
++}
++
++static bool is_sext_32_to_64(struct bcf_expr *expr)
++{
++	return expr->code == (BCF_BV | BCF_SIGN_EXTEND) &&
++	       expr->params == (((u16)32 << 8) | 64);
++}
++
++static int bcf_expr32(struct bpf_verifier_env *env, int expr_idx)
++{
++	struct bcf_expr *expr;
++
++	if (expr_idx < 0)
++		return expr_idx;
++
++	expr = env->bcf.exprs + expr_idx;
++	if (is_zext_32_to_64(expr) || is_sext_32_to_64(expr))
++		return expr->args[0];
++
++	if (expr->code == (BCF_BV | BCF_VAL))
++		return bcf_val(env, expr->args[0], true);
++
++	return bcf_extract(env, 32, expr_idx);
++}
++
++static int bcf_add_pred(struct bpf_verifier_env *env, u8 op, int lhs, u64 imm,
++			bool bit32)
++{
++	int rhs;
++
++	if (lhs < 0)
++		return lhs;
++
++	rhs = bcf_val(env, imm, bit32);
++	return bcf_build_expr(env, BCF_BOOL | op, 0, 2, lhs, rhs);
++}
++
++static bool fit_u32(struct bpf_reg_state *reg)
++{
++	return reg->umin_value == reg->u32_min_value &&
++	       reg->umax_value == reg->u32_max_value;
++}
++
++static bool fit_s32(struct bpf_reg_state *reg)
++{
++	return reg->smin_value == reg->s32_min_value &&
++	       reg->smax_value == reg->s32_max_value;
++}
++
++static int __bcf_bound_reg(struct bpf_verifier_env *env, int op, int expr,
++			   u64 imm, bool bit32)
++{
++	return bcf_add_cond(env, bcf_add_pred(env, op, expr, imm, bit32));
++}
++
++static int bcf_bound_reg32(struct bpf_verifier_env *env,
++			   struct bpf_reg_state *reg)
++{
++	u32 umin = reg->u32_min_value, umax = reg->u32_max_value;
++	s32 smin = reg->s32_min_value, smax = reg->s32_max_value;
++	int expr = reg->bcf_expr;
++	int ret = 0;
++
++	if (umin != 0)
++		ret = __bcf_bound_reg(env, BPF_JGE, expr, umin, true);
++	if (ret >= 0 && umax != U32_MAX)
++		ret = __bcf_bound_reg(env, BPF_JLE, expr, umax, true);
++
++	if (ret >= 0 && smin != S32_MIN && smin != umin)
++		ret = __bcf_bound_reg(env, BPF_JSGE, expr, smin, true);
++	if (ret >= 0 && smax != S32_MAX && smax != umax)
++		ret = __bcf_bound_reg(env, BPF_JSLE, expr, smax, true);
++
++	return ret;
++}
++
++static int bcf_bound_reg(struct bpf_verifier_env *env,
++			 struct bpf_reg_state *reg)
++{
++	u64 umin = reg->umin_value, umax = reg->umax_value;
++	s64 smin = reg->smin_value, smax = reg->smax_value;
++	int expr = reg->bcf_expr;
++	int ret = 0;
++
++	if (umin != 0)
++		ret = __bcf_bound_reg(env, BPF_JGE, expr, umin, false);
++	if (ret >= 0 && umax != U64_MAX)
++		ret = __bcf_bound_reg(env, BPF_JLE, expr, umax, false);
++
++	if (ret >= 0 && smin != S64_MIN && smin != umin)
++		ret = __bcf_bound_reg(env, BPF_JSGE, expr, smin, false);
++	if (ret >= 0 && smax != S64_MAX && smax != umax)
++		ret = __bcf_bound_reg(env, BPF_JSLE, expr, smax, false);
++
++	return ret;
++}
++
++static int bcf_reg_expr(struct bpf_verifier_env *env, struct bpf_reg_state *reg,
++			bool subreg)
++{
++	int err;
++
++	if (reg->bcf_expr >= 0)
++		goto out;
++
++	if (tnum_is_const(reg->var_off)) {
++		reg->bcf_expr = bcf_val(env, reg->var_off.value, false);
++	} else if (fit_u32(reg)) {
++		reg->bcf_expr = bcf_var(env, true);
++		err = bcf_bound_reg32(env, reg);
++		if (err < 0)
++			return err;
++		bcf_zext_32_to_64(env, reg);
++	} else if (fit_s32(reg)) {
++		reg->bcf_expr = bcf_var(env, true);
++		err = bcf_bound_reg32(env, reg);
++		if (err < 0)
++			return err;
++		bcf_sext_32_to_64(env, reg);
++	} else {
++		reg->bcf_expr = bcf_var(env, false);
++		err = bcf_bound_reg(env, reg);
++		if (err < 0)
++			return err;
++	}
++out:
++	if (!subreg)
++		return reg->bcf_expr;
++	return bcf_expr32(env, reg->bcf_expr);
++}
++
+ static int __get_spi(s32 off)
  {
- 	bool pop_log = !(env->log.level & BPF_LOG_LEVEL2);
-@@ -20144,6 +20201,15 @@ static int do_check(struct bpf_verifier_env *env)
- 				return err;
- 		}
- 
-+		if (env->bcf.tracking) {
-+			int path = bcf_match_path(env);
+ 	return (-off - 1) / BPF_REG_SIZE;
+@@ -2187,6 +2457,8 @@ static void ___mark_reg_known(struct bpf_reg_state *reg, u64 imm)
+ 	reg->s32_max_value = (s32)imm;
+ 	reg->u32_min_value = (u32)imm;
+ 	reg->u32_max_value = (u32)imm;
 +
-+			if (path == PATH_MISMATCH)
-+				goto process_bpf_exit;
-+			else if (path == PATH_DONE)
-+				return 0;
++	reg->bcf_expr = -1;
+ }
+ 
+ /* Mark the unknown part of a register (variable offset or scalar value) as
+@@ -2807,6 +3079,7 @@ static void __mark_reg_unknown_imprecise(struct bpf_reg_state *reg)
+ 	reg->var_off = tnum_unknown;
+ 	reg->frameno = 0;
+ 	reg->precise = false;
++	reg->bcf_expr = -1;
+ 	__mark_reg_unbounded(reg);
+ }
+ 
+@@ -3790,6 +4063,12 @@ static int __check_reg_arg(struct bpf_verifier_env *env, struct bpf_reg_state *r
+ 		if (rw64)
+ 			mark_insn_zext(env, reg);
+ 
++		/* Bind an expr for non-constants when it's first used. */
++		if (env->bcf.tracking && !tnum_is_const(reg->var_off)) {
++			bcf_reg_expr(env, reg, false);
++			if (reg->bcf_expr < 0)
++				return reg->bcf_expr;
 +		}
-+
- 		if (signal_pending(current))
- 			return -EAGAIN;
- 
+ 		return 0;
+ 	} else {
+ 		/* check whether register used as dest operand can be written to */
+@@ -25244,6 +25523,7 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr, __u3
+ 	kvfree(env->cfg.insn_postorder);
+ 	kvfree(env->scc_info);
+ 	kvfree(env->succ);
++	kvfree(env->bcf.exprs);
+ 	kvfree(env);
+ 	return ret;
+ }
 -- 
 2.34.1
 
