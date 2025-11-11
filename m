@@ -1,34 +1,34 @@
 Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9F91347FED;
-	Tue, 11 Nov 2025 06:55:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F2F434B66F;
+	Tue, 11 Nov 2025 06:55:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762844136; cv=none; b=U9DREtFeGcXlgaikKeVtkQ3NboEPuKy5HVl5Rvfn7WX86Y8mL0vBj3i20N1mgTCEzWDJb9+CH8U16M0L9jk8qn2tH7pTyQ3L1vcZIpTZfbFuX660Xg3KueVJv5yMB3cmN8PDRapokz0aj+bhNaMB95fW2dJdE8trocyfElpy1Pg=
+	t=1762844136; cv=none; b=UXbfuCfJgwdW/kGkK+e1S9AWcdsfqZGVtYJHQvVKQUweuZKu5+xHxHUvc7yuwDXjhvHc39rvlPxfPBN4wEvUIe8OFHlKfOiQQnloh59Z3xriA4sXYFGmENvC2EESgf0WGUsEkYAuq2rvF88s+Pv4PCPo5sjHeowiKM9cSCIr5GY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1762844136; c=relaxed/simple;
-	bh=YA4G6m3sgGwRoawonPoNBAWiFIpr54qetLlGIbqx5nk=;
+	bh=Jw8zwnPuRNXAUEy6/iRRNrO3Vb7wl9+VqF98zG0jrso=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=kT5EORdRfVnvhYSK50J5RpLIO/cAEsbdXD0j+Psg1OULaDfinEyerXa96ncR6ji4YDkUeiSgrPNmcc7d9KsuFmjsgKukmb1p0+1rM5XvEJS1IySEDagngZoBTYlFJfNiSbL1LPxPfL3BV9CBBWmnYD052PB6mEsQomBdHHJyC3w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=YCDudwCD; arc=none smtp.client-ip=62.89.141.173
+	 MIME-Version; b=SQ9fPZ2SNwh7XpYc2DHKU+bvGSQREQki0hsuWU5nMeE28Ne6lk2YPqBn9qHCOXxwP4n4P7Ir1lE5SLmamtHD0+svhMshhn5ni4/Z8yGG8q6nkO/ZkInSXNx+t5QpSvs1IvNg5u2nnf1PofJ2NFdu8axaDMz0dxZ9MaCUw/5sdWo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=RQCOMeHD; arc=none smtp.client-ip=62.89.141.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="YCDudwCD"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="RQCOMeHD"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
 	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
 	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=8X770T8ZfjCDu3xB4E5AEqp0VoQs0dPMEWp6Hxra23A=; b=YCDudwCDT/n4mN+8CVGG/MVpKv
-	HXMKHDYa0eAoCZBp7rPVUFHDcK55zwx1kWLUNU/sTXQtPOfR3YBdohIuk01gmUmOXc/gGOIW4MLHN
-	q6hwsoi7Q0hkY8ti3IDavzsEsJjvTcWMl/b5dG/LunvamKdSimus6KhyaPw/wM3O9nXkobmOoIbcy
-	JhlSaMb2V2j7YUnd3PIhI1A58jHvLBk/2CPMyNlE6TqswKB/6vHKcHwuv0QG3ZP8RVWL+7zcPvn3r
-	6ydR3Iwc37imHuIzYZPdqsSdfuzz3FZg2HijNLeMjmh1ddGfHdq/TvOa1SEfgR6yONrujxgrznqfg
-	/X3ZcTKg==;
+	bh=cNupE5WP11QDcgvbWMAmFaE1TAZeWcI3mGTR58jAFHY=; b=RQCOMeHDTMsMilhxlrv0z4v2K7
+	Uax1Ub263Rf604bstsm5tixvcaZtT4WVJ1iaUIE8BEHoZknV4vdRUMVILyZhiqThaCURM15QSbzNU
+	XDbRDWKE5nnVHmhBAZ/LMjfgS6zWKcBwQCsbXTRyEt2lUStEdf8a+zEKSkMDyoCkNrQXHNR53Qqgz
+	lgkQoE2tU3nqJHkM94bqdzPnp3ljtAC0tMDWbxR+uPLfN01RjB5NqhEIVcgrTJJ3/Q3fsnp83xhzE
+	2sih+Jp16DJAkGsHt8obPqINFFoiq0zPSf4+w9PbSTfWDnw4tal2yXVwLn6Sys3f9Azg4i7IoS43+
+	uF5YJCng==;
 Received: from viro by zeniv.linux.org.uk with local (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1vIiHm-0000000Bx2N-3R3y;
-	Tue, 11 Nov 2025 06:55:27 +0000
+	id 1vIiHq-0000000BxEp-1TZh;
+	Tue, 11 Nov 2025 06:55:30 +0000
 From: Al Viro <viro@zeniv.linux.org.uk>
 To: linux-fsdevel@vger.kernel.org
 Cc: torvalds@linux-foundation.org,
@@ -52,9 +52,9 @@ Cc: torvalds@linux-foundation.org,
 	selinux@vger.kernel.org,
 	borntraeger@linux.ibm.com,
 	bpf@vger.kernel.org
-Subject: [PATCH v3 33/50] selinuxfs: don't stash the dentry of /policy_capabilities
-Date: Tue, 11 Nov 2025 06:55:02 +0000
-Message-ID: <20251111065520.2847791-34-viro@zeniv.linux.org.uk>
+Subject: [PATCH v3 42/50] hypfs: swich hypfs_create_u64() to returning int
+Date: Tue, 11 Nov 2025 06:55:11 +0000
+Message-ID: <20251111065520.2847791-43-viro@zeniv.linux.org.uk>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20251111065520.2847791-1-viro@zeniv.linux.org.uk>
 References: <20251111065520.2847791-1-viro@zeniv.linux.org.uk>
@@ -67,92 +67,162 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Al Viro <viro@ftp.linux.org.uk>
 
-Don't bother to store the dentry of /policy_capabilities - it belongs
-to invariant part of tree and we only use it to populate that directory,
-so there's no reason to keep it around afterwards.
+same story as for hypfs_create_str()
 
-Same situation as with /avc, /ss, etc.  There are two directories that
-get replaced on policy load - /class and /booleans.  These we need to
-stash (and update the pointers on policy reload); /policy_capabilities
-is not in the same boat.
-
-Acked-by: Paul Moore <paul@paul-moore.com>
-Reviewed-by: Stephen Smalley <stephen.smalley.work@gmail.com>
-Tested-by: Stephen Smalley <stephen.smalley.work@gmail.com>
 Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 ---
- security/selinux/selinuxfs.c | 21 +++++++++------------
- 1 file changed, 9 insertions(+), 12 deletions(-)
+ arch/s390/hypfs/hypfs.h         |  3 +--
+ arch/s390/hypfs/hypfs_diag_fs.c | 20 ++++++++++----------
+ arch/s390/hypfs/hypfs_vm_fs.c   | 15 ++++++---------
+ arch/s390/hypfs/inode.c         |  9 ++++-----
+ 4 files changed, 21 insertions(+), 26 deletions(-)
 
-diff --git a/security/selinux/selinuxfs.c b/security/selinux/selinuxfs.c
-index 232e087bce3e..b39e919c27b1 100644
---- a/security/selinux/selinuxfs.c
-+++ b/security/selinux/selinuxfs.c
-@@ -75,7 +75,6 @@ struct selinux_fs_info {
- 	struct dentry *class_dir;
- 	unsigned long last_class_ino;
- 	bool policy_opened;
--	struct dentry *policycap_dir;
- 	unsigned long last_ino;
- 	struct super_block *sb;
- };
-@@ -117,7 +116,6 @@ static void selinux_fs_info_free(struct super_block *sb)
+diff --git a/arch/s390/hypfs/hypfs.h b/arch/s390/hypfs/hypfs.h
+index 0d109d956015..2bb7104124ca 100644
+--- a/arch/s390/hypfs/hypfs.h
++++ b/arch/s390/hypfs/hypfs.h
+@@ -22,8 +22,7 @@
  
- #define BOOL_DIR_NAME "booleans"
- #define CLASS_DIR_NAME "class"
--#define POLICYCAP_DIR_NAME "policy_capabilities"
+ extern struct dentry *hypfs_mkdir(struct dentry *parent, const char *name);
  
- #define TMPBUFLEN	12
- static ssize_t sel_read_enforce(struct file *filp, char __user *buf,
-@@ -1871,23 +1869,24 @@ static int sel_make_classes(struct selinux_policy *newpolicy,
- 	return rc;
+-extern struct dentry *hypfs_create_u64(struct dentry *dir, const char *name,
+-				       __u64 value);
++extern int hypfs_create_u64(struct dentry *dir, const char *name, __u64 value);
+ 
+ extern int hypfs_create_str(struct dentry *dir, const char *name, char *string);
+ 
+diff --git a/arch/s390/hypfs/hypfs_diag_fs.c b/arch/s390/hypfs/hypfs_diag_fs.c
+index 2178e6060a5d..83c9426df08e 100644
+--- a/arch/s390/hypfs/hypfs_diag_fs.c
++++ b/arch/s390/hypfs/hypfs_diag_fs.c
+@@ -204,7 +204,7 @@ static int hypfs_create_cpu_files(struct dentry *cpus_dir, void *cpu_info)
+ {
+ 	struct dentry *cpu_dir;
+ 	char buffer[TMP_SIZE];
+-	void *rc;
++	int rc;
+ 
+ 	snprintf(buffer, TMP_SIZE, "%d", cpu_info__cpu_addr(diag204_get_info_type(),
+ 							    cpu_info));
+@@ -214,18 +214,18 @@ static int hypfs_create_cpu_files(struct dentry *cpus_dir, void *cpu_info)
+ 	rc = hypfs_create_u64(cpu_dir, "mgmtime",
+ 			      cpu_info__acc_time(diag204_get_info_type(), cpu_info) -
+ 			      cpu_info__lp_time(diag204_get_info_type(), cpu_info));
+-	if (IS_ERR(rc))
+-		return PTR_ERR(rc);
++	if (rc)
++		return rc;
+ 	rc = hypfs_create_u64(cpu_dir, "cputime",
+ 			      cpu_info__lp_time(diag204_get_info_type(), cpu_info));
+-	if (IS_ERR(rc))
+-		return PTR_ERR(rc);
++	if (rc)
++		return rc;
+ 	if (diag204_get_info_type() == DIAG204_INFO_EXT) {
+ 		rc = hypfs_create_u64(cpu_dir, "onlinetime",
+ 				      cpu_info__online_time(diag204_get_info_type(),
+ 							    cpu_info));
+-		if (IS_ERR(rc))
+-			return PTR_ERR(rc);
++		if (rc)
++			return rc;
+ 	}
+ 	diag224_idx2name(cpu_info__ctidx(diag204_get_info_type(), cpu_info), buffer);
+ 	return hypfs_create_str(cpu_dir, "type", buffer);
+@@ -263,7 +263,7 @@ static int hypfs_create_phys_cpu_files(struct dentry *cpus_dir, void *cpu_info)
+ {
+ 	struct dentry *cpu_dir;
+ 	char buffer[TMP_SIZE];
+-	void *rc;
++	int rc;
+ 
+ 	snprintf(buffer, TMP_SIZE, "%i", phys_cpu__cpu_addr(diag204_get_info_type(),
+ 							    cpu_info));
+@@ -272,8 +272,8 @@ static int hypfs_create_phys_cpu_files(struct dentry *cpus_dir, void *cpu_info)
+ 		return PTR_ERR(cpu_dir);
+ 	rc = hypfs_create_u64(cpu_dir, "mgmtime",
+ 			      phys_cpu__mgm_time(diag204_get_info_type(), cpu_info));
+-	if (IS_ERR(rc))
+-		return PTR_ERR(rc);
++	if (rc)
++		return rc;
+ 	diag224_idx2name(phys_cpu__ctidx(diag204_get_info_type(), cpu_info), buffer);
+ 	return hypfs_create_str(cpu_dir, "type", buffer);
+ }
+diff --git a/arch/s390/hypfs/hypfs_vm_fs.c b/arch/s390/hypfs/hypfs_vm_fs.c
+index e8a32d66062b..a149a9f92e40 100644
+--- a/arch/s390/hypfs/hypfs_vm_fs.c
++++ b/arch/s390/hypfs/hypfs_vm_fs.c
+@@ -19,10 +19,9 @@
+ 
+ #define ATTRIBUTE(dir, name, member) \
+ do { \
+-	void *rc; \
+-	rc = hypfs_create_u64(dir, name, member); \
+-	if (IS_ERR(rc)) \
+-		return PTR_ERR(rc); \
++	int rc = hypfs_create_u64(dir, name, member); \
++	if (rc) \
++		return rc; \
+ } while (0)
+ 
+ static int hypfs_vm_create_guest(struct dentry *systems_dir,
+@@ -85,7 +84,7 @@ static int hypfs_vm_create_guest(struct dentry *systems_dir,
+ 
+ int hypfs_vm_create_files(struct dentry *root)
+ {
+-	struct dentry *dir, *file;
++	struct dentry *dir;
+ 	struct diag2fc_data *data;
+ 	unsigned int count = 0;
+ 	int rc, i;
+@@ -110,11 +109,9 @@ int hypfs_vm_create_files(struct dentry *root)
+ 		rc = PTR_ERR(dir);
+ 		goto failed;
+ 	}
+-	file = hypfs_create_u64(dir, "count", data->lcpus);
+-	if (IS_ERR(file)) {
+-		rc = PTR_ERR(file);
++	rc = hypfs_create_u64(dir, "count", data->lcpus);
++	if (rc)
+ 		goto failed;
+-	}
+ 
+ 	/* guests */
+ 	dir = hypfs_mkdir(root, "systems");
+diff --git a/arch/s390/hypfs/inode.c b/arch/s390/hypfs/inode.c
+index c5e2d8932b88..6a80ab2692be 100644
+--- a/arch/s390/hypfs/inode.c
++++ b/arch/s390/hypfs/inode.c
+@@ -377,8 +377,7 @@ static struct dentry *hypfs_create_update_file(struct dentry *dir)
+ 	return dentry;
  }
  
--static int sel_make_policycap(struct selinux_fs_info *fsi)
-+static int sel_make_policycap(struct dentry *dir)
+-struct dentry *hypfs_create_u64(struct dentry *dir,
+-				const char *name, __u64 value)
++int hypfs_create_u64(struct dentry *dir, const char *name, __u64 value)
  {
-+	struct super_block *sb = dir->d_sb;
- 	unsigned int iter;
- 	struct dentry *dentry = NULL;
- 	struct inode *inode = NULL;
- 
- 	for (iter = 0; iter <= POLICYDB_CAP_MAX; iter++) {
- 		if (iter < ARRAY_SIZE(selinux_policycap_names))
--			dentry = d_alloc_name(fsi->policycap_dir,
-+			dentry = d_alloc_name(dir,
- 					      selinux_policycap_names[iter]);
- 		else
--			dentry = d_alloc_name(fsi->policycap_dir, "unknown");
-+			dentry = d_alloc_name(dir, "unknown");
- 
- 		if (dentry == NULL)
- 			return -ENOMEM;
- 
--		inode = sel_make_inode(fsi->sb, S_IFREG | 0444);
-+		inode = sel_make_inode(sb, S_IFREG | 0444);
- 		if (inode == NULL) {
- 			dput(dentry);
- 			return -ENOMEM;
-@@ -2071,15 +2070,13 @@ static int sel_fill_super(struct super_block *sb, struct fs_context *fc)
- 		goto err;
+ 	char *buffer;
+ 	char tmp[TMP_SIZE];
+@@ -387,15 +386,15 @@ struct dentry *hypfs_create_u64(struct dentry *dir,
+ 	snprintf(tmp, TMP_SIZE, "%llu\n", (unsigned long long int)value);
+ 	buffer = kstrdup(tmp, GFP_KERNEL);
+ 	if (!buffer)
+-		return ERR_PTR(-ENOMEM);
++		return -ENOMEM;
+ 	dentry =
+ 	    hypfs_create_file(dir, name, buffer, S_IFREG | REG_FILE_MODE);
+ 	if (IS_ERR(dentry)) {
+ 		kfree(buffer);
+-		return ERR_PTR(-ENOMEM);
++		return -ENOMEM;
  	}
+ 	hypfs_add_dentry(dentry);
+-	return dentry;
++	return 0;
+ }
  
--	fsi->policycap_dir = sel_make_dir(sb->s_root, POLICYCAP_DIR_NAME,
--					  &fsi->last_ino);
--	if (IS_ERR(fsi->policycap_dir)) {
--		ret = PTR_ERR(fsi->policycap_dir);
--		fsi->policycap_dir = NULL;
-+	dentry = sel_make_dir(sb->s_root, "policy_capabilities", &fsi->last_ino);
-+	if (IS_ERR(dentry)) {
-+		ret = PTR_ERR(dentry);
- 		goto err;
- 	}
- 
--	ret = sel_make_policycap(fsi);
-+	ret = sel_make_policycap(dentry);
- 	if (ret) {
- 		pr_err("SELinux: failed to load policy capabilities\n");
- 		goto err;
+ int hypfs_create_str(struct dentry *dir, const char *name, char *string)
 -- 
 2.47.3
 
