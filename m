@@ -1,74 +1,74 @@
-Received: from SN4PR0501CU005.outbound.protection.outlook.com (mail-southcentralusazon11011069.outbound.protection.outlook.com [40.93.194.69])
+Received: from BL2PR02CU003.outbound.protection.outlook.com (mail-eastusazon11011024.outbound.protection.outlook.com [52.101.52.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47AC534C822;
-	Tue, 11 Nov 2025 10:15:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.194.69
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E402334D92F;
+	Tue, 11 Nov 2025 10:15:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.52.24
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762856151; cv=fail; b=EmX4Y7idJpZNJMRmZTvcnom+DSocmCHXbX8xH70smdNDqf7dEn1KbR08PuETsrwgVjwl9b2O9tBkaQT8APOsL+5FYo/f9nRSvU8f2nLcYa2x2W3ILOkc/d9exeZYI7JAoSqWa5ebzGJUj3dCoiGMOMUCKEghiJOognernRkLlAg=
+	t=1762856154; cv=fail; b=sT/z2JV2IpsZgfvHT4qFx/LVoeURkjH8cbocxZ72SDnsLvqr27irgLwawwDbzV2mS1dP5kDGYMp9pe5PBo+PFQzep6vuIZenRV6McvyzJWyMosTqxgyP3cokGsT6fmoKoSweIWg8+G7CcHr4v0rhC7x8oHtC5x8e9f3kwiOCdIE=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762856151; c=relaxed/simple;
-	bh=e3yJk7FDm65rNm94TD/8hCBOSZZDJIVLApfIwlcNKmc=;
+	s=arc-20240116; t=1762856154; c=relaxed/simple;
+	bh=d8XuRsTVRt/6tCehsPJwcTrmHQeWtvV1lXYHsX+/il8=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=g62zoWSMdyojqNydj6SXi2f3HAN14RYL+mcApbDxL/V5B0pQE7WlkNvfGv3c4If3eFAl6V9mOHCNP4C70Jr7U41Lj2l5vEvY7xZ3y5NT+itwSx/hsf/twFYCkEvy0fgYErhd1vaWWCVlycU7DpFcxsL49yJTzf4LIv4q2Q5/j04=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=kEpDCiPo; arc=fail smtp.client-ip=40.93.194.69
+	 MIME-Version:Content-Type; b=c9WKkGlqoV2jphPJHeR/f//4H/v4IzunAhpPu5lyuYnq75AmuQthN0s3tKxnGDJtdFTdQ/GQxVKhV+tfdY1SqYF+Fv/gsH8wmX6uLQ1f+0qYlUyd/6ZNL7h4r+Dt58nDxzPpuOQ2Ao2UShy8b9wcGDU4EXVprLeintV84oic99o=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=JkqUWrQm; arc=fail smtp.client-ip=52.101.52.24
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="kEpDCiPo"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="JkqUWrQm"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=cN1tWsYGhHNqpcsAGaCS2RPOqq4OL0Ly4OMsBu2AGqg6vGOppLDVplGszv4WLMDVpaj4EYOtr5x/WELM36ZkP0B88v3hzZ+ogq1JdnOhazQLkD/cvUwdbPyyTXgpD+oQBE3GfXDr2rDmXRfZHUJISfiYpAk0dh7ZOSeFs1MWS19eN1s89tLs7j0j6Cp6uJXDWul1Ef+ZfeIjGa4nq93cNHwwrkdc4Npi6tjpPQxRs3WEAdB7zQd+0s47iy35l+wcYmiMGWK4L/+KU9ZVJ43OcltIsN58dcgeFb2nuvM6AIzFcjPp3mhEMr2AFhW1Q9i8CUU37iJpr933UNh9C0AWJA==
+ b=B6DWOslSWFV8frtGMnrryWdZHK22CId2nXX0hcwcqCUtfKpiw12IVp/6HzGlaIV24V4ezEN0ED2vII2gV4STa38lErLEo1upwloeD7ueq4kWwQ+KpZtijW/EKjhc+tNli+VuN+NRJZm0B4LETvmp5UG6d2z6Oo5t2WCr4EIVnitYvbE8pmuIZIz4ccXCXr79HS5aAn6vFLh40j3bs9SDNIHypRhn29wjHvzQZfpC2xeGTBKQk5jiQTAZdsvnKrycmOXm+zcGpw3LBxbuIHocNjY7Qy7eFMyL9wTuhEPHVyfC3UfdScsLV7UzEcZPPa5AsdhT1P7JD3FX7ZjioEz0Eg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jLsFjHke8WVpfXWGgboxL3lmQjo8NONC2uzytbXA6oI=;
- b=RZ9CmuusklizimlJ3PaDcSJ5jEPTRkH2wc1vT5QNgTw9n9cLilbyRlHSRL1MER0SUZj7WU66f2529WmWKfEtl1KA//aio+pC1dGZTpyja7rHizxow+BRVO6Sv3jea7A/1oQ8Xrr8c3YG2mCkzPhyW708W7yDPMJLY2tlvlcUhT7NkcEDuUMC/OHabhWPd5HWPxHSMdsbVPJwjKSG+db8/cBUGAjT1GkXruAvp/vnIhcLUf/hl19FgAWb3pH+vr4D7fHOoSkdXkI4zWBxLeFuo0rwgOH4QLuH23kFP5yOGx8lFiCvvnyxfaWhMeVCYnKgapJKQA8Qq2CVekme6UequA==
+ bh=fxLTEw1wbmrYbdIYn+VHy3lKwPk7oPIOcjhjOIOC5uI=;
+ b=xLn8rBB51nZXmPpBKm6KpWm6fh9AZFkeDe+eyX6+SRgf1DjFxzIt1Xj8h5VIVFnQK1/LT9zXMAuc4bK5pmbuk2iuNb8zd3dT7iBbOjF4zxTMM/oWr1Ze9rbW6Lu4bY2z5auYIXVUKPOfi+UvZV0atS0HVDXghitKMr2pmedkQ8HS6PNT/RqKNEigP0+Pzy2suW8BH1Mynn0fYSi7iL5lP62FodcmVYw682Q3G/x6xhjDo7MFPYehDDZ0hZOLWgyF0EMgXk3azNFf+uVCQQH2fRa2523Ozl3RV0WJ2783NGQ+LAM1cExih4AKLg9WcPFV7DzwkwZlzGlV/CMehe4zJQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 198.47.21.194) smtp.rcpttodomain=kernel.org smtp.mailfrom=ti.com; dmarc=pass
+ 198.47.21.195) smtp.rcpttodomain=kernel.org smtp.mailfrom=ti.com; dmarc=pass
  (p=quarantine sp=none pct=100) action=none header.from=ti.com; dkim=none
  (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jLsFjHke8WVpfXWGgboxL3lmQjo8NONC2uzytbXA6oI=;
- b=kEpDCiPobEd7ZDgEbuxt972FYkLihSnNSjgVJFlHyCFN2WIir6hvuIj5OmMhneyrDlrx3MuUM0LdK53QgMBMWLLrOwRcQS/kUEOBLrFmVoebfeChupQv3juPV83aGe16Y/Exdqh7jW8WU8CE4BjxjFPkt/NupTMyL97umEpEd48=
-Received: from CH2PR19CA0017.namprd19.prod.outlook.com (2603:10b6:610:4d::27)
- by MW4PR10MB6510.namprd10.prod.outlook.com (2603:10b6:303:224::8) with
+ bh=fxLTEw1wbmrYbdIYn+VHy3lKwPk7oPIOcjhjOIOC5uI=;
+ b=JkqUWrQm2JN67HviqIYa1UddVr3E8B67CH5jNPPnrp3OZP0BCUNvvbwQ/qyd9Lmx/3iCyf0Uya3er0zj1yOK7rcv9m1E8yUUdJPakNMz+zSYktMtTkWYcZy8gmPYTbssT/2L4tdsLpbHfVaEvoPJS+GheFdPbuEJ2aiKxbY4EAM=
+Received: from DM6PR13CA0023.namprd13.prod.outlook.com (2603:10b6:5:bc::36) by
+ PH8PR10MB6315.namprd10.prod.outlook.com (2603:10b6:510:1ce::14) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9320.15; Tue, 11 Nov
- 2025 10:15:45 +0000
-Received: from CH2PEPF00000146.namprd02.prod.outlook.com
- (2603:10b6:610:4d:cafe::5c) by CH2PR19CA0017.outlook.office365.com
- (2603:10b6:610:4d::27) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9298.16 via Frontend Transport; Tue,
- 11 Nov 2025 10:15:37 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 198.47.21.194)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9298.16; Tue, 11 Nov
+ 2025 10:15:50 +0000
+Received: from CY4PEPF0000EE3A.namprd03.prod.outlook.com
+ (2603:10b6:5:bc:cafe::7) by DM6PR13CA0023.outlook.office365.com
+ (2603:10b6:5:bc::36) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9320.15 via Frontend Transport; Tue,
+ 11 Nov 2025 10:15:49 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 198.47.21.195)
  smtp.mailfrom=ti.com; dkim=none (message not signed) header.d=none;dmarc=pass
  action=none header.from=ti.com;
 Received-SPF: Pass (protection.outlook.com: domain of ti.com designates
- 198.47.21.194 as permitted sender) receiver=protection.outlook.com;
- client-ip=198.47.21.194; helo=flwvzet200.ext.ti.com; pr=C
-Received: from flwvzet200.ext.ti.com (198.47.21.194) by
- CH2PEPF00000146.mail.protection.outlook.com (10.167.244.103) with Microsoft
+ 198.47.21.195 as permitted sender) receiver=protection.outlook.com;
+ client-ip=198.47.21.195; helo=flwvzet201.ext.ti.com; pr=C
+Received: from flwvzet201.ext.ti.com (198.47.21.195) by
+ CY4PEPF0000EE3A.mail.protection.outlook.com (10.167.242.12) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9320.13 via Frontend Transport; Tue, 11 Nov 2025 10:15:43 +0000
-Received: from DFLE209.ent.ti.com (10.64.6.67) by flwvzet200.ext.ti.com
- (10.248.192.31) with Microsoft SMTP Server (version=TLS1_2,
+ 15.20.9320.13 via Frontend Transport; Tue, 11 Nov 2025 10:15:48 +0000
+Received: from DFLE212.ent.ti.com (10.64.6.70) by flwvzet201.ext.ti.com
+ (10.248.192.32) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Tue, 11 Nov
- 2025 04:15:38 -0600
-Received: from DFLE201.ent.ti.com (10.64.6.59) by DFLE209.ent.ti.com
- (10.64.6.67) with Microsoft SMTP Server (version=TLS1_2,
+ 2025 04:15:43 -0600
+Received: from DFLE205.ent.ti.com (10.64.6.63) by DFLE212.ent.ti.com
+ (10.64.6.70) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Tue, 11 Nov
- 2025 04:15:38 -0600
-Received: from lelvem-mr05.itg.ti.com (10.180.75.9) by DFLE201.ent.ti.com
- (10.64.6.59) with Microsoft SMTP Server (version=TLS1_2,
+ 2025 04:15:43 -0600
+Received: from fllvem-mr08.itg.ti.com (10.64.41.88) by DFLE205.ent.ti.com
+ (10.64.6.63) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20 via Frontend
- Transport; Tue, 11 Nov 2025 04:15:38 -0600
+ Transport; Tue, 11 Nov 2025 04:15:43 -0600
 Received: from fllv0122.itg.ti.com (fllv0122.itg.ti.com [10.247.120.72])
-	by lelvem-mr05.itg.ti.com (8.18.1/8.18.1) with ESMTP id 5ABAFcSV751649;
-	Tue, 11 Nov 2025 04:15:38 -0600
+	by fllvem-mr08.itg.ti.com (8.18.1/8.18.1) with ESMTP id 5ABAFh5Y1794247;
+	Tue, 11 Nov 2025 04:15:43 -0600
 Received: from localhost (meghana-pc.dhcp.ti.com [10.24.69.13] (may be forged))
-	by fllv0122.itg.ti.com (8.14.7/8.14.7) with ESMTP id 5ABAFbjV011913;
-	Tue, 11 Nov 2025 04:15:38 -0600
+	by fllv0122.itg.ti.com (8.14.7/8.14.7) with ESMTP id 5ABAFg65011926;
+	Tue, 11 Nov 2025 04:15:42 -0600
 From: Meghana Malladi <m-malladi@ti.com>
 To: <horms@kernel.org>, <namcao@linutronix.de>, <vadim.fedorenko@linux.dev>,
 	<jacob.e.keller@intel.com>, <m-malladi@ti.com>, <christian.koenig@amd.com>,
@@ -81,9 +81,9 @@ CC: <linaro-mm-sig@lists.linaro.org>, <dri-devel@lists.freedesktop.org>,
 	<linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
 	<linux-arm-kernel@lists.infradead.org>, <srk@ti.com>, Vignesh Raghavendra
 	<vigneshr@ti.com>, Roger Quadros <rogerq@kernel.org>, <danishanwar@ti.com>
-Subject: [PATCH net-next v5 4/6] net: ti: icssg-prueth: Make emac_run_xdp function independent of page
-Date: Tue, 11 Nov 2025 15:45:21 +0530
-Message-ID: <20251111101523.3160680-5-m-malladi@ti.com>
+Subject: [PATCH net-next v5 6/6] net: ti: icssg-prueth: Enable zero copy in XDP features
+Date: Tue, 11 Nov 2025 15:45:23 +0530
+Message-ID: <20251111101523.3160680-7-m-malladi@ti.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20251111101523.3160680-1-m-malladi@ti.com>
 References: <20251111101523.3160680-1-m-malladi@ti.com>
@@ -98,198 +98,78 @@ Content-Type: text/plain
 X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH2PEPF00000146:EE_|MW4PR10MB6510:EE_
-X-MS-Office365-Filtering-Correlation-Id: 28e5d029-3e8c-4353-f2d7-08de210b461f
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000EE3A:EE_|PH8PR10MB6315:EE_
+X-MS-Office365-Filtering-Correlation-Id: 152e3b73-675f-4afd-9c0c-08de210b4902
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|7416014|1800799024|82310400026|376014|36860700013|921020;
+	BCL:0;ARA:13230040|7416014|376014|36860700013|1800799024|82310400026|921020;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?0+lVBBfEE1gNXMIuKjpZ4cAk27WMdniy9p5aYHyiwWmknuk7oIoxuzba9oFe?=
- =?us-ascii?Q?zGrarnyAZkhpPw3yhqmJy5FPogPQq+st7O2FYnh1ecKSDi8sBlmQsn2U70v1?=
- =?us-ascii?Q?9s03x70EaYtLZk71T3w+x/+4jPdcTivjX4sXBIvgmVSfdhwSX5xKLktJfwe7?=
- =?us-ascii?Q?qWD9+uo3X49gn5cnZiw5xcPwEY/2tc03I8XjP4m8Xity3oFEqhIUnFEnJO08?=
- =?us-ascii?Q?SOqql0/i5a+6YNXjPENn6Gw+N5H5xulIJ6JBYrAZJJD9MpOhp/lKW86qdqFY?=
- =?us-ascii?Q?m1dCeXAGm7R1PEiNRPUCTF2dcgjfXSSi9omJiC9tEzBO15Rr+LLpKOwFuubP?=
- =?us-ascii?Q?Sq0o/mzYiD6OFetQuecPqu1hpognVzjUuR2KTc4+3EvvLVY7M9pqRq6bhHCG?=
- =?us-ascii?Q?G6mkswcuLKxlmnQR0ECvqd0z0aNl8FyOtghWObeqdIN/SSkTo0L9E0BX48SX?=
- =?us-ascii?Q?zYR6igSNIGAC3r7qbxCQOh68z91Hqet3NhIZGIhhpYp7BiFF0kL+O5RHM6f6?=
- =?us-ascii?Q?NvliU1nT0A8P5BLwuO4KlQAWO5kBjlgc5jOmtWIS4zZlYmtI3OvBr9gYeRf8?=
- =?us-ascii?Q?apt/BU2L/s3znrbaj1ZfqXWegMyNFb+JLv/Xy2K+TeroM2GHGqWjrOd0SC3/?=
- =?us-ascii?Q?SC29fugp3FuN/ZCKF7ltrYqrOesEd+6qF7SRh489WjKgtxU5/9xLxl7dh3Ky?=
- =?us-ascii?Q?HsyQ3qjon1Wl9Ql/AdsiLRpLG0uGAcj+kOwC9saiU56IXB27EyJfJeJwrtbP?=
- =?us-ascii?Q?5a024NXzkPktb5yLL97oga4lbL+9TJRp89lSCytYrzPQhbvT6NQ/QUy3BUaI?=
- =?us-ascii?Q?zpzbRpo4xoyX2paDer4kljcS7tWNxzjPwQJjm+uDvRMXyoWRYNR77MZ6qrqK?=
- =?us-ascii?Q?TCmRqx5Nn+9dp7XfRZkNCRK4U0BzHKVyk4NgCKwmYt970cs5OeaNR1kLagLe?=
- =?us-ascii?Q?Z4tHI0K8xU6qEBkVBtOPkaOo3nhSbcQW/dHauj+F3Jez/Jt82QvhJbbHW4LR?=
- =?us-ascii?Q?z/IO2l4mDwL6SrXAF4+xke/jN3DN+lX7kkqDZARd3hRKMGnCsHHJPEhxHN3u?=
- =?us-ascii?Q?FEieQrB5ol1UL5Gbo0fyrTL7YV+dj3RYSDI/E9shEMqGl5tbDdtpM6q9px8R?=
- =?us-ascii?Q?MhWCtgDSfGkIn7ThVuebBiorflBysxw9vcKu8R48rNiQ1drzym0Of7jbr96J?=
- =?us-ascii?Q?V9f3sYrRL9WkjjevaIAOWyNa9KCB3RevysuzzZEEZyq7vgVwI7V6dV6+QB5t?=
- =?us-ascii?Q?/R0i1u3bpHH8VqrN6/ZG4AvjPfsJgzE83tLYNKt0wS8HzcbMoUUkxfij1M5b?=
- =?us-ascii?Q?62Zioj2E4NeZ346nMG5MtLgsc+ehTEv4R72JdSLCoq+/KdJ469fuVXTzyQJA?=
- =?us-ascii?Q?QqkQNgV3iB9qgH/AB4al3UOlMlXNp0gwz2SU/+Ipofg73mncbjwYI62nMKuL?=
- =?us-ascii?Q?ALUSsBxv722CFzUXVfZuOAv6T65Cy0UU+SV9Wu15FSUbjMhJ1OXwObKBL5Yr?=
- =?us-ascii?Q?zybb3JJCJFZujU5B6R93ei+jamrMdg9jk5YG/auOkMi9j0FUA73yAGSw0YHk?=
- =?us-ascii?Q?lLZP09zIgR/Nl1Y42J5m6pKeG9iyuJ2fWzyVIfTi?=
+	=?us-ascii?Q?rrHFTcOQdB0zWlOaLBZnsyEDipppBamaEXTMcMv+c/JEkCuBCYiTdY0ZYrFp?=
+ =?us-ascii?Q?DJ5BJXvE6ZABHuqOmpiz+nGLx++aEmM4jlpwqrsWkp0prFBOMatlnLg7jbpg?=
+ =?us-ascii?Q?D5wzvhBBCv9GE9qhp2quBqtQgy2IW1GbcFSkA1D4yuICoJDVOJzpZhaKXOa5?=
+ =?us-ascii?Q?jKF1cMIOW2Bz1PtRK/wmYdGUe1cc3Iy6zcxN1owgVSN4CYQ0Qb658c+ufKn4?=
+ =?us-ascii?Q?9C/YZ0gatN2NRvbBPLIW2y6pvxTCABh1a+O4AKI8NX1fr5UcTm6RPFzLCJRr?=
+ =?us-ascii?Q?tydCngX+ELY0++3nWU/a4WAOxhb1p4PSwc7t+fKt14HhlM80smqVQsO2Vwbm?=
+ =?us-ascii?Q?42UifKxoBC8gDNo4K01C2+daOgKYM/OABembqGsLA3JmItDVAkCXDgqFZaNW?=
+ =?us-ascii?Q?TXHE/Mfbl7m5MblrVQjxualiixIV9Ragrq+Px00F0Nw8aWshjJA+VySUfvm5?=
+ =?us-ascii?Q?s/H8B7G/hOhfeuY3O4rvl24/ZNXC24nXvC5R+eISV4ykXT0GJ0t7LB+666jm?=
+ =?us-ascii?Q?KsqbvePL2Xc+HGpxChNU/U7fzmG6cPxMoDceOyOueBLaxdvypLLGztYw0cNB?=
+ =?us-ascii?Q?klFR5CaK0pY8G6DyFq/8M1kvCtvNTQI8snq3xDA/iTayL6+dnKttn9fwnhro?=
+ =?us-ascii?Q?hBzBYBm0mN+a1rGRdNEV+HPjVF8GL29o8xuVu4rC1eeRCUuKNu3XNxMTBp/B?=
+ =?us-ascii?Q?e1Fs3nfTa6xw5RtzXUVPyzkpKPj642pI1Ou9c4e/9MFXuFt+ARUhrFJprFf0?=
+ =?us-ascii?Q?3mcI4jRQvJhytCUVhBHGmQdY15JbawTa3PVrYUfsdEuVBeyhE6MvQarEZ6cw?=
+ =?us-ascii?Q?gYTu+PbjP9BQXZDNdsjnwrx5r5Fl9wwAcETFTkYVjqb6lm4s6StM614GCCS4?=
+ =?us-ascii?Q?GidXDxL34Zb4RemE3cn6coUIg/Muh6MwVEXDm4kDSTc5alT2EBLQ+7qxJRIE?=
+ =?us-ascii?Q?WpticweaDZdjv9017ORX/1DEsM4LpGmwwHmrldYrpUWwdkB/h+oWe+0XNEe9?=
+ =?us-ascii?Q?0sKOkNVgOGKE1Rw3Q9Jl7D4+x7b2NAolk8xy77m1Z5fHDBOyPBBGFSXgbFxE?=
+ =?us-ascii?Q?CjlbvP7W4pcZ3YDHN85v/SEIesuMocW7Xu+SwlmYtUYE4STz7FtCjOGCBxRY?=
+ =?us-ascii?Q?+oTwvx2FqUMEHig39Lvua2uKfmtQm6+yy6bPv/kODVCP8ewuVkmabzGh1Bkh?=
+ =?us-ascii?Q?Z4UcOLlH5lPdOWqrzoGSXJ8CMIZIbK77aAsdVyBtK/i2XtyakiWWcEfdXF/0?=
+ =?us-ascii?Q?bs+bBUUch+f0JuqHr2Y+iTy4JCIsBbGYtsWVfpA0K+rY5cJd79uivwvG8SPx?=
+ =?us-ascii?Q?2aWjywjmh9xx45a2tWuwFDED1ccQ0AbgD5lQQhoaFtSVcSwleHZQv7FjyS6F?=
+ =?us-ascii?Q?pJGhdsgkDDQszXlmj9rwtpsCn9urHNmb2Qzuwb5sYULBzJBomX851HkzTle8?=
+ =?us-ascii?Q?Mb5OxKKDRAW0wjkmoYfdqS7DI9jyVigvHSI5MTWrhMPTiFVL+DaLPAGU6Kte?=
+ =?us-ascii?Q?7ZdWP1vHY81iWMQzQbuQY1hA7+wk9sl8fdsi8yGXL8UfE6dj4A8JrSUvVHS4?=
+ =?us-ascii?Q?2JueUzmFUSIu1oyOyIE=3D?=
 X-Forefront-Antispam-Report:
-	CIP:198.47.21.194;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:flwvzet200.ext.ti.com;PTR:ErrorRetry;CAT:NONE;SFS:(13230040)(7416014)(1800799024)(82310400026)(376014)(36860700013)(921020);DIR:OUT;SFP:1101;
+	CIP:198.47.21.195;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:flwvzet201.ext.ti.com;PTR:ErrorRetry;CAT:NONE;SFS:(13230040)(7416014)(376014)(36860700013)(1800799024)(82310400026)(921020);DIR:OUT;SFP:1101;
 X-OriginatorOrg: ti.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Nov 2025 10:15:43.7585
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Nov 2025 10:15:48.6069
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 28e5d029-3e8c-4353-f2d7-08de210b461f
+X-MS-Exchange-CrossTenant-Network-Message-Id: 152e3b73-675f-4afd-9c0c-08de210b4902
 X-MS-Exchange-CrossTenant-Id: e5b49634-450b-4709-8abb-1e2b19b982b7
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e5b49634-450b-4709-8abb-1e2b19b982b7;Ip=[198.47.21.194];Helo=[flwvzet200.ext.ti.com]
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e5b49634-450b-4709-8abb-1e2b19b982b7;Ip=[198.47.21.195];Helo=[flwvzet201.ext.ti.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	CH2PEPF00000146.namprd02.prod.outlook.com
+	CY4PEPF0000EE3A.namprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR10MB6510
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR10MB6315
 
-emac_run_xdp function runs xdp program, at a given hook point
-in the Rx path of the driver in NAPI context and returns
-XDP return codes. In zero copy mode the driver receives
-packets using UMEM frames instead of pages (native XDP).
-Decouple the usage of page in this function.
+Enable the zero copy feature flag in xdp_set_features_flag()
+for a given ndev to get the AF-XDP zero copy support running
+for both Tx and Rx.
 
 Reviewed-by: Jacob Keller <jacob.e.keller@intel.com>
 Signed-off-by: Meghana Malladi <m-malladi@ti.com>
 ---
- drivers/net/ethernet/ti/icssg/icssg_common.c | 26 ++++++++++++--------
- drivers/net/ethernet/ti/icssg/icssg_prueth.c |  3 ++-
- drivers/net/ethernet/ti/icssg/icssg_prueth.h |  9 +++++--
- 3 files changed, 25 insertions(+), 13 deletions(-)
+ drivers/net/ethernet/ti/icssg/icssg_prueth.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/ti/icssg/icssg_common.c b/drivers/net/ethernet/ti/icssg/icssg_common.c
-index d7469ad457fd..b88cfe99e8b7 100644
---- a/drivers/net/ethernet/ti/icssg/icssg_common.c
-+++ b/drivers/net/ethernet/ti/icssg/icssg_common.c
-@@ -647,15 +647,15 @@ void emac_rx_timestamp(struct prueth_emac *emac,
-  * emac_xmit_xdp_frame - transmits an XDP frame
-  * @emac: emac device
-  * @xdpf: data to transmit
-- * @page: page from page pool if already DMA mapped
-  * @q_idx: queue id
-+ * @buff_type: Type of buffer to be transmitted
-  *
-  * Return: XDP state
-  */
- u32 emac_xmit_xdp_frame(struct prueth_emac *emac,
- 			struct xdp_frame *xdpf,
--			struct page *page,
--			unsigned int q_idx)
-+			unsigned int q_idx,
-+			enum prueth_tx_buff_type buff_type)
- {
- 	struct cppi5_host_desc_t *first_desc;
- 	struct net_device *ndev = emac->ndev;
-@@ -663,6 +663,7 @@ u32 emac_xmit_xdp_frame(struct prueth_emac *emac,
- 	struct prueth_tx_chn *tx_chn;
- 	dma_addr_t desc_dma, buf_dma;
- 	struct prueth_swdata *swdata;
-+	struct page *page;
- 	u32 *epib;
- 	int ret;
- 
-@@ -679,7 +680,12 @@ u32 emac_xmit_xdp_frame(struct prueth_emac *emac,
- 		return ICSSG_XDP_CONSUMED;	/* drop */
- 	}
- 
--	if (page) { /* already DMA mapped by page_pool */
-+	if (buff_type == PRUETH_TX_BUFF_TYPE_XDP_TX) { /* already DMA mapped by page_pool */
-+		page = virt_to_head_page(xdpf->data);
-+		if (unlikely(!page)) {
-+			netdev_err(ndev, "xdp tx: failed to get page from xdpf\n");
-+			goto drop_free_descs;
-+		}
- 		buf_dma = page_pool_get_dma_addr(page);
- 		buf_dma += xdpf->headroom + sizeof(struct xdp_frame);
- 	} else { /* Map the linear buffer */
-@@ -734,13 +740,11 @@ EXPORT_SYMBOL_GPL(emac_xmit_xdp_frame);
-  * emac_run_xdp - run an XDP program
-  * @emac: emac device
-  * @xdp: XDP buffer containing the frame
-- * @page: page with RX data if already DMA mapped
-  * @len: Rx descriptor packet length
-  *
-  * Return: XDP state
-  */
--static u32 emac_run_xdp(struct prueth_emac *emac, struct xdp_buff *xdp,
--			struct page *page, u32 *len)
-+static u32 emac_run_xdp(struct prueth_emac *emac, struct xdp_buff *xdp, u32 *len)
- {
- 	struct net_device *ndev = emac->ndev;
- 	struct netdev_queue *netif_txq;
-@@ -767,7 +771,8 @@ static u32 emac_run_xdp(struct prueth_emac *emac, struct xdp_buff *xdp,
- 		q_idx = cpu % emac->tx_ch_num;
- 		netif_txq = netdev_get_tx_queue(ndev, q_idx);
- 		__netif_tx_lock(netif_txq, cpu);
--		result = emac_xmit_xdp_frame(emac, xdpf, page, q_idx);
-+		result = emac_xmit_xdp_frame(emac, xdpf, q_idx,
-+					     PRUETH_TX_BUFF_TYPE_XDP_TX);
- 		__netif_tx_unlock(netif_txq);
- 		if (result == ICSSG_XDP_CONSUMED) {
- 			ndev->stats.tx_dropped++;
-@@ -792,7 +797,8 @@ static u32 emac_run_xdp(struct prueth_emac *emac, struct xdp_buff *xdp,
- 		fallthrough; /* handle aborts by dropping packet */
- 	case XDP_DROP:
- 		ndev->stats.rx_dropped++;
--		page_pool_recycle_direct(emac->rx_chns.pg_pool, page);
-+		page_pool_recycle_direct(emac->rx_chns.pg_pool,
-+					 virt_to_head_page(xdp->data));
- 		return ICSSG_XDP_CONSUMED;
- 	}
- }
-@@ -861,7 +867,7 @@ static int emac_rx_packet(struct prueth_emac *emac, u32 flow_id, u32 *xdp_state)
- 		xdp_init_buff(&xdp, PAGE_SIZE, &rx_chn->xdp_rxq);
- 		xdp_prepare_buff(&xdp, pa, PRUETH_HEADROOM, pkt_len, false);
- 
--		*xdp_state = emac_run_xdp(emac, &xdp, page, &pkt_len);
-+		*xdp_state = emac_run_xdp(emac, &xdp, &pkt_len);
- 		if (*xdp_state != ICSSG_XDP_PASS)
- 			goto requeue;
- 		headroom = xdp.data - xdp.data_hard_start;
 diff --git a/drivers/net/ethernet/ti/icssg/icssg_prueth.c b/drivers/net/ethernet/ti/icssg/icssg_prueth.c
-index bdce5a40defe..bb8d42ba0102 100644
+index 22de04ac18cb..f65041662173 100644
 --- a/drivers/net/ethernet/ti/icssg/icssg_prueth.c
 +++ b/drivers/net/ethernet/ti/icssg/icssg_prueth.c
-@@ -1185,7 +1185,8 @@ static int emac_xdp_xmit(struct net_device *dev, int n, struct xdp_frame **frame
- 	__netif_tx_lock(netif_txq, cpu);
- 	for (i = 0; i < n; i++) {
- 		xdpf = frames[i];
--		err = emac_xmit_xdp_frame(emac, xdpf, NULL, q_idx);
-+		err = emac_xmit_xdp_frame(emac, xdpf, q_idx,
-+					  PRUETH_TX_BUFF_TYPE_XDP_NDO);
- 		if (err != ICSSG_XDP_TX) {
- 			ndev->stats.tx_dropped++;
- 			break;
-diff --git a/drivers/net/ethernet/ti/icssg/icssg_prueth.h b/drivers/net/ethernet/ti/icssg/icssg_prueth.h
-index 67339cdf2ddf..3147a1d8f59a 100644
---- a/drivers/net/ethernet/ti/icssg/icssg_prueth.h
-+++ b/drivers/net/ethernet/ti/icssg/icssg_prueth.h
-@@ -154,6 +154,11 @@ enum prueth_swdata_type {
- 	PRUETH_SWDATA_XSK,
- };
+@@ -1554,7 +1554,8 @@ static int prueth_netdev_init(struct prueth *prueth,
+ 	xdp_set_features_flag(ndev,
+ 			      NETDEV_XDP_ACT_BASIC |
+ 			      NETDEV_XDP_ACT_REDIRECT |
+-			      NETDEV_XDP_ACT_NDO_XMIT);
++			      NETDEV_XDP_ACT_NDO_XMIT |
++			      NETDEV_XDP_ACT_XSK_ZEROCOPY);
  
-+enum prueth_tx_buff_type {
-+	PRUETH_TX_BUFF_TYPE_XDP_TX,
-+	PRUETH_TX_BUFF_TYPE_XDP_NDO,
-+};
-+
- struct prueth_swdata {
- 	enum prueth_swdata_type type;
- 	union prueth_data {
-@@ -506,8 +511,8 @@ void prueth_put_cores(struct prueth *prueth, int slice);
- u64 icssg_ts_to_ns(u32 hi_sw, u32 hi, u32 lo, u32 cycle_time_ns);
- u32 emac_xmit_xdp_frame(struct prueth_emac *emac,
- 			struct xdp_frame *xdpf,
--			struct page *page,
--			unsigned int q_idx);
-+			unsigned int q_idx,
-+			enum prueth_tx_buff_type buff_type);
- void prueth_rx_cleanup(void *data, dma_addr_t desc_dma);
- void prueth_tx_cleanup(void *data, dma_addr_t desc_dma);
- int prueth_xsk_wakeup(struct net_device *ndev, u32 qid, u32 flags);
+ 	netif_napi_add(ndev, &emac->napi_rx, icssg_napi_rx_poll);
+ 	hrtimer_setup(&emac->rx_hrtimer, &emac_rx_timer_callback, CLOCK_MONOTONIC,
 -- 
 2.43.0
 
