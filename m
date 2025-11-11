@@ -1,233 +1,100 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from 69-171-232-180.mail-mxout.facebook.com (69-171-232-180.mail-mxout.facebook.com [69.171.232.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEB543730DB
-	for <bpf@vger.kernel.org>; Tue, 11 Nov 2025 17:01:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D79453115BD
+	for <bpf@vger.kernel.org>; Tue, 11 Nov 2025 17:04:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762880479; cv=none; b=ShoMYFNV5DfG1S+dXXy15jq4nNHgUsfAgElM3AuyinOQXHOT9bTIvTL/bKqtAaTOiAjtJgiwOZgV+8rsxB0EI4oHaN0BMhK29IeenGaj6FvvUUE5my26E/qRGZeAbF7qVeUDoWKnvSzKPLZ52lG4jiEG+mu3VBbRKFJ15p1EQYM=
+	t=1762880681; cv=none; b=jmZy7t2/4Z9S9WYCsrlhY9LEagJEykwp8XwnNgqWgxNbzn09CTRqG8VP6As0smvdtqtByRYQmgceRJcdN0FMeOaaLeGjFnUvUUmhkNw0erY2cBezkOgUAlwdmN7hMVUcBYtKFAYOPQgTeYMCPeNBRaqECYvsz4W6LITyQV1BTBc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762880479; c=relaxed/simple;
-	bh=GG8uHV0FmaqMPOs5Q6aTAzqlFriQK9XSeM8KFTVlID4=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=WUuSWGOOrwsjc/VBYQ5h+c5Mzzq5EceLMYsdKIVw0vnUmYLcPg5HtPcb7spL+wPbTar+t/oPvvqzLQQBepdvDvNXeQ4OQHQ5OQeqpPTe+8j6U8gJdAbs42l6xH5DdcRXvd/1UDLOVe8v7yc5q2y83gBdtlnMMQ32srFVfpWpVWU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e52L5gGY; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e52L5gGY"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DD52C4CEFB;
-	Tue, 11 Nov 2025 17:01:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762880478;
-	bh=GG8uHV0FmaqMPOs5Q6aTAzqlFriQK9XSeM8KFTVlID4=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=e52L5gGYG0Y2wO6QINYG9SEbwyxCTt2w/pljtEh4YAPIedU1yCySBphpzF5zNf8Fz
-	 EMXzQffyn42RVqUunsoz2w06R1o5s6hYx4nJ36ikCbuQDMygvUV+Ej2/fBROeAn/SC
-	 XH63GskBEXoQ/qDvgRgKJpcG3EpL7aSMJWl8WduQ7VNh236ZR2Uy6ZnAHB4tgAQT84
-	 BTIhRAnHSrHw4JU7aubOgpY3m+Adg6xJn+M6x15VND10J6Jb78lT9E5W5oZ7sZgaFD
-	 mGFGKgdH+QvqGPwclBw5a+pU5jJLDODEVHBCCQ6MCN0J8Tg0ukSusAH6KfRCfjQCTu
-	 2Y52BVhy8D+vA==
-Content-Type: multipart/mixed; boundary="===============7128587919362208443=="
+	s=arc-20240116; t=1762880681; c=relaxed/simple;
+	bh=OxYODRbxQBMUVVOcY+3Zb//XqJeaJRWPR9E5F4ZNbNs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NmsBzUh5qY9jfgL9+SIXLWSSAPKlJXyE1PqJA9CueNLAuHQ76x73b8QAuRUCUH4CCFxV9dvj9O57igCzVmlAWKQpI5NNrVC9DcFFNrvopfWEX1BDQYEonRpPdbna3jQ5M4WX98hGTy56+tn7qvNPt7fvJ41y+/7CFwXiHUQE2dc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
+Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
+	id CA2BF14B819E3; Tue, 11 Nov 2025 09:04:24 -0800 (PST)
+From: Yonghong Song <yonghong.song@linux.dev>
+To: Alan Maguire <alan.maguire@oracle.com>,
+	Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+	dwarves@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	bpf@vger.kernel.org,
+	David Faust <david.faust@oracle.com>,
+	"Jose E . Marchesi" <jose.marchesi@oracle.com>,
+	kernel-team@fb.com
+Subject: [PATCH dwarves 0/3] pahole: Replace or add functions with true signatures in btf
+Date: Tue, 11 Nov 2025 09:04:24 -0800
+Message-ID: <20251111170424.286892-1-yonghong.song@linux.dev>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <10e3bbd8dc718b20a0182ac11bfc44ed521f3857495e756972c79d205a9ea4eb@mail.kernel.org>
-In-Reply-To: <20251111163424.16471-2-puranjay@kernel.org>
-References: <20251111163424.16471-2-puranjay@kernel.org>
-Subject: Re: [PATCH bpf-next 1/4] bpf: arena: populate vm_area without allocating memory
-From: bot+bpf-ci@kernel.org
-To: puranjay@kernel.org,bpf@vger.kernel.org
-Cc: puranjay@kernel.org,puranjay12@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,memxor@gmail.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Tue, 11 Nov 2025 17:01:18 +0000 (UTC)
+Content-Transfer-Encoding: quoted-printable
 
---===============7128587919362208443==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Current vmlinux BTF encoding is based on the source level signatures.
+But the compiler may do some optimization and changed the signature.
+If the user tried with source level signature, their initial implementati=
+on
+may have wrong results and then the user need to check what is the
+problem and work around it, e.g. through kprobe since kprobe does not
+need vmlinux BTF.=20
 
-> diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
-> index 1074ac445..dd5100a2f 100644
-> --- a/kernel/bpf/arena.c
-> +++ b/kernel/bpf/arena.c
+The following is a concrete example for [1].
+The original source signature:
+  typedef struct {
+        union {
+                void            *kernel;
+                void __user     *user;
+        };
+        bool            is_kernel : 1;
+  } sockptr_t;
+  typedef sockptr_t bpfptr_t;
+  static int map_create(union bpf_attr *attr, bpfptr_t uattr) { ... }
+After compiler optimization, the signature becomes:
+  static int map_create(union bpf_attr *attr, bool uattr__coerce1) { ... =
+}
+ =20
+In the above, uattr__coerce1 corresponds to 'is_kernel' field in sockptr_=
+t.
+Here, the suffix '__coerce1' refers to the second 64bit value in
+sockptr_t. The first 64bit value will be '__coerce0' if that value
+is used instead.
 
-[ ... ]
+To do proper tracing, it would be good for the users to know the
+changed signature. With the actual signature, both kprobe and fentry
+should work as usual. This can avoid user surprise and improve
+developer productivity.
 
-> @@ -92,6 +92,63 @@ static long compute_pgoff(struct bpf_arena *arena, long uaddr)
->  	return (u32)(uaddr - (u32)arena->user_vm_start) >> PAGE_SHIFT;
->  }
->
-> +struct apply_range_data {
-> +	struct page **pages;
-> +	int i;
-> +};
-> +
-> +static int apply_range_set_cb(pte_t *pte, unsigned long addr, void *data)
-> +{
-> +	struct apply_range_data *d = data;
-> +	struct page *page;
-> +
-> +	if (!data)
-> +		return 0;
-> +	/* sanity check */
-> +	if (unlikely(!pte_none(ptep_get(pte))))
-> +		return -EBUSY;
-> +
-> +	page = d->pages[d->i++];
-> +	/* paranoia, similar to vmap_pages_pte_range() */
-> +	if (WARN_ON_ONCE(!pfn_valid(page_to_pfn(page))))
-> +		return -EINVAL;
-> +
-> +	set_pte_at(&init_mm, addr, pte, mk_pte(page, PAGE_KERNEL));
-> +	return 0;
-> +}
-> +
-> +static int apply_range_clear_cb(pte_t *pte, unsigned long addr, void *data)
-> +{
-> +	struct mm_struct *mm = &init_mm;
-> +	pte_t old_pte;
-> +	struct page *page;
-> +
-> +	/* sanity check */
-> +	old_pte = ptep_get(pte);
-> +	if (pte_none(old_pte) || !pte_present(old_pte))
-> +		return 0; /* nothing to do */
-> +
-> +	/* get page and free it */
-> +	page = pte_page(old_pte);
-> +	if (WARN_ON_ONCE(!page))
-> +		return -EINVAL;
-> +
-> +	pte_clear(mm, addr, pte);
-> +
-> +	/* ensure no stale TLB entries */
-> +	flush_tlb_kernel_range(addr, addr + PAGE_SIZE);
-> +
-> +	__free_page(page);
-> +
-> +	return 0;
-> +}
-> +
-> +static int populate_pgtable_except_pte(struct bpf_arena *arena)
-> +{
-> +	return apply_to_page_range(&init_mm, bpf_arena_get_kern_vm_start(arena),
-> +				   KERN_VM_SZ - GUARD_SZ, apply_range_set_cb, NULL);
-> +}
-> +
->  static struct bpf_map *arena_map_alloc(union bpf_attr *attr)
->  {
->  	struct vm_struct *kern_vm;
+The llvm compiler patch [1] collects true signature and encoded those
+functions in dwarf. pahole will process these functions and
+replace old signtures with true signatures. Additionally,
+new functions (e.g., foo.llvm.<hash>) can be encoded in
+vmlinux BTF as well.
 
-[ ... ]
+Patches 1/2 are refactor patches. Patch 3 has the detailed explanation
+in commit message and implements the logic to encode replaced or new
+signatures to vmlinux BTF. Please see Patch 3 for details.
 
-> @@ -144,6 +201,9 @@ static struct bpf_map *arena_map_alloc(union bpf_attr *attr)
->  		goto err;
->  	}
->  	mutex_init(&arena->lock);
-> +	err = populate_pgtable_except_pte(arena);
-> +	if (err)
-> +		goto err;
+  [1] https://github.com/llvm/llvm-project/pull/165310
 
-Does this leak the arena and range_tree on error? The error path at the
-range_tree_set() failure (above these lines) calls bpf_map_area_free(arena)
-before goto err, but this new error path doesn't clean up arena or call
-range_tree_destroy() before jumping to err.
+Yonghong Song (3):
+  btf_encoder: Refactor elf_functions__new() with struct btf_encoder as
+    argument
+  bpf_encoder: Refactor a helper elf_function__check_and_push_sym()
+  pahole: Replace or add functions with true signatures in btf
 
->
->  	return &arena->map;
->  err:
+ btf_encoder.c  | 79 +++++++++++++++++++++++++++++++++++---------
+ dwarf_loader.c | 89 ++++++++++++++++++++++++++++++++++++++++++++++++++
+ dwarves.h      |  4 +++
+ pahole.c       |  9 +++++
+ 4 files changed, 165 insertions(+), 16 deletions(-)
 
-[ ... ]
+--=20
+2.47.3
 
-> @@ -286,6 +346,7 @@ static vm_fault_t arena_vm_fault(struct vm_fault *vmf)
->  	if (ret)
->  		return VM_FAULT_SIGSEGV;
->
-> +	struct apply_range_data data = { .pages = &page, .i = 0 };
->  	/* Account into memcg of the process that created bpf_arena */
->  	ret = bpf_map_alloc_pages(map, NUMA_NO_NODE, 1, &page);
->  	if (ret) {
->  		range_tree_set(&arena->rt, vmf->pgoff, 1);
->  		return VM_FAULT_SIGSEGV;
->  	}
->
-> -	ret = vm_area_map_pages(arena->kern_vm, kaddr, kaddr + PAGE_SIZE, &page);
-> +	ret = apply_to_page_range(&init_mm, kaddr, PAGE_SIZE, apply_range_set_cb, &data);
->  	if (ret) {
->  		range_tree_set(&arena->rt, vmf->pgoff, 1);
->  		__free_page(page);
-
-[ ... ]
-
-> @@ -428,7 +489,7 @@ static long arena_alloc_pages(struct bpf_arena *arena, long uaddr, long page_cnt
->  	/* user_vm_end/start are fixed before bpf prog runs */
->  	long page_cnt_max = (arena->user_vm_end - arena->user_vm_start) >> PAGE_SHIFT;
->  	u64 kern_vm_start = bpf_arena_get_kern_vm_start(arena);
-> -	struct page **pages;
-> +	struct page **pages = NULL;
->  	long pgoff = 0;
->  	u32 uaddr32;
->  	int ret, i;
-
-[ ... ]
-
-> @@ -465,6 +526,7 @@ static long arena_alloc_pages(struct bpf_arena *arena, long uaddr, long page_cnt
->  	if (ret)
->  		goto out_free_pages;
->
-> +	struct apply_range_data data = { .pages = pages, .i = 0 };
->  	ret = bpf_map_alloc_pages(&arena->map, node_id, page_cnt, pages);
->  	if (ret)
->  		goto out;
-> @@ -477,8 +539,8 @@ static long arena_alloc_pages(struct bpf_arena *arena, long uaddr, long page_cnt
->  	 * kern_vm_start + uaddr32 + page_cnt * PAGE_SIZE - 1 can overflow
->  	 * lower 32-bit and it's ok.
->  	 */
-> -	ret = vm_area_map_pages(arena->kern_vm, kern_vm_start + uaddr32,
-> -				kern_vm_start + uaddr32 + page_cnt * PAGE_SIZE, pages);
-> +	ret = apply_to_page_range(&init_mm, kern_vm_start + uaddr32,
-> +				  page_cnt << PAGE_SHIFT, apply_range_set_cb, &data);
->  	if (ret) {
->  		for (i = 0; i < page_cnt; i++)
->  			__free_page(pages[i]);
-
-[ ... ]
-
-> @@ -545,8 +607,8 @@ static void arena_free_pages(struct bpf_arena *arena, long uaddr, long page_cnt)
->  			 * page_cnt is big it's faster to do the batched zap.
->  			 */
->  			zap_pages(arena, full_uaddr, 1);
-> -		vm_area_unmap_pages(arena->kern_vm, kaddr, kaddr + PAGE_SIZE);
-> -		__free_page(page);
-> +		apply_to_existing_page_range(&init_mm, kaddr, page_cnt << PAGE_SHIFT,
-> +					     apply_range_clear_cb, NULL);
-
-Can this free pages multiple times? This is inside a loop that iterates
-page_cnt times, with kaddr incrementing by PAGE_SIZE each iteration. But
-apply_to_existing_page_range() is called with size page_cnt << PAGE_SHIFT,
-which processes page_cnt pages starting from kaddr.
-
-On the first iteration (i=0), it processes pages [0..page_cnt-1].
-On the second iteration (i=1, kaddr+=PAGE_SIZE), it processes pages
-[1..page_cnt], overlapping with the first iteration.
-
-Since apply_range_clear_cb() calls __free_page() for each page, page 0
-gets freed page_cnt times, page 1 gets freed page_cnt-1 times, etc.
-
-The original code called vm_area_unmap_pages() with size PAGE_SIZE,
-processing one page per iteration. Should the new code use PAGE_SIZE
-instead of page_cnt << PAGE_SHIFT?
-
->  	}
->  }
->
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/19272481461
-
---===============7128587919362208443==--
