@@ -1,196 +1,101 @@
-Received: from out-181.mta0.migadu.com (out-181.mta0.migadu.com [91.218.175.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from plesk.hostmyservers.fr (plesk.hostmyservers.fr [45.145.164.37])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D96A434FF6C;
-	Thu, 13 Nov 2025 13:16:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF8093446AA;
+	Thu, 13 Nov 2025 13:26:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.145.164.37
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763039813; cv=none; b=l1Vd9Goqn7rkAI4c8DbLLuNe2mPdFFGZ72h2opZFePc7c7D3+hOb7IGvT8u9Z9UPLq9B//JAGDgBCJxtUKVcah2BY9YXlkziet1erszJqYrA+kwwYzVnpcLbIzs+Z/FiUFtSzDVPkKJ3TXCKXtugFIFnyoyyuWoMXGRcNuB4On8=
+	t=1763040382; cv=none; b=V8N7R2Q+R7GpwRVCppEhHtEJUwBAOusdqIXRBm2WK00gBRu1Vh/TKEyGvORu2NIS0XosjMOVo80WOppyWO+U1Z8N43wYceCUCEnuQWT5rh7rURJq87FIzmnsrE3hpfj7x98y/ivBbqTJSfkvsWSazu7rRqUTfVi2PoBx7ihewg8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763039813; c=relaxed/simple;
-	bh=QNGOqLbAwoqstrsgcHwu7Y9gDhv7BY88AiOG8qIPNu4=;
+	s=arc-20240116; t=1763040382; c=relaxed/simple;
+	bh=Rh3bzVGApBGQbzZkTO2BFKFs3NSxoPrIjQ2As0xPEjo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=koR190feZOWmNgBgjFH4jETxsn92E04IUuCfbEUAmXVbkjC8DBt5pBtBmyPfQOoRHe9tCzeBPTvxdhIl6v4r0/yqO+bHo8Cd87aEzMfZJjQONayQ0EMSGvgm1nZZasgA32hUJahES9ScMrSsdCgyShCjZYwHFRU3Vfw6H9EQmRw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ckybWbZ/; arc=none smtp.client-ip=91.218.175.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ckybWbZ/"
-Message-ID: <17a9444f-1151-44b4-b2ec-5cafd12bf2bd@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1763039808;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=AvsYg/suGuaRX0DZcS1SBS2h2LrKRFVpbG6edtKNjaU=;
-	b=ckybWbZ/jvkG/c8u4NjG0nbicVD6AWkD5VuKlAtznklBjF3N4S6zwcwpfeFWSkkZarzWXM
-	0mt6wNVZ2OvL1KLTv2fSDR/z65Ueh8XBOkXSGB2tB+RTUNG3/R6DPqVeQEsSWcL6gCLh15
-	Y7Cq53I0I9lYTyU2czOF3XtXlJLsUpo=
-Date: Thu, 13 Nov 2025 21:16:32 +0800
+	 In-Reply-To:Content-Type; b=b2kiqgTLE2DHbbrqFwRFNw0aEDx53ouZUdI3cHz4ICVSPKEYtSCfOxCWhOeRDQQG7I9nsV3Ka8gMDHoUhJ6j8q9Qz0vG1dAuV9aQAbYFjyGevyT0WlkN9+80fFFNLbgiRwJsRKsxPfh7d1TlJdO+5EfsgBEU1ntatYCPSypgNSg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=arnaud-lcm.com; spf=pass smtp.mailfrom=arnaud-lcm.com; arc=none smtp.client-ip=45.145.164.37
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=arnaud-lcm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arnaud-lcm.com
+Received: from [192.168.7.227] (54-240-197-234.amazon.com [54.240.197.234])
+	by plesk.hostmyservers.fr (Postfix) with ESMTPSA id 7BF1A40C10;
+	Thu, 13 Nov 2025 13:26:11 +0000 (UTC)
+Authentication-Results: Plesk;
+        spf=pass (sender IP is 54.240.197.234) smtp.mailfrom=contact@arnaud-lcm.com smtp.helo=[192.168.7.227]
+Received-SPF: pass (Plesk: connection is authenticated)
+Message-ID: <43aa4ed3-d9c0-4f60-b850-d345cb85fe41@arnaud-lcm.com>
+Date: Thu, 13 Nov 2025 13:26:10 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v6 2/2] selftests/bpf: Add test to verify freeing
- the special fields when update [lru_,]percpu_hash maps
-To: Yonghong Song <yonghong.song@linux.dev>, bpf@vger.kernel.org
-Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
- martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
- john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
- haoluo@google.com, jolsa@kernel.org, memxor@gmail.com, ameryhung@gmail.com,
- linux-kernel@vger.kernel.org, kernel-patches-bot@fb.com
-References: <20251105151407.12723-1-leon.hwang@linux.dev>
- <20251105151407.12723-3-leon.hwang@linux.dev>
- <9f662e2c-7370-4f99-bdec-bc123495e1c5@linux.dev>
- <04c35045-ef5b-4e92-9da9-6710ce8fdabf@linux.dev>
- <22251785-789d-43f8-8031-86406cd4c12b@linux.dev>
- <6a2a6f41-f24a-4e87-94d0-8cb147725279@linux.dev>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v3] bpf: Clamp trace length in __bpf_get_stack to
+ fix OOB write
+To: Brahmajit Das <listout@listout.xyz>
+Cc: syzbot+d1b7fa1092def3628bd7@syzkaller.appspotmail.com, andrii@kernel.org,
+ ast@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net,
+ eddyz87@gmail.com, haoluo@google.com, john.fastabend@gmail.com,
+ jolsa@kernel.org, kpsingh@kernel.org, linux-kernel@vger.kernel.org,
+ martin.lau@linux.dev, netdev@vger.kernel.org, sdf@fomichev.me,
+ song@kernel.org, syzkaller-bugs@googlegroups.com, yonghong.song@linux.dev
+References: <691231dc.a70a0220.22f260.0101.GAE@google.com>
+ <20251111081254.25532-1-listout@listout.xyz>
+ <3f79436c-d343-46ff-8559-afb7da24a44d@arnaud-lcm.com>
+ <kjjn3mvfp2gf5iyeyukthgluayrkefonfmqbugrsreeeqfwde5@rxrzxrsobt54>
 Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <6a2a6f41-f24a-4e87-94d0-8cb147725279@linux.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+From: "Lecomte, Arnaud" <contact@arnaud-lcm.com>
+In-Reply-To: <kjjn3mvfp2gf5iyeyukthgluayrkefonfmqbugrsreeeqfwde5@rxrzxrsobt54>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-PPP-Message-ID: <176304037239.10917.10498323386673519218@Plesk>
+X-PPP-Vhost: arnaud-lcm.com
 
 
-
-On 2025/11/12 05:58, Yonghong Song wrote:
->
->
-> On 11/11/25 5:52 AM, Leon Hwang wrote:
+On 13/11/2025 12:49, Brahmajit Das wrote:
+> On 12.11.2025 08:40, 'Lecomte, Arnaud' via syzkaller-bugs wrote:
+>> I am a not sure this is the right solution and I am scared that by
+>> forcing this clamping, we are hiding something else.
+>> If we have a look at the code below:
+>> ```
 >>
->> On 2025/11/11 21:38, Leon Hwang wrote:
->>>
->>> On 2025/11/7 10:00, Yonghong Song wrote:
->>>>
->>>> On 11/5/25 7:14 AM, Leon Hwang wrote:
-[...]
-
->>>>> +
->>>>> +static int __insert_in_list(struct bpf_list_head *head, struct
->>>>> bpf_spin_lock *lock,
->>>>> +                struct node_data __kptr **node)
->>>>> +{
->>>>> +    struct node_data *node_new, *node_ref, *node_old;
->>>>> +
->>>>> +    node_new = bpf_obj_new(typeof(*node_new));
->>>>> +    if (!node_new)
->>>>> +        return -1;
->>>>> +
->>>>> +    node_ref = bpf_refcount_acquire(node_new);
->>>>> +    node_old = bpf_kptr_xchg(node, node_new);
->>>> Change the above to node_old = bpf_kptr_xchg(node, node_node_ref);
->>>> might
->>>> be better for reasoning although node_ref/node_new are the same.
->>>>
->>> Nope — node_ref and node_new are different for the verifier.
->> They are the same in theory.
+>> |
 >>
->> The verifier failure was likely caused by something else, but I'm not
->> sure of the exact reason.
+>> 	if (trace_in) {
+>> 		trace = trace_in;
+>> 		trace->nr = min_t(u32, trace->nr, max_depth);
+>> 	} else if (kernel && task) {
+>> 		trace = get_callchain_entry_for_task(task, max_depth);
+>> 	} else {
+>> 		trace = get_perf_callchain(regs, kernel, user, max_depth,
+>> 					crosstask, false, 0);
+>> 	} ``` trace should be (if I remember correctly) clamped there. If not, it
+>> might hide something else. I would like to have a look at the return for
+>> each if case through gdb. |
+> Hi Arnaud,
+> So I've been debugging this the reproducer always takes the else branch
+> so trace holds whatever get_perf_callchain returns; in this situation.
 >
-> I did some analysis and your code works as expected:
+> I mostly found it to be a value around 4.
 >
->     node_ref = bpf_refcount_acquire(node_new);
->     node_old = bpf_kptr_xchg(node, node_new);
->     if (node_old) {
->             bpf_obj_drop(node_old);
->             bpf_obj_drop(node_ref);
->             return -2;
->     }
+> In some case the value would exceed to something 27 or 44, just after
+> the code block
 >
->     bpf_spin_lock(lock);
->     bpf_list_push_front(head, &node_ref->l);
->     ref = (u64)(void *) &node_ref->ref;
->     bpf_spin_unlock(lock);
+> 	if (unlikely(!trace) || trace->nr < skip) {
+> 		if (may_fault)
+> 			rcu_read_unlock();
+> 		goto err_fault;
+> 	}
 >
-> In the above, after the following insn:
->     node_old = bpf_kptr_xchg(node, node_new);
-> the second argument 'node_new' will become a scalar since it
-> may be changed by another bpf program accessing the same map.
->
-> So your code is okay as node_ref still valid ptr_node_data
-> and can be used in following codes.
->
->
-> My suggestion to replace
->     node_old = bpf_kptr_xchg(node, node_new);
-> with
->     node_old = bpf_kptr_xchg(node, node_ref);
-> will not work since node_ref will be a scalar
-> so subsequent bpf_obj_drop(node_ref) and bpf_list_push_front(...)
-> won't work.
->
-> In summary, your change look okay to me. Sorry for noise.
->
+> So I'm assuming there's some race condition that might be going on
+> somewhere.
+Which value ? trace->nr ?
+> I'm still debugging bug I'm open to ideas and definitely I could be
+> wrong here, please feel free to correct/point out.
 
-Hi Yonghong,
-
-Thanks for your detailed analysis.
-
-Indeed, in the case of
-node_old = bpf_kptr_xchg(node, node_ref);,
-the verifier marks node_ref as SCALAR_VALUE.
-
-Here's the relevant part in check_helper_call():
-
-static int check_helper_call(struct bpf_verifier_env *env, struct
-bpf_insn *insn,
-                             int *insn_idx_p)
-{
-        //...
-        if (meta.release_regno) {
-                err = -EINVAL;
-                if (arg_type_is_dynptr(fn->arg_type[meta.release_regno -
-BPF_REG_1])) {
-                        err = unmark_stack_slots_dynptr(env,
-&regs[meta.release_regno]);
-                } else if (func_id == BPF_FUNC_kptr_xchg &&
-meta.ref_obj_id) {
-                        u32 ref_obj_id = meta.ref_obj_id;
-                        bool in_rcu = in_rcu_cs(env);
-                        struct bpf_func_state *state;
-                        struct bpf_reg_state *reg;
-
-                        err = release_reference_nomark(env->cur_state,
-ref_obj_id);
-                        if (!err) {
-
-bpf_for_each_reg_in_vstate(env->cur_state, state, reg, ({
-                                        if (reg->ref_obj_id == ref_obj_id) {
-                                                if (in_rcu && (reg->type
-& MEM_ALLOC) && (reg->type & MEM_PERCPU)) {
-                                                        reg->ref_obj_id = 0;
-                                                        reg->type &=
-~MEM_ALLOC;
-                                                        reg->type |=
-MEM_RCU;
-                                                } else {
-
-mark_reg_invalid(env, reg);
-                                                }
-                                        }
-                                }));
-                        }
-                } else if (meta.ref_obj_id) {
-                        //...
-        }
-        //...
-}
-
-This logic matches your explanation — when the argument passed to
-bpf_kptr_xchg() holds a reference (meta.ref_obj_id), that reference is
-not a KPTR_PERCPU inside an RCU critical section.
-As a result, node_ref is invalidated and becomes a scalar after the call.
-
-So yes, your reasoning is correct, and this behavior explains why using
-node_ref as the second argument doesn't work.
+I should be able to have a look tomorrow evening as I am currently a bit 
+overloaded
+with my work.
 
 Thanks,
-Leon
+Arnaud
 
-[...]
