@@ -1,51 +1,109 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 503C234E74C;
-	Thu, 13 Nov 2025 13:05:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A1172C21D8
+	for <bpf@vger.kernel.org>; Thu, 13 Nov 2025 13:16:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763039110; cv=none; b=N9gs47cYQtzNDzDptwdaUiwbCbX1ZIgWt7ODUHzEkE+JEK9PCmvmjyzftty7tzX72oIKqHpWwcHntqSTrySob6u9lV1lU66yZ82BkNOo+5tnJuYWF6AFZ9mWsHDOgl5w8f/d62TuH3yvtPySFDvFbvv88Zz5n5EmOnlXq/4SAZM=
+	t=1763039804; cv=none; b=EL+Eh+KtHtXSeaGADK1F91Wmfdyw4kwnhCr+WOX93P6PeVrUpG0ZB+r6YbrbsqKFldA3Ho3CqIj811h1I56m8CODJlOoYmKDQpg/ZCtxt0jEc4DLzljnepnklpDnkIH1l0vKTKr9KsPqtSYuC+vy4dmy/EFgOioJtTXrXyVfvXk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763039110; c=relaxed/simple;
-	bh=cL2KGa3EDoiRCfsg89NVRAFAk4L8Qg34jvE72zfEDh8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rJXqivzsQrD5D9Np5BHBYV0qPo4erL5m1IGhprXsZcQsJGV4Oi4GY2Q0UKytVgEQWyd/TTXCuODLGv+LK89Dl3kt3jCA3gNt8pTP88MSnfykQngCnYBfJ/r9KbzIzU5rp8gH2Z2vthNwyx8Y3DKVwnCuhEblO0xS4JGDeQXDRKQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=il4RnQGw; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1763039804; c=relaxed/simple;
+	bh=9vAPeMTFO0eBnz1z3RP+JUWWUOUJ64sbjllUUULC1tI=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=he3i1DypZ2XiShzKPXEA6P6feD7TJ50tanZcvbaOG2n0ci7XMO0ZU8SXaP4xAQ9a6P/zjLSNUdNW8AROSqzV6z1xtCTnxZ73HNsyYpUKGFy6DUi03P4A7K4lT9obsibigfbxXV+zCK3aWMNNd6Iwv0A2rMu/OE6cgpPeBI6mS7A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Rek854TF; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=N9zLXFdF; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="il4RnQGw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2BE2C19424;
-	Thu, 13 Nov 2025 13:05:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763039110;
-	bh=cL2KGa3EDoiRCfsg89NVRAFAk4L8Qg34jvE72zfEDh8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=il4RnQGwDvnxHfZSmsds+I8y6BNCBtXGaG87YpVWivDQ6OAMNU0aN73RxVc/phLZp
-	 nBq004ZZQJS15y4wwdPHMDYVfZFw1GqSq0ccJZHaK8lshhGWY+D087BtQFu7STDswl
-	 0f4U2LLDBzAeXxgA8NNesftI2ujyTAH/Q+34taTN9qHIf/4Av7bOWViiL9C30AbxFB
-	 ZVc/hpC66wTR50h6hAG6T+YZxtu2rbrGMPL6Euk/wbanQv/8V2P2u8KRm8ueL80UmY
-	 KP+bFEo0u5ZavG6L0bP2T+AG5kOtlGFMkzvJFBTaeofM7P7ml4cPa5RH0aKykI8WdV
-	 Lhpe1TlFi9zWA==
-Date: Thu, 13 Nov 2025 14:05:00 +0100
-From: Christian Brauner <brauner@kernel.org>
-To: Jan Kara <jack@suse.cz>
-Cc: syzbot <syzbot+0b2e79f91ff6579bfa5b@syzkaller.appspotmail.com>, 
-	akpm@linux-foundation.org, bpf@vger.kernel.org, bsegall@google.com, david@redhat.com, 
-	dietmar.eggemann@arm.com, jsavitz@redhat.com, juri.lelli@redhat.com, kartikey406@gmail.com, 
-	kees@kernel.org, liam.howlett@oracle.com, linux-fsdevel@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, linux-security-module@vger.kernel.org, 
-	lorenzo.stoakes@oracle.com, mgorman@suse.de, mhocko@suse.com, mingo@redhat.com, 
-	mjguzik@gmail.com, oleg@redhat.com, paul@paul-moore.com, peterz@infradead.org, 
-	rostedt@goodmis.org, rppt@kernel.org, sergeh@kernel.org, surenb@google.com, 
-	syzkaller-bugs@googlegroups.com, vbabka@suse.cz, vincent.guittot@linaro.org, 
-	viro@zeniv.linux.org.uk, vschneid@redhat.com, 
-	syzbot+0a8655a80e189278487e@syzkaller.appspotmail.com
-Subject: Re: [PATCH] nsproxy: fix free_nsproxy() and simplify
- create_new_namespaces()
-Message-ID: <20251113-hochphase-sprossen-2ff6e1f23b5b@brauner>
-References: <691360cc.a70a0220.22f260.013e.GAE@google.com>
- <20251111-sakralbau-guthaben-7dcc277d337f@brauner>
- <3yjawi3c72ieiss7ivefckuua55e2yvo55z4m4ykp2pzw2snpa@ym34e3d7cnoi>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Rek854TF";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="N9zLXFdF"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1763039801;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=9vAPeMTFO0eBnz1z3RP+JUWWUOUJ64sbjllUUULC1tI=;
+	b=Rek854TFxnAKfYKWm2nrR2LDfpADm1im5ESCGw0cbRUXVXm6LjA9x4mc7VmKp1Wn2ooBrS
+	bUwemOk//Ji8ztvjwlv6djZuusVfGA9FgU4siExe8Nq10/0D3hoN7ggUdaBs3/2rsvT6CD
+	3U4kKQAerQ1z8bgEbLfKnugtdEzsF0o=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-648-lm8yHlPVOrGPIyfPrFBm-Q-1; Thu, 13 Nov 2025 08:16:40 -0500
+X-MC-Unique: lm8yHlPVOrGPIyfPrFBm-Q-1
+X-Mimecast-MFC-AGG-ID: lm8yHlPVOrGPIyfPrFBm-Q_1763039799
+Received: by mail-ed1-f69.google.com with SMTP id 4fb4d7f45d1cf-64097bef0e2so1097825a12.3
+        for <bpf@vger.kernel.org>; Thu, 13 Nov 2025 05:16:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1763039799; x=1763644599; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9vAPeMTFO0eBnz1z3RP+JUWWUOUJ64sbjllUUULC1tI=;
+        b=N9zLXFdFYpV/osHscfn7TdXBBfd5UFZvIppK9EQQoLWEGDVKnu7QTJK8Gvz5AT2Dit
+         yfRz4k5Dx5DaSV5v5RqehBpn3vSIIiRvw7VnYm1OtQIW2ndijSvhoSEDD25A56VS9YaB
+         C1YTQbGUZK2WEOrfWdFlNocb8r9FCcL94EQ+CnWQqLz+U/Ij9MSMRvHNRsp91qEANUiK
+         VEwFewCBFtOSPQK7PmJZK/aa24MnwoPEqs6w89K/k0FvU3XiF97l5/gw7nGe8hlHXvv7
+         /ongoYI09PSI8XPah4a+qRk6bp+xvg+BLQJGKncEMylvl1EpSoxTeLGkmeWW2cMVuv5+
+         6qsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763039799; x=1763644599;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=9vAPeMTFO0eBnz1z3RP+JUWWUOUJ64sbjllUUULC1tI=;
+        b=IaGKskJ9oFVWxNqyB4r+5PHc9KC0SP7OrqutOFNv6gHnIPpJkSFd+52KFRqmHg/xf+
+         npMFomAstiy/czLQlymwTHOoBYdLZgWZTsDYshzmFmH6KB42daQ4qX6F1BVRKMUL30SH
+         rBpqRI6TMgRxqYNGjE6V1KlS70XM/fa/JQU9C1zjHrpt1+kQrtP+vnFaNfJmtkMBTCJo
+         WTPT2KwkGTpyuDM4YjIBEOq8h+I5fuwRfZ7D+lusAC0FMgALp9ooUnqCUbQIOFrcskMi
+         qz/pQD524KKpGkDQkaTtl8T7wjn8H4IRGZ1b1kc1UcF7tjpJKYdqYGHYbL3RuS8hZFm1
+         BErw==
+X-Forwarded-Encrypted: i=1; AJvYcCWTICoZke8l9XVjQztIHzze2R8TDwMHKrERCJ+P+fUbLF1ECy7cxHWJAaMYFOr/BJeXkJA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzW0RV1/s0hcHY30hM7XKzsaatrL37Ow9qf9d24pjFk/HI0ACX2
+	cxvM1GusHApTKwjEQdzQy5nW7jj7KHuL3w3ywRF1klF2Je0TjL/kXeOnqiOq4Yi/ONdlRzydHY7
+	ibaFTrfZ23pAEu4LMM4gAiUsFO+IFd91n5ZhpEx1/OiKmMAhtlvrnOQ==
+X-Gm-Gg: ASbGncsdAV1qxBuAezeRIzHAHvpfJqeWA8ARdHkUAxmtob3Ok4sol5hJJyLk+c5tl2w
+	xg+ag0nqButZGBI6xqtrd0I7KtSWti1xtpVUWZlKTc2SmyuZOgPQFqBAK7jEgqQDHVkSdWa2Yhz
+	HsQPeQgSlT7kK7eg+Vye/LDi75flEamlgnPPHZQkFx88Hlzxa6w5ufjN3zzBBfdzdBKlomDJO4g
+	UH2dv4+7adgikVG+RQ5l4eAWfdXo63rG3fUTQ0DtFwRDj21486q3btsWMXP9pn9WhW/nK4JQnUf
+	8zXH3wxkSGhKEBKMCmb58RXJxkd8cxNVTMB6MkEXqbHaJSDinwud543BO0R6hd1DsXnzXNa9g6W
+	LKtafXRl4jFtL/J6xc1rnb+YgZA==
+X-Received: by 2002:a05:6402:3246:10b0:640:9b11:5d65 with SMTP id 4fb4d7f45d1cf-6431a53869cmr4852173a12.24.1763039798813;
+        Thu, 13 Nov 2025 05:16:38 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHLcdyRRLd6FFTpnP+EhRUxFYbZIck3c6mTdTrBYOE3QCti+/KF//8k0n5mO+GBPIWDghFa9A==
+X-Received: by 2002:a05:6402:3246:10b0:640:9b11:5d65 with SMTP id 4fb4d7f45d1cf-6431a53869cmr4852148a12.24.1763039798370;
+        Thu, 13 Nov 2025 05:16:38 -0800 (PST)
+Received: from alrua-x1.borgediget.toke.dk (alrua-x1.borgediget.toke.dk. [2a0c:4d80:42:443::2])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6433a3f8eb0sm1495033a12.12.2025.11.13.05.16.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Nov 2025 05:16:37 -0800 (PST)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+	id 8CE6B329799; Thu, 13 Nov 2025 14:16:36 +0100 (CET)
+From: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To: Tariq Toukan <ttoukan.linux@gmail.com>, Tariq Toukan
+ <tariqt@nvidia.com>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski
+ <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Andrew Lunn
+ <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>
+Cc: Saeed Mahameed <saeedm@nvidia.com>, Leon Romanovsky <leon@kernel.org>,
+ Mark Bloch <mbloch@nvidia.com>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard Brouer
+ <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
+ netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org, Gal Pressman
+ <gal@nvidia.com>, Leon Romanovsky <leonro@nvidia.com>, Moshe Shemesh
+ <moshe@nvidia.com>, William Tu <witu@nvidia.com>, Dragos Tatulea
+ <dtatulea@nvidia.com>, Nimrod Oren <noren@nvidia.com>, Alex Lazar
+ <alazar@nvidia.com>
+Subject: Re: [PATCH net-next 0/6] net/mlx5e: Speedup channel configuration
+ operations
+In-Reply-To: <60c0b805-92e9-48c0-a4dc-5ea071728b3d@gmail.com>
+References: <1762939749-1165658-1-git-send-email-tariqt@nvidia.com>
+ <874iqzldvq.fsf@toke.dk> <89e33ec4-051d-4ca5-8fcd-f500362dee91@gmail.com>
+ <87ms4rjjm0.fsf@toke.dk> <60c0b805-92e9-48c0-a4dc-5ea071728b3d@gmail.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date: Thu, 13 Nov 2025 14:16:36 +0100
+Message-ID: <878qgajcnf.fsf@toke.dk>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -53,229 +111,64 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <3yjawi3c72ieiss7ivefckuua55e2yvo55z4m4ykp2pzw2snpa@ym34e3d7cnoi>
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Nov 13, 2025 at 12:19:40PM +0100, Jan Kara wrote:
-> On Tue 11-11-25 22:29:44, Christian Brauner wrote:
-> > Make it possible to handle NULL being passed to the reference count
-> > helpers instead of forcing the caller to handle this. Afterwards we can
-> > nicely allow a cleanup guard to handle nsproxy freeing.
-> > 
-> > Active reference count handling is not done in nsproxy_free() but rather
-> > in free_nsproxy() as nsproxy_free() is also called from setns() failure
-> > paths where a new nsproxy has been prepared but has not been marked as
-> > active via switch_task_namespaces().
-> > 
-> > Fixes: 3c9820d5c64a ("ns: add active reference count")
-> > Reported-by: syzbot+0b2e79f91ff6579bfa5b@syzkaller.appspotmail.com
-> > Reported-by: syzbot+0a8655a80e189278487e@syzkaller.appspotmail.com
-> > Link: https://lore.kernel.org/690bfb9e.050a0220.2e3c35.0013.GAE@google.com
-> > Signed-off-by: Christian Brauner <brauner@kernel.org>
-> 
-> I believe having free_nsproxy() and nsproxy_free() functions with
-> the same signature and slightly different semantics is making things too
-> easy to get wrong. Maybe call free_nsproxy() say deactivate_nsproxy()?
+Tariq Toukan <ttoukan.linux@gmail.com> writes:
 
-Good idea, I'll rename to that!
+> On 12/11/2025 18:33, Toke H=C3=B8iland-J=C3=B8rgensen wrote:
+>> Tariq Toukan <ttoukan.linux@gmail.com> writes:
+>>=20
+>>> On 12/11/2025 12:54, Toke H=C3=B8iland-J=C3=B8rgensen wrote:
+>>>> Tariq Toukan <tariqt@nvidia.com> writes:
+>>>>
+>>>>> Hi,
+>>>>>
+>>>>> This series significantly improves the latency of channel configurati=
+on
+>>>>> operations, like interface up (create channels), interface down (dest=
+roy
+>>>>> channels), and channels reconfiguration (create new set, destroy old
+>>>>> one).
+>>>>
+>>>> On the topic of improving ifup/ifdown times, I noticed at some point
+>>>> that mlx5 will call synchronize_net() once for every queue when they a=
+re
+>>>> deactivated (in mlx5e_deactivate_txqsq()). Have you considered changing
+>>>> that to amortise the sync latency over the full interface bringdown? :)
+>>>>
+>>>> -Toke
+>>>>
+>>>>
+>>>
+>>> Correct!
+>>> This can be improved and I actually have WIP patches for this, as I'm
+>>> revisiting this code area recently.
+>>=20
+>> Excellent! We ran into some issues with this a while back, so would be
+>> great to see this improved.
+>>=20
+>> -Toke
+>>=20
+>
+> Can you elaborate on the test case and issues encountered?
+> To make sure I'm addressing them.
 
-> 
-> Otherwise the patch looks correct to me. Feel free to add:
-> 
-> Reviewed-by: Jan Kara <jack@suse.cz>
-> 
-> 								Honza
-> 
-> > ---
-> >  include/linux/ns_common.h |  11 ++--
-> >  kernel/nsproxy.c          | 107 +++++++++++++++-----------------------
-> >  2 files changed, 48 insertions(+), 70 deletions(-)
-> > 
-> > diff --git a/include/linux/ns_common.h b/include/linux/ns_common.h
-> > index 136f6a322e53..825f5865bfc5 100644
-> > --- a/include/linux/ns_common.h
-> > +++ b/include/linux/ns_common.h
-> > @@ -114,11 +114,14 @@ static __always_inline __must_check bool __ns_ref_dec_and_lock(struct ns_common
-> >  }
-> >  
-> >  #define ns_ref_read(__ns) __ns_ref_read(to_ns_common((__ns)))
-> > -#define ns_ref_inc(__ns) __ns_ref_inc(to_ns_common((__ns)))
-> > -#define ns_ref_get(__ns) __ns_ref_get(to_ns_common((__ns)))
-> > -#define ns_ref_put(__ns) __ns_ref_put(to_ns_common((__ns)))
-> > +#define ns_ref_inc(__ns) \
-> > +	do { if (__ns) __ns_ref_inc(to_ns_common((__ns))); } while (0)
-> > +#define ns_ref_get(__ns) \
-> > +	((__ns) ? __ns_ref_get(to_ns_common((__ns))) : false)
-> > +#define ns_ref_put(__ns) \
-> > +	((__ns) ? __ns_ref_put(to_ns_common((__ns))) : false)
-> >  #define ns_ref_put_and_lock(__ns, __ns_lock) \
-> > -	__ns_ref_dec_and_lock(to_ns_common((__ns)), __ns_lock)
-> > +	((__ns) ? __ns_ref_dec_and_lock(to_ns_common((__ns)), __ns_lock) : false)
-> >  
-> >  #define ns_ref_active_read(__ns) \
-> >  	((__ns) ? __ns_ref_active_read(to_ns_common(__ns)) : 0)
-> > diff --git a/kernel/nsproxy.c b/kernel/nsproxy.c
-> > index 94c2cfe0afa1..2c94452dc793 100644
-> > --- a/kernel/nsproxy.c
-> > +++ b/kernel/nsproxy.c
-> > @@ -60,6 +60,27 @@ static inline struct nsproxy *create_nsproxy(void)
-> >  	return nsproxy;
-> >  }
-> >  
-> > +static inline void nsproxy_free(struct nsproxy *ns)
-> > +{
-> > +	put_mnt_ns(ns->mnt_ns);
-> > +	put_uts_ns(ns->uts_ns);
-> > +	put_ipc_ns(ns->ipc_ns);
-> > +	put_pid_ns(ns->pid_ns_for_children);
-> > +	put_time_ns(ns->time_ns);
-> > +	put_time_ns(ns->time_ns_for_children);
-> > +	put_cgroup_ns(ns->cgroup_ns);
-> > +	put_net(ns->net_ns);
-> > +	kmem_cache_free(nsproxy_cachep, ns);
-> > +}
-> > +
-> > +DEFINE_FREE(nsproxy_free, struct nsproxy *, if (_T) nsproxy_free(_T))
-> > +
-> > +void free_nsproxy(struct nsproxy *ns)
-> > +{
-> > +	nsproxy_ns_active_put(ns);
-> > +	nsproxy_free(ns);
-> > +}
-> > +
-> >  /*
-> >   * Create new nsproxy and all of its the associated namespaces.
-> >   * Return the newly created nsproxy.  Do not attach this to the task,
-> > @@ -69,76 +90,45 @@ static struct nsproxy *create_new_namespaces(u64 flags,
-> >  	struct task_struct *tsk, struct user_namespace *user_ns,
-> >  	struct fs_struct *new_fs)
-> >  {
-> > -	struct nsproxy *new_nsp;
-> > -	int err;
-> > +	struct nsproxy *new_nsp __free(nsproxy_free) = NULL;
-> >  
-> >  	new_nsp = create_nsproxy();
-> >  	if (!new_nsp)
-> >  		return ERR_PTR(-ENOMEM);
-> >  
-> >  	new_nsp->mnt_ns = copy_mnt_ns(flags, tsk->nsproxy->mnt_ns, user_ns, new_fs);
-> > -	if (IS_ERR(new_nsp->mnt_ns)) {
-> > -		err = PTR_ERR(new_nsp->mnt_ns);
-> > -		goto out_ns;
-> > -	}
-> > +	if (IS_ERR(new_nsp->mnt_ns))
-> > +		return ERR_CAST(new_nsp->mnt_ns);
-> >  
-> >  	new_nsp->uts_ns = copy_utsname(flags, user_ns, tsk->nsproxy->uts_ns);
-> > -	if (IS_ERR(new_nsp->uts_ns)) {
-> > -		err = PTR_ERR(new_nsp->uts_ns);
-> > -		goto out_uts;
-> > -	}
-> > +	if (IS_ERR(new_nsp->uts_ns))
-> > +		return ERR_CAST(new_nsp->uts_ns);
-> >  
-> >  	new_nsp->ipc_ns = copy_ipcs(flags, user_ns, tsk->nsproxy->ipc_ns);
-> > -	if (IS_ERR(new_nsp->ipc_ns)) {
-> > -		err = PTR_ERR(new_nsp->ipc_ns);
-> > -		goto out_ipc;
-> > -	}
-> > +	if (IS_ERR(new_nsp->ipc_ns))
-> > +		return ERR_CAST(new_nsp->ipc_ns);
-> >  
-> > -	new_nsp->pid_ns_for_children =
-> > -		copy_pid_ns(flags, user_ns, tsk->nsproxy->pid_ns_for_children);
-> > -	if (IS_ERR(new_nsp->pid_ns_for_children)) {
-> > -		err = PTR_ERR(new_nsp->pid_ns_for_children);
-> > -		goto out_pid;
-> > -	}
-> > +	new_nsp->pid_ns_for_children = copy_pid_ns(flags, user_ns,
-> > +						   tsk->nsproxy->pid_ns_for_children);
-> > +	if (IS_ERR(new_nsp->pid_ns_for_children))
-> > +		return ERR_CAST(new_nsp->pid_ns_for_children);
-> >  
-> >  	new_nsp->cgroup_ns = copy_cgroup_ns(flags, user_ns,
-> >  					    tsk->nsproxy->cgroup_ns);
-> > -	if (IS_ERR(new_nsp->cgroup_ns)) {
-> > -		err = PTR_ERR(new_nsp->cgroup_ns);
-> > -		goto out_cgroup;
-> > -	}
-> > +	if (IS_ERR(new_nsp->cgroup_ns))
-> > +		return ERR_CAST(new_nsp->cgroup_ns);
-> >  
-> >  	new_nsp->net_ns = copy_net_ns(flags, user_ns, tsk->nsproxy->net_ns);
-> > -	if (IS_ERR(new_nsp->net_ns)) {
-> > -		err = PTR_ERR(new_nsp->net_ns);
-> > -		goto out_net;
-> > -	}
-> > +	if (IS_ERR(new_nsp->net_ns))
-> > +		return ERR_CAST(new_nsp->net_ns);
-> >  
-> >  	new_nsp->time_ns_for_children = copy_time_ns(flags, user_ns,
-> > -					tsk->nsproxy->time_ns_for_children);
-> > -	if (IS_ERR(new_nsp->time_ns_for_children)) {
-> > -		err = PTR_ERR(new_nsp->time_ns_for_children);
-> > -		goto out_time;
-> > -	}
-> > +						     tsk->nsproxy->time_ns_for_children);
-> > +	if (IS_ERR(new_nsp->time_ns_for_children))
-> > +		return ERR_CAST(new_nsp->time_ns_for_children);
-> >  	new_nsp->time_ns = get_time_ns(tsk->nsproxy->time_ns);
-> >  
-> > -	return new_nsp;
-> > -
-> > -out_time:
-> > -	put_net(new_nsp->net_ns);
-> > -out_net:
-> > -	put_cgroup_ns(new_nsp->cgroup_ns);
-> > -out_cgroup:
-> > -	put_pid_ns(new_nsp->pid_ns_for_children);
-> > -out_pid:
-> > -	put_ipc_ns(new_nsp->ipc_ns);
-> > -out_ipc:
-> > -	put_uts_ns(new_nsp->uts_ns);
-> > -out_uts:
-> > -	put_mnt_ns(new_nsp->mnt_ns);
-> > -out_ns:
-> > -	kmem_cache_free(nsproxy_cachep, new_nsp);
-> > -	return ERR_PTR(err);
-> > +	return no_free_ptr(new_nsp);
-> >  }
-> >  
-> >  /*
-> > @@ -185,21 +175,6 @@ int copy_namespaces(u64 flags, struct task_struct *tsk)
-> >  	return 0;
-> >  }
-> >  
-> > -void free_nsproxy(struct nsproxy *ns)
-> > -{
-> > -	nsproxy_ns_active_put(ns);
-> > -
-> > -	put_mnt_ns(ns->mnt_ns);
-> > -	put_uts_ns(ns->uts_ns);
-> > -	put_ipc_ns(ns->ipc_ns);
-> > -	put_pid_ns(ns->pid_ns_for_children);
-> > -	put_time_ns(ns->time_ns);
-> > -	put_time_ns(ns->time_ns_for_children);
-> > -	put_cgroup_ns(ns->cgroup_ns);
-> > -	put_net(ns->net_ns);
-> > -	kmem_cache_free(nsproxy_cachep, ns);
-> > -}
-> > -
-> >  /*
-> >   * Called from unshare. Unshare all the namespaces part of nsproxy.
-> >   * On success, returns the new nsproxy.
-> > @@ -338,7 +313,7 @@ static void put_nsset(struct nsset *nsset)
-> >  	if (nsset->fs && (flags & CLONE_NEWNS) && (flags & ~CLONE_NEWNS))
-> >  		free_fs_struct(nsset->fs);
-> >  	if (nsset->nsproxy)
-> > -		free_nsproxy(nsset->nsproxy);
-> > +		nsproxy_free(nsset->nsproxy);
-> >  }
-> >  
-> >  static int prepare_nsset(unsigned flags, struct nsset *nsset)
-> > -- 
-> > 2.47.3
-> > 
-> -- 
-> Jan Kara <jack@suse.com>
-> SUSE Labs, CR
+Sure, thanks for taking a look!
+
+The high-level issue we've been seeing involves long delays creating and
+tearing down OpenShift (Kubernetes) pods that have SR-IOV devices
+assigned to them. The worst example of involved a test that basically
+reboots an application (tearing down its pods and immediately recreating
+them), which takes up to ~10 minutes for ~100 pods.
+
+Because a lot of the wait happens with the RNTL held, we also get
+cascading errors to other parts of the system. This is how I ended up
+digging into what the mlx5 driver was doing while holding the RTNL,
+which is where I noticed the "synchronize_net() in a loop" behaviour.
+
+We're working on reducing the blast radius of the RTNL in general, but
+the setup/teardown time seems to be driver specific, so any improvements
+here would be welcome, I guess :)
+
+-Toke
+
