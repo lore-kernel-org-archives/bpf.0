@@ -1,112 +1,120 @@
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay.hostedemail.com (smtprelay0012.hostedemail.com [216.40.44.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E07C7329E76
-	for <bpf@vger.kernel.org>; Fri, 14 Nov 2025 16:14:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BF35283CBF;
+	Fri, 14 Nov 2025 16:28:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763136898; cv=none; b=DX0zru7uW400WB2uD87gkypUjF1i9d3NJMsBCsH+xZs2yVJT7XKbeYnKnUXHVegV2xUudzTxI+s8YKZJbWLwmxtVawlqNmhcUX4r0v7iGTc0AH0cMc6zjQDjiAu3VlZZHgk7zw9rlghkv7Pbw9ZvU31pmI/PfK1OQGkOnoFOA9w=
+	t=1763137692; cv=none; b=u7OaXYkDZYhQMDOiSu+4V2WyUnrgf1Gvy818MRadHNaLZcLrHnqGoJ6T2+/92p0krkaDCUGUBDGUuzeNekT2QWqLPYpPAFMed9ZGosEckEcnKTCzBK2h60Zao3LsRLr9GA2BrylZK/m5dLl4q0yAs+PAPIXiIvmmIQsqPyhgcJM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763136898; c=relaxed/simple;
-	bh=0KEMRnM9OlC4P/LSEy02FovIuGSAeGZa97d2f7KESG8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hR5s0vlUIr+upiiGC3R7Osjx6EraWkdJfKpIfqm49ArfT+tvPwv01dxAMGoYfM18WVZFwYVPbrkkT7VswU4zOfWWInFj1lIVwdziHEYcsw/93FTS3y04tzCkMH1CKtw/4ybUxTajuc1VSuU+SqGMnaFcy3gxHmvBw0G59VoUbIo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c2GvzZvc; arc=none smtp.client-ip=209.85.221.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c2GvzZvc"
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-42b31507ed8so1728515f8f.1
-        for <bpf@vger.kernel.org>; Fri, 14 Nov 2025 08:14:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763136895; x=1763741695; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Q9m4N6m+GpmnkcOX3LOBnUDNwNK5sGNIv80VL76U6SA=;
-        b=c2GvzZvcLSKuuUgdKpmm30hJtBBR9sYUHCjG3ELiEkl+OE0O/siRD4wbGI8GypbiSR
-         fiqotJKhbGqNUEKL5nAxPp7cje0SkJJsMl4dhUCP2tFq6cwQQJnmlHqO4OtGgMx/pWFo
-         5KNqDxC8wyEwT8ZBSHvlPWJYUy2OmvME8DT7IZL8qJBkiAF4OuZ4QXfvALklUiOJY1RT
-         6fd48zmjcYjcgCQIYqx9mUDWbslxwKYlqLOlsar0ZKo8022BI8MZjNOtG3/MqImgKfQS
-         d2q6y8AqlZtiDkrYDjDRpRHj0xx4aSgvXrElZnAUD5C9RxwmapwpgBrZW241v8eSH7Xg
-         LLrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763136895; x=1763741695;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=Q9m4N6m+GpmnkcOX3LOBnUDNwNK5sGNIv80VL76U6SA=;
-        b=UhIwyHCjUdDQOCEfDPI0S9fk5sN058RQ9sW2xmo5C91R+Ue4QP8ezAwuszFm3lu9UU
-         SyRpuLP0WfECeiBMfWF6xvwcUpDpmO9vc73vk3z4le6/eCbA+BvNotmCk5ipHdaRAB2w
-         CXFp2oHJizGTr5EvvTYbGmFHfyUun9Whi3MhDC0MYWMWUVY/E8Y+1xzrtRZqvyl3Ze7g
-         YoS8qYXz2BfONtib7uRE4QGUv4f3Cfz0tPJbOFNREz8oVLJlHmbznGSDfZRp6LVqY/Yc
-         xPDSe1UemW6GDU9s05yuyavPgwG7HWpwPFc3F7HTupnOl+jqYaXYPyTGg8zCzaAds5CN
-         X9Tw==
-X-Gm-Message-State: AOJu0YxUros50glR1o3oPBE3Q/eTVIqZBEcqGFBAINKHbrNXsLSOS3qq
-	Y6l1rcAjaM831N/8wUTUqu952hasZNh4CGqJohbeodjkYiwAoxKqENCanAqTzfRwWdozRDmjb+R
-	Ds2wr+rBtnvIL2ndk5roav1Rag4TUSbE=
-X-Gm-Gg: ASbGncvw84OScdxeNsUsp37F7JKlJOSghTmERFnXWegy0Wg97DK+Q/P6jaTvO73vdWP
-	ZTCHVV+pVjvvSaWqLe0Ph2dUEYZlFxN4RkYy1iSKWhpBJaJ+QQYMxO3Mrrk0UI0XfAADRFa80tQ
-	lcd6c3insi2lRvWTN2ri7dditUEcKEOGuDncIdgvZtf0AAgriUEArjK31hpx1RpMptbGfWWSXzU
-	qdS6Wnbg63XZmZFW6GFKFwJ2GpdvtFMvjhufjNIit1PXz6Abt9s9O3SHkXIEABvJUlJnXtFQRnR
-	8m0bLzc6ZYvYSHD1tBES34eptROq
-X-Google-Smtp-Source: AGHT+IHF79deL2JaC4EHdXEWbtnO/OZxWZ1Xl+R66rYMHVHfX9VDSVtfnAeiEp4svQtmx7EsqK9GSy8gkmQZZM0oXhs=
-X-Received: by 2002:a5d:5f90:0:b0:429:8a71:d57 with SMTP id
- ffacd0b85a97d-42b59356aadmr3612069f8f.27.1763136894857; Fri, 14 Nov 2025
- 08:14:54 -0800 (PST)
+	s=arc-20240116; t=1763137692; c=relaxed/simple;
+	bh=QIK9ItLTIk6pAbhauY0sm3JqkjFNJ/8GidbIVaT4+kU=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=XkmPihnNF00nHyrIkbEZ6RnHvfHjOFVvEH8ogNbZHyTAB5H+BojjTQmhL5XQV1E6kTi4SSBLHEk164qUCGTzZedNY2j072TR0L3ZBVdfh59Yg6tttnVcY89qW8anK/EPIvkcGzIYTK2uqSEk71lyHuS0UW37VhMRzh70wC5cepk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+Received: from omf07.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay06.hostedemail.com (Postfix) with ESMTP id 8160012DA72;
+	Fri, 14 Nov 2025 16:28:07 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf07.hostedemail.com (Postfix) with ESMTPA id 5F2B52002D;
+	Fri, 14 Nov 2025 16:28:03 +0000 (UTC)
+Date: Fri, 14 Nov 2025 11:28:21 -0500
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Menglong Dong <menglong.dong@linux.dev>
+Cc: Menglong Dong <menglong8.dong@gmail.com>, ast@kernel.org,
+ daniel@iogearbox.net, john.fastabend@gmail.com, andrii@kernel.org,
+ martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, kpsingh@kernel.org, sdf@fomichev.me,
+ haoluo@google.com, jolsa@kernel.org, mhiramat@kernel.org,
+ mark.rutland@arm.com, mathieu.desnoyers@efficios.com, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC bpf-next 0/7] bpf trampoline support "jmp" mode
+Message-ID: <20251114112821.39da4d91@gandalf.local.home>
+In-Reply-To: <117548898.nniJfEyVGO@7950hx>
+References: <20251114092450.172024-1-dongml2@chinatelecom.cn>
+	<20251114083835.553c9480@gandalf.local.home>
+	<117548898.nniJfEyVGO@7950hx>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251114031039.63852-1-alexei.starovoitov@gmail.com>
- <f273691ffc4f2ca3a4f6b16abb50804f60aa4fe9.camel@gmail.com> <62b71f16bf43e6045fb3c37a7b4db7d959a17739.camel@gmail.com>
-In-Reply-To: <62b71f16bf43e6045fb3c37a7b4db7d959a17739.camel@gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Fri, 14 Nov 2025 08:14:43 -0800
-X-Gm-Features: AWmQ_bluu05ULUMDsAeYUHmYxTL_DSl964t-u1eKy3Jzl6iQCQP9KcJnNRGqN-A
-Message-ID: <CAADnVQJ7wQwkuiySTEokaW-nuEPKwKbtW1N0TZKt7Da_etHPxg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 1/2] bpf: Recognize special arithmetic shift in
- the verifier
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: bpf <bpf@vger.kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@kernel.org>, Hao Sun <sunhao.th@gmail.com>, 
-	Kernel Team <kernel-team@fb.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Stat-Signature: 9f44huoa574et3k15s3wmm36yz7rhnz5
+X-Rspamd-Server: rspamout03
+X-Rspamd-Queue-Id: 5F2B52002D
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX1+jFbLuHIU+RkS1gAzenJzlgDHwvz8NYxA=
+X-HE-Tag: 1763137683-354947
+X-HE-Meta: U2FsdGVkX1/DDua1XMkXhw0u/ANwjsYw00a0sFfg6t+38jP+gJZtEPRMjIzJ5PX6fcBb8VTlLlWqKrgQwhvLmD51WXExn90fhVJBBzlsAp4SiYKjjB8RHb8zQ4O05smIua7aP/n41DeTTlN0swrxTYgwyJ1hF/W7HM3W4TiQ/It3DIPGf2sUc7EEcie5KRLazKLBE9WoZ6vI1ioaCGOc8D485rlu9/jDtoMDAdsy2Sl5Z9AMUTmAuae2I8v3DtSTLy4mdnbUJWqiB4bV3o/7miLn9DL1RJM9TA6ILgfiK8TxEjYSTa3Z0dGMcN1PvEhB2AiltLjnzrqtdH58g5IvZS5HoQHSUCON
 
-On Thu, Nov 13, 2025 at 11:48=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.co=
-m> wrote:
->
-> On Thu, 2025-11-13 at 23:26 -0800, Eduard Zingerman wrote:
-> > On Thu, 2025-11-13 at 19:10 -0800, Alexei Starovoitov wrote:
-> >
-> > [...]
-> >
-> > > 227: (85) call bpf_skb_store_bytes#9
-> > > 228: (bc) w2 =3D w0
-> > > 229: (c4) w2 s>>=3D 31   ;
-> > > R2=3Dscalar(smin=3D0,smax=3Dumax=3D0xffffffff,smin32=3D-1,smax32=3D0,=
-var_off=3D(0x0; 0xffffffff))
-> > > 230: (54) w2 &=3D -134   ;
-> > > R2=3Dscalar(smin=3D0,smax=3Dumax=3Dumax32=3D0xffffff7a,smax32=3D0x7ff=
-fff7a,var_off=3D(0x0; 0xffffff7a))
-> >
-> > Forking states is an interesting idea, however something is fishy with
-> > the way we handle &=3D. After arithmetic shift the range is known to be=
- [-1,0].
-> > I would assume that binary 'and' operation cannot widen the range,
->
-> Ok, that's not true for negative numbers.
-> Each switch from 1 to 0 lowers minimal value bound.
+On Fri, 14 Nov 2025 21:58:34 +0800
+Menglong Dong <menglong.dong@linux.dev> wrote:
 
-Yeah. The 'and' logic is difficult to grasp.
-First tnum_and() makes var_off=3D(0x0; 0xffffff7a)
-Then scalar32_min_max_and() refines bounds to
-smin32=3D0x80000000 and smax32=3D0x7fffff7a.
-Both bounds are impossible.
-It feels we can improve it by keeping
-smin32=3D0xffffff7a // -134
-smax32=3D0
-but it's probably only true when starting from smin32=3D-1
+> On 2025/11/14 21:38, Steven Rostedt wrote:
+> > On Fri, 14 Nov 2025 17:24:43 +0800
+> > Menglong Dong <menglong8.dong@gmail.com> wrote:
+> >   
+> > > Therefore, we introduce the "jmp" mode for bpf trampoline, as advised by
+> > > Alexei in [1]. And the logic will become this:
+> > >   call foo -> jmp trampoline -> call foo-body ->
+> > >   return foo-body -> return foo  
+> > 
+> > This obviously only works when there's a single function used by that
+> > trampoline. It also doesn't allow tracing of the return side (it's
+> > basically just the function tracer for a single function).  
+> 
+> Hi, Steven. I think you misunderstand something? For the fentry/fexit,
+> the whole process is:
+
+Yeah, I got a bit confused by the notation above.
+
+> 
+> call foo -> jmp trampoline -> call all the fentry bpf progs ->
+> call foo-body -> return foo-body -> call all the fexit bpf progs
+> -> return foo.  
+> 
+> The "call foo-body" means "origin call", and it will store the
+> return value of the traced function to the stack, therefore the
+> fexit progs can get it.
+> 
+> So it can trace the return side with the "fexit". And it's almost the
+> same as the origin logic of the bpf trampoline:
+
+OK, so this is just the way it always works.
+
+> 
+> call foo -> call trampoline -> call all the fentry bpf progs ->
+> call foo-body -> return foo-body -> call all the fexit bpf progs
+> -> skip the rip -> return foo.  
+> 
+> What I did here is just replace the "call trampoline" to
+> "jmp trampoline".
+> 
+> > 
+> > Is there any mechanism to make sure that the trampoline being called is
+> > only used by that one function? I haven't looked at the code yet, but
+> > should there be a test that makes sure a trampoline isn't registered for
+> > two or more different functions?  
+> 
+> As for now, the bpf trampoline is per-function. Every trampoline
+> has a unique key, and we find the trampoline for the target function
+> by that key. So it can't be used by two or more different functions.
+> 
+> If the trampoline need to get the ip of the origin call from the stack,
+> such as BPF_TRAMP_F_SHARE_IPMODIFY case, we will fallback to the
+> "call" mode, as we can't get the rip from the stack in the "jmp" mode.
+> And I think this is what you mean "only work for a single function"?
+> Yeah, we fallback on such case.
+
+
+OK, I got lost in the notation. It doesn't need a "call" because each
+trampoline is only for a single function. Hence it doesn't need to know the
+return address.
+
+-- Steve
+
