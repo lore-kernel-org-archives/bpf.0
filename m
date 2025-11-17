@@ -1,188 +1,174 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65D7E21CA0D;
-	Mon, 17 Nov 2025 06:54:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B682A8462
+	for <bpf@vger.kernel.org>; Mon, 17 Nov 2025 08:01:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763362462; cv=none; b=TCqiTBvWK3WJEUOlLPK4kKibOD14OW5ukZTlvzpmxPsGF9DugWc61L3yF0PfV0wxui8bLT3GDzI3C6z9r9vL3ZcZw7u8ao05htsaD3ffFB1RZVxlvP77E+8PDqCoF5CnB3lhkGFkQBiosFvl/l6i28LVQf9K2esF/uhZoepLpG4=
+	t=1763366481; cv=none; b=BSc/Wlv1WtUb53v4ubCSMb1t6jPwpMcgLcke30TMgdR/DhDpru0HjR0hcyLpzO+0JWoP06KG3ekiVYKiiDSZwZITFHBABsjjR6mZP04ayjIU0z6FgzqEY59YT9F7kZ1aVpWmciBKtVSMVkxlZMm+SZ6OqrFx9U5DmpvGyXeTkS8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763362462; c=relaxed/simple;
-	bh=9VGcasXjEK1hK5vTzISCY8XU8j93I1t4fZXrIDahP00=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=BTTgHAkWqD75sn9MT1RIvaL44LnMm3j41KWmmibsn7FNYquEws39pfgjsluPZdla/vzoj+bNsFc+pSA2PJoEiievSezb6Jj+nfuLdywO9JvHsZj4Fj5FIIZhFDI3HohGY1LTIHW+sQfKSxZ7TfrlDH+QfDr/Cub+myaAU1GZ4/M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=ZUj0FO1v; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1763366481; c=relaxed/simple;
+	bh=ldWrn4/4dGN5tyDYADFjeNSDikUmn5bLbi1mO0yfGTs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=V9NqG1e2vxZWuIsWJW4NmRhHAqKqwZYaD4boKLCFYMhGck+BWNeXAhz5sZdgPUcZOOAsefW59S2eYagDj/SgwIF/0gLqGBKCDMwUkBZ+3qZ9qDNo42IuO5EtrAEfXz9+tbcB95ZEPU2lPlfB6h2g1wuM7ER9m0Q0C0SNYGNFfHs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VBxVfjMn; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="ZUj0FO1v"
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5AGH77er011537;
-	Mon, 17 Nov 2025 06:52:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=+alo3U
-	bEupCj7LbLwMD2TuLDGJIyyt28uqSQUJb9iEA=; b=ZUj0FO1vF0bpo788xJ5nvA
-	ZI9sFh+riLN+alcFWnBRLSr3CKWwJGpyjWXLEl0OsnuzIlQ1EWXfDTldYjm5qs6O
-	FrlwMKVx9P2fhD5Vnz4GN0P40Ru0HCaI8T6hg9WPJhKuEI3OCQM2QChP9DUm4cgb
-	eYp09mfdPwlCuxR2vB1jX+nJOgFaYZEiR2fxcOTWzVa2c9ILSWTmhmKcFGWtO6UD
-	jsNMcgubzKvkyYFbaL6hADrEIKVZyCuQx47ae+ESlFLe29AVZTmaq6sZaTn7CSCf
-	CDfhsKoEpKVI7Bmyh2QfceEYmB9zi8+iyr9ozZJmh1GXWK7c9rRoA7nxzwNaIohA
-	==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4aejk14ud9-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 17 Nov 2025 06:52:50 +0000 (GMT)
-Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 5AH6dU1F009668;
-	Mon, 17 Nov 2025 06:52:49 GMT
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4aejk14ud7-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 17 Nov 2025 06:52:49 +0000 (GMT)
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5AH6PWjg010419;
-	Mon, 17 Nov 2025 06:52:48 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4af3urvk33-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 17 Nov 2025 06:52:48 +0000
-Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 5AH6qjrJ39715256
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 17 Nov 2025 06:52:45 GMT
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id F02FB20040;
-	Mon, 17 Nov 2025 06:52:44 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 1B1FA2004B;
-	Mon, 17 Nov 2025 06:52:41 +0000 (GMT)
-Received: from li-621bac4c-27c7-11b2-a85c-c2bf7c4b3c07.in.ibm.com (unknown [9.109.219.153])
-	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Mon, 17 Nov 2025 06:52:40 +0000 (GMT)
-From: Saket Kumar Bhaskar <skb99@linux.ibm.com>
-To: bpf@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org
-Cc: hbathini@linux.ibm.com, sachinpb@linux.ibm.com, venkat88@linux.ibm.com,
-        andrii@kernel.org, eddyz87@gmail.com, ast@kernel.org,
-        daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
-        yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
-        sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
-        christophe.leroy@csgroup.eu, naveen@kernel.org, maddy@linux.ibm.com,
-        mpe@ellerman.id.au, npiggin@gmail.com
-Subject: [PATCH bpf-next v2 1/2] powerpc64/bpf: Support internal-only MOV instruction to resolve per-CPU addrs
-Date: Mon, 17 Nov 2025 12:22:34 +0530
-Message-ID: <e58dc8bfd5be16f95684d35fd68919ea83c7e322.1762422548.git.skb99@linux.ibm.com>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <cover.1762422548.git.skb99@linux.ibm.com>
-References: <cover.1762422548.git.skb99@linux.ibm.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VBxVfjMn"
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4775e891b5eso20195015e9.2
+        for <bpf@vger.kernel.org>; Mon, 17 Nov 2025 00:01:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1763366478; x=1763971278; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=BZ2V3ClwzvtK5ZGuVjKWlrVxcpGffy1Lae3rK4VNwNI=;
+        b=VBxVfjMnQjreMt9osVt+wT5oz+D+kTFCKU/G9tPpndqX40qBouR1EAuvDgZVB4XNbx
+         COaOmmrA8EI/D6OrIGrfk8p5n97qSLO1v/CVtYpT21zA0ypZF/C+xubGQvdIjNfam7tH
+         86IAqKM5O4h1yAg+hzE7UnI1BhxQnTZ52g+/8AuNwTcMkEG3jIvwXGVnWrXQUnIY6tzc
+         uF8HknyUK0tw/abm8QfC3SHtb33Pojk6gZjFxZ729QUV+w1EBOYqRCFHg7Idce16Z7Dn
+         A0VmTOkOiqt6SG9Utx00eH3QSzx6sbnST8+lYwI7fZj/9uX+CU8Uf7JMQEFYACv9WptQ
+         BJgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763366478; x=1763971278;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=BZ2V3ClwzvtK5ZGuVjKWlrVxcpGffy1Lae3rK4VNwNI=;
+        b=W8eYtajXvxV9ELWIGiWjSJIIgv16StyZ4jGK3O9bVSjQdHEuABlwLa/kdWRxOBjARh
+         AArBwjGI7UVwQ5qEJ6mzZ6TEYjHMJFZecN4b37I19L3nC6uqmitNzH7ThRWudUBr6W/o
+         lysrdW4dCPuTRnEXw7Ls4pP5HqrVLk0PNqUuCxSVqDEb2wYWw7ikbkOw9jr2A5RVApfN
+         XR1XayZkIwjMVyhmGDTBSYvNbElbgoBP66BsIU228gnSsNIttnLofVKiVPK2CXcRLozl
+         6uYKhRFR1m+ZjJ18UKo+Dqtbh+tU+SN/ttPAqPIikZ+hndg5oLf9SYBU6s/fh963VGOS
+         DDIg==
+X-Gm-Message-State: AOJu0Yzk1ZgFMMW4nDzSxNbFBzl2ziVcPZRV52FPt1fHjEgSYJuKl6vo
+	rlCZkQpsaJn6j8rUiKS3ujFSKoAxXfB/0HOaMu59/LtQls8ht4JAhRZD
+X-Gm-Gg: ASbGncsXvmWtekvprHH93qrXsAPH4uIJlnwwn6XOdh6I1/UPpA+P5QYyJ0hldKsPGo6
+	xIcixIOBXZBhULm4otqhGVg+03HLewU+JMCUsn+2SkWXmMl8ZkUbAnCGJTsnBAuy2XA+ktmmoXs
+	pxJHpUWVbx64bQO8t5V8hWDmF4Fp28ugg6xAxywhpt3Dn2+mkaOA1wkVAAFQbwS42fiEFIlPmPA
+	jyVMN+DPHIEc7IhaSgvSiPkw4XAOfQAJq1IN4MP0qbwJD8HaQwrYwM3+i4jzTgbea9rUWRrxzN5
+	2xbpCZ8hWtRroRouH8e+Lyr4eXEy4Wx2fa6ZD9YY4Eh57jhVliVVzpwvoNYWjRJGFOqhYRItTlg
+	A8SVNtS45/lgdm7o/pnwsJcCJIovNHU+y4ZJls2YTfIVU6EwjTcWhHU/N65gBo4DU/GHvfHPdS/
+	JourYBK47xFQVDFXadOGhI
+X-Google-Smtp-Source: AGHT+IEhwXWnh2PDBFttyEHjm0POpI/lLrbUZ8xaDLMLJTs2KphK+Y5wvtZEhdvs+QS0FF8TSNNItA==
+X-Received: by 2002:a05:600c:c178:b0:475:da1a:53f9 with SMTP id 5b1f17b1804b1-4778fe5732cmr97775695e9.14.1763366477391;
+        Mon, 17 Nov 2025 00:01:17 -0800 (PST)
+Received: from mail.gmail.com ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4779525d2bcsm151309385e9.5.2025.11.17.00.01.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Nov 2025 00:01:16 -0800 (PST)
+Date: Mon, 17 Nov 2025 08:08:13 +0000
+From: Anton Protopopov <a.s.protopopov@gmail.com>
+To: Puranjay Mohan <puranjay@kernel.org>
+Cc: bpf@vger.kernel.org, Puranjay Mohan <puranjay12@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Xu Kuohai <xukuohai@huaweicloud.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, kernel-team@meta.com,
+	Yonghong Song <yonghong.song@linux.dev>
+Subject: Re: [PATCH bpf-next 0/4] bpf: arm64: Indirect jumps
+Message-ID: <aRrX7eXoWL1RhtJO@mail.gmail.com>
+References: <20251117004656.33292-1-puranjay@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Authority-Analysis: v=2.4 cv=C/nkCAP+ c=1 sm=1 tr=0 ts=691ac642 cx=c_pps
- a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
- a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=NEAV23lmAAAA:8 a=VnNF1IyMAAAA:8 a=9ieA5zyVNCi_1SjJAlMA:9 a=3ZKOabzyN94A:10
- a=QEXdDO2ut3YA:10 a=cPQSjfK2_nFv0Q5t_7PE:22
-X-Proofpoint-GUID: tCJP1Y9VwZFQNgXULkF-3Z_VQtLbbkcV
-X-Proofpoint-ORIG-GUID: 8Pwe9b7X5a-OSzI9xeEndQmbr_ki4epO
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTE1MDAzMiBTYWx0ZWRfX4sNlqtGEEzo0
- HCD0L4pkM2CtYgmrPNKBUCaLkUTjlDmSvn8DtKPzBjBKoctzukLS7PALtCjLwqK6gwox4xwPiDJ
- /BfpiZK+RtmE/8g3RuxVQhyFgS3y8UCYKzvY+1x3D/+tVWE3z1AwgHfqVT3Bpw2D1aCuLnGuC8k
- Y4OPTYoapUGAnTALVnVI0oQtXDD4jwOQJKaXSDu+W8tLZ3FMk7cgpOK0YkCGusBL0IAYCoLirc/
- HX/ybD0p77OJTIjCjsrmI4W+JteGYNBMNJ5o+IjlkMXRZGTlGEEMqw5kp0u3zyD6BNxF44C6Q8V
- 3qWs34AjhK7G9+69suavhKvbS7+HwUitG6qk92OrGF74GAqjI96+Esw/SczUYucGTXgA3KTzZFL
- +Yy+ODNG2yZqF5Rimy9M+aN5v34K7Q==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-11-17_02,2025-11-13_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- phishscore=0 priorityscore=1501 spamscore=0 impostorscore=0 bulkscore=0
- malwarescore=0 suspectscore=0 clxscore=1015 lowpriorityscore=0 adultscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2510240000 definitions=main-2511150032
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251117004656.33292-1-puranjay@kernel.org>
 
-With the introduction of commit 7bdbf7446305 ("bpf: add special
-internal-only MOV instruction to resolve per-CPU addrs"),
-a new BPF instruction BPF_MOV64_PERCPU_REG has been added to
-resolve absolute addresses of per-CPU data from their per-CPU
-offsets. This update requires enabling support for this
-instruction in the powerpc JIT compiler.
+On 25/11/17 12:46AM, Puranjay Mohan wrote:
+> This set adds the support of indirect jumps to the arm64 JIT. It
+> involves calling bpf_prog_update_insn_ptrs() to support instructions
+> array map. The second piece is supporting BPF_JMP|BPF_X|BPF_JA, SRC=0,
+> DST=Rx, off=0, imm=0 instruction that is trivial to implement on arm64.
+>
+> When running the selftests after doing the above changes, I found that
+> on arm64 builds of llvm, a relocation section was being generated for
+> .jumptables sections and it was making libbpf fail like:
+> 
+> libbpf: relocation against STT_SECTION in non-exec section is not supported!
+> Error: failed to link 'tools/testing/selftests/bpf/cpuv4/bpf_gotox.bpf.o': Invalid argument (22)
+> 
+> Which is due to:
+> 
+> Relocation section '.rel.jumptables' at offset 0x5b50 contains 263 entries:
+>     Offset             Info             Type               Symbol's Value  Symbol's Name
+> 0000000000000000  0000000300000002 R_BPF_64_ABS64         0000000000000000 syscall
+> 0000000000000008  0000000300000002 R_BPF_64_ABS64         0000000000000000 syscall
+> 0000000000000010  0000000300000002 R_BPF_64_ABS64         0000000000000000 syscall
+> 
+> This rel section is not generated by x86 builds of LLVM. The third patch
+> of this set makes libbpf ignore relocation sections for .jumptables.
 
-As of commit 7a0268fa1a36 ("[PATCH] powerpc/64: per cpu data
-optimisations"), the per-CPU data offset for the CPU is stored in
-the paca.
+I added Yonghong to this thread. He had fixed this problem in
+https://github.com/llvm/llvm-project/pull/166301 changes doesn't seem to be
+x86-specific...
 
-To support this BPF instruction in the powerpc JIT, the following
-powerpc instructions are emitted:
+> 
+> The final patch enables selftests on arm64:
+> 
+>  [root@localhost bpf]# ./test_progs-cpuv4 -a "*gotox*"
+>  #20/1    bpf_gotox/one-switch:OK
+>  #20/2    bpf_gotox/one-switch-non-zero-sec-offset:OK
+>  #20/3    bpf_gotox/two-switches:OK
+>  #20/4    bpf_gotox/big-jump-table:OK
+>  #20/5    bpf_gotox/static-global:OK
+>  #20/6    bpf_gotox/nonstatic-global:OK
+>  #20/7    bpf_gotox/other-sec:OK
+>  #20/8    bpf_gotox/static-global-other-sec:OK
+>  #20/9    bpf_gotox/nonstatic-global-other-sec:OK
+>  #20/10   bpf_gotox/one-jump-two-maps:OK
+>  #20/11   bpf_gotox/one-map-two-jumps:OK
+>  #20      bpf_gotox:OK
+>  #537/1   verifier_gotox/jump_table_ok:OK
+>  #537/2   verifier_gotox/jump_table_reserved_field_src_reg:OK
+>  #537/3   verifier_gotox/jump_table_reserved_field_non_zero_off:OK
+>  #537/4   verifier_gotox/jump_table_reserved_field_non_zero_imm:OK
+>  #537/5   verifier_gotox/jump_table_no_jump_table:OK
+>  #537/6   verifier_gotox/jump_table_incorrect_dst_reg_type:OK
+>  #537/7   verifier_gotox/jump_table_invalid_read_size_u32:OK
+>  #537/8   verifier_gotox/jump_table_invalid_read_size_u16:OK
+>  #537/9   verifier_gotox/jump_table_invalid_read_size_u8:OK
+>  #537/10  verifier_gotox/jump_table_misaligned_access:OK
+>  #537/11  verifier_gotox/jump_table_invalid_mem_acceess_pos:OK
+>  #537/12  verifier_gotox/jump_table_invalid_mem_acceess_neg:OK
+>  #537/13  verifier_gotox/jump_table_add_sub_ok:OK
+>  #537/14  verifier_gotox/jump_table_no_writes:OK
+>  #537/15  verifier_gotox/jump_table_use_reg_r0:OK
+>  #537/16  verifier_gotox/jump_table_use_reg_r1:OK
+>  #537/17  verifier_gotox/jump_table_use_reg_r2:OK
+>  #537/18  verifier_gotox/jump_table_use_reg_r3:OK
+>  #537/19  verifier_gotox/jump_table_use_reg_r4:OK
+>  #537/20  verifier_gotox/jump_table_use_reg_r5:OK
+>  #537/21  verifier_gotox/jump_table_use_reg_r6:OK
+>  #537/22  verifier_gotox/jump_table_use_reg_r7:OK
+>  #537/23  verifier_gotox/jump_table_use_reg_r8:OK
+>  #537/24  verifier_gotox/jump_table_use_reg_r9:OK
+>  #537/25  verifier_gotox/jump_table_outside_subprog:OK
+>  #537/26  verifier_gotox/jump_table_contains_non_unique_values:OK
+>  #537     verifier_gotox:OK
+>  Summary: 2/37 PASSED, 0 SKIPPED, 0 FAILED
 
-ld tmp1_reg, 48(13)		//Load per-CPU data offset from paca(r13) in tmp1_reg.
-add dst_reg, src_reg, tmp1_reg	//Add the per cpu offset to the dst.
-mr dst_reg, src_reg		//Move src_reg to dst_reg, if src_reg != dst_reg
+Cool!
 
-To evaluate the performance improvements introduced by this change,
-the benchmark described in [1] was employed.
-
-Before Change:
-glob-arr-inc   :   41.580 ± 0.034M/s
-arr-inc        :   39.592 ± 0.055M/s
-hash-inc       :   25.873 ± 0.012M/s
-
-After Change:
-glob-arr-inc   :   42.024 ± 0.049M/s
-arr-inc        :   55.447 ± 0.031M/s
-hash-inc       :   26.565 ± 0.014M/s
-
-[1] https://github.com/anakryiko/linux/commit/8dec900975ef
-
-Signed-off-by: Saket Kumar Bhaskar <skb99@linux.ibm.com>
----
- arch/powerpc/net/bpf_jit_comp.c   | 5 +++++
- arch/powerpc/net/bpf_jit_comp64.c | 9 +++++++++
- 2 files changed, 14 insertions(+)
-
-diff --git a/arch/powerpc/net/bpf_jit_comp.c b/arch/powerpc/net/bpf_jit_comp.c
-index 88ad5ba7b87f..2f2230ae2145 100644
---- a/arch/powerpc/net/bpf_jit_comp.c
-+++ b/arch/powerpc/net/bpf_jit_comp.c
-@@ -466,6 +466,11 @@ bool bpf_jit_supports_insn(struct bpf_insn *insn, bool in_arena)
- 	return true;
- }
- 
-+bool bpf_jit_supports_percpu_insn(void)
-+{
-+	return IS_ENABLED(CONFIG_PPC64);
-+}
-+
- void *arch_alloc_bpf_trampoline(unsigned int size)
- {
- 	return bpf_prog_pack_alloc(size, bpf_jit_fill_ill_insns);
-diff --git a/arch/powerpc/net/bpf_jit_comp64.c b/arch/powerpc/net/bpf_jit_comp64.c
-index 1fe37128c876..21486706b5ea 100644
---- a/arch/powerpc/net/bpf_jit_comp64.c
-+++ b/arch/powerpc/net/bpf_jit_comp64.c
-@@ -918,6 +918,15 @@ int bpf_jit_build_body(struct bpf_prog *fp, u32 *image, u32 *fimage, struct code
- 		case BPF_ALU | BPF_MOV | BPF_X: /* (u32) dst = src */
- 		case BPF_ALU64 | BPF_MOV | BPF_X: /* dst = src */
- 
-+			if (insn_is_mov_percpu_addr(&insn[i])) {
-+				if (IS_ENABLED(CONFIG_SMP)) {
-+					EMIT(PPC_RAW_LD(tmp1_reg, _R13, offsetof(struct paca_struct, data_offset)));
-+					EMIT(PPC_RAW_ADD(dst_reg, src_reg, tmp1_reg));
-+				} else {
-+					EMIT(PPC_RAW_MR(dst_reg, src_reg));
-+				}
-+			}
-+
- 			if (insn_is_cast_user(&insn[i])) {
- 				EMIT(PPC_RAW_RLDICL_DOT(tmp1_reg, src_reg, 0, 32));
- 				PPC_LI64(dst_reg, (ctx->user_vm_start & 0xffffffff00000000UL));
--- 
-2.51.0
-
+> Puranjay Mohan (4):
+>   bpf: arm64: Add support for instructions array
+>   bpf: arm64: Add support for indirect jumps
+>   libbpf: Ignore relocations for .jumptables sections
+>   selftests: bpf: Enable gotox tests from arm64
+> 
+>  arch/arm64/net/bpf_jit_comp.c                      | 11 +++++++++++
+>  tools/lib/bpf/linker.c                             |  4 ++++
+>  tools/testing/selftests/bpf/progs/verifier_gotox.c |  4 ++--
+>  3 files changed, 17 insertions(+), 2 deletions(-)
+> 
+> -- 
+> 2.47.3
+> 
