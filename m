@@ -1,193 +1,112 @@
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B8DE28D83D
-	for <bpf@vger.kernel.org>; Mon, 17 Nov 2025 18:45:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B99532E681
+	for <bpf@vger.kernel.org>; Mon, 17 Nov 2025 18:54:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763405146; cv=none; b=VqCge9Asgc+P7GHZeCGSetOqkDMPHtIIx9XHFFMh9JIiTCeprpt9Q8xfe9H15DxMdFfGjCnVCJXWMWZxsERa3xpVfBHUYp+VHsrY3T8DnSxvz5zM4YUqI+g6+VkbqLK0Sg2WPMyx2NOWXcB5ZxmM8PiQhFgeaasapyLX8kbnj30=
+	t=1763405642; cv=none; b=ZGbkDAt3b6IXZZ0tZgLHcNNaykSNgwjtf1RwE3885NKdMkZxFaoHaMVgPGxkRqCxbrPjiYWcuG4D2zc5+tnUqW9pKEEsihC32bIIkGAM5XJVssHI+JB//3G2KzgsWmWuAduE0sMwQrekJiUrK4qvBdkt1o0IujO7Y2ELyZxcG00=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763405146; c=relaxed/simple;
-	bh=XfpLeaMZaftJPa7XH4d6g3rAc3/MCc5v2eE3X/twjBg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=iCR2qH3RSkNiFaGksdGA3CmACLUtm+zYduDfINH/ZStXgBV9T2OG0Pea68yE8HhqAxJ30j7W22ftpPdaY8t+dM7YCe5wgxRBVxIZv6O+GIKeqYp1PO08bb4mepwRWQ6B1DBE5NYQZWMET4QJKSLmPxWiR6x0pewG00HTX0gj8Xc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NDT9Jk/0; arc=none smtp.client-ip=209.85.216.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1763405642; c=relaxed/simple;
+	bh=hrNHIG/nbISC8tMC+2r0pssn+cNsSvKBP5Y974zuY80=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=CwSjZZYW56ZuqIwiC4e7/poq68bkmqqRf1cJBFRqzqgUKVEPd6DnGyBvhG4Z+0Teu69gn69QsUWdT5KEjz5bN6TMT5xnmZHdrC21jpmjsvTLfOjZj5gdm1bCi7mUSqgvX4F3U1unGN5a1VHxUnZNS3FcCxQGSOZc6Z6qKGjzHh4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=VNAUCwSQ; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NDT9Jk/0"
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-343dfb673a8so4414531a91.0
-        for <bpf@vger.kernel.org>; Mon, 17 Nov 2025 10:45:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763405144; x=1764009944; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7wucYSeQ2nsQ8Jk+wJRdH9jEs+0g/nJs2i4hQi0un/g=;
-        b=NDT9Jk/03fRZAfArZZL/XY7N7/BgR+DWtY00ece4zt7N+HqmLihjkUv8R0YivBeRvf
-         M95T5gF4dtM7eXldobq0fZCXDV9YIRxIDed3tD5GfktI9Myix88xMOqZdhf9mI+OcYCc
-         eCemSmoUxF3oCqBfqS88oNrmnMqPejhSdg3rDhuffI1novuF4pHYe3vXum+WIO72Hefm
-         WR39u1HzPKPrIIoGoVCHtKKgmluVghyvL0VsrryBsKOiw+g6VhD9MOQ+synLhNYQSW5Y
-         cItMPmOiyn7+L6I2a1/h3WZHDFef5GPviPHZqza2KdnZa/ZWjO00e4GBLBwRDxu56gNY
-         +8pQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763405144; x=1764009944;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=7wucYSeQ2nsQ8Jk+wJRdH9jEs+0g/nJs2i4hQi0un/g=;
-        b=PD9Tj+R4vO/igq69Iexpo2p84ecDEM8j6ftTy05HFs29YMFxhi9yMifP/jQ0v1zc4k
-         yuFcoQeDodqGdJtsxsk8mEjztKmyKx5+KFWTFAnQ9h3kVYIUcK3QfmhuEZydCApQzBSq
-         DdUoG7vxpqXVvMiFPNYcsVdAKUSh+PouwE01HgPllh6Q9VkiYx6bvv+0na7dOAKHtd3l
-         GGYdWJVhMw7Sl53ROV6ZpyElvKx3doKqsBSBPL63bWAh+kWJWx8ReBsBDJNzBZafeJsi
-         rfxxn9CDp4age5ZKMSDShVU8zfTWxQ7Qth0dzUmV6DlYHF+2DJzg4hdP6RiDqFD8Pu7T
-         QGig==
-X-Forwarded-Encrypted: i=1; AJvYcCWzKSFl34Yy+HvMxReteJ3REHM5KvYCta+lybWW7qF0EWLq9n1lAWhRveCqzWuN0PTYWx8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxboM7NPnwRZr5NSwyOkcVeWyvKv4JhxjchkTXtQJycBYGjy3R1
-	6ze9ADR0udk1+cCg5JA9nIGnX9igmsCDKiH22VSmUqBEBEyC4TlcPeU1GA7JOKQHzLJj3A6NrCD
-	6qz0W4n2o1xm5sukFyBAk6dptS4xjvew=
-X-Gm-Gg: ASbGncs83KBT1koO2Wc51CqDxztwSM2CjpselHXp6mNjURmfMY+D1gumcBiKzN8C39r
-	bYa6KyMzCUnAysi/E6+5C4Zx/XQ23PZR4V+OI1dljlR0ONsO1+Kxhg9MBSl4HFVcXZlSq5Wq5xt
-	WJpbjiVIsnlufA/XXm4twFN8KvjqmV1PFsJUJolNXdy5ypn6X9LvBaQoX7Rm2LFLrl7tY2hixCJ
-	/+QTmy4uF8HN0gzDb6sH265teisQhRmH4fpaVRmcoMxZ6J1anPvv2XdZO19EpE+0nd2vuB4OOnp
-X-Google-Smtp-Source: AGHT+IHaGw3phEOQw4Qpur0eLmyhxso8M4IG4GnZLwbf/2toORgNJUKXRKe/uLp0l71+D3q3BCbIbJuZDTs9RGbD+0c=
-X-Received: by 2002:a17:90b:510c:b0:343:b610:901c with SMTP id
- 98e67ed59e1d1-343fa74be77mr14049811a91.26.1763405144456; Mon, 17 Nov 2025
- 10:45:44 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="VNAUCwSQ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1763405639;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=UnUlTPtVR2MQD7gqFLugI5+DVwDLcxMsEM0+o58ybm4=;
+	b=VNAUCwSQd+2qVZpnfI9odQOms+N8G/RZwQvMjjPIPAVW9idtyyV8SwXCd9dslGxbOUT+1i
+	S5VRB3MNbH8ITqyOUEWYyvQ0bs7yO1Bdx5jlxXeeITYaQeYS8ikUePBAquRJ8CiVPgIGJJ
+	Xpu/lCNHTBgYEqh9HAZWraBJRXR/JUw=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-345-Cj-7FV4sOh-wiHweRnJHkw-1; Mon,
+ 17 Nov 2025 13:53:55 -0500
+X-MC-Unique: Cj-7FV4sOh-wiHweRnJHkw-1
+X-Mimecast-MFC-AGG-ID: Cj-7FV4sOh-wiHweRnJHkw_1763405634
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 1C83D1956059;
+	Mon, 17 Nov 2025 18:53:54 +0000 (UTC)
+Received: from wcosta-thinkpadt14gen4.rmtbr.csb (unknown [10.22.81.153])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 08B1B180049F;
+	Mon, 17 Nov 2025 18:53:48 +0000 (UTC)
+From: Wander Lairson Costa <wander@redhat.com>
+To: Steven Rostedt <rostedt@goodmis.org>,
+	Wander Lairson Costa <wander@redhat.com>,
+	Tomas Glozar <tglozar@redhat.com>,
+	Ivan Pravdin <ipravdin.official@gmail.com>,
+	Crystal Wood <crwood@redhat.com>,
+	John Kacur <jkacur@redhat.com>,
+	Costa Shulyupin <costa.shul@redhat.com>,
+	Tiezhu Yang <yangtiezhu@loongson.cn>,
+	linux-trace-kernel@vger.kernel.org (open list:Real-time Linux Analysis (RTLA) tools),
+	linux-kernel@vger.kernel.org (open list),
+	bpf@vger.kernel.org (open list:BPF [MISC]:Keyword:(?:\b|_)bpf(?:\b|_))
+Subject: [PATCH 0/13] rtla: Code robustness and maintainability improvements
+Date: Mon, 17 Nov 2025 15:41:07 -0300
+Message-ID: <20251117184409.42831-1-wander@redhat.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251114193729.251892-1-ssranevjti@gmail.com> <aReUv1kVACh3UKv-@casper.infradead.org>
- <CANNWa07Y_GPKuYNQ0ncWHGa4KX91QFosz6WGJ9P6-AJQniD3zw@mail.gmail.com>
- <aRpQ7LTZDP-Xz-Sr@casper.infradead.org> <20251117164155.GB196362@frogsfrogsfrogs>
- <aRtjfN7sC6_Bv4bx@casper.infradead.org>
-In-Reply-To: <aRtjfN7sC6_Bv4bx@casper.infradead.org>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Mon, 17 Nov 2025 10:45:31 -0800
-X-Gm-Features: AWmQ_bnuhsyqplW3EwmS5X2rilTR8nQ_4xwujfWlx5dY8gU3dMEgLDCj7uI7O6I
-Message-ID: <CAEf4BzZu+u-F9SjhcY5GN5vumOi6X=3AwUom+KJXeCpvC+-ppQ@mail.gmail.com>
-Subject: Re: [PATCH] mm/filemap: fix NULL pointer dereference in do_read_cache_folio()
-To: Matthew Wilcox <willy@infradead.org>
-Cc: "Darrick J. Wong" <djwong@kernel.org>, SHAURYA RANE <ssrane_b23@ee.vjti.ac.in>, 
-	akpm@linux-foundation.org, shakeel.butt@linux.dev, eddyz87@gmail.com, 
-	andrii@kernel.org, ast@kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
-	linux-kernel-mentees@lists.linux.dev, skhan@linuxfoundation.org, 
-	david.hunter.linux@gmail.com, khalid@kernel.org, 
-	syzbot+09b7d050e4806540153d@syzkaller.appspotmail.com, 
-	bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
 
-+ bpf@
+This patch series enhances the robustness and maintainability of the
+RTLA (Real-Time Linux Analysis) tool through systematic improvements
+to error handling, code clarity, and consistency.
 
-On Mon, Nov 17, 2025 at 10:03=E2=80=AFAM Matthew Wilcox <willy@infradead.or=
-g> wrote:
->
-> On Mon, Nov 17, 2025 at 08:41:55AM -0800, Darrick J. Wong wrote:
-> > I wondered why this whole thing opencodes kernel_read, but then I
-> > noticed zero fstests for it and decid*******************************
-> > *****.
->
-> I wondered the same thing!  And the answer is that it's special BPF
-> stuff:
->
->         /* if sleeping is allowed, wait for the page, if necessary */
->         if (r->may_fault && (IS_ERR(r->folio) || !folio_test_uptodate(r->=
-folio))) {
->                 filemap_invalidate_lock_shared(r->file->f_mapping);
->                 r->folio =3D read_cache_folio(r->file->f_mapping, file_of=
-f >> PAGE_SHIFT,
->                                             NULL, r->file);
->                 filemap_invalidate_unlock_shared(r->file->f_mapping);
->         }
->
-> if 'may_fault' (a misnomer since it really means "may sleep"), then we
-> essentially do kernel_read().
->
-> Now, maybe the right thing to do here is rip out almost all of
-> lib/buildid.c and replace it with an iocb with IOCB_NOWAIT set (or not).
-> I was hesitant to suggest this earlier as it's a bit of a big ask of
-> someone who was just trying to submit a one-line change.  But now that
-> "it's also shmem" has entered the picture, I'm leaning more towards this
-> approach anyway.
+The changes strengthen defensive programming practices throughout the
+codebase by improving input validation and memory management. Several
+new helper functions and macros are introduced to reduce code duplication
+and provide safer, more readable alternatives to common operations. The
+series also consolidates duplicate logic across modules and adopts
+standard conventions where appropriate.
 
-As I replied on another email, ideally we'd have some low-level file
-reading interface where we wouldn't have to know about secretmem, or
-XFS+DAX, or whatever other unusual combination of conditions where
-exposed internal APIs like filemap_get_folio() + read_cache_folio()
-can crash.
+These improvements make the code more resilient and easier to maintain
+while preserving existing functionality and behavior.
 
-The only real limitation is that we'd like to be able to control
-whether we are ok sleeping or not, as this code can be called from
-pretty much anywhere BPF might run, which includes NMI context.
+Wander Lairson Costa (13):
+  rtla: Check for memory allocation failures
+  rtla: Use strdup() to simplify code
+  rtla: Introduce for_each_action() helper
+  rtla: Replace atoi() with a robust strtoi()
+  rtla: Simplify argument parsing
+  rtla: Use strncmp_static() in more places
+  rtla: Introduce timerlat_restart() helper
+  rtla: Use standard exit codes for result enum
+  rtla: Exit if trace output action fails
+  rtla: Remove redundant memset after calloc
+  rtla: Replace magic number with MAX_PATH
+  rtla: Remove unused headers
+  rtla: Fix inconsistent state in actions_add_* functions
 
-Would this kiocb_read() approach work under those circumstances?
+ tools/tracing/rtla/src/actions.c       | 91 ++++++++++++++++++--------
+ tools/tracing/rtla/src/actions.h       |  7 +-
+ tools/tracing/rtla/src/osnoise.c       |  6 +-
+ tools/tracing/rtla/src/osnoise_hist.c  |  1 -
+ tools/tracing/rtla/src/timerlat.c      | 36 +++++++++-
+ tools/tracing/rtla/src/timerlat.h      |  9 +++
+ tools/tracing/rtla/src/timerlat_hist.c | 32 +++++----
+ tools/tracing/rtla/src/timerlat_top.c  | 27 ++++----
+ tools/tracing/rtla/src/timerlat_u.c    |  4 +-
+ tools/tracing/rtla/src/trace.c         | 23 ++++---
+ tools/tracing/rtla/src/utils.c         | 48 +++++++++++---
+ tools/tracing/rtla/src/utils.h         | 23 +++++--
+ 12 files changed, 220 insertions(+), 87 deletions(-)
 
->
-> Looking at it though, it's a bit weird that we don't have a
-> kiocb_read().  It feels like __kernel_read() needs to be split into
-> half like:
->
-> diff --git a/fs/read_write.c b/fs/read_write.c
-> index 833bae068770..a3bf962836a7 100644
-> --- a/fs/read_write.c
-> +++ b/fs/read_write.c
-> @@ -503,14 +503,29 @@ static int warn_unsupported(struct file *file, cons=
-t char *op)
->         return -EINVAL;
->  }
->
-> -ssize_t __kernel_read(struct file *file, void *buf, size_t count, loff_t=
- *pos)
-> +ssize_t kiocb_read(struct kiocb *iocb, void *buf, size_t count)
->  {
-> +       struct file *file =3D iocb->ki_filp;
->         struct kvec iov =3D {
->                 .iov_base       =3D buf,
->                 .iov_len        =3D min_t(size_t, count, MAX_RW_COUNT),
->         };
-> -       struct kiocb kiocb;
->         struct iov_iter iter;
-> +       int ret;
-> +
-> +       iov_iter_kvec(&iter, ITER_DEST, &iov, 1, iov.iov_len);
-> +       ret =3D file->f_op->read_iter(iocb, &iter);
-> +       if (ret > 0) {
-> +               fsnotify_access(file);
-> +               add_rchar(current, ret);
-> +       }
-> +       inc_syscr(current);
-> +       return ret;
-> +}
-> +
-> +ssize_t __kernel_read(struct file *file, void *buf, size_t count, loff_t=
- *pos)
-> +{
-> +       struct kiocb kiocb;
->         ssize_t ret;
->
->         if (WARN_ON_ONCE(!(file->f_mode & FMODE_READ)))
-> @@ -526,15 +541,9 @@ ssize_t __kernel_read(struct file *file, void *buf, =
-size_t count, loff_t *pos)
->
->         init_sync_kiocb(&kiocb, file);
->         kiocb.ki_pos =3D pos ? *pos : 0;
-> -       iov_iter_kvec(&iter, ITER_DEST, &iov, 1, iov.iov_len);
-> -       ret =3D file->f_op->read_iter(&kiocb, &iter);
-> -       if (ret > 0) {
-> -               if (pos)
-> -                       *pos =3D kiocb.ki_pos;
-> -               fsnotify_access(file);
-> -               add_rchar(current, ret);
-> -       }
-> -       inc_syscr(current);
-> +       ret =3D kiocb_read(&kiocb, buf, count);
-> +       if (pos && ret > 0)
-> +               *pos =3D kiocb.ki_pos;
->         return ret;
->  }
->
+-- 
+2.51.1
+
