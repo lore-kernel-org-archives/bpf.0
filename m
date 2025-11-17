@@ -1,165 +1,173 @@
-Received: from mail-wr1-f67.google.com (mail-wr1-f67.google.com [209.85.221.67])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A61BE339714
-	for <bpf@vger.kernel.org>; Mon, 17 Nov 2025 15:20:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.67
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 610D62C08AC
+	for <bpf@vger.kernel.org>; Mon, 17 Nov 2025 16:02:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763392859; cv=none; b=JzFEx3f11jvQMO6rbv+QuNImEFAW1EavJsA2ugVTVyibUuk9nPzUbqSz50671KAlngYN1CraO53eeDTh2yvvSlxtacBLldN0FDeKEvmKwBkVGD+f8WKpARQx99BouhFs8P1PKv8Y1THLkfLvBdmwgiR8ja/3tCPtr6OLRvItgro=
+	t=1763395322; cv=none; b=OOsmsrwCHCJ8lA2N86HprtxE3RvxX4oA08a5XnAyWP3CSvGK5dR6gzFJVQk6JWVAp++3bRdyLc94DCsBPYhahZhWjLB6myyq+38atlqcIVvv3B+/dQ/0Ps8wLrzdmThj79MEznTCskFMRK4upwaFpNDax1nCRSaxE5LZkUbA/UA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763392859; c=relaxed/simple;
-	bh=nBXRJ/Lj6pHLUFwwVnbtUqA95tBUTPdLw2xPFfQxMq0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WyMkpoG4DqpQkyL70n8ODV5wW7UlUkfBbklmnyKkZc7CbDXa3vj9uKmmHtamoVT7hcP4FI2enc40BME2F1d3eE4HlZj5ZZ7Kn/bCPzcMiA6Ue2UGghlkLwjBxIQFP4ZbRZZ8GNTrbjYj5+cGYXv1sN2Y2XgkiQuAkVFvVAwkhfY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Sum0HjGz; arc=none smtp.client-ip=209.85.221.67
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1763395322; c=relaxed/simple;
+	bh=kEOtZrS7dH9pdsf5bhNC0+W3R6aN/WKcTVS/jWBxh0M=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mVNNXj5OSzE3R0ERaaKM8Tc5659IuQPcg/cCDA30R7mivLB8zDtZ+4X5c0nE6DGdH2r/GyiwOIxT1RpqK8fkNPsjVFtXY+qGqSFSFCS59lVs5KJRWjWmNSiVmtoZgUPCbYiMCRX1hxX3CjozqkCUr+uSy2M2uC+pAA24Im5X128=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XYgJA4zJ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Sum0HjGz"
-Received: by mail-wr1-f67.google.com with SMTP id ffacd0b85a97d-42bb288c1bfso1472835f8f.2
-        for <bpf@vger.kernel.org>; Mon, 17 Nov 2025 07:20:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763392856; x=1763997656; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0kCvOypSRgSH1aaHCxG43EYVQi35m8kcAmfWU/9CkF8=;
-        b=Sum0HjGzAcnJXMWt/XxvJ5bo1T6ZudIb/K3EbevhPEsQJjy8mv9a+QdHPx71E9WeXK
-         AI5pml0Dds7AYEjeTYUnrjdq9t/1W0ilvLiZUL1SQ/oVWzORhAphXkLTli/0LgAes8QZ
-         u6tvIV+SG4ISn0oLpO73xu1ElPM+nwfVCr9hwXiH+GIh0TctjNAZskxZcheHDAR+gsnA
-         qOP7NCOwxRuysYzObfvdU0AZX2oJJWRmeu1vf1ipRBDJI15nTIKnZcK9ntZMZdynLQCY
-         oRztikWURvwuRFgzVUQou2F1rmsXKtB3V9cXx9EsN2hbu1pdqdqagmicvCNLuWfkCqji
-         +t3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763392856; x=1763997656;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=0kCvOypSRgSH1aaHCxG43EYVQi35m8kcAmfWU/9CkF8=;
-        b=JaBDN1nbciWYRdjCeJNQxf7ZgvEjA0I4vQTLONPo2YkQM1/mK5P4PxPM/8oAlax6kJ
-         Z+aFFnFzS2uT229j7XUsmMCUsC/7dl0ic02GKgL6b59ySB0lPMhiKGpi/aJToJADVm5a
-         3+Kl8Crd9opkoRGCZnT/IbnU0unn+PcMaReJ4I6bmdm7sIjpkyEOZhOo01ylyhnXQe6O
-         GRXwXVB+r3DvHEbQxFJk5b4wk2Q5XJ6WP/mS0VWvsAOl5w3XN9khclBmoH+TNZjqp/Ss
-         MqYMZSuW65Cy4mbSgT/v3gcN5uZCbbhlUZcoGLj1ACqjIsfkHE0+fV9OOP+CLIcF6g1E
-         Lydg==
-X-Forwarded-Encrypted: i=1; AJvYcCVl1rsgbfrO7iBvzRMaWFRRBTVKdfHyC471MeQvrSGt6AarvVhcGqFUN/G/XtRwAQvFvto=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw9D3w4tGPQA7m6VyJdbS7ktogCeiERNWLZWqA0LaGVVxjwiYMt
-	FqCCNRPKbbw9bkzkFJoGn8pXerFBrifItURzbwd274qQBqdKD2Zfj93/CTBwafAjOhF5X2rlRbv
-	YVbJY7uMdAxJ0N58aDoQXXsb0YqWQRVs=
-X-Gm-Gg: ASbGncsejdV20wo7wbz6YJtG5YG1O42LXR5hId5SUCBWP6eP5a7uMSrfBhn/Vk3zJZ8
-	exhvUQFCSs1+Buac/71efVzFSG5Tz4P7EWFH24wKRSyXXbN33iswNC3p4THycsQxX0ITXyc0Ki9
-	g5KQ2tK+AnFkipGsfDy8YGvs4rBme8pNFweDLdGxI7ye8dvOcOyHQBHyzxMCB3AdRI0q5TPVXBT
-	pgJNfr/GbrJUXayb4xUja9v1ac6ddVlq9BbZF3iY3Gicm7umd/W+MnI12TyExw1WwY6hIoStDyx
-	m050maWbD3RZ/tayXZxrIdMb
-X-Google-Smtp-Source: AGHT+IFSzKx/vUTmdhKWcVO389atLqUwRqzhByZxIiqOEJ3O/ICevGF/Oeb7Tt9yovbUu/S0SQ9Wso3dbAz3BAn3yKA=
-X-Received: by 2002:a5d:5885:0:b0:42b:5448:7b07 with SMTP id
- ffacd0b85a97d-42b59345897mr12624473f8f.2.1763392855396; Mon, 17 Nov 2025
- 07:20:55 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XYgJA4zJ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2B03C116B1;
+	Mon, 17 Nov 2025 16:02:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763395322;
+	bh=kEOtZrS7dH9pdsf5bhNC0+W3R6aN/WKcTVS/jWBxh0M=;
+	h=From:To:Cc:Subject:Date:From;
+	b=XYgJA4zJVRwCY7Re1nX1B2hHKo2f9gIBwiYn0xGVklFfQP2HSBb5kj0WZFbuSSxpy
+	 MLk5QqdCeqL9QTaKNtesO7ske8sT18ysPscVwHlX8k994ct9EyfugGVl6U/MAn2tau
+	 ztRgp/QT3a3T6I8K81zueQgOMhG5nGX8jqMJnq8+qJ02VqgQ7ipEdsnLR28qgAEjHt
+	 qJIotaYQK6j6ZToEGHAjEfzxuSE0RvtuJjYw4iGQcxDdaPRlrEc/Fb59H0mHBssXhO
+	 G5WzoPDyWoKaoh6sjvmpqRwHkqL9e0jK5L2rpqwTrnNrHxY1jv70ZdqKI9QUJrcInw
+	 qdeoJ+pSlFbQA==
+From: Puranjay Mohan <puranjay@kernel.org>
+To: bpf@vger.kernel.org
+Cc: Puranjay Mohan <puranjay@kernel.org>,
+	Puranjay Mohan <puranjay12@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	kernel-team@meta.com
+Subject: [PATCH bpf-next v3 0/4] Remove KF_SLEEPABLE from arena kfuncs
+Date: Mon, 17 Nov 2025 16:01:44 +0000
+Message-ID: <20251117160150.62183-1-puranjay@kernel.org>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAH6OuBTjG+N=+GGwcpOUbeDN563oz4iVcU3rbse68egp9wj9_A@mail.gmail.com>
- <CAADnVQLXJyMhfqr=ZEUWsov3TC155OkGvuaOHL5j+aK5Pv=F7A@mail.gmail.com>
- <CAH6OuBTXwW9WKHRNS53kRgZ3Y5GdH3n0EY4YogOGGSTGnYL9og@mail.gmail.com>
- <CAADnVQ+DycJQ7eW_FDE59Qc1SzJseYy2f8yniqh0C354ruLdCw@mail.gmail.com> <CAH6OuBRtCyRhvn4E3yQSqpynoqRiB+sYbiZP1ATqXE4LQDTQmA@mail.gmail.com>
-In-Reply-To: <CAH6OuBRtCyRhvn4E3yQSqpynoqRiB+sYbiZP1ATqXE4LQDTQmA@mail.gmail.com>
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date: Mon, 17 Nov 2025 10:20:18 -0500
-X-Gm-Features: AWmQ_bndKnYAFCQanZYFSY8RNfFGIqBnu-Uze_xQ6I0P82qNYW0GL0YO9PStMZM
-Message-ID: <CAP01T776rsC_aNF4AijRGDqZRfmeKDbSfFmGYPTYh+zaOuwrWw@mail.gmail.com>
-Subject: Re: bpf: system freezes due to recursive lock in bpf_ringbuf_reserve()
- caused by commit a650d38 ("bpf: Convert ringbuf map to rqspinlock")
-To: Ritesh Oedayrajsingh Varma <ritesh@superluminal.eu>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, 
-	Andrii Nakryiko <andrii.nakryiko@gmail.com>, Jiri Olsa <olsajiri@gmail.com>, 
-	bpf <bpf@vger.kernel.org>, Jelle van der Beek <jelle@superluminal.eu>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Sun, 16 Nov 2025 at 15:11, Ritesh Oedayrajsingh Varma
-<ritesh@superluminal.eu> wrote:
->
-> On Sun, Nov 16, 2025 at 1:23=E2=80=AFAM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
-> >
-> > On Sat, Nov 15, 2025 at 3:04=E2=80=AFPM Ritesh Oedayrajsingh Varma
-> > <ritesh@superluminal.eu> wrote:
-> > >
-> > > Hi Alexei,
-> > >
-> > > Thanks for the info! I wasn't aware of that fix, but I just checked,
-> > > and my kernel *does* have that fix. I'm on 6.17.1-300.fc43.x86_64.
-> > >
-> > > I just installed the kernel sources locally to make sure, and the cod=
-e
-> > > for rqspinlock matches that of the commit you linked (i.e. the
-> > > is_nmi() check added in the commit is there). The code for the relate=
-d
-> > > commit  164c246 ("rqspinlock: Protect waiters in queue from stalls")
-> > > is also present. You can verify this yourself on Fedora's 6.17.1 git
-> > > tree: https://gitlab.com/cki-project/kernel-ark/-/blob/kernel-6.17.1-=
-1/kernel/bpf/rqspinlock.c#L474
-> > >
-> > > So it's good to know issues have already been fixed in this area sinc=
-e
-> > > the original commit, but it looks like there's still something lurkin=
-g
-> > > here. To clarify, I'm not exactly sure which of the various timeout
-> > > cases in raw_res_spin_lock_irqsave() this recursive lock situation is
-> > > hitting.
-> >
-> > Ohh. Interesting. It's a new issue then. We thought that
-> > that commit fixed it for good.
-> > How quickly does your reproducer hit it ?
->
-> It reproduces ~instantly on the machines I've tested on, which is a
-> bit surprising given the inherently racy nature of this issue.
->
-> I've reproduced this on 4 core / 8 threads and 16 core / 32 threads
-> machines myself (kernel 6.17.1-300.fc43.x86_64 on both). The user who
-> first reported the issue was also on a 16 core / 32 thread machine
-> (kernel 6.17.4-200.fc42.x86_64).
->
-> I'll be out of town for a few days from tomorrow, but I'll try to put
-> together a more complete repro before then if possible. I can also
-> provide more diagnostic information if needed.
+v2: https://lore.kernel.org/all/20251114111700.43292-1-puranjay@kernel.org/
+Changes in v2->v3:
+Patch 1:
+        - Call range_tree_destroy() in error path of
+          populate_pgtable_except_pte() in arena_map_alloc() (AI)
+Patch 2:
+        - Fix double mutex_unlock() in the error path of
+          arena_alloc_pages() (AI)
+        - Fix coding style issues (Alexei)
+Patch 3:
+        - Unlock spinlock before returning from arena_vm_fault() in case
+          BPF_F_SEGV_ON_FAULT is set by user. (AI)
+        - Use __llist_del_all() in place of llist_del_all for on-stack
+          llist (free_pages) (Alexei)
+        - Fix build issues on 32-bit systems where arena.c is not compiled.
+          (kernel test robot)
+        - Make bpf_arena_alloc_pages() polymorphic so it knows if it has
+          been called in sleepable or non-sleepable context. This
+          information is passed to arena_free_pages() in the error path.
+Patch 4:
+        - Add a better comment for the big_alloc3() test that triggers
+          kmalloc_nolock()'s limit and if bpf_arena_alloc_pages() works
+          correctly above this limit.
 
-I think I see the problem, but don't have a good solution except
-reverting to a trylock with 0 timeout until we have something better.
-Any other value will likely lead to freezes that are as long as the timeout=
-.
-I can trigger it with the stress test we have in the tree when we
-repeatedly spam the CPU with NMIs.
+v1: https://lore.kernel.org/all/20251111163424.16471-1-puranjay@kernel.org/
+Changes in v1->v2:
+Patch 1:
+        - Import tlbflush.h to fix build issue in loongarch. (kernel
+          test robot)
+        - Fix unused variable error in apply_range_clear_cb() (kernel
+          test robot)
+        - Call bpf_map_area_free() on error path of
+          populate_pgtable_except_pte() (AI)
+        - Use PAGE_SIZE in apply_to_existing_page_range() (AI)
+Patch 2:
+        - Cap allocation made by kmalloc_nolock() for pages array to
+          KMALLOC_MAX_CACHE_SIZE and reuse the array in an explicit loop
+          to overcome this limit. (AI)
+Patch 3:
+        - Do page_ref_add(page, 1); under the spinlock to mitigate a
+          race (AI)
+Patch 4:
+        - Add a new testcase big_alloc3() verifier_arena_large.c that
+          tries to allocate a large number of pages at once, this is to
+          trigger the kmalloc_nolock() limit in Patch 2 and see if the
+          loop logic works correctly.
 
-I don't think the problem is when you have reentrancy on the same CPU,
-but when you
-have a situation as follows:
+This set allows arena kfuncs to be called from non-sleepable contexts.
+It is acheived by the following changes:
 
-CPU 0
-NMI : tail waiter
-Task: random unrelated thing
+The range_tree is now protected with a rqspinlock and not a mutex,
+this change is enough to make bpf_arena_reserve_pages() any context
+safe.
 
-CPU 1-2
-<other waiters in the middle>
+bpf_arena_alloc_pages() had four points where it could sleep:
 
-CPU 3
-NMI: head waiter
-Task: Owner
+1. Mutex to protect range_tree: now replaced with rqspinlock
 
-There is no AA deadlock in CPU 0, so we keep spinning.
-If the NMI keeps spamming and delaying the owner from making progress
-(on multiple CPUs), it is possible to timeout the NMI CPU.
-It feels a bit extreme to be able to cause delays up to 250 ms such
-that we timeout.
+2. kvcalloc() for allocations: now replaced with kmalloc_nolock()
 
-I will look at this in closer detail in a couple of days when I have more t=
-ime.
+3. Allocating pages with bpf_map_alloc_pages(): this already calls
+   alloc_pages_nolock() in non-sleepable contexts and therefore is safe.
 
+4. Setting up kernel page tables with vm_area_map_pages():
+   vm_area_map_pages() may allocate memory while inserting pages into
+   bpf arena's vm_area. Now, at arena creation time populate all page
+   table levels except the last level and when new pages need to be
+   inserted call apply_to_page_range() again which will only do
+   set_pte_at() for those pages and will not allocate memory.
 
->
-> >
-> > Kumar,
-> > please take a look.
+The above four changes make bpf_arena_alloc_pages() any context safe.
+
+bpf_arena_free_pages() has to do the following steps:
+
+1. Update the range_tree
+2. vm_area_unmap_pages(): to unmap pages from kernel vm_area
+3. flush the tlb: done in step 2, already.
+4. zap_pages(): to unmap pages from user page tables
+5. free pages.
+
+The third patch in this set makes bpf_arena_free_pages() polymorphic using
+the specialize_kfunc() mechanism. When called from a sleepable context,
+arena_free_pages() remains mostly unchanged except the following:
+1. rqspinlock is taken now instead of the mutex for the range tree
+2. Instead of using vm_area_unmap_pages() that can free intermediate page
+   table levels, apply_to_existing_page_range() with a callback is used
+   that only does pte_clear() on the last level and leaves the intermediate
+   page table levels intact. This is needed to make sure that
+   bpf_arena_alloc_pages() can safely do set_pte_at() without allocating
+   intermediate page tables.
+
+When arena_free_pages() is called from a non-sleepable context or it fails to
+acquire the rqspinlock in the sleepable case, a lock-less list of struct
+arena_free_span is used to queue the uaddr and page cnt. kmalloc_nolock()
+is used to allocate this arena_free_span, this can fail but we need to make
+this trade-off for frees done from non-sleepable contexts.
+
+arena_free_pages() then raises an irq_work whose handler in turn schedules
+work that iterate this list and clears ptes, flushes tlbs, zap pages, and
+frees pages for the queued uaddr and page cnts.
+
+apply_range_clear_cb() with apply_to_existing_page_range() is used to
+clear PTEs and collect pages to be freed, struct llist_node pcp_llist;
+in the struct page is used to do this.
+
+Puranjay Mohan (4):
+  bpf: arena: populate vm_area without allocating memory
+  bpf: arena: use kmalloc_nolock() in place of kvcalloc()
+  bpf: arena: make arena kfuncs any context safe
+  selftests: bpf: test non-sleepable arena allocations
+
+ include/linux/bpf.h                           |  15 +
+ kernel/bpf/arena.c                            | 371 +++++++++++++++---
+ kernel/bpf/verifier.c                         |  10 +
+ .../selftests/bpf/prog_tests/arena_list.c     |  20 +-
+ .../testing/selftests/bpf/progs/arena_list.c  |  11 +
+ .../selftests/bpf/progs/verifier_arena.c      | 185 +++++++++
+ .../bpf/progs/verifier_arena_large.c          |  29 ++
+ 7 files changed, 582 insertions(+), 59 deletions(-)
+
+-- 
+2.47.1
+
