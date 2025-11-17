@@ -1,63 +1,63 @@
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AD942BEC30
-	for <bpf@vger.kernel.org>; Mon, 17 Nov 2025 16:05:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 592E62C21DB
+	for <bpf@vger.kernel.org>; Mon, 17 Nov 2025 16:05:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763395548; cv=none; b=m9HdDLLI9QV56KToBZ0NJRPX0txlkbPmiUYcXX4nMQRzfYsUhPr1WDvSK55oC2C6EzprBG6lVRA3V1KqPr/TGWJ61RgsyGA5LaI9pd7++OEXqSv0pt5q+PUmM3pKR1VHwngR/xl5aq3UoTag1XGu4gjE9dZLEXvhzfqMtbnC7sE=
+	t=1763395551; cv=none; b=Ys+vgxdh0W5/OUs76+RdayRCPVFixepm4soPxIIjoVDQuDexiNArQPQqrWmb5Q6vlLHj8kvnpmiXdHNOm1LsvCxpi/uyM+fU3c/b1/iXDyvcbDY7z2RoHx4Wh6kbqalupUIq65nwFyfjsQaKwHYuxbfsAPLRmJ9CrhLy2aY2AC4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763395548; c=relaxed/simple;
-	bh=zR11PadUKffBVoAS2I53jVhWoEUv6Rds+RYWfmCWtD4=;
+	s=arc-20240116; t=1763395551; c=relaxed/simple;
+	bh=rtpjIiIlwv8Z4omsOMF5KY5wtcbo4rQbTFrRHKz+CEQ=;
 	h=From:To:Cc:Subject:In-Reply-To:Date:Message-ID:References:
-	 MIME-Version:Content-Type; b=GArd3GdUrnOFdFrHAUHB/nOTUBh+K0gbs8j06Gee4+ecfK+rCCTjAQiClpHVk9DHlkSLw1HDkaUcNAgG5LK8DsFnX7/gqLcmo3tqNoSKrSGKr/Y6ZVzDnYsKxHwpUf7dbDPku4fb1BGoCdJbZ22+WYpLjydsWWk9u6l2N9fXXDo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Loh+SqJY; arc=none smtp.client-ip=209.85.128.51
+	 MIME-Version:Content-Type; b=J+cCIzG1KSFF4gJ497rIfflQ3ZzT6tdQNAmnJ54C/77mg6yMZZr5mxGloQP7ubzqDv26Omb3Geg4qM5pR1rEFxHtsKbI16sXzNJCQjOWXmlBzauJrT3zWI3tPgEVO/rjMpZFWjlA9pLKaevroEjWZvBuA0yPn102LThHU3vXSeU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hJ7jAYav; arc=none smtp.client-ip=209.85.221.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Loh+SqJY"
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-4777771ed1aso30406675e9.2
-        for <bpf@vger.kernel.org>; Mon, 17 Nov 2025 08:05:46 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hJ7jAYav"
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-42b566859ecso3468630f8f.2
+        for <bpf@vger.kernel.org>; Mon, 17 Nov 2025 08:05:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763395545; x=1764000345; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1763395548; x=1764000348; darn=vger.kernel.org;
         h=mime-version:user-agent:references:message-id:date:in-reply-to
          :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=veP6ZsFPLmRwgmCdpo5pE77+0E1WbpqRaQfM3K7/5S0=;
-        b=Loh+SqJYiVGQEAVFX0kxXdZpT4MKZ3u7QInsz1A2u/ZPjbwsFHAFD1x8ta4i/soq7D
-         uEZgOgQm4DXKF64R3TE9ROsAQPdCkFJXKFdabHY0jYzVNyLjX4TD/W4bEnsZNxY5YWt7
-         rTH6hufZsCMPPOxwMpeNW/UoG4VTYsh6cRfFwDps6hf4QZuWPx3MrAXB5zU+q6Cs9B4C
-         jBfRtyCwuA607Se5to40ev1ec9AbrA9Xp05tIjDkj9TlMQgDkmJ35tZ4smi5G1UEanr2
-         smiagnzpf6tw2mLcMp8uigGK1J2DEQJwoqdc8waNBalKJoMoR1SheZXw0an9dp+1Anhg
-         6wYQ==
+        bh=GIQH9Z7cUezUjldbG+MilUGr+vhpfO0JfTL7ifs5sCI=;
+        b=hJ7jAYavo3C1/TG6ll6NAicftlF3LVdy+kf3hFlnuIZFykMFnD5AM2XPKaUTuLGUEF
+         nuvKcWeBmGq5xutW+Vm25Epnk/yhaDqxBPrfL7ehUtNatWMtIN91zemgoQ4UQTFzDsqD
+         o7qoxG7KJNgC3jWnu7Ea+8gpLjdii3kwsdHvR1WBk66qavmzz+rRv1qvPU+DiIKEP2MC
+         rnfvbV4+5ab0eX85omsEJjNvlG4eSwaDUmLSAEN6B/ZxGUMxv0MI11lxbFHJ14Rsn3k+
+         nqxKWlVFgrnhGmBztfg8S12+NoZD/+at5dUjz4/46FucwuJGocgVlLSovn+Erl9m6QRN
+         b9Fg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763395545; x=1764000345;
+        d=1e100.net; s=20230601; t=1763395548; x=1764000348;
         h=mime-version:user-agent:references:message-id:date:in-reply-to
          :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=veP6ZsFPLmRwgmCdpo5pE77+0E1WbpqRaQfM3K7/5S0=;
-        b=TCdi55UYAch/dVHoEIIYY75NdwwgJN1tNxTOZ9zKZ1VUY/wS2pKGvi6AlVsCO0IDpd
-         ISlaGdsXr7dKJkBB6ZQ/vvhxlPU+Qrk4qAMxzXQ5wIjMct7NSVYPMU1GyOvlMYI0cmdX
-         LOsuWU95Vrsj7LVy7RvkR3uv8RnS8XaouNdvxDqcuj3vUFohFiHGd5CxHcbQFNGvxx5U
-         +8AxnGZI7JqUiuSH5zXTG0US5gl+8LrRDoSgRK+6lxJ1H4PtFcnuXKjIG+VALy20k4hA
-         G7ptUUrU1CCHr094GXY2CYQjm4ELNEJbVCZWZ/fRDXEIThT6q07dI4JxSukEGEuSU1cO
-         HboQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUN16QVZ86c01PRrVl3ImEELLWer6HqOFY0G/HzBSnxHwTUMwcdr5waVdCCg+VvUbD9jr0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxy5w7XZUADIYJwvHkCdtHJcpN3jGKNVm8BScMj0TESKdvszd8H
-	+/l/1/ehH5HAbYMGcIIm5r2Tp/P9Z3K8T06LFEb7vQQeaUBH9SN1mOTm
-X-Gm-Gg: ASbGnctyc97Ybs/xntFckWHeW69XQqXCf4+QG1dNoAuQuHczqvKx4wIdlFtMBDCrCh0
-	3OA9Lm1O9jzyJFLnGia4XobW3OcS2zmH9lSnD26ACEvyIry5O6dn1HE/0F5fmelDXqhnmHfKE4y
-	V2PWgiu2lUi1nFJ2IvhA2GkI4Y+SmOI8mc5rsXBkFdQiyp17dmNUoN8eANNGOLyxK6UMQUOGppy
-	aXizDdWoW8m7p2cDoPZCkrCa8E6CCzGm8OZ+b9V1ZdAn5Nn6xIggONv8ceOZe0g4D/6GVU6/8Jt
-	7Oj/XPBN39IiOccWeeSk0d9kShi+F1cnWA5s7Ucasr4Y6q/2zJfNLfO7xGl8Tf438Y39fO0q1Ig
-	yJA/kubXuL5xqq3eo9swfHtTaLw0P/5MeykUPgTyrs78hSand/xZD7HP+yY4zUCuNzf5a3dNl9t
-	rwfvArG6bxCzqpRPdvW5+5TLI0HgcNOdG8ig==
-X-Google-Smtp-Source: AGHT+IELmBtYaKQJWSaqOyfivRd23QI/DFTaZg6tiH7/6qdQirofoDu9HP7b5w4rLfETnNrziPkg1g==
-X-Received: by 2002:a7b:c014:0:b0:477:994b:dbb8 with SMTP id 5b1f17b1804b1-477994bddeemr52518145e9.11.1763395545080;
-        Mon, 17 Nov 2025 08:05:45 -0800 (PST)
+        bh=GIQH9Z7cUezUjldbG+MilUGr+vhpfO0JfTL7ifs5sCI=;
+        b=GQ7lOqzUfaZ3fBBqU2yzTipky25zmkcqRWgcytLQ6AhCpJ1szymJ9i+AVnz2+as8zD
+         dvZW8VzJkYHOkzm7KCAC9Irw48vzVeTePhjXenTAXcAAlUAq1RuZUeUGJoafxGpKuX4A
+         WaVM8xyTnPtmrHRjfUmPIwfVihUF0jE/kwqXJuu0QFrVVt+R0pywM3mfRV5XDwDwZvmy
+         zW8rrllD3Wz/NKNfKZmblZTZIn3xmgO7fpQdf92s55D5gwmdoNO0NwB1hV4UbvDSUsuD
+         oFqLEfb+8uSOjqNLma40icmaTCADLHpEw+s7WM3EcXLjx7KpTPxLyGLRvmm/Gml2foeo
+         Xv/w==
+X-Forwarded-Encrypted: i=1; AJvYcCW5yMh9UlzlkEPwKCCAY+qWD42V/KarLMyXep+qKoeh6xy8jUeInE46QUTBzNxgasUSZ7o=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwE8vSJjsJQ4oLIE0QZpjJiJlb+AZELwpgYhqvsWH5pt4x68h44
+	aY95ywBNvxKu8ylT+55vagvWbfuJPAf9fHC6jcYuc13dASzI7IdRtMEz
+X-Gm-Gg: ASbGnctEjos039EganHwsAJ3/NCU+S7+Zllu2L/YVNdMn/ohrQ8Ek43h8Acg7o7nI6x
+	oY63xFasbbQb2ywPslMHMqyCq7QEsx578NM3CC/ur33qqLbjxCf1R2F+TqICZDDhw9rWu/ItVDZ
+	G+1gy+RuN7uckJ7/mG0HhqBv4J68/2e6WcZ6neq6p2yotCOreMjVF2rjHnCO06E9ncuLlDjtYjU
+	7pMEsZcDGteW9VHOql/sGlfHzoOBWdZq+2rjiS8PBFP9AbOVwrbSRWT56k/DX/5sl/f0z0zx5JZ
+	Ae3UgtNAZjbfrXdUTtIGJmYQ5U0lCI5imgRGaNC/m/s/ihQ26eSX6ekB5EYeCzBAQLzWoWozTR7
+	Rwt5mSaB9a942hYmbTQmkoiEu5uMl8qNX+tLqf0wq3V8DShicRmz57+64VM5YaPV0GmsgYtt5RQ
+	ee+2TzYZIY2Xtl4GTJZD7MinXprjO4dJl+fA==
+X-Google-Smtp-Source: AGHT+IFJtFrkxaLk28xLtAautoQrmDYpq9UtvQj5B3teNEO1FH5SHr/O+P9hTImJsKXpGip44YXjmg==
+X-Received: by 2002:a05:6000:25c8:b0:429:c851:69bc with SMTP id ffacd0b85a97d-42b59342f3fmr10432513f8f.8.1763395547294;
+        Mon, 17 Nov 2025 08:05:47 -0800 (PST)
 Received: from imac ([2a02:8010:60a0:0:7408:290d:f7fc:41bd])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4779cec0f2fsm51154305e9.10.2025.11.17.08.05.44
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42b53e7ae2dsm27430854f8f.5.2025.11.17.08.05.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Nov 2025 08:05:44 -0800 (PST)
+        Mon, 17 Nov 2025 08:05:46 -0800 (PST)
 From: Donald Hunter <donald.hunter@gmail.com>
 To: Gal Pressman <gal@nvidia.com>
 Cc: "David S. Miller" <davem@davemloft.net>,  Eric Dumazet
@@ -68,13 +68,13 @@ Cc: "David S. Miller" <davem@davemloft.net>,  Eric Dumazet
   Jesper Dangaard Brouer <hawk@kernel.org>,  John Fastabend
  <john.fastabend@gmail.com>,  Stanislav Fomichev <sdf@fomichev.me>,
   <bpf@vger.kernel.org>,  Nimrod Oren <noren@nvidia.com>
-Subject: Re: [PATCH net-next 2/3] tools: ynl: cli: Parse nested attributes
- in --list-attrs output
-In-Reply-To: <20251116192845.1693119-3-gal@nvidia.com>
-Date: Mon, 17 Nov 2025 15:57:21 +0000
-Message-ID: <m2o6p0mz32.fsf@gmail.com>
+Subject: Re: [PATCH net-next 3/3] tools: ynl: cli: Display enum values in
+ --list-attrs output
+In-Reply-To: <20251116192845.1693119-4-gal@nvidia.com>
+Date: Mon, 17 Nov 2025 16:05:22 +0000
+Message-ID: <m2jyzomypp.fsf@gmail.com>
 References: <20251116192845.1693119-1-gal@nvidia.com>
-	<20251116192845.1693119-3-gal@nvidia.com>
+	<20251116192845.1693119-4-gal@nvidia.com>
 User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -86,23 +86,48 @@ Content-Type: text/plain
 
 Gal Pressman <gal@nvidia.com> writes:
 
-> Enhance the --list-attrs option to recursively display nested attributes
-> instead of just showing "nest" as the type.
-> Nested attributes now show their attribute set name and expand to
-> display their contents.
+> When listing attributes with --list-attrs, display the actual enum
+> values for attributes that reference an enum type.
 >
->   # ./cli.py --family ethtool --list-attrs rss-get
+>   # ./cli.py --family netdev --list-attrs dev-get
 >   [..]
->   Do request attributes:
->     - header: nest -> header
->         - dev-index: u32
->         - dev-name: string
->         - flags: u32 (enum: header-flags)
->         - phy-index: u32
->     - context: u32
+>     - xdp-features: u64 (enum: xdp-act)
+>       Values: basic, redirect, ndo-xmit, xsk-zerocopy, hw-offload, rx-sg, ndo-xmit-sg
+>       Bitmask of enabled xdp-features.
 >   [..]
 >
 > Reviewed-by: Nimrod Oren <noren@nvidia.com>
 > Signed-off-by: Gal Pressman <gal@nvidia.com>
+> ---
+>  tools/net/ynl/pyynl/cli.py | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+>
+> diff --git a/tools/net/ynl/pyynl/cli.py b/tools/net/ynl/pyynl/cli.py
+> index 3389e552ec4e..d305add514cd 100755
+> --- a/tools/net/ynl/pyynl/cli.py
+> +++ b/tools/net/ynl/pyynl/cli.py
+> @@ -139,7 +139,12 @@ def main():
+>                  attr = attr_set.attrs[attr_name]
+>                  attr_info = f'{prefix}- {attr_name}: {attr.type}'
+>                  if 'enum' in attr.yaml:
+> -                    attr_info += f" (enum: {attr.yaml['enum']})"
+> +                    enum_name = attr.yaml['enum']
+> +                    attr_info += f" (enum: {enum_name})"
 
-Reviewed-by: Donald Hunter <donald.hunter@gmail.com>
+Would be good to say enum | flags so that people know what semantics are valid.
+
+> +                    # Print enum values if available
+> +                    if enum_name in ynl.consts:
+> +                        enum_values = list(ynl.consts[enum_name].entries.keys())
+> +                        attr_info += f"\n{prefix}  Values: {', '.join(enum_values)}"
+
+This produces quite noisy output for e.g.
+
+./tools/net/ynl/pyynl/cli.py --family ethtool --list-attrs rss-get
+
+Not sure what to suggest to improve readability but maybe it doesn't
+need 'Values:' or commas, or perhaps only output each enum once?
+
+>  
+>                  # Show nested attributes reference and recursively display them
+>                  nested_set_name = None
