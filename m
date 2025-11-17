@@ -1,205 +1,199 @@
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36EB4315789
-	for <bpf@vger.kernel.org>; Mon, 17 Nov 2025 06:38:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D85DBCA52;
+	Mon, 17 Nov 2025 06:53:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763361507; cv=none; b=OkuLCkSQW0VXnTQ3ENH0pRRycrfDMiR5LJjuq/tn1QDQ3V2t3onjde7pVoAdiAr6R+OkJGBYGGiv9sH2WX+S3QV6LrxglXcTTB0vkIP3w9YZmj2rYBH7+K9hgVU0CmXrlZfOtCv17/bw4sLqlAx5YRjf8bXm5lt4VZXH2qpa0Yo=
+	t=1763362411; cv=none; b=ceMc6EsOh5a3pU62ynGqTNzNQj2ZUTcppDoPbIRVvWGi5hJfTjMybLkAqUfToNf96UKeYruqliPwqXQrkByzxGKOCZlXvoK3MG32N7rHA5BFQVx3sFjHzMHHWE0XzZZK/Ihqyuz/acsyi4eZoB3H6r5J/UhSY3m/zYJ41FN/AQo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763361507; c=relaxed/simple;
-	bh=A3rPgwriz9b4YMnOHBRbVV8RhIKuGfNGKqAw/aSnWR0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=d26F+1EzyIHJnKU7FlsdkfgTSAQMI6t3BfbD7/nGRNRXKn9swmH7Cnvnwvi9JwbI3GrjNvjW9yYrB9pCcgoq1CpKP6dh3Wrv3AyJVnFPRP8ReFYAR0cJQAQw0c+7I6WsQ8hSpKh3BotctIriVuqIly2/raAjjgJra2DXPQCDmBc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=gf5NFbf1; arc=none smtp.client-ip=209.85.167.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1763362411; c=relaxed/simple;
+	bh=1yzf8onJM6PqNQMkzbUrD7ldyzkK3nBVG+AhX2toCmA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Yb10lwdsQ/S3af3Vot+IXdBQmGikIBMuOBej0WpkrwR6fRb4LEiD1Mut+RlLH8+XfgXvzS9d6RxFS0OHpNOB7W/0bz1zxFHxuKQEBwzrlGnY898FbhQ/xdxq3GF1sz6xWAoq3jrQYZWjfpe13qLnXhKlRDfWt6EtMN3M5tNmLL4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=tLNghg/K; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="gf5NFbf1"
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-5957e017378so4466155e87.3
-        for <bpf@vger.kernel.org>; Sun, 16 Nov 2025 22:38:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1763361502; x=1763966302; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mKPR8K5JHXfnzVilFNApKLVvNZlS9+8kqXfsjfMNXqI=;
-        b=gf5NFbf1JXmj3AGYkhkTLg/oETWuiJ81BRLbW9KHkG4aPxxhP09VYdkFChl5ISNsvW
-         B1cRpQaFmpw31ymrVP55jw00Dm0KgFGGPLBjKfxcwfQKdGw5aOdW1E9yK+1ZJfs42gfF
-         pbr3OaePXjI/o7NmANcZad9rrsNLIv50WjcGeOXFHvVnH9mLyunPsjcBuMfL31IfLX/8
-         9XF0tWe/m7n4hoPamVdKEbO5iDMK+0X2ADJc+oCrfBdvRMqs1LZ9+xGdlGwonBORFD12
-         +7VRMj5EQvFIoTWUo4+BuHAublOfKXlrxAt0xdmQLo7rLSQBLdEUBUJyNKIMiXQ6wbG3
-         fxpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763361502; x=1763966302;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=mKPR8K5JHXfnzVilFNApKLVvNZlS9+8kqXfsjfMNXqI=;
-        b=WOLVLZChLjrrDNEJe+D3cNzq1x6+f8JaPuZ9uOr4JNXb7LcUjbfWVJyQUn5srLF2vg
-         6+E7BIDxvPxKnGnP+/CqIawHdWkAqRUaX9yp39wvYTlENhhmdvwx5Y2XOUGH5mK+t1a8
-         faJEIogWSvipEW9oxXi07uVctmFzPj15jhe2hiKj+UOaxwrGnYFdV4XAyMmuvMtfOYNw
-         pFlGVP1B8uJIK1aOWIyWC2eE6ZgVzwY5Uahe+/16L1aOX85wpgYwPLbdU70wMRI6tsGF
-         XtGkh74y00f0/Oe7zwLparRWLmv35/pb53VOat231/v7kHREYlHo/IJ76qShq1ifYw++
-         z4Mw==
-X-Gm-Message-State: AOJu0YxoEasPAw4KWkhn6FPUX2zRGg/ZCUmJeFHREpZwSWQzsb1Eee4n
-	zzCP3xe1c/Tibo/1ZU1pouQdlKc7xTz250sh/dur5C6nGKh2tEtrj7cxIasIxPDTzs9bG4YWuUT
-	BO5nLezKXHwPZCVNVYVAC33Im2N24DhX2XkjbAkrYkA==
-X-Gm-Gg: ASbGncsnzOVnnqsHzEYQswBB8RNutjcKZtFKf/4W5656+csPudFy+l1BBQHcuZfVAo/
-	FhS5GdT1cnPA7yukfygnbvKl3R0oZge5ptUaBUCUv9RPAX1CNNYrHfHw1xsT2Z8VkbdYKeDKSYd
-	vy9SWJEhvljpOpUJp6wvCgK0X5BPxi9IzVgzFz//7AhHCCcHAujoTG8s8IajloDxCts3300aziy
-	DT3jw3tHejW4bJWIF/R3LH0fEdxtaC8josgee4CT9lmI5T9kf2LIPksBrIRviMtIt3QM1WZ2I1x
-	EH5nBKPoAd/GH4koCn4=
-X-Google-Smtp-Source: AGHT+IF2nuhg87qiUvcOswURQNG1UrXLxNTg9RKGJWjZh7RuDRmzJpvcQFqpdeQyNJOrQ9CjFviUwVaU1c282AQ/H5Y=
-X-Received: by 2002:a05:6512:3a8f:b0:595:83f5:c33e with SMTP id
- 2adb3069b0e04-59584198566mr3695392e87.11.1763361502263; Sun, 16 Nov 2025
- 22:38:22 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="tLNghg/K"
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5AGMl45p010097;
+	Mon, 17 Nov 2025 06:52:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=goh29T
+	nuhyapOGXR0zlX/Z8AleVLtcjUxGl6sp6C0JE=; b=tLNghg/KTtWWzB1rbw+l+6
+	zQsJLZuE8VjlfqCV78ZhBXg9MVt5VtmbaymwHiU10VIGiwosl22GC0AZUZ52+V9w
+	8WgCL7FbYVr7v159GhgTk7kmv3lqzdZl3gJUwE/oGkYYHV+KBNNpdAjZ1jxdfXC7
+	ZCpSyrcJ1o7g6dxH/01HPakD0Duu0Skcd2/onvROhAzbsjDF2Y7ftJ00Z/b64+Ut
+	yXDIpeq6kPCUEzKemS1XIurlmdH5lFStOpipJBOthbGVv4HDKS9SKRgOMJApJnLE
+	O3vdsy4l3v5pKynuifAEXO9fpxQLz7ZKfFrjhvT7ZQWXP/CvpzbVCZ0KeYN2GIzg
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4aejk14udh-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 17 Nov 2025 06:52:55 +0000 (GMT)
+Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 5AH6qsFU001845;
+	Mon, 17 Nov 2025 06:52:54 GMT
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4aejk14udd-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 17 Nov 2025 06:52:54 +0000 (GMT)
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5AH2nJhr022042;
+	Mon, 17 Nov 2025 06:52:53 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4af4umme9e-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 17 Nov 2025 06:52:53 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 5AH6qnUH27329190
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 17 Nov 2025 06:52:49 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 2A7672004B;
+	Mon, 17 Nov 2025 06:52:49 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 478A020040;
+	Mon, 17 Nov 2025 06:52:45 +0000 (GMT)
+Received: from li-621bac4c-27c7-11b2-a85c-c2bf7c4b3c07.in.ibm.com (unknown [9.109.219.153])
+	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Mon, 17 Nov 2025 06:52:45 +0000 (GMT)
+From: Saket Kumar Bhaskar <skb99@linux.ibm.com>
+To: bpf@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org
+Cc: hbathini@linux.ibm.com, sachinpb@linux.ibm.com, venkat88@linux.ibm.com,
+        andrii@kernel.org, eddyz87@gmail.com, ast@kernel.org,
+        daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
+        yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+        sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
+        christophe.leroy@csgroup.eu, naveen@kernel.org, maddy@linux.ibm.com,
+        mpe@ellerman.id.au, npiggin@gmail.com
+Subject: [PATCH bpf-next v2 2/2] powerpc64/bpf: Inline bpf_get_smp_processor_id() and bpf_get_current_task()
+Date: Mon, 17 Nov 2025 12:22:35 +0530
+Message-ID: <1ff85160e12abfe1bd1e553b394957492187d133.1762422548.git.skb99@linux.ibm.com>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <cover.1762422548.git.skb99@linux.ibm.com>
+References: <cover.1762422548.git.skb99@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251115225550.1086693-1-hoyeon.lee@suse.com> <20251115225550.1086693-6-hoyeon.lee@suse.com>
- <fa987c2b-b806-4aa7-a318-812fc7d0f414@linux.dev>
-In-Reply-To: <fa987c2b-b806-4aa7-a318-812fc7d0f414@linux.dev>
-From: Hoyeon Lee <hoyeon.lee@suse.com>
-Date: Mon, 17 Nov 2025 15:37:50 +0900
-X-Gm-Features: AWmQ_bnRlBGsS_F9znam2aLrWmZfBD5qK6FdCrSiGBUG8wo4GZBjDq9kjSkoE4U
-Message-ID: <CAK7-dKYDqV97K+hbw651zbu3-UZ1WSOf2a07uqWWtiRSfJV_zQ@mail.gmail.com>
-Subject: Re: [bpf-next v1 5/5] selftests/bpf: propagate LLVM toolchain to
- runqslower build
-To: Yonghong Song <yonghong.song@linux.dev>
-Cc: bpf@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Authority-Analysis: v=2.4 cv=C/nkCAP+ c=1 sm=1 tr=0 ts=691ac647 cx=c_pps
+ a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
+ a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=NEAV23lmAAAA:8 a=VnNF1IyMAAAA:8 a=9ieA5zyVNCi_1SjJAlMA:9 a=3ZKOabzyN94A:10
+ a=QEXdDO2ut3YA:10 a=cPQSjfK2_nFv0Q5t_7PE:22
+X-Proofpoint-GUID: _e3zeQflEfxkh1U5_2jp0BWjdKq9oiNs
+X-Proofpoint-ORIG-GUID: 5vIa992N3xODDCZUEEZr3giKP6QnUkXG
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTE1MDAzMiBTYWx0ZWRfX2bpz1iXo9ll3
+ TRaEtZGbGDhqXk6DC79twvZR2esula8n4BwIhT6LmseyFl2j4iaELHd7C3XPoZtXDuFpGKOoFnW
+ aQq2L20W6VhWzMDylIzSkCjUoSS1D7RVBQbzNNYzteRcUN9tfpliFlNTiAqSgA1zNK9KKK1eZVT
+ Wi6gZuQmrrGj5NmD4H7oCqaBHjUWDwFaOGI6wo1sFXHp0OJtdi+aQlOKrRk653wk385qGCdjujX
+ cY1OvH/WJDvCwQEKqG36ANBYp1/fqM+//n+9RZZoUZ2iMX0mUhdAC6bBoAUcAwNUZiwBdx5P9W/
+ t9n36Ws0LPm39Gt1DbLxXRP2rQib2ftaQ926Bq+TwgiWffFP7qDOihOMvtkODHMLLuGdj+L4xGB
+ hucXcB5A2TBR9lggG40Ea+d0iqrk7g==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-11-17_02,2025-11-13_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ phishscore=0 priorityscore=1501 spamscore=0 impostorscore=0 bulkscore=0
+ malwarescore=0 suspectscore=0 clxscore=1015 lowpriorityscore=0 adultscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2510240000 definitions=main-2511150032
 
-On Mon, Nov 17, 2025 at 3:04=E2=80=AFPM Yonghong Song <yonghong.song@linux.=
-dev> wrote:
->
->
->
-> On 11/15/25 2:55 PM, Hoyeon Lee wrote:
-> > The selftests/bpf invokes a nested make when building runqslower, but
-> > LLVM toolchain version (clang/llvm-strip) is not propagated. As a
-> > result, runqslower is built with system default clang, not respecting
-> > specified LLVM version.
-> >
-> >      # LLVM=3D-21 make -C tools/testing/selftests/bpf
-> >      ...
-> >      make feature_display=3D0 -C /bpf/tools/bpf/runqslower             =
-           \
-> >          OUTPUT=3D/bpf/tools/testing/selftests/bpf/tools/build/runqslow=
-er/        \
-> >          BPFOBJ_OUTPUT=3D/bpf/tools/testing/selftests/bpf/tools/build/l=
-ibbpf/     \
-> >          BPFOBJ=3D/bpf/tools/testing/selftests/bpf/tools/build/libbpf/l=
-ibbpf.a    \
-> >          BPF_INCLUDE=3D/bpf/tools/testing/selftests/bpf/tools/include  =
-           \
-> >          BPFTOOL_OUTPUT=3D/bpf/tools/testing/selftests/bpf/tools/build/=
-bpftool/   \
-> >          VMLINUX_BTF=3D/sys/kernel/btf/vmlinux BPF_TARGET_ENDIAN=3D--ta=
-rget=3Dbpfel   \
-> >          EXTRA_CFLAGS=3D'-g -O0  ' EXTRA_LDFLAGS=3D' ' &&              =
-             \
-> >          cp  /bpf/tools/testing/selftests/bpf/tools/build/runqslower/ru=
-nqslower \
-> >              /bpf/tools/testing/selftests/bpf/runqslower
-> >      clang -g -O2 --target=3Dbpfel -I/bpf/tools/testing/selftests/bpf/t=
-ools/build/runqslower/ \
-> >            -I/bpf/tools/testing/selftests/bpf/tools/include -I/bpf/tool=
-s/include/uapi       \
-> >            -c runqslower.bpf.c -o /bpf/tools/testing/selftests/bpf/tool=
-s/build/runqslower/runqslower.bpf.o && \
-> >            llvm-strip -g /bpf/tools/testing/selftests/bpf/tools/build/r=
-unqslower//runqslower.bpf.o
-> >      /bin/sh: 1: clang: not found
->
-> I tried with LLVM=3D-20 make -C tools/testing/selftests/bpf in my system =
-and
-> there is no build error.
->
-> Also could you try with command line
->     make -C tools/testing/selftests/bpf LLVM=3D1
-> for clang build kernel or selftests, LLVM=3D1 is recommended as it
-> encodes a bunch of clang command lines:
->    CC              =3D $(LLVM_PREFIX)clang$(LLVM_SUFFIX)
->    LD              =3D $(LLVM_PREFIX)ld.lld$(LLVM_SUFFIX)
->    AR              =3D $(LLVM_PREFIX)llvm-ar$(LLVM_SUFFIX)
->    NM              =3D $(LLVM_PREFIX)llvm-nm$(LLVM_SUFFIX)
->    OBJCOPY         =3D $(LLVM_PREFIX)llvm-objcopy$(LLVM_SUFFIX)
->    OBJDUMP         =3D $(LLVM_PREFIX)llvm-objdump$(LLVM_SUFFIX)
->    READELF         =3D $(LLVM_PREFIX)llvm-readelf$(LLVM_SUFFIX)
->    STRIP           =3D $(LLVM_PREFIX)llvm-strip$(LLVM_SUFFIX)
->
->
-Thanks for the review.
+Inline the calls to bpf_get_smp_processor_id()/bpf_get_current_task()
+in the powerpc bpf jit.
 
-Just to clarify, the issue is not the build failure itself. The error
-"clang: not found" only appeared because I intentionally did not set
-update-alternatives to avoid falling back to the system default compiler.
+powerpc saves the Logical processor number (paca_index) and pointer
+to current task (__current) in paca.
 
-The real issue is that the runqslower sub-make invokes "clang" instead
-of "clang-21" when LLVM=3D-21 is specified. This shows that the selected
-LLVM toolchain version is not being propagated into the nested build.
+Here is how the powerpc JITed assembly changes after this commit:
 
-LLVM=3D1 works well for general builds, but in this case the intention is
-to verify that a specific LLVM version is consistently applied across
-all sub-makes. That propagation does not currently happen, and the patch
-addresses exactly that.
+Before:
 
-Thanks again for taking a look.
->
->
-> >
-> > Explicitly propagate CLANG and LLVM_STRIP to the runqslower sub-make so
-> > that the LLVM toolchain selection from lib.mk is preserved.
-> >
-> > Signed-off-by: Hoyeon Lee <hoyeon.lee@suse.com>
-> > ---
-> >   tools/testing/selftests/bpf/Makefile | 1 +
-> >   tools/testing/selftests/lib.mk       | 1 +
-> >   2 files changed, 2 insertions(+)
-> >
-> > diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selft=
-ests/bpf/Makefile
-> > index 34ea23c63bd5..79ab69920dca 100644
-> > --- a/tools/testing/selftests/bpf/Makefile
-> > +++ b/tools/testing/selftests/bpf/Makefile
-> > @@ -306,6 +306,7 @@ endif
-> >
-> >   $(OUTPUT)/runqslower: $(BPFOBJ) | $(DEFAULT_BPFTOOL) $(RUNQSLOWER_OUT=
-PUT)
-> >       $(Q)$(MAKE) $(submake_extras) -C $(TOOLSDIR)/bpf/runqslower      =
-      \
-> > +                 CLANG=3D$(CLANG) LLVM_STRIP=3D$(LLVM_STRIP)          =
-          \
-> >                   OUTPUT=3D$(RUNQSLOWER_OUTPUT) VMLINUX_BTF=3D$(VMLINUX=
-_BTF)     \
-> >                   BPFTOOL_OUTPUT=3D$(HOST_BUILD_DIR)/bpftool/          =
-        \
-> >                   BPFOBJ_OUTPUT=3D$(BUILD_DIR)/libbpf/                 =
-        \
-> > diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/l=
-ib.mk
-> > index a448fae57831..f14255b2afbd 100644
-> > --- a/tools/testing/selftests/lib.mk
-> > +++ b/tools/testing/selftests/lib.mk
-> > @@ -8,6 +8,7 @@ LLVM_SUFFIX :=3D $(LLVM)
-> >   endif
-> >
-> >   CLANG :=3D $(LLVM_PREFIX)clang$(LLVM_SUFFIX)
-> > +LLVM_STRIP :=3D $(LLVM_PREFIX)llvm-strip$(LLVM_SUFFIX)
-> >
-> >   CLANG_TARGET_FLAGS_arm          :=3D arm-linux-gnueabi
-> >   CLANG_TARGET_FLAGS_arm64        :=3D aarch64-linux-gnu
->
+cpu = bpf_get_smp_processor_id();
+
+addis 12, 2, -517
+addi 12, 12, -29456
+mtctr 12
+bctrl
+mr	8, 3
+
+After:
+
+cpu = bpf_get_smp_processor_id();
+
+lhz 8, 8(13)
+
+To evaluate the performance improvements introduced by this change,
+the benchmark described in [1] was employed.
+
++---------------+-------------------+-------------------+--------------+
+|      Name     |      Before       |        After      |   % change   |
+|---------------+-------------------+-------------------+--------------|
+| glob-arr-inc  | 40.701 ± 0.008M/s | 55.207 ± 0.021M/s |   + 35.64%   |
+| arr-inc       | 39.401 ± 0.007M/s | 56.275 ± 0.023M/s |   + 42.42%   |
+| hash-inc      | 24.944 ± 0.004M/s | 26.212 ± 0.003M/s |   +  5.08%   |
++---------------+-------------------+-------------------+--------------+
+
+[1] https://github.com/anakryiko/linux/commit/8dec900975ef
+
+Signed-off-by: Saket Kumar Bhaskar <skb99@linux.ibm.com>
+---
+ arch/powerpc/net/bpf_jit_comp.c   | 11 +++++++++++
+ arch/powerpc/net/bpf_jit_comp64.c | 10 ++++++++++
+ 2 files changed, 21 insertions(+)
+
+diff --git a/arch/powerpc/net/bpf_jit_comp.c b/arch/powerpc/net/bpf_jit_comp.c
+index 2f2230ae2145..c88dfa1418ec 100644
+--- a/arch/powerpc/net/bpf_jit_comp.c
++++ b/arch/powerpc/net/bpf_jit_comp.c
+@@ -471,6 +471,17 @@ bool bpf_jit_supports_percpu_insn(void)
+ 	return IS_ENABLED(CONFIG_PPC64);
+ }
+ 
++bool bpf_jit_inlines_helper_call(s32 imm)
++{
++	switch (imm) {
++	case BPF_FUNC_get_smp_processor_id:
++	case BPF_FUNC_get_current_task:
++		return true;
++	default:
++		return false;
++	}
++}
++
+ void *arch_alloc_bpf_trampoline(unsigned int size)
+ {
+ 	return bpf_prog_pack_alloc(size, bpf_jit_fill_ill_insns);
+diff --git a/arch/powerpc/net/bpf_jit_comp64.c b/arch/powerpc/net/bpf_jit_comp64.c
+index 21486706b5ea..4e1643422370 100644
+--- a/arch/powerpc/net/bpf_jit_comp64.c
++++ b/arch/powerpc/net/bpf_jit_comp64.c
+@@ -1399,6 +1399,16 @@ int bpf_jit_build_body(struct bpf_prog *fp, u32 *image, u32 *fimage, struct code
+ 		case BPF_JMP | BPF_CALL:
+ 			ctx->seen |= SEEN_FUNC;
+ 
++			if (insn[i].src_reg == BPF_REG_0) {
++				if (imm == BPF_FUNC_get_smp_processor_id) {
++					EMIT(PPC_RAW_LHZ(insn[i].src_reg, _R13, offsetof(struct paca_struct, paca_index)));
++					break;
++				} else if (imm == BPF_FUNC_get_current_task) {
++					EMIT(PPC_RAW_LD(insn[i].src_reg, _R13, offsetof(struct paca_struct, __current)));
++					break;
++				}
++			}
++
+ 			ret = bpf_jit_get_func_addr(fp, &insn[i], extra_pass,
+ 						    &func_addr, &func_addr_fixed);
+ 			if (ret < 0)
+-- 
+2.51.0
+
