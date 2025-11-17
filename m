@@ -1,239 +1,120 @@
-Received: from devnull.danielhodges.dev (vps-2f6e086e.vps.ovh.us [135.148.138.8])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5414D265621;
-	Mon, 17 Nov 2025 21:19:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=135.148.138.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 331A731985F;
+	Mon, 17 Nov 2025 21:19:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763414369; cv=none; b=Oz0su4pCRS64rvgjoUK7ps4t50BigabAii7f6OKNdRe2FTeht99keImqE3FaAuyHZo+1A6G7JcQWDOuMGjBxaHhg/7FQzVA3lvGLddeWkY4C9oowShyUjqmNqUZh5KWqdd131xFCSlLqHl7i3DvZFRViGBavraWvHaR9A3qcUHU=
+	t=1763414380; cv=none; b=POzBxUY1xCkIU4rs45olC2pZRfiUFnXX81Zyyqv2WHLzXZY/fTjCob7z7ioQtjhH1KwHhuxxOg2IW7K2dgPb+DowKwBqc89q1T4WIdIyhDC0qp+7B7IhGetdTJWxQrj4Rbwcmw1uWi0neuU5tAYhAiM+4OKPHAyTrifpKzvmssU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763414369; c=relaxed/simple;
-	bh=hhWsIEhg8dOWtB8beGeredqlzU4oJwOYtF0tn+8lKrA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Ezd5fGol+Z8/hlnDBdPVaQDzbVBmRF6/od7FlqG0lTNyadIv3xdxZOKHGn1qv/xbvjkVmDkoHjGIMy0xC5ReeXnn1ApLWzAclKb3qg0xgleZIr6krjSXrQRkQ3xhJzY1MyUa5GbfckiLi1+XDA364uliDciBuS2M7UhOkj0jztw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=danielhodges.dev; spf=pass smtp.mailfrom=danielhodges.dev; dkim=pass (2048-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b=bU814iID; dkim=permerror (0-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b=HNX6Fm+f; arc=none smtp.client-ip=135.148.138.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=danielhodges.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=danielhodges.dev
+	s=arc-20240116; t=1763414380; c=relaxed/simple;
+	bh=Fcr2an9OvyfvByMvUiGXR6bKpiB77D8pC9j1w6+C2Ao=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:Content-Type; b=hpfut+Ig1dnh+7fpTrBtEYkd5zgtL4SW3gIVCi5bWK4a0LIkRS8pjJn7BfHM80hv4NvXZC613u2lqba/dWvqNlE0njILuqL80WZ1jcD/TbYdIpnldIZMl9YL4RAE44Wvbt9N5d7avCXkrJvkBpx3PGoBlzIGaDPEXAG64n+ZHHg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=FSGe+vqK; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b="bU814iID";
-	dkim=permerror (0-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b="HNX6Fm+f"
-DKIM-Signature: v=1; a=rsa-sha256; s=202510r; d=danielhodges.dev; c=relaxed/relaxed;
-	h=Message-ID:Date:Subject:To:From; t=1763414070; bh=jl4pESYU046bgMbTdyczb4r
-	/NoQlMV6hNGDcgqbnsjQ=; b=bU814iIDSN5ZPPjBkWEH8665JEDLWdRVyUtpDQ+ExigIxwspks
-	JlTPLH4gvQYqFc9yvA1EqjSW6Xysf88oTbS6gxH8aXerBydqW3Y64kqtoEdESoFP2yKEQciAbuj
-	k0o20hM4NP9su9GqrlDbRPbWIh9rekUIj2UtL1Qb7iqbI2LaEjn0Ec7GxZ2cNCpr19uqU0OMM0W
-	nRihSCR7yUGFXC1PAhhCWJnLQ0Id46tN3kyfLw8/N/92BNSN7bIn3ApYfgCCBJLH0d3YzBZ/pLX
-	Nym7UhaQNyNyzMN5Hv1z43SxGQNbJ9xEgP0UBu1HOwZhc0OMUe+O+z3itW2q/gIss0w==;
-DKIM-Signature: v=1; a=ed25519-sha256; s=202510e; d=danielhodges.dev; c=relaxed/relaxed;
-	h=Message-ID:Date:Subject:To:From; t=1763414070; bh=jl4pESYU046bgMbTdyczb4r
-	/NoQlMV6hNGDcgqbnsjQ=; b=HNX6Fm+figy6z/aWa5i5Jxu0S8IHScP3TT4pWbMkHT12SDHRiL
-	iocxvlUTPGR9AOdyRXTARdlkA5ayc9Bt+nAw==;
-From: Daniel Hodges <git@danielhodges.dev>
-To: Vadim Fedorenko <vadim.fedorenko@linux.dev>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	bpf@vger.kernel.org (open list:BPF [CRYPTO]),
-	linux-kernel@vger.kernel.org (open list)
-Cc: Daniel Hodges <git@danielhodges.dev>
-Subject: [PATCH bpf-next 1/4] bpf: Add SHA hash kfuncs for cryptographic hashing
-Date: Mon, 17 Nov 2025 16:13:58 -0500
-Message-ID: <20251117211413.1394-2-git@danielhodges.dev>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20251117211413.1394-1-git@danielhodges.dev>
-References: <20251117211413.1394-1-git@danielhodges.dev>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="FSGe+vqK"
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5AHA9PRB014231;
+	Mon, 17 Nov 2025 21:19:29 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=pp1; bh=oNRxzU4vgpmjzlPv1h5l0lfs5clT
+	aOUfbtAGJEOhM80=; b=FSGe+vqKRIYqTxoWA7cvqPU20j8XsNoiVZUm9AFfcJXV
+	I9RSRwKvzB9pK9lSDTMsX36L0r0z4MwJqBrh0Hg7F+ZftGkPaCub53Gw6Gk1ZIzC
+	ySyL/VqRhosg/RGfSsFI1Fx/sb4DHkZKDHGoWFZ8AKbKF5t3/3ZXgO0GHFhZSjEG
+	UwUXnenOID/Bjn0lTGqYm6aU6xYpXi5o5aW0gEgQEMLEsKQ0N1mpF3BYJUA7yYNx
+	CttoVulwXdhktZ2fe/2xjFEH87c0A9HMCS+yS/qlP+JxIsVHtv+7+JsKlDKn4FuH
+	dV5nWxX6RdcDldvX63WqgxRVbGgUq4xy97+0O6ydJQ==
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4aejk182k9-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 17 Nov 2025 21:19:28 +0000 (GMT)
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5AHHTk0N010406;
+	Mon, 17 Nov 2025 21:19:27 GMT
+Received: from smtprelay04.dal12v.mail.ibm.com ([172.16.1.6])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4af3us048p-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 17 Nov 2025 21:19:27 +0000
+Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
+	by smtprelay04.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 5AHLJRTN24642278
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 17 Nov 2025 21:19:27 GMT
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 8059558058;
+	Mon, 17 Nov 2025 21:19:27 +0000 (GMT)
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 87E7A58057;
+	Mon, 17 Nov 2025 21:19:26 +0000 (GMT)
+Received: from [9.111.144.178] (unknown [9.111.144.178])
+	by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTPS;
+	Mon, 17 Nov 2025 21:19:26 +0000 (GMT)
+Message-ID: <9a8eaa37-698d-41ff-a6f8-287b685d7f78@linux.ibm.com>
+Date: Mon, 17 Nov 2025 22:19:24 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+From: Mikhail Zaslonko <zaslonko@linux.ibm.com>
+Subject: linux-next: samples/bpf build error: no member named 'ns_id' in
+ struct ns_common
+To: bpf@vger.kernel.org
+Cc: linux-next@vger.kernel.org, Alexander Egorenkov <egorenar@linux.ibm.com>,
+        Christian Brauner <brauner@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Authority-Analysis: v=2.4 cv=C/nkCAP+ c=1 sm=1 tr=0 ts=691b9160 cx=c_pps
+ a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
+ a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=VwQbUJbxAAAA:8 a=dNcmTFmNxba2xSaGdesA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+ a=HhbK4dLum7pmb74im6QT:22
+X-Proofpoint-GUID: _FUKo9_AZFfCMeqkxcjlRacmjK6LfgUu
+X-Proofpoint-ORIG-GUID: _FUKo9_AZFfCMeqkxcjlRacmjK6LfgUu
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTE1MDAzMiBTYWx0ZWRfX5kyeYHRvHbK6
+ yQmmxT7Gx2r6PlSFeZnEuSY9Nf2lN8e4rhftka1CnoLcGsabPHeXMhBsBB2pU5uO1FGv08kCHCh
+ zseNi5RoqJS9k1KHC0PNqSoXLFZgNZiXVHJRkbD+7T7CgB8TUt5GW8FI7TPtiaKLlrrppuyeahX
+ XuTu95lKvClXhArhDnspykx4nCYKVbWCEbWzBCf0Ntyt/rf71CJ9zsG/bltpUrhqSWFcOa7TYg5
+ 4xNcSgbo9UngyD6LwcGS4c+SX+9xngc0vAbSeawIfAG9E/y4X2qY3uwIjc8lKjcGd0STI9CsF0h
+ gI8VkIN8e28hr1N8UQbYRfHWUqY5yqd9nfI97eKVkOztDAtRAYg0Kv+ourdZAPn01ptOaG3KQGd
+ Xv2qCJF450aOzQ4QObsx8dvESsdSWg==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-11-17_04,2025-11-13_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ phishscore=0 priorityscore=1501 spamscore=0 impostorscore=0 bulkscore=0
+ malwarescore=0 suspectscore=0 clxscore=1011 lowpriorityscore=0 adultscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2510240000 definitions=main-2511150032
 
-Add three new kfuncs for computing cryptographic hashes in BPF programs:
-- bpf_sha256_hash(): Computes SHA-256 hash (32-byte output)
-- bpf_sha384_hash(): Computes SHA-384 hash (48-byte output)
-- bpf_sha512_hash(): Computes SHA-512 hash (64-byte output)
+Hi,
 
-These kfuncs leverage the kernel's existing crypto library (sha256/sha384/
-sha512 functions) and use bpf_dynptr for safe memory access without risk
-of page faults. The functions validate input parameters including checking
-for read-only output buffers and ensuring sufficient buffer sizes.
+I’m observing build errors in samples/bpf on linux-next.
 
-This enables BPF programs to compute cryptographic hashes for use cases
-such as content verification, integrity checking, and data authentication.
+  - linux-next snapshot: next-20251117 
+  - Architecture: s390x
+  - Compiler: clang version 20.1.8
 
-Signed-off-by: Daniel Hodges <git@danielhodges.dev>
----
- kernel/bpf/crypto.c | 125 +++++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 124 insertions(+), 1 deletion(-)
+Numerous errors of the following type:
 
-diff --git a/kernel/bpf/crypto.c b/kernel/bpf/crypto.c
-index 83c4d9943084..485972b0f858 100644
---- a/kernel/bpf/crypto.c
-+++ b/kernel/bpf/crypto.c
-@@ -8,7 +8,8 @@
- #include <linux/filter.h>
- #include <linux/scatterlist.h>
- #include <linux/skbuff.h>
--#include <crypto/skcipher.h>
-+#include <crypto/sha2.h>
-+#include <crypto/sig.h>
- 
- struct bpf_crypto_type_list {
- 	const struct bpf_crypto_type *type;
-@@ -343,6 +344,122 @@ __bpf_kfunc int bpf_crypto_encrypt(struct bpf_crypto_ctx *ctx,
- 	return bpf_crypto_crypt(ctx, src_kern, dst_kern, siv_kern, false);
- }
- 
-+#if IS_ENABLED(CONFIG_CRYPTO_LIB_SHA256)
-+/**
-+ * bpf_sha256_hash() - Compute SHA-256 hash using kernel crypto library
-+ * @data: bpf_dynptr to the input data to hash. Must be a trusted pointer.
-+ * @out: bpf_dynptr to the output buffer (must be at least 32 bytes). Must be a trusted pointer.
-+ *
-+ * Computes SHA-256 hash of the input data. Uses bpf_dynptr to ensure safe memory access
-+ * without risk of page faults.
-+ */
-+__bpf_kfunc int bpf_sha256_hash(const struct bpf_dynptr *data, const struct bpf_dynptr *out)
-+{
-+	const struct bpf_dynptr_kern *data_kern = (struct bpf_dynptr_kern *)data;
-+	const struct bpf_dynptr_kern *out_kern = (struct bpf_dynptr_kern *)out;
-+	u32 data_len, out_len;
-+	const u8 *data_ptr;
-+	u8 *out_ptr;
-+
-+	if (__bpf_dynptr_is_rdonly(out_kern))
-+		return -EINVAL;
-+
-+	data_len = __bpf_dynptr_size(data_kern);
-+	out_len = __bpf_dynptr_size(out_kern);
-+
-+	if (data_len == 0 || out_len < 32)
-+		return -EINVAL;
-+
-+	data_ptr = __bpf_dynptr_data(data_kern, data_len);
-+	if (!data_ptr)
-+		return -EINVAL;
-+
-+	out_ptr = __bpf_dynptr_data_rw(out_kern, out_len);
-+	if (!out_ptr)
-+		return -EINVAL;
-+
-+	sha256(data_ptr, data_len, out_ptr);
-+
-+	return 0;
-+}
-+
-+/**
-+ * bpf_sha384_hash() - Compute SHA-384 hash using kernel crypto library
-+ * @data: bpf_dynptr to the input data to hash. Must be a trusted pointer.
-+ * @out: bpf_dynptr to the output buffer (must be at least 48 bytes). Must be a trusted pointer.
-+ *
-+ * Computes SHA-384 hash of the input data. Uses bpf_dynptr to ensure safe memory access
-+ * without risk of page faults.
-+ */
-+__bpf_kfunc int bpf_sha384_hash(const struct bpf_dynptr *data, const struct bpf_dynptr *out)
-+{
-+	const struct bpf_dynptr_kern *data_kern = (struct bpf_dynptr_kern *)data;
-+	const struct bpf_dynptr_kern *out_kern = (struct bpf_dynptr_kern *)out;
-+	u32 data_len, out_len;
-+	const u8 *data_ptr;
-+	u8 *out_ptr;
-+
-+	if (__bpf_dynptr_is_rdonly(out_kern))
-+		return -EINVAL;
-+
-+	data_len = __bpf_dynptr_size(data_kern);
-+	out_len = __bpf_dynptr_size(out_kern);
-+
-+	if (data_len == 0 || out_len < 48)
-+		return -EINVAL;
-+
-+	data_ptr = __bpf_dynptr_data(data_kern, data_len);
-+	if (!data_ptr)
-+		return -EINVAL;
-+
-+	out_ptr = __bpf_dynptr_data_rw(out_kern, out_len);
-+	if (!out_ptr)
-+		return -EINVAL;
-+
-+	sha384(data_ptr, data_len, out_ptr);
-+
-+	return 0;
-+}
-+
-+/**
-+ * bpf_sha512_hash() - Compute SHA-512 hash using kernel crypto library
-+ * @data: bpf_dynptr to the input data to hash. Must be a trusted pointer.
-+ * @out: bpf_dynptr to the output buffer (must be at least 64 bytes). Must be a trusted pointer.
-+ *
-+ * Computes SHA-512 hash of the input data. Uses bpf_dynptr to ensure safe memory access
-+ * without risk of page faults.
-+ */
-+__bpf_kfunc int bpf_sha512_hash(const struct bpf_dynptr *data, const struct bpf_dynptr *out)
-+{
-+	const struct bpf_dynptr_kern *data_kern = (struct bpf_dynptr_kern *)data;
-+	const struct bpf_dynptr_kern *out_kern = (struct bpf_dynptr_kern *)out;
-+	u32 data_len, out_len;
-+	const u8 *data_ptr;
-+	u8 *out_ptr;
-+
-+	if (__bpf_dynptr_is_rdonly(out_kern))
-+		return -EINVAL;
-+
-+	data_len = __bpf_dynptr_size(data_kern);
-+	out_len = __bpf_dynptr_size(out_kern);
-+
-+	if (data_len == 0 || out_len < 64)
-+		return -EINVAL;
-+
-+	data_ptr = __bpf_dynptr_data(data_kern, data_len);
-+	if (!data_ptr)
-+		return -EINVAL;
-+
-+	out_ptr = __bpf_dynptr_data_rw(out_kern, out_len);
-+	if (!out_ptr)
-+		return -EINVAL;
-+
-+	sha512(data_ptr, data_len, out_ptr);
-+
-+	return 0;
-+}
-+#endif /* CONFIG_CRYPTO_LIB_SHA256 */
-+
- __bpf_kfunc_end_defs();
- 
- BTF_KFUNCS_START(crypt_init_kfunc_btf_ids)
-@@ -359,6 +476,11 @@ static const struct btf_kfunc_id_set crypt_init_kfunc_set = {
- BTF_KFUNCS_START(crypt_kfunc_btf_ids)
- BTF_ID_FLAGS(func, bpf_crypto_decrypt, KF_RCU)
- BTF_ID_FLAGS(func, bpf_crypto_encrypt, KF_RCU)
-+#if IS_ENABLED(CONFIG_CRYPTO_LIB_SHA256)
-+BTF_ID_FLAGS(func, bpf_sha256_hash, 0)
-+BTF_ID_FLAGS(func, bpf_sha384_hash, 0)
-+BTF_ID_FLAGS(func, bpf_sha512_hash, 0)
-+#endif
- BTF_KFUNCS_END(crypt_kfunc_btf_ids)
- 
- static const struct btf_kfunc_id_set crypt_kfunc_set = {
-@@ -383,6 +505,7 @@ static int __init crypto_kfunc_init(void)
- 	ret = register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_CLS, &crypt_kfunc_set);
- 	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_ACT, &crypt_kfunc_set);
- 	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_XDP, &crypt_kfunc_set);
-+	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SYSCALL, &crypt_kfunc_set);
- 	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SYSCALL,
- 					       &crypt_init_kfunc_set);
- 	return  ret ?: register_btf_id_dtor_kfuncs(bpf_crypto_dtors,
--- 
-2.51.0
+In file included from lathist_kern.c:9:
+In file included from /root/linux-next/include/linux/ptrace.h:10:
+In file included from /root/linux-next/include/linux/pid_namespace.h:11:
+/root/linux-next/include/linux/ns_common.h:25:23: error: no member named 'ns_id' in 'struct ns_common'
+   25 |         VFS_WARN_ON_ONCE(ns->ns_id == 0);
+      |                          ~~  ^
 
+Appears to be a mismatch between kernel headers and bpf. 
+On next-20251111 no errors of this type took place.
+
+I figured out the following patch series is likely the cause:
+https://lore.kernel.org/all/20251109-namespace-6-19-fixes-v1-0-ae8a4ad5a3b3@kernel.org/
+
+Thanks,
+Mikhail Zaslonko
