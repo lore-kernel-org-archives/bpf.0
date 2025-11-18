@@ -1,33 +1,33 @@
 Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E882285074;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16A6128F50F;
 	Tue, 18 Nov 2025 05:16:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763442976; cv=none; b=IqEyaGIg18JckdTy0fMlDwHPo3qlUVkxg22PzBlgsGTR0fXOEmE8FXOP9lMwqEVCNx1uqH4GMhcA+TR2tbW7aiy6pzwMDX0gzo/dkd+iILw4aQALiB9eU9W9lynIqxnh+NVBEUmGzseP2tSeJmyWYMQeAm+sxZ2JrJv03taCehY=
+	t=1763442976; cv=none; b=p4xObV6bp8vKV6QFXJRl8n9/r12CsC+64QdTZMd8zaLgOKAKQDeA14+/loQw6uiJ0qYn2Dk/8eIXkZgV62vlhIp0kc7rWUu9Ykp2O8tRT9weop85ri4oRL6ziNz6npXh5CVDsOCj0aprIjANcAbg48IsxgR/RxTNmsY9UAseUI8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1763442976; c=relaxed/simple;
-	bh=aQb2qy2J1pCZ1132PoicrKjRnzTEBFPwnGLeE5EsJfc=;
+	bh=zwvv7t8MBgANRD5S0+TL/wuEbc9ZMEz6rxvOZJPG75Y=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=LZNExFe5gOLNVRV8lzCDTim8rd1O5Yg1ulp21WUgrT/B3ChqpYPVrJilry0vA+HNqYwe1o+3xW1UmtHsFVJ2IC6G3U6WQicWI4fYBSZ6h/mXx8P545FMaDYVZ+9fsm/KmTZvRlNQM1gGjoh7+R6ViCljL5e+ybsLkDGANZsIhwI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=ZKo+9Obd; arc=none smtp.client-ip=62.89.141.173
+	 MIME-Version; b=cRiCjMjxrfW6omBC3xtt57ywl1f49NtzeFE15eWJgwTDIMyGtnL9bK3Ss8NFeGHFBhvv4KtjuyYWI2fanNDCkcSDV1fahiV/wDozmZwiUdscBVM2eKtdqApOce/lzZ6J7qFsl/gaYe3maOCWlPE3PrNWi5+G6uj449bTbYYpTtU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=drr6P6/I; arc=none smtp.client-ip=62.89.141.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="ZKo+9Obd"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="drr6P6/I"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
 	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
 	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=JiG9nHcsxcwZpHb/L0Tx41DaV7imD29tLb/ai1sU578=; b=ZKo+9ObdivkDNkysiYahzyuuss
-	V9yrjHh7tmjMIizFvtgrzU1ew9DKv2ijMXyq/m+VY6kJr1ok4yabwOPGzxZgNPqo1qdCwZH+GGCA9
-	Xtf/YL51cWReDV2QQXM8zEYytJDNiC9btkCVTAfz/42rcVTuGMFe7UWcDLIpuix5YDrac++QHzoXz
-	6v2zGdAVaUgb36aZ1KMpkw4J2jiHmlaq73tuwK2Le9V93bz2apa3mx7aNKqaPIoaPriRmBF0oazpX
-	A4BKfQIDaZjshqkFVaASv2u9+Euguf7X+3JH3/CMgPPVV+/JuZY+mNYWB3ETE4qgxS7s+2dJxIEyv
-	jDie91pw==;
+	bh=WKINhvrphJyrNwMIsOfgnLwqrkhKPlvlu+weyrXrIrI=; b=drr6P6/ImDwO/t9/k7B747NbnQ
+	2NNpVUCzrwlO4WPEqnMN1C5vUIu1JwP9bNUnldZd1a71TrolnehTHK9+jrp+oJNDVuCG4no5+7mwx
+	+2osw5kE94CsjuVBAWO/KVsNQMqX+0RkuAh9I+5WH/8RdScDn9eVGgjDbWi0KV0NFh+QSOtbjg1ot
+	olAWidgyu9oIdnGKdczwLgH5GpCcSpeNk4qBmUz/FxLORprEREsuLf/Tzp0Zp6U7NQ/cZ3CCtsRSm
+	tbogeVwJBiD5TavPaIvgYzIJTas34LzcQNI4b3uIuie0hDfXaD5198X10oVYWQqVgMoWZb3/MMyN9
+	nHpHfRjg==;
 Received: from viro by zeniv.linux.org.uk with local (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1vLE4U-0000000GER4-2rTm;
+	id 1vLE4U-0000000GEQb-0vTT;
 	Tue, 18 Nov 2025 05:16:06 +0000
 From: Al Viro <viro@zeniv.linux.org.uk>
 To: linux-fsdevel@vger.kernel.org
@@ -53,9 +53,9 @@ Cc: torvalds@linux-foundation.org,
 	borntraeger@linux.ibm.com,
 	bpf@vger.kernel.org,
 	clm@meta.com
-Subject: [PATCH v4 14/54] convert mqueue
-Date: Tue, 18 Nov 2025 05:15:23 +0000
-Message-ID: <20251118051604.3868588-15-viro@zeniv.linux.org.uk>
+Subject: [PATCH v4 10/54] configfs, securityfs: kill_litter_super() not needed
+Date: Tue, 18 Nov 2025 05:15:19 +0000
+Message-ID: <20251118051604.3868588-11-viro@zeniv.linux.org.uk>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20251118051604.3868588-1-viro@zeniv.linux.org.uk>
 References: <20251118051604.3868588-1-viro@zeniv.linux.org.uk>
@@ -68,56 +68,50 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Al Viro <viro@ftp.linux.org.uk>
 
-All modifications via normal VFS codepaths; just take care of making
-persistent in in mqueue_create_attr() and discardable in mqueue_unlink()
-and it doesn't need kill_litter_super() at all.
+These are guaranteed to be empty by the time they are shut down;
+both are single-instance and there is an internal mount maintained
+for as long as there is any contents.
 
-mqueue_unlink() side is best handled by having it call simple_unlink()
-rather than duplicating its guts...
+Both have that internal mount pinned by every object in root.
 
+In other words, kill_litter_super() boils down to kill_anon_super()
+for those.
+
+Reviewed-by: Joel Becker <jlbec@evilplan.org>
+Acked-by: Paul Moore <paul@paul-moore> (LSM)
+Acked-by: Andreas Hindborg <a.hindborg@kernel.org> (configfs)
 Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 ---
- ipc/mqueue.c | 12 +++---------
- 1 file changed, 3 insertions(+), 9 deletions(-)
+ fs/configfs/mount.c | 2 +-
+ security/inode.c    | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/ipc/mqueue.c b/ipc/mqueue.c
-index 093551fe66a7..5737130137bf 100644
---- a/ipc/mqueue.c
-+++ b/ipc/mqueue.c
-@@ -599,8 +599,7 @@ static int mqueue_create_attr(struct dentry *dentry, umode_t mode, void *arg)
- 	dir->i_size += DIRENT_SIZE;
- 	simple_inode_init_ts(dir);
+diff --git a/fs/configfs/mount.c b/fs/configfs/mount.c
+index 456c4a2efb53..4929f3431189 100644
+--- a/fs/configfs/mount.c
++++ b/fs/configfs/mount.c
+@@ -116,7 +116,7 @@ static struct file_system_type configfs_fs_type = {
+ 	.owner		= THIS_MODULE,
+ 	.name		= "configfs",
+ 	.init_fs_context = configfs_init_fs_context,
+-	.kill_sb	= kill_litter_super,
++	.kill_sb	= kill_anon_super,
+ };
+ MODULE_ALIAS_FS("configfs");
  
--	d_instantiate(dentry, inode);
--	dget(dentry);
-+	d_make_persistent(dentry, inode);
- 	return 0;
- out_unlock:
- 	spin_unlock(&mq_lock);
-@@ -617,13 +616,8 @@ static int mqueue_create(struct mnt_idmap *idmap, struct inode *dir,
- 
- static int mqueue_unlink(struct inode *dir, struct dentry *dentry)
- {
--	struct inode *inode = d_inode(dentry);
--
--	simple_inode_init_ts(dir);
- 	dir->i_size -= DIRENT_SIZE;
--	drop_nlink(inode);
--	dput(dentry);
--	return 0;
-+	return simple_unlink(dir, dentry);
- }
- 
- /*
-@@ -1638,7 +1632,7 @@ static const struct fs_context_operations mqueue_fs_context_ops = {
- static struct file_system_type mqueue_fs_type = {
- 	.name			= "mqueue",
- 	.init_fs_context	= mqueue_init_fs_context,
--	.kill_sb		= kill_litter_super,
-+	.kill_sb		= kill_anon_super,
- 	.fs_flags		= FS_USERNS_MOUNT,
+diff --git a/security/inode.c b/security/inode.c
+index 43382ef8896e..bf7b5e2e6955 100644
+--- a/security/inode.c
++++ b/security/inode.c
+@@ -70,7 +70,7 @@ static struct file_system_type fs_type = {
+ 	.owner =	THIS_MODULE,
+ 	.name =		"securityfs",
+ 	.init_fs_context = securityfs_init_fs_context,
+-	.kill_sb =	kill_litter_super,
++	.kill_sb =	kill_anon_super,
  };
  
+ /**
 -- 
 2.47.3
 
