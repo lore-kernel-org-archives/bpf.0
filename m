@@ -1,34 +1,34 @@
 Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D43524BBFD;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E0FC270545;
 	Tue, 18 Nov 2025 05:16:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763442975; cv=none; b=CRtwI732+/63JZhu2hNXDagIo/2TJxHmcU6goyooH7A5kfUBGwQOU6by2fRB122U8mL7JXhTh1ePt9mcXlF/1RV8ReVNWLtpPED4nezMzZjnig4ojqJ+yPGTPAYP50upe7swcBcDPyXnpbQu1XZ2+DpfmocHMu4lbFWlUZ7vYvE=
+	t=1763442975; cv=none; b=iHcqMaN9qMkPVagcV1JnA2VOSGTYYsvFwSTQ1EbHNzBC6ZG3vKGEhx+5vXAczRjw6WoRWzc0SaGx15KvLHPG5JdOF1+G3JrJjINljPL79ER4OngroDCIqvCPJgZXlI4czL/VuggpuvIiSofOqFzi08YQJ+1iycUcH/KzzCnX15E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1763442975; c=relaxed/simple;
-	bh=Iwt5ye99zRJSX9pycRhX5pwplCSLlQAGWoYLgPWULTo=;
+	bh=35MbVjxtToOQyUh5FTs7bBeOlum4Q1e4+S1+OrjjcRo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=A8/qKi/r+brzgvj+9u3oGDIJAerXNwXx8t+j2pTVkst6jAXvdCi4mpWnfr2g8VqeThiEdHO2mwNcAaGxVzTqYBYd/y9yMQ5tqhi1nEkUbXjKN7SNAxp5i0GUyA2v6hzO9VmOzH7x0nosmT9YUZsHiSyo1mkGfbXJ0yfuTxnMQ0s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=cMhlXBqE; arc=none smtp.client-ip=62.89.141.173
+	 MIME-Version; b=TQ1uFTLti9WA9qxtvScpVDhUXSS6eFRKNAi5Si9K6bUstS/5uNIb31CDxs+CJaDzknTW1brO2PeX7X8aCtnKaN4DK/HXj69bT6y+c3hiNvyHb6ytKhLXIAwzVGdMIFhvWg0mpF08VWgnWp+U82Lkbd8dzmfpW1dYlMOHp9E4T74=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=gJiPdzY0; arc=none smtp.client-ip=62.89.141.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="cMhlXBqE"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="gJiPdzY0"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
 	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
 	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=Zcrjn9Hoyal2qTn93te4BLRuOf8fYSOuLLeBgOIrdbo=; b=cMhlXBqEGcRgFzivtW6c0N9XeJ
-	5GoGNtggd/IvFsOSwoxXYFjLNuuucPyNlyXC9RYSslkG2HVqkhhkXopsNdIlCG7dHuTmqENpcMkCW
-	1y11RnGPngVleScCDLPtMiEFccZvejq+LsXLe5h3Jpu64iwHmDTVgryh/skc3R/qzpyGfLa/4NEnX
-	QzrbT7g12nVRpeqkBNdMWVvVisoqlemJ28304bpBsNN0dZ2QzvYivoQ/dLNwf9c1QWZfGLcJk6nsW
-	CgKWdgJB77OjrZB53fmfibtws2x2pG6nmSHorw+hngyXde+felKNRB1P4cCifXGXt+lbUs2oEZ/ou
-	nFVCdRrg==;
+	bh=o92Omq0psZ3ukvz3ytEXVDnarOtbezsCR+bO9JM0kAQ=; b=gJiPdzY0TRltDme/VDbpmSj937
+	voGiIUGCZf3gef7x1o6bLNE3mWjRZt2mYVc7BPhPcTWRNNQFndEeftSQ/3vYeJLVJT1roZB2tWHmQ
+	URVsY+tmfEYDP9HhZM5fLamP1J8SAp+WeegXyDlN0Z4bVN9uWRFUKgH9GU20hX5GPpD6jfRpmRQC2
+	9QQn+Wp/FsAQcqK8JpkX9h+sEJyr9YtkruhstFYaXO7s79ohZh+nRXaFvYWutUTMwwU6ZHwahXc28
+	I9t7nAb6ObHn41+9ek5a/PWQ21NefE2VCFPt4dTgxTtjkPZp9cgxIOUGFu5a+s2M0zqiGp41lP0qU
+	j3bGGQgQ==;
 Received: from viro by zeniv.linux.org.uk with local (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1vLE4U-0000000GERG-3gSD;
-	Tue, 18 Nov 2025 05:16:06 +0000
+	id 1vLE4V-0000000GERs-2LuP;
+	Tue, 18 Nov 2025 05:16:07 +0000
 From: Al Viro <viro@zeniv.linux.org.uk>
 To: linux-fsdevel@vger.kernel.org
 Cc: torvalds@linux-foundation.org,
@@ -53,9 +53,9 @@ Cc: torvalds@linux-foundation.org,
 	borntraeger@linux.ibm.com,
 	bpf@vger.kernel.org,
 	clm@meta.com
-Subject: [PATCH v4 16/54] convert dlmfs
-Date: Tue, 18 Nov 2025 05:15:25 +0000
-Message-ID: <20251118051604.3868588-17-viro@zeniv.linux.org.uk>
+Subject: [PATCH v4 23/54] convert spufs
+Date: Tue, 18 Nov 2025 05:15:32 +0000
+Message-ID: <20251118051604.3868588-24-viro@zeniv.linux.org.uk>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20251118051604.3868588-1-viro@zeniv.linux.org.uk>
 References: <20251118051604.3868588-1-viro@zeniv.linux.org.uk>
@@ -68,49 +68,78 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Al Viro <viro@ftp.linux.org.uk>
 
-All modifications via normal VFS codepaths; just take care of making
-persistent in ->create() and ->mkdir() and that's it (removal side
-doesn't need any changes, since it uses simple_rmdir() for ->rmdir()
-and calls simple_unlink() from ->unlink()).
+have spufs_new_file() use d_make_persistent() instead of d_add() and
+do an uncondition dput() in the caller; the rest is completely
+straightforward.
+
+[a braino in spufs_mkgang() fixed]
 
 Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 ---
- fs/ocfs2/dlmfs/dlmfs.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ arch/powerpc/platforms/cell/spufs/inode.c | 17 +++++++----------
+ 1 file changed, 7 insertions(+), 10 deletions(-)
 
-diff --git a/fs/ocfs2/dlmfs/dlmfs.c b/fs/ocfs2/dlmfs/dlmfs.c
-index cccaa1d6fbba..339f0b11cdc8 100644
---- a/fs/ocfs2/dlmfs/dlmfs.c
-+++ b/fs/ocfs2/dlmfs/dlmfs.c
-@@ -441,8 +441,7 @@ static struct dentry *dlmfs_mkdir(struct mnt_idmap * idmap,
- 	ip->ip_conn = conn;
- 
- 	inc_nlink(dir);
--	d_instantiate(dentry, inode);
--	dget(dentry);	/* Extra count - pin the dentry in core */
+diff --git a/arch/powerpc/platforms/cell/spufs/inode.c b/arch/powerpc/platforms/cell/spufs/inode.c
+index 7ec60290abe6..fc8ccf4dc159 100644
+--- a/arch/powerpc/platforms/cell/spufs/inode.c
++++ b/arch/powerpc/platforms/cell/spufs/inode.c
+@@ -127,7 +127,7 @@ spufs_new_file(struct super_block *sb, struct dentry *dentry,
+ 	inode->i_fop = fops;
+ 	inode->i_size = size;
+ 	inode->i_private = SPUFS_I(inode)->i_ctx = get_spu_context(ctx);
+-	d_add(dentry, inode);
 +	d_make_persistent(dentry, inode);
- 
- 	status = 0;
- bail:
-@@ -480,8 +479,7 @@ static int dlmfs_create(struct mnt_idmap *idmap,
- 		goto bail;
- 	}
- 
--	d_instantiate(dentry, inode);
--	dget(dentry);	/* Extra count - pin the dentry in core */
-+	d_make_persistent(dentry, inode);
- bail:
- 	return status;
+ out:
+ 	return ret;
  }
-@@ -574,7 +572,7 @@ static int dlmfs_init_fs_context(struct fs_context *fc)
- static struct file_system_type dlmfs_fs_type = {
- 	.owner		= THIS_MODULE,
- 	.name		= "ocfs2_dlmfs",
--	.kill_sb	= kill_litter_super,
-+	.kill_sb	= kill_anon_super,
- 	.init_fs_context = dlmfs_init_fs_context,
+@@ -163,10 +163,9 @@ static int spufs_fill_dir(struct dentry *dir,
+ 			return -ENOMEM;
+ 		ret = spufs_new_file(dir->d_sb, dentry, files->ops,
+ 					files->mode & mode, files->size, ctx);
+-		if (ret) {
+-			dput(dentry);
++		dput(dentry);
++		if (ret)
+ 			return ret;
+-		}
+ 		files++;
+ 	}
+ 	return 0;
+@@ -241,11 +240,10 @@ spufs_mkdir(struct inode *dir, struct dentry *dentry, unsigned int flags,
+ 
+ 	inode_lock(inode);
+ 
+-	dget(dentry);
+ 	inc_nlink(dir);
+ 	inc_nlink(inode);
+ 
+-	d_instantiate(dentry, inode);
++	d_make_persistent(dentry, inode);
+ 
+ 	if (flags & SPU_CREATE_NOSCHED)
+ 		ret = spufs_fill_dir(dentry, spufs_dir_nosched_contents,
+@@ -479,10 +477,9 @@ spufs_mkgang(struct inode *dir, struct dentry *dentry, umode_t mode)
+ 	inode->i_op = &simple_dir_inode_operations;
+ 	inode->i_fop = &simple_dir_operations;
+ 
+-	d_instantiate(dentry, inode);
+-	dget(dentry);
+ 	inc_nlink(dir);
+-	inc_nlink(d_inode(dentry));
++	inc_nlink(inode);
++	d_make_persistent(dentry, inode);
+ 	return ret;
+ 
+ out_iput:
+@@ -780,7 +777,7 @@ static struct file_system_type spufs_type = {
+ 	.name = "spufs",
+ 	.init_fs_context = spufs_init_fs_context,
+ 	.parameters	= spufs_fs_parameters,
+-	.kill_sb = kill_litter_super,
++	.kill_sb = kill_anon_super,
  };
- MODULE_ALIAS_FS("ocfs2_dlmfs");
+ MODULE_ALIAS_FS("spufs");
+ 
 -- 
 2.47.3
 
