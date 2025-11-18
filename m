@@ -1,115 +1,94 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86B582C08A1;
-	Tue, 18 Nov 2025 05:13:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11D7528A704;
+	Tue, 18 Nov 2025 05:16:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763442836; cv=none; b=meezjYKsK4/VJNwa19dt+pxv3ceX0YjzafcEpwVnQXwX2THjyOoLwsx3uO2l4QDQPy8xlT1lUvO/vF1gIkn0GopTxXQjRLiy6U9Nxk7F4UzqPipt7JRXZ+gV9Ct/dewYvfjuR6CDwQb0EoRTSTJgm9+vCYGfTW8hekRjxaa9UIM=
+	t=1763442975; cv=none; b=qH5OoL8QH/3Wv/x9xysvHT80Qga4AHYhSf+vm6x09Ytv174hwPcFlP4X/NnfNhnLvMApeDw0CCp818iDM2e8PzcLBbdXo2MfQWWivCVxkR7f4FlU8MpUj8TRtq3fUYUms8DWl7gIuaXO6GP9IHQQ6NVeAgkEjJUGRjwxDvQLuxc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763442836; c=relaxed/simple;
-	bh=2gPD+JZO5mYYvMtl+rFT0Oc//WhuEptkcJHXgMy1Wi0=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=hYchwAIcwmPmdH9T1uuVy5CCrAxecOoA5FF02vyq8sFdaPoOtVHOUbUBP1m4nlwXdD1IhFUhNeMsIv90Z1p06f44Hlbxqb0se9W653EzaZQ5fJwu/wUgS9inOrNY9HLuQKHLWZPXoDZEClJPp2ah67J8Z2waR6xNfju5j1rP2Vs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M5UF7fRv; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1763442975; c=relaxed/simple;
+	bh=uIkWhT5lBZMbGKboTZYEGGJGOnQwh5txmBIVng9mTCc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=OuPvc6HF4GkY/3ExnnODNBPg35tVf253YXXWzxJFnlRYY5zLOTD3E0ForG8QV20XX32QK8f6lLHBAcMJ5USWf5DHcDKW+Hn6pKiCF1BF1yMrpzk7zPzQXh/aXiLLXjEj8iYl3+jDVaBG6Y60WCvs2lRhIQ8+R7dqFG9KyhkTP2w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=Vl/3NOTL; arc=none smtp.client-ip=62.89.141.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M5UF7fRv"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26B55C4CEF1;
-	Tue, 18 Nov 2025 05:13:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763442835;
-	bh=2gPD+JZO5mYYvMtl+rFT0Oc//WhuEptkcJHXgMy1Wi0=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=M5UF7fRvFse5rwpW39QDN5PWRb2yW9u8RSB6DfCJKU5n8tYO1RkK+lh5tYoL7D/lI
-	 wbidKhZyUZZk93KgzW6wyQxuWiuCWl5BgFNMmC5P78UORVyuiuWA/IKNv5z9W7KwII
-	 ujf9NasgH8byb+pXZ/YS1c05W4Lg+TTPvUeIwqbBkR3Wyg9+t8j2WyNGIHcEstPh0c
-	 JqHlfXg0VqFvVN5SL5MKHEXqsikH7E68HHTND4jFzUH6+pVX8c150G1lcPRy3sHBl0
-	 /UhYqvyi5leuEX7LIhv5YLAze3tJOGYtv//89JtataSjSzHzIdB3lobjew2+8bopFn
-	 0JY65+HT4ER1w==
-Date: Tue, 18 Nov 2025 14:13:50 +0900
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: Wander Lairson Costa <wander@redhat.com>, Tomas Glozar
- <tglozar@redhat.com>, Ivan Pravdin <ipravdin.official@gmail.com>, Crystal
- Wood <crwood@redhat.com>, John Kacur <jkacur@redhat.com>, Costa Shulyupin
- <costa.shul@redhat.com>, Tiezhu Yang <yangtiezhu@loongson.cn>,
- linux-trace-kernel@vger.kernel.org (open list:Real-time Linux Analysis
- (RTLA) tools), linux-kernel@vger.kernel.org (open list),
- bpf@vger.kernel.org (open list:BPF [MISC]:Keyword:(?:\b|_)bpf(?:\b|_))
-Subject: Re: [rtla 01/13] rtla: Check for memory allocation failures
-Message-Id: <20251118141350.50662edbdf0a788b70e40e53@kernel.org>
-In-Reply-To: <20251117220615.079bce82@batman.local.home>
-References: <20251117184409.42831-1-wander@redhat.com>
-	<20251117184409.42831-2-wander@redhat.com>
-	<20251118110946.2e154e8c88b3edd31cc3113a@kernel.org>
-	<20251117220615.079bce82@batman.local.home>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="Vl/3NOTL"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
+	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
+	Reply-To:Content-Type:Content-ID:Content-Description;
+	bh=nXGw1nJCnekakkZR178NLSh8+iviODtKUClSm5rridQ=; b=Vl/3NOTLarYBwB87GqxphHKkQI
+	7nr+xrUdOHGzbQvNgPwTh/+ZuDIklH3LjYUAJTNerzga8Stv121nDnS3dDUlEWMDcLUPP0vdvR7CY
+	bwy1nf84MahGcCd/mXVTinqlKGe/gh3FEFU4G0XTQY2caZj4q/ktudPogUMWC6fe4UAt6FUnBzwDI
+	wlEBeCbvC+oK7xQDjQ7Gp/b5U1/DIQzgr2komhocDqrOpYndVRm6Prd84cwdTe/IF2ZycbvfTJfwh
+	/cdvCBu8/rsMTkT9oC8Hh15d+60epPGvbHco9HjSlcLntpJEtmjdXQst25vMXn5ZTu5l4vga99Rih
+	xpFUYzEg==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1vLE4U-0000000GEQg-1EYJ;
+	Tue, 18 Nov 2025 05:16:06 +0000
+From: Al Viro <viro@zeniv.linux.org.uk>
+To: linux-fsdevel@vger.kernel.org
+Cc: torvalds@linux-foundation.org,
+	brauner@kernel.org,
+	jack@suse.cz,
+	raven@themaw.net,
+	miklos@szeredi.hu,
+	neil@brown.name,
+	a.hindborg@kernel.org,
+	linux-mm@kvack.org,
+	linux-efi@vger.kernel.org,
+	ocfs2-devel@lists.linux.dev,
+	kees@kernel.org,
+	rostedt@goodmis.org,
+	gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org,
+	paul@paul-moore.com,
+	casey@schaufler-ca.com,
+	linuxppc-dev@lists.ozlabs.org,
+	john.johansen@canonical.com,
+	selinux@vger.kernel.org,
+	borntraeger@linux.ibm.com,
+	bpf@vger.kernel.org,
+	clm@meta.com
+Subject: [PATCH v4 11/54] convert xenfs
+Date: Tue, 18 Nov 2025 05:15:20 +0000
+Message-ID: <20251118051604.3868588-12-viro@zeniv.linux.org.uk>
+X-Mailer: git-send-email 2.49.0
+In-Reply-To: <20251118051604.3868588-1-viro@zeniv.linux.org.uk>
+References: <20251118051604.3868588-1-viro@zeniv.linux.org.uk>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Sender: Al Viro <viro@ftp.linux.org.uk>
 
-On Mon, 17 Nov 2025 22:06:15 -0500
-Steven Rostedt <rostedt@goodmis.org> wrote:
+entirely static tree, populated by simple_fill_super().  Can switch
+to kill_anon_super() without any other changes.
 
-> On Tue, 18 Nov 2025 11:09:46 +0900
-> Masami Hiramatsu (Google) <mhiramat@kernel.org> wrote:
-> 
-> > On Mon, 17 Nov 2025 15:41:08 -0300
-> > Wander Lairson Costa <wander@redhat.com> wrote:
-> > 
-> > > The actions_init() and actions_new() functions did not check the
-> > > return value of calloc() and realloc() respectively. In a low
-> > > memory situation, this could lead to a NULL pointer dereference.
-> > > 
-> > > Add checks for the return value of memory allocation functions
-> > > and return an error in case of failure. Update the callers to
-> > > handle the error properly.
-> > > 
-> > > Signed-off-by: Wander Lairson Costa <wander@redhat.com>
-> > > ---
-> > >  tools/tracing/rtla/src/actions.c       | 26 +++++++++++++++++++++++---
-> > >  tools/tracing/rtla/src/actions.h       |  2 +-
-> > >  tools/tracing/rtla/src/timerlat_hist.c |  7 +++++--
-> > >  tools/tracing/rtla/src/timerlat_top.c  |  7 +++++--
-> > >  4 files changed, 34 insertions(+), 8 deletions(-)
-> > > 
-> > > diff --git a/tools/tracing/rtla/src/actions.c b/tools/tracing/rtla/src/actions.c
-> > > index 8945aee58d511..01648a1425c10 100644
-> > > --- a/tools/tracing/rtla/src/actions.c
-> > > +++ b/tools/tracing/rtla/src/actions.c
-> > > @@ -11,11 +11,13 @@
-> > >  /*
-> > >   * actions_init - initialize struct actions
-> > >   */
-> > > -void
-> > > +int
-> > >  actions_init(struct actions *self)
-> > >  {
-> > >  	self->size = action_default_size;
-> > >  	self->list = calloc(self->size, sizeof(struct action));
-> > > +	if (!self->list)
-> > > +		return -1;  
-> > 
-> > Can you return -ENOMEM?
-> 
-> Does it need to? This is user space not the kernel. Errno is already
-> set by calloc() failing.
+Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
+---
+ drivers/xen/xenfs/super.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Ah, indeed! I agree to just return -1.
-
-Reviewed-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-
-Thank you,
-
-> 
-> -- Steve
-> 
-
-
+diff --git a/drivers/xen/xenfs/super.c b/drivers/xen/xenfs/super.c
+index d7d64235010d..37ea7c5c0346 100644
+--- a/drivers/xen/xenfs/super.c
++++ b/drivers/xen/xenfs/super.c
+@@ -88,7 +88,7 @@ static struct file_system_type xenfs_type = {
+ 	.owner =	THIS_MODULE,
+ 	.name =		"xenfs",
+ 	.init_fs_context = xenfs_init_fs_context,
+-	.kill_sb =	kill_litter_super,
++	.kill_sb =	kill_anon_super,
+ };
+ MODULE_ALIAS_FS("xenfs");
+ 
 -- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+2.47.3
+
