@@ -1,34 +1,34 @@
 Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D6E5263F28;
-	Tue, 18 Nov 2025 05:16:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 388912BE033;
+	Tue, 18 Nov 2025 05:16:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763442978; cv=none; b=Xk7Y4ynO3JVjfVIHFfe8KDFQ0FNxJEMFBQJc3Fd14l0oWQpHjLhe4zZf5I2VCSLN+KN5fw2ECOaatoiTrkL1T+QbL1Jj1uIKuTF1Z/ySHvgen7WrZ6VoI92Qns0R3wtYW2FZ32ev8wmlevOH1UZeKwCafTakqjVkYgQRMVGu3og=
+	t=1763442978; cv=none; b=f5fvPzyzf2KCAVrf/53gfWKOLJ+FGXUv9XZgZowaw9vWhtW44Bwo+754yv2JUkbE6mGp+8U3v/Gw4Kpix7YUQ9/pDwIN42IgEdV8+QYDLjmyMX59hh4unIgRwXEXsazOmesNNpYWu2JjZoPrUeHK5wQURDMtsqR72KZD6jPNaLM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1763442978; c=relaxed/simple;
-	bh=x0h8MlzTgc4T4rt8y2yx/rckrOB4f9P7D0y01x5RsO0=;
+	bh=yRwd7nCJnBJUW06pO/fKpqsgG1doeoCr8HZkyHd67Dk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=VQviQolAZso0iJrqR6XSBoiargoDpRoSuiNa5lxaeiOvQE8WjP77UB281V/zWW1xSedNGjwL3guNuZxH3m837vZ5NQ+5kQmdUnXvaOw8Ft4cptK8Tcv6ITFf6UyQF7Me5chs/P3Q451/xeURblmviiCVJSrVAOdYeVZA3cK3kCo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=IjzD6SZN; arc=none smtp.client-ip=62.89.141.173
+	 MIME-Version; b=sXVqE2XO9dQ7Fou8ATfiSD17Q616Uh1KaPdtQALp3cIV+fPWXzWAGuw5tebzvj9PmceuuKgGk7ONiJTGDU0RD0KNgN6lZNlxSPl0KgUwwIqXeQqrDhdmLGL0QdLLQ8HkZooVUaFE+bn1UcZhQRnn8groX7UZ5H1a5BZdG+vKcxs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=HKkg+A6i; arc=none smtp.client-ip=62.89.141.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="IjzD6SZN"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="HKkg+A6i"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
 	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
 	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=W4Rux38+4wafzrtHIPx/pAtSqJiq0rCT3/CghgJ+qB0=; b=IjzD6SZNXZ75C/fjOmEaQfJprG
-	st1rZe+yTGOATslq/EHEeNfCyI3fQTgrrCV/xwDy09PJSc20HZ9/ok0I0a6gCKmEXdF6E8xreFNhp
-	OgidLo1jv4DB8vfCPjI7+oGZVX3/oxkW1jyzqdo2J6X/UdDJYlW2D3R3PLUowglk9et6/yxJjtxYZ
-	KNTgNk9hRf7Szz3u6z00J01G2unFzLttC/ER2KnYlhR10MLCFBlSJTocJz2mk767MUGk7sNN/rxqv
-	o/P8JiVlYvDsCT5f0UsCsVRKt74WvBpr3DKdGHm8BMKE9Iiy6gn6+QnxHbtC7Bfhkk0QlZ5G0yBJ+
-	3ninlNHA==;
+	bh=iatHkZ5szHUbSV6QRCjJzQR1r0SBUitYfnCBfKmo74w=; b=HKkg+A6iw446C1m+bFq5Rf4+zr
+	WtzxBAxyNorJmfhyRzyCutjKbpfkUzb6VIIyZ8TGu3Pv492wCgVw6ATyFzN71gfh3aqxSmOywa+XX
+	hXtWrNHEkFK2PL9+dRu7Z8frLeV186SMrTIwduMMNxQZA9WWgu1Xbuyqc4rH/zZ81ikczrbh/IxW2
+	l/WWnVRxQ8RLKxM4KmzKbRVt4W4vhEj97gnK9cNxyXq1SbFlL+YtfCYjF6ajQqNa5BbTGC4R+ah0y
+	xsxXQFz05BzncgXE23HUlDxD4flK2OxwCSKMJomxPUGuCy8x6RtOchSX9D93+FkOLWlu2GhngN0ZD
+	53y4+dEQ==;
 Received: from viro by zeniv.linux.org.uk with local (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1vLE4T-0000000GEPt-1rsH;
-	Tue, 18 Nov 2025 05:16:05 +0000
+	id 1vLE4X-0000000GETl-1pH7;
+	Tue, 18 Nov 2025 05:16:09 +0000
 From: Al Viro <viro@zeniv.linux.org.uk>
 To: linux-fsdevel@vger.kernel.org
 Cc: torvalds@linux-foundation.org,
@@ -53,9 +53,9 @@ Cc: torvalds@linux-foundation.org,
 	borntraeger@linux.ibm.com,
 	bpf@vger.kernel.org,
 	clm@meta.com
-Subject: [PATCH v4 03/54] new helper: simple_remove_by_name()
-Date: Tue, 18 Nov 2025 05:15:12 +0000
-Message-ID: <20251118051604.3868588-4-viro@zeniv.linux.org.uk>
+Subject: [PATCH v4 41/54] convert functionfs
+Date: Tue, 18 Nov 2025 05:15:50 +0000
+Message-ID: <20251118051604.3868588-42-viro@zeniv.linux.org.uk>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20251118051604.3868588-1-viro@zeniv.linux.org.uk>
 References: <20251118051604.3868588-1-viro@zeniv.linux.org.uk>
@@ -68,82 +68,61 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Al Viro <viro@ftp.linux.org.uk>
 
-simple_recursive_removal(), but instead of victim dentry it takes
-parent + name.
+All files are regular; ep0 is there all along, other ep* may appear
+and go away during the filesystem lifetime; all of those are guaranteed
+to be gone by the time we umount it.
 
-Used to be open-coded in fs/fuse/control.c, but there's no need to expose
-the guts of that thing there and there are other potential users, so
-let's lift it into libfs...
+Object creation is in ffs_sb_create_file(), removals - at ->kill_sb()
+time (for ep0) or by simple_remove_by_name() from ffs_epfiles_destroy()
+(for the rest of them).
 
-Acked-by: Miklos Szeredi <mszeredi@redhat.com>
+Switch ffs_sb_create_file() to simple_start_creating()/d_make_persistent()/
+simple_done_creating() and that's it.
+
 Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 ---
- fs/fuse/control.c  |  7 +------
- fs/libfs.c         | 13 +++++++++++++
- include/linux/fs.h |  2 ++
- 3 files changed, 16 insertions(+), 6 deletions(-)
+ drivers/usb/gadget/function/f_fs.c | 17 +++++++++--------
+ 1 file changed, 9 insertions(+), 8 deletions(-)
 
-diff --git a/fs/fuse/control.c b/fs/fuse/control.c
-index 5247df896c5d..3dca752127ff 100644
---- a/fs/fuse/control.c
-+++ b/fs/fuse/control.c
-@@ -290,18 +290,13 @@ static void remove_one(struct dentry *dentry)
-  */
- void fuse_ctl_remove_conn(struct fuse_conn *fc)
+diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+index 40868ceb765c..4bf61017b42d 100644
+--- a/drivers/usb/gadget/function/f_fs.c
++++ b/drivers/usb/gadget/function/f_fs.c
+@@ -1899,17 +1899,18 @@ static int ffs_sb_create_file(struct super_block *sb, const char *name,
+ 	struct dentry	*dentry;
+ 	struct inode	*inode;
+ 
+-	dentry = d_alloc_name(sb->s_root, name);
+-	if (!dentry)
+-		return -ENOMEM;
+-
+ 	inode = ffs_sb_make_inode(sb, data, fops, NULL, &ffs->file_perms);
+-	if (!inode) {
+-		dput(dentry);
++	if (!inode)
+ 		return -ENOMEM;
++	dentry = simple_start_creating(sb->s_root, name);
++	if (IS_ERR(dentry)) {
++		iput(inode);
++		return PTR_ERR(dentry);
+ 	}
+ 
+-	d_add(dentry, inode);
++	d_make_persistent(dentry, inode);
++
++	simple_done_creating(dentry);
+ 	return 0;
+ }
+ 
+@@ -2098,7 +2099,7 @@ static void ffs_data_reset(struct ffs_data *ffs);
+ static void
+ ffs_fs_kill_sb(struct super_block *sb)
  {
--	struct dentry *dentry;
- 	char name[32];
- 
- 	if (!fuse_control_sb || fc->no_control)
- 		return;
- 
- 	sprintf(name, "%u", fc->dev);
--	dentry = lookup_noperm_positive_unlocked(&QSTR(name), fuse_control_sb->s_root);
--	if (!IS_ERR(dentry)) {
--		simple_recursive_removal(dentry, remove_one);
--		dput(dentry);	// paired with lookup_noperm_positive_unlocked()
--	}
-+	simple_remove_by_name(fuse_control_sb->s_root, name, remove_one);
- }
- 
- static int fuse_ctl_fill_super(struct super_block *sb, struct fs_context *fsc)
-diff --git a/fs/libfs.c b/fs/libfs.c
-index ce8c496a6940..d029aff41f66 100644
---- a/fs/libfs.c
-+++ b/fs/libfs.c
-@@ -655,6 +655,19 @@ void simple_recursive_removal(struct dentry *dentry,
- }
- EXPORT_SYMBOL(simple_recursive_removal);
- 
-+void simple_remove_by_name(struct dentry *parent, const char *name,
-+                           void (*callback)(struct dentry *))
-+{
-+	struct dentry *dentry;
-+
-+	dentry = lookup_noperm_positive_unlocked(&QSTR(name), parent);
-+	if (!IS_ERR(dentry)) {
-+		simple_recursive_removal(dentry, callback);
-+		dput(dentry);	// paired with lookup_noperm_positive_unlocked()
-+	}
-+}
-+EXPORT_SYMBOL(simple_remove_by_name);
-+
- /* caller holds parent directory with I_MUTEX_PARENT */
- void locked_recursive_removal(struct dentry *dentry,
-                               void (*callback)(struct dentry *))
-diff --git a/include/linux/fs.h b/include/linux/fs.h
-index c895146c1444..28bd4e8d3892 100644
---- a/include/linux/fs.h
-+++ b/include/linux/fs.h
-@@ -3631,6 +3631,8 @@ extern int simple_rename(struct mnt_idmap *, struct inode *,
- 			 unsigned int);
- extern void simple_recursive_removal(struct dentry *,
-                               void (*callback)(struct dentry *));
-+extern void simple_remove_by_name(struct dentry *, const char *,
-+                              void (*callback)(struct dentry *));
- extern void locked_recursive_removal(struct dentry *,
-                               void (*callback)(struct dentry *));
- extern int noop_fsync(struct file *, loff_t, loff_t, int);
+-	kill_litter_super(sb);
++	kill_anon_super(sb);
+ 	if (sb->s_fs_info) {
+ 		struct ffs_data *ffs = sb->s_fs_info;
+ 		ffs->state = FFS_CLOSING;
 -- 
 2.47.3
 
