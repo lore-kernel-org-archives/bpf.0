@@ -1,229 +1,163 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtp-o-2.desy.de (smtp-o-2.desy.de [131.169.56.155])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BAB01D61A3;
-	Tue, 18 Nov 2025 13:25:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE0C125D53C
+	for <bpf@vger.kernel.org>; Tue, 18 Nov 2025 13:40:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=131.169.56.155
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763472307; cv=none; b=E4Bycwz2I9Co35A9oIkSBhZpkLbPg7uTE7S4BZ1lPHmhbRkpIVsN7jAGqDxfaEOvszgBk0kJHsP0VJdTDComVcSq5FPAQn7ejQk5ZdTsl9JilC0Ogocq+8YOAfq0bSEyIBMymTPqID7S1B4YcIvxJrjYojNsWyQkmwJKt00rTaU=
+	t=1763473205; cv=none; b=XNq5wgs+VQYQfe/+sMdrxn2qMZp9xsfSoR/vzT7JQtD1v3Cy3ARiqnoFh4saJ2kLdSl7anOlzhrhTzbLVxupTWh4vj9JVp/OsCXbz5Ad55alZ6QPBTS/oVSMTiQ28w0AVSvECI9jYr6WVO7VjXQ9EgUbmNu+h2jZnz7RMvFEdfw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763472307; c=relaxed/simple;
-	bh=F5W+P0I3YFJHta4PTmiymq7vv23UWVkLDdd8del4PDA=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=p9Mgs9zxSyVtmr/9pQh4qPnVlnR/jQ/zjXYHS6mavGJJfFvXhrmjw7k1ZIe1ylYEKcCPnmn/wn2uRw9l6VaPBCpSkTdhdSXUCBf0h9FtmnWgnrk17f+uKDDmRLbTYRTGbIX9QCh+oqo2PIE5Rcq/pko6jmY0BiJdIgbntsEDfmU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pDgKmdfJ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1763473205; c=relaxed/simple;
+	bh=9Cql4XvVIoSfHSRbR3AwQvZn8YJ+YiE8UBq0cyStOPM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=DYpO5+l3lVr6aSX7t7+nGxBX6NZtYvrj+GUWX5Ce/AGOIF+y3+B42e61Ns1EebqsXoD8+c6/TNIBVfptqN6wOqWIA4C7EDK4cja8VtZ9ZdZc703HXEz8dB4BzKPhfZVyRlVCHSXkbvA2hVSR604N1w9tKByB9UDazW4JmGdo4zo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=xfel.eu; spf=none smtp.mailfrom=mail.desy.de; dkim=pass (1024-bit key) header.d=xfel.eu header.i=@xfel.eu header.b=uYB6Tkwo; arc=none smtp.client-ip=131.169.56.155
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=xfel.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mail.desy.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pDgKmdfJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92180C19425;
-	Tue, 18 Nov 2025 13:25:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763472306;
-	bh=F5W+P0I3YFJHta4PTmiymq7vv23UWVkLDdd8del4PDA=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=pDgKmdfJMGU7ptY98gy55Bju3+TsbaUDRLfhPB2yzMB+PMEfiyQAqC/CuxMb7IzTM
-	 0YIu8ZT/SJfZJ0rqA6R63ZK3Hjb72JDZeLqJFH762L36IZRrcvzXql8tXpB85MXntF
-	 6dITIVlUsKHM4/I2V2nwBuvvYoc4VnCnsP38koVIrCJMxyaJkjYh+gbU5bqFFWRRjP
-	 J5OKZVGHVbblqiUiN23F9oUz4BjRvO1ldsyAzlVZ9GOA1Yis8jvZxMxnvb5sZ7NX7y
-	 E0VFCw8gEwHY9qnJmc9WaxxR5gB+naRIiYPWn+u+LGW9AzV693T3uHoYDmB4cO+32+
-	 P9t5IPpQ9lzlg==
-Content-Type: multipart/mixed; boundary="===============3617201011509474706=="
+	dkim=pass (1024-bit key) header.d=xfel.eu header.i=@xfel.eu header.b="uYB6Tkwo"
+Received: from smtp-buf-2.desy.de (smtp-buf-2.desy.de [131.169.56.165])
+	by smtp-o-2.desy.de (Postfix) with ESMTP id 08CF813F647
+	for <bpf@vger.kernel.org>; Tue, 18 Nov 2025 14:39:53 +0100 (CET)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp-o-2.desy.de 08CF813F647
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xfel.eu; s=default;
+	t=1763473193; bh=pEUOZA0v0wAoCPnQyX6VvjwsqqtX3pUJzqB8VmhgS1w=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=uYB6TkwoT/j0uRZViJJaNbTN2ppEB3st1rLyPfGXvz8QMeD3r30nddLtJUdC8rr3c
+	 j8/myWdX6sVWCN1egdf3lM/jSawIbYpdxZVxejV27atGe81lsEHGdbwaGmDGBNzGvW
+	 tdxcVM1Um6B+REhBISmbrX9Vwr2naAoLPxzKH7wE=
+Received: from smtp-m-1.desy.de (smtp-m-1.desy.de [IPv6:2001:638:700:1038::1:81])
+	by smtp-buf-2.desy.de (Postfix) with ESMTP id EEA28120043;
+	Tue, 18 Nov 2025 14:39:52 +0100 (CET)
+Received: from a1722.mx.srv.dfn.de (a1722.mx.srv.dfn.de [194.95.233.47])
+	by smtp-m-1.desy.de (Postfix) with ESMTP id E2CA640044;
+	Tue, 18 Nov 2025 14:39:52 +0100 (CET)
+Received: from smtp-intra-1.desy.de (smtp-intra-1.desy.de [131.169.56.82])
+	by a1722.mx.srv.dfn.de (Postfix) with ESMTP id 23D373200A2;
+	Tue, 18 Nov 2025 14:39:52 +0100 (CET)
+Received: from exflqr30474.desy.de (exflqr30474.desy.de [192.168.177.248])
+	by smtp-intra-1.desy.de (Postfix) with ESMTP id 10D9880053;
+	Tue, 18 Nov 2025 14:39:52 +0100 (CET)
+Received: by exflqr30474.desy.de (Postfix, from userid 31112)
+	id 0B7F2201AE; Tue, 18 Nov 2025 14:39:52 +0100 (CET)
+From: Martin Teichmann <martin.teichmann@xfel.eu>
+To: bpf@vger.kernel.org
+Cc: eddyz87@gmail.com,
+	ast@kernel.org,
+	andrii@kernel.org,
+	Martin Teichmann <martin.teichmann@xfel.eu>
+Subject: [PATCH v5 bpf-next 1/4] bpf: properly verify tail call behavior
+Date: Tue, 18 Nov 2025 14:39:41 +0100
+Message-ID: <20251118133944.979865-2-martin.teichmann@xfel.eu>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <4952b7bf8a0b50352b31bee7ddf89e7809101af6.camel@gmail.com>
+References: <4952b7bf8a0b50352b31bee7ddf89e7809101af6.camel@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <83e39931f7cb3894d6fd3537550448b89a5aa60fb2e3757b56d6e8db91496e3d@mail.kernel.org>
-In-Reply-To: <20251118123639.688444-2-dongml2@chinatelecom.cn>
-References: <20251118123639.688444-2-dongml2@chinatelecom.cn>
-Subject: Re: [PATCH bpf-next v3 1/6] ftrace: introduce FTRACE_OPS_FL_JMP
-From: bot+bpf-ci@kernel.org
-To: menglong8.dong@gmail.com,ast@kernel.org,rostedt@goodmis.org
-Cc: daniel@iogearbox.net,john.fastabend@gmail.com,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,mhiramat@kernel.org,mark.rutland@arm.com,mathieu.desnoyers@efficios.com,jiang.biao@linux.dev,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,linux-trace-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Tue, 18 Nov 2025 13:25:04 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
 
---===============3617201011509474706==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+A successful ebpf tail call does not return to the caller, but to the
+caller-of-the-caller, often just finishing the ebpf program altogether.
 
-> diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
-> index 07f8c309e..015dd1049 100644
-> --- a/include/linux/ftrace.h
-> +++ b/include/linux/ftrace.h
+Any restrictions that the verifier needs to take into account - notably
+the fact that the tail call might have modified packet pointers - are to
+be checked on the caller-of-the-caller. Checking it on the caller made
+the verifier refuse perfectly fine programs that would use the packet
+pointers after a tail call, which is no problem as this code is only
+executed if the tail call was unsuccessful, i.e. nothing happened.
 
-[ ... ]
+This patch simulates the behavior of a tail call in the verifier. A
+conditional jump to the code after the tail call is added for the case
+of an unsucessful tail call, and a return to the caller is simulated for
+a successful tail call.
 
-> @@ -577,6 +578,38 @@ static inline void arch_ftrace_set_direct_caller(struct ftrace_regs *fregs,
->  						 unsigned long addr) { }
->  #endif /* CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS */
->
-> +#ifdef CONFIG_DYNAMIC_FTRACE_WITH_JMP
-> +static inline bool ftrace_is_jmp(unsigned long addr)
-> +{
-> +	return addr & 1;
-> +}
-> +
-> +static inline unsigned long ftrace_jmp_set(unsigned long addr)
-> +{
-> +	return addr | 1UL;
-> +}
-> +
-> +static inline unsigned long ftrace_jmp_get(unsigned long addr)
-> +{
-> +	return addr & ~1UL;
-> +}
-> +#else
-> +static inline bool ftrace_is_jmp(unsigned long addr)
-> +{
-> +	return false;
-> +}
-> +
-> +static inline unsigned long ftrace_jmp_set(unsigned long addr)
-> +{
-> +	return addr;
-> +}
-> +
-> +static inline unsigned long ftrace_jmp_get(unsigned long addr)
-> +{
-> +	return addr;
-> +}
-> +#endif /* CONFIG_DYNAMIC_FTRACE_WITH_JMP */
+For the successful case we assume that the tail call returns an int,
+as tail calls are currently only allowed in functions that return and
+int. We always assume that the tail call modified the packet pointers,
+as we do not know what the tail call did.
 
-[ ... ]
+For the unsuccessful case we know nothing happened, so we do not need to
+add new constraints.
 
-> diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-> index 59cfacb8a..bbb37c0f8 100644
-> --- a/kernel/trace/ftrace.c
-> +++ b/kernel/trace/ftrace.c
+This approach also allows to check other problems that may occur with
+tail calls, namely we are now able to check that precision is properly
+propagated into subprograms using tail calls, as well as checking the
+live slots in such a subprogram.
 
-[ ... ]
-
-> @@ -5951,7 +5951,8 @@ static void remove_direct_functions_hash(struct ftrace_hash *hash, unsigned long
->  	for (i = 0; i < size; i++) {
->  		hlist_for_each_entry(entry, &hash->buckets[i], hlist) {
->  			del = __ftrace_lookup_ip(direct_functions, entry->ip);
-> -			if (del && del->direct == addr) {
-> +			if (del && ftrace_jmp_get(del->direct) ==
-> +				   ftrace_jmp_get(addr)) {
->  				remove_hash_entry(direct_functions, del);
->  				kfree(del);
->  			}
-
-[ ... ]
-
-> @@ -6016,8 +6017,15 @@ int register_ftrace_direct(struct ftrace_ops *ops, unsigned long addr)
->  	if (ftrace_hash_empty(hash))
->  		return -EINVAL;
->
-> +	/* This is a "raw" address, and this should never happen. */
-> +	if (WARN_ON_ONCE(ftrace_is_jmp(addr)))
-> +		return -EINVAL;
-> +
->  	mutex_lock(&direct_mutex);
->
-> +	if (ops->flags & FTRACE_OPS_FL_JMP)
-> +		addr = ftrace_jmp_set(addr);
-> +
->  	/* Make sure requested entries are not already registered.. */
-
-[ ... ]
-
->  	/* ... and add the new entries */
->  	size = 1 << hash->size_bits;
->  	for (i = 0; i < size; i++) {
->  		hlist_for_each_entry(entry, &hash->buckets[i], hlist) {
->  			new = add_hash_entry(new_hash, entry->ip);
->  			if (!new)
->  				goto out_unlock;
->  			/* Update both the copy and the hash entry */
->  			new->direct = addr;
->  			entry->direct = addr;
->  		}
->  	}
-
-After addr is potentially encoded with ftrace_jmp_set(), it gets stored in
-entry->direct. However, ftrace_find_rec_direct() returns entry->direct
-without masking:
-
-unsigned long ftrace_find_rec_direct(unsigned long ip)
-{
-	struct ftrace_func_entry *entry;
-
-	entry = __ftrace_lookup_ip(direct_functions, ip);
-	if (!entry)
-		return 0;
-
-	return entry->direct;
-}
-
-This encoded address flows to two consumers:
-
-1. ftrace_get_addr_new() and ftrace_get_addr_curr() return it directly,
-   which eventually reaches architecture-specific ftrace_call_replace().
-   Can the architecture code handle addresses with LSB set?
-
-2. The debug output at kernel/trace/ftrace.c in ftrace_enabled_show():
-   seq_printf(m, "\n\tdirect-->%pS", (void *)direct);
-
-   Won't this print the wrong symbol due to the LSB being set?
-
->  	ops->func = call_direct_funcs;
->  	ops->flags = MULTI_FLAGS;
->  	ops->trampoline = FTRACE_REGS_ADDR;
->  	ops->direct_call = addr;
-
-Similarly, ops->direct_call stores the encoded address. In
-call_direct_funcs():
-
-static void call_direct_funcs(unsigned long ip, unsigned long pip,
-			      struct ftrace_ops *ops, struct ftrace_regs *fregs)
-{
-	unsigned long addr = READ_ONCE(ops->direct_call);
-
-	if (!addr)
-		return;
-
-	arch_ftrace_set_direct_caller(fregs, addr);
-}
-
-The encoded address is passed directly to arch_ftrace_set_direct_caller()
-without masking. Looking at arch implementations like x86:
-
-static inline void
-__arch_ftrace_set_direct_caller(struct pt_regs *regs, unsigned long addr)
-{
-	/* Emulate a call */
-	regs->orig_ax = addr;
-}
-
-Does arch_ftrace_set_direct_caller() expect addresses with the LSB set?
-The implementations directly store the address into registers without any
-masking.
-
-The commit message says "we can tell if we should use 'jmp' for the
-callback in ftrace_call_replace()", but no architecture code is updated
-to check the LSB. Should ftrace_find_rec_direct() and call_direct_funcs()
-mask the JMP bit before returning addresses to architecture code?
-
-> @@ -6136,8 +6146,13 @@ __modify_ftrace_direct(struct ftrace_ops *ops, unsigned long addr)
->
->  	lockdep_assert_held_once(&direct_mutex);
->
-> +	/* This is a "raw" address, and this should never happen. */
-> +	if (WARN_ON_ONCE(ftrace_is_jmp(addr)))
-> +		return -EINVAL;
-> +
-> +	if (ops->flags & FTRACE_OPS_FL_JMP)
-> +		addr = ftrace_jmp_set(addr);
-
-Same encoding happens here with the same flow issues.
-
-
+Fixes: 1a4607ffba35 ("bpf: consider that tail calls invalidate packet pointers")
+Link: https://lore.kernel.org/bpf/20251029105828.1488347-1-martin.teichmann@xfel.eu/
+Signed-off-by: Martin Teichmann <martin.teichmann@xfel.eu>
 ---
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+ kernel/bpf/verifier.c | 31 ++++++++++++++++++++++++++++---
+ 1 file changed, 28 insertions(+), 3 deletions(-)
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/19466635856
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 098dd7f21c89..117a2b1cf87c 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -4438,6 +4438,11 @@ static int backtrack_insn(struct bpf_verifier_env *env, int idx, int subseq_idx,
+ 					     bt_reg_mask(bt));
+ 				return -EFAULT;
+ 			}
++			if (insn->src_reg == BPF_REG_0 && insn->imm == BPF_FUNC_tail_call
++			    && subseq_idx - idx != 1) {
++				if (bt_subprog_enter(bt))
++					return -EFAULT;
++			}
+ 		} else if (opcode == BPF_EXIT) {
+ 			bool r0_precise;
+ 
+@@ -11064,6 +11069,10 @@ static int prepare_func_exit(struct bpf_verifier_env *env, int *insn_idx)
+ 	bool in_callback_fn;
+ 	int err;
+ 
++	err = bpf_update_live_stack(env);
++	if (err)
++		return err;
++
+ 	callee = state->frame[state->curframe];
+ 	r0 = &callee->regs[BPF_REG_0];
+ 	if (r0->type == PTR_TO_STACK) {
+@@ -11970,6 +11979,25 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
+ 		env->prog->call_get_func_ip = true;
+ 	}
+ 
++	if (func_id == BPF_FUNC_tail_call) {
++		if (env->cur_state->curframe) {
++			struct bpf_verifier_state *branch;
++
++			mark_reg_scratched(env, BPF_REG_0);
++			branch = push_stack(env, env->insn_idx + 1, env->insn_idx, false);
++			if (IS_ERR(branch))
++				return PTR_ERR(branch);
++			clear_all_pkt_pointers(env);
++			mark_reg_unknown(env, regs, BPF_REG_0);
++			err = prepare_func_exit(env, &env->insn_idx);
++			if (err)
++				return err;
++			env->insn_idx--;
++		} else {
++			changes_data = false;
++		}
++	}
++
+ 	if (changes_data)
+ 		clear_all_pkt_pointers(env);
+ 	return 0;
+@@ -20140,9 +20168,6 @@ static int process_bpf_exit_full(struct bpf_verifier_env *env,
+ 		return PROCESS_BPF_EXIT;
+ 
+ 	if (env->cur_state->curframe) {
+-		err = bpf_update_live_stack(env);
+-		if (err)
+-			return err;
+ 		/* exit from nested function */
+ 		err = prepare_func_exit(env, &env->insn_idx);
+ 		if (err)
+-- 
+2.43.0
 
---===============3617201011509474706==--
