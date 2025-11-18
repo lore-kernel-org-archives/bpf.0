@@ -1,34 +1,34 @@
 Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34DDE2D0C89;
-	Tue, 18 Nov 2025 05:16:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E975287502;
+	Tue, 18 Nov 2025 05:16:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763442980; cv=none; b=KD2QRDlWZoxUPibuBUYScZgbD8UEIqicwFySI43f6Qas8guDECtxwyWWcNlnz0aKj7jU7I25EAG1aJNw01OT6VOI4xhbNc+9Xf35Gor9ajpGqk3IB1b6JYEM5re5z9RryI8FeiyLPWJ4LDN/0xmIwIh47XUTv6EqdKbIYGMDd0k=
+	t=1763442981; cv=none; b=LoNihHW30g2orDDRkfw5ZFsQOOj5baaWHGE5z3P+rZGCz476t+oor2Y35Jf7CedzyVS+5F/w9qiD5xPk0xUKQ/2e2bqxF5VCF1B534UeR+UacOZWpcJ8p40Yz+fsycMNItnaB/Xrrf4NoTvFlRvaFr/EyqrfuhZrhVrPVslOZDI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763442980; c=relaxed/simple;
-	bh=hvKn4v226vlFPVcEMTmI8vKLyXW8b3xQk740dDR1S7k=;
+	s=arc-20240116; t=1763442981; c=relaxed/simple;
+	bh=fOevxjAZDWF39Ou5j+d+tqBmG/dAKefXb84c0nkAeKM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=PHNIQkx7kg7UB7p+a9IRODVzPyH1S1SxTyxWwURTdYrlX+TmxJh7xU5DG25Ve1rQefxZI//Xq9soIG40VwpNauRYqftA1fMtcmdBIHA9kJA24nDN0sdH++ldzwMPXJwdi9RQiTQrJ9KE9WmVxz3dUWryOySUTs/VCHOAZ6wxwd0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=g0mv9RTw; arc=none smtp.client-ip=62.89.141.173
+	 MIME-Version; b=W0Se08N/7PZ/bNjD36JMuISz/+8SahoBOk2oUnesNJ60hp7pU/RwtUzHArfTwdgsf7DdnbrXG1VV7yLpvN2NNcTgj88bMle6/ZYJjkpD/OJ2YtOhblmPzHQait2KdXpeYT1pAkOf5aR32qQVSvG1rvwm0e5QhcsEyGmlXMcnKSU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=uebdJF5p; arc=none smtp.client-ip=62.89.141.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="g0mv9RTw"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="uebdJF5p"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
 	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
 	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=aIO5z+XlaxOUN+dxGxWKQXIfyt7HKUVO8xN2mehuHOs=; b=g0mv9RTw6hRIGfNojwuJd8DIlg
-	XAxjmgYDdyfJFsN0XD3Jfka9gaG3VCqgvyJYgUHM3pHn4tE2GkDDLVYWsS1+nG2WOjG/E/QYbPbLm
-	oS8OrknvRjHCSGPkjGufGgVowrmAwSNv3kKFhKSBFVuQ2yuai9WjpyevBpRLNU+NuzLZB55IDIxj2
-	Y3OnvimbyRDK7fSziC0/rbfNELdS8QpJ1dewvrXyb3YNWXwdcSbyOFLAHfhcX7R5nCntGQNYmxIC1
-	DSgxk9NtEWBm4phOxWU9BtEC7870tYpDVsa6Dxw7UUorh+9/ptM/tkE3aLCy7yxa6f6pbKa718xMa
-	Qs6TyoXQ==;
+	bh=AteBZg1Rl8HXmlwF9pQEJDfnqUw3H67agXJaoVo2v7U=; b=uebdJF5pf07uYuFSwWcvMcjJA4
+	aMBIgBZ07P6Z7Z5i2y6WJB9aj7c4VP5/O9k2aF7DzcSYPG1dwqEOTubJtzYsWoiPZo0kA2/jDUEF2
+	b7r0UsEwbChuPZROhUWdb3uUGI7EdA5kZNpkgsHvboUEniW8t2gp12fPx3iHxPaq0vSuAJbv2p1HI
+	kHCzgWGRfgOsZmsmtrjipM9tulW2sRBO40L3kgNJMHpw6+JqgEQ+1w2YyYwLjGPaQ73xX5QhOeyew
+	yKSk130DpWM8QXtbXxc9lfE7z25d/IUY835TAk/kl1TCuVJN7Mr7fefmvVmRISgxVpvMmFWtqSBgp
+	DZssowdQ==;
 Received: from viro by zeniv.linux.org.uk with local (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1vLE4Z-0000000GEaZ-1Umn;
-	Tue, 18 Nov 2025 05:16:11 +0000
+	id 1vLE4T-0000000GEPl-14AR;
+	Tue, 18 Nov 2025 05:16:05 +0000
 From: Al Viro <viro@zeniv.linux.org.uk>
 To: linux-fsdevel@vger.kernel.org
 Cc: torvalds@linux-foundation.org,
@@ -53,9 +53,9 @@ Cc: torvalds@linux-foundation.org,
 	borntraeger@linux.ibm.com,
 	bpf@vger.kernel.org,
 	clm@meta.com
-Subject: [PATCH v4 48/54] convert rpc_pipefs
-Date: Tue, 18 Nov 2025 05:15:57 +0000
-Message-ID: <20251118051604.3868588-49-viro@zeniv.linux.org.uk>
+Subject: [PATCH v4 02/54] tracefs: fix a leak in eventfs_create_events_dir()
+Date: Tue, 18 Nov 2025 05:15:11 +0000
+Message-ID: <20251118051604.3868588-3-viro@zeniv.linux.org.uk>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20251118051604.3868588-1-viro@zeniv.linux.org.uk>
 References: <20251118051604.3868588-1-viro@zeniv.linux.org.uk>
@@ -68,97 +68,37 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Al Viro <viro@ftp.linux.org.uk>
 
-Just use d_make_persistent() + dput() (and fold the latter into
-simple_finish_creating()) and that's it...
+If we have LOCKDOWN_TRACEFS, the function bails out - *after*
+having locked the parent directory and without bothering to
+undo that.  Just check it before tracefs_start_creating()...
 
-NOTE: pipe->dentry is a borrowed reference - it does not contribute
-to dentry refcount.
-
+Fixes: e24709454c45 "tracefs/eventfs: Add missing lockdown checks"
+Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 ---
- net/sunrpc/rpc_pipe.c | 27 ++++++++++++---------------
- 1 file changed, 12 insertions(+), 15 deletions(-)
+ fs/tracefs/event_inode.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/net/sunrpc/rpc_pipe.c b/net/sunrpc/rpc_pipe.c
-index 0bd1df2ebb47..379daefc4847 100644
---- a/net/sunrpc/rpc_pipe.c
-+++ b/net/sunrpc/rpc_pipe.c
-@@ -536,17 +536,16 @@ static int rpc_new_file(struct dentry *parent,
+diff --git a/fs/tracefs/event_inode.c b/fs/tracefs/event_inode.c
+index 8705c77a9e75..93c231601c8e 100644
+--- a/fs/tracefs/event_inode.c
++++ b/fs/tracefs/event_inode.c
+@@ -757,7 +757,7 @@ struct eventfs_inode *eventfs_create_events_dir(const char *name, struct dentry
+ 						const struct eventfs_entry *entries,
+ 						int size, void *data)
+ {
+-	struct dentry *dentry = tracefs_start_creating(name, parent);
++	struct dentry *dentry;
+ 	struct eventfs_root_inode *rei;
+ 	struct eventfs_inode *ei;
+ 	struct tracefs_inode *ti;
+@@ -768,6 +768,7 @@ struct eventfs_inode *eventfs_create_events_dir(const char *name, struct dentry
+ 	if (security_locked_down(LOCKDOWN_TRACEFS))
+ 		return NULL;
  
- 	inode = rpc_get_inode(dir->i_sb, S_IFREG | mode);
- 	if (unlikely(!inode)) {
--		dput(dentry);
--		inode_unlock(dir);
-+		simple_done_creating(dentry);
- 		return -ENOMEM;
- 	}
- 	inode->i_ino = iunique(dir->i_sb, 100);
- 	if (i_fop)
- 		inode->i_fop = i_fop;
- 	rpc_inode_setowner(inode, private);
--	d_instantiate(dentry, inode);
-+	d_make_persistent(dentry, inode);
- 	fsnotify_create(dir, dentry);
--	inode_unlock(dir);
-+	simple_done_creating(dentry);
- 	return 0;
- }
- 
-@@ -563,18 +562,17 @@ static struct dentry *rpc_new_dir(struct dentry *parent,
- 
- 	inode = rpc_get_inode(dir->i_sb, S_IFDIR | mode);
- 	if (unlikely(!inode)) {
--		dput(dentry);
--		inode_unlock(dir);
-+		simple_done_creating(dentry);
- 		return ERR_PTR(-ENOMEM);
- 	}
- 
- 	inode->i_ino = iunique(dir->i_sb, 100);
- 	inc_nlink(dir);
--	d_instantiate(dentry, inode);
-+	d_make_persistent(dentry, inode);
- 	fsnotify_mkdir(dir, dentry);
--	inode_unlock(dir);
-+	simple_done_creating(dentry);
- 
--	return dentry;
-+	return dentry; // borrowed
- }
- 
- static int rpc_populate(struct dentry *parent,
-@@ -657,8 +655,7 @@ int rpc_mkpipe_dentry(struct dentry *parent, const char *name,
- 
- 	inode = rpc_get_inode(dir->i_sb, umode);
- 	if (unlikely(!inode)) {
--		dput(dentry);
--		inode_unlock(dir);
-+		simple_done_creating(dentry);
- 		err = -ENOMEM;
- 		goto failed;
- 	}
-@@ -668,10 +665,10 @@ int rpc_mkpipe_dentry(struct dentry *parent, const char *name,
- 	rpci->private = private;
- 	rpci->pipe = pipe;
- 	rpc_inode_setowner(inode, private);
--	d_instantiate(dentry, inode);
--	pipe->dentry = dentry;
-+	pipe->dentry = dentry; // borrowed
-+	d_make_persistent(dentry, inode);
- 	fsnotify_create(dir, dentry);
--	inode_unlock(dir);
-+	simple_done_creating(dentry);
- 	return 0;
- 
- failed:
-@@ -1206,7 +1203,7 @@ static void rpc_kill_sb(struct super_block *sb)
- 					   sb);
- 	mutex_unlock(&sn->pipefs_sb_lock);
- out:
--	kill_litter_super(sb);
-+	kill_anon_super(sb);
- 	put_net(net);
- }
++	dentry = tracefs_start_creating(name, parent);
+ 	if (IS_ERR(dentry))
+ 		return ERR_CAST(dentry);
  
 -- 
 2.47.3
