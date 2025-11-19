@@ -1,246 +1,201 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+Received: from smtp-o-1.desy.de (smtp-o-1.desy.de [131.169.56.154])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E87A42C08CD;
-	Wed, 19 Nov 2025 15:25:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69ED62D738A
+	for <bpf@vger.kernel.org>; Wed, 19 Nov 2025 16:04:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=131.169.56.154
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763565931; cv=none; b=rds4t8i+ewyl3raO+Itg7D53io2F5OXUhw+zvFcWceuc2afhm2rR4xj3gAX6Ue5QeD3tuZqBna9HOLALSTcGmHxou78rCOQy7fOgvpebbp/4doMW3lcFu4C+Cp3jvOu5y2maGT+6oQZuBFDPa1hjLWUb6HhZJZYGXNYl1k0IlXI=
+	t=1763568248; cv=none; b=uiKhL6VpmKVveCIJslyKKJnTO1snPvmBK9x0pqfpzf3c5jOmFPyNnztkZGGx6hUYwZ4kHxr+L/rNpytOlaHwdh+4svwNG0Ht6vRsqJiiIaFXiOBS5lBZTH6QRqAtDja2Vs/GUKX6drtthEy/WvmCvlwWgnx5gR3840ss6IOjqnY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763565931; c=relaxed/simple;
-	bh=/lm3D/t8RucZMw6LEUlzR9tkbbE5ViBMVXNNeF0jkPA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=d40Eh6NXbhdAeuNdaSLYq4egyD345d3+gGxfeGoZrPY7Ud9c4BQPjwSmbNQsWqkksI/8otVu8TcAF3CgNTjWaZxXYxSVZFwSs7JmSjz+aQt36YK2kqg1HhJNU6Kfdqtyum+Y5H00N5bmg7MT2OMWaUPjBFeM3OZ7Ijwfx+doGGA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=AkjhWRWJ; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1763568248; c=relaxed/simple;
+	bh=GWd3jdBMmHKbyRVV9iuuPY5pZFTloG+4fZoD1Qj/xd4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=H+/oNTxuXotDwyI8zduSu3cENpYmc4w0RViFkTXz+unmCk8wnLjIMYUaGjrn6ZuiaGtdsLiWN2NjnDOdrq/jfho/xKJyRS39770aph3hUvEiyYNVH4RRWrSqqyhRwtKeLy8zux5NMR/SOygaDTeYmctwI2VqwU4iT01YC8Zn8fE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=xfel.eu; spf=none smtp.mailfrom=mail.desy.de; dkim=pass (1024-bit key) header.d=xfel.eu header.i=@xfel.eu header.b=sCD7UVkv; arc=none smtp.client-ip=131.169.56.154
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=xfel.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mail.desy.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="AkjhWRWJ"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=/cQ90ymvJBRWE2biPSf/gxrsEHs5FH2HkQgu5nyu+eo=; b=AkjhWRWJ85RY4KyKzR+1p5Qt9d
-	nPzWM8T5p4ihZuEr9RpNCvHMD0UffHxxosOYCFwOBLtVjJjTpVw0jQhbMuFG8vHlsjzeB/yAaGCP7
-	H8xtO6NV/akRVlavZWsHFcXwsUdkJbZeHvwmjoLfwol5GdCxSMvkRUxrh77Gm78dbB5X6vnRKEcHZ
-	elW3Aegb41H+lxLkYK4XacDbevlm0VytvKmIbzyhFN/7/cKRl5g8QdHHnJx93bOJafQHaAr8rj7ga
-	JoMxwMoNv80oqAA6sdeglpmfUMEPVofrt9iHa1uUjbAZ29UeGtFu89HgX/lNmVee3BegF/Xlb12r5
-	DuCEwD5w==;
-Received: from sslproxy05.your-server.de ([78.46.172.2])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1vLjch-0006DF-1l;
-	Wed, 19 Nov 2025 15:57:31 +0100
-Received: from localhost ([127.0.0.1])
-	by sslproxy05.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1vLjcg-000GBY-0O;
-	Wed, 19 Nov 2025 15:57:30 +0100
-Message-ID: <2372a3b8-9bb2-4c53-9029-9bd03f56b98a@iogearbox.net>
-Date: Wed, 19 Nov 2025 15:57:29 +0100
+	dkim=pass (1024-bit key) header.d=xfel.eu header.i=@xfel.eu header.b="sCD7UVkv"
+Received: from smtp-buf-2.desy.de (smtp-buf-2.desy.de [131.169.56.165])
+	by smtp-o-1.desy.de (Postfix) with ESMTP id 6045E11F75B
+	for <bpf@vger.kernel.org>; Wed, 19 Nov 2025 17:04:04 +0100 (CET)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp-o-1.desy.de 6045E11F75B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xfel.eu; s=default;
+	t=1763568244; bh=T/oXCWZysQyn2io6NmDEMqz9oSQDxb3RVkJq6Ld9FzU=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=sCD7UVkvmCkpJqylPZ9jnOlMy5FWGf2eRZwqXBbobwH2nJR7/z3n1no9XPwq0ptb9
+	 K4BHT7Qb120TMxrf/jrPKLPVSLzWT4kz9JsGaFWbt+QYjBWgG409bLGlycS/cXp7LZ
+	 bLUqTA/yhR6hE9EoDVlTI67YZXD6eNPM0vkPKTOo=
+Received: from smtp-m-2.desy.de (smtp-m-2.desy.de [IPv6:2001:638:700:1038::1:82])
+	by smtp-buf-2.desy.de (Postfix) with ESMTP id 55399120043;
+	Wed, 19 Nov 2025 17:04:04 +0100 (CET)
+Received: from c1722.mx.srv.dfn.de (c1722.mx.srv.dfn.de [IPv6:2001:638:d:c303:acdc:1979:2:e7])
+	by smtp-m-2.desy.de (Postfix) with ESMTP id 473CE16003F;
+	Wed, 19 Nov 2025 17:04:04 +0100 (CET)
+Received: from smtp-intra-2.desy.de (smtp-intra-2.desy.de [131.169.56.83])
+	by c1722.mx.srv.dfn.de (Postfix) with ESMTP id B4BF2100036;
+	Wed, 19 Nov 2025 17:04:03 +0100 (CET)
+Received: from exflqr30474.desy.de (exflqr30474.desy.de [192.168.177.248])
+	by smtp-intra-2.desy.de (Postfix) with ESMTP id A532220044;
+	Wed, 19 Nov 2025 17:04:03 +0100 (CET)
+Received: by exflqr30474.desy.de (Postfix, from userid 31112)
+	id A1221201AE; Wed, 19 Nov 2025 17:04:03 +0100 (CET)
+From: Martin Teichmann <martin.teichmann@xfel.eu>
+To: bpf@vger.kernel.org
+Cc: eddyz87@gmail.com,
+	ast@kernel.org,
+	andrii@kernel.org,
+	Martin Teichmann <martin.teichmann@xfel.eu>
+Subject: [PATCH v6 bpf-next 3/4] bpf: correct stack liveness for tail calls
+Date: Wed, 19 Nov 2025 17:03:54 +0100
+Message-ID: <20251119160355.1160932-4-martin.teichmann@xfel.eu>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <622f4e7645e426ae180e4511877eb90ceb1b1063.camel@gmail.com>
+References: <622f4e7645e426ae180e4511877eb90ceb1b1063.camel@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v4 01/14] net: Add bind-queue operation
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, davem@davemloft.net,
- razor@blackwall.org, pabeni@redhat.com, willemb@google.com, sdf@fomichev.me,
- john.fastabend@gmail.com, martin.lau@kernel.org, jordan@jrife.io,
- maciej.fijalkowski@intel.com, magnus.karlsson@intel.com, dw@davidwei.uk,
- toke@redhat.com, yangzhenze@bytedance.com, wangdongdong.6@bytedance.com
-References: <20251031212103.310683-1-daniel@iogearbox.net>
- <20251031212103.310683-2-daniel@iogearbox.net>
- <20251106163948.0d0d7d54@kernel.org>
-Content-Language: en-US
-From: Daniel Borkmann <daniel@iogearbox.net>
-Autocrypt: addr=daniel@iogearbox.net; keydata=
- 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
-In-Reply-To: <20251106163948.0d0d7d54@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: Clear (ClamAV 1.0.9/27825/Wed Nov 19 10:10:02 2025)
+Content-Transfer-Encoding: 8bit
 
-Hi Jakub,
+From: Eduard Zingerman <eddyz87@gmail.com>
 
-On 11/7/25 1:39 AM, Jakub Kicinski wrote:
-> On Fri, 31 Oct 2025 22:20:50 +0100 Daniel Borkmann wrote:
->> From: David Wei <dw@davidwei.uk>
->>
->> Add a ynl netdev family operation called bind-queue that creates a new
->> rx queue in a virtual netdev (i.e. netkit or veth) and binds it to an rx
->> queue in a real netdev.
-> 
-> bind is already used in context of queues to attach devmem.
-> Having bind-rx, bind-tx == devmem, and bind-queue something else
-> is not great. Plus well-named ops have the object first.
-> 
-> Can we call this op queue-create ?
-> 
-> It is creating a queue on the netkit, we can wrap the other params
-> into a nest called "lease". Once / if we get to dynamic queue creation
-> on real netdevs we can reuse it (presumably then lack of "lease" will
-> then imply that we need a real queue to be allocated).
-> 
->> This forms a queue pair, where the peer queue of
-> 
-> "queue pair" means Rx+Tx, please do not reuse terms like this.
+This updates bpf_insn_successors() reflecting that control flow might
+jump over the instructions between tail call and function exit, verifier
+might assume that some writes to parent stack always happen, which is
+not the case.
 
-Ok, yeah lets switch everything to 'lease', sgtm.
+Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
+Signed-off-by: Martin Teichmann <martin.teichmann@xfel.eu>
+---
+ include/linux/bpf_verifier.h |  5 +++--
+ kernel/bpf/liveness.c        |  7 ++++---
+ kernel/bpf/verifier.c        | 29 +++++++++++++++++++++++++++--
+ 3 files changed, 34 insertions(+), 7 deletions(-)
 
->> the pair in the virtual netdev acts as a proxy for the peer queue in the
->> real netdev. Thus, the peer queue in the virtual netdev can be used by
->> processes running in a container to use both memory providers (io_uring
->> zero-copy rx and devmem) and AF_XDP. An early implementation had only
->> driver-specific integration [0], but in order for other virtual devices
->> to reuse, it makes sense to have this as a generic API.
-> 
->> diff --git a/Documentation/netlink/specs/netdev.yaml b/Documentation/netlink/specs/netdev.yaml
->> index e00d3fa1c152..1e24c7f76de0 100644
->> --- a/Documentation/netlink/specs/netdev.yaml
->> +++ b/Documentation/netlink/specs/netdev.yaml
->> @@ -561,6 +561,46 @@ attribute-sets:
->>           type: u32
->>           checks:
->>             min: 1
->> +  -
->> +    name: queue-pair
->> +    attributes:
-> 
-> No need to create a "real" attribute set for this.
-> 
-> Once the attrs are wrapped in a "lease" nest you'll need a single
-> triplet, so make this a subset-of: queue (see the queue-id set).
-> name: ifc-queue-id ?
-
-Does the below rework look reasonable to you in terms of netdev spec?
-
-I do like the queue-create as it's generic and can be reused in future.
-As you said, we'll make the lease a nested attribute there and in future
-queue-create can be reused without it.
-
-We could then also reuse the same for the queue-get operation, I'll still
-add the netns-id to the 'lease' attribute set as well, and for 'queue-create'
-we enforce that the 'netns-id' is not set in order to indicate to search
-the ifindex in the current netns.
-
-With the below its also clear that queue-create ifindex is always done
-against the netkit device in our use-case and there's no ambiguity.
-
-Thanks,
-Daniel
-
-diff --git a/Documentation/netlink/specs/netdev.yaml b/Documentation/netlink/specs/netdev.yaml
-index 82bf5cb2617d..b7278e8a167e 100644
---- a/Documentation/netlink/specs/netdev.yaml
-+++ b/Documentation/netlink/specs/netdev.yaml
-@@ -339,6 +339,11 @@ attribute-sets:
-          doc: XSK information for this queue, if any.
-          type: nest
-          nested-attributes: xsk-info
-+      -
-+        name: lease
-+        doc: tbd
-+        type: nest
-+        nested-attributes: lease
-    -
-      name: qstats
-      doc: |
-@@ -537,6 +542,20 @@ attribute-sets:
-          name: id
-        -
-          name: type
-+  -
-+    name: lease
-+    attributes:
-+      -
-+        name: ifindex
-+        doc: netdev ifindex to lease the queue from.
-+        type: u32
-+        checks:
-+          min: 1
-+      -
-+        name: queue
-+        doc: netdev queue to lease from.
-+        type: nest
-+        nested-attributes: queue-id
-    -
-      name: dmabuf
-      attributes:
-@@ -684,6 +703,7 @@ operations:
-              - dmabuf
-              - io-uring
-              - xsk
-+            - lease
-        dump:
-          request:
-            attributes:
-@@ -795,6 +815,20 @@ operations:
-          reply:
-            attributes:
-              - id
-+    -
-+      name: queue-create
-+      doc: tbd
-+      attribute-set: queue
-+      flags: [admin-perm]
-+      do:
-+        request:
-+          attributes:
-+            - ifindex
-+            - type
-+            - lease
-+        reply: &queue-create-op
-+          attributes:
-+            - id
-  
-  kernel-family:
-    headers: ["net/netdev_netlink.h"]
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index 5441341f1ab9..8d0b60fa5f2b 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -527,7 +527,6 @@ struct bpf_insn_aux_data {
+ 		struct {
+ 			u32 map_index;		/* index into used_maps[] */
+ 			u32 map_off;		/* offset from value base address */
+-			struct bpf_iarray *jt;	/* jump table for gotox instruction */
+ 		};
+ 		struct {
+ 			enum bpf_reg_type reg_type;	/* type of pseudo_btf_id */
+@@ -550,6 +549,7 @@ struct bpf_insn_aux_data {
+ 		/* remember the offset of node field within type to rewrite */
+ 		u64 insert_off;
+ 	};
++	struct bpf_iarray *jt;	/* jump table for gotox or bpf_tailcall call instruction */
+ 	struct btf_struct_meta *kptr_struct_meta;
+ 	u64 map_key_state; /* constant (32 bit) key tracking for maps */
+ 	int ctx_field_size; /* the ctx field size for load insn, maybe 0 */
+@@ -652,6 +652,7 @@ struct bpf_subprog_info {
+ 	u32 start; /* insn idx of function entry point */
+ 	u32 linfo_idx; /* The idx to the main_prog->aux->linfo */
+ 	u32 postorder_start; /* The idx to the env->cfg.insn_postorder */
++	u32 exit_idx; /* Index of one of the BPF_EXIT instructions in this subprogram */
+ 	u16 stack_depth; /* max. stack depth used by this function */
+ 	u16 stack_extra;
+ 	/* offsets in range [stack_depth .. fastcall_stack_off)
+@@ -669,9 +670,9 @@ struct bpf_subprog_info {
+ 	bool keep_fastcall_stack: 1;
+ 	bool changes_pkt_data: 1;
+ 	bool might_sleep: 1;
++	u8 arg_cnt:3;
+ 
+ 	enum priv_stack_mode priv_stack_mode;
+-	u8 arg_cnt;
+ 	struct bpf_subprog_arg_info args[MAX_BPF_FUNC_REG_ARGS];
+ };
+ 
+diff --git a/kernel/bpf/liveness.c b/kernel/bpf/liveness.c
+index a7240013fd9d..60db5d655495 100644
+--- a/kernel/bpf/liveness.c
++++ b/kernel/bpf/liveness.c
+@@ -482,11 +482,12 @@ bpf_insn_successors(struct bpf_verifier_env *env, u32 idx)
+ 	struct bpf_prog *prog = env->prog;
+ 	struct bpf_insn *insn = &prog->insnsi[idx];
+ 	const struct opcode_info *opcode_info;
+-	struct bpf_iarray *succ;
++	struct bpf_iarray *succ, *jt;
+ 	int insn_sz;
+ 
+-	if (unlikely(insn_is_gotox(insn)))
+-		return env->insn_aux_data[idx].jt;
++	jt = env->insn_aux_data[idx].jt;
++	if (unlikely(jt))
++		return jt;
+ 
+ 	/* pre-allocated array of size up to 2; reset cnt, as it may have been used already */
+ 	succ = env->succ;
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 117a2b1cf87c..f564150ec807 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -3555,8 +3555,12 @@ static int check_subprogs(struct bpf_verifier_env *env)
+ 			subprog[cur_subprog].has_ld_abs = true;
+ 		if (BPF_CLASS(code) != BPF_JMP && BPF_CLASS(code) != BPF_JMP32)
+ 			goto next;
+-		if (BPF_OP(code) == BPF_EXIT || BPF_OP(code) == BPF_CALL)
++		if (BPF_OP(code) == BPF_CALL)
+ 			goto next;
++		if (BPF_OP(code) == BPF_EXIT) {
++			subprog[cur_subprog].exit_idx = i;
++			goto next;
++		}
+ 		off = i + bpf_jmp_offset(&insn[i]) + 1;
+ 		if (off < subprog_start || off >= subprog_end) {
+ 			verbose(env, "jump out of range from insn %d to %d\n", i, off);
+@@ -18150,6 +18154,25 @@ static int visit_gotox_insn(int t, struct bpf_verifier_env *env)
+ 	return keep_exploring ? KEEP_EXPLORING : DONE_EXPLORING;
+ }
+ 
++static int visit_tailcall_insn(struct bpf_verifier_env *env, int t)
++{
++	static struct bpf_subprog_info *subprog;
++	struct bpf_iarray *jt;
++
++	if (env->insn_aux_data[t].jt)
++		return 0;
++
++	jt = iarray_realloc(NULL, 2);
++	if (!jt)
++		return -ENOMEM;
++
++	subprog = bpf_find_containing_subprog(env, t);
++	jt->items[0] = t + 1;
++	jt->items[1] = subprog->exit_idx;
++	env->insn_aux_data[t].jt = jt;
++	return 0;
++}
++
+ /* Visits the instruction at index t and returns one of the following:
+  *  < 0 - an error occurred
+  *  DONE_EXPLORING - the instruction was fully explored
+@@ -18210,6 +18233,8 @@ static int visit_insn(int t, struct bpf_verifier_env *env)
+ 				mark_subprog_might_sleep(env, t);
+ 			if (bpf_helper_changes_pkt_data(insn->imm))
+ 				mark_subprog_changes_pkt_data(env, t);
++			if (insn->imm == BPF_FUNC_tail_call)
++				visit_tailcall_insn(env, t);
+ 		} else if (insn->src_reg == BPF_PSEUDO_KFUNC_CALL) {
+ 			struct bpf_kfunc_call_arg_meta meta;
+ 
+@@ -21471,7 +21496,7 @@ static void clear_insn_aux_data(struct bpf_verifier_env *env, int start, int len
+ 	int i;
+ 
+ 	for (i = start; i < end; i++) {
+-		if (insn_is_gotox(&insns[i])) {
++		if (aux_data[i].jt) {
+ 			kvfree(aux_data[i].jt);
+ 			aux_data[i].jt = NULL;
+ 		}
+-- 
+2.43.0
 
