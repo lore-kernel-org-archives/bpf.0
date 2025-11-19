@@ -1,425 +1,602 @@
-Received: from invmail4.hynix.com (exvmail4.hynix.com [166.125.252.92])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EADB71B6D08;
-	Wed, 19 Nov 2025 01:27:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.125.252.92
+Received: from out-180.mta1.migadu.com (out-180.mta1.migadu.com [95.215.58.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8A7F24677A
+	for <bpf@vger.kernel.org>; Wed, 19 Nov 2025 01:34:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763515657; cv=none; b=FvzXRWDoAAdnZzoTtPYsAuKTSFb9/I01CDtwvSkmrkQta3henQNOk9K1QGlv8BpiPR56z/XDkdRtq2wUSROVluwkbdujmrZ/oIGlFvoIA/5j1ApnZFKxTAnZWkU3Y5MCYcvtcEAwStR2TO3FWEkbSq5lZ+z4i3igqVDPUH52OP4=
+	t=1763516101; cv=none; b=FCeCf0KYqmaZzSFPMKk2nN+0O5XarWD6o/cWzgf6UXAhkdK8GT1tUczHsOq/ISx7Xt6+TlU5uCO+8qX9oiRcAwj349f47W0SLVbSeeGpvbKPOLtwZz/KE1zjh3zQDyQ5vA6jonfvWJ58bARMSfb0Bq4tlhpWD+6bP1B0t79C5JI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763515657; c=relaxed/simple;
-	bh=aqJxbP789GiJ0GxmlXaS8IOLYOOA3M6pcL4wmW3BkkQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=lSXnXPg5sH53+uh5RvmZjogcmgEmCGoW0vEeVVT9YeIb2SL5V7Ceb6wuJeo+MSx+4Xxob2iEJ2lKHYbKrHvb8KKJVW+pAZjcUw2bs2BOPv/A3Kz2jcnZNM4gmFqJ6AgM8sTHYlc08iR7YVQ8bxy+SDH1EhKjGyZbI6F9AUIhT1I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com; spf=pass smtp.mailfrom=sk.com; arc=none smtp.client-ip=166.125.252.92
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sk.com
-X-AuditID: a67dfc5b-c2dff70000001609-55-691d1cf9e515
-From: Byungchul Park <byungchul@sk.com>
-To: linux-mm@kvack.org,
-	netdev@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	kernel_team@skhynix.com,
-	harry.yoo@oracle.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	davem@davemloft.net,
-	kuba@kernel.org,
-	hawk@kernel.org,
-	john.fastabend@gmail.com,
-	sdf@fomichev.me,
-	saeedm@nvidia.com,
-	leon@kernel.org,
-	tariqt@nvidia.com,
-	mbloch@nvidia.com,
-	andrew+netdev@lunn.ch,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	akpm@linux-foundation.org,
-	david@redhat.com,
-	lorenzo.stoakes@oracle.com,
-	Liam.Howlett@oracle.com,
-	vbabka@suse.cz,
-	rppt@kernel.org,
-	surenb@google.com,
-	mhocko@suse.com,
-	horms@kernel.org,
-	jackmanb@google.com,
-	hannes@cmpxchg.org,
-	ziy@nvidia.com,
-	ilias.apalodimas@linaro.org,
-	willy@infradead.org,
-	brauner@kernel.org,
-	kas@kernel.org,
-	yuzhao@google.com,
-	usamaarif642@gmail.com,
-	baolin.wang@linux.alibaba.com,
-	almasrymina@google.com,
-	toke@redhat.com,
-	asml.silence@gmail.com,
+	s=arc-20240116; t=1763516101; c=relaxed/simple;
+	bh=utM9YfdalYWl7iTOpRHh4CFer73pX7LUN10W1+sBrG8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=BjSDU+D70TT3W1YgJFRzJ12+2Xc8uaq+jppVhtOYwZhmSESjY/ynoB5IkCbUhmjlG8y0qBWHk9aKyoN/74FDjY6Lpg+wK99WTzs45HGow4Fqs5vrksG7xow/xGSkyz6qwJ7lUzpPe5P3GJRd3bCyxRu09dTJx0eq1el33xfLcYU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=kbmG10x1; arc=none smtp.client-ip=95.215.58.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="kbmG10x1"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1763516096;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=HJ3VjAT/1JRhW/gpt3j3I9moH9fANhCnAIifgJP2C6Y=;
+	b=kbmG10x1v1sq/VQ6AHV5R4kB5PubC/+/l3ZrfRLP/wFy1xZP8/qy4GdE9UW5kdM4uPXtZ8
+	SmH/mg6LECTzFB7rnBzHBAZNPuPrqaFcxzYhl5B/QfKaY6y0LBjGnE4cg6Nm0/XOWcZJIY
+	2oaObruik/d/Rt3Js9WWffWkGYu0J+s=
+From: Hui Zhu <hui.zhu@linux.dev>
+To: Andrew Morton <akpm@linux-foundation.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Michal Hocko <mhocko@kernel.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Muchun Song <muchun.song@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Kees Cook <kees@kernel.org>,
+	Tejun Heo <tj@kernel.org>,
+	Jeff Xu <jeffxu@chromium.org>,
+	mkoutny@suse.com,
+	Jan Hendrik Farr <kernel@jfarr.cc>,
+	Christian Brauner <brauner@kernel.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Brian Gerst <brgerst@gmail.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org,
+	cgroups@vger.kernel.org,
 	bpf@vger.kernel.org,
-	linux-rdma@vger.kernel.org,
-	sfr@canb.auug.org.au,
-	dw@davidwei.uk,
-	ap420073@gmail.com,
-	dtatulea@nvidia.com
-Subject: [RFC mm v7] mm: introduce a new page type for page pool in page type
-Date: Wed, 19 Nov 2025 10:27:09 +0900
-Message-Id: <20251119012709.35895-1-byungchul@sk.com>
-X-Mailer: git-send-email 2.17.1
+	linux-kselftest@vger.kernel.org
+Cc: Hui Zhu <zhuhui@kylinos.cn>,
+	Geliang Tang <geliang@kernel.org>
+Subject: [RFC PATCH 1/3] memcg: add eBPF struct ops support for memory charging
+Date: Wed, 19 Nov 2025 09:34:06 +0800
+Message-ID: <15f95166c6c516f303f3092e74c88ace5164bdf0.1763457705.git.zhuhui@kylinos.cn>
+In-Reply-To: <cover.1763457705.git.zhuhui@kylinos.cn>
+References: <cover.1763457705.git.zhuhui@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Sa0hTYRjHec97ds5xOjtNrZOXioEUQnbB7Amiy7f3ixgVdIVaecqRWszL
-	VCy0BqbmpYtkc5VR3o3lusyJk3Jei6i8sai0lrooMzEdzQ1sWlHf/vwvvw8PD4flRkkwp0pK
-	EdVJygQFI6Wl3/xur3GHhqnWnetZDXpDAwP1P9Oh+kOTBFwNDgr0dY8RTLvesjBn6UTwo72L
-	ga/WKQR3bjsx6F9qaZgxzGIwNzsQfCm7x8Bop52FemMMDFeN0dCSa8JgL+5moFDrxmBxTbBw
-	rqnGC36QzcKrx0USuDpbicGU/YGFvmY9A0MNcxIYayukoUdXS8NkaTuG4aLt0FmxBJzPxxG0
-	G0wUOC/eYGDgejMFjywDLFzprWDgk3YYQa/VTkOp5wID5TlFCNw/vciJkmkJlHcMsdsjSY7N
-	xhDr+HdMHta+ochg2SWa2FqfUcSse8+SCmMqeVATQfJtvZgY6/IYYpy6zJJ3gy0M6S5z08T8
-	cTMxN/2gSOH5CWZn0AHpljgxQZUmqtduPSKNz9O6qdODynRHbrUkG1XG5iMfTuCjhGzPAPVX
-	9zW6mHnN8KsEm82F53Ugv06oKZ32aimH+QJOeNvauBAE8DGCvcXE5iOOo/lw4cXoAlPGbxQm
-	RsfY38wVQv39J/i3v1jouT5Cz9exl2+4KZ+3sbdy/lH5Al7g+zmh2tP/Z7tMeFpjo0uQv+6/
-	ue7fXPffvALhOiRXJaUlKlUJUZHxGUmq9MhjpxKNyPtJVWc8B5vQ1KvdbYjnkMJPdmFRmEou
-	UaYlZyS2IYHDikBZ+I5QlVwWp8zIFNWnDqtTE8TkNhTC0Yqlsg1OTZycP6FMEU+K4mlR/Tel
-	OJ9g7yWzrvllah0X7Xv3H7UkdocWV8ESx2taE1Oiv/v8hfmsdSakuCo3Nm+TpjCvejLAOmgJ
-	D/TpSOszTH72XeMp2JbFb44+5P9k9/CefQUkyG/EN3eXb+jyW8Erjd9Wh3XMvtOEtOqXabqc
-	2zSGrjD3QMqcaevxsYiY6H6Lva42crpSQSfHK9dHYHWy8hdOCNbeRQMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Se0hTYRyG+853zndOy9HJxE6WFSMVotQw8RddMII6FGURYRSRQw9upFO2
-	FBUCTbGyNDUFm1sY4l1ZzryiUmpTCyuUbNFlZalQpqXLNpVsFlH/vbzvw/PXy2H3AsaLU2su
-	SFqNMkZBZLTs6K70bc713urA9h4CBlMtgRpHElS8a2HAWTtOgaG6CYHd+YqFxQ4LgpmeXgKf
-	u6cRlN6ZxWB4mkHDd9Mchta2cQSfiuoIjFpGWKgxHwFb+RgN7ZebMYzc6COQnTGPocM5ycKl
-	lkqXuCGVhW5jPwPPmnIYKJgrw9Cc+o6FoTYDgbe1iwyMdWXT0K+vouFrYQ8GW04oWEo8Yfbx
-	BIIeUzMFs9eNBJ7faqOgseM5CzcHSwh8yLAhGOweoaFw4QqB4rQcBPMOl3Iy185A8cO3bGiA
-	mGa1ErF7YgqL96peUuJwUR4tWjsfUWKr/g0rlpgTxIbKLWKWdRCL5uqrRDRP57Pi6+F2IvYV
-	zdNi6/udYmvLDCVmp0+SY56nZbujpBh1oqQN2BshU13NmKfih5VJ45crmFRUFpaFlnMCv0MY
-	qneSpUx4P8FqdeKl7MEHCpWFdleWcZi/xgmvOut/D6v5I8JIezObhTiO5n2EgdHfHjkfLEyO
-	jrF/nBuFmrv38Z9+ldB/6yO9hGOX33TbfanGLiS9sRjnohX6/yj9P0r/H1WCcDXyUGsSY5Xq
-	mGB/3XlVskad5B8ZF2tGrq+UX1zIa0H2oYNdiOeQwk3uyF2vdmeUibrk2C4kcFjhIffZ56rk
-	UcrkFEkbd06bECPputA6jlaskR8KlyLc+WjlBem8JMVL2r8rxS33SkUhfKDvzBPiO/7lW2aQ
-	5mJIgTF5ShhYeYacve0XGm2LKp3TBiXUZXpGb/XzRo2GB2PLjJXZkVTxj7g9GjkTPjdw0rbB
-	2/F1T3zEKc+QsJ/POjc7UvYf/3huh0BU/h2H1246YBq2W4xuQbWlE0nhUX32PFWR74mGFwW9
-	TL7blXyLgtaplNu3YK1O+QuLJBpRJwMAAA==
-X-CFilter-Loop: Reflected
+X-Migadu-Flow: FLOW_OUT
 
-Currently, the condition 'page->pp_magic == PP_SIGNATURE' is used to
-determine if a page belongs to a page pool.  However, with the planned
-removal of @pp_magic, we should instead leverage the page_type in struct
-page, such as PGTY_netpp, for this purpose.
+From: Hui Zhu <zhuhui@kylinos.cn>
 
-Introduce and use the page type APIs e.g. PageNetpp(), __SetPageNetpp(),
-and __ClearPageNetpp() instead, and remove the existing APIs accessing
-@pp_magic e.g. page_pool_page_is_pp(), netmem_or_pp_magic(), and
-netmem_clear_pp_magic().
+Add eBPF struct ops support to the memory controller, enabling
+dynamic memory management policies via eBPF programs. This
+allows users to implement custom memory charging and
+reclamation strategies without kernel recompilation.
 
-Plus, add @page_type to struct net_iov at the same offset as struct page
-so as to use the page_type APIs for struct net_iov as well.  While at it,
-reorder @type and @owner in struct net_iov to avoid a hole and
-increasing the struct size.
+The implementation introduces:
 
-This work was inspired by the following link:
+- A new BPF struct ops type `memcg_ops` with a `try_charge_memcg`
+  hook for intercepting memory charge operations
+- Integration into the `try_charge_memcg()` function to call
+  registered eBPF handlers
+- Safe registration/unregistration via BPF struct ops
+  infrastructure
+- Reference counting using percpu_ref to track handler lifecycle
+- Static branch keys to minimize overhead when disabled
+- New Kconfig option CONFIG_MEMCG_BPF to control the feature
 
-  https://lore.kernel.org/all/582f41c0-2742-4400-9c81-0d46bf4e8314@gmail.com/
+The eBPF handler receives a `try_charge_memcg` struct containing:
+- Memory cgroup and affected memory cgroup
+- GFP flags and page count
+- Reclamation options
+- Current charge status
 
-While at it, move the sanity check for page pool to on the page free
-path.
+Handlers can inspect this context and modify certain fields
+(e.g., nr_pages) to adjust reclamation behavior. The design
+enforces single active handler to avoid conflicts.
 
-Suggested-by: David Hildenbrand <david@redhat.com>
-Co-developed-by: Pavel Begunkov <asml.silence@gmail.com>
-Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
-Signed-off-by: Byungchul Park <byungchul@sk.com>
-Acked-by: David Hildenbrand <david@redhat.com>
-Acked-by: Zi Yan <ziy@nvidia.com>
-Reviewed-by: Toke Høiland-Jørgensen <toke@redhat.com>
+Use cases include:
+- Custom memory policies for specialized workloads
+- Memory pressure telemetry and monitoring
+- Integration with container management systems
+- Runtime memory management experimentation
+
+Design decisions:
+- Uses RCU synchronization for safe handler replacement
+- Zero overhead when feature is disabled (via static keys)
+- Single handler model prevents complexity and race conditions
+- eBPF verifier restrictions ensure memory safety
+- Minimal context exposure to reduce attack surface
+
+Signed-off-by: Geliang Tang <geliang@kernel.org>
+Signed-off-by: Hui Zhu <zhuhui@kylinos.cn>
 ---
-I'm keeping all the Reviewed-by and Acked-by given for mm changes even
-though I changed a lil bit since it obviously improves the code better.
+ MAINTAINERS         |   2 +
+ init/Kconfig        |  38 +++++++++
+ mm/Makefile         |   1 +
+ mm/memcontrol.c     |  26 ++++--
+ mm/memcontrol_bpf.c | 200 ++++++++++++++++++++++++++++++++++++++++++++
+ mm/memcontrol_bpf.h | 103 +++++++++++++++++++++++
+ 6 files changed, 363 insertions(+), 7 deletions(-)
+ create mode 100644 mm/memcontrol_bpf.c
+ create mode 100644 mm/memcontrol_bpf.h
 
-However, I dropped all the Reviewed-by and Acked-by given for network
-changes since I changed how to implement the part on the request from
-Jakub.  Can I keep your tags?  Jakub, are you okay with this change?
-
-  Reviewed-by: Mina Almasry <almasrymina@google.com>
-  Reviewed-by: Pavel Begunkov <asml.silence@gmail.com>
-
-This set is supposed to go via the mm tree, but it currently also
-depends on patches in the net-next tree.  For now, this set is based
-on linux-next, but will apply cleanly (or get rebased) after mm tree was
-rebased.
-
-Changes from v6:
-	1. Do bad_page() and prevent the page from being returned to the
-	   page allocator instead of just WARN_ON_ONCE() on detection of
-	   page pool leak in the page free path. (feedbacked by Jesper
-	   and David)
-
-Changes from v5:
-	1. Add @page_type to struct net_iov so as to use the page_type
-	   APIs even for struct net_iov. (feedbacked by Jakub)
-
-Changes from v4:
-	1. Rebase on the latest version of linux-next as of Nov 3.
-	2. Improve commit messages. (feedbacked by Jakub and Mina)
-	3. Add Acked-by and Reviewed-by.  Thanks to Mina.
-
-Changes from v3:
-	1. Rebase on next-20251023 of linux-next.
-	2. Split into two, mm changes and network changes.
-	3. Improve the comments (feedbacked by Jakub)
-
-Changes from v2:
-	1. Rebase on linux-next as of Jul 29.
-	2. Skip 'niov->pp = NULL' when it's allocated using __GFP_ZERO.
-	3. Change trivial coding style. (feedbacked by Mina)
-	4. Add Co-developed-by, Acked-by, and Reviewed-by properly.
-	   Thanks to all.
-
-Changes from v1:
-	1. Rebase on linux-next.
-	2. Initialize net_iov->pp = NULL when allocating net_iov in
-	   net_devmem_bind_dmabuf() and io_zcrx_create_area().
-	3. Use ->pp for net_iov to identify if it's pp rather than
-	   always consider net_iov as pp.
-	4. Add Suggested-by: David Hildenbrand <david@redhat.com>.
----
- .../net/ethernet/mellanox/mlx5/core/en/xdp.c  |  2 +-
- include/linux/mm.h                            | 27 +++----------------
- include/linux/page-flags.h                    |  6 +++++
- include/net/netmem.h                          | 15 +++++++++--
- mm/page_alloc.c                               | 11 +++++---
- net/core/netmem_priv.h                        | 20 +++++---------
- net/core/page_pool.c                          | 18 +++++++++++--
- 7 files changed, 53 insertions(+), 46 deletions(-)
-
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c b/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
-index 5d51600935a6..def274f5c1ca 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
-@@ -707,7 +707,7 @@ static void mlx5e_free_xdpsq_desc(struct mlx5e_xdpsq *sq,
- 				xdpi = mlx5e_xdpi_fifo_pop(xdpi_fifo);
- 				page = xdpi.page.page;
+diff --git a/MAINTAINERS b/MAINTAINERS
+index e64b94e6b5a9..498d01c9a48e 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -6351,6 +6351,8 @@ F:	include/linux/page_counter.h
+ F:	mm/memcontrol.c
+ F:	mm/memcontrol-v1.c
+ F:	mm/memcontrol-v1.h
++F:	mm/memcontrol_bpf.c
++F:	mm/memcontrol_bpf.h
+ F:	mm/page_counter.c
+ F:	mm/swap_cgroup.c
+ F:	samples/cgroup/*
+diff --git a/init/Kconfig b/init/Kconfig
+index cab3ad28ca49..cde8f5cb5ffa 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -1063,6 +1063,44 @@ config MEMCG_V1
  
--				/* No need to check page_pool_page_is_pp() as we
-+				/* No need to check PageNetpp() as we
- 				 * know this is a page_pool page.
- 				 */
- 				page_pool_recycle_direct(pp_page_to_nmdesc(page)->pp,
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index a3f97c551ad8..081e365caa1a 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -4252,10 +4252,9 @@ int arch_lock_shadow_stack_status(struct task_struct *t, unsigned long status);
-  * DMA mapping IDs for page_pool
-  *
-  * When DMA-mapping a page, page_pool allocates an ID (from an xarray) and
-- * stashes it in the upper bits of page->pp_magic. We always want to be able to
-- * unambiguously identify page pool pages (using page_pool_page_is_pp()). Non-PP
-- * pages can have arbitrary kernel pointers stored in the same field as pp_magic
-- * (since it overlaps with page->lru.next), so we must ensure that we cannot
-+ * stashes it in the upper bits of page->pp_magic. Non-PP pages can have
-+ * arbitrary kernel pointers stored in the same field as pp_magic (since
-+ * it overlaps with page->lru.next), so we must ensure that we cannot
-  * mistake a valid kernel pointer with any of the values we write into this
-  * field.
-  *
-@@ -4290,26 +4289,6 @@ int arch_lock_shadow_stack_status(struct task_struct *t, unsigned long status);
- #define PP_DMA_INDEX_MASK GENMASK(PP_DMA_INDEX_BITS + PP_DMA_INDEX_SHIFT - 1, \
- 				  PP_DMA_INDEX_SHIFT)
+ 	  Say N if unsure.
  
--/* Mask used for checking in page_pool_page_is_pp() below. page->pp_magic is
-- * OR'ed with PP_SIGNATURE after the allocation in order to preserve bit 0 for
-- * the head page of compound page and bit 1 for pfmemalloc page, as well as the
-- * bits used for the DMA index. page_is_pfmemalloc() is checked in
-- * __page_pool_put_page() to avoid recycling the pfmemalloc page.
-- */
--#define PP_MAGIC_MASK ~(PP_DMA_INDEX_MASK | 0x3UL)
--
--#ifdef CONFIG_PAGE_POOL
--static inline bool page_pool_page_is_pp(const struct page *page)
--{
--	return (page->pp_magic & PP_MAGIC_MASK) == PP_SIGNATURE;
--}
--#else
--static inline bool page_pool_page_is_pp(const struct page *page)
--{
--	return false;
--}
--#endif
--
- #define PAGE_SNAPSHOT_FAITHFUL (1 << 0)
- #define PAGE_SNAPSHOT_PG_BUDDY (1 << 1)
- #define PAGE_SNAPSHOT_PG_IDLE  (1 << 2)
-diff --git a/include/linux/page-flags.h b/include/linux/page-flags.h
-index 0091ad1986bf..edf5418c91dd 100644
---- a/include/linux/page-flags.h
-+++ b/include/linux/page-flags.h
-@@ -934,6 +934,7 @@ enum pagetype {
- 	PGTY_zsmalloc		= 0xf6,
- 	PGTY_unaccepted		= 0xf7,
- 	PGTY_large_kmalloc	= 0xf8,
-+	PGTY_netpp		= 0xf9,
- 
- 	PGTY_mapcount_underflow = 0xff
- };
-@@ -1078,6 +1079,11 @@ PAGE_TYPE_OPS(Zsmalloc, zsmalloc, zsmalloc)
- PAGE_TYPE_OPS(Unaccepted, unaccepted, unaccepted)
- FOLIO_TYPE_OPS(large_kmalloc, large_kmalloc)
- 
-+/*
-+ * Marks page_pool allocated pages.
-+ */
-+PAGE_TYPE_OPS(Netpp, netpp, netpp)
++config MEMCG_BPF
++	bool "Memory controller eBPF support"
++	depends on MEMCG
++	depends on BPF_SYSCALL
++	default n
++	help
++	  This option enables eBPF support for the memory controller,
++	  allowing eBPF programs to hook into memory charging
++	  operations and implement custom memory management policies
++	  at runtime.
 +
- /**
-  * PageHuge - Determine if the page belongs to hugetlbfs
-  * @page: The page to test.
-diff --git a/include/net/netmem.h b/include/net/netmem.h
-index 651e2c62d1dd..ab107b05341e 100644
---- a/include/net/netmem.h
-+++ b/include/net/netmem.h
-@@ -114,10 +114,21 @@ struct net_iov {
- 			atomic_long_t pp_ref_count;
- 		};
- 	};
--	struct net_iov_area *owner;
++	  With this feature enabled, administrators can load eBPF
++	  programs to monitor and adjust memory charging behavior
++	  without recompiling the kernel. This enables:
 +
-+	unsigned int page_type;
- 	enum net_iov_type type;
-+	struct net_iov_area *owner;
- };
- 
-+/* Make sure 'the offset of page_type in struct page == the offset of
-+ * type in struct net_iov'.
-+ */
-+#define NET_IOV_ASSERT_OFFSET(pg, iov)			\
-+	static_assert(offsetof(struct page, pg) ==	\
-+		      offsetof(struct net_iov, iov))
-+NET_IOV_ASSERT_OFFSET(page_type, page_type);
-+#undef NET_IOV_ASSERT_OFFSET
++	  - Custom memory reclamation strategies for specialized
++	    workloads
++	  - Dynamic memory pressure telemetry and monitoring
++	  - Memory accounting adjustments based on runtime conditions
++	  - Integration with container orchestration systems
++	  - Experimentation with novel memory management algorithms
 +
- struct net_iov_area {
- 	/* Array of net_iovs for this area. */
- 	struct net_iov *niovs;
-@@ -260,7 +271,7 @@ static inline unsigned long netmem_pfn_trace(netmem_ref netmem)
-  */
- #define pp_page_to_nmdesc(p)						\
- ({									\
--	DEBUG_NET_WARN_ON_ONCE(!page_pool_page_is_pp(p));		\
-+	DEBUG_NET_WARN_ON_ONCE(!PageNetpp(p));				\
- 	__pp_page_to_nmdesc(p);						\
- })
++	  The eBPF handler is invoked during memory charge attempts
++	  and can inspect memory cgroup context and optionally modify
++	  parameters like reclamation size.
++
++	  When this feature is disabled or no eBPF program is loaded,
++	  there is zero performance overhead. When enabled with an
++	  active program, overhead is minimal (one indirect function
++	  call per charge attempt). The eBPF verifier ensures memory
++	  safety of loaded programs.
++
++	  Only one eBPF program can be active at a time. Loading a
++	  new program requires appropriate BPF permissions
++	  (CAP_PERFMON or CAP_SYS_ADMIN).
++
++	  Say N if unsure.
++
+ config BLK_CGROUP
+ 	bool "IO controller"
+ 	depends on BLOCK
+diff --git a/mm/Makefile b/mm/Makefile
+index 21abb3353550..5ac2fa7a8a74 100644
+--- a/mm/Makefile
++++ b/mm/Makefile
+@@ -102,6 +102,7 @@ obj-$(CONFIG_TRANSPARENT_HUGEPAGE) += huge_memory.o khugepaged.o
+ obj-$(CONFIG_PAGE_COUNTER) += page_counter.o
+ obj-$(CONFIG_MEMCG_V1) += memcontrol-v1.o
+ obj-$(CONFIG_MEMCG) += memcontrol.o vmpressure.o
++obj-$(CONFIG_MEMCG_BPF) += memcontrol_bpf.o
+ ifdef CONFIG_SWAP
+ obj-$(CONFIG_MEMCG) += swap_cgroup.o
+ endif
+diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+index 4deda33625f4..104c9e9309f2 100644
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -68,6 +68,7 @@
+ #include <net/ip.h>
+ #include "slab.h"
+ #include "memcontrol-v1.h"
++#include "memcontrol_bpf.h"
  
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index 600d9e981c23..5ae55a5d7b5d 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -1041,7 +1041,6 @@ static inline bool page_expected_state(struct page *page,
- #ifdef CONFIG_MEMCG
- 			page->memcg_data |
- #endif
--			page_pool_page_is_pp(page) |
- 			(page->flags.f & check_flags)))
- 		return false;
+ #include <linux/uaccess.h>
  
-@@ -1068,8 +1067,6 @@ static const char *page_bad_reason(struct page *page, unsigned long flags)
- 	if (unlikely(page->memcg_data))
- 		bad_reason = "page still charged to cgroup";
- #endif
--	if (unlikely(page_pool_page_is_pp(page)))
--		bad_reason = "page_pool leak";
- 	return bad_reason;
- }
+@@ -2301,13 +2302,14 @@ static int try_charge_memcg(struct mem_cgroup *memcg, gfp_t gfp_mask,
+ 	int nr_retries = MAX_RECLAIM_RETRIES;
+ 	struct mem_cgroup *mem_over_limit;
+ 	struct page_counter *counter;
+-	unsigned long nr_reclaimed;
++	unsigned long nr_reclaime, nr_reclaimed;
+ 	bool passed_oom = false;
+ 	unsigned int reclaim_options = MEMCG_RECLAIM_MAY_SWAP;
+ 	bool drained = false;
+ 	bool raised_max_event = false;
+ 	unsigned long pflags;
+ 	bool allow_spinning = gfpflags_allow_spinning(gfp_mask);
++	bool charge_done = false;
  
-@@ -1378,9 +1375,15 @@ __always_inline bool free_pages_prepare(struct page *page,
- 		mod_mthp_stat(order, MTHP_STAT_NR_ANON, -1);
- 		folio->mapping = NULL;
- 	}
--	if (unlikely(page_has_type(page)))
-+	if (unlikely(page_has_type(page))) {
-+		/* networking expects to clear its page type before releasing */
-+		if (unlikely(PageNetpp(page))) {
-+			bad_page(page, "page_pool leak");
-+			return false;
+ retry:
+ 	if (consume_stock(memcg, nr_pages))
+@@ -2320,20 +2322,30 @@ static int try_charge_memcg(struct mem_cgroup *memcg, gfp_t gfp_mask,
+ 	if (!do_memsw_account() ||
+ 	    page_counter_try_charge(&memcg->memsw, batch, &counter)) {
+ 		if (page_counter_try_charge(&memcg->memory, batch, &counter))
+-			goto done_restock;
+-		if (do_memsw_account())
+-			page_counter_uncharge(&memcg->memsw, batch);
+-		mem_over_limit = mem_cgroup_from_counter(counter, memory);
++			charge_done = true;
++		else {
++			if (do_memsw_account())
++				page_counter_uncharge(&memcg->memsw, batch);
++			mem_over_limit = mem_cgroup_from_counter(counter, memory);
 +		}
- 		/* Reset the page_type (which overlays _mapcount) */
- 		page->page_type = UINT_MAX;
+ 	} else {
+ 		mem_over_limit = mem_cgroup_from_counter(counter, memsw);
+ 		reclaim_options &= ~MEMCG_RECLAIM_MAY_SWAP;
+ 	}
+ 
+-	if (batch > nr_pages) {
++	if (!charge_done && batch > nr_pages) {
+ 		batch = nr_pages;
+ 		goto retry;
+ 	}
+ 
++	nr_reclaime = bpf_try_charge_memcg(memcg, gfp_mask, nr_pages,
++					   mem_over_limit,
++					   reclaim_options,
++					   charge_done);
++
++	if (charge_done)
++		goto done_restock;
++
+ 	/*
+ 	 * Prevent unbounded recursion when reclaim operations need to
+ 	 * allocate memory. This might exceed the limits temporarily,
+@@ -2353,7 +2365,7 @@ static int try_charge_memcg(struct mem_cgroup *memcg, gfp_t gfp_mask,
+ 	raised_max_event = true;
+ 
+ 	psi_memstall_enter(&pflags);
+-	nr_reclaimed = try_to_free_mem_cgroup_pages(mem_over_limit, nr_pages,
++	nr_reclaimed = try_to_free_mem_cgroup_pages(mem_over_limit, nr_reclaime,
+ 						    gfp_mask, reclaim_options, NULL);
+ 	psi_memstall_leave(&pflags);
+ 
+diff --git a/mm/memcontrol_bpf.c b/mm/memcontrol_bpf.c
+new file mode 100644
+index 000000000000..0bdb2a147a50
+--- /dev/null
++++ b/mm/memcontrol_bpf.c
+@@ -0,0 +1,200 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Memory Controller eBPF support
++ *
++ * Author: Hui Zhu <zhuhui@kylinos.cn>
++ * Copyright (C) 2025 KylinSoft Corporation.
++ */
++
++#include <linux/cgroup-defs.h>
++#include <linux/page_counter.h>
++#include <linux/memcontrol.h>
++#include <linux/cgroup.h>
++#include <linux/rcupdate.h>
++#include <linux/bpf_verifier.h>
++#include <linux/bpf.h>
++#include <linux/btf.h>
++#include <linux/btf_ids.h>
++#include <linux/module.h>
++#include "memcontrol_bpf.h"
++
++struct memcg_ops __rcu *memcg_ops;
++DEFINE_STATIC_KEY_FALSE(memcg_bpf_enable);
++
++static void memcg_ops_release(struct percpu_ref *ref)
++{
++	struct memcg_ops *ops = container_of(ref,
++		struct memcg_ops, refcount);
++
++	/* Signal destruction completion */
++	complete(&ops->destroy_done);
++}
++
++static int memcg_ops_btf_struct_access(struct bpf_verifier_log *log,
++					const struct bpf_reg_state *reg,
++					int off, int size)
++{
++	size_t end;
++
++	switch (off) {
++	case offsetof(struct try_charge_memcg, nr_pages):
++		end = offsetofend(struct try_charge_memcg, nr_pages);
++		break;
++	default:
++		return -EACCES;
 +	}
- 
- 	if (is_check_pages_enabled()) {
- 		if (free_page_is_bad(page))
-diff --git a/net/core/netmem_priv.h b/net/core/netmem_priv.h
-index 23175cb2bd86..6b7d90b8ebb9 100644
---- a/net/core/netmem_priv.h
-+++ b/net/core/netmem_priv.h
-@@ -8,21 +8,15 @@ static inline unsigned long netmem_get_pp_magic(netmem_ref netmem)
- 	return netmem_to_nmdesc(netmem)->pp_magic & ~PP_DMA_INDEX_MASK;
- }
- 
--static inline void netmem_or_pp_magic(netmem_ref netmem, unsigned long pp_magic)
--{
--	netmem_to_nmdesc(netmem)->pp_magic |= pp_magic;
--}
--
--static inline void netmem_clear_pp_magic(netmem_ref netmem)
--{
--	WARN_ON_ONCE(netmem_to_nmdesc(netmem)->pp_magic & PP_DMA_INDEX_MASK);
--
--	netmem_to_nmdesc(netmem)->pp_magic = 0;
--}
--
- static inline bool netmem_is_pp(netmem_ref netmem)
- {
--	return (netmem_get_pp_magic(netmem) & PP_MAGIC_MASK) == PP_SIGNATURE;
-+	/* XXX: Now that the offset of page_type is shared between
-+	 * struct page and net_iov, just cast the netmem to struct page
-+	 * unconditionally by clearing NET_IOV if any, no matter whether
-+	 * it comes from struct net_iov or struct page.  This should be
-+	 * adjusted once the offset is no longer shared.
-+	 */
-+	return PageNetpp(__netmem_to_page((__force unsigned long)netmem & ~NET_IOV));
- }
- 
- static inline void netmem_set_pp(netmem_ref netmem, struct page_pool *pool)
-diff --git a/net/core/page_pool.c b/net/core/page_pool.c
-index 1a5edec485f1..27650ca789d1 100644
---- a/net/core/page_pool.c
-+++ b/net/core/page_pool.c
-@@ -699,7 +699,14 @@ s32 page_pool_inflight(const struct page_pool *pool, bool strict)
- void page_pool_set_pp_info(struct page_pool *pool, netmem_ref netmem)
- {
- 	netmem_set_pp(netmem, pool);
--	netmem_or_pp_magic(netmem, PP_SIGNATURE);
 +
-+	/* XXX: Now that the offset of page_type is shared between
-+	 * struct page and net_iov, just cast the netmem to struct page
-+	 * unconditionally by clearing NET_IOV if any, no matter whether
-+	 * it comes from struct net_iov or struct page.  This should be
-+	 * adjusted once the offset is no longer shared.
-+	 */
-+	__SetPageNetpp(__netmem_to_page((__force unsigned long)netmem & ~NET_IOV));
- 
- 	/* Ensuring all pages have been split into one fragment initially:
- 	 * page_pool_set_pp_info() is only called once for every page when it
-@@ -714,7 +721,14 @@ void page_pool_set_pp_info(struct page_pool *pool, netmem_ref netmem)
- 
- void page_pool_clear_pp_info(netmem_ref netmem)
- {
--	netmem_clear_pp_magic(netmem);
-+	/* XXX: Now that the offset of page_type is shared between
-+	 * struct page and net_iov, just cast the netmem to struct page
-+	 * unconditionally by clearing NET_IOV if any, no matter whether
-+	 * it comes from struct net_iov or struct page.  This should be
-+	 * adjusted once the offset is no longer shared.
-+	 */
-+	__ClearPageNetpp(__netmem_to_page((__force unsigned long)netmem & ~NET_IOV));
++	if (off + size > end)
++		return -EACCES;
 +
- 	netmem_set_pp(netmem, NULL);
- }
- 
-
-base-commit: e1f5bb196f0b0eee197e06d361f8ac5f091c2963
++	return 0;
++}
++
++static bool memcg_ops_is_valid_access(int off, int size, enum bpf_access_type type,
++	const struct bpf_prog *prog,
++	struct bpf_insn_access_aux *info)
++{
++	return bpf_tracing_btf_ctx_access(off, size, type, prog, info);
++}
++
++const struct bpf_verifier_ops bpf_memcg_verifier_ops = {
++	.get_func_proto = bpf_base_func_proto,
++	.btf_struct_access = memcg_ops_btf_struct_access,
++	.is_valid_access = memcg_ops_is_valid_access,
++};
++
++static int cfi_try_charge_memcg(struct try_charge_memcg *tcm)
++{
++	return -EINVAL;
++}
++
++static struct memcg_ops cfi_bpf_memcg_ops = {
++	.try_charge_memcg = cfi_try_charge_memcg,
++};
++
++static int bpf_memcg_ops_init(struct btf *btf)
++{
++	return 0;
++}
++
++static int bpf_memcg_ops_check_member(const struct btf_type *t,
++				const struct btf_member *member,
++				const struct bpf_prog *prog)
++{
++	u32 moff = __btf_member_bit_offset(t, member) / 8;
++
++	switch (moff) {
++	case offsetof(struct memcg_ops, try_charge_memcg):
++	case offsetof(struct memcg_ops, refcount):
++	case offsetof(struct memcg_ops, destroy_done):
++		break;
++	default:
++		if (prog->sleepable)
++			return -EINVAL;
++	}
++
++	return 0;
++}
++
++static int default_try_charge_memcg(struct try_charge_memcg *tcm)
++{
++	return 0;
++}
++
++static int bpf_memcg_ops_init_member(const struct btf_type *t,
++				const struct btf_member *member,
++				void *kdata, const void *udata)
++{
++	struct memcg_ops *ops = (struct memcg_ops *)kdata;
++	u32 moff = __btf_member_bit_offset(t, member) / 8;
++	int ret;
++
++	if (moff == offsetof(struct memcg_ops, refcount)) {
++		ret = percpu_ref_init(&ops->refcount, memcg_ops_release, 0, GFP_KERNEL);
++		if (ret) {
++			pr_err("Failed to percpu_ref_init: %d\n", ret);
++			return ret;
++		}
++
++		init_completion(&ops->destroy_done);
++
++		if (!ops->try_charge_memcg)
++			ops->try_charge_memcg = default_try_charge_memcg;
++	}
++
++	return 0;
++}
++
++static int bpf_memcg_ops_reg(void *kdata, struct bpf_link *link)
++{
++	struct memcg_ops *new_ops, *old_ops;
++
++	/*
++	 * Check if ops already exists.
++	 * just get old_ops but not keep lock because
++	 * caller has locked st_map->lock.
++	 */
++	rcu_read_lock();
++	old_ops = rcu_dereference(memcg_ops);
++	rcu_read_unlock();
++	if (old_ops)
++		return -EEXIST;
++
++	new_ops = kdata;
++
++	/* Atomically set ops pointer (should be NULL at this point) */
++	old_ops = rcu_replace_pointer(memcg_ops, new_ops, true);
++	WARN_ON(old_ops);
++
++	static_branch_enable(&memcg_bpf_enable);
++
++	return 0;
++}
++
++/* Unregister the struct ops instance */
++static void bpf_memcg_ops_unreg(void *kdata, struct bpf_link *link)
++{
++	struct memcg_ops *ops;
++
++	static_branch_disable(&memcg_bpf_enable);
++
++	/* Not lock same with bpf_memcg_ops_reg. */
++	ops = rcu_replace_pointer(memcg_ops, NULL, true);
++	if (ops) {
++		synchronize_rcu();
++
++		percpu_ref_kill(&ops->refcount);
++		wait_for_completion(&ops->destroy_done);
++
++		percpu_ref_exit(&ops->refcount);
++	}
++}
++
++static struct bpf_struct_ops bpf_memcg_ops = {
++	.verifier_ops = &bpf_memcg_verifier_ops,
++	.init = bpf_memcg_ops_init,
++	.check_member = bpf_memcg_ops_check_member,
++	.init_member = bpf_memcg_ops_init_member,
++	.reg = bpf_memcg_ops_reg,
++	.unreg = bpf_memcg_ops_unreg,
++	.name = "memcg_ops",
++	.owner = THIS_MODULE,
++	.cfi_stubs = &cfi_bpf_memcg_ops,
++};
++
++static int __init memcontrol_bpf_init(void)
++{
++	int err;
++
++	RCU_INIT_POINTER(memcg_ops, NULL);
++
++	err = register_bpf_struct_ops(&bpf_memcg_ops, memcg_ops);
++	if (err) {
++		pr_warn("error while registering bpf memcg_ops: %d\n", err);
++		return err;
++	}
++
++	pr_info("bpf memcg_ops registered successfully\n");
++	return 0;
++}
++late_initcall(memcontrol_bpf_init);
+diff --git a/mm/memcontrol_bpf.h b/mm/memcontrol_bpf.h
+new file mode 100644
+index 000000000000..ee2815fc3d05
+--- /dev/null
++++ b/mm/memcontrol_bpf.h
+@@ -0,0 +1,103 @@
++/* SPDX-License-Identifier: GPL-2.0-or-later */
++/* memcontrol_bpf.h - Memory Controller eBPF support
++ *
++ * Author: Hui Zhu <zhuhui@kylinos.cn>
++ * Copyright (C) 2025 KylinSoft Corporation.
++ */
++
++#ifndef _LINUX_MEMCONTROL_BPF_H
++#define _LINUX_MEMCONTROL_BPF_H
++
++#ifdef CONFIG_MEMCG_BPF
++
++struct try_charge_memcg {
++	struct mem_cgroup *memcg;
++	gfp_t gfp_mask;
++	unsigned long nr_pages;
++	struct mem_cgroup *mem_over_limit;
++	unsigned int reclaim_options;
++	bool charge_done;
++};
++
++struct memcg_ops {
++	int (*try_charge_memcg)(struct try_charge_memcg *tcm);
++	struct percpu_ref refcount;
++	struct completion destroy_done;
++};
++
++extern struct memcg_ops __rcu *memcg_ops;
++DECLARE_STATIC_KEY_FALSE(memcg_bpf_enable);
++
++static inline struct memcg_ops *memcg_ops_get(void)
++{
++	struct memcg_ops *ops;
++
++	rcu_read_lock();
++	ops = rcu_dereference(memcg_ops);
++	if (likely(ops)) {
++		if (unlikely(!percpu_ref_tryget_live(&ops->refcount)))
++			ops = NULL;
++	}
++	rcu_read_unlock();
++
++	return ops;
++}
++
++static inline void memcg_ops_put(struct memcg_ops *ops)
++{
++	percpu_ref_put(&ops->refcount);
++}
++
++static inline unsigned long
++bpf_try_charge_memcg(struct mem_cgroup *memcg,
++		     gfp_t gfp_mask,
++		     unsigned int nr_pages,
++		     struct mem_cgroup *mem_over_limit,
++		     unsigned int reclaim_options,
++		     bool charge_done)
++{
++	struct memcg_ops *ops;
++	struct try_charge_memcg tcm;
++	int update_nr_pages;
++
++	if (likely(!static_branch_unlikely(&memcg_bpf_enable)))
++		goto out;
++
++	ops = memcg_ops_get();
++	if (unlikely(!ops))
++		goto out;
++
++	tcm.memcg = memcg;
++	tcm.gfp_mask = gfp_mask;
++	tcm.nr_pages = nr_pages;
++	tcm.mem_over_limit = mem_over_limit;
++	tcm.reclaim_options = reclaim_options;
++	tcm.charge_done = charge_done;
++
++	update_nr_pages = ops->try_charge_memcg(&tcm);
++
++	memcg_ops_put(ops);
++
++	if (update_nr_pages && !charge_done && tcm.nr_pages &&
++	    tcm.nr_pages <= HPAGE_PMD_NR)
++		nr_pages = tcm.nr_pages;
++
++out:
++	return nr_pages;
++}
++
++#else
++
++#define bpf_try_charge_memcg(memcg, gfp_mask, nr_pages, \
++			     mem_over_limit, reclaim_options, \
++			     charge_done) \
++			     ((void)memcg, \
++			      (void)gfp_mask, \
++			      nr_pages, \
++			      (void)mem_over_limit, \
++			      (void)reclaim_options, \
++			      (void)charge_done)
++
++#endif
++
++#endif
 -- 
-2.17.1
+2.43.0
 
