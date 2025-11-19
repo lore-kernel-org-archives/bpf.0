@@ -1,113 +1,91 @@
-Received: from smtp-o-1.desy.de (smtp-o-1.desy.de [131.169.56.154])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69DE42D59F7
-	for <bpf@vger.kernel.org>; Wed, 19 Nov 2025 16:04:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=131.169.56.154
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0982936E555;
+	Wed, 19 Nov 2025 16:07:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763568251; cv=none; b=ircBQuiGtWGHomfQKIRX6Kk86xMERnGTIUVzW8SphgjPqAGFDXnlXVnh09bcZRjG9vdv0kEbqRMNXgBDtkAHRtrK8MgXO/+XiG4HVQKYqnGzRdSsb8h66UuWlpDowOU/90OGN5JZpwoCjGDqEzxyIxZT/ntj9elBBfbvgjVhHOA=
+	t=1763568435; cv=none; b=M9eF34YaBxduztuhYyo9sCS2/AENWCLB/wHdIsAxuGNEh5zId/Gj+iOxbZJdUyhTfyXcScl1g16Kp0tscH6rvfaKnv5KkQcqMlgbaFj0mnTSj0bv5rCIQI16A8VHFIiMpMTeaN5hvmsLKoWRnQLS832n/8d70/1bLd7qx44SCe0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763568251; c=relaxed/simple;
-	bh=D1dvfyFZn4fTD9P3L+aKcIof/xv5wKDsxEsuv77eNVs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=tUT2BI0+Ds5rmBfj0bDh+OFY+S/7k408CbqQpT5qjdHvfeZg04Uis9aLEErM6IaFNzcG5HkXKvUIB5TPV7SNanBLgc3oNRaU8W5UiSy8gFOkHslB8y2my9JBjJWgJstgdVTk70cH8PX8aqOgf3uz3iVUqtuXhI0YePK7cqrnQjo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=xfel.eu; spf=none smtp.mailfrom=mail.desy.de; dkim=pass (1024-bit key) header.d=xfel.eu header.i=@xfel.eu header.b=LjTgYk2J; arc=none smtp.client-ip=131.169.56.154
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=xfel.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mail.desy.de
+	s=arc-20240116; t=1763568435; c=relaxed/simple;
+	bh=qRmXNqvNBQDh97190xHWs7o5wzuF2E7C7rnGx3N7xAc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aiV5ZGYPIMBEF7024cv2PWrp32gM6PxDoc6mo696BVf1H57moKusNOR2+l9DfYjYIAIYh9tQi0WDZjh5ytjUNimGRvyNHtcvv7fmZ92YYKTV7lAcd1JTUAD13u42pxE27H1nVDTIUJ0dcps2FkL8InDVCuRjU1URWdPDZhIT/Kw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b7KQxCxa; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=xfel.eu header.i=@xfel.eu header.b="LjTgYk2J"
-Received: from smtp-buf-2.desy.de (smtp-buf-2.desy.de [IPv6:2001:638:700:1038::1:a5])
-	by smtp-o-1.desy.de (Postfix) with ESMTP id 6E49811F74C
-	for <bpf@vger.kernel.org>; Wed, 19 Nov 2025 17:03:58 +0100 (CET)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp-o-1.desy.de 6E49811F74C
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xfel.eu; s=default;
-	t=1763568238; bh=aXRl5LbIe4SIxI+2jkbPFXSrdC9cHgsePOTDOOLMIW4=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=LjTgYk2JNptea4uz75Vz6WF/3FFuNtMjOcMupXj1Vz5g0rRhvurKmPOdx/tXIfzZK
-	 SsRjpk+0qN25IyIpc0IeS1EuyAdSk7OHTgv+GsM8G1jzT+gvXX6qdqrBSpq50SUaqc
-	 HCOE8KOho2kVIUfH6rNfzxSklhDqV/On9ZDuqoQk=
-Received: from smtp-m-1.desy.de (smtp-m-1.desy.de [IPv6:2001:638:700:1038::1:81])
-	by smtp-buf-2.desy.de (Postfix) with ESMTP id 603DF120043;
-	Wed, 19 Nov 2025 17:03:58 +0100 (CET)
-Received: from c1722.mx.srv.dfn.de (c1722.mx.srv.dfn.de [194.95.239.47])
-	by smtp-m-1.desy.de (Postfix) with ESMTP id 51F7A40044;
-	Wed, 19 Nov 2025 17:03:58 +0100 (CET)
-Received: from smtp-intra-1.desy.de (smtp-intra-1.desy.de [IPv6:2001:638:700:1038::1:52])
-	by c1722.mx.srv.dfn.de (Postfix) with ESMTP id 9721D100033;
-	Wed, 19 Nov 2025 17:03:57 +0100 (CET)
-Received: from exflqr30474.desy.de (exflqr30474.desy.de [192.168.177.248])
-	by smtp-intra-1.desy.de (Postfix) with ESMTP id 7738780046;
-	Wed, 19 Nov 2025 17:03:57 +0100 (CET)
-Received: by exflqr30474.desy.de (Postfix, from userid 31112)
-	id 70061201AE; Wed, 19 Nov 2025 17:03:57 +0100 (CET)
-From: Martin Teichmann <martin.teichmann@xfel.eu>
-To: bpf@vger.kernel.org
-Cc: eddyz87@gmail.com,
-	ast@kernel.org,
-	andrii@kernel.org,
-	Martin Teichmann <martin.teichmann@xfel.eu>
-Subject: [PATCH v6 bpf-next 0/4] bpf: properly verify tail call behavior
-Date: Wed, 19 Nov 2025 17:03:51 +0100
-Message-ID: <20251119160355.1160932-1-martin.teichmann@xfel.eu>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <622f4e7645e426ae180e4511877eb90ceb1b1063.camel@gmail.com>
-References: <622f4e7645e426ae180e4511877eb90ceb1b1063.camel@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b7KQxCxa"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 581A2C4CEF5;
+	Wed, 19 Nov 2025 16:07:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763568434;
+	bh=qRmXNqvNBQDh97190xHWs7o5wzuF2E7C7rnGx3N7xAc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=b7KQxCxafz4qEtGxChHspekYVsdbRsj9qiAz3vFLObGmqzZL1lrFzsBm8ciNbo6bq
+	 6BGzn/8DBsreJedaX+njzYw+E6jL4GPtRfRmybU9J+KrygcbHjUiE0fs+uh/QE0hHP
+	 JPY4vDH00zQ7d98qcxtDlDEuoR0pfukrqJyDU+rNCe9lhxeqcGCciOmDsRIRbLDTuN
+	 FKn8BquQeP2swUUvrzc0OrDxuxM5jAUXtAsRKDWgQX7VTQ3Zw2+2W9bhY+dJf+Uryl
+	 i+UbaOQQNdPcqbzi+7QtAn/c0/dF25lZ0w5/bf1XZ3TSyj50NsbNJNzj6X6G7jCNd3
+	 KMf70HOU7D2Tg==
+Date: Wed, 19 Nov 2025 06:07:13 -1000
+From: Tejun Heo <tj@kernel.org>
+To: Hui Zhu <hui.zhu@linux.dev>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Michal Hocko <mhocko@kernel.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Muchun Song <muchun.song@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>, Kees Cook <kees@kernel.org>,
+	Jeff Xu <jeffxu@chromium.org>, mkoutny@suse.com,
+	Jan Hendrik Farr <kernel@jfarr.cc>,
+	Christian Brauner <brauner@kernel.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Brian Gerst <brgerst@gmail.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+	cgroups@vger.kernel.org, bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, Hui Zhu <zhuhui@kylinos.cn>,
+	Geliang Tang <geliang@kernel.org>
+Subject: Re: [RFC PATCH 1/3] memcg: add eBPF struct ops support for memory
+ charging
+Message-ID: <aR3rMWgTWHryaZ6n@slm.duckdns.org>
+References: <cover.1763457705.git.zhuhui@kylinos.cn>
+ <15f95166c6c516f303f3092e74c88ace5164bdf0.1763457705.git.zhuhui@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <15f95166c6c516f303f3092e74c88ace5164bdf0.1763457705.git.zhuhui@kylinos.cn>
 
-Hi Eduard, Hi Alexei, Hi List,
+Hello, Hui.
 
-thanks for the good feedback.
+On Wed, Nov 19, 2025 at 09:34:06AM +0800, Hui Zhu wrote:
+> Handlers can inspect this context and modify certain fields
+> (e.g., nr_pages) to adjust reclamation behavior. The design
+> enforces single active handler to avoid conflicts.
 
-Some details:
+Other folks would know a lot better how this should hook into memcg, but
+given that this is a cgroup feature, this should allow hierarchical
+delegation. It probably would be a good idea to aling it with the bpf OOM
+handler support that Roman is working on.
 
-Eduard wrote:
-
-> > +			env->insn_idx--;
->
-> This insn_idx adjustment is a bit unfortunate, but refactoring getting
-> rid of it is probably out of scope for this series.
-
-Indeed. I tried hard to avoid it but couldn't find a way that would not have
-let this patch explode. Similarly, check_helper_call by now ends with a lot
-of if's checking func_id. This should at some point probably be replaced by
-a switch statement.
-
-Eduard also wrote:
-
-> > +__msg("mark_precise: frame0: parent state regs=r0 stack=:  R0=Pscalar() R6=map_value(map=.data.vals,ks=4,vs=16) R10=fp0")
->
-> Nit: I'd add a couple more lines to this __msg sequence to check that
->      backtrack_insn correctly moved one frame down.
-
-I added some more __msg lines where it enters the subprogram, that's where the
-patch changes behavior.
-
-Cheers
-
-Martin
-
-Eduard Zingerman (2):
-  bpf: correct stack liveness for tail calls
-  bpf: test the correct stack liveness of tail calls
-
-Martin Teichmann (2):
-  bpf: properly verify tail call behavior
-  bpf: test the proper verification of tail calls
-
- include/linux/bpf_verifier.h                  |  5 +-
- kernel/bpf/liveness.c                         |  7 ++-
- kernel/bpf/verifier.c                         | 60 +++++++++++++++++--
- .../selftests/bpf/progs/verifier_live_stack.c | 50 ++++++++++++++++
- .../selftests/bpf/progs/verifier_sock.c       | 39 +++++++++++-
- .../bpf/progs/verifier_subprog_precision.c    | 53 ++++++++++++++++
- 6 files changed, 202 insertions(+), 12 deletions(-)
+Thanks.
 
 -- 
-2.43.0
-
+tejun
