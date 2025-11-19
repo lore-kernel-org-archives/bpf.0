@@ -1,116 +1,118 @@
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D79930CD88
-	for <bpf@vger.kernel.org>; Wed, 19 Nov 2025 11:13:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C147350A31
+	for <bpf@vger.kernel.org>; Wed, 19 Nov 2025 11:18:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763550806; cv=none; b=O8O3q0XB1ADK+ZtqglqmeeKu8XO7NzY+WaRlCgmNRuDYRgcaDXlh8XJDrvX44HacLMWjuBZwjgU9nxVq9aeRDLuBLJLBMOLwDIsKeJeknmKPYS3Uth7XSFszR9kK9a1jHJAbKXF1/5sL7A6grOj7TpZEPddKjiVFaIG9UVF9XfY=
+	t=1763551117; cv=none; b=cL9otvW9NQQK+HVTgGSYAWdB/T1lMaj1MniGegAhGMycg1pW3N0uWe7F7WT65kfIYis1xZVGTzRWtCenDgHZJ+pSQ1jiYMRV9mzWk1jg31uv/f99Gy8YQMbPR/7e9/HE+2eVTO8MBMx5uNhLo8AzUCaEje0of1zhhjBgglu+9CM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763550806; c=relaxed/simple;
-	bh=nb+mJ6g8xbD56YjmKiO9zA1XoGg1t2NzK6WrpvjSkW0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DKS+nAyEV4QiZwhRxjyWoGHzfigQV9IMTifIr8iFsUKBLBKbpdxxKY5XnB+cXpfKLtyzXZOBPNsp8U/8vxYizzrMqdO3MBCpARpifYSP45nLCIwjJD8me04srTUf2SYXbf6h93j1wOP5q/z1mN/bll6CgFtZFQ5uEMd9nq0t0CM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VwK0BLmo; arc=none smtp.client-ip=209.85.221.44
+	s=arc-20240116; t=1763551117; c=relaxed/simple;
+	bh=wnKmrEX+pbTq0ERf5shSOaxsLKBHldzbETjRuzX256M=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ZotqanjcBrK5blYV9LFFtxa4v1+1kabkDfSz8TY/u35hjqDF5ZvMyr2XSdfKagV5OBR//KHgZwfLoXIy4Sb8/q9/WZborhyvJe2YE9rOXyfpL9Z4iY9xYnLviX5RxjOxusdlVb2G3BUro+P2hXs9NXN/1hV7iYlCdaWKrMgDX4I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Xq+3q1wD; arc=none smtp.client-ip=209.85.128.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VwK0BLmo"
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-42b32900c8bso3766138f8f.0
-        for <bpf@vger.kernel.org>; Wed, 19 Nov 2025 03:13:24 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Xq+3q1wD"
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-4779cb0a33fso46432655e9.0
+        for <bpf@vger.kernel.org>; Wed, 19 Nov 2025 03:18:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763550803; x=1764155603; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=5IjPLdQYgzo4OkqbW+Jd1GzPleISY9kcaASlAVZ+fqA=;
-        b=VwK0BLmoOmvkQXfsdNpRSasuSOWO2h/SrWT0WiDhErPmMsFeTu9Pc4ppbi/X+edSCD
-         ibiOXozcAKDJVWGHJJTHZ2ok6GXsldODckwlpa4CMI7AYLJpizbtQ7tSF37Epgg8/1bL
-         iws8ouAG2C6UIrHd5HFv/OLo8xM7/hh/AxOvt23ODsKOCDyCZcAL2YSufRP3njZgOnyA
-         XL0cNPKBIusmZE8UFr5IMHgsC/eXHsPhCzsXdD8j4HNlHSqNcwiT9HgPxGdnvf6Dbmlt
-         wuWNBkSuQSyfHhZ/vmhKyUfayaIZNtOws7mnYWCsylTt/jW/M26prKGhp659ot7ZMENr
-         doog==
+        d=gmail.com; s=20230601; t=1763551113; x=1764155913; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=aq5MP13d+IT3N1JOi0PtzwT5WRhKDdRZny9LOhUMISs=;
+        b=Xq+3q1wDfq3N8k+jvOQPAYcaZsIhQFDM7ozKoUn/SvWCPY0WJ8SWoI9Y+Xcqp/RZZY
+         7vN2gT9xCWtrqfClnaCLiaASa3hMJDTzB8xw5ADOd5jeW+RPRLLGI4ZICuEzs38KYGAS
+         +1k2GxQmOFz+UTlhRewJsR0xRXsXZCMzyAlT1kbq6RfBXnwZ1MKdbSd2tLQHEoR79E4H
+         LlgfWHOLFrOmlAbPP9G+26AlKxjDl+umTv8H+4f0JK7ys1JxDLijGRqGHq/G5/YCas3L
+         KTiZ6pa9KMpxB+LggM/6h3+bA7iHVTHwCk/S+rbyT2QdlNYDUEdkM/fnNVBg1flJXFbX
+         +XXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763550803; x=1764155603;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5IjPLdQYgzo4OkqbW+Jd1GzPleISY9kcaASlAVZ+fqA=;
-        b=REao2WmR070e0+TEgRH2Tu9qSA1V6fHovJaBMr/FGzA0ebqYZkHQjtzZQvYdKlsXXC
-         x9mqwpsRqNm7MknAKgpdEfo2nAiOKc7ZcGOH7IvguaUvOIb6azAMbdt8MjrwktlS60/Y
-         NyapEOVhtVchboJFpB4anIE4kATSlgwJFGyelCIj/gpCE9GF6eT0r0XhFy2d2zNvZlWi
-         fSyZS3mpkA/A2svDH0+I63nY1TIHmAuhMyhs9/T9H5VfXFkV5EgNUK0yAU9RpBLXxu+w
-         LPtRfNO0J+Q6oNbQYk/8/RKXhOmTx1dGhzWIUDvj6kNidj2ptOS7EhRJdYOMmiVOOX6t
-         4F+Q==
-X-Gm-Message-State: AOJu0Yw+p2H29F4s+VxnyC1nQ6VRSaQdjB37vJO5o6mrEDOZVvaC9r8h
-	nKMxHO8OikP6RuxH8WFb7pRsI2gI7982J2VrbUQF/iz5m9HXfuDFvG8Izwrm1w==
-X-Gm-Gg: ASbGncvhuuDTy/Wi/wOSmCt63kZQFjPg7WjncMacn3wfK0qXu0YumLl+H4ubZtJhB2x
-	drIbPqXzqvxcwOdaB3n76DxSw97BiXAO/v6ww8I99Rn5xjEdEqLwKlyRPr6ViIxNYY9ZaJzE41j
-	XdmkPlJeXLYizNUoyFvVXiBSi/0sHJsgE82dsZttz6I/0imta5JfZOC8bOg7ZEFUoZRWctaC/h0
-	LkMEj5VvdkaVz4e3FVAkSBPFhPHPqhrOaBatdwlHlm2Oe/sDtrb2Kgx3sr5zYKO0qs7J7ubCyN3
-	UK5rwDbAiodE1LLk4p5JEIsIrUhWVS90hGZ37jkfHd0ZlrjHvmMD+TBaNyVygAM/mz3ca1sj8Jr
-	sXmrUkutLiuGjCTsPUOEgkza3eFOL9AYE5dcBA/6uHVnN1yLndk5z46RRdPAvTkDqgGaMFkA2FE
-	CORP2kZ81U3Mz02icq26TC
-X-Google-Smtp-Source: AGHT+IGF4Hup7dzgZ977iG91B9iMul0xQ5DqW5f4+85XuNqhEZrF/RDq3PvzNREE2BZRD/GHOwqo1w==
-X-Received: by 2002:a05:6000:430a:b0:42b:3ed2:c08b with SMTP id ffacd0b85a97d-42cb1fc7b58mr2086363f8f.51.1763550803228;
-        Wed, 19 Nov 2025 03:13:23 -0800 (PST)
-Received: from mail.gmail.com ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42b53f1fd50sm37634471f8f.38.2025.11.19.03.13.22
+        d=1e100.net; s=20230601; t=1763551113; x=1764155913;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aq5MP13d+IT3N1JOi0PtzwT5WRhKDdRZny9LOhUMISs=;
+        b=aHCBlCXyEtXns53eVHH4+6HKVJkIFZqmw+PXl5tjJzSntFWbL1xoprCgEpZ4Vuvgbh
+         8Zx297/4LXYQE2abdSmebL4LVmjCMx/MOelw6x0/vduNNtIieDnVPZ+jyqm6JssphSb6
+         RCGAYLuqrpdjAr/nSoIxgA3L8/8nmFooIJG7KivQuHAZTblfF4pELXlYt65lv4e8qC0s
+         dwKGwUWzfBBGcnK7b/WCNSoDFFBUww9Q42CXOG7YHoq3UXYqRN4p/b9CU33dsNcJZFiS
+         R0LfSX33UcPczDrKviH8N/4Hlivok+PKoPHfu1EdrRtv0MrKxp8EKXQ8hru8xuXK0zTi
+         ekKA==
+X-Gm-Message-State: AOJu0YyYl7Ybmp4LpZ+LTDDPqDZo2xksfvQTkhlTtWv0Uwlc9GsvKqnS
+	aWyZdVJrKzFFOB8XFWO6Kmyqv+k4VaTHhDnpNgRdbsLHwJuab1jk4UlbfCC9wA==
+X-Gm-Gg: ASbGncuAcDWZMPjQwavXPqmKIB3DzXlIqiYELtSGfIJMAm7bH6VHRLDDLZx4P/epxp/
+	A9Bm0keqjjtKvIBBN3IQpZ5nBDvTK6mcBVL15J+wNdJHOnmB0GliSWoFo3Wt18sHuRnV/GsaP7+
+	Fq3p4NRgK6NYCyOiV5JMmsoGcNV6RMC0QF3FNd95Hs3uN+NoFJYTQ8kJtfkXtVU5hiQnMo7uV7V
+	f5vMgmOtesJNsC4PjAKE16gvXcEyvtTRxJ5x7q4d9SaLgcZ5oVCskZ6Zr1mctP0Ub6c0rs7FE9k
+	d4o/9NcSIJ0WBwkzvHI/YCctgCedPbuSpJuIkP7ERAIiyhqoFg79M69LvH2ykugbdBnujk1a6vW
+	978MZWn80HfUB4MGtcy7doOWrhKzcthEvsqFLtp6Nvco3pwVmzkBQoPuYtVDTLr6/J0jgFM+iQ2
+	6y9jk4gtzZLrofja4ytRUI52fALJRxSg==
+X-Google-Smtp-Source: AGHT+IFWW315R8A6Z2zyhbUx+Yl5My/8lq7M5X+Bm+a4cX63MhZ+GL9CoOlub1Uiiibw/E2v6sfW3Q==
+X-Received: by 2002:a05:600c:1549:b0:477:9ce2:a0d8 with SMTP id 5b1f17b1804b1-4779ce2a4ffmr146102195e9.0.1763551113064;
+        Wed, 19 Nov 2025 03:18:33 -0800 (PST)
+Received: from localhost.localdomain ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-477b0ffef34sm42892475e9.2.2025.11.19.03.18.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Nov 2025 03:13:22 -0800 (PST)
-Date: Wed, 19 Nov 2025 11:20:14 +0000
+        Wed, 19 Nov 2025 03:18:32 -0800 (PST)
 From: Anton Protopopov <a.s.protopopov@gmail.com>
-To: Dan Carpenter <dan.carpenter@linaro.org>
-Cc: bpf@vger.kernel.org
-Subject: Re: [bug report] bpf, x86: add support for indirect jumps
-Message-ID: <aR2n7mrFwjucPsYm@mail.gmail.com>
-References: <aR2BN1Ix--8tmVrN@stanley.mountain>
+To: bpf@vger.kernel.org
+Cc: Anton Protopopov <a.s.protopopov@gmail.com>,
+	Dan Carpenter <dan.carpenter@linaro.org>
+Subject: [PATCH bpf-next] bpf: add a check to make static analysers happy
+Date: Wed, 19 Nov 2025 11:25:17 +0000
+Message-Id: <20251119112517.1091793-1-a.s.protopopov@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aR2BN1Ix--8tmVrN@stanley.mountain>
+Content-Transfer-Encoding: 8bit
 
-On 25/11/19 11:35AM, Dan Carpenter wrote:
-> Hello Anton Protopopov,
-> 
-> Commit 493d9e0d6083 ("bpf, x86: add support for indirect jumps") from
-> Nov 5, 2025 (linux-next), leads to the following Smatch static
-> checker warning:
-> 
-> 	kernel/bpf/verifier.c:17907 copy_insn_array()
-> 	error: 'value' dereferencing possible ERR_PTR()
-> 
-> kernel/bpf/verifier.c
->     17898 static int copy_insn_array(struct bpf_map *map, u32 start, u32 end, u32 *items)
->     17899 {
->     17900         struct bpf_insn_array_value *value;
->     17901         u32 i;
->     17902 
->     17903         for (i = start; i <= end; i++) {
->     17904                 value = map->ops->map_lookup_elem(map, &i);
->     17905                 if (!value)
->     17906                         return -EINVAL;
-> --> 17907                 items[i - start] = value->xlated_off;
-> 
-> ->map_lookup_elem() returns error pointers on error and it returns NULL
-> (I guess if there isn't an error but the element is not found).
+In [1] Dan Carpenter reported that the following code makes the
+Smatch static analyser unhappy:
 
-I didn't check the value here, because in this case map_lookup_elem()
-always returns a correct value or NULL (= index is outside of boundaries).
+        17904       value = map->ops->map_lookup_elem(map, &i);
+        17905       if (!value)
+        17906               return -EINVAL;
+    --> 17907       items[i - start] = value->xlated_off;
 
-From BPF point of view, map_lookup_elem must return valid pointer, or
-null (see the bpf_map_lookup_elem_proto in kernel/bpf/helpers.c). But
-some lookup functions might be called from kernel (as in this case)
-or from userspace via the syscall. So I'll send a fix to add a check
-here and make the static checker happy.
+The analyser assumes that the `value` variable may contain an error
+and thus it should be properly checked before the dereference.
+On practice this will never happen as array maps do not return
+error values in map_lookup_elem, but to make the Smatch and other
+possible analysers happy this patch adds a formal check.
 
->     17908         }
->     17909         return 0;
->     17910 }
-> 
-> regards,
-> dan carpenter
+Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
+Closes: https://lore.kernel.org/bpf/aR2BN1Ix--8tmVrN@stanley.mountain/ [1]
+Fixes: 493d9e0d6083 ("bpf, x86: add support for indirect jumps")
+Signed-off-by: Anton Protopopov <a.s.protopopov@gmail.com>
+---
+ kernel/bpf/verifier.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 098dd7f21c89..93716da57d48 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -17929,7 +17929,13 @@ static int copy_insn_array(struct bpf_map *map, u32 start, u32 end, u32 *items)
+ 
+ 	for (i = start; i <= end; i++) {
+ 		value = map->ops->map_lookup_elem(map, &i);
+-		if (!value)
++		/*
++		 * map_lookup_elem of an array map will never return an error,
++		 * but not checking it makes some static analysers to worry
++		 */
++		if (IS_ERR(value))
++			return PTR_ERR(value);
++		else if (!value)
+ 			return -EINVAL;
+ 		items[i - start] = value->xlated_off;
+ 	}
+-- 
+2.34.1
+
