@@ -1,64 +1,64 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1937D2E62B5;
-	Wed, 19 Nov 2025 13:24:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DD85359718;
+	Wed, 19 Nov 2025 13:24:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763558675; cv=none; b=b6df14e2iL2UBMgzt5O6TR4G2M3F2N9qK5Brf/vfNe2yYnwxTkSrPy8zH6k0VT6ab7wAD4jdw3LXeYNYz321Zasv8UG5x9gBfz2gSgmsnVilz9ZGk4yQu828wTYifMhymRXQQoPWKlothCrsb+JnfXvD8H8utzFT1/9xnI+Fu7w=
+	t=1763558679; cv=none; b=WuTWJXRe+G9TQ5tiUjPcOwVgcPaD2G/Cei1HIwM4SV6w59WWXpy/psBLcBfA888Cp9UeSSOU6+xBIUhDQnuxUDGE5OsYfoYVrEQV2St6VVoj9UCSlF6mcTagUM6CDpSQavdeo7SsiAA5jESC6HSrTnzj8pMsWsFOHFRQ4tPG1Wo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763558675; c=relaxed/simple;
-	bh=PD5KjV0dW4MzNSSIuhKUR08ZjfvgDX5ar77ah0hVkUI=;
+	s=arc-20240116; t=1763558679; c=relaxed/simple;
+	bh=apZVgnomkEKWMSLke0CJxFF7X6gXXfBnrgG8aI7U76I=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=moLpMUugDL+6+dlqW9Qm1aJ6lGKJ16pB5jR5VIt+32nYsKHoF6o6XDiAht1SfTyHd4ezChoS1gtqlrco3f1JCHBsIUBOu9HqCw3Kzt5FL6ybc3MG2QUivL9XQOJNJZnsYX2Zj3dp/rDIrnqYYNYsIvVDbLeRkTmKq0wgFbtR4ks=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=ojnpFOpm; arc=none smtp.client-ip=148.163.156.1
+	 MIME-Version; b=uVsnD8G7IDpDR6ewFqD9cCvblKFeNKaKguPf5Y4EpCcByQyI4J9HlZEvTvZ9D0SN+/2rimEeXi5+rpnvn/Uy8kSef8wZgr6F8+L7p8VfPOmO+r2bFskhQTd2N8BV3GWNM63PQxHHPww2ZmkFK2rJ/EVBJVbHwQ9kpPQDjwGf2c0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=SelcCS2Q; arc=none smtp.client-ip=148.163.158.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="ojnpFOpm"
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5AJ7lPJS018097;
-	Wed, 19 Nov 2025 13:23:38 GMT
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="SelcCS2Q"
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5AJ8vQ9F007244;
+	Wed, 19 Nov 2025 13:23:36 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
 	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=4y3LM4t1myVzp8ykI
-	RFVERQ9BO+2u20q4avccARI3e0=; b=ojnpFOpmkw+dE3C898yuZ8KmM8BDckVFy
-	LhPLqU+DO4SC2zBYXeUwUdiCrA2kuL0N6+VJkejlKDv6fGSSz7HZ6oSsxtGbVP8e
-	TqKmPD6fkIz1aBq6KkLKw1ruO5U1WIpo7ZqcFKcsifBN1lRKtgPjJJdxz+Xrl92n
-	T2OnCLQ3NdBaJlT96eOTsCh5zBwOtsbbyHDy9PTjl00dyiOCslfztRscK4M9pprb
-	RQhAbXv3RWP/daGMiYAvqGrTnqtcoLQk81lumUctGqq4w0LCrOvidFZd8UhqT56I
-	KBCMghXOzheqs+HrKPXV0U/pmKkjFj90BznIoWRgQTCeIK65y2IhA==
+	:mime-version:references:subject:to; s=pp1; bh=nNJgzz0krS2ConCdQ
+	K9UJQ5jnwsblOsZmcy5cf7ngeM=; b=SelcCS2QXtcy4T2YXRxklaNzxBG+FUbUX
+	EzSOHCmCMJEPR7FPpMSrlz83nG8KrOIi0dwLoWwZcZr/47B5EYE44b+WMYSjR24N
+	sl5OByx9FPbUHiLRGnKeJdlzwMeTXIDq3sdflz/Yi757w+1iweR3A20baiqMEQ9j
+	2Ufapug5MPU3bmwokh85PGFjHBuEIO2FLZZsk/k7RIJpCB7Ya/1yMVgK5f6waorM
+	2IZmW+Aoy7lhMOGvDKLqnrnvNd6xmDDYLIGrlpLVZ3fqOIf+gA89BFgzTS/xBYFp
+	+9Z5AWPh7V8Moh2cBUjJwbZmTAlaVEMUwa69D+Ro7iwNRzks+i3+Q==
 Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4aejka0jcn-1
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4aejmsqtsf-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 19 Nov 2025 13:23:38 +0000 (GMT)
-Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 5AJDFsBb018047;
-	Wed, 19 Nov 2025 13:23:37 GMT
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4aejka0jch-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 19 Nov 2025 13:23:37 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5AJBEm2P022434;
+	Wed, 19 Nov 2025 13:23:35 +0000 (GMT)
+Received: from m0360072.ppops.net (m0360072.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 5AJCsBP2015019;
 	Wed, 19 Nov 2025 13:23:35 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4af4un0tc0-1
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4aejmsqtsa-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 19 Nov 2025 13:23:35 +0000
+	Wed, 19 Nov 2025 13:23:35 +0000 (GMT)
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5AJBBSND010411;
+	Wed, 19 Nov 2025 13:23:33 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4af3us8y4w-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 19 Nov 2025 13:23:33 +0000
 Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
-	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 5AJDNVO936045160
+	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 5AJDNUSq42860902
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 19 Nov 2025 13:23:31 GMT
+	Wed, 19 Nov 2025 13:23:30 GMT
 Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id C5A7820040;
-	Wed, 19 Nov 2025 13:23:31 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 234A020040;
+	Wed, 19 Nov 2025 13:23:30 +0000 (GMT)
 Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 450B320043;
-	Wed, 19 Nov 2025 13:23:31 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 99C812004B;
+	Wed, 19 Nov 2025 13:23:29 +0000 (GMT)
 Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
 	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Wed, 19 Nov 2025 13:23:31 +0000 (GMT)
+	Wed, 19 Nov 2025 13:23:29 +0000 (GMT)
 From: Jens Remus <jremus@linux.ibm.com>
 To: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
         bpf@vger.kernel.org, x86@kernel.org, linux-mm@kvack.org,
@@ -87,11 +87,10 @@ Cc: Jens Remus <jremus@linux.ibm.com>, Josh Poimboeuf <jpoimboe@kernel.org>,
         Michal Hocko <mhocko@suse.com>, Mike Rapoport <rppt@kernel.org>,
         Suren Baghdasaryan <surenb@google.com>,
         Vlastimil Babka <vbabka@suse.cz>, Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>
-Subject: [PATCH v12 10/13] unwind_user/sframe: Remove .sframe section on detected corruption
-Date: Wed, 19 Nov 2025 14:23:20 +0100
-Message-ID: <20251119132323.1281768-11-jremus@linux.ibm.com>
+        Vasily Gorbik <gor@linux.ibm.com>
+Subject: [PATCH v12 07/13] unwind_user: Stop when reaching an outermost frame
+Date: Wed, 19 Nov 2025 14:23:17 +0100
+Message-ID: <20251119132323.1281768-8-jremus@linux.ibm.com>
 X-Mailer: git-send-email 2.48.1
 In-Reply-To: <20251119132323.1281768-1-jremus@linux.ibm.com>
 References: <20251119132323.1281768-1-jremus@linux.ibm.com>
@@ -103,37 +102,39 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: dasUaUOJpHebFMhJgsmDmO-6X7S72ESd
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTE1MDAzMiBTYWx0ZWRfX6roNHJ3Sgr5T
- g0w/TinR4dYGNLryUzbMNRTLxhl8RfezYgHQXTH0V+yLtFS/pADobDgArk198VDEycF6FGJaEC1
- a2NlUyWg++C3zT99TEnGq+AG0k3UdOf9z2PjeeARcuXqLm9MUN6tUED45JymJn5VyhGqOR5Ruk/
- vDROOJ+IcV4aBAvq2fAt3CA7lWjATXUQImh98anoIZiOjOcZJag/PfbTdV1HvkftYHXR0gsU1Lr
- I60+U1PmeS+vLhBjVRyKefFCuiMowm69B4LAPN4bqSW9jZWJbUSbdslhHIkrpVJ/jiy4wW+6T2z
- Wxti3biy8H3LHC5l6eLz4r0o+QPOq/Usib8fIBXidztr6ZMvMy/eJU1efVy/MJuzTkaHuZ6ax+b
- WGumD1SSFt2osQwS0n7WEHCh5ZioyQ==
-X-Proofpoint-ORIG-GUID: SLtu1LenXUFsCw6Xve05BxuMJ5AzEBGo
-X-Authority-Analysis: v=2.4 cv=XtL3+FF9 c=1 sm=1 tr=0 ts=691dc4da cx=c_pps
- a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
+X-Proofpoint-ORIG-GUID: qcKsCRgGdXJn90olzyaL8xuhTfECMnlM
+X-Authority-Analysis: v=2.4 cv=Rv3I7SmK c=1 sm=1 tr=0 ts=691dc4d7 cx=c_pps
+ a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
  a=6UeiqGixMTsA:10 a=VkNPw1HP01LnGYTKEx00:22 a=VwQbUJbxAAAA:8 a=7d_E57ReAAAA:8
  a=JfrnYn6hAAAA:8 a=yPCof4ZbAAAA:8 a=mDV3o1hIAAAA:8 a=yMhMjlubAAAA:8
  a=VnNF1IyMAAAA:8 a=Z4Rwk6OoAAAA:8 a=20KFwNOVAAAA:8 a=7mOBRU54AAAA:8
- a=meVymXHHAAAA:8 a=UW-gzNxWWvgdzlWFvSoA:9 a=jhqOcbufqs7Y1TYCrUUU:22
- a=1CNFftbPRP8L7MoqJWF3:22 a=HkZW87K1Qel5hWWM3VKY:22 a=wa9RWnbW_A1YIeRBVszw:22
- a=2JgSa4NbpEOStq-L5dxp:22
+ a=v_yGwNk4s_hqRJXMsLcA:9 a=jhqOcbufqs7Y1TYCrUUU:22 a=1CNFftbPRP8L7MoqJWF3:22
+ a=HkZW87K1Qel5hWWM3VKY:22 a=wa9RWnbW_A1YIeRBVszw:22
+X-Proofpoint-GUID: XXj1-gbW4yNC1v_pD8J7P3UNYUWbpfnq
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTE1MDAzMiBTYWx0ZWRfXz3zsTnOl+jB+
+ zCBFf+kNqKNjJX+xmlRzDaagdx2nQnia82+m3KR++R393gmQHhoIPVwKmDPl6hBE2zdiPySQ98E
+ GzKbFSWVxv697GqXy4oQDZzwte54Eve9317fBBVll+NGDS0ZUqpb5LWfvVqEtATrnLf2zaSead0
+ Jo1Hci0DOdiAA495vUtskLQqfp23MfHxeFu5Vl00354+SQTU+/6yngA+9L2iQedcMpUVE5hYeHS
+ tiaHYYewxfU6JRnYtg5vdjc9vrYcEPRVf90X2DgifD7rzznfJlo11/ao4sqN4UAxH6vFdTiRSEL
+ gujHEEonJma30KSzAdy2NXyP0o4s5669uHgmhDFoEYynabsYB5I9dUN+s6IQzKfTPntmfU+JvE2
+ SPzWzcP4XqVO/5X3+tW/VKlkyX96dA==
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
  definitions=2025-11-19_04,2025-11-18_02,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1015 spamscore=0 bulkscore=0 priorityscore=1501 impostorscore=0
- adultscore=0 lowpriorityscore=0 phishscore=0 suspectscore=0 malwarescore=0
+ malwarescore=0 suspectscore=0 clxscore=1015 phishscore=0 priorityscore=1501
+ spamscore=0 lowpriorityscore=0 impostorscore=0 adultscore=0 bulkscore=0
  classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
  reason=mlx scancount=1 engine=8.19.0-2510240000 definitions=main-2511150032
 
-From: Josh Poimboeuf <jpoimboe@kernel.org>
+Add an indication for an outermost frame to the unwind user frame
+structure and stop unwinding when reaching an outermost frame.
 
-To avoid continued attempted use of a bad .sframe section, remove it
-on demand when the first sign of corruption is detected.
+This will be used by unwind user sframe, as SFrame may represent an
+undefined return address as indication for an outermost frame.
 
+Cc: Steven Rostedt <rostedt@kernel.org>
+Cc: Josh Poimboeuf <jpoimboe@kernel.org>
 Cc: Masami Hiramatsu <mhiramat@kernel.org>
 Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Cc: Peter Zijlstra <peterz@infradead.org>
@@ -153,28 +154,73 @@ Cc: Florian Weimer <fweimer@redhat.com>
 Cc: Sam James <sam@gentoo.org>
 Cc: Kees Cook <kees@kernel.org>
 Cc: "Carlos O'Donell" <codonell@redhat.com>
-Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 Signed-off-by: Jens Remus <jremus@linux.ibm.com>
 ---
- kernel/unwind/sframe.c | 4 ++++
- 1 file changed, 4 insertions(+)
 
-diff --git a/kernel/unwind/sframe.c b/kernel/unwind/sframe.c
-index 1e877c3e5417..61340ee524c2 100644
---- a/kernel/unwind/sframe.c
-+++ b/kernel/unwind/sframe.c
-@@ -342,6 +342,10 @@ int sframe_find(unsigned long ip, struct unwind_user_frame *frame)
- 	ret = __find_fre(sec, &fde, ip, frame);
- end:
- 	user_read_access_end();
-+
-+	if (ret == -EFAULT)
-+		WARN_ON_ONCE(sframe_remove_section(sec->sframe_start));
-+
- 	return ret;
- }
+Notes (jremus):
+    Changes in v12:
+    - Adjust to Peter's tip perf/core commit ae25884ad749 ("unwind_user/x86:
+      Teach FP unwind about start of function").
+    
+    Changes in v11:
+    - New patch.
+
+ arch/x86/include/asm/unwind_user.h | 6 ++++--
+ include/linux/unwind_user_types.h  | 1 +
+ kernel/unwind/user.c               | 6 ++++++
+ 3 files changed, 11 insertions(+), 2 deletions(-)
+
+diff --git a/arch/x86/include/asm/unwind_user.h b/arch/x86/include/asm/unwind_user.h
+index 12064284bc4e..f9a1c460150d 100644
+--- a/arch/x86/include/asm/unwind_user.h
++++ b/arch/x86/include/asm/unwind_user.h
+@@ -11,13 +11,15 @@
+ 	.cfa_off	=  2*(ws),			\
+ 	.ra_off		= -1*(ws),			\
+ 	.fp_off		= -2*(ws),			\
+-	.use_fp		= true,
++	.use_fp		= true,				\
++	.outermost	= false,
  
+ #define ARCH_INIT_USER_FP_ENTRY_FRAME(ws)		\
+ 	.cfa_off	=  1*(ws),			\
+ 	.ra_off		= -1*(ws),			\
+ 	.fp_off		= 0,				\
+-	.use_fp		= false,
++	.use_fp		= false,			\
++	.outermost	= false,
+ 
+ static inline int unwind_user_word_size(struct pt_regs *regs)
+ {
+diff --git a/include/linux/unwind_user_types.h b/include/linux/unwind_user_types.h
+index 43e4b160883f..616cc5ee4586 100644
+--- a/include/linux/unwind_user_types.h
++++ b/include/linux/unwind_user_types.h
+@@ -32,6 +32,7 @@ struct unwind_user_frame {
+ 	s32 ra_off;
+ 	s32 fp_off;
+ 	bool use_fp;
++	bool outermost;
+ };
+ 
+ struct unwind_user_state {
+diff --git a/kernel/unwind/user.c b/kernel/unwind/user.c
+index 7644ab9f6a61..d053295b1f7e 100644
+--- a/kernel/unwind/user.c
++++ b/kernel/unwind/user.c
+@@ -32,6 +32,12 @@ static int unwind_user_next_common(struct unwind_user_state *state,
+ {
+ 	unsigned long cfa, fp, ra;
+ 
++	/* Stop unwinding when reaching an outermost frame. */
++	if (frame->outermost) {
++		state->done = true;
++		return 0;
++	}
++
+ 	if (frame->use_fp) {
+ 		if (state->fp < state->sp)
+ 			return -EINVAL;
 -- 
 2.48.1
 
