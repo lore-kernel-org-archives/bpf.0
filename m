@@ -1,54 +1,54 @@
-Received: from smtp-o-1.desy.de (smtp-o-1.desy.de [131.169.56.154])
+Received: from smtp-o-2.desy.de (smtp-o-2.desy.de [131.169.56.155])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BC682BD5B4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 948B2261B9A
 	for <bpf@vger.kernel.org>; Wed, 19 Nov 2025 16:04:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=131.169.56.154
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=131.169.56.155
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763568250; cv=none; b=SSG8cmbUpTQhJrlq8ZezBpwSJEdEYfMG+iMlCgMVy9zdUwIYSdtXK8dsHFExTMUtRPrpUROQTCGcv3pJ+Hp5yeQmcSKk9i994C6CAtzYTR+uveTYP11GIPonKn8Kwvp3mPwxq0ue/cARqltGG2xSEx6dmgg1OXjIKfOjwHqlYSc=
+	t=1763568250; cv=none; b=XLntEr8Du8qaNFeAMD+9Jgu2AmHBKUuCGSAAgp6ljHeYZYKesbBBOuDHb5rxPK8hGsBaVGOL0gqCc4pE17NVGiDZ+fqrabsa/Wr+fiTMR2C4Nsqad1ihMqmXPEKZiwkcRHRc2W1Phms9QJqu0n86lysuOLheQh2mgj+EfNheNMQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1763568250; c=relaxed/simple;
-	bh=GWeBz6TJ1v/24gYA0zHfBPnnQwbo+TPzQx0lLndT89o=;
+	bh=l2mSRC284W2cN4M+Eu659LwgoQnQU69a/3/wXDK4y38=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=rBNzCs2T95koQGvuImRGm7Oz/1ua3iPKbk2X6MWZD1iqHPzepExW2n46u7WcL4c3BJrMIc3azAcEzQJJnJlsIqdZPtFiUXOiAh0dYR74h4rvUlBd9UARsPg4xgLuuUsdPb8m+DV+Cj0GtGLq/ZphEUixg+IXn8pkdqRd4Ahou9Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=xfel.eu; spf=none smtp.mailfrom=mail.desy.de; dkim=pass (1024-bit key) header.d=xfel.eu header.i=@xfel.eu header.b=GwYB3TeP; arc=none smtp.client-ip=131.169.56.154
+	 MIME-Version; b=WpCARN054iftq4KtkdH+hLxMfXBg2AIqyW4wrmluu1SIZUfvVwwhJ31FVUq/sAY42AqpYWoNbl06DqHC3vYQz7UWAG+jS0CCOINX14wz/9Q67rxnVbsDxizemepKgQ5AQo9QFnp4gc/1kkRBDs4F9qoKWwzBiqq+vTYnoO49AMw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=xfel.eu; spf=none smtp.mailfrom=mail.desy.de; dkim=pass (1024-bit key) header.d=xfel.eu header.i=@xfel.eu header.b=20cONReL; arc=none smtp.client-ip=131.169.56.155
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=xfel.eu
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mail.desy.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=xfel.eu header.i=@xfel.eu header.b="GwYB3TeP"
+	dkim=pass (1024-bit key) header.d=xfel.eu header.i=@xfel.eu header.b="20cONReL"
 Received: from smtp-buf-2.desy.de (smtp-buf-2.desy.de [131.169.56.165])
-	by smtp-o-1.desy.de (Postfix) with ESMTP id 6E8D211F752
-	for <bpf@vger.kernel.org>; Wed, 19 Nov 2025 17:04:01 +0100 (CET)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp-o-1.desy.de 6E8D211F752
+	by smtp-o-2.desy.de (Postfix) with ESMTP id 685FE13F655
+	for <bpf@vger.kernel.org>; Wed, 19 Nov 2025 17:04:06 +0100 (CET)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp-o-2.desy.de 685FE13F655
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xfel.eu; s=default;
-	t=1763568241; bh=01YdGcmleXlPCX8EF2Ac0bGpMP+BVLDHCQA4vetRxkM=;
+	t=1763568246; bh=Rk30RL8hww40hEHD2u7r+FaPMJutyW0a25spn/WQmBo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=GwYB3TePRtdRDxY3uZlwDzYJpDeABbGcgSOAnMJK/oh/hJBVJU2iJDkMhR2/wvPec
-	 0eTXfBicVCPAxYjaGyGUGYLrPOA7/5bqtx6aP1DEuj60JssLbTpXu+3YzboPga7a5u
-	 vmgZNoy2JL8BEgOQuV7TY6fkdFl8J7d1iRb+YiLc=
-Received: from smtp-m-1.desy.de (smtp-m-1.desy.de [131.169.56.129])
-	by smtp-buf-2.desy.de (Postfix) with ESMTP id 60E48120043;
-	Wed, 19 Nov 2025 17:04:01 +0100 (CET)
-Received: from c1722.mx.srv.dfn.de (c1722.mx.srv.dfn.de [194.95.239.47])
-	by smtp-m-1.desy.de (Postfix) with ESMTP id 53B4F40044;
-	Wed, 19 Nov 2025 17:04:01 +0100 (CET)
-Received: from smtp-intra-2.desy.de (smtp-intra-2.desy.de [IPv6:2001:638:700:1038::1:53])
-	by c1722.mx.srv.dfn.de (Postfix) with ESMTP id C551C100034;
-	Wed, 19 Nov 2025 17:04:00 +0100 (CET)
+	b=20cONReLDv3T6ROzzd7QPsduQ11g8XmCe+biMoflOgOsjfVvCVkTDFy5zl62m1ZO8
+	 eIE4ajVFZJQZdpIL5A8AIftneTzsUg3J9pQR0RpwnTasO9lGG9I6poN+FwC5dSaKCn
+	 9JVC5f/lL8jp4ncb8cFX+QxyUfY5/qT8u7TIpbtc=
+Received: from smtp-m-2.desy.de (smtp-m-2.desy.de [131.169.56.130])
+	by smtp-buf-2.desy.de (Postfix) with ESMTP id 5D02F120043;
+	Wed, 19 Nov 2025 17:04:06 +0100 (CET)
+Received: from a1722.mx.srv.dfn.de (a1722.mx.srv.dfn.de [194.95.233.47])
+	by smtp-m-2.desy.de (Postfix) with ESMTP id 50BF316003F;
+	Wed, 19 Nov 2025 17:04:06 +0100 (CET)
+Received: from smtp-intra-1.desy.de (smtp-intra-1.desy.de [131.169.56.82])
+	by a1722.mx.srv.dfn.de (Postfix) with ESMTP id 88B493200B3;
+	Wed, 19 Nov 2025 17:04:05 +0100 (CET)
 Received: from exflqr30474.desy.de (exflqr30474.desy.de [192.168.177.248])
-	by smtp-intra-2.desy.de (Postfix) with ESMTP id AE5A520044;
-	Wed, 19 Nov 2025 17:04:00 +0100 (CET)
+	by smtp-intra-1.desy.de (Postfix) with ESMTP id 79BB080046;
+	Wed, 19 Nov 2025 17:04:05 +0100 (CET)
 Received: by exflqr30474.desy.de (Postfix, from userid 31112)
-	id AAA1B201AE; Wed, 19 Nov 2025 17:04:00 +0100 (CET)
+	id 75C0A201AE; Wed, 19 Nov 2025 17:04:05 +0100 (CET)
 From: Martin Teichmann <martin.teichmann@xfel.eu>
 To: bpf@vger.kernel.org
 Cc: eddyz87@gmail.com,
 	ast@kernel.org,
 	andrii@kernel.org,
 	Martin Teichmann <martin.teichmann@xfel.eu>
-Subject: [PATCH v6 bpf-next 2/4] bpf: test the proper verification of tail calls
-Date: Wed, 19 Nov 2025 17:03:53 +0100
-Message-ID: <20251119160355.1160932-3-martin.teichmann@xfel.eu>
+Subject: [PATCH v6 bpf-next 4/4] bpf: test the correct stack liveness of tail calls
+Date: Wed, 19 Nov 2025 17:03:55 +0100
+Message-ID: <20251119160355.1160932-5-martin.teichmann@xfel.eu>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <622f4e7645e426ae180e4511877eb90ceb1b1063.camel@gmail.com>
 References: <622f4e7645e426ae180e4511877eb90ceb1b1063.camel@gmail.com>
@@ -60,91 +60,26 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Three tests are added:
+From: Eduard Zingerman <eddyz87@gmail.com>
 
-- invalidate_pkt_pointers_by_tail_call checks that one can use the
-  packet pointer after a tail call. This was originally possible
-  and also poses not problems, but was made impossible by 1a4607ffba35.
+A new test is added: caller_stack_write_tail_call tests that the live
+stack is correctly tracked for a tail call.
 
-- invalidate_pkt_pointers_by_static_tail_call tests a corner case
-  found by Eduard Zingerman during the discussion of the original fix,
-  which was broken in that fix.
-
-- subprog_result_tail_call tests that precision propagation works
-  correctly across tail calls. This did not work before.
-
+Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 Signed-off-by: Martin Teichmann <martin.teichmann@xfel.eu>
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- .../selftests/bpf/progs/verifier_sock.c       | 39 +++++++++++++-
- .../bpf/progs/verifier_subprog_precision.c    | 53 +++++++++++++++++++
- 2 files changed, 90 insertions(+), 2 deletions(-)
+ .../selftests/bpf/progs/verifier_live_stack.c | 50 +++++++++++++++++++
+ 1 file changed, 50 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_sock.c b/tools/testing/selftests/bpf/progs/verifier_sock.c
-index 2b4610b53382..a2132c72d3b8 100644
---- a/tools/testing/selftests/bpf/progs/verifier_sock.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_sock.c
-@@ -1117,10 +1117,17 @@ int tail_call(struct __sk_buff *sk)
- 	return 0;
+diff --git a/tools/testing/selftests/bpf/progs/verifier_live_stack.c b/tools/testing/selftests/bpf/progs/verifier_live_stack.c
+index c0e808509268..2de105057bbc 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_live_stack.c
++++ b/tools/testing/selftests/bpf/progs/verifier_live_stack.c
+@@ -292,3 +292,53 @@ __naked void syzbot_postorder_bug1(void)
+ 	"exit;"
+ 	::: __clobber_all);
  }
- 
--/* Tail calls invalidate packet pointers. */
-+static __noinline
-+int static_tail_call(struct __sk_buff *sk)
-+{
-+	bpf_tail_call_static(sk, &jmp_table, 0);
-+	return 0;
-+}
 +
-+/* Tail calls in sub-programs invalidate packet pointers. */
- SEC("tc")
- __failure __msg("invalid mem access")
--int invalidate_pkt_pointers_by_tail_call(struct __sk_buff *sk)
-+int invalidate_pkt_pointers_by_global_tail_call(struct __sk_buff *sk)
- {
- 	int *p = (void *)(long)sk->data;
- 
-@@ -1131,4 +1138,32 @@ int invalidate_pkt_pointers_by_tail_call(struct __sk_buff *sk)
- 	return TCX_PASS;
- }
- 
-+/* Tail calls in static sub-programs invalidate packet pointers. */
-+SEC("tc")
-+__failure __msg("invalid mem access")
-+int invalidate_pkt_pointers_by_static_tail_call(struct __sk_buff *sk)
-+{
-+	int *p = (void *)(long)sk->data;
-+
-+	if ((void *)(p + 1) > (void *)(long)sk->data_end)
-+		return TCX_DROP;
-+	static_tail_call(sk);
-+	*p = 42; /* this is unsafe */
-+	return TCX_PASS;
-+}
-+
-+/* Direct tail calls do not invalidate packet pointers. */
-+SEC("tc")
-+__success
-+int invalidate_pkt_pointers_by_tail_call(struct __sk_buff *sk)
-+{
-+	int *p = (void *)(long)sk->data;
-+
-+	if ((void *)(p + 1) > (void *)(long)sk->data_end)
-+		return TCX_DROP;
-+	bpf_tail_call_static(sk, &jmp_table, 0);
-+	*p = 42; /* this is NOT unsafe: tail calls don't return */
-+	return TCX_PASS;
-+}
-+
- char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/verifier_subprog_precision.c b/tools/testing/selftests/bpf/progs/verifier_subprog_precision.c
-index ac3e418c2a96..61886ed554de 100644
---- a/tools/testing/selftests/bpf/progs/verifier_subprog_precision.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_subprog_precision.c
-@@ -793,4 +793,57 @@ __naked int stack_slot_aliases_precision(void)
- 	);
- }
- 
 +struct {
 +        __uint(type, BPF_MAP_TYPE_PROG_ARRAY);
 +        __uint(max_entries, 1);
@@ -152,53 +87,48 @@ index ac3e418c2a96..61886ed554de 100644
 +        __type(value, __u32);
 +} map_array SEC(".maps");
 +
-+__naked __noinline __used
-+static unsigned long identity_tail_call(void)
++SEC("socket")
++__failure __msg("invalid read from stack R2 off=-1024 size=8")
++__flag(BPF_F_TEST_STATE_FREQ)
++__naked unsigned long caller_stack_write_tail_call(void)
 +{
-+	/* the simplest identity function involving a tail call */
 +        asm volatile (
-+		"r6 = r2;"
-+		"r2 = %[map_array] ll;"
-+		"r3 = 0;"
-+		"call %[bpf_tail_call];"
-+		"r0 = r6;"
-+		"exit;"
-+		:
-+		: __imm(bpf_tail_call),
-+		  __imm_addr(map_array)
-+		: __clobber_all);
++	"r6 = r1;"
++	"*(u64 *)(r10 - 8) = -8;"
++        "call %[bpf_get_prandom_u32];"
++        "if r0 != 42 goto 1f;"
++        "goto 2f;"
++  "1:"
++        "*(u64 *)(r10 - 8) = -1024;"
++  "2:"
++        "r1 = r6;"
++        "r2 = r10;"
++        "r2 += -8;"
++        "call write_tail_call;"
++        "r1 = *(u64 *)(r10 - 8);"
++        "r2 = r10;"
++        "r2 += r1;"
++        "r0 = *(u64 *)(r2 + 0);"
++        "exit;"
++        :: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
 +}
 +
-+SEC("?raw_tp")
-+__failure __log_level(2)
-+__msg("13: (85) call bpf_tail_call#12")
-+__msg("mark_precise: frame1: last_idx 13 first_idx 0 subseq_idx -1 ")
-+__msg("returning from callee:")
-+__msg("frame1: R0=scalar() R6=3 R10=fp0")
-+__msg("to caller at 4:")
-+__msg("R0=scalar() R6=map_value(map=.data.vals,ks=4,vs=16) R10=fp0")
-+__msg("6: (0f) r1 += r0")
-+__msg("mark_precise: frame0: regs=r0 stack= before 5: (bf) r1 = r6")
-+__msg("mark_precise: frame0: regs=r0 stack= before 4: (27) r0 *= 4")
-+__msg("mark_precise: frame0: parent state regs=r0 stack=:  R0=Pscalar() R6=map_value(map=.data.vals,ks=4,vs=16) R10=fp0")
-+__msg("math between map_value pointer and register with unbounded min value is not allowed")
-+__naked int subprog_result_tail_call(void)
++static __used __naked unsigned long write_tail_call(void)
 +{
-+	asm volatile (
-+		"r2 = 3;"
-+		"call identity_tail_call;"
-+		"r0 *= 4;"
-+		"r1 = %[vals];"
-+		"r1 += r0;"
-+		"r0 = *(u32 *)(r1 + 0);"
-+		"exit;"
-+		:
-+		: __imm_ptr(vals)
-+		: __clobber_common
-+	);
++        asm volatile (
++        "r6 = r2;"
++        "r2 = %[map_array] ll;"
++        "r3 = 0;"
++        "call %[bpf_tail_call];"
++        "*(u64 *)(r6 + 0) = -16;"
++        "r0 = 0;"
++        "exit;"
++	:
++	: __imm(bpf_tail_call),
++          __imm_addr(map_array)
++        : __clobber_all);
 +}
-+
- char _license[] SEC("license") = "GPL";
 -- 
 2.43.0
 
