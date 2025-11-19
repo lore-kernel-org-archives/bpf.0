@@ -1,52 +1,58 @@
 Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 881FD32C92B;
-	Wed, 19 Nov 2025 22:42:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62B4A2C178E;
+	Wed, 19 Nov 2025 22:42:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.38
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763592166; cv=none; b=tcNEuFkJwTpWSBQTajwj5kQxd8k+vSvFz0ATSysNuvgrWFU5QNu3VYfjBqFU0S8N9eSFUbFRkA2v8BFyFxMhWNFyZmGWDwrHRSn7CwcY6RMaX2O6v3nzP4qfiubPRp1EitX/6akIaYYyjV+xBLk6bPoMWfEO0A9da6T+pabJ/go=
+	t=1763592172; cv=none; b=JQZNnMRi8a6TeuxFjFdA+KKPk8t+wHyf60sh0c0MW9NbtU61oNegn8pt4k56u8G3yQ5pTPNEmIhJf7blnvpyxtpkxWii9c2N+cIKGCJ0j+iH8NL/LL75/Re+/gRUvWBC4281Z3SmsCkcP2490GMeOdH2xTcp8MEZPvBqq2poez0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763592166; c=relaxed/simple;
-	bh=p/DR/FykffMserbGV6pix+DJEuXiCs5JkS8z/3JAX+E=;
+	s=arc-20240116; t=1763592172; c=relaxed/simple;
+	bh=WL0PXhXU9WzA14alwt1F7pd1ySSZ0ovhU3GxmPY01xU=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=OZ0K4UilTvcq09WN+TShdlxuCJPG+Qb3GT3KLOe7SaOVE9ynldDNSlfLLb+G0azY13Mli5WwnmeWnYF+QG+zQm8J0F4zrjcnRZizPmvHXY1pQic/04l3C78aQdUnDue/SNf0mjif7sWHB43QMJXYyW+5ek2ZJEEflyinCtRejhE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=runbox.com; dkim=pass (2048-bit key) header.d=runbox.com header.i=@runbox.com header.b=tXEnrd0F; arc=none smtp.client-ip=185.226.149.38
+	 MIME-Version; b=sZOco4V/Sempa+kwlqbkppoarznoGqURYCbohfEmxP+F9AWpK7kE7vUmU3s7wRSZQI36eezov2ETTht7yT4eBV4iTbQkjePKqRkxBln47VnhZw0l3cZwXF1z5U5obl2fX6jwjLV3eYo7mz6Znnc0d7YjKZSUl8kOlZKZTIdPkXc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=runbox.com; dkim=pass (2048-bit key) header.d=runbox.com header.i=@runbox.com header.b=mJmOyflN; arc=none smtp.client-ip=185.226.149.38
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=runbox.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=runbox.com header.i=@runbox.com header.b="tXEnrd0F"
+	dkim=pass (2048-bit key) header.d=runbox.com header.i=@runbox.com header.b="mJmOyflN"
 Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
 	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
 	(Exim 4.93)
 	(envelope-from <david.laight.linux_spam@runbox.com>)
-	id 1vLqss-006ktm-Ml; Wed, 19 Nov 2025 23:42:42 +0100
+	id 1vLqsy-006kwn-JE; Wed, 19 Nov 2025 23:42:48 +0100
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=runbox.com;
 	 s=selector1; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To
 	:Message-Id:Date:Subject:Cc:To:From;
-	bh=zMBuIAwUIhlU23riZVslwHF2pmtSGAEsu39ThErsacM=; b=tXEnrd0FsCIeJdJS23xtND5qma
-	/nyz4LKFnCGT8cX0llevptwGUar6RlozBMNTjjI4qSDiv6Zo3IWFBbZyCjadX3oTN0HTvoszmtMCw
-	Ub7syVi2ALmfPGqC1wAb//U7KFTiTI1m+E1k7vJsN/qI4QPZJsL7u7JX4xLDsmgeuuDubF4z0u6wL
-	kf9iNyvkpqoJNzSUgoAmDW5sOdAYLdawnePjuCd01vo4lwZ7AKFPOhf8X6tkAPVr6rJMeFFTAgdVU
-	XBfPiHxne2fNsTCHc39RFot23sa3jacc9UZdHGfYEmS5hc9aYhXQJ1n8hMzFVDN9YWGFtULZd5Zsp
-	0fbgnv9g==;
+	bh=9HRmK+hbwURnGQuKYeIXbIO2jWPVVl5U3dF50i9W/9w=; b=mJmOyflNz4dWxZBUr5CLXi9xsa
+	ydk558tWK0Ta32NGSHQdEft+yG/07JG0lWYF5dC4xQcNxG6aE3YSXXBr0B2akA+lbRf3+exZ9ciKf
+	T2XY/zj9UphkAnFOCsGUWXe3qY9EDj601OAb6N2B5UZt/PFAySrQ4LdPTcPMZhktu1/N09O+gOJSY
+	oqozgGS9mVGOT/tuvbVRH+lec4Fgagb7TKt2yg0fQF2zuiu3hmYTWc6t2oBUjIkekTJJPX4/lH3vD
+	eZYBG9IbtLYU8LdvKH71/O3zSAeRDjGEZOKfexDF2XtQ8U4UErCU5XPSpEKSHEfyzDqIQ/DgQPAEZ
+	nkfmpJdw==;
 Received: from [10.9.9.74] (helo=submission03.runbox)
 	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
 	(envelope-from <david.laight.linux_spam@runbox.com>)
-	id 1vLqsr-0000Bm-85; Wed, 19 Nov 2025 23:42:42 +0100
+	id 1vLqsx-0000DV-W4; Wed, 19 Nov 2025 23:42:48 +0100
 Received: by submission03.runbox with esmtpsa  [Authenticated ID (1493616)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim 4.93)
-	id 1vLqsW-00Fos6-Mx; Wed, 19 Nov 2025 23:42:20 +0100
+	id 1vLqsl-00Fos6-8x; Wed, 19 Nov 2025 23:42:35 +0100
 From: david.laight.linux@gmail.com
 To: linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org
+	bpf@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
+	KP Singh <kpsingh@kernel.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Matt Bobrowski <mattbobrowski@google.com>,
+	Song Liu <song@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
 	David Laight <david.laight.linux@gmail.com>
-Subject: [PATCH 06/44] bpf: Verifier, remove some unusual uses of min_t() and max_t()
-Date: Wed, 19 Nov 2025 22:41:02 +0000
-Message-Id: <20251119224140.8616-7-david.laight.linux@gmail.com>
+Subject: [PATCH 35/44] bpf: use min() instead of min_t()
+Date: Wed, 19 Nov 2025 22:41:31 +0000
+Message-Id: <20251119224140.8616-36-david.laight.linux@gmail.com>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20251119224140.8616-1-david.laight.linux@gmail.com>
 References: <20251119224140.8616-1-david.laight.linux@gmail.com>
@@ -60,78 +66,33 @@ Content-Transfer-Encoding: 8bit
 
 From: David Laight <david.laight.linux@gmail.com>
 
-min_t() and max_t() are normally used to change the signedness
-of a positive value to avoid a signed-v-unsigned compare warning.
+min_t(unsigned int, a, b) casts an 'unsigned long' to 'unsigned int'.
+Use min(a, b) instead as it promotes any 'unsigned int' to 'unsigned long'
+and so cannot discard significant bits.
 
-However they are used here to convert an unsigned 64bit pattern
-to a signed to a 32/64bit signed number.
-To avoid any confusion use plain min()/max() and explicitely cast
-the u64 expression to the correct signed value.
+In this case the 'unsigned long' value is small enough that the result
+is ok.
 
-Use a simple max() for the max_pkt_offset calulation and delete the
-comment about why the cast to u32 is safe.
+Detected by an extra check added to min_t().
 
 Signed-off-by: David Laight <david.laight.linux@gmail.com>
 ---
- kernel/bpf/verifier.c | 29 +++++++++++------------------
- 1 file changed, 11 insertions(+), 18 deletions(-)
+ kernel/trace/bpf_trace.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index ff40e5e65c43..22fa9769fbdb 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -2319,12 +2319,12 @@ static void __update_reg32_bounds(struct bpf_reg_state *reg)
- 	struct tnum var32_off = tnum_subreg(reg->var_off);
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index 4f87c16d915a..ee3152df767c 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -1515,7 +1515,7 @@ BPF_CALL_4(bpf_read_branch_records, struct bpf_perf_event_data_kern *, ctx,
+ 	if (!buf || (size % br_entry_size != 0))
+ 		return -EINVAL;
  
- 	/* min signed is max(sign bit) | min(other bits) */
--	reg->s32_min_value = max_t(s32, reg->s32_min_value,
--			var32_off.value | (var32_off.mask & S32_MIN));
-+	reg->s32_min_value = max(reg->s32_min_value,
-+			(s32)(var32_off.value | (var32_off.mask & S32_MIN)));
- 	/* max signed is min(sign bit) | max(other bits) */
--	reg->s32_max_value = min_t(s32, reg->s32_max_value,
--			var32_off.value | (var32_off.mask & S32_MAX));
--	reg->u32_min_value = max_t(u32, reg->u32_min_value, (u32)var32_off.value);
-+	reg->s32_max_value = min(reg->s32_max_value,
-+			(s32)(var32_off.value | (var32_off.mask & S32_MAX)));
-+	reg->u32_min_value = max(reg->u32_min_value, (u32)var32_off.value);
- 	reg->u32_max_value = min(reg->u32_max_value,
- 				 (u32)(var32_off.value | var32_off.mask));
- }
-@@ -2332,11 +2332,11 @@ static void __update_reg32_bounds(struct bpf_reg_state *reg)
- static void __update_reg64_bounds(struct bpf_reg_state *reg)
- {
- 	/* min signed is max(sign bit) | min(other bits) */
--	reg->smin_value = max_t(s64, reg->smin_value,
--				reg->var_off.value | (reg->var_off.mask & S64_MIN));
-+	reg->smin_value = max(reg->smin_value,
-+				(s64)(reg->var_off.value | (reg->var_off.mask & S64_MIN)));
- 	/* max signed is min(sign bit) | max(other bits) */
--	reg->smax_value = min_t(s64, reg->smax_value,
--				reg->var_off.value | (reg->var_off.mask & S64_MAX));
-+	reg->smax_value = min(reg->smax_value,
-+				(s64)(reg->var_off.value | (reg->var_off.mask & S64_MAX)));
- 	reg->umin_value = max(reg->umin_value, reg->var_off.value);
- 	reg->umax_value = min(reg->umax_value,
- 			      reg->var_off.value | reg->var_off.mask);
-@@ -6128,15 +6128,8 @@ static int check_packet_access(struct bpf_verifier_env *env, u32 regno, int off,
- 		return err;
- 	}
+-	to_copy = min_t(u32, br_stack->nr * br_entry_size, size);
++	to_copy = min(br_stack->nr * br_entry_size, size);
+ 	memcpy(buf, br_stack->entries, to_copy);
  
--	/* __check_mem_access has made sure "off + size - 1" is within u16.
--	 * reg->umax_value can't be bigger than MAX_PACKET_OFF which is 0xffff,
--	 * otherwise find_good_pkt_pointers would have refused to set range info
--	 * that __check_mem_access would have rejected this pkt access.
--	 * Therefore, "off + reg->umax_value + size - 1" won't overflow u32.
--	 */
--	env->prog->aux->max_pkt_offset =
--		max_t(u32, env->prog->aux->max_pkt_offset,
--		      off + reg->umax_value + size - 1);
-+	env->prog->aux->max_pkt_offset = max(env->prog->aux->max_pkt_offset,
-+					     off + reg->umax_value + size - 1);
- 
- 	return err;
- }
+ 	return to_copy;
 -- 
 2.39.5
 
