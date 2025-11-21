@@ -1,21 +1,21 @@
-Received: from localhost.localdomain (unknown [147.136.157.2])
+Received: from localhost.localdomain (unknown [147.136.157.3])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61D0134BA54;
-	Fri, 21 Nov 2025 14:24:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=147.136.157.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 196CE258ECB;
+	Fri, 21 Nov 2025 14:33:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=147.136.157.3
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763735067; cv=none; b=C3vuskElI8gpCGLfoYBcYbuF9Bgllro5skcV6ZDPq6383tNgr4ZuutA01H7AUzex+UdQ6KKU04skVFnSVeyD+pHmmJt6Ew+0C5j9lhrNRXPLfbOuYEeqqbVrb4R2Ii1aON0pNpWmLnqf5fcmWB9DDFCPXntI1L1onAEbicL23BA=
+	t=1763735646; cv=none; b=L/gj7H63BWWnYyKujrQ61zzYZchi9gLv4oHtf+W46Ya3sRt0qvrSEkGOsmzwoV60jM2PQZYAexcwK/aR2EVO7SLjAcS3sr4I0hSMSISL+03/iVoouzCnzlbdh0yWOq+WyP+cVEEj+y+7KoqivOavhZW9bNkRabERnd6BOxYv91g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763735067; c=relaxed/simple;
-	bh=lMRjjg/wsjH5CwBUd3tT2F+wv+rZN70ipvgFgvqLm3o=;
+	s=arc-20240116; t=1763735646; c=relaxed/simple;
+	bh=AQADdyfLtOVxgA8NdEMOhMNPPleNcF5QRJU044YyD00=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=iCqkQc3OWffrWD5PpKVFkauW2EP2I+5WyjuwBM5x+yjpJHyEnFREV83cWD8oQXv1TC2i67aP7SXJJ9I9cneSbznmX/Ye9TeygS0BXSTODDRWEShRQGG4hZ2HP77oyP5Jvf6y8zbp284hOdLb532+t70Ehv+LODi/CJyipuNpffQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=none smtp.mailfrom=localhost.localdomain; arc=none smtp.client-ip=147.136.157.2
+	 MIME-Version; b=aQ+9DxToneLh5Q9HoGJfWk9DxbLyylPB2ThRELdBOiPe6asopa72KHxB2kujiPlnS5cLQJtUTbD73DQhfdI/eKLXomE+WBxXVZRbAfzQavcG8+G1c5Z11CbTOUKipnXihKDuEgwGuo7wB6bF2fROeBtK5oP8liCTNKjEDzjWqeI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=none smtp.mailfrom=localhost.localdomain; arc=none smtp.client-ip=147.136.157.3
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=localhost.localdomain
 Received: by localhost.localdomain (Postfix, from userid 1007)
-	id ADCBC8B2A19; Fri, 21 Nov 2025 22:24:15 +0800 (+08)
+	id 8DF8A8B2A17; Fri, 21 Nov 2025 22:24:01 +0800 (+08)
 From: Jiayuan Chen <jiayuan.chen@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
@@ -29,11 +29,11 @@ Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
 	Neal Cardwell <ncardwell@google.com>,
 	Kuniyuki Iwashima <kuniyu@google.com>,
 	David Ahern <dsahern@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
 	Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
 	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
 	Song Liu <song@kernel.org>,
 	Yonghong Song <yonghong.song@linux.dev>,
 	KP Singh <kpsingh@kernel.org>,
@@ -47,9 +47,9 @@ Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
 	netdev@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v3 3/3] bpf, selftest: Add tests for FIONREAD and copied_seq
-Date: Fri, 21 Nov 2025 22:23:24 +0800
-Message-ID: <20251121142352.297588-4-jiayuan.chen@linux.dev>
+Subject: [PATCH bpf-next v3 1/3] bpf, sockmap: Fix incorrect copied_seq calculation
+Date: Fri, 21 Nov 2025 22:23:22 +0800
+Message-ID: <20251121142352.297588-2-jiayuan.chen@linux.dev>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20251121142352.297588-1-jiayuan.chen@linux.dev>
 References: <20251121142352.297588-1-jiayuan.chen@linux.dev>
@@ -61,314 +61,164 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This commit adds two new test functions: one to reproduce the bug reported
-by syzkaller [1], and another to cover the calculation of copied_seq.
+A socket using sockmap has its own independent receive queue: ingress_msg.
+This queue may contain data from its own protocol stack or from other
+sockets.
 
-The tests primarily involve installing  and uninstalling sockmap on
-sockets, then reading data to verify proper functionality.
+The issue is that when reading from ingress_msg, we update tp->copied_seq
+by default. However, if the data is not from its own protocol stack,
+tcp->rcv_nxt is not increased. Later, if we convert this socket to a
+native socket, reading from this socket may fail because copied_seq might
+be significantly larger than rcv_nxt.
 
-Additionally, extend the do_test_sockmap_skb_verdict_fionread() function
-to support UDP FIONREAD testing.
+This fix also addresses the syzkaller-reported bug referenced in the
+Closes tag.
 
-[1] https://syzkaller.appspot.com/bug?extid=06dbd397158ec0ea4983
+This patch marks the skmsg objects in ingress_msg. When reading, we update
+copied_seq only if the data is from its own protocol stack.
 
+                                                     FD1:read()
+                                                     --  FD1->copied_seq++
+                                                         |  [read data]
+                                                         |
+                                [enqueue data]           v
+                  [sockmap]     -> ingress to self ->  ingress_msg queue
+FD1 native stack  ------>                                 ^
+-- FD1->rcv_nxt++               -> redirect to other      | [enqueue data]
+                                       |                  |
+                                       |             ingress to FD1
+                                       v                  ^
+                                      ...                 |  [sockmap]
+                                                     FD2 native stack
+
+Closes: https://syzkaller.appspot.com/bug?extid=06dbd397158ec0ea4983
+Fixes: 04919bed948dc ("tcp: Introduce tcp_read_skb()")
 Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
 ---
- .../selftests/bpf/prog_tests/sockmap_basic.c  | 203 +++++++++++++++++-
- .../bpf/progs/test_sockmap_pass_prog.c        |   8 +
- 2 files changed, 205 insertions(+), 6 deletions(-)
+ include/linux/skmsg.h |  2 ++
+ net/core/skmsg.c      | 25 ++++++++++++++++++++++---
+ net/ipv4/tcp_bpf.c    |  5 +++--
+ 3 files changed, 27 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-index 1e3e4392dcca..8828f2b2f761 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-@@ -1,7 +1,8 @@
- // SPDX-License-Identifier: GPL-2.0
- // Copyright (c) 2020 Cloudflare
- #include <error.h>
--#include <netinet/tcp.h>
-+#include <linux/tcp.h>
-+#include <linux/socket.h>
- #include <sys/epoll.h>
+diff --git a/include/linux/skmsg.h b/include/linux/skmsg.h
+index 49847888c287..0323a2b6cf5e 100644
+--- a/include/linux/skmsg.h
++++ b/include/linux/skmsg.h
+@@ -141,6 +141,8 @@ int sk_msg_memcopy_from_iter(struct sock *sk, struct iov_iter *from,
+ 			     struct sk_msg *msg, u32 bytes);
+ int sk_msg_recvmsg(struct sock *sk, struct sk_psock *psock, struct msghdr *msg,
+ 		   int len, int flags);
++int __sk_msg_recvmsg(struct sock *sk, struct sk_psock *psock, struct msghdr *msg,
++		     int len, int flags, int *from_self_copied);
+ bool sk_msg_is_readable(struct sock *sk);
  
- #include "test_progs.h"
-@@ -22,6 +23,16 @@
- #define TCP_REPAIR_ON		1
- #define TCP_REPAIR_OFF_NO_WP	-1	/* Turn off without window probes */
+ static inline void sk_msg_check_to_free(struct sk_msg *msg, u32 i, u32 bytes)
+diff --git a/net/core/skmsg.c b/net/core/skmsg.c
+index 2ac7731e1e0a..d73e03f7713a 100644
+--- a/net/core/skmsg.c
++++ b/net/core/skmsg.c
+@@ -409,14 +409,14 @@ int sk_msg_memcopy_from_iter(struct sock *sk, struct iov_iter *from,
+ }
+ EXPORT_SYMBOL_GPL(sk_msg_memcopy_from_iter);
  
-+/**
-+ * SOL_TCP is defined in <netinet/tcp.h> while field
-+ * copybuf_address of tcp_zerocopy_receive is not in it
-+ * Although glibc has merged my patch to sync headers,
-+ * the fix will take time to propagate, hence this workaround.
-+ */
-+#ifndef SOL_TCP
-+#define SOL_TCP 6
-+#endif
-+
- static int connected_socket_v4(void)
+-/* Receive sk_msg from psock->ingress_msg to @msg. */
+-int sk_msg_recvmsg(struct sock *sk, struct sk_psock *psock, struct msghdr *msg,
+-		   int len, int flags)
++int __sk_msg_recvmsg(struct sock *sk, struct sk_psock *psock, struct msghdr *msg,
++		     int len, int flags, int *from_self_copied)
  {
- 	struct sockaddr_in addr = {
-@@ -536,13 +547,14 @@ static void test_sockmap_skb_verdict_shutdown(void)
+ 	struct iov_iter *iter = &msg->msg_iter;
+ 	int peek = flags & MSG_PEEK;
+ 	struct sk_msg *msg_rx;
+ 	int i, copied = 0;
++	bool to_self;
+ 
+ 	msg_rx = sk_psock_peek_msg(psock);
+ 	while (copied != len) {
+@@ -425,6 +425,7 @@ int sk_msg_recvmsg(struct sock *sk, struct sk_psock *psock, struct msghdr *msg,
+ 		if (unlikely(!msg_rx))
+ 			break;
+ 
++		to_self = msg_rx->sk == sk;
+ 		i = msg_rx->sg.start;
+ 		do {
+ 			struct page *page;
+@@ -443,6 +444,9 @@ int sk_msg_recvmsg(struct sock *sk, struct sk_psock *psock, struct msghdr *msg,
+ 			}
+ 
+ 			copied += copy;
++			if (to_self && from_self_copied)
++				*from_self_copied += copy;
++
+ 			if (likely(!peek)) {
+ 				sge->offset += copy;
+ 				sge->length -= copy;
+@@ -487,6 +491,14 @@ int sk_msg_recvmsg(struct sock *sk, struct sk_psock *psock, struct msghdr *msg,
+ out:
+ 	return copied;
  }
- 
- 
--static void test_sockmap_skb_verdict_fionread(bool pass_prog)
-+static void do_test_sockmap_skb_verdict_fionread(int sotype, bool pass_prog)
- {
- 	int err, map, verdict, c0 = -1, c1 = -1, p0 = -1, p1 = -1;
- 	int expected, zero = 0, sent, recvd, avail;
- 	struct test_sockmap_pass_prog *pass = NULL;
- 	struct test_sockmap_drop_prog *drop = NULL;
- 	char buf[256] = "0123456789";
-+	int split_len = sizeof(buf) / 2;
- 
- 	if (pass_prog) {
- 		pass = test_sockmap_pass_prog__open_and_load();
-@@ -550,7 +562,10 @@ static void test_sockmap_skb_verdict_fionread(bool pass_prog)
- 			return;
- 		verdict = bpf_program__fd(pass->progs.prog_skb_verdict);
- 		map = bpf_map__fd(pass->maps.sock_map_rx);
--		expected = sizeof(buf);
-+		if (sotype == SOCK_DGRAM)
-+			expected = split_len; /* FIONREAD for UDP is different from TCP */
-+		else
-+			expected = sizeof(buf);
- 	} else {
- 		drop = test_sockmap_drop_prog__open_and_load();
- 		if (!ASSERT_OK_PTR(drop, "open_and_load"))
-@@ -566,7 +581,7 @@ static void test_sockmap_skb_verdict_fionread(bool pass_prog)
- 	if (!ASSERT_OK(err, "bpf_prog_attach"))
- 		goto out;
- 
--	err = create_socket_pairs(AF_INET, SOCK_STREAM, &c0, &c1, &p0, &p1);
-+	err = create_socket_pairs(AF_INET, sotype, &c0, &c1, &p0, &p1);
- 	if (!ASSERT_OK(err, "create_socket_pairs()"))
- 		goto out;
- 
-@@ -574,8 +589,9 @@ static void test_sockmap_skb_verdict_fionread(bool pass_prog)
- 	if (!ASSERT_OK(err, "bpf_map_update_elem(c1)"))
- 		goto out_close;
- 
--	sent = xsend(p1, &buf, sizeof(buf), 0);
--	ASSERT_EQ(sent, sizeof(buf), "xsend(p0)");
-+	sent = xsend(p1, &buf, split_len, 0);
-+	sent += xsend(p1, &buf, sizeof(buf) - split_len, 0);
-+	ASSERT_EQ(sent, sizeof(buf), "xsend(p1)");
- 	err = ioctl(c1, FIONREAD, &avail);
- 	ASSERT_OK(err, "ioctl(FIONREAD) error");
- 	ASSERT_EQ(avail, expected, "ioctl(FIONREAD)");
-@@ -597,6 +613,12 @@ static void test_sockmap_skb_verdict_fionread(bool pass_prog)
- 		test_sockmap_drop_prog__destroy(drop);
- }
- 
-+static void test_sockmap_skb_verdict_fionread(bool pass_prog)
++EXPORT_SYMBOL_GPL(__sk_msg_recvmsg);
++
++/* Receive sk_msg from psock->ingress_msg to @msg. */
++int sk_msg_recvmsg(struct sock *sk, struct sk_psock *psock, struct msghdr *msg,
++		   int len, int flags)
 +{
-+	do_test_sockmap_skb_verdict_fionread(SOCK_STREAM, pass_prog);
-+	do_test_sockmap_skb_verdict_fionread(SOCK_DGRAM, pass_prog);
++	return __sk_msg_recvmsg(sk, psock, msg, len, flags, NULL);
 +}
-+
- static void test_sockmap_skb_verdict_change_tail(void)
- {
- 	struct test_sockmap_change_tail *skel;
-@@ -1042,6 +1064,169 @@ static void test_sockmap_vsock_unconnected(void)
- 	xclose(map);
- }
+ EXPORT_SYMBOL_GPL(sk_msg_recvmsg);
  
-+/* it used to reproduce WARNING */
-+static void test_sockmap_zc(void)
-+{
-+	int map, err, sent, recvd, zero = 0, one = 1, on = 1;
-+	char buf[10] = "0123456789", rcv[11], addr[100];
-+	struct test_sockmap_pass_prog *skel = NULL;
-+	int c0 = -1, p0 = -1, c1 = -1, p1 = -1;
-+	struct tcp_zerocopy_receive zc;
-+	socklen_t zc_len = sizeof(zc);
-+	struct bpf_program *prog;
+ bool sk_msg_is_readable(struct sock *sk)
+@@ -616,6 +628,12 @@ static int sk_psock_skb_ingress_self(struct sk_psock *psock, struct sk_buff *skb
+ 	if (unlikely(!msg))
+ 		return -EAGAIN;
+ 	skb_set_owner_r(skb, sk);
 +
-+	skel = test_sockmap_pass_prog__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-+		return;
-+
-+	if (create_socket_pairs(AF_INET, SOCK_STREAM, &c0, &c1, &p0, &p1))
-+		goto end;
-+
-+	prog = skel->progs.prog_skb_verdict_ingress;
-+	map = bpf_map__fd(skel->maps.sock_map_rx);
-+
-+	err = bpf_prog_attach(bpf_program__fd(prog), map, BPF_SK_SKB_STREAM_VERDICT, 0);
-+	if (!ASSERT_OK(err, "bpf_prog_attach"))
-+		goto end;
-+
-+	err = bpf_map_update_elem(map, &zero, &p0, BPF_ANY);
-+	if (!ASSERT_OK(err, "bpf_map_update_elem"))
-+		goto end;
-+
-+	err = bpf_map_update_elem(map, &one, &p1, BPF_ANY);
-+	if (!ASSERT_OK(err, "bpf_map_update_elem"))
-+		goto end;
-+
-+	sent = xsend(c0, buf, sizeof(buf), 0);
-+	if (!ASSERT_EQ(sent, sizeof(buf), "xsend"))
-+		goto end;
-+
-+	/* trigger tcp_bpf_recvmsg_parser and inc copied_seq of p1 */
-+	recvd = recv_timeout(p1, rcv, sizeof(rcv), MSG_DONTWAIT, 1);
-+	if (!ASSERT_EQ(recvd, sent, "recv_timeout(p1)"))
-+		goto end;
-+
-+	/* uninstall sockmap of p1 */
-+	bpf_map_delete_elem(map, &one);
-+
-+	/* trigger tcp stack and the rcv_nxt of p1 is less than copied_seq */
-+	sent = xsend(c1, buf, sizeof(buf) - 1, 0);
-+	if (!ASSERT_EQ(sent, sizeof(buf) - 1, "xsend"))
-+		goto end;
-+
-+	err = setsockopt(p1, SOL_SOCKET, SO_ZEROCOPY, &on, sizeof(on));
-+	if (!ASSERT_OK(err, "setsockopt"))
-+		goto end;
-+
-+	memset(&zc, 0, sizeof(zc));
-+	zc.copybuf_address = (__u64)((unsigned long)addr);
-+	zc.copybuf_len = sizeof(addr);
-+
-+	err = getsockopt(p1, IPPROTO_TCP, TCP_ZEROCOPY_RECEIVE, &zc, &zc_len);
-+	if (!ASSERT_OK(err, "getsockopt"))
-+		goto end;
-+
-+end:
-+	if (c0 >= 0)
-+		close(c0);
-+	if (p0 >= 0)
-+		close(p0);
-+	if (c1 >= 0)
-+		close(c1);
-+	if (p1 >= 0)
-+		close(p1);
-+	test_sockmap_pass_prog__destroy(skel);
-+}
-+
-+/* it used to check whether copied_seq of sk is correct */
-+static void test_sockmap_copied_seq(bool strp)
-+{
-+	int i, map, err, sent, recvd, zero = 0, one = 1;
-+	struct test_sockmap_pass_prog *skel = NULL;
-+	int c0 = -1, p0 = -1, c1 = -1, p1 = -1;
-+	char buf[10] = "0123456789", rcv[11];
-+	struct bpf_program *prog;
-+
-+	skel = test_sockmap_pass_prog__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-+		return;
-+
-+	if (create_socket_pairs(AF_INET, SOCK_STREAM, &c0, &c1, &p0, &p1))
-+		goto end;
-+
-+	prog = skel->progs.prog_skb_verdict_ingress;
-+	map = bpf_map__fd(skel->maps.sock_map_rx);
-+
-+	err = bpf_prog_attach(bpf_program__fd(prog), map, BPF_SK_SKB_STREAM_VERDICT, 0);
-+	if (!ASSERT_OK(err, "bpf_prog_attach verdict"))
-+		goto end;
-+
-+	if (strp) {
-+		prog = skel->progs.prog_skb_parser;
-+		err = bpf_prog_attach(bpf_program__fd(prog), map, BPF_SK_SKB_STREAM_PARSER, 0);
-+		if (!ASSERT_OK(err, "bpf_prog_attach parser"))
-+			goto end;
-+	}
-+
-+	err = bpf_map_update_elem(map, &zero, &p0, BPF_ANY);
-+	if (!ASSERT_OK(err, "bpf_map_update_elem(p0)"))
-+		goto end;
-+
-+	err = bpf_map_update_elem(map, &one, &p1, BPF_ANY);
-+	if (!ASSERT_OK(err, "bpf_map_update_elem(p1)"))
-+		goto end;
-+
-+	/* just trigger sockamp: data sent by c0 will be received by p1 */
-+	sent = xsend(c0, buf, sizeof(buf), 0);
-+	if (!ASSERT_EQ(sent, sizeof(buf), "xsend(c0), bpf"))
-+		goto end;
-+
-+	recvd = recv_timeout(p1, rcv, sizeof(rcv), MSG_DONTWAIT, 1);
-+	if (!ASSERT_EQ(recvd, sent, "recv_timeout(p1), bpf"))
-+		goto end;
-+
-+	/* uninstall sockmap of p1 and p0 */
-+	err = bpf_map_delete_elem(map, &one);
-+	if (!ASSERT_OK(err, "bpf_map_delete_elem(1)"))
-+		goto end;
-+
-+	err = bpf_map_delete_elem(map, &zero);
-+	if (!ASSERT_OK(err, "bpf_map_delete_elem(0)"))
-+		goto end;
-+
-+	/* now all sockets become plain socket, they should still work */
-+	for (i = 0; i < 5; i++) {
-+		/* test copied_seq of p1 by running tcp native stack */
-+		sent = xsend(c1, buf, sizeof(buf), 0);
-+		if (!ASSERT_EQ(sent, sizeof(buf), "xsend(c1), native"))
-+			goto end;
-+
-+		recvd = recv(p1, rcv, sizeof(rcv), MSG_DONTWAIT);
-+		if (!ASSERT_EQ(recvd, sent, "recv_timeout(p1), native"))
-+			goto end;
-+
-+		/* p0 previously redirected skb to p1, we also check copied_seq of p0 */
-+		sent = xsend(c0, buf, sizeof(buf), 0);
-+		if (!ASSERT_EQ(sent, sizeof(buf), "xsend(c0), native"))
-+			goto end;
-+
-+		recvd = recv(p0, rcv, sizeof(rcv), MSG_DONTWAIT);
-+		if (!ASSERT_EQ(recvd, sent, "recv_timeout(p0), native"))
-+			goto end;
-+	}
-+
-+end:
-+	if (c0 >= 0)
-+		close(c0);
-+	if (p0 >= 0)
-+		close(p0);
-+	if (c1 >= 0)
-+		close(c1);
-+	if (p1 >= 0)
-+		close(p1);
-+	test_sockmap_pass_prog__destroy(skel);
-+}
-+
- void test_sockmap_basic(void)
- {
- 	if (test__start_subtest("sockmap create_update_free"))
-@@ -1108,4 +1293,10 @@ void test_sockmap_basic(void)
- 		test_sockmap_skb_verdict_vsock_poll();
- 	if (test__start_subtest("sockmap vsock unconnected"))
- 		test_sockmap_vsock_unconnected();
-+	if (test__start_subtest("sockmap with zc"))
-+		test_sockmap_zc();
-+	if (test__start_subtest("sockmap recover"))
-+		test_sockmap_copied_seq(false);
-+	if (test__start_subtest("sockmap recover with strp"))
-+		test_sockmap_copied_seq(true);
- }
-diff --git a/tools/testing/selftests/bpf/progs/test_sockmap_pass_prog.c b/tools/testing/selftests/bpf/progs/test_sockmap_pass_prog.c
-index 69aacc96db36..085d7e61e78d 100644
---- a/tools/testing/selftests/bpf/progs/test_sockmap_pass_prog.c
-+++ b/tools/testing/selftests/bpf/progs/test_sockmap_pass_prog.c
-@@ -44,4 +44,12 @@ int prog_skb_parser(struct __sk_buff *skb)
- 	return SK_PASS;
- }
++	/* This is used in tcp_bpf_recvmsg_parser() to determine whether the
++	 * data originates from the socket's own protocol stack. No need to
++	 * refcount sk because msg's lifetime is bound to sk via the ingress_msg.
++	 */
++	msg->sk = sk;
+ 	err = sk_psock_skb_ingress_enqueue(skb, off, len, psock, sk, msg, take_ref);
+ 	if (err < 0)
+ 		kfree(msg);
+@@ -909,6 +927,7 @@ int sk_psock_msg_verdict(struct sock *sk, struct sk_psock *psock,
+ 	sk_msg_compute_data_pointers(msg);
+ 	msg->sk = sk;
+ 	ret = bpf_prog_run_pin_on_cpu(prog, msg);
++	msg->sk = NULL;
+ 	ret = sk_psock_map_verd(ret, msg->sk_redir);
+ 	psock->apply_bytes = msg->apply_bytes;
+ 	if (ret == __SK_REDIRECT) {
+diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
+index a268e1595b22..6332fc36ffe6 100644
+--- a/net/ipv4/tcp_bpf.c
++++ b/net/ipv4/tcp_bpf.c
+@@ -226,6 +226,7 @@ static int tcp_bpf_recvmsg_parser(struct sock *sk,
+ 	int peek = flags & MSG_PEEK;
+ 	struct sk_psock *psock;
+ 	struct tcp_sock *tcp;
++	int from_self_copied = 0;
+ 	int copied = 0;
+ 	u32 seq;
  
-+SEC("sk_skb/stream_verdict")
-+int prog_skb_verdict_ingress(struct __sk_buff *skb)
-+{
-+	int one = 1;
-+
-+	return bpf_sk_redirect_map(skb, &sock_map_rx, one, BPF_F_INGRESS);
-+}
-+
- char _license[] SEC("license") = "GPL";
+@@ -262,7 +263,7 @@ static int tcp_bpf_recvmsg_parser(struct sock *sk,
+ 	}
+ 
+ msg_bytes_ready:
+-	copied = sk_msg_recvmsg(sk, psock, msg, len, flags);
++	copied = __sk_msg_recvmsg(sk, psock, msg, len, flags, &from_self_copied);
+ 	/* The typical case for EFAULT is the socket was gracefully
+ 	 * shutdown with a FIN pkt. So check here the other case is
+ 	 * some error on copy_page_to_iter which would be unexpected.
+@@ -277,7 +278,7 @@ static int tcp_bpf_recvmsg_parser(struct sock *sk,
+ 			goto out;
+ 		}
+ 	}
+-	seq += copied;
++	seq += from_self_copied;
+ 	if (!copied) {
+ 		long timeo;
+ 		int data;
 -- 
 2.43.0
 
