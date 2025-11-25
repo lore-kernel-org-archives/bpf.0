@@ -1,163 +1,253 @@
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-002c1b01.pphosted.com (mx0a-002c1b01.pphosted.com [148.163.151.68])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27F6E2F692F
-	for <bpf@vger.kernel.org>; Tue, 25 Nov 2025 19:09:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764097779; cv=none; b=i2nfQjY5ifkih+XgG5w2AqCLZDmgLtXc4SOiqtQgTSIWTQ2hvy8sxYKUsg/px/KTxyy4Lwqgbr7PDb3GgkUIAgEgXVpli38MFsHZrsNwUIDQD8BN80v/S90R2UqkCkmOw2gCV0r5/jHJ2CBSdoEBM8LAiFs9/oEzP6mTdB3hsUQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764097779; c=relaxed/simple;
-	bh=WhPVHCJW76FGJUYswsjQFNbMTK7L4YrF4FJlMHrzrPk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GW+shfXmw50fm1ZAgVErli09nYvVBUJDW1KE111YtFLf1zd8FMjmFqYyF96TonUs5XdvlxydrLOy3YvR6yBtw0GLB5My0KT0Cl33AKl8HNfozXuZgBZXSwVLRV9y5Ok+LX3qAUIYEN00TqUgJLzzFVRMvx8R9VtAOLUjjzOdwKI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NlOgYsPb; arc=none smtp.client-ip=209.85.214.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D89533374A;
+	Tue, 25 Nov 2025 19:18:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=148.163.151.68
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1764098332; cv=fail; b=oo1enzyU3/Qdp1XGvrjgeH/dy/OrxEK2P0Qiq5qUPDa7al2WTkIJgFq7n+QXAYe2uoL4euOM6v1WhdIzlanIeB1m5tbSH29oV6cM8P8XnfAJBrA1ehpBb6BlMqaDOkWe3W7XljIW4p8pXxVobf5KRKJAs2OMIrXzXQ1ub5qfwq0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1764098332; c=relaxed/simple;
+	bh=bJ6zh6F1860Vb6iJ1hWdJ7sBOoVC7YzRxhe5FAxCyKc=;
+	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=BgwawjsFVwWWsNK9NU6+KzLB7yTP16I/tWguYyRKh+Jw8WM2laXxZm8ylmMaMTYs4k7H+WROTDTn7RaSrtIjpLCeQZc8UcluV4q+LoOqi61CfnDjWWuNvQ3tdVKGvsq4QriDtMTAIIs4b/svujVYETdF5WsnTFtaqj+DgtR3ShY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nutanix.com; spf=pass smtp.mailfrom=nutanix.com; dkim=pass (2048-bit key) header.d=nutanix.com header.i=@nutanix.com header.b=DWaVO3va; dkim=pass (2048-bit key) header.d=nutanix.com header.i=@nutanix.com header.b=S1rBgVFe; arc=fail smtp.client-ip=148.163.151.68
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nutanix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nutanix.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NlOgYsPb"
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-297d4a56f97so87574595ad.1
-        for <bpf@vger.kernel.org>; Tue, 25 Nov 2025 11:09:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764097777; x=1764702577; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KqV4ea26VpNRnNDOYj3v3FWNR4t9iRrjXWCFY4hl9NI=;
-        b=NlOgYsPbCXU9ejFGWz4GDe2nHBW8zxMR8CehaM3nG60xRZqeNQQXfZUlIRkmIFBfbZ
-         mQWQbA7O+kmym/wi4PrFU4ZAQXNrFPiHsXlJhlk1uPhITqoDH67Zp22ytXmSmlj9tEPQ
-         LC7BfDQV6eDnsK7dq9Lxu+YRLW9mOq9my6XatCYFQLcGdGlymd9YZzGwmUaNvMWAWTbK
-         6RvmofRhZd5VLG/eYu7+akPmBR5qKQ8fqVjyxt27WJOmTtBQiL9ae51YLAA0Ax7zzv5+
-         x9kobiSDBPcjegvtSyNJ7g64XdvF9FEjsRef9ExNv194OhegnXLgMN3m9EEuRX7VNDyQ
-         PRWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764097777; x=1764702577;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KqV4ea26VpNRnNDOYj3v3FWNR4t9iRrjXWCFY4hl9NI=;
-        b=fLSc6vBBy/uf3/nOmyspElVuXXc9SrkjNVMt5P1GC1xanpBZ+d48aYOaWhdet2S4bR
-         ASshfwJXOHjfaBGRYRO6xzokczrZY237BqYsyD36IhAnVHoy2RN0TzzEwaYgWRMEB11F
-         FfcJH96zJRzEj9DGnW5P1Zye0NWI7mC9C8tYu55exX2OskwFm8miyJXUJcF/4CCoGUCz
-         up7cRPhZsopX7TPuCmFBHPlzHgX8Y2Itclu9zT0yUk1AtCrLHGSEL4HLFc0MwkE3NPSI
-         r4if5VQWm76k5teuudGH/LCPodFChJRuuVzYQhCk/cPxqKZVWuGBVbWQ1w5yEaG/3BCR
-         vhBg==
-X-Forwarded-Encrypted: i=1; AJvYcCXcmM0k+99umjAz+ES+Xc+foOCtTp+oK1z/NQykhd+vDxja4WYo8N1CqPJiIH78P87FwGY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyD7HcuOoRPSlBv2RAgpJVvCKsjUhIc0dilgrU+CkhfSyb4/FMO
-	ecbVJ1XBSZU16aXPCWYD2rOl35virWh2sQOUzetmtOyMtjJM0WUocCQa
-X-Gm-Gg: ASbGncsjIV4tIEfk/BiAN2msHEwuzYDzWwNx1fA4Z/co3DhPEdj7yzRyT/BnrASMIE2
-	tcQvtMPynkDWEGNC83qjmgTfGQ0n1Lf29YY8K1+EOuS1hYEyLfGX2NsUo/2azTYPPyurHM+J+8G
-	hdFXf6ERy9+Vp23wd31WRvJvjPVbsVxRJ/ba7y331JhnO3SmCcWZMj659EQWtku7saHLNvA6HD8
-	03AB/L8tbR9JOZtKM1K7gzbLdJnqY7n2tuwlppmxntWKs5wE6QvAlGrKPQA7rL3bRDt9jkgr2Gu
-	p/Jjmv6rp8HbEdCsyukMxFPyU+2kY78rwHbhvUOX/sjehYRnFGt3VyK/INy7s8Cm1HlhLToQbdp
-	veaoXm0jbxX76NnfuLodA/Owo8ZV8UGpG7MtKEFQoxaG0HkVMM8Swzwyt+qR+UMaMdSMPWY6kFk
-	5LpyLeNkbg6paK1X+9HcgYUqh20Qx5qqdUwTq12unUWQnghxop3zJ5gB1NfELeTFkb
-X-Google-Smtp-Source: AGHT+IHuIf8IdstsNtTBrFtuIhxYayVPP9kbYzco+dRdLBQVBBJBvJGBn5Q65xamj5HkAzoQXFriDQ==
-X-Received: by 2002:a17:903:2acb:b0:294:fc77:f021 with SMTP id d9443c01a7336-29b6c6b32f7mr194870325ad.49.1764097777372;
-        Tue, 25 Nov 2025 11:09:37 -0800 (PST)
-Received: from ?IPV6:2600:8802:b00:9ce0:a9c6:421a:26c5:f914? ([2600:8802:b00:9ce0:a9c6:421a:26c5:f914])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29b5b107cc2sm176518725ad.16.2025.11.25.11.09.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Nov 2025 11:09:37 -0800 (PST)
-Message-ID: <851516d5-a5e8-47dd-82e0-3e34090e600d@gmail.com>
-Date: Tue, 25 Nov 2025 11:09:35 -0800
+	dkim=pass (2048-bit key) header.d=nutanix.com header.i=@nutanix.com header.b="DWaVO3va";
+	dkim=pass (2048-bit key) header.d=nutanix.com header.i=@nutanix.com header.b="S1rBgVFe"
+Received: from pps.filterd (m0127837.ppops.net [127.0.0.1])
+	by mx0a-002c1b01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5APGKoNh2184171;
+	Tue, 25 Nov 2025 11:18:27 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nutanix.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=proofpoint20171006; bh=BROV6D/vhWf5y
+	QFm0vzJV3BgV5P4HxPx6ZjO6AvWBxs=; b=DWaVO3vaIj+uK39pfZjc/TrkHUP+f
+	U6jdQ//twnUFeHU3F2UgVi6bSkObYlbZfNkk4nM8O4ide3mLbdkpBQvKLXyhCfkb
+	sd1cm+AHW/rN9DAPJJe1M72aYT17c9DHVkhf1ClDYTYa4vxhYyvtejsH9TRjK4NE
+	r90AynobCwjEchOToZwa1uaAXrch+VGOUi8W+UsJkv0Bx5wHDwwSaKKlkrImgkWH
+	QLU5wvFKvowQtP6iYlH702Nbv/VDgbBPqHqPCKFP3hobsM3qev5seGbgZLDFWTtS
+	Zmw79k8N67XDxPueEED1exj3kaYBWsCV3HzlkX/npnPili3LTG/mcr8Pw==
+Received: from ch5pr02cu005.outbound.protection.outlook.com (mail-northcentralusazon11022110.outbound.protection.outlook.com [40.107.200.110])
+	by mx0a-002c1b01.pphosted.com (PPS) with ESMTPS id 4anfw40cv0-1
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+	Tue, 25 Nov 2025 11:18:27 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=aIAxAj1zP9jMLGPS+zqegOvxe62Tpt+Qcc9Sjp06c8XxXtFzWlvdyIbV7dIK+by/aUmtmak80+rgcVEnnQE/dWfqFSmjeNu/xZ5ZoFqZGNII189jlJHWS23kMTU3wqT/ttsMKzsd4XmLTfKRvIqqG1XYFVhZkd9iz/Q0+05fil9SAmKX1vr4vLmy7sgOwDmzaKE+Fce3fvm5iJLf839SkFt5Tv3UJ3SpGO6L5DsvytuEqaL0o7DcSv3wYu4z1MQ796X8sPrz1bAgmfARBMRUxNcIt1fWb7bBblm5anKzwG/hor2ua5TjLhXRrz5kNwWN1JOvRWAhtOpNhb8NvGLwcg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=BROV6D/vhWf5yQFm0vzJV3BgV5P4HxPx6ZjO6AvWBxs=;
+ b=bpL825mFX/R4Jeg+IryQqyengjGiISQkWQLb7M6gfx491GURDko334WuapSHeg7CmpQPI0oBjCVSca4OKXUYisynFbHovGo/3TUC1dqAOQqmpe7F+0yPszBTGV1Fr7NotYEsS6R5nJwQw3U3I6OKyL18J+o+Ec3SM62qbp3q0gJc07vxlihAEID+kVc8wramtjRiDKvzBm1IeBEavolWOQ5HRgIGrYgd+cC5rOLrxAS72xAYFPOoXsJAiOswJA5ZSzM1TPmNNQDV9PgNMSRDr/NNQNe5XkhLgH1wb96LHXMPlUHeoFwvosG6PwxXDnogLpXAyr0cJ40XfwFvVduKAA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nutanix.com; dmarc=pass action=none header.from=nutanix.com;
+ dkim=pass header.d=nutanix.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nutanix.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BROV6D/vhWf5yQFm0vzJV3BgV5P4HxPx6ZjO6AvWBxs=;
+ b=S1rBgVFeOpIrc15buIokJ7AVUA2AP30n4HPFcU9AYLp7u4SduLv8IlUsOr5M9COB7KZ8d4MC+o9EqaE5O8IAUhRHpTtn261nL1C+PUBWq2NMwTah/i1PPHxXFjiH2Pspy3RYGZR8C45MnQhdSkzm44zRTMlu2WVhUMgEuhHhAKbH8v96BI20EePQkE92IELvXjJD/CJPySP8WlHNYadLJj+Q6nbQMK+Dcir+epzuVMwScfrDa0IINP41OY9gG5a6j/koCadYupMc7ARADkkMBfuKvG/RPNufWyuDsTUdBSBbjUGXvHyrCaaFkVuCQhUf+pQu6LPY4L8Dm+j0PI2aXw==
+Received: from LV0PR02MB11133.namprd02.prod.outlook.com
+ (2603:10b6:408:333::18) by PH0PR02MB7557.namprd02.prod.outlook.com
+ (2603:10b6:510:54::17) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9343.17; Tue, 25 Nov
+ 2025 19:18:24 +0000
+Received: from LV0PR02MB11133.namprd02.prod.outlook.com
+ ([fe80::10e5:8031:1b1b:b2dc]) by LV0PR02MB11133.namprd02.prod.outlook.com
+ ([fe80::10e5:8031:1b1b:b2dc%4]) with mapi id 15.20.9343.016; Tue, 25 Nov 2025
+ 19:18:24 +0000
+From: Jon Kohler <jon@nutanix.com>
+To: netdev@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Stanislav Fomichev <sdf@fomichev.me>,
+        bpf@vger.kernel.org (open list:XDP (eXpress Data Path):Keyword:(?:\b|_)xdp(?:\b|_))
+Cc: Jon Kohler <jon@nutanix.com>
+Subject: [PATCH net-next v2 0/9] tun: optimize SKB allocation with NAPI cache
+Date: Tue, 25 Nov 2025 13:00:27 -0700
+Message-ID: <20251125200041.1565663-1-jon@nutanix.com>
+X-Mailer: git-send-email 2.43.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: PH7P220CA0128.NAMP220.PROD.OUTLOOK.COM
+ (2603:10b6:510:327::15) To LV0PR02MB11133.namprd02.prod.outlook.com
+ (2603:10b6:408:333::18)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V3 1/6] block: ignore discard return value
-To: Jens Axboe <axboe@kernel.dk>, agk@redhat.com, snitzer@kernel.org,
- mpatocka@redhat.com, song@kernel.org, yukuai@fnnas.com, hch@lst.de,
- sagi@grimberg.me, kch@nvidia.com, jaegeuk@kernel.org, chao@kernel.org,
- cem@kernel.org
-Cc: linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
- dm-devel@lists.linux.dev, linux-raid@vger.kernel.org,
- linux-nvme@lists.infradead.org, linux-f2fs-devel@lists.sourceforge.net,
- linux-xfs@vger.kernel.org, bpf@vger.kernel.org,
- Johannes Thumshirn <johannes.thumshirn@wdc.com>,
- "Martin K . Petersen" <martin.petersen@oracle.com>
-References: <20251124234806.75216-1-ckulkarnilinux@gmail.com>
- <20251124234806.75216-2-ckulkarnilinux@gmail.com>
- <e3f09e0c-63f4-4887-8e3a-1fb24963b627@kernel.dk>
-Content-Language: en-US
-From: Chaitanya Kulkarni <ckulkarnilinux@gmail.com>
-In-Reply-To: <e3f09e0c-63f4-4887-8e3a-1fb24963b627@kernel.dk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV0PR02MB11133:EE_|PH0PR02MB7557:EE_
+X-MS-Office365-Filtering-Correlation-Id: c362f32a-6d10-41fc-0f36-08de2c5767b6
+x-proofpoint-crosstenant: true
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|1800799024|52116014|376014|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?8DRQVwW6V9kFpyxgRzM+xQOtsxzNtEbXBZuDyCz5qBH1uwHDGhV2pz5ruajo?=
+ =?us-ascii?Q?wfap2I2gj2xjWcf1sodwt3oPmBlpwP9aPMipCYDo+pguDIig11A29wQUClk5?=
+ =?us-ascii?Q?TXMLLgX9aIAlb5guaZqN84+V/lWVJwctdN4tjxFoTLUwfqs9d+7UXjbh+Ffg?=
+ =?us-ascii?Q?G8zadfSgvvd1WUChnVy5lpsX8u0pBPqdRr2X39JWkYpnVJr/pF1pXOcUvkX+?=
+ =?us-ascii?Q?BLUPJmMxGy3QJ0HLDwAKl26oi5LqcY2jOykz6yVgpKl9BClxqlXkJDW/nc/j?=
+ =?us-ascii?Q?0oL5dWZ/skdKmiz45SoMNpJa0etR8O3CZW526LCuMhi1RiMgRW33UPpZqfp3?=
+ =?us-ascii?Q?Jzb9K/yWu7HviYq6eyXhggcJ5YfSsrW0ycnu6pnRkp0YvZbTLjSpawCZ4bW6?=
+ =?us-ascii?Q?YF4RzW3GJiDU44j/UU0KMdQrDv/Jbov8ereevndf/g5aKSULrgyJUXUII1/L?=
+ =?us-ascii?Q?3C5obLYUA98LwrnPYnMxqEzwj9kaJALSqyG+X1N+wjimEvpsPYRnDV7zaALz?=
+ =?us-ascii?Q?LsBtTkRwJdBy+WCXP6E3yw0AtqkhJ8d6iEVmBugcroVNiii1aIuPluVVpin3?=
+ =?us-ascii?Q?YYhn08AIM9Yb9VxrOOUOONlIPJDVYHl9WZ9UdLalFTJSukOtBed0WFDQk8uH?=
+ =?us-ascii?Q?eORgwZ68154oBSkrD00qTmAzMI/ac8jLgSRMpJCFfRy8s2FYSD5zcmqJmy12?=
+ =?us-ascii?Q?PWd4e85638NLK/03lJJrUEo3RUhs9eY4uO8vL2zYMBDsdGCAZ+Imzmvrxj/r?=
+ =?us-ascii?Q?cuSkpeWc8CnKwAXx4W1ABYN/k/HgMrTC4++TTCktXaUHShcahbh8QxcCbhKp?=
+ =?us-ascii?Q?AlTh/0Vs/ehw7ETHOxkpHxP+11+2E+D2RdHlFLotvVqrk9d0lBDF/2xdWiND?=
+ =?us-ascii?Q?yeCYjZ0KXM74RlmasrzhKTrhL9EKSSA3PCYjlayxdsvZUqjc4HjBypfSc+DE?=
+ =?us-ascii?Q?vj7No/hYSPmU4Ae6o/lrFxDrmgPjNhrJSartCv65QQozAcsOru8Z3TBJTgka?=
+ =?us-ascii?Q?DFZ7IeQi7QafeENkhL2bK4khIzt0GEtQaTOUf/WocijmDf06d99pXykKB1g4?=
+ =?us-ascii?Q?cN0gYBtOEHWS5qoIzv+YBtBLMSbROVkBENVq7qsRbP+QXovspilooLzdAzkJ?=
+ =?us-ascii?Q?gTXF2YLJcE4HFx04JcMRmL7pMzuuGoNfFm3ua3OTAsPOSqydWPxSpjQx724L?=
+ =?us-ascii?Q?Hvd1U0IUjkkgaBt0ztNoYuTom4AK3mPSWeK/lz8Cc49ohLc8eaePGEcSmypy?=
+ =?us-ascii?Q?j1+jjuCWa4oinR3YptwI+iHwGKPI3QVW5jD+AKbxSH/2VUFz0r9oLeLNT+kp?=
+ =?us-ascii?Q?06yCyp2PfPUQXlk34xsZ/ymMnlMtRlV8pfJ1UYCuHAoGdkwB5+Oa7m3zDQFq?=
+ =?us-ascii?Q?Aib9tbWVeO22/gzFZmAhJMkQSBefOYeTdBcixfh3cKiq7kGFs8sZ23RyM4rX?=
+ =?us-ascii?Q?7MPVsus36lPRFLhe1vT8wFSvrHiVevk/Zc6IrhT/rompXw14mXtVNDelJNxO?=
+ =?us-ascii?Q?jNpo5PZ9QD50hVw7ujJL+dc+fqtq+d5zTCEa?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV0PR02MB11133.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(52116014)(376014)(38350700014);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?hHmLOMGIac1xPPWgxadbtqouYvG5ATryFco4VdFcIpWeebQpRenGlvY0hJE6?=
+ =?us-ascii?Q?Pi8+4m0nUzsnGIZnNLXDtzgkIgI8uMvo+HjE7td4yqXC5abvDWB5dd+WuYhK?=
+ =?us-ascii?Q?6uwkpiMf0ivQps3s3/7OCtDTV8xm4DwfKxrIl5eoQUU4LGODwfukSeiX75tz?=
+ =?us-ascii?Q?2XI4/C1UVkJmV12USCJ04Q6i3uC1lQxdsSgc0/VJnmHhMCNqFHZGkwhdgmHN?=
+ =?us-ascii?Q?8ETzdBhTRQ9rYfIT+4AzOXxgEQLE2liq+gs50k0npZSbWns6In0VtbcqUkIe?=
+ =?us-ascii?Q?sNYu+Zk+g3P+Vt04FBuqQmTtqqjfwgvbDgWHrcs1xm21eVemXtikjO4PocCv?=
+ =?us-ascii?Q?Et9NisgpJ0mRGbkduttlqUOXMIzqCzZk+/gMLOF4TRfN8LSSIr7M0Blp+xK6?=
+ =?us-ascii?Q?b8nt3u3CEjRIrSuNZWCw0kg3uzCgSmT2ogzm23I05wa8anBeFWzZ+T8PN92w?=
+ =?us-ascii?Q?LAwNQM1FL4U6UZz7bJgz+C4aUe7daTXbxcGxQtIZryDkn0cPSDBhJR7XOyAV?=
+ =?us-ascii?Q?mfiwqBCBwGjpiDYRC7vx2dXtk+NAL89zG0BJz8Sq48Cy2GsT4t8rSI0znvFn?=
+ =?us-ascii?Q?DeCciavVymXyWkZsmKAh1ctCIC8/76gMsET0ZVyGkSNekJxrJF3s01KU3qx5?=
+ =?us-ascii?Q?B62BFxdI9xk6ijA0HiZPlE4PfHSG179IXUAjbwpGilrDDT5YR4uFhZpGpXQ3?=
+ =?us-ascii?Q?VhNSckO1ysxunmsihVuPOI7uiR2tckutp7I3sljIipsL+R1NNtssOacfrqRO?=
+ =?us-ascii?Q?JE7Fl48dpiExR2OXlOz7o9eOyLq00diPg0AjgcBWfTPJxO4OidfOHBi44Lxm?=
+ =?us-ascii?Q?grxUPkI40aIqQwQwCJQSy/o0xbunDgY9RCPNj8FPe6hQIcqDXqqEG8mXgPAH?=
+ =?us-ascii?Q?cLK82bAj0Olp5PXcv2vBQWFxV/aGKAxKkVPV8g0IWjh93cHKwf62ePmOi2G5?=
+ =?us-ascii?Q?wwJVhIgY+HfkNmwB8i18oZx57p0HR7usEaG+9toYPXIM22mMbcD083Satcra?=
+ =?us-ascii?Q?Be+kOvAnyZfjkPHOm5CwTr+oCLs5palyhMixjyTHSp8xEynu6EXao05Ebijp?=
+ =?us-ascii?Q?/IQ6YcxaF4iaFQQCgsNbrwYWCYm31/2kbSQG8FuixLuWJhwamfPAt78DhwaX?=
+ =?us-ascii?Q?TOsOiqBSReTl+44DBIPZcZ6+eH9SqY6q8DKguab92iVSKkq/AUzIvSvXBR0Q?=
+ =?us-ascii?Q?+8HzIXXvV4aP0DCCnfxw3ijAlpsbVKIJ6JZQoqYpkGbcgKQNODfEGoeo1RLZ?=
+ =?us-ascii?Q?i2SVAG8X9JKtdYt6sFnAj1F9Yu40avtPKq/vo1TCLeYFYLtsp3o6sNkYCaDW?=
+ =?us-ascii?Q?a60a59xVfQYrrmZDSDi17zhFaFWfigWtnz+ylXzZqo/Ytb6IpXjyPRL6POSO?=
+ =?us-ascii?Q?4//1K/qAOKI92q2UmCDGw8A2joUXF9jL9Zo4QnzA2cEbsE0GRWDll6weppFw?=
+ =?us-ascii?Q?f//ZeT1eHRVjGOluqjpazJTZ4g/RZo2gaV6g/7zxQgR/xK6gbWoJPlqL1OHy?=
+ =?us-ascii?Q?HziEqI8lP/uJP1GyZBBEcFcRnHQyoX35GuYhiCYaXshB7xBv8uiqa8DHUGO/?=
+ =?us-ascii?Q?ShbT9VNfeQBiV08kBQNccY9VVSGJS3ipkLBMblFOkdBLak0qNCvjL9xEpIVK?=
+ =?us-ascii?Q?NQ=3D=3D?=
+X-OriginatorOrg: nutanix.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c362f32a-6d10-41fc-0f36-08de2c5767b6
+X-MS-Exchange-CrossTenant-AuthSource: LV0PR02MB11133.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Nov 2025 19:18:24.7723
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: bb047546-786f-4de1-bd75-24e5b6f79043
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: SzxA3aUypwunQptYCd21mDKP9Cj6jDa0BdLigFC+FtkvYBJfxX4EHl5oGBEyVNshed8NGUk4zE8+uPtok+Gzphe5de/+CWKhWzXaT3QPjIk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR02MB7557
+X-Proofpoint-GUID: jKaBicul_ebhmOAXZ0ojXmtXQsuOK2tz
+X-Authority-Analysis: v=2.4 cv=NfzrFmD4 c=1 sm=1 tr=0 ts=69260103 cx=c_pps
+ a=ZQ5czZ6yTY4ZD+V8z0ndCg==:117 a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19
+ a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19 a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19
+ a=xqWC_Br6kY4A:10 a=6UeiqGixMTsA:10 a=0kUYKlekyDsA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=VwQbUJbxAAAA:8 a=64Cc0HZtAAAA:8
+ a=w4ubDpE_Fi1pwYaKQRoA:9
+X-Proofpoint-ORIG-GUID: jKaBicul_ebhmOAXZ0ojXmtXQsuOK2tz
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTI1MDE2MSBTYWx0ZWRfXxCB3PPnbuVqj
+ oHmQIFqGU+nE32Ab2PlVSFPXXRuMSNLLC2uKUfBMwEq7B/9VExVMFfSbm65Oer+skkRfD6Gohbd
+ Jwzj6f+1D0jxIYcNA3gGWVxJFW/sc5y/jhgkrHVDR6ThBAZoHb04Vpf/n9RXsQ7Dqy2EUMrY8Ku
+ 8+/9c6Q5lVGp2KNOwfd6o3q1i6ybU7FRPC+Z3lo4atR3npk/dbaIXexDJfcoLAUEQdrHAXsjag1
+ +ZeA9PbQ9tsBQSqN3M3R8QQCNXmwbVUwERylPz3tx0TyaOqlLtPSJAIM1dbyiOPETVIa8/qvN/o
+ H30z3CrLeLrVwLv//o7RwXMylKZcJIxy52IIfRsc/mDzQu7t/mh2wdUKfbW8erSsvanx5UOUwTt
+ az0Mw1mEYlzPVFemkCPdV6E3eoVxEw==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-11-25_02,2025-11-25_01,2025-10-01_01
+X-Proofpoint-Spam-Reason: safe
 
-On 11/25/25 09:38, Jens Axboe wrote:
-> On 11/24/25 4:48 PM, Chaitanya Kulkarni wrote:
->> __blkdev_issue_discard() always returns 0, making the error check
->> in blkdev_issue_discard() dead code.
-> Shouldn't it be a void instead then?
->
-Yes, we have decided to clean up the callers first [1]. Once they are
-merged safely, after rc1 I'll send a patch [2] to make it void since
-it touches many different subsystems.
+Use the per-CPU NAPI cache for SKB allocation in most places, and
+leverage bulk allocation for tun_xdp_one since the batch size is known
+at submission time. Additionally, utilize napi_build_skb and
+napi_consume_skb to further benefit from the NAPI cache. This all
+improves efficiency by reducing allocation overhead. 
 
--ck
+Note: This series does not address the large payload path in
+tun_alloc_skb, which spans sock.c and skbuff.c,A separate series will
+handle privatizing the allocation code in tun and integrating the NAPI
+cache for that path.
 
-[1]
-https://marc.info/?l=linux-block&m=176405170918235&w=2
-https://marc.info/?l=dm-devel&m=176345232320530&w=2
+Results using basic iperf3 UDP test:
+TX guest: taskset -c 2 iperf3 -c rx-ip-here -t 30 -p 5200 -b 0 -u -i 30
+RX guest: taskset -c 2 iperf3 -s -p 5200 -D
 
-[2]
- From abdf4d1863a02d4be816aaab9a789f44bfca568f Mon Sep 17 00:00:00 2001
-From: Chaitanya Kulkarni <ckulkarnilinux@gmail.com>
-Date: Tue, 18 Nov 2025 10:35:58 -0800
-Subject: [PATCH 6/6] block: change discar return type to  void
+        Bitrate       
+Before: 6.08 Gbits/sec
+After : 6.36 Gbits/sec
 
-Now that all callers have been updated to not check the return value
-of __blkdev_issue_discard(), change its return type from int to void
-and remove the return 0 statement.
+However, the basic test doesn't tell the whole story. Looking at a
+flamegraph from before and after, less cycles are spent both on RX
+vhost thread in the guest-to-guest on a single host case, but also less
+cycles in the guest-to-guest case when on separate hosts, as the host
+NIC handlers benefit from these NAPI-allocated SKBs (and deferred free)
+as well.
 
-This completes the cleanup of dead error checking code around
-__blkdev_issue_discard().
+Speaking of deferred free, v2 adds exporting deferred free from net
+core and using immediately prior in tun_put_user. This not only keeps
+the cache as warm as you can get, but also prevents a TX heavy vhost
+thread from getting IPI'd like its going out of style. This approach
+is similar in concept to what happens from NAPI loop in net_rx_action.
 
-Signed-off-by: Chaitanya Kulkarni <ckulkarnilinux@gmail.com>
----
-  block/blk-lib.c        | 3 +--
-  include/linux/blkdev.h | 2 +-
-  2 files changed, 2 insertions(+), 3 deletions(-)
+I've also merged this series with a small series about cleaning up
+packet drop statistics along the various error paths in tun, as I want
+to make sure those all go through kfree_skb_reason(), and we'd have
+merge conflicts separating the two. If the maintainers want to take
+them separately, happy to break them apart if needed. It is fairly
+clean keeping them together otherwise.
 
-diff --git a/block/blk-lib.c b/block/blk-lib.c
-index 19e0203cc18a..0a5f39325b2d 100644
---- a/block/blk-lib.c
-+++ b/block/blk-lib.c
-@@ -60,7 +60,7 @@ struct bio *blk_alloc_discard_bio(struct block_device *bdev,
-  	return bio;
-  }
-  
--int __blkdev_issue_discard(struct block_device *bdev, sector_t sector,
-+void __blkdev_issue_discard(struct block_device *bdev, sector_t sector,
-  		sector_t nr_sects, gfp_t gfp_mask, struct bio **biop)
-  {
-  	struct bio *bio;
-@@ -68,7 +68,6 @@ int __blkdev_issue_discard(struct block_device *bdev, sector_t sector,
-  	while ((bio = blk_alloc_discard_bio(bdev, &sector, &nr_sects,
-  			gfp_mask)))
-  		*biop = bio_chain_and_submit(*biop, bio);
--	return 0;
-  }
-  EXPORT_SYMBOL(__blkdev_issue_discard);
-  
-diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
-index f0ab02e0a673..b05c37d20b09 100644
---- a/include/linux/blkdev.h
-+++ b/include/linux/blkdev.h
-@@ -1258,7 +1258,7 @@ extern void blk_io_schedule(void);
-  
-  int blkdev_issue_discard(struct block_device *bdev, sector_t sector,
-  		sector_t nr_sects, gfp_t gfp_mask);
--int __blkdev_issue_discard(struct block_device *bdev, sector_t sector,
-+void __blkdev_issue_discard(struct block_device *bdev, sector_t sector,
-  		sector_t nr_sects, gfp_t gfp_mask, struct bio **biop);
-  int blkdev_issue_secure_erase(struct block_device *bdev, sector_t sector,
-  		sector_t nr_sects, gfp_t gfp);
+Thanks all,
+Jon
+
+v2:
+- Added drop statistics cleanup series, else merge conflicts abound
+- Removed xdp_prog change (Willem)
+- Clarified drop scenario in tun_put_user, where it is an extention of
+  current behavior (Willem comment from v1)
+- Export skb_defer_free_flush
+- Use deferred skb free to immediately refill cache prior to bulk alloc,
+  which also prevents IPIs from pounding TX heavy / TX only cores
+
+v1: https://patchwork.kernel.org/project/netdevbpf/cover/20250506145530.2877229-1-jon@nutanix.com/
+
+Jon Kohler (9):
+  tun: cleanup out label in tun_xdp_one
+  tun: correct drop statistics in tun_xdp_one
+  tun: correct drop statistics in tun_put_user
+  tun: correct drop statistics in tun_get_user
+  tun: use bulk NAPI cache allocation in tun_xdp_one
+  tun: use napi_build_skb in __tun_build_skb
+  tun: use napi_consume_skb() in tun_put_user
+  net: core: export skb_defer_free_flush
+  tun: flush deferred skb free list before bulk NAPI cache get
+
+ drivers/net/tun.c      | 170 +++++++++++++++++++++++++++++------------
+ include/linux/skbuff.h |   1 +
+ net/core/dev.c         |   3 +-
+ 3 files changed, 126 insertions(+), 48 deletions(-)
+
 -- 
-2.40.0
+2.43.0
 
