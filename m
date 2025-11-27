@@ -1,207 +1,116 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from out-183.mta1.migadu.com (out-183.mta1.migadu.com [95.215.58.183])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C47CF2F531A
-	for <bpf@vger.kernel.org>; Thu, 27 Nov 2025 17:58:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E39922F4A18
+	for <bpf@vger.kernel.org>; Thu, 27 Nov 2025 18:53:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764266307; cv=none; b=LORktGW8GvhvUYRx24R+FVhkoJGHgaKSXXk/iQfmArJ99b4yVP+stiGWGr8q5IfJAdjgf/U1bqJ260PHmR5d7EU5CrWz2HG1xGFAeAFWEN6woEZaWGcgXUVZiEZmVYDBAFxgnpW4Y2XEjnMoaVn56kdL8Oa+pIe/uHYwbB6HmRk=
+	t=1764269605; cv=none; b=oRKMnaRh575uhpeGs15doRcGsA1AIkZGtL+HwzF6+0SkcCeymF3PPO1HMtGyHH58hO9ltwwS+j5TsNpQDvgaVDgPUDn1nQaTMbfp7YrTeKusjCekH6qT2GFR+UlxIE6aM6lkey4ZZXr+clVOVS4v0ggvQOSs509Pxz4nXhmxjFE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764266307; c=relaxed/simple;
-	bh=TPEliOZDbEMTucSchU26H1mgBRnCr+iif0iy/Krl6TE=;
-	h=Content-Type:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To; b=jPU2Yvh4xNg6lfXt6wniMlg1pJ1LPPc97x4BhFR9uMt+nRrRyF3EA1Cxl4T0uqabACW/NI1jvo0Ea8dnIUhd9LVcg4J5fTdmEBwgY9mdsleFOdJrJkNl3ZPfWXVXP2DzL73AJDFKHL3iqWCcyp6UmiNPt895b5Um+dsJKML5Q9M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=VoPpntZJ; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=rcquEUCf; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1764269605; c=relaxed/simple;
+	bh=OGljzmU0DkQ+x9fsECZTDJgZ2OLFsyJKQITIodlLZY4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=fSOCKKyAM5teD9qm34vG/StIM/YPsk31qqZAfkpRwlGjY8e8Yjy2aaz74FpGaAF/jQUsaVR3rakBv0aQ2PUbVRagPainDyOYeNdG4EYlAaenISIV2rRHJvuTnun3abF3T9KnXsu//JTLPeeBCdHTvNSwS1aVJwETP/LsOdO6McE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=vh/2nFAb; arc=none smtp.client-ip=95.215.58.183
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="VoPpntZJ";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="rcquEUCf"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1764266304;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="vh/2nFAb"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1764269601;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=DY2OZoOg2Jn10jb874/Zht9ZmafIol/m0aMFjx0QUms=;
-	b=VoPpntZJjWhp2cPUdEj5TmjbaWF40Q3fm5/8X3PFltRzK7HwXcKEfh6U0PSbII2DyyLQki
-	6Tq9UakCS/suoa76magkzh9LpYzWuPo9UeDEiy5+n1rA6YuiL7H828pC6+fO3xDXTZH4Ki
-	fictfay6A252QEnH7KX2LoPkJbtajFU=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-152-JmNkpDItMOqtnxEUe0GZGQ-1; Thu, 27 Nov 2025 12:58:23 -0500
-X-MC-Unique: JmNkpDItMOqtnxEUe0GZGQ-1
-X-Mimecast-MFC-AGG-ID: JmNkpDItMOqtnxEUe0GZGQ_1764266302
-Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-42b366a76ffso741865f8f.1
-        for <bpf@vger.kernel.org>; Thu, 27 Nov 2025 09:58:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1764266302; x=1764871102; darn=vger.kernel.org;
-        h=in-reply-to:from:content-language:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DY2OZoOg2Jn10jb874/Zht9ZmafIol/m0aMFjx0QUms=;
-        b=rcquEUCfROmwhFDdhqn8XS+VDCZkL0P9VH9X2ss4CYngPcPIJiAISEDh52TBDCY4B8
-         NV/leAJDoAjgQJd+dRpu7SeYt19H2nyVF8pTb/x07Jp/ZcDLeLcgIeUggRFbDea50N/U
-         PavDwtYrtOCc/yyRbyE4qCkZMnao1YSfd2mJkyfo5JSIuW9J+FgpJAnNumB10aIeIIsT
-         p01fyiLQb19SaO5PjVUIelU0UCUkgQtqklILyUxTp28k9v26tUdY6UiWh6QdcczCM2i9
-         ERsK98vJRzUZ99Et834S/SxXnNvHJw3GejURDZwxebka7/2nyW82Yzd2lLNubzAM5/iK
-         TSSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764266302; x=1764871102;
-        h=in-reply-to:from:content-language:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DY2OZoOg2Jn10jb874/Zht9ZmafIol/m0aMFjx0QUms=;
-        b=MnA1a2eDWkNxnGahMZfyBzAw521gH6JhPYy7WfKWX+MHY0PqJgg8C4srIfb2EGKUW4
-         kjADTgYdy8nv2hclV33++N1LUAPQnLaj7QCb2a37EddifNM0fRlClJ21i5g/TY5mF3sn
-         1UrisFVwcNTw83CKlYeqazvMrZgg8c9wD4EkfTaYmtNLLv3ABhDrP/TOg7CMA6t25jkt
-         Sl1Igdwf6OC4R+Am0zJAOKYJQgudAp8R8ZEYYBClAYRe1N9FTq237YfLYTiTbWFr7I8X
-         ylV8yHprZ/rxBhmz07Cc+1aLLaWvpMFTLJMbafqMOXZsb97cP4xKMbpOAxGV5RN4u1+H
-         uAEQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVyCOFJGWSl+1tKC8Ik75+sBSaBMnFFXJWIl23ASRDSHmleNOLfYQX9oyoaIQefsoHgyH8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyHjIucbCrFWBxIpzER/bcfROubfduIPb4qGQCKz1QSml9+lDUh
-	BjJqdZXdwas5DXUtYCpNy7KX9JCPms8ZuOHugW3NWE/yEHngZknE82S7sPr0YIQmuRm0LqEo1SK
-	D/nH2PNAymVTG7Qrd2oYioYZsrmphtc/rdAxZjhcDZoNdL7clAxH6Og==
-X-Gm-Gg: ASbGnct8e9DKV3QeezatXHEKZOB6/RsZpm4cyUzD7M0CLr7qSvNcjqbnmFazu8/YqMv
-	q7tqUqW8FYAFxpJn4LpMt2yVNbSSreRi2yFUVPAWAOcxvBw11wMxIpVdBX+toFqpOBfwwPIbVdF
-	3tjuE6c2daRsC15PnWcmv98KpfPfyWbeh/XzOEPRr2Y4Kfea2WbMorVfvLscPk+G18R/OkECrl3
-	M9Y8f0a3MlGdMPZg1YDJZx8jzsmy5ZaQV2YKFiuXwk3MCeGCRbidr8pkNcRbKSutLCFZmK5+py4
-	jgQa2dqPHU2sDNqGncxr58qMLodu726PX298UMizUVZ+jWayz85DqrsdmhALJjOoaH3lrkcqInr
-	tPC9uGBx4zGMbDA==
-X-Received: by 2002:a05:6000:2506:b0:429:b525:6dc2 with SMTP id ffacd0b85a97d-42e0f213901mr12126306f8f.17.1764266301755;
-        Thu, 27 Nov 2025 09:58:21 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IGLRSA4nZtw3RbOLioK1qcRhOZy0uuInbULKsyGs0r8xbhY31cwWTMcCnjCEwBSM0N/0WJA6A==
-X-Received: by 2002:a05:6000:2506:b0:429:b525:6dc2 with SMTP id ffacd0b85a97d-42e0f213901mr12126275f8f.17.1764266301322;
-        Thu, 27 Nov 2025 09:58:21 -0800 (PST)
-Received: from [192.168.88.32] ([212.105.155.212])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42e1caa767dsm4882115f8f.38.2025.11.27.09.58.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Nov 2025 09:58:20 -0800 (PST)
-Content-Type: multipart/mixed; boundary="------------YlcUvmJr0yf8fUFaZ0Spby8F"
-Message-ID: <f8d6dbe0-b213-4990-a8af-2f95d25d21be@redhat.com>
-Date: Thu, 27 Nov 2025 18:58:18 +0100
+	bh=GkubKcSTNE4kKDdz7gUmlKO6JRAaq9Yff0unvyM5a5E=;
+	b=vh/2nFAbmvdxajM7iTr61Dj2BLyrmCRbpofhmY4haJZ5bok6qmfLfriiVj0QDQOXPSEbEu
+	F/87xb+qrzA0P+fIfHs+9kr+bXgAFAPuwM0yZaYQJ97Edymn8ZOAckErGLiuGpC44Wcp4X
+	pmk3qXxSxmPSppIp1flbojKpbPLim28=
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nicolas.schier@linux.dev>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Alan Maguire <alan.maguire@oracle.com>,
+	Donglin Peng <dolinux.peng@gmail.com>
+Cc: bpf@vger.kernel.org,
+	dwarves@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kbuild@vger.kernel.org
+Subject: [PATCH bpf-next v2 1/4] resolve_btfids: rename object btf field to btf_path
+Date: Thu, 27 Nov 2025 10:52:39 -0800
+Message-ID: <20251127185242.3954132-2-ihor.solodrai@linux.dev>
+In-Reply-To: <20251127185242.3954132-1-ihor.solodrai@linux.dev>
+References: <20251127185242.3954132-1-ihor.solodrai@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v3] xsk: skip validating skb list in xmit path
-To: Jason Xing <kerneljasonxing@gmail.com>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- bjorn@kernel.org, magnus.karlsson@intel.com, maciej.fijalkowski@intel.com,
- jonathan.lemon@gmail.com, sdf@fomichev.me, ast@kernel.org,
- daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
- bpf@vger.kernel.org, netdev@vger.kernel.org,
- Jason Xing <kernelxing@tencent.com>
-References: <20251125115754.46793-1-kerneljasonxing@gmail.com>
- <b859fd65-d7bb-45bf-b7f8-e6701c418c1f@redhat.com>
- <CAL+tcoDdntkJ8SFaqjPvkJoCDwiitqsCNeFUq7CYa_fajPQL4A@mail.gmail.com>
-Content-Language: en-US
-From: Paolo Abeni <pabeni@redhat.com>
-In-Reply-To: <CAL+tcoDdntkJ8SFaqjPvkJoCDwiitqsCNeFUq7CYa_fajPQL4A@mail.gmail.com>
-
-This is a multi-part message in MIME format.
---------------YlcUvmJr0yf8fUFaZ0Spby8F
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On 11/27/25 1:49 PM, Jason Xing wrote:
-> On Thu, Nov 27, 2025 at 8:02 PM Paolo Abeni <pabeni@redhat.com> wrote:
->> On 11/25/25 12:57 PM, Jason Xing wrote:
->>> This patch also removes total ~4% consumption which can be observed
->>> by perf:
->>> |--2.97%--validate_xmit_skb
->>> |          |
->>> |           --1.76%--netif_skb_features
->>> |                     |
->>> |                      --0.65%--skb_network_protocol
->>> |
->>> |--1.06%--validate_xmit_xfrm
->>>
->>> The above result has been verfied on different NICs, like I40E. I
->>> managed to see the number is going up by 4%.
->>
->> I must admit this delta is surprising, and does not fit my experience in
->> slightly different scenarios with the plain UDP TX path.
-> 
-> My take is that when the path is extremely hot, even the mathematics
-> calculation could cause unexpected overhead. You can see the pps is
-> now over 2,000,000. The reason why I say this is because I've done a
-> few similar tests to verify this thought.
+Rename the member of `struct object` holding the path to BTF data if
+provided via --btf arg. `btf_path` is less ambiguous.
 
-Uhm... 2M is not that huge. Prior to the H/W vulnerability fallout
-(spectre and friends) reasonable good H/W (2016 old) could do ~2Mpps
-with a single plain UDP socket.
+Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+---
+ tools/bpf/resolve_btfids/main.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-Also validate_xmit_xfrm() should be basically a no-op, possibly some bad
-luck with icache?
-
-Could you please try the attached patch instead?
-
-Should not be as good as skipping the whole validation but should give
-some measurable gain.
->>> [1] - analysis of the validate_xmit_skb()
->>> 1. validate_xmit_unreadable_skb()
->>>    xsk doesn't initialize skb->unreadable, so the function will not free
->>>    the skb.
->>> 2. validate_xmit_vlan()
->>>    xsk also doesn't initialize skb->vlan_all.
->>> 3. sk_validate_xmit_skb()
->>>    skb from xsk_build_skb() doesn't have either sk_validate_xmit_skb or
->>>    sk_state, so the skb will not be validated.
->>> 4. netif_needs_gso()
->>>    af_xdp doesn't support gso/tso.
->>> 5. skb_needs_linearize() && __skb_linearize()
->>>    skb doesn't have frag_list as always, so skb_has_frag_list() returns
->>>    false. In copy mode, skb can put more data in the frags[] that can be
->>>    found in xsk_build_skb_zerocopy().
->>
->> I'm not sure  parse this last sentence correctly, could you please
->> re-phrase?
->>
->> I read it as as the xsk xmit path could build skb with nr_frags > 0.
->> That in turn will need validation from
->> validate_xmit_skb()/skb_needs_linearize() depending on the egress device
->> (lack of NETIF_F_SG), regardless of any other offload required.
-> 
-> There are two paths where the allocation of frags happen:
-> 1) xsk_build_skb() -> xsk_build_skb_zerocopy() -> skb_fill_page_desc()
-> -> shinfo->frags[i]
-> 2) xsk_build_skb() -> skb_add_rx_frag() -> ... -> shinfo->frags[i]
-> 
-> Neither of them touch skb->frag_list, which means frag_list is NULL.
-> IIUC, there is no place where frag_list is used (which actually I
-> tested). we can see skb_needs_linearize() needs to check
-> skb_has_frag_list() first, so it will not proceed after seeing it
-> return false.
-https://elixir.bootlin.com/linux/v6.18-rc7/source/include/linux/skbuff.h#L4322
-
-return skb_is_nonlinear(skb) &&
-	       ((skb_has_frag_list(skb) && !(features & NETIF_F_FRAGLIST)) ||
-		(skb_shinfo(skb)->nr_frags && !(features & NETIF_F_SG)));
-
-can return true even if `!skb_has_frag_list(skb)`.
-
-I think you still need to call validate_xmit_skb()
-
-/P
-
-
---------------YlcUvmJr0yf8fUFaZ0Spby8F
-Content-Type: text/x-patch; charset=UTF-8; name="sec_path.patch"
-Content-Disposition: attachment; filename="sec_path.patch"
-Content-Transfer-Encoding: base64
-
-ZGlmZiAtLWdpdCBhL25ldC9jb3JlL2Rldi5jIGIvbmV0L2NvcmUvZGV2LmMKaW5kZXggOTA5
-NGMwZmI4YzY4Li4zOTUxNmE1NzY2ZTUgMTAwNjQ0Ci0tLSBhL25ldC9jb3JlL2Rldi5jCisr
-KyBiL25ldC9jb3JlL2Rldi5jCkBAIC00MDMwLDcgKzQwMzAsOCBAQCBzdGF0aWMgc3RydWN0
-IHNrX2J1ZmYgKnZhbGlkYXRlX3htaXRfc2tiKHN0cnVjdCBza19idWZmICpza2IsIHN0cnVj
-dCBuZXRfZGV2aWNlCiAJCX0KIAl9CiAKLQlza2IgPSB2YWxpZGF0ZV94bWl0X3hmcm0oc2ti
-LCBmZWF0dXJlcywgYWdhaW4pOworCWlmIChza2Jfc2VjX3BhdGgoc2tiKQorCQlza2IgPSB2
-YWxpZGF0ZV94bWl0X3hmcm0oc2tiLCBmZWF0dXJlcywgYWdhaW4pOwogCiAJcmV0dXJuIHNr
-YjsKIAo=
-
---------------YlcUvmJr0yf8fUFaZ0Spby8F--
+diff --git a/tools/bpf/resolve_btfids/main.c b/tools/bpf/resolve_btfids/main.c
+index d47191c6e55e..164f0c941f04 100644
+--- a/tools/bpf/resolve_btfids/main.c
++++ b/tools/bpf/resolve_btfids/main.c
+@@ -113,7 +113,7 @@ struct btf_id {
+ 
+ struct object {
+ 	const char *path;
+-	const char *btf;
++	const char *btf_path;
+ 	const char *base_btf_path;
+ 
+ 	struct {
+@@ -550,11 +550,11 @@ static int symbols_resolve(struct object *obj)
+ 		}
+ 	}
+ 
+-	btf = btf__parse_split(obj->btf ?: obj->path, base_btf);
++	btf = btf__parse_split(obj->btf_path ?: obj->path, base_btf);
+ 	err = libbpf_get_error(btf);
+ 	if (err) {
+ 		pr_err("FAILED: load BTF from %s: %s\n",
+-			obj->btf ?: obj->path, strerror(-err));
++			obj->btf_path ?: obj->path, strerror(-err));
+ 		goto out;
+ 	}
+ 
+@@ -790,8 +790,8 @@ int main(int argc, const char **argv)
+ 	struct option btfid_options[] = {
+ 		OPT_INCR('v', "verbose", &verbose,
+ 			 "be more verbose (show errors, etc)"),
+-		OPT_STRING(0, "btf", &obj.btf, "BTF data",
+-			   "BTF data"),
++		OPT_STRING(0, "btf", &obj.btf_path, "file",
++			   "path to a file with input BTF data"),
+ 		OPT_STRING('b', "btf_base", &obj.base_btf_path, "file",
+ 			   "path of file providing base BTF"),
+ 		OPT_BOOLEAN(0, "fatal_warnings", &fatal_warnings,
+-- 
+2.52.0
 
