@@ -1,89 +1,90 @@
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94322264619
-	for <bpf@vger.kernel.org>; Fri, 28 Nov 2025 06:17:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E91ED168BD
+	for <bpf@vger.kernel.org>; Fri, 28 Nov 2025 06:26:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764310675; cv=none; b=rH+sr6/2ewf5o5fYULBaQH6/ALnJzLeKIfBo0iiLbhSMSJv3WaFKCyNEneV1gqTYr/uktWhJTl46JVp1VDgoNyG9yqQT+scJCJUqVlEtK+WrY+H+3hFQUrvUmEiF5FqQjw9oLdqclkAzYL3a2y2rF33Y/YRBlAem3QgojsijBfw=
+	t=1764311174; cv=none; b=E6jt8d91rjjmPvoMt58v8PNfWaPWOjR5+oxk+ib1D52dC4xuEEBRd7M3apVpKgPj+7ZyjobxUby60ChMIVcEiWoiPEmzcq1xy/xldE/3XDLWsYOKOff7KPEtOPELwwZlZHfI69gWjgGAtcaZpOoTwpnpPqXjciuLvPM4jcuXX5A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764310675; c=relaxed/simple;
-	bh=HximMye/VFWctOpP3E4ibp7RMqjgk4RAKfLmlJNJj4c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bZnCPWiQuPmTSSOuRSX782vG5h+Mk8LNbiXmlOIb/vdCX1WdKiFAYIVK5ohlBzP2RvAUQrhcA6Ys54kxSFk9Sv93Eym0GOOs2C8iUdvXNzlR+VUf1JZQO3OruQK+Y9mO9BfaVwS8TOCkLaK6fCOQ84gukBUhnOyK+Pv2yGiQ394=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZiihxpRm; arc=none smtp.client-ip=209.85.218.53
+	s=arc-20240116; t=1764311174; c=relaxed/simple;
+	bh=bZT49ydu77wgwjmQNQdiRQaDD8Nx0YJxO+IAgauzRSw=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=gTJGULrMYJAfn/WHcrObXM4+C/vXrt9kVe+A7coSWB79jRANpWjr5FM9FzNqNwg62lk4Ep2gtM3ZUxybl/REOENfoYH4RwGVWbwaVs1TozecYZh8P5pCsG3fQhIIAy8uDLdH61WsOjwza/X7eikRm8Vq4S57+R6taRH7qX8CHn0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AqcafEuI; arc=none smtp.client-ip=209.85.128.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZiihxpRm"
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-b713c7096f9so235434666b.3
-        for <bpf@vger.kernel.org>; Thu, 27 Nov 2025 22:17:53 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AqcafEuI"
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4775e891b5eso5990505e9.2
+        for <bpf@vger.kernel.org>; Thu, 27 Nov 2025 22:26:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764310671; x=1764915471; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=kASojpANFdrTQESbj370MQAn4E4rOTxjRuoaZKuKoS4=;
-        b=ZiihxpRmbZ8kmdeMJuEz3/6f2Kvr0S+2+J5c44fOfvVqOQUYqyBoHdP7M4jBVDTNHE
-         5PwZtgmv7FR214bF4tbcIeRner62j25yZ7yylbXGtsNi9L6f+kdkQOQnWgKFOIxgpG6L
-         SsGoQyfAj09bzo5op7S8JHBwoeOSWEyX6yz2cY1kYEum8aXHooCgmvBqyrSppkJ4WIWv
-         x3uK8eoYJ6+Gx9ZOeq9QohLezmUrLO5Py8quEr8TlBJvbuOTUR6iRggd7ALsaMP+OIQs
-         +abQ5rM3pBYvQzXusW2z+sAHDpO9/6zabz+3/+WkJolAtAmk1PyVfRHcmU9v3bZrtLXa
-         XA/A==
+        d=gmail.com; s=20230601; t=1764311170; x=1764915970; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=rbDzoWYMXv2tQPdvVF9qBCi+WsV6MWBsivjlCPgz2/4=;
+        b=AqcafEuIglfOaolB+FycS+rWBBJW+oTW2Y+POqeYNuIhcHvqy/05EF4pGzCVzVrDy6
+         Q1CpPKzAQ/Cjj281puoLjnFLUBYG4UH2SPwYbyf5YyW8H8jCjz6pwrJdyD2/QE3g1KFO
+         9sxqWVq1vL6T488xZH7wVPXotJJ/ElA2mhZhLkAdtozTJ4iH8HDb6TXGMzJLgPlruVGx
+         ZmiM4aspG3GVjgqAUsvjpQ8xXcEtrYx23D884CbtbKcBqMB9pnpwSZtWvRg0qGZLQVv4
+         S5qJyNKqgrqgbPmtM3dXN0gE3ukVv69OQ+rJJqEOQ9LQCLK/cwqMp5nmUzdqcAgSLFig
+         l4SA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764310671; x=1764915471;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kASojpANFdrTQESbj370MQAn4E4rOTxjRuoaZKuKoS4=;
-        b=I7JZcpcRDL8pnWEXeElTMydZbQcA6rm8mnhS6b3xiXzV0RM1gRUoPMOl0MhFy7W4AM
-         Q9mMnNc4aNoCbnGpkf+Kjktdk7SGIKFcN/Rgyd7IFnfx5S+rYbKcI3+i36zhAIN8neOL
-         3pP8PbDrfqeay8dPXwLWvksMyPRFUWQwSzS2HtPhag1uLxGisq7FwDhv6c0O6CXZcgwt
-         vKrWLMtD/Ve9h2B9VmM4gzOMTIIKtkERp6zWvfbfjaF49k+KtUbWanZwRq6+hoMbVQEj
-         cgscVZIOiucf2arMEASXmLnd/2m8AOIVIJGzEugSs82XVUUKXkUya8Muqp15BhIHjx4j
-         XT+Q==
-X-Gm-Message-State: AOJu0YzWpAQqUk8j3fL2TlOWZmQSoNeEY+YeCBG9Jhw0cDQxthISzDby
-	BAXFOM9mOe/aFG6EKcC1viNVAn06yc+cMohAtQ034852WIScaIdHLMhos7sEYw==
-X-Gm-Gg: ASbGncvvHoKEL+5YjVmuVdYOxI3ZMG6jBgZTmos5U8Y17CIXuaZnbDl6pb9sfLRkAPI
-	3rquJPt0mtjFm1XGP0tHYF5y0GzmlQFSA2GaYQSb8laJfU9/vLQCOnT496BeMCLjGLEmRypLq75
-	NM/zhM0idoVHpZhgdbWL9Q7EktzOJCmI8CDouc/k1UsCh6ZAe0tif55kwSr+rK+Itw6/joXsg/f
-	IzJvzmU2CptbsOnMCf3gSadIPWZ/t33zLeB/lUldMbutH5r/WEQdEdJmEfjt85ubYG8DJ/wgTce
-	seDHZuvL4WuIy7RK2oZHkS60wmByJkgwuuMk49guAEURcWmKDcKPKzayazBBxqz3ijoB8uytD/4
-	ZM8Xu4cgaFxJ6kPANa9VlJtEO7bkKQeSaFBN3u9oFYmzDUSqPNK3Byr+5Tj3vp7f+FJSZIylBTQ
-	+5lbbVAeI/0EKsc7mi8Y+vS9TCcF1kuSM=
-X-Google-Smtp-Source: AGHT+IGI5XQU6hhGhlnQIFt+UgLzfsOmiENfIUKeYfR+0Vi9HKnuJP67c53Sal4qeFoWVQ0PXTH8jg==
-X-Received: by 2002:a17:907:3f9b:b0:b70:af93:b32d with SMTP id a640c23a62f3a-b7671a17160mr2913252666b.53.1764310671347;
-        Thu, 27 Nov 2025 22:17:51 -0800 (PST)
-Received: from mail.gmail.com ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b76f51c55e9sm354922066b.26.2025.11.27.22.17.50
+        d=1e100.net; s=20230601; t=1764311170; x=1764915970;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rbDzoWYMXv2tQPdvVF9qBCi+WsV6MWBsivjlCPgz2/4=;
+        b=soMoef9RE/iZ5wzLzIo9KDqASf2UAz0AM56CeQbxyN4ugUe5mDfD7P7NttMQmXikRl
+         HqIgsbI1Ap+PI2v99ir13xBPlAneIeTzwuif4PRutmNyIhaTniGHbgOlbgs/XlnBan5/
+         V6gh6Clw/8fcQbWh01UKnIEixdjL4xGqsli+aByjGO3xqiW6KzTmVbyviQVJwS8NEaep
+         kVA/wzqeFdRGJarhaBhWKBw2uIhDaafNIB78MgHY8JAEbW2pNCFGwZCbgxoA55JtQZOA
+         pHzdQg/lLdytOkNSIeYZU/y+W0m0XGUQRpgeCdZXD3EVmAPJJ/EFW7KNsKzihR2RrvCv
+         /NvA==
+X-Gm-Message-State: AOJu0YxMJaXOnqDJKtgOjPsyQ94blsAD+NY0ooZLDKJ85K+mTh5DktyB
+	DH5mU9jrwoxruC/aTZdhCZrQ/aIs6EaA2kRxzCE0dN684TXnR3voOV4141RD6Q==
+X-Gm-Gg: ASbGnctU5NjodfHttV5uUZ7mM5tJBDE/TDury0Zjyn5GcvSfv0UCTdqfbUv+QZVv8c3
+	ee/eP0MAFcOkUDCkUlsUrd+/qckKZHX0Yjbntu4aEYYr9GnAbEIlh4Nb13SkWV9QHmKUKz2Z3bY
+	JzNTRq4gbMs10VJvG9WL8pk5vqO6uF7+GEn8XqrkGzcp3DsagQ/yPLKsxfh5uQdVKe2sjeuDHf/
+	C77iLLf3ZNHnCGOu5AUOtpdjq7Y0/BMmtMKSbFcbwCETTWmAm+W/YVo+v73KkOXp8jr8mtSM258
+	33V8MJGnbx0fQyeG8UUGSASVaWxMc0/R2UYwVCF7lqvlGt1RoN4QT3EDKMlocHywpZ2tyOB53cl
+	c5Sikw2ITzTi/c+sSdON4XSMaHLSvOBBalWRpFfjpnHBspFdO1GLLgfDbbAv4w5kGwgNk6kU5xQ
+	Tt+7J4ttNGwjR3/isvgxqu1pE2SPlrZw==
+X-Google-Smtp-Source: AGHT+IHrjwZcNwq09Q6grIQ6N4P/MeihlBkNfbAJIstkb7DYSM0iD2VvExEF/8ds6zoe9tTzxCeltQ==
+X-Received: by 2002:a05:600c:358d:b0:477:55c9:c3ea with SMTP id 5b1f17b1804b1-477c01f0b32mr264448665e9.35.1764311169767;
+        Thu, 27 Nov 2025 22:26:09 -0800 (PST)
+Received: from localhost.localdomain ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47906cb9715sm84784575e9.2.2025.11.27.22.26.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Nov 2025 22:17:50 -0800 (PST)
-Date: Fri, 28 Nov 2025 06:24:18 +0000
+        Thu, 27 Nov 2025 22:26:09 -0800 (PST)
 From: Anton Protopopov <a.s.protopopov@gmail.com>
 To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>
-Subject: Re: [PATCH bpf-next] bpf: force BPF_F_RDONLY_PROG on insn array
- creation
-Message-ID: <aSlAEotGnO518JYf@mail.gmail.com>
-References: <20251127210656.3239541-1-a.s.protopopov@gmail.com>
+Cc: Anton Protopopov <a.s.protopopov@gmail.com>
+Subject: [PATCH bpf-next 0/2] A pair of follow ups for indirect jumps
+Date: Fri, 28 Nov 2025 06:32:22 +0000
+Message-Id: <20251128063224.1305482-1-a.s.protopopov@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251127210656.3239541-1-a.s.protopopov@gmail.com>
+Content-Transfer-Encoding: 8bit
 
-On 25/11/27 09:06PM, Anton Protopopov wrote:
-> The original implementation added a hack to check_mem_access()
-> to prevent programs from writing into insn arrays. To get rid
-> of this hack, enforce BPF_F_RDONLY_PROG on map creation.
-> 
-> Also fix the corresponding selftest, as the error message changes
-> with this patch.
+Two fixes suggested by Alexei in [1]. Resending as a series,
+as the second patch depends on the first.
 
-Will resend it as part of a series, as the following patch depends on this one.
-(See https://lore.kernel.org/bpf/20251127210732.3241888-1-a.s.protopopov@gmail.com/T/#u)
+  [1] https://lore.kernel.org/bpf/CAADnVQK3piReoo1ja=9hgz7aJ60Y_Jjur_JMOaYV8-Mn_VyE4A@mail.gmail.com/#R
 
-> [...]
+Anton Protopopov (2):
+  bpf: force BPF_F_RDONLY_PROG on insn array creation
+  bpf: check for insn arrays in check_ptr_alignment
+
+ kernel/bpf/bpf_insn_array.c                   |  3 +++
+ kernel/bpf/verifier.c                         | 19 +++++++++----------
+ .../selftests/bpf/progs/verifier_gotox.c      |  2 +-
+ 3 files changed, 13 insertions(+), 11 deletions(-)
+
+-- 
+2.34.1
+
