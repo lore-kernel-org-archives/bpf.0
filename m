@@ -1,121 +1,237 @@
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56FA1168BD
-	for <bpf@vger.kernel.org>; Fri, 28 Nov 2025 06:26:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27E0A2D3ED2;
+	Fri, 28 Nov 2025 06:27:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764311182; cv=none; b=t+5imdZsQdSfEmI4Kx45P8i7NxaOddVioD0gdTbkCuxonySs8+73n1WSSMW0slbm00JLrtmrncMvkfxO+OWu0LMMIvVu0x8s35PD6q8mkc6nIQYkTpfCpz1Nj+7mF+WqOm5CA5uMsRUNURgYKP0eMQgBjgObDJj4bEtzH6rePFA=
+	t=1764311245; cv=none; b=nVZTMb/kVJBgRBR2jTDnAF7EKXoyimEm51JVmtVR+IiS2Pdqs5rTsb2IAAujk3SpSi9jpyHH7mPlTInNlwuU7yYxGg7hGylr1c1skv6rJRNDE6JFZeskhHTP3FpsMBHrINFUpS9W2+tle6g1GQa+dq/KiYJEeZcXnj7F/cYXPMQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764311182; c=relaxed/simple;
-	bh=CRtBOxsvowIsrG9IIZjD+TNQdinAURq5wnzAWd9Dxno=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=chPnGtIE6YlN8FHuwnGpBE3NBkhrlf2sSL+WTrFULIBk6mk9ScQTaQ7hbrGx0cIeWwvbIVhTwf0UzKC+6sCO09oQrSjYtlQ9j9+90AN4qHkyIu+Pi48/zN+e6BvjE3rmwGepNvz19DhZKXnqvwQLkIgktj/hU3pS3k7EWRQ3zEM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IPi0JWYi; arc=none smtp.client-ip=209.85.128.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1764311245; c=relaxed/simple;
+	bh=aggvr88xXdemp691MmwM3WjDvjYxmVZArKmDb3ErPbY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=WgtyIMAHrOzXSN0qjEa+t0i5Xc5Z3/VwatX3/VNngJ2zhOkYgPYmcU7oAy8X8fcQ+UAwkqIe4U5X9WIoaIm0/Cf/tCHxJGY9k9PJ/EPSX5F8p3O9vGTxCG+TEUVMr+/M7fOll2PnZMz22CWVqxBZnCo4avsCg965UlgcfvI3Y5A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=YVpucs6x; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IPi0JWYi"
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-477619f8ae5so8735835e9.3
-        for <bpf@vger.kernel.org>; Thu, 27 Nov 2025 22:26:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764311178; x=1764915978; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UB5GYR2Y9gT++pcCe5c3Az2yczxHavHJBHiuIl3EX6M=;
-        b=IPi0JWYiSIRNZniMS22ofVTsJGJIGjvCS/XSTHFziTwNqJdWRfTa2DJq3JM9IRixKI
-         dgx8yMVEDgBw9lgBIzAmsUm/hfciLWGPWnUOmJjEaa83v3407RJSHdvc5ihuXTiNIdMf
-         Ru3hXTUljq5dUgoyNjxib5kJRqgkPKUd3GWstVvwcMCAYB79S5sFgEPvwozFw82hERuf
-         YJ7tUSHs7TJMxsksT/nYpQ9VyWp0AS74udJgafLitbfbFNGdlZFzci4I+F1mVs9ZfgK5
-         +g1EC1aRP4qZa7ionMoIUEOm8N5I3uXC896Q0DfVerVrlMeMWGsEZTdLVH9TD0K1TQdF
-         6Fcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764311178; x=1764915978;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=UB5GYR2Y9gT++pcCe5c3Az2yczxHavHJBHiuIl3EX6M=;
-        b=BNifrhfRvJYNjAD8xh/UC38uVDHRhpYy/oHv/m3exnLNYzUAaadciidbM4rpy/008c
-         vO5vvZn6Yz2ZtRRnxv73vHoRsMGFaYiqfOPI3VteKzgq0Pzb1HI61c0xR4m8KfABn4Sh
-         QzEVk/a6EBehblJ4gdbdfM4PWJkLytlLIdanN1LFO/8Vp31hrDmbidJKlhVtjvxwSNeu
-         TPNZ3Q3JZ8zMzFvtx4ZgdpLOuMfSxqtIeFy9l8BxTIB0Ukl5ynOApp9Q7908JeWshlQa
-         QV+EZJ514p6aRnmUVOnGJiWTKFaLYGGxtg1cJc2MU22Xsgk98CfUU+JgPOIffOa14CBP
-         nCvg==
-X-Gm-Message-State: AOJu0YyFp7nNXywDTJk+YTxEoTzqQuqrobn7Cxpv2BtBcasKkBuKHK0V
-	je9cppJctW68tE51HcjuY6Fv/kWNHkOOH+3o1tHaesmNd0J4PpD6KZsWOQIRgw==
-X-Gm-Gg: ASbGncs36rJl3vlm04SxJvoBOqAMwWS/9ADa33PINHzdOqHHdwmLe64HJcczujD6in9
-	davrAeaUxWVljFdYQRmatIc1H7da48/NXA8vxHh8JTJOed0MYQqpmexjVSi4derGyM2jY226oSb
-	Ebxdn/yr4Hb89POIhoqplkc2hSbd0/j96fyZZIvplTQfPsVMw4nkJ93pfzyCsS58cM82xtzQ/ZO
-	fi7t4Ht40/zGfj/w71tbP6pOwmPbyseRc8L4QjFiqlZnmMMbY0gpxQn6J11R3Dwwd0GIeV/AYxP
-	RHp7LK5B95MvMvN0XLJ1PJ3Y0cd5Nbzl0G56fujYDxi9kag6NNPcRN4rGN9aH/QGdjgg7LTx413
-	vD2AYm9Gnims9bsCBa28QiR3o4lp2z1wA+QbXmZ5jdV/Za6yOTAFeFlvJH1DtEEEE7rfkWNAJpE
-	PKcJidjJ6z+gfKEFm0vN3RG0/QtMMJhg==
-X-Google-Smtp-Source: AGHT+IGovjaQ5vLsQynusCO5l26JM5kYXgGoeafhKOCj/rk1h9WGdu/NivmV/8bMJEKtUwLBLHPEFg==
-X-Received: by 2002:a05:600c:1c85:b0:471:9da:524c with SMTP id 5b1f17b1804b1-477c016eab5mr307279215e9.12.1764311175832;
-        Thu, 27 Nov 2025 22:26:15 -0800 (PST)
-Received: from localhost.localdomain ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47906cb9715sm84784575e9.2.2025.11.27.22.26.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Nov 2025 22:26:15 -0800 (PST)
-From: Anton Protopopov <a.s.protopopov@gmail.com>
-To: bpf@vger.kernel.org
-Cc: Anton Protopopov <a.s.protopopov@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>
-Subject: [PATCH bpf-next 2/2] bpf: check for insn arrays in check_ptr_alignment
-Date: Fri, 28 Nov 2025 06:32:24 +0000
-Message-Id: <20251128063224.1305482-3-a.s.protopopov@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20251128063224.1305482-1-a.s.protopopov@gmail.com>
-References: <20251128063224.1305482-1-a.s.protopopov@gmail.com>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="YVpucs6x"
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5AS6Egwb024341;
+	Fri, 28 Nov 2025 06:27:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=/nVNds
+	U8yIG76653XuRsx3j2nJNqhB/jnt1wQ5iajQc=; b=YVpucs6xTBk0VFsr+FIN+t
+	NNwQ/UnXBSe97nxMjTHG6CX0PqbNF/2eVGfuAV4AqT85QrfZTYMKzeq7oQH3EdOt
+	TXui61YHAKNHTuZzbgoyCHGGC0O+gmJseLKqRaUgZdzrInsHtpFm7+UwyElyNdb5
+	qAzyKfm+14JucFNgKDZoC9KKfYRCCaU+XRmPifjpQurHkNpVhMqJOH8lLqEZUWVT
+	WsOt//9KM/DXivQ0jfvuS2KdrVcELQWZFz7/VbYokOp8cGB+RGMoVI8OlELyvUNs
+	7LSWAW+RC7Ws+jWRdCHP6roPt1wrvRnDNorJNRweUh0H8kmZHYJEyiMuurwP8MHA
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4ak4pjd49w-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 28 Nov 2025 06:27:18 +0000 (GMT)
+Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 5AS6RHfd025422;
+	Fri, 28 Nov 2025 06:27:17 GMT
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4ak4pjd49r-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 28 Nov 2025 06:27:17 +0000 (GMT)
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5AS45oZS016409;
+	Fri, 28 Nov 2025 06:27:16 GMT
+Received: from smtprelay06.wdc07v.mail.ibm.com ([172.16.1.73])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4aks0kkgvy-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 28 Nov 2025 06:27:16 +0000
+Received: from smtpav05.dal12v.mail.ibm.com (smtpav05.dal12v.mail.ibm.com [10.241.53.104])
+	by smtprelay06.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 5AS6RF3P25101042
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 28 Nov 2025 06:27:16 GMT
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id DC6245806C;
+	Fri, 28 Nov 2025 06:27:15 +0000 (GMT)
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 069F05806E;
+	Fri, 28 Nov 2025 06:27:14 +0000 (GMT)
+Received: from [9.61.122.162] (unknown [9.61.122.162])
+	by smtpav05.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Fri, 28 Nov 2025 06:27:13 +0000 (GMT)
+Message-ID: <65e3ff98-4490-413e-a075-c1df8e7b2bd1@linux.ibm.com>
+Date: Fri, 28 Nov 2025 11:57:12 +0530
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: kernel build failure when CONFIG_DEBUG_INFO_BTF and CONFIG_KCSAN
+ are enabled
+To: Alan Maguire <alan.maguire@oracle.com>, Jiri Olsa <olsajiri@gmail.com>
+Cc: bpf@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>
+References: <42a1b4b0-83d0-4dda-b1df-15a1b7c7638d@linux.ibm.com>
+ <aSgz3h0Ywa6i3gKT@krava> <214308ce-763c-47a8-8719-70564b3ef49c@oracle.com>
+Content-Language: en-US
+From: Nilay Shroff <nilay@linux.ibm.com>
+In-Reply-To: <214308ce-763c-47a8-8719-70564b3ef49c@oracle.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTIyMDAxNiBTYWx0ZWRfX0ha8Dx+aFTmN
+ StBRslKUzwegFjS0TGd2+z7Wwdzu5DQMMPns2Gt5B2upug9nT2nerkY6xvmgTEhliaVxjAQMn3P
+ 9+o16xrvanhxIGHT0O6gyUuxUD0V46+LirnobLAJfaHym5TZwWPYhp7agwA8S5BMIc8EHc7oU3O
+ wZRigbjis0OQ/RLInWRtLoaRtpCQ93ue0dYz+SJKFlqbBP5z5g3EEqigxUKPoOP/6UEoAQDV2pB
+ RBnx+5Th3IiOE6e8LgEnp4zKPYcFk4g0ukeD8PxhVj04aAOrrUohjW0tfeCX6cX9h7DaJpuzRDE
+ kXPqJkmpARzpLt6rKYcqgStnbwpt35saAI5f7xdw0ShpvQz3R8c15YYhJ5xXQM38iZ11BIVl9ca
+ RTIfyWk0wERztHIKOiOMQEZetHVz7Q==
+X-Proofpoint-ORIG-GUID: 06pki4VTKN8faDxOKPugZVl8dRkLeJ98
+X-Authority-Analysis: v=2.4 cv=CcYFJbrl c=1 sm=1 tr=0 ts=692940c6 cx=c_pps
+ a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
+ a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=VwQbUJbxAAAA:8 a=VnNF1IyMAAAA:8 a=yPCof4ZbAAAA:8 a=2P-_1YrwpTGgQw7qTdIA:9
+ a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-Proofpoint-GUID: h7dUo5TFhy0wFr0dJ9cssKQkQzqiSdWV
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-11-25_02,2025-11-27_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ malwarescore=0 suspectscore=0 clxscore=1011 adultscore=0 spamscore=0
+ phishscore=0 priorityscore=1501 bulkscore=0 impostorscore=0
+ lowpriorityscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2510240000
+ definitions=main-2511220016
 
-Do not abuse the strict_alignment_once flag, and check if the map is
-an instruction array inside the check_ptr_alignment() function.
 
-Suggested-by: Alexei Starovoitov <ast@kernel.org>
-Signed-off-by: Anton Protopopov <a.s.protopopov@gmail.com>
----
- kernel/bpf/verifier.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Hi Alan,
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 58f99557ba38..ddc68273d29f 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -6482,6 +6482,8 @@ static int check_ptr_alignment(struct bpf_verifier_env *env,
- 		break;
- 	case PTR_TO_MAP_VALUE:
- 		pointer_desc = "value ";
-+		if (reg->map_ptr->map_type == BPF_MAP_TYPE_INSN_ARRAY)
-+			strict = true;
- 		break;
- 	case PTR_TO_CTX:
- 		pointer_desc = "context ";
-@@ -7529,8 +7531,6 @@ static int check_mem_access(struct bpf_verifier_env *env, int insn_idx, u32 regn
- {
- 	struct bpf_reg_state *regs = cur_regs(env);
- 	struct bpf_reg_state *reg = regs + regno;
--	bool insn_array = reg->type == PTR_TO_MAP_VALUE &&
--			  reg->map_ptr->map_type == BPF_MAP_TYPE_INSN_ARRAY;
- 	int size, err = 0;
- 
- 	size = bpf_size_to_bytes(bpf_size);
-@@ -7538,7 +7538,7 @@ static int check_mem_access(struct bpf_verifier_env *env, int insn_idx, u32 regn
- 		return size;
- 
- 	/* alignment checks will add in reg->off themselves */
--	err = check_ptr_alignment(env, reg, off, size, strict_alignment_once || insn_array);
-+	err = check_ptr_alignment(env, reg, off, size, strict_alignment_once);
- 	if (err)
- 		return err;
- 
--- 
-2.34.1
+On 11/27/25 9:06 PM, Alan Maguire wrote:
+> On 27/11/2025 11:19, Jiri Olsa wrote:
+>> On Wed, Nov 26, 2025 at 03:59:28PM +0530, Nilay Shroff wrote:
+>>> Hi,
+>>>
+>>> I am encountering the following build failures when compiling the kernel source checked out
+>>> from the for-6.19/block branch [1]:
+>>>
+>>>   KSYMS   .tmp_vmlinux2.kallsyms.S
+>>>   AS      .tmp_vmlinux2.kallsyms.o
+>>>   LD      vmlinux.unstripped
+>>>   BTFIDS  vmlinux.unstripped
+>>> WARN: multiple IDs found for 'task_struct': 110, 3046 - using 110
+>>> WARN: multiple IDs found for 'module': 170, 3055 - using 170
+>>> WARN: multiple IDs found for 'file': 697, 3130 - using 697
+>>> WARN: multiple IDs found for 'vm_area_struct': 714, 3140 - using 714
+>>> WARN: multiple IDs found for 'seq_file': 1060, 3167 - using 1060
+>>> WARN: multiple IDs found for 'cgroup': 2355, 3304 - using 2355
+>>> WARN: multiple IDs found for 'inode': 553, 3339 - using 553
+>>> WARN: multiple IDs found for 'path': 586, 3369 - using 586
+>>> WARN: multiple IDs found for 'bpf_prog': 2565, 3640 - using 2565
+>>> WARN: multiple IDs found for 'bpf_map': 2657, 3837 - using 2657
+>>> WARN: multiple IDs found for 'bpf_link': 2849, 3965 - using 2849
+>>> [...]
+>>> make[2]: *** [scripts/Makefile.vmlinux:72: vmlinux.unstripped] Error 255
+>>> make[2]: *** Deleting file 'vmlinux.unstripped'
+>>> make[1]: *** [/home/src/linux/Makefile:1242: vmlinux] Error 2
+>>> make: *** [Makefile:248: __sub-make] Error 2
+>>>
+>>>
+>>> The build failure appears after commit 42adb2d4ef24 (“fs: Add the __data_racy annotation
+>>> to backing_dev_info.ra_pages”) and commit 935a20d1bebf (“block: Remove queue freezing
+>>> from several sysfs store callbacks”). However, the root cause does not seem to be specific
+>>
+>> yep, looks like __data_racy macro that adds 'volatile' to struct member is causing
+>> the mismatch during deduplication
+>>
+>> when you enable KCSAN some objects may opt out from it (via KCSAN_SANITIZE := n or
+>> such) and they will be compiled without __SANITIZE_THREAD__ macro defined which means
+>> __data_racy will be empty .. and we will get 2 versions of 'struct backing_dev_info'
+>> which cascades up to the task_struct and others
+>>
+>> not sure what's the best solution in here.. could we ignore volatile for
+>> the field in the struct during deduplication? 
+>>
+> 
+> Yeah, it seems like a slightly looser form of equivalence matching might be needed.
+> The following libbpf change ignores modifiers in type equivalence comparison and 
+> resolves the issue for me. It might be too big a hammer though, what do folks think?
+> 
+> From 160fb6610d75d3cdc38a9729cc17875a302a7189 Mon Sep 17 00:00:00 2001
+> From: Alan Maguire <alan.maguire@oracle.com>
+> Date: Thu, 27 Nov 2025 15:22:04 +0000
+> Subject: [RFC bpf-next] libbpf: BTF dedup should ignore modifiers in type
+>  equivalence checks
+> 
+> We see identical type problems in [1] as a result of an occasionally
+> applied volatile modifier to kernel data structures. Such things can
+> result from different header include patterns, explicit Makefile
+> rules etc.  As a result consider types with modifiers (const, volatile,
+> restrict, type tag) as equivalent for dedup equivalence testing purposes.
+> 
+> [1] https://lore.kernel.org/bpf/42a1b4b0-83d0-4dda-b1df-15a1b7c7638d@linux.ibm.com/
+> 
+> Reported-by: Nilay Shroff <nilay@linux.ibm.com>
+> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+> ---
+>  tools/lib/bpf/btf.c | 27 +++++++++++++++++++++------
+>  1 file changed, 21 insertions(+), 6 deletions(-)
+> 
+> diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
+> index e5003885bda8..384194a6cdae 100644
+> --- a/tools/lib/bpf/btf.c
+> +++ b/tools/lib/bpf/btf.c
+> @@ -4678,12 +4678,10 @@ static int btf_dedup_is_equiv(struct btf_dedup *d, __u32 cand_id,
+>  	cand_kind = btf_kind(cand_type);
+>  	canon_kind = btf_kind(canon_type);
+>  
+> -	if (cand_type->name_off != canon_type->name_off)
+> -		return 0;
+> -
+>  	/* FWD <--> STRUCT/UNION equivalence check, if enabled */
+> -	if ((cand_kind == BTF_KIND_FWD || canon_kind == BTF_KIND_FWD)
+> -	    && cand_kind != canon_kind) {
+> +	if ((cand_kind == BTF_KIND_FWD || canon_kind == BTF_KIND_FWD) &&
+> +	    cand_type->name_off == canon_type->name_off &&
+> +	    cand_kind != canon_kind) {
+>  		__u16 real_kind;
+>  		__u16 fwd_kind;
+>  
+> @@ -4700,7 +4698,24 @@ static int btf_dedup_is_equiv(struct btf_dedup *d, __u32 cand_id,
+>  		return fwd_kind == real_kind;
+>  	}
+>  
+> -	if (cand_kind != canon_kind)
+> +	/*
+> +	 * Types are considered equivalent if modifiers (const, volatile,
+> +	 * restrict, type tag) are present for one but not the other.
+> +	 */
+> +	if (cand_kind != canon_kind) {
+> +		__u32 next_cand_id = cand_id;
+> +		__u32 next_canon_id = canon_id;
+> +
+> +		if (btf_is_mod(cand_type))
+> +			next_cand_id = cand_type->type;
+> +		if (btf_is_mod(canon_type))
+> +			next_canon_id = canon_type->type;
+> +		if (cand_id == next_cand_id && canon_id == next_canon_id)
+> +			return 0;
+> +		return btf_dedup_is_equiv(d, next_cand_id, next_canon_id);
+> +	}
+> +
+> +	if (cand_type->name_off != canon_type->name_off)
+>  		return 0;
+>  
+>  	switch (cand_kind) {
+
+Thanks for your patch! I just applied it on my tree and rebuild the 
+tree. However I am still seeing the same compilation warnings. I am
+using the latest for-6.19/block branch[1].
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux.git/log/?h=for-6.19/block 
+
+Thanks,
+--Nilay
 
