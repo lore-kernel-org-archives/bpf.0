@@ -1,67 +1,30 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27E0A2D3ED2;
-	Fri, 28 Nov 2025 06:27:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06AC522759C
+	for <bpf@vger.kernel.org>; Fri, 28 Nov 2025 07:16:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764311245; cv=none; b=nVZTMb/kVJBgRBR2jTDnAF7EKXoyimEm51JVmtVR+IiS2Pdqs5rTsb2IAAujk3SpSi9jpyHH7mPlTInNlwuU7yYxGg7hGylr1c1skv6rJRNDE6JFZeskhHTP3FpsMBHrINFUpS9W2+tle6g1GQa+dq/KiYJEeZcXnj7F/cYXPMQ=
+	t=1764314181; cv=none; b=KfDYXTiLpCPkb0n+Kl2K/1yc984wYC2StXIdvBvSEHaOZaPnoL8ukhcvcZBBxcrB6pjD2pAeeP5LJoSLaK09ukVLHpynrrFceLxQxePp+3ccTUT3hhd2L1HV4SV6SnrCaLe8gQALxIaq1PI83Li0EvvU2AO0DcLB3muuesolvpk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764311245; c=relaxed/simple;
-	bh=aggvr88xXdemp691MmwM3WjDvjYxmVZArKmDb3ErPbY=;
+	s=arc-20240116; t=1764314181; c=relaxed/simple;
+	bh=7giw6CKZKKBmdfMgYV51hu4SF/vWs3jsvLlmh+gimRQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WgtyIMAHrOzXSN0qjEa+t0i5Xc5Z3/VwatX3/VNngJ2zhOkYgPYmcU7oAy8X8fcQ+UAwkqIe4U5X9WIoaIm0/Cf/tCHxJGY9k9PJ/EPSX5F8p3O9vGTxCG+TEUVMr+/M7fOll2PnZMz22CWVqxBZnCo4avsCg965UlgcfvI3Y5A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=YVpucs6x; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="YVpucs6x"
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5AS6Egwb024341;
-	Fri, 28 Nov 2025 06:27:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=/nVNds
-	U8yIG76653XuRsx3j2nJNqhB/jnt1wQ5iajQc=; b=YVpucs6xTBk0VFsr+FIN+t
-	NNwQ/UnXBSe97nxMjTHG6CX0PqbNF/2eVGfuAV4AqT85QrfZTYMKzeq7oQH3EdOt
-	TXui61YHAKNHTuZzbgoyCHGGC0O+gmJseLKqRaUgZdzrInsHtpFm7+UwyElyNdb5
-	qAzyKfm+14JucFNgKDZoC9KKfYRCCaU+XRmPifjpQurHkNpVhMqJOH8lLqEZUWVT
-	WsOt//9KM/DXivQ0jfvuS2KdrVcELQWZFz7/VbYokOp8cGB+RGMoVI8OlELyvUNs
-	7LSWAW+RC7Ws+jWRdCHP6roPt1wrvRnDNorJNRweUh0H8kmZHYJEyiMuurwP8MHA
-	==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4ak4pjd49w-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 28 Nov 2025 06:27:18 +0000 (GMT)
-Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 5AS6RHfd025422;
-	Fri, 28 Nov 2025 06:27:17 GMT
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4ak4pjd49r-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 28 Nov 2025 06:27:17 +0000 (GMT)
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5AS45oZS016409;
-	Fri, 28 Nov 2025 06:27:16 GMT
-Received: from smtprelay06.wdc07v.mail.ibm.com ([172.16.1.73])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4aks0kkgvy-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 28 Nov 2025 06:27:16 +0000
-Received: from smtpav05.dal12v.mail.ibm.com (smtpav05.dal12v.mail.ibm.com [10.241.53.104])
-	by smtprelay06.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 5AS6RF3P25101042
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 28 Nov 2025 06:27:16 GMT
-Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id DC6245806C;
-	Fri, 28 Nov 2025 06:27:15 +0000 (GMT)
-Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 069F05806E;
-	Fri, 28 Nov 2025 06:27:14 +0000 (GMT)
-Received: from [9.61.122.162] (unknown [9.61.122.162])
-	by smtpav05.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Fri, 28 Nov 2025 06:27:13 +0000 (GMT)
-Message-ID: <65e3ff98-4490-413e-a075-c1df8e7b2bd1@linux.ibm.com>
-Date: Fri, 28 Nov 2025 11:57:12 +0530
+	 In-Reply-To:Content-Type; b=I8C/n09Yuulj2/BfMsd9Hk4KVcXFJVywVIlczaEOISrMHWZV+t8k+sznFSJ4/1j9xT3tjCnk7ixD1RdAmcGPAkuP1M/3xRPKB0gVpNVuEwPaMIWUNOWR4R6QVtFFijZ/Pcd3vAubZ8v5LaN2fXOwL36HsmO9UvI0MIXQrq5e0Vk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.93.142])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4dHl1h53tJzYQtpg
+	for <bpf@vger.kernel.org>; Fri, 28 Nov 2025 15:15:20 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.75])
+	by mail.maildlp.com (Postfix) with ESMTP id 910661A084D
+	for <bpf@vger.kernel.org>; Fri, 28 Nov 2025 15:16:15 +0800 (CST)
+Received: from [10.67.111.192] (unknown [10.67.111.192])
+	by APP2 (Coremail) with SMTP id Syh0CgCnBHs6TClpKrAlCQ--.35552S2;
+	Fri, 28 Nov 2025 15:16:11 +0800 (CST)
+Message-ID: <7ba9e3d0-d9ba-41f5-b8e8-4846ea7ae003@huaweicloud.com>
+Date: Fri, 28 Nov 2025 15:16:10 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -69,169 +32,272 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: kernel build failure when CONFIG_DEBUG_INFO_BTF and CONFIG_KCSAN
- are enabled
-To: Alan Maguire <alan.maguire@oracle.com>, Jiri Olsa <olsajiri@gmail.com>
-Cc: bpf@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>
-References: <42a1b4b0-83d0-4dda-b1df-15a1b7c7638d@linux.ibm.com>
- <aSgz3h0Ywa6i3gKT@krava> <214308ce-763c-47a8-8719-70564b3ef49c@oracle.com>
+Subject: Re: [PATCH bpf-next] bpf: arm64: Fix panic due to missing BTI at
+ indirect jump targets
 Content-Language: en-US
-From: Nilay Shroff <nilay@linux.ibm.com>
-In-Reply-To: <214308ce-763c-47a8-8719-70564b3ef49c@oracle.com>
-Content-Type: text/plain; charset=UTF-8
+To: Anton Protopopov <a.s.protopopov@gmail.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Yonghong Song <yhs@fb.com>,
+ Puranjay Mohan <puranjay@kernel.org>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>
+References: <20251127140318.3944249-1-xukuohai@huaweicloud.com>
+ <aSh4QCd27MUHMVdp@mail.gmail.com>
+From: Xu Kuohai <xukuohai@huaweicloud.com>
+In-Reply-To: <aSh4QCd27MUHMVdp@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTIyMDAxNiBTYWx0ZWRfX0ha8Dx+aFTmN
- StBRslKUzwegFjS0TGd2+z7Wwdzu5DQMMPns2Gt5B2upug9nT2nerkY6xvmgTEhliaVxjAQMn3P
- 9+o16xrvanhxIGHT0O6gyUuxUD0V46+LirnobLAJfaHym5TZwWPYhp7agwA8S5BMIc8EHc7oU3O
- wZRigbjis0OQ/RLInWRtLoaRtpCQ93ue0dYz+SJKFlqbBP5z5g3EEqigxUKPoOP/6UEoAQDV2pB
- RBnx+5Th3IiOE6e8LgEnp4zKPYcFk4g0ukeD8PxhVj04aAOrrUohjW0tfeCX6cX9h7DaJpuzRDE
- kXPqJkmpARzpLt6rKYcqgStnbwpt35saAI5f7xdw0ShpvQz3R8c15YYhJ5xXQM38iZ11BIVl9ca
- RTIfyWk0wERztHIKOiOMQEZetHVz7Q==
-X-Proofpoint-ORIG-GUID: 06pki4VTKN8faDxOKPugZVl8dRkLeJ98
-X-Authority-Analysis: v=2.4 cv=CcYFJbrl c=1 sm=1 tr=0 ts=692940c6 cx=c_pps
- a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
- a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=VwQbUJbxAAAA:8 a=VnNF1IyMAAAA:8 a=yPCof4ZbAAAA:8 a=2P-_1YrwpTGgQw7qTdIA:9
- a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-Proofpoint-GUID: h7dUo5TFhy0wFr0dJ9cssKQkQzqiSdWV
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-11-25_02,2025-11-27_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- malwarescore=0 suspectscore=0 clxscore=1011 adultscore=0 spamscore=0
- phishscore=0 priorityscore=1501 bulkscore=0 impostorscore=0
- lowpriorityscore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2510240000
- definitions=main-2511220016
+X-CM-TRANSID:Syh0CgCnBHs6TClpKrAlCQ--.35552S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3GrW3GF4fZF1kKrW5ZFy7Wrg_yoW3KrWxpF
+	WDJw1akFW8XrW8GFnrXa18Ary3trs5Gr1YkrWft3yIk3Z0vr93KFW5KFsIkFnxCryUCF1x
+	ZF4j9r1fu3yUA37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
+	14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
+	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8
+	ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
+	0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
+	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU1
+	7KsUUUUUU==
+X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
 
+On 11/28/2025 12:11 AM, Anton Protopopov wrote:
+> On 25/11/27 10:03PM, Xu Kuohai wrote:
+>> From: Xu Kuohai <xukuohai@huawei.com>
+> 
+> This patch doesn't apply to bpf-next due to
+> https://lore.kernel.org/bpf/20251125145857.98134-2-leon.hwang@linux.dev/T/#u
+>
 
-Hi Alan,
+Oops, thanks for the notice. I'll rebase on the latest bpf-next.
 
-On 11/27/25 9:06 PM, Alan Maguire wrote:
-> On 27/11/2025 11:19, Jiri Olsa wrote:
->> On Wed, Nov 26, 2025 at 03:59:28PM +0530, Nilay Shroff wrote:
->>> Hi,
->>>
->>> I am encountering the following build failures when compiling the kernel source checked out
->>> from the for-6.19/block branch [1]:
->>>
->>>   KSYMS   .tmp_vmlinux2.kallsyms.S
->>>   AS      .tmp_vmlinux2.kallsyms.o
->>>   LD      vmlinux.unstripped
->>>   BTFIDS  vmlinux.unstripped
->>> WARN: multiple IDs found for 'task_struct': 110, 3046 - using 110
->>> WARN: multiple IDs found for 'module': 170, 3055 - using 170
->>> WARN: multiple IDs found for 'file': 697, 3130 - using 697
->>> WARN: multiple IDs found for 'vm_area_struct': 714, 3140 - using 714
->>> WARN: multiple IDs found for 'seq_file': 1060, 3167 - using 1060
->>> WARN: multiple IDs found for 'cgroup': 2355, 3304 - using 2355
->>> WARN: multiple IDs found for 'inode': 553, 3339 - using 553
->>> WARN: multiple IDs found for 'path': 586, 3369 - using 586
->>> WARN: multiple IDs found for 'bpf_prog': 2565, 3640 - using 2565
->>> WARN: multiple IDs found for 'bpf_map': 2657, 3837 - using 2657
->>> WARN: multiple IDs found for 'bpf_link': 2849, 3965 - using 2849
->>> [...]
->>> make[2]: *** [scripts/Makefile.vmlinux:72: vmlinux.unstripped] Error 255
->>> make[2]: *** Deleting file 'vmlinux.unstripped'
->>> make[1]: *** [/home/src/linux/Makefile:1242: vmlinux] Error 2
->>> make: *** [Makefile:248: __sub-make] Error 2
->>>
->>>
->>> The build failure appears after commit 42adb2d4ef24 (“fs: Add the __data_racy annotation
->>> to backing_dev_info.ra_pages”) and commit 935a20d1bebf (“block: Remove queue freezing
->>> from several sysfs store callbacks”). However, the root cause does not seem to be specific
+>> When BTI is enabled, the indirect jump selftest triggers BTI exception:
 >>
->> yep, looks like __data_racy macro that adds 'volatile' to struct member is causing
->> the mismatch during deduplication
+>> Internal error: Oops - BTI: 0000000036000003 [#1]  SMP
+>> ...
+>> Call trace:
+>>   bpf_prog_2e5f1c71c13ac3e0_big_jump_table+0x54/0xf8 (P)
+>>   bpf_prog_run_pin_on_cpu+0x140/0x468
+>>   bpf_prog_test_run_syscall+0x280/0x3b8
+>>   bpf_prog_test_run+0x22c/0x2c0
+>>   __sys_bpf+0x4d8/0x5c8
+>>   __arm64_sys_bpf+0x88/0xa8
+>>   invoke_syscall+0x80/0x220
+>>   el0_svc_common+0x160/0x1d0
+>>   do_el0_svc+0x54/0x70
+>>   el0_svc+0x54/0x188
+>>   el0t_64_sync_handler+0x84/0x130
+>>   el0t_64_sync+0x198/0x1a0
 >>
->> when you enable KCSAN some objects may opt out from it (via KCSAN_SANITIZE := n or
->> such) and they will be compiled without __SANITIZE_THREAD__ macro defined which means
->> __data_racy will be empty .. and we will get 2 versions of 'struct backing_dev_info'
->> which cascades up to the task_struct and others
+>> This happens because no BTI instruction is generated by the JIT for
+>> indirect jump targets.
 >>
->> not sure what's the best solution in here.. could we ignore volatile for
->> the field in the struct during deduplication? 
+>> Fix it by emitting BTI instruction for every possible indirect jump
+>> targets when BTI is enabled. The targets are identified by traversing
+>> all instruction arrays used by the BPF program, since indirect jump
+>> targets can only be read from instruction arrays.
 >>
+>> Fixes: f4a66cf1cb14 ("bpf: arm64: Add support for indirect jumps")
+>> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+>> ---
+>>   arch/arm64/net/bpf_jit_comp.c | 20 ++++++++++++++++
+>>   include/linux/bpf.h           | 12 ++++++++++
+>>   kernel/bpf/bpf_insn_array.c   | 43 +++++++++++++++++++++++++++++++++++
+>>   3 files changed, 75 insertions(+)
+>>
+>> diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+>> index 929123a5431a..f546df886049 100644
+>> --- a/arch/arm64/net/bpf_jit_comp.c
+>> +++ b/arch/arm64/net/bpf_jit_comp.c
+>> @@ -78,6 +78,7 @@ static const int bpf2a64[] = {
+>>   
+>>   struct jit_ctx {
+>>   	const struct bpf_prog *prog;
+>> +	unsigned long *indirect_targets;
+>>   	int idx;
+>>   	int epilogue_offset;
+>>   	int *offset;
+>> @@ -1199,6 +1200,11 @@ static int add_exception_handler(const struct bpf_insn *insn,
+>>   	return 0;
+>>   }
+>>   
+>> +static bool maybe_indirect_target(int insn_off, unsigned long *targets_bitmap)
 > 
-> Yeah, it seems like a slightly looser form of equivalence matching might be needed.
-> The following libbpf change ignores modifiers in type equivalence comparison and 
-> resolves the issue for me. It might be too big a hammer though, what do folks think?
-> 
-> From 160fb6610d75d3cdc38a9729cc17875a302a7189 Mon Sep 17 00:00:00 2001
-> From: Alan Maguire <alan.maguire@oracle.com>
-> Date: Thu, 27 Nov 2025 15:22:04 +0000
-> Subject: [RFC bpf-next] libbpf: BTF dedup should ignore modifiers in type
->  equivalence checks
-> 
-> We see identical type problems in [1] as a result of an occasionally
-> applied volatile modifier to kernel data structures. Such things can
-> result from different header include patterns, explicit Makefile
-> rules etc.  As a result consider types with modifiers (const, volatile,
-> restrict, type tag) as equivalent for dedup equivalence testing purposes.
-> 
-> [1] https://lore.kernel.org/bpf/42a1b4b0-83d0-4dda-b1df-15a1b7c7638d@linux.ibm.com/
-> 
-> Reported-by: Nilay Shroff <nilay@linux.ibm.com>
-> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
-> ---
->  tools/lib/bpf/btf.c | 27 +++++++++++++++++++++------
->  1 file changed, 21 insertions(+), 6 deletions(-)
-> 
-> diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-> index e5003885bda8..384194a6cdae 100644
-> --- a/tools/lib/bpf/btf.c
-> +++ b/tools/lib/bpf/btf.c
-> @@ -4678,12 +4678,10 @@ static int btf_dedup_is_equiv(struct btf_dedup *d, __u32 cand_id,
->  	cand_kind = btf_kind(cand_type);
->  	canon_kind = btf_kind(canon_type);
->  
-> -	if (cand_type->name_off != canon_type->name_off)
-> -		return 0;
-> -
->  	/* FWD <--> STRUCT/UNION equivalence check, if enabled */
-> -	if ((cand_kind == BTF_KIND_FWD || canon_kind == BTF_KIND_FWD)
-> -	    && cand_kind != canon_kind) {
-> +	if ((cand_kind == BTF_KIND_FWD || canon_kind == BTF_KIND_FWD) &&
-> +	    cand_type->name_off == canon_type->name_off &&
-> +	    cand_kind != canon_kind) {
->  		__u16 real_kind;
->  		__u16 fwd_kind;
->  
-> @@ -4700,7 +4698,24 @@ static int btf_dedup_is_equiv(struct btf_dedup *d, __u32 cand_id,
->  		return fwd_kind == real_kind;
->  	}
->  
-> -	if (cand_kind != canon_kind)
-> +	/*
-> +	 * Types are considered equivalent if modifiers (const, volatile,
-> +	 * restrict, type tag) are present for one but not the other.
-> +	 */
-> +	if (cand_kind != canon_kind) {
-> +		__u32 next_cand_id = cand_id;
-> +		__u32 next_canon_id = canon_id;
-> +
-> +		if (btf_is_mod(cand_type))
-> +			next_cand_id = cand_type->type;
-> +		if (btf_is_mod(canon_type))
-> +			next_canon_id = canon_type->type;
-> +		if (cand_id == next_cand_id && canon_id == next_canon_id)
-> +			return 0;
-> +		return btf_dedup_is_equiv(d, next_cand_id, next_canon_id);
-> +	}
-> +
-> +	if (cand_type->name_off != canon_type->name_off)
->  		return 0;
->  
->  	switch (cand_kind) {
+> Why "maybe"? (But also see below.)
+>
 
-Thanks for your patch! I just applied it on my tree and rebuild the 
-tree. However I am still seeing the same compilation warnings. I am
-using the latest for-6.19/block branch[1].
+IIUC, although indirect jump targets are loaded from instruction arrays,
+not all instructions pointed to by an instruction array are actually used
+as indirect jump targets. It is legal for indirect jumps to target only
+some of the instructions.
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux.git/log/?h=for-6.19/block 
+>> +{
+>> +	return targets_bitmap && test_bit(insn_off, targets_bitmap);
+>> +}
+>> +
+>>   /* JITs an eBPF instruction.
+>>    * Returns:
+>>    * 0  - successfully JITed an 8-byte eBPF instruction.
+>> @@ -1231,6 +1237,9 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
+>>   	int ret;
+>>   	bool sign_extend;
+>>   
+>> +	if (maybe_indirect_target(i, ctx->indirect_targets))
+>> +		emit_bti(A64_BTI_J, ctx);
+>> +
+>>   	switch (code) {
+>>   	/* dst = src */
+>>   	case BPF_ALU | BPF_MOV | BPF_X:
+>> @@ -2085,6 +2094,16 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
+>>   	memset(&ctx, 0, sizeof(ctx));
+>>   	ctx.prog = prog;
+>>   
+>> +	if (IS_ENABLED(CONFIG_ARM64_BTI_KERNEL) && bpf_prog_has_insn_array(prog)) {
+>> +		ctx.indirect_targets = kvcalloc(BITS_TO_LONGS(prog->len), sizeof(unsigned long),
+>> +						GFP_KERNEL);
+> 
+> It's allocated here on every run, but freed below only when
+> !prog->is_func || extra_pass.
+>
 
-Thanks,
---Nilay
+Well, actually, the bitmap is allocated in the first pass of the JIT
+and freed in the last pass. For passes other than the first, this code
+is skipped via the statement goto skip_init_ctx, which is unaffected
+by this patch.
+
+Indeed, there are quite a few gotos in bpf_int_jit_compile, which makes
+the code somewhat hard to follow. It seems like it’s time for some
+cleanup, and I’ll try to work on that.
+
+>> +		if (ctx.indirect_targets == NULL) {
+>> +			prog = orig_prog;
+>> +			goto out_off;
+>> +		}
+>> +		bpf_prog_collect_indirect_targets(prog, ctx.indirect_targets);
+>> +	}
+>> +
+>>   	ctx.offset = kvcalloc(prog->len + 1, sizeof(int), GFP_KERNEL);
+>>   	if (ctx.offset == NULL) {
+>>   		prog = orig_prog;
+>> @@ -2248,6 +2267,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
+>>   			prog->aux->priv_stack_ptr = NULL;
+>>   		}
+>>   		kvfree(ctx.offset);
+>> +		kvfree(ctx.indirect_targets);
+>>   out_priv_stack:
+>>   		kfree(jit_data);
+>>   		prog->aux->jit_data = NULL;
+>> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+>> index a9b788c7b4aa..c81eb54f7b26 100644
+>> --- a/include/linux/bpf.h
+>> +++ b/include/linux/bpf.h
+>> @@ -3822,11 +3822,23 @@ void bpf_insn_array_adjust_after_remove(struct bpf_map *map, u32 off, u32 len);
+>>   
+>>   #ifdef CONFIG_BPF_SYSCALL
+>>   void bpf_prog_update_insn_ptrs(struct bpf_prog *prog, u32 *offsets, void *image);
+>> +void bpf_prog_collect_indirect_targets(const struct bpf_prog *prog, unsigned long *bitmap);
+>> +bool bpf_prog_has_insn_array(const struct bpf_prog *prog);
+>>   #else
+>>   static inline void
+>>   bpf_prog_update_insn_ptrs(struct bpf_prog *prog, u32 *offsets, void *image)
+>>   {
+>>   }
+>> +
+>> +static inline bool bpf_prog_has_insn_array(const struct bpf_prog *prog)
+>> +{
+>> +	return false;
+>> +}
+>> +
+>> +static inline void
+>> +bpf_prog_collect_indirect_targets(const struct bpf_prog *prog, unsigned long *bitmap)
+>> +{
+>> +}
+>>   #endif
+>>   
+>>   #endif /* _LINUX_BPF_H */
+>> diff --git a/kernel/bpf/bpf_insn_array.c b/kernel/bpf/bpf_insn_array.c
+>> index 61ce52882632..ed20b186a1f5 100644
+>> --- a/kernel/bpf/bpf_insn_array.c
+>> +++ b/kernel/bpf/bpf_insn_array.c
+>> @@ -299,3 +299,46 @@ void bpf_prog_update_insn_ptrs(struct bpf_prog *prog, u32 *offsets, void *image)
+>>   		}
+>>   	}
+>>   }
+>> +
+>> +bool bpf_prog_has_insn_array(const struct bpf_prog *prog)
+>> +{
+>> +	int i;
+>> +
+>> +	for (i = 0; i < prog->aux->used_map_cnt; i++) {
+>> +		if (is_insn_array(prog->aux->used_maps[i]))
+>> +			return true;
+>> +	}
+>> +	return false;
+>> +}
+> 
+> I think a different check is needed here (and a different function
+> name, smth like "bpf_prog_has_indirect_jumps"),and a different
+> algorithm to collect jump targets in the chunk below. A program can
+> have instruction arrays not related to indirect jumps (see, e.g.,
+> bpf_insn_array selftests + in future insns arrays will be used to
+> also support other functionality). As an extreme case, an insn array
+> can point to every instruction in a prog, thus a BTI will be
+> generated for every instruction.
+> 
+> In verifier it is used a bit differently, namely, all insn arrays for
+> a given subprog are collected when an indirect jump is encountered
+> (and non-deterministic only in check_cfg). Later in verification, an
+> exact map is used, so this is not a problem.
+>
+
+ACK, we should leverage the information derived by the verifier to exclude
+instruction arrays that are not used for indirect jumps.
+
+> Initially I wanted to have a map flag (in map_extra) to distingiush between
+> different types of instruction arrays ("plane ones", "jump targets",
+> "call targets", "static keys"), but Andrii wasn't happy with it,
+> so eventually I've dropped it. Maybe it is worth adding it until
+> the code is merged to upstream? Eduard, Alexei, wdyt?
+> 
+>> +
+>> +/*
+>> + * This function collects possible indirect jump targets in a BPF program. Since indirect jump
+>> + * targets can only be read from instruction arrays, it traverses all instruction arrays used
+>> + * by @prog. For each instruction in the arrays, it sets the corresponding bit in @bitmap.
+>> + */
+>> +void bpf_prog_collect_indirect_targets(const struct bpf_prog *prog, unsigned long *bitmap)
+>> +{
+>> +	struct bpf_insn_array *insn_array;
+>> +	struct bpf_map *map;
+>> +	u32 xlated_off;
+>> +	int i, j;
+>> +
+>> +	for (i = 0; i < prog->aux->used_map_cnt; i++) {
+>> +		map = prog->aux->used_maps[i];
+>> +		if (!is_insn_array(map))
+>> +			continue;
+>> +
+>> +		insn_array = cast_insn_array(map);
+>> +		for (j = 0; j < map->max_entries; j++) {
+>> +			xlated_off = insn_array->values[j].xlated_off;
+>> +			if (xlated_off == INSN_DELETED)
+>> +				continue;
+>> +			if (xlated_off < prog->aux->subprog_start)
+>> +				continue;
+>> +			xlated_off -= prog->aux->subprog_start;
+>> +			if (xlated_off >= prog->len)
+>> +				continue;
+>> +			__set_bit(xlated_off, bitmap);
+>> +		}
+>> +	}
+>> +}
+>> -- 
+>> 2.47.3
+>>
 
