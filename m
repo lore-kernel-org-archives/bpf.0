@@ -1,192 +1,199 @@
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from DU2PR03CU002.outbound.protection.outlook.com (mail-northeuropeazon11011033.outbound.protection.outlook.com [52.101.65.33])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97FE130CD92
-	for <bpf@vger.kernel.org>; Mon,  1 Dec 2025 15:03:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764601435; cv=none; b=idETqMIy+39wc7KlYtqnFBNXmnOhv1y7PyhxRZnugvouAZXt6fshwvCD+IGy4J8OIQ5hYq9ddw6Xdughmq0A3fkg+skJzkRI7XGlE2iSeIAL+Y8eVPwoVwntEjzu+CD2w7s6S++QyL3OH++2+Z/8AqG9whCoV7ITCfQ4coNb4ZE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764601435; c=relaxed/simple;
-	bh=EXzDcH+w5Jl6eGdL/1XTbFsMDWschXz87blxBSftkBo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=c/Y7673RWu31HrUgnG2/Kb+jU3fQAkU+q8qkoo8ClFeTscIKCFxl46Lh3Z5qsNrn65Y1rMPc4M4UOTSsxGK74B1gaBvQ5jJS5m7SEef7r0GweIjonMQIW/UrcXyDXACkacop4sMKAFx97rELbG1uFlusx/srGsdz5pVjA8wT9lk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mTmeSQeU; arc=none smtp.client-ip=209.85.210.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96E6430FC12;
+	Mon,  1 Dec 2025 16:38:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.65.33
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1764607109; cv=fail; b=UWVbjmvny+h/mGOaDwV83mAXAYngI8O0HQNpruIDqmpCpwiCOHDXLPSYEv13ZlM0VsOB9GzDKPn7Lj3ojYIKVAbV/q3evAf3nO76Evuzf9+JZN8TuO+5sagJ5etJkWAM3P5L2YMzy3/wahTf4jKDAzKYIJ55FV+beK/SSutVpqc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1764607109; c=relaxed/simple;
+	bh=Q49lg1ygR5li/7gImh7zFQzfI3h2ISG+4HsdDeihcTE=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=usYh3fKKBA1YmJ0zLuXsklJLDDEFT12gbbfYKszHszI2CcqtB88J7eGaUia7cjZ2bENQL7tsoFolJxpimc5XG5ngigTCcrX9t8ZwSVn416p66RRkhxgv56esH6Q/CC5Afr6f6dikaleLme3Huz9w5sbf/e6yxEyoW16UxrrEda0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com; spf=fail smtp.mailfrom=nokia-bell-labs.com; dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b=PPQyyGvA; arc=fail smtp.client-ip=52.101.65.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nokia-bell-labs.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mTmeSQeU"
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-7ad1cd0db3bso3381530b3a.1
-        for <bpf@vger.kernel.org>; Mon, 01 Dec 2025 07:03:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764601433; x=1765206233; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tpw8LHvPdU6zlHMAMXTfZPDQrMbxfwldCPC5wqMja1s=;
-        b=mTmeSQeUZ0NrsnUYmshCon0vaDA5QJpjJ1fpawYxxKzT9Uv7wl3Ufi6yagGfTciolq
-         bfg9n+u/MViOgORULSRBWSPg99vIJe89NEAFNafQ7JMbpcF3UTzLnv8jR/paHRr3bznJ
-         0lxQfb5J520sr1CGeY5B78PzEc0EhqoHKGy+7zIwEMG0lGS0+FnxQLH4eT9NLhhIH2BN
-         3vsYriktRFP5Hb6EW0QncZ34gJOWKVtu77Cy3ymoQAXiXUgjm7X4UT3bsyIeK1vpWSNk
-         Mfbe6mXY69IIwgB0R8FWckc+pbqRa215ZYfY6C/oFQBkAVzJ30dEMKQG/NC+EmG01r6T
-         eURw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764601433; x=1765206233;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tpw8LHvPdU6zlHMAMXTfZPDQrMbxfwldCPC5wqMja1s=;
-        b=kQE6AfI0DV7EYf2VZLiB+3Ek70KfhmbsCQ0CG+Wl1SfeB62Im9gmWcxbJq0om3qKXx
-         EX/2cdc03lm+/xJ746ojln2NurF5p3/WFzexaXfkQ52k/BvUJICEX4qI18QaMKP5bRFQ
-         DkAg+fKnAR0cN9eE8kBnnHAiq7s8+dUb2vE6cShTn7NnIJZsbqiNerRn9ewVXTJrsfF0
-         cxIk61MpBcTsUGmQNkagxJggfu+NP8pS9U/ylCsKzb9nFm6y9h9Watez1MZC69BwOq9w
-         29AXHXpGx/p5VfnnyX8/aQUcwfJK3yQgTTRpLKhnCG9GNOOsp9tays2fSNxTDeTtlVoe
-         64Uw==
-X-Forwarded-Encrypted: i=1; AJvYcCWHa/w02ZIbqdgShR0iIHP9Zyxhzkfoyc2L5O68QgeLill2IJpnVyKp4ZE9DAd2qVIKoy0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwZdDiyimK+RWwk/xbHAbLg1nY0314q0inYkJPMs3G81ybOPi+I
-	MuMwnS7qYjNppRoJfjEgdSerOhExune+iBgpDUVXhMBg9t6bHZxQqTMw
-X-Gm-Gg: ASbGncucDF2D+lohiswfth0pVrbNWj6WoxBr/uaHoqKwhP7XEUW7RKP1JIh53EuS7H2
-	dzOpOX+up6wk5k42Es4DmyhRyC0K8voW/RvPG/ue+hbPm6rZo15VV4yQ5034gn2v3eJ9qkeNzYt
-	q6a/KPD8zFyVJgwjuLrj6IAbuDPNvsXLoIt2slPYctRZKsEEeasuFkLFOmO0vmZuYnXcibyprWi
-	XKZPZCvKxId42quoq5nwE7RRqSqDAk5rWMDgb//cxLmEjNu1ml3RDoYJLkO8FJ2kW1hST8R5SwU
-	tJ8aZiukJnWNn0WMuwwVYSsoEH+trVkjgAtojNZlCSIogddNT3AUEMu7ojXpTO/cg5LdDoZBrfJ
-	gczgj+lspLEBbI6pXTVykgjFPzBJ4EOSEfP26ZStBv0t5acq+bodJBCvXF6vQTrC/x7YTrh0tLS
-	1fGLK61mXS/qkU9P9gaNjhvlZ1+3eW6IcrXIO+ltI5Dh33ZrevTOAIMd+xmf+xGQ==
-X-Google-Smtp-Source: AGHT+IHmv0QxInfFB/jZapSApAINRmF451TKrxhW5iPzZqBDqwn6NRIZ2O7dcTdimLEG9yOOxzaRZQ==
-X-Received: by 2002:a05:6a20:548d:b0:2d5:264c:e4a1 with SMTP id adf61e73a8af0-3637daaa237mr27333954637.8.1764601430946;
-        Mon, 01 Dec 2025 07:03:50 -0800 (PST)
-Received: from ?IPV6:2001:ee0:4f4c:210:adfb:c7fd:bfdc:f0bb? ([2001:ee0:4f4c:210:adfb:c7fd:bfdc:f0bb])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7d1516f6621sm13760828b3a.16.2025.12.01.07.03.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 Dec 2025 07:03:50 -0800 (PST)
-Message-ID: <a9718b11-76d5-4228-9256-6a4dee90c302@gmail.com>
-Date: Mon, 1 Dec 2025 22:03:42 +0700
+	dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b="PPQyyGvA"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=T3FqPqKlyBWeTekUc3XUhmP1Gitgnqyo67t6MQLSvPWlHel1ml7yRKYn/JbjqQgcHwjvFkvyJICP7ikzFroNJJRnVmzCChcNELOCP45B00xnaWLH+F+ybadSsTzLCSkgLCQdeEB0TpDPDToQhFYWsWXZCJFdFNUUVPd+neeSsuHnku34Zjc8MgpLhCS1UDKbTCtQCF4Q6+wuijOHML1V7/S5l0gpfqawLgsoOPxrxiKo6ka6qQSKF6L4+Kcc9raR/ha9mnjbs6fvzukoEZEtMSXGbdlNaLZESwoTCoojxOySSb4dI/ugn0UMzc/aDMEfT0VoKlGGIBe4jIhhy7FepA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+kuB7eRxeMGDNwXVB8pJvlHLKjUPv3X1qilnfBJ6Mdw=;
+ b=WZRujJHUToy+T6S2j8BWlOoHd8UIK9K9tMb4zsPqzoM9h4PvvpDLAFbIAqwA/DbLxzcPuXP3FH9aPdQtoKJYS0YmLQeg5nZ3Zf0Iz5sa7cYM2crJzS240o6q5sdOfVCr0mGu8aYAvBsolS5n43b6In+TJc4cBsfi7ddnRbfDQWFgWNhW/UE05vrB5HS0zwv0B0kdZHSpZIzhLzRxDQeIw4R02qevFsN8MhzEdAq/9qHLNuQxfKDL2oYLDY0huQHfg8ut0cdGiWAqH9ZFR1mNLCVxTq7tu1AMv1mhOlewOYRE+7FCC4UF3R9M6wDqxFATCL1cR1lg6aAWH3qzRJ1pBA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 131.228.6.100) smtp.rcpttodomain=apple.com smtp.mailfrom=nokia-bell-labs.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none
+ header.from=nokia-bell-labs.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia-bell-labs.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+kuB7eRxeMGDNwXVB8pJvlHLKjUPv3X1qilnfBJ6Mdw=;
+ b=PPQyyGvAL8IRkZffsvdNU5UjW2aB/tu932Cz7VjLu0E80yZRGag2wKpsJch1qbS9yoLPfRpnvmzFWmh/m/Zsmy5NvMAf+yN8SqOtoOIFXkzrC2U5agiTMshyk8K5XLHP2CBodIOytnPCTUjOydDHC6UNXdv5quMwCO2ExGVlwRzG+v6C5oe21KpptifRmTiusaRPIBfk5x6KRVHVnCYj3+bffFwo0YRP9/BLCDahl7PRAgElo6VmIxUcz0WlWnUr2jqHOEhrwuNLtQUJQewS8c8uFY/xx2uV2hbY5Dk2NbkyeGYwGyB9Je/BlIwUgtPMJsq36R3DkU6PGcKXs/YoOg==
+Received: from AS4P192CA0006.EURP192.PROD.OUTLOOK.COM (2603:10a6:20b:5da::7)
+ by VI1PR07MB9828.eurprd07.prod.outlook.com (2603:10a6:800:1d0::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9366.17; Mon, 1 Dec
+ 2025 16:38:21 +0000
+Received: from AM3PEPF00009B9C.eurprd04.prod.outlook.com
+ (2603:10a6:20b:5da:cafe::b) by AS4P192CA0006.outlook.office365.com
+ (2603:10a6:20b:5da::7) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9366.17 via Frontend Transport; Mon,
+ 1 Dec 2025 16:38:15 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 131.228.6.100)
+ smtp.mailfrom=nokia-bell-labs.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nokia-bell-labs.com;
+Received-SPF: Pass (protection.outlook.com: domain of nokia-bell-labs.com
+ designates 131.228.6.100 as permitted sender)
+ receiver=protection.outlook.com; client-ip=131.228.6.100;
+ helo=fr711usmtp2.zeu.alcatel-lucent.com; pr=C
+Received: from fr711usmtp2.zeu.alcatel-lucent.com (131.228.6.100) by
+ AM3PEPF00009B9C.mail.protection.outlook.com (10.167.16.21) with Microsoft
+ SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.9388.8
+ via Frontend Transport; Mon, 1 Dec 2025 16:38:21 +0000
+Received: from sarah.nbl.nsn-rdnet.net (sarah.nbl.nsn-rdnet.net [10.0.73.150])
+	by fr711usmtp2.zeu.alcatel-lucent.com (Postfix) with ESMTP id BDA18680033;
+	Mon,  1 Dec 2025 18:38:19 +0200 (EET)
+From: chia-yu.chang@nokia-bell-labs.com
+To: pabeni@redhat.com,
+	edumazet@google.com,
+	parav@nvidia.com,
+	linux-doc@vger.kernel.org,
+	corbet@lwn.net,
+	horms@kernel.org,
+	dsahern@kernel.org,
+	kuniyu@google.com,
+	bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	dave.taht@gmail.com,
+	jhs@mojatatu.com,
+	kuba@kernel.org,
+	stephen@networkplumber.org,
+	xiyou.wangcong@gmail.com,
+	jiri@resnulli.us,
+	davem@davemloft.net,
+	andrew+netdev@lunn.ch,
+	donald.hunter@gmail.com,
+	ast@fiberby.net,
+	liuhangbin@gmail.com,
+	shuah@kernel.org,
+	linux-kselftest@vger.kernel.org,
+	ij@kernel.org,
+	ncardwell@google.com,
+	koen.de_schepper@nokia-bell-labs.com,
+	g.white@cablelabs.com,
+	ingemar.s.johansson@ericsson.com,
+	mirja.kuehlewind@ericsson.com,
+	cheshire@apple.com,
+	rs.ietf@gmx.at,
+	Jason_Livingood@comcast.com,
+	vidhi_goel@apple.com
+Cc: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+Subject: [PATCH v7 net-next 02/13] gro: flushing when CWR is set negatively affects AccECN
+Date: Mon,  1 Dec 2025 17:37:49 +0100
+Message-Id: <20251201163800.3965-3-chia-yu.chang@nokia-bell-labs.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20251201163800.3965-1-chia-yu.chang@nokia-bell-labs.com>
+References: <20251201163800.3965-1-chia-yu.chang@nokia-bell-labs.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC] virtio_net: gate delayed refill scheduling
-To: Jason Wang <jasowang@redhat.com>
-Cc: "Michael S. Tsirkin" <mst@redhat.com>, linux-kernel@vger.kernel.org,
- Paolo Abeni <pabeni@redhat.com>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
- =?UTF-8?Q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>,
- Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, virtualization@lists.linux.dev,
- netdev@vger.kernel.org, bpf@vger.kernel.org
-References: <40af2b73239850e7bf1a81abb71ee99f1b563b9c.1764226734.git.mst@redhat.com>
- <a61dc7ee-d00b-41b4-b6fd-8a5152c3eae3@gmail.com>
- <CACGkMEuJFVUDQ7SKt93mCVkbDHxK+A74Bs9URpdGR+0mtjxmAg@mail.gmail.com>
-Content-Language: en-US
-From: Bui Quang Minh <minhquangbui99@gmail.com>
-In-Reply-To: <CACGkMEuJFVUDQ7SKt93mCVkbDHxK+A74Bs9URpdGR+0mtjxmAg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM3PEPF00009B9C:EE_|VI1PR07MB9828:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2548178b-c24b-4d24-367b-08de30f80a2b
+X-LD-Processed: 5d471751-9675-428d-917b-70f44f9630b0,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+ BCL:0;ARA:13230040|36860700013|1800799024|376014|7416014|82310400026|921020;
+X-Microsoft-Antispam-Message-Info:
+ =?utf-8?B?K0dydENBemdxU0pFbGZiOGVQVlBWMGJ3YWUwRWJCWGxZODRQMy8xVmx3KzU1?=
+ =?utf-8?B?SWVTWlZzeTFNWWZNMTNiN3Frbk1sTHRNSUxhWWx4UDJDdWczYnptY1A2ZGZN?=
+ =?utf-8?B?S2dKVjZnMHVtN1A2MUpiZS9seGJPSlpOWDBXb1UyMGNCZ0MxaXdBY0xoTlhN?=
+ =?utf-8?B?WFFHa0s4cC9qajBoR3FOWnNrYmEwelYyZDd5Q2FnMG5CVmhWbUFlZGJjb1BR?=
+ =?utf-8?B?eE9zY1o0MUN1RCt2cTJaRWNSTkswNnZNd0svT3Q4N082ZW5KQVNWcy8rY09V?=
+ =?utf-8?B?TkF1ajRFMTdMR1cxSDFITzZMYytyaVNxOGVuSjk4UE44aFBCODAyVFU2S003?=
+ =?utf-8?B?TE9GQkRUMXBxR1dyUVlyL0M3dHBKRnVCckFxa29ROTVNdGVJcFJEM1BpaEhQ?=
+ =?utf-8?B?VVluWlBFRk5ic0NZanZLK2ZaOEM1dlNJbzI3a2lTM1ZEVGdyaVBONEs1bHlk?=
+ =?utf-8?B?bVJxTExtM1RoR3R4amlVWms5L1ZQNnEzN3B2RGZ5azFkUHBGbEdxRjI4a2xz?=
+ =?utf-8?B?VnN2UHNsWWw5VWtLSnEwN1B1UGlac0dVZTRpcUNPeUwycWdNN0Y4UkplSy9Q?=
+ =?utf-8?B?eVkyTmQ0cDllOWZQcEFZbS9zakd1ZWR2UVZYZ0VUb2JSQmlYZHkxTWdodWlE?=
+ =?utf-8?B?OUsrc1ZGdmhRUHNrcnIyNjJMckNNZmtIRzBBRzhQc3ROVzUyNVhDcGpPWjYz?=
+ =?utf-8?B?enFXUjdnazRBVC9SK1ROYTFBZUwraGprVUt1RGVVaGFwemo1UkI0MGgwekJx?=
+ =?utf-8?B?elNDcEJDTlh4S3BaRXcxaERRK3FqZUtYS2hpOVBWRUJmNU5kMHpHVGUyTDlW?=
+ =?utf-8?B?V3dDRXdCY0V5M3RWQjVMdnAzdjRLQUR6NzV6WGlSUCtTNy9GdG1idFhYWW9v?=
+ =?utf-8?B?ekU2TnExejJMODJJa2g2NXNySmgzUFV4RVdpVGtFdVVPY01yRXZOaXBpdlQ3?=
+ =?utf-8?B?R2Y5aWNuTlZGcTVTVTFpMzVjbk5BZVUyblVnQklqT2NncTVUSFBKVFQ2ZXpy?=
+ =?utf-8?B?eFV0b3hLNGM1K2I3M2xxRDJhTXFMNUFXRUVNRlpWOXdZZ1RGZ09CSzZJUTgy?=
+ =?utf-8?B?aDA5MjBLQ3k0QldFY0tnQ1RxaktTVDIvQ2NYdS82MWFTdTUreC8rYStiYTNp?=
+ =?utf-8?B?YU5PbTJFUkdYMHNjR2lmU0ErRDZQSTJqRWVBR3ZaeWJWT0pmWG1Za2ovSTJl?=
+ =?utf-8?B?cUtDL1FDZVk0UlpwUWZwLzd3M1RLY1o0R0gxMGRsRFhQQ3Z4NkRRV2hiS3pj?=
+ =?utf-8?B?YVZlc21jeXdwMmd0TTl5cXBZSEx2bzMwZ29hV0tIeDR5MlUxRHgxZ1VRQTB4?=
+ =?utf-8?B?YUVobTh3akZ2UjVHSnJYUVJmMXNTSVMwd2pBMVVXSTBBMXNkYVRjRm95cXRD?=
+ =?utf-8?B?UWpvQUNSYU0xMmVEazJrakxmblliOXh5aWVwa0x4T0duMTVFUWtISmxrOVBj?=
+ =?utf-8?B?S0ZERnpNRWQzVDNVcGJSUUpoUmlaMzVNNDdHSmFSTW03YUsraVlNbnJWU1U0?=
+ =?utf-8?B?QzNnZ2V6c3Q4bElpL0V6L2o0Z1dWREwwMmhvVThzdUlEWDFWbno3VnZhT25s?=
+ =?utf-8?B?NGx2TUFZSFpiY3VGSnFNVjdNbEVJb1prUGZsd3VUKzlXSVR0Vy9xWUo0Z0hM?=
+ =?utf-8?B?cjJZUHRNSGp5clJpMHhWUGR3L2RRdnN0MXZheHY1N3ZlQ1dncmRDUktSOUI3?=
+ =?utf-8?B?aVdzREVZUmRZbXNNdGE3MVZQTFN5aTMrRnZxNkF4dklEdzgrNzlaMDV0SWVX?=
+ =?utf-8?B?a2ROTU1ycStQakUyc0Q0MHJEMkpLZi9nOXRWVTEzL1Y5RU4yWmxDZmdma0xa?=
+ =?utf-8?B?RnFSbVgzVEppZkgvNzg4dnQwRTUrZ3Z5ODV1QUhWbUkyV2JMUnVqZitidHlk?=
+ =?utf-8?B?VlYvNm1nemo2cU9zNEdNS2tTdW1OWDh3enpmZ3hSZ1JIcCt3b2cxeG1pYlRs?=
+ =?utf-8?B?Unhwekk3aHM5amJMMFI5ZFR5Uk8rWHVVb0VCVUNKMEFraVRsRG9hbTVpSnB6?=
+ =?utf-8?B?dUpFb1VxT0xXVENpU2tUU3hUSGJiTlltMG5sRExRamlvUU1zek00UDlycWtt?=
+ =?utf-8?B?RnBoWEwvQ1ZYdTFtczhKc0dHYUsrdGxheTg0S1ptWFFCUUYwRlNFL3NLWnky?=
+ =?utf-8?Q?x3jOc0+pvbaHe6hRmEZHqaWqL?=
+X-Forefront-Antispam-Report:
+ CIP:131.228.6.100;CTRY:FI;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:fr711usmtp2.zeu.alcatel-lucent.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(1800799024)(376014)(7416014)(82310400026)(921020);DIR:OUT;SFP:1101;
+X-OriginatorOrg: nokia-bell-labs.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Dec 2025 16:38:21.3089
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2548178b-c24b-4d24-367b-08de30f80a2b
+X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=5d471751-9675-428d-917b-70f44f9630b0;Ip=[131.228.6.100];Helo=[fr711usmtp2.zeu.alcatel-lucent.com]
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TreatMessagesAsInternal-AM3PEPF00009B9C.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR07MB9828
 
-On 11/28/25 09:20, Jason Wang wrote:
-> On Fri, Nov 28, 2025 at 1:47 AM Bui Quang Minh <minhquangbui99@gmail.com> wrote:
->> I think the the requeue in refill_work is not the problem here. In
->> virtnet_rx_pause[_all](), we use cancel_work_sync() which is safe to
->> use "even if the work re-queues itself". AFAICS, cancel_work_sync()
->> will disable work -> flush work -> enable again. So if the work requeue
->> itself in flush work, the requeue will fail because the work is already
->> disabled.
-> Right.
->
->> I think what triggers the deadlock here is a bug in
->> virtnet_rx_resume_all(). virtnet_rx_resume_all() calls to
->> __virtnet_rx_resume() which calls napi_enable() and may schedule
->> refill. It schedules the refill work right after napi_enable the first
->> receive queue. The correct way must be napi_enable all receive queues
->> before scheduling refill work.
-> So what you meant is that the napi_disable() is called for a queue
-> whose NAPI has been disabled?
->
-> cpu0] enable_delayed_refill()
-> cpu0] napi_enable(queue0)
-> cpu0] schedule_delayed_work(&vi->refill)
-> cpu1] napi_disable(queue0)
-> cpu1] napi_enable(queue0)
-> cpu1] napi_disable(queue1)
->
-> In this case cpu1 waits forever while holding the netdev lock. This
-> looks like a bug since the netdev_lock 413f0271f3966 ("net: protect
-> NAPI enablement with netdev_lock()")?
+From: Ilpo Järvinen <ij@kernel.org>
 
-Yes, I've tried to fix it in 4bc12818b363 ("virtio-net: disable delayed 
-refill when pausing rx"), but it has flaws.
+As AccECN may keep CWR bit asserted due to different
+interpretation of the bit, flushing with GRO because of
+CWR may effectively disable GRO until AccECN counter
+field changes such that CWR-bit becomes 0.
 
->> The fix is like this (there are quite duplicated code, I will clean up
->> and send patches later if it is correct)
->>
->> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
->> index 8e04adb57f52..892aa0805d1b 100644
->> --- a/drivers/net/virtio_net.c
->> +++ b/drivers/net/virtio_net.c
->> @@ -3482,20 +3482,25 @@ static void __virtnet_rx_resume(struct virtnet_info *vi,
->>    static void virtnet_rx_resume_all(struct virtnet_info *vi)
->>    {
->>        int i;
->> +    bool schedule_refill = false;
->> +
->> +    for (i = 0; i < vi->max_queue_pairs; i++)
->> +        __virtnet_rx_resume(vi, &vi->rq[i], false);
->>
->>        enable_delayed_refill(vi);
->> -    for (i = 0; i < vi->max_queue_pairs; i++) {
->> -        if (i < vi->curr_queue_pairs)
->> -            __virtnet_rx_resume(vi, &vi->rq[i], true);
->> -        else
->> -            __virtnet_rx_resume(vi, &vi->rq[i], false);
->> -    }
->> +
->> +    for (i = 0; i < vi->curr_queue_pairs; i++)
->> +        if (!try_fill_recv(vi, &vi->rq[i], GFP_KERNEL))
->> +            schedule_refill = true;
->> +
->> +    if (schedule_refill)
->> +        schedule_delayed_work(&vi->refill, 0);
->>    }
->>
->>    static void virtnet_rx_resume(struct virtnet_info *vi, struct receive_queue *rq)
->>    {
->> -    enable_delayed_refill(vi);
->>        __virtnet_rx_resume(vi, rq, true);
->> +    enable_delayed_refill(vi);
-> This seems to be odd. I think at least we need to move this before:
->
->> +    if (schedule_refill)
->> +        schedule_delayed_work(&vi->refill, 0);
-> ?
+There is no harm done from not immediately forwarding the
+CWR'ed segment with RFC3168 ECN.
 
-Yes, I think helper __virtnet_rx_resume does not work well, because 
-virtnet_rx_resume_all and virtnet_rx_resume have slightly different 
-logic. So I think it's better to open-code the helper and do the logic 
-directly in virtnet_rx_resume_all and virtnet_rx_resume.
+Signed-off-by: Ilpo Järvinen <ij@kernel.org>
+Signed-off-by: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+---
+ net/ipv4/tcp_offload.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
->>    }
->>
->>    static int virtnet_rx_resize(struct virtnet_info *vi,
->>
->> I also move the enable_delayed_refill() after we __virtnet_rx_resume()
->> to ensure no refill is scheduled before napi_enable().
->>
->> What do you think?
-> This has been implemented in your patch or I may miss something.
+diff --git a/net/ipv4/tcp_offload.c b/net/ipv4/tcp_offload.c
+index fdda18b1abda..9bd710c7bc95 100644
+--- a/net/ipv4/tcp_offload.c
++++ b/net/ipv4/tcp_offload.c
+@@ -303,8 +303,7 @@ struct sk_buff *tcp_gro_receive(struct list_head *head, struct sk_buff *skb,
+ 		goto out_check_final;
+ 
+ 	th2 = tcp_hdr(p);
+-	flush = (__force int)(flags & TCP_FLAG_CWR);
+-	flush |= (__force int)((flags ^ tcp_flag_word(th2)) &
++	flush = (__force int)((flags ^ tcp_flag_word(th2)) &
+ 		  ~(TCP_FLAG_FIN | TCP_FLAG_PSH));
+ 	flush |= (__force int)(th->ack_seq ^ th2->ack_seq);
+ 	for (i = sizeof(*th); i < thlen; i += 4)
+-- 
+2.34.1
 
-Yes, I move the enable_delayed_refill after the call __virtnet_rx_resume 
-in the above diff because I see it creates a window where delayed refill 
-is enabled before napi is enabled. However, AFAICS, other places that 
-schedule the delayed refill work must acquire the rtnl_lock and/or 
-netdev_lock, so it cannot happen while we are in virtnet_rx_resume[_all].
-
-Thanks,
-Quang Minh.
