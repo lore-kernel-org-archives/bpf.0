@@ -1,30 +1,32 @@
-Received: from out-180.mta1.migadu.com (out-180.mta1.migadu.com [95.215.58.180])
+Received: from out-186.mta1.migadu.com (out-186.mta1.migadu.com [95.215.58.186])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0B5527146B
-	for <bpf@vger.kernel.org>; Tue,  2 Dec 2025 15:31:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2959625484D
+	for <bpf@vger.kernel.org>; Tue,  2 Dec 2025 15:31:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.186
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764689483; cv=none; b=l4rkNieT9kB5AfA5IDSdSrCPdOlXBXhTpFqEbedNLayBIW4TVYjcvIk/U/UArGfA8rrOoAvvrN2SakRuZMTRrZEeWOKoNcpMHRHR83MmqlUS9J1oK58JBiEZiITLMYjubylOowr4ox6MVmy0AeOOkAGURF6uvn+EIN3a3eZvHew=
+	t=1764689484; cv=none; b=oNdPhgz67WxAteD9/yYPuckxX7RbisJIdgfTfVR2Xo1jGCAYLU/ThDm1PTeORzb/zkkFh7Sum+v7AbZYwa4oJ8RmXaS/KtyvknYSwOm6awI28MaM5CqvYiRWIJbE09JcnSlVeoOOW3U9g3VwWaU7nCVFYDRpHKzTbo6mhhsDFx0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764689483; c=relaxed/simple;
-	bh=lqFSWWgbCYLsxE6Jcv0lfyihLv79CSGPMuWmwkl1yVY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=cJFH6K3uKey/MkLezsro0nyPwsKoA3aYMzBKB6Q6GGkhmEBQKIdjEWoNtoHQ/Al55/TCmdi5FTjGJ0cXmD2cL3Tgniu14RkSWKimsE+FSJKXLixXMjGYSJrK7ZDY2wnM3pKoW5AWtiksubbzpLBBq5kywtbYdH/sk6pn6IipEDo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Ww2l/SQx; arc=none smtp.client-ip=95.215.58.180
+	s=arc-20240116; t=1764689484; c=relaxed/simple;
+	bh=F+UplCImDF/kps8pu9STR2+AOE67Uk7IX90+jmF8uFo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=GHvxIKTNSPWP7ShDBZD4+dE0Ry6WlQbhH1Fr9AluhIu1IUWdLR+eie9JWuROHuBWid6ODztP2LBhZF5EJC0IH6zqQ+MIBKfRI1ravfyhmcMQC2DtbLmT6bodY5AdYhKw9MTHnN+p3T9KfEio7bn8VAFa1OTXXGb+etNi6t7dGf0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=lQgmhnic; arc=none smtp.client-ip=95.215.58.186
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Ww2l/SQx"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="lQgmhnic"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1764689469;
+	t=1764689480;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=sT5IkezlGFPCTc3WA5XyqMyPfdf9RAfyoHrWAPvBjSA=;
-	b=Ww2l/SQxHsc+IBm+FinRcSFtbb/fSvvwH8eiAjouKRn/0UikpapWi2Sleb82wdtXU6RhOT
-	wADfxwpMcPDadILU71W2zcRJQs4H5UvLQ4XQ8Hf7Zkd/V7Vjc8RD7j7hpam/0OBcJ1ygsc
-	jR2jAz6McCnGYbt1vffZPZuHLJaG3W4=
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=UEr1mCiRT8TYyqQLuCagLUjWOsUAHJwvRmp0JqhDR2c=;
+	b=lQgmhnic9aVt/qEbIMxv/+68hq0XXMdDuTZIRsWHCQRWx6CRMOjNXNuN/im2k70mSS6GXj
+	N4tgyYkEDBdrUtslhMBYPv5tweKzQGqTEd0hCdsAAphIYDByU4lYZ4WQc0XmDMoWPwJ8JD
+	/kaM5A+710uApbzEytUKev+Q5BOJ22s=
 From: Leon Hwang <leon.hwang@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -46,9 +48,11 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	kernel-patches-bot@fb.com
-Subject: [PATCH bpf-next 0/3] bpf: Fix unintended eviction when updating lru hash maps
-Date: Tue,  2 Dec 2025 23:30:29 +0800
-Message-ID: <20251202153032.10118-1-leon.hwang@linux.dev>
+Subject: [PATCH bpf-next 2/3] bpf: Avoid unintended eviction when updating lru_percpu_hash maps
+Date: Tue,  2 Dec 2025 23:30:31 +0800
+Message-ID: <20251202153032.10118-3-leon.hwang@linux.dev>
+In-Reply-To: <20251202153032.10118-1-leon.hwang@linux.dev>
+References: <20251202153032.10118-1-leon.hwang@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -58,42 +62,59 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-This unintended LRU eviction issue was observed while developing the
-selftest for
-"[PATCH bpf-next v10 0/8] bpf: Introduce BPF_F_CPU and BPF_F_ALL_CPUS flags for percpu maps" [1].
+Similar to the previous fix for lru_hash maps, the lru_percpu_hash map
+implementation also suffers from unnecessary eviction when updating
+existing elements.
 
-When updating an existing element in lru_hash or lru_percpu_hash maps,
-the current implementation calls prealloc_lru_pop() to get a new node
-before checking if the key already exists. If the map is full, this
-triggers LRU eviction and removes an existing element, even though the
-update operation only needs to modify the value in-place.
+When updating a key that already exists in a full lru_percpu_hash map,
+the current code path calls prealloc_lru_pop() before checking for the
+existing key (unless map_flags is BPF_EXIST). This can evict an unrelated
+element even though the update is just modifying the per-CPU value of an
+existing entry.
 
-In the selftest, this was to be worked around by reserving an extra entry to
-avoid triggering eviction in __htab_lru_percpu_map_update_elem().
-However, the underlying issue remains problematic because:
+Fix this by looking up the key first. If found, update the per-CPU value
+in-place using pcpu_copy_value(), refresh the LRU reference, and return
+early. Only proceed with node allocation if the key does not exist.
 
-1. Users may unexpectedly lose entries when updating existing keys in a
-   full map.
-2. The eviction overhead is unnecessary for existing key updates.
+Fixes: 8f8449384ec3 ("bpf: Add BPF_MAP_TYPE_LRU_PERCPU_HASH")
+Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+---
+ kernel/bpf/hashtab.c | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
-This patchset fixes the issue by first checking if the key exists before
-allocating a new node. If the key is found, update the value in-place,
-refresh the LRU reference, and return immediately without triggering any
-eviction. Only proceed with node allocation if the key does not exist.
-
-Links:
-[1] https://lore.kernel.org/bpf/20251117162033.6296-1-leon.hwang@linux.dev/
-
-Leon Hwang (3):
-  bpf: Avoid unintended eviction when updating lru_hash maps
-  bpf: Avoid unintended eviction when updating lru_percpu_hash maps
-  selftests/bpf: Add tests to verify no unintended eviction when
-    updating lru hash maps
-
- kernel/bpf/hashtab.c                          | 43 +++++++++++
- .../selftests/bpf/prog_tests/htab_update.c    | 73 +++++++++++++++++++
- 2 files changed, 116 insertions(+)
-
---
+diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+index fb624aa76573..af54fc3a9ba9 100644
+--- a/kernel/bpf/hashtab.c
++++ b/kernel/bpf/hashtab.c
+@@ -1358,6 +1358,28 @@ static long __htab_lru_percpu_map_update_elem(struct bpf_map *map, void *key,
+ 	b = __select_bucket(htab, hash);
+ 	head = &b->head;
+ 
++	ret = htab_lock_bucket(b, &flags);
++	if (ret)
++		goto err_lock_bucket;
++
++	l_old = lookup_elem_raw(head, hash, key, key_size);
++
++	ret = check_flags(htab, l_old, map_flags);
++	if (ret)
++		goto err;
++
++	if (l_old) {
++		bpf_lru_node_set_ref(&l_old->lru_node);
++		/* per-cpu hash map can update value in-place */
++		pcpu_copy_value(htab, htab_elem_get_ptr(l_old, key_size),
++				value, onallcpus);
++	}
++
++	htab_unlock_bucket(b, flags);
++
++	if (l_old)
++		return 0;
++
+ 	/* For LRU, we need to alloc before taking bucket's
+ 	 * spinlock because LRU's elem alloc may need
+ 	 * to remove older elem from htab and this removal
+-- 
 2.52.0
 
