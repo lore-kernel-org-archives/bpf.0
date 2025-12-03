@@ -1,164 +1,177 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1235245019;
-	Wed,  3 Dec 2025 08:47:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BA04158535;
+	Wed,  3 Dec 2025 08:47:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764751639; cv=none; b=gLyDFO4VNcMhlddSh+MPpetlERhcbpTwIpZJXxohZ40XCbTOK/64D0bpL3A4Cvtz0CAy2ZRABZy4UnZqkiKZBw+U5puOLUkrYFq1J2nD4R0Ts6jeD8/i1q5TRU0A7rKhu2PHDYyQwNrFdPWAHJIK8TrE7u/qZ3+r00BVJfvsi40=
+	t=1764751667; cv=none; b=opf7uMg/Q0XEYcu2Q0K8GkKGYdAyzDjRWuqR9qKKvV4LoZP44aE0rlSUne2yB4PR7L68GhFi8DiH6JTnMzuSUiTlGdwpEHp7Rzf67dbDDLXqerd/YhGOfKG5F2W56a6qA/GUss06un4/gtBJdod5lIhxa32Loxy+G601CsSyPac=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764751639; c=relaxed/simple;
-	bh=ADK3Ayeg4WcQXxuws22v65U6ZbGl1rBpQy8nvECVAOg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RAMBNwIGg1wtLY640JU+zkJAmM6dJxRp8u6FBJCvKycn/ii9XPFg/8ReNRvbH9ai3E8KId88gCcY8FTHx3Z00erghhxOZcr8nb9bx+E3e+CxYSIyMQSOHOqBEUCEgYJoHua9ETZcDh5OXvrXa6J3/wgxF1BE5EJpx6CzitXAzyE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=kk/XZp75; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=6B2+T0Q8; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	s=arc-20240116; t=1764751667; c=relaxed/simple;
+	bh=zZggOqyqpCFVEMcM9cHwsXefF4PRk8oAmhf5XqTg3nE=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=oKLluY3tNtlPeSEX0j0ISIv61Vdul/Y3m26PVqv3nDAgu6xza/YCV1ggveGDCy6CKShvIf22FzvA3kOHnEcDgQs/Kq+yMPGBu1IdqaJZiLRerWxgFwDcBNfpKdkK0E/pkJu+23SkUBE6HASLpSwJ5bsxHCIEeg4Qtv9OshTATVE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Hl5QYGaY; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="kk/XZp75";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="6B2+T0Q8"
-Date: Wed, 3 Dec 2025 09:47:08 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1764751630;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=/GRGsombs69lKO7dDXV9AxmBXZpYeIv4jXcexpDNGLw=;
-	b=kk/XZp75ZCTN/3s8HzV1zsYz3H/HgIUDwh0mKesFVin5a76/Fg91ooqnWdxTlGZ0zsX623
-	X8Un5hp1DXuss6Fxidw1iXBfNSAZXa4MYQfipWfZLUI/HM1VIcWADtfmTHu1NicQ/G3MrP
-	4dlowT4r3Tr9Ag79g5b/JFVajOTlKm56d/5nPGAW6YaVo8rVw46bSpl+4Uxtn2uzlbDjHl
-	UH3btmFYun48TqGubsdIMlrvySiL9diRxqUHlzFl9H+31XeA9vskVSthIFl4U/Yr1h043G
-	1q/gT6BTHGjA4RkeA+7Gv3GluwWCI0ysw7zX3NxRu1K+X5CAJNs6vH7Tc2RPmQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1764751630;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=/GRGsombs69lKO7dDXV9AxmBXZpYeIv4jXcexpDNGLw=;
-	b=6B2+T0Q8ZLgXtb8HyPPz5tWGEul/CHOGZHMqVxnh+uk/vPKG+EpIwVq3Nh7MWgP88IJr8x
-	TEAV0zFbvYf1kTCg==
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To: Jesper Dangaard Brouer <hawk@kernel.org>
-Cc: Jon Kohler <jon@nutanix.com>, Jason Wang <jasowang@redhat.com>,
-	"netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	open list <linux-kernel@vger.kernel.org>,
-	"open list:XDP (eXpress Data Path):Keyword:(?:b|_)xdp(?:b|_)" <bpf@vger.kernel.org>,
-	Alexander Lobakin <aleksander.lobakin@intel.com>
-Subject: Re: [PATCH net-next v2 5/9] tun: use bulk NAPI cache allocation in
- tun_xdp_one
-Message-ID: <20251203084708.FKvfWWxW@linutronix.de>
-References: <20251125200041.1565663-1-jon@nutanix.com>
- <20251125200041.1565663-6-jon@nutanix.com>
- <CACGkMEsDCVKSzHSKACAPp3Wsd8LscUE0GO4Ko9GPGfTR0vapyg@mail.gmail.com>
- <CF8FF91A-2197-47F7-882B-33967C9C6089@nutanix.com>
- <c04b51c6-bc03-410e-af41-64f318b8960f@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Hl5QYGaY"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCF6BC19422;
+	Wed,  3 Dec 2025 08:47:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1764751667;
+	bh=zZggOqyqpCFVEMcM9cHwsXefF4PRk8oAmhf5XqTg3nE=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=Hl5QYGaYXkUGRQCpvqRKGGxwk72j/uZIW+2KInS5UiITtjd7fhh0KOWuqZkkqC0ch
+	 RPOI7nYQr7R9cfdzxPZhjEoRat5tGEzxjZwv/RzOG9NLmbm2dtmtU6XNak89b59mqv
+	 5TP7FnB8Z7P5GdMIMNghZcum0ZXDHrcnAUpMNboZR7sejeYjK+X8wWh9IncPmV7Mg9
+	 nvbUgWWNnuleBsyBvknXHohHCAtLX0+IFgeQhnf0oJ9k+XZDmlIDhJfVvdxcG2PTfq
+	 Pz96eqw+7b+h5fgUsAZyut+31r9AmaG2/I6KYhfJmLZLQLY5x4rpA8QnmBwqSkqmvL
+	 xhdX17i0JyZQA==
+Content-Type: multipart/mixed; boundary="===============9160476271581551712=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <c04b51c6-bc03-410e-af41-64f318b8960f@kernel.org>
+Message-Id: <d0d8e0d78f614eb8b443772b50fb36093d48c7f43374316246ad3ad836b5c9ce@mail.kernel.org>
+In-Reply-To: <20251203082402.78816-5-jolsa@kernel.org>
+References: <20251203082402.78816-5-jolsa@kernel.org>
+Subject: Re: [PATCHv4 bpf-next 4/9] ftrace: Add update_ftrace_direct_add function
+From: bot+bpf-ci@kernel.org
+To: jolsa@kernel.org,rostedt@kernel.org,revest@google.com,mark.rutland@arm.com
+Cc: bpf@vger.kernel.org,linux-kernel@vger.kernel.org,linux-trace-kernel@vger.kernel.org,linux-arm-kernel@lists.infradead.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,menglong8.dong@gmail.com,song@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Wed,  3 Dec 2025 08:47:45 +0000 (UTC)
 
-On 2025-12-02 18:32:23 [+0100], Jesper Dangaard Brouer wrote:
-> > > > +                       napi_consume_skb(skb, 1);
-> > >=20
-> > > I wonder if this would have any side effects since tun_xdp_one() is
-> > > not called by a NAPI.
-> >=20
-> > As far as I can tell, this napi_consume_skb is really just an artifact =
-of
-> > how it was named and how it was traditionally used.
-> >=20
-> > Now this is really just a napi_consume_skb within a bh disable/enable
-> > section, which should meet the requirements of how that interface
-> > should be used (again, AFAICT)
-> >=20
->=20
-> Yicks - this sounds super ugly.  Just wrapping napi_consume_skb() in bh
-> disable/enable section and then assuming you get the same protection as
-> NAPI is really dubious.
->=20
-> Cc Sebastian as he is trying to cleanup these kind of use-case, to make
-> kernel preemption work.
+--===============9160476271581551712==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-I am actually done with this.
+> diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
+> index 8c034b028..eb60d971e 100644
+> --- a/include/linux/ftrace.h
+> +++ b/include/linux/ftrace.h
 
-Wrapping napi_consume_skb(, 1) in bh-disable basically does the trick if
-called from outside-bh section as long as it is not an IRQ section. The
-reason is that the skb-head is cached in a per-CPU cache which accessed
-only within softirq/ NAPI context.
-So you can "return" skbs in NET_TX and have some around in NET_RX.
-Otherwise skb is returned directly to the slab allocator.
-If this about skb recycling, you using page_pool might help. This
-however also expects NAPI/ BH disabled context.
+[ ... ]
 
-> > > > @@ -2576,13 +2583,24 @@ static int tun_sendmsg(struct socket *sock,=
- struct msghdr *m, size_t total_len)
-> > > >                 rcu_read_lock();
-> > > >                 bpf_net_ctx =3D bpf_net_ctx_set(&__bpf_net_ctx);
-> > > >=20
-> > > > -               for (i =3D 0; i < n; i++) {
-> > > > +               num_skbs =3D napi_skb_cache_get_bulk(skbs, n);
-> > >=20
-> > > Its document said:
-> > >=20
-> > > """
-> > > * Must be called *only* from the BH context.
-> > > =E2=80=9C"=E2=80=9D
-> > We=E2=80=99re in a bh_disable section here, is that not good enough?
->=20
-> Again this feels very ugly and prone to painting ourselves into a
-> corner, assuming BH-disabled sections have same protection as NAPI.
->=20
-> (The napi_skb_cache_get/put function are operating on per CPU arrays
-> without any locking.)
+> diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+> index 84aee9096..1660a8754 100644
+> --- a/kernel/trace/ftrace.c
+> +++ b/kernel/trace/ftrace.c
 
-This is okay. NAPI means BH is disabled. Nothing more. There are a few
-implications to it.
-The default path is
- process-context (kernel or userland)
- * IRQ *
-   -> irq is handled via its handler with disabled interrupts
-   -> handler raises NET_RX aka NAPI
-   -> irq core is done with IRQ handling and notices softirqs have been
-      raised. Disables BH and starts handling softirqs with enabled
-      interrupts before returning back before the interruption.
-   -> softirqs are handled with with BH disabled.
-   * IRQ * fires again.
-     -> irq is handled as previously and NET_RX is set again.
-     -> irq core returns back to previously handled softirqs
-   -> Once NET_RX is done, softirq core would be done and return back
-      but since it noticed that NET_RX is pending (again) it does
-      another round.
+[ ... ]
 
-This is how it normally works. If you disable-bh in process context
-(either manually via local_bh_disable() or via spin_lock_bh()) then you
-enter BH context. There is hardly a difference (in_serving_softirq()
-will report a different value but this should not matter to anyone
-outside the core code).
-Any IRQ that raises NET_RX here will not lead to handling softirqs
-because BH is disabled (this maps the "IRQ fires again" case from
-above). This is delayed until local_bh_enable().
+> +int update_ftrace_direct_add(struct ftrace_ops *ops, struct ftrace_hash *hash)
+> +{
+> +	struct ftrace_hash *old_direct_functions = NULL, *new_direct_functions = NULL;
+> +	struct ftrace_hash *old_filter_hash = NULL, *new_filter_hash = NULL;
+> +	struct ftrace_func_entry *entry;
+> +	int i, size, err = -EINVAL;
+> +	bool reg;
+> +
+> +	if (!hash_count(hash))
+> +		return -EINVAL;
+> +
+> +	mutex_lock(&direct_mutex);
+> +
+> +	/* Make sure requested entries are not already registered. */
+> +	size = 1 << hash->size_bits;
+> +	for (i = 0; i < size; i++) {
+> +		hlist_for_each_entry(entry, &hash->buckets[i], hlist) {
+> +			if (__ftrace_lookup_ip(direct_functions, entry->ip))
+> +				goto out_unlock;
+> +		}
+> +	}
+> +
+> +	old_filter_hash = ops->func_hash ? ops->func_hash->filter_hash : NULL;
+> +	old_direct_functions = direct_functions;
+> +
+> +	/* If there's nothing in filter_hash we need to register the ops. */
+> +	reg = hash_count(old_filter_hash) == 0;
+> +	if (reg) {
+> +		if (ops->func || ops->trampoline)
+> +			goto out_unlock;
+> +		if (ops->flags & FTRACE_OPS_FL_ENABLED)
+> +			goto out_unlock;
+> +	}
+> +
+> +	err = -ENOMEM;
+> +	new_filter_hash = hash_add(old_filter_hash, hash);
+> +	if (!new_filter_hash)
+> +		goto out_unlock;
+> +
+> +	new_direct_functions = hash_add(old_direct_functions, hash);
+> +	if (!new_direct_functions)
+> +		goto out_unlock;
 
-Therefore protecting the per-CPU array with local_bh_disable() is okay
-but for PREEMPT_RT reasons, per-CPU data needs this
-local_lock_nested_bh() around it (as napi_skb_cache_get/put does).
+Can new_filter_hash leak here?  If the second hash_add() fails but the
+first one succeeds, update_ftrace_direct_add() will goto out_unlock
+with new_filter_hash pointing to allocated memory.  At out_unlock, only
+old_filter_hash gets freed, not new_filter_hash.
 
-> --Jesper
+register_ftrace_direct() handles this by freeing new_hash on error:
 
-Sebastian
+    out_unlock:
+        mutex_unlock(&direct_mutex);
+
+        if (free_hash && free_hash != EMPTY_HASH)
+            call_rcu_tasks(&free_hash->rcu, register_ftrace_direct_cb);
+
+        if (new_hash)
+            free_ftrace_hash(new_hash);
+
+        return err;
+
+> +
+> +	rcu_assign_pointer(direct_functions, new_direct_functions);
+> +
+> +	if (reg) {
+> +		ops->func = call_direct_funcs;
+> +		ops->flags |= MULTI_FLAGS;
+> +		ops->trampoline = FTRACE_REGS_ADDR;
+> +		ops->local_hash.filter_hash = new_filter_hash;
+> +
+> +		err = register_ftrace_function_nolock(ops);
+> +		if (err) {
+> +			/* restore old filter on error */
+> +			ops->local_hash.filter_hash = old_filter_hash;
+> +			old_filter_hash = new_filter_hash;
+> +
+> +			/* cleanup for possible another register call */
+> +			ops->func = NULL;
+> +			ops->trampoline = 0;
+> +		}
+> +	} else {
+> +		err = ftrace_update_ops(ops, new_filter_hash, EMPTY_HASH);
+> +		/*
+> +		 * new_filter_hash is dup-ed, so we need to release it anyway,
+> +		 * old_filter_hash either stays on error or is released already
+> +		 */
+> +		old_filter_hash = new_filter_hash;
+> +	}
+> +
+> +	if (err) {
+> +		/* reset direct_functions and free the new one */
+> +		rcu_assign_pointer(direct_functions, old_direct_functions);
+> +		old_direct_functions = new_direct_functions;
+> +	}
+> +
+> + out_unlock:
+> +	mutex_unlock(&direct_mutex);
+> +
+> +	if (old_direct_functions && old_direct_functions != EMPTY_HASH)
+> +		call_rcu_tasks(&old_direct_functions->rcu, register_ftrace_direct_cb);
+> +	if (old_filter_hash)
+> +		free_ftrace_hash(old_filter_hash);
+> +
+> +	return err;
+> +}
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/19887401362
+
+--===============9160476271581551712==--
