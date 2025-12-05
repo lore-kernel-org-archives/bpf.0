@@ -1,64 +1,64 @@
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1174346E5E
-	for <bpf@vger.kernel.org>; Fri,  5 Dec 2025 17:12:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9193B33B6DC
+	for <bpf@vger.kernel.org>; Fri,  5 Dec 2025 17:12:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764954761; cv=none; b=JgfxYAwQDDvTJyPg+GmfnKLydmPNzxXq4p4Z2mOCOV/72Xk/7GGrv/pPR0e2F6I6VPyQDEeHwcetVqM9ltNdF0WNvkR5QlwtEqEiUFullGvJJwD4e6GDuXivC0JvsCg7UvWCDwerPrpcpO4ekdTcTup2LFlclW5bvzPQh70AJ4M=
+	t=1764954761; cv=none; b=cQ7k26Yggw4OZ6vHrI/4wZ9MDUefcShWBZN4mUo/BP+e4RwZCrdcRaWiGhjxURXJnOLmxd2ErKtD/geXqIFkNCCn85wlX8b4Sau7sSxRMOQQVdCJ1e4eFJw1CQu+BRoe3CE3h1Hspxe91pQVxtYfFpJ4dJtzEYq0a8bt2n9aDdM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1764954761; c=relaxed/simple;
-	bh=yuIIgf/alWIG+QnlbE0mlEBwwSslOpyY/5j2tQg/iS4=;
+	bh=ThCJjVG5RVMfr+zdrGxXazrxZX2CekhpjLmMxCxTOIY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=jV1dHAwKz1kaj5FGk2+sCRjo2E/gvwjw1EaRMk2LtGMcI5iPhSr1xAOIHsfw/yBBv6f650opvqMFPlikSF9w7dqk4pgzLmfBBOUD+hgLc8LM/T3mzAEZANJGqtsBux35SszX4Bzp5r5UWXNDLAPWAqlIjoDu2HP33i7VVK1uYt0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HgLQK5KO; arc=none smtp.client-ip=209.85.210.179
+	 MIME-Version:Content-Type; b=Qu76o4Fkc6FZsN2jKA9xEOTUZt+lU7nI6bki7QLc5gtxtGgtN8FOP6MlDU5MCFkEhhY8vWBTflaNa8A/gW50/qvD1G6g9h4+KPEOEmTAtjERktHBZY3aBOjxJvJoie30PpCfbrt9tx4PHOptXZO0XQZrbn9gj1eaDLNC8xs8bBY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eP3cAG4e; arc=none smtp.client-ip=209.85.214.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HgLQK5KO"
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-7b86e0d9615so4083228b3a.0
-        for <bpf@vger.kernel.org>; Fri, 05 Dec 2025 09:12:25 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eP3cAG4e"
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-297f35be2ffso35960075ad.2
+        for <bpf@vger.kernel.org>; Fri, 05 Dec 2025 09:12:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764954744; x=1765559544; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1764954746; x=1765559546; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ld7Zfx8+1mGBDI9kHG+7ggDCtFZChlITAxT8Fla3YiA=;
-        b=HgLQK5KO1PT5LLG8pa1wfajjkS3nhaQVsSlNLlmuAp7tLqBCnx64dM3Nqr/H/dQKRu
-         1bs3e6eJXb10j5mBn2YJPHLC4vdf9keDT3y3jFI2+k88UXm2CFM/S9Y0gvrLtAr3brDR
-         Z2sdrXHDlj/3+VOVBOist5mCdzbnCZFVjlknMYK6N3KrbM3tYO17YQfhxg5exdA/0Gb0
-         qZ4ABMR+iDEz+sowXHc0Szym3OAOuWm9bII03Jn0e8pRCOcD/LgqGvSg7X6uUQDlXShK
-         vIxuIaDa9K53v/02iFIEU5XuQe+5RXz6bgrYhXNMxTnNYkn1bG6THXdUnLPTVukCBoV9
-         Dp0Q==
+        bh=8KthOHDXIygNvoKbYqyGnez1cqEGX3CMF/hwkpTkQzU=;
+        b=eP3cAG4ezK1TsESvpI45ZoOcnw7xSCR3V/ZH08uto4kj8uVfS6myIq6k4a+yWYITwV
+         MpKBhj2XDnKKPUUo0397EHk2lN/jaKzwXyo5QNb3A25HSpyS2vbHSA0Y7aJfDq0AEsEX
+         YkRGBmih/vz/fghrwW+OJ3JFRCyv8A7WKlArZg3G9hSxMeQaZwzXxssG0b5xf3swXBKg
+         wSpJ8m6KDusuVt3CN2T5MWwm8BJt95BPq1ra25XqrTHm7/2WfEubQaIBsz5V7hnKpOEz
+         b9vsgmI7uBjDM6e84Bd7JgZHixFTHceBd3F9sI+c4zq9yZnQxNe7pEwL//jt7sPzQIFN
+         ttdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764954744; x=1765559544;
+        d=1e100.net; s=20230601; t=1764954746; x=1765559546;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ld7Zfx8+1mGBDI9kHG+7ggDCtFZChlITAxT8Fla3YiA=;
-        b=cbxOyv+h2U0+cJShiqLnhiGVSS3XVWgBBVK+jD7x9ctdJklAx8KlVUDtDKoD60wikk
-         7j0fh1VYCQrCMoFKlMGFdGDUwDroP0vyzV0CFdn9bIO/+jnYURzcay7pKvB0iynye8Ak
-         C/xKV43DOUPdQrfdG/9WxmqYRHvBMoiz/SRDq2cMJIZwkKZbn/msNA8nq8AtEDEjclHB
-         D6RA2QX6S74iFb1Scko38VPnZ0kXaLx/LG2SJPbwOn7GnuksRR2MzQ/uLTneXq871nH3
-         M5c69Br4r8UkW+cRIrpaq1dkc2OUbXr9arMYQ2khBBzQ6i2u1z8E8+IvbSsVphB680lK
-         NHdg==
-X-Forwarded-Encrypted: i=1; AJvYcCX0gLooa37e+Rwz3cXlK6uqEMQwcZFOi5s/6tD78Tnde0zNuiMX4Ws+UAMd/m76zLqWFBU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz9HIByqsVfs9yuCQM3+y82l+iKCMsRptSQ4IwyFSwBxfUSU3rt
-	itt6MSdWy+jdExAVpYYCe5NqBTk/k0eWvXDpkK33Uiswn+vQr+rdSxw2
-X-Gm-Gg: ASbGncskRYET36CQiNpVk/fMmoJWGe7kI7p9atdkGUcvMf20muL0SUpspNT+Bgtkua3
-	N5J40/nQTeGyRSv/vYZUmJvRhagI+g8w8BLXbFa60XBf/7CjnXt2kHV/73zQut4PZreynkb6Mnu
-	nZGTEidiV4c9/q4WiiIlVg17/VzHKdrwq8EgUBML2sBZh18BymXCzffOZYPsj0ASEiDEYUBOrSx
-	osgDdF0T5i2T80xjO4jJCc7ZSbZ/isD78LIhsOaCwR0QeA2+ddnlKwa0GipoRIzul5RbL1ydFzh
-	nUMzq3YQgFqzAGzVlhDFYGXVLSjkEVdV3AHV1aaninWlF6PTs2YIqcljjaguy5cQWJCVUYK6hfh
-	s3o7cKnKvEpNPwKb2nl2+W0LAD2Lfxj6mPWAFv0BOCX8vwF9kMxPP5gvFQDt6EbE2G0/7h45aIo
-	nqMGZ3SukzYph8jnJEGPYeGX0=
-X-Google-Smtp-Source: AGHT+IF6pVDWfDwXkq4xnlvBOGGFZK9hjfQ59/B+jw1lZUA9k+IMOEvrgSx0HezsT2H83Dv+hHEutg==
-X-Received: by 2002:a05:7022:4191:b0:11b:8161:5cfc with SMTP id a92af1059eb24-11df0cd9712mr8471296c88.36.1764954743550;
-        Fri, 05 Dec 2025 09:12:23 -0800 (PST)
+        bh=8KthOHDXIygNvoKbYqyGnez1cqEGX3CMF/hwkpTkQzU=;
+        b=TpGiENOOApJDwjsZjk1N3vJvFPDry/z0jwc7kKRQTuA/HFTxAJm31alLzm25Oon8BC
+         IBsL07l06ZCFqGkemXX2C9dtaWZyL4Zdi8L6UIsev/TSaD5dzqo36iVJcIWj5+PJ3CIV
+         9Pvi/in2jIAXSiC/W+XYKc00jrksZquPibxPLfdkR0xY2DN+JBCRpCO3U4B52bxbn4Q4
+         bKrZZoITNvU9AI1N95E2YBCH0IGiv0O+peDkGm8Upw6HzE5t4Sx8h6zJxB8w+SrzoPXO
+         HUOg4MGtCaDyWwoB9FSrrWvWArkqBeCdYkAxsTJaygtAZ1esUUBXPIbvF8vw1Fh6+qg+
+         248Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXO2LOKIl89gPNMrnL7Iz86kwTJVd1ro94xtDJS98ENzmtitpw1CQsXCeokv+ADlXMfpl8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw0kZJBvpzzj9Q+XOTBfUjEZEIwE1h9vbcwhmo5WPcY7ex6E8Px
+	j2j6z7PgJkuLLvtbqE08XnhvBZmqG4bUQNueEOtVS6P7ylU87mqGVSzc
+X-Gm-Gg: ASbGncskMPk754v9mcM0RuRwZ2HVLfmmktuDy8dZLspo2J/ZQNVDckbyrFqm7Ze6RCc
+	4aanA50oxpLF679ceK8vGamShfjPGjN+yQl84aRkjCE3MCbj0mhTGJcZcaF52CYcYAiE8HYDjsl
+	IIhl02QBggTArWcP5R/4oPUpmTupvx9JqTT04u+EYgwvjGVaO8vGPGn4RSlFU1noIc8bM19cIDg
+	ZNAbVvL/PA7aNcEioXMseZQaTeHp5iYyLYtoAlEQLsaSNVc7VufYxGyWaYM5iRTszDrK7NLnuHT
+	TMpnqoXPAPPdAgU4ysJkXY2truHmIsBMuJE1S7gr0GQlhdT8D0z9WzdHKZCL5rK+gBVLs8F9r+t
+	SUvCiEygb5i4JQEs+pt5B2hBG6xRN982aJZxi2fXoCzZ7rkX+fdHqCbhVjtf/tRi6V1FV0H+Axe
+	ygUjtuSKhJLOFlKTL0CCfUa78=
+X-Google-Smtp-Source: AGHT+IFGP5H8TS9l/ZWNTkIDFkoqd//BYSN576PH3VvQ3NUTIBZhXN9o4FjDBwMKRZAasheLBNdWLg==
+X-Received: by 2002:a05:7022:ebc9:b0:11a:2f10:fa46 with SMTP id a92af1059eb24-11df0b44724mr9060052c88.0.1764954746240;
+        Fri, 05 Dec 2025 09:12:26 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-11df7576932sm20210155c88.4.2025.12.05.09.12.22
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-11df7552defsm20339483c88.2.2025.12.05.09.12.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Dec 2025 09:12:23 -0800 (PST)
+        Fri, 05 Dec 2025 09:12:25 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
 From: Guenter Roeck <linux@roeck-us.net>
 To: Shuah Khan <shuah@kernel.org>
@@ -74,10 +74,10 @@ Cc: Jakub Kicinski <kuba@kernel.org>,
 	netdev@vger.kernel.org,
 	bpf@vger.kernel.org,
 	Guenter Roeck <linux@roeck-us.net>,
-	Joe Damato <jdamato@fastly.com>
-Subject: [PATCH v2 10/13] selftests: net: Fix build warnings
-Date: Fri,  5 Dec 2025 09:10:04 -0800
-Message-ID: <20251205171010.515236-11-linux@roeck-us.net>
+	Amir Goldstein <amir73il@gmail.com>
+Subject: [PATCH v2 12/13] selftests/fs/mount-notify-ns: Fix build warning
+Date: Fri,  5 Dec 2025 09:10:06 -0800
+Message-ID: <20251205171010.515236-13-linux@roeck-us.net>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20251205171010.515236-1-linux@roeck-us.net>
 References: <20251205171010.515236-1-linux@roeck-us.net>
@@ -92,51 +92,38 @@ Content-Transfer-Encoding: 8bit
 
 Fix
 
-ksft.h: In function ‘ksft_ready’:
-ksft.h:27:9: warning: ignoring return value of ‘write’ declared with attribute ‘warn_unused_result’
+mount-notify_test_ns.c: In function ‘fanotify_rmdir’:
+mount-notify_test_ns.c:494:17: warning:
+	ignoring return value of ‘chdir’ declared with attribute ‘warn_unused_result’
 
-ksft.h: In function ‘ksft_wait’:
-ksft.h:51:9: warning: ignoring return value of ‘read’ declared with attribute ‘warn_unused_result’
+by checking the return value of chdir() and displaying an error message
+if it returns an error.
 
-by checking the return value of the affected functions and displaying
-an error message if an error is seen.
-
-Fixes: 2b6d490b82668 ("selftests: drv-net: Factor out ksft C helpers")
-Cc: Joe Damato <jdamato@fastly.com>
+Fixes: 781091f3f5945 ("selftests/fs/mount-notify: add a test variant running inside userns")
+Cc: Amir Goldstein <amir73il@gmail.com>
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
-v2: Update subject and description to reflect that the patch fixes build
-    warnings.
-    Use perror() to display an error message if one of the functions
-    returns an error.
+v2: Update subject and description to reflect that the patch fixes a build
+    warning.
+    Use perror() to display an error message if chdir() returns an error.
 
- tools/testing/selftests/net/lib/ksft.h | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ .../selftests/filesystems/mount-notify/mount-notify_test_ns.c  | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/net/lib/ksft.h b/tools/testing/selftests/net/lib/ksft.h
-index 17dc34a612c6..03912902a6d3 100644
---- a/tools/testing/selftests/net/lib/ksft.h
-+++ b/tools/testing/selftests/net/lib/ksft.h
-@@ -24,7 +24,8 @@ static inline void ksft_ready(void)
- 		fd = STDOUT_FILENO;
- 	}
+diff --git a/tools/testing/selftests/filesystems/mount-notify/mount-notify_test_ns.c b/tools/testing/selftests/filesystems/mount-notify/mount-notify_test_ns.c
+index 9f57ca46e3af..90bec6faf64e 100644
+--- a/tools/testing/selftests/filesystems/mount-notify/mount-notify_test_ns.c
++++ b/tools/testing/selftests/filesystems/mount-notify/mount-notify_test_ns.c
+@@ -491,7 +491,8 @@ TEST_F(fanotify, rmdir)
+ 	ASSERT_GE(ret, 0);
  
--	write(fd, msg, sizeof(msg));
-+	if (write(fd, msg, sizeof(msg)) < 0)
-+		perror("write()");
- 	if (fd != STDOUT_FILENO)
- 		close(fd);
- }
-@@ -48,7 +49,8 @@ static inline void ksft_wait(void)
- 		fd = STDIN_FILENO;
- 	}
- 
--	read(fd, &byte, sizeof(byte));
-+	if (read(fd, &byte, sizeof(byte)) < 0)
-+		perror("read()");
- 	if (fd != STDIN_FILENO)
- 		close(fd);
- }
+ 	if (ret == 0) {
+-		chdir("/");
++		if (chdir("/"))
++			perror("chdir()");
+ 		unshare(CLONE_NEWNS);
+ 		mount("", "/", NULL, MS_REC|MS_PRIVATE, NULL);
+ 		umount2("/a", MNT_DETACH);
 -- 
 2.45.2
 
