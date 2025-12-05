@@ -1,64 +1,64 @@
-Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13F4D347BD9
-	for <bpf@vger.kernel.org>; Fri,  5 Dec 2025 17:12:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27BBA3491DE
+	for <bpf@vger.kernel.org>; Fri,  5 Dec 2025 17:12:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764954756; cv=none; b=PMxbLh0Vd4D/ny8hfcxc++fXjssYJhlrDs4YW1yEH8NlLj1j8vsCg4GoAQ3IAEwZR/qaPmlktvdJYTWef4yvnX5+wgP2BoBBQT3rW80SqYcSjSpdvWuqENqdGRdJ0Ih3n138uOCo6iQe+DZTwErb21yLKIk8Fu6F5tcrEswRHVA=
+	t=1764954758; cv=none; b=TuWENIJxn8qKKOpI5FwAwFRDUFt4GdaJBNFV/qo5MCchrIccYfIGvi2psnpGZxYVyYHnXgYHzXr/xgKNr673xkVKcYojlEGebkY6kXRlT7/39vsJnppVqO0JyzfRxRCDQ1EHVav3GF242EclS/9fSOz28Dior8EKQsK/IRfW9i8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764954756; c=relaxed/simple;
-	bh=YtYoTmiGxnOh5dtDECL3sKhDmcIdC9O9DzDnMbMxrZc=;
+	s=arc-20240116; t=1764954758; c=relaxed/simple;
+	bh=7b04OUSp5PPbHF012Af7Jd1Z5TcnkOHwaX4bsLzbOSE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=BhV1RvLpl2p9Uvbtqx+gW0MthgNWm9v1Nr2ALwkWUGex6SlnknXfQOv7WIbDSoBoCr7aIvzksHjc8lOlD/WhDAHXsyf/ETA1Tlx8QU3oEPSoImpJ//e6v8UEmNBXLKiRLptGSWT8WL/l7MwSKekcFSJwlYu+cZQAwm5P1xjMJqs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ltgsSjVp; arc=none smtp.client-ip=209.85.215.175
+	 MIME-Version:Content-Type; b=dN73NitmSW7Fyx/MkGYfZg7USE3ixeFlgyKLcHFHGOkW6f+DYPLm4kFIESodtGG4CiXWfFiDtUk/k296AMQ8VdZMcUmulTatJYp9Emr1lzv/cZ4VBx/L0iOkkxToULb35gWGPMQAT8ssuUzFLUph6FLBuKgESp570KRRbogE+pU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RQ56iiPV; arc=none smtp.client-ip=209.85.214.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ltgsSjVp"
-Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-b9a5b5b47bfso2057596a12.1
-        for <bpf@vger.kernel.org>; Fri, 05 Dec 2025 09:12:25 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RQ56iiPV"
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-29555415c5fso28609915ad.1
+        for <bpf@vger.kernel.org>; Fri, 05 Dec 2025 09:12:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764954742; x=1765559542; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1764954745; x=1765559545; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=47vuMKXmBnhdjf53+B1B8/LaD2EktMN0NOXdUnTfNOk=;
-        b=ltgsSjVp9ysDRlyKerXQDlumgJHsv8QOUwqmqbFHUJlFY9PFQQl4RxJVkc7D4TdXrP
-         NgNT3zJVmv+y//SUoCdaVemBWaTX0RZnfb2NlMh9fmRr6NVT0D7zQU20jncF+jGv8ir2
-         5yoM5I0A70Zcp1B7XkjOHGbfFDyvULGsFBzM8vwk07XRU+vZutb2XyQO5eFNqywQ0NlG
-         MJGuhjDbjzoRbROY7l0sCYU2CAS+62wIuDKT0UHR03Dc5Lbx+jRUSiPGpSI61swp5ole
-         lW7jDxxotS2fO6dj761HvoifHLNZdeWS7OwEBO7FDMMuKquEqtvCRkmOry8LQ8i3WYGc
-         Hw/A==
+        bh=XDia+MA8HLQHzWjV88VwCKaD5C1zT15MPbh82oRmFds=;
+        b=RQ56iiPVcENS3HQKjiLkzKx1aYAH3n1Jh6A8PEZ+VjWpPaJqOBps0QEuowfb2p/c/7
+         jGLMU7XJrB9o/toV183CCWiNgHPdUXGvS5CEYJJ0dKopLt0ndPC9TB2K5OcjEC07Sl3r
+         NaWAtLn/mUnT3wPSl23pzccsZybVtyGNUDAR3lySTz243KjoS5jmN1FEDAMwNB4gN/R8
+         Kr1KBlEYYoCIKj6C6U6fxDf5PIHotZqlyF9TSGH2u7+3V03jMK4MwuRjqInTRQt25N3Z
+         XMWR9ZSuHyf4ZE4+S4I903x1n/mpAOmN8iHRkLtmJNAgwaB7RlXeQc3PAsmeEcBQdfzc
+         r0zg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764954742; x=1765559542;
+        d=1e100.net; s=20230601; t=1764954745; x=1765559545;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=47vuMKXmBnhdjf53+B1B8/LaD2EktMN0NOXdUnTfNOk=;
-        b=nlH3/9xq4EGZgz0PPtuHw1zDeIEqxqWdu1UBclYd30rwXNYOIqk7M+vxZ3tYXydZ1C
-         hElJ0+kecq127dHZVY1EECmrpFsZFL8WxgW2lHryG32ihCgYWGJKDOhGorVEa4YunMg/
-         ov4pZVW69xrpDKBo0Fdw3fvixzdnaqSInPUvFfu9SdpXDAAo9pYFP447Y4XYN14QNYq6
-         VgtnB1cVwnVEMBO6zkDC9MaLYvyM/Dzuh/fgEFqD5vrBXAgAi0NlcJsTD7Dzg0FBAuwT
-         jPeyNHoECCb6+MWg0mGHYDhbWJPNtfOZemPHmooFS5MB/OCXHe8TV3VmIfjfzRGheCPN
-         Td/w==
-X-Forwarded-Encrypted: i=1; AJvYcCVHQUcQDorE7rta05YFH6Z3tGFfeoJe/0qes0HJWDyoirgvFuHuzx03w/9BGheXymLUt/Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzHwmtguKhvyNaRF5wPgHUsk20CshaxSd3W+owUeD3TcJkLpCt7
-	T/lTrzYVO1wDDxYQoWIXU0DHNUoAnmfwPOxfHhAndYOy+K6SnY3WkLRx
-X-Gm-Gg: ASbGncsjk7CKkqPPXNl8YEpd3ONHUFpDTGfCZrwkVmJXQMRzoo0QrEvIlIGpNTWS+hj
-	3mlZohfgctlrniqd+Fp3Hv0wbbfM8q2JRY4wrPNrXkQnwrXfHzSIgz4CEXGf7M63sQx531Ll9Bf
-	H2KreYjOCQszQq+b9Vvoc2NhyCQTjbKXiXkiakULxFZTnvPVIYKLFs8wJ6u07cam5txJmCKKbPK
-	Oa1grVN2StJxnz0WGq+yjAXSBETg/gpFyPVK7RbzfScOWPdZbg7BAHq3LhVhqmcMNzHU6j3nEzn
-	Xf+LONn6vWIcY5pdjW5XBaygVJ8OM/b4rSi7Sa8P7DBjDTssbN7EDW/zt6F+GZJiNpFDbHjDZ0f
-	mAKClf/K7urEWHNcAHwzQfSMZKW2ZOIcuQtoJyOfWmkJZwCaibe8I8vq7BifQslXfVNR1h/hMBb
-	ugJQE3hP2u+Clp30Rru63/YZA=
-X-Google-Smtp-Source: AGHT+IEk22OUEE7gdeZwhTjpvbdAQz+kolwi6WKygGxoM1AqKfc3siF5IPSsP8KEFJASWzEJYAwOyg==
-X-Received: by 2002:a05:693c:2d86:b0:2a4:664e:a5af with SMTP id 5a478bee46e88-2ab92e88ab7mr9468546eec.28.1764954742216;
-        Fri, 05 Dec 2025 09:12:22 -0800 (PST)
+        bh=XDia+MA8HLQHzWjV88VwCKaD5C1zT15MPbh82oRmFds=;
+        b=v5sKSlIEMZnPKB5usH/dW6mHmG62ecdLfso1VPUPzHegwjhRjulCTeAsmEXY/JUa0t
+         02V5qZWm5kqXDFrKu+dbygxF3KIge0nhYCtsGaOK7LWXqueufK/Y7nVMfcCo2Tu/HU9+
+         pfY3DlenN8ehjznlv6aTPpIY4oSCotl451YSJfXAKsdKWnOyxsbasHyJAYYswvlmshSF
+         YNVfEvoBFVJ5R8JT2wJUEu5GAIQ7QzDW5uQWQWXP5OGcpCfX33sa20ueyG4C+LinskKh
+         7xfQuQTjnIMiHsfPygC/mDqeP+UscIXETGi5izzc+yWIF8Akgz94Em4oAlXpfYoP2BOQ
+         WhkQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWz69ysHA1C0SeStmSqslCgGaj5Rx0UGSMWR+Ou/o6Aw19EFxFwXZu/1Oro7OHOkJUQgRk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxOoBly01zkj5JGoaEsxfjwTRcUOrMX/nvp9o6UnD1FCy9dOQsh
+	duprbOR+WbquBndZsAHAwri8mG1ID6VXnSsEJzJcxjJhduvYZMDFnbSS
+X-Gm-Gg: ASbGncs6pVHiZidqut+27iRezw3UCs6wi91YNZHAysyyuOhH4QvJeWsHkDbucFrseMd
+	mftv524HkfoglHVI31OACifLOcAds/bqX+UtBsq/MrKSCdsMJ3PUJIAoRhAiC9fgXjs2WpP9O/U
+	DvMdlVwcpG8Qj9/MUWMffYIy+UU1NUQNepMiqjE9NfGPWt960nEDs+yVtK9Qegy+yW+BnvaW4RA
+	0fYe3D8i8zpAQpUaDjPK44CQwJ3DkWM42VrtblY2VbRsjZaB7WgDBx9g55vChPoRbaUMZ8V59AD
+	WxznNcfhIF+5thWQoBZBEWBAtSVNVl96D+EvG36RvhqV+KS6kl4iL5+tO4lsGsefLRPcurjfCre
+	xsSJWQgi+v/4FANeqxoNviSZSz62WTD0RCDkvPylcGbnqQnKf/fow3y9gIxwm+ZPAifoMjCYw4w
+	5NCl7ug2kpUj0MK88LrRVlgDI=
+X-Google-Smtp-Source: AGHT+IFpapsnYxxuCMxEK0T30dMrqsmXHdoldVmyDlrGUqkSkZ/3MRNWB7srXi6l4pDtAeoht0dECQ==
+X-Received: by 2002:a05:7022:428f:b0:119:e569:f62e with SMTP id a92af1059eb24-11df0c5273fmr9380516c88.39.1764954745007;
+        Fri, 05 Dec 2025 09:12:25 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2aba8816ae9sm15102636eec.5.2025.12.05.09.12.21
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-11df7703bd7sm22123783c88.10.2025.12.05.09.12.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Dec 2025 09:12:21 -0800 (PST)
+        Fri, 05 Dec 2025 09:12:24 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
 From: Guenter Roeck <linux@roeck-us.net>
 To: Shuah Khan <shuah@kernel.org>
@@ -74,11 +74,10 @@ Cc: Jakub Kicinski <kuba@kernel.org>,
 	netdev@vger.kernel.org,
 	bpf@vger.kernel.org,
 	Guenter Roeck <linux@roeck-us.net>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>
-Subject: [PATCH v2 09/13] selftests/seccomp: Fix build warning
-Date: Fri,  5 Dec 2025 09:10:03 -0800
-Message-ID: <20251205171010.515236-10-linux@roeck-us.net>
+	Miklos Szeredi <mszeredi@redhat.com>
+Subject: [PATCH v2 11/13] selftests/fs/mount-notify: Fix build warning
+Date: Fri,  5 Dec 2025 09:10:05 -0800
+Message-ID: <20251205171010.515236-12-linux@roeck-us.net>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20251205171010.515236-1-linux@roeck-us.net>
 References: <20251205171010.515236-1-linux@roeck-us.net>
@@ -91,38 +90,40 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Fix:
+Fix
 
-seccomp_bpf.c: In function ‘UPROBE_setup’:
-seccomp_bpf.c:5175:74: warning: pointer type mismatch in conditional expression
+mount-notify_test.c: In function ‘fanotify_rmdir’:
+mount-notify_test.c:467:17: warning:
+	ignoring return value of ‘chdir’ declared with attribute ‘warn_unused_result’
 
-by type casting the argument to get_uprobe_offset().
+by checking the return value of chdir() and displaying an error message
+if an error is reported.
 
-Fixes: 9ffc7a635c35a ("selftests/seccomp: validate uprobe syscall passes through seccomp")
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
+Fixes: e1c24b52adb22 ("selftests: add tests for mount notification")
+Cc: Miklos Szeredi <mszeredi@redhat.com>
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
 v2: Update subject and description to reflect that the patch fixes a build
-    warning. 
+    warning.
+    Use perror() to display an error message if chdir() returns an error.
 
- tools/testing/selftests/seccomp/seccomp_bpf.c | 3 ++-
+ .../selftests/filesystems/mount-notify/mount-notify_test.c     | 3 ++-
  1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
-index 874f17763536..2584f4f5c062 100644
---- a/tools/testing/selftests/seccomp/seccomp_bpf.c
-+++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
-@@ -5172,7 +5172,8 @@ FIXTURE_SETUP(UPROBE)
- 		ASSERT_GE(bit, 0);
- 	}
+diff --git a/tools/testing/selftests/filesystems/mount-notify/mount-notify_test.c b/tools/testing/selftests/filesystems/mount-notify/mount-notify_test.c
+index e4b7c2b457ee..5c929275e689 100644
+--- a/tools/testing/selftests/filesystems/mount-notify/mount-notify_test.c
++++ b/tools/testing/selftests/filesystems/mount-notify/mount-notify_test.c
+@@ -464,7 +464,8 @@ TEST_F(fanotify, rmdir)
+ 	ASSERT_GE(ret, 0);
  
--	offset = get_uprobe_offset(variant->uretprobe ? probed_uretprobe : probed_uprobe);
-+	offset = get_uprobe_offset(variant->uretprobe ?
-+				   (void *)probed_uretprobe : (void *)probed_uprobe);
- 	ASSERT_GE(offset, 0);
- 
- 	if (variant->uretprobe)
+ 	if (ret == 0) {
+-		chdir("/");
++		if (chdir("/"))
++			perror("chdir()");
+ 		unshare(CLONE_NEWNS);
+ 		mount("", "/", NULL, MS_REC|MS_PRIVATE, NULL);
+ 		umount2("/a", MNT_DETACH);
 -- 
 2.45.2
 
