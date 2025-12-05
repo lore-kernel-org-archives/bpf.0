@@ -1,64 +1,64 @@
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F96733E368
-	for <bpf@vger.kernel.org>; Fri,  5 Dec 2025 17:12:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1174346E5E
+	for <bpf@vger.kernel.org>; Fri,  5 Dec 2025 17:12:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764954760; cv=none; b=Ztfv62GlR2/qnlpW6ViL2VIjwXM+nC7hiG8vZiGievff+qVDWSjCpcdnyJIGq+hOfryFvvahKV2GJUAkGG5etT6I0+TV3OUmdUHZ97lUHjlESYVjZ4aW9vPPff5oBqZ+4M4iO0UubVr0dR96E0DrwukEsliclKvJZHfFZMujIk8=
+	t=1764954761; cv=none; b=JgfxYAwQDDvTJyPg+GmfnKLydmPNzxXq4p4Z2mOCOV/72Xk/7GGrv/pPR0e2F6I6VPyQDEeHwcetVqM9ltNdF0WNvkR5QlwtEqEiUFullGvJJwD4e6GDuXivC0JvsCg7UvWCDwerPrpcpO4ekdTcTup2LFlclW5bvzPQh70AJ4M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764954760; c=relaxed/simple;
-	bh=cB31pmWNA2px7ozTCQpqrnxwkRY3wOGmMDqxO5JNm/A=;
+	s=arc-20240116; t=1764954761; c=relaxed/simple;
+	bh=yuIIgf/alWIG+QnlbE0mlEBwwSslOpyY/5j2tQg/iS4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=M3KjrhFoO+ENbOkXErKWEn8ibldro3RLULjTEeD0I7d5FViy8hcFT1F/P0AziqQbYO34tC/W3O0KHRxnP0LSI6QDISdrWgsNVQr/W/ndONEbYICupwxrcWupeAGhyWS6s08WvuGIpvmt4SDR/dY3yMJDA/U06ImHbt0KBtMYk8Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YfQwJsZZ; arc=none smtp.client-ip=209.85.210.178
+	 MIME-Version:Content-Type; b=jV1dHAwKz1kaj5FGk2+sCRjo2E/gvwjw1EaRMk2LtGMcI5iPhSr1xAOIHsfw/yBBv6f650opvqMFPlikSF9w7dqk4pgzLmfBBOUD+hgLc8LM/T3mzAEZANJGqtsBux35SszX4Bzp5r5UWXNDLAPWAqlIjoDu2HP33i7VVK1uYt0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HgLQK5KO; arc=none smtp.client-ip=209.85.210.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YfQwJsZZ"
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-7ba92341f83so3086765b3a.0
-        for <bpf@vger.kernel.org>; Fri, 05 Dec 2025 09:12:33 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HgLQK5KO"
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-7b86e0d9615so4083228b3a.0
+        for <bpf@vger.kernel.org>; Fri, 05 Dec 2025 09:12:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764954748; x=1765559548; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1764954744; x=1765559544; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=svZn1kMXxy5/37Gn195RmY55SpZYbLuXKcgjq6f2gyc=;
-        b=YfQwJsZZt8EeG5RqAGBuA5u5gBhg1ugiIn9F3uGvTiQMKOFqclk1jo2vOeJAOZKkXI
-         /Zqq60gioILstAST97YWja/cjbCeuy1f59u+bGfbeek56t42pwW8rSMa4XaLJFiYI7qi
-         toLn2qqti9jPuSz/5asy0JN3IVomPfBRFgkDEshrrgurJ+cgIoQFZtW/bn3rGd8eCI/y
-         2i14X6a+bKdra7M5ZQJOaGO4YTawkah4oLdtf8gcR2fTrMjsg+VAz/P8A0u4NxYCWBeQ
-         UVvpsIjtJSGDE4a7FGsg3aXls3BNqZS015JmwB+k+WXmFDZcqHKNGDYad8BY3r6idv+z
-         Ud3A==
+        bh=ld7Zfx8+1mGBDI9kHG+7ggDCtFZChlITAxT8Fla3YiA=;
+        b=HgLQK5KO1PT5LLG8pa1wfajjkS3nhaQVsSlNLlmuAp7tLqBCnx64dM3Nqr/H/dQKRu
+         1bs3e6eJXb10j5mBn2YJPHLC4vdf9keDT3y3jFI2+k88UXm2CFM/S9Y0gvrLtAr3brDR
+         Z2sdrXHDlj/3+VOVBOist5mCdzbnCZFVjlknMYK6N3KrbM3tYO17YQfhxg5exdA/0Gb0
+         qZ4ABMR+iDEz+sowXHc0Szym3OAOuWm9bII03Jn0e8pRCOcD/LgqGvSg7X6uUQDlXShK
+         vIxuIaDa9K53v/02iFIEU5XuQe+5RXz6bgrYhXNMxTnNYkn1bG6THXdUnLPTVukCBoV9
+         Dp0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764954748; x=1765559548;
+        d=1e100.net; s=20230601; t=1764954744; x=1765559544;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=svZn1kMXxy5/37Gn195RmY55SpZYbLuXKcgjq6f2gyc=;
-        b=wMQjDZhzWKoRhHRFJdhD5hw5VfQi4lnvTsi6XOSN74N0BxHlTVEnsbGuiFpXjSJyHi
-         8pJkzGfy/8O7sKVplzr9j6QgBqKRClNrbWeDbm6m0f0cvHq9+qnxrhNL0e4evzYB/W9s
-         no5I+kbpj/5wsjnkH9d+jktrE4ZRz2Lr269L0JkJy0gv0H97iXng5NkidsnG2E+kQIuC
-         pj2YVbMTs8XBYjrXVNOsEW5T5yxayPmWCcTZH1YWCjNA0pIDfeft7yyJsnzQijbzvM9R
-         KEBgBRFAKTxsVnhl2gDVfwn5doiFMKwZqsfDFsaj3JW4PK9k0sXlurL2bsoEJRVTTPp2
-         rTiw==
-X-Forwarded-Encrypted: i=1; AJvYcCWI3aOpoGUjgLq3Ak06oVia1jIesf1dWcpcz6Kc6zZyVpbb03a852LRgDUpK70iLRLoWEs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwG+Tt32QsbAkFhr/k2W1fsZ+EiFgdM5Q7IRs0Ue/wZvlJLxl7Z
-	heWVvIYJn78P1/XwtkcVETFPWKyt4SUVwp7+joofTcnbW44lGqlDaHZX
-X-Gm-Gg: ASbGncs1ar98ynN8IOQzy7ryKFZi2+IicEQHoMSSeGLGb1JsiHuz08k4naD/UKg7E/Y
-	1vTvDBjpBzPld0CWjC5lQPIZQfjUIyTRUFziREfeV6ClYOpzoiyzePxwxKiDpnqs2bu4uWbfLFJ
-	ekstCNqHsZETeUt8qIDmvByil+j6zwTo0iiV5FXjPJ1D639cONYqNIc4YyT/wR/xLbM0ZO1m6ol
-	ioBJ6CnrIf9TZMuN1tM8ABBcKPFHv6M76LsbJC83GAzVyzskDa43guy0azk/LC97pJLRgPztrh3
-	qt31uP51DjaeJytFH0Oxg7sbT/l/I3PlFvvQfSKrFOlp0Kk2mJVj4S03rNpdkoXplHoJ2wybf/2
-	IhMH6orHM3epHfAP29ux9GjFyrDA55bKdEXfsEvIXsg7qyeTMq/+WGaFmfRsWYKMMu9xFjolDmq
-	GO2Gy+niUZXiAJ9jmXihTl67s=
-X-Google-Smtp-Source: AGHT+IGHDjpBTcigzNC5fmT2HMSl2OIXJF4Ntvq8YICmSN0m9lTSarMT6qdvBRwyf5R5o7dnkTdLEQ==
-X-Received: by 2002:a05:7022:6988:b0:119:e56b:c758 with SMTP id a92af1059eb24-11df649fd93mr5077082c88.29.1764954747801;
-        Fri, 05 Dec 2025 09:12:27 -0800 (PST)
+        bh=ld7Zfx8+1mGBDI9kHG+7ggDCtFZChlITAxT8Fla3YiA=;
+        b=cbxOyv+h2U0+cJShiqLnhiGVSS3XVWgBBVK+jD7x9ctdJklAx8KlVUDtDKoD60wikk
+         7j0fh1VYCQrCMoFKlMGFdGDUwDroP0vyzV0CFdn9bIO/+jnYURzcay7pKvB0iynye8Ak
+         C/xKV43DOUPdQrfdG/9WxmqYRHvBMoiz/SRDq2cMJIZwkKZbn/msNA8nq8AtEDEjclHB
+         D6RA2QX6S74iFb1Scko38VPnZ0kXaLx/LG2SJPbwOn7GnuksRR2MzQ/uLTneXq871nH3
+         M5c69Br4r8UkW+cRIrpaq1dkc2OUbXr9arMYQ2khBBzQ6i2u1z8E8+IvbSsVphB680lK
+         NHdg==
+X-Forwarded-Encrypted: i=1; AJvYcCX0gLooa37e+Rwz3cXlK6uqEMQwcZFOi5s/6tD78Tnde0zNuiMX4Ws+UAMd/m76zLqWFBU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz9HIByqsVfs9yuCQM3+y82l+iKCMsRptSQ4IwyFSwBxfUSU3rt
+	itt6MSdWy+jdExAVpYYCe5NqBTk/k0eWvXDpkK33Uiswn+vQr+rdSxw2
+X-Gm-Gg: ASbGncskRYET36CQiNpVk/fMmoJWGe7kI7p9atdkGUcvMf20muL0SUpspNT+Bgtkua3
+	N5J40/nQTeGyRSv/vYZUmJvRhagI+g8w8BLXbFa60XBf/7CjnXt2kHV/73zQut4PZreynkb6Mnu
+	nZGTEidiV4c9/q4WiiIlVg17/VzHKdrwq8EgUBML2sBZh18BymXCzffOZYPsj0ASEiDEYUBOrSx
+	osgDdF0T5i2T80xjO4jJCc7ZSbZ/isD78LIhsOaCwR0QeA2+ddnlKwa0GipoRIzul5RbL1ydFzh
+	nUMzq3YQgFqzAGzVlhDFYGXVLSjkEVdV3AHV1aaninWlF6PTs2YIqcljjaguy5cQWJCVUYK6hfh
+	s3o7cKnKvEpNPwKb2nl2+W0LAD2Lfxj6mPWAFv0BOCX8vwF9kMxPP5gvFQDt6EbE2G0/7h45aIo
+	nqMGZ3SukzYph8jnJEGPYeGX0=
+X-Google-Smtp-Source: AGHT+IF6pVDWfDwXkq4xnlvBOGGFZK9hjfQ59/B+jw1lZUA9k+IMOEvrgSx0HezsT2H83Dv+hHEutg==
+X-Received: by 2002:a05:7022:4191:b0:11b:8161:5cfc with SMTP id a92af1059eb24-11df0cd9712mr8471296c88.36.1764954743550;
+        Fri, 05 Dec 2025 09:12:23 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-11df7703bd7sm22124088c88.10.2025.12.05.09.12.26
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-11df7576932sm20210155c88.4.2025.12.05.09.12.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Dec 2025 09:12:27 -0800 (PST)
+        Fri, 05 Dec 2025 09:12:23 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
 From: Guenter Roeck <linux@roeck-us.net>
 To: Shuah Khan <shuah@kernel.org>
@@ -74,10 +74,10 @@ Cc: Jakub Kicinski <kuba@kernel.org>,
 	netdev@vger.kernel.org,
 	bpf@vger.kernel.org,
 	Guenter Roeck <linux@roeck-us.net>,
-	David Wei <dw@davidwei.uk>
-Subject: [PATCH v2 13/13] selftests: net: tfo: Fix build warning
-Date: Fri,  5 Dec 2025 09:10:07 -0800
-Message-ID: <20251205171010.515236-14-linux@roeck-us.net>
+	Joe Damato <jdamato@fastly.com>
+Subject: [PATCH v2 10/13] selftests: net: Fix build warnings
+Date: Fri,  5 Dec 2025 09:10:04 -0800
+Message-ID: <20251205171010.515236-11-linux@roeck-us.net>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20251205171010.515236-1-linux@roeck-us.net>
 References: <20251205171010.515236-1-linux@roeck-us.net>
@@ -92,37 +92,51 @@ Content-Transfer-Encoding: 8bit
 
 Fix
 
-tfo.c: In function ‘run_server’:
-tfo.c:84:9: warning: ignoring return value of ‘read’ declared with attribute ‘warn_unused_result’
+ksft.h: In function ‘ksft_ready’:
+ksft.h:27:9: warning: ignoring return value of ‘write’ declared with attribute ‘warn_unused_result’
 
-by evaluating the return value from read() and displaying an error message
-if it reports an error.
+ksft.h: In function ‘ksft_wait’:
+ksft.h:51:9: warning: ignoring return value of ‘read’ declared with attribute ‘warn_unused_result’
 
-Fixes: c65b5bb2329e3 ("selftests: net: add passive TFO test binary")
-Cc: David Wei <dw@davidwei.uk>
+by checking the return value of the affected functions and displaying
+an error message if an error is seen.
+
+Fixes: 2b6d490b82668 ("selftests: drv-net: Factor out ksft C helpers")
+Cc: Joe Damato <jdamato@fastly.com>
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
-v2: Update subject and description to reflect that the patch fixes a build
-    warning.
-    Use perror() to display an error message if read() returns an error.
+v2: Update subject and description to reflect that the patch fixes build
+    warnings.
+    Use perror() to display an error message if one of the functions
+    returns an error.
 
- tools/testing/selftests/net/tfo.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ tools/testing/selftests/net/lib/ksft.h | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/net/tfo.c b/tools/testing/selftests/net/tfo.c
-index eb3cac5e583c..8d82140f0f76 100644
---- a/tools/testing/selftests/net/tfo.c
-+++ b/tools/testing/selftests/net/tfo.c
-@@ -81,7 +81,8 @@ static void run_server(void)
- 	if (getsockopt(connfd, SOL_SOCKET, SO_INCOMING_NAPI_ID, &opt, &len) < 0)
- 		error(1, errno, "getsockopt(SO_INCOMING_NAPI_ID)");
+diff --git a/tools/testing/selftests/net/lib/ksft.h b/tools/testing/selftests/net/lib/ksft.h
+index 17dc34a612c6..03912902a6d3 100644
+--- a/tools/testing/selftests/net/lib/ksft.h
++++ b/tools/testing/selftests/net/lib/ksft.h
+@@ -24,7 +24,8 @@ static inline void ksft_ready(void)
+ 		fd = STDOUT_FILENO;
+ 	}
  
--	read(connfd, buf, 64);
-+	if (read(connfd, buf, 64) < 0)
+-	write(fd, msg, sizeof(msg));
++	if (write(fd, msg, sizeof(msg)) < 0)
++		perror("write()");
+ 	if (fd != STDOUT_FILENO)
+ 		close(fd);
+ }
+@@ -48,7 +49,8 @@ static inline void ksft_wait(void)
+ 		fd = STDIN_FILENO;
+ 	}
+ 
+-	read(fd, &byte, sizeof(byte));
++	if (read(fd, &byte, sizeof(byte)) < 0)
 +		perror("read()");
- 	fprintf(outfile, "%d\n", opt);
- 
- 	fclose(outfile);
+ 	if (fd != STDIN_FILENO)
+ 		close(fd);
+ }
 -- 
 2.45.2
 
