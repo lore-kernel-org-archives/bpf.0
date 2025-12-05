@@ -1,243 +1,169 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from fra-out-006.esa.eu-central-1.outbound.mail-perimeter.amazon.com (fra-out-006.esa.eu-central-1.outbound.mail-perimeter.amazon.com [18.197.217.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE30934FF6F;
-	Fri,  5 Dec 2025 17:15:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C53B346798;
+	Fri,  5 Dec 2025 17:23:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.197.217.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764954945; cv=none; b=O0wyNWbArgrkQfqcZmIaC6EpDQ1mSLTU2XQVyVvuAzYrq3w7ca0SWoTi8n87r0gKsGxFLxnIEzfmRStlIR6UHCXAprYhESl/cjzo8AUDCIHzH++hk7Enp3MAJNU18ypORuMuaEVfKglcBJacwVKWlq0a2q4UdSzisQlBGzhb/p8=
+	t=1764955415; cv=none; b=C2NDcFPVcNGwFE/sJ0vyb4H5+yVD4PYS60Bgwrru9YkVWfkfqtlO6qIksr7odQqGqcFhL4SUvwG8E75e0lf51+BTzgcQMDBPISzJAxxcvJA+lhg8BG17KYPwhSm0xiDx5SpMfT7Hjg8cMdSm5kcPYo9Oy8W7mGswI+0/bk60Mv4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764954945; c=relaxed/simple;
-	bh=EpVPiNSvNCIlBsoRFqWSixIr1ltDc1FtGXz6ucCai4E=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=XSaj0lWBmZJElpxhUfbiSW5WSMx2WSN/kkN3h9HcbDJq7ilI51SToxE+dBu2LalsVqSZJ4E/9FT5RFhlBWuSGktFfE4nkMn825RekQl8Yz1QSaiCZfBoXPPyyTwGVanIE4Uvo6g7GoWU5GoeaJInDuJWFQsZJ/2OeCfo6X1h/+s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=YZpw/alu; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1764955415; c=relaxed/simple;
+	bh=FZI2ceXyv/NOPuyQMweU+D+8Ikh9jJhi181Yt9tWvWw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=ZXwHVyy3vNJUTy/B68bkoWucTVp6VRgniNR38ws0/bMDM2m49NMpBYWKLHY8cxXIpIP2q77Ou4oLkKRE0V8FSRCxDVWyTUOsrFSGf6AjWk8kITKt+ilIQZB2USu7xUF2SaFlOS3sgEa799ZewaM4XDgoWfWBQje2SG+xbJ5QsE4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.uk; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=FSJoaVt9; arc=none smtp.client-ip=18.197.217.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="YZpw/alu"
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5B5FHjet027523;
-	Fri, 5 Dec 2025 17:14:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=/8a31K4Sd6aU33so4
-	PMuO/2Yjkyh5Fe6LtDEMdSPIt8=; b=YZpw/aluxMHToNB5bTrOt3KvWBdsCLinm
-	POInPKg4y7MoezHNM+/FLzG1eozEIdqWaVosUoRGK6pwylGW9iWaayFmrRCVwGTi
-	2dSMcjIRTllCmoiLSoVBs2Kka8MPxGhwEpdaqkz0CrmjHNc0QaU9u3UalCQkIGUU
-	c37SfyiAihtTFSd8D92ssCCzoishD856iXvEVGfdCvg72wyPtwdUs0bVFOoQVWdf
-	WJBw7HhJ4SpIzYcXNYeEMs0M+QSEVMDcajDInoJfCHrrg2lPGPvrBnEjTxQv+5Wu
-	WE3KvfHzTdOT6oOt4RKkKeEXvzJaE5W8NNKeQcWP7CUsFgSG/azAA==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4aqrja6v9k-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 05 Dec 2025 17:14:57 +0000 (GMT)
-Received: from m0356517.ppops.net (m0356517.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 5B5H7s4s019258;
-	Fri, 5 Dec 2025 17:14:56 GMT
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4aqrja6v9f-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 05 Dec 2025 17:14:56 +0000 (GMT)
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5B5EkMV0019069;
-	Fri, 5 Dec 2025 17:14:55 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4arbhyeee1-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 05 Dec 2025 17:14:55 +0000
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 5B5HEp4x26214780
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 5 Dec 2025 17:14:51 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 51C462005A;
-	Fri,  5 Dec 2025 17:14:51 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 09DEF2004E;
-	Fri,  5 Dec 2025 17:14:51 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.87.85.9])
-	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Fri,  5 Dec 2025 17:14:50 +0000 (GMT)
-From: Jens Remus <jremus@linux.ibm.com>
-To: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linux-s390@vger.kernel.org, bpf@vger.kernel.org, x86@kernel.org,
-        Steven Rostedt <rostedt@kernel.org>
-Cc: Jens Remus <jremus@linux.ibm.com>, Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Indu Bhagat <indu.bhagat@oracle.com>,
-        "Jose E. Marchesi" <jemarch@gnu.org>,
-        Beau Belgrave <beaub@linux.microsoft.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Florian Weimer <fweimer@redhat.com>, Kees Cook <kees@kernel.org>,
-        "Carlos O'Donell" <codonell@redhat.com>, Sam James <sam@gentoo.org>,
-        Dylan Hatch <dylanbhatch@google.com>
-Subject: [RFC PATCH v2 09/15] unwind_user: Enable archs that pass RA in a register
-Date: Fri,  5 Dec 2025 18:14:40 +0100
-Message-ID: <20251205171446.2814872-10-jremus@linux.ibm.com>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20251205171446.2814872-1-jremus@linux.ibm.com>
-References: <20251205171446.2814872-1-jremus@linux.ibm.com>
+	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="FSJoaVt9"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
+  t=1764955413; x=1796491413;
+  h=message-id:date:mime-version:reply-to:subject:to:cc:
+   references:from:in-reply-to:content-transfer-encoding;
+  bh=RienKcTqqmsGG8zizmirrEKiZCGuAJt5fOpB1029IRQ=;
+  b=FSJoaVt9qKf1CBcOmrFgR8cs/ZnAFGFucyiVsSG/Ruitvrp97RxrdWls
+   RacjR7wzKqevTsQAI5KdwWKQNZTer/jmXOYT45XVVxwgQOoJ6M8cuId5A
+   +4e+9i/il1Q9SxX8UnEjW4almT+O2La2Gow43AWKRrzMFefTYQxuG1xpk
+   djo/fK12eRk11bXUwPSmHQm3soropqkJTX7vgvzfV6Cs+/XjIDbevAou+
+   gkPF1jLBc8AoYzySPNsHPjnYWEozA/RISfoH/R5Y66hKBx5Nqb6kyG2QM
+   2bLKTZ5c48BLYpgEiWzPStJq7J8exfPLKfK1+nksUM+3F3yceoLJTK5Ip
+   g==;
+X-CSE-ConnectionGUID: U9T32tygTySwaMWRVIxYXw==
+X-CSE-MsgGUID: ezeiUYqjT6+LtvlkxY9Q1A==
+X-IronPort-AV: E=Sophos;i="6.20,252,1758585600"; 
+   d="scan'208";a="6302828"
+Received: from ip-10-6-11-83.eu-central-1.compute.internal (HELO smtpout.naws.eu-central-1.prod.farcaster.email.amazon.dev) ([10.6.11.83])
+  by internal-fra-out-006.esa.eu-central-1.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2025 17:23:30 +0000
+Received: from EX19MTAEUC002.ant.amazon.com [54.240.197.236:4382]
+ by smtpin.naws.eu-central-1.prod.farcaster.email.amazon.dev [10.0.6.214:2525] with esmtp (Farcaster)
+ id ba644cd0-1d42-4328-b08c-52f3a96e0bd0; Fri, 5 Dec 2025 17:23:30 +0000 (UTC)
+X-Farcaster-Flow-ID: ba644cd0-1d42-4328-b08c-52f3a96e0bd0
+Received: from EX19D005EUB003.ant.amazon.com (10.252.51.31) by
+ EX19MTAEUC002.ant.amazon.com (10.252.51.181) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.29;
+ Fri, 5 Dec 2025 17:23:26 +0000
+Received: from [192.168.14.68] (10.106.83.5) by EX19D005EUB003.ant.amazon.com
+ (10.252.51.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.29; Fri, 5 Dec 2025
+ 17:23:23 +0000
+Message-ID: <356ece73-83ff-4c0f-a3fb-4b24df7953b3@amazon.com>
+Date: Fri, 5 Dec 2025 17:23:22 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Reply-To: <kalyazin@amazon.com>
+Subject: Re: [PATCH v7 05/12] KVM: guest_memfd: Add flag to remove from direct
+ map
+To: Aneesh Kumar K.V <aneesh.kumar@kernel.org>
+CC: "pbonzini@redhat.com" <pbonzini@redhat.com>, "corbet@lwn.net"
+	<corbet@lwn.net>, "maz@kernel.org" <maz@kernel.org>, "oliver.upton@linux.dev"
+	<oliver.upton@linux.dev>, "joey.gouly@arm.com" <joey.gouly@arm.com>,
+	"suzuki.poulose@arm.com" <suzuki.poulose@arm.com>, "yuzenghui@huawei.com"
+	<yuzenghui@huawei.com>, "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+	"will@kernel.org" <will@kernel.org>, "tglx@linutronix.de"
+	<tglx@linutronix.de>, "mingo@redhat.com" <mingo@redhat.com>, "bp@alien8.de"
+	<bp@alien8.de>, "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+	"x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+	"luto@kernel.org" <luto@kernel.org>, "peterz@infradead.org"
+	<peterz@infradead.org>, "willy@infradead.org" <willy@infradead.org>,
+	"akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+	"lorenzo.stoakes@oracle.com" <lorenzo.stoakes@oracle.com>,
+	"Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>, "vbabka@suse.cz"
+	<vbabka@suse.cz>, "rppt@kernel.org" <rppt@kernel.org>, "surenb@google.com"
+	<surenb@google.com>, "mhocko@suse.com" <mhocko@suse.com>, "song@kernel.org"
+	<song@kernel.org>, "jolsa@kernel.org" <jolsa@kernel.org>, "ast@kernel.org"
+	<ast@kernel.org>, "daniel@iogearbox.net" <daniel@iogearbox.net>,
+	"andrii@kernel.org" <andrii@kernel.org>, "martin.lau@linux.dev"
+	<martin.lau@linux.dev>, "eddyz87@gmail.com" <eddyz87@gmail.com>,
+	"yonghong.song@linux.dev" <yonghong.song@linux.dev>,
+	"john.fastabend@gmail.com" <john.fastabend@gmail.com>, "kpsingh@kernel.org"
+	<kpsingh@kernel.org>, "sdf@fomichev.me" <sdf@fomichev.me>,
+	"haoluo@google.com" <haoluo@google.com>, "jgg@ziepe.ca" <jgg@ziepe.ca>,
+	"jhubbard@nvidia.com" <jhubbard@nvidia.com>, "peterx@redhat.com"
+	<peterx@redhat.com>, "jannh@google.com" <jannh@google.com>,
+	"pfalcato@suse.de" <pfalcato@suse.de>, "shuah@kernel.org" <shuah@kernel.org>,
+	"seanjc@google.com" <seanjc@google.com>, "kvm@vger.kernel.org"
+	<kvm@vger.kernel.org>, "linux-doc@vger.kernel.org"
+	<linux-doc@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "kvmarm@lists.linux.dev"
+	<kvmarm@lists.linux.dev>, "linux-fsdevel@vger.kernel.org"
+	<linux-fsdevel@vger.kernel.org>, "linux-mm@kvack.org" <linux-mm@kvack.org>,
+	"bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, "Cali,
+ Marco" <xmarcalx@amazon.co.uk>, "Kalyazin, Nikita" <kalyazin@amazon.co.uk>,
+	"Thomson, Jack" <jackabt@amazon.co.uk>, "derekmn@amazon.co.uk"
+	<derekmn@amazon.co.uk>, "tabba@google.com" <tabba@google.com>,
+	"ackerleytng@google.com" <ackerleytng@google.com>, "david@kernel.org"
+	<david@kernel.org>, "patrick.roy@linux.dev" <patrick.roy@linux.dev>
+References: <20250924151101.2225820-4-patrick.roy@campus.lmu.de>
+ <20250924152214.7292-1-roypat@amazon.co.uk>
+ <20250924152214.7292-2-roypat@amazon.co.uk> <yq5ajz07czvz.fsf@kernel.org>
+Content-Language: en-US
+From: Nikita Kalyazin <kalyazin@amazon.com>
+Autocrypt: addr=kalyazin@amazon.com; keydata=
+ xjMEY+ZIvRYJKwYBBAHaRw8BAQdA9FwYskD/5BFmiiTgktstviS9svHeszG2JfIkUqjxf+/N
+ JU5pa2l0YSBLYWx5YXppbiA8a2FseWF6aW5AYW1hem9uLmNvbT7CjwQTFggANxYhBGhhGDEy
+ BjLQwD9FsK+SyiCpmmTzBQJnrNfABQkFps9DAhsDBAsJCAcFFQgJCgsFFgIDAQAACgkQr5LK
+ IKmaZPOpfgD/exazh4C2Z8fNEz54YLJ6tuFEgQrVQPX6nQ/PfQi2+dwBAMGTpZcj9Z9NvSe1
+ CmmKYnYjhzGxzjBs8itSUvWIcMsFzjgEY+ZIvRIKKwYBBAGXVQEFAQEHQCqd7/nb2tb36vZt
+ ubg1iBLCSDctMlKHsQTp7wCnEc4RAwEIB8J+BBgWCAAmFiEEaGEYMTIGMtDAP0Wwr5LKIKma
+ ZPMFAmes18AFCQWmz0MCGwwACgkQr5LKIKmaZPNTlQEA+q+rGFn7273rOAg+rxPty0M8lJbT
+ i2kGo8RmPPLu650A/1kWgz1AnenQUYzTAFnZrKSsXAw5WoHaDLBz9kiO5pAK
+In-Reply-To: <yq5ajz07czvz.fsf@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 9qRHTvcCAPbtXjbEQLgo5bVv-5kMUubc
-X-Proofpoint-ORIG-GUID: U2GWtFQuv6ABtv9_Fn_8oY7ag7CFbmVy
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTI5MDAyMCBTYWx0ZWRfX/rgkUDUii6EV
- jzyF93REMD+9SlEZX9I7ug5mP1ZRYTeLEWsImp6Rz8Txjdmvv0cFrFY+ezt5MkVPvqeqwbI/R1/
- 26dl0/zqR+Fya0gdE4jbj6kKOd2XS1M2TiSprY1TMw+scOnHvJHQDhLLp4aJ9PrijzELPHRZq/r
- hj8wdWFF59Y73FSNIf7yzFOnQyG0udl/FUipWJHNyc8HqRS4XiMtbT4mWqi2JXkC6fdtt13jbhS
- FXM0cUpM65vjQYgWcrGWFSHAwnXSjNcNfeX004gOQV6LjqYWTgSKW5+CwXkPkLmmE/zRBug4g10
- 7ceAJbVYuo6tGDwnvI7LiPGcpBeHvEQPwXb5k0nE0RXqUCCc7KNRKvLiX7tcWu9ivsfSoHEj6Sj
- P4dhl5BH1X+gi0Ieo39TXIVg/AzMLA==
-X-Authority-Analysis: v=2.4 cv=dYGNHHXe c=1 sm=1 tr=0 ts=69331311 cx=c_pps
- a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
- a=wP3pNCr1ah4A:10 a=VkNPw1HP01LnGYTKEx00:22 a=VnNF1IyMAAAA:8
- a=BZmVhOMqpLk0IJKryeUA:9
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-12-05_06,2025-12-04_04,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- malwarescore=0 spamscore=0 suspectscore=0 clxscore=1015 adultscore=0
- lowpriorityscore=0 bulkscore=0 phishscore=0 priorityscore=1501
- impostorscore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2510240000
- definitions=main-2511290020
+X-ClientProxiedBy: EX19D008EUC001.ant.amazon.com (10.252.51.165) To
+ EX19D005EUB003.ant.amazon.com (10.252.51.31)
 
-Not all architectures have the return address (RA) in user space saved
-on the stack on function entry, such as x86-64 does due to its CALL
-instruction pushing the RA onto the stack.  Architectures/ABIs, such as
-s390, also do not necessarily enforce to save the RA in user space on
-the stack in the function prologue or even at all, for instance in leaf
-functions.
 
-Treat a RA offset from CFA of zero as indication that the RA is not
-saved (on the stack).  For the topmost frame treat it as indication that
-the RA is in the link/RA register, such as on arm64 and s390, and obtain
-it from there.  For non-topmost frames treat it as error, as the RA must
-be saved.
 
-Additionally allow the SP to be unchanged in the topmost frame, for
-architectures where SP at function entry == SP at call site, such as
-arm64 and s390.
+On 03/11/2025 07:57, Aneesh Kumar K.V wrote:
+> "Roy, Patrick" <roypat@amazon.co.uk> writes:
+> 
+> ....
+> 
+>> +static int kvm_gmem_folio_zap_direct_map(struct folio *folio)
+>> +{
+>> +     if (kvm_gmem_folio_no_direct_map(folio))
+>> +             return 0;
+>> +
+>> +     int r = set_direct_map_valid_noflush(folio_page(folio, 0), folio_nr_pages(folio),
+>> +                                      false);
+>> +
+>> +     if (!r) {
+>> +             unsigned long addr = (unsigned long) folio_address(folio);
+>> +             folio->private = (void *) ((u64) folio->private & KVM_GMEM_FOLIO_NO_DIRECT_MAP);
+>> +             flush_tlb_kernel_range(addr, addr + folio_size(folio));
+>> +     }
+>> +
+>> +     return r;
+>> +}
+> 
+> These 'noflush' functions are actually doing flush_tlb_kernel
+> 
+> [-]  ∘ flush_tlb_kernel_range
+>   |-[-]  ← __change_memory_common
+>   |  `-[-]  ← set_memory_valid
+>   |     `-   ← set_direct_map_valid_noflush
 
-Note that treating a RA offset from CFA of zero as indication that
-the RA is not saved on the stack additionally allows for architectures,
-such as s390, where the frame pointer (FP) may be saved without the RA
-being saved as well.  Provided that such architectures represent this
-in SFrame by encoding the "missing" RA offset using a padding RA offset
-with a value of zero.
+Hi Aneesh,
 
-Signed-off-by: Jens Remus <jremus@linux.ibm.com>
----
+Thanks for pointing at that.  I ran internal tests and it appears that 
+the second flush_tlb_kernel_range() call does add a latency similar to 
+the one coming from the first call, even though it intuitively should be 
+a no-op.  I have to admit that I am not aware of a safe way to avoid the 
+second flushing on ARM while keeping the guest_memfd code arch-agnostic. 
+  Perhaps I should seek Will's counsel for it.  Nevertheless, I don't 
+think there is a concern from the functional point of view.
 
-Notes (jremus):
-    Changes in v2:
-    - Reword commit subject and message.
-    - Rename config option USER_RA_REG to UNWIND_USER_RA_REG and reword
-      help text to mention both link and return address register. (Josh)
-    - Move dummy user_return_address() from linux/ptrace.h to
-      linux/unwind_user.h, rename to unwind_user_get_ra_reg(),
-      return -EINVAL, and guard by !CONFIG_HAVE_UNWIND_USER_RA_REG. (Josh)
-    - Do not check for !IS_ENABLED(CONFIG_HAVE_USER_RA_REG), as the dummy
-      implementation of user_return_address() returns -EINVAL.
-    - Drop config option USER_RA_REG / UNWIND_USER_RA_REG, as it is of
-      no value any longer.
-    - Drop topmost checks from unwind user sframe, as they are already
-      done by unwind user. (Josh)
+Nikita
 
- include/linux/unwind_user.h |  9 +++++++++
- kernel/unwind/sframe.c      |  6 ++----
- kernel/unwind/user.c        | 17 +++++++++++++----
- 3 files changed, 24 insertions(+), 8 deletions(-)
-
-diff --git a/include/linux/unwind_user.h b/include/linux/unwind_user.h
-index 64618618febd..bc2edae39955 100644
---- a/include/linux/unwind_user.h
-+++ b/include/linux/unwind_user.h
-@@ -23,6 +23,15 @@ static inline bool unwind_user_at_function_start(struct pt_regs *regs)
- #define unwind_user_at_function_start unwind_user_at_function_start
- #endif
- 
-+#ifndef unwind_user_get_ra_reg
-+static inline int unwind_user_get_ra_reg(unsigned long *val)
-+{
-+	WARN_ON_ONCE(1);
-+	return -EINVAL;
-+}
-+#define unwind_user_get_ra_reg unwind_user_get_ra_reg
-+#endif
-+
- int unwind_user(struct unwind_stacktrace *trace, unsigned int max_entries);
- 
- #endif /* _LINUX_UNWIND_USER_H */
-diff --git a/kernel/unwind/sframe.c b/kernel/unwind/sframe.c
-index 7952b041dd23..38b3577f5253 100644
---- a/kernel/unwind/sframe.c
-+++ b/kernel/unwind/sframe.c
-@@ -228,10 +228,8 @@ static __always_inline int __read_fre(struct sframe_section *sec,
- 	offset_count--;
- 
- 	ra_off = sec->ra_off;
--	if (!ra_off) {
--		if (!offset_count--)
--			return -EFAULT;
--
-+	if (!ra_off && offset_count) {
-+		offset_count--;
- 		UNSAFE_GET_USER_INC(ra_off, cur, offset_size, Efault);
- 	}
- 
-diff --git a/kernel/unwind/user.c b/kernel/unwind/user.c
-index 6c75a7411871..58e1549cd9f4 100644
---- a/kernel/unwind/user.c
-+++ b/kernel/unwind/user.c
-@@ -50,16 +50,25 @@ static int unwind_user_next_common(struct unwind_user_state *state,
- 
- 	/* Get the Stack Pointer (SP) */
- 	sp = cfa + frame->sp_off;
--	/* Make sure that stack is not going in wrong direction */
--	if (sp <= state->sp)
-+	/*
-+	 * Make sure that stack is not going in wrong direction.  Allow SP
-+	 * to be unchanged for the topmost frame, by subtracting topmost,
-+	 * which is either 0 or 1.
-+	 */
-+	if (sp <= state->sp - state->topmost)
- 		return -EINVAL;
- 	/* Make sure that the address is word aligned */
- 	if (sp & (state->ws - 1))
- 		return -EINVAL;
- 
- 	/* Get the Return Address (RA) */
--	if (get_user_word(&ra, cfa, frame->ra_off, state->ws))
--		return -EINVAL;
-+	if (frame->ra_off) {
-+		if (get_user_word(&ra, cfa, frame->ra_off, state->ws))
-+			return -EINVAL;
-+	} else {
-+		if (!state->topmost || unwind_user_get_ra_reg(&ra))
-+			return -EINVAL;
-+	}
- 
- 	/* Get the Frame Pointer (FP) */
- 	if (frame->fp_off && get_user_word(&fp, cfa, frame->fp_off, state->ws))
--- 
-2.51.0
+> 
+> -aneesh
 
