@@ -1,64 +1,64 @@
 Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FFCF17C77;
-	Fri,  5 Dec 2025 17:15:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C7FC349B08;
+	Fri,  5 Dec 2025 17:15:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764954934; cv=none; b=e7npAE9uyTEtGMBQyeBz63MgP5DbYUIaiQV18rfPR89aQet0pbLbzzE6qKborJzStfO340b9BbjKs5w0FHDKBq9ozzNR/41Ipm9OJaH0Q+l41z1882nDeqIIHxKR8QKdZEjOt0vpneex+QawS861jUXZ0Vv2OoqRS8u0Cp4nsYM=
+	t=1764954934; cv=none; b=uQKH+KSBNM+GYibK8WzWFR111LvKhh3/T6KOFb9x3zx0EYE8FclI5KnDQYtMUOSKU0vWzUADUEq4SK5ZqmYC8xyFXWbgjPCyI97f8qM6wyI47lwpWUMHF56j2cGxeCmgocbWwGJvUjVB7Ud9MiTdqDwu4rCfvWc7GEl5U6XoXeY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1764954934; c=relaxed/simple;
-	bh=Ig76xTemWnBp5V9wcafXhVnewT4GyeDWXCD4NFeuEEI=;
+	bh=BaaazKY4N/gQqcOAQuMq3hnJYhCcrMeU6NqtFo95EdE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=DuiJHJP16n3/1DAECSG1xjRrkQRUWg7reFvSbW/eujQ9VMzNJM2o6jdJzEMC0Wpx/F2VPTqgXXckU2N9IwMZu9qniu2AWqBLe9iU0RFkeB+wRT50nphyy4z6prhe2A1/y/8mL3DA8rHzcjjPllycMy6yUOqnXgDXvZByyA0upbk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=E30KpZ3e; arc=none smtp.client-ip=148.163.158.5
+	 MIME-Version; b=aQ2Ozl9aRZyxqwTbtXKSVlFdKlqrmdMHvjF7xBUR3uAl9ACB9LfGTuSxCuaSF0j3TXgSQKqnPx13oz/RrWHVusmct7g5vyvFY3gFe0mB/+m3GbFBS9rO5Mt30FNsdP2OEgJU+sQ3YDLQpgsPBTYZ5j3QzYmd4T24DGt/Pi9ASU8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=PJqIhMlF; arc=none smtp.client-ip=148.163.158.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="E30KpZ3e"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="PJqIhMlF"
 Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5B5Bjoj5026038;
-	Fri, 5 Dec 2025 17:14:56 GMT
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5B5CbnhN029507;
+	Fri, 5 Dec 2025 17:14:57 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
 	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=XDw2tSBsdhyOzenUT
-	DEc+daDW0YtX3pVwUrUg8mkf/0=; b=E30KpZ3eIsEL7vt4qiVGSW8nz6YC893yl
-	3l7S/DWxwLMgqcdmM6gJkkhMwn3rVTxcDuVwYvUNlgqIhFUUdRMuqwAr9ZIyAMFR
-	MT2dRUfRtb9bWKagDJBJyTpGnGZPvxmXSg3D9xGvTwTo+CtKUBjPTD03ilPhIuwT
-	9BlqeRaxpMr/7udNzWZzX7//0qM9x6wizcNZQKeUobzJl+Vf3FJLejH1ZTJR+p/E
-	eNOvBP/wV99HJjPfs6Osk5zDVOYKcoH98PdbaSqXQk+3wPkyTIZCUpTji7lMc37A
-	N7cF6XiVPt1+sgxdut1QeV0ivevSR2YeJb+HcjoZWxfrUDuuzBppw==
+	:mime-version:references:subject:to; s=pp1; bh=xqV77jlNdGfgAvl7u
+	ClQOa17ALUwsCcaS1Mv50ZA9CI=; b=PJqIhMlF+oVb6fch22SHxkH1B+b5GtcOW
+	rNOjUsQ9qsm05vkiw5VNRkQG7PpOMx8hZRajpsSiDkjWhH/WvUXkzoai7qCN6KK6
+	hqfTNT4MdSEGNDZObZBn0XbB7/eYHxEVHrnqxFv1jbm49mbUtawXAomgpc9QwGJf
+	ebfdisUT5Lr3j7dTRm+d1Zx23tWp2FCI5/sGQRzJrlPlWiJpiS4DXowe4UREN9Tw
+	+uhfMAYQMNXVMjZBu1Ni83vG1MxQzpjyGqSzrLSXCbIljeYGF8PwhJR3paLd4y38
+	L8W/RUxjbM/UU+4yd8yb3HyE1zZulx5i8cMX1MY7opcNd65N8USHw==
 Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4aqq8v664s-1
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4aqq8v664w-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 05 Dec 2025 17:14:57 +0000 (GMT)
+Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 5B5H7RIH021565;
+	Fri, 5 Dec 2025 17:14:56 GMT
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4aqq8v664r-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
 	Fri, 05 Dec 2025 17:14:56 +0000 (GMT)
-Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 5B5HEtmh004440;
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5B5Eb9Tp010240;
 	Fri, 5 Dec 2025 17:14:55 GMT
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4aqq8v664m-1
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4arcnkpb58-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 05 Dec 2025 17:14:55 +0000 (GMT)
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5B5H9aEP024071;
-	Fri, 5 Dec 2025 17:14:54 GMT
-Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4arb5sxh4m-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 05 Dec 2025 17:14:54 +0000
+	Fri, 05 Dec 2025 17:14:55 +0000
 Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 5B5HEoIh35586536
+	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 5B5HEpxF26214784
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 5 Dec 2025 17:14:50 GMT
+	Fri, 5 Dec 2025 17:14:51 GMT
 Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id B279320043;
-	Fri,  5 Dec 2025 17:14:50 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id A2A942004E;
+	Fri,  5 Dec 2025 17:14:51 +0000 (GMT)
 Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 6EFB72004F;
-	Fri,  5 Dec 2025 17:14:50 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 5429820063;
+	Fri,  5 Dec 2025 17:14:51 +0000 (GMT)
 Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.87.85.9])
 	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Fri,  5 Dec 2025 17:14:50 +0000 (GMT)
+	Fri,  5 Dec 2025 17:14:51 +0000 (GMT)
 From: Jens Remus <jremus@linux.ibm.com>
 To: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
         linux-s390@vger.kernel.org, bpf@vger.kernel.org, x86@kernel.org,
@@ -83,9 +83,9 @@ Cc: Jens Remus <jremus@linux.ibm.com>, Heiko Carstens <hca@linux.ibm.com>,
         Florian Weimer <fweimer@redhat.com>, Kees Cook <kees@kernel.org>,
         "Carlos O'Donell" <codonell@redhat.com>, Sam James <sam@gentoo.org>,
         Dylan Hatch <dylanbhatch@google.com>
-Subject: [RFC PATCH v2 07/15] s390/vdso: Enable SFrame generation in vDSO
-Date: Fri,  5 Dec 2025 18:14:38 +0100
-Message-ID: <20251205171446.2814872-8-jremus@linux.ibm.com>
+Subject: [RFC PATCH v2 10/15] unwind_user: Enable archs that save RA/FP in other registers
+Date: Fri,  5 Dec 2025 18:14:41 +0100
+Message-ID: <20251205171446.2814872-11-jremus@linux.ibm.com>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20251205171446.2814872-1-jremus@linux.ibm.com>
 References: <20251205171446.2814872-1-jremus@linux.ibm.com>
@@ -97,19 +97,19 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: OvygtJfHt49xuN1AlhupT-W9xEwANQsb
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTI5MDAwOCBTYWx0ZWRfXxog9xW2GVq9Y
- M9lHy5o0oQc9XAJUQH5aZ1qhdAucheciuHtTTd4MC2zy2OSVX9ux9o+am6qnZECAFhqstaHOAaB
- hQy3mxolG2jPiw8sH7+IkBQAZjrpXuuX5E8ylQgjitgiWkkuTJgk+dAvysIrIBpjnwT07kWt5l9
- QNVqpxC0nea4EvV9gKD74igw0SU/pQ9K3xc74s9IyzbBMuMld6kzOGSpVaSatBn/mQFlKb0sm2A
- okOZ2GakzmpFumJCKrveeQH2lrHVZw9JHmWR+gcTcBrn54L4GSSbHHSAHokS69po1J2UiwwpAVq
- csfp2kMnlpTWB06CdpSBXf+IBtrSY2WPdK6ffhHuGVkApw8XefaiWa93VZtozXbiwt9GCuK9DBm
- LPj4a/O8YoZZ2ob5bCaSC/T4hwaq7g==
-X-Authority-Analysis: v=2.4 cv=Scz6t/Ru c=1 sm=1 tr=0 ts=69331310 cx=c_pps
- a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
- a=wP3pNCr1ah4A:10 a=VkNPw1HP01LnGYTKEx00:22 a=VwQbUJbxAAAA:8 a=meVymXHHAAAA:8
- a=VnNF1IyMAAAA:8 a=dAJiN8YmCtcRjYQ6G8MA:9 a=2JgSa4NbpEOStq-L5dxp:22
-X-Proofpoint-GUID: nflwbrWN7yLoguSeV1zeq_mO3GRzyfG3
+X-Proofpoint-ORIG-GUID: 6pSAVqgkRWaR6NSOf0v0jLVZro9nB8W8
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTI5MDAwOCBTYWx0ZWRfXzHkjNdTEuIJO
+ qwyZXR/LEV/0Ma77q5VWJEK2xxl7YF3raYUlk9u+/B7rJQeX6qoF2IoCz3CbGi/ixYrSLiSkAvm
+ 1GVk8v9PWcOPjxOOl5s/E96QH/L9BpMo7tJ/G3f84toJThXRvK65ItVLM0BquQc7xd5kUYK97JN
+ QhF6H3L+RAa/FSD//B8gdLvHIHTfwW6pDeqVKX6XaoKogF9UahJRw2KLdcTCaDbb6NEE36h5Ow7
+ eC4/WcJTOoYQPYLYZbHXirrG1//lKnTEFoHE+D2EBvXjscXabO/xiLwvjchqXXpTCHh5W1rXPTo
+ EghCUAdsV7SNgnqCyrAOnNPiWaUUKxA1w9Rwtu80j+/BQHfGW9AZnuaUBVZXr4B3A3iYMRsB4Li
+ AGEtUgGBZLvUSc8aEDPmHtRL1+AbYQ==
+X-Authority-Analysis: v=2.4 cv=Scz6t/Ru c=1 sm=1 tr=0 ts=69331311 cx=c_pps
+ a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
+ a=wP3pNCr1ah4A:10 a=VkNPw1HP01LnGYTKEx00:22 a=VnNF1IyMAAAA:8
+ a=-jCn-aex0Ddyt886wV4A:9
+X-Proofpoint-GUID: 5nhX3_gGauAHjq09AvhKfodUzaFNN60l
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
  definitions=2025-12-05_06,2025-12-04_04,2025-10-01_01
@@ -119,128 +119,245 @@ X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
  classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
  reason=mlx scancount=1 engine=8.19.0-2510240000 definitions=main-2511290008
 
-This replicates Josh's x86 patch "x86/vdso: Enable sframe generation
-in VDSO" [1] for s390.
-
-Test whether the assembler supports generating SFrame stack trace
-information.  Note that it is insufficient to test whether the assembler
-supports option --gsframe, as GNU assembler supports that regardless
-of whether it is actually capable of generating SFrame stack trace
-information for the architecture.
-
-If so enable SFrame stack trace information generation in the vDSO
-library so kernel and user space can unwind through it.
-
-[1]: x86/vdso: Enable sframe generation in VDSO,
-     https://lore.kernel.org/all/20250425024023.173709192@goodmis.org/
+Enable unwinding of user space for architectures, such as s390, that
+save the return address (RA) and/or frame pointer (FP) in other
+registers.  This is only valid in the topmost frame, for instance when
+in a leaf function.
 
 Signed-off-by: Jens Remus <jremus@linux.ibm.com>
 ---
 
 Notes (jremus):
     Changes in RFC v2:
-    - Introduce config option AS_SFRAME instead of requiring Josh's x86
-      patch as pre-requisite.
-    - Reword commit message.
+    - Reword HAVE_UNWIND_USER_LOC_REG help text.
+    - Rename struct unwind_user_reginfo field frame_off to offset. (Josh)
+    - Move dummy unwind_user_get_reg() from asm-generic/unwind_user.h
+      to linux/unwind_user.h, drop its function comment, warn once,
+      return -EINVAL, and guard by !HAVE_UNWIND_USER_LOC_REG. (Josh)
+    - Rename generic_sframe_set_frame_reginfo() to sframe_init_reginfo()
+      and drop its function comment. (Josh)
+    - Do not check FP/RA offset for zero for UNWIND_USER_LOC_STACK. (Josh)
+    - Do not check for !IS_ENABLED(CONFIG_HAVE_UNWIND_USER_LOC_REG), as
+      the dummy implementation of unwind_user_get_reg() returns -EINVAL.
+    - Drop config option HAVE_UNWIND_USER_LOC_REG, as it is no longer of
+      any value.
+    - Keep checking for topmost for UNWIND_USER_LOC_REG. (Jens)
+    - Explicitly preserve FP if UNWIND_USER_LOC_NONE and drop later test
+      for frame->fp.loc != UNWIND_USER_LOC_NONE. (Josh)
     
-    Link to Josh's latest x86 patch:
-    https://lore.kernel.org/all/20250425024023.173709192@goodmis.org/
+    Would it make sense to rename UNWIND_USER_LOC_NONE to one of the
+    following to clarify its meaning for the unwinder?
+    - UNWIND_USER_LOC_UNCHANGED
+    - UNWIND_USER_LOC_RETAIN
+    - UNWIND_USER_LOC_PRESERVED
+    - UNWIND_USER_LOC_IDENTITY
 
- arch/Kconfig                         | 3 +++
- arch/s390/include/asm/dwarf.h        | 4 ++++
- arch/s390/kernel/vdso64/Makefile     | 7 ++++++-
- arch/s390/kernel/vdso64/vdso64.lds.S | 9 +++++++++
- 4 files changed, 22 insertions(+), 1 deletion(-)
+ arch/x86/include/asm/unwind_user.h       | 21 +++++++++++---
+ include/asm-generic/unwind_user_sframe.h | 15 ++++++++++
+ include/linux/unwind_user.h              |  9 ++++++
+ include/linux/unwind_user_types.h        | 18 ++++++++++--
+ kernel/unwind/sframe.c                   |  4 +--
+ kernel/unwind/user.c                     | 37 +++++++++++++++++++-----
+ 6 files changed, 89 insertions(+), 15 deletions(-)
 
-diff --git a/arch/Kconfig b/arch/Kconfig
-index 06c4f909398c..7fa89d70b244 100644
---- a/arch/Kconfig
-+++ b/arch/Kconfig
-@@ -482,6 +482,9 @@ config HAVE_HARDLOCKUP_DETECTOR_ARCH
- 	  It uses the same command line parameters, and sysctl interface,
- 	  as the generic hardlockup detectors.
+diff --git a/arch/x86/include/asm/unwind_user.h b/arch/x86/include/asm/unwind_user.h
+index dbdbad0beaf9..61a9ae9b07ea 100644
+--- a/arch/x86/include/asm/unwind_user.h
++++ b/arch/x86/include/asm/unwind_user.h
+@@ -26,16 +26,27 @@ static inline int unwind_user_word_size(struct pt_regs *regs)
+ #define ARCH_INIT_USER_FP_FRAME(ws)			\
+ 	.cfa_off	=  2*(ws),			\
+ 	.sp_off		= 0,				\
+-	.ra_off		= -1*(ws),			\
+-	.fp_off		= -2*(ws),			\
++	.ra		= {				\
++		.loc		= UNWIND_USER_LOC_STACK,\
++		.offset		= -1*(ws),		\
++			},				\
++	.fp		= {				\
++		.loc		= UNWIND_USER_LOC_STACK,\
++		.offset		= -2*(ws),		\
++			},				\
+ 	.use_fp		= true,				\
+ 	.outermost	= false,
  
-+config AS_SFRAME
-+	def_bool $(as-instr,.cfi_sections .sframe\n.cfi_startproc\n.cfi_endproc)
+ #define ARCH_INIT_USER_FP_ENTRY_FRAME(ws)		\
+ 	.cfa_off	=  1*(ws),			\
+ 	.sp_off		= 0,				\
+-	.ra_off		= -1*(ws),			\
+-	.fp_off		= 0,				\
++	.ra		= {				\
++		.loc		= UNWIND_USER_LOC_STACK,\
++		.offset		= -1*(ws),		\
++			},				\
++	.fp		= {				\
++		.loc		= UNWIND_USER_LOC_NONE,	\
++			},				\
+ 	.use_fp		= false,			\
+ 	.outermost	= false,
+ 
+@@ -47,4 +58,6 @@ static inline bool unwind_user_at_function_start(struct pt_regs *regs)
+ 
+ #endif /* CONFIG_HAVE_UNWIND_USER_FP */
+ 
++#include <asm-generic/unwind_user.h>
 +
- config UNWIND_USER
- 	bool
+ #endif /* _ASM_X86_UNWIND_USER_H */
+diff --git a/include/asm-generic/unwind_user_sframe.h b/include/asm-generic/unwind_user_sframe.h
+index 8c9ac47bc8bd..163961ca5252 100644
+--- a/include/asm-generic/unwind_user_sframe.h
++++ b/include/asm-generic/unwind_user_sframe.h
+@@ -2,6 +2,7 @@
+ #ifndef _ASM_GENERIC_UNWIND_USER_SFRAME_H
+ #define _ASM_GENERIC_UNWIND_USER_SFRAME_H
  
-diff --git a/arch/s390/include/asm/dwarf.h b/arch/s390/include/asm/dwarf.h
-index 6bcf37256feb..2f148b15fd7d 100644
---- a/arch/s390/include/asm/dwarf.h
-+++ b/arch/s390/include/asm/dwarf.h
-@@ -16,7 +16,11 @@
- 	 * symbols for the .dbg file.
- 	 */
++#include <linux/unwind_user_types.h>
+ #include <linux/types.h>
  
-+#ifdef CONFIG_AS_SFRAME
-+	.cfi_sections .eh_frame, .debug_frame, .sframe
-+#else
- 	.cfi_sections .eh_frame, .debug_frame
+ #ifndef SFRAME_SP_OFFSET
+@@ -9,4 +10,18 @@
+ #define SFRAME_SP_OFFSET 0
+ #endif
+ 
++#ifndef sframe_init_reginfo
++static inline void
++sframe_init_reginfo(struct unwind_user_reginfo *reginfo, s32 offset)
++{
++	if (offset) {
++		reginfo->loc = UNWIND_USER_LOC_STACK;
++		reginfo->offset = offset;
++	} else {
++		reginfo->loc = UNWIND_USER_LOC_NONE;
++	}
++}
++#define sframe_init_reginfo sframe_init_reginfo
 +#endif
- 
- #define CFI_STARTPROC		.cfi_startproc
- #define CFI_ENDPROC		.cfi_endproc
-diff --git a/arch/s390/kernel/vdso64/Makefile b/arch/s390/kernel/vdso64/Makefile
-index 8e78dc3ba025..f597f3b863d7 100644
---- a/arch/s390/kernel/vdso64/Makefile
-+++ b/arch/s390/kernel/vdso64/Makefile
-@@ -20,7 +20,11 @@ targets := $(obj-vdso64) $(obj-cvdso64) vdso64.so vdso64.so.dbg
- obj-vdso64 := $(addprefix $(obj)/, $(obj-vdso64))
- obj-cvdso64 := $(addprefix $(obj)/, $(obj-cvdso64))
- 
--KBUILD_AFLAGS += -DBUILD_VDSO
-+ifeq ($(CONFIG_AS_SFRAME),y)
-+	SFRAME_CFLAGS := -Wa,--gsframe
-+endif
 +
-+KBUILD_AFLAGS += -DBUILD_VDSO $(SFRAME_CFLAGS)
- KBUILD_CFLAGS += -DBUILD_VDSO -DDISABLE_BRANCH_PROFILING
+ #endif /* _ASM_GENERIC_UNWIND_USER_SFRAME_H */
+diff --git a/include/linux/unwind_user.h b/include/linux/unwind_user.h
+index bc2edae39955..61fd5c05d0f0 100644
+--- a/include/linux/unwind_user.h
++++ b/include/linux/unwind_user.h
+@@ -32,6 +32,15 @@ static inline int unwind_user_get_ra_reg(unsigned long *val)
+ #define unwind_user_get_ra_reg unwind_user_get_ra_reg
+ #endif
  
- KBUILD_AFLAGS_64 := $(filter-out -m64,$(KBUILD_AFLAGS))
-@@ -32,6 +36,7 @@ KBUILD_CFLAGS_64 := $(filter-out -mno-pic-data-is-text-relative,$(KBUILD_CFLAGS_
- KBUILD_CFLAGS_64 := $(filter-out -munaligned-symbols,$(KBUILD_CFLAGS_64))
- KBUILD_CFLAGS_64 := $(filter-out -fno-asynchronous-unwind-tables,$(KBUILD_CFLAGS_64))
- KBUILD_CFLAGS_64 += -m64 -fPIC -fno-common -fno-builtin -fasynchronous-unwind-tables
-+KBUILD_CFLAGS_64 += $(SFRAME_CFLAGS)
- ldflags-y := -shared -soname=linux-vdso64.so.1 \
- 	     --hash-style=both --build-id=sha1 -T
- 
-diff --git a/arch/s390/kernel/vdso64/vdso64.lds.S b/arch/s390/kernel/vdso64/vdso64.lds.S
-index e4f6551ae898..0205d84369ca 100644
---- a/arch/s390/kernel/vdso64/vdso64.lds.S
-+++ b/arch/s390/kernel/vdso64/vdso64.lds.S
-@@ -50,6 +50,11 @@ SECTIONS
- 
- 	.eh_frame_hdr	: { *(.eh_frame_hdr) }		:text	:eh_frame_hdr
- 	.eh_frame	: { KEEP (*(.eh_frame)) }	:text
-+
-+#ifdef CONFIG_AS_SFRAME
-+	.sframe		: { *(.sframe) }		:text	:sframe
++#ifndef unwind_user_get_reg
++static inline int unwind_user_get_reg(unsigned long *val, int regnum)
++{
++	WARN_ON_ONCE(1);
++	return -EINVAL;
++}
++#define unwind_user_get_reg unwind_user_get_reg
 +#endif
 +
- 	.gcc_except_table : { *(.gcc_except_table .gcc_except_table.*) }
+ int unwind_user(struct unwind_stacktrace *trace, unsigned int max_entries);
  
- 	.rela.dyn ALIGN(8) : { *(.rela.dyn) }
-@@ -114,6 +119,7 @@ SECTIONS
-  * Very old versions of ld do not recognize this name token; use the constant.
-  */
- #define PT_GNU_EH_FRAME	0x6474e550
-+#define PT_GNU_SFRAME	0x6474e554
+ #endif /* _LINUX_UNWIND_USER_H */
+diff --git a/include/linux/unwind_user_types.h b/include/linux/unwind_user_types.h
+index 4656aa08a7db..6efc12b6e831 100644
+--- a/include/linux/unwind_user_types.h
++++ b/include/linux/unwind_user_types.h
+@@ -27,11 +27,25 @@ struct unwind_stacktrace {
+ 	unsigned long	*entries;
+ };
  
- /*
-  * We must supply the ELF program headers explicitly to get just one
-@@ -125,6 +131,9 @@ PHDRS
- 	dynamic		PT_DYNAMIC FLAGS(4);		/* PF_R */
- 	note		PT_NOTE FLAGS(4);		/* PF_R */
- 	eh_frame_hdr	PT_GNU_EH_FRAME;
-+#ifdef CONFIG_AS_SFRAME
-+	sframe		PT_GNU_SFRAME;
-+#endif
++enum unwind_user_loc {
++	UNWIND_USER_LOC_NONE,
++	UNWIND_USER_LOC_STACK,
++	UNWIND_USER_LOC_REG,
++};
++
++struct unwind_user_reginfo {
++	enum unwind_user_loc loc;
++	union {
++		s32 offset;
++		int regnum;
++	};
++};
++
+ struct unwind_user_frame {
+ 	s32 cfa_off;
+ 	s32 sp_off;
+-	s32 ra_off;
+-	s32 fp_off;
++	struct unwind_user_reginfo ra;
++	struct unwind_user_reginfo fp;
+ 	bool use_fp;
+ 	bool outermost;
+ };
+diff --git a/kernel/unwind/sframe.c b/kernel/unwind/sframe.c
+index 38b3577f5253..45cd7380ac38 100644
+--- a/kernel/unwind/sframe.c
++++ b/kernel/unwind/sframe.c
+@@ -307,8 +307,8 @@ static __always_inline int __find_fre(struct sframe_section *sec,
+ 
+ 	frame->cfa_off = fre->cfa_off;
+ 	frame->sp_off  = SFRAME_SP_OFFSET;
+-	frame->ra_off  = fre->ra_off;
+-	frame->fp_off  = fre->fp_off;
++	sframe_init_reginfo(&frame->ra, fre->ra_off);
++	sframe_init_reginfo(&frame->fp, fre->fp_off);
+ 	frame->use_fp  = SFRAME_FRE_CFA_BASE_REG_ID(fre->info) == SFRAME_BASE_REG_FP;
+ 	frame->outermost = fre->ra_undefined;
+ 
+diff --git a/kernel/unwind/user.c b/kernel/unwind/user.c
+index 58e1549cd9f4..122045cb411f 100644
+--- a/kernel/unwind/user.c
++++ b/kernel/unwind/user.c
+@@ -62,22 +62,45 @@ static int unwind_user_next_common(struct unwind_user_state *state,
+ 		return -EINVAL;
+ 
+ 	/* Get the Return Address (RA) */
+-	if (frame->ra_off) {
+-		if (get_user_word(&ra, cfa, frame->ra_off, state->ws))
+-			return -EINVAL;
+-	} else {
++	switch (frame->ra.loc) {
++	case UNWIND_USER_LOC_NONE:
+ 		if (!state->topmost || unwind_user_get_ra_reg(&ra))
+ 			return -EINVAL;
++		break;
++	case UNWIND_USER_LOC_STACK:
++		if (get_user_word(&ra, cfa, frame->ra.offset, state->ws))
++			return -EINVAL;
++		break;
++	case UNWIND_USER_LOC_REG:
++		if (!state->topmost || unwind_user_get_reg(&ra, frame->ra.regnum))
++			return -EINVAL;
++		break;
++	default:
++		WARN_ON_ONCE(1);
++		return -EINVAL;
+ 	}
+ 
+ 	/* Get the Frame Pointer (FP) */
+-	if (frame->fp_off && get_user_word(&fp, cfa, frame->fp_off, state->ws))
++	switch (frame->fp.loc) {
++	case UNWIND_USER_LOC_NONE:
++		fp = state->fp;
++		break;
++	case UNWIND_USER_LOC_STACK:
++		if (get_user_word(&fp, cfa, frame->fp.offset, state->ws))
++			return -EINVAL;
++		break;
++	case UNWIND_USER_LOC_REG:
++		if (!state->topmost || unwind_user_get_reg(&fp, frame->fp.regnum))
++			return -EINVAL;
++		break;
++	default:
++		WARN_ON_ONCE(1);
+ 		return -EINVAL;
++	}
+ 
+ 	state->ip = ra;
+ 	state->sp = sp;
+-	if (frame->fp_off)
+-		state->fp = fp;
++	state->fp = fp;
+ 	state->topmost = false;
+ 	return 0;
  }
- 
- /*
 -- 
 2.51.0
 
