@@ -1,70 +1,122 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-181.mta1.migadu.com (out-181.mta1.migadu.com [95.215.58.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 156161917ED;
-	Fri,  5 Dec 2025 22:21:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFB3E2DF134
+	for <bpf@vger.kernel.org>; Fri,  5 Dec 2025 22:31:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764973295; cv=none; b=YZTKjqctk1GsPZ1uV5kZAhMyV8hTzL4Ss0Sn+QH0C3qQUMT3QvB7N1DWzvL4dzPrzaAGxEOICz59BG4gfAPuiu9LaeIvHbQO58OH46HmOPvAmgLTNIG006w5uuVgcj4zV4lzvfKsCKfmGyP/epCmeoKzszjB0ikQoIjENCadvLE=
+	t=1764973904; cv=none; b=XIuBdLDtN0OpUDc7qD9bcI/4sDg972JQ8CdEXCNH41JIOW0eUXRonLUrly85wLE4YEyxmAHDHCjqzh9TLrmuBtJPMHZ5ujImkskSsOcAhglJU4v8E1Rgs0o+AFtVAnsuBC3xgYXvvpiRRwT/FOjGo31nC4ZU25GCThGP2jp/EbE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764973295; c=relaxed/simple;
-	bh=PlYPjSe/WtTei2KOWQ2XY7wXUNPiqzN2chnzfwHdaT8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gU3adBp0wTAc93ZAinDBqs05ux4ZBolGmtg3S00AUlS14dq5y1DC+YsOqgJ+KvaMfjiNy+b8OYjo0RroxvXFhabDeREPiE6CYVUSNrTZOrMPIi2WqdIJE3tjiH87ZgnLOurlf5FiXFEO/sOlo+ozQrVwexYwA77+EyVXhdtmjMM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WgRjFJXF; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1764973904; c=relaxed/simple;
+	bh=OGljzmU0DkQ+x9fsECZTDJgZ2OLFsyJKQITIodlLZY4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Q2dEhdPbzuUgA4d7RKzK/N3c/612ZhKhvejpLd8z6miwc+PuzWLhpSieKkgsejdwA84KcgChNlE2cngP8If0+Jo6SVlrwJecW8nUmZ18Ewr6U6z9SRfSlCWjQThHSaSglCN+SN85KBHxOFRwB719QdNF2oQEw3G4Gl7f8mSZikY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=nw6Jnbe3; arc=none smtp.client-ip=95.215.58.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WgRjFJXF"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D57C8C4CEF1;
-	Fri,  5 Dec 2025 22:21:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764973294;
-	bh=PlYPjSe/WtTei2KOWQ2XY7wXUNPiqzN2chnzfwHdaT8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=WgRjFJXFeifPSSzBXQmA2uLG1aRvj0vvNAxd6XBuUSPqtOTjGHq8rNl2azU8a+tuf
-	 zOG5hhYXzy/ksKNwVHpJKpg/rLLIuyt2ULhwr6A50iWUnMD4uC/XgJpsHMPgnK768p
-	 Sk+XFxLw3M0edioED9nzLHM0d+prJC2vJGnjYkXSG1yZL21MW0E3GkK+ey4TO5ybJg
-	 9GNqODY/GpEkly+lvom5Kizm4w+Lv2GXwdTiRQ9xTPvq3c9Mqe6xo1WlimbHWM1Mm/
-	 /32yu+F8MiN5FiLcI4wc4Lohuq3mJQTRWiO2cCI2hSmEfeyemX963MsUYYEIK0jkJL
-	 OQFATWW71Y/KA==
-Date: Fri, 5 Dec 2025 14:21:34 -0800
-From: Kees Cook <kees@kernel.org>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Shuah Khan <shuah@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
-	Christian Brauner <brauner@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Eric Dumazet <edumazet@google.com>,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	wine-devel@winehq.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
-	Jiri Olsa <jolsa@kernel.org>, Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH v2 09/13] selftests/seccomp: Fix build warning
-Message-ID: <202512051421.DCD77D0561@keescook>
-References: <20251205171010.515236-1-linux@roeck-us.net>
- <20251205171010.515236-10-linux@roeck-us.net>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="nw6Jnbe3"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1764973900;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=GkubKcSTNE4kKDdz7gUmlKO6JRAaq9Yff0unvyM5a5E=;
+	b=nw6Jnbe3DO/H3Tiqm9LcEFhzMZY3dQctd+Lar9FgMfZV6rvFYCoctQRAXwMHIcLu+UNDfd
+	a02s02EE3q0EjZbAeaNIgDcIyjSC/8Xfg1FlDD/3jtnma7Ux3VFWJjMEqVcL6cHhXu3yD1
+	IhmO99CH+KzHXMdPGInddz5FYTR65P0=
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nsc@kernel.org>,
+	Tejun Heo <tj@kernel.org>,
+	David Vernet <void@manifault.com>,
+	Andrea Righi <arighi@nvidia.com>,
+	Changwoo Min <changwoo@igalia.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Alan Maguire <alan.maguire@oracle.com>,
+	Donglin Peng <dolinux.peng@gmail.com>
+Cc: bpf@vger.kernel.org,
+	dwarves@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kbuild@vger.kernel.org
+Subject: [PATCH bpf-next v3 1/6] resolve_btfids: Rename object btf field to btf_path
+Date: Fri,  5 Dec 2025 14:30:41 -0800
+Message-ID: <20251205223046.4155870-2-ihor.solodrai@linux.dev>
+In-Reply-To: <20251205223046.4155870-1-ihor.solodrai@linux.dev>
+References: <20251205223046.4155870-1-ihor.solodrai@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20251205171010.515236-10-linux@roeck-us.net>
+X-Migadu-Flow: FLOW_OUT
 
-On Fri, Dec 05, 2025 at 09:10:03AM -0800, Guenter Roeck wrote:
-> Fix:
-> 
-> seccomp_bpf.c: In function ‘UPROBE_setup’:
-> seccomp_bpf.c:5175:74: warning: pointer type mismatch in conditional expression
-> 
-> by type casting the argument to get_uprobe_offset().
-> 
-> Fixes: 9ffc7a635c35a ("selftests/seccomp: validate uprobe syscall passes through seccomp")
-> Cc: Jiri Olsa <jolsa@kernel.org>
-> Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
-> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Rename the member of `struct object` holding the path to BTF data if
+provided via --btf arg. `btf_path` is less ambiguous.
 
-Reviewed-by: Kees Cook <kees@kernel.org>
+Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+---
+ tools/bpf/resolve_btfids/main.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
+diff --git a/tools/bpf/resolve_btfids/main.c b/tools/bpf/resolve_btfids/main.c
+index d47191c6e55e..164f0c941f04 100644
+--- a/tools/bpf/resolve_btfids/main.c
++++ b/tools/bpf/resolve_btfids/main.c
+@@ -113,7 +113,7 @@ struct btf_id {
+ 
+ struct object {
+ 	const char *path;
+-	const char *btf;
++	const char *btf_path;
+ 	const char *base_btf_path;
+ 
+ 	struct {
+@@ -550,11 +550,11 @@ static int symbols_resolve(struct object *obj)
+ 		}
+ 	}
+ 
+-	btf = btf__parse_split(obj->btf ?: obj->path, base_btf);
++	btf = btf__parse_split(obj->btf_path ?: obj->path, base_btf);
+ 	err = libbpf_get_error(btf);
+ 	if (err) {
+ 		pr_err("FAILED: load BTF from %s: %s\n",
+-			obj->btf ?: obj->path, strerror(-err));
++			obj->btf_path ?: obj->path, strerror(-err));
+ 		goto out;
+ 	}
+ 
+@@ -790,8 +790,8 @@ int main(int argc, const char **argv)
+ 	struct option btfid_options[] = {
+ 		OPT_INCR('v', "verbose", &verbose,
+ 			 "be more verbose (show errors, etc)"),
+-		OPT_STRING(0, "btf", &obj.btf, "BTF data",
+-			   "BTF data"),
++		OPT_STRING(0, "btf", &obj.btf_path, "file",
++			   "path to a file with input BTF data"),
+ 		OPT_STRING('b', "btf_base", &obj.base_btf_path, "file",
+ 			   "path of file providing base BTF"),
+ 		OPT_BOOLEAN(0, "fatal_warnings", &fatal_warnings,
 -- 
-Kees Cook
+2.52.0
+
