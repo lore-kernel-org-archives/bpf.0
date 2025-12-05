@@ -1,225 +1,125 @@
-Received: from fra-out-008.esa.eu-central-1.outbound.mail-perimeter.amazon.com (fra-out-008.esa.eu-central-1.outbound.mail-perimeter.amazon.com [35.158.23.94])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BA1D330322;
-	Fri,  5 Dec 2025 17:01:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=35.158.23.94
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7522C3446D6
+	for <bpf@vger.kernel.org>; Fri,  5 Dec 2025 17:12:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764954094; cv=none; b=CDB6lr3L51zMgnPwy0pZChTb0WRAEpcf3Ay18UTwB1ofO9v3TeV3dr3658XxnF4+iYStk9Wu+QnBig7TgBO7vrg3TlEGUSfAdi9koXE/Nvbn36GlrXQ0GHi4PnN2Xraid0MyjAALmllvgJJQ5IFcAN99h0kQQsQL2eME5pwfSX0=
+	t=1764954738; cv=none; b=lYdHS6RoZGHlURY1s7YhYWBtyvTw54aO8cGUSm4M0nI67bErkQuzAw3bV2WqzxjbYT+iebOynHbMAtEt9uLxpXs2+lgasXp8wZ0fQtQdDr6Al03hmMYZNslr7b9pSx2rBKLiQqxoR2pPL7Nppq6SxoABKryKH/uKIQZd8BOgJgs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764954094; c=relaxed/simple;
-	bh=+XLKM1HMOFNNPu4cU3SY1UKMhfjGTgNxGUTHgOxbOaY=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=pSU/MJVyX+xCao0t5gy3ssSuPU0GjZm5ar3Ot//O8421cqpFs5ugv29r2BVoE3HHNxWMf57ZNOmfUtyePOEYTK9vTpY878pb2ohHF8T5uhntc148AcCwMwIX9Nk9MfbDklQasZH6Npx0cwFcIcjV0y7/QrpC3LzFdJsmzj4AIlY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.co.uk; spf=pass smtp.mailfrom=amazon.co.uk; dkim=pass (2048-bit key) header.d=amazon.co.uk header.i=@amazon.co.uk header.b=Fy20tpch; arc=none smtp.client-ip=35.158.23.94
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.co.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.uk
+	s=arc-20240116; t=1764954738; c=relaxed/simple;
+	bh=Ke9Hk/U1tAD95iE3yn3zf2OpEhZ/z0cUps2pNlkpgN8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZZ9AgQrX1+dv3oJ0FEeVvUnT2W/W7l+nmrBxwHDQR+UTzxH6T/wFmjhGBkcIbFIWi9jiQvV1zHc4pJaiVbPX2D5S4Q7z4VNUXh2O1I28920xc0nTniey+NSvL4VfmwAIDiuxhmojnryVAflhSdP/oFFGefvhNH0wgIa3N42+/TU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S6DYlxzK; arc=none smtp.client-ip=209.85.210.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.co.uk header.i=@amazon.co.uk header.b="Fy20tpch"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S6DYlxzK"
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-7b75e366866so1165611b3a.2
+        for <bpf@vger.kernel.org>; Fri, 05 Dec 2025 09:12:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.co.uk; i=@amazon.co.uk; q=dns/txt;
-  s=amazoncorp2; t=1764954084; x=1796490084;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=j+Z5wrixfI4H8rTwsRxl2yKp4vaZueJxgsH7jlHoBL4=;
-  b=Fy20tpchJXJ9KK2XB0MgvqiXjn4BBp+3PWGW9SXjIyNYu2pgwy5aTlo+
-   Mc+txq4b9SloR6IjHdsPRlG+IGpL138JW0eTzwEZSsySu5qurRoCrLjby
-   mmgSfabNwMom53LeloEmmck/rhYbpOIMmZuHVz4mbhpX62nQG6krDub+N
-   LK0cmkaZwdXxMK2f/Ry0XvqhljHGujpYPUe/jO/2Q3vncL6eymdJWOnzl
-   2JZkHsTMQ8vgdrKRpcQpUyuuP/edVl0LHfz1iDMIqHkcCQbzQ22BCVd+Y
-   b8/k1dcfQyqv4qIos+ptksfNY/TiTlvw9rkWzCuG+CUEryZeFXIYYvXM7
-   w==;
-X-CSE-ConnectionGUID: MRvNL6aoRryvv4gsH+MURw==
-X-CSE-MsgGUID: jK4+obf/SNGZvM6PfooJcQ==
-X-IronPort-AV: E=Sophos;i="6.20,252,1758585600"; 
-   d="scan'208";a="6306432"
-Received: from ip-10-6-11-83.eu-central-1.compute.internal (HELO smtpout.naws.eu-central-1.prod.farcaster.email.amazon.dev) ([10.6.11.83])
-  by internal-fra-out-008.esa.eu-central-1.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2025 16:59:52 +0000
-Received: from EX19MTAEUC002.ant.amazon.com [54.240.197.236:11955]
- by smtpin.naws.eu-central-1.prod.farcaster.email.amazon.dev [10.0.26.175:2525] with esmtp (Farcaster)
- id ebbc9af5-ef2d-44ce-9711-a58d362cbdb5; Fri, 5 Dec 2025 16:59:52 +0000 (UTC)
-X-Farcaster-Flow-ID: ebbc9af5-ef2d-44ce-9711-a58d362cbdb5
-Received: from EX19D005EUB004.ant.amazon.com (10.252.51.126) by
- EX19MTAEUC002.ant.amazon.com (10.252.51.181) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.29;
- Fri, 5 Dec 2025 16:59:52 +0000
-Received: from EX19D005EUB003.ant.amazon.com (10.252.51.31) by
- EX19D005EUB004.ant.amazon.com (10.252.51.126) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.29;
- Fri, 5 Dec 2025 16:59:51 +0000
-Received: from EX19D005EUB003.ant.amazon.com ([fe80::b825:becb:4b38:da0c]) by
- EX19D005EUB003.ant.amazon.com ([fe80::b825:becb:4b38:da0c%3]) with mapi id
- 15.02.2562.029; Fri, 5 Dec 2025 16:59:51 +0000
-From: "Kalyazin, Nikita" <kalyazin@amazon.co.uk>
-To: "kvm@vger.kernel.org" <kvm@vger.kernel.org>, "linux-doc@vger.kernel.org"
-	<linux-doc@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "kvmarm@lists.linux.dev"
-	<kvmarm@lists.linux.dev>, "linux-fsdevel@vger.kernel.org"
-	<linux-fsdevel@vger.kernel.org>, "linux-mm@kvack.org" <linux-mm@kvack.org>,
-	"bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-CC: "pbonzini@redhat.com" <pbonzini@redhat.com>, "corbet@lwn.net"
-	<corbet@lwn.net>, "maz@kernel.org" <maz@kernel.org>, "oupton@kernel.org"
-	<oupton@kernel.org>, "joey.gouly@arm.com" <joey.gouly@arm.com>,
-	"suzuki.poulose@arm.com" <suzuki.poulose@arm.com>, "yuzenghui@huawei.com"
-	<yuzenghui@huawei.com>, "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-	"will@kernel.org" <will@kernel.org>, "seanjc@google.com" <seanjc@google.com>,
-	"tglx@linutronix.de" <tglx@linutronix.de>, "mingo@redhat.com"
-	<mingo@redhat.com>, "bp@alien8.de" <bp@alien8.de>,
-	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>, "x86@kernel.org"
-	<x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>, "luto@kernel.org"
-	<luto@kernel.org>, "peterz@infradead.org" <peterz@infradead.org>,
-	"willy@infradead.org" <willy@infradead.org>, "akpm@linux-foundation.org"
-	<akpm@linux-foundation.org>, "david@kernel.org" <david@kernel.org>,
-	"lorenzo.stoakes@oracle.com" <lorenzo.stoakes@oracle.com>,
-	"Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>, "vbabka@suse.cz"
-	<vbabka@suse.cz>, "rppt@kernel.org" <rppt@kernel.org>, "surenb@google.com"
-	<surenb@google.com>, "mhocko@suse.com" <mhocko@suse.com>, "ast@kernel.org"
-	<ast@kernel.org>, "daniel@iogearbox.net" <daniel@iogearbox.net>,
-	"andrii@kernel.org" <andrii@kernel.org>, "martin.lau@linux.dev"
-	<martin.lau@linux.dev>, "eddyz87@gmail.com" <eddyz87@gmail.com>,
-	"song@kernel.org" <song@kernel.org>, "yonghong.song@linux.dev"
-	<yonghong.song@linux.dev>, "john.fastabend@gmail.com"
-	<john.fastabend@gmail.com>, "kpsingh@kernel.org" <kpsingh@kernel.org>,
-	"sdf@fomichev.me" <sdf@fomichev.me>, "haoluo@google.com" <haoluo@google.com>,
-	"jolsa@kernel.org" <jolsa@kernel.org>, "jgg@ziepe.ca" <jgg@ziepe.ca>,
-	"jhubbard@nvidia.com" <jhubbard@nvidia.com>, "peterx@redhat.com"
-	<peterx@redhat.com>, "jannh@google.com" <jannh@google.com>,
-	"pfalcato@suse.de" <pfalcato@suse.de>, "shuah@kernel.org" <shuah@kernel.org>,
-	"riel@surriel.com" <riel@surriel.com>, "baohua@kernel.org"
-	<baohua@kernel.org>, "ryan.roberts@arm.com" <ryan.roberts@arm.com>,
-	"jgross@suse.com" <jgross@suse.com>, "yu-cheng.yu@intel.com"
-	<yu-cheng.yu@intel.com>, "kas@kernel.org" <kas@kernel.org>, "coxu@redhat.com"
-	<coxu@redhat.com>, "kevin.brodsky@arm.com" <kevin.brodsky@arm.com>,
-	"ackerleytng@google.com" <ackerleytng@google.com>, "maobibo@loongson.cn"
-	<maobibo@loongson.cn>, "prsampat@amd.com" <prsampat@amd.com>,
-	"mlevitsk@redhat.com" <mlevitsk@redhat.com>, "isaku.yamahata@intel.com"
-	<isaku.yamahata@intel.com>, "jmattson@google.com" <jmattson@google.com>,
-	"jthoughton@google.com" <jthoughton@google.com>,
-	"linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "vannapurve@google.com"
-	<vannapurve@google.com>, "jackmanb@google.com" <jackmanb@google.com>,
-	"aneesh.kumar@kernel.org" <aneesh.kumar@kernel.org>, "patrick.roy@linux.dev"
-	<patrick.roy@linux.dev>, "Thomson, Jack" <jackabt@amazon.co.uk>, "Itazuri,
- Takahiro" <itazur@amazon.co.uk>, "Manwaring, Derek" <derekmn@amazon.com>,
-	"Cali, Marco" <xmarcalx@amazon.co.uk>, "Kalyazin, Nikita"
-	<kalyazin@amazon.co.uk>
-Subject: [PATCH v8 11/13] KVM: selftests: cover GUEST_MEMFD_FLAG_NO_DIRECT_MAP
- in existing selftests
-Thread-Topic: [PATCH v8 11/13] KVM: selftests: cover
- GUEST_MEMFD_FLAG_NO_DIRECT_MAP in existing selftests
-Thread-Index: AQHcZgiSLmjQ8ZJCx0KLKn2zyDItvg==
-Date: Fri, 5 Dec 2025 16:59:51 +0000
-Message-ID: <20251205165743.9341-12-kalyazin@amazon.com>
-References: <20251205165743.9341-1-kalyazin@amazon.com>
-In-Reply-To: <20251205165743.9341-1-kalyazin@amazon.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        d=gmail.com; s=20230601; t=1764954729; x=1765559529; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=qORTeh1RcK0OLbEB6J4TCs98golUP6RBmjRH7IZnXsA=;
+        b=S6DYlxzKruzDfBHIyj/heAqkkyMEmdAfW3L9vPdmwoamBke00Z/laqgNYOsutGWAdT
+         pjzvi2xxee3wUmzepkOB570WTwyyRLsUrhUh9Ad9OZ6kURalpPG66IaCY1N/y6zX/xhf
+         OfHZSpCjzM/nN9ZMQRjKiXf4S+0gsQXmNVWQNG7/do+yxT2C9Rd165VAMA5D/tzB8TJ7
+         UT5/5e0zejwtA8UwbYQzy0KOcNMdDDOxAfXKGFUO+PEV1RP7GvC3hT7mLkAPBahbWYTC
+         R0qhxeRXPefvCAQhF0M9gBJUDwKyGItQjcJDO1E4cazifF33ayaxOBoUQcxSx2BESR/p
+         /qlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764954729; x=1765559529;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qORTeh1RcK0OLbEB6J4TCs98golUP6RBmjRH7IZnXsA=;
+        b=aRC3ebCb/+TqMgKc6R2UsQRXEB4zC2sDyVbyST4+/kzTzmF8kYmVnvDWLC5QJNPgBt
+         UUKJRA6xKp59w5/hzRYDlBtJvwX9WU1TqimIgxUIL1qQnivVhYiFt65+ytI3lrXm/Zm8
+         171MqGdSpkjlsRzKDIvJgGbQlmA/jLoS/ORV0qSoW2BuTT1u1EiKhp7k7MuVaNUWbQ6Q
+         mY9RLyk0VQTfWG7QHsMYev1OFmkvVZsLccl9wallLAf5gXyr4z9ggVkcgfx9HbXqW6EX
+         8u8W8wj/TxV8xh8mPbwGxA1oSCz+GfTzh7Z0Yf2TKQ+GkAH3+pU0ULJGFjtCN/XyNLUM
+         Plwg==
+X-Forwarded-Encrypted: i=1; AJvYcCW00aWpX/OasgQcTk+EpaKRsSVLdaqw6teFsav1kcLdRc/SduwceBeraPfeJzbvBuOLkh0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw2tvy4ZrR/IW830jL5XfhIwlHhiM4yNOiCu2yY3ceufodYyyaR
+	cwnpUQzNVbDjNqnxSy3Fcb64vO2fVJJmGLWSFB3kpeAgBJ6Be/OXWGa8
+X-Gm-Gg: ASbGncu/U6me1n8KpNDTVCIvnGsYK6c3NHG+dkVncQx7eEFuXi9FrkyfOwRiQPBy1vt
+	7wyP12t82zrnrKZ7dfMcWsmbmhQsqYBc84EkK+QtrUFFXOOs6kvLA1+04kzDKUvXMUunyv7aLn2
+	P3nqF13IbuTj/996/jD8VDI+PAHV9t7yvDTRDdtJlBcL+vHR7nktlNSvtsf29DbpCzJNaCghx2v
+	LdxoFKjTz80l0LcbiXHfoANNw/1povlzGN1y7vEA2fkYSIg2kA4Rst4C+USey3SiFQN4w/b8BRy
+	CBqTWFNiWMi4TNUlr0QpCAbrDQPggyzwfQP2mhKEluMy4RDpx69bPi1vYH9vurCEVWyuj4cVOjf
+	k9EJd4JeZQvdfA/yQ4zYCJpX+5aPj5lKSNbW+pc0YupWizbaZO8ONa6wTUBO19QSE3ULfLjeeWS
+	g/jro5MnxIKmanXHl5X78MitY=
+X-Google-Smtp-Source: AGHT+IHG9Ub9xshsdF6kH5/FAkq+jq1T/rEVFAM65Ag5B1+pgNhqA3GKA+rpXsrwIeGzgMXlNvHVmg==
+X-Received: by 2002:a05:7022:609f:b0:11b:ade6:45a7 with SMTP id a92af1059eb24-11df643be88mr5146019c88.1.1764954729409;
+        Fri, 05 Dec 2025 09:12:09 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-11df7552defsm20336959c88.2.2025.12.05.09.12.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 Dec 2025 09:12:08 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+From: Guenter Roeck <linux@roeck-us.net>
+To: Shuah Khan <shuah@kernel.org>
+Cc: Jakub Kicinski <kuba@kernel.org>,
+	Christian Brauner <brauner@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Eric Dumazet <edumazet@google.com>,
+	Kees Cook <kees@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	wine-devel@winehq.org,
+	netdev@vger.kernel.org,
+	bpf@vger.kernel.org,
+	Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH v2 00/13] selftests: Fix build warnings and errors
+Date: Fri,  5 Dec 2025 09:09:54 -0800
+Message-ID: <20251205171010.515236-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-From: Patrick Roy <patrick.roy@linux.dev>=0A=
-=0A=
-Extend mem conversion selftests to cover the scenario that the guest can=0A=
-fault in and write gmem-backed guest memory even if its direct map=0A=
-removed. Also cover the new flag in guest_memfd_test.c tests.=0A=
-=0A=
-Signed-off-by: Patrick Roy <patrick.roy@linux.dev>=0A=
-Signed-off-by: Nikita Kalyazin <kalyazin@amazon.com>=0A=
----=0A=
- tools/testing/selftests/kvm/guest_memfd_test.c  | 17 ++++++++++++++++-=0A=
- .../kvm/x86/private_mem_conversions_test.c      |  7 ++++---=0A=
- 2 files changed, 20 insertions(+), 4 deletions(-)=0A=
-=0A=
-diff --git a/tools/testing/selftests/kvm/guest_memfd_test.c b/tools/testing=
-/selftests/kvm/guest_memfd_test.c=0A=
-index 618c937f3c90..9615018a1a67 100644=0A=
---- a/tools/testing/selftests/kvm/guest_memfd_test.c=0A=
-+++ b/tools/testing/selftests/kvm/guest_memfd_test.c=0A=
-@@ -403,6 +403,17 @@ static void test_guest_memfd(unsigned long vm_type)=0A=
- 		__test_guest_memfd(vm, GUEST_MEMFD_FLAG_MMAP |=0A=
- 				       GUEST_MEMFD_FLAG_INIT_SHARED);=0A=
- =0A=
-+	if (flags & GUEST_MEMFD_FLAG_NO_DIRECT_MAP) {=0A=
-+		__test_guest_memfd(vm, GUEST_MEMFD_FLAG_NO_DIRECT_MAP);=0A=
-+		if (flags & GUEST_MEMFD_FLAG_MMAP)=0A=
-+			__test_guest_memfd(vm, GUEST_MEMFD_FLAG_NO_DIRECT_MAP |=0A=
-+					       GUEST_MEMFD_FLAG_MMAP);=0A=
-+		if (flags & GUEST_MEMFD_FLAG_INIT_SHARED)=0A=
-+			__test_guest_memfd(vm, GUEST_MEMFD_FLAG_NO_DIRECT_MAP |=0A=
-+					       GUEST_MEMFD_FLAG_MMAP |=0A=
-+					       GUEST_MEMFD_FLAG_INIT_SHARED);=0A=
-+	}=0A=
-+=0A=
- 	kvm_vm_free(vm);=0A=
- }=0A=
- =0A=
-@@ -445,10 +456,14 @@ static void test_guest_memfd_guest(void)=0A=
- 	TEST_ASSERT(vm_check_cap(vm, KVM_CAP_GUEST_MEMFD_FLAGS) & GUEST_MEMFD_FLA=
-G_INIT_SHARED,=0A=
- 		    "Default VM type should support INIT_SHARED, supported flags =3D 0x%=
-x",=0A=
- 		    vm_check_cap(vm, KVM_CAP_GUEST_MEMFD_FLAGS));=0A=
-+	TEST_ASSERT(vm_check_cap(vm, KVM_CAP_GUEST_MEMFD_FLAGS) & GUEST_MEMFD_FLA=
-G_NO_DIRECT_MAP,=0A=
-+		    "Default VM type should support INIT_SHARED, supported flags =3D 0x%=
-x",=0A=
-+		    vm_check_cap(vm, KVM_CAP_GUEST_MEMFD_FLAGS));=0A=
- =0A=
- 	size =3D vm->page_size;=0A=
- 	fd =3D vm_create_guest_memfd(vm, size, GUEST_MEMFD_FLAG_MMAP |=0A=
--					     GUEST_MEMFD_FLAG_INIT_SHARED);=0A=
-+					     GUEST_MEMFD_FLAG_INIT_SHARED |=0A=
-+					     GUEST_MEMFD_FLAG_NO_DIRECT_MAP);=0A=
- 	vm_set_user_memory_region2(vm, slot, KVM_MEM_GUEST_MEMFD, gpa, size, NULL=
-, fd, 0);=0A=
- =0A=
- 	mem =3D kvm_mmap(size, PROT_READ | PROT_WRITE, MAP_SHARED, fd);=0A=
-diff --git a/tools/testing/selftests/kvm/x86/private_mem_conversions_test.c=
- b/tools/testing/selftests/kvm/x86/private_mem_conversions_test.c=0A=
-index 1969f4ab9b28..8767cb4a037e 100644=0A=
---- a/tools/testing/selftests/kvm/x86/private_mem_conversions_test.c=0A=
-+++ b/tools/testing/selftests/kvm/x86/private_mem_conversions_test.c=0A=
-@@ -367,7 +367,7 @@ static void *__test_mem_conversions(void *__vcpu)=0A=
- }=0A=
- =0A=
- static void test_mem_conversions(enum vm_mem_backing_src_type src_type, ui=
-nt32_t nr_vcpus,=0A=
--				 uint32_t nr_memslots)=0A=
-+				 uint32_t nr_memslots, uint64_t gmem_flags)=0A=
- {=0A=
- 	/*=0A=
- 	 * Allocate enough memory so that each vCPU's chunk of memory can be=0A=
-@@ -394,7 +394,7 @@ static void test_mem_conversions(enum vm_mem_backing_sr=
-c_type src_type, uint32_t=0A=
- =0A=
- 	vm_enable_cap(vm, KVM_CAP_EXIT_HYPERCALL, (1 << KVM_HC_MAP_GPA_RANGE));=
-=0A=
- =0A=
--	memfd =3D vm_create_guest_memfd(vm, memfd_size, 0);=0A=
-+	memfd =3D vm_create_guest_memfd(vm, memfd_size, gmem_flags);=0A=
- =0A=
- 	for (i =3D 0; i < nr_memslots; i++)=0A=
- 		vm_mem_add(vm, src_type, BASE_DATA_GPA + slot_size * i,=0A=
-@@ -474,7 +474,8 @@ int main(int argc, char *argv[])=0A=
- 		}=0A=
- 	}=0A=
- =0A=
--	test_mem_conversions(src_type, nr_vcpus, nr_memslots);=0A=
-+	test_mem_conversions(src_type, nr_vcpus, nr_memslots, 0);=0A=
-+	test_mem_conversions(src_type, nr_vcpus, nr_memslots, GUEST_MEMFD_FLAG_NO=
-_DIRECT_MAP);=0A=
- =0A=
- 	return 0;=0A=
- }=0A=
--- =0A=
-2.50.1=0A=
-=0A=
+This series fixes build warnings and errors observed when trying to build
+selftests.
+
+v2: Emphasize that the patch series fixes build warnings and errors
+    which are seen even if -Werror is not provided.
+    Fix usage of cc-option.
+    For "ignoring return value" warnings, use perror() to display an error
+    message if the affected function returns an error.
+
+----------------------------------------------------------------
+Guenter Roeck (13):
+      clone3: clone3_cap_checkpoint_restore: Fix build warnings
+      selftests: ntsync: Fix build warnings
+      selftests/filesystems: fclog: Fix build warnings and errors
+      selftests/filesystems: file_stressor: Fix build warning
+      selftests/filesystems: anon_inode_test: Fix build warning
+      selftest: af_unix: Support compilers without flex-array-member-not-at-end support
+      selftest/futex: Comment out test_futex_mpol
+      selftests: net: netlink-dumps: Avoid uninitialized variable warning
+      selftests/seccomp: Fix build warning
+      selftests: net: Fix build warnings
+      selftests/fs/mount-notify: Fix build warning
+      selftests/fs/mount-notify-ns: Fix build warning
+      selftests: net: tfo: Fix build warning
+
+ tools/testing/selftests/clone3/clone3_cap_checkpoint_restore.c     | 4 ----
+ tools/testing/selftests/drivers/ntsync/ntsync.c                    | 4 ++--
+ tools/testing/selftests/filesystems/anon_inode_test.c              | 1 +
+ tools/testing/selftests/filesystems/fclog.c                        | 1 +
+ tools/testing/selftests/filesystems/file_stressor.c                | 2 --
+ .../testing/selftests/filesystems/mount-notify/mount-notify_test.c | 3 ++-
+ .../selftests/filesystems/mount-notify/mount-notify_test_ns.c      | 3 ++-
+ tools/testing/selftests/futex/functional/futex_numa_mpol.c         | 2 ++
+ tools/testing/selftests/net/af_unix/Makefile                       | 7 ++++++-
+ tools/testing/selftests/net/lib/ksft.h                             | 6 ++++--
+ tools/testing/selftests/net/netlink-dumps.c                        | 2 +-
+ tools/testing/selftests/net/tfo.c                                  | 3 ++-
+ tools/testing/selftests/seccomp/seccomp_bpf.c                      | 3 ++-
+ 13 files changed, 25 insertions(+), 16 deletions(-)
