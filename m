@@ -1,64 +1,64 @@
-Received: from mail-dl1-f51.google.com (mail-dl1-f51.google.com [74.125.82.51])
+Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A66531ED96
-	for <bpf@vger.kernel.org>; Fri,  5 Dec 2025 17:12:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13F4D347BD9
+	for <bpf@vger.kernel.org>; Fri,  5 Dec 2025 17:12:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764954747; cv=none; b=pu993iBxt+exBUp12AeX6h42ymUUp3OHMRXuipa/WlzV7RgX0W/VDrG9hi1AIjCdGqwMNBXOebSuWFjAtMNfVAKPhx4h0PpWQ2VHkuq+ZPCDugdlWn1WP0Xjbx+5FucdPjrOkSzxat+k4ymrFO73GEcV+BMXI4paFGnjZtDcJ/o=
+	t=1764954756; cv=none; b=PMxbLh0Vd4D/ny8hfcxc++fXjssYJhlrDs4YW1yEH8NlLj1j8vsCg4GoAQ3IAEwZR/qaPmlktvdJYTWef4yvnX5+wgP2BoBBQT3rW80SqYcSjSpdvWuqENqdGRdJ0Ih3n138uOCo6iQe+DZTwErb21yLKIk8Fu6F5tcrEswRHVA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764954747; c=relaxed/simple;
-	bh=IxOhZQlEd/Qy+CepjX8AS60bi75DFljz0EePvluZ/lE=;
+	s=arc-20240116; t=1764954756; c=relaxed/simple;
+	bh=YtYoTmiGxnOh5dtDECL3sKhDmcIdC9O9DzDnMbMxrZc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ftXHqnU2AfwiK7rl11tIPPv/ZSfgN/bRr0+3PSYhIb/Ci7EvP1AzgZh/vsUYFpsirkU3JkTDMEfs2gNqtqv1Qln8jlXnCQNeeD9QNCOXnmUcOS4A4ROggK/3MNbq7AL8YMJ0KyTwjF3uDg7kcszmyvpNVlXfiBoM+mXbGphJI64=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VPlv8YPY; arc=none smtp.client-ip=74.125.82.51
+	 MIME-Version:Content-Type; b=BhV1RvLpl2p9Uvbtqx+gW0MthgNWm9v1Nr2ALwkWUGex6SlnknXfQOv7WIbDSoBoCr7aIvzksHjc8lOlD/WhDAHXsyf/ETA1Tlx8QU3oEPSoImpJ//e6v8UEmNBXLKiRLptGSWT8WL/l7MwSKekcFSJwlYu+cZQAwm5P1xjMJqs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ltgsSjVp; arc=none smtp.client-ip=209.85.215.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VPlv8YPY"
-Received: by mail-dl1-f51.google.com with SMTP id a92af1059eb24-11b6bc976d6so4344760c88.0
-        for <bpf@vger.kernel.org>; Fri, 05 Dec 2025 09:12:20 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ltgsSjVp"
+Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-b9a5b5b47bfso2057596a12.1
+        for <bpf@vger.kernel.org>; Fri, 05 Dec 2025 09:12:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764954736; x=1765559536; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1764954742; x=1765559542; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=n4IdV8qLxCXpcZvIrzxwaz1yCq/7QPM0MNgJTT3yV/c=;
-        b=VPlv8YPYEfO7w8MO9RAkz9CUM0VsJEckg/+CMpdCFwxKyk4QYo7JaR2dY9SRwvIsqH
-         Oe0bdXebvMAi2Q6TKgcFa8sfg7zR8FLCuvTWH4EadyIuMHcWfDxEGwF7Maxc9fPjGb1Z
-         KeKNJ/CbG9zRlmBpr0K62GFO3l9L2n6G5BYjk4BB6TBXRaD8ANhntTpvFBlDIcj29tNL
-         wk9a+SrD5rHQ6r7QgT8srfuowJic48rHP26yFS7NoWGxTJQ6Tav8bndTFUnqfnM29OWj
-         jSq4tN8MSf2clwr7crYZYD2VRcQfMKMDbKj1gELuwYBdWF9ATJCmzu2Qr/sfdA8FPXcM
-         zuLw==
+        bh=47vuMKXmBnhdjf53+B1B8/LaD2EktMN0NOXdUnTfNOk=;
+        b=ltgsSjVp9ysDRlyKerXQDlumgJHsv8QOUwqmqbFHUJlFY9PFQQl4RxJVkc7D4TdXrP
+         NgNT3zJVmv+y//SUoCdaVemBWaTX0RZnfb2NlMh9fmRr6NVT0D7zQU20jncF+jGv8ir2
+         5yoM5I0A70Zcp1B7XkjOHGbfFDyvULGsFBzM8vwk07XRU+vZutb2XyQO5eFNqywQ0NlG
+         MJGuhjDbjzoRbROY7l0sCYU2CAS+62wIuDKT0UHR03Dc5Lbx+jRUSiPGpSI61swp5ole
+         lW7jDxxotS2fO6dj761HvoifHLNZdeWS7OwEBO7FDMMuKquEqtvCRkmOry8LQ8i3WYGc
+         Hw/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764954736; x=1765559536;
+        d=1e100.net; s=20230601; t=1764954742; x=1765559542;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=n4IdV8qLxCXpcZvIrzxwaz1yCq/7QPM0MNgJTT3yV/c=;
-        b=v66CgqkT0J2bCL44v5RGpcSZa3TsKZ/2/Hz82OxUoM3hAfulqsa/33A+q/AKFs1JsR
-         Ojsa0Wzy6AhE+OguxHNJ/ylFuS3AHQHsROpANLcLaCiCwuY0kiNOl8d2vwTjIW+drNqQ
-         T+1fJa7XwgSTK1SsSVNBsoCBex7Z7ZlsphSwJRoykldmBe3G0YCrd4oXzFQjeT+sVS8K
-         htpinV4raeEEAee9mkALD6YiZCTN8yOrLbLIURHeXb+GeYzMQKaoKggUfixepq70FdXS
-         r5rDY5I82dLn6yGKm//pHHNVu5Tp0669F/P1+0WDSAEs4MNRcpu4MbtbxElrYh+0FRg5
-         PK5g==
-X-Forwarded-Encrypted: i=1; AJvYcCU9PdM2T30IGxv1oiVBMz748+RuDaVxl88SJsMS6Wy+qLPfzkO96iImIYuOITeGgQE6SfQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzqPm5/rNrInpij/+JP1IPS52Z9+jQpfFQ3IacWdEe3YRp+xfFa
-	lzs00VCdO70MUPCEu/tOsC5IJMNXb55dXRDilO951aVEkRq/Xy2goh2g
-X-Gm-Gg: ASbGncvZwmQS0iObJFCnoxWLYW4RGuaqX67MGNb3TSP3pOA5u0r2CdrqSaa3XIVxUcl
-	TUDu8TRAfzXGWJ1b+j82nsZ6BMPOWff7vvO4UPFhA9DgaXoBI3FIM+4PmC3LRtjvJAp8tbdwcIL
-	fYSZgIkC7Rsu2ek1nN/C/1tEgVQEC+rudvrG8WlURXCMKUT6JfbVONXUeAHe9hqJM9bsZgCKU7B
-	Ck333FrlGnQyps10t3hQKYy73q9wNiv/K0W4TQgXyRmO+fGp7n91aYjB/gZHS7DUS718hJ6NSrh
-	Nhq5eSCr4vYhnbnwM34ontoobqXCpx9M/0r9J03AK2dUlom+zgQuG0J+3d6ua27keA6REmNx8bi
-	KDzQhp3y6zOwMuHVXG9GDGkC52EHkXo0JrpIIeWjcg+U+in2woZlVPVsxMtHxUAghHNmrnpPfdV
-	7jnT5HHwujxStV1mntKHdOD+hIU45gmBOzvw==
-X-Google-Smtp-Source: AGHT+IFIrrXmeRELseDoVSjhKR65g42A+CBh3uKmPIej8MyEU1H63Ol/p4iC5ibACsKwkEY6LwYTPQ==
-X-Received: by 2002:a05:7022:43a4:b0:11b:ade6:45c7 with SMTP id a92af1059eb24-11df5fdadc6mr6650958c88.3.1764954736002;
-        Fri, 05 Dec 2025 09:12:16 -0800 (PST)
+        bh=47vuMKXmBnhdjf53+B1B8/LaD2EktMN0NOXdUnTfNOk=;
+        b=nlH3/9xq4EGZgz0PPtuHw1zDeIEqxqWdu1UBclYd30rwXNYOIqk7M+vxZ3tYXydZ1C
+         hElJ0+kecq127dHZVY1EECmrpFsZFL8WxgW2lHryG32ihCgYWGJKDOhGorVEa4YunMg/
+         ov4pZVW69xrpDKBo0Fdw3fvixzdnaqSInPUvFfu9SdpXDAAo9pYFP447Y4XYN14QNYq6
+         VgtnB1cVwnVEMBO6zkDC9MaLYvyM/Dzuh/fgEFqD5vrBXAgAi0NlcJsTD7Dzg0FBAuwT
+         jPeyNHoECCb6+MWg0mGHYDhbWJPNtfOZemPHmooFS5MB/OCXHe8TV3VmIfjfzRGheCPN
+         Td/w==
+X-Forwarded-Encrypted: i=1; AJvYcCVHQUcQDorE7rta05YFH6Z3tGFfeoJe/0qes0HJWDyoirgvFuHuzx03w/9BGheXymLUt/Y=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzHwmtguKhvyNaRF5wPgHUsk20CshaxSd3W+owUeD3TcJkLpCt7
+	T/lTrzYVO1wDDxYQoWIXU0DHNUoAnmfwPOxfHhAndYOy+K6SnY3WkLRx
+X-Gm-Gg: ASbGncsjk7CKkqPPXNl8YEpd3ONHUFpDTGfCZrwkVmJXQMRzoo0QrEvIlIGpNTWS+hj
+	3mlZohfgctlrniqd+Fp3Hv0wbbfM8q2JRY4wrPNrXkQnwrXfHzSIgz4CEXGf7M63sQx531Ll9Bf
+	H2KreYjOCQszQq+b9Vvoc2NhyCQTjbKXiXkiakULxFZTnvPVIYKLFs8wJ6u07cam5txJmCKKbPK
+	Oa1grVN2StJxnz0WGq+yjAXSBETg/gpFyPVK7RbzfScOWPdZbg7BAHq3LhVhqmcMNzHU6j3nEzn
+	Xf+LONn6vWIcY5pdjW5XBaygVJ8OM/b4rSi7Sa8P7DBjDTssbN7EDW/zt6F+GZJiNpFDbHjDZ0f
+	mAKClf/K7urEWHNcAHwzQfSMZKW2ZOIcuQtoJyOfWmkJZwCaibe8I8vq7BifQslXfVNR1h/hMBb
+	ugJQE3hP2u+Clp30Rru63/YZA=
+X-Google-Smtp-Source: AGHT+IEk22OUEE7gdeZwhTjpvbdAQz+kolwi6WKygGxoM1AqKfc3siF5IPSsP8KEFJASWzEJYAwOyg==
+X-Received: by 2002:a05:693c:2d86:b0:2a4:664e:a5af with SMTP id 5a478bee46e88-2ab92e88ab7mr9468546eec.28.1764954742216;
+        Fri, 05 Dec 2025 09:12:22 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-11df76e2eefsm19408894c88.6.2025.12.05.09.12.15
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2aba8816ae9sm15102636eec.5.2025.12.05.09.12.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Dec 2025 09:12:15 -0800 (PST)
+        Fri, 05 Dec 2025 09:12:21 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
 From: Guenter Roeck <linux@roeck-us.net>
 To: Shuah Khan <shuah@kernel.org>
@@ -73,10 +73,12 @@ Cc: Jakub Kicinski <kuba@kernel.org>,
 	wine-devel@winehq.org,
 	netdev@vger.kernel.org,
 	bpf@vger.kernel.org,
-	Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH v2 05/13] selftests/filesystems: anon_inode_test: Fix build warning
-Date: Fri,  5 Dec 2025 09:09:59 -0800
-Message-ID: <20251205171010.515236-6-linux@roeck-us.net>
+	Guenter Roeck <linux@roeck-us.net>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>
+Subject: [PATCH v2 09/13] selftests/seccomp: Fix build warning
+Date: Fri,  5 Dec 2025 09:10:03 -0800
+Message-ID: <20251205171010.515236-10-linux@roeck-us.net>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20251205171010.515236-1-linux@roeck-us.net>
 References: <20251205171010.515236-1-linux@roeck-us.net>
@@ -89,38 +91,38 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Fix
+Fix:
 
-anon_inode_test.c:45:12: warning: call to undeclared function 'execveat'
+seccomp_bpf.c: In function ‘UPROBE_setup’:
+seccomp_bpf.c:5175:74: warning: pointer type mismatch in conditional expression
 
-by adding the missing include file.
+by type casting the argument to get_uprobe_offset().
 
-Fixes: f8ca403ae77cb ("selftests/filesystems: add exec() test for anonymous inodes")
-Cc: Christian Brauner <brauner@kernel.org>
+Fixes: 9ffc7a635c35a ("selftests/seccomp: validate uprobe syscall passes through seccomp")
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
 v2: Update subject and description to reflect that the patch fixes a build
-    warning.
-    This patch does not fix:
-	anon_inode_test.c: In function ‘anon_inode_no_exec’:
-	anon_inode_test.c:46:19: warning: argument 3 null where non-null expected
-    because I have no idea how to do avoid that warning.
+    warning. 
 
- tools/testing/selftests/filesystems/anon_inode_test.c | 1 +
- 1 file changed, 1 insertion(+)
+ tools/testing/selftests/seccomp/seccomp_bpf.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/filesystems/anon_inode_test.c b/tools/testing/selftests/filesystems/anon_inode_test.c
-index 73e0a4d4fb2f..5ddcfd2927f9 100644
---- a/tools/testing/selftests/filesystems/anon_inode_test.c
-+++ b/tools/testing/selftests/filesystems/anon_inode_test.c
-@@ -4,6 +4,7 @@
+diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
+index 874f17763536..2584f4f5c062 100644
+--- a/tools/testing/selftests/seccomp/seccomp_bpf.c
++++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+@@ -5172,7 +5172,8 @@ FIXTURE_SETUP(UPROBE)
+ 		ASSERT_GE(bit, 0);
+ 	}
  
- #include <fcntl.h>
- #include <stdio.h>
-+#include <unistd.h>
- #include <sys/stat.h>
+-	offset = get_uprobe_offset(variant->uretprobe ? probed_uretprobe : probed_uprobe);
++	offset = get_uprobe_offset(variant->uretprobe ?
++				   (void *)probed_uretprobe : (void *)probed_uprobe);
+ 	ASSERT_GE(offset, 0);
  
- #include "../kselftest_harness.h"
+ 	if (variant->uretprobe)
 -- 
 2.45.2
 
