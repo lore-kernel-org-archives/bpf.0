@@ -1,164 +1,127 @@
-Received: from out-185.mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 957FB4A35
-	for <bpf@vger.kernel.org>; Sat,  6 Dec 2025 00:59:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.185
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FA131F5820
+	for <bpf@vger.kernel.org>; Sat,  6 Dec 2025 01:00:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764982775; cv=none; b=j/pevLfa2dFBHxdAZVMwYApATfCWiiUGl5PKufQdZ5azXsCOsMgjzcYZAtV4Tzgj2LxDkJWIn4YX9Z+jEr7z9ILvPZpHsbbAokqJH1CC+TnM+VELK/67ju6tl1q4fMmzoogNzDIUvjAGTka0UfMdV7v4JkMuu4i92oEzQx/jVcg=
+	t=1764982860; cv=none; b=U3O66Xgf4JuATxaqHZLJC0A5C5u6vAiZiYAxAJrDmARVCvr3TNUjlBbf7Hks1Yn+7z/nEZ2VgtPleLhdn9+TuuPRkv7pWE8LC9zz6RNzotzXhDvt0pF2d3539wd4rWowur0TVpM9oGHo+vcPFBxGbzK5EZA35W8xiXN1+X6Izfs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764982775; c=relaxed/simple;
-	bh=0jQ3a9oazjtLu0ajytfIcW6UxT6F8I4cHqmPzkFmk+M=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SC5B/PLJvZKQ7V6Rm3oe7n9X64Xf0FZhQVIDM82szsu9gG5xzcfh8HismZKp0wjXYSUoO9fjgRf48ToA6ExCjHpZ5vOQ6LWADKSdlKl6br8k4Pw9Oyha3b2rRknFjKK7UoOgVyof4FMfx83qO3kAhuY/67d0g2nGzwr9kscK30I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=MYtOH8Zv; arc=none smtp.client-ip=91.218.175.185
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1764982860; c=relaxed/simple;
+	bh=J+fhDaXwYCVeolnHJqphArpPI9eh8evErlD9axz1MAw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=AZuttAMRm5dcqVNkFZdeWktjMqG8bQFcn7fCiasKSlB5k5558Y2Ej+QPYxGgWI6WXY0Vd9pPFpcIkiu3Na2kd7pVHwCiLvB/Di8HyH4cO8nexWxBVdlK71xdkC8c7JYhMlFGZ+OATjRhqpMCMywfox3eMOdhj/ESNfw+QD4qTmw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Qnzulgv+; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="MYtOH8Zv"
-Message-ID: <941a15fa-0048-4c60-a3ae-fe1c00386c89@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1764982761;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=DTfQkhpJ0K8ZKCiJ/wOi9QlqOTf2vyou5RQO0OZGMVs=;
-	b=MYtOH8ZvkTGnxHos6voi5+3p9O/ZPsEYNBHbGkRB9NC4Yy029HsDBXLGllH8REL2oFwzpj
-	o8CXkvHaWjjvnK5+Lll2Q8AW0cMRKhcjg2ilqI+mff5l/mQUfi9y4byU3IyhtdqJ1Y6tto
-	Mxj12ujAloLnYbXYF38ngIcslk8ZhHg=
-Date: Fri, 5 Dec 2025 16:58:59 -0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Qnzulgv+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D33E4C2BCAF
+	for <bpf@vger.kernel.org>; Sat,  6 Dec 2025 01:00:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1764982859;
+	bh=J+fhDaXwYCVeolnHJqphArpPI9eh8evErlD9axz1MAw=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=Qnzulgv+tx1SX+gb3y7ZAkb/WuMLbtEGT3HPvy9ftP9wrCUPKCyiVbF9bEuXSKx7l
+	 B9QUHtEKZuHbYDRWGb7ALnLK/5L5ggWPQaMsc7GdZ+3tdnx5S4IQCdGCDaoDZog7n5
+	 tH3I2q7UPnKqeFPHl6vqP5ClsCXmCfZTqhLjeoEb0KT+2Rbo/9TDjK9Qt/WtwlFmVJ
+	 CFfp2y8C/9rHTM3RG4RT25rSRFhBd8dfT4ad3fFSDDceleOQkWiHrOYy7GwLstrVkC
+	 Ci1iHNn4yi5mJ5G38s8jB3erYnayOkqV3yNiUz1EVBt4Ly3VFr8NDpRGyfnGu4clet
+	 pfL13MDrGKrvQ==
+Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-4ee14ba3d9cso24887841cf.1
+        for <bpf@vger.kernel.org>; Fri, 05 Dec 2025 17:00:59 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCV+I8rs8uLtCNMt5qesQ4rInyTFEd6kiHLz+8pZ/ezppmfsuMQX9ZvsoxLAd8cVO2V/WcA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyqbud/aX7fS9Y657wHCk6EdZxQWwvmRkA4xW2P2QrjnE195r/D
+	ZivqJeGbWR5fXsrWjCe56W3/gHyq9YJe7MvQO2PK9crQ/ULIhr0Bo/JEfysrY5xSZhubJRes2OM
+	uoLvqH8f0kZKWFZq5j5+NGbzicTB6d5U=
+X-Google-Smtp-Source: AGHT+IGn2O6tFzSRWYNTMScR/52ZmXcrwxYz1GxPPNjvV5SR/F37LjxKdbUrGm55UrwcWcNQj1E2ievJ16SKdJy2FS0=
+X-Received: by 2002:ac8:5d07:0:b0:4ed:af7b:69cf with SMTP id
+ d75a77b69052e-4f03fe35945mr17379821cf.37.1764982858626; Fri, 05 Dec 2025
+ 17:00:58 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v3 4/6] lib/Kconfig.debug: Set the minimum
- required pahole version to v1.22
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Andrew Morton <akpm@linux-foundation.org>,
- Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
- Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>,
- Andrea Righi <arighi@nvidia.com>, Changwoo Min <changwoo@igalia.com>,
- Shuah Khan <shuah@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Alan Maguire <alan.maguire@oracle.com>, Donglin Peng
- <dolinux.peng@gmail.com>, bpf@vger.kernel.org, dwarves@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org
-References: <20251205223046.4155870-1-ihor.solodrai@linux.dev>
- <20251205223046.4155870-5-ihor.solodrai@linux.dev>
- <CAEf4BzbwTWGs0g1dhrRGpYOxA-ce5n9z3FSKPHZ+KZ=fpJODag@mail.gmail.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <CAEf4BzbwTWGs0g1dhrRGpYOxA-ce5n9z3FSKPHZ+KZ=fpJODag@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+References: <20251205173923.31740-1-git@danielhodges.dev> <20251205173923.31740-2-git@danielhodges.dev>
+In-Reply-To: <20251205173923.31740-2-git@danielhodges.dev>
+From: Song Liu <song@kernel.org>
+Date: Fri, 5 Dec 2025 17:00:47 -0800
+X-Gmail-Original-Message-ID: <CAPhsuW4VJCsVKFeyH78XcHudk2RCPWp3EgAUGNEZsUXzdhHHxQ@mail.gmail.com>
+X-Gm-Features: AWmQ_blGuzTaHdY2NfSViIYZKRdY3NEPQG8pgPpjCooOxctA71waN5ucdvC4R00
+Message-ID: <CAPhsuW4VJCsVKFeyH78XcHudk2RCPWp3EgAUGNEZsUXzdhHHxQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 1/5] crypto: Add BPF hash algorithm type
+ registration module
+To: Daniel Hodges <git@danielhodges.dev>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
+	vadim.fedorenko@linux.dev, martin.lau@linux.dev, eddyz87@gmail.com, 
+	yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org, 
+	sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, 
+	herbert@gondor.apana.org.au, davem@davemloft.net, shuah@kernel.org, 
+	bpf@vger.kernel.org, linux-crypto@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 12/5/25 4:32 PM, Andrii Nakryiko wrote:
-> On Fri, Dec 5, 2025 at 2:32 PM Ihor Solodrai <ihor.solodrai@linux.dev> wrote:
->>
->> Subsequent patches in the series change vmlinux linking scripts to
->> unconditionally pass --btf_encode_detached to pahole, which was
->> introduced in v1.22 [1][2].
->>
->> This change allows to remove PAHOLE_HAS_SPLIT_BTF Kconfig option and
->> other checks of older pahole versions.
->>
->> [1] https://github.com/acmel/dwarves/releases/tag/v1.22
->> [2] https://lore.kernel.org/bpf/cbafbf4e-9073-4383-8ee6-1353f9e5869c@oracle.com/
->>
->> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
->> ---
->>  lib/Kconfig.debug         | 13 ++++---------
->>  scripts/Makefile.btf      |  9 +--------
->>  tools/sched_ext/README.md |  1 -
->>  3 files changed, 5 insertions(+), 18 deletions(-)
->>
->> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
->> index 742b23ef0d8b..3abf3ae554b6 100644
->> --- a/lib/Kconfig.debug
->> +++ b/lib/Kconfig.debug
->> @@ -389,18 +389,13 @@ config DEBUG_INFO_BTF
->>         depends on !DEBUG_INFO_SPLIT && !DEBUG_INFO_REDUCED
->>         depends on !GCC_PLUGIN_RANDSTRUCT || COMPILE_TEST
->>         depends on BPF_SYSCALL
->> -       depends on PAHOLE_VERSION >= 116
->> -       depends on DEBUG_INFO_DWARF4 || PAHOLE_VERSION >= 121
->> +       depends on PAHOLE_VERSION >= 122
->>         # pahole uses elfutils, which does not have support for Hexagon relocations
->>         depends on !HEXAGON
->>         help
->>           Generate deduplicated BTF type information from DWARF debug info.
->> -         Turning this on requires pahole v1.16 or later (v1.21 or later to
->> -         support DWARF 5), which will convert DWARF type info into equivalent
->> -         deduplicated BTF type info.
->> -
->> -config PAHOLE_HAS_SPLIT_BTF
->> -       def_bool PAHOLE_VERSION >= 119
->> +         Turning this on requires pahole v1.22 or later, which will convert
->> +         DWARF type info into equivalent deduplicated BTF type info.
->>
->>  config PAHOLE_HAS_BTF_TAG
->>         def_bool PAHOLE_VERSION >= 123
->> @@ -422,7 +417,7 @@ config PAHOLE_HAS_LANG_EXCLUDE
->>  config DEBUG_INFO_BTF_MODULES
->>         bool "Generate BTF type information for kernel modules"
->>         default y
->> -       depends on DEBUG_INFO_BTF && MODULES && PAHOLE_HAS_SPLIT_BTF
->> +       depends on DEBUG_INFO_BTF && MODULES
->>         help
->>           Generate compact split BTF type information for kernel modules.
->>
->> diff --git a/scripts/Makefile.btf b/scripts/Makefile.btf
->> index db76335dd917..7c1cd6c2ff75 100644
->> --- a/scripts/Makefile.btf
->> +++ b/scripts/Makefile.btf
->> @@ -7,14 +7,7 @@ JOBS := $(patsubst -j%,%,$(filter -j%,$(MAKEFLAGS)))
->>
->>  ifeq ($(call test-le, $(pahole-ver), 125),y)
->>
->> -# pahole 1.18 through 1.21 can't handle zero-sized per-CPU vars
->> -ifeq ($(call test-le, $(pahole-ver), 121),y)
->> -pahole-flags-$(call test-ge, $(pahole-ver), 118)       += --skip_encoding_btf_vars
->> -endif
->> -
->> -pahole-flags-$(call test-ge, $(pahole-ver), 121)       += --btf_gen_floats
->> -
->> -pahole-flags-$(call test-ge, $(pahole-ver), 122)       += -j$(JOBS)
->> +pahole-flags-$(call test-ge, $(pahole-ver), 122)       += --btf_gen_floats -j$(JOBS)
-> 
-> this should be unconditional given we expect at least 1.22, no?
+On Fri, Dec 5, 2025 at 9:40=E2=80=AFAM Daniel Hodges <git@danielhodges.dev>=
+ wrote:
+>
+> Add bpf_crypto_shash module that registers a hash type with the BPF
+> crypto infrastructure, enabling BPF programs to access kernel hash
+> algorithms through a unified interface.
+>
+> Update the bpf_crypto_type interface with hash-specific callbacks:
+>    - alloc_tfm: Allocates crypto_shash context with proper descriptor siz=
+e
+>    - free_tfm: Releases hash transform and context memory
+>    - has_algo: Checks algorithm availability via crypto_has_shash()
+>    - hash: Performs single-shot hashing via crypto_shash_digest()
+>    - digestsize: Returns the output size for the hash algorithm
+>    - get_flags: Exposes transform flags to BPF programs
+>
+> Update bpf_shash_ctx to contain crypto_shash transform and shash_desc
+> descriptor to accommodate algorithm-specific descriptor requirements.
+>
+> Signed-off-by: Daniel Hodges <git@danielhodges.dev>
+> ---
+>  crypto/Makefile           |  3 ++
+>  crypto/bpf_crypto_shash.c | 94 +++++++++++++++++++++++++++++++++++++++
+>  2 files changed, 97 insertions(+)
+>  create mode 100644 crypto/bpf_crypto_shash.c
+>
+> diff --git a/crypto/Makefile b/crypto/Makefile
+> index 16a35649dd91..853dff375906 100644
+> --- a/crypto/Makefile
+> +++ b/crypto/Makefile
+> @@ -30,6 +30,9 @@ obj-$(CONFIG_CRYPTO_ECHAINIV) +=3D echainiv.o
+>  crypto_hash-y +=3D ahash.o
+>  crypto_hash-y +=3D shash.o
+>  obj-$(CONFIG_CRYPTO_HASH2) +=3D crypto_hash.o
+> +ifeq ($(CONFIG_BPF_SYSCALL),y)
+> +obj-$(CONFIG_CRYPTO_HASH2) +=3D bpf_crypto_shash.o
+> +endif
+>
+>  obj-$(CONFIG_CRYPTO_AKCIPHER2) +=3D akcipher.o
+>  obj-$(CONFIG_CRYPTO_SIG2) +=3D sig.o
+> diff --git a/crypto/bpf_crypto_shash.c b/crypto/bpf_crypto_shash.c
+> new file mode 100644
+> index 000000000000..39032e7dd602
+> --- /dev/null
+> +++ b/crypto/bpf_crypto_shash.c
+> @@ -0,0 +1,94 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +#include <linux/types.h>
+> +#include <linux/module.h>
+> +#include <linux/bpf_crypto.h>
+> +#include <crypto/hash.h>
+> +
+> +struct bpf_shash_ctx {
+> +       struct crypto_shash *tfm;
+> +       struct shash_desc desc;
+> +};
 
-Yes, it can be unconditional, but still under if ver < 125.
+Instead of adding bpf_shash_ctx and bpf_ecdsa_ctx, can we extend
+bpf_crypto_ctx to cover all hash and ECDSA? bpf_crypto_ctx has a
+const pointer to bpf_crypto_type, so this should be possible?
 
-> 
->>
->>  pahole-flags-$(call test-ge, $(pahole-ver), 125)       += --skip_encoding_btf_inconsistent_proto --btf_gen_optimized
->>
->> diff --git a/tools/sched_ext/README.md b/tools/sched_ext/README.md
->> index 16a42e4060f6..56a9d1557ac4 100644
->> --- a/tools/sched_ext/README.md
->> +++ b/tools/sched_ext/README.md
->> @@ -65,7 +65,6 @@ It's also recommended that you also include the following Kconfig options:
->>  ```
->>  CONFIG_BPF_JIT_ALWAYS_ON=y
->>  CONFIG_BPF_JIT_DEFAULT_ON=y
->> -CONFIG_PAHOLE_HAS_SPLIT_BTF=y
->>  CONFIG_PAHOLE_HAS_BTF_TAG=y
->>  ```
->>
->> --
->> 2.52.0
->>
-
+Thanks,
+Song
