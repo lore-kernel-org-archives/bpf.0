@@ -1,228 +1,177 @@
 Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9672B1DFE22;
-	Mon,  8 Dec 2025 16:36:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E19542FC004;
+	Mon,  8 Dec 2025 17:16:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765211795; cv=none; b=rVYX1qDbJKA03Qth+C8VpdZ8AVuYXmtzp0hFlkNOp0H5P7CWuzPIjvbHneEFWYxuczDoKMbOZCKAkYGnhHQriKWjRUxrHonnD6WTZyNt9JC2bunyk0DtcyeAtdiwVuH/S/bBePl983MBgRFBdTb+w8paUUAJcSutgKc0JzeIudE=
+	t=1765214194; cv=none; b=olBpf0fCEJKfPRFfWYR7Sdl3zWBLxMvLpCxEfPUv6rwjJeOAfMRFhOg+RSxgphSDGyoWv0/ZkVc2fRGd0xsEbP2DoRho1xPJZJp+fFWwDY1iOEZ1DTgBmHyaCJ02bck2JTWBGNnNvMhU7+7crGqGFJBLSUPrl5ZnHNfso59xrYo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765211795; c=relaxed/simple;
-	bh=YnBsFXsGHGSOPxfdQ5wJ0fsKU1bDt2UA+EMrBFaeetI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=W/9HSN/xM4QgE+NvAjHvUt/pM+mJxmYhcjG0ZNoJ3AYu5q5xVG14B9wWekshwOaWeoDpIEIaSZFAW9Gb/m+50aMnXkNoL7MwglRKn1K+5lHnsy5MWgUVU+ZBx7vxpd4ztjC/cRQaBzZuHRyzyWYu8j7ocjWwPeDV8iIDRw4mW2A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=JfCXLG9l; arc=none smtp.client-ip=148.163.156.1
+	s=arc-20240116; t=1765214194; c=relaxed/simple;
+	bh=0a+eKf1KW5ejSSq4eH6CMbHXPiDRaoGF3QvlZM1SXQU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=ne/hwSRKTgWHd/Hg/Xac0zW1exrxweknQ3G2dJa40/j9fsc40zaovV55gfhy8MH8HDDq8MnE+sWQv5iml7evogJnPdiKw92rINdSkZflwFLjdX2jeen0aNWe8Iccn2ic5ypnpJIxtGmA91J4iMfwcuAyMFzzr1UNV42Cyi4njg0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=id62Ntmd; arc=none smtp.client-ip=148.163.156.1
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="JfCXLG9l"
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5B883t4J031236;
-	Mon, 8 Dec 2025 16:35:54 GMT
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="id62Ntmd"
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5B8DdfXK008835;
+	Mon, 8 Dec 2025 17:16:08 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=e3eICh
-	wSuwWgy6GE4OQOcLb+VywABhBwwWbuVsEmPOw=; b=JfCXLG9luLEQyuk2flqLwU
-	VPLSkQ8UYmif9gEy3uytbinIq9hsN/jMwwp/B5Fcyo1Ot2ywWrvFhYvIkgsRXui8
-	LMXAm5PYW/gUJhtaylBYrQIw5E/8v8AMwVXhg2feYufWzt53/FELV7F2ttmC4PWu
-	o6tXkWtfzL9z2m9hK3qKjCqhj//bTitvcOyUQ4NglbI7AI67faH4Pmj1ulIXmwVC
-	lfHcscd6pdA2cS3kOfLGRQm59vAsfjiQIlJCc8VZpRLi9LMSKpAxFyCmiHVTxG7q
-	GHnwIrzHchOI7yUK/Bd1rCbE7maZgkWeQ8jpO8uCeTmjC5a9tI5rR5cBxSiZse3A
-	==
+	:content-transfer-encoding:date:from:in-reply-to:message-id
+	:mime-version:references:subject:to; s=pp1; bh=g8Yq2CEK016UerPQC
+	n8BIpK5q3lUk06mi10es+UamvM=; b=id62NtmdPodUliCP/sSD8qO1LmwUyUP40
+	ItUjtwrukphS9rO1FFu9ya8Mh5wFog2t08QxCyUlK6df0raMlQ1R3PCnZsDvQ4Gu
+	UrNQUhtVGYTjh/LlePd8nzqTOqnW+2z/hN+XF0kFiUiZw/zDUx69pjNEBWvQwEee
+	oa10W7O8Sj2bo1WS9UYILzw2RdTYZaMNECrIrgioZMYwE3q0JgWa/t1fknHywUth
+	vEYlGSNCGbVm/I/y2vn0yeRNVLNFq3iv6TGxnLzsUau8CLA2QRAb6zDsqgPT1eoE
+	BpHxyb/cz9KUa6JD3YBgYBvRLSOYF7G9opMvCuWvjAMwMr7iZX83w==
 Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4avc618r8h-1
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4avc7brwes-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 08 Dec 2025 16:35:53 +0000 (GMT)
-Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 5B8GQm8q002455;
-	Mon, 8 Dec 2025 16:35:53 GMT
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4avc618r8f-1
+	Mon, 08 Dec 2025 17:16:08 +0000 (GMT)
+Received: from m0356517.ppops.net (m0356517.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 5B8HG7DA015085;
+	Mon, 8 Dec 2025 17:16:07 GMT
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4avc7brwek-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 08 Dec 2025 16:35:52 +0000 (GMT)
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5B8Eh8TW028123;
-	Mon, 8 Dec 2025 16:35:51 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4avy6xpqyu-1
+	Mon, 08 Dec 2025 17:16:07 +0000 (GMT)
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5B8Fc5Ul002034;
+	Mon, 8 Dec 2025 17:16:06 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4aw11j6kfg-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 08 Dec 2025 16:35:51 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 5B8GZnnD60031444
+	Mon, 08 Dec 2025 17:16:06 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 5B8HG2KH38732188
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 8 Dec 2025 16:35:49 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 968B72004B;
-	Mon,  8 Dec 2025 16:35:49 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id CA12020040;
-	Mon,  8 Dec 2025 16:35:45 +0000 (GMT)
-Received: from [9.43.1.23] (unknown [9.43.1.23])
-	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Mon,  8 Dec 2025 16:35:45 +0000 (GMT)
-Message-ID: <e34ddd05-d926-4eb4-b861-4bf8fd5635bb@linux.ibm.com>
-Date: Mon, 8 Dec 2025 22:05:44 +0530
+	Mon, 8 Dec 2025 17:16:02 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 8A23A2004B;
+	Mon,  8 Dec 2025 17:16:02 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 301F92004F;
+	Mon,  8 Dec 2025 17:16:02 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.87.85.9])
+	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Mon,  8 Dec 2025 17:16:02 +0000 (GMT)
+From: Jens Remus <jremus@linux.ibm.com>
+To: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linux-s390@vger.kernel.org, bpf@vger.kernel.org, x86@kernel.org,
+        Steven Rostedt <rostedt@kernel.org>
+Cc: Jens Remus <jremus@linux.ibm.com>, Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Indu Bhagat <indu.bhagat@oracle.com>,
+        "Jose E. Marchesi" <jemarch@gnu.org>,
+        Beau Belgrave <beaub@linux.microsoft.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Florian Weimer <fweimer@redhat.com>, Kees Cook <kees@kernel.org>,
+        "Carlos O'Donell" <codonell@redhat.com>, Sam James <sam@gentoo.org>,
+        Dylan Hatch <dylanbhatch@google.com>
+Subject: [RFC PATCH v3 01/17] unwind_user: Enhance comments on get CFA, FP, and RA
+Date: Mon,  8 Dec 2025 18:15:43 +0100
+Message-ID: <20251208171559.2029709-2-jremus@linux.ibm.com>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <20251208171559.2029709-1-jremus@linux.ibm.com>
+References: <20251208171559.2029709-1-jremus@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] powerpc64/bpf: support direct_call on livepatch function
-To: Naveen N Rao <naveen@kernel.org>
-Cc: Madhavan Srinivasan <maddy@linux.ibm.com>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>, bpf@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, Song Liu <songliubraving@fb.com>,
-        Jiri Olsa <jolsa@kernel.org>, Viktor Malik <vmalik@redhat.com>,
-        live-patching@vger.kernel.org, Josh Poimboeuf <jpoimboe@kernel.org>,
-        Joe Lawrence
- <joe.lawrence@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>, linux-trace-kernel@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Shung-Hsi Yu <shung-hsi.yu@suse.com>
-References: <20251002192755.86441-1-hbathini@linux.ibm.com>
- <amwerofvasp7ssmq3zlrjakqj5aygyrgplcqzweno4ef42tiav@uex2ildqjvx2>
- <17f49a63-eccb-4075-91dd-b1f37aa762c7@linux.ibm.com>
- <unegysw3bihg32od7aham3npsdpm5govboo3uglorwsrjqfqfk@pbyzwwztmqtc>
- <42d72061-3d23-43db-bb02-d5f75333c924@linux.ibm.com>
- <dvvv5cytyak2iquer7d6g57ttum3qcckupyahsqsmvpzfjbyni@wbsr77swnrcl>
- <79946463-4742-4919-9d56-927a0a6f1c7c@linux.ibm.com>
- <nuinyo7o7uniemqqmoboctwrkkwkuv77nt7yk6td6eb3x43hv2@2lukfuvcmcko>
-Content-Language: en-US
-From: Hari Bathini <hbathini@linux.ibm.com>
-In-Reply-To: <nuinyo7o7uniemqqmoboctwrkkwkuv77nt7yk6td6eb3x43hv2@2lukfuvcmcko>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjA2MDAyMCBTYWx0ZWRfX9U2KbdGZ/LCC
- JOjlrLWWTsixmht3mI0hbyMr73SiF8T4VBqS934bvJozgzXIG9hLpfbmgI5EZ4XNn75Pv6x3P+V
- uipZqh3xvmpRN7lw9OIhWDgWhlnpvomPUNrMXaZwWoOyyTxr55wntz33MjCtOkZ/axksMtj7IUp
- tPULqxBEF0eMCUJlnm9mql8gV6g68sTs9P02OVNf1Niwha+yJYgit+DlomxvLnef6Q2pRJvloIt
- mxSzwt9KczRq47Wh1glc9LxKMyJ5l739xzBOKHIXYMj+FDUj3Mfac0TttMRQGHePqwohwOiUSXo
- c7a6H5T7CjH3GUIINmXxnNrdLD10MlKFl5xPGC/KNoBHDO11P6GtMzUmv3YpJsU7Tcy1j6jP2C9
- IvL6enxk8iooG/hhtTomhNsGwFAhNg==
-X-Proofpoint-GUID: eceSSM85vtVc9Swark3NlheFqQRPVYLn
-X-Proofpoint-ORIG-GUID: Xz4BH_e4YtKkpsZ2KZVlvpNoDMQcbkWY
-X-Authority-Analysis: v=2.4 cv=O/U0fR9W c=1 sm=1 tr=0 ts=6936fe69 cx=c_pps
- a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
- a=IkcTkHD0fZMA:10 a=wP3pNCr1ah4A:10 a=VkNPw1HP01LnGYTKEx00:22
- a=ytJgG1wrisC3aVGMN-IA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-ORIG-GUID: 836EzP7j02oR7Nn1hmOTKSxy9wcs7saz
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjA2MDAyMCBTYWx0ZWRfX3XXjmNR4+8Ph
+ IDipJwDTUdbT7aVp1ckxCemV6aDjbXz45iPjHAcvmPSYpWUY9VaHMC4I92ehKxTGWYPEeSE/Qaq
+ lCNsbWb/rY4OzUg5JlMMbEj8hr1Ek5rjmS/ByJ3IsWpJKbtXV6XnyuMKi9W0ek3P2lufGH+D8sJ
+ UAR6VIO9DKTvLL33I8vlqSjZMaQdZSLBCtGQ/WQDDIrt8SEg3eYCo9wbB0VjMHQAwHy2scaDf/w
+ AOcYXlyJE1urrFt7d3tCOUnMqATI0TKWAWJ0xWEgTirrzyAfFaPgPd1upuC3SqtdFdqMbZDe+NG
+ OFX/Fy/uqOQ0EgYEEqzG0vnlySoJDeLvcZYkuBEW+1M0ZWQ4qnTr8v6zoMm6JkaMgdrYC0pnpyK
+ 9vMo+CRtWBytI9Sb1JFEDSOn9PviSg==
+X-Proofpoint-GUID: al5qWv5wnkZzAVSaNhISX0IU_hPEI2OG
+X-Authority-Analysis: v=2.4 cv=FpwIPmrq c=1 sm=1 tr=0 ts=693707d8 cx=c_pps
+ a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
+ a=wP3pNCr1ah4A:10 a=VkNPw1HP01LnGYTKEx00:22 a=VnNF1IyMAAAA:8
+ a=GRZQj7fo7pb9Qcd1f_cA:9
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
  definitions=2025-12-06_02,2025-12-04_04,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 lowpriorityscore=0 bulkscore=0 clxscore=1011 phishscore=0
- suspectscore=0 adultscore=0 spamscore=0 malwarescore=0 priorityscore=1501
+ priorityscore=1501 bulkscore=0 spamscore=0 lowpriorityscore=0 suspectscore=0
+ malwarescore=0 phishscore=0 clxscore=1015 adultscore=0 impostorscore=0
  classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
  reason=mlx scancount=1 engine=8.19.0-2510240000 definitions=main-2512060020
 
-Thanks for the review, Naveen.
-I was on leave for sometime and could not look into it in a while
-after that.
+Move the comment "Get the Canonical Frame Address (CFA)" to the top
+of the sequence of statements that actually get the CFA.  Reword the
+comment "Find the Return Address (RA)" to "Get ...", as the statements
+actually get the RA.  Add a respective comment to the statements that
+get the FP.  This will be useful once future commits extend the logic
+to get the RA and FP.
 
-On 15/10/25 11:48 am, Naveen N Rao wrote:
-> On Fri, Oct 10, 2025 at 12:47:21PM +0530, Hari Bathini wrote:
->>
->>
->> On 09/10/25 4:57 pm, Naveen N Rao wrote:
->>> On Thu, Oct 09, 2025 at 11:19:45AM +0530, Hari Bathini wrote:
->>>>
->>>>
->>>> On 08/10/25 1:43 pm, Naveen N Rao wrote:
->>>>> On Mon, Oct 06, 2025 at 06:50:20PM +0530, Hari Bathini wrote:
->>>>>>
->>>>>>
->>>>>> On 06/10/25 1:22 pm, Naveen N Rao wrote:
->>>>>>> On Fri, Oct 03, 2025 at 12:57:54AM +0530, Hari Bathini wrote:
->>>>>>>> Today, livepatch takes precedence over direct_call. Instead, save the
->>>>>>>> state and make direct_call before handling livepatch.
->>>>>>>
->>>>>>> If we call into the BPF trampoline first and if we have
->>>>>>> BPF_TRAMP_F_CALL_ORIG set, does this result in the BPF trampoline
->>>>>>> calling the new copy of the live-patched function or the old one?
->>>>>>
->>>>>> Naveen, calls the new copy of the live-patched function..
->>>>>
->>>>> Hmm... I'm probably missing something.
->>>>>
->>>>> With ftrace OOL stubs, what I recall is that BPF trampoline derives the
->>>>> original function address from the OOL stub (which would be associated
->>>>> with the original function, not the livepatch one).
->>>>
->>>> Trampoline derives the address from LR.
->>>
->>> Does it? I'm referring to BPF_TRAMP_F_CALL_ORIG handling in
->>> __arch_prepare_bpf_trampoline().
->>
->>
->>> LR at BPF trampoline entry points at
->>> the ftrace OOL stub. We recover the "real LR" pointing to the function
->>> being traced from there so that we can call into it from within the BPF
->>> trampoline.
->>
->> Naveen, from the snippet in livepatch_handler code shared below,
->> the LR at BPF trmapoline entry points at the 'nop' after the call
->> to trampoline with 'bnectrl cr1' in the updated livepatch_handler.
->>
->> Mimic'ing ftrace OOL branch instruction in livepatch_handler
->> with 'b	1f' (the instruction after nop) to ensure the trmapoline
->> derives the real LR to '1f' and jumps back into the livepatch_handler..
->>
->> +       /* Jump to the direct_call */
->> +       bnectrl cr1
->> +
->> +       /*
->> +        * The address to jump after direct call is deduced based on ftrace
->> OOL stub sequence.
->> +        * The seemingly insignificant couple of instructions below is to
->> mimic that here to
->> +        * jump back to the livepatch handler code below.
->> +        */
->> +       nop
->> +       b       1f
->> +
->> +       /*
->> +        * Restore the state for livepatching from the livepatch stack.
->> +        * Before that, check if livepatch stack is intact. Use r0 for it.
->> +        */
->> +1:     mtctr   r0
-> 
-> Ah, so you are faking a ftrace OOL stub here. But, won't this mean that
+While at it align the comment on the "stack going in wrong direction"
+check to the following one on the "address is word aligned" check.
 
-Yeah.
+Signed-off-by: Jens Remus <jremus@linux.ibm.com>
+---
+ kernel/unwind/user.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-> bpf_get_func_ip() won't return the function address anymore?
+diff --git a/kernel/unwind/user.c b/kernel/unwind/user.c
+index d053295b1f7e..f81c36ab2861 100644
+--- a/kernel/unwind/user.c
++++ b/kernel/unwind/user.c
+@@ -38,6 +38,7 @@ static int unwind_user_next_common(struct unwind_user_state *state,
+ 		return 0;
+ 	}
+ 
++	/* Get the Canonical Frame Address (CFA) */
+ 	if (frame->use_fp) {
+ 		if (state->fp < state->sp)
+ 			return -EINVAL;
+@@ -45,11 +46,9 @@ static int unwind_user_next_common(struct unwind_user_state *state,
+ 	} else {
+ 		cfa = state->sp;
+ 	}
+-
+-	/* Get the Canonical Frame Address (CFA) */
+ 	cfa += frame->cfa_off;
+ 
+-	/* stack going in wrong direction? */
++	/* Make sure that stack is not going in wrong direction */
+ 	if (cfa <= state->sp)
+ 		return -EINVAL;
+ 
+@@ -57,10 +56,11 @@ static int unwind_user_next_common(struct unwind_user_state *state,
+ 	if (cfa & (state->ws - 1))
+ 		return -EINVAL;
+ 
+-	/* Find the Return Address (RA) */
++	/* Get the Return Address (RA) */
+ 	if (get_user_word(&ra, cfa, frame->ra_off, state->ws))
+ 		return -EINVAL;
+ 
++	/* Get the Frame Pointer (FP) */
+ 	if (frame->fp_off && get_user_word(&fp, cfa, frame->fp_off, state->ws))
+ 		return -EINVAL;
+ 
+-- 
+2.51.0
 
-Right. I do agree it can have issues in some scenarios.
-
-> 
-> One of the other thoughts I had was if we could stuff the function
-> address into the ftrace OOL stub. I had considered this back when I
-> implemented the OOL stubs, but didn't do it due to the extra memory
-> requirement. However, given the dance we're having to do, I'm now
-> thinking that may make sense and can simplify the code. If we can also
-> hook into livepatch, then we should be able to update the function
-> address in the stub to point to the new address and the trampoline
-> should then "just work" since it already saves/restores the TOC [We may
-> additionally have to update the function IP in _R12, but that would be a
-> minor change overall]
-> 
-> We will still need a way to restore livepatch TOC if the BPF trampoline
-> doesn't itself call into the function, but we may be able to handle that
-> if we change the return address to jump to a stub that restores the TOC
-> from the livepatch stack.
-
-Sounds doable. Looking into a couple of other things at the moment
-though. Will try out this suggestion and get back post that.
-Having said that, your thoughts on whether the current approach
-is a viable option if bpf_get_func_ip() can be fixed somehow?
-
-- Hari
