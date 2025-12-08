@@ -1,269 +1,179 @@
-Received: from out-183.mta1.migadu.com (out-183.mta1.migadu.com [95.215.58.183])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f206.google.com (mail-oi1-f206.google.com [209.85.167.206])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 834D22192F4
-	for <bpf@vger.kernel.org>; Mon,  8 Dec 2025 08:49:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78EB32DC76F
+	for <bpf@vger.kernel.org>; Mon,  8 Dec 2025 08:58:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.206
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765183784; cv=none; b=MoKfsKEkDE0r0gFG/fGutQL9UmNn52butJfxgtEd+xPuZjwoEBN3aYwmYqTn5Xo2axxy2amRnqjVF/WzNg+2pGi8M/b14J0iDbf3nJqo75DK9x0jFihZOsxx0iBXl7iJDItzO4v4m5PSRF7noaBp/n9kogamnkMGFmrfqSYJjs8=
+	t=1765184308; cv=none; b=lb1a2F0JPB0QnpOtM4O1KHKP9nl716SVCGxGF2VAeuHtVt2QrmFTh0B02G91ujNlXxTw0A+sM43Z/dkXLsP9w87ghy5cAbP4YCX9q5nFtxscWkBxDeyGuv2WptiL66kq40aKrBhH1eKmjbp5ng7S2mZiI81gQkuJVbQzG26PD38=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765183784; c=relaxed/simple;
-	bh=h7nWsRYeCi3W72b4YW32UykCWbgbF+6AvYubkfr/7nc=;
-	h=MIME-Version:Date:Content-Type:From:Message-ID:Subject:To:Cc:
-	 In-Reply-To:References; b=C7lXGH29XyRa/I1SurlyQmFVmFm9uEd0zq5vtav0Oec00XD1NS+JpQOfYeZ4c/6a0nykMMyW3imo7pJrJ9pe/I6LtkcQ8iOgfUhfY6oPZyGoaATcL7w01K2lpgMGLXlUp5hTSndqTX1dVdpPLNfeIg27w91nKqyD5/Sh9fFxLwU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=cFepiQxN; arc=none smtp.client-ip=95.215.58.183
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="cFepiQxN"
+	s=arc-20240116; t=1765184308; c=relaxed/simple;
+	bh=ZS71SkdDyRKSWwtwVL9j8zb1nfO+MqbEZ7A91WWyfNU=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=QVh00oFsg4orfQI96BloKpVpUDwLApifGXtsG4e1Zr+Q98ZNOfINnNhoxrh3eUsXeFZ9Bsvrplb740XLCO2MYwBNVN0csabTd/Gg0m6S9kMdAS1XnizyrjFCbGxeV4H417jS97eEPVlFGhX3jwAxheotei3tLKCPhid1gGhIKO0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.167.206
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-oi1-f206.google.com with SMTP id 5614622812f47-4530ea23ce6so6694357b6e.1
+        for <bpf@vger.kernel.org>; Mon, 08 Dec 2025 00:58:26 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1765184305; x=1765789105;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9FQasKD4bqoPxS9gKhFI9S0GuhkqNXd0OMNuacVPrKw=;
+        b=cYdukwwNCZopHZMpLWf6bW8/d4EXr1261D+GiCaaezwN7U5ouZAVjMz7aKU+bhr/l1
+         Xhqs9IpGt/Aq4VHCYMfQNT5SMm4HTCg+jRiY8HVtrLfSPjHtJYYXAZ5s5kKESRZ11LiQ
+         PKgUOqy/q/Sw9LO6Jgn6+drr0bM7XRGJdPBY5+ASrtf+clzUzN0UmHctQIIPb900qnzh
+         XlXEQSJ01+gDhDsXOW4UUQJZDe2FuKfzNg5sfXWylcEwJUk1on5Mj7esDh6K4Q0/K9/8
+         f7BAg1QH9CJgWy2Wl9exe/ILnOkXe2yuuQDFt2Vg7cctk8Bzx0mVOY2BkxlBSKXIzshR
+         dZfg==
+X-Forwarded-Encrypted: i=1; AJvYcCWiuY/qVOeChzYCRsvxnbhCvr0Tp333L/79ZWMgbCAIZUr5bLaf1DB7ME5/hvhZ/yWJX6Y=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywg3bDsvblK++XjdQvp1PC7N91X4un9v0P8vjiZ2BtOMJFBVNbk
+	j8U/rL6DweCIm0yGoKyVPPck1lBrLAZrI5zaMxlGI7JIjNCZYb2vnAcLI2FZVSc+Ma048P/wXBW
+	JAUd5tIlkTnZR165Mr3d4ojFvRCpg6zmHd/OZn9xXE7GVeg5JH+tlFVBcEPQ=
+X-Google-Smtp-Source: AGHT+IFZbjrqQF5gjS1Cv/xFxoq1Zp2A6lPpXNZ8sqN7jFPoGRpQglq9N/QrYtkv4alX3tXkL1Y9cbWV+nA2jo/oB4X4qT5ZeoO+
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1765183779;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=md5rTE5KknOBT4xPJmYQUJv6l5PQ4j1T9Q1h2YConaM=;
-	b=cFepiQxN0YI5olqORmnriQuU0nV4lPqC+Ss7VnbeXlyT0KrwxdFMofkiXOOFWKIE8LvaWO
-	7aWbu9fRckTTsC3E/cIM6HkHBApdiAnnFjcFyIpxPdIyxaK/ilrQEd8tGMH4WDVH8Yc5eV
-	P2Y16lI2B+JdCdUxC2e/7cbhN6nVHjg=
-Date: Mon, 08 Dec 2025 08:49:34 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: hui.zhu@linux.dev
-Message-ID: <1d9a162605a3f32ac215430131f7745488deaa34@linux.dev>
-TLS-Required: No
-Subject: Re: [PATCH v2 21/23] sched: psi: implement bpf_psi_create_trigger() 
- kfunc
-To: "Roman Gushchin" <roman.gushchin@linux.dev>, "Andrew Morton"
- <akpm@linux-foundation.org>
-Cc: linux-kernel@vger.kernel.org, "Alexei Starovoitov" <ast@kernel.org>,
- "Suren Baghdasaryan" <surenb@google.com>, "Michal Hocko"
- <mhocko@kernel.org>, "Shakeel Butt" <shakeel.butt@linux.dev>, "Johannes 
- Weiner" <hannes@cmpxchg.org>, "Andrii Nakryiko" <andrii@kernel.org>, "JP 
- Kobryn" <inwardvessel@gmail.com>, linux-mm@kvack.org,
- cgroups@vger.kernel.org, bpf@vger.kernel.org, "Martin KaFai Lau"
- <martin.lau@kernel.org>, "Song Liu" <song@kernel.org>, "Kumar Kartikeya 
- Dwivedi" <memxor@gmail.com>, "Tejun Heo" <tj@kernel.org>, "Roman 
- Gushchin" <roman.gushchin@linux.dev>
-In-Reply-To: <20251027232206.473085-11-roman.gushchin@linux.dev>
-References: <20251027232206.473085-1-roman.gushchin@linux.dev>
- <20251027232206.473085-11-roman.gushchin@linux.dev>
-X-Migadu-Flow: FLOW_OUT
+X-Received: by 2002:a05:6820:1621:b0:659:9a49:9045 with SMTP id
+ 006d021491bc7-6599a8b6ef8mr3257881eaf.16.1765184305736; Mon, 08 Dec 2025
+ 00:58:25 -0800 (PST)
+Date: Mon, 08 Dec 2025 00:58:25 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <69369331.a70a0220.38f243.009d.GAE@google.com>
+Subject: [syzbot] [net?] [bpf?] general protection fault in bq_flush_to_queue (2)
+From: syzbot <syzbot+2b3391f44313b3983e91@syzkaller.appspotmail.com>
+To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
+	daniel@iogearbox.net, davem@davemloft.net, eddyz87@gmail.com, 
+	haoluo@google.com, hawk@kernel.org, john.fastabend@gmail.com, 
+	jolsa@kernel.org, kpsingh@kernel.org, kuba@kernel.org, 
+	linux-kernel@vger.kernel.org, martin.lau@linux.dev, netdev@vger.kernel.org, 
+	sdf@fomichev.me, song@kernel.org, syzkaller-bugs@googlegroups.com, 
+	yonghong.song@linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-2025=E5=B9=B410=E6=9C=8828=E6=97=A5 07:22, "Roman Gushchin" <roman.gushch=
-in@linux.dev mailto:roman.gushchin@linux.dev?to=3D%22Roman%20Gushchin%22%=
-20%3Croman.gushchin%40linux.dev%3E > =E5=86=99=E5=88=B0:
+Hello,
+
+syzbot found the following issue on:
+
+HEAD commit:    aa833fc394ba drm/xe: Fix duplicated put due to merge resol..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=12f27cc2580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=bb66b4eefaf3f448
+dashboard link: https://syzkaller.appspot.com/bug?extid=2b3391f44313b3983e91
+compiler:       Debian clang version 20.1.8 (++20250708063551+0c9f909b7976-1~exp1~20250708183702.136), Debian LLD 20.1.8
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=148d701a580000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=166e7192580000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/262740328d6d/disk-aa833fc3.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/bf629be0ab14/vmlinux-aa833fc3.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/b71e61abc00a/bzImage-aa833fc3.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+2b3391f44313b3983e91@syzkaller.appspotmail.com
+
+Oops: general protection fault, probably for non-canonical address 0xdffffc0000000000: 0000 [#1] SMP KASAN PTI
+KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007]
+CPU: 0 UID: 0 PID: 6085 Comm: syz.0.18 Not tainted syzkaller #0 PREEMPT_{RT,(full)} 
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/25/2025
+RIP: 0010:__list_del include/linux/list.h:204 [inline]
+RIP: 0010:__list_del_clearprev include/linux/list.h:217 [inline]
+RIP: 0010:bq_flush_to_queue+0x46f/0x580 kernel/bpf/cpumap.c:740
+Code: 35 00 4d 8b 26 4d 8d 74 24 08 4c 89 f0 48 c1 e8 03 42 80 3c 38 00 74 08 4c 89 f7 e8 0b f2 35 00 49 89 1e 48 89 d8 48 c1 e8 03 <42> 80 3c 38 00 74 08 48 89 df e8 f2 f1 35 00 4c 89 23 48 8b 04 24
+RSP: 0018:ffffc90004207650 EFLAGS: 00010246
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: 0000000000000001 RSI: 0000000000000004 RDI: 00000000ffffffff
+RBP: ffff888030b0c400 R08: ffff888024b2802b R09: 1ffff11004965005
+R10: dffffc0000000000 R11: ffffed1004965006 R12: ffffc90003ad79e0
+R13: 0000000000000008 R14: ffffc90003ad79e8 R15: dffffc0000000000
+FS:  00007f6b36bed6c0(0000) GS:ffff888126d5e000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f6b36becf98 CR3: 000000003f6c6000 CR4: 00000000003526f0
+Call Trace:
+ <TASK>
+ __cpu_map_flush+0x5d/0xd0 kernel/bpf/cpumap.c:808
+ xdp_do_flush+0x13c/0x1d0 net/core/filter.c:4348
+ xdp_test_run_batch net/bpf/test_run.c:348 [inline]
+ bpf_test_run_xdp_live+0x154f/0x1b20 net/bpf/test_run.c:379
+ bpf_prog_test_run_xdp+0x7c0/0x10e0 net/bpf/test_run.c:1388
+ bpf_prog_test_run+0x2cd/0x340 kernel/bpf/syscall.c:4703
+ __sys_bpf+0x562/0x860 kernel/bpf/syscall.c:6182
+ __do_sys_bpf kernel/bpf/syscall.c:6274 [inline]
+ __se_sys_bpf kernel/bpf/syscall.c:6272 [inline]
+ __x64_sys_bpf+0x7c/0x90 kernel/bpf/syscall.c:6272
+ do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+ do_syscall_64+0xfa/0xf80 arch/x86/entry/syscall_64.c:94
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7f6b3759f749
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 a8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f6b36bed038 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
+RAX: ffffffffffffffda RBX: 00007f6b377f6090 RCX: 00007f6b3759f749
+RDX: 0000000000000050 RSI: 0000200000000000 RDI: 000000000000000a
+RBP: 00007f6b37623f91 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007f6b377f6128 R14: 00007f6b377f6090 R15: 00007ffda92d99b8
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:__list_del include/linux/list.h:204 [inline]
+RIP: 0010:__list_del_clearprev include/linux/list.h:217 [inline]
+RIP: 0010:bq_flush_to_queue+0x46f/0x580 kernel/bpf/cpumap.c:740
+Code: 35 00 4d 8b 26 4d 8d 74 24 08 4c 89 f0 48 c1 e8 03 42 80 3c 38 00 74 08 4c 89 f7 e8 0b f2 35 00 49 89 1e 48 89 d8 48 c1 e8 03 <42> 80 3c 38 00 74 08 48 89 df e8 f2 f1 35 00 4c 89 23 48 8b 04 24
+RSP: 0018:ffffc90004207650 EFLAGS: 00010246
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: 0000000000000001 RSI: 0000000000000004 RDI: 00000000ffffffff
+RBP: ffff888030b0c400 R08: ffff888024b2802b R09: 1ffff11004965005
+R10: dffffc0000000000 R11: ffffed1004965006 R12: ffffc90003ad79e0
+R13: 0000000000000008 R14: ffffc90003ad79e8 R15: dffffc0000000000
+FS:  00007f6b36bed6c0(0000) GS:ffff888126d5e000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f6b36becf98 CR3: 000000003f6c6000 CR4: 00000000003526f0
+----------------
+Code disassembly (best guess):
+   0:	35 00 4d 8b 26       	xor    $0x268b4d00,%eax
+   5:	4d 8d 74 24 08       	lea    0x8(%r12),%r14
+   a:	4c 89 f0             	mov    %r14,%rax
+   d:	48 c1 e8 03          	shr    $0x3,%rax
+  11:	42 80 3c 38 00       	cmpb   $0x0,(%rax,%r15,1)
+  16:	74 08                	je     0x20
+  18:	4c 89 f7             	mov    %r14,%rdi
+  1b:	e8 0b f2 35 00       	call   0x35f22b
+  20:	49 89 1e             	mov    %rbx,(%r14)
+  23:	48 89 d8             	mov    %rbx,%rax
+  26:	48 c1 e8 03          	shr    $0x3,%rax
+* 2a:	42 80 3c 38 00       	cmpb   $0x0,(%rax,%r15,1) <-- trapping instruction
+  2f:	74 08                	je     0x39
+  31:	48 89 df             	mov    %rbx,%rdi
+  34:	e8 f2 f1 35 00       	call   0x35f22b
+  39:	4c 89 23             	mov    %r12,(%rbx)
+  3c:	48 8b 04 24          	mov    (%rsp),%rax
 
 
->=20
->=20Implement a new bpf_psi_create_trigger() BPF kfunc, which allows
-> to create new PSI triggers and attach them to cgroups or be
-> system-wide.
->=20
->=20Created triggers will exist until the struct ops is loaded and
-> if they are attached to a cgroup until the cgroup exists.
->=20
->=20Due to a limitation of 5 arguments, the resource type and the "full"
-> bit are squeezed into a single u32.
->=20
->=20Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Hi Roman,
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
-I wrote an eBPF program attempting to use bpf_psi struct ops and
-bpf_psi_create_trigger to continuously receive memory-related PSI
-events, but I only received one event.
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
 
-Looking at the code implementation, when an event occurs:
-if (cmpxchg(&t->event, 0, 1) =3D=3D 0) {
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
 
-However, in eBPF there appears to be no way to call the equivalent
-of this code from psi_trigger_poll:
-if (cmpxchg(&t->event, 1, 0) =3D=3D 1)
-to reset the event back to 0.
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
 
-Would it be possible to add an additional BPF helper function to
-handle this? Without a way to acknowledge/reset the event flag,
-the trigger only fires once and cannot be reused for continuous
-monitoring.
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
 
-Best,
-Hui
-
-
-
-> ---
->  include/linux/cgroup.h | 4 ++
->  include/linux/psi.h | 6 +++
->  kernel/sched/bpf_psi.c | 94 ++++++++++++++++++++++++++++++++++++++++++
->  3 files changed, 104 insertions(+)
->=20
->=20diff --git a/include/linux/cgroup.h b/include/linux/cgroup.h
-> index 6ed477338b16..1a99da44999e 100644
-> --- a/include/linux/cgroup.h
-> +++ b/include/linux/cgroup.h
-> @@ -707,6 +707,10 @@ static inline bool task_under_cgroup_hierarchy(str=
-uct task_struct *task,
->=20=20
->=20 static inline void cgroup_path_from_kernfs_id(u64 id, char *buf, siz=
-e_t buflen)
->  {}
-> +static inline struct cgroup *cgroup_get_from_id(u64 id)
-> +{
-> + return NULL;
-> +}
->  #endif /* !CONFIG_CGROUPS */
->=20=20
->=20 #ifdef CONFIG_CGROUPS
-> diff --git a/include/linux/psi.h b/include/linux/psi.h
-> index 8178e998d94b..8ffe84cd8571 100644
-> --- a/include/linux/psi.h
-> +++ b/include/linux/psi.h
-> @@ -50,6 +50,12 @@ int psi_cgroup_alloc(struct cgroup *cgrp);
->  void psi_cgroup_free(struct cgroup *cgrp);
->  void cgroup_move_task(struct task_struct *p, struct css_set *to);
->  void psi_cgroup_restart(struct psi_group *group);
-> +
-> +#else
-> +static inline struct psi_group *cgroup_psi(struct cgroup *cgrp)
-> +{
-> + return &psi_system;
-> +}
->  #endif
->=20=20
->=20 #else /* CONFIG_PSI */
-> diff --git a/kernel/sched/bpf_psi.c b/kernel/sched/bpf_psi.c
-> index c383a20119a6..7974de56594f 100644
-> --- a/kernel/sched/bpf_psi.c
-> +++ b/kernel/sched/bpf_psi.c
-> @@ -8,6 +8,7 @@
->  #include <linux/bpf_psi.h>
->  #include <linux/cgroup-defs.h>
->=20=20
->=20+struct bpf_struct_ops bpf_psi_bpf_ops;
->  static struct workqueue_struct *bpf_psi_wq;
->=20=20
->=20 static DEFINE_MUTEX(bpf_psi_lock);
-> @@ -186,6 +187,92 @@ static const struct bpf_verifier_ops bpf_psi_verif=
-ier_ops =3D {
->  .is_valid_access =3D bpf_psi_ops_is_valid_access,
->  };
->=20=20
->=20+__bpf_kfunc_start_defs();
-> +
-> +/**
-> + * bpf_psi_create_trigger - Create a PSI trigger
-> + * @bpf_psi: bpf_psi struct to attach the trigger to
-> + * @cgroup_id: cgroup Id to attach the trigger; 0 for system-wide scop=
-e
-> + * @resource: resource to monitor (PSI_MEM, PSI_IO, etc) and the full =
-bit.
-> + * @threshold_us: threshold in us
-> + * @window_us: window in us
-> + *
-> + * Creates a PSI trigger and attached is to bpf_psi. The trigger will =
-be
-> + * active unless bpf struct ops is unloaded or the corresponding cgrou=
-p
-> + * is deleted.
-> + *
-> + * Resource's most significant bit encodes whether "some" or "full"
-> + * PSI state should be tracked.
-> + *
-> + * Returns 0 on success and the error code on failure.
-> + */
-> +__bpf_kfunc int bpf_psi_create_trigger(struct bpf_psi *bpf_psi,
-> + u64 cgroup_id, u32 resource,
-> + u32 threshold_us, u32 window_us)
-> +{
-> + enum psi_res res =3D resource & ~BPF_PSI_FULL;
-> + bool full =3D resource & BPF_PSI_FULL;
-> + struct psi_trigger_params params;
-> + struct cgroup *cgroup __maybe_unused =3D NULL;
-> + struct psi_group *group;
-> + struct psi_trigger *t;
-> + int ret =3D 0;
-> +
-> + if (res >=3D NR_PSI_RESOURCES)
-> + return -EINVAL;
-> +
-> + if (IS_ENABLED(CONFIG_CGROUPS) && cgroup_id) {
-> + cgroup =3D cgroup_get_from_id(cgroup_id);
-> + if (IS_ERR_OR_NULL(cgroup))
-> + return PTR_ERR(cgroup);
-> +
-> + group =3D cgroup_psi(cgroup);
-> + } else {
-> + group =3D &psi_system;
-> + }
-> +
-> + params.type =3D PSI_BPF;
-> + params.bpf_psi =3D bpf_psi;
-> + params.privileged =3D capable(CAP_SYS_RESOURCE);
-> + params.res =3D res;
-> + params.full =3D full;
-> + params.threshold_us =3D threshold_us;
-> + params.window_us =3D window_us;
-> +
-> + t =3D psi_trigger_create(group, &params);
-> + if (IS_ERR(t))
-> + ret =3D PTR_ERR(t);
-> + else
-> + t->cgroup_id =3D cgroup_id;
-> +
-> +#ifdef CONFIG_CGROUPS
-> + if (cgroup)
-> + cgroup_put(cgroup);
-> +#endif
-> +
-> + return ret;
-> +}
-> +__bpf_kfunc_end_defs();
-> +
-> +BTF_KFUNCS_START(bpf_psi_kfuncs)
-> +BTF_ID_FLAGS(func, bpf_psi_create_trigger, KF_TRUSTED_ARGS)
-> +BTF_KFUNCS_END(bpf_psi_kfuncs)
-> +
-> +static int bpf_psi_kfunc_filter(const struct bpf_prog *prog, u32 kfunc=
-_id)
-> +{
-> + if (btf_id_set8_contains(&bpf_psi_kfuncs, kfunc_id) &&
-> + prog->aux->st_ops !=3D &bpf_psi_bpf_ops)
-> + return -EACCES;
-> +
-> + return 0;
-> +}
-> +
-> +static const struct btf_kfunc_id_set bpf_psi_kfunc_set =3D {
-> + .owner =3D THIS_MODULE,
-> + .set =3D &bpf_psi_kfuncs,
-> + .filter =3D bpf_psi_kfunc_filter,
-> +};
-> +
->  static int bpf_psi_ops_reg(void *kdata, struct bpf_link *link)
->  {
->  struct bpf_psi_ops *ops =3D kdata;
-> @@ -287,6 +374,13 @@ static int __init bpf_psi_struct_ops_init(void)
->  if (!bpf_psi_wq)
->  return -ENOMEM;
->=20=20
->=20+ err =3D register_btf_kfunc_id_set(BPF_PROG_TYPE_STRUCT_OPS,
-> + &bpf_psi_kfunc_set);
-> + if (err) {
-> + pr_warn("error while registering bpf psi kfuncs: %d", err);
-> + goto err;
-> + }
-> +
->  err =3D register_bpf_struct_ops(&bpf_psi_bpf_ops, bpf_psi_ops);
->  if (err) {
->  pr_warn("error while registering bpf psi struct ops: %d", err);
-> --=20
->=202.51.0
->
+If you want to undo deduplication, reply with:
+#syz undup
