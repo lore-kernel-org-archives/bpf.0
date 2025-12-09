@@ -1,116 +1,94 @@
-Received: from smtp.mpi-sp.org (smtp.mpi-sp.org [141.5.46.40])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E95B25B311
-	for <bpf@vger.kernel.org>; Tue,  9 Dec 2025 16:20:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=141.5.46.40
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00CAF32E69C;
+	Tue,  9 Dec 2025 17:21:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765297263; cv=none; b=qoS7bWDetfHK3ix6hGmh+tQw5Fjw+zGns08Lfb5TNIEfHWfrjyvXQPrmx1gvLhJf7iYxOzA84CIuBlCLEPgmSnClrtEN51Z0kLYnF4fIcElZal/ovObzmcFlob/3qsb1J5rU9AAFAUGcYejcXvG/zWsYf8WEA+tapBgZd3DOsk0=
+	t=1765300913; cv=none; b=GaTcqqYlYJI+4LPZGEwJgX0IAsTxVi6l+/7QxlSBNSPOavj+CZ2wixcOLRqXab2mNjHETEyBXbsluEiq5O3yd81fX5KQdbHGx2ZUfKlJ7j2COfVaZ7bT9MkVBdz0nbdHLZQ+JpV5unXTbMR+mJPQgMt4HN6qhsTiT1sNM/aRhCw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765297263; c=relaxed/simple;
-	bh=gvQI3CfhhF1QeqlonSSajuUz18BnvU/fD1J5wqS7K34=;
-	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
-	 Message-ID:Content-Type; b=IQshI9XIgwo/EG9pcorHpz9338gjLlmxNlYqHlaCVJI8gvTKYK9iaaXecStbP6eUQqFXaXqP6Z+2xC0AMX4XKvuRjXSHFys1nG+q6bgM4qFAZiS9oLbPCy2jc5s3CwUHIw0QZqTT2uy04k+KjmIEjnufrEBd+rVoEs5hVBLy4ig=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mpi-sp.org; spf=pass smtp.mailfrom=mpi-sp.org; dkim=pass (4096-bit key) header.d=mpi-sp.org header.i=@mpi-sp.org header.b=rHx1PWGE; dkim=pass (4096-bit key) header.d=mpi-sp.org header.i=@mpi-sp.org header.b=rHx1PWGE; arc=none smtp.client-ip=141.5.46.40
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mpi-sp.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mpi-sp.org
+	s=arc-20240116; t=1765300913; c=relaxed/simple;
+	bh=4D7MGFxeRJTDY1I7TVqNGOxjKxHrYX8Xu/NQUp33yQY=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=Oe4fkSenS4PIzKTSb2Gkz1cRIqcRZpIGr77TjfmkYn1924SCgyHmutcejW8t3mFhUt+d0uSmocf1npBiZOzF0ucSUcgDG8qqt78bDHLLpNuciVMv3j9F2R1hn0oh/oeMPotPuFqXKkQzPemtpLBXwHCty9YSiSBS4AjJHlzSIY0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZuUNgvto; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=mpi-sp.org header.i=@mpi-sp.org header.b="rHx1PWGE";
-	dkim=pass (4096-bit key) header.d=mpi-sp.org header.i=@mpi-sp.org header.b="rHx1PWGE"
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mpi-sp.org; s=202211;
-	t=1765296902; bh=gvQI3CfhhF1QeqlonSSajuUz18BnvU/fD1J5wqS7K34=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=rHx1PWGEnEJmMPFpVS7P6RxbfAfKmRIkJ00/6VRbNZTaacgavgXESieIOUYtSY4No
-	 3SxMl9/BdUIvJ4Eu4WPewXbCdy2lx7oYp7FpPcBTwacfMNBQkChyjVwCgT4rNUo7CF
-	 e85SAWpP1oNUmY/1UkM+nJvKB18GAWxrBJ+shZMoxXxirv4U/ESwIngGEEJEHmSCdL
-	 2Y1iRJIedbOM1ZB0Orix/V37jzfa06BoYTVswnhFx1y6uNRcep14L2CxWK7wgMNLQm
-	 1FPxtRvZoIS230EdFfvJ0uEDOzFv1ez4pgDgxpkCINn81SNvCy+g/F6KzJQYU9weiy
-	 N0243BOhwoZzYnsGpXni6F7X5grSFDYFvP/AYeXvR0braSoIF/qa9Z2+g+gceNmN24
-	 VE1yZguuNNPZ/O4cjozzC+5RGBxRKyyFFdIWvKult5XPthlbcisMJUL/rzsTDSfqH0
-	 oKKo5i0HxnaGNXjOEsNFFn2r2WRMGNU++oz6Dn9aad7ppCt5BFjrI9rPbarZTrUo5/
-	 7NRRfx79RdsmnE9mj4LjfmwdPOktK5AUR147vwju8HHliuZNBDWIW7s/YY3Gx+pHV3
-	 wKrr+tdlUkDGG4f0Tj5D4UbhaKIoAw03qXih8ttROHvyiQlRMJ+Wj6Rzlv7L8Gm4KM
-	 GrdTD90Ob0gC8+AbB6vpF+iw=
-Received: from smtp.mpi-sp.org (localhost [127.0.0.1])
-	by smtp.mpi-sp.org (Postfix) with ESMTP id 2979E8801E9;
-	Tue,  9 Dec 2025 17:15:02 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mpi-sp.org; s=202211;
-	t=1765296902; bh=gvQI3CfhhF1QeqlonSSajuUz18BnvU/fD1J5wqS7K34=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=rHx1PWGEnEJmMPFpVS7P6RxbfAfKmRIkJ00/6VRbNZTaacgavgXESieIOUYtSY4No
-	 3SxMl9/BdUIvJ4Eu4WPewXbCdy2lx7oYp7FpPcBTwacfMNBQkChyjVwCgT4rNUo7CF
-	 e85SAWpP1oNUmY/1UkM+nJvKB18GAWxrBJ+shZMoxXxirv4U/ESwIngGEEJEHmSCdL
-	 2Y1iRJIedbOM1ZB0Orix/V37jzfa06BoYTVswnhFx1y6uNRcep14L2CxWK7wgMNLQm
-	 1FPxtRvZoIS230EdFfvJ0uEDOzFv1ez4pgDgxpkCINn81SNvCy+g/F6KzJQYU9weiy
-	 N0243BOhwoZzYnsGpXni6F7X5grSFDYFvP/AYeXvR0braSoIF/qa9Z2+g+gceNmN24
-	 VE1yZguuNNPZ/O4cjozzC+5RGBxRKyyFFdIWvKult5XPthlbcisMJUL/rzsTDSfqH0
-	 oKKo5i0HxnaGNXjOEsNFFn2r2WRMGNU++oz6Dn9aad7ppCt5BFjrI9rPbarZTrUo5/
-	 7NRRfx79RdsmnE9mj4LjfmwdPOktK5AUR147vwju8HHliuZNBDWIW7s/YY3Gx+pHV3
-	 wKrr+tdlUkDGG4f0Tj5D4UbhaKIoAw03qXih8ttROHvyiQlRMJ+Wj6Rzlv7L8Gm4KM
-	 GrdTD90Ob0gC8+AbB6vpF+iw=
-Received: from imap.mpi-sp.org (imap.mpi-sp.org [10.100.1.36])
-	by smtp.mpi-sp.org (Postfix) with ESMTPSA id E0D118801DA;
-	Tue,  9 Dec 2025 17:15:01 +0100 (CET)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZuUNgvto"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2988C4CEF5;
+	Tue,  9 Dec 2025 17:21:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1765300912;
+	bh=4D7MGFxeRJTDY1I7TVqNGOxjKxHrYX8Xu/NQUp33yQY=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=ZuUNgvto237oQlEXMdNAwfCle3hrlKfTdWltwxprsJTDwDSOdfrCe6Lc0w70aYteg
+	 USDyX2OxNMDGgtWaUvicOUoeIciT2t7tAOw3WDlhOMzTKJeRy4m0i+RWtaUBFa7E/C
+	 Fh64065DCj12G8NmPeComkTbsyqVXopIMgdcUxuhBpB7h2CHxjNtePOG2zHBH1ffFn
+	 jYf9fNs4YEVS13NGMzinskDsNMCoWsCgmTtfmDYOQcD1Rw43ZeZ7C07/EiBlJbd9QX
+	 ILeieRrStbLL0RC69ydyLES/kPMYSQcagtEyRshqmJjUXuvmVrcEofuvPcdhc/bh6r
+	 wr318dPlMkLHw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id F2AFB3808200;
+	Tue,  9 Dec 2025 17:18:48 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Tue, 09 Dec 2025 17:15:01 +0100
-From: "syeda-mahnur.asif" <syeda-mahnur.asif@mpi-sp.org>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org, daniel@iogearbox.net
-Subject: Re: Sanitizer flags an eBPF bug
-In-Reply-To: <da6b0f1c28c53e9e39ce3e949b0885c2@mpi-sp.org>
-References: <cd5e012f7d365821707c9788bf382e3b@mpi-sp.org>
- <da6b0f1c28c53e9e39ce3e949b0885c2@mpi-sp.org>
-Message-ID: <c032d4a0d93986ff9c4b20396b53af35@mpi-sp.org>
-X-Sender: syeda-mahnur.asif@mpi-sp.org
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: ClamAV using ClamSMTP
+Content-Transfer-Encoding: 8bit
+Subject: Re: [f2fs-dev] [PATCH V3 0/6] block: ignore __blkdev_issue_discard()
+ ret value
+From: patchwork-bot+f2fs@kernel.org
+Message-Id: 
+ <176530072781.4018985.3920629164173659180.git-patchwork-notify@kernel.org>
+Date: Tue, 09 Dec 2025 17:18:47 +0000
+References: <20251124234806.75216-1-ckulkarnilinux@gmail.com>
+In-Reply-To: <20251124234806.75216-1-ckulkarnilinux@gmail.com>
+To: Chaitanya Kulkarni <ckulkarnilinux@gmail.com>
+Cc: axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org, mpatocka@redhat.com,
+ song@kernel.org, yukuai@fnnas.com, hch@lst.de, sagi@grimberg.me,
+ kch@nvidia.com, jaegeuk@kernel.org, chao@kernel.org, cem@kernel.org,
+ dm-devel@lists.linux.dev, linux-raid@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
+ linux-f2fs-devel@lists.sourceforge.net, linux-block@vger.kernel.org,
+ bpf@vger.kernel.org, linux-xfs@vger.kernel.org
 
-Hi,
+Hello:
 
-I would like to disclose this at a conference in a few weeks, and it 
-would be great if there is any confirmation / update on this?
+This series was applied to jaegeuk/f2fs.git (dev)
+by Jens Axboe <axboe@kernel.dk>:
 
-Best regards,
-Mahnur
-
-On 2025-11-27 14:59, syeda-mahnur.asif wrote:
+On Mon, 24 Nov 2025 15:48:00 -0800 you wrote:
 > Hi,
 > 
-> Just wondering if there is any update on this?
+> __blkdev_issue_discard() only returns value 0, that makes post call
+> error checking code dead. This patch series revmoes this dead code at
+> all the call sites and adjust the callers.
 > 
-> Best regards,
-> Mahnur
+> Please note that it doesn't change the return type of the function from
+> int to void in this series, it will be done once this series gets merged
+> smoothly.
 > 
-> On 2025-11-03 15:02, syeda-mahnur.asif wrote:
->> Hi,
->> 
->> I've been playing around with eBPF and have sanitizers enabled, a 
->> "BUG: Invalid wait context" is thrown in some specific instances:
->> 1. The eBPF program is of Tracing type
->> 2. Ringbuf helper functions are used.
->> 3. The program is attached to perf_event related symbols in the 
->> kernel.
->> 
->> I'm attaching a folder with two instances of such programs and the 
->> info dumped by the sanitizer. The attached files for each instance 
->> include:
->> 1. bpf_prog(x).c
->> 2. bpf_prog(x).o - object file that is compiled with "clang-16 -O2 -g 
->> -target bpf -c bpf_progx.c -o bpf_progx.o" and loaded by libbpf (v1.6)
->> 3. trig(x).c - File in C that is compiled as a binary and when 
->> executed causes the bpf program to run
->> 4. dump(x).txt - Sanitizer dump
->> 5. vmlinux.h - Specific vmlinux file used in compiling the ebpf 
->> program object files
->> 
->> Happy to provide any other additional info that might be relevant.
->> 
->> Best regards,
->> Mahnur
+> [...]
+
+Here is the summary with links:
+  - [f2fs-dev,V3,1/6] block: ignore discard return value
+    https://git.kernel.org/jaegeuk/f2fs/c/7d09a8e25121
+  - [f2fs-dev,V3,2/6] md: ignore discard return value
+    (no matching commit)
+  - [f2fs-dev,V3,3/6] dm: ignore discard return value
+    (no matching commit)
+  - [f2fs-dev,V3,4/6] nvmet: ignore discard return value
+    (no matching commit)
+  - [f2fs-dev,V3,5/6] f2fs: ignore discard return value
+    (no matching commit)
+  - [f2fs-dev,V3,6/6] xfs: ignore discard return value
+    (no matching commit)
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
