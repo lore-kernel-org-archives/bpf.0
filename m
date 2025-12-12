@@ -1,113 +1,126 @@
-Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com [209.85.210.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50051282EB
-	for <bpf@vger.kernel.org>; Fri, 12 Dec 2025 09:01:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AAF82E03F1;
+	Fri, 12 Dec 2025 09:11:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765530086; cv=none; b=J+/h0Tjk7s7n9eF7fSFuYx4lvfAxZUSNVnW6Q3N1YmZ5LCGVisOU2Ord9MVTa7QmIyWlsBgeW86z8Dm0uUV5EOMfmhO2MPm8WfgJOR6Gd0iySB1xWNyPlQmdCRBlAOJk/yt3A0XiS0chcJfagF77P90L0JuOi1Nc1eERd/c0VrE=
+	t=1765530678; cv=none; b=OWmmZcTXXKlOivJwe1JWZgQAEYuLUG32oE+ChQ0AoMmfR0Ba44KjOGQi6iyvNLJznuCsPvxcWmQfdnPSQ4MMF7S85egneV7Weu8X3XWCKAyTTcnl5mKA4IUwU8UvE/U84u8oPmmgIVe2UDY18K+5JdP+zm5lGMwFjbI9gEI2ljc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765530086; c=relaxed/simple;
-	bh=JKozA+ihNq4x4Z9RrSdTKWeKEiQ1xyKxK4t4W67sS6Y=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=AyUzLm+L8o46JIiLajFYkqVPopleElVu5kZZFRLAYKdbbwjsJsWwM6YyMpzDvxwM8GVdRjzx0lZttODNUbCvNObIIx7qVeQavG0JbLf5L90/6K/GsokPLzUTT1s8rwrzO1iFe0s+HlFrGnx0gMRjAJcOFvia5QUsmZBXpqSNWvc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EZIAvXGp; arc=none smtp.client-ip=209.85.210.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EZIAvXGp"
-Received: by mail-ot1-f51.google.com with SMTP id 46e09a7af769-7c7503c73b4so548709a34.3
-        for <bpf@vger.kernel.org>; Fri, 12 Dec 2025 01:01:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1765530084; x=1766134884; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=JKozA+ihNq4x4Z9RrSdTKWeKEiQ1xyKxK4t4W67sS6Y=;
-        b=EZIAvXGpEbKmuutCyOXbkCuDLYOm1e26odMeEezMdaEaIcD1tvdWK6e35upU50QoWU
-         DxO/rvrMYkxcUeOy2bqhL6Yb5kvScfJeyOks9lKBDhe8d8s9kcNjtE6dr7xKDA7ELZQL
-         NWRDNXmnEjx5gwyKq7bZprh8+n/bTJr8Y/lS0FT6Ct3lktLjxCxNOuoNViXt8E7SVOBA
-         V5/9Qimb5niNxRMy5m0D7kcz3qc3yaRFrPpMgY6VHko5zXGmlsd9yz7SFpo6FADcRx1q
-         M59r5kIVV0YH2+UZZEhFcD5yIbPEVuojZrW+fP3+tSMR9zt2aqhOcp0uwCitPW5bV+RT
-         U6lQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765530084; x=1766134884;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JKozA+ihNq4x4Z9RrSdTKWeKEiQ1xyKxK4t4W67sS6Y=;
-        b=cCHBdapuTnCGIsRb2/axMEAw9XFWlfy1tCyfNPxKmFWCE4og+38jew8URFqiLz+Gjv
-         OOhhg+NpNBwGjH9oONNNGSGvg8sufZybmIEaC+UkHRmFsm5HT9S02aechs3PvjdcAQYX
-         jp7j0TJnNZQk7ire03UCrgRNxGB/aHYKmEeETg5PZQfiMy+d1qOwweNJTgCNO+WiKnKG
-         mbLUlWKJdecivrh2eeNCP7moyOE7YMm87DAaUKMzevWZf2704a0exno4n+EnSA7nmnQ/
-         uN4WdxUiP3va7HIYsMSDW2DVZ57LeuWrRKtn0YTjoChd6m+UrM9CV+AKDJb7Qrz/jZno
-         WAiQ==
-X-Gm-Message-State: AOJu0Ywp1p1BSglK33BZSdYoqhvjNPXEzpt5tv7ltGDRlqQW0kzbPaG8
-	lTIP4dz0gO9K6d673enp1MeJY4V8VcHPLScirpAZ9Gbrv+Tej/waO1M8pPZPLArt
-X-Gm-Gg: AY/fxX6VZng8IiKPIFN+U3oP5oIlySHX6PhcrQk+0Hg6MJUnWRclAV0i5h/d8g/dGCw
-	qabIalnm5H+LWufBuIRjhTNdaQ8TUDYtBTXTVnujmvM2gvXZZPsl3uTQGObtArS1atiKEd9VGI9
-	fGlzZtc6LqUiGnx/U2X5tiqj2xmp9WuJCxzoud5SPhPlwmAEQF1btCIf8CSl5IyoGNz6RcQC6Bw
-	XCfMe0QcYcUrpHLi6/6mLFsbqVv+NkOwBtda3UQFx8tMJFa9lPyE7kPfsXlj+X3PiGZVbsFgz5M
-	5GpeeDYHddgEqZWt4BB/vATezvPutFdyp8MkaO4EL4uckwoZvb9UB9wmDsRCEUEB7CBOJmdRbJ0
-	YSnSXyPgULrVOSCuHSxEWFi4Jdw56MrkQeRUAUp7dCTnyUU3Gnw9uUZW46q4moRI0c0favsoV8a
-	RC9VUrWfUp96ICsJ8NTL1QYuVPr6dJxU49bhyZgHLu459BPm9oc5Rrgg==
-X-Google-Smtp-Source: AGHT+IH321PbFRiMaWCDNl4lSGVuS0AwL6lMd2u2Ei57eaf0ISIe5GTqG0pgY602LItAKZZCrdasEQ==
-X-Received: by 2002:a17:902:f686:b0:295:9a46:a1d0 with SMTP id d9443c01a7336-29f23cd7cebmr12297065ad.45.1765523389898;
-        Thu, 11 Dec 2025 23:09:49 -0800 (PST)
-Received: from [10.200.2.32] (fs98a57d9c.tkyc007.ap.nuro.jp. [152.165.125.156])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29f2e40765csm5138155ad.0.2025.12.11.23.09.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Dec 2025 23:09:49 -0800 (PST)
-Message-ID: <e509afe94b4492d64e27756f4db773b7a179e994.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v3 4/6] lib/Kconfig.debug: Set the minimum
- required pahole version to v1.22
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Ihor Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov
- <ast@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
- <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>,  Song Liu
- <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend	
- <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav
- Fomichev	 <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa
- <jolsa@kernel.org>,  Andrew Morton <akpm@linux-foundation.org>, Nathan
- Chancellor <nathan@kernel.org>, Nicolas Schier	 <nsc@kernel.org>, Tejun Heo
- <tj@kernel.org>, David Vernet <void@manifault.com>,  Andrea Righi
- <arighi@nvidia.com>, Changwoo Min <changwoo@igalia.com>, Shuah Khan
- <shuah@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt	 <justinstitt@google.com>,
- Alan Maguire <alan.maguire@oracle.com>, Donglin Peng	
- <dolinux.peng@gmail.com>
-Cc: bpf@vger.kernel.org, dwarves@vger.kernel.org,
- linux-kernel@vger.kernel.org, 	linux-kbuild@vger.kernel.org
-Date: Fri, 12 Dec 2025 16:09:41 +0900
-In-Reply-To: <20251205223046.4155870-5-ihor.solodrai@linux.dev>
-References: <20251205223046.4155870-1-ihor.solodrai@linux.dev>
-		 <20251205223046.4155870-5-ihor.solodrai@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2 (3.56.2-2.fc42) 
+	s=arc-20240116; t=1765530678; c=relaxed/simple;
+	bh=+478+1MlJJu/eDrwiiRW51x+lhF72Jrguoce3vARQR4=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=Ux4iwQGD1jEKwuM8I3/M+4qj07XRq1TR7SDkxijV6Ornajs7E3c1ko8emlTFgjuJ5SEOb9k2C1MGYvr13bxUAUUPCy/Tnw3rVBqglLzTpTDZNBnnG+adNAxod5UMsXtBNTHeXTHxZodUSYdz6VcRPoc/081sRkGGrFbCLLwIVnk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 7ed61ceed73a11f0a38c85956e01ac42-20251212
+X-CTIC-Tags:
+	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NO_NAME, HR_CTE_8B, HR_CTT_TXT
+	HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME, HR_SJ_DIGIT_LEN
+	HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM, HR_SJ_PHRASE
+	HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT, HR_TO_NO_NAME
+	IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED, SA_EXISTED, SN_EXISTED
+	SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS, CIE_GOOD, CIE_GOOD_SPF
+	GTI_FG_BS, GTI_RG_INFO, GTI_C_BU, AMN_GOOD, ABX_MISS_RDNS
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.6,REQID:a56b5fad-0f10-449b-a93c-3d38e8504431,IP:10,U
+	RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+	N:release,TS:0
+X-CID-INFO: VERSION:1.3.6,REQID:a56b5fad-0f10-449b-a93c-3d38e8504431,IP:10,URL
+	:0,TC:0,Content:-5,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:a9d874c,CLOUDID:6aa8bc4968dfe35c500828456c5666b7,BulkI
+	D:2512121711087OH12THU,BulkQuantity:0,Recheck:0,SF:17|19|38|66|78|102|127|
+	850|898,TC:nil,Content:0|15|50,EDM:-3,IP:-2,URL:99|1,File:nil,RT:nil,Bulk:
+	nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,B
+	RE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,TF_CID_SPAM_ULS
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: 7ed61ceed73a11f0a38c85956e01ac42-20251212
+X-User: duanchenghao@kylinos.cn
+Received: from localhost.localdomain [(223.70.159.239)] by mailgw.kylinos.cn
+	(envelope-from <duanchenghao@kylinos.cn>)
+	(Generic MTA)
+	with ESMTP id 1334467834; Fri, 12 Dec 2025 17:11:08 +0800
+From: Chenghao Duan <duanchenghao@kylinos.cn>
+To: yangtiezhu@loongson.cn,
+	hengqi.chen@gmail.com,
+	chenhuacai@kernel.org
+Cc: kernel@xen0n.name,
+	zhangtianyang@loongson.cn,
+	masahiroy@kernel.org,
+	linux-kernel@vger.kernel.org,
+	loongarch@lists.linux.dev,
+	bpf@vger.kernel.org,
+	duanchenghao@kylinos.cn,
+	youling.tang@linux.dev,
+	jianghaoran@kylinos.cn,
+	vincent.mc.li@gmail.com
+Subject: [PATCH v2 0/4] Fix the failure issue of the module_attach test case
+Date: Fri, 12 Dec 2025 17:10:59 +0800
+Message-Id: <20251212091103.1247753-1-duanchenghao@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Fri, 2025-12-05 at 14:30 -0800, Ihor Solodrai wrote:
-> Subsequent patches in the series change vmlinux linking scripts to
-> unconditionally pass --btf_encode_detached to pahole, which was
-> introduced in v1.22 [1][2].
->=20
-> This change allows to remove PAHOLE_HAS_SPLIT_BTF Kconfig option and
-> other checks of older pahole versions.
->=20
-> [1] https://github.com/acmel/dwarves/releases/tag/v1.22
-> [2] https://lore.kernel.org/bpf/cbafbf4e-9073-4383-8ee6-1353f9e5869c@orac=
-le.com/
->=20
-> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
-> ---
+V2:
+Referring to Tiezhu's suggestion, split the v1 patch titled
+"LoongArch: Modify the jump logic of the trampoline" into three parts:
+ (1) ftrace code
+ (2) sample test
+ (3) bpf code
+The code logic and implementation remain unchanged.
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+--------------------------Changelog------------------------------------
+v1:
+links: https://lore.kernel.org/all/20251209093405.1309253-1-duanchenghao@kylinos.cn/
+The following test cases under the tools/testing/selftests/bpf/
+directory have passed the test：
 
-[...]
+./test_progs -t module_attach
+./test_progs -t module_fentry_shadow
+./test_progs -t subprogs
+./test_progs -t subprogs_extable
+./test_progs -t tailcalls
+./test_progs -t struct_ops -d struct_ops_multi_pages
+./test_progs -t fexit_bpf2bpf
+./test_progs -t fexit_stress
+./test_progs -t module_fentry_shadow
+./test_progs -t fentry_test/fentry
+./test_progs -t fexit_test/fexit
+./test_progs -t fentry_fexit
+./test_progs -t modify_return
+./test_progs -t fexit_sleep
+./test_progs -t test_overhead
+./test_progs -t trampoline_count
+
+Chenghao Duan (4):
+  LoongArch: ftrace: Refactor register restoration in
+    ftrace_common_return
+  ftrace: samples: Adjust register stack restore order in direct call
+    trampolines
+  LoongArch: BPF: Enhance trampoline support for kernel and module
+    tracing
+  LoongArch: BPF: Enable BPF exception fixup for specific ADE subcode
+
+ arch/loongarch/kernel/mcount_dyn.S          | 14 +++++---
+ arch/loongarch/kernel/traps.c               |  8 ++++-
+ arch/loongarch/net/bpf_jit.c                | 38 +++++++++++++++------
+ samples/ftrace/ftrace-direct-modify.c       |  8 ++---
+ samples/ftrace/ftrace-direct-multi-modify.c |  8 ++---
+ samples/ftrace/ftrace-direct-multi.c        |  4 +--
+ samples/ftrace/ftrace-direct-too.c          |  4 +--
+ samples/ftrace/ftrace-direct.c              |  4 +--
+ 8 files changed, 58 insertions(+), 30 deletions(-)
+
+-- 
+2.25.1
 
