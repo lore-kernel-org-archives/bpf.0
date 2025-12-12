@@ -1,206 +1,234 @@
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68FFA30DEB2;
-	Fri, 12 Dec 2025 09:11:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30ECE311973;
+	Fri, 12 Dec 2025 09:22:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765530704; cv=none; b=ftekZMIOZf1iyNBKQOmoiH4WdkmLH4fg1dx3ysPLVJCoK1Nc2Nhzw36Ynuafqc7xjrt3jaK2kbNtm/7X79wy9BCXwzwTimF12cl5/h8ZS6FJW0fPXJfibEzhWXqqTh+fQlz4qA40qc+d4GkdtYmdf3a0gHLV7pj9ru1JViWVR5g=
+	t=1765531331; cv=none; b=fqE5wOxLb7r05zVooTVTaJg0b1wYmVh0KzMVbl8I/ybzkkZ2DyfA4OyxLGcGAUJu/LRuzF5CbsgBZudFXqRwS3BWa5a6W8vvTEJ/+g4ZNuoD7ESFOgV8JQUQ9w0AfgumGqnDQr9S8yv9NZNLB0+NzFCpLgZVxf/IC/has38DJ7I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765530704; c=relaxed/simple;
-	bh=pkliUrzEeUU6sVjnmAseowuvxhsqVM8s2e/pKg8RqRs=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=gH1F1Yfur79O8RnWexxcyefZKO7FGq1oPkz6rGwbvr/Gkhr49wxRUdK4589wycyffhGvHzWr/SZ7nIyww9ZjXOEvw8k4KZZgcxs2WO//kcq7OK13jMbdts31PA/kXwkxZMkwNqTRpuYQwFbxo3RH6KHOEes6SnhFbhRWmD0U0ZM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 8d732b5cd73a11f0a38c85956e01ac42-20251212
-X-CTIC-Tags:
-	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NO_NAME, HR_CTE_8B, HR_CTT_MISS
-	HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME, HR_SJ_DIGIT_LEN
-	HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM, HR_SJ_PHRASE
-	HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT, HR_TO_NO_NAME
-	IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED, SA_EXISTED, SN_EXISTED
-	SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.6,REQID:9164bdee-4e35-4824-8d6c-52da678fe158,IP:10,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:5
-X-CID-INFO: VERSION:1.3.6,REQID:9164bdee-4e35-4824-8d6c-52da678fe158,IP:10,URL
-	:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
-	elease,TS:5
-X-CID-META: VersionHash:a9d874c,CLOUDID:5e16e23be3cc20cfdcd1ae7847815dd2,BulkI
-	D:2512121711350DZ09CJT,BulkQuantity:0,Recheck:0,SF:17|19|38|66|78|81|82|10
-	2|127|850|898,TC:nil,Content:0|15|50,EDM:-3,IP:-2,URL:0,File:nil,RT:nil,Bu
-	lk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:
-	0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 8d732b5cd73a11f0a38c85956e01ac42-20251212
-X-User: duanchenghao@kylinos.cn
-Received: from localhost.localdomain [(223.70.159.239)] by mailgw.kylinos.cn
-	(envelope-from <duanchenghao@kylinos.cn>)
-	(Generic MTA)
-	with ESMTP id 125336568; Fri, 12 Dec 2025 17:11:32 +0800
-From: Chenghao Duan <duanchenghao@kylinos.cn>
-To: yangtiezhu@loongson.cn,
-	hengqi.chen@gmail.com,
-	chenhuacai@kernel.org
-Cc: kernel@xen0n.name,
-	zhangtianyang@loongson.cn,
-	masahiroy@kernel.org,
-	linux-kernel@vger.kernel.org,
-	loongarch@lists.linux.dev,
-	bpf@vger.kernel.org,
-	duanchenghao@kylinos.cn,
-	youling.tang@linux.dev,
-	jianghaoran@kylinos.cn,
-	vincent.mc.li@gmail.com
-Subject: [PATCH v2 3/4] LoongArch: BPF: Enhance trampoline support for kernel and module tracing
-Date: Fri, 12 Dec 2025 17:11:02 +0800
-Message-Id: <20251212091103.1247753-4-duanchenghao@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20251212091103.1247753-1-duanchenghao@kylinos.cn>
-References: <20251212091103.1247753-1-duanchenghao@kylinos.cn>
+	s=arc-20240116; t=1765531331; c=relaxed/simple;
+	bh=G4/Ro5h/dXWSgGT4bi8LaimRNYvzCb1QNsi4W/ft1OM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=u0VD1miETHZV6YhLtBroEd6tSNzn3EV5Gwj0DJphHpFM9moGYzKceb+MARgF9+BskAmN3n7qfheUpv5arbt0uwlLB5QsRLebxrQjICfuEKd2EN4DNBbqEfiCWXRr7pHuqhYjYDFI1oKP0QXgk+7KKeDHiUjtHXw+aiEgJMf6ZKo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=GLV1uZB0; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="GLV1uZB0"
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5BC92JKO022802;
+	Fri, 12 Dec 2025 09:21:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=1SVc7R
+	vjSkKvbeeSy9JkHiRgrtVWX/MI2JfZ5mhQsHM=; b=GLV1uZB063h2nQkRdH909x
+	cTkKipDeehdUcjcKGosyWCnUtzFaLW1brhgVI/mMGZ2HBuLbry/Kka3d0B4CciGQ
+	66sDRrdItBK9Ek/+d0LIQyj9xi40iCji2aBulSfU+okbX3Z5bFn3LFv9QZbBcuNq
+	c4GPp/8F9RNG+9mhNplXfnhe6nRfSHmhLfL4xdm1PO9pNQspRmEBdDp/EMivnnyd
+	H9KF+k1YftPqWbvvQnwTHfJNpErZ1AloKL5cBbmq5s/qwNJGhl7r/j9GqZdcU6Nt
+	7J6kt9/FtLi+MrdK4+OzanOih/X4A8MdLjOrxBE9eGsToIwz5EG67dN2mezD55zw
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4av9ww3v0k-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 12 Dec 2025 09:21:45 +0000 (GMT)
+Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 5BC9FG02018648;
+	Fri, 12 Dec 2025 09:21:45 GMT
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4av9ww3v0f-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 12 Dec 2025 09:21:45 +0000 (GMT)
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5BC6bscd008391;
+	Fri, 12 Dec 2025 09:21:44 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4avytnb461-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 12 Dec 2025 09:21:44 +0000
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 5BC9LecK42598670
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 12 Dec 2025 09:21:40 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id EEA702004D;
+	Fri, 12 Dec 2025 09:21:39 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 81E4020040;
+	Fri, 12 Dec 2025 09:21:38 +0000 (GMT)
+Received: from [9.111.169.84] (unknown [9.111.169.84])
+	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Fri, 12 Dec 2025 09:21:38 +0000 (GMT)
+Message-ID: <e38c0be1-52af-49a0-8bbc-1148ad3cc32e@linux.ibm.com>
+Date: Fri, 12 Dec 2025 10:21:38 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH v3 17/17] s390/unwind_user/fp: Enable back chain
+ unwinding of user space
+To: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linux-s390@vger.kernel.org, bpf@vger.kernel.org, x86@kernel.org,
+        Steven Rostedt <rostedt@kernel.org>
+Cc: Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Indu Bhagat <indu.bhagat@oracle.com>,
+        "Jose E. Marchesi" <jemarch@gnu.org>,
+        Beau Belgrave <beaub@linux.microsoft.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Florian Weimer <fweimer@redhat.com>, Kees Cook <kees@kernel.org>,
+        "Carlos O'Donell" <codonell@redhat.com>, Sam James <sam@gentoo.org>,
+        Dylan Hatch <dylanbhatch@google.com>
+References: <20251208171559.2029709-1-jremus@linux.ibm.com>
+ <20251208171559.2029709-18-jremus@linux.ibm.com>
+Content-Language: en-US
+From: Jens Remus <jremus@linux.ibm.com>
+Organization: IBM Deutschland Research & Development GmbH
+In-Reply-To: <20251208171559.2029709-18-jremus@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: rDt31-Fuxu1pHN2xDfNuEfS8dlGf87xF
+X-Proofpoint-ORIG-GUID: k-yP8sNeYnLD5LApFVd7kYBCz2H_w0ye
+X-Authority-Analysis: v=2.4 cv=AdS83nXG c=1 sm=1 tr=0 ts=693bdea9 cx=c_pps
+ a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
+ a=IkcTkHD0fZMA:10 a=wP3pNCr1ah4A:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=VnNF1IyMAAAA:8 a=fMs-5SPQQjTgPQFwRbIA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjA2MDAwMCBTYWx0ZWRfX4c9yzRJsDN42
+ DlLvmi1NfoNTQqS3/EBrFWyYMHUOtEeZefS7FiMSrxjNBXUAiLC1i8wjUeV1Afeknakgy15aik6
+ 5Ad6iK0+6hT92W7DdYOCWOPS/lhu+gPyKMsC0gdVjdS8N1lTPTvZB0QhWGXf7SKnEBGWseZAn5N
+ xDTY2yvqL909dItjqM/Y2UyLuTl3ExBperl6clM9VcH6k5sdQOHe79bha8u4iatWulKPXdg6hg9
+ +SRd/RZNXdfk3p/AeiagwCHisSiENN5XAlu/8W0mVMEUAj/gsUWwT2ho1yfNPJeja152dt0cst6
+ uox36ag20AXgddYPV8aakcmuMJC3SzRRgMKPrRVW3moFXm5cioXa3gpCsyKJlE2uOGwtR7WvauD
+ QepDFf9f26HRZhxQJ27LuNAV+kDnOA==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-12-12_02,2025-12-11_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ suspectscore=0 adultscore=0 priorityscore=1501 spamscore=0 phishscore=0
+ lowpriorityscore=0 bulkscore=0 clxscore=1015 malwarescore=0 impostorscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2510240000 definitions=main-2512060000
 
-This patch addresses two main issues in the LoongArch BPF trampoline
-implementation:
+On 12/8/2025 6:15 PM, Jens Remus wrote:
 
-1. BPF-to-BPF call handling:
- - Modify the build_prologue function to ensure that the value of the
- return address register ra is saved to t0 before entering the
- trampoline operation.
- - This ensures that the return address handling logic is accurate and
- error-free when a BPF program calls another BPF program.
+...
 
-2. Enable Module Function Tracing Support:
- - Remove the previous restrictions that blocked the tracing of kernel
- module functions.
- - Fix the issue that previously caused kernel lockups when attempting
- to trace module functions
+> Leverage the unwind user fp infrastructure to enable unwinding of user
+> space using back chain.  Enable HAVE_UNWIND_USER_FP and provide a s390-
+> specific implementation of unwind_user_fp_get_frame(), which uses the
+> back chain.
 
-3. Related Function Optimizations:
- - Adjust the jump offset of tail calls to ensure correct instruction
-   alignment.
- - Enhance the bpf_arch_text_poke() function to enable accurate location
- of BPF program entry points.
- - Refine the trampoline return logic to ensure that the register data
- is correct when returning to both the traced function and the parent
- function.
+> diff --git a/arch/s390/include/asm/unwind_user.h b/arch/s390/include/asm/unwind_user.h
 
-Signed-off-by: Chenghao Duan <duanchenghao@kylinos.cn>
----
- arch/loongarch/net/bpf_jit.c | 38 +++++++++++++++++++++++++-----------
- 1 file changed, 27 insertions(+), 11 deletions(-)
+> +static inline int unwind_user_fp_get_frame(struct unwind_user_state *state,
+> +					   struct unwind_user_frame *frame)
+> +{
+> +	struct stack_frame_user __user *sf;
+> +	unsigned long __user *ra_addr;
+> +	unsigned long sp;
+> +
+> +	sf = (void __user *)state->sp;
+> +
+> +	/*
+> +	 * In topmost frame check whether IP in early prologue, RA and SP
+> +	 * registers saved, and no new stack frame allocated.
+> +	 */
+> +	if (state->topmost) {
+> +		unsigned long ra, ra_reg;
+> +
+> +		ra_addr = (unsigned long __user *)&sf->gprs[8];
+> +		if (__get_user(ra, ra_addr))
+> +			return -EINVAL;
+> +		if (__get_user(sp, (unsigned long __user *)&sf->gprs[9]))
+> +			return -EINVAL;
+> +		if (unwind_user_get_ra_reg(&ra_reg))
+> +			return -EINVAL;
+> +		if (ra == ra_reg && sp == state->sp)
+> +			goto done;
+> +	}
 
-diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
-index 8dc58781b8eb..0c16a1b18e8f 100644
---- a/arch/loongarch/net/bpf_jit.c
-+++ b/arch/loongarch/net/bpf_jit.c
-@@ -139,6 +139,7 @@ static void build_prologue(struct jit_ctx *ctx)
- 	stack_adjust = round_up(stack_adjust, 16);
- 	stack_adjust += bpf_stack_adjust;
- 
-+	move_reg(ctx, LOONGARCH_GPR_T0, LOONGARCH_GPR_RA);
- 	/* Reserve space for the move_imm + jirl instruction */
- 	for (i = 0; i < LOONGARCH_LONG_JUMP_NINSNS; i++)
- 		emit_insn(ctx, nop);
-@@ -238,7 +239,7 @@ static void __build_epilogue(struct jit_ctx *ctx, bool is_tail_call)
- 		 * Call the next bpf prog and skip the first instruction
- 		 * of TCC initialization.
- 		 */
--		emit_insn(ctx, jirl, LOONGARCH_GPR_ZERO, LOONGARCH_GPR_T3, 6);
-+		emit_insn(ctx, jirl, LOONGARCH_GPR_ZERO, LOONGARCH_GPR_T3, 7);
- 	}
- }
- 
-@@ -1265,7 +1266,7 @@ static int emit_jump_or_nops(void *target, void *ip, u32 *insns, bool is_call)
- 		return 0;
- 	}
- 
--	return emit_jump_and_link(&ctx, is_call ? LOONGARCH_GPR_T0 : LOONGARCH_GPR_ZERO, (u64)target);
-+	return emit_jump_and_link(&ctx, is_call ? LOONGARCH_GPR_RA : LOONGARCH_GPR_ZERO, (u64)target);
- }
- 
- static int emit_call(struct jit_ctx *ctx, u64 addr)
-@@ -1289,6 +1290,10 @@ int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type old_t,
- 		       void *new_addr)
- {
- 	int ret;
-+	unsigned long size = 0;
-+	unsigned long offset = 0;
-+	char namebuf[KSYM_NAME_LEN];
-+	void *image = NULL;
- 	bool is_call;
- 	u32 old_insns[LOONGARCH_LONG_JUMP_NINSNS] = {[0 ... 4] = INSN_NOP};
- 	u32 new_insns[LOONGARCH_LONG_JUMP_NINSNS] = {[0 ... 4] = INSN_NOP};
-@@ -1296,9 +1301,18 @@ int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type old_t,
- 	/* Only poking bpf text is supported. Since kernel function entry
- 	 * is set up by ftrace, we rely on ftrace to poke kernel functions.
- 	 */
--	if (!is_bpf_text_address((unsigned long)ip))
-+	if (!__bpf_address_lookup((unsigned long)ip, &size, &offset, namebuf))
- 		return -ENOTSUPP;
- 
-+	image = ip - offset;
-+	/* zero offset means we're poking bpf prog entry */
-+	if (offset == 0)
-+		/* skip to the nop instruction in bpf prog entry:
-+		 * move t0, ra
-+		 * nop
-+		 */
-+		ip = image + LOONGARCH_INSN_SIZE;
-+
- 	is_call = old_t == BPF_MOD_CALL;
- 	ret = emit_jump_or_nops(old_addr, ip, old_insns, is_call);
- 	if (ret)
-@@ -1622,14 +1636,12 @@ static int __arch_prepare_bpf_trampoline(struct jit_ctx *ctx, struct bpf_tramp_i
- 
- 	/* To traced function */
- 	/* Ftrace jump skips 2 NOP instructions */
--	if (is_kernel_text((unsigned long)orig_call))
-+	if (is_kernel_text((unsigned long)orig_call) ||
-+	    is_module_text_address((unsigned long)orig_call))
- 		orig_call += LOONGARCH_FENTRY_NBYTES;
- 	/* Direct jump skips 5 NOP instructions */
- 	else if (is_bpf_text_address((unsigned long)orig_call))
- 		orig_call += LOONGARCH_BPF_FENTRY_NBYTES;
--	/* Module tracing not supported - cause kernel lockups */
--	else if (is_module_text_address((unsigned long)orig_call))
--		return -ENOTSUPP;
- 
- 	if (flags & BPF_TRAMP_F_CALL_ORIG) {
- 		move_addr(ctx, LOONGARCH_GPR_A0, (const u64)im);
-@@ -1722,12 +1734,16 @@ static int __arch_prepare_bpf_trampoline(struct jit_ctx *ctx, struct bpf_tramp_i
- 		emit_insn(ctx, ldd, LOONGARCH_GPR_FP, LOONGARCH_GPR_SP, 0);
- 		emit_insn(ctx, addid, LOONGARCH_GPR_SP, LOONGARCH_GPR_SP, 16);
- 
--		if (flags & BPF_TRAMP_F_SKIP_FRAME)
-+		if (flags & BPF_TRAMP_F_SKIP_FRAME) {
- 			/* return to parent function */
--			emit_insn(ctx, jirl, LOONGARCH_GPR_ZERO, LOONGARCH_GPR_RA, 0);
--		else
--			/* return to traced function */
-+			move_reg(ctx, LOONGARCH_GPR_RA, LOONGARCH_GPR_T0);
- 			emit_insn(ctx, jirl, LOONGARCH_GPR_ZERO, LOONGARCH_GPR_T0, 0);
-+		} else {
-+			/* return to traced function */
-+			move_reg(ctx, LOONGARCH_GPR_T1, LOONGARCH_GPR_RA);
-+			move_reg(ctx, LOONGARCH_GPR_RA, LOONGARCH_GPR_T0);
-+			emit_insn(ctx, jirl, LOONGARCH_GPR_ZERO, LOONGARCH_GPR_T1, 0);
-+		}
- 	}
- 
- 	ret = ctx->idx;
+I realized that this additional heuristic is flawed:
+
+The topmost function may be past prologue, have allocated a new stack
+frame, and called a function.  The callee may have saved its RA and SP
+registers in the current stack frame, so that after the return from
+function call, the heuristic would erroneously assume that the topmost
+function is in early prologue and use the callee's RA and SP.
+
+Instead of erroneously skipping the caller it might erroneously insert
+a callee as caller.  I'll remove it again in the next version.
+
+> +
+> +	if (__get_user(sp, (unsigned long __user *)&sf->back_chain))
+> +		return -EINVAL;
+> +	if (!sp && ip_within_vdso(state->ip)) {
+> +		/*
+> +		 * Assume non-standard vDSO user wrapper stack frame.
+> +		 * See vDSO user wrapper code for details.
+> +		 */
+> +		struct stack_frame_vdso_wrapper *sf_vdso = (void __user *)sf;
+> +
+> +		ra_addr = (unsigned long __user *)&sf_vdso->return_address;
+> +		sf = (void __user *)((unsigned long)sf + STACK_FRAME_VDSO_OVERHEAD);
+> +		if (__get_user(sp, (unsigned long __user *)&sf->back_chain))
+> +			return -EINVAL;
+> +	} else if (!sp) {
+> +		/*
+> +		 * Assume outermost frame reached. unwind_user_next_common()
+> +		 * disregards all other fields in outermost frame.
+> +		 */
+> +		frame->outermost = false;
+
+		frame->outermost = true;
+
+> +		return 0;
+> +	} else {
+> +		/*
+> +		 * Assume IP past prologue and new stack frame allocated.
+> +		 * Follow back chain, which then equals the SP at entry.
+> +		 * Skips caller if wrong in topmost frame.
+> +		 */
+> +		sf = (void __user *)sp;
+> +		ra_addr = (unsigned long __user *)&sf->gprs[8];
+> +	}
+> +
+> +done:
+> +	frame->cfa_off = sp - state->sp + 160;
+> +	frame->sp_off = -160;
+> +	frame->fp.loc = UNWIND_USER_LOC_UNKNOWN;	/* Cannot unwind FP. */
+> +	frame->use_fp = false;
+> +	frame->ra.loc = UNWIND_USER_LOC_STACK;
+> +	frame->ra.offset = (unsigned long)ra_addr - (state->sp + frame->cfa_off);
+> +	frame->outermost = false;
+> +
+> +	return 0;
+> +}
+> +#define unwind_user_fp_get_frame unwind_user_fp_get_frame
+Regards,
+Jens
 -- 
-2.25.1
+Jens Remus
+Linux on Z Development (D3303)
++49-7031-16-1128 Office
+jremus@de.ibm.com
+
+IBM
+
+IBM Deutschland Research & Development GmbH; Vorsitzender des Aufsichtsrats: Wolfgang Wendt; Geschäftsführung: David Faller; Sitz der Gesellschaft: Böblingen; Registergericht: Amtsgericht Stuttgart, HRB 243294
+IBM Data Privacy Statement: https://www.ibm.com/privacy/
 
