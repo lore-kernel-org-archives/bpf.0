@@ -1,197 +1,241 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A9152BF3E2;
-	Fri, 12 Dec 2025 08:15:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 133BE2741A0
+	for <bpf@vger.kernel.org>; Fri, 12 Dec 2025 08:58:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765527330; cv=none; b=WusaNdsZz5oxSAWhIQXsW4DcHoOIoRnH2bLd3TE72gZTvKKgBgGbAV5qE/vhK/yQvk+DapD73ja0DZN+ipCBmLxJKTRLK48tsh03TNShDUlLq+8syR6GLyf8BeUJPjfOIO57Sp/CMXtEAxHaKamyCkIVjSc1CIRoimEgtkOoAo8=
+	t=1765529884; cv=none; b=fhogo0s1XuZj40tbDfQjuEp+78A5etFb/Rx5lWJqDWSrngJp4WlgkPY8wIX0az6UNVfcplMtl/bYEz9fLSBGSkh3c35YHakRjMX0j26vl/7bXMhqEW/GgeEtA9W3lxNA5YpM0R+mVozs8vKS5DEOGOPRscooqzM5dCPJsbqxfd4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765527330; c=relaxed/simple;
-	bh=oXzknb+soR7rjkQzIPzrrf05XHCYFSQmrZBkpLVRTkY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=R7KBeCSegIDagr9WsZcH01Wqs8seRdUvCTdf2uAfIyjsD1v57dmVJaQWMBh/3lnX+KM29nBkztSH3/5gKpOBhSTL5zda9HeSDZWJRiz/31PpH2oGGJ2sJB/f7FdNuUqBqpitVNbrQ9+A6P1ui4BWW/5n2fo0UWKFwSCIFeNs7V8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=P23uyrmW; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1765529884; c=relaxed/simple;
+	bh=PcDog/To0UjbKuyFLuDAwEJCCxk0v1Bgpl+ObyVOA/w=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=ggdV/Yr195u+u6mAu5zvCkBG/ctZBE/77xnWFy0GNAfvCYQlTSidywRfWIgTqoG97XNWEcDfcc8+LR7X4plIrJ/jjk7akFCJxS5W7gY+JLDG8m3xOMxKKk4zPEYlvyO/ciZgdRfOh1esESreWhnoyL+QMW+OfeGDrFIerkQyAPw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W87UPNQP; arc=none smtp.client-ip=209.85.219.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="P23uyrmW"
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5BBIqgk6010186;
-	Fri, 12 Dec 2025 08:14:43 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=/m1kpF
-	nXyyLJYkHaebDolzH+98BuCZUPbfMxloz5vus=; b=P23uyrmWSVD5DkS2IMDktV
-	V+/SkFgDRRZxDdFSaU0qS7Cqi/voKylxa//vCelL6Md1H7bxwxD3YJ84hhFtCni8
-	kCnQFtZMIgh8Xcai4mVutxoByNbz+Axu2qXxeyP6Oc+YoV05QhJvWQZbibx03SVR
-	G/YCmbhxErJdCrz36pr74KusvWVYBLs58lbyILq66owFCqmX6xhFhoO2IkD1WGpt
-	hcabaz6VQdZEcloW1kHOa2fHlDcUrjKnfnpCp6GEugPWvEgniLUAOOt7q22O+gbf
-	ITF0i4FZoc3qo76VrU8i59ZAU16BtYumg7L77Eut3JV8d7icvDnw0PefM7Q+kTvA
-	==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4aytm95av6-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 12 Dec 2025 08:14:43 +0000 (GMT)
-Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 5BC8Eg1T018009;
-	Fri, 12 Dec 2025 08:14:42 GMT
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4aytm95av3-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 12 Dec 2025 08:14:42 +0000 (GMT)
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5BC6bfiL012425;
-	Fri, 12 Dec 2025 08:14:42 GMT
-Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4aw0akatdf-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 12 Dec 2025 08:14:41 +0000
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 5BC8EcDX47186184
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 12 Dec 2025 08:14:38 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 1CBD120049;
-	Fri, 12 Dec 2025 08:14:38 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 993EF20040;
-	Fri, 12 Dec 2025 08:13:40 +0000 (GMT)
-Received: from [9.111.169.84] (unknown [9.111.169.84])
-	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Fri, 12 Dec 2025 08:13:40 +0000 (GMT)
-Message-ID: <81cf7e6a-702b-4021-a148-9d051d28e80c@linux.ibm.com>
-Date: Fri, 12 Dec 2025 09:13:37 +0100
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W87UPNQP"
+Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-888310b91c5so9267476d6.1
+        for <bpf@vger.kernel.org>; Fri, 12 Dec 2025 00:58:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1765529882; x=1766134682; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=HA/4sr3TqfG74qmcWJYKn1Au1cNj4XE5l8roaw6U9kQ=;
+        b=W87UPNQPqCTBDdLCQj+TZQyV6qMZobyMn+sy0hFJ/vYdPYGa7V8/eHE1Bq4EdpKFQl
+         13uOopJYmsyRip51YfFVR/Mt1hk7rcZRF/3WqZfwbGexL9G6itkoPrfF/UzbpjDlQLZG
+         bCPSLzmQ89WJiBUZNaDLCemaqQqLCEnkspkJI1UiepjkNvydmzr0VPJZrcN1O/7veIIE
+         oGWZ94RGts1kgDxTAoxg500lhqlCmsWsyXiOUm/ePK83WzSrABNcUMxMxC6Fd4yD0Zw6
+         RSy2tZb0Pga8e5kdukTZAk/UoWlmflTf6mrXBHr9hhYIxXDPPBse3IFFul6yAfMCmA/6
+         u4NQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1765529882; x=1766134682;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HA/4sr3TqfG74qmcWJYKn1Au1cNj4XE5l8roaw6U9kQ=;
+        b=udTrLFmoZ5krVT/mEjS2L/eg0vVhKuNWEoZEdoiM+s1f0IW5OPa+vB+GrSLJy1Deaq
+         lRYyEBVfyyaLvv504TU2WgYfa73sQlAL9ckzeRUU34qpAmOq7k5PQVEl3qchpl7gzsjq
+         5sU3tQrdb5AUJZpw9bzETH6uZI7OfsBGQDuXr4EBQBm/1uQNqwRv8cJGZE7MKVjZidpU
+         jUJm5dQVvSzNx82UVU9DG/vzmG3P1k7CPbuGuBueh6lvdc+CynpbMcIyIg41u4D1AyOc
+         6V6P1yuhmfmLdg9PGRdYIDzMGra2ou+HRAGL699yv5QnhgejZIim5HOahIc3FgjL8Nlh
+         9G1Q==
+X-Gm-Message-State: AOJu0YwXj0ruMT0YwK7PBvP0wn+HEHvYIK5okncUFsjeehUrrHVm24rP
+	1u0aMpRuKxQOxPsbHYRF9hKylAl8pQoSXK5XfzcYZrtzPKoO3YwM8AZgV5K5mSPF
+X-Gm-Gg: AY/fxX6xIbChSUiWeaV9X/iSmTUFasdjiBqkkQ2s1FTuSei7vdKhcuMh3c7qKhmN7LA
+	66kJhxnLi6VtTKCSw6IlHquxONV8do9UJwPYdSU+DtUmERoTGSycJy9OWX2Ok1vzXQFq9ZHR243
+	snXZduCm8Wv4G9JkeSqRw3atN/JDNyMd/O89+CoSl8phUhh9nXb7ZlNWaPhI2xlzZa6z17d+1bl
+	BTnsYGrDBPolqwTSW3ukAO9CzTiPdV60eXgHFpsWK2XCYcpbdFzjRic5ch3EO0A95PbXkiquhH4
+	8DxI60jHXw+Kh2SX0FewrIUeCvhzj0PL7N40NMBjUyRH9BOn1D7xBGLd4+iGVpe6lqmsUwzatUG
+	9HjU7S6DDc4j95K+RZfVBXoJ7qclCzBpwyUc6lkPWu3GT0K0h530UrNTKZ8rafsGmc62c4j1JFC
+	hxUAm8kvQp0EJHlEQr+UDiacRDcA5qrPk/TgdxLUq42r4=
+X-Google-Smtp-Source: AGHT+IFWTMFJQMKXlJUDxuMrVm62gSFXENwTcyB18RGeM1BcBDoReByl3fxu8tZ+slqa0tRQxxkuxQ==
+X-Received: by 2002:a17:902:d3ca:b0:298:68e:4042 with SMTP id d9443c01a7336-29eeec1d557mr31575955ad.26.1765523343711;
+        Thu, 11 Dec 2025 23:09:03 -0800 (PST)
+Received: from [10.200.2.32] (fs98a57d9c.tkyc007.ap.nuro.jp. [152.165.125.156])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29ee9d38b98sm44760935ad.34.2025.12.11.23.08.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Dec 2025 23:09:03 -0800 (PST)
+Message-ID: <b11c1ae3816842f7b1768072982680c0bc80d8f4.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v3 6/6] resolve_btfids: change in-place update
+ with raw binary output
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Ihor Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov
+ <ast@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
+ <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>,  Song Liu
+ <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend	
+ <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav
+ Fomichev	 <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa
+ <jolsa@kernel.org>,  Andrew Morton <akpm@linux-foundation.org>, Nathan
+ Chancellor <nathan@kernel.org>, Nicolas Schier	 <nsc@kernel.org>, Tejun Heo
+ <tj@kernel.org>, David Vernet <void@manifault.com>,  Andrea Righi
+ <arighi@nvidia.com>, Changwoo Min <changwoo@igalia.com>, Shuah Khan
+ <shuah@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt	 <justinstitt@google.com>,
+ Alan Maguire <alan.maguire@oracle.com>, Donglin Peng	
+ <dolinux.peng@gmail.com>
+Cc: bpf@vger.kernel.org, dwarves@vger.kernel.org,
+ linux-kernel@vger.kernel.org, 	linux-kbuild@vger.kernel.org
+Date: Fri, 12 Dec 2025 16:08:54 +0900
+In-Reply-To: <20251205223554.4159772-1-ihor.solodrai@linux.dev>
+References: <20251205223046.4155870-6-ihor.solodrai@linux.dev>
+	 <20251205223554.4159772-1-ihor.solodrai@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2 (3.56.2-2.fc42) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v3 14/17] s390/unwind_user/sframe: Enable
- HAVE_UNWIND_USER_SFRAME
-To: Heiko Carstens <hca@linux.ibm.com>
-Cc: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linux-s390@vger.kernel.org, bpf@vger.kernel.org, x86@kernel.org,
-        Steven Rostedt <rostedt@kernel.org>, Vasily Gorbik <gor@linux.ibm.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Indu Bhagat <indu.bhagat@oracle.com>,
-        "Jose E. Marchesi" <jemarch@gnu.org>,
-        Beau Belgrave <beaub@linux.microsoft.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Florian Weimer <fweimer@redhat.com>, Kees Cook <kees@kernel.org>,
-        "Carlos O'Donell" <codonell@redhat.com>, Sam James <sam@gentoo.org>,
-        Dylan Hatch <dylanbhatch@google.com>
-References: <20251208171559.2029709-1-jremus@linux.ibm.com>
- <20251208171559.2029709-15-jremus@linux.ibm.com>
- <20251210151012.40732B79-hca@linux.ibm.com>
-Content-Language: en-US
-From: Jens Remus <jremus@linux.ibm.com>
-Organization: IBM Deutschland Research & Development GmbH
-In-Reply-To: <20251210151012.40732B79-hca@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: OEvpXfclAQ9iQ829_WXTZ7y3JxA1yP13
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjExMDA2MSBTYWx0ZWRfX7cwJ/2FTxbOK
- JGde00bzjEu9AlLbFNhQ6noZTmjVvTRBrYo4EsCH/SrF2Q00lVkRE35E9CyNnCnLKs4Pp/BHXeH
- fX57/LxEdTxrYs0lXUaFefsSbnFoffcoS6ZKQ0knYvSabcR2fFsN9Gl5tmoni+k8P/wC+tlPlG+
- kRu/0l1Tne1MoUmMaVSr+MvbRBBwC9nRzKrL1c6MlPQfQgE8V9XUsEPF0j0bGTG2Qt8O1LT363/
- QjRKgoqiE2zmZeipWxF0/UPvxc1nHBQKxNh1vzamLOsxEW7oW5vecRuMtA/Zri0B6PIBXXswhGf
- pliB88rrSlsqU7/VxV0Gv+epvbQUCCEIPqhrydZnZg4HfKgbFMpfHo5SLEHmCmEV6fKg1iCICNW
- F8qZpFLon4TeEz4sXcHqeuk+VU2bRA==
-X-Proofpoint-GUID: KvxoyagGqrDnoujMKLzUDAEemsy768bn
-X-Authority-Analysis: v=2.4 cv=F5xat6hN c=1 sm=1 tr=0 ts=693bcef3 cx=c_pps
- a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
- a=IkcTkHD0fZMA:10 a=wP3pNCr1ah4A:10 a=VkNPw1HP01LnGYTKEx00:22
- a=VnNF1IyMAAAA:8 a=jPGRhfdHIWHQ-jYqdAYA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-12-12_01,2025-12-11_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- suspectscore=0 malwarescore=0 spamscore=0 bulkscore=0 impostorscore=0
- phishscore=0 clxscore=1015 lowpriorityscore=0 priorityscore=1501 adultscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2510240000 definitions=main-2512110061
 
-Hello Heiko,
+On Fri, 2025-12-05 at 14:35 -0800, Ihor Solodrai wrote:
+> Currently resolve_btfids updates .BTF_ids section of an ELF file
+> in-place, based on the contents of provided BTF, usually within the
+> same input file, and optionally a BTF base.
+>=20
+> Change resolve_btfids behavior to enable BTF transformations as part
+> of its main operation. To achieve this, in-place ELF write in
+> resolve_btfids is replaced with generation of the following binaries:
+>   * ${1}.BTF with .BTF section data
+>   * ${1}.BTF_ids with .BTF_ids section data if it existed in ${1}
+>   * ${1}.BTF.base with .BTF.base section data for out-of-tree modules
+>=20
+> The execution of resolve_btfids and consumption of its output is
+> orchestrated by scripts/gen-btf.sh introduced in this patch.
+>=20
+> The motivation for emitting binary data is that it allows simplifying
+> resolve_btfids implementation by delegating ELF update to the $OBJCOPY
+> tool [1], which is already widely used across the codebase.
+>=20
+> There are two distinct paths for BTF generation and resolve_btfids
+> application in the kernel build: for vmlinux and for kernel modules.
+>=20
+> For the vmlinux binary a .BTF section is added in a roundabout way to
+> ensure correct linking. The patch doesn't change this approach, only
+> the implementation is a little different.
+>=20
+> Before this patch it worked as follows:
+>=20
+>   * pahole consumed .tmp_vmlinux1 [2] and added .BTF section with
+>     llvm-objcopy [3] to it
+>   * then everything except the .BTF section was stripped from .tmp_vmlinu=
+x1
+>     into a .tmp_vmlinux1.bpf.o object [2], later linked into vmlinux
+>   * resolve_btfids was executed later on vmlinux.unstripped [4],
+>     updating it in-place
+>=20
+> After this patch gen-btf.sh implements the following:
+>=20
+>   * pahole consumes .tmp_vmlinux1 and produces a *detached* file with
+>     raw BTF data
+>   * resolve_btfids consumes .tmp_vmlinux1 and detached BTF to produce
+>     (potentially modified) .BTF, and .BTF_ids sections data
+>   * a .tmp_vmlinux1.bpf.o object is then produced with objcopy copying
+>     BTF output of resolve_btfids
+>   * .BTF_ids data gets embedded into vmlinux.unstripped in
+>     link-vmlinux.sh by objcopy --update-section
+>=20
+> For kernel modules, creating a special .bpf.o file is not necessary,
+> and so embedding of sections data produced by resolve_btfids is
+> straightforward with objcopy.
+>=20
+> With this patch an ELF file becomes effectively read-only within
+> resolve_btfids, which allows deleting elf_update() call and satellite
+> code (like compressed_section_fix [5]).
+>=20
+> Endianness handling of .BTF_ids data is also changed. Previously the
+> "flags" part of the section was bswapped in sets_patch() [6], and then
+> Elf_Type was modified before elf_update() to signal to libelf that
+> bswap may be necessary. With this patch we explicitly bswap entire
+> data buffer on load and on dump.
+>=20
+> [1] https://lore.kernel.org/bpf/131b4190-9c49-4f79-a99d-c00fac97fa44@linu=
+x.dev/
+> [2] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tr=
+ee/scripts/link-vmlinux.sh?h=3Dv6.18#n110
+> [3] https://git.kernel.org/pub/scm/devel/pahole/pahole.git/tree/btf_encod=
+er.c?h=3Dv1.31#n1803
+> [4] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tr=
+ee/scripts/link-vmlinux.sh?h=3Dv6.18#n284
+> [5] https://lore.kernel.org/bpf/20200819092342.259004-1-jolsa@kernel.org/
+> [6] https://lore.kernel.org/bpf/cover.1707223196.git.vmalik@redhat.com/
+>=20
+> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+> ---
 
-thank you for the feedback!
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 
-On 12/10/2025 4:10 PM, Heiko Carstens wrote:
-> On Mon, Dec 08, 2025 at 06:15:56PM +0100, Jens Remus wrote:
->> +static inline int __s390_get_dwarf_fpr(unsigned long *val, int regnum)
->> +{
->> +	switch (regnum) {
->> +	case 16:
->> +		fpu_std(0, (freg_t *)val);
->> +		break;
->> +	case 17:
->> +		fpu_std(2, (freg_t *)val);
->> +		break;
->> +	case 18:
->> +		fpu_std(4, (freg_t *)val);
->> +		break;
->> +	case 19:
->> +		fpu_std(6, (freg_t *)val);
->> +		break;
->> +	case 20:
->> +		fpu_std(1, (freg_t *)val);
->> +		break;
-> 
-> IIRC, I mentioned this already last time. But it is not correct to access user
-> space floating point register contents like this. Due to in-kernel fpu/vector
-> register usage the user space register contents may have been saved away to
-> the per-thread vxrs save area, and registers may have been used for in-kernel
-> usage instead.
-> Read: the above code could access lazy register contents of in-kernel usage.
-> 
-> Change the above to something like:
-> 
-> 	struct fpu *fpu = &current->thread.ufpu;
-> 
-> 	save_user_fpu_regs();
-> 	switch (regnum) {
-> 	case 16: return fpu->vxrs[0].high;
-> 	case 17: return fpu->vxrs[2].high;
-> 	case 18: return fpu->vxrs[4].high;
-> 	case 19: return fpu->vxrs[6].high;
-> 	case 20: return fpu->vxrs[1].high;
-> 	...
-> 
-> save_user_fpu_regs() will write all user space fpu/vector register contents to
-> the per-thread save area (if not already saved), and then it is possible to
-> read contents from there.
+> @@ -552,6 +528,13 @@ static int symbols_collect(struct object *obj)
+>  	return 0;
+>  }
+> =20
+> +static inline bool is_envvar_set(const char *var_name)
+> +{
+> +	const char *value =3D getenv(var_name);
+> +
+> +	return value && value[0] !=3D '\0';
+> +}
+> +
 
-Thanks!  I have changed the code accordingly.  Works fine.
+This is a leftover, not used anywhere.
 
-> I'll see if I can provide something better for this use case, since this code
-> needs to access only the first 16 registers; so no need to write contents of
-> all registers to the save area.
+[...]
 
-Ok.
+> @@ -860,23 +913,34 @@ int main(int argc, const char **argv)
+>  	 */
+>  	if (obj.efile.idlist_shndx =3D=3D -1 ||
+>  	    obj.efile.symbols_shndx =3D=3D -1) {
+> -		pr_debug("Cannot find .BTF_ids or symbols sections, nothing to do\n");
+> -		err =3D 0;
+> -		goto out;
+> +		pr_debug("Cannot find .BTF_ids or symbols sections, skip symbols resol=
+ution\n");
+> +		goto dump_btf;
+>  	}
+> =20
+>  	if (symbols_collect(&obj))
+>  		goto out;
+> =20
+> -	if (load_btf(&obj))
+> -		goto out;
+> -
+>  	if (symbols_resolve(&obj))
+>  		goto out;
+> =20
+>  	if (symbols_patch(&obj))
+>  		goto out;
+> =20
+> +	err =3D make_out_path(out_path, obj.path, BTF_IDS_SECTION);
+> +	if (err || dump_raw_btf_ids(&obj, out_path))
+> +		goto out;
+> +
+> +dump_btf:
+> +	err =3D make_out_path(out_path, obj.path, BTF_ELF_SEC);
+> +	if (err || dump_raw_btf(obj.btf, out_path))
 
-Regards,
-Jens
--- 
-Jens Remus
-Linux on Z Development (D3303)
-+49-7031-16-1128 Office
-jremus@de.ibm.com
+Nit: 'err' is not set if dump_raw_btf() errors out.
+     Maybe use:
 
-IBM
+     	   err =3D make_out_path(out_path, obj.path, BTF_ELF_SEC);
+     	   err =3D err ?: dump_raw_btf(obj.btf, out_path);
+	   if (err)
+	      goto out;
+     ?
 
-IBM Deutschland Research & Development GmbH; Vorsitzender des Aufsichtsrats: Wolfgang Wendt; Geschäftsführung: David Faller; Sitz der Gesellschaft: Böblingen; Registergericht: Amtsgericht Stuttgart, HRB 243294
-IBM Data Privacy Statement: https://www.ibm.com/privacy/
+> +		goto out;
+> +
+> +	if (obj.base_btf && obj.distill_base) {
+> +		err =3D make_out_path(out_path, obj.path, BTF_BASE_ELF_SEC);
+> +		if (err || dump_raw_btf(obj.base_btf, out_path))
+> +			goto out;
+> +	}
+> +
+>  	if (!(fatal_warnings && warnings))
+>  		err =3D 0;
+>  out:
 
+[...]
