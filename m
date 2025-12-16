@@ -1,51 +1,49 @@
 Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6405328608
-	for <bpf@vger.kernel.org>; Tue, 16 Dec 2025 17:20:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4B8A26B95B
+	for <bpf@vger.kernel.org>; Tue, 16 Dec 2025 17:20:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765905616; cv=none; b=PFXHf/CU8lPQfUo3K4B1SiEY7ZJGYhMdXunL/TbWrKxr6nh0rei3sU0AjYdCzMBlkVITzz2ZOXIcZZM+s6kp3U7I4Yns54M68Hrs3V4qj+xjBdRU9CJhtkA8Xa803PnfecVcoYmtylv8YTF9J9ZsJXvUobXaglguGFkwtQs6W9E=
+	t=1765905644; cv=none; b=DUsqnMicOJz2dGFWuwZZASFhqNvV32+ZwwiF3RB1j6Zc4JZdOwKQpHNydNtuvZmhw0wA8X718nVVE+M/s7jtPJn+tiFM5YECO40Nkf6mnCTV4RQxvBIIwz2qVLPkwlP7l7BuQxXkJRHSRbl96ZAzJ3OefsRlAVmYl8vQrm5GeIM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765905616; c=relaxed/simple;
-	bh=w7UWC60Kl2F4HFXLzJwUvsSAVfiFL30KxEdeYidBx60=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=s7U5p0y2E/XX4KcFafg9oVjxubd+2pR2P2INo6y7HYpGj6fIrxruve0NBihhRzCkSgPjx9U1kvU3Z6cfK/UU03QjoBYNDrkGkRexO3uo/GRcTnreYQmZ2H8Tot5MyUIcxB01/+5Dkzo/Pn4P2kNjs0F1cuXxwoTmQiDqhnL7D50=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=OmaNnalk; arc=none smtp.client-ip=205.220.165.32
+	s=arc-20240116; t=1765905644; c=relaxed/simple;
+	bh=uKyPtuDYRRHp6Nq/MlUVAjy+hEoX/Pr7VOAV2p9gT1E=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=rsR8A2YtUUWvn0d007YbaipgHrxLajQkax0mqK1Dv+Vbqdpo2RvndfeLUsmfKP0aycL8gEAdAiB3kkpDeIvDBlz/SjGq6yHBuCw6/pEAPyF+rEfpsQNlJE5jgQU0/ycZRnO7Z25jK6VTUeF7QtETCfGjLVziF+6NsmyV1OdWHLU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=QcsksXkW; arc=none smtp.client-ip=205.220.165.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="OmaNnalk"
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5BGDuNXl543904;
-	Tue, 16 Dec 2025 17:19:04 GMT
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="QcsksXkW"
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5BGDuLC1374205;
+	Tue, 16 Dec 2025 17:18:59 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=corp-2025-04-25; bh=895u1
-	teOuieqgVITS/I99i8odp5vcx3mDJtrWPE9Fpc=; b=OmaNnalkEyS/YrKqthBlz
-	7tmESHS3hDplavBG3DBObe0l/i+0rgeoxw3UdhjDl8guzpNpl2kqLItQYKv/AZOe
-	UOgpgJowVbSG9jEVSPtmdwH3M0GjnuvXmYt3nkWqUT2kwoaRKnLeqYnI0Kdo8lSj
-	wbxGhkOfrnbHwCezAJP2lLfVp8eJO/g0CzMKxY0UTbd3MDwilijj8FCe6Cl+oviS
-	/gNTYX2yWSX8Wz9VJsrVbWFWdPYpKZuqDXsz/XmjL+ZMx0aggGOAuI4/77yT7OVe
-	pduvfDfCV/TvkpR45RWAKV9OKw7NnMPSGFKvIta1/eD33IsgVOekSOmc7gnKmR6M
-	g==
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=corp-2025-04-25; bh=0qZDZ79fqhXgmN5YkWJvqDIGvePl6
+	4ExuYpzeJ79j84=; b=QcsksXkWwwY0GJZB+EwDr1HkP2hjhTHPHzG6V9AHjOPzc
+	/spCOfHv3+agj043di+KXxC3iCKazzXgrpqFgVD6n6xxJrcef8AE1vMqwE+caWh3
+	DNXQvD4pgX0NZ/e7ckb+ZhqIsyPK3DgNqjMIOq98DExbywCxRPzPhFkk9MOvZsXp
+	aAOc8PAGsUi08MQuZzUb+3spnncBczcqSLB2oAtGamsuSOL3x3Lg1ZaRj4L1kdhw
+	cXroM6WCPOK1ptsKOZB30P10OAcHw8GZQ5bqCt0xPBdicLhVgrdgLdwbFqPFjD88
+	BYisogRhrW6hF77CD8ZZClqjaNzjptzbiP3YAU8FQ==
 Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4b1015vc70-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4b0xqxvey4-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 16 Dec 2025 17:19:03 +0000 (GMT)
+	Tue, 16 Dec 2025 17:18:59 +0000 (GMT)
 Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 5BGHFnR4006079;
-	Tue, 16 Dec 2025 17:19:02 GMT
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 5BGFmSsC005928;
+	Tue, 16 Dec 2025 17:18:58 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4b0xkdgpws-1
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4b0xkdgptj-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 16 Dec 2025 17:19:02 +0000
+	Tue, 16 Dec 2025 17:18:57 +0000
 Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 5BGHIvZT039632;
-	Tue, 16 Dec 2025 17:19:01 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 5BGHIvZP039632;
+	Tue, 16 Dec 2025 17:18:57 GMT
 Received: from bpf.uk.oracle.com (dhcp-10-154-50-156.vpn.oracle.com [10.154.50.156])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 4b0xkdgprs-3;
-	Tue, 16 Dec 2025 17:19:01 +0000
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 4b0xkdgprs-1;
+	Tue, 16 Dec 2025 17:18:57 +0000
 From: Alan Maguire <alan.maguire@oracle.com>
 To: qmo@kernel.org
 Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
@@ -53,12 +51,10 @@ Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
         yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
         sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
         bpf@vger.kernel.org, Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH bpf-next 2/2] bpftool: force-anonymize structs to avoid need for -fms-extension
-Date: Tue, 16 Dec 2025 17:18:54 +0000
-Message-ID: <20251216171854.2291424-3-alan.maguire@oracle.com>
+Subject: [PATCH bpf-next 0/2] Handle -fms-extension in kernel structs
+Date: Tue, 16 Dec 2025 17:18:52 +0000
+Message-ID: <20251216171854.2291424-1-alan.maguire@oracle.com>
 X-Mailer: git-send-email 2.43.5
-In-Reply-To: <20251216171854.2291424-1-alan.maguire@oracle.com>
-References: <20251216171854.2291424-1-alan.maguire@oracle.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -70,52 +66,52 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
  definitions=2025-12-16_02,2025-12-16_02,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 bulkscore=0 malwarescore=0
- adultscore=0 mlxlogscore=999 mlxscore=0 spamscore=0 suspectscore=0
+ adultscore=0 mlxlogscore=917 mlxscore=0 spamscore=0 suspectscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2510240000
  definitions=main-2512160149
-X-Proofpoint-GUID: nnPeqjmEbmSd0PpN-rTVCMpKfSVdrbGU
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjE2MDE0OCBTYWx0ZWRfXxQYXYXOCk3F0
- 3WLOLEDA4SkbQAxZ2Aawneaj+mdbifELp1tIvQu68AaqLlQSiJdZYm/HLBTdOa9hXga9U9VW0Rm
- nCJhGtoUprJWb6jQQAaVs6oy+wU/2HVK/S1byXK2eyqh2b6Frwy4Un1pbMX3GvB81Task+Jqacn
- 2WhWlXWnx2bHPZaoUbbUAGzbi+UfwbkI+PCeW1b5jBB27ryISEgaqsuORYd10p341dB9P1hk30p
- k1aIP9KLe43y1S+BS64ak/SDmjqbl19/rlr+z54HyjaEFcpAKUemadW5b+u7Bgxq9GZiwkv2HQM
- cE2d+16Ybjn+g6f34+0LIPpZwgeTk4yKTGrBs2PbzqeqEIXU89W+aEFbgBh67e0tkovcEaBmBgG
- c22jbF4DLEOGYRR9G+a/iANodR8e+Lgua4s4026o1jZ80Sm/0WU=
-X-Authority-Analysis: v=2.4 cv=GbUaXAXL c=1 sm=1 tr=0 ts=69419487 b=1 cx=c_pps
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjE2MDE0OCBTYWx0ZWRfX3dln/QIgCSWY
+ 5wLMSlIWGVZhT8dDddi5SBRDar3Bi/oJRufG7xD892G+MNZ/t9JHt25eH/umJTaiz+E/qO8lVum
+ ziwWTD8XDFFroOYgfXXR0elJrA6snweJ5GzVkST4dK/VlDcBjwb4mqXCM/1SRoIj4jfH/Z0k8+W
+ /mMWOGwH/5dEqSYB4cJ/T6ZaFl04m9tTlcRolrmF6+lj+s+I2UKaRVlCWs3o4LtQcEGH5Avh94Z
+ HcIEHTdw26+MrS8U1/+OMJ0g6Vct4v8OFtu4fEryQZLZls/9awEhd0b+uSzLNhWifnOnFJ6+3AM
+ woTIFI8bS6ItAuTQNB6MVK/6yZUq8kCd67ZcMzfPN3GpS6DgGXqW3cNhpZtIlQZFGUV7IeDc0K5
+ ui9PcyZ6coKkyb/bg3l2oCiPb76TeJzQhGIRUHHI1L82Oytpmuo=
+X-Proofpoint-GUID: rBYhLbXYyt0tqslDFgNo5P4av0lCDKBW
+X-Proofpoint-ORIG-GUID: rBYhLbXYyt0tqslDFgNo5P4av0lCDKBW
+X-Authority-Analysis: v=2.4 cv=BYDVE7t2 c=1 sm=1 tr=0 ts=69419483 b=1 cx=c_pps
  a=zPCbziy225d3KhSqZt3L1A==:117 a=zPCbziy225d3KhSqZt3L1A==:17
- a=wP3pNCr1ah4A:10 a=VkNPw1HP01LnGYTKEx00:22 a=yPCof4ZbAAAA:8
- a=5XCLiLK5bj5d-ma3yFgA:9 cc=ntf awl=host:12109
-X-Proofpoint-ORIG-GUID: nnPeqjmEbmSd0PpN-rTVCMpKfSVdrbGU
+ a=wP3pNCr1ah4A:10 a=VkNPw1HP01LnGYTKEx00:22 a=VwQbUJbxAAAA:8 a=pGLkceISAAAA:8
+ a=4U32NmAA7IdqOqh1_S4A:9 cc=ntf awl=host:12109
 
-Use libbpf dump option to ensure that a nested struct will be
-declared as an equivalent anonymous struct to the named struct.
-With this approach we do not need -fms-extension to support
-such structs in vmlinux.h.
+The kernel is using named structs embedded in other structs
+with no member name (similar to anonymous struct usage).
+Such an arrangement causes problems for compilers unless -fms-extension
+is specified.  With vmlinux.h generation we do not want to impose
+that on the vmlinux.h consumer, so generate a compatible representation
+using anonymous types.
 
-Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
----
- tools/bpf/bpftool/btf.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Patch 1 adds libbpf support for this in BTF dump code; patch 2
+adds bpftool support to use the new option.
 
-diff --git a/tools/bpf/bpftool/btf.c b/tools/bpf/bpftool/btf.c
-index 946612029dee..523c8bf0e53a 100644
---- a/tools/bpf/bpftool/btf.c
-+++ b/tools/bpf/bpftool/btf.c
-@@ -771,11 +771,13 @@ static struct sort_datum *sort_btf_c(const struct btf *btf)
- static int dump_btf_c(const struct btf *btf,
- 		      __u32 *root_type_ids, int root_type_cnt, bool sort_dump)
- {
-+	DECLARE_LIBBPF_OPTS(btf_dump_opts, opts,
-+			    .force_anon_struct_members = true);
- 	struct sort_datum *datums = NULL;
- 	struct btf_dump *d;
- 	int err = 0, i;
- 
--	d = btf_dump__new(btf, btf_dump_printf, NULL, NULL);
-+	d = btf_dump__new(btf, btf_dump_printf, NULL, &opts);
- 	if (!d)
- 		return -errno;
- 
+Note that this was essentially
+
+Suggested-by: Song Liu <song@kernel.org>
+
+so feel free to add that to the series.
+
+See [1] for more.
+
+[1] https://lore.kernel.org/bpf/CAADnVQK9ZkPC7+R5VXKHVdtj8tumpMXm7BTp0u9CoiFLz_aPTg@mail.gmail.com/
+
+Alan Maguire (2):
+  libbpf: add option to force-anonymize nested structs for BTF dump
+  bpftool: force-anonymize structs to avoid need for -fms-extension
+
+ tools/bpf/bpftool/btf.c  |  4 +++-
+ tools/lib/bpf/btf.h      | 25 ++++++++++++++++++++++++-
+ tools/lib/bpf/btf_dump.c | 25 ++++++++++++++++++++++---
+ 3 files changed, 49 insertions(+), 5 deletions(-)
+
 -- 
 2.39.3
 
