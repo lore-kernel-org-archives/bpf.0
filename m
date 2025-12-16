@@ -1,291 +1,350 @@
-Received: from baidu.com (mx22.baidu.com [220.181.50.185])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F1612AEF5;
-	Tue, 16 Dec 2025 08:18:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.181.50.185
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A16E32E13D;
+	Tue, 16 Dec 2025 09:30:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765873114; cv=none; b=ARTgoT4SA7wSooKHy2ilOlWSRrJP8/iy6axYNjC36cYGWr5iSubok82taP7bm2N6UnNarkYgOTsZ3F72Bv4YbQpvyjCBFeEc4sulg7qT/NusM2OQ/d3Q582eo85FwrrZTcqksSH58qHgwU0E4QH7MAhSK5/3se0BBc2gxocjQq8=
+	t=1765877428; cv=none; b=rPFQko7AISg38WU66czKFy2tnlLsvcyRl3Z8jITYT0T4TXk/fc2svLdOkw0QEG77OHPVS92KpPGTciDxbX8c74RibFdkhXHW3+uWZzxn3D3QagS+xz4ef/C2wXgZ9c2Pf0/WxuSSIslmk7+nKFvk9lbjDzRx396Ki3qVXM2FoHA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765873114; c=relaxed/simple;
-	bh=fmZflpl4g8O8DUJ31IaY89Tk7YTybXRgHs9PkrMWCFk=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=X9fmdMmAeyBuKSjWjEQDp0la+Crm7+d2aNGhsb/SmvArGaiuyXM06k64ezjeZIQbNxaX/witcuvdgzyxcZCRAn20He9PovMKYRpOQ8Y5Uhqsp8C2qRuEkwxst7tsTrahadn5fKYpeubqZIKPPh8TC3t3q1Cse4BrfdiihnSlTLQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=baidu.com; spf=pass smtp.mailfrom=baidu.com; arc=none smtp.client-ip=220.181.50.185
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=baidu.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baidu.com
-From: lirongqing <lirongqing@baidu.com>
-To: Andrew Morton <akpm@linux-foundation.org>, Lance Yang
-	<lance.yang@linux.dev>
-CC: Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy
-	<chleroy@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Eduard
- Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, Yonghong Song
-	<yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, KP
- Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo
-	<haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	<linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-aspeed@lists.ozlabs.org>,
-	<linux-openrisc@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
-	<dri-devel@lists.freedesktop.org>, <bpf@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>, <wireguard@lists.zx2c4.com>,
-	<netdev@vger.kernel.org>, Li RongQing <lirongqing@baidu.com>
-Subject: [PATCH] watchdog: softlockup: panic when lockup duration exceeds N thresholds
-Date: Tue, 16 Dec 2025 02:45:21 -0500
-Message-ID: <20251216074521.2796-1-lirongqing@baidu.com>
-X-Mailer: git-send-email 2.17.1
+	s=arc-20240116; t=1765877428; c=relaxed/simple;
+	bh=9B9fL9zQ8qnpaJErs1fVIQqV/HGDDzxTb5bppDM/LNI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=b5n1mUrxVWMo4Vz6Sa+DHn+7nRf564Pw9+4us00kLtAOE152vLNGRQwKSb6FR5TgXtFpUmieJYr9Z7N37WT/gsCo+0a2QPZX+MFpS2yTyuBYiuLU2cDyVMeoF4SK32HmQCnKgF8K2n47lSawWrRZ9BxH4bmrtTnV7wzsTYNJlv4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=OniCZkuc; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="OniCZkuc"
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5BFNWofX001735;
+	Tue, 16 Dec 2025 09:29:35 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=/f30n5
+	Ql5+zqGKmNBlm+fXaMqRlBT/rSwX8VxTEqBuk=; b=OniCZkucWongtxlAi3ZvVJ
+	5JwSsXlQ5mxDnYEForvgj1ywcCxr78HxB6TRDRAzZyGV1ZOGHx1who66ffsAdid3
+	DPycevH/thepPY96Y2il1agRBYQH0imZe1oXA7M7pcHQMGdGY67m4nBI0nUxei4z
+	uhsFzxHUevePlEe8hN0gkKFmYp6DbXXcO0OChth0Bw061EQkAF1XGJn1yljmZB39
+	2boAxzuFZzYrrSxealg1VLXvhRye3uQ9jm8J3Boy1p0ZpDoJVfD2YFLXa+eIl5NA
+	lQ5VYeuMmn6CUT0oQ9dAhY2zc8lqngeN6zviuWnJ0SIFIkRxjj0qel/7r8aKKtTQ
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4b0ytv685c-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 16 Dec 2025 09:29:35 +0000 (GMT)
+Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 5BG9Qvk9021825;
+	Tue, 16 Dec 2025 09:29:34 GMT
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4b0ytv6859-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 16 Dec 2025 09:29:34 +0000 (GMT)
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5BG8mfdA026803;
+	Tue, 16 Dec 2025 09:29:33 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4b1jfsbkp4-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 16 Dec 2025 09:29:33 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 5BG9TTfK42140010
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 16 Dec 2025 09:29:29 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 5834720040;
+	Tue, 16 Dec 2025 09:29:29 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 0214720043;
+	Tue, 16 Dec 2025 09:29:29 +0000 (GMT)
+Received: from [9.52.200.193] (unknown [9.52.200.193])
+	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 16 Dec 2025 09:29:28 +0000 (GMT)
+Message-ID: <024b7bb4-731e-4da4-8480-4789f5912977@linux.ibm.com>
+Date: Tue, 16 Dec 2025 10:29:28 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: bjhj-exc8.internal.baidu.com (172.31.3.18) To
- bjkjy-exc3.internal.baidu.com (172.31.50.47)
-X-FEAS-Client-IP: 172.31.50.47
-X-FE-Policy-ID: 52:10:53:SYSTEM
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 4/6] perf script: Display
+ PERF_RECORD_CALLCHAIN_DEFERRED
+To: Namhyung Kim <namhyung@kernel.org>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Ian Rogers <irogers@google.com>, James Clark <james.clark@linaro.org>,
+        Jiri Olsa <jolsa@kernel.org>, Adrian Hunter <adrian.hunter@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, linux-perf-users@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Indu Bhagat <indu.bhagat@oracle.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>
+References: <20251120234804.156340-1-namhyung@kernel.org>
+ <20251120234804.156340-5-namhyung@kernel.org>
+ <9fe12698-2fd5-41fe-8505-735d73eae0a2@linux.ibm.com>
+ <aUDkpsW-WH3IPIhh@google.com>
+Content-Language: en-US
+From: Jens Remus <jremus@linux.ibm.com>
+Organization: IBM Deutschland Research & Development GmbH
+In-Reply-To: <aUDkpsW-WH3IPIhh@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjEzMDAyMyBTYWx0ZWRfX/XlN0FngC9fC
+ AW1o5ed63hU5GBPaWI3aP40oDTdUtoWkYSH2yGuVwXu+chjPnqhdsolwlLuLEpp1uOD72XYF/+9
+ FRAaga8EQZ0OUEOezPieO2icte4r5/ET8E/Gqx/tD0BiPkdsHhQMaVVjLAOLp449PtsVRzraCGc
+ UivoQiFWu/HhkYnLdjjpfUH45Z229qUfmuNxNSjS/+ZdZ10zwxqnC8GuLhaah7mwZkaNG4zh7dX
+ A2VxMbug2/kdBkZCEsISglzsDi8cZMAn/DTZKEJ4s8cUB8vU9HoaJtrmNVL2RM7sTCcUGbrrFor
+ goqJ+ZxaVybVVgqKXdX4PD/Y6PczOAu2EctmBzzkESI7vPpoBi9v/x3o8ydsCkD2Agctw/enRIR
+ +qBip+1YFQ+SeHvLPSbEOwDpeZ1lgg==
+X-Proofpoint-ORIG-GUID: JJT289aWiYLsJKcs2q0Ec5udR-biyz3H
+X-Authority-Analysis: v=2.4 cv=QtRTHFyd c=1 sm=1 tr=0 ts=6941267f cx=c_pps
+ a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
+ a=IkcTkHD0fZMA:10 a=wP3pNCr1ah4A:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=VnNF1IyMAAAA:8 a=zGLf65y6ZfpCdAT4qmQA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-Proofpoint-GUID: itQ1wkfx0CwiNgQT9LDmeEL1J0-yMivu
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-12-16_01,2025-12-15_03,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ phishscore=0 adultscore=0 malwarescore=0 lowpriorityscore=0 spamscore=0
+ priorityscore=1501 bulkscore=0 suspectscore=0 impostorscore=0 clxscore=1015
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2510240000 definitions=main-2512130023
 
-From: Li RongQing <lirongqing@baidu.com>
+Hello Namhyung!
 
-The softlockup_panic sysctl is currently a binary option: panic immediately
-or never panic on soft lockups.
+On 12/16/2025 5:48 AM, Namhyung Kim wrote:
+> On Fri, Dec 12, 2025 at 01:11:38PM +0100, Jens Remus wrote:
 
-Panicking on any soft lockup, regardless of duration, can be overly
-aggressive for brief stalls that may be caused by legitimate operations.
-Conversely, never panicking may allow severe system hangs to persist
-undetected.
+>> following is an observation from my attempt to enable unwind user fp on
+>> s390 using s390 back chain instead of frame pointer and relaxing the
+>> s390-specific IP validation check.
+>>
+>> When capturing call graphs of a Java application the list of "unwound"
+>> user space IPs may contain invalid entries, such as 0x0, 0xdeaddeaf,
+>> and 0xffffffffffffff.  IPs that exceed PERF_CONTEXT_MAX, such as the
+>> latter, cause perf not to display any deferred (or merged) call chain.
+>> Note that this is not caused by your patch series.
+> 
+> Right, it's not a real IP so perf ABI treats them as a magic context.
+> 
+>>
+>> While re-adding the s390-specific IP checks would "hide" those, I found
+>> that the call graphs look good otherwise.  That is the back chain seems
+>> to be intact.  It is just the user space application (e.g. Java JRE) not
+>> correctly adhering to the ABI and saving the return address to the
+>> specified location on the stack, causing bogus IPs to be reported.
+>>
+>> Could perf be improved to handle those user space IPs that exceed
+>> PERF_CONTEXT_MAX?
+> 
+> Ideally we should not have them in the first place.  Is it a JRE issue
+> or your s390 unwinder issue?  Is it possible to ignore them in the
+> unwinder?
 
-Extend softlockup_panic to accept an integer threshold, allowing the kernel
-to panic only when the normalized lockup duration exceeds N watchdog
-threshold periods. This provides finer-grained control to distinguish
-between transient delays and persistent system failures.
+Stack tracing using frame pointer is virtually impossible on s390, as
+the ABI does not designate a specific register as FP register, does not
+specify a fixed register save area layout, nor does mandate a FP to be
+setup early.  Compilers usually setup a FP late, that is after static
+stack allocation.
 
-The accepted values are:
-- 0: Don't panic (unchanged)
-- 1: Panic when duration >= 1 * threshold (20s default, original behavior)
-- N > 1: Panic when duration >= N * threshold (e.g., 2 = 40s, 3 = 60s.)
+An alternative is the s390-specific back chain, which is basically a
+frame pointer on stack.  The ABI specifics that *(SP+0) has the pointer
+to the previous frame and *(BC-48) has the return address (RA), if a
+back chain is used (e.g. compiler option -mbackchain is used).  This is
+why I implemented unwind user fp on s390 using back chain.  Note that
+the back chain can be correctly followed, even if the saved RAs are
+bogus.  That is what can be observed in case of this specific Java JRE.
+Apparently it correctly maintains the back chain stack slot, but does
+not correctly maintain the RA stack slot.  So the RA stack save slot may
+contain any random value.
 
-The original behavior is preserved for values 0 and 1, maintaining full
-backward compatibility while allowing systems to tolerate brief lockups
-while still catching severe, persistent hangs.
+The s390-implementation of unwind user fp could check whether the return
+address is a valid IP.  This is how it is implemented in the existing
+stack tracer in arch/s390/kernel/stacktrace.c:
 
-Signed-off-by: Li RongQing <lirongqing@baidu.com>
----
- Documentation/admin-guide/kernel-parameters.txt      | 10 +++++-----
- arch/arm/configs/aspeed_g5_defconfig                 |  2 +-
- arch/arm/configs/pxa3xx_defconfig                    |  2 +-
- arch/openrisc/configs/or1klitex_defconfig            |  2 +-
- arch/powerpc/configs/skiroot_defconfig               |  2 +-
- drivers/gpu/drm/ci/arm.config                        |  2 +-
- drivers/gpu/drm/ci/arm64.config                      |  2 +-
- drivers/gpu/drm/ci/x86_64.config                     |  2 +-
- kernel/watchdog.c                                    |  8 +++++---
- lib/Kconfig.debug                                    | 13 +++++++------
- tools/testing/selftests/bpf/config                   |  2 +-
- tools/testing/selftests/wireguard/qemu/kernel.config |  2 +-
- 12 files changed, 26 insertions(+), 23 deletions(-)
+static inline bool ip_invalid(unsigned long ip)
+{
+	/* ABI requires IPs to be 2-byte aligned */
+	if (ip & 1)
+		return true;
+	if (ip < mmap_min_addr)
+		return true;
+	if (ip >= current->mm->context.asce_limit)
+		return true;
+	return false;
+}
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index a8d0afd..27c5f96 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -6934,12 +6934,12 @@ Kernel parameters
- 
- 	softlockup_panic=
- 			[KNL] Should the soft-lockup detector generate panics.
--			Format: 0 | 1
-+			Format: <int>
- 
--			A value of 1 instructs the soft-lockup detector
--			to panic the machine when a soft-lockup occurs. It is
--			also controlled by the kernel.softlockup_panic sysctl
--			and CONFIG_BOOTPARAM_SOFTLOCKUP_PANIC, which is the
-+			A value of non-zero instructs the soft-lockup detector
-+			to panic the machine when a soft-lockup duration exceeds
-+			N thresholds. It is also controlled by the kernel.softlockup_panic
-+			sysctl and CONFIG_BOOTPARAM_SOFTLOCKUP_PANIC, which is the
- 			respective build-time switch to that functionality.
- 
- 	softlockup_all_cpu_backtrace=
-diff --git a/arch/arm/configs/aspeed_g5_defconfig b/arch/arm/configs/aspeed_g5_defconfig
-index 2e6ea13..ec558e5 100644
---- a/arch/arm/configs/aspeed_g5_defconfig
-+++ b/arch/arm/configs/aspeed_g5_defconfig
-@@ -306,7 +306,7 @@ CONFIG_SCHED_STACK_END_CHECK=y
- CONFIG_PANIC_ON_OOPS=y
- CONFIG_PANIC_TIMEOUT=-1
- CONFIG_SOFTLOCKUP_DETECTOR=y
--CONFIG_BOOTPARAM_SOFTLOCKUP_PANIC=y
-+CONFIG_BOOTPARAM_SOFTLOCKUP_PANIC=1
- CONFIG_BOOTPARAM_HUNG_TASK_PANIC=1
- CONFIG_WQ_WATCHDOG=y
- # CONFIG_SCHED_DEBUG is not set
-diff --git a/arch/arm/configs/pxa3xx_defconfig b/arch/arm/configs/pxa3xx_defconfig
-index 07d422f..fb272e3 100644
---- a/arch/arm/configs/pxa3xx_defconfig
-+++ b/arch/arm/configs/pxa3xx_defconfig
-@@ -100,7 +100,7 @@ CONFIG_PRINTK_TIME=y
- CONFIG_DEBUG_KERNEL=y
- CONFIG_MAGIC_SYSRQ=y
- CONFIG_DEBUG_SHIRQ=y
--CONFIG_BOOTPARAM_SOFTLOCKUP_PANIC=y
-+CONFIG_BOOTPARAM_SOFTLOCKUP_PANIC=1
- # CONFIG_SCHED_DEBUG is not set
- CONFIG_DEBUG_SPINLOCK=y
- CONFIG_DEBUG_SPINLOCK_SLEEP=y
-diff --git a/arch/openrisc/configs/or1klitex_defconfig b/arch/openrisc/configs/or1klitex_defconfig
-index fb1eb9a..984b0e3 100644
---- a/arch/openrisc/configs/or1klitex_defconfig
-+++ b/arch/openrisc/configs/or1klitex_defconfig
-@@ -52,5 +52,5 @@ CONFIG_LSM="lockdown,yama,loadpin,safesetid,integrity,bpf"
- CONFIG_PRINTK_TIME=y
- CONFIG_PANIC_ON_OOPS=y
- CONFIG_SOFTLOCKUP_DETECTOR=y
--CONFIG_BOOTPARAM_SOFTLOCKUP_PANIC=y
-+CONFIG_BOOTPARAM_SOFTLOCKUP_PANIC=1
- CONFIG_BUG_ON_DATA_CORRUPTION=y
-diff --git a/arch/powerpc/configs/skiroot_defconfig b/arch/powerpc/configs/skiroot_defconfig
-index 2b71a6d..a4114fc 100644
---- a/arch/powerpc/configs/skiroot_defconfig
-+++ b/arch/powerpc/configs/skiroot_defconfig
-@@ -289,7 +289,7 @@ CONFIG_SCHED_STACK_END_CHECK=y
- CONFIG_DEBUG_STACKOVERFLOW=y
- CONFIG_PANIC_ON_OOPS=y
- CONFIG_SOFTLOCKUP_DETECTOR=y
--CONFIG_BOOTPARAM_SOFTLOCKUP_PANIC=y
-+CONFIG_BOOTPARAM_SOFTLOCKUP_PANIC=1
- CONFIG_HARDLOCKUP_DETECTOR=y
- CONFIG_BOOTPARAM_HARDLOCKUP_PANIC=y
- CONFIG_WQ_WATCHDOG=y
-diff --git a/drivers/gpu/drm/ci/arm.config b/drivers/gpu/drm/ci/arm.config
-index 411e814..d7c5167 100644
---- a/drivers/gpu/drm/ci/arm.config
-+++ b/drivers/gpu/drm/ci/arm.config
-@@ -52,7 +52,7 @@ CONFIG_TMPFS=y
- CONFIG_PROVE_LOCKING=n
- CONFIG_DEBUG_LOCKDEP=n
- CONFIG_SOFTLOCKUP_DETECTOR=n
--CONFIG_BOOTPARAM_SOFTLOCKUP_PANIC=n
-+CONFIG_BOOTPARAM_SOFTLOCKUP_PANIC=0
- 
- CONFIG_FW_LOADER_COMPRESS=y
- 
-diff --git a/drivers/gpu/drm/ci/arm64.config b/drivers/gpu/drm/ci/arm64.config
-index fddfbd4..ea0e307 100644
---- a/drivers/gpu/drm/ci/arm64.config
-+++ b/drivers/gpu/drm/ci/arm64.config
-@@ -161,7 +161,7 @@ CONFIG_TMPFS=y
- CONFIG_PROVE_LOCKING=n
- CONFIG_DEBUG_LOCKDEP=n
- CONFIG_SOFTLOCKUP_DETECTOR=y
--CONFIG_BOOTPARAM_SOFTLOCKUP_PANIC=y
-+CONFIG_BOOTPARAM_SOFTLOCKUP_PANIC=1
- 
- CONFIG_DETECT_HUNG_TASK=y
- 
-diff --git a/drivers/gpu/drm/ci/x86_64.config b/drivers/gpu/drm/ci/x86_64.config
-index 8eaba388..7ac98a7 100644
---- a/drivers/gpu/drm/ci/x86_64.config
-+++ b/drivers/gpu/drm/ci/x86_64.config
-@@ -47,7 +47,7 @@ CONFIG_TMPFS=y
- CONFIG_PROVE_LOCKING=n
- CONFIG_DEBUG_LOCKDEP=n
- CONFIG_SOFTLOCKUP_DETECTOR=y
--CONFIG_BOOTPARAM_SOFTLOCKUP_PANIC=y
-+CONFIG_BOOTPARAM_SOFTLOCKUP_PANIC=1
- 
- CONFIG_DETECT_HUNG_TASK=y
- 
-diff --git a/kernel/watchdog.c b/kernel/watchdog.c
-index 0685e3a..a5fa116 100644
---- a/kernel/watchdog.c
-+++ b/kernel/watchdog.c
-@@ -363,7 +363,7 @@ static struct cpumask watchdog_allowed_mask __read_mostly;
- 
- /* Global variables, exported for sysctl */
- unsigned int __read_mostly softlockup_panic =
--			IS_ENABLED(CONFIG_BOOTPARAM_SOFTLOCKUP_PANIC);
-+			CONFIG_BOOTPARAM_SOFTLOCKUP_PANIC;
- 
- static bool softlockup_initialized __read_mostly;
- static u64 __read_mostly sample_period;
-@@ -879,7 +879,9 @@ static enum hrtimer_restart watchdog_timer_fn(struct hrtimer *hrtimer)
- 
- 		add_taint(TAINT_SOFTLOCKUP, LOCKDEP_STILL_OK);
- 		sys_info(softlockup_si_mask & ~SYS_INFO_ALL_BT);
--		if (softlockup_panic)
-+		duration = duration / get_softlockup_thresh();
-+
-+		if (softlockup_panic && duration >= softlockup_panic)
- 			panic("softlockup: hung tasks");
- 	}
- 
-@@ -1228,7 +1230,7 @@ static const struct ctl_table watchdog_sysctls[] = {
- 		.mode		= 0644,
- 		.proc_handler	= proc_dointvec_minmax,
- 		.extra1		= SYSCTL_ZERO,
--		.extra2		= SYSCTL_ONE,
-+		.extra2		= SYSCTL_INT_MAX,
- 	},
- 	{
- 		.procname	= "softlockup_sys_info",
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index ba36939..17a7a77 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -1110,13 +1110,14 @@ config SOFTLOCKUP_DETECTOR_INTR_STORM
- 	  the CPU stats and the interrupt counts during the "soft lockups".
- 
- config BOOTPARAM_SOFTLOCKUP_PANIC
--	bool "Panic (Reboot) On Soft Lockups"
-+	int "Panic (Reboot) On Soft Lockups"
- 	depends on SOFTLOCKUP_DETECTOR
-+	default 0
- 	help
--	  Say Y here to enable the kernel to panic on "soft lockups",
--	  which are bugs that cause the kernel to loop in kernel
--	  mode for more than 20 seconds (configurable using the watchdog_thresh
--	  sysctl), without giving other tasks a chance to run.
-+	  Set to a non-zero value N to enable the kernel to panic on "soft
-+	  lockups", which are bugs that cause the kernel to loop in kernel
-+	  mode for more than (N * 20 seconds) (configurable using the
-+	  watchdog_thresh sysctl), without giving other tasks a chance to run.
- 
- 	  The panic can be used in combination with panic_timeout,
- 	  to cause the system to reboot automatically after a
-@@ -1124,7 +1125,7 @@ config BOOTPARAM_SOFTLOCKUP_PANIC
- 	  high-availability systems that have uptime guarantees and
- 	  where a lockup must be resolved ASAP.
- 
--	  Say N if unsure.
-+	  Say 0 if unsure.
- 
- config HAVE_HARDLOCKUP_DETECTOR_BUDDY
- 	bool
-diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
-index 558839e..2485538 100644
---- a/tools/testing/selftests/bpf/config
-+++ b/tools/testing/selftests/bpf/config
-@@ -1,6 +1,6 @@
- CONFIG_BLK_DEV_LOOP=y
- CONFIG_BOOTPARAM_HARDLOCKUP_PANIC=y
--CONFIG_BOOTPARAM_SOFTLOCKUP_PANIC=y
-+CONFIG_BOOTPARAM_SOFTLOCKUP_PANIC=1
- CONFIG_BPF=y
- CONFIG_BPF_EVENTS=y
- CONFIG_BPF_JIT=y
-diff --git a/tools/testing/selftests/wireguard/qemu/kernel.config b/tools/testing/selftests/wireguard/qemu/kernel.config
-index 0504c11..bb89d2d 100644
---- a/tools/testing/selftests/wireguard/qemu/kernel.config
-+++ b/tools/testing/selftests/wireguard/qemu/kernel.config
-@@ -80,7 +80,7 @@ CONFIG_HARDLOCKUP_DETECTOR=y
- CONFIG_WQ_WATCHDOG=y
- CONFIG_DETECT_HUNG_TASK=y
- CONFIG_BOOTPARAM_HARDLOCKUP_PANIC=y
--CONFIG_BOOTPARAM_SOFTLOCKUP_PANIC=y
-+CONFIG_BOOTPARAM_SOFTLOCKUP_PANIC=1
- CONFIG_BOOTPARAM_HUNG_TASK_PANIC=1
- CONFIG_PANIC_TIMEOUT=-1
- CONFIG_STACKTRACE=y
+It could then either stop or return some magic value
+(e.g. PERF_CONTEXT_MAX - 1) to indicate that the IP is invalid and
+continue.  Actually I would prefer to continue so that a user an see
+that there is something odd with the stack trace.
+
+Alternatively such a check could possibly also be implemented in the
+common undwind user, if the address space limits are known in common
+code, or as an architecture-specific hook.  In general I tend to at
+least add a check whether the IP is zero, as this is used on several
+architectures as indication for outermost frames (usually in
+combination with a FP of zero).
+
+>>
+>> Is there otherwise guidance how unwind user and/or the s390
+>> implementation should deal with such IPs?  Should it stop taking the
+>> deferred calltrace?  Should it substitute those with e.g 0, so that
+>> perf can display them?
+
+
+>> Sample for IP == ffffffffffffff (perf does not display any call chain):
+...
+>> # perf report -D
+>> ...
+>> 44004346257 0x17718 [0x40]: PERF_RECORD_SAMPLE(IP, 0x2): 1082/1084: 0x3ffa3e413aa period: 1001001 addr: 0
+>> ... FP chain: nr:2
+>> .....  0: fffffffffffffd80
+>> .....  1: 0000000400000079
+>> ...... (deferred)
+>>  ... thread: java:1084
+>>  ...... dso: /tmp/perf-1082.map
+>>
+>> 0x17758@perf.data [0xd0]: event: 22
+>> .
+>> . ... raw event: size 208 bytes
+...
+>>
+>> 44004348864 0x17758 [0xd0]: PERF_RECORD_CALLCHAIN_DEFERRED(IP, 0x2): 1082/1084: 0x400000079
+>> ... FP chain: nr:21
+>> .....  0: 000003ffa3e413aa
+>> .....  1: 000003ff3809e2d0
+>> .....  2: 000003ff3809e130
+>> .....  3: 000003ffb95fdf68
+>> .....  4: 0000000000000000
+>> .....  5: 000003ffb95fe128
+>> .....  6: 000003ffb95fe1d0
+>> .....  7: 005780888e7647a5
+>> .....  8: 000003ffa3e437f2
+>> .....  9: ffffffffffffffff <-- !
+>> ..... 10: 000003ffa3e4a1fc
+>> ..... 11: 0000000000000000
+>> ..... 12: 000003ffa3e37900
+>> ..... 13: 000003ffa3e41080
+>> ..... 14: 000003ffb9dd11de
+>> ..... 15: 000003ffb9e8df92
+>> ..... 16: 000003ffb9e90e86
+>> ..... 17: 000003ffbab8b07e
+>> ..... 18: 000003ffbab8e040
+>> ..... 19: 000003ffba8abbd8
+>> ..... 20: 000003ffba92b950
+>> : unhandled!
+>>
+>> ...
+>> [next entry]
+>>
+>>
+>> On 11/21/2025 12:48 AM, Namhyung Kim wrote:
+
+>>> diff --git a/tools/perf/builtin-script.c b/tools/perf/builtin-script.c
+>>
+>>> +static int process_deferred_sample_event(const struct perf_tool *tool,
+>>> +					 union perf_event *event,
+>>> +					 struct perf_sample *sample,
+>>> +					 struct evsel *evsel,
+>>> +					 struct machine *machine)
+>>> +{
+>>
+>>> +	perf_sample__fprintf_start(scr, sample, al.thread, evsel,
+>>> +				   PERF_RECORD_CALLCHAIN_DEFERRED, fp);
+>>> +	fprintf(fp, "DEFERRED CALLCHAIN [cookie: %llx]",
+>>> +		(unsigned long long)event->callchain_deferred.cookie);
+>>> +
+>>> +	if (PRINT_FIELD(IP)) {
+>>> +		struct callchain_cursor *cursor = NULL;
+>>> +
+>>> +		if (symbol_conf.use_callchain && sample->callchain) {
+>>> +			cursor = get_tls_callchain_cursor();
+>>> +			if (thread__resolve_callchain(al.thread, cursor, evsel,
+>>> +						      sample, NULL, NULL,
+>>> +						      scripting_max_stack)) {
+>>
+>> thread__resolve_callchain()
+>> calls __thread__resolve_callchain()
+>> calls thread__resolve_callchain_sample():
+>>
+>>         for (i = first_call, nr_entries = 0;
+>>              i < chain_nr && nr_entries < max_stack; i++) {
+>> ...
+>>                 ip = chain->ips[j];
+>>                 if (ip < PERF_CONTEXT_MAX)   <-- IP=ff..ff is greater than PERF_CONTEXT_MAX
+>>                        ++nr_entries;
+> 
+> Right.
+> 
+>> ...
+>>                 err = add_callchain_ip(thread, cursor, parent,
+>>                                        root_al, &cpumode, ip,
+>>                                        false, NULL, NULL, 0, symbols);
+>>
+>>                 if (err)
+>>                         return (err < 0) ? err : 0;
+>>
+>> calls add_callchain_ip:
+>>
+>>                if (ip >= PERF_CONTEXT_MAX) {
+>>                        switch (ip) {
+>>                        case PERF_CONTEXT_HV:
+>>                                *cpumode = PERF_RECORD_MISC_HYPERVISOR;
+>>                                break;
+>>                        case PERF_CONTEXT_KERNEL:
+>>                                *cpumode = PERF_RECORD_MISC_KERNEL;
+>>                                break;
+>>                        case PERF_CONTEXT_USER:
+>>                        case PERF_CONTEXT_USER_DEFERRED:
+>>                                *cpumode = PERF_RECORD_MISC_USER;
+>>                                break;
+>>                        default:
+>>                                pr_debug("invalid callchain context: "  <-- IP=ff..ff reaches default case
+>>                                         "%"PRId64"\n", (s64) ip);
+> 
+> We may skip -1 if it's Java and *cpumode is already USER and it's s390.
+> But I'd like to understand the situation first.
+
+Let's better not add any weird architecture-specific handling.  This is
+also not limited to -1 (and 0), as Java may have used the stack save
+area in any way, so it may be any random value.
+
+>>                                /*
+>>                                 * It seems the callchain is corrupted.
+>>                                 * Discard all.
+>>                                 */
+>>                                callchain_cursor_reset(cursor);
+>>                                err = 1;
+>>                                goto out;
+>>                        }
+>>
+>>> +				pr_info("cannot resolve deferred callchains\n");
+>>> +				cursor = NULL;
+>>> +			}
+>>> +		}
+>>> +
+>>> +		fputc(cursor ? '\n' : ' ', fp);
+>>> +		sample__fprintf_sym(sample, &al, 0, output[type].print_ip_opts,
+>>> +				    cursor, symbol_conf.bt_stop_list, fp);
+>>> +	}
+
+Thanks and regards,
+Jens
 -- 
-2.9.4
+Jens Remus
+Linux on Z Development (D3303)
++49-7031-16-1128 Office
+jremus@de.ibm.com
+
+IBM
+
+IBM Deutschland Research & Development GmbH; Vorsitzender des Aufsichtsrats: Wolfgang Wendt; Geschäftsführung: David Faller; Sitz der Gesellschaft: Böblingen; Registergericht: Amtsgericht Stuttgart, HRB 243294
+IBM Data Privacy Statement: https://www.ibm.com/privacy/
 
