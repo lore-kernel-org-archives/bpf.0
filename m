@@ -1,107 +1,81 @@
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+Received: from SJ2PR03CU001.outbound.protection.outlook.com (mail-westusazon11012018.outbound.protection.outlook.com [52.101.43.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 274DB16A956
-	for <bpf@vger.kernel.org>; Wed, 17 Dec 2025 20:51:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B4E3212552;
+	Wed, 17 Dec 2025 21:02:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.43.18
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766004681; cv=fail; b=SBJi/jH9lDEsOlKcebqPxvs5UfWkT3E69wuSRBunBJQJ8g5JZVZJMmIehgG9cOljGoTDrWpdu9+4klUk9w9NKRVvX8e1/hZB9xPJDNynYwNCEN2vr56Saw5fawmtA8ySlD+gdmZQl3iwK2+PsDy2L4T4Dn9YSBkdaTPgJU8BVp8=
+	t=1766005348; cv=fail; b=GJOMNxrQgjRtAL7ogsNdguOcza30e07USXnaJLjwwPN74ggM1MMsI6dHSqy17wb71Rptbzdt45C1IPFvVVMDA0cBiFUQ9w5MzYpwRw/AtI628yC0NonvOmpXh2Wd3WMwVFnDx9H7mm1NNdWxkLTC3rDm/l8J6lVXyX+/w3L6sx4=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766004681; c=relaxed/simple;
-	bh=JAc/p0nEmEl86UTSbGss2V1vmHGltnk5+2XA8PhGvNY=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=WbZjr+dnKo+4M3VQV1z5SvczKodwVMy+q3flqsD465q0LJAUbUFMMN4NF1PjZ460x14trR8TSE0WjGyxJXjL0QqX8oibotQ4cOiq94OMn9bDfcTvKwLwKXFnHslaqVHILTPSiVVYH1MxMBPKgYZj5ajYRo1C7rOeW1WLlFJZaKA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=r9ScZAIn; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=E/Uacp0/; arc=fail smtp.client-ip=205.220.165.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+	s=arc-20240116; t=1766005348; c=relaxed/simple;
+	bh=nDlYkvz4RD6i4v+tpwIvSAEpjrti/SpP4/VAQvfiqLo=;
+	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=eHP0/83rF3LMFBujUmhuMIm+7BKdM5z5ETnJY13E5KI2xDXqGF22H/KZMy/l4yCP5T225DlEVf6bJ6DD5+flIXiUQSEAmdeL0Chc9kmVzCCmTY3pBaCJvSA06BSr4EVWxNDT1mCsOwHJEv0RHvVFUoK9805XKU6zjAde7m4a4Yg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=UypBNaXO; arc=fail smtp.client-ip=52.101.43.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="r9ScZAIn";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="E/Uacp0/"
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5BHJQaiU3377663;
-	Wed, 17 Dec 2025 20:50:53 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=yajmK6N37h1JuD+whiAPSpB1eR86RVf+a55czHSLJIQ=; b=
-	r9ScZAInvXAq5IAjdvVvuK1sIiK5cwm4dPIYAb9Eqm0BOm2zWFMvwmdSQ0n5b56L
-	NbeY878jeHomczojZq6431JfQMQEYjsw9ylos3/aBBYdxRipttoqTDowlxawHkX6
-	lxtC49v/KIVO0EkEubXlkomndliWLgGYq55OXZLkFKwNQ9Lq2blLi1YtDT4r8tQM
-	zeRPOPvjYz1n0dio8RDGD7kJfY2Veh+ZjlkDyNc/4jwJ9UVhwiYuWT5CTvGiJHfN
-	qfb6PGw5TEYm1vi7apFMp1EAeWk5gkaFcvFLCJoXZzCxO11NXny1QzjbZcM+Jp39
-	uFYPUpx178Rw40SIzT4NQQ==
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4b3xc8rnhv-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 17 Dec 2025 20:50:52 +0000 (GMT)
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 5BHKHxpo022457;
-	Wed, 17 Dec 2025 20:50:51 GMT
-Received: from ph8pr06cu001.outbound.protection.outlook.com (mail-westus3azon11012066.outbound.protection.outlook.com [40.107.209.66])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4b0xkn2n3p-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 17 Dec 2025 20:50:51 +0000
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="UypBNaXO"
+Received: from DS0PR12MB6413.namprd12.prod.outlook.com (2603:10b6:8:ce::10) by
+ CH0PR12MB8532.namprd12.prod.outlook.com (2603:10b6:610:191::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9434.6; Wed, 17 Dec
+ 2025 20:46:52 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=qYBZKu2nekuPFzyaZqHqlH6IQ8wgLCOuFTFSgVyty+66xDzNrPWSWVEsD1th2bCAKVDD3B1WeJotkWf6ZGa+PeUXDpnie9xJN4R5Z6RLmHucNg8QHwuS0fDf7vMNcxd1h+FYdKgLnTTKCrwbGsIcdxS8vpST1hFa0//r1l5pysNTxPlTVaL+7myaUzCbQ89Go622WkY7Dadd8fLRnIRGpN5rIyvoEiiApupzjQlhB5pkl5VkgSAjHlCv2tzpyAWkVpflTBpPQ8dXU7cayjZo0T7Gv6Hc+wOwVw6Zgh1b3zwImCAPhUAtk95Z36vZV5KP7Q841UJTTU2I4/oD9R7tGw==
+ b=EymZCNA0ieP8lh1yfp05teVDljH6/2rpmCeLG9lEvgnZ8lvRze6IkquGu6LldFOuI9SA2m9pEpbv2rXTHlbkj5pzeh9dcVzrTXpZirv96rOk7hgpFqkQVRi5ZC0f6Qt9fJvSaU4wLCXfobY6hXnE08nIBNsNWX9K+tyzjRe3y6V7SYJBjvY7nF+tPk3ikdPv/82RjOuqmxMWMtsFthC1mvVazs455WpYBkfYRWw7xLXMCSCsowFnuzGo90Pra2Qa/e0QDU747iuULaZNbx7kU6YJVjmbbc3d/1f/Dwh1qkgq4+paOPJD4Fj3pC356U9sRThZuu5HjPotGOUJ5RCTZQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=yajmK6N37h1JuD+whiAPSpB1eR86RVf+a55czHSLJIQ=;
- b=XrMJHVU2OGZw4qOVgZsgfhS1oy7CXLnCqDziUB9fGu6V5inDNhfjO7vzmlq/J7OZQN3FDw2+PWBIuvrfUjilUtAexDaKSLs4TIMNyRwUwm65Hk6slviIOhP4WaRT5ZDV03XVru0VWhRCwjPVg5GJXk4mbRTMIuqYccNX0tEnthLu8APuVvFyXBS09fIIoJ/CuR/PqyxjymK6xP0UHmrp5lSSk+0lF29M5X2iIgprgCST9hdkToClw2TNMscjd6fU6/y7JLvA0jnqca9HWQfXd1xhSGQbi762oQrmcjMr+QW8B0VrdD/XM9FiIGvpHvkN0ep2R8iK0VQq/JKFDVJfSw==
+ bh=a1JpjV2egCE63o5jhY5jMFZpq7t1PE3pl66nHr5rfT8=;
+ b=yyQDev/W3QstbTkIO1N0UWw7FCgLyYJYKZ6HWvlS/OT7KqWF0kIwnMFgbA7DE9ly7EPmG/OUIVSFp8LDXyZNEe3KC0K3FBUhB7VhYjlpoXQh+m2GbZzf7F12kCZU4RdQEf+yy+SzLYhc4xkQnEnIEBLrX8E2klW0LP6rePjlO9AKBy8buDb79X6m/cwR1fL8z+xiDOF7sZQG9t7QLxW7C9e0FnjaQqEOdSFb90EKTVP1HJrC4eeFAFmIuKt5x0yRLjW3WpNJmb2TnwrSPIp+nnhCMgxQTbfIcTESFz6sOmq/gDFgkE2E1C3FqvYlSdRmJnQjxG4MMawd8ZKtWpCcZg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=yajmK6N37h1JuD+whiAPSpB1eR86RVf+a55czHSLJIQ=;
- b=E/Uacp0/Yi0w9odPXSV0/7UnFbISwEtXDJ4QHm2uhygTVTElJVHcbq7k0ugEO1uMowbXI11fDZ2XRB7yfhyQj7xWI8vnRA5r/iA3IzkMz4KVJQhTIrXsDBY1lc1QpLMWmCNSfs1PINczrqG3oh0BKegkm2VF5N0xeHPUueHwrrE=
-Received: from DS0PR10MB6271.namprd10.prod.outlook.com (2603:10b6:8:d1::15) by
- PH3PPF1189AF8C5.namprd10.prod.outlook.com (2603:10b6:518:1::78a) with
+ bh=a1JpjV2egCE63o5jhY5jMFZpq7t1PE3pl66nHr5rfT8=;
+ b=UypBNaXOvkwa4QGj+ukGHuA6rlFkw+ifpG+1ZrJdveJ8u6mE9LrbCyuoNkf30ThCYLyZFw5hDHOKpOciSWXUv0OHvgP2fsjmLAqh50JgE8W79KoFZnPuzfwtKbl3MhOc7mZBQiZfmvQzzx//yMHybnWktRLerO39/rcu3Ns0QJ9+HVmTV2bnC3quc1COgl1qghddFDLOOQUEfG0xU0hB0ghRGixk4xHhjoEGpht0b6MEZeT1Ag1GPmCILSHXYjQPZ3o3cvGSVOISw8SMOvyTZcsur9kc/du4J0uWT5VzL8lhv7gaek82dr/5uHV51rf/W2LYUgNyti6zQfD4LFqqvQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV8PR12MB9620.namprd12.prod.outlook.com (2603:10b6:408:2a1::19)
+ by DS0PR12MB6413.namprd12.prod.outlook.com (2603:10b6:8:ce::10) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9434.6; Wed, 17 Dec
- 2025 20:50:47 +0000
-Received: from DS0PR10MB6271.namprd10.prod.outlook.com
- ([fe80::940b:88ca:dd2d:6b0c]) by DS0PR10MB6271.namprd10.prod.outlook.com
- ([fe80::940b:88ca:dd2d:6b0c%7]) with mapi id 15.20.9434.001; Wed, 17 Dec 2025
- 20:50:47 +0000
-Message-ID: <b65fd7dc-fbad-4a96-8eb8-f36f8f518d44@oracle.com>
-Date: Wed, 17 Dec 2025 20:50:41 +0000
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next 1/2] libbpf: add option to force-anonymize nested
- structs for BTF dump
-To: Eduard Zingerman <eddyz87@gmail.com>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Quentin Monnet <qmo@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-        Yonghong Song <yonghong.song@linux.dev>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        bpf <bpf@vger.kernel.org>
-References: <20251216171854.2291424-1-alan.maguire@oracle.com>
- <20251216171854.2291424-2-alan.maguire@oracle.com>
- <d5a578c01f8a2d4d95ca16e0a9ee5b9bfce1c30e.camel@gmail.com>
- <9a096b2a16d552031a12f3f4f5a2c725212df5e6.camel@gmail.com>
- <b535b47a-519e-4138-861b-c16ed7fa0bcd@oracle.com>
- <CAADnVQ+EyYO+aOZewNQwETr5rphOCp6jJQH_fw9GqjVFdQd19A@mail.gmail.com>
- <CAEf4BzbWZtRdKCGwhjRV9MOufTC-coWFSU5sRtk4gdm9S_bg+w@mail.gmail.com>
- <6ae6dfd8-3f73-4318-93c1-97541d267a28@oracle.com>
- <CAADnVQ+wNPbbA0e4+6kx+LtOH=09jJyiYcEKZfc8kt6UPnq=EQ@mail.gmail.com>
- <535846f7-4cc7-4b12-aab4-52e530d04706@oracle.com>
- <ae6c6e50b3176d4ee4cce4cda09807a05d103fbf.camel@gmail.com>
- <3071012cc1e8d6bdf16b13d371a12cb201c502a7.camel@gmail.com>
-Content-Language: en-GB
-From: Alan Maguire <alan.maguire@oracle.com>
-In-Reply-To: <3071012cc1e8d6bdf16b13d371a12cb201c502a7.camel@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO2P265CA0496.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:13a::21) To DS0PR10MB6271.namprd10.prod.outlook.com
- (2603:10b6:8:d1::15)
+ 2025 09:39:45 +0000
+Received: from LV8PR12MB9620.namprd12.prod.outlook.com
+ ([fe80::1b59:c8a2:4c00:8a2c]) by LV8PR12MB9620.namprd12.prod.outlook.com
+ ([fe80::1b59:c8a2:4c00:8a2c%3]) with mapi id 15.20.9434.001; Wed, 17 Dec 2025
+ 09:39:45 +0000
+From: Andrea Righi <arighi@nvidia.com>
+To: Ingo Molnar <mingo@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>
+Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ben Segall <bsegall@google.com>,
+	Mel Gorman <mgorman@suse.de>,
+	Valentin Schneider <vschneid@redhat.com>,
+	Tejun Heo <tj@kernel.org>,
+	David Vernet <void@manifault.com>,
+	Changwoo Min <changwoo@igalia.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Joel Fernandes <joelagnelf@nvidia.com>,
+	Christian Loehle <christian.loehle@arm.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	sched-ext@lists.linux.dev,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCHSET v11 sched_ext/for-6.20] Add a deadline server for sched_ext tasks
+Date: Wed, 17 Dec 2025 10:35:38 +0100
+Message-ID: <20251217093923.1556187-1-arighi@nvidia.com>
+X-Mailer: git-send-email 2.52.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: ZR2P278CA0035.CHEP278.PROD.OUTLOOK.COM
+ (2603:10a6:910:47::20) To LV8PR12MB9620.namprd12.prod.outlook.com
+ (2603:10b6:408:2a1::19)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -109,152 +83,239 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS0PR10MB6271:EE_|PH3PPF1189AF8C5:EE_
-X-MS-Office365-Filtering-Correlation-Id: 95a41220-0be6-455a-e2ca-08de3dadf463
+X-MS-TrafficTypeDiagnostic:
+ LV8PR12MB9620:EE_|DS0PR12MB6413:EE_|CH0PR12MB8532:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1ee2cc93-f222-402b-88b3-08de3d503624
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|7416014|376014;
+X-Microsoft-Antispam:
+ BCL:0;ARA:13230040|1800799024|366016|376014|7416014|13003099007;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?WmY2Wms3bzJxZnFPU2t3WGMrTGRaSklnSVRGazEzakFQTUI4dlBuRTllb0VO?=
- =?utf-8?B?WVFNd01NZFBRWDFnNEU3VzRPSmIvUEFaR3QwUS9jOGJMb05QemdRWUhFazRY?=
- =?utf-8?B?dlJYSDFScTh1MTlMM3dWZ0Z3YjMxa0Z2eTlEaFkwaXgyMCsyZzNNYWYrbXRH?=
- =?utf-8?B?SHdTVWVzMDdhNXpTK3RkVldpVjd5VEtuQVljdFhWcWl4djVwY0ZWbGxCNTdV?=
- =?utf-8?B?bERSYUNvWW1XSlRCNHpRRms2UlFOaXppaTRCMzIrd3k4VnlRYzV5QTBWLzFI?=
- =?utf-8?B?TVFONDhpR05vdEhqUDNJR2ZvSitwRUl4bU9HU3h4WVNMWUNMQVRBZjY5T1FF?=
- =?utf-8?B?ekdHeWV6U1FxeWkzVjZESEM3TXFQNGJ3TEFTdlFVUDVtOGZqblExSFBQMjRk?=
- =?utf-8?B?UmcyVnZVV1JsUmVCTmVINUxwSDJYRWh1VktsbVI0SjRkSkc0UVRYZUtwcUlP?=
- =?utf-8?B?Z09FeXREY2RNSEUwMldUZkNpTTlJREVQUm9ibmhlWW8wWDRIU3BaeTJDYlc0?=
- =?utf-8?B?VksrUGNSOWZ2VHpJallrQ1BkRjRtc2t2R3Y0NWpNc0R1dzc2MjRueXpLWlZ2?=
- =?utf-8?B?UEJxVWc4bVB6cXB5UlgxN2tnNDZHNnYwMFZlNlZ1d2Fwd1FrUnNxVHJ1YVVo?=
- =?utf-8?B?R09zU0ZFaDZkM1BxOCt2dXB4emtqVlJYWi9oTzNKQThoVFYyT0dsczNRekUw?=
- =?utf-8?B?RGNNU2lXT2swZTJQNlhpWWRXb1FHZExSSm90SGYrU2RWTE5aQmUwR3NxWnVa?=
- =?utf-8?B?bGhRa2pEa3VLZWc2bWswejAxQVdNM1JWMktKbkhmWWFUSEtJTGJzMWFOdkJi?=
- =?utf-8?B?dERTdUFsdUJHdjVEQW1VT2NKVlNzVTZ1RXVsL3ZsdkVGUktDbG9URVlrdXNp?=
- =?utf-8?B?bEtpRWo2dDhNdlpDdlYxaDkzdmNLOVE2dFowYy91VHR4SVZjbWhPOFRacDB6?=
- =?utf-8?B?eE1CTDJOREwrMUJ3RnpDSTFNV1RIYnlZZVZVY2JSUFkxRGVtYXA1ZkZiZU9i?=
- =?utf-8?B?ZEllOWJIRnZ4K2RDdVNNN1JwWHRGMCt5T0RLdTJRNERWdHliNmZOK01DMjFz?=
- =?utf-8?B?MWJTZkFtTG9teXJEV3dNTUVDajlweHYxS1pKVzR1bGx3cHpCWWJLS0xnVTRl?=
- =?utf-8?B?emtzWGdjd0RIL1pRRVdxMWg0U1h3TGRNdTFSQ2NlWE5UTk9NREdTL1ZpenQz?=
- =?utf-8?B?UGQ1cDhkbC8rSWk3ZWt5WENtRTBjTWxaRWE2d0hqVzNzLzFEeUwyV3loQ3Zz?=
- =?utf-8?B?d0JoT1RxRm5yZXBFQWFxVHpRQyt3UmlrdEYzbTNQNjZXZzRSbVA1cXRmRkFy?=
- =?utf-8?B?QjlxV3FCUlBqRGQ0eW0za0xkNml6T3VCK1lzZ0kwc3RHTE1TaG9mOW1tN1cv?=
- =?utf-8?B?eHFWbHM2aUtGcTFYZVFPenREYWhablVKTGszbFV3MEt2cUhERWw2M1k0VHp6?=
- =?utf-8?B?R202R0gxbHFLRFV4d3F5QitqeFIwLzFLNUFXeTY0Vy9tU2l5aHZpWWZ4WkdP?=
- =?utf-8?B?cVQ2WFVUbVcrT0luSXF3aU50dmlzWnRGMFY2OU1lTisrQ01NRnB1bXdxVitn?=
- =?utf-8?B?UVdMOFMrN1FPRVVoZ1g2a2VBWUpiSVNaN012YlhwMHBPcU9LVEFkRXNueC8y?=
- =?utf-8?B?enhFdEFRTkMxRVdsWVh4OStjWWRvcCs2Skpxcy9INXRNK1NBV2p4VjRXME9r?=
- =?utf-8?B?VmxOWG5laEdqSGpSZWlaOFlDTmVqdTBhM1lsb1Z3bDZGZDlnd3JlOUVGRGQx?=
- =?utf-8?B?cHZwSEFiSXZoTGpBa3NXSzZydC8yTEtBNHZTUlZ1UXdXcVpGYUU2VlBIMU9R?=
- =?utf-8?B?OVF6cnNrS2h2bExFWUxsYmV4NitHRlZETVFNOFdwLzUybVZ0S0JhZEt4WnNx?=
- =?utf-8?B?VHpTSGNJY0hMNFRrTnJSVlpWVlFlcGpWNDBxNFpGOFB4K1Zhd0QxTlcwU1Yv?=
- =?utf-8?Q?AA9MTZTuBXMcFYrSCqv4+wDBfQM1NKbL?=
+ =?us-ascii?Q?MkDTa774Jjxq3sYPI6sMXJKamuE+rrf/YIZQUO+CPGxzVP6BQzspq4073dRg?=
+ =?us-ascii?Q?Q/txP2ljvXnwC6eGDdQ27KBh5H/dFYZSXjA4jLBF+4eyk4nYbYa57/8g4nFa?=
+ =?us-ascii?Q?mlvXmdIwfnPCm8jXgWiwzSKLOJrqqCaYWDnmVkXg+B5LdFWI1252WxH8lZYA?=
+ =?us-ascii?Q?Jk+0EF2Y7mDd9Mn22V/Glj8AKWEPIJoILxDplMWL+XfSNAOFzz/+69AdSK4A?=
+ =?us-ascii?Q?10zZJ7yTRqpEFVr9gt8xHfqsiNdBIZ9XcbKuqpetgYQNGw6DEx37+QRXxcsc?=
+ =?us-ascii?Q?v7/MOQIWuq2LY0OMI2oJoLqOPZjZHvXtFCl43gO8E2xZgAXrh/1lR3dIr7iN?=
+ =?us-ascii?Q?+FKYbJAA+m+LDZNL9cMo1wjANaGs0CLG7/vjWLYy7MBrq7GS3dYzoP3Qwmwq?=
+ =?us-ascii?Q?H88cjiNRcK+rPGY07JEsqe/pb8u9TuSBPOezef3ygDymVUCz8yIUOtMfv/Rl?=
+ =?us-ascii?Q?9ah8GN6gqfTpgx4074/LxoTGTzXJjZGJvcF0Ys57AcexFbXvsWOnf1yyV/87?=
+ =?us-ascii?Q?iv+3+aGpw3Bfvk9rBg8Lk4zhzTNDQQceY8FcOmtDUIUytsxgFNjYOs78rKbk?=
+ =?us-ascii?Q?ykDVJGYgAC1+gvnJC4DHmjntmrXBZKKwEQ4Mh69SZdCjGslViPBOA8sMK0Su?=
+ =?us-ascii?Q?UXD/kLU5fMSgA/+VLWrwUUf0uLhRxRzgFXZqUyfJDSYqnjrvW/mczn1JBpNs?=
+ =?us-ascii?Q?D5hX+64RoEHprNoyntzj732GGSA8R+9UiRf6ZTajwnQyXCd4JFY1T7dJqNZU?=
+ =?us-ascii?Q?G7DshVvWe52PFQMg8b7m0JX3J/fYLcqnse8rXrGMy4FgVZXmvpEF1JomANFi?=
+ =?us-ascii?Q?Dh2YaCNvsLx9Ohah4UEwJxPqS7rMVqFTzXE9NfKr0HFGgUKkTzbdyE1UxVOY?=
+ =?us-ascii?Q?MbGSZbJUxgyUUBDzSm51IdEk+dL05RV3rFHoC8dqzlROy4zHKCJWOGmM/4fx?=
+ =?us-ascii?Q?C/kRCfJ+cMVkp320VtDrNlbBDOzLKyfcqHZ73rC2jJISUEn4jpA3G7DBzesr?=
+ =?us-ascii?Q?2gWraFmbaNJBDobyuc+kKdFU27KgN7ubEmPzvaIWXac3rEG+oKLrb3u7xt1a?=
+ =?us-ascii?Q?McClzwdcrh8rBBmpnPT3Q5Do5fzs9cIn8jvHGqulrnJUrwjaxKLzu2pLB1Jk?=
+ =?us-ascii?Q?Md+ZlSQ3W2sy+fGwfwNKzfbdbzT6fdMPbzL5UcSD3Pf2LisrQbvVZaW8jn18?=
+ =?us-ascii?Q?yYL865ULvoKRGXTRPOMJk98jc7Zg4FBKf2GKjlmnKHoPt3XQ61GJeVAythTY?=
+ =?us-ascii?Q?Wlbfo0nIf97Mc8TpIm9mIYgqNKK0cxHxfoN68phTUu+xxqUNbiAsxELttPle?=
+ =?us-ascii?Q?mx3nO3bO2sSXy8Hf4Cp8wj7Wa3aRydqhlfgLQDZ1L707q5kq/onrB7P6WP+9?=
+ =?us-ascii?Q?0U2oFP4MAnGzc7hiRDrBC+bzABQ6bXgAqp9gamMfvXoAVvDkBKRIIHwiXEOB?=
+ =?us-ascii?Q?SryYUbhHJPClkbXYYq4Lum6AtAl3ciVeSLBOAl0X9xPFssJZEvekxw=3D=3D?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR10MB6271.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(7416014)(376014);DIR:OUT;SFP:1101;
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV8PR12MB9620.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014)(13003099007);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?RFlQLzhBclprRUJmNXNJeS9sSVU0bUlvM0FEL2dwRSswWU1DU0ZBSkRiazF5?=
- =?utf-8?B?MUIyY1Q2QUdvWHJLelFScjREbS9MbkxMSEE0WStETnlVVDh1eWJVM2hxUFk3?=
- =?utf-8?B?a2Q0Z0RpL29DRVc5TS9zb3BOM2gvblUrYkZJZXA1bkIzN2M4SWV4TUJacVp4?=
- =?utf-8?B?QUNFS0RPUGI5cjBZMjRiQnRPdkZDeW9kdmV0YkdiUFF1bnV4Wm5aRFFJTUU1?=
- =?utf-8?B?QXkwd3RHWWZxNWovZnRuVytEQ0ZubkJRdnBDT0p2cGFFL3NWZkVUMXJXOEln?=
- =?utf-8?B?WjI3YUFwYUdDNEZDVG5NZEJmdnRDUU5CL3RuNFd1NzZMbWRydFJZdEovYldR?=
- =?utf-8?B?bkUzTjRxK3NVblJmTEkxRXJETjh6WmRaZVRKaUEvWjhEajI3b0tDQVBRdnhy?=
- =?utf-8?B?ck0yYXg3SExDV3hRR2poK3lES0d6cStHajkrdWJOWmFyWHdXZE11clRxYWhi?=
- =?utf-8?B?ZmdCU1VkdEJ1MTZJNEpLYzFKNEZValZpTWFGd2FMOGdKNVFYMTlSLzNaVERi?=
- =?utf-8?B?OWxoQThCR1RCZlB1Q0RSZi9YUE5UajJ0eVFsLzJGMm1ibis3REVWdnFZWXVH?=
- =?utf-8?B?cVZJaEZsU25IOStaTmg3TmR0elgrN1paR09mMXBjV2ZzWlVpZXYxMm1YQVRr?=
- =?utf-8?B?eStlUUtSbGw4YXB3SjdFOWkxb0pWZ2ppcWVYdmkreG9RL3gvcld6VTFaRSs2?=
- =?utf-8?B?Mjg3alhaakFCKzJnQjhzWmI3ZWwzMzNDVFJNYmNycXZKUnpnbmFpVUkyb3Bj?=
- =?utf-8?B?Rm1OSDlKdU9aZEdBQ1VWbjV3dFFxL3g3czBWYVJWUmN2ZGRuaWc0dnFJSzdI?=
- =?utf-8?B?ajhHMVk3RUlrWjRZMlZmMHF5aURXVjRCU3JmdXdIRHJkNUFVQk41R1d6UDMy?=
- =?utf-8?B?bEtwWWdHSmR2ZmU1ZEV5dFJkeXEvWWFvNHJXRlpES05UeGROVVh3RFNROGRu?=
- =?utf-8?B?ZWFXZ2RYUFZENVpIcnNqcnlObTJUQ3hUN1VsTmo5UVpEYXJPVkVHaE1WdjFm?=
- =?utf-8?B?QzdDcEhiVS83dlQzemFtd1A5YzdEMis3T0lTZzFSWXBaMUNrTWJxVlNvTFM3?=
- =?utf-8?B?VWNFWUtMNW1mRHJ1OVlFNWRwTHRkd3dBVmtHdXpId3VFelBuM3FmeXgvbmMz?=
- =?utf-8?B?TVY1U3ZzeWcweFNxc2p2Z3FXV1NOWWxuU2I2dHVFNGpwR2ord1MyK00rVUJD?=
- =?utf-8?B?WmNLRmhyOUpNbDZSTHBid21yYU8yNVJtYmVvUDJFSWFUdkJCbmFXb1dwa1RF?=
- =?utf-8?B?T1Z6V3NOeVE3b2RiM2dpT3ljWmtFTmVzYlhBeWtZOFd2dVFpUk9LUkIvaFM5?=
- =?utf-8?B?RllEekEvdWp1eE14clVSd1ZQZGVVbll6Z0RIR1VSOEpJRlpRa3cxSEFNaGZK?=
- =?utf-8?B?Q2NzYUFZZWdITFFLTGtoUlZacHVYU2hBd3AvNVJ2NW5wOHcrVEhLVXlkQUxj?=
- =?utf-8?B?VUU5WTVKbGhTODhXTVdEcHlVTXN5bG1lb1Q1Q2xPQ2l2cVQwSlpsM2t1Y2ZJ?=
- =?utf-8?B?RjRTd2doVlNDT0ttVzRYLzMrZnF4TTVNV1MzNTg3OFEyODcydHlKZnNTd3R0?=
- =?utf-8?B?eEtCYm4rait5cWZ4eUdZbFpkbjFxTEQ2UFoyc2ZBZjBYVjBsbzhDaUdra1ha?=
- =?utf-8?B?QTM2dFE0VjFJL2E3YWpUdWRIRVdXL2pzWEFSSFJ1c0RDWEw3UUI5VGVJQjVX?=
- =?utf-8?B?R2toaHVaYThkTUxtMlF3Vk45TUJZTmZDWU5PUVZodmpzTzlTNTM4b1g5WEtt?=
- =?utf-8?B?cU1sK3ByR2tnc0FrUDZDOFNIb3FQNlZwZEZYNFVWaHo4N2crcWRIT0Jmc1kw?=
- =?utf-8?B?djhXU1V2ZUJqNkVVZEdMQjZpUFQ5UEhBR2xhL0F5VGpwNnJOWjNXYStzNFN2?=
- =?utf-8?B?eDFoem4wbTlLaG95NTlDcXRuaTkvNVpEa3dKZ2J1N21oUTVkQkpGR2F1Yncy?=
- =?utf-8?B?cTBQb2pMODdDR0xrWDJOaTlKNHJOd1hVTmlYSmNTZGFWSGZjUk0wQmtjc21F?=
- =?utf-8?B?OFNVdHZuRFlQK1lCV2RxUlpmQmp3eFUyVnNkcEdiZEtrbkIwQlE5UDZNbzVl?=
- =?utf-8?B?V2RVMklFQVV0NDVRMnl6Mk5KRXR3dzVVODF6S2FIUlBIeHF0eExkNTFpcFll?=
- =?utf-8?B?L05qVGp2NnB1d1RpNEpkcjNTUmUwb2YrazRaSmJsVlUwWUszaVhmVlRxV0xm?=
- =?utf-8?B?d3c9PQ==?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	s9+DeyxDbseTwL/07mMyszncKoGhMDa/uxlViRrW62dp13Ikft8j44R4ABQydrE9FiXRkAhmut4l/mfGZOfxwHGY9PsGyeHsJzlScggt/+2IRJevABRJdWonaENHFF49wGyjG/CgZetsAfje8cyH56FA0Jc6gATicHm4w/z1401rTzibuL9HWJkDMkflTxFWShG1z87/8fewBOWvkR4eQtvRUxRMpSVvMzhlEGjQnMIsZZ3FtqoaFvKkpBtXwkkAkVBahTqJSr/4pG418oAVKTxCci6rOnBUJMmIe1cSWFpoMicV9wQZ3w0O1E6xF+DZr2EuSBDfQuMpDPvGODsfQE74+AA21AKlEq+D7Kx5Ch4fhZrodrhDUU274QvwVT9U8XwVOip4DYU3fBZ2Z2ykmTrtI0LWPLDlFWqQ33fyUZM+KY7pQMT9EWZjan9fQl7ZlCn8xLwSNslVxXegnArhz3FINNt9mUms+YcjTQWdCz7zb1v4uFViRvsd3645v6twEz7J5DR92o7LtgSm1+SqcPiHkQ9u1BA+qhOX+teXTvYuIujQBk6JMUiRlesu49FZyvB+S/Q3r94bUL/FeOOPxxz1cQfIzeImme5NpGq8RUw=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 95a41220-0be6-455a-e2ca-08de3dadf463
-X-MS-Exchange-CrossTenant-AuthSource: DS0PR10MB6271.namprd10.prod.outlook.com
+ =?us-ascii?Q?PAJ1oaj2Wz6/rL+kpBZ0x9thysN+kBE1e4M2yiPR4eqd0RI0Ucm+iogrrAWi?=
+ =?us-ascii?Q?jpyJdnZNKN6HBQKCW7Ec0eG5QZJzsoNo6HCcUaOXgFFuoVz9Q9Qcn3UQH69t?=
+ =?us-ascii?Q?a8Hpz619o0TRXvt62d0ioQoJPj9CkXGhN16S7uPrZQI0RGYitNuf9PKcFun5?=
+ =?us-ascii?Q?Lt00aTnwz0HP1R6Gwk+ZnJ5vmJJ80PGQ+gGM3/TpTPIpACvCRbjZpeiBo5Zg?=
+ =?us-ascii?Q?UOmrrmun5r9sj6WoFUQrRD3nA/Azb+Q4JWuLDa1q6nONXLW6a5EvTgJ9BPfm?=
+ =?us-ascii?Q?YGY9VZRmc6Ap//J8Q82x+i/klBEflSok2v0DoHammuWRyFvGl2B9EotdqMhk?=
+ =?us-ascii?Q?mPwTmbBvB/hJZffUoklfqrggFWyU9EVfjOO14Bm6WzQBjwedwFpKdwPQYBIL?=
+ =?us-ascii?Q?Z5DvFPpUsVzKCJLa4ppMScpgJDpCzRoGCmfKXhaXhJX565w7b0D9yUJPC0eq?=
+ =?us-ascii?Q?ICWgAZBCkuPsw0GfWYbTwWjMBuIN+6RRUQFoE3nVGN9Uj5tP8UqLf1TXVs0S?=
+ =?us-ascii?Q?94v2uFjHNjv4IhiWCrpOFvZ3/zTyIp2QLzrxzNfsgfucM9hkRWWswnOwniEN?=
+ =?us-ascii?Q?vHJSrTjAepsXYPABNt4ajmRR4uYo5b2LvWcZKbrqltlCmx5UW9nOu7BY4ed0?=
+ =?us-ascii?Q?zz8j94TvHbVf/gvwj9cyRLVb1oMyTufDGTQMc35gOT7mqUxpttQyio3qQIAe?=
+ =?us-ascii?Q?dDuHoLZX8Yck+6BB3K/jX/AIz76TCexlhcfA2VW95o/TWn4fRlUz1Z4uFGxJ?=
+ =?us-ascii?Q?sY5x2TIOOmZTrqbcQFhzJRHmJyTQgFabPYw80d53/I453qCbsx+ydNzdezkW?=
+ =?us-ascii?Q?MLkyVN5mzfVE88RJGvddWyO9IEQh02f+zMUhJKjkxApFmyB3dAoZJbPL0Dh4?=
+ =?us-ascii?Q?D0yx91EdDWXGg+Sl2HPjXod/epqIjyXOxX8ac2XOUr3rco8yXbcFWzfwLmzj?=
+ =?us-ascii?Q?YndZaf/noGh9oKh+wQraCpXh8HN3ZWtfWJHdF8VS9ojV9oCpIdGaMUX9kyIp?=
+ =?us-ascii?Q?9rZaHONngNNCCz0wlelFbvT4JpMslpGj71z4INdVBf5cswD/fJ9q5pnXa3U8?=
+ =?us-ascii?Q?uybUt2sdR1iJkHKCmKxt11MCIXRLHc99nr78YXh2vCR4eI+mgXudxQnyVx9z?=
+ =?us-ascii?Q?PHguGiqzvCC7rG+99A2FHl5qnnCg5Mu9litcGYAC5V4lZqUTdfcwidJDivMN?=
+ =?us-ascii?Q?Mvwj9UoMy3KOQpmYUJXdpM/P3FNq2sAYyk17+Mxo4WS1ATWKrew1nVtfY1Pa?=
+ =?us-ascii?Q?jiRZhiZvN0fBAJRzq25v5Kanq+BW2gOFQCCbB/EqvYR11T5F84EwU34wIUme?=
+ =?us-ascii?Q?nU7/xV040Ih0BC89HojjFd+knv8xeOzduiyRhPKSWMm8j7f1oWiH7nQgbLdu?=
+ =?us-ascii?Q?vCosWMyBlq1/8Et9A15eujeb71u2DJgcrcuxECVve+h+fv1Apz63WANFE4GR?=
+ =?us-ascii?Q?MTRY2YbXw6c0EE3RvIYuGPKX0yL2DHHvSWuEZ3gDjJ/rpjH5uSQntwX6b6gS?=
+ =?us-ascii?Q?vLAVqSywaooupcdQBxuLw8sddiS5zW1+ybSp1/JEsfGAQ3ghl30v80IckAN2?=
+ =?us-ascii?Q?jb8sr3b4+R7NyVqQg6gFA58RKUzX1KF77elmmpt9?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1ee2cc93-f222-402b-88b3-08de3d503624
+X-MS-Exchange-CrossTenant-AuthSource: LV8PR12MB9620.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Dec 2025 20:50:47.4098
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Dec 2025 09:39:45.1181
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: o4l4E0TawxiETW7ldw3xzCE+/rJwwWkZEcIMAgypzEnVLgQUtJNJOyLtQayOvuXQ/vHAiiko99cGOp+UwKB9rg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH3PPF1189AF8C5
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-12-17_03,2025-12-17_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 suspectscore=0 adultscore=0
- mlxscore=0 malwarescore=0 mlxlogscore=937 phishscore=0 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2510240000
- definitions=main-2512170165
-X-Authority-Analysis: v=2.4 cv=bq5BxUai c=1 sm=1 tr=0 ts=694317ac b=1 cx=c_pps
- a=e1sVV491RgrpLwSTMOnk8w==:117 a=e1sVV491RgrpLwSTMOnk8w==:17
- a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
- a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
- a=wP3pNCr1ah4A:10 a=GoEa3M9JfhUA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=kML5vXh8SpfcSk0zMX8A:9 a=QEXdDO2ut3YA:10 cc=ntf awl=host:13654
-X-Proofpoint-GUID: Mfi7Y5IfwibVPx3Ii-RFSTw544FT-Hre
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjE3MDE2NiBTYWx0ZWRfX233VTQ5481k8
- cIWCGv4V52ebLSYKgP+8e/AVw4VvfbbN9i5NGOR4HE0ta+F6nAoF+5WsuAz+BRhkGgQYjeY9n+C
- 1mZh+LD00mRvcm5mBtEV7jqtUkCAmH78NOaJj9StYTr7mrLYrrT+q14KEQyhyVCLQg5PrPAsL7F
- cTnQGcNYhGS8oISMywj+ARc5nYAAD2gJ4sBLaAEkQe2elatVxcd8CFyr6a7ZrtT3EHGL5Z6pMKr
- SmvWxZq24Kb5i9g395WwZdKRh4zpA9whu3xNXneozq7UVQScpu6GCS5663ySN0yl98MfTvZ4qFV
- vKzxRB/NpsHHILKTYnlnZwCZExiqGz/sLW/6WTHUy7yGWNbJDJFQGxXGMXhNgsVUDqgDd58NUtA
- 29ea1gwAtCdXIyiY1vtn6tnLRYfncXwxwBRmzODREPYPC7JOkCo=
-X-Proofpoint-ORIG-GUID: Mfi7Y5IfwibVPx3Ii-RFSTw544FT-Hre
+X-MS-Exchange-CrossTenant-UserPrincipalName: pnNjDBKNP/XZjmumfI86/r5LLdl/PwvTcZchjP8rWo0iGToEOLSS4PiyvaCX4x72WdsZB0G9a8wstwhAiYKLGA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB6413
+X-OriginatorOrg: Nvidia.com
 
-On 17/12/2025 19:35, Eduard Zingerman wrote:
-> On Wed, 2025-12-17 at 11:34 -0800, Eduard Zingerman wrote:
->> On Wed, 2025-12-17 at 18:41 +0000, Alan Maguire wrote:
->>
->> [...]
->>
->>> So maybe the best we can do here is something like the following at the top
->>> of vmlinux.h:
->>>
->>> #ifndef BPF_USE_MS_EXTENSIONS
->>> #if __has_builtin(__builtin_FUNCSIG) || defined(_MSC_EXTENSIONS)
->>> #define BPF_USE_MS_EXTENSIONS
->>> #endif
->>> #endif
->>>
->>> ...and then guard using #ifdef BPF_USE_MS_EXTENSIONS
->>>
->>> That will work on clang and perhaps at some point work on gcc, but also
->>> gives the user the option to supply a macro to force use in cases where
->>> there is no detection available.
->>
->> Are we sure we need such flexibility?
->> Maybe just stick with current implementation and unroll the structures
->> unconditionally?
-> 
-> I mean, the point of the extension is to make the code smaller.
-> But here we are expanding it instead, so why bother?
+sched_ext tasks can be starved by long-running RT tasks, especially since
+RT throttling was replaced by deadline servers to boost only SCHED_NORMAL
+tasks.
 
-Yeah, I'm happy either way; if we have agreement that we just use the nested anon
-struct without macro complications I'll send an updated patch. 
+Several users in the community have reported issues with RT stalling
+sched_ext tasks. This is fairly common on distributions or environments
+where applications like video compositors, audio services, etc. run as RT
+tasks by default.
 
-Alan
+Example trace (showing a per-CPU kthread stalled due to the sway Wayland
+compositor running as an RT task):
+
+ runnable task stall (kworker/0:0[106377] failed to run for 5.043s)
+ ...
+ CPU 0   : nr_run=3 flags=0xd cpu_rel=0 ops_qseq=20646200 pnt_seq=45388738
+           curr=sway[994] class=rt_sched_class
+   R kworker/0:0[106377] -5043ms
+       scx_state/flags=3/0x1 dsq_flags=0x0 ops_state/qseq=0/0
+       sticky/holding_cpu=-1/-1 dsq_id=0x8000000000000002 dsq_vtime=0 slice=20000000
+       cpus=01
+
+This is often perceived as a bug in the BPF schedulers, but in reality they
+can't do much: RT tasks run outside their control and can potentially
+consume 100% of the CPU bandwidth.
+
+Fix this by adding a sched_ext deadline server, so that sched_ext tasks are
+also boosted and do not suffer starvation.
+
+Two kselftests are also provided to verify the starvation fixes and
+bandwidth allocation is correct.
+
+== Design ==
+
+ - The EXT server is initialized at boot time and remains configured
+   throughout the system's lifetime
+ - It starts automatically when the first sched_ext task is enqueued
+   (rq->scx.nr_running == 1)
+ - The server's pick function (ext_server_pick_task) always selects
+   sched_ext tasks when active
+ - Runtime accounting happens in update_curr_scx() during task execution
+   and update_curr_idle() when idle
+ - Bandwidth accounting includes both fair and ext servers in root domain
+   calculations
+ - A debugfs interface (/sys/kernel/debug/sched/ext_server/) allows runtime
+   tuning of server parameters
+
+== Highlights in this version ==
+
+As discussed at the sched_ext microconference at LPC Tokyo, the plan is to
+start with a simpler approach, avoiding automatically creating or tearing
+down the EXT server bandwidth reservation when a BPF scheduler is loaded or
+unloaded. Instead, the reservation is kept permanently active. This
+significantly simplifies the logic while still addressing the starvation
+issue.
+
+Any fine-tuning of the bandwidth reservation is delegated to the system
+administrator, who can adjust it via the debugfs interface. In the future,
+a more suitable interface can be introduced and automatic removal of the
+reservation when the BPF scheduler is unloaded can be revisited.
+
+This patchset is also available in the following git branch:
+
+ git://git.kernel.org/pub/scm/linux/kernel/git/arighi/linux.git scx-dl-server
+
+Changes in v11:
+ - do not create/remove the bandwidth reservation for the ext server when a
+   BPF scheduler is loaded/unloaded, but keep the reservation bandwdith
+   always active
+ - change rt_stall kselftest to validate both FAIR and EXT DL servers
+ - Link to v10: https://lore.kernel.org/all/20250903095008.162049-1-arighi@nvidia.com/
+
+Changes in v10:
+ - reordered patches to better isolate sched_ext changes vs sched/deadline
+   changes (Andrea Righi)
+ - define ext_server only with CONFIG_SCHED_CLASS_EXT=y (Andrea Righi)
+ - add WARN_ON_ONCE(!cpus) check in dl_server_apply_params() (Andrea Righi)
+ - wait for inactive_task_timer to fire before removing the bandwidth
+   reservation (Juri Lelli)
+ - remove explicit dl_server_stop() in dequeue_task_scx() to reduce timer
+   reprogramming overhead (Juri Lelli)
+ - do not restart pick_task() when invoked by the dl_server (Tejun Heo)
+ - rename rq_dl_server to dl_server (Peter Zijlstra)
+ - fixed a missing dl_server start in dl_server_on() (Christian Loehle)
+ - add a comment to the rt_stall selftest to better explain the 4%
+   threshold (Emil Tsalapatis)
+ - Link to v9: https://lore.kernel.org/all/20251017093214.70029-1-arighi@nvidia.com/
+
+Changes in v9:
+ - Drop the ->balance() logic as its functionality is now integrated into
+   ->pick_task(), allowing dl_server to call pick_task_scx() directly
+ - Link to v8: https://lore.kernel.org/all/20250903095008.162049-1-arighi@nvidia.com/
+
+Changes in v8:
+ - Add tj's patch to de-couple balance and pick_task and avoid changing
+   sched/core callbacks to propagate @rf
+ - Simplify dl_se->dl_server check (suggested by PeterZ)
+ - Small coding style fixes in the kselftests
+ - Link to v7: https://lore.kernel.org/all/20250809184800.129831-1-joelagnelf@nvidia.com/
+
+Changes in v7:
+ - Rebased to Linus master
+ - Link to v6: https://lore.kernel.org/all/20250702232944.3221001-1-joelagnelf@nvidia.com/
+
+Changes in v6:
+ - Added Acks to few patches
+ - Fixes to few nits suggested by Tejun
+ - Link to v5: https://lore.kernel.org/all/20250620203234.3349930-1-joelagnelf@nvidia.com/
+
+Changes in v5:
+ - Added a kselftest (total_bw) to sched_ext to verify bandwidth values
+   from debugfs
+ - Address comment from Andrea about redundant rq clock invalidation
+ - Link to v4: https://lore.kernel.org/all/20250617200523.1261231-1-joelagnelf@nvidia.com/
+
+Changes in v4:
+ - Fixed issues with hotplugged CPUs having their DL server bandwidth
+   altered due to loading SCX
+ - Fixed other issues
+ - Rebased on Linus master
+ - All sched_ext kselftests reliably pass now, also verified that the
+   total_bw in debugfs (CONFIG_SCHED_DEBUG) is conserved with these patches
+ - Link to v3: https://lore.kernel.org/all/20250613051734.4023260-1-joelagnelf@nvidia.com/
+
+Changes in v3:
+ - Removed code duplication in debugfs. Made ext interface separate
+ - Fixed issue where rq_lock_irqsave was not used in the relinquish patch
+ - Fixed running bw accounting issue in dl_server_remove_params
+ - Link to v2: https://lore.kernel.org/all/20250602180110.816225-1-joelagnelf@nvidia.com/
+
+Changes in v2:
+ - Fixed a hang related to using rq_lock instead of rq_lock_irqsave
+ - Added support to remove BW of DL servers when they are switched to/from EXT
+ - Link to v1: https://lore.kernel.org/all/20250315022158.2354454-1-joelagnelf@nvidia.com/
+
+Andrea Righi (2):
+      sched_ext: Add a DL server for sched_ext tasks
+      selftests/sched_ext: Add test for sched_ext dl_server
+
+Joel Fernandes (5):
+      sched/deadline: Clear the defer params
+      sched/debug: Fix updating of ppos on server write ops
+      sched/debug: Stop and start server based on if it was active
+      sched/debug: Add support to change sched_ext server params
+      selftests/sched_ext: Add test for DL server total_bw consistency
+
+ kernel/sched/core.c                              |   6 +
+ kernel/sched/deadline.c                          |  87 +++++--
+ kernel/sched/debug.c                             | 171 +++++++++++---
+ kernel/sched/ext.c                               |  42 ++++
+ kernel/sched/idle.c                              |   3 +
+ kernel/sched/sched.h                             |   2 +
+ kernel/sched/topology.c                          |   5 +
+ tools/testing/selftests/sched_ext/Makefile       |   2 +
+ tools/testing/selftests/sched_ext/rt_stall.bpf.c |  23 ++
+ tools/testing/selftests/sched_ext/rt_stall.c     | 240 +++++++++++++++++++
+ tools/testing/selftests/sched_ext/total_bw.c     | 281 +++++++++++++++++++++++
+ 11 files changed, 811 insertions(+), 51 deletions(-)
+ create mode 100644 tools/testing/selftests/sched_ext/rt_stall.bpf.c
+ create mode 100644 tools/testing/selftests/sched_ext/rt_stall.c
+ create mode 100644 tools/testing/selftests/sched_ext/total_bw.c
