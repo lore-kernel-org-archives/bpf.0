@@ -1,216 +1,155 @@
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2839E3595D
-	for <bpf@vger.kernel.org>; Wed, 17 Dec 2025 03:20:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C77D1A76DE
+	for <bpf@vger.kernel.org>; Wed, 17 Dec 2025 03:26:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765941611; cv=none; b=ppqF4AiGogMZqsWUwxL0z+41ydpfCQuqTUaGLWa2g65gmvEfbSlpG/bhH+ysqhEZlEXkhqScvxR8p7bKUJZ31WLxv/+6LirMsORuVqSEcKQa74HtNrpE8Tsq6hBOvdUHEtD2nHwtlf3CaqAO4DTiGY9M27jvpxR2uzChNVCqrAw=
+	t=1765941994; cv=none; b=GJZNzZzBGDLShmJYbQZuoVq9AauCqetwnLE+G41kWeQQalrI9M8eu6Y6SCWNe0CmR5peD/w3gOLaV0HEQql2/2Pb2lbA+sB5y7MStEywveCcgleMef0F69AqchT4R1rwKtUJ5HYmMcN7rLeQzA6ZEBBeABPXIw6QiVMVvAdHl3o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765941611; c=relaxed/simple;
-	bh=vltlcu99mq35FQkwYNebhsQPHV8KIbKd5XmZSDTvq2A=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=T+pHXTCf2hp+fl7J90GThN5Iytq0Q+KRYZiDF9EazogK+CFLhRnOckAv4n1pVI9iVNyQMaU4ZkSSWMPFUapg+5p9VfrP4A9DBGiTOyQrBXGyXwuUU8s/v2M/ZvjYtU7IAYPC1Ht+Gn1w1Nkdz6hn9V999Vqaai7xZFfV6uJEqDY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VCFlKjlu; arc=none smtp.client-ip=209.85.218.49
+	s=arc-20240116; t=1765941994; c=relaxed/simple;
+	bh=LHpsNCXL/bOO7gUQ1S1nSG7Px4JIPVzP6GHN69VWN7c=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Ck6h5BEbs9yeuKKQ33Jq9K970/LRKSX2KBNEmi9KwDiPTTRZUEVcgR+85NCfk3vmPq0frZg0H+DHpxBtSV5qbCbxjci/P0MvNSVw7wSf9QpJkSKE6KpdiCB4gDhyWUkLans1Bb8NTePt9xMjzApM7MRAbSnKXc5iIakapoD87Y0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ESf3B24H; arc=none smtp.client-ip=209.85.160.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VCFlKjlu"
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-b79d6a70fc8so929010366b.0
-        for <bpf@vger.kernel.org>; Tue, 16 Dec 2025 19:20:09 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ESf3B24H"
+Received: by mail-qt1-f171.google.com with SMTP id d75a77b69052e-4ed66b5abf7so1596861cf.1
+        for <bpf@vger.kernel.org>; Tue, 16 Dec 2025 19:26:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1765941608; x=1766546408; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eJMFkq7VFxSPJo1OL6kE+KuCDmkdiU7jjNYrbrgIQno=;
-        b=VCFlKjlutbU9vR5is5tpUrVtzLNz6NioUofdD2fP64vI4xE6bqUVPqlTD/ph8Rce9f
-         BNW5muufjrh5eH8Z7MrcKb6ZtSfuX9Ps/okYMSb40Fzh5q2BXAYOUVLyD/nNHEFSB+zo
-         P9VrOh0XhgpKpM88ts6RT3dfiC+gBwcR542Dy4b6QjKq5aTS7cJghMt7rzHdglZLzNgJ
-         tLj1B0l9OaJq1AxVHFKgC5U+cxPxzuVYPs+S5XCSZ+tfGR018SMn+pvpHyUs8oMFQNcQ
-         sFcRe5veVUd1gCa6yxUutOL6aKIcVQlEVcfJWbn92qwJTFVCLxi/sr1Rfcb7/tI6egRY
-         X2bg==
+        d=gmail.com; s=20230601; t=1765941992; x=1766546792; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=3Vk9SUSPMqpeXO4V0g80Rs4e7ekOb6wqfhBJbRc5PHQ=;
+        b=ESf3B24HZqcQfVx8gZNGUdEMt/25Fl7r1tfHXE/yoW7qSsunu5z/atvcpO3bbM6sLB
+         rXWBJg5iKzqVy28dUh68nwfwbWUjLajL5YJpaCrIRD8De7jlqDlmCdhP+OxgPgbnz0+X
+         w2D4l55Gu+eeVYdhz/waPkQvWvkUYmmw5xDVrip+OAVYUqf8l5xAu4/fpo1vO/GX94Yv
+         d4qgPEb45ji5DSFE/Y8NjV+HlUl6TSw77WpDUeUCzBXl+41f+BBArAJfthr8RhyvPulY
+         b3lqRXsUGzkHcbx+dw+ylM82+FVLs/4yTKid3jjcwANAR1ApJij2FTk/zAGCsjmulzWv
+         rfLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765941608; x=1766546408;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=eJMFkq7VFxSPJo1OL6kE+KuCDmkdiU7jjNYrbrgIQno=;
-        b=RSxR8nbpVzewwqS9mhvwJ+CKwT7kf7YgSU5/+deg6WOCtVzgIeefk6VeMUXSmNPZC+
-         t+ejxLr+gnNC7ljnWPtiiXAHGc4fCHvmzpedX7KzXlwL7P7FMZWjzPQMJmQoIrXjacjx
-         6QqDu0oQTbdsFbVah6BjAECLfGDnJzOsvdrCH6MbqyNVKpoPNgqIZtOg0VWMAL6AFmmP
-         oSt/Sdoq95jo7dOTy72y5FHXeEfHsxmcO5yPcfABqOR6UPZgzfFsIp2z7OMQaZ7XJks1
-         pCrS6WoGeflo6fmbpLzz58CZhpdCx9JhlwOmx+GOkDMSIEiYOFH99LAQMhPJLbaObH3q
-         2vsQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWK84nH9zUf683VFXUtgmE5vkQQbAEy5nF4Ly34dpL7jCkADZkRP6OOjMH7S8dxyG33BAI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YztB/+DtoVFQKJ5MZfzE4B9IomWa4LSLs00+ZaYyXHXx59oTZi+
-	W+1nvj9vTp4qUKe3hxcvIGQxZdCZHM+H8x4yJXvG2MyPMQjMn0AN1yAkzTbABqKQzB/HnH7SuKt
-	vu4umA9Y5hJGc2JvNOSMh4+4Y7nAtNB0=
-X-Gm-Gg: AY/fxX7IPr2Fob+NcL7nrIIZ1gh0VvmqPC1xgZzd41K2S6NGgul6CSc1q0GnSulZryK
-	jqNSeg5cxvvdK4y/VMADH5oTjDXLyOBM7MVhxMhPSNfcXcn0tbqFrpgs5v5FnkFcyxCIHr7ovjZ
-	pr7MFlnD3kt0fRM4stGAvrsT8OomZMghlOQxP3GDaZRpk8YM3qXrWM4POk64+SjjzRwuUsBGF4T
-	hJ0URWobvoR5NPrUbIUT4h1mbAKIk+9NsmWis3OcovtRDpcc8068ydpVgQBUh4WnCQe4jHA
-X-Google-Smtp-Source: AGHT+IFDPebcu0Pyh3dVc1+nnAvlkyEB5BdkYnT9bCGY+qOjfT21sbu993LCZbRgIuZ7NZPqMtNUYgoBnGsTJDIb2FY=
-X-Received: by 2002:a17:907:93c3:b0:b7d:3aab:5bf2 with SMTP id
- a640c23a62f3a-b7d3aab9320mr948584966b.63.1765941608390; Tue, 16 Dec 2025
- 19:20:08 -0800 (PST)
+        d=1e100.net; s=20230601; t=1765941992; x=1766546792;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3Vk9SUSPMqpeXO4V0g80Rs4e7ekOb6wqfhBJbRc5PHQ=;
+        b=jkjd+FsVGFZmTJGDhkjIcNAqAEhg0ikmIdpIQN1oe8hOVrkxNE8HMo7a1NTUKPRh0P
+         BLlFHLcZDzKSyrFA5m/fe73tGqwLThN2e/msz5v1kx4Wb7ZldQOcxoZqRPKFm/QEjzYe
+         qR2SjCb+KL7+8qE9ZV/Xg3Bipdl6SbiWHzuqUk4yehjxWhuZclOB+rgJAXa1kRPBy8+c
+         avhNtNNEflzfpoLeEd8M19S2yMOyhsNfeKqCeKRr2ByHc15BeJqYRgVzxTPZqR6TFuaQ
+         1JH02rzqdoBSfTf/M2xzijijEMqJuiLssrYgZCrunA7p97wst+jTllUp3BCXBOFcZaH1
+         XISQ==
+X-Gm-Message-State: AOJu0YyzUmRoaRAYSFfbbIfSTMVry3Jf2eW3gjgniYwu//U1ZvK/FCET
+	ofzYIilROdCJoIbcPTHo+nVcNhn7AExG+xv0dJHGLzFmjYkBr0LRdo0MZYbcEg==
+X-Gm-Gg: AY/fxX4XXqViC3iFksLN5/NgBodFP7snYo2jnV2rg3SURpRhsAM49YLKr0R45yHkdy+
+	iOy1O+puvhoRT2dhEdmORIcoQJ35eTmwGpMqaMzOxxGv6Yz6XQlmC0zOlzHaeSGuNLPmvl8fI5A
+	+MAjpdx6VEks2f6x8IH/tRpnHck/Wq0ugdt2L6I+pXluCPkTqfFCIK75pzKjL1kL8W1BLs0mRZx
+	0d8gLOsV4Id23laoiyqgdYLU3qpBvBgFnzC4mLUfoOBEt2QpX6wxSbGbTtRoW7zPD6mgBLC7gPZ
+	p0Rj+eeK2whE3qwRtfUQONcQTEEDux6m3BjUSMkO8QRsLu8/PikY7oD+tpIzc6dbe+yGeZAhi1n
+	K5+2RfX+zSdcW3YsA63X+T8eHikcMQlX/kSeP9dZuMkNOh6PGJrkYRYbKJj8JPjWQWF9G7tCS8N
+	UUO/1Bwve30QIkl4eOANFCRjcukYZu7aUEUJDpNNzoI/dppWGX7eqJKlvsMgEZ
+X-Google-Smtp-Source: AGHT+IENgctDhJxEQNYVjK/r0BvGCi6u1c6Qx8uMbHHqsv6Wi52gLm1bHHz2JYBgpfKTfWXb1Kt1uw==
+X-Received: by 2002:a05:6a00:2884:b0:781:1110:f175 with SMTP id d2e1a72fcca58-7f667e16c85mr15887547b3a.14.1765935441801;
+        Tue, 16 Dec 2025 17:37:21 -0800 (PST)
+Received: from localhost.localdomain ([2601:600:837f:c6b0:18cf:ab6c:cac0:3007])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7fcb8f106fdsm843724b3a.19.2025.12.16.17.37.21
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Tue, 16 Dec 2025 17:37:21 -0800 (PST)
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To: torvalds@linux-foundation.org
+Cc: bpf@vger.kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@kernel.org
+Subject: [GIT PULL] BPF fixes for 6.19-rc2
+Date: Tue, 16 Dec 2025 17:37:19 -0800
+Message-ID: <20251217013719.85504-1-alexei.starovoitov@gmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251208062353.1702672-1-dolinux.peng@gmail.com>
- <20251208062353.1702672-6-dolinux.peng@gmail.com> <0b9fd098307b5aa15a7d7a3f7f2b01fe63e66a53.camel@gmail.com>
-In-Reply-To: <0b9fd098307b5aa15a7d7a3f7f2b01fe63e66a53.camel@gmail.com>
-From: Donglin Peng <dolinux.peng@gmail.com>
-Date: Wed, 17 Dec 2025 11:19:56 +0800
-X-Gm-Features: AQt7F2oIWP3i1SPCBI6vGkN-CNRP3YHUqTjrpNrA_vNNh7TQXQJ68ESYK5OammM
-Message-ID: <CAErzpmtHkYY1MWM+bNdOwNKxQTtWTcya22Bp68ZDOOSZtGgaXw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v9 05/10] libbpf: Verify BTF Sorting
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: ast@kernel.org, andrii.nakryiko@gmail.com, zhangxiaoqin@xiaomi.com, 
-	ihor.solodrai@linux.dev, linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
-	pengdonglin <pengdonglin@xiaomi.com>, Alan Maguire <alan.maguire@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Wed, Dec 17, 2025 at 8:32=E2=80=AFAM Eduard Zingerman <eddyz87@gmail.com=
-> wrote:
->
-> On Mon, 2025-12-08 at 14:23 +0800, Donglin Peng wrote:
-> > From: pengdonglin <pengdonglin@xiaomi.com>
-> >
-> > This patch checks whether the BTF is sorted by name in ascending
-> > order. If sorted, binary search will be used when looking up types.
-> >
-> > Cc: Eduard Zingerman <eddyz87@gmail.com>
-> > Cc: Alexei Starovoitov <ast@kernel.org>
-> > Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-> > Cc: Alan Maguire <alan.maguire@oracle.com>
-> > Cc: Ihor Solodrai <ihor.solodrai@linux.dev>
-> > Cc: Xiaoqin Zhang <zhangxiaoqin@xiaomi.com>
-> > Signed-off-by: pengdonglin <pengdonglin@xiaomi.com>
-> > ---
-> >  tools/lib/bpf/btf.c | 46 ++++++++++++++++++++++++++++++++++++++++++++-
-> >  1 file changed, 45 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-> > index 7f150c869bf6..a53d24704857 100644
-> > --- a/tools/lib/bpf/btf.c
-> > +++ b/tools/lib/bpf/btf.c
-> > @@ -899,6 +899,49 @@ int btf__resolve_type(const struct btf *btf, __u32=
- type_id)
-> >       return type_id;
-> >  }
-> >
-> > +/*
-> > + * Assuming that types are sorted by name in ascending order.
-> > + */
-> > +static int btf_compare_type_names(const void *a, const void *b, void *=
-priv)
->
-> This can be declared as ...(u32 a, u32 b, struct btf *btf).
+Hi Linus,
 
-Thanks, I will fix it in the next version.
+The following changes since commit 8f7aa3d3c7323f4ca2768a9e74ebbe359c4f8f88:
 
->
-> > +{
-> > +     struct btf *btf =3D (struct btf *)priv;
-> > +     struct btf_type *ta =3D btf_type_by_id(btf, *(__u32 *)a);
-> > +     struct btf_type *tb =3D btf_type_by_id(btf, *(__u32 *)b);
-> > +     const char *na, *nb;
-> > +
-> > +     na =3D btf__str_by_offset(btf, ta->name_off);
-> > +     nb =3D btf__str_by_offset(btf, tb->name_off);
-> > +     return strcmp(na, nb);
-> > +}
-> > +
-> > +static void btf_check_sorted(struct btf *btf)
-> > +{
-> > +     const struct btf_type *t;
-> > +     int i, k =3D 0, n;
-> > +     __u32 sorted_start_id =3D 0;
-> > +
-> > +     if (btf->nr_types < 2)
-> > +             return;
-> > +
-> > +     n =3D btf__type_cnt(btf) - 1;
-> > +     for (i =3D btf->start_id; i < n; i++) {
-> > +             k =3D i + 1;
-> > +             if (btf_compare_type_names(&i, &k, btf) > 0)
-> > +                     return;
-> > +             t =3D btf_type_by_id(btf, i);
-> > +             if (sorted_start_id =3D=3D 0 &&
-> > +                     !str_is_empty(btf__str_by_offset(btf, t->name_off=
-)))
->                 ^^^^^^^^
-> Nit: broken indentation.
+  Merge tag 'net-next-6.19' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next (2025-12-03 17:24:33 -0800)
 
-Thanks, I will fix it.
+are available in the Git repository at:
 
->
-> > +                     sorted_start_id =3D i;
-> > +     }
-> > +
-> > +     t =3D btf_type_by_id(btf, k);
->
-> Nit: please use 'n' instead of 'k'.
+  https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git tags/bpf-fixes
 
-Thanks, I agree, although k equals n at this point.
+for you to fetch changes up to 1d528e794f3db5d32279123a89957c44c4406a09:
 
->      Maybe just change condition in the loop and avoid the second part?
->      E.g.:
->
->        n =3D btf__type_cnt(btf);
->        for (...) {
->          ...
->          if (k < n && btf_compare_type_names(a: &i, b: &k, priv: btf) > 0=
-)
->            return;
->          ...
->        }
->
->      A bit shorter/simpler this way.
+  Merge branch 'bpf-fix-bpf_d_path-helper-prototype' (2025-12-10 01:36:26 -0800)
 
-Great, I agree and will fix it in the next version.
+----------------------------------------------------------------
+- Fix BPF builds due to -fms-extensions. selftests (Alexei Starovoitov),
+  bpftool (Quentin Monnet).
 
->
-> > +     if (sorted_start_id =3D=3D 0 &&
-> > +             !str_is_empty(btf__str_by_offset(btf, t->name_off)))
-> > +             sorted_start_id =3D k;
-> > +     if (sorted_start_id)
-> > +             btf->sorted_start_id =3D sorted_start_id;
-> > +}
-> > +
-> >  static __s32 btf_find_by_name_bsearch(const struct btf *btf, const cha=
-r *name,
-> >                                               __s32 start_id, __s32 end=
-_id)
-> >  {
-> > @@ -935,7 +978,7 @@ static __s32 btf_find_by_name_kind(const struct btf=
- *btf, int start_id,
-> >
-> >       if (start_id < btf->start_id) {
-> >               idx =3D btf_find_by_name_kind(btf->base_btf, start_id,
-> > -                     type_name, kind);
-> > +                                         type_name, kind);
->
-> Nit: shouldn't be in this patch.
+- Fix build of net/smc when CONFIG_BPF_SYSCALL=y, but CONFIG_BPF_JIT=n
+  (Geert Uytterhoeven)
 
-Thanks, I will fix it in the next version.
+- Fix livepatch/BPF interaction and support reliable unwinding through
+  BPF stack frames (Josh Poimboeuf)
 
->
-> >               if (idx >=3D 0)
-> >                       return idx;
-> >               start_id =3D btf->start_id;
-> > @@ -1147,6 +1190,7 @@ static struct btf *btf_new(const void *data, __u3=
-2 size, struct btf *base_btf, b
-> >       err =3D err ?: btf_sanity_check(btf);
-> >       if (err)
-> >               goto done;
-> > +     btf_check_sorted(btf);
-> >
-> >  done:
-> >       if (err) {
->
+- Do not audit capability check in arm64 JIT (Ondrej Mosnacek)
+
+- Fix truncated dmabuf BPF iterator reads (T.J. Mercier)
+
+- Fix verifier assumptions of bpf_d_path's output buffer (Shuran Liu)
+
+- Fix warnings in libbpf when built with -Wdiscarded-qualifiers under C23
+  (Mikhail Gavrilov)
+
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+----------------------------------------------------------------
+Alexei Starovoitov (3):
+      selftests/bpf: Add -fms-extensions to bpf build flags
+      Merge branch 'bpf-x86-unwind-orc-support-reliable-unwinding-through-bpf-stack-frames'
+      Merge branch 'bpf-fix-bpf_d_path-helper-prototype'
+
+Geert Uytterhoeven (1):
+      net: smc: SMC_HS_CTRL_BPF should depend on BPF_JIT
+
+Josh Poimboeuf (2):
+      bpf: Add bpf_has_frame_pointer()
+      x86/unwind/orc: Support reliable unwinding through BPF stack frames
+
+Mikhail Gavrilov (1):
+      libbpf: Fix -Wdiscarded-qualifiers under C23
+
+Ondrej Mosnacek (1):
+      bpf, arm64: Do not audit capability check in do_jit()
+
+Quentin Monnet (1):
+      bpftool: Fix build warnings due to MS extensions
+
+Shuran Liu (2):
+      bpf: Fix verifier assumptions of bpf_d_path's output buffer
+      selftests/bpf: add regression test for bpf_d_path()
+
+T.J. Mercier (2):
+      bpf: Fix truncated dmabuf iterator reads
+      selftests/bpf: Add test for truncated dmabuf_iter reads
+
+ arch/arm64/net/bpf_jit_comp.c                      |  2 +-
+ arch/x86/kernel/unwind_orc.c                       | 39 +++++++---
+ arch/x86/net/bpf_jit_comp.c                        | 12 +++
+ include/linux/bpf.h                                |  3 +
+ kernel/bpf/core.c                                  | 16 ++++
+ kernel/bpf/dmabuf_iter.c                           | 56 ++++++++++++--
+ kernel/trace/bpf_trace.c                           |  2 +-
+ net/smc/Kconfig                                    |  4 +-
+ tools/bpf/bpftool/Makefile                         |  2 +
+ tools/lib/bpf/libbpf.c                             |  7 +-
+ tools/testing/selftests/bpf/Makefile               |  2 +
+ tools/testing/selftests/bpf/prog_tests/d_path.c    | 89 +++++++++++++++++-----
+ .../testing/selftests/bpf/prog_tests/dmabuf_iter.c | 47 ++++++++++--
+ tools/testing/selftests/bpf/progs/test_d_path.c    | 23 ++++++
+ 14 files changed, 256 insertions(+), 48 deletions(-)
