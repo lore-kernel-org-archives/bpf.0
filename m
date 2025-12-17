@@ -1,19 +1,20 @@
 Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 633FF2DAFA9;
-	Wed, 17 Dec 2025 06:14:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65A172DAFB0;
+	Wed, 17 Dec 2025 06:14:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765952096; cv=none; b=n0SK2kGlFzQm0yBzQuD6SqMFm1SAP8xvdLcrMSlAJOLmgocoSQKiWmwUsaxE+monpQBoxQQCsEwU6qSrjjbJrXd03zjdDNCfEx624j4o7lpl/VFntPpjpYSwiAqFAGqKNC46jGINc3dJ/sPEYqzQl6vK+tQDxPPe1fn59kmFPng=
+	t=1765952097; cv=none; b=b5CDrRIs5tFghcKOID6Vn8hChfE7E+jJjHi1MAiy8IqmbgJUr0x+ZiTu+kcSB//CY+/TaoYEpBEFGffbgRL4ItX9HDZxkw6kxfn3yLWkPHuiiHZ2MUx2zuyn7/voaSP8YQ4Ft9Ucc4h7kmH13TVRbnYsYJkDmcbnbhmlSFHQwmo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765952096; c=relaxed/simple;
-	bh=y51wTs7jYAWrEVI7X6kbS+bRonOycdY4GKG3tQF+rH8=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=M/pJbFMpjsHD1F7OQawNryy5K0Vwfy92sAjmNovkY9GvuWkXniyJHG3gSBI1POqivOKdIlk/rPhHfRtw4x4mO+v9igGEAv42KGCgeaRV//7ses/ZXXfC3yLij3ORnkNex+aXK+octVci9nagfK408cYG8tHsRxSN700fTAwsY3Q=
+	s=arc-20240116; t=1765952097; c=relaxed/simple;
+	bh=r1I+bpErqlh++r/MFQe8qcmP4ACN25MMSukJfXZll64=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=iESn7vbiWpGrrxRJbXw2EMgm8ECmg56dF6ZSpmhzOevEic4MjPbMnepWYgwOGgaINANCcdRHdKJa4VS/66ho88bAhiF1UmBQlWdknp5pZqOHYehLx2kZGg75IEuFALT8lsp9K/oPZLXHu8QTx1N3tfYNdGoKzzXfswCGXJFkgx0=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: aff566e4db0f11f0a38c85956e01ac42-20251217
+X-UUID: b0a89976db0f11f0a38c85956e01ac42-20251217
 X-CTIC-Tags:
 	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NO_NAME, HR_CTE_8B, HR_CTT_TXT
 	HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME, HR_SJ_DIGIT_LEN
@@ -24,27 +25,27 @@ X-CTIC-Tags:
 	DMARC_NOPASS, CIE_BAD, CIE_GOOD_SPF, CIE_UNKNOWN, GTI_FG_BS
 	GTI_RG_INFO, GTI_C_BU, AMN_GOOD, ABX_MISS_RDNS
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.6,REQID:201bb43f-4d2d-4df5-bda8-e3071088b4e8,IP:10,U
+X-CID-O-INFO: VERSION:1.3.6,REQID:8e401cd1-354d-4394-a7c3-c1672cd8df66,IP:10,U
 	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION
 	:release,TS:5
-X-CID-INFO: VERSION:1.3.6,REQID:201bb43f-4d2d-4df5-bda8-e3071088b4e8,IP:10,URL
+X-CID-INFO: VERSION:1.3.6,REQID:8e401cd1-354d-4394-a7c3-c1672cd8df66,IP:10,URL
 	:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
 	elease,TS:5
-X-CID-META: VersionHash:a9d874c,CLOUDID:8113c73be708f2d7f3cd128b7603ee1f,BulkI
-	D:251217141448DGS19CJA,BulkQuantity:0,Recheck:0,SF:17|19|38|66|78|102|127|
-	850|898,TC:nil,Content:0|15|50,EDM:-3,IP:-2,URL:99|1,File:nil,RT:nil,Bulk:
-	nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,B
-	RE:0,ARC:0
+X-CID-META: VersionHash:a9d874c,CLOUDID:1524952e3b7d2bf701af38f7ac9cb77e,BulkI
+	D:251217141448XN7Y5VUG,BulkQuantity:0,Recheck:0,SF:17|19|38|66|78|81|82|10
+	2|127|850|898,TC:nil,Content:0|15|50,EDM:-3,IP:-2,URL:0,File:nil,RT:nil,Bu
+	lk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:
+	0,BRE:0,ARC:0
 X-CID-BVR: 2,SSN|SDN
 X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,TF_CID_SPAM_ULS,TF_CID_SPAM_SNR
+X-CID-FACTOR: TF_CID_SPAM_FSD,TF_CID_SPAM_SNR,TF_CID_SPAM_FAS
 X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: aff566e4db0f11f0a38c85956e01ac42-20251217
+X-UUID: b0a89976db0f11f0a38c85956e01ac42-20251217
 X-User: duanchenghao@kylinos.cn
 Received: from localhost.localdomain [(183.242.174.20)] by mailgw.kylinos.cn
 	(envelope-from <duanchenghao@kylinos.cn>)
 	(Generic MTA)
-	with ESMTP id 1493946342; Wed, 17 Dec 2025 14:14:47 +0800
+	with ESMTP id 1826887528; Wed, 17 Dec 2025 14:14:48 +0800
 From: Chenghao Duan <duanchenghao@kylinos.cn>
 To: yangtiezhu@loongson.cn,
 	rostedt@goodmis.org,
@@ -63,10 +64,12 @@ Cc: kernel@xen0n.name,
 	jianghaoran@kylinos.cn,
 	vincent.mc.li@gmail.com,
 	linux-trace-kernel@vger.kernel.org
-Subject: [PATCH v4 0/7] Fix the failure issue of the module_attach test case
-Date: Wed, 17 Dec 2025 14:14:28 +0800
-Message-Id: <20251217061435.802204-1-duanchenghao@kylinos.cn>
+Subject: [PATCH v4 2/7] LoongArch: Enable exception fixup for specific ADE subcode
+Date: Wed, 17 Dec 2025 14:14:30 +0800
+Message-Id: <20251217061435.802204-3-duanchenghao@kylinos.cn>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20251217061435.802204-1-duanchenghao@kylinos.cn>
+References: <20251217061435.802204-1-duanchenghao@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -76,90 +79,51 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-v4:
-My sincere apologies for the misunderstanding in my interpretation of
-Tiezhu's reply in the v2 email thread. After the release of v3, Tiezhu
-reminded me again of the importance of splitting the patches, and I am
-very grateful for this. Below are the changes made for v4.
+This patch allows the LoongArch BPF JIT to handle recoverable memory
+access errors generated by BPF_PROBE_MEM* instructions.
 
-Split the patch titled "LoongArch: BPF: Enhance trampoline support for
-kernel and module tracing" into the following smaller patches by
-functionality to facilitate code reading and review, while ensuring the
-code logic and modification locations remain unchanged:
-"LoongArch: BPF: Enable and fix trampoline-based tracing for module functions"
-"LoongArch: BPF: Save return address register ra to t0 before trampoline"
-"LoongArch: BPF: Adjust the jump offset of tail calls"
-"LoongArch: BPF: Enhance the bpf_arch_text_poke() function"
+When a BPF program performs memory access operations, the instructions
+it executes may trigger ADEM exceptions. The kernel’s built-in BPF
+exception table mechanism (EX_TYPE_BPF) will generate corresponding
+exception fixup entries in the JIT compilation phase; however, the
+architecture-specific trap handling function needs to proactively call
+the common fixup routine to achieve exception recovery.
 
---------------------------Changelog------------------------------------
-v3:
-links: https://lore.kernel.org/all/20251216094753.1317231-1-duanchenghao@kylinos.cn/
-1. Adjust the position of fixup_exception() in the patch "LoongArch:
-Enable exception fixup for specific ADE": move its invocation to within
-the code block wrapped by irqentry_enter()/irqentry_exit().
+do_ade(): fix EX_TYPE_BPF memory access exceptions for BPF programs,
+ensure safe execution.
 
-2. Add the relevant test items to the patch commit log.
+Relevant test cases: illegal address access tests in module_attach and
+subprogs_extable of selftests/bpf
 
-3. Adjust the sequence of patches
+Signed-off-by: Chenghao Duan <duanchenghao@kylinos.cn>
+---
+ arch/loongarch/kernel/traps.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-With the exception of the patch "LoongArch: Enable exception fixup for
-specific ADE", no source code changes have been made in the other
-patches.
-
-v2:
-links: https://lore.kernel.org/all/20251212091103.1247753-1-duanchenghao@kylinos.cn/
-Referring to Tiezhu's suggestion, split the v1 patch titled
-"LoongArch: Modify the jump logic of the trampoline" into three parts:
- (1) ftrace code
- (2) sample test
- (3) bpf code
-The code logic and implementation remain unchanged.
-
-v1:
-links: https://lore.kernel.org/all/20251209093405.1309253-1-duanchenghao@kylinos.cn/
-The following test cases under the tools/testing/selftests/bpf/
-directory have passed the test：
-
-./test_progs -t module_attach
-./test_progs -t module_fentry_shadow
-./test_progs -t subprogs
-./test_progs -t subprogs_extable
-./test_progs -t tailcalls
-./test_progs -t struct_ops -d struct_ops_multi_pages
-./test_progs -t fexit_bpf2bpf
-./test_progs -t fexit_stress
-./test_progs -t module_fentry_shadow
-./test_progs -t fentry_test/fentry
-./test_progs -t fexit_test/fexit
-./test_progs -t fentry_fexit
-./test_progs -t modify_return
-./test_progs -t fexit_sleep
-./test_progs -t test_overhead
-./test_progs -t trampoline_count
-
-Chenghao Duan (7):
-  LoongArch: ftrace: Refactor register restoration in
-    ftrace_common_return
-  LoongArch: Enable exception fixup for specific ADE subcode
-  LoongArch: BPF: Enable and fix trampoline-based tracing for module
-    functions
-  LoongArch: BPF: Save return address register ra to t0 before
-    trampoline
-  LoongArch: BPF: Adjust the jump offset of tail calls
-  LoongArch: BPF: Enhance the bpf_arch_text_poke() function
-  LoongArch: ftrace: Adjust register stack restore order in direct call
-    trampolines
-
- arch/loongarch/kernel/mcount_dyn.S          | 14 +++++---
- arch/loongarch/kernel/traps.c               |  9 ++++-
- arch/loongarch/net/bpf_jit.c                | 38 +++++++++++++++------
- samples/ftrace/ftrace-direct-modify.c       |  8 ++---
- samples/ftrace/ftrace-direct-multi-modify.c |  8 ++---
- samples/ftrace/ftrace-direct-multi.c        |  4 +--
- samples/ftrace/ftrace-direct-too.c          |  4 +--
- samples/ftrace/ftrace-direct.c              |  4 +--
- 8 files changed, 59 insertions(+), 30 deletions(-)
-
+diff --git a/arch/loongarch/kernel/traps.c b/arch/loongarch/kernel/traps.c
+index 004b8ebf0051..201c9a5532f4 100644
+--- a/arch/loongarch/kernel/traps.c
++++ b/arch/loongarch/kernel/traps.c
+@@ -534,11 +534,18 @@ asmlinkage void noinstr do_fpe(struct pt_regs *regs, unsigned long fcsr)
+ 
+ asmlinkage void noinstr do_ade(struct pt_regs *regs)
+ {
+-	irqentry_state_t state = irqentry_enter(regs);
++	irqentry_state_t state;
++	unsigned int esubcode = FIELD_GET(CSR_ESTAT_ESUBCODE, regs->csr_estat);
++
++	state = irqentry_enter(regs);
++
++	if ((esubcode == EXSUBCODE_ADEM) && fixup_exception(regs))
++		goto out;
+ 
+ 	die_if_kernel("Kernel ade access", regs);
+ 	force_sig_fault(SIGBUS, BUS_ADRERR, (void __user *)regs->csr_badvaddr);
+ 
++out:
+ 	irqentry_exit(regs, state);
+ }
+ 
 -- 
 2.25.1
 
