@@ -1,25 +1,25 @@
-Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
+Received: from relay.hostedemail.com (smtprelay0011.hostedemail.com [216.40.44.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27CFE287276;
-	Wed, 17 Dec 2025 22:26:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FDE33112C2;
+	Wed, 17 Dec 2025 22:28:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766010386; cv=none; b=Erj/uJWnI8oO6omfF+SYH1sQvQJdpFZHt/VlNQwku9pY6I8iCSBc/wuWl0lREoFwwg6OvnpCtqd/3mNQFxURH/HR9xqQyLzEH6HGO9TkHSDUrdcPJPyJnBor2CAHQGkOjTXkFoz+OuyTghE0ETiKInZU5sf9mvwJxEYQGdtvJns=
+	t=1766010541; cv=none; b=ldcrs+Yrm3+UIhH6a2OMTja7b1bn7roTYp75SkN/zZMJdJ+daDQJJVNXBu+2HR0tkTwiMnSb2SXE0cXY5s+hJIDroiE567pkPZQXUE7NX6weMYZFMeatBPjmh2hgAPoVhm9+YHcSAe7fESiX2jdYZHuYwBaZJaqDOsM4VFxNpeE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766010386; c=relaxed/simple;
-	bh=4YznakJw+kC0vFnT9CnLZi47NaSZObtLNgrEKgofxTU=;
+	s=arc-20240116; t=1766010541; c=relaxed/simple;
+	bh=2hawc1SSg+liNeexE2EYxW5UPDOa48r4bF69kCdcuKA=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=HSEfT2jQSKdxCk3yuhGSaMqByQhRwQID1rd4okuETo2759vip/NjhqLtG2TZdFnlVQHIWEvBYfzXvH6eteEEpyzjSsGPIdn2PzjLC4b6Sz5AFhxrJiFE7ZR9yLv2ykJqWBm/jg+OvMiz4Obfrc74EgjkCI0xuPOEiD7p1sZ99f0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.15
+	 MIME-Version:Content-Type; b=oaRAQQkU56X/yV5Lnf+bzsVrohnKx7M3+l/OnPhbW0Os8TQ7Lil7VPAqsW/+zg4jtDOiBkR1L4phb8ZYbsa9dk8BQ0x8bw11qhhpba5uPvJ0IGv1OZtCUAx8oNp6d5hFXiPDhDtjFSEvzAwyogkwWwiyyWUQEzUu3iwqLfVvH9o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf13.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay09.hostedemail.com (Postfix) with ESMTP id 19A258AFF3;
-	Wed, 17 Dec 2025 22:26:15 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf13.hostedemail.com (Postfix) with ESMTPA id BB07720011;
-	Wed, 17 Dec 2025 22:26:10 +0000 (UTC)
-Date: Wed, 17 Dec 2025 17:27:47 -0500
+Received: from omf03.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay07.hostedemail.com (Postfix) with ESMTP id DB953160168;
+	Wed, 17 Dec 2025 22:28:56 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf03.hostedemail.com (Postfix) with ESMTPA id EF2C96000A;
+	Wed, 17 Dec 2025 22:28:52 +0000 (UTC)
+Date: Wed, 17 Dec 2025 17:30:29 -0500
 From: Steven Rostedt <rostedt@goodmis.org>
 To: Maurice Hieronymus <mhi@mailbox.org>
 Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
@@ -33,7 +33,7 @@ Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
  georges.aureau@hpe.com, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-trace-kernel@vger.kernel.org
 Subject: Re: [PATCH v3] kallsyms: Always initialize modbuildid
-Message-ID: <20251217172747.2a333460@gandalf.local.home>
+Message-ID: <20251217173029.2d07012c@gandalf.local.home>
 In-Reply-To: <20251210170347.28053-1-mhi@mailbox.org>
 References: <20251210170347.28053-1-mhi@mailbox.org>
 X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
@@ -45,35 +45,24 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Stat-Signature: ptq8o68qjes4pu4f8da78ee5nnxfnihm
-X-Rspamd-Server: rspamout01
-X-Rspamd-Queue-Id: BB07720011
+X-Stat-Signature: fanm57x3yjdxcqgoguhs9ebmsd1xpeu5
+X-Rspamd-Server: rspamout02
+X-Rspamd-Queue-Id: EF2C96000A
 X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX1+hoL+qqMM0vf3HHIXEf6+/t4+c7/SWdYE=
-X-HE-Tag: 1766010370-923308
-X-HE-Meta: U2FsdGVkX19F7zz1mgQWDtQzVAqZJv6M27fcHoRJ0xIYyA5BjRtpRQAI29iibHPUhi1YEmAYqHNkNRMH1ngER/1DHWlJtc46RUqAJ4r29EvnNNMJRzPZdXJGJ646FAvjVVjI4ERTI04g9P24CzpOGlY//hWQvau9E0/D+hY6TIFfvteRyh4bbRWDCiktdXxTuhSrvIqT+voFTWQ0bNSoWv5XqSTFzzYluLV7UiPTYplwfNs7HDcJTNa5S8WB+y7E30g+RhYT7H/eDKS/pQl2VD8ZwyMmiYteQs241v5GC+bDLjIJiPwfmhtJd/HR+Gyj8URr1ruZqBeJgeO0tF2TETGyDfsm57uJ7F/wJZvXYOOcktsvh9Yl7wB1SzMYEbMO
+X-Session-ID: U2FsdGVkX1+AwUgPOkPQtD55AUh0sTWLJi3q30jqUWI=
+X-HE-Tag: 1766010532-244636
+X-HE-Meta: U2FsdGVkX1+ht2JxDWh2RXatxiYHvO7GQ9ze+R9EnAi1bsHURm4vgvzLYpsPZLltGGsz6LUmgNMTyQn0ehSNz74deEdj64Zh/OkfB/QkezVTozf795oIbEpSoSv/4UybWhrbyOvoaL0hEBmKnwuznOazKqhhYm86N/M171LNIGMlWfpb2cjOQkqzVK0jgfheQ6Ps7spSoqUzAUgsHQEkehtxbyADeRer20Xqc6nODxLUAxQ/OIWSa0nHTNZKtI2AybELXW6kjdsXMGPI78hvdrys9l5mm+nhLrgvoJ3LSndZUetR/MxlXkpy/Diiftoazj2MehEMEPxTTk3eLMHjqBU06Uyj0gt9FOqbJiKUkTusJJCvIWokAZuznU31XXnq
 
 On Wed, 10 Dec 2025 18:03:45 +0100
 Maurice Hieronymus <mhi@mailbox.org> wrote:
 
-> @@ -7761,6 +7761,12 @@ ftrace_mod_address_lookup(unsigned long addr, unsigned long *size,
->  		if (ret) {
->  			if (modname)
->  				*modname = mod_map->mod->name;
-> +			if (modbuildid)
-> +#if IS_ENABLED(CONFIG_STACKTRACE_BUILD_ID)
+>  include/linux/filter.h | 6 ++++--
+>  include/linux/ftrace.h | 4 ++--
+>  kernel/kallsyms.c      | 4 ++--
+>  kernel/trace/ftrace.c  | 8 +++++++-
+>  4 files changed, 15 insertions(+), 7 deletions(-)
 
-IS_ENABLED() is for use within C code. This should simply be:
-
-#ifdef CONFIG_STACKTRACE_BUILD_ID
+Also split this up into two patches. Then I can take the one for ftrace and
+the networking folks can take the bpf update.
 
 -- Steve
-
-> +				*modbuildid = mod_map->mod->build_id;
-> +#else
-> +				*modbuildid = NULL;
-> +#endif
->  			break;
->  		}
->  	}
-
