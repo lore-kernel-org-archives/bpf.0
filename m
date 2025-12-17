@@ -1,256 +1,208 @@
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B5D3312800
-	for <bpf@vger.kernel.org>; Wed, 17 Dec 2025 22:29:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B4AA296BBF
+	for <bpf@vger.kernel.org>; Wed, 17 Dec 2025 22:34:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766010580; cv=none; b=gloL0SLXhTAF+SwGkBt2dphG0EpDGlXqrmbYDRr3qlAVAT7DpSdvTFs8U2N6QzRftVQgHp5qLN7LzzgAdjksikhAJZx7aNxS0V33p9IM3vxELABZj5vp1aGQQ57uQi0M8I7ZJNaxiDOEHR2r0jYfrotH7B4re2YDOXjoh1pXdQA=
+	t=1766010860; cv=none; b=aRY1kk8u2YKjRtyjwdDsCCc/yDAo5JVnEQ7AfsVmPQx6X/UewUj9laNaIY6WzdZFrfSP6EBkU0ECg6kjJxOMP6uakQe3Ra3fdvuOUnpyvKEkvEcw3MVeZnvtAsHEVoDVtTgikIkFjevH70haZcg/lxPVCskJKaS1VKPFyPYlai0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766010580; c=relaxed/simple;
-	bh=hGRkPUnoAhcn6WCIHsRizvFWmK4QEgHb0kZo7QZmjdQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jhfwqGKcWSPk1YxU9XMBZnanZ4tQcp1LRECpsPsB45w/lQ8KYFtxnIb6BOweiPr9p53jVTu6fqFEtaABbzYN6tlKhJmrqrguL8/MW5+Cu5rh3xzW85FsfgIFr9DDFhAM8gkLYH7PRS556Ah8V4maTF91P6fiUtaSfDlmqnRLV+o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lxPpkksj; arc=none smtp.client-ip=209.85.208.47
+	s=arc-20240116; t=1766010860; c=relaxed/simple;
+	bh=IXq5/3dFlmxxQgf13Vxgn8YlBM73UISDTowcZj0VERo=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=caNfz1al8HIIQtKups/Hyq+6e5xQEDR/+JOUt/EaVjv40/qRN/Gj6Pa3Z3csUObbQdJ/ggKiVEECMTJNiWGcWswU+4ObFG+Ob46YXAEEmRZQjZS0v6PTKGyW5sQH15FTBPMh+o52YE5yrHnIfBugPgBBzCxiIf9S3jZ/RCBYSNw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=J02awCVj; arc=none smtp.client-ip=209.85.210.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lxPpkksj"
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-640a0812658so10459560a12.0
-        for <bpf@vger.kernel.org>; Wed, 17 Dec 2025 14:29:37 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="J02awCVj"
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-7acd9a03ba9so44609b3a.1
+        for <bpf@vger.kernel.org>; Wed, 17 Dec 2025 14:34:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1766010576; x=1766615376; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9H54kmn96vNV3ygwYbBRomzNZ50c+SuQtzurnnIVdFI=;
-        b=lxPpkksjQ9fn2Sf8k6zFGorQP9OxVPNQat/ryivmciD0qbX/6SrxZl3CDdbr+YSDBK
-         lSoMhWdf/iamjSvEgtYe5zW9K1VpDVzAkaANdMzWVAK5uFuMkAGaeIoNeyO7kaNLegwA
-         LQy9M2FORTfZJdkwe/b4jxep3CVd35JI1EDQ/bi6l6WCv01qxk1M+Jc0BoQnP1uFN1ab
-         4/WbnqNQaJIpNuDElUzGJka+4ny0jPcdMu5zUYWCJBkGoCioRSaJzdf0BKw6NN9yBqdL
-         8jubhuJA7uZPPeUUPgLgbvPrXuBGHyBptY1k8bRtmbWcGAG5fruIBKusKz4AFJ/e7bRh
-         p5pQ==
+        d=gmail.com; s=20230601; t=1766010858; x=1766615658; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Z6EUMfqffTwbShAjal8oHtzsjiuYJcumiq8lizyQBv8=;
+        b=J02awCVjB03/3u0abtcrDYojD0L4eZSL+poEYeXqP1iTfB1m9wWr0fcGNdhatO7Y+T
+         ZwcGb7J3xBF6m24O82Nh1fEqsDN2+hChkYECNFDfYzoTDFQeu29sYQ6jE8LGcU0lhuLx
+         vyQVARjKaUTEn2m61826818BDyWUb2xoxy6IwAm+ryCXXoqdRVnMPXTrBk2BNnXZXPCS
+         wO+ixomSQ8CFAYhmMgjrI7WR1stt02iobWZaFhLCTDHpPRYXB6st9VIRqjCFXjH/Unmz
+         cVFoeSXH/as4F81slRLOmQDfQOMe27hzUEE6O93ieWOJdWV/GPbQw7BXRwBAuxUxmV8f
+         mH3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766010576; x=1766615376;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=9H54kmn96vNV3ygwYbBRomzNZ50c+SuQtzurnnIVdFI=;
-        b=QvptAhhu5Cq8CMg2nr1iRl2H/SrarRJC/JzYeL/TsInShSVMpTKR5nSO1XFI47tGCh
-         mmkrhddV03tDKLwSVzYAMr+iI9GtrLCet73/YjjMDiqzZfqn5SvxTgCGNSAb5r7ByPC2
-         snQ+iyi1P2j/JFc0O2Hwv3iYwU/cfV7RQIEPY6xNG2c3kco9cN2yAJ4vMPl+JKVJM6Rs
-         w1mMT07RjxRk5bME6x1qqf3wruDBktFA6cVFU31y3bHPwYX6wU80Pk7TFWIEjAY8nOW0
-         F2CH98erCPm+z41+No66Oj06GZv+rlMkMC2AoPiApj2rBCj6t65uiYIF/p/cQHRfb7uB
-         3IHA==
-X-Forwarded-Encrypted: i=1; AJvYcCXgh0/EHfxi54MzEDAhoqpn+ooKc6ajomjIEW6uafID7k6Nh1Pix6ZoE6O4PDPRuPvz41w=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx5y2ndngeFFuzrrug3ADEgoI3bjvV9sbKBb9DRVE/dMzvxDO+u
-	w+pa1+fhTWlvQzU69qXEPGwiIjDNxbzpm2j4gwnPKiOCvu8t8HOMjOlCwb9zLPra80uMjIyXwur
-	RGwcknOYlw72FZIf79e6FnMmhqdWpF7o=
-X-Gm-Gg: AY/fxX6CFpDyrwyey5VFPmDlwsj2dtGMqPWJGclLdhZl6q3V4cP4ClyTP+iY/JUqtZe
-	OWBHq+GOjGxeylTLMoCGnmdfUuEpjzG9HfyCq3MP2ZYQPUbw5qyebgqB5LdIPq0TvWr5fSj27Im
-	xcxipIXBUqMn/LnsSsnCA0V+fR/oKfCOY3yPL6HgvSz2r6ypJCcFaGj10/iFZGhB6pad8wYvdKO
-	YYO2T1OdyCVZDVO8z8xZ7dTmYaOCQArYXhJ9sfL0c3auc/7XxSwfGGfER3HPTEhazwJpCpu3AB0
-	/oZKkLJ7KnM=
-X-Google-Smtp-Source: AGHT+IHy0SPC7NZr09ACBkL+rzU7+b/jgSqQD84mqbjPUZWVOXQVxca90u4aU06tyBxNkzJ7qSjRrdzf2U7LHwjmhAk=
-X-Received: by 2002:a05:6402:35ce:b0:63c:3c63:75ed with SMTP id
- 4fb4d7f45d1cf-6499b1c6ab0mr18878629a12.22.1766010576228; Wed, 17 Dec 2025
- 14:29:36 -0800 (PST)
+        d=1e100.net; s=20230601; t=1766010858; x=1766615658;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Z6EUMfqffTwbShAjal8oHtzsjiuYJcumiq8lizyQBv8=;
+        b=dHn/2koxYW5CgAXyqPcJR3YDRTEmqjESSTE65msF5Or5Re8VXPatZNmvotohDsqAfp
+         uc7i+cREi712Yjx/IMZV6ASrbUufRzLghcQVg5f7uVtGCtlV9iVsSnbfqeC1v7njSnYQ
+         7UCsCLTJ0yKExNtH8TcWvmferUT/r3uIphKkIbJxiQ2bCB6G0ZVIWIZ9Gd89bUSlniPC
+         nGAIQFYVWFtmZHP5RmfLvkyfLXqz0FQAPoHcbVDAZgF95B12RPQ6BBt+QDH9ncdEbyFK
+         VbphIsMGNULH3R/TtEysu4YLN13MPfZJxYtqIoQbRtSl+jY1G7W1GxUStk3WgTq4JGRv
+         N9Cg==
+X-Forwarded-Encrypted: i=1; AJvYcCUzAyL3QNATjoUnejdFNfdV3acVEGtEXLEUi3vzKZU9wWsr3SswnW2JAyN1EaDKwZWh7AI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwxOGfVS1WG1f5uda9U9bqLGrH1J9Bi1qNrkvK2x+YLMvoqPsw0
+	FJLAsGgVkC1yjAZM8ytsI0NteQgVCfxR5oMmv1+FJ4x1VcMxeSEwMfoi
+X-Gm-Gg: AY/fxX7L6cZB1dv/Xhy4svNUv/2gmbueSRr6HhFDMt5wPqGZfVgICotHJjMLAKevSip
+	OIL6PGvW38SgeHrpxcR5dAILc9/G2zv8SNXVx9eJvR1Z7dckhywIRuNkoiAcMH/HKpFbOrS0l7g
+	5xBltEnc/hrwhXI/Za8RZPhlGx2WD4sYDl4I0jEEXy0odrPtO1Smj+WGapBkOo6Hs+YfDSjh/5W
+	+qvopwbwNxZs2hf0U0hqMA+A6eGAXnNiV6iNsPk/Q6i5li8G0jme5GHBM6uDv3UvS8MX2hyCu3j
+	rhG8WJktGoS6FBbJblOS7HOZkBBvGkDaoA4GUTfLx7B6VItp/CaG+2Imkl2xgjJyZ9xhKAL5OmP
+	HzjbZJaVt/H3HvWfCce/SQe7MYgTDmBBzRYBthKTXz9+ZGt9/Fdfw+y5iuYd5iWuWBCUnK+1rRA
+	qp3Bgwxrcs+rOucQOaLK+L7I3fWvDtNFDhDBEu
+X-Google-Smtp-Source: AGHT+IFKAdYVsvgU3BfOUAxtCdCjqxmwP55/aVdRxY7in1o28WJ0JThJmpZrfjW+JvbQTP5APxG7sA==
+X-Received: by 2002:a05:7023:a85:b0:11a:335d:80d3 with SMTP id a92af1059eb24-11f34bfa7damr15185047c88.22.1766010858390;
+        Wed, 17 Dec 2025 14:34:18 -0800 (PST)
+Received: from ?IPv6:2a03:83e0:115c:1:9f95:2f12:bb69:e3e6? ([2620:10d:c090:500::7:a4ff])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-12061fcfc66sm1919430c88.15.2025.12.17.14.34.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Dec 2025 14:34:17 -0800 (PST)
+Message-ID: <5022ccaf5591e5bb88fe3d7a08dbb3c4fb6c3132.camel@gmail.com>
+Subject: Re: [PATCH bpf-next 1/2] libbpf: add option to force-anonymize
+ nested structs for BTF dump
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Andrii Nakryiko
+	 <andrii.nakryiko@gmail.com>
+Cc: Alan Maguire <alan.maguire@oracle.com>, Quentin Monnet <qmo@kernel.org>,
+  Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,  Martin KaFai Lau
+ <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song
+ <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, KP
+ Singh <kpsingh@kernel.org>, Stanislav Fomichev	 <sdf@fomichev.me>, Hao Luo
+ <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, bpf	
+ <bpf@vger.kernel.org>
+Date: Wed, 17 Dec 2025 14:34:15 -0800
+In-Reply-To: <CAADnVQJ1V1vwPVnhyE4OfOSQt_BnB3wRW9g9_bhkdu-QZyuQkQ@mail.gmail.com>
+References: <20251216171854.2291424-1-alan.maguire@oracle.com>
+	 <20251216171854.2291424-2-alan.maguire@oracle.com>
+	 <d5a578c01f8a2d4d95ca16e0a9ee5b9bfce1c30e.camel@gmail.com>
+	 <9a096b2a16d552031a12f3f4f5a2c725212df5e6.camel@gmail.com>
+	 <b535b47a-519e-4138-861b-c16ed7fa0bcd@oracle.com>
+	 <CAADnVQ+EyYO+aOZewNQwETr5rphOCp6jJQH_fw9GqjVFdQd19A@mail.gmail.com>
+	 <CAEf4BzbWZtRdKCGwhjRV9MOufTC-coWFSU5sRtk4gdm9S_bg+w@mail.gmail.com>
+	 <6ae6dfd8-3f73-4318-93c1-97541d267a28@oracle.com>
+	 <CAADnVQ+wNPbbA0e4+6kx+LtOH=09jJyiYcEKZfc8kt6UPnq=EQ@mail.gmail.com>
+	 <535846f7-4cc7-4b12-aab4-52e530d04706@oracle.com>
+	 <ae6c6e50b3176d4ee4cce4cda09807a05d103fbf.camel@gmail.com>
+	 <3071012cc1e8d6bdf16b13d371a12cb201c502a7.camel@gmail.com>
+	 <b65fd7dc-fbad-4a96-8eb8-f36f8f518d44@oracle.com>
+	 <CAEf4Bzb+3cryZAEwC_O7xgm3=cthZU-SNsUWfGH8OpSwc+3vaw@mail.gmail.com>
+	 <CAADnVQJ1V1vwPVnhyE4OfOSQt_BnB3wRW9g9_bhkdu-QZyuQkQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2 (3.56.2-2.fc42) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251217162830.2597286-3-puranjay@kernel.org> <f144fd46b602b74fc4c1c2664082fbe893e7ec9c274fcc5fdf13d65151749e9c@mail.kernel.org>
- <CANk7y0h4JO2-tp9HjRHjcQdTOgmRSsw0rxmK-=G89AVY92U8Jw@mail.gmail.com>
- <CAADnVQ+E6Tgcf1E5x-wk_TA+Lz83cA=SL8EZUGL70bQpywwexg@mail.gmail.com>
- <CANk7y0jNj0SDOBr=3n_0jhQbLzaj--yVUF4oDA-ManQG-=bkhw@mail.gmail.com> <a0c04178-2159-4475-9be8-93320ffc2138@linux.dev>
-In-Reply-To: <a0c04178-2159-4475-9be8-93320ffc2138@linux.dev>
-From: Puranjay Mohan <puranjay12@gmail.com>
-Date: Wed, 17 Dec 2025 22:29:23 +0000
-X-Gm-Features: AQt7F2pS1XvtGfaw6CsXi5lqqcqMe8RcxTask6GUikNhKVbwDkxTVzHOwPa4ixM
-Message-ID: <CANk7y0hs2E6SVuxt1oHRFek0TD4y0DVP63755K5jxGd9BM3VwQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 2/2] bpf: arm64: Optimize recursion detection by
- not using atomics
-To: Yonghong Song <yonghong.song@linux.dev>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bot+bpf-ci@kernel.org, 
-	bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Martin KaFai Lau <martin.lau@kernel.org>, Eduard <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Kernel Team <kernel-team@meta.com>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, 
-	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, Chris Mason <clm@meta.com>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Dec 17, 2025 at 9:32=E2=80=AFPM Yonghong Song <yonghong.song@linux.=
-dev> wrote:
->
->
->
-> On 12/17/25 10:56 AM, Puranjay Mohan wrote:
-> > On Wed, Dec 17, 2025 at 6:46=E2=80=AFPM Alexei Starovoitov
-> > <alexei.starovoitov@gmail.com> wrote:
-> >> On Wed, Dec 17, 2025 at 10:13=E2=80=AFAM Puranjay Mohan <puranjay@kern=
-el.org> wrote:
-> >>> On Wed, Dec 17, 2025 at 4:56=E2=80=AFPM <bot+bpf-ci@kernel.org> wrote=
-:
-> >>>>> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> >>>>> index 2da986136d26..654fb94bf60c 100644
-> >>>>> --- a/include/linux/bpf.h
-> >>>>> +++ b/include/linux/bpf.h
-> >>>> [ ... ]
-> >>>>
-> >>>>> @@ -2006,12 +2009,32 @@ struct bpf_struct_ops_common_value {
-> >>>>>
-> >>>>>   static inline bool bpf_prog_get_recursion_context(struct bpf_prog=
- *prog)
-> >>>>>   {
-> >>>>> +#ifdef CONFIG_ARM64
-> >>>>> +     u8 rctx =3D interrupt_context_level();
-> >>>>> +     u8 *active =3D this_cpu_ptr(prog->active);
-> >>>>> +
-> >>>>> +     active[rctx]++;
-> >>>>> +     barrier();
-> >>>>> +     if (get_unaligned_le32(active) !=3D BIT(rctx * 8))
-> >>>>> +             return false;
-> >>>>> +
-> >>>>> +     return true;
-> >>>>> +#else
-> >>>>>        return this_cpu_inc_return(*(prog->active)) =3D=3D 1;
-> >>>>> +#endif
-> >>>>>   }
-> >>>> Can preemption between the increment and check cause a counter leak =
-on
-> >>>> CONFIG_PREEMPT_RCU systems? The trampoline calls this function under
-> >>>> rcu_read_lock_dont_migrate() which allows preemption on PREEMPT_RCU
-> >>>> (documented at include/linux/rcupdate.h:856).
-> >>>>
-> >>>> Consider this scenario on an ARM64 system with PREEMPT_RCU:
-> >>>>
-> >>>> 1. Thread A increments active[0] to 1
-> >>>> 2. Preemption occurs before Thread A reaches the check
-> >>>> 3. Thread B on same CPU increments active[0] to 2
-> >>>> 4. Thread B checks: sees 2 !=3D BIT(0), returns false
-> >>>> 5. Thread A resumes, checks: sees 2 !=3D BIT(0), returns false
-> >>>> 6. Both threads return false, neither runs BPF
-> >>>> 7. Neither calls bpf_prog_put_recursion_context() (see
-> >>>>     __bpf_prog_enter_recur() at kernel/bpf/trampoline.c:952)
-> >>>> 8. Counter permanently stuck at 2, all future BPF on this CPU fails
-> >>> Step 7 is incorrect. Looking at the JIT-generated code, the exit
-> >>> function is ALWAYS called, regardless of whether the enter function
-> >>> returns 0 or a start time:
-> >>>
-> >>>    // x86 JIT at arch/x86/net/bpf_jit_comp.c:2998-3050
-> >>>    call bpf_trampoline_enter()    // Line 2998
-> >>>    test rax, rax                   // Line 3006
-> >>>    je skip_exec                    // Conditional jump
-> >>>    ... BPF program execution ...   // Lines 3011-3023
-> >>>    skip_exec:                      // Line 3037 (jump lands here)
-> >>>    call bpf_trampoline_exit()      // Line 3049 - ALWAYS executed
-> >>>
-> >>>    The bpf_trampoline_exit() call is after the skip_exec label, so it
-> >>> executes in both cases.
-> >>>
-> >>> What Actually Happens:
-> >>>
-> >>>    Initial state: active[0] =3D 0
-> >>>
-> >>>    Thread A (normal context, rctx=3D0):
-> >>>    1. active[0]++ =E2=86=92 active[0] =3D 1
-> >>>    2. Preempted before barrier()
-> >>>
-> >>>    Thread B (scheduled on same CPU, normal context, rctx=3D0):
-> >>>    3. active[0]++ =E2=86=92 active[0] =3D 2
-> >>>    4. barrier()
-> >>>    5. get_unaligned_le32(active) =E2=86=92 reads 0x00000002
-> >>>    6. Check: 0x00000002 !=3D BIT(0) =3D 0x00000001 =E2=86=92 returns =
-false
-> >>>    7. __bpf_prog_enter_recur returns 0
-> >>>    8. JIT checks return value, skips BPF execution
-> >>>    9. JIT ALWAYS calls __bpf_prog_exit_recur (see
-> >>> arch/arm64/net/bpf_jit_comp.c:2362)
-> >>>    10. bpf_prog_put_recursion_context(prog) executes
-> >>>    11. barrier(), active[0]-- =E2=86=92 active[0] =3D 1
-> >>>
-> >>>    Thread A resumes:
-> >>>    12. barrier()
-> >>>    13. get_unaligned_le32(active) =E2=86=92 reads 0x00000001 (Thread =
-B already
-> >>> decremented!)
-> >>>    14. Check: 0x00000001 =3D=3D BIT(0) =3D 0x00000001 =E2=86=92 retur=
-ns true =E2=9C=93
-> >>>    15. __bpf_prog_enter_recur returns start_time
-> >>>    16. BPF program executes
-> >>>    17. __bpf_prog_exit_recur called
-> >>>    18. bpf_prog_put_recursion_context(prog) executes
-> >>>    19. barrier(), active[0]-- =E2=86=92 active[0] =3D 0 =E2=9C=93
-> >>>
-> >>>    Final State
-> >>>
-> >>>    - Counter returns to 0 =E2=9C=93
-> >>>    - No leak =E2=9C=93
-> >>>    - Thread B detected interference and aborted =E2=9C=93
-> >>>    - Thread A executed successfully =E2=9C=93
-> >>>    - Only ONE thread executed the BPF program =E2=9C=93
-> >>>
-> >>>
-> >>> Now that I think of it, there is another race condition that leads to
-> >>> NEITHER program running:
-> >>>
-> >>> Consider this scenario on an arm64 system with PREEMPT_RCU:
-> >>>
-> >>> 1. Thread A increments active[0] from 0 to 1
-> >>> 2. Thread A is preempted before reaching barrier()
-> >>> 3. Thread B (same CPU, same context) increments active[0] from 1 to 2
-> >>> 4. Thread B executes barrier() and checks: sees 2 !=3D BIT(0), return=
-s false
-> >>> 5. Thread A resumes, executes barrier() and checks: sees 2 !=3D BIT(0=
-),
-> >>> returns false
-> >>> 6. Both threads return false to __bpf_prog_enter_recur()
-> >>> 7. Both skip BPF program execution
-> >>> 8. Both call bpf_prog_put_recursion_context() and decrement: 2->1->0
-> >>> 9. Neither BPF program executes, but the counter correctly returns to=
- 0
-> >>>
-> >>> This means the patch is changing the behaviour in case of recursion
-> >>> from "One program gets to run" to
-> >>> "At most one program gets to run", but given the performance benefits=
-,
-> >>> I think we can accept this change.
-> >> Agree. It's fine, but we can mitigate it, but doing this rctx trick
-> >> only when RCU is not preemptable. Which pretty much would mean
-> >> that PREEMPT_RT will use atomic and !RT will use rctx
-> >> and this 'no prog executes' will not happen.
+On Wed, 2025-12-17 at 13:27 -0800, Alexei Starovoitov wrote:
+> On Wed, Dec 17, 2025 at 1:02=E2=80=AFPM Andrii Nakryiko
+> <andrii.nakryiko@gmail.com> wrote:
 > >
-> > The issue is also with sleepable programs, they use
-> > rcu_read_lock_trace() and can end up with
-> > 'no prog executes' scenario.
+> > On Wed, Dec 17, 2025 at 12:50=E2=80=AFPM Alan Maguire <alan.maguire@ora=
+cle.com> wrote:
+> > >
+> > > On 17/12/2025 19:35, Eduard Zingerman wrote:
+> > > > On Wed, 2025-12-17 at 11:34 -0800, Eduard Zingerman wrote:
+> > > > > On Wed, 2025-12-17 at 18:41 +0000, Alan Maguire wrote:
+> > > > >
+> > > > > [...]
+> > > > >
+> > > > > > So maybe the best we can do here is something like the followin=
+g at the top
+> > > > > > of vmlinux.h:
+> > > > > >
+> > > > > > #ifndef BPF_USE_MS_EXTENSIONS
+> > > > > > #if __has_builtin(__builtin_FUNCSIG) || defined(_MSC_EXTENSIONS=
+)
+> > > > > > #define BPF_USE_MS_EXTENSIONS
+> > > > > > #endif
+> > > > > > #endif
+> > > > > >
+> > > > > > ...and then guard using #ifdef BPF_USE_MS_EXTENSIONS
+> > > > > >
+> > > > > > That will work on clang and perhaps at some point work on gcc, =
+but also
+> > > > > > gives the user the option to supply a macro to force use in cas=
+es where
+> > > > > > there is no detection available.
+> > > > >
+> > > > > Are we sure we need such flexibility?
+> > > > > Maybe just stick with current implementation and unroll the struc=
+tures
+> > > > > unconditionally?
+> > > >
+> > > > I mean, the point of the extension is to make the code smaller.
+> > > > But here we are expanding it instead, so why bother?
+> > >
+> > > Yeah, I'm happy either way; if we have agreement that we just use the=
+ nested anon
+> > > struct without macro complications I'll send an updated patch.
 > >
-> > What do you think is the best approach for them?
+> > There is a little bit of semantic meaning being lost when we inline
+> > the struct, but I guess that can't be helped. Let's just
+> > unconditionally inline then. Still better than having extra emit
+> > option, IMO.
 >
-> For sleepable programs, maybe we can use the original approach like
->    return this_cpu_inc_return(*(prog->active)) =3D=3D 1;
-> ?
-> This should solve the 'no prog execution' issue.
+> tbh I'm concerned about information loss.
+>
+> If it's not too hard I would do
+> #ifndef BPF_USE_MS_EXTENSIONS
+> #if __has_builtin(__builtin_FUNCSIG)
+> #define BPF_USE_MS_EXTENSIONS
+> #endif
+>
+> and it will guarantee to work for clang while gcc will have structs inlin=
+ed.
+>
+> In one of the clang selftests they have this comment:
+> clang/test/Preprocessor/feature_tests.c:
+> #elif __has_builtin(__builtin_FUNCSIG)
+> #error Clang should not have this without '-fms-extensions'
+> #endif
+>
+> so this detection is a known approach.
 
+Speaking of information loss.
+It appears that clang does the same trick internally:
 
-I tried putting preempt_disable/enable() around inc+read in entry and
-dec in exit:
+  $ cat ms-ext-test2.c
+  struct foo {
+    int a;
+  } __attribute__((preserve_access_index));
+ =20
+  struct bar {
+    struct foo;
+  } __attribute__((preserve_access_index));
+ =20
+  int buz(struct bar *bar) {
+    return bar->a;
+  }
 
-New data, a little different config, so ignore exact values.
+  $ clang -O2 -g -fms-extensions --target=3Dbpf -c ms-ext-test2.c
+  ms-ext-test2.c:6:3: warning: anonymous structs are a Microsoft extension =
+[-Wmicrosoft-anon-tag]
+      6 |   struct foo;
+        |   ^~~~~~~~~~
+  1 warning generated.
 
-This patch:                           56.524M/s
-This patch with preempt_disable():    53.856M/s
-bpf-next/master:                      43.067M/s
-bpf-next/master without Catalin fix:  51.862M/s
+  $ llvm-objdump -Sdr ms-ext-test2.o
+ =20
+  ms-ext-test2.o: file format elf64-bpf
+ =20
+  Disassembly of section .text:
+ =20
+  0000000000000000 <buz>:
+  ;   return bar->a;
+         0:       61 10 00 00 00 00 00 00 w0 =3D *(u32 *)(r1 + 0x0)
+                  0000000000000000:  CO-RE <byte_off> [2] struct bar::<anon=
+ 0>.a (0:0:0)
+         1:       95 00 00 00 00 00 00 00 exit
 
-
-This is still very good and covers the sleepable case as well. So let's do =
-this?
-
-Thanks,
-Puranjay
+Note the "<anon 0>" in the relocation.
+It appears that we loose no information if structures are unrolled.
