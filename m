@@ -1,170 +1,444 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from CH5PR02CU005.outbound.protection.outlook.com (mail-northcentralusazon11012047.outbound.protection.outlook.com [40.107.200.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F7322D29C7
-	for <bpf@vger.kernel.org>; Wed, 17 Dec 2025 19:06:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765998415; cv=none; b=XNkJsdS0+OaemnUVUc06L/VSL3FF1vk+GPNffJsiyi5pj6c0cym9RzGrnv1iPs2eP4GCu1JvjAhuqFuiorxKOVMhsd3+d8HKm0Nwdp9cYt7pG/feJviHIy0uMW4Pb4Vc/OvcFdiN2Ty2/BiHhgf4nsoAKpzQzwhjaJUTNFFj6Bg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765998415; c=relaxed/simple;
-	bh=B31QHAod5lFIrQCFE/R2n6Uxr3VOSVVBc61u+VsisTg=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=U27YpB96Kd6Tah3keLNE7gHjiSeEEgJdIBO55NEiiI8bVuJfAgYDMTg8XROayozmf0ty8Hq4e4lSYAegOxfn6KWWvxBPO1r87RVkz2QtFm6Ya7L+fofxeLPA9V8mHMsOT4v0LC+xyW4Z1N9NGlmZKvoPRVrUBo/meIFsj2rTT70=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OGKL9pts; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C7397262B;
+	Wed, 17 Dec 2025 19:14:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.200.47
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1765998885; cv=fail; b=IxA6CADB3Z1H/vNvoPPB/DfSvA4eW6/jCjagyDbgY34K2X/qsVGfVTw8Ow+86rFMc7X6oTgADLw3w0Dz+B/t+oJCatcjj2ygqOIgTNTTTu/iin8HKOlYlF7VKPuS5ynoEqI0UCrkRFCK1pzP8fhLT93Xsv0uoS5k3ZcCQVSQnig=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1765998885; c=relaxed/simple;
+	bh=k7CacBXn0Zpme2Z+3TcLAgNid7mE0VT/c/c5JOuGsNY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=K1914zhmmrmistGP3W+gGpC8YPis8EX5ld/iqQjZdWC6T8lLxxfs6B88NV1v7iojZrIz98VWccwSqYpZRUrjrXYlq0ld8iQIv9V3/KTnhig9MP3IvaG/wP1ZWq4O5gQH7QyFQnoIOz7wwWhz7CwkOboop9amEkCwae+Qc+NkmoQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=lloOMXGd; arc=fail smtp.client-ip=40.107.200.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OGKL9pts"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9600AC4CEF5;
-	Wed, 17 Dec 2025 19:06:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765998414;
-	bh=B31QHAod5lFIrQCFE/R2n6Uxr3VOSVVBc61u+VsisTg=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=OGKL9ptsCtGJNZvjhC+rkkDiUzCgqXeNWDsY0u4TgjnR5fv3EqTRvqQ3+NDDjf+XK
-	 amwGg6kUBOyxe0GUhIre04y246L/zapNb08bYC6roFuVdQVixtZpqxo/D5kBMpNF8v
-	 2d7+2AjBcgfMe0nAlNQkhA7+HK63IGfY9kubT2TEaxvDt3lbIgzoW1kUjNuiaU6PRN
-	 EIW1rN/+5Q/zCdZ5R7JmokZGq6UqTRV/YCAM289zC/dg8Bsoo21/S0Fp0a1zca9g1J
-	 n/RBcnJM3nnQTfirFYWYgzlYlPPvmsFj2FBCrTG6QH73RsUxTXZ8lWroLM2Y2nB9RP
-	 TYeW4+6rnG/yA==
-Content-Type: multipart/mixed; boundary="===============4069848939569761835=="
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="lloOMXGd"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=sKyIdnYCUtIvWKYevlOeWMr2x9LHEkqttMv+3oBT9oBDnzbINCvoQEYlW15Vsh9W6gZniBSwvWbxZnmUOb/SGUtUHvdbJNlB6BV367CN25qziUnCdgQv9VT0rgacKA/DXMPxGDnzqc21KQpCOSLZlqA0Xh2DmR2tQQUA1RRi87OWWJLd5SwzvcRFmcr778gW8CHUQYRnCTdsOd9f7971rGef9Aby7z816zHxCtf79LQvxKRVJ10iYvN8FhfdrTInUVM5pYnqKYNQQzlOJgoJ4glmAVW+ysFMw1nWYSiNvHQTKsuygOanUuPDLIVD5KLIZpRYJZq0/O4uJ28ecUFBKg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1FYv+Mz7VTBBpNFUUTTxRNPFgvfvjOiXaeYxmd/jF7M=;
+ b=IQgKvF/M4rLXA3ty8lzrvwH9wsTz4aqy+B6HkwCODrrovgCXEklvvp0c8hJCiiR18sNh/VpZ4mE2NHUSauUTHUB7WbHRiXsrkP9h+Ru8YglL6QitFidsl7XVRBQ2ZVY/EscSpmb8gicO4gMJeHtPXWnFYlr3VQACmVraGlPrJYDVlBKWtCKx51HkKKm44KKGIHT5kqE5eJDVi8AiEmVcpt+Cf7zM0lXsG4KUpF+dh/p40EvAOtBT9ih4UKuc+qI7xyKsJvXdZhM0uNSEHmFNADl9pqUBcioljHwg6YOKKmdNmeXA7LjsyboekDyeJ8muttx9ax5nN0kz5uzqBv+XTA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1FYv+Mz7VTBBpNFUUTTxRNPFgvfvjOiXaeYxmd/jF7M=;
+ b=lloOMXGdKiTDtLq9esoipykUmnQWGORrvEdh7bAdngKNhmdJkkx9fy0UYYesWYq/xn5mll/OpEC/UlrjMyFNdKsp3/hNuJ99Bizi+xxHZ6Iw6fkJ1itPIAQExr8usZI2DzoYyyK3Iyf0GNgmVqFD5P5+Q+eW2YqIxzhlkK5ZvtJoFm9UZ0sN5XvQMaDzOX2dtg7Egi9R+G8bHjtPKFdRSUELlHjPjdCKjOcDNpSP1diT6iHTusQy6oXmTqpMCInfcZPcoVODerAl5Cq6ns3SRhlmrnOwiNmNFD30c/2HhC7KTBy3PRCfDp4Ih1HU/gF5/DivPWYY17evPa/cPo6j/g==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV8PR12MB9620.namprd12.prod.outlook.com (2603:10b6:408:2a1::19)
+ by DS0PR12MB6413.namprd12.prod.outlook.com (2603:10b6:8:ce::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9434.6; Wed, 17 Dec
+ 2025 09:40:02 +0000
+Received: from LV8PR12MB9620.namprd12.prod.outlook.com
+ ([fe80::1b59:c8a2:4c00:8a2c]) by LV8PR12MB9620.namprd12.prod.outlook.com
+ ([fe80::1b59:c8a2:4c00:8a2c%3]) with mapi id 15.20.9434.001; Wed, 17 Dec 2025
+ 09:40:02 +0000
+From: Andrea Righi <arighi@nvidia.com>
+To: Ingo Molnar <mingo@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>
+Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ben Segall <bsegall@google.com>,
+	Mel Gorman <mgorman@suse.de>,
+	Valentin Schneider <vschneid@redhat.com>,
+	Tejun Heo <tj@kernel.org>,
+	David Vernet <void@manifault.com>,
+	Changwoo Min <changwoo@igalia.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Joel Fernandes <joelagnelf@nvidia.com>,
+	Christian Loehle <christian.loehle@arm.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	sched-ext@lists.linux.dev,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 5/7] sched/debug: Add support to change sched_ext server params
+Date: Wed, 17 Dec 2025 10:35:43 +0100
+Message-ID: <20251217093923.1556187-6-arighi@nvidia.com>
+X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20251217093923.1556187-1-arighi@nvidia.com>
+References: <20251217093923.1556187-1-arighi@nvidia.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: MI0P293CA0002.ITAP293.PROD.OUTLOOK.COM
+ (2603:10a6:290:44::7) To LV8PR12MB9620.namprd12.prod.outlook.com
+ (2603:10b6:408:2a1::19)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <3a85d544551fcd6d0b770c1824dcce7e39caff71380a36fb77e33397fd2457bc@mail.kernel.org>
-In-Reply-To: <20251217184438.3557859-2-puranjay@kernel.org>
-References: <20251217184438.3557859-2-puranjay@kernel.org>
-Subject: Re: [PATCH bpf-next v6 1/4] bpf: arena: populate vm_area without allocating memory
-From: bot+bpf-ci@kernel.org
-To: puranjay@kernel.org,bpf@vger.kernel.org
-Cc: puranjay@kernel.org,puranjay12@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,memxor@gmail.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Wed, 17 Dec 2025 19:06:54 +0000 (UTC)
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV8PR12MB9620:EE_|DS0PR12MB6413:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3884f92a-6fee-4706-7c75-08de3d504089
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014|7416014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?EDClEjtlKuGYI1c/Fz5k6gsddfX0SlVt2wjCg4TeNeu5Tf9dnlSJH0VsLBKT?=
+ =?us-ascii?Q?MaCyXUgNsbyhC1N2c2CtmTtc9smVGSoht020uyjvA6cTxLMDvldFTrPcZ+5L?=
+ =?us-ascii?Q?DjdX5M8PxTqKoqPhegkmdGFoBnBXMkzVlOaW6jEOmX0s3s28bqTOqhlIVImu?=
+ =?us-ascii?Q?cmPauiToI+Raqv7MYOUi5dfFuMbbeQl1vESSsy6X6OE1ziaW5sSp0x8wyb3U?=
+ =?us-ascii?Q?LvXnsykRAJLhAyeGKU4Zzb1xCu9kJ51UttdezNhDC4f3G7v1bLcwG5x6YEAU?=
+ =?us-ascii?Q?XzbFU7ErZq2swPY8ISFdO9JSvNaJtYtvAqNwz6ejX/+JDGBNXKbwpL95ziMZ?=
+ =?us-ascii?Q?zv7mpLZ7X5OWQI5t7d05UeVhAH35VL2lqMizW9pyI3i+Hxgg4JSkSEhQl/6R?=
+ =?us-ascii?Q?NGbYhGjEPo8jQPGMkVw3elxN069LkX9iBcrzQgJR+4FT58C8AEy5w8nq7Mfz?=
+ =?us-ascii?Q?3/pgA/1YR47XXG9xWXdnx79rFG/JEHbqqDN/QRsHtoIZYWSmcO+5ZJaljpTv?=
+ =?us-ascii?Q?iA9yHGCS4Qq2anmyBu68K/lxbppjmKXY3vtQsfpnWesyf5T/SeJ+d0z5X67w?=
+ =?us-ascii?Q?AE9pQNs38ghGuynmk/MxSo435Ja5jkpbF9aNY8EveNlVDPIqntHJJGCfy5hr?=
+ =?us-ascii?Q?L56B9nXInKCU6UHnoh3WsA3Y6vdjpO/BXfn4JhC2+DcWSVLaHMoAZbuDs8up?=
+ =?us-ascii?Q?bEBRwTZnA11mPCtb44ldilX63aq59h92QYuTDRxqww7nOxypCAhlsylH8j7Y?=
+ =?us-ascii?Q?CQhQc6VY1zdGtvhs65DabwlmtqEtfb1VQdPftYaD3BmqIosgvxgoG4v76fmT?=
+ =?us-ascii?Q?pSQQzR81HzqZuYv1SJawX1snE60vNIhrjJr5xAWFFP/tPyWdcRMXQB9RYuw3?=
+ =?us-ascii?Q?MyxHRhjf/oI5Q4X9UbCZDEzaXEV5ocLsap6EnEbA2BVqExb6NFMMigW53FRV?=
+ =?us-ascii?Q?sNsH0/FwcTSYTtiV75Uezo/zBlBkPqO8T9hD/henNIWZGfZKIFaDtI4cFMke?=
+ =?us-ascii?Q?dLlRbJsfiJnCPkVlGkmWRjiFw1GmXmLwAn1GQchfSMDFJgTpvJz2KAL5BIUL?=
+ =?us-ascii?Q?xFKtjR2E+6vC9GlH8JtewhxNc30FArXbsMJqsVP2Os+e9/5NB02ih/ePL+2G?=
+ =?us-ascii?Q?qOg2ZIUIuTdn5FJxkq6jp0xr8aFcp2QyIjYN3RUab64tAduBd9kwgjoFSNlQ?=
+ =?us-ascii?Q?63NyeuXvEUz7/DhNYl5tKpEOU2MI1E8PYRliRIJrgCwGuxmQrLfZC9n2B09P?=
+ =?us-ascii?Q?/UXFzd7PSxWHlCX5VftC8Nz/bWVkHcDRIThiaN36Jw1dbt2lgZwnDDxNd5Cb?=
+ =?us-ascii?Q?Zo7A4HH33lkiShz16Xb1hQUbo/TUa0TQz16/lAsaidHzlk2SriW+M7dOMCKl?=
+ =?us-ascii?Q?6rzPz1WRNZf8hVJjeTGwrqjpUL552t/r5imhKK7hP3xn+VMfKM672BL/hg1m?=
+ =?us-ascii?Q?nVkknn4ee1mKcLq8DMcK0NO5YH1Jnq6V?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV8PR12MB9620.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?h3iml7tLT7MdOVmBNV9WfKqbaGqScyyfCJ3oWoS23rWTJYfRosSO24tsWrw1?=
+ =?us-ascii?Q?ot9KdlFoqvnoDhYy9/2/XAi4imHYmqNj4LcZgy00Ch+6mM6R/iuQfihoCzw0?=
+ =?us-ascii?Q?U4wvCH9js2imLkNQ3ITTyrpiRZ6o7lw6HGa8PJK2WoxBZttqS2b3r2KlB+Qt?=
+ =?us-ascii?Q?FDCAcM0oB9u6oPcNrzZi4X8ij+bXXPN+pW/j99ITmppOhd3B4+h2BSx8fzH4?=
+ =?us-ascii?Q?jaCxiwO/zSO3L6vhCvKXurUzb0gB4hzVyl+ZXyG+AzUwedEbJEDNQuEu+y3M?=
+ =?us-ascii?Q?oZYIApy1eKWtHm+OU/u8eHxxY4T0zSEXqHNsooZHM0AnoLRA81elu/cLSN3w?=
+ =?us-ascii?Q?Y1dmnD8NxsuW3AWFvYb3z1YtGABVcgLEdmBhtwZyqNZew088EGrEJ+Mjmjlp?=
+ =?us-ascii?Q?XzN6T01/FgYORKTY/LlJDeEKiRKatE/rDHEPHwap+Thb5MseO2JKX4aJ2S0a?=
+ =?us-ascii?Q?pQ9+Czd1bI7kC2hhmWiSp/2dnyIPvX0Lmjc4shv8Y8GM84aRuzcWb0YC3aGo?=
+ =?us-ascii?Q?0XAeFKedJN+cfs2U7STAgwwYxvHfFzl/w6OIxHJpshl1NbiylB1j/8ulSwco?=
+ =?us-ascii?Q?XdZLXqbAN7mKBNMVuyGDYPqMpCj/SWL7UMpQigF7Ozt+SWkjXvH6HzbUiPM8?=
+ =?us-ascii?Q?QdtmAXV88RcPrIijKV0hPWyWl/Q5z64s0Xo0n0bIQJwIws3Zt5unesiIWa5c?=
+ =?us-ascii?Q?LeVJklJKcBRRETu/yLYb3puZhAHh89YUFveE8GTfIbeNWdUB4B7l42ETEVv4?=
+ =?us-ascii?Q?VnZmKn1TyDUrXdcM7E3OhaZLh+OC+cf420kJePBYzr93r1xsuUtVyO3zJWMz?=
+ =?us-ascii?Q?0SOa37W1aPdO8PF2sysGsosOKtju4H+frRaMD0n+hkENX8+FMO3AuGqeokNc?=
+ =?us-ascii?Q?+IqUM30AOQdeRjgyD9+K3+MBgU8YsO5KsL9HQWDvf8eXKPkIaT5CpLsqY2XZ?=
+ =?us-ascii?Q?cwyJoOWvY6q0uR8d9n+P1tqcxMroC1eWONsmMMuHQrGqsh14dsL91kXXxOJN?=
+ =?us-ascii?Q?wE3gkTwAMQC9/sIhStw2qdVC3+QbNcB8Dyeg04ZknAdFji3bR2N0NH5cTI01?=
+ =?us-ascii?Q?4V3gV1CDmc06FLBLBccXlWs8fCo3NYuM3Miu1o1TDbGKnvpOzgvQPHrsOnDr?=
+ =?us-ascii?Q?2gKXq9KgNjnkyKHErg26ZefIALUwrTRpNwq8ZwRdsELucU0HUhYxqkfg8wjX?=
+ =?us-ascii?Q?Ex1oyDlINrbd9ldwy7yYL9LZPCCItrUxGmleMzfNPMgcRqCwYibZEK7Y9ZBg?=
+ =?us-ascii?Q?T2ZBxXn56ua2dg0jrHu4lI3JR9jL7K52a4w+BXVysQCAb9QcICgEgr7J/19Z?=
+ =?us-ascii?Q?NUgZQB0/RCoiS23yTGbrraHCkAiLSgBT5HSoxQ0w4Tmcf+i+7sVRUClZE19R?=
+ =?us-ascii?Q?ckHmwG4ibbc6VzlGA+qyJjbcK9VmhUDl7VCVuTMvJ99gklQwvs1dyjhmxuEm?=
+ =?us-ascii?Q?DY5l5lrqR8uxPLDw1LaVL5vBbVEI6kvQqFdhSwNX0kztXQV89pPxuhuSU84x?=
+ =?us-ascii?Q?w3O4lq9YR//JhWTjzFSYg4hYzMtfO0HafV42iCuU2t65H4yoKKWF81ncI9Ai?=
+ =?us-ascii?Q?PkPhKESdxtmjsZ1WvSz57yb8i9OWo3M94mXlDlE5?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3884f92a-6fee-4706-7c75-08de3d504089
+X-MS-Exchange-CrossTenant-AuthSource: LV8PR12MB9620.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Dec 2025 09:40:02.3807
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: sHc22RkFLguR1JiL/mVtSbtYs7Z51kpx6p+nBqDA0LzDgD1IHkG3MDKn5RJjDEbwKT5hdpY9ssy/vTy6sD/W6g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB6413
 
---===============4069848939569761835==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+From: Joel Fernandes <joelagnelf@nvidia.com>
 
-> diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
-> index 872dc0e41c65..039f25fc074b 100644
-> --- a/kernel/bpf/arena.c
-> +++ b/kernel/bpf/arena.c
-> @@ -7,6 +7,7 @@
->  #include <linux/btf_ids.h>
->  #include <linux/vmalloc.h>
->  #include <linux/pagemap.h>
-> +#include <asm/tlbflush.h>
->  #include "range_tree.h"
->
->  /*
-> @@ -92,6 +93,63 @@ static long compute_pgoff(struct bpf_arena *arena, long uaddr)
->  	return (u32)(uaddr - (u32)arena->user_vm_start) >> PAGE_SHIFT;
->  }
->
-> +struct apply_range_data {
-> +	struct page **pages;
-> +	int i;
-> +};
-> +
-> +static int apply_range_set_cb(pte_t *pte, unsigned long addr, void *data)
-> +{
-> +	struct apply_range_data *d = data;
-> +	struct page *page;
-> +
-> +	if (!data)
-> +		return 0;
-> +	/* sanity check */
-> +	if (unlikely(!pte_none(ptep_get(pte))))
-> +		return -EBUSY;
-> +
-> +	page = d->pages[d->i];
-> +	/* paranoia, similar to vmap_pages_pte_range() */
-> +	if (WARN_ON_ONCE(!pfn_valid(page_to_pfn(page))))
-> +		return -EINVAL;
-> +
-> +	set_pte_at(&init_mm, addr, pte, mk_pte(page, PAGE_KERNEL));
-> +	d->i++;
-> +	return 0;
-> +}
+When a sched_ext server is loaded, tasks in the fair class are
+automatically moved to the sched_ext class. Add support to modify the
+ext server parameters similar to how the fair server parameters are
+modified.
 
-The old code path used vm_area_map_pages() which calls vmap_pages_range(),
-and vmap_pages_range() calls flush_cache_vmap() after setting up the
-mappings. This new callback sets PTEs but doesn't flush the cache.
+Re-use common code between ext and fair servers as needed.
 
-Several architectures (arc, nios2, sh, xtensa) have non-trivial
-flush_cache_vmap() implementations that flush the entire cache or
-specific ranges. Is the cache flush intentionally omitted here, or could
-this cause stale cache data on those architectures?
+v2: - use dl_se->dl_server to determine if dl_se is a DL server
+      (Peter Zijlstra)
+    - depend on CONFIG_SCHED_CLASS_EXT (Andrea Righi)
 
-[ ... ]
-
-> @@ -428,7 +493,8 @@ static long arena_alloc_pages(struct bpf_arena *arena, long uaddr, long page_cnt)
->  	/* user_vm_end/start are fixed before bpf prog runs */
->  	long page_cnt_max = (arena->user_vm_end - arena->user_vm_start) >> PAGE_SHIFT;
->  	u64 kern_vm_start = bpf_arena_get_kern_vm_start(arena);
-> -	struct page **pages;
-> +	struct page **pages = NULL;
-> +	long mapped = 0;
->  	long pgoff = 0;
->  	u32 uaddr32;
->  	int ret, i;
-
-[ ... ]
-
->
-> +	struct apply_range_data data = { .pages = pages, .i = 0 };
->  	ret = bpf_map_alloc_pages(&arena->map, node_id, page_cnt, pages);
->  	if (ret)
->  		goto out;
-> @@ -477,17 +544,20 @@ static long arena_alloc_pages(struct bpf_arena *arena, long uaddr, long page_cnt)
->  	 * kern_vm_start + uaddr32 + page_cnt * PAGE_SIZE - 1 can overflow
->  	 * lower 32-bit and it's ok.
->  	 */
-> -	ret = vm_area_map_pages(arena->kern_vm, kern_vm_start + uaddr32,
-> -				kern_vm_start + uaddr32 + page_cnt * PAGE_SIZE, pages);
-> +	ret = apply_to_page_range(&init_mm, kern_vm_start + uaddr32,
-> +				  page_cnt << PAGE_SHIFT, apply_range_set_cb, &data);
->  	if (ret) {
-> -		for (i = 0; i < page_cnt; i++)
-> +		mapped = data.i;
-> +		for (i = mapped; i < page_cnt; i++)
->  			__free_page(pages[i]);
->  		goto out;
->  	}
->  	kvfree(pages);
->  	return clear_lo32(arena->user_vm_start) + uaddr32;
->  out:
-> -	range_tree_set(&arena->rt, pgoff, page_cnt);
-> +	range_tree_set(&arena->rt, pgoff + mapped, page_cnt - mapped);
-> +	if (mapped)
-> +		arena_free_pages(arena, uaddr32, mapped);
->  out_free_pages:
-
-The new error handling calls arena_free_pages() when apply_to_page_range()
-partially succeeds. However, arena_alloc_pages() takes arena->lock via
-guard(mutex) at the start of the function, and arena_free_pages() also
-tries to take arena->lock via guard(mutex).
-
-Doesn't this create a deadlock? The call path would be:
-
-  arena_alloc_pages() takes lock ->
-  apply_to_page_range() fails after mapping some pages ->
-  arena_free_pages() tries to take the same lock ->
-  deadlock
-
-The old code didn't have this issue because vm_area_map_pages() would
-either succeed completely or fail before any pages were mapped, so the
-error path only freed page structures, not kernel mappings.
-
-[ ... ]
-
-
+Tested-by: Christian Loehle <christian.loehle@arm.com>
+Reviewed-by: Juri Lelli <juri.lelli@redhat.com>
+Co-developed-by: Andrea Righi <arighi@nvidia.com>
+Signed-off-by: Andrea Righi <arighi@nvidia.com>
+Signed-off-by: Joel Fernandes <joelagnelf@nvidia.com>
 ---
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+ kernel/sched/debug.c | 157 ++++++++++++++++++++++++++++++++++++-------
+ 1 file changed, 133 insertions(+), 24 deletions(-)
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/20313834837
+diff --git a/kernel/sched/debug.c b/kernel/sched/debug.c
+index dd793f8f3858a..2e9896668c6fd 100644
+--- a/kernel/sched/debug.c
++++ b/kernel/sched/debug.c
+@@ -336,14 +336,16 @@ enum dl_param {
+ 	DL_PERIOD,
+ };
+ 
+-static unsigned long fair_server_period_max = (1UL << 22) * NSEC_PER_USEC; /* ~4 seconds */
+-static unsigned long fair_server_period_min = (100) * NSEC_PER_USEC;     /* 100 us */
++static unsigned long dl_server_period_max = (1UL << 22) * NSEC_PER_USEC; /* ~4 seconds */
++static unsigned long dl_server_period_min = (100) * NSEC_PER_USEC;     /* 100 us */
+ 
+-static ssize_t sched_fair_server_write(struct file *filp, const char __user *ubuf,
+-				       size_t cnt, loff_t *ppos, enum dl_param param)
++static ssize_t sched_server_write_common(struct file *filp, const char __user *ubuf,
++					 size_t cnt, loff_t *ppos, enum dl_param param,
++					 void *server)
+ {
+ 	long cpu = (long) ((struct seq_file *) filp->private_data)->private;
+ 	struct rq *rq = cpu_rq(cpu);
++	struct sched_dl_entity *dl_se = (struct sched_dl_entity *)server;
+ 	u64 runtime, period;
+ 	int retval = 0;
+ 	size_t err;
+@@ -356,8 +358,8 @@ static ssize_t sched_fair_server_write(struct file *filp, const char __user *ubu
+ 	scoped_guard (rq_lock_irqsave, rq) {
+ 		bool is_active;
+ 
+-		runtime  = rq->fair_server.dl_runtime;
+-		period = rq->fair_server.dl_period;
++		runtime = dl_se->dl_runtime;
++		period = dl_se->dl_period;
+ 
+ 		switch (param) {
+ 		case DL_RUNTIME:
+@@ -373,25 +375,25 @@ static ssize_t sched_fair_server_write(struct file *filp, const char __user *ubu
+ 		}
+ 
+ 		if (runtime > period ||
+-		    period > fair_server_period_max ||
+-		    period < fair_server_period_min) {
++		    period > dl_server_period_max ||
++		    period < dl_server_period_min) {
+ 			return  -EINVAL;
+ 		}
+ 
+-		is_active = dl_server_active(&rq->fair_server);
++		is_active = dl_server_active(dl_se);
+ 		if (is_active) {
+ 			update_rq_clock(rq);
+-			dl_server_stop(&rq->fair_server);
++			dl_server_stop(dl_se);
+ 		}
+ 
+-		retval = dl_server_apply_params(&rq->fair_server, runtime, period, 0);
++		retval = dl_server_apply_params(dl_se, runtime, period, 0);
+ 
+ 		if (!runtime)
+-			printk_deferred("Fair server disabled in CPU %d, system may crash due to starvation.\n",
+-					cpu_of(rq));
++			printk_deferred("%s server disabled in CPU %d, system may crash due to starvation.\n",
++					server == &rq->fair_server ? "Fair" : "Ext", cpu_of(rq));
+ 
+ 		if (is_active && runtime)
+-			dl_server_start(&rq->fair_server);
++			dl_server_start(dl_se);
+ 
+ 		if (retval < 0)
+ 			return retval;
+@@ -401,36 +403,42 @@ static ssize_t sched_fair_server_write(struct file *filp, const char __user *ubu
+ 	return cnt;
+ }
+ 
+-static size_t sched_fair_server_show(struct seq_file *m, void *v, enum dl_param param)
++static size_t sched_server_show_common(struct seq_file *m, void *v, enum dl_param param,
++				       void *server)
+ {
+-	unsigned long cpu = (unsigned long) m->private;
+-	struct rq *rq = cpu_rq(cpu);
++	struct sched_dl_entity *dl_se = (struct sched_dl_entity *)server;
+ 	u64 value;
+ 
+ 	switch (param) {
+ 	case DL_RUNTIME:
+-		value = rq->fair_server.dl_runtime;
++		value = dl_se->dl_runtime;
+ 		break;
+ 	case DL_PERIOD:
+-		value = rq->fair_server.dl_period;
++		value = dl_se->dl_period;
+ 		break;
+ 	}
+ 
+ 	seq_printf(m, "%llu\n", value);
+ 	return 0;
+-
+ }
+ 
+ static ssize_t
+ sched_fair_server_runtime_write(struct file *filp, const char __user *ubuf,
+ 				size_t cnt, loff_t *ppos)
+ {
+-	return sched_fair_server_write(filp, ubuf, cnt, ppos, DL_RUNTIME);
++	long cpu = (long) ((struct seq_file *) filp->private_data)->private;
++	struct rq *rq = cpu_rq(cpu);
++
++	return sched_server_write_common(filp, ubuf, cnt, ppos, DL_RUNTIME,
++					&rq->fair_server);
+ }
+ 
+ static int sched_fair_server_runtime_show(struct seq_file *m, void *v)
+ {
+-	return sched_fair_server_show(m, v, DL_RUNTIME);
++	unsigned long cpu = (unsigned long) m->private;
++	struct rq *rq = cpu_rq(cpu);
++
++	return sched_server_show_common(m, v, DL_RUNTIME, &rq->fair_server);
+ }
+ 
+ static int sched_fair_server_runtime_open(struct inode *inode, struct file *filp)
+@@ -446,16 +454,57 @@ static const struct file_operations fair_server_runtime_fops = {
+ 	.release	= single_release,
+ };
+ 
++#ifdef CONFIG_SCHED_CLASS_EXT
++static ssize_t
++sched_ext_server_runtime_write(struct file *filp, const char __user *ubuf,
++			       size_t cnt, loff_t *ppos)
++{
++	long cpu = (long) ((struct seq_file *) filp->private_data)->private;
++	struct rq *rq = cpu_rq(cpu);
++
++	return sched_server_write_common(filp, ubuf, cnt, ppos, DL_RUNTIME,
++					&rq->ext_server);
++}
++
++static int sched_ext_server_runtime_show(struct seq_file *m, void *v)
++{
++	unsigned long cpu = (unsigned long) m->private;
++	struct rq *rq = cpu_rq(cpu);
++
++	return sched_server_show_common(m, v, DL_RUNTIME, &rq->ext_server);
++}
++
++static int sched_ext_server_runtime_open(struct inode *inode, struct file *filp)
++{
++	return single_open(filp, sched_ext_server_runtime_show, inode->i_private);
++}
++
++static const struct file_operations ext_server_runtime_fops = {
++	.open		= sched_ext_server_runtime_open,
++	.write		= sched_ext_server_runtime_write,
++	.read		= seq_read,
++	.llseek		= seq_lseek,
++	.release	= single_release,
++};
++#endif /* CONFIG_SCHED_CLASS_EXT */
++
+ static ssize_t
+ sched_fair_server_period_write(struct file *filp, const char __user *ubuf,
+ 			       size_t cnt, loff_t *ppos)
+ {
+-	return sched_fair_server_write(filp, ubuf, cnt, ppos, DL_PERIOD);
++	long cpu = (long) ((struct seq_file *) filp->private_data)->private;
++	struct rq *rq = cpu_rq(cpu);
++
++	return sched_server_write_common(filp, ubuf, cnt, ppos, DL_PERIOD,
++					&rq->fair_server);
+ }
+ 
+ static int sched_fair_server_period_show(struct seq_file *m, void *v)
+ {
+-	return sched_fair_server_show(m, v, DL_PERIOD);
++	unsigned long cpu = (unsigned long) m->private;
++	struct rq *rq = cpu_rq(cpu);
++
++	return sched_server_show_common(m, v, DL_PERIOD, &rq->fair_server);
+ }
+ 
+ static int sched_fair_server_period_open(struct inode *inode, struct file *filp)
+@@ -471,6 +520,40 @@ static const struct file_operations fair_server_period_fops = {
+ 	.release	= single_release,
+ };
+ 
++#ifdef CONFIG_SCHED_CLASS_EXT
++static ssize_t
++sched_ext_server_period_write(struct file *filp, const char __user *ubuf,
++			      size_t cnt, loff_t *ppos)
++{
++	long cpu = (long) ((struct seq_file *) filp->private_data)->private;
++	struct rq *rq = cpu_rq(cpu);
++
++	return sched_server_write_common(filp, ubuf, cnt, ppos, DL_PERIOD,
++					&rq->ext_server);
++}
++
++static int sched_ext_server_period_show(struct seq_file *m, void *v)
++{
++	unsigned long cpu = (unsigned long) m->private;
++	struct rq *rq = cpu_rq(cpu);
++
++	return sched_server_show_common(m, v, DL_PERIOD, &rq->ext_server);
++}
++
++static int sched_ext_server_period_open(struct inode *inode, struct file *filp)
++{
++	return single_open(filp, sched_ext_server_period_show, inode->i_private);
++}
++
++static const struct file_operations ext_server_period_fops = {
++	.open		= sched_ext_server_period_open,
++	.write		= sched_ext_server_period_write,
++	.read		= seq_read,
++	.llseek		= seq_lseek,
++	.release	= single_release,
++};
++#endif /* CONFIG_SCHED_CLASS_EXT */
++
+ static struct dentry *debugfs_sched;
+ 
+ static void debugfs_fair_server_init(void)
+@@ -494,6 +577,29 @@ static void debugfs_fair_server_init(void)
+ 	}
+ }
+ 
++#ifdef CONFIG_SCHED_CLASS_EXT
++static void debugfs_ext_server_init(void)
++{
++	struct dentry *d_ext;
++	unsigned long cpu;
++
++	d_ext = debugfs_create_dir("ext_server", debugfs_sched);
++	if (!d_ext)
++		return;
++
++	for_each_possible_cpu(cpu) {
++		struct dentry *d_cpu;
++		char buf[32];
++
++		snprintf(buf, sizeof(buf), "cpu%lu", cpu);
++		d_cpu = debugfs_create_dir(buf, d_ext);
++
++		debugfs_create_file("runtime", 0644, d_cpu, (void *) cpu, &ext_server_runtime_fops);
++		debugfs_create_file("period", 0644, d_cpu, (void *) cpu, &ext_server_period_fops);
++	}
++}
++#endif /* CONFIG_SCHED_CLASS_EXT */
++
+ static __init int sched_init_debug(void)
+ {
+ 	struct dentry __maybe_unused *numa;
+@@ -532,6 +638,9 @@ static __init int sched_init_debug(void)
+ 	debugfs_create_file("debug", 0444, debugfs_sched, NULL, &sched_debug_fops);
+ 
+ 	debugfs_fair_server_init();
++#ifdef CONFIG_SCHED_CLASS_EXT
++	debugfs_ext_server_init();
++#endif
+ 
+ 	return 0;
+ }
+-- 
+2.52.0
 
---===============4069848939569761835==--
