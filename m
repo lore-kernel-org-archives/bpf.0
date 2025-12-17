@@ -1,216 +1,102 @@
-Received: from DM1PR04CU001.outbound.protection.outlook.com (mail-centralusazon11010070.outbound.protection.outlook.com [52.101.61.70])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9FEE337113;
-	Wed, 17 Dec 2025 16:12:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.61.70
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765987956; cv=fail; b=AJEM45psgtJXS2xbNj2VrOVIfF2n9v66Jmihg40GAyylHXBPa4XkSgnyGeAjYPnJH+v9fyswt5x1rCW+WKCSd3MD45GW5IOtktm3lFG+FUqYZEHya0fPnL5/gWGz8eZYSm4q/m1F32kGRYGcGP9XdlUZMxitL6fb2bZKgn+mecs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765987956; c=relaxed/simple;
-	bh=n86omlfVDr5NGOdqIU3p9hgCCgSUlN2AdCvKQDnA1EU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=oDEtyK0DBZ5qK8Gk3fLaOv9C3scXTi8fYej6FGgE/oIN6mTbOlR3vbtl8Xs1+o5dM/AEIJ6cr9y4H1XLav6pgQAwQ0z666scHwNkHyWjsQf0tT35VkUilarJqlEKrAXWj0e4GqXJqpQfs44KG1VEmcbzAdyMvuw0gtrotlQ+Emw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=eRtOx6UN; arc=fail smtp.client-ip=52.101.61.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FA4F329E77
+	for <bpf@vger.kernel.org>; Wed, 17 Dec 2025 16:13:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1765987992; cv=none; b=Ku2ieV/IniEbJlOd2//zLMbZujcw6A7Z1QuBj789TUZfoFbjSiUcXf+S3gyDi3sBP9J4e/d8dSyJjWW7lim/mK42+23u3kJLnY3JntZw7NL823/U3DnorB0pWzs4PlYLgK47maErryzZg0/YydIPZMwKZ9Ju9NLdt/Aj3D9g/OA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1765987992; c=relaxed/simple;
+	bh=27FhYn+Ldk8zA3WnIB5TNv2dJawoPgWOKh1N09wCfPM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=HHdVllVqfE2W1iRJNxnZ8Vw24BUnTO7+RHgqjFFZ/YPmMJ3qSzPp0j6cqd5bBiee2PIwLudn15Wge77asvrDIpxUoPpGoKsEIJUTHmER6Bij+70IpXb+GbIll7+VrUXPTezZhQy3ENzMKxbTXMiaBVrpJu3GsZiTKb24N7hbM3w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LG0M4DSo; arc=none smtp.client-ip=209.85.221.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="eRtOx6UN"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=e5WxAstIFDQ5BWqdqIaIBmjt/x8Rh4t31e4ERnz4pSDzXg+uclu8MTw2swCnZEHSLF7sfIK3i8MzTPEf50bxVEY5sGJvUjLh3zXXFRhluy3MhSZWb9VU/m0GVwRo/9InFZX5mXevd2+SkH0LJk8/rE2VlP1eDPpfYvxxuVDO7B3xw1ItYnBh74AzB0PM6WvANYVQJ0l8exASt3FUy/Fq+KhYC+1wHd5u/rz1xbfWY41wKbXddHsC4b7szTXun5yg426TMSjRoaHgLHgubmZGv5VoC0e0HUwOGF2zPJhUx9lGNTPpcGuusXLw9EmrXwjzAaPXXyToyQ5UotsZO/TKjQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rvHn0OqsDct1kPu3YlxzC2IxvwnaS8m9PLjrfPLC2+0=;
- b=FaSYavOHxRMHvKyxORtwIu6xl5ExS4LYu+wWOfKjyfr0bik/qj2mVJL3bZj7BgrafbcVq89L4WVA6po+IMV59yFptVNWXJu2mePkHrKiAm94XFhQL9dqTn810b/l0F43qYSpv7jekAddJbYhIyvZBquEF0bKJiWcayEBZ6+e+1K6+DEHzC0Ga7tMYdtwIYNNeXPzAzE9lF5/vczWVzD0t/ArlcYbQBSU2HOrHTCbQzg7z6Wh/zP4hk0HXiag+0U8rmQjRFUvk7VOhR0A+pYGEiWZzvHb8HCiNkn2MrMGLOujwt5weP6Xdk18gkE/vHgbPQzu518aFG1NXGRvLyv1Pg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rvHn0OqsDct1kPu3YlxzC2IxvwnaS8m9PLjrfPLC2+0=;
- b=eRtOx6UN0n9JQfxcNotBDncf/5ZEONad1aLFSv5N0iFvf3Vyf+zYwOuclQPhSffwER+aWBM1oZxhm7cdd+RWNiaD7P3td+zkpvWWq0SocgcotAakipwn4DXArm/q8KRYh0lNgXddI54PDjy7Ks0ev3Y/uY3FxxjjZ3cDMKwhAFGFFNSeNQOzAsjDbdFmT4oDgnM6M2VM9sU2qcL0Fy2NTME82Rs1xL+EOYQPabdPSHMQyVRJS/oeMHApQTLjdJaqRW7Dou1JanfVSuuNKs+A0gSgtCNG+aJmbP1/hQYD2obLOgo6n/DKFeX9it+7WzUinz/Hx9UTtwieZO2x8Ee5cw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV8PR12MB9620.namprd12.prod.outlook.com (2603:10b6:408:2a1::19)
- by DS0PR12MB6413.namprd12.prod.outlook.com (2603:10b6:8:ce::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9434.6; Wed, 17 Dec
- 2025 09:39:55 +0000
-Received: from LV8PR12MB9620.namprd12.prod.outlook.com
- ([fe80::1b59:c8a2:4c00:8a2c]) by LV8PR12MB9620.namprd12.prod.outlook.com
- ([fe80::1b59:c8a2:4c00:8a2c%3]) with mapi id 15.20.9434.001; Wed, 17 Dec 2025
- 09:39:55 +0000
-From: Andrea Righi <arighi@nvidia.com>
-To: Ingo Molnar <mingo@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>
-Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>,
-	Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	Tejun Heo <tj@kernel.org>,
-	David Vernet <void@manifault.com>,
-	Changwoo Min <changwoo@igalia.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Joel Fernandes <joelagnelf@nvidia.com>,
-	Christian Loehle <christian.loehle@arm.com>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	sched-ext@lists.linux.dev,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 3/7] sched/debug: Stop and start server based on if it was active
-Date: Wed, 17 Dec 2025 10:35:41 +0100
-Message-ID: <20251217093923.1556187-4-arighi@nvidia.com>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20251217093923.1556187-1-arighi@nvidia.com>
-References: <20251217093923.1556187-1-arighi@nvidia.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: MI0P293CA0006.ITAP293.PROD.OUTLOOK.COM
- (2603:10a6:290:44::17) To LV8PR12MB9620.namprd12.prod.outlook.com
- (2603:10b6:408:2a1::19)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LG0M4DSo"
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-42b3b0d76fcso3601903f8f.3
+        for <bpf@vger.kernel.org>; Wed, 17 Dec 2025 08:13:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1765987989; x=1766592789; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=G/M0yE2CsY+Sdgb0I+EEYUMGlPLpSRD/fQQ/bZ/KF1k=;
+        b=LG0M4DSo9RTe6k3wzUAOqxa6Q3wKFLS1RWLXT+qtx/gYpXKMcXsu7iVh963OUUdRiz
+         /9umNclABqR1FI4fN4Aplro5sgQYYOQWewLIM1XIjUGKD+4PYHwyjqPWSwnu11w8AAjr
+         XqoMcZDgiioYF5VaiAT+ansz6eDSbhGypuv81/VZ3bZ/aUvekkTn0aJqoZhf+nbnL9kJ
+         NGZj0lJm0AXkTXwaE+umUDuD6L7THze3/2rS+iDq4d7mFz4KvQGJsxU3oBDZF30rB4oZ
+         i1YnBkNuP8YSi0KQddVw//S9W3QqaHyPBwaRxD86Rx0QLfdP6R+XvABX3eyNa9QHZnG8
+         O96w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1765987989; x=1766592789;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=G/M0yE2CsY+Sdgb0I+EEYUMGlPLpSRD/fQQ/bZ/KF1k=;
+        b=T5KWpmmIhZArt/Yl/u4qnncbsSGKwBZAwQa2eSYwE616pqeYL9JR16oebX+Lqm+0EW
+         1mChyGN7CMvbXo4zSMA+1dlfOnhDit+IlA/UZ44mUps1dzE/o/SqF7YlIHG+rYEjVS6z
+         2S9wj4mMbJPI6ELwqCDBCwvx9TvMCg2d6clHAh4wyOjjlhwCGfqWNa08tkXMhxQe0n0S
+         IJRrZ8sQw24BKlcSfRscD/pYfPW0h5n61z1i9E3Io6AUUSZEL5WOT1uD7r7VL3CyIAcS
+         8fFh5pQMha43LBjHEMXTBDiGKvTwTxaRqnYBrnxA1afw1AyptGrWwMhbM2WGJj9f4ng8
+         nLrQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVths2a7pc7MLKr4grb9Iv0y4G/jLBnKs5MImF0tBtErhxWnGZKNP6RuOBTAF7As3hhuY8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzPJ50XPLAbLI15j74XRRfNgHWgrD+Y/xWxra+w95crurej+Iuy
+	bL/bORi0LQNUCzNycQd1u4gVa4yScLNZ34j+du/c84Z4fdQWZWroi3HOVddP3Lei1yx4UlCzBxI
+	zNmLyPwTTHC1l6uwI3blqbiWX8InkCDE=
+X-Gm-Gg: AY/fxX7JTjfTGKLmT6UnCs31FsUOncFjBY167bPTN4J6aZSr53WkbCTUMcCyHsSqP40
+	tpYS2SmVCP7QfpSyBDAd7HFYXg7HQ1FE2jWY1PzVFZ/LwfkxTIySkGjlentXMwLTokTh4ucuj1d
+	f3Z7dqKAHIp2OHuTGqrro6waQyBfdfbM/eCSUa2Spwji+wnteVZL9G+ynfRUMMrpMgUdbMn9hiA
+	MkrGS9QsprSF74cibLHvJO3BgO++/ug4MlV1x7TfBX7JHn7N3xcicOP7ecB2IY0NBBjxrKn/oED
+	oQknmnuL4bTo/aJVjwgizgPCaEkP
+X-Google-Smtp-Source: AGHT+IGq4/pPJ9cKS+GAdJxc6PzbjiCHTLLzfAeNabJrf/Xb9K0c2vh7cp3sXxOcg08lmJi7RzNf1ueujJu3YUGSsNQ=
+X-Received: by 2002:a05:6000:2411:b0:42b:396e:27fd with SMTP id
+ ffacd0b85a97d-42fb46e5003mr19359495f8f.38.1765987988426; Wed, 17 Dec 2025
+ 08:13:08 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV8PR12MB9620:EE_|DS0PR12MB6413:EE_
-X-MS-Office365-Filtering-Correlation-Id: 50219048-901b-4bb3-ccfe-08de3d503c64
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014|7416014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?jOIqU942Myb4XQ7md8HsOd6aKNUdFT3Xb0RZbtq/GbSIK/SH6Qj+Hrfhxhxe?=
- =?us-ascii?Q?QVaUO7SvKy4gU5h5k3llHBUOblH2GySSVIWlT/QkT6Npi33NrhWr68kvkiK7?=
- =?us-ascii?Q?3hMPI2lWup0xYidYWCEkN4Pv0+mQw4J5jpSZk6Puf79M11o3m3+y7FI+HMc8?=
- =?us-ascii?Q?n8vR6MULK90bcrx7CCoR81trWozXaRP/ayuovL5ntSvTsTdOQCtO9opdq9N/?=
- =?us-ascii?Q?87b3ci5/7Y/XbiPSoEEyrbGTJgEXZ/DdluMp2cEYiD/BlnG4/5BbiyY0Jd7v?=
- =?us-ascii?Q?9MeKVjUwQ4P55gVdjyuPiOiDObB4P6eisl4YajdA2GDni2YV785QNhhyiOKq?=
- =?us-ascii?Q?5RiaXp2UgNtFhv5Bfq4mK91m9qC5CcIv1r10DawOSrQgbl4pObBMfhYpbQud?=
- =?us-ascii?Q?l9qVbf08niddXsDOtQmQaH+c4ybYCGnLUsdhbVjEOf4f591vn64Liq4sfQFO?=
- =?us-ascii?Q?L5c7E5FYSS7qb9beE6Cedv5eDdiH+VRehqXa7t7YIC7aCsAufajYIWDiuFyM?=
- =?us-ascii?Q?aIzxKDQEWeD9X746d/eFRLQwtbEPPLzrgXqp+3trAo11K0Rb8nOcGL4JfNqH?=
- =?us-ascii?Q?dQMrLuXNfKgvXoMoEuUazMGCUJd8hq5V/P3kBKf48YnSgXK7gFm8+DgDk+nL?=
- =?us-ascii?Q?qwmy4WuNlyaGXSw2A3rm6iGQwjfKETuboPkFu6CZqba593cfq8c8OpGQ1gRL?=
- =?us-ascii?Q?UOvtNyBJZf0l2/MFZMt2VzXh7ZL8PY1zglNrMM4mqqpD1EUPyHvgO8eG/YCd?=
- =?us-ascii?Q?w64zsHo8OnRwiMGPVu3Wk0WucwLKQpFPBd+kRFNOOfg1uvFt69s46iYA5kam?=
- =?us-ascii?Q?XhwvTdazUebiSErf81Ue4TjndXmaHeMyadcYkykzsO+Sht8dUL96xvOYE58l?=
- =?us-ascii?Q?zLjybiUcbMRd5FtvmflVRE0MEijjM0yMHj4DCrxhWUq4inmyv0UuOY5U0l5p?=
- =?us-ascii?Q?QnlQhJOuUZT5S4Y6jt2TMSdk3PNiBgb9boUy+Nsscfs8uZA57WVHya8s7GDf?=
- =?us-ascii?Q?hJvyax/iRTwl14cjH4xpg3ttKdgBgATTluMWzHqoJuGlMaRQX3ohfeFuImpp?=
- =?us-ascii?Q?vZfxotvSWFH5Zjch6KlnqR2xY0BLoU7nntZIJCGU8/8u5LJI5y+fmQx1aZRx?=
- =?us-ascii?Q?haVCEw4aOiqCKlaT9Tr8C7s18gk/+ShFzMNNc1YQ3Of8Q2VTCf8QL7Zz/rcT?=
- =?us-ascii?Q?t+bBWA82eYegR6edX11ApLePQaXEi3c5LSY/GHMauBO7kBZxqW7sOOTPJoHk?=
- =?us-ascii?Q?L8QzKozVN5Ico9PYabTWUoGBqvqtP3Zj7zwFv/fRP2QTq9Y5GR+BZFfuJ6PV?=
- =?us-ascii?Q?UU9OzCrXXNkPjLEn8Rsjf4G8A6jsW9ZHPQSzI8pYVDuCOYJWHIaSrj8a/2X4?=
- =?us-ascii?Q?uPZ5Zwl5cn/iE1LuQ2xlQCmzZ5jj03jyuDhWd4LFNRXU5jgxWK2Cf2la3p7q?=
- =?us-ascii?Q?LIxR0+EONLxKX+P/eBMzeXR1GhswqGvD?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV8PR12MB9620.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?0h8k55ELLjPpSr9X9VMlWqqBcJdkJ+W852NqzKbyduLsUqDbd+XsJXh+H1pW?=
- =?us-ascii?Q?9NHYbdVx1vYrw2Pg2XAGg0dAVecVRKw/Lcd5Iv5ustGT2s5zsK1gRJLMU1Z7?=
- =?us-ascii?Q?7OE21a9djq/nHM6pbR+GHTRJCFXdL3Js1wp537r51ARGyk01E+HRPSW6puDy?=
- =?us-ascii?Q?Lr//1EdKAoCB39iU0OhKpgJdXtYN8w6F2npNCXQfdY1Sm/PDTTDfZZ203XLF?=
- =?us-ascii?Q?IJhfKFIjUWtg/a5EDJDkFDxlxBpM7ub6eJFb27sck5i0zcWQAS9IWfJewI5F?=
- =?us-ascii?Q?IS5u9Wm76QCpKiJJF+olssLlKpk1R+xdkFtTU+KcT89C+GUMPw+NCHNwkueP?=
- =?us-ascii?Q?iccF/+9aiPr2Hr8U0w+zc/85B0ocUrRsX15NcBTMCVROLQ4N2pyvRUeRv9pI?=
- =?us-ascii?Q?UAlDIvHGkQYtTp8RPJsFlcVwWuquCH/hy28PkIMBBqVLgIxOdgEYl4idHzw1?=
- =?us-ascii?Q?BIiB5kIORk6oDaQTGmOSNbUFBFbXi/ACtYvNKYJRo9rkLEPg8He1v3nPAlSG?=
- =?us-ascii?Q?BD2M4DD7+MXzUZ0ynqfNMNaEfGlBjXdomuP7ZReDcT/uiCwDCaLO1hE8N6Bt?=
- =?us-ascii?Q?DOB0imx9TK9Fhvc9BLSEf9KG6ppSbrVOyM/QuN+mbefOpMEDzABQ7oPtEZuG?=
- =?us-ascii?Q?5F0AGr6noDKZw3jp8H57+1lFMEhmDYcPn5ZmiuhsKjRvHji2v1hDK4Zx9Ive?=
- =?us-ascii?Q?hQs1AsFfJOQAiUbbQbSI9IV4RolzTb2pw3Z+vQzdkBaO5TY9aIWk4OKuXVz/?=
- =?us-ascii?Q?8VFIjAsEnKiuODWPxM6opmdHvIN1Aa6Puts9xLDF0tLkGMqaH6Trz5//d66f?=
- =?us-ascii?Q?wa/b8HGUfEbTy3wtYhewVH+hdc1RztAABP0cv513St5oKltjDH9e9SXIbUbP?=
- =?us-ascii?Q?05g7PSz6sH6GLGeaj90PhIDVZdeVyrRFUMu1HQp5bawlCU74pFqXY6d1fwzJ?=
- =?us-ascii?Q?rnKdBvf6ywBg3UWDS2HFLXEiANZBE6FdrdtS7qSxd/4pdPT88zz+2S50ZynS?=
- =?us-ascii?Q?ljckYhUR62RfWYaI+2o8vF8jvzI13OdfriJSMfKh9KIP+6UvTORB8Ydcys8a?=
- =?us-ascii?Q?UaCrKs4C+3gjtPfqOko9x8ocG8iNQfu3c+2DiRi/GAJ+TpNrgvdtE9QiqBco?=
- =?us-ascii?Q?CC2EPUf8XPGZ4Q6qsAkvH6uWpWELkx34byjYm7d7ceLbCkY1bxIhCxciiy9q?=
- =?us-ascii?Q?GlspgL4UNLVQ9CxSRCQNMQJlCjR0sA7AMQw9ruT/5jLSVb3asSfuGg9O9FHp?=
- =?us-ascii?Q?JqKgjxh7kpvMC5i/HwXzeRZfXY7yy8mI1PnVqQCv1dMYyS6Hp8hThXbtB7AW?=
- =?us-ascii?Q?zcnw16Q582G13JLYu8mrsXNho2pKF9ycDcN17WTjpeM6W0rYWOv1nmKa175w?=
- =?us-ascii?Q?F/CxzIAKPKCSj7Z4SIIMo41wTz25CClQLaeAlJ/tuvyW5zlyKyjCxU2EfrEE?=
- =?us-ascii?Q?pi9oGwoWKuKEVLLBV+S8D0qmqzaVE9ytLyyGdWh0cl0ALqaZ1CgAIpZy8dOm?=
- =?us-ascii?Q?rcHKUDe5BWsKuOAmOIbJVWUXNNACwPkzajIDaZ4nVwHWaPNCP7VL/ms8hyZ+?=
- =?us-ascii?Q?zweOpozH6fkMj4h1cT0to090LOUOyJW2+C4H0CKX?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 50219048-901b-4bb3-ccfe-08de3d503c64
-X-MS-Exchange-CrossTenant-AuthSource: LV8PR12MB9620.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Dec 2025 09:39:55.4416
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: UJOUMwXYLHCdUJ+jo98m3zWNf5gdSqJVb30J9g12CDtecqDkjXN7sysZjFn0U9MLZ7J0BPYSdoOak8ZCZFiMhQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB6413
+References: <20251216171854.2291424-1-alan.maguire@oracle.com>
+ <20251216171854.2291424-2-alan.maguire@oracle.com> <d5a578c01f8a2d4d95ca16e0a9ee5b9bfce1c30e.camel@gmail.com>
+ <9a096b2a16d552031a12f3f4f5a2c725212df5e6.camel@gmail.com> <b535b47a-519e-4138-861b-c16ed7fa0bcd@oracle.com>
+In-Reply-To: <b535b47a-519e-4138-861b-c16ed7fa0bcd@oracle.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Wed, 17 Dec 2025 08:12:55 -0800
+X-Gm-Features: AQt7F2qNhk3PJxTwbXo5dgGQTN8lTn3UxzMnqTQAWqhMsLAcgLURZ5HRMYRydhs
+Message-ID: <CAADnVQ+EyYO+aOZewNQwETr5rphOCp6jJQH_fw9GqjVFdQd19A@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/2] libbpf: add option to force-anonymize nested
+ structs for BTF dump
+To: Alan Maguire <alan.maguire@oracle.com>
+Cc: Eduard Zingerman <eddyz87@gmail.com>, Quentin Monnet <qmo@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Joel Fernandes <joelagnelf@nvidia.com>
+On Wed, Dec 17, 2025 at 8:06=E2=80=AFAM Alan Maguire <alan.maguire@oracle.c=
+om> wrote:
+>
+> struct foo {
+>         struct foo *ptr;
+> };
+>
+> struct bar {
+>
+> #ifdef __MS_EXTENSIONS__
+>         struct foo;
+> #else
+>         struct {
+>                 struct foo *ptr;
+>         };
+> #endif
 
-Currently the DL server interface for applying parameters checks
-CFS-internals to identify if the server is active. This is error-prone
-and makes it difficult when adding new servers in the future.
-
-Fix it, by using dl_server_active() which is also used by the DL server
-code to determine if the DL server was started.
-
-v2: do not start the server if runtime is zero (Juri Lelli)
-
-Tested-by: Christian Loehle <christian.loehle@arm.com>
-Acked-by: Tejun Heo <tj@kernel.org>
-Reviewed-by: Juri Lelli <juri.lelli@redhat.com>
-Reviewed-by: Andrea Righi <arighi@nvidia.com>
-Signed-off-by: Joel Fernandes <joelagnelf@nvidia.com>
----
- kernel/sched/debug.c | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
-
-diff --git a/kernel/sched/debug.c b/kernel/sched/debug.c
-index 93f009e1076d8..dd793f8f3858a 100644
---- a/kernel/sched/debug.c
-+++ b/kernel/sched/debug.c
-@@ -354,6 +354,8 @@ static ssize_t sched_fair_server_write(struct file *filp, const char __user *ubu
- 		return err;
- 
- 	scoped_guard (rq_lock_irqsave, rq) {
-+		bool is_active;
-+
- 		runtime  = rq->fair_server.dl_runtime;
- 		period = rq->fair_server.dl_period;
- 
-@@ -376,8 +378,11 @@ static ssize_t sched_fair_server_write(struct file *filp, const char __user *ubu
- 			return  -EINVAL;
- 		}
- 
--		update_rq_clock(rq);
--		dl_server_stop(&rq->fair_server);
-+		is_active = dl_server_active(&rq->fair_server);
-+		if (is_active) {
-+			update_rq_clock(rq);
-+			dl_server_stop(&rq->fair_server);
-+		}
- 
- 		retval = dl_server_apply_params(&rq->fair_server, runtime, period, 0);
- 
-@@ -385,7 +390,7 @@ static ssize_t sched_fair_server_write(struct file *filp, const char __user *ubu
- 			printk_deferred("Fair server disabled in CPU %d, system may crash due to starvation.\n",
- 					cpu_of(rq));
- 
--		if (rq->cfs.h_nr_queued)
-+		if (is_active && runtime)
- 			dl_server_start(&rq->fair_server);
- 
- 		if (retval < 0)
--- 
-2.52.0
-
+Did you test it ? I suspect AI invented it.
+I see nothing like this in gcc or llvm sources.
