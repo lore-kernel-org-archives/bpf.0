@@ -1,155 +1,190 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B05E33CEAF;
-	Wed, 17 Dec 2025 09:34:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-pl1-f194.google.com (mail-pl1-f194.google.com [209.85.214.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CE5F2264CF
+	for <bpf@vger.kernel.org>; Wed, 17 Dec 2025 09:54:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765964066; cv=none; b=eTlDcrr1WYx1HT/6ME8nw8FSiivphVP30bHGb0dSt8k+4u6zDw704IOlsiSzT6/egLBGzAYJFu+UWy3PbCuZohm3JwqrtJ7LSS3VtkR93TmTu68E5stkxzl6Wdnj4dhdHVhZJZQSVSfwwRWdZXmxFK97ELfxBj5Bf0nYPLJrLNU=
+	t=1765965297; cv=none; b=OYncPwFYOTUX+7OtVCstCQrn0fYHlfRlN3ouw9brmmCMetPidPay3qnlPuqw4tjrm4M8H9duRwgj8+P1fBa3Il9jWeRKX86yeMjS2yGutvKCouJkIojc+cMwD5iJflgOTNoqeC/NjzyE/Ir37o8mNRJT/Tw6GJS64GnuCJm6a8k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765964066; c=relaxed/simple;
-	bh=pA6OyNOPqic2PU25XHzrUn7XCNr0QY2cPEtn3K+4NLg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OXd8wYwekDpPzHOHI+Rz3lJYwhe1HPp8aGhmd7J0bcUCBZT9uQyTRducOjdhHkHPWVZfXMA9Hd+X9HIMDITeIKCcNKDjI7iEB8L+MC6mZjwtayCVFr8vE4POfGOlzYl7dT2mjpCBzh5QOWyF5ZTmYAwNUrtTqTb80FpiyLUKDF8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9305914BF;
-	Wed, 17 Dec 2025 01:34:16 -0800 (PST)
-Received: from [10.57.91.77] (unknown [10.57.91.77])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 894773F73B;
-	Wed, 17 Dec 2025 01:34:17 -0800 (PST)
-Message-ID: <100cc8da-b826-4fc2-a624-746bf6fb049d@arm.com>
-Date: Wed, 17 Dec 2025 09:34:15 +0000
+	s=arc-20240116; t=1765965297; c=relaxed/simple;
+	bh=NGvdOLAiuDMwpsDwMXQ5sEGNewqHQ/BO9EMpstuuiD4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=drWFe20AuU1KdaQ554oiMBVyIHZ3/ApA3yALjQaoDjhksrV9a9Lg0u8QSd83knUfMxZAekLadVPbXoRFQYoxwufyUf2vkdqafyxopJ7AuyHyWeqf5AULnuEW06tIZOQzA5fWJg3G5TTsu51w1dbsY2ibSpg6WpZuz8wsp2SUJ4k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UTFwtxt0; arc=none smtp.client-ip=209.85.214.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UTFwtxt0"
+Received: by mail-pl1-f194.google.com with SMTP id d9443c01a7336-2a1388cdac3so17126845ad.0
+        for <bpf@vger.kernel.org>; Wed, 17 Dec 2025 01:54:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1765965296; x=1766570096; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ia3wyOyYeEqo0nguI+DPqpD5+4HXprm2bO56e8BK4e4=;
+        b=UTFwtxt0BAr1Zl0aRz1KDZ2SM9Ev2RckF1ZSmAjY/WXwggWqpeBXvjt4B8wqtMxyT1
+         C4YX6w/+/Y+1ehh9yfBe9nmXzGJr4HFUm6rEpDs8M08pzDB1uD8/Mat3Dp+staSOrWOI
+         wvpUY1kRQ6C6oFOCC+K2G5i/wb1APEtsH90o7B+S8z5jLdnN7ytzjQnGGSoRQywtuCyE
+         PrKron2bYu+HI3vMDiU22beRKH0gGHrCGBhdwBwQOmTfhTuvFDaAm7n2R3VUMx4+a0hj
+         SdLMYBVmuqj2dDSwnyz+sDopDaGaAI7KoTbmdnB3sNuG7XINyVrHmRESQCm8D6bvf1gq
+         jgaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1765965296; x=1766570096;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ia3wyOyYeEqo0nguI+DPqpD5+4HXprm2bO56e8BK4e4=;
+        b=EG9MhzEr+sq3E2G/Nis37pbnuqruYlYzWLvbrigK0ua2WXuufQBaEpIHMiu/77KpEQ
+         jVQ141idxiEmzRsFJe3g+DIn1o6gXxcMHoQdF1C95kj0ZNjDW5pEWrNthaKydW9tolai
+         zNyFaUeJpoSo8HKryymA7rsTizuo4J1WYRaZVFkYTwEnm3sHVCePOdx+r8iMBMADeE6g
+         lBCuGUORKifOlqzUtHr3Zoelk1Puc+XXFWgM5W0FJ01KKHsc1yVagHnnARN40k5NuNP/
+         xE1FG1EHoaN2O1dOxCHIqlKWVPmZscsWrpSpO5svOQLp/Olc/psvcU4wfdrXB0M4zw8L
+         jWqA==
+X-Forwarded-Encrypted: i=1; AJvYcCXR371JIyer4n2XsOBbGq0BR8l9bu68wnSRf5YZ62cbO6xZpJWwILIZJ7v5ggjmLZmv+zI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy7WaZ8dXxkKHE6X+Dl8A/UoFXFhM8K781LDAsqIyqSLSB49YNp
+	KSfvU4f/QAvI3VjTlqu23I3/34n8CwEVQ8koKrURHiBjsD2bVnknxBtCdm8T+VnC
+X-Gm-Gg: AY/fxX5GBFrtA0lxsqYl/Kq0pYDwPTWPyU9NgzJpioORLc/jtLixZYuv1TzP96ISIL6
+	4tKSgzjhIHQQAO/gqgLO7ibMJQH+/0LF+7J+UfD0QzwtrEiEgQeGUg9wo7kODU9klv/AxjxgwF5
+	DbkxAcQhCuXIXLOJ0lyR5vRCuGdZF2CLovVFJbjamHZLpgQ6IR9YYqTHS1GdhyFzK3U5uRJEnqS
+	vv1EPy4m5Yd38yd+dYRNwq3Q5lmLLHm4Vf7MZUHDWtKQhdmpN0Y0gwWGbPdjLs+5FgC/AWHlBPb
+	Z7fEq6ag7KRMnKrHGmntDQ9ty9U8PXQdHl4CXYSpoWeprXECj7DA3hG9pM/jMbjFDTZ+TL4ADQc
+	nS3A7zXjqf/T57y+cGMR5Em3ThI1THvwR6LHaO7F1H5wxXQ3a+O5f9Dvv7x9/oUrZ6lUS3uR/+E
+	FrBMyDqNU=
+X-Google-Smtp-Source: AGHT+IH8vphoIeSzTwCCge5KbWOLEeT5ViqMbLxOMT5VhgZKsu6oxMiG1bT/dCXlAp5hgtrSwsOWIw==
+X-Received: by 2002:a17:903:3508:b0:2a0:f46a:e3f1 with SMTP id d9443c01a7336-2a0f46ae498mr89462805ad.3.1765965295677;
+        Wed, 17 Dec 2025 01:54:55 -0800 (PST)
+Received: from 7940hx ([43.129.244.20])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a07fa0b1aasm140715945ad.3.2025.12.17.01.54.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Dec 2025 01:54:55 -0800 (PST)
+From: Menglong Dong <menglong8.dong@gmail.com>
+X-Google-Original-From: Menglong Dong <dongml2@chinatelecom.cn>
+To: ast@kernel.org,
+	andrii@kernel.org
+Cc: davem@davemloft.net,
+	dsahern@kernel.org,
+	daniel@iogearbox.net,
+	martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	john.fastabend@gmail.com,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	tglx@linutronix.de,
+	mingo@redhat.com,
+	bp@alien8.de,
+	dave.hansen@linux.intel.com,
+	x86@kernel.org,
+	hpa@zytor.com,
+	netdev@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v4 0/9] bpf: tracing session supporting
+Date: Wed, 17 Dec 2025 17:54:36 +0800
+Message-ID: <20251217095445.218428-1-dongml2@chinatelecom.cn>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/2] introduce pagetable_alloc_nolock()
-Content-Language: en-GB
-To: Yeoreum Yun <yeoreum.yun@arm.com>
-Cc: akpm@linux-foundation.org, david@kernel.org, lorenzo.stoakes@oracle.com,
- Liam.Howlett@oracle.com, vbabka@suse.cz, rppt@kernel.org, surenb@google.com,
- mhocko@suse.com, ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, jackmanb@google.com,
- hannes@cmpxchg.org, ziy@nvidia.com, bigeasy@linutronix.de,
- clrkwllms@kernel.org, rostedt@goodmis.org, catalin.marinas@arm.com,
- will@kernel.org, kevin.brodsky@arm.com, dev.jain@arm.com,
- yang@os.amperecomputing.com, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
- linux-rt-devel@lists.linux.dev, linux-arm-kernel@lists.infradead.org
-References: <20251212161832.2067134-1-yeoreum.yun@arm.com>
- <916c17ba-22b1-456e-a184-cb3f60249af7@arm.com>
- <aUGOPd7gNRf1xHEc@e129823.arm.com>
-From: Ryan Roberts <ryan.roberts@arm.com>
-In-Reply-To: <aUGOPd7gNRf1xHEc@e129823.arm.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On 16/12/2025 16:52, Yeoreum Yun wrote:
-> Hi Ryan,
-> 
->> On 12/12/2025 16:18, Yeoreum Yun wrote:
->>> Some architectures invoke pagetable_alloc() or __get_free_pages()
->>> with preemption disabled.
->>> For example, in arm64, linear_map_split_to_ptes() calls pagetable_alloc()
->>> while spliting block entry to ptes and __kpti_install_ng_mappings()
->>> calls __get_free_pages() to create kpti pagetable.
->>>
->>> Under PREEMPT_RT, calling pagetable_alloc() with
->>> preemption disabled is not allowed, because it may acquire
->>> a spin lock that becomes sleepable on RT, potentially
->>> causing a sleep during page allocation.
->>>
->>> Since above two functions is called as callback of stop_machine()
->>> where its callback is called in preemption disabled,
->>> They could make a potential problem. (sleeping in preemption disabled).
->>>
->>> To address this, introduce pagetable_alloc_nolock() API.
->>
->> I don't really understand what the problem is that you're trying to fix. As I
->> see it, there are 2 call sites in arm64 arch code that are calling into the page
->> allocator from stop_machine() - one via via pagetable_alloc() and another via
->> __get_free_pages(). But both of those calls are passing in GFP_ATOMIC. It was my
->> understanding that the page allocator would ensure it never sleeps when
->> GFP_ATOMIC is passed in, (even for PREEMPT_RT)?
-> 
-> Although GFP_ATOMIC is specify, it only affects of "water mark" of the
-> page with __GFP_HIGH. and to get a page, it must grab the lock --
-> zone->lock or pcp_lock in the rmqueue().
-> 
-> This zone->lock and pcp_lock is spin_lock and it's a sleepable in
-> PREEMPT_RT that's why the memory allocation/free using general API
-> except nolock() version couldn't be called since
-> if "contention" happens they'll sleep while waiting to get the lock.
-> 
-> The reason why "nolock()" can use, it always uses "trylock" with
-> ALLOC_TRYLOCK flags. otherwise GFP_ATOMIC also can be sleepable in
-> PREEMPT_RT.
-> 
->>
->> What is the actual symptom you are seeing?
-> 
-> Since the place where called while smp_cpus_done() and there seems no
-> contention, there seems no problem. However as I mention in another
-> thread
-> (https://lore.kernel.org/all/aT%2FdrjN1BkvyAGoi@e129823.arm.com/),
-> This gives a the false impression --
-> GFP_ATOMIC are “safe to use in preemption disabled”
-> even though they are not in PREEMPT_RT case, I've changed it.
-> 
->>
->> If the page allocator is somehow ignoring the GFP_ATOMIC request for PREEMPT_RT,
->> then isn't that a bug in the page allocator? I'm not sure why you would change
->> the callsites? Can't you just change the page allocator based on GFP_ATOMIC?
-> 
-> It doesn't ignore the GFP_ATOMIC feature:
->   - __GFP_HIGH: use water mark till min reserved
->   - __GFP_KSWAPD_RECLAIM: wake up kswapd if reclaim required.
-> 
-> But, it's a restriction -- "page allocation / free" API cannot be called
-> in preempt-disabled context at PREEMPT_RT.
-> 
-> That's why I think it's wrong usage not a page allocator bug.
+Hi, all.
 
-I've taken a look at this and I agree with your analysis. Thanks for explaining.
+In this version, I combined Alexei and Andrii's advice, which makes the
+architecture specific code much simpler.
 
-Looking at other stop_machine() callbacks, there are some that call printk() and
-I would assume that spinlocks could be taken there which may present the same
-kind of issue or PREEMPT_RT? (I'm guessing). I don't see any others that attempt
-to allocate memory though.
+Sometimes, we need to hook both the entry and exit of a function with
+TRACING. Therefore, we need define a FENTRY and a FEXIT for the target
+function, which is not convenient.
 
-Anyway, to fix the 2 arm64 callsites, I see 2 possible approaches:
+Therefore, we add a tracing session support for TRACING. Generally
+speaking, it's similar to kprobe session, which can hook both the entry
+and exit of a function with a single BPF program. Session cookie is also
+supported with the kfunc bpf_fsession_cookie(). In order to limit the
+stack usage, we limit the maximum number of cookies to 4.
 
-- Call the nolock variant (as you are doing). But that would just convert a
-deadlock to a panic; if the lock is held when stop_machine() runs, without your
-change, we now have a deadlock due to waiting on the lock inside stop_machine().
-With your change, we notice the lock is already taken and panic. I guess it is
-marginally better, but not by much. Certainly I would just _always_ call the
-nolock variant regardless of PREEMPT_RT if we take this route; For !PREEMPT_RT,
-the lock is guarranteed to be free so nolock will always succeed.
+The kfunc bpf_fsession_is_return() and bpf_fsession_cookie() are both
+inlined in the verifier.
 
-- Preallocate the memory before entering stop_machine(). I think this would be
-much more robust. For kpti_install_ng_mappings() I think you could hoist the
-allocation/free out of stop_machine() and pass the pointer in pretty easily. For
-linear_map_split_to_ptes() its a bit more complex; Perhaps, we need to walk the
-pgtable to figure out how much to preallocate, allocate it, then set it up as a
-special allocator, wrapped by an allocation function and modify the callchain to
-take a callback function instead of gfp flags.
+We allow the usage of bpf_get_func_ret() to get the return value in the
+fentry of the tracing session, as it will always get "0", which is safe
+enough and is OK. Maybe we can prohibit the usage of bpf_get_func_ret()
+in the fentry in verifier, which can make the architecture specific code
+simpler.
 
-What do you think?
+The fsession stuff is arch related, so the -EOPNOTSUPP will be returned if
+it is not supported yet by the arch. In this series, we only support
+x86_64. And later, other arch will be implemented.
 
-Thanks,
-Ryan
+Changes since v3:
+* instead of adding a new hlist to progs_hlist in trampoline, add the bpf
+  program to both the fentry hlist and the fexit hlist.
+* introduce the 2nd patch to reuse the nr_args field in the stack to
+  store all the information we need(except the session cookies).
+* limit the maximum number of cookies to 4.
+* remove the logic to skip fexit if the fentry return non-zero.
 
-> 
-> [...]
-> 
-> --
-> Sincerely,
-> Yeoreum Yun
+Changes since v2:
+* squeeze some patches:
+  - the 2 patches for the kfunc bpf_tracing_is_exit() and
+    bpf_fsession_cookie() are merged into the second patch.
+  - the testcases for fsession are also squeezed.
+
+* fix the CI error by move the testcase for bpf_get_func_ip to
+  fsession_test.c
+
+Changes since v1:
+* session cookie support.
+  In this version, session cookie is implemented, and the kfunc
+  bpf_fsession_cookie() is added.
+
+* restructure the layout of the stack.
+  In this version, the session stuff that stored in the stack is changed,
+  and we locate them after the return value to not break
+  bpf_get_func_ip().
+
+* testcase enhancement.
+  Some nits in the testcase that suggested by Jiri is fixed. Meanwhile,
+  the testcase for get_func_ip and session cookie is added too.
+
+Menglong Dong (9):
+  bpf: add tracing session support
+  bpf: use last 8-bits for the nr_args in trampoline
+  bpf: add the kfunc bpf_fsession_is_return
+  bpf: add the kfunc bpf_fsession_cookie
+  bpf,x86: introduce emit_st_r0_imm64() for trampoline
+  bpf,x86: add tracing session supporting for x86_64
+  libbpf: add support for tracing session
+  selftests/bpf: add testcases for tracing session
+  selftests/bpf: test fsession mixed with fentry and fexit
+
+ arch/x86/net/bpf_jit_comp.c                   |  47 +++-
+ include/linux/bpf.h                           |  39 +++
+ include/uapi/linux/bpf.h                      |   1 +
+ kernel/bpf/btf.c                              |   2 +
+ kernel/bpf/syscall.c                          |  18 +-
+ kernel/bpf/trampoline.c                       |  50 +++-
+ kernel/bpf/verifier.c                         |  75 ++++--
+ kernel/trace/bpf_trace.c                      |  56 ++++-
+ net/bpf/test_run.c                            |   1 +
+ net/core/bpf_sk_storage.c                     |   1 +
+ tools/bpf/bpftool/common.c                    |   1 +
+ tools/include/uapi/linux/bpf.h                |   1 +
+ tools/lib/bpf/bpf.c                           |   2 +
+ tools/lib/bpf/libbpf.c                        |   3 +
+ .../selftests/bpf/prog_tests/fsession_test.c  |  90 +++++++
+ .../bpf/prog_tests/tracing_failure.c          |   2 +-
+ .../selftests/bpf/progs/fsession_test.c       | 226 ++++++++++++++++++
+ 17 files changed, 571 insertions(+), 44 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/fsession_test.c
+ create mode 100644 tools/testing/selftests/bpf/progs/fsession_test.c
+
+-- 
+2.52.0
 
