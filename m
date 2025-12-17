@@ -1,20 +1,20 @@
 Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6907E2DA77F;
-	Wed, 17 Dec 2025 06:14:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 617E22DAFAF;
+	Wed, 17 Dec 2025 06:14:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765952098; cv=none; b=dxyhOZZqrpWMpZP0mdaVTXT3ld6bLKb0kgA+F2RJEBqeVQGaR4TOdRIl9IgdXdTH2zJbKXPLpgATYhI7ygZGbAA8w/TEzAotEnwzOLxXMJZoyIqJSNgW7pKs6JIzpPdP0oZSBeyxlguuoIGmHAoDt5gFobXaufCuRoXT++nkIiM=
+	t=1765952098; cv=none; b=Zk4E6OfbnNbUr8wWZ8FLYiXI0PWhYs85oh49FY6JbtFb+lCvMT6kof75sRCQiDZf02tiTvHHciXIw+BMSHda0klRVxoQmSyuAuvOmdis3K7ZuWn9IaCbDgaG5eGwn7GpHnkdVE7Lgis71BjbEPMq7Sh4dtbw34wEO8psvsucZn0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1765952098; c=relaxed/simple;
-	bh=Zfloy8I/PvvV0GgsACcj4Xioz0vOdmYRRY1dbRe0Cjk=;
+	bh=wZLOMETjgoJ2dGINqkm2V8I5bmIvypzJ/UXmJA+ST2I=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=f1i2yZHvfwIsiZdUApNxrJS2dPIW+QkkfuYq0OtT189aTtmurqYvSgR8yWHnJWjXDRA8TKwftQNWIagAfy7CwJWkEcIjCCv7CliEyqkGpEM8Xuph+u3VJzhQ7ei+bvk2KRC8N2ymCCFwgYsttrLXV+8Ibn0hN91Q3LFGcZFRbUY=
+	 MIME-Version; b=qqSQEberkUSZPsiqs/Qry/yAoN04gxBqh47WsDI+ibphItSxWDmxs9c7rC9Po/h2hSPqK4hf6mv1GTuGH0yym0p4tsaFOuKwEckCkm/5hhAZ/PJmBnPIfpPav41YkanE9lM23BYUaDpWCzdbqs2EHM68SXtKKKfC6fRcus61oE0=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: b03d542cdb0f11f0a38c85956e01ac42-20251217
+X-UUID: b17e2dc0db0f11f0a38c85956e01ac42-20251217
 X-CTIC-Tags:
 	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NO_NAME, HR_CTE_8B, HR_CTT_MISS
 	HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME, HR_SJ_DIGIT_LEN
@@ -25,27 +25,27 @@ X-CTIC-Tags:
 	DMARC_NOPASS, CIE_BAD, CIE_GOOD_SPF, CIE_UNKNOWN, GTI_FG_BS
 	GTI_RG_INFO, GTI_C_BU, AMN_GOOD, ABX_MISS_RDNS
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.6,REQID:4119027e-0bad-4eb7-bfb1-90a7e9005e4a,IP:10,U
+X-CID-O-INFO: VERSION:1.3.6,REQID:54636725-8111-4a94-bf27-e8707e41cefc,IP:10,U
 	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION
 	:release,TS:5
-X-CID-INFO: VERSION:1.3.6,REQID:4119027e-0bad-4eb7-bfb1-90a7e9005e4a,IP:10,URL
+X-CID-INFO: VERSION:1.3.6,REQID:54636725-8111-4a94-bf27-e8707e41cefc,IP:10,URL
 	:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
 	elease,TS:5
-X-CID-META: VersionHash:a9d874c,CLOUDID:df328e767154f61dcf2d98f75131e4e8,BulkI
-	D:251212171111BX2VBL8B,BulkQuantity:4,Recheck:0,SF:17|19|38|66|78|81|82|10
+X-CID-META: VersionHash:a9d874c,CLOUDID:ba6e0229970adc7d7e96f99048600b0c,BulkI
+	D:2512171414511WY777SV,BulkQuantity:0,Recheck:0,SF:17|19|38|66|78|81|82|10
 	2|127|850|898,TC:nil,Content:0|15|50,EDM:-3,IP:-2,URL:0,File:nil,RT:nil,Bu
-	lk:41,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0
-	,BRE:0,ARC:0
+	lk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:
+	0,BRE:0,ARC:0
 X-CID-BVR: 2,SSN|SDN
 X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD
+X-CID-FACTOR: TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,TF_CID_SPAM_SNR
 X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: b03d542cdb0f11f0a38c85956e01ac42-20251217
+X-UUID: b17e2dc0db0f11f0a38c85956e01ac42-20251217
 X-User: duanchenghao@kylinos.cn
 Received: from localhost.localdomain [(183.242.174.20)] by mailgw.kylinos.cn
 	(envelope-from <duanchenghao@kylinos.cn>)
 	(Generic MTA)
-	with ESMTP id 71023797; Wed, 17 Dec 2025 14:14:47 +0800
+	with ESMTP id 1517111480; Wed, 17 Dec 2025 14:14:49 +0800
 From: Chenghao Duan <duanchenghao@kylinos.cn>
 To: yangtiezhu@loongson.cn,
 	rostedt@goodmis.org,
@@ -64,9 +64,9 @@ Cc: kernel@xen0n.name,
 	jianghaoran@kylinos.cn,
 	vincent.mc.li@gmail.com,
 	linux-trace-kernel@vger.kernel.org
-Subject: [PATCH v4 1/7] LoongArch: ftrace: Refactor register restoration in ftrace_common_return
-Date: Wed, 17 Dec 2025 14:14:29 +0800
-Message-Id: <20251217061435.802204-2-duanchenghao@kylinos.cn>
+Subject: [PATCH v4 4/7] LoongArch: BPF: Save return address register ra to t0 before trampoline
+Date: Wed, 17 Dec 2025 14:14:32 +0800
+Message-Id: <20251217061435.802204-5-duanchenghao@kylinos.cn>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20251217061435.802204-1-duanchenghao@kylinos.cn>
 References: <20251217061435.802204-1-duanchenghao@kylinos.cn>
@@ -78,68 +78,29 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Refactor the register restoration sequence in the ftrace_common_return
-function to clearly distinguish between the logic of normal returns and
-direct call returns in function tracing scenarios. The logic is as
-follows:
-1. In the case of a normal return, the execution flow returns to the
-traced function, and ftrace must ensure that the register data is
-consistent with the state when the function was entered.
-ra = parent return address; t0 = traced function return address.
+Modify the build_prologue function to ensure the return address
+register ra is saved to t0 before entering trampoline operations.
+This change ensures accurate return address handling when a BPF
+program calls another BPF program, preventing errors in the
+BPF-to-BPF call chain.
 
-2. In the case of a direct call return, the execution flow jumps to the
-custom trampoline function, and ftrace must ensure that the register
-data is consistent with the state when ftrace was entered.
-ra = traced function return address; t0 = parent return address.
-
-Fixes: 9cdc3b6a299c ("LoongArch: ftrace: Add direct call support")
 Signed-off-by: Chenghao Duan <duanchenghao@kylinos.cn>
 ---
- arch/loongarch/kernel/mcount_dyn.S | 14 ++++++++++----
- 1 file changed, 10 insertions(+), 4 deletions(-)
+ arch/loongarch/net/bpf_jit.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/loongarch/kernel/mcount_dyn.S b/arch/loongarch/kernel/mcount_dyn.S
-index d6b474ad1d5e..5729c20e5b8b 100644
---- a/arch/loongarch/kernel/mcount_dyn.S
-+++ b/arch/loongarch/kernel/mcount_dyn.S
-@@ -94,7 +94,6 @@ SYM_INNER_LABEL(ftrace_graph_call, SYM_L_GLOBAL)
-  * at the callsite, so there is no need to restore the T series regs.
-  */
- ftrace_common_return:
--	PTR_L		ra, sp, PT_R1
- 	PTR_L		a0, sp, PT_R4
- 	PTR_L		a1, sp, PT_R5
- 	PTR_L		a2, sp, PT_R6
-@@ -104,12 +103,17 @@ ftrace_common_return:
- 	PTR_L		a6, sp, PT_R10
- 	PTR_L		a7, sp, PT_R11
- 	PTR_L		fp, sp, PT_R22
--	PTR_L		t0, sp, PT_ERA
- 	PTR_L		t1, sp, PT_R13
--	PTR_ADDI	sp, sp, PT_SIZE
- 	bnez		t1, .Ldirect
-+
-+	PTR_L		ra, sp, PT_R1
-+	PTR_L		t0, sp, PT_ERA
-+	PTR_ADDI	sp, sp, PT_SIZE
- 	jr		t0
- .Ldirect:
-+	PTR_L		t0, sp, PT_R1
-+	PTR_L		ra, sp, PT_ERA
-+	PTR_ADDI	sp, sp, PT_SIZE
- 	jr		t1
- SYM_CODE_END(ftrace_common)
+diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
+index 76cd24646bec..c560d1e14b9d 100644
+--- a/arch/loongarch/net/bpf_jit.c
++++ b/arch/loongarch/net/bpf_jit.c
+@@ -139,6 +139,7 @@ static void build_prologue(struct jit_ctx *ctx)
+ 	stack_adjust = round_up(stack_adjust, 16);
+ 	stack_adjust += bpf_stack_adjust;
  
-@@ -161,6 +165,8 @@ SYM_CODE_END(return_to_handler)
- #ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
- SYM_CODE_START(ftrace_stub_direct_tramp)
- 	UNWIND_HINT_UNDEFINED
--	jr		t0
-+	move		t1, ra
-+	move		ra, t0
-+	jr		t1
- SYM_CODE_END(ftrace_stub_direct_tramp)
- #endif /* CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS */
++	move_reg(ctx, LOONGARCH_GPR_T0, LOONGARCH_GPR_RA);
+ 	/* Reserve space for the move_imm + jirl instruction */
+ 	for (i = 0; i < LOONGARCH_LONG_JUMP_NINSNS; i++)
+ 		emit_insn(ctx, nop);
 -- 
 2.25.1
 
