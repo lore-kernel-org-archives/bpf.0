@@ -1,144 +1,154 @@
-Received: from out-180.mta0.migadu.com (out-180.mta0.migadu.com [91.218.175.180])
+Received: from mx0a-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 725A03BDA80
-	for <bpf@vger.kernel.org>; Wed, 17 Dec 2025 10:38:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF84333BBD1;
+	Wed, 17 Dec 2025 11:09:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.148.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765967902; cv=none; b=GSSPHWdu+Xr4T7qnzlwE0ZmRU7JLa9LYPA2pdQoHNLAu31UxvlK5piFQjA2Khghg9gfDmqzB0TVtZUdiDQ6YyL4dNccWmwab9Ke1/sxAOmWFVCmKIvuLehVHcBy+t3bNfNNOO4HdrdiYilz5AUGweQrdSvKd2fX4OP6gFp0GhqU=
+	t=1765969756; cv=none; b=LtLdHZtlZkLCbKWR35PV+nJ7JA5ACyplJmHXNskG01mioqRaregOEzsJITGT6oeFpWXlAUdFdc7DBRGmGCEeCh6pqafGzwUjqxCLpt7xIBL1p06qNnYndtygB9dfuoJNf2e+vs3y/5eIC1HCvFb2c9lH3A0x10S2CtzBSIOCFbY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765967902; c=relaxed/simple;
-	bh=Bi0A5xyQzAzMmvhTPYb84wqht90XVitNk3J6taYf2/w=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=L6WN0ELij1lY9LgWFXmLU6gcfEQbT2L4E3egdHsdFkKXpCq9HD3rxaWUfM5p++ecv/XM5Qz7bkaA8+yyTqe5rYKDI6JA9l4BRDMEIlP7NKrGtf1L6M19ULcB7awQ11XLN+xwyV6hdCghEK12S9kcFdodLE+a2B5pNFBqgg+xmAo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=g+gODfQu; arc=none smtp.client-ip=91.218.175.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1765969756; c=relaxed/simple;
+	bh=hmqOoZZJvHvHQXt9UC424KsCOsv4Rx0pjW0fYiw28i4=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=joPa7sWPrUhjMfbsltPnugP+VVGdwKQVzpqGD2x7c/nQai823szr+3j1B0FFdPYaqK+fMy3lkXO9ciXO74oBGOIxKZEvgv1kWPEqTkM5CuDvdA8Lp3H3zibR5TbZ35fYY24fbMCZ/+/U+w+3c6iiKKXrwUnIHOrOkGE6qZ9L5ag=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b=eiT+qOKB; arc=none smtp.client-ip=67.231.148.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=marvell.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="g+gODfQu"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1765967891;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=F/UoXNWt64owICESDRDCydShXt+IIujt1eIf5x6/3j4=;
-	b=g+gODfQu4MFyoWMUSbLujm7o9X0gkYPZBmTMY21kTnrGX3puyBpr5uleWgKaM/3fHpmlJL
-	Kp9Cpi5lOfmD85pWUox+9FuWBdIQnjKg4PtRlQFsAzngNagfB47a9wPDyRVnVh8ikzbnni
-	G9fOuzaZZ++o3Lr4/QGU62urGLTXf58=
-From: Menglong Dong <menglong.dong@linux.dev>
-To: menglong8.dong@gmail.com, ast@kernel.org, andrii@kernel.org,
- bot+bpf-ci@kernel.org
-Cc: davem@davemloft.net, dsahern@kernel.org, daniel@iogearbox.net,
- martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, tglx@linutronix.de,
- mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
- hpa@zytor.com, netdev@vger.kernel.org, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
- daniel@iogearbox.net, martin.lau@kernel.org, eddyz87@gmail.com,
- yonghong.song@linux.dev, clm@meta.com, ihor.solodrai@linux.dev
-Subject:
- Re: [PATCH bpf-next v4 9/9] selftests/bpf: test fsession mixed with fentry
- and fexit
-Date: Wed, 17 Dec 2025 18:37:52 +0800
-Message-ID: <5955023.DvuYhMxLoT@7940hx>
-In-Reply-To:
- <351b78207e3df166707b3f8c9fe446504167e35819d0dda26559559ebf548e83@mail.kernel.org>
-References:
- <20251217095445.218428-10-dongml2@chinatelecom.cn>
- <351b78207e3df166707b3f8c9fe446504167e35819d0dda26559559ebf548e83@mail.kernel.org>
+	dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b="eiT+qOKB"
+Received: from pps.filterd (m0431384.ppops.net [127.0.0.1])
+	by mx0a-0016f401.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5BH6pd1S1394915;
+	Wed, 17 Dec 2025 03:08:21 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=pfpt0220; bh=L5LfAcotcrApoC11pZx/JxZ2v
+	PnVWo323nWO/uSuVGM=; b=eiT+qOKBKXFLUlfIJE/OqlHxxJzcxqdo3khktYh7M
+	JJJoWnbK4zkGgbDEnQZs9zsorZZ/ePTPeyC0ddhc8GyBZ19Ei92iFcVXyZTUcAs1
+	QDgWLJhQQOh5utJBw2FSHF7HrKnjFQvzVIuQNK+htF059FH59R1vDTBg/5tzhwK1
+	VDkyGLnQonH294E6/vcOyUhLZ9xhGTXFW1xCx913kiNCEwjsUWCSyCGjD+GKyelB
+	3fddBPeHhr8qJlJwKdjCzkos7Vk68j2iDkyARKqWVZLX4y2SPIc7g82GBuN+iJ90
+	n6R5M6kdlfXnBYDgroEbEbHC8fGTH4nRzSronGt0zioqQ==
+Received: from dc6wp-exch02.marvell.com ([4.21.29.225])
+	by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 4b3qm30dvu-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 17 Dec 2025 03:08:21 -0800 (PST)
+Received: from DC6WP-EXCH02.marvell.com (10.76.176.209) by
+ DC6WP-EXCH02.marvell.com (10.76.176.209) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.25; Wed, 17 Dec 2025 03:08:33 -0800
+Received: from maili.marvell.com (10.69.176.80) by DC6WP-EXCH02.marvell.com
+ (10.76.176.209) with Microsoft SMTP Server id 15.2.1544.25 via Frontend
+ Transport; Wed, 17 Dec 2025 03:08:33 -0800
+Received: from test-OptiPlex-Tower-Plus-7010 (unknown [10.29.37.157])
+	by maili.marvell.com (Postfix) with SMTP id 1A6253F7063;
+	Wed, 17 Dec 2025 03:08:13 -0800 (PST)
+Date: Wed, 17 Dec 2025 16:38:13 +0530
+From: Hariprasad Kelam <hkelam@marvell.com>
+To: Wei Fang <wei.fang@nxp.com>
+CC: <andrew+netdev@lunn.ch>, <davem@davemloft.net>, <edumazet@google.com>,
+        <kuba@kernel.org>, <pabeni@redhat.com>, <mcoquelin.stm32@gmail.com>,
+        <alexandre.torgue@foss.st.com>, <ast@kernel.org>,
+        <daniel@iogearbox.net>, <hawk@kernel.org>, <john.fastabend@gmail.com>,
+        <sdf@fomichev.me>, <rmk+kernel@armlinux.org.uk>, <0x1207@gmail.com>,
+        <hayashi.kunihiko@socionext.com>, <vladimir.oltean@nxp.com>,
+        <boon.leong.ong@intel.com>, <imx@lists.linux.dev>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>, <bpf@vger.kernel.org>
+Subject: Re: [PATCH net] net: stmmac: fix the crash issue for zero copy
+ XDP_TX action
+Message-ID: <aUKPHdtAPDnMqB7X@test-OptiPlex-Tower-Plus-7010>
+References: <20251204071332.1907111-1-wei.fang@nxp.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="utf-8"
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20251204071332.1907111-1-wei.fang@nxp.com>
+X-Authority-Analysis: v=2.4 cv=d8j4CBjE c=1 sm=1 tr=0 ts=69428f25 cx=c_pps
+ a=gIfcoYsirJbf48DBMSPrZA==:117 a=gIfcoYsirJbf48DBMSPrZA==:17
+ a=w373o-ZMvzc93a0z:21 a=kj9zAlcOel0A:10 a=wP3pNCr1ah4A:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=8AirrxEcAAAA:8 a=Kl3X-cPyiDMRo7OHHioA:9
+ a=CjuIK1q_8ugA:10 a=ST-jHhOKWsTCqRlWije3:22
+X-Proofpoint-GUID: XdCkQVAvRv7gCtPhPvNC9ks__pJciWRQ
+X-Proofpoint-ORIG-GUID: XdCkQVAvRv7gCtPhPvNC9ks__pJciWRQ
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjE3MDA4OCBTYWx0ZWRfX4NQw4KFTQd+R
+ vaaSpXxOppCubo56wif2WEVBU+MZIU384E0wV47reSde0d3PkVCNXxtBiMAhRaXiM1K+YXYKNrI
+ 7/8ZnckBz0Y/R+05DY1y1l0ISKdioUUnaEt2AEG6MmXubWc3FmsuIwafkJEGXnZvr4SkvCdU6eL
+ LGnJsKisU3rQpLNFOXniyfLAdJZXZ+uplzOD+AM61lnQw2fm4+LXYyX5w2kG6M1mNiRMweaiLVc
+ Ugrf9/Y9KgagUPwLEnNCdOuVWP210548nYgoXqH3FcJwk6rrSJUssqzcTSJbqZbPmnAAoGWE41M
+ U84WjISbO9T+adVuTWQJh55aqyWtJ0b9vdqJn0obyyWmB4d9GMuUCJrvoU84kpTh5ka3AzKaUmw
+ r9SSUybpcrocJDUwJbSGFNPmq/ifvQ==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-12-17_01,2025-12-16_05,2025-10-01_01
 
-On 2025/12/17 18:24 bot+bpf-ci@kernel.org write:
-> > diff --git a/tools/testing/selftests/bpf/progs/fsession_test.c b/tools/testing/selftests/bpf/progs/fsession_test.c
-> > index f7c96ef1c7a9..223a6ea47888 100644
-> > --- a/tools/testing/selftests/bpf/progs/fsession_test.c
-> > +++ b/tools/testing/selftests/bpf/progs/fsession_test.c
-> > @@ -190,3 +190,37 @@ int BPF_PROG(test10, int a)
-> >  		test10_exit_ok = *cookie == 0x1111222233334444ull;
-> >  	return 0;
-> >  }
-> > +
-> > +__u64 test11_entry_result = 0;
-> > +__u64 test11_exit_result = 0;
-> > +
-> > +SEC("fsession/bpf_fentry_test1")
-> > +int BPF_PROG(test11, int a, int ret)
-> > +{
-> > +	__u64 *cookie = bpf_fsession_cookie(ctx);
-> > +
-> > +	if (!bpf_fsession_is_return(ctx)) {
-> > +		test11_entry_result = a == 1 && ret == 0;
-> > +		*cookie = 0x123456ULL;
+On 2025-12-04 at 12:43:32, Wei Fang (wei.fang@nxp.com) wrote:
+> There is a crash issue when running zero copy XDP_TX action, the crash
+> log is shown below.
 > 
-> Should the cookie pointer be checked for NULL before dereferencing?
+> [  216.122464] Unable to handle kernel paging request at virtual address fffeffff80000000
+> [  216.187524] Internal error: Oops: 0000000096000144 [#1]  SMP
+> [  216.301694] Call trace:
+> [  216.304130]  dcache_clean_poc+0x20/0x38 (P)
+> [  216.308308]  __dma_sync_single_for_device+0x1bc/0x1e0
+> [  216.313351]  stmmac_xdp_xmit_xdpf+0x354/0x400
+> [  216.317701]  __stmmac_xdp_run_prog+0x164/0x368
+> [  216.322139]  stmmac_napi_poll_rxtx+0xba8/0xf00
+> [  216.326576]  __napi_poll+0x40/0x218
+> [  216.408054] Kernel panic - not syncing: Oops: Fatal exception in interrupt
 > 
-> Looking at the existing tests in this file, both test9 and test10 (which
-> also call bpf_fsession_cookie) explicitly check if the cookie pointer is
-> NULL before dereferencing it:
+> For XDP_TX action, the xdp_buff is converted to xdp_frame by
+> xdp_convert_buff_to_frame(). The memory type of the resulting xdp_frame
+> depends on the memory type of the xdp_buff. For page pool based xdp_buff
+> it produces xdp_frame with memory type MEM_TYPE_PAGE_POOL. For zero copy
+> XSK pool based xdp_buff it produces xdp_frame with memory type
+> MEM_TYPE_PAGE_ORDER0. However, stmmac_xdp_xmit_back() does not check the
+> memory type and always uses the page pool type, this leads to invalid
+> mappings and causes the crash. Therefore, check the xdp_buff memory type
+> in stmmac_xdp_xmit_back() to fix this issue.
 > 
->   test9: if (cookie) { *cookie = 0xAAAA...; }
->   test10: if (cookie) { *cookie = 0x1111...; }
-
-The checking is unnecessary, as bpf_fsession_cookie() can't
-return NULL. I'll remove such checking in the test in the next
-version.
-
-Thanks!
-Menglong Dong
-
-> 
-> test11 dereferences cookie without this check. If cookie were NULL or
-> invalid, test11 would crash rather than fail gracefully like test9/test10
-> do. While the BPF verifier likely ensures cookie is valid when the
-> program is loaded, following the established pattern would make the test
-> more robust.
-> 
-> The same issue occurs in the exit path:
-> 
-> > +		return 0;
-> > +	}
-> > +
-> > +	test11_exit_result = a == 1 && ret == 2 && *cookie == 0x123456ULL;
->                                                     ^^^^^^^
-> 
-> > +	return 0;
-> > +}
-> > +
-> > +__u64 test12_result = 0;
-> > +SEC("fexit/bpf_fentry_test1")
-> > +int BPF_PROG(test12, int a, int ret)
-> > +{
-> > +	test12_result = a == 1 && ret == 2;
-> > +	return 0;
-> > +}
-> > +
-> > +__u64 test13_result = 0;
-> > +SEC("fentry/bpf_fentry_test1")
-> > +int BPF_PROG(test13, int a)
-> > +{
-> > +	test13_result = a == 1;
-> > +	return 0;
-> > +}
-> 
-> 
+> Fixes: bba2556efad6 ("net: stmmac: Enable RX via AF_XDP zero-copy")
+> Signed-off-by: Wei Fang <wei.fang@nxp.com>
 > ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+>  .../net/ethernet/stmicro/stmmac/stmmac_main.c   | 17 +++++++++++++++--
+>  1 file changed, 15 insertions(+), 2 deletions(-)
 > 
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/20299185010
-> 
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> index 7b90ecd3a55e..a6664f300e4a 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> @@ -88,6 +88,7 @@ MODULE_PARM_DESC(phyaddr, "Physical device address");
+>  #define STMMAC_XDP_CONSUMED	BIT(0)
+>  #define STMMAC_XDP_TX		BIT(1)
+>  #define STMMAC_XDP_REDIRECT	BIT(2)
+> +#define STMMAC_XSK_CONSUMED	BIT(3)
+>  
+>  static int flow_ctrl = 0xdead;
+>  module_param(flow_ctrl, int, 0644);
+> @@ -4988,6 +4989,7 @@ static int stmmac_xdp_get_tx_queue(struct stmmac_priv *priv,
+>  static int stmmac_xdp_xmit_back(struct stmmac_priv *priv,
+>  				struct xdp_buff *xdp)
+>  {
+> +	bool zc = !!(xdp->rxq->mem.type == MEM_TYPE_XSK_BUFF_POOL);
+>  	struct xdp_frame *xdpf = xdp_convert_buff_to_frame(xdp);
+>  	int cpu = smp_processor_id();
+>  	struct netdev_queue *nq;
+> @@ -5004,9 +5006,18 @@ static int stmmac_xdp_xmit_back(struct stmmac_priv *priv,
+>  	/* Avoids TX time-out as we are sharing with slow path */
+>  	txq_trans_cond_update(nq);
+>  
+> -	res = stmmac_xdp_xmit_xdpf(priv, queue, xdpf, false);
+> -	if (res == STMMAC_XDP_TX)
+> +	/* For zero copy XDP_TX action, dma_map is true */
+> +	res = stmmac_xdp_xmit_xdpf(priv, queue, xdpf, zc);
+	Seems stmmac_xdp_xmit_xdpf is using dma_map_single if we pass zc is true.
+        Ideally in case of zc, driver can use page_pool_get_dma_addr, may be you
+        need pass zc param as false. Please check
 
-
-
-
+Thanks,
+Hariprasad k
+	
