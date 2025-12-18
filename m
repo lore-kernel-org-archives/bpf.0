@@ -1,130 +1,138 @@
-Received: from out-186.mta0.migadu.com (out-186.mta0.migadu.com [91.218.175.186])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE8902F5308
-	for <bpf@vger.kernel.org>; Thu, 18 Dec 2025 18:26:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.186
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05F54326942;
+	Thu, 18 Dec 2025 18:27:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766082396; cv=none; b=WfqmOQz0s0wRZBpeyqS5MEbFfKwdk4hSy5Az70n66/M9mEnJBmdLQtkmsxXV2bZ3ANQH1Xnh5uXyXBotXC1jiBqYPMRpSRhmWd6zEWO93YQU7hrcleSrf4e0hLPDm5kmFUpeCheTNfiKkinX6K7Ww/6B7W4b+wCDAhTsN3j0Okw=
+	t=1766082478; cv=none; b=XiQxxhPksQ/Mt/eipN4CaNc4/+kdZp5h27p41mpHSDoGaLdONXcA7sGUcmpNKBO8cMGFBfb1cD6req4W1ru+HBOQ+0TNGltaaxs83GzjA7F1fqGcIgEW18LLSHRqm30ydsqw097fQb60CEbccCVRYlhVoPcmfwjwicOi67uyu0Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766082396; c=relaxed/simple;
-	bh=UlE6+2Fa1x3o29PxLnPTQxa9DHSswPvD388GUb1fLDA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CoxUEgnIvVa9Yd+uUNLxJPUqW7bNnqgBPnL1EbrVsJrNr/SwyuElohPi1Q9hdaFZniMg6Mxof1uEtnxWpur30sFtVG4RzExYdUvccLXA/p6b7WCCdiZmVA/oIY5M40mWz9nqwgzBvJhxsWKrwF4Cg5bmJZjo/QQ3dVsFdLt+lfc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=vvNLXsLz; arc=none smtp.client-ip=91.218.175.186
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1766082478; c=relaxed/simple;
+	bh=Mvj4FCjmHlpKdYwrWcQq3wTMAQrnZkyN14FqozNk20U=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=EITqtjtTntvjjmC2Uv6rBPZM2TrUe1jdfuAODBjGmgvUlfpnKZvh+oEoCZJzCv7dRyDO0gMIaPN9cQQddQ6xaSdhSm5brsZDHE6SNejnWJ+121NK+H5nLKek821ogXLN7zulDzOOXStvYkHbHjOvdiCVHhtqQRG+hYQp3ZvfhYg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TGv9BDwb; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="vvNLXsLz"
-Message-ID: <d0a58c79-eb85-41d2-bc17-7b507f57155a@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1766082382;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Jk9zkrxndUi94GHHgKkt7+7sXifVn66L0kR3rsGhGxk=;
-	b=vvNLXsLzcyxdXKcK4fHDYW0LPdn0Ie9CzTA4+3lHZGCParHllUcCY6XaM5knaTqUbj7VnF
-	c3HRt992DN05dvyU3LaOVqe7NTgZVsUwVy4rHsWk4ZRbIdd7FbB8wPSqxXe/lewMkgjDxy
-	jLq1uSuSgz4KjB8tE04p12SjyGLifnc=
-Date: Thu, 18 Dec 2025 10:26:14 -0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TGv9BDwb"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82E46C4CEFB;
+	Thu, 18 Dec 2025 18:27:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1766082476;
+	bh=Mvj4FCjmHlpKdYwrWcQq3wTMAQrnZkyN14FqozNk20U=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=TGv9BDwbFdS5oDyADb7rlyym4EY2f1vBxnVZg4upOhXucUXPZU1hr6Isxi6W9d3Z9
+	 iKpzHMk+kKDEtTa27K8OKXUPkMcD4HoWJ+UKrC5w17XOC6V5sO6Rrdj/PTi4nHBbnx
+	 hrv9wDonsW2GSzXiuU86EWvCjbJfskIuvrYbGMwBMceDMGZbeEQzR1JHw5TjGfujC4
+	 g+0FRg+yaAHrkuqL9S1YqFFbqxwgeOaadNjmDyyaClvEEuc/ShU//UPQ0wQwOJrimG
+	 IyWVnUugtpN/7BZ9sL95OM9k+bfk2f9risXS3c23tfL97wim8sKYOIwpBX/TNYdvko
+	 YCgOLE03upsYQ==
+Content-Type: multipart/mixed; boundary="===============2847465728903958225=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: bpf: xdp: unhandled error in xdp_test_run_init_page() leads to
- crash
-To: =?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-Cc: "dzm91@hust.edu.cn" <dzm91@hust.edu.cn>, M202472210@hust.edu.cn,
- ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
- song@kernel.org, yonghong.song@linux.dev, john.fastabend@gmail.com,
- kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, horms@kernel.org,
- hust-os-kernel-patches@googlegroups.com, netdev@vger.kernel.org,
- bpf@vger.kernel.org, Alexander Lobakin <aleksander.lobakin@intel.com>,
- Yinhao Hu <dddddd@hust.edu.cn>
-References: <fa2be179-bad7-4ee3-8668-4903d1853461@hust.edu.cn>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <fa2be179-bad7-4ee3-8668-4903d1853461@hust.edu.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Message-Id: <1a31d5b805f81b28ea95cdfdd57b8e2fb88ab29bfbbc034b4443978b4dddb5c6@mail.kernel.org>
+In-Reply-To: <20251218175628.1460321-2-ameryhung@gmail.com>
+References: <20251218175628.1460321-2-ameryhung@gmail.com>
+Subject: Re: [PATCH bpf-next v3 01/16] bpf: Convert bpf_selem_unlink_map to failable
+From: bot+bpf-ci@kernel.org
+To: ameryhung@gmail.com,bpf@vger.kernel.org
+Cc: netdev@vger.kernel.org,alexei.starovoitov@gmail.com,andrii@kernel.org,daniel@iogearbox.net,memxor@gmail.com,martin.lau@kernel.org,kpsingh@kernel.org,yonghong.song@linux.dev,song@kernel.org,haoluo@google.com,ameryhung@gmail.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Thu, 18 Dec 2025 18:27:56 +0000 (UTC)
+
+--===============2847465728903958225==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+
+> diff --git a/kernel/bpf/bpf_local_storage.c b/kernel/bpf/bpf_local_storage.c
+> index e2fe6c32822b..4e3f227fd634 100644
+> --- a/kernel/bpf/bpf_local_storage.c
+> +++ b/kernel/bpf/bpf_local_storage.c
+
+[ ... ]
+
+> @@ -488,9 +516,10 @@ bpf_local_storage_update(void *owner, struct bpf_local_storage_map *smap,
+>  {
+>  	struct bpf_local_storage_data *old_sdata = NULL;
+>  	struct bpf_local_storage_elem *alloc_selem, *selem = NULL;
+> +	struct bpf_local_storage_map_bucket *b, *old_b = NULL;
+> +	unsigned long flags, b_flags, old_b_flags;
+>  	struct bpf_local_storage *local_storage;
+>  	HLIST_HEAD(old_selem_free_list);
+> -	unsigned long flags;
+>  	int err;
+
+[ ... ]
+
+> @@ -574,20 +603,37 @@ bpf_local_storage_update(void *owner, struct bpf_local_storage_map *smap,
+>  		goto unlock;
+>  	}
+>
+> +	b = select_bucket(smap, selem);
+> +
+> +	if (old_sdata) {
+> +		old_b = select_bucket(smap, SELEM(old_sdata));
+> +		old_b = old_b == b ? NULL : old_b;
+> +	}
+> +
+> +	raw_spin_lock_irqsave(&b->lock, b_flags);
+> +
+> +	if (old_b)
+> +		raw_spin_lock_irqsave(&old_b->lock, old_b_flags);
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Could this introduce an ABBA deadlock between two bucket locks? If two
+threads concurrently update storage on the same map with different owners,
+their new and old selems could hash to different buckets with reversed
+order:
+
+  Thread 1: new_selem -> bucket_A, old_selem -> bucket_B
+            acquires b->lock (A), then waits for old_b->lock (B)
+
+  Thread 2: new_selem -> bucket_B, old_selem -> bucket_A
+            acquires b->lock (B), then waits for old_b->lock (A)
+
+Since the locks are regular raw_spinlocks (not rqspinlocks yet), they
+will block indefinitely in this scenario.
+
+Note: I see that commit 615477732ee8 ("bpf: Change local_storage->lock
+and b->lock to rqspinlock") later in this series changes to rqspinlock
+which has deadlock detection and can return -EDEADLK instead of blocking.
+However, in the current commit the locks are still raw_spinlocks.
+
+> +
+>  	alloc_selem = NULL;
+>  	/* First, link the new selem to the map */
+> -	bpf_selem_link_map(smap, selem);
+> +	bpf_selem_link_map_nolock(smap, selem, b);
+>
+>  	/* Second, link (and publish) the new selem to local_storage */
+>  	bpf_selem_link_storage_nolock(local_storage, selem);
+>
+>  	/* Third, remove old selem, SELEM(old_sdata) */
+>  	if (old_sdata) {
+> -		bpf_selem_unlink_map(SELEM(old_sdata));
+> +		bpf_selem_unlink_map_nolock(SELEM(old_sdata));
+>  		bpf_selem_unlink_storage_nolock(local_storage, SELEM(old_sdata),
+>  						&old_selem_free_list);
+>  	}
+>
+> +	if (old_b)
+> +		raw_spin_unlock_irqrestore(&old_b->lock, old_b_flags);
+> +
+> +	raw_spin_unlock_irqrestore(&b->lock, b_flags);
+> +
+>  unlock:
+>  	raw_spin_unlock_irqrestore(&local_storage->lock, flags);
 
 
-On 12/18/25 2:43 AM, Yinhao Hu wrote:
-> Our fuzzer tool discovered a user-memory-access vulnerability in the BPF
-> subsystem. The vulnerability is triggered when building an `sk_buff`
-> from an XDP frame that has not been properly initialized due to an
-> unhandled initialization failure, causing the kernel to access an
-> invalid memory address.
-> 
-> Reported-by: Yinhao Hu <dddddd@hust.edu.cn>
-> Reported-by: Kaiyan Mei <M202472210@hust.edu.cn>
-> Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
-> 
-> ## Root Cause
-> 
-> `xdp_test_run_setup()` attempts to create a `page_pool` with the page
-> initialization callback `xdp_test_run_init_page()`.
-> 
-> During page initialization, `xdp_test_run_init_page()` calls
-> `xdp_update_frame_from_buff()` to initialize an `xdp_frame`. However, if
-> the available headroom in the associated `xdp_buff` is insufficient,
-> `xdp_update_frame_from_buff()` returns an error. This error is not
-> handled by `xdp_test_run_init_page()`, leaving the `xdp_frame`
-> uninitialized.
-> 
-> Later, `xdp_test_run_batch()` retrieves this `xdp_frame` from the
-> `page_pool`. Although it may attempt to partially reinitialize the frame
-> via `reset_ctx()`, the failure from `xdp_update_frame_from_buff()` is
-> still ignored.
-> 
-> Finally, `__xdp_build_skb_from_frame()` attempts to construct an
-> `sk_buff` from the uninitialized `xdp_frame`. It reads uninitialized
-> members (e.g., `data`, `headroom`, `frame_sz`) to compute a `hard_start`
-> address, which is then passed to `build_skb_around()`. The underlying
-> `__build_skb_around()` attempts to write to this invalid address,
-> resulting in a kernel crash.
-> 
-> ## Execution Flow Visualization
-> 
-> ```
-> Vulnerability Execution Flow
-> |
-> |--- 1. An XDP program is loaded with act XDP_PASS
-> |
-> |--- 2. `bpf(BPF_PROG_TEST_RUN, ...)` Syscall Execution
-> |    |
-> |    `-- bpf_test_run_xdp_live
-> |        |
-> |        `-- xdp_test_run_setup
-> |        |   |
-> |        |   `--> page_pool_create() with init callback
-> xdp_test_run_init_page()
-> |        |         |
-> |        |         `--> xdp_update_frame_from_buff() may fail, but error
-> is ignored, leaving xdp_frame uninitialized
-> |        |
-> |        `-- xdp_test_run_batch
-> |             |
-> |             |--> page_pool_dev_alloc_pages() returns page with
-> uninitialized xdp_frame
-> |             |
-> |             `--> xdp_recv_frames
-> |                   |
-> |                   |--> __xdp_build_skb_from_frame() reads
-> uninitialized xdpf members, computes invalid hard_start address, passes
-> it to build_skb_around()
-> |                   |
-> |                   `--> __build_skb_around() writes to invalid address
-> -> CRASH
-> ```
-> 
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-This looks a legit issue. Toke, please help to take a look.
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/20346662777
 
+--===============2847465728903958225==--
