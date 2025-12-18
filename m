@@ -1,123 +1,106 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D30D13126BE;
-	Thu, 18 Dec 2025 18:28:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66EF0335567
+	for <bpf@vger.kernel.org>; Thu, 18 Dec 2025 19:32:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766082481; cv=none; b=n5AWmQp12d/c/pYZj6AuOShhiDCKGRn7Z6HkifbytwKF+/qVKk+q39csVJrYlmVCcqj6FFyXuuVqBYBkI0/1JrJGJEMmtod0dHI20QhWdgJDmZRcg/prUr4hDSEmbtG4Gue0MhzPEJXd/wq4bZAiTZEgeBDDJ2IR9+kGQ3yRynA=
+	t=1766086329; cv=none; b=L2fL3x1D/oK1VwYQNk/ZgZhgpt6mGyfFBjmh5NZVWa9wHzrK42NSLd5D6mh/Y6JIzsXoiU8gR3O9d/4ngRiCCL369f1hSmkiqF1gbZ09ilupVOgxYIWfFIuut+r5bqg1Mgq9FpO6roaFMGMeYFnR/NuWSGXvummLHj+1Nhhtz4w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766082481; c=relaxed/simple;
-	bh=sOmCQApvY7MQRYUL2cFCwah6QCaJh7ECm+G7QeKmctY=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=JrNhHMBnGMttyPq6kW0t7rZU/EYMoSedtKpaC+0Lb3fefa8LPBpBK+VphI9tmFy2sg68mLfT2ZyX6VhLn0/cDWI/e4Eiw9wk8ozzNYYgmRyXCNXX3PVAdjl5sgYwdCc4ZfEuOQcvSltFLCPE/JWKPOyknyb69R/0Tkux6axa6Cc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xj1cMl8Y; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1766086329; c=relaxed/simple;
+	bh=ssIwjLKhW7TxPZZsMXmemlCPcgF9XDpevuAc5bMB6Ck=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=KYFl/H90FclP3FSUZAjSWfCReupxJAgcw/yg7Ufig58q5aBVv7CI2yzAUsqdxnOhUgc2PcU1jxCGicIaCaJ7NtyKW7YyTHysZj+b9ziVlYOQm8/N84OAo/GDxT7K847u8Af6oQv1fb6sKVUdPydW3EivfAFOGinMcsrURKYZeio=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fUnrAiqz; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xj1cMl8Y"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D059C16AAE;
-	Thu, 18 Dec 2025 18:27:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1766082478;
-	bh=sOmCQApvY7MQRYUL2cFCwah6QCaJh7ECm+G7QeKmctY=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=Xj1cMl8Ys+hcTQuaHtyW5wOtmtfENQ+tqKZMOapXSpCwOtxGOozC0iJeUNeqLloes
-	 XaWNDFVC55YOSnmsYPGsIT/f7SXmTbzktIuUhRNOp0N4I1sKn8E+3gakiYZbcF5gKS
-	 V+BgW7thdQr91U+QbK5vN8uj9JV1LrinrXBtDzGkYmsXTogtteboRvztMQlL+5ZPJY
-	 m+fX9O4G8b5BlmEfS6fbb3/pIZHY1NaiJsnNFGlKIbZxx7GxyDmB+s2f+YvDqL39QG
-	 bECeZKOaiTimQV0unnNo9zzwjqdIjBIfmUl6Ackzbk2jofCGMvnPSI6xXTpISIDIY8
-	 m7KcF/h8efwKw==
-Content-Type: multipart/mixed; boundary="===============3549994344081258731=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fUnrAiqz"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2a0a95200e8so9391235ad.0
+        for <bpf@vger.kernel.org>; Thu, 18 Dec 2025 11:32:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1766086326; x=1766691126; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=ssIwjLKhW7TxPZZsMXmemlCPcgF9XDpevuAc5bMB6Ck=;
+        b=fUnrAiqzEP/UcjR2HvY8haQeyosVl/6Vb/9ht5bgxpliw4ZT0Bxi1oxtsjK5wNKo8m
+         C5pFl511/x6fixuZKwuLUq/mVx4Uscfdp42kPMu5rKDVaB25ZQ7aE7Yd2nm1clgqk+rQ
+         84oxAOG0Z/sGkXQqwsn6sF7nJYYSuvZnAVhxMIchs/BGiEf9sNt0D4xhQUXvZN1B26/Z
+         FL5asIUXvDWhw8gM339+x3D0Kk6aZvmLsrcWyrXvAe7w3+/cmPwLHsPhKjwcOPYP289L
+         3BmpTQklhCCm+faudTsM49VnDxTi5fv/Prw6dfc7emdPdU9AgpRouk9ZYcHTLNYNboMc
+         SjHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1766086326; x=1766691126;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ssIwjLKhW7TxPZZsMXmemlCPcgF9XDpevuAc5bMB6Ck=;
+        b=SfruWRTgyvcUrnZsPfuQMIHMI2ELBKitkcAvhDP7CDRaMs6fvTsOt1isljxG5vLPNc
+         6tmLoeMDV0BQrSRzfsEn6nEJV9UXtwdJ4pTy5GZrui5xTrFkPn+wUg3LBv90w1FvC1xP
+         hHK81cqVzXFDChGqzDzhoCX/70gzzcrRyTNVN5d6pXg2c7G0mz8kWjACvgL8/xmx99Nr
+         f9gNtz1UuV/FD/WQehrVKVZay71bKZL22Fe+OYIBQxHcArmnAIX2JrJwGMgx/YBXjxPB
+         g/cpGwaf0ep9GAM56uRTSsyxjZuLDKYyT5IN+kQ+SYbvKmbNJyi4CX+vB/8heCyn8J6M
+         fmkg==
+X-Forwarded-Encrypted: i=1; AJvYcCXeC5/2BKgqPJntQ7BLX1OmHzOx1yR8NQ2zG/Bl+w7cZCYMVAdmc3df3RIf6snoh5Y1e4E=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxy5I+6MEC1rUcLo1RnqL9HzU+sg+YgWrtnwKA7W1jV77aeRlTc
+	zHx2YB3YSDwmaRc9+x2Gk5fHEIdYPzYUGwGCERh/Lm+8xSfMPPWmFOhx
+X-Gm-Gg: AY/fxX6jCHZzMDEowjgHbYIrWgj6K22A6kjufxFkMOdQK4WFekACaUwovsmO3DYp2sZ
+	mlo/Fy1D/j5e6W9yIGaxyyiTFxKvIPNKSqnna0L0PICeevSvTEQ/BwwH+2BwgvpDob3Y7x2/e+c
+	KCIioK4CddQjrr7m289MuAyunziA5aWDSAkAW3T39Q3S1Yz3dZ604UaKfhMpC1MgBknsyREwbBj
+	eGifkKfFFLz+W8kW8BQo7BdiX/INhAZSNmkETOxWhYJVsG3Nqpsq5pALKnplM6t1o6OQCwgd3Mm
+	Tq7BIv+CMGmen8lGMSjW5snm3967itiHwbJ6nXVbkxwyCw9qUseoLXBnF59kQ4Fr+guml/ixBoH
+	Yd8BzHDICOy+dQJflDKQl45DFeoFK7fNIlbw4AY7XY1W99hoXbqvr1eyVUkufTjRQZZUgwE0o8B
+	AdzeONsA5M3tN7uedajShIUqRrIEl4Lk4e9hCC/WmZI5j333E=
+X-Google-Smtp-Source: AGHT+IHljvg4KI/iWmhtSRdT/OZ69NXZamkuNiRG2Vuw0TgHR1NsiuAkOpR56lvEGU0UpJFMOWBdBg==
+X-Received: by 2002:a17:902:d484:b0:29e:c283:39fb with SMTP id d9443c01a7336-2a2f2a35736mr3418655ad.52.1766086325869;
+        Thu, 18 Dec 2025 11:32:05 -0800 (PST)
+Received: from ?IPv6:2a03:83e0:115c:1:d912:2088:c593:6daa? ([2620:10d:c090:500::7:e642])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a2f3d6d557sm542115ad.84.2025.12.18.11.32.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Dec 2025 11:32:05 -0800 (PST)
+Message-ID: <843d859737c1b70fb4c7b543c78afdd884840091.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v10 04/13] libbpf: Optimize type lookup with
+ binary search for sorted BTF
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Donglin Peng <dolinux.peng@gmail.com>, ast@kernel.org, 
+	andrii.nakryiko@gmail.com
+Cc: zhangxiaoqin@xiaomi.com, ihor.solodrai@linux.dev, 
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, pengdonglin
+	 <pengdonglin@xiaomi.com>, Alan Maguire <alan.maguire@oracle.com>
+Date: Thu, 18 Dec 2025 11:32:04 -0800
+In-Reply-To: <20251218113051.455293-5-dolinux.peng@gmail.com>
+References: <20251218113051.455293-1-dolinux.peng@gmail.com>
+	 <20251218113051.455293-5-dolinux.peng@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2 (3.56.2-2.fc42) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <fe0e4007f3dac99d114d50ed365885795aa2c22f648e72b57c5ff7e8762f57ce@mail.kernel.org>
-In-Reply-To: <20251218175628.1460321-6-ameryhung@gmail.com>
-References: <20251218175628.1460321-6-ameryhung@gmail.com>
-Subject: Re: [PATCH bpf-next v3 05/16] bpf: Change local_storage->lock and b->lock to rqspinlock
-From: bot+bpf-ci@kernel.org
-To: ameryhung@gmail.com,bpf@vger.kernel.org
-Cc: netdev@vger.kernel.org,alexei.starovoitov@gmail.com,andrii@kernel.org,daniel@iogearbox.net,memxor@gmail.com,martin.lau@kernel.org,kpsingh@kernel.org,yonghong.song@linux.dev,song@kernel.org,haoluo@google.com,ameryhung@gmail.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu, 18 Dec 2025 18:27:58 +0000 (UTC)
 
---===============3549994344081258731==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Thu, 2025-12-18 at 19:30 +0800, Donglin Peng wrote:
+> From: pengdonglin <pengdonglin@xiaomi.com>
+>=20
+> This patch introduces binary search optimization for BTF type lookups
+> when the BTF instance contains sorted types.
+>=20
+> The optimization significantly improves performance when searching for
+> types in large BTF instances with sorted types. For unsorted BTF, the
+> implementation falls back to the original linear search.
+>=20
+> Cc: Eduard Zingerman <eddyz87@gmail.com>
+> Cc: Alexei Starovoitov <ast@kernel.org>
+> Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+> Cc: Alan Maguire <alan.maguire@oracle.com>
+> Cc: Ihor Solodrai <ihor.solodrai@linux.dev>
+> Cc: Xiaoqin Zhang <zhangxiaoqin@xiaomi.com>
+> Signed-off-by: pengdonglin <pengdonglin@xiaomi.com>
+> ---
 
-> diff --git a/kernel/bpf/bpf_local_storage.c b/kernel/bpf/bpf_local_storage.c
-> index fa629a180e9e..1d21ec11c80e 100644
-> --- a/kernel/bpf/bpf_local_storage.c
-> +++ b/kernel/bpf/bpf_local_storage.c
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 
-[ ... ]
-
-> @@ -382,7 +390,10 @@ int bpf_selem_unlink(struct bpf_local_storage_elem *selem, bool reuse_now)
->  	local_storage = rcu_dereference_check(selem->local_storage,
->  					      bpf_rcu_lock_held());
->
-> -	raw_spin_lock_irqsave(&local_storage->lock, flags);
-> +	err = raw_res_spin_lock_irqsave(&local_storage->lock, flags);
-> +	if (err)
-> +		return err;
-
-This change makes bpf_selem_unlink() failable, but bpf_local_storage_map_free()
-calls it in a while loop that continues iterating while hlist_first_rcu()
-returns elements:
-
-    while ((selem = hlist_entry_safe(
-            rcu_dereference_raw(hlist_first_rcu(&b->list)), ...))) {
-        WARN_ON(bpf_selem_unlink(selem, true));
-    }
-
-If bpf_selem_unlink() fails (returns error), the selem is not removed from
-b->list, so hlist_first_rcu() returns the same selem again. Would this cause
-an infinite loop printing warnings until the system becomes unresponsive?
-
-[ ... ]
-
-> @@ -719,7 +743,7 @@ void bpf_local_storage_destroy(struct bpf_local_storage *local_storage)
->  	 * when unlinking elem from the local_storage->list and
->  	 * the map's bucket->list.
->  	 */
-> -	raw_spin_lock_irqsave(&local_storage->lock, flags);
-> +	WARN_ON(raw_res_spin_lock_irqsave(&local_storage->lock, flags));
->  	hlist_for_each_entry_safe(selem, n, &local_storage->list, snode) {
->  		/* Always unlink from map before unlinking from
->  		 * local_storage.
->  		 */
-> -		bpf_selem_unlink_map(selem);
-> +		WARN_ON(bpf_selem_unlink_map(selem));
-
-If raw_res_spin_lock_irqsave() fails, WARN_ON() prints a warning but does
-not prevent execution from continuing. The code then proceeds to iterate
-local_storage->list without holding local_storage->lock, and eventually
-calls raw_res_spin_unlock_irqrestore() at the end without having acquired
-the lock. Does this cause issues with the rqspinlock held-lock tracking,
-which unconditionally decrements its counter in res_spin_unlock()?
-
-Additionally, if bpf_selem_unlink_map() fails, the selem remains linked to
-the map's bucket list, but execution continues and
-bpf_selem_unlink_storage_nolock() removes it from local_storage->list and
-adds it to the free list. When the selem is later freed, would the map's
-bucket still hold a dangling reference to it?
-
-> @@ -734,7 +758,7 @@ void bpf_local_storage_destroy(struct bpf_local_storage *local_storage)
->  		free_storage = bpf_selem_unlink_storage_nolock(
->  			local_storage, selem, &free_selem_list);
->  	}
-> -	raw_spin_unlock_irqrestore(&local_storage->lock, flags);
-> +	raw_res_spin_unlock_irqrestore(&local_storage->lock, flags);
-
-[ ... ]
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/20346662777
-
---===============3549994344081258731==--
+[...]
