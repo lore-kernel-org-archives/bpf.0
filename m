@@ -1,139 +1,179 @@
-Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18E622BEC3A;
-	Thu, 18 Dec 2025 06:22:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.156.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6247E2877C3
+	for <bpf@vger.kernel.org>; Thu, 18 Dec 2025 07:14:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766038967; cv=none; b=AZ5ffQ4p9hqJagJMnJyhv3lboTYNCn5DcTTFscHbenpiq4VvBERAte/WKpaC8hjwxX7BPT388QQ9/MzlQofpc79dF5wTALinO07lzl529SCuMsljGAfvAJD3D2hdIsvGLNRE558YOx4pGJ23uWMjJKqYhASMnyfllBw3/8uwchQ=
+	t=1766042063; cv=none; b=r3T3mkC/uBi57qgGHiHU7pvApxyBEMojK/18e/NVVJrZ6OzwRLaFoq//U0p6/8/sPzcFqmJqJ68mElvPjhG/NACSN3MZatP6uWjq+jtl3iIFvY55zefyogDseHI2UPwpbIslNzeMB1tRs+hbbfWojdzLpNctblFvPtqIZ6Xh1fg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766038967; c=relaxed/simple;
-	bh=NRaRIsDGwjEfXMSjZC/NFMUG4kypo6Es9lBDiFQ10qs=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=m3gjRTdcWOn+yKeSFcepbsnp1o+J8KQ/FAvryixTxY83jen80IA/sbwdwwLJwi2poMP7dt9/5hROxcOG8QEdvbFqQ5ifUIXhs2O31BTBHtHrqFqcZsuXeqCW7SRKuoCPOQCQTVVxsAxTQqLfcU7iX7V6GT0WACgZuwoVFK6WKYg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b=f2CfZn3o; arc=none smtp.client-ip=67.231.156.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=marvell.com
+	s=arc-20240116; t=1766042063; c=relaxed/simple;
+	bh=pdMUtduMXCj5whENGA9N7DnLbY+JEMVMPlaas2KdqgI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=n+ZzFmbouVwgu4aWRGaaiTpipSEfnAb4bGbEBbHVEhb2EPShHCgHW1Hmp7h4RfPuZvG6Rh8JdlF/GPT73Ld9U0gEHGmM5lOomoD5xKVjE05n58sAXdr/fcmh8ailxiS1NESHYl2ynDzVivnEMFEOQkj6OmJMaIdjBonce/Kn5hc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=aLs2Ee5q; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=kD6QzC6G; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b="f2CfZn3o"
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-	by mx0b-0016f401.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5BHNW1xA238011;
-	Wed, 17 Dec 2025 22:21:51 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=pfpt0220; bh=QnU9W7deeMrcvpR9ljaEaTJJv
-	JbQij1DQub+QTx1CYs=; b=f2CfZn3oBtXySP0x5i/PJl4htTdJqX8wloWnZvOqU
-	L4apeJ7lWzwsdpyIi9aPBkG7S00oJUpxS7uO2JFDGCPRsMTiMMuFg6bV1iMkngbt
-	T7Zmq7cwZLrStHo5pIl1rh/tYxt/cLwQ7EwR7J7v6aUrvGs2/unRFZUE8yPPqCnM
-	9bGoEKfvHGQjrTtH3sSPcQewDQlrZ9rsYvTf1/ksDwzftxWJVilnU4j70n9sp5Mf
-	AAbHkptOnY5PcORBdLd6jGMuS3VcWmPf3geMfteJZIdkdYn60d3W8qrmojtZGLiO
-	JXySOmppc+Anm4cc+AW7FbquKyGVfkdOADtXOD04eFFgg==
-Received: from dc5-exch05.marvell.com ([199.233.59.128])
-	by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 4b3w5s1yju-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 17 Dec 2025 22:21:51 -0800 (PST)
-Received: from DC5-EXCH05.marvell.com (10.69.176.209) by
- DC5-EXCH05.marvell.com (10.69.176.209) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.25; Wed, 17 Dec 2025 22:22:03 -0800
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH05.marvell.com
- (10.69.176.209) with Microsoft SMTP Server id 15.2.1544.25 via Frontend
- Transport; Wed, 17 Dec 2025 22:22:03 -0800
-Received: from test-OptiPlex-Tower-Plus-7010 (unknown [10.29.37.157])
-	by maili.marvell.com (Postfix) with SMTP id D412B3F70C1;
-	Wed, 17 Dec 2025 22:21:43 -0800 (PST)
-Date: Thu, 18 Dec 2025 11:51:42 +0530
-From: Hariprasad Kelam <hkelam@marvell.com>
-To: Wei Fang <wei.fang@nxp.com>
-CC: "andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>,
-        "davem@davemloft.net"
-	<davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "mcoquelin.stm32@gmail.com" <mcoquelin.stm32@gmail.com>,
-        "alexandre.torgue@foss.st.com" <alexandre.torgue@foss.st.com>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "daniel@iogearbox.net"
-	<daniel@iogearbox.net>,
-        "hawk@kernel.org" <hawk@kernel.org>,
-        "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
-        "sdf@fomichev.me"
-	<sdf@fomichev.me>,
-        "rmk+kernel@armlinux.org.uk" <rmk+kernel@armlinux.org.uk>,
-        "0x1207@gmail.com" <0x1207@gmail.com>,
-        "hayashi.kunihiko@socionext.com"
-	<hayashi.kunihiko@socionext.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        "boon.leong.ong@intel.com" <boon.leong.ong@intel.com>,
-        "imx@lists.linux.dev"
-	<imx@lists.linux.dev>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-stm32@st-md-mailman.stormreply.com"
-	<linux-stm32@st-md-mailman.stormreply.com>,
-        "linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>,
-        "bpf@vger.kernel.org"
-	<bpf@vger.kernel.org>
-Subject: Re: [PATCH net] net: stmmac: fix the crash issue for zero copy
- XDP_TX action
-Message-ID: <aUOddielBMkrmwhd@test-OptiPlex-Tower-Plus-7010>
-References: <20251204071332.1907111-1-wei.fang@nxp.com>
- <aUKPHdtAPDnMqB7X@test-OptiPlex-Tower-Plus-7010>
- <AS8PR04MB849779A6392D543049A3F5BE88ABA@AS8PR04MB8497.eurprd04.prod.outlook.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="aLs2Ee5q";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="kD6QzC6G"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1766042060;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=oNBsiLM1lI5WSv0gDo/xxnKGXTG+8RkXyoth8Hg52dk=;
+	b=aLs2Ee5qVfUHNo+cKCdt5ERD7tpHxLjPW35gTUDGsty01cM7qxlNwMtbFWB9kYYHEOWRPR
+	34czcntWkXseOisZeisTZRaOFc/bvc4ftrK1G0NtPpLFPnisK3peU4QGL6Mo12xvsuXlDJ
+	B/ejXaA+pYFOZsYNgJYu0BoX5xJjVHM=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-306-KLi16BCeOfKHM6Sp6M0ORA-1; Thu, 18 Dec 2025 02:14:18 -0500
+X-MC-Unique: KLi16BCeOfKHM6Sp6M0ORA-1
+X-Mimecast-MFC-AGG-ID: KLi16BCeOfKHM6Sp6M0ORA_1766042057
+Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-430f5dcd4d3so155132f8f.1
+        for <bpf@vger.kernel.org>; Wed, 17 Dec 2025 23:14:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1766042056; x=1766646856; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=oNBsiLM1lI5WSv0gDo/xxnKGXTG+8RkXyoth8Hg52dk=;
+        b=kD6QzC6GiQmYrdH4YxH7W2Gj77eHBrbcWvGvJrulBJpYs+ya+7f8fIv2uGgQ/O0B8m
+         Fz5DMDxstvMDHrBdM9GMU7QwEwy3bf5WMX+/P6PwdEyqeYwxl/GWkR07iF9RrfU0o7lB
+         3MPWhG8+PXQ7wScmUJ4OdtSas1SCuLGgmlcBJmnZnOVGOFO61pjbyxw0EKpdH8OQPT0E
+         cR+jwyalByW5W7wGf55tLF07tR3HUrgxRmANRCgN9sr/UxY3IqtHidQgJLpgKs59WYJF
+         b7aDvWN3u+6BOPkN/pKUbKUzmhkFmb2XRgZNpQFjxFFt27qUHL2OByawW7JVhtbUUAG+
+         l33g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1766042056; x=1766646856;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oNBsiLM1lI5WSv0gDo/xxnKGXTG+8RkXyoth8Hg52dk=;
+        b=kZkHq1HEgvk6vv5PASx/b/cA+MC+dtiu+6hmrsB/DGsLE4jVgH2nHq1cqNtY5M++YX
+         qOlunm9pdJbnmv00y5/EuhRTjGNqJYuqUPKXkOnXB0m+sdQKaF4lyBvaDhbuEC/zqRKK
+         /Gyj8Vfvk2HG0OQOn/UPuDsygOgHfqIlkLp+5L81Fv1+s87Hm/+J2QiyJTz7diUn1TWe
+         suGnRsTWGZ+FVafgte9UxrswhLcWTFR6xCsyOvUQd2q6tisCeEiVpQln47k37534d0i8
+         f0dX7YlRJwZfVlBgPnn99uPZ0jEjx3MVCRqL/jrXoecVbJgaj4Jj5z+HgQt+7DCaWZDv
+         aByg==
+X-Forwarded-Encrypted: i=1; AJvYcCVIpthDjhL8RuuZoF76p2n//hSn86z6T1Gmy87U7bNWAhzfF7xc+1LsAVum4yivvyzsyZ0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywxjm69TiaIhBVuBLpj1jAmYscxW5jhbB3byK1B0mYTwNsXNAPx
+	8tDwzUuZNhpOORCWMOn9NfBFRri99yifvJfdP6ijS38psXGB7LwrYEj6hxyO+phjBPGC2IeDWNB
+	AO9/2KrrbPZnL4Mqq3bS/x9sb3Cchp6EyafQaqibsCwuOaOQZH+IJ3obYyV+x8Q==
+X-Gm-Gg: AY/fxX44h6qeY/GRL++/kf/XBSbLYVwe96W/Lp2Mqr/an1GMIJghvCvTcUCCTjIi5cD
+	qKB6wjBnUwTy7sGGTpie+iQ6XFpeJh/yytv351ftNwbBTxWuRTbAilMe8mAXeQnRr0e9Y3v0Z/2
+	Ejw2t5Xfg9PvYM8Z2XfrM7dGsEtJ8lBrvROojm8Pprzf+ngxB1i6GUtkqBgel+rjSqVKHeTykzQ
+	g5S3YBXJAPn4V8me9VXb6HZLQKlOFRi0ZhKVNm1RNW1NP8vLRaMn6byxiXBP5CeeiUCoGi7o4Ao
+	c4BGztwb/n3OsOyeSiH5rx6j5ZywBr7z+ubeif4oP1CmDZ1IAHgNYT6BpWhQpeKyXg0iWLNHsL/
+	CLkHYRnuhg/f2HJZtIgEpmairZwDlQ9Z5xqE5sXLH
+X-Received: by 2002:a05:6000:3113:b0:430:fbce:458a with SMTP id ffacd0b85a97d-432448b7f11mr2026731f8f.18.1766042056140;
+        Wed, 17 Dec 2025 23:14:16 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHmwvfPARt5/oktdF01vTTh+pbj0DvIQNLkJ0QsqlEvJKz7q81ZhZQ2a/z1plKZxslmFO/O2g==
+X-Received: by 2002:a05:6000:3113:b0:430:fbce:458a with SMTP id ffacd0b85a97d-432448b7f11mr2026688f8f.18.1766042055684;
+        Wed, 17 Dec 2025 23:14:15 -0800 (PST)
+Received: from jlelli-thinkpadt14gen4.remote.csb ([151.29.129.40])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4324493fe27sm3248198f8f.12.2025.12.17.23.14.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Dec 2025 23:14:15 -0800 (PST)
+Date: Thu, 18 Dec 2025 08:14:13 +0100
+From: Juri Lelli <juri.lelli@redhat.com>
+To: Andrea Righi <arighi@nvidia.com>
+Cc: Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+	Valentin Schneider <vschneid@redhat.com>, Tejun Heo <tj@kernel.org>,
+	David Vernet <void@manifault.com>,
+	Changwoo Min <changwoo@igalia.com>, Shuah Khan <shuah@kernel.org>,
+	Joel Fernandes <joelagnelf@nvidia.com>,
+	Christian Loehle <christian.loehle@arm.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>, sched-ext@lists.linux.dev,
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 4/7] sched_ext: Add a DL server for sched_ext tasks
+Message-ID: <aUOpxVIQieTOMifV@jlelli-thinkpadt14gen4.remote.csb>
+References: <20251217093923.1556187-1-arighi@nvidia.com>
+ <20251217093923.1556187-5-arighi@nvidia.com>
+ <aULQ7kPm-RqHWGDL@jlelli-thinkpadt14gen4.remote.csb>
+ <aUMmuRI-ZljfDuh9@gpd4>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <AS8PR04MB849779A6392D543049A3F5BE88ABA@AS8PR04MB8497.eurprd04.prod.outlook.com>
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjE4MDA1MCBTYWx0ZWRfX58H1lLqEekM7
- GAUAaaNMq92E4QYI6TfFDXq0fJJqIS59lalZ5uiZH9wNP/NncPI2UmdOu9Z2tvqtv4ZGNQRmuTR
- iwd0TGRySBMwD/0/cpLUUdS0ZF866dcE2BOqhDtc5VwFsEIPgH9fXxYJsHx/sqN7fFVgZFamETQ
- x+ZgiZjftcnNNiGd08amDKjaTLQfjZg621kK6aplA2/vPHM6NkSCLp+ZXD7zNbFW+zQGaxOiDED
- y0YYNXwcYzsoYNLswpV95c8TfWARaqi+gnu7cnVdKYCVXvO9NUGML5W9uiHdD1V7fk4sRzzXuLr
- uVRRjABUGpUGo8nx4kyWOHKq3iq6D/DrC0tPdwhHC5y/CHcD1C0geHW3pBcVCoajui7ccUx90fK
- L6hn/qoQ9qj0Rf2Gzn4cYrmKc2iR3A==
-X-Proofpoint-GUID: jUik8wHEQLBJBYXI0BOoajfYtHppzs5j
-X-Proofpoint-ORIG-GUID: jUik8wHEQLBJBYXI0BOoajfYtHppzs5j
-X-Authority-Analysis: v=2.4 cv=Zpvg6t7G c=1 sm=1 tr=0 ts=69439d7f cx=c_pps
- a=rEv8fa4AjpPjGxpoe8rlIQ==:117 a=rEv8fa4AjpPjGxpoe8rlIQ==:17
- a=w373o-ZMvzc93a0z:21 a=kj9zAlcOel0A:10 a=wP3pNCr1ah4A:10
- a=VkNPw1HP01LnGYTKEx00:22 a=8AirrxEcAAAA:8 a=XlXf_pu8Z8fFeJWwk6sA:9
- a=CjuIK1q_8ugA:10 a=ST-jHhOKWsTCqRlWije3:22 a=gFKHwRTsc5ICqspHuaiD:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-12-18_01,2025-12-17_02,2025-10-01_01
+In-Reply-To: <aUMmuRI-ZljfDuh9@gpd4>
 
-On 2025-12-17 at 18:19:19, Wei Fang (wei.fang@nxp.com) wrote:
-> > > -	res = stmmac_xdp_xmit_xdpf(priv, queue, xdpf, false);
-> > > -	if (res == STMMAC_XDP_TX)
-> > > +	/* For zero copy XDP_TX action, dma_map is true */
-> > > +	res = stmmac_xdp_xmit_xdpf(priv, queue, xdpf, zc);
-> > 	Seems stmmac_xdp_xmit_xdpf is using dma_map_single if we pass zc is
-> > true.
-> >         Ideally in case of zc, driver can use page_pool_get_dma_addr, may be
-> > you
-> >         need pass zc param as false. Please check
-> > 
+Hi!
+
+On 17/12/25 22:55, Andrea Righi wrote:
+> sched_ext currently suffers starvation due to RT. The same workload when
+> converted to EXT can get zero runtime if RT is 100% running, causing EXT
+> processes to stall. Fix it by adding a DL server for EXT.
 > 
-> No, the memory type of xdpf->data is MEM_TYPE_PAGE_ORDER0 rather
-> than MEM_TYPE_PAGE_POOL, so we should use dma_map_single().
-> Otherwise, it will lead to invalid mappings and cause the crash.
+> A kselftest is also included later to confirm that both DL servers are
+> functioning correctly:
 > 
->
- ACK, found below code bit confusing
-		case STMMAC_XDP_CONSUMED:
- 			xsk_buff_free(buf->xdp);
-+			fallthrough;
-+		case STMMAC_XSK_CONSUMED:
- 			rx_dropped++; 
-              
-     Ideally in case of STMMAC_XSK_CONSUMED, driver needs to call xsk_buff_free.
-     And in case of STMMAC_XDP_CONSUMED, driver needs to call xdp_return_frame.
-     May be you can move all buffer free logic to stmmac_rx_zc with above suggested
-     changes.
+>  # ./runner -t rt_stall
+>  ===== START =====
+>  TEST: rt_stall
+>  DESCRIPTION: Verify that RT tasks cannot stall SCHED_EXT tasks
+>  OUTPUT:
+>  TAP version 13
+>  1..1
+>  # Runtime of FAIR task (PID 1511) is 0.250000 seconds
+>  # Runtime of RT task (PID 1512) is 4.750000 seconds
+>  # FAIR task got 5.00% of total runtime
+>  ok 1 PASS: FAIR task got more than 4.00% of runtime
+>  TAP version 13
+>  1..1
+>  # Runtime of EXT task (PID 1514) is 0.250000 seconds
+>  # Runtime of RT task (PID 1515) is 4.750000 seconds
+>  # EXT task got 5.00% of total runtime
+>  ok 2 PASS: EXT task got more than 4.00% of runtime
+>  TAP version 13
+>  1..1
+>  # Runtime of FAIR task (PID 1517) is 0.250000 seconds
+>  # Runtime of RT task (PID 1518) is 4.750000 seconds
+>  # FAIR task got 5.00% of total runtime
+>  ok 3 PASS: FAIR task got more than 4.00% of runtime
+>  TAP version 13
+>  1..1
+>  # Runtime of EXT task (PID 1521) is 0.250000 seconds
+>  # Runtime of RT task (PID 1522) is 4.750000 seconds
+>  # EXT task got 5.00% of total runtime
+>  ok 4 PASS: EXT task got more than 4.00% of runtime
+>  ok 1 rt_stall #
+>  =====  END  =====
+> 
+> v5: - do not restart the EXT server on switch_class() (Juri Lelli)
+> v4: - initialize EXT server bandwidth reservation at init time and
+>       always keep it active (Andrea Righi)
+>     - check for rq->nr_running == 1 to determine when to account idle
+>       time (Juri Lelli)
+> v3: - clarify that fair is not the only dl_server (Juri Lelli)
+>     - remove explicit stop to reduce timer reprogramming overhead
+>       (Juri Lelli)
+>     - do not restart pick_task() when it's invoked by the dl_server
+>       (Tejun Heo)
+>     - depend on CONFIG_SCHED_CLASS_EXT (Andrea Righi)
+> v2: - drop ->balance() now that pick_task() has an rf argument
+>       (Andrea Righi)
+> 
+> Tested-by: Christian Loehle <christian.loehle@arm.com>
+> Co-developed-by: Joel Fernandes <joelagnelf@nvidia.com>
+> Signed-off-by: Joel Fernandes <joelagnelf@nvidia.com>
+> Signed-off-by: Andrea Righi <arighi@nvidia.com>
+> ---
+
+This new version looks good to me, thanks!
+
+Reviewed-by: Juri Lelli <juri.lelli@redhat.com>
+
+Best,
+Juri
+
