@@ -1,32 +1,32 @@
-Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
+Received: from out-180.mta1.migadu.com (out-180.mta1.migadu.com [95.215.58.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42EF6AD5A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AB941EEE6
 	for <bpf@vger.kernel.org>; Fri, 19 Dec 2025 01:58:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766109505; cv=none; b=kJOnWTGcZgyVRR4t2cyyolaUyNUWvXpdn5rnqJLMBzJKMdQ+BQzvWXh9DbZIm47pu/d5on3hFmBW8IMKtiedIh7+nzKMSnzG5dHg5GHXkHDd5m9jTgkYT338d9Lrsj1umuFldrrwkocV4Nh1LahmwshrJUMQQGRZloRw6By7l8E=
+	t=1766109506; cv=none; b=t4x6abpJGYQiUq5mH2vzNjLQcYPKVNm4SG1i4ORAL92RrCouxso5uJEngo6hmk6BCaLAh+PFSHUvoQET7BwCpP0bqNWTEf0mIqdW81BTvXPLHg7CHcP4p9d+m92/lcGb4fVGiSO5XUJDndAPAu4WABoZOjBLVH6oQaoaJkTIs58=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766109505; c=relaxed/simple;
-	bh=SUzjmJ/qp3+OEfDECND6JC/aBO+xVfNML/kcfnYiUk4=;
+	s=arc-20240116; t=1766109506; c=relaxed/simple;
+	bh=HcY+vy9al7sqF1VTO6SnMDZIWH3un9eML8EgBe8odQY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=h1Lkj560poPQj4lRLNgnriYmnDPIY2qUQw5CaTaQmXzdRYjPRTU0euVD6/CVDVnf30YrtRzK6f2/9/NsHK/hM9Wc8DohVBiaOesU60xMuXO2hbu9DybVKvOKDx5GJCcB8s8LJQko/wRjLvvVvtCLmrQGskq4a+fXPzvn6nmcFKM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=DFfbZWiC; arc=none smtp.client-ip=95.215.58.170
+	 MIME-Version; b=A1+LnvUjJjHS698GkNAeyxqIGxrqX0fHc2yeiaFaDDjp+18RVGUoNMy5q0BXiigZ9gJgOx+q6zxgm+j0M6UwjERg2MVmtK26sqAdZsZPk6BJKwxoUIYeHWP6I7gWggq4pU8VjBNO3YgQufGwqWXdgKH97XWXOhzG5oMU05hOMgE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=OJZpfSSL; arc=none smtp.client-ip=95.215.58.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="DFfbZWiC"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="OJZpfSSL"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1766109495;
+	t=1766109502;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=bTktsG7ST0CgeUUMGlE5kKsDclUE4lDCG2tInOPeljI=;
-	b=DFfbZWiCA55KAw8LDUto63tYUC/7C46Wrgqkf7IkJsWlewiLqPtgh8oEIBwP6b4dV3EnMR
-	nCFsu7r+TmfSu3YCi/VQYo0DMUKk6dRck+8Lrd2d014ZYfTKhMB6dyNq0b7vso3kFciW9U
-	BNA6Ha17E7WuPhvvkK9sx80Y0m+uZpc=
+	bh=tV9usWj80Ogq6TmS1s38ufUGObR0UVII6OSc269xPng=;
+	b=OJZpfSSLWmxnrDoRf3dLWFLBZCHSMtqgqIoVmgBjETvoq9jAEtKmEADoWR7yhZycqaQI/m
+	qKNG03HQqr83it08rbNZN2x/PhP8IPam3LYIQjq2BXvtmZKVmtx5Jm40ODgiTJK++L0Xhe
+	PkdIT//XPDO6UyCPRuKhuY9+joRuN8Y=
 From: Roman Gushchin <roman.gushchin@linux.dev>
 To: bpf@vger.kernel.org,
 	linux-mm@kvack.org,
@@ -36,12 +36,10 @@ Cc: JP Kobryn <inwardvessel@gmail.com>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Shakeel Butt <shakeel.butt@linux.dev>,
 	Michal Hocko <mhocko@kernel.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Michal Hocko <mhocko@suse.com>
-Subject: [PATCH bpf-next v1 4/6] mm: introduce BPF kfuncs to access memcg statistics and events
-Date: Thu, 18 Dec 2025 17:57:48 -0800
-Message-ID: <20251219015750.23732-5-roman.gushchin@linux.dev>
+	Johannes Weiner <hannes@cmpxchg.org>
+Subject: [PATCH bpf-next v1 6/6] bpf: selftests: selftests for memcg stat kfuncs
+Date: Thu, 18 Dec 2025 17:57:50 -0800
+Message-ID: <20251219015750.23732-7-roman.gushchin@linux.dev>
 In-Reply-To: <20251219015750.23732-1-roman.gushchin@linux.dev>
 References: <20251219015750.23732-1-roman.gushchin@linux.dev>
 Precedence: bulk
@@ -53,165 +51,329 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-Introduce BPF kfuncs to conveniently access memcg data:
-  - bpf_mem_cgroup_vm_events(),
-  - bpf_mem_cgroup_usage(),
-  - bpf_mem_cgroup_page_state(),
-  - bpf_mem_cgroup_flush_stats().
+From: JP Kobryn <inwardvessel@gmail.com>
 
-These functions are useful for implementing BPF OOM policies, but
-also can be used to accelerate access to the memcg data. Reading
-it through cgroupfs is much more expensive, roughly 5x, mostly
-because of the need to convert the data into the text and back.
+Add test coverage for the kfuncs that fetch memcg stats. Using some common
+stats, test scenarios ensuring that the given stat increases by some
+arbitrary amount. The stats selected cover the three categories represented
+by the enums: node_stat_item, memcg_stat_item, vm_event_item.
 
-JP Kobryn:
-An experiment was setup to compare the performance of a program that
-uses the traditional method of reading memory.stat vs a program using
-the new kfuncs. The control program opens up the root memory.stat file
-and for 1M iterations reads, converts the string values to numeric data,
-then seeks back to the beginning. The experimental program sets up the
-requisite libbpf objects and for 1M iterations invokes a bpf program
-which uses the kfuncs to fetch all available stats for node_stat_item,
-memcg_stat_item, and vm_event_item types.
+Since only a subset of all stats are queried, use a static struct made up
+of fields for each stat. Write to the struct with the fetched values when
+the bpf program is invoked and read the fields in the user mode program for
+verification.
 
-The results showed a significant perf benefit on the experimental side,
-outperforming the control side by a margin of 93%. In kernel mode,
-elapsed time was reduced by 80%, while in user mode, over 99% of time
-was saved.
-
-control: elapsed time
-real    0m38.318s
-user    0m25.131s
-sys     0m13.070s
-
-experiment: elapsed time
-real    0m2.789s
-user    0m0.187s
-sys     0m2.512s
-
-control: perf data
-33.43% a.out libc.so.6         [.] __vfscanf_internal
- 6.88% a.out [kernel.kallsyms] [k] vsnprintf
- 6.33% a.out libc.so.6         [.] _IO_fgets
- 5.51% a.out [kernel.kallsyms] [k] format_decode
- 4.31% a.out libc.so.6         [.] __GI_____strtoull_l_internal
- 3.78% a.out [kernel.kallsyms] [k] string
- 3.53% a.out [kernel.kallsyms] [k] number
- 2.71% a.out libc.so.6         [.] _IO_sputbackc
- 2.41% a.out [kernel.kallsyms] [k] strlen
- 1.98% a.out a.out             [.] main
- 1.70% a.out libc.so.6         [.] _IO_getline_info
- 1.51% a.out libc.so.6         [.] __isoc99_sscanf
- 1.47% a.out [kernel.kallsyms] [k] memory_stat_format
- 1.47% a.out [kernel.kallsyms] [k] memcpy_orig
- 1.41% a.out [kernel.kallsyms] [k] seq_buf_printf
-
-experiment: perf data
-10.55% memcgstat bpf_prog_..._query [k] bpf_prog_16aab2f19fa982a7_query
- 6.90% memcgstat [kernel.kallsyms]  [k] memcg_page_state_output
- 3.55% memcgstat [kernel.kallsyms]  [k] _raw_spin_lock
- 3.12% memcgstat [kernel.kallsyms]  [k] memcg_events
- 2.87% memcgstat [kernel.kallsyms]  [k] __memcg_slab_post_alloc_hook
- 2.73% memcgstat [kernel.kallsyms]  [k] kmem_cache_free
- 2.70% memcgstat [kernel.kallsyms]  [k] entry_SYSRETQ_unsafe_stack
- 2.25% memcgstat [kernel.kallsyms]  [k] __memcg_slab_free_hook
- 2.06% memcgstat [kernel.kallsyms]  [k] get_page_from_freelist
-
-Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
-Co-developed-by: JP Kobryn <inwardvessel@gmail.com>
 Signed-off-by: JP Kobryn <inwardvessel@gmail.com>
-Acked-by: Michal Hocko <mhocko@suse.com>
 ---
- include/linux/memcontrol.h |  2 ++
- mm/bpf_memcontrol.c        | 55 ++++++++++++++++++++++++++++++++++++++
- 2 files changed, 57 insertions(+)
+ .../testing/selftests/bpf/cgroup_iter_memcg.h |  18 ++
+ .../bpf/prog_tests/cgroup_iter_memcg.c        | 223 ++++++++++++++++++
+ .../selftests/bpf/progs/cgroup_iter_memcg.c   |  42 ++++
+ 3 files changed, 283 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/cgroup_iter_memcg.h
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c
+ create mode 100644 tools/testing/selftests/bpf/progs/cgroup_iter_memcg.c
 
-diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
-index b309d13110af..8c1ba4477d36 100644
---- a/include/linux/memcontrol.h
-+++ b/include/linux/memcontrol.h
-@@ -949,6 +949,8 @@ static inline void mod_memcg_page_state(struct page *page,
- 	rcu_read_unlock();
- }
- 
-+unsigned long memcg_events(struct mem_cgroup *memcg, int event);
-+unsigned long mem_cgroup_usage(struct mem_cgroup *memcg, bool swap);
- unsigned long memcg_page_state(struct mem_cgroup *memcg, int idx);
- unsigned long memcg_page_state_output(struct mem_cgroup *memcg, int item);
- unsigned long lruvec_page_state(struct lruvec *lruvec, enum node_stat_item idx);
-diff --git a/mm/bpf_memcontrol.c b/mm/bpf_memcontrol.c
-index 6d0d73bf0dd1..4d9d7d909f6c 100644
---- a/mm/bpf_memcontrol.c
-+++ b/mm/bpf_memcontrol.c
-@@ -75,6 +75,56 @@ __bpf_kfunc void bpf_put_mem_cgroup(struct mem_cgroup *memcg)
- 	css_put(&memcg->css);
- }
- 
-+/**
-+ * bpf_mem_cgroup_vm_events - Read memory cgroup's vm event counter
-+ * @memcg: memory cgroup
-+ * @event: event id
-+ *
-+ * Allows to read memory cgroup event counters.
-+ */
-+__bpf_kfunc unsigned long bpf_mem_cgroup_vm_events(struct mem_cgroup *memcg,
-+						enum vm_event_item event)
+diff --git a/tools/testing/selftests/bpf/cgroup_iter_memcg.h b/tools/testing/selftests/bpf/cgroup_iter_memcg.h
+new file mode 100644
+index 000000000000..3f59b127943b
+--- /dev/null
++++ b/tools/testing/selftests/bpf/cgroup_iter_memcg.h
+@@ -0,0 +1,18 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/* Copyright (c) 2025 Meta Platforms, Inc. and affiliates. */
++#ifndef __CGROUP_ITER_MEMCG_H
++#define __CGROUP_ITER_MEMCG_H
++
++struct memcg_query {
++	/* some node_stat_item's */
++	unsigned long nr_anon_mapped;
++	unsigned long nr_shmem;
++	unsigned long nr_file_pages;
++	unsigned long nr_file_mapped;
++	/* some memcg_stat_item */
++	unsigned long memcg_kmem;
++	/* some vm_event_item */
++	unsigned long pgfault;
++};
++
++#endif /* __CGROUP_ITER_MEMCG_H */
+diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c b/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c
+new file mode 100644
+index 000000000000..215e4c98c76f
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c
+@@ -0,0 +1,223 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2025 Meta Platforms, Inc. and affiliates. */
++#include <test_progs.h>
++#include <bpf/libbpf.h>
++#include <bpf/btf.h>
++#include <fcntl.h>
++#include <sys/mman.h>
++#include <unistd.h>
++#include "cgroup_helpers.h"
++#include "cgroup_iter_memcg.h"
++#include "cgroup_iter_memcg.skel.h"
++
++static int read_stats(struct bpf_link *link)
 +{
-+	return memcg_events(memcg, event);
++	int fd, ret = 0;
++	ssize_t bytes;
++
++	fd = bpf_iter_create(bpf_link__fd(link));
++	if (!ASSERT_OK_FD(fd, "bpf_iter_create"))
++		return 1;
++
++	/*
++	 * Invoke iter program by reading from its fd. We're not expecting any
++	 * data to be written by the bpf program so the result should be zero.
++	 * Results will be read directly through the custom data section
++	 * accessible through skel->data_query.memcg_query.
++	 */
++	bytes = read(fd, NULL, 0);
++	if (!ASSERT_EQ(bytes, 0, "read fd"))
++		ret = 1;
++
++	close(fd);
++	return ret;
 +}
 +
-+/**
-+ * bpf_mem_cgroup_usage - Read memory cgroup's usage
-+ * @memcg: memory cgroup
-+ *
-+ * Returns current memory cgroup size in bytes.
-+ */
-+__bpf_kfunc unsigned long bpf_mem_cgroup_usage(struct mem_cgroup *memcg)
++static void test_anon(struct bpf_link *link, struct memcg_query *memcg_query)
 +{
-+	return page_counter_read(&memcg->memory) * PAGE_SIZE;
++	void *map;
++	size_t len;
++
++	len = sysconf(_SC_PAGESIZE) * 1024;
++
++	/*
++	 * Increase memcg anon usage by mapping and writing
++	 * to a new anon region.
++	 */
++	map = mmap(NULL, len, PROT_WRITE, MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
++	if (!ASSERT_NEQ(map, MAP_FAILED, "mmap anon"))
++		return;
++
++	memset(map, 1, len);
++
++	if (!ASSERT_OK(read_stats(link), "read stats"))
++		goto cleanup;
++
++	ASSERT_GT(memcg_query->nr_anon_mapped, 0, "final anon mapped val");
++
++cleanup:
++	munmap(map, len);
 +}
 +
-+/**
-+ * bpf_mem_cgroup_page_state - Read memory cgroup's page state counter
-+ * @memcg: memory cgroup
-+ * @idx: counter idx
-+ *
-+ * Allows to read memory cgroup statistics. The output is in bytes.
-+ */
-+__bpf_kfunc unsigned long bpf_mem_cgroup_page_state(struct mem_cgroup *memcg, int idx)
++static void test_file(struct bpf_link *link, struct memcg_query *memcg_query)
 +{
-+	if (idx < 0 || idx >= MEMCG_NR_STAT)
-+		return (unsigned long)-1;
++	void *map;
++	size_t len;
++	char *path;
++	int fd;
 +
-+	return memcg_page_state_output(memcg, idx);
++	len = sysconf(_SC_PAGESIZE) * 1024;
++	path = "/tmp/test_cgroup_iter_memcg";
++
++	/*
++	 * Increase memcg file usage by creating and writing
++	 * to a mapped file.
++	 */
++	fd = open(path, O_CREAT | O_RDWR, 0644);
++	if (!ASSERT_OK_FD(fd, "open fd"))
++		return;
++	if (!ASSERT_OK(ftruncate(fd, len), "ftruncate"))
++		goto cleanup_fd;
++
++	map = mmap(NULL, len, PROT_WRITE, MAP_SHARED, fd, 0);
++	if (!ASSERT_NEQ(map, MAP_FAILED, "mmap file"))
++		goto cleanup_fd;
++
++	memset(map, 1, len);
++
++	if (!ASSERT_OK(read_stats(link), "read stats"))
++		goto cleanup_map;
++
++	ASSERT_GT(memcg_query->nr_file_pages, 0, "final file value");
++	ASSERT_GT(memcg_query->nr_file_mapped, 0, "final file mapped value");
++
++cleanup_map:
++	munmap(map, len);
++cleanup_fd:
++	close(fd);
++	unlink(path);
 +}
 +
-+/**
-+ * bpf_mem_cgroup_flush_stats - Flush memory cgroup's statistics
-+ * @memcg: memory cgroup
-+ *
-+ * Propagate memory cgroup's statistics up the cgroup tree.
-+ */
-+__bpf_kfunc void bpf_mem_cgroup_flush_stats(struct mem_cgroup *memcg)
++static void test_shmem(struct bpf_link *link, struct memcg_query *memcg_query)
 +{
-+	mem_cgroup_flush_stats(memcg);
++	size_t len;
++	int fd;
++
++	len = sysconf(_SC_PAGESIZE) * 1024;
++
++	/*
++	 * Increase memcg shmem usage by creating and writing
++	 * to a shmem object.
++	 */
++	fd = shm_open("/tmp_shmem", O_CREAT | O_RDWR, 0644);
++	if (!ASSERT_OK_FD(fd, "shm_open"))
++		return;
++
++	if (!ASSERT_OK(fallocate(fd, 0, 0, len), "fallocate"))
++		goto cleanup;
++
++	if (!ASSERT_OK(read_stats(link), "read stats"))
++		goto cleanup;
++
++	ASSERT_GT(memcg_query->nr_shmem, 0, "final shmem value");
++
++cleanup:
++	close(fd);
++	shm_unlink("/tmp_shmem");
 +}
 +
- __bpf_kfunc_end_defs();
- 
- BTF_KFUNCS_START(bpf_memcontrol_kfuncs)
-@@ -82,6 +132,11 @@ BTF_ID_FLAGS(func, bpf_get_root_mem_cgroup, KF_ACQUIRE | KF_RET_NULL)
- BTF_ID_FLAGS(func, bpf_get_mem_cgroup, KF_TRUSTED_ARGS | KF_ACQUIRE | KF_RET_NULL | KF_RCU)
- BTF_ID_FLAGS(func, bpf_put_mem_cgroup, KF_TRUSTED_ARGS | KF_RELEASE)
- 
-+BTF_ID_FLAGS(func, bpf_mem_cgroup_vm_events, KF_TRUSTED_ARGS)
-+BTF_ID_FLAGS(func, bpf_mem_cgroup_usage, KF_TRUSTED_ARGS)
-+BTF_ID_FLAGS(func, bpf_mem_cgroup_page_state, KF_TRUSTED_ARGS)
-+BTF_ID_FLAGS(func, bpf_mem_cgroup_flush_stats, KF_TRUSTED_ARGS | KF_SLEEPABLE)
++#define NR_PIPES 64
++static void test_kmem(struct bpf_link *link, struct memcg_query *memcg_query)
++{
++	int fds[NR_PIPES][2], i;
 +
- BTF_KFUNCS_END(bpf_memcontrol_kfuncs)
- 
- static const struct btf_kfunc_id_set bpf_memcontrol_kfunc_set = {
++	/*
++	 * Increase kmem value by creating pipes which will allocate some
++	 * kernel buffers.
++	 */
++	for (i = 0; i < NR_PIPES; i++) {
++		if (!ASSERT_OK(pipe(fds[i]), "pipe"))
++			goto cleanup;
++	}
++
++	if (!ASSERT_OK(read_stats(link), "read stats"))
++		goto cleanup;
++
++	ASSERT_GT(memcg_query->memcg_kmem, 0, "kmem value");
++
++cleanup:
++	for (i = 0; i < NR_PIPES; i++) {
++		close(fds[i][0]);
++		close(fds[i][1]);
++	}
++}
++
++static void test_pgfault(struct bpf_link *link, struct memcg_query *memcg_query)
++{
++	void *map;
++	size_t len;
++
++	len = sysconf(_SC_PAGESIZE) * 1024;
++
++	/* Create region to use for triggering a page fault. */
++	map = mmap(NULL, len, PROT_WRITE, MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
++	if (!ASSERT_NEQ(map, MAP_FAILED, "mmap anon"))
++		return;
++
++	/* Trigger page fault. */
++	memset(map, 1, len);
++
++	if (!ASSERT_OK(read_stats(link), "read stats"))
++		goto cleanup;
++
++	ASSERT_GT(memcg_query->pgfault, 0, "final pgfault val");
++
++cleanup:
++	munmap(map, len);
++}
++
++void test_cgroup_iter_memcg(void)
++{
++	char *cgroup_rel_path = "/cgroup_iter_memcg_test";
++	struct cgroup_iter_memcg *skel;
++	struct bpf_link *link;
++	int cgroup_fd;
++
++	cgroup_fd = cgroup_setup_and_join(cgroup_rel_path);
++	if (!ASSERT_OK_FD(cgroup_fd, "cgroup_setup_and_join"))
++		return;
++
++	skel = cgroup_iter_memcg__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "cgroup_iter_memcg__open_and_load"))
++		goto cleanup_cgroup_fd;
++
++	DECLARE_LIBBPF_OPTS(bpf_iter_attach_opts, opts);
++	union bpf_iter_link_info linfo = {
++		.cgroup.cgroup_fd = cgroup_fd,
++		.cgroup.order = BPF_CGROUP_ITER_SELF_ONLY,
++	};
++	opts.link_info = &linfo;
++	opts.link_info_len = sizeof(linfo);
++
++	link = bpf_program__attach_iter(skel->progs.cgroup_memcg_query, &opts);
++	if (!ASSERT_OK_PTR(link, "bpf_program__attach_iter"))
++		goto cleanup_skel;
++
++	if (test__start_subtest("cgroup_iter_memcg__anon"))
++		test_anon(link, &skel->data_query->memcg_query);
++	if (test__start_subtest("cgroup_iter_memcg__shmem"))
++		test_shmem(link, &skel->data_query->memcg_query);
++	if (test__start_subtest("cgroup_iter_memcg__file"))
++		test_file(link, &skel->data_query->memcg_query);
++	if (test__start_subtest("cgroup_iter_memcg__kmem"))
++		test_kmem(link, &skel->data_query->memcg_query);
++	if (test__start_subtest("cgroup_iter_memcg__pgfault"))
++		test_pgfault(link, &skel->data_query->memcg_query);
++
++	bpf_link__destroy(link);
++cleanup_skel:
++	cgroup_iter_memcg__destroy(skel);
++cleanup_cgroup_fd:
++	close(cgroup_fd);
++	cleanup_cgroup_environment();
++}
+diff --git a/tools/testing/selftests/bpf/progs/cgroup_iter_memcg.c b/tools/testing/selftests/bpf/progs/cgroup_iter_memcg.c
+new file mode 100644
+index 000000000000..fa7efcc4d1e7
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/cgroup_iter_memcg.c
+@@ -0,0 +1,42 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2025 Meta Platforms, Inc. and affiliates. */
++#include <vmlinux.h>
++#include <bpf/bpf_core_read.h>
++#include "cgroup_iter_memcg.h"
++
++char _license[] SEC("license") = "GPL";
++
++/* The latest values read are stored here. */
++struct memcg_query memcg_query SEC(".data.query");
++
++SEC("iter.s/cgroup")
++int cgroup_memcg_query(struct bpf_iter__cgroup *ctx)
++{
++	struct cgroup *cgrp = ctx->cgroup;
++	struct cgroup_subsys_state *css;
++	struct mem_cgroup *memcg;
++
++	if (!cgrp)
++		return 1;
++
++	css = &cgrp->self;
++	if (!css)
++		return 1;
++
++	memcg = bpf_get_mem_cgroup(css);
++	if (!memcg)
++		return 1;
++
++	bpf_mem_cgroup_flush_stats(memcg);
++
++	memcg_query.nr_anon_mapped = bpf_mem_cgroup_page_state(memcg, NR_ANON_MAPPED);
++	memcg_query.nr_shmem = bpf_mem_cgroup_page_state(memcg, NR_SHMEM);
++	memcg_query.nr_file_pages = bpf_mem_cgroup_page_state(memcg, NR_FILE_PAGES);
++	memcg_query.nr_file_mapped = bpf_mem_cgroup_page_state(memcg, NR_FILE_MAPPED);
++	memcg_query.memcg_kmem = bpf_mem_cgroup_page_state(memcg, MEMCG_KMEM);
++	memcg_query.pgfault = bpf_mem_cgroup_vm_events(memcg, PGFAULT);
++
++	bpf_put_mem_cgroup(memcg);
++
++	return 0;
++}
 -- 
 2.52.0
 
