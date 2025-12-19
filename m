@@ -1,172 +1,213 @@
-Received: from mail-qv1-f66.google.com (mail-qv1-f66.google.com [209.85.219.66])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC905362150
-	for <bpf@vger.kernel.org>; Fri, 19 Dec 2025 16:29:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D33F33CEA5
+	for <bpf@vger.kernel.org>; Fri, 19 Dec 2025 16:41:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766161790; cv=none; b=PkrL24YrD1VXXfUf7XaYUChfkPaIa9giC1NXBR8yEz0dIdcG1W4pt5ZXbHN7nZUoaBAuD0QtMkWmtbOQz0cZ87NuBkg3nX2Mkr9w7xrfn8L5rDClEESiN94BwBSu6KrHUyF6gSnpTQLr5RNAJX42oxaF6Z7swytbUo5q5qxN0wM=
+	t=1766162464; cv=none; b=HFYSMYaA8A/6YVjmcIjxKjMVpuYX3n0+FH9GAxr3VSQkuf21piGjVDnflJTuDJ7WZx8X9wazI5pWErGwIdrrO9B/dOXiolFpqSeu4Nm/9uv9YnxHD/0JNrMFztcl1kgxKcqxByAiytV3BHJ8otdpzr6G+lkQeMzk/dGZnH590c4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766161790; c=relaxed/simple;
-	bh=cB3UAVw4AnK+AP0ieow7TbChOsK4vAiQbdu+PfJgSDM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VTUZ2gZp5Gptc7uURcqkvxibnXGfxrTYxfTQg/b9yNtzOtPMyOJ+0F3bNQPJ5qTrcb5LVBSOWMxMqCck9WWgcRjfr0ekNgbrVySSuIFB7AV/rRO3O63ewWZBi+gRK3E6jRYqy9IG2VwTbcltedG0O9LyGdr9gLc8SqtlYIR0pJk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IpuW5wf5; arc=none smtp.client-ip=209.85.219.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1766162464; c=relaxed/simple;
+	bh=PlNgCFLWP1sflSNg7tigi2WDl62KM7a41QAwKhaVpaM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=rIfCquk7UYggqivUmPyUGSJQgj7IjM1z4Dfe84wSQ6sh7ZiridIXvILv/tFrOzPeBgx1lysHR4Rd/9g+wEEG8Aud2DQbwlO55mZ60It5YbF4EDnxDTQSbx22b/rlPVznpxB5yvKK8o1gAi9d+dTiWPdRyXqQ7jGIM2yCcf4yFVY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hseb6uVW; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IpuW5wf5"
-Received: by mail-qv1-f66.google.com with SMTP id 6a1803df08f44-88888c41a13so21408056d6.3
-        for <bpf@vger.kernel.org>; Fri, 19 Dec 2025 08:29:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1766161788; x=1766766588; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Edwd8UY5a1jD2Jxp69UFc+WzgBkBRj9goxSodHca6Sw=;
-        b=IpuW5wf5aJAQF5syvh9bP2rdp0do73ORAatD0A67jxmELOKUdtUW7ePQl3qwlajbma
-         BFb+c3zocF/jJxIlFmarqTMxTYlS/iGGxzcitn+4WMbs1m/mWC93BoYEzw7/DNllP62D
-         Ih63ZM3ZPDX6bRZFL0PuCO2rR78rKGZcRbDcSUa9nIObdUzr7prwFKgTc5bC50HR2RPW
-         O+kxoV/AoWKR207kfM2EC2j+XuM0qDzuJCx4hX3k9ya4L3I7MOR2qbkYjBgUUMg9G+YB
-         yO4kyd8ghP+C0CVoyzJ8SvRN24YnMLyht4NDH+UB2SQtZEFU2ZOzdyvy7QrpFyi5AsPD
-         oC7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766161788; x=1766766588;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Edwd8UY5a1jD2Jxp69UFc+WzgBkBRj9goxSodHca6Sw=;
-        b=AOHH5wquVAxLriShFZZhlYiyeg0jokZtqE2lix/zdoSdlBd5uzPNtNyllBAiO0pboK
-         x8CWDzuH8RRoL2zgBUUUIC5bhzulr+4H9FFGLtwADAQR1v3CYIE1OVZ5rOn6diuL6DKh
-         Ph5foiVyWTSIW1rzLfmU4ZqtCdnNV1Su/V/PpdwBgf6VlG3fPVXnDxGgGSOzNQbFfIqf
-         4E5/MMIiyOb8n737YPa0gLDWs1pLkm1h9vDD+sMql2zNfU70nEqNzMIgdGzen0xm6o0P
-         82OeANff5UM1pWhdiLR2vs3AB7Hhkf/N5pGM0xqBYAMzl+Hz8ndlSIDDW28FQgwZBNI7
-         t7BA==
-X-Forwarded-Encrypted: i=1; AJvYcCV01GECmtAcOIXeSvHUA7BKYx0lHQe7NmBP5fwgLTm1zraGYg78xGQMXEA9UTNzWYRanp8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwBUlxNkIPUBc7LtliG3EEEZ+7+KpDzs/FChSGqlDuDQyMF/3HE
-	P+g0JP3AcApMR2Tqgn52KSnKl50mxNWhlAI4MktGE+/2qfByzvXs5AITq/H/W2Yt1xM=
-X-Gm-Gg: AY/fxX711rU2pfzFL/9XJucYV8rwOCHjCo4qp03irXZHabappQjpN5LPd15XFuQIYHI
-	Y1Cp60EyQExbgS34fTewZEz6++8qdr6P9o++Cye8SPQLMSPxFS3XX8PZDHwsFrLYMS8f8qwBPwB
-	aU+lSsgmjrXjlbkhtjvntCKuP+4xWmffQ7b1xAX0Ba6R16FSV9Pf7cdEpKsti1OT/DD9Iey6C9Q
-	qu4ineUmgsCIO3rz3EX0S8VOtImH2AllOxnSH5LEnYKIYqY3c+iJXb6Lc3VlBSwofibwwmauj2I
-	AY1U+cyueZeLP9s8Dr5su0iRtTrnWio3gAI7lw3Tq/yiuBTcH0Zakh5GvuyvlcLxR7z9H0DHggC
-	1YwDhV/w3qmDzIhi+hKnBuHwvmDLFBwGshV3t5Yi0sPHw313Vkp3hCrsWOnLTanTN1KDcXgKVaJ
-	CiCw6xyeeOMzg=
-X-Google-Smtp-Source: AGHT+IFq5oWI2daMug51YuI+nmWHxSg6/yFeviCCy4ETMjX2vXEJi5/nbTSyTXuKWJ73d/ANbQ0DVQ==
-X-Received: by 2002:a17:902:fc43:b0:29d:9b39:c05f with SMTP id d9443c01a7336-2a2f22026camr31186615ad.10.1766154600996;
-        Fri, 19 Dec 2025 06:30:00 -0800 (PST)
-Received: from 7950hx ([43.129.244.20])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a2f3c6a769sm24607575ad.7.2025.12.19.06.29.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Dec 2025 06:30:00 -0800 (PST)
-From: Menglong Dong <menglong8.dong@gmail.com>
-X-Google-Original-From: Menglong Dong <dongml2@chinatelecom.cn>
-To: ast@kernel.org,
-	schwab@linux-m68k.org
-Cc: daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	bjorn@kernel.org,
-	pulehui@huawei.com,
-	puranjay@kernel.org,
-	pjw@kernel.org,
-	palmer@dabbelt.com,
-	aou@eecs.berkeley.edu,
-	alex@ghiti.fr,
-	bpf@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf v2] riscv, bpf: fix incorrect usage of BPF_TRAMP_F_ORIG_STACK
-Date: Fri, 19 Dec 2025 22:29:48 +0800
-Message-ID: <20251219142948.204312-1-dongml2@chinatelecom.cn>
-X-Mailer: git-send-email 2.52.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hseb6uVW"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0DAEC4AF0B
+	for <bpf@vger.kernel.org>; Fri, 19 Dec 2025 16:41:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1766162463;
+	bh=PlNgCFLWP1sflSNg7tigi2WDl62KM7a41QAwKhaVpaM=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=hseb6uVWoB7IAkj1OJ8DsM/ePVhzU815GZwAZd6C1JXgAP1CsKyWopo/Q2RVRlz7a
+	 6splEHqWI3ttNkhTuyv+Uu4KMIKr01JoZw2pAhqrPTnNLcgYr8vS+0bsyWH7l+I3MK
+	 l0r0lQ9qIJcJKJRP0q4FTsRrmHui2UeASTCYoRRMHaH39J3m6da0fLRQqV2fijMFqb
+	 WJvEDeycLr6q1OsOjv8bDT9nVQfiPeXxg+iNodWolLh350ggCx1ZoF5DANPlB1Xq/A
+	 SPE/uA2cW3F/dvxw5LlqPgU64BSJe+7DtMkcvAVoCDUME6b8PyLl/Ozjfhijpe/CXv
+	 ZaDONJL0MVd1Q==
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-64b58553449so729138a12.1
+        for <bpf@vger.kernel.org>; Fri, 19 Dec 2025 08:41:03 -0800 (PST)
+X-Gm-Message-State: AOJu0YyoFWNw7PRWw/ICcRUoBZLx+OdtTtvHtiwUeCqnBuYaJT0uWRil
+	gmIocDV9dciB72bDv3hmo8gFQ+Owx/9YR+hSSRvEmBYTVqOFFPgKE7t9Cdu0ZFMgp6o133BGp9u
+	UsJJyQTyw/i56z8I4dSUauuevxplnRdg=
+X-Google-Smtp-Source: AGHT+IG3JMxK9+f+aKtrDqj92Mm3pfwAOTLKaX5/1tmaxUvKOPQ5vMBzAhZsVwGvZtA4hozbU/aji1fgU4Fj+OoHJUU=
+X-Received: by 2002:a05:6402:1d55:b0:64b:4540:ef94 with SMTP id
+ 4fb4d7f45d1cf-64b8eb618d0mr2880511a12.21.1766162462076; Fri, 19 Dec 2025
+ 08:41:02 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20251217233608.2374187-1-puranjay@kernel.org> <20251217233608.2374187-3-puranjay@kernel.org>
+ <1728d4e1-ce5c-476e-b057-b8a9a7621e1b@linux.dev>
+In-Reply-To: <1728d4e1-ce5c-476e-b057-b8a9a7621e1b@linux.dev>
+From: Puranjay Mohan <puranjay@kernel.org>
+Date: Fri, 19 Dec 2025 16:40:45 +0000
+X-Gmail-Original-Message-ID: <CANk7y0gRJ4u-R+Pzv9M1LTJtRgTR+BxxFJia8q_u0cY-kM0JzA@mail.gmail.com>
+X-Gm-Features: AQt7F2rvl-ovAXOzmsq69b_3L79BATrKKY5QTW4qNzx-IhMT7QjvWwyYryCPIJ0
+Message-ID: <CANk7y0gRJ4u-R+Pzv9M1LTJtRgTR+BxxFJia8q_u0cY-kM0JzA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 2/2] bpf: arm64: Optimize recursion detection
+ by not using atomics
+To: Yonghong Song <yonghong.song@linux.dev>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Martin KaFai Lau <martin.lau@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, kernel-team@meta.com, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The usage of BPF_TRAMP_F_ORIG_STACK in __arch_prepare_bpf_trampoline() is
-wrong, and it should be BPF_TRAMP_F_CALL_ORIG, which caused crash as
-Andreas reported:
+On Thu, Dec 18, 2025 at 5:56=E2=80=AFPM Yonghong Song <yonghong.song@linux.=
+dev> wrote:
+>
+>
+>
+> On 12/17/25 3:35 PM, Puranjay Mohan wrote:
+> > BPF programs detect recursion using a per-CPU 'active' flag in struct
+> > bpf_prog. The trampoline currently sets/clears this flag with atomic
+> > operations.
+> >
+> > On some arm64 platforms (e.g., Neoverse V2 with LSE), per-CPU atomic
+> > operations are relatively slow. Unlike x86_64 - where per-CPU updates
+> > can avoid cross-core atomicity, arm64 LSE atomics are always atomic
+> > across all cores, which is unnecessary overhead for strictly per-CPU
+> > state.
+> >
+> > This patch removes atomics from the recursion detection path on arm64 b=
+y
+> > changing 'active' to a per-CPU array of four u8 counters, one per
+> > context: {NMI, hard-irq, soft-irq, normal}. The running context uses a
+> > non-atomic increment/decrement on its element.  After increment,
+> > recursion is detected by reading the array as a u32 and verifying that
+> > only the expected element changed; any change in another element
+> > indicates inter-context recursion, and a value > 1 in the same element
+> > indicates same-context recursion.
+> >
+> > For example, starting from {0,0,0,0}, a normal-context trigger changes
+> > the array to {0,0,0,1}.  If an NMI arrives on the same CPU and triggers
+> > the program, the array becomes {1,0,0,1}. When the NMI context checks
+> > the u32 against the expected mask for normal (0x00000001), it observes
+> > 0x01000001 and correctly reports recursion. Same-context recursion is
+> > detected analogously.
+> >
+> > Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
+>
+> LGTM with a few nits below.
+>
+> Acked-by: Yonghong Song <yonghong.song@linux.dev>
+>
+> > ---
+> >   include/linux/bpf.h | 33 ++++++++++++++++++++++++++++++---
+> >   kernel/bpf/core.c   |  3 ++-
+> >   2 files changed, 32 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> > index 2da986136d26..5ca2a761d9a1 100644
+> > --- a/include/linux/bpf.h
+> > +++ b/include/linux/bpf.h
+> > @@ -31,6 +31,7 @@
+> >   #include <linux/static_call.h>
+> >   #include <linux/memcontrol.h>
+> >   #include <linux/cfi.h>
+> > +#include <linux/unaligned.h>
+> >   #include <asm/rqspinlock.h>
+> >
+> >   struct bpf_verifier_env;
+> > @@ -1746,6 +1747,8 @@ struct bpf_prog_aux {
+> >       struct bpf_map __rcu *st_ops_assoc;
+> >   };
+> >
+> > +#define BPF_NR_CONTEXTS        4       /* normal, softirq, hardirq, NM=
+I */
+> > +
+> >   struct bpf_prog {
+> >       u16                     pages;          /* Number of allocated pa=
+ges */
+> >       u16                     jited:1,        /* Is our filter JIT'ed? =
+*/
+> > @@ -1772,7 +1775,7 @@ struct bpf_prog {
+> >               u8 tag[BPF_TAG_SIZE];
+> >       };
+> >       struct bpf_prog_stats __percpu *stats;
+> > -     int __percpu            *active;
+> > +     u8 __percpu             *active;        /* u8[BPF_NR_CONTEXTS] fo=
+r rerecursion protection */
+> >       unsigned int            (*bpf_func)(const void *ctx,
+> >                                           const struct bpf_insn *insn);
+> >       struct bpf_prog_aux     *aux;           /* Auxiliary fields */
+> > @@ -2006,12 +2009,36 @@ struct bpf_struct_ops_common_value {
+> >
+> >   static inline bool bpf_prog_get_recursion_context(struct bpf_prog *pr=
+og)
+> >   {
+> > -     return this_cpu_inc_return(*(prog->active)) =3D=3D 1;
+> > +#ifdef CONFIG_ARM64
+> > +     u8 rctx =3D interrupt_context_level();
+> > +     u8 *active =3D this_cpu_ptr(prog->active);
+> > +     u32 val;
+> > +
+> > +     preempt_disable();
+> > +     active[rctx]++;
+> > +     val =3D get_unaligned_le32(active);
+>
+> The 'active' already aligned with 8 (or 4 with my below suggestion).
+> The get_unaligned_le32() works, but maybe we could use le32_to_cpu()
+> instead. Maybe there is no performance difference between
+> get_unaligned_le32() and le32_to_cpu() so you pick get_unaligned_le32()?
+> It would be good to clarify in commit message if get_unaligned_le32()
+> is used.
+>
+> > +     preempt_enable();
+> > +     if (val !=3D BIT(rctx * 8))
+> > +             return false;
+> > +
+> > +     return true;
+> > +#else
+> > +     return this_cpu_inc_return(*(int __percpu *)(prog->active)) =3D=
+=3D 1;
+> > +#endif
+> >   }
+> >
+> >   static inline void bpf_prog_put_recursion_context(struct bpf_prog *pr=
+og)
+> >   {
+> > -     this_cpu_dec(*(prog->active));
+> > +#ifdef CONFIG_ARM64
+> > +     u8 rctx =3D interrupt_context_level();
+> > +     u8 *active =3D this_cpu_ptr(prog->active);
+> > +
+> > +     preempt_disable();
+> > +     active[rctx]--;
+> > +     preempt_enable();
+> > +#else
+> > +     this_cpu_dec(*(int __percpu *)(prog->active));
+> > +#endif
+> >   }
+> >
+> >   #if defined(CONFIG_BPF_JIT) && defined(CONFIG_BPF_SYSCALL)
+> > diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> > index c66316e32563..b5063acfcf92 100644
+> > --- a/kernel/bpf/core.c
+> > +++ b/kernel/bpf/core.c
+> > @@ -112,7 +112,8 @@ struct bpf_prog *bpf_prog_alloc_no_stats(unsigned i=
+nt size, gfp_t gfp_extra_flag
+> >               vfree(fp);
+> >               return NULL;
+> >       }
+> > -     fp->active =3D alloc_percpu_gfp(int, bpf_memcg_flags(GFP_KERNEL |=
+ gfp_extra_flags));
+> > +     fp->active =3D __alloc_percpu_gfp(sizeof(u8[BPF_NR_CONTEXTS]), 8,
+> > +                                     bpf_memcg_flags(GFP_KERNEL | gfp_=
+extra_flags));
+>
+> Here, the alignment is 8. Can it be 4 since the above reads a 32bit value=
+?
 
-  Insufficient stack space to handle exception!
-  Task stack:     [0xff20000000010000..0xff20000000014000]
-  Overflow stack: [0xff600000ffdad070..0xff600000ffdae070]
-  CPU: 1 UID: 0 PID: 1 Comm: systemd Not tainted 6.18.0-rc5+ #15 PREEMPT(voluntary)
-  Hardware name: riscv-virtio qemu/qemu, BIOS 2025.10 10/01/2025
-  epc : copy_from_kernel_nofault+0xa/0x198
-   ra : bpf_probe_read_kernel+0x20/0x60
-  epc : ffffffff802b732a ra : ffffffff801e6070 sp : ff2000000000ffe0
-   gp : ffffffff82262ed0 tp : 0000000000000000 t0 : ffffffff80022320
-   t1 : ffffffff801e6056 t2 : 0000000000000000 s0 : ff20000000010040
-   s1 : 0000000000000008 a0 : ff20000000010050 a1 : ff60000083b3d320
-   a2 : 0000000000000008 a3 : 0000000000000097 a4 : 0000000000000000
-   a5 : 0000000000000000 a6 : 0000000000000021 a7 : 0000000000000003
-   s2 : ff20000000010050 s3 : ff6000008459fc18 s4 : ff60000083b3d340
-   s5 : ff20000000010060 s6 : 0000000000000000 s7 : ff20000000013aa8
-   s8 : 0000000000000000 s9 : 0000000000008000 s10: 000000000058dcb0
-   s11: 000000000058dca7 t3 : 000000006925116d t4 : ff6000008090f026
-   t5 : 00007fff9b0cbaa8 t6 : 0000000000000016
-  status: 0000000200000120 badaddr: 0000000000000000 cause: 8000000000000005
-  Kernel panic - not syncing: Kernel stack overflow
-  CPU: 1 UID: 0 PID: 1 Comm: systemd Not tainted 6.18.0-rc5+ #15 PREEMPT(voluntary)
-  Hardware name: riscv-virtio qemu/qemu, BIOS 2025.10 10/01/2025
-  Call Trace:
-  [<ffffffff8001a1f8>] dump_backtrace+0x28/0x38
-  [<ffffffff80002502>] show_stack+0x3a/0x50
-  [<ffffffff800122be>] dump_stack_lvl+0x56/0x80
-  [<ffffffff80012300>] dump_stack+0x18/0x22
-  [<ffffffff80002abe>] vpanic+0xf6/0x328
-  [<ffffffff80002d2e>] panic+0x3e/0x40
-  [<ffffffff80019ef0>] handle_bad_stack+0x98/0xa0
-  [<ffffffff801e6070>] bpf_probe_read_kernel+0x20/0x60
+Yes, It should be 4. Will change in next version and add your acked by.
 
-Just fix it.
-
-Fixes: 47c9214dcbea ("bpf: fix the usage of BPF_TRAMP_F_SKIP_FRAME")
-Reported-by: Andreas Schwab <schwab@linux-m68k.org>
-Closes: https://lore.kernel.org/bpf/874ipnkfvt.fsf@igel.home/
-Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
----
-v2:
-- merge the code
----
- arch/riscv/net/bpf_jit_comp64.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
-
-diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
-index 5f9457e910e8..37888abee70c 100644
---- a/arch/riscv/net/bpf_jit_comp64.c
-+++ b/arch/riscv/net/bpf_jit_comp64.c
-@@ -1133,10 +1133,6 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im,
- 
- 	store_args(nr_arg_slots, args_off, ctx);
- 
--	/* skip to actual body of traced function */
--	if (flags & BPF_TRAMP_F_ORIG_STACK)
--		orig_call += RV_FENTRY_NINSNS * 4;
--
- 	if (flags & BPF_TRAMP_F_CALL_ORIG) {
- 		emit_imm(RV_REG_A0, ctx->insns ? (const s64)im : RV_MAX_COUNT_IMM, ctx);
- 		ret = emit_call((const u64)__bpf_tramp_enter, true, ctx);
-@@ -1171,6 +1167,8 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im,
- 	}
- 
- 	if (flags & BPF_TRAMP_F_CALL_ORIG) {
-+		/* skip to actual body of traced function */
-+		orig_call += RV_FENTRY_NINSNS * 4;
- 		restore_args(min_t(int, nr_arg_slots, RV_MAX_REG_ARGS), args_off, ctx);
- 		restore_stack_args(nr_arg_slots - RV_MAX_REG_ARGS, args_off, stk_arg_off, ctx);
- 		ret = emit_call((const u64)orig_call, true, ctx);
--- 
-2.52.0
-
+Thanks,
+Puranjay
