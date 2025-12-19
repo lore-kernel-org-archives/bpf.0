@@ -1,81 +1,81 @@
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDB832BEFFF
-	for <bpf@vger.kernel.org>; Fri, 19 Dec 2025 09:27:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8E162C030E
+	for <bpf@vger.kernel.org>; Fri, 19 Dec 2025 09:28:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766136480; cv=none; b=mRTLzL/6QPlPXUGbcjtAkFFGWoI0yrhOpQmVx85IUL2hkYDzucaeD0yWTPPfcBaDie9F7+bQT+zK0XDSSXWLq0vfoCGRG6tIuQ8Tlf/K8RlGuVOMlh1Moouc2vVet91PZCKTrP51nzCAomxYcFvCKC+tTVDRpz/MSY1K37BveWQ=
+	t=1766136483; cv=none; b=E1Sdrvf7i0BBFmSDgLxGo3q+5Jbai0qoclMFFQfs3kyxcOMZ4vHUHGLKAJ6jkULpmNJczsQZnSBfQS+xHBImOpLJr4myNzwOOIHAvqLzv2Ixth6ucfrxn1vQ7LX4h/8GtNYfKTslzEkyYWzzceTouCBplFzbMu0AAGTjoev1DdE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766136480; c=relaxed/simple;
-	bh=AWCb9Zlk3X/yQ+3/BM0yomxMF6ZXBp57Sea52ZPFdrk=;
+	s=arc-20240116; t=1766136483; c=relaxed/simple;
+	bh=0AlBx06Eu21z/jJ57GZXbgjr3e6fq7+/15ATFqwEuB0=;
 	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Q/khNLVgPTdL4cqqKGfqo7f/CObc7T58jc1XFr8Tk2jb/LqO9Lq+3MNgAry+OsxWn31RdfvIqel0FE/F991A8g021VouaLk5j7wWmDqK8oGe4nn+fzs8RtJgbjwVnrfnniq1Ttw6O3UQtQZLLn6QxIdB+9Krqci4/qo2xXNu9iw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=a46tb6SV; arc=none smtp.client-ip=209.85.128.49
+	 Content-Type:Content-Disposition:In-Reply-To; b=iz3pGFmQo3wFadGmdQ9cXFq6Gxa2UQQVu9SZU83EE2nKyT+DBJhhZMIAU1+VnEu85lsLLizsng8Y0ES1XOZwSgphisVSfUrI09yy9HQU4ArYfn24hmFp5gRGecfOM/2EWZnU2Re6EQmdFf8B9gp/YLwZvkFYIrseZioFvbjHjDM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YQV+57sR; arc=none smtp.client-ip=209.85.221.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="a46tb6SV"
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-477ba2c1ca2so15620255e9.2
-        for <bpf@vger.kernel.org>; Fri, 19 Dec 2025 01:27:48 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YQV+57sR"
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-42fb3801f7eso806256f8f.3
+        for <bpf@vger.kernel.org>; Fri, 19 Dec 2025 01:28:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1766136467; x=1766741267; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1766136479; x=1766741279; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=qmnXlxHoWq0NbG8Ccw5YQt/6uSNtB/ujN6Gu6zmgr7g=;
-        b=a46tb6SVG4+Va3N/aQFdClrZMP12l4SGTA8d/Kk4HrWnXkBJZP0a65WHnIIBFKWr71
-         QeB+wOzChmzWs0/CpRhFQ/15KUt4aNs0QSim+4E8q3tqTv2uQ11+/i+k3AKuj8KciiPZ
-         LvC7Di5FP2pTLALZqTrSFN9oWIAb4nDhqwtiOnAANEJPlL0Y8scD/d7i3zR13zsEL+ll
-         91sdx+twkF4Fu2i86jLLHlgl5Hz0a//y65xfoTNNWrdn3Vau4mpug8R5zB7Gt1tYuQxj
-         ArYY27NaxfBNqu0RBkiT/xDHohiuBfA6M3Xr5HJMoktbCmGzorBMHMOJALF7zq45uTA6
-         H9Rg==
+        bh=9oGgjLnB4BRLCSerYoS0OtPGacv8L+vjRrbT/ZyiNdM=;
+        b=YQV+57sRTQ/ldOL6/G4LlgWF7CuVRaLm64AUqtMWJ5/mMJUA5oX+5sqdz3xopepMmY
+         clJLtazQo7UKQlNYDM8W6S2nP46Huamz9/cCxFzvUxK3noTKB+rWQJjk65vzhZelNG8m
+         XFCQ3ZPG/ex/v9NTEsnytoY+KIzeuEsReHfTnNqBWLaYP03Woba8fR5ypC0zWFVC9lkQ
+         tRVBfR7W6HY/r0UFxuixQliERqJ0Lwv9S6C08Mh6Qen7AtZcDDkDXRhg5R7VybPJJAxc
+         nSGzZIyJJ2Aw8XHILreaG7W0cAfouAnYnt5JPWqn8Rba0A7v08a9gGmDbDSfjBCszZzy
+         LrZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766136467; x=1766741267;
+        d=1e100.net; s=20230601; t=1766136479; x=1766741279;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=qmnXlxHoWq0NbG8Ccw5YQt/6uSNtB/ujN6Gu6zmgr7g=;
-        b=wgJlTdqSmGpnUqpxBGUflrBt1YOt3iyLBVXy+cCwc4XKs+g05YW4WJZwI8bojg7k+o
-         KbRwoDaJoIJLdLcAuc4cE+porhcH8DIybB5I2tfbE7VKCVhg/QSEDs67MHKTpqY1bJpJ
-         WxbnpdIQnQrjnyJ6oWrIYo/ig2lhq94NSxuM1fPGd04jlIBXMbqkW2h1BLRaEc+nWa13
-         ScmUH0x0G1XHnCglSetioUiPYaaP+dC9pEYJbhfJdK5hN7NU73eh+S/ns8wIcpXGNpSe
-         nXY77xvlCANXIS+UWTnnkUG6LSZAnUDaYk+/i3vZNOUB8fbJhDZNz/xbcZxtxxAMm9A7
-         X5Ug==
-X-Forwarded-Encrypted: i=1; AJvYcCX1I931yXNgFEmpr/xtBnTl/a2uLzYguZVEHGYE8LhAYDy5JsCZUyYGPg+Qs8s92HXelog=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxtl3k2QTc1oi9DVa6iYCQO8VabQ0RAM7gYBKtEK2NlsoJLwUm/
-	BVuRLykodcsjeg9gP9MU9XJZVnjQ9f++Moe0tP/5Ks8yg3s/Au2jSTwa
-X-Gm-Gg: AY/fxX7VJ32Rt0oajrElI8q/MCi3uMX3ed0fJ/5vuOIvRfo7hPgZ4sR0z0LVI2Yk1oq
-	9TIur4nIip9GLh1DnV+5L39inIoIy5Ak52BOGLoByZamBmtMwOFKITdREP1qvJ2nYbjh/fhMEmj
-	7U+anA8FuHkMzcdir3HDaUiRCVWJcynC0yI/dfuOqz1ZeHYwgKMHQB/cbfzptZ8MoRnitl/bsYO
-	1gT8bVLC0TnHxsi7UNzLS6aWtneOzGFxRnP4wZgRn1EiFdY3SFSoqJrANhuYQef1zuKJC2HjXhB
-	lVr2rOMXsUSRpf6AtXxzuuLmAInTN4eDQryRbgClCJVZGQYymYB9JMTqwiRQJdNOfuFic4gQu6G
-	3h9UfBWgrDI+bnwjG9k2sr/BJamxEuW9t19rULEwF7LsXUkY2vEb1KWhhi+Rv
-X-Google-Smtp-Source: AGHT+IEyiXP2r+UagAVyzsxyVSYES1j9aAQG6eYvB7U3MJyHwiFSEqfhleLuOyMaRGuuYSwfofjO1g==
-X-Received: by 2002:a05:600c:4e90:b0:46e:3d41:6001 with SMTP id 5b1f17b1804b1-47d1959440dmr18983345e9.34.1766136467150;
-        Fri, 19 Dec 2025 01:27:47 -0800 (PST)
+        bh=9oGgjLnB4BRLCSerYoS0OtPGacv8L+vjRrbT/ZyiNdM=;
+        b=fuszDFP/lhUm5CiM16jQFU0ziQ702E3yDjGpZjihhIwToB2II4hW0J85MlkZm06E8f
+         H52sLmuozRBRfaez7E1EFgfM/WxdzOC8couZsfoJuoO/5o6AB4YnOuWcJGkLXYlYHMcY
+         8tIqTilldK7EUT2d14oWqj5Gl70eIExaZq18sYs02C2zCLg+sTFKtODmjR4Dgs9NUaKw
+         B1mopBUh7Mart7XbOMNa81w6aIt1eiBMDu0u312cha2dOFOFLOmF2m+LG0u0hqpzO7/n
+         C58TFp5EKFC3Zi0jAKATgWTbw9K2H9Q5kcxFeqa3+g+4r/8xU5NjNMmnbuGaPlpg7OH3
+         JUEg==
+X-Forwarded-Encrypted: i=1; AJvYcCUE7GPfZ8M0MmMhdnm1HlC+uGXrEAL/zQHxJdbSOirlAQq9gnCiSELT3RwBpz+v06ltFlc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyi37qnb5eL1CIRvoMkYMQiE0/2Suqy3SbznZOuJQXkil6pQzNk
+	Arz+eolxbDPlvVBHEokkKT7dOl5yP6rfFVSvrY9Pgo9fe3KrArMScws+
+X-Gm-Gg: AY/fxX78+meDne1oqNOyQQYK+B+5I0l5xFnf0llZtJN+m5g4hL5mNbnGHXP/6sz1IDU
+	UknlRzNdPkyan5T0keC/qpg+9ZuqZWwEUpEJv0ja6soU5MYGQzQI3oPVk3VZHdlFHgdi7oLN1hb
+	Ea31lA4mbLHayj4qayKEHAtPuU55iWKHc1PFy9ReleK5WQOgAEUGNW5wgMWZ/9x3KZ17gVFtFbf
+	s20cUdB+8y5WbF6QSupIJ78ct+HBgHfVNR2/eWy1bCxpDuoThSrd9dmfD8Rpsj1SQRTh3HAf3a/
+	iPvaDkKpoJsbhetyPlA0JiIVuzKg0uc4LQBdv+uMF4bjXvg+JEMPJuVmjA4PGQtOmwS73+4rZG0
+	q9aJqUgqvGb1vfiZQRQAeyHgtO9467uK4Vm3kXIftX5UI20QkxScAfFMWZpy4
+X-Google-Smtp-Source: AGHT+IFl2szXlrHSULap4BBtRF/o7UsYp3zfggM0fI3SQpbqWNjjL70eotggPkLeDniNhGFRNl34Jw==
+X-Received: by 2002:a05:6000:2404:b0:42f:bb3f:c5f1 with SMTP id ffacd0b85a97d-4324e506738mr2441194f8f.44.1766136478888;
+        Fri, 19 Dec 2025 01:27:58 -0800 (PST)
 Received: from krava ([2a02:8308:a00c:e200::b44f])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47be27b28a7sm90595515e9.12.2025.12.19.01.27.46
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4324ea1b1bdsm3845068f8f.8.2025.12.19.01.27.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Dec 2025 01:27:46 -0800 (PST)
+        Fri, 19 Dec 2025 01:27:58 -0800 (PST)
 From: Jiri Olsa <olsajiri@gmail.com>
 X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Fri, 19 Dec 2025 10:27:45 +0100
-To: Steven Rostedt <rostedt@kernel.org>
-Cc: Florent Revest <revest@google.com>, Mark Rutland <mark.rutland@arm.com>,
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
+Date: Fri, 19 Dec 2025 10:27:56 +0100
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: Steven Rostedt <rostedt@kernel.org>, Florent Revest <revest@google.com>,
+	Mark Rutland <mark.rutland@arm.com>, bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Menglong Dong <menglong8.dong@gmail.com>,
 	Song Liu <song@kernel.org>
-Subject: Re: [PATCHv5 bpf-next 5/9] ftrace: Add update_ftrace_direct_del
- function
-Message-ID: <aUUakb_Bv1sDfJUR@krava>
+Subject: Re: [PATCHv5 bpf-next 9/9] bpf,x86: Use single ftrace_ops for direct
+ calls
+Message-ID: <aUUanPijlWsDlS0X@krava>
 References: <20251215211402.353056-1-jolsa@kernel.org>
- <20251215211402.353056-6-jolsa@kernel.org>
- <20251217204814.38756224@robin>
+ <20251215211402.353056-10-jolsa@kernel.org>
+ <20251218112608.11a14a4a@gandalf.local.home>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -84,106 +84,439 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251217204814.38756224@robin>
+In-Reply-To: <20251218112608.11a14a4a@gandalf.local.home>
 
-On Wed, Dec 17, 2025 at 08:48:14PM -0500, Steven Rostedt wrote:
-> On Mon, 15 Dec 2025 22:13:58 +0100
+On Thu, Dec 18, 2025 at 11:26:08AM -0500, Steven Rostedt wrote:
+> On Mon, 15 Dec 2025 22:14:02 +0100
 > Jiri Olsa <jolsa@kernel.org> wrote:
-> > +/**
-> > + * hash_sub - substracts @b from @a and returns the result
-> > + * @a: struct ftrace_hash object
-> > + * @b: struct ftrace_hash object
-> > + *
-> > + * Returns struct ftrace_hash object on success, NULL on error.
-> > + */
-> > +static struct ftrace_hash *hash_sub(struct ftrace_hash *a, struct ftrace_hash *b)
+> 
+> > Using single ftrace_ops for direct calls update instead of allocating
+> > ftrace_ops object for each trampoline.
+> > 
+> > With single ftrace_ops object we can use update_ftrace_direct_* api
+> > that allows multiple ip sites updates on single ftrace_ops object.
+> > 
+> > Adding HAVE_SINGLE_FTRACE_DIRECT_OPS config option to be enabled on
+> > each arch that supports this.
+> > 
+> > At the moment we can enable this only on x86 arch, because arm relies
+> > on ftrace_ops object representing just single trampoline image (stored
+> > in ftrace_ops::direct_call). Ach that do not support this will continue
+> 
+> My back "Ach" and doesn't support me well. ;-)
+
+heh, should have been 'Archs' ;-)
+
+> 
+> > to use *_ftrace_direct api.
+> > 
+> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> > ---
+> >  arch/x86/Kconfig        |   1 +
+> >  kernel/bpf/trampoline.c | 195 ++++++++++++++++++++++++++++++++++------
+> >  kernel/trace/Kconfig    |   3 +
+> >  kernel/trace/ftrace.c   |   7 +-
+> >  4 files changed, 177 insertions(+), 29 deletions(-)
+> > 
+> > diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+> > index 17a107cc5244..d0c36e49e66e 100644
+> > --- a/arch/x86/Kconfig
+> > +++ b/arch/x86/Kconfig
+> > @@ -335,6 +335,7 @@ config X86
+> >  	select SCHED_SMT			if SMP
+> >  	select ARCH_SUPPORTS_SCHED_CLUSTER	if SMP
+> >  	select ARCH_SUPPORTS_SCHED_MC		if SMP
+> > +	select HAVE_SINGLE_FTRACE_DIRECT_OPS	if X86_64 && DYNAMIC_FTRACE_WITH_DIRECT_CALLS
+> 
+> You can remove the "&& DYNAMIC_FTRACE_WITH_DIRECT_CALLS" part by having the
+> config depend on it (see below).
+
+...
+
+> 
+> >  
+> >  config INSTRUCTION_DECODER
+> >  	def_bool y
+> > diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+> > index 17af2aad8382..02371db3db3e 100644
+> > --- a/kernel/bpf/trampoline.c
+> > +++ b/kernel/bpf/trampoline.c
+> > @@ -33,12 +33,40 @@ static DEFINE_MUTEX(trampoline_mutex);
+> >  #ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
+> >  static int bpf_trampoline_update(struct bpf_trampoline *tr, bool lock_direct_mutex);
+> >  
+> > +#ifdef CONFIG_HAVE_SINGLE_FTRACE_DIRECT_OPS
+> 
+> Make this:
+> 
+>  #ifdef CONFIG_SINGLE_FTRACE_DIRECT_OPS
+> 
+> for the suggested modification in the Kconfig below.
+> 
+> > +static struct bpf_trampoline *direct_ops_ip_lookup(struct ftrace_ops *ops, unsigned long ip)
 > > +{
-> > +	struct ftrace_func_entry *entry, *del;
-> > +	struct ftrace_hash *sub;
-> > +	int size, i;
+> > +	struct hlist_head *head_ip;
+> > +	struct bpf_trampoline *tr;
 > > +
-> > +	sub = alloc_and_copy_ftrace_hash(a->size_bits, a);
-> > +	if (!sub)
-> > +		goto error;
+> > +	mutex_lock(&trampoline_mutex);
 > 
-> Again, this can be just return NULL;
+> 	guard(mutex)(&trampoline_mutex);
 
-ok
+right, will change
 
 > 
-> > +
-> > +	size = 1 << b->size_bits;
-> > +	for (i = 0; i < size; i++) {
+> > +	head_ip = &trampoline_ip_table[hash_64(ip, TRAMPOLINE_HASH_BITS)];
+> > +	hlist_for_each_entry(tr, head_ip, hlist_ip) {
+> > +		if (tr->ip == ip)
 > 
-> You can make this for (int i = 0; ...) too.
-
-ok
-
+> 			return NULL;
 > 
-> > +		hlist_for_each_entry(entry, &b->buckets[i], hlist) {
-> > +			del = __ftrace_lookup_ip(sub, entry->ip);
-> > +			if (WARN_ON_ONCE(!del))
-> > +				goto error;
-> 
-> And you can remove the error label here too:
-
-ok
-
-> 
-> 			if (WARN_ON_ONCE(!del)) {
-> 				free_ftrace_hash(sub);
-> 				return NULL;
-> 			}
-> 
-> 
-> > +			remove_hash_entry(sub, del);
-> > +			kfree(del);
-> > +		}
+> > +			goto out;
 > > +	}
-> > +	return sub;
+> 
+> 
+> > +	tr = NULL;
+> > +out:
+> > +	mutex_unlock(&trampoline_mutex);
+> 
+> No need for the above
+
+yep
+
+> 
+> > +	return tr;
+> > +}
+> > +#else
+> > +static struct bpf_trampoline *direct_ops_ip_lookup(struct ftrace_ops *ops, unsigned long ip)
+> > +{
+> > +	return ops->private;
+> > +}
+> > +#endif /* CONFIG_HAVE_SINGLE_FTRACE_DIRECT_OPS */
 > > +
-> > + error:
-> > +	free_ftrace_hash(sub);
-> > +	return NULL;
+> >  static int bpf_tramp_ftrace_ops_func(struct ftrace_ops *ops, unsigned long ip,
+> >  				     enum ftrace_ops_cmd cmd)
+> >  {
+> > -	struct bpf_trampoline *tr = ops->private;
+> > +	struct bpf_trampoline *tr;
+> >  	int ret = 0;
+> >  
+> > +	tr = direct_ops_ip_lookup(ops, ip);
+> > +	if (!tr)
+> > +		return -EINVAL;
+> > +
+> >  	if (cmd == FTRACE_OPS_CMD_ENABLE_SHARE_IPMODIFY_SELF) {
+> >  		/* This is called inside register_ftrace_direct_multi(), so
+> >  		 * tr->mutex is already locked.
+> > @@ -137,6 +165,139 @@ void bpf_image_ksym_del(struct bpf_ksym *ksym)
+> >  			   PAGE_SIZE, true, ksym->name);
+> >  }
+> >  
+> > +#ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
+> > +#ifdef CONFIG_HAVE_SINGLE_FTRACE_DIRECT_OPS
+> 
+> Replace the above two with:
+> 
+>  #ifdef CONFIG_SINGLE_FTRACE_DIRECT_OPS
+
+...
+
+> 
+> > +/*
+> > + * We have only single direct_ops which contains all the direct call
+> > + * sites and is the only global ftrace_ops for all trampolines.
+> > + *
+> > + * We use 'update_ftrace_direct_*' api for attachment.
+> > + */
+> > +struct ftrace_ops direct_ops = {
+> > +	.ops_func = bpf_tramp_ftrace_ops_func,
+> > +};
+> > +
+> > +static int direct_ops_alloc(struct bpf_trampoline *tr)
+> > +{
+> > +	tr->fops = &direct_ops;
+> > +	return 0;
 > > +}
 > > +
-> > +int update_ftrace_direct_del(struct ftrace_ops *ops, struct ftrace_hash *hash)
+> > +static void direct_ops_free(struct bpf_trampoline *tr) { }
+> > +
+> > +static struct ftrace_hash *hash_from_ip(struct bpf_trampoline *tr, void *ptr)
 > > +{
-> > +	struct ftrace_hash *old_direct_functions = NULL, *new_direct_functions;
-> > +	struct ftrace_hash *old_filter_hash, *new_filter_hash = NULL;
-> > +	struct ftrace_func_entry *del, *entry;
+> > +	unsigned long ip, addr = (unsigned long) ptr;
+> > +	struct ftrace_hash *hash;
+> > +
+> > +	ip = ftrace_location(tr->ip);
+> > +	if (!ip)
+> > +		return NULL;
+> > +	hash = alloc_ftrace_hash(FTRACE_HASH_DEFAULT_BITS);
+> > +	if (!hash)
+> > +		return NULL;
+> > +	if (bpf_trampoline_use_jmp(tr->flags))
+> > +		addr = ftrace_jmp_set(addr);
+> > +	if (!add_hash_entry_direct(hash, ip, addr)) {
+> > +		free_ftrace_hash(hash);
+> > +		return NULL;
+> > +	}
+> > +	return hash;
+> > +}
+> > +
+> > +static int direct_ops_add(struct bpf_trampoline *tr, void *addr)
+> > +{
+> > +	struct ftrace_hash *hash = hash_from_ip(tr, addr);
+> > +	int err = -ENOMEM;
+> > +
+> > +	if (hash)
+> > +		err = update_ftrace_direct_add(tr->fops, hash);
+> > +	free_ftrace_hash(hash);
+> > +	return err;
+> > +}
 > 
-> One variable per line.
+> I think these functions would be cleaner as:
+> 
+> {
+> 	struct ftrace_hash *hash = hash_from_ip(tr, addr);
+> 	int err;
+> 
+> 	if (!hash)
+> 		return -ENOMEM;
+> 
+> 	err = update_ftrace_direct_*(tr->fops, hash);
+> 	free_ftrace_hash(hash);
+> 	return err;
+> }
 
-ok
+np, will change
 
 > 
-> > +	unsigned long size, i;
-> > +	int err = -EINVAL;
-> > +
-> > +	if (!hash_count(hash))
-> > +		return -EINVAL;
-> > +	if (check_direct_multi(ops))
-> > +		return -EINVAL;
-> > +	if (!(ops->flags & FTRACE_OPS_FL_ENABLED))
-> > +		return -EINVAL;
-> > +	if (direct_functions == EMPTY_HASH)
-> > +		return -EINVAL;
-> > +
-> > +	mutex_lock(&direct_mutex);
-> > +
-> > +	old_filter_hash = ops->func_hash ? ops->func_hash->filter_hash : NULL;
-> > +
-> > +	if (!hash_count(old_filter_hash))
-> > +		goto out_unlock;
-> > +
-> > +	/* Make sure requested entries are already registered. */
-> > +	size = 1 << hash->size_bits;
-> > +	for (i = 0; i < size; i++) {
 > 
-> 	for (int i = 0; ...) 
+> > +
+> > +static int direct_ops_del(struct bpf_trampoline *tr, void *addr)
+> > +{
+> > +	struct ftrace_hash *hash = hash_from_ip(tr, addr);
+> > +	int err = -ENOMEM;
+> > +
+> > +	if (hash)
+> > +		err = update_ftrace_direct_del(tr->fops, hash);
+> > +	free_ftrace_hash(hash);
+> > +	return err;
+> > +}
+> > +
+> > +static int direct_ops_mod(struct bpf_trampoline *tr, void *addr, bool lock_direct_mutex)
+> > +{
+> > +	struct ftrace_hash *hash = hash_from_ip(tr, addr);
+> > +	int err = -ENOMEM;
+> > +
+> > +	if (hash)
+> > +		err = update_ftrace_direct_mod(tr->fops, hash, lock_direct_mutex);
+> > +	free_ftrace_hash(hash);
+> > +	return err;
+> > +}
+> > +#else
+> > +/*
+> > + * We allocate ftrace_ops object for each trampoline and it contains
+> > + * call site specific for that trampoline.
+> > + *
+> > + * We use *_ftrace_direct api for attachment.
+> > + */
+> > +static int direct_ops_alloc(struct bpf_trampoline *tr)
+> > +{
+> > +	tr->fops = kzalloc(sizeof(struct ftrace_ops), GFP_KERNEL);
+> > +	if (!tr->fops)
+> > +		return -ENOMEM;
+> > +	tr->fops->private = tr;
+> > +	tr->fops->ops_func = bpf_tramp_ftrace_ops_func;
+> > +	return 0;
+> > +}
+> > +
+> > +static void direct_ops_free(struct bpf_trampoline *tr)
+> > +{
+> > +	if (tr->fops) {
+> > +		ftrace_free_filter(tr->fops);
+> > +		kfree(tr->fops);
+> > +	}
+> > +}
+> 
+> Why not:
+> 
+> static void direct_ops_free(struct bpf_trampoline *tr)
+> {
+> 	if (!tr->fops)
+> 		return;
+> 
+> 	ftrace_free_filter(tr->fops);
+> 	kfree(tr->fops);
+> }
 
-ack
+same pattern like above, ok
+
+> 
+>  ?
+> 
+> > +
+> > +static int direct_ops_add(struct bpf_trampoline *tr, void *ptr)
+> > +{
+> > +	unsigned long addr = (unsigned long) ptr;
+> > +	struct ftrace_ops *ops = tr->fops;
+> > +	int ret;
+> > +
+> > +	if (bpf_trampoline_use_jmp(tr->flags))
+> > +		addr = ftrace_jmp_set(addr);
+> > +
+> > +	ret = ftrace_set_filter_ip(ops, tr->ip, 0, 1);
+> > +	if (ret)
+> > +		return ret;
+> > +	return register_ftrace_direct(ops, addr);
+> > +}
+> > +
+> > +static int direct_ops_del(struct bpf_trampoline *tr, void *addr)
+> > +{
+> > +	return unregister_ftrace_direct(tr->fops, (long)addr, false);
+> > +}
+> > +
+> > +static int direct_ops_mod(struct bpf_trampoline *tr, void *ptr, bool lock_direct_mutex)
+> > +{
+> > +	unsigned long addr = (unsigned long) ptr;
+> > +	struct ftrace_ops *ops = tr->fops;
+> > +
+> > +	if (bpf_trampoline_use_jmp(tr->flags))
+> > +		addr = ftrace_jmp_set(addr);
+> > +	if (lock_direct_mutex)
+> > +		return modify_ftrace_direct(ops, addr);
+> > +	return modify_ftrace_direct_nolock(ops, addr);
+> > +}
+> > +#endif /* CONFIG_HAVE_SINGLE_FTRACE_DIRECT_OPS */
+> > +#else
+> > +static void direct_ops_free(struct bpf_trampoline *tr) { }
+> 
+> This is somewhat inconsistent with direct_ops_alloc() that has:
+> 
+> #ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
+> 	if (direct_ops_alloc(tr)) {
+> 		kfree(tr);
+> 		tr = NULL;
+> 		goto out;
+> 	}
+> #endif
+> 
+> Now, if you wrap the direct_ops_free() too, we can remove the
+>  #ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
+> part with my kconfig suggestion. Otherwise keep the kconfig as is, but I
+> would add a stub function for direct_ops_alloc() too.
+
+ah right.. I think let's do the kconfig change you suggest to make
+this simpler
+
+> 
+> > +#endif /* CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS */
+> > +
+> >  static struct bpf_trampoline *bpf_trampoline_lookup(u64 key, unsigned long ip)
+> >  {
+> >  	struct bpf_trampoline *tr;
+> > @@ -155,14 +316,11 @@ static struct bpf_trampoline *bpf_trampoline_lookup(u64 key, unsigned long ip)
+> >  	if (!tr)
+> >  		goto out;
+> >  #ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
+> > -	tr->fops = kzalloc(sizeof(struct ftrace_ops), GFP_KERNEL);
+> > -	if (!tr->fops) {
+> > +	if (direct_ops_alloc(tr)) {
+> >  		kfree(tr);
+> >  		tr = NULL;
+> >  		goto out;
+> >  	}
+> > -	tr->fops->private = tr;
+> > -	tr->fops->ops_func = bpf_tramp_ftrace_ops_func;
+> >  #endif
+> >  
+> >  	tr->key = key;
+> > @@ -206,7 +364,7 @@ static int unregister_fentry(struct bpf_trampoline *tr, u32 orig_flags,
+> >  	int ret;
+> >  
+> >  	if (tr->func.ftrace_managed)
+> > -		ret = unregister_ftrace_direct(tr->fops, (long)old_addr, false);
+> > +		ret = direct_ops_del(tr, old_addr);
+> 
+> Doesn't this need a wrapper too?
+
+yep
+
+> 
+> >  	else
+> >  		ret = bpf_trampoline_update_fentry(tr, orig_flags, old_addr, NULL);
+> >  
+> > @@ -220,15 +378,7 @@ static int modify_fentry(struct bpf_trampoline *tr, u32 orig_flags,
+> >  	int ret;
+> >  
+> >  	if (tr->func.ftrace_managed) {
+> > -		unsigned long addr = (unsigned long) new_addr;
+> > -
+> > -		if (bpf_trampoline_use_jmp(tr->flags))
+> > -			addr = ftrace_jmp_set(addr);
+> > -
+> > -		if (lock_direct_mutex)
+> > -			ret = modify_ftrace_direct(tr->fops, addr);
+> > -		else
+> > -			ret = modify_ftrace_direct_nolock(tr->fops, addr);
+> > +		ret = direct_ops_mod(tr, new_addr, lock_direct_mutex);
+> 
+> and this.
+> 
+> >  	} else {
+> >  		ret = bpf_trampoline_update_fentry(tr, orig_flags, old_addr,
+> >  						   new_addr);
+> > @@ -251,15 +401,7 @@ static int register_fentry(struct bpf_trampoline *tr, void *new_addr)
+> >  	}
+> >  
+> >  	if (tr->func.ftrace_managed) {
+> > -		unsigned long addr = (unsigned long) new_addr;
+> > -
+> > -		if (bpf_trampoline_use_jmp(tr->flags))
+> > -			addr = ftrace_jmp_set(addr);
+> > -
+> > -		ret = ftrace_set_filter_ip(tr->fops, (unsigned long)ip, 0, 1);
+> > -		if (ret)
+> > -			return ret;
+> > -		ret = register_ftrace_direct(tr->fops, addr);
+> > +		ret = direct_ops_add(tr, new_addr);
+> 
+> Ditto.
+
+yes
+
+> 
+> >  	} else {
+> >  		ret = bpf_trampoline_update_fentry(tr, 0, NULL, new_addr);
+> >  	}
+> > @@ -910,10 +1052,7 @@ void bpf_trampoline_put(struct bpf_trampoline *tr)
+> >  	 */
+> >  	hlist_del(&tr->hlist_key);
+> >  	hlist_del(&tr->hlist_ip);
+> > -	if (tr->fops) {
+> > -		ftrace_free_filter(tr->fops);
+> > -		kfree(tr->fops);
+> > -	}
+> > +	direct_ops_free(tr);
+> >  	kfree(tr);
+> >  out:
+> >  	mutex_unlock(&trampoline_mutex);
+> > diff --git a/kernel/trace/Kconfig b/kernel/trace/Kconfig
+> > index 4661b9e606e0..1ad2e307c834 100644
+> > --- a/kernel/trace/Kconfig
+> > +++ b/kernel/trace/Kconfig
+> > @@ -50,6 +50,9 @@ config HAVE_DYNAMIC_FTRACE_WITH_REGS
+> >  config HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
+> >  	bool
+> >  
+> > +config HAVE_SINGLE_FTRACE_DIRECT_OPS
+> > +	bool
+> > +
+> 
+> Now you could add:
+> 
+>   config SINGLE_FTRACE_DIRECT_OPS
+> 	bool
+> 	default y
+> 	depends on HAVE_SINGLE_FTRACE_DIRECT_OPS && DYNAMIC_FTRACE_WITH_DIRECT_CALLS
+
+ok, the dependency is more ovbvious, will change
 
 thanks,
 jirka
