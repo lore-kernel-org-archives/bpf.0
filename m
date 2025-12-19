@@ -1,138 +1,145 @@
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1E9233F38D
-	for <bpf@vger.kernel.org>; Fri, 19 Dec 2025 18:44:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A95F34A3D0
+	for <bpf@vger.kernel.org>; Fri, 19 Dec 2025 18:45:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766169885; cv=none; b=m3OIJLJcGkLP0iF+vkjCcDFHkN0V0mDs7kVrnvvdkZGajX7RZUboqJzTGTHpTuP4oLpgmW+NTUEDpQEDimqo46fT6lBJNwrxRjokn3T8alaN9T+MCS1lYlBwImAcTASWvjbDCjkWu4sdE3FkdRtRp8Cfdzn0oYltc/7m43TNers=
+	t=1766169913; cv=none; b=WhhoXj+036zkq0/rAIibEJsN7+/d4LEGbH+2jsXQV+1gEMSb218E+PqwWpi7G81zqKoTjFHv1P9P8ZGJ4PcfD5ylF7eptxdee4F0UO1ybcbReqORN8N9A6/nLicCl9UovEj+B956byx0+YcfALhxrmdrOSm3koRwhdyLPNeqV5I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766169885; c=relaxed/simple;
-	bh=qUIbJz4v0Rubf3X8GDdYbaOS1mdha3XyVNbYZgSaA2w=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=QKHsL2RK++AdQFlIYA+DZ7U+as8emP8Tqu3HsVdB2F3yRsWHWRMCi5x8kAZpL9CWEQPpkVDw4GrurlWT2WQlM05+1jcabkmqkFt/V1449X7FcqOmNmyEZ+CVjWcmIX0RW4sv0PScUFKYGccRve0YlwvXWHjU6/hry4tEfUn6oB4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eLTVGQFO; arc=none smtp.client-ip=209.85.216.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1766169913; c=relaxed/simple;
+	bh=fdA4SOinV6miSZMqEmQwwi0gHc728+lALNs8BrpnCfU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=uWTk7huBv+0GR/6NwFQAPza/EVd7sRg1g3nxG3tR0Ss6vMSlMG80s6iOxAS0E5xzdxI9qaEVDtpGdI9hYoeOhBEYF1xofJK0dBlMjheenYn0OXgvYgy3ZoLJn6p6Ye3n5mlyAo/Zva5wMgatZREDDwZicngRXDm9lgs3lqHx0sY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s07KTV3/; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eLTVGQFO"
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-34c565c3673so1451652a91.0
-        for <bpf@vger.kernel.org>; Fri, 19 Dec 2025 10:44:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1766169882; x=1766774682; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=qUIbJz4v0Rubf3X8GDdYbaOS1mdha3XyVNbYZgSaA2w=;
-        b=eLTVGQFOzm5xYs/oOJBZEUEfMtz4C/cClPhCnkB1LQ7F1FZ2epst6goqVyorHscKA8
-         0/RxHrU0w8afpP1kDBWuYeXR6UR/Kxy5oMTQGlXuncSMMQkQ0jeuawe7Mnq+69xNUM/h
-         5tCcZUcRzrhAMEb6brjcE+pf6brIBGqJVjDvE6j1Pyuf6WSgfaxc5eLRbJz4A+MKUFmc
-         +lSb4048Qg6Cpwx79oPhARzOZ3VHwyuTk9Zh7248ya6npu3TGG4fwiFxqTk2fD4fh7W5
-         azn1IhpQqZ0H7taq+vn4uYoONFsFY3G+Lh9SFyecpdTj8R1kfPzy6KaobAQzaFi58cNk
-         1nPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766169882; x=1766774682;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qUIbJz4v0Rubf3X8GDdYbaOS1mdha3XyVNbYZgSaA2w=;
-        b=gqTu1eA+QhLk+nk5B3kHaXAiaza0D6F25Qw3w6N35I4w2EIcgSYeu1GfLbJEphWya/
-         AtdwiSggDKfizYs31uGarGF60mJsWqhIhroV9ezhsD71/HahyfQoiM1na+WDHH9PZg42
-         K25cx0j0fAHLm4MXEpaYu09obNhFNY7V+U+QF/cq7p3gg+pfJtbSfez33ZvWYxw7JRum
-         vWFKCtKtYcVzm6tPWippptJbUS0zFrEjBNN6TYso/01ySqeGTKwWZsAePLE7gV9u2+bR
-         Rwh2h/FPbd8Mb8rDVh1+f8S1BYa3dZeyXNncUX08uQI843eYflBX9joetYGGpTbqXf/B
-         HXWA==
-X-Forwarded-Encrypted: i=1; AJvYcCUB+wpRK1B6S4p/NyhzUC6PYwfI9eZJBMuJ36E6RVMUnWKOGmKk3hzBZd62BUa8tgzPhW4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzZ5n7/+n9BlpS2ZQdgDUNyiSraXNdch5jit8SPFJ8V+rj8Chzc
-	UgfeO4WtY5SRLtTgZbQWMbV8U82GtQfuYI9HwZwE7lblIk+rZJy/pF1J
-X-Gm-Gg: AY/fxX5F/n9cfJ/XqmSRf86jg4RqACSwo7bQgg00njK+uAHAMvFiQCG7tTRv9A1+HVD
-	qc6glapwc2v7lCdp1cLSFpsnd30ey4+UObJsk0tSwpwh0mizilUCZED11GlmfrK8XDp6ZdCAVj2
-	E7RaosUoCvYZWrWIZUuP5+LwCAQuzXUbPuLGnGHvGrR5j8qi8nKxU2fXqc4XiRO9zsdgpraa4Nn
-	ybesEytdPsmC7Smdr99US/l4RlRhVO5WYA3gzuYNpwU13gIM0IPTQ8FGO3RyBJOOB/hNhF1Cj/Y
-	xvnFBgJJwkpWvQjnhkIZbhaFVmM6qeUFjPui07Py3mshxTG9mdS/5dr3ngCeh/R6CYmVMrY7d/R
-	htA34KkWlcgvc1HwoHg10pqN8NdTDEv3dmtw82/DBnjzWSl5lMVjVOspYuLhVaSRUDOcu26bLA4
-	6RP4UkZBA=
-X-Google-Smtp-Source: AGHT+IG31t9E+qtbzvlggQ58tNUpirdrVXwoq5p8e1XvpatVKwcKANPdBsUzaj3dxq8sc9z2zdP7qg==
-X-Received: by 2002:a17:90b:1d0d:b0:32e:23c9:6f41 with SMTP id 98e67ed59e1d1-34e90d6980bmr3302082a91.5.1766169881612;
-        Fri, 19 Dec 2025 10:44:41 -0800 (PST)
-Received: from [192.168.0.56] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-34e76ce0c8asm2156786a91.2.2025.12.19.10.44.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Dec 2025 10:44:40 -0800 (PST)
-Message-ID: <aaeacdd937e2d0b04959c009bc9ebdd18497865b.camel@gmail.com>
-Subject: Re: [PATCH v8 bpf-next 02/10] libbpf: Support kind layout section
- handling in BTF
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Alan Maguire <alan.maguire@oracle.com>, andrii@kernel.org,
- ast@kernel.org, 	daniel@iogearbox.net, martin.lau@linux.dev,
- song@kernel.org, 	yonghong.song@linux.dev, john.fastabend@gmail.com,
- kpsingh@kernel.org, 	sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
- qmo@kernel.org, 	ihor.solodrai@linux.dev, dwarves@vger.kernel.org,
- bpf@vger.kernel.org, 	ttreyer@meta.com, mykyta.yatsenko5@gmail.com
-Date: Fri, 19 Dec 2025 10:44:37 -0800
-In-Reply-To: <CAEf4BzaS9xoFaTF7LEyjYg9iPZZGn3=UhDVXAv9AuuMz1wFoZg@mail.gmail.com>
-References: <20251215091730.1188790-1-alan.maguire@oracle.com>
-	 <20251215091730.1188790-3-alan.maguire@oracle.com>
-	 <CAEf4Bza+C7nRxFDHS0dNDk5XF79nE6y4GqEu0bmtJPTMoFrNvQ@mail.gmail.com>
-	 <db38bb39-7d16-41b6-968d-61e3b7681440@oracle.com>
-	 <CAEf4Bzbn_eWC8W8+so-BgkzNOxx8jgEysU3kTzBCW1jwXPEfnQ@mail.gmail.com>
-	 <ccafde20-3ea5-458a-b2e7-219aaa9a7ff0@oracle.com>
-	 <CAEf4BzZ+iH1XvaYOjE==GPJ6wFo14_QtrFYvyvWa=ebc6UKPbA@mail.gmail.com>
-	 <a99c8b9148a71c7827b00be5c793bfe8379de1de.camel@gmail.com>
-	 <CAEf4BzaS9xoFaTF7LEyjYg9iPZZGn3=UhDVXAv9AuuMz1wFoZg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.1 (3.58.1-1.fc43) 
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s07KTV3/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 817A3C4CEF1;
+	Fri, 19 Dec 2025 18:45:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1766169912;
+	bh=fdA4SOinV6miSZMqEmQwwi0gHc728+lALNs8BrpnCfU=;
+	h=From:To:Cc:Subject:Date:From;
+	b=s07KTV3/t/3VWmRiphv+Bn5MBtMCTbr8s6G6GAMkPXiuQSfuDQqKfqutVHPs1HA4B
+	 /HRuExZNbYLsnH+fCr3CuEHnaCPMK1TWHo6dmUvTzV+OsMEPacltUQz/GCRDFev+FN
+	 cPITfAkVQw1Z18rvAPOYfwu/v7cdbRf4XnslIwcLkC3SQVS9pPhkwF6lpFGim5VWKP
+	 WUXHF710AUTVV9za5TcX/lKaut0YOL6fkmlsrTgq2Y0f1M8pRf9EGIOTKvqu0gktVm
+	 uoOBDGt/AYfE0uplvQLEWKX86wK9dhOcjg1nfpVvfzkiKvGzYc2qFp7D2K4kNNRVx0
+	 e7zKdqCeTguNA==
+From: Puranjay Mohan <puranjay@kernel.org>
+To: bpf@vger.kernel.org
+Cc: Puranjay Mohan <puranjay@kernel.org>,
+	Puranjay Mohan <puranjay12@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	kernel-team@meta.com,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	linux-arm-kernel@lists.infradead.org
+Subject: [PATCH bpf-next v3 0/2] bpf: Optimize recursion detection on arm64
+Date: Fri, 19 Dec 2025 10:44:16 -0800
+Message-ID: <20251219184422.2899902-1-puranjay@kernel.org>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Fri, 2025-12-19 at 10:41 -0800, Andrii Nakryiko wrote:
-> On Fri, Dec 19, 2025 at 10:36=E2=80=AFAM Eduard Zingerman <eddyz87@gmail.=
-com> wrote:
-> >=20
-> > On Fri, 2025-12-19 at 10:21 -0800, Andrii Nakryiko wrote:
-> >=20
-> > [...]
-> >=20
-> > > > The sanitization for user-space consumption is doable alright, I wa=
-s thinking
-> > > > of the case where the kernel itself reads in BTF for vmlinux/module=
-s on boot,
-> > > > and that BTF was generated by newer pahole so has unexpected layout=
- info.
-> > > > If we just emitted layout info unconditionally that would mean newe=
-r pahole might
-> > > > generate BTf for a kernel that it could not read. If however we rel=
-axed the
-> > > > constraints a bit I think we could get the validation to succeed fo=
-r older
-> > > > kernels while ignoring the bits of the BTF they don't care about. F=
-ix that would
-> > > > also potentially future-proof addition of other sections to the BTF=
- header without
-> > > > requiring options.
-> > >=20
-> > > No, let's forget about allowing the kernel to let through some
-> > > unrecognized parts of BTF. Pahole will keep introducing feature flags
-> > > that we need to enable (like layout stuff, for example), so old
-> > > kernels built with new pahole will be just fine. And any
-> > > kernel-specific modifications will be moved to resolve_btfids and wil=
-l
-> > > be in-sync with kernel logic. I think we are all good and we don't
-> > > have to invent new things on this front, potentially opening us up to
-> > > some unforeseen attacks through BTF injection.
-> >=20
-> > That would mean that the flag to generate or not layout information
-> > should remain, right?
->=20
-> Yeah, unfortunately, as there will be no libbpf to sanitize that. But
-> that brings the layout question for Clang/GCC, are we adding that?
-> That should be emitted unconditionally, IMO.
+V2: https://lore.kernel.org/all/20251217233608.2374187-1-puranjay@kernel.org/
+Changes in v2->v3:
+- Added acked by Yonghong
+- Patch 2:
+        - Change alignment of active from 8 to 4
+        - Use le32_to_cpu in place of get_unaligned_le32()
 
-I don't think we have layout generation in the current roadmap.
-I'll add it to the plan.
+V1: https://lore.kernel.org/all/20251217162830.2597286-1-puranjay@kernel.org/
+Changes in V1->V2:
+- Patch 2:
+        - Put preempt_enable()/disable() around RMW accesses to mitigate
+          race conditions. Because on CONFIG_PREEMPT_RCU and sleepable
+	  bpf programs, preemption can cause no bpf prog to execute in
+	  case of recursion.
+
+BPF programs detect recursion using a per-CPU 'active' flag in struct
+bpf_prog. The trampoline currently sets/clears this flag with atomic
+operations.
+
+On some arm64 platforms (e.g., Neoverse V2 with LSE), per-CPU atomic
+operations are relatively slow. Unlike x86_64 - where per-CPU updates
+can avoid cross-core atomicity, arm64 LSE atomics are always atomic
+across all cores, which is unnecessary overhead for strictly per-CPU
+state.
+
+This patch removes atomics from the recursion detection path on arm64.
+
+It was discovered in [1] that per-CPU atomics that don't return a value
+were extremely slow on some arm64 platforms, Catalin added a fix in
+commit 535fdfc5a228 ("arm64: Use load LSE atomics for the non-return
+per-CPU atomic operations") to solve this issue, but it seems to have
+caused a regression on the fentry benchmark.
+
+Using the fentry benchmark from the bpf selftests shows the following:
+
+  ./tools/testing/selftests/bpf/bench trig-fentry
+
+ +---------------------------------------------+------------------------+
+ |               Configuration                 | Total Operations (M/s) |
+ +---------------------------------------------+------------------------+
+ | bpf-next/master with Catalin’s fix reverted |         51.770         |
+ |---------------------------------------------|------------------------|
+ | bpf-next/master                             |         43.271         |
+ | bpf-next/master with this change            |         43.271         |
+ +---------------------------------------------+------------------------+
+
+All benchmarks were run on a KVM based vm with Neoverse-V2 and 8 cpus.
+
+This patch yields a 25% improvement in this benchmark compared to
+bpf-next. Notably, reverting Catalin's fix also results in a performance
+gain for this benchmark, which is interesting but expected.
+
+For completeness, this benchmark was also run with the change enabled on
+x86-64, which resulted in a 30% regression in the fentry benchmark. So,
+it is only enabled on arm64.
+
+P.S. - Here is more data with other program types:
+
+ +-----------------+-----------+-----------+----------+
+ |     Metric      |  Before   |   After   | % Diff   |
+ +-----------------+-----------+-----------+----------+
+ | fentry          |   43.149  |   53.948  | +25.03%  |
+ | fentry.s        |   41.831  |   50.937  | +21.76%  |
+ | rawtp           |   50.834  |   58.731  | +15.53%  |
+ | fexit           |   31.118  |   34.360  | +10.42%  |
+ | tp              |   39.536  |   41.632  |  +5.30%  |
+ | syscall-count   |    8.053  |    8.305  |  +3.13%  |
+ | fmodret         |   33.940  |   34.769  |  +2.44%  |
+ | kprobe          |    9.970  |    9.998  |  +0.28%  |
+ | usermode-count  |  224.886  |  224.839  |  -0.02%  |
+ | kernel-count    |  154.229  |  153.043  |  -0.77%  |
+ +-----------------+-----------+-----------+----------+
+
+[1] https://lore.kernel.org/all/e7d539ed-ced0-4b96-8ecd-048a5b803b85@paulmck-laptop/
+
+Puranjay Mohan (2):
+  bpf: move recursion detection logic to helpers
+  bpf: arm64: Optimize recursion detection by not using atomics
+
+ include/linux/bpf.h      | 38 +++++++++++++++++++++++++++++++++++++-
+ kernel/bpf/core.c        |  3 ++-
+ kernel/bpf/trampoline.c  |  8 ++++----
+ kernel/trace/bpf_trace.c |  4 ++--
+ 4 files changed, 45 insertions(+), 8 deletions(-)
+
+
+base-commit: ec439c38013550420aecc15988ae6acb670838c1
+-- 
+2.47.3
+
