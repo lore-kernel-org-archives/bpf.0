@@ -1,31 +1,30 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DFCA34B40C
-	for <bpf@vger.kernel.org>; Fri, 19 Dec 2025 18:45:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED1911D5CD4
+	for <bpf@vger.kernel.org>; Fri, 19 Dec 2025 19:13:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766169926; cv=none; b=j0bnKONGb1ZjFBHL3Bq9Xu4sS41I1liSWnITdslo7ArHhepVnzqtOH80u+e+md2kbgbDs1pM3jkrWBTcimWQmEwR7phbYvtKYRBj/xFWRHHJEOIPxkTSclv2gNRm6KdwrJ6m0G5Xi/t+R25IJ7IxtR7Limrpp4TKKA8rMQe+p2g=
+	t=1766171600; cv=none; b=XOGspwdkrYvfAkTBQfLnYDJUvY4ArT72qn0cEx8zTCS9UyhWVV1Z2WSvOs74CmLFPOwEPkhhdG+lSAtpekg8QDZApewDwheL706uuzjsu4XwleOMwkuqb7piMEDl9N7LWAFL1PplBzvDrxWakHo3ZSgn+SOhEJ0m7G9OZIYmN2A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766169926; c=relaxed/simple;
-	bh=MX7u6YCAf8ISSlBSjmO63NiEj72J0NgYtomqNWx848Q=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=aCxQdSEo7XDJ/cd81qwkpFc22C8hm9qY2LWo0wLTr8AsenS/hFa3QoftbkwiGJnsDA0X+smpgc+fOTk0p84yW6/R4kjCRkuIZGqmDe4+qvZ08BfRCcZrLUaS4nViQ4pdHmFvBxKffPdsOxvHiE8Wi8/9tFZZ1CJzgQVjp57IOzY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nDW6/vgK; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1766171600; c=relaxed/simple;
+	bh=bNjCGaEWJYJ9D3C/P+SCnczJupzEw0pdhQAN2wkW+FQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ULUdANp0/a/tYkR+aDnX2zUIkgEbywGL0R6BLmkSkpoY2pPljO/d1L9EzRVSrm2t+2+xyHPGXYV/EdtzZz/k+RV2Ed6jJm7S9ewjiAAZ1oyVadE+84jPFcAcMzJ0cXvSYspEuMZQ7UiXxOh0iPPuDR/ItSd7CvIEppw+n72v0Tk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KDgyx7yv; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nDW6/vgK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73704C4CEF1;
-	Fri, 19 Dec 2025 18:45:25 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KDgyx7yv"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56E50C4CEF1;
+	Fri, 19 Dec 2025 19:13:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1766169925;
-	bh=MX7u6YCAf8ISSlBSjmO63NiEj72J0NgYtomqNWx848Q=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=nDW6/vgKTnJzLQNhfd/FgWJBM6F7bnYDZ7fWbB/Lq4456mxPv4v/tZKKPyhYmzhD0
-	 mG32Jh7mT8vqC8XrthShEjEwQloJo1NKBd5qfUCZMGT2iFQt66cPH5eJtGWAdrSAIm
-	 yPMkS6Ogp6J7o06tRP/BrTj3MvWSRUMQSawtD5byKMOlyrLl0aAyCYG2iP6rzYoKDY
-	 MRMObERDYUbya6zAsXWX8HwNxRObnQtkCu3bDs8CtpsygQBSu96v6XdP7/KDFAj7/k
-	 lmsSfq/PWDa+wkxOGRUbPD0YKqZ8+VYFZpK9Kl7bzuqkEO/krJQwGO80ZDRkzA8YrL
-	 YcF7p3Wwb7gEg==
+	s=k20201202; t=1766171599;
+	bh=bNjCGaEWJYJ9D3C/P+SCnczJupzEw0pdhQAN2wkW+FQ=;
+	h=From:To:Cc:Subject:Date:From;
+	b=KDgyx7yvvBl7t6cWEy5UX965mT27TE6ZyhMo7X2huTva91K6g4pUPHG/nAy7PdEXU
+	 6V04AAF2ogpTiCZ28pIsXv0nmqUagijrRI4NexZJZssL4fhHCgWgVcYsiZWCVr+fGf
+	 4yfK5IbRiTpVTpX3FI5WwrnAGV2PDPt2nE55xZa/uWNn8n6bkhqtzoJdQF+bwvMkvd
+	 dSsTquVb90K4NBQcrYkYNHYmuJILDuYDetNkGqovg6/rWWo1TZupCWHnbXORrMqWlz
+	 rtovLyhNMj99Wjbgrq3IGxjNredqAs22YX223sNW51OMXZb36vJr5ZQnUk4AGgk/XS
+	 3QGo47LsKqerA==
 From: Puranjay Mohan <puranjay@kernel.org>
 To: bpf@vger.kernel.org
 Cc: Puranjay Mohan <puranjay@kernel.org>,
@@ -42,12 +41,10 @@ Cc: Puranjay Mohan <puranjay@kernel.org>,
 	Mark Rutland <mark.rutland@arm.com>,
 	linux-arm-kernel@lists.infradead.org,
 	Yonghong Song <yonghong.song@linux.dev>
-Subject: [PATCH bpf-next v3 2/2] bpf: arm64: Optimize recursion detection by not using atomics
-Date: Fri, 19 Dec 2025 10:44:18 -0800
-Message-ID: <20251219184422.2899902-3-puranjay@kernel.org>
+Subject: [PATCH bpf-next] bpf: arm64: fix sparse warnings
+Date: Fri, 19 Dec 2025 11:13:08 -0800
+Message-ID: <20251219191310.3204425-1-puranjay@kernel.org>
 X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20251219184422.2899902-1-puranjay@kernel.org>
-References: <20251219184422.2899902-1-puranjay@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -56,114 +53,42 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-BPF programs detect recursion using a per-CPU 'active' flag in struct
-bpf_prog. The trampoline currently sets/clears this flag with atomic
-operations.
+ctx->image is declared as __le32 because arm64 instructions are LE
+regardless of CPU's runtime endianness. emit_u32_data() emits raw data
+and not instructions so cast the value to __le32 to fix the sparse
+warning.
 
-On some arm64 platforms (e.g., Neoverse V2 with LSE), per-CPU atomic
-operations are relatively slow. Unlike x86_64 - where per-CPU updates
-can avoid cross-core atomicity, arm64 LSE atomics are always atomic
-across all cores, which is unnecessary overhead for strictly per-CPU
-state.
+Cast function pointer to void * before doing arithmetic.
 
-This patch removes atomics from the recursion detection path on arm64 by
-changing 'active' to a per-CPU array of four u8 counters, one per
-context: {NMI, hard-irq, soft-irq, normal}. The running context uses a
-non-atomic increment/decrement on its element.  After increment,
-recursion is detected by reading the array as a u32 and verifying that
-only the expected element changed; any change in another element
-indicates inter-context recursion, and a value > 1 in the same element
-indicates same-context recursion.
-
-For example, starting from {0,0,0,0}, a normal-context trigger changes
-the array to {0,0,0,1}.  If an NMI arrives on the same CPU and triggers
-the program, the array becomes {1,0,0,1}. When the NMI context checks
-the u32 against the expected mask for normal (0x00000001), it observes
-0x01000001 and correctly reports recursion. Same-context recursion is
-detected analogously.
-
-Acked-by: Yonghong Song <yonghong.song@linux.dev>
 Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
 ---
- include/linux/bpf.h | 32 +++++++++++++++++++++++++++++---
- kernel/bpf/core.c   |  3 ++-
- 2 files changed, 31 insertions(+), 4 deletions(-)
+ arch/arm64/net/bpf_jit_comp.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 2da986136d26..da6a00dd313f 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1746,6 +1746,8 @@ struct bpf_prog_aux {
- 	struct bpf_map __rcu *st_ops_assoc;
- };
- 
-+#define BPF_NR_CONTEXTS        4       /* normal, softirq, hardirq, NMI */
-+
- struct bpf_prog {
- 	u16			pages;		/* Number of allocated pages */
- 	u16			jited:1,	/* Is our filter JIT'ed? */
-@@ -1772,7 +1774,7 @@ struct bpf_prog {
- 		u8 tag[BPF_TAG_SIZE];
- 	};
- 	struct bpf_prog_stats __percpu *stats;
--	int __percpu		*active;
-+	u8 __percpu		*active;	/* u8[BPF_NR_CONTEXTS] for recursion protection */
- 	unsigned int		(*bpf_func)(const void *ctx,
- 					    const struct bpf_insn *insn);
- 	struct bpf_prog_aux	*aux;		/* Auxiliary fields */
-@@ -2006,12 +2008,36 @@ struct bpf_struct_ops_common_value {
- 
- static inline bool bpf_prog_get_recursion_context(struct bpf_prog *prog)
+diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+index b6eb7a465ad2..0c4d44bcfbf4 100644
+--- a/arch/arm64/net/bpf_jit_comp.c
++++ b/arch/arm64/net/bpf_jit_comp.c
+@@ -118,7 +118,7 @@ static inline void emit(const u32 insn, struct jit_ctx *ctx)
+ static inline void emit_u32_data(const u32 data, struct jit_ctx *ctx)
  {
--	return this_cpu_inc_return(*(prog->active)) == 1;
-+#ifdef CONFIG_ARM64
-+	u8 rctx = interrupt_context_level();
-+	u8 *active = this_cpu_ptr(prog->active);
-+	u32 val;
-+
-+	preempt_disable();
-+	active[rctx]++;
-+	val = le32_to_cpu(*(__le32 *)active);
-+	preempt_enable();
-+	if (val != BIT(rctx * 8))
-+		return false;
-+
-+	return true;
-+#else
-+	return this_cpu_inc_return(*(int __percpu *)(prog->active)) == 1;
-+#endif
- }
+ 	if (ctx->image != NULL && ctx->write)
+-		ctx->image[ctx->idx] = data;
++		ctx->image[ctx->idx] = (__force __le32)data;
  
- static inline void bpf_prog_put_recursion_context(struct bpf_prog *prog)
- {
--	this_cpu_dec(*(prog->active));
-+#ifdef CONFIG_ARM64
-+	u8 rctx = interrupt_context_level();
-+	u8 *active = this_cpu_ptr(prog->active);
-+
-+	preempt_disable();
-+	active[rctx]--;
-+	preempt_enable();
-+#else
-+	this_cpu_dec(*(int __percpu *)(prog->active));
-+#endif
+ 	ctx->idx++;
  }
- 
- #if defined(CONFIG_BPF_JIT) && defined(CONFIG_BPF_SYSCALL)
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index c66316e32563..e0b8a8a5aaa9 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -112,7 +112,8 @@ struct bpf_prog *bpf_prog_alloc_no_stats(unsigned int size, gfp_t gfp_extra_flag
- 		vfree(fp);
- 		return NULL;
- 	}
--	fp->active = alloc_percpu_gfp(int, bpf_memcg_flags(GFP_KERNEL | gfp_extra_flags));
-+	fp->active = __alloc_percpu_gfp(sizeof(u8[BPF_NR_CONTEXTS]), 4,
-+					bpf_memcg_flags(GFP_KERNEL | gfp_extra_flags));
- 	if (!fp->active) {
- 		vfree(fp);
- 		kfree(aux);
+@@ -3139,7 +3139,7 @@ void bpf_jit_free(struct bpf_prog *prog)
+ 			bpf_jit_binary_pack_finalize(jit_data->ro_header, jit_data->header);
+ 			kfree(jit_data);
+ 		}
+-		prog->bpf_func -= cfi_get_offset();
++		prog->bpf_func = (void *)prog->bpf_func - cfi_get_offset();
+ 		hdr = bpf_jit_binary_pack_hdr(prog);
+ 		bpf_jit_binary_pack_free(hdr, NULL);
+ 		priv_stack_ptr = prog->aux->priv_stack_ptr;
+
+base-commit: ec439c38013550420aecc15988ae6acb670838c1
 -- 
 2.47.3
 
