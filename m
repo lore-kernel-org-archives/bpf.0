@@ -1,144 +1,147 @@
-Received: from mail-yx1-f66.google.com (mail-yx1-f66.google.com [74.125.224.66])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B8862D3225
-	for <bpf@vger.kernel.org>; Fri, 19 Dec 2025 14:04:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7672D2FCC0E
+	for <bpf@vger.kernel.org>; Fri, 19 Dec 2025 14:36:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766153086; cv=none; b=fwFEScevLXFhwgs7OFvsPUFqqlKuyOgncrimDfibMEjt5sEGaosqaKYz7CVjtlhh+3gF4Pb6dbHshf9hrt6CnAMb98OMrTdmtoGgbckh3sjPmwJIFQ0S7MlD+XLlLY8xRYHzUpUWyoFDkRu/pzTmhsNRz6mkP1PNhepvPkSWrgk=
+	t=1766154996; cv=none; b=FkGWWVP11saBfI/GiisLryzO6YHHzimBnUiDutqAybNKbsABiAvRQOB0e534K2lECI4MCTYomkrAOfjps6lvG7aMPkTlJOgOi8mSaFg+nBma2YssQIoOo2W40jmSo+rvpIsOQXSyDr6z9aehsS/skv01iTE0hCdkarc6aGWN6vE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766153086; c=relaxed/simple;
-	bh=xrwer0i51j+vK7w8PnSsMSuWOOnWfVvIOvT/dSmKgHs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=HMZxNi3YgQXP0z6S6o6PYXvJuQMqWwSRrwWZwMdckCQy8P5AIcR9KDe2LHHdfJ+LzFB4RXdtpyeaN9E1Obd0qwq1NsRhWLbjk0cdCxMSh3SQQu+JlTlgBrZLen0MESz9ps8ndKAIcOozZRuhP8+cT8z6xuhS/c6PTGCvEPEAtjY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UKyIuDnj; arc=none smtp.client-ip=74.125.224.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1766154996; c=relaxed/simple;
+	bh=HSFPB/bwkL8yxZYc5klNfsL7dvjnOX38Gvv8GtWH4y8=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=R7AAf6NyaLf8To2eyi8kzU8JRw3Wgsh5X7nXhrfZE/Oq9QJNOyaitXpAI5lENNaNTcz+iOqwWK2w4jcfgDm0prKkHpugXScS2Wv5CbchI66tDx3t5QjHdW4cqAdgQLDbnI78i0PoGBe/u9O5xQlOvQGmR7XtYsWp8jn3GmYkdgw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=RjKkpD3R; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=mzdytlFU; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UKyIuDnj"
-Received: by mail-yx1-f66.google.com with SMTP id 956f58d0204a3-64669a2ecb5so1216765d50.1
-        for <bpf@vger.kernel.org>; Fri, 19 Dec 2025 06:04:45 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="RjKkpD3R";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="mzdytlFU"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1766154993;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+	bh=HSFPB/bwkL8yxZYc5klNfsL7dvjnOX38Gvv8GtWH4y8=;
+	b=RjKkpD3RXZsHSkmqATCeCNrRgEzjo0njIGXNtxQsF67g38C/YSugzP69ThVq5XZk7T5B/2
+	6vt9TZnLdZRXMZdSzRuAaT/5US4+KHNTHpq3viVjJdJFuVQKUfLFgKIteGm1Ka6lGriTYB
+	ujoR1pOFcFGZiinlbUPis3lUpicwTD0=
+Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com
+ [209.85.214.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-220--p0d11w2OgaizL1ur8fLLQ-1; Fri, 19 Dec 2025 09:36:30 -0500
+X-MC-Unique: -p0d11w2OgaizL1ur8fLLQ-1
+X-Mimecast-MFC-AGG-ID: -p0d11w2OgaizL1ur8fLLQ_1766154990
+Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-29e6b269686so36187065ad.1
+        for <bpf@vger.kernel.org>; Fri, 19 Dec 2025 06:36:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1766153084; x=1766757884; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EGxqoB7Y4Q+aOAQo4uC0e9A1qBgkvdCsyCbyewI9lPY=;
-        b=UKyIuDnjHvcT9KPr4vzCfz5FXEu9NIYs8k+ax4Tbo/2MYPxnEPuWwxQDq47op7tvOt
-         t/l/hvcaksGlB/5tN1EpdF2+b47noPbj+ljlf0QSFagjslEaVLMVlGBfGMG5Ng0iis3z
-         rHfyF/nC7MK9gU1E7sJn6OawwB5dY891zk7T3PLrFCylbhhWFlahNJiQJNEX+I4J8loC
-         EaxUfuByQ0XfzYoXUU/Hh7oKlkT31q3lbrA07sbttUlARITvhtTS7RRzED7xjmhfR7D5
-         ZUT2/PL3dPi/kgQ30k/MrmYbq6cPiZNV4P5KZx50aT45kDFyrha1If9Sg/5fPezRtPdn
-         yYdQ==
+        d=redhat.com; s=google; t=1766154990; x=1766759790; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=HSFPB/bwkL8yxZYc5klNfsL7dvjnOX38Gvv8GtWH4y8=;
+        b=mzdytlFUdC/37s5JWCld6fcexuKbbyIHxDefKdWHqsK5Vju+kOSndN2a8uiDRQ+VDR
+         BgnTzZdDQaovYjYNXebDRvKy2+8JgatQNhi1Wid9HP96n3NhNwWc96Ps/UFty+7AgN+t
+         qqzR5eRhH2Q3vk6V7sq/Lb9gKPUOflYc72sXvD+KjtiuebpW3Z/FO5tDJcPbqcuLtE+c
+         9fLmK5ERpcJAxsp/shEXXTaUE88w+LwiXNtwsLMkiuU1aM/mpoXON4qoGZkaT3JhnSMd
+         nc01gK6d4kpBIOemfIeOHd24hluBolfsGu85IEc+2DAzuurJTLmXXMuNrXoONXqba3PI
+         9NKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766153084; x=1766757884;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=EGxqoB7Y4Q+aOAQo4uC0e9A1qBgkvdCsyCbyewI9lPY=;
-        b=rIDLIoR7zUiQ2G23hSqGIiw1rWpbyfrzSvezKmzJejsk2Ff8qg1tJPJAaacFrJR/iH
-         MGlHV5vgHm4brCeB4aL1uFxWdZuSHjRp61V2xwksAtTs28eqadCCWBygqt5Wj+zua8vl
-         3nMYM7lgpR1tVDeosd/VwdgR4G3oiiknyALHKsnYkpQMcCt2XKvVYNdIcIYtWG5aaXo8
-         KCRZKrObOPDqqWNdawf+2up2BCREtDn9n6N3M+iX2vi67+vOMg2On9MgvR4dOscdjVEt
-         HdmRGQ5APP8wM9OnIkio2fqQxJoBD4tkGwtTmJD19OydjPVERrqKyjEJydgJJGBs+5lB
-         7wEQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUKCRwTdA7GJSBbuO21uINx1bF9bIRp2nRE/MnsxNRP6dsbiWZ0fg1b+egptHYRja51usg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzbJXcOmN9vP50Dd8Y/RtDQUFZtDJzc2qGKdCHZ0zdWl/BpcDpx
-	uV+Tbswi2GfW4sPFyf5jxppK/jhGr7+4OhiIFgEGG3CTqvNUQfgzAjl6ZaoCuSaWM7uFkoT9lJU
-	+lZ/NkQSDLX2yKHLWSFvyJjbVHFEQoL4=
-X-Gm-Gg: AY/fxX4zzvfYMkDAclOiuOkImUAPgckJW3Th+QgcPbnNR2WWq02iKfqo3MTHPIS2L4W
-	itvBfqKWBhV4uXMFllkZz58BHCEFvGOyznZMb7cXzYW6PbHJn8w3q5Vci28LmR6MqGls2atbXV0
-	WRxeIHoZNKCm/wpG5+OUJka0mEz6MQdtaQ2zpKXoRmOhmAMIMuCrGkxbPufeQsdU/F1IolrVNxa
-	1lM09YIG10xpo4boLo4rvILy3Yy54DxRhcpjQlz3H672C0p48voTsgzBN+oRC8N6lwZmsERRNU=
-X-Google-Smtp-Source: AGHT+IFe5VQEy4+st1yZpJ90yvWkO9sdYhLBqjXP1Svo3qIeSORvrFBH7F5HtDjDOBbEu4XaMNwh4a68BzkqLovyvi0=
-X-Received: by 2002:a05:690e:1242:b0:63f:c019:23b2 with SMTP id
- 956f58d0204a3-6466329e6b7mr4564629d50.28.1766153084263; Fri, 19 Dec 2025
- 06:04:44 -0800 (PST)
+        d=1e100.net; s=20230601; t=1766154990; x=1766759790;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HSFPB/bwkL8yxZYc5klNfsL7dvjnOX38Gvv8GtWH4y8=;
+        b=vx0wT+V/E7gptX1JrK/LBN/00kwTttuaDp1o0F/zWkjxlkCXh6MU0vFXPjWnow7sKm
+         B6U4NQQ58sSBGtr5JbQtLxLG/Ows8Qt1PFCj3ePKD+h58XAZleWE9wy46hbq7a8d2UQh
+         lqs5UAyaVIwRlzO+EvAuxZ8e0YIXqd8PCPw1lP0e3A0inusGV1NAg8h6rp862wQ45RAv
+         CjcGqut0heZr3F8wQ/1Ky+gZCJveb+MivDWrb7xJxvjlUd4ZHqbtjgEE6/Ny5L8YzlkA
+         6UlDt89K0pWDh7Q96ofwC+ZppTm7NwfAgNIxRewp54XmKJN8jFFip96OSeHmxoDmP0Yl
+         cFoA==
+X-Forwarded-Encrypted: i=1; AJvYcCWtM3FEe1rEn7dg30zx9HFDXU4V41wmw5zp9L/vSME0p4LVgcLEBnYBv8PgPCKRDxHjS4U=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz28jSyPtS8YYRkg/ftxQO1AcmDyTrDCIMjxqCmB+NaW+ER3+fX
+	TmGVv7FJvFfP3s7QBf/OHvFkVUr0MYEKK/496nNHiVzPRM5ityMfXCOEd7xxUERiYzS4YFMOkE9
+	T8unPPjKzPmk//SEgHmo8HrhYCBazxymrzceYQVlusOzrSnf4Jd/GKAVMp91Tljtowk+wm2nvzy
+	ryQHmAcScgqZ2EhuTceDK3pNfioSAd
+X-Gm-Gg: AY/fxX43cHRNHFMvbxyhtSSyptWFdQpR+rTLdZcM+Zj/7g+jbM4x/3YaRAf8tdbB/3o
+	a0m6Uu4vKWWFXdduI0pjkoIwAjeXmoNmOVXoYQ/BaQvZ7ihGvGeUT3/4DB9TTMmfqJPzfTrhz0Q
+	8f4/g9kA06faiSzYBENZeds/UesM/YBgjuGCTBvCDe2oV7ZEBelmHGfzBYXmr9YUlK1Bmqmd19z
+	NN4oTs=
+X-Received: by 2002:a17:90a:e7c9:b0:34a:b8e0:dd64 with SMTP id 98e67ed59e1d1-34e92113546mr2602519a91.1.1766154989661;
+        Fri, 19 Dec 2025 06:36:29 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IH6XTI+e9miphOZJZOd+oGctJdHIYB919X0q9PI20jDC/DqiFfT4PXKX2g1KDxLKh2+5CLUbQqa1wiKc1MyUkg=
+X-Received: by 2002:a17:90a:e7c9:b0:34a:b8e0:dd64 with SMTP id
+ 98e67ed59e1d1-34e92113546mr2602507a91.1.1766154989236; Fri, 19 Dec 2025
+ 06:36:29 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251118123639.688444-1-dongml2@chinatelecom.cn>
- <875xa2g0m0.fsf@igel.home> <5070743.31r3eYUQgx@7950hx> <1948844.tdWV9SEqCh@7950hx>
- <87cy4aeg56.fsf@igel.home>
-In-Reply-To: <87cy4aeg56.fsf@igel.home>
-From: Menglong Dong <menglong8.dong@gmail.com>
-Date: Fri, 19 Dec 2025 22:04:32 +0800
-X-Gm-Features: AQt7F2ruKyHMhyl2Amo3LqNoWlaqpaF_0zgXhcG3nHKrhX2LjLD44Yver_XU5ik
-Message-ID: <CADxym3Y098836fHHRSjeryxCp=CPB8sDU19TBBVs07VZOERJXw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 3/6] bpf: fix the usage of BPF_TRAMP_F_SKIP_FRAME
-To: Andreas Schwab <schwab@linux-m68k.org>
-Cc: Menglong Dong <menglong.dong@linux.dev>, ast@kernel.org, rostedt@goodmis.org, 
-	daniel@iogearbox.net, john.fastabend@gmail.com, andrii@kernel.org, 
-	martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org, 
-	yonghong.song@linux.dev, kpsingh@kernel.org, sdf@fomichev.me, 
-	haoluo@google.com, jolsa@kernel.org, mhiramat@kernel.org, 
-	mark.rutland@arm.com, mathieu.desnoyers@efficios.com, jiang.biao@linux.dev, 
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+From: Jason Montleon <jmontleo@redhat.com>
+Date: Fri, 19 Dec 2025 09:36:17 -0500
+X-Gm-Features: AQt7F2pnE7QJEunHyj172HIMr_CoX0S3PPbHC3g7BOuigEeA0QrCgTUwLvZmr1E
+Message-ID: <CAJD_bPKbZaEHmKzVcLPGJuR3Y3MO1AJDA0TmLZrLkCJ0PzCM1A@mail.gmail.com>
+Subject: [REGRESSION] Cannot boot 6.19-rc1 on riscv64 with BPF enabled.
+To: Linux regressions mailing list <regressions@lists.linux.dev>, menglong8.dong@gmail.com, ast@kernel.org
+Cc: linux-riscv@lists.infradead.org, bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, Dec 19, 2025 at 9:49=E2=80=AFPM Andreas Schwab <schwab@linux-m68k.o=
-rg> wrote:
->
-> On Dez 19 2025, Menglong Dong wrote:
->
-> > diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_c=
-omp64.c
-> > index 5f9457e910e8..09b70bf362d3 100644
-> > --- a/arch/riscv/net/bpf_jit_comp64.c
-> > +++ b/arch/riscv/net/bpf_jit_comp64.c
-> > @@ -1134,7 +1134,7 @@ static int __arch_prepare_bpf_trampoline(struct b=
-pf_tramp_image *im,
-> >       store_args(nr_arg_slots, args_off, ctx);
-> >
-> >       /* skip to actual body of traced function */
-> > -     if (flags & BPF_TRAMP_F_ORIG_STACK)
-> > +     if (flags & BPF_TRAMP_F_CALL_ORIG)
-> >               orig_call +=3D RV_FENTRY_NINSNS * 4;
->
-> There are now three occurrences of that condition, and only the third
-> one uses orig_call.  How about merging them?
+When booting riscv64 systems with BPF enabled using 6.19-rc1 the
+system produces the following panic. I tried on several boards and
+they resulted in the same error.
 
-Yeah, I think we can merge it to the third one, like this:
+[ 5.380583] Insufficient stack space to handle exception!
+[ 5.385986] Task stack: [0xffffffc600020000..0xffffffc600024000]
+[ 5.392339] Overflow stack: [0xffffffd7fef7a070..0xffffffd7fef7b070]
+[ 5.398693] CPU: 2 UID: 0 PID: 1 Comm: systemd Tainted: G W
+6.19.0-rc1-00001-g74d9cab5b6c1 #15 NONE
+[ 5.409302] Tainted: [W]=WARN
+[ 5.412271] Hardware name: starfive StarFive VisionFive 2
+v1.3B/StarFive VisionFive 2 v1.3B, BIOS 2024.10-rc3 10/01/2024
+[ 5.423134] epc : copy_from_kernel_nofault_allowed+0xa/0x28
+[ 5.428718] ra : copy_from_kernel_nofault+0x28/0x198
+[ 5.433774] epc : ffffffff8024062a ra : ffffffff80240670 sp : ffffffc60001fff0
+[ 5.440997] gp : ffffffff82464ce8 tp : 0000000000000000 t0 : ffffffff80024620
+[ 5.448219] t1 : ffffffff8017c052 t2 : 0000000000000000 s0 : ffffffc600020030
+[ 5.455442] s1 : ffffffd6c2198260 a0 : ffffffd6c2198260 a1 : 0000000000000008
+[ 5.462664] a2 : 0000000000000008 a3 : 000000000000009d a4 : 0000000000000000
+[ 5.469885] a5 : 0000000000000000 a6 : 0000000000000021 a7 : 0000000000000003
+[ 5.477106] s2 : ffffffc600020070 s3 : 0000000000000008 s4 : 0000000000000000
+[ 5.484327] s5 : ffffffc600020080 s6 : 0000000000000000 s7 : 0000000000038000
+[ 5.491549] s8 : 0000000000008002 s9 : 0000000000380000 s10: ffffffc600023cf8
+[ 5.498771] s11: ffffffd6c419bf00 t3 : 0000000077ab9db9 t4 : 00000000113918e7
+[ 5.505993] t5 : ffffffff9e9bcc29 t6 : ffffffc600023ad4
+[ 5.511304] status: 0000000200000120 badaddr: ffffffc60001fff0 cause:
+000000000000000f
+[ 5.519221] Kernel panic - not syncing: Kernel stack overflow
+[ 5.524967] CPU: 2 UID: 0 PID: 1 Comm: systemd Tainted: G W
+6.19.0-rc1-00001-g74d9cab5b6c1 #15 NONE
+[ 5.535574] Tainted: [W]=WARN
+[ 5.538544] Hardware name: starfive StarFive VisionFive 2
+v1.3B/StarFive VisionFive 2 v1.3B, BIOS 2024.10-rc3 10/01/2024
+[ 5.549408] Call Trace:
+[ 5.551859] [<ffffffff8001e438>] dump_backtrace+0x28/0x38
+[ 5.557262] [<ffffffff80002462>] show_stack+0x3a/0x50
+[ 5.562317] [<ffffffff80016d02>] dump_stack_lvl+0x5a/0x80
+[ 5.567720] [<ffffffff80016d40>] dump_stack+0x18/0x20
+[ 5.572776] [<ffffffff80002b7a>] vpanic+0xf2/0x2d0
+[ 5.577570] [<ffffffff80002d96>] panic+0x3e/0x48
+[ 5.582191] [<ffffffff8001e110>] handle_bad_stack+0x98/0xc0
+[ 5.587765] [<ffffffff80240670>] copy_from_kernel_nofault+0x28/0x198
+[ 5.594122] SMP: stopping secondary CPUs
+[ 5.598070] ---[ end Kernel panic - not syncing: Kernel stack overflow ]---
 
-diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp6=
-4.c
-index 5f9457e910e8..37888abee70c 100644
---- a/arch/riscv/net/bpf_jit_comp64.c
-+++ b/arch/riscv/net/bpf_jit_comp64.c
-@@ -1133,10 +1133,6 @@ static int __arch_prepare_bpf_trampoline(struct
-bpf_tramp_image *im,
+A bisect identified 47c9214dcb as the problematic commit:
+[47c9214dcbea9043ac20441a285c7bb5486b8b2d] bpf: fix the usage of
+BPF_TRAMP_F_SKIP_FRAME
 
-        store_args(nr_arg_slots, args_off, ctx);
+This commit reverts cleanly and when building 6.19-rc1 without it I am
+able to boot successfully.
 
--       /* skip to actual body of traced function */
--       if (flags & BPF_TRAMP_F_ORIG_STACK)
--               orig_call +=3D RV_FENTRY_NINSNS * 4;
--
-        if (flags & BPF_TRAMP_F_CALL_ORIG) {
-                emit_imm(RV_REG_A0, ctx->insns ? (const s64)im :
-RV_MAX_COUNT_IMM, ctx);
-                ret =3D emit_call((const u64)__bpf_tramp_enter, true, ctx);
-@@ -1171,6 +1167,8 @@ static int __arch_prepare_bpf_trampoline(struct
-bpf_tramp_image *im,
-        }
+A copy of the trace, bisect log, and config used to reproduce the
+problem are at:
+https://gist.github.com/jmontleon/b8b861352e7b9bc9fd3a93d391926dec
 
-        if (flags & BPF_TRAMP_F_CALL_ORIG) {
-+               /* skip to actual body of traced function */
-+               orig_call +=3D RV_FENTRY_NINSNS * 4;
-                restore_args(min_t(int, nr_arg_slots,
-RV_MAX_REG_ARGS), args_off, ctx);
-                restore_stack_args(nr_arg_slots - RV_MAX_REG_ARGS,
-args_off, stk_arg_off, ctx);
-                ret =3D emit_call((const u64)orig_call, true, ctx);
+#regzbot introduced: 47c9214dcb
 
->
-> --
-> Andreas Schwab, schwab@linux-m68k.org
-> GPG Key fingerprint =3D 7578 EB47 D4E5 4D69 2510  2552 DF73 E780 A9DA AEC=
-1
-> "And now for something completely different."
+Thank you,
+Jason Montleon
+
