@@ -1,159 +1,199 @@
-Received: from mail-yw1-f195.google.com (mail-yw1-f195.google.com [209.85.128.195])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A2262868B5
-	for <bpf@vger.kernel.org>; Fri, 19 Dec 2025 15:05:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61CED1DED57
+	for <bpf@vger.kernel.org>; Fri, 19 Dec 2025 15:21:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766156716; cv=none; b=IWJAMe7oYcv2NvbprzbWczThuRSJJvdB6k5/wHNJ5NTuX8sm8oS2Z0BT6T+7EJ84NbS+tAMyQzPBT5n6nk65NXmKAE28zJ7m9DFJd9nmjcJatV1lfElKLg/VJ8nHaIKjNk/hMeN7YXpNRXL0AqskgIctXEQfBnao0G+a2T076B4=
+	t=1766157672; cv=none; b=KHrod78q1R66U3x2oXZfgIqVIuRvv26iNltC4B9ryRTtv7WcFbeUp4ofGx3eqayCdxwffGTK9CbQ09AsgMQ+P1y3df99Ad7ZJbmPL8GM7Lz+CKFkxwy3c8KDRsHXcdbPqQeFQbcmnFP9sStYEB6vRgMlkOA7JpxY8wi5AdwnI4M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766156716; c=relaxed/simple;
-	bh=hGjYfTPZVpLjfYpJDfuQ8wmqEFOpDaT5M488rWNUYoM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=THACi4oqDE5taOS25oFV/9cibZyhaFmlDghxX2YaSAP5FOEApJhWnO0i+iehYRiuRNVu/jFVZRNCGGRjx8z/tSDDSvWD6jJxjto7geMlb3Qy4MPrk1gqmfYJJ0i1qiagdXgi/WgX0R3pChnXl1Nu9CR4EU7Xll+Pg2V+1Pzh+lo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mB3chJjg; arc=none smtp.client-ip=209.85.128.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1766157672; c=relaxed/simple;
+	bh=9IImE2hSXJ/4EvWqXVGrUVzVQ1/uCI+Op22+KXGSARQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=P0TiLjqWHoDcaKCDmVdFdoDnaIkrG4Ox8lZHriGkonN/9W6jBFY/rgVllAMKqFDZESV3ZiEkO9NACevJK+2vGnB6kQN2bjVMW+LrnzzZXkOp1EHsXjC9yHpGZwlOFODyuqxwmXWZ3BGfw0GRQKjk6UcicKmMpAtJcxU0Cd109vs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=iF3Ryhgz; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=M1XeyXQ0; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mB3chJjg"
-Received: by mail-yw1-f195.google.com with SMTP id 00721157ae682-78e7ba9fc29so17100227b3.2
-        for <bpf@vger.kernel.org>; Fri, 19 Dec 2025 07:05:14 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="iF3Ryhgz";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="M1XeyXQ0"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1766157668;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=8GNrUURfSmzebc65djIow5Kw9CK6Frte1+TYEv6Oem4=;
+	b=iF3Ryhgz60aLdo8yMQQtFOY25g73GdesCFen8gn2kC+wfoUueCsAOJze/eB6fKE+iY2PJW
+	CdhPOI2FB1ck6zGs3MMa/h4eu6wYznzxPXFCQKkd7jvAau+z008biFNI5pn+A+aFynYUvF
+	gCuJJPMw7nECwr4Kedm3h/NHrpWAklA=
+Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com
+ [209.85.216.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-390-8V-P_eY8OFmV-kKhdhVW6w-1; Fri, 19 Dec 2025 10:21:07 -0500
+X-MC-Unique: 8V-P_eY8OFmV-kKhdhVW6w-1
+X-Mimecast-MFC-AGG-ID: 8V-P_eY8OFmV-kKhdhVW6w_1766157665
+Received: by mail-pj1-f71.google.com with SMTP id 98e67ed59e1d1-34c2f670a06so2410170a91.3
+        for <bpf@vger.kernel.org>; Fri, 19 Dec 2025 07:21:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1766156714; x=1766761514; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=d8S9arpnQbQKRrRPutZ5MVC6WeUVyaLDfqwrd6H6Lag=;
-        b=mB3chJjgFlhBy8ODFO9zMLjj31fdnu82PsYKSMql5+4P1xOrEMaKD3l2knKvFtswhJ
-         nowvKIEhG2Ec3ofo2+Bmr6MZjLvhTgYcm3s2n0Xoq5yi/9i5KIkKDmkg9lXP5jKIeUlK
-         v2UcJNvt8oV/0YXnQf97p8qwlU4smy3Gc545XFlXf0B2briUQLJMzSvfrIZFgpvBhdhr
-         jXzULupGQuXInVVmRn4KHexWHcwilaMQGZkZS0GQLUerH5dJSmWiAx+i5wi93QOFvTsY
-         v4DthoJWyqtqi/omjd2MhaZ0hZM9dsvhjd8mhBp5Xmb3lqEYlrWipdpmxgshYZ0orQtT
-         lINw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766156714; x=1766761514;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=redhat.com; s=google; t=1766157664; x=1766762464; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=d8S9arpnQbQKRrRPutZ5MVC6WeUVyaLDfqwrd6H6Lag=;
-        b=KDdafhe0wkVau2GhU0AAOVAGwIx7k0nbxLnbU05LqkWQZE3PCsfQVjolhdGl99GRlM
-         v3RUAT6q8ouHU64T0hynyYZCgn6ca6w/4z2YxlazgpyB/0NIxOYL89nDqYjIyEy+rm4O
-         /BW+ODwY1k6Ye9dvSLq/PuvQGpjnLsDvSCGmj+HrucsIXqUrsNycb3bZiEigAXlVeQyh
-         B/YDrTQtOS4/rkUiLBuKcpcDUscZvcAqrIRQzeud38lilGYCyHfGVWCKa1tcvHz/odyr
-         dVDl0afYKlj6zVRKm/M0PtHIqr3K24nkSmUjP+zd6KZCKRvikZka2rR2raVmwB3jRHYs
-         yAKw==
-X-Forwarded-Encrypted: i=1; AJvYcCUEHQp/iawCn50FCzWUTxVzq5y5aHWymohXky1C2fYQVO6rpRwdcKGcxiNfjXeUSD+74bc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwifhRC8ZUqMqDvXO3iQeByATpUTywTRGE5SVWdwv3B6jBS6xgo
-	NuxwpMaFL+BO/QJ6I98KcnN7j9bZmi/KilqCYFJvFIt0VtnhYzGsbIlYwFsR9Z+iAJI=
-X-Gm-Gg: AY/fxX6ppPE1wa/ScTeTdVKX9hjEEYPXwiBCZbCGB2q0DQflzTEJioX4SJjTd0ualTw
-	0+nhUwXBxECirh3+0xhWHC1+tUWTH5MeuFpN6+o0qx+MAIt36ykg/V7ugvPkXQCEhj4Y8r+xxYC
-	xPi2ODkRYtseDJzfOVm889bWg1Wha6Xo4deyQQt0htj928BINkUQJJ8bazSlyviBfQjL2Z62VtO
-	KaKFRewEoj3PxOGWWM0OXIFIbaw8SwVSUr4gFJePLkMmnTJtQaH2Tc8JBnBCNSQAIbMDOEBGxbm
-	Xaz2PbTchRNqFCgiOYB3AMCiGGiMhAfQTnz3uPhIHyB/ZLjcmQ5noUfrmax+1te9N0vqudCZFZR
-	lOd6QSS7LLLIAfkPyu+EtQ9PIL9Rp29ZKxapmZqO6FVPrxmwAyV1cwYesH4au0jkxavfdmsVkfG
-	BKY0IfKzGbrcErM8ghPMtLTA==
-X-Google-Smtp-Source: AGHT+IGA2/j7Dp0GcCqLOtCuhTofXascKJCOpzP4V5d1jVIW4N3VAzOMwjEDO8OdEOpYvh5aBfsBIA==
-X-Received: by 2002:a05:6a20:3d0a:b0:34e:eb6a:c765 with SMTP id adf61e73a8af0-376aa5008bamr2997142637.37.1766150181401;
-        Fri, 19 Dec 2025 05:16:21 -0800 (PST)
-Received: from 7950hx ([43.129.244.20])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-34e9224d9e5sm2346819a91.17.2025.12.19.05.16.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Dec 2025 05:16:20 -0800 (PST)
-From: Menglong Dong <menglong8.dong@gmail.com>
-X-Google-Original-From: Menglong Dong <dongml2@chinatelecom.cn>
-To: ast@kernel.org
-Cc: daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	bjorn@kernel.org,
-	pulehui@huawei.com,
-	puranjay@kernel.org,
-	pjw@kernel.org,
-	palmer@dabbelt.com,
-	aou@eecs.berkeley.edu,
-	alex@ghiti.fr,
-	menglong8.dong@gmail.com,
-	jiang.biao@linux.dev,
-	bpf@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH RESEND bpf] riscv, bpf: fix incorrect usage of BPF_TRAMP_F_ORIG_STACK
-Date: Fri, 19 Dec 2025 21:16:09 +0800
-Message-ID: <20251219131609.176911-1-dongml2@chinatelecom.cn>
-X-Mailer: git-send-email 2.52.0
+        bh=8GNrUURfSmzebc65djIow5Kw9CK6Frte1+TYEv6Oem4=;
+        b=M1XeyXQ0sbrP99SGosytZfheJi/wlyOCugQX5VCN4ZyhpKYhxu08ZqmgFWg9xFuJLB
+         ZmK7wLrEPG3Nbd+mYuhxNnET7bJ/XxGcxcOSANkT35jf4y3XGRrF5+MdlMQ87QkQHzcV
+         PenQlgoWFNjueVSkvu+Dqc/BegrNqHFvKVdPhxocRsOylE8rVKk6il/vFX6mfrSyrMjW
+         a0uDGYC7OSnhlmVyU8otk6/voMycK+y+U4T4UHlaqw0AIinHVasrP+eXgmJXbF0NgtQc
+         SXEUJ8+H3DloboLe0NsERXMI7+ecdIOTaEmgAGHs7f7GqiSNriQsVqbeyJKHzwcFmJCG
+         vPtw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1766157664; x=1766762464;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=8GNrUURfSmzebc65djIow5Kw9CK6Frte1+TYEv6Oem4=;
+        b=mnN3fXHA7t+XCr2zFGLonNrDAiBD2EofdzKUWMNBk4CI2guxBWxZlHT2D9rHe+myfF
+         RaXDORlyE/rZuLLowDxAXv/MTijILusRk9WYTidzx/D1z3Rmlhay+Np1ZUEU9W1zvrQO
+         5kyelwUiJiZSSC60pRKFvkrSj+9Ru6gPIQP3F9fYEROP66gzTZwgu+tYNhUE7KlGFngK
+         CmjJ1Z4613C7xCmg7hnkCTJhjydPmUZdofMvZqyrHeOKs4Ymq5oahFvSFZ5AyKWPdAxU
+         qiUgnv/1eFCcgoEkgxpCeM0MmsscQiMeKrF2LFLsv+LmgYl0Qd9glg1pj2msHIKXoTRO
+         /pfA==
+X-Forwarded-Encrypted: i=1; AJvYcCUIpGZUs3eT64XyrTugaX1frRO8GgUaIT5YgjiS8v6FctpD2NcMu1rZ8pGnqoERfWzORFs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzzDXNAOJHHuJQmoDi8icATSloCQq+3TxAqCKJujI13WODfjbmB
+	cNPcaUCld9SL51RoBzyWSEYV/PhVf5nwyjidGv+uC6oYW7BHeJrnC6pL8SMO7HKDsqMN3uDNv+m
+	D4hbG0LO1ROHAZC49S2Jsfoc4TSxcmgLNNuoEJu9Lb1Yk8DmUtqTHvBjRlsBKWPEnXm62P454dg
+	4Cj877xzTFFhcIOSw1mpau60U807tt
+X-Gm-Gg: AY/fxX5aWgHfZMCFGORTo3v8JNHpafsW0GBO6hH+RlB9SidKHQJNRUilcQepGOSIdaD
+	QQqnUmgBjhGxgjzZfcD8n9PNN5jAInL9Oo2sBHrHfKJ56gr+EdRvznxI+P449x+Bne4y2AJHGAQ
+	2mECKdkpi/DyUa6IgLXIMzwzwBloINeuHFuBNvT6eWAmHwoPkrBK90IUlGg99STTNp4yJyin+Z2
+	v+b5a8=
+X-Received: by 2002:a17:90b:5547:b0:34c:9cec:dd83 with SMTP id 98e67ed59e1d1-34e921cc010mr3005040a91.27.1766157664001;
+        Fri, 19 Dec 2025 07:21:04 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHFEpuejWFp7fSKwerVlVcCgXqrnYOoWHQGcUkurutrqVKPcESqG+rFzqWmLZAKiKvlEuJhChthrKgtuozV8HA=
+X-Received: by 2002:a17:90b:5547:b0:34c:9cec:dd83 with SMTP id
+ 98e67ed59e1d1-34e921cc010mr3005011a91.27.1766157663469; Fri, 19 Dec 2025
+ 07:21:03 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <CAJD_bPKbZaEHmKzVcLPGJuR3Y3MO1AJDA0TmLZrLkCJ0PzCM1A@mail.gmail.com>
+ <CADxym3b=gBhefPMUCeiE_H0WPbG9AuL5tGe_6gsCZ8wi1ifJoA@mail.gmail.com>
+In-Reply-To: <CADxym3b=gBhefPMUCeiE_H0WPbG9AuL5tGe_6gsCZ8wi1ifJoA@mail.gmail.com>
+From: Jason Montleon <jmontleo@redhat.com>
+Date: Fri, 19 Dec 2025 10:20:51 -0500
+X-Gm-Features: AQt7F2qqt-p_zldZTjyDB7sjira-h7NBbmxMyRxRQLiF0daePQk2q7cGbnDUSYo
+Message-ID: <CAJD_bPJyCZGm5zBhnB_tfSkFjn7BgeDMgmTuRNDsz24F73ofWw@mail.gmail.com>
+Subject: Re: [REGRESSION] Cannot boot 6.19-rc1 on riscv64 with BPF enabled.
+To: Menglong Dong <menglong8.dong@gmail.com>
+Cc: Linux regressions mailing list <regressions@lists.linux.dev>, ast@kernel.org, 
+	linux-riscv@lists.infradead.org, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The usage of BPF_TRAMP_F_ORIG_STACK in __arch_prepare_bpf_trampoline() is
-wrong, and it should be BPF_TRAMP_F_CALL_ORIG, which caused crash as
-Andreas reported:
+On Fri, Dec 19, 2025 at 9:52=E2=80=AFAM Menglong Dong <menglong8.dong@gmail=
+.com> wrote:
+>
+> On Fri, Dec 19, 2025 at 10:36=E2=80=AFPM Jason Montleon <jmontleo@redhat.=
+com> wrote:
+> >
+> > When booting riscv64 systems with BPF enabled using 6.19-rc1 the
+> > system produces the following panic. I tried on several boards and
+> > they resulted in the same error.
+>
+> Sorry about the problem. I have sent a fix for this issue:
+> https://lore.kernel.org/bpf/20251219124748.81133-1-dongml2@chinatelecom.c=
+n/T/#u
+>
+> And here is the discussion about it:
+> https://lore.kernel.org/bpf/CADxym3Y098836fHHRSjeryxCp=3DCPB8sDU19TBBVs07=
+VZOERJXw@mail.gmail.com/T/#u
+>
+> Thanks!
+> Menglong Dong
+>
 
-  Insufficient stack space to handle exception!
-  Task stack:     [0xff20000000010000..0xff20000000014000]
-  Overflow stack: [0xff600000ffdad070..0xff600000ffdae070]
-  CPU: 1 UID: 0 PID: 1 Comm: systemd Not tainted 6.18.0-rc5+ #15 PREEMPT(voluntary)
-  Hardware name: riscv-virtio qemu/qemu, BIOS 2025.10 10/01/2025
-  epc : copy_from_kernel_nofault+0xa/0x198
-   ra : bpf_probe_read_kernel+0x20/0x60
-  epc : ffffffff802b732a ra : ffffffff801e6070 sp : ff2000000000ffe0
-   gp : ffffffff82262ed0 tp : 0000000000000000 t0 : ffffffff80022320
-   t1 : ffffffff801e6056 t2 : 0000000000000000 s0 : ff20000000010040
-   s1 : 0000000000000008 a0 : ff20000000010050 a1 : ff60000083b3d320
-   a2 : 0000000000000008 a3 : 0000000000000097 a4 : 0000000000000000
-   a5 : 0000000000000000 a6 : 0000000000000021 a7 : 0000000000000003
-   s2 : ff20000000010050 s3 : ff6000008459fc18 s4 : ff60000083b3d340
-   s5 : ff20000000010060 s6 : 0000000000000000 s7 : ff20000000013aa8
-   s8 : 0000000000000000 s9 : 0000000000008000 s10: 000000000058dcb0
-   s11: 000000000058dca7 t3 : 000000006925116d t4 : ff6000008090f026
-   t5 : 00007fff9b0cbaa8 t6 : 0000000000000016
-  status: 0000000200000120 badaddr: 0000000000000000 cause: 8000000000000005
-  Kernel panic - not syncing: Kernel stack overflow
-  CPU: 1 UID: 0 PID: 1 Comm: systemd Not tainted 6.18.0-rc5+ #15 PREEMPT(voluntary)
-  Hardware name: riscv-virtio qemu/qemu, BIOS 2025.10 10/01/2025
-  Call Trace:
-  [<ffffffff8001a1f8>] dump_backtrace+0x28/0x38
-  [<ffffffff80002502>] show_stack+0x3a/0x50
-  [<ffffffff800122be>] dump_stack_lvl+0x56/0x80
-  [<ffffffff80012300>] dump_stack+0x18/0x22
-  [<ffffffff80002abe>] vpanic+0xf6/0x328
-  [<ffffffff80002d2e>] panic+0x3e/0x40
-  [<ffffffff80019ef0>] handle_bad_stack+0x98/0xa0
-  [<ffffffff801e6070>] bpf_probe_read_kernel+0x20/0x60
+Thank you for the quick response! I can confirm your patch fixes the issue.
 
-Just fix it.
+Thanks you!
 
-Fixes: 47c9214dcbea ("bpf: fix the usage of BPF_TRAMP_F_SKIP_FRAME")
-Reported-by: Andreas Schwab <schwab@linux-m68k.org>
-Closes: https://lore.kernel.org/bpf/874ipnkfvt.fsf@igel.home/
-Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
----
- arch/riscv/net/bpf_jit_comp64.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > [ 5.380583] Insufficient stack space to handle exception!
+> > [ 5.385986] Task stack: [0xffffffc600020000..0xffffffc600024000]
+> > [ 5.392339] Overflow stack: [0xffffffd7fef7a070..0xffffffd7fef7b070]
+> > [ 5.398693] CPU: 2 UID: 0 PID: 1 Comm: systemd Tainted: G W
+> > 6.19.0-rc1-00001-g74d9cab5b6c1 #15 NONE
+> > [ 5.409302] Tainted: [W]=3DWARN
+> > [ 5.412271] Hardware name: starfive StarFive VisionFive 2
+> > v1.3B/StarFive VisionFive 2 v1.3B, BIOS 2024.10-rc3 10/01/2024
+> > [ 5.423134] epc : copy_from_kernel_nofault_allowed+0xa/0x28
+> > [ 5.428718] ra : copy_from_kernel_nofault+0x28/0x198
+> > [ 5.433774] epc : ffffffff8024062a ra : ffffffff80240670 sp : ffffffc60=
+001fff0
+> > [ 5.440997] gp : ffffffff82464ce8 tp : 0000000000000000 t0 : ffffffff80=
+024620
+> > [ 5.448219] t1 : ffffffff8017c052 t2 : 0000000000000000 s0 : ffffffc600=
+020030
+> > [ 5.455442] s1 : ffffffd6c2198260 a0 : ffffffd6c2198260 a1 : 0000000000=
+000008
+> > [ 5.462664] a2 : 0000000000000008 a3 : 000000000000009d a4 : 0000000000=
+000000
+> > [ 5.469885] a5 : 0000000000000000 a6 : 0000000000000021 a7 : 0000000000=
+000003
+> > [ 5.477106] s2 : ffffffc600020070 s3 : 0000000000000008 s4 : 0000000000=
+000000
+> > [ 5.484327] s5 : ffffffc600020080 s6 : 0000000000000000 s7 : 0000000000=
+038000
+> > [ 5.491549] s8 : 0000000000008002 s9 : 0000000000380000 s10: ffffffc600=
+023cf8
+> > [ 5.498771] s11: ffffffd6c419bf00 t3 : 0000000077ab9db9 t4 : 0000000011=
+3918e7
+> > [ 5.505993] t5 : ffffffff9e9bcc29 t6 : ffffffc600023ad4
+> > [ 5.511304] status: 0000000200000120 badaddr: ffffffc60001fff0 cause:
+> > 000000000000000f
+> > [ 5.519221] Kernel panic - not syncing: Kernel stack overflow
+> > [ 5.524967] CPU: 2 UID: 0 PID: 1 Comm: systemd Tainted: G W
+> > 6.19.0-rc1-00001-g74d9cab5b6c1 #15 NONE
+> > [ 5.535574] Tainted: [W]=3DWARN
+> > [ 5.538544] Hardware name: starfive StarFive VisionFive 2
+> > v1.3B/StarFive VisionFive 2 v1.3B, BIOS 2024.10-rc3 10/01/2024
+> > [ 5.549408] Call Trace:
+> > [ 5.551859] [<ffffffff8001e438>] dump_backtrace+0x28/0x38
+> > [ 5.557262] [<ffffffff80002462>] show_stack+0x3a/0x50
+> > [ 5.562317] [<ffffffff80016d02>] dump_stack_lvl+0x5a/0x80
+> > [ 5.567720] [<ffffffff80016d40>] dump_stack+0x18/0x20
+> > [ 5.572776] [<ffffffff80002b7a>] vpanic+0xf2/0x2d0
+> > [ 5.577570] [<ffffffff80002d96>] panic+0x3e/0x48
+> > [ 5.582191] [<ffffffff8001e110>] handle_bad_stack+0x98/0xc0
+> > [ 5.587765] [<ffffffff80240670>] copy_from_kernel_nofault+0x28/0x198
+> > [ 5.594122] SMP: stopping secondary CPUs
+> > [ 5.598070] ---[ end Kernel panic - not syncing: Kernel stack overflow =
+]---
+> >
+> > A bisect identified 47c9214dcb as the problematic commit:
+> > [47c9214dcbea9043ac20441a285c7bb5486b8b2d] bpf: fix the usage of
+> > BPF_TRAMP_F_SKIP_FRAME
+> >
+> > This commit reverts cleanly and when building 6.19-rc1 without it I am
+> > able to boot successfully.
+> >
+> > A copy of the trace, bisect log, and config used to reproduce the
+> > problem are at:
+> > https://gist.github.com/jmontleon/b8b861352e7b9bc9fd3a93d391926dec
+> >
+> > #regzbot introduced: 47c9214dcb
+> >
+> > Thank you,
+> > Jason Montleon
+> >
+>
 
-diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
-index 5f9457e910e8..09b70bf362d3 100644
---- a/arch/riscv/net/bpf_jit_comp64.c
-+++ b/arch/riscv/net/bpf_jit_comp64.c
-@@ -1134,7 +1134,7 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im,
- 	store_args(nr_arg_slots, args_off, ctx);
- 
- 	/* skip to actual body of traced function */
--	if (flags & BPF_TRAMP_F_ORIG_STACK)
-+	if (flags & BPF_TRAMP_F_CALL_ORIG)
- 		orig_call += RV_FENTRY_NINSNS * 4;
- 
- 	if (flags & BPF_TRAMP_F_CALL_ORIG) {
--- 
-2.52.0
+
+--=20
+Jason Montleon        | email: jmontleo@redhat.com
+Red Hat, Inc.         | gpg key: 0x069E3022
+Cell: 508-496-0663    | irc: jmontleo / jmontleon
 
