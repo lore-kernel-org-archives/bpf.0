@@ -1,108 +1,159 @@
 Received: from mail-yw1-f195.google.com (mail-yw1-f195.google.com [209.85.128.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69B4D33D6D0
-	for <bpf@vger.kernel.org>; Fri, 19 Dec 2025 14:54:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A2262868B5
+	for <bpf@vger.kernel.org>; Fri, 19 Dec 2025 15:05:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766156083; cv=none; b=jZs1I0u9i2QWhBQ9xSboSzozxschmREtcQmP+CtehelaXlqv8IZ171q4H3QShE5cRW8LgQuND0P74K+hUbW4DOLWESVn2mQ1fe1PcbJo3fyot9HQrJxg25is8uyz4pozCT70Mx1VvtwskPGdr/IL/IWzAi2BYKViCqx4IKbVj+w=
+	t=1766156716; cv=none; b=IWJAMe7oYcv2NvbprzbWczThuRSJJvdB6k5/wHNJ5NTuX8sm8oS2Z0BT6T+7EJ84NbS+tAMyQzPBT5n6nk65NXmKAE28zJ7m9DFJd9nmjcJatV1lfElKLg/VJ8nHaIKjNk/hMeN7YXpNRXL0AqskgIctXEQfBnao0G+a2T076B4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766156083; c=relaxed/simple;
-	bh=4Xdt/E0eKuLiqARs5/+NwNizpugYWI1QB+HlCH+SMbo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CDYZZ3R3RQFyhaG5LWNaIcfKY+Ln4AJnpCRnG6RJt6BiLuv8+nvPr68EflhYy69tR3Ln0M70J6jxIIDTfNTXDHRNfTLAcaHXqFuh/jLQ/OYle4F+1vlS3/bL/XnElHf1/bDfuojWTaRSS8ujlssrklQgRzMECxIZ/oR2HCy+nuk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kh6FSf/t; arc=none smtp.client-ip=209.85.128.195
+	s=arc-20240116; t=1766156716; c=relaxed/simple;
+	bh=hGjYfTPZVpLjfYpJDfuQ8wmqEFOpDaT5M488rWNUYoM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=THACi4oqDE5taOS25oFV/9cibZyhaFmlDghxX2YaSAP5FOEApJhWnO0i+iehYRiuRNVu/jFVZRNCGGRjx8z/tSDDSvWD6jJxjto7geMlb3Qy4MPrk1gqmfYJJ0i1qiagdXgi/WgX0R3pChnXl1Nu9CR4EU7Xll+Pg2V+1Pzh+lo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mB3chJjg; arc=none smtp.client-ip=209.85.128.195
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kh6FSf/t"
-Received: by mail-yw1-f195.google.com with SMTP id 00721157ae682-78fb7704cb4so4675357b3.3
-        for <bpf@vger.kernel.org>; Fri, 19 Dec 2025 06:54:41 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mB3chJjg"
+Received: by mail-yw1-f195.google.com with SMTP id 00721157ae682-78e7ba9fc29so17100227b3.2
+        for <bpf@vger.kernel.org>; Fri, 19 Dec 2025 07:05:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1766156080; x=1766760880; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iDdaTMRRYAY1qSHlAuTYn+8+uE5UBoDcaSos5vnXy9g=;
-        b=kh6FSf/t9mCFBt1iHZ+MlgKIXW7Yqb9pIOMPd9uAbrvR2sToE0IM56TS9Tf37eapb7
-         CoWl2MxEX4Z8TSFuy/tEQJaJbXe8uJaC1yn1HqgcbR7C8wlAZXpeJe+QuDvz3dZTwMvR
-         aYq+9nFZE4owwzz16bNlrSGcARiNU3Juen1CmiRxfck5Lsabm6n3J0UkW/djztFkyRKR
-         O4hq73syL7UfsdILWPy57VSc2S2PzPSHb16gAUTFq6PEswB9jVqr67Bf/anil2iM5tO0
-         Tk1MuD2+OPIXOFVNK+A0oKY2hXZmn3gYeqPlfrJGs71gN0J/8F27evd5L4saRJBOUONy
-         5eEA==
+        d=gmail.com; s=20230601; t=1766156714; x=1766761514; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=d8S9arpnQbQKRrRPutZ5MVC6WeUVyaLDfqwrd6H6Lag=;
+        b=mB3chJjgFlhBy8ODFO9zMLjj31fdnu82PsYKSMql5+4P1xOrEMaKD3l2knKvFtswhJ
+         nowvKIEhG2Ec3ofo2+Bmr6MZjLvhTgYcm3s2n0Xoq5yi/9i5KIkKDmkg9lXP5jKIeUlK
+         v2UcJNvt8oV/0YXnQf97p8qwlU4smy3Gc545XFlXf0B2briUQLJMzSvfrIZFgpvBhdhr
+         jXzULupGQuXInVVmRn4KHexWHcwilaMQGZkZS0GQLUerH5dJSmWiAx+i5wi93QOFvTsY
+         v4DthoJWyqtqi/omjd2MhaZ0hZM9dsvhjd8mhBp5Xmb3lqEYlrWipdpmxgshYZ0orQtT
+         lINw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766156080; x=1766760880;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=iDdaTMRRYAY1qSHlAuTYn+8+uE5UBoDcaSos5vnXy9g=;
-        b=TI0tT8rUSRpNf+cPMq4SNP9FvrX8ixnK7PiRW7puBc+a5sMYa+efl+wiDkNr5GJgtz
-         gIz7CLDEN8CapMVTq6TX52rnO3rBQVHRPL0q74fd17mlyMNcgan9ojE5Mx1k6N4QTm/Y
-         7+5DZbYOAtFLcWSvdMCwiDtRWpnrhy61Q/RPPRH2MENDmZ5nYYEsAI4h5uOH7ZrJZwmL
-         SuHPEu98DzJKaE6a7uD3A4gWw4myCHd8uG15gLoM7s5miTjD9y0ASVXJse3EnXXuCFdI
-         eM5ihkXg4IkIl75tj/J6nawPEuMGeGKu8ufCMJdeNgs1zM14KYHMm8r+5YhKcCkRsPkz
-         AvxA==
-X-Forwarded-Encrypted: i=1; AJvYcCWolDFM0ofkVAcFIc9yWCxOtwqkpY/5LaeRiXeWSe9OKodYzgPDRzvQUfCS5aw0dO757fw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwIypcfUZyl4CbuDnFDJhdOlOTYmemsWy/ZTqhhdzNRY+sd7DF4
-	a22CvGcwc26iCRReVyU3lV6p77NJIwPOMEpLfEzGScQhtNXxOUtjH9XdhxPYlZGqvkA2IY5Zg9S
-	sgZsUVW8zpUBmdUROK9SikIcnvL29m4M=
-X-Gm-Gg: AY/fxX5I5rRsdbI6a2NK4/4pwydsjFOAmh5JaEK59CBElO8zhb6DH5bDpN5x1+saR2b
-	tCI+NbPVGDia91/TV2neohGDhXneG2OFZdNApbRv4jEAlNx0W660UxbQS3qUDJaJV9euNBTM2tW
-	AR4N4dnzHIpxsq+O0yyZoB+2R0CW+SN6JaKgsmV+kricowZCa4bgt1gtugAFOWNwiL6eVk7dVlo
-	CRKWiDTIgz6+4r95b6oydrYHL8d8rVq7HaVtyG+dXWBqpzEQILtIj6Oq5chwBNwAcx63vvwxeo=
-X-Google-Smtp-Source: AGHT+IEQpU2uHORHsSaJvH+4Kc5a7FmzNED+x1TC212I/IRWbm5lKmfSyUpFZx/jrL2TYMouTF4PT26t1Et1Fqe+jxo=
-X-Received: by 2002:a05:690e:4184:b0:644:43f7:11b8 with SMTP id
- 956f58d0204a3-6466a844038mr2341085d50.13.1766156080207; Fri, 19 Dec 2025
- 06:54:40 -0800 (PST)
+        d=1e100.net; s=20230601; t=1766156714; x=1766761514;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=d8S9arpnQbQKRrRPutZ5MVC6WeUVyaLDfqwrd6H6Lag=;
+        b=KDdafhe0wkVau2GhU0AAOVAGwIx7k0nbxLnbU05LqkWQZE3PCsfQVjolhdGl99GRlM
+         v3RUAT6q8ouHU64T0hynyYZCgn6ca6w/4z2YxlazgpyB/0NIxOYL89nDqYjIyEy+rm4O
+         /BW+ODwY1k6Ye9dvSLq/PuvQGpjnLsDvSCGmj+HrucsIXqUrsNycb3bZiEigAXlVeQyh
+         B/YDrTQtOS4/rkUiLBuKcpcDUscZvcAqrIRQzeud38lilGYCyHfGVWCKa1tcvHz/odyr
+         dVDl0afYKlj6zVRKm/M0PtHIqr3K24nkSmUjP+zd6KZCKRvikZka2rR2raVmwB3jRHYs
+         yAKw==
+X-Forwarded-Encrypted: i=1; AJvYcCUEHQp/iawCn50FCzWUTxVzq5y5aHWymohXky1C2fYQVO6rpRwdcKGcxiNfjXeUSD+74bc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwifhRC8ZUqMqDvXO3iQeByATpUTywTRGE5SVWdwv3B6jBS6xgo
+	NuxwpMaFL+BO/QJ6I98KcnN7j9bZmi/KilqCYFJvFIt0VtnhYzGsbIlYwFsR9Z+iAJI=
+X-Gm-Gg: AY/fxX6ppPE1wa/ScTeTdVKX9hjEEYPXwiBCZbCGB2q0DQflzTEJioX4SJjTd0ualTw
+	0+nhUwXBxECirh3+0xhWHC1+tUWTH5MeuFpN6+o0qx+MAIt36ykg/V7ugvPkXQCEhj4Y8r+xxYC
+	xPi2ODkRYtseDJzfOVm889bWg1Wha6Xo4deyQQt0htj928BINkUQJJ8bazSlyviBfQjL2Z62VtO
+	KaKFRewEoj3PxOGWWM0OXIFIbaw8SwVSUr4gFJePLkMmnTJtQaH2Tc8JBnBCNSQAIbMDOEBGxbm
+	Xaz2PbTchRNqFCgiOYB3AMCiGGiMhAfQTnz3uPhIHyB/ZLjcmQ5noUfrmax+1te9N0vqudCZFZR
+	lOd6QSS7LLLIAfkPyu+EtQ9PIL9Rp29ZKxapmZqO6FVPrxmwAyV1cwYesH4au0jkxavfdmsVkfG
+	BKY0IfKzGbrcErM8ghPMtLTA==
+X-Google-Smtp-Source: AGHT+IGA2/j7Dp0GcCqLOtCuhTofXascKJCOpzP4V5d1jVIW4N3VAzOMwjEDO8OdEOpYvh5aBfsBIA==
+X-Received: by 2002:a05:6a20:3d0a:b0:34e:eb6a:c765 with SMTP id adf61e73a8af0-376aa5008bamr2997142637.37.1766150181401;
+        Fri, 19 Dec 2025 05:16:21 -0800 (PST)
+Received: from 7950hx ([43.129.244.20])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-34e9224d9e5sm2346819a91.17.2025.12.19.05.16.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Dec 2025 05:16:20 -0800 (PST)
+From: Menglong Dong <menglong8.dong@gmail.com>
+X-Google-Original-From: Menglong Dong <dongml2@chinatelecom.cn>
+To: ast@kernel.org
+Cc: daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	john.fastabend@gmail.com,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	bjorn@kernel.org,
+	pulehui@huawei.com,
+	puranjay@kernel.org,
+	pjw@kernel.org,
+	palmer@dabbelt.com,
+	aou@eecs.berkeley.edu,
+	alex@ghiti.fr,
+	menglong8.dong@gmail.com,
+	jiang.biao@linux.dev,
+	bpf@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH RESEND bpf] riscv, bpf: fix incorrect usage of BPF_TRAMP_F_ORIG_STACK
+Date: Fri, 19 Dec 2025 21:16:09 +0800
+Message-ID: <20251219131609.176911-1-dongml2@chinatelecom.cn>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251118123639.688444-1-dongml2@chinatelecom.cn>
- <875xa2g0m0.fsf@igel.home> <5070743.31r3eYUQgx@7950hx> <1948844.tdWV9SEqCh@7950hx>
- <87cy4aeg56.fsf@igel.home> <CADxym3Y098836fHHRSjeryxCp=CPB8sDU19TBBVs07VZOERJXw@mail.gmail.com>
- <878qeyedaw.fsf@igel.home>
-In-Reply-To: <878qeyedaw.fsf@igel.home>
-From: Menglong Dong <menglong8.dong@gmail.com>
-Date: Fri, 19 Dec 2025 22:54:28 +0800
-X-Gm-Features: AQt7F2qQ1ufef4ZaQXp8N9zw3HgOD1aYzUQ6NsLMEQPkiIIuUt3G0BCDsWRcz7k
-Message-ID: <CADxym3ZSHtqAn+_6pKEO+95tRp13eRCUuPqCfcM=xqMbhcf3PA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 3/6] bpf: fix the usage of BPF_TRAMP_F_SKIP_FRAME
-To: Andreas Schwab <schwab@linux-m68k.org>
-Cc: Menglong Dong <menglong.dong@linux.dev>, ast@kernel.org, rostedt@goodmis.org, 
-	daniel@iogearbox.net, john.fastabend@gmail.com, andrii@kernel.org, 
-	martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org, 
-	yonghong.song@linux.dev, kpsingh@kernel.org, sdf@fomichev.me, 
-	haoluo@google.com, jolsa@kernel.org, mhiramat@kernel.org, 
-	mark.rutland@arm.com, mathieu.desnoyers@efficios.com, jiang.biao@linux.dev, 
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Fri, Dec 19, 2025 at 10:50=E2=80=AFPM Andreas Schwab <schwab@linux-m68k.=
-org> wrote:
->
-> On Dez 19 2025, Menglong Dong wrote:
->
-> > @@ -1171,6 +1167,8 @@ static int __arch_prepare_bpf_trampoline(struct
-> > bpf_tramp_image *im,
-> >         }
-> >
-> >         if (flags & BPF_TRAMP_F_CALL_ORIG) {
-> > +               /* skip to actual body of traced function */
-> > +               orig_call +=3D RV_FENTRY_NINSNS * 4;
->
-> Before this line, orig_call still contains the same value as func_addr,
-> with the latter being dead, so there is not much point in using a copy.
+The usage of BPF_TRAMP_F_ORIG_STACK in __arch_prepare_bpf_trampoline() is
+wrong, and it should be BPF_TRAMP_F_CALL_ORIG, which caused crash as
+Andreas reported:
 
-Yeah, we can use "func_addr + RV_FENTRY_NINSNS * 4" here directly.
+  Insufficient stack space to handle exception!
+  Task stack:     [0xff20000000010000..0xff20000000014000]
+  Overflow stack: [0xff600000ffdad070..0xff600000ffdae070]
+  CPU: 1 UID: 0 PID: 1 Comm: systemd Not tainted 6.18.0-rc5+ #15 PREEMPT(voluntary)
+  Hardware name: riscv-virtio qemu/qemu, BIOS 2025.10 10/01/2025
+  epc : copy_from_kernel_nofault+0xa/0x198
+   ra : bpf_probe_read_kernel+0x20/0x60
+  epc : ffffffff802b732a ra : ffffffff801e6070 sp : ff2000000000ffe0
+   gp : ffffffff82262ed0 tp : 0000000000000000 t0 : ffffffff80022320
+   t1 : ffffffff801e6056 t2 : 0000000000000000 s0 : ff20000000010040
+   s1 : 0000000000000008 a0 : ff20000000010050 a1 : ff60000083b3d320
+   a2 : 0000000000000008 a3 : 0000000000000097 a4 : 0000000000000000
+   a5 : 0000000000000000 a6 : 0000000000000021 a7 : 0000000000000003
+   s2 : ff20000000010050 s3 : ff6000008459fc18 s4 : ff60000083b3d340
+   s5 : ff20000000010060 s6 : 0000000000000000 s7 : ff20000000013aa8
+   s8 : 0000000000000000 s9 : 0000000000008000 s10: 000000000058dcb0
+   s11: 000000000058dca7 t3 : 000000006925116d t4 : ff6000008090f026
+   t5 : 00007fff9b0cbaa8 t6 : 0000000000000016
+  status: 0000000200000120 badaddr: 0000000000000000 cause: 8000000000000005
+  Kernel panic - not syncing: Kernel stack overflow
+  CPU: 1 UID: 0 PID: 1 Comm: systemd Not tainted 6.18.0-rc5+ #15 PREEMPT(voluntary)
+  Hardware name: riscv-virtio qemu/qemu, BIOS 2025.10 10/01/2025
+  Call Trace:
+  [<ffffffff8001a1f8>] dump_backtrace+0x28/0x38
+  [<ffffffff80002502>] show_stack+0x3a/0x50
+  [<ffffffff800122be>] dump_stack_lvl+0x56/0x80
+  [<ffffffff80012300>] dump_stack+0x18/0x22
+  [<ffffffff80002abe>] vpanic+0xf6/0x328
+  [<ffffffff80002d2e>] panic+0x3e/0x40
+  [<ffffffff80019ef0>] handle_bad_stack+0x98/0xa0
+  [<ffffffff801e6070>] bpf_probe_read_kernel+0x20/0x60
 
->
-> --
-> Andreas Schwab, schwab@linux-m68k.org
-> GPG Key fingerprint =3D 7578 EB47 D4E5 4D69 2510  2552 DF73 E780 A9DA AEC=
-1
-> "And now for something completely different."
+Just fix it.
+
+Fixes: 47c9214dcbea ("bpf: fix the usage of BPF_TRAMP_F_SKIP_FRAME")
+Reported-by: Andreas Schwab <schwab@linux-m68k.org>
+Closes: https://lore.kernel.org/bpf/874ipnkfvt.fsf@igel.home/
+Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
+---
+ arch/riscv/net/bpf_jit_comp64.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
+index 5f9457e910e8..09b70bf362d3 100644
+--- a/arch/riscv/net/bpf_jit_comp64.c
++++ b/arch/riscv/net/bpf_jit_comp64.c
+@@ -1134,7 +1134,7 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im,
+ 	store_args(nr_arg_slots, args_off, ctx);
+ 
+ 	/* skip to actual body of traced function */
+-	if (flags & BPF_TRAMP_F_ORIG_STACK)
++	if (flags & BPF_TRAMP_F_CALL_ORIG)
+ 		orig_call += RV_FENTRY_NINSNS * 4;
+ 
+ 	if (flags & BPF_TRAMP_F_CALL_ORIG) {
+-- 
+2.52.0
+
