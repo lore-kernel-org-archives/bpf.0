@@ -1,30 +1,32 @@
-Received: from out-178.mta0.migadu.com (out-178.mta0.migadu.com [91.218.175.178])
+Received: from out-185.mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38C4F276050
-	for <bpf@vger.kernel.org>; Sat, 20 Dec 2025 04:13:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DD358F5B
+	for <bpf@vger.kernel.org>; Sat, 20 Dec 2025 04:13:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.185
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766204000; cv=none; b=RhL+yhYbM2Fr0tempQGYf8hIOfdiLety8883ahtDFgKSsq4ETNVUvYdYX9QnCp6CmY8lCX3fVstZ+A/SZ3TZwZJCEP+vPlbnKntf2KSgWC/CXAAD8ABPvYr/Rw6TTB9V95Ypqyt8UuXIV1/SDZZQyJAQd2yrJYaHu3UFUncVW2w=
+	t=1766204003; cv=none; b=mUPBFgyBhMjcdm4Jt7HnzeR2D+KaKO9YRX6an9Ban7u64z+rQSa+sim4ycNf5uiSRS8+U7mMuAJSiPUWBVMrezx29Hab+76mTiWLm3d+i35/o67IXPPw3qPzKfyDkQQBtz40OT2AoJMKIv26ziMrddwc9jjfOUyaFNHxfwGZACM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766204000; c=relaxed/simple;
-	bh=SHv2Iq955cChy4Uoy4h2p6Pssci1g9l9LMiOPWGVdAo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=W1AO5oUzT/XpUd1bNg86vTHWMrAc24UsqKvRO5hC9bXEW3TTHcGaoJ54NFWp3zXKVdoBap1mKSNlAGztKh61UKy1pJ4ehf1USL6i/TfvolLJGKW5QtjLyINQYbj5Uob34w6qkA577+swWfTZM1PPjdsXhrvhPgszUDGD+CAYD6E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=cwAU33OF; arc=none smtp.client-ip=91.218.175.178
+	s=arc-20240116; t=1766204003; c=relaxed/simple;
+	bh=TLFN6xvqCudM+BlZuTtt8seZTGFz5HGzdN9cbr5pse8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=DZBs5Gn4wxq9S6YL2fVqOgtzh5iOkw/vQkG/YrFnChqEqr5oNO+iJCB8qKFfT5/+0t6WuZQH5kW91NVUTFXRBDyd372nx8rrB4sgEutip1Yx9q6EJaioQX7kDU1VfJKRGCTOa3c7K52r/E+UEDMSUnESzOcaYf/OI/deG8fxJMk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=gKvEL66b; arc=none smtp.client-ip=91.218.175.185
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="cwAU33OF"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="gKvEL66b"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1766203983;
+	t=1766203997;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=wj67LJX/XEXlSZrfpiOUjDxm3w3z3jaCg452pE5m7xA=;
-	b=cwAU33OF8lzqQdJ5ZZcFI2VxRJuRM5zjc43cBN/2hm2mUDbQJFu/4Z7MbYdkX0vrxeFZUj
-	PelNzJYTzUeNfH4tByrRIV4mtSREmvkEfZhgtCRtaY19D4liYxRdFchAekbiOe6K1IaOhb
-	SMqtUc6uPVeRTvok7YuS7qLe6wTcfIk=
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=0lVuR6pchH6jgQ09wItDn6PsrwL4FoyScJ2gG8GX4fA=;
+	b=gKvEL66bO+z7ttjD2KYiVENpRi3zKONK7yhd9JuzI2g+oZjmwihxs7aJ8zy+GjcaQsorjQ
+	MX1CKTmzFk0hY+p8+U7H8JUqNp7fr2kYYOY7Zra6m6YZh5ImZjq8aYES1mnZX+YNu3CyGj
+	l3bhS1a+4gZYizhA2A/fnDbB2iNuxEk=
 From: Roman Gushchin <roman.gushchin@linux.dev>
 To: bpf@vger.kernel.org,
 	linux-mm@kvack.org,
@@ -36,9 +38,11 @@ Cc: JP Kobryn <inwardvessel@gmail.com>,
 	Michal Hocko <mhocko@kernel.org>,
 	Johannes Weiner <hannes@cmpxchg.org>,
 	Roman Gushchin <roman.gushchin@linux.dev>
-Subject: [PATCH bpf-next v2 0/7] mm: bpf kfuncs to access memcg data
-Date: Fri, 19 Dec 2025 20:12:43 -0800
-Message-ID: <20251220041250.372179-1-roman.gushchin@linux.dev>
+Subject: [PATCH bpf-next v2 3/7] mm: introduce bpf_get_root_mem_cgroup() BPF kfunc
+Date: Fri, 19 Dec 2025 20:12:46 -0800
+Message-ID: <20251220041250.372179-4-roman.gushchin@linux.dev>
+In-Reply-To: <20251220041250.372179-1-roman.gushchin@linux.dev>
+References: <20251220041250.372179-1-roman.gushchin@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -48,50 +52,62 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-Introduce kfuncs to simplify the access to the memcg data.
-These kfuncs can be used to accelerate monitoring use cases and
-for implementing custom OOM policies once BPF OOM is landed.
+Introduce a BPF kfunc to get a trusted pointer to the root memory
+cgroup. It's very handy to traverse the full memcg tree, e.g.
+for handling a system-wide OOM.
 
-This patchset was separated out from the BPF OOM patchset to simplify
-the logistics and accelerate the landing of the part which is useful
-by itself. No functional changes since BPF OOM v2.
+It's possible to obtain this pointer by traversing the memcg tree
+up from any known memcg, but it's sub-optimal and makes BPF programs
+more complex and less efficient.
 
-v2:
-  - added mem_cgroup_disabled() checks (by Shakeel B.)
-  - added special handling of the root memcg in bpf_mem_cgroup_usage()
-  (by Shakeel B.)
-  - minor fixes in the kselftest (by Shakeel B.)
-  - added a MAINTAINERS entry (by Shakeel B.)
+bpf_get_root_mem_cgroup() has a KF_ACQUIRE | KF_RET_NULL semantics,
+however in reality it's not necessary to bump the corresponding
+reference counter - root memory cgroup is immortal, reference counting
+is skipped, see css_get(). Once set, root_mem_cgroup is always a valid
+memcg pointer. It's safe to call bpf_put_mem_cgroup() for the pointer
+obtained with bpf_get_root_mem_cgroup(), it's effectively a no-op.
 
-v1:
-  https://lore.kernel.org/bpf/87ike29s5r.fsf@linux.dev/T/#t
+Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
+---
+ mm/bpf_memcontrol.c | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
-
-JP Kobryn (2):
-  mm: introduce BPF kfunc to access memory events
-  bpf: selftests: selftests for memcg stat kfuncs
-
-Roman Gushchin (5):
-  mm: declare memcg_page_state_output() in memcontrol.h
-  mm: introduce BPF kfuncs to deal with memcg pointers
-  mm: introduce bpf_get_root_mem_cgroup() BPF kfunc
-  mm: introduce BPF kfuncs to access memcg statistics and events
-  MAINTAINERS: add an entry for MM BPF extensions
-
- MAINTAINERS                                   |   7 +
- include/linux/memcontrol.h                    |   3 +
- mm/Makefile                                   |   3 +
- mm/bpf_memcontrol.c                           | 179 ++++++++++++++
- mm/memcontrol-v1.h                            |   1 -
- .../testing/selftests/bpf/cgroup_iter_memcg.h |  18 ++
- .../bpf/prog_tests/cgroup_iter_memcg.c        | 223 ++++++++++++++++++
- .../selftests/bpf/progs/cgroup_iter_memcg.c   |  39 +++
- 8 files changed, 472 insertions(+), 1 deletion(-)
- create mode 100644 mm/bpf_memcontrol.c
- create mode 100644 tools/testing/selftests/bpf/cgroup_iter_memcg.h
- create mode 100644 tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c
- create mode 100644 tools/testing/selftests/bpf/progs/cgroup_iter_memcg.c
-
+diff --git a/mm/bpf_memcontrol.c b/mm/bpf_memcontrol.c
+index 03d435fc4f10..2d518ad2ad3f 100644
+--- a/mm/bpf_memcontrol.c
++++ b/mm/bpf_memcontrol.c
+@@ -10,6 +10,23 @@
+ 
+ __bpf_kfunc_start_defs();
+ 
++/**
++ * bpf_get_root_mem_cgroup - Returns a pointer to the root memory cgroup
++ *
++ * The function has KF_ACQUIRE semantics, even though the root memory
++ * cgroup is never destroyed after being created and doesn't require
++ * reference counting. And it's perfectly safe to pass it to
++ * bpf_put_mem_cgroup()
++ */
++__bpf_kfunc struct mem_cgroup *bpf_get_root_mem_cgroup(void)
++{
++	if (mem_cgroup_disabled())
++		return NULL;
++
++	/* css_get() is not needed */
++	return root_mem_cgroup;
++}
++
+ /**
+  * bpf_get_mem_cgroup - Get a reference to a memory cgroup
+  * @css: pointer to the css structure
+@@ -64,6 +81,7 @@ __bpf_kfunc void bpf_put_mem_cgroup(struct mem_cgroup *memcg)
+ __bpf_kfunc_end_defs();
+ 
+ BTF_KFUNCS_START(bpf_memcontrol_kfuncs)
++BTF_ID_FLAGS(func, bpf_get_root_mem_cgroup, KF_ACQUIRE | KF_RET_NULL)
+ BTF_ID_FLAGS(func, bpf_get_mem_cgroup, KF_TRUSTED_ARGS | KF_ACQUIRE | KF_RET_NULL | KF_RCU)
+ BTF_ID_FLAGS(func, bpf_put_mem_cgroup, KF_TRUSTED_ARGS | KF_RELEASE)
+ 
 -- 
 2.52.0
 
