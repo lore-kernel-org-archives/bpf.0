@@ -1,30 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AF8B28690
-	for <bpf@vger.kernel.org>; Mon, 22 Dec 2025 13:33:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2796D2C21EA
+	for <bpf@vger.kernel.org>; Mon, 22 Dec 2025 13:33:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766410392; cv=none; b=q73MUHhiDMpnejoW92HOMB9v2HZgz005u2gDOz6oFlbp269PxFma0pN9e+EAUO0UFC6m6m1wgJxLu4fr/rOeUXXwnQ3ZpWVx+fVexAPq/azhUTD2nB8vtpH20HIy8LXRIy//OFvSibMf0CjVwU83mSaS1Aq/RcFCt3heGGnq/ac=
+	t=1766410396; cv=none; b=FOX9wpbPKw0Tx5ZKRkllPX8Gc/E5uUOZVswqBr/tX+bs2MOPHqCIKqkyF0bpG/Qr3Kg1TTvLu/GKKqM1ZxXG2CbFb8cwBUk/kfhMVzqpd1BMDU/l4k+XcuFm+xQi4iGBIJNr7AcR7NQ2WcVzKT2DceI9wumIduMdutT4453/FkU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766410392; c=relaxed/simple;
-	bh=/iTAz4zPG+gEMI+u8h1ivV2phbGqoylUnMMvXYZAMA8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Q/qUk9JAefey3K2bhN3hL4CVGdPZHJD+YO9VFlvohOwAr6DLcZN7WpAFdoPj4ns1gucGFtUcXP8+Me392dwd+S8wCFF4EFDuN8Z6HVNJNyuAb+hgaMPwgLpclkfkHB1k5pRw6RylPb8EMOPbun7MQwVuGMOsR57WCYJ5r3+Kirw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Fuho+ybR; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1766410396; c=relaxed/simple;
+	bh=wukZ/dBkaUTZvR16MA9qazIAS8XTVz1eg6VQ3EqiEnU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=HKLAe49lRIwJNrtODvr9uYRTjTMemVMrBuSZbzDpgKcMZjdIbLsbKbV39vtOwJFmEwA6bGbpuwHwgRRr8zQzppqkb/QWzcCKVIDw7al4mrt3uwOC3Q1sYGO/96oPjgcWEAVfIk/6nIWKrqJcNyHajdfbZP5JFvPwP2WmKpBMxrk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nfjylhN4; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Fuho+ybR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BF3EC4CEF1;
-	Mon, 22 Dec 2025 13:33:11 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nfjylhN4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 842EFC4CEF1;
+	Mon, 22 Dec 2025 13:33:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1766410391;
-	bh=/iTAz4zPG+gEMI+u8h1ivV2phbGqoylUnMMvXYZAMA8=;
-	h=From:To:Cc:Subject:Date:From;
-	b=Fuho+ybRp63ZGLkM2AAfk3iZ2a9b6TlNy5gJTTnXAmpmT23+2y5w4HupSRBeYI/16
-	 ecrjcpl9dFTvinQZW5T8NrdYGfBER7GqAUx8M1L1xvbsvzNn/OdijyNYFt47f98QOu
-	 sjr1Mm2iEFnfuH4iNVOUvX7WtP9pYmeHxHUN9o8IGiYEfy78e9AQJAUT0HJ7DsoM5M
-	 CNX3C2a2abirbjINaMo5c7GES25ZrMU5Yp4xbTanuYa4lw3LltjF6ngIwK8uOZIw6n
-	 2A+DynasC1RsA4Xn2eOFgeQwJ8e89WeKpZdcbh9S9tgrZSN65X90RJUfsRjFW9lfwY
-	 Rs1L5v+TZxUBw==
+	s=k20201202; t=1766410395;
+	bh=wukZ/dBkaUTZvR16MA9qazIAS8XTVz1eg6VQ3EqiEnU=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=nfjylhN4DDlUPKT0F78/vYPwpOjjAveCEM0y44lLmKhOh9XR36lKdx9p4erRdQhV1
+	 DNqwJuNhcCuJmBjPPDnm/CECOpfRRPWFQkqsPrxw3q+u27IeMBJjbrAPdLallvIbAz
+	 Yaot3ee6Ua/ZdxvafJqrRUswY8ypd1R2V11sD5gHz4hyZ6acYS1YkjO/Cpf7yGY04b
+	 F964f6fieLDxnOcRMsCOi3tDGjpyi2ssCMxkn0Z9chWp9H0IOTy/CWYI1RBQfOY6pb
+	 9eUr2HDiF/LBPxkJi9PHg7gwZku8+TLuCsieVG5P6GK72dPYYuSudHPa9vbDaRa4Ny
+	 SSrkBP8ewxJBg==
 From: Puranjay Mohan <puranjay@kernel.org>
 To: bpf@vger.kernel.org
 Cc: Puranjay Mohan <puranjay@kernel.org>,
@@ -36,10 +37,12 @@ Cc: Puranjay Mohan <puranjay@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v2 0/2] Allow calling kfuncs from raw_tp programs
-Date: Mon, 22 Dec 2025 05:32:44 -0800
-Message-ID: <20251222133250.1890587-1-puranjay@kernel.org>
+Subject: [PATCH bpf-next v2 1/2] bpf: allow calling kfuncs from raw_tp programs
+Date: Mon, 22 Dec 2025 05:32:45 -0800
+Message-ID: <20251222133250.1890587-2-puranjay@kernel.org>
 X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20251222133250.1890587-1-puranjay@kernel.org>
+References: <20251222133250.1890587-1-puranjay@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -48,23 +51,26 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-V1: https://lore.kernel.org/all/20251218145514.339819-1-puranjay@kernel.org/
-Changes in V1->V2:
-- Update selftests to allow success for raw_tp programs calling kfuncs.
+Associate raw tracepoint program type with the kfunc tracing hook. This
+allows calling kfuncs from raw_tp programs.
 
-This set enables calling kfuncs from raw_tp programs.
+Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
+---
+ kernel/bpf/btf.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Puranjay Mohan (2):
-  bpf: allow calling kfuncs from raw_tp programs
-  selftests: bpf: fix tests with raw_tp calling kfuncs
-
- kernel/bpf/btf.c                                            | 1 +
- tools/testing/selftests/bpf/progs/dynptr_fail.c             | 2 +-
- .../testing/selftests/bpf/progs/verifier_kfunc_prog_types.c | 6 +++---
- 3 files changed, 5 insertions(+), 4 deletions(-)
-
-
-base-commit: f785a31395d9cafb8b2c42c7358fad72a6463142
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 0de8fc8a0e0b..539c9fdea41d 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -8681,6 +8681,7 @@ static int bpf_prog_type_to_kfunc_hook(enum bpf_prog_type prog_type)
+ 		return BTF_KFUNC_HOOK_STRUCT_OPS;
+ 	case BPF_PROG_TYPE_TRACING:
+ 	case BPF_PROG_TYPE_TRACEPOINT:
++	case BPF_PROG_TYPE_RAW_TRACEPOINT:
+ 	case BPF_PROG_TYPE_PERF_EVENT:
+ 	case BPF_PROG_TYPE_LSM:
+ 		return BTF_KFUNC_HOOK_TRACING;
 -- 
 2.47.3
 
