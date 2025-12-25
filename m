@@ -1,53 +1,92 @@
-Received: from chinatelecom.cn (smtpnm6-01.21cn.com [182.42.159.233])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 007A92F5A0D;
-	Thu, 25 Dec 2025 09:22:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=182.42.159.233
+Received: from mail-pj1-f68.google.com (mail-pj1-f68.google.com [209.85.216.68])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 901572F4A14
+	for <bpf@vger.kernel.org>; Thu, 25 Dec 2025 10:45:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.68
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766654533; cv=none; b=SXJQ8BeTZgM7JkCN1Dj4fhcPKZCUkXJTnAZC5NovFbLLoqtxCNmZEVa+BuLjW88gUOJvOC/BquwboH05Yoch0KcvUcuXIO78lazARHSWzKkRDYft9qb0b4iy4ds6FMMjGyclcz6FXcg5twHKXOq/eqvnj/AumOl81q8PRzJsnwY=
+	t=1766659517; cv=none; b=KALO1aVT0BUe9zM4ASPbsiF9p7uteJ2yh4soq0jtO0Nd1VKGJ9GmR9bFKxFX1x/1nhln9ZrVfyqLqFiMazGNA2RcT1ADRLGB4SgBhe4hEn5hSG05VS/b+HLavjyWj6OEsSHVEKSXQnvLDefFs58k/tz2VbjcMxCuacn6cEySIm0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766654533; c=relaxed/simple;
-	bh=VBKSYg5quzAcIf8QlT0PjiUQ1PAiSRMywyzWhLQ2ptE=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=u6y6DUfVhA6mWOCENcItuQWEbOPlGv+5DzKnX+i+ZG3nsxbDqJu8A+k8velHUuiTK3M9Jd/CyRbQEWRWND3EEKsNxJ2iZdbcyRjShQHszMznq0QnnKZ0QNvW7YKQ76TD3yyU9gfHGsw/w1V4RK5M4IUFqaKWWiW5/VMbk3nPJ3I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=chinatelecom.cn; spf=pass smtp.mailfrom=chinatelecom.cn; arc=none smtp.client-ip=182.42.159.233
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=chinatelecom.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chinatelecom.cn
-HMM_SOURCE_IP:172.27.0.100:0.1853048837
-HMM_ATTACHE_NUM:0000
-HMM_SOURCE_TYPE:SMTP
-Received: from clientip-101.227.46.167 (unknown [172.27.0.100])
-	by chinatelecom.cn (HERMES) with SMTP id 68CD0CAF3D;
-	Thu, 25 Dec 2025 17:14:13 +0800 (CST)
-X-189-SAVE-TO-SEND: +niuwl1@chinatelecom.cn
-Received: from  ([101.227.46.167])
-	by gateway-ssl-dep-55bdcd6d8-lhb6k with ESMTP id c33f190ec59849b6a676bd3b584ff7f1 for qmo@kernel.org;
-	Thu, 25 Dec 2025 17:14:31 CST
-X-Transaction-ID: c33f190ec59849b6a676bd3b584ff7f1
-X-Real-From: niuwl1@chinatelecom.cn
-X-Receive-IP: 101.227.46.167
-X-MEDUSA-Status: 0
-Sender: niuwl1@chinatelecom.cn
-From: WanLi Niu <niuwl1@chinatelecom.cn>
-To: Quentin Monnet <qmo@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	WanLi Niu <niuwl1@chinatelecom.cn>,
-	hlleng <a909204013@gmail.com>,
+	s=arc-20240116; t=1766659517; c=relaxed/simple;
+	bh=ooda17nRlgzaWXxyIFbJgZPuJX16QrZkoNK6HccLzn8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=IuU5esuGPqHf++EZBMCZCewrHDY/yeNFDxpENXbYKX7Dsa1/LxSrGzYf1K6cyF6RtvBmi7gQw29COY/r2m/rNbjShiBuAZ3j+MXs7yugwGBv9CQ7bJCpzS7Ex+VdIJevRH1aqoEL/KUsTFprd4DnQIT0pLw/SyWFhi/zQL3sv/A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jZOS1OEN; arc=none smtp.client-ip=209.85.216.68
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jZOS1OEN"
+Received: by mail-pj1-f68.google.com with SMTP id 98e67ed59e1d1-34c21417781so6558037a91.3
+        for <bpf@vger.kernel.org>; Thu, 25 Dec 2025 02:45:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1766659515; x=1767264315; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=8xxF3kFQmHFC/i/qRiYm9vYsPAXcnfy31W/R9Oc0Ir4=;
+        b=jZOS1OENxyCDycYyFRnAzbgDKGu8RGWN5fLhaRz0DtTXSWSA14R0z54n2nmcJQGZ1g
+         wnDs2ZQKluUEWGYipQ0If8tGPxFskWCPBdad9vc47i+fkyiMLLh+rDq6yDPjvx6RHdxN
+         xjnCHcXpASY4WhdXGDHWW2SA7voN3+hAYXgySiQjyJpMmSlg3o0YMVZZOKX5dRxpsTDA
+         bidHh9MAOA7k3PSbdVTPVLofwjQ1Ho5aL0/N8oM1M7WKVU0byyuT3tipPiZgAXlf42qX
+         ISwo+aP4bwDkwyazV3Tu/yA6ewJ6ZaDnMjqpMlcfi+7/0GVN+INy79agYOhpX13exk8A
+         D+fA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1766659515; x=1767264315;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8xxF3kFQmHFC/i/qRiYm9vYsPAXcnfy31W/R9Oc0Ir4=;
+        b=X0EXKqSf/m4+wB7u2pVv6gbmfSHrgLnKRnwtgU542rP6mt+oUmRpl7VDxUs6/p6or+
+         waBSYboCL0Nc/Td0z/D0Esu6ed9PPhf5xN2uZnrM1+smOblFWEgJjrKejHxwwLfbIZHs
+         44SejlMWoDPnP//P4fsI5HcJgPiTXzaS05vuCE1zUVASgmJWrj6upMqb8YrPRA2GkBdk
+         XuZUp42PzsuTTOYT37tECVUH+3FwuuUtXVEoXG1jtyVQ2db4nSwiov9USHCmxHe1RTB8
+         iUNIxa2SZZSoYcL5MYvLRI3HY9/nk0pFs3xepXNporEAHsFqEluo2nzetVMA5Fc9yUo8
+         D5rg==
+X-Forwarded-Encrypted: i=1; AJvYcCWUKh6BmMKOsaCkuvRaTPYLa0tm1iF4CsWtzR8x2gt5TMLAbB6CWR+onIMiuqFzE46tJ3s=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyiEl2XcuIqc1iOXObaiqlDposnxjWPJgDqo8uF9PHLc265RPxe
+	WMYsIIlqVGL5o5f4IOJCksnrvV2JXAefwuAEb6OUq9rDYquSXhgUF72m
+X-Gm-Gg: AY/fxX7XSOQF9Q9FE3M8aNh8pt+Fd5PdKtlELbGyBp1J9NXwBXaaZHrnSJygH3xCT8L
+	C+TZdpqnq2lhTUexUP6n3/fMfQLwKg8pN5bjp5JcAtdP6F6XrszbqEVpAGfyhsDS2EZGXAX0NaD
+	0oEzgiswP66gRxNNVnUiMFcefFapXoquDb13ca4OOKNh6CyxNIjK6r9z3UqknSN5eAyXWpxWOQL
+	nYBAIwjneicKECR/YHvkQvgnlQ3WcE9n4PLkS1jfEEoIUhdfQt4QYgBTwnZ0Xqz/9UwnewvQ7SY
+	05SKf/ZJ/LlF+/86bz34FY52RU+ampBTon3c5apXYBjkpLbvg0iUVlQFeiKuEAL0ipoq3B6zYq8
+	+PMr8Izn0s8jOt/d/OnAnj8emoUXEqxUGY6ZUOOx26c7sLlo7BCftnx12NwFINuJSDq27aAT44+
+	wjIEFr6/o16ZQbGl25Ng==
+X-Google-Smtp-Source: AGHT+IFbVIhBTT0zROCFj/DYziq38CbJr650ni+iD1kul5A+SyuRB0jXgOZgjQFJ5hvYqb5XPA1zVA==
+X-Received: by 2002:a17:90b:3c4e:b0:349:8116:a2d8 with SMTP id 98e67ed59e1d1-34e9211367cmr18738470a91.7.1766659514802;
+        Thu, 25 Dec 2025 02:45:14 -0800 (PST)
+Received: from 7940hx ([160.187.0.149])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-34e772ac06fsm9091379a91.11.2025.12.25.02.45.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Dec 2025 02:45:14 -0800 (PST)
+From: Menglong Dong <menglong8.dong@gmail.com>
+X-Google-Original-From: Menglong Dong <dongml2@chinatelecom.cn>
+To: ast@kernel.org
+Cc: davem@davemloft.net,
+	dsahern@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	john.fastabend@gmail.com,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	tglx@linutronix.de,
+	mingo@redhat.com,
+	bp@alien8.de,
+	dave.hansen@linux.intel.com,
+	jiang.biao@linux.dev,
+	x86@kernel.org,
+	hpa@zytor.com,
+	netdev@vger.kernel.org,
 	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next] bpftool: add missing --sign option to help output
-Date: Thu, 25 Dec 2025 17:13:52 +0800
-Message-Id: <20251225091352.3048-1-niuwl1@chinatelecom.cn>
-X-Mailer: git-send-email 2.39.1
+Subject: [PATCH bpf-next] bpf, x86: inline bpf_get_current_task() for x86_64
+Date: Thu, 25 Dec 2025 18:44:59 +0800
+Message-ID: <20251225104459.204104-1-dongml2@chinatelecom.cn>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -56,35 +95,73 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Signed-off-by: WanLi Niu <niuwl1@chinatelecom.cn>
-Co-developed-by: hlleng <a909204013@gmail.com>
-Signed-off-by: hlleng <a909204013@gmail.com
+Inline bpf_get_current_task() and bpf_get_current_task_btf() for x86_64
+to obtain better performance. The instruction we use here is:
 
+  65 48 8B 04 25 [offset] // mov rax, gs:[offset]
+
+Not sure if there is any side effect here.
+
+Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
 ---
- tools/bpf/bpftool/main.c | 3 +++
- 1 file changed, 3 insertions(+)
+ arch/x86/net/bpf_jit_comp.c | 33 +++++++++++++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
 
-diff --git a/tools/bpf/bpftool/main.c b/tools/bpf/bpftool/main.c
-index a829a6a49037..3b4987a2f1bb 100644
---- a/tools/bpf/bpftool/main.c
-+++ b/tools/bpf/bpftool/main.c
-@@ -66,6 +66,7 @@ static int do_help(int argc, char **argv)
- 		"\n"
- 		"       OBJECT := { prog | map | link | cgroup | perf | net | feature | btf | gen | struct_ops | iter | token }\n"
- 		"       " HELP_SPEC_OPTIONS " |\n"
-+		"                    { {-S|--sign {-k|--private_key_path} {-i|--cert_path} } |\n"
- 		"                    {-V|--version} }\n"
- 		"",
- 		bin_name, bin_name, bin_name);
-@@ -452,6 +453,8 @@ int main(int argc, char **argv)
- 		{ "debug",	no_argument,	NULL,	'd' },
- 		{ "use-loader",	no_argument,	NULL,	'L' },
- 		{ "sign",	no_argument,	NULL,	'S' },
-+		{ "private_key_path",	required_argument,	NULL,	'k' },
-+		{ "cert_path",	required_argument,	NULL,	'i' },
- 		{ "base-btf",	required_argument, NULL, 'B' },
- 		{ 0 }
- 	};
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index b69dc7194e2c..7f38481816f0 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -1300,6 +1300,19 @@ static void emit_st_r12(u8 **pprog, u32 size, u32 dst_reg, int off, int imm)
+ 	emit_st_index(pprog, size, dst_reg, X86_REG_R12, off, imm);
+ }
+ 
++static void emit_ldx_percpu_r0(u8 **pprog, const void __percpu *ptr)
++{
++	u8 *prog = *pprog;
++
++	/* mov rax, gs:[offset] */
++	EMIT2(0x65, 0x48);
++	EMIT2(0x8B, 0x04);
++	EMIT1(0x25);
++	EMIT((u32)(unsigned long)ptr, 4);
++
++	*pprog = prog;
++}
++
+ static int emit_atomic_rmw(u8 **pprog, u32 atomic_op,
+ 			   u32 dst_reg, u32 src_reg, s16 off, u8 bpf_size)
+ {
+@@ -2435,6 +2448,15 @@ st:			if (is_imm8(insn->off))
+ 		case BPF_JMP | BPF_CALL: {
+ 			u8 *ip = image + addrs[i - 1];
+ 
++			if (insn->src_reg == 0 && (insn->imm == BPF_FUNC_get_current_task ||
++						   insn->imm == BPF_FUNC_get_current_task_btf)) {
++				if (IS_ENABLED(CONFIG_USE_X86_SEG_SUPPORT))
++					emit_ldx_percpu_r0(&prog, &const_current_task);
++				else
++					emit_ldx_percpu_r0(&prog, &current_task);
++				break;
++			}
++
+ 			func = (u8 *) __bpf_call_base + imm32;
+ 			if (src_reg == BPF_PSEUDO_CALL && tail_call_reachable) {
+ 				LOAD_TAIL_CALL_CNT_PTR(stack_depth);
+@@ -4067,3 +4089,14 @@ bool bpf_jit_supports_timed_may_goto(void)
+ {
+ 	return true;
+ }
++
++bool bpf_jit_inlines_helper_call(s32 imm)
++{
++	switch (imm) {
++	case BPF_FUNC_get_current_task:
++	case BPF_FUNC_get_current_task_btf:
++		return true;
++	default:
++		return false;
++	}
++}
 -- 
-2.39.1
+2.52.0
 
