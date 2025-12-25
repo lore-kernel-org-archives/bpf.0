@@ -1,147 +1,133 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1E9E2F7444
-	for <bpf@vger.kernel.org>; Thu, 25 Dec 2025 07:33:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+Received: from zg8tmty1ljiyny4xntuumtyw.icoremail.net (zg8tmty1ljiyny4xntuumtyw.icoremail.net [165.227.155.160])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF55C17BEBF
+	for <bpf@vger.kernel.org>; Thu, 25 Dec 2025 09:17:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=165.227.155.160
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766648028; cv=none; b=gH8Ww3m3KC+XxfDa2Rp7QOJ4OlpZP7rHQ/Coh1xnZOg+KqXVC9RXDD7kCPtwkd1N2UaANRcG1VICpX3ihig9l3yrK3BadNAD23Zk/obVyuufi0MEC5rEZWtYONrt8y8SXydwFfeeZmCI3o+LteT3/S0G9WM2SYQbOM7QwvoyS44=
+	t=1766654274; cv=none; b=I1Y9mMVaH+uW+feQKu85gC8vjZ9XaZlO/sxbzNy5+T01EBWTK2yCUzhcVG8qrS2FMlqYgctGYLhkUVUCp8RCXcSl2qhwKYoWqyYVdHk8LORoRg3ujzHK/DsNuRCH2qx6m/btUKMnFV5EqIDFYJxf/9EYU53ufr08sg0Yulf/6Po=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766648028; c=relaxed/simple;
-	bh=+iyjwmBV87ktkSqNEIqB4ESqTnXUiOMV88fHerMRrvM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=JW56YXzhzK9rmsBmwIc1Wl6zDzGnc1EZWMTXMMe4nclhx5NIZe/2NzdJE3nkVKFisUCspJdkXyqAe9e64lW6NT/r8Q+DxwgSJoqV6vfsE2FddWguSGMdbxdytfLLEAtIdRjXLUO8Ee/puSkvtBbu9XFtOt/K30rxo1V9SMlei7s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=gsFJiT9+; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=gSCsE2df; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="gsFJiT9+";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="gSCsE2df"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1766648024;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=/0m7nvOOvh/L5z00dJTlH990Zltybvr44yIpTdc8ZCI=;
-	b=gsFJiT9+1e0vHTCKUAVGUoRD13YnAk3RcyVRwulmy5xqCT3EvB+osoLDuX/uaYVRdIXscH
-	qFOaah88X2sMPUbd34pp0OwN3agx4mrmultP6SmsJUZYDaT8cNCY595oFI4kJJHr/qOIh4
-	gNHN99UxZ5awNMc+hASQqU9I2Ui47+c=
-Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com
- [209.85.216.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-684-OfDgl9BIMme55Ag8rZgVkQ-1; Thu, 25 Dec 2025 02:33:42 -0500
-X-MC-Unique: OfDgl9BIMme55Ag8rZgVkQ-1
-X-Mimecast-MFC-AGG-ID: OfDgl9BIMme55Ag8rZgVkQ_1766648021
-Received: by mail-pj1-f72.google.com with SMTP id 98e67ed59e1d1-34c38781efcso12558048a91.2
-        for <bpf@vger.kernel.org>; Wed, 24 Dec 2025 23:33:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1766648021; x=1767252821; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/0m7nvOOvh/L5z00dJTlH990Zltybvr44yIpTdc8ZCI=;
-        b=gSCsE2df1YPFNh3vhMEMnO2ZSm2F2w5G3zYWQSca7AbN31/FwKjU25cnGDQO9W2NRz
-         xGCBgb5hbmcwQcC78WgkceIKvxmv+8NpODWRokZifT9tMEcFHdC0Ah4SG0nGRsskYB0x
-         g9fD457JcyFf6xvqf0RedBeIB/qlQbKWIXEQW8sGsLG0Z5kUjrkDKgXEH0VUC7TT3uos
-         vbQJ/B63rwNwf/9VGZoXdPMpIQMvE/kh4TwJRDhYUy4UsFB9a7OLDVCFcRiYvTn4hlBm
-         jIlcBn41btNKIVcMvoItxOE1cezhDneobYs3ui3r2fiEkrSDi7sG3YkgScX00HRXoerp
-         OMxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766648021; x=1767252821;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=/0m7nvOOvh/L5z00dJTlH990Zltybvr44yIpTdc8ZCI=;
-        b=L0Zmnm+cSYpXDe8Cbrp2NwoXKuK4E0FnTaL4B0EYryvjsPV5zpJwcusYAN3GSL6Dr6
-         07P+qZZZIlziWdedbQHVqnLuWMOH1BGgj6cncCdATtg3rJIJvnJ9y5bVDadL4r6+x8q4
-         S6BEefl3dCkPYFOFe+mmVgtEg0BItLn8mfhi9//rvxrSIsciwBSWdEsHI8K/PF6J1PUy
-         I3WITjMpDeGf71ioIlZJaz0Yy8ZbawN24aXWZbYcF6ed/lTJcSezTdkl0+LMPb7XDnr2
-         3ZKvNU4VbjWEKUO1z5I6umcl+6WMNgAIaP+5xnTJya7c0wTdmer+LUOvKjNxz+3Uvztw
-         Oudw==
-X-Forwarded-Encrypted: i=1; AJvYcCUX7m09tc8eJUdygh/of+Zyrctd/NGoXEjabCb3udv8aTnT0yxbf3tvVwZM8McI/yUIX38=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw36FP0svG8rM9GwNZM9WeZgxZcNSooQXX5cbxS8LKveEzstnuC
-	pFkKnokztlsLUlTUyjaHNHEfJTLhr40MVL7yVW1ht7ikzkSGEe+dGwqD6vMWhWkvj0Xjwvrlykh
-	JYcC9TLHyVUaZKL5tbu4pN8Kqgrz2nepUJEjzPZJRs0++Y7oMX5IjyH6fsg+X6Yy/GXXJLSqCK5
-	26YO9agdrQZBjU8H9jsb5pww7/el8R
-X-Gm-Gg: AY/fxX745WIybw2qZ1GkiAxaOwtZQBHvXIasFm0EZzGojme4/KFM+i55+kMHaQNvE2q
-	EwJDgxbZZNCiJw6bFTqRt09yPEeG7Gt2++3VGpRXcoiV731fmulEo3n11Nm6/BjHZIhBpteb+0s
-	VV+Dw+ifl//jj3KQ4ZKpTWAIKS+Ed4B7rjET9mjof7Vl7k+HjdpCN3YeM4TfFlz5aaDb4=
-X-Received: by 2002:a17:90b:5804:b0:343:c3d1:8bb1 with SMTP id 98e67ed59e1d1-34e921d0d76mr15800479a91.28.1766648021160;
-        Wed, 24 Dec 2025 23:33:41 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IFcyl5vR43OkL/hDfKBDmGKAR37cMOZ8Ka1DFFBdJlFQKrUA0x40DEd0hamphs8/qa8tc2gRbIfcXUfzzGSd0U=
-X-Received: by 2002:a17:90b:5804:b0:343:c3d1:8bb1 with SMTP id
- 98e67ed59e1d1-34e921d0d76mr15800458a91.28.1766648020802; Wed, 24 Dec 2025
- 23:33:40 -0800 (PST)
+	s=arc-20240116; t=1766654274; c=relaxed/simple;
+	bh=XzyAszPsEEzAGfFYYA9ANkEQadAhJos4/Kz6oJ/mG0M=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=VUOYkpK5jz/rC6ImS8gARpzE9aZNR3TF/0nlt2YJCilP72Y1srQWaTsSOu31b1FSRjxJLSYZkJ74vNxxxKfGwB+YyGSCkjKIgCo5eQMvUJAth6buRQ1hkWbIIcRmezF1rXC8RCOUJVgP5GNE1RIWWX8U+kn1KYeNG9zQKpXccQw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn; spf=pass smtp.mailfrom=zju.edu.cn; arc=none smtp.client-ip=165.227.155.160
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zju.edu.cn
+Received: from zju.edu.cn (unknown [10.162.146.110])
+	by mtasvr (Coremail) with SMTP id _____wBn9ZURAU1pKBVJAQ--.775S3;
+	Thu, 25 Dec 2025 17:17:06 +0800 (CST)
+Received: from lutetium.tail477849.ts.net (unknown [10.162.146.110])
+	by mail-app2 (Coremail) with SMTP id zC_KCgCHoEQNAU1pv82sBA--.57027S2;
+	Thu, 25 Dec 2025 17:17:01 +0800 (CST)
+From: Yazhou Tang <tangyazhou@zju.edu.cn>
+To: yonghong.song@linux.dev
+Cc: andrii@kernel.org,
+	ast@kernel.org,
+	bpf@vger.kernel.org,
+	daniel@iogearbox.net,
+	eddyz87@gmail.com,
+	haoluo@google.com,
+	john.fastabend@gmail.com,
+	jolsa@kernel.org,
+	kpsingh@kernel.org,
+	martin.lau@linux.dev,
+	sdf@fomichev.me,
+	shenghaoyuan0928@163.com,
+	song@kernel.org,
+	tangyazhou518@outlook.com,
+	tangyazhou@zju.edu.cn,
+	ziye@zju.edu.cn
+Subject: Re: [PATCH bpf-next v2 1/2] bpf: Add interval and tnum analysis for signed and unsigned BPF_DIV
+Date: Thu, 25 Dec 2025 17:17:01 +0800
+Message-ID: <20251225091701.1911903-1-tangyazhou@zju.edu.cn>
+X-Mailer: git-send-email 2.52.0
+In-Reply-To: <db829499-1ad3-4d9f-8a89-6246938a45aa@linux.dev>
+References: <db829499-1ad3-4d9f-8a89-6246938a45aa@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251223152533.24364-1-minhquangbui99@gmail.com>
- <20251223152533.24364-2-minhquangbui99@gmail.com> <CACGkMEvXkPiTGxZ6nuC72-VGdLHVXzrGa9bAF=TcP8nqPjeZ_w@mail.gmail.com>
- <1766540234.3618076-1-xuanzhuo@linux.alibaba.com> <20251223204555-mutt-send-email-mst@kernel.org>
-In-Reply-To: <20251223204555-mutt-send-email-mst@kernel.org>
-From: Jason Wang <jasowang@redhat.com>
-Date: Thu, 25 Dec 2025 15:33:29 +0800
-X-Gm-Features: AQt7F2oZsDAy5UzUdBbuKS6sbUPRqmYTSaTWpVnvwoETb7rBpSLDuU-0lomm-PA
-Message-ID: <CACGkMEs7_-=-8w=7gW8R_EhzfWOwuDoj4p-iCPQ7areOa9uaUw@mail.gmail.com>
-Subject: Re: [PATCH net 1/3] virtio-net: make refill work a per receive queue work
-To: "Michael S. Tsirkin" <mst@redhat.com>
-Cc: Xuan Zhuo <xuanzhuo@linux.alibaba.com>, netdev@vger.kernel.org, 
-	=?UTF-8?Q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
-	Stanislav Fomichev <sdf@fomichev.me>, virtualization@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
-	Bui Quang Minh <minhquangbui99@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:zC_KCgCHoEQNAU1pv82sBA--.57027S2
+X-CM-SenderInfo: qssvjiasrsq6lmxovvfxof0/1tbiBhMLCmlMQgMzsgAAsx
+X-CM-DELIVERINFO: =?B?5x9rvAXKKxbFmtjJiESix3B1w3vD7IpoGYuur0o+r46DyAi5OfOO+T4vrW4FyUBIyu
+	9q9Dr9MYVIMdkv4rk87rhzASu3Ve6MbmPje8e4z3NFnj74RZLcPgfLhUIWcdxobQO6it2f
+	/s7SWci5MPyhdGhWtGA5eE0qe+2D2/L2aOTGgXuDEn+dEztJga1jiHlT0kKvDQ==
+X-Coremail-Antispam: 1Uk129KBj93XoW7CryxWryUGFWDury8Gw48AFc_yoW8ZFy8pa
+	ySg3W8urWDXF15Kw1v93yIk3Z5W395A3y7WryrCw1jk3WY9ry8ZFWFkw15WFn8G3WYgw12
+	g3yYqry8Za4qyFXCm3ZEXasCq-sJn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUU9Eb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AK
+	xVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc
+	02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAF
+	wI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0Y48IcxkI7V
+	AKI48G6xCjnVAKz4kxM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28IcxkI7VAKI48JMxC2
+	0s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI
+	0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE
+	14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20x
+	vaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8
+	JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU801v3UUUUU==
 
-On Wed, Dec 24, 2025 at 9:48=E2=80=AFAM Michael S. Tsirkin <mst@redhat.com>=
- wrote:
->
-> On Wed, Dec 24, 2025 at 09:37:14AM +0800, Xuan Zhuo wrote:
-> >
-> > Hi Jason,
-> >
-> > I'm wondering why we even need this refill work. Why not simply let NAP=
-I retry
-> > the refill on its next run if the refill fails? That would seem much si=
-mpler.
-> > This refill work complicates maintenance and often introduces a lot of
-> > concurrency issues and races.
-> >
-> > Thanks.
->
-> refill work can refill from GFP_KERNEL, napi only from ATOMIC.
->
-> And if GFP_ATOMIC failed, aggressively retrying might not be a great idea=
-.
+Hi Yonghong,
 
-Btw, I see some drivers are doing things as Xuan said. E.g
-mlx5e_napi_poll() did:
+Thank you for the review.
 
-busy |=3D INDIRECT_CALL_2(rq->post_wqes,
-                                mlx5e_post_rx_mpwqes,
-                                mlx5e_post_rx_wqes,
+> In my own experience, typical division (signed or unsigned) has remainder 0.
+> For example, (ptr1 - ptr2)/sizeof(*ptr1).
+> 
+> Do you have other production examples which needs more complex div/sdiv
+> handling in tnum and verifier? For example see:
+>     https://lore.kernel.org/bpf/aRYSlGmmQM1kfF_b@mail.gmail.com/
 
-...
+You are absolutely right that pointer arithmetic is the most common use
+case for division in BPF today.
 
-if (busy) {
-         if (likely(mlx5e_channel_no_affinity_change(c))) {
-                work_done =3D budget;
-                goto out;
-...
+To be honest, our primary motivation for this patch is not driven by a
+specific real-world problem or use case. Instead, we want to improve the
+completeness of the BPF verifier.
 
->
-> Not saying refill work is a great hack, but that is the reason for it.
-> --
-> MST
->
+While analyzing the verifier's logic, we noticed that unlike other ALU
+operations, BPF_DIV (and BPF_MOD) lacks precise value tracking. This
+creates a gap where valid BPF code using standard ISA instructions might
+be rejected simply because the verifier falls back to "unknown scalar"
+too easily. We believe that closing this gap makes the verifier more robust
+for future developers who might use division in non-pointer contexts.
 
-Thanks
+That said, I fully agree with your concern regarding code complexity. To
+address this, I am working on a v3 which will:
+
+1. Simplify and refactor the logic to be cleaner and more readable.
+2. Add detailed in-code comments and commit message examples to explain
+   the tnum/interval derivation steps.
+3. Fix the ALU32/64 mismatch issue reported by syzbot ci (which I have
+   already root-caused).
+
+I hope this helps explain the goal of the patch.
+
+> > +/* Not well-formed Tnum, whose concrete value is empty set. */
+> > +const struct tnum tnum_empty = { .value = -1, .mask = -1 };
+> 
+> Maybe tnum_empty renamed to tnum_poison? This will make it
+> explicit that it is not well formed.
+
+> > +static u64 __get_mask(u64 x)
+> > +{
+> > +	int width = 0;
+> > +
+> > +	if (x > 0)
+> > +		width = 64 - __builtin_clzll(x);
+> 
+> Maybe 'width = fls64(x)'?
+
+Agreed. I will do these 2 changes in the next version.
+
+Thank you for the suggestions!
+
+Best regards,
+
+Yazhou
 
