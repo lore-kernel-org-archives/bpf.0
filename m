@@ -1,229 +1,105 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-183.mta1.migadu.com (out-183.mta1.migadu.com [95.215.58.183])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 922E327F00A;
-	Mon, 29 Dec 2025 19:11:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B58123AE87
+	for <bpf@vger.kernel.org>; Mon, 29 Dec 2025 19:28:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767035467; cv=none; b=ouChiIVwAxZr/D0GKKSmoPWYTkc2EfSH8PDon5twxxyVHjbsIKW0diVtqjcHuZ98tZhGvwKuC7/2re4vOQzIA8uxKODvW0QPIY+9zxqXjCLnJTCHP7Tk0DChX+pfO6aqbsVQfAld4AcOwQCndntaLRXOTuzfIskkiDk3wa535PY=
+	t=1767036514; cv=none; b=VwVWmgr63ffQKXPaWywR8qvW+spv+0EwNLhkeOU0n3QsAUi8/S9+LGkHKDWAB+cTmUG/bRLpy0K4vmy2hUAR3F1J1I6bsCdJ8DmcobUc0zpCFL9tJijPYAqzPdULqrq8aTOrumvk6rK3O63Wz8XLfKj5da4SSsE6HgdjTivlQCA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767035467; c=relaxed/simple;
-	bh=XUhX9y4AUAsfs0RX5l5s4LfdmkuCqgRoPEpYS58H5Dc=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=QWw9DzMSFz38+KdCHc8aFhYqPBxoBGESH2Tun/SaGBzLjLJpagkmvhr++j6TDDEaFkh/j2UtapKdFrLsHGNC0Lk5DFG1rhlRAi2RJYlhekHS7v0mSW0cxhmz+W6uZUxz5rr3rLO9bqkE5oMW4EMD+XSxr4znncT3eJyDemfu9Og=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l0qAfahU; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1767036514; c=relaxed/simple;
+	bh=OvepIgKTsXQ554crop9a18ID5p0xWukoyJgTO3AWK+s=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=QL5IW5YpE6AA0+ZoAgY3j4ah8zvu3OyMjlF9SKkVZWILK5JCz/W996M0psk4B9XvGsM9f7nsTzEgW9BzS4cohlxokOgwGYRc/qqwGjAWzFxsmQJCbJT/us5Gar6eTmh2q+KbY6EBVs7m3ctGxitok7EIlJ3aG3JtxCMx9YweBQA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=jNeIe3bC; arc=none smtp.client-ip=95.215.58.183
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l0qAfahU"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF686C19423;
-	Mon, 29 Dec 2025 19:11:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767035466;
-	bh=XUhX9y4AUAsfs0RX5l5s4LfdmkuCqgRoPEpYS58H5Dc=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=l0qAfahUtbXzmwgG+XQyijQM0r4r6JUP9lQKh6mw0X3MdCOypBw35vsG11bNpxWmO
-	 MnkAegtgNiXIBzMOgWZnZiBqVLv+WUvGBUBCK1JLi4I68fnIGPGAlxteRIaFmpAU5o
-	 sDGvXMzma7w4Uv73EwqU8ZdB+zViV7n0HlWl+q2W8aBe3LJEl0XNonIQX9VukYFuvY
-	 XQK17K8MCWFsawHctH4Qdh08z2qramzau4HP9gBdBglkWJlsg2SIsoK+fTldwTEghE
-	 0FpsR6jq+09lsQ3OC2t8DdZP55zMPa2pgEmjEyDRG4oea8vV+Z33/FuCv7YeSOvR6X
-	 l5hYgMuU8m/ZA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 757A2CE1079; Mon, 29 Dec 2025 11:11:06 -0800 (PST)
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: rcu@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	kernel-team@meta.com,
-	rostedt@goodmis.org,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	bpf@vger.kernel.org
-Subject: [PATCH v4 5/9] rcu: Add noinstr-fast rcu_read_{,un}lock_tasks_trace() APIs
-Date: Mon, 29 Dec 2025 11:11:00 -0800
-Message-Id: <20251229191104.693447-5-paulmck@kernel.org>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <b206b083-f611-43b6-993f-78ddbe315813@paulmck-laptop>
-References: <b206b083-f611-43b6-993f-78ddbe315813@paulmck-laptop>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="jNeIe3bC"
+Message-ID: <5c9130f8-dd8a-41c4-8033-d5661f64c01a@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1767036509;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Irz9LTpqvbmdmlGPdks1FZg7wCTsfvzQn5Eo49frrB4=;
+	b=jNeIe3bCnu6XyQCXlqqd5hpLnTRq96sypyzRUtDSC6IHaCuWb7ttMM4nGHeAaXtjshEnam
+	qVSotNJSq4u18h03AMXj9tATx7VRK69uKeu+c126wv8frmZHDHEs77M53pSAGB/Se5nSsX
+	2oF8EeFZniVaZ0rEM8Lx/htuO/53pDA=
+Date: Mon, 29 Dec 2025 11:28:10 -0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Subject: Re: [bpf-next:master 8/9] FAILED: load BTF from .tmp_vmlinux1.BTF.1:
+ No such file or directory
+To: kernel test robot <lkp@intel.com>, Dinh Nguyen <dinguyen@kernel.org>,
+ Alan Maguire <alan.maguire@oracle.com>
+Cc: oe-kbuild-all@lists.linux.dev, Andrii Nakryiko <andrii@kernel.org>,
+ bpf <bpf@vger.kernel.org>, linux-kbuild@vger.kernel.org,
+ linux-kernel@vger.kernel.org, dwarves <dwarves@vger.kernel.org>
+References: <202512250932.X7mdviuH-lkp@intel.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <202512250932.X7mdviuH-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-When expressing RCU Tasks Trace in terms of SRCU-fast, it was
-necessary to keep a nesting count and per-CPU srcu_ctr structure
-pointer in the task_struct structure, which is slow to access.
-But an alternative is to instead make rcu_read_lock_tasks_trace() and
-rcu_read_unlock_tasks_trace(), which match the underlying SRCU-fast
-semantics, avoiding the task_struct accesses.
+On 12/24/25 5:01 PM, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+> head:   f14cdb1367b947d373215e36cfe9c69768dbafc9
+> commit: 522397d05e7d4a7c30b91841492360336b24f833 [8/9] resolve_btfids: Change in-place update with raw binary output
+> config: nios2-randconfig-001-20251224 (https://download.01.org/0day-ci/archive/20251225/202512250932.X7mdviuH-lkp@intel.com/config)
+> compiler: nios2-linux-gcc (GCC) 11.5.0
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251225/202512250932.X7mdviuH-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202512250932.X7mdviuH-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+>    Complex, interval and imaginary float types are not supported
+>    Error while encoding BTF.
 
-When all callers have switched to the new API, the previous
-rcu_read_lock_trace() and rcu_read_unlock_trace() APIs will be removed.
+Hi Dinh, Alan,
 
-The rcu_read_{,un}lock_{,tasks_}trace() functions need to use smp_mb()
-only if invoked where RCU is not watching, that is, from locations where
-a call to rcu_is_watching() would return false.  In architectures that
-define the ARCH_WANTS_NO_INSTR Kconfig option, use of noinstr and friends
-ensures that tracing happens only where RCU is watching, so those
-architectures can dispense entirely with the read-side calls to smp_mb().
+Not sure why this has surfaced only now, but it appears that kernel
+build with ARCH=nios2 and CONFIG_DEBUG_INFO_BTF=y has been broken for
+a long time.
 
-Other architectures include these read-side calls by default, but in many
-installations there might be either larger than average tolerance for
-risk, prohibition of removing tracing on a running system, or careful
-review and approval of removing of tracing.  Such installations can
-build their kernels with CONFIG_TASKS_TRACE_RCU_NO_MB=y to avoid those
-read-side calls to smp_mb(), thus accepting responsibility for run-time
-removal of tracing from code regions that RCU is not watching.
+I tried the following revisions:
+  - bpf-next @ 522397d05e7d as in bug report
+  - bpf-next @ 014e1cdb5fad without the gen-btf.sh patch
+  - v6.18
+  - v6.17
+  - v6.12 (~1y ago)
 
-Those wishing to disable read-side memory barriers for an entire
-architecture can select this TASKS_TRACE_RCU_NO_MB Kconfig option,
-hence the polarity.
+All fail with the same error in pahole [1]:
 
-[ paulmck: Apply Peter Zijlstra feedback. ]
+	Complex, interval and imaginary float types are not supported
+	Encountered error while encoding BTF.
 
-Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-Cc: Andrii Nakryiko <andrii@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: <bpf@vger.kernel.org>
----
- include/linux/rcupdate_trace.h | 65 +++++++++++++++++++++++++++++-----
- kernel/rcu/Kconfig             | 23 ++++++++++++
- 2 files changed, 80 insertions(+), 8 deletions(-)
+I used v1.24 in most experiments, the default debian:bookworm
+installation.  Upgrading pahole to v1.31 doesn't change this behavior.
 
-diff --git a/include/linux/rcupdate_trace.h b/include/linux/rcupdate_trace.h
-index 0bd47f12ecd17..f47ba9c074601 100644
---- a/include/linux/rcupdate_trace.h
-+++ b/include/linux/rcupdate_trace.h
-@@ -34,6 +34,53 @@ static inline int rcu_read_lock_trace_held(void)
- 
- #ifdef CONFIG_TASKS_TRACE_RCU
- 
-+/**
-+ * rcu_read_lock_tasks_trace - mark beginning of RCU-trace read-side critical section
-+ *
-+ * When synchronize_rcu_tasks_trace() is invoked by one task, then that
-+ * task is guaranteed to block until all other tasks exit their read-side
-+ * critical sections.  Similarly, if call_rcu_trace() is invoked on one
-+ * task while other tasks are within RCU read-side critical sections,
-+ * invocation of the corresponding RCU callback is deferred until after
-+ * the all the other tasks exit their critical sections.
-+ *
-+ * For more details, please see the documentation for
-+ * srcu_read_lock_fast().  For a description of how implicit RCU
-+ * readers provide the needed ordering for architectures defining the
-+ * ARCH_WANTS_NO_INSTR Kconfig option (and thus promising never to trace
-+ * code where RCU is not watching), please see the __srcu_read_lock_fast()
-+ * (non-kerneldoc) header comment.  Otherwise, the smp_mb() below provided
-+ * the needed ordering.
-+ */
-+static inline struct srcu_ctr __percpu *rcu_read_lock_tasks_trace(void)
-+{
-+	struct srcu_ctr __percpu *ret = __srcu_read_lock_fast(&rcu_tasks_trace_srcu_struct);
-+
-+	rcu_try_lock_acquire(&rcu_tasks_trace_srcu_struct.dep_map);
-+	if (!IS_ENABLED(CONFIG_TASKS_TRACE_RCU_NO_MB))
-+		smp_mb(); // Provide ordering on noinstr-incomplete architectures.
-+	return ret;
-+}
-+
-+/**
-+ * rcu_read_unlock_tasks_trace - mark end of RCU-trace read-side critical section
-+ * @scp: return value from corresponding rcu_read_lock_tasks_trace().
-+ *
-+ * Pairs with the preceding call to rcu_read_lock_tasks_trace() that
-+ * returned the value passed in via scp.
-+ *
-+ * For more details, please see the documentation for rcu_read_unlock().
-+ * For memory-ordering information, please see the header comment for the
-+ * rcu_read_lock_tasks_trace() function.
-+ */
-+static inline void rcu_read_unlock_tasks_trace(struct srcu_ctr __percpu *scp)
-+{
-+	if (!IS_ENABLED(CONFIG_TASKS_TRACE_RCU_NO_MB))
-+		smp_mb(); // Provide ordering on noinstr-incomplete architectures.
-+	__srcu_read_unlock_fast(&rcu_tasks_trace_srcu_struct, scp);
-+	srcu_lock_release(&rcu_tasks_trace_srcu_struct.dep_map);
-+}
-+
- /**
-  * rcu_read_lock_trace - mark beginning of RCU-trace read-side critical section
-  *
-@@ -50,14 +97,15 @@ static inline void rcu_read_lock_trace(void)
- {
- 	struct task_struct *t = current;
- 
-+	rcu_try_lock_acquire(&rcu_tasks_trace_srcu_struct.dep_map);
- 	if (t->trc_reader_nesting++) {
- 		// In case we interrupted a Tasks Trace RCU reader.
--		rcu_try_lock_acquire(&rcu_tasks_trace_srcu_struct.dep_map);
- 		return;
- 	}
- 	barrier();  // nesting before scp to protect against interrupt handler.
--	t->trc_reader_scp = srcu_read_lock_fast(&rcu_tasks_trace_srcu_struct);
--	smp_mb(); // Placeholder for more selective ordering
-+	t->trc_reader_scp = __srcu_read_lock_fast(&rcu_tasks_trace_srcu_struct);
-+	if (!IS_ENABLED(CONFIG_TASKS_TRACE_RCU_NO_MB))
-+		smp_mb(); // Placeholder for more selective ordering
- }
- 
- /**
-@@ -74,13 +122,14 @@ static inline void rcu_read_unlock_trace(void)
- 	struct srcu_ctr __percpu *scp;
- 	struct task_struct *t = current;
- 
--	smp_mb(); // Placeholder for more selective ordering
- 	scp = t->trc_reader_scp;
- 	barrier();  // scp before nesting to protect against interrupt handler.
--	if (!--t->trc_reader_nesting)
--		srcu_read_unlock_fast(&rcu_tasks_trace_srcu_struct, scp);
--	else
--		srcu_lock_release(&rcu_tasks_trace_srcu_struct.dep_map);
-+	if (!--t->trc_reader_nesting) {
-+		if (!IS_ENABLED(CONFIG_TASKS_TRACE_RCU_NO_MB))
-+			smp_mb(); // Placeholder for more selective ordering
-+		__srcu_read_unlock_fast(&rcu_tasks_trace_srcu_struct, scp);
-+	}
-+	srcu_lock_release(&rcu_tasks_trace_srcu_struct.dep_map);
- }
- 
- /**
-diff --git a/kernel/rcu/Kconfig b/kernel/rcu/Kconfig
-index c381a31301168..762299291e09b 100644
---- a/kernel/rcu/Kconfig
-+++ b/kernel/rcu/Kconfig
-@@ -142,6 +142,29 @@ config TASKS_TRACE_RCU
- 	default n
- 	select IRQ_WORK
- 
-+config TASKS_TRACE_RCU_NO_MB
-+	bool "Override RCU Tasks Trace inclusion of read-side memory barriers"
-+	depends on RCU_EXPERT && TASKS_TRACE_RCU
-+	default ARCH_WANTS_NO_INSTR
-+	help
-+	  This option prevents the use of read-side memory barriers in
-+	  rcu_read_lock_tasks_trace() and rcu_read_unlock_tasks_trace()
-+	  even in kernels built with CONFIG_ARCH_WANTS_NO_INSTR=n, that is,
-+	  in kernels that do not have noinstr set up in entry/exit code.
-+	  By setting this option, you are promising to carefully review
-+	  use of ftrace, BPF, and friends to ensure that no tracing
-+	  operation is attached to a function that runs in that portion
-+	  of the entry/exit code that RCU does not watch, that is,
-+	  where rcu_is_watching() returns false.  Alternatively, you
-+	  might choose to never remove traces except by rebooting.
-+
-+	  Those wishing to disable read-side memory barriers for an entire
-+	  architecture can select this Kconfig option, hence the polarity.
-+
-+	  Say Y here if you need speed and will review use of tracing.
-+	  Say N here for certain esoteric testing of RCU itself.
-+	  Take the default if you are unsure.
-+
- config RCU_STALL_COMMON
- 	def_bool TREE_RCU
- 	help
--- 
-2.40.1
+I also stumbled on a phoronix article [2], saying Nios II support has
+ended with GCC 15. Is it actively supported in Linux?
+
+Not clear to me if anything needs to be fixed here. I'd appreciate any input.
+
+Thanks.
+
+[1] https://git.kernel.org/pub/scm/devel/pahole/pahole.git/tree/btf_encoder.c?h=v1.31#n469
+[2] https://www.phoronix.com/news/GCC-15-Drops-Altera-Nios-II
+
+
+>>> FAILED: load BTF from .tmp_vmlinux1.BTF.1: No such file or directory
+> 
 
