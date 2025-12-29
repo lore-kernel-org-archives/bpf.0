@@ -1,46 +1,50 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 853B3274B4D;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 905C627E077;
 	Mon, 29 Dec 2025 19:11:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767035467; cv=none; b=SN70VcjPXu+WTucKqOsbgGIXazbhoJ1R2sIDHb4Ptc++x2ADDo8w/VMF8Uh3l9EwHSwLWMA9/tNhCmvJlWd0IxQdmw5QAXlV2QaxsRinDccAvPiOInPqpNYUvN4+WaHfGAX3WHOMxml5BQRunEZ1Voxam43m9/BmkRhllcouxm4=
+	t=1767035467; cv=none; b=P6sdDrw+bST3oNZWqj7AmowpNuXuTJZ3aYR43jq21e5NmivuP+pZiEhG5dQr5tR0jgjen1rbtPrrAMyHCsVgzBeFgN+h2JGx9nzstvX5QVQjMvr96GbEiJgOwvhmeVesyQ1XC+RiJW7Qbw1JVUEGo8JRjBM7HZohgX1gL6lWfmM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1767035467; c=relaxed/simple;
-	bh=RCb48nJYGD9FDhOCx8rn3xYPgrAldJAxldDGmLx+cXw=;
+	bh=am3a4f/tTp1G67zvZ8p5t5twCf+9bpA6UUdHIvr9SDs=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=RWVHDm5ZEDuD2jq9YWHtbeTXlL6izCNyYtxZZTotXzK18xyvvGod7aw3D4thRobjeI0iWuyxVULTLs/NraDap65yxtf0N/yLTwn9M32ql2QO5iJunvB+Ph8CttH7aaoX5aKPVKNbrAJUUWg3zknz4E6u1QTUR72QW/iScBUzcio=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GPud9yx8; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=irQM3RkGi414DD3/BSUJMb5Q403ro7o6sSVPjNRhRULFuPsMq712fZ8un5fezvFU2OG1XfmBt9F1QApVlXGzkgV+YtlFgHAPyZW3V0yc9mX2PSCag2bYJ85tZ1raT5WKalmZ22h/w/a18+rg8xTALi4ixLUFoAmmexaASnlnC04=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G6gWU0gq; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GPud9yx8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AED9C116D0;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G6gWU0gq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E622C2BCAF;
 	Mon, 29 Dec 2025 19:11:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1767035467;
-	bh=RCb48nJYGD9FDhOCx8rn3xYPgrAldJAxldDGmLx+cXw=;
+	bh=am3a4f/tTp1G67zvZ8p5t5twCf+9bpA6UUdHIvr9SDs=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=GPud9yx8fkrJj1bXBaOEtWEXx0zNuJBAsu1KSTeBA4eyzJ87sk7zKkPbbljl2BCWg
-	 hzJ1mZSmjuyXZ7CN+mZLSoKHod4Vj9uuG80RK0O8m2aj3IcutlWyF9PHA3+o7DuyNE
-	 dEBdIkjmrSF/MUoyk4iturHrQhCcWcmfMg95Tzyhihsxr+HJgAG6lpyRmCTgy/565j
-	 wTyDTRG7tbsXKfL8JoRIxlP/j0lCVgLIMA59x5LFmNs9405nkQRKlF4/QblKz9o0HU
-	 7SX1J9jPchzMrJ8G2rbuOfnWLXZvef27IPMjQalNhR13FJ1fqt/iLTBwQ4/D+o5dbP
-	 ptww06FsZUElw==
+	b=G6gWU0gqaXHs8iS6OF0/ijZeI/dlu1SZzULEc1e2hs+9YERcIhFpGckuIrroFy+xC
+	 bZC+bANsXxraTtvqxlgbtXWx4mXfURFyUzl4dftonsFzToBNiz2unHSKaeK6n0tOTh
+	 8lm6tgM4bFd9LTe8RTWDMsdcC2hmGuYwBZfbn+kuegj1Zl5Iy54/GrfNWX2IzjQw2W
+	 ri/ei+KI8JV5UTEWdfsB4wIyhar3xAcn9crea6U7mLfqHbsx49Z7fMlp6sWHJsqIXE
+	 d15RuyM+zaTcQtWy0aB3/xSO7uOCtHc3TCrpys60Dxgd7rdSs2fQCgsiWoauSB0xp5
+	 bbybjIdaZ8c6Q==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 7E802CE11A4; Mon, 29 Dec 2025 11:11:06 -0800 (PST)
+	id 7A13ACE1109; Mon, 29 Dec 2025 11:11:06 -0800 (PST)
 From: "Paul E. McKenney" <paulmck@kernel.org>
 To: rcu@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org,
 	kernel-team@meta.com,
 	rostedt@goodmis.org,
 	"Paul E. McKenney" <paulmck@kernel.org>,
+	Joe Perches <joe@perches.com>,
+	Andy Whitcroft <apw@canonical.com>,
+	Dwaipayan Ray <dwaipayanray1@gmail.com>,
+	Lukas Bulwahn <lukas.bulwahn@gmail.com>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Alexei Starovoitov <ast@kernel.org>,
 	Peter Zijlstra <peterz@infradead.org>,
 	bpf@vger.kernel.org
-Subject: [PATCH v4 9/9] rcutorture: Test rcu_tasks_trace_expedite_current()
-Date: Mon, 29 Dec 2025 11:11:04 -0800
-Message-Id: <20251229191104.693447-9-paulmck@kernel.org>
+Subject: [PATCH v4 7/9] checkpatch: Deprecate rcu_read_{,un}lock_trace()
+Date: Mon, 29 Dec 2025 11:11:02 -0800
+Message-Id: <20251229191104.693447-7-paulmck@kernel.org>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <b206b083-f611-43b6-993f-78ddbe315813@paulmck-laptop>
 References: <b206b083-f611-43b6-993f-78ddbe315813@paulmck-laptop>
@@ -52,32 +56,39 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This commit adds a ->exp_current member to the tasks_tracing_ops structure
-to test the rcu_tasks_trace_expedite_current() function.
-
-[ paulmck: Apply kernel test robot feedback. ]
+Uses of rcu_read_lock_trace() and rcu_read_unlock_trace()
+are better served by the new rcu_read_lock_tasks_trace() and
+rcu_read_unlock_tasks_trace() APIs.  Therefore, mark the old APIs as
+deprecated.
 
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+Acked-by: Joe Perches <joe@perches.com>
+Cc: Andy Whitcroft <apw@canonical.com>
+Cc: Dwaipayan Ray <dwaipayanray1@gmail.com>
+Cc: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 Cc: Andrii Nakryiko <andrii@kernel.org>
 Cc: Alexei Starovoitov <ast@kernel.org>
 Cc: Peter Zijlstra <peterz@infradead.org>
 Cc: <bpf@vger.kernel.org>
 ---
- kernel/rcu/rcutorture.c | 1 +
- 1 file changed, 1 insertion(+)
+ scripts/checkpatch.pl | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/rcu/rcutorture.c b/kernel/rcu/rcutorture.c
-index 78a6ebe77d35d..d00b043823aef 100644
---- a/kernel/rcu/rcutorture.c
-+++ b/kernel/rcu/rcutorture.c
-@@ -1178,6 +1178,7 @@ static struct rcu_torture_ops tasks_tracing_ops = {
- 	.deferred_free	= rcu_tasks_tracing_torture_deferred_free,
- 	.sync		= synchronize_rcu_tasks_trace,
- 	.exp_sync	= synchronize_rcu_tasks_trace,
-+	.exp_current	= rcu_tasks_trace_expedite_current,
- 	.call		= call_rcu_tasks_trace,
- 	.cb_barrier	= rcu_barrier_tasks_trace,
- 	.cbflood_max	= 50000,
+diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
+index c0250244cf7a3..362a8d1cd3278 100755
+--- a/scripts/checkpatch.pl
++++ b/scripts/checkpatch.pl
+@@ -863,7 +863,9 @@ our %deprecated_apis = (
+ 	#These should be enough to drive away new IDR users
+ 	"DEFINE_IDR"				=> "DEFINE_XARRAY",
+ 	"idr_init"				=> "xa_init",
+-	"idr_init_base"				=> "xa_init_flags"
++	"idr_init_base"				=> "xa_init_flags",
++	"rcu_read_lock_trace"			=> "rcu_read_lock_tasks_trace",
++	"rcu_read_unlock_trace"			=> "rcu_read_unlock_tasks_trace",
+ );
+ 
+ #Create a search pattern for all these strings to speed up a loop below
 -- 
 2.40.1
 
