@@ -1,50 +1,46 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 905C627E077;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9368F27F4CA;
 	Mon, 29 Dec 2025 19:11:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767035467; cv=none; b=P6sdDrw+bST3oNZWqj7AmowpNuXuTJZ3aYR43jq21e5NmivuP+pZiEhG5dQr5tR0jgjen1rbtPrrAMyHCsVgzBeFgN+h2JGx9nzstvX5QVQjMvr96GbEiJgOwvhmeVesyQ1XC+RiJW7Qbw1JVUEGo8JRjBM7HZohgX1gL6lWfmM=
+	t=1767035467; cv=none; b=Enhf8i/KazqImsL/mV7ma0QP/wk65lEhrgdxK7zvwiO+wXIQ3R1YQrT+yX0axK+u8WqWtkNR7m5gxAF/FJ04Gao6KTP4EEXpKWORPX2G4SkKUq8M/Uc05DdV0s6F6/ViAGCs+wAQj56MWX0A7AH1s0+vULau4De0PaED0FOuXIM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1767035467; c=relaxed/simple;
-	bh=am3a4f/tTp1G67zvZ8p5t5twCf+9bpA6UUdHIvr9SDs=;
+	bh=Ax7FBvNwaT/XyPQJp8bumqr3pkAZvIxwCUWKEB+5I40=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=irQM3RkGi414DD3/BSUJMb5Q403ro7o6sSVPjNRhRULFuPsMq712fZ8un5fezvFU2OG1XfmBt9F1QApVlXGzkgV+YtlFgHAPyZW3V0yc9mX2PSCag2bYJ85tZ1raT5WKalmZ22h/w/a18+rg8xTALi4ixLUFoAmmexaASnlnC04=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G6gWU0gq; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=pd6Hv6kHT9+HnPI5oAg3X9BDdNBvLHZgiRXOzemEcp3p0oeFgXnKRlReFb7DD6bxA6qADmht3m7Pn0XKH2EdyxtzZd6CQIj29adfBjAx7dQcc2r6eQ2phbjAstaYCbRRx+J+tA5PM/D4yso07zbCUY/ipyA6CW6jL8hrb1HibTo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kBtkOgI7; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G6gWU0gq"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E622C2BCAF;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kBtkOgI7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F65EC2BC87;
 	Mon, 29 Dec 2025 19:11:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1767035467;
-	bh=am3a4f/tTp1G67zvZ8p5t5twCf+9bpA6UUdHIvr9SDs=;
+	bh=Ax7FBvNwaT/XyPQJp8bumqr3pkAZvIxwCUWKEB+5I40=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=G6gWU0gqaXHs8iS6OF0/ijZeI/dlu1SZzULEc1e2hs+9YERcIhFpGckuIrroFy+xC
-	 bZC+bANsXxraTtvqxlgbtXWx4mXfURFyUzl4dftonsFzToBNiz2unHSKaeK6n0tOTh
-	 8lm6tgM4bFd9LTe8RTWDMsdcC2hmGuYwBZfbn+kuegj1Zl5Iy54/GrfNWX2IzjQw2W
-	 ri/ei+KI8JV5UTEWdfsB4wIyhar3xAcn9crea6U7mLfqHbsx49Z7fMlp6sWHJsqIXE
-	 d15RuyM+zaTcQtWy0aB3/xSO7uOCtHc3TCrpys60Dxgd7rdSs2fQCgsiWoauSB0xp5
-	 bbybjIdaZ8c6Q==
+	b=kBtkOgI7FntPLyVBT9mVPpSLqozf4X28y1qnhCHDQWIy4bcYWvqujwWFRqcU29j4V
+	 F93hqWB5o/+Yg0qLpVwjdTZGTuLyRbYHBBOWlu7dhExKrj9yhSNZv36K6lVNGTRwfp
+	 QeFNldkeTSacIPbBJZ972g88LKSYkaZMTGHFx7iTPqRyiPNE7U4Yud6jNtxROzt9P4
+	 yABjw3hbMSAwS4QhPWzbEEVBcKUOK9WX1wGVaDeSJq6ezABE5w5yT9qqgXigW2Rawm
+	 V/1Q9Jj4OLSwi7sb/PBPzNsdtQvThcxnWzDfEW+ufDIqJ74qlwgqIXnfDX8cpHpZF4
+	 UeFcJk8NU9Wgw==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 7A13ACE1109; Mon, 29 Dec 2025 11:11:06 -0800 (PST)
+	id 77A79CE10F4; Mon, 29 Dec 2025 11:11:06 -0800 (PST)
 From: "Paul E. McKenney" <paulmck@kernel.org>
 To: rcu@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org,
 	kernel-team@meta.com,
 	rostedt@goodmis.org,
 	"Paul E. McKenney" <paulmck@kernel.org>,
-	Joe Perches <joe@perches.com>,
-	Andy Whitcroft <apw@canonical.com>,
-	Dwaipayan Ray <dwaipayanray1@gmail.com>,
-	Lukas Bulwahn <lukas.bulwahn@gmail.com>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Alexei Starovoitov <ast@kernel.org>,
 	Peter Zijlstra <peterz@infradead.org>,
 	bpf@vger.kernel.org
-Subject: [PATCH v4 7/9] checkpatch: Deprecate rcu_read_{,un}lock_trace()
-Date: Mon, 29 Dec 2025 11:11:02 -0800
-Message-Id: <20251229191104.693447-7-paulmck@kernel.org>
+Subject: [PATCH v4 6/9] rcu: Update Requirements.rst for RCU Tasks Trace
+Date: Mon, 29 Dec 2025 11:11:01 -0800
+Message-Id: <20251229191104.693447-6-paulmck@kernel.org>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <b206b083-f611-43b6-993f-78ddbe315813@paulmck-laptop>
 References: <b206b083-f611-43b6-993f-78ddbe315813@paulmck-laptop>
@@ -56,39 +52,41 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Uses of rcu_read_lock_trace() and rcu_read_unlock_trace()
-are better served by the new rcu_read_lock_tasks_trace() and
-rcu_read_unlock_tasks_trace() APIs.  Therefore, mark the old APIs as
-deprecated.
+This commit updates the documentation to declare that RCU Tasks Trace
+is implemented as a thin wrapper around SRCU-fast.
 
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-Acked-by: Joe Perches <joe@perches.com>
-Cc: Andy Whitcroft <apw@canonical.com>
-Cc: Dwaipayan Ray <dwaipayanray1@gmail.com>
-Cc: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 Cc: Andrii Nakryiko <andrii@kernel.org>
 Cc: Alexei Starovoitov <ast@kernel.org>
 Cc: Peter Zijlstra <peterz@infradead.org>
 Cc: <bpf@vger.kernel.org>
 ---
- scripts/checkpatch.pl | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ .../RCU/Design/Requirements/Requirements.rst         | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-index c0250244cf7a3..362a8d1cd3278 100755
---- a/scripts/checkpatch.pl
-+++ b/scripts/checkpatch.pl
-@@ -863,7 +863,9 @@ our %deprecated_apis = (
- 	#These should be enough to drive away new IDR users
- 	"DEFINE_IDR"				=> "DEFINE_XARRAY",
- 	"idr_init"				=> "xa_init",
--	"idr_init_base"				=> "xa_init_flags"
-+	"idr_init_base"				=> "xa_init_flags",
-+	"rcu_read_lock_trace"			=> "rcu_read_lock_tasks_trace",
-+	"rcu_read_unlock_trace"			=> "rcu_read_unlock_tasks_trace",
- );
+diff --git a/Documentation/RCU/Design/Requirements/Requirements.rst b/Documentation/RCU/Design/Requirements/Requirements.rst
+index ba417a08b93df..b5cdbba3ec2e7 100644
+--- a/Documentation/RCU/Design/Requirements/Requirements.rst
++++ b/Documentation/RCU/Design/Requirements/Requirements.rst
+@@ -2780,12 +2780,12 @@ Tasks Trace RCU
+ ~~~~~~~~~~~~~~~
  
- #Create a search pattern for all these strings to speed up a loop below
+ Some forms of tracing need to sleep in readers, but cannot tolerate
+-SRCU's read-side overhead, which includes a full memory barrier in both
+-srcu_read_lock() and srcu_read_unlock().  This need is handled by a
+-Tasks Trace RCU that uses scheduler locking and IPIs to synchronize with
+-readers.  Real-time systems that cannot tolerate IPIs may build their
+-kernels with ``CONFIG_TASKS_TRACE_RCU_READ_MB=y``, which avoids the IPIs at
+-the expense of adding full memory barriers to the read-side primitives.
++SRCU's read-side overhead, which includes a full memory barrier in
++both srcu_read_lock() and srcu_read_unlock().  This need is handled by
++a Tasks Trace RCU API implemented as thin wrappers around SRCU-fast,
++which avoids the read-side memory barriers, at least for architectures
++that apply noinstr to kernel entry/exit code (or that build with
++``CONFIG_TASKS_TRACE_RCU_NO_MB=y``.
+ 
+ The tasks-trace-RCU API is also reasonably compact,
+ consisting of rcu_read_lock_trace(), rcu_read_unlock_trace(),
 -- 
 2.40.1
 
