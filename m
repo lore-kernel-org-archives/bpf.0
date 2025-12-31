@@ -1,145 +1,99 @@
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE3F83064A9
-	for <bpf@vger.kernel.org>; Wed, 31 Dec 2025 21:34:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9C4C12CDBE
+	for <bpf@vger.kernel.org>; Wed, 31 Dec 2025 21:41:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767216898; cv=none; b=rXE2wvRCtG0k5c8Ja1b0mZC3F6ys7/15fYF5r8EJBQFnLoB3qCeEytunMoiuk4BpboxpHnb+o+meGzxS7Xm1cgrNMCe5Jn9btNmE0uJKP1xk3yqSPNZlte6a4lqaX/h16X5HiNXSXBdIh9OJN16sSK9zcPdvFnhbyCW1vZ4/kY4=
+	t=1767217276; cv=none; b=HxGvIcsWzBgricZOCalKVpD2AK1xooC+kUSRCxQsZUedHjTreoNQIhwWMJZhIa1xcAXT9d2gD6ZmqDWBVuoejMW2YzrF5lJl3gYZepZywJlVweiriYAMA5WEIhmD+l0LsigRazooUYVagyITmUOEaNkdQVq49ZGJ86uWkA5JDzk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767216898; c=relaxed/simple;
-	bh=NkpxC+v+IEZhsd9ska/BWRQFaVRrwDGbf3fuEbg07AU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=l6zEUvSuPxZHbRIkmCpzp4gJOHZkoEjsP6yET0arqA4BCCzaO0krjYSZRA1Czw1+LUwcncsz/Sg3qdG3NaUsrKVcAfNMQTih1qbYw1+gdGbbm8yboAuUEHO+ZfXTAlQGbdKsDxELfZrZHHh8UD0/Smx3nSvy7lagAKzbFWT8+aw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=db9bex7p; arc=none smtp.client-ip=209.85.221.44
+	s=arc-20240116; t=1767217276; c=relaxed/simple;
+	bh=XIu4EGJn5/cjdLujH7igiV+svr4AhRNC/uNoRJb36dU=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=VmKD275Gu89vboHKJYgZHV3M381k3wo3P7d4PKSc0DSUCe3bRwclgQU3rnS1zJnZeaJCAJ2Vg0rkqU1lpuEnbBxlKT75YkLYDAUolHGnCBOjPrV03wodXDUh5w/NDKxAcX8Q5fUwq1W2edcmISiwF4nJrttJkw9xB0bFt9chdRk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IdhIHUCC; arc=none smtp.client-ip=209.85.216.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="db9bex7p"
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-4308d81fdf6so5260127f8f.2
-        for <bpf@vger.kernel.org>; Wed, 31 Dec 2025 13:34:56 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IdhIHUCC"
+Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-34b75fba315so12127652a91.3
+        for <bpf@vger.kernel.org>; Wed, 31 Dec 2025 13:41:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1767216895; x=1767821695; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GleHLxzrqhi5Hmxay6c41BI3irva7zlljp3uEYcnh1A=;
-        b=db9bex7pjZ0YvBZsfrVw3EOv1a2ziWD2wq3hw/GigqvN6Dsr6R+HYmz26vo0SSbOtN
-         rKC14Tl6+Hif1Zz/sj6r0/m6vexA++ZMpGapNdSdTlYRUf+zV8q4VOe0iaA2kFHk7Q75
-         wYnk3gAzt0H7fQ8n8kAR2YtGGnT4Oa4SyeuT4Fh5eapjxmoAJ84p5VvNBJqVhdA+XEqr
-         GIEsXjNgwjd/3QV2bptxDKrQeOjdxlM5Loj+ykKRRfU8opnD8GfwO8AUFOGdUX0imf5f
-         5PuJf3UJYTJSGg/BXqP/WdcF6rPDse8KA62BHUnP6cEjngV/RBqdZwxBCXDlhWR88ZMp
-         r7CQ==
+        d=gmail.com; s=20230601; t=1767217274; x=1767822074; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=XIu4EGJn5/cjdLujH7igiV+svr4AhRNC/uNoRJb36dU=;
+        b=IdhIHUCC2mZr/5e3s4wBJf8nqxTYsYvJjgGT9PMBTKpiBRNwPG3GiF0crCwCwbK7q9
+         lzT5EGys3aDzqFZAGoCAm3koxyeaxj7vLjcw10MQsDpYzF3CV9kwshY7fSDf50fpPOw0
+         28XksBOID6ez2XEoMaj8a4w6t6Fz3ymc3ty05BZAXRIkspglmuNAeUPnQnT/r9LG71YU
+         0W/wRic/BdMCjWNSFjg1JCw69vpPq/s6x8It04M0RWYHrpv/hVcO/F1wnGaYgG9Jm37A
+         hmfxXIm9+MWOSa31wyHlwcO6QBD3VDTOcERLKNisvSfojhC+JLsHTXL5JUNzCKGj36yn
+         LxtA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767216895; x=1767821695;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=GleHLxzrqhi5Hmxay6c41BI3irva7zlljp3uEYcnh1A=;
-        b=vQGB1Yj13lg+6nWJoa+fd7e6iRR7rcCzPYglO7iUCba2iQNhM9KLszJb3jHv5E5Z1J
-         wDhElq10YUMi/j8vnFgfGn1cMEJRrwGD1dKrQZORC6QPC4rxfjqBDPw77ci9edkK/k65
-         Zm6X1bvhyhfsDOQj99tJkXIhoaY59vkkgZ4+bqVSVKn7H+MJqjlc47sbRJN1N5RGJQWc
-         QXhWIMaB3Y6mTPNiw1/4BZ1RlZCAzPTeykD8txqL8ZI/ppn8jZv1vr32ewUhZLG/LWsl
-         KUFjj124DT2WnU6zvczwk2IHyWrZKWsicVgkkxjNXIXJbx2+ddCdF4vedmHovgsgyByd
-         wQNA==
-X-Forwarded-Encrypted: i=1; AJvYcCWvdT5VZnDm8Mp0vZjDkow3qXvs3I1Hky0+qGJX/S7WGTSRDxLb8btn0R7MCiHVrv6zFxM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx9HcyuIF/mCTHjMuo0YJ/jqHDfD2uf9UFbCMRP9C1m/VfwAAcx
-	nIklOyHExyWPBYatesUQRq7S969/wZOBbti9NfBzot7N8pDzeEzdxXPMfqPJ7sBQXQ0fCw4xI4W
-	B2uI59OQb9D+hrV6a8B4m6StjuKs/sWU=
-X-Gm-Gg: AY/fxX7g/IclZY1iw5actzf1BipC1Aer9duDQgt5mDVR0CSRqIP0KezUr5CXf1Tlj7U
-	q6g7uB6wrpoWGeB38Et9otljf5nhnqO7izO2M5lAj04MBVe7fpwaSlKic3nILfEBkZxuAqwz5Re
-	HYxV0usaKq7vSgU4qtrzFyx3n5qjUqDLTtbC6NlGmp5Ttd+qSViNQQUeFv1FE82ZYVDyPvd+PpG
-	e1JtLKjNtW5kgxXwIw3lhI4efLXyMYqTtct2Gk79edDeFN8oKBu8zlt8EPebybJ1IqrBR2g/t38
-	3m7Fk40Zg8YkcPXFKPywwnWOhjdP
-X-Google-Smtp-Source: AGHT+IHt+ldVyNL/+5ZYIaXtm4dZPxM9U/F2RXTc0isKzBzLrWGnTUAEyyc+PvTuMiqiJQmrxvIZRk9PjsPUty8TWTY=
-X-Received: by 2002:a05:6000:2906:b0:430:fd84:3171 with SMTP id
- ffacd0b85a97d-4324e4c9e98mr46013240f8f.22.1767216894870; Wed, 31 Dec 2025
- 13:34:54 -0800 (PST)
+        d=1e100.net; s=20230601; t=1767217274; x=1767822074;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XIu4EGJn5/cjdLujH7igiV+svr4AhRNC/uNoRJb36dU=;
+        b=dUgSaW1vxCqwEZhuarsvRmdIIxN64Cn6o35CpT7x44txbNDF2hTyjncXsasGBPgc6U
+         QTHZE+3RM7b65pcZt9ndWZVr0MWy85vCKhcwvreV5Fo9N+vjvGLgLz+gSvWTEhnSy8xt
+         JKD4AVzQsDDR0uPzozDLAgtVciuR1/ZLzliNH6NvTJAhtmoN0Ooxs4FObC/7gUrcOpbZ
+         BJaSOAKDgOA8jFoPpLyNCIHTJ0qAJ3WDxtNjjGqu2oTGYk8aoJPVpCOhX7uxuBjpwh3g
+         RfV6RTCu7Qa6INuIXLlA5bQ4YWcjP2XZAAPssgtW9vFsxRMFEja0WxNoe35COWxxDodA
+         ckYg==
+X-Forwarded-Encrypted: i=1; AJvYcCXr9YW/lxsCbbNJ5o0Be2Rx/ftPq1y5FGVDgX/emfSWcJueTQGzfTCmTVk+1Nn4Ib3bXhU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx3bdEWDMmB5pZWJZuZOqHILxJWgGB/k1TDvP7BVBhVYqkSm8xx
+	zWsTKjIfnrBZczNLdMqUpUBi5RX5uTcq7rYiQNiS+ftI0Ri5etG8GgxZ
+X-Gm-Gg: AY/fxX50DBOAB3+0OEtLSKYH2dFpu63n2xUQBLRRZPW7+OUwzzMgp4KTOj1S8mgocN9
+	o20VFjdevlQGNXDmZhD67vbXc42+hbpXcXvPuPDRiCeac/h4DAiMlVgV8oNs0ff2YDHLZXQtpbZ
+	hnNuVcDjd4ZigEN/acbE55ksAgAzEmKdlJ6P1Lt1Q4On7vLLl5X/2MSUMtHc08QvdnDaS6aaluG
+	gJi/9nUGZBuu4HfUf/vW4PLF2YpoFVkIRCXGffIUNgd0DRcMY03BFkH1L3bpgcHxvujsvfk/wNr
+	JoO5LH/+7Xo0bAEBdhPao8n5uCXtlPT1PN4DlpQ/KpXvOJRuhRTq1Vm7QlQPtMS/FXtKJwDnS0a
+	ixAlJhHQgJT8/nYw+lKHc3z2/gNmnO21uvwwsjsv06tHuQRmwIm+I47dt7DsV1OGzFX9tYM1JC9
+	T2IP3vgH/n
+X-Google-Smtp-Source: AGHT+IFkf/j1O4DXbsozkAFcnxIz+vJVbBzemNhCQT8mB/o5fKx1K8KQJ5GSPrICMikmRwXuY7kvLA==
+X-Received: by 2002:a17:90b:582f:b0:340:c4dc:4b8b with SMTP id 98e67ed59e1d1-34e92142aa0mr27204635a91.10.1767217274032;
+        Wed, 31 Dec 2025 13:41:14 -0800 (PST)
+Received: from [192.168.0.226] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-34e921b165bsm33093086a91.6.2025.12.31.13.41.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 Dec 2025 13:41:13 -0800 (PST)
+Message-ID: <9f23c1d865b99ed379b7b3237332554d760921c1.camel@gmail.com>
+Subject: Re: [PATCH bpf-next] selftests/bpf: veristat: fix printing order in
+ output_stats()
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Puranjay Mohan <puranjay@kernel.org>, bpf@vger.kernel.org
+Cc: Puranjay Mohan <puranjay12@gmail.com>, Alexei Starovoitov
+ <ast@kernel.org>,  Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>, Martin KaFai Lau	 <martin.lau@kernel.org>, Kumar
+ Kartikeya Dwivedi <memxor@gmail.com>, 	kernel-team@meta.com
+Date: Wed, 31 Dec 2025 13:41:11 -0800
+In-Reply-To: <20251231195207.2801487-1-puranjay@kernel.org>
+References: <20251231195207.2801487-1-puranjay@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.2 (3.58.2-1.fc43) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251231184711.12163-1-sun.jian.kdev@gmail.com>
-In-Reply-To: <20251231184711.12163-1-sun.jian.kdev@gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Wed, 31 Dec 2025 13:34:43 -0800
-X-Gm-Features: AQt7F2r3FvMkanS_Kc02yR3b3z9fhG7p439EULDoQJrWc41KaD98QXyP6kRecGY
-Message-ID: <CAADnVQLUzhEi=T3shodJ_9N-e+=epH52Ui=B=2eFXMRfZf8jTw@mail.gmail.com>
-Subject: Re: [PATCH] selftests/bpf: fix qdisc kfunc declarations
-To: Sun Jian <sun.jian.kdev@gmail.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, bpf <bpf@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Alexei Starovoitov <ast@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Dec 31, 2025 at 10:47=E2=80=AFAM Sun Jian <sun.jian.kdev@gmail.com>=
- wrote:
->
-> The qdisc BPF selftests fail to build because qdisc-related kfuncs are
-> used without proper declarations, and struct bpf_sk_buff_ptr is only
-> introduced in a function prototype scope, triggering -Wvisibility and
-> type mismatch errors under -Werror.
->
-> Fix the build by:
->   - adding a file-scope forward declaration for struct bpf_sk_buff_ptr
->   - declaring qdisc kfuncs (bpf_qdisc_* and bpf_skb_get_hash/bpf_kfree_sk=
-b)
->     as __ksym in the shared header
->   - including required BPF headers in qdisc test progs
->
-> Tested: make -C tools/testing/selftests/bpf OUTPUT=3D/tmp/selftests-bpf \
-> /tmp/selftests-bpf/bpf_qdisc_fifo.bpf.o \
-> /tmp/selftests-bpf/bpf_qdisc_fq.bpf.o \
-> /tmp/selftests-bpf/bpf_qdisc_fail__incompl_ops.bpf.o
->
-> Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
+On Wed, 2025-12-31 at 11:52 -0800, Puranjay Mohan wrote:
+> The order of the variables in the printf() doesn't match the text and
+> therefore verfistat prints something like this:
+>=20
+> Done. Processed 24 files, 0 programs. Skipped 62 files, 0 programs.
+>=20
+> When it should print:
+>=20
+> Done. Processed 24 files, 62 programs. Skipped 0 files, 0 programs.
+>=20
+> Fix the order of variables in the printf() call.
+>=20
+> Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
 > ---
->  .../selftests/bpf/progs/bpf_qdisc_common.h      | 17 +++++++++++++++++
->  .../bpf/progs/bpf_qdisc_fail__incompl_ops.c     |  4 ++++
->  .../selftests/bpf/progs/bpf_qdisc_fifo.c        |  4 ++++
->  .../testing/selftests/bpf/progs/bpf_qdisc_fq.c  |  1 +
->  4 files changed, 26 insertions(+)
->
-> diff --git a/tools/testing/selftests/bpf/progs/bpf_qdisc_common.h b/tools=
-/testing/selftests/bpf/progs/bpf_qdisc_common.h
-> index 3754f581b328..bed2294c35f9 100644
-> --- a/tools/testing/selftests/bpf/progs/bpf_qdisc_common.h
-> +++ b/tools/testing/selftests/bpf/progs/bpf_qdisc_common.h
-> @@ -3,6 +3,9 @@
->  #ifndef _BPF_QDISC_COMMON_H
->  #define _BPF_QDISC_COMMON_H
->
-> +#include <vmlinux.h>
-> +#include <bpf/bpf_helpers.h>
-> +
->  #define NET_XMIT_SUCCESS        0x00
->  #define NET_XMIT_DROP           0x01    /* skb dropped                  =
-*/
->  #define NET_XMIT_CN             0x02    /* congestion notification      =
-*/
-> @@ -14,6 +17,20 @@
->
->  struct bpf_sk_buff_ptr;
->
-> +/* kfunc declarations provided via vmlinux BTF */
-> +extern void bpf_qdisc_skb_drop(struct sk_buff *skb,
-> +                              struct bpf_sk_buff_ptr *to_free) __ksym;
-> +
-> +extern void bpf_qdisc_bstats_update(struct Qdisc *sch,
-> +                                   const struct sk_buff *skb) __ksym;
-> +
-> +extern void bpf_qdisc_watchdog_schedule(struct Qdisc *sch,
-> +                                       u64 expire, u64 delta_ns) __ksym;
-> +
-> +extern __u32 bpf_skb_get_hash(struct sk_buff *skb) __ksym;
-> +
-> +extern void bpf_kfree_skb(struct sk_buff *skb) __ksym;
 
-Stop this spam.
-You keep ignoring earlier feedback.
-
-pw-bot: cr
+Tested-by: Eduard Zingerman <eddyz87@gmail.com>
