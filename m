@@ -1,72 +1,70 @@
-Received: from mail-yx1-f98.google.com (mail-yx1-f98.google.com [74.125.224.98])
+Received: from mail-wm1-f97.google.com (mail-wm1-f97.google.com [209.85.128.97])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E41A21D5BC
-	for <bpf@vger.kernel.org>; Wed, 31 Dec 2025 17:37:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.98
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08A202BE02B
+	for <bpf@vger.kernel.org>; Wed, 31 Dec 2025 17:37:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.97
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767202648; cv=none; b=QVP5ad694Xn5BAATaJrkPDn2Cy8+0BE59iCK7vRNe5uAReUegAy5T1MJXVNSK1v0FZRjG2yKnJJaS25cV+o99Kdkby+4EawuNv5aPQv8AccW1zduvl6+8ZN4KzjdzB1S4+erzhD6kaWiqxrUTfzRnwjE1mRv/Amt9FoG1HvzmGM=
+	t=1767202650; cv=none; b=a8cxOsC5KTq7bdVMVXnGTxraUaSq9QgS2bwHnyUfdPR5cOkwzlruTH2FFntvD6xqiKrGEseZz0RwUX9P3/yX8ztii7GNc5pq6a2favrqSXkxbZWzaVhHP4752TRGmN/YJgzAN9+D7sBYX9mtwOJuUPtHgZ+fzUMM+beqVvlKoTc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767202648; c=relaxed/simple;
-	bh=j34IflS+eKTJabK0NTs8ebKaiD8zpNvLHhM3IHbHvyM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=scwm9BB6s+dStcG+CEYn79BuXh5kP7X9HTPQgP5czWzrU8r5L49mWL6vdwrouIUJja4oKz882LPDIBSBJEevmHeC9nP6OT9Lit3+ILgT7U/y/QNbcjbIbEPhz7gYwwuhvGztVpYTKZlZZkxiVJNGA5GwgalxxeSxtIl8kcahkBM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=aMZ0FO8e; arc=none smtp.client-ip=74.125.224.98
+	s=arc-20240116; t=1767202650; c=relaxed/simple;
+	bh=LZYOpaJobrgCoHjgtRl+RztH/j8GuhkRE/eHMkq8QYg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VJinvbarSCTs3XA+zFTIJdbJhk+komGXXusMlYw9EyvK3XjeTEDXa0aQ3TyAv79XYfgITulIcsSQMg5otULXQoyjapY02aoHWLyOM9zpoey5ADyQWq2MmwbcjaeH0h0o/WWLeYMGqURxypnPUJzN3n6tViK9KWfng24vqTRbrNo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=BeIsK024; arc=none smtp.client-ip=209.85.128.97
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=purestorage.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="aMZ0FO8e"
-Received: by mail-yx1-f98.google.com with SMTP id 956f58d0204a3-6446c1b327aso1562280d50.3
-        for <bpf@vger.kernel.org>; Wed, 31 Dec 2025 09:37:24 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="BeIsK024"
+Received: by mail-wm1-f97.google.com with SMTP id 5b1f17b1804b1-477985aea2bso9627515e9.3
+        for <bpf@vger.kernel.org>; Wed, 31 Dec 2025 09:37:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=purestorage.com; s=google2022; t=1767202644; x=1767807444; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mnMrXoOdHpUw8dswWZLzwCvPJsKuA+x+IPeEnhc/WiU=;
-        b=aMZ0FO8eE1ThIaxDlcweBOpkPbQXQynRdRZz9HbAePBd6TuFenODEQ1b/bVzry7W94
-         WW2E1+MWmmXR65vJ8OzpXntfG3slaxcCvgmoBYSJjTjwRl+c4LDSo1rehO3z/yNfGsQq
-         N0vMsKzGvmtafdCEO97d30auvv1z3sbN9tWUCawyigEykxJuFMS68HN3V8UEOSFd+81z
-         tljzvFesn1+clmFE2E6Df+IdZfygCc1mgY4g6ZuN02IA4YBEdNiGnHykh6oWc4VoiFBS
-         nXcgO9fRKcKWPlSQbLI5flFEBOnCQQDI5GCEso0++yp9k436pOJyjnvRWfwXbfIzHNyi
-         z95A==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=xVlyjcKAentrmX30QVvO0mBVKIkrp0xM35G2rMEV4pU=;
+        b=BeIsK024gQBeYxE45plp9XLT5WDl1u1NqYaXbFnaqK9wBWqATAF8hiTETePy4qtKbb
+         sfUHEDoT69toDnHGUt3cmffIxAUjxm+EkU0/lFD+U/Pm9cus8P9rMWzSZGCwmS+a5wxl
+         HbHrJVgqkmuDNXd+HATOqT7eLKvBq3nKYEd9suCGoiQGc3At7pnqzumk/U0rTtI1kshC
+         H3Yk7Ek3tO5M5UoBa1l0Qig1jjaRjA7k6IJO19J/+eRavG+rulnsX/X4AGBNzRZJX/LU
+         1Zc1UjbfDuLwiUaWJqmxw+KuGAtMSdJMyXndH03j2Z9NG4oe4NmZidNaqaC6AgI3l/p2
+         uSFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20230601; t=1767202644; x=1767807444;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=mnMrXoOdHpUw8dswWZLzwCvPJsKuA+x+IPeEnhc/WiU=;
-        b=SedjAtvVxz6T+bJGqLxGSZtpOhj3ck/tcK6qKZZKp4XfDJDnUWugec/u+Y00USwpCm
-         KYIgHkNFKGxHI2Isjp0Exyr5Ocpegd/dXdcS/f1NI9IwmL97YxiA73GadehvKEEjWmnz
-         8bLNKJCpxoFTj4BLBCoqNh6fvkTohvfPFO/iDy/5GrF9j6UWHKMOeTAFEtplyrGE07fO
-         EBtLFy1WYe2u9duPQYjh17s5R2UetCo6jrU7Y9gakGnUfBtAFg3tzzCr0lDJ1DffuIYS
-         KyO8FT1RDtJsHDHITIWGxDGvRal34SezgM4dlcwoBt3ik0sjItEAuK9KiGoYR3VotIsG
-         xmeg==
-X-Forwarded-Encrypted: i=1; AJvYcCWgN/ETXbGtvW0o+IoXIUtY6G23gvbdOowx8Zp4TZov17NxTn2loYYqcqDye7jsyGvv/tw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxugw7u9O86jkfRhSiSpVzO1OAu4NlDM/DPH3oLq411/aAg+h+a
-	U+QhHFVlm1oNudQT5Ym193iq2LVeLKAZf1h5nxiTGzpzBEh7eBnjaY2ZSfJcE0VRxQsqEzBU6HB
-	h2tS4hVo8kf/NTUrGIH5XnVGThTY8lJ/YfZm/W0l5/vUtzEpaAp1MMt2MMJqZoN6L9WVFeaY5ci
-	d1mkM+uMYGSLBhCHh7vQR+Xq7BdZ1d+A/kAyKsUV+CQV8A4WHTzA1Y0ghgLBrRV4haeSt3ZyBlq
-	b3wFMM79xoixhg1aHHzqkVi
-X-Gm-Gg: AY/fxX5xJkLJPdUiK4j9mRgdNmBjKBwnuHHxniOrAeS5YgpOrRMHL05kDqADw3sUSd1
-	7oFCiFQwHR5YaWnAsJhQNdk+MUrR6/TipEN22oMSBWw6UsMDC1izwdrD4xxvH+p4ub53Ao6mwEM
-	uPVwt9S3cxS0Y9RrhRjRoX3O4YkwNl9SgO60tQw5bldlxw8QwQf0eai+vZtmtne7DEXVKGvyAaX
-	IqsNakYLx9g4FFo/5B0kYAh1/x4pYMeojxlnNzDnv2TXM4QVYIhc06sAf9fZ1wOODDDjB1hv004
-	faqhRuS7n5YaYhgvnwnNsyKGX6rNv30Kf7IWDW1aC/d/yUhpBSReW/LifJkQ67vl199fBECKefx
-	gsglwDQ3h+J/KA//AXPSyT6JEiyM=
-X-Google-Smtp-Source: AGHT+IGMlV6Wi+eGoWgPSuCkcnDiX+llPw/Yxuw1WalLbJ19UweEl9/hcQpJmEfRSWezvyZ75uRmTz4c8mpi
-X-Received: by 2002:a05:690c:387:b0:790:1669:d796 with SMTP id 00721157ae682-7901669d995mr128786567b3.1.1767202643785;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xVlyjcKAentrmX30QVvO0mBVKIkrp0xM35G2rMEV4pU=;
+        b=e7qpVsSg74Rd93pZaMy5NhMn9GmKw/n7ndmaEizhiQft35MJg6UsQjZAWpvUPrTZl/
+         1EYVRHBI6xu0nLHIRFRUCdnUtPgXeGj4og4pn/WdPHrPsUK+cE5acKA8OkvEE7osDNiz
+         78nXci35T+XPJHMUU+JXVbvktCNWjuFq0NY96wj5CuAxqYRxHbimsBg2g4LjIonW8qqn
+         gj+TV1cc2aHgIWSiteYceX4aRVWeQIXjpdsVkLSLwvySrXM5zTdqiIxhTE3/8CX13POv
+         u4zlL1M9mE5xa2W+vIfRHMVEzVH3dUTu4VY8+KZgB27igHqM68c9pFm4lWbBnU3v4ns+
+         8wYQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUC9qW5IfBISikuOiXJhnNC7DtN3RPpFC3y088Uit5DfdL1q/SYxi5o+8lmZdvDSXDKcAo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwYWbq+rXwqDf8+4azhYrH1uDAKhhiSJECW3JVsO873DtDd5R7n
+	H742nbh88Aw4wF18gN++RCqWfk1f4qTaxI5OG3JjKnQ6/RiAGQXhsJqsNEql14EP2a38C+M7AUP
+	UlOahQ8bspmtH518XW1NoeP0KldIgq3yqxsuVXPENI7Yyl0liYPTIYGho5MgvVy2XXd+JgBlQj9
+	DuJINp8A7NCyFvD9Nab+wUv3VPVXZgdvKkFJRvLC564B7qmktUK0XZZ/yqD3xhR82yc4+ODq0sX
+	bd7BUqk
+X-Gm-Gg: AY/fxX7+GE+ybfn5QbQRwMAFlxVXEou7UTn8B1Ng17yV8/i84OFZ5AxCft+/DO/Qi5F
+	LIQ2cKSLYn7bi2m8eLXw49jMtkO6tG+izNU29JEmF2rQvE4Jt2TVAYxxxX8a4bcX1w3JjfBS/CU
+	t64e9LeYPK2K+F2yat+jZIDSImbdIENBVFQm/yjgd5g/9/Q9buD6eTsgUg6RZo/HNVFe2117K9C
+	TwfndR9RZmLC1VSfimrrTvqbXsbACTrPpORpDoHPRNkutubueMgyZCVYZnl0zDgPr5g7CFQIsgZ
+	KUrVB5r5XyO9udiIw8XbDd0SeWh7n4fNfd/EwKNmNq5kmxhUsOkt2aeUmbNFI2YddEbZ5DuhI5M
+	F1LBQmwKYCxjjXdzldsfGdocaGLGzkCRafMyg4Rp5zA==
+X-Google-Smtp-Source: AGHT+IHGNcufNXfcgEiaG3fE++EJIUmFXSODBiTSSOMmOJWuTmPgyA5t+pQycATcDgetKa4a7ZLxQVnzL4oj
+X-Received: by 2002:a05:600c:4ed2:b0:477:9c9e:ec7e with SMTP id 5b1f17b1804b1-47d19597517mr267166145e9.6.1767202643565;
         Wed, 31 Dec 2025 09:37:23 -0800 (PST)
-Received: from c7-smtp-2023.dev.purestorage.com ([2620:125:9017:12:36:3:5:0])
-        by smtp-relay.gmail.com with ESMTPS id 00721157ae682-78fc994a092sm16171307b3.6.2025.12.31.09.37.23
+Received: from c7-smtp-2023.dev.purestorage.com ([208.88.159.128])
+        by smtp-relay.gmail.com with ESMTPS id ffacd0b85a97d-4324ea81ee9sm4354365f8f.19.2025.12.31.09.37.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Wed, 31 Dec 2025 09:37:23 -0800 (PST)
 X-Relaying-Domain: purestorage.com
 Received: from dev-csander.dev.purestorage.com (dev-csander.dev.purestorage.com [10.49.34.222])
-	by c7-smtp-2023.dev.purestorage.com (Postfix) with ESMTP id 738753420F4;
-	Wed, 31 Dec 2025 10:37:22 -0700 (MST)
+	by c7-smtp-2023.dev.purestorage.com (Postfix) with ESMTP id 304C53403AF;
+	Wed, 31 Dec 2025 10:37:21 -0700 (MST)
 Received: by dev-csander.dev.purestorage.com (Postfix, from userid 1557716354)
-	id 6E501E4234A; Wed, 31 Dec 2025 10:37:22 -0700 (MST)
+	id 1CE0EE4234A; Wed, 31 Dec 2025 10:37:21 -0700 (MST)
 From: Caleb Sander Mateos <csander@purestorage.com>
 To: Jiri Kosina <jikos@kernel.org>,
 	Benjamin Tissoires <bentiss@kernel.org>,
@@ -125,12 +123,10 @@ Cc: linux-input@vger.kernel.org,
 	linux-stm32@st-md-mailman.stormreply.com,
 	linux-arm-kernel@lists.infradead.org,
 	Caleb Sander Mateos <csander@purestorage.com>
-Subject: [PATCH 4/5] net: make cfi_stubs globals const
-Date: Wed, 31 Dec 2025 10:36:32 -0700
-Message-ID: <20251231173633.3981832-5-csander@purestorage.com>
+Subject: [PATCH 0/5] bpf: use const pointer for struct_ops cfi_stubs
+Date: Wed, 31 Dec 2025 10:36:28 -0700
+Message-ID: <20251231173633.3981832-1-csander@purestorage.com>
 X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20251231173633.3981832-1-csander@purestorage.com>
-References: <20251231173633.3981832-1-csander@purestorage.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -139,88 +135,30 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Now that struct bpf_struct_ops's cfi_stubs field is a const pointer,
-declare the __bpf_bpf_dummy_ops, __bpf_ops_tcp_congestion_ops,
-__bpf_ops_qdisc_ops, and __smc_bpf_hs_ctrl global variables it points to
-as const. This allows the global variables to be placed in readonly
-memory.
+struct bpf_struct_ops's cfi_stubs field is used as a readonly pointer
+but has type void *. Change its type to void const * to allow it to
+point to readonly global memory. Update the struct_ops implementations
+to declare their cfi_stubs global variables as const.
 
-Signed-off-by: Caleb Sander Mateos <csander@purestorage.com>
----
- net/bpf/bpf_dummy_struct_ops.c | 2 +-
- net/ipv4/bpf_tcp_ca.c          | 2 +-
- net/sched/bpf_qdisc.c          | 2 +-
- net/smc/smc_hs_bpf.c           | 2 +-
- 4 files changed, 4 insertions(+), 4 deletions(-)
+Caleb Sander Mateos (5):
+  bpf: use const pointer for struct_ops cfi_stubs
+  HID: bpf: make __bpf_hid_bpf_ops const
+  sched_ext: make __bpf_ops_sched_ext_ops const
+  net: make cfi_stubs globals const
+  selftests/bpf: make cfi_stubs globals const
 
-diff --git a/net/bpf/bpf_dummy_struct_ops.c b/net/bpf/bpf_dummy_struct_ops.c
-index 812457819b5a..198152dbce9a 100644
---- a/net/bpf/bpf_dummy_struct_ops.c
-+++ b/net/bpf/bpf_dummy_struct_ops.c
-@@ -296,11 +296,11 @@ static int bpf_dummy_test_2(struct bpf_dummy_ops_state *cb, int a1, unsigned sho
- static int bpf_dummy_test_sleepable(struct bpf_dummy_ops_state *cb)
- {
- 	return 0;
- }
- 
--static struct bpf_dummy_ops __bpf_bpf_dummy_ops = {
-+static const struct bpf_dummy_ops __bpf_bpf_dummy_ops = {
- 	.test_1 = bpf_dummy_ops__test_1,
- 	.test_2 = bpf_dummy_test_2,
- 	.test_sleepable = bpf_dummy_test_sleepable,
- };
- 
-diff --git a/net/ipv4/bpf_tcp_ca.c b/net/ipv4/bpf_tcp_ca.c
-index e01492234b0b..bd2ce4ff1762 100644
---- a/net/ipv4/bpf_tcp_ca.c
-+++ b/net/ipv4/bpf_tcp_ca.c
-@@ -306,11 +306,11 @@ static void __bpf_tcp_ca_init(struct sock *sk)
- 
- static void __bpf_tcp_ca_release(struct sock *sk)
- {
- }
- 
--static struct tcp_congestion_ops __bpf_ops_tcp_congestion_ops = {
-+static const struct tcp_congestion_ops __bpf_ops_tcp_congestion_ops = {
- 	.ssthresh = bpf_tcp_ca_ssthresh,
- 	.cong_avoid = bpf_tcp_ca_cong_avoid,
- 	.set_state = bpf_tcp_ca_set_state,
- 	.cwnd_event = bpf_tcp_ca_cwnd_event,
- 	.in_ack_event = bpf_tcp_ca_in_ack_event,
-diff --git a/net/sched/bpf_qdisc.c b/net/sched/bpf_qdisc.c
-index adcb618a2bfc..8f9a6440f113 100644
---- a/net/sched/bpf_qdisc.c
-+++ b/net/sched/bpf_qdisc.c
-@@ -427,11 +427,11 @@ static void Qdisc_ops__reset(struct Qdisc *sch)
- 
- static void Qdisc_ops__destroy(struct Qdisc *sch)
- {
- }
- 
--static struct Qdisc_ops __bpf_ops_qdisc_ops = {
-+static const struct Qdisc_ops __bpf_ops_qdisc_ops = {
- 	.enqueue = Qdisc_ops__enqueue,
- 	.dequeue = Qdisc_ops__dequeue,
- 	.init = Qdisc_ops__init,
- 	.reset = Qdisc_ops__reset,
- 	.destroy = Qdisc_ops__destroy,
-diff --git a/net/smc/smc_hs_bpf.c b/net/smc/smc_hs_bpf.c
-index 063d23d85850..5c562e2a15be 100644
---- a/net/smc/smc_hs_bpf.c
-+++ b/net/smc/smc_hs_bpf.c
-@@ -60,11 +60,11 @@ static int __smc_bpf_stub_set_tcp_option_cond(const struct tcp_sock *tp,
- 					      struct inet_request_sock *ireq)
- {
- 	return 1;
- }
- 
--static struct smc_hs_ctrl __smc_bpf_hs_ctrl = {
-+static const struct smc_hs_ctrl __smc_bpf_hs_ctrl = {
- 	.syn_option	= __smc_bpf_stub_set_tcp_option,
- 	.synack_option	= __smc_bpf_stub_set_tcp_option_cond,
- };
- 
- static int smc_bpf_hs_ctrl_init(struct btf *btf) { return 0; }
+ drivers/hid/bpf/hid_bpf_struct_ops.c                   |  2 +-
+ include/linux/bpf.h                                    |  2 +-
+ kernel/bpf/bpf_struct_ops.c                            |  6 +++---
+ kernel/sched/ext.c                                     |  2 +-
+ net/bpf/bpf_dummy_struct_ops.c                         |  2 +-
+ net/ipv4/bpf_tcp_ca.c                                  |  2 +-
+ net/sched/bpf_qdisc.c                                  |  2 +-
+ net/smc/smc_hs_bpf.c                                   |  2 +-
+ .../testing/selftests/bpf/test_kmods/bpf_test_no_cfi.c |  2 +-
+ tools/testing/selftests/bpf/test_kmods/bpf_testmod.c   | 10 +++++-----
+ 10 files changed, 16 insertions(+), 16 deletions(-)
+
 -- 
 2.45.2
 
