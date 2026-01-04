@@ -1,32 +1,32 @@
 Received: from out-174.mta0.migadu.com (out-174.mta0.migadu.com [91.218.175.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E28B235BE2
-	for <bpf@vger.kernel.org>; Sun,  4 Jan 2026 16:25:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF1F2275B06
+	for <bpf@vger.kernel.org>; Sun,  4 Jan 2026 16:25:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767543905; cv=none; b=IYVjMtR+YoTrHR3+k2qYtGdiLq/rijUGPVlgFztlReE28N2rlm7LdQ6u3dm0bCxXPYcFMCotdZsIcDwhaA1U24Nhbxq8r4SfLCM6QhsOQ3x0lGGy79/0fTrj1nlr5moFDIa99kQOtykoPV9r/5xZtcTt3tP7wgPLLcvBjUCEm/k=
+	t=1767543910; cv=none; b=gDBj0S151We5OgMwwOCnw1l7JLbfsFa3Zesq3kxGY1uEegbbK9E7ExDOl2tm9Jo8LqQvoTBHy2k97oEZTJfbJw3gAU/KYdrquRQIADIw4Tqx4r1+2Z8llFxmIcuqxEqyGiag3v/0y/FfPDBtlZxfUnaLIMdCtNs07s/UaoHneoM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767543905; c=relaxed/simple;
-	bh=91jkGKfDJwn1XnLEZU/KmWmRlnEhLxr/3bEtwdraeCM=;
+	s=arc-20240116; t=1767543910; c=relaxed/simple;
+	bh=LSTTQ1Bw6k7njO8lwuxwQO6h9yNeUWCg0KXwR2Yikd8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ovejrClPHFA/p5RW/NYFbPY03+VL/fmCUKdgx/3S/iN6P/2oJEW63DE7gtotFclW8vT1NwnO2Aw882tt9dRLAgdjGQHj1Xz2RRU4L7q1qhBjFFWIwJtc/AxMO74Ch0TFwQRCYF//F4bI1A0rC9ycGhoarTCchQiikUUWEbcYFaA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=QbbrUXYB; arc=none smtp.client-ip=91.218.175.174
+	 MIME-Version; b=HaogCaKBmlZVouA7w4evTrjzcjhrHaqXbIl3xNvxYcjnK8dk3LJfYebOwe+VpSX6edEdFMie2oA8lTw4pJtYpkXAI0fWWzleuEkev14n5qbqZ4qKMLE+QwJn5qj5k1uqqZuKL3P5gU/Q0joLwKzDZ90cz8e6TfxJhDCskYTwziU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=vuVRnV8K; arc=none smtp.client-ip=91.218.175.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="QbbrUXYB"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="vuVRnV8K"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1767543890;
+	t=1767543906;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=ghm38KeLA+Zt1e5ioDPfhSJ87XBSGozi7s0hux0wgYY=;
-	b=QbbrUXYB28c0COIhrJjJZA77B0Un8m8cBW4PtN4KlNMyzUrXnQUAVB3WZZyVyKs4Up7jPr
-	fWcuqatbn6fXyz3iDqRwcQBDxZMs9zfX4EVq1p9DbtlEqoj5sDVLB6I2kuwOPAgVLUGdB2
-	HuVp46jcI2ku0zPyBJQFSYDqekMUm/A=
+	bh=pqbsIbMnN1SRJEl+iPFxJCqCnnA13u+xQvRbspdzZhg=;
+	b=vuVRnV8KsWEl32XjLibUJqTVNuyAgu2Rfq8RAwC0U+f3yHLB0jE+t/S/hmO3+uRW8TzkY1
+	Igqj2rbXzsy0k2snLJkZd8fi0/Z4YVnnVT9yrGEce7ypmn/GIYwbswno5s2vtQk8OlNSXx
+	qghU0C9WepW1socVTmvBocKOfMzllHM=
 From: KaFai Wan <kafai.wan@linux.dev>
 To: ast@kernel.org,
 	daniel@iogearbox.net,
@@ -54,11 +54,12 @@ To: ast@kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
 Cc: KaFai Wan <kafai.wan@linux.dev>
-Subject: [PATCH bpf-next 0/2] bpf, test_run: Fix user-memory-access vulnerability for LIVE_FRAMES
-Date: Mon,  5 Jan 2026 00:23:48 +0800
-Message-ID: <20260104162350.347403-1-kafai.wan@linux.dev>
-In-Reply-To: <fa2be179-bad7-4ee3-8668-4903d1853461@hust.edu.cn>
+Subject: [PATCH bpf-next 2/2] selftests/bpf: Add test for xdp_md context with LIVE_FRAMES in BPF_PROG_TEST_RUN
+Date: Mon,  5 Jan 2026 00:23:50 +0800
+Message-ID: <20260104162350.347403-3-kafai.wan@linux.dev>
+In-Reply-To: <20260104162350.347403-1-kafai.wan@linux.dev>
 References: <fa2be179-bad7-4ee3-8668-4903d1853461@hust.edu.cn>
+ <20260104162350.347403-1-kafai.wan@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -68,21 +69,75 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-This small patchset is about avoid user-memory-access vulnerability
-for LIVE_FRAMES at specific xdp_md context.
+Add a test case uses xdp_md as context parameter for BPF_PROG_TEST_RUN
+with LIVE_FRAMES flag. The test ensures that potential user-memory-access
+vulnerabilities are properly prevented.
 
+Signed-off-by: KaFai Wan <kafai.wan@linux.dev>
 ---
-KaFai Wan (2):
-  bpf, test_run: Fix user-memory-access vulnerability for LIVE_FRAMES
-  selftests/bpf: Add test for xdp_md context with LIVE_FRAMES in
-    BPF_PROG_TEST_RUN
+ .../bpf/prog_tests/xdp_context_test_run.c     | 19 +++++++++++++++++++
+ .../bpf/progs/test_xdp_context_test_run.c     |  6 ++++++
+ 2 files changed, 25 insertions(+)
 
- net/bpf/test_run.c                            | 23 +++++++++----------
- .../bpf/prog_tests/xdp_context_test_run.c     | 19 +++++++++++++++
- .../bpf/prog_tests/xdp_do_redirect.c          |  6 ++---
- .../bpf/progs/test_xdp_context_test_run.c     |  6 +++++
- 4 files changed, 39 insertions(+), 15 deletions(-)
-
+diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_context_test_run.c b/tools/testing/selftests/bpf/prog_tests/xdp_context_test_run.c
+index ee94c281888a..0276daaae45c 100644
+--- a/tools/testing/selftests/bpf/prog_tests/xdp_context_test_run.c
++++ b/tools/testing/selftests/bpf/prog_tests/xdp_context_test_run.c
+@@ -45,6 +45,7 @@ void test_xdp_context_error(int prog_fd, struct bpf_test_run_opts opts,
+ void test_xdp_context_test_run(void)
+ {
+ 	struct test_xdp_context_test_run *skel = NULL;
++	char data_xdp[sizeof(pkt_v4) + XDP_PACKET_HEADROOM];
+ 	char data[sizeof(pkt_v4) + sizeof(__u32)];
+ 	char bad_ctx[sizeof(struct xdp_md) + 1];
+ 	struct xdp_md ctx_in, ctx_out;
+@@ -55,6 +56,12 @@ void test_xdp_context_test_run(void)
+ 			    .ctx_size_out = sizeof(ctx_out),
+ 			    .repeat = 1,
+ 		);
++	DECLARE_LIBBPF_OPTS(bpf_test_run_opts, opts_xdp,
++			    .data_in = &data_xdp,
++			    .data_size_in = sizeof(data_xdp),
++			    .flags = BPF_F_TEST_XDP_LIVE_FRAMES,
++			    .repeat = 1,
++		);
+ 	int err, prog_fd;
+ 
+ 	skel = test_xdp_context_test_run__open_and_load();
+@@ -70,6 +77,18 @@ void test_xdp_context_test_run(void)
+ 	ASSERT_EQ(errno, E2BIG, "extradata-errno");
+ 	ASSERT_ERR(err, "bpf_prog_test_run(extradata)");
+ 
++	memset(&ctx_in, 0, sizeof(ctx_in));
++	ctx_in.data_meta = 0;
++	ctx_in.data = 0xf4;
++	ctx_in.data_end = sizeof(data_xdp);
++	opts_xdp.ctx_in = &ctx_in;
++	opts_xdp.ctx_size_in = sizeof(ctx_in);
++	*(__u32 *)(data_xdp + 0) = 0x28d6a0b5;
++	*(__u32 *)(data_xdp + 4) = 0xf273eea3;
++	*(struct ipv4_packet *)(data_xdp + ctx_in.data) = pkt_v4;
++	err = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.xdp_pass), &opts_xdp);
++	ASSERT_OK(err, "bpf_prog_test_run(valid meta)");
++
+ 	*(__u32 *)data = XDP_PASS;
+ 	*(struct ipv4_packet *)(data + sizeof(__u32)) = pkt_v4;
+ 	opts.ctx_in = &ctx_in;
+diff --git a/tools/testing/selftests/bpf/progs/test_xdp_context_test_run.c b/tools/testing/selftests/bpf/progs/test_xdp_context_test_run.c
+index d7b88cd05afd..2166928d4680 100644
+--- a/tools/testing/selftests/bpf/progs/test_xdp_context_test_run.c
++++ b/tools/testing/selftests/bpf/progs/test_xdp_context_test_run.c
+@@ -17,4 +17,10 @@ int xdp_context(struct xdp_md *xdp)
+ 	return ret;
+ }
+ 
++SEC("xdp")
++int xdp_pass(struct xdp_md *xdp)
++{
++	return XDP_PASS;
++}
++
+ char _license[] SEC("license") = "GPL";
 -- 
 2.43.0
 
