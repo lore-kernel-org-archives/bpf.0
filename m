@@ -1,312 +1,170 @@
-Received: from devnull.danielhodges.dev (vps-2f6e086e.vps.ovh.us [135.148.138.8])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B0F32F3C0A;
-	Mon,  5 Jan 2026 17:44:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=135.148.138.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29B1C3451B3
+	for <bpf@vger.kernel.org>; Mon,  5 Jan 2026 17:45:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767635061; cv=none; b=SWuaDnie9WsK3an0pZBvgvDUSWNoxTIR6SR2OEZeNbP3ZN/jh4M/F7rk/9DvnrLlHFY/b9oITT+vNragb7CGhSexG87SP8EpOGozsW4E7Ybb+/nNPhEjR89CA9FKgjnsJM+m7f3t6AmErCO3xx3qEAhbv9hX2EODeLJfvWPQ92M=
+	t=1767635118; cv=none; b=ap9bH/ZDoywYDz1SCNtQr3bePg8i19abckOoc+2xliP3ZWPAJOUpqrOtHrpCM4iw7isRw2HS1RwhO81bERu0ByWHDKKVgAidMrbhMOhiksBdego3bRSf789KlG+EsQPVXf4aAZm11ym7Wmsc290UOtfT+JrGdHzv1lD/VOG9y7c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767635061; c=relaxed/simple;
-	bh=3OAcQVPjbA4HjgHSJgvd9krWCA+NhHdCh0atFvYZL3s=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=hntDpnsGx/N6WiQjeUHEebTbdtMKdEEx+D0EmSmaiSizZ5KuLlMpfSmSkqRpKgOusUw/n7vYPfNHfaovPoRNUbyx/S4DiTxQkhIcMV/jxiA5BGaHYpiUXh1uTOctvDVlEsp3haAUaSeFGFbUGnEe4t92e60oCDp86GZqdilA4ac=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=danielhodges.dev; spf=pass smtp.mailfrom=danielhodges.dev; dkim=pass (2048-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b=LWNGpZ1z; dkim=permerror (0-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b=hia6ne2M; arc=none smtp.client-ip=135.148.138.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=danielhodges.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=danielhodges.dev
+	s=arc-20240116; t=1767635118; c=relaxed/simple;
+	bh=7sNkA7xhl9kxwedUqpqBxYuPDFQnkNhl3zCI3WdX2Zc=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=RXvhr8RYzHXAs+K6nBT3P8OZWNZ6Lh5sgmZK1VhTe+kARbmjRqbRwZsIx+FDQN6B+Is5VL0BnLs/Qi51fxuXPlh2OjlcBqTSwL5iJA70Ihocvv3HEjWvDtb+3iPr+q2Y/Bp5p5B34FjJW6ct2dv/6g3pMEG9ZtTd9LDHr3rZyEs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fsI7RfVr; arc=none smtp.client-ip=209.85.215.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b="LWNGpZ1z";
-	dkim=permerror (0-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b="hia6ne2M"
-DKIM-Signature: v=1; a=rsa-sha256; s=202510r; d=danielhodges.dev; c=relaxed/relaxed;
-	h=Message-ID:Date:Subject:To:From; t=1767634677; bh=j0BJC2IDsdxfLZAhla89qAl
-	kedAI2eotg/cturZSd50=; b=LWNGpZ1zIsjMNp+P+jT2w6N9zbU2gKX0+oXRGzw2p/7BXAhicC
-	jqQk0ulLkjG53KfGkoe/SjCjQgDXfXac/SjD6HhBHiRgZPSP4meBsdRRIqwpNBO/uXnoH4U/GNJ
-	LrrhQvWDkwTfvrhTYUUN2uztTimWNKMupysmqiVbFwRR+78cPNajcXVhq8MohxLTNiYhlO5OpvE
-	xvGOmm+3PhM/acw2H5An7tjqF5ZZ/y7qUxTBAOZwO+C9dt+RRJVyJ38JQCHfRQ7lUma+h1rgQV5
-	FigfIgn62fuKvn6ONYP3cdk5b0P0B4/3B9wJC64F6kLFcsm2mwSk1NOhmAhI3XRNRnQ==;
-DKIM-Signature: v=1; a=ed25519-sha256; s=202510e; d=danielhodges.dev; c=relaxed/relaxed;
-	h=Message-ID:Date:Subject:To:From; t=1767634677; bh=j0BJC2IDsdxfLZAhla89qAl
-	kedAI2eotg/cturZSd50=; b=hia6ne2M7WykpmMpmBEcaktXOk29VvFpjjzsgjE2TBglMQI4rA
-	xcnzxBpU9TrMNOzKoB08qRZyel0/KmBTQIDg==;
-From: Daniel Hodges <git@danielhodges.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Vadim Fedorenko <vadim.fedorenko@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Mykyta Yatsenko <yatsenko@meta.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	"David S . Miller" <davem@davemloft.net>,
-	linux-crypto@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Daniel Hodges <git@danielhodges.dev>
-Subject: [PATCH bpf-next v4 5/6] bpf: Add ECDSA signature verification kfuncs
-Date: Mon,  5 Jan 2026 12:37:54 -0500
-Message-ID: <20260105173755.22515-6-git@danielhodges.dev>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20260105173755.22515-1-git@danielhodges.dev>
-References: <20260105173755.22515-1-git@danielhodges.dev>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fsI7RfVr"
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-bde0f62464cso99856a12.2
+        for <bpf@vger.kernel.org>; Mon, 05 Jan 2026 09:45:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1767635116; x=1768239916; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=lTVNrbVTa+G+TWLvc9H4X9UDBXSMZSGYoyeRsLzfSLk=;
+        b=fsI7RfVrfr8+mLptNtWXETK+pESWt4BDLc1xHOz6yvw+cv+wEPdYqA8ccWngxGxLqK
+         blMrCJrR1MkwPcwRSn2Vvr6oz8TwOtO7g1YAKOksovHmDnxbc26gWXLh+aHUAn1FdO5C
+         29JKwgX0CndDfhD1fl3BZIA2MpNBJYna1AIB0BlLUoOPWKso0D9t9IV49LP8+NHaG7sl
+         jOM1xgw99RseTjlXLroQssJSpe23OoNhejHydOT03XcCD7J9xAHvGv6oTqWJ3t0/vcb/
+         Yr2XrgA25fHalzH9wf10d8NCu+n3pEqXeoClBukBGSdxKTUV2CXHGh42lbGjvgZVmzL0
+         TnmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767635116; x=1768239916;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lTVNrbVTa+G+TWLvc9H4X9UDBXSMZSGYoyeRsLzfSLk=;
+        b=L72/4ZSKRHgf1K2SIYScENrgNzdLHZIyzaCp+5FOjjyVbdRFrm9AOufYyYFZDc/eX9
+         2Zoi3tiNtO49UkMpmupQG+lKDsnxfm5w/Z1xNyjBvc38PfKHZYC6gi1kV58lPlt8bcKy
+         CtWdw8YW7dQCENfAjjxfcSxqHpgcrHWXoLh9BuKByer04mqEz+ixFkFo9kOj2hcEL2hD
+         lKaltUH8U+KeHFmaD0oCzBg4qg4sEOu9cItIr5ni9B4ZCtGnULTaw1djONlmm4Qx7We1
+         dv4c7+pBtp1Jr4hq0X3LJVV3aHJqulIbk8Z/abQsZ8OjPWEq3SGPZ5oVoBfzVPm76Gxj
+         +8Hg==
+X-Forwarded-Encrypted: i=1; AJvYcCWU3cc4EkCcYkXYnZFvyWJWxHK2yuZ9s7BlE0oZmwKcpWMrciXdGcWmlEi2L6qfGLHfiNY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yym4J4LOazd01OMGyXHPyARuuz3/onpFFJoFQq+oJokljPdpBis
+	5zknszCl51TTQwG+e/4mlgjdCRWfy81y3PxmpEe1+r3i5eYCzc7asTZr
+X-Gm-Gg: AY/fxX6tc0lVdlRpOzVcQpe4jMVd1tVY60lO0fndLHo/HhooG6Ui4hdl2q3R4EXmcRy
+	Rz7GMwtOjXJ03FYPmPULyNc3gXqYVFtCf6dQGLRpZRcx/GYDvGRrGFjwYuzrv4I7E8e723vaCxq
+	gU4DguWQ7Y+bhsPP4Zi/4z/svvFmF0U2oYhoR6zPMHlCVwr8dUqhaRLdB1hHCmmFFqFN3IJRa4X
+	G8UKQZUy/sRVqeqKHOtsPEBFw6b8TUBf+i1vbv6NL7cJio10szJiGD9wRTf9uqBBa0/CZjITCyi
+	HBNvHwhhNFvT5DY4PPy5cpd+4u1N0V/msZbWi3bs0qta8wy8FKIKUbY9jrmEBD6cy72fYYtCU/0
+	5YQtvKg5mbmS+HPRjqgx2g8jXL6V2lixcocPy3U56dJ8qNafyMC8a7Z52qabyTVdsqz0XeZMAQe
+	VWk+Tqz2Vp3Y8/V25v57ts75Ya15ag3IGUBIJp
+X-Google-Smtp-Source: AGHT+IHwqflAWpHbFYx4gUYYKc+Iao7re9ab7WD0vrEsaxmDed0XXnADhREOOc9mSQN3CehRMwjA6A==
+X-Received: by 2002:a05:693c:2c92:b0:2ac:1b11:bf98 with SMTP id 5a478bee46e88-2b16f906cc0mr82752eec.28.1767635116108;
+        Mon, 05 Jan 2026 09:45:16 -0800 (PST)
+Received: from ?IPv6:2a03:83e0:115c:1:175e:3ec9:5deb:d470? ([2620:10d:c090:500::2:d7b1])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b16f16faffsm459465eec.1.2026.01.05.09.45.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Jan 2026 09:45:15 -0800 (PST)
+Message-ID: <08ab237ad7da8d1f6494cb434d9a5a46a599462c.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v2 1/2] bpf, x86: inline bpf_get_current_task()
+ for x86_64
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Menglong Dong <menglong8.dong@gmail.com>, ast@kernel.org
+Cc: davem@davemloft.net, dsahern@kernel.org, daniel@iogearbox.net, 
+	andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
+ yonghong.song@linux.dev, 	john.fastabend@gmail.com, kpsingh@kernel.org,
+ sdf@fomichev.me, haoluo@google.com, 	jolsa@kernel.org, tglx@linutronix.de,
+ mingo@redhat.com, bp@alien8.de, 	dave.hansen@linux.intel.com,
+ x86@kernel.org, hpa@zytor.com, netdev@vger.kernel.org, 
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Date: Mon, 05 Jan 2026 09:45:13 -0800
+In-Reply-To: <20260104131635.27621-2-dongml2@chinatelecom.cn>
+References: <20260104131635.27621-1-dongml2@chinatelecom.cn>
+	 <20260104131635.27621-2-dongml2@chinatelecom.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.2 (3.58.2-1.fc43) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Add support for ECDSA signature verification in BPF programs through
-the unified bpf_crypto_ctx API.
+On Sun, 2026-01-04 at 21:16 +0800, Menglong Dong wrote:
+> Inline bpf_get_current_task() and bpf_get_current_task_btf() for x86_64
+> to obtain better performance. The instruction we use here is:
+>=20
+>   65 48 8B 04 25 [offset] // mov rax, gs:[offset]
+>=20
+> Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
+> ---
+> v2:
+> - check the variable type in emit_ldx_percpu_r0 with __verify_pcpu_ptr
+> - remove the usage of const_current_task
+> ---
+>  arch/x86/net/bpf_jit_comp.c | 36 ++++++++++++++++++++++++++++++++++++
+>  1 file changed, 36 insertions(+)
+>=20
+> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+> index e3b1c4b1d550..f5ff7c77aad7 100644
+> --- a/arch/x86/net/bpf_jit_comp.c
+> +++ b/arch/x86/net/bpf_jit_comp.c
+> @@ -1300,6 +1300,25 @@ static void emit_st_r12(u8 **pprog, u32 size, u32 =
+dst_reg, int off, int imm)
+>  	emit_st_index(pprog, size, dst_reg, X86_REG_R12, off, imm);
+>  }
+> =20
+> +static void __emit_ldx_percpu_r0(u8 **pprog, __force unsigned long ptr)
+> +{
+> +	u8 *prog =3D *pprog;
+> +
+> +	/* mov rax, gs:[ptr] */
+> +	EMIT2(0x65, 0x48);
+> +	EMIT2(0x8B, 0x04);
+> +	EMIT1(0x25);
+> +	EMIT((u32)ptr, 4);
+> +
+> +	*pprog =3D prog;
+> +}
+> +
+> +#define emit_ldx_percpu_r0(prog, variable)					\
+> +	do {									\
+> +		__verify_pcpu_ptr(&(variable));					\
+> +		__emit_ldx_percpu_r0(&prog, (__force unsigned long)&(variable));\
+> +	} while (0)
+> +
+>  static int emit_atomic_rmw(u8 **pprog, u32 atomic_op,
+>  			   u32 dst_reg, u32 src_reg, s16 off, u8 bpf_size)
+>  {
+> @@ -2441,6 +2460,12 @@ st:			if (is_imm8(insn->off))
+>  		case BPF_JMP | BPF_CALL: {
+>  			u8 *ip =3D image + addrs[i - 1];
+> =20
+> +			if (insn->src_reg =3D=3D 0 && (insn->imm =3D=3D BPF_FUNC_get_current_=
+task ||
+> +						   insn->imm =3D=3D BPF_FUNC_get_current_task_btf)) {
 
-Changes:
-- Add enum bpf_crypto_type_id for efficient type checking
-- Update all crypto type modules to set type_id field
-- Implement bpf_ecdsa_verify() for signature verification
-- Add bpf_ecdsa_keysize(), bpf_ecdsa_digestsize(), bpf_ecdsa_maxsize()
-  helper functions for querying context properties
-- Add type_id checks in all ECDSA kfuncs for type safety
-- Register ECDSA kfuncs for SCHED_CLS and XDP program types
+I think this should be guarded by IS_ENABLED(CONFIG_SMP).
+The current.h:get_current() used
+arch/x86/include/asm/percpu.h:this_cpu_read_stable() that is unrolled
+to __raw_cpu_read_stable(), which uses __force_percpu_arg(), which uses
+__force_percpu_prefix, which is defined differently depending on CONFIG_SMP=
+.
 
-ECDSA contexts are created using bpf_crypto_ctx_create() with
-type="sig" and appropriate algorithm (e.g., "p1363(ecdsa-nist-p256)").
-The public key is passed via the key/key_len fields in bpf_crypto_params.
-
-This enables BPF programs to perform cryptographic signature verification
-for use cases such as packet authentication and content validation.
-
-Signed-off-by: Daniel Hodges <git@danielhodges.dev>
----
- crypto/bpf_crypto_shash.c    |   1 +
- crypto/bpf_crypto_sig.c      |   1 +
- crypto/bpf_crypto_skcipher.c |   1 +
- include/linux/bpf_crypto.h   |   7 +++
- kernel/bpf/crypto.c          | 115 +++++++++++++++++++++++++++++++++++
- 5 files changed, 125 insertions(+)
-
-diff --git a/crypto/bpf_crypto_shash.c b/crypto/bpf_crypto_shash.c
-index 95c178ec0ce8..6e9b0d757ec9 100644
---- a/crypto/bpf_crypto_shash.c
-+++ b/crypto/bpf_crypto_shash.c
-@@ -74,6 +74,7 @@ static const struct bpf_crypto_type bpf_crypto_shash_type = {
- 	.digestsize	= bpf_crypto_shash_digestsize,
- 	.get_flags	= bpf_crypto_shash_get_flags,
- 	.owner		= THIS_MODULE,
-+	.type_id	= BPF_CRYPTO_TYPE_HASH,
- 	.name		= "hash",
- };
- 
-diff --git a/crypto/bpf_crypto_sig.c b/crypto/bpf_crypto_sig.c
-index ad0d3810df8e..c6e67338cd40 100644
---- a/crypto/bpf_crypto_sig.c
-+++ b/crypto/bpf_crypto_sig.c
-@@ -38,6 +38,7 @@ static const struct bpf_crypto_type bpf_crypto_sig_type = {
- 	.get_flags	= bpf_crypto_sig_get_flags,
- 	.setkey		= bpf_crypto_sig_setkey,
- 	.owner		= THIS_MODULE,
-+	.type_id	= BPF_CRYPTO_TYPE_SIG,
- 	.name		= "sig",
- };
- 
-diff --git a/crypto/bpf_crypto_skcipher.c b/crypto/bpf_crypto_skcipher.c
-index a88798d3e8c8..79d310fbcc48 100644
---- a/crypto/bpf_crypto_skcipher.c
-+++ b/crypto/bpf_crypto_skcipher.c
-@@ -63,6 +63,7 @@ static const struct bpf_crypto_type bpf_crypto_lskcipher_type = {
- 	.statesize	= bpf_crypto_lskcipher_statesize,
- 	.get_flags	= bpf_crypto_lskcipher_get_flags,
- 	.owner		= THIS_MODULE,
-+	.type_id	= BPF_CRYPTO_TYPE_SKCIPHER,
- 	.name		= "skcipher",
- };
- 
-diff --git a/include/linux/bpf_crypto.h b/include/linux/bpf_crypto.h
-index c84371cc4e47..cf2c66f9782b 100644
---- a/include/linux/bpf_crypto.h
-+++ b/include/linux/bpf_crypto.h
-@@ -3,6 +3,12 @@
- #ifndef _BPF_CRYPTO_H
- #define _BPF_CRYPTO_H
- 
-+enum bpf_crypto_type_id {
-+	BPF_CRYPTO_TYPE_SKCIPHER = 1,
-+	BPF_CRYPTO_TYPE_HASH,
-+	BPF_CRYPTO_TYPE_SIG,
-+};
-+
- struct bpf_crypto_type {
- 	void *(*alloc_tfm)(const char *algo);
- 	void (*free_tfm)(void *tfm);
-@@ -17,6 +23,7 @@ struct bpf_crypto_type {
- 	unsigned int (*digestsize)(void *tfm);
- 	u32 (*get_flags)(void *tfm);
- 	struct module *owner;
-+	enum bpf_crypto_type_id type_id;
- 	char name[14];
- };
- 
-diff --git a/kernel/bpf/crypto.c b/kernel/bpf/crypto.c
-index f593e7910d3d..3c57a8c31ea2 100644
---- a/kernel/bpf/crypto.c
-+++ b/kernel/bpf/crypto.c
-@@ -9,6 +9,7 @@
- #include <linux/scatterlist.h>
- #include <linux/skbuff.h>
- #include <crypto/skcipher.h>
-+#include <crypto/sig.h>
- 
- struct bpf_crypto_type_list {
- 	const struct bpf_crypto_type *type;
-@@ -57,6 +58,7 @@ struct bpf_crypto_ctx {
- 	refcount_t usage;
- };
- 
-+
- int bpf_crypto_register_type(const struct bpf_crypto_type *type)
- {
- 	struct bpf_crypto_type_list *node;
-@@ -400,6 +402,109 @@ __bpf_kfunc int bpf_crypto_hash(struct bpf_crypto_ctx *ctx,
- }
- #endif /* CONFIG_CRYPTO_HASH2 */
- 
-+#if IS_ENABLED(CONFIG_CRYPTO_ECDSA)
-+/**
-+ * bpf_ecdsa_verify() - Verify ECDSA signature using pre-allocated context
-+ * @ctx: ECDSA context created by bpf_crypto_ctx_create() with type "sig"
-+ * @message: bpf_dynptr to the message hash to verify. Must be a trusted pointer.
-+ * @signature: bpf_dynptr to the ECDSA signature in r || s format. Must be a trusted pointer.
-+ *             Must be 64 bytes for P-256, 96 for P-384, 132 for P-521
-+ *
-+ * Verifies an ECDSA signature using a pre-allocated context. This function
-+ * does not allocate memory and can be used in non-sleepable BPF programs.
-+ * Uses bpf_dynptr to ensure safe memory access without risk of page faults.
-+ */
-+__bpf_kfunc int bpf_ecdsa_verify(struct bpf_crypto_ctx *ctx,
-+				 const struct bpf_dynptr *message,
-+				 const struct bpf_dynptr *signature)
-+{
-+	const struct bpf_dynptr_kern *msg_kern = (struct bpf_dynptr_kern *)message;
-+	const struct bpf_dynptr_kern *sig_kern = (struct bpf_dynptr_kern *)signature;
-+	struct crypto_sig *sig_tfm;
-+	const u8 *msg_ptr, *sig_ptr;
-+	u32 msg_len, sig_len;
-+
-+	if (!ctx)
-+		return -EINVAL;
-+
-+	if (ctx->type->type_id != BPF_CRYPTO_TYPE_SIG)
-+		return -EINVAL;
-+
-+	msg_len = __bpf_dynptr_size(msg_kern);
-+	sig_len = __bpf_dynptr_size(sig_kern);
-+
-+	if (msg_len == 0 || sig_len == 0)
-+		return -EINVAL;
-+
-+	msg_ptr = __bpf_dynptr_data(msg_kern, msg_len);
-+	if (!msg_ptr)
-+		return -EINVAL;
-+
-+	sig_ptr = __bpf_dynptr_data(sig_kern, sig_len);
-+	if (!sig_ptr)
-+		return -EINVAL;
-+
-+	sig_tfm = (struct crypto_sig *)ctx->tfm;
-+	return crypto_sig_verify(sig_tfm, sig_ptr, sig_len, msg_ptr, msg_len);
-+}
-+
-+/**
-+ * bpf_ecdsa_keysize() - Get the key size for ECDSA context
-+ * @ctx: ECDSA context
-+ *
-+ * Returns: Key size in bits, or negative error code on failure
-+ */
-+__bpf_kfunc int bpf_ecdsa_keysize(struct bpf_crypto_ctx *ctx)
-+{
-+	struct crypto_sig *sig_tfm;
-+
-+	if (!ctx)
-+		return -EINVAL;
-+
-+	if (ctx->type->type_id != BPF_CRYPTO_TYPE_SIG)
-+		return -EINVAL;
-+
-+	sig_tfm = (struct crypto_sig *)ctx->tfm;
-+	return crypto_sig_keysize(sig_tfm);
-+}
-+
-+/**
-+ * bpf_ecdsa_digestsize() - Get the maximum digest size for ECDSA context
-+ * @ctx: ECDSA context
-+ */
-+__bpf_kfunc int bpf_ecdsa_digestsize(struct bpf_crypto_ctx *ctx)
-+{
-+	struct crypto_sig *sig_tfm;
-+
-+	if (!ctx)
-+		return -EINVAL;
-+
-+	if (ctx->type->type_id != BPF_CRYPTO_TYPE_SIG)
-+		return -EINVAL;
-+
-+	sig_tfm = (struct crypto_sig *)ctx->tfm;
-+	return crypto_sig_digestsize(sig_tfm);
-+}
-+
-+/**
-+ * bpf_ecdsa_maxsize() - Get the maximum signature size for ECDSA context
-+ * @ctx: ECDSA context
-+ */
-+__bpf_kfunc int bpf_ecdsa_maxsize(struct bpf_crypto_ctx *ctx)
-+{
-+	struct crypto_sig *sig_tfm;
-+
-+	if (!ctx)
-+		return -EINVAL;
-+
-+	if (ctx->type->type_id != BPF_CRYPTO_TYPE_SIG)
-+		return -EINVAL;
-+
-+	sig_tfm = (struct crypto_sig *)ctx->tfm;
-+	return crypto_sig_maxsize(sig_tfm);
-+}
-+#endif /* CONFIG_CRYPTO_ECDSA */
-+
- __bpf_kfunc_end_defs();
- 
- BTF_KFUNCS_START(crypt_init_kfunc_btf_ids)
-@@ -419,6 +524,12 @@ BTF_ID_FLAGS(func, bpf_crypto_encrypt, KF_RCU)
- #if IS_ENABLED(CONFIG_CRYPTO_HASH2)
- BTF_ID_FLAGS(func, bpf_crypto_hash, KF_RCU)
- #endif
-+#if IS_ENABLED(CONFIG_CRYPTO_ECDSA)
-+BTF_ID_FLAGS(func, bpf_ecdsa_verify, KF_RCU)
-+BTF_ID_FLAGS(func, bpf_ecdsa_keysize, 0)
-+BTF_ID_FLAGS(func, bpf_ecdsa_digestsize, 0)
-+BTF_ID_FLAGS(func, bpf_ecdsa_maxsize, 0)
-+#endif
- BTF_KFUNCS_END(crypt_kfunc_btf_ids)
- 
- static const struct btf_kfunc_id_set crypt_kfunc_set = {
-@@ -447,6 +558,10 @@ static int __init crypto_kfunc_init(void)
- 	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SYSCALL, &crypt_kfunc_set);
- 	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SYSCALL,
- 					       &crypt_init_kfunc_set);
-+	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_CLS,
-+					       &crypt_init_kfunc_set);
-+	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_XDP,
-+					       &crypt_init_kfunc_set);
- 	return  ret ?: register_btf_id_dtor_kfuncs(bpf_crypto_dtors,
- 						   ARRAY_SIZE(bpf_crypto_dtors),
- 						   THIS_MODULE);
--- 
-2.51.0
-
+> +				emit_ldx_percpu_r0(prog, current_task);
+> +				break;
+> +			}
+> +
+>  			func =3D (u8 *) __bpf_call_base + imm32;
+>  			if (src_reg =3D=3D BPF_PSEUDO_CALL && tail_call_reachable) {
+>  				LOAD_TAIL_CALL_CNT_PTR(stack_depth);
+> @@ -4082,3 +4107,14 @@ bool bpf_jit_supports_timed_may_goto(void)
+>  {
+>  	return true;
+>  }
+> +
+> +bool bpf_jit_inlines_helper_call(s32 imm)
+> +{
+> +	switch (imm) {
+> +	case BPF_FUNC_get_current_task:
+> +	case BPF_FUNC_get_current_task_btf:
+> +		return true;
+> +	default:
+> +		return false;
+> +	}
+> +}
