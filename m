@@ -1,170 +1,219 @@
-Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from devnull.danielhodges.dev (vps-2f6e086e.vps.ovh.us [135.148.138.8])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29B1C3451B3
-	for <bpf@vger.kernel.org>; Mon,  5 Jan 2026 17:45:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EAFF1C3BF7;
+	Mon,  5 Jan 2026 17:47:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=135.148.138.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767635118; cv=none; b=ap9bH/ZDoywYDz1SCNtQr3bePg8i19abckOoc+2xliP3ZWPAJOUpqrOtHrpCM4iw7isRw2HS1RwhO81bERu0ByWHDKKVgAidMrbhMOhiksBdego3bRSf789KlG+EsQPVXf4aAZm11ym7Wmsc290UOtfT+JrGdHzv1lD/VOG9y7c=
+	t=1767635259; cv=none; b=VLFIkl413pxqeZBr6GWk/juvJSt7KDCeX4Ft5KQIp62RN+7R3FYKhrVVR9BX5/gu44Jdr+pexfvfPANt087F3+YZxQJFywrPEZ20ilSpNVNSHz77A2guupiSmgNC4p/9fapJfUcabHiNB/NOWN8GFVp/7eqkqrtHM15enwKQUoI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767635118; c=relaxed/simple;
-	bh=7sNkA7xhl9kxwedUqpqBxYuPDFQnkNhl3zCI3WdX2Zc=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=RXvhr8RYzHXAs+K6nBT3P8OZWNZ6Lh5sgmZK1VhTe+kARbmjRqbRwZsIx+FDQN6B+Is5VL0BnLs/Qi51fxuXPlh2OjlcBqTSwL5iJA70Ihocvv3HEjWvDtb+3iPr+q2Y/Bp5p5B34FjJW6ct2dv/6g3pMEG9ZtTd9LDHr3rZyEs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fsI7RfVr; arc=none smtp.client-ip=209.85.215.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1767635259; c=relaxed/simple;
+	bh=wirrKdUILPa+ztEIgAAZT9tqHv9j2vrUAip4DfwBiuI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=IGfE5OCgEj3K4aQ6WrH5ecNPvNbOhBB8ARLSOfR6aG5UoGZ4nMd56DeBkPj0ZhdIsCu1BeLuIsoyDCNFCERkJeIP57Wq88SkcjX18c4VF6l4RpbxZh04ZmaTZW+3/o2b7mDlk5GjEnIzx2xU3LmrOE7qdN7E7rnLzP/OcI/A8a0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=danielhodges.dev; spf=pass smtp.mailfrom=danielhodges.dev; dkim=pass (2048-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b=SOjOeS5d; dkim=permerror (0-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b=cTswnLwF; arc=none smtp.client-ip=135.148.138.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=danielhodges.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=danielhodges.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fsI7RfVr"
-Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-bde0f62464cso99856a12.2
-        for <bpf@vger.kernel.org>; Mon, 05 Jan 2026 09:45:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1767635116; x=1768239916; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=lTVNrbVTa+G+TWLvc9H4X9UDBXSMZSGYoyeRsLzfSLk=;
-        b=fsI7RfVrfr8+mLptNtWXETK+pESWt4BDLc1xHOz6yvw+cv+wEPdYqA8ccWngxGxLqK
-         blMrCJrR1MkwPcwRSn2Vvr6oz8TwOtO7g1YAKOksovHmDnxbc26gWXLh+aHUAn1FdO5C
-         29JKwgX0CndDfhD1fl3BZIA2MpNBJYna1AIB0BlLUoOPWKso0D9t9IV49LP8+NHaG7sl
-         jOM1xgw99RseTjlXLroQssJSpe23OoNhejHydOT03XcCD7J9xAHvGv6oTqWJ3t0/vcb/
-         Yr2XrgA25fHalzH9wf10d8NCu+n3pEqXeoClBukBGSdxKTUV2CXHGh42lbGjvgZVmzL0
-         TnmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767635116; x=1768239916;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lTVNrbVTa+G+TWLvc9H4X9UDBXSMZSGYoyeRsLzfSLk=;
-        b=L72/4ZSKRHgf1K2SIYScENrgNzdLHZIyzaCp+5FOjjyVbdRFrm9AOufYyYFZDc/eX9
-         2Zoi3tiNtO49UkMpmupQG+lKDsnxfm5w/Z1xNyjBvc38PfKHZYC6gi1kV58lPlt8bcKy
-         CtWdw8YW7dQCENfAjjxfcSxqHpgcrHWXoLh9BuKByer04mqEz+ixFkFo9kOj2hcEL2hD
-         lKaltUH8U+KeHFmaD0oCzBg4qg4sEOu9cItIr5ni9B4ZCtGnULTaw1djONlmm4Qx7We1
-         dv4c7+pBtp1Jr4hq0X3LJVV3aHJqulIbk8Z/abQsZ8OjPWEq3SGPZ5oVoBfzVPm76Gxj
-         +8Hg==
-X-Forwarded-Encrypted: i=1; AJvYcCWU3cc4EkCcYkXYnZFvyWJWxHK2yuZ9s7BlE0oZmwKcpWMrciXdGcWmlEi2L6qfGLHfiNY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yym4J4LOazd01OMGyXHPyARuuz3/onpFFJoFQq+oJokljPdpBis
-	5zknszCl51TTQwG+e/4mlgjdCRWfy81y3PxmpEe1+r3i5eYCzc7asTZr
-X-Gm-Gg: AY/fxX6tc0lVdlRpOzVcQpe4jMVd1tVY60lO0fndLHo/HhooG6Ui4hdl2q3R4EXmcRy
-	Rz7GMwtOjXJ03FYPmPULyNc3gXqYVFtCf6dQGLRpZRcx/GYDvGRrGFjwYuzrv4I7E8e723vaCxq
-	gU4DguWQ7Y+bhsPP4Zi/4z/svvFmF0U2oYhoR6zPMHlCVwr8dUqhaRLdB1hHCmmFFqFN3IJRa4X
-	G8UKQZUy/sRVqeqKHOtsPEBFw6b8TUBf+i1vbv6NL7cJio10szJiGD9wRTf9uqBBa0/CZjITCyi
-	HBNvHwhhNFvT5DY4PPy5cpd+4u1N0V/msZbWi3bs0qta8wy8FKIKUbY9jrmEBD6cy72fYYtCU/0
-	5YQtvKg5mbmS+HPRjqgx2g8jXL6V2lixcocPy3U56dJ8qNafyMC8a7Z52qabyTVdsqz0XeZMAQe
-	VWk+Tqz2Vp3Y8/V25v57ts75Ya15ag3IGUBIJp
-X-Google-Smtp-Source: AGHT+IHwqflAWpHbFYx4gUYYKc+Iao7re9ab7WD0vrEsaxmDed0XXnADhREOOc9mSQN3CehRMwjA6A==
-X-Received: by 2002:a05:693c:2c92:b0:2ac:1b11:bf98 with SMTP id 5a478bee46e88-2b16f906cc0mr82752eec.28.1767635116108;
-        Mon, 05 Jan 2026 09:45:16 -0800 (PST)
-Received: from ?IPv6:2a03:83e0:115c:1:175e:3ec9:5deb:d470? ([2620:10d:c090:500::2:d7b1])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b16f16faffsm459465eec.1.2026.01.05.09.45.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Jan 2026 09:45:15 -0800 (PST)
-Message-ID: <08ab237ad7da8d1f6494cb434d9a5a46a599462c.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v2 1/2] bpf, x86: inline bpf_get_current_task()
- for x86_64
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Menglong Dong <menglong8.dong@gmail.com>, ast@kernel.org
-Cc: davem@davemloft.net, dsahern@kernel.org, daniel@iogearbox.net, 
-	andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
- yonghong.song@linux.dev, 	john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@fomichev.me, haoluo@google.com, 	jolsa@kernel.org, tglx@linutronix.de,
- mingo@redhat.com, bp@alien8.de, 	dave.hansen@linux.intel.com,
- x86@kernel.org, hpa@zytor.com, netdev@vger.kernel.org, 
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Date: Mon, 05 Jan 2026 09:45:13 -0800
-In-Reply-To: <20260104131635.27621-2-dongml2@chinatelecom.cn>
-References: <20260104131635.27621-1-dongml2@chinatelecom.cn>
-	 <20260104131635.27621-2-dongml2@chinatelecom.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.2 (3.58.2-1.fc43) 
+	dkim=pass (2048-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b="SOjOeS5d";
+	dkim=permerror (0-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b="cTswnLwF"
+DKIM-Signature: v=1; a=rsa-sha256; s=202510r; d=danielhodges.dev; c=relaxed/relaxed;
+	h=Message-ID:Date:Subject:To:From; t=1767634676; bh=4RFsQG38WUaFBQCY8IsR0nQ
+	s4fmT2fb1harffXkZ3+Q=; b=SOjOeS5d0Joldy7ixTWiryY6+PhZ7Cyd+Hdh7pOCR+PaItZecM
+	gvSB4wjcR07uLSzt9mU+0taiX4/Ey1ZuySFQ6aWyJWl+b8XwGCDqqMMGEr79R5QWYJEpZa8cLqs
+	6fe5uuy7Nu1POaRCuehk5gmvtsWmQLN78B6EiGNq7oU9KXvSmPUuEAvD8RBKdCHakrprSq9E0ue
+	0P2gBe4mwyl0QIie0PP6jJ5+rz0ZsLOxYCP1WSBwLuYDS/cPbU43+cnt4+HHrMqfVPtwofFuoWf
+	LL5Z9wzPVJ1VzeLyZ00qDuQj2P501jG7UKqhMrRXKBNdZyhhJfL/F7NEEL7jtmg4YcQ==;
+DKIM-Signature: v=1; a=ed25519-sha256; s=202510e; d=danielhodges.dev; c=relaxed/relaxed;
+	h=Message-ID:Date:Subject:To:From; t=1767634676; bh=4RFsQG38WUaFBQCY8IsR0nQ
+	s4fmT2fb1harffXkZ3+Q=; b=cTswnLwFl3a4OxJh/0Ynnwofzfws5qYC+jaUAKQByZPQluwJqL
+	EBjY7kViMDeDTqezYczIT5tJHQG5vgUZnpCg==;
+From: Daniel Hodges <git@danielhodges.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Vadim Fedorenko <vadim.fedorenko@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Mykyta Yatsenko <yatsenko@meta.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	"David S . Miller" <davem@davemloft.net>,
+	linux-crypto@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Daniel Hodges <git@danielhodges.dev>
+Subject: [PATCH bpf-next v4 1/6] crypto: Add BPF hash algorithm type registration module
+Date: Mon,  5 Jan 2026 12:37:50 -0500
+Message-ID: <20260105173755.22515-2-git@danielhodges.dev>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <20260105173755.22515-1-git@danielhodges.dev>
+References: <20260105173755.22515-1-git@danielhodges.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Sun, 2026-01-04 at 21:16 +0800, Menglong Dong wrote:
-> Inline bpf_get_current_task() and bpf_get_current_task_btf() for x86_64
-> to obtain better performance. The instruction we use here is:
->=20
->   65 48 8B 04 25 [offset] // mov rax, gs:[offset]
->=20
-> Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
-> ---
-> v2:
-> - check the variable type in emit_ldx_percpu_r0 with __verify_pcpu_ptr
-> - remove the usage of const_current_task
-> ---
->  arch/x86/net/bpf_jit_comp.c | 36 ++++++++++++++++++++++++++++++++++++
->  1 file changed, 36 insertions(+)
->=20
-> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-> index e3b1c4b1d550..f5ff7c77aad7 100644
-> --- a/arch/x86/net/bpf_jit_comp.c
-> +++ b/arch/x86/net/bpf_jit_comp.c
-> @@ -1300,6 +1300,25 @@ static void emit_st_r12(u8 **pprog, u32 size, u32 =
-dst_reg, int off, int imm)
->  	emit_st_index(pprog, size, dst_reg, X86_REG_R12, off, imm);
->  }
-> =20
-> +static void __emit_ldx_percpu_r0(u8 **pprog, __force unsigned long ptr)
-> +{
-> +	u8 *prog =3D *pprog;
-> +
-> +	/* mov rax, gs:[ptr] */
-> +	EMIT2(0x65, 0x48);
-> +	EMIT2(0x8B, 0x04);
-> +	EMIT1(0x25);
-> +	EMIT((u32)ptr, 4);
-> +
-> +	*pprog =3D prog;
-> +}
-> +
-> +#define emit_ldx_percpu_r0(prog, variable)					\
-> +	do {									\
-> +		__verify_pcpu_ptr(&(variable));					\
-> +		__emit_ldx_percpu_r0(&prog, (__force unsigned long)&(variable));\
-> +	} while (0)
-> +
->  static int emit_atomic_rmw(u8 **pprog, u32 atomic_op,
->  			   u32 dst_reg, u32 src_reg, s16 off, u8 bpf_size)
->  {
-> @@ -2441,6 +2460,12 @@ st:			if (is_imm8(insn->off))
->  		case BPF_JMP | BPF_CALL: {
->  			u8 *ip =3D image + addrs[i - 1];
-> =20
-> +			if (insn->src_reg =3D=3D 0 && (insn->imm =3D=3D BPF_FUNC_get_current_=
-task ||
-> +						   insn->imm =3D=3D BPF_FUNC_get_current_task_btf)) {
+Add bpf_crypto_shash module that registers a hash type with the BPF
+crypto infrastructure, enabling BPF programs to access kernel hash
+algorithms through a unified interface.
 
-I think this should be guarded by IS_ENABLED(CONFIG_SMP).
-The current.h:get_current() used
-arch/x86/include/asm/percpu.h:this_cpu_read_stable() that is unrolled
-to __raw_cpu_read_stable(), which uses __force_percpu_arg(), which uses
-__force_percpu_prefix, which is defined differently depending on CONFIG_SMP=
-.
+Update the bpf_crypto_type interface with hash-specific callbacks:
+   - alloc_tfm: Allocates crypto_shash context with proper descriptor size
+   - free_tfm: Releases hash transform and context memory
+   - has_algo: Checks algorithm availability via crypto_has_shash()
+   - hash: Performs single-shot hashing via crypto_shash_digest()
+   - digestsize: Returns the output size for the hash algorithm
+   - get_flags: Exposes transform flags to BPF programs
 
-> +				emit_ldx_percpu_r0(prog, current_task);
-> +				break;
-> +			}
-> +
->  			func =3D (u8 *) __bpf_call_base + imm32;
->  			if (src_reg =3D=3D BPF_PSEUDO_CALL && tail_call_reachable) {
->  				LOAD_TAIL_CALL_CNT_PTR(stack_depth);
-> @@ -4082,3 +4107,14 @@ bool bpf_jit_supports_timed_may_goto(void)
->  {
->  	return true;
->  }
-> +
-> +bool bpf_jit_inlines_helper_call(s32 imm)
-> +{
-> +	switch (imm) {
-> +	case BPF_FUNC_get_current_task:
-> +	case BPF_FUNC_get_current_task_btf:
-> +		return true;
-> +	default:
-> +		return false;
-> +	}
-> +}
+Update bpf_shash_ctx to contain crypto_shash transform and shash_desc
+descriptor to accommodate algorithm-specific descriptor requirements.
+
+Signed-off-by: Daniel Hodges <git@danielhodges.dev>
+---
+ MAINTAINERS               |  1 +
+ crypto/Makefile           |  3 ++
+ crypto/bpf_crypto_shash.c | 95 +++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 99 insertions(+)
+ create mode 100644 crypto/bpf_crypto_shash.c
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 70c2b73b3941..05e0aee5693c 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -4712,6 +4712,7 @@ BPF [CRYPTO]
+ M:	Vadim Fedorenko <vadim.fedorenko@linux.dev>
+ L:	bpf@vger.kernel.org
+ S:	Maintained
++F:	crypto/bpf_crypto_shash.c
+ F:	crypto/bpf_crypto_skcipher.c
+ F:	include/linux/bpf_crypto.h
+ F:	kernel/bpf/crypto.c
+diff --git a/crypto/Makefile b/crypto/Makefile
+index 16a35649dd91..853dff375906 100644
+--- a/crypto/Makefile
++++ b/crypto/Makefile
+@@ -30,6 +30,9 @@ obj-$(CONFIG_CRYPTO_ECHAINIV) += echainiv.o
+ crypto_hash-y += ahash.o
+ crypto_hash-y += shash.o
+ obj-$(CONFIG_CRYPTO_HASH2) += crypto_hash.o
++ifeq ($(CONFIG_BPF_SYSCALL),y)
++obj-$(CONFIG_CRYPTO_HASH2) += bpf_crypto_shash.o
++endif
+ 
+ obj-$(CONFIG_CRYPTO_AKCIPHER2) += akcipher.o
+ obj-$(CONFIG_CRYPTO_SIG2) += sig.o
+diff --git a/crypto/bpf_crypto_shash.c b/crypto/bpf_crypto_shash.c
+new file mode 100644
+index 000000000000..95c178ec0ce8
+--- /dev/null
++++ b/crypto/bpf_crypto_shash.c
+@@ -0,0 +1,95 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/* Copyright (c) 2025 Meta Platforms, Inc. and affiliates. */
++#include <linux/types.h>
++#include <linux/module.h>
++#include <linux/bpf_crypto.h>
++#include <crypto/hash.h>
++
++struct bpf_shash_ctx {
++	struct crypto_shash *tfm;
++	struct shash_desc desc;
++};
++
++static void *bpf_crypto_shash_alloc_tfm(const char *algo)
++{
++	struct bpf_shash_ctx *ctx;
++	struct crypto_shash *tfm;
++
++	tfm = crypto_alloc_shash(algo, 0, 0);
++	if (IS_ERR(tfm))
++		return tfm;
++
++	ctx = kzalloc(sizeof(*ctx) + crypto_shash_descsize(tfm), GFP_KERNEL);
++	if (!ctx) {
++		crypto_free_shash(tfm);
++		return ERR_PTR(-ENOMEM);
++	}
++
++	ctx->tfm = tfm;
++	ctx->desc.tfm = tfm;
++
++	return ctx;
++}
++
++static void bpf_crypto_shash_free_tfm(void *tfm)
++{
++	struct bpf_shash_ctx *ctx = tfm;
++
++	crypto_free_shash(ctx->tfm);
++	kfree(ctx);
++}
++
++static int bpf_crypto_shash_has_algo(const char *algo)
++{
++	return crypto_has_shash(algo, 0, 0);
++}
++
++static int bpf_crypto_shash_hash(void *tfm, const u8 *data, u8 *out,
++				 unsigned int len)
++{
++	struct bpf_shash_ctx *ctx = tfm;
++
++	return crypto_shash_digest(&ctx->desc, data, len, out);
++}
++
++static unsigned int bpf_crypto_shash_digestsize(void *tfm)
++{
++	struct bpf_shash_ctx *ctx = tfm;
++
++	return crypto_shash_digestsize(ctx->tfm);
++}
++
++static u32 bpf_crypto_shash_get_flags(void *tfm)
++{
++	struct bpf_shash_ctx *ctx = tfm;
++
++	return crypto_shash_get_flags(ctx->tfm);
++}
++
++static const struct bpf_crypto_type bpf_crypto_shash_type = {
++	.alloc_tfm	= bpf_crypto_shash_alloc_tfm,
++	.free_tfm	= bpf_crypto_shash_free_tfm,
++	.has_algo	= bpf_crypto_shash_has_algo,
++	.hash		= bpf_crypto_shash_hash,
++	.digestsize	= bpf_crypto_shash_digestsize,
++	.get_flags	= bpf_crypto_shash_get_flags,
++	.owner		= THIS_MODULE,
++	.name		= "hash",
++};
++
++static int __init bpf_crypto_shash_init(void)
++{
++	return bpf_crypto_register_type(&bpf_crypto_shash_type);
++}
++
++static void __exit bpf_crypto_shash_exit(void)
++{
++	int err = bpf_crypto_unregister_type(&bpf_crypto_shash_type);
++
++	WARN_ON_ONCE(err);
++}
++
++module_init(bpf_crypto_shash_init);
++module_exit(bpf_crypto_shash_exit);
++MODULE_LICENSE("GPL");
++MODULE_DESCRIPTION("Hash algorithm support for BPF");
+-- 
+2.51.0
+
