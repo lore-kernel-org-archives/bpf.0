@@ -1,166 +1,269 @@
-Received: from out-181.mta0.migadu.com (out-181.mta0.migadu.com [91.218.175.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C991D3502A8
-	for <bpf@vger.kernel.org>; Tue,  6 Jan 2026 17:22:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0D12350A16
+	for <bpf@vger.kernel.org>; Tue,  6 Jan 2026 17:22:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767720128; cv=none; b=EFmgJq4zFUa8pQpj7OhZBPfghqSJyP+ElYSdNE8DeUVbNvQveor+0Y2ROcS0X7jcFvqsvvyoxtQWpMv9nIgXU/a9IauNtEBD1Fsob5yh9xfy6EF2kUOd6X7MywPrpefTomAYCEghXUVl3NEcKcics/iUc+Te+K6JRz0tZYyi//Y=
+	t=1767720131; cv=none; b=BkVFcWPLKswBvbdGYLkR2BEkPCpxz0izFBBGc7PHMfxooszqanazhZVN2Ylv7t1oUaOfLziC4Oda6zsPMHKtVjhyVMh1qVvUa4AnLJT6y9lLur+zuvfXGrqBYex21eDLpOAAVXggRlA0EbP4Nz035fjFXek5I48oKrpDrfUpdHA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767720128; c=relaxed/simple;
-	bh=HxI4+nzQuzg70aSRlSj9KKaRq21uALuyDmmimZAfIfI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=kg62XfdrW4HqkKfKf+KQ802JXYSoP6rdn7FqIlXNU0g8zhIL/GNrmoXrXuBeY7N71BdGK9CTRxOXehg3Icj9Av7DpIgAqmvaaUDZTOacDu2BSYCnIMIQPQZYGDFdHA8HsJBaVzjV+l+W27f5CJPN1uYC6oCviSXeTDpeoC/AZDM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=A3x0HJVr; arc=none smtp.client-ip=91.218.175.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1767720131; c=relaxed/simple;
+	bh=mNuNf0GoqZpiXPiSKnBKwesRdbVIpfz5NaEY4M5hk40=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=SwPudrbTDosIlOyAxQjMUFyoKtHtMqT3pFaBOH4KIU/5BEqAM34Yk8RxrlyJcR3+fJIllj+bkHvW/WlkSiDMVSYyCMj1AjHQnbfvVT6Eu80fk3JfqbJn7THv6YoWe6nTWjXfoU+EjLznSUSW/91qZqv4q/eZM78rRjfGXPVLrBI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YN42gavb; arc=none smtp.client-ip=209.85.208.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="A3x0HJVr"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1767720123;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=mSPAXTe59AXqGHWDQ1uMbUsQxBwsOMvl1BeG421F/78=;
-	b=A3x0HJVrxScEAlTcSIG2ScmXBWFPoL8hCdG9KeFsqmeMKN4ms+ZAsaB9T5hSD/DJfMS2/P
-	+ElCGOriVYdSUPvMfdh2oPLuohKcw8t7dN47czjtJA3obQovjwklGy8PsyCg6f/HjpydsI
-	LLAT0bxLCCpF8rhkx2rLuSLMmkFUaWg=
-From: Leon Hwang <leon.hwang@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Christian Brauner <brauner@kernel.org>,
-	Oleg Nesterov <oleg@redhat.com>,
-	Leon Hwang <leon.hwang@linux.dev>,
-	Seth Forshee <sforshee@kernel.org>,
-	Yuichiro Tsuji <yuichtsu@amazon.com>,
-	Andrey Albershteyn <aalbersh@redhat.com>,
-	Willem de Bruijn <willemb@google.com>,
-	Jason Xing <kerneljasonxing@gmail.com>,
-	Paul Chaignon <paul.chaignon@gmail.com>,
-	Mykyta Yatsenko <yatsenko@meta.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Anton Protopopov <a.s.protopopov@gmail.com>,
-	Amery Hung <ameryhung@gmail.com>,
-	Rong Tao <rongtao@cestc.cn>,
-	linux-kernel@vger.kernel.org,
-	linux-api@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	kernel-patches-bot@fb.com
-Subject: [RESEND PATCH bpf-next v4 8/9] libbpf: Add common attr support for map_create
-Date: Wed,  7 Jan 2026 01:20:17 +0800
-Message-ID: <20260106172018.57757-9-leon.hwang@linux.dev>
-In-Reply-To: <20260106172018.57757-1-leon.hwang@linux.dev>
-References: <20260106172018.57757-1-leon.hwang@linux.dev>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YN42gavb"
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-64b92abe63aso2412431a12.0
+        for <bpf@vger.kernel.org>; Tue, 06 Jan 2026 09:22:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1767720128; x=1768324928; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Xgvwz2gDwwXwFnFWlzKsD5/iqv4laUDyFosa30OhvdU=;
+        b=YN42gavbaYu8hnZRw4FdxfPvgjyymRZMAg77rae/qhRWCGgdVwTOOWMwQFCwCcvfJX
+         CKdG1dp9tRJwHg6XA7u5JSQ6P1ZQQOeDlFaCKo0fkCDefeikUyyHHKtBHjZ+LSLezFD4
+         Fk1DjleOrIGhXjGiQQKwXR/CKK1h3xc5dXJkrhj47/Pml6pi7cYgULeE9n14eyf0haDo
+         3kQDQCblokD/gEKCWs7fc6+jnasBbKJ8C4lD/YwX2xzMeKJypFiRSgWkkCBoo9Dzsbl1
+         sl9SoItgCi/WVWiH0InITZtE/H90QtBcpuXBa+U/nMVERspnNY030i+sNazU1OAkMe4e
+         BEmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767720128; x=1768324928;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Xgvwz2gDwwXwFnFWlzKsD5/iqv4laUDyFosa30OhvdU=;
+        b=P6ULQWW21PXI0EoKx5WW4m1UU8xZmAySpiuF579QvepkPT0C7aK0F1/77K0KlDHQEa
+         hECcco5SwDWpeTAx1s/r5We/OsNmCRvajMBHXeBPw9/KwheT8y1blC1/5G4K3DZq7W2w
+         3go660e05W4FFOIjnERm7J+QJqeLEzdGWjhzhvrbTfkhyDFKhoXfOtwnW/zSkWc22ySt
+         r9o/IjZCDA3FToCr2/guINoreE+E+fuTXCy4Nzo2ko3f7kKPCmAX7ddDGlle9sJXhrnN
+         NoBFIa9lH/BotrzNZoM4WIC1auSJ3+0E9erbbfXHiaXYIMvfcVln+Svi5l7Ayc7w//iy
+         TXHQ==
+X-Gm-Message-State: AOJu0YwwRHnlCvcrjU0edgo44AjwhRkAUdOSiV3t1K/A/f4vIZl4qr/n
+	fdhDKVIRA9zd5ST8Vbdc61sydgilUxUPwqOxVSPl+dWUD9wJS/aHdG+LsUBK+oVSy4eQWoT0A+5
+	Ft+Q2LZ//gXkjGJ6qru6aDyL5U6cEjl0=
+X-Gm-Gg: AY/fxX5p6PLzp7laHWiMWZptUu4E47liDw2eO5OmZBEUFMKBPOISTDWaRh+GsNlsJH0
+	r1o4nOy3mEJ6Yh7BkfBLrt970GWxL5L92gFkQpkNGl2zkHcYcHeDT4+zSyVjksilfcAaWNNxRKU
+	oguGe3umz7NbKIHx9xk1qbKkJOAMMRRBGpKYXZEUOZDIYdHE1k72sSUEZMqXWjsH+4hOa3uFmht
+	Drg9EWaQGLmwYmEaKZ9R6zP6/oUS9+IRyD5DRpW7lcynd2ukj+Fu2K1wlNuRf0+aWCGsCzO4Cvi
+	Y9ZRmloG
+X-Google-Smtp-Source: AGHT+IE8pjDMyDVKpMMbf/2BiQqNtZgddmWmaDb10R4MPn2DoKTVLhyn3/eiAAgllpbNvrDmIvCARFLb3kX+KMUWjGk=
+X-Received: by 2002:a17:907:70c:b0:b73:80de:e6b2 with SMTP id
+ a640c23a62f3a-b8426bf10a8mr408936466b.31.1767720127814; Tue, 06 Jan 2026
+ 09:22:07 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+References: <20260103022310.935686-1-puranjay@kernel.org> <20260103022310.935686-2-puranjay@kernel.org>
+In-Reply-To: <20260103022310.935686-2-puranjay@kernel.org>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Tue, 6 Jan 2026 09:21:50 -0800
+X-Gm-Features: AQt7F2rkeBOoKZwWdih78_H7gWM6d9JlU5oiz-JtbbuJ6f4iYHk1C8pnGeLJ42c
+Message-ID: <CAEf4BzYeF2sUqEzfT6aLuBVuh1W8fkxHoFjBf-e5nvJW9UgQLw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 1/2] bpf: Recognize special arithmetic shift
+ in the verifier
+To: Puranjay Mohan <puranjay@kernel.org>
+Cc: bpf@vger.kernel.org, Puranjay Mohan <puranjay12@gmail.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, kernel-team@meta.com, sunhao.th@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-With the previous commit adding common attribute support for
-BPF_MAP_CREATE, it is now possible to retrieve detailed error messages
-when map creation fails by using the 'log_buf' field from the common
-attributes.
+On Fri, Jan 2, 2026 at 6:24=E2=80=AFPM Puranjay Mohan <puranjay@kernel.org>=
+ wrote:
+>
+> From: Alexei Starovoitov <ast@kernel.org>
+>
+> cilium bpf_wiregard.bpf.c when compiled with -O1 fails to load
+> with the following verifier log:
+>
+> 192: (79) r2 =3D *(u64 *)(r10 -304)     ; R2=3Dpkt(r=3D40) R10=3Dfp0 fp-3=
+04=3Dpkt(r=3D40)
+> ...
+> 227: (85) call bpf_skb_store_bytes#9          ; R0=3Dscalar()
+> 228: (bc) w2 =3D w0                     ; R0=3Dscalar() R2=3Dscalar(smin=
+=3D0,smax=3Dumax=3D0xffffffff,var_off=3D(0x0; 0xffffffff))
+> 229: (c4) w2 s>>=3D 31                  ; R2=3Dscalar(smin=3D0,smax=3Duma=
+x=3D0xffffffff,smin32=3D-1,smax32=3D0,var_off=3D(0x0; 0xffffffff))
+> 230: (54) w2 &=3D -134                  ; R2=3Dscalar(smin=3D0,smax=3Duma=
+x=3Dumax32=3D0xffffff7a,smax32=3D0x7fffff7a,var_off=3D(0x0; 0xffffff7a))
+> ...
+> 232: (66) if w2 s> 0xffffffff goto pc+125     ; R2=3Dscalar(smin=3Dumin=
+=3Dumin32=3D0x80000000,smax=3Dumax=3Dumax32=3D0xffffff7a,smax32=3D-134,var_=
+off=3D(0x80000000; 0x7fffff7a))
+> ...
+> 238: (79) r4 =3D *(u64 *)(r10 -304)     ; R4=3Dscalar() R10=3Dfp0 fp-304=
+=3Dscalar()
+> 239: (56) if w2 !=3D 0xffffff78 goto pc+210     ; R2=3D0xffffff78 // -136
+> ...
+> 258: (71) r1 =3D *(u8 *)(r4 +0)
+> R4 invalid mem access 'scalar'
+>
+> The error might confuse most bpf authors, since fp-304 slot had 'pkt'
+> pointer at insn 192 and became 'scalar' at 238. That happened because
+> bpf_skb_store_bytes() clears all packet pointers including those in
+> the stack. On the first glance it might look like a bug in the source
+> code, since ctx->data pointer should have been reloaded after the call
+> to bpf_skb_store_bytes().
+>
+> The relevant part of cilium source code looks like this:
+>
+> // bpf/lib/nodeport.h
+> int dsr_set_ipip6()
+> {
+>         if (ctx_adjust_hroom(...))
+>                 return DROP_INVALID; // -134
+>         if (ctx_store_bytes(...))
+>                 return DROP_WRITE_ERROR; // -141
+>         return 0;
+> }
+>
+> bool dsr_fail_needs_reply(int code)
+> {
+>         if (code =3D=3D DROP_FRAG_NEEDED) // -136
+>                 return true;
+>         return false;
+> }
+>
+> tail_nodeport_ipv6_dsr()
+> {
+>         ret =3D dsr_set_ipip6(...);
+>         if (!IS_ERR(ret)) {
+>                 ...
+>         } else {
+>                 if (dsr_fail_needs_reply(ret))
+>                         return dsr_reply_icmp6(...);
+>         }
+> }
+>
+> The code doesn't have arithmetic shift by 31 and it reloads ctx->data
+> every time it needs to access it. So it's not a bug in the source code.
+>
+> The reason is DAGCombiner::foldSelectCCToShiftAnd() LLVM transformation:
+>
+>   // If this is a select where the false operand is zero and the compare =
+is a
+>   // check of the sign bit, see if we can perform the "gzip trick":
+>   // select_cc setlt X, 0, A, 0 -> and (sra X, size(X)-1), A
+>   // select_cc setgt X, 0, A, 0 -> and (not (sra X, size(X)-1)), A
+>
+> The conditional branch in dsr_set_ipip6() and its return values
+> are optimized into BPF_ARSH plus BPF_AND:
+>
+> 227: (85) call bpf_skb_store_bytes#9
+> 228: (bc) w2 =3D w0
+> 229: (c4) w2 s>>=3D 31   ; R2=3Dscalar(smin=3D0,smax=3Dumax=3D0xffffffff,=
+smin32=3D-1,smax32=3D0,var_off=3D(0x0; 0xffffffff))
+> 230: (54) w2 &=3D -134   ; R2=3Dscalar(smin=3D0,smax=3Dumax=3Dumax32=3D0x=
+ffffff7a,smax32=3D0x7fffff7a,var_off=3D(0x0; 0xffffff7a))
+>
+> after insn 230 the register w2 can only be 0 or -134,
+> but the verifier approximates it, since there is no way to
+> represent two scalars in bpf_reg_state.
+> After fallthough at insn 232 the w2 can only be -134,
+> hence the branch at insn
+> 239: (56) if w2 !=3D -136 goto pc+210
+> should be always taken, and trapping insn 258 should never execute.
+> LLVM generated correct code, but the verifier follows impossible
+> path and rejects valid program. To fix this issue recognize this
+> special LLVM optimization and fork the verifier state.
+> So after insn 229: (c4) w2 s>>=3D 31
+> the verifier has two states to explore:
+> one with w2 =3D 0 and another with w2 =3D 0xffffffff
+> which makes the verifier accept bpf_wiregard.c
+>
+> Note there are 20+ such patterns in bpf_wiregard.o compiled
+> with -O1 and -O2, but they're rarely seen in other production
+> bpf programs, so push_stack() approach is not a concern.
+>
+> Reported-by: Hao Sun <sunhao.th@gmail.com>
+> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+> Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+> Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
+> ---
+>  kernel/bpf/verifier.c | 34 ++++++++++++++++++++++++++++++++++
+>  1 file changed, 34 insertions(+)
+>
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index c9da70dd3e72..6dbcfae5615b 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -15490,6 +15490,35 @@ static bool is_safe_to_compute_dst_reg_range(str=
+uct bpf_insn *insn,
+>         }
+>  }
+>
+> +static int maybe_fork_scalars(struct bpf_verifier_env *env, struct bpf_i=
+nsn *insn,
+> +                             struct bpf_reg_state *dst_reg)
+> +{
+> +       struct bpf_verifier_state *branch;
+> +       struct bpf_reg_state *regs;
+> +       bool alu32;
+> +
+> +       if (dst_reg->smin_value =3D=3D -1 && dst_reg->smax_value =3D=3D 0=
+)
+> +               alu32 =3D false;
+> +       else if (dst_reg->s32_min_value =3D=3D -1 && dst_reg->s32_max_val=
+ue =3D=3D 0)
+> +               alu32 =3D true;
+> +       else
+> +               return 0;
+> +
+> +       branch =3D push_stack(env, env->insn_idx + 1, env->insn_idx, fals=
+e);
+> +       if (IS_ERR(branch))
+> +               return PTR_ERR(branch);
+> +
+> +       regs =3D branch->frame[branch->curframe]->regs;
+> +       if (alu32) {
+> +               __mark_reg32_known(&regs[insn->dst_reg], 0);
+> +               __mark_reg32_known(dst_reg, -1ull);
 
-Introduce a new struct bpf_syscall_common_attr_opts, which wraps these
-new fields, 'log_buf', 'log_size', 'log_level', and 'log_true_size'.
+Did you get a chance to run veristat with these changes against
+selftests, scx, maybe also Meta BPF objects? Curious if there are any
+noticeable differences.
 
-Extend 'bpf_map_create_opts' with a new field, 'cattr_opts', allowing
-users to capture and inspect those log messages.
+Also, the choice of which branch gets zero vs one set might have
+meaningful differences (heuristically, "linear path" should preferably
+explore conditions that lead to more complete and complex states), so
+I'd be interested to see if and what difference does it make in
+practice.
 
-Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
----
- tools/lib/bpf/bpf.c | 15 ++++++++++++++-
- tools/lib/bpf/bpf.h | 17 ++++++++++++++++-
- 2 files changed, 30 insertions(+), 2 deletions(-)
-
-diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-index 689ade4a822b..4a1ba4951785 100644
---- a/tools/lib/bpf/bpf.c
-+++ b/tools/lib/bpf/bpf.c
-@@ -207,6 +207,9 @@ int bpf_map_create(enum bpf_map_type map_type,
- 		   const struct bpf_map_create_opts *opts)
- {
- 	const size_t attr_sz = offsetofend(union bpf_attr, excl_prog_hash_size);
-+	const size_t common_attrs_sz = sizeof(struct bpf_common_attr);
-+	struct bpf_syscall_common_attr_opts *cattr_opts;
-+	struct bpf_common_attr common_attrs;
- 	union bpf_attr attr;
- 	int fd;
- 
-@@ -240,7 +243,17 @@ int bpf_map_create(enum bpf_map_type map_type,
- 	attr.excl_prog_hash = ptr_to_u64(OPTS_GET(opts, excl_prog_hash, NULL));
- 	attr.excl_prog_hash_size = OPTS_GET(opts, excl_prog_hash_size, 0);
- 
--	fd = sys_bpf_fd(BPF_MAP_CREATE, &attr, attr_sz);
-+	cattr_opts = OPTS_GET(opts, cattr_opts, NULL);
-+	if (cattr_opts && feat_supported(NULL, FEAT_EXTENDED_SYSCALL)) {
-+		memset(&common_attrs, 0, common_attrs_sz);
-+		common_attrs.log_buf = ptr_to_u64(OPTS_GET(cattr_opts, log_buf, NULL));
-+		common_attrs.log_size = OPTS_GET(cattr_opts, log_size, 0);
-+		common_attrs.log_level = OPTS_GET(cattr_opts, log_level, 0);
-+		fd = sys_bpf_ext_fd(BPF_MAP_CREATE, &attr, attr_sz, &common_attrs, common_attrs_sz);
-+		OPTS_SET(cattr_opts, log_true_size, common_attrs.log_true_size);
-+	} else {
-+		fd = sys_bpf_fd(BPF_MAP_CREATE, &attr, attr_sz);
-+	}
- 	return libbpf_err_errno(fd);
- }
- 
-diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
-index 1f9c28d27795..6f544c205b89 100644
---- a/tools/lib/bpf/bpf.h
-+++ b/tools/lib/bpf/bpf.h
-@@ -37,6 +37,18 @@ extern "C" {
- 
- LIBBPF_API int libbpf_set_memlock_rlim(size_t memlock_bytes);
- 
-+struct bpf_syscall_common_attr_opts {
-+	size_t sz; /* size of this struct for forward/backward compatibility */
-+
-+	const char *log_buf;
-+	__u32 log_size;
-+	__u32 log_level;
-+	__u32 log_true_size;
-+
-+	size_t :0;
-+};
-+#define bpf_syscall_common_attr_opts__last_field log_true_size
-+
- struct bpf_map_create_opts {
- 	size_t sz; /* size of this struct for forward/backward compatibility */
- 
-@@ -57,9 +69,12 @@ struct bpf_map_create_opts {
- 
- 	const void *excl_prog_hash;
- 	__u32 excl_prog_hash_size;
-+
-+	struct bpf_syscall_common_attr_opts *cattr_opts;
-+
- 	size_t :0;
- };
--#define bpf_map_create_opts__last_field excl_prog_hash_size
-+#define bpf_map_create_opts__last_field cattr_opts
- 
- LIBBPF_API int bpf_map_create(enum bpf_map_type map_type,
- 			      const char *map_name,
--- 
-2.52.0
-
+> +       } else {
+> +               __mark_reg_known(&regs[insn->dst_reg], 0);
+> +               __mark_reg_known(dst_reg, -1ull);
+> +       }
+> +       return 0;
+> +}
+> +
+>  /* WARNING: This function does calculations on 64-bit values, but the ac=
+tual
+>   * execution may occur on 32-bit values. Therefore, things like bitshift=
+s
+>   * need extra checks in the 32-bit case.
+> @@ -15552,6 +15581,11 @@ static int adjust_scalar_min_max_vals(struct bpf=
+_verifier_env *env,
+>                 scalar_min_max_mul(dst_reg, &src_reg);
+>                 break;
+>         case BPF_AND:
+> +               if (tnum_is_const(src_reg.var_off)) {
+> +                       ret =3D maybe_fork_scalars(env, insn, dst_reg);
+> +                       if (ret)
+> +                               return ret;
+> +               }
+>                 dst_reg->var_off =3D tnum_and(dst_reg->var_off, src_reg.v=
+ar_off);
+>                 scalar32_min_max_and(dst_reg, &src_reg);
+>                 scalar_min_max_and(dst_reg, &src_reg);
+> --
+> 2.47.3
+>
