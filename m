@@ -1,126 +1,203 @@
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DA093659E3
-	for <bpf@vger.kernel.org>; Tue,  6 Jan 2026 18:25:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9265635772D;
+	Tue,  6 Jan 2026 18:30:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767723950; cv=none; b=jGCYkRE0fafsPt+7t0lNsi2NY+yZuJ2PUOMZK9Rzicb0dzZDcsCSRFYdNKsbFskbvSkCP0QJLAfD6aAvEGLPdJvAxWpGhd4BCMzQ7+UQM3E7vAyTHXYhrSUHeQS4ksu6lJS5LHgcNaJginTEFgN8GNBRIwRuodP7aRCUJ8nY/Cw=
+	t=1767724212; cv=none; b=BGeZJx7vQM7XI7O3Y/TaoK0Y1YkakMdWKphg09FNLZDPGuAWSBSZ4BWZIlTW6GtxgETjw/6DMelzAFJjb8JgTD/ELRfMDmUGMPGZAHZKeVC1Yo/x2W8mHSpsLwHwuN5fCGE8cQUilRlLgVPwdcDium2gQxv9NM2s/p1ih1gsAOQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767723950; c=relaxed/simple;
-	bh=4/uoYwkQGGTtpzX8u/eo6P+kwZj4cFQPvTLf1lRyWpE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PGtiVJPpxe9XXxK/K0s+Ch/zfVKMZkgOCcKoVmAjUr91+7aKg8DR8+Bb1OHPh9aOKQh+bvwkbFT4FDVTz5bgX82NkpKXO4Yy/7z5JzIrFz4a8ztN5yUJ2UWSzfYaKepC2SjLMiO+8i4VMHW5tsAVEqA7DQ6gpMM2OblmxodFFa8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DfG8s8+t; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1767724212; c=relaxed/simple;
+	bh=Dz2Ym3tEX0RcebBf6gO93gpP/oqEAI8XAzvZV8Sdss0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dBUFXcclzfFkuA7ca1kwlPd0qNU5fqrQKIEqN2FzMw5GYaNd/GYqXx74eEdQAhJOSAxyNouywZltSyPh3YYQyoreM1OFlu33QlsGbe2Z3Wb8vPpik0H3fA3Q/nvQoV1FeVb1BhCaIY/btw7AWCYzxaUD/kU8nvaPmYY6EwDNm8c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Imo6Vi6z; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DfG8s8+t"
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-477619f8ae5so10376415e9.3
-        for <bpf@vger.kernel.org>; Tue, 06 Jan 2026 10:25:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1767723947; x=1768328747; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8AoW3ejQJ9eJjCHqIfu+Ch/7dBIUphGUj0Go0KFZrfM=;
-        b=DfG8s8+tadcL4jRIo/J0HtPnNGyrbsa2sDc8TZ93u+c0UQEbolmmt/zfQQZwxU2ilz
-         jsF3QysM8ChrgxrHkl+fYTjVpqTrQJoQegvNajGXOVS8d071ho4vzUqIw3qoTsp7/EKd
-         Uo6vxiRCoYD69EUESADbGPWXUeXHJLgcctzp8ZZeaPxXm3cfzIKvvA0tBv6lxLuKI/aD
-         El8l/VDbIkvpEm/QU+oOBNSM3EUsbApmjDvqkm+jsJscvKqmmeiHlX8n2BA/WoE4NVSG
-         GUQcH7el3obAojQ8EG//K+EkOuYXUlOPAtylwG+o7hR2qrJpiRaKrDmYprBZqKCUu08I
-         HkBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767723947; x=1768328747;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=8AoW3ejQJ9eJjCHqIfu+Ch/7dBIUphGUj0Go0KFZrfM=;
-        b=dvU+EhyrxfkoIsD2WLLw7MRBTz9DhQ3d0habuDHtNk096AlsFfFHtIFvkkkEOUnfux
-         K8SjJJLUlq22rYX6Be6iktbobS5QerPtQrQdIQJIML4TQxVNo1CfpCIMU6kPI2py/nLH
-         lkWv9jnDprwvoxJW94ItbMpkk4sjbPD8q581kLRpyNqoWO1JR2mP1HicjLDhLPwA+oJf
-         q6qLvKurYoWQf0W0s1g4eIvJYwiJt2WF/yisbCg6Sm6G0YFJf8wS8qK0/xPwA1bs57UM
-         yFBFx2ek1xLfaKvFJnILwW3bqYqNBOyM71sKCabzAprtUylWyTa4TpMfriJNq1HNqqXZ
-         haIg==
-X-Gm-Message-State: AOJu0Yxm3HxFnMQFDwLdFKlv9gCL2F2AhQ8/jnOYtxN5+oTLKL8TQ93E
-	HH9muvjOFzMZldaP8v4FYZP+MpP0dIenKwokgxCXN5ovG8G4x20Z2oVRoAnVXdmfhdLs0yFlpD6
-	IgklI22U8y1mfMhwPj7B/kPZSZk3IM4E=
-X-Gm-Gg: AY/fxX7euLVvn3kH5dWYBTkXOfeP8SQjcjAK+FnBC8RDVNXHULM5OpW7lJipbKAlz3l
-	c4bFcdYPjczOWhb46/01OLrBk/9DFcTp4TwF9UERi/+N5lU5f2bIkuiRY1vUremcWOvo17Zob1X
-	J7FVQ3Mg3hcQtSKWEPiY0w3nInLSlHgJ+S8n/RGi51UyQy4dSPbTLvk02j3TULeIoZhzFHYxN48
-	0MXn8pOl+kXEoNWbFgg6Ku56Wou9G1flTRknVKoAItRQBfum3tgTCXO9yQPaOnJvRE0Fw0LS8Gw
-	p22FEH3T3Y8=
-X-Google-Smtp-Source: AGHT+IGsGnfJfAF5gkbuaYurEsk4m0EVmraVoF9eJkmzNVjRcPqqWh0CPN/0EqZ+853//q0ziJrMzLBUR+RerHVtZoI=
-X-Received: by 2002:a05:6000:1862:b0:431:8ff:206b with SMTP id
- ffacd0b85a97d-432c3628095mr123323f8f.2.1767723946574; Tue, 06 Jan 2026
- 10:25:46 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Imo6Vi6z"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08574C116C6;
+	Tue,  6 Jan 2026 18:30:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1767724212;
+	bh=Dz2Ym3tEX0RcebBf6gO93gpP/oqEAI8XAzvZV8Sdss0=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+	b=Imo6Vi6zvqA+DeKky0oisrMVTDWZpotrHxiQo5taDd7u3WudO5R1Q8xTu6t167KS/
+	 4jldPkQ461Y72oEHbc4u+pEPX7CgR4Es2XqCtj585d/2bdHAGf/zZTR8zLt4EBVydw
+	 eFjV5STlTtWWXTU2kVIMVB+8RY27ExryDqPz1ljZqHi3bkJso71efW5KflAHfXMGnn
+	 Qkcn/UabvDc8frhG/aAWMqkd8o6G1GaBgcyXNkELcMb5LO2bhTQYmddz1yrItHj+/e
+	 ozdGbJo4Tr/g4J5Vo9J2mZHUGgjDIlbLHbRV7YZY84l9RG01ImjnOqIGdYsqAEGq8I
+	 0Aa1bwwqbG2tA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id 24DF9CE0B06; Tue,  6 Jan 2026 10:30:11 -0800 (PST)
+Date: Tue, 6 Jan 2026 10:30:11 -0800
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Boqun Feng <boqun.feng@gmail.com>, linux-rt-devel@lists.linux.dev,
+	rcu@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Joel Fernandes <joelagnelf@nvidia.com>,
+	Josh Triplett <josh@joshtriplett.org>,
+	Lai Jiangshan <jiangshanlai@gmail.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Uladzislau Rezki <urezki@gmail.com>, Zqiang <qiang.zhang@linux.dev>,
+	bpf@vger.kernel.org
+Subject: Re: [RFC PATCH 1/2] rcu: Add rcu_read_lock_notrace()
+Message-ID: <24a769a9-274c-452f-904f-fa1cc8271183@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <512331d8-fdb4-4dc1-8d9b-34cc35ba48a5@paulmck-laptop>
+ <bbe08cca-72c4-4bd2-a894-97227edcd1ad@efficios.com>
+ <16dd7f3c-1c0f-4dfd-bfee-4c07ec844b72@paulmck-laptop>
+ <20250716110922.0dadc4ec@batman.local.home>
+ <895b48bd-d51e-4439-b5e0-0cddcc17a142@paulmck-laptop>
+ <bb20a575-235b-499e-aa1d-70fe9e2c7617@paulmck-laptop>
+ <e8f7829c-51c9-494a-827a-ee471b2e17cd@efficios.com>
+ <2d9eb910-f880-4966-ba40-9b1e0835279c@efficios.com>
+ <2f8bb8bb-320e-480f-9a56-8eb5cbd4438a@paulmck-laptop>
+ <42ec09a2-ba39-4277-94ee-faca1540a4c8@efficios.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251126145039.15715-1-leon.hwang@linux.dev>
-In-Reply-To: <20251126145039.15715-1-leon.hwang@linux.dev>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Tue, 6 Jan 2026 10:25:33 -0800
-X-Gm-Features: AQt7F2pJ_Liu0LKeNcvMVLFvGCOlEacrr7yy9EMutoWB-gdLesv_S3yuLaz6VF4
-Message-ID: <CAADnVQLisw1HFdDKWvSyWGdpVE1wSUdUBB=5aE7srHjsLNELPg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v12 0/7] bpf: Introduce BPF_F_CPU and
- BPF_F_ALL_CPUS flags for percpu maps
-To: Leon Hwang <leon.hwang@linux.dev>
-Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Jiri Olsa <jolsa@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Song Liu <song@kernel.org>, Eduard <eddyz87@gmail.com>, 
-	Daniel Xu <dxu@dxuuu.xyz>, =?UTF-8?Q?Daniel_M=C3=BCller?= <deso@posteo.net>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Shuah Khan <shuah@kernel.org>, Jason Xing <kerneljasonxing@gmail.com>, 
-	Tao Chen <chen.dylane@linux.dev>, Willem de Bruijn <willemb@google.com>, 
-	Paul Chaignon <paul.chaignon@gmail.com>, Anton Protopopov <a.s.protopopov@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Mykyta Yatsenko <yatsenko@meta.com>, 
-	Tobias Klauser <tklauser@distanz.ch>, kernel-patches-bot@fb.com, 
-	LKML <linux-kernel@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <42ec09a2-ba39-4277-94ee-faca1540a4c8@efficios.com>
 
-On Wed, Nov 26, 2025 at 6:51=E2=80=AFAM Leon Hwang <leon.hwang@linux.dev> w=
-rote:
->
-> This patch set introduces the BPF_F_CPU and BPF_F_ALL_CPUS flags for
-> percpu maps, as the requirement of BPF_F_ALL_CPUS flag for percpu_array
-> maps was discussed in the thread of
-> "[PATCH bpf-next v3 0/4] bpf: Introduce global percpu data"[1].
->
-> The goal of BPF_F_ALL_CPUS flag is to reduce data caching overhead in lig=
-ht
-> skeletons by allowing a single value to be reused to update values across=
- all
-> CPUs. This avoids the M:N problem where M cached values are used to updat=
-e a
-> map on N CPUs kernel.
->
-> The BPF_F_CPU flag is accompanied by *flags*-embedded cpu info, which
-> specifies the target CPU for the operation:
->
-> * For lookup operations: the flag field alongside cpu info enable queryin=
-g
->   a value on the specified CPU.
-> * For update operations: the flag field alongside cpu info enable
->   updating value for specified CPU.
->
-> Links:
-> [1] https://lore.kernel.org/bpf/20250526162146.24429-1-leon.hwang@linux.d=
-ev/
->
-> Changes:
-> v11 -> v12:
-> * Dropped the v11 changes.
-> * Stabilized the lru_percpu_hash map test by keeping an extra spare entry=
-,
->   which can be used temporarily during updates to avoid unintended LRU
->   evictions.
+On Tue, Jan 06, 2026 at 10:08:44AM -0500, Mathieu Desnoyers wrote:
+> On 2025-07-17 11:18, Paul E. McKenney wrote:
+> > On Thu, Jul 17, 2025 at 10:46:46AM -0400, Mathieu Desnoyers wrote:
+> > > On 2025-07-17 09:14, Mathieu Desnoyers wrote:
+> > > > On 2025-07-16 18:54, Paul E. McKenney wrote:
+> > > [...]
+> > > > 
+> > > > 2) I think I'm late to the party in reviewing srcu-fast, I'll
+> > > >      go have a look :)
+> > > 
+> > > OK, I'll bite. :) Please let me know where I'm missing something:
+> > > 
+> > > Looking at srcu-lite and srcu-fast, I understand that they fundamentally
+> > > depend on a trick we published here https://lwn.net/Articles/573497/
+> > > "The RCU-barrier menagerie" that allows turning, e.g. this Dekker:
+> > > 
+> > > volatile int x = 0, y = 0
+> > > 
+> > > CPU 0              CPU 1
+> > > 
+> > > x = 1              y = 1
+> > > smp_mb             smp_mb
+> > > r2 = y             r4 = x
+> > > 
+> > > BUG_ON(r2 == 0 && r4 == 0)
+> > > 
+> > > into
+> > > 
+> > > volatile int x = 0, y = 0
+> > > 
+> > > CPU 0            CPU 1
+> > > 
+> > > rcu_read_lock()
+> > > x = 1              y = 1
+> > >                     synchronize_rcu()
+> > > r2 = y             r4 = x
+> > > rcu_read_unlock()
+> > > 
+> > > BUG_ON(r2 == 0 && r4 == 0)
+> > > 
+> > > So looking at srcu-fast, we have:
+> > > 
+> > >   * Note that both this_cpu_inc() and atomic_long_inc() are RCU read-side
+> > >   * critical sections either because they disables interrupts, because they
+> > >   * are a single instruction, or because they are a read-modify-write atomic
+> > >   * operation, depending on the whims of the architecture.
+> > > 
+> > > It appears to be pairing, as RCU read-side:
+> > > 
+> > > - irq off/on implied by this_cpu_inc
+> > > - atomic
+> > > - single instruction
+> > > 
+> > > with synchronize_rcu within the grace period, and hope that this behaves as a
+> > > smp_mb pairing preventing the srcu read-side critical section from leaking
+> > > out of the srcu read lock/unlock.
+> > > 
+> > > I note that there is a validation that rcu_is_watching() within
+> > > __srcu_read_lock_fast, but it's one thing to have rcu watching, but
+> > > another to have an actual read-side critical section. Note that
+> > > preemption, irqs, softirqs can very well be enabled when calling
+> > > __srcu_read_lock_fast.
+> > > 
+> > > My understanding of the how memory barriers implemented with RCU
+> > > work is that we need to surround the memory accesses on the fast-path
+> > > (where we turn smp_mb into barrier) with an RCU read-side critical
+> > > section to make sure it does not spawn across a synchronize_rcu.
+> > > 
+> > > What I am missing here is how can a RCU side-side that only consist
+> > > of the irq off/on or atomic or single instruction cover all memory
+> > > accesses we are trying to order, namely those within the srcu
+> > > critical section after the compiler barrier() ? Is having RCU
+> > > watching sufficient to guarantee this ?
+> > 
+> > Good eyes!!!
+> > 
+> > The trick is that this "RCU read-side critical section" consists only of
+> > either this_cpu_inc() or atomic_long_inc(), with the latter only happening
+> > in systems that have NMIs, but don't have NMI-safe per-CPU operations.
+> > Neither this_cpu_inc() nor atomic_long_inc() can be interrupted, and
+> > thus both act as an interrupts-disabled RCU read-side critical section.
+> > 
+> > Therefore, if the SRCU grace-period computation fails to see an
+> > srcu_read_lock_fast() increment, its earlier code is guaranteed to
+> > happen before the corresponding critical section.  Similarly, if the SRCU
+> > grace-period computation sees an srcu_read_unlock_fast(), its subsequent
+> > code is guaranteed to happen after the corresponding critical section.
+> > 
+> > Does that help?  If so, would you be interested and nominating a comment?
+> > 
+> > Or am I missing something subtle here?
+> > 
+> > Either way, many thanks for digging into this!!!
+> Re-reading the comment and your explanation, I think the comments are
+> clear enough. One nit I found while reading though:
+> 
+> include/linux/srcutree.h:
+> 
+>  * Note that both this_cpu_inc() and atomic_long_inc() are RCU read-side
+>  * critical sections either because they disables interrupts, because
+> 
+> disables -> disable
 
-Please rebase and resend.
-This set got lost during holidays.
+Like this?
+
+							Thanx, Paul
+
+------------------------------------------------------------------------
+
+commit b3fc7ac622a19fcf921871be097e3536847406cd
+Author: Paul E. McKenney <paulmck@kernel.org>
+Date:   Tue Jan 6 10:28:10 2026 -0800
+
+    srcu: Fix s/they disables/they disable/ typo in srcu_read_unlock_fast()
+    
+    Typo fix in srcu_read_unlock_fast() header comment.
+    
+    Reported-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+
+diff --git a/include/linux/srcutree.h b/include/linux/srcutree.h
+index d6f978b50472d..727719a3cbeb9 100644
+--- a/include/linux/srcutree.h
++++ b/include/linux/srcutree.h
+@@ -259,7 +259,7 @@ static inline struct srcu_ctr __percpu *__srcu_ctr_to_ptr(struct srcu_struct *ss
+  * srcu_read_unlock_fast().
+  *
+  * Note that both this_cpu_inc() and atomic_long_inc() are RCU read-side
+- * critical sections either because they disables interrupts, because
++ * critical sections either because they disable interrupts, because
+  * they are a single instruction, or because they are read-modify-write
+  * atomic operations, depending on the whims of the architecture.
+  * This matters because the SRCU-fast grace-period mechanism uses either
