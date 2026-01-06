@@ -1,47 +1,47 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89555313521
-	for <bpf@vger.kernel.org>; Tue,  6 Jan 2026 13:46:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67D4628643C
+	for <bpf@vger.kernel.org>; Tue,  6 Jan 2026 13:47:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767707193; cv=none; b=J/BCyq1OBDoMBKv7mcOOeo+Erandibuc6WFHmuceVXFSoqmDtBilLY0ghT/MDpyH9e7b3KYvztWzJgnDL7aEYgRF/q0GJtle2+dhe+a2E5JgLHUXgZ5J1/fdkMOCARdORgJysYwhQSGN4n1Jtdlyc6BXlmGFJQaU/fMOfKglia8=
+	t=1767707231; cv=none; b=WjEQaZDtOnxXIiZxQhP/98+5E8uUcHDSJV5uNsHmsBMIqkamoC6qy3oO7fmLd6MD2OoMwGg3AQbvwXCBg+H1aYnV7uSXJ7IsgSXcYspYPyGczTecHT3kM/FDB5EFpSCQOxh254Tj0aw8qfPqF5QvfCzqAIyZtGYZ5E8ozAUtfi4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767707193; c=relaxed/simple;
-	bh=XeCKCQslN/bQhvxqvkYZrAg7y9wmgEVBBNPHBVI3M0c=;
+	s=arc-20240116; t=1767707231; c=relaxed/simple;
+	bh=kLhmG8r8/G/ZBzcMsD21dGTit7z/QexGf+BuN2OdGGU=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Z61vLNRrWojyjXUy3uxyzw03dys/7zZFuhf4B1c+FIjIqCBOQqbdXzBo+X+SQtJJ4YreaTOWCbZ7FD4pnhhTDKaICJVCDB/cbpagOoP2JarIezUtaN+StYoRCv70NQ91mPsRWrobKIAYbiyn9XfIuYa5P49tjwcASnirq8ghwzw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=PR2yuQ2H; arc=none smtp.client-ip=170.10.133.124
+	 MIME-Version; b=u7rbXLXecxwBnaGxl49Jn43Rski+PYmc1IypHwAUFlRNFpKKtrzqJSNtXVNLOsA4nLwF9Q3Yehx/8Rsn8SZGFhkQbaxpSVAJK7Ci51nDYgvhWawmMnLGArXH87J3wNpn3MC3M2M1MLLyKdS46Dg6sLNEKPFGN/9Ad4uuyu9/gtU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=iTWIQoiy; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="PR2yuQ2H"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="iTWIQoiy"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1767707190;
+	s=mimecast20190719; t=1767707229;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=jeWOzu4MzcAw4CDL5ZObANt/PvdTfv+Z8kd/Q22vWhY=;
-	b=PR2yuQ2HRWo5FDQVtVOk1a4ZuUhIPhPcuFkbDupyqWtga7N7fzZnqYB8yYreWoruatLO1n
-	QFIA2oJiAcv7iPRMcAcYJYzwOqAj9TNq5cbW53dHTyVFhrCyF3d48nPC9AqVD0fVIjIVwk
-	plt2h/sSLbiJudjvJaBcVl8g/W3NAVk=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+	bh=K2MacZa0tkiAD+rR0g1h1MHJtgQHxTFEHFa+WubSNqk=;
+	b=iTWIQoiyAoSb3kk9SuO/BYIKymogCmt40Vtgv4CYZ926nDTqW8j3FuCsqB2ITx5gSfnz6n
+	4vV64pm2SPnQzX0f8Nwl3yj8Lxkj0pu+bLo642TpAOLfim2dg2DR3ra0GjPvjmo0TlbaJ9
+	vHocGHGqWsbQ5z3VoEYymTpPgPgdL2c=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-632-vsjNaMk4PzqAZ2E8dMoj0A-1; Tue,
- 06 Jan 2026 08:46:27 -0500
-X-MC-Unique: vsjNaMk4PzqAZ2E8dMoj0A-1
-X-Mimecast-MFC-AGG-ID: vsjNaMk4PzqAZ2E8dMoj0A_1767707186
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-404-U3IkJEZZNYiniFGAwG_s1A-1; Tue,
+ 06 Jan 2026 08:47:06 -0500
+X-MC-Unique: U3IkJEZZNYiniFGAwG_s1A-1
+X-Mimecast-MFC-AGG-ID: U3IkJEZZNYiniFGAwG_s1A_1767707225
 Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5845D1801210;
-	Tue,  6 Jan 2026 13:46:26 +0000 (UTC)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 117521956068;
+	Tue,  6 Jan 2026 13:47:05 +0000 (UTC)
 Received: from wcosta-thinkpadt14gen4.rmtbr.csb (unknown [10.22.89.23])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 6E2A0180035A;
-	Tue,  6 Jan 2026 13:46:22 +0000 (UTC)
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 8A7DD1800367;
+	Tue,  6 Jan 2026 13:47:01 +0000 (UTC)
 From: Wander Lairson Costa <wander@redhat.com>
 To: Steven Rostedt <rostedt@goodmis.org>,
 	Tomas Glozar <tglozar@redhat.com>,
@@ -54,9 +54,9 @@ To: Steven Rostedt <rostedt@goodmis.org>,
 	linux-trace-kernel@vger.kernel.org (open list:Real-time Linux Analysis (RTLA) tools),
 	linux-kernel@vger.kernel.org (open list:Real-time Linux Analysis (RTLA) tools),
 	bpf@vger.kernel.org (open list:BPF [MISC]:Keyword:(?:\b|_)bpf(?:\b|_))
-Subject: [PATCH v2 14/18] rtla: Add generated output files to gitignore
-Date: Tue,  6 Jan 2026 08:49:50 -0300
-Message-ID: <20260106133655.249887-15-wander@redhat.com>
+Subject: [PATCH v2 15/18] rtla: Make stop_tracing variable volatile
+Date: Tue,  6 Jan 2026 08:49:51 -0300
+Message-ID: <20260106133655.249887-16-wander@redhat.com>
 In-Reply-To: <20260106133655.249887-1-wander@redhat.com>
 References: <20260106133655.249887-1-wander@redhat.com>
 Precedence: bulk
@@ -68,33 +68,51 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
 
-The rtla tool generates various output files during testing and
-execution, including custom trace outputs and histogram data. These
-files are artifacts of running the tool with different options and
-should not be tracked in version control.
+The stop_tracing global variable is accessed from both the signal
+handler context and the main program flow without synchronization.
+This creates a potential race condition where compiler optimizations
+could cache the variable value in registers, preventing the signal
+handler's updates from being visible to other parts of the program.
 
-Add gitignore entries for custom_filename.txt, osnoise_irq_noise_hist.txt,
-osnoise_trace.txt, and timerlat_trace.txt to prevent accidentally
-committing these generated files. This aligns with the existing pattern
-of ignoring build artifacts and generated headers like *.skel.h.
+Add the volatile qualifier to stop_tracing in both common.c and
+common.h to ensure all accesses to this variable bypass compiler
+optimizations and read directly from memory. This guarantees that
+when the signal handler sets stop_tracing, the change is immediately
+visible to the main program loop, preventing potential hangs or
+delayed shutdown when termination signals are received.
 
 Signed-off-by: Wander Lairson Costa <wander@redhat.com>
 ---
- tools/tracing/rtla/.gitignore | 4 ++++
- 1 file changed, 4 insertions(+)
+ tools/tracing/rtla/src/common.c | 2 +-
+ tools/tracing/rtla/src/common.h | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/tracing/rtla/.gitignore b/tools/tracing/rtla/.gitignore
-index 1a394ad26cc1e..4d39d64ac08c0 100644
---- a/tools/tracing/rtla/.gitignore
-+++ b/tools/tracing/rtla/.gitignore
-@@ -5,3 +5,7 @@ fixdep
- feature
- FEATURE-DUMP
- *.skel.h
-+custom_filename.txt
-+osnoise_irq_noise_hist.txt
-+osnoise_trace.txt
-+timerlat_trace.txt
+diff --git a/tools/tracing/rtla/src/common.c b/tools/tracing/rtla/src/common.c
+index d608ffe12e7b0..1e6542a1e9630 100644
+--- a/tools/tracing/rtla/src/common.c
++++ b/tools/tracing/rtla/src/common.c
+@@ -8,7 +8,7 @@
+ #include "common.h"
+ 
+ struct trace_instance *trace_inst;
+-int stop_tracing;
++volatile int stop_tracing;
+ 
+ static void stop_trace(int sig)
+ {
+diff --git a/tools/tracing/rtla/src/common.h b/tools/tracing/rtla/src/common.h
+index f2c9e21c03651..283641f3e7c9b 100644
+--- a/tools/tracing/rtla/src/common.h
++++ b/tools/tracing/rtla/src/common.h
+@@ -54,7 +54,7 @@ struct osnoise_context {
+ };
+ 
+ extern struct trace_instance *trace_inst;
+-extern int stop_tracing;
++extern volatile int stop_tracing;
+ 
+ struct hist_params {
+ 	char			no_irq;
 -- 
 2.52.0
 
