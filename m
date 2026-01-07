@@ -1,399 +1,195 @@
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+Received: from mail-ej1-f68.google.com (mail-ej1-f68.google.com [209.85.218.68])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E468A33E347
-	for <bpf@vger.kernel.org>; Wed,  7 Jan 2026 14:23:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C108634C154
+	for <bpf@vger.kernel.org>; Wed,  7 Jan 2026 14:28:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.68
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767795836; cv=none; b=LQW+pDoQnXDucQdlkWtjqCIHEmn4uRbKDlkDMnbGN9444NfW/j33ya+ZHmYUZfB3f/eFNJNF4kK7NNus5YEcUYdovOMaFX6fl9ygIQ9Dx9E2e6knIG7JYc+jOY7qljCWaorQhIIZ7MZUdeP2g1sjMBz1kJ6PX0kVrtqGJROpRoQ=
+	t=1767796093; cv=none; b=JcTFXFhDb5VL9pU/3qvBdGIFYwgSBeW+PLT1bkGtRw1xdjooZvZs+dlIjiZZcx+78k1+bwRQYhM4patkSPr/+E9HeT66ccpmV8Fo+H/+pC76ieeUXAb2FesJ6HcIOdmKJ0WEe2XVyVRDJ5ylSkAMcH/00GEHcFj1rLsCdl86vtk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767795836; c=relaxed/simple;
-	bh=a8vDcpbPYMfbNysE7qf6k6fF4jGeW3i+glF02ZVNNhU=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=pz3yrUtfz23TvjGnvwzYaa9871rmpzxDK8l4Jn+Bj07e8figGuYHXToI4xJp6lY9llQwJnXUQ4NfOQA0hR1AaVn3fvFfwIR1fu4MGg3bYFjLq9d6050Zw0H+IY2zdoa4/dB3k4tUuccryQwvqOkV1kcdkRVuMZIOv/EBll6+l20=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=TP/eXHNw; arc=none smtp.client-ip=209.85.208.42
+	s=arc-20240116; t=1767796093; c=relaxed/simple;
+	bh=Eu6ilaH8UuDw7IwCHWdvumqfGOwaK2NCp0A8fqgTDQ8=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=hcgnqmsLx8AqgPuGpHaXAMCYWW3UHaPGtg8aUw7uBCJzgdCCA3RuXFcfQU9408BIuv/fQLYZqjSMe93aID8WP5c7R/NAhlzVJ/OTynAOeH0GPfljDOgEAeWux1DjB0rJGR82uFkgrZipfuIXuqeGl8h2bPE5AlF5wrsYDRJMvGw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=LwmwbkUV; arc=none smtp.client-ip=209.85.218.68
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="TP/eXHNw"
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-64b9cb94ff5so2942180a12.2
-        for <bpf@vger.kernel.org>; Wed, 07 Jan 2026 06:23:53 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="LwmwbkUV"
+Received: by mail-ej1-f68.google.com with SMTP id a640c23a62f3a-b83122f9d78so345795366b.0
+        for <bpf@vger.kernel.org>; Wed, 07 Jan 2026 06:28:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1767795832; x=1768400632; darn=vger.kernel.org;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=JBVMBb/APMLSOerd9JPa7bBGnobTH7lXEbSuGohgvIA=;
-        b=TP/eXHNwpgZvLQ9l77YQjZBya+B/7bsYdALv1HLBTbDzb9onGIya4yJYZbdKX7ob6o
-         jEhgJSrvI0ZmIFVCb5gGooZnlPf0OSD8sxvnRHUChpyzAvkLHcWMJO96ml+NHTsou3Z3
-         09nuIGNviVakE45u3Q5fK2sZ+ZlFSnSrjlDlf51cxdjLCk0ulPNFOvB7RNzQsyu+FAXV
-         KtlokiofBPoLCGKP0SlNOzzV5X4HuHAeHcbvOLHd1f4uIBHTzIV1fpV1lBdZckG8g0XM
-         2uf98hD5mAYIK/vpuPeqc7ATVut4ZIzZXSL8Xw07aQ6Uo1bjxs/AResPWpEAti/xWeWu
-         ax6g==
+        d=cloudflare.com; s=google09082023; t=1767796090; x=1768400890; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=dXZ/1IRyrkfvpzIX9P5wE04Wi2LMwB98c3ecDlM6NcQ=;
+        b=LwmwbkUV8BY/zPjtQZxuyUPZK5xGiLqgdSa6g8wSkpQAQbHSIVVFjzs80AyBNpUMvM
+         shG9X+3IhRmk9c1HPC3gAz78mdSuIVwiYXDEdGNtPNBC9Km657BKsJkmC+uJFt65yc1L
+         mfcbsykfhNY/Fpc0MeVPmnvOSbIMgifT6ognkDDbPowA+9h7bPMx25TpRVIOPWZsfmb4
+         R1LEFayVkGFV7/gE24Bs1ltbkS2+cm5Tf7kFVDrn+8fYNnbVnR9BMAUGLM8q3nUxivrS
+         Ad1kXDETzV55irfmEY6M9ufGXyLiTOYAm4/58vHsTo70UA/ZGFa6Xu9AUbsCAvyUmIA5
+         Ktew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767795832; x=1768400632;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JBVMBb/APMLSOerd9JPa7bBGnobTH7lXEbSuGohgvIA=;
-        b=v5RBnCfWKZivvHYOBez18b1gxPV2yu6q4jpvWPoZv2Dq4wq1YTICFZsH0p3roXwT4f
-         SzLQHnA4jfGFcrFSDtL6H5Rxz+WA5lPZLSMYpeY0EFDaC+8kFZPwkr4e5jKMVtn18NAp
-         sqO8Gc2bqUq7lNdyXX2mCo2WSrC7WSdhBciNm2Zw7EfUFeOxnp778gPEnV3uuXyRA1KF
-         Ra5lPKnBmhaM+GFOEpwazdxEGjwhFYJzRAHuNtAeMbVBDUrXezVNc0tDhts7xDXcleBX
-         O1GldAbDdRXR/hXNDiqW1Ex6QG2J+prTqdp7XrYWOyPVwuG8R4M8bsxRZ2NbNB98wnUb
-         cCgA==
-X-Gm-Message-State: AOJu0Yyd1u1TiuijWqAadpLjM4ggZrNnkZwtRQ/yEqlx+Uz/SN4jMRZC
-	hCpigGdQ/Y9MBjLydQfabueOihOc4KOLftNCprff+VUyvccVJeMBa1u1mcOPss0hLEk=
-X-Gm-Gg: AY/fxX6C2J4IrjBEJ7Zfvg+1uloQcXC5egyL7Klgtq9jq+GXdSG7JS/hQ0BOqP7zcSF
-	PrrTFPb7wxi+hthtqSb1uhFZQ9wBYcpgEqeZTOiCptw66qsfSf/jZM2vWzQD129V5IuVBq67LVd
-	ji/+2gLkKIa91g7rUy0I670W4Ti3TdRC5j9Ih4H966Nk/qTPzaOzyp66YswGtroeEdWvPOZIlJq
-	qK2rsT32ofdl6Y5jzEs96Mv5kxAKGJDdVcOiU//018aQREJ//XZYA1mUJZgDXYwEtLgD78e10mb
-	zpnyqV1QhkvsLwHCbR/n92klqNlsMBqJFP2tQoH0XYxmnfIgUQwyNTfMBA3OlxEbgPvi0xUGAwa
-	clvb+2hIIctjc8cyXehnahR3lP7g3GRalxgSPW0f2J6BNC2JbFsF/9R8bKUELKU8YYCVIb+b4sn
-	4tn7tFn4z8/oSy7HxDKvzaUihYcsb6TugB2yE4ivAVgwU/VaysGBba7yiMBHs=
-X-Google-Smtp-Source: AGHT+IHC3TOcqtbVoxe1Wynwn2n01sOMbR1eyayRz1nHq97srelpzusiLnmdeLMvuwyovffayj+MRA==
-X-Received: by 2002:aa7:d710:0:b0:649:b4d8:7946 with SMTP id 4fb4d7f45d1cf-65097e5d9e2mr1891900a12.23.1767795832061;
-        Wed, 07 Jan 2026 06:23:52 -0800 (PST)
+        d=1e100.net; s=20230601; t=1767796090; x=1768400890;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dXZ/1IRyrkfvpzIX9P5wE04Wi2LMwB98c3ecDlM6NcQ=;
+        b=pilDYOR4uAZFjn1xgF2ReVCWRA2Sz8uDXDEngcfMWmssUrqXQacDKyebaNONTXjgNk
+         M6P072k1bcjzVIuPMNttUlb/KP6l8iAaxrTwioFUWwvddCwF3G7hkEwlOTAT3nM+Vg79
+         CgLp427/0M5v4ivOgwTSICaqa6Xzux8Y64FPIq1oZHa2+qaoZStdNmma3JVi4Qb3Rmxa
+         i04ZQzUktskzFpU15cII5Cjjf4us0l3/9j7A8t7Zc8RfhXk2Ois5hC48+96XjqtW+G/O
+         Sgb5cquE26ILAtDWc43hI/vGUxuvn/gUvDjvf+ARqmHDgDgy5LjivGNZpQNUdbUwcWd/
+         ipcQ==
+X-Gm-Message-State: AOJu0Ywhps3Ew/lvr4qIy2xEvt7lulgLenWxveqA9iryoi4H5j1+OKuy
+	ZSaR7BjweGV6rWVIB8hifYWWGy62I/gM0YKw8elVFZ7H0QksAGW+Lv890kgwiCaINZM=
+X-Gm-Gg: AY/fxX7imZxtpeE19vLoLtsx/M7f0UrCjY+fInabm7uPTiCC2BRdro7pCskWtOtZsSb
+	NJD3LHPIoBMCqUIA5ciiGK+k6IwhQWWpt1BcbbFYITpiQFxDvOZXCEC5cWnUA//woy/D621Fzkg
+	mTfoUlrG6R8zkNMsh12AfDj9wrOMzy51kqW0FQAErzcuZp6ZQT4OQUfnI2OKiVs1qckieDYglms
+	d67L8Nyg0rjAVtAQMfT+yZaAm+sYpyQqgP9obqg3v+s3p7v67gZOqtkY7cFA+lwiCtWhtA2XRnF
+	wGYpvRDvx4FaUNEQpfjpDkbDTSwGjhyOaXmcalolOd9ekfDZHKRHvau0ISml/sgn2yz2v+cKqUO
+	s6dfTNKSdaBlm8ok5DWJXlCk5bRvRLjel09RNGk/NuAQa7UlbQNWJLsjpdYpKnoaMVAGX3+nQ7X
+	JNuP5YqQ7wp8pUTtKBGbKQcgKA9TYSaBNYvTEWArBKBam1EXynUtEEYdszqLY=
+X-Google-Smtp-Source: AGHT+IGoIuvDrbD78kTl/itHNAZl4UA1IKW8Enb2OFYQWSEoOEC/UFEEv9VXia2+Uk2rY/X+EVzxPQ==
+X-Received: by 2002:a17:907:1b1d:b0:b79:f984:1557 with SMTP id a640c23a62f3a-b8445378cb2mr279344166b.46.1767796089952;
+        Wed, 07 Jan 2026 06:28:09 -0800 (PST)
 Received: from cloudflare.com (79.184.207.118.ipv4.supernova.orange.pl. [79.184.207.118])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6507b8c4454sm4857073a12.3.2026.01.07.06.23.51
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b842a56962esm534525266b.66.2026.01.07.06.28.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jan 2026 06:23:51 -0800 (PST)
+        Wed, 07 Jan 2026 06:28:09 -0800 (PST)
 From: Jakub Sitnicki <jakub@cloudflare.com>
-To: Jiayuan Chen <jiayuan.chen@linux.dev>
-Cc: bpf@vger.kernel.org,  John Fastabend <john.fastabend@gmail.com>,  "David
- S. Miller" <davem@davemloft.net>,  Eric Dumazet <edumazet@google.com>,
-  Jakub Kicinski <kuba@kernel.org>,  Paolo Abeni <pabeni@redhat.com>,
-  Simon Horman <horms@kernel.org>,  Neal Cardwell <ncardwell@google.com>,
-  Kuniyuki Iwashima <kuniyu@google.com>,  David Ahern <dsahern@kernel.org>,
-  Alexei Starovoitov <ast@kernel.org>,  Daniel Borkmann
- <daniel@iogearbox.net>,  Andrii Nakryiko <andrii@kernel.org>,  Martin
- KaFai Lau <martin.lau@linux.dev>,  Eduard Zingerman <eddyz87@gmail.com>,
-  Song Liu <song@kernel.org>,  Yonghong Song <yonghong.song@linux.dev>,  KP
- Singh <kpsingh@kernel.org>,  Stanislav Fomichev <sdf@fomichev.me>,  Hao
- Luo <haoluo@google.com>,  Jiri Olsa <jolsa@kernel.org>,  Shuah Khan
- <shuah@kernel.org>,  Stefano Garzarella <sgarzare@redhat.com>,  Michal
- Luczaj <mhal@rbox.co>,  Cong Wang <cong.wang@bytedance.com>,
-  netdev@vger.kernel.org,  linux-kernel@vger.kernel.org,
-  linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf-next v5 2/3] bpf, sockmap: Fix FIONREAD for sockmap
-In-Reply-To: <20260106051458.279151-3-jiayuan.chen@linux.dev> (Jiayuan Chen's
-	message of "Tue, 6 Jan 2026 13:14:28 +0800")
-References: <20260106051458.279151-1-jiayuan.chen@linux.dev>
-	<20260106051458.279151-3-jiayuan.chen@linux.dev>
-Date: Wed, 07 Jan 2026 15:23:50 +0100
-Message-ID: <87ikddijrd.fsf@cloudflare.com>
+Subject: [PATCH bpf-next v3 00/17] Decouple skb metadata tracking from MAC
+ header offset
+Date: Wed, 07 Jan 2026 15:28:00 +0100
+Message-Id: <20260107-skb-meta-safeproof-netdevs-rx-only-v3-0-0d461c5e4764@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAHBtXmkC/42PwU7EIBRFf6VhLQZombaz8j+Mi0d5WGJbOsCQT
+ ib9d5EZY4zGuLy5eee8eyUBvcVAjtWVeEw2WLfkUD9UZBhheUVqdc5EMCE5FzUNb4rOGIEGMLh
+ 65wxdMGpMgfqNumW60NoILZjmEjWQDFo9GrsVyTNR68fBFsnLrfF4OmdrvNczhgDFeqxuTia/n
+ NmwQhxpaiijckDFOuhV3aqnYXJnbSbw+Di4ucBHG6LzlzIt8UK/r2j+syLx7Oj6tjOSyabh7W+
+ OJD65B/bt0z+4InNBcDy0vZJg4Ad33/d3YU8H2ZgBAAA=
+X-Change-ID: 20251123-skb-meta-safeproof-netdevs-rx-only-3f2d20d15eda
+To: bpf@vger.kernel.org
+Cc: netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ Jesper Dangaard Brouer <hawk@kernel.org>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Simon Horman <horms@kernel.org>, 
+ Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+ Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+ kernel-team@cloudflare.com
+X-Mailer: b4 0.15-dev-07fe9
 
-On Tue, Jan 06, 2026 at 01:14 PM +08, Jiayuan Chen wrote:
-> A socket using sockmap has its own independent receive queue: ingress_msg.
-> This queue may contain data from its own protocol stack or from other
-> sockets.
->
-> Therefore, for sockmap, relying solely on copied_seq and rcv_nxt to
-> calculate FIONREAD is not enough.
->
-> This patch adds a new ingress_size field in the psock structure to record
-> the data length in ingress_msg. Additionally, we implement new ioctl
-> interfaces for TCP and UDP to intercept FIONREAD operations. While Unix
-> and VSOCK also support sockmap and have similar FIONREAD calculation
-> issues, fixing them would require more extensive changes
-> (please let me know if modifications are needed). I believe it's not
-> appropriate to include those changes under this fix patch.
+This series continues the effort to provide reliable access to xdp/skb
+metadata from BPF context on the receive path. We have recently talked
+about it at Plumbers [1].
 
-Nit: These last two lines don't really belong in the commit message.
-Side notes for reviewers can be added after the "---" marker.
+Currently skb metadata location is tied to the MAC header offset:
 
-> Previous work by John Fastabend made some efforts towards FIONREAD support:
-> commit e5c6de5fa025 ("bpf, sockmap: Incorrectly handling copied_seq")
-> Although the current patch is based on the previous work by John Fastabend,
-> it is acceptable for our Fixes tag to point to the same commit.
->
->                                                      FD1:read()
->                                                      --  FD1->copied_seq++
->                                                          |  [read data]
->                                                          |
->                                 [enqueue data]           v
->                   [sockmap]     -> ingress to self ->  ingress_msg queue
-> FD1 native stack  ------>                                 ^
-> -- FD1->rcv_nxt++               -> redirect to other      | [enqueue data]
->                                        |                  |
->                                        |             ingress to FD1
->                                        v                  ^
->                                       ...                 |  [sockmap]
->                                                      FD2 native stack
->
-> Fixes: 04919bed948dc ("tcp: Introduce tcp_read_skb()")
-> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
-> ---
->  include/linux/skmsg.h | 67 +++++++++++++++++++++++++++++++++++++++++--
->  net/core/skmsg.c      |  3 ++
->  net/ipv4/tcp_bpf.c    | 21 ++++++++++++++
->  net/ipv4/udp_bpf.c    | 25 +++++++++++++---
->  4 files changed, 110 insertions(+), 6 deletions(-)
->
-> diff --git a/include/linux/skmsg.h b/include/linux/skmsg.h
-> index 0323a2b6cf5e..1fa03953043f 100644
-> --- a/include/linux/skmsg.h
-> +++ b/include/linux/skmsg.h
-> @@ -97,6 +97,7 @@ struct sk_psock {
->  	struct sk_buff_head		ingress_skb;
->  	struct list_head		ingress_msg;
->  	spinlock_t			ingress_lock;
-> +	ssize_t				ingress_size;
+  [headroom][metadata][MAC hdr][L3 pkt]
+                      ^
+                      skb_metadata_end = head + mac_header
 
-The name is not great because we also already have `ingress_bytes`.
-I suggest to rename and add a doc string. Also we don't expect the count
-to ever be negative. Why ssize_t when we store all other byte counts
-there as u32?
+This design breaks on L2 decapsulation (VLAN, GRE, etc.) when the MAC
+offset is reset. The naive fix is to memmove metadata on every decap path,
+but we can avoid this cost by tracking metadata position independently.
 
-        /** @msg_tot_len: Total bytes queued in ingress_msg list. */
-        u32                             msg_tot_len;
+Introduce a dedicated meta_end field in skb_shared_info that records where
+metadata ends relative to skb->head:
 
->  	unsigned long			state;
->  	struct list_head		link;
->  	spinlock_t			link_lock;
-> @@ -321,6 +322,27 @@ static inline void sock_drop(struct sock *sk, struct sk_buff *skb)
->  	kfree_skb(skb);
->  }
->  
-> +static inline ssize_t sk_psock_get_msg_size_nolock(struct sk_psock *psock)
-> +{
-> +	/* Used by ioctl to read ingress_size only; lock-free for performance */
-> +	return READ_ONCE(psock->ingress_size);
-> +}
-> +
-> +static inline void sk_psock_inc_msg_size_locked(struct sk_psock *psock, ssize_t diff)
-> +{
-> +	/* Use WRITE_ONCE to ensure correct read in sk_psock_get_msg_size_nolock().
-> +	 * ingress_lock should be held to prevent concurrent updates to ingress_size
-> +	 */
-> +	WRITE_ONCE(psock->ingress_size, psock->ingress_size + diff);
-> +}
-> +
-> +static inline void sk_psock_inc_msg_size(struct sk_psock *psock, ssize_t diff)
+  [headroom][metadata][gap][MAC hdr][L3 pkt]
+                     ^
+                     skb_metadata_end = head + meta_end
+                     
+This allows BPF dynptr access (bpf_dynptr_from_skb_meta()) to work without
+memmove. For skb->data_meta pointer access, which expects metadata
+immediately before skb->data, make the verifier inject realignment code in
+TC BPF prologue.
 
-Not sure about this function name. "inc" usually means increment by one.
-Was that modeled after some existing interface?
+Patches 1-9 enforce the calling convention: skb_metadata_set() must be
+called after skb->data points past the metadata area, ensuring meta_end
+captures the correct position. Patch 10 implements the core change.
+Patches 11-14 extend the verifier to track data_meta usage, and patch 15
+adds the realignment logic. Patch 16 adds selftests covering L2 decap
+scenarios.
 
-If not, I'd switch rename to sk_psock_msg_len_add(..., int delta)
+Note: This series does not address moving metadata on L2 encapsulation when
+forwarding packets. VLAN and QinQ have already been patched when fixing TC
+BPF helpers [2], but other tagging/tunnel code still requires changes.
 
-Following the naming convention from sk_forward_alloc_add(),
-skb_frag_size_add(), skb_len_add(), etc.
+Note to maintainers: This is not a typical series, in the sense that it
+touches both the networking drivers and the BPF verifier. The driver
+changes (patches 1-9) can be split out, if it makes patch wrangling easier.
 
-> +{
-> +	spin_lock_bh(&psock->ingress_lock);
-> +	sk_psock_inc_msg_size_locked(psock, diff);
-> +	spin_unlock_bh(&psock->ingress_lock);
-> +}
-> +
->  static inline bool sk_psock_queue_msg(struct sk_psock *psock,
->  				      struct sk_msg *msg)
->  {
-> @@ -329,6 +351,7 @@ static inline bool sk_psock_queue_msg(struct sk_psock *psock,
->  	spin_lock_bh(&psock->ingress_lock);
->  	if (sk_psock_test_state(psock, SK_PSOCK_TX_ENABLED)) {
->  		list_add_tail(&msg->list, &psock->ingress_msg);
-> +		sk_psock_inc_msg_size_locked(psock, msg->sg.size);
->  		ret = true;
->  	} else {
->  		sk_msg_free(psock->sk, msg);
-> @@ -345,18 +368,25 @@ static inline struct sk_msg *sk_psock_dequeue_msg(struct sk_psock *psock)
->  
->  	spin_lock_bh(&psock->ingress_lock);
->  	msg = list_first_entry_or_null(&psock->ingress_msg, struct sk_msg, list);
-> -	if (msg)
-> +	if (msg) {
->  		list_del(&msg->list);
-> +		sk_psock_inc_msg_size_locked(psock, -msg->sg.size);
-> +	}
->  	spin_unlock_bh(&psock->ingress_lock);
->  	return msg;
->  }
->  
-> +static inline struct sk_msg *sk_psock_peek_msg_locked(struct sk_psock *psock)
-> +{
-> +	return list_first_entry_or_null(&psock->ingress_msg, struct sk_msg, list);
-> +}
-> +
->  static inline struct sk_msg *sk_psock_peek_msg(struct sk_psock *psock)
->  {
->  	struct sk_msg *msg;
->  
->  	spin_lock_bh(&psock->ingress_lock);
-> -	msg = list_first_entry_or_null(&psock->ingress_msg, struct sk_msg, list);
-> +	msg = sk_psock_peek_msg_locked(psock);
->  	spin_unlock_bh(&psock->ingress_lock);
->  	return msg;
->  }
-> @@ -523,6 +553,39 @@ static inline bool sk_psock_strp_enabled(struct sk_psock *psock)
->  	return !!psock->saved_data_ready;
->  }
->  
-> +/* for tcp only, sk is locked */
-> +static inline ssize_t sk_psock_msg_inq(struct sock *sk)
-> +{
-> +	struct sk_psock *psock;
-> +	ssize_t inq = 0;
-> +
-> +	psock = sk_psock_get(sk);
-> +	if (likely(psock)) {
-> +		inq = sk_psock_get_msg_size_nolock(psock);
-> +		sk_psock_put(sk, psock);
-> +	}
-> +	return inq;
-> +}
-> +
-> +/* for udp only, sk is not locked */
-> +static inline ssize_t sk_msg_first_length(struct sock *sk)
+Thanks,
+-jkbs
 
-s/_length/_len/
+[1] https://lpc.events/event/19/contributions/2269/
+[2] https://lore.kernel.org/all/20251105-skb-meta-rx-path-v4-0-5ceb08a9b37b@cloudflare.com/
 
-> +{
-> +	struct sk_psock *psock;
-> +	struct sk_msg *msg;
-> +	ssize_t inq = 0;
-> +
-> +	psock = sk_psock_get(sk);
-> +	if (likely(psock)) {
-> +		spin_lock_bh(&psock->ingress_lock);
-> +		msg = sk_psock_peek_msg_locked(psock);
-> +		if (msg)
-> +			inq = msg->sg.size;
-> +		spin_unlock_bh(&psock->ingress_lock);
-> +		sk_psock_put(sk, psock);
-> +	}
-> +	return inq;
-> +}
-> +
->  #if IS_ENABLED(CONFIG_NET_SOCK_MSG)
->  
->  #define BPF_F_STRPARSER	(1UL << 1)
-> diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-> index d73e03f7713a..c959d52a62b2 100644
-> --- a/net/core/skmsg.c
-> +++ b/net/core/skmsg.c
-> @@ -455,6 +455,7 @@ int __sk_msg_recvmsg(struct sock *sk, struct sk_psock *psock, struct msghdr *msg
->  					atomic_sub(copy, &sk->sk_rmem_alloc);
->  				}
->  				msg_rx->sg.size -= copy;
-> +				sk_psock_inc_msg_size(psock, -copy);
->  
->  				if (!sge->length) {
->  					sk_msg_iter_var_next(i);
-> @@ -819,9 +820,11 @@ static void __sk_psock_purge_ingress_msg(struct sk_psock *psock)
->  		list_del(&msg->list);
->  		if (!msg->skb)
->  			atomic_sub(msg->sg.size, &psock->sk->sk_rmem_alloc);
-> +		sk_psock_inc_msg_size(psock, -((ssize_t)msg->sg.size));
+Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
+---
+Changes in v3:
+- Use BPF_EMIT_CALL in gen_prologue (patch 15, 16) (Alexei)
+  (Will convert bpf_qdisc/testmod as a follow up.)
+- Link to v2: https://lore.kernel.org/r/20260105-skb-meta-safeproof-netdevs-rx-only-v2-0-a21e679b5afa@cloudflare.com
 
-Cast won't be needed after you switch param type to `int`.
+Changes in v2:
+- Add veth driver fix (patch 7)
+- Add selftests for L2 decap paths (patch 16)
+- Link to RFC: https://lore.kernel.org/r/20251124-skb-meta-safeproof-netdevs-rx-only-v1-0-8978f5054417@cloudflare.com
 
->  		sk_msg_free(psock->sk, msg);
->  		kfree(msg);
->  	}
-> +	WARN_ON_ONCE(psock->ingress_size);
->  }
->  
->  static void __sk_psock_zap_ingress(struct sk_psock *psock)
-> diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
-> index 6332fc36ffe6..a9c758868f13 100644
-> --- a/net/ipv4/tcp_bpf.c
-> +++ b/net/ipv4/tcp_bpf.c
-> @@ -10,6 +10,7 @@
->  
->  #include <net/inet_common.h>
->  #include <net/tls.h>
-> +#include <asm/ioctls.h>
->  
->  void tcp_eat_skb(struct sock *sk, struct sk_buff *skb)
->  {
-> @@ -332,6 +333,25 @@ static int tcp_bpf_recvmsg_parser(struct sock *sk,
->  	return copied;
->  }
->  
-> +static int tcp_bpf_ioctl(struct sock *sk, int cmd, int *karg)
-> +{
-> +	bool slow;
-> +
-> +	/* we only care about FIONREAD */
+---
+Jakub Sitnicki (17):
+      bnxt_en: Call skb_metadata_set when skb->data points at metadata end
+      i40e: Call skb_metadata_set when skb->data points at metadata end
+      igb: Call skb_metadata_set when skb->data points at metadata end
+      igc: Call skb_metadata_set when skb->data points at metadata end
+      ixgbe: Call skb_metadata_set when skb->data points at metadata end
+      net/mlx5e: Call skb_metadata_set when skb->data points at metadata end
+      veth: Call skb_metadata_set when skb->data points at metadata end
+      xsk: Call skb_metadata_set when skb->data points at metadata end
+      xdp: Call skb_metadata_set when skb->data points at metadata end
+      net: Track skb metadata end separately from MAC offset
+      bpf, verifier: Remove side effects from may_access_direct_pkt_data
+      bpf, verifier: Turn seen_direct_write flag into a bitmap
+      bpf, verifier: Propagate packet access flags to gen_prologue
+      bpf, verifier: Track when data_meta pointer is loaded
+      bpf, verifier: Support direct kernel calls in gen_prologue
+      bpf: Realign skb metadata for TC progs using data_meta
+      selftests/bpf: Test skb metadata access after L2 decapsulation
 
-Nit: This comment seems redundant. The expression is obvious.
+ drivers/net/ethernet/broadcom/bnxt/bnxt.c          |   2 +-
+ drivers/net/ethernet/intel/i40e/i40e_xsk.c         |   2 +-
+ drivers/net/ethernet/intel/igb/igb_xsk.c           |   2 +-
+ drivers/net/ethernet/intel/igc/igc_main.c          |   4 +-
+ drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c       |   2 +-
+ .../net/ethernet/mellanox/mlx5/core/en/xsk/rx.c    |   2 +-
+ drivers/net/veth.c                                 |   4 +-
+ include/linux/bpf.h                                |   2 +-
+ include/linux/bpf_verifier.h                       |   8 +-
+ include/linux/skbuff.h                             |  37 ++-
+ kernel/bpf/cgroup.c                                |   2 +-
+ kernel/bpf/verifier.c                              |  54 ++--
+ net/core/dev.c                                     |   5 +-
+ net/core/filter.c                                  |  62 ++++-
+ net/core/skbuff.c                                  |  10 +-
+ net/core/xdp.c                                     |   2 +-
+ net/sched/bpf_qdisc.c                              |   3 +-
+ tools/testing/selftests/bpf/config                 |   6 +-
+ .../bpf/prog_tests/xdp_context_test_run.c          | 292 +++++++++++++++++++++
+ tools/testing/selftests/bpf/progs/test_xdp_meta.c  |  48 ++--
+ .../testing/selftests/bpf/test_kmods/bpf_testmod.c |   6 +-
+ 21 files changed, 466 insertions(+), 89 deletions(-)
 
-> +	if (cmd != SIOCINQ)
-> +		return tcp_ioctl(sk, cmd, karg);
-> +
-> +	/* works similar as tcp_ioctl */
-> +	if (sk->sk_state == TCP_LISTEN)
-> +		return -EINVAL;
-> +
-> +	slow = lock_sock_fast(sk);
-> +	*karg = sk_psock_msg_inq(sk);
-> +	unlock_sock_fast(sk, slow);
-> +
-> +	return 0;
-> +}
-> +
->  static int tcp_bpf_recvmsg(struct sock *sk, struct msghdr *msg, size_t len,
->  			   int flags, int *addr_len)
->  {
-> @@ -610,6 +630,7 @@ static void tcp_bpf_rebuild_protos(struct proto prot[TCP_BPF_NUM_CFGS],
->  	prot[TCP_BPF_BASE].close		= sock_map_close;
->  	prot[TCP_BPF_BASE].recvmsg		= tcp_bpf_recvmsg;
->  	prot[TCP_BPF_BASE].sock_is_readable	= sk_msg_is_readable;
-> +	prot[TCP_BPF_BASE].ioctl		= tcp_bpf_ioctl;
->  
->  	prot[TCP_BPF_TX]			= prot[TCP_BPF_BASE];
->  	prot[TCP_BPF_TX].sendmsg		= tcp_bpf_sendmsg;
-> diff --git a/net/ipv4/udp_bpf.c b/net/ipv4/udp_bpf.c
-> index 0735d820e413..cc1156aef14d 100644
-> --- a/net/ipv4/udp_bpf.c
-> +++ b/net/ipv4/udp_bpf.c
-> @@ -5,6 +5,7 @@
->  #include <net/sock.h>
->  #include <net/udp.h>
->  #include <net/inet_common.h>
-> +#include <asm/ioctls.h>
->  
->  #include "udp_impl.h"
->  
-> @@ -111,12 +112,28 @@ enum {
->  static DEFINE_SPINLOCK(udpv6_prot_lock);
->  static struct proto udp_bpf_prots[UDP_BPF_NUM_PROTS];
->  
-> +static int udp_bpf_ioctl(struct sock *sk, int cmd, int *karg)
-> +{
-> +	/* we only care about FIONREAD */
-> +	if (cmd != SIOCINQ)
-> +		return udp_ioctl(sk, cmd, karg);
-> +
-> +	/* works similar as udp_ioctl.
-> +	 * man udp(7): "FIONREAD (SIOCINQ): Returns the size of the next
-> +	 * pending datagram in the integer in bytes, or 0 when no datagram
-> +	 * is pending."
-> +	 */
-
-Not sure we need to quote man pages here.
-
-> +	*karg = sk_msg_first_length(sk);
-> +	return 0;
-> +}
-> +
->  static void udp_bpf_rebuild_protos(struct proto *prot, const struct proto *base)
->  {
-> -	*prot        = *base;
-> -	prot->close  = sock_map_close;
-> -	prot->recvmsg = udp_bpf_recvmsg;
-> -	prot->sock_is_readable = sk_msg_is_readable;
-> +	*prot			= *base;
-> +	prot->close		= sock_map_close;
-> +	prot->recvmsg		= udp_bpf_recvmsg;
-> +	prot->sock_is_readable	= sk_msg_is_readable;
-> +	prot->ioctl		= udp_bpf_ioctl;
->  }
->  
->  static void udp_bpf_check_v6_needs_rebuild(struct proto *ops)
