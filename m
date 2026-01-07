@@ -1,140 +1,226 @@
-Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AB91399A54;
-	Wed,  7 Jan 2026 15:52:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBFAA37BE8C;
+	Wed,  7 Jan 2026 15:53:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767801198; cv=none; b=CI+D9Ba3r+x34eKskEKDcGZd8fqsHSGD1+uA+Va5hVVUqVlo52roWQH3scIJjcRs0yaY0M8n9jbo4OoG7e/URC9BMddY/eMP4fxNT3VxUzYIpAwXALdMZSGSYFEs7/LEJZQC9htItatYZJRaiN2Kqv0UI0QfdNdpYP92/62Hm20=
+	t=1767801241; cv=none; b=hgxtW7GEW40ow4cqSUrIY1TcTiB402yWchuoKuXOvp8SpklHUKiLNMcFkWip7HPVjdAm/CYY6nSE07NXbtQix2NhwWXzSSBdIjWA4CCKGFYWI9n80h3j1ATeBZpZaETh/Ku9B7zOxVL9A/GS93p1JRbI3widNY7E7/XotfW/vDw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767801198; c=relaxed/simple;
-	bh=Tt2AtrMSewMzULqLE1VhdgEpismAuO+TcOXUIcITff0=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=qfeT2CtMNjEoZM/Wkw3WUTkqP8JLxGrUNnotgKo+gzsLSWhr7NdT+/9dgWa/f3eEnFytUhh6SMAFD2LGtBHlLLET5plt3xMb+q1xy7RJfV7/I/7SNAmymi83M3MiyeAePA9JgTB2PXD/dV0lwwce3MkJ8hhv9tszQCAuRKThu+w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf05.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay08.hostedemail.com (Postfix) with ESMTP id 5F3D8140441;
-	Wed,  7 Jan 2026 15:52:52 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf05.hostedemail.com (Postfix) with ESMTPA id A363F20019;
-	Wed,  7 Jan 2026 15:52:49 +0000 (UTC)
-Date: Wed, 7 Jan 2026 10:53:16 -0500
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Jiri Olsa <olsajiri@gmail.com>
-Cc: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>, Will Deacon
- <will@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
- bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, x86@kernel.org, Yonghong Song
- <yhs@fb.com>, Song Liu <songliubraving@fb.com>, Andrii Nakryiko
- <andrii@kernel.org>, Mark Rutland <mark.rutland@arm.com>, Mahe Tardy
- <mahe.tardy@gmail.com>
-Subject: Re: [BUG/RFC 1/2] arm64/ftrace,bpf: Fix partial regs after
- bpf_prog_run
-Message-ID: <20260107105316.2b70a308@gandalf.local.home>
-In-Reply-To: <aV4X5Yx07LomQji4@krava>
-References: <20251105125924.365205-1-jolsa@kernel.org>
-	<aVfbqYsWdGXu4lh8@willie-the-truck>
-	<20260104223415.0a31f423c861c0b651de966b@kernel.org>
-	<20260105162220.6ba5129a@gandalf.local.home>
-	<aV4X5Yx07LomQji4@krava>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1767801241; c=relaxed/simple;
+	bh=cs21N9MiDRScheFdM57oelbKb1VxtVwcvzerWe0JBpQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=bPchmCqb6v93SCiBdmOIuLGWUl+1n0lzKKEGDCQs4nGRfQ8hl9kLnGVnQmwOqAb+kmOHz3EF9G9wfgmpfY/ejBdHl2s4INsvYzXFUj1LuWZagvaby/i31XTAe9tU/+O0VA0KRbtUJcZEGihReAAWpAPensdzGQ7MgcnawMTGQ3M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eJGoCKwm; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eJGoCKwm"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F28A1C4CEF1;
+	Wed,  7 Jan 2026 15:53:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1767801239;
+	bh=cs21N9MiDRScheFdM57oelbKb1VxtVwcvzerWe0JBpQ=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=eJGoCKwm52H3ME44zctEbx8zYvtIV7ZLlmnE/vpVS4nt0LMZ3cGhdRc1nHrEivLP6
+	 12cPreEIC0k4ApSI/RmSwa4JBq1nDVSJhChrTCRQtU6a3mWW9qDUM52R48Xp+GI6o2
+	 vGPMUYMpdiULqqp7zTs1qKgWC7NNUVmyPX4ds2aB9TsSIWeBHhrrGAE2XFfxTdAO6+
+	 +FGDyVMeRTGwiOS6xSR2xHPjUDCA/JnoSYMOLUtWHFwWxhs3W1rDWHiYixEfvZrR73
+	 s5F5J2l9oYqCaJb2i00cFKzLBsd4fqAAj7UqlaUAkE+7pO3mSyTjd+jGZKbJlscu5v
+	 A/pPXFzrmDyQw==
+From: Sasha Levin <sashal@kernel.org>
+To: patches@lists.linux.dev,
+	stable@vger.kernel.org
+Cc: Chenghao Duan <duanchenghao@kylinos.cn>,
+	Huacai Chen <chenhuacai@loongson.cn>,
+	Sasha Levin <sashal@kernel.org>,
+	chenhuacai@kernel.org,
+	masahiroy@kernel.org,
+	jiaxun.yang@flygoat.com,
+	arnd@arndb.de,
+	yangtiezhu@loongson.cn,
+	bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.18-6.1] LoongArch: Enable exception fixup for specific ADE subcode
+Date: Wed,  7 Jan 2026 10:53:15 -0500
+Message-ID: <20260107155329.4063936-13-sashal@kernel.org>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <20260107155329.4063936-1-sashal@kernel.org>
+References: <20260107155329.4063936-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Stat-Signature: d78ujc6wjwrs4np7zp9k9df8wcrg8spq
-X-Rspamd-Server: rspamout02
-X-Rspamd-Queue-Id: A363F20019
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX19y53fBfBOjUg/Mlrbjm27/1NrjOMyHETA=
-X-HE-Tag: 1767801169-452600
-X-HE-Meta: U2FsdGVkX1+hldrlx96Y7+EcduT/AqiVoSH8QmMOWvVLBMrUv1IVv6IO41fhZ4RVAeaEuFfgunBNpxHvG1O1TGLPQ3JiX1a9nfHStvtPjZ+qC6M8Sj4BCMDlqjH//NEprQR2dFXHSO2Q85qKa8ZWd1JmEn8jCjbgD2LzKFFzpxSkbyws8Nw8h5fNGqR9CTdBpatoTRQgXUAqlhWk4gttSADniPTDpYyuvv2n2RwYFSFCyOQdUT8abxn44s6dkRK5JKxdWq5ttP5G1uGsINNp7MeadAIwBGYnyflqKunhECWqX14W7J8qUJy2BT5whAKLzhYH1LrALs1vk1R4DAhVELV+ikzLGxZWFRGjXFouFsoppxNwQBvckPM+gbwdLbSg
+Content-Type: text/plain; charset=UTF-8
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.18.3
+Content-Transfer-Encoding: 8bit
 
-On Wed, 7 Jan 2026 09:23:01 +0100
-Jiri Olsa <olsajiri@gmail.com> wrote:
+From: Chenghao Duan <duanchenghao@kylinos.cn>
 
-> ---
-> diff --git a/arch/arm64/include/asm/ftrace.h b/arch/arm64/include/asm/ftrace.h
-> index 1621c84f44b3..177c7bbf3b84 100644
-> --- a/arch/arm64/include/asm/ftrace.h
-> +++ b/arch/arm64/include/asm/ftrace.h
-> @@ -157,6 +157,30 @@ ftrace_partial_regs(const struct ftrace_regs *fregs, struct pt_regs *regs)
->  	return regs;
->  }
->  
-> +/*
-> + * ftrace_partial_regs_update - update the original ftrace_regs from regs
-> + * @fregs: The ftrace_regs to update from @regs
-> + * @regs: The partial regs from ftrace_partial_regs() that was updated
-> + *
-> + * Some architectures have the partial regs living in the ftrace_regs
-> + * structure, whereas other architectures need to make a different copy
-> + * of the @regs. If a partial @regs is retrieved by ftrace_partial_regs() and
-> + * if the code using @regs updates a field (like the instruction pointer or
-> + * stack pointer) it may need to propagate that change to the original @fregs
-> + * it retrieved the partial @regs from. Use this function to guarantee that
-> + * update happens.
-> + */
+[ Upstream commit 9bdc1ab5e4ce6f066119018d8f69631a46f9c5a0 ]
 
-I think the kernel doc should go into the generic function, and this just say:
+This patch allows the LoongArch BPF JIT to handle recoverable memory
+access errors generated by BPF_PROBE_MEM* instructions.
 
-  /* See description of this function in the generic header */
+When a BPF program performs memory access operations, the instructions
+it executes may trigger ADEM exceptions. The kernel’s built-in BPF
+exception table mechanism (EX_TYPE_BPF) will generate corresponding
+exception fixup entries in the JIT compilation phase; however, the
+architecture-specific trap handling function needs to proactively call
+the common fixup routine to achieve exception recovery.
 
-or something similar.
+do_ade(): fix EX_TYPE_BPF memory access exceptions for BPF programs,
+ensure safe execution.
 
-Also, should probably have the description in the general function say:
+Relevant test cases: illegal address access tests in module_attach and
+subprogs_extable of selftests/bpf.
 
-  *
-  * For architectures that need to update @fregs from @regs, this function needs to be
-  * defined.
+Signed-off-by: Chenghao Duan <duanchenghao@kylinos.cn>
+Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
 
-Or something similar.
+LLM Generated explanations, may be completely bogus:
 
--- Steve
+## Analysis of LoongArch Exception Fixup Commit
 
-> +static __always_inline void
-> +ftrace_partial_regs_update(const struct ftrace_regs *fregs, struct pt_regs *regs)
-> +{
-> +	struct __arch_ftrace_regs *afregs = arch_ftrace_regs(fregs);
-> +
-> +	if (afregs->pc != regs->pc) {
-> +		afregs->pc = regs->pc;
-> +		afregs->regs[0] = regs->regs[0];
-> +	}
-> +}
-> +
->  #define arch_ftrace_fill_perf_regs(fregs, _regs) do {		\
->  		(_regs)->pc = arch_ftrace_regs(fregs)->pc;			\
->  		(_regs)->regs[29] = arch_ftrace_regs(fregs)->fp;		\
-> diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
-> index 770f0dc993cc..ae22559b4099 100644
-> --- a/include/linux/ftrace.h
-> +++ b/include/linux/ftrace.h
-> @@ -213,6 +213,9 @@ ftrace_partial_regs(struct ftrace_regs *fregs, struct pt_regs *regs)
->  	return regs;
->  }
->  
-> +static __always_inline void
-> +ftrace_partial_regs_update(struct ftrace_regs *fregs, struct pt_regs *regs) { }
-> +
->  #endif /* !CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS || CONFIG_HAVE_FTRACE_REGS_HAVING_PT_REGS */
->  
->  #ifdef CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS
-> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> index 6e076485bf70..3a17f79b20c2 100644
-> --- a/kernel/trace/bpf_trace.c
-> +++ b/kernel/trace/bpf_trace.c
-> @@ -2564,6 +2564,7 @@ kprobe_multi_link_prog_run(struct bpf_kprobe_multi_link *link,
->  	old_run_ctx = bpf_set_run_ctx(&run_ctx.session_ctx.run_ctx);
->  	err = bpf_prog_run(link->link.prog, regs);
->  	bpf_reset_run_ctx(old_run_ctx);
-> +	ftrace_partial_regs_update(fregs, bpf_kprobe_multi_pt_regs_ptr());
->  	rcu_read_unlock();
->  
->   out:
-> -- 
+### 1. COMMIT MESSAGE ANALYSIS
+
+The subject "LoongArch: Enable exception fixup for specific ADE subcode"
+and message clearly indicate this is a **bug fix** for BPF exception
+handling. Key phrases:
+- "handle recoverable memory access errors generated by BPF_PROBE_MEM*
+  instructions"
+- "fix EX_TYPE_BPF memory access exceptions for BPF programs, ensure
+  safe execution"
+- References specific failing test cases (module_attach,
+  subprogs_extable in selftests/bpf)
+
+### 2. CODE CHANGE ANALYSIS
+
+The change is in `do_ade()` (Address alignment exception handler):
+
+```c
++   unsigned int esubcode = FIELD_GET(CSR_ESTAT_ESUBCODE,
+regs->csr_estat);
++
++   if ((esubcode == EXSUBCODE_ADEM) && fixup_exception(regs))
++       goto out;
+```
+
+**The bug mechanism:**
+- BPF programs using `BPF_PROBE_MEM*` instructions may intentionally
+  access invalid memory addresses
+- The BPF JIT properly creates exception table entries (EX_TYPE_BPF)
+  during compilation
+- However, the LoongArch `do_ade()` handler was NOT calling
+  `fixup_exception()` to check these entries
+- Result: Instead of graceful recovery, the kernel dies
+  (`die_if_kernel`) or sends SIGBUS
+
+**The fix mechanism:**
+- Checks for ADEM (Address Exception - Memory) subcode specifically
+- Calls `fixup_exception()` to look up the exception table
+- If a fixup exists, recovers gracefully via the `goto out` path
+- Falls back to original behavior if no fixup is found
+
+This follows the same pattern used by other architectures (x86, arm64)
+for handling BPF exception recovery.
+
+### 3. CLASSIFICATION
+
+This is a **bug fix**, not a new feature:
+- The BPF exception table mechanism already exists
+- The `fixup_exception()` infrastructure already exists
+- This completes incomplete exception handling that was causing crashes
+
+### 4. SCOPE AND RISK ASSESSMENT
+
+**Size:** Very small
+- 5 lines added
+- 1 file modified
+- Single architecture affected (LoongArch only)
+
+**Risk:** LOW
+- Conservative change with explicit fallback to original behavior
+- Uses well-established kernel infrastructure (`fixup_exception`,
+  `FIELD_GET`)
+- Only affects specific ADEM exception subcode
+- No changes to hot paths for non-exception cases
+
+### 5. USER IMPACT
+
+**Affected users:** LoongArch systems running BPF programs that probe
+memory (bpftrace, BPF-based tracing/security tools)
+
+**Severity:** HIGH for affected users
+- Without fix: Kernel panic or SIGBUS when BPF probes invalid memory
+- BPF_PROBE_MEM is designed for safe memory probing; without this, it's
+  broken on LoongArch
+
+### 6. STABILITY INDICATORS
+
+- Signed-off-by from LoongArch maintainer (Huacai Chen) - indicates
+  proper review
+- Specific test cases mentioned (suggests it was tested)
+- The change follows patterns well-established in other architectures
+
+### 7. DEPENDENCY CHECK
+
+The fix is standalone, requiring only:
+- LoongArch architecture support (5.19+)
+- LoongArch BPF JIT with exception table support
+- These prerequisites should exist in stable trees that have LoongArch
+
+### SUMMARY
+
+**Meets stable kernel criteria:**
+1. ✅ **Obviously correct:** Standard pattern used by other architectures
+2. ✅ **Fixes a real bug:** BPF programs crash/panic on memory probe
+   operations
+3. ✅ **Important issue:** Kernel crashes/panics are severe
+4. ✅ **Small and contained:** 5 lines, single file, single architecture
+5. ✅ **No new features:** Uses existing infrastructure, just enables
+   proper behavior
+6. ✅ **Low risk:** Fallback to original behavior when no fixup exists
+
+**Risk vs Benefit:**
+- Risk: Minimal - architecture-specific, conservative, well-tested
+  pattern
+- Benefit: High - fixes kernel crashes for LoongArch BPF users
+
+This is a small, surgical fix to LoongArch exception handling that
+enables proper BPF exception recovery. Without it, BPF programs using
+probe_mem operations will cause kernel panics on LoongArch. The fix
+follows patterns already used by other architectures and has minimal
+risk.
+
+**YES**
+
+ arch/loongarch/kernel/traps.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/arch/loongarch/kernel/traps.c b/arch/loongarch/kernel/traps.c
+index da5926fead4a..8e51ce004572 100644
+--- a/arch/loongarch/kernel/traps.c
++++ b/arch/loongarch/kernel/traps.c
+@@ -535,10 +535,15 @@ asmlinkage void noinstr do_fpe(struct pt_regs *regs, unsigned long fcsr)
+ asmlinkage void noinstr do_ade(struct pt_regs *regs)
+ {
+ 	irqentry_state_t state = irqentry_enter(regs);
++	unsigned int esubcode = FIELD_GET(CSR_ESTAT_ESUBCODE, regs->csr_estat);
++
++	if ((esubcode == EXSUBCODE_ADEM) && fixup_exception(regs))
++		goto out;
+ 
+ 	die_if_kernel("Kernel ade access", regs);
+ 	force_sig_fault(SIGBUS, BUS_ADRERR, (void __user *)regs->csr_badvaddr);
+ 
++out:
+ 	irqentry_exit(regs, state);
+ }
+ 
+-- 
+2.51.0
+
