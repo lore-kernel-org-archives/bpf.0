@@ -1,65 +1,66 @@
 Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DA0B393DC8
-	for <bpf@vger.kernel.org>; Wed,  7 Jan 2026 17:49:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEC58376BC5
+	for <bpf@vger.kernel.org>; Wed,  7 Jan 2026 17:49:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767808192; cv=none; b=cHeJPd4h5ftSjkApKBvkX++JlWQj2kcRRpIuIlyhB2xR8/38b/f8JPK1ixadk4VwzDNQY7l1z+7yq57A71023zgmoNGVTIl97+L0tYRMvtiqyU3rGZaZdbRXjV8OcOro8ei5Y+oNXq/7Mlo6T+F5k0oWBY0MiPp6ZjasDKnzAo0=
+	t=1767808192; cv=none; b=bnX02LeaGHiwPfSdVsEs7eDzfTkqUyTZg4nj2VrsTCr8bty8nH49pbN+u45VALudU0tEQ0KMEG45SKdNdzSRi7PSQCn2eZglt4Zu8TCF90CuGxJ/lxKgeun9emjCdJnioboRBO7KSkAxMxxVbv1W3KSnZiGssbXuFk/cM20EIR8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1767808192; c=relaxed/simple;
-	bh=SWyMRCjSOVCSx3FWxZDLXZnAjKeKkFv9M7p4lS61Opo=;
+	bh=3ZwcEzyETQicE5ksFjWJaJIKAw6O2apJP863bJMMnh8=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=AZivYQ49nU3QyRly6YeNOUAwdGlFdT8n2n+vVGUF7aDNv0oOk3Q7v4ZFQSdA9QJ0/yhekAAzFGHuWZbLis5wdeudYiie3qlJMubGxCRVg5Js01EBfFUIwrWbGhWmSfCRw0zUsJcCoBulRSSeFtR4UZC8L/xiyAEDI6vGZiJLmFw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZSP51YQd; arc=none smtp.client-ip=209.85.128.51
+	 In-Reply-To:To:Cc; b=EVca2EeQPv+F9G8XbRY86j1f1Xk/I4jDI+pkCwD4t7SbP7LBXQfOroNatLPluC7SeZqmu77nfGD9H8XvJwrY2JdPfgPOOAwos37HTltMQEguakLniwtwp3HfewV+8tGXS0eIYgb9Um9sd+Arvw9O1M0N9mmQ3RkvgwQliDPhsfA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iZ5F7ukn; arc=none smtp.client-ip=209.85.128.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZSP51YQd"
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-4779adb38d3so16846185e9.2
-        for <bpf@vger.kernel.org>; Wed, 07 Jan 2026 09:49:45 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iZ5F7ukn"
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-477770019e4so19449295e9.3
+        for <bpf@vger.kernel.org>; Wed, 07 Jan 2026 09:49:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1767808182; x=1768412982; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1767808179; x=1768412979; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Z90nFROdPtst2IKVs/+csEyxpI1YETMH4mOHgmwYj7o=;
-        b=ZSP51YQdoJi9vSEPBQMs+BjZCRWJBeP1zGBMEu/RCVswQ0CcTQrmHFg77fwyDIoyxO
-         QDjBUqZb1VmJD61DF5K9oZfivICUDuJGF4febOwnmxeIOM/7+d6JCIk4c+qKQER91oUt
-         68xGgs7kA35GtfT5U9cK421Ck0omcDeWTZTeNq81L9wZggkaATAcX/VhjYC6dFtv1nBo
-         5hqYNwOfG2Am2rGa7TNqj2+cJ239xC6EpDOcPcr7YZMMD9IW+aYWfJGUqDWEmYIgRA1a
-         n8bxYS/QUY/4l+jYi17CQbHC7J2c9w5E5zaB4/gN4ibllIJJV90mAp4BZoMXompl2IGG
-         924Q==
+        bh=uL0hc0B2d2JeQdXAGmFIKiLGWAuC3m53S6Fw/7Ju8Yc=;
+        b=iZ5F7uknUGeA3kXVsC+tYKxIgZWL+sRATaXIwUVP2SI4HT3wEBOvIgxkYKRaX6Gcie
+         R/ekdUii7i+v4ZC8+RpMLAlXatV8SiLDjvQV3aQ2wg6+RUf4ZqTxUpmIPhkVEy0iiA7L
+         rbhz/2T2cvgKiB4uAvI1eqNn+hQ1mvK4DDBTtjdhVkwlXR4K2zUlJcIvd8dMvpUmfyxI
+         Ey+hRBwEhSPo7WM5IqhcRF7VBmptTCJHXEJBS/8g+T5RK4hhYUnj7/dNVn4Fd6+iapln
+         3IzzThm3YkoyuY7cF1JTEy3LzEyCmpYHUmkS9d2E3GOS2fdxD++2YFLefK968ZoUCmhr
+         tGoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767808182; x=1768412982;
+        d=1e100.net; s=20230601; t=1767808179; x=1768412979;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=Z90nFROdPtst2IKVs/+csEyxpI1YETMH4mOHgmwYj7o=;
-        b=Kne89O6ht8XZuBiVdI1fuQXqIVMAMeW0y1FSSZdN09R0pdVXNX+m1hHMsEeqB3CZwA
-         6Ga7x0pUKFcbXJ+7yiN+Bg56Hzz21us/VtaPfY3OY5bP8D0MCXSP2alrEqMQEQHbE+rV
-         Yi8udZlufLv+xmxNiT6SE9wfIUlwvI5J0EU5bqGr75lpPi5IeDOCw5v4AyW5XVZ5eq5s
-         4LecTFzEwko18eBCVl8vuvgfW9lBQTy2CC0bSSKX8Rm9atH8mR6zpIdSJhd5sldmJTrP
-         FakQcSwQ+zKnEDNUcAHsg8mzKE6YiBD+y/fLaX1zUKkwIkotMfoQI1ArHc4n6nkVPlnb
-         v5PQ==
-X-Gm-Message-State: AOJu0YwCllebQfxYI3CEQNoS4agNicIi4BpBVHuhk+qzD6BH/GHaXLVI
-	iL7lQeMG/zdyocCKcgABw8Kf8iWtwlBgyzAg1rpbHeaqJxXaEFePk/CJ
-X-Gm-Gg: AY/fxX55d3kMShgkGuH6Clbc5ROocavRloE8lbEX8IMCPYBi5sa9o9aHqyMdQAQlPdZ
-	WqPXC2kwlcKp0X7jFVWRnNdR+dnGr+OpXEepvgXDJea+wL5GEyZ1mEc2dm/SMN3/Jt7dLOTszoh
-	E0n+h2EPS9WuEXt2l1DiTg/nROIn4z8lamQvQ6I0zSg1LggFT1WzIYqnKnz3bz1qRAONmPAcEpt
-	tBt9XafxETBsZAgenju4CtYo5x9b12AqbuhV3XAtguvZmq9fR+vQtPbRRVQ86ZO7f7uk5416NBZ
-	xKMELyizTsHstzWvp/AWuW5VZCmwy1+2mKzYUBbp44YxhDhNLt03D7DDPkEYx8PuDa+UQLPtV0D
-	9MZa+kgNrKhDi4ald4zoP1KPC1ebDS2BxcRiYnF+Rc90GvlErSiR/0P8v/m63SgOS604=
-X-Google-Smtp-Source: AGHT+IHPYoy1Gh+KsAYZrWNwn8ZBMZtjb6cbA+0QVRUvRahVtY/3GqS0f+5DMAxSuHBQRsLuNgYBxQ==
-X-Received: by 2002:a05:600c:3110:b0:47d:3ffa:980e with SMTP id 5b1f17b1804b1-47d84b4101dmr34711385e9.28.1767808182234;
-        Wed, 07 Jan 2026 09:49:42 -0800 (PST)
+        bh=uL0hc0B2d2JeQdXAGmFIKiLGWAuC3m53S6Fw/7Ju8Yc=;
+        b=QtYZ1WD/iNRU5bb3ufg2e93cZLRNsdGVwA0JBMA5trLYQRPjPGCm1Rt8MK75VgbX4g
+         QHT9TaTXoBwLS52XxkxrJPvqUhZnY9jK0XMWeJYgLUC7l7WPojZ7FzlLQJFaMMv8cojb
+         JZuSw7XI628fkVEtFllSegxEkwCDKWW0jqo5yTXeu/vvfX5cCZXP2XV2UnvEwVBU+KdI
+         K0w/mPI63UQXMAYU3E8p+KxUOMTt3LGfvtAn36w1LuWilDfQc/1tJZcubOJ2meDgV9Ov
+         YZySlIA/y9usxQLZF+lKgqBW9Bc+1Z8ew69b+VxnGIz/tV/a/J+8dM1WL/5ji7xAWo7g
+         GQpQ==
+X-Gm-Message-State: AOJu0YytFWVD/fAGAyBZW8tgYItCEN7FKe5K371MoJEmX3+lA3KQNwaL
+	2+0cQ1jKRNBNyxiPp/HYHR0h0kLbc7MgZDz7kgHGLhJxktsTI6tmOeWR
+X-Gm-Gg: AY/fxX4hWkoDHS/zQTV1QuQuWvljrMllRxaAeEqry9yygC5oMznHWW4/Vq5dUqsK9hF
+	EyLI9Gve8Ih+ZDASPehGp38PVs4VWsC+juCOVC7t/f0dko5Eef1Z4VOYm/thg9nZMKrOOm0v1m/
+	dEPL7tXBxwaDhZZfl3SUdmaQ4r0G7OT/ffsluHVWSmzjRIkn2fCYD+zjns3V9BD4JqsYSC2bb6z
+	G/vULQ9WntgISKb419x/Xs7+8U5jvQKTrsMiNiAkpkZSCSbealYocCGaMNaPqHbyK9y77+EaAH2
+	OfkooakVj721Zx8EuiFgA3Nfv1AEoJHPrc45RNjOshX6w2M0+wSw0qaKy6Cdh+hyUyEquWT8nsw
+	MX0QSPifu71g868E78mZcWtiZq6C/kKUi0QP7709C3D+HKH3HFA8XeJiBqARklD3hB80=
+X-Google-Smtp-Source: AGHT+IGLCru/G7VhoIk8vlZk8m8j8rZzZd7k2h5uiwjcFRhmaS3sKl0F2sEURNzj5Lq1OPLYKu48iQ==
+X-Received: by 2002:a05:600c:1d0a:b0:477:8b77:155e with SMTP id 5b1f17b1804b1-47d84b17b55mr43849105e9.15.1767808179409;
+        Wed, 07 Jan 2026 09:49:39 -0800 (PST)
 Received: from localhost ([2620:10d:c092:500::5:d4be])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47d7f653cd6sm115987495e9.9.2026.01.07.09.49.41
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47d8715b5f7sm19137785e9.4.2026.01.07.09.49.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jan 2026 09:49:41 -0800 (PST)
+        Wed, 07 Jan 2026 09:49:39 -0800 (PST)
 From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Date: Wed, 07 Jan 2026 17:49:10 +0000
-Subject: [PATCH RFC v3 08/10] selftests/bpf: Refactor timer selftests
+Date: Wed, 07 Jan 2026 17:49:07 +0000
+Subject: [PATCH RFC v3 05/10] bpf: Enable bpf timer and workqueue use in
+ NMI
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -68,7 +69,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260107-timer_nolock-v3-8-740d3ec3e5f9@meta.com>
+Message-Id: <20260107-timer_nolock-v3-5-740d3ec3e5f9@meta.com>
 References: <20260107-timer_nolock-v3-0-740d3ec3e5f9@meta.com>
 In-Reply-To: <20260107-timer_nolock-v3-0-740d3ec3e5f9@meta.com>
 To: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
@@ -76,118 +77,495 @@ To: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
  memxor@gmail.com, eddyz87@gmail.com
 Cc: Mykyta Yatsenko <yatsenko@meta.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1767808173; l=2904;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1767808173; l=13777;
  i=yatsenko@meta.com; s=20251031; h=from:subject:message-id;
- bh=I12f8/2m85P/qMhnRxqBUg240K5nCwpW7fUenuGUBFo=;
- b=grmIi6Gy4+gbZyBc+Rky8FlTimwsgWUFTx0RWZhjTM/yJ9aMDziwe+squVTfglQ1JCkkP+fDR
- QzzjHi8NkHRC40cU8AicoUM8H9ucousehYyLZ3J5OmFbF5plGNs0xEM
+ bh=Yg/5IPS2iQyipQoiK4nT0Yb3JhIdDuUmbj/Xe45d8IE=;
+ b=aANAp4N0Hf0iEWi1ZOG4nkMuMb/aH2ue/5oefeNVezQginOardaJsZgKj7aVOVKO8eavtjvs6
+ P/XahzlyhJ7AFqrkwgyFbzwTFZlYXz0oGWbsm3rS3zoyoaFsJ0UYErH
 X-Developer-Key: i=yatsenko@meta.com; a=ed25519;
  pk=TFoLStOoH/++W4HJHRgNr8zj8vPFB1W+/QECPcQygzo=
 
 From: Mykyta Yatsenko <yatsenko@meta.com>
 
-Refactor timer selftests, extracting stress test into a separate test.
-This makes it easier to debug test failures and allows to extend.
+Refactor bpf timer and workqueue helpers to allow calling them from NMI
+context by making all operations lock-free and deferring NMI-unsafe
+work to irq_work.
+
+Previously, bpf_timer_start(), and bpf_wq_start()
+could not be called from NMI context because they acquired
+bpf_spin_lock and called hrtimer/schedule_work APIs directly. This
+patch removes these limitations.
+
+Key changes:
+ * Remove bpf_spin_lock from struct bpf_async_kern. Replace locked
+   operations with atomic cmpxchg() for initialization and xchg() for
+   cancel and free.
+ * Add per-async irq_work to defer NMI-unsafe operations (hrtimer_start,
+   hrtimer_try_to_cancel, schedule_work) from NMI to softirq context.
+ * Use the lock-free mpmc_cell (added in the previous commit) to pass
+   operation commands (start/cancel/free) along with their parameters
+   (nsec, mode) from NMI-safe callers to the irq_work handler.
+ * Add reference counting to bpf_async_cb to ensure the object stays
+   alive until all scheduled irq_work completes and the timer/work
+   callback finishes.
+ * Move bpf_prog_put() to RCU callback to handle races between
+   set_callback() and cancel_and_free().
+
+This enables BPF programs attached to NMI-context hooks (perf
+events) to use timers and workqueues for deferred processing.
 
 Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
 ---
- tools/testing/selftests/bpf/prog_tests/timer.c | 55 +++++++++++++++++---------
- 1 file changed, 36 insertions(+), 19 deletions(-)
+ kernel/bpf/helpers.c | 288 ++++++++++++++++++++++++++++++++++-----------------
+ 1 file changed, 191 insertions(+), 97 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/timer.c b/tools/testing/selftests/bpf/prog_tests/timer.c
-index 34f9ccce260293755980bcd6fcece491964f7929..4d853d1bd2a71b3d0f1ba0daa7a699945b4457fe 100644
---- a/tools/testing/selftests/bpf/prog_tests/timer.c
-+++ b/tools/testing/selftests/bpf/prog_tests/timer.c
-@@ -22,13 +22,35 @@ static void *spin_lock_thread(void *arg)
- 	pthread_exit(arg);
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index dc8ed948321e6c535d2cc2e8f9fbdd0636cdcabf..b90b005a17e1de9c0c62056a665d124b883c6320 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -29,6 +29,7 @@
+ #include <linux/task_work.h>
+ #include <linux/irq_work.h>
+ #include <linux/buildid.h>
++#include <mpmc_cell.h>
+ 
+ #include "../../lib/kstrtox.h"
+ 
+@@ -1095,6 +1096,23 @@ static void *map_key_from_value(struct bpf_map *map, void *value, u32 *arr_idx)
+ 	return (void *)value - round_up(map->key_size, 8);
  }
  
--static int timer(struct timer *timer_skel)
++enum bpf_async_type {
++	BPF_ASYNC_TYPE_TIMER = 0,
++	BPF_ASYNC_TYPE_WQ,
++};
 +
-+static int timer_stress(struct timer *timer_skel)
- {
--	int i, err, prog_fd;
-+	int i, err = 1, prog_fd;
- 	LIBBPF_OPTS(bpf_test_run_opts, topts);
- 	pthread_t thread_id[NUM_THR];
- 	void *ret;
++enum bpf_async_op {
++	BPF_ASYNC_START,
++	BPF_ASYNC_CANCEL,
++	BPF_ASYNC_CANCEL_AND_FREE,
++};
++
++struct bpf_async_cmd {
++	u64 nsec;
++	u32 mode;
++	u32 op;
++};
++
+ struct bpf_async_cb {
+ 	struct bpf_map *map;
+ 	struct bpf_prog *prog;
+@@ -1105,6 +1123,12 @@ struct bpf_async_cb {
+ 		struct work_struct delete_work;
+ 	};
+ 	u64 flags;
++	struct irq_work worker;
++	struct bpf_mpmc_cell_ctl ctl;
++	struct bpf_async_cmd cmd[2];
++	atomic_t last_seq;
++	refcount_t refcnt;
++	enum bpf_async_type type;
+ };
  
-+	prog_fd = bpf_program__fd(timer_skel->progs.race);
-+	for (i = 0; i < NUM_THR; i++) {
-+		err = pthread_create(&thread_id[i], NULL,
-+				     &spin_lock_thread, &prog_fd);
-+		if (!ASSERT_OK(err, "pthread_create"))
-+			break;
-+	}
+ /* BPF map elements can contain 'struct bpf_timer'.
+@@ -1142,18 +1166,8 @@ struct bpf_async_kern {
+ 		struct bpf_hrtimer *timer;
+ 		struct bpf_work *work;
+ 	};
+-	/* bpf_spin_lock is used here instead of spinlock_t to make
+-	 * sure that it always fits into space reserved by struct bpf_timer
+-	 * regardless of LOCKDEP and spinlock debug flags.
+-	 */
+-	struct bpf_spin_lock lock;
+ } __attribute__((aligned(8)));
+ 
+-enum bpf_async_type {
+-	BPF_ASYNC_TYPE_TIMER = 0,
+-	BPF_ASYNC_TYPE_WQ,
+-};
+-
+ static DEFINE_PER_CPU(struct bpf_hrtimer *, hrtimer_running);
+ 
+ static enum hrtimer_restart bpf_timer_cb(struct hrtimer *hrtimer)
+@@ -1219,6 +1233,13 @@ static void bpf_async_cb_rcu_free(struct rcu_head *rcu)
+ {
+ 	struct bpf_async_cb *cb = container_of(rcu, struct bpf_async_cb, rcu);
+ 
++	/*
++	 * Drop the last reference to prog only after RCU GP, as set_callback()
++	 * may race with cancel_and_free()
++	 */
++	if (cb->prog)
++		bpf_prog_put(cb->prog);
 +
-+	while (i) {
-+		err = pthread_join(thread_id[--i], &ret);
-+		if (ASSERT_OK(err, "pthread_join"))
-+			ASSERT_EQ(ret, (void *)&prog_fd, "pthread_join");
+ 	kfree_nolock(cb);
+ }
+ 
+@@ -1246,18 +1267,17 @@ static void bpf_timer_delete_work(struct work_struct *work)
+ 	call_rcu(&t->cb.rcu, bpf_async_cb_rcu_free);
+ }
+ 
++static void __bpf_async_cancel_and_free(struct bpf_async_kern *async);
++static void bpf_async_irq_worker(struct irq_work *work);
++
+ static int __bpf_async_init(struct bpf_async_kern *async, struct bpf_map *map, u64 flags,
+ 			    enum bpf_async_type type)
+ {
+-	struct bpf_async_cb *cb;
++	struct bpf_async_cb *cb, *old_cb;
+ 	struct bpf_hrtimer *t;
+ 	struct bpf_work *w;
+ 	clockid_t clockid;
+ 	size_t size;
+-	int ret = 0;
+-
+-	if (in_nmi())
+-		return -EOPNOTSUPP;
+ 
+ 	switch (type) {
+ 	case BPF_ASYNC_TYPE_TIMER:
+@@ -1270,18 +1290,13 @@ static int __bpf_async_init(struct bpf_async_kern *async, struct bpf_map *map, u
+ 		return -EINVAL;
+ 	}
+ 
+-	__bpf_spin_lock_irqsave(&async->lock);
+ 	t = async->timer;
+-	if (t) {
+-		ret = -EBUSY;
+-		goto out;
+-	}
++	if (t)
++		return -EBUSY;
+ 
+ 	cb = bpf_map_kmalloc_nolock(map, size, 0, map->numa_node);
+-	if (!cb) {
+-		ret = -ENOMEM;
+-		goto out;
+-	}
++	if (!cb)
++		return -ENOMEM;
+ 
+ 	switch (type) {
+ 	case BPF_ASYNC_TYPE_TIMER:
+@@ -1304,9 +1319,19 @@ static int __bpf_async_init(struct bpf_async_kern *async, struct bpf_map *map, u
+ 	cb->map = map;
+ 	cb->prog = NULL;
+ 	cb->flags = flags;
++	cb->worker = IRQ_WORK_INIT(bpf_async_irq_worker);
++	bpf_mpmc_cell_init(&cb->ctl, &cb->cmd[0], &cb->cmd[1]);
++	refcount_set(&cb->refcnt, 1); /* map's reference */
++	atomic_set(&cb->last_seq, 0);
++	cb->type = type;
+ 	rcu_assign_pointer(cb->callback_fn, NULL);
+ 
+-	WRITE_ONCE(async->cb, cb);
++	old_cb = cmpxchg(&async->cb, NULL, cb);
++	if (old_cb) {
++		/* Lost the race to initialize this bpf_async_kern, drop the allocated object */
++		kfree_nolock(cb);
++		return -EBUSY;
 +	}
-+	return err;
+ 	/* Guarantee the order between async->cb and map->usercnt. So
+ 	 * when there are concurrent uref release and bpf timer init, either
+ 	 * bpf_timer_cancel_and_free() called by uref release reads a no-NULL
+@@ -1317,13 +1342,11 @@ static int __bpf_async_init(struct bpf_async_kern *async, struct bpf_map *map, u
+ 		/* maps with timers must be either held by user space
+ 		 * or pinned in bpffs.
+ 		 */
+-		WRITE_ONCE(async->cb, NULL);
+-		kfree_nolock(cb);
+-		ret = -EPERM;
++		__bpf_async_cancel_and_free(async);
++		return -EPERM;
+ 	}
+-out:
+-	__bpf_spin_unlock_irqrestore(&async->lock);
+-	return ret;
++
++	return 0;
+ }
+ 
+ BPF_CALL_3(bpf_timer_init, struct bpf_async_kern *, timer, struct bpf_map *, map,
+@@ -1354,6 +1377,61 @@ static const struct bpf_func_proto bpf_timer_init_proto = {
+ 	.arg3_type	= ARG_ANYTHING,
+ };
+ 
++static int bpf_async_schedule_op(struct bpf_async_cb *cb, u32 op, u64 nsec, u32 timer_mode)
++{
++	struct bpf_mpmc_cell_ctl *ctl = &cb->ctl;
++	struct bpf_async_cmd *cmd;
++
++	cmd = bpf_mpmc_cell_write_begin(ctl);
++	if (!cmd)
++		return -EBUSY;
++
++	cmd->nsec = nsec;
++	cmd->mode = timer_mode;
++	cmd->op = op;
++
++	bpf_mpmc_cell_write_commit(ctl);
++
++	if (!refcount_inc_not_zero(&cb->refcnt))
++		return -EBUSY;
++
++	irq_work_queue(&cb->worker);
++
++	return 0;
 +}
 +
-+static int timer(struct timer *timer_skel)
++static int bpf_async_read_op(struct bpf_async_cb *cb, enum bpf_async_op *op,
++			     u64 *nsec, u32 *flags)
 +{
-+	int err, prog_fd;
-+	LIBBPF_OPTS(bpf_test_run_opts, topts);
++	struct bpf_mpmc_cell_ctl *ctl = &cb->ctl;
++	struct bpf_async_cmd *cmd;
++	u32 seq, last_seq;
 +
- 	err = timer__attach(timer_skel);
- 	if (!ASSERT_OK(err, "timer_attach"))
- 		return err;
-@@ -63,25 +85,10 @@ static int timer(struct timer *timer_skel)
- 	/* check that code paths completed */
- 	ASSERT_EQ(timer_skel->bss->ok, 1 | 2 | 4, "ok");
++	do {
++		last_seq = atomic_read_acquire(&cb->last_seq);
++		cmd = bpf_mpmc_cell_read_begin(ctl, &seq);
++
++		/* Return -EBUSY if current seq is consumed by another reader */
++		if (seq == last_seq)
++			return -EBUSY;
++
++		*nsec = cmd->nsec;
++		*flags = cmd->mode;
++		*op = cmd->op;
++
++	/*
++	 * Retry read on one of the two conditions:
++	 *  1. Some writer produced new snapshot while we were reading. Our snapshot may have been
++	 *     modified, and not consistent.
++	 *  2. Another reader consumed some snapshot. We need to validate that this snapshot is not
++	 *     consumed. This prevents duplicate op processing.
++	 */
++	} while (bpf_mpmc_cell_read_end(ctl, seq) == -EAGAIN ||
++		 atomic_cmpxchg_release(&cb->last_seq, last_seq, seq) != last_seq);
++
++	return 0;
++}
++
+ static int __bpf_async_set_callback(struct bpf_async_kern *async, void *callback_fn,
+ 				    struct bpf_prog *prog)
+ {
+@@ -1395,22 +1473,19 @@ static const struct bpf_func_proto bpf_timer_set_callback_proto = {
+ 	.arg2_type	= ARG_PTR_TO_FUNC,
+ };
  
--	prog_fd = bpf_program__fd(timer_skel->progs.race);
--	for (i = 0; i < NUM_THR; i++) {
--		err = pthread_create(&thread_id[i], NULL,
--				     &spin_lock_thread, &prog_fd);
--		if (!ASSERT_OK(err, "pthread_create"))
--			break;
+-BPF_CALL_3(bpf_timer_start, struct bpf_async_kern *, timer, u64, nsecs, u64, flags)
++BPF_CALL_3(bpf_timer_start, struct bpf_async_kern *, async, u64, nsecs, u64, flags)
+ {
+ 	struct bpf_hrtimer *t;
+-	int ret = 0;
+-	enum hrtimer_mode mode;
++	u32 mode;
+ 
+-	if (in_nmi())
+-		return -EOPNOTSUPP;
+ 	if (flags & ~(BPF_F_TIMER_ABS | BPF_F_TIMER_CPU_PIN))
+ 		return -EINVAL;
+-	__bpf_spin_lock_irqsave(&timer->lock);
+-	t = timer->timer;
+-	if (!t || !t->cb.prog) {
+-		ret = -EINVAL;
+-		goto out;
 -	}
++
++	guard(rcu)();
++
++	t = async->timer;
++	if (!t || !t->cb.prog)
++		return -EINVAL;
+ 
+ 	if (flags & BPF_F_TIMER_ABS)
+ 		mode = HRTIMER_MODE_ABS_SOFT;
+@@ -1420,10 +1495,7 @@ BPF_CALL_3(bpf_timer_start, struct bpf_async_kern *, timer, u64, nsecs, u64, fla
+ 	if (flags & BPF_F_TIMER_CPU_PIN)
+ 		mode |= HRTIMER_MODE_PINNED;
+ 
+-	hrtimer_start(&t->timer, ns_to_ktime(nsecs), mode);
+-out:
+-	__bpf_spin_unlock_irqrestore(&timer->lock);
+-	return ret;
++	return bpf_async_schedule_op(&t->cb, BPF_ASYNC_START, nsecs, mode);
+ }
+ 
+ static const struct bpf_func_proto bpf_timer_start_proto = {
+@@ -1435,17 +1507,6 @@ static const struct bpf_func_proto bpf_timer_start_proto = {
+ 	.arg3_type	= ARG_ANYTHING,
+ };
+ 
+-static void drop_prog_refcnt(struct bpf_async_cb *async)
+-{
+-	struct bpf_prog *prog = async->prog;
 -
--	while (i) {
--		err = pthread_join(thread_id[--i], &ret);
--		if (ASSERT_OK(err, "pthread_join"))
--			ASSERT_EQ(ret, (void *)&prog_fd, "pthread_join");
+-	if (prog) {
+-		bpf_prog_put(prog);
+-		async->prog = NULL;
+-		rcu_assign_pointer(async->callback_fn, NULL);
 -	}
+-}
 -
+ BPF_CALL_1(bpf_timer_cancel, struct bpf_async_kern *, async)
+ {
+ 	struct bpf_hrtimer *t, *cur_t;
+@@ -1513,27 +1574,16 @@ static const struct bpf_func_proto bpf_timer_cancel_proto = {
+ 	.arg1_type	= ARG_PTR_TO_TIMER,
+ };
+ 
+-static struct bpf_async_cb *__bpf_async_cancel_and_free(struct bpf_async_kern *async)
++static void __bpf_async_cancel_and_free(struct bpf_async_kern *async)
+ {
+ 	struct bpf_async_cb *cb;
+ 
+-	/* Performance optimization: read async->cb without lock first. */
+-	if (!READ_ONCE(async->cb))
+-		return NULL;
+-
+-	__bpf_spin_lock_irqsave(&async->lock);
+-	/* re-read it under lock */
+-	cb = async->cb;
++	cb = xchg(&async->cb, NULL);
+ 	if (!cb)
+-		goto out;
+-	drop_prog_refcnt(cb);
+-	/* The subsequent bpf_timer_start/cancel() helpers won't be able to use
+-	 * this timer, since it won't be initialized.
+-	 */
+-	WRITE_ONCE(async->cb, NULL);
+-out:
+-	__bpf_spin_unlock_irqrestore(&async->lock);
+-	return cb;
++		return;
++
++	/* Consume map's refcnt */
++	irq_work_queue(&cb->worker);
+ }
+ 
+ static void bpf_timer_delete(struct bpf_hrtimer *t)
+@@ -1588,19 +1638,76 @@ static void bpf_timer_delete(struct bpf_hrtimer *t)
+ 	}
+ }
+ 
++static void bpf_async_process_op(struct bpf_async_cb *cb, u32 op,
++				 u64 timer_nsec, u32 timer_mode)
++{
++	switch (cb->type) {
++	case BPF_ASYNC_TYPE_TIMER: {
++		struct bpf_hrtimer *t = container_of(cb, struct bpf_hrtimer, cb);
++
++		switch (op) {
++		case BPF_ASYNC_START:
++			hrtimer_start(&t->timer, ns_to_ktime(timer_nsec), timer_mode);
++			break;
++		case BPF_ASYNC_CANCEL:
++			hrtimer_try_to_cancel(&t->timer);
++			break;
++		case BPF_ASYNC_CANCEL_AND_FREE:
++			bpf_timer_delete(t);
++			break;
++		default:
++			break;
++		}
++		break;
++	}
++	case BPF_ASYNC_TYPE_WQ: {
++		struct bpf_work *w = container_of(cb, struct bpf_work, cb);
++
++		switch (op) {
++		case BPF_ASYNC_START:
++			schedule_work(&w->work);
++			break;
++		case BPF_ASYNC_CANCEL_AND_FREE:
++			/*
++			 * Trigger cancel of the sleepable work, but *do not* wait for
++			 * it to finish.
++			 * kfree will be called once the work has finished.
++			 */
++			schedule_work(&w->delete_work);
++			break;
++		default:
++			break;
++		}
++		break;
++	}
++	}
++}
++
++static void bpf_async_irq_worker(struct irq_work *work)
++{
++	struct bpf_async_cb *cb = container_of(work, struct bpf_async_cb, worker);
++	u32 op, timer_mode;
++	u64 nsec;
++	int err;
++
++	err = bpf_async_read_op(cb, &op, &nsec, &timer_mode);
++	if (err)
++		goto out;
++
++	bpf_async_process_op(cb, op, nsec, timer_mode);
++
++out:
++	if (refcount_dec_and_test(&cb->refcnt))
++		bpf_async_process_op(cb, BPF_ASYNC_CANCEL_AND_FREE, 0, 0);
++}
++
+ /*
+  * This function is called by map_delete/update_elem for individual element and
+  * by ops->map_release_uref when the user space reference to a map reaches zero.
+  */
+ void bpf_timer_cancel_and_free(void *val)
+ {
+-	struct bpf_hrtimer *t;
+-
+-	t = (struct bpf_hrtimer *)__bpf_async_cancel_and_free(val);
+-	if (!t)
+-		return;
+-
+-	bpf_timer_delete(t);
++	__bpf_async_cancel_and_free(val);
+ }
+ 
+ /* This function is called by map_delete/update_elem for individual element and
+@@ -1608,19 +1715,7 @@ void bpf_timer_cancel_and_free(void *val)
+  */
+ void bpf_wq_cancel_and_free(void *val)
+ {
+-	struct bpf_work *work;
+-
+-	BTF_TYPE_EMIT(struct bpf_wq);
+-
+-	work = (struct bpf_work *)__bpf_async_cancel_and_free(val);
+-	if (!work)
+-		return;
+-	/* Trigger cancel of the sleepable work, but *do not* wait for
+-	 * it to finish if it was running as we might not be in a
+-	 * sleepable context.
+-	 * kfree will be called once the work has finished.
+-	 */
+-	schedule_work(&work->delete_work);
++	__bpf_async_cancel_and_free(val);
+ }
+ 
+ BPF_CALL_2(bpf_kptr_xchg, void *, dst, void *, ptr)
+@@ -3093,15 +3188,14 @@ __bpf_kfunc int bpf_wq_start(struct bpf_wq *wq, unsigned int flags)
+ 	struct bpf_async_kern *async = (struct bpf_async_kern *)wq;
+ 	struct bpf_work *w;
+ 
+-	if (in_nmi())
+-		return -EOPNOTSUPP;
+ 	if (flags)
+ 		return -EINVAL;
+ 	w = READ_ONCE(async->work);
+ 	if (!w || !READ_ONCE(w->cb.prog))
+ 		return -EINVAL;
+ 
+-	schedule_work(&w->work);
++	bpf_async_schedule_op(&w->cb, BPF_ASYNC_START, 0, 0);
++
  	return 0;
  }
  
--/* TODO: use pid filtering */
--void serial_test_timer(void)
-+static void test_timer(int (*timer_test_fn)(struct timer *timer_skel))
- {
- 	struct timer *timer_skel = NULL;
- 	int err;
-@@ -94,13 +101,23 @@ void serial_test_timer(void)
- 	if (!ASSERT_OK_PTR(timer_skel, "timer_skel_load"))
- 		return;
- 
--	err = timer(timer_skel);
-+	err = timer_test_fn(timer_skel);
- 	ASSERT_OK(err, "timer");
- 	timer__destroy(timer_skel);
-+}
-+
-+void serial_test_timer(void)
-+{
-+	test_timer(timer);
- 
- 	RUN_TESTS(timer_failure);
- }
- 
-+void serial_test_timer_stress(void)
-+{
-+	test_timer(timer_stress);
-+}
-+
- void test_timer_interrupt(void)
- {
- 	struct timer_interrupt *skel = NULL;
 
 -- 
 2.52.0
