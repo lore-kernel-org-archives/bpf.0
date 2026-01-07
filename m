@@ -1,28 +1,28 @@
-Received: from relay.hostedemail.com (smtprelay0013.hostedemail.com [216.40.44.13])
+Received: from relay.hostedemail.com (smtprelay0014.hostedemail.com [216.40.44.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B71A34D4D8;
-	Wed,  7 Jan 2026 16:03:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 469E833A01E;
+	Wed,  7 Jan 2026 16:07:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767801822; cv=none; b=gFhe0rCLRZM8r6LmyBTQTRQe5gQz4XMQJT/zh/ZIs3nGTINYqTPClOV1U5nCT18UhIBJqJq/WiIR4pgabvhDIqLLR20rwHTzSx6TtGqdmlOF68vbBWA4EfRr4j7pG9aFXCBJ40qQcdqIGismbP8GDLNFTaS1fS3D2DcL0HTzljM=
+	t=1767802084; cv=none; b=YCGKs9idJOR6AVq+sespyyKnnsSXhR5XiaEyb1Iv5kWdRSQ02fG6pFSB7UnGMhMqj9C15ECc2LT/IZ9Te0bvCu8H7BCJ1Sutaw0KrZqA66SkizWxEQyJwdOoWoDThxxJh6aDTXreXce/vJrFw348SGr4mV2ayJYdBoDjWKqD1Ww=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767801822; c=relaxed/simple;
-	bh=0/LOXatsbH7F3/lbi5zwi6kK9oqM1E1EsqV+tVAbn7c=;
+	s=arc-20240116; t=1767802084; c=relaxed/simple;
+	bh=rAdTjzfI6ZefcjNO2L8Jejw5vRP0yRdJuiyw0aoSZQ0=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=sTURO8I4e3HRxlC6bv6sWlm3Ij/IVmdPVadUCAy39CTMnQVXZpSH/IiIhLfgRIZHS79IX/52H/h4VkDSP1fKr2Af9Zk/9wjwUuw+O6he3USVFLLOQP9XAOU8vlVbZipSx+lyKRYzsKSQpgHoZD+5s7iht/U7CKHGweD8Op7a4Dw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.13
+	 MIME-Version:Content-Type; b=ltUbPokvGAqLAA5TNnRwe5aD0i3fVzbijywg/3RTAS2VBsu6T2fcNpJKcyV+W53khQhGEZINoCCIF5+tm0GLy6UFanVqFPUSpTuYhE3MOU4cHQ8DJo9RPOp4I+b4NAVLwVPZZyzq09TaKXsajZdtRNyDViI0Pm5yk5sAjajFsBA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf04.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay06.hostedemail.com (Postfix) with ESMTP id BDE121A5130;
-	Wed,  7 Jan 2026 16:03:28 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf04.hostedemail.com (Postfix) with ESMTPA id E70AC20023;
-	Wed,  7 Jan 2026 16:03:25 +0000 (UTC)
-Date: Wed, 7 Jan 2026 11:03:52 -0500
+Received: from omf06.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay07.hostedemail.com (Postfix) with ESMTP id DB827160420;
+	Wed,  7 Jan 2026 16:07:50 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf06.hostedemail.com (Postfix) with ESMTPA id 301EF2000E;
+	Wed,  7 Jan 2026 16:07:48 +0000 (UTC)
+Date: Wed, 7 Jan 2026 11:08:14 -0500
 From: Steven Rostedt <rostedt@goodmis.org>
-To: Jiri Olsa <jolsa@kernel.org>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>, Will Deacon <will@kernel.org>,
+To: Will Deacon <will@kernel.org>
+Cc: Jiri Olsa <jolsa@kernel.org>, Masami Hiramatsu <mhiramat@kernel.org>,
  Mahe Tardy <mahe.tardy@gmail.com>, Peter Zijlstra <peterz@infradead.org>,
  bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
  linux-arm-kernel@lists.infradead.org, x86@kernel.org, Yonghong Song
@@ -30,9 +30,10 @@ Cc: Masami Hiramatsu <mhiramat@kernel.org>, Will Deacon <will@kernel.org>,
  <andrii@kernel.org>, Mark Rutland <mark.rutland@arm.com>
 Subject: Re: [PATCH bpf-next 1/2] arm64/ftrace,bpf: Fix partial regs after
  bpf_prog_run
-Message-ID: <20260107110352.3fd7ddda@gandalf.local.home>
-In-Reply-To: <20260107093256.54616-1-jolsa@kernel.org>
+Message-ID: <20260107110814.1dfc9ec0@gandalf.local.home>
+In-Reply-To: <aV5qpZwxgVRu2Q8w@willie-the-truck>
 References: <20260107093256.54616-1-jolsa@kernel.org>
+	<aV5qpZwxgVRu2Q8w@willie-the-truck>
 X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -42,53 +43,33 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Rspamd-Server: rspamout07
-X-Rspamd-Queue-Id: E70AC20023
-X-Stat-Signature: 13qo46g6zpia7f3nofbp81nnodino9w7
+X-Stat-Signature: qy4j19qy53bj957cygb9gkss444jbwzi
+X-Rspamd-Server: rspamout04
+X-Rspamd-Queue-Id: 301EF2000E
 X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX1957k6O/UsmSN3vUac32Bo7sXZIZwwkaaU=
-X-HE-Tag: 1767801805-671253
-X-HE-Meta: U2FsdGVkX18RsKY0dngVyvOKbOnb578X+xSZkEOG7hLLVWfcT997CreYeXdTXjiUBbrnEpEplun5zUoX/yIde/2G7I0khiiwc2+9R3i83hE5x9MaXQsj752xyWlfb1torPzACnrRGbNQRBs76gmyhpH81bHqH6l5Ph89iZObGEZbEZGFPfhDP4wmX4UEQOSAmpy+EanvESqs05MZHmkt+EhdhXlEt4bxk4hAlAIcQw42HV/JXn0BV2+43E+XurhE5vtIgIOTTqPOPf6C1dvfnCE7BZArazcQzYY63MXPU9eCBeI0YhZEhYxCQn/Q3+/MgFzPmaLc5W8Wh67jl6agKZJpPxz16ltc
+X-Session-ID: U2FsdGVkX19Psz/3Po3Wu+zE9EFiNolFBPIekU7NMl0=
+X-HE-Tag: 1767802068-600516
+X-HE-Meta: U2FsdGVkX19MpXNmjRTzf5eqNvutq13fH6LNi6K+gfHE6MtwcqV9v17WFTdDoZ8hnovtbZRxIDPYuPGSnvVQCPErohKxIFTHtJ3uDJi0CJvWrwxOSPNMwdbhjophPBLCXWhG8yHdzUuQ6JTsnRw2906L0DpujHMONSJT/3aVtTdaEybCmKF1nYcXDFg6NwiuJoCoPl+iio7bxppqMkJx2nyNMjvkNM2F5DGs1OoayfjqZtxfFwAIADNBVxZv81v1kVsEIr92L9frvqK9SgbPTxiFrrSFhOXnUVht2QY/GD9Sh0hUXlym1QLlWvB0Jke+Gl3j9N4ImY5uAJYWmYknfOXC8irHT0XR
 
-On Wed,  7 Jan 2026 10:32:55 +0100
-Jiri Olsa <jolsa@kernel.org> wrote:
+On Wed, 7 Jan 2026 14:16:05 +0000
+Will Deacon <will@kernel.org> wrote:
 
-> diff --git a/arch/arm64/include/asm/ftrace.h b/arch/arm64/include/asm/ftrace.h
-> index 1621c84f44b3..177c7bbf3b84 100644
-> --- a/arch/arm64/include/asm/ftrace.h
-> +++ b/arch/arm64/include/asm/ftrace.h
-> @@ -157,6 +157,30 @@ ftrace_partial_regs(const struct ftrace_regs *fregs, struct pt_regs *regs)
->  	return regs;
->  }
->  
+> I still don't understand why we need anything new in the arch code for this.
+> 
+> We've selected HAVE_ARCH_FTRACE_REGS and we implement
+> ftrace_regs_set_instruction_pointer() and ftrace_regs_set_return_value()
+> so the core code already has everything it needs to make this work
+> without additional arch support.
 
-See my reply in the other email thread:
+I believe the issue is that the BPF code takes a pt_regs and does the
+update directly with that, and not the ftrace_regs.
 
-  https://lore.kernel.org/all/20260107105316.2b70a308@gandalf.local.home/
+I'm guessing this is due to BPF programs modifying the pt_regs directly,
+and BPF programs do not yet understand ftrace_regs?
+
+Because arm64 requires making a copy of pt_regs as the ftrace_regs has a
+different layout, and the ftrace_regs is what does the changes, if the
+pt_regs passed to the BPF program modifies the values it needs a way to
+propagate that back to the ftrace_regs.
 
 -- Steve
-
-
-> +/*
-> + * ftrace_partial_regs_update - update the original ftrace_regs from regs
-> + * @fregs: The ftrace_regs to update from @regs
-> + * @regs: The partial regs from ftrace_partial_regs() that was updated
-> + *
-> + * Some architectures have the partial regs living in the ftrace_regs
-> + * structure, whereas other architectures need to make a different copy
-> + * of the @regs. If a partial @regs is retrieved by ftrace_partial_regs() and
-> + * if the code using @regs updates a field (like the instruction pointer or
-> + * stack pointer) it may need to propagate that change to the original @fregs
-> + * it retrieved the partial @regs from. Use this function to guarantee that
-> + * update happens.
-> + */
-> +static __always_inline void
-> +ftrace_partial_regs_update(const struct ftrace_regs *fregs, struct pt_regs *regs)
-> +{
-> +	struct __arch_ftrace_regs *afregs = arch_ftrace_regs(fregs);
-> +
-> +	if (afregs->pc != regs->pc) {
-> +		afregs->pc = regs->pc;
-> +		afregs->regs[0] = regs->regs[0];
-> +	}
-> +}
