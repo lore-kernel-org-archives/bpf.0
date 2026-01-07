@@ -1,132 +1,144 @@
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx-rz-2.rrze.uni-erlangen.de (mx-rz-2.rrze.uni-erlangen.de [131.188.11.21])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37AF2387560
-	for <bpf@vger.kernel.org>; Wed,  7 Jan 2026 17:49:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49838487BE
+	for <bpf@vger.kernel.org>; Wed,  7 Jan 2026 18:00:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=131.188.11.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767808192; cv=none; b=niTG7prmgQ4OlP59NK/9FEZyVl6QZsZzKUX7S7Up/IkVLgEY/JtUXVUQVsaXSwXrJxChvxY3oIgzwMK0+fzKRKdq9HtKDELQLYc5IKRRnW90Xaq1qq3N8bg89aX1E9XIA/sdnb8dvgaqqcGcLRtH6RkymFhK4wyjw7InaMFAtjY=
+	t=1767808841; cv=none; b=ftNTsyDfRKsv60dFdsUDJmUpgpDFTDvRxBVcP88t/5gDdeE+AoELommugMyg694G0tl+KXqld9TOAJv7wMF9kQQAf2J4+Ch5POd0vrY6gq3PRAMM5PpYuXf+W26T2NrZl0rjhzJ94luH7yu09CU7afIP1bmi+dgnNXTcXJaEhRU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767808192; c=relaxed/simple;
-	bh=AEcTR+nY6qSU2TaOIdNV0XrgxGl8MLFbh1nkZk6Bv+w=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=jgVoHcCsaJ3pIE95AvuJqT+/CJ6FMMUB91E67j9obBdVPuBGgcoPjzhLrugDj0ljvVdxZoIKFxt4uTqsSapaS+Onh0S8jhN6Sf53kcM+xRitjJahpsNZK4jU+gQOo8rh7NoUFMVzug+Rxa8qKMbUp+MNljblOJpK6usZTK9U3tw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KWdfJEK/; arc=none smtp.client-ip=209.85.221.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1767808841; c=relaxed/simple;
+	bh=XWYpzFVOYNMZshVetMxqmksABzUHIEZ+W32iYolvtL4=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=F2SJt7l3WVvav/rIzN78V3Pp7ep/oVG2hK+N0G2Vw8ZRTisjWKC8mf6Ky0PJdadV2FUVeQhKPTBwi/jpGDkDdT/nbANOvUPv1fn/Ng4/M04+jLCnGbZvZavNdNoJ0YUYdjFG9Aua+LRUhfGYQJ+oVHCgvZ9sgaAsc2TNpd6ce2A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fau.de; spf=pass smtp.mailfrom=fau.de; dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.b=frVi5bsO; arc=none smtp.client-ip=131.188.11.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fau.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fau.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KWdfJEK/"
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-42fbc3056afso1260697f8f.2
-        for <bpf@vger.kernel.org>; Wed, 07 Jan 2026 09:49:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1767808181; x=1768412981; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=x/Li3ak2nH82Kr13A+iObhEa6WI6nNurqJFAGqngfSg=;
-        b=KWdfJEK/dz23SVuG0Fq+zdeQhu8e3hV07EeISBSepdIYw2+9lL68RTO0ybsDhq3rjy
-         pYYXNPPU3BsF5vsAOnc0R2hdePk3I+cArp7XABKTi7LhKnTshYEYSYIjT987eZwsH8UZ
-         uBBjFzbm4g1J3NGRDmCnnjT3vt6YCDNeZbK3UaGg3rBOdZ4GDXTexg1fAZpcdJamt0yL
-         N9CW6brFiuCaRWiMGy0y3fS7adCvBU/yx1uaz5JdY6jeGRpK0thE/HfvYQTvltsRp+6P
-         Y5bLvyoD/oh5to3DmMdgw/dUakjACFOek4AMPxV+P++uBwcsDSA1zjmC1zIdKmr1akLu
-         Ym6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767808181; x=1768412981;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=x/Li3ak2nH82Kr13A+iObhEa6WI6nNurqJFAGqngfSg=;
-        b=dEmbknu8IQvfwxIyacbQa7svNz//hmETI/J0ajzB0XJSWpkGKUOmYRzx/l+nTHmYDn
-         dKbzLl2azs8QL3/NqHoQZv3HdPQqH5A48wggP1P4E5KzSugXx8aoL5d6CDrG6+bIuaxW
-         X+1AgT4b1TMvhZclpbDWfE2vegDebh+bEBSjyK7kqeTx74LlMeFDG7jZJN44Id7hNKS5
-         64Xi3o+xyBP7uX42xWaPF50VRUcEuLeVwdJ09ImHBMj9AvJe89McBQRrMgtR9cPsyzdS
-         XH5yuVBd4HKPPTBv/qcfKA/b9J75Tq4yAK5gTlIpxcZaBQvHzVjP6EBiWH+p2xjdU/9w
-         Xjtg==
-X-Gm-Message-State: AOJu0YyUDSTnHYqHE9RLsJBUOGLYdTE0RgO/LEXDidx7IghEKzmFC/91
-	p10LrYWk3o5Lg/K+lqqkF5HBtWmYtlOz3O5MvVNr4A/p8g58ZfEKIB7B
-X-Gm-Gg: AY/fxX7GvyeVXqRuVP7f5xcOa8T1F+X/nH+G5hBNrr6C4JVFl9WN/YkqpZ8plXVA/0G
-	DtnMWVE4tWib9pj69gaLacTjuPG0X702rW9D+fAg4NOTC4axZhahmN3s6d0kQDBHR4UCL9bZVDI
-	qXHDs6ZkQsQNtx+6Qscvd31lEbBpnL5fFHiFaYy2rHGJ64EOSgBIqdrEZNSg66wyAtlSzSkU5CR
-	0OTqSej/36gZH2WYmvaGpXLSmaIdcIqYvkE9NPSbImbuFOBiWK2ZFf6n7FXRaHj8cEDQ5eKz1Mx
-	KwWxbNkivvXgFf+dIlzaTBe6nvpkYMIPmwkZ2g7a/bqTnw6jy3U2UAnhSJtoiyVjWznoRTzklCj
-	zZS+unZuflHwoSvdArYo61PbkSleGqxjHKZvk56ppZJUI7ohmyG072WB4hf4Fu+iWrB0=
-X-Google-Smtp-Source: AGHT+IHoniSXDuVmR8Etv37NqVv0x7oTvvYNuRvbo02dt6dCTOIwaH2kKQ4rLIgbOxI5gDaO5DGvYg==
-X-Received: by 2002:a05:6000:1844:b0:431:b6e:8be3 with SMTP id ffacd0b85a97d-432c375b04amr4667164f8f.38.1767808181364;
-        Wed, 07 Jan 2026 09:49:41 -0800 (PST)
-Received: from localhost ([2620:10d:c092:500::5:d4be])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-432bd5ee893sm11306066f8f.37.2026.01.07.09.49.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jan 2026 09:49:41 -0800 (PST)
-From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Date: Wed, 07 Jan 2026 17:49:09 +0000
-Subject: [PATCH RFC v3 07/10] bpf: Introduce bpf_timer_cancel_async() kfunc
+	dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.b="frVi5bsO"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fau.de; s=fau-2021;
+	t=1767808348; bh=FEBbEJYjF9VeYuE/c6VI2LwqJ1VlZp1N2SisoMN0mzg=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From:To:CC:
+	 Subject;
+	b=frVi5bsOpHQyFdBNg/aA4J73jE61+MYbzsrKroDpZBhxhbi0vauKHV5NrIACNrO5b
+	 dyMBdoXBaDAUxS9LZQjaF4Z9c1AjI8un16hnHb8G31qeuFwqWGbWizET+PWIioS7kp
+	 IVHr6UmC+vDQWrrM50QQIuZImmRpWP1rGgApKU05Xoj+yCE6dPIshlq+cSqZ50d1oh
+	 jcP8hRBen2TLlJyQXBfFIX/T6zyKV3lq41JLsMXYKoF5Q+5ilWviIxt20IsKo1Cb0X
+	 MPXbjPRN725V30meLJRVY2I0ci2/SlJ3/yoNyCkDO2gWlkEShVe5Nx34WZ4KJvVmup
+	 wQNDzMuCNmsPg==
+Received: from mx-rz-smart.rrze.uni-erlangen.de (mx-rz-smart.rrze.uni-erlangen.de [IPv6:2001:638:a000:1025::1e])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-rz-2.rrze.uni-erlangen.de (Postfix) with ESMTPS id 4dmbGM6ssTzPkCM;
+	Wed,  7 Jan 2026 18:52:27 +0100 (CET)
+X-Virus-Scanned: amavisd-new at boeck2.rrze.uni-erlangen.de (RRZE)
+X-RRZE-Flag: Not-Spam
+X-RRZE-Submit-IP: 10.188.34.184
+Received: from localhost (i4laptop33.informatik.uni-erlangen.de [10.188.34.184])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: U2FsdGVkX19Sh7w1z3IDDyxOFeZshEUU57P0q9RJGdo=)
+	by smtp-auth.uni-erlangen.de (Postfix) with ESMTPSA id 4dmbGJ700vzPk7g;
+	Wed,  7 Jan 2026 18:52:24 +0100 (CET)
+From: Luis Gerhorst <luis.gerhorst@fau.de>
+To: Lukas Gerlach <lukas.gerlach@cispa.de>
+Cc: <ast@kernel.org>,  <bjorn@kernel.org>,  <bpf@vger.kernel.org>,
+  <daniel.weber@cispa.de>,  <daniel@iogearbox.net>,
+  <jo.vanbulck@kuleuven.be>,  <linux-riscv@lists.infradead.org>,
+  <luke.r.nels@gmail.com>,  <marton.bognar@kuleuven.be>,
+  <michael.schwarz@cispa.de>,  <palmer@dabbelt.com>,  <pjw@kernel.org>,
+  <xi.wang@gmail.com>, <cleger@rivosinc.com>, <palmer@rivosinc.com>,
+ <conor.dooley@microchip.com>, <andrew@sifive.com>
+Subject: Re: [PATCH] riscv, bpf: Emit fence.i for BPF_NOSPEC
+In-Reply-To: <20260107095406.4082-1-lukas.gerlach@cispa.de> (Lukas Gerlach's
+	message of "Wed, 7 Jan 2026 10:54:05 +0100")
+References: <87y0m996b2.fsf@fau.de>
+	<20260107095406.4082-1-lukas.gerlach@cispa.de>
+User-Agent: mu4e 1.12.12; emacs 30.2
+Date: Wed, 07 Jan 2026 18:52:24 +0100
+Message-ID: <87sechz4x3.fsf@fau.de>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260107-timer_nolock-v3-7-740d3ec3e5f9@meta.com>
-References: <20260107-timer_nolock-v3-0-740d3ec3e5f9@meta.com>
-In-Reply-To: <20260107-timer_nolock-v3-0-740d3ec3e5f9@meta.com>
-To: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
- daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com, 
- memxor@gmail.com, eddyz87@gmail.com
-Cc: Mykyta Yatsenko <yatsenko@meta.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1767808173; l=1354;
- i=yatsenko@meta.com; s=20251031; h=from:subject:message-id;
- bh=Tdgbt4GZ0T7vO7YspQ75Jfs7RWvQuCd5QKb4zItKBzE=;
- b=//FfxQqXDk7O3R9byJjxGjCB6RNdrzBoXonKEnUQzZrh3VnSZhahbAulAdTzbklGnKygHc6UZ
- 3JMsMSsthnSCPVv2okTiHYCYCM5jks9A7zALaxJlPZNS04a7YnOAc5R
-X-Developer-Key: i=yatsenko@meta.com; a=ed25519;
- pk=TFoLStOoH/++W4HJHRgNr8zj8vPFB1W+/QECPcQygzo=
+Content-Type: text/plain
 
-From: Mykyta Yatsenko <yatsenko@meta.com>
+Lukas Gerlach <lukas.gerlach@cispa.de> writes:
 
-introducing bpf timer cancel kfunc that attempts canceling timer
-asynchronously, hence, supports working in NMI context.
+> Regarding bpf_jit_bypass_spec_v1/v4(): currently this is per-architecture.
+> What we need is per-processor granularity, so we can disable mitigations
+> on in-order cores and keep them enabled on vulnerable out-of-order processors.
 
-Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
----
- kernel/bpf/helpers.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+Yes, sorry this was unclear. I just wanted to point out that once you
+have that infrastructure you can implement them as follows:
 
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index b90b005a17e1de9c0c62056a665d124b883c6320..1f593df04f326c509398f501907265ec6dae60e9 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -4439,6 +4439,19 @@ __bpf_kfunc int bpf_dynptr_file_discard(struct bpf_dynptr *dynptr)
- 	return 0;
- }
- 
-+__bpf_kfunc int bpf_timer_cancel_async(struct bpf_timer *timer)
-+{
-+	struct bpf_async_cb *cb;
-+	struct bpf_async_kern *async = (void *)timer;
-+
-+	guard(rcu)();
-+	cb = async->cb;
-+	if (!cb)
-+		return -EINVAL;
-+
-+	return bpf_async_schedule_op(cb, BPF_ASYNC_CANCEL, 0, 0);
-+}
-+
- __bpf_kfunc_end_defs();
- 
- static void bpf_task_work_cancel_scheduled(struct irq_work *irq_work)
-@@ -4620,6 +4633,7 @@ BTF_ID_FLAGS(func, bpf_task_work_schedule_signal_impl)
- BTF_ID_FLAGS(func, bpf_task_work_schedule_resume_impl)
- BTF_ID_FLAGS(func, bpf_dynptr_from_file)
- BTF_ID_FLAGS(func, bpf_dynptr_file_discard)
-+BTF_ID_FLAGS(func, bpf_timer_cancel_async)
- BTF_KFUNCS_END(common_btf_ids)
- 
- static const struct btf_kfunc_id_set common_kfunc_set = {
+bpf_jit_bypass_spec_v1/v4() {
+  if (RV_CPU_IN_ORDER())
+    return true;
+  else
+    return false;
+}
 
--- 
-2.52.0
+But you are right that the definition of RV_CPU_IN_ORDER() is still
+missing of course.
 
+> Regarding fence.i being an extension: all RISC-V processors supported by the
+> kernel that are vulnerable to these attacks support this instruction.
+
+I am not sure if I misunderstand the "that are vulnerable to these
+attacks".
+
+If you mean that vulnerable CPUs always have fence.i: What if a CPU
+still does not support the instruction (no matter if it is vulnerable or
+not)?
+
+If I understand the RISC-V JIT correctly, it will then still generate
+fence.i with this patch. When this eBPF program is then invoked the
+CPU will panic upon reaching the fence.i which is a invalid opcode as
+far as this CPU is concerned. Or is there some ifdef I am missing here?
+
+I would assume you need something like this:
+
+case BPF_ST | BPF_NOSPEC:
+  if (riscv_has_extension_likely(RISCV_ISA_EXT_ZIFENCEI))
+    emit_fence_i(ctx);
+  break;
+
+Or is there some guarantee that this extension is always available? I
+read [3] as implying that this is no longer the case with the 2.0
+instruction set for unprivileged. Does this also mean it is an optional
+extension for the privileged ISA?
+
+RISC-V cpufeature.c had this in [2]:
+
+		/*
+		 * Linux requires the following extensions, so we may as well
+		 * always set them.
+		 */
+		set_bit(RISCV_ISA_EXT_ZICSR, this_isa);
+		set_bit(RISCV_ISA_EXT_ZIFENCEI, this_isa);
+
+But as of [1] it was changed to:
+
+		if (acpi_disabled) {
+			set_bit(RISCV_ISA_EXT_ZICSR, source_isa);
+			set_bit(RISCV_ISA_EXT_ZIFENCEI, source_isa);
+
+So based on that I would assume fence.i may not always be supported.
+
+But I also found that 921ebd8f2c08 ("RISC-V: Allow userspace to flush
+the instruction cache") seems to assume that fence.i always works (see
+local_flush_icache_all() which I assume runs in the kernel).
+
+Even if the CPU is known vulnerable but does not support the extension,
+it will be better not to generate the instruction. If we still want to
+do something about these CPUs, maybe add a warning message to advise the
+user that unpriv eBPF should definately be kept disabled on this CPU?
+
+[1] https://lore.kernel.org/all/20230711224600.10879-1-palmer@rivosinc.com/
+[2] https://lore.kernel.org/all/20230607-nest-collision-5796b6be8be6@spud/
+[3] https://docs.riscv.org/reference/isa/unpriv/zifencei.html
