@@ -1,163 +1,119 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f65.google.com (mail-wr1-f65.google.com [209.85.221.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE9161B4223
-	for <bpf@vger.kernel.org>; Wed,  7 Jan 2026 18:22:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AF8130AD15
+	for <bpf@vger.kernel.org>; Wed,  7 Jan 2026 18:30:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767810159; cv=none; b=sx8nadRNQ2gS9F/T0dqm66Xv+r750NTxDgwd+AbFgyj0BvMfFMv6bGFW+ZOqYNdcEiZ7tea4T7O0utjhRvdZJ9YU+lWkXNI5kZtWyVdDNhsw3tdLaJiRSBjUkDd90cEQyhhemZZeOwv2Uu7LqP/Tk2WCnoZ2lv9kneT8U4JJjgc=
+	t=1767810671; cv=none; b=PKfGIa9BPKIf25Oa640aUV29xmPxj75kYzMx7QhLduladjNv8D1w226BfjexEhP+okqKl5k7DjJ5Zhg2vaoXQ8fJDj7fFCMf3bgM6ncTE8SJSiBQ/pxva4QDYWZ+iodj3e4MvymKZ3QZ+U7TM648QFsNsZq8Llk7FBaOg+iJaXU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767810159; c=relaxed/simple;
-	bh=YFSNAO19OLcGvuybRg2d3pnOrcRU6lUigg5sdpXOUp4=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=QZvy/6f58OyL8vBaUQcbNRyljPFSOEpktaTX5goXDOjsM49zH/R1a1b1I4bFcrV6SZIZFFZ/LuiVDR6/VbhiPDciERVj8QSeGVB1c+TqEFqY7PhTwqL9opGp0EUdrfc7som41RmBom4zRYW9MpAHeoB1tiiOJBSkz0sp3rDXOR8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LDWHHmnn; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1767810671; c=relaxed/simple;
+	bh=L1UE6UZGVBGpjUXO8FTNKoTJdBuYU5aYHJ6eSBWdquo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=LsB7FcOpqHAloQT+HqKpq2ofcEz4pyNc5m8K5IMyOl6CDUrNtAPUJj89zN4o5W+pD8sz8DsKVaVeC3JIdsSFLqZQLHw1VeVM9YWbyBqWl1+apiDQNioOFnt3haQxanPgxlyojrwwA9l0ypHbVhRbzxOHVDPOzWnTHXx7RkId4j0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DB7YYQgL; arc=none smtp.client-ip=209.85.221.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LDWHHmnn"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D847C4CEF1;
-	Wed,  7 Jan 2026 18:22:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767810159;
-	bh=YFSNAO19OLcGvuybRg2d3pnOrcRU6lUigg5sdpXOUp4=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=LDWHHmnnwVyAALgUxVpDAVbd8v+qYqI5S1OEZ2lUlHSMcjeR+0yfd9J2dlTwtPKS4
-	 nGcLnL9HmUb5L0eZDKf7qGJGOVHVgr9+5FNx34FoGY1APjYYXdZk8dCkK6XBq7cQ1J
-	 592O2bYC+SNE1NZaA3MsASGQnso1ak30ONS5VMie6F7HrpauJpQN8gHqTq8v3K6JaU
-	 Ry/DHfWwqUYuq3iaLAtGpUAoluDTMioBV6yA65sDE/iOEHc7oD2r4UUgxBIKe/5Jgi
-	 DF2b0CxV/dY6HUlA/GWzyqDXkBTC8EfKrr4XaP23gg4bf2zKrYKlrG+XPCbo29idmO
-	 7eiibvivo8u7Q==
-Content-Type: multipart/mixed; boundary="===============1397663430468551668=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DB7YYQgL"
+Received: by mail-wr1-f65.google.com with SMTP id ffacd0b85a97d-43246af170aso665582f8f.0
+        for <bpf@vger.kernel.org>; Wed, 07 Jan 2026 10:30:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1767810657; x=1768415457; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=bx2taddgtABc2OMI6OXSOW8L/uzHIuesESNW5Hivnss=;
+        b=DB7YYQgLDI/4ktw1dAYFByaOv2awzHeuEjbzOyj6b+0Sh+Fp2Mvx0JiXk99xN2vVt/
+         ZoKKmXOK2ZXW5JrPcxHU5J97THmC4YDMuxQLoCPOD1SYDSAjBkdOWv6CbhUPmP3llBA+
+         DhD6EQ5qm9+drK+Tkir5bW8TWtuW5i2WWC+eAq/OOwNYA8Mz1LkjNfCwPnlYfu1oe9dB
+         pRvvpIz6+jSr/YetwKIsLYVf2O6cH8cg5SSDRSmf7yjS34HRVLbc0PjfNbhvMFhiGbKu
+         fTO4T/an20VGKBFojYhXu67bT1jJ0ZGB2RBa8aD9xM4wjGg/fKnTfbWqMObAuI1afUT0
+         aNQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767810657; x=1768415457;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bx2taddgtABc2OMI6OXSOW8L/uzHIuesESNW5Hivnss=;
+        b=QE8xe4+SdEqPeGAiF/GbuoixIygcWBy2FG6yppwgFQQzTjhxTqmkwk89GaWrz761/U
+         0j6hsMvo+h21jt/uRYRmLeVByoKhO68muqy1fL2h92ajXU2EVi31KWI4kkLpYBoaR2xZ
+         OmpfdjY/6osfyInGWGzb/dmQMCUCK+IDoAm9DkoUHWrm41IIjxjOJiwx+UqBpRDxygBf
+         YTCq9S/jzdHmSfnEwHU6QHl38W6d1XJHwDe6NRM24nFyBvDJIvneU8VQzW/BvTYOgvfP
+         /k5egZY3S0VgKzd9HahwCIfI9hlBidq7C7ZyurnMadaUZ4CX4GjXSS9nW/MEceHWMaCS
+         Vefw==
+X-Gm-Message-State: AOJu0Yy8h071Qsm4Cc5kvwHyG8TYp6WVuZk0YdvV0FFPvJoPZ7T+gl0G
+	TFI/Xl4mzGCxANuyPcMAI4XQd1yVvzymoaC2szyrpRYwUUJs9zIVxM+al83sAQyaPjCfSLEXu0C
+	0Ps7hIY9sHpQ7UEv0wWr109H3ythXNbo=
+X-Gm-Gg: AY/fxX4DF1wMoxz0blN8mfTBsSxypMI1f8EkKy80ahHUITHY/XgyQNIOlMHG5PAIDwf
+	98yhVIIajiCcteZOdkIRTksFyrBxyjOzH1ax92OjSopos6CTmv8DNAxPWJRVxj5DKdHHQqO/W5h
+	7Dd0xRdE1+JTSltaCSVJxV3I5h8tcIk/004hvjg090ht07vCaQjP+B5DejFz8RKOjlIR+t5aTt4
+	dwzAQTdgx0Vs/xqrjOJeCFsjFB2O4KwRziLqyOQ1YsX3FVIbsyE8xJwP9D9aefzam0PhrDNoTtG
+	wkDOP68DR3HfMvGmn9wv4k9trAqjSg==
+X-Google-Smtp-Source: AGHT+IGYNguBgltfyQNIxy5vX+0ih/uFM+OYVueRe/Him0Roz6kWWUUu4dQGg4Qvyh6cR2NN9qLuVJm7IwDQvcELAbU=
+X-Received: by 2002:a5d:5d11:0:b0:429:d3c9:b8af with SMTP id
+ ffacd0b85a97d-432c3764450mr4468788f8f.25.1767810656483; Wed, 07 Jan 2026
+ 10:30:56 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <b24f940a2d2e990dc39154bc606665b36e1630fde457032d64f2a2ee5c0f4b45@mail.kernel.org>
-In-Reply-To: <20260107-timer_nolock-v3-1-740d3ec3e5f9@meta.com>
-References: <20260107-timer_nolock-v3-1-740d3ec3e5f9@meta.com>
-Subject: Re: [PATCH RFC v3 01/10] bpf: Refactor __bpf_async_set_callback()
-From: bot+bpf-ci@kernel.org
-To: mykyta.yatsenko5@gmail.com,bpf@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,kafai@meta.com,kernel-team@meta.com,memxor@gmail.com,eddyz87@gmail.com
-Cc: yatsenko@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Wed,  7 Jan 2026 18:22:39 +0000 (UTC)
+References: <20260107-timer_nolock-v3-0-740d3ec3e5f9@meta.com> <20260107-timer_nolock-v3-4-740d3ec3e5f9@meta.com>
+In-Reply-To: <20260107-timer_nolock-v3-4-740d3ec3e5f9@meta.com>
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Date: Wed, 7 Jan 2026 19:30:19 +0100
+X-Gm-Features: AQt7F2p2cU5phKP92KVSajP9NIwfXLm6yH7_ZZJ5nrHdnMzcM5XQo-ul1gSKBAA
+Message-ID: <CAP01T77h5caT6EprhREYMNmjTkbBZ9-OT7HkxdnJUNNME2evQQ@mail.gmail.com>
+Subject: Re: [PATCH RFC v3 04/10] bpf: Add lock-free cell for NMI-safe async operations
+To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
+	daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com, eddyz87@gmail.com, 
+	Mykyta Yatsenko <yatsenko@meta.com>
+Content-Type: text/plain; charset="UTF-8"
 
---===============1397663430468551668==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-
-> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-> index 9eaa4185e0a7..954bd61310a6 100644
-> --- a/kernel/bpf/helpers.c
-> +++ b/kernel/bpf/helpers.c
-> @@ -1355,55 +1355,36 @@ static const struct bpf_func_proto bpf_timer_init_proto = {
->  };
+On Wed, 7 Jan 2026 at 18:49, Mykyta Yatsenko <mykyta.yatsenko5@gmail.com> wrote:
 >
->  static int __bpf_async_set_callback(struct bpf_async_kern *async, void *callback_fn,
-> -				    struct bpf_prog_aux *aux, unsigned int flags,
-> -				    enum bpf_async_type type)
-> +				    struct bpf_prog *prog)
->  {
-> -	struct bpf_prog *prev, *prog = aux->prog;
-> -	struct bpf_async_cb *cb;
-> -	int ret = 0;
-> +	struct bpf_prog *prev;
-> +	struct bpf_async_cb *cb = async->cb;
+> From: Mykyta Yatsenko <yatsenko@meta.com>
 >
-> -	if (in_nmi())
-> -		return -EOPNOTSUPP;
-> -	__bpf_spin_lock_irqsave(&async->lock);
-> -	cb = async->cb;
-> -	if (!cb) {
-> -		ret = -EINVAL;
-> -		goto out;
-> -	}
-> +	if (!cb)
-> +		return -EPERM;
+> Introduce mpmc_cell, a lock-free cell primitive designed to support
+> concurrent writes to struct in NMI context (only one writer advances),
+> allowing readers to consume consistent snapshot.
+>
+> Implementation details:
+>  Double buffering allows writers run concurrently with readers (read
+>  from one cell, write to another)
+>
+>  The implementation uses a sequence-number-based protocol to enable
+>  exclusive writes.
+>   * Bit 0 of seq indicates an active writer
+>   * Bits 1+ form a generation counter
+>   * (seq & 2) >> 1 selects the read cell, write cell is opposite
+>   * Writers atomically set bit 0, write to the inactive cell, then
+>     increment seq to publish
+>   * Readers snapshot seq, read from the active cell, then validate
+>     that seq hasn't changed
+>
+> mpmc_cell expects users to pre-allocate double buffers.
+>
+> Key properties:
+>  * Writers never block (fail if lost the race to another writer)
+>  * Readers never block writers (double buffering), but may require
+>  retries if write updates the snapshot concurrently.
+>
+> This will be used by BPF timer and workqueue helpers to defer NMI-unsafe
+> operations (like hrtimer_start()) to irq_work effectively allowing BPF
+> programs to initiate timers and workqueues from NMI context.
+>
+> Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
+> ---
 
-A small concern: the error code changed from -EINVAL to -EPERM. The verifier
-comment at kernel/bpf/verifier.c mentions that non-initialized timers
-"will return -EINVAL". Is the error code change intentional, and should
-the verifier comment be updated?
+We already have a dual-versioned concurrency control primitive in the
+kernel (seqcount_latch_t). I would just use that instead of
+reinventing it here. I don't see much of a difference except writer
+serialization, which can be done on top of it. If it was already
+considered and discarded for some reason, please add that reason to
+the commit message.
 
-> -	if (!atomic64_read(&cb->map->usercnt)) {
-> -		/* maps with timers must be either held by user space
-> -		 * or pinned in bpffs. Otherwise timer might still be
-> -		 * running even when bpf prog is detached and user space
-> -		 * is gone, since map_release_uref won't ever be called.
-> -		 */
-> -		ret = -EPERM;
-> -		goto out;
-> -	}
-
-The usercnt check is removed here. The check still exists in
-__bpf_async_init(), so a timer cannot be initialized when usercnt is zero.
-But can there be issues if set_callback is called after usercnt drops to
-zero on an already-initialized timer? The old code would fail with -EPERM,
-while the new code proceeds.
-
-> -	prev = cb->prog;
-> -	if (prev != prog) {
-> -		/* Bump prog refcnt once. Every bpf_timer_set_callback()
-> -		 * can pick different callback_fn-s within the same prog.
-> -		 */
-> -		prog = bpf_prog_inc_not_zero(prog);
-> -		if (IS_ERR(prog)) {
-> -			ret = PTR_ERR(prog);
-> -			goto out;
-> +	do {
-> +		if (prog) {
-> +			prog = bpf_prog_inc_not_zero(prog);
-> +			if (IS_ERR(prog))
-> +				return PTR_ERR(prog);
->  		}
-> +
-> +		prev = xchg(&cb->prog, prog);
-> +		rcu_assign_pointer(cb->callback_fn, callback_fn);
-
-Is there a potential race between these two operations? Consider two
-concurrent callers (with programs P and Q) racing:
-
-1. Thread A: xchg stores P into cb->prog
-2. Thread B: xchg stores Q into cb->prog, gets P back
-3. Thread B: rcu_assign_pointer stores FB (Q's callback)
-4. Thread B: bpf_prog_put(P), B's check passes, B exits
-5. Thread A: rcu_assign_pointer stores FA (P's callback), overwrites FB
-6. Thread A: check fails (cb->prog is Q, not P), retries
-
-After step 5, cb->prog holds Q (with Q's reference) but cb->callback_fn
-points to FA (from P). If P's refcount drops to zero elsewhere and P is
-freed, would the timer callback FA become a dangling pointer?
-
-The bpf_timer_cb() function reads cb->callback_fn and calls it directly
-without verifying it corresponds to cb->prog. The cb->prog field holds
-the reference keeping the program alive, but if the callback pointer is
-from a different program that may have been freed, this could be a problem.
-
-> +
->  		if (prev)
-> -			/* Drop prev prog refcnt when swapping with new prog */
->  			bpf_prog_put(prev);
-> -		cb->prog = prog;
-> -	}
-> -	rcu_assign_pointer(cb->callback_fn, callback_fn);
-> -out:
-> -	__bpf_spin_unlock_irqrestore(&async->lock);
-> -	return ret;
-> +
-> +	} while (READ_ONCE(cb->prog) != prog || READ_ONCE(cb->callback_fn) != callback_fn);
-> +
-> +	return 0;
->  }
-
-[ ... ]
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/20791345842
-
---===============1397663430468551668==--
+>  [...]
+>
