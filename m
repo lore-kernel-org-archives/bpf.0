@@ -1,240 +1,132 @@
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87A60318BAB
-	for <bpf@vger.kernel.org>; Wed,  7 Jan 2026 18:55:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 399B232F741
+	for <bpf@vger.kernel.org>; Wed,  7 Jan 2026 19:05:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767812157; cv=none; b=IBMWeAzMbTFOjssyi6D+PD3xIx+FQPzv+/R7p8/TiWJ2mKrSMll7h6vAGPI89eUvOx1AnbXH3G6pC+ra/1xOwLUsNmL7AYCHLnMVFePhKIkLrnz7tPtRXTflo+EGqT6RBBSoaYJkW4c95hPR+dljl3KVfz9YTZ0+vg68SnQl3Bg=
+	t=1767812743; cv=none; b=HGzguIRuxLWa1KOirPvXpZWNJtD17I6xRIuCddMZnNpYgLt6FjhbfJ7ATLcTIMNOw0IPd7kvoXuyMjkzre3ojUu2r8Clkcg2fKculyfwoCLxAg92havQtk7gNI9bj9Bxb7JG91SpSKZOpgOxIBOUNKdCEcsdI6/yJ5oCFErGjuA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767812157; c=relaxed/simple;
-	bh=CQ15+jmMikIU6wFwTAHawuxypljghp7aaFnKSDLlmbU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CI76wGiflYxDCgOzQXSxSud/sb2gVPK/BYNqc+qMdcTWFpSr7LbAvkhmH3kq/ewG8yWB6pUsxHmg/620zLMAGG9PZ5AISJNU4j41zOO0pbVj1BRnOr2pyex2iT8T7X03SNLu5hPJb7AmynCEAsm1b8SmtaGzXWJczW4Bvb7SR1U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=jtwzycjl; arc=none smtp.client-ip=209.85.218.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1767812743; c=relaxed/simple;
+	bh=Z9K1U5qcHc6IKvb1kBZrpQlxEokyPVVSVMGXJ5dObn8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=j4SwPw2G2pulzTwl0b4bb82OoM61AUTCICUl+lWqSSoPvOW5yCVlWnnlxLgrFtlQ7AF7PbN+IehCvxENFD8qaNZqi2TiH4nQ3tGW01ceQ98cFb88VQcetdth22Lgg+gM458pT15x7F4ccWy5veIrarL8cvxrhDa+UIwJjhiJem0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cuM29+Qo; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="jtwzycjl"
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-b802d5e9f06so338383066b.1
-        for <bpf@vger.kernel.org>; Wed, 07 Jan 2026 10:55:55 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cuM29+Qo"
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-47aa03d3326so20839705e9.3
+        for <bpf@vger.kernel.org>; Wed, 07 Jan 2026 11:05:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1767812154; x=1768416954; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=iB6LLjvjWZkbTDtVG9wXI4w/k1j407j8ihh7yY47E7s=;
-        b=jtwzycjlJCx+DR6Y2OMX5oausWYviVwjaknRiNWQExCL6H67K3vQ7obZMy9KxClFQJ
-         YUP26at0eFNn80BLnzgE8DiXNCq7azqtacNzcmrqnOgv80XvMRmZYsQA227zJdbqiEoE
-         g6b1c4QC55rmP+FG0JKzuBlgnOxqQpSWhYsPU6CpZkPsZTjj/+TtPDUDDA5xPOyMQaCX
-         6TQhpNjHacX8pYhj43bnbPaKYnniG0UzJR5paXuxB9xrIOXsiP7roXHMlkWwgvPyT1QM
-         /e2LRuhMx3W1OaaFFTnfGB3UdjtfrDO+SkHOcLPlZawWHEImeBTU83hxuHuLV9SOoQoB
-         gCzQ==
+        d=gmail.com; s=20230601; t=1767812740; x=1768417540; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yV2GAzN/rOYaFDderfCFwznQg734j5qWy6h3Uqhklv4=;
+        b=cuM29+QoLclZBiRWCeYNsiYvVq9Bll4Z+1x26darFHLrw7CBMV2ehcZ5JjtrqqUqLR
+         Yzxu05HFwCEp+L/yJYYYqdwFBL6lK2kyJQX/PjM5rwqyZOsh+Ys2uzfd9SWULDnb/zx1
+         sGFw+aMyA+Vahtreza9W95tiCc3yKSjtDvn0NvbXX9H3Zr/74la5XXP3iikp5TMFRQAx
+         CymTuwwUqdDxFdCwJhm7OTjhMU4wxEApKvg4824jDGQ8YOCnkNdMiHK6NH7MVS6HB+ND
+         stLEMwTEv/+14K69ipJiG2inKhGeI0V1ypcHIyt1oiPuX4nY3cP7jfcD/EwDiiE6UL6h
+         oQcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767812154; x=1768416954;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iB6LLjvjWZkbTDtVG9wXI4w/k1j407j8ihh7yY47E7s=;
-        b=furu8bQDv+OEcM5Offwew4ZGZuNF/Z1v8JYy+U46Lfd20GlLbD+Vmn+Fco51/eOzAW
-         LRcvOuplJFSsNfJQzB+RM/ThdWem6z4iZTEEahN62XvmxDgNokzin6Vc1bvHzmvm53Pr
-         ckwU70EwRYxsFW0OPlBtSP7qz4mzDDP9LiNtrtgaPWs25a8pl5uq/i//znL1WBQD9pnN
-         lW4CPZMmUrdCXzZMlAhIV/weRVRtZHhHXCenxr3pfZM+7+PySqjYQ5datkFNAwnLzadS
-         4hen504RhyvWvBvcqhBEUUSFmdqgwhnzrj3bZBczgZYqipUmLZDkYTUBW+H0JmDxm7mz
-         9+3w==
-X-Forwarded-Encrypted: i=1; AJvYcCXSqZdYzPt0s8GZH80hu/N7pBqh7zHakS2Ak3npXTUU9HzxMiV81r6LjaUYcI4/sR8YLW4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwaJuedOsfCU3Kjyv6jK8S+JePrhGfiIfDgqg9L4IB5yBGjc8tG
-	fkuOdvq2Nc+giWgB7XeBUthLtv3CV2bzh2ie4ZqiL0KgiRUafu37wmJIwF8P2W69eQ==
-X-Gm-Gg: AY/fxX4AuOvTb7yKGrBrs7QnN7dx4m5bE8N+I/oelFQRY7Kfy3//+SQBrLgWds0s4YE
-	Pg6sLTEcJqlRRhBafxQA4kMvlFDBGiuXxKKeR4Olxg46OK60Ge5xjBaOhABRjVVTmUyIZtNRXWv
-	iQzHh35RUOub2KBLWgBwiqIlxdLg+iw3lV2Cf9PTQaNaAK3ckL3Nm5Xo3oEhIHrJs6lxKKUthX5
-	iTMWbsOjf1M6m8gA5CT+DH0MdX6XUXT1FhBqpbjoc1aUncZpAsDZ2K1fMr4XxlFdulw0DLtaFEg
-	iS3dK5kaA/wJ/wHGaDmxjY8MDLAvnDuitrg/A5BZY7XEJzgoe+WsPps/1kAX3ha0aMwU1+QHZJ0
-	yiq75DhONS5dyBhZr2uIc3weCkx3wRhXqaA0nwzZyWWSm9kQQvmILKNWax3vc3yUvK3/P8yBF15
-	Tsirdt1F8Ol2rKEK0VFjvlEHig7q4v4iBmDb6MjdBgyt3aEyuCF8YmFQ==
-X-Google-Smtp-Source: AGHT+IG74AldfrSONuxqlnKLU7sKe1MqJmVX+YHwA9ZTvdPW2tPkplovcq9bbWp+RX4ZX/ellmtV0A==
-X-Received: by 2002:a17:907:9704:b0:b83:1341:18ce with SMTP id a640c23a62f3a-b844502c5cemr354283466b.13.1767812153418;
-        Wed, 07 Jan 2026 10:55:53 -0800 (PST)
-Received: from google.com (14.59.147.34.bc.googleusercontent.com. [34.147.59.14])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b842a5187afsm577555366b.58.2026.01.07.10.55.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jan 2026 10:55:52 -0800 (PST)
-Date: Wed, 7 Jan 2026 18:55:49 +0000
-From: Matt Bobrowski <mattbobrowski@google.com>
-To: Alan Maguire <alan.maguire@oracle.com>
-Cc: Yonghong Song <yonghong.song@linux.dev>,
-	Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-	dwarves@vger.kernel.org, bpf@vger.kernel.org,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Jiri Olsa <jolsa@kernel.org>
-Subject: Re: [PATCH dwarves] btf_encoder: prefer strong function definitions
- for BTF generation
-Message-ID: <aV6sNbs3vwCoGk49@google.com>
-References: <20251231085322.3248063-1-mattbobrowski@google.com>
- <926aca4a-d7d5-4e7d-9096-77b27374c5cd@linux.dev>
- <aVt139VXMTka-hYw@google.com>
- <aVuk1e73g7ZTHqMY@google.com>
- <6b0968a3-406b-412f-acbb-c00ac2ad7c93@linux.dev>
- <aVwihhKEszvcyNKo@google.com>
- <ace92738-a52a-4248-b7d8-bcfce6f9af22@oracle.com>
+        d=1e100.net; s=20230601; t=1767812740; x=1768417540;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=yV2GAzN/rOYaFDderfCFwznQg734j5qWy6h3Uqhklv4=;
+        b=u5pKCTv/kYt4NSfQGjTgFMJyqXVTxcshQCr5gDQ4gModbapNcSzvQKZ2t4mHnIlk5Z
+         Tj3cWOSxRBSQ3yRyAye80R+xLu7TS17fUAEJpMR1wHL5F/7XF86PzWoz2RHfPx+ThkYQ
+         /STzpShDZpVyUmHwYfZ/nXuMxyT8LAhtcma/vWPmwyOvloaO2MyKkbaYJcS9Tmid7XS0
+         2NaFEOkG3do74jryKqOZgdj2fwsuB6n3V6g8WVaNNMaMGXx4SdauE4B/aEG6aPwdvgn8
+         j7lwv8Uiwod+B34JLGF1hT94NXaWyapJzmL5b/BcIe0Lvq8TfUWXo0fvOFSEn5vGThBI
+         WTag==
+X-Gm-Message-State: AOJu0YyJQKdZtwA+nGmZkfuPPtwm38XaefaiBGnD2CPgtW0NQF8U3x/r
+	veX2bgFaDQ+4M8ysu7u/4NDBosrtqwq3aSm368vFY6A1lvNFkrJU8PHL
+X-Gm-Gg: AY/fxX61FKHEEf24IZN8mPSbRMRmYS395ONbXjLzjR5FwA3GnFrm0NVPyun7ERnrj5D
+	1AXY0mj7DnmNNBQo+Zuje+kHdvK9VAmcYj2vhgC4sZ/re2B1IHXKqKC2wQmqsCy47N2t6Tnmg7W
+	sphBp0TVFnw9g62hdPWmSu09r2vr5r2TRSGvbFeIPnJWJguOuH0O73CmWb6DenisFT214ocWTAY
+	S/7KzJg/qqOow6q15mNOOma+VW0UgGr8GXegNAL+DmpdOdUW7BuhqdQaCtPoffn5bi54IBdjISe
+	LnB/M3WRjhGXugRMqYKDSo7RyjzV86IM3e2HCf6vPJJ8ds+ddGUTf71syzHd69ym4N5bjh1z4iG
+	fU71KW9LlEiFySkkaiWC55Evd6w3KeOoaWyW+A92pexrzXTZ4J2AU2VzLEFM9K2eXIBt9X1RvJ1
+	6HE14E9OGTgj3TYvgBhGwh87JFXA+DERkWtcun6jdgg4iLtoY=
+X-Google-Smtp-Source: AGHT+IHyy9s+ZUVKJ+rFCDUfHXHwkqBs2cte5XZUdotZJAZmzxhrf4Iw8bX8j9IYH/rJFAJ+PLhWTg==
+X-Received: by 2002:a05:600c:3152:b0:45d:dc85:c009 with SMTP id 5b1f17b1804b1-47d84b1a04amr47874555e9.10.1767812740116;
+        Wed, 07 Jan 2026 11:05:40 -0800 (PST)
+Received: from ?IPV6:2a03:83e0:1126:4:5e8:9143:852f:9288? ([2620:10d:c092:500::5:d4be])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-432bd5df8besm11338361f8f.26.2026.01.07.11.05.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Jan 2026 11:05:39 -0800 (PST)
+Message-ID: <e4eee776-e9c7-4186-b239-733f81a9ae4a@gmail.com>
+Date: Wed, 7 Jan 2026 19:05:37 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC v3 04/10] bpf: Add lock-free cell for NMI-safe async
+ operations
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+ daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com,
+ eddyz87@gmail.com, Mykyta Yatsenko <yatsenko@meta.com>
+References: <20260107-timer_nolock-v3-0-740d3ec3e5f9@meta.com>
+ <20260107-timer_nolock-v3-4-740d3ec3e5f9@meta.com>
+ <CAP01T77h5caT6EprhREYMNmjTkbBZ9-OT7HkxdnJUNNME2evQQ@mail.gmail.com>
+Content-Language: en-US
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+In-Reply-To: <CAP01T77h5caT6EprhREYMNmjTkbBZ9-OT7HkxdnJUNNME2evQQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <ace92738-a52a-4248-b7d8-bcfce6f9af22@oracle.com>
 
-On Wed, Jan 07, 2026 at 03:50:40PM +0000, Alan Maguire wrote:
-> On 05/01/2026 20:43, Matt Bobrowski wrote:
-> > On Mon, Jan 05, 2026 at 08:23:29AM -0800, Yonghong Song wrote:
-> >>
-> >>
-> >> On 1/5/26 3:47 AM, Matt Bobrowski wrote:
-> >>> On Mon, Jan 05, 2026 at 08:27:11AM +0000, Matt Bobrowski wrote:
-> >>>> On Fri, Jan 02, 2026 at 10:46:00AM -0800, Yonghong Song wrote:
-> >>>>>
-> >>>>> On 12/31/25 12:53 AM, Matt Bobrowski wrote:
-> >>>>>> Currently, when a function has both a weak and a strong definition
-> >>>>>> across different compilation units (CUs), the BTF encoder arbitrarily
-> >>>>>> selects one to generate the BTF entry. This selection fundamentally is
-> >>>>>> dependent on the order in which pahole processes the CUs.
-> >>>>>>
-> >>>>>> This indifference often leads to a mismatch where the generated BTF
-> >>>>>> reflects the weak definition's prototype, even though the linker
-> >>>>>> selected the strong definition for the final vmlinux binary.
-> >>>>>>
-> >>>>>> A notable example described in [0] involving function
-> >>>>>> bpf_lsm_mmap_file(). Both weak and strong definitions exist,
-> >>>>>> distinguished only by parameter names (e.g., file vs
-> >>>>>> file__nullable). While the strong definition is linked into the
-> >>>>>> vmlinux object, the generated BTF contained the prototype for the weak
-> >>>>>> definition. This causes issues for BPF verifier (e.g., __nullable
-> >>>>>> annotation semantics), or tools relying on accurate type information.
-> >>>>>>
-> >>>>>> To fix this, ensure the BTF encoder selects the function definition
-> >>>>>> corresponding to the actual code linked into the binary. This is
-> >>>>>> achieved by comparing the DWARF function address (DW_AT_low_pc) with
-> >>>>>> the ELF symbol address (st_value). Only the DWARF entry for the strong
-> >>>>>> definition will match the final resolved ELF symbol address.
-> >>>>>>
-> >>>>>> [0] https://lore.kernel.org/all/aVJY9H-e83T7ivT4@google.com/
-> >>>>>>
-> >>>>>> Link: https://lore.kernel.org/all/aVJY9H-e83T7ivT4@google.com/
-> >>>>>> Signed-off-by: Matt Bobrowski <mattbobrowski@google.com>
-> >>>>> LGTM with some nits below.
-> >>>> Thanks for the review.
-> >>>>
-> >>>>> Acked-by: Yonghong Song <yonghong.song@linux.dev>
-> >>>>>
-> >>>>>> ---
-> >>>>>>    btf_encoder.c | 36 ++++++++++++++++++++++++++++++++++++
-> >>>>>>    1 file changed, 36 insertions(+)
-> >>>>>>
-> >>>>>> diff --git a/btf_encoder.c b/btf_encoder.c
-> >>>>>> index b37ee7f..0462094 100644
-> >>>>>> --- a/btf_encoder.c
-> >>>>>> +++ b/btf_encoder.c
-> >>>>>> @@ -79,6 +79,7 @@ struct btf_encoder_func_annot {
-> >>>>>>    /* state used to do later encoding of saved functions */
-> >>>>>>    struct btf_encoder_func_state {
-> >>>>>> +	uint64_t addr;
-> >>>>>>    	struct elf_function *elf;
-> >>>>>>    	uint32_t type_id_off;
-> >>>>>>    	uint16_t nr_parms;
-> >>>>>> @@ -1258,6 +1259,7 @@ static int32_t btf_encoder__save_func(struct btf_encoder *encoder, struct functi
-> >>>>>>    	if (!state)
-> >>>>>>    		return -ENOMEM;
-> >>>>>> +	state->addr = function__addr(fn);
-> >>>>>>    	state->elf = func;
-> >>>>>>    	state->nr_parms = ftype->nr_parms + (ftype->unspec_parms ? 1 : 0);
-> >>>>>>    	state->ret_type_id = ftype->tag.type == 0 ? 0 : encoder->type_id_off + ftype->tag.type;
-> >>>>>> @@ -1477,6 +1479,29 @@ static void btf_encoder__delete_saved_funcs(struct btf_encoder *encoder)
-> >>>>>>    	encoder->func_states.cap = 0;
-> >>>>>>    }
-> >>>>>> +static struct btf_encoder_func_state *btf_encoder__select_canonical_state(struct btf_encoder_func_state *combined_states,
-> >>>>>> +									  int combined_cnt)
-> >>>>>> +{
-> >>>>>> +	int i, j;
-> >>>>>> +
-> >>>>>> +	/*
-> >>>>>> +	 * The same elf_function is shared amongst combined functions,
-> >>>>>> +	 * as per saved_functions_combine().
-> >>>>>> +	 */
-> >>>>>> +	struct elf_function *elf = combined_states[0].elf;
-> >>>>> The logic is okay. But can we�limit elf->sym_cnt to be 1 here?
-> >>>>> This will match the case where two functions (weak and strong)
-> >>>>> co-exist in compiler and eventually only strong/global function
-> >>>>> will survive.
-> >>>> In fact, checking again I believe that the loop is redundant because
-> >>>> elf_function__has_ambiguous_address() ensures that if we reach this
-> >>>> point, all symbols for the function share the same address. Therefore,
-> >>>> checking the first symbol (elf->syms[0]) should be sufficient and
-> >>>> equivalent to checking all of them.
-> >>>>
-> >>>> Will send through a v2 with this amendment.
-> >>> Hm, actually, no. I don't think the addresses stored within
-> >>> elf->syms[#].addr should all be assumed to be the same at the point
-> >>> which the new btf_encoder__select_canonical_state() function is called
-> >>> (due to things like skip_encoding_inconsistent_proto possibly taking
-> >>> effect). Therefore, I think it's best that we leave things as is and
-> >>> exhaustively iterate through all elf->syms? I don't believe there's
-> >>> any adverse effects in doing it this way anyway?
-> >>
-> >> No. Your code is correct. For elf->sym_cnt, it covers both sym_cnt
-> >> is 1 or more than 1. My previous suggestion is to single out the
-> >> sym_cnt = 1 case since it is what you try to fix.
-> >>
-> >> I am okay with the current implementation since it is correct.
-> >> Maybe Alan and Arnaldo have additional comments about the code.
-> > 
-> > Sure, sounds good. I think leaving it as is probably our best bet at
-> > this point.
-> >
-> 
-> hi Matt, I ran the change through github CI and there is some differences in
-> the set of generated functions from vmlinux (see the "Compare functions generated"
-> step):
-> 
-> https://github.com/alan-maguire/dwarves/actions/runs/20786255742/job/59698755550
-> 
-> Specifically we see changes in some function signatures like this:
-> 
-> < int neightbl_fill_info(struct sk_buff * skb, struct neigh_table * tbl, u32 pid, u32 seq, int type, int flags);
-> ---
-> > int neightbl_fill_info(struct sk_buff * skb, struct neigh_table * tbl, u32 pid, u32 seq, int flags, int type);
-> 
-> Note the reordering of the last two parameters. The "<" line matches the source code, and the
-> ">" line is what we get from pahole with your change. We've seen this before and the reason is 
-> that we're not paying close enough attention to cases where the actual function omits parameters
-> due to optimization; that last "type" parameter doesn't have a DW_AT_location and that indicates 
-> it's been optimized out. We should really get in this case is:
-> 
-> int neightbl_fill_info.constprop.0(struct sk_buff * skb, struct neigh_table * tbl, u32 pid, u32 seq, int flags);
-> 
-> So it's not that your change causes this exactly; it's that paradoxically because
-> your change does a better job of selecting the real function signature in the CU
-> (and then we go on to misrepresent it) the problem is more glaringly exposed.
->
-> The good news is I think I have a workable fix for this problem; what I'd propose is - 
-> presuming it works - we land it prior to your change. Once I've tested that out a bit
-> I'll follow up. Thanks!
+On 1/7/26 18:30, Kumar Kartikeya Dwivedi wrote:
+> On Wed, 7 Jan 2026 at 18:49, Mykyta Yatsenko <mykyta.yatsenko5@gmail.com> wrote:
+>> From: Mykyta Yatsenko <yatsenko@meta.com>
+>>
+>> Introduce mpmc_cell, a lock-free cell primitive designed to support
+>> concurrent writes to struct in NMI context (only one writer advances),
+>> allowing readers to consume consistent snapshot.
+>>
+>> Implementation details:
+>>   Double buffering allows writers run concurrently with readers (read
+>>   from one cell, write to another)
+>>
+>>   The implementation uses a sequence-number-based protocol to enable
+>>   exclusive writes.
+>>    * Bit 0 of seq indicates an active writer
+>>    * Bits 1+ form a generation counter
+>>    * (seq & 2) >> 1 selects the read cell, write cell is opposite
+>>    * Writers atomically set bit 0, write to the inactive cell, then
+>>      increment seq to publish
+>>    * Readers snapshot seq, read from the active cell, then validate
+>>      that seq hasn't changed
+>>
+>> mpmc_cell expects users to pre-allocate double buffers.
+>>
+>> Key properties:
+>>   * Writers never block (fail if lost the race to another writer)
+>>   * Readers never block writers (double buffering), but may require
+>>   retries if write updates the snapshot concurrently.
+>>
+>> This will be used by BPF timer and workqueue helpers to defer NMI-unsafe
+>> operations (like hrtimer_start()) to irq_work effectively allowing BPF
+>> programs to initiate timers and workqueues from NMI context.
+>>
+>> Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
+>> ---
+> We already have a dual-versioned concurrency control primitive in the
+> kernel (seqcount_latch_t). I would just use that instead of
+> reinventing it here. I don't see much of a difference except writer
+> serialization, which can be done on top of it. If it was already
+> considered and discarded for some reason, please add that reason to
+> the commit message.
+yes, multiple concurrent  writers support would is the main difference
+between seqcount_latch_t and my implementation. I'll switch to
+seqcount_latch_t and external synchronization for writers.
+>>   [...]
+>>
 
-Ha, interesting! Curious, should the .constprop.0 based functions also
-not be emitted within the generated BTF given that they too
-technically would exist in the .text section and can be called?
-Apologies if I'm not understanding something correctly here, but my
-current understanding is that non-.constprop.0 and .constprop.0
-variants share differing addresses.
-
-Anyway, please keep me updated on how you're progressing with the fix
-that you're intending to work on.
