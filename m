@@ -1,86 +1,135 @@
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CFE040F8F3;
-	Thu,  8 Jan 2026 14:19:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.181.97.72
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 204343D3CF5
+	for <bpf@vger.kernel.org>; Thu,  8 Jan 2026 14:32:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767881949; cv=none; b=mC03oytCuq9ldHHzwefLQ+GnyBIVtre3qX1hw6me+VmgbtqQlHpVgT4Z6UNZ3tFU9lve+/fE3It3Udo3RyQiI16kNz0XqfapDFijxjsW5R+l7oB3M3a+vuDXzv0WrkpzM0rML8HfMfmRwAVNg3X4e1+W+CAp77PMBqTa8OmN20k=
+	t=1767882766; cv=none; b=VOriqfj4g9K4439iLhwWa1pzpXdV13W4Nap2X+0ySx4SVd+JY/cyc9PtRvuKhI739S931u0++dv9LthLdK1aqn0aTZg+B3gjM9H01Rupt5ABbPsLfWi61xoC8h0CMErarmHkrUztJ2uwEqjG5rn6nxFQGiY8aCWt0Q/s6C1znzA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767881949; c=relaxed/simple;
-	bh=BepAi8AeO4+ixlelyuqSBWK9uM4+csWfw4z51yePc58=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=a4bpf2E5NQTWuY5Jc2tGMII8o+cuhHxUEHjpVq61H7Re2ACwop+ohbHu9Fvh2TKSD/8deURnLmGynb2CGWVixNvbcQDrrFTKSpYNPY6FZHl4RJsKNslca9F3/woPH9MI1BHXRDCHCV/YR3vNm3N2sNmG9EWBuFqJ2vcKZaFTy9Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=I-love.SAKURA.ne.jp; spf=pass smtp.mailfrom=I-love.SAKURA.ne.jp; arc=none smtp.client-ip=202.181.97.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=I-love.SAKURA.ne.jp
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=I-love.SAKURA.ne.jp
-Received: from www262.sakura.ne.jp (localhost [127.0.0.1])
-	by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 608EIsPZ043558;
-	Thu, 8 Jan 2026 23:18:54 +0900 (JST)
-	(envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from [192.168.1.10] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-	(authenticated bits=0)
-	by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 608EIs3R043554
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-	Thu, 8 Jan 2026 23:18:54 +0900 (JST)
-	(envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <1db0fa14-af3b-47e6-93dc-0adffaa3d934@I-love.SAKURA.ne.jp>
-Date: Thu, 8 Jan 2026 23:18:54 +0900
+	s=arc-20240116; t=1767882766; c=relaxed/simple;
+	bh=dHjIgFqdeoPzZ5z+03xbnogVyQwTr9wuLKUwgnPwV5g=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=H4RtWaheYG87A6j5xGbU5XaMZ0tcmGekj9HF0/yxzFa9o/eCnQmiVOMA5TJytFnYUFvjEvAehjy4bv4sEq0KfDr2SrLj2+yZTHMN08OfKyjgV+Y2/GzcjfVwj3Wf+JfcrJvAZyPAJcYnaxDAvOE80/mtCYVUyIEvH+5/RV1qcs4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e3ESvgyB; arc=none smtp.client-ip=209.85.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e3ESvgyB"
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-47775fb6c56so30585795e9.1
+        for <bpf@vger.kernel.org>; Thu, 08 Jan 2026 06:32:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1767882763; x=1768487563; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=dKsZk5STRUk0X4Pv4cc5SZyi6XswPBivoY5uNi8SKAU=;
+        b=e3ESvgyBt9gQC42atr/ki2jdc8asvgjXgWS7NTslxdIZMC+NBmxPxSwI3k0RKU5SO9
+         /UyneP+AJEY7kAZPrr8Cin3d6ob9M20cbqWCCf1NvimjKDyUV/KuPVJ+89IxyKLVFjED
+         ejkMuPr1PprNWktCdPuA35EKU7tRdtm2G+oXEko3C+ynagQTCJ7kkBkt0yPQHNxhl55l
+         t5zikgTxhmK1Ey+/km+FWTHUMPKAB6G3emEa/YSlV1Mc8c1+h4DJ0w/w1Mqj7Jr/OoRJ
+         gZOciTuVfrCV2gZkV6RK3bYcVRvYsxfoGwLTDqy6YGD288vtNUi6uH7pRR/DyEWBZSp8
+         B0IQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767882763; x=1768487563;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dKsZk5STRUk0X4Pv4cc5SZyi6XswPBivoY5uNi8SKAU=;
+        b=pAlJ8uAeng6mmYwopcmvJRr73b1bQXs7v2EPOlxhuMRUz7rgXVhZXkWLBulha0VvGx
+         KpC9SaTFiZlg/kvJJxvXwES9E4cDQFoGeRorKRjHuo+WOzJCXwBLL5vm6zlE7XX8VnS9
+         l10wD7BkuS1N7etIVjFWbSIBiVswBGjS8vtnqJQgBQg2I3uoW+pEhzn/oTc8aYSeNfGZ
+         Im33ggru0BfwVKxEx7BFKPaF0DFwru9qVcyhA+NwUkZdacisrZjcTWiF4HwsQLFp+y4W
+         Jlg0GHIEQL5PnbYlIEUPdH3uQovwErCtNKIlM9z6yqIXSeB1qmCvw8VcnWfYdBFgnpUd
+         Dwbg==
+X-Forwarded-Encrypted: i=1; AJvYcCUTMITtXFy4KxKbw8yTPKAiWz8o/y/IhdqRAtaO2saDFq4hSU/ephihx5R0Ue3HK7M1CbI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy0T3g6Y2n/f1WnQwV1+SLAQoOhfBVxGSG+dQ7qUIUzIc9TCVSP
+	Sv/TIiMrSN7zjJGbCxbhO1FbCIcIZRcQmTYmvK0Hrk5D0Yi6BxthABbP
+X-Gm-Gg: AY/fxX6lA8vbi/pDXJVTGUT1OWvXSKAb4jvDFPM5AI4ntWtgFNKBMjT78vLjvjZL4f7
+	VN3ywKXj5pucv38Qadw+43eMyU+dUx16XtCuyg/vsTPt8x2A1fiV5UcdfpiRS4GWT4JNDXpNIPz
+	dy9nASot/6MHISfe9y7wMYyoU4+i2wZ/bz1SRlVian22XoPqLHWM7EIjAyuGjh2SlPfAx1oJBsk
+	GECFWW+2CXM7WbBa+MDnO5kBdrwmha/kCPxS/PlAtEjE/BZ9KQUatLKRRC3RCYnGcMCTRK4ytHz
+	tHqH6hK29ExB6h1EwwJoZ5a+Ftg/9edtFLp3Hhvj86nPDD1j8m8gWR1UMPFwnB38b5ghDTNVnLL
+	0M99QgnA9oAn9BYmF8RKzbCN+rri9phpNnkxTyKLruIWDNpnCKLmKKStrrhKT87EpA9X96gzDBB
+	w=
+X-Google-Smtp-Source: AGHT+IGnDsY3fisUw/PeO5pgI1mNCLBNotubRxiPg3jCybSey6S3sceqOXla0zwMBu7+42vl1Y5nvA==
+X-Received: by 2002:a05:600c:4ed1:b0:47d:18b0:bb9a with SMTP id 5b1f17b1804b1-47d84b54031mr77169965e9.33.1767882763275;
+        Thu, 08 Jan 2026 06:32:43 -0800 (PST)
+Received: from krava ([176.74.159.170])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47d7f41eb3bsm159970735e9.7.2026.01.08.06.32.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Jan 2026 06:32:42 -0800 (PST)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Thu, 8 Jan 2026 15:32:40 +0100
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>, Will Deacon <will@kernel.org>,
+	Mahe Tardy <mahe.tardy@gmail.com>,
+	Peter Zijlstra <peterz@infradead.org>, bpf@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, x86@kernel.org,
+	Yonghong Song <yhs@fb.com>, Song Liu <songliubraving@fb.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>
+Subject: Re: [PATCH bpf-next 1/2] arm64/ftrace,bpf: Fix partial regs after
+ bpf_prog_run
+Message-ID: <aV_ACGtNHRfheAme@krava>
+References: <20260107093256.54616-1-jolsa@kernel.org>
+ <20260107110352.3fd7ddda@gandalf.local.home>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] bpf: fix reference count leak in bpf_prog_test_run_xdp()
-To: =?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>
-References: <af090e53-9d9b-4412-8acb-957733b3975c@I-love.SAKURA.ne.jp>
- <87qzs02ofv.fsf@toke.dk>
-Content-Language: en-US
-From: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <87qzs02ofv.fsf@toke.dk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Anti-Virus-Server: fsav303.rs.sakura.ne.jp
-X-Virus-Status: clean
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260107110352.3fd7ddda@gandalf.local.home>
 
-On 2026/01/08 23:01, Toke Høiland-Jørgensen wrote:
-> Hmm, this will end up call bpf_ctx_finish() in the error path, which I'm
-> not sure we want?
+On Wed, Jan 07, 2026 at 11:03:52AM -0500, Steven Rostedt wrote:
+> On Wed,  7 Jan 2026 10:32:55 +0100
+> Jiri Olsa <jolsa@kernel.org> wrote:
+> 
+> > diff --git a/arch/arm64/include/asm/ftrace.h b/arch/arm64/include/asm/ftrace.h
+> > index 1621c84f44b3..177c7bbf3b84 100644
+> > --- a/arch/arm64/include/asm/ftrace.h
+> > +++ b/arch/arm64/include/asm/ftrace.h
+> > @@ -157,6 +157,30 @@ ftrace_partial_regs(const struct ftrace_regs *fregs, struct pt_regs *regs)
+> >  	return regs;
+> >  }
+> >  
+> 
+> See my reply in the other email thread:
+> 
+>   https://lore.kernel.org/all/20260107105316.2b70a308@gandalf.local.home/
 
-Excuse me, but I don't think bpf_ctx_finish() will be called, for
+ah ok, thanks
 
-+out_put_dev:
- 	/* We convert the xdp_buff back to an xdp_md before checking the return
- 	 * code so the reference count of any held netdevice will be decremented
- 	 * even if the test run failed.
- 	 */
- 	xdp_convert_buff_to_md(&xdp, ctx);
- 	if (ret) // <== ret was set to non-0 value immediately before the "goto out_put_dev;" line.
- 		goto out;
- 
- 	size = xdp.data_end - xdp.data_meta + sinfo->xdp_frags_size;
- 	ret = bpf_test_finish(kattr, uattr, xdp.data_meta, sinfo, size, sinfo->xdp_frags_size,
- 			      retval, duration);
- 	if (!ret)
- 		ret = bpf_ctx_finish(kattr, uattr, ctx,
- 				     sizeof(struct xdp_md));
+jirka
 
 > 
-> Could we just move the xdp_convert_md_to_buff() call to after the frags
-> have been copied? Not sure there's technically any dependency there,
-> even though it does look a little off?
-
-Unless
-
-	xdp_md->data = xdp->data - xdp->data_meta;
-	xdp_md->data_end = xdp->data_end - xdp->data_meta;
-
-in xdp_convert_buff_to_md() lines do something bad for the error path,
-I think this change will be safe.
-
+> -- Steve
+> 
+> 
+> > +/*
+> > + * ftrace_partial_regs_update - update the original ftrace_regs from regs
+> > + * @fregs: The ftrace_regs to update from @regs
+> > + * @regs: The partial regs from ftrace_partial_regs() that was updated
+> > + *
+> > + * Some architectures have the partial regs living in the ftrace_regs
+> > + * structure, whereas other architectures need to make a different copy
+> > + * of the @regs. If a partial @regs is retrieved by ftrace_partial_regs() and
+> > + * if the code using @regs updates a field (like the instruction pointer or
+> > + * stack pointer) it may need to propagate that change to the original @fregs
+> > + * it retrieved the partial @regs from. Use this function to guarantee that
+> > + * update happens.
+> > + */
+> > +static __always_inline void
+> > +ftrace_partial_regs_update(const struct ftrace_regs *fregs, struct pt_regs *regs)
+> > +{
+> > +	struct __arch_ftrace_regs *afregs = arch_ftrace_regs(fregs);
+> > +
+> > +	if (afregs->pc != regs->pc) {
+> > +		afregs->pc = regs->pc;
+> > +		afregs->regs[0] = regs->regs[0];
+> > +	}
+> > +}
