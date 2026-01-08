@@ -1,124 +1,118 @@
-Received: from mx-rz-3.rrze.uni-erlangen.de (mx-rz-3.rrze.uni-erlangen.de [131.188.11.22])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF3C83B8BC7
-	for <bpf@vger.kernel.org>; Thu,  8 Jan 2026 10:05:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=131.188.11.22
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90A4D4611ED
+	for <bpf@vger.kernel.org>; Thu,  8 Jan 2026 10:39:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767866723; cv=none; b=mHsaEbg46SNX6xxXH8+WsoxYboUFejv0ZXoXa107+WH9oKfMG8ft2pLH+t3YHtFr2vGXs+g3ujIQDcNqTu1PgnO1CCFU1Rgd0MxlzzwD7jSsVZz91Nzdi0SUVhIs2UwsJgQHHKVcQvTx+OLUwWkBtANs1Pmsw+KtbaATA3uPL7M=
+	t=1767868803; cv=none; b=n4koBq8TUlWSFvNeYell0ZagNIYhxZsky7QdeAkhkJvPmxTavl7wRvv+ogUU+mFPDMrav2OeWSwFmEVlCqb0PHH7pGgz+ZNdpxCsn5KlnX5SdzJJLG3KBthgAzvMuU1VfQuMCUHzb1QQn/mjMibPhhTHQ/MO9LQ0DkH+dhj/NKY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767866723; c=relaxed/simple;
-	bh=jS/mByU1/+LWoO6eJHzIMJeaNxLcmHNTlUbmDgIA0RI=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=QwHuVI2YVJ0nZferjng3m38x3R6axMgRurl/j6x70Rz0vep7gkyk9IMZ/fKp/6eIvSudtRmZ73ooPs2JSFowMdGg5PYm5ZkiW62e8UNEXIDU6yaKGFscUdtVA8NO+3HiASwoWNxlcNCEBrnzhehWX/hhOZveMPPkZ/6oemKj1/4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fau.de; spf=pass smtp.mailfrom=fau.de; dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.b=TXRwanSq; arc=none smtp.client-ip=131.188.11.22
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fau.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fau.de
+	s=arc-20240116; t=1767868803; c=relaxed/simple;
+	bh=9rxcaH0XqfpFzaFSC2tVEZqpmrAprad3wZiQ8PdrRiU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=LXzfrkvMpvV9fz6fLH4qVCyKxvOoUDJ5O9akvQ/dmK3s2ulvXCU8MFKIjvqTiljMF4/IVIKS1H13kz4TjhmzSjV4poOKd3TFnuiDL8kei7rdWy2kurPeDj0p/3hswR+Ca0EuHC/d8C1dnzipcJMDa32r9zeVFvOX0UH1DrSW8To=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V+EuXV8O; arc=none smtp.client-ip=209.85.208.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.b="TXRwanSq"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fau.de; s=fau-2021;
-	t=1767866709; bh=pnpSM3+LZ7mt++O2dJV5Zv3nt3YFPeMMaAN43GJ9qSI=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From:To:CC:
-	 Subject;
-	b=TXRwanSqLD1caB7/z27CfdMl+01wFPEyCyYyER7hODQ7nfKk+4XAQ6n19GMWyCM8A
-	 nUbjG/WzLyx9YtxeG8ajPcVS0xlmB5XWF1qggMqc2p3T32fCJNy9sAI7/d31CFSwtK
-	 qR2HJY2B4tcQAziwErqszVK3Yu7Zl7eXvxGiYSPZfJwO1NoV12ffLKPQHDFhti7Ha1
-	 ix/1yVb+qbCPtuvZKaeee+siCZBJSKn27khqzRi5ZQDuEAMuUq0WyEwQQas41jITYO
-	 5sI8dXKMtI+ciJHNvZZ9fzJcdzAWx7i45PagAO/JWk+JVgzV8ZmIMQEOcIoH9eyIsB
-	 3xlb+iqxx+3Mg==
-Received: from mx-rz-smart.rrze.uni-erlangen.de (mx-rz-smart.rrze.uni-erlangen.de [IPv6:2001:638:a000:1025::1e])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-rz-3.rrze.uni-erlangen.de (Postfix) with ESMTPS id 4dn0rj5vcVz1xwT;
-	Thu,  8 Jan 2026 11:05:09 +0100 (CET)
-X-Virus-Scanned: amavisd-new at boeck1.rrze.uni-erlangen.de (RRZE)
-X-RRZE-Flag: Not-Spam
-X-RRZE-Submit-IP: 10.188.34.184
-Received: from localhost (i4laptop33.informatik.uni-erlangen.de [10.188.34.184])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: U2FsdGVkX180WNKE5bNi5QBpRfXLZfhB6/uihbEZEPM=)
-	by smtp-auth.uni-erlangen.de (Postfix) with ESMTPSA id 4dn0rg0bYbz1y3L;
-	Thu,  8 Jan 2026 11:05:07 +0100 (CET)
-From: Luis Gerhorst <luis.gerhorst@fau.de>
-To: Samuel Holland <samuel.holland@sifive.com>
-Cc: Lukas Gerlach <lukas.gerlach@cispa.de>,  ast@kernel.org,
-  bjorn@kernel.org,  bpf@vger.kernel.org,  daniel.weber@cispa.de,
-  daniel@iogearbox.net,  jo.vanbulck@kuleuven.be,
-  linux-riscv@lists.infradead.org,  luke.r.nels@gmail.com,
-  marton.bognar@kuleuven.be,  michael.schwarz@cispa.de,
-  palmer@dabbelt.com,  pjw@kernel.org,  xi.wang@gmail.com,
-  cleger@rivosinc.com,  palmer@rivosinc.com,  conor.dooley@microchip.com,
-  andrew@sifive.com
-Subject: Re: [PATCH] riscv, bpf: Emit fence.i for BPF_NOSPEC
-In-Reply-To: <06ac0b87-d398-4cb0-a614-760bfe41cf7f@sifive.com> (Samuel
-	Holland's message of "Wed, 7 Jan 2026 17:30:02 -0600")
-References: <87y0m996b2.fsf@fau.de>
-	<20260107095406.4082-1-lukas.gerlach@cispa.de> <87sechz4x3.fsf@fau.de>
-	<06ac0b87-d398-4cb0-a614-760bfe41cf7f@sifive.com>
-User-Agent: mu4e 1.12.12; emacs 30.2
-Date: Thu, 08 Jan 2026 11:05:06 +0100
-Message-ID: <875x9czagd.fsf@fau.de>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V+EuXV8O"
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-65063a95558so4271345a12.0
+        for <bpf@vger.kernel.org>; Thu, 08 Jan 2026 02:39:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1767868792; x=1768473592; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=R67t3/y7Vy0NRDZFClRFUWiyayd2hkScl9Wg2asEBDA=;
+        b=V+EuXV8OGX4zWncqRwcokOxWbm3Xf4Y+hIetkMJDTFK8IYlaP4SoUUw7Nc9YomOx20
+         AyEk0UwS1XW6NLUtswzk0XGbuNNloDI10XXcMH9crlsV077DVJlMXcWIZ0ilZ9SdQUIP
+         T8d2oGfqe9LURelcV3ccSfTPOKO3OAv7f03mtTT4uBJzU1/9Xvj6ca3jsht5LoJWpvod
+         gmlSsr7H8qcsX1LCF7Jw8iSxanoZPvlQDhjJOjXy5vlB4kX9mKM47wYvs3/oRGlsTwpk
+         2VgiRxncejRCG2r7Wag1S6hnwwlUdeOLHh0uRzjXVpftQajUBd5Jw13e3uOwl1oQeADH
+         5fFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767868792; x=1768473592;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=R67t3/y7Vy0NRDZFClRFUWiyayd2hkScl9Wg2asEBDA=;
+        b=OS3B+URcRebKJee99o3CCSqTuPZiEawDUlgzIv0roQ2/f8g1LnGoSajiqxPWQ3LEOy
+         07vPpAu/IhouphkoWIK0bEi2jQ58T3l/4OhZp5TcXAvEZPbmoIBHFmzmj327yDPxFQh2
+         NOCBmGEpvx0ZYSIkzIZd+R0wH18H2/ZUAkzR0dUiXCQaUCiKh2wvh3JXO440LWuC7Uo6
+         VdY0no+2WYf9zcmUhkSViO7UTnis1qwGRX/SOvXWQpj9Q2p4LnofztVinwk40lkwUg0W
+         yJSLEs7d8vMKF6VAr7OnJa5OV1eghl/LKxk9KYNhImPivTuWToG9v0+ozZfTZy18lsra
+         bU2A==
+X-Gm-Message-State: AOJu0YzbBi89+3XsnZlDLKVtsjpGLy9kNALBBSRh0YFUf4IFdQCyuzPA
+	AII7TI5G6ZkJ7DJNY/a36lswSQnuN/XXwbtc+9Xg4Lh7BVK54lo4keWShGUwfsnfLw++n3aNlpl
+	6DNYtzTdKC8PWteXmd+2QuVNBxTXwhCI=
+X-Gm-Gg: AY/fxX7xDGiU8TzETDtN7m4iZeszr+bFFHB7QwXO3e0TvrIS8G2JCTQIFclNypsZsk6
+	oDqm7gqlmwOaug8cw1kjlkk+EziA1a3P/bvPDqcdenxes4POzHQS3HSAxVoCJKXngPJ1csV57Xj
+	Tjg6CO5Utl/Fx0rCMZS9WzvWTk9AtsGVFhs/KJaR8rObb34Uw7W+3RKtbSsiRyTLzI7YAdprXB3
+	LwLoGaliIL1dqMb11wSplBEztHXn7MlB3emGJ+mq4WThsJK6ptLB+vA7FJXqD+Mrlw2NOWKbHB/
+	jWjBhnFyasA=
+X-Google-Smtp-Source: AGHT+IGCYQyz/RLKT3W08NRV/2R7Cn1ezLmmZAOZrvocGXcs8stVuZq68/ef3tFY440YfK/htzas+forWJ4jial60mE=
+X-Received: by 2002:a05:6402:270a:b0:647:54ba:6c42 with SMTP id
+ 4fb4d7f45d1cf-65097dcd9fdmr4950878a12.4.1767868791586; Thu, 08 Jan 2026
+ 02:39:51 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20260107203941.1063754-1-puranjay@kernel.org> <20260107203941.1063754-4-puranjay@kernel.org>
+ <d64c1ff42310fc6c6284add088e598df078559cb.camel@gmail.com>
+In-Reply-To: <d64c1ff42310fc6c6284add088e598df078559cb.camel@gmail.com>
+From: Puranjay Mohan <puranjay12@gmail.com>
+Date: Thu, 8 Jan 2026 10:39:37 +0000
+X-Gm-Features: AQt7F2p3MvIxgq1GLJh4piVYbZ8TRVj2WWcZFZnv8FQbNY_3OjsmbfkuExaAucI
+Message-ID: <CANk7y0gJjhRmgVo5jmEHx53WWCz5BBEYp7XXqo+9Nz2oH5zACA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 3/3] selftests/bpf: Update expected output for
+ sub64_partial_overflow test
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Martin KaFai Lau <martin.lau@kernel.org>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, kernel-team@meta.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Samuel Holland <samuel.holland@sifive.com> writes:
-
-> The Zifencei extension is no longer a mandatory part of the ISA, but it is
-> mandatory for Linux. Linux requires at least "rv32ima or rv64ima, as defined by
-> version 2.2 of the user ISA and version 1.10 of the privileged ISA".
+On Thu, Jan 8, 2026 at 6:59=E2=80=AFAM Eduard Zingerman <eddyz87@gmail.com>=
+ wrote:
 >
-> Notably, in version 2.2 of the user ISA, the Zifencei extension was still an
-> unnamed subset of the I extension, so it is included in the above requirement.
-> It was later removed from the I extension and given its own name, which is why
-> we have weirdness like the code below. (You can see in arch/riscv/Makefile where
-> we unconditionally add either ISA version 2.2 or Zifencei to CFLAGS.)
+> On Wed, 2026-01-07 at 12:39 -0800, Puranjay Mohan wrote:
+> > Update the expected regex pattern for the sub64_partial_overflow test.
+> > With BPF_SUB now supporting linked register tracking, the verifier
+> > output shows R3=3Dscalar(id=3D1-1) instead of R3=3Dscalar() because r3 =
+is
+> > now tracked as linked to r0 with an offset of -1.
+> >
+> > Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
+> > ---
 >
->> RISC-V cpufeature.c had this in [2]:
->> 
->> 		/*
->> 		 * Linux requires the following extensions, so we may as well
->> 		 * always set them.
->> 		 */
->> 		set_bit(RISCV_ISA_EXT_ZICSR, this_isa);
->> 		set_bit(RISCV_ISA_EXT_ZIFENCEI, this_isa);
->> 
->> But as of [1] it was changed to:
->> 
->> 		if (acpi_disabled) {
->> 			set_bit(RISCV_ISA_EXT_ZICSR, source_isa);
->> 			set_bit(RISCV_ISA_EXT_ZIFENCEI, source_isa);
->> 
->> So based on that I would assume fence.i may not always be supported.
+> W/o this patch selftests fail after patch #1, right?
+> We usually keep such test fixes in verifier patches.
+> Such that selftests are passing after each commit,
+> This makes any potential git bisect simpler.
+
+Yes, I will merge this with the first patch in v2.
+
 >
-> This is just a quirk of the parsing code. As mentioned in [1], older devicetrees
-> were written while Zifencei was an implicit part of I, so we don't expect it to
-> appear in the devicetree. The ACPI table definition was written after Zifencei
-> was a separate extension, so we do expect Zifencei to appear on its own in the
-> ACPI table. But it is still required. (We don't currently check that all
-> extensions required by the kernel are actually present; this will be done as
-> part of the RVA23 enablement.)
->
->> But I also found that 921ebd8f2c08 ("RISC-V: Allow userspace to flush
->> the instruction cache") seems to assume that fence.i always works (see
->> local_flush_icache_all() which I assume runs in the kernel).
->
-> Yes, the kernel definitely won't run if fence.i is missing, so we don't need to
-> worry about such hardware. We could probably document this better.
-
-Thanks for clarifying this! In that case the patch looks good to me.
-
-I assume some testing has been done to ensure the instruction coding
-works. (I think the eBPF CI does not have RISC-V yet but [1] previously
-worked fine for me.)
-
-Acked-by: Luis Gerhorst <luis.gerhorst@fau.de>
-
-[1] https://github.com/pulehui/riscv-bpf-vmtest
+> >  tools/testing/selftests/bpf/progs/verifier_bounds.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/tools/testing/selftests/bpf/progs/verifier_bounds.c b/tool=
+s/testing/selftests/bpf/progs/verifier_bounds.c
+> > index 411a18437d7e..560531404bce 100644
+> > --- a/tools/testing/selftests/bpf/progs/verifier_bounds.c
+> > +++ b/tools/testing/selftests/bpf/progs/verifier_bounds.c
+> > @@ -1477,7 +1477,7 @@ __naked void sub64_full_overflow(void)
+> >  SEC("socket")
+> >  __description("64-bit subtraction, partial overflow, result in unbound=
+ed reg")
+> >  __success __log_level(2)
+> > -__msg("3: (1f) r3 -=3D r2 {{.*}} R3=3Dscalar()")
+> > +__msg("3: (1f) r3 -=3D r2 {{.*}} R3=3Dscalar(id=3D1-1)")
+> >  __retval(0)
+> >  __naked void sub64_partial_overflow(void)
+> >  {
