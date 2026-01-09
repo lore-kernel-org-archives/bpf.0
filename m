@@ -1,38 +1,38 @@
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E3D733D4F0;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FBD733D4F2;
 	Fri,  9 Jan 2026 21:27:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767994023; cv=none; b=R2PsOGZ2RusQN/4+bJEQGV9vXKqmO8dFAuH6Yik6WWNPEgbLVE7/jJBFUFJ/w7wMn/MoFdXIqfqye97bZRjbGoe9vUfkTycEg8baFyXoL+vErBchi8Cz6TnWNiMWSEYnI7p4czWqrKvIx9yuuT05TbDtOEBCXAuu68VTbFGyvBs=
+	t=1767994024; cv=none; b=VgpnhpW8lg5XQkXzNx/a0sjr9LzyRGxuE+bbafcZ5zm32yKonUiJjduHGwkWOdAHbx5Dun4jyVSEz4kwGf8Pgz1AHsH+r3FgB2dO+EgAQJ5AI+SMUxSuEEgfA7+nyoESBuLrvrPWHyDTYTrrhOeFSLv6gkPnUOYLO9bR2UgcX/U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767994023; c=relaxed/simple;
-	bh=rdr5J+hHrc1dCqlvNaU0poD+GJK5U9YP+2/COu96mEw=;
+	s=arc-20240116; t=1767994024; c=relaxed/simple;
+	bh=HUgwPka4M0yHQeXNjfZtBMFVEz2wHjLcGoeWfhGa++k=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=VeFBD6Tmj3KH+SvI2BKaR3utilHWpHf1Og8JZQk2nd8QjHFL0OLsn4qSAStrEmqrSEDk4kXo+7gRXf8khlI+iHzx8Y0mxxYKcG1HOPQGFyj3L7pLlGgVJFvxDU9y5T6NxMvB/aRC4jbZ3cICCKEV7L4VVpWOoK9cO76wq8ZoSeo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=m+xKM8bf; arc=none smtp.client-ip=213.133.104.62
+	 MIME-Version; b=PbcsEnxhxY/CndVisX+2X3Q3k09X5J4g5X/j2WABTKQ5lL+6zAQuy0zNq4IBV66LSbhqaXMlee+xgE2Aszbt9PbOVVYSZb3aoAM4gTBx1UohdQvcqx76Qt3T3NrS1M6u+RQxWVpRxU+ZNErEL8UC3y8qywArRpf8JimvKF5BIxc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=QN2MNKgU; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="m+xKM8bf"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="QN2MNKgU"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
 	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
 	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=c0FRVVCjuS3SSW0lO5JZxDoXnVeYi/510stVJ5Y9ikQ=; b=m+xKM8bfJQ8M/IyCUzsDvVeR/V
-	CZ98yhA0WAijYLvsRUMmU7bC186wThB3nniHpJ9sdXkWbNmH4mtXQoWNirI7x4nexjCbDLkoYKHjq
-	zSq/GwPHRTHv8ddA0ClZqwcTQpWOfVuLX5Z8kniOn2Nq1jmalwCquhT7bhLEVbM8Mj1+FzCwvTDzH
-	UdlcglYPkpvbRNMNCDx7GX929AFdbmU2nTND2xbu4KCazZZS7lPh7/5UYZ/DW1eyCmzEAFXEw2qtT
-	ql7ikcekxtSs2sah00OB38lKG7GudDRwSd7CoKajI/A+r4sVIWMIn/hR62ROU85EKaIwp+9iPL7S9
-	bFV5TRjg==;
+	bh=WbFsLRJzYxDV/0xfkCioZe7RTbFdJTzm5jUQXguqsYM=; b=QN2MNKgUUlkZW3MghD4GiFjZ0q
+	mzUDZs1MluxGLrapE0mAN2l5FP9krIYqYE4evkVxX8aihf9xoR/abS06SHTaOZ1tA/BavmH/gAVOU
+	J6+QA41gOS7HDzQm0vmjbAkucofZbqFVc3Vb2Fo1w3bLegwbwgwVrALfoAD9qIW3TjdhuFBqqOSl5
+	Lu8IAO0wxlzAI18TN4/zqQj8GbJPdWLQsDKQRcCooAaqTbSkN3uWAPlBXRksQV6dmOELXhbOwLFuF
+	vvd1Aw9DYKWBLirF2AUmCXeaqt2Z8Tx/L6wEHdfUVbOL+76iZhQ/gIHhVhr90Udg/9qOHwSZgK/xm
+	NJOoBIkQ==;
 Received: from localhost ([127.0.0.1])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1veK0B-000536-0q;
-	Fri, 09 Jan 2026 22:26:35 +0100
+	id 1veK0P-00055Z-2q;
+	Fri, 09 Jan 2026 22:26:49 +0100
 From: Daniel Borkmann <daniel@iogearbox.net>
 To: netdev@vger.kernel.org
 Cc: bpf@vger.kernel.org,
@@ -51,9 +51,9 @@ Cc: bpf@vger.kernel.org,
 	toke@redhat.com,
 	yangzhenze@bytedance.com,
 	wangdongdong.6@bytedance.com
-Subject: [PATCH net-next v5 01/16] net: Add queue-create operation
-Date: Fri,  9 Jan 2026 22:26:17 +0100
-Message-ID: <20260109212632.146920-2-daniel@iogearbox.net>
+Subject: [PATCH net-next v5 14/16] selftests/net: Add env for container based tests
+Date: Fri,  9 Jan 2026 22:26:30 +0100
+Message-ID: <20260109212632.146920-15-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260109212632.146920-1-daniel@iogearbox.net>
 References: <20260109212632.146920-1-daniel@iogearbox.net>
@@ -66,297 +66,233 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Virus-Scanned: Clear (ClamAV 1.0.9/27875/Fri Jan  9 08:26:02 2026)
 
-Add a ynl netdev family operation called queue-create that creates a
-new queue on a netdevice:
+From: David Wei <dw@davidwei.uk>
 
-      name: queue-create
-      attribute-set: queue
-      flags: [admin-perm]
-      do:
-        request:
-          attributes:
-            - ifindex
-            - type
-            - lease
-        reply: &queue-create-op
-          attributes:
-            - id
+Add an env NetDrvContEnv for container based selftests. This automates
+the setup of a netns, netkit pair with one inside the netns, and a BPF
+program that forwards skbs from the NETIF host inside the container.
 
-This is a generic operation such that it can be extended for various
-use cases in future. Right now it is mandatory to specify ifindex,
-the queue type which is enforced to rx and a lease. The newly created
-queue id is returned to the caller.
+Currently only netkit is used, but other virtual netdevs e.g. veth can
+be used too.
 
-A queue from a virtual device can have a lease which refers to another
-queue from a physical device. This is useful for memory providers
-and AF_XDP operations which take an ifindex and queue id to allow
-applications to bind against virtual devices in containers. The lease
-couples both queues together and allows to proxy the operations from
-a virtual device in a container to the physical device.
+Expect netkit container datapath selftests to have a publicly routable
+IP prefix to assign to netkit in a container, such that packets will
+land on eth0. The BPF skb forward program will then forward such packets
+from the host netns to the container netns.
 
-In future, the nested lease attribute can be lifted and made optional
-for other use-cases such as dynamic queue creation for physical
-netdevs. The lack of lease and the specification of the physical
-device as an ifindex will imply that we need a real queue to be
-allocated. Similarly, the queue type enforcement to rx can then be
-lifted as well to support tx.
-
-An early implementation had only driver-specific integration [0], but
-in order for other virtual devices to reuse, it makes sense to have
-this as a generic API in core net.
-
-For leasing queues, the virtual netdev must have real_num_rx_queue
-less than num_rx_queues at the time of calling queue-create. The
-queue-type must be rx as only rx queues are supported for leasing
-for now. We also enforce that the queue-create ifindex must point
-to a virtual device, and that the nested lease attribute's ifindex
-must point to a physical device. The nested lease attribute set
-contains a netns-id attribute which is currently only intended for
-dumping as part of the queue-get operation. Also, it is modeled as
-an s32 type similarly as done elsewhere in the stack.
-
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Co-developed-by: David Wei <dw@davidwei.uk>
 Signed-off-by: David Wei <dw@davidwei.uk>
-Link: https://bpfconf.ebpf.io/bpfconf2025/bpfconf2025_material/lsfmmbpf_2025_netkit_borkmann.pdf [0]
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 ---
- Documentation/netlink/specs/netdev.yaml | 44 +++++++++++++++++++++++++
- include/uapi/linux/netdev.h             | 11 +++++++
- net/core/netdev-genl-gen.c              | 20 +++++++++++
- net/core/netdev-genl-gen.h              |  2 ++
- net/core/netdev-genl.c                  |  5 +++
- tools/include/uapi/linux/netdev.h       | 11 +++++++
- 6 files changed, 93 insertions(+)
+ .../testing/selftests/drivers/net/README.rst  |   7 ++
+ .../drivers/net/hw/lib/py/__init__.py         |   7 +-
+ .../selftests/drivers/net/lib/py/__init__.py  |   7 +-
+ .../selftests/drivers/net/lib/py/env.py       | 107 +++++++++++++++++-
+ 4 files changed, 121 insertions(+), 7 deletions(-)
 
-diff --git a/Documentation/netlink/specs/netdev.yaml b/Documentation/netlink/specs/netdev.yaml
-index 82bf5cb2617d..f074b9b81e21 100644
---- a/Documentation/netlink/specs/netdev.yaml
-+++ b/Documentation/netlink/specs/netdev.yaml
-@@ -339,6 +339,15 @@ attribute-sets:
-         doc: XSK information for this queue, if any.
-         type: nest
-         nested-attributes: xsk-info
-+      -
-+        name: lease
-+        doc: |
-+          A queue from a virtual device can have a lease which refers to
-+          another queue from a physical device. This is useful for memory
-+          providers and AF_XDP operations which take an ifindex and queue id
-+          to allow applications to bind against virtual devices in containers.
-+        type: nest
-+        nested-attributes: lease
-   -
-     name: qstats
-     doc: |
-@@ -537,6 +546,24 @@ attribute-sets:
-         name: id
-       -
-         name: type
-+  -
-+    name: lease
-+    attributes:
-+      -
-+        name: ifindex
-+        doc: The netdev ifindex to lease the queue from.
-+        type: u32
-+        checks:
-+          min: 1
-+      -
-+        name: queue
-+        doc: The netdev queue to lease from.
-+        type: nest
-+        nested-attributes: queue-id
-+      -
-+        name: netns-id
-+        doc: The network namespace id of the netdev.
-+        type: s32
-   -
-     name: dmabuf
-     attributes:
-@@ -684,6 +711,7 @@ operations:
-             - dmabuf
-             - io-uring
-             - xsk
-+            - lease
-       dump:
-         request:
-           attributes:
-@@ -795,6 +823,22 @@ operations:
-         reply:
-           attributes:
-             - id
-+    -
-+      name: queue-create
-+      doc: |
-+        Create a new queue for the given netdevice. Whether this operation
-+        is supported depends on the device and the driver.
-+      attribute-set: queue
-+      flags: [admin-perm]
-+      do:
-+        request:
-+          attributes:
-+            - ifindex
-+            - type
-+            - lease
-+        reply: &queue-create-op
-+          attributes:
-+            - id
+diff --git a/tools/testing/selftests/drivers/net/README.rst b/tools/testing/selftests/drivers/net/README.rst
+index eb838ae94844..b94e81c2e030 100644
+--- a/tools/testing/selftests/drivers/net/README.rst
++++ b/tools/testing/selftests/drivers/net/README.rst
+@@ -62,6 +62,13 @@ LOCAL_V4, LOCAL_V6, REMOTE_V4, REMOTE_V6
  
- kernel-family:
-   headers: ["net/netdev_netlink.h"]
-diff --git a/include/uapi/linux/netdev.h b/include/uapi/linux/netdev.h
-index e0b579a1df4f..7df1056a35fd 100644
---- a/include/uapi/linux/netdev.h
-+++ b/include/uapi/linux/netdev.h
-@@ -160,6 +160,7 @@ enum {
- 	NETDEV_A_QUEUE_DMABUF,
- 	NETDEV_A_QUEUE_IO_URING,
- 	NETDEV_A_QUEUE_XSK,
-+	NETDEV_A_QUEUE_LEASE,
+ Local and remote endpoint IP addresses.
  
- 	__NETDEV_A_QUEUE_MAX,
- 	NETDEV_A_QUEUE_MAX = (__NETDEV_A_QUEUE_MAX - 1)
-@@ -202,6 +203,15 @@ enum {
- 	NETDEV_A_QSTATS_MAX = (__NETDEV_A_QSTATS_MAX - 1)
- };
- 
-+enum {
-+	NETDEV_A_LEASE_IFINDEX = 1,
-+	NETDEV_A_LEASE_QUEUE,
-+	NETDEV_A_LEASE_NETNS_ID,
++LOCAL_PREFIX_V4, LOCAL_PREFIX_V6
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 +
-+	__NETDEV_A_LEASE_MAX,
-+	NETDEV_A_LEASE_MAX = (__NETDEV_A_LEASE_MAX - 1)
-+};
++Local IP prefix/subnet which can be used to allocate extra IP addresses (for
++network name spaces behind macvlan, veth, netkit devices). DUT must be
++reachable using these addresses from the endpoint.
 +
- enum {
- 	NETDEV_A_DMABUF_IFINDEX = 1,
- 	NETDEV_A_DMABUF_QUEUES,
-@@ -228,6 +238,7 @@ enum {
- 	NETDEV_CMD_BIND_RX,
- 	NETDEV_CMD_NAPI_SET,
- 	NETDEV_CMD_BIND_TX,
-+	NETDEV_CMD_QUEUE_CREATE,
+ REMOTE_TYPE
+ ~~~~~~~~~~~
  
- 	__NETDEV_CMD_MAX,
- 	NETDEV_CMD_MAX = (__NETDEV_CMD_MAX - 1)
-diff --git a/net/core/netdev-genl-gen.c b/net/core/netdev-genl-gen.c
-index ba673e81716f..52ba99c019e7 100644
---- a/net/core/netdev-genl-gen.c
-+++ b/net/core/netdev-genl-gen.c
-@@ -28,6 +28,12 @@ static const struct netlink_range_validation netdev_a_napi_defer_hard_irqs_range
- };
+diff --git a/tools/testing/selftests/drivers/net/hw/lib/py/__init__.py b/tools/testing/selftests/drivers/net/hw/lib/py/__init__.py
+index 766bfc4ad842..9a0dd482258d 100644
+--- a/tools/testing/selftests/drivers/net/hw/lib/py/__init__.py
++++ b/tools/testing/selftests/drivers/net/hw/lib/py/__init__.py
+@@ -3,6 +3,7 @@
+ """
+ Driver test environment (hardware-only tests).
+ NetDrvEnv and NetDrvEpEnv are the main environment classes.
++NetDrvContEnv extends NetDrvEpEnv with netkit container support.
+ Former is for local host only tests, latter creates / connects
+ to a remote endpoint. See NIPA wiki for more information about
+ running and writing driver tests.
+@@ -29,7 +30,7 @@ try:
+     from net.lib.py import ksft_eq, ksft_ge, ksft_in, ksft_is, ksft_lt, \
+         ksft_ne, ksft_not_in, ksft_raises, ksft_true, ksft_gt, ksft_not_none
+     from drivers.net.lib.py import GenerateTraffic, Remote, Iperf3Runner
+-    from drivers.net.lib.py import NetDrvEnv, NetDrvEpEnv
++    from drivers.net.lib.py import NetDrvEnv, NetDrvEpEnv, NetDrvContEnv
  
- /* Common nested types */
-+const struct nla_policy netdev_lease_nl_policy[NETDEV_A_LEASE_NETNS_ID + 1] = {
-+	[NETDEV_A_LEASE_IFINDEX] = NLA_POLICY_MIN(NLA_U32, 1),
-+	[NETDEV_A_LEASE_QUEUE] = NLA_POLICY_NESTED(netdev_queue_id_nl_policy),
-+	[NETDEV_A_LEASE_NETNS_ID] = { .type = NLA_S32, },
-+};
+     __all__ = ["NetNS", "NetNSEnter", "NetdevSimDev",
+                "EthtoolFamily", "NetdevFamily", "NetshaperFamily",
+@@ -44,8 +45,8 @@ try:
+                "ksft_eq", "ksft_ge", "ksft_in", "ksft_is", "ksft_lt",
+                "ksft_ne", "ksft_not_in", "ksft_raises", "ksft_true", "ksft_gt",
+                "ksft_not_none", "ksft_not_none",
+-               "NetDrvEnv", "NetDrvEpEnv", "GenerateTraffic", "Remote",
+-               "Iperf3Runner"]
++               "NetDrvEnv", "NetDrvEpEnv", "NetDrvContEnv", "GenerateTraffic",
++               "Remote", "Iperf3Runner"]
+ except ModuleNotFoundError as e:
+     print("Failed importing `net` library from kernel sources")
+     print(str(e))
+diff --git a/tools/testing/selftests/drivers/net/lib/py/__init__.py b/tools/testing/selftests/drivers/net/lib/py/__init__.py
+index 8b75faa9af6d..be3a8a936882 100644
+--- a/tools/testing/selftests/drivers/net/lib/py/__init__.py
++++ b/tools/testing/selftests/drivers/net/lib/py/__init__.py
+@@ -3,6 +3,7 @@
+ """
+ Driver test environment.
+ NetDrvEnv and NetDrvEpEnv are the main environment classes.
++NetDrvContEnv extends NetDrvEpEnv with netkit container support.
+ Former is for local host only tests, latter creates / connects
+ to a remote endpoint. See NIPA wiki for more information about
+ running and writing driver tests.
+@@ -43,12 +44,12 @@ try:
+                "ksft_ne", "ksft_not_in", "ksft_raises", "ksft_true", "ksft_gt",
+                "ksft_not_none", "ksft_not_none"]
+ 
+-    from .env import NetDrvEnv, NetDrvEpEnv
++    from .env import NetDrvEnv, NetDrvEpEnv, NetDrvContEnv
+     from .load import GenerateTraffic, Iperf3Runner
+     from .remote import Remote
+ 
+-    __all__ += ["NetDrvEnv", "NetDrvEpEnv", "GenerateTraffic", "Remote",
+-                "Iperf3Runner"]
++    __all__ += ["NetDrvEnv", "NetDrvEpEnv", "NetDrvContEnv", "GenerateTraffic",
++                "Remote", "Iperf3Runner"]
+ except ModuleNotFoundError as e:
+     print("Failed importing `net` library from kernel sources")
+     print(str(e))
+diff --git a/tools/testing/selftests/drivers/net/lib/py/env.py b/tools/testing/selftests/drivers/net/lib/py/env.py
+index 8b644fd84ff2..3cc94d1e53ed 100644
+--- a/tools/testing/selftests/drivers/net/lib/py/env.py
++++ b/tools/testing/selftests/drivers/net/lib/py/env.py
+@@ -1,11 +1,13 @@
+ # SPDX-License-Identifier: GPL-2.0
+ 
++import ipaddress
+ import os
++import re
+ import time
+ from pathlib import Path
+ from lib.py import KsftSkipEx, KsftXfailEx
+ from lib.py import ksft_setup, wait_file
+-from lib.py import cmd, ethtool, ip, CmdExitFailure
++from lib.py import cmd, ethtool, ip, CmdExitFailure, bpftool
+ from lib.py import NetNS, NetdevSimDev
+ from .remote import Remote
+ 
+@@ -285,3 +287,106 @@ class NetDrvEpEnv(NetDrvEnvBase):
+                 data.get('stats-block-usecs', 0) / 1000 / 1000
+ 
+         time.sleep(self._stats_settle_time)
 +
- const struct nla_policy netdev_page_pool_info_nl_policy[NETDEV_A_PAGE_POOL_IFINDEX + 1] = {
- 	[NETDEV_A_PAGE_POOL_ID] = NLA_POLICY_FULL_RANGE(NLA_UINT, &netdev_a_page_pool_id_range),
- 	[NETDEV_A_PAGE_POOL_IFINDEX] = NLA_POLICY_FULL_RANGE(NLA_U32, &netdev_a_page_pool_ifindex_range),
-@@ -107,6 +113,13 @@ static const struct nla_policy netdev_bind_tx_nl_policy[NETDEV_A_DMABUF_FD + 1]
- 	[NETDEV_A_DMABUF_FD] = { .type = NLA_U32, },
- };
- 
-+/* NETDEV_CMD_QUEUE_CREATE - do */
-+static const struct nla_policy netdev_queue_create_nl_policy[NETDEV_A_QUEUE_LEASE + 1] = {
-+	[NETDEV_A_QUEUE_IFINDEX] = NLA_POLICY_MIN(NLA_U32, 1),
-+	[NETDEV_A_QUEUE_TYPE] = NLA_POLICY_MAX(NLA_U32, 1),
-+	[NETDEV_A_QUEUE_LEASE] = NLA_POLICY_NESTED(netdev_lease_nl_policy),
-+};
 +
- /* Ops table for netdev */
- static const struct genl_split_ops netdev_nl_ops[] = {
- 	{
-@@ -205,6 +218,13 @@ static const struct genl_split_ops netdev_nl_ops[] = {
- 		.maxattr	= NETDEV_A_DMABUF_FD,
- 		.flags		= GENL_CMD_CAP_DO,
- 	},
-+	{
-+		.cmd		= NETDEV_CMD_QUEUE_CREATE,
-+		.doit		= netdev_nl_queue_create_doit,
-+		.policy		= netdev_queue_create_nl_policy,
-+		.maxattr	= NETDEV_A_QUEUE_LEASE,
-+		.flags		= GENL_ADMIN_PERM | GENL_CMD_CAP_DO,
-+	},
- };
- 
- static const struct genl_multicast_group netdev_nl_mcgrps[] = {
-diff --git a/net/core/netdev-genl-gen.h b/net/core/netdev-genl-gen.h
-index cffc08517a41..d71b435d72c1 100644
---- a/net/core/netdev-genl-gen.h
-+++ b/net/core/netdev-genl-gen.h
-@@ -14,6 +14,7 @@
- #include <net/netdev_netlink.h>
- 
- /* Common nested types */
-+extern const struct nla_policy netdev_lease_nl_policy[NETDEV_A_LEASE_NETNS_ID + 1];
- extern const struct nla_policy netdev_page_pool_info_nl_policy[NETDEV_A_PAGE_POOL_IFINDEX + 1];
- extern const struct nla_policy netdev_queue_id_nl_policy[NETDEV_A_QUEUE_TYPE + 1];
- 
-@@ -36,6 +37,7 @@ int netdev_nl_qstats_get_dumpit(struct sk_buff *skb,
- int netdev_nl_bind_rx_doit(struct sk_buff *skb, struct genl_info *info);
- int netdev_nl_napi_set_doit(struct sk_buff *skb, struct genl_info *info);
- int netdev_nl_bind_tx_doit(struct sk_buff *skb, struct genl_info *info);
-+int netdev_nl_queue_create_doit(struct sk_buff *skb, struct genl_info *info);
- 
- enum {
- 	NETDEV_NLGRP_MGMT,
-diff --git a/net/core/netdev-genl.c b/net/core/netdev-genl.c
-index 470fabbeacd9..aae75431858d 100644
---- a/net/core/netdev-genl.c
-+++ b/net/core/netdev-genl.c
-@@ -1120,6 +1120,11 @@ int netdev_nl_bind_tx_doit(struct sk_buff *skb, struct genl_info *info)
- 	return err;
- }
- 
-+int netdev_nl_queue_create_doit(struct sk_buff *skb, struct genl_info *info)
-+{
-+	return -EOPNOTSUPP;
-+}
++class NetDrvContEnv(NetDrvEpEnv):
++    """
++    Class for an environment with a netkit pair setup for forwarding traffic
++    between the physical interface and a network namespace.
++    """
 +
- void netdev_nl_sock_priv_init(struct netdev_nl_sock *priv)
- {
- 	INIT_LIST_HEAD(&priv->bindings);
-diff --git a/tools/include/uapi/linux/netdev.h b/tools/include/uapi/linux/netdev.h
-index e0b579a1df4f..7df1056a35fd 100644
---- a/tools/include/uapi/linux/netdev.h
-+++ b/tools/include/uapi/linux/netdev.h
-@@ -160,6 +160,7 @@ enum {
- 	NETDEV_A_QUEUE_DMABUF,
- 	NETDEV_A_QUEUE_IO_URING,
- 	NETDEV_A_QUEUE_XSK,
-+	NETDEV_A_QUEUE_LEASE,
- 
- 	__NETDEV_A_QUEUE_MAX,
- 	NETDEV_A_QUEUE_MAX = (__NETDEV_A_QUEUE_MAX - 1)
-@@ -202,6 +203,15 @@ enum {
- 	NETDEV_A_QSTATS_MAX = (__NETDEV_A_QSTATS_MAX - 1)
- };
- 
-+enum {
-+	NETDEV_A_LEASE_IFINDEX = 1,
-+	NETDEV_A_LEASE_QUEUE,
-+	NETDEV_A_LEASE_NETNS_ID,
++    def __init__(self, src_path, nk_rxqueues=1, **kwargs):
++        super().__init__(src_path, **kwargs)
 +
-+	__NETDEV_A_LEASE_MAX,
-+	NETDEV_A_LEASE_MAX = (__NETDEV_A_LEASE_MAX - 1)
-+};
++        self.require_ipver("6")
++        local_prefix = self.env.get("LOCAL_PREFIX_V6")
++        if not local_prefix:
++            raise KsftSkipEx("LOCAL_PREFIX_V6 required")
 +
- enum {
- 	NETDEV_A_DMABUF_IFINDEX = 1,
- 	NETDEV_A_DMABUF_QUEUES,
-@@ -228,6 +238,7 @@ enum {
- 	NETDEV_CMD_BIND_RX,
- 	NETDEV_CMD_NAPI_SET,
- 	NETDEV_CMD_BIND_TX,
-+	NETDEV_CMD_QUEUE_CREATE,
- 
- 	__NETDEV_CMD_MAX,
- 	NETDEV_CMD_MAX = (__NETDEV_CMD_MAX - 1)
++        local_prefix = local_prefix.rstrip("/64").rstrip("::").rstrip(":")
++        self.ipv6_prefix = f"{local_prefix}::"
++        self.nk_host_ipv6 = f"{local_prefix}::2:1"
++        self.nk_guest_ipv6 = f"{local_prefix}::2:2"
++
++        self.netns = None
++        self._nk_host_ifname = None
++        self._nk_guest_ifname = None
++        self._tc_attached = False
++        self._bpf_prog_id = None
++
++        ip(f"link add type netkit mode l2 forward peer forward numrxqueues {nk_rxqueues}")
++
++        all_links = ip("-d link show", json=True)
++        netkit_links = [link for link in all_links
++                        if link.get('linkinfo', {}).get('info_kind') == 'netkit'
++                        and 'UP' not in link.get('flags', [])]
++
++        if len(netkit_links) != 2:
++            raise KsftSkipEx("Failed to create netkit pair")
++
++        netkit_links.sort(key=lambda x: x['ifindex'])
++        self._nk_host_ifname = netkit_links[1]['ifname']
++        self._nk_guest_ifname = netkit_links[0]['ifname']
++        self.nk_host_ifindex = netkit_links[1]['ifindex']
++        self.nk_guest_ifindex = netkit_links[0]['ifindex']
++
++        self.netns = NetNS()
++        ip(f"link set dev {self._nk_guest_ifname} netns {self.netns.name}")
++        ip(f"link set dev {self._nk_host_ifname} up")
++        ip(f"-6 addr add fe80::1/64 dev {self._nk_host_ifname} nodad")
++        ip(f"-6 route add {self.nk_guest_ipv6}/128 via fe80::2 dev {self._nk_host_ifname}")
++
++        ip("link set lo up", ns=self.netns)
++        ip(f"link set dev {self._nk_guest_ifname} up", ns=self.netns)
++        ip(f"-6 addr add fe80::2/64 dev {self._nk_guest_ifname}", ns=self.netns)
++        ip(f"-6 addr add {self.nk_guest_ipv6}/64 dev {self._nk_guest_ifname} nodad", ns=self.netns)
++        ip(f"-6 route add default via fe80::1 dev {self._nk_guest_ifname}", ns=self.netns)
++
++        bpf_obj = self.test_dir / "nk_forward.bpf.o"
++        if not bpf_obj.exists():
++            raise KsftSkipEx("BPF prog not found")
++
++        cmd(f"tc filter add dev {self.ifname} ingress bpf obj {bpf_obj} sec tc/ingress direct-action")
++        self._tc_attached = True
++
++        tc_info = cmd(f"tc filter show dev {self.ifname} ingress").stdout
++        match = re.search(r'pref (\d+).*nk_forward\.bpf.*id (\d+)', tc_info)
++        if not match:
++            raise Exception("Failed to get BPF prog ID")
++        self._bpf_prog_pref = int(match.group(1))
++        self._bpf_prog_id = int(match.group(2))
++
++        prog_info = bpftool(f"prog show id {self._bpf_prog_id}", json=True)
++        map_ids = prog_info.get("map_ids", [])
++
++        bss_map_id = None
++        for map_id in map_ids:
++            map_info = bpftool(f"map show id {map_id}", json=True)
++            if map_info.get("name").endswith("bss"):
++                bss_map_id = map_id
++
++        if bss_map_id is None:
++            raise Exception("Failed to find .bss map")
++
++        ipv6_addr = ipaddress.IPv6Address(self.ipv6_prefix)
++        ipv6_bytes = ipv6_addr.packed
++        ifindex_bytes = self.nk_host_ifindex.to_bytes(4, byteorder='little')
++        value = ipv6_bytes + ifindex_bytes
++        value_hex = ' '.join(f'{b:02x}' for b in value)
++        bpftool(f"map update id {bss_map_id} key hex 00 00 00 00 value hex {value_hex}")
++
++    def __del__(self):
++        if self._tc_attached:
++            cmd(f"tc filter del dev {self.ifname} ingress pref {self._bpf_prog_pref}").stdout
++            self._tc_attached = False
++
++        if self._nk_host_ifname:
++            cmd(f"ip link del dev {self._nk_host_ifname}")
++            self._nk_host_ifname = None
++            self._nk_guest_ifname = None
++
++        if self.netns:
++            del self.netns
++            self.netns = None
++
++        super().__del__()
 -- 
 2.43.0
 
