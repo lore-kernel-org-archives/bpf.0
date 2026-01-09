@@ -1,80 +1,119 @@
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A911E35CB6A
-	for <bpf@vger.kernel.org>; Fri,  9 Jan 2026 13:00:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C831935B159
+	for <bpf@vger.kernel.org>; Fri,  9 Jan 2026 13:04:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767963645; cv=none; b=VnTTFXYDVA3oW49bUN5QBJpnDERRAueDEwG8u4FbV7MBollbSxHdpIul+M++OBldNwRFJmaeywKRNOLG2M1myU1WZMSHoqM+njndxXvZI34bbkr3lYza5mO4E6Slk46pkdQHpMidlGLSyD+zVjmCdVTAqD1VknqYSUukInpZNtA=
+	t=1767963884; cv=none; b=HKxaJwzLdSdtJwCCDoZ/Mj+Tv9/3TTNKH9Yg4V2dmx2kMXSFGZafWgyX16cD4f/ivcr8sgE/A3+warWW6KWG0YnsVe++RbamOidoeub9C3Pi7B37G1v5vvI1IkRk2esaXiZVR1q31UaLLZxNeBZoLDQyeroVs3o/QR1rLdmYE3g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767963645; c=relaxed/simple;
-	bh=y+RkYpOAQ7uM/0ey3EZvsKbFdv6jknz7JJQBhw+sV0s=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=uWFYgVPh03mjtlTsk9Vv23jjx3ybckzn/XD8NIQm2yAqq8r3dlLRoY9+NR9fNUs6UPAwWeRfWspyQ/xAgv2YBOzInK7vhUWwPZAmIL/rOMGBBGYDxJGPKeqw/HZURsnc+DZbM+TvZK0SawGHcGG3ScJ3nyH3F13NfqBxAc6ryzM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dWUj5ZEl; arc=none smtp.client-ip=209.85.214.175
+	s=arc-20240116; t=1767963884; c=relaxed/simple;
+	bh=ME5RwYYeXnXNLbQ/Bkl/rSm+h34n/XlbEQhFl4FNSPc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=gVvLNEDfdYdYBRTDuzbonTh4Sq5sEOO+rmdyexdFY1x5V7cTW20r1p5kLvjf7aKoMpeKSivjHntGmQsA92Ba+iNwUErD5pxvWdkPYVHz/oZlatWF3SOPoSesfTW4l/tB/Of44W878Ws/YCbNkGzr5Grgax9ZHFcBKNhyN0aXKrU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QDduGjKT; arc=none smtp.client-ip=209.85.218.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dWUj5ZEl"
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-29f1bc40b35so49230505ad.2
-        for <bpf@vger.kernel.org>; Fri, 09 Jan 2026 05:00:43 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QDduGjKT"
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-b736d883ac4so791911066b.2
+        for <bpf@vger.kernel.org>; Fri, 09 Jan 2026 05:04:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1767963643; x=1768568443; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MO7278nlQYTAPfu3eaWy0xSK9M5O/y06GriyWS2ce/U=;
-        b=dWUj5ZElExOKPKl7s7CV1ni/De8q/UmB/wwa/o3C53egK803aB42F9qDyDhQJ+Zdkh
-         Vjr7ra2S8N+I11AlBPTND3Q5GX8pRP/tD0GhGGWlz0QJBglZC6IAnPBQGzuA1cUk9Zg/
-         W+7o6LotVXVQcfmUiPBk13OEELPvtJPmH3FpUqkG88Rc7kZMzEBeRI9kPzD2VxivJFqH
-         OFJ6joWU9rroLOIwV7C9AytYqhWFySgc7JmoC1+MCtbzTVxv9IM6wWo2QMVLlvQdWOcr
-         cKMWQsffzhlRwtKDqf+OY7XJF9thTe84TAcbsmU7nDNPyQTSTp6fgEQ8fZ66+r4QDRkL
-         QcDg==
+        d=gmail.com; s=20230601; t=1767963881; x=1768568681; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=fQi3F9taD578uKhb5WeGr8+LqFJi+cgMU9mJCgFH+JI=;
+        b=QDduGjKTx1G99BMLRaHn5vlgGt0NaPYtR06aaXViuKqECR/OUujK80wWLDWpaFm/+W
+         IE+oimb15cZ4NJrjXyH+QzOL6vkqC7/oKzui2Nw4AU1hI415k9f6ZJN9D16DSGB4Q4+h
+         bysIQVUHSptG03eZM5PtBm/xgNta5HgEQqwzaCk7kHGrcB1KAUQAvJZKE2E0lC+Aa+br
+         +itJejPtHzLK/KC4Tbx37d5kMdSNffxec+dy+j0V233B0WSvTVnCBmYo09y8P4fhGr2n
+         YflFvUOgVr96pkC2f6y23+6WB9cEnHTUSS86LkKUnL6o0ZMUgM17d0OqXq1Mgnxq5i+Q
+         GbLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767963643; x=1768568443;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=MO7278nlQYTAPfu3eaWy0xSK9M5O/y06GriyWS2ce/U=;
-        b=KvtMS9sjrAWiGSzuKt14wBN0R9qVhKrPfQxivoQt7rLU9pEUK16jev98Zi+obY/7Ll
-         Ar1Ni+4GABrqEHpxMi8v0zziG63+GCx7VbYaEeWi10RJy4goYkVE0Dt59XAU5l/HyMgK
-         NjFNuU5OSw5LX46SYDoZGJp4hlkVQHzoM3CAwU4yuCj4MKn14GIw5/8fMNrO8PNVEBrg
-         fgCaUvOAcc/JTCs4vfIfuQ7yD4pclhAoqmd5jmfuPoiyeyST/U2E5VvTKlk5/Kb5epPt
-         wP0juqsHJOOImXk1fucBZ5zP5yo8xlwhUemwCt51mwgex7uLnYwoyXB4j88aGn8o3tCo
-         kElA==
-X-Forwarded-Encrypted: i=1; AJvYcCU8gNFKxp1Nvhp6riJ9NT30R6QIkJdIgbbO4Lg4Hh0TR5ZQzlAxehUimOnA9MxWFYPp8CY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyd1h9C2BxmSiwUyHEcEmuGoGjrgT3HJvnsrs2ZF3l5sq0bOf+H
-	jAkMFTmE1Q9viNfgAgGlE2zcZFZdP53VqibtLwZXFxCKonUPtxz4TZDA
-X-Gm-Gg: AY/fxX5lGCgVdbYkkfrLJNIxf6u7AWSrGrClNj7W/TTvnw9UqUv5lAKrzsx+yS0KSqm
-	1FrzSh0DM7gS9W9cn9EUrG2sIUwzVDcOhoBCnYnIVf0aKrfnCOVeJW3UzFCDAOcQ8lb0ma88tmY
-	7QxHEvjM5hevVR/4W39A8eFMOJw5LI8IJtKrqrLw4dlyYuOGiuMWZUiRtcEXuB4j5L8FZ8WwmVM
-	A24FFeQtW9et8XSl7tGbxc5BUc53U8obT2xz8pds80E4Y9t/ZAex84zWhFvaSQk2laBNMatVPUZ
-	zkZHGb7Afzh3yp/r7EL5Wum21RwJu7i4RRbmY7v5kCTz4T6imaudCKnY5PpUDqZVFtf1d4bD12x
-	efo5Nqbz/3wpZr8wh8w2Zpbnx1ndjxz4Y4r1/O3ECtTvk7i0Xzm6ya14ycMJdqlRcpIRREGcP4J
-	v3UdiEAAPpm0KpEJhyHIOKX05i4r8=
-X-Google-Smtp-Source: AGHT+IG5Cqo3+38kG8ESzhWrBgdKbUFhdU0k029rjUkM6vXAH4vvVwZEbE/pXDENcUb+VYMnZzwlCQ==
-X-Received: by 2002:a17:903:1cd:b0:2a0:b02b:2114 with SMTP id d9443c01a7336-2a3ee413b9cmr100817785ad.11.1767963642383;
-        Fri, 09 Jan 2026 05:00:42 -0800 (PST)
-Received: from pengdl-pc.mioffice.cn ([43.224.245.249])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a3e3c3a328sm104927325ad.4.2026.01.09.05.00.39
+        d=1e100.net; s=20230601; t=1767963881; x=1768568681;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fQi3F9taD578uKhb5WeGr8+LqFJi+cgMU9mJCgFH+JI=;
+        b=gCVGzSVB1OY2VV6HhisF7DAtGk8Osykabwz+jhAD/aH7Ha94Ou+k59eG5/3TdfyXAI
+         QB7eVValLnenFtAR4hyq7tNjQLBoP72HHQl8PpOrFAifzC9XjH+ALNEQbKVsCmRj0twu
+         EXS0Ue9tDXNYHlLOzWG5FLhNMvHBC0GTflpCW8uIl/VNzPjWJym0POOVyrdTSmJiIgAc
+         jJnrs0yxPLkF+t074mqw0LbANRopT1YbZx/IZS6QsBwAOBrGhgUZn4lq45ujaBnPp5UN
+         g9c2NJHOR+/Sr1x3rFr3jNil69MfWFHGiqkLcCHYcge5f6Pyc3YYc+TFuUZ8byehL2XE
+         yM1A==
+X-Forwarded-Encrypted: i=1; AJvYcCWYpJ0cGBjBCOiwmGWK+UOiwOXnjVg4qeoV5Fc4vdu0i10M/ZbvaMPu4Bk9yLxGgnJjTqw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx/z+x6E41OtHpWKdtJccfaCdRKFgJSnFAoEk5xr3bvEZ/vaJ3P
+	vp7LWmnYPUP6hZkzsQo0GTgONeMohPVbGU+25hQVN3dH/Tv1mU3ybKwuWQ6lSw==
+X-Gm-Gg: AY/fxX5EY2T5SLP3cfAMFvC/jecf8mzuXLOJW5tzYHweN+f4iRGNOjovd+v51JOpgnD
+	T8gkr63CVNz/m8w6sckYQtXH/KQ6wVnzvHZSMsJjYfA0IatkEZE7v1yLRzbQ83n/qQvLbx6KmO+
+	nnqyn+eQz2Ct5AloZMmHo97dLnWqZFUKmrrUf2xjSFLuRph/MCP54dw65JYDdZ15Zq6KlfJxNKV
+	4NwGVku+FfxEYIqtpAJRqMr/UAtbwMhIXpXcrpLwygiPWZfXO7A379JdX5fwTDCh/03oM8YEDnR
+	QURZg/hIXXi3AKC7VY6h9GGXOvJh84Bccc78zpHRiFOM/TbpFctie6Qk3d1ZgW7I7ZgJ9MWGgXG
+	RzLB9rbpII81wQ0PeiiM3PrFL8C1fD1oIHy1EuS3p2TNXIdcZup/ZLFvwso57oK2k4fx+V5/Ogq
+	7Uz4SKmMcyVANqx/QSycasDzqpqBmIKBq7xUTepZD4nz8CYf/lFYpPelzqJpftpLVyji/GQA==
+X-Google-Smtp-Source: AGHT+IHEu00dTqymHYnWX3YB9+V+M0g0pVj0f65C6gXQXrOLC70cW7LkbUbrjcu3dFBefYWTWksRNQ==
+X-Received: by 2002:a05:600c:4fc6:b0:477:a21c:2066 with SMTP id 5b1f17b1804b1-47d84b0a902mr94022565e9.5.1767958133975;
+        Fri, 09 Jan 2026 03:28:53 -0800 (PST)
+Received: from 127.com ([2620:10d:c092:600::1:69b5])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47d8636c610sm60056985e9.0.2026.01.09.03.28.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jan 2026 05:00:41 -0800 (PST)
-From: Donglin Peng <dolinux.peng@gmail.com>
-To: ast@kernel.org,
-	andrii.nakryiko@gmail.com,
-	eddyz87@gmail.com
-Cc: zhangxiaoqin@xiaomi.com,
-	ihor.solodrai@linux.dev,
+        Fri, 09 Jan 2026 03:28:52 -0800 (PST)
+From: Pavel Begunkov <asml.silence@gmail.com>
+To: netdev@vger.kernel.org
+Cc: "David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Michael Chan <michael.chan@broadcom.com>,
+	Pavan Chebbi <pavan.chebbi@broadcom.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Joshua Washington <joshwash@google.com>,
+	Harshitha Ramamurthy <hramamurthy@google.com>,
+	Saeed Mahameed <saeedm@nvidia.com>,
+	Tariq Toukan <tariqt@nvidia.com>,
+	Mark Bloch <mbloch@nvidia.com>,
+	Leon Romanovsky <leon@kernel.org>,
+	Alexander Duyck <alexanderduyck@fb.com>,
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Willem de Bruijn <willemb@google.com>,
+	Ankit Garg <nktgrg@google.com>,
+	Tim Hostetler <thostet@google.com>,
+	Alok Tiwari <alok.a.tiwari@oracle.com>,
+	Ziwei Xiao <ziweixiao@google.com>,
+	John Fraker <jfraker@google.com>,
+	Praveen Kaligineedi <pkaligineedi@google.com>,
+	Mohsin Bashir <mohsin.bashr@gmail.com>,
+	Joe Damato <joe@dama.to>,
+	Mina Almasry <almasrymina@google.com>,
+	Dimitri Daskalakis <dimitri.daskalakis1@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	Samiullah Khawaja <skhawaja@google.com>,
+	Ahmed Zaki <ahmed.zaki@intel.com>,
+	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	Pavel Begunkov <asml.silence@gmail.com>,
+	David Wei <dw@davidwei.uk>,
+	Yue Haibing <yuehaibing@huawei.com>,
+	Haiyue Wang <haiyuewa@163.com>,
+	Jens Axboe <axboe@kernel.dk>,
+	Simon Horman <horms@kernel.org>,
+	Vishwanath Seshagiri <vishs@fb.com>,
+	linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	bpf@vger.kernel.org,
-	Donglin Peng <pengdonglin@xiaomi.com>,
-	Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH bpf-next v12 11/11] btf: Refactor the code by calling str_is_empty
-Date: Fri,  9 Jan 2026 21:00:03 +0800
-Message-Id: <20260109130003.3313716-12-dolinux.peng@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260109130003.3313716-1-dolinux.peng@gmail.com>
-References: <20260109130003.3313716-1-dolinux.peng@gmail.com>
+	linux-rdma@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	dtatulea@nvidia.com,
+	io-uring@vger.kernel.org
+Subject: [PATCH net-next v8 0/9] Add support for providers with large rx buffer
+Date: Fri,  9 Jan 2026 11:28:39 +0000
+Message-ID: <cover.1767819709.git.asml.silence@gmail.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -83,203 +122,123 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Donglin Peng <pengdonglin@xiaomi.com>
+Note: it's net/ only bits and doesn't include changes, which shoulf be
+merged separately and are posted separately. The full branch for
+convenience is at [1], and the patch is here:
 
-Calling the str_is_empty function to clarify the code and
-no functional changes are introduced.
+https://lore.kernel.org/io-uring/7486ab32e99be1f614b3ef8d0e9bc77015b173f7.1764265323.git.asml.silence@gmail.com
 
-Cc: Eduard Zingerman <eddyz87@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>
-Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Alan Maguire <alan.maguire@oracle.com>
-Cc: Ihor Solodrai <ihor.solodrai@linux.dev>
-Cc: Xiaoqin Zhang <zhangxiaoqin@xiaomi.com>
-Signed-off-by: Donglin Peng <pengdonglin@xiaomi.com>
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+Many modern NICs support configurable receive buffer lengths, and zcrx and
+memory providers can use buffers larger than 4K to improve performance. When
+paired with hw-gro larger rx buffer sizes can drastically reduce the number
+of buffers traversing the stack and save a lot of processing time. It also
+allows to give to users larger contiguous chunks of data. The idea was first
+floated around by Saeed during netdev conf 2024 and was asked about by a few
+folks.
+
+Single stream benchmarks showed up to ~30% CPU util improvement.
+E.g. comparison for 4K vs 32K buffers using a 200Gbit NIC:
+
+packets=23987040 (MB=2745098), rps=199559 (MB/s=22837)
+CPU    %usr   %nice    %sys %iowait    %irq   %soft   %idle
+  0    1.53    0.00   27.78    2.72    1.31   66.45    0.22
+packets=24078368 (MB=2755550), rps=200319 (MB/s=22924)
+CPU    %usr   %nice    %sys %iowait    %irq   %soft   %idle
+  0    0.69    0.00    8.26   31.65    1.83   57.00    0.57
+
+This series adds net infrastructure for memory providers configuring
+the size and implements it for bnxt. It's an opt-in feature for drivers,
+they should advertise support for the parameter in the qops and must check
+if the hardware supports the given size. It's limited to memory providers
+as it drastically simplifies implementation. It doesn't affect the fast
+path zcrx uAPI, and the user exposed parameter is defined in zcrx terms,
+which allows it to be flexible and adjusted in the future.
+
+A liburing example can be found at [2]
+
+full branch:
+[1] https://github.com/isilence/linux.git zcrx/large-buffers-v8
+Liburing example:
+[2] https://github.com/isilence/liburing.git zcrx/rx-buf-len
+
 ---
- tools/lib/bpf/btf.c    | 34 +++++++++++++++++-----------------
- tools/lib/bpf/libbpf.c |  4 ++--
- 2 files changed, 19 insertions(+), 19 deletions(-)
 
-diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-index 918d9fa6ec36..66e4a57896b3 100644
---- a/tools/lib/bpf/btf.c
-+++ b/tools/lib/bpf/btf.c
-@@ -2128,7 +2128,7 @@ int btf__add_int(struct btf *btf, const char *name, size_t byte_sz, int encoding
- 	int sz, name_off;
- 
- 	/* non-empty name */
--	if (!name || !name[0])
-+	if (str_is_empty(name))
- 		return libbpf_err(-EINVAL);
- 	/* byte_sz must be power of 2 */
- 	if (!byte_sz || (byte_sz & (byte_sz - 1)) || byte_sz > 16)
-@@ -2176,7 +2176,7 @@ int btf__add_float(struct btf *btf, const char *name, size_t byte_sz)
- 	int sz, name_off;
- 
- 	/* non-empty name */
--	if (!name || !name[0])
-+	if (str_is_empty(name))
- 		return libbpf_err(-EINVAL);
- 
- 	/* byte_sz must be one of the explicitly allowed values */
-@@ -2231,7 +2231,7 @@ static int btf_add_ref_kind(struct btf *btf, int kind, const char *name, int ref
- 	if (!t)
- 		return libbpf_err(-ENOMEM);
- 
--	if (name && name[0]) {
-+	if (!str_is_empty(name)) {
- 		name_off = btf__add_str(btf, name);
- 		if (name_off < 0)
- 			return name_off;
-@@ -2308,7 +2308,7 @@ static int btf_add_composite(struct btf *btf, int kind, const char *name, __u32
- 	if (!t)
- 		return libbpf_err(-ENOMEM);
- 
--	if (name && name[0]) {
-+	if (!str_is_empty(name)) {
- 		name_off = btf__add_str(btf, name);
- 		if (name_off < 0)
- 			return name_off;
-@@ -2409,7 +2409,7 @@ int btf__add_field(struct btf *btf, const char *name, int type_id,
- 	if (!m)
- 		return libbpf_err(-ENOMEM);
- 
--	if (name && name[0]) {
-+	if (!str_is_empty(name)) {
- 		name_off = btf__add_str(btf, name);
- 		if (name_off < 0)
- 			return name_off;
-@@ -2447,7 +2447,7 @@ static int btf_add_enum_common(struct btf *btf, const char *name, __u32 byte_sz,
- 	if (!t)
- 		return libbpf_err(-ENOMEM);
- 
--	if (name && name[0]) {
-+	if (!str_is_empty(name)) {
- 		name_off = btf__add_str(btf, name);
- 		if (name_off < 0)
- 			return name_off;
-@@ -2505,7 +2505,7 @@ int btf__add_enum_value(struct btf *btf, const char *name, __s64 value)
- 		return libbpf_err(-EINVAL);
- 
- 	/* non-empty name */
--	if (!name || !name[0])
-+	if (str_is_empty(name))
- 		return libbpf_err(-EINVAL);
- 	if (value < INT_MIN || value > UINT_MAX)
- 		return libbpf_err(-E2BIG);
-@@ -2582,7 +2582,7 @@ int btf__add_enum64_value(struct btf *btf, const char *name, __u64 value)
- 		return libbpf_err(-EINVAL);
- 
- 	/* non-empty name */
--	if (!name || !name[0])
-+	if (str_is_empty(name))
- 		return libbpf_err(-EINVAL);
- 
- 	/* decompose and invalidate raw data */
-@@ -2622,7 +2622,7 @@ int btf__add_enum64_value(struct btf *btf, const char *name, __u64 value)
-  */
- int btf__add_fwd(struct btf *btf, const char *name, enum btf_fwd_kind fwd_kind)
- {
--	if (!name || !name[0])
-+	if (str_is_empty(name))
- 		return libbpf_err(-EINVAL);
- 
- 	switch (fwd_kind) {
-@@ -2658,7 +2658,7 @@ int btf__add_fwd(struct btf *btf, const char *name, enum btf_fwd_kind fwd_kind)
-  */
- int btf__add_typedef(struct btf *btf, const char *name, int ref_type_id)
- {
--	if (!name || !name[0])
-+	if (str_is_empty(name))
- 		return libbpf_err(-EINVAL);
- 
- 	return btf_add_ref_kind(btf, BTF_KIND_TYPEDEF, name, ref_type_id, 0);
-@@ -2710,7 +2710,7 @@ int btf__add_restrict(struct btf *btf, int ref_type_id)
-  */
- int btf__add_type_tag(struct btf *btf, const char *value, int ref_type_id)
- {
--	if (!value || !value[0])
-+	if (str_is_empty(value))
- 		return libbpf_err(-EINVAL);
- 
- 	return btf_add_ref_kind(btf, BTF_KIND_TYPE_TAG, value, ref_type_id, 0);
-@@ -2727,7 +2727,7 @@ int btf__add_type_tag(struct btf *btf, const char *value, int ref_type_id)
-  */
- int btf__add_type_attr(struct btf *btf, const char *value, int ref_type_id)
- {
--	if (!value || !value[0])
-+	if (str_is_empty(value))
- 		return libbpf_err(-EINVAL);
- 
- 	return btf_add_ref_kind(btf, BTF_KIND_TYPE_TAG, value, ref_type_id, 1);
-@@ -2746,7 +2746,7 @@ int btf__add_func(struct btf *btf, const char *name,
- {
- 	int id;
- 
--	if (!name || !name[0])
-+	if (str_is_empty(name))
- 		return libbpf_err(-EINVAL);
- 	if (linkage != BTF_FUNC_STATIC && linkage != BTF_FUNC_GLOBAL &&
- 	    linkage != BTF_FUNC_EXTERN)
-@@ -2832,7 +2832,7 @@ int btf__add_func_param(struct btf *btf, const char *name, int type_id)
- 	if (!p)
- 		return libbpf_err(-ENOMEM);
- 
--	if (name && name[0]) {
-+	if (!str_is_empty(name)) {
- 		name_off = btf__add_str(btf, name);
- 		if (name_off < 0)
- 			return name_off;
-@@ -2867,7 +2867,7 @@ int btf__add_var(struct btf *btf, const char *name, int linkage, int type_id)
- 	int sz, name_off;
- 
- 	/* non-empty name */
--	if (!name || !name[0])
-+	if (str_is_empty(name))
- 		return libbpf_err(-EINVAL);
- 	if (linkage != BTF_VAR_STATIC && linkage != BTF_VAR_GLOBAL_ALLOCATED &&
- 	    linkage != BTF_VAR_GLOBAL_EXTERN)
-@@ -2916,7 +2916,7 @@ int btf__add_datasec(struct btf *btf, const char *name, __u32 byte_sz)
- 	int sz, name_off;
- 
- 	/* non-empty name */
--	if (!name || !name[0])
-+	if (str_is_empty(name))
- 		return libbpf_err(-EINVAL);
- 
- 	if (btf_ensure_modifiable(btf))
-@@ -2993,7 +2993,7 @@ static int btf_add_decl_tag(struct btf *btf, const char *value, int ref_type_id,
- 	struct btf_type *t;
- 	int sz, value_off;
- 
--	if (!value || !value[0] || component_idx < -1)
-+	if (str_is_empty(value) || component_idx < -1)
- 		return libbpf_err(-EINVAL);
- 
- 	if (validate_type_id(ref_type_id))
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 6ea81701e274..bbcfd72b07d5 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -2904,7 +2904,7 @@ static int bpf_object__init_user_btf_map(struct bpf_object *obj,
- 	var_extra = btf_var(var);
- 	map_name = btf__name_by_offset(obj->btf, var->name_off);
- 
--	if (map_name == NULL || map_name[0] == '\0') {
-+	if (str_is_empty(map_name)) {
- 		pr_warn("map #%d: empty name.\n", var_idx);
- 		return -EINVAL;
- 	}
-@@ -4281,7 +4281,7 @@ static int bpf_object__collect_externs(struct bpf_object *obj)
- 		if (!sym_is_extern(sym))
- 			continue;
- 		ext_name = elf_sym_str(obj, sym->st_name);
--		if (!ext_name || !ext_name[0])
-+		if (str_is_empty(ext_name))
- 			continue;
- 
- 		ext = obj->externs;
+The following changes since commit 9ace4753a5202b02191d54e9fdf7f9e3d02b85eb:
+
+  Linux 6.19-rc4 (2026-01-04 14:41:55 -0800)
+
+are available in the Git repository at:
+
+  https://github.com/isilence/linux.git tags/net-queue-rx-buf-len-v8
+
+for you to fetch changes up to 37f5abe6929963fc6086777056b59ecb034d0e19:
+
+  io_uring/zcrx: document area chunking parameter (2026-01-08 11:35:20 +0000)
+
+
+v8: - Add stripped down qcfg
+    - Retain the page size across resets for bnxt
+
+v7: - Add xa_destroy
+    - Rebase
+
+v6: - Update docs and add a selftest
+
+v5: https://lore.kernel.org/netdev/cover.1760440268.git.asml.silence@gmail.com/
+    - Remove all unnecessary bits like configuration via netlink, and
+      multi-stage queue configuration.
+
+v4: https://lore.kernel.org/all/cover.1760364551.git.asml.silence@gmail.com/
+    - Update fbnic qops
+    - Propagate max buf len for hns3
+    - Use configured buf size in __bnxt_alloc_rx_netmem
+    - Minor stylistic changes
+v3: https://lore.kernel.org/all/cover.1755499375.git.asml.silence@gmail.com/
+    - Rebased, excluded zcrx specific patches
+    - Set agg_size_fac to 1 on warning
+v2: https://lore.kernel.org/all/cover.1754657711.git.asml.silence@gmail.com/
+    - Add MAX_PAGE_ORDER check on pp init
+    - Applied comments rewording
+    - Adjust pp.max_len based on order
+    - Patch up mlx5 queue callbacks after rebase
+    - Minor ->queue_mgmt_ops refactoring
+    - Rebased to account for both fill level and agg_size_fac
+    - Pass providers buf length in struct pp_memory_provider_params and
+      apply it in __netdev_queue_confi().
+    - Use ->supported_ring_params to validate drivers support of set
+      qcfg parameters.
+
+Jakub Kicinski (2):
+  net: reduce indent of struct netdev_queue_mgmt_ops members
+  eth: bnxt: adjust the fill level of agg queues with larger buffers
+
+Pavel Begunkov (7):
+  net: memzero mp params when closing a queue
+  net: add bare bone queue configs
+  net: pass queue rx page size from memory provider
+  eth: bnxt: store rx buffer size per queue
+  eth: bnxt: support qcfg provided rx page size
+  selftests: iou-zcrx: test large chunk sizes
+  io_uring/zcrx: document area chunking parameter
+
+ Documentation/networking/iou-zcrx.rst         |  20 +++
+ drivers/net/ethernet/broadcom/bnxt/bnxt.c     | 126 ++++++++++++++----
+ drivers/net/ethernet/broadcom/bnxt/bnxt.h     |   2 +
+ drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c |   6 +-
+ drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.h |   2 +-
+ drivers/net/ethernet/google/gve/gve_main.c    |   9 +-
+ .../net/ethernet/mellanox/mlx5/core/en_main.c |  10 +-
+ drivers/net/ethernet/meta/fbnic/fbnic_txrx.c  |   8 +-
+ drivers/net/netdevsim/netdev.c                |   7 +-
+ include/net/netdev_queues.h                   |  47 +++++--
+ include/net/netdev_rx_queue.h                 |   2 +
+ include/net/page_pool/types.h                 |   1 +
+ net/core/dev.c                                |  17 +++
+ net/core/netdev_rx_queue.c                    |  31 +++--
+ .../selftests/drivers/net/hw/iou-zcrx.c       |  72 ++++++++--
+ .../selftests/drivers/net/hw/iou-zcrx.py      |  37 +++++
+ 16 files changed, 318 insertions(+), 79 deletions(-)
+
 -- 
-2.34.1
+2.52.0
 
