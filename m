@@ -1,64 +1,64 @@
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 271F535BDC3
-	for <bpf@vger.kernel.org>; Fri,  9 Jan 2026 13:00:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3837C35E555
+	for <bpf@vger.kernel.org>; Fri,  9 Jan 2026 13:00:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767963635; cv=none; b=ZzZOa8aK0LtbG78ItCCysqe1YMTsOKj71w2H6tpUTH/6r3GSRlJxAQf92m+B+9pHmGfHfvH76zgP9kxDgbeWnMZut4ELs6vYT0h02KRYG6U2c9CBt3Ny8mP8GOHbdikX9SQBML+I3ZmS1TiSmLxx/ON+flzX/8o/z9ua6d0yuo8=
+	t=1767963638; cv=none; b=EgJnrSpIAvwN5ZDxSs1ZLmSefArUESyz0R802o9ulDnl7DKFFRelh4j2MflQwR8bJi4iJnMNpN1IPaX3nFlBSZN1n78XOgEiVU5RhuwpzViCt1PNrNhg6qOn2qpp0QjQPhbaP8682l207oz3VfS8XSL1l91iEGL4W8LxzNo0Obc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767963635; c=relaxed/simple;
-	bh=I7eY37GsTyoXAh2wI+oSWMcZ+lGsgT+0+h2fMUYmJ2s=;
+	s=arc-20240116; t=1767963638; c=relaxed/simple;
+	bh=PP4UHGdg2aJ+7TetAPvJTrpVWwYUmJgFr04BIdkvHYQ=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=XVEQ/YZ+eXyzwX+OwZOdmLOXISIEmD4UxZ8+h3PIc62W1jiNM1MVYLu/R6DrauYyOCZ7jkx8LiIW2BWWC0FBgVdrTvf+t66FriMzopj1D4T1MM0xOYWErQnPUy4njZ2uKYAfCNG1t9ZYvFwbpM142rBd1aabGZSayhrS+1gEEHs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SksYxhhm; arc=none smtp.client-ip=209.85.214.175
+	 MIME-Version; b=R8FTtWRNbjY+TeOYeuV9QSg6dVkXUa5GzWMVAcFGNxW7HoB/HKuT3QWO33I2w8AC8T6o7T0tPF5EUrO2TfafUXKR6mtRR9B9pueGsthGI8uPzqOVUrLZUHT7Gz09RhRYwuXJbGJPmvowpkXF+0AfG3QSPbxRUCLuaxuostgBBtc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dQza34Pt; arc=none smtp.client-ip=209.85.214.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SksYxhhm"
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2a0c09bb78cso23496865ad.0
-        for <bpf@vger.kernel.org>; Fri, 09 Jan 2026 05:00:34 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dQza34Pt"
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2a07f8dd9cdso31965845ad.1
+        for <bpf@vger.kernel.org>; Fri, 09 Jan 2026 05:00:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1767963633; x=1768568433; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1767963637; x=1768568437; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=3mmxvmI6t4HDfgNI7x8o7q25F6wuDxougz7BYJ8lGNw=;
-        b=SksYxhhmwwRk/L+yd7O3uO8/vCTdT/IHEd2MkMxAaxMCkC9VwByAdYKaCqsKMD5V3q
-         wA5P6yv/Cg714ntI2a5x24zttVbDCcrm9Y7eLiVqGLjX1YSr7CM6FHq908htKXepEsvs
-         C09Cdn1np8kLEQzLGHafs6Woy53hbN2KfUtCm2kTm7q0RKIa/9dw+zVB2HmbtWuuL9XY
-         xpV2HzfVYJPdxXncS2th1cHOQb6nl8ArsmLHnHyefYwcLIta0fHLw5+YgyUuGY5QmcjL
-         QV9kltw4rDfv+qO/DRb0M7xCoi2oUX0R5EXwtVDcR8vuoUhANVA4VriNmfVHvwbs22Qe
-         PwoA==
+        bh=ezrrIGR+HhUrN/b6TeSbq07sIHXRwZZn0egYDAnCwYw=;
+        b=dQza34Ptgfm2HLpHyY5vPCUu9swGH0zgrOktnkOxtIc6DeNfanpblZHb784Q9tERkx
+         KVVbgGOff2DfFMli0Pq+vkLTFToUg8HG7iVueYjnIB7s/dcsdkA4nKSF4iJDQHjuueNT
+         PY4nC2+B5Dpd5ueZtTKCysUJAaCYtsN24Cn7jSBhIlSDzM5EVCQXvSrzcnJG5lapMMdY
+         Gj4eBWV6PJlcpSMn6XThIRXUiq907O/uhhUfdgYIEO/S9rE/DB9/v1005TwW1plsyBs/
+         aaycURpzQSW7OZZf7mtoJZWjzbZyKkU3ekbULW2z/K2SBrJa0FXmygYSx4o09GWp0LmY
+         hbeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767963633; x=1768568433;
+        d=1e100.net; s=20230601; t=1767963637; x=1768568437;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=3mmxvmI6t4HDfgNI7x8o7q25F6wuDxougz7BYJ8lGNw=;
-        b=hKKihhSfPWZ7X+Nz5/wsK0B45mbBTSc8nVKPe/lxw44QRQeTaKmvrHBu1VbKa0tF+W
-         0Jp+rlSODNgI2dNJdvNgPuA4xtNKWToOTRuA1PRlKJzPe5pt2kFAUfl73lL4VsXqLJgt
-         nvSbopcnPhvkSC7JDT9+FVz7OE9b6XDHOGsMFmQWb9o2U+AKgIWu+MEMoFl/0VBElk1Q
-         Sf7MUfU/P5UgFMKFbEoNjr/y2VGLkiyeJJiiCdWTqLHzFays9WsVw31l5UPdOGE0EV+K
-         xA1Sjy5flMqEWNfHQ2HuhODYgJAjEFDohcap9rMGUYV9FxwHhdFE1o1sqQdpkVjCv70N
-         rV+w==
-X-Forwarded-Encrypted: i=1; AJvYcCWS9y8LYwzmBGJZ/1ZTYgZtDzdHoO9xyPS/SZ5GcuF9ceABwxO+q1qTCpaiddN0VPrKS5s=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxdk8IyijgdWMtHcU+CVDE7jgEMiaOhZrsUoaAfhSI1CnA4h0DI
-	ovT8xQcaTSzJiFXF6l2YwU/kF3GM6w/3MjF/MvVym9OIzDSj5uos7csA
-X-Gm-Gg: AY/fxX77os5x8xg8zvf/piHTA77XtW7w1LtnyoT0ToIrCI6SBb93foUYfUVwSC88R+B
-	qxxdBGf+1b8CCJdhonPmLvNJ3P+F6lJpWaWKS6OKN5PckGQ50LNkFwl0tokyehe/dQ2Tz018lex
-	8YGnMeN3NGoWxZXbFZ9xGd6eQCK/VwCLOQFtjrrANfoADtUezlr/4tylP/6vRetuLEEnpmc/u4T
-	QIvjSuYfGLw1c51z4anv/YS7EaokeKOgadWnVjjJCc5hFwY/UqD/9s7D5QblmjkuPAPCE8ymSsV
-	e4u0T1vwD0/AQs12vyW647DFW9I75/byvn7yKhvfr1qtkyXjZPEz7AMvme46fJFHpuLb/R/d8Tm
-	0knprfp0ylPdXUP8WSMjQ042LorpvLxUHypn5pgvK19YN4QGrQbECI0r7bNUwfu3mKujZwgULf1
-	nWdv7oFZsTc/YzpddTIcbYMqLb078=
-X-Google-Smtp-Source: AGHT+IFoDc8zaNyyFce5gCCCHC7gM3YATlAegS9bI1XtcQ7NPXKyJ161Oc8IFC3/EUDLdresQG1BLg==
-X-Received: by 2002:a17:903:350d:b0:269:7840:de24 with SMTP id d9443c01a7336-2a3e39e5b74mr113131885ad.21.1767963633180;
-        Fri, 09 Jan 2026 05:00:33 -0800 (PST)
+        bh=ezrrIGR+HhUrN/b6TeSbq07sIHXRwZZn0egYDAnCwYw=;
+        b=YK4kfYRrfohKNk1nPL8G64YJSrF2uTKP7VRf3vbmvhnWiVlz8UkpbqH2RIj7tYseer
+         mHbsMg15iEW7ex7PJJ1ve8BVCQHJ/61BCDuaqVvt4G/orPmMTpCg34Cx5aFBnWOnxlxX
+         sWZiQF+KnY+Xl09mncAySQZpPTDLw+YYFqr4odMBjz7o513H/qlZYYz1VVBa+IXZtWHs
+         p0YStD8A01lNsQZWU3t4O39hAETItLpIbTbMhzU1c//7t5vh2Tfett7Rbes7HMaN5RAS
+         UyyiHB9ycxD3lvDkzQaN0aU0ZVp8mkL8DgNswQ7QeiE1UqfvkGenvAuWVr0heTvWAHdw
+         PeYg==
+X-Forwarded-Encrypted: i=1; AJvYcCVffLEsPcB2VhygKaYxWYQkfu2DDcD2WYn8/JFEgYEmdT0Ee8lar/Dck7KSOaCn4DDZ7P0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxncfs7npnYSCff1MYdGvQkB/izf5ktJliOw8XDgckq2NBaOeIk
+	J76LHVju0Qoa245p9gFNnASNs9c8wIjgfqJqBkW0+4GrP94ckKJrrrba3rfDOl4CnxE=
+X-Gm-Gg: AY/fxX52grHon0lhEK4ajI4TnN3i1Mf9oHViQCZ5AnpO+aMAKL51lp8jXJMqk83Th+l
+	sILYFXDbBf33hY7w7k8wMQCZJJZk+Po1AKw5ldT2s5KU5Q9Ji8r4IbTuvjSFqIVHkcziFHYURLO
+	U7DTxGy52jdNCdpGznVziiacZAIvYnWykPJl042T2jWCuU+TdtkdiwpQo4PBHXJe1v7nrtxYMFi
+	rSazv5fwP29DBW1zlXlqiAIc0zLQYzQpYgK6r2i2p6CaErYE9OBeKz2YpvFOtR0hzEI56sFnfxu
+	6OxHtN8v+1q/q1NpQru1IjgEIChv930g6ifWg2kc6fwuhYOFI9BKTuVURFE+HBCXtDcE3A0p4WB
+	yZbWWP99kHjDYDe2esfGTUuqwuMewCTegHLc+3FhczLJvdBUGYHszpQu0wnIzyQXfPBFoObtgge
+	6V298pC58dJ6PG0oaKk6JT1/9CRVI=
+X-Google-Smtp-Source: AGHT+IHGtBK/QdskngOI5OKlKsTDyA39yJOP75NjonrZNih/ElHm8DB77Fgzhggt+tCVfNovhyx3wA==
+X-Received: by 2002:a17:902:cf06:b0:2a0:d662:7285 with SMTP id d9443c01a7336-2a3ee33e1aamr97569295ad.0.1767963636166;
+        Fri, 09 Jan 2026 05:00:36 -0800 (PST)
 Received: from pengdl-pc.mioffice.cn ([43.224.245.249])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a3e3c3a328sm104927325ad.4.2026.01.09.05.00.30
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a3e3c3a328sm104927325ad.4.2026.01.09.05.00.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jan 2026 05:00:32 -0800 (PST)
+        Fri, 09 Jan 2026 05:00:35 -0800 (PST)
 From: Donglin Peng <dolinux.peng@gmail.com>
 To: ast@kernel.org,
 	andrii.nakryiko@gmail.com,
@@ -69,9 +69,9 @@ Cc: zhangxiaoqin@xiaomi.com,
 	bpf@vger.kernel.org,
 	Donglin Peng <pengdonglin@xiaomi.com>,
 	Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH bpf-next v12 08/11] bpf: Skip anonymous types in type lookup for performance
-Date: Fri,  9 Jan 2026 21:00:00 +0800
-Message-Id: <20260109130003.3313716-9-dolinux.peng@gmail.com>
+Subject: [PATCH bpf-next v12 09/11] bpf: Optimize the performance of find_bpffs_btf_enums
+Date: Fri,  9 Jan 2026 21:00:01 +0800
+Message-Id: <20260109130003.3313716-10-dolinux.peng@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20260109130003.3313716-1-dolinux.peng@gmail.com>
 References: <20260109130003.3313716-1-dolinux.peng@gmail.com>
@@ -85,11 +85,10 @@ Content-Transfer-Encoding: 8bit
 
 From: Donglin Peng <pengdonglin@xiaomi.com>
 
-Currently, vmlinux and kernel module BTFs are unconditionally
-sorted during the build phase, with named types placed at the
-end. Thus, anonymous types should be skipped when starting the
-search. In my vmlinux BTF, the number of anonymous types is
-61,747, which means the loop count can be reduced by 61,747.
+Currently, vmlinux BTF is unconditionally sorted during
+the build phase. The function btf_find_by_name_kind
+executes the binary search branch, so find_bpffs_btf_enums
+can be optimized by using btf_find_by_name_kind.
 
 Cc: Eduard Zingerman <eddyz87@gmail.com>
 Cc: Alexei Starovoitov <ast@kernel.org>
@@ -100,75 +99,73 @@ Cc: Xiaoqin Zhang <zhangxiaoqin@xiaomi.com>
 Signed-off-by: Donglin Peng <pengdonglin@xiaomi.com>
 Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- kernel/bpf/btf.c      | 10 ++++++----
- kernel/bpf/verifier.c |  7 +------
- 2 files changed, 7 insertions(+), 10 deletions(-)
+ kernel/bpf/inode.c | 42 +++++++++++++++++-------------------------
+ 1 file changed, 17 insertions(+), 25 deletions(-)
 
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 12eecf59d71f..686dbe18a97a 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -3534,7 +3534,8 @@ const char *btf_find_decl_tag_value(const struct btf *btf, const struct btf_type
- 	const struct btf_type *t;
- 	int len, id;
+diff --git a/kernel/bpf/inode.c b/kernel/bpf/inode.c
+index 9f866a010dad..005ea3a2cda7 100644
+--- a/kernel/bpf/inode.c
++++ b/kernel/bpf/inode.c
+@@ -600,10 +600,17 @@ struct bpffs_btf_enums {
  
--	id = btf_find_next_decl_tag(btf, pt, comp_idx, tag_key, 0);
-+	id = btf_find_next_decl_tag(btf, pt, comp_idx, tag_key,
-+				    btf_named_start_id(btf, false) - 1);
- 	if (id < 0)
- 		return ERR_PTR(id);
+ static int find_bpffs_btf_enums(struct bpffs_btf_enums *info)
+ {
++	struct {
++		const struct btf_type **type;
++		const char *name;
++	} btf_enums[] = {
++		{&info->cmd_t,		"bpf_cmd"},
++		{&info->map_t,		"bpf_map_type"},
++		{&info->prog_t,		"bpf_prog_type"},
++		{&info->attach_t,	"bpf_attach_type"},
++	};
+ 	const struct btf *btf;
+-	const struct btf_type *t;
+-	const char *name;
+-	int i, n;
++	int i, id;
  
-@@ -7844,12 +7845,13 @@ int btf_prepare_func_args(struct bpf_verifier_env *env, int subprog)
- 			tname);
- 		return -EINVAL;
- 	}
-+
- 	/* Convert BTF function arguments into verifier types.
- 	 * Only PTR_TO_CTX and SCALAR are supported atm.
- 	 */
- 	for (i = 0; i < nargs; i++) {
- 		u32 tags = 0;
--		int id = 0;
-+		int id = btf_named_start_id(btf, false) - 1;
+ 	memset(info, 0, sizeof(*info));
  
- 		/* 'arg:<tag>' decl_tag takes precedence over derivation of
- 		 * register type from BTF type itself
-@@ -9331,7 +9333,7 @@ bpf_core_find_cands(struct bpf_core_ctx *ctx, u32 local_type_id)
- 	}
+@@ -615,31 +622,16 @@ static int find_bpffs_btf_enums(struct bpffs_btf_enums *info)
  
- 	/* Attempt to find target candidates in vmlinux BTF first */
--	cands = bpf_core_add_cands(cands, main_btf, 1);
-+	cands = bpf_core_add_cands(cands, main_btf, btf_named_start_id(main_btf, true));
- 	if (IS_ERR(cands))
- 		return ERR_CAST(cands);
+ 	info->btf = btf;
  
-@@ -9363,7 +9365,7 @@ bpf_core_find_cands(struct bpf_core_ctx *ctx, u32 local_type_id)
- 		 */
- 		btf_get(mod_btf);
- 		spin_unlock_bh(&btf_idr_lock);
--		cands = bpf_core_add_cands(cands, mod_btf, btf_nr_types(main_btf));
-+		cands = bpf_core_add_cands(cands, mod_btf, btf_named_start_id(mod_btf, true));
- 		btf_put(mod_btf);
- 		if (IS_ERR(cands))
- 			return ERR_CAST(cands);
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 53635ea2e41b..53aa8f503775 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -20652,12 +20652,7 @@ static int find_btf_percpu_datasec(struct btf *btf)
- 	 * types to look at only module's own BTF types.
- 	 */
- 	n = btf_nr_types(btf);
--	if (btf_is_module(btf))
--		i = btf_nr_types(btf_vmlinux);
--	else
--		i = 1;
+-	for (i = 1, n = btf_nr_types(btf); i < n; i++) {
+-		t = btf_type_by_id(btf, i);
+-		if (!btf_type_is_enum(t))
+-			continue;
 -
--	for(; i < n; i++) {
-+	for (i = btf_named_start_id(btf, true); i < n; i++) {
- 		t = btf_type_by_id(btf, i);
- 		if (BTF_INFO_KIND(t->info) != BTF_KIND_DATASEC)
- 			continue;
+-		name = btf_name_by_offset(btf, t->name_off);
+-		if (!name)
+-			continue;
+-
+-		if (strcmp(name, "bpf_cmd") == 0)
+-			info->cmd_t = t;
+-		else if (strcmp(name, "bpf_map_type") == 0)
+-			info->map_t = t;
+-		else if (strcmp(name, "bpf_prog_type") == 0)
+-			info->prog_t = t;
+-		else if (strcmp(name, "bpf_attach_type") == 0)
+-			info->attach_t = t;
+-		else
+-			continue;
++	for (i = 0; i < ARRAY_SIZE(btf_enums); i++) {
++		id = btf_find_by_name_kind(btf, btf_enums[i].name,
++					   BTF_KIND_ENUM);
++		if (id < 0)
++			return -ESRCH;
+ 
+-		if (info->cmd_t && info->map_t && info->prog_t && info->attach_t)
+-			return 0;
++		*btf_enums[i].type = btf_type_by_id(btf, id);
+ 	}
+ 
+-	return -ESRCH;
++	return 0;
+ }
+ 
+ static bool find_btf_enum_const(const struct btf *btf, const struct btf_type *enum_t,
 -- 
 2.34.1
 
