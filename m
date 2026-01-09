@@ -1,100 +1,219 @@
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from YT3PR01CU008.outbound.protection.outlook.com (mail-canadacentralazon11020099.outbound.protection.outlook.com [52.101.189.99])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C20F3309EE9
-	for <bpf@vger.kernel.org>; Fri,  9 Jan 2026 22:19:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767997196; cv=none; b=VF+tcR9rw/3W/tF+pKz+0dT8sZfRaQWSF3qxGY8p8Mmd4OjuCUPLlO1+ATnTxpq7Qx1ZEl7OL54w0YfT9UNeCF3xqU2aJbkpwuE5lqrWFZa4t+MluS9gTl/ZqlGZFk8OaK0jkc3bBPlFFp963mMQCveX6xvU3J0eo6PSc9S65sg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767997196; c=relaxed/simple;
-	bh=Ne8i7YXeFHHbtqXLBZUSUcbry2cNZf25YM7V9+JlAwA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Nb5/zeDv4gea3/w5OWxD4pDdRT6xaNALjotLGoDGQxMeC8yZxGwXUEEaLXJPwzsdVdfzRITX8MTFeKhaW/oGeydYTBbJ6ZlAp7/S1ggKif6Iemv++SExwNNdOTm4svTGgdltNH5xp80PNKZRbNR+dWHbPwt05HXFk6NW8vv6Bo8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Quxb4DcG; arc=none smtp.client-ip=209.85.215.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A6AF50095C;
+	Fri,  9 Jan 2026 22:31:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.189.99
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1767997906; cv=fail; b=aFxOZLFkLyyvbWrV6UdSsJh24VIyx/DxNycMcKnj/diOs2Vc4IxZBQJfvacSLA3li4weg/cwT81sA79ZjXLfg99RpBCxoMItaGZpNJqpoEXYNrDRpdBk5V3HX/tLAB2Hx09fDpfS9jk2yWtz5bmDhdvCBKjbKS0bMH/NAP1y7iU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1767997906; c=relaxed/simple;
+	bh=J183VU2iFRIhA8H0X4KdVy73ohzCkZTg3uMCvj7y3gc=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=Z2Scxj8Mfrjd22nHSa/p47OXeJbY2q+NKATkxm/bkE7taLwNrnkkbPwoF57x832ivJjuNP0/xUp2DBwjrPXSvR1ltZCXt9SXbHTuSNca3i0dFslCB+/JOpP/Zil59dEgsUWhXlY/A2fnqDzFJyEAp3edtFl0ldI6s3uKjfRzMbY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=CO114bpc; arc=fail smtp.client-ip=52.101.189.99
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Quxb4DcG"
-Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-bc0d7255434so2164367a12.0
-        for <bpf@vger.kernel.org>; Fri, 09 Jan 2026 14:19:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1767997193; x=1768601993; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FbPWcVBMzVXUFOGyIOPx6vXGBHy/t/RWY588AaGv0us=;
-        b=Quxb4DcGsq4lFTc7a8cd5feOyaIW9Y7t85j54aTXzzPPQMKRtNamqG1omXyEleqC+I
-         scn7K/0blutBgdiqLAT0JbXTo+M/TvVKzCAGXYZXAAZgYUDdCYPbpEFjZCpaEunwS4j6
-         QmcXlyyQE6LWzvNsutIUgUDNu6Sj2yZz7xEgYtnPh0NoUyL740atoMPL3SbjddqVDFep
-         t61uwjv9XJHQ3R5DCqLpXX5VUZT0nXCKi70DkMnfQm64pDrZ19JEdG5BmOHb1yBOleGq
-         3K5NVJjj5kzlGz3PDm0bnUfCQT+zsnFbZa2cYJABOasFj2udLxW00YPKSMMNrtfQm+xa
-         mivA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767997193; x=1768601993;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=FbPWcVBMzVXUFOGyIOPx6vXGBHy/t/RWY588AaGv0us=;
-        b=cXJSR7ZNFDCap0yPwjjpy97R1huwFSezQGCQeDeTaV9kOzjDjmlgHfJwk5D0BsMfC4
-         f/qjv6dDH0cUZvoo0sfNMg85/ZExc0zCtNhicv/scWElgOjpqA8Q76Nio6rdY00SP9CX
-         aVcoJC8i6QiqE4eLSbmwCg07po7NyF5gBQ/4RFPIXn/As37GduoOFHC3YThY/tzcMHHs
-         6szZzOHJIeKNSmczA8yK752uMxK0Sq7nHIEq7IDbhqAUdvvzt4ffZ1AU3YiSQPLuqBgw
-         EHRMVGUga63DavzPlWnBUj0ky1ZxFV9s97McL8CawPyRHivscM6kl9j9nESW3OTroSUi
-         7nQw==
-X-Gm-Message-State: AOJu0Yy/ri8T8RYkfuiTCLSd35KrK6jeyLjYvoPzHhgWXHZvVlmBnMfN
-	Xn6JOJHeJ9d8krKgIqcVq2IrDXfg5ud0Y31nqASEWzyHws8cS2qXc+a/QWpCSoKConeMFca6vlW
-	C5Pj0OfCjTY8jDoA5tNHoTXE6pX2ISsM=
-X-Gm-Gg: AY/fxX55CpuJI5nsvmqHpq0hTor7xAu7PB3LKIanQOlL0i1L0MYmYKIUEifXzZHGFXF
-	+uY5QtIKMQ2hRRYblEXTx/6QC0zSdLkrUCSuNTS1IKPgO3NrXa3R33br+edm6XpB4dqqarL9i1b
-	IYzyKJMnz9pt0h9fXw6hrn0gmACe9PITYni95QO9VQ+wd75b/oMRPN2VIIoXZ2Gy+mdKwR2XljW
-	rk99h9lWI0vWgDds3zgVLPVVgzSwaRoNYGXamx1D/FWnqZcKtHsGXAFfFgBhbL+UycI631N0DOl
-	3HzxiKLS4PpDod2ij68=
-X-Google-Smtp-Source: AGHT+IH3vuqgjjW2WAuRgYdnkcaU8n1mipxuShwzdddBX1vd1U+/A+622rG4ZaKhQMfJJpgmVxVfx6hxaRVkbMuESf8=
-X-Received: by 2002:a17:90b:3a4f:b0:34c:c514:ee1f with SMTP id
- 98e67ed59e1d1-34f68b6628dmr10343568a91.11.1767997192617; Fri, 09 Jan 2026
- 14:19:52 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="CO114bpc"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=hzFJXSeN7WZzweyiBkebvyzbHK6beXD9S1x5qqcbMrloZvEEK1+bSRO7kZIF8pvx6jEqghm4DzXGJwQIU/BnMY8guBIQnIWEuCoAizHaTslfW4k722lwNswCW7Qf8Vmo4MHK1OSgZD/nh6cw5K7qqeElb736W9/jfeoyZfajrKWF3xkVk2f9+e9XDNB5oGbeZvmcDMWGLTQoiMz4ZHLRrDI3e6syGXrFgy0v19J+ePPgtXSaSlPeRTLl46RHfQBd+77SGXuF2PSnOU/olPQJkMq7abNe5+oLmaqV03O6M8Ou1p5YC5FYhMeZzv2ar3AtPmviJ0kARhkRq/vyLVFqRw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=X7yBf6QtlWvikqR6zs7QzmA0D/hYDxv63mSdsI5yRZw=;
+ b=oCXfJgt8+lActleWkrmQK+GUClPW59IrMUHvSIwIYjcDugPYCvj/pDj8oz9dVw7OfWEGMlRpy5y3qzMkX8Xdh4qWN1H8OqR4ADX+TCd1hshE/XxdnOPDz9z8Nz5MFvda8pMsGgCUM/HCNjUBalKAjNRnHur/lg6Y66As7pogJPWzYtH5pGot3GWqNCOKsixB8VURINxkbrJWMZ+LBEzUmIxlwon684Wg7c09SbxBe9KmNmbeSBr4jGA4PVp9G/N3wVpVdBPX7HdLy2iweua0tiDqo2QOyrNMrVJhiVV8JqnROmtkgdaEXmNQyUr68nVX4OytfR5p3r/wBzeVfhWAcw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
+ dkim=pass header.d=efficios.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=X7yBf6QtlWvikqR6zs7QzmA0D/hYDxv63mSdsI5yRZw=;
+ b=CO114bpcxhK1tH2QYK+mUq/kYTEwfRE5M+0QXnBodrU3ZZnEos0xzJVlmvBkcZD2myshHFm4L1eQbuJB9hG1/zLaCD9kdpNYQSRXjfVH4wzxaNhRWQ1ewk0Gda1IF+ls9qWMHpnunCcKks3Go9CsUcgMGupFgLrz6HxC7WVc4Ebqs6ORZ+YTeyeuaeCh4V7VVdrBmTqkU4wIpSWUea2hZcHAjw9rYZLG5UsUWZ39ArpdqJUYW3fVUp6kCS2NhsiVs8TAXsQrNWmH9OxUSsT37FWQf3W9ZgtSSppWwiRbDzWmRI2h0kOfzIh1GPb/bN+sliupgoiD0I/lebJR/zMr2A==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=efficios.com;
+Received: from YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:be::5)
+ by YT3PR01MB8772.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:7d::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9499.2; Fri, 9 Jan
+ 2026 22:31:40 +0000
+Received: from YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::6004:a862:d45d:90c1]) by YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::6004:a862:d45d:90c1%5]) with mapi id 15.20.9499.003; Fri, 9 Jan 2026
+ 22:31:40 +0000
+Message-ID: <86c106f9-f968-4423-a81e-7377989321c5@efficios.com>
+Date: Fri, 9 Jan 2026 17:31:39 -0500
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5] tracing: Guard __DECLARE_TRACE() use of
+ __DO_TRACE_CALL() with SRCU-fast
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+ Steven Rostedt <rostedt@goodmis.org>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+ Linux trace kernel <linux-trace-kernel@vger.kernel.org>,
+ bpf <bpf@vger.kernel.org>, Masami Hiramatsu <mhiramat@kernel.org>,
+ "Paul E. McKenney" <paulmck@kernel.org>,
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+ Thomas Gleixner <tglx@linutronix.de>
+References: <20260108220550.2f6638f3@fedora>
+ <da261242-482f-4b47-81c6-b065c5a95c4b@efficios.com>
+ <CAADnVQJMa+p_BcYxKUgve2=sqRBwSs3wLGAGhbA0r6hwFpJ+6Q@mail.gmail.com>
+ <20260109141930.6deb2a0a@gandalf.local.home>
+ <3c0df437-f6e5-47c6-aed5-f4cc26fe627a@efficios.com>
+ <CAADnVQLeCLRhx1Oe5DdJCT0e+WWq4L3Rdee1Ky0JNNh3LdozeQ@mail.gmail.com>
+ <20260109170028.0068a14d@fedora>
+ <CAADnVQKGm-t2SdN_vFVMn0tNiQ5Fs6FutD2Au-jO69aGdhKS7Q@mail.gmail.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Content-Language: en-US
+In-Reply-To: <CAADnVQKGm-t2SdN_vFVMn0tNiQ5Fs6FutD2Au-jO69aGdhKS7Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: YQZPR01CA0145.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c01:8c::11) To YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:be::5)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260107-timer_nolock-v3-0-740d3ec3e5f9@meta.com> <20260107-timer_nolock-v3-6-740d3ec3e5f9@meta.com>
-In-Reply-To: <20260107-timer_nolock-v3-6-740d3ec3e5f9@meta.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Fri, 9 Jan 2026 14:19:15 -0800
-X-Gm-Features: AQt7F2rFEragAz7ZtQCjGKmGIg_QTf2DW1CS_PeDtM-eoLQSEL-Pc97h1bS60XY
-Message-ID: <CAEf4BzYy5syWv6P3pDH10+BH0yTJhy9azBEoK2rLKGpnsZ70GA@mail.gmail.com>
-Subject: Re: [PATCH RFC v3 06/10] bpf: Add verifier support for bpf_timer
- argument in kfuncs
-To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
-	daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com, memxor@gmail.com, 
-	eddyz87@gmail.com, Mykyta Yatsenko <yatsenko@meta.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: YT2PR01MB9175:EE_|YT3PR01MB8772:EE_
+X-MS-Office365-Filtering-Correlation-Id: 301191dd-bf98-4d68-e965-08de4fcedb97
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|366016|10070799003|1800799024|7053199007;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?YktVRmluUXlBZDdsaTF0NFI5eWNSV3pJVmN0THZKSFJYS09rOG9sYnpZS05l?=
+ =?utf-8?B?VFJuakJOWFdXTmFYL2dkTEMzMjhjaXZUUlc5Y2RvQmwvWDVNeDByRTBxZzBq?=
+ =?utf-8?B?WWVBNFV3Y3pzZmI0Q3ZIR2tQVE14cDBlbFdWWlhObjlWSFk0MHpDSkhZU0Vx?=
+ =?utf-8?B?YzJ2T1pKS1RiS3hEaWZwdW1ucnVFa3VMNXFSWVpPNXdwT0gyNnZ2SmJEckFO?=
+ =?utf-8?B?Qm5oWk1oL0NmTXFSbVFLYkM2aHovQWFWYXFEcmxTUUptZ2lpNTc3UkE5UVoy?=
+ =?utf-8?B?Q0krbDV3RFpTdzFIb1pRUk1YUC9LczJRMktqMWlNWW0yQ2hpZmk5enJYeGQy?=
+ =?utf-8?B?MDFhZDZaWS9hMXZabVBFeDkzSHdqZ0pHeFBudktiRTY4QlJLZk94MGlZdlRD?=
+ =?utf-8?B?c1UrZmRpRG0wajFwWTBEM3pSQm54OU1pYWRMQkpFd1ZGeFBzbmFTdHlPOGtJ?=
+ =?utf-8?B?UnBzVm0zdWtnMDBsOXhKMGFLenFKTWRqZGsxZ2JOTW5XQ1hwMXpCUXNWZWFx?=
+ =?utf-8?B?S3RSVHg3aWtLRWVCdUhYVjRCT0xDeEVxMkNUQnR1amJtcU5JL2MvaXdPZGdi?=
+ =?utf-8?B?NkRjNTd3VjZqTWVrOG5IVWt3U0E0N0xrdlZ4LzN6T2F5MlVsaGFuR1Y2WkRV?=
+ =?utf-8?B?TmRMaHpPaXJRcWZhM0xXcTJBNHNkOFhrUTV2QjdkZ2d4UlZwMVk1NVBhNVVY?=
+ =?utf-8?B?dHhNVEJwRzlKWE1GSW5zNlpENEFiVTRmRWFwMFcrMlpoWHN0c3lTQ3o1RWFR?=
+ =?utf-8?B?SjBTMzVLc3ZlM0RxTjhJaVpvWFJyMUFUdkphNU9LeW5rdkRoYmZEZjFNK0pY?=
+ =?utf-8?B?dlRqZm5IbnpjTWpXd3pwWnVBR1BVOHgxaldvQS84Z0ZCb2lYdTVDNWdROFhF?=
+ =?utf-8?B?N0RaRVBwSVZpVzJuZURPS2hXbitOdDVtV2JlWnd2YUVrNGplWFptQ1FYZ01k?=
+ =?utf-8?B?YWo1K1EwSEVyNEJyaDVCS2t2UVY5SGJzUkZMc1NKMXFlcmJBYk5XbFZGUXEr?=
+ =?utf-8?B?NXI5S3ErUGZtM3Fab1QxclVkVVpDUlVxTUJ6QUZsMk1MNUlaVHhFVzNsWGU2?=
+ =?utf-8?B?NXlhbURUY0tOSFQ2WWdQeUNHNENNWTIxRCtVMXVPK3BLR3JtVCs4SXRvU3Jn?=
+ =?utf-8?B?a2IrOHpxSUJZRGFmcUtFeHM1cHJ2VThld04xcXg0MFpxRDJhbnBlVEtLVk9q?=
+ =?utf-8?B?ODZ1Z3pYRWxxS0NTQk5uZXNyck9vTGZlZmhuZ25IdTF5L2RscDJDc1VsemRZ?=
+ =?utf-8?B?U1ZwM3ZoOG14bFYwemNnQ2xvT3RzOWZhN3UxU05GQmFmNzQyVFlEVW9GdDNO?=
+ =?utf-8?B?ek0zSnBaV0hhdTB5cFJidkJaRHhrS3puVjFCU3d4UUN6SWV2Sk9KUTZDeGh0?=
+ =?utf-8?B?WjNNTzU4MFFzYlhNc2ZjK3RucFRNZE5lOThLM1lQRktJNmhkS0tuSmtOdTRO?=
+ =?utf-8?B?YW5wR2swdGMwVlVZRFdwNHRPeHR1ZGRzM3Z4ZDZVWlFybDZTMlArc0lXb2JX?=
+ =?utf-8?B?Wk9kWXhhaWdEYVJvOWtvbUkwWEJLcnBoNWRmVnZsSGxqWkMwVWlSdGVDcklv?=
+ =?utf-8?B?aTFDYXNuR0R4MC9tWEc4dkd1SDhNb3cwWFZBQXI2clF3aEI0SnlTRnR0V3Ja?=
+ =?utf-8?B?S00xRUp4ajUyQlpJb2pucUdobk1EZXY4WStKVUluMGlzMWxoWXlmRzdDZGlz?=
+ =?utf-8?B?M2swNWpzZDg3Q1AwSE1LYTZuVDR0VE13VUF0cmYxbG9QNUNQL2k1dHRDMHpt?=
+ =?utf-8?B?SkN0ZmhXSVZvZ1lkR1RWMjloeGllTFFWMWxWM0FlTUtaOEc2ckFoM09NWVMw?=
+ =?utf-8?B?dkZDSlFqSSs2VkxoUHh1NTRtUE1KT1dEYnBxUEg0emljS0JsYXlyYzBHajJV?=
+ =?utf-8?B?TGpodTdDelU1U3QwOTFhRUZyVGN0V3JlZktQZ0VKLzhxb2c9PQ==?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(10070799003)(1800799024)(7053199007);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?ck40Qld5c2RaeFNKRzRwYWhYb1pRSjRzNm9ldHpacmt4a0lSdXJvMWVRNnB3?=
+ =?utf-8?B?SEl0eVM0UDQvWkJwbk5JV2FtdWl3Z285SDdEczA2aUFtZWdWNlNyQmVIR1hx?=
+ =?utf-8?B?OVZ0d1dhaGx3N2kzTEd4OGQxdDhFUXQ2cm1SbTBNMFNITURkYTRoUVZGT2I0?=
+ =?utf-8?B?NDNtYndQNnZMUzJ2OThtbTJ2N2pNcVVSK1NpOFZuMmVjbVB3TWQ5UTFhc0FB?=
+ =?utf-8?B?VzZtcXIxVE12QVZJVjlqaEdFdVRUaVY4cU5SRnoxQ2dsMTdrd2xrektmeE9y?=
+ =?utf-8?B?ZGJyUkdnc1N5U0ZUR3NmelBWZFNSOUhEWnJXemhFZXFzczRYRkhNR3RXVUp4?=
+ =?utf-8?B?ay9DeHU0VDhYVDEyNklLMkJRVk5MU0d2NDlTb2Y0K3lzMU9VVDRhc3k5UEs4?=
+ =?utf-8?B?Tmh0RUpQTUZwOUJwLzZsMW1DOFRIczdJclQ4N3JZMXViZjVCcnN0cDVlakpr?=
+ =?utf-8?B?NllMaXZ4TUR0YzROZWZ3aSsvRUozWTJTN1RPODhVVTQxVHl1TytRZmNNeHhD?=
+ =?utf-8?B?MHZYS2lVRkFKQTBqUmtGQS9lb05ub3hzSGQ5Z2pacW5VdWdBbkc1R2p1bnc2?=
+ =?utf-8?B?WGw3alRIekpySnBQYXcyK2s2M09iNm5WQVJORWJnalRCMHpxaGlCbTBlSWVh?=
+ =?utf-8?B?K2djZU42dGpYMzV5Szl0UkxJTnhOOEI5NnB2TjdndzNJTWdiRTQ1S09OdW00?=
+ =?utf-8?B?UjlCVHB3R1grU1FoUnE5MFNEamt3a21zV0tNTHd5WXREZDBIb3hTRGVNQnhw?=
+ =?utf-8?B?dzJTa2lNUXBkRmZWYytFWjFKSXR1dkdoMjhYaUF2b3RseWtrVlR6d08xMzVt?=
+ =?utf-8?B?OWI4WlFMKzI5WUFDbU1UZmFaQUVibVlGS1k2SWtOQ3VYZXh6c2JtN1BKbElH?=
+ =?utf-8?B?cHBXaDJGVnZ0WXZhdFFYcmR5Q2ZBWHh1eXNmUUFsZEZqRzE4SDRjZDR3NzMy?=
+ =?utf-8?B?VlYvaDZocSt3SnZneVVMbzdTMlFxUjNoZkZnM0diK0NLSTZhb0xZMllQaWt4?=
+ =?utf-8?B?VVZTSStNRlFHSGl5ZHh1WVp1TUtXczlHNWt4NGtRQ29acFRKL0l6dkhqdVBF?=
+ =?utf-8?B?ZkNIL1AwVFlaa3dNNWRVY2FVc1ZrZjI4N01xSTlSM2kxNmk1VkZjZUd3ZmdS?=
+ =?utf-8?B?RllEamc2eUZxdjNVNzA5T1hJdUpNL3N6eHBGcHorVURWbnNQME5pUGNxQXBq?=
+ =?utf-8?B?S3I5ZU55VXBMeGRHV3JQS3dCTVhMTEN6Rm8zR1d4Q1NxekYyU0FGSEN0RVlS?=
+ =?utf-8?B?anZsSWxMeit5Y2Rmd3VIUFlNQ3dNZXRQcUhLL2tCVitlZlJBYWVuZmdTZmlV?=
+ =?utf-8?B?c2NsZlhTMUgzckRXWFVHWWxQenlJdE1pSktwbDFTZHE5N0xVaEE4TFlWbWth?=
+ =?utf-8?B?L25vNnB4Z1RGMUNBMSs1aHlKaVNCV2liVG80b084S2UzdGVCeTAvRVMyOC9s?=
+ =?utf-8?B?VGhCSmFTN0FybzQ0RjNCakw5MkYxazdJOEJwMkdXT2NZZTlSdjVxdmdSdXg2?=
+ =?utf-8?B?eDNlQWRUMnA1UHRieUl4OGx1MTNjQkEwTXVJSXNhZDFMUGxHblpvMisyWVJn?=
+ =?utf-8?B?bEwzMGIyWDAyZldKYW5obWVXWjc3Zlh2RVUyMENvODdyUndQbE5Cd2E2NEE2?=
+ =?utf-8?B?UURIcC81bkdQWmptaTZOSG5pVGhSODBaY1FPdUlQdk5XdE5NL3JjU0w0Ujhh?=
+ =?utf-8?B?YmlxaGN3SUk5NzZVOUc1QWtzQy9UemZScDFIdHlVenB6QUZGeUpJTnFPenZE?=
+ =?utf-8?B?cHpDQ1NOeUtOdVQwaUNkdDF2NFVDN0E4aDM4Q0lZS3FneitKRzhqdmx4OFRO?=
+ =?utf-8?B?QlpmaXJVZko3SGk4cmJsdjdoK2RXQTJqY1ljMzNDNm45TVFPMzdqdU1Ib1hR?=
+ =?utf-8?B?SGh3WXNNMEhkZXBsRFF6VStZeDc4YzBUR29CelVJbm9sdTRCZWg3Njk0b3N4?=
+ =?utf-8?B?Rjc5c2lvZVEwaC9JYmNRYVJzai9rV3pRaEFlS1FMNUpUVXhCWWFWK1dkOWhD?=
+ =?utf-8?B?WHd4cVAyR2ZmdUE3YXVMakJxNGEwbGRvdlpndlhEM0ZSU0d5cDFZanZSK011?=
+ =?utf-8?B?UkhBdkdvVU4wdUYrRHhmWmpTREhpY05GeXExdjg0ajRPdXNyRWpyMEpZS2w2?=
+ =?utf-8?B?blFtYlZKdHh0WVU3YXVqK1FZL3A5Qk83bDg1SnhsTGRWMldnNVNhQTh5ZWF5?=
+ =?utf-8?B?K3dVcmtnZW9GeVlyUGYvaHZ4dFZoaUJXTmhrYXRLMlNzMmFQUVlDMWttRlA3?=
+ =?utf-8?B?STM2dHlud0wvc3dWS3JnTXZLV09WK2QzcURFOFIrSUFTcjNUYUN2RnZFZU1B?=
+ =?utf-8?B?alZYWlFwNGRuNzBuc21tZldoamZHdERLejFiYktaVVhMRm5OTFhDQlJzaDFJ?=
+ =?utf-8?Q?0UGfP/UnUtJ5fl6eupC5w+0hRxl5BZ/830S1O7schMlMm?=
+X-MS-Exchange-AntiSpam-MessageData-1: 9LRvIEHcK4RWDJaKtEheGboy9CmS6cQXWh8=
+X-OriginatorOrg: efficios.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 301191dd-bf98-4d68-e965-08de4fcedb97
+X-MS-Exchange-CrossTenant-AuthSource: YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jan 2026 22:31:40.0224
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4f278736-4ab6-415c-957e-1f55336bd31e
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: UCabRMOONbC6W6JjUgR6dAyqGxKFvKDP/+SA8FeeL/KEw9Jd09ixGHTFP1rhUwdUO6Z7VN5cuTPdEumNVdUrB8ZEPRLs9KQbQd0LRPjf1dk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: YT3PR01MB8772
 
-On Wed, Jan 7, 2026 at 9:49=E2=80=AFAM Mykyta Yatsenko
-<mykyta.yatsenko5@gmail.com> wrote:
->
-> From: Mykyta Yatsenko <yatsenko@meta.com>
->
-> Extend the verifier to recognize struct bpf_timer as a valid kfunc
-> argument type. Previously, bpf_timer was only supported in BPF helpers.
->
-> This prepares for adding timer-related kfuncs in subsequent patches.
->
-> Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
-> ---
->  kernel/bpf/verifier.c | 59 +++++++++++++++++++++++++++++++++++++++++++++=
-------
->  1 file changed, 53 insertions(+), 6 deletions(-)
->
+On 2026-01-09 17:18, Alexei Starovoitov wrote:
+> On Fri, Jan 9, 2026 at 2:00 PM Steven Rostedt <rostedt@goodmis.org> wrote:
+>>
+>> On Fri, 9 Jan 2026 13:54:34 -0800
+>> Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
+>>
+>>> On Fri, Jan 9, 2026 at 12:21 PM Mathieu Desnoyers
+>>> <mathieu.desnoyers@efficios.com> wrote:
+>>>>
+>>>>
+>>>> * preempt disable/enable pair:                                     1.1 ns
+>>>> * srcu-fast lock/unlock:                                           1.5 ns
+>>>>
+>>>> CONFIG_RCU_REF_SCALE_TEST=y
+>>>> * migrate disable/enable pair:                                     3.0 ns
+>>>
+>>> .. and you're arguing that 3ns vs 1ns difference is so important
+>>> for your out-of-tree tracer that in-tree tracers need to do
+>>> some workarounds?! wtf
+>>
+>> This has nothing to do with out of tree tracers. The overhead of the
+>> 22ns is for any tracepoint in an in-tree module. That's because the
+>> rq->nr_pinned isn't exported for modules to use.
+> 
+> None of the driver's tracepoints are in the critical path.
+> You perfectly know that Mathieu argued about not slowing down lttng.
 
-Looks reasonable.
+My argument is about not slowing down high-throughput tracers
+on preempt-rt kernels. This affects ftrace as well as lttng,
+so both in-tree and OOT tracers just alike.
 
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
+Are you so sure that no tracepoint instrumentation whatsoever can
+be compiled into a module which is a critical path for some workload ?
+That's a bold statement.
 
+Thanks,
 
-[...]
+Mathieu
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
