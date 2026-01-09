@@ -1,38 +1,38 @@
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B8A633D4EC;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B81E33D4E3;
 	Fri,  9 Jan 2026 21:27:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767994024; cv=none; b=SNSg99Oqj+Z3n4pCmomYhvHIiV93nkAxMbDYHVamqG07OJBaQ/s/K1kPd9g1tL7bb6Lmy4gqxYfkTpP7rIg/7NPnNKTvkZ096M4yLpsi8whwVFs+u7P0b6K7KaXck6aM5oQwcfAsljyEPg2IgsyfJ20SmO96vvaoBPnZ5YpNshM=
+	t=1767994024; cv=none; b=KtrKA9kzSGPgpPQx7Qh0+PnDcO5dk47IXSZjeM5ODh0BNVHHG0Rj3rIlBB+zCEuCuUSsL6fy+xKm68EMTRyWDx5ud5jxMk1VqP0+O1Vqn/7xyY1D8l+z1vgYAHSORIsWjto6css/omlDvLfK0Vqi+85DceCjLVecCln0WJOJXmE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1767994024; c=relaxed/simple;
-	bh=1Tj2cU78U6Uqvupeim/+6m/jr/f90sGQupkBeHHca+I=;
+	bh=Q+8on5CLPksbVyalTnoFNVm3pTzmd8RkjqmgmnvQikw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RsMYNwrHvIx0pYV6dAe5fAS4iEeIQL0mvUQJBRjBoefSXvJ9mm3Z7MC8I755Ay4sXDfJV2c6rMXIphfVfyyEYOaQWw8JB4hcXDn/lVaV86nVY6FGw3SKEKbJbl4wZPtSwWstTSY4HjaRsv9/GF6aOCEVVzK5won4Jo2aj+g3rBM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=mtmQnUIB; arc=none smtp.client-ip=213.133.104.62
+	 MIME-Version; b=TjrKhSm8zs0SacxbwqFnRkncVyHPClVCyrKQhGVhTdl5B6dsfSM93uQ9SFQX8ZmhdOEDgN96i1N2jF75F6E6/mUpVdp3+sPaw1ApOA0JmUfEhl+EFzwx+yLWXI5X7iZnmR23Zl/73AFc4wrIKhRnvVslo+ZT3ytJKIRRK7Yqzks=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=WPxu5UE+; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="mtmQnUIB"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="WPxu5UE+"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
 	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
 	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=uXdCZyoZVljtyNiSMpjIWzZRgp0/tQVh+jDLIVX7swA=; b=mtmQnUIBDXegCjZfkGpBUTzHNp
-	Unz+mDEy7y90S1AsBExgljeq5FfMjahc6L2meaguNOY5V2DNhcqa69TEPKPjjNL7Q0EJJb6F0ruyF
-	cFvZ287bB2+ceE2HI3qzw9ChsMBTwRj9HaizcZWXaHH7F8UzjmGtHd1mwvycK/u+BbtcXZGub1LW6
-	3kqUIJo0mBWR0yichNn8UsSY16HbitkdOywqwVAitlP/Vo4HFw0/bqcaEuBrskrbB+bTCB4Yh795i
-	RCGPGYzco9dw+4tPwVPHNZG22+OPr3SJuMJoIukNa14rDTLw0D4KiRfOvd7KWauOVeLIk6l8xx09E
-	ISxRrPKA==;
+	bh=h2VTpaB+EdqCwGXkQPFmK9vXQ+0Ba7kuQVb5qiU45h8=; b=WPxu5UE+tAGj9Hvrl/BqJj7BPP
+	U5Y0OpGE3A1nU1WyMZ7uvWnMh9UP9TzDAm0pqcOtyyrMobh9IcoXDZjkv6RlfAUHpIk6ak5KrfEf1
+	FJLZnGD8iZlKEQrNhvBss5q0bxPdyOkpyclU3WlanEHHY8/LzXHRdD8+HsrtAWH6gx9dh6sIhDYup
+	tCpDO7ynB7cnH4yGc0w5A/+hKKctEziH6hxYVjqYMjL5eqcIt3QOd4Imn+SisGcNeJt2oqvIzCPtb
+	RtG+UBTsvXQvffn/u10Lt5ug/Rwwus3VydREZ8I6vc67qvwUsVxg1xMyRCC/WwAZdensv3UzrDTtm
+	t/mlsYig==;
 Received: from localhost ([127.0.0.1])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1veK0I-00053n-19;
-	Fri, 09 Jan 2026 22:26:42 +0100
+	id 1veK0O-00055H-2W;
+	Fri, 09 Jan 2026 22:26:48 +0100
 From: Daniel Borkmann <daniel@iogearbox.net>
 To: netdev@vger.kernel.org
 Cc: bpf@vger.kernel.org,
@@ -51,9 +51,9 @@ Cc: bpf@vger.kernel.org,
 	toke@redhat.com,
 	yangzhenze@bytedance.com,
 	wangdongdong.6@bytedance.com
-Subject: [PATCH net-next v5 07/16] xsk: Extend xsk_rcv_check validation
-Date: Fri,  9 Jan 2026 22:26:23 +0100
-Message-ID: <20260109212632.146920-8-daniel@iogearbox.net>
+Subject: [PATCH net-next v5 13/16] selftests/net: Add bpf skb forwarding program
+Date: Fri,  9 Jan 2026 22:26:29 +0100
+Message-ID: <20260109212632.146920-14-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260109212632.146920-1-daniel@iogearbox.net>
 References: <20260109212632.146920-1-daniel@iogearbox.net>
@@ -66,59 +66,85 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Virus-Scanned: Clear (ClamAV 1.0.9/27875/Fri Jan  9 08:26:02 2026)
 
-xsk_rcv_check tests for inbound packets to see whether they match the bound
-AF_XDP socket. Refactor the test into a small helper xsk_dev_queue_valid and
-move the validation against xs->dev and xs->queue_id there. The fast-path
-case stays in place and allows for quick return in xsk_dev_queue_valid. If
-it fails, the validation is extended to check whether the AF_XDP socket is
-bound against a leased queue, and if the case then the test is redone.
+From: David Wei <dw@davidwei.uk>
 
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Co-developed-by: David Wei <dw@davidwei.uk>
+Add nk_forward.bpf.c, a BPF program that forwards skbs matching some IPv6
+prefix received on eth0 ifindex to a specified netkit ifindex. This will
+be needed by netkit container tests.
+
 Signed-off-by: David Wei <dw@davidwei.uk>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 ---
- net/xdp/xsk.c | 23 ++++++++++++++++++++---
- 1 file changed, 20 insertions(+), 3 deletions(-)
+ .../selftests/drivers/net/hw/.gitignore       |  2 +
+ .../selftests/drivers/net/hw/nk_forward.bpf.c | 49 +++++++++++++++++++
+ 2 files changed, 51 insertions(+)
+ create mode 100644 tools/testing/selftests/drivers/net/hw/nk_forward.bpf.c
 
-diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-index 410297b4ab48..d95c481338c6 100644
---- a/net/xdp/xsk.c
-+++ b/net/xdp/xsk.c
-@@ -324,14 +324,31 @@ static bool xsk_is_bound(struct xdp_sock *xs)
- 	return false;
- }
- 
-+static bool xsk_dev_queue_valid(const struct xdp_sock *xs,
-+				const struct xdp_rxq_info *info)
+diff --git a/tools/testing/selftests/drivers/net/hw/.gitignore b/tools/testing/selftests/drivers/net/hw/.gitignore
+index 46540468a775..9ae058dba155 100644
+--- a/tools/testing/selftests/drivers/net/hw/.gitignore
++++ b/tools/testing/selftests/drivers/net/hw/.gitignore
+@@ -2,3 +2,5 @@
+ iou-zcrx
+ ncdevmem
+ toeplitz
++# bpftool
++tools/
+diff --git a/tools/testing/selftests/drivers/net/hw/nk_forward.bpf.c b/tools/testing/selftests/drivers/net/hw/nk_forward.bpf.c
+new file mode 100644
+index 000000000000..b593cd6c314c
+--- /dev/null
++++ b/tools/testing/selftests/drivers/net/hw/nk_forward.bpf.c
+@@ -0,0 +1,49 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <linux/bpf.h>
++#include <linux/pkt_cls.h>
++#include <linux/if_ether.h>
++#include <linux/ipv6.h>
++#include <linux/in6.h>
++#include <bpf/bpf_endian.h>
++#include <bpf/bpf_helpers.h>
++
++#define TC_ACT_OK 0
++#define ETH_P_IPV6 0x86DD
++
++#define ctx_ptr(field)		(void *)(long)(field)
++
++#define v6_p64_equal(a, b)	(a.s6_addr32[0] == b.s6_addr32[0] && \
++				 a.s6_addr32[1] == b.s6_addr32[1])
++
++volatile __u32 netkit_ifindex;
++volatile __u8 ipv6_prefix[16];
++
++SEC("tc/ingress")
++int tc_redirect_peer(struct __sk_buff *skb)
 +{
-+	struct net_device *dev = xs->dev;
-+	u32 queue_index = xs->queue_id;
-+	struct netdev_rx_queue *rxq;
++	void *data_end = ctx_ptr(skb->data_end);
++	void *data = ctx_ptr(skb->data);
++	struct in6_addr *peer_addr;
++	struct ipv6hdr *ip6h;
++	struct ethhdr *eth;
 +
-+	if (info->dev == dev &&
-+	    info->queue_index == queue_index)
-+		return true;
++	peer_addr = (struct in6_addr *)ipv6_prefix;
 +
-+	rxq = READ_ONCE(__netif_get_rx_queue(dev, queue_index)->lease);
-+	if (!rxq)
-+		return false;
++	if (skb->protocol != bpf_htons(ETH_P_IPV6))
++		return TC_ACT_OK;
 +
-+	return info->dev == rxq->dev &&
-+	       info->queue_index == get_netdev_rx_queue_index(rxq);
++	eth = data;
++	if ((void *)(eth + 1) > data_end)
++		return TC_ACT_OK;
++
++	ip6h = data + sizeof(struct ethhdr);
++	if ((void *)(ip6h + 1) > data_end)
++		return TC_ACT_OK;
++
++	if (!v6_p64_equal(ip6h->daddr, (*peer_addr)))
++		return TC_ACT_OK;
++
++	return bpf_redirect_peer(netkit_ifindex, 0);
 +}
 +
- static int xsk_rcv_check(struct xdp_sock *xs, struct xdp_buff *xdp, u32 len)
- {
- 	if (!xsk_is_bound(xs))
- 		return -ENXIO;
--
--	if (xs->dev != xdp->rxq->dev || xs->queue_id != xdp->rxq->queue_index)
-+	if (!xsk_dev_queue_valid(xs, xdp->rxq))
- 		return -EINVAL;
--
- 	if (len > xsk_pool_get_rx_frame_size(xs->pool) && !xs->sg) {
- 		xs->rx_dropped++;
- 		return -ENOSPC;
++char __license[] SEC("license") = "GPL";
 -- 
 2.43.0
 
