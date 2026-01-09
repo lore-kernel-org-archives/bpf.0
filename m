@@ -1,121 +1,237 @@
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E18531B133
-	for <bpf@vger.kernel.org>; Fri,  9 Jan 2026 21:26:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E003B31E0EF;
+	Fri,  9 Jan 2026 21:26:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767993979; cv=none; b=MV7A2LWwCAc9LK1P+hUicLZZpuOCgR6tziaCDJ32iOv0ilE3ha251vk3N9k0Jg55c1ZeJfHRm4dGfDMwHNNbOl+8nQIxrDwrBxDO9zldxyE7K/RLeVsB4gCU/yWe7c2+CUD7e3hPathUOPxthLO5LbwkzhR+WjeHJ9Q4l0eBVHA=
+	t=1767994022; cv=none; b=OMNRZzYe5Ya3QX/wQ09WNEP79qmxcS1cmcaIY1WIh80fHsnOYDW0ItGZzfazcinxbHWCxN/J9ld/Sb/sfnzGgrY4ehjSo8plKWkP6lpIGHCjzRSG1i89LasUDKE9fKmkbiqOAw6Qp3Q/kvI7lYhckJYWXmniXYGvi9kcwKf57Kg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767993979; c=relaxed/simple;
-	bh=jZb2DV3VYg3KTpCmGTHYH7dMKFtnWqFx+0+R4bze5cs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=oMqu/304XDDu65Pfm/6qM6jU6g2C8OVB5chJiMdOS0eqQxfYlz76BRkOsBqUV1y1MpbAcTYv9IVf8uyGX14mYQaoDsBq4C3CEWXRBz/Gu2/UnVyaAoQYwY7hE5oOCwrt5QwK/rnb787WcXtlBta58g+ABgBHyKid22LygXWe/yg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AOQPNNBg; arc=none smtp.client-ip=209.85.216.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1767994022; c=relaxed/simple;
+	bh=Lvw/9q7y1akwNTHErzXo6FSryF1tiMaZ5bOpTrCuEkI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=fL3sXsftI92BKmA1Uqo93I8eNxLsyhVuSkPPxJbnO6xIkADAzdlkyk0yWyxdxp9/qb7EYrUzfR2EHf0WLKO3WgppUbRUcXIbDOnheLTy7L44kOFphR9nQL0NpK/i+V/A9L4LKPKiwdG99gRQAaDAKhvdf/NvaGMJgETEF+A/JHo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=kmgusg6V; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AOQPNNBg"
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-34c84ec3b6eso4518904a91.3
-        for <bpf@vger.kernel.org>; Fri, 09 Jan 2026 13:26:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1767993978; x=1768598778; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3PLTC6+WFDGXYqyG0uPpYDMGiGDWwjj9uk5WPWr0eHs=;
-        b=AOQPNNBggvdqKmzvoJXQDMY0INnPimgRpKTgkODKf/gWW2gNMww5uJEA3wCEvinLxD
-         xGEH7kogeMUEOq7slxXBtndu/Wp9sl6cyg7S+sWsgbMuGkPxiie/Fhy6VYQFVaQm2w3g
-         tjjuvHH9Niazhz/cbN6DGb8yl+mvDTjATiGWg7PtXHEH+1fkOc2Ctr+YAlVkErYs3clG
-         GWLYa2KqdqW/xXtLDLeRL8PbAJeRZ8WPqrXa+YYrQiIxODVVoh30DGXvlnLVIuiuP9Cj
-         ZcMSuwSZjZSQFMsAWWaCgKgBKMZnfwxUREZogJA+VPyglesRLA2WsUY8YrVpP/Jc+Z5i
-         4L4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767993978; x=1768598778;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=3PLTC6+WFDGXYqyG0uPpYDMGiGDWwjj9uk5WPWr0eHs=;
-        b=ZV7/nGlov6HFazYKm0XQdGtv6q/DE56E0IVWJqwqNEXWmKM/KYh+BJOjktiMJzkjXk
-         GRBUQxSWn2/Rc1R0kTIH2KC1pzzie2vju4fZCiNeDIdqTuDMmAs89q/Jr2uK4ck+fW6i
-         kSUXr+byM0t3HYEd5zadfyJXRJ+KBlfc+IlfB5LeiwV78p+MNo3bNn/9yqvRTtiUCprK
-         HEQLsl4eqH0XHhwnCWTgTXN3KDHM8zcgO5fCtBeHtz4qhG5RfImfopWIDC50JOOdDEPa
-         usuPakyTRyZwdPpcdoV3bYeG3+OAsjjiTrhbDF248F+ULmCpkZqK4cgVLAkRRis+wdiv
-         r1tg==
-X-Gm-Message-State: AOJu0YyQDJnckOx6vZMa+uJrgFDuIW/7YOQGDNLjh1pyh74Z6OcIboNa
-	LoOMgOpSF1WJctOz5mfRQ1Ur4jqNj4FQEu40w9YrVpFPYFsLLTHQHRnCa5Gjq66eTLZwLJ4PuIr
-	5U0XLLqEn4quTmvc0XUQZrdgjRg085b8=
-X-Gm-Gg: AY/fxX5qS1RKImJvF0oH7nCE5CjkbPu2ZviAeQ3vRAKZUt6FJf4+NeaRx9QTq7BQSiT
-	gpIerDDz8KGaanT/qHpNh0G4Og5JEB1Zm5nQryv1I3mDFHXilYSqa/QQWsvbfRt8ke2OLh6ogpi
-	o8T+PGAyVadXnne5q2Lkd3MzSrLvIxu9aNCljA4km+CZvKu7d/7Q67IkFtdizVASLVuRQ5z9CmY
-	PkvTulVa1jxt58Pt8iUy+kkHypXjIKx+/3QqJnMjMMntvqt/U0ND64bf/MXUT64OHRmfcXfP/GZ
-	uw/cuMbX
-X-Google-Smtp-Source: AGHT+IG/bpaUEpUOnATYkCSmrMI1j90hX8BsCLlB1BPNT9E9gm8iUxiAyX6vRCzuum9iILiu5dl8XQZnUi1RwTRnJAY=
-X-Received: by 2002:a17:90b:3ec8:b0:341:88c1:6a7d with SMTP id
- 98e67ed59e1d1-34f68cbe7aemr10617640a91.18.1767993977671; Fri, 09 Jan 2026
- 13:26:17 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="kmgusg6V"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
+	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
+	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=vWVw+q1iuvOsMKlx0+VagsyC0HkwY6nD1/LeI6xzM8E=; b=kmgusg6Vnn4Am+m6hShkYWKShO
+	AmfdekeACIdFrVMEMZvk7+DWrR8SoQNLx0QYpsb879YhdS3R3eeXr904DSVYu4Lm/R1WKJCIRkSdP
+	yPqEiWflicuCY0MutEYrl7a7rQBhI0rwgGTuAZEZICF2A229Ge+6G4FXN75A3dumUTeod9L+nTwlN
+	+EQLVbYVEq9BDre8lNqoMWIhcl4fUiVBfd56h3z1FJuOi2o6KT0GdCnN+O7DD5mpGByh3KlGw534S
+	+f9Mvc75NPSz+MW/Wk1syJiyZWgUbDR83kfORhwyMCdHKXDQ1dIiccalOokR9oXIFtIibESSQU99p
+	ISKdZePA==;
+Received: from localhost ([127.0.0.1])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1veK0M-00054l-24;
+	Fri, 09 Jan 2026 22:26:46 +0100
+From: Daniel Borkmann <daniel@iogearbox.net>
+To: netdev@vger.kernel.org
+Cc: bpf@vger.kernel.org,
+	kuba@kernel.org,
+	davem@davemloft.net,
+	razor@blackwall.org,
+	pabeni@redhat.com,
+	willemb@google.com,
+	sdf@fomichev.me,
+	john.fastabend@gmail.com,
+	martin.lau@kernel.org,
+	jordan@jrife.io,
+	maciej.fijalkowski@intel.com,
+	magnus.karlsson@intel.com,
+	dw@davidwei.uk,
+	toke@redhat.com,
+	yangzhenze@bytedance.com,
+	wangdongdong.6@bytedance.com
+Subject: [PATCH net-next v5 11/16] netkit: Add netkit notifier to check for unregistering devices
+Date: Fri,  9 Jan 2026 22:26:27 +0100
+Message-ID: <20260109212632.146920-12-daniel@iogearbox.net>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260109212632.146920-1-daniel@iogearbox.net>
+References: <20260109212632.146920-1-daniel@iogearbox.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260108175106.2731796-1-mykyta.yatsenko5@gmail.com>
-In-Reply-To: <20260108175106.2731796-1-mykyta.yatsenko5@gmail.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Fri, 9 Jan 2026 13:26:03 -0800
-X-Gm-Features: AQt7F2odpb5g9J1rNncBWLsB4qfEEU8AeXZzQC6grHgtRIw-VDURjB-SEooiDxg
-Message-ID: <CAEf4Bzaq9ZnXUWpVvxztGZujcQnsb474snoFZ7xuDtR54u+c6A@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v1] bpf: Use reg_state() for register access in verifier
-To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
-	daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com, 
-	Mykyta Yatsenko <yatsenko@meta.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: Clear (ClamAV 1.0.9/27875/Fri Jan  9 08:26:02 2026)
 
-On Thu, Jan 8, 2026 at 9:51=E2=80=AFAM Mykyta Yatsenko
-<mykyta.yatsenko5@gmail.com> wrote:
->
-> From: Mykyta Yatsenko <yatsenko@meta.com>
->
-> Replace the pattern of declaring a local regs array from cur_regs()
-> and then indexing into it with the more concise reg_state() helper.
-> This simplifies the code by eliminating intermediate variables and
-> makes register access more consistent throughout the verifier.
->
-> Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
-> ---
->  kernel/bpf/verifier.c | 41 ++++++++++++++++++-----------------------
->  1 file changed, 18 insertions(+), 23 deletions(-)
->
+Add a netdevice notifier in netkit to watch for NETDEV_UNREGISTER events.
+If the target device is indeed NETREG_UNREGISTERING and previously leased
+a queue to a netkit device, then collect the related netkit devices and
+batch-unregister_netdevice_many() them.
 
-LGTM
+If this would not be done, then the netkit device would hold a reference
+on the physical device preventing it from going away. However, in case of
+both io_uring zero-copy as well as AF_XDP this situation is handled
+gracefully and the allocated resources are torn down.
 
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
+In the case where mentioned infra is used through netkit, the applications
+have a reference on netkit, and netkit in turn holds a reference on the
+physical device. In order to have netkit release the reference on the
+physical device, we need such watcher to then unregister the netkit ones.
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 53635ea2e41b..9721f18cc34c 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -5654,8 +5654,7 @@ static int check_stack_write(struct bpf_verifier_en=
-v *env,
->  static int check_map_access_type(struct bpf_verifier_env *env, u32 regno=
-,
->                                  int off, int size, enum bpf_access_type =
-type)
->  {
-> -       struct bpf_reg_state *regs =3D cur_regs(env);
-> -       struct bpf_map *map =3D regs[regno].map_ptr;
-> +       struct bpf_map *map =3D reg_state(env, regno)->map_ptr;
+This is generally quite similar to the dependency handling in case of
+tunnels (e.g. vxlan bound to a underlying netdev) where the tunnel device
+gets removed along with the physical device.
 
-nit: this one I'd probably do in two steps
+  # ip a
+  [...]
+  4: enp10s0f0np0: <BROADCAST,MULTICAST> mtu 1500 qdisc mq state DOWN group default qlen 1000
+      link/ether e8:eb:d3:a3:43:f6 brd ff:ff:ff:ff:ff:ff
+      inet 10.0.0.2/24 scope global enp10s0f0np0
+         valid_lft forever preferred_lft forever
+  [...]
+  8: nk@NONE: <BROADCAST,MULTICAST,NOARP> mtu 1500 qdisc noop state DOWN group default qlen 1000
+      link/ether 00:00:00:00:00:00 brd ff:ff:ff:ff:ff:ff
+  [...]
 
-struct bpf_reg_state *reg =3D reg_state(env, regno);
-struct bpf_map *map =3D =3D reg->map_ptr;
+  # rmmod mlx5_ib
+  # rmmod mlx5_core
 
->         u32 cap =3D bpf_map_flags_to_cap(map);
->
->         if (type =3D=3D BPF_WRITE && !(cap & BPF_MAP_CAN_WRITE)) {
+  [  309.261822] mlx5_core 0000:0a:00.0 mlx5_0: Port: 1 Link DOWN
+  [  344.235236] mlx5_core 0000:0a:00.1: E-Switch: Unload vfs: mode(LEGACY), nvfs(0), necvfs(0), active vports(0)
+  [  344.246948] mlx5_core 0000:0a:00.1: E-Switch: Disable: mode(LEGACY), nvfs(0), necvfs(0), active vports(0)
+  [  344.463754] mlx5_core 0000:0a:00.1: E-Switch: Disable: mode(LEGACY), nvfs(0), necvfs(0), active vports(0)
+  [  344.770155] mlx5_core 0000:0a:00.1: E-Switch: cleanup
+  [  345.345709] mlx5_core 0000:0a:00.0: E-Switch: Unload vfs: mode(LEGACY), nvfs(0), necvfs(0), active vports(0)
+  [  345.357524] mlx5_core 0000:0a:00.0: E-Switch: Disable: mode(LEGACY), nvfs(0), necvfs(0), active vports(0)
+  [  350.995989] mlx5_core 0000:0a:00.0: E-Switch: Disable: mode(LEGACY), nvfs(0), necvfs(0), active vports(0)
+  [  351.574396] mlx5_core 0000:0a:00.0: E-Switch: cleanup
 
-[...]
+  # ip a
+  [...]
+  [ both enp10s0f0np0 and nk gone ]
+  [...]
+
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Co-developed-by: David Wei <dw@davidwei.uk>
+Signed-off-by: David Wei <dw@davidwei.uk>
+Reviewed-by: Nikolay Aleksandrov <razor@blackwall.org>
+---
+ drivers/net/netkit.c      | 58 ++++++++++++++++++++++++++++++++++++++-
+ include/linux/netdevice.h |  6 ++++
+ 2 files changed, 63 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/net/netkit.c b/drivers/net/netkit.c
+index 9d9d74a7e589..d4426c30e0fd 100644
+--- a/drivers/net/netkit.c
++++ b/drivers/net/netkit.c
+@@ -1037,6 +1037,49 @@ static int netkit_change_link(struct net_device *dev, struct nlattr *tb[],
+ 	return 0;
+ }
+ 
++static void netkit_check_lease_unregister(struct net_device *dev)
++{
++	LIST_HEAD(list_kill);
++	u32 q_idx;
++
++	if (READ_ONCE(dev->reg_state) != NETREG_UNREGISTERING ||
++	    !dev->dev.parent)
++		return;
++
++	for (q_idx = 0; q_idx < dev->real_num_rx_queues; q_idx++) {
++		struct net_device *tmp = dev;
++		u32 tmp_q_idx = q_idx;
++
++		netdev_lock_ops(dev);
++		if (netif_rx_queue_lease_get_owner(&tmp, &tmp_q_idx)) {
++			if (tmp->netdev_ops != &netkit_netdev_ops)
++				continue;
++			/* A single phys device can have multiple queues leased
++			 * to one netkit device. We can only queue that netkit
++			 * device once to the list_kill. Queues of that phys
++			 * device can be leased with different individual netkit
++			 * devices, hence we batch via list_kill.
++			 */
++			if (unregister_netdevice_queued(tmp))
++				continue;
++			netkit_del_link(tmp, &list_kill);
++		}
++		netdev_unlock_ops(dev);
++	}
++
++	unregister_netdevice_many(&list_kill);
++}
++
++static int netkit_notifier(struct notifier_block *this,
++			   unsigned long event, void *ptr)
++{
++	struct net_device *dev = netdev_notifier_info_to_dev(ptr);
++
++	if (event == NETDEV_UNREGISTER)
++		netkit_check_lease_unregister(dev);
++	return NOTIFY_DONE;
++}
++
+ static size_t netkit_get_size(const struct net_device *dev)
+ {
+ 	return nla_total_size(sizeof(u32)) + /* IFLA_NETKIT_POLICY */
+@@ -1113,18 +1156,31 @@ static struct rtnl_link_ops netkit_link_ops = {
+ 	.maxtype	= IFLA_NETKIT_MAX,
+ };
+ 
++static struct notifier_block netkit_netdev_notifier = {
++	.notifier_call	= netkit_notifier,
++};
++
+ static __init int netkit_mod_init(void)
+ {
++	int ret;
++
+ 	BUILD_BUG_ON((int)NETKIT_NEXT != (int)TCX_NEXT ||
+ 		     (int)NETKIT_PASS != (int)TCX_PASS ||
+ 		     (int)NETKIT_DROP != (int)TCX_DROP ||
+ 		     (int)NETKIT_REDIRECT != (int)TCX_REDIRECT);
+ 
+-	return rtnl_link_register(&netkit_link_ops);
++	ret = rtnl_link_register(&netkit_link_ops);
++	if (ret)
++		return ret;
++	ret = register_netdevice_notifier(&netkit_netdev_notifier);
++	if (ret)
++		rtnl_link_unregister(&netkit_link_ops);
++	return ret;
+ }
+ 
+ static __exit void netkit_mod_exit(void)
+ {
++	unregister_netdevice_notifier(&netkit_netdev_notifier);
+ 	rtnl_link_unregister(&netkit_link_ops);
+ }
+ 
+diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+index 5870a9e514a5..3ff1370bc9ae 100644
+--- a/include/linux/netdevice.h
++++ b/include/linux/netdevice.h
+@@ -3400,11 +3400,17 @@ static inline int dev_direct_xmit(struct sk_buff *skb, u16 queue_id)
+ int register_netdevice(struct net_device *dev);
+ void unregister_netdevice_queue(struct net_device *dev, struct list_head *head);
+ void unregister_netdevice_many(struct list_head *head);
++
+ static inline void unregister_netdevice(struct net_device *dev)
+ {
+ 	unregister_netdevice_queue(dev, NULL);
+ }
+ 
++static inline bool unregister_netdevice_queued(const struct net_device *dev)
++{
++	return !list_empty(&dev->unreg_list);
++}
++
+ int netdev_refcnt_read(const struct net_device *dev);
+ void free_netdev(struct net_device *dev);
+ 
+-- 
+2.43.0
+
