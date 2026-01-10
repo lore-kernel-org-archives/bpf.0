@@ -1,125 +1,227 @@
-Received: from mail-dy1-f202.google.com (mail-dy1-f202.google.com [74.125.82.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FD6C4A02
-	for <bpf@vger.kernel.org>; Sat, 10 Jan 2026 08:26:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE6873D6F;
+	Sat, 10 Jan 2026 08:37:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=141.14.17.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768033571; cv=none; b=QjEsRyleFoi5TGGQIbkfyC49khCLzqdFrXhUi8eJh16gMlcRpZkHjP0KAE85dlphy0fdDb8rZ3V+vTHZn2OnrOS4b7dqzlTYqzKrep72M+RsjarZGkrU7qoBSeAGb4QWxut9qa0m0xk8ZtbdzSCydaH2xyZQdFEfjqs9uDAANLs=
+	t=1768034237; cv=none; b=phqKlmyDqRpJTmgTHGKTYEfqe9JzNDdu/1BSIrZMONnWtofNsIvl1P5lkLZaV6YMaGzyIfKXsje3gTR0uSJw71uaA4eVvp99ZurqAsa47aea7VLtBVwrQJWStvqk20D+TmfFuTc2crO6xoRWGTqnd2wtn6+6edah9nRN7jVOQs4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768033571; c=relaxed/simple;
-	bh=fU9tXtVUuvz++hhVpv6nOf14ncQA9HihGffXc9Blti4=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=K9JlxyzN7bVMs/69AyY4sIDkP+NsM+IWRi3ViQD98fBvFdGIe9S4C1HsderbCDNDCljsxHyp4nl0LqmoSvOwDc+t+fdmEpPlOGKA9ocLCHgWDgDGcGChVmL7b8QisquuL7JBCGk6plqQLHzS4o43Pup5gAFOCSrTflS8Pw54x58=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--samitolvanen.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=1aUYk9bM; arc=none smtp.client-ip=74.125.82.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--samitolvanen.bounces.google.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="1aUYk9bM"
-Received: by mail-dy1-f202.google.com with SMTP id 5a478bee46e88-2b0751d8de7so6545039eec.1
-        for <bpf@vger.kernel.org>; Sat, 10 Jan 2026 00:26:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1768033560; x=1768638360; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=PZhkoiS2Eo/kq3Cli8CQX1phFsPCl4naA/gjIFzyLV8=;
-        b=1aUYk9bMCBtiYbJSy8auWrAI2DyPvbN+xBIkVdWjy+Ppe3JPx1TqgTU1UL0Zz0t2W1
-         xXyRSkgXR1uprPKNStP19RBOLEKEolshdB0V3J7HrNPS6gWzXDT03JDuhzBeoWWkW9Qo
-         Z9u4XB+b2ZMB+afa0CymDJpgDPjnPVoDZ/ZHM9Az7TAZVFDCLEbw4oF5gM4P2GlrlYwf
-         K6yLJRRq2oRqB2T1+6vzG92FaBJ2nxPWY8qG0wUhAZOtvUGleoSo5s5GpA/ILwLWXtaF
-         7LZ9TJJrLloXwGIIuy1eDeVflrM/l5VtgoZ8qUVwy4meTDHJ/TqUMm2A1f2JD87xf/fy
-         iiWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768033560; x=1768638360;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PZhkoiS2Eo/kq3Cli8CQX1phFsPCl4naA/gjIFzyLV8=;
-        b=eBPAtC/T22KKiw3ZA00LiLzIG6scJ2MBkWgf14BdpGyB5TNZhIhc8WipgLX5hTYMwQ
-         QfZdJZU4PuWQqMxvHIyfcdViEjOKc2ZigEHTJ8TJi+3AZjYAS/s2uNmaNv3ATcM55N14
-         41ggWsrIAEqPXpTbr/YrD6OBNTV1ln6CNbVaytKZFWGvaKSPNiFlpS/f9UGPuE7JfUlH
-         OsrFFxnkKH0HCOvzBw3TDt5SH4msR67Q+GzLIDHbH2xqaSRCZkTa9nxhVLnYvkVussEK
-         UXG6wsIy4bVX0/hX5ngDWy5S3DiD6MMmyYef026c6qEGkPi2iF9vRddA5+53+BEILG3p
-         kZ8g==
-X-Gm-Message-State: AOJu0Yx4kUEOvhvlCjMA2MO0ey2azl7lakDqbg8OqX/Yxmb9MLe61gyw
-	g2JMPq/ClSRihSeAWZAkrBt2vi8zbKEsuLRDQo4Fdu0LcvRqzEpu7cKxfM0J9yUM0tr4zTS7hu1
-	96kLxYb/qHepO3CILIR67Zls21ibYHPIRO/gKJvAd1Lp0d/WYzRi/IfyC3aAeai4YEG5Y0g3NQE
-	tTO9s0ucCKuSFnyiO0W68+/Nso7TBV/Atti+MYjAttXnEYKP7rRWjCO3pZGD+7YYyG
-X-Google-Smtp-Source: AGHT+IG9YKCSq7wS7f0FWH0qnCPG7v4Hjw/ILCg0+RfetXQsjFo9F+6oxi8SmQfwivw3ZF8EVRkWhSbDDRqzXAdk+xg=
-X-Received: from dycog7.prod.google.com ([2002:a05:7301:9a87:b0:2ae:3278:d74f])
- (user=samitolvanen job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:7300:e9d9:20b0:2b0:582e:fe51 with SMTP id 5a478bee46e88-2b17d2a841dmr7814723eec.20.1768033560093;
- Sat, 10 Jan 2026 00:26:00 -0800 (PST)
-Date: Sat, 10 Jan 2026 08:25:52 +0000
-In-Reply-To: <20260110082548.113748-6-samitolvanen@google.com>
+	s=arc-20240116; t=1768034237; c=relaxed/simple;
+	bh=O/PpOg36FNM2ei1vhJaHdz1sULiLmjd+N8Mpmu1yecg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=hqY/tkpFFs4zQ5QiR6eBIE767u/G068ICTILeUGA/dqTjUPwY8GV9t3jHHKoAkj2fZRgpZzavQtVKRiSNSR+7K84NFNtIQ+/sjrpwakcerO+8c9hZZyLuESE1NjERYd3hYoH0ozyEi+5BN7qf0BY6fU4Ltb47qI8v6t6sdjwKwo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de; spf=pass smtp.mailfrom=molgen.mpg.de; arc=none smtp.client-ip=141.14.17.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=molgen.mpg.de
+Received: from [192.168.2.217] (p5dc55726.dip0.t-ipconnect.de [93.197.87.38])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: pmenzel)
+	by mx.molgen.mpg.de (Postfix) with ESMTPSA id 905F42394AFD3;
+	Sat, 10 Jan 2026 09:35:59 +0100 (CET)
+Message-ID: <43dafae2-e1f1-44ce-91c1-7fc236966f58@molgen.mpg.de>
+Date: Sat, 10 Jan 2026 09:35:58 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260110082548.113748-6-samitolvanen@google.com>
-X-Developer-Key: i=samitolvanen@google.com; a=openpgp; fpr=35CCFB63B283D6D3AEB783944CB5F6848BBC56EE
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1607; i=samitolvanen@google.com;
- h=from:subject; bh=fU9tXtVUuvz++hhVpv6nOf14ncQA9HihGffXc9Blti4=;
- b=owGbwMvMwCUWxa662nLh8irG02pJDJlJvHwP4ydbut2RMjnQ9ODCnS2OKqy+lja+XC473u2V/
- rt9QYdSRykLgxgXg6yYIkvL19Vbd393Sn31uUgCZg4rE8gQBi5OAZiIziVGho2HN68R23FxSueL
- Hab7bx5u1xBQ2VO556dvY/lcnR5Z72SG/xn92xL+WF+wn8H//Vi40D6OmGk7HFhWpV5am8jbL5f yiQMA
-X-Mailer: git-send-email 2.52.0.457.g6b5491de43-goog
-Message-ID: <20260110082548.113748-9-samitolvanen@google.com>
-Subject: [PATCH bpf-next v5 3/4] selftests/bpf: Use the correct destructor
- kfunc type
-From: Sami Tolvanen <samitolvanen@google.com>
-To: bpf@vger.kernel.org
-Cc: Vadim Fedorenko <vadim.fedorenko@linux.dev>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Jamal Hadi Salim <jhs@mojatatu.com>, 
-	Cong Wang <xiyou.wangcong@gmail.com>, Jiri Pirko <jiri@resnulli.us>, 
-	Viktor Malik <vmalik@redhat.com>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Sami Tolvanen <samitolvanen@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [Intel-wired-lan] [PATCH iwl-next v4] idpf: export RX hardware
+ timestamping information to XDP
+To: Mina Almasry <almasrymina@google.com>
+Cc: netdev@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, YiFei Zhu <zhuyifei@google.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>,
+ Tony Nguyen <anthony.l.nguyen@intel.com>,
+ Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+ Andrew Lunn <andrew+netdev@lunn.ch>, Eric Dumazet <edumazet@google.com>,
+ Paolo Abeni <pabeni@redhat.com>,
+ Alexander Lobakin <aleksander.lobakin@intel.com>,
+ Richard Cochran <richardcochran@gmail.com>,
+ intel-wired-lan@lists.osuosl.org,
+ Aleksandr Loktionov <aleksandr.loktionov@intel.com>
+References: <20251223194649.3050648-1-almasrymina@google.com>
+Content-Language: en-US
+From: Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <20251223194649.3050648-1-almasrymina@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-With CONFIG_CFI enabled, the kernel strictly enforces that indirect
-function calls use a function pointer type that matches the target
-function. As bpf_testmod_ctx_release() signature differs from the
-btf_dtor_kfunc_t pointer type used for the destructor calls in
-bpf_obj_free_fields(), add a stub function with the correct type to
-fix the type mismatch.
+Dear Mina,
 
-Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
-Acked-by: Yonghong Song <yonghong.song@linux.dev>
----
- tools/testing/selftests/bpf/test_kmods/bpf_testmod.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-index 1c41d03bd5a1..bc07ce9d5477 100644
---- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-+++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-@@ -285,6 +285,12 @@ __bpf_kfunc void bpf_testmod_ctx_release(struct bpf_testmod_ctx *ctx)
- 		call_rcu(&ctx->rcu, testmod_free_cb);
- }
- 
-+__bpf_kfunc void bpf_testmod_ctx_release_dtor(void *ctx)
-+{
-+	bpf_testmod_ctx_release(ctx);
-+}
-+CFI_NOSEAL(bpf_testmod_ctx_release_dtor);
-+
- static struct bpf_testmod_ops3 *st_ops3;
- 
- static int bpf_testmod_test_3(void)
-@@ -707,7 +713,7 @@ BTF_KFUNCS_END(bpf_testmod_common_kfunc_ids)
- 
- BTF_ID_LIST(bpf_testmod_dtor_ids)
- BTF_ID(struct, bpf_testmod_ctx)
--BTF_ID(func, bpf_testmod_ctx_release)
-+BTF_ID(func, bpf_testmod_ctx_release_dtor)
- 
- static const struct btf_kfunc_id_set bpf_testmod_common_kfunc_set = {
- 	.owner = THIS_MODULE,
--- 
-2.52.0.457.g6b5491de43-goog
+Thank you for your patch. Some minor comments, should you resend.
 
+Am 23.12.25 um 20:46 schrieb Mina Almasry via Intel-wired-lan:
+> From: YiFei Zhu <zhuyifei@google.com>
+> 
+> The logic is similar to idpf_rx_hwtstamp, but the data is exported
+> as a BPF kfunc instead of appended to an skb to support grabbing
+> timestamps in xsk packets.
+> 
+> A idpf_queue_has(PTP, rxq) condition is added to check the queue
+> supports PTP similar to idpf_rx_process_skb_fields.
+> 
+> Tested using an xsk connection and checking xdp timestamps are
+> retreivable in received packets.
+
+retr*ie*vable
+
+It’d be great if you could share the commands.
+
+> Cc: intel-wired-lan@lists.osuosl.org
+> Signed-off-by: YiFei Zhu <zhuyifei@google.com>
+> Signed-off-by: Mina Almasry <almasrymina@google.com>
+> Reviewed-by: Aleksandr Loktionov <aleksandr.loktionov@intel.com>
+> 
+> ---
+> 
+> v4: https://lore.kernel.org/netdev/20251219202957.2309698-1-almasrymina@google.com/
+> - Fix indentation (lobakin)
+> - I kept the (u64) casts for all bit shifted bits in idpf_xdp_get_qw3
+>    and friends as I see all idpf_xdp_get_qw* functions do the cast in all
+>    bit-shifted variables.
+> 
+> v3: https://lore.kernel.org/netdev/20251218022948.3288897-1-almasrymina@google.com/
+> - Do the idpf_queue_has(PTP) check before we read qw1 (lobakin)
+> - Fix _qw1 not copying over ts_low on on !__LIBETH_WORD_ACCESS systems
+>    (AI)
+> 
+> v2: https://lore.kernel.org/netdev/20251122140839.3922015-1-almasrymina@google.com/
+> - Fixed alphabetical ordering
+> - Use the xdp desc type instead of virtchnl one (required some added
+>    helpers)
+> 
+> ---
+>   drivers/net/ethernet/intel/idpf/xdp.c | 31 +++++++++++++++++++++++++++
+>   drivers/net/ethernet/intel/idpf/xdp.h | 20 +++++++++++++++++
+>   2 files changed, 51 insertions(+)
+> 
+> diff --git a/drivers/net/ethernet/intel/idpf/xdp.c b/drivers/net/ethernet/intel/idpf/xdp.c
+> index 958d16f87424..0916d201bf98 100644
+> --- a/drivers/net/ethernet/intel/idpf/xdp.c
+> +++ b/drivers/net/ethernet/intel/idpf/xdp.c
+> @@ -2,6 +2,7 @@
+>   /* Copyright (C) 2025 Intel Corporation */
+>   
+>   #include "idpf.h"
+> +#include "idpf_ptp.h"
+>   #include "idpf_virtchnl.h"
+>   #include "xdp.h"
+>   #include "xsk.h"
+> @@ -391,8 +392,38 @@ static int idpf_xdpmo_rx_hash(const struct xdp_md *ctx, u32 *hash,
+>   				    pt);
+>   }
+>   
+> +static int idpf_xdpmo_rx_timestamp(const struct xdp_md *ctx, u64 *timestamp)
+> +{
+> +	const struct libeth_xdp_buff *xdp = (typeof(xdp))ctx;
+> +	struct idpf_xdp_rx_desc desc __uninitialized;
+> +	const struct idpf_rx_queue *rxq;
+> +	u64 cached_time, ts_ns;
+> +	u32 ts_high;
+> +
+> +	rxq = libeth_xdp_buff_to_rq(xdp, typeof(*rxq), xdp_rxq);
+> +
+> +	if (!idpf_queue_has(PTP, rxq))
+> +		return -ENODATA;
+> +
+> +	idpf_xdp_get_qw1(&desc, xdp->desc);
+> +
+> +	if (!(idpf_xdp_rx_ts_low(&desc) & VIRTCHNL2_RX_FLEX_TSTAMP_VALID))
+> +		return -ENODATA;
+> +
+> +	cached_time = READ_ONCE(rxq->cached_phc_time);
+> +
+> +	idpf_xdp_get_qw3(&desc, xdp->desc);
+> +
+> +	ts_high = idpf_xdp_rx_ts_high(&desc);
+> +	ts_ns = idpf_ptp_tstamp_extend_32b_to_64b(cached_time, ts_high);
+> +
+> +	*timestamp = ts_ns;
+> +	return 0;
+> +}
+> +
+>   static const struct xdp_metadata_ops idpf_xdpmo = {
+>   	.xmo_rx_hash		= idpf_xdpmo_rx_hash,
+> +	.xmo_rx_timestamp	= idpf_xdpmo_rx_timestamp,
+
+Append the unit?
+
+>   };
+>   
+>   void idpf_xdp_set_features(const struct idpf_vport *vport)
+> diff --git a/drivers/net/ethernet/intel/idpf/xdp.h b/drivers/net/ethernet/intel/idpf/xdp.h
+> index 479f5ef3c604..1748a0d73547 100644
+> --- a/drivers/net/ethernet/intel/idpf/xdp.h
+> +++ b/drivers/net/ethernet/intel/idpf/xdp.h
+> @@ -112,11 +112,13 @@ struct idpf_xdp_rx_desc {
+>   	aligned_u64		qw1;
+>   #define IDPF_XDP_RX_BUF		GENMASK_ULL(47, 32)
+>   #define IDPF_XDP_RX_EOP		BIT_ULL(1)
+> +#define IDPF_XDP_RX_TS_LOW	GENMASK_ULL(31, 24)
+>   
+>   	aligned_u64		qw2;
+>   #define IDPF_XDP_RX_HASH	GENMASK_ULL(31, 0)
+>   
+>   	aligned_u64		qw3;
+> +#define IDPF_XDP_RX_TS_HIGH	GENMASK_ULL(63, 32)
+>   } __aligned(4 * sizeof(u64));
+>   static_assert(sizeof(struct idpf_xdp_rx_desc) ==
+>   	      sizeof(struct virtchnl2_rx_flex_desc_adv_nic_3));
+> @@ -128,6 +130,8 @@ static_assert(sizeof(struct idpf_xdp_rx_desc) ==
+>   #define idpf_xdp_rx_buf(desc)	FIELD_GET(IDPF_XDP_RX_BUF, (desc)->qw1)
+>   #define idpf_xdp_rx_eop(desc)	!!((desc)->qw1 & IDPF_XDP_RX_EOP)
+>   #define idpf_xdp_rx_hash(desc)	FIELD_GET(IDPF_XDP_RX_HASH, (desc)->qw2)
+> +#define idpf_xdp_rx_ts_low(desc)	FIELD_GET(IDPF_XDP_RX_TS_LOW, (desc)->qw1)
+> +#define idpf_xdp_rx_ts_high(desc)	FIELD_GET(IDPF_XDP_RX_TS_HIGH, (desc)->qw3)
+>   
+>   static inline void
+>   idpf_xdp_get_qw0(struct idpf_xdp_rx_desc *desc,
+> @@ -149,6 +153,9 @@ idpf_xdp_get_qw1(struct idpf_xdp_rx_desc *desc,
+>   	desc->qw1 = ((const typeof(desc))rxd)->qw1;
+>   #else
+>   	desc->qw1 = ((u64)le16_to_cpu(rxd->buf_id) << 32) |
+> +		    ((u64)rxd->ts_low << 24) |
+> +		    ((u64)rxd->fflags1 << 16) |
+> +		    ((u64)rxd->status_err1 << 8) |
+>   		    rxd->status_err0_qw1;
+>   #endif
+>   }
+> @@ -166,6 +173,19 @@ idpf_xdp_get_qw2(struct idpf_xdp_rx_desc *desc,
+>   #endif
+>   }
+>   
+> +static inline void
+> +idpf_xdp_get_qw3(struct idpf_xdp_rx_desc *desc,
+> +		 const struct virtchnl2_rx_flex_desc_adv_nic_3 *rxd)
+> +{
+> +#ifdef __LIBETH_WORD_ACCESS
+> +	desc->qw3 = ((const typeof(desc))rxd)->qw3;
+> +#else
+> +	desc->qw3 = ((u64)le32_to_cpu(rxd->ts_high) << 32) |
+> +		    ((u64)le16_to_cpu(rxd->fmd6) << 16) |
+> +		    le16_to_cpu(rxd->l2tag1);
+> +#endif
+
+It’s done elsewhere in the file, but I wonder why use the preprocessor 
+and not plain C code, and let the linker(?) remove the unneeded branch?
+
+> +}
+> +
+>   void idpf_xdp_set_features(const struct idpf_vport *vport);
+>   
+>   int idpf_xdp(struct net_device *dev, struct netdev_bpf *xdp);
+
+
+Kind regards,
+
+Paul
