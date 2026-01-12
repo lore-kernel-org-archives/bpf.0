@@ -1,81 +1,40 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48F3E2EA154
-	for <bpf@vger.kernel.org>; Mon, 12 Jan 2026 15:17:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 880822E7BCC
+	for <bpf@vger.kernel.org>; Mon, 12 Jan 2026 15:17:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768231035; cv=none; b=dQE3jYcY1eBBSMXkygcyGqOGS15SNnYb621e8HjiQFzv7C9m3R9RwIVchbbctw1iugo4r+hjktpYfMcCQHcMO8zhCQChp5wJmiDmfM5HQFaXz+b5098Ly96vAQ3vQDCkNxX6e+GM0bDFCL6PO6huJM87Len/u2+p00mLg9ia4QA=
+	t=1768231040; cv=none; b=kFpST3s/pa/aiYNJUS9UlIOtwoEck2eXjQdEzMixYhGXtdJwjYwZwT5JkE4lBpcO4DfZs3JoyqIjHQbnGldzshCH0h+GbZz7v6sHGFIBNgsETGmgzxba0D5slWDvY1xTvqR4mcsI+gm2Ud9NG6BEplP0PmdWT2GeOcyN0CsANDg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768231035; c=relaxed/simple;
-	bh=yqM+w07Zwpb+APidaQLkf114vHvMuhLlZCBkRGLptyM=;
+	s=arc-20240116; t=1768231040; c=relaxed/simple;
+	bh=M7Kef26AGVe3a7vE1+PkSOKVMWGNPtsgVf0Ty47fyDg=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=bkGI9obohCTmC5phMRrpcC3FwLtgtFEo99YG/CVwzn5K2sABiRimB8WUPdk4cnk2LQEeB1F+UVJbcK0gyKgfvEMfw9sFjjluzOhiZ9YQ2jD9j9qwAFnMJLl644qssMTCg2TAKZtQPtbwAilN5xajThrJsR/KQYEvaFIlGeL9LAc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=HkJ5ezc7; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=QTmyckr4; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=HkJ5ezc7; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=QTmyckr4; arc=none smtp.client-ip=195.135.223.131
+	 In-Reply-To:To:Cc; b=QcsVNwgAJapkgNz4SEpwrNnDOLtGAvYg2JdBh6Mx3z0AFeX64208Ed8GelJgn0vYksQDc2ompZCy6AA8DkZGVyTtjzX/jHS6nUDfrfZi2clVIOFsLeMGV7sfJeTsHMT6dZpgPkIwrUPSrwOm4lZKklcIq/nv8lldpEJQyarbLCI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; arc=none smtp.client-ip=195.135.223.130
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="HkJ5ezc7";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="QTmyckr4";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="HkJ5ezc7";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="QTmyckr4"
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id D5F8B5BCC3;
-	Mon, 12 Jan 2026 15:16:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1768231017; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=U2g8lMsPgMhUe+Zak9uNfJ1KurP7aWlEZWc/PUq01OM=;
-	b=HkJ5ezc7yX2EBzEJGCjRUDHQ7RkvrtjYX5vldN6BUpO+/FUw8C02bWK9eblzisttBfDoo0
-	Yuj/fFE/vceGtaRnYHFy62MNLM06oCzOVVQ5SAwRHeh7do1iD+rGGVhSRAdQZMXU1MgC9H
-	PJzaWD9G2eLWlz9lpGNrUCDh++hULpM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1768231017;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=U2g8lMsPgMhUe+Zak9uNfJ1KurP7aWlEZWc/PUq01OM=;
-	b=QTmyckr4OBAImDmueC4+/2/GkIicVvBMk0/WqSEhxbNG4+g1ryFLU2DZKIbdiCDmaHcQq0
-	cdZY7acwd2yh+uAg==
-Authentication-Results: smtp-out2.suse.de;
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 361813368C;
+	Mon, 12 Jan 2026 15:16:58 +0000 (UTC)
+Authentication-Results: smtp-out1.suse.de;
 	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1768231017; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=U2g8lMsPgMhUe+Zak9uNfJ1KurP7aWlEZWc/PUq01OM=;
-	b=HkJ5ezc7yX2EBzEJGCjRUDHQ7RkvrtjYX5vldN6BUpO+/FUw8C02bWK9eblzisttBfDoo0
-	Yuj/fFE/vceGtaRnYHFy62MNLM06oCzOVVQ5SAwRHeh7do1iD+rGGVhSRAdQZMXU1MgC9H
-	PJzaWD9G2eLWlz9lpGNrUCDh++hULpM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1768231017;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=U2g8lMsPgMhUe+Zak9uNfJ1KurP7aWlEZWc/PUq01OM=;
-	b=QTmyckr4OBAImDmueC4+/2/GkIicVvBMk0/WqSEhxbNG4+g1ryFLU2DZKIbdiCDmaHcQq0
-	cdZY7acwd2yh+uAg==
 Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id A0A423EA65;
-	Mon, 12 Jan 2026 15:16:57 +0000 (UTC)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 167FB3EA63;
+	Mon, 12 Jan 2026 15:16:58 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
 	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id GLLIJmkQZWn7FgAAD6G6ig
-	(envelope-from <vbabka@suse.cz>); Mon, 12 Jan 2026 15:16:57 +0000
+	id CE42BWoQZWn7FgAAD6G6ig
+	(envelope-from <vbabka@suse.cz>); Mon, 12 Jan 2026 15:16:58 +0000
 From: Vlastimil Babka <vbabka@suse.cz>
-Date: Mon, 12 Jan 2026 16:16:58 +0100
-Subject: [PATCH RFC v2 04/20] slab: add sheaves to most caches
+Date: Mon, 12 Jan 2026 16:17:01 +0100
+Subject: [PATCH RFC v2 07/20] slab: handle kmalloc sheaves bootstrap
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -84,7 +43,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260112-sheaves-for-all-v2-4-98225cfb50cf@suse.cz>
+Message-Id: <20260112-sheaves-for-all-v2-7-98225cfb50cf@suse.cz>
 References: <20260112-sheaves-for-all-v2-0-98225cfb50cf@suse.cz>
 In-Reply-To: <20260112-sheaves-for-all-v2-0-98225cfb50cf@suse.cz>
 To: Harry Yoo <harry.yoo@oracle.com>, Petr Tesarik <ptesarik@suse.com>, 
@@ -100,162 +59,175 @@ Cc: Hao Li <hao.li@linux.dev>, Andrew Morton <akpm@linux-foundation.org>,
  bpf@vger.kernel.org, kasan-dev@googlegroups.com, 
  Vlastimil Babka <vbabka@suse.cz>
 X-Mailer: b4 0.14.3
-X-Spam-Score: -8.30
-X-Spamd-Result: default: False [-8.30 / 50.00];
-	REPLY(-4.00)[];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MIME_TRACE(0.00)[0:+];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	ARC_NA(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[18];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	RCVD_TLS_ALL(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[linux.dev,linux-foundation.org,gmail.com,oracle.com,google.com,linutronix.de,kernel.org,kvack.org,vger.kernel.org,lists.linux.dev,googlegroups.com,suse.cz];
-	RCVD_COUNT_TWO(0.00)[2];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	R_RATELIMIT(0.00)[to_ip_from(RLwn5r54y1cp81no5tmbbew5oc)];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,suse.cz:mid,suse.cz:email]
+X-Rspamd-Pre-Result: action=no action;
+	module=replies;
+	Message is reply to one we originated
+X-Spam-Score: -4.00
+X-Rspamd-Pre-Result: action=no action;
+	module=replies;
+	Message is reply to one we originated
+X-Rspamd-Action: no action
+X-Rspamd-Queue-Id: 361813368C
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
 X-Spam-Level: 
+X-Spamd-Result: default: False [-4.00 / 50.00];
+	REPLY(-4.00)[]
 X-Spam-Flag: NO
 
-In the first step to replace cpu (partial) slabs with sheaves, enable
-sheaves for almost all caches. Treat args->sheaf_capacity as a minimum,
-and calculate sheaf capacity with a formula that roughly follows the
-formula for number of objects in cpu partial slabs in set_cpu_partial().
+Enable sheaves for kmalloc caches. For other types than KMALLOC_NORMAL,
+we can simply allow them in calculate_sizes() as they are created later
+than KMALLOC_NORMAL caches and can allocate sheaves and barns from
+those.
 
-This should achieve roughly similar contention on the barn spin lock as
-there's currently for node list_lock without sheaves, to make
-benchmarking results comparable. It can be further tuned later.
+For KMALLOC_NORMAL caches we perform additional step after first
+creating them without sheaves. Then bootstrap_cache_sheaves() simply
+allocates and initializes barns and sheaves and finally sets
+s->sheaf_capacity to make them actually used.
 
-Don't enable sheaves for bootstrap caches as that wouldn't work. In
-order to recognize them by SLAB_NO_OBJ_EXT, make sure the flag exists
-even for !CONFIG_SLAB_OBJ_EXT.
-
-This limitation will be lifted for kmalloc caches after the necessary
-bootstrapping changes.
+Afterwards the only caches left without sheaves (unless SLUB_TINY or
+debugging is enabled) are kmem_cache and kmem_cache_node. These are only
+used when creating or destroying other kmem_caches. Thus they are not
+performance critical and we can simply leave it that way.
 
 Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
 ---
- include/linux/slab.h |  6 ------
- mm/slub.c            | 51 +++++++++++++++++++++++++++++++++++++++++++++++----
- 2 files changed, 47 insertions(+), 10 deletions(-)
+ mm/slub.c | 88 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 84 insertions(+), 4 deletions(-)
 
-diff --git a/include/linux/slab.h b/include/linux/slab.h
-index 2482992248dc..2682ee57ec90 100644
---- a/include/linux/slab.h
-+++ b/include/linux/slab.h
-@@ -57,9 +57,7 @@ enum _slab_flag_bits {
- #endif
- 	_SLAB_OBJECT_POISON,
- 	_SLAB_CMPXCHG_DOUBLE,
--#ifdef CONFIG_SLAB_OBJ_EXT
- 	_SLAB_NO_OBJ_EXT,
--#endif
- 	_SLAB_FLAGS_LAST_BIT
- };
- 
-@@ -238,11 +236,7 @@ enum _slab_flag_bits {
- #define SLAB_TEMPORARY		SLAB_RECLAIM_ACCOUNT	/* Objects are short-lived */
- 
- /* Slab created using create_boot_cache */
--#ifdef CONFIG_SLAB_OBJ_EXT
- #define SLAB_NO_OBJ_EXT		__SLAB_FLAG_BIT(_SLAB_NO_OBJ_EXT)
--#else
--#define SLAB_NO_OBJ_EXT		__SLAB_FLAG_UNUSED
--#endif
- 
- /*
-  * ZERO_SIZE_PTR will be returned for zero sized kmalloc requests.
 diff --git a/mm/slub.c b/mm/slub.c
-index 8ffeb3ab3228..6e05e3cc5c49 100644
+index 0177a654a06a..f2de44f8bda4 100644
 --- a/mm/slub.c
 +++ b/mm/slub.c
-@@ -7857,6 +7857,48 @@ static void set_cpu_partial(struct kmem_cache *s)
- #endif
+@@ -2593,7 +2593,8 @@ static void *setup_object(struct kmem_cache *s, void *object)
+ 	return object;
  }
  
-+static unsigned int calculate_sheaf_capacity(struct kmem_cache *s,
-+					     struct kmem_cache_args *args)
-+
+-static struct slab_sheaf *alloc_empty_sheaf(struct kmem_cache *s, gfp_t gfp)
++static struct slab_sheaf *__alloc_empty_sheaf(struct kmem_cache *s, gfp_t gfp,
++					      unsigned int capacity)
+ {
+ 	struct slab_sheaf *sheaf;
+ 	size_t sheaf_size;
+@@ -2611,7 +2612,7 @@ static struct slab_sheaf *alloc_empty_sheaf(struct kmem_cache *s, gfp_t gfp)
+ 	if (s->flags & SLAB_KMALLOC)
+ 		gfp |= __GFP_NO_OBJ_EXT;
+ 
+-	sheaf_size = struct_size(sheaf, objects, s->sheaf_capacity);
++	sheaf_size = struct_size(sheaf, objects, capacity);
+ 	sheaf = kzalloc(sheaf_size, gfp);
+ 
+ 	if (unlikely(!sheaf))
+@@ -2624,6 +2625,12 @@ static struct slab_sheaf *alloc_empty_sheaf(struct kmem_cache *s, gfp_t gfp)
+ 	return sheaf;
+ }
+ 
++static inline struct slab_sheaf *alloc_empty_sheaf(struct kmem_cache *s,
++						   gfp_t gfp)
 +{
-+	unsigned int capacity;
-+	size_t size;
-+
-+
-+	if (IS_ENABLED(CONFIG_SLUB_TINY) || s->flags & SLAB_DEBUG_FLAGS)
-+		return 0;
-+
-+	/* bootstrap caches can't have sheaves for now */
-+	if (s->flags & SLAB_NO_OBJ_EXT)
-+		return 0;
-+
-+	/*
-+	 * For now we use roughly similar formula (divided by two as there are
-+	 * two percpu sheaves) as what was used for percpu partial slabs, which
-+	 * should result in similar lock contention (barn or list_lock)
-+	 */
-+	if (s->size >= PAGE_SIZE)
-+		capacity = 4;
-+	else if (s->size >= 1024)
-+		capacity = 12;
-+	else if (s->size >= 256)
-+		capacity = 26;
-+	else
-+		capacity = 60;
-+
-+	/* Increment capacity to make sheaf exactly a kmalloc size bucket */
-+	size = struct_size_t(struct slab_sheaf, objects, capacity);
-+	size = kmalloc_size_roundup(size);
-+	capacity = (size - struct_size_t(struct slab_sheaf, objects, 0)) / sizeof(void *);
-+
-+	/*
-+	 * Respect an explicit request for capacity that's typically motivated by
-+	 * expected maximum size of kmem_cache_prefill_sheaf() to not end up
-+	 * using low-performance oversize sheaves
-+	 */
-+	return max(capacity, args->sheaf_capacity);
++	return __alloc_empty_sheaf(s, gfp, s->sheaf_capacity);
 +}
 +
- /*
-  * calculate_sizes() determines the order and the distribution of data within
-  * a slab object.
-@@ -7991,6 +8033,10 @@ static int calculate_sizes(struct kmem_cache_args *args, struct kmem_cache *s)
+ static void free_empty_sheaf(struct kmem_cache *s, struct slab_sheaf *sheaf)
+ {
+ 	kfree(sheaf);
+@@ -8117,8 +8124,11 @@ static int calculate_sizes(struct kmem_cache_args *args, struct kmem_cache *s)
  	if (s->flags & SLAB_RECLAIM_ACCOUNT)
  		s->allocflags |= __GFP_RECLAIMABLE;
  
-+	/* kmalloc caches need extra care to support sheaves */
-+	if (!is_kmalloc_cache(s))
-+		s->sheaf_capacity = calculate_sheaf_capacity(s, args);
-+
+-	/* kmalloc caches need extra care to support sheaves */
+-	if (!is_kmalloc_cache(s))
++	/*
++	 * For KMALLOC_NORMAL caches we enable sheaves later by
++	 * bootstrap_kmalloc_sheaves() to avoid recursion
++	 */
++	if (!is_kmalloc_normal(s))
+ 		s->sheaf_capacity = calculate_sheaf_capacity(s, args);
+ 
  	/*
- 	 * Determine the number of objects per slab
- 	 */
-@@ -8595,15 +8641,12 @@ int do_kmem_cache_create(struct kmem_cache *s, const char *name,
+@@ -8613,6 +8623,74 @@ static struct kmem_cache * __init bootstrap(struct kmem_cache *static_cache)
+ 	return s;
+ }
  
- 	set_cpu_partial(s);
++/*
++ * Finish the sheaves initialization done normally by init_percpu_sheaves() and
++ * init_kmem_cache_nodes(). For normal kmalloc caches we have to bootstrap it
++ * since sheaves and barns are allocated by kmalloc.
++ */
++static void __init bootstrap_cache_sheaves(struct kmem_cache *s)
++{
++	struct kmem_cache_args empty_args = {};
++	unsigned int capacity;
++	bool failed = false;
++	int node, cpu;
++
++	capacity = calculate_sheaf_capacity(s, &empty_args);
++
++	/* capacity can be 0 due to debugging or SLUB_TINY */
++	if (!capacity)
++		return;
++
++	for_each_node_mask(node, slab_nodes) {
++		struct node_barn *barn;
++
++		barn = kmalloc_node(sizeof(*barn), GFP_KERNEL, node);
++
++		if (!barn) {
++			failed = true;
++			goto out;
++		}
++
++		barn_init(barn);
++		get_node(s, node)->barn = barn;
++	}
++
++	for_each_possible_cpu(cpu) {
++		struct slub_percpu_sheaves *pcs;
++
++		pcs = per_cpu_ptr(s->cpu_sheaves, cpu);
++
++		pcs->main = __alloc_empty_sheaf(s, GFP_KERNEL, capacity);
++
++		if (!pcs->main) {
++			failed = true;
++			break;
++		}
++	}
++
++out:
++	/*
++	 * It's still early in boot so treat this like same as a failure to
++	 * create the kmalloc cache in the first place
++	 */
++	if (failed)
++		panic("Out of memory when creating kmem_cache %s\n", s->name);
++
++	s->sheaf_capacity = capacity;
++}
++
++static void __init bootstrap_kmalloc_sheaves(void)
++{
++	enum kmalloc_cache_type type;
++
++	for (type = KMALLOC_NORMAL; type <= KMALLOC_RANDOM_END; type++) {
++		for (int idx = 0; idx < KMALLOC_SHIFT_HIGH + 1; idx++) {
++			if (kmalloc_caches[type][idx])
++				bootstrap_cache_sheaves(kmalloc_caches[type][idx]);
++		}
++	}
++}
++
+ void __init kmem_cache_init(void)
+ {
+ 	static __initdata struct kmem_cache boot_kmem_cache,
+@@ -8656,6 +8734,8 @@ void __init kmem_cache_init(void)
+ 	setup_kmalloc_cache_index_table();
+ 	create_kmalloc_caches();
  
--	if (args->sheaf_capacity && !IS_ENABLED(CONFIG_SLUB_TINY)
--					&& !(s->flags & SLAB_DEBUG_FLAGS)) {
-+	if (s->sheaf_capacity) {
- 		s->cpu_sheaves = alloc_percpu(struct slub_percpu_sheaves);
- 		if (!s->cpu_sheaves) {
- 			err = -ENOMEM;
- 			goto out;
- 		}
--		// TODO: increase capacity to grow slab_sheaf up to next kmalloc size?
--		s->sheaf_capacity = args->sheaf_capacity;
- 	}
++	bootstrap_kmalloc_sheaves();
++
+ 	/* Setup random freelists for each cache */
+ 	init_freelist_randomization();
  
- #ifdef CONFIG_NUMA
 
 -- 
 2.52.0
