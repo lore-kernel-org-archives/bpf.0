@@ -1,70 +1,86 @@
-Received: from mail-out.m-online.net (mail-out.m-online.net [212.18.0.10])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0A4A3559C6;
-	Mon, 12 Jan 2026 10:58:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.18.0.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70B6C290D81;
+	Mon, 12 Jan 2026 11:05:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768215511; cv=none; b=C5ez9nfmsozceocn1hhCg2i1G6iLsxOfdhSLUtNuo0FepDjjdlwljLurrmXLcIRs38uJjgXgNDqckuuHzUWtBCgJ8plOhUYCR2T2/EsIKM3Bf6O4ngT0FecOchiG1xE3rg0B2m7EjOVeTLvpHJnxbEATOCSeRRgOtcC3b8btK/4=
+	t=1768215953; cv=none; b=hs3TgApt7bysgPRxjwt3yAfTQBxbb//hql47lql4gyObQvnN1V5p/4WEXe978WsQ3Zz+rBewQrxiEU+ujqOpi+/SLK7U5VhU441IJbzh+NpnsBvpcMMTpcYLepqhFgkdT+mFasORnMnGlof1S4VJWNPxEfjzBBFxpIi/P1Bi4dQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768215511; c=relaxed/simple;
-	bh=bW5RpmxuKPFfjs2iXKDUMFTP0SRtJ9fwSlkkNCrcwGg=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=I9eFEAskEtvnY9vv1+7vTcXiIzJCbJ04yFXRRLv902SWhExTKR+N0jeQVbWnLcVOIECegdh/UqHqcTKeNHZHUS/lSvzz6AwQErsxhjeTJngO+Qq9lUyIHMaeckiV7cJI7ywzHPM6XkM2nbjW2g/QL9ORlgdGQAc+vQziCkCjBU4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=nefkom.net; arc=none smtp.client-ip=212.18.0.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nefkom.net
-Received: from mail-out.m-online.net (mail-out.m-online.net [212.18.0.10])
-	by mail-out.m-online.net (Postfix) with ESMTP id 4dqTc73xfXz1sG8X;
-	Mon, 12 Jan 2026 11:47:51 +0100 (CET)
-Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
-	by mail-out.m-online.net (Postfix) with ESMTP id 4dqTc50Kz7z1sG8K;
-	Mon, 12 Jan 2026 11:47:49 +0100 (CET)
-Received: from localhost (dynscan1.mnet-online.de [192.168.6.68])
-	by mail.m-online.net (Postfix) with ESMTP id 4dqTc450Rtz1qqlW;
-	Mon, 12 Jan 2026 11:47:48 +0100 (CET)
-X-Virus-Scanned: amavis at mnet-online.de
-Received: from mail.mnet-online.de ([192.168.8.182])
- by localhost (dynscan1.mail.m-online.net [192.168.6.68]) (amavis, port 10024)
- with ESMTP id 5xyWnyBHaP_3; Mon, 12 Jan 2026 11:47:47 +0100 (CET)
-X-Auth-Info: SSvjvNtRh5vfqOJuaTWqGcpcynIQ3r1wcZPSLPTfB+jtBxxbGYpGhF5kFG0qbYIO
-Received: from igel.home (aftr-82-135-83-110.dynamic.mnet-online.de [82.135.83.110])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.mnet-online.de (Postfix) with ESMTPSA;
-	Mon, 12 Jan 2026 11:47:47 +0100 (CET)
-Received: by igel.home (Postfix, from userid 1000)
-	id 588F32C21A6; Mon, 12 Jan 2026 11:47:47 +0100 (CET)
-From: Andreas Schwab <schwab@linux-m68k.org>
-To: Menglong Dong <menglong8.dong@gmail.com>
-Cc: ast@kernel.org,  daniel@iogearbox.net,  andrii@kernel.org,
-  martin.lau@linux.dev,  eddyz87@gmail.com,  song@kernel.org,
-  yonghong.song@linux.dev,  john.fastabend@gmail.com,  kpsingh@kernel.org,
-  sdf@fomichev.me,  haoluo@google.com,  jolsa@kernel.org,
-  bjorn@kernel.org,  pulehui@huawei.com,  puranjay@kernel.org,
-  pjw@kernel.org,  palmer@dabbelt.com,  aou@eecs.berkeley.edu,
-  alex@ghiti.fr,  bpf@vger.kernel.org,  linux-riscv@lists.infradead.org,
-  linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf v2] riscv, bpf: fix incorrect usage of
- BPF_TRAMP_F_ORIG_STACK
-In-Reply-To: <20251219142948.204312-1-dongml2@chinatelecom.cn> (Menglong
-	Dong's message of "Fri, 19 Dec 2025 22:29:48 +0800")
-References: <20251219142948.204312-1-dongml2@chinatelecom.cn>
-Date: Mon, 12 Jan 2026 11:47:47 +0100
-Message-ID: <87zf6jayzw.fsf@>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	s=arc-20240116; t=1768215953; c=relaxed/simple;
+	bh=12qjxKrKiYt4pXU613mI33pHUAiJdZ2m7E1yNfiSuPA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Cje6x59DmIeRWEqbn2QFjQ2JwF+uKtuLO/SJHGzoFJOAHrmnrSi6jd7AYfJ8l56zlalTVKkY1oSnGL/gofIX9ffWvozRX0q+XUKs8Vfn0ovLy29E2KOBKH6rpToDDM9/heITpjj2TIiBRwFjXk4k1YnVMXaTq1lzGi75V6z329Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=EX24A4HL; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="EX24A4HL"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 843D8C16AAE;
+	Mon, 12 Jan 2026 11:05:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1768215953;
+	bh=12qjxKrKiYt4pXU613mI33pHUAiJdZ2m7E1yNfiSuPA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=EX24A4HLwW33KwOVyI65nJHstYeYlNCOy8l6db/DJh9DFOQs0aEF0U/K20I0+P0FE
+	 barvLs5OnyoQZ2jdNLayZSc2/enJmFcjDrOuRTlQ/750jnum6WD4RoCUp8YomwbI0M
+	 smHtVNCarAd1Llc83edwNfyI+LJafKIH9dz4+aV8=
+Date: Mon, 12 Jan 2026 12:05:50 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Keerthana K <keerthana.kalyanasundaram@broadcom.com>
+Cc: stable@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
+	kuba@kernel.org, pabeni@redhat.com, dsahern@kernel.org,
+	borisp@nvidia.com, john.fastabend@gmail.com, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+	ajay.kaher@broadcom.com, alexey.makhalov@broadcom.com,
+	vamsi-krishna.brahmajosyula@broadcom.com, yin.ding@broadcom.com,
+	tapas.kundu@broadcom.com, Kuniyuki Iwashima <kuniyu@google.com>,
+	Sabrina Dubroca <sd@queasysnail.net>,
+	Sasha Levin <sashal@kernel.org>
+Subject: Re: [PATCH v6.6.y 2/2] tls: Use __sk_dst_get() and dst_dev_rcu() in
+ get_netdev_for_sock().
+Message-ID: <2026011223-tarnish-mustiness-a6bf@gregkh>
+References: <20260112064554.2969656-1-keerthana.kalyanasundaram@broadcom.com>
+ <20260112064554.2969656-3-keerthana.kalyanasundaram@broadcom.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260112064554.2969656-3-keerthana.kalyanasundaram@broadcom.com>
 
-It's rc5 and this is still not merged.
+On Mon, Jan 12, 2026 at 06:45:54AM +0000, Keerthana K wrote:
+> From: Kuniyuki Iwashima <kuniyu@google.com>
+> 
+> [ Upstream commit c65f27b9c3be2269918e1cbad6d8884741f835c5 ]
+> 
+> get_netdev_for_sock() is called during setsockopt(),
+> so not under RCU.
+> 
+> Using sk_dst_get(sk)->dev could trigger UAF.
+> 
+> Let's use __sk_dst_get() and dst_dev_rcu().
+> 
+> Note that the only ->ndo_sk_get_lower_dev() user is
+> bond_sk_get_lower_dev(), which uses RCU.
+> 
+> Fixes: e8f69799810c ("net/tls: Add generic NIC offload infrastructure")
+> Signed-off-by: Kuniyuki Iwashima <kuniyu@google.com>
+> Reviewed-by: Eric Dumazet <edumazet@google.com>
+> Reviewed-by: Sabrina Dubroca <sd@queasysnail.net>
+> Link: https://patch.msgid.link/20250916214758.650211-6-kuniyu@google.com
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
+> [ Keerthana: Backport to v6.6.y ]
+> Signed-off-by: Keerthana K <keerthana.kalyanasundaram@broadcom.com>
+> ---
+>  net/tls/tls_device.c | 17 ++++++++++-------
+>  1 file changed, 10 insertions(+), 7 deletions(-)
 
--- 
-Andreas Schwab, schwab@linux-m68k.org
-GPG Key fingerprint = 7578 EB47 D4E5 4D69 2510  2552 DF73 E780 A9DA AEC1
-"And now for something completely different."
+This is not in 6.12.y, so we can't take it for 6.6.y yet.  Can you
+please send a 6.12.y version and then a new 6.6.y version?
+
+thanks,
+
+greg k-h
