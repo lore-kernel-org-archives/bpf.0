@@ -1,140 +1,137 @@
-Received: from relay.hostedemail.com (smtprelay0013.hostedemail.com [216.40.44.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8E5827FD45;
-	Mon, 12 Jan 2026 14:02:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE58D241CB2
+	for <bpf@vger.kernel.org>; Mon, 12 Jan 2026 14:37:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768226539; cv=none; b=NdhiPpsEXptQ8Z63fMr0JvJyEYFzvUPVlu7HR+FmYWgCb+g52t4C2qfcRG8/BzGwn3rGxzIuOtEKODe9+587988iobPCzjtRqXdnV8F581h9KRyCPYgKnx+IS1p7Bg7QKnCTmwRspapeid9/gd/HoPFFWZtjXi3aprLtSdnZKY0=
+	t=1768228629; cv=none; b=qmoL+Hf+DrNkUs96nHY5GzCvY3I+cucT/TkfC97allwQVSrMrheoUhO/O+rprBxsF9m++wMRGlEfW7btZdUoGMtE4HzcV7Vo2cWAZESqNYYpj02fEQMnpmpUFKLkSDaoZdzJXlo78aOkIvNspLkflUIfMWONeW61ZhIWiHlZKlc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768226539; c=relaxed/simple;
-	bh=XmcTzjP+IJ00WyfHItPCpaDCCeKe1TYq6v4q5Ysbfgo=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=rewhoa2tzbx8PWYHef3f9EHOyCId3NhLTj+IwtJaBiby/UCnRWpd6c/Qic4DKiBwtQZp46fH6jQ8YxCAOimgnGv4bunnyu/a0l1wognRYMnINIMG6j/13MPJWnXMfys292lgo9UpU9zAZWTYSq2pQQT+hWGcC+T2oFX1HwQgtDI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf13.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay06.hostedemail.com (Postfix) with ESMTP id 45DC11AC23A;
-	Mon, 12 Jan 2026 13:53:23 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf13.hostedemail.com (Postfix) with ESMTPA id 1890B20012;
-	Mon, 12 Jan 2026 13:53:20 +0000 (UTC)
-Date: Mon, 12 Jan 2026 08:53:19 -0500
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, LKML
- <linux-kernel@vger.kernel.org>, Linux trace kernel
- <linux-trace-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>, Masami
- Hiramatsu <mhiramat@kernel.org>, "Paul E. McKenney" <paulmck@kernel.org>,
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>, Thomas Gleixner
- <tglx@linutronix.de>
-Subject: Re: [PATCH v5] tracing: Guard __DECLARE_TRACE() use of
- __DO_TRACE_CALL() with SRCU-fast
-Message-ID: <20260112085257.26bb7b5b@fedora>
-In-Reply-To: <CAADnVQJiEhDrfYVEyV8eGUECE_XFt7PGG=PFJRKU4jRBn-TsvA@mail.gmail.com>
-References: <20260108220550.2f6638f3@fedora>
-	<da261242-482f-4b47-81c6-b065c5a95c4b@efficios.com>
-	<CAADnVQJMa+p_BcYxKUgve2=sqRBwSs3wLGAGhbA0r6hwFpJ+6Q@mail.gmail.com>
-	<20260109141930.6deb2a0a@gandalf.local.home>
-	<3c0df437-f6e5-47c6-aed5-f4cc26fe627a@efficios.com>
-	<CAADnVQLeCLRhx1Oe5DdJCT0e+WWq4L3Rdee1Ky0JNNh3LdozeQ@mail.gmail.com>
-	<20260109170028.0068a14d@fedora>
-	<CAADnVQKGm-t2SdN_vFVMn0tNiQ5Fs6FutD2Au-jO69aGdhKS7Q@mail.gmail.com>
-	<20260109173326.616e873c@fedora>
-	<20260109173915.1e8a784e@fedora>
-	<CAADnVQKB4dAWtX7T15yh31NYNcBUugoqcnTZ3U9APo8SZkTuwg@mail.gmail.com>
-	<20260110111454.7d1a7b66@fedora>
-	<CAADnVQJ_L_TvFogq0+-qOH=vxe5bzU9iz3c-6-N7VFYE6cBnjQ@mail.gmail.com>
-	<20260111170953.49127c00@fedora>
-	<CAADnVQJiEhDrfYVEyV8eGUECE_XFt7PGG=PFJRKU4jRBn-TsvA@mail.gmail.com>
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-redhat-linux-gnu)
+	s=arc-20240116; t=1768228629; c=relaxed/simple;
+	bh=iyqqznUqDL99OwJCEkrsF2iVykllrm4FsNPCyAuRMwE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=DF1VDTtqBUN3e70yJBBtPRgiJAHrtOY2IJDqeK7VYpT2d8qQ0MQg2rp2+V35rEFVZqF3RdTnpOaxIVR+sck8k3Q9OqWWRgDAaeYi6a0TnUmhS4s+86XBBZ5SKvh+bnfSWSyi09yIuxLtjqykJDz7oCC4WC3QHZhqeEVKFcBQzPc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=HxKCXCEn; arc=none smtp.client-ip=209.85.221.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="HxKCXCEn"
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-432d2670932so2746511f8f.2
+        for <bpf@vger.kernel.org>; Mon, 12 Jan 2026 06:37:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1768228626; x=1768833426; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Gusj9aT7RaX3C9uGASncaxKiTRdOev9W3ScVaZSC4iY=;
+        b=HxKCXCEnI49Qz4IQaghPBJuui1rlMR6Novwc99GHqU+DzA2GaaTSHU0BmrzVdrjoR0
+         eaJfAzUC0RPWV3NJ3dAm7K4H5ny9qutM5lWev7HR6nAwHlWZ222AgweMPQO1Pk4ZQ2/c
+         927hsXyAyGVY5f9lK0+0f5jSUCbYNy+Q+zvBu1EG//K7ZGUb0WZAj8LIpQJEuaYR0xGr
+         S/ADOD4neNCly69JA/OBFTtTVbHlCYWBXvPAD40FLZRPusoLLzlNVgM4hYtl7lA3HcSf
+         Ew0d2xha43Q3Zw25P0OfIN5XwuIZDFWAF751T2FBGekiJw+zOfXVAX2cnH7DpNk0CKmM
+         9XXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768228626; x=1768833426;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Gusj9aT7RaX3C9uGASncaxKiTRdOev9W3ScVaZSC4iY=;
+        b=YD0inafJFiuHa0Y8mon2IfpvvV6QerUdBbbzKOR/imsbJsw9RyYosrNgzaCFUZHIBk
+         YK7EsGH3cMqpdc7zzqIIIJBJPWG2MJ8LHJ5Hez/pZ78csUW15BGui0OSfBBZQZgjiLOB
+         wfUUJuAfDmI2kr1qiop61KVa0uGr+8Pyeh1D8D+P3zm7/QksG+ACgx7hAvBAaFLPy20+
+         wJxWTPffySjoLCKmFFRzhwfpy29aPxawy8ZiLKP3fgn7flsDkwRlNx4f03295zV2UAlN
+         Ww1yCPRhQy2Azz00DMvlBA2PptdP2DQ+dMP7n8YjB2m2YsS4fpvgKw7JwTpeX5lrsCeU
+         ijfA==
+X-Forwarded-Encrypted: i=1; AJvYcCXYmZxscWKV3LqaTlqDA3HC+e/A8aKU5sI5Z8YKmgjptqM1CEQVEzsJJbaeogwm+TQD+vA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzlNq1Ca7rrra8gFbTCYFHIVHjoqsN8ku+STSleX+I6LGWZtTlh
+	4a5rdKQL6H3h2uKZmjABNwDxBx4+ToAYRXwtCKTP4zIlZQC8vO2HU65oUR/VInuxEEk=
+X-Gm-Gg: AY/fxX6t7CWpUWjTb2n0LJLXZ9PJfCA9BJp2uJWEHmRwNUcGMk6/8l3+aOZ/3QsMR/m
+	Z2l4eRpmCrqM2o4XQXLUHM4XkElYhFjBn3+DgGnPnBHaJcbaRNRPKU7hnApf89zXWqyEni/Hs/F
+	TrRNyMavqmgchb2CQH5Rn/R51q2QKCtdfchBIWOhQirm3SAUMCAUV4YoOe8GG4BSNfjYgOqXoqW
+	BhwnqAarUvMgl2H+h9lxMBVaOxJPKkUqgudAlZEu5zqiXd6GMs4eubdPPchDMwUhwLTnvWy2bN9
+	tlrFNhySPhxQ0+w66EHvsHwKMslAENbcmavYQBTgV36At1g/wWiaGOkju1IyRHGUB1GbTAsjeTM
+	7Bk2r4cGzjJHydq7EVqO9V8+ZEmpC63NVN+6SyXg60G2aBRDsgxjM14c5zKT0YKANWftH1qv9aH
+	aq0wIvXc4WD5OKPu3Vt71CEgksWeR7XQ==
+X-Google-Smtp-Source: AGHT+IFmm1oEKKdZV8ZlNXFTTJqlKJkxSdN4HcGz/P7O+LQJVZm9Zz54Me3GJnG5+SbV8c+kl57MWg==
+X-Received: by 2002:a5d:5f94:0:b0:432:5bac:3915 with SMTP id ffacd0b85a97d-432c37c87e4mr21260896f8f.39.1768228625843;
+        Mon, 12 Jan 2026 06:37:05 -0800 (PST)
+Received: from [10.0.1.22] (109-81-1-107.rct.o2.cz. [109.81.1.107])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-432bd5ff0b2sm38877725f8f.42.2026.01.12.06.37.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Jan 2026 06:37:05 -0800 (PST)
+Message-ID: <d683a5c5-51ad-4b8e-bf8e-6a0526f7c9c1@suse.com>
+Date: Mon, 12 Jan 2026 15:37:04 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] module: Fix kernel panic when a symbol st_shndx is out of
+ bounds
+To: Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: Luis Chamberlain <mcgrof@kernel.org>, Daniel Gomez <da.gomez@kernel.org>,
+ Nathan Chancellor <nathan@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, linux-kernel@vger.kernel.org,
+ linux-modules@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kbuild@vger.kernel.org, llvm@lists.linux.dev
+References: <20251230183208.1317279-1-ihor.solodrai@linux.dev>
+Content-Language: en-US
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <20251230183208.1317279-1-ihor.solodrai@linux.dev>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Rspamd-Server: rspamout07
-X-Rspamd-Queue-Id: 1890B20012
-X-Stat-Signature: gcjjox51mrxtmsrreow5a3i5gw9tp9u1
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX18VqfY3Eg7yuckf9KrSUxHmnxOL9VS9acY=
-X-HE-Tag: 1768226000-715225
-X-HE-Meta: U2FsdGVkX1+wTUSCcvJ9YKpsslDni28EAev+O6hnTL6tiTGLW0myv/79edh+fekfijsTR7aIpnz8hmKYF2xhvPXobM33rS2uQkTVovE2iyUdXw0rOq7B6E/4uX86Jjy+eftROHVdeBEaxZal79AXTNZkiNEVP6iIFv8v5TPx7M95BmtmfvkQPmNR1EvQel25yBF8V417IqDiLvCakFAO6b0Rje3Mxqst/KERgAA79+LQ26kJMd0u0Ghq2pOXZqPFggnEww5/QYezuNqZCfByYGTxwo0Jl3PQt+Y2+CP499laogRxBUT1XxWYJ9irixSKd3Iw5B2VRttQTRHg43D2bTkoIXr/c2my
 
-On Sun, 11 Jan 2026 15:38:38 -0800
-Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
-
-> > Oh, so you are OK replacing the preempt_disable in the tracepoint
-> > callbacks with fast SRCU?  
+On 12/30/25 7:32 PM, Ihor Solodrai wrote:
+> The module loader doesn't check for bounds of the ELF section index in
+> simplify_symbols():
 > 
-> yes, but..
+>        for (i = 1; i < symsec->sh_size / sizeof(Elf_Sym); i++) {
+> 		const char *name = info->strtab + sym[i].st_name;
 > 
-> > Then I guess we can simply do that. Would it be fine to do that for
-> > both RT and non-RT? That will simplify the code quite a bit.  
+> 		switch (sym[i].st_shndx) {
+> 		case SHN_COMMON:
 > 
-> Agree. perf needs preempt_disable in their callbacks (as this patch does)
-> and bpf side needs to add migrate_disable in __bpf_trace_run for now.
-> Though syscall tracepoints are sleepable we don't take advantage of
-> that on the bpf side. Eventually we will, and then rcu_lock
-> inside __bpf_trace_run will become srcu_fast_lock.
+> 		[...]
 > 
-> The way to think about generic infrastructure like tracepoints is
-> to minimize their overhead no matter what out-of-tree and in-tree
-> users' assumptions are today, so why do we need preempt_disable
-> or srcu_fast there?
-
-Either preempt disable or srcu_fast is still needed.
-
-> I think today it's there because all callbacks (perf, ftrace, bpf)
-> expect preemption to be disabled, but can we just remove it from tp side?
-> and move preempt_disable to callbacks that actually need it?
-
-Yes if we are talking about switching from preempt_disable to src_fast.
-No if you mean to remove both as it still needs RCU protection. It's
-used for synchronizing changes in the tracepoint infrastructure itself.
-That __DO_TRACE_CALL() macro is the guts of the tracepoint callback
-code. It needs to handle races with additions and removals of callbacks
-there, as the callbacks also get data passed to them. If it gets out of
-sync, a callback could be called with another callback's data.
-
-That's why it has:
-
-                it_func_ptr =                                           \
-                        rcu_dereference_raw((&__tracepoint_##name)->funcs);
-
+> 		default:
+> 			/* Divert to percpu allocation if a percpu var. */
+> 			if (sym[i].st_shndx == info->index.pcpu)
+> 				secbase = (unsigned long)mod_percpu(mod);
+> 			else
+>   /** HERE --> **/		secbase = info->sechdrs[sym[i].st_shndx].sh_addr;
+> 			sym[i].st_value += secbase;
+> 			break;
+> 		}
+> 	}
 > 
-> I'm looking at release_probes(). It's fine as-is, no?
+> A symbol with an out-of-bounds st_shndx value, for example 0xffff
+> (known as SHN_XINDEX or SHN_HIRESERVE), may cause a kernel panic:
+> 
+>   BUG: unable to handle page fault for address: ...
+>   RIP: 0010:simplify_symbols+0x2b2/0x480
+>   ...
+>   Kernel panic - not syncing: Fatal exception
+> 
+> This can happen when module ELF is legitimately using SHN_XINDEX or
+> when it is corrupted.
+> 
+> Add a bounds check in simplify_symbols() to validate that st_shndx is
+> within the valid range before using it.
+> 
+> This issue was discovered due to a bug in llvm-objcopy, see relevant
+> discussion for details [1].
+> 
+> [1] https://lore.kernel.org/linux-modules/20251224005752.201911-1-ihor.solodrai@linux.dev/
+> 
+> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 
-That's just freeing, and as you see, there's RCU synchronization
-required.
+Reviewed-by: Petr Pavlu <petr.pavlu@suse.com>
 
-Updates to tracepoints require RCU protection. It started out with
-preempt_disable() for all tracepoints (which was synchronized with
-synchronized_sched() which later became just synchronize_rcu()).
-
-The issue that came about was that both ftrace and perf had an
-assumption that its tracepoint callbacks always have preempt disabled
-when being called. To move to srcu_fast() that is no longer the case.
-And we need to do that for PREEMPT_RT if BPF is running very long
-callbacks to the tracepoints.
-
-Ftrace has been fixed to not require it, but still needs to take into
-account if tracepoints disable preemption or not so that it can display
-the preempt_count() of when the tracepoint was called correctly.
-
-Perf is trivial to fix as it can simply add a preempt_disable() in its
-handler.
-
-But we were originally told that BPF had an issue because it had the
-assumption that tracepoint callbacks wouldn't migrate. That's where
-this patch came about.
-
-Now if you are saying that BPF will handle migrate_disable() on its own
-and not require the tracepoint infrastructure to do it for it, then
-this is perfect. And I can then simplify this code, and just use
-srcu_fast for both RT and !RT.
-
--- Steve
+-- 
+Thanks,
+Petr
