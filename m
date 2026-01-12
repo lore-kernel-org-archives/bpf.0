@@ -1,106 +1,60 @@
-Received: from mail-ot1-f98.google.com (mail-ot1-f98.google.com [209.85.210.98])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from xmbghk7.mail.qq.com (xmbghk7.mail.qq.com [43.163.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0217314B77
-	for <bpf@vger.kernel.org>; Mon, 12 Jan 2026 06:49:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.98
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E192D3101BD;
+	Mon, 12 Jan 2026 06:51:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=43.163.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768200547; cv=none; b=Etxz29ytRM7VCbpBd+9zR32boM1XGe6pt2Ne3VHOs4kFRmvL4wCLlp9d/Pvty20QG995zwJwRM5O/jsUppJnz8zvbXnAxcq8f6Njg2gcdg43D4kz35ahFMUyeSgd8/dEn83O7QNneEx7HzTbscypmcrzW2Z9S3J3mX7Cz5wfASc=
+	t=1768200703; cv=none; b=M6B4M1ooafwXycGip+9jB6wKgG+m1enIUYT1yo7LhCoh9WbSYBxo/yPPlri0CX6FqL4qXejl+ENve4PVcB+ovbLQF/Ab/86PaC8hVNlCpTvCC3nrQW6T/BrJosD9+p7f5KWD0Iw1hmRUyanPMM9mc16KNncK1u+Mge+WUIu664g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768200547; c=relaxed/simple;
-	bh=/NupvgywEukBz4QryS1IcnmPfJQHRj4TZPz9BZQSMgM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=BZebZlfZto57hS0UP0bDxvGaDZMtU+v9Wr8gP9cEueM6lNgkwsVgol7H16XlPIwi6KyDyfcDfMVb2qJgsFk4pH5o29GQmXhIJdzn2VDA/KkOoy0oTMMNopn0QCTrIaveP8rfp7Kr9bvGpSe0URkYgghu7wm5BV3DiobzZ4R9p2k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=HULDzgV0; arc=none smtp.client-ip=209.85.210.98
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
+	s=arc-20240116; t=1768200703; c=relaxed/simple;
+	bh=quJvE8vwHYpHVBavlYKLXNnhs4IOSsGtUMCeys7CZnE=;
+	h=Message-ID:From:To:Cc:Subject:Date:MIME-Version; b=Lt9nvXZzooURnTGNiwGH3W72lWkyOA/UXEci0ZIZpJJyYLtaApgSc70LAPhy+7P0F+85Divzw6BuIlWGxsaxb/Hcm/bcyz8wvST8bQQiReBgj4bLXLycATAg9n6t/e5NC3oyV+umpX6+iCRa2BqQZOf74877HuoyLkm4ZSPjfQU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=njl9no/1; arc=none smtp.client-ip=43.163.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="HULDzgV0"
-Received: by mail-ot1-f98.google.com with SMTP id 46e09a7af769-7c914482db2so1087769a34.3
-        for <bpf@vger.kernel.org>; Sun, 11 Jan 2026 22:49:05 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768200544; x=1768805344;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:dkim-signature:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jPMqt7OubTukSzfJGmFa7NplH3SyhzWtPIziyN+vzQc=;
-        b=PDwxdk6CeOznofUmS0vw8FlKuDh4gyD1oa7Z0CduO0eLOY3gg3c3xe0qU65bzrBPxh
-         DklCaxHt6aRhSGGHM7gebupuakMt9nlni7rd72THghlvCEIR/Y8DrA37su6jQE+ihxFQ
-         HlpAft4OWZ8uquqT4O/rfChjCObEiFu4xypW5NiFq1ZpiePoVYCeHETUBBauXaLggUhZ
-         FE2lX6UeH08i+KWlasXrp+6dvjogC/gNbTbmXob5T6KIb8HwKTSVNDNiXbS7nJupnvUP
-         qzs2vOhqtCLTP/eBEJ/mgGEgtwsa052oV22VCvJcW879bjzGzD9enPNVJTvthhcb5fHv
-         0sHA==
-X-Forwarded-Encrypted: i=1; AJvYcCXDJtUG2V4R+vlNYusgma759d7eRYb5LzycZs4HsqBYG6EwGWxKEYeUPJLsU1q6aY2u06w=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxrVvcfyQ6rzxMBOnZf72QL/ruRn5/A6/ke5zikmMAPkWWb6Dq9
-	JJ4r5Ys3BlTe9SrsUR1q4QThf1mb8oqwzWPRGL8Gf/OecWfTN8ZHonDPm6g+Ul0eV7OiByukdYx
-	8z8w3xmwds0BWNWZf74uTqSd5VFvu/k6eVa9Ne2W2o2p9xVdIk+Hs58cjToRCy/CTg9cF9GWP9K
-	t4U4HREa6dzgVWftah72+Gx3p4leCaAZqSgygvmxv/0eTZDnFkL1G60fKkAFUL5l8wYwSRNxZR7
-	ygRV6bQMmCjF3NmPM8WP9OeG/8=
-X-Gm-Gg: AY/fxX7sg7c6QoXcOFVLAxgFGUA0rImMv3nPGqbwRU7Do6vXe43a2RgCo84sSv7QbIS
-	Um30T5gMro4kvpuKAXSJjtINVYNNwo9oPTupifuf0s9xzCT2n1IlcUlX17OqIlM5ZJMEi4Skp+v
-	5adU0yF4NBJmEEWjE56/mstR0u0WIr/nbOb8TdFHowyuASJE/XyIZKhKwDCt3J1Pq7VsSIn1jIC
-	hGr+yHFcfW50n+x8Q6mZA+b3Wpe67e3dEiH+K60c1i1NBSOx8XPyYkEOz487dQ9OaIr586z7VHf
-	hY1MlLaRw8H802Lk//r4BezlfxVSL+Q1P1px4Cox9Y/4LalhkPb0rSTv7GfUoFnxKSdMAyNvjI3
-	zRrbfvXqms/UmwW9G0VKFFLHM+9zt7tVwIRioSHIaAzAqu77ergMD/KHW+TMt+Nh7xKByyMjh2N
-	JDwcAnDuLa1abeXiXOctqEwrGgIGzwZ3VVmiqx0G/zlwUt0p2ImkAFfd5kDoU=
-X-Google-Smtp-Source: AGHT+IGU3Q3DTE3paAR6KyIYjM++1ol6X6uwXmSKDO3eBOccd4t/HzMs/1I8jCuuILom7vu69OstOHdhk6M+
-X-Received: by 2002:a05:6870:b251:b0:3e8:952c:bacc with SMTP id 586e51a60fabf-3ffc094bcd7mr7723550fac.1.1768200544468;
-        Sun, 11 Jan 2026 22:49:04 -0800 (PST)
-Received: from smtp-us-east1-p01-i01-si01.dlp.protect.broadcom.com (address-144-49-247-2.dlp.protect.broadcom.com. [144.49.247.2])
-        by smtp-relay.gmail.com with ESMTPS id 586e51a60fabf-3ffa4dee33bsm2009447fac.1.2026.01.11.22.49.03
-        for <bpf@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 11 Jan 2026 22:49:04 -0800 (PST)
-X-Relaying-Domain: broadcom.com
-X-CFilter-Loop: Reflected
-Received: by mail-qv1-f72.google.com with SMTP id 6a1803df08f44-88fd7ddba3fso24055676d6.1
-        for <bpf@vger.kernel.org>; Sun, 11 Jan 2026 22:49:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1768200543; x=1768805343; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jPMqt7OubTukSzfJGmFa7NplH3SyhzWtPIziyN+vzQc=;
-        b=HULDzgV0xNjjSDM0vQDvUI6wFElpZDOEMzhjLyc0Zk2D0LMSxBEPRLi4ELVQC2Zckj
-         +t0+mYjt0a+14Ys/HHcXrEkZecSP7mRKLNoLAbvQ34qFg1tmnQlWVTfUaw17GkjwMuvP
-         tY4Ic7ug4kHP2ApvIjskPOrgGh9/eHxqAw+/M=
-X-Forwarded-Encrypted: i=1; AJvYcCUM0wUPqEkQyHCe0/ePFMIi6VXhKD39QZ07AZSW0Em26gJ8wI6b2pEE25uuDyhlzC779qY=@vger.kernel.org
-X-Received: by 2002:a05:6214:2481:b0:70d:e7e1:840f with SMTP id 6a1803df08f44-890842cb736mr185047256d6.3.1768200542672;
-        Sun, 11 Jan 2026 22:49:02 -0800 (PST)
-X-Received: by 2002:a05:6214:2481:b0:70d:e7e1:840f with SMTP id 6a1803df08f44-890842cb736mr185047146d6.3.1768200542333;
-        Sun, 11 Jan 2026 22:49:02 -0800 (PST)
-Received: from keerthanak-ph5-dev.. ([192.19.161.250])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-890770e472csm131125426d6.23.2026.01.11.22.48.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 11 Jan 2026 22:49:01 -0800 (PST)
-From: Keerthana K <keerthana.kalyanasundaram@broadcom.com>
-To: stable@vger.kernel.org,
-	gregkh@linuxfoundation.org
-Cc: davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	dsahern@kernel.org,
-	borisp@nvidia.com,
-	john.fastabend@gmail.com,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
+	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="njl9no/1"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
+	t=1768200693; bh=Qa6tB27g4TuNvXPUs8YdrNgF61XPByBVroSOodFWU0A=;
+	h=From:To:Cc:Subject:Date;
+	b=njl9no/1aj2JlbX4oPu9+hzj18RLS8Sy0tae3cHNNO5oj32BnqDeL34mOTzI7EhFs
+	 PRlIhQ7sSDFpDr0SF5rk9M4HJMmrucIZAEOIuogGyDfFpSuzUOJBneAVPak7QHyh6S
+	 tEVqQHIglC/Jglpv0smd8r8fo10/3j4MbXq9+cTQ=
+Received: from localhost.localdomain ([101.227.46.167])
+	by newxmesmtplogicsvrszb51-0.qq.com (NewEsmtp) with SMTP
+	id C8F278E1; Mon, 12 Jan 2026 14:50:15 +0800
+X-QQ-mid: xmsmtpt1768200615tlg886l4c
+Message-ID: <tencent_B4B492A164C782F98C9C2E607E74B638FC0A@qq.com>
+X-QQ-XMAILINFO: OIJV+wUmQOUAVnYhePoI1LQs7l55OAEmSe3roA+0jNNeRUynkl2oQrlDHJLL/3
+	 6SZFBhrueazgJ05Z0DFPHPyPzBZJzZzweNyLf1ma3hurBhzCYKHqdRd4dw7jil2FbIeVHLPmFIT5
+	 Erk6rNH0c2ny3CkeCri2IKIhyYMpVHBvSqsu6ULGwaL8KWfQQAEKMUMKXsmbSuT5GnycDDeHXBsi
+	 FK750W25u2ch+P0mXbxLTqOTvzUX5aXsbQ8iLBF4zcRenWYFG2btiK3t7DkYwt0AS4iWnErwU72/
+	 ZfNsAFa60t2o8WaUqpC1qfigkpVprKI00so5hbteDXX/O8cKgJ0AJUnSPhRPg+LqRMO38uEV8eBa
+	 zfCXiq6BDgXmoNosa0+XMn8N4uyxJuIL9H2Ypgo6Cym8TO82Cf3sDRHVw7PwparAUUl36N0mkbzo
+	 kQFyxd1sSYRD4xlTEwE1TmuW1S8KCWnouJYMHh+iz2Ik55ERp0IWN8prwE47M7WMUz8AA+cXKX4q
+	 Aip+kWGwP3mZHa45zUBYEKyBu3u733aU/I35sc7XX4hqUelu8XwsVKLHXSHh4bmya2kUckV89cF5
+	 lxcwGFEzh/BVp6YpepGsKA3sM30AdQlM+0LS5tO28jt6EiGcGVuHRuzUgBpKNNynUW4/L3XXxPCO
+	 pSXHEDGDbO07Tt1LBAMepIOH+IVwpZ1qeD5vDkPPMoBWZ0bC5IOBx6bRKO72AKRzGKuNe/2vn52/
+	 bSawyAIzw1E3qi2+uCWa2uNKRGy6FhF84ibf+UxZOW555oUNY6h/co3WGKx8OJuxhi5GAZFVtSTT
+	 qMyZONxTdEucQFIMEGLdVOJ+rXUtIJcmeg8OGK2fNqFmJJPhQ3sjO1VwvItf8T4LxnSQsVRFu/Np
+	 NBGT4jbwfsWjGA1IijUAbn0UXzAp0Tc2xfqbid8oN7r82TwpJZes+JYhb4mEdWUIfva+dSxQvfGs
+	 X9YVq77zuHgsw7w8ORztDtWrjvQ9NojFF0xWvDuPDZkoE+MIJypY89J+6wDqZHGXGGgk++emRk1p
+	 sb8J2NUdgAieBXUkbJXDOEJKSHD96AyPQfsjVPIdKAH/BH1Ay2eqmfNv0yMhw=
+X-QQ-XMRINFO: MPJ6Tf5t3I/ylTmHUqvI8+Wpn+Gzalws3A==
+From: wujing <realwujing@qq.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>
+Cc: John Fastabend <john.fastabend@gmail.com>,
 	bpf@vger.kernel.org,
-	ajay.kaher@broadcom.com,
-	alexey.makhalov@broadcom.com,
-	vamsi-krishna.brahmajosyula@broadcom.com,
-	yin.ding@broadcom.com,
-	tapas.kundu@broadcom.com,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	Sabrina Dubroca <sd@queasysnail.net>,
-	Sasha Levin <sashal@kernel.org>,
-	Keerthana K <keerthana.kalyanasundaram@broadcom.com>
-Subject: [PATCH v6.6.y 2/2] tls: Use __sk_dst_get() and dst_dev_rcu() in get_netdev_for_sock().
-Date: Mon, 12 Jan 2026 06:45:54 +0000
-Message-ID: <20260112064554.2969656-3-keerthana.kalyanasundaram@broadcom.com>
-X-Mailer: git-send-email 2.43.7
-In-Reply-To: <20260112064554.2969656-1-keerthana.kalyanasundaram@broadcom.com>
-References: <20260112064554.2969656-1-keerthana.kalyanasundaram@broadcom.com>
+	linux-kernel@vger.kernel.org,
+	wujing <realwujing@qq.com>,
+	Qiliang Yuan <yuanql9@chinatelecom.cn>
+Subject: [PATCH] bpf/verifier: implement slab cache for verifier state list
+Date: Mon, 12 Jan 2026 14:49:53 +0800
+X-OQ-MSGID: <20260112064953.933973-1-realwujing@qq.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -108,67 +62,104 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-DetectorID-Processed: b00c1d49-9d2e-4205-b15f-d015386d3d5e
 
-From: Kuniyuki Iwashima <kuniyu@google.com>
+The BPF verifier's state exploration logic in is_state_visited()
+frequently allocates and deallocates 'struct bpf_verifier_state_list'
+nodes to track explored states and prune the search space.
 
-[ Upstream commit c65f27b9c3be2269918e1cbad6d8884741f835c5 ]
+Currently, these allocations use generic kzalloc(), which can lead to
+unnecessary memory fragmentation and performance overhead when
+verifying high-complexity BPF programs with thousands of potential
+states.
 
-get_netdev_for_sock() is called during setsockopt(),
-so not under RCU.
+This patch introduces a dedicated slab cache, 'bpf_verifier_state_list',
+to manage these allocations more efficiently. This provides better
+allocation speed, reduced fragmentation, and improved cache locality
+during the verification process.
 
-Using sk_dst_get(sk)->dev could trigger UAF.
+Summary of changes:
+- Define global 'bpf_verifier_state_list_cachep'.
+- Initialize the cache via late_initcall() in bpf_verifier_init().
+- Use kmem_cache_zalloc() in is_state_visited() to allocate new states.
+- Replace kfree() with kmem_cache_free() in maybe_free_verifier_state(),
+  is_state_visited() error paths, and free_states().
 
-Let's use __sk_dst_get() and dst_dev_rcu().
-
-Note that the only ->ndo_sk_get_lower_dev() user is
-bond_sk_get_lower_dev(), which uses RCU.
-
-Fixes: e8f69799810c ("net/tls: Add generic NIC offload infrastructure")
-Signed-off-by: Kuniyuki Iwashima <kuniyu@google.com>
-Reviewed-by: Eric Dumazet <edumazet@google.com>
-Reviewed-by: Sabrina Dubroca <sd@queasysnail.net>
-Link: https://patch.msgid.link/20250916214758.650211-6-kuniyu@google.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
-[ Keerthana: Backport to v6.6.y ]
-Signed-off-by: Keerthana K <keerthana.kalyanasundaram@broadcom.com>
+Signed-off-by: wujing <realwujing@qq.com>
+Signed-off-by: Qiliang Yuan <yuanql9@chinatelecom.cn>
 ---
- net/tls/tls_device.c | 17 ++++++++++-------
- 1 file changed, 10 insertions(+), 7 deletions(-)
+ kernel/bpf/verifier.c | 20 +++++++++++++++-----
+ 1 file changed, 15 insertions(+), 5 deletions(-)
 
-diff --git a/net/tls/tls_device.c b/net/tls/tls_device.c
-index 4f72fd26a..55b46df65 100644
---- a/net/tls/tls_device.c
-+++ b/net/tls/tls_device.c
-@@ -125,17 +125,19 @@ static void tls_device_queue_ctx_destruction(struct tls_context *ctx)
- /* We assume that the socket is already connected */
- static struct net_device *get_netdev_for_sock(struct sock *sk)
- {
--	struct dst_entry *dst = sk_dst_get(sk);
--	struct net_device *netdev = NULL;
-+	struct net_device *dev, *lowest_dev = NULL;
-+	struct dst_entry *dst;
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 169845710c7e..5c1be0cae4c2 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -46,6 +46,7 @@ static const struct bpf_verifier_ops * const bpf_verifier_ops[] = {
  
--	if (likely(dst)) {
--		netdev = netdev_sk_get_lowest_dev(dst->dev, sk);
--		dev_hold(netdev);
-+	rcu_read_lock();
-+	dst = __sk_dst_get(sk);
-+	dev = dst ? dst_dev_rcu(dst) : NULL;
-+	if (likely(dev)) {
-+		lowest_dev = netdev_sk_get_lowest_dev(dev, sk);
-+		dev_hold(lowest_dev);
+ struct bpf_mem_alloc bpf_global_percpu_ma;
+ static bool bpf_global_percpu_ma_set;
++static struct kmem_cache *bpf_verifier_state_list_cachep;
+ 
+ /* bpf_check() is a static code analyzer that walks eBPF program
+  * instruction by instruction and updates register/stack state.
+@@ -1711,7 +1712,7 @@ static void maybe_free_verifier_state(struct bpf_verifier_env *env,
+ 			loop_entry_sl->state.used_as_loop_entry--;
+ 		list_del(&sl->node);
+ 		free_verifier_state(&sl->state, false);
+-		kfree(sl);
++		kmem_cache_free(bpf_verifier_state_list_cachep, sl);
+ 		env->free_list_size--;
+ 		sl = loop_entry_sl;
  	}
-+	rcu_read_unlock();
+@@ -19282,7 +19283,7 @@ static int is_state_visited(struct bpf_verifier_env *env, int insn_idx)
+ 	 * When looping the sl->state.branches will be > 0 and this state
+ 	 * will not be considered for equivalence until branches == 0.
+ 	 */
+-	new_sl = kzalloc(sizeof(struct bpf_verifier_state_list), GFP_KERNEL);
++	new_sl = kmem_cache_zalloc(bpf_verifier_state_list_cachep, GFP_KERNEL);
+ 	if (!new_sl)
+ 		return -ENOMEM;
+ 	env->total_states++;
+@@ -19300,7 +19301,7 @@ static int is_state_visited(struct bpf_verifier_env *env, int insn_idx)
+ 	err = copy_verifier_state(new, cur);
+ 	if (err) {
+ 		free_verifier_state(new, false);
+-		kfree(new_sl);
++		kmem_cache_free(bpf_verifier_state_list_cachep, new_sl);
+ 		return err;
+ 	}
+ 	new->insn_idx = insn_idx;
+@@ -22666,7 +22667,7 @@ static void free_states(struct bpf_verifier_env *env)
+ 	list_for_each_safe(pos, tmp, &env->free_list) {
+ 		sl = container_of(pos, struct bpf_verifier_state_list, node);
+ 		free_verifier_state(&sl->state, false);
+-		kfree(sl);
++		kmem_cache_free(bpf_verifier_state_list_cachep, sl);
+ 	}
+ 	INIT_LIST_HEAD(&env->free_list);
  
--	dst_release(dst);
--
--	return netdev;
-+	return lowest_dev;
+@@ -22679,7 +22680,7 @@ static void free_states(struct bpf_verifier_env *env)
+ 		list_for_each_safe(pos, tmp, head) {
+ 			sl = container_of(pos, struct bpf_verifier_state_list, node);
+ 			free_verifier_state(&sl->state, false);
+-			kfree(sl);
++			kmem_cache_free(bpf_verifier_state_list_cachep, sl);
+ 		}
+ 		INIT_LIST_HEAD(&env->explored_states[i]);
+ 	}
+@@ -24199,3 +24200,12 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr, __u3
+ 	kvfree(env);
+ 	return ret;
  }
- 
- static void destroy_record(struct tls_record_info *record)
++
++static int __init bpf_verifier_init(void)
++{
++	bpf_verifier_state_list_cachep = kmem_cache_create("bpf_verifier_state_list",
++							   sizeof(struct bpf_verifier_state_list),
++							   0, SLAB_PANIC, NULL);
++	return 0;
++}
++late_initcall(bpf_verifier_init);
 -- 
-2.43.7
+2.43.0
 
