@@ -1,37 +1,38 @@
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4538241690;
-	Tue, 13 Jan 2026 23:23:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C52C3557E8;
+	Tue, 13 Jan 2026 23:23:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768346602; cv=none; b=aURmNYTO6u42TmZecblMJf26BpW6e79Nzdu9Xc0VTHZVcC5FpZJcJ1wm+7YDhvCM2OzBeqhDjnj1XbNOMSRBYqRGoSGbgWEhtbPXthQ7VDoREfq4Pfh6K1Y1rGX/q6ECqSA1y7V1aHFZAuV6oPJ0WGgunUV9sPKiHUQJvKYq9Mg=
+	t=1768346602; cv=none; b=Dwbck2h6fo/1ycCfNZQYz4MjGag6oKO5bH+8NokzWnnAJBG1u11KqRVW31q9QhO6x5ZSKkT3hZUTUY3TXSv3xYH5BGzoiQnjuQ1cCE8tWR/yGtJ0LjUdWkk+eBeaB1nh5slGeicDQTXLMi+zbB75jadkYUmRKwbehXEG8c3rELs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1768346602; c=relaxed/simple;
-	bh=KDCbhLq0dGTObzOl9kd7FyC+CNGXDffNYcsegK7M3v4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jWeUb1Ch9VWa9oQXrMCBRZg9vRLUdkd+10khYuVbZq34cd4euT1oIOab147EtnF7YXvZLJ04rMw/G13kICQ+kb26P8d8txiy2jnz91hOXq5J2+p4j0oPKaVo5w/KW2hwwoQzXKNIzLaAOsSuNbv+HStawSVzoMUxB/8NZFHxykw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=jI/zYN/s; arc=none smtp.client-ip=213.133.104.62
+	bh=SJf7cNU0fZW0CK/eUCI2N9AJV6VJzpE/DK7/k6ercgg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=hV45affExzDCILzqRf6zHIpaXz5j8PTF+gUXrKyDsu96NMaXNZDXTojsLL5bXdzUQmbFcV5wQu9TZm+3EpJ57SljSTtR2Bhm+18mx+vrGKBg+x3AgsrxlEUX+o0bJaUvWTU9alr7ws7WBB9d+ZQhSlVMZHMslnFdg5p4kLIk/hs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=Pv2wETvA; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="jI/zYN/s"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="Pv2wETvA"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
-	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:In-Reply-To:References;
-	bh=+3Wc1zE3FbV1o3OPptrIsJUG/DAOQPGqS4QpYdY+NCQ=; b=jI/zYN/sIBAO/uzel0Sct2ZtjV
-	CQISgcPJtlshBL2d2oH+UPp8XHomkseQKV5x99OC0aWFxyVhARMGAcurswTJ4eHbDFRgBq7fMmw1N
-	kSBcT7iFaq/tOzY6TDF70hq67YQ52BOZ4/QsWCh0e2SX61CHmk6tEOss8wmrehInsPdHq9AZCYg4P
-	OVY9x759Ft4Z2IUysARtTZol7aOnaLbBp07vf9vlEvTwqLRmsYgTp7sKWVEoZ2LStfTnY0wGZFsqI
-	dG7NKo6ao1dJpsbhMTa/0tYFMkY3kPoJZv1EyVlzkseHflF/vO3AlV0iokbUYDZxCjYpnbqPypWFI
-	B1UxKZHA==;
+	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
+	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=EVT6/7blxzKStpR/Bx0PFLo7sHdk8xrC7TaYykRI2Io=; b=Pv2wETvAe2/EgBQvIZ1CXmNRlo
+	ffcp5AXeV2JiCc0d2F6hHX9Gj+k3wU8ptmupu8f5LpKseNgU8UIHr/qYHAUhyeZfiZJwJBKzzZPAs
+	8pnZWDNNwoo7Sy00Z8N8Bv06TOvcBVu5Vl4eqdBGbhLrvceSfCXnRu8AqO9yw0YbMYNSMP3PKajGI
+	5n5wE6hVrZNtCCVuMMOFYpfaxH1UJNG7mb9V61YAjTfxTkCZ20tw6QPgffmWCPMPTRjvWGvFY1HMi
+	fYDDjm/QBN5pdBwDwfxcul1hNC13FPzxaQBleqbpWIzfag5e9Uh9ta6GF8DqGCu39mpqstejXepkY
+	cS49rHUQ==;
 Received: from localhost ([127.0.0.1])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1vfnj1-0003VG-0Z;
-	Wed, 14 Jan 2026 00:22:59 +0100
+	id 1vfnjA-0003XU-2u;
+	Wed, 14 Jan 2026 00:23:08 +0100
 From: Daniel Borkmann <daniel@iogearbox.net>
 To: netdev@vger.kernel.org
 Cc: bpf@vger.kernel.org,
@@ -50,10 +51,12 @@ Cc: bpf@vger.kernel.org,
 	toke@redhat.com,
 	yangzhenze@bytedance.com,
 	wangdongdong.6@bytedance.com
-Subject: [PATCH net-next v6 00/16] netkit: Support for io_uring zero-copy and AF_XDP
-Date: Wed, 14 Jan 2026 00:22:41 +0100
-Message-ID: <20260113232257.200036-1-daniel@iogearbox.net>
+Subject: [PATCH net-next v6 08/16] xsk: Proxy pool management for leased queues
+Date: Wed, 14 Jan 2026 00:22:49 +0100
+Message-ID: <20260113232257.200036-9-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260113232257.200036-1-daniel@iogearbox.net>
+References: <20260113232257.200036-1-daniel@iogearbox.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -63,136 +66,95 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Virus-Scanned: Clear (ClamAV 1.4.3/27879/Tue Jan 13 08:26:16 2026)
 
-Containers use virtual netdevs to route traffic from a physical netdev
-in the host namespace. They do not have access to the physical netdev
-in the host and thus can't use memory providers or AF_XDP that require
-reconfiguring/restarting queues in the physical netdev.
+Similarly to the net_mp_{open,close}_rxq handling for leased queues, proxy
+the xsk_{reg,clear}_pool_at_qid via netif_get_rx_queue_lease_locked such
+that in case a virtual netdev picked a leased rxq, the request gets through
+to the real rxq in the physical netdev. The proxying is only relevant for
+queue_id < dev->real_num_rx_queues since right now its only supported for
+rxqs.
 
-This patchset adds the concept of queue leasing to virtual netdevs that
-allow containers to use memory providers and AF_XDP at native speed.
-Leased queues are bound to a real queue in a physical netdev and act
-as a proxy.
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Co-developed-by: David Wei <dw@davidwei.uk>
+Signed-off-by: David Wei <dw@davidwei.uk>
+---
+ net/xdp/xsk.c | 48 +++++++++++++++++++++++++++++++++++-------------
+ 1 file changed, 35 insertions(+), 13 deletions(-)
 
-Memory providers and AF_XDP operations take an ifindex and queue id,
-so containers would pass in an ifindex for a virtual netdev and a queue
-id of a leased queue, which then gets proxied to the underlying real
-queue.
-
-We have implemented support for this concept in netkit and tested the
-latter against Nvidia ConnectX-6 (mlx5) as well as Broadcom BCM957504
-(bnxt_en) 100G NICs. For more details see the individual patches.
-
-v5->v6:
- - Fix nest_queue test in netdev_nl_queue_fill_one (Jakub/AI bot)
- - Fix netdev notifier locking leak (Jakub/AI bot)
- - Drop NETREG_UNREGISTERING WARN_ON_ONCE to avoid confusion (Stan)
- - Remove slipped-in .gitignore cruft in net selftest (Stan)
- - Fix Pylint warnings in net selftest (Jakub)
-v4->v5:
- - Rework of the core API into queue-create op (Jakub)
- - Rename from queue peering to queue leasing (Jakub)
- - Add net selftests for queue leasing (Stan, Jakub)
- - Move netkit_queue_get_dma_dev into core (Jakub)
- - Dropped netkit_get_channels (Jakub)
- - Moved ndo_queue_create back to return index or error (Jakub)
- - Inline __netdev_rx_queue_{peer,unpeer} helpers (Jakub)
- - Adding helpers in patches where they are used (Jakub)
- - Undo inline for netdev_put_lock (Jakub)
- - Factoring out checks whether device can lease (Jakub)
- - Fix up return codes in netdev_nl_bind_queue_doit (Jakub)
- - Reject when AF_XDP or mp already bound (Jakub)
- - Switch some error cases to NL_SET_BAD_ATTR() (Jakub)
- - Rebase and retested everything with mlx5 + bnxt_en
-v3->v4:
- - ndo_queue_create store dst queue via arg (Nikolay)
- - Small nits like a spelling issue + rev xmas (Nikolay)
- - admin-perm flag in bind-queue spec (Jakub)
- - Fix potential ABBA deadlock situation in bind (Jakub, Paolo, Stan)
- - Add a peer dev_tracker to not reuse the sysfs one (Jakub)
- - New patch (12/14) to handle the underlying device going away (Jakub)
- - Improve commit message on queue-get (Jakub)
- - Do not expose phys dev info from container on queue-get (Jakub)
- - Add netif_put_rx_queue_peer_locked to simplify code (Stan)
- - Rework xsk handling to simplify the code and drop a few patches
- - Rebase and retested everything with mlx5 + bnxt_en
-v2->v3:
- - Use netdev_ops_assert_locked instead of netdev_assert_locked (syzbot)
- - Add missing netdev_lockdep_set_classes in netkit
-v1->v2:
- - Removed bind sample ynl code (Stan)
- - Reworked netdev locking to have consistent order (Stan, Kuba)
- - Return 'not supported' in API patch (Stan)
- - Improved ynl documentation (Kuba)
- - Added 'max: s32-max' in ynl spec for ifindex (Kuba)
- - Added also queue type in ynl to have user specify rx to make
-   it obvious (Kuba)
- - Use of netdev_hold (Kuba)
- - Avoid static inlines from another header (Kuba)
- - Squashed some commits (Kuba, Stan)
- - Removed ndo_{peer,unpeer}_queues callback and simplified
-   code (Kuba)
- - Improved commit messages (Toke, Kuba, Stan, zf)
- - Got rid of locking genl_sk_priv_get (Stan)
- - Removed af_xdp cleanup churn (Maciej)
- - Added netdev locking asserts (Stan)
- - Reject ethtool ioctl path queue resizing (Kuba)
- - Added kdoc for ndo_queue_create (Stan)
- - Uninvert logic in netkit single dev mode (Jordan)
- - Added binding support for multiple queues
-
-Daniel Borkmann (9):
-  net: Add queue-create operation
-  net: Implement netdev_nl_queue_create_doit
-  net: Add lease info to queue-get response
-  net, ethtool: Disallow leased real rxqs to be resized
-  xsk: Extend xsk_rcv_check validation
-  xsk: Proxy pool management for leased queues
-  netkit: Add single device mode for netkit
-  netkit: Add netkit notifier to check for unregistering devices
-  netkit: Add xsk support for af_xdp applications
-
-David Wei (7):
-  net: Proxy net_mp_{open,close}_rxq for leased queues
-  net: Proxy netdev_queue_get_dma_dev for leased queues
-  netkit: Implement rtnl_link_ops->alloc and ndo_queue_create
-  selftests/net: Add bpf skb forwarding program
-  selftests/net: Add env for container based tests
-  selftests/net: Make NetDrvContEnv support queue leasing
-  selftests/net: Add netkit container tests
-
- Documentation/netlink/specs/netdev.yaml       |  44 +++
- drivers/net/netkit.c                          | 358 +++++++++++++++---
- include/linux/netdevice.h                     |   6 +
- include/net/netdev_queues.h                   |  19 +-
- include/net/netdev_rx_queue.h                 |  21 +-
- include/net/page_pool/memory_provider.h       |   4 +-
- include/net/xdp_sock_drv.h                    |   2 +-
- include/uapi/linux/if_link.h                  |   6 +
- include/uapi/linux/netdev.h                   |  11 +
- net/core/dev.c                                |   7 +
- net/core/dev.h                                |   2 +
- net/core/netdev-genl-gen.c                    |  20 +
- net/core/netdev-genl-gen.h                    |   2 +
- net/core/netdev-genl.c                        | 185 +++++++++
- net/core/netdev_queues.c                      |  74 +++-
- net/core/netdev_rx_queue.c                    | 169 +++++++--
- net/ethtool/channels.c                        |  12 +-
- net/ethtool/ioctl.c                           |   9 +-
- net/xdp/xsk.c                                 |  73 +++-
- tools/include/uapi/linux/netdev.h             |  11 +
- .../testing/selftests/drivers/net/README.rst  |   7 +
- .../testing/selftests/drivers/net/hw/Makefile |   2 +
- .../drivers/net/hw/lib/py/__init__.py         |   7 +-
- .../selftests/drivers/net/hw/nk_forward.bpf.c |  49 +++
- .../selftests/drivers/net/hw/nk_netns.py      |  23 ++
- .../selftests/drivers/net/hw/nk_qlease.py     |  55 +++
- .../selftests/drivers/net/lib/py/__init__.py  |   7 +-
- .../selftests/drivers/net/lib/py/env.py       | 157 +++++++-
- 28 files changed, 1224 insertions(+), 118 deletions(-)
- create mode 100644 tools/testing/selftests/drivers/net/hw/nk_forward.bpf.c
- create mode 100755 tools/testing/selftests/drivers/net/hw/nk_netns.py
- create mode 100755 tools/testing/selftests/drivers/net/hw/nk_qlease.py
-
+diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+index d95c481338c6..6e396cef1cae 100644
+--- a/net/xdp/xsk.c
++++ b/net/xdp/xsk.c
+@@ -23,6 +23,8 @@
+ #include <linux/netdevice.h>
+ #include <linux/rculist.h>
+ #include <linux/vmalloc.h>
++
++#include <net/netdev_queues.h>
+ #include <net/xdp_sock_drv.h>
+ #include <net/busy_poll.h>
+ #include <net/netdev_lock.h>
+@@ -117,10 +119,18 @@ EXPORT_SYMBOL(xsk_get_pool_from_qid);
+ 
+ void xsk_clear_pool_at_qid(struct net_device *dev, u16 queue_id)
+ {
+-	if (queue_id < dev->num_rx_queues)
+-		dev->_rx[queue_id].pool = NULL;
+-	if (queue_id < dev->num_tx_queues)
+-		dev->_tx[queue_id].pool = NULL;
++	struct net_device *orig_dev = dev;
++	unsigned int id = queue_id;
++
++	if (id < dev->real_num_rx_queues)
++		WARN_ON_ONCE(!netif_get_rx_queue_lease_locked(&dev, &id));
++
++	if (id < dev->real_num_rx_queues)
++		dev->_rx[id].pool = NULL;
++	if (id < dev->real_num_tx_queues)
++		dev->_tx[id].pool = NULL;
++
++	netif_put_rx_queue_lease_locked(orig_dev, dev);
+ }
+ 
+ /* The buffer pool is stored both in the _rx struct and the _tx struct as we do
+@@ -130,17 +140,29 @@ void xsk_clear_pool_at_qid(struct net_device *dev, u16 queue_id)
+ int xsk_reg_pool_at_qid(struct net_device *dev, struct xsk_buff_pool *pool,
+ 			u16 queue_id)
+ {
+-	if (queue_id >= max_t(unsigned int,
+-			      dev->real_num_rx_queues,
+-			      dev->real_num_tx_queues))
+-		return -EINVAL;
++	struct net_device *orig_dev = dev;
++	unsigned int id = queue_id;
++	int ret = 0;
+ 
+-	if (queue_id < dev->real_num_rx_queues)
+-		dev->_rx[queue_id].pool = pool;
+-	if (queue_id < dev->real_num_tx_queues)
+-		dev->_tx[queue_id].pool = pool;
++	if (id >= max(dev->real_num_rx_queues,
++		      dev->real_num_tx_queues))
++		return -EINVAL;
++	if (id < dev->real_num_rx_queues) {
++		if (!netif_get_rx_queue_lease_locked(&dev, &id))
++			return -EBUSY;
++		if (xsk_get_pool_from_qid(dev, id)) {
++			ret = -EBUSY;
++			goto out;
++		}
++	}
+ 
+-	return 0;
++	if (id < dev->real_num_rx_queues)
++		dev->_rx[id].pool = pool;
++	if (id < dev->real_num_tx_queues)
++		dev->_tx[id].pool = pool;
++out:
++	netif_put_rx_queue_lease_locked(orig_dev, dev);
++	return ret;
+ }
+ 
+ static int __xsk_rcv_zc(struct xdp_sock *xs, struct xdp_buff_xsk *xskb, u32 len,
 -- 
 2.43.0
 
