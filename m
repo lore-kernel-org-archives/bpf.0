@@ -1,68 +1,68 @@
-Received: from mail-dl1-f46.google.com (mail-dl1-f46.google.com [74.125.82.46])
+Received: from mail-dy1-f181.google.com (mail-dy1-f181.google.com [74.125.82.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F06633803D9
-	for <bpf@vger.kernel.org>; Tue, 13 Jan 2026 16:57:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 854B12F0685
+	for <bpf@vger.kernel.org>; Tue, 13 Jan 2026 16:58:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768323466; cv=none; b=F4JhvRpXMiN6Gp6aO4Xo7IoyoWatKs8yhlQNkuEz1M9r5yXmtj81PAarYy1aMLfxZSQd3B9BikomaRVFIt5Uk9OdtxGPdHcg888OijxPIEB0VBoTg+IOEFScQfbijjhtlBItK9R8DQ3qcM/lJ57EKuWVdWEj2Fe8Ikj9EwPS/Y4=
+	t=1768323506; cv=none; b=d42konpUR86v+1ROJcy48W+pOth06DDRpbzW9bgz+mS4PHDQEgyZ5OTIi9l9t8aJbb6FntadfgwhdXx+G47Rz0m9FWideXq6khWhduVQoMZy4O7Ov44p6W4bJ8FnUiMVw0Mp/LPRoNbxbIjC58ZK4fXN36++7RuyaZV0FWGzuDs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768323466; c=relaxed/simple;
-	bh=0XnufA+vKKOFM3j1I6V3PEMQn3QU8xGoTX9vlIzUKTc=;
+	s=arc-20240116; t=1768323506; c=relaxed/simple;
+	bh=6Qy9RFFnU7FhdGhT3OFG5W3FiZMln0ipNVP7RahSUfs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EAaEge9XpKJEZU6NIO4qzBEgtW7rfhA5PyCR2CxtMhkf5iDwxK5BInsv8k2DKsz7JimTU2+QO1wu1FjLagtuZcKrcfO3JvU2V4F8Bel5dVBPEv4LwgkVbR1fbhZVaJqCeSiXdbS/1deeM7ijDgB77s5tuDHB9kUXGYeqzaLbu2s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk; spf=none smtp.mailfrom=davidwei.uk; dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b=aEJQBFTL; arc=none smtp.client-ip=74.125.82.46
+	 In-Reply-To:Content-Type; b=AZx4EcFeHqQHd4+cTjwgOGMr8hiWew6VwfcaNX5bH38zFf+vKgEWiWrI/9QNmSJ2rGWp2VBXYjUujrPXse9RJlK1fJXEXkyTF6y+/dCf8NEt6v8wDsfOhslcflCOvhXNlcsiObgyDw1ujhFw+v/1Oq7ppJgO+3NRL87F2iJsBJ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk; spf=none smtp.mailfrom=davidwei.uk; dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b=arPqkIoj; arc=none smtp.client-ip=74.125.82.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=davidwei.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b="aEJQBFTL"
-Received: by mail-dl1-f46.google.com with SMTP id a92af1059eb24-12332910300so1142987c88.0
-        for <bpf@vger.kernel.org>; Tue, 13 Jan 2026 08:57:39 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b="arPqkIoj"
+Received: by mail-dy1-f181.google.com with SMTP id 5a478bee46e88-2ae255ac8bdso2888762eec.0
+        for <bpf@vger.kernel.org>; Tue, 13 Jan 2026 08:58:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=davidwei-uk.20230601.gappssmtp.com; s=20230601; t=1768323459; x=1768928259; darn=vger.kernel.org;
+        d=davidwei-uk.20230601.gappssmtp.com; s=20230601; t=1768323502; x=1768928302; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=/IWdv0aphEAVaIt1hnbRSuaugoQ1OgFL1kohFBWpHLY=;
-        b=aEJQBFTL/qRglMNkawY4oTlqXZL4trWCpQku9IdjJfPVRDhx/aS6WNhSmWaZ7kD7Gp
-         ztQxkanhvHVKZ301ooddDR15R7fx6GdllaEYm4EiI0xPA1XgL8J/Mg9//CY53SvjmTBF
-         0f/sZUtc1Sq3pbytXfIE6m0oMrUlLX34HachD3NIczMLSPXYRkOhphJfwKQAUDzawbUO
-         YTdkDPE6KTegNkuZNErSMs1U5VtqxNHuLjwA1LQC31j7JEXNNJ0WbPqPYbp5IsKXDJlF
-         d4Nfn4iicsNctgS8ZbuA2E1cOock0clHgYfHw6EYpg22Vz92z4OswGKMLpQE5il9vxUg
-         DyyQ==
+        bh=n77cGqLpADKbmUH705Nn9XH804i7piONdOwkUPIPb3g=;
+        b=arPqkIojm3BzWuNVp2unot0Dq1MnPVId9dYHXNjLMCDQTh+ob4APFE2WwP4l9Om5Jx
+         Oeng1DFBi0Ez33Y7YL7r4w8QGzhhxrO8fbjZeblQPMaI+yLDl2L+MA2fSz5Np/aPayzV
+         Zop8flHOiBM+7ypmlUG96uCWIPgxQWOU6NJcqPeKC4T8OuTq034w+p5nsu6YGjBaKC+d
+         6M4uPLGr4bpd8wSTX+ArhjLM9zfDrV5N8wYyLjMWNvJhkQR8IrPNFyzu/njerrJNsn9V
+         hGL98ph8uXRqGQCMNpaXenCJo2kHSPSrKkC2jIbBBEt22xrxJ6JRVvyzD6xWpcjOVFst
+         n+ng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768323459; x=1768928259;
+        d=1e100.net; s=20230601; t=1768323502; x=1768928302;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=/IWdv0aphEAVaIt1hnbRSuaugoQ1OgFL1kohFBWpHLY=;
-        b=QavYMZeuz0lcySKBtwsW6bacM6MVNwWBtX5QqLRQ3ycA9duvj/b9QEfh4k/44cXZ1i
-         Su7iwGdttaWwJ7OuIgU68ig+ZKTQfqVey+/mbt/VD7qbYU94L34jqstZDLa1BgnHx41q
-         2JQcOWGG8a8ZB8LqfvcHcu6nIcvURlYExvdaKLtAA6MKB9SMvPjMlhfBRsGa6kOVhDFh
-         N8VeNVodFhUofTEMyQfqd3Oair0STdoEhZCXNxmptZgs4Q5kDVQavMHMX7xBtyJcMeAa
-         hJhofsvsiWE0fNmImXm9ebbjDiZxWtQJSOtuIdWUhLcADcztdnAmsf158dTnJfLiTaDB
-         Fshg==
-X-Forwarded-Encrypted: i=1; AJvYcCWDZu2+zV85Lw0i0CNwj/eXoehO9PqcfeWmtO4F0HwDZ5ZV8Fdv9jSwH0vTupGdAB4G6e8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyJ5Lj5vFRPiCBVMn0i7+tq4HlRBCWTmjRlEVLE4SxhdGYLKYOH
-	bt9yFOlWeaJVAQVaxdtnHJlBWExqGOq3FQHcnnD4yzwXQH2siwdO3vEmvR2P1v6KXyc=
-X-Gm-Gg: AY/fxX7HSCFKs3MRLIoDAujgR0I9VpyL5A3B/DCZrNFDOMHBL7HdJvcMAk8MAoebVlq
-	/qykuriGT4wSAqeGa5Voc03kLT8ixmu49J9hsYXmX56Ul+6T4BauplZlExRluiAfyx0KgYktEoj
-	Lx2miN+i7A01BJnR7x5CFm8HwzMhbWcX73Zb2GsKJhIuiVgJyUhR3pEg7Hg7L71Ib6avaKJnoiN
-	t7vSBfLdwLghoEnOxpl1o+AI+RKfpCW4oraWpku4sr0xjUcOH2Lk5DCsn7arQcqULkdIh1bw6vz
-	BWgbjjOoJO566U1VqAad2Ac3MXOl8t3aKh7u0QfkSMkDe8jJ4SukWzPOY8Q5/5BEfPT7tG6stQL
-	hKvWmzWLT0QsMpMrdmICvfXivOuq2j3MeNfqiubHJ1SybKeA31tCeZ7PJL4vTM58UbLVD08oS9H
-	t1BmIMzsrlYegpZWVWh4JvohlTtR3ac0WBQuCR+csshil0U2fn2uHV+6W0CScI/jAuMpA/+s7KM
-	uNUwNsFBdNFPxCx142f
-X-Google-Smtp-Source: AGHT+IH/Z/YUd3HhJgUE2KDAOVqPnirOdWOY08BI6bWnSTC6xKDHkmgqpxkpujIvZh2zqFAbqFN1gQ==
-X-Received: by 2002:a05:7300:ed13:b0:2ae:5cdc:214c with SMTP id 5a478bee46e88-2b17d30bff4mr23323000eec.39.1768323459051;
-        Tue, 13 Jan 2026 08:57:39 -0800 (PST)
+        bh=n77cGqLpADKbmUH705Nn9XH804i7piONdOwkUPIPb3g=;
+        b=raQecYD80MI1w53FmWhqdOFxVFSSc4HfLyKZVPas1qnzCGg60hi6VmB1GKA7zA/V8x
+         voYDK10OC+VtreFri7C+2z4lPt7+U00dS5lBzq6ohJaoJ80RDsdDwJujSMn3lvqd2CRS
+         zivT5vDgZw5Uq2UC0O73+Kk9h7kh9PhvV0AIRXkABcd7wJTa43w9APqj7QYEkRPC7rAG
+         X8neTjl48wQLtFol9PXCVeSGnnxslCcdq05uzC5ujfU/nsOelC4kGjmZ0bxIzYv35gkX
+         ZqJbHp5q1w2pWbRG7YHZkM0n78UGxVcpGSEEcistBoZ3s0hD3w7rwGiAm7/THOdGpcPM
+         U1PA==
+X-Forwarded-Encrypted: i=1; AJvYcCVTrEl4t8KpSkwlYCpqYFt5in4+YemoVCGdvRscZH+tCYYXzaX6cnOrjEqWPpH/n3y4V9s=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzJJIWNwhswu8z+FTJz8M/H+mnIak2yQDy6qCQP8DMLQ6Vl9Inc
+	VXWQYdx7MCBmdYeWLpiqH2+JDOdTq+gcFbBj3cYVeGVNB9Sy2r9mlrS4M33ErbbfLwc=
+X-Gm-Gg: AY/fxX6bCiUfO6T9UEaE6+07Juo2SAuutv+yUBYKsSi0rP5m7fc/V/cLZ+Z6gHCUYKu
+	92iWVfWmUhUAfOayvmrwaby1d58E9zh52Df8KnXSYRfZY6ibxyPW7r/AaKnxwoeO9EVpT2HYbW+
+	PGzl6IzBdop2tr+p32VDfDapom5s629b1fnpWYaCOls03/SIJUSpCn4iEfPbO08MSGbfNyoFqsh
+	keva0RqOnmk1m9tx6DThOOzkki6H8qPXPmwhu6UB+rcQqlEt4maAssd9AuL3NXxxp/5ayYD0xQ1
+	jB6cNvW1fjVvRwGqLPfecTrYpZQkbUm7jAw2cFp0uriKeei3QDkL/bnlPrpkz+eJk6g+NMczLST
+	mCnNF04AJolz5hMCBYSxzgNkrapQapWl75WYT2u8ZGrZcQOjTooLha/+B0vef2Gct68wFoD44cP
+	hH8Bk8UfcD0chHnWc0BnsQMSz6ipqtwlO8/WqadDOmWUowdZ0RsPcIFcoZ1rw6NvdeCle6ilSyE
+	tFg8RzWGKYqXI8FMHUj
+X-Google-Smtp-Source: AGHT+IFPbxTriagZU/H3z0UHuDj2NqhqlCDbpNot88w6o+ZauEKhsAYhZNwxljY/4wB3cG8nkebtwQ==
+X-Received: by 2002:a05:7300:5415:b0:2a4:3593:6453 with SMTP id 5a478bee46e88-2b17d2294f6mr23252353eec.3.1768323501600;
+        Tue, 13 Jan 2026 08:58:21 -0800 (PST)
 Received: from ?IPV6:2a03:83e0:1156:1:c8f:b917:4342:fa09? ([2620:10d:c090:500::7ecc])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-121f248c239sm23354318c88.9.2026.01.13.08.57.37
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b1707d57aasm17121126eec.30.2026.01.13.08.58.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Jan 2026 08:57:38 -0800 (PST)
-Message-ID: <24891166-20a8-42d7-88bd-0b3f4d425c33@davidwei.uk>
-Date: Tue, 13 Jan 2026 08:57:36 -0800
+        Tue, 13 Jan 2026 08:58:21 -0800 (PST)
+Message-ID: <745cf43b-05f5-4129-abea-117fe1c53a70@davidwei.uk>
+Date: Tue, 13 Jan 2026 08:58:18 -0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -70,50 +70,28 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v5 13/16] selftests/net: Add bpf skb forwarding
- program
-To: Stanislav Fomichev <stfomichev@gmail.com>,
- Daniel Borkmann <daniel@iogearbox.net>
-Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, kuba@kernel.org,
- davem@davemloft.net, razor@blackwall.org, pabeni@redhat.com,
- willemb@google.com, sdf@fomichev.me, john.fastabend@gmail.com,
- martin.lau@kernel.org, jordan@jrife.io, maciej.fijalkowski@intel.com,
- magnus.karlsson@intel.com, toke@redhat.com, yangzhenze@bytedance.com,
- wangdongdong.6@bytedance.com
+Subject: Re: [PATCH net-next v5 15/16] selftests/net: Make NetDrvContEnv
+ support queue leasing
+To: Jakub Kicinski <kuba@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>
+Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, davem@davemloft.net,
+ razor@blackwall.org, pabeni@redhat.com, willemb@google.com, sdf@fomichev.me,
+ john.fastabend@gmail.com, martin.lau@kernel.org, jordan@jrife.io,
+ maciej.fijalkowski@intel.com, magnus.karlsson@intel.com, toke@redhat.com,
+ yangzhenze@bytedance.com, wangdongdong.6@bytedance.com
 References: <20260109212632.146920-1-daniel@iogearbox.net>
- <20260109212632.146920-14-daniel@iogearbox.net> <aWQPNM5Sh1QNKtp7@mini-arch>
+ <20260109212632.146920-16-daniel@iogearbox.net>
+ <20260112195915.5af68b2d@kernel.org>
 Content-Language: en-US
 From: David Wei <dw@davidwei.uk>
-In-Reply-To: <aWQPNM5Sh1QNKtp7@mini-arch>
+In-Reply-To: <20260112195915.5af68b2d@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 2026-01-11 12:59, Stanislav Fomichev wrote:
-> On 01/09, Daniel Borkmann wrote:
->> From: David Wei <dw@davidwei.uk>
->>
->> Add nk_forward.bpf.c, a BPF program that forwards skbs matching some IPv6
->> prefix received on eth0 ifindex to a specified netkit ifindex. This will
->> be needed by netkit container tests.
->>
->> Signed-off-by: David Wei <dw@davidwei.uk>
->> Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
->> ---
->>   .../selftests/drivers/net/hw/.gitignore       |  2 +
->>   .../selftests/drivers/net/hw/nk_forward.bpf.c | 49 +++++++++++++++++++
->>   2 files changed, 51 insertions(+)
->>   create mode 100644 tools/testing/selftests/drivers/net/hw/nk_forward.bpf.c
->>
->> diff --git a/tools/testing/selftests/drivers/net/hw/.gitignore b/tools/testing/selftests/drivers/net/hw/.gitignore
->> index 46540468a775..9ae058dba155 100644
->> --- a/tools/testing/selftests/drivers/net/hw/.gitignore
->> +++ b/tools/testing/selftests/drivers/net/hw/.gitignore
->> @@ -2,3 +2,5 @@
->>   iou-zcrx
->>   ncdevmem
->>   toeplitz
->> +# bpftool
+On 2026-01-12 19:59, Jakub Kicinski wrote:
+> On Fri,  9 Jan 2026 22:26:31 +0100 Daniel Borkmann wrote:
+>> -from lib.py import cmd, ethtool, ip, CmdExitFailure, bpftool
+>> +from lib.py import cmd, defer, ethtool, ip, CmdExitFailure, bpftool
 > 
-> nit: "# bpftool" is not needed here?
+> tools/testing/selftests/drivers/net/lib/py/env.py:10: [F401] `lib.py.defer` imported but unused
 
-Leftover from a previous iteration. Will remove.
+Will remove.
