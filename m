@@ -1,38 +1,38 @@
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08D8A36BCC3;
-	Tue, 13 Jan 2026 23:23:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4908136BCE9;
+	Tue, 13 Jan 2026 23:23:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768346613; cv=none; b=ZxwKZtj/2+1/enowqPwJDyb6KCyscUzeYwHH1xVWY5odOzlIZyzSynTGiUzmH7VUw0fEHYe78N6ZjqfJWrBIRjKmDcgYJISWDDLQldPq6mAP2FEh1azC1CkMXvkTIZEtMUdMAjRzMeI1qS5NlKE+gij7LBbf6JQ6gi90DMywd+c=
+	t=1768346613; cv=none; b=s6qY7P3/YOBiC12F5qBAPtvL8zIvO7v/Yq4vGRXOmBvrT2IQstw3iPjQZy1Cgq/kLoWh4FbQa0ysM47gvmnoJsG6ymy0TxQRxAHoShHhKXpfnpxSI7iEzE1WdgjSCZeUfXrBaSSOhVCGXMekFkRFdV6zHH2EBMFkB+aXjdUnKr8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1768346613; c=relaxed/simple;
-	bh=1k6kzoqItjIkmabD/sjWkkjgZ0/9p7R19VgBBYjIUQ8=;
+	bh=MZfEByh+9dl0thDVWSYPQbzKvrntUG3X1FtuXaD+Hac=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=u/K5wwoRCEK0bDJeVmzxVZggPyLJ4r+JJTYgNHzezYkoyrtOSqV2JJZxQ/WM6Hmn8AHrwVvGaDcwBe5AccaYtbF6nvZWg0DjFBkMbw3uI/sZSnmrOqMRClGQbTg8tjULkYUp6STXO6ksMF19pP9pBPvWfavHfqE6f7eRcEpBRnM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=nNINZUPo; arc=none smtp.client-ip=213.133.104.62
+	 MIME-Version; b=hnxrs8dy5thhAv/xv5S22eKsKjuq1xWjWDcLC0kxN60RJSm0GkDr4ybnC1HB1uOyZcsyLCd0Yxtf2EwL+KQQNOybNJ+AVovri5XOgPc3yZkchv3BXtTUH6pCQUcKCDhvQaUJulEfYsocyjR0BY1Oz75/a0Rop0TnS6J2i3RirOA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=OLN5F25Y; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="nNINZUPo"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="OLN5F25Y"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
 	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
 	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=LhAgQRYDTXewD/gVvcMHaGMTkuVE0X3Al2FHsAEVSPA=; b=nNINZUPoI94BwaQp7qgiksJfMX
-	Nw3B4ChoBLLPE9BCeU3mQpc4UdqJ78nnJDLv7BRR2F0hxFiAxCDOByYd4IjFO/1WORvJgr/CZ0fwQ
-	HRQTwL6NvHJqyIh2PP7TjOdMyEVbck+am7VZS2caT6zAGi8NsK4Y9SQ46ayEVsfmUU0/GvbrGtcdq
-	q3YHtYZuz/SmtittA7A7mkzcJRnOvqjzRUITLaJIdoRdO83eu6B4Fz9p4oiSKdKifRxYixGtMXYUp
-	cBNxtuxWB3BNlzzEFItHxGuCfcb3BsK+UsLDXlpazNM5W3BjxUGYeT4dWkKMYhrHmLVyrBK8XlWK/
-	204eGncw==;
+	bh=kDPOfxKZxMLXp+34wuu3rEJf6xcjKsdKBrNkbxQ+SfU=; b=OLN5F25Ymc7U8P0MG0CM+sPjEw
+	o+AdkpJqX0HP3xjG8m857Py4aGdCHbavQM6TEGLHOAIGg17GPpaIaqXWTKtpeMDHNnwuGO27c//3q
+	5vroPykmpwfoBTHaCnPhINJlBEdrM+j35MNuamvPukHZmq7XiniGpaUeVEH6WQmbF0QHEhbRwasRk
+	anEn0jxNF9X+fC5Jbz99Jdb4YcUEFqUE8TvATr2IznzEKbvsk/GkLdwJ8QNquWnvudiqVDIsd8d+b
+	CH3ugauWaGgIU4bcbNuTNdARVPFpiYikkDXpM4AvxI5W8Lp78Fj4ZePJrf2r9XQgVt34E/hLmYjDF
+	3/zQNtmg==;
 Received: from localhost ([127.0.0.1])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1vfnjH-0003fo-1D;
-	Wed, 14 Jan 2026 00:23:15 +0100
+	id 1vfnj8-0003X0-26;
+	Wed, 14 Jan 2026 00:23:06 +0100
 From: Daniel Borkmann <daniel@iogearbox.net>
 To: netdev@vger.kernel.org
 Cc: bpf@vger.kernel.org,
@@ -51,9 +51,9 @@ Cc: bpf@vger.kernel.org,
 	toke@redhat.com,
 	yangzhenze@bytedance.com,
 	wangdongdong.6@bytedance.com
-Subject: [PATCH net-next v6 14/16] selftests/net: Add env for container based tests
-Date: Wed, 14 Jan 2026 00:22:55 +0100
-Message-ID: <20260113232257.200036-15-daniel@iogearbox.net>
+Subject: [PATCH net-next v6 06/16] net: Proxy netdev_queue_get_dma_dev for leased queues
+Date: Wed, 14 Jan 2026 00:22:47 +0100
+Message-ID: <20260113232257.200036-7-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260113232257.200036-1-daniel@iogearbox.net>
 References: <20260113232257.200036-1-daniel@iogearbox.net>
@@ -68,237 +68,54 @@ X-Virus-Scanned: Clear (ClamAV 1.4.3/27879/Tue Jan 13 08:26:16 2026)
 
 From: David Wei <dw@davidwei.uk>
 
-Add an env NetDrvContEnv for container based selftests. This automates
-the setup of a netns, netkit pair with one inside the netns, and a BPF
-program that forwards skbs from the NETIF host inside the container.
-
-Currently only netkit is used, but other virtual netdevs e.g. veth can
-be used too.
-
-Expect netkit container datapath selftests to have a publicly routable
-IP prefix to assign to netkit in a container, such that packets will
-land on eth0. The BPF skb forward program will then forward such packets
-from the host netns to the container netns.
+Extend netdev_queue_get_dma_dev to return the physical device of the
+real rxq for DMA in case the queue was leased. This allows memory
+providers like io_uring zero-copy or devmem to bind to the physically
+leased rxq via virtual devices such as netkit.
 
 Signed-off-by: David Wei <dw@davidwei.uk>
+Co-developed-by: Daniel Borkmann <daniel@iogearbox.net>
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 ---
- .../testing/selftests/drivers/net/README.rst  |   7 ++
- .../drivers/net/hw/lib/py/__init__.py         |   7 +-
- .../selftests/drivers/net/lib/py/__init__.py  |   7 +-
- .../selftests/drivers/net/lib/py/env.py       | 113 +++++++++++++++++-
- 4 files changed, 127 insertions(+), 7 deletions(-)
+ net/core/netdev_queues.c | 17 +++++++++++++++--
+ 1 file changed, 15 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/drivers/net/README.rst b/tools/testing/selftests/drivers/net/README.rst
-index eb838ae94844..b94e81c2e030 100644
---- a/tools/testing/selftests/drivers/net/README.rst
-+++ b/tools/testing/selftests/drivers/net/README.rst
-@@ -62,6 +62,13 @@ LOCAL_V4, LOCAL_V6, REMOTE_V4, REMOTE_V6
+diff --git a/net/core/netdev_queues.c b/net/core/netdev_queues.c
+index fae92ee090c4..97acf6440829 100644
+--- a/net/core/netdev_queues.c
++++ b/net/core/netdev_queues.c
+@@ -9,16 +9,29 @@
+  * @dev:	net_device
+  * @idx:	queue index
+  *
+- * Get dma device for zero-copy operations to be used for this queue.
++ * Get dma device for zero-copy operations to be used for this queue. If the
++ * queue is leased to a physical queue, we retrieve the latter's dma device.
+  * When such device is not available or valid, the function will return NULL.
+  *
+  * Return: Device or NULL on error
+  */
+ struct device *netdev_queue_get_dma_dev(struct net_device *dev, int idx)
+ {
+-	const struct netdev_queue_mgmt_ops *queue_ops = dev->queue_mgmt_ops;
++	const struct netdev_queue_mgmt_ops *queue_ops;
+ 	struct device *dma_dev;
  
- Local and remote endpoint IP addresses.
- 
-+LOCAL_PREFIX_V4, LOCAL_PREFIX_V6
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++	if (idx < dev->real_num_rx_queues) {
++		struct netdev_rx_queue *rxq = __netif_get_rx_queue(dev, idx);
 +
-+Local IP prefix/subnet which can be used to allocate extra IP addresses (for
-+network name spaces behind macvlan, veth, netkit devices). DUT must be
-+reachable using these addresses from the endpoint.
++		if (rxq->lease) {
++			rxq = rxq->lease;
++			dev = rxq->dev;
++			idx = get_netdev_rx_queue_index(rxq);
++		}
++	}
 +
- REMOTE_TYPE
- ~~~~~~~~~~~
- 
-diff --git a/tools/testing/selftests/drivers/net/hw/lib/py/__init__.py b/tools/testing/selftests/drivers/net/hw/lib/py/__init__.py
-index d5d247eca6b7..022008249313 100644
---- a/tools/testing/selftests/drivers/net/hw/lib/py/__init__.py
-+++ b/tools/testing/selftests/drivers/net/hw/lib/py/__init__.py
-@@ -3,6 +3,7 @@
- """
- Driver test environment (hardware-only tests).
- NetDrvEnv and NetDrvEpEnv are the main environment classes.
-+NetDrvContEnv extends NetDrvEpEnv with netkit container support.
- Former is for local host only tests, latter creates / connects
- to a remote endpoint. See NIPA wiki for more information about
- running and writing driver tests.
-@@ -29,7 +30,7 @@ try:
-     from net.lib.py import ksft_eq, ksft_ge, ksft_in, ksft_is, ksft_lt, \
-         ksft_ne, ksft_not_in, ksft_raises, ksft_true, ksft_gt, ksft_not_none
-     from drivers.net.lib.py import GenerateTraffic, Remote, Iperf3Runner
--    from drivers.net.lib.py import NetDrvEnv, NetDrvEpEnv
-+    from drivers.net.lib.py import NetDrvEnv, NetDrvEpEnv, NetDrvContEnv
- 
-     __all__ = ["NetNS", "NetNSEnter", "NetdevSimDev",
-                "EthtoolFamily", "NetdevFamily", "NetshaperFamily",
-@@ -44,8 +45,8 @@ try:
-                "ksft_eq", "ksft_ge", "ksft_in", "ksft_is", "ksft_lt",
-                "ksft_ne", "ksft_not_in", "ksft_raises", "ksft_true", "ksft_gt",
-                "ksft_not_none", "ksft_not_none",
--               "NetDrvEnv", "NetDrvEpEnv", "GenerateTraffic", "Remote",
--               "Iperf3Runner"]
-+               "NetDrvEnv", "NetDrvEpEnv", "NetDrvContEnv", "GenerateTraffic",
-+               "Remote", "Iperf3Runner"]
- except ModuleNotFoundError as e:
-     print("Failed importing `net` library from kernel sources")
-     print(str(e))
-diff --git a/tools/testing/selftests/drivers/net/lib/py/__init__.py b/tools/testing/selftests/drivers/net/lib/py/__init__.py
-index 8b75faa9af6d..be3a8a936882 100644
---- a/tools/testing/selftests/drivers/net/lib/py/__init__.py
-+++ b/tools/testing/selftests/drivers/net/lib/py/__init__.py
-@@ -3,6 +3,7 @@
- """
- Driver test environment.
- NetDrvEnv and NetDrvEpEnv are the main environment classes.
-+NetDrvContEnv extends NetDrvEpEnv with netkit container support.
- Former is for local host only tests, latter creates / connects
- to a remote endpoint. See NIPA wiki for more information about
- running and writing driver tests.
-@@ -43,12 +44,12 @@ try:
-                "ksft_ne", "ksft_not_in", "ksft_raises", "ksft_true", "ksft_gt",
-                "ksft_not_none", "ksft_not_none"]
- 
--    from .env import NetDrvEnv, NetDrvEpEnv
-+    from .env import NetDrvEnv, NetDrvEpEnv, NetDrvContEnv
-     from .load import GenerateTraffic, Iperf3Runner
-     from .remote import Remote
- 
--    __all__ += ["NetDrvEnv", "NetDrvEpEnv", "GenerateTraffic", "Remote",
--                "Iperf3Runner"]
-+    __all__ += ["NetDrvEnv", "NetDrvEpEnv", "NetDrvContEnv", "GenerateTraffic",
-+                "Remote", "Iperf3Runner"]
- except ModuleNotFoundError as e:
-     print("Failed importing `net` library from kernel sources")
-     print(str(e))
-diff --git a/tools/testing/selftests/drivers/net/lib/py/env.py b/tools/testing/selftests/drivers/net/lib/py/env.py
-index 63495376e654..3a60c12b9087 100644
---- a/tools/testing/selftests/drivers/net/lib/py/env.py
-+++ b/tools/testing/selftests/drivers/net/lib/py/env.py
-@@ -1,11 +1,13 @@
- # SPDX-License-Identifier: GPL-2.0
- 
-+import ipaddress
- import os
-+import re
- import time
- from pathlib import Path
- from lib.py import KsftSkipEx, KsftXfailEx
- from lib.py import ksft_setup, wait_file
--from lib.py import cmd, ethtool, ip, CmdExitFailure
-+from lib.py import cmd, ethtool, ip, CmdExitFailure, bpftool
- from lib.py import NetNS, NetdevSimDev
- from .remote import Remote
- 
-@@ -286,3 +288,112 @@ class NetDrvEpEnv(NetDrvEnvBase):
-                 data.get('stats-block-usecs', 0) / 1000 / 1000
- 
-         time.sleep(self._stats_settle_time)
++	queue_ops = dev->queue_mgmt_ops;
 +
-+
-+class NetDrvContEnv(NetDrvEpEnv):
-+    """
-+    Class for an environment with a netkit pair setup for forwarding traffic
-+    between the physical interface and a network namespace.
-+    """
-+
-+    def __init__(self, src_path, nk_rxqueues=1, **kwargs):
-+        super().__init__(src_path, **kwargs)
-+
-+        self.require_ipver("6")
-+        local_prefix = self.env.get("LOCAL_PREFIX_V6")
-+        if not local_prefix:
-+            raise KsftSkipEx("LOCAL_PREFIX_V6 required")
-+
-+        local_prefix = local_prefix.rstrip("/64").rstrip("::").rstrip(":")
-+        self.ipv6_prefix = f"{local_prefix}::"
-+        self.nk_host_ipv6 = f"{local_prefix}::2:1"
-+        self.nk_guest_ipv6 = f"{local_prefix}::2:2"
-+
-+        self.netns = None
-+        self._nk_host_ifname = None
-+        self._nk_guest_ifname = None
-+        self._tc_attached = False
-+        self._bpf_prog_pref = None
-+        self._bpf_prog_id = None
-+
-+        ip(f"link add type netkit mode l2 forward peer forward numrxqueues {nk_rxqueues}")
-+
-+        all_links = ip("-d link show", json=True)
-+        netkit_links = [link for link in all_links
-+                        if link.get('linkinfo', {}).get('info_kind') == 'netkit'
-+                        and 'UP' not in link.get('flags', [])]
-+
-+        if len(netkit_links) != 2:
-+            raise KsftSkipEx("Failed to create netkit pair")
-+
-+        netkit_links.sort(key=lambda x: x['ifindex'])
-+        self._nk_host_ifname = netkit_links[1]['ifname']
-+        self._nk_guest_ifname = netkit_links[0]['ifname']
-+        self.nk_host_ifindex = netkit_links[1]['ifindex']
-+        self.nk_guest_ifindex = netkit_links[0]['ifindex']
-+
-+        self._setup_ns()
-+        self._attach_bpf()
-+
-+    def __del__(self):
-+        if self._tc_attached:
-+            cmd(f"tc filter del dev {self.ifname} ingress pref {self._bpf_prog_pref}")
-+            self._tc_attached = False
-+
-+        if self._nk_host_ifname:
-+            cmd(f"ip link del dev {self._nk_host_ifname}")
-+            self._nk_host_ifname = None
-+            self._nk_guest_ifname = None
-+
-+        if self.netns:
-+            del self.netns
-+            self.netns = None
-+
-+        super().__del__()
-+
-+    def _setup_ns(self):
-+        self.netns = NetNS()
-+        ip(f"link set dev {self._nk_guest_ifname} netns {self.netns.name}")
-+        ip(f"link set dev {self._nk_host_ifname} up")
-+        ip(f"-6 addr add fe80::1/64 dev {self._nk_host_ifname} nodad")
-+        ip(f"-6 route add {self.nk_guest_ipv6}/128 via fe80::2 dev {self._nk_host_ifname}")
-+
-+        ip("link set lo up", ns=self.netns)
-+        ip(f"link set dev {self._nk_guest_ifname} up", ns=self.netns)
-+        ip(f"-6 addr add fe80::2/64 dev {self._nk_guest_ifname}", ns=self.netns)
-+        ip(f"-6 addr add {self.nk_guest_ipv6}/64 dev {self._nk_guest_ifname} nodad", ns=self.netns)
-+        ip(f"-6 route add default via fe80::1 dev {self._nk_guest_ifname}", ns=self.netns)
-+
-+    def _attach_bpf(self):
-+        bpf_obj = self.test_dir / "nk_forward.bpf.o"
-+        if not bpf_obj.exists():
-+            raise KsftSkipEx("BPF prog not found")
-+
-+        cmd(f"tc filter add dev {self.ifname} ingress bpf obj {bpf_obj} sec tc/ingress direct-action")
-+        self._tc_attached = True
-+
-+        tc_info = cmd(f"tc filter show dev {self.ifname} ingress").stdout
-+        match = re.search(r'pref (\d+).*nk_forward\.bpf.*id (\d+)', tc_info)
-+        if not match:
-+            raise Exception("Failed to get BPF prog ID")
-+        self._bpf_prog_pref = int(match.group(1))
-+        self._bpf_prog_id = int(match.group(2))
-+
-+        prog_info = bpftool(f"prog show id {self._bpf_prog_id}", json=True)
-+        map_ids = prog_info.get("map_ids", [])
-+
-+        bss_map_id = None
-+        for map_id in map_ids:
-+            map_info = bpftool(f"map show id {map_id}", json=True)
-+            if map_info.get("name").endswith("bss"):
-+                bss_map_id = map_id
-+
-+        if bss_map_id is None:
-+            raise Exception("Failed to find .bss map")
-+
-+        ipv6_addr = ipaddress.IPv6Address(self.ipv6_prefix)
-+        ipv6_bytes = ipv6_addr.packed
-+        ifindex_bytes = self.nk_host_ifindex.to_bytes(4, byteorder='little')
-+        value = ipv6_bytes + ifindex_bytes
-+        value_hex = ' '.join(f'{b:02x}' for b in value)
-+        bpftool(f"map update id {bss_map_id} key hex 00 00 00 00 value hex {value_hex}")
+ 	if (queue_ops && queue_ops->ndo_queue_get_dma_dev)
+ 		dma_dev = queue_ops->ndo_queue_get_dma_dev(dev, idx);
+ 	else
 -- 
 2.43.0
 
