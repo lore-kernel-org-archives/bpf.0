@@ -1,38 +1,38 @@
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 991AF36B076;
-	Tue, 13 Jan 2026 23:23:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C442436BCC4;
+	Tue, 13 Jan 2026 23:23:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768346618; cv=none; b=rMuVrXvExXkhn6V+zJVhBrq9wgnQLrbQE84mEtT8bkrEMNrRgFu1sYNl6ldujadozdb6Ty3zZY18aiOJnj2twVNlAsNBDjIulVINUzfPk87Sz8LBhZ3ZSEEDoJzeBmvPU8KzSrwDvajDUWk7UVwsUITJzNtvvcIYdf+y1XidEcs=
+	t=1768346621; cv=none; b=Zhi4E22eIvngS6ZGV+Lra8+5tfDKhvYj35znEfq7mK1CoQa01zfHzlbBsNp3iIm3K1HKFMSuB4EUoExRwP31G+zjvn86Fsta2O9Lm98cvYfSOAOF+MCiUb+1QW6BUu3lx5z0vCpOVeDwwvSrxff7TPT7STpzl3Xj2sIs067xQBg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768346618; c=relaxed/simple;
-	bh=dMQSAlrh4tJCS9xLK7FxrOplNJbCcDGarQvFPFS+7p4=;
+	s=arc-20240116; t=1768346621; c=relaxed/simple;
+	bh=ds3vmtRO482oJ4L9zl1gi+HwQInYAfVxpdU9illDGlw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=e8MNFET44fxDg21xjI82KDcIxOxH/COyNvctk3eNXHuXp6LDlTbxmEtznsTzgOIE7d2h4uTjuGbU7xprE14O0Ht5R93Q2aMichtU9LBBPOlveSPdEgalifKmUIMLJS+12etXQjSOVDISbv+LtRmZq2VtLZMNAplIuvHopukB4LM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=BuGGINKb; arc=none smtp.client-ip=213.133.104.62
+	 MIME-Version; b=m1C5bVXK49KJguxdiQlGbUUi+CSbTsJEtLemL0QKJMWMp9kEfLkdDTjXrzulC1wBXw4gdpbY/DijmQveMzZNP2iT6MZd768AsGBcvBqHNQzubGm3IYgHOxyn9nto7TsmEoc7emOcISMwgL+IReliXl6517HUx9OQh0U8hlNCk4o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=AC0eEgzN; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="BuGGINKb"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="AC0eEgzN"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
 	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
 	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=5k0TkGA7AzD+s9tVJrNQn9vHQHakrPyWfA266GzgxCc=; b=BuGGINKbj9qIrCtBQnTnxYm6ky
-	4JJ1YPWZIVPa/UYOUnvZAiXkUFADPCYB/iMY04rbdRkgksGn9Gaq4tseP2xtLWyOEUlukFhYvQ9xz
-	uxG1cjIcplFEWYLH0YTdoHQ/OqoHA4Tn6FunnIcpLkLVI5WE0Vk4xcxHiH9VyADMIjex23gvEVVFp
-	UszQVd8DxElHvm+l/bW5VdBrYBpjM/Bnu52O1K8/vQfs0uKUeJzJBw2T2L63/F+ld1Wr4xqp1/guH
-	y/oGlaltZqUywmC+yniWFe7MgUHX/i81dHkE9uAuVB4/oHKhduKh81u2piJtVss2Vj3Hb0xoNVhpu
-	Tp5CwVwQ==;
+	bh=A3JhZ4YZgwR/rLOGJb+FXJJbVesXMoF+77HTdLn+a1E=; b=AC0eEgzNgKiJ7Oa4gF1bUyeYpp
+	VXUl7x3tvo2EPBSsSgIPBuc9A469P0ZtOUKBZodEmbk2JWNbFtDsI0ohu9j8gHKJrg8A7zh4EkYWR
+	1IJrWpbZUEQ8CTmomxdanIp9Upy50U4E+nrrxknWvRhzZfEhc9pN/wuj0Uwk56HInnwpipMspzD8N
+	YupAiruwXQNl/RwN/QnZ939HRXAWfdKt60ZCi0Mf2nCIvbHaJyCoVMEkXEWVuAoUiebmckHfD4yAP
+	RgopjSVZOHlqZ5n2r7L4/fmvwiZERYutV5UTgNWjjX4tB5vMidTo+gQtSmVYiObb6mVX1UsdYLSHQ
+	Jr4B5lGg==;
 Received: from localhost ([127.0.0.1])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1vfnjB-0003Xe-35;
-	Wed, 14 Jan 2026 00:23:10 +0100
+	id 1vfnjJ-0003jK-1d;
+	Wed, 14 Jan 2026 00:23:17 +0100
 From: Daniel Borkmann <daniel@iogearbox.net>
 To: netdev@vger.kernel.org
 Cc: bpf@vger.kernel.org,
@@ -51,9 +51,9 @@ Cc: bpf@vger.kernel.org,
 	toke@redhat.com,
 	yangzhenze@bytedance.com,
 	wangdongdong.6@bytedance.com
-Subject: [PATCH net-next v6 09/16] netkit: Add single device mode for netkit
-Date: Wed, 14 Jan 2026 00:22:50 +0100
-Message-ID: <20260113232257.200036-10-daniel@iogearbox.net>
+Subject: [PATCH net-next v6 16/16] selftests/net: Add netkit container tests
+Date: Wed, 14 Jan 2026 00:22:57 +0100
+Message-ID: <20260113232257.200036-17-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260113232257.200036-1-daniel@iogearbox.net>
 References: <20260113232257.200036-1-daniel@iogearbox.net>
@@ -66,297 +66,130 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Virus-Scanned: Clear (ClamAV 1.4.3/27879/Tue Jan 13 08:26:16 2026)
 
-Add a single device mode for netkit instead of netkit pairs. The primary
-target for the paired devices is to connect network namespaces, of course,
-and support has been implemented in projects like Cilium [0]. For the rxq
-leasing the plan is to support two main scenarios related to single device
-mode:
+From: David Wei <dw@davidwei.uk>
 
-* For the use-case of io_uring zero-copy, the control plane can either
-  set up a netkit pair where the peer device can perform rxq leasing which
-  is then tied to the lifetime of the peer device, or the control plane
-  can use a regular netkit pair to connect the hostns to a Pod/container
-  and dynamically add/remove rxq leasing through a single device without
-  having to interrupt the device pair. In the case of io_uring, the memory
-  pool is used as skb non-linear pages, and thus the skb will go its way
-  through the regular stack into netkit. Things like the netkit policy when
-  no BPF is attached or skb scrubbing etc apply as-is in case the paired
-  devices are used, or if the backend memory is tied to the single device
-  and traffic goes through a paired device.
+Add two tests using NetDrvContEnv. One basic test that sets up a netkit
+pair, with one end in a netns. Use LOCAL_PREFIX_V6 and nk_forward BPF
+program to ping from a remote host to the netkit in netns.
 
-* For the use-case of AF_XDP, the control plane needs to use netkit in the
-  single device mode. The single device mode currently enforces only a
-  pass policy when no BPF is attached, and does not yet support BPF link
-  attachments for AF_XDP. skbs sent to that device get dropped at the
-  moment. Given AF_XDP operates at a lower layer of the stack tying this
-  to the netkit pair did not make sense. In future, the plan is to allow
-  BPF at the XDP layer which can: i) process traffic coming from the AF_XDP
-  application (e.g. QEMU with AF_XDP backend) to filter egress traffic or
-  to push selected egress traffic up to the single netkit device to the
-  local stack (e.g. DHCP requests), and ii) vice-versa skbs sent to the
-  single netkit into the AF_XDP application (e.g. DHCP replies). Also,
-  the control-plane can dynamically manage rxq leasing for the single
-  netkit device without having to interrupt (e.g. down/up cycle) the main
-  netkit pair for the Pod which has traffic going in and out.
+Second is a selftest for netkit queue leasing, using io_uring zero copy
+test binary inside of a netns with netkit. This checks that memory
+providers can be bound against virtual queues in a netkit within a
+netns that are leasing from a physical netdev in the default netns.
 
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Co-developed-by: David Wei <dw@davidwei.uk>
 Signed-off-by: David Wei <dw@davidwei.uk>
-Reviewed-by: Jordan Rife <jordan@jrife.io>
-Reviewed-by: Nikolay Aleksandrov <razor@blackwall.org>
-Link: https://docs.cilium.io/en/stable/operations/performance/tuning/#netkit-device-mode [0]
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 ---
- drivers/net/netkit.c         | 108 ++++++++++++++++++++++-------------
- include/uapi/linux/if_link.h |   6 ++
- 2 files changed, 74 insertions(+), 40 deletions(-)
+ .../testing/selftests/drivers/net/hw/Makefile |  2 +
+ .../selftests/drivers/net/hw/nk_netns.py      | 23 ++++++++
+ .../selftests/drivers/net/hw/nk_qlease.py     | 55 +++++++++++++++++++
+ 3 files changed, 80 insertions(+)
+ create mode 100755 tools/testing/selftests/drivers/net/hw/nk_netns.py
+ create mode 100755 tools/testing/selftests/drivers/net/hw/nk_qlease.py
 
-diff --git a/drivers/net/netkit.c b/drivers/net/netkit.c
-index 0a2fef7caccb..96734828bfb8 100644
---- a/drivers/net/netkit.c
-+++ b/drivers/net/netkit.c
-@@ -26,6 +26,7 @@ struct netkit {
- 
- 	__cacheline_group_begin(netkit_slowpath);
- 	enum netkit_mode mode;
-+	enum netkit_pairing pair;
- 	bool primary;
- 	u32 headroom;
- 	__cacheline_group_end(netkit_slowpath);
-@@ -135,6 +136,10 @@ static int netkit_open(struct net_device *dev)
- 	struct netkit *nk = netkit_priv(dev);
- 	struct net_device *peer = rtnl_dereference(nk->peer);
- 
-+	if (nk->pair == NETKIT_DEVICE_SINGLE) {
-+		netif_carrier_on(dev);
-+		return 0;
-+	}
- 	if (!peer)
- 		return -ENOTCONN;
- 	if (peer->flags & IFF_UP) {
-@@ -335,6 +340,7 @@ static int netkit_new_link(struct net_device *dev,
- 	enum netkit_scrub scrub_prim = NETKIT_SCRUB_DEFAULT;
- 	enum netkit_scrub scrub_peer = NETKIT_SCRUB_DEFAULT;
- 	struct nlattr *peer_tb[IFLA_MAX + 1], **tbp, *attr;
-+	enum netkit_pairing pair = NETKIT_DEVICE_PAIR;
- 	enum netkit_action policy_prim = NETKIT_PASS;
- 	enum netkit_action policy_peer = NETKIT_PASS;
- 	struct nlattr **data = params->data;
-@@ -343,7 +349,7 @@ static int netkit_new_link(struct net_device *dev,
- 	struct nlattr **tb = params->tb;
- 	u16 headroom = 0, tailroom = 0;
- 	struct ifinfomsg *ifmp = NULL;
--	struct net_device *peer;
-+	struct net_device *peer = NULL;
- 	char ifname[IFNAMSIZ];
- 	struct netkit *nk;
- 	int err;
-@@ -380,6 +386,8 @@ static int netkit_new_link(struct net_device *dev,
- 			headroom = nla_get_u16(data[IFLA_NETKIT_HEADROOM]);
- 		if (data[IFLA_NETKIT_TAILROOM])
- 			tailroom = nla_get_u16(data[IFLA_NETKIT_TAILROOM]);
-+		if (data[IFLA_NETKIT_PAIRING])
-+			pair = nla_get_u32(data[IFLA_NETKIT_PAIRING]);
- 	}
- 
- 	if (ifmp && tbp[IFLA_IFNAME]) {
-@@ -392,45 +400,49 @@ static int netkit_new_link(struct net_device *dev,
- 	if (mode != NETKIT_L2 &&
- 	    (tb[IFLA_ADDRESS] || tbp[IFLA_ADDRESS]))
- 		return -EOPNOTSUPP;
-+	if (pair == NETKIT_DEVICE_SINGLE &&
-+	    (tb != tbp ||
-+	     tb[IFLA_NETKIT_PEER_POLICY] ||
-+	     tb[IFLA_NETKIT_PEER_SCRUB] ||
-+	     policy_prim != NETKIT_PASS))
-+		return -EOPNOTSUPP;
- 
--	peer = rtnl_create_link(peer_net, ifname, ifname_assign_type,
--				&netkit_link_ops, tbp, extack);
--	if (IS_ERR(peer))
--		return PTR_ERR(peer);
--
--	netif_inherit_tso_max(peer, dev);
--	if (headroom) {
--		peer->needed_headroom = headroom;
--		dev->needed_headroom = headroom;
--	}
--	if (tailroom) {
--		peer->needed_tailroom = tailroom;
--		dev->needed_tailroom = tailroom;
--	}
--
--	if (mode == NETKIT_L2 && !(ifmp && tbp[IFLA_ADDRESS]))
--		eth_hw_addr_random(peer);
--	if (ifmp && dev->ifindex)
--		peer->ifindex = ifmp->ifi_index;
--
--	nk = netkit_priv(peer);
--	nk->primary = false;
--	nk->policy = policy_peer;
--	nk->scrub = scrub_peer;
--	nk->mode = mode;
--	nk->headroom = headroom;
--	bpf_mprog_bundle_init(&nk->bundle);
-+	if (pair == NETKIT_DEVICE_PAIR) {
-+		peer = rtnl_create_link(peer_net, ifname, ifname_assign_type,
-+					&netkit_link_ops, tbp, extack);
-+		if (IS_ERR(peer))
-+			return PTR_ERR(peer);
+diff --git a/tools/testing/selftests/drivers/net/hw/Makefile b/tools/testing/selftests/drivers/net/hw/Makefile
+index 9c163ba6feee..39ad86d693b3 100644
+--- a/tools/testing/selftests/drivers/net/hw/Makefile
++++ b/tools/testing/selftests/drivers/net/hw/Makefile
+@@ -32,6 +32,8 @@ TEST_PROGS = \
+ 	irq.py \
+ 	loopback.sh \
+ 	nic_timestamp.py \
++	nk_netns.py \
++	nk_qlease.py \
+ 	pp_alloc_fail.py \
+ 	rss_api.py \
+ 	rss_ctx.py \
+diff --git a/tools/testing/selftests/drivers/net/hw/nk_netns.py b/tools/testing/selftests/drivers/net/hw/nk_netns.py
+new file mode 100755
+index 000000000000..afa8638195d8
+--- /dev/null
++++ b/tools/testing/selftests/drivers/net/hw/nk_netns.py
+@@ -0,0 +1,23 @@
++#!/usr/bin/env python3
++# SPDX-License-Identifier: GPL-2.0
 +
-+		netif_inherit_tso_max(peer, dev);
-+		if (headroom)
-+			peer->needed_headroom = headroom;
-+		if (tailroom)
-+			peer->needed_tailroom = tailroom;
-+		if (mode == NETKIT_L2 && !(ifmp && tbp[IFLA_ADDRESS]))
-+			eth_hw_addr_random(peer);
-+		if (ifmp && dev->ifindex)
-+			peer->ifindex = ifmp->ifi_index;
- 
--	err = register_netdevice(peer);
--	if (err < 0)
--		goto err_register_peer;
--	netif_carrier_off(peer);
--	if (mode == NETKIT_L2)
--		dev_change_flags(peer, peer->flags & ~IFF_NOARP, NULL);
-+		nk = netkit_priv(peer);
-+		nk->primary = false;
-+		nk->policy = policy_peer;
-+		nk->scrub = scrub_peer;
-+		nk->mode = mode;
-+		nk->pair = pair;
-+		nk->headroom = headroom;
-+		bpf_mprog_bundle_init(&nk->bundle);
++from lib.py import ksft_run, ksft_exit
++from lib.py import NetDrvContEnv
++from lib.py import cmd
 +
-+		err = register_netdevice(peer);
-+		if (err < 0)
-+			goto err_register_peer;
-+		netif_carrier_off(peer);
-+		if (mode == NETKIT_L2)
-+			dev_change_flags(peer, peer->flags & ~IFF_NOARP, NULL);
- 
--	err = rtnl_configure_link(peer, NULL, 0, NULL);
--	if (err < 0)
--		goto err_configure_peer;
-+		err = rtnl_configure_link(peer, NULL, 0, NULL);
-+		if (err < 0)
-+			goto err_configure_peer;
-+	}
- 
- 	if (mode == NETKIT_L2 && !tb[IFLA_ADDRESS])
- 		eth_hw_addr_random(dev);
-@@ -438,12 +450,17 @@ static int netkit_new_link(struct net_device *dev,
- 		nla_strscpy(dev->name, tb[IFLA_IFNAME], IFNAMSIZ);
- 	else
- 		strscpy(dev->name, "nk%d", IFNAMSIZ);
-+	if (headroom)
-+		dev->needed_headroom = headroom;
-+	if (tailroom)
-+		dev->needed_tailroom = tailroom;
- 
- 	nk = netkit_priv(dev);
- 	nk->primary = true;
- 	nk->policy = policy_prim;
- 	nk->scrub = scrub_prim;
- 	nk->mode = mode;
-+	nk->pair = pair;
- 	nk->headroom = headroom;
- 	bpf_mprog_bundle_init(&nk->bundle);
- 
-@@ -455,10 +472,12 @@ static int netkit_new_link(struct net_device *dev,
- 		dev_change_flags(dev, dev->flags & ~IFF_NOARP, NULL);
- 
- 	rcu_assign_pointer(netkit_priv(dev)->peer, peer);
--	rcu_assign_pointer(netkit_priv(peer)->peer, dev);
-+	if (peer)
-+		rcu_assign_pointer(netkit_priv(peer)->peer, dev);
- 	return 0;
- err_configure_peer:
--	unregister_netdevice(peer);
-+	if (peer)
-+		unregister_netdevice(peer);
- 	return err;
- err_register_peer:
- 	free_netdev(peer);
-@@ -518,6 +537,8 @@ static struct net_device *netkit_dev_fetch(struct net *net, u32 ifindex, u32 whi
- 	nk = netkit_priv(dev);
- 	if (!nk->primary)
- 		return ERR_PTR(-EACCES);
-+	if (nk->pair == NETKIT_DEVICE_SINGLE)
-+		return ERR_PTR(-EOPNOTSUPP);
- 	if (which == BPF_NETKIT_PEER) {
- 		dev = rcu_dereference_rtnl(nk->peer);
- 		if (!dev)
-@@ -879,6 +900,7 @@ static int netkit_change_link(struct net_device *dev, struct nlattr *tb[],
- 		{ IFLA_NETKIT_PEER_INFO,  "peer info" },
- 		{ IFLA_NETKIT_HEADROOM,   "headroom" },
- 		{ IFLA_NETKIT_TAILROOM,   "tailroom" },
-+		{ IFLA_NETKIT_PAIRING,    "pairing" },
- 	};
- 
- 	if (!nk->primary) {
-@@ -898,9 +920,11 @@ static int netkit_change_link(struct net_device *dev, struct nlattr *tb[],
- 	}
- 
- 	if (data[IFLA_NETKIT_POLICY]) {
-+		err = -EOPNOTSUPP;
- 		attr = data[IFLA_NETKIT_POLICY];
- 		policy = nla_get_u32(attr);
--		err = netkit_check_policy(policy, attr, extack);
-+		if (nk->pair == NETKIT_DEVICE_PAIR)
-+			err = netkit_check_policy(policy, attr, extack);
- 		if (err)
- 			return err;
- 		WRITE_ONCE(nk->policy, policy);
-@@ -931,6 +955,7 @@ static size_t netkit_get_size(const struct net_device *dev)
- 	       nla_total_size(sizeof(u8))  + /* IFLA_NETKIT_PRIMARY */
- 	       nla_total_size(sizeof(u16)) + /* IFLA_NETKIT_HEADROOM */
- 	       nla_total_size(sizeof(u16)) + /* IFLA_NETKIT_TAILROOM */
-+	       nla_total_size(sizeof(u32)) + /* IFLA_NETKIT_PAIRING */
- 	       0;
- }
- 
-@@ -951,6 +976,8 @@ static int netkit_fill_info(struct sk_buff *skb, const struct net_device *dev)
- 		return -EMSGSIZE;
- 	if (nla_put_u16(skb, IFLA_NETKIT_TAILROOM, dev->needed_tailroom))
- 		return -EMSGSIZE;
-+	if (nla_put_u32(skb, IFLA_NETKIT_PAIRING, nk->pair))
-+		return -EMSGSIZE;
- 
- 	if (peer) {
- 		nk = netkit_priv(peer);
-@@ -972,6 +999,7 @@ static const struct nla_policy netkit_policy[IFLA_NETKIT_MAX + 1] = {
- 	[IFLA_NETKIT_TAILROOM]		= { .type = NLA_U16 },
- 	[IFLA_NETKIT_SCRUB]		= NLA_POLICY_MAX(NLA_U32, NETKIT_SCRUB_DEFAULT),
- 	[IFLA_NETKIT_PEER_SCRUB]	= NLA_POLICY_MAX(NLA_U32, NETKIT_SCRUB_DEFAULT),
-+	[IFLA_NETKIT_PAIRING]		= NLA_POLICY_MAX(NLA_U32, NETKIT_DEVICE_SINGLE),
- 	[IFLA_NETKIT_PRIMARY]		= { .type = NLA_REJECT,
- 					    .reject_message = "Primary attribute is read-only" },
- };
-diff --git a/include/uapi/linux/if_link.h b/include/uapi/linux/if_link.h
-index 3b491d96e52e..bbd565757298 100644
---- a/include/uapi/linux/if_link.h
-+++ b/include/uapi/linux/if_link.h
-@@ -1296,6 +1296,11 @@ enum netkit_mode {
- 	NETKIT_L3,
- };
- 
-+enum netkit_pairing {
-+	NETKIT_DEVICE_PAIR,
-+	NETKIT_DEVICE_SINGLE,
-+};
 +
- /* NETKIT_SCRUB_NONE leaves clearing skb->{mark,priority} up to
-  * the BPF program if attached. This also means the latter can
-  * consume the two fields if they were populated earlier.
-@@ -1320,6 +1325,7 @@ enum {
- 	IFLA_NETKIT_PEER_SCRUB,
- 	IFLA_NETKIT_HEADROOM,
- 	IFLA_NETKIT_TAILROOM,
-+	IFLA_NETKIT_PAIRING,
- 	__IFLA_NETKIT_MAX,
- };
- #define IFLA_NETKIT_MAX	(__IFLA_NETKIT_MAX - 1)
++def test_ping(cfg) -> None:
++    cfg.require_ipver("6")
++
++    cmd(f"ping -c 1 -W5 {cfg.nk_guest_ipv6}", host=cfg.remote)
++    cmd(f"ping -c 1 -W5 {cfg.remote_addr_v['6']}", ns=cfg.netns)
++
++
++def main() -> None:
++    with NetDrvContEnv(__file__) as cfg:
++        ksft_run([test_ping], args=(cfg,))
++    ksft_exit()
++
++
++if __name__ == "__main__":
++    main()
+diff --git a/tools/testing/selftests/drivers/net/hw/nk_qlease.py b/tools/testing/selftests/drivers/net/hw/nk_qlease.py
+new file mode 100755
+index 000000000000..738a46d2d20c
+--- /dev/null
++++ b/tools/testing/selftests/drivers/net/hw/nk_qlease.py
+@@ -0,0 +1,55 @@
++#!/usr/bin/env python3
++# SPDX-License-Identifier: GPL-2.0
++
++import re
++from os import path
++from lib.py import ksft_run, ksft_exit
++from lib.py import NetDrvContEnv
++from lib.py import bkg, cmd, defer, ethtool, rand_port, wait_port_listen
++
++
++def create_rss_ctx(cfg):
++    output = ethtool(f"-X {cfg.ifname} context new start {cfg.src_queue} equal 1").stdout
++    values = re.search(r'New RSS context is (\d+)', output).group(1)
++    return int(values)
++
++
++def set_flow_rule(cfg):
++    output = ethtool(f"-N {cfg.ifname} flow-type tcp6 dst-port {cfg.port} action {cfg.src_queue}").stdout
++    values = re.search(r'ID (\d+)', output).group(1)
++    return int(values)
++
++
++def set_flow_rule_rss(cfg, rss_ctx_id):
++    output = ethtool(f"-N {cfg.ifname} flow-type tcp6 dst-port {cfg.port} context {rss_ctx_id}").stdout
++    values = re.search(r'ID (\d+)', output).group(1)
++    return int(values)
++
++
++def test_iou_zcrx(cfg) -> None:
++    cfg.require_ipver('6')
++
++    ethtool(f"-X {cfg.ifname} equal {cfg.src_queue}")
++    defer(ethtool, f"-X {cfg.ifname} default")
++
++    flow_rule_id = set_flow_rule(cfg)
++    defer(ethtool, f"-N {cfg.ifname} delete {flow_rule_id}")
++
++    rx_cmd = f"ip netns exec {cfg.netns.name} {cfg.bin_local} -s -p {cfg.port} -i {cfg._nk_guest_ifname} -q {cfg.nk_queue}"
++    tx_cmd = f"{cfg.bin_remote} -c -h {cfg.nk_guest_ipv6} -p {cfg.port} -l 12840"
++    with bkg(rx_cmd, exit_wait=True):
++        wait_port_listen(cfg.port, proto="tcp", ns=cfg.netns)
++        cmd(tx_cmd, host=cfg.remote)
++
++
++def main() -> None:
++    with NetDrvContEnv(__file__, lease=True) as cfg:
++        cfg.bin_local = path.abspath(path.dirname(__file__) + "/../../../drivers/net/hw/iou-zcrx")
++        cfg.bin_remote = cfg.remote.deploy(cfg.bin_local)
++        cfg.port = rand_port()
++        ksft_run([test_iou_zcrx], args=(cfg,))
++    ksft_exit()
++
++
++if __name__ == "__main__":
++    main()
 -- 
 2.43.0
 
