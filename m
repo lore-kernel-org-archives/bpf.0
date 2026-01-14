@@ -1,120 +1,118 @@
-Received: from mail-ua1-f52.google.com (mail-ua1-f52.google.com [209.85.222.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A5404A23
-	for <bpf@vger.kernel.org>; Wed, 14 Jan 2026 04:01:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6721C24BBE4;
+	Wed, 14 Jan 2026 04:08:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768363271; cv=none; b=aXi/nts2zKXyK76hHijfHUH/VjAXznyvPL/AnIuqiJ/+ASqrq3GgmCSkHLRkpj+BPYlQYfRHgIHf8xUiWamTNRkMgHihVfvTB09sWYd4EF7nN+vtUsJxI5SWJBABZr4JOxbDEAUNxskOCd8bg3HDxbu4SxVBF2IhmlUBtwbcr+4=
+	t=1768363702; cv=none; b=lNFHV7WeINGqajIjmMUGKxrTUMeZ/9AUpWnPYjcoVTt0R6DYKoUM/AdsjVcDgKXrj0DE/9zeUOgoPcNJXGjzcwPoSggRJ5W0LyqEcWA46mD241pvonko6n/KPdxPoPCWEEP9Gn991lavJe1pf49uGHfCkobe7/P5+5twY7c4N1E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768363271; c=relaxed/simple;
-	bh=g3ttzySCpadhRihhOHOSG7r8/H5jbizgJ+zbI4SvFrE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=BwSeFvqmc4ALi5DbPKTHNrVaEegrOFmhHxY2Ihp7Su/LpumPPVKlC7Srq4RZdEhqx6dBnM10tbdw5bKTVw8afyTmnGpz8x3WvP81E95ujrzWLSUKGoTAAmQjMKK7rl8W3RhL8obEX4X5c2wGKPZQ2jVAdLyQ+lm5tatmUgrXfXw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DoYhAtxO; arc=none smtp.client-ip=209.85.222.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1768363702; c=relaxed/simple;
+	bh=Aum4e75q/c3WD6beapNhk9vDmdL2F+An3dcb9kVyPNw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=BNmiLzOzM9bSaDeO20WUcc9FvvLau2HjHjlWDRfq1WkijNh1sJ01JYGjKYHpZdqhUVeVQieMhxbw2zhV4zQkSRp6wSRrNvamd0Ndk6q+cXu/hYIE14WgPxuTcHdlcNKhxktF5F3CNGl4BOKYcoK/7cNH0Kis0UlXFpLhyfWUDGA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=r8aqhHFK; arc=none smtp.client-ip=91.218.175.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DoYhAtxO"
-Received: by mail-ua1-f52.google.com with SMTP id a1e0cc1a2514c-9413e5ee53eso5172046241.0
-        for <bpf@vger.kernel.org>; Tue, 13 Jan 2026 20:01:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768363269; x=1768968069; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=OqvlnKm4qKjRisLmwMXjojWSI5sL/ME1vVLL5S7zzvw=;
-        b=DoYhAtxOP6wCEcmZ/t21QQ424oOP6PlD+X8Y+QSuKDIobnoF23t0OSlBHkc1m+XlM+
-         XMnBWhwwc8YWoHjZ64RN6T0+2ZzKVcTGUre/Y0Tz9aJ3HfYtU91E+VBwI33yBs612/H8
-         Vaw3OFw7x5SH/kTV0Eh0UJ45tqIOJUOLkFPww4PXasalz2BmCec91i8jsbIFIRjQrAwq
-         D/3ltSPHaJAKNqpGcvrA93RUvRCDnkiEDh0IShwKGk67W37gVjWkilKTZjw77rNWcJ/U
-         QLx0GfBkqlLHhk0CpUk/E5KrrMisAHBG/Esxz/9C8+kTgYQS5snS5O5YSyZ6tWQftzN5
-         GDJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768363269; x=1768968069;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OqvlnKm4qKjRisLmwMXjojWSI5sL/ME1vVLL5S7zzvw=;
-        b=AGAgIw61jctPcpKfjt4VxjDsjF8VCG8766wA8zH/GE2LiZcHb8vUk/FN5FtDaeywa2
-         bTQCLNuGz8uP3bw+4xAAKYQeTEyC7nlAoMKeleAyYKkvYu5iPH9x8DiT7/BI/JbMHIPV
-         35ntS+1ZPv1SlXKnnYgui77ZtyRfZBwFqgDBLx2Uh6qiU+DtS41JufjXSJZ+IQ3Lgkkh
-         H5dycLfSE9DpoJ21knkExhWAF5pZGSNVEwnJr3kOAawkRJPG12PTrExaHJ7S+YgjY1bs
-         1Gz0XsY1GEAIfHfzeZFwqKJvKF7QnsT9jrW7mSQNY7kRO6wWkBZVz1ENBcNDhbDlja0e
-         R7ZQ==
-X-Gm-Message-State: AOJu0Yw2RN7oypD/S05rUb0HEb6Uv0z86VeSr8wvfTpy9e+BDCakQ+1R
-	KcNsp1X3rn/HFtExKhiKrwV+SPh9QjmhiP/C3wfV0HZYp+D1wkPe4ey3PoMbzA==
-X-Gm-Gg: AY/fxX5+1CVCRgKHVshvc0emAjNAJNp7TxCNw5wj6N4RcfkW88XGB3SpSM3dCN/BeE8
-	kO+qAJe06ZJnSimWqJ9yzBlXAoB7IaaWytI4mQM7Ib30JDcJX0VAVeHUj55DstPqZq8NBbxdQUb
-	eyZEvUOpfQrBLNUS0QAiVmPVWD/ZTQVGZncG+Uw9xlwEc72cQRqNmJ7y50v7BmyWoQSSY7JTWtY
-	mHVKVuHKV8NnKyZOys6BhnBeooQrsA0ug3ri8I8WnWGVrcbzizBQQE0FApl7ICzNstwhfrKE66s
-	U2NcErXD3EbIINJrzAdqTw8834MoLYJb4NWR0+sT5ePfXmDgE5TIHtMsxEzyFAIN3BxqxnT4Mqd
-	pP3Dtqih0ORn20Po4QY+wWScRnRxN7sT1+fJ6Mm9ka2hdhzz9jzConjh4IEKb0+B7PHBnZBmCge
-	V2MbBYnAbaC4SPhBizc/xmyKylDlHLX9epr3lIFoetOSlrY4A38Pn/Pudx+uzy
-X-Received: by 2002:a05:6a00:8c05:b0:81b:8990:be32 with SMTP id d2e1a72fcca58-81f81bb5f3emr876966b3a.0.1768357165095;
-        Tue, 13 Jan 2026 18:19:25 -0800 (PST)
-Received: from localhost.localdomain ([2601:600:837f:c6b0:18cf:ab6c:cac0:3007])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-819c5de6405sm21666323b3a.61.2026.01.13.18.19.24
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Tue, 13 Jan 2026 18:19:24 -0800 (PST)
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To: torvalds@linux-foundation.org
-Cc: bpf@vger.kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@kernel.org
-Subject: [GIT PULL] BPF fixes for 6.19-rc6
-Date: Tue, 13 Jan 2026 18:19:22 -0800
-Message-ID: <20260114021922.47032-1-alexei.starovoitov@gmail.com>
-X-Mailer: git-send-email 2.50.1
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="r8aqhHFK"
+Message-ID: <e796df2b-6dd9-4b45-b8fb-9ef9f7fceab6@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1768363688;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=vjgazky+ZRtvPL75QtxyxWAG7S1HJNuCDfOmdekMQb4=;
+	b=r8aqhHFKIgqYlt4KzfjTy42NxtLo8k/QdluHHs/RtNdt/NIJ1m9DeINM0hCi/p8oIJ7EQ9
+	SS0iMcFC04uEk91NrPICu2cgPtTp8mP56PXd7dV2je5gGjl2PHH5HLi7S/F47J/hzEe27k
+	XkePeuCi6/ZCGEOsZUZyw0DIIH+fU0U=
+Date: Tue, 13 Jan 2026 20:08:02 -0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Subject: Re: [PATCH bpf-next v1 03/10] bpf: Verifier support for
+ KF_IMPLICIT_ARGS
+To: Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov
+ <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ Martin KaFai Lau <martin.lau@linux.dev>
+Cc: Mykyta Yatsenko <yatsenko@meta.com>, Tejun Heo <tj@kernel.org>,
+ Alan Maguire <alan.maguire@oracle.com>,
+ Benjamin Tissoires <bentiss@kernel.org>, Jiri Kosina <jikos@kernel.org>,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-input@vger.kernel.org, sched-ext@lists.linux.dev
+References: <20260109184852.1089786-1-ihor.solodrai@linux.dev>
+ <20260109184852.1089786-4-ihor.solodrai@linux.dev>
+ <18d9b15319bf8d71a3cd5b08239529505714dc96.camel@gmail.com>
+ <aff8eeed-414c-49b3-b7f0-c8c328ed5199@linux.dev>
+ <5027595d4eff50d423af8ebc5fecd6a0f7229d60.camel@gmail.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <5027595d4eff50d423af8ebc5fecd6a0f7229d60.camel@gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-Hi Linus,
 
-The following changes since commit f0b9d8eb98dfee8d00419aa07543bdc2c1a44fb1:
 
-  Merge tag 'nfsd-6.19-3' of git://git.kernel.org/pub/scm/linux/kernel/git/cel/linux (2026-01-06 09:12:52 -0800)
+On 1/13/26 5:06 PM, Eduard Zingerman wrote:
+> On Tue, 2026-01-13 at 16:03 -0800, Ihor Solodrai wrote:
+>> On 1/13/26 1:59 PM, Eduard Zingerman wrote:
+>>> On Fri, 2026-01-09 at 10:48 -0800, Ihor Solodrai wrote:
+>>>
+>>> [...]
+>>>
+>>>> --- a/kernel/bpf/verifier.c
+>>>> +++ b/kernel/bpf/verifier.c
+>>>> @@ -3271,6 +3271,38 @@ static struct btf *find_kfunc_desc_btf(struct bpf_verifier_env *env, s16 offset)
+>>>>  	return btf_vmlinux ?: ERR_PTR(-ENOENT);
+>>>>  }
+>>>>  
+>>>> +#define KF_IMPL_SUFFIX "_impl"
+>>>> +
+>>>> +static const struct btf_type *find_kfunc_impl_proto(struct bpf_verifier_env *env,
+>>>> +						    struct btf *btf,
+>>>> +						    const char *func_name)
+>>>> +{
+>>>> +	char impl_name[KSYM_SYMBOL_LEN];
+>>>
+>>> Oh, as we discussed already, this should use env->tmp_str_buf.
+>>
+>> The env->tmp_str_buf size is smaller:
+>>
+>> 	#define TMP_STR_BUF_LEN 320
+>>
+>> *And* there is already a local char buffer of size KSYM_SYMBOL_LEN
+>> already in use in verifier.c:
+>>
+>> 	int bpf_check_attach_target(...) {
+>> 		bool prog_extension = prog->type == BPF_PROG_TYPE_EXT;
+>> 		bool prog_tracing = prog->type == BPF_PROG_TYPE_TRACING;
+>> 		char trace_symbol[KSYM_SYMBOL_LEN];
+>> 	[...]
+>>
+>> Since these are function names, the real limit is KSYM_SYMBOL_LEN,
+>> right?
+>>
+>> Sure >320 chars long kfunc name is unlikely, but technically possible.
+> 
+> 320 is good enough, you'll be able to cover this:
+> 
+> kfunc_trace_long_descriptive_kernel_symbol_for_tracing_scheduler_memory_io_and_interrupt_paths_during_runtime_analysis_of_latency_throughput_and_resource_contention_on_large_scale_multiprocessor_linux_systems_using_bpf_and_kprobes_without_requiring_kernel_recompilation_or_system_restart_for_production_use_cases_v2x
+> 
+> But not this:
+> 
+> kfunc_trace_kernel_scheduler_and_memory_management_path_for_observing_task_lifecycle_events_context_switches_page_fault_handling_and_io_wait_states_while_debugging_performance_regressions_on_large_multiprocessor_systems_running_preemptible_linux_kernels_with_bpf_tracing_and_dynamic_instrumentation_enabled_for_deep_visibility_into_runtime_behavior_and_latency_sensitive_code_paths_without_recompilation.
+> 
+> Should suffice, I think.
 
-are available in the Git repository at:
+I will laugh for at least 321 seconds when the size of this buffer
+will have to be increased, and will make sure you hear it :)
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git tags/bpf-fixes
+They thought 640K of memory is enough, you know.
 
-for you to fetch changes up to ec69daabe45256f98ac86c651b8ad1b2574489a7:
-
-  bpf: Fix reference count leak in bpf_prog_test_run_xdp() (2026-01-12 16:37:40 -0800)
-
-----------------------------------------------------------------
-- Fix incorrect usage of BPF_TRAMP_F_ORIG_STACK in riscv JIT (Menglong Dong)
-
-- Fix reference count leak in bpf_prog_test_run_xdp() (Tetsuo Handa)
-
-- Fix metadata size check in bpf_test_run() (Toke Høiland-Jørgensen)
-
-- Check that BPF insn array is not allowed as a map for
-  const strings (Deepanshu Kartikey)
-
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-----------------------------------------------------------------
-Deepanshu Kartikey (1):
-      bpf: Reject BPF_MAP_TYPE_INSN_ARRAY in check_reg_const_str()
-
-Menglong Dong (1):
-      riscv, bpf: Fix incorrect usage of BPF_TRAMP_F_ORIG_STACK
-
-Tetsuo Handa (1):
-      bpf: Fix reference count leak in bpf_prog_test_run_xdp()
-
-Toke Høiland-Jørgensen (2):
-      bpf, test_run: Subtract size of xdp_frame from allowed metadata size
-      selftests/bpf: Update xdp_context_test_run test to check maximum metadata size
-
- arch/riscv/net/bpf_jit_comp64.c                    |  6 ++----
- kernel/bpf/verifier.c                              |  5 +++++
- net/bpf/test_run.c                                 | 25 +++++++++++++++-------
- .../bpf/prog_tests/xdp_context_test_run.c          | 14 +++++++++---
- 4 files changed, 35 insertions(+), 15 deletions(-)
