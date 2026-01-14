@@ -1,93 +1,112 @@
-Received: from out-184.mta0.migadu.com (out-184.mta0.migadu.com [91.218.175.184])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A72431355E
-	for <bpf@vger.kernel.org>; Wed, 14 Jan 2026 03:28:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.184
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2161C2E401
+	for <bpf@vger.kernel.org>; Wed, 14 Jan 2026 03:31:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768361289; cv=none; b=Vb9I/DuSUtgvh0hp14oT0zsw/qd2lQ/gOrIAFtS8+FIhnVC5/jE16xh33uoe0LSZA+Z2jy/ixBa924riZchxqmKaXNJb1CiEuQzlDu35QybDZenIFIgtqm5DljB5tQTETRLX/QHhJsfwXAoZGOPBol80afZIB0yYRsaNKZy+27Y=
+	t=1768361485; cv=none; b=c2QpZzlFj23WV1I6ZKS7W422NgTLhlB7L0Rl4NX2w0A8BKQDMDckvA2ghq8x1oTECd/fl81F/BMwA8t92bL11HicxnpP/tE5v2/4qPHyf8CaSFiXzVqGaUBgx+eDzMaoTIavNoJN+Oa05scOsO3XlYcqS6wBILdb0Ts42pkuv8s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768361289; c=relaxed/simple;
-	bh=O9f4C5zUOMjRSe4jnAbx0T/yF7HgptKMwhUuZnIamCI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=BXmJukimESzg5g7mR20ZcNZHT6dXLvifa39gX4J/9wnUqGz+pCy5nH2TIBSBNT33h7auzd67bjYfUOiqGW4yXyHi1P3KqQvDP1ukfsSyYr6JFFgndX1JW3+MjozofQc5awhqzI1mR4WnxOka8nfXClhl48IKflQMd/YqXm6z+5M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=RctGruig; arc=none smtp.client-ip=91.218.175.184
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1768361485; c=relaxed/simple;
+	bh=cfrqsW8sP5o7ktsIS6ZHNgJ7VMmSDGubBh2uclhq+J8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Q3c+xp/BuhrT/pDrncGV1GIWie9+uSNnA8Ybl2AyFI/H7iofRyYEVExGjru0wAr05VER2cw92s2mbj42Lfkubrb/t4EBye9R4NMhw4zX8nh43szw3sJQVOq5fxABZ3EpwZLYDBcC9jGpfN3U/FgAvv+cVihKjlXvOT0718PHcrc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=U1kTo595; arc=none smtp.client-ip=209.85.221.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="RctGruig"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1768361285;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ycFLTAEQ8/ZiU5uZC5zCeWJAtwNZMqltXXzh3a9aomU=;
-	b=RctGruignyn9XNVgpXcREL1KELzps6fBRYIfEchY1V4VUiYu8WJd2T2TNogr5qaKkC8umI
-	9A77yw2NzhrZMnUsY3NmkCUpTbcDz8faM6dvTL335FYDnTSVs9/mIh8GG+wJRFvf07t/Xa
-	1Q1OdBu8lXO2i+elBursZ9exlPxiGls=
-From: Menglong Dong <menglong.dong@linux.dev>
-To: Menglong Dong <menglong8.dong@gmail.com>,
- Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
- martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, davem@davemloft.net,
- dsahern@kernel.org, tglx@linutronix.de, mingo@redhat.com,
- jiang.biao@linux.dev, bp@alien8.de, dave.hansen@linux.intel.com,
- x86@kernel.org, hpa@zytor.com, bpf@vger.kernel.org, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next v9 08/11] libbpf: add fsession support
-Date: Wed, 14 Jan 2026 11:27:47 +0800
-Message-ID: <3359527.AJdgDx1Vlc@7940hx>
-In-Reply-To:
- <CAEf4BzY0s2fe_Xq4MC2PiQaiYZPic=O0mfMaoF5HW-gDnuMQhA@mail.gmail.com>
-References:
- <20260110141115.537055-1-dongml2@chinatelecom.cn>
- <20260110141115.537055-9-dongml2@chinatelecom.cn>
- <CAEf4BzY0s2fe_Xq4MC2PiQaiYZPic=O0mfMaoF5HW-gDnuMQhA@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U1kTo595"
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-430f57cd471so4139742f8f.0
+        for <bpf@vger.kernel.org>; Tue, 13 Jan 2026 19:31:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1768361482; x=1768966282; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tAwkswLSDvceXj/iX0pI2u7qJO+mp3M2B3KW95gBNSc=;
+        b=U1kTo595A6nqbOS6KJi2juLmo2M+W9Wp5chwQzvnESOMwgdS6K57Xvb48P3FbcXlWs
+         4ZzLsmN7GYENKfNVEyZRq6hLTkTk7kMlXSd1l7xmQguUThm/LKkeYbL6xdUP9+OsnPCk
+         NwcQof6WgRapdRBb8zDqfH9dsM0RuxG1NGMQ3tO+l3B/lP24zK8ocs8+jsyCOEg6CMO6
+         LsaOAPdCoiY012XRQrGhABrhr7yjhN3rtfcBXklFwTQtpTCgOVhYf8jRdt0jCWwN/OJH
+         YtiwCR0WLUjq8eX5gM1RcGiSJlqK+3RkWiyxVdUa8rTmPgbRKniEa5RCnytAM8EXVyIQ
+         f2Ug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768361482; x=1768966282;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=tAwkswLSDvceXj/iX0pI2u7qJO+mp3M2B3KW95gBNSc=;
+        b=CmrKV184PvOCjYVfxzgSaJLjyaBA0grVTMjC/lglkf9yP01BrXiEmloh689u/g+J8a
+         Lu7lMPc8C9LRtxQUwPALFI2zMgpDfJ8wrC1YR2PcByXkLNoqcp4gesDgk6gDrBoxw6Vg
+         Syvi0RIIwwE7SZuZiKPCHuzjJSzKEaU2VYpT9jPoryqy/J3S2DB/RIm2kkMyebfqhD6a
+         oxYDYEHlt1CqhrXf0yfYNCIKOSYb1c4enruDUDSM9DjKmZqchev9Up5jREyB2CE9c92c
+         AyYxfyAsDQQ3uM+JJTDLTov6NqI2G043WR/Q3WZ9JGw4gvyZ29JN6mGiLAzAnQdVOdcf
+         f21Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWEx9iJ6yG45gTTHhbkuzmjv1HJK8lDYq4IML+pjqeqdl31erdyNABd7ndQ2gao0ZSdj9U=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw5Ji6nDaL40TAU7lYtSWJEaVJzRVADLOaOU0nDXolU847feATT
+	/SeAuEeal8/rIRbfuVFIcM1Wrk3mPUwpqTFWsU/iax/fTyyhAQA2jY6KNr1ovx01nFi80EST1kR
+	fsR5+uMwEEmaWexI3SvzbCtpDeUifVHM=
+X-Gm-Gg: AY/fxX7cvPE3RJZlrGWFxbShRJq92X6qFR68wfj8kzPNzw10kbnVJDNWBoa0/MUeISD
+	JtbmOQ8zSF6nVt0wALmri5rKh43mQ+dVdBwJQxHxdIqOyNqAkfDcVwgOyPtfph3IedWk67/MvZE
+	cXwzxO2TotlE6mSTsMQjVzWHAUECQtyfzNS2J8ly7dB5S3QwP/u4HEoiWggKlGqakPGayPG1vF6
+	yKH4dQziIKE5sRonQubDGH15rZLqu3ob0LDOjBvhXqpLCtWZqQAXe7VYkkFU3DCqgmC0FAr0DmV
+	PjvGJinfp0C9E7wLYBXA1KTHkkwS
+X-Received: by 2002:a05:6000:310c:b0:430:fc63:8c8 with SMTP id
+ ffacd0b85a97d-4342c54759dmr1005118f8f.35.1768361482534; Tue, 13 Jan 2026
+ 19:31:22 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20260112-sheaves-for-all-v2-0-98225cfb50cf@suse.cz> <20260112-sheaves-for-all-v2-13-98225cfb50cf@suse.cz>
+In-Reply-To: <20260112-sheaves-for-all-v2-13-98225cfb50cf@suse.cz>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Tue, 13 Jan 2026 19:31:11 -0800
+X-Gm-Features: AZwV_QjU8IHt4ADtGwZuCMWdsEN668TGd1jbbhsvRKh-PS7J4GcDNvMn4EbhZYo
+Message-ID: <CAADnVQKBt2xmqs+o0onUwd7G-0UDbE8LECnkJJUCVbywAr2tUg@mail.gmail.com>
+Subject: Re: [PATCH RFC v2 13/20] slab: simplify kmalloc_nolock()
+To: Vlastimil Babka <vbabka@suse.cz>
+Cc: Harry Yoo <harry.yoo@oracle.com>, Petr Tesarik <ptesarik@suse.com>, 
+	Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>, 
+	Roman Gushchin <roman.gushchin@linux.dev>, Hao Li <hao.li@linux.dev>, 
+	Andrew Morton <akpm@linux-foundation.org>, Uladzislau Rezki <urezki@gmail.com>, 
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Suren Baghdasaryan <surenb@google.com>, 
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>, Alexei Starovoitov <ast@kernel.org>, linux-mm <linux-mm@kvack.org>, 
+	LKML <linux-kernel@vger.kernel.org>, linux-rt-devel@lists.linux.dev, 
+	bpf <bpf@vger.kernel.org>, kasan-dev <kasan-dev@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
-X-Migadu-Flow: FLOW_OUT
 
-On 2026/1/14 09:24 Andrii Nakryiko <andrii.nakryiko@gmail.com> write:
-> On Sat, Jan 10, 2026 at 6:12=E2=80=AFAM Menglong Dong <menglong8.dong@gma=
-il.com> wrote:
-> >
-> > Add BPF_TRACE_FSESSION to libbpf and bpftool.
-> >
-> > Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
-> > ---
-> > v5:
-> > - remove the handling of BPF_TRACE_SESSION in legacy fallback path for
-> >   BPF_RAW_TRACEPOINT_OPEN
-> > - use fsession terminology consistently
-> > ---
-> >  tools/bpf/bpftool/common.c | 1 +
->=20
-> I know it's a trivial change, but we don't normally mix libbpf and
-> bpftool changes, can you split it into a separate patch?
+On Mon, Jan 12, 2026 at 7:17=E2=80=AFAM Vlastimil Babka <vbabka@suse.cz> wr=
+ote:
+>
+> The kmalloc_nolock() implementation has several complications and
+> restrictions due to SLUB's cpu slab locking, lockless fastpath and
+> PREEMPT_RT differences. With cpu slab usage removed, we can simplify
+> things:
+>
+> - the local_lock_cpu_slab() macros became unused, remove them
+>
+> - we no longer need to set up lockdep classes on PREEMPT_RT
+>
+> - we no longer need to annotate ___slab_alloc as NOKPROBE_SYMBOL
+>   since there's no lockless cpu freelist manipulation anymore
+>
+> - __slab_alloc_node() can be called from kmalloc_nolock_noprof()
+>   unconditionally. It can also no longer return EBUSY. But trylock
+>   failures can still happen so retry with the larger bucket if the
+>   allocation fails for any reason.
+>
+> Note that we still need __CMPXCHG_DOUBLE, because while it was removed
+> we don't use cmpxchg16b on cpu freelist anymore, we still use it on
+> slab freelist, and the alternative is slab_lock() which can be
+> interrupted by a nmi. Clarify the comment to mention it specifically.
+>
+> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
 
-ACK.
+sheaves and corresponding simplification of nolock() logic
+in patches 11,12,13 look very promising to me.
 
-Thanks!
-Menglong Dong
-
->=20
-> >  tools/lib/bpf/bpf.c        | 1 +
-> >  tools/lib/bpf/libbpf.c     | 3 +++
-> >  3 files changed, 5 insertions(+)
->=20
-> [...]
->=20
-
-
-
-
+Acked-by: Alexei Starovoitov <ast@kernel.org>
