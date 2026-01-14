@@ -1,93 +1,73 @@
-Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 228D637F735
-	for <bpf@vger.kernel.org>; Wed, 14 Jan 2026 22:48:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02D3225DAEA;
+	Wed, 14 Jan 2026 23:13:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768430928; cv=none; b=SM1tI8aKIX7fkgbGU3HQwaCAmBrknrhdr3W4SGVUHumf77wEdpacp8UFqL3u8vFAJgnIKgWTV8SK6rYR/IHiiV6idPdD3vvgr+305JhK8DYzLkdAhpqYVu/3VLEJX/T4sutHUP0un9SBV7AXDUNSI6talguKo8glI6n2V93r/HE=
+	t=1768432429; cv=none; b=BnvCX+c5WfZZSy56DAHbEUncPD8H7D4/37wjLpM6cox8ZNXXWQRAikcVda4v2h427Q94rnVwCBf0RaxOkC0MQCwU/Io7JoQxTKqHSFm6vs7miUofM3jYWeoijTHQb471ftg2ya/3nWF1bctRhS/o9i4RcGZ9V8PEVYK+3qUzwSg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768430928; c=relaxed/simple;
-	bh=7WsxJU7FKkp41RYPPQz3X32Ge44pP2VLnRmModcDNf4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rAgpcCueSSwGQ9fJd+c0zG0nfkDBnUBTQeh292/7kFkRzqgjOLB5RNmy/HRUTH70BF0e3RlIa96jPQuHECMrZ84Rr+YEORm/Xfnkcm/dMz4XpE6mepyVUmDEYmSM7icfVLkEhb9ZM2TLxB10qFzV+qK1a8Sb+i5btE4VN6h7Dvg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SH+Z8ZVO; arc=none smtp.client-ip=209.85.160.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1768432429; c=relaxed/simple;
+	bh=nrrLtRfi4zqtezZNYT9fL1ylm1cmz713dBfa6hDFuXY=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=lpmFsgCuLEbiRzDvWbaP4URu9TDaIao1ly6QRr2KsDXoCU0GjPGUwrwefMA+GUnTRhSpzT3aFzphiPvxyf16nV+Jzk0jYfPA1rvEpAagiflFx4Ot3j2HQQmOjYqHpEK2HwjPm2DD0+o8rBPp4u3tCGOXy0owoiHvKAaojVEPISg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tKpGzxOk; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SH+Z8ZVO"
-Received: by mail-qt1-f178.google.com with SMTP id d75a77b69052e-4f822b2df7aso4387431cf.2
-        for <bpf@vger.kernel.org>; Wed, 14 Jan 2026 14:48:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768430919; x=1769035719; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=HLgCsqyyIABS0s1NbINga0N29+Yya9EPm6l3UVkUqlk=;
-        b=SH+Z8ZVO+gEYiRbW/DFwsTu4HC1Pyo6i3OlR/UASdP0xdZ+hX9WUh97uHGoS+7y6U6
-         K+lU2FpbQ2Q9XEz8CxBYQu8UJ4jXRVkBV1iTleqPRB162CMSG4xk2lmKOdIG+Rs3i7an
-         UcZSKA8XrsKQJKxFBc5xTnkaZiErufMwI8zS7U9wKG+23KjyVKaUEUbYXkeIiXlNJXtJ
-         WP02Dosly5AMFyG1uijWKppaeqrPj9uIOWILppG24w+DeUCiyTBp7Y8HOLaWrvMLv0PB
-         l8Dk/IhupwoS7c2EUAAC1TwtJCupEPjnMJIVDB0loyROC+5AF8QWM1u3joM840OOVIbk
-         WAzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768430919; x=1769035719;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HLgCsqyyIABS0s1NbINga0N29+Yya9EPm6l3UVkUqlk=;
-        b=bfC0IKBqJD6u9tUbXM6thvVArfNZHDb5rVpFLEFHoTl/9onk5+0Iaigzvgr+IXtEqy
-         WnecJKPScsbpbof7oxONbIJWlU5Gjaz4pmgUFRNTpOssS9ftDkgJBPzV8bOnIY1MQNOP
-         VRLh9gmawgXk2d6Iw7HngKFTZvuT6Dp/Mps7YzRDg+Eq/8FFyRSvUYadm0KkKQqZcSX3
-         083rF4vyxq0HxAa+cjMoPDdgf2S1anaQE7JNOlhxrMz+ULxIilgqT701VgE2azBl3/Cp
-         ZfQwGgW9+qRiyHpJIFOLl1UYeqXpzNxIb6c8yZyYjKYABUV7JVANOP3JdRjpSiPrAvmh
-         dfDA==
-X-Forwarded-Encrypted: i=1; AJvYcCUJ2kCjNsP3qoOdPrg2k8EHJmv1JG81xCP9v6M+/jvmnne+RC2KD4KBgQePdU2psx49Bxw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz929t1i2wAuC+ienzvBwHG/QLum8z5/AgCPPws2OMhK9mJriK2
-	QzMdEsYQlOk65NVMO6TSsgC2DzCX6CFLKQnewgVAO8x5fZhO0W7oLSMrIunN
-X-Gm-Gg: AY/fxX5WO5C2a2S3GQaAjd9rDz8sf62WZ9b3wjXQEhbEeKvUKjB4309hs/lMdZAfTwS
-	dWPtaV2z9BrTveAX0EjnXGAMSi/0wMJsaGPC1gvn+LOE4GFf4nbO7AMxVzJ4QkhWl1C/qU+GlOH
-	q6vHLuVz5cdBxYPdNipBvcb1TC31TCSzeZIBcmi5KMSuyiop5V6+3iOZuqdL4PDTvrvmcmPIYQ5
-	Zq1LrSL3YoNd+1Rhsf36Iw3nM9GhS3Qiya1yJCQbmwMr3JM3yNjqXUylIigaaG5LcETaK8GwO4t
-	cq1rJASbSbaFhEnmGgeNzIIgM49rzQKAs0om8OqQL0Ko7HXGqYjaB6ItmAG22G0Kh5wRQhZ/U/d
-	e+yT9s3JMFbBSrci28eXwmtkFu5/pHkObi0GTinRUVecgDkI5eGANWtTzdeoLMEmzhJBuJIFyaP
-	4VHrIAbpciTaw/+bruN1GNdFMrDe0K/E/WSgl4n8n1WOOcWYOmTBJYdku+JgCiAoQ3W66gJg3ZU
-	dzlpQ==
-X-Received: by 2002:a05:7022:1582:b0:123:34e8:ae8e with SMTP id a92af1059eb24-12336ae5ca6mr4266670c88.50.1768424199264;
-        Wed, 14 Jan 2026 12:56:39 -0800 (PST)
-Received: from localhost (c-76-102-12-149.hsd1.ca.comcast.net. [76.102.12.149])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-121f248c246sm32065044c88.11.2026.01.14.12.56.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Jan 2026 12:56:38 -0800 (PST)
-Date: Wed, 14 Jan 2026 12:56:38 -0800
-From: Stanislav Fomichev <stfomichev@gmail.com>
-To: Jason Xing <kerneljasonxing@gmail.com>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, bjorn@kernel.org, magnus.karlsson@intel.com,
-	maciej.fijalkowski@intel.com, jonathan.lemon@gmail.com,
-	sdf@fomichev.me, ast@kernel.org, daniel@iogearbox.net,
-	hawk@kernel.org, john.fastabend@gmail.com, bpf@vger.kernel.org,
-	netdev@vger.kernel.org, Jason Xing <kernelxing@tencent.com>
-Subject: Re: [PATCH net-next v6 0/2] xsk: move cq_cached_prod_lock
-Message-ID: <aWgDBtepjbGNSA0z@mini-arch>
-References: <20260104012125.44003-1-kerneljasonxing@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tKpGzxOk"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 430E8C4CEF7;
+	Wed, 14 Jan 2026 23:13:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768432428;
+	bh=nrrLtRfi4zqtezZNYT9fL1ylm1cmz713dBfa6hDFuXY=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=tKpGzxOk8KWC2Bg99tlvlER8RkaAbzrC7BUZ6ghMBlcgARgJ3YziDUcCKFRMe+2wq
+	 6fwbf+kgkcSgYn1jsz+RYYEEUk7JRQBLEd2TQLV/GRsceOlCVINvuUSxq+QiO/zxEB
+	 NGY+zXK9363DoqO1I+7pyMIPcjzPQ3YENmf4hDovKvjGA1Y5j8HIstuwBTa4lHcvID
+	 OihkKLmLmElWhSNFezRTqc7PSqORjMKnruCX58c7+6j0koAHH19zf70ZDQDljJfytM
+	 w9+tAAX3Hilz44NEYg3Rym5ff5zrhosJCtyoL9eNqvnlJ/ZTksE0a3kF/Qk2My+X1d
+	 /2JuNc6ULzQ2g==
+Date: Wed, 14 Jan 2026 15:13:46 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: chia-yu.chang@nokia-bell-labs.com
+Cc: pabeni@redhat.com, edumazet@google.com, parav@nvidia.com,
+ linux-doc@vger.kernel.org, corbet@lwn.net, horms@kernel.org,
+ dsahern@kernel.org, kuniyu@google.com, bpf@vger.kernel.org,
+ netdev@vger.kernel.org, dave.taht@gmail.com, jhs@mojatatu.com,
+ stephen@networkplumber.org, xiyou.wangcong@gmail.com, jiri@resnulli.us,
+ davem@davemloft.net, andrew+netdev@lunn.ch, donald.hunter@gmail.com,
+ ast@fiberby.net, liuhangbin@gmail.com, shuah@kernel.org,
+ linux-kselftest@vger.kernel.org, ij@kernel.org, ncardwell@google.com,
+ koen.de_schepper@nokia-bell-labs.com, g.white@cablelabs.com,
+ ingemar.s.johansson@ericsson.com, mirja.kuehlewind@ericsson.com,
+ cheshire@apple.com, rs.ietf@gmx.at, Jason_Livingood@comcast.com,
+ vidhi_goel@apple.com
+Subject: Re: [PATCH v2 net-next 0/1] AccECN packetdrill selftest series
+Message-ID: <20260114151346.734001ac@kernel.org>
+In-Reply-To: <20260114162915.94820-1-chia-yu.chang@nokia-bell-labs.com>
+References: <20260114162915.94820-1-chia-yu.chang@nokia-bell-labs.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260104012125.44003-1-kerneljasonxing@gmail.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On 01/04, Jason Xing wrote:
-> From: Jason Xing <kernelxing@tencent.com>
+On Wed, 14 Jan 2026 17:29:14 +0100 chia-yu.chang@nokia-bell-labs.com
+wrote:
+> Please find the v2 AccECN packetdrill selftest patch series, which
+> includes 58 test cases used to verify the functionality of
+> Accurate ECN spec (RFC9768) under a variety of conditions.
 > 
-> Move cq_cached_prod_lock to avoid touching new cacheline.
-> 
-> ---
-> V6
-> Link: https://lore.kernel.org/all/20251216025047.67553-1-kerneljasonxing@gmail.com/
-> 1. only rebase
+> The used packetdrill is commit 6f2116af6b7e1936a53e80ab31b77f74abda1aaa
+> of the branch: https://github.com/minuscat/packetdrill_accecn
 
-Acked-by: Stanislav Fomichev <sdf@fomichev.me>
+Missing your own SoB on the patch, but also -- are these supposed to
+pass without the kernel patches? Without going back to check Paolo's
+message my understanding was that you'd repost this as patch 15 of 
+the kernel series.
+
+On the packetdrill side -- is PR #61 the code we need merged?
+Doesn't seem like it. Could you please clean that part up and start
+the review process?
