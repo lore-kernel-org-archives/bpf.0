@@ -1,41 +1,42 @@
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22B4D37F8DD;
-	Wed, 14 Jan 2026 08:59:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C34E330E82B;
+	Wed, 14 Jan 2026 08:59:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768381180; cv=none; b=Gnmba53vCqbkE03yNmwZsEebMoHyjWp2g7zABdTfXcw+eUErQDYt99QTl8To8R1VwM2VReRXrfO4uB7w3yY25xzrdBfkvBW5fHiKWOZ/H5VWGplNBHGLhvzjEb7vG7gfqzmWLMySU0LE9VLvG5bXSFa5PlsZxwneD6yJRWkMlvc=
+	t=1768381184; cv=none; b=WovMNrvKT/lzLlQSayXKiGbgF1Lo/lMhlDckhm79iTClD6cQhgKArnVTCHCxnHAVxdOzAbb2MGz/w8x2MonBi7eh3OVUWZzbsQFFHTgBijkxEATbETlUwkwVutLVIeCaESR16swRlnjUCncvPcQ/BKyXpMJP5NZVJkZjEhQ/XEk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768381180; c=relaxed/simple;
-	bh=jfPUqQWJZGU7oG961vK3ZEupMQb+g/O94lcjCffp6XU=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=fUDQRMwPPUiobfdRO5WGPYzzQ2H7OVutrPlhZ3vVTNs4sm0bk/2f4e1J35CDn1Rahe5JbfNZyxm4YB4S1KuHy+N67WFBxeBOEw0EAigqVVKQ8S6DyUVzRYERIWcvAm1S2SAexPSUcjd1KUTflJ/Zg7DB6A9zzDdK5AqxkbPEEnY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Ba5S0DKy; arc=none smtp.client-ip=185.246.84.56
+	s=arc-20240116; t=1768381184; c=relaxed/simple;
+	bh=AXcncB8cVGGHhldgQyoX8ZrEQuko2sGpm2O0f9IUnOA=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=n2W6ugfB/Fjj82Q7ruBeGWMPECCfc93onxXlL41x1rwghyA1FFTgtNSPs698MRu1thk6uarwWHtZ8S0uVMUI8w8lXpnYcHYVM1cbyqYTk+8nLhhRsJMeFryL+05dWhK5zEQaQ4UwneMyzIUKM1S+MN7yIdIIxjG5DC0X8kp74d4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=SOX5GWwr; arc=none smtp.client-ip=185.246.85.4
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Ba5S0DKy"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="SOX5GWwr"
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id DA8C21A27E1;
-	Wed, 14 Jan 2026 08:59:33 +0000 (UTC)
+	by smtpout-03.galae.net (Postfix) with ESMTPS id 537F54E420CF;
+	Wed, 14 Jan 2026 08:59:36 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id ADC8B6074A;
-	Wed, 14 Jan 2026 08:59:33 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 629C4103C837F;
-	Wed, 14 Jan 2026 09:59:29 +0100 (CET)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 2A4876074A;
+	Wed, 14 Jan 2026 08:59:36 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id ED12F103C8396;
+	Wed, 14 Jan 2026 09:59:32 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1768381172; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding; bh=CIZkjM+GKPvZOdvW+Eej6zqqEW+j2hg9Gu+RLdmF8KU=;
-	b=Ba5S0DKyFhwErG2v3M4yxWon9i1wcixUGx7nMFLxqGhXSIMuEafc0Lzob9RxX3kNSjlCcj
-	djwiBMJvHrGZBTRRSaMkx0GkqfHDgjTLqlq6bvawl2S/K+dlCIrUjbE6klyJhOE2ilLyq0
-	VdUg5f2wE8Vahe1dAD+YUlLgajex0xEC4vNj7FhRQwD5BkEnvval5TH9C+hAwdqc5U7pxP
-	vkRuzKgyZyjGyHSa9Q4KzrzINHBYaE28/RDy3h40MHGVI2MQgGO4Znvqxb/VP9aVzI50/t
-	H3X3DP2rt5Lm7VctYXITN5MpEeu0Q1vSeLuEoTq8XtQAj7OC2/tuP0R0BUWnUg==
+	t=1768381175; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=NcEoWUb5aJwsVAuuDv3WRH6UAsZs2JrlSDjQHU9FbrI=;
+	b=SOX5GWwrY+UGf2RNQEqIdd7Uzqc3R+5gGFaB+sM1Vitseb08i2V0goabiyvkt8BANxPmff
+	kUwfxTnEXckoqIel3NtTvQf/Z9ry5+W8QjhH5F9f5mWnGPMqhiLHjPFHDPE8FjZDfaP7x4
+	LvmeSGZ4SQjhbLQCALKHxiFz2hgVfWlF5cjDCywfkFrlBA4WeVP675JSB5wk3DQSZCaqBD
+	bU6HuKx8XFUsri9EUbOME2B7QK7AExv9hPqcM+H1LXUDGJXctYyZ92G4j9tTdBFSKI4pSd
+	kAGV01sLIvd1EkVZris3FAkhnUQAB0g9ncKIBBIMPnnHVMFwmMy2rDXkmkTtwQ==
 From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
-Subject: [PATCH bpf-next 0/4] selftests/bpf: add a new runner for bpftool
- tests
-Date: Wed, 14 Jan 2026 09:59:11 +0100
-Message-Id: <20260114-bpftool-tests-v1-0-cfab1cc9beaf@bootlin.com>
+Date: Wed, 14 Jan 2026 09:59:12 +0100
+Subject: [PATCH bpf-next 1/4] bpf/selftests: move assert macros into a
+ dedicated header
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -44,10 +45,9 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/x2MQQqAIBAAvxJ7biGlIvpKdEhbayE0XIlA/HvSc
- WBmMghFJoG5yRDpYeHgK6i2AXtu/iDkvTLoTg9KK43mdimECxNJEjRGjYPtrSUzQW3uSI7f/7d
- AVdHTm2At5QMLdWl9aQAAAA==
-X-Change-ID: 20251212-bpftool-tests-bb165c4cceb8
+Message-Id: <20260114-bpftool-tests-v1-1-cfab1cc9beaf@bootlin.com>
+References: <20260114-bpftool-tests-v1-0-cfab1cc9beaf@bootlin.com>
+In-Reply-To: <20260114-bpftool-tests-v1-0-cfab1cc9beaf@bootlin.com>
 To: Andrii Nakryiko <andrii@kernel.org>, 
  Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
  Daniel Borkmann <daniel@iogearbox.net>, 
@@ -65,64 +65,504 @@ Cc: ebpf@linuxfoundation.org,
 X-Mailer: b4 0.14.3
 X-Last-TLS-Session-Version: TLSv1.3
 
-Hello,
-this series is part of the larger effort aiming to convert all
-standalone tests to the CI runners so that they are properly executed on
-patches submission.
+The test_progs runner defines a large set of convenient assert macros to
+perform all the tests. Writing a new runner involves rewriting some
+macros if we want some basic testing features like standardized failure
+log.
 
-Some of those tests are validating bpftool behavior(test_bpftool_map.sh,
-test_bpftool_metadata.sh, test_bpftool_synctypes.py, test_bpftool.py...)
-and so they do not integrate well in test_progs. This series proposes to
-introduce a new runner to support those tests. This new runner is
-heavily inspired from test_progs, with slightly less features.
-
-- First commit move the assert macros exposed by test_progs into a
-  shared header so that they can be used by the new runner
-- Second commit introduces the new runner, as well as a first test
-- Third commit adds a second test
-- Fourth commit drops the legacy scripts corresponding to those new
-  tests
-
-The series only adds the runner, but it is not enough to have it running
-in CI. The github actions need to be updated both in [1] and [2], and I
-am not sure how it si supposed to be contributed (the part needed in [1]
-must likely be integrated in the commit that is systematically brought
-on top of the bpf-next_base branch). Still, an example of test_bpftool
-run can be found in [3], in which I have forked and updated the needed
-Github actions ([4])
-
-[1] https://github.com/kernel-patches/bpf.git
-[2] https://github.com/libbpf/ci
-[3] https://github.com/kernel-patches/bpf/pull/10711
-[4] https://github.com/Tropicao/libbpf-ci
+Export those assert macros from test_progs into a dedicated header so
+that we can use those in any test_runner. The sole requirement to be
+able to use those macros is to define a test__fail function in the
+runner that will be called whenever an assert fails.
 
 Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
 ---
-Alexis Lothoré (eBPF Foundation) (4):
-      bpf/selftests: move assert macros into a dedicated header
-      bpf/selftests: introduce bptool test runner and a first test
-      selftests/bpf: add bpftool map manipulations tests
-      selftests/bpf: remove converted bpftool test scripts
+ tools/testing/selftests/bpf/assert_helpers.h | 231 +++++++++++++++++++++++++++
+ tools/testing/selftests/bpf/test_progs.h     | 226 +-------------------------
+ 2 files changed, 232 insertions(+), 225 deletions(-)
 
- tools/testing/selftests/bpf/.gitignore             |   1 +
- tools/testing/selftests/bpf/Makefile               |  16 +-
- tools/testing/selftests/bpf/assert_helpers.h       | 231 ++++++++++++
- tools/testing/selftests/bpf/bpftool_helpers.c      | 114 ++++++
- tools/testing/selftests/bpf/bpftool_helpers.h      |  19 +
- .../testing/selftests/bpf/bpftool_tests/.gitignore |   2 +
- .../bpf/bpftool_tests/bpftool_maps_access.c        | 370 +++++++++++++++++++
- .../selftests/bpf/bpftool_tests/bpftool_metadata.c | 128 +++++++
- tools/testing/selftests/bpf/test_bpftool.c         | 126 +++++++
- tools/testing/selftests/bpf/test_bpftool.h         |  36 ++
- tools/testing/selftests/bpf/test_bpftool_map.sh    | 398 ---------------------
- .../testing/selftests/bpf/test_bpftool_metadata.sh |  85 -----
- tools/testing/selftests/bpf/test_progs.h           | 226 +-----------
- 13 files changed, 1041 insertions(+), 711 deletions(-)
----
-base-commit: 807cd0dc688b0e7314f53dc3a594f247bb3b665b
-change-id: 20251212-bpftool-tests-bb165c4cceb8
+diff --git a/tools/testing/selftests/bpf/assert_helpers.h b/tools/testing/selftests/bpf/assert_helpers.h
+new file mode 100644
+index 000000000000..93ab5bf39431
+--- /dev/null
++++ b/tools/testing/selftests/bpf/assert_helpers.h
+@@ -0,0 +1,231 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++#pragma once
++#include <stdio.h>
++#include <errno.h>
++#include <stdbool.h>
++
++#define _CHECK(condition, tag, duration, format...) ({			\
++	int __ret = !!(condition);					\
++	int __save_errno = errno;					\
++	if (__ret) {							\
++		test__fail();						\
++		fprintf(stdout, "%s:FAIL:%s ", __func__, tag);		\
++		fprintf(stdout, ##format);				\
++	} else {							\
++		fprintf(stdout, "%s:PASS:%s %d nsec\n",			\
++		       __func__, tag, duration);			\
++	}								\
++	errno = __save_errno;						\
++	__ret;								\
++})
++
++#define CHECK_FAIL(condition) ({					\
++	int __ret = !!(condition);					\
++	int __save_errno = errno;					\
++	if (__ret) {							\
++		test__fail();						\
++		fprintf(stdout, "%s:FAIL:%d\n", __func__, __LINE__);	\
++	}								\
++	errno = __save_errno;						\
++	__ret;								\
++})
++
++#define CHECK(condition, tag, format...) \
++	_CHECK(condition, tag, duration, format)
++#define CHECK_ATTR(condition, tag, format...) \
++	_CHECK(condition, tag, tattr.duration, format)
++
++#define ASSERT_FAIL(fmt, args...) ({					\
++	static int duration;						\
++	CHECK(false, "", fmt"\n", ##args);				\
++	false;								\
++})
++
++#define ASSERT_TRUE(actual, name) ({					\
++	static int duration;						\
++	bool ___ok = (actual);						\
++	CHECK(!___ok, (name), "unexpected %s: got FALSE\n", (name));	\
++	___ok;								\
++})
++
++#define ASSERT_FALSE(actual, name) ({					\
++	static int duration;						\
++	bool ___ok = !(actual);						\
++	CHECK(!___ok, (name), "unexpected %s: got TRUE\n", (name));	\
++	___ok;								\
++})
++
++#define ASSERT_EQ(actual, expected, name) ({				\
++	static int duration;						\
++	typeof(actual) ___act = (actual);				\
++	typeof(expected) ___exp = (expected);				\
++	bool ___ok = ___act == ___exp;					\
++	CHECK(!___ok, (name),						\
++	      "unexpected %s: actual %lld != expected %lld\n",		\
++	      (name), (long long)(___act), (long long)(___exp));	\
++	___ok;								\
++})
++
++#define ASSERT_NEQ(actual, expected, name) ({				\
++	static int duration;						\
++	typeof(actual) ___act = (actual);				\
++	typeof(expected) ___exp = (expected);				\
++	bool ___ok = ___act != ___exp;					\
++	CHECK(!___ok, (name),						\
++	      "unexpected %s: actual %lld == expected %lld\n",		\
++	      (name), (long long)(___act), (long long)(___exp));	\
++	___ok;								\
++})
++
++#define ASSERT_LT(actual, expected, name) ({				\
++	static int duration;						\
++	typeof(actual) ___act = (actual);				\
++	typeof(expected) ___exp = (expected);				\
++	bool ___ok = ___act < ___exp;					\
++	CHECK(!___ok, (name),						\
++	      "unexpected %s: actual %lld >= expected %lld\n",		\
++	      (name), (long long)(___act), (long long)(___exp));	\
++	___ok;								\
++})
++
++#define ASSERT_LE(actual, expected, name) ({				\
++	static int duration;						\
++	typeof(actual) ___act = (actual);				\
++	typeof(expected) ___exp = (expected);				\
++	bool ___ok = ___act <= ___exp;					\
++	CHECK(!___ok, (name),						\
++	      "unexpected %s: actual %lld > expected %lld\n",		\
++	      (name), (long long)(___act), (long long)(___exp));	\
++	___ok;								\
++})
++
++#define ASSERT_GT(actual, expected, name) ({				\
++	static int duration;						\
++	typeof(actual) ___act = (actual);				\
++	typeof(expected) ___exp = (expected);				\
++	bool ___ok = ___act > ___exp;					\
++	CHECK(!___ok, (name),						\
++	      "unexpected %s: actual %lld <= expected %lld\n",		\
++	      (name), (long long)(___act), (long long)(___exp));	\
++	___ok;								\
++})
++
++#define ASSERT_GE(actual, expected, name) ({				\
++	static int duration;						\
++	typeof(actual) ___act = (actual);				\
++	typeof(expected) ___exp = (expected);				\
++	bool ___ok = ___act >= ___exp;					\
++	CHECK(!___ok, (name),						\
++	      "unexpected %s: actual %lld < expected %lld\n",		\
++	      (name), (long long)(___act), (long long)(___exp));	\
++	___ok;								\
++})
++
++#define ASSERT_STREQ(actual, expected, name) ({				\
++	static int duration;						\
++	const char *___act = actual;					\
++	const char *___exp = expected;					\
++	bool ___ok = strcmp(___act, ___exp) == 0;			\
++	CHECK(!___ok, (name),						\
++	      "unexpected %s: actual '%s' != expected '%s'\n",		\
++	      (name), ___act, ___exp);					\
++	___ok;								\
++})
++
++#define ASSERT_STRNEQ(actual, expected, len, name) ({			\
++	static int duration;						\
++	const char *___act = actual;					\
++	const char *___exp = expected;					\
++	int ___len = len;						\
++	bool ___ok = strncmp(___act, ___exp, ___len) == 0;		\
++	CHECK(!___ok, (name),						\
++	      "unexpected %s: actual '%.*s' != expected '%.*s'\n",	\
++	      (name), ___len, ___act, ___len, ___exp);			\
++	___ok;								\
++})
++
++#define ASSERT_HAS_SUBSTR(str, substr, name) ({				\
++	static int duration;						\
++	const char *___str = str;					\
++	const char *___substr = substr;					\
++	bool ___ok = strstr(___str, ___substr) != NULL;			\
++	CHECK(!___ok, (name),						\
++	      "unexpected %s: '%s' is not a substring of '%s'\n",	\
++	      (name), ___substr, ___str);				\
++	___ok;								\
++})
++
++#define ASSERT_MEMEQ(actual, expected, len, name) ({			\
++	static int duration;						\
++	const void *__act = actual;					\
++	const void *__exp = expected;					\
++	int __len = len;						\
++	bool ___ok = memcmp(__act, __exp, __len) == 0;			\
++	CHECK(!___ok, (name), "unexpected memory mismatch\n");		\
++	fprintf(stdout, "actual:\n");					\
++	hexdump("\t", __act, __len);					\
++	fprintf(stdout, "expected:\n");					\
++	hexdump("\t", __exp, __len);					\
++	___ok;								\
++})
++
++#define ASSERT_OK(res, name) ({						\
++	static int duration;						\
++	long long ___res = (res);					\
++	bool ___ok = ___res == 0;					\
++	CHECK(!___ok, (name), "unexpected error: %lld (errno %d)\n",	\
++	      ___res, errno);						\
++	___ok;								\
++})
++
++#define ASSERT_ERR(res, name) ({					\
++	static int duration;						\
++	long long ___res = (res);					\
++	bool ___ok = ___res < 0;					\
++	CHECK(!___ok, (name), "unexpected success: %lld\n", ___res);	\
++	___ok;								\
++})
++
++#define ASSERT_NULL(ptr, name) ({					\
++	static int duration;						\
++	const void *___res = (ptr);					\
++	bool ___ok = !___res;						\
++	CHECK(!___ok, (name), "unexpected pointer: %p\n", ___res);	\
++	___ok;								\
++})
++
++#define ASSERT_OK_PTR(ptr, name) ({					\
++	static int duration;						\
++	const void *___res = (ptr);					\
++	int ___err = libbpf_get_error(___res);				\
++	bool ___ok = ___err == 0;					\
++	CHECK(!___ok, (name), "unexpected error: %d\n", ___err);	\
++	___ok;								\
++})
++
++#define ASSERT_ERR_PTR(ptr, name) ({					\
++	static int duration;						\
++	const void *___res = (ptr);					\
++	int ___err = libbpf_get_error(___res);				\
++	bool ___ok = ___err != 0;					\
++	CHECK(!___ok, (name), "unexpected pointer: %p\n", ___res);	\
++	___ok;								\
++})
++
++#define ASSERT_OK_FD(fd, name) ({					\
++	static int duration;						\
++	int ___fd = (fd);						\
++	bool ___ok = ___fd >= 0;					\
++	CHECK(!___ok, (name), "unexpected fd: %d (errno %d)\n",		\
++	      ___fd, errno);						\
++	___ok;								\
++})
++
++#define ASSERT_ERR_FD(fd, name) ({					\
++	static int duration;						\
++	int ___fd = (fd);						\
++	bool ___ok = ___fd < 0;						\
++	CHECK(!___ok, (name), "unexpected fd: %d\n", ___fd);		\
++	___ok;								\
++})
++
+diff --git a/tools/testing/selftests/bpf/test_progs.h b/tools/testing/selftests/bpf/test_progs.h
+index eebfc18cdcd2..bb876d8f6bcc 100644
+--- a/tools/testing/selftests/bpf/test_progs.h
++++ b/tools/testing/selftests/bpf/test_progs.h
+@@ -42,6 +42,7 @@ typedef __u16 __sum16;
+ #include <bpf/bpf_endian.h>
+ #include "trace_helpers.h"
+ #include "testing_helpers.h"
++#include "assert_helpers.h"
+ 
+ enum verbosity {
+ 	VERBOSE_NONE,
+@@ -195,231 +196,6 @@ void hexdump(const char *prefix, const void *buf, size_t len);
+ 		fprintf(stdout, ##format);                                     \
+ 	})
+ 
+-#define _CHECK(condition, tag, duration, format...) ({			\
+-	int __ret = !!(condition);					\
+-	int __save_errno = errno;					\
+-	if (__ret) {							\
+-		test__fail();						\
+-		fprintf(stdout, "%s:FAIL:%s ", __func__, tag);		\
+-		fprintf(stdout, ##format);				\
+-	} else {							\
+-		fprintf(stdout, "%s:PASS:%s %d nsec\n",			\
+-		       __func__, tag, duration);			\
+-	}								\
+-	errno = __save_errno;						\
+-	__ret;								\
+-})
+-
+-#define CHECK_FAIL(condition) ({					\
+-	int __ret = !!(condition);					\
+-	int __save_errno = errno;					\
+-	if (__ret) {							\
+-		test__fail();						\
+-		fprintf(stdout, "%s:FAIL:%d\n", __func__, __LINE__);	\
+-	}								\
+-	errno = __save_errno;						\
+-	__ret;								\
+-})
+-
+-#define CHECK(condition, tag, format...) \
+-	_CHECK(condition, tag, duration, format)
+-#define CHECK_ATTR(condition, tag, format...) \
+-	_CHECK(condition, tag, tattr.duration, format)
+-
+-#define ASSERT_FAIL(fmt, args...) ({					\
+-	static int duration = 0;					\
+-	CHECK(false, "", fmt"\n", ##args);				\
+-	false;								\
+-})
+-
+-#define ASSERT_TRUE(actual, name) ({					\
+-	static int duration = 0;					\
+-	bool ___ok = (actual);						\
+-	CHECK(!___ok, (name), "unexpected %s: got FALSE\n", (name));	\
+-	___ok;								\
+-})
+-
+-#define ASSERT_FALSE(actual, name) ({					\
+-	static int duration = 0;					\
+-	bool ___ok = !(actual);						\
+-	CHECK(!___ok, (name), "unexpected %s: got TRUE\n", (name));	\
+-	___ok;								\
+-})
+-
+-#define ASSERT_EQ(actual, expected, name) ({				\
+-	static int duration = 0;					\
+-	typeof(actual) ___act = (actual);				\
+-	typeof(expected) ___exp = (expected);				\
+-	bool ___ok = ___act == ___exp;					\
+-	CHECK(!___ok, (name),						\
+-	      "unexpected %s: actual %lld != expected %lld\n",		\
+-	      (name), (long long)(___act), (long long)(___exp));	\
+-	___ok;								\
+-})
+-
+-#define ASSERT_NEQ(actual, expected, name) ({				\
+-	static int duration = 0;					\
+-	typeof(actual) ___act = (actual);				\
+-	typeof(expected) ___exp = (expected);				\
+-	bool ___ok = ___act != ___exp;					\
+-	CHECK(!___ok, (name),						\
+-	      "unexpected %s: actual %lld == expected %lld\n",		\
+-	      (name), (long long)(___act), (long long)(___exp));	\
+-	___ok;								\
+-})
+-
+-#define ASSERT_LT(actual, expected, name) ({				\
+-	static int duration = 0;					\
+-	typeof(actual) ___act = (actual);				\
+-	typeof(expected) ___exp = (expected);				\
+-	bool ___ok = ___act < ___exp;					\
+-	CHECK(!___ok, (name),						\
+-	      "unexpected %s: actual %lld >= expected %lld\n",		\
+-	      (name), (long long)(___act), (long long)(___exp));	\
+-	___ok;								\
+-})
+-
+-#define ASSERT_LE(actual, expected, name) ({				\
+-	static int duration = 0;					\
+-	typeof(actual) ___act = (actual);				\
+-	typeof(expected) ___exp = (expected);				\
+-	bool ___ok = ___act <= ___exp;					\
+-	CHECK(!___ok, (name),						\
+-	      "unexpected %s: actual %lld > expected %lld\n",		\
+-	      (name), (long long)(___act), (long long)(___exp));	\
+-	___ok;								\
+-})
+-
+-#define ASSERT_GT(actual, expected, name) ({				\
+-	static int duration = 0;					\
+-	typeof(actual) ___act = (actual);				\
+-	typeof(expected) ___exp = (expected);				\
+-	bool ___ok = ___act > ___exp;					\
+-	CHECK(!___ok, (name),						\
+-	      "unexpected %s: actual %lld <= expected %lld\n",		\
+-	      (name), (long long)(___act), (long long)(___exp));	\
+-	___ok;								\
+-})
+-
+-#define ASSERT_GE(actual, expected, name) ({				\
+-	static int duration = 0;					\
+-	typeof(actual) ___act = (actual);				\
+-	typeof(expected) ___exp = (expected);				\
+-	bool ___ok = ___act >= ___exp;					\
+-	CHECK(!___ok, (name),						\
+-	      "unexpected %s: actual %lld < expected %lld\n",		\
+-	      (name), (long long)(___act), (long long)(___exp));	\
+-	___ok;								\
+-})
+-
+-#define ASSERT_STREQ(actual, expected, name) ({				\
+-	static int duration = 0;					\
+-	const char *___act = actual;					\
+-	const char *___exp = expected;					\
+-	bool ___ok = strcmp(___act, ___exp) == 0;			\
+-	CHECK(!___ok, (name),						\
+-	      "unexpected %s: actual '%s' != expected '%s'\n",		\
+-	      (name), ___act, ___exp);					\
+-	___ok;								\
+-})
+-
+-#define ASSERT_STRNEQ(actual, expected, len, name) ({			\
+-	static int duration = 0;					\
+-	const char *___act = actual;					\
+-	const char *___exp = expected;					\
+-	int ___len = len;						\
+-	bool ___ok = strncmp(___act, ___exp, ___len) == 0;		\
+-	CHECK(!___ok, (name),						\
+-	      "unexpected %s: actual '%.*s' != expected '%.*s'\n",	\
+-	      (name), ___len, ___act, ___len, ___exp);			\
+-	___ok;								\
+-})
+-
+-#define ASSERT_HAS_SUBSTR(str, substr, name) ({				\
+-	static int duration = 0;					\
+-	const char *___str = str;					\
+-	const char *___substr = substr;					\
+-	bool ___ok = strstr(___str, ___substr) != NULL;			\
+-	CHECK(!___ok, (name),						\
+-	      "unexpected %s: '%s' is not a substring of '%s'\n",	\
+-	      (name), ___substr, ___str);				\
+-	___ok;								\
+-})
+-
+-#define ASSERT_MEMEQ(actual, expected, len, name) ({			\
+-	static int duration = 0;					\
+-	const void *__act = actual;					\
+-	const void *__exp = expected;					\
+-	int __len = len;						\
+-	bool ___ok = memcmp(__act, __exp, __len) == 0;			\
+-	CHECK(!___ok, (name), "unexpected memory mismatch\n");		\
+-	fprintf(stdout, "actual:\n");					\
+-	hexdump("\t", __act, __len);					\
+-	fprintf(stdout, "expected:\n");					\
+-	hexdump("\t", __exp, __len);					\
+-	___ok;								\
+-})
+-
+-#define ASSERT_OK(res, name) ({						\
+-	static int duration = 0;					\
+-	long long ___res = (res);					\
+-	bool ___ok = ___res == 0;					\
+-	CHECK(!___ok, (name), "unexpected error: %lld (errno %d)\n",	\
+-	      ___res, errno);						\
+-	___ok;								\
+-})
+-
+-#define ASSERT_ERR(res, name) ({					\
+-	static int duration = 0;					\
+-	long long ___res = (res);					\
+-	bool ___ok = ___res < 0;					\
+-	CHECK(!___ok, (name), "unexpected success: %lld\n", ___res);	\
+-	___ok;								\
+-})
+-
+-#define ASSERT_NULL(ptr, name) ({					\
+-	static int duration = 0;					\
+-	const void *___res = (ptr);					\
+-	bool ___ok = !___res;						\
+-	CHECK(!___ok, (name), "unexpected pointer: %p\n", ___res);	\
+-	___ok;								\
+-})
+-
+-#define ASSERT_OK_PTR(ptr, name) ({					\
+-	static int duration = 0;					\
+-	const void *___res = (ptr);					\
+-	int ___err = libbpf_get_error(___res);				\
+-	bool ___ok = ___err == 0;					\
+-	CHECK(!___ok, (name), "unexpected error: %d\n", ___err);	\
+-	___ok;								\
+-})
+-
+-#define ASSERT_ERR_PTR(ptr, name) ({					\
+-	static int duration = 0;					\
+-	const void *___res = (ptr);					\
+-	int ___err = libbpf_get_error(___res);				\
+-	bool ___ok = ___err != 0;					\
+-	CHECK(!___ok, (name), "unexpected pointer: %p\n", ___res);	\
+-	___ok;								\
+-})
+-
+-#define ASSERT_OK_FD(fd, name) ({					\
+-	static int duration = 0;					\
+-	int ___fd = (fd);						\
+-	bool ___ok = ___fd >= 0;					\
+-	CHECK(!___ok, (name), "unexpected fd: %d (errno %d)\n",		\
+-	      ___fd, errno);						\
+-	___ok;								\
+-})
+-
+-#define ASSERT_ERR_FD(fd, name) ({					\
+-	static int duration = 0;					\
+-	int ___fd = (fd);						\
+-	bool ___ok = ___fd < 0;						\
+-	CHECK(!___ok, (name), "unexpected fd: %d\n", ___fd);		\
+-	___ok;								\
+-})
+-
+ #define SYS(goto_label, fmt, ...)					\
+ 	({								\
+ 		char cmd[1024];						\
 
-Best regards,
 -- 
-Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
+2.52.0
 
