@@ -1,126 +1,312 @@
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA901397ACC
-	for <bpf@vger.kernel.org>; Wed, 14 Jan 2026 12:26:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D6D8399032;
+	Wed, 14 Jan 2026 12:27:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768393588; cv=none; b=tE/397NrBwD0aVIe5Vhn3xuHjhivkI3ccVc6jemfJW98SNzu/3g7Bwh5pQwOQujt3x28zp4TtqEdNNas4Lk6voVmgDhUOVdOJhbwzJ2FF1LPefAB9UkiGM6lUqWUAw0VeaDguiBclNizjpY3S8SW4ptntMlu/k1G1Lh4Z8wt9hw=
+	t=1768393672; cv=none; b=UPLfG9K/JE1oRR9AqNRebjnqbFx5h48R5zqAZBoGLT/IhDF64tixKPiPhCYgsVVzNGHPH9UpC1FnpCVc9mc82rwDr0GDjuf5NVPitOnKIt+3t8GhiAA7ckIgAFGGdnPu3v27ceLvkOo4JlHW4ulNhgkdlYwcWKGfSokwMjXPJvE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768393588; c=relaxed/simple;
-	bh=JEDnlZYXIHilnOnTePLHzYAZD0ZmBByyDO4WzTOYCCk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=PXn+Y9VuUe1BvNEPXkPK3lUTAow2IrL3oQqY8rCxXwSSZsLrCxVeaqOcv3FPQVgtIWEWoJ7doewjHrdOrRkr4zOiNUFk57ajCyD61Co1xVO2TWxx1rZ72LzbFPzEKrFT9CLMQPaQjfyhOmo30/R9mh0R1bwRKzaKbKA96h/K+NE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=b1i75yib; arc=none smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1768393672; c=relaxed/simple;
+	bh=DYAr8uZefUILpwfnCmaoF2xmqlYDZ09mukiO+4g9r94=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=oBTB0MFBExyDf3R+wOiKUq2SnL1aym+zQsR8t5e1H/1eoxGpESnc++6D8kgTCAjwpBm6Q61I7EQehxFFhkBXqCRdWJtiVBRnUPECWKbpZNMYkv94izY7lGj20A3A5tAo4BjGZdRJh15ZACvIfpxza+R9T3cLy6IVJmoZJnAw1+A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Eb5iOM4T; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b1i75yib"
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-29f0f875bc5so67940155ad.3
-        for <bpf@vger.kernel.org>; Wed, 14 Jan 2026 04:26:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768393584; x=1768998384; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=AbzNlyftwKRg9xsu0MFnIl7dchtZzqwBBSHtb8zwf2M=;
-        b=b1i75yibxVgOr/Wjjc2QVYZnW3+jOTNz6BFEGAG0QuwV6TL7zfwc22aNfLk3bcD56o
-         NYZ9Gop1frF7BfSHJnfDOf4NwWmYpMqbppapjspV4Zc2fYa0lPtlZJrXfE8W964peLnj
-         mTiomx4X7nHZFwNFMwyz6REat4rCwtlnqhTCRKeD3OXumaxEHD0rMZED3xnu9VzYku2m
-         Z3PpUFVzZ4YNYJZfIlsVdCA4+Y/G4fWGxsVj9EUB2H2OskVHbQGyjH1yatTkPWndV2Q+
-         ZwvYKgRZQP1B9CUhhzr3PCz7aV9NsjYdW5dyomLar7sp8Bqkip+p890a0DvNf/s8lI03
-         3jJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768393584; x=1768998384;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AbzNlyftwKRg9xsu0MFnIl7dchtZzqwBBSHtb8zwf2M=;
-        b=sgbTcgmXwLa43TijbO29DcgxFrGtY+4CHlz7e/9jFBd6zqhzLQL8jfcTyh4mFBCeen
-         WNtS5Hs/AAjG9yTo02gFJtjWdGzQkxOjLmquZ7zugFrK4kL5wL3PLJoX8qC2hz67gP9P
-         6Kd16SPdf20sxh+tI75ipO8HTBNHfwoGccjEko32xNuw539nEenyd8DlHfhbtgakFKa9
-         1jzdv50zDtWpwkG79LqWtLYHyOBj8uffHZm2FSyt+AukT9DwiUhuHoFdSj1sr9GvL8j9
-         5FxYLqc9GlXtr3fZyx3d6vCFVTBU1VkaicQI7GSrBSSkCEeJrxEo5nZPTQ3gxvcNx0GM
-         P/Ew==
-X-Forwarded-Encrypted: i=1; AJvYcCUueKmWuX4tEgR6lmG/uprZ8qnNNGwwFBzXqtFhwSNpWJjijfwmN+K/8v6654BurPn+wZU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw7Xh234WGMRC/wJCgXM1T6onTv4iZWoZFeSa/B7aKtli/Sjomn
-	faSmTkH/5eJp9sLJQz7TsT0J9+PPLwfD7YsU5bPGmRHwqsRrK1cbBBZ3
-X-Gm-Gg: AY/fxX4kksPCbKGg94k+IlVmV7fa0BoU40CaZJTUJjbF0am4/ee0X1+AsQ9mmZtrUd1
-	ErcFWkgORB8dWLs8gN485rvwlx+7fVaAUn0SXTkGpbX7aQsAosVq32Wm9+3Nbedlc+ydS2NOHAW
-	O0I+wr5LsBLyGxfzHApxOk0CaniZbKspaIXSHStBnLzLvlZhT3ZouRZHQJtJZSt2s9MwhEat2u0
-	8jYs1Cm6gPGj4vjPUq2g0yFrWA98siw8jYVqMU/q9ml8YH8jBqJd3hS0XP/XdrCa7JMe8Zhc0Xo
-	WOLaIoI9vcfJa2nrQe231XIDweFrQGfo+To+dMPRWfGikj/4BX0eptGWeCq750g7F1YZwEmofeZ
-	GLsYEuHE6ajf/VebbI9bpLWncRdKtQbueAmZy8z/JIt2c+6bTWrXafo4r85NXIuq9BPbhdc1h0q
-	AqDzC61nRYoXEuSNrldZy46T8UvQfNJRHU2zej78IopOhLFhnH7MkfIg==
-X-Received: by 2002:a17:903:40d2:b0:2a0:d34f:aff3 with SMTP id d9443c01a7336-2a59bb36674mr24558905ad.18.1768393584056;
-        Wed, 14 Jan 2026 04:26:24 -0800 (PST)
-Received: from d.home.mmyangfl.tk ([2001:19f0:8001:1644:5400:5ff:fe3e:12b1])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a3e3cd4401sm230327115ad.92.2026.01.14.04.25.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Jan 2026 04:25:57 -0800 (PST)
-From: David Yang <mmyangfl@gmail.com>
-To: netdev@vger.kernel.org
-Cc: David Yang <mmyangfl@gmail.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: [PATCH net-next] veth: fix data race in veth_get_ethtool_stats
-Date: Wed, 14 Jan 2026 20:24:45 +0800
-Message-ID: <20260114122450.227982-1-mmyangfl@gmail.com>
-X-Mailer: git-send-email 2.51.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Eb5iOM4T"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41817C4CEF7;
+	Wed, 14 Jan 2026 12:27:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768393672;
+	bh=DYAr8uZefUILpwfnCmaoF2xmqlYDZ09mukiO+4g9r94=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=Eb5iOM4Tp80KUlMCviLbJWAoOoNYnyiQFT1orrpSLV99MIRIeR2YO0ifWLBxyBm7u
+	 bUaBvk/mRg1TkB9fZfnjEI8URwWOVhkxRatJvET3DbeWFy+P0505ZZ942nlKwdLLeM
+	 l8J9M/z1sSbdcBGN/deqmee/jpETe2QC0ZvARzNqiq5gWL1GrdZBUVaIL+IE0K+Jlb
+	 suhMbTGGyLpmKOkjAHGEtO8yRXNMlwY4IIrXmpKDKZ2N2+5/yT0afrpa4gFOidZjvb
+	 WET/8WK81T7qYwYVCq20ynmQRk5BIje35AmfzQL/M8IdZDQ/JT6Zo4x0FcIKRw4e5h
+	 4oeocK+cyoOpg==
+Message-ID: <42d41a0d-9d26-4eeb-af46-200083261c09@kernel.org>
+Date: Wed, 14 Jan 2026 13:27:45 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 2/6] powerpc64/bpf: Support tailcalls with subprogs
+To: adubey@linux.ibm.com, bpf@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: hbathini@linux.ibm.com, sachinpb@linux.ibm.com, venkat88@linux.ibm.com,
+ andrii@kernel.org, eddyz87@gmail.com, mykolal@fb.com, ast@kernel.org,
+ daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
+ yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+ sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, naveen@kernel.org,
+ maddy@linux.ibm.com, mpe@ellerman.id.au, npiggin@gmail.com,
+ memxor@gmail.com, iii@linux.ibm.com, shuah@kernel.org
+References: <20260114114450.30405-1-adubey@linux.ibm.com>
+ <20260114114450.30405-3-adubey@linux.ibm.com>
+Content-Language: fr-FR
+From: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>
+In-Reply-To: <20260114114450.30405-3-adubey@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-In veth_get_ethtool_stats(), some statistics protected by
-u64_stats_sync, are read and accumulated in ignorance of possible
-u64_stats_fetch_retry() events. These statistics, peer_tq_xdp_xmit and
-peer_tq_xdp_xmit_err, are already accumulated by veth_xdp_xmit(). Fix
-this by reading them into a temporary buffer first.
 
-Signed-off-by: David Yang <mmyangfl@gmail.com>
----
- drivers/net/veth.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/veth.c b/drivers/net/veth.c
-index 14e6f2a2fb77..9982412fd7f2 100644
---- a/drivers/net/veth.c
-+++ b/drivers/net/veth.c
-@@ -228,16 +228,20 @@ static void veth_get_ethtool_stats(struct net_device *dev,
- 		const struct veth_rq_stats *rq_stats = &rcv_priv->rq[i].stats;
- 		const void *base = (void *)&rq_stats->vs;
- 		unsigned int start, tx_idx = idx;
-+		u64 buf[VETH_TQ_STATS_LEN];
- 		size_t offset;
- 
--		tx_idx += (i % dev->real_num_tx_queues) * VETH_TQ_STATS_LEN;
- 		do {
- 			start = u64_stats_fetch_begin(&rq_stats->syncp);
- 			for (j = 0; j < VETH_TQ_STATS_LEN; j++) {
- 				offset = veth_tq_stats_desc[j].offset;
--				data[tx_idx + j] += *(u64 *)(base + offset);
-+				buf[j] = *(u64 *)(base + offset);
- 			}
- 		} while (u64_stats_fetch_retry(&rq_stats->syncp, start));
-+
-+		tx_idx += (i % dev->real_num_tx_queues) * VETH_TQ_STATS_LEN;
-+		for (j = 0; j < VETH_TQ_STATS_LEN; j++)
-+			data[tx_idx + j] += buf[j];
- 	}
- 	pp_idx = idx + dev->real_num_tx_queues * VETH_TQ_STATS_LEN;
- 
--- 
-2.51.0
+Le 14/01/2026 à 12:44, adubey@linux.ibm.com a écrit :
+> From: Abhishek Dubey <adubey@linux.ibm.com>
+> 
+> Enabling tailcalls with subprog combinations by referencing
+> method. The actual tailcall count is always maintained in the
+> tail_call_info variable present in the frame of main function
+> (also called entry function). The tail_call_info variables in
+> the frames of all other subprog contains reference to the
+> tail_call_info present in frame of main function.
+> 
+> Dynamic resolution interprets the tail_call_info either as
+> value or reference depending on the context of active frame
+> while tailcall is invoked.
+> 
+> Signed-off-by: Abhishek Dubey <adubey@linux.ibm.com>
+> ---
+>   arch/powerpc/net/bpf_jit.h        | 12 +++++-
+>   arch/powerpc/net/bpf_jit_comp.c   | 10 ++++-
+>   arch/powerpc/net/bpf_jit_comp64.c | 68 +++++++++++++++++++++++--------
+>   3 files changed, 70 insertions(+), 20 deletions(-)
+> 
+> diff --git a/arch/powerpc/net/bpf_jit.h b/arch/powerpc/net/bpf_jit.h
+> index 45d419c0ee73..5d735bc5e6bd 100644
+> --- a/arch/powerpc/net/bpf_jit.h
+> +++ b/arch/powerpc/net/bpf_jit.h
+> @@ -51,6 +51,12 @@
+>   		EMIT(PPC_INST_BRANCH_COND | (((cond) & 0x3ff) << 16) | (offset & 0xfffc));					\
+>   	} while (0)
+>   
+> +/* Same as PPC_BCC_SHORT, except valid dest is known prior to call. */
+> +#define PPC_COND_BRANCH(cond, dest)                                           \
+> +	do {								      \
+> +		long offset = (long)(dest) - CTX_NIA(ctx);		      \
+> +		EMIT(PPC_INST_BRANCH_COND | (((cond) & 0x3ff) << 16) | (offset & 0xfffc));    \
+> +	} while (0)
+
+I don't like the idea of duplicating PPC_BCC_SHORT() to just kick the 
+verification out. Now we will have two macros doing the exact same thing 
+with one handling failure case and one ignoring failure case. There is a 
+big risk that one day or another someone will use the wrong macro.
+
+Could you change bpf_jit_build_prologue() to return an int add use 
+PPC_BCC_SHORT() instead of that new PPC_COND_BRANCH() ?
+
+
+>   /*
+>    * Sign-extended 32-bit immediate load
+>    *
+> @@ -75,6 +81,8 @@
+>   
+>   /* for tailcall counter */
+>   #define BPF_PPC_TAILCALL        8
+> +/* for gpr non volatile registers BPG_REG_6 to 10 */
+> +#define BPF_PPC_STACK_SAVE      (6*8)
+
+Add spaces before and after the *
+
+>   
+>   /* If dummy pass (!image), account for maximum possible instructions */
+>   #define PPC_LI64(d, i)		do {					      \
+> @@ -170,6 +178,7 @@ struct codegen_context {
+>   	unsigned int alt_exit_addr;
+>   	u64 arena_vm_start;
+>   	u64 user_vm_start;
+> +	bool is_subprog;
+>   };
+>   
+>   #define bpf_to_ppc(r)	(ctx->b2p[r])
+> @@ -204,11 +213,10 @@ void bpf_jit_build_epilogue(u32 *image, struct codegen_context *ctx);
+>   void bpf_jit_build_fentry_stubs(u32 *image, struct codegen_context *ctx);
+>   void bpf_jit_realloc_regs(struct codegen_context *ctx);
+>   int bpf_jit_emit_exit_insn(u32 *image, struct codegen_context *ctx, int tmp_reg, long exit_addr);
+> -
+>   int bpf_add_extable_entry(struct bpf_prog *fp, u32 *image, u32 *fimage, int pass,
+>   			  struct codegen_context *ctx, int insn_idx,
+>   			  int jmp_off, int dst_reg, u32 code);
+> -
+
+Not sure why this patch needs to remove those blank lines here and above.
+
+> +int bpf_jit_stack_tailcallinfo_offset(struct codegen_context *ctx);
+>   #endif
+>   
+>   #endif
+> diff --git a/arch/powerpc/net/bpf_jit_comp.c b/arch/powerpc/net/bpf_jit_comp.c
+> index 5e976730b2f5..069a8822c30d 100644
+> --- a/arch/powerpc/net/bpf_jit_comp.c
+> +++ b/arch/powerpc/net/bpf_jit_comp.c
+> @@ -206,6 +206,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *fp)
+>   	cgctx.stack_size = round_up(fp->aux->stack_depth, 16);
+>   	cgctx.arena_vm_start = bpf_arena_get_kern_vm_start(fp->aux->arena);
+>   	cgctx.user_vm_start = bpf_arena_get_user_vm_start(fp->aux->arena);
+> +	cgctx.is_subprog = bpf_is_subprog(fp);
+>   
+>   	/* Scouting faux-generate pass 0 */
+>   	if (bpf_jit_build_body(fp, NULL, NULL, &cgctx, addrs, 0, false)) {
+> @@ -435,6 +436,11 @@ void bpf_jit_free(struct bpf_prog *fp)
+>   	bpf_prog_unlock_free(fp);
+>   }
+>   
+> +bool bpf_jit_supports_subprog_tailcalls(void)
+> +{
+> +	return IS_ENABLED(CONFIG_PPC64);
+> +}
+> +
+>   bool bpf_jit_supports_kfunc_call(void)
+>   {
+>   	return true;
+> @@ -604,7 +610,7 @@ static void bpf_trampoline_setup_tail_call_cnt(u32 *image, struct codegen_contex
+>   					       int func_frame_offset, int r4_off)
+>   {
+>   	if (IS_ENABLED(CONFIG_PPC64)) {
+> -		/* See bpf_jit_stack_tailcallcnt() */
+> +		/* See bpf_jit_stack_tailcallinfo_offset() */
+>   		int tailcallcnt_offset = 7 * 8;
+>   
+>   		EMIT(PPC_RAW_LL(_R3, _R1, func_frame_offset - tailcallcnt_offset));
+> @@ -619,7 +625,7 @@ static void bpf_trampoline_restore_tail_call_cnt(u32 *image, struct codegen_cont
+>   						 int func_frame_offset, int r4_off)
+>   {
+>   	if (IS_ENABLED(CONFIG_PPC64)) {
+> -		/* See bpf_jit_stack_tailcallcnt() */
+> +		/* See bpf_jit_stack_tailcallinfo_offset() */
+>   		int tailcallcnt_offset = 7 * 8;
+>   
+>   		EMIT(PPC_RAW_LL(_R3, _R1, -tailcallcnt_offset));
+> diff --git a/arch/powerpc/net/bpf_jit_comp64.c b/arch/powerpc/net/bpf_jit_comp64.c
+> index 39061cd742c1..cebf81fbd59f 100644
+> --- a/arch/powerpc/net/bpf_jit_comp64.c
+> +++ b/arch/powerpc/net/bpf_jit_comp64.c
+> @@ -26,8 +26,12 @@
+>    * Ensure the top half (upto local_tmp_var) stays consistent
+>    * with our redzone usage.
+>    *
+> + * tail_call_info - stores tailcall count value in main program's
+> + *                  frame, stores reference to tail_call_info of
+> + *                  main's frame in sub-prog's frame.
+> + *
+>    *		[	prev sp		] <-------------
+> - *		[    tail_call_cnt	] 8		|
+> + *		[    tail_call_info	] 8		|
+>    *		[   nv gpr save area	] 6*8		|
+>    *		[    local_tmp_var	] 24		|
+>    * fp (r31) -->	[   ebpf stack space	] upto 512	|
+> @@ -35,8 +39,6 @@
+>    * sp (r1) --->	[    stack pointer	] --------------
+>    */
+>   
+> -/* for gpr non volatile registers BPG_REG_6 to 10 */
+> -#define BPF_PPC_STACK_SAVE	(6*8)
+>   /* for bpf JIT code internal usage */
+>   #define BPF_PPC_STACK_LOCALS	24
+>   /* stack frame excluding BPF stack, ensure this is quadword aligned */
+> @@ -98,7 +100,7 @@ static inline bool bpf_has_stack_frame(struct codegen_context *ctx)
+>    *		[	prev sp		] <-------------
+>    *		[	  ...       	] 		|
+>    * sp (r1) --->	[    stack pointer	] --------------
+> - *		[    tail_call_cnt	] 8
+> + *		[    tail_call_info	] 8
+>    *		[   nv gpr save area	] 6*8
+>    *		[    local_tmp_var	] 24
+>    *		[   unused red zone	] 224
+> @@ -114,7 +116,7 @@ static int bpf_jit_stack_local(struct codegen_context *ctx)
+>   	}
+>   }
+>   
+> -static int bpf_jit_stack_tailcallcnt(struct codegen_context *ctx)
+> +int bpf_jit_stack_tailcallinfo_offset(struct codegen_context *ctx)
+>   {
+>   	return bpf_jit_stack_local(ctx) + BPF_PPC_STACK_LOCALS + BPF_PPC_STACK_SAVE;
+>   }
+> @@ -147,17 +149,32 @@ void bpf_jit_build_prologue(u32 *image, struct codegen_context *ctx)
+>   #endif
+>   
+>   	/*
+> -	 * Initialize tail_call_cnt if we do tail calls.
+> -	 * Otherwise, put in NOPs so that it can be skipped when we are
+> -	 * invoked through a tail call.
+> +	 * Tail call count(tcc) is saved & updated only in main
+> +	 * program's frame and the address of tcc in main program's
+> +	 * frame (tcc_ptr) is saved in subprogs frame.
+> +	 *
+> +	 * Offset of tail_call_info on any frame will be interpreted
+> +	 * as either tcc_ptr or tcc value depending on whether it is
+> +	 * greater than MAX_TAIL_CALL_CNT or not.
+>   	 */
+> -	if (ctx->seen & SEEN_TAILCALL) {
+> +	if (!ctx->is_subprog) {
+>   		EMIT(PPC_RAW_LI(bpf_to_ppc(TMP_REG_1), 0));
+>   		/* this goes in the redzone */
+>   		EMIT(PPC_RAW_STD(bpf_to_ppc(TMP_REG_1), _R1, -(BPF_PPC_TAILCALL)));
+>   	} else {
+> -		EMIT(PPC_RAW_NOP());
+> -		EMIT(PPC_RAW_NOP());
+> +		/*
+> +		 * if tail_call_info < MAX_TAIL_CALL_CNT
+> +		 *     main prog calling first subprog -> copy reference
+> +		 * else
+> +		 *     subsequent subprog calling another subprog -> directly copy content
+> +		 */
+> +		EMIT(PPC_RAW_LD(bpf_to_ppc(TMP_REG_2), _R1, 0));
+> +		EMIT(PPC_RAW_LD(bpf_to_ppc(TMP_REG_1), bpf_to_ppc(TMP_REG_2), -(BPF_PPC_TAILCALL)));
+> +		EMIT(PPC_RAW_CMPLWI(bpf_to_ppc(TMP_REG_1), MAX_TAIL_CALL_CNT));
+> +		PPC_COND_BRANCH(COND_GT, CTX_NIA(ctx) + 8);
+> +		EMIT(PPC_RAW_ADDI(bpf_to_ppc(TMP_REG_1), bpf_to_ppc(TMP_REG_2),
+> +							-(BPF_PPC_TAILCALL)));
+> +		EMIT(PPC_RAW_STD(bpf_to_ppc(TMP_REG_1), _R1, -(BPF_PPC_TAILCALL)));
+>   	}
+>   
+>   	if (bpf_has_stack_frame(ctx)) {
+> @@ -352,19 +369,38 @@ static int bpf_jit_emit_tail_call(u32 *image, struct codegen_context *ctx, u32 o
+>   	EMIT(PPC_RAW_CMPLW(b2p_index, bpf_to_ppc(TMP_REG_1)));
+>   	PPC_BCC_SHORT(COND_GE, out);
+>   
+> +	EMIT(PPC_RAW_LD(bpf_to_ppc(TMP_REG_1), _R1, bpf_jit_stack_tailcallinfo_offset(ctx)));
+> +	EMIT(PPC_RAW_CMPLWI(bpf_to_ppc(TMP_REG_1), MAX_TAIL_CALL_CNT));
+> +	PPC_COND_BRANCH(COND_LE, CTX_NIA(ctx) + 8);
+> +
+> +	/* dereference TMP_REG_1 */
+> +	EMIT(PPC_RAW_LD(bpf_to_ppc(TMP_REG_1), bpf_to_ppc(TMP_REG_1), 0));
+> +
+>   	/*
+> -	 * if (tail_call_cnt >= MAX_TAIL_CALL_CNT)
+> +	 * if (tail_call_info == MAX_TAIL_CALL_CNT)
+>   	 *   goto out;
+>   	 */
+> -	EMIT(PPC_RAW_LD(bpf_to_ppc(TMP_REG_1), _R1, bpf_jit_stack_tailcallcnt(ctx)));
+>   	EMIT(PPC_RAW_CMPLWI(bpf_to_ppc(TMP_REG_1), MAX_TAIL_CALL_CNT));
+> -	PPC_BCC_SHORT(COND_GE, out);
+> +	PPC_COND_BRANCH(COND_EQ, out);
+>   
+>   	/*
+> -	 * tail_call_cnt++;
+> +	 * tail_call_info++; <- Actual value of tcc here
+>   	 */
+>   	EMIT(PPC_RAW_ADDI(bpf_to_ppc(TMP_REG_1), bpf_to_ppc(TMP_REG_1), 1));
+> -	EMIT(PPC_RAW_STD(bpf_to_ppc(TMP_REG_1), _R1, bpf_jit_stack_tailcallcnt(ctx)));
+> +
+> +	/*
+> +	 * Before writing updated tail_call_info, distinguish if current frame
+> +	 * is storing a reference to tail_call_info or actual tcc value in
+> +	 * tail_call_info.
+> +	 */
+> +	EMIT(PPC_RAW_LD(bpf_to_ppc(TMP_REG_2), _R1, bpf_jit_stack_tailcallinfo_offset(ctx)));
+> +	EMIT(PPC_RAW_CMPLWI(bpf_to_ppc(TMP_REG_2), MAX_TAIL_CALL_CNT));
+> +	PPC_COND_BRANCH(COND_GT, CTX_NIA(ctx) + 8);
+> +
+> +	/* First get address of tail_call_info */
+> +	EMIT(PPC_RAW_ADDI(bpf_to_ppc(TMP_REG_2), _R1, bpf_jit_stack_tailcallinfo_offset(ctx)));
+> +	/* Writeback updated value to tail_call_info */
+> +	EMIT(PPC_RAW_STD(bpf_to_ppc(TMP_REG_1), bpf_to_ppc(TMP_REG_2), 0));
+>   
+>   	/* prog = array->ptrs[index]; */
+>   	EMIT(PPC_RAW_MULI(bpf_to_ppc(TMP_REG_1), b2p_index, 8));
 
