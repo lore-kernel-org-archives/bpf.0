@@ -1,89 +1,93 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88009296BB7;
-	Wed, 14 Jan 2026 03:36:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E57EF284896
+	for <bpf@vger.kernel.org>; Wed, 14 Jan 2026 03:42:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768361775; cv=none; b=FocCfMZOiK294dnuWPjq/CUbiTPNpDSSLBEsEbTN3wsmJXo6x3G3bd9wCC/CoIIt9GEG61/DLiLHmFWVzrKJ33Qx/8QGxPT/LR0ivI0K1pxz5LnFk6HkBu7xA28E9ty7st8lsQB5NLCsJKiOLisrgSRhrQmwtTjY1rEmu0qJHic=
+	t=1768362135; cv=none; b=nXVPYx4OiasOeDkIcLSqJqYQk8EYOf37EhEold5ph495reYLPLXoqjhBZ0tNr2Wayid/gkN546wWjpoPutayiBWVIg40AYALOSUKX+vVNMxr+ElCOnngid7SzIbTifLiuMKJLwp5u96b0tIdrWHNfCtEb8EG2lvXKrBsaDagOm0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768361775; c=relaxed/simple;
-	bh=XdgwGXL6Xkf7KFiVxYJaa6oGaEzMG6qYj6DrtcALVZw=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=TyRPnPB9CkYtPh7m+Ap0z1zVsPQ4PoqZVqvVXt3/+YgXDcVdhm8x+XDviL38sUV77PIjEWWTJJFqbD8zusirtRQlvDniDMLEQZw0pq5mrKA0BtvOOyfhfHos53GcKCvem5RKQtR3U0q/2Zm1cFoWktPksdA6gRuml2mE0lkiDik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KtPxaBvF; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1768362135; c=relaxed/simple;
+	bh=6hbicXXmERQ2Zwqv3mA84pqzJuKeBjHJ7zWItYtxOog=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=gsazb+M/CBrYlsCHJjRaQuPVmAOAHcboe1G46LYiuXQeR221yFPJYZuGkiHVL/PHpFG0ylUgh13w90yFgkZkC5QCgOk2nAVF+usVPxyz771mpI5xDSWlCrtHGfzEtHRsN0UN/y9AUwCRcLGY95O1gFgQcZpyMSYeqW5VVLPe6so=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GAB1By9f; arc=none smtp.client-ip=209.85.221.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KtPxaBvF"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE5F8C4CEF7;
-	Wed, 14 Jan 2026 03:36:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768361775;
-	bh=XdgwGXL6Xkf7KFiVxYJaa6oGaEzMG6qYj6DrtcALVZw=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=KtPxaBvFjvBQXFgO6ttgm1CTd9pwSd7h+Lyh+D9BlZcO995/kseP/Wry1CiCN3v/n
-	 gBwIeg1brhKqIgABt6UECFua/Ct/X6gYsG38FVO8f6nWOf173R366ktySg2c/OI6jY
-	 vk2Ge2hCtjCrU3a9L6qa0l7mSw2vfPb0vGqD7MpfJV5pEDB/zBBeNPk3CdhrwD5Zu0
-	 eumNzZOYzfdZb4LKIHdXfESrFvoslPCoWdoC1b0JaoLC/mIXrjkvL3pAioVtBHM6eI
-	 WeCKp318EhcZFMv/64Kg8sLAhyMxzF4GhCzOaMZyc6/3d1xjwxIJU83EoMG09a8DJm
-	 WGF3Zo8ytomJg==
-Date: Tue, 13 Jan 2026 19:36:12 -0800
-From: Jakub Kicinski <kuba@kernel.org>
-To: Pavel Begunkov <asml.silence@gmail.com>
-Cc: netdev@vger.kernel.org, "David S . Miller" <davem@davemloft.net>, Eric
- Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Jonathan
- Corbet <corbet@lwn.net>, Michael Chan <michael.chan@broadcom.com>, Pavan
- Chebbi <pavan.chebbi@broadcom.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, John
- Fastabend <john.fastabend@gmail.com>, Joshua Washington
- <joshwash@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>, Saeed
- Mahameed <saeedm@nvidia.com>, Tariq Toukan <tariqt@nvidia.com>, Mark Bloch
- <mbloch@nvidia.com>, Leon Romanovsky <leon@kernel.org>, Alexander Duyck
- <alexanderduyck@fb.com>, Ilias Apalodimas <ilias.apalodimas@linaro.org>,
- Shuah Khan <shuah@kernel.org>, Willem de Bruijn <willemb@google.com>, Ankit
- Garg <nktgrg@google.com>, Tim Hostetler <thostet@google.com>, Alok Tiwari
- <alok.a.tiwari@oracle.com>, Ziwei Xiao <ziweixiao@google.com>, John Fraker
- <jfraker@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>, Mohsin
- Bashir <mohsin.bashr@gmail.com>, Joe Damato <joe@dama.to>, Mina Almasry
- <almasrymina@google.com>, Dimitri Daskalakis
- <dimitri.daskalakis1@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>,
- Kuniyuki Iwashima <kuniyu@google.com>, Samiullah Khawaja
- <skhawaja@google.com>, Ahmed Zaki <ahmed.zaki@intel.com>, Alexander Lobakin
- <aleksander.lobakin@intel.com>, David Wei <dw@davidwei.uk>, Yue Haibing
- <yuehaibing@huawei.com>, Haiyue Wang <haiyuewa@163.com>, Jens Axboe
- <axboe@kernel.dk>, Simon Horman <horms@kernel.org>, Vishwanath Seshagiri
- <vishs@fb.com>, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org, linux-rdma@vger.kernel.org,
- linux-kselftest@vger.kernel.org, dtatulea@nvidia.com,
- io-uring@vger.kernel.org
-Subject: Re: [PATCH net-next v8 7/9] eth: bnxt: support qcfg provided rx
- page size
-Message-ID: <20260113193612.2abfcf10@kernel.org>
-In-Reply-To: <28028611f572ded416b8ab653f1b9515b0337fba.1767819709.git.asml.silence@gmail.com>
-References: <cover.1767819709.git.asml.silence@gmail.com>
-	<28028611f572ded416b8ab653f1b9515b0337fba.1767819709.git.asml.silence@gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GAB1By9f"
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-43246af170aso236633f8f.0
+        for <bpf@vger.kernel.org>; Tue, 13 Jan 2026 19:42:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1768362132; x=1768966932; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6hbicXXmERQ2Zwqv3mA84pqzJuKeBjHJ7zWItYtxOog=;
+        b=GAB1By9fREyxCbO0j10ZY8KtsHjHqYlKZEcnE/512bc8mCwEGLuuiExALoBZPb7cXb
+         2KorLaoTcyaeeigIWOpceLKMyOogzIyy8/gvBgqIxc73RiDVpsh9laVe7Tchlzob07ve
+         dDMjnlzfyQF6Ix7WjAelce5h5T4YmH9EB84P+axScZaxFjzaNV8BlkmiNbOK3v9pa/6z
+         p0lwILqtjRpcEusULOyfbXalFXykvQEQinzYIqd5TO+UJff3z/NtQpWK/eoTefFreyva
+         wm9wSBLAwu5cIyUH9fkAT7SYXixjZo/FXJ2gjQezQb/B0cMNIUZctjW0ReHmmXayKtY0
+         EVrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768362132; x=1768966932;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=6hbicXXmERQ2Zwqv3mA84pqzJuKeBjHJ7zWItYtxOog=;
+        b=X67acWqnjLUe5EZMdWuwDvlbsSFwCpl4OL60BLRdmx8MSqSdZ3SoXVyM23fxLfPoOP
+         fJXLeo4pJ7FMPR52Bzq8/ZKLDlXbb5O2m3hzXqiE52rxXYbTKnxACmZw5IPKvSChpdQp
+         PPZasEIaHCX5h5ZnceFzm6GtuQ6QbbtE3pdIylE4gYzZDNS7KVMcYkrNg+ZrgBqtDVfG
+         9hAswepHv3DsRbnteMK1pE15m4Cy0hVxyF01HT5efCqqya/Oo6Ki3UxnuWclhXIOruw9
+         5OnSLvQ57KERDyPtwraUETwOOsRat1BDZhYXHqDt0lJdYinfjhvimpB/Psx26YkQWt5v
+         TYhg==
+X-Gm-Message-State: AOJu0Ywt/vcPBqWHcFddhp7PdBGTPXu9j6CqaVFuw9RWLkBR8Ir4nXEO
+	3M/K7ral9JuS9xwzjIuOxOfKlIfphmQ8JXhOqN0GpcQrtZ9Em5aAfgHzul+nPvE6JDk9e/5ow+C
+	sr0N/DhcmYoskIYvrkRGGvbpD/LFiHrs=
+X-Gm-Gg: AY/fxX53Y7h3u2MXKcJ0EPf2AC7KhxH/Fg+D3OTXPBsEw0EP/8apXFQboSlcv04V3LM
+	DXdaaH1ymT2RtvlyZF1EhyB/+xwfIIGcmugw++AGlC05VopjZXA3/lp3HCLrfSTPeqmypC6+kjd
+	/cHxH/WYJEvFHTs4tITcjx12bhEsMvzmOkV1MBDp9tiZEsvQhLNoxxzSd55dkcleNSYoWASVOY+
+	qmbrxvX2q8MJ2OB6XLgHEaShiBKhss3FFwXEX90hiBaVA1Ecy8PdzgEDrFQ3GwddViqQOrwxVmG
+	ssH+6oQAPSd1gfeiUvIOk7O4U+bM
+X-Received: by 2002:a05:6000:1889:b0:42b:2a41:f20 with SMTP id
+ ffacd0b85a97d-4342c0d5d5emr1155789f8f.18.1768362132237; Tue, 13 Jan 2026
+ 19:42:12 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20260111153047.8388-1-a.s.protopopov@gmail.com> <20260111153047.8388-2-a.s.protopopov@gmail.com>
+In-Reply-To: <20260111153047.8388-2-a.s.protopopov@gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Tue, 13 Jan 2026 19:42:01 -0800
+X-Gm-Features: AZwV_QiyyGUGT0UFZyZuOWk9InMn-ccznBBEMeekNGLZkpb5rje0Fp_0Vf9xpVk
+Message-ID: <CAADnVQ+6aByMvKttzhMWSSHM=mwiZnAd9CLVE1beHoC2o1xvrw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/3] bpf: insn array: return proper address for
+ non-zero offsets
+To: Anton Protopopov <a.s.protopopov@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Yonghong Song <yonghong.song@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri,  9 Jan 2026 11:28:46 +0000 Pavel Begunkov wrote:
-> @@ -4342,7 +4343,8 @@ static void bnxt_init_ring_struct(struct bnxt *bp)
->  		if (!rxr)
->  			goto skip_rx;
->  
-> -		rxr->rx_page_size = BNXT_RX_PAGE_SIZE;
-> +		rxq = __netif_get_rx_queue(bp->dev, i);
-> +		rxr->rx_page_size = rxq->qcfg.rx_page_size;
+On Sun, Jan 11, 2026 at 7:23=E2=80=AFAM Anton Protopopov
+<a.s.protopopov@gmail.com> wrote:
+>
+> The map_direct_value_addr() function of the instruction
+> array map incorrectly adds offset to the resulting address.
+> This is a bug, because later the resolve_pseudo_ldimm64()
+> function adds the offset. Fix it. Corresponding selftests
+> are added in a consequent commit.
+>
+> Fixes: 493d9e0d6083 ("bpf, x86: add support for indirect jumps")
+> Signed-off-by: Anton Protopopov <a.s.protopopov@gmail.com>
 
-Pretty sure I asked for the netdev_queue_config() helper to make 
-a return, instead of drivers poking directly into core state.
-Having the config live in rxq directly is also ugh.
-
-But at this stage we're probably better off if you just respin
-to fix the nits from Paolo and I try to de-lobotimize the driver
-facing API. This is close enough.
+Applied and tweaked the subject line of all 3 patches.
+Please see what I did and don't invent new prefixes.
+bpf, libbpf, selftest/bpf, bpftool, and "bpf, x86/arm64:"
+are the only categories.
+If you see others, maintainers were too lazy to do fixups.
