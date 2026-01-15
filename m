@@ -1,427 +1,361 @@
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BECA42BDC13
-	for <bpf@vger.kernel.org>; Thu, 15 Jan 2026 19:11:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768504263; cv=none; b=lRJQ7Z6WOmSN7OemRTG8TgDy6aODIZWSEGMxC5P9/YHWgkf3AbhLwD3nsoNu5AP3U5ztGrQX9RPofv4DvPZIKeSJi1OxzG3E0mjrk8VrV47eGYL3ZCaG3XqjXjHcppPu+nj4hcIa+yQs6g8LG0FlyhPMOtuYokT2xWjQ4tejhNU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768504263; c=relaxed/simple;
-	bh=38iSyjYoEwMzr+nrU6pjXPKBtQ2TX3V1C7DF25i/yc0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GujqGVbsekVqqmif/dAAgA/Vw8bYYemXAJY+ucrNgvTwDOL0sk2RjMTHgML/QPeEjZ0EsCT1nVZOQ7owIpY1dVj81f8LjDG185/ND/VS9ZQWRsaxbqaIDz6GqcnR7DoVIbOfvSjkRjRTz6LsGYfOYR943pqPSA9m0a7Qaks28aY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mG6XQo6D; arc=none smtp.client-ip=209.85.208.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 247763A0B23
+	for <bpf@vger.kernel.org>; Thu, 15 Jan 2026 19:11:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768504318; cv=fail; b=YHvn//XH6DgZMmAksb2d40P4xEpj5l+Ij17wAFuvLor5u+YZQ2+kB+wBsNu+OS9mh/x8LxRogovPtz95ydYuoD9BTkLVyuIIhiV1XnIb85Wo0d5wJCYUVfdW87ZC/eyi8g/OKYiNO+ZmshRXM1QOTLfvmXKrjItw5+t0oEaGKPI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768504318; c=relaxed/simple;
+	bh=vjmQRj3TJ0b1/EcL6kUlDO2l2xjEHKxXglWvB5FBByw=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=EwdxIPk+w+ETpiuxRrxsPAGkKjRm5kJeuq2gcTEyLM+5Q2OErCev2ImypOobuOOJ1PjgEPEYJoZvAlbAYoDpugtRrCugAT9MlGAsa2IKBiqjEzwwpjKjbIqvEg0H3wYx3gq3ZdyqSdnLGUrVLm8wv6qefCMfSG0jcO+pAwBgxyc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=UuDmp8Sp; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=Q1CCVue0; arc=fail smtp.client-ip=205.220.165.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mG6XQo6D"
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-64c893f3a94so4126764a12.0
-        for <bpf@vger.kernel.org>; Thu, 15 Jan 2026 11:11:01 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="UuDmp8Sp";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="Q1CCVue0"
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60FEtB4T802772;
+	Thu, 15 Jan 2026 19:11:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=
+	corp-2025-04-25; bh=wLRO+g3DH7XNqnqYYX59VJYAt1IJxjxk0iOjYJdxYhU=; b=
+	UuDmp8Sp5rS42YqIxDaewxwitmyY4UUGiR80Ka65aiczqbyEBZy2yWRCAf7e3JHb
+	h3zTOg1aw3lX5kgyjcPqudBojckuoNm6dhat4+WtpRZjDXPtMMJ899GId+xXM5Hu
+	rl4wQskMWuoD1HctthD95le4nxUHF1huGfAYVvvftpNXdCMdpIAz6fm5Ga8u+fSh
+	GvCbXImIo0p+a9K087/9uMknDBW3qcZoxcU3yHGTav3f7NbH9jgVHE1zM33Isuov
+	UOLT4AHrvw0H5hDqBIr8bRoqNBKBvkCTPM6OLoOKa1aT2Z8KO6fn/ZrVV0G7drF2
+	VCkxOvqP5zYXstkE44rjHg==
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4bkre40g90-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 15 Jan 2026 19:11:15 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 60FI7Bt5005714;
+	Thu, 15 Jan 2026 19:11:14 GMT
+Received: from co1pr03cu002.outbound.protection.outlook.com (mail-westus2azon11010063.outbound.protection.outlook.com [52.101.46.63])
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4bkd7bek2f-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 15 Jan 2026 19:11:14 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=wKccKAB1XpOUELK1VUaIyuryqe6+iSIyv5DmD/ujf188Ft1+VyKlTP3+x4QlIo5qtmwLx4SxPR90Uvg0VHf3Wfasn15ouBQd7bY2m5U5DE1w4dOim7EmjicEMl8qRMIxM0ZPh3R1dBnv3YFS0qzrCsuS1husEfL9PwzmCjyTn08fcgRy0xd9JKU4cSlEwPIjz99+LxYeq77BaDHZvARVH0w1r86SB3yRPLy8NDR/v61xj+YdWDe7PlpK4ckON5RsbiCdArGTdaCDD44jQMmZS5WzSoEQKjAsRbPnYh4y/oQfi7IVTEeCZek/J0YT83XjKi684FYgjmylxHzJ+rNtUA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wLRO+g3DH7XNqnqYYX59VJYAt1IJxjxk0iOjYJdxYhU=;
+ b=C8HnzxOGHct1tsYmExM45SRBJQOsh7GJ6WFl1xrns0dVDK/vudQkh+MiKd1T0/453KMI5qIw/LnAxLrjVmXj+iI4qaq5qId95jx3Gho4YQytu5tVGSDyB9HClYL3BtO2BL3vc5ZzsDOTHNwxwgkRDnl2w6Bkap6D1N9rLp8UWvGb6SjSIN8K2xpXkm73w+8khddtSuQwMJEcTXRUZSKKwPSCN7GIw6eLeaOU2CiEwlnjSZyYB2VL8GWlqZ3mhqqgPZuIrpExgXzjqeoPMsgm2yKrIC4vwD70qyujlrKY/Yc92xwbaFq0zmRPp+ZejIdTYN0IbHUWG4KRAI9vduU5+A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768504260; x=1769109060; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bW47JMUnnrn3JGaUjgMVWNTwCOKFTT/lQ2uvrJQBiv0=;
-        b=mG6XQo6DscD0qaNtyg2siXtqTOwofyVHE0Y9rzo/4WzVfE10MmoU9b0wijrhc4lOgc
-         uqGH9cX7qK7fQjY5ErgQXkuX3Rfs5DlDzGI1IjPtKSY0QVIpGkcdy4GMmTfK7kK64vXB
-         U1Bhw2ILAsHTilA03Wn5nYvU+PYEjOp83Vck4cvwxnq7zXOL7wXYCdd3IYHXNXDbSvmM
-         eu2kAIqnlyOIAk7sJMvHtXkJHMluShnQUtYBYwv6PKZNzw8mwfFSadEUchaqwBMjllb3
-         QTeYBC+XdM7D8WWKs2I9jsXh8xCZGjyB8V5mk//Q1a/hLeA3WHp77LS26Yvk9T+OzdVg
-         YXfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768504260; x=1769109060;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=bW47JMUnnrn3JGaUjgMVWNTwCOKFTT/lQ2uvrJQBiv0=;
-        b=i9FlpmDSNZ8ovdfA9AtfyIXr1tnDTVCdkN4u2jyyEYiOQIfRVWsxe55bWUWUJVGmFx
-         ANlBM5TH1HGXafamOX6bZmZAFgra1V3aYZOiWBNpTfXUVe2bObz4my2+NGH/+Pg1Bzl8
-         8Uv8CjcCo1Mg9TcVh46Jc/XuKO5NWn8kXKSD88KPzV9KZSn++mhVdhbCjDCsnLo7FsSl
-         p+fHH1i63pE8kLuKNKlKlX9X9fT2ZIunxK3LoZytzewbrmkUFdUMEnSBUZXITev7zLUT
-         A3R6us9Yz5tfVDHHwScVdwHPFeIqaYaB1wJAxU791yuCbaSs0onpdzC9isAn9hDLRMmk
-         xc5w==
-X-Forwarded-Encrypted: i=1; AJvYcCXkMn2l6n+Jbt1T2TtrjP89nvDWv0Ze5ZasFwn+ysy5KZiU9O+bby6zOPCFzLu59QHiAHg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxo2a2Xvis2tZjS2M8eXA11Fl/AnJy6rJfsrDROk+0YJmkaimVQ
-	NkJ5AD8ijgmLs63UQE7dM9Hyw+yvGLkLQanj5aKj8R2PJWBrLdd9yaGmtn19ZA==
-X-Gm-Gg: AY/fxX7FalVpdYuGltuFvnvvdfOZ3rHfFWf5ZYwmkKVh7cagThbOqSNUW9Gl+g9CvCr
-	WMHfqbst7BPAOKHsSeeKGEty5kMYpnHyrlXqDfr+dgk9NKHrlJRMmcMUU4v7FjWFp8qy3r3w8+I
-	RIM8TxVcZgg39c99coNh3DzHauqhDgk7MHcOnD+dy67swFE+PFo+dM9SedyVFCpr4AKwxZyI8Hh
-	eRFJQa/WzBxvVfinK263vyjtSpK0e5YIIb+X6eJAPFu3T92SAGZ5nnYlKi35hdjIfxk22xwT0B6
-	7GvALN1/wRkKXVU9dr/mnY6/WImoqMGBgY4Hdwk13BpA3Gef9WkOaz/itDCrBt+DPxqGfDzR5H9
-	Mrn9jj2uGEDlbhQRqYZHGqJCI+u9gBEJk3tJ7ECECObTc3kVeazod8HsvVDg8daNHLo1/7AKt1Y
-	ZqGZt28vET0RMQLAxjbKXv03yoRYJN+SFuIlVdYRlUPqFzQhL6ZRko11EBA7Fkr9ZuTqnRUWpDl
-	uu9BpXg32zl/A/BCCGzz9k95TU1
-X-Received: by 2002:a05:600d:640f:20b0:47d:6c36:a125 with SMTP id 5b1f17b1804b1-4801e7d2a3cmr1465185e9.17.1768497153419;
-        Thu, 15 Jan 2026 09:12:33 -0800 (PST)
-Received: from 127.mynet ([2a01:4b00:bd21:4f00:7cc6:d3ca:494:116c])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47f429071a2sm54741645e9.11.2026.01.15.09.12.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Jan 2026 09:12:32 -0800 (PST)
-From: Pavel Begunkov <asml.silence@gmail.com>
-To: netdev@vger.kernel.org
-Cc: "David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Michael Chan <michael.chan@broadcom.com>,
-	Pavan Chebbi <pavan.chebbi@broadcom.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Joshua Washington <joshwash@google.com>,
-	Harshitha Ramamurthy <hramamurthy@google.com>,
-	Saeed Mahameed <saeedm@nvidia.com>,
-	Tariq Toukan <tariqt@nvidia.com>,
-	Mark Bloch <mbloch@nvidia.com>,
-	Leon Romanovsky <leon@kernel.org>,
-	Alexander Duyck <alexanderduyck@fb.com>,
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Willem de Bruijn <willemb@google.com>,
-	Ankit Garg <nktgrg@google.com>,
-	Tim Hostetler <thostet@google.com>,
-	Alok Tiwari <alok.a.tiwari@oracle.com>,
-	Ziwei Xiao <ziweixiao@google.com>,
-	John Fraker <jfraker@google.com>,
-	Praveen Kaligineedi <pkaligineedi@google.com>,
-	Mohsin Bashir <mohsin.bashr@gmail.com>,
-	Joe Damato <joe@dama.to>,
-	Mina Almasry <almasrymina@google.com>,
-	Dimitri Daskalakis <dimitri.daskalakis1@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	Samiullah Khawaja <skhawaja@google.com>,
-	Alexander Lobakin <aleksander.lobakin@intel.com>,
-	Pavel Begunkov <asml.silence@gmail.com>,
-	David Wei <dw@davidwei.uk>,
-	Yue Haibing <yuehaibing@huawei.com>,
-	Haiyue Wang <haiyuewa@163.com>,
-	Jens Axboe <axboe@kernel.dk>,
-	Simon Horman <horms@kernel.org>,
-	Vishwanath Seshagiri <vishs@fb.com>,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-rdma@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	dtatulea@nvidia.com,
-	kernel-team@meta.com,
-	io-uring@vger.kernel.org
-Subject: [PATCH net-next v9 5/9] eth: bnxt: store rx buffer size per queue
-Date: Thu, 15 Jan 2026 17:11:58 +0000
-Message-ID: <f57efb32aae1da5c0a25acf473ef4ab559894adf.1768493907.git.asml.silence@gmail.com>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <cover.1768493907.git.asml.silence@gmail.com>
-References: <cover.1768493907.git.asml.silence@gmail.com>
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=wLRO+g3DH7XNqnqYYX59VJYAt1IJxjxk0iOjYJdxYhU=;
+ b=Q1CCVue0Xhgp8f1GPjGzFnFHE7CN3d7eIe0f3Mrd0zacqeiRrrtzpPacBG+5WMJfjABf+aAEqzlrOfGQpmzaEZM2m5HEEXdFAQPDSbtRYVHL8fDQy4WvRtmq2tkuQBFDa5WRMhmD4jvQj1qJpmvjEdDjorePP56mj17eJJmm71c=
+Received: from DS0PR10MB6271.namprd10.prod.outlook.com (2603:10b6:8:d1::15) by
+ DM6PR10MB4300.namprd10.prod.outlook.com (2603:10b6:5:221::8) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9499.7; Thu, 15 Jan 2026 19:11:10 +0000
+Received: from DS0PR10MB6271.namprd10.prod.outlook.com
+ ([fe80::940b:88ca:dd2d:6b0c]) by DS0PR10MB6271.namprd10.prod.outlook.com
+ ([fe80::940b:88ca:dd2d:6b0c%7]) with mapi id 15.20.9478.004; Thu, 15 Jan 2026
+ 19:11:10 +0000
+Message-ID: <7b09d0ce-9d4a-439a-969a-24b808f76b30@oracle.com>
+Date: Thu, 15 Jan 2026 19:11:03 +0000
+User-Agent: Mozilla Thunderbird
+Subject: Re: KCSCAN and duplicate types in BTF [was Re: [PATCH bpf v2 1/2]
+ libbpf: BTF dedup should ignore modifiers in type equivalence checks)]
+To: Marco Elver <elver@google.com>
+Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>, andrii@kernel.org,
+        yonghong.song@linux.dev, nilay@linux.ibm.com, ast@kernel.org,
+        jolsa@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev,
+        eddyz87@gmail.com, song@kernel.org, john.fastabend@gmail.com,
+        kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com,
+        bvanassche@acm.org, bpf@vger.kernel.org
+References: <20260114183808.2946395-1-alan.maguire@oracle.com>
+ <20260114183808.2946395-2-alan.maguire@oracle.com>
+ <CAEf4BzZruKmtcwK+V_qT8RcaXpp3=GXaZaiQtK4OchSR8Ye4Yg@mail.gmail.com>
+ <5886e8c8-7646-4686-91b7-185cc953be20@oracle.com>
+ <CANpmjNPJfmN57BsZknURkPG+1__1CsxW3zk+gpWS83c1diKstg@mail.gmail.com>
+Content-Language: en-GB
+From: Alan Maguire <alan.maguire@oracle.com>
+In-Reply-To: <CANpmjNPJfmN57BsZknURkPG+1__1CsxW3zk+gpWS83c1diKstg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: LO4P265CA0066.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:2af::9) To DS0PR10MB6271.namprd10.prod.outlook.com
+ (2603:10b6:8:d1::15)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS0PR10MB6271:EE_|DM6PR10MB4300:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4e9840f2-78a4-4c19-6da7-08de5469d7be
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|376014|1800799024|366016;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?ZmZwOURETGFReVk4WmdMVnZrbjFmU05kNGZUaGJrQjFtSU1yUHVFZjNYY3lQ?=
+ =?utf-8?B?c2RMUnhKZlNFenRaVFpEdk1HSHRhUzBKUE5tV05MQ2Q1ZTdJb1J4L0dIQ2R4?=
+ =?utf-8?B?ckNIblM1dTlGTmxLYmtvVkovbEY3dFlYOEo2RndhbVdJT01rdnd6RHExNlZ0?=
+ =?utf-8?B?TjdlaXdNaFlSUGZSQXB1dU52UHVNMmlDTWFSdlU0cFpudkJpU00wUlJlRnNQ?=
+ =?utf-8?B?WTRidkVBVDhUSVZ6Z2JzQjZoTFB6cDVvNUlTbmc5R0VyeCtBcGkzeE1lRS8r?=
+ =?utf-8?B?Wm9LSC9RVEZOWHhnT2NLTk50aFE3dVdMaDBKS0YvSnFsSGhISFdKMmozNUI5?=
+ =?utf-8?B?cXI1N3VLU0UrWHhwcXAwSXhqMXlyVjg1S3l6WG02TXZYZ2FHTWF1Tkl2T214?=
+ =?utf-8?B?S3hoS3FFQjgrU2pWVSs2RmJ0Y0VvSmtqTHBUNTBwSGtTWE0vT2s2OU5BTnAr?=
+ =?utf-8?B?dEtyL2Ixc1N6OGF0aFpaS0NkZmF0NUQvdkpBYXo3aUFlRHQrYWxJRjV5cURK?=
+ =?utf-8?B?TDAzMGV6UkNoeXNFdjVoRy9NaDFoMm16N21PdCthWjQ3QzNhRGMxbll4Y3JP?=
+ =?utf-8?B?dmNsTFEwclQ2bURraDVndngrNHU1VldLcGttUXRSS0s5L0h5TmlBNVhIaWt1?=
+ =?utf-8?B?NTFqL05ociszVEh5QVpEd0hHbWZsUE1RV2lWN1BJT0NIeWFIa3hkUGc1OW9U?=
+ =?utf-8?B?RXZmOTZLcDQveHY4OURDRlBIUVE1eXZ1V3NoUVAvTCthUWlVRFRNZU1TK0xi?=
+ =?utf-8?B?aC9uMGU2aFg4QXBBUmUyRWRLTGFBNmJBN2NaSU5VRW9kZjhLWk4rSUJlN0Rp?=
+ =?utf-8?B?NFJiZU4vN1JsVVFUQi80MUxhTGN2NVB4cmlqaElxNjhOaURDQmlsQVdhWExv?=
+ =?utf-8?B?UXdDaitiZUVSbUpQeHJ5RHIzeFgvR3paVVFyQ1JQSUpSSUVVN1p2UUtWR1Ez?=
+ =?utf-8?B?eXo0R0VyRlBtcVBVaXB6N3NwNXR6dndwQm9MRGwvUkxyRHhtWjR1endJaXFy?=
+ =?utf-8?B?RndlS0tjTUN4eDZ2M1dWNzgzVjBkM1BmMkpJaUhKZ0V0UEpha2ZUWmxwVlV5?=
+ =?utf-8?B?MEo4RVAvOHo3WlNpQlg4N2s1aGJZRG9RSjlsTTlVMjFacDlxME5zSW55bXBN?=
+ =?utf-8?B?UEY1ZnhiNUREK1RUaWFvUEZpbDFQRy9yU0liTUduMjdzSDBLQ0hSelloUEVR?=
+ =?utf-8?B?eFFmZm41M1g4NnVIR3ZIb3g5QUJScDNFRTkyM1o5Sm4zRUNValFubmxuWGJa?=
+ =?utf-8?B?RXZFMy8vNUNzVmNQRGNZZlBkRk5zVlF5d2xjMUE5K3h2SThnaGVnVDc0K0dI?=
+ =?utf-8?B?RDlFelBDQVFTQnJyQ1lndmtaeHNrSG5MNmxmQTI5cHlwS21mOCtzeS9LSjJt?=
+ =?utf-8?B?cVkreml3RXNxRXBRR2t0SDVkM0Q5eXJyODB3Z2l5UmwvTVRQN1JoZ29VM1lX?=
+ =?utf-8?B?M1FHTHJEdzhvNjFzWHhSMzBvZ3FobmF2ZjRCelNUdDhGUHdCR0drK25nNEVp?=
+ =?utf-8?B?V2thYWZwS1dydEFUbU56OTBQVE5zOEh4T0NvakNnQkpEQ2Z3TkxCallwdFR6?=
+ =?utf-8?B?dmFUWWxkTGpaV3hNRElnSUdnR0hSTTdlanpoUzNwN09jMmtSQzl3a21oczQ4?=
+ =?utf-8?B?QUYyS05CN1NCSjhUb0hZMGV1RS8vN2dIc1I0cW9KVkE0SEtuTHhVQ25yQUVt?=
+ =?utf-8?B?ejNsWUdOeVVLSkhzYXhoMGlpdmIyS01ra3R5VmJVc2l2NnZVdTBBQktWa1B4?=
+ =?utf-8?B?OTZjR2RsS080ZktTV09ib0s5MFB1V0Z4V1N4cEd3YmY5ZXJ4MmxTTUp4NXFX?=
+ =?utf-8?B?SmRUMU5BaFV5eFV0LzNJTkZNOVlIWE42cG9Mbk1QZ1JnSVJxbmxvSWhMRzdt?=
+ =?utf-8?B?TDNkUk9URGh6SE5QMXRNcFZ4bElwMitwMlBzV01QWG5qVkxDbGh1RUllVm4r?=
+ =?utf-8?B?K2VSZkNKcWtxQVhWZ01xNkhTOU9CbjZqWjJnM2hyd0RvN0JHWTdsSDI0cVFJ?=
+ =?utf-8?B?UVpnSXlSaG8vRzdxd3VKNUVLMHVtMlM0ajJ1Y2M2VG5pR3hXWUkzUi9ETE95?=
+ =?utf-8?B?WXVtTExIYzBaYlVsbzQ4K1RnMWJRdWUwcklCNnEwT3BRT0lnR1RkTmNoMUJw?=
+ =?utf-8?Q?Nong=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR10MB6271.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(366016);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?TlpSNjArcUVmSCtVUnQyalFob09JTU1kYmR1V1dQREM3cjE1NlFTbVl6OWJr?=
+ =?utf-8?B?bGJYRTh2dUVjeW80cVlSZXRqZHNtSy94VWVTUXV2b2pOSVdDMmNHOXFId1hI?=
+ =?utf-8?B?b2N0VkU1ZVZ5YjVJNUZrWlFCcWxVUjZ4YjN6Y0xKMFYrVXRHcHVLMEpzQnN4?=
+ =?utf-8?B?ZG1WRThMaWYrUVdUMDdobVlmM1RSOUpaUGdKRFU4UGV2Yk1rZ2h2MDZIVGsw?=
+ =?utf-8?B?bXZNeGxjS0JZUlRxdmdqZWdLYkd1bmVvMTIvTjFhdFZWdlNCeUMxZHhVN0Z0?=
+ =?utf-8?B?UmVGVDZqS1ZYQXROVE1qYkFwZWxyUzgwMFlvWlJMVlVWVElCdmlZZXBLUDJi?=
+ =?utf-8?B?aWlOeXJwUDc4VmxtVU1PLzROT3I2NkE5TTZpajlZRjRudUEveEtJdDFCWGEv?=
+ =?utf-8?B?ZmdybGNIVXo3Z1NYdWZXTVdCVE9NTVpaN3dlc0pyYnFKQTNrcXBBRGE5eVhq?=
+ =?utf-8?B?Tk9rVEZCRy8zeFRYOTJaMXEvblFFT3QzbFdFSnRObmxCTnZMejRQVzhwN1F1?=
+ =?utf-8?B?WXZFbUY2cGxrNVREOVhNd1ZKT1AxNHgzTUNtT2szSlNlMGtwRzdXRFlneldp?=
+ =?utf-8?B?dkNWemxoZEMvYjl2NUVua2ZQRHZCZUN5NnJzWTZRdGI4dnVvanRiT0Z3Q2xU?=
+ =?utf-8?B?dWVNdjR4RFprZnBMb2JHWTRRSG1aamFQa282UC9VM0doaXIrU1k1bzJ5QUxn?=
+ =?utf-8?B?VDdYaHBzaGJOdTdWRVVhRlZraEczTlJsZFlqTnNPQkFpU3ZPbVZwQzFkSUJK?=
+ =?utf-8?B?VjY2WmRlcWhHWFZOTGQ1WU5LS0pTYUxyNnNHWjJDNUxXbzRsNHp1Sjk4bUJa?=
+ =?utf-8?B?MGQzMmcyVGdEcFVzdzVYRGJDSmhoRVdrTnYrQ0FNdmRzSE13UlJONkNxbkRT?=
+ =?utf-8?B?UjBqbGdjYWNWS3VyRkJnRGw5THB1SmF5UERhK0lWVHRxWDlHYm5NaTBhZ0Va?=
+ =?utf-8?B?SlBwSE1tUmNaNGdLSHgxVUFTSlI5MHU2ZWhQQ2psSFBRQ0h4cUhyQ2ZEVFA1?=
+ =?utf-8?B?dmV3cG11a3pTaEdEd1Jja3cwdFllVU16QVhLSWxxc0Q0K3ZDYVN2dDBoWW80?=
+ =?utf-8?B?VEhOR3NyQ3NGbzZsOHBOWVlLa0t5ZlREcXNqaHZLT0cvbGhxRUV0MzZIalNP?=
+ =?utf-8?B?emRua3MwNVAwaG1iYVRZcEhvWWdRbUZYMHdHdmQ2a2JlTUNkVnVJRDB1NnJ3?=
+ =?utf-8?B?ZjZNUFhOQUMyaW0xUWdQZTIxZkpKR1ZUbWpsay9jeVA4ZURZVW9uNzJrSnlP?=
+ =?utf-8?B?Kzg2TnZ1cVhySmdCMkFJbEUwTjlQZ2Q2bXVFRWlVRWVTZ2F5eFBjYzdTcmhu?=
+ =?utf-8?B?TjQ4M05PTkwxeVFveUVDUzBlUlZvc2hYaFlsZzJLVkZMSzdEaGNydGp2WkNC?=
+ =?utf-8?B?U0JoaVluM1JYWkQxWUhpcG5hT1h0NTM4bHhnRUlMS3JRZDZMamhCOU5udk1C?=
+ =?utf-8?B?Yk5ybGg1a1doNm9Fak8zSm1sYXRxNFJYWHJzUkErVzZZam9QNEZLVUJOTkU1?=
+ =?utf-8?B?dzhycHBQUUhTQWlueDlDRllJdjA5MHU0Z0pIMjVVb0tIYUFUSFFPajd4YUJ3?=
+ =?utf-8?B?M3lBVkxaSnY0ajU1bFFHOS8ySEFvWmtXWnJLQ25IcVI4NlFjeDFTeUZnQlFT?=
+ =?utf-8?B?U3BIbk1laTZRYThCblFWUG5yUlE2Qytqd0lZUDNtUlN0LzNBQ3FEM0VVTURi?=
+ =?utf-8?B?ZkVHZ1MrREpidloxZjBHN3FGR1h1QnFaVG0zV1FSYS80YmNVTGNmNmZKb1lo?=
+ =?utf-8?B?TjlXc1VHM3JEMDMxMStwV0pYY2daaERzV3RyakRuTVAyZWpLSUpRRjBXK3Va?=
+ =?utf-8?B?UW0wWk5HNHg3RmhabG5wSkFVWTVudDE3clJXNW8vQStjakZ6aUdUNmFkMWIy?=
+ =?utf-8?B?WWUydVZ4cDREeUZFbmtDenFNMFNVVlV2L2Y1MEQ3WXM2MUduelc3cUNZUjhr?=
+ =?utf-8?B?VkZudWw1cTY4U3VYbmpmVlVEQ09RRFVySHI4ejBmVGIrMENmMGJwTjdRTzFE?=
+ =?utf-8?B?SDVTekVkTzhUQmR2clNFeElQbERLTzJFYTNXWllrdUhsVmFwYjk3ZFVmNHF0?=
+ =?utf-8?B?Wmk4TGNHL01Lem9nTGR1cGFqdWFsUHU4Y3ZRdTh5US9wUzdLZDR3ektOclZN?=
+ =?utf-8?B?aGpBRE9meXErZ0Y0TFZMWHhiWnVCNjN0NzlwWmlJSTlVWmJPb0kzNjJHeTQy?=
+ =?utf-8?B?SDNZcmhNYUNRd0lQOFM0SFMyckJGK0V5SzdrVCtSNGFoR2FyZTl3UFdaUitE?=
+ =?utf-8?B?UEp4NVhJT2lpNFBSZFpjTVJ1b3VBM0xYei9SbnhwU3BlbThOaEJ5OEd5MFRJ?=
+ =?utf-8?B?TDA5SkdEK2xJTmpMakhUWGhZRlJBbXFGeXliSy9hUHNiY2hIbEw5UT09?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	FiRHjg7N3lEaRy1kMuvjRjAQdUsLA9VyEFS9g+ogWUUPM5GayoBCJDxxwNS0x05WBIIRWF7Sy2MpTiD3skaiqNyqu5eY+GH26FVqjyAzIRSxjcbONfIcpZ7odM4DFmk2GaC5zCFhvTk1dTgGxUduA6rTjK8s5mBRLEAZbUc/Mqcrl74z4gke2MgD3TED2k5FT2IrYPZRs2InjqMk3JpNqs+7HA5PZ0s1NNDVImbMqoQ3ho/u97GsCv0EWaLJhUXbRaESUIodBpm0hi3tJDUGrU+6Ic70uzQJQh0fvcTSYy3XnW9YVw0G/CzLJzNST3I2fvqqrc+RJB/OLcejhRDiqfMDN3aqwL+kBEzgbseK5V2KZCpSCF6XNBaSNrjpjqXl4UH/UKZyF5gFF7vaiRaiumEYb9YthBDx4Mh749G1owInjQlyhgATN2dlkSE8dAKIIRouhSNFha9utJ0rMYaF1DdF0XcwU+ub7tXxC34S2tB5XXqxlJlKi07SeibuUBoXenJOSxhaHMb+kOMJytqkNho1p5cy3GX+znsTD7aRyenFd5PYCJx1M2NHesUTGRzbtQSCJC+lCL90DlmnmGqObboYOxnVAEZ3lX0O0jjup3U=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4e9840f2-78a4-4c19-6da7-08de5469d7be
+X-MS-Exchange-CrossTenant-AuthSource: DS0PR10MB6271.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jan 2026 19:11:10.3552
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: JQv84b2gzKrpYJEpU7FPjL+hiSAyesvZbDo37DXrR07xetuX/Ot84DhPtLF0sf4yP8x4xJSWM0SkXPyqLMRiqQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR10MB4300
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2026-01-15_06,2026-01-15_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 suspectscore=0
+ mlxscore=0 adultscore=0 phishscore=0 malwarescore=0 bulkscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2512120000 definitions=main-2601150149
+X-Proofpoint-ORIG-GUID: 5ez2YdDgMX5ZWgEeOdkxN2_4jDiCqVfm
+X-Authority-Analysis: v=2.4 cv=YKOSCBGx c=1 sm=1 tr=0 ts=69693bd3 cx=c_pps
+ a=XiAAW1AwiKB2Y8Wsi+sD2Q==:117 a=XiAAW1AwiKB2Y8Wsi+sD2Q==:17
+ a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
+ a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
+ a=vUbySO9Y5rIA:10 a=GoEa3M9JfhUA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=VwQbUJbxAAAA:8 a=VnNF1IyMAAAA:8 a=yPCof4ZbAAAA:8 a=5qUQm5ksQB-EVdhpwFwA:9
+ a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTE1MDE0OSBTYWx0ZWRfX0XznCIte38EY
+ OTHppHA7OJtIrqYfMx2s0R8JlWs2JwtGBoFsmugVms/ApV8Ak1qN2iviAP88bpaUkfQoi5v1Jgu
+ B1zMbf5aDp9X9cG+jYZb+a6CdRpKwHjL79hoIvuWyluwfkPtZkJ102wcJWg3gVly1WEJMljWZSu
+ XsPZnZTsqARdDhusN8eMiwm2ikZsA3KSYvX2FE/y+apAGvnS+nzfuwP1kWSfLQs13PMoztW3pZ+
+ 0haYZAJfIz71Yi1hOzmugiV/h9ygwaXpFBzfK2aXSUWZlcJDlneISzcQaqf5UZGceqg5gHtZil+
+ krQEPLgMm3lLInoCp/7VAy42b5CHaCbrnVlmTsojI24yebKSyKk8dRoxEJeLb9KJ5PYhpyN2kby
+ eqtTc/RY+aBDlqd7dM1bXWqOr/D8vQOb5jXEJByj6GGO0VcoD7BOTVuOFzTQVo5zmFqMUegRu/n
+ RKmYmi8FgNLUJrkyITA==
+X-Proofpoint-GUID: 5ez2YdDgMX5ZWgEeOdkxN2_4jDiCqVfm
 
-Instead of using a constant buffer length, allow configuring the size
-for each queue separately. There is no way to change the length yet, and
-it'll be passed from memory providers in a later patch.
+On 15/01/2026 18:55, Marco Elver wrote:
+> On Thu, 15 Jan 2026 at 19:36, Alan Maguire <alan.maguire@oracle.com> wrote:
+>>
+>> On 15/01/2026 17:50, Andrii Nakryiko wrote:
+>>> On Wed, Jan 14, 2026 at 10:38 AM Alan Maguire <alan.maguire@oracle.com> wrote:
+>>>>
+>>>> We see identical type problems in [1] as a result of an occasionally
+>>>> applied volatile modifier to kernel data structures. Such things can
+>>>> result from different header include patterns, explicit Makefile
+>>>> rules, and in the KCSAN case compiler flags.  As a result consider
+>>>> types with modifiers const, volatile and restrict as equivalent
+>>>> for dedup equivalence testing purposes.
+>>>>
+>>>> Type tag is excluded from modifier equivalence as it would be possible
+>>>> we would end up with the type without the type tag annotations in the
+>>>> final BTF, which could potentially lead to information loss.
+>>>>
+>>>> Importantly we do not update the hypothetical map for matching types;
+>>>> this allows us to match in both directions where the canonical has
+>>>> the modifier _and_ when it does not.  This bidirectional matching is
+>>>> important because in some cases we need to favour the modifier,
+>>>> and in other cases not.  Consider split BTF; if the base BTF has
+>>>> a struct containing a type without modifier and the split has the
+>>>> modifier, we want to deduplicate and have base type as canonical.
+>>>> Also if a type has a mix of modifier and non-modifier qualified
+>>>> types we want it to deduplicate against a possibly different mix.
+>>>> See the following selftest for examples of these cases.
+>>>>
+>>>> [1] https://lore.kernel.org/bpf/42a1b4b0-83d0-4dda-b1df-15a1b7c7638d@linux.ibm.com/
+>>>>
+>>>> Reported-by: Nilay Shroff <nilay@linux.ibm.com>
+>>>> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+>>>> ---
+>>>>  tools/lib/bpf/btf.c | 35 ++++++++++++++++++++++++++---------
+>>>>  1 file changed, 26 insertions(+), 9 deletions(-)
+>>>>
+>>>
+>>> Alan,
+>>>
+>>> I do not like this approach and I do not want to teach BTF dedup to
+>>> ignore random volatiles. Let's either work with KCSAN folks to fix
+>>> __data_racy discrepancy or add some option to pahole to strip
+>>> volatiles (but not by default, only if KCSAN is enabled in Kconfig)
+>>> before dedup (and thus we can't do that in resolve_btfids,
+>>> unfortunately; it has to go into pahole).
+>>>
+>>
+>> Okay, I think the former would be the better path if possible; cc'ed Marco
+>> who introduced __data_racy with commit
+>>
+>> 31f605a308e6 ("kcsan, compiler_types: Introduce __data_racy type qualifier")
+>>
+>>
+>> ...and Bart is already on the cc list. Feel free to include anyone
+>> else who might be able to help here.
+>>
+>> The background here is that in generating BPF Type Format (BTF)
+>> info for kernels we are hitting a problem since a few structures
+>> use __data_racy annotations for fields and these structures are compiled
+>> into both KCSAN and non-KCSAN objects. The result is some have a volatile
+>> modifier and some do not, and we wind up with a bunch of duplicated
+>> core kernel data structures as a result of the differences, and this
+>> creates problems for BTF generation.
+>>
+>> Perhaps one way out of this would be to have an unconditional __data_racy
+>> definition specific for struct fields
+>>
+>> #define __data_racy_field       volatile
+>>
+>> ...and use it for the two cases below?
+>>
+>> By having that defined regardless of whether KCSAN was enabled or not,
+>> and using it for struct fields (while leaving variables intact) we
+>> can sidestep the problem from the BTF side. Would that work from the
+>> KCSAN side and for the fields in question in general?
+>>
+>>> Furthermore, it seems like __data_racy is meant to be used with
+>>> *variables*, not as part of *field* declaration ([0]), so perhaps it
+>>> was a mistake to add those to fields. Note, there are just *TWO*
+>>> fields with __data_racy:
+>>>
+>>> include/linux/blkdev.h
+>>> 498:    unsigned int __data_racy rq_timeout;
+>>>
+>>> include/linux/backing-dev-defs.h
+>>> 174:    unsigned long __data_racy ra_pages;
+>>>
+>>
+>> Not sure, the original commit above gives a struct field annotation
+>> as an example. Anyway hopefully we can find a workable solution.
+> 
+> By "KCSAN enabled or not", I assume you mean in KCSAN kernels only? We
 
-Suggested-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
----
- drivers/net/ethernet/broadcom/bnxt/bnxt.c     | 56 +++++++++++--------
- drivers/net/ethernet/broadcom/bnxt/bnxt.h     |  1 +
- drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c |  6 +-
- drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.h |  2 +-
- 4 files changed, 38 insertions(+), 27 deletions(-)
+I should have clarified this, sorry; I meant _within_ a KCSAN kernel where
+some objects opt out of KCSAN with KCSAN_SANITIZE like
 
-diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt.c b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-index a0abe991f79a..196b972263bd 100644
---- a/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-+++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-@@ -905,7 +905,7 @@ static void bnxt_tx_int(struct bnxt *bp, struct bnxt_napi *bnapi, int budget)
- 
- static bool bnxt_separate_head_pool(struct bnxt_rx_ring_info *rxr)
- {
--	return rxr->need_head_pool || PAGE_SIZE > BNXT_RX_PAGE_SIZE;
-+	return rxr->need_head_pool || rxr->rx_page_size < PAGE_SIZE;
- }
- 
- static struct page *__bnxt_alloc_rx_page(struct bnxt *bp, dma_addr_t *mapping,
-@@ -915,9 +915,9 @@ static struct page *__bnxt_alloc_rx_page(struct bnxt *bp, dma_addr_t *mapping,
- {
- 	struct page *page;
- 
--	if (PAGE_SIZE > BNXT_RX_PAGE_SIZE) {
-+	if (rxr->rx_page_size < PAGE_SIZE) {
- 		page = page_pool_dev_alloc_frag(rxr->page_pool, offset,
--						BNXT_RX_PAGE_SIZE);
-+						rxr->rx_page_size);
- 	} else {
- 		page = page_pool_dev_alloc_pages(rxr->page_pool);
- 		*offset = 0;
-@@ -936,8 +936,9 @@ static netmem_ref __bnxt_alloc_rx_netmem(struct bnxt *bp, dma_addr_t *mapping,
- {
- 	netmem_ref netmem;
- 
--	if (PAGE_SIZE > BNXT_RX_PAGE_SIZE) {
--		netmem = page_pool_alloc_frag_netmem(rxr->page_pool, offset, BNXT_RX_PAGE_SIZE, gfp);
-+	if (rxr->rx_page_size < PAGE_SIZE) {
-+		netmem = page_pool_alloc_frag_netmem(rxr->page_pool, offset,
-+						     rxr->rx_page_size, gfp);
- 	} else {
- 		netmem = page_pool_alloc_netmems(rxr->page_pool, gfp);
- 		*offset = 0;
-@@ -1155,9 +1156,9 @@ static struct sk_buff *bnxt_rx_multi_page_skb(struct bnxt *bp,
- 		return NULL;
- 	}
- 	dma_addr -= bp->rx_dma_offset;
--	dma_sync_single_for_cpu(&bp->pdev->dev, dma_addr, BNXT_RX_PAGE_SIZE,
-+	dma_sync_single_for_cpu(&bp->pdev->dev, dma_addr, rxr->rx_page_size,
- 				bp->rx_dir);
--	skb = napi_build_skb(data_ptr - bp->rx_offset, BNXT_RX_PAGE_SIZE);
-+	skb = napi_build_skb(data_ptr - bp->rx_offset, rxr->rx_page_size);
- 	if (!skb) {
- 		page_pool_recycle_direct(rxr->page_pool, page);
- 		return NULL;
-@@ -1189,7 +1190,7 @@ static struct sk_buff *bnxt_rx_page_skb(struct bnxt *bp,
- 		return NULL;
- 	}
- 	dma_addr -= bp->rx_dma_offset;
--	dma_sync_single_for_cpu(&bp->pdev->dev, dma_addr, BNXT_RX_PAGE_SIZE,
-+	dma_sync_single_for_cpu(&bp->pdev->dev, dma_addr, rxr->rx_page_size,
- 				bp->rx_dir);
- 
- 	if (unlikely(!payload))
-@@ -1203,7 +1204,7 @@ static struct sk_buff *bnxt_rx_page_skb(struct bnxt *bp,
- 
- 	skb_mark_for_recycle(skb);
- 	off = (void *)data_ptr - page_address(page);
--	skb_add_rx_frag(skb, 0, page, off, len, BNXT_RX_PAGE_SIZE);
-+	skb_add_rx_frag(skb, 0, page, off, len, rxr->rx_page_size);
- 	memcpy(skb->data - NET_IP_ALIGN, data_ptr - NET_IP_ALIGN,
- 	       payload + NET_IP_ALIGN);
- 
-@@ -1288,7 +1289,7 @@ static u32 __bnxt_rx_agg_netmems(struct bnxt *bp,
- 		if (skb) {
- 			skb_add_rx_frag_netmem(skb, i, cons_rx_buf->netmem,
- 					       cons_rx_buf->offset,
--					       frag_len, BNXT_RX_PAGE_SIZE);
-+					       frag_len, rxr->rx_page_size);
- 		} else {
- 			skb_frag_t *frag = &shinfo->frags[i];
- 
-@@ -1313,7 +1314,7 @@ static u32 __bnxt_rx_agg_netmems(struct bnxt *bp,
- 			if (skb) {
- 				skb->len -= frag_len;
- 				skb->data_len -= frag_len;
--				skb->truesize -= BNXT_RX_PAGE_SIZE;
-+				skb->truesize -= rxr->rx_page_size;
- 			}
- 
- 			--shinfo->nr_frags;
-@@ -1328,7 +1329,7 @@ static u32 __bnxt_rx_agg_netmems(struct bnxt *bp,
- 		}
- 
- 		page_pool_dma_sync_netmem_for_cpu(rxr->page_pool, netmem, 0,
--						  BNXT_RX_PAGE_SIZE);
-+						  rxr->rx_page_size);
- 
- 		total_frag_len += frag_len;
- 		prod = NEXT_RX_AGG(prod);
-@@ -2290,8 +2291,7 @@ static int bnxt_rx_pkt(struct bnxt *bp, struct bnxt_cp_ring_info *cpr,
- 			if (!skb)
- 				goto oom_next_rx;
- 		} else {
--			skb = bnxt_xdp_build_skb(bp, skb, agg_bufs,
--						 rxr->page_pool, &xdp);
-+			skb = bnxt_xdp_build_skb(bp, skb, agg_bufs, rxr, &xdp);
- 			if (!skb) {
- 				/* we should be able to free the old skb here */
- 				bnxt_xdp_buff_frags_free(rxr, &xdp);
-@@ -3837,11 +3837,13 @@ static int bnxt_alloc_rx_page_pool(struct bnxt *bp,
- 	pp.pool_size = bp->rx_agg_ring_size / agg_size_fac;
- 	if (BNXT_RX_PAGE_MODE(bp))
- 		pp.pool_size += bp->rx_ring_size / rx_size_fac;
-+
-+	pp.order = get_order(rxr->rx_page_size);
- 	pp.nid = numa_node;
- 	pp.netdev = bp->dev;
- 	pp.dev = &bp->pdev->dev;
- 	pp.dma_dir = bp->rx_dir;
--	pp.max_len = PAGE_SIZE;
-+	pp.max_len = PAGE_SIZE << pp.order;
- 	pp.flags = PP_FLAG_DMA_MAP | PP_FLAG_DMA_SYNC_DEV |
- 		   PP_FLAG_ALLOW_UNREADABLE_NETMEM;
- 	pp.queue_idx = rxr->bnapi->index;
-@@ -3852,7 +3854,10 @@ static int bnxt_alloc_rx_page_pool(struct bnxt *bp,
- 	rxr->page_pool = pool;
- 
- 	rxr->need_head_pool = page_pool_is_unreadable(pool);
-+	rxr->need_head_pool |= !!pp.order;
- 	if (bnxt_separate_head_pool(rxr)) {
-+		pp.order = 0;
-+		pp.max_len = PAGE_SIZE;
- 		pp.pool_size = min(bp->rx_ring_size / rx_size_fac, 1024);
- 		pp.flags = PP_FLAG_DMA_MAP | PP_FLAG_DMA_SYNC_DEV;
- 		pool = page_pool_create(&pp);
-@@ -4328,6 +4333,8 @@ static void bnxt_init_ring_struct(struct bnxt *bp)
- 		if (!rxr)
- 			goto skip_rx;
- 
-+		rxr->rx_page_size = BNXT_RX_PAGE_SIZE;
-+
- 		ring = &rxr->rx_ring_struct;
- 		rmem = &ring->ring_mem;
- 		rmem->nr_pages = bp->rx_nr_pages;
-@@ -4487,7 +4494,7 @@ static void bnxt_init_one_rx_agg_ring_rxbd(struct bnxt *bp,
- 	ring = &rxr->rx_agg_ring_struct;
- 	ring->fw_ring_id = INVALID_HW_RING_ID;
- 	if ((bp->flags & BNXT_FLAG_AGG_RINGS)) {
--		type = ((u32)BNXT_RX_PAGE_SIZE << RX_BD_LEN_SHIFT) |
-+		type = ((u32)rxr->rx_page_size << RX_BD_LEN_SHIFT) |
- 			RX_BD_TYPE_RX_AGG_BD;
- 
- 		/* On P7, setting EOP will cause the chip to disable
-@@ -7065,6 +7072,7 @@ static void bnxt_hwrm_ring_grp_free(struct bnxt *bp)
- 
- static void bnxt_set_rx_ring_params_p5(struct bnxt *bp, u32 ring_type,
- 				       struct hwrm_ring_alloc_input *req,
-+				       struct bnxt_rx_ring_info *rxr,
- 				       struct bnxt_ring_struct *ring)
- {
- 	struct bnxt_ring_grp_info *grp_info = &bp->grp_info[ring->grp_idx];
-@@ -7074,7 +7082,7 @@ static void bnxt_set_rx_ring_params_p5(struct bnxt *bp, u32 ring_type,
- 	if (ring_type == HWRM_RING_ALLOC_AGG) {
- 		req->ring_type = RING_ALLOC_REQ_RING_TYPE_RX_AGG;
- 		req->rx_ring_id = cpu_to_le16(grp_info->rx_fw_ring_id);
--		req->rx_buf_size = cpu_to_le16(BNXT_RX_PAGE_SIZE);
-+		req->rx_buf_size = cpu_to_le16(rxr->rx_page_size);
- 		enables |= RING_ALLOC_REQ_ENABLES_RX_RING_ID_VALID;
- 	} else {
- 		req->rx_buf_size = cpu_to_le16(bp->rx_buf_use_size);
-@@ -7088,6 +7096,7 @@ static void bnxt_set_rx_ring_params_p5(struct bnxt *bp, u32 ring_type,
- }
- 
- static int hwrm_ring_alloc_send_msg(struct bnxt *bp,
-+				    struct bnxt_rx_ring_info *rxr,
- 				    struct bnxt_ring_struct *ring,
- 				    u32 ring_type, u32 map_index)
- {
-@@ -7144,7 +7153,8 @@ static int hwrm_ring_alloc_send_msg(struct bnxt *bp,
- 			      cpu_to_le32(bp->rx_ring_mask + 1) :
- 			      cpu_to_le32(bp->rx_agg_ring_mask + 1);
- 		if (bp->flags & BNXT_FLAG_CHIP_P5_PLUS)
--			bnxt_set_rx_ring_params_p5(bp, ring_type, req, ring);
-+			bnxt_set_rx_ring_params_p5(bp, ring_type, req,
-+						   rxr, ring);
- 		break;
- 	case HWRM_RING_ALLOC_CMPL:
- 		req->ring_type = RING_ALLOC_REQ_RING_TYPE_L2_CMPL;
-@@ -7292,7 +7302,7 @@ static int bnxt_hwrm_rx_ring_alloc(struct bnxt *bp,
- 	u32 map_idx = bnapi->index;
- 	int rc;
- 
--	rc = hwrm_ring_alloc_send_msg(bp, ring, type, map_idx);
-+	rc = hwrm_ring_alloc_send_msg(bp, rxr, ring, type, map_idx);
- 	if (rc)
- 		return rc;
- 
-@@ -7312,7 +7322,7 @@ static int bnxt_hwrm_rx_agg_ring_alloc(struct bnxt *bp,
- 	int rc;
- 
- 	map_idx = grp_idx + bp->rx_nr_rings;
--	rc = hwrm_ring_alloc_send_msg(bp, ring, type, map_idx);
-+	rc = hwrm_ring_alloc_send_msg(bp, rxr, ring, type, map_idx);
- 	if (rc)
- 		return rc;
- 
-@@ -7336,7 +7346,7 @@ static int bnxt_hwrm_cp_ring_alloc_p5(struct bnxt *bp,
- 
- 	ring = &cpr->cp_ring_struct;
- 	ring->handle = BNXT_SET_NQ_HDL(cpr);
--	rc = hwrm_ring_alloc_send_msg(bp, ring, type, map_idx);
-+	rc = hwrm_ring_alloc_send_msg(bp, NULL, ring, type, map_idx);
- 	if (rc)
- 		return rc;
- 	bnxt_set_db(bp, &cpr->cp_db, type, map_idx, ring->fw_ring_id);
-@@ -7351,7 +7361,7 @@ static int bnxt_hwrm_tx_ring_alloc(struct bnxt *bp,
- 	const u32 type = HWRM_RING_ALLOC_TX;
- 	int rc;
- 
--	rc = hwrm_ring_alloc_send_msg(bp, ring, type, tx_idx);
-+	rc = hwrm_ring_alloc_send_msg(bp, NULL, ring, type, tx_idx);
- 	if (rc)
- 		return rc;
- 	bnxt_set_db(bp, &txr->tx_db, type, tx_idx, ring->fw_ring_id);
-@@ -7377,7 +7387,7 @@ static int bnxt_hwrm_ring_alloc(struct bnxt *bp)
- 
- 		vector = bp->irq_tbl[map_idx].vector;
- 		disable_irq_nosync(vector);
--		rc = hwrm_ring_alloc_send_msg(bp, ring, type, map_idx);
-+		rc = hwrm_ring_alloc_send_msg(bp, NULL, ring, type, map_idx);
- 		if (rc) {
- 			enable_irq(vector);
- 			goto err_out;
-diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt.h b/drivers/net/ethernet/broadcom/bnxt/bnxt.h
-index f88e7769a838..9eaef6d7c150 100644
---- a/drivers/net/ethernet/broadcom/bnxt/bnxt.h
-+++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.h
-@@ -1105,6 +1105,7 @@ struct bnxt_rx_ring_info {
- 
- 	unsigned long		*rx_agg_bmap;
- 	u16			rx_agg_bmap_size;
-+	u32			rx_page_size;
- 	bool                    need_head_pool;
- 
- 	dma_addr_t		rx_desc_mapping[MAX_RX_PAGES];
-diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c b/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c
-index c94a391b1ba5..85cbeb35681c 100644
---- a/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c
-+++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c
-@@ -183,7 +183,7 @@ void bnxt_xdp_buff_init(struct bnxt *bp, struct bnxt_rx_ring_info *rxr,
- 			u16 cons, u8 *data_ptr, unsigned int len,
- 			struct xdp_buff *xdp)
- {
--	u32 buflen = BNXT_RX_PAGE_SIZE;
-+	u32 buflen = rxr->rx_page_size;
- 	struct bnxt_sw_rx_bd *rx_buf;
- 	struct pci_dev *pdev;
- 	dma_addr_t mapping;
-@@ -460,7 +460,7 @@ int bnxt_xdp(struct net_device *dev, struct netdev_bpf *xdp)
- 
- struct sk_buff *
- bnxt_xdp_build_skb(struct bnxt *bp, struct sk_buff *skb, u8 num_frags,
--		   struct page_pool *pool, struct xdp_buff *xdp)
-+		   struct bnxt_rx_ring_info *rxr, struct xdp_buff *xdp)
- {
- 	struct skb_shared_info *sinfo = xdp_get_shared_info_from_buff(xdp);
- 
-@@ -468,7 +468,7 @@ bnxt_xdp_build_skb(struct bnxt *bp, struct sk_buff *skb, u8 num_frags,
- 		return NULL;
- 
- 	xdp_update_skb_frags_info(skb, num_frags, sinfo->xdp_frags_size,
--				  BNXT_RX_PAGE_SIZE * num_frags,
-+				  rxr->rx_page_size * num_frags,
- 				  xdp_buff_get_skb_flags(xdp));
- 	return skb;
- }
-diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.h b/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.h
-index 220285e190fc..8933a0dec09a 100644
---- a/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.h
-+++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.h
-@@ -32,6 +32,6 @@ void bnxt_xdp_buff_init(struct bnxt *bp, struct bnxt_rx_ring_info *rxr,
- void bnxt_xdp_buff_frags_free(struct bnxt_rx_ring_info *rxr,
- 			      struct xdp_buff *xdp);
- struct sk_buff *bnxt_xdp_build_skb(struct bnxt *bp, struct sk_buff *skb,
--				   u8 num_frags, struct page_pool *pool,
-+				   u8 num_frags, struct bnxt_rx_ring_info *rxr,
- 				   struct xdp_buff *xdp);
- #endif
--- 
-2.52.0
+KCSAN_SANITIZE_slab_common.o := n
+
+> should _not_ define __data_racy as volatile outside KCSAN kernels, as
+> that's not what __data_racy is for and would have other unintended
+> consequences. KCSAN just knows to treat "volatile" specially, which is
+> why it's used like it is here, but otherwise explicit volatile
+> variables are a no-no in general.
+> 
+> Right now we have this in include/linux/compiler_types.h:
+> 
+> #ifdef __SANITIZE_THREAD__
+> ... other defs that should remain untouched ...
+> # define __data_racy volatile
+> #else
+> ...
+> # define __data_racy
+> #endif
+> 
+> But perhaps that should be moved to a separate #ifdef block:
+> 
+> #ifdef CONFIG_KCSAN
+> # define __data_racy volatile
+> #else
+> # define __data_racy
+> #endif
+> 
+> ... with an explanation why (consistent definitions across
+> instrumented and uninstrumented source files), and why it's benign for
+> uninstrumented code in KCSAN kernels (behaviour unchanged, but subtle
+> performance loss, although it's an already instrumented kernel so
+> performance is moot anyway). I think that should work, but it needs
+> some testing.
+> 
+> Could you test something like that?
+> 
+
+I'm pretty sure that would work; let me try it out. Thanks!
+
+Alan
+
+> Thanks,
+> -- Marco
 
