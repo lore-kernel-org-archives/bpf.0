@@ -1,38 +1,38 @@
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CC1A33123E;
-	Thu, 15 Jan 2026 08:26:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECD11331A4D;
+	Thu, 15 Jan 2026 08:26:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768465598; cv=none; b=rlCkSXnTnvXq3H3EwCJnEsFmkrWPTph4Xjexi67rOvbfDZVYsXFf7sh3A1Xs2nKIk7+sIz+Kcc12AiDAZlCjTN+P7zTV4SYhgbBCwnVJZkGmhJbdQgczzB+rrgxtf4/JMocregE++56sHl9XQPu1QBGOusj330vdD2fe37P5cbA=
+	t=1768465605; cv=none; b=Elih4NZg7uK6GypOsxSQOT8eaOAMOzGYnLW2UY/9OZfagZB6txwxsm+3EdAJch8/TJQCToCWscaZ1Q/yMHnJJuQ/HDwwShN/wJ2hJSeJAAEMdgJXi83plr5Gge8PfsXAAENJpV/ew52MpeJilYgGZGDYsJKoIhplE3MHAbeQbg0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768465598; c=relaxed/simple;
-	bh=6GsCZXrABdgx2onEaBOfyQrsy9/4/iqlSCkkjQMQRQU=;
+	s=arc-20240116; t=1768465605; c=relaxed/simple;
+	bh=Ia767jD5QTfwOLlKZHEVNJ6tsIOrQM4HVVSa9wMtPGw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Sauskb3vhhj91WRnsYxMWWRkkddgbbNcO4heQlZ4KC34gjVu967O59/WLib1ViDaVsyIkQWGKOyotFBobpPkf0LYmliFw9IgwySRZ4KjeT3dA4sF1tMtqAtkR8TRy7CUYoz2O2wwY8CQJlIIduymEaBewy6hF00A4cKVU/WAo+8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=EqfahaY0; arc=none smtp.client-ip=213.133.104.62
+	 MIME-Version; b=Q/sny86HtJk7/DcM7VAmIKS887pEyPM+uU7xque9Xo2jE/d2oWlq5tRuwRy74jLfsIicEOTbs1j6JDKXJA00cXlP5ImUqQpd7OboG1j+HomnSWv5jUIaaNoBhiOCsv1YuwfY4zm0LCxvuO3oDAkzzJmXGuQmZOL+BeMDE/HwOuA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=JY4Dilq2; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="EqfahaY0"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="JY4Dilq2"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
 	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
 	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=5Hd8bxPtnAuQKh5uNKS97kD6fbNpzJ3mHL/tVjIy2TE=; b=EqfahaY0+PfwR/Ir+8AKB8jfpP
-	jOhtZGMm5lTAUaw6L2nRMz3ySH/xhOWH7m5Vx3qOIPYPj5LFf5qIolMrahUyZrXSJhenHmXB4PdjM
-	H85EogCapPIvNYvOew6Do7jREPalT0241/rq8R/AFnD7pM7Z8rUaydavyqdg6A40HDXwDck/dNxy/
-	yNKc59euN9fiQLKe5FfApYUbx8yvMqLwePMtCACP8UkSBmQDSvy0Lhkhem77X1kkupKT/q6Jcfox7
-	uZUOor0iDVCjPr2weE+z1dAgvlR502fSvOWAWNesbPoFSzy8oHRb5miJzJ/Bb93OqN2I0aS7j73aM
-	zowCSjYw==;
+	bh=vDYMdV1AE4rtkBYHgjF8DcoM9t6uF/pZLj8zQ1xSHsI=; b=JY4Dilq2xWgTxTZ6FMu6BvosYG
+	61j2Wrg73BkjO0ennyBjPf1OYqzetzFT+7xtxH9/yDIsqviG9IUo/IBgQUu/iIde4EgoE10MU9cZV
+	kqeEmqfxcRp0H2DHBoKtRbhKjQ/2k6CB5836knj+ie4dlDmAX6j/yEe+FxaF6HTo0VWDKbku3mEMZ
+	oFDBaBKez8WobOvnUc4LaQ3/Lvb7sSx3I9xznVBeai4qX8D//VAD6i8mVuZPkrx7n5kANUmuC/zV3
+	MmH+gs4kyw+e9zbP6jcrYLB0GL3rnnEgpEpFS+Smmx0ZqFlKjeMEceod/r7TcIR5ESWJ4ARpaJNXQ
+	hPRmgGPw==;
 Received: from localhost ([127.0.0.1])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1vgIgL-000NrB-2f;
-	Thu, 15 Jan 2026 09:26:17 +0100
+	id 1vgIgQ-000NsA-0B;
+	Thu, 15 Jan 2026 09:26:22 +0100
 From: Daniel Borkmann <daniel@iogearbox.net>
 To: netdev@vger.kernel.org
 Cc: bpf@vger.kernel.org,
@@ -51,9 +51,9 @@ Cc: bpf@vger.kernel.org,
 	toke@redhat.com,
 	yangzhenze@bytedance.com,
 	wangdongdong.6@bytedance.com
-Subject: [PATCH net-next v7 11/16] netkit: Add netkit notifier to check for unregistering devices
-Date: Thu, 15 Jan 2026 09:25:58 +0100
-Message-ID: <20260115082603.219152-12-daniel@iogearbox.net>
+Subject: [PATCH net-next v7 15/16] selftests/net: Make NetDrvContEnv support queue leasing
+Date: Thu, 15 Jan 2026 09:26:02 +0100
+Message-ID: <20260115082603.219152-16-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260115082603.219152-1-daniel@iogearbox.net>
 References: <20260115082603.219152-1-daniel@iogearbox.net>
@@ -66,170 +66,118 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Virus-Scanned: Clear (ClamAV 1.4.3/27881/Thu Jan 15 08:25:08 2026)
 
-Add a netdevice notifier in netkit to watch for NETDEV_UNREGISTER events.
-If the target device is indeed NETREG_UNREGISTERING and previously leased
-a queue to a netkit device, then collect the related netkit devices and
-batch-unregister_netdevice_many() them.
+From: David Wei <dw@davidwei.uk>
 
-If this would not be done, then the netkit device would hold a reference
-on the physical device preventing it from going away. However, in case of
-both io_uring zero-copy as well as AF_XDP this situation is handled
-gracefully and the allocated resources are torn down.
+Add a new parameter `lease` to NetDrvContEnv that sets up queue leasing
+in the env.
 
-In the case where mentioned infra is used through netkit, the applications
-have a reference on netkit, and netkit in turn holds a reference on the
-physical device. In order to have netkit release the reference on the
-physical device, we need such watcher to then unregister the netkit ones.
+The NETIF also has some ethtool parameters changed to support memory
+provider tests. This is needed in NetDrvContEnv rather than individual
+test cases since the cleanup to restore NETIF can't be done, until the
+netns in the env is gone.
 
-This is generally quite similar to the dependency handling in case of
-tunnels (e.g. vxlan bound to a underlying netdev) where the tunnel device
-gets removed along with the physical device.
-
-  # ip a
-  [...]
-  4: enp10s0f0np0: <BROADCAST,MULTICAST> mtu 1500 qdisc mq state DOWN group default qlen 1000
-      link/ether e8:eb:d3:a3:43:f6 brd ff:ff:ff:ff:ff:ff
-      inet 10.0.0.2/24 scope global enp10s0f0np0
-         valid_lft forever preferred_lft forever
-  [...]
-  8: nk@NONE: <BROADCAST,MULTICAST,NOARP> mtu 1500 qdisc noop state DOWN group default qlen 1000
-      link/ether 00:00:00:00:00:00 brd ff:ff:ff:ff:ff:ff
-  [...]
-
-  # rmmod mlx5_ib
-  # rmmod mlx5_core
-
-  [  309.261822] mlx5_core 0000:0a:00.0 mlx5_0: Port: 1 Link DOWN
-  [  344.235236] mlx5_core 0000:0a:00.1: E-Switch: Unload vfs: mode(LEGACY), nvfs(0), necvfs(0), active vports(0)
-  [  344.246948] mlx5_core 0000:0a:00.1: E-Switch: Disable: mode(LEGACY), nvfs(0), necvfs(0), active vports(0)
-  [  344.463754] mlx5_core 0000:0a:00.1: E-Switch: Disable: mode(LEGACY), nvfs(0), necvfs(0), active vports(0)
-  [  344.770155] mlx5_core 0000:0a:00.1: E-Switch: cleanup
-  [  345.345709] mlx5_core 0000:0a:00.0: E-Switch: Unload vfs: mode(LEGACY), nvfs(0), necvfs(0), active vports(0)
-  [  345.357524] mlx5_core 0000:0a:00.0: E-Switch: Disable: mode(LEGACY), nvfs(0), necvfs(0), active vports(0)
-  [  350.995989] mlx5_core 0000:0a:00.0: E-Switch: Disable: mode(LEGACY), nvfs(0), necvfs(0), active vports(0)
-  [  351.574396] mlx5_core 0000:0a:00.0: E-Switch: cleanup
-
-  # ip a
-  [...]
-  [ both enp10s0f0np0 and nk gone ]
-  [...]
-
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Co-developed-by: David Wei <dw@davidwei.uk>
 Signed-off-by: David Wei <dw@davidwei.uk>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 ---
- drivers/net/netkit.c      | 57 ++++++++++++++++++++++++++++++++++++++-
- include/linux/netdevice.h |  6 +++++
- 2 files changed, 62 insertions(+), 1 deletion(-)
+ .../selftests/drivers/net/lib/py/env.py       | 47 ++++++++++++++++++-
+ 1 file changed, 46 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/netkit.c b/drivers/net/netkit.c
-index c6688b604337..5c417c6055d8 100644
---- a/drivers/net/netkit.c
-+++ b/drivers/net/netkit.c
-@@ -1039,6 +1039,48 @@ static int netkit_change_link(struct net_device *dev, struct nlattr *tb[],
- 	return 0;
- }
+diff --git a/tools/testing/selftests/drivers/net/lib/py/env.py b/tools/testing/selftests/drivers/net/lib/py/env.py
+index 5b12c4c59e09..7066d78395c6 100644
+--- a/tools/testing/selftests/drivers/net/lib/py/env.py
++++ b/tools/testing/selftests/drivers/net/lib/py/env.py
+@@ -9,6 +9,7 @@ from lib.py import KsftSkipEx, KsftXfailEx
+ from lib.py import ksft_setup, wait_file
+ from lib.py import cmd, ethtool, ip, CmdExitFailure
+ from lib.py import NetNS, NetdevSimDev
++from lib.py import NetdevFamily, EthtoolFamily
+ from .remote import Remote
+ from . import bpftool
  
-+static void netkit_check_lease_unregister(struct net_device *dev)
-+{
-+	LIST_HEAD(list_kill);
-+	u32 q_idx;
-+
-+	if (READ_ONCE(dev->reg_state) != NETREG_UNREGISTERING ||
-+	    !dev->dev.parent)
-+		return;
-+
-+	netdev_lock_ops(dev);
-+	for (q_idx = 0; q_idx < dev->real_num_rx_queues; q_idx++) {
-+		struct net_device *tmp = dev;
-+		u32 tmp_q_idx = q_idx;
-+
-+		if (netif_rx_queue_lease_get_owner(&tmp, &tmp_q_idx)) {
-+			if (tmp->netdev_ops != &netkit_netdev_ops)
-+				continue;
-+			/* A single phys device can have multiple queues leased
-+			 * to one netkit device. We can only queue that netkit
-+			 * device once to the list_kill. Queues of that phys
-+			 * device can be leased with different individual netkit
-+			 * devices, hence we batch via list_kill.
-+			 */
-+			if (unregister_netdevice_queued(tmp))
-+				continue;
-+			netkit_del_link(tmp, &list_kill);
-+		}
-+	}
-+	netdev_unlock_ops(dev);
-+	unregister_netdevice_many(&list_kill);
-+}
-+
-+static int netkit_notifier(struct notifier_block *this,
-+			   unsigned long event, void *ptr)
-+{
-+	struct net_device *dev = netdev_notifier_info_to_dev(ptr);
-+
-+	if (event == NETDEV_UNREGISTER)
-+		netkit_check_lease_unregister(dev);
-+	return NOTIFY_DONE;
-+}
-+
- static size_t netkit_get_size(const struct net_device *dev)
- {
- 	return nla_total_size(sizeof(u32)) + /* IFLA_NETKIT_POLICY */
-@@ -1115,18 +1157,31 @@ static struct rtnl_link_ops netkit_link_ops = {
- 	.maxtype	= IFLA_NETKIT_MAX,
- };
+@@ -300,7 +301,7 @@ class NetDrvContEnv(NetDrvEpEnv):
+     between the physical interface and a network namespace.
+     """
  
-+static struct notifier_block netkit_netdev_notifier = {
-+	.notifier_call	= netkit_notifier,
-+};
+-    def __init__(self, src_path, nk_rxqueues=1, **kwargs):
++    def __init__(self, src_path, lease=False, **kwargs):
+         super().__init__(src_path, **kwargs)
+ 
+         self.require_ipver("6")
+@@ -308,6 +309,9 @@ class NetDrvContEnv(NetDrvEpEnv):
+         if not local_prefix:
+             raise KsftSkipEx("LOCAL_PREFIX_V6 required")
+ 
++        self.netdevnl = NetdevFamily()
++        self.ethnl = EthtoolFamily()
 +
- static __init int netkit_mod_init(void)
- {
-+	int ret;
+         local_prefix = local_prefix.rstrip("/64").rstrip("::").rstrip(":")
+         self.ipv6_prefix = f"{local_prefix}::"
+         self.nk_host_ipv6 = f"{local_prefix}::2:1"
+@@ -319,7 +323,11 @@ class NetDrvContEnv(NetDrvEpEnv):
+         self._tc_attached = False
+         self._bpf_prog_pref = None
+         self._bpf_prog_id = None
++        self._leased = False
+ 
++        nk_rxqueues = 1
++        if lease:
++            nk_rxqueues = 2
+         ip(f"link add type netkit mode l2 forward peer forward numrxqueues {nk_rxqueues}")
+ 
+         all_links = ip("-d link show", json=True)
+@@ -336,6 +344,9 @@ class NetDrvContEnv(NetDrvEpEnv):
+         self.nk_host_ifindex = netkit_links[1]['ifindex']
+         self.nk_guest_ifindex = netkit_links[0]['ifindex']
+ 
++        if lease:
++            self._lease_queues()
 +
- 	BUILD_BUG_ON((int)NETKIT_NEXT != (int)TCX_NEXT ||
- 		     (int)NETKIT_PASS != (int)TCX_PASS ||
- 		     (int)NETKIT_DROP != (int)TCX_DROP ||
- 		     (int)NETKIT_REDIRECT != (int)TCX_REDIRECT);
+         self._setup_ns()
+         self._attach_bpf()
  
--	return rtnl_link_register(&netkit_link_ops);
-+	ret = rtnl_link_register(&netkit_link_ops);
-+	if (ret)
-+		return ret;
-+	ret = register_netdevice_notifier(&netkit_netdev_notifier);
-+	if (ret)
-+		rtnl_link_unregister(&netkit_link_ops);
-+	return ret;
- }
+@@ -353,8 +364,42 @@ class NetDrvContEnv(NetDrvEpEnv):
+             del self.netns
+             self.netns = None
  
- static __exit void netkit_mod_exit(void)
- {
-+	unregister_netdevice_notifier(&netkit_netdev_notifier);
- 	rtnl_link_unregister(&netkit_link_ops);
- }
- 
-diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-index d99b0fbc1942..4d146c000e21 100644
---- a/include/linux/netdevice.h
-+++ b/include/linux/netdevice.h
-@@ -3400,11 +3400,17 @@ static inline int dev_direct_xmit(struct sk_buff *skb, u16 queue_id)
- int register_netdevice(struct net_device *dev);
- void unregister_netdevice_queue(struct net_device *dev, struct list_head *head);
- void unregister_netdevice_many(struct list_head *head);
++        if self._leased:
++            self.ethnl.rings_set({'header': {'dev-index': self.ifindex},
++                                  'tcp-data-split': 'unknown',
++                                  'hds-thresh': self._hds_thresh,
++                                  'rx': self._rx_rings})
++            self._leased = False
 +
- static inline void unregister_netdevice(struct net_device *dev)
- {
- 	unregister_netdevice_queue(dev, NULL);
- }
+         super().__del__()
  
-+static inline bool unregister_netdevice_queued(const struct net_device *dev)
-+{
-+	return !list_empty(&dev->unreg_list);
-+}
++    def _lease_queues(self):
++        channels = self.ethnl.channels_get({'header': {'dev-index': self.ifindex}})
++        channels = channels['combined-count']
++        if channels < 2:
++            raise KsftSkipEx('Test requires NETIF with at least 2 combined channels')
 +
- int netdev_refcnt_read(const struct net_device *dev);
- void free_netdev(struct net_device *dev);
- 
++        rings = self.ethnl.rings_get({'header': {'dev-index': self.ifindex}})
++        self._rx_rings = rings['rx']
++        self._hds_thresh = rings.get('hds-thresh', 0)
++        self.ethnl.rings_set({'header': {'dev-index': self.ifindex},
++                            'tcp-data-split': 'enabled',
++                            'hds-thresh': 0,
++                            'rx': 64})
++        self.src_queue = channels - 1
++        bind_result = self.netdevnl.queue_create(
++            {
++                "ifindex": self.nk_guest_ifindex,
++                "type": "rx",
++                "lease": {
++                    "ifindex": self.ifindex,
++                    "queue": {"id": self.src_queue, "type": "rx"},
++                },
++            }
++        )
++        self.nk_queue = bind_result['id']
++        self._leased = True
++
+     def _setup_ns(self):
+         self.netns = NetNS()
+         ip(f"link set dev {self._nk_guest_ifname} netns {self.netns.name}")
 -- 
 2.43.0
 
