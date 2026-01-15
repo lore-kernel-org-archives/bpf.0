@@ -1,261 +1,208 @@
-Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3473C396B75
-	for <bpf@vger.kernel.org>; Thu, 15 Jan 2026 18:52:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88DE33BBA0F
+	for <bpf@vger.kernel.org>; Thu, 15 Jan 2026 18:52:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768503139; cv=none; b=FYrfqL+9K2sYr6nz5aKR+oUl7Ny7LwGH37ke8/PxBnvKkP2oNJuDUzRPnmxKz2o4fRkGVJP5pqweG0f9yPdf/hUcxLjoVJJWTbFgkQKxNWB9nU+1SoDLPr2DIjWFy6b4UjC6pa515U1hoo1jigC91PcF3SpuzIS0xHcwCFzdpJg=
+	t=1768503148; cv=none; b=d+2wqyGcAOzZCswrUzqmUyQZPwUshjcia+CF7vdvSAlUp2CbcsxeUvI6wXWJYOkXbh/yLVclpNJuqrzyPcZu3aOLpnF33K3jAUP48TDGqL+WOE8Qhd1fLas6aTl0t3lGZUbDgCMWqgkvmfTSDMF0F+8gw/A0Kab7xXIrDwJwZv0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768503139; c=relaxed/simple;
-	bh=2Rd+T2fxxjOULfBFXLH5UIRvtWG8/G7q1lCPuJeByr0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=XBsns1fMtt4sq46wxSyKqgV4M/ku86hmnxvgPcdDGkIGBSwig8rEaMdCM+ecmre8DF11okkr6cvHRYkZleKDjtrGyZA78VdJYJozOqJSxBzdhkxE4ZGYBapagIvLAaaBA/vhP2xDtSOdbLvuDI6QHaqomTKwpz8CxsmVF5Hkfgw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KoyRHDKF; arc=none smtp.client-ip=209.85.215.174
+	s=arc-20240116; t=1768503148; c=relaxed/simple;
+	bh=TuEFRuqLBOnYedH6bHZA/P5wHxHxsIqISOe/UJTU4FU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Gfe9RnKWKCgBBVJfZRTO3kFua79LM48QAI/r9mtlYy85mQxk8cdG3gLFc4EuGioFR1ISouI0kdJhptNofLy51mt/ldfyvgfHs8GfNioK3QBS/rML2UjF03NZJzBtw3kKNdcrpqQyl2zwp8u7+wiLECdzn+a8hoTtBmtgc2k5rOs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hiV6XWyj; arc=none smtp.client-ip=209.85.128.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KoyRHDKF"
-Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-bcfd82f55ebso981618a12.1
-        for <bpf@vger.kernel.org>; Thu, 15 Jan 2026 10:52:18 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hiV6XWyj"
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-47eddddcdcfso7039535e9.1
+        for <bpf@vger.kernel.org>; Thu, 15 Jan 2026 10:52:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768503137; x=1769107937; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tD0n2wghIe+hwlFHDxEK9qHpYzp/XoQTH/HMSUPUjZc=;
-        b=KoyRHDKFWEaz7VDX0iAPtNbdlfdOOQiudOkt5yX/eWexixakiQVh7iP+9x1hB/8ZZA
-         4UbDI8BeaC4H5Uf2Q8WrIfb+Je6lqmUz+34cSPQlF5x4i/qxejJebo1G33UT5E2feYgH
-         Myi1uZevgZsnfQMuvUbP23XcXIMNQzqxtVZaCdSwVRyzL/WtzH+xY9eIHIQl39HqInln
-         XNno268/AfaRaoZehmgM+8J/HlLBO35aUelaiSRCc7ETRJYHekpxCNFKILHdq2RN5/W7
-         /m2JRNSrzkSa6SiD+zB1yj7z6IMMeX7WtlxqZTgg0/+Ymo9w9mpFz93WaRQ1LmNfvB+1
-         VzuA==
+        d=gmail.com; s=20230601; t=1768503145; x=1769107945; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=NFeXl8zneto1MokIObjVTz/6UgfEQ0ha9IzMl9847FU=;
+        b=hiV6XWyjsZDEfUa+xjCd6FxYmqj0qJ6lPA3LhQmFhzdu/h8nk+X8NIZr9SrRcQo/Zo
+         eNOtxkTHJCX8VZCUgs7KCBS53Fuw8mG7Q7Hzjq55cfIX8jZHuID0SnjPQuVHUPw+BA7l
+         nygKo9nqGNVQBkT7sTkyckeT2HnJAoa8uRYf+eeZG9mJcdSqSgM0A5HXOStPyC7gSmfM
+         1eRSuuSGRyHOviC0d1d/xbXCuSOQCF0okjhpAAM/Re6DtEQaKRkHz//QDkYwqUPPpBSV
+         R3dDxS2X+mkHw9HI/mfry7w1PRSrLouCHACcLJ3FYPbyBqfG5bf+DYOemeVtHjLGQ29d
+         733A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768503137; x=1769107937;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=tD0n2wghIe+hwlFHDxEK9qHpYzp/XoQTH/HMSUPUjZc=;
-        b=j2NlJ+69JSBmlGf7ty4fCp6NX5/db+zq87JsjX3RK63xdNzrsDU6o27+sdP0Eh1FC7
-         MXgrvWwV6FOhin3r+P92/8LT54/AsIVNhBEfnwiEYnX/wIu23OnLFSewueGY2HwbfRVZ
-         HyKl53y5hy4+rVhu3/5uZ0yXOTwW8akiWCxgV7G6GW0wEyLBgcaTkANtDiPhGdp4xGEX
-         CsHgHQenl9zyd26Mj2l4Cpwzs4G508mT2ow/VWpfNyQB01WL1NEd7hqwzW2j+tK0fJAB
-         T5wFMoIZVrFIIuHQ/KXUur8XVGcuAV6K2fcnFVmZKdD7SznIUpWj0+1Hd6eVCsNgmkFu
-         ktOA==
-X-Forwarded-Encrypted: i=1; AJvYcCUliDB2igrCEtZ8yZSpW/t6nauZFe0gHxTC0vLO42P+fzRW+koiF+HLfqs/1JOiNZd2BP0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxZiEMTqLtTYVIj7H12CzIhb1l9nju+byKseZ8hznx+HcWRecB9
-	vu96DDh276M1eeZKAbk5FJO/qZuUjtmODP8A61ofsWpROws7Oc52NlJL8zH4BFqR4Xm5C/k+i79
-	sZJkV5T8eXL5/j0oIf4TqliUwKELmlhzUcg==
-X-Gm-Gg: AY/fxX6kmc+70XdBqXMluwKF9Sx5EsFwzxcD+mKge2SCmmOj5qnX02ydhu9URnFAXyy
-	Bmnu9MnYHPdihyJz+VX7sHCVYO2JFBmrMhyZ0tPyCkhal7/WkV6iKHNRxU0qNJEJUKDPezoXKSe
-	PiPGftrXyScuzvYr/E1i7wNrYH0r9xTxSHSKDuBsk7AcfJnW1Z6ZZHP4dI0G8J2awAvaME8LaER
-	8BVuJPa9wpvFsxg2Jt7b0iq5psoblyGD40YgLXAaf/6FUm0AK3ZbNK+P4wiL52erX/cmvJwo06Q
-	SkEpnZyA
-X-Received: by 2002:a17:902:c407:b0:2a0:99f7:67b4 with SMTP id
- d9443c01a7336-2a71756c272mr4420715ad.8.1768503137511; Thu, 15 Jan 2026
- 10:52:17 -0800 (PST)
+        d=1e100.net; s=20230601; t=1768503145; x=1769107945;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NFeXl8zneto1MokIObjVTz/6UgfEQ0ha9IzMl9847FU=;
+        b=xUejYYjalmd3Gzaq6/3slNYc/PrefVJvZxc4fin/GOGnaNUZ7nBd6uv9QlY/TGxxm/
+         nezDX+DujhkrBS3njn43gzqEcCYnqORkC+0W2cEUxw9sx4RuPUm7HlU6QJwEtitWlaZL
+         KiwPMR0gEvYjORn0PrLvRIe3LrSfq/AvRH2zEgGKub9hvEZdrB8XUHp63JFgJKP+0TKX
+         uaYoTvicv0SLKIanhRjQvUV0IT7bfDEP1xOZ4l/ksCHnU4AvNuAYbZzVcWQmZyf/bCQp
+         wpgKOvUeRHau6jGEgdwzCOuWLad9YLRQTcMtdPSJ3PVhwF3N9GhVvsCF27E08lDfzdrA
+         /h+Q==
+X-Gm-Message-State: AOJu0YxuR2Lf7pdnyPPgTXkJdMNLrTTHLAeAZjBcP47UAgb+hH4mSwEy
+	kXPzb2W7cFuyoz4Bl/SMVu67mSrNzfc0kMK2hhZvk+XqweEJM5gTCI+s
+X-Gm-Gg: AY/fxX6qXJ9zwtXoBJ359N5BMaQkmgWKA3htwl9GgqwnhW8GAYjMr6khtAncmyxbfUE
+	X5Lq/gJPE9BgW2U0U7QkJDG2ofqCzKHOVywEZdv8b6HPYaN0retehbN2k6nKsR1nY4nqK0AwnvJ
+	QOuFyN4YLbo1zoctmUm0LslYIoR06MnHsNxfPetz1quTaKRNyRhnT8nGSrq8LWLp/Ckol1zbk2k
+	JMq6vYcOvAr+aAIXxndGJ/s6hVWjwknht+8Vhln0kb9bXTSJ/j0dTDVa9bw60B3MfE8F+0RsGHv
+	FGhHo4oL5lyZioVBrvT9Rc8e44tCvlVC3GXdNl9SqSQ9HtFMbrAFnCRxe0SSl8Lm2iXY2SJiEtU
+	PTtRykdGw/jADb8f62C0Vzz7Y2IHs6trjreAJZ/HpM4zcHaJYORTB5TX8EGHilGll4f7r0Iw9fQ
+	udqTsE6SobRi9qMuklWhLUEGV5gCQn2KQ=
+X-Received: by 2002:a05:600c:1d28:b0:45d:5c71:769a with SMTP id 5b1f17b1804b1-4801eb0d727mr1966235e9.26.1768503144657;
+        Thu, 15 Jan 2026 10:52:24 -0800 (PST)
+Received: from ?IPV6:2620:10d:c0c3:1131::11fd? ([2620:10d:c092:400::5:2520])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47ee85e8807sm33760485e9.16.2026.01.15.10.52.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Jan 2026 10:52:24 -0800 (PST)
+Message-ID: <56169b8c-2bba-4a11-95dc-51789ed2c915@gmail.com>
+Date: Thu, 15 Jan 2026 18:52:23 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260112214940.1222115-1-jolsa@kernel.org> <20260112214940.1222115-3-jolsa@kernel.org>
- <20260112170757.4e41c0d8@gandalf.local.home> <aWYv6864cdO2PWbb@krava>
-In-Reply-To: <aWYv6864cdO2PWbb@krava>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Thu, 15 Jan 2026 10:52:04 -0800
-X-Gm-Features: AZwV_QjXO-yhEtC-_YSLoFVniP-2k2iYTwX1IjXIqEh7rIM5iZ-xHOytlXiEqcY
-Message-ID: <CAEf4BzZ-sPD4UZF-TL2ep-zQOyeOC3K5XC2o3Gsx4Q6XpN-zQw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 2/4] x86/fgraph,bpf: Switch kprobe_multi program
- stack unwind to hw_regs path
-To: Jiri Olsa <olsajiri@gmail.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	Josh Poimboeuf <jpoimboe@kernel.org>, Mahe Tardy <mahe.tardy@gmail.com>, 
-	Peter Zijlstra <peterz@infradead.org>, bpf@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, x86@kernel.org, 
-	Yonghong Song <yhs@fb.com>, Song Liu <songliubraving@fb.com>, Andrii Nakryiko <andrii@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC v3 05/10] bpf: Enable bpf timer and workqueue use in
+ NMI
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+ daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com,
+ memxor@gmail.com, eddyz87@gmail.com, Mykyta Yatsenko <yatsenko@meta.com>
+References: <20260107-timer_nolock-v3-0-740d3ec3e5f9@meta.com>
+ <20260107-timer_nolock-v3-5-740d3ec3e5f9@meta.com>
+ <CAEf4BzYpZPtBFyceDfELDTg8fHFTOC+cqeTvvtWyzOtMqRc5iQ@mail.gmail.com>
+ <14ef41d3-778c-4fe1-841a-9caffe8e0ec9@gmail.com>
+ <CAEf4BzYDSKHjdr_tLoYgDT6s09S8s2U7vS-v67kP1ZRGDvQhTA@mail.gmail.com>
+Content-Language: en-US
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+In-Reply-To: <CAEf4BzYDSKHjdr_tLoYgDT6s09S8s2U7vS-v67kP1ZRGDvQhTA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Tue, Jan 13, 2026 at 3:43=E2=80=AFAM Jiri Olsa <olsajiri@gmail.com> wrot=
-e:
+On 1/15/26 18:39, Andrii Nakryiko wrote:
+> On Wed, Jan 14, 2026 at 6:53 AM Mykyta Yatsenko
+> <mykyta.yatsenko5@gmail.com> wrote:
+>> On 1/9/26 22:19, Andrii Nakryiko wrote:
+>>> On Wed, Jan 7, 2026 at 9:49 AM Mykyta Yatsenko
+>>> <mykyta.yatsenko5@gmail.com> wrote:
+>>>> From: Mykyta Yatsenko <yatsenko@meta.com>
+>>>>
+>>>> Refactor bpf timer and workqueue helpers to allow calling them from NMI
+>>>> context by making all operations lock-free and deferring NMI-unsafe
+>>>> work to irq_work.
+>>>>
+>>>> Previously, bpf_timer_start(), and bpf_wq_start()
+>>>> could not be called from NMI context because they acquired
+>>>> bpf_spin_lock and called hrtimer/schedule_work APIs directly. This
+>>>> patch removes these limitations.
+>>>>
+>>>> Key changes:
+>>>>    * Remove bpf_spin_lock from struct bpf_async_kern. Replace locked
+>>>>      operations with atomic cmpxchg() for initialization and xchg() for
+>>>>      cancel and free.
+>>>>    * Add per-async irq_work to defer NMI-unsafe operations (hrtimer_start,
+>>>>      hrtimer_try_to_cancel, schedule_work) from NMI to softirq context.
+>>>>    * Use the lock-free mpmc_cell (added in the previous commit) to pass
+>>>>      operation commands (start/cancel/free) along with their parameters
+>>>>      (nsec, mode) from NMI-safe callers to the irq_work handler.
+>>>>    * Add reference counting to bpf_async_cb to ensure the object stays
+>>>>      alive until all scheduled irq_work completes and the timer/work
+>>>>      callback finishes.
+>>>>    * Move bpf_prog_put() to RCU callback to handle races between
+>>>>      set_callback() and cancel_and_free().
+>>>>
+>>>> This enables BPF programs attached to NMI-context hooks (perf
+>>>> events) to use timers and workqueues for deferred processing.
+>>>>
+>>>> Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
+>>>> ---
+>>>>    kernel/bpf/helpers.c | 288 ++++++++++++++++++++++++++++++++++-----------------
+>>>>    1 file changed, 191 insertions(+), 97 deletions(-)
+>>>>
+> please trim irrelevant parts to shorten distractions in email
 >
-> On Mon, Jan 12, 2026 at 05:07:57PM -0500, Steven Rostedt wrote:
-> > On Mon, 12 Jan 2026 22:49:38 +0100
-> > Jiri Olsa <jolsa@kernel.org> wrote:
-> >
-> > > To recreate same stack setup for return probe as we have for entry
-> > > probe, we set the instruction pointer to the attached function addres=
-s,
-> > > which gets us the same unwind setup and same stack trace.
-> > >
-> > > With the fix, entry probe:
-> > >
-> > >   # bpftrace -e 'kprobe:__x64_sys_newuname* { print(kstack)}'
-> > >   Attaching 1 probe...
-> > >
-> > >         __x64_sys_newuname+9
-> > >         do_syscall_64+134
-> > >         entry_SYSCALL_64_after_hwframe+118
-> > >
-> > > return probe:
-> > >
-> > >   # bpftrace -e 'kretprobe:__x64_sys_newuname* { print(kstack)}'
-> > >   Attaching 1 probe...
-> > >
-> > >         __x64_sys_newuname+4
-> > >         do_syscall_64+134
-> > >         entry_SYSCALL_64_after_hwframe+118
-> >
-> > But is this really correct?
-> >
-> > The stack trace of the return from __x86_sys_newuname is from offset "+=
-4".
-> >
-> > The stack trace from entry is offset "+9". Isn't it confusing that the
-> > offset is likely not from the return portion of that function?
+> [...]
 >
-> right, makes sense.. so standard kprobe actualy skips attached function
-> (__x86_sys_newuname) on return probe stacktrace.. perhaps we should do
-> the same for kprobe_multi
+>>>> -static struct bpf_async_cb *__bpf_async_cancel_and_free(struct bpf_async_kern *async)
+>>>> +static void __bpf_async_cancel_and_free(struct bpf_async_kern *async)
+>>>>    {
+>>>>           struct bpf_async_cb *cb;
+>>>>
+>>>> -       /* Performance optimization: read async->cb without lock first. */
+>>>> -       if (!READ_ONCE(async->cb))
+>>>> -               return NULL;
+>>>> -
+>>>> -       __bpf_spin_lock_irqsave(&async->lock);
+>>>> -       /* re-read it under lock */
+>>>> -       cb = async->cb;
+>>>> +       cb = xchg(&async->cb, NULL);
+>>>>           if (!cb)
+>>>> -               goto out;
+>>>> -       drop_prog_refcnt(cb);
+>>>> -       /* The subsequent bpf_timer_start/cancel() helpers won't be able to use
+>>>> -        * this timer, since it won't be initialized.
+>>>> -        */
+>>>> -       WRITE_ONCE(async->cb, NULL);
+>>>> -out:
+>>>> -       __bpf_spin_unlock_irqrestore(&async->lock);
+>>>> -       return cb;
+>>>> +               return;
+>>>> +
+>>>> +       /* Consume map's refcnt */
+>>>> +       irq_work_queue(&cb->worker);
+>>> hm... this is subtle (and maybe broken?) irq_work_queue() can be
+>>> ignored here, if there is already another one scheduled, so I think
+>>> your clever idea with CANCEL_AND_FREE being done based on this
+>>> refcount drop is flawed...
+>>>
+>>> CANCEL_AND_FREE has to succeed, so it's out-of-bounds signal that
+>>> shouldn't be going through that command cell, yes. But can't we just
+>>> have a simple one-way bool that will be set to true here (+ memory
+>>> barriers, maybe), and then irq_work_queue() scheduled. If there is irq
+>>> work is scheduled, it will inevitable will see this flag (even if it's
+>>> not our callback), and if not, then irq_work_queue() will successfully
+>>> schedule callback which will also clean up.
+>> Thanks for pointing to this issue.
+>> I don't think we can solve it with a simple bool, because cleanup
+>> should only happen once, and only after refcnt is 0, otherwise we need
+>> to go
+>> back to states to indicate cleanup initiation and cleanup entering (to
+>> implement
+>> mutual exclusion of the irq_work callbacks trying to run cleanup).
+> I meant bool as a command indicator of sorts, which is just part of
+> the solution. We do have reader's mutual exclusion with last_seq,
+> don't we? And the idea was that once the winning reader notices that
+> shutdown was requested, they can perform it and make sure that
+> subsequent readers (if there are any scheduled) would do nothing.
+> E.g., by setting last_seq to some special large value to indicate "we
+> are done, no more commands will be accepted".
+Winning reader that runs cleanup can't tell other pending readers to not
+do anything, because after cleanup we can't guarantee that the bpf_async_cb
+is not freed, other readers have to access it, that's why we have refcnt 
+that
+is the mechanism to make sure the last reader does cleanup.
+>
+> But let me go and read the latest version and refresh what's going on
+> there in my mind.
+>
+>> We can still solve this with the refcnt: Drop reference, if refcnt is not 0,
+>> we successfully released map reference and one of the scheduled irq_work
+>> callbacks
+>> will cleanup, otherwise we took the last reference, all we need is to
+>> schedule new irq_work
+>> (which can't fail)
+>>
+>>       if (!refcount_dec_and_test(&cb->refcnt))
+>>           return;
+>>
+>>       /* We took the last reference, need to schedule cleanup */
+>>       refcount_set(&cb->refcnt, 1);
+>>       irq_work_queue(&cb->worker);
+>>
+> [...]
 
-but it is quite nice to see what function we were kretprobing,
-actually... How hard would it be to support that for singular kprobe
-as well? And what does fexit's stack trace show for such case?
-
->
-> I managed to get that with the change below, but it's wrong wrt arch code=
-,
-> note the ftrace_regs_set_stack_pointer(fregs, stack + 8) .. will try to
-> figure out better way when we agree on the solution
->
-> thanks,
-> jirka
->
->
-> ---
-> diff --git a/arch/x86/include/asm/ftrace.h b/arch/x86/include/asm/ftrace.=
-h
-> index c56e1e63b893..b0e8ce4934e7 100644
-> --- a/arch/x86/include/asm/ftrace.h
-> +++ b/arch/x86/include/asm/ftrace.h
-> @@ -71,6 +71,9 @@ arch_ftrace_get_regs(struct ftrace_regs *fregs)
->  #define ftrace_regs_set_instruction_pointer(fregs, _ip)        \
->         do { arch_ftrace_regs(fregs)->regs.ip =3D (_ip); } while (0)
->
-> +#define ftrace_regs_set_stack_pointer(fregs, _sp)      \
-> +       do { arch_ftrace_regs(fregs)->regs.sp =3D (_sp); } while (0)
-> +
->
->  static __always_inline unsigned long
->  ftrace_regs_get_return_address(struct ftrace_regs *fregs)
-> diff --git a/kernel/trace/fgraph.c b/kernel/trace/fgraph.c
-> index 6279e0a753cf..b1510c412dcb 100644
-> --- a/kernel/trace/fgraph.c
-> +++ b/kernel/trace/fgraph.c
-> @@ -717,7 +717,8 @@ int function_graph_enter_regs(unsigned long ret, unsi=
-gned long func,
->  /* Retrieve a function return address to the trace stack on thread info.=
-*/
->  static struct ftrace_ret_stack *
->  ftrace_pop_return_trace(struct ftrace_graph_ret *trace, unsigned long *r=
-et,
-> -                       unsigned long frame_pointer, int *offset)
-> +                       unsigned long *stack, unsigned long frame_pointer=
-,
-> +                       int *offset)
->  {
->         struct ftrace_ret_stack *ret_stack;
->
-> @@ -762,6 +763,7 @@ ftrace_pop_return_trace(struct ftrace_graph_ret *trac=
-e, unsigned long *ret,
->
->         *offset +=3D FGRAPH_FRAME_OFFSET;
->         *ret =3D ret_stack->ret;
-> +       *stack =3D (unsigned long) ret_stack->retp;
->         trace->func =3D ret_stack->func;
->         trace->overrun =3D atomic_read(&current->trace_overrun);
->         trace->depth =3D current->curr_ret_depth;
-> @@ -810,12 +812,13 @@ __ftrace_return_to_handler(struct ftrace_regs *freg=
-s, unsigned long frame_pointe
->         struct ftrace_ret_stack *ret_stack;
->         struct ftrace_graph_ret trace;
->         unsigned long bitmap;
-> +       unsigned long stack;
->         unsigned long ret;
->         int offset;
->         int bit;
->         int i;
->
-> -       ret_stack =3D ftrace_pop_return_trace(&trace, &ret, frame_pointer=
-, &offset);
-> +       ret_stack =3D ftrace_pop_return_trace(&trace, &ret, &stack, frame=
-_pointer, &offset);
->
->         if (unlikely(!ret_stack)) {
->                 ftrace_graph_stop();
-> @@ -824,8 +827,11 @@ __ftrace_return_to_handler(struct ftrace_regs *fregs=
-, unsigned long frame_pointe
->                 return (unsigned long)panic;
->         }
->
-> -       if (fregs)
-> -               ftrace_regs_set_instruction_pointer(fregs, trace.func);
-> +       if (fregs) {
-> +               ftrace_regs_set_instruction_pointer(fregs, ret);
-> +               ftrace_regs_set_stack_pointer(fregs, stack + 8);
-> +       }
-> +
->
->         bit =3D ftrace_test_recursion_trylock(trace.func, ret);
->         /*
-> diff --git a/tools/testing/selftests/bpf/prog_tests/stacktrace_ips.c b/to=
-ols/testing/selftests/bpf/prog_tests/stacktrace_ips.c
-> index e1a9b55e07cb..852830536109 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/stacktrace_ips.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/stacktrace_ips.c
-> @@ -74,12 +74,20 @@ static void test_stacktrace_ips_kprobe_multi(bool ret=
-probe)
->
->         load_kallsyms();
->
-> -       check_stacktrace_ips(bpf_map__fd(skel->maps.stackmap), skel->bss-=
->stack_key, 5,
-> -                            ksym_get_addr("bpf_testmod_stacktrace_test")=
-,
-> -                            ksym_get_addr("bpf_testmod_stacktrace_test_3=
-"),
-> -                            ksym_get_addr("bpf_testmod_stacktrace_test_2=
-"),
-> -                            ksym_get_addr("bpf_testmod_stacktrace_test_1=
-"),
-> -                            ksym_get_addr("bpf_testmod_test_read"));
-> +       if (retprobe) {
-> +               check_stacktrace_ips(bpf_map__fd(skel->maps.stackmap), sk=
-el->bss->stack_key, 4,
-> +                                    ksym_get_addr("bpf_testmod_stacktrac=
-e_test_3"),
-> +                                    ksym_get_addr("bpf_testmod_stacktrac=
-e_test_2"),
-> +                                    ksym_get_addr("bpf_testmod_stacktrac=
-e_test_1"),
-> +                                    ksym_get_addr("bpf_testmod_test_read=
-"));
-> +       } else {
-> +               check_stacktrace_ips(bpf_map__fd(skel->maps.stackmap), sk=
-el->bss->stack_key, 5,
-> +                                    ksym_get_addr("bpf_testmod_stacktrac=
-e_test"),
-> +                                    ksym_get_addr("bpf_testmod_stacktrac=
-e_test_3"),
-> +                                    ksym_get_addr("bpf_testmod_stacktrac=
-e_test_2"),
-> +                                    ksym_get_addr("bpf_testmod_stacktrac=
-e_test_1"),
-> +                                    ksym_get_addr("bpf_testmod_test_read=
-"));
-> +       }
->
->  cleanup:
->         stacktrace_ips__destroy(skel);
