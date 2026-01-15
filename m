@@ -1,66 +1,68 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from esa1.cc.uec.ac.jp (mx.uec.ac.jp [130.153.8.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26DB128725F
-	for <bpf@vger.kernel.org>; Thu, 15 Jan 2026 17:30:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92D7127B340
+	for <bpf@vger.kernel.org>; Thu, 15 Jan 2026 17:39:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.153.8.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768498227; cv=none; b=XvUIbP6cKtKnc1XMeQYsviOhtRRCwr29L4kbqckY06N+WbEdPmV0/GZhH1vH5GePmWlyA/jcJAMpP6nuBfLLiGFscAHwAZPnBz5MVbVU97KYcIa/NW6+aek9DeYuNWBC3uNgQ6ypRBi3dQ+dU5VCiUvk21R+xQK7Uwh/JDju5Aw=
+	t=1768498772; cv=none; b=IrCVXf7IlaS7aqu9FCTev9z+a0x+VxtWdwsi7KS7KlpHBLURKNS6MsBCghUkOj34KEMgclecXqNb3wpwD7UZRDMdjgkVF/wnx8WKPphjOsQhKmHqt0CjVO6hPdGpQFwtynvDT2SfD7SkaLuUTPIujCXsEtt8IZO707UzQaYLwsU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768498227; c=relaxed/simple;
-	bh=KoiAGygCsP7LdXIPJKl87sZsR/SSo6UkoSgUMxQy9Hc=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=DhzqOWBtP5G12ZTYEehAws3WCejJQi3sC5DGneK/MmfM6Ima7Xn7w8/px7Phuvps3SQhQcJP6f/2OkiCZVADE28heeg9LgZAB26/Nijs5360dF4g1teM6Tf4AvS2exDQ4YNuKcI06dwfE9VDgIusPRXP72r9MtQsbDYvPvIEq1w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=BB/Z6PyK; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="BB/Z6PyK"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1768498225;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=2Tu3p1Zj6pQY7Vz4/LZDPBl0XAGrdE37S9bZ1+G2txM=;
-	b=BB/Z6PyKu+FGW+rMF20VH/t+PYYPe1QThrYvyYWj0k7G756qfoSJWrnC4eugj7cD7e1Irr
-	+9mMF9ZPuNBW/JE5qHlNRDJIlY9LDw9iIFtyBkRIwaS9igYt2ChmbypQ+hRrQdjPjYqQH4
-	nwVgQxI5ZufZFrAoZWmYl9lJp3UHfM8=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-573-F7Y7gd1ZOAmofL9UcD7uvg-1; Thu,
- 15 Jan 2026 12:30:22 -0500
-X-MC-Unique: F7Y7gd1ZOAmofL9UcD7uvg-1
-X-Mimecast-MFC-AGG-ID: F7Y7gd1ZOAmofL9UcD7uvg_1768498220
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id A82EF19560B5;
-	Thu, 15 Jan 2026 17:30:20 +0000 (UTC)
-Received: from fedora.redhat.com (unknown [10.22.64.87])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 194AC1800285;
-	Thu, 15 Jan 2026 17:30:15 +0000 (UTC)
-From: Wander Lairson Costa <wander@redhat.com>
-To: Steven Rostedt <rostedt@goodmis.org>,
-	Tomas Glozar <tglozar@redhat.com>,
-	Wander Lairson Costa <wander@redhat.com>,
-	Crystal Wood <crwood@redhat.com>,
-	Ivan Pravdin <ipravdin.official@gmail.com>,
-	Costa Shulyupin <costa.shul@redhat.com>,
-	John Kacur <jkacur@redhat.com>,
-	Tiezhu Yang <yangtiezhu@loongson.cn>,
-	Daniel Wagner <dwagner@suse.de>,
-	Daniel Bristot de Oliveira <bristot@kernel.org>,
-	linux-trace-kernel@vger.kernel.org (open list:Real-time Linux Analysis (RTLA) tools),
-	linux-kernel@vger.kernel.org (open list:Real-time Linux Analysis (RTLA) tools),
-	bpf@vger.kernel.org (open list:BPF [MISC]:Keyword:(?:\b|_)bpf(?:\b|_))
-Subject: [PATCH v3 18/18] rtla/utils: Fix loop condition in PID validation
-Date: Thu, 15 Jan 2026 13:32:01 -0300
-Message-ID: <20260115163650.118910-19-wander@redhat.com>
-In-Reply-To: <20260115163650.118910-1-wander@redhat.com>
-References: <20260115163650.118910-1-wander@redhat.com>
+	s=arc-20240116; t=1768498772; c=relaxed/simple;
+	bh=k0z6mOMj5GtWwbLc6GOYwbxY7BYeNlqZN7nWgzjCzik=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mkqG6dz2QUpnl8sPqInRYp2EWlaVeTYjUKtw2qzVKrBvA9LyuKArUJkvbk7Q1YnLvy0BPzsu7EDQAu1EpgqS/Qp7PqwRL4Qya+FaV4ug4HPhGAEBtLWGgUs/nyquKCtG7k3BEPCWafZty+xgcLwngvf7EkeCm1XoEjIgr/T2y9k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hpc.is.uec.ac.jp; spf=pass smtp.mailfrom=hpc.is.uec.ac.jp; arc=none smtp.client-ip=130.153.8.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hpc.is.uec.ac.jp
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hpc.is.uec.ac.jp
+X-CSE-ConnectionGUID: JluXyON8TcmlWKfme2nN5g==
+X-CSE-MsgGUID: oVbIUo+xTKyI1ngw1bZ7wg==
+X-IPAS-Result: =?us-ascii?q?A2EtBQCdJWlp/zYImYJaglkCuhmBfwYJAQEBAQEBAQEBW?=
+ =?us-ascii?q?gQBAYUHjHgnNQgOAQIEAQEBAQMCAwEBAQEBAQEBAQEBCwEBAQUBAQEBAQEGA?=
+ =?us-ascii?q?wEBAgKBHYYJU0kBEAGGQAFGUIQCgnSyBoEB3XotVIEyFYE4jVJxhTqCDYR9h?=
+ =?us-ascii?q?Bp2hXcEgxwUlBZIgR4DWSwBE0ITDQoLBwVqYQIZAzUSKhVuCBEZHYEZCj4Xg?=
+ =?us-ascii?q?QobBwWBUgaCFoZmD4kygUsDCxgNSBEsNxQbQm4HkgwHgQ8qUJBBB5cGoRGEJ?=
+ =?us-ascii?q?oRRH5xoTYNxpnoumFikWYZSA4IRTTiDI1EZD9MAgSUCBwsBAQMJhn6KbIF/A?=
+ =?us-ascii?q?QE?=
+IronPort-Data: A9a23:rXqayqI1hB8jgd6fFE+RfZQlxSXFcZb7ZxGr2PjKsXjdYENSgTMEn
+ zRLXTrSOPjZYTbwL9l3bIrjoBxUsJ/XnYJjHARorCE8RH9jl5H5CIXCJC8cHc8zwu4v7q5Dx
+ 59DAjUVBJlsFhcwnj/0bP656yI6jf3ULlbFILasEjhrQgN5QzsWhxtmmuoo6qZlmtHR7zml4
+ LsemOWBfgX8s9JIGjhMsfzb8Uoy5K6aVA4w5zTSW9ga5DcyqFFIVPrzFYnpR1PkT49dGPKNR
+ uqr5NmR4mPD8h4xPcium7D9f1diaua60d+m0yc+twCK23CulwRqukoJHKN0hXR/0l1lq+tMJ
+ OBl7vRcf+uJ0prkw4zxWzEAe8130DYvFLXveRBTuuTKp6HKnueFL1yDwyjaMKVBktubD12i+
+ tQ6LC09fzel1969xbaEaedpi54lCpTkadZ3VnFIlVk1DN4jUdXPTqHL+9JCzXEti8sIFP2YZ
+ dJxhThHNU+YJUQSYRFHTs9i9AurriCXnzlwqUmVpLs+5mH7zBR6lrn2dsfYcZqDToNXhi50o
+ 0qfpzqnWU9CbIb3JTyt9Uymp9LI3jPHe5MzTbu36adgsgKMyTlGYPERfQHi+6bm0x/Wt8hkA
+ 00P+is/pK073EyzRZ/8RFulrXXCtxVaWcI4LgEhwASdj6bZ5weHC3IVF3hcZddgvcRwRyRCO
+ kK1c83BJzhygKyybyKh/bKQkhC8PCVPK0lfanpRJeca2OUPtr3fmTrtdr5e/EOdi82wFTz0w
+ i6HtjlnwagehogC3OO55TgrYg5ARLCUE2bZBS2OAApJCz+Vgqb/OOREDnCCvJ59wH6xFAXpg
+ ZT9s5H2ASBnJcjleNaxrBox8EGBva/fb2KF0DaD7rE99znl5niiY41K+zBiNQ9uPI4JfTLif
+ FXU/AhW4ZpOOnqhZLN2ZISqY/kXIGmJPYqNa804mfIUOcAsLlLfonkxDaNStki0+HURfWgEE
+ c/zWa6R4bwyUMyLEBLeqz8h7IIW
+IronPort-HdrOrdr: A9a23:5FsMmKoHHdpOjrtG/E/sXToaV5oweYIsimQD101hICG9vPb1qy
+ nIpoV46faaslgssR0b8+xoW5PwIk80l6QV3WB5B97LNzUO01HGEGgN1+bfKkXbexHDyg==
+X-Talos-CUID: 9a23:DUFWmWDbd+BPmdb6Ewtj6X4FPeZ1TnbYyEjzLUq1U2BPFbLAHA==
+X-Talos-MUID: 9a23:OFbnKwTeoCmr47AVRXTrujtDCcAr85iNGWFUl5oZ4sO2ajN/bmI=
+X-IronPort-Anti-Spam-Filtered: true
+X-IronPort-AV: E=Sophos;i="6.21,228,1763391600"; 
+   d="scan'208";a="106636003"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+X-IronPort-Outbreak-Status: No, level 0, Unknown - Unknown
+Received: from mx-delivery1.uec.ac.jp (HELO mx-delivery.uec.ac.jp) ([130.153.8.54])
+  by esa1.cc.uec.ac.jp with ESMTP; 16 Jan 2026 02:38:19 +0900
+Received: from labpc.. (unknown [172.21.208.155])
+	by mx-delivery.uec.ac.jp (Postfix) with ESMTPSA id D0B5E183E386;
+	Fri, 16 Jan 2026 02:38:18 +0900 (JST)
+From: Yuzuki Ishiyama <ishiyama@hpc.is.uec.ac.jp>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	Yuzuki Ishiyama <ishiyama@hpc.is.uec.ac.jp>
+Subject: [PATCH bpf-next 0/2] bpf: Add kfunc bpf_strncasecmp()
+Date: Fri, 16 Jan 2026 02:37:14 +0900
+Message-ID: <20260115173717.2060746-1-ishiyama@hpc.is.uec.ac.jp>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -68,41 +70,22 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
 
-The procfs_is_workload_pid() function iterates through a directory
-entry name to validate if it represents a process ID. The loop
-condition checks if the pointer t_name is non-NULL, but since
-incrementing a pointer never makes it NULL, this condition is always
-true within the loop's context. Although the inner isdigit() check
-catches the NUL terminator and breaks out of the loop, the condition
-is semantically misleading and not idiomatic for C string processing.
+This patchset introduces bpf_strncasecmp to allow case-insensitive and
+limited-length string comparison. This is useful for parsing protocol
+headers like HTTP.
 
-Correct the loop condition from checking the pointer (t_name) to
-checking the character it points to (*t_name). This ensures the loop
-terminates when the NUL terminator is reached, aligning with standard
-C string iteration practices. While the original code functioned
-correctly due to the existing character validation, this change
-improves code clarity and maintainability.
+Yuzuki Ishiyama (2):
+  bpf: add bpf_strncasecmp kfunc
+  selftests/bpf: Test kfunc bpf_strncasecmp
 
-Signed-off-by: Wander Lairson Costa <wander@redhat.com>
----
- tools/tracing/rtla/src/utils.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ kernel/bpf/helpers.c                          | 31 +++++++++++++++++--
+ .../selftests/bpf/prog_tests/string_kfuncs.c  |  1 +
+ .../bpf/progs/string_kfuncs_failure1.c        |  6 ++++
+ .../bpf/progs/string_kfuncs_failure2.c        |  1 +
+ .../bpf/progs/string_kfuncs_success.c         |  7 +++++
+ 5 files changed, 43 insertions(+), 3 deletions(-)
 
-diff --git a/tools/tracing/rtla/src/utils.c b/tools/tracing/rtla/src/utils.c
-index 1ea9980d8ecd3..3d47f3ed52dee 100644
---- a/tools/tracing/rtla/src/utils.c
-+++ b/tools/tracing/rtla/src/utils.c
-@@ -296,7 +296,7 @@ static int procfs_is_workload_pid(const char *comm_prefix, struct dirent *proc_e
- 		return 0;
- 
- 	/* check if the string is a pid */
--	for (t_name = proc_entry->d_name; t_name; t_name++) {
-+	for (t_name = proc_entry->d_name; *t_name; t_name++) {
- 		if (!isdigit(*t_name))
- 			break;
- 	}
 -- 
-2.52.0
+2.43.0
 
