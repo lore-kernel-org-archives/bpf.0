@@ -1,38 +1,38 @@
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6781329E46;
-	Thu, 15 Jan 2026 08:26:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87CD7330B33;
+	Thu, 15 Jan 2026 08:26:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768465589; cv=none; b=dSkuaNM2Arc/xm+xJJcDAIrsd5c5cIOPZZgCG3PrEd3dXdzxXyWr/evEjHKAlFO1PP5/3H1virmMM4l7JxHYIm9Ge0rdGoUTpTgbBa4C9P2jA1bcxbwTxYr5SVzNl6FsoiSwlbz/hQFwhQAh5GlW1lO/8w7uP6tkNaOQa6ghQKQ=
+	t=1768465589; cv=none; b=bS2vtE9nvK1Rw2noXOwh7KG0/lTQ2EO3qECx291k6yCF6WNk662u4/GXMQMt+CQme1rx/Q3Bh/ZG2ji7QxrpfJEs7ENjLAiwiODLqGWOc1EkGJX2X9L4Qv9XRZaC7k/5nHfnrvTovNnyJRnZylNIe+9qP3qSwzU68uY4koM+pRM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1768465589; c=relaxed/simple;
-	bh=oDz+w9bblLvGb7IaWb6VvM1EwEz8lm3k7vyhewjg0/U=;
+	bh=p2y1QUnYMnHlwkTdk4i5NI8z7/XoFmNCZmNWY3oA0Y4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=A+6q40tqQx/k1SD+JRx3ZPNymbHIOPE2riqtl19wTmX2dMPWrwIDrHza/c+qoQvLnyp2MSZxAAblCEIluufdAN0C0WJvPSd1sRhljdJltVDuEWDZ5C99yn+LQmBKlIFDAedJKyrisMUFZphAlKsjW9NKZcz8crTFeyAaZVOtOzY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=oT63OOrW; arc=none smtp.client-ip=213.133.104.62
+	 MIME-Version; b=lXOBz9J6rS9cl37OWwFc3YcOknnVbh7CoeOgoeeqUZ5ZV9E1G9UxtfzkYBaJf9XwwMgFSrMj7VqQQ9hsbLiXF1Kk8FDTc/Jc7xWc22oBApIFidreungt43efclyq+F9JZFZ9ZCnCfL51WMznoQavuMLj351/aUolQfcqSLGXTnc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=Mr8dtk91; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="oT63OOrW"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="Mr8dtk91"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
 	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
 	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=kAFqq4h6yPpVJjjW8VDZLQrWyRfepuN7gDgoliLDth4=; b=oT63OOrW96Prtnpzihk2QmUUuD
-	FiY081nLKsoi2YdU+1u5hcYydULF2eZrNE6NBqPzexeHtlhBAMbKoopkh83E4AkSa+2WHIas7mC63
-	QU1YuzMq77IGyOHwtTwfCCst6ZXkf9SIq5YkVN4dlKBIbPFOB96ZYTrXABNAzPewc3NsOHRGvMFko
-	d6l6FsecKnAz1VZg84ae6lDVW3T8TpxnEUf4BFBKcXcgE1/AcTKNXzexDYaYlLD8RK1+/DocDfXCv
-	q1lVU1jlYu8813lUSikZ9/93yLzYUTM2QknVmkul3rviL3A4w9v+6P/EV49cmL9DSiqzntZSnJOwO
-	nt0eg+gw==;
+	bh=n4Unc2xp9086mwQD7M9Uo4Ss8e7bLZZ3RMdu47Dqj/A=; b=Mr8dtk91hpZ3MOAcka8uaozImS
+	b8wn5WB4uK61jgwpjKW/efF/b/zdL0HO9PFtG1vaREIR20lER0yu90Uy1FA8ttqHCjY+ebFctN/Ze
+	czILt+YdToEgjcqOkgK0xmBuGrHvbI7IgnHtWT/7SWOAcJCYST4aF6/xmtTJaYb0V9o3fgL9Iqra5
+	KydldcJcnQaxjbAfjKccdPAiFYcE4zDcsJxL18xBNVIKSI1eHLDV3T6rAiyRJFA3hzIRV2juoFP54
+	8zC1lP1T8mSLH/SzyWff5u3vt59PXhsiKO2tNYQiHYCJ2b2dlcxgnfhAZYX1DCmL5f3ZpxMrWe/Zg
+	Aql2cg2g==;
 Received: from localhost ([127.0.0.1])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1vgIgE-000Nph-2a;
-	Thu, 15 Jan 2026 09:26:10 +0100
+	id 1vgIgC-000NpP-1e;
+	Thu, 15 Jan 2026 09:26:08 +0100
 From: Daniel Borkmann <daniel@iogearbox.net>
 To: netdev@vger.kernel.org
 Cc: bpf@vger.kernel.org,
@@ -51,9 +51,9 @@ Cc: bpf@vger.kernel.org,
 	toke@redhat.com,
 	yangzhenze@bytedance.com,
 	wangdongdong.6@bytedance.com
-Subject: [PATCH net-next v7 05/16] net: Proxy net_mp_{open,close}_rxq for leased queues
-Date: Thu, 15 Jan 2026 09:25:52 +0100
-Message-ID: <20260115082603.219152-6-daniel@iogearbox.net>
+Subject: [PATCH net-next v7 03/16] net: Add lease info to queue-get response
+Date: Thu, 15 Jan 2026 09:25:50 +0100
+Message-ID: <20260115082603.219152-4-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260115082603.219152-1-daniel@iogearbox.net>
 References: <20260115082603.219152-1-daniel@iogearbox.net>
@@ -66,219 +66,215 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Virus-Scanned: Clear (ClamAV 1.4.3/27881/Thu Jan 15 08:25:08 2026)
 
-From: David Wei <dw@davidwei.uk>
+Populate nested lease info to the queue-get response that returns the
+ifindex, queue id with type and optionally netns id if the device
+resides in a different netns.
 
-When a process in a container wants to setup a memory provider, it will
-use the virtual netdev and a leased rxq, and call net_mp_{open,close}_rxq
-to try and restart the queue. At this point, proxy the queue restart on
-the real rxq in the physical netdev.
+Example with ynl client:
 
-For memory providers (io_uring zero-copy rx and devmem), it causes the
-real rxq in the physical netdev to be filled from a memory provider that
-has DMA mapped memory from a process within a container.
+  # ip a
+  [...]
+  4: enp10s0f0np0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 xdp/id:24 qdisc mq state UP group default qlen 1000
+    link/ether e8:eb:d3:a3:43:f6 brd ff:ff:ff:ff:ff:ff
+    inet 10.0.0.2/24 scope global enp10s0f0np0
+       valid_lft forever preferred_lft forever
+    inet6 fe80::eaeb:d3ff:fea3:43f6/64 scope link proto kernel_ll
+       valid_lft forever preferred_lft forever
+  [...]
 
-Signed-off-by: David Wei <dw@davidwei.uk>
-Co-developed-by: Daniel Borkmann <daniel@iogearbox.net>
+  # ethtool -i enp10s0f0np0
+  driver: mlx5_core
+  [...]
+
+  # ./pyynl/cli.py \
+      --spec ~/netlink/specs/netdev.yaml \
+      --do queue-get \
+      --json '{"ifindex": 4, "id": 15, "type": "rx"}'
+  {'id': 15,
+   'ifindex': 4,
+   'lease': {'ifindex': 8, 'netns-id': 0, 'queue': {'id': 1, 'type': 'rx'}},
+   'napi-id': 8227,
+   'type': 'rx',
+   'xsk': {}}
+
+  # ip netns list
+  foo (id: 0)
+
+  # ip netns exec foo ip a
+  [...]
+  8: nk@NONE: <BROADCAST,MULTICAST,NOARP,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default qlen 1000
+      link/ether 00:00:00:00:00:00 brd ff:ff:ff:ff:ff:ff
+      inet6 fe80::200:ff:fe00:0/64 scope link proto kernel_ll
+         valid_lft forever preferred_lft forever
+  [...]
+
+  # ip netns exec foo ethtool -i nk
+  driver: netkit
+  [...]
+
+  # ip netns exec foo ls /sys/class/net/nk/queues/
+  rx-0  rx-1  tx-0
+
+  # ip netns exec foo ./pyynl/cli.py \
+      --spec ~/netlink/specs/netdev.yaml \
+      --do queue-get \
+      --json '{"ifindex": 8, "id": 1, "type": "rx"}'
+  {'id': 1, 'ifindex': 8, 'type': 'rx'}
+
+Note that the caller of netdev_nl_queue_fill_one() holds the netdevice
+lock. For the queue-get we do not lock both devices. When queues get
+{un,}leased, both devices are locked, thus if __netif_get_rx_queue_peer()
+returns true, the peer pointer points to a valid device. The netns-id
+is fetched via peernet2id_alloc() similarly as done in OVS.
+
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Co-developed-by: David Wei <dw@davidwei.uk>
+Signed-off-by: David Wei <dw@davidwei.uk>
 Reviewed-by: Nikolay Aleksandrov <razor@blackwall.org>
 ---
- include/net/netdev_rx_queue.h           |  4 ++
- include/net/page_pool/memory_provider.h |  4 +-
- net/core/netdev_rx_queue.c              | 78 +++++++++++++++++++------
- 3 files changed, 66 insertions(+), 20 deletions(-)
+ include/net/netdev_rx_queue.h | 10 ++++++++
+ net/core/netdev-genl.c        | 36 ++++++++++++++++++++++++++++
+ net/core/netdev_rx_queue.c    | 45 +++++++++++++++++++++++++++++++++++
+ 3 files changed, 91 insertions(+)
 
 diff --git a/include/net/netdev_rx_queue.h b/include/net/netdev_rx_queue.h
-index de04fdfdad72..508d11afaecb 100644
+index 1cacc2451516..de04fdfdad72 100644
 --- a/include/net/netdev_rx_queue.h
 +++ b/include/net/netdev_rx_queue.h
-@@ -73,4 +73,8 @@ enum netif_lease_dir {
- struct netdev_rx_queue *
- __netif_get_rx_queue_lease(struct net_device **dev, unsigned int *rxq,
- 			   enum netif_lease_dir dir);
+@@ -63,4 +63,14 @@ void netdev_rx_queue_lease(struct netdev_rx_queue *rxq_dst,
+ 			   struct netdev_rx_queue *rxq_src);
+ void netdev_rx_queue_unlease(struct netdev_rx_queue *rxq_dst,
+ 			     struct netdev_rx_queue *rxq_src);
++bool netif_rx_queue_lease_get_owner(struct net_device **dev, unsigned int *rxq);
++
++enum netif_lease_dir {
++	NETIF_VIRT_TO_PHYS,
++	NETIF_PHYS_TO_VIRT,
++};
++
 +struct netdev_rx_queue *
-+netif_get_rx_queue_lease_locked(struct net_device **dev, unsigned int *rxq);
-+void netif_put_rx_queue_lease_locked(struct net_device *orig_dev,
-+				     struct net_device *dev);
++__netif_get_rx_queue_lease(struct net_device **dev, unsigned int *rxq,
++			   enum netif_lease_dir dir);
  #endif /* _LINUX_NETDEV_RX_QUEUE_H */
-diff --git a/include/net/page_pool/memory_provider.h b/include/net/page_pool/memory_provider.h
-index ada4f968960a..b6f811c3416b 100644
---- a/include/net/page_pool/memory_provider.h
-+++ b/include/net/page_pool/memory_provider.h
-@@ -23,12 +23,12 @@ bool net_mp_niov_set_dma_addr(struct net_iov *niov, dma_addr_t addr);
- void net_mp_niov_set_page_pool(struct page_pool *pool, struct net_iov *niov);
- void net_mp_niov_clear_page_pool(struct net_iov *niov);
+diff --git a/net/core/netdev-genl.c b/net/core/netdev-genl.c
+index cd4dc4eef029..51c830f88f10 100644
+--- a/net/core/netdev-genl.c
++++ b/net/core/netdev-genl.c
+@@ -391,8 +391,11 @@ netdev_nl_queue_fill_one(struct sk_buff *rsp, struct net_device *netdev,
+ 			 u32 q_idx, u32 q_type, const struct genl_info *info)
+ {
+ 	struct pp_memory_provider_params *params;
++	struct net_device *orig_netdev = netdev;
++	struct nlattr *nest_lease, *nest_queue;
+ 	struct netdev_rx_queue *rxq;
+ 	struct netdev_queue *txq;
++	u32 lease_q_idx = q_idx;
+ 	void *hdr;
  
--int net_mp_open_rxq(struct net_device *dev, unsigned ifq_idx,
-+int net_mp_open_rxq(struct net_device *dev, unsigned int rxq_idx,
- 		    struct pp_memory_provider_params *p);
- int __net_mp_open_rxq(struct net_device *dev, unsigned int rxq_idx,
- 		      const struct pp_memory_provider_params *p,
- 		      struct netlink_ext_ack *extack);
--void net_mp_close_rxq(struct net_device *dev, unsigned ifq_idx,
-+void net_mp_close_rxq(struct net_device *dev, unsigned int rxq_idx,
- 		      struct pp_memory_provider_params *old_p);
- void __net_mp_close_rxq(struct net_device *dev, unsigned int rxq_idx,
- 			const struct pp_memory_provider_params *old_p);
+ 	hdr = genlmsg_iput(rsp, info);
+@@ -410,6 +413,37 @@ netdev_nl_queue_fill_one(struct sk_buff *rsp, struct net_device *netdev,
+ 		if (nla_put_napi_id(rsp, rxq->napi))
+ 			goto nla_put_failure;
+ 
++		if (netif_rx_queue_lease_get_owner(&netdev, &lease_q_idx)) {
++			struct net *net, *peer_net;
++
++			nest_lease = nla_nest_start(rsp, NETDEV_A_QUEUE_LEASE);
++			if (!nest_lease)
++				goto nla_put_failure;
++			nest_queue = nla_nest_start(rsp, NETDEV_A_LEASE_QUEUE);
++			if (!nest_queue)
++				goto nla_put_failure;
++			if (nla_put_u32(rsp, NETDEV_A_QUEUE_ID, lease_q_idx))
++				goto nla_put_failure;
++			if (nla_put_u32(rsp, NETDEV_A_QUEUE_TYPE, q_type))
++				goto nla_put_failure;
++			nla_nest_end(rsp, nest_queue);
++			if (nla_put_u32(rsp, NETDEV_A_LEASE_IFINDEX,
++					READ_ONCE(netdev->ifindex)))
++				goto nla_put_failure;
++			rcu_read_lock();
++			peer_net = dev_net_rcu(netdev);
++			net = dev_net_rcu(orig_netdev);
++			if (!net_eq(net, peer_net)) {
++				s32 id = peernet2id_alloc(net, peer_net, GFP_ATOMIC);
++
++				if (nla_put_s32(rsp, NETDEV_A_LEASE_NETNS_ID, id))
++					goto nla_put_failure_unlock;
++			}
++			rcu_read_unlock();
++			nla_nest_end(rsp, nest_lease);
++			netdev = orig_netdev;
++		}
++
+ 		params = &rxq->mp_params;
+ 		if (params->mp_ops &&
+ 		    params->mp_ops->nl_fill(params->mp_priv, rsp, rxq))
+@@ -437,6 +471,8 @@ netdev_nl_queue_fill_one(struct sk_buff *rsp, struct net_device *netdev,
+ 
+ 	return 0;
+ 
++nla_put_failure_unlock:
++	rcu_read_unlock();
+ nla_put_failure:
+ 	genlmsg_cancel(rsp, hdr);
+ 	return -EMSGSIZE;
 diff --git a/net/core/netdev_rx_queue.c b/net/core/netdev_rx_queue.c
-index 61fe25817e98..75c7a68cb90d 100644
+index 830c1a964c36..61fe25817e98 100644
 --- a/net/core/netdev_rx_queue.c
 +++ b/net/core/netdev_rx_queue.c
-@@ -67,6 +67,29 @@ __netif_get_rx_queue_lease(struct net_device **dev, unsigned int *rxq_idx,
- 	return rxq;
+@@ -40,6 +40,51 @@ bool netif_rxq_is_leased(struct net_device *dev, unsigned int rxq_idx)
+ 	return false;
  }
  
++static bool netif_lease_dir_ok(const struct net_device *dev,
++			       enum netif_lease_dir dir)
++{
++	if (dir == NETIF_VIRT_TO_PHYS && !dev->dev.parent)
++		return true;
++	if (dir == NETIF_PHYS_TO_VIRT && dev->dev.parent)
++		return true;
++	return false;
++}
++
 +struct netdev_rx_queue *
-+netif_get_rx_queue_lease_locked(struct net_device **dev, unsigned int *rxq_idx)
++__netif_get_rx_queue_lease(struct net_device **dev, unsigned int *rxq_idx,
++			   enum netif_lease_dir dir)
++{
++	struct net_device *orig_dev = *dev;
++	struct netdev_rx_queue *rxq = __netif_get_rx_queue(orig_dev, *rxq_idx);
++
++	if (rxq->lease) {
++		if (!netif_lease_dir_ok(orig_dev, dir))
++			return NULL;
++		rxq = rxq->lease;
++		*rxq_idx = get_netdev_rx_queue_index(rxq);
++		*dev = rxq->dev;
++	}
++	return rxq;
++}
++
++bool netif_rx_queue_lease_get_owner(struct net_device **dev,
++				    unsigned int *rxq_idx)
 +{
 +	struct net_device *orig_dev = *dev;
 +	struct netdev_rx_queue *rxq;
 +
-+	/* Locking order is always from the virtual to the physical device
-+	 * see netdev_nl_queue_create_doit().
++	/* The physical device needs to be locked. If there is indeed a lease,
++	 * then the virtual device holds a reference on the physical device
++	 * and the lease stays active until the virtual device is torn down.
++	 * When queues get {un,}leased both devices are always locked.
 +	 */
 +	netdev_ops_assert_locked(orig_dev);
-+	rxq = __netif_get_rx_queue_lease(dev, rxq_idx, NETIF_VIRT_TO_PHYS);
++	rxq = __netif_get_rx_queue_lease(dev, rxq_idx, NETIF_PHYS_TO_VIRT);
 +	if (rxq && orig_dev != *dev)
-+		netdev_lock(*dev);
-+	return rxq;
++		return true;
++	return false;
 +}
 +
-+void netif_put_rx_queue_lease_locked(struct net_device *orig_dev,
-+				     struct net_device *dev)
-+{
-+	if (orig_dev != dev)
-+		netdev_unlock(dev);
-+}
-+
- bool netif_rx_queue_lease_get_owner(struct net_device **dev,
- 				    unsigned int *rxq_idx)
+ /* See also page_pool_is_unreadable() */
+ bool netif_rxq_has_unreadable_mp(struct net_device *dev, unsigned int rxq_idx)
  {
-@@ -183,49 +206,63 @@ int __net_mp_open_rxq(struct net_device *dev, unsigned int rxq_idx,
- 		      const struct pp_memory_provider_params *p,
- 		      struct netlink_ext_ack *extack)
- {
-+	struct net_device *orig_dev = dev;
- 	struct netdev_rx_queue *rxq;
- 	int ret;
- 
- 	if (!netdev_need_ops_lock(dev))
- 		return -EOPNOTSUPP;
--
- 	if (rxq_idx >= dev->real_num_rx_queues) {
- 		NL_SET_ERR_MSG(extack, "rx queue index out of range");
- 		return -ERANGE;
- 	}
--	rxq_idx = array_index_nospec(rxq_idx, dev->real_num_rx_queues);
- 
-+	rxq_idx = array_index_nospec(rxq_idx, dev->real_num_rx_queues);
-+	rxq = netif_get_rx_queue_lease_locked(&dev, &rxq_idx);
-+	if (!rxq) {
-+		NL_SET_ERR_MSG(extack, "rx queue peered to a virtual netdev");
-+		return -EBUSY;
-+	}
-+	if (!dev->dev.parent) {
-+		NL_SET_ERR_MSG(extack, "rx queue is mapped to a virtual netdev");
-+		ret = -EBUSY;
-+		goto out;
-+	}
- 	if (dev->cfg->hds_config != ETHTOOL_TCP_DATA_SPLIT_ENABLED) {
- 		NL_SET_ERR_MSG(extack, "tcp-data-split is disabled");
--		return -EINVAL;
-+		ret = -EINVAL;
-+		goto out;
- 	}
- 	if (dev->cfg->hds_thresh) {
- 		NL_SET_ERR_MSG(extack, "hds-thresh is not zero");
--		return -EINVAL;
-+		ret = -EINVAL;
-+		goto out;
- 	}
- 	if (dev_xdp_prog_count(dev)) {
- 		NL_SET_ERR_MSG(extack, "unable to custom memory provider to device with XDP program attached");
--		return -EEXIST;
-+		ret = -EEXIST;
-+		goto out;
- 	}
--
--	rxq = __netif_get_rx_queue(dev, rxq_idx);
- 	if (rxq->mp_params.mp_ops) {
- 		NL_SET_ERR_MSG(extack, "designated queue already memory provider bound");
--		return -EEXIST;
-+		ret = -EEXIST;
-+		goto out;
- 	}
- #ifdef CONFIG_XDP_SOCKETS
- 	if (rxq->pool) {
- 		NL_SET_ERR_MSG(extack, "designated queue already in use by AF_XDP");
--		return -EBUSY;
-+		ret = -EBUSY;
-+		goto out;
- 	}
- #endif
--
- 	rxq->mp_params = *p;
- 	ret = netdev_rx_queue_restart(dev, rxq_idx);
- 	if (ret) {
- 		rxq->mp_params.mp_ops = NULL;
- 		rxq->mp_params.mp_priv = NULL;
- 	}
-+out:
-+	netif_put_rx_queue_lease_locked(orig_dev, dev);
- 	return ret;
- }
- 
-@@ -240,38 +277,43 @@ int net_mp_open_rxq(struct net_device *dev, unsigned int rxq_idx,
- 	return ret;
- }
- 
--void __net_mp_close_rxq(struct net_device *dev, unsigned int ifq_idx,
-+void __net_mp_close_rxq(struct net_device *dev, unsigned int rxq_idx,
- 			const struct pp_memory_provider_params *old_p)
- {
-+	struct net_device *orig_dev = dev;
- 	struct netdev_rx_queue *rxq;
- 	int err;
- 
--	if (WARN_ON_ONCE(ifq_idx >= dev->real_num_rx_queues))
-+	if (WARN_ON_ONCE(rxq_idx >= dev->real_num_rx_queues))
- 		return;
- 
--	rxq = __netif_get_rx_queue(dev, ifq_idx);
-+	rxq = netif_get_rx_queue_lease_locked(&dev, &rxq_idx);
-+	if (WARN_ON_ONCE(!rxq))
-+		return;
- 
- 	/* Callers holding a netdev ref may get here after we already
- 	 * went thru shutdown via dev_memory_provider_uninstall().
- 	 */
- 	if (dev->reg_state > NETREG_REGISTERED &&
- 	    !rxq->mp_params.mp_ops)
--		return;
-+		goto out;
- 
- 	if (WARN_ON_ONCE(rxq->mp_params.mp_ops != old_p->mp_ops ||
- 			 rxq->mp_params.mp_priv != old_p->mp_priv))
--		return;
-+		goto out;
- 
- 	rxq->mp_params.mp_ops = NULL;
- 	rxq->mp_params.mp_priv = NULL;
--	err = netdev_rx_queue_restart(dev, ifq_idx);
-+	err = netdev_rx_queue_restart(dev, rxq_idx);
- 	WARN_ON(err && err != -ENETDOWN);
-+out:
-+	netif_put_rx_queue_lease_locked(orig_dev, dev);
- }
- 
--void net_mp_close_rxq(struct net_device *dev, unsigned ifq_idx,
-+void net_mp_close_rxq(struct net_device *dev, unsigned int rxq_idx,
- 		      struct pp_memory_provider_params *old_p)
- {
- 	netdev_lock(dev);
--	__net_mp_close_rxq(dev, ifq_idx, old_p);
-+	__net_mp_close_rxq(dev, rxq_idx, old_p);
- 	netdev_unlock(dev);
- }
 -- 
 2.43.0
 
