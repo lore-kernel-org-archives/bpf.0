@@ -1,142 +1,151 @@
-Received: from mail-wr1-f67.google.com (mail-wr1-f67.google.com [209.85.221.67])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0897B32AAC7
-	for <bpf@vger.kernel.org>; Thu, 15 Jan 2026 07:55:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.67
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F12C3326D5C;
+	Thu, 15 Jan 2026 08:26:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768463722; cv=none; b=D7yOqaUPBv3ZtCKkVpcxnskAccwuRouHCkIhb3AtvP03qloRq0BWcNQXaSz+8JVQAAvtFjIdJSfa+PhkVFY/MFBP61sO2cHcAlfxfCYaNExK1POayls3lZJzGKSmvvxII4wBXk2uOvbK82KE62gSrv0Z7+nq5PCWpRcRo3OUjh4=
+	t=1768465588; cv=none; b=O9AgF3h9qUpskElBPCf5beQXL5EjCB3ZMbCGrVv35Y8L9LeLKgX7SuN/ax7uS7zM4lNj2/Qs0iscGi5yu7oY9JyWn8gv/6Dlj2F0XfojFoiwphgJUopHDN8xmx2ea6iD8VofoG2PziKfMtPDnfJVDnauUGEss2yWn+vnWwF2zE0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768463722; c=relaxed/simple;
-	bh=om7HWFSCcurUmG6Mdx+2OBk3oT41KbwfSRYe/GiyAWQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=HOANGz7AJE5xg7/nR3gasZOaXDKdHDyhGhVWl3gDbwztgqycWOqPb787jqPTEZNlgWqVRF8l5p/wqmHH8JsHcX+5+WI6T/JymntGZLnpITtZxWMrAIW0Wu3ISDqMueZ9jyBQaa3KNvBOpl9AJHA11zPQL20GdYQSUiGeYkrzStM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mxu/0b9E; arc=none smtp.client-ip=209.85.221.67
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1768465588; c=relaxed/simple;
+	bh=deHERidX6Uj50jqArC5AnAHfZyrBeWMJABClTGf0c9o=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=iPWrvc9iYegpkLlYtA9mY0kzcdu4bvSF08mM8CJytlg3yxlK79pXdPr9QkySLlYY3kcEutdgyM50fMKv69nIkZOmLHVVx6XrG1ucppcYd1ht3xb86s3xE2Is4p3Ck48avGHzx2oYt4F1HsN26D1+SdaD7oNIj8GifeYEHkrpTQo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=FmsBICbe; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mxu/0b9E"
-Received: by mail-wr1-f67.google.com with SMTP id ffacd0b85a97d-430f2ee2f00so299855f8f.3
-        for <bpf@vger.kernel.org>; Wed, 14 Jan 2026 23:55:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768463719; x=1769068519; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=kKO78bOkK71SeHcqc9Sc94UOqPxLObVPuU/Z//5QLXI=;
-        b=mxu/0b9E/YvVWDRcZm99N37i0EAHJJGHXj66RWHGYUCshUMeYfWAwt9VktVGG82j84
-         z+AE/ihGXeSXBVVBx1PWmf6HteRwoxTxwKPqiWTnKL5E0YlCn26n3M/TxrkhWr4n5C7A
-         6uYlEY1zbOauRvXwed31caAKjZb+Snrw0KYs7YcKxRh8JxDmb6O/tg89Ma+KyfQ2BzkU
-         LjE3uwDuZ8oq86IxDV5YYmuuoUI1LjrVMBWyyNnXoATvv5gQh0m5xvTtwOllwCbb8aNL
-         G6RaDO7eh41C7pgABV0RRjAtrtsP9fpP3yloo/kC1ZF2pcEwcA77OOfNADM9JSr8cwhF
-         /R+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768463719; x=1769068519;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kKO78bOkK71SeHcqc9Sc94UOqPxLObVPuU/Z//5QLXI=;
-        b=QabeTeYL1P78yl8SFBRighze36mMTTukBsg8cvriVMP3Gp6+8nsbMKpVc/uGXs5KFD
-         gGVaI1rLNvBidOarYouIauOXs1sVSSeaoKnHQ9J9G/4+DR2O0TuqTEkOK89gtcHDr8QC
-         X6qqTp7D9vG31vuXySUFgJWkgToGklzC0pDaMZlMlrO662KwC2u/jLKx2cB5pkKWHBcu
-         UE+iqZDwk8IGTaNiczu6e8nmMM1VCVfz/CRxxw6X9Qk5qXyFzDybKFMBQOagEu8ppm64
-         Xt26lQ6xr0D8gQZ+9Osmf7+2IK5aRIwrX9D8+rVfAJXtktVdsYEGqaiVRcV2z7HtI5m4
-         fY9w==
-X-Gm-Message-State: AOJu0YzXdzyV1m/5MUMSZzdhxdTkfXaq6JAKwKtAlJmDmYIaUz2riGfU
-	Y0u7Xuhuy9HkaCsivAKQKDFoHPk7PhXNxUDnj8TlKnObptn1jk9T3Tbm1OKUUJvxCg3Awcjdaml
-	g72XvJoU67sqr24LZ91Bv4rmSzSWQn+W2auku
-X-Gm-Gg: AY/fxX69y8s7XVPO2Bfl6GOJ20WRDm0B1F2rQi05oIEVAjON4fg6q+X1bZUepvLLqEM
-	CJx5e7KUiAQ21hz3cZ9AW/vP5peFU1RCDcSQEt4QbjNJnjxGvAVVHVa96I+rskzkZum4DZgsw9c
-	X9IVGPiPJaq2Qll/JPZaZrc2t0Y5syFK583W/X5Ar1qNXvWRa6UBxU7CjFZqR09DDhuNpfkiaYY
-	QD5M0MfNSRPVsOsugy95bQI0uVy+WvKKzCQGFO6IaOnqYwaSRifGTft0F46usitSmbOq9lvv29l
-	bq2LWKFQ9vwlBXuPaUs/8zKvbJov
-X-Received: by 2002:a05:6000:4301:b0:431:8f8:7f24 with SMTP id
- ffacd0b85a97d-4342c535b7bmr7202529f8f.39.1768463719264; Wed, 14 Jan 2026
- 23:55:19 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="FmsBICbe"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
+	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
+	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=jKRcqnAN1FejFT21FpY8AxftZkZMdt43RnsJvrkKQQU=; b=FmsBICbeY4mWZKcIr+cNCff1y4
+	paQss6DSn/Zlq1KmIhp0bVpzyv/+ARgbSRG5f/GcojEu24ziBFYDNZPryAJY11SYTUVbagAErTVAB
+	q+djdsVJUM01uFwJFOBbc/nF56jCWRXJ90xdxmuMHkyMNuyemaWdFnqN8iJD/cloDTUhTZB99GUbZ
+	9+PcLPyh8cw1VKg0VuXpG+Cu8r3xf/UpjOTHAg8rtHVKG5ZPCNd446TkZxrgGnNRckte0OgyGkjTk
+	j01Cxsi14vL2T20PSf9n3xGiIcWdIYnEVNy1ScSxpFtiXZky9rSISw8xIbVyOPhsZDrC4FTvxXitS
+	7tV1wNpg==;
+Received: from localhost ([127.0.0.1])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1vgIgD-000NpU-25;
+	Thu, 15 Jan 2026 09:26:09 +0100
+From: Daniel Borkmann <daniel@iogearbox.net>
+To: netdev@vger.kernel.org
+Cc: bpf@vger.kernel.org,
+	kuba@kernel.org,
+	davem@davemloft.net,
+	razor@blackwall.org,
+	pabeni@redhat.com,
+	willemb@google.com,
+	sdf@fomichev.me,
+	john.fastabend@gmail.com,
+	martin.lau@kernel.org,
+	jordan@jrife.io,
+	maciej.fijalkowski@intel.com,
+	magnus.karlsson@intel.com,
+	dw@davidwei.uk,
+	toke@redhat.com,
+	yangzhenze@bytedance.com,
+	wangdongdong.6@bytedance.com
+Subject: [PATCH net-next v7 04/16] net, ethtool: Disallow leased real rxqs to be resized
+Date: Thu, 15 Jan 2026 09:25:51 +0100
+Message-ID: <20260115082603.219152-5-daniel@iogearbox.net>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260115082603.219152-1-daniel@iogearbox.net>
+References: <20260115082603.219152-1-daniel@iogearbox.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260115061319.2895636-1-yonghong.song@linux.dev>
-In-Reply-To: <20260115061319.2895636-1-yonghong.song@linux.dev>
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date: Thu, 15 Jan 2026 08:54:42 +0100
-X-Gm-Features: AZwV_QgTZDgey5kb1xz_G5IHC7YNoRQpYKwJeDQil9DsOT5tQyZ0c2BYnI5guiE
-Message-ID: <CAP01T75HfwbrZkRouGiuhfbFqMS4-LXh-nQ7ho=rJ-DZ44vCDA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] selftests/bpf: Fix map_kptr test failure
-To: Yonghong Song <yonghong.song@linux.dev>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, kernel-team@fb.com, 
-	Martin KaFai Lau <martin.lau@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: Clear (ClamAV 1.4.3/27881/Thu Jan 15 08:25:08 2026)
 
-On Thu, 15 Jan 2026 at 07:16, Yonghong Song <yonghong.song@linux.dev> wrote:
->
-> On my arm64 machine, I get the following failure:
->   ...
->   tester_init:PASS:tester_log_buf 0 nsec
->   process_subtest:PASS:obj_open_mem 0 nsec
->   process_subtest:PASS:specs_alloc 0 nsec
->   serial_test_map_kptr:PASS:rcu_tasks_trace_gp__open_and_load 0 nsec
->   ...
->   test_map_kptr_success:PASS:map_kptr__open_and_load 0 nsec
->   test_map_kptr_success:PASS:test_map_kptr_ref1 refcount 0 nsec
->   test_map_kptr_success:FAIL:test_map_kptr_ref1 retval unexpected error: 2 (errno 2)
->   test_map_kptr_success:PASS:test_map_kptr_ref2 refcount 0 nsec
->   test_map_kptr_success:FAIL:test_map_kptr_ref2 retval unexpected error: 1 (errno 2)
->   ...
->   #201/21  map_kptr/success-map:FAIL
->
-> In serial_test_map_kptr(), before test_map_kptr_success(), one
-> kern_sync_rcu() is used to have some delay for freeing the map.
-> But in my environment, one kern_sync_rcu() seems not enough and
-> caused the test failure.
->
-> In bpf_map_free_in_work() in syscall.c, the queue time for
->   queue_work(system_dfl_wq, &map->work)
-> may be longer than expected. This may cause the test failure
-> since test_map_kptr_success() expects all previous maps having been freed.
->
-> In stead of one kern_sync_rcu() before test_map_kptr_success(),
-> I added two more kern_sync_rcu() to have a longer delay and
-> the test succeeded.
->
-> Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
-> ---
+Similar to AF_XDP, do not allow queues in a physical netdev to be
+resized by ethtool -L when they are leased.
 
-This is still not a proper fix, right? Maybe two works in this case,
-but it isn't guaranteed to be enough either.
-RCU gp wait won't have any synchronization with when wq items are executed.
-I forgot why I used kern_sync_rcu() originally, but I feel the right
-way to fix this would be to count when all maps have finished their
-bpf_map_free through an fexit hook. Thoughts?
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Co-developed-by: David Wei <dw@davidwei.uk>
+Signed-off-by: David Wei <dw@davidwei.uk>
+Reviewed-by: Nikolay Aleksandrov <razor@blackwall.org>
+---
+ net/ethtool/channels.c | 12 +++++++-----
+ net/ethtool/ioctl.c    |  9 +++++----
+ 2 files changed, 12 insertions(+), 9 deletions(-)
 
->  tools/testing/selftests/bpf/prog_tests/map_kptr.c | 4 ++++
->  1 file changed, 4 insertions(+)
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/map_kptr.c b/tools/testing/selftests/bpf/prog_tests/map_kptr.c
-> index 8743df599567..f9cfc4d3153c 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/map_kptr.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/map_kptr.c
-> @@ -148,11 +148,15 @@ void serial_test_map_kptr(void)
->
->                 ASSERT_OK(kern_sync_rcu_tasks_trace(skel), "sync rcu_tasks_trace");
->                 ASSERT_OK(kern_sync_rcu(), "sync rcu");
-> +               ASSERT_OK(kern_sync_rcu(), "sync rcu");
-> +               ASSERT_OK(kern_sync_rcu(), "sync rcu");
->                 /* Observe refcount dropping to 1 on bpf_map_free_deferred */
->                 test_map_kptr_success(false);
->
->                 ASSERT_OK(kern_sync_rcu_tasks_trace(skel), "sync rcu_tasks_trace");
->                 ASSERT_OK(kern_sync_rcu(), "sync rcu");
-> +               ASSERT_OK(kern_sync_rcu(), "sync rcu");
-> +               ASSERT_OK(kern_sync_rcu(), "sync rcu");
->                 /* Observe refcount dropping to 1 on synchronous delete elem */
->                 test_map_kptr_success(true);
->         }
-> --
-> 2.47.3
->
->
+diff --git a/net/ethtool/channels.c b/net/ethtool/channels.c
+index ca4f80282448..797d2a08c515 100644
+--- a/net/ethtool/channels.c
++++ b/net/ethtool/channels.c
+@@ -1,6 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0-only
+ 
+-#include <net/xdp_sock_drv.h>
++#include <net/netdev_queues.h>
+ 
+ #include "netlink.h"
+ #include "common.h"
+@@ -169,14 +169,16 @@ ethnl_set_channels(struct ethnl_req_info *req_info, struct genl_info *info)
+ 	if (ret)
+ 		return ret;
+ 
+-	/* Disabling channels, query zero-copy AF_XDP sockets */
++	/* ensure channels are not busy at the moment */
+ 	from_channel = channels.combined_count +
+ 		       min(channels.rx_count, channels.tx_count);
+-	for (i = from_channel; i < old_total; i++)
+-		if (xsk_get_pool_from_qid(dev, i)) {
+-			GENL_SET_ERR_MSG(info, "requested channel counts are too low for existing zerocopy AF_XDP sockets");
++	for (i = from_channel; i < old_total; i++) {
++		if (netdev_queue_busy(dev, i, NULL)) {
++			GENL_SET_ERR_MSG(info,
++					 "requested channel counts are too low due to busy queues (AF_XDP or queue leasing)");
+ 			return -EINVAL;
+ 		}
++	}
+ 
+ 	ret = dev->ethtool_ops->set_channels(dev, &channels);
+ 	return ret < 0 ? ret : 1;
+diff --git a/net/ethtool/ioctl.c b/net/ethtool/ioctl.c
+index 9431e305b233..02a3454234d6 100644
+--- a/net/ethtool/ioctl.c
++++ b/net/ethtool/ioctl.c
+@@ -27,12 +27,13 @@
+ #include <linux/net.h>
+ #include <linux/pm_runtime.h>
+ #include <linux/utsname.h>
++#include <linux/ethtool_netlink.h>
+ #include <net/devlink.h>
+ #include <net/ipv6.h>
+-#include <net/xdp_sock_drv.h>
+ #include <net/flow_offload.h>
+ #include <net/netdev_lock.h>
+-#include <linux/ethtool_netlink.h>
++#include <net/netdev_queues.h>
++
+ #include "common.h"
+ 
+ /* State held across locks and calls for commands which have devlink fallback */
+@@ -2282,12 +2283,12 @@ static noinline_for_stack int ethtool_set_channels(struct net_device *dev,
+ 	if (ret)
+ 		return ret;
+ 
+-	/* Disabling channels, query zero-copy AF_XDP sockets */
++	/* Disabling channels, query busy queues (AF_XDP, queue leasing) */
+ 	from_channel = channels.combined_count +
+ 		min(channels.rx_count, channels.tx_count);
+ 	to_channel = curr.combined_count + max(curr.rx_count, curr.tx_count);
+ 	for (i = from_channel; i < to_channel; i++)
+-		if (xsk_get_pool_from_qid(dev, i))
++		if (netdev_queue_busy(dev, i, NULL))
+ 			return -EINVAL;
+ 
+ 	ret = dev->ethtool_ops->set_channels(dev, &channels);
+-- 
+2.43.0
+
