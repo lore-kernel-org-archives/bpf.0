@@ -1,80 +1,168 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C33DD2FFFBE
-	for <bpf@vger.kernel.org>; Fri, 16 Jan 2026 22:23:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADF6C310627
+	for <bpf@vger.kernel.org>; Fri, 16 Jan 2026 22:25:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768602215; cv=none; b=AZWh5nTnxJzqbVY4rdX3ogqzHskoMYx3w/YiBo35mra81A85cwy/3MWpoOqMd5j0ao6stalBdFXZlfb2Dia2PHae8yHkWHJH3M9dmF/rkfi+n0sGa6vOJUA/l41UgLR2t9i9p46MYw3OGaaQ1B8leejguFaHjNsJQTV46nYJDTM=
+	t=1768602307; cv=none; b=p20HZoJQKnXQHmcEMCfXl6J4xPYCuVZfFsE50CuHzF7ZXdpzWwH/GNGnReyf5E/jzo//xRu+YblLgs5pnfLsfd1Uf9WS9c5IOlXxfIwXZPfhfP6UIyyzAWTbrbxRFqSPxJSRHGMbNMv8VMj4mFDc+1AaJL32duupGvpkjGuDETw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768602215; c=relaxed/simple;
-	bh=aURJh++m0C3MaqNHUo8y8Vx1znHzKpaVp8zKYEmxH2o=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=bWAi7b0ua86CGLK7viD6PDVfQ9SOpEZe/jJqPr2kwa67CMXTLByg3l0j+NX/LrwnY8Djhyv48y5KmYFnKiaaig5YiH86sUfVh1JKJR/xBqq9I2QU7BLAMki/tELwBzWFalRoRvwp8i0Yn50BS22egA5TBAAqQ+BuZbtZA/LZTZY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WN1N6omw; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1768602307; c=relaxed/simple;
+	bh=qptEp8sEbtVPxJxGO0g+sItbsWbLaXt42kMa9TNE7OA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=kpJx88aBDVOSneFFiHTho9+BC2+Tml3D0vcSfxn5FTJUYmxLqBnFZfGgIOCRoKQAvyOzXrYgiZX20tRpAGCoCbexeTXo8lMW6Qzq9hQ9GmVS0MVco4gnE8gN9Or9kqjFRS+HpNAPL5R53BmdxGqhAiPDazn2eB6gsjG4ZmHG/lw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BYjAObTc; arc=none smtp.client-ip=209.85.215.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WN1N6omw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E82AC116C6;
-	Fri, 16 Jan 2026 22:23:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768602215;
-	bh=aURJh++m0C3MaqNHUo8y8Vx1znHzKpaVp8zKYEmxH2o=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=WN1N6omwTZoLiNwNh0IB8iq9WsrX6NYewn1vzCNcvy1mG233csHPiojs6OzEBWrBt
-	 mVEL+wJdH4b/0BIl8eQne61h77Wjx32gpZ67WUYw8jQuWtBumGWDejyNfpEG2juFSA
-	 f8VTCJNBwtI2TTyc2ZdKSVMsGmDK7zEJuvgTVSbEMVqErf7PqNEf+nZagYMQQa451s
-	 N5qOazqj6zWU9TutVRqHLRhaTVcA7mQXHtD+rR5LXD0gwOgiLQD34XnsmU0pUa17+k
-	 27IdfjN3K29A8MPKxFNwqnwId/1/va6XEx8TmRQd0fXZtT4Sgjdti3f9PYi2w6GiPi
-	 FLmiEdxmkb//Q==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id F2D67380CECB;
-	Fri, 16 Jan 2026 22:20:07 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BYjAObTc"
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-c56188aef06so1079948a12.2
+        for <bpf@vger.kernel.org>; Fri, 16 Jan 2026 14:25:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1768602305; x=1769207105; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JKu+95CPgLvp/C5TpNMES7nTK5oZeBFLzp4GfKdaUjQ=;
+        b=BYjAObTcCgGFplePKZv6cz5XoZKBjmWL48jUdlDZp+DBFqebZubj0QRA4bvqAKBJj2
+         nOYU2n4OFBgGt6K1rprnpPxbDV0F1Be1QAp0zgnqRP3RVFWuYHbfqccJm9uklvH9XPWp
+         wjrUaGi0BLzqck69ZMRm5bFiz3e3xbFnNR5K1ubysC6TqXMzZ2K7SFtF+W0Zdct3D8I8
+         RO/bq3JMjG+HJc0fQ+RQfnyv0fMrd2Q4HYoltQwAr3yNetP0aAyR5qcaJ9CHYXjAxT1s
+         vo1WYdIveve1yhrffb7jD0b7KKXbvDlNpPWcJaIlMuBuHqziJbXUe/dfXcoN5LDISe/h
+         GE8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768602305; x=1769207105;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=JKu+95CPgLvp/C5TpNMES7nTK5oZeBFLzp4GfKdaUjQ=;
+        b=FfyhyrMVPjFKDtlaCD8qfKKoqXS4vfb2pEn1RiFoDc+Gs0EmEVUkFvOHrnWifOhY5d
+         UOR7TD6kA+j+8pCX6Uwq291Ww8eipVy01VepmOxu5MqLHSZdzWQX5XhbPDhHKl2hjvVX
+         83lXdA0oB8Wfi3pBYr6BDIxhQgitm7B1NWT4ly+zGfAcIvuXffZFha3uGP0uNH/QUOYq
+         0gG/cperJ4vDh54ctk1zGYMsHTJaP0/N71io80sOXyO25m93PV4Jqfhyy05McqvW4uGq
+         zfEX/iPbVTNmyMl5GHgiuROOH4o2BVwjfvz1IF6y6yeBoGG52Pv/+UNbiF4jzzhXZaEh
+         LE8g==
+X-Forwarded-Encrypted: i=1; AJvYcCV7mp2sCXXFNOy1bm43Cb0slIVzB0Nk3ziz2udtx/VNj6XTyYF+D941gzF8qr4p0F+5/rw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzZrTRYqlQ7Afb7cf6w/3mYSqamEMNYYpzeYgkg6nJcYkZXH14q
+	vjrhakIzukxJbgjNbnUoqG4NJp2aizzEeRCE8086fB/1HjDs0EsQgFFqECBJSmMFizrc3n5jsyj
+	Zs4c45iGomrklHdZ3jpACRx07tvIWpZo=
+X-Gm-Gg: AY/fxX5+NKDsMFW2Dl42fpukE8Y852kgcqrAKcgRBeIlMaHWhAv97As1lj4kqzPyoPp
+	PLebYNTRLbLjHzfJOEjAdqIHUVjI+K1eR0ZoP75BFPR0VIuzKIWwhp2LYOjoRAiPt1fUE4PIzpY
+	MyZH72J6CivMGoGFB2Uh4FqPi2Ry4o35tVWqtsCAycpitbi9iV/yKfGX4DxeXlPJFX8o/9C2wGE
+	SvmOw+qZ4/GVaWs8+MSTL90CUOgkCu6DD1lSInAkZxHwuQ228k8pPvSc5Ub4BXmo8pAouszKi/H
+	ts+xP1TgPmw=
+X-Received: by 2002:a17:90b:3501:b0:340:d1a1:af8e with SMTP id
+ 98e67ed59e1d1-35272fe6ee0mr4031169a91.37.1768602305010; Fri, 16 Jan 2026
+ 14:25:05 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v1] bpf: Add __force annotations to silence
- sparse
- warnings
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <176860200680.819374.11642331369076459428.git-patchwork-notify@kernel.org>
-Date: Fri, 16 Jan 2026 22:20:06 +0000
-References: <20260115184509.3585759-1-mykyta.yatsenko5@gmail.com>
-In-Reply-To: <20260115184509.3585759-1-mykyta.yatsenko5@gmail.com>
-To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
- daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com,
- yatsenko@meta.com, lkp@intel.com
+References: <20260112214940.1222115-1-jolsa@kernel.org> <20260112214940.1222115-3-jolsa@kernel.org>
+ <20260112170757.4e41c0d8@gandalf.local.home> <aWYv6864cdO2PWbb@krava>
+ <CAEf4BzZ-sPD4UZF-TL2ep-zQOyeOC3K5XC2o3Gsx4Q6XpN-zQw@mail.gmail.com> <aWpme7kBw9xyzRFP@krava>
+In-Reply-To: <aWpme7kBw9xyzRFP@krava>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Fri, 16 Jan 2026 14:24:51 -0800
+X-Gm-Features: AZwV_QjlKAd57l3v7WOINdaUEuCO64fxYBxvdL4QvGUxnlSeVPU6ggFqHIo30QA
+Message-ID: <CAEf4BzZyF2MsF5CkLEsrd0dumeCJ3-zzP+azCZ4TRoDkzjGLdg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 2/4] x86/fgraph,bpf: Switch kprobe_multi program
+ stack unwind to hw_regs path
+To: Jiri Olsa <olsajiri@gmail.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
+	Josh Poimboeuf <jpoimboe@kernel.org>, Mahe Tardy <mahe.tardy@gmail.com>, 
+	Peter Zijlstra <peterz@infradead.org>, bpf@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, x86@kernel.org, 
+	Yonghong Song <yhs@fb.com>, Song Liu <songliubraving@fb.com>, Andrii Nakryiko <andrii@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello:
+On Fri, Jan 16, 2026 at 8:25=E2=80=AFAM Jiri Olsa <olsajiri@gmail.com> wrot=
+e:
+>
+> On Thu, Jan 15, 2026 at 10:52:04AM -0800, Andrii Nakryiko wrote:
+> > On Tue, Jan 13, 2026 at 3:43=E2=80=AFAM Jiri Olsa <olsajiri@gmail.com> =
+wrote:
+> > >
+> > > On Mon, Jan 12, 2026 at 05:07:57PM -0500, Steven Rostedt wrote:
+> > > > On Mon, 12 Jan 2026 22:49:38 +0100
+> > > > Jiri Olsa <jolsa@kernel.org> wrote:
+> > > >
+> > > > > To recreate same stack setup for return probe as we have for entr=
+y
+> > > > > probe, we set the instruction pointer to the attached function ad=
+dress,
+> > > > > which gets us the same unwind setup and same stack trace.
+> > > > >
+> > > > > With the fix, entry probe:
+> > > > >
+> > > > >   # bpftrace -e 'kprobe:__x64_sys_newuname* { print(kstack)}'
+> > > > >   Attaching 1 probe...
+> > > > >
+> > > > >         __x64_sys_newuname+9
+> > > > >         do_syscall_64+134
+> > > > >         entry_SYSCALL_64_after_hwframe+118
+> > > > >
+> > > > > return probe:
+> > > > >
+> > > > >   # bpftrace -e 'kretprobe:__x64_sys_newuname* { print(kstack)}'
+> > > > >   Attaching 1 probe...
+> > > > >
+> > > > >         __x64_sys_newuname+4
+> > > > >         do_syscall_64+134
+> > > > >         entry_SYSCALL_64_after_hwframe+118
+> > > >
+> > > > But is this really correct?
+> > > >
+> > > > The stack trace of the return from __x86_sys_newuname is from offse=
+t "+4".
+> > > >
+> > > > The stack trace from entry is offset "+9". Isn't it confusing that =
+the
+> > > > offset is likely not from the return portion of that function?
+> > >
+> > > right, makes sense.. so standard kprobe actualy skips attached functi=
+on
+> > > (__x86_sys_newuname) on return probe stacktrace.. perhaps we should d=
+o
+> > > the same for kprobe_multi
+> >
+> > but it is quite nice to see what function we were kretprobing,
+> > actually...
+>
+> IIUC Steven doesn't like the wrong +offset that comes from entry probe,
+> maybe we could have func+(ADDRESS_OF_RET+1) ..but not sure how hard that
+> would be
+>
+> still.. you always have the attached function ip when you get the stacktr=
+ace,
+> so I'm not sure how usefull it's to have it in stacktrace as well.. you c=
+an
+> always add it yourself
 
-This patch was applied to bpf/bpf-next.git (master)
-by Andrii Nakryiko <andrii@kernel.org>:
+You can, but that's a custom thing that every single tool has to
+implement. Having traced function right there in the stack would be so
+nice and convenient.
 
-On Thu, 15 Jan 2026 18:45:09 +0000 you wrote:
-> From: Mykyta Yatsenko <yatsenko@meta.com>
-> 
-> Add __force annotations to casts that convert between __user and kernel
-> address spaces. These casts are intentional:
-> 
-> - In bpf_send_signal_common(), the value is stored in si_value.sival_ptr
->   which is typed as void __user *, but the value comes from a BPF
->   program parameter.
-> 
-> [...]
+I don't insist, but I'm just saying that practically speaking this
+would make sense. Even conceptually, kretprobe is (logically) called
+from traced function right before exit. In reality it's not exactly
+like that and we don't know where ret happened, but having traced
+function in kretprobe's stack trace is more useful than confusing,
+IMO.
 
-Here is the summary with links:
-  - [bpf-next,v1] bpf: Add __force annotations to silence sparse warnings
-    https://git.kernel.org/bpf/bpf-next/c/170014769761
+But again, I just found it interesting that we could have it, if we wanted =
+to.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+>
+>
+> > How hard would it be to support that for singular kprobe
+> > as well? And what does fexit's stack trace show for such case?
+>
+> I think we will get the bpf_program address, so we see the attached
+> function in stacktrace, will check
+>
+> thanks,
+> jirka
