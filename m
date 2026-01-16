@@ -1,197 +1,179 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF28E1DE4EF;
-	Fri, 16 Jan 2026 12:29:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768566550; cv=none; b=jx/LU4Wn7cpZK2fIqEJcaF+YcAKvRknSFttYveOywTdf5gZSMHFJ/Q6A4nBeY5QW0Dnskr1SFn2DRMT3u8/ThDR61/VyGbGwhFWv4aIVYJryujUTjx1K4mq84MtHob9xnZiArJaXOmrvobJuSV+hh4Fvhuk7qDMwwx4TV+xdRe8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768566550; c=relaxed/simple;
-	bh=xi6zM5CVklLfECdqHMYOBwNT/HjrbAQtzgaoZogHnGk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AbwpwxcaK8Ti6qammFdYw1vQZ7rQR9Gp+WfTgS2bbNX2JlDyRNWWtE+n3R4tqZmmguYf+s8XYeTi3yiTja8hqpJYUJY8mjSVOcTYxcZeLbQUaF+JimQwWG3PrH3ievKnHuqbNMXN0HSUyCqRozBlI7ZTpaNOYpaVbIDmPoC/COs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZsRsJEf/; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 041971F1932
+	for <bpf@vger.kernel.org>; Fri, 16 Jan 2026 12:59:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.42
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768568395; cv=pass; b=eg01kkb1R7LdFNQME5OcDHne/OLCNO6TM9BKdyj9556ynJoq5TN97hTiE6ADkXHgY6/ALA4Ar2XOnN4fEQeG95Nv66ttMghviGDfe71idufvGfmHZQLruEWGLNk7VEKkA3FXtInF3PoMKZXw143HBOJ2MxwBBpgLsw2X7Vnr48o=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768568395; c=relaxed/simple;
+	bh=5XrZEu7IM2qF9d+CyS0+9uAYhKYc+7JWy68FH5vx7/k=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=UETN46cs5ihQDy5u0bNxo16fgISiSMVfQDPLbM7wQhzn34pOMXGozKKDhuD0gaLzBECakv1cu5sgXCWwbXIJcyIViD+gan8v/yttcghEcGWg9v1scG6JuRNXETjUa73InPMB1QkiYgHpx8lXONUsHCZhqHNbnJS3IUzd8BHm00c=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=N8tYHRXM; arc=pass smtp.client-ip=209.85.218.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZsRsJEf/"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1768566545; x=1800102545;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=xi6zM5CVklLfECdqHMYOBwNT/HjrbAQtzgaoZogHnGk=;
-  b=ZsRsJEf/vK1anXUXmW7JYtGZI282edn0MHA6+wReWxYztmKTHpMC5ssy
-   tAHadgkXSvFTXQZBnpI08iAUsaCxSRSLRcoUP2f64bYleEpVExjBPAUpr
-   Y/HUImRlOzUfUTZFMhBM5aAh2Wu2b+bh3DKmouWkoFNnXe1IhDF+bRND5
-   C3VN8/ZS06CCSDGzCNr1NaY5hFWQB+0KNB5ycJosHRESJ5kxhw7etBt8M
-   NB3MORhHypmQRX9aeCRlTG5DFSZP91k90JVu1R2PegFsC+txzQDkXh3P/
-   k8PdBPu+2Va0N+OQSsXFUhfQoXOgjgkbL0c/IcSpLhLAgqosPDPQ8JcIm
-   Q==;
-X-CSE-ConnectionGUID: Rkx3tlRwQLybkafiz5dH/g==
-X-CSE-MsgGUID: oRSfnv43TKOv3/QHR2b6ag==
-X-IronPort-AV: E=McAfee;i="6800,10657,11672"; a="68889869"
-X-IronPort-AV: E=Sophos;i="6.21,231,1763452800"; 
-   d="scan'208";a="68889869"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2026 04:29:04 -0800
-X-CSE-ConnectionGUID: cciyI+moRiCnC1gkccgIFw==
-X-CSE-MsgGUID: M4jROaV+Qo67aryhk+swUA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,231,1763452800"; 
-   d="scan'208";a="204384752"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 16 Jan 2026 04:28:59 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vgiwi-00000000KpE-0KSC;
-	Fri, 16 Jan 2026 12:28:56 +0000
-Date: Fri, 16 Jan 2026 20:28:23 +0800
-From: kernel test robot <lkp@intel.com>
-To: Wei Fang <wei.fang@nxp.com>, shenwei.wang@nxp.com,
-	xiaoning.wang@nxp.com, frank.li@nxp.com, andrew+netdev@lunn.ch,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, ast@kernel.org, daniel@iogearbox.net,
-	hawk@kernel.org, john.fastabend@gmail.com, sdf@fomichev.me
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	imx@lists.linux.dev, bpf@vger.kernel.org
-Subject: Re: [PATCH v2 net-next 14/14] net: fec: add AF_XDP zero-copy support
-Message-ID: <202601162115.ATDIXPBp-lkp@intel.com>
-References: <20260116074027.1603841-15-wei.fang@nxp.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N8tYHRXM"
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-b876798b97eso333911666b.1
+        for <bpf@vger.kernel.org>; Fri, 16 Jan 2026 04:59:53 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1768568392; cv=none;
+        d=google.com; s=arc-20240605;
+        b=SspwiaIY8HqeZoLRF1ttzd/t0DSxnOKwnNfMixdDxze32mYfdZnywsrK5PHOI41RJN
+         PCy1xQJGyGTqDkml/bhD7F9k9oz+FLUVe9tEMcw7d2Ze6NL7Y4vAKhmvkkdA+lWYTJQJ
+         6GGMLKJ1RgfgeF+6gcXA++Zi+m1eyv/Sr5F73bfEGTSKQ4L62q6QamKjo30Z17xj+XSu
+         Qq7PQLXjHpGUkM1laDG0Gc63u9igRUA1HN1FWfhDw5qTgFn7hBMll8ttoo6m+0aDogob
+         q50k1LQFYZoqGUdepdr7mHgm/EiKmnDYD9gHsRxiVdeiQ5aaNOERkJW4GY82KS6HuMR5
+         pBsQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=KaFtW2Z8I9yicCNtr1Z0UdrlsofWrWtI4cSYysTIiSU=;
+        fh=s/U2tX1QyS+6Cr3UC+tsC37VXjN1NmMqAyctztF2ai4=;
+        b=Wt+ZWIBn1c7T7j4r/syVGpq3BuBXtJrtiKLab/x3N7B8LCU6SWsQVBxOpEUw8/G0hw
+         fGjex4Bsgkfw6kmVkr2UcKKAV1KzgmHkpitzx2XLKemY9Krm7eC/y/lYS/85v1hrqZN6
+         2WZpaOCTWodpYYkUBPwEWdEx2xcmxi9pwmTOstUU/oNea7MDHsSj0VXy+w8aYk8MH7AV
+         kkUTRqXeyyWOQjUFzpKO5c9L6Makp5fO0WCK+7FOhg3l2NcTiYx4Mi3QEBP67X+V6l1R
+         wJ1AEhXVUgJKF0/xphSUdPwtQnn263e73cpVVUoJLEW5In4Nh/Us8AR3EJq7e/j2i/ek
+         tbWA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1768568392; x=1769173192; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KaFtW2Z8I9yicCNtr1Z0UdrlsofWrWtI4cSYysTIiSU=;
+        b=N8tYHRXMdLyirKM9f0fvzdrbkhZpeIQ2kaVmwwFJH87TbFxKccgnHswN1oxMPw55mP
+         RggkE81x5J6ANYGye6tKvnw9ADzzkn8BUxLc/GQFUuMT0vqreH86ar6Hz3yRV4n/Fpjk
+         RHGkCCJvOaTIM9HO2Dgdxo9PjucP25r2PmjwzqJ7CZfTLgpf239/Zj39vP2BGksGqHvq
+         WFJBXwsuwrfdmxSdLemL+nHuAR5+Aeq9F7sjGznDRK9+dgEU0xkBgMMW7ONR/byjg184
+         9vSwItJD+h83K2hfdew1diJUQnIX2rp/Z10Rgd2LsMCXUSpRm8lUpDJ1W9KdDHDqJi5P
+         VnlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768568392; x=1769173192;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=KaFtW2Z8I9yicCNtr1Z0UdrlsofWrWtI4cSYysTIiSU=;
+        b=eGFdPkGSl86jhtDOJXWH3Juf2WHDrxx2fxSFYQH7z4Ce1ys7Kt39c2ARd/YOWyD7uH
+         2hPH5MHJpLerAB7duheRaOqKtm3+JdScEub4ghpVEMQ08Z53YMNO66kgci/NW1l4OUeN
+         M8t1HrqvvJfpHADg6YDzgCW4YIX0FyQcgO4CY/yCu5TpTMriiFhicOmmPxU4gMZw0jX2
+         0Ylqi91hVM11KgV3FgOrLZovXXT7MlNAj0dleG3xqSC9XptQI+EpXjEetqTdvU8nVEpA
+         V+/Btj/ouPwYh5jT+RYgf+9jSN4cnlzhDXTePJEx8ksQ2HlHOb+Jx62oW5p/DDgl9cDU
+         tLng==
+X-Gm-Message-State: AOJu0YwG4NeqqzY8Vj7ozRtx8DSbxFBwIgR5TfmxJRq9ja0SW9kQWcr7
+	tVoYzkqnnVXwtJuQbe9bkkj4GjQ/msr1LYJk9HmMQ+KQTzoZyQ8p+zAZZOigx13K+6qC8912D/9
+	wKuFoS9qpkR2wM/k3x52O7iYlr9laWoE=
+X-Gm-Gg: AY/fxX7qRkOoLrYXN84ZFbso5mpBIv9+TKjtON2QNNp1poB0/MC9ILEQDSMXZWHdfx6
+	OrXKiXAOPf+2+6qFBAFPcspVBPQ2I0MxRIaXcf2ZHHiCerCn2KHmgtxQYj7nySsVhK3mvRb7Vlx
+	PNCgHXNs/Bm2czOvzJQR0xCZG6/gUINWkugfqPGfGsqSuRffb7UI6SxVx84hz9qQCbCf/EnJ2mM
+	pUVGfSmBv51qFGzMxYPjlqpvchwUII6h4MZyD1DEM/BDYBjG7oQ2lfFdavzPt7GcZqcSt4=
+X-Received: by 2002:a17:907:848:b0:b87:2780:1b34 with SMTP id
+ a640c23a62f3a-b879324d779mr259027066b.61.1768568392170; Fri, 16 Jan 2026
+ 04:59:52 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260116074027.1603841-15-wei.fang@nxp.com>
+References: <20260115151143.1344724-1-puranjay@kernel.org> <20260115151143.1344724-2-puranjay@kernel.org>
+ <CAEf4BzbXo0FCxJwjrk_O0YBCPkDW0a5-gFW8VEbQDqu4P-XP+Q@mail.gmail.com>
+In-Reply-To: <CAEf4BzbXo0FCxJwjrk_O0YBCPkDW0a5-gFW8VEbQDqu4P-XP+Q@mail.gmail.com>
+From: Puranjay Mohan <puranjay12@gmail.com>
+Date: Fri, 16 Jan 2026 13:59:40 +0100
+X-Gm-Features: AZwV_Qjv5JmkUIH3YMI7doKlz10bV_lCFrAqPbJG-eWCc7frFESVw2Ucl3F67ZA
+Message-ID: <CANk7y0gMC6VYwgzebi8SvV4EFGvEhNiGo8JXus2XnXxEVJ+zRQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/2] bpf: Preserve id of register in sync_linked_regs()
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Martin KaFai Lau <martin.lau@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, kernel-team@meta.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Wei,
+On Thu, Jan 15, 2026 at 11:43=E2=80=AFPM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
+>
+> On Thu, Jan 15, 2026 at 7:11=E2=80=AFAM Puranjay Mohan <puranjay@kernel.o=
+rg> wrote:
+> >
+> > sync_linked_regs() copies the id of known_reg to reg when propagating
+> > bounds of known_reg to reg using the off of known_reg, but when
+> > known_reg was linked to reg like:
+> >
+> > known_reg =3D reg         ; both known_reg and reg get same id
+> > known_reg +=3D 4          ; known_reg gets off =3D 4, and its id gets B=
+PF_ADD_CONST
+> >
+> > now when a call to sync_linked_regs() happens, let's say with the follo=
+wing:
+> >
+> > if known_reg >=3D 10 goto pc+2
+> >
+> > known_reg's new bounds are propagated to reg but now reg gets
+> > BPF_ADD_CONST from the copy.
+> >
+> > This means if another link to reg is created like:
+> >
+> > another_reg =3D reg       ; another_reg should get the id of reg but
+> >                           assign_scalar_id_before_mov() sees
+> >                           BPF_ADD_CONST on reg and assigns a new id to =
+it.
+> >
+> > As reg has a new id now, known_reg's link to reg is broken. If we find
+> > new bounds for known_reg, they will not be propagated to reg.
+> >
+> > This can be seen in the selftest added in the next commit:
+> >
+> > 0: (85) call bpf_get_prandom_u32#7    ; R0=3Dscalar()
+> > 1: (57) r0 &=3D 255                     ; R0=3Dscalar(smin=3Dsmin32=3D0=
+,smax=3Dumax=3Dsmax32=3Dumax32=3D255,var_off=3D(0x0; 0xff))
+> > 2: (bf) r1 =3D r0                       ; R0=3Dscalar(id=3D1,smin=3Dsmi=
+n32=3D0,smax=3Dumax=3Dsmax32=3Dumax32=3D255,var_off=3D(0x0; 0xff)) R1=3Dsca=
+lar(id=3D1,smin=3Dsmin32=3D0,smax=3Dumax=3Dsmax32=3Dumax32=3D255,var_off=3D=
+(0x0; 0xff))
+> > 3: (07) r1 +=3D 4                       ; R1=3Dscalar(id=3D1+4,smin=3Du=
+min=3Dsmin32=3Dumin32=3D4,smax=3Dumax=3Dsmax32=3Dumax32=3D259,var_off=3D(0x=
+0; 0x1ff))
+> > 4: (a5) if r1 < 0xa goto pc+4         ; R1=3Dscalar(id=3D1+4,smin=3Dumi=
+n=3Dsmin32=3Dumin32=3D10,smax=3Dumax=3Dsmax32=3Dumax32=3D259,var_off=3D(0x0=
+; 0x1ff))
+> > 5: (bf) r2 =3D r0                       ; R0=3Dscalar(id=3D2,smin=3Dumi=
+n=3Dsmin32=3Dumin32=3D6,smax=3Dumax=3Dsmax32=3Dumax32=3D255) R2=3Dscalar(id=
+=3D2,smin=3Dumin=3Dsmin32=3Dumin32=3D6,smax=3Dumax=3Dsmax32=3Dumax32=3D255)
+> > 6: (a5) if r1 < 0xe goto pc+2         ; R1=3Dscalar(id=3D1+4,smin=3Dumi=
+n=3Dsmin32=3Dumin32=3D14,smax=3Dumax=3Dsmax32=3Dumax32=3D259,var_off=3D(0x0=
+; 0x1ff))
+> > 7: (35) if r0 >=3D 0xa goto pc+1        ; R0=3Dscalar(id=3D2,smin=3Dumi=
+n=3Dsmin32=3Dumin32=3D6,smax=3Dumax=3Dsmax32=3Dumax32=3D9,var_off=3D(0x0; 0=
+xf))
+> > 8: (37) r0 /=3D 0
+> > div by zero
+> >
+> > When 4 is verified, r1's bounds are propagated to r0 but r0 also gets
+> > BPF_ADD_CONST (bug).
+> > When 5 is verified, r0 gets a new id (2) and its link with r1 is broken=
+.
+> >
+> > After 6 we know r1 has bounds [14, 259] and therefore r0 should have
+> > bounds [10, 255], therefore the branch at 7 is always taken. But becaus=
+e
+> > r0's id was changed to 2, r1's new bounds are not propagated to r0.
+> > The verifier still thinks r0 has bounds [6, 255] before 7 and execution
+> > can reach div by zero.
+> >
+> > Fix this by preserving id in sync_linked_regs() like off and subreg_def=
+.
+>
+> We should mark_reg_scratched() all the registers that got new IDs or
+> new ranges or offsets. Basically, if anything about register state was
+> changed, even if verified instruction doesn't work with that register
+> directly, all affected registers (we can think about this as side
+> effects) should be "scratched" and emitted in the verifier log.
+>
 
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on net-next/main]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Wei-Fang/net-fec-add-fec_txq_trigger_xmit-helper/20260116-154834
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20260116074027.1603841-15-wei.fang%40nxp.com
-patch subject: [PATCH v2 net-next 14/14] net: fec: add AF_XDP zero-copy support
-config: arm-imx_v4_v5_defconfig (https://download.01.org/0day-ci/archive/20260116/202601162115.ATDIXPBp-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260116/202601162115.ATDIXPBp-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601162115.ATDIXPBp-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/net/ethernet/freescale/fec_main.c:1040:4: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
-    1040 |                         default:
-         |                         ^
-   drivers/net/ethernet/freescale/fec_main.c:1040:4: note: insert 'break;' to avoid fall-through
-    1040 |                         default:
-         |                         ^
-         |                         break; 
-   1 warning generated.
-
-
-vim +1040 drivers/net/ethernet/freescale/fec_main.c
-
-61a4427b955f79d drivers/net/ethernet/freescale/fec_main.c Nimrod Andy    2014-06-12   970  
-14109a59caf93e6 drivers/net/ethernet/freescale/fec.c      Frank Li       2013-03-26   971  /* Init RX & TX buffer descriptors
-14109a59caf93e6 drivers/net/ethernet/freescale/fec.c      Frank Li       2013-03-26   972   */
-14109a59caf93e6 drivers/net/ethernet/freescale/fec.c      Frank Li       2013-03-26   973  static void fec_enet_bd_init(struct net_device *dev)
-14109a59caf93e6 drivers/net/ethernet/freescale/fec.c      Frank Li       2013-03-26   974  {
-14109a59caf93e6 drivers/net/ethernet/freescale/fec.c      Frank Li       2013-03-26   975  	struct fec_enet_private *fep = netdev_priv(dev);
-4d494cdc92b3b9a drivers/net/ethernet/freescale/fec_main.c Fugang Duan    2014-09-13   976  	struct fec_enet_priv_tx_q *txq;
-4d494cdc92b3b9a drivers/net/ethernet/freescale/fec_main.c Fugang Duan    2014-09-13   977  	struct fec_enet_priv_rx_q *rxq;
-14109a59caf93e6 drivers/net/ethernet/freescale/fec.c      Frank Li       2013-03-26   978  	struct bufdesc *bdp;
-14109a59caf93e6 drivers/net/ethernet/freescale/fec.c      Frank Li       2013-03-26   979  	unsigned int i;
-59d0f746564495c drivers/net/ethernet/freescale/fec_main.c Frank Li       2014-09-13   980  	unsigned int q;
-14109a59caf93e6 drivers/net/ethernet/freescale/fec.c      Frank Li       2013-03-26   981  
-59d0f746564495c drivers/net/ethernet/freescale/fec_main.c Frank Li       2014-09-13   982  	for (q = 0; q < fep->num_rx_queues; q++) {
-14109a59caf93e6 drivers/net/ethernet/freescale/fec.c      Frank Li       2013-03-26   983  		/* Initialize the receive buffer descriptors. */
-59d0f746564495c drivers/net/ethernet/freescale/fec_main.c Frank Li       2014-09-13   984  		rxq = fep->rx_queue[q];
-7355f2760620b38 drivers/net/ethernet/freescale/fec_main.c Troy Kisky     2016-02-05   985  		bdp = rxq->bd.base;
-4d494cdc92b3b9a drivers/net/ethernet/freescale/fec_main.c Fugang Duan    2014-09-13   986  
-7355f2760620b38 drivers/net/ethernet/freescale/fec_main.c Troy Kisky     2016-02-05   987  		for (i = 0; i < rxq->bd.ring_size; i++) {
-14109a59caf93e6 drivers/net/ethernet/freescale/fec.c      Frank Li       2013-03-26   988  
-14109a59caf93e6 drivers/net/ethernet/freescale/fec.c      Frank Li       2013-03-26   989  			/* Initialize the BD for every fragment in the page. */
-14109a59caf93e6 drivers/net/ethernet/freescale/fec.c      Frank Li       2013-03-26   990  			if (bdp->cbd_bufaddr)
-5cfa30397bc3677 drivers/net/ethernet/freescale/fec_main.c Johannes Berg  2016-01-24   991  				bdp->cbd_sc = cpu_to_fec16(BD_ENET_RX_EMPTY);
-14109a59caf93e6 drivers/net/ethernet/freescale/fec.c      Frank Li       2013-03-26   992  			else
-5cfa30397bc3677 drivers/net/ethernet/freescale/fec_main.c Johannes Berg  2016-01-24   993  				bdp->cbd_sc = cpu_to_fec16(0);
-7355f2760620b38 drivers/net/ethernet/freescale/fec_main.c Troy Kisky     2016-02-05   994  			bdp = fec_enet_get_nextdesc(bdp, &rxq->bd);
-14109a59caf93e6 drivers/net/ethernet/freescale/fec.c      Frank Li       2013-03-26   995  		}
-14109a59caf93e6 drivers/net/ethernet/freescale/fec.c      Frank Li       2013-03-26   996  
-14109a59caf93e6 drivers/net/ethernet/freescale/fec.c      Frank Li       2013-03-26   997  		/* Set the last buffer to wrap */
-7355f2760620b38 drivers/net/ethernet/freescale/fec_main.c Troy Kisky     2016-02-05   998  		bdp = fec_enet_get_prevdesc(bdp, &rxq->bd);
-bd31490718b47d9 drivers/net/ethernet/freescale/fec_main.c Wei Fang       2025-11-19   999  		bdp->cbd_sc |= cpu_to_fec16(BD_ENET_RX_WRAP);
-14109a59caf93e6 drivers/net/ethernet/freescale/fec.c      Frank Li       2013-03-26  1000  
-7355f2760620b38 drivers/net/ethernet/freescale/fec_main.c Troy Kisky     2016-02-05  1001  		rxq->bd.cur = rxq->bd.base;
-59d0f746564495c drivers/net/ethernet/freescale/fec_main.c Frank Li       2014-09-13  1002  	}
-14109a59caf93e6 drivers/net/ethernet/freescale/fec.c      Frank Li       2013-03-26  1003  
-59d0f746564495c drivers/net/ethernet/freescale/fec_main.c Frank Li       2014-09-13  1004  	for (q = 0; q < fep->num_tx_queues; q++) {
-14109a59caf93e6 drivers/net/ethernet/freescale/fec.c      Frank Li       2013-03-26  1005  		/* ...and the same for transmit */
-59d0f746564495c drivers/net/ethernet/freescale/fec_main.c Frank Li       2014-09-13  1006  		txq = fep->tx_queue[q];
-7355f2760620b38 drivers/net/ethernet/freescale/fec_main.c Troy Kisky     2016-02-05  1007  		bdp = txq->bd.base;
-7355f2760620b38 drivers/net/ethernet/freescale/fec_main.c Troy Kisky     2016-02-05  1008  		txq->bd.cur = bdp;
-14109a59caf93e6 drivers/net/ethernet/freescale/fec.c      Frank Li       2013-03-26  1009  
-7355f2760620b38 drivers/net/ethernet/freescale/fec_main.c Troy Kisky     2016-02-05  1010  		for (i = 0; i < txq->bd.ring_size; i++) {
-81725cc0fbfea44 drivers/net/ethernet/freescale/fec_main.c Wei Fang       2026-01-16  1011  			struct page *page;
-81725cc0fbfea44 drivers/net/ethernet/freescale/fec_main.c Wei Fang       2026-01-16  1012  
-14109a59caf93e6 drivers/net/ethernet/freescale/fec.c      Frank Li       2013-03-26  1013  			/* Initialize the BD for every fragment in the page. */
-5cfa30397bc3677 drivers/net/ethernet/freescale/fec_main.c Johannes Berg  2016-01-24  1014  			bdp->cbd_sc = cpu_to_fec16(0);
-81725cc0fbfea44 drivers/net/ethernet/freescale/fec_main.c Wei Fang       2026-01-16  1015  
-81725cc0fbfea44 drivers/net/ethernet/freescale/fec_main.c Wei Fang       2026-01-16  1016  			switch (txq->tx_buf[i].type) {
-81725cc0fbfea44 drivers/net/ethernet/freescale/fec_main.c Wei Fang       2026-01-16  1017  			case FEC_TXBUF_T_SKB:
-178e5f57a8d8f8f drivers/net/ethernet/freescale/fec_main.c Fugang Duan    2017-12-22  1018  				if (bdp->cbd_bufaddr &&
-178e5f57a8d8f8f drivers/net/ethernet/freescale/fec_main.c Fugang Duan    2017-12-22  1019  				    !IS_TSO_HEADER(txq, fec32_to_cpu(bdp->cbd_bufaddr)))
-178e5f57a8d8f8f drivers/net/ethernet/freescale/fec_main.c Fugang Duan    2017-12-22  1020  					dma_unmap_single(&fep->pdev->dev,
-178e5f57a8d8f8f drivers/net/ethernet/freescale/fec_main.c Fugang Duan    2017-12-22  1021  							 fec32_to_cpu(bdp->cbd_bufaddr),
-178e5f57a8d8f8f drivers/net/ethernet/freescale/fec_main.c Fugang Duan    2017-12-22  1022  							 fec16_to_cpu(bdp->cbd_datlen),
-178e5f57a8d8f8f drivers/net/ethernet/freescale/fec_main.c Fugang Duan    2017-12-22  1023  							 DMA_TO_DEVICE);
-af6f4791380c320 drivers/net/ethernet/freescale/fec_main.c Wei Fang       2023-08-15  1024  				dev_kfree_skb_any(txq->tx_buf[i].buf_p);
-81725cc0fbfea44 drivers/net/ethernet/freescale/fec_main.c Wei Fang       2026-01-16  1025  				break;
-81725cc0fbfea44 drivers/net/ethernet/freescale/fec_main.c Wei Fang       2026-01-16  1026  			case FEC_TXBUF_T_XDP_NDO:
-20f797399035a80 drivers/net/ethernet/freescale/fec_main.c Wei Fang       2023-07-06  1027  				dma_unmap_single(&fep->pdev->dev,
-20f797399035a80 drivers/net/ethernet/freescale/fec_main.c Wei Fang       2023-07-06  1028  						 fec32_to_cpu(bdp->cbd_bufaddr),
-20f797399035a80 drivers/net/ethernet/freescale/fec_main.c Wei Fang       2023-07-06  1029  						 fec16_to_cpu(bdp->cbd_datlen),
-20f797399035a80 drivers/net/ethernet/freescale/fec_main.c Wei Fang       2023-07-06  1030  						 DMA_TO_DEVICE);
-af6f4791380c320 drivers/net/ethernet/freescale/fec_main.c Wei Fang       2023-08-15  1031  				xdp_return_frame(txq->tx_buf[i].buf_p);
-81725cc0fbfea44 drivers/net/ethernet/freescale/fec_main.c Wei Fang       2026-01-16  1032  				break;
-81725cc0fbfea44 drivers/net/ethernet/freescale/fec_main.c Wei Fang       2026-01-16  1033  			case FEC_TXBUF_T_XDP_TX:
-81725cc0fbfea44 drivers/net/ethernet/freescale/fec_main.c Wei Fang       2026-01-16  1034  				page = txq->tx_buf[i].buf_p;
-65589e860a80369 drivers/net/ethernet/freescale/fec_main.c Byungchul Park 2025-07-21  1035  				page_pool_put_page(pp_page_to_nmdesc(page)->pp,
-f1d89a02b16bcdc drivers/net/ethernet/freescale/fec_main.c Wei Fang       2026-01-16  1036  						   page, 0, false);
-81725cc0fbfea44 drivers/net/ethernet/freescale/fec_main.c Wei Fang       2026-01-16  1037  				break;
-f9806afd55c4ab1 drivers/net/ethernet/freescale/fec_main.c Wei Fang       2026-01-16  1038  			case FEC_TXBUF_T_XSK_TX:
-f9806afd55c4ab1 drivers/net/ethernet/freescale/fec_main.c Wei Fang       2026-01-16  1039  				xsk_buff_free(txq->tx_buf[i].buf_p);
-81725cc0fbfea44 drivers/net/ethernet/freescale/fec_main.c Wei Fang       2026-01-16 @1040  			default:
-81725cc0fbfea44 drivers/net/ethernet/freescale/fec_main.c Wei Fang       2026-01-16  1041  				break;
-81725cc0fbfea44 drivers/net/ethernet/freescale/fec_main.c Wei Fang       2026-01-16  1042  			};
-20f797399035a80 drivers/net/ethernet/freescale/fec_main.c Wei Fang       2023-07-06  1043  
-af6f4791380c320 drivers/net/ethernet/freescale/fec_main.c Wei Fang       2023-08-15  1044  			txq->tx_buf[i].buf_p = NULL;
-20f797399035a80 drivers/net/ethernet/freescale/fec_main.c Wei Fang       2023-07-06  1045  			/* restore default tx buffer type: FEC_TXBUF_T_SKB */
-20f797399035a80 drivers/net/ethernet/freescale/fec_main.c Wei Fang       2023-07-06  1046  			txq->tx_buf[i].type = FEC_TXBUF_T_SKB;
-5cfa30397bc3677 drivers/net/ethernet/freescale/fec_main.c Johannes Berg  2016-01-24  1047  			bdp->cbd_bufaddr = cpu_to_fec32(0);
-7355f2760620b38 drivers/net/ethernet/freescale/fec_main.c Troy Kisky     2016-02-05  1048  			bdp = fec_enet_get_nextdesc(bdp, &txq->bd);
-14109a59caf93e6 drivers/net/ethernet/freescale/fec.c      Frank Li       2013-03-26  1049  		}
-14109a59caf93e6 drivers/net/ethernet/freescale/fec.c      Frank Li       2013-03-26  1050  
-14109a59caf93e6 drivers/net/ethernet/freescale/fec.c      Frank Li       2013-03-26  1051  		/* Set the last buffer to wrap */
-7355f2760620b38 drivers/net/ethernet/freescale/fec_main.c Troy Kisky     2016-02-05  1052  		bdp = fec_enet_get_prevdesc(bdp, &txq->bd);
-bd31490718b47d9 drivers/net/ethernet/freescale/fec_main.c Wei Fang       2025-11-19  1053  		bdp->cbd_sc |= cpu_to_fec16(BD_ENET_TX_WRAP);
-4d494cdc92b3b9a drivers/net/ethernet/freescale/fec_main.c Fugang Duan    2014-09-13  1054  		txq->dirty_tx = bdp;
-14109a59caf93e6 drivers/net/ethernet/freescale/fec.c      Frank Li       2013-03-26  1055  	}
-59d0f746564495c drivers/net/ethernet/freescale/fec_main.c Frank Li       2014-09-13  1056  }
-59d0f746564495c drivers/net/ethernet/freescale/fec_main.c Frank Li       2014-09-13  1057  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+I agree, will send a separate patch for this.
