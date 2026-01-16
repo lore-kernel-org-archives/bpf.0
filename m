@@ -1,226 +1,165 @@
-Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5121C286D5D
-	for <bpf@vger.kernel.org>; Fri, 16 Jan 2026 21:18:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768598292; cv=none; b=o5qY0V9X/ZRH9u0n6j/T05SVTp7KBPD93X9bJet0vqaNszXKaREUwcUHx5m1onNXw1nLBiW3zw3EQmbeXamcEzWpQeI70iTtd18rRTcsPnjZjPU+2rv2U+8UyPEFG9iUDQQdhoxAKM6SBWuKXP/5NQR5NDDtBsv0Ds/TSmWIYoc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768598292; c=relaxed/simple;
-	bh=HAHiIl2jNrhC5hc5QL6D3q9jjBG3PTH2NaOK/wX8RuI=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=QpF+IRsPcSpZxoUKLtmTCR0uO/5u4U0Iii2/c+n7qMadW043kUJxmkE+xNPA1BC7luZOZAEIVA3pZM3Mm21zHQIo+PxhU60eKDeZWVO8YZFl7taUDtiTh3RsVYYpSzXO2b4M8HsRQ0ja/VxqujDqJ1UPLfkaQhcM+mmVhHZuUEM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=I9rQHYWH; arc=none smtp.client-ip=91.218.175.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5236D2D8DA6
+	for <bpf@vger.kernel.org>; Fri, 16 Jan 2026 22:20:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.174
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768602048; cv=pass; b=OfhcQa6EFUecCxzaW1tQJd3qyZcF55zyNuMGKaOSQslQLReyMRRmFohrYXY68jsrz9kOkQZfzKF5pJ5OIhrQZIyqc0yPh3H85V5Xfi/ZzJYlUdR07IxCara8eDh8wxOFhnhpxcUpKbxs1MHYntZG9ikIi3tOFr95+Yt5MW4OO7I=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768602048; c=relaxed/simple;
+	bh=o5En9a8wP5By67GXNTiNQjIPnUWaBuLHMV9zVL0xjhM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=chEwJbHmkT1okyAj6shs50yBLUAEpCWXmp8kZsUnZ3IXrUG4xKdMG85deVkWsuiZ8RfI5wUiw4TYIUHSTIw1GqJMQ3mWoQbjXWOHncPbjRJgFqJvzd+iYelSTmbB1SfV9IOuDPen1sDyQnhM8j5ctE0sCmpl78kDZm4v+30D+Bg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jl6fwD5X; arc=pass smtp.client-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="I9rQHYWH"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1768598289;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=6fIDHZTLCHe/bajC18/peDAHRSXDESLQ9QSFkCkrL/k=;
-	b=I9rQHYWHcTJDT9aUag93ADbbTeSiXNbylUMI/REH6Y6OxQ2Qn3rrqdWqannqUf2nph5Zlt
-	hxCAKnfUVbuIMSGxpbgzw1qcsZWLWy48qCsaqgBbpHrRlPif/39oBXGPocABdX3CTus1Fn
-	n4r1dSV3L5zgu32WZKgrtAUgqTKGKgM=
-From: Roman Gushchin <roman.gushchin@linux.dev>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Matt Bobrowski <mattbobrowski@google.com>,  Alexei Starovoitov
- <ast@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>,  Andrii
- Nakryiko <andrii@kernel.org>,  Martin KaFai Lau <martin.lau@linux.dev>,
-  Eduard Zingerman <eddyz87@gmail.com>,  Song Liu <song@kernel.org>,
-  Yonghong Song <yonghong.song@linux.dev>,  ohn Fastabend
- <john.fastabend@gmail.com>,  KP Singh <kpsingh@kernel.org>,  Stanislav
- Fomichev <sdf@fomichev.me>,  Jiri Olsa <jolsa@kernel.org>,  Kumar
- Kartikeya Dwivedi <memxor@gmail.com>,  bpf <bpf@vger.kernel.org>
-Subject: Re: Subject: [PATCH bpf-next 2/3] bpf: drop KF_ACQUIRE flag on BPF
- kfunc bpf_get_root_mem_cgroup()
-In-Reply-To: <CAADnVQ+45MorO=pODKOEVXhpY1skVy1tPkkABPAxDJGx4vOijg@mail.gmail.com>
-	(Alexei Starovoitov's message of "Fri, 16 Jan 2026 08:12:19 -0800")
-References: <20260113083949.2502978-2-mattbobrowski@google.com>
-	<87y0lyxilp.fsf@linux.dev> <aWnu-b0dlm0xZFDS@google.com>
-	<CAADnVQKd-yu=bZjx+3=QKLq+26wcGJtJSrZoQh8b8ByKSPEXcQ@mail.gmail.com>
-	<CAADnVQ+45MorO=pODKOEVXhpY1skVy1tPkkABPAxDJGx4vOijg@mail.gmail.com>
-Date: Fri, 16 Jan 2026 13:18:02 -0800
-Message-ID: <878qdx6yut.fsf@linux.dev>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jl6fwD5X"
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2a07fac8aa1so17923785ad.1
+        for <bpf@vger.kernel.org>; Fri, 16 Jan 2026 14:20:47 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1768602047; cv=none;
+        d=google.com; s=arc-20240605;
+        b=MHofemP0DqBarFUZqaRD60kT/LuNtxKi6dKxo9PrfcVqA2AePWp4H8qPt3Q2BBptsm
+         icX5tE1e/S7Gq9etJy7RLOT3M7807EQS0AoJvikyo9JLg2YhgeHV7LFJBqpnmaY7mfy4
+         737S5ln4uqGZNCeW+nO9H8ErdUVDWZ1LqAjNmT8VZt1vsMH2Z1r+nuo4A4SXWsW9V3PO
+         S9pEUvHuUNgGyWl1Y+hae7lb+RfafPEsWFUasFfFidJe5uvDe1nq/sHAiz2kTeSrR7fF
+         WGBk/n51vNtnInpqPd8/0wxqVh3fLnOTjijWSfxXH5HuUwhcQueRxspTbH5LJ0fj+/ui
+         9rbA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=o5En9a8wP5By67GXNTiNQjIPnUWaBuLHMV9zVL0xjhM=;
+        fh=4abOVxnohxhQ0fQveMdkk/H4wbC+/wKs01OxgiJQ1BA=;
+        b=P9/1GLOP4oia9SAf2Ymqj1JSirgQ2oiac1oktWzGyIBFTXUGW3BYU/a1W72TzOZ83V
+         JTtTeL8hxHfXYtAx7R4dosPLx6jXEkeDdLPOjumycIprM4e3lv4+byZBNU7exSR2s/C/
+         BK4bytGb/TBN/5OROTYrxExbKsW7k5ji2Jo9U6Qs82JgeNKJcLOrm65laBbF5G+rKasl
+         59LUEuqSeE2R9Gc3WDI2h5ctiWCtWA8n0tupHZH5vsz5D8K/wweDkWi6zL6vPvwJOiu9
+         wAnEqhKy9tM241QG6wPSkAbDcGwApfJ6tfE8TvXUFCowJm/pE/AKLgvDqkAQ9GnZX1Xp
+         ei3Q==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1768602047; x=1769206847; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=o5En9a8wP5By67GXNTiNQjIPnUWaBuLHMV9zVL0xjhM=;
+        b=jl6fwD5XuK8nNz0w8naADUnEY83g5YEz8a/AJMTNwsu+p/9darZgynRx3h0TTCIPkU
+         fQx5WKc/uQ9iHsZ2qE0eLzF4K6sHagBAuuYCAaJ4bPvgacdNyLKMwj7FuUh+UvvebEsB
+         ujlvGefiQ16jpeIIsompuWkHE7czowuBkO+1XE8cmmFURBz1Jmhw+8ifaVXBzAMXjIEt
+         svjgdadT9xkGnr25ipuogSTgwFcAdgyPf0ucI3nyrMQmpbNDj/BqDdZMj6YZDAXsxRWU
+         9lgtgKxFEtEY9PBkgyhT3AHgvXFp3hrVdvONvtAw4w9uPXrpQQrNyYu6CTevJhN9i459
+         5UBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768602047; x=1769206847;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=o5En9a8wP5By67GXNTiNQjIPnUWaBuLHMV9zVL0xjhM=;
+        b=h65SEI5N5XH1RO+26/akgZqN1dwRN4EVh/MCUc0l1A9fD3m7k7Z2eh3IjBaGFZISjG
+         oZPABPylgEwYdLTrKlbBFP0WUW4aAOS/cJ6ZE3+7cE/KBEFlaxqWlCNOp/um9zn59pkx
+         zvpc+u4AMsq/N21aaO9kBEarU6CGATwBp94plwdBI7Dws1/FPK2DQCJByhjK35OXzHyt
+         wAaAJXUcbmqVBCgww1DhbgnuWceXwzEZuLJH8946RjT94WVOQn0HlLirforPISRYI8tP
+         s0+CerInSA8gisxcK63qYY6A85ouc5+envMA43oVwGiJIEpxCZTOBPL5b8AHafSSDz7l
+         Gxcw==
+X-Forwarded-Encrypted: i=1; AJvYcCXL5NueGBUR+6xoR49v/W6/rMvrFTlEjeeYwhyeKKC0++FmZPGCphC6cP54eEgmTDjlXeM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx3fB3/67faoFlNY6pROeGcQ795nshlAkwRwSiqy8+30pE19Up8
+	cnqjtJkjP3w8t88OeWV8gnQTtBY7L/pB0xGDCx+UNrFsQ/qloU4m7yNaD8EXwl+Ze1W0T2vFVBx
+	zrI0bn8BZvnAK290Cdqgn+G5wOwJC35g=
+X-Gm-Gg: AY/fxX7fFb+t3dmhZt1hTCVLE0oirfIhnY2ws+TZGWpbGuloGuHxR80FlR148D7O5eJ
+	Xs9zZFyi7HE1237S5z5t8Aptc9SGRszEXtPvrp7R0OIfmtr5CygtV953wADZnr2E/PyoTJOxyOi
+	LXOx0QBFlVBlTYTcTkQz97Y703f2YW0O19zUe50QyvIxjfknchwUetRUWQylQImuGDKl/hFslr4
+	SzPQ4w2+cWA9hQwTo+P1T6LATHv/kzohqKrOB03zZ4UhYUtIcE18DqqO2w3B8gI/BHux07/e6nG
+	r4u7bX5uYXDwlPpE8hg1Rg==
+X-Received: by 2002:a17:903:3888:b0:295:c2e7:7199 with SMTP id
+ d9443c01a7336-2a7175a63fdmr36859055ad.29.1768602046673; Fri, 16 Jan 2026
+ 14:20:46 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+References: <20260114-bpftool-tests-v1-0-cfab1cc9beaf@bootlin.com>
+ <CAEf4BzYvZsjSpsDHXAuZ9G3=r4e27+c_LDpSUampw-fTfKA2=g@mail.gmail.com> <DFPUQZ5PNXKA.12KADC78HCRQ5@bootlin.com>
+In-Reply-To: <DFPUQZ5PNXKA.12KADC78HCRQ5@bootlin.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Fri, 16 Jan 2026 14:20:33 -0800
+X-Gm-Features: AZwV_Qj7HA8GkrLxttMYt-BAKc2j92CUeTQrxpfNtW9oL8TZwLQvAQc9j6gMlZ8
+Message-ID: <CAEf4BzbT-7iRezzNRQPvQpRDA3BmkesCSijT4mPXuWb2ua=9ag@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 0/4] selftests/bpf: add a new runner for bpftool tests
+To: =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, ebpf@linuxfoundation.org, 
+	Bastien Curutchet <bastien.curutchet@bootlin.com>, 
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>, linux-kernel@vger.kernel.org, 
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Migadu-Flow: FLOW_OUT
 
-Alexei Starovoitov <alexei.starovoitov@gmail.com> writes:
-
-> On Fri, Jan 16, 2026 at 7:22=E2=80=AFAM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
->>
->> On Thu, Jan 15, 2026 at 11:55=E2=80=AFPM Matt Bobrowski
->> <mattbobrowski@google.com> wrote:
->> >
->> > On Thu, Jan 15, 2026 at 08:54:42PM -0800, Roman Gushchin wrote:
->> > >
->> > > > With the BPF verifier now treating pointers to struct types return=
-ed
->> > > > from BPF kfuncs as implicitly trusted by default, there is no need=
- for
->> > > > bpf_get_root_mem_cgroup() to be annotated with the KF_ACQUIRE flag.
->> > >
->> > > > bpf_get_root_mem_cgroup() does not acquire any references, but rat=
-her
->> > > > simply returns a NULL pointer or a pointer to a struct mem_cgroup
->> > > > object that is valid for the entire lifetime of the kernel.
->> > >
->> > > > This simplifies BPF programs using this kfunc by removing the
->> > > > requirement to pair the call with bpf_put_mem_cgroup().
->> > >
->> > > It's actually the opposite: having the get semantics (which is also
->> > > suggested by the name) allows to treat the root memory cgroup exactly
->> > > as any other. And it makes the code much simpler, otherwise you
->> > > need to have these ugly checks across the codebase:
->> > >       if (memcg !=3D root_mem_cgroup)
->> > >               css_put(&memcg->css);
->> >
->> > I mean, you're certainly not forced to do this. But, I do also see
->> > what you mean.
->> >
->> > > This is why __all__ memcg && cgroup code follows this principle and =
-the
->> > > hides the special handling of the root memory cgroup within
->> > > css_get()/css_put().
->> > >
->> > > I wasn't cc'ed on this series, otherwise I'd nack this patch.
->> > > If the overhead of an extra kfunc call is a concern here (which I
->> > > doubt), we can introduce a non-acquire bpf_root_mem_cgroup()
->> > > version.
->> > >
->> > > And I strongly suggest to revert this change.
->> >
->> > Apologies, I honestly thought I did CC you on this series. Don't know
->> > what happened with that. Anyway, I'm totally OK with reverting this
->> > patch and keeping bpf_get_root_mem_cgroup() with KF_ACQUIRE
->> > semantics. bpf_get_root_mem_cgroup() was selected as it was the very
->> > first BPF kfunc that came to mind where implicit trusted pointer
->> > semantics should be applied by the BPF verifier.
->> >
->> > Notably, the follow up selftest patch [0] will also need to be
->> > reverted if so as it relies on bpf_get_root_mem_cgroup() without
->> > KF_ACQUIRE. We can probably
->> >
->> > [0] https://lore.kernel.org/bpf/20260113083949.2502978-2-mattbobrowski=
-@google.com/T/#mfa14fb83b3350c25f961fd43dc4df9b25d00c5f5
->>
->> Instead of revert of two patches, let's revert one and replace
->> with test kfunc that 2nd patch can use.
->>
->> tbh I don't think it's a big deal in practice.
->> Kernel code working with cgroups might be different than bpf.
->> I'm not sure what was the use case for bpf_get_root_mem_cgroup().
->>
->> Roman,
->> please share your protype bpf code for oom, so it's easier to see
->> why non-acquire semantics for bpf_get_root_mem_cgroup() are problematic.
+On Thu, Jan 15, 2026 at 11:57=E2=80=AFPM Alexis Lothor=C3=A9
+<alexis.lothore@bootlin.com> wrote:
 >
-> Actually, thinking more about it, bpf_get_root_mem_cgroup() should NOT ha=
-ve
-> an acquire semantics, otherwise you cannot even implement:
+> Hi Andrii,
 >
-> static inline bool mem_cgroup_is_root(struct mem_cgroup *memcg)
-> {
->         return (memcg =3D=3D root_mem_cgroup);
-> }
-
-You can check memcg->css.parent =3D=3D NULL instead.
-
+> On Thu Jan 15, 2026 at 6:58 PM CET, Andrii Nakryiko wrote:
+> > On Wed, Jan 14, 2026 at 12:59=E2=80=AFAM Alexis Lothor=C3=A9 (eBPF Foun=
+dation)
+> > <alexis.lothore@bootlin.com> wrote:
+> >>
+> >> Hello,
+> >> this series is part of the larger effort aiming to convert all
+> >> standalone tests to the CI runners so that they are properly executed =
+on
+> >> patches submission.
+> >>
+> >> Some of those tests are validating bpftool behavior(test_bpftool_map.s=
+h,
+> >> test_bpftool_metadata.sh, test_bpftool_synctypes.py, test_bpftool.py..=
+.)
+> >> and so they do not integrate well in test_progs. This series proposes =
+to
+> >
+> > Can you elaborate why they do not integrate well? In my mind,
+> > test_progs should be the only runner into which we invest effort
+> > (parallel tests, all the different filtering, etc; why would we have
+> > to reimplement subsets of this). The fact that we have test_maps and
+> > test_verifier is historical and if we had enough time we'd merge all
+> > of them into test_progs.
+> >
+> > What exactly in test_progs would prevent us from implementing bpftool
+> > test runner?
 >
-> without ugliness:
+> I don't think there is any strong technical blocker preventing from
+> integrating those tests directly into test_progs. That's rather about
+> the fact that test_progs tests depends (almost) exclusively on
+> libbpf/skeletons. Those bpftool tests rather need to directly execute
+
+There are actually plenty of test in test_progs that do networking
+setups, calling system() to launch various binaries, etc. So it never
+was purely for libbpf/skeletons/whatnot.
+
+So yeah, I think bpftool testing should still be implemented as one
+(or many) test_progs tests (and maybe subtests), utilizing
+test_progs's generic multi-process testing setup, filtering,
+reporting, etc infrastructure. No need to add extra runners.
+
+> bpftool and parse its stdout output, so I thought that it made sense to
+> have a dedicated runner for this. If I'm wrong and so if those tests
+> should rather be moved in the test_progs runner (eg to avoid duplicating
+> the runner features), I'm fine with it. Any additional opinion on this
+> is welcome.
 >
-> static inline bool bpf_mem_cgroup_is_root(struct mem_cgroup *memcg)
-> {
->         struct mem_cgroup *root_memcg =3D bpf_get_root_mem_cgroup();
->         bool ret =3D memcg =3D=3D root_memcg;
+> Thanks,
 >
->         bpf_put_mem_cgroup(root_memcg);
->         return ret;
-> }
-
-Maybe we need both, but if root_mem_cgroup is handled different, you
-can't do a very natural thing like:
-
-some_func (struct *mem_cgroup subtree_root) {
-          struct mem_cgroup *memcg =3D subtree_root ?  subtree_root : bpf_g=
-et_root_mem_cgroup();
-
-          // iterate over subtree
-
-
-or you can't pass a pointer (with a reference) to a function or a work
-with the assumption that it should drop the reference at the end.
-
-Basically you can't easily mix the root_mem_cgroup pointer with normal
-memcg pointers.
-
-E.g. in my bpfoom case:
-
-SEC("struct_ops.s/handle_out_of_memory")
-int BPF_PROG(test_out_of_memory, struct oom_control *oc, struct bpf_struct_=
-ops_link *link)
-{
-	struct task_struct *task;
-	struct mem_cgroup *root_memcg =3D oc->memcg;
-	struct mem_cgroup *memcg, *victim =3D NULL;
-	struct cgroup_subsys_state *css_pos, *css;
-	unsigned long usage, max_usage =3D 0;
-	unsigned long pagecache =3D 0;
-	int ret =3D 0;
-
-	if (root_memcg)
-		root_memcg =3D bpf_get_mem_cgroup(&root_memcg->css);
-	else
-		root_memcg =3D bpf_get_root_mem_cgroup();
-
-	if (!root_memcg)
-		return 0;
-
-	css =3D &root_memcg->css;
-	if (css && css->cgroup =3D=3D link->cgroup)
-		goto exit;
-
-	bpf_rcu_read_lock();
-	bpf_for_each(css, css_pos, &root_memcg->css, BPF_CGROUP_ITER_DESCENDANTS_P=
-OST) {
-		if (css_pos->cgroup->nr_descendants + css_pos->cgroup->nr_dying_descendan=
-ts)
-			continue;
-
-		memcg =3D bpf_get_mem_cgroup(css_pos);
-		if (!memcg)
-			continue;
-
-                < ... >
-
-		bpf_put_mem_cgroup(memcg);
-	}
-	bpf_rcu_read_unlock();
-
-        < ... >
-
-	bpf_put_mem_cgroup(victim);
-exit:
-	bpf_put_mem_cgroup(root_memcg);
-
-	return ret;
-}
-
---
-
-How to write it without get semantics?
-
-Thanks!
+> Alexis
+> --
+> Alexis Lothor=C3=A9, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+>
