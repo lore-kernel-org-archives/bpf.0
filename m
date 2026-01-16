@@ -1,32 +1,32 @@
-Received: from out-173.mta1.migadu.com (out-173.mta1.migadu.com [95.215.58.173])
+Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 709A03A4F25
-	for <bpf@vger.kernel.org>; Fri, 16 Jan 2026 20:18:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 622C43A7DF6
+	for <bpf@vger.kernel.org>; Fri, 16 Jan 2026 20:18:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768594686; cv=none; b=UwUL0cRKJPAObgx8FMeWDk1H/pA7nnwZl6UUNVRV4BgZwnH0FlqnFh6Se3xiofuh00F7PW5FUbeqhuiDZawSNzo3TR7YvKLAoGZPa0rafacbjh7xBfGQ1/5vc3Zmabthe2BmAqnRvvmdEt9UCFLJaA/jMG8gwtOt4mqC2/eVDCQ=
+	t=1768594696; cv=none; b=M4Bb41Fc53cHLa8nW8PVG95F6BgbMT6velQ08Wyi5kjFYqMzX5zwmPwksiQc/CDnuZBXyyXehaK0X2MYogYt2l1qR1k/FzEksq99Lbadbh9axW7PZrrgU2RF68LmerWLUVsuccIebNOUjyBUjeuCl9Yol0xrpZnwRCbRdfDBT+w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768594686; c=relaxed/simple;
-	bh=Lgi/7TN0nAFd8pQZKq123W62uVpFkclyfvzL1sHFdds=;
+	s=arc-20240116; t=1768594696; c=relaxed/simple;
+	bh=SOOi4rOIWX7qVSczijt4jM7tUhPVgb2G3KcVk24vLOI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=TFJhs8oa37Ix4Z9Cs10gGR+dmJlyT4mFtdRshRFCa8vXfbOPOzaz0cNewQ9wa3Fm5YTqKVPdKJ/hR+oNXvuFjkbngmh1nevU4FyvnzWA2myj6DJuD5ywXM++Ck7gl3aLwwcemJp39Elgo/3eWPxM7KX+uXYq4VpkLz/ptIbbFiY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=kzuGmMHF; arc=none smtp.client-ip=95.215.58.173
+	 MIME-Version; b=WAwTxZPhebv7CGAPvXFqxoGtY7p/MxYQBJZ/3PNL5Vn52ADj//8xTGVOTr37i4FsMmSL4aYypOmpSEu+4bW2pCiElKSvCsMINlL25TBMulG3/z3cQndlcW2VwP9dz9HxPqKpEF96a59UHryLZRH6QdTSigWhgHLs1czviGWBER0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ZwkMpbBn; arc=none smtp.client-ip=95.215.58.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="kzuGmMHF"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ZwkMpbBn"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1768594679;
+	t=1768594690;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=z8Pd0FWnxLlu1cbnVUCep7TIFu5V8I8OdSQJEDTQooM=;
-	b=kzuGmMHFMuqdZap+KDky4Duiz1fTCmR8iJ779L1nCZHQIcoswdUz7O0OA3mgd7GHuJeSP/
-	cS7wTlSDQpbPYADTNHn4N7nLPDa5EqRN9xIaJGuk+0b9g9cTUt5CzNl2V/gA5whAgi5OeD
-	dnDJM3G09iK90TW5SSH6r95rTBiLOkM=
+	bh=sHo+aZoQ4zp2IRNGFxshxVMXOU+lbImEhL/LWgCBgH4=;
+	b=ZwkMpbBnal/zOGsfhex4Vd4jLUBoHQ0avYQT5n+Yr/LO/Awb+dRctlOQHikjJq0KO9tWjA
+	FlIrCM1SSRWDyKn9dCWSc3DpRULP+TwiBq7eTyhGPXkzadJY+wa9G7cMVH0hBBfbaj9761
+	57nmcEVNtAKdBQbqcQMb0pO3zD0rbKI=
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -43,9 +43,9 @@ Cc: Mykyta Yatsenko <yatsenko@meta.com>,
 	linux-kernel@vger.kernel.org,
 	linux-input@vger.kernel.org,
 	sched-ext@lists.linux.dev
-Subject: [PATCH bpf-next v2 08/13] HID: Use bpf_wq_set_callback kernel function
-Date: Fri, 16 Jan 2026 12:16:55 -0800
-Message-ID: <20260116201700.864797-9-ihor.solodrai@linux.dev>
+Subject: [PATCH bpf-next v2 10/13] bpf: Migrate bpf_stream_vprintk() to KF_IMPLICIT_ARGS
+Date: Fri, 16 Jan 2026 12:16:57 -0800
+Message-ID: <20260116201700.864797-11-ihor.solodrai@linux.dev>
 In-Reply-To: <20260116201700.864797-1-ihor.solodrai@linux.dev>
 References: <20260116201700.864797-1-ihor.solodrai@linux.dev>
 Precedence: bulk
@@ -57,71 +57,112 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-Remove extern declaration of bpf_wq_set_callback_impl() from
-hid_bpf_helpers.h and replace bpf_wq_set_callback macro with a
-corresponding new declaration.
+Implement bpf_stream_vprintk with an implicit bpf_prog_aux argument,
+and remote bpf_stream_vprintk_impl from the kernel.
 
-Tested with:
-  # append tools/testing/selftests/hid/config and build the kernel
-  $ make -C tools/testing/selftests/hid
-  # in built kernel
-  $ ./tools/testing/selftests/hid/hid_bpf -t test_multiply_events_wq
+Update the selftests to use the new API with implicit argument.
 
-  TAP version 13
-  1..1
-  # Starting 1 tests from 1 test cases.
-  #  RUN           hid_bpf.test_multiply_events_wq ...
-  [    2.575520] hid-generic 0003:0001:0A36.0001: hidraw0: USB HID v0.00 Device [test-uhid-device-138] on 138
-  #            OK  hid_bpf.test_multiply_events_wq
-  ok 1 hid_bpf.test_multiply_events_wq
-  # PASSED: 1 / 1 tests passed.
-  # Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
-  PASS
+bpf_stream_vprintk macro is changed to use the new bpf_stream_vprintk
+kfunc, and the extern definition of bpf_stream_vprintk_impl is
+replaced accordingly.
 
-Acked-by: Benjamin Tissoires <bentiss@kernel.org>
 Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 ---
- drivers/hid/bpf/progs/hid_bpf_helpers.h             | 8 +++-----
- tools/testing/selftests/hid/progs/hid_bpf_helpers.h | 8 +++-----
- 2 files changed, 6 insertions(+), 10 deletions(-)
+ kernel/bpf/helpers.c                            | 2 +-
+ kernel/bpf/stream.c                             | 5 ++---
+ tools/lib/bpf/bpf_helpers.h                     | 6 +++---
+ tools/testing/selftests/bpf/progs/stream_fail.c | 6 +++---
+ 4 files changed, 9 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/hid/bpf/progs/hid_bpf_helpers.h b/drivers/hid/bpf/progs/hid_bpf_helpers.h
-index bf19785a6b06..228f8d787567 100644
---- a/drivers/hid/bpf/progs/hid_bpf_helpers.h
-+++ b/drivers/hid/bpf/progs/hid_bpf_helpers.h
-@@ -33,11 +33,9 @@ extern int hid_bpf_try_input_report(struct hid_bpf_ctx *ctx,
- /* bpf_wq implementation */
- extern int bpf_wq_init(struct bpf_wq *wq, void *p__map, unsigned int flags) __weak __ksym;
- extern int bpf_wq_start(struct bpf_wq *wq, unsigned int flags) __weak __ksym;
--extern int bpf_wq_set_callback_impl(struct bpf_wq *wq,
--		int (callback_fn)(void *map, int *key, void *value),
--		unsigned int flags__k, void *aux__ign) __ksym;
--#define bpf_wq_set_callback(wq, cb, flags) \
--	bpf_wq_set_callback_impl(wq, cb, flags, NULL)
-+extern int bpf_wq_set_callback(struct bpf_wq *wq,
-+		int (*callback_fn)(void *, int *, void *),
-+		unsigned int flags) __weak __ksym;
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index f2f974b5fb3b..f8aa1320e2f7 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -4533,7 +4533,7 @@ BTF_ID_FLAGS(func, bpf_strncasestr);
+ #if defined(CONFIG_BPF_LSM) && defined(CONFIG_CGROUPS)
+ BTF_ID_FLAGS(func, bpf_cgroup_read_xattr, KF_RCU)
+ #endif
+-BTF_ID_FLAGS(func, bpf_stream_vprintk_impl)
++BTF_ID_FLAGS(func, bpf_stream_vprintk, KF_IMPLICIT_ARGS)
+ BTF_ID_FLAGS(func, bpf_task_work_schedule_signal, KF_IMPLICIT_ARGS)
+ BTF_ID_FLAGS(func, bpf_task_work_schedule_resume, KF_IMPLICIT_ARGS)
+ BTF_ID_FLAGS(func, bpf_dynptr_from_file)
+diff --git a/kernel/bpf/stream.c b/kernel/bpf/stream.c
+index 0b6bc3f30335..24730df55e69 100644
+--- a/kernel/bpf/stream.c
++++ b/kernel/bpf/stream.c
+@@ -212,14 +212,13 @@ __bpf_kfunc_start_defs();
+  * Avoid using enum bpf_stream_id so that kfunc users don't have to pull in the
+  * enum in headers.
+  */
+-__bpf_kfunc int bpf_stream_vprintk_impl(int stream_id, const char *fmt__str, const void *args,
+-					u32 len__sz, void *aux__prog)
++__bpf_kfunc int bpf_stream_vprintk(int stream_id, const char *fmt__str, const void *args,
++				   u32 len__sz, struct bpf_prog_aux *aux)
+ {
+ 	struct bpf_bprintf_data data = {
+ 		.get_bin_args	= true,
+ 		.get_buf	= true,
+ 	};
+-	struct bpf_prog_aux *aux = aux__prog;
+ 	u32 fmt_size = strlen(fmt__str) + 1;
+ 	struct bpf_stream *stream;
+ 	u32 data_len = len__sz;
+diff --git a/tools/lib/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_helpers.h
+index d4e4e388e625..c145da05a67c 100644
+--- a/tools/lib/bpf/bpf_helpers.h
++++ b/tools/lib/bpf/bpf_helpers.h
+@@ -315,8 +315,8 @@ enum libbpf_tristate {
+ 			  ___param, sizeof(___param));		\
+ })
  
- #define HID_MAX_DESCRIPTOR_SIZE	4096
- #define HID_IGNORE_EVENT	-1
-diff --git a/tools/testing/selftests/hid/progs/hid_bpf_helpers.h b/tools/testing/selftests/hid/progs/hid_bpf_helpers.h
-index 531228b849da..80ab60905865 100644
---- a/tools/testing/selftests/hid/progs/hid_bpf_helpers.h
-+++ b/tools/testing/selftests/hid/progs/hid_bpf_helpers.h
-@@ -116,10 +116,8 @@ extern int hid_bpf_try_input_report(struct hid_bpf_ctx *ctx,
- /* bpf_wq implementation */
- extern int bpf_wq_init(struct bpf_wq *wq, void *p__map, unsigned int flags) __weak __ksym;
- extern int bpf_wq_start(struct bpf_wq *wq, unsigned int flags) __weak __ksym;
--extern int bpf_wq_set_callback_impl(struct bpf_wq *wq,
--		int (callback_fn)(void *map, int *key, void *wq),
--		unsigned int flags__k, void *aux__ign) __weak __ksym;
--#define bpf_wq_set_callback(timer, cb, flags) \
--	bpf_wq_set_callback_impl(timer, cb, flags, NULL)
-+extern int bpf_wq_set_callback(struct bpf_wq *wq,
-+		int (*callback_fn)(void *, int *, void *),
-+		unsigned int flags) __weak __ksym;
+-extern int bpf_stream_vprintk_impl(int stream_id, const char *fmt__str, const void *args,
+-				   __u32 len__sz, void *aux__prog) __weak __ksym;
++extern int bpf_stream_vprintk(int stream_id, const char *fmt__str, const void *args,
++			      __u32 len__sz) __weak __ksym;
  
- #endif /* __HID_BPF_HELPERS_H */
+ #define bpf_stream_printk(stream_id, fmt, args...)					\
+ ({											\
+@@ -328,7 +328,7 @@ extern int bpf_stream_vprintk_impl(int stream_id, const char *fmt__str, const vo
+ 	___bpf_fill(___param, args);							\
+ 	_Pragma("GCC diagnostic pop")							\
+ 											\
+-	bpf_stream_vprintk_impl(stream_id, ___fmt, ___param, sizeof(___param), NULL);	\
++	bpf_stream_vprintk(stream_id, ___fmt, ___param, sizeof(___param));		\
+ })
+ 
+ /* Use __bpf_printk when bpf_printk call has 3 or fewer fmt args
+diff --git a/tools/testing/selftests/bpf/progs/stream_fail.c b/tools/testing/selftests/bpf/progs/stream_fail.c
+index 3662515f0107..8e8249f3521c 100644
+--- a/tools/testing/selftests/bpf/progs/stream_fail.c
++++ b/tools/testing/selftests/bpf/progs/stream_fail.c
+@@ -10,7 +10,7 @@ SEC("syscall")
+ __failure __msg("Possibly NULL pointer passed")
+ int stream_vprintk_null_arg(void *ctx)
+ {
+-	bpf_stream_vprintk_impl(BPF_STDOUT, "", NULL, 0, NULL);
++	bpf_stream_vprintk(BPF_STDOUT, "", NULL, 0);
+ 	return 0;
+ }
+ 
+@@ -18,7 +18,7 @@ SEC("syscall")
+ __failure __msg("R3 type=scalar expected=")
+ int stream_vprintk_scalar_arg(void *ctx)
+ {
+-	bpf_stream_vprintk_impl(BPF_STDOUT, "", (void *)46, 0, NULL);
++	bpf_stream_vprintk(BPF_STDOUT, "", (void *)46, 0);
+ 	return 0;
+ }
+ 
+@@ -26,7 +26,7 @@ SEC("syscall")
+ __failure __msg("arg#1 doesn't point to a const string")
+ int stream_vprintk_string_arg(void *ctx)
+ {
+-	bpf_stream_vprintk_impl(BPF_STDOUT, ctx, NULL, 0, NULL);
++	bpf_stream_vprintk(BPF_STDOUT, ctx, NULL, 0);
+ 	return 0;
+ }
+ 
 -- 
 2.52.0
 
