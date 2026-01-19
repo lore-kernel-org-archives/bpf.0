@@ -1,30 +1,32 @@
 Received: from out-174.mta0.migadu.com (out-174.mta0.migadu.com [91.218.175.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B0A83803C2
-	for <bpf@vger.kernel.org>; Mon, 19 Jan 2026 14:23:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C84A337E2F4
+	for <bpf@vger.kernel.org>; Mon, 19 Jan 2026 14:24:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768832637; cv=none; b=CghsCpl7pZpa7ysTQr0m59soCgaKv37+1G2ed1coNeSyPzp7X6VTsVLAqjOwxmQhZNY1/3sjRrDeUxlZRHAIsLICxSUjMVFO8l4xfQ+KpnF303YX5JcWJyBZ+wIfnxFO/S4mNO6R+rriC+wXhl28LyblpdYe/rHPyba8RWzRFmU=
+	t=1768832648; cv=none; b=HCpjQfxCaPHaq9fshwvP+wpnR1cCM1+P0tSQ+EYRh8fsL/sIAMYgfPu2Tts/dm2m3A0AwIcvRrPe3EWwFL3zyM3ogaWlvLdL6fTWvFUC/MJIhfThTlP04CPadNjLiqCcCLTub9fJ+eKQTZgkae4HV7gWa8/ZxCH2VzBkpIaaDyA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768832637; c=relaxed/simple;
-	bh=zVGZh7eFDDPz8YwCWOxi/FDxpsyLCNTp4r0ypycyE+0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=YZRvkzc9favahn2AlnZT84HJTntL57wMPkrIZl8aDl8H34FccTiS2gjholB+TalQ7kR6Kme6GBd2SM1+y/672jdg0YrlBoFWTVTO5RoXuRTxcgXnrTnlzyUM//kOOD/YovtmOf4LC7ZlD7OB1wRK7cTgSLvFmoPodbWwlvLVD6A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=KoPGdF5E; arc=none smtp.client-ip=91.218.175.174
+	s=arc-20240116; t=1768832648; c=relaxed/simple;
+	bh=oayvu13mdV7aSgVp1rBKytLvqsfxdo+vvFuy6pb+7uY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=a88JdSb7HV1M6I3RS40pQhavj7NzsT5Z5mGkmt82gOp2EwyBBC8zIG2PT1J4I2wr1GR1WFjQfQxJOfPPjCZ1WvbTrKQWl4P7H55NvHeU4kiNmEuBdZU5lXG89LG3XqnJ7W638jQcIBQ8heZbQ2T3qNC1cSQhiZSSYGWFF59Q+Bs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=uHxDawZl; arc=none smtp.client-ip=91.218.175.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="KoPGdF5E"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="uHxDawZl"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1768832623;
+	t=1768832644;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=3T80oN8F5GALi0Utz+Tw6OTmbiEVk1RUB4ZQwlgHphc=;
-	b=KoPGdF5EZZ7HlwpXKoAv0qVESjP/Sbh4uL6L/VcRMqyJ0mgCXmUnFjCynxsilJEMJK17it
-	pF5xBNu4tGBGv27+tBe8LKcApkPQT7ZHGghcn8PhJDpqpFUgJXFsQSLZJcMeEQI53fXbS9
-	ldaR2YmCGNdWdFgk3bjX7wnCITiW2OY=
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=4Eq1NLSrw3mzgr+D9bwwnsXLMtRZs1wD5aWZcftrom8=;
+	b=uHxDawZl5wKLRvTYnFa2iHf4BpkQMRh6QHtbyUksBI6UNsHnxGh16L+tTDM5PWyTbdTJU4
+	xIJN9QYJIiaOCBbwJUG/wsaBnovufi5hb+3BSg65PcAjv14yjxGHglWJljUJmEikLtpJFD
+	/N6NnMMvvHbKoVfzY8sK0YqtWlvphng=
 From: Leon Hwang <leon.hwang@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Martin KaFai Lau <martin.lau@linux.dev>,
@@ -44,9 +46,11 @@ Cc: Martin KaFai Lau <martin.lau@linux.dev>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	kernel-patches-bot@fb.com
-Subject: [PATCH bpf-next 0/3] bpf: Avoid deadlock using trylock when popping LRU free nodes
-Date: Mon, 19 Jan 2026 22:21:17 +0800
-Message-ID: <20260119142120.28170-1-leon.hwang@linux.dev>
+Subject: [PATCH bpf-next 2/3] bpf: Avoid deadlock using trylock when popping LRU free nodes
+Date: Mon, 19 Jan 2026 22:21:19 +0800
+Message-ID: <20260119142120.28170-3-leon.hwang@linux.dev>
+In-Reply-To: <20260119142120.28170-1-leon.hwang@linux.dev>
+References: <20260119142120.28170-1-leon.hwang@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -56,39 +60,86 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-Switch the free-node pop paths to raw_spin_trylock*() so callers don't block
-on contended LRU locks. This is a narrower change than Menglong's approach [1],
-which aimed to eliminate the deadlock entirely.
+Switch the free-node pop paths to raw_spin_trylock*() to avoid blocking
+on contended LRU locks.
 
-The trylock-based approach avoids deadlocks in long-lived critical
-sections, while still allowing locking in short-lived ones. Although it
-does not completely eliminate the possibility of deadlock, it
-significantly reduces the likelihood in practice.
+If the global or per-CPU LRU lock is unavailable, refuse to refill the
+local free list and return NULL instead. This allows callers to back
+off safely rather than blocking or re-entering the same lock context.
 
-LRU-related deadlocks have been observed multiple times, including:
+This change avoids lockdep warnings and potential deadlocks caused by
+re-entrant LRU lock acquisition from NMI context, as shown below:
 
- - [syzbot] [bpf?] possible deadlock in bpf_lru_push_free (2) [2]
- - Re: [PATCH bpf v3 0/4] bpf: Free special fields when update hash and local storage maps [3]
- - Raw log of CI failure [4]
+[  418.260323] bpf_testmod: oh no, recursing into test_1, recursion_misses 1
+[  424.982207] ================================
+[  424.982216] WARNING: inconsistent lock state
+[  424.982223] inconsistent {INITIAL USE} -> {IN-NMI} usage.
+[  424.982314]  *** DEADLOCK ***
+[...]
 
-BTW, this series also factors out the bpf_lru_node_set_hash() helper, along with
-a comment describing the required ordering and locking constraints.
+Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+---
+ kernel/bpf/bpf_lru_list.c | 17 ++++++++++-------
+ 1 file changed, 10 insertions(+), 7 deletions(-)
 
-Links:
-[1] https://lore.kernel.org/bpf/20251030030010.95352-1-dongml2@chinatelecom.cn/
-[2] https://lore.kernel.org/bpf/69155df5.a70a0220.3124cb.0018.GAE@google.com/
-[3] https://lore.kernel.org/bpf/CAEf4BzbTJCUx0D=zjx6+5m5iiGhwLzaP94hnw36ZMDHAf4-U_w@mail.gmail.com/
-[4] https://github.com/kernel-patches/bpf/actions/runs/20943173932/job/60181505085
-
-Leon Hwang (3):
-  bpf: Factor out bpf_lru_node_set_hash() helper
-  bpf: Avoid deadlock using trylock when popping LRU free nodes
-  selftests/bpf: Allow -ENOMEM on LRU map updates
-
- kernel/bpf/bpf_lru_list.c                     | 35 ++++++++++++++-----
- .../bpf/map_tests/map_percpu_stats.c          |  3 +-
- 2 files changed, 28 insertions(+), 10 deletions(-)
-
---
+diff --git a/kernel/bpf/bpf_lru_list.c b/kernel/bpf/bpf_lru_list.c
+index c091f3232cc5..03d37f72731a 100644
+--- a/kernel/bpf/bpf_lru_list.c
++++ b/kernel/bpf/bpf_lru_list.c
+@@ -312,14 +312,15 @@ static void bpf_lru_list_push_free(struct bpf_lru_list *l,
+ 	raw_spin_unlock_irqrestore(&l->lock, flags);
+ }
+ 
+-static void bpf_lru_list_pop_free_to_local(struct bpf_lru *lru,
++static bool bpf_lru_list_pop_free_to_local(struct bpf_lru *lru,
+ 					   struct bpf_lru_locallist *loc_l)
+ {
+ 	struct bpf_lru_list *l = &lru->common_lru.lru_list;
+ 	struct bpf_lru_node *node, *tmp_node;
+ 	unsigned int nfree = 0;
+ 
+-	raw_spin_lock(&l->lock);
++	if (!raw_spin_trylock(&l->lock))
++		return false;
+ 
+ 	__local_list_flush(l, loc_l);
+ 
+@@ -339,6 +340,8 @@ static void bpf_lru_list_pop_free_to_local(struct bpf_lru *lru,
+ 				      BPF_LRU_LOCAL_LIST_T_FREE);
+ 
+ 	raw_spin_unlock(&l->lock);
++
++	return true;
+ }
+ 
+ /*
+@@ -418,7 +421,8 @@ static struct bpf_lru_node *bpf_percpu_lru_pop_free(struct bpf_lru *lru,
+ 
+ 	l = per_cpu_ptr(lru->percpu_lru, cpu);
+ 
+-	raw_spin_lock_irqsave(&l->lock, flags);
++	if (!raw_spin_trylock_irqsave(&l->lock, flags))
++		return NULL;
+ 
+ 	__bpf_lru_list_rotate(lru, l);
+ 
+@@ -451,13 +455,12 @@ static struct bpf_lru_node *bpf_common_lru_pop_free(struct bpf_lru *lru,
+ 
+ 	loc_l = per_cpu_ptr(clru->local_list, cpu);
+ 
+-	raw_spin_lock_irqsave(&loc_l->lock, flags);
++	if (!raw_spin_trylock_irqsave(&loc_l->lock, flags))
++		return NULL;
+ 
+ 	node = __local_list_pop_free(loc_l);
+-	if (!node) {
+-		bpf_lru_list_pop_free_to_local(lru, loc_l);
++	if (!node && bpf_lru_list_pop_free_to_local(lru, loc_l))
+ 		node = __local_list_pop_free(loc_l);
+-	}
+ 
+ 	if (node)
+ 		__local_list_add_pending(lru, loc_l, cpu, node, hash);
+-- 
 2.52.0
 
