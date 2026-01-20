@@ -1,90 +1,88 @@
-Received: from out-189.mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41C8D31A072
-	for <bpf@vger.kernel.org>; Tue, 20 Jan 2026 18:20:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.189
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5742366540;
+	Tue, 20 Jan 2026 18:20:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768933238; cv=none; b=pZru90kR7HhAHDZC9dnFBGwvclC0fc+sTXjieIFZjlhsLSU0N0wgMiB4oZAZ2gVb+6KkeYxMOKj8uPpKCoDoFNrhuKPE0m+0hkPuTP4YEQ7pTiavPBEHs2jRs10uEVfaj1qCLcnMpp0EFztQRzAWTweS25Zi3G0d6yb5e9GXMU8=
+	t=1768933253; cv=none; b=PoNbWhANaHWGgmjcczi7Sj5I8CzhwJA46gXPalupoVqcoZ8YuKJP1jnNj6XVqibAUfze6OUgFD88nR2uIK7cxqbwWO7KtAjPKRylA5XCUraqkUErE9j2EyIqZnkevGQQne3W+Ssvtjry6a3onSkbYqopursYgcFfkdiWrwaHCQM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768933238; c=relaxed/simple;
-	bh=Id4cOmNEiQlVyYt3ZOmFEsW5EXk1o6WCVdlGjBzHwko=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AeIn3VVvsIkhaWs+C6C8yeMOjiR939jTv/xmsmApcakI4uS/xA5YThLjPwaYfcejlIoO/w3TQcJODGIRkLo0MEqeXhVG2BSOIS1iEM4P0nUIewEkxR8jj7/wJLYCiWSQKgkY1QgOpdxOMrIJd4pNeD4CCLb7b/WYTCi3X/Nf0KE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=DSBWMH9t; arc=none smtp.client-ip=91.218.175.189
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1768933253; c=relaxed/simple;
+	bh=rr573QidU3iAi/lvnpGtvA5TtBvZUkHLZPl7uHktzLQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KA3Sljtajm9DmEvOfWvYYOEvjZQBbthDK9kUSbDFWTpDStayiLhET3mvMFWNDoJccFlzbf61ZjeoU6pn7D51FUrN7HbLRPFfF1fywAMBdgGEH0jLujhu1a14NAE3LUYHQSLkK6WF4vlnXVO0SxabiC8nP898SXSp78z7EDY63dM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sRblidTw; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="DSBWMH9t"
-Message-ID: <4cb38afd-e795-44d5-b71e-e28ef46a713e@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1768933224;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Hw/sMcabrZCvewEQTdeG4CPdU3m3zhufQ69bpx+RQH4=;
-	b=DSBWMH9t9DBoDy90DWa0S5Md9TPpZcYKg++8SBupfJ89+tSsHRDanBO0HYYftlmIQO5Gei
-	JcFI5blTl0snagOQnbMXl0q24eJjmyBAHS22UMmB/CHSvr9uMKFcnKZzcAzq8cUs6UGtED
-	F/leoiDdQNu3gIorPa2p5GwZuDNcc64=
-Date: Tue, 20 Jan 2026 10:20:17 -0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sRblidTw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42C5EC16AAE;
+	Tue, 20 Jan 2026 18:20:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768933253;
+	bh=rr573QidU3iAi/lvnpGtvA5TtBvZUkHLZPl7uHktzLQ=;
+	h=From:To:Cc:Subject:Date:Reply-To:From;
+	b=sRblidTwtARRi2PQoc8ElNupT9MkusGhgZsxkCA2n/JZadoZlYh/1PWW2AdwnfLR4
+	 fJfkPj9FB9jEnHWMgFgnzXWHkCKsS5xn6QmY2CWl8ERa0wMEsU+Ehap9SEVsLTfgth
+	 0qcpacYVnNe50Zrz1ivaSrPV9amIeLooOqXba41IurQEZFcOTdoA5d5/jxm4mUVkPY
+	 hi7LMzGU0YKQlIoFAouke+6kCYTbyPLP8l5kMTP2X5V0BxpgCyD7I+RnapI3ZhR19M
+	 y7CcjK7CPao+LEL7NPC0R0wNoFb9E/uY6K56c4+OYWD72T5icLWSWc+2OnGw2LCuaX
+	 tEXN34QOKlpBw==
+From: Gary Guo <gary@kernel.org>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: Gary Guo <gary@garyguo.net>,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] scripts/gen-btf.sh: fix shebang for NixOS
+Date: Tue, 20 Jan 2026 18:20:33 +0000
+Message-ID: <20260120182034.3647092-1-gary@kernel.org>
+X-Mailer: git-send-email 2.51.2
+Reply-To: Gary Guo <gary@garyguo.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v2 11/13] selftests/bpf: Migrate struct_ops_assoc
- test to KF_IMPLICIT_ARGS
-To: Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov
- <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>
-Cc: Mykyta Yatsenko <yatsenko@meta.com>, Tejun Heo <tj@kernel.org>,
- Alan Maguire <alan.maguire@oracle.com>,
- Benjamin Tissoires <bentiss@kernel.org>, Jiri Kosina <jikos@kernel.org>,
- Amery Hung <ameryhung@gmail.com>, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
- sched-ext@lists.linux.dev
-References: <20260116201700.864797-1-ihor.solodrai@linux.dev>
- <20260116201700.864797-12-ihor.solodrai@linux.dev>
- <b5fef9672be4395b76619b8bd39697bf28b93350.camel@gmail.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <b5fef9672be4395b76619b8bd39697bf28b93350.camel@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
 
-On 1/19/26 5:59 PM, Eduard Zingerman wrote:
-> On Fri, 2026-01-16 at 12:16 -0800, Ihor Solodrai wrote:
-> 
-> [...]
-> 
->> diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
->> index 2357a0340ffe..225ea30c4e3d 100644
->> --- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
->> +++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
->> @@ -161,7 +161,9 @@ void bpf_kfunc_rcu_task_test(struct task_struct *ptr) __ksym;
->>  struct task_struct *bpf_kfunc_ret_rcu_test(void) __ksym;
->>  int *bpf_kfunc_ret_rcu_test_nostruct(int rdonly_buf_size) __ksym;
->>  
->> -int bpf_kfunc_multi_st_ops_test_1(struct st_ops_args *args, u32 id) __ksym;
->> -int bpf_kfunc_multi_st_ops_test_1_impl(struct st_ops_args *args, void *aux__prog) __ksym;
->> +#ifndef __KERNEL__
->> +extern int bpf_kfunc_multi_st_ops_test_1(struct st_ops_args *args, u32 id) __weak __ksym;
->> +extern int bpf_kfunc_multi_st_ops_test_1_assoc(struct st_ops_args *args) __weak __ksym;
->> +#endif
-> 
-> Nit: wbpf_kfunc_multi_st_ops_test_1 change is not necessary, right?
+From: Gary Guo <gary@garyguo.net>
 
-Right, but it felt wrong to only change one of these decls.
+NixOS only puts /usr/bin/env and /bin/sh at the standard location as
+required by POSIX, but not other shells. Other program that kernel build
+depends on is supplied via PATH, so shebang needs to use /usr/bin/env to
+find them.
 
-This header is weird in that it is included both in the module code
-and in BPF progs, although it is typically not a problem since the
-most kfunc signatures match.
+This has been done to a few other scripts already, e.g.
+gen_test_kallsyms.sh or decode_stacktrace.sh.
 
-Maybe it should have #ifndef __KERNEL__ followed by kfunc declarations
-that correspond to vmlinux.h format? I haven't tried that, but seems
-logical to me.
+Fixes: 522397d05e7d ("resolve_btfids: Change in-place update with raw binary output")
+Signed-off-by: Gary Guo <gary@garyguo.net>
+---
+ scripts/gen-btf.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/scripts/gen-btf.sh b/scripts/gen-btf.sh
+index be21ccee3487..4cd3159f2ddb 100755
+--- a/scripts/gen-btf.sh
++++ b/scripts/gen-btf.sh
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/usr/bin/env bash
+ # SPDX-License-Identifier: GPL-2.0
+ # Copyright (c) 2025 Meta Platforms, Inc. and affiliates.
+ #
+
+base-commit: 053966c344dbd346e71305f530e91ea77916189f
+-- 
+2.51.2
 
