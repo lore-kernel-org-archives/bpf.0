@@ -1,66 +1,90 @@
-Received: from out-185.mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAC2D3E9F68
-	for <bpf@vger.kernel.org>; Tue, 20 Jan 2026 22:52:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.185
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5826033C1A3;
+	Tue, 20 Jan 2026 22:55:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768949533; cv=none; b=ITbPQcPsh/oCurBmFXE2kUrjA/3CAOUtC2zNzIu8wdxE8UwysIOSNJutJQGuEUASvTbGQ63ugyZchp03wFv+BCEcmGz6/FuuAvNpRwVgVoiYzQgYBwZDmbo0iB3mDZ7CFk1tcC/pXzdcBHjyi2d4GutsaXR4bNzOqMxftW0W0w4=
+	t=1768949720; cv=none; b=EaJfE6fQaJkkb5xyhZRNdiWQW4sEvQ4jeiwhdntuoNa1GcX6nq2Yyv5eoVuHTIOipPKJ+W/bPu75s5ND2kiV+bm+u82uGeEyn1ap9lUH+dYvCPl4205W8HEP7FXr+nTMiFoB+boUhq6e2jVi+eLtyCJQ+lMrHYzzVax+ifvYQug=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768949533; c=relaxed/simple;
-	bh=B+4SQN3XtEYLxLN4jI2aCDpcYoyy+NMRu6RK31oqMIg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NgAHImWKWLLiGcgegstOGnSH53j0zZAYF6/vc9BFXwmTuDLXgCajGIGvRq9FpEP2huunWo6oEi4VvjYACjsrcgqhtN31gxs+JZ26wjn7H9qMO1S7p2T77AyDANW+m45k0aAol0mpuxfEcSsIxG419A0AcxKLrhQ1Oxl+YBSILsk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=jpkHTjD+; arc=none smtp.client-ip=91.218.175.185
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1768949720; c=relaxed/simple;
+	bh=atj9ZDrlVFqwsuqKBLywRG1xl/dR3yS5PUSMm9ea8eY=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=GYalfKnNJEWIsZoYF8YbmYdOzWp1zFeuqbB48f9u1bPKos2affCnO24AXNYpt1SXpP6givUb5rAhHsImrn7T2ItmUaKMlWfTtntlmcCCPVq87tb1t4hkacr0wcZUtOXYAOvUxqgZciufnle5Nw62b5SKgA0Xf3ob3rmb4U/ABNo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ebmnwilp; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="jpkHTjD+"
-Message-ID: <0c8f3058-6c7c-43e9-a1c6-378622df6373@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1768949528;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=B+4SQN3XtEYLxLN4jI2aCDpcYoyy+NMRu6RK31oqMIg=;
-	b=jpkHTjD+ZmTaAX3Op8MVW3gsbHdjoKPksAzEe06Regyr9ER+rgRcOiKJFQOKRjTfFVbBEj
-	5bG5ykg24L3dvD7mUDULxQQjDEqKV5vw92jWuDMJwGSQXel7rNxgQDgF613p2dsoo995EN
-	XqgFLenF6A+xRSBh88yuW4EOZMJWF6E=
-Date: Tue, 20 Jan 2026 14:52:01 -0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ebmnwilp"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 517A2C16AAE;
+	Tue, 20 Jan 2026 22:55:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768949719;
+	bh=atj9ZDrlVFqwsuqKBLywRG1xl/dR3yS5PUSMm9ea8eY=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=ebmnwilpPPTq+vxUd+PvhRSMbvQb6TgdyAYujOTlACXFMHYHC73rLz8zH2cktXpQb
+	 Ugpm9CYoO6XZoYT+djfIwWHFw2IZPPNGVXJ2PsRxvmytwsMELCWBMIc7fcWrA14Tv1
+	 Bfqf/nm0xHzyiPbKkbaGub/Bon1m3ix1+hGU53XiP7Saga1GkpOz5v/ybjFmO6E93K
+	 V7AHUDcxLnfYQ+DvIUsYxkrG8RQm9ZvP8+m0Fqeii3IsNcNDOjiXY7HXaqL4gar/6r
+	 ZrUMk4cH96rGr9tFGsZ+ssc1Ixc/RrqHnp4TAdIG9dCugzeUMcYZphI2/bSN+sKgfu
+	 euK81znc+bWSQ==
+Content-Type: multipart/mixed; boundary="===============8612786677161922109=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v4 2/2] selftests/bpf: test bpf_get_func_arg()
- for tp_btf
-Content-Language: en-GB
-To: Menglong Dong <menglong8.dong@gmail.com>, ast@kernel.org,
- andrii@kernel.org
-Cc: daniel@iogearbox.net, john.fastabend@gmail.com, martin.lau@linux.dev,
- eddyz87@gmail.com, song@kernel.org, kpsingh@kernel.org, sdf@fomichev.me,
- haoluo@google.com, jolsa@kernel.org, mattbobrowski@google.com,
- rostedt@goodmis.org, mhiramat@kernel.org, mathieu.desnoyers@efficios.com,
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org
-References: <20260120073046.324342-1-dongml2@chinatelecom.cn>
- <20260120073046.324342-3-dongml2@chinatelecom.cn>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <20260120073046.324342-3-dongml2@chinatelecom.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Message-Id: <e8677fdf7cbe2c1174d7047c51f02516d92a91f9a649a30f0041e0f4bfc0b0a6@mail.kernel.org>
+In-Reply-To: <20260120222638.3976562-8-ihor.solodrai@linux.dev>
+References: <20260120222638.3976562-8-ihor.solodrai@linux.dev>
+Subject: Re: [PATCH bpf-next v3 07/13] bpf: Migrate bpf_wq_set_callback_impl() to KF_IMPLICIT_ARGS
+From: bot+bpf-ci@kernel.org
+To: ihor.solodrai@linux.dev,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com
+Cc: yatsenko@meta.com,tj@kernel.org,alan.maguire@oracle.com,bentiss@kernel.org,jikos@kernel.org,ameryhung@gmail.com,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,linux-input@vger.kernel.org,sched-ext@lists.linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Tue, 20 Jan 2026 22:55:18 +0000 (UTC)
+
+--===============8612786677161922109==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
 
-
-
-On 1/19/26 11:30 PM, Menglong Dong wrote:
-> Test bpf_get_func_arg() and bpf_get_func_arg_cnt() for tp_btf. The code
-> is most copied from test1 and test2.
+> diff --git a/tools/testing/selftests/bpf/bpf_experimental.h b/tools/testing/selftests/bpf/bpf_experimental.h
+> index 2cd9165c7348..68a49b1f77ae 100644
+> --- a/tools/testing/selftests/bpf/bpf_experimental.h
+> +++ b/tools/testing/selftests/bpf/bpf_experimental.h
+> @@ -580,11 +580,6 @@ extern void bpf_iter_css_destroy(struct bpf_iter_css *it) __weak __ksym;
 >
-> Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
+>  extern int bpf_wq_init(struct bpf_wq *wq, void *p__map, unsigned int flags) __weak __ksym;
+>  extern int bpf_wq_start(struct bpf_wq *wq, unsigned int flags) __weak __ksym;
+> -extern int bpf_wq_set_callback_impl(struct bpf_wq *wq,
+> -		int (callback_fn)(void *map, int *key, void *value),
+> -		unsigned int flags__k, void *aux__ign) __ksym;
+> -#define bpf_wq_set_callback(timer, cb, flags) \
+> -	bpf_wq_set_callback_impl(timer, cb, flags, NULL)
 
-Acked-by: Yonghong Song <yonghong.song@linux.dev>
+The old bpf_wq_set_callback_impl declaration and bpf_wq_set_callback macro
+are removed here, but there does not appear to be a replacement declaration
+for the new bpf_wq_set_callback kfunc.
 
+Test files wq.c and wq_failures.c include bpf_experimental.h but do not
+include vmlinux.h. They continue to call bpf_wq_set_callback() after this
+change. Without an extern declaration such as:
+
+    extern int bpf_wq_set_callback(struct bpf_wq *wq,
+            int (callback_fn)(void *map, int *key, void *value),
+            unsigned int flags) __weak __ksym;
+
+should these test files fail to compile due to the missing declaration?
+The kfunc_implicit_args.c test (from the earlier commit in this series)
+demonstrates that explicit __ksym declarations are needed for kfuncs that
+are not obtained from vmlinux.h.
+
+[ ... ]
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/21190053819
+
+--===============8612786677161922109==--
