@@ -1,32 +1,32 @@
-Received: from out-171.mta1.migadu.com (out-171.mta1.migadu.com [95.215.58.171])
+Received: from out-183.mta1.migadu.com (out-183.mta1.migadu.com [95.215.58.183])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 419BC47CC70
-	for <bpf@vger.kernel.org>; Tue, 20 Jan 2026 22:27:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9FE847CC61
+	for <bpf@vger.kernel.org>; Tue, 20 Jan 2026 22:27:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768948061; cv=none; b=s8KT8sJeoLqv21EwjF5sk8uDafZI2lHQw4IvqppedaVVkZfm4LcXYqyrhBu31FsbKJ9EHOrHOIYfaL0DUBqAqiKs2z/Kcfxy6atnXgyb7g6aZ4L84i85LOixKhSIpUiFYHBhFHhIzgHlrOCksTc9Ab14ok7d0Yp9DFDns7/tCrI=
+	t=1768948064; cv=none; b=VvNdMnZ5cR1k1pwzy4R7GmjTiSBaPiU32Xwd8GYanKhPdrh766hxKNfDPEFJ31jWYxUmyGJmGWR8TrPYe8ACkcqUdTH8s/yoT9vvgubAOeFlB3k91xOZoEW1epRqdjO2tx/wl64JyhcGmB32sKmWXhOYd4tMH8ETl4EUn9asGqs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768948061; c=relaxed/simple;
-	bh=gj6reRIBenGEhVSvuRPrvqy7Cr2UXz1ceVpyEXVAJhU=;
+	s=arc-20240116; t=1768948064; c=relaxed/simple;
+	bh=Lgi/7TN0nAFd8pQZKq123W62uVpFkclyfvzL1sHFdds=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Hvcp45uA00XXmn4sz9fc+6sZP6GQkkd9yVDnTY++rO6TLeILuE/Mb9Bm/FCZuG96QLA6exPqNHTq3GdW7u6IA/DGBZ+xRVvylQt8qBdZsYJmBu7ry4vHH12k/w5NSL3aTIfa7tiNHq3QMTdyFNs5425Y8uOM48I0MoRbUmOyIBI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=pi/UPrTK; arc=none smtp.client-ip=95.215.58.171
+	 MIME-Version; b=AvOlcpL6tzfa69WdL2ub7BS1t3UUP33J9Aj6QXAWeLIZLieK/uVv+mb0H6D4LiypN4GpHEuTkKxXAxG6/tThbWPqX4+28xHbA9hp1o7EJj6eTcIZl6kYm3Laa7NBVbxvm3YQMagEnPIX7Czt1C04iNXBYYDVL3e1clT/MQzQw64=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=VmPAgdDv; arc=none smtp.client-ip=95.215.58.183
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="pi/UPrTK"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="VmPAgdDv"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1768948046;
+	t=1768948053;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=97FuF/fff1eb0jGFSo1fap5QARKBSb9jyQQD9qR9ADI=;
-	b=pi/UPrTKmm7MFk9AnERixri2hRMwstafTZNFtYaWjAb5eBGehYdixvnp8mENcC+VAYjG5P
-	1l5xT/Iw/g8xRDJlLFDKQQMfW9xABOqgXg5Efkf0nstn+LPy8lN2H3cqidBvBlhf6hR6H5
-	xjFS4A+4VoFavaG8wepcZYEhXVbzK1Y=
+	bh=z8Pd0FWnxLlu1cbnVUCep7TIFu5V8I8OdSQJEDTQooM=;
+	b=VmPAgdDvG+ErKED72vCxtq2FasHacXoWoDUOwxXsPa3ZX0CyA6mtTsdLXkQjSpNY1V0C/o
+	TKExYY7dsLgdV2dg0Fkmoavb7TjzLpuGMHTWfCYV4X4gt7T0Yvq/TOxo3pBc9b0pN/5/lR
+	2FED61IzBDJf/Vv2ZmKvENihv9nVUQg=
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -43,9 +43,9 @@ Cc: Mykyta Yatsenko <yatsenko@meta.com>,
 	linux-kernel@vger.kernel.org,
 	linux-input@vger.kernel.org,
 	sched-ext@lists.linux.dev
-Subject: [PATCH bpf-next v3 06/13] selftests/bpf: Add tests for KF_IMPLICIT_ARGS
-Date: Tue, 20 Jan 2026 14:26:31 -0800
-Message-ID: <20260120222638.3976562-7-ihor.solodrai@linux.dev>
+Subject: [PATCH bpf-next v3 08/13] HID: Use bpf_wq_set_callback kernel function
+Date: Tue, 20 Jan 2026 14:26:33 -0800
+Message-ID: <20260120222638.3976562-9-ihor.solodrai@linux.dev>
 In-Reply-To: <20260120222638.3976562-1-ihor.solodrai@linux.dev>
 References: <20260120222638.3976562-1-ihor.solodrai@linux.dev>
 Precedence: bulk
@@ -57,137 +57,71 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-Add trivial end-to-end tests to validate that KF_IMPLICIT_ARGS flag is
-properly handled by both resolve_btfids and the verifier.
+Remove extern declaration of bpf_wq_set_callback_impl() from
+hid_bpf_helpers.h and replace bpf_wq_set_callback macro with a
+corresponding new declaration.
 
-Declare kfuncs in bpf_testmod. Check that bpf_prog_aux pointer is set
-in the kfunc implementation. Verify that calls with implicit args and
-a legacy case all work.
+Tested with:
+  # append tools/testing/selftests/hid/config and build the kernel
+  $ make -C tools/testing/selftests/hid
+  # in built kernel
+  $ ./tools/testing/selftests/hid/hid_bpf -t test_multiply_events_wq
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+  TAP version 13
+  1..1
+  # Starting 1 tests from 1 test cases.
+  #  RUN           hid_bpf.test_multiply_events_wq ...
+  [    2.575520] hid-generic 0003:0001:0A36.0001: hidraw0: USB HID v0.00 Device [test-uhid-device-138] on 138
+  #            OK  hid_bpf.test_multiply_events_wq
+  ok 1 hid_bpf.test_multiply_events_wq
+  # PASSED: 1 / 1 tests passed.
+  # Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
+  PASS
+
+Acked-by: Benjamin Tissoires <bentiss@kernel.org>
 Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 ---
- .../bpf/prog_tests/kfunc_implicit_args.c      | 10 +++++
- .../selftests/bpf/progs/kfunc_implicit_args.c | 41 +++++++++++++++++++
- .../selftests/bpf/test_kmods/bpf_testmod.c    | 26 ++++++++++++
- 3 files changed, 77 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/kfunc_implicit_args.c
- create mode 100644 tools/testing/selftests/bpf/progs/kfunc_implicit_args.c
+ drivers/hid/bpf/progs/hid_bpf_helpers.h             | 8 +++-----
+ tools/testing/selftests/hid/progs/hid_bpf_helpers.h | 8 +++-----
+ 2 files changed, 6 insertions(+), 10 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/kfunc_implicit_args.c b/tools/testing/selftests/bpf/prog_tests/kfunc_implicit_args.c
-new file mode 100644
-index 000000000000..5e4793c9c29a
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/kfunc_implicit_args.c
-@@ -0,0 +1,10 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-+
-+#include <test_progs.h>
-+#include "kfunc_implicit_args.skel.h"
-+
-+void test_kfunc_implicit_args(void)
-+{
-+	RUN_TESTS(kfunc_implicit_args);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/kfunc_implicit_args.c b/tools/testing/selftests/bpf/progs/kfunc_implicit_args.c
-new file mode 100644
-index 000000000000..89b6a47e22dd
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/kfunc_implicit_args.c
-@@ -0,0 +1,41 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-+
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
-+
-+extern int bpf_kfunc_implicit_arg(int a) __weak __ksym;
-+extern int bpf_kfunc_implicit_arg_impl(int a, struct bpf_prog_aux *aux) __weak __ksym; /* illegal */
-+extern int bpf_kfunc_implicit_arg_legacy(int a, int b) __weak __ksym;
-+extern int bpf_kfunc_implicit_arg_legacy_impl(int a, int b, struct bpf_prog_aux *aux) __weak __ksym;
-+
-+char _license[] SEC("license") = "GPL";
-+
-+SEC("syscall")
-+__retval(5)
-+int test_kfunc_implicit_arg(void *ctx)
-+{
-+	return bpf_kfunc_implicit_arg(5);
-+}
-+
-+SEC("syscall")
-+__failure __msg("cannot find address for kernel function bpf_kfunc_implicit_arg_impl")
-+int test_kfunc_implicit_arg_impl_illegal(void *ctx)
-+{
-+	return bpf_kfunc_implicit_arg_impl(5, NULL);
-+}
-+
-+SEC("syscall")
-+__retval(7)
-+int test_kfunc_implicit_arg_legacy(void *ctx)
-+{
-+	return bpf_kfunc_implicit_arg_legacy(3, 4);
-+}
-+
-+SEC("syscall")
-+__retval(11)
-+int test_kfunc_implicit_arg_legacy_impl(void *ctx)
-+{
-+	return bpf_kfunc_implicit_arg_legacy_impl(5, 6, NULL);
-+}
-diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-index bc07ce9d5477..a996b816ecc4 100644
---- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-+++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-@@ -1142,6 +1142,10 @@ __bpf_kfunc int bpf_kfunc_st_ops_inc10(struct st_ops_args *args)
- __bpf_kfunc int bpf_kfunc_multi_st_ops_test_1(struct st_ops_args *args, u32 id);
- __bpf_kfunc int bpf_kfunc_multi_st_ops_test_1_impl(struct st_ops_args *args, void *aux_prog);
+diff --git a/drivers/hid/bpf/progs/hid_bpf_helpers.h b/drivers/hid/bpf/progs/hid_bpf_helpers.h
+index bf19785a6b06..228f8d787567 100644
+--- a/drivers/hid/bpf/progs/hid_bpf_helpers.h
++++ b/drivers/hid/bpf/progs/hid_bpf_helpers.h
+@@ -33,11 +33,9 @@ extern int hid_bpf_try_input_report(struct hid_bpf_ctx *ctx,
+ /* bpf_wq implementation */
+ extern int bpf_wq_init(struct bpf_wq *wq, void *p__map, unsigned int flags) __weak __ksym;
+ extern int bpf_wq_start(struct bpf_wq *wq, unsigned int flags) __weak __ksym;
+-extern int bpf_wq_set_callback_impl(struct bpf_wq *wq,
+-		int (callback_fn)(void *map, int *key, void *value),
+-		unsigned int flags__k, void *aux__ign) __ksym;
+-#define bpf_wq_set_callback(wq, cb, flags) \
+-	bpf_wq_set_callback_impl(wq, cb, flags, NULL)
++extern int bpf_wq_set_callback(struct bpf_wq *wq,
++		int (*callback_fn)(void *, int *, void *),
++		unsigned int flags) __weak __ksym;
  
-+__bpf_kfunc int bpf_kfunc_implicit_arg(int a, struct bpf_prog_aux *aux);
-+__bpf_kfunc int bpf_kfunc_implicit_arg_legacy(int a, int b, struct bpf_prog_aux *aux);
-+__bpf_kfunc int bpf_kfunc_implicit_arg_legacy_impl(int a, int b, struct bpf_prog_aux *aux);
-+
- BTF_KFUNCS_START(bpf_testmod_check_kfunc_ids)
- BTF_ID_FLAGS(func, bpf_testmod_test_mod_kfunc)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test1)
-@@ -1184,6 +1188,9 @@ BTF_ID_FLAGS(func, bpf_kfunc_st_ops_test_pro_epilogue, KF_SLEEPABLE)
- BTF_ID_FLAGS(func, bpf_kfunc_st_ops_inc10)
- BTF_ID_FLAGS(func, bpf_kfunc_multi_st_ops_test_1)
- BTF_ID_FLAGS(func, bpf_kfunc_multi_st_ops_test_1_impl)
-+BTF_ID_FLAGS(func, bpf_kfunc_implicit_arg, KF_IMPLICIT_ARGS)
-+BTF_ID_FLAGS(func, bpf_kfunc_implicit_arg_legacy, KF_IMPLICIT_ARGS)
-+BTF_ID_FLAGS(func, bpf_kfunc_implicit_arg_legacy_impl)
- BTF_KFUNCS_END(bpf_testmod_check_kfunc_ids)
+ #define HID_MAX_DESCRIPTOR_SIZE	4096
+ #define HID_IGNORE_EVENT	-1
+diff --git a/tools/testing/selftests/hid/progs/hid_bpf_helpers.h b/tools/testing/selftests/hid/progs/hid_bpf_helpers.h
+index 531228b849da..80ab60905865 100644
+--- a/tools/testing/selftests/hid/progs/hid_bpf_helpers.h
++++ b/tools/testing/selftests/hid/progs/hid_bpf_helpers.h
+@@ -116,10 +116,8 @@ extern int hid_bpf_try_input_report(struct hid_bpf_ctx *ctx,
+ /* bpf_wq implementation */
+ extern int bpf_wq_init(struct bpf_wq *wq, void *p__map, unsigned int flags) __weak __ksym;
+ extern int bpf_wq_start(struct bpf_wq *wq, unsigned int flags) __weak __ksym;
+-extern int bpf_wq_set_callback_impl(struct bpf_wq *wq,
+-		int (callback_fn)(void *map, int *key, void *wq),
+-		unsigned int flags__k, void *aux__ign) __weak __ksym;
+-#define bpf_wq_set_callback(timer, cb, flags) \
+-	bpf_wq_set_callback_impl(timer, cb, flags, NULL)
++extern int bpf_wq_set_callback(struct bpf_wq *wq,
++		int (*callback_fn)(void *, int *, void *),
++		unsigned int flags) __weak __ksym;
  
- static int bpf_testmod_ops_init(struct btf *btf)
-@@ -1675,6 +1682,25 @@ int bpf_kfunc_multi_st_ops_test_1_impl(struct st_ops_args *args, void *aux__prog
- 	return ret;
- }
- 
-+int bpf_kfunc_implicit_arg(int a, struct bpf_prog_aux *aux)
-+{
-+	if (aux && a > 0)
-+		return a;
-+	return -EINVAL;
-+}
-+
-+int bpf_kfunc_implicit_arg_legacy(int a, int b, struct bpf_prog_aux *aux)
-+{
-+	if (aux)
-+		return a + b;
-+	return -EINVAL;
-+}
-+
-+int bpf_kfunc_implicit_arg_legacy_impl(int a, int b, struct bpf_prog_aux *aux)
-+{
-+	return bpf_kfunc_implicit_arg_legacy(a, b, aux);
-+}
-+
- static int multi_st_ops_reg(void *kdata, struct bpf_link *link)
- {
- 	struct bpf_testmod_multi_st_ops *st_ops =
+ #endif /* __HID_BPF_HELPERS_H */
 -- 
 2.52.0
 
