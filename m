@@ -1,258 +1,229 @@
-Received: from mail-ed1-f67.google.com (mail-ed1-f67.google.com [209.85.208.67])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BFA644A700
-	for <bpf@vger.kernel.org>; Tue, 20 Jan 2026 15:01:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.67
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DCF82FE591
+	for <bpf@vger.kernel.org>; Tue, 20 Jan 2026 15:18:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768921289; cv=none; b=cIQ226PJw+tt6j2wwJDsrKthZ8Tu3e7f8PrFVpQ1LY8rIzCCB2oPGgXQfGCdYcC2h6dsG++n7oi8anCdk3alAKz9jP1f3rR8nGl2jgi17g7gmZRLRVinbz2Af2SB5TDXOBNtThcuMsQp2FHsMC1ERbPjhm+XmruRGLZ4foGtw7M=
+	t=1768922323; cv=none; b=pNaJv9q3T1BoRuqxU/WP9kilWOd0s6z299S5dcNxy72AGuAMpQnFd5idqQwbqYgTTpOsLym6dwN62d2gLg+tVUbC3TY+p2spAIyXDX9pTW7+OA6WHR1Bgw3vEjOsZa7gDfHKvtD+EnbCJDfD2Vn3TgTYCCmv97N8Ht1LrOjAnaY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768921289; c=relaxed/simple;
-	bh=e3KIXA5K1BSTDXaN5S3F7j8PM7hZNZ2/owWnE24bZ/o=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=FYphNa/unEwQBhU4jZhUDgV1HFr6H1U9hsZbNpsfH55KZUzHDHGxY7PtxeA7ljxsQZwrnehTsfGrTn4leoqHK0WZH/Dh9qosrV9GDz0Ws25876tUTpnhfox2zhbRezBfwwJPHuS7RweckbdRlfLkJrhIsH5OKqToG7Dqe8wWW6Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=fC5ypsaZ; arc=none smtp.client-ip=209.85.208.67
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+	s=arc-20240116; t=1768922323; c=relaxed/simple;
+	bh=8ozzNJgyqK43aAMDbi+isaR9zJ6IWS3IDCGEK9uyR50=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Cb3r+fAPg6nSbD3/xKTaen8O0bqjo/WIvSnNmm170RA/zI1IbnHUJvCw2aAKkQ2jAvbUqu34SOQV1SepqLj2v3HctrFUuGinoOKMZIpfOy2weekWbeHcDI+Q/KbluQCvuRJcRljZFnZ33/DKr/iPedcK3jAhG8okt38l36oTSk8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=v8K48JaK; arc=none smtp.client-ip=91.218.175.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="fC5ypsaZ"
-Received: by mail-ed1-f67.google.com with SMTP id 4fb4d7f45d1cf-64b608ffca7so8260523a12.3
-        for <bpf@vger.kernel.org>; Tue, 20 Jan 2026 07:01:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1768921285; x=1769526085; darn=vger.kernel.org;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=jYI0gLBKIqxhNhOB7IM8ExaSr/699rjlW1w6qxp7P1A=;
-        b=fC5ypsaZsDFQsZ88mcEV6PqE0f66AfimA3K/Yo7OMqf4+47DIxBicb7hiZcm7dKhu1
-         u0cp2SevSHnrlBejhvTBWWsaQexcocCQuO/DIpJR5JTHolXIH1V7xnl3if2zrMmqLVKn
-         cfQRPEwdnH55vhoJuoRSdHgG2xxCuWLEQ9uSS+p64ICoPX/lrMRVSqShg5pcYQLSmg1p
-         B+wcH47AXHTRrD7EI79vjwnK8jc+dx33QmA01cOu3Tn/uveJoCq7oLWCxamXlti/E0u2
-         TMj/Hb6si8v9TAVVSfijHmZC2AMOHH6rnKa4lmKPaAMRRx+PRxfZ6nyD1dvPYT1SPFbJ
-         5fNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768921285; x=1769526085;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jYI0gLBKIqxhNhOB7IM8ExaSr/699rjlW1w6qxp7P1A=;
-        b=MiLMBXWgcMXUWDRnS0UVkrgouwPeNDYVQoNn5qSE1sd42qKrc9+yU9xD69FxpcrT9v
-         G4VCAbzdIDK+fhH8IPQnjpHhONc75qXyRPa7yoc+JoXoASP3xOwZE9XJDxj3blHZqJXX
-         8oGgIXpXMfXroW4K87wg2chwMQWnKX4y+VCXYzb4isTQ3I0jBh3MJbKgXH2PdSbSgS3a
-         sC+o8fahEYupLKGMvRYCKyeG0z1/5SCXzI8XvjEgnN/I1f4f0gYh2E5GajNBz24t1QWL
-         b5mD7rqtwgqr2KbDIgKH6UVvBG8kssUmNdxrEdoE2yiS1AOZxQ79bDjBOSDW8w9VYzKZ
-         43gg==
-X-Gm-Message-State: AOJu0Yxn1m+u6PkhRKvGeucSQOx7YwfJliz2oS1S9HoS2LUD0W/bXqXP
-	ILilA+OImX5eDniRgdNcV+0ROuRu5/ZbHEJLWMGlakwof2Pbe/aIt/Obs7Zt9fdNpyY=
-X-Gm-Gg: AZuq6aI+WT5+rZne/4UI9SoTeaAovL/ga3Weng1NLcloBsDsRva+8ROaglmWsdqOCcy
-	u1VS7NlKSbCEGXYXYD7ZYmwkPrlK8mANCstcxu6sF34WotiQv8ziHRh7l52sGfK0DIPnmMn6MIo
-	9JLjMIig/PiGrLZshJSl0VBoRrFftpzuflcm+kzc7BCrc2WzQnoO8lMusKLY8upKrtXEZqGez4j
-	4kiDkANdqYATclMTP0lEbsNzNJyIXgIellwNUoJXhlDALc1oRFCZXRWZ/kiwW4kcg4rvfFZV0dz
-	VvLzN+pK1GOuE/Xw5++bE+R6hm0XB6oxPmxuW0wRfzKTzKbKT1jO53W6izYZJ/CRxz8hjIyClON
-	ZjjyjW3pFZxIkWFtZH6yudhY3XSIFtUp6bp+5LxDzJFzbFRoR2iVOA46rhugznqBZi6J5DrV1iE
-	LFP3Y=
-X-Received: by 2002:a17:907:e106:b0:b87:f6fc:aea9 with SMTP id a640c23a62f3a-b87f6fcaf6amr234043466b.9.1768921283931;
-        Tue, 20 Jan 2026 07:01:23 -0800 (PST)
-Received: from cloudflare.com ([2a09:bac5:5063:2969::420:45])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b87959c96f4sm1419134966b.40.2026.01.20.07.01.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Jan 2026 07:01:23 -0800 (PST)
-From: Jakub Sitnicki <jakub@cloudflare.com>
-To: Jiayuan Chen <jiayuan.chen@linux.dev>
-Cc: bpf@vger.kernel.org,  John Fastabend <john.fastabend@gmail.com>,  "David
- S. Miller" <davem@davemloft.net>,  Eric Dumazet <edumazet@google.com>,
-  Jakub Kicinski <kuba@kernel.org>,  Paolo Abeni <pabeni@redhat.com>,
-  Simon Horman <horms@kernel.org>,  Neal Cardwell <ncardwell@google.com>,
-  Kuniyuki Iwashima <kuniyu@google.com>,  David Ahern <dsahern@kernel.org>,
-  Alexei Starovoitov <ast@kernel.org>,  Daniel Borkmann
- <daniel@iogearbox.net>,  Andrii Nakryiko <andrii@kernel.org>,  Martin
- KaFai Lau <martin.lau@linux.dev>,  Eduard Zingerman <eddyz87@gmail.com>,
-  Song Liu <song@kernel.org>,  Yonghong Song <yonghong.song@linux.dev>,  KP
- Singh <kpsingh@kernel.org>,  Stanislav Fomichev <sdf@fomichev.me>,  Hao
- Luo <haoluo@google.com>,  Jiri Olsa <jolsa@kernel.org>,  Shuah Khan
- <shuah@kernel.org>,  Michal Luczaj <mhal@rbox.co>,  Cong Wang
- <cong.wang@bytedance.com>,  netdev@vger.kernel.org,
-  linux-kernel@vger.kernel.org,  linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf-next v7 1/3] bpf, sockmap: Fix incorrect copied_seq
- calculation
-In-Reply-To: <20260113025121.197535-2-jiayuan.chen@linux.dev> (Jiayuan Chen's
-	message of "Tue, 13 Jan 2026 10:50:49 +0800")
-References: <20260113025121.197535-1-jiayuan.chen@linux.dev>
-	<20260113025121.197535-2-jiayuan.chen@linux.dev>
-Date: Tue, 20 Jan 2026 16:01:21 +0100
-Message-ID: <875x8wuy4e.fsf@cloudflare.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="v8K48JaK"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1768922318;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=3kEiXNfLi6uoWFn9MWxuUVEjTcz/eymK3cqMhcQByFw=;
+	b=v8K48JaKz/VhycMcYbzQlEtnCgAuITR9sBBhS9Dyw8FfSQCDgkAycM7jzAx8s19XWrjKkt
+	VgcNXNVfZCCFvJnxnb42AGW6Q8S8iMb1c1DqBSNn5AYvo5Mzuae72UwXeJaqSUN1iYC15t
+	qp6d2ZEGZWY7mNn08FPv32iQ1UeJDVY=
+From: Leon Hwang <leon.hwang@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Christian Brauner <brauner@kernel.org>,
+	Seth Forshee <sforshee@kernel.org>,
+	Yuichiro Tsuji <yuichtsu@amazon.com>,
+	Andrey Albershteyn <aalbersh@redhat.com>,
+	Leon Hwang <leon.hwang@linux.dev>,
+	Willem de Bruijn <willemb@google.com>,
+	Jason Xing <kerneljasonxing@gmail.com>,
+	Tao Chen <chen.dylane@linux.dev>,
+	Mykyta Yatsenko <yatsenko@meta.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Anton Protopopov <a.s.protopopov@gmail.com>,
+	Amery Hung <ameryhung@gmail.com>,
+	Rong Tao <rongtao@cestc.cn>,
+	linux-kernel@vger.kernel.org,
+	linux-api@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	kernel-patches-bot@fb.com
+Subject: [PATCH bpf-next v6 1/9] bpf: Extend BPF syscall with common attributes support
+Date: Tue, 20 Jan 2026 23:15:08 +0800
+Message-ID: <20260120151516.39607-2-leon.hwang@linux.dev>
+In-Reply-To: <20260120151516.39607-1-leon.hwang@linux.dev>
+References: <20260120151516.39607-1-leon.hwang@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Tue, Jan 13, 2026 at 10:50 AM +08, Jiayuan Chen wrote:
-> A socket using sockmap has its own independent receive queue: ingress_msg.
-> This queue may contain data from its own protocol stack or from other
-> sockets.
->
-> The issue is that when reading from ingress_msg, we update tp->copied_seq
-> by default. However, if the data is not from its own protocol stack,
-> tcp->rcv_nxt is not increased. Later, if we convert this socket to a
-> native socket, reading from this socket may fail because copied_seq might
-> be significantly larger than rcv_nxt.
->
-> This fix also addresses the syzkaller-reported bug referenced in the
-> Closes tag.
->
-> This patch marks the skmsg objects in ingress_msg. When reading, we update
-> copied_seq only if the data is from its own protocol stack.
->
->                                                      FD1:read()
->                                                      --  FD1->copied_seq++
->                                                          |  [read data]
->                                                          |
->                                 [enqueue data]           v
->                   [sockmap]     -> ingress to self ->  ingress_msg queue
-> FD1 native stack  ------>                                 ^
-> -- FD1->rcv_nxt++               -> redirect to other      | [enqueue data]
->                                        |                  |
->                                        |             ingress to FD1
->                                        v                  ^
->                                       ...                 |  [sockmap]
->                                                      FD2 native stack
->
-> Closes: https://syzkaller.appspot.com/bug?extid=06dbd397158ec0ea4983
-> Fixes: 04919bed948dc ("tcp: Introduce tcp_read_skb()")
-> Reviewed-by: Jakub Sitnicki <jakub@cloudflare.com>
-> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
-> ---
->  include/linux/skmsg.h |  2 ++
->  net/core/skmsg.c      | 28 +++++++++++++++++++++++++---
->  net/ipv4/tcp_bpf.c    |  5 +++--
->  3 files changed, 30 insertions(+), 5 deletions(-)
->
-> diff --git a/include/linux/skmsg.h b/include/linux/skmsg.h
-> index 49847888c287..dfdc158ab88c 100644
-> --- a/include/linux/skmsg.h
-> +++ b/include/linux/skmsg.h
-> @@ -141,6 +141,8 @@ int sk_msg_memcopy_from_iter(struct sock *sk, struct iov_iter *from,
->  			     struct sk_msg *msg, u32 bytes);
->  int sk_msg_recvmsg(struct sock *sk, struct sk_psock *psock, struct msghdr *msg,
->  		   int len, int flags);
-> +int __sk_msg_recvmsg(struct sock *sk, struct sk_psock *psock, struct msghdr *msg,
-> +		     int len, int flags, int *copied_from_self);
->  bool sk_msg_is_readable(struct sock *sk);
->  
->  static inline void sk_msg_check_to_free(struct sk_msg *msg, u32 i, u32 bytes)
-> diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-> index 2ac7731e1e0a..ca22ecdbf192 100644
-> --- a/net/core/skmsg.c
-> +++ b/net/core/skmsg.c
-> @@ -409,22 +409,26 @@ int sk_msg_memcopy_from_iter(struct sock *sk, struct iov_iter *from,
->  }
->  EXPORT_SYMBOL_GPL(sk_msg_memcopy_from_iter);
->  
-> -/* Receive sk_msg from psock->ingress_msg to @msg. */
-> -int sk_msg_recvmsg(struct sock *sk, struct sk_psock *psock, struct msghdr *msg,
-> -		   int len, int flags)
-> +int __sk_msg_recvmsg(struct sock *sk, struct sk_psock *psock, struct msghdr *msg,
-> +		     int len, int flags, int *copied_from_self)
->  {
->  	struct iov_iter *iter = &msg->msg_iter;
->  	int peek = flags & MSG_PEEK;
->  	struct sk_msg *msg_rx;
->  	int i, copied = 0;
-> +	bool from_self;
->  
->  	msg_rx = sk_psock_peek_msg(psock);
-> +	if (copied_from_self)
-> +		*copied_from_self = 0;
-> +
->  	while (copied != len) {
->  		struct scatterlist *sge;
->  
->  		if (unlikely(!msg_rx))
->  			break;
->  
-> +		from_self = msg_rx->sk == sk;
->  		i = msg_rx->sg.start;
->  		do {
->  			struct page *page;
-> @@ -443,6 +447,9 @@ int sk_msg_recvmsg(struct sock *sk, struct sk_psock *psock, struct msghdr *msg,
->  			}
->  
->  			copied += copy;
-> +			if (from_self && copied_from_self)
-> +				*copied_from_self += copy;
-> +
->  			if (likely(!peek)) {
->  				sge->offset += copy;
->  				sge->length -= copy;
-> @@ -487,6 +494,14 @@ int sk_msg_recvmsg(struct sock *sk, struct sk_psock *psock, struct msghdr *msg,
->  out:
->  	return copied;
->  }
-> +EXPORT_SYMBOL_GPL(__sk_msg_recvmsg);
+Extend the BPF syscall to support a set of common attributes shared
+across all BPF commands:
 
-Nit: Sorry, I haven't caught that before. tcp_bpf is a built-in. We
-don't need to export this internal helper to modules.
+1. 'log_buf': User-provided buffer for storing logs.
+2. 'log_size': Size of the log buffer.
+3. 'log_level': Log verbosity level.
+4. 'log_true_size': The size of log reported by kernel.
 
-> +
-> +/* Receive sk_msg from psock->ingress_msg to @msg. */
-> +int sk_msg_recvmsg(struct sock *sk, struct sk_psock *psock, struct msghdr *msg,
-> +		   int len, int flags)
-> +{
-> +	return __sk_msg_recvmsg(sk, psock, msg, len, flags, NULL);
-> +}
->  EXPORT_SYMBOL_GPL(sk_msg_recvmsg);
->  
->  bool sk_msg_is_readable(struct sock *sk)
-> @@ -616,6 +631,12 @@ static int sk_psock_skb_ingress_self(struct sk_psock *psock, struct sk_buff *skb
->  	if (unlikely(!msg))
->  		return -EAGAIN;
->  	skb_set_owner_r(skb, sk);
-> +
-> +	/* This is used in tcp_bpf_recvmsg_parser() to determine whether the
-> +	 * data originates from the socket's own protocol stack. No need to
-> +	 * refcount sk because msg's lifetime is bound to sk via the ingress_msg.
-> +	 */
-> +	msg->sk = sk;
->  	err = sk_psock_skb_ingress_enqueue(skb, off, len, psock, sk, msg, take_ref);
->  	if (err < 0)
->  		kfree(msg);
-> @@ -909,6 +930,7 @@ int sk_psock_msg_verdict(struct sock *sk, struct sk_psock *psock,
->  	sk_msg_compute_data_pointers(msg);
->  	msg->sk = sk;
->  	ret = bpf_prog_run_pin_on_cpu(prog, msg);
-> +	msg->sk = NULL;
->  	ret = sk_psock_map_verd(ret, msg->sk_redir);
->  	psock->apply_bytes = msg->apply_bytes;
->  	if (ret == __SK_REDIRECT) {
-> diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
-> index a268e1595b22..5c698fd7fbf8 100644
-> --- a/net/ipv4/tcp_bpf.c
-> +++ b/net/ipv4/tcp_bpf.c
-> @@ -226,6 +226,7 @@ static int tcp_bpf_recvmsg_parser(struct sock *sk,
->  	int peek = flags & MSG_PEEK;
->  	struct sk_psock *psock;
->  	struct tcp_sock *tcp;
-> +	int copied_from_self = 0;
->  	int copied = 0;
->  	u32 seq;
->  
-> @@ -262,7 +263,7 @@ static int tcp_bpf_recvmsg_parser(struct sock *sk,
->  	}
->  
->  msg_bytes_ready:
-> -	copied = sk_msg_recvmsg(sk, psock, msg, len, flags);
-> +	copied = __sk_msg_recvmsg(sk, psock, msg, len, flags, &copied_from_self);
->  	/* The typical case for EFAULT is the socket was gracefully
->  	 * shutdown with a FIN pkt. So check here the other case is
->  	 * some error on copy_page_to_iter which would be unexpected.
-> @@ -277,7 +278,7 @@ static int tcp_bpf_recvmsg_parser(struct sock *sk,
->  			goto out;
->  		}
->  	}
-> -	seq += copied;
-> +	seq += copied_from_self;
->  	if (!copied) {
->  		long timeo;
->  		int data;
+These common attributes are passed as the 4th argument to the BPF
+syscall, with the 5th argument specifying the size of this structure.
+
+To indicate the use of these common attributes from userspace, a new flag
+'BPF_COMMON_ATTRS' ('1 << 16') is introduced. This flag is OR-ed into the
+'cmd' field of the syscall.
+
+When 'cmd & BPF_COMMON_ATTRS' is set, the kernel will copy the common
+attributes from userspace into kernel space for use.
+
+Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+---
+ include/linux/syscalls.h       |  3 ++-
+ include/uapi/linux/bpf.h       |  8 ++++++++
+ kernel/bpf/syscall.c           | 25 +++++++++++++++++++++----
+ tools/include/uapi/linux/bpf.h |  8 ++++++++
+ 4 files changed, 39 insertions(+), 5 deletions(-)
+
+diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
+index cf84d98964b2..729659202d77 100644
+--- a/include/linux/syscalls.h
++++ b/include/linux/syscalls.h
+@@ -937,7 +937,8 @@ asmlinkage long sys_seccomp(unsigned int op, unsigned int flags,
+ asmlinkage long sys_getrandom(char __user *buf, size_t count,
+ 			      unsigned int flags);
+ asmlinkage long sys_memfd_create(const char __user *uname_ptr, unsigned int flags);
+-asmlinkage long sys_bpf(int cmd, union bpf_attr __user *attr, unsigned int size);
++asmlinkage long sys_bpf(int cmd, union bpf_attr __user *attr, unsigned int size,
++			struct bpf_common_attr __user *attr_common, unsigned int size_common);
+ asmlinkage long sys_execveat(int dfd, const char __user *filename,
+ 			const char __user *const __user *argv,
+ 			const char __user *const __user *envp, int flags);
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 2a2ade4be60f..814bd2debd5b 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -986,6 +986,7 @@ enum bpf_cmd {
+ 	BPF_PROG_STREAM_READ_BY_FD,
+ 	BPF_PROG_ASSOC_STRUCT_OPS,
+ 	__MAX_BPF_CMD,
++	BPF_COMMON_ATTRS = 1 << 16, /* Indicate carrying syscall common attrs. */
+ };
+ 
+ enum bpf_map_type {
+@@ -1491,6 +1492,13 @@ struct bpf_stack_build_id {
+ 	};
+ };
+ 
++struct bpf_common_attr {
++	__u64 log_buf;
++	__u32 log_size;
++	__u32 log_level;
++	__u32 log_true_size;
++};
++
+ #define BPF_OBJ_NAME_LEN 16U
+ 
+ enum {
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index ecc0929ce462..27fc73a29b0f 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -6163,8 +6163,10 @@ static int prog_assoc_struct_ops(union bpf_attr *attr)
+ 	return ret;
+ }
+ 
+-static int __sys_bpf(enum bpf_cmd cmd, bpfptr_t uattr, unsigned int size)
++static int __sys_bpf(enum bpf_cmd cmd, bpfptr_t uattr, unsigned int size,
++		     bpfptr_t uattr_common, unsigned int size_common)
+ {
++	struct bpf_common_attr attr_common;
+ 	union bpf_attr attr;
+ 	int err;
+ 
+@@ -6178,6 +6180,20 @@ static int __sys_bpf(enum bpf_cmd cmd, bpfptr_t uattr, unsigned int size)
+ 	if (copy_from_bpfptr(&attr, uattr, size) != 0)
+ 		return -EFAULT;
+ 
++	memset(&attr_common, 0, sizeof(attr_common));
++	if (cmd & BPF_COMMON_ATTRS) {
++		err = bpf_check_uarg_tail_zero(uattr_common, sizeof(attr_common), size_common);
++		if (err)
++			return err;
++
++		cmd &= ~BPF_COMMON_ATTRS;
++		size_common = min_t(u32, size_common, sizeof(attr_common));
++		if (copy_from_bpfptr(&attr_common, uattr_common, size_common) != 0)
++			return -EFAULT;
++	} else {
++		size_common = 0;
++	}
++
+ 	err = security_bpf(cmd, &attr, size, uattr.is_kernel);
+ 	if (err < 0)
+ 		return err;
+@@ -6313,9 +6329,10 @@ static int __sys_bpf(enum bpf_cmd cmd, bpfptr_t uattr, unsigned int size)
+ 	return err;
+ }
+ 
+-SYSCALL_DEFINE3(bpf, int, cmd, union bpf_attr __user *, uattr, unsigned int, size)
++SYSCALL_DEFINE5(bpf, int, cmd, union bpf_attr __user *, uattr, unsigned int, size,
++		struct bpf_common_attr __user *, uattr_common, unsigned int, size_common)
+ {
+-	return __sys_bpf(cmd, USER_BPFPTR(uattr), size);
++	return __sys_bpf(cmd, USER_BPFPTR(uattr), size, USER_BPFPTR(uattr_common), size_common);
+ }
+ 
+ static bool syscall_prog_is_valid_access(int off, int size,
+@@ -6346,7 +6363,7 @@ BPF_CALL_3(bpf_sys_bpf, int, cmd, union bpf_attr *, attr, u32, attr_size)
+ 	default:
+ 		return -EINVAL;
+ 	}
+-	return __sys_bpf(cmd, KERNEL_BPFPTR(attr), attr_size);
++	return __sys_bpf(cmd, KERNEL_BPFPTR(attr), attr_size, KERNEL_BPFPTR(NULL), 0);
+ }
+ 
+ 
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index b816bc53d2e1..c14f9c6a275c 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -986,6 +986,7 @@ enum bpf_cmd {
+ 	BPF_PROG_STREAM_READ_BY_FD,
+ 	BPF_PROG_ASSOC_STRUCT_OPS,
+ 	__MAX_BPF_CMD,
++	BPF_COMMON_ATTRS = 1 << 16, /* Indicate carrying syscall common attrs. */
+ };
+ 
+ enum bpf_map_type {
+@@ -1491,6 +1492,13 @@ struct bpf_stack_build_id {
+ 	};
+ };
+ 
++struct bpf_common_attr {
++	__u64 log_buf;
++	__u32 log_size;
++	__u32 log_level;
++	__u32 log_true_size;
++};
++
+ #define BPF_OBJ_NAME_LEN 16U
+ 
+ enum {
+-- 
+2.52.0
+
