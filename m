@@ -1,136 +1,148 @@
-Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC2733A7823
-	for <bpf@vger.kernel.org>; Tue, 20 Jan 2026 19:54:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768938848; cv=none; b=qm28BUEGMyp6s7jpOE4tL52jESZvOv3yoUuGeqbnFaI/MjAEHb+s0b1l7QMWPEX4mRKtjQ8gu2S32HT9Gu9MGuYXp6OJLCaGyQnVZfbLhyt+UjdaMGeqLrkoZzg8cZcAaDlcgfDsE1+kSG7USXxjYeIs5gS1qb69XLYnF+mxJVw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768938848; c=relaxed/simple;
-	bh=SGry9sh68kwELDKIdJIRRmG29w6MHwsJc9F33zh8doQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=amfLWUsOkKAGJJuFvx+/w51WJ61RFxPkHvRApiIyVJVd2Uio3YaBuDepEDQ2qEuxtbKF9eEuityiiQq/z5YPtgao0R/1TWvBTwsdHNJeIRzlzCwfZsMO1QEWcCOYH1M565NI2NICG0iEBF5EBZr2IID1h5oe0dwTWWedsAvgiXo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=tK66K6ie; arc=none smtp.client-ip=91.218.175.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 863B3345CA5
+	for <bpf@vger.kernel.org>; Tue, 20 Jan 2026 21:04:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.48
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768943055; cv=pass; b=BB+/thnqCkwpUvemQQKnqVqYpO8+YguViPhVMiFQa+Wcoe4Ic7j5LWeEslOZENUOFR0U3z/gM2BKYEez5kqU/pP6UnQYUBmD8FVAgGTVuu9gA71fMh5YIDzB2JMyKHk87cfZ6YdB96v1viKfFBMbwOhLqhjG6oobiJCuQAVqGgI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768943055; c=relaxed/simple;
+	bh=Ts1jxwUKhSUgqpDTCGEAc2n5xXWvl8SdC5x8YUX0Tz4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=TyWJ7LNmysLrG8GSPwsMTF5m5/nT97/+mKMvLsly72XU7Nwmw2HU6u66tumvPBLdRSx5Pny+8C4hK6I39vjfk/9Qb8B+M2lfCEA730dmiPp7APKBdEMJRMyzRto0ghXffr3tWG62WShTWn/uTTgMIleijs3lKPvVtZUmjdGknJ8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZAzMG+ga; arc=pass smtp.client-ip=209.85.221.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="tK66K6ie"
-Message-ID: <5364d5ec-f30c-40d6-9a99-c251fec3868c@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1768938829;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ZUGtXQFZZ4O5fl2DGSy010+08iBrE+9BMYtw/44nDN8=;
-	b=tK66K6ieZW/6AujEvyXa7Fb5DjfKqaHcN7mWRzk9XVYfBw5U03m0upAbyWalvExZMDNdJ7
-	yynJ6VazMS9wdVDiTeayNZEUMoXhhNuKDo8tP+kB5Nkgehq31elNQlwElPB1EwfxaGg9tr
-	pFhOqdrz5CKiTzUOZTROAEjuBP+AQHs=
-Date: Tue, 20 Jan 2026 11:53:42 -0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZAzMG+ga"
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-4359228b7c6so654063f8f.2
+        for <bpf@vger.kernel.org>; Tue, 20 Jan 2026 13:04:13 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1768943052; cv=none;
+        d=google.com; s=arc-20240605;
+        b=F4F1kRtEqhOTq0r7Sw7w3M79iB61ASeI5a0RI8W4uvE8mG2V2QIBg/1B/azCRXdXvV
+         mCzY50ZaRqYmSe4Xv106GHmeLEjOa4tnqkibkztcyX0+/dKSQAYBZNbmeQAMBPxtriJF
+         hkFNT6Yn9IAt1MiI4BdAGLwGuivhPnzRNEoARpuIcg64tYpSMuoR1uQwlaa1uBqbAQ1V
+         WccT/GMwA9aJPSJdiOaaJLrp/Oh7cWge06sMypr+mZlOLTFwIkigmXX8PHhJs6SpSQuP
+         J7555Aml0pu0vo0lY+dqbLZGxXwSxh0BXkPwo1Ms2jlZMKgY0AWy6gSAcDe9qDWr2CgS
+         dvUA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=pzzZDPd4jb3WfjctUiFBbJuKkbeF/iPpCm3WW/SQRp8=;
+        fh=Hn1KVsLV/tblPOKRgacAYI4Cl9KT5a5T5FeT6fAkmjA=;
+        b=ljnXKe2HgTSNCVuqsnKRVfDxGKTUVg65p9/2eX34ItanfrHV0iMCuClr9B3BSnuQQC
+         RE49CN/zXvW9IVw23gouug4ymW8qJeXW32FiYtPszqISqjgXwQBdIouzWb4o5Fbx7TKu
+         H30Qo6uCFmOryTiRXqV2murN8VroVjTlLgARNfRfaqbbprswWahsUdbYCnL131mb0nUq
+         4tQ4ryYaWIJrFxlWgCbc24qhXuCHlBCkv35//lU0pBlFKbBG6G1oj0fLT/le9inFDKPQ
+         pI9rFSZsJKt9YVPQlwhckZqaFf53gNQmSnZmlnL2+aJ6ikl6B0OpJGix+nAtoFodpUwL
+         QtQQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1768943051; x=1769547851; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pzzZDPd4jb3WfjctUiFBbJuKkbeF/iPpCm3WW/SQRp8=;
+        b=ZAzMG+gaMM4cf2RqlCF5/1cSxBBkzCtMIA3xVV5bzPHDgvJ3xGw1G+S7S2HTfFf2+G
+         tGY0lXZKMwItABpyWOnFgOy/EX5o+lK01qWN9c4DTmXV4t3qcDlVK6vS/O8/Iaqe4P2f
+         xEyHV0HjfKZpEKksYCylIgoaFCxLFPcJ7PnMCIhxsVvfbcAO/ImW4nthIsoR6HYO1EFA
+         yopj7pp8Q0yK31zifeytKQ7VkjW598errr0TZ6YRyYHMowCXKi4GpRSNetYeSXBAMJ9m
+         EHhvcK6FmTXsr7l588EMpf32HHOp+OHYoZIkHm4bKkJD1ix6jQuOyMggnUscLwBSxLcb
+         A3rw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768943051; x=1769547851;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=pzzZDPd4jb3WfjctUiFBbJuKkbeF/iPpCm3WW/SQRp8=;
+        b=blMtpvNvtlTlbFn/J2CNZtE5iRvcasJI9JRv609CNyr9olcSIWOaCsVN3NdOu4CtV7
+         yVBQIWZmxM6uKyKPgngeNGP479jlj9YgyE1vl3kCpmYbzjmRcV11FJRlDy0RSflgmY9D
+         qDFWUNAJlbu4J+Nemw/Sg2myqb3aMzNPlrLUU/elQVlyw0i4VmygJrbdabzDhT4I3Dd0
+         7QBDJdlhH1e3q9DUVewcHQ5g6lS2k1y8qxfGcL7F30t3RLn6bJHw30VOMb0/eyMRbdu3
+         FIcab/Q5hweZI3bwEcbRiYSjoR6Rk6PJr4HvW2Aw1gckkvN6W7/75na73lhtc1ZUjj5U
+         ViIw==
+X-Forwarded-Encrypted: i=1; AJvYcCVo/KTwAeG9UYe8+/N2BhNolHv/SiVOxZuQkRNGvSXFMpxst4nJDjtmHfzpe2R6YSnO0SE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyQOjU+YgHZoSZnXcFO02uaXvzfslNeMWzg/nSFvg89L6zyde5S
+	0gpiJVK9V/VVdBR2kyHibrNTMGOMCHfjBB+0wgXUYoAm+RTK8n3Z2wdJayOdQD/w2Jz9o+gtCxM
+	aZY7CA7OSZNlrqfb2nKoJP7WNT0WaXBQ=
+X-Gm-Gg: AZuq6aINiPetHVtY1WJNU5OADrBgWRZpytuXktxF+xxg5Obz3DoRVTRSwucKe4R88AF
+	nHupMrgB4oCGI/1nWBqrgTRsfpXOM/YPadhbtKJ2zxvl8djNLodp2JZuefBGFJHmOkmDTvwpLdO
+	cotVlrvYq1l4Ul49bggMT/01kkMj0wjCIL8frdTEi9Wfh5+3iPrP3Dlf6GsgB6p4cCO776eK+tC
+	TG+7UUkdj2uIzDVFq/g9yZUzL2MyPCP1YOHWDSXUiLrIVi9PZCanWQwANVk4I9NyI+O1GHSinEu
+	8pr4XQRsM2UkyK1uSXStqCMJS51RazDDctiVidvj/IeQvypI0VVHwqMEnu9ItNmO7BJBqM8R8CM
+	rxIrmCNciOJS3Vw==
+X-Received: by 2002:a05:6000:18b:b0:435:94c4:649c with SMTP id
+ ffacd0b85a97d-43594c4658bmr2717394f8f.30.1768943051414; Tue, 20 Jan 2026
+ 13:04:11 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH] scripts/gen-btf.sh: fix shebang for NixOS
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
- Gary Guo <gary@garyguo.net>
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260120182034.3647092-1-gary@kernel.org>
- <b53ee085-d9d2-4365-a5bc-d61e2bce97f8@linux.dev>
- <DFTNNQLGB1CS.2HDOGB99S9ACP@garyguo.net>
- <ea83b91a-796c-4329-bcf5-2c49efa897fc@t-8ch.de>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <ea83b91a-796c-4329-bcf5-2c49efa897fc@t-8ch.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+References: <20260119085458.182221-1-tangyazhou@zju.edu.cn>
+ <20260119085458.182221-2-tangyazhou@zju.edu.cn> <57dbe0b62e2cf0370f90825f9508c466cd673704.camel@gmail.com>
+In-Reply-To: <57dbe0b62e2cf0370f90825f9508c466cd673704.camel@gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Tue, 20 Jan 2026 13:03:59 -0800
+X-Gm-Features: AZwV_Qjd6CnSpX5iS38uP-qpLemsIwuVpgInUr2ejwO3zZeWv6wEaCA6cbAGQoU
+Message-ID: <CAADnVQ+xyTTweTV3Kud5zPdRtcQkXEv9iYMQXyc_rc8_Jzunbg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v5 1/2] bpf: Add range tracking for BPF_DIV and BPF_MOD
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: Yazhou Tang <tangyazhou@zju.edu.cn>, bpf <bpf@vger.kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Yazhou Tang <tangyazhou518@outlook.com>, Shenghao Yuan <shenghaoyuan0928@163.com>, 
+	Tianci Cao <ziye@zju.edu.cn>, syzbot@syzkaller.appspotmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 1/20/26 11:38 AM, Thomas Weißschuh wrote:
-> On 2026-01-20 19:15:11+0000, Gary Guo wrote:
->> On Tue Jan 20, 2026 at 6:59 PM GMT, Ihor Solodrai wrote:
->>> On 1/20/26 10:20 AM, Gary Guo wrote:
->>>> From: Gary Guo <gary@garyguo.net>
->>>>
->>>> NixOS only puts /usr/bin/env and /bin/sh at the standard location as
->>>> required by POSIX, but not other shells. Other program that kernel build
->>>> depends on is supplied via PATH, so shebang needs to use /usr/bin/env to
->>>> find them.
->>>>
->>>> This has been done to a few other scripts already, e.g.
->>>> gen_test_kallsyms.sh or decode_stacktrace.sh.
->>>>
->>>> Fixes: 522397d05e7d ("resolve_btfids: Change in-place update with raw binary output")
->>>> Signed-off-by: Gary Guo <gary@garyguo.net>
->>>> ---
->>>>  scripts/gen-btf.sh | 2 +-
->>>>  1 file changed, 1 insertion(+), 1 deletion(-)
->>>>
->>>> diff --git a/scripts/gen-btf.sh b/scripts/gen-btf.sh
->>>> index be21ccee3487..4cd3159f2ddb 100755
->>>> --- a/scripts/gen-btf.sh
->>>> +++ b/scripts/gen-btf.sh
->>>> @@ -1,4 +1,4 @@
->>>> -#!/bin/bash
->>>> +#!/usr/bin/env bash
->>>>  # SPDX-License-Identifier: GPL-2.0
->>>>  # Copyright (c) 2025 Meta Platforms, Inc. and affiliates.
->>>>  #
->>>>
->>>> base-commit: 053966c344dbd346e71305f530e91ea77916189f
->>>
->>> Hi Gary, thanks for the patch.
->>>
->>> I'm guessing this came up because gen-btf.sh is part of the vmlinux
->>> build, and link-vmlinux.sh has #!/bin/sh (not bash).
->>
->> My typical experience is that when I see an error about /bin/bash not found, I
->> just use "bash <script path>" instead without putting much think into it.
->>
->> gen-btf.sh is part of build so I don't get to invoke the script directly, hence
->> the patch.
-> 
-> For the build we have $(CONFIG_SHELL) to stick before the script.
-> It is only 'sh', but it is the well-known variable users know to
-> override. IMO all script invocations should use this mechanism.
+On Tue, Jan 20, 2026 at 10:51=E2=80=AFAM Eduard Zingerman <eddyz87@gmail.co=
+m> wrote:
+>
+> On Mon, 2026-01-19 at 16:54 +0800, Yazhou Tang wrote:
+>
+> [...]
+>
+> Hi Yazhou, Alexei,
+>
+> Sorry for chiming in late in the series.
+>
+> > diff --git a/tools/testing/selftests/bpf/progs/verifier_value_illegal_a=
+lu.c b/tools/testing/selftests/bpf/progs/verifier_value_illegal_alu.c
+> > index 2129e4353fd9..4d8273c258d5 100644
+> > --- a/tools/testing/selftests/bpf/progs/verifier_value_illegal_alu.c
+> > +++ b/tools/testing/selftests/bpf/progs/verifier_value_illegal_alu.c
+> > @@ -173,14 +173,15 @@ __naked void flow_keys_illegal_variable_offset_al=
+u(void)
+> >       asm volatile("                                  \
+> >       r6 =3D r1;                                        \
+> >       r7 =3D *(u64*)(r6 + %[flow_keys_off]);            \
+> > -     r8 =3D 8;                                         \
+> > -     r8 /=3D 1;                                        \
+> > +     call %[bpf_get_prandom_u32];                    \
+> > +     r8 =3D r0;                                        \
+>
+> I suggest we special case `rX /=3D 1`.
+> Maybe in the is_safe_to_compute_dst_reg_range().
+> This is an old trick that might be used in the wild.
+> And optimizer should remove any such instructions when compiling from C.
+> So I don't think adding special case here would hinder verifier versatili=
+ty.
 
-There are two places where gen-btf.sh is invoked.
-
-In link-vmlinux.sh:
-
-	if ! ${srctree}/scripts/gen-btf.sh .tmp_vmlinux1; then
-		echo >&2 "Failed to generate BTF for vmlinux"
-		echo >&2 "Try to disable CONFIG_DEBUG_INFO_BTF"
-		exit 1
-	fi
-
-And in Makefile.modfinal:
-
-quiet_cmd_btf_ko = BTF [M] $@
-      cmd_btf_ko = 							\
-	if [ ! -f $(objtree)/vmlinux ]; then				\
-		printf "Skipping BTF generation for %s due to unavailability of vmlinux\n" $@ 1>&2; \
-	else	\
-		$(srctree)/scripts/gen-btf.sh --btf_base $(objtree)/vmlinux $@; \
-	fi;
-
-So it's trivial to put $(CONFIG_SHELL) in front of it. But then it
-must be migrated to #!/bin/sh, right?
-
-
-> 
-> 
-> Thomas
-
+and to standardize now and forever that /=3D1 makes it unbounded?
+I'd rather not. JITs don't special case the divisor 1 and in runtime
+the /=3D1 trick is quite costly. Integer division is the slowest instructio=
+n
+on any CPU architecture.
+We have few selftests that adopted that trick, but let's not continue
+and not encourage it going forward.
+Let's figure out a different way to tell the verifier that the scalar
+is unbounded.
+I suspect ^=3D0; ^=3D0; will destroy the bounds just as well
+and will be fast to execute.
