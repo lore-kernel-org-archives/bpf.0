@@ -1,144 +1,119 @@
-Received: from mail-dl1-f54.google.com (mail-dl1-f54.google.com [74.125.82.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp-42ad.mail.infomaniak.ch (smtp-42ad.mail.infomaniak.ch [84.16.66.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E59C73A0B3F
-	for <bpf@vger.kernel.org>; Tue, 20 Jan 2026 21:54:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8E873491E1
+	for <bpf@vger.kernel.org>; Tue, 20 Jan 2026 21:55:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.66.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768946059; cv=none; b=MnJ1JZJ96iUrDZ9b/ObER/pXAMNFYFZ+5iNF76LPS1lma3hthFwh0DQrYKLJB9VwojExbaKkWHDdIH9fN+5FuJvoD/tZ1JuzNkCFXI8188BqC1IBcCGhoecsPbCIJrL+eATvXMbyAv6r0vUFsm7xx8JsoJSOkyoPv7AnRvHNw4w=
+	t=1768946113; cv=none; b=CtrDkkM39yD2hLE2rHepl8JHEqSge9el2TqFa6wYE33UJfG3iDlrPCtF1AhvokLwRirvoFGle2QXKs+qHQANLeJq9EC34E9QqqFDE1NvOp7FerPtQJx1sXFuMCYgxraiiRYCc/8pg22athYFGrVCcj7V+RHn5vwgX6vu4wjRqh4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768946059; c=relaxed/simple;
-	bh=9d53jm34GSkgS994xvMdTstlDJIh/vpxoaBJ/AGCsyU=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=dcOvLQJcMiZDNe19rOv73w/15UbkwGhf50mJ4KJ4gXcyA+Sa2cOCsLDpmiq4fzZl51Nu6wb7hmpzbpZMIq2UyAXDwOf/VEtaUP0WpmZZW1uwu90oZAM7eO2S1xL4XQV7zWOLd/iU8eJwAO6kvSQJZM9zD0AmfFNgW6RqtMl+CpA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CiveW+a2; arc=none smtp.client-ip=74.125.82.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1768946113; c=relaxed/simple;
+	bh=AwHUD+rXuhKyKmXPrdQZrRAZDbCQlrWch9VuSW3eH3Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UQPXfQj/g0LYphBUOaBhcX/bi3ywFn8Nr47IxQz2wO1P3k3BEvUxeAD5xodOQ4SGrrb8nSopp1Ni7MFXzQWDAy4NOSZXsu8Zu65eoe3w7vxuNrI7uOGt6KOJhRvY4rNLzFZvnyZfr38sViyXP1hTtW/o2Ucf9fn3CEUgH7ffFrY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=WcCwNIfl; arc=none smtp.client-ip=84.16.66.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CiveW+a2"
-Received: by mail-dl1-f54.google.com with SMTP id a92af1059eb24-1233bb90317so277340c88.1
-        for <bpf@vger.kernel.org>; Tue, 20 Jan 2026 13:54:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768946057; x=1769550857; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=YBWwpE5S/GwpjdaYQMyUayEfLLhx8fmsH84EIn3zr7c=;
-        b=CiveW+a2DPNaicjjFpvrr6JYYllsK3XtXaucE6ns0+8Duq2wCPyQhPeJEabdC4UesK
-         du49DOHB/y4jX67M5GF27ZLXPNjy3UAZBdKmm3hS0nBJSUq4wlSS5G3B8mv9EmDwoa7s
-         d7CrI0fZxrNGMNrdVxwKLJYQhPp45F0Ot3rKGnDMsnO7D4y3HkvWjTK18FAc1gcMgJpH
-         pdmHHUNkFA0ieNElLlDYuYi2wSXBUCeOUf/tprh2gkwv74l3d9QcTfogL34qNCRwGTue
-         MNq4F4LBuu1pcnw4HeKps3DbG3FmGbqOJg/9XZL8zrEzxxPKFNRPBA/UxMAfkd3n+Rze
-         Jn5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768946057; x=1769550857;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YBWwpE5S/GwpjdaYQMyUayEfLLhx8fmsH84EIn3zr7c=;
-        b=a2kXy2aAYp3FEywz8wYG8sGgsLoIrEnZOBwWtSgyebOXEJld+UsPC3DPFbd5YKoj7Z
-         PlVRAPF1FH1j+jfnygDQok+4+J4JgIlato+WZ8ZqGtMw6xePjTRgdDIvn7R7+M9MKimn
-         3K/SVt1yvxHe37fcdJqg/OK4NejTFZfw9jq00gmCm8jsVrcegCQCP6TKjL0QbJnuehs8
-         4BfliIZX0n2iSjoskEh2KgHGHMYfRCLkGrFNHA4dMhEFjCFP2v8HE7FRiWBSyN4KQZgK
-         l2pJ9JBG8lOU+33I33BpMBmoi35vbPP7aQytCjx1F5wSleJ58r+oGFPk99PkrScehQIz
-         0DAw==
-X-Forwarded-Encrypted: i=1; AJvYcCXVJyMZ+y+vl8Yw9H6pbzAzNclmaPEHrIzHNWNhr3xFj1ODQop0p3zRAVsI9oOit05RNiU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzeqdkUljTcG+Tp4XK2T30P9AsNLta2vpo2VWThWB37sKmF/Kxq
-	w9VUJg8nml42Ci2zDnLkW1/EJ0xuxFfre6puHKtdbmZn8JcmJV+SDlQN
-X-Gm-Gg: AZuq6aIGnCChamwnnTdsRkzzXXoATeJYyCVPBqqybgbbxE/jSZaYFineHU/gkHGzM9L
-	1rVaKkHAeHnVa2ydpVI1VHeC3r25vGhZyQgQGtATmBp9yq3ydxGhh8DnG9807np+3fNX0IrQBzd
-	t3LyBcijj3QMVFNbqyvx4mmeo5iOUUy3WJptaxmDbilyPuwcq9bb8kioa8upwEmvBqtqDOuaS0R
-	I1DCS+fLBCupkWxBsxoFi5Lq0Ptj9Qw2Hj7h7gRUzR+7gKRipgPQvJ0sFWmxqmH3tshjjzd82JT
-	zKVGTVXerYLGI2vcG4S3gzqbSeI3AgzZddjEKVmHl2SaDKoAWj6i9/vtp78yyjRWBfrL4bLUHf1
-	zB5FTMBWcGC7Uuhdv3mlUyWdCYccjwVcg0ljsbVUHJ2ljDJ7bBX1BFsjl3wPKcL8MYMyBmwZFIS
-	i44tbUEj4oFBJmhLjjz9LzXMNXWya7YW4jgOenN8PtMOBja6hyWAgfCEaw9j6GlearvPci
-X-Received: by 2002:a05:7300:a507:b0:2a4:3593:ccbb with SMTP id 5a478bee46e88-2b6b3468fecmr12408923eec.2.1768946056600;
-        Tue, 20 Jan 2026 13:54:16 -0800 (PST)
-Received: from ?IPv6:2a03:83e0:115c:1:6a7d:961b:9e54:4392? ([2620:10d:c090:500::2:634c])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b7102fd2efsm757052eec.12.2026.01.20.13.54.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Jan 2026 13:54:16 -0800 (PST)
-Message-ID: <acada74ba15f0aaeede2440ff68916f3fbfa7da9.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v5 1/2] bpf: Add range tracking for BPF_DIV and
- BPF_MOD
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Yazhou Tang <tangyazhou@zju.edu.cn>, bpf <bpf@vger.kernel.org>, Alexei
- Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, John
- Fastabend	 <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,  KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,  Jiri
- Olsa <jolsa@kernel.org>, Yazhou Tang <tangyazhou518@outlook.com>, Shenghao
- Yuan	 <shenghaoyuan0928@163.com>, Tianci Cao <ziye@zju.edu.cn>, 
-	syzbot@syzkaller.appspotmail.com
-Date: Tue, 20 Jan 2026 13:54:13 -0800
-In-Reply-To: <CAADnVQ+xyTTweTV3Kud5zPdRtcQkXEv9iYMQXyc_rc8_Jzunbg@mail.gmail.com>
-References: <20260119085458.182221-1-tangyazhou@zju.edu.cn>
-	 <20260119085458.182221-2-tangyazhou@zju.edu.cn>
-	 <57dbe0b62e2cf0370f90825f9508c466cd673704.camel@gmail.com>
-	 <CAADnVQ+xyTTweTV3Kud5zPdRtcQkXEv9iYMQXyc_rc8_Jzunbg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.2 (3.58.2-1.fc43) 
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="WcCwNIfl"
+Received: from smtp-4-0001.mail.infomaniak.ch (unknown [IPv6:2001:1600:7:10::a6c])
+	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4dwgrd52Bmzg9t;
+	Tue, 20 Jan 2026 22:46:41 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
+	s=20191114; t=1768945601;
+	bh=CUnC6gBg1b8DZjIFRJjoz21kw+O4IDvw1ZCQ7hb32w0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=WcCwNIfltvas3I8WkaxOw4+8cb98Kkmo+ZF7qsZUr3tX3je8MAfeFMOjr92TJkrD7
+	 XHcq1YNheRGDGLozfVE6lbHz+Sh1sEIyypT2HGH9iGOunB8tq0HyME1MLnr3r6W7tB
+	 iUtAbnd0WOsULgDiW94Mr0CTZWRkmIpnuHhdLSR0=
+Received: from unknown by smtp-4-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4dwgrb45vZzqrp;
+	Tue, 20 Jan 2026 22:46:39 +0100 (CET)
+Date: Tue, 20 Jan 2026 22:46:34 +0100
+From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
+To: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+Cc: Eric Dumazet <edumazet@google.com>, 
+	Kuniyuki Iwashima <kuniyu@google.com>, Paolo Abeni <pabeni@redhat.com>, 
+	Willem de Bruijn <willemb@google.com>, "David S. Miller" <davem@davemloft.net>, 
+	Jakub Kicinski <kuba@kernel.org>, Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	Matthieu Baerts <matttbe@kernel.org>, Mat Martineau <martineau@kernel.org>, 
+	Geliang Tang <geliang@kernel.org>, =?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-api@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>, linux-kselftest@vger.kernel.org, 
+	mptcp@lists.linux.dev, linux-security-module@vger.kernel.org, bpf@vger.kernel.org, 
+	libc-alpha@sourceware.org, Carlos O'Donell <carlos@redhat.com>, 
+	Adhemerval Zanella <adhemerval.zanella@linaro.org>, Rich Felker <dalias@libc.org>, klibc@zytor.com, 
+	Florian Weimer <fweimer@redhat.com>
+Subject: Re: [PATCH net-next v2 2/4] selftests/landlock: Move some UAPI
+ header inclusions after libc ones
+Message-ID: <20260120.ahGaepheZah8@digikod.net>
+References: <20260120-uapi-sockaddr-v2-0-63c319111cf6@linutronix.de>
+ <20260120-uapi-sockaddr-v2-2-63c319111cf6@linutronix.de>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260120-uapi-sockaddr-v2-2-63c319111cf6@linutronix.de>
+X-Infomaniak-Routing: alpha
 
-On Tue, 2026-01-20 at 13:03 -0800, Alexei Starovoitov wrote:
-> On Tue, Jan 20, 2026 at 10:51=E2=80=AFAM Eduard Zingerman <eddyz87@gmail.=
-com> wrote:
-> >=20
-> > On Mon, 2026-01-19 at 16:54 +0800, Yazhou Tang wrote:
-> >=20
-> > [...]
-> >=20
-> > Hi Yazhou, Alexei,
-> >=20
-> > Sorry for chiming in late in the series.
-> >=20
-> > > diff --git a/tools/testing/selftests/bpf/progs/verifier_value_illegal=
-_alu.c b/tools/testing/selftests/bpf/progs/verifier_value_illegal_alu.c
-> > > index 2129e4353fd9..4d8273c258d5 100644
-> > > --- a/tools/testing/selftests/bpf/progs/verifier_value_illegal_alu.c
-> > > +++ b/tools/testing/selftests/bpf/progs/verifier_value_illegal_alu.c
-> > > @@ -173,14 +173,15 @@ __naked void flow_keys_illegal_variable_offset_=
-alu(void)
-> > >       asm volatile("                                  \
-> > >       r6 =3D r1;                                        \
-> > >       r7 =3D *(u64*)(r6 + %[flow_keys_off]);            \
-> > > -     r8 =3D 8;                                         \
-> > > -     r8 /=3D 1;                                        \
-> > > +     call %[bpf_get_prandom_u32];                    \
-> > > +     r8 =3D r0;                                        \
-> >=20
-> > I suggest we special case `rX /=3D 1`.
-> > Maybe in the is_safe_to_compute_dst_reg_range().
-> > This is an old trick that might be used in the wild.
-> > And optimizer should remove any such instructions when compiling from C=
-.
-> > So I don't think adding special case here would hinder verifier versati=
-lity.
->=20
-> and to standardize now and forever that /=3D1 makes it unbounded?
-> I'd rather not. JITs don't special case the divisor 1 and in runtime
-> the /=3D1 trick is quite costly. Integer division is the slowest instruct=
-ion
-> on any CPU architecture.
-> We have few selftests that adopted that trick, but let's not continue
-> and not encourage it going forward.
-> Let's figure out a different way to tell the verifier that the scalar
-> is unbounded.
+On Tue, Jan 20, 2026 at 03:10:32PM +0100, Thomas Weißschuh wrote:
+> Interleaving inclusions of UAPI headers and libc headers is problematic.
+> Both sets of headers define conflicting symbols. To enable their
+> coexistence a compatibility-mechanism is in place.
+> 
+> An upcoming change will define 'struct sockaddr' from linux/socket.h.
+> However sys/socket.h from libc does not yet handle this case and a
+> symbol conflict will arise.
+> 
+> Move the inclusion of all UAPI headers after the inclusion of the glibc
+> ones, so the compatibility mechanism from the UAPI headers is used.
+> 
+> Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 
-Fair enough.
+Reviewed-by: Mickaël Salaün <mic@digikod.net>
 
-> I suspect ^=3D0; ^=3D0; will destroy the bounds just as well
-> and will be fast to execute.
+Thanks!
 
-scalar_min_max_xor() tries to compute min and max,
-does not nuke register state.
-Andrii suggested adding a kfunc or instruction for this purpose some
-time ago. Anyway, that's unrelated if we don't want to keep /=3D 1.
+> ---
+>  tools/testing/selftests/landlock/audit.h | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/landlock/audit.h b/tools/testing/selftests/landlock/audit.h
+> index 44eb433e9666..c12b16c690dc 100644
+> --- a/tools/testing/selftests/landlock/audit.h
+> +++ b/tools/testing/selftests/landlock/audit.h
+> @@ -7,9 +7,6 @@
+>  
+>  #define _GNU_SOURCE
+>  #include <errno.h>
+> -#include <linux/audit.h>
+> -#include <linux/limits.h>
+> -#include <linux/netlink.h>
+>  #include <regex.h>
+>  #include <stdbool.h>
+>  #include <stdint.h>
+> @@ -20,6 +17,10 @@
+>  #include <sys/time.h>
+>  #include <unistd.h>
+>  
+> +#include <linux/audit.h>
+> +#include <linux/limits.h>
+> +#include <linux/netlink.h>
+> +
+>  #include "kselftest.h"
+>  
+>  #ifndef ARRAY_SIZE
+> 
+> -- 
+> 2.52.0
+> 
+> 
