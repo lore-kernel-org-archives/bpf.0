@@ -1,165 +1,225 @@
-Received: from mail-dy1-f182.google.com (mail-dy1-f182.google.com [74.125.82.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from devnull.danielhodges.dev (vps-2f6e086e.vps.ovh.us [135.148.138.8])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E69934B194
-	for <bpf@vger.kernel.org>; Tue, 20 Jan 2026 18:40:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84C08328B77;
+	Tue, 20 Jan 2026 18:47:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=135.148.138.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768934408; cv=none; b=NECb94aX/WdpBX0qGERL+i6GQ3ba/pB7AYKnX7Nn9Y39QC5jpjujiW3+hmjsiRq+BDK1AqPB1o5O2Hn/EUQgWTHlD77HEvSCOdsN8cVEjKxslrWigN2JQAKaBH5HHSSbSUf2f+74fRh+eILmvDf9m840zTEApUmjp1jhrcP1fjc=
+	t=1768934842; cv=none; b=RuC/U8WGjCy/J16QFNcyNpb5ZCk8fTC8blh7OHwPuuSTfya8Atu3Fhxi5cKySxTjJ9p+VpSyCJRN57dQTv3jM6qf5eD+eEc5yM9R5mF47oZL54X2WR9WOnmGJ4USCCjg5LtR+YqpNIuIxZh6e7E3BGDhVzT1l4GJDA+BoRITEVQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768934408; c=relaxed/simple;
-	bh=BuQ1ShCKV2TIwR4iKcKAM95usz7/aYLJ9oCUKkNrd8I=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=VQ1X3KxRJzAktROHEBpinUKgfMDVjXFLSvsCxEX2KWyVp39w7K1u+iYvXPz0MBEKk/XKPQbitPETXwqrjRTn1nc7dfiYKVtwYeFUKU0giDv+wMGZrlKxxyAmq0Ddb0foQw/9tM4nDGWKXxFoVE2oOkrvtBmV2Y216JQY/Hz29B8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CUTs/nPr; arc=none smtp.client-ip=74.125.82.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1768934842; c=relaxed/simple;
+	bh=qCVuNNAjSm2ZryoOADn8nw2wzLohyxAWfpXZDz/Ghu0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=sweCWGp+DXLw9/Ka7ds/CQRamAO1VLbXAEUZmFViSscUw9KqnCWdnSua5aS5zAYK5qsfHpYTauOI9nCaXJX2DsojZDLeMRiPZjk5jO12UZ8Azl016FeZ0TX51JyzWdSnbvtWkfi0BG2u0sKJsl6qXq2uZr1jbASe36m5Bb6e6UA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=danielhodges.dev; spf=pass smtp.mailfrom=danielhodges.dev; dkim=pass (2048-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b=R2rVd4f0; dkim=permerror (0-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b=lnYnsnre; arc=none smtp.client-ip=135.148.138.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=danielhodges.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=danielhodges.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CUTs/nPr"
-Received: by mail-dy1-f182.google.com with SMTP id 5a478bee46e88-2b0ea1edf11so10609918eec.0
-        for <bpf@vger.kernel.org>; Tue, 20 Jan 2026 10:40:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768934406; x=1769539206; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=LeeG+LydMx9pdpEIlKwJIXhJ7Lz8QyFbhhTyyId5je0=;
-        b=CUTs/nPr3Zbf9YvGWz94tNQCdWKTx0iOYEhqJbDnJWcva067NHTDRqYDhfHZec2ZgJ
-         nc1aCETo5oNJY5oCT9GJs6FoSviJN7j5bs28Y5FOgtBYTOvbS/UtnH3c4uNp4HgowLUY
-         XxVmPbhn8EWqxdHCy3hMRXTMLn2XMD8bUWfYSJvdi7qj+mhesDrB7A4unIn0qxR01AMc
-         92Yop6qSWAMREAJ4QJ++1EWEm/Ue7HO4WmO+x5I6xxagTaUYkPPwpt6UKDKs8U//inum
-         xAi2bWgHPsQp2iy/JxVnl/Jd4hnRodJizkC7VesTY1GCT8pL62/trv4rXnWvjcbrJfhW
-         yCgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768934406; x=1769539206;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LeeG+LydMx9pdpEIlKwJIXhJ7Lz8QyFbhhTyyId5je0=;
-        b=jhnQxZg7kq4d5Fgs+YDjdD0dTfraEnTBT2hsCU/1lw/zUEP+RPoZAtQ19aEDyD2UHJ
-         McH954eKj9fkO0xTZIJ6OXFpIxE1DDRplhKYNOM+VI7OTlczimPBEP7gLU7EHKCTwivu
-         FoBfLAnnN4SK6gjhjeYwnWGcHPDntmY2VhITRiC8lHpjpy0ZHRdG8cSdBSo6P+YVbUMF
-         /VXSVrPn5BOj3PSuk2zzO55r2BizJToLLx1FhahW+roPHd+bBQR05rRoSI8ZN3fN6bY3
-         //6X/KP0NL1sUvssgrXL2G74Tp2KLS00DHJTtE3+Qv8puujgyA572zNlDi30HV11Pirn
-         bE+A==
-X-Forwarded-Encrypted: i=1; AJvYcCXj9oaSDssCnzizcYW1I7fuDFH4o4Jan+luGNQ1RxdGlaSyiR+NH+7dNqL7MYVwwm/HK3o=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwN8PIfmk13g6g68PNNyxohiNw4o2G5qjXqG4opKC62ItlNh1WJ
-	YVWQI5knbBoF1sVqr6vxzGMNo9pejj2LW3FSaaGkjRaKkWXEoHEwl+km
-X-Gm-Gg: AZuq6aJ34JOMPZ171zr812JTEkqXgqj4OoczY8ZtaYViWiOn6+A9pnRfIJ0wJ6Q9UtF
-	skPukGeVO7wU6qDjfN+qq7JS4Xrg0BFpEgikpfdibA5A0TGeb2pjpJzmu9aZKOoUz6ZT/KXvnIk
-	nwNQviSP+fZmTv2pcdCIxarquZyG0uoqQHj67a/adzIQSwV2dYHsTowN0Or5uH1uTW3/VXnuKwv
-	NRhmFXQR41JoZOO70zVYKrYY43b13SV6iD4pTPPg2+rb7Z465OvNk8Fk0Xo9otFTEnJkHJgalkK
-	bkKvKl4T3sKxfiKpMbCS1RLgtRSayJxydHohlY0n7RGGHZEO0YtnXNWv5er0AlD9ILkhqra8TUV
-	n1eMhGx6jquNta3c6xQl4e3QN2LGgo2044SqoiuCsW9b3cnFynAnTpQ+JlTRn3GDu1Jt5wjJsgL
-	V7bQ8GMn9jIJ/wu0miWzR2E3j4cjUrwJhOx7wrvH24yNNe6u78jDb74jHLln0nxmK38OjheoRcV
-	eJf2ew=
-X-Received: by 2002:a05:7300:8188:b0:2ab:c284:d5d2 with SMTP id 5a478bee46e88-2b6b4e2841emr10118777eec.4.1768934405935;
-        Tue, 20 Jan 2026 10:40:05 -0800 (PST)
-Received: from ?IPv6:2a03:83e0:115c:1:b08c:bb3d:92b9:704d? ([2620:10d:c090:500::3:93b1])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b6b3502d22sm18159145eec.10.2026.01.20.10.40.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Jan 2026 10:40:05 -0800 (PST)
-Message-ID: <45b3df2a1b83a90c134b265ecd713731173556f0.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v2 04/13] resolve_btfids: Introduce
- finalize_btf() step
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Ihor Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov
- <ast@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
- <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>
-Cc: Mykyta Yatsenko <yatsenko@meta.com>, Tejun Heo <tj@kernel.org>, Alan
- Maguire <alan.maguire@oracle.com>, Benjamin Tissoires <bentiss@kernel.org>,
- Jiri Kosina	 <jikos@kernel.org>, Amery Hung <ameryhung@gmail.com>,
- bpf@vger.kernel.org, 	linux-kernel@vger.kernel.org,
- linux-input@vger.kernel.org, 	sched-ext@lists.linux.dev
-Date: Tue, 20 Jan 2026 10:40:03 -0800
-In-Reply-To: <74fbaa99-024b-4e42-bda0-99ae792d565b@linux.dev>
-References: <20260116201700.864797-1-ihor.solodrai@linux.dev>
-	 <20260116201700.864797-5-ihor.solodrai@linux.dev>
-	 <c404446ab6d344338592dfa44f5a7e1b95492564.camel@gmail.com>
-	 <fe471a8c-4238-432b-9507-e2039f7fa9d8@linux.dev>
-	 <b92382bdb9b9b274c0eda1d2bf8aba69c9768ecd.camel@gmail.com>
-	 <74fbaa99-024b-4e42-bda0-99ae792d565b@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.2 (3.58.2-1.fc43) 
+	dkim=pass (2048-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b="R2rVd4f0";
+	dkim=permerror (0-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b="lnYnsnre"
+DKIM-Signature: v=1; a=rsa-sha256; s=202510r; d=danielhodges.dev; c=relaxed/relaxed;
+	h=Message-ID:Date:Subject:To:From; t=1768934822; bh=oSDTKco5Z+cIUPHV2/IWFXX
+	+zYklRUkeNigBk+7VzAY=; b=R2rVd4f0+h+siD3DjmILgTK7NnVBlb/aM/xsccQdPzZ+3Pl3Lt
+	CoX1micfT5W2cVndN5m55Ve1+UjP3qg430aEEtEzO+UIoFc1rB2tuWhXKSpbUlCJ3PBRc8yUEAN
+	1gbrmxkEzzsAOnGkefgyCTzL5RR5mP1cFRVOFVyBhfrGhXFunbJc9JLSkrMVb0GQlrFGUupR4lS
+	Q4/yBTR3OtEkJSi+daZUktIiAPyGSJj2o3PbQ/oFoZWG+wB+nPhTyDcFQx80gnqqqJNYTGh/13b
+	3QOZEvMQ6us4Gz/Lsw3dHvses2UgQH3hqv3qlECfHpFT6mjfdw0mVOe22R45lq2JcZg==;
+DKIM-Signature: v=1; a=ed25519-sha256; s=202510e; d=danielhodges.dev; c=relaxed/relaxed;
+	h=Message-ID:Date:Subject:To:From; t=1768934822; bh=oSDTKco5Z+cIUPHV2/IWFXX
+	+zYklRUkeNigBk+7VzAY=; b=lnYnsnre7UItQ+bWyx/HJhq8dhq0uJusTVHxQqpb9wVuhxgB3A
+	pv5euYf/G4+LoC1u/0NBlnqVVf+yltMZbkCg==;
+From: Daniel Hodges <git@danielhodges.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Vadim Fedorenko <vadim.fedorenko@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Mykyta Yatsenko <yatsenko@meta.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	"David S . Miller" <davem@davemloft.net>,
+	linux-crypto@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Daniel Hodges <git@danielhodges.dev>
+Subject: [PATCH bpf-next v5 4/7] bpf: Add hash kfunc for cryptographic hashing
+Date: Tue, 20 Jan 2026 13:46:58 -0500
+Message-ID: <20260120184701.23082-5-git@danielhodges.dev>
+X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20260120184701.23082-1-git@danielhodges.dev>
+References: <20260120184701.23082-1-git@danielhodges.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Tue, 2026-01-20 at 10:35 -0800, Ihor Solodrai wrote:
-> On 1/20/26 10:19 AM, Eduard Zingerman wrote:
-> > On Tue, 2026-01-20 at 10:11 -0800, Ihor Solodrai wrote:
-> >=20
-> > [...]
-> >=20
-> > > > > @@ -1099,12 +1116,22 @@ int main(int argc, const char **argv)
-> > > > >  	if (obj.efile.idlist_shndx =3D=3D -1 ||
-> > > > >  	    obj.efile.symbols_shndx =3D=3D -1) {
-> > > > >  		pr_debug("Cannot find .BTF_ids or symbols sections, skip symbo=
-ls resolution\n");
-> > > > > -		goto dump_btf;
-> > > > > +		resolve_btfids =3D false;
-> > > > >  	}
-> > > > > =20
-> > > > > -	if (symbols_collect(&obj))
-> > > > > +	if (resolve_btfids)
-> > > > > +		if (symbols_collect(&obj))
-> > > > > +			goto out;
-> > > >=20
-> > > > Nit: check obj.efile.idlist_shndx and obj.efile.symbols_shndx insid=
-e symbols_collect()?
-> > > >      To avoid resolve_btfids flag and the `goto dump_btf;` below.
-> > >=20
-> > > Hi Eduard, thank you for review.
-> > >=20
-> > > The issue is that in case of .BTF_ids section absent we have to skip
-> > > some of the steps, specifically:
-> > >   - symbols_collect()
-> > >   - sequence between symbols_resolve() and dump_raw_btf_ids()
-> >=20
-> > > It's not an exit condition, we still have to do load/dump of the BTF.
-> > >=20
-> > > I tried in symbols_collect():
-> > >=20
-> > > 	if (obj.efile.idlist_shndx =3D=3D -1 || obj.efile.symbols_shndx =3D=
-=3D -1)
-> > > 		return 0;
-> > >=20
-> > > But then, we either have to do the same check in symbols_resolve() an=
-d
-> > > co, or maybe store a flag in the struct object.  So I decided it's
-> > > better to have an explicit flag in the main control flow, instead of
-> > > hiding it.
-> >=20
-> > For symbols_resolve() is any special logic necessary?
-> > I think that `id =3D btf_id__find(root, str);` will just return NULL fo=
-r
-> > every type, thus the whole function would be a noop passing through
-> > BTF types once.
-> >=20
-> > symbols_patch() will be a noop, as it will attempt traversing empty roo=
-ts.
-> > dump_raw_btf_ids() already returns if there are no .BTF_ids.
->=20
-> Hm... Looks like you're right, those would be noops.
->=20
-> Still, I think it's clearer what steps are skipped with a toplevel
-> flag.  Otherwise to figure out that those are noops you need to check
-> every subroutine (as you just did), and a future change may
-> unintentionally break the expectation of noop creating an unnecessary
-> debugging session.
+Extend bpf_crypto_type structure with hash operations:
+ - hash(): Performs hashing operation
+ - digestsize(): Returns hash output size
 
-I'd argue that resolve_btfids is written in a clear read data /
-process data manner, so it should behave correctly even if collected
-data is empty. Is there a difference between no .BTF_ids and empty
-.BTF_ids?
+Update bpf_crypto_ctx_create() to support keyless operations:
+ - Hash algorithms don't require keys, unlike ciphers
+ - Only validates key presence if type->setkey is defined
+ - Conditionally sets IV/state length for cipher operations only
 
-> And re symbols_resolve(), if we don't like allocating unnecessary
-> memory, why are we ok with traversing the BTF with noops? Seems
-> a bit inconsistent to me.
+Add bpf_crypto_hash() kfunc that works with any hash algorithm
+registered in the kernel's crypto API through the BPF crypto type
+system. This enables BPF programs to compute cryptographic hashes for
+use cases such as content verification, integrity checking, and data
+authentication.
 
-He-he, I never heard about consistency :)
-Just don't like flags, they make me think more.
+Signed-off-by: Daniel Hodges <git@danielhodges.dev>
+---
+ kernel/bpf/crypto.c | 87 ++++++++++++++++++++++++++++++++++++++++-----
+ 1 file changed, 78 insertions(+), 9 deletions(-)
+
+diff --git a/kernel/bpf/crypto.c b/kernel/bpf/crypto.c
+index 7e75a1936256..c8f354b1a2cb 100644
+--- a/kernel/bpf/crypto.c
++++ b/kernel/bpf/crypto.c
+@@ -139,7 +139,7 @@ __bpf_kfunc_start_defs();
+  * It may return NULL if no memory is available.
+  * @params:	pointer to struct bpf_crypto_params which contains all the
+  *		details needed to initialise crypto context.
+- * @params__sz:	size of steuct bpf_crypto_params usef by bpf program
++ * @params__sz:	size of struct bpf_crypto_params used by bpf program
+  * @err:	integer to store error code when NULL is returned.
+  */
+ __bpf_kfunc struct bpf_crypto_ctx *
+@@ -171,7 +171,12 @@ bpf_crypto_ctx_create(const struct bpf_crypto_params *params, u32 params__sz,
+ 		goto err_module_put;
+ 	}
+ 
+-	if (!params->key_len || params->key_len > sizeof(params->key)) {
++	/* Hash operations don't require a key, but cipher operations do */
++	if (params->key_len > sizeof(params->key)) {
++		*err = -EINVAL;
++		goto err_module_put;
++	}
++	if (!params->key_len && type->setkey) {
+ 		*err = -EINVAL;
+ 		goto err_module_put;
+ 	}
+@@ -195,16 +200,23 @@ bpf_crypto_ctx_create(const struct bpf_crypto_params *params, u32 params__sz,
+ 			goto err_free_tfm;
+ 	}
+ 
+-	*err = type->setkey(ctx->tfm, params->key, params->key_len);
+-	if (*err)
+-		goto err_free_tfm;
++	if (params->key_len) {
++		if (!type->setkey) {
++			*err = -EINVAL;
++			goto err_free_tfm;
++		}
++		*err = type->setkey(ctx->tfm, params->key, params->key_len);
++		if (*err)
++			goto err_free_tfm;
+ 
+-	if (type->get_flags(ctx->tfm) & CRYPTO_TFM_NEED_KEY) {
+-		*err = -EINVAL;
+-		goto err_free_tfm;
++		if (type->get_flags(ctx->tfm) & CRYPTO_TFM_NEED_KEY) {
++			*err = -EINVAL;
++			goto err_free_tfm;
++		}
+ 	}
+ 
+-	ctx->siv_len = type->ivsize(ctx->tfm) + type->statesize(ctx->tfm);
++	if (type->ivsize && type->statesize)
++		ctx->siv_len = type->ivsize(ctx->tfm) + type->statesize(ctx->tfm);
+ 
+ 	refcount_set(&ctx->usage, 1);
+ 
+@@ -349,6 +361,58 @@ __bpf_kfunc int bpf_crypto_encrypt(struct bpf_crypto_ctx *ctx,
+ 	return bpf_crypto_crypt(ctx, src_kern, dst_kern, siv_kern, false);
+ }
+ 
++#if IS_ENABLED(CONFIG_CRYPTO_HASH2)
++/**
++ * bpf_crypto_hash() - Compute hash using configured context
++ * @ctx:	The crypto context being used. The ctx must be a trusted pointer.
++ * @data:	bpf_dynptr to the input data to hash. Must be a trusted pointer.
++ * @out:	bpf_dynptr to the output buffer. Must be a trusted pointer.
++ *
++ * Computes hash of the input data using the crypto context. The output buffer
++ * must be at least as large as the digest size of the hash algorithm.
++ */
++__bpf_kfunc int bpf_crypto_hash(struct bpf_crypto_ctx *ctx,
++				const struct bpf_dynptr *data,
++				const struct bpf_dynptr *out)
++{
++	const struct bpf_dynptr_kern *data_kern = (struct bpf_dynptr_kern *)data;
++	const struct bpf_dynptr_kern *out_kern = (struct bpf_dynptr_kern *)out;
++	unsigned int digestsize;
++	u64 data_len, out_len;
++	const u8 *data_ptr;
++	u8 *out_ptr;
++
++	if (ctx->type->type_id != BPF_CRYPTO_TYPE_HASH)
++		return -EINVAL;
++
++	if (!ctx->type->hash)
++		return -EOPNOTSUPP;
++
++	data_len = __bpf_dynptr_size(data_kern);
++	out_len = __bpf_dynptr_size(out_kern);
++
++	if (data_len == 0 || data_len > UINT_MAX)
++		return -EINVAL;
++
++	if (!ctx->type->digestsize)
++		return -EOPNOTSUPP;
++
++	digestsize = ctx->type->digestsize(ctx->tfm);
++	if (out_len < digestsize)
++		return -EINVAL;
++
++	data_ptr = __bpf_dynptr_data(data_kern, data_len);
++	if (!data_ptr)
++		return -EINVAL;
++
++	out_ptr = __bpf_dynptr_data_rw(out_kern, out_len);
++	if (!out_ptr)
++		return -EINVAL;
++
++	return ctx->type->hash(ctx->tfm, data_ptr, out_ptr, data_len);
++}
++#endif /* CONFIG_CRYPTO_HASH2 */
++
+ __bpf_kfunc_end_defs();
+ 
+ BTF_KFUNCS_START(crypt_init_kfunc_btf_ids)
+@@ -365,6 +429,9 @@ static const struct btf_kfunc_id_set crypt_init_kfunc_set = {
+ BTF_KFUNCS_START(crypt_kfunc_btf_ids)
+ BTF_ID_FLAGS(func, bpf_crypto_decrypt, KF_RCU)
+ BTF_ID_FLAGS(func, bpf_crypto_encrypt, KF_RCU)
++#if IS_ENABLED(CONFIG_CRYPTO_HASH2)
++BTF_ID_FLAGS(func, bpf_crypto_hash, KF_RCU)
++#endif
+ BTF_KFUNCS_END(crypt_kfunc_btf_ids)
+ 
+ static const struct btf_kfunc_id_set crypt_kfunc_set = {
+@@ -389,6 +456,8 @@ static int __init crypto_kfunc_init(void)
+ 	ret = register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_CLS, &crypt_kfunc_set);
+ 	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_ACT, &crypt_kfunc_set);
+ 	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_XDP, &crypt_kfunc_set);
++	/* Register for SYSCALL programs to enable testing and debugging */
++	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SYSCALL, &crypt_kfunc_set);
+ 	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SYSCALL,
+ 					       &crypt_init_kfunc_set);
+ 	return  ret ?: register_btf_id_dtor_kfuncs(bpf_crypto_dtors,
+-- 
+2.52.0
+
