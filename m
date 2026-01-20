@@ -1,103 +1,171 @@
-Received: from cvsmtppost03.nmdf.navercorp.com (cvsmtppost03.nmdf.navercorp.com [114.111.35.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A5793D300C
-	for <bpf@vger.kernel.org>; Tue, 20 Jan 2026 09:17:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.111.35.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E6CA3491E1
+	for <bpf@vger.kernel.org>; Tue, 20 Jan 2026 09:20:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768900679; cv=none; b=fMGd0uX/m+Wb+QMgFoNVNf9URlOisrlOvdFsu6TFTJVV0t7vIgHDklsFcbbGZiXFDG4hXtHhZb9VbaqqKEJ4y3I0AC0gOJyvgnoY9n75FxIxVZI431Y1+d/fj4CIII8sr2gFXymmvbKXkq/5ltDnVTWar2bsqqsyAccg/u/4hN0=
+	t=1768900806; cv=none; b=jtgjfZDhzs+52G3plI1zGKsbLzktJRB526TgaEV5t9zsIhsfBcClJ0yj6BjZlecBpskf7ubn0syAk938RrJTvg5li/lf4w2cwLg2DFG5r1XJOyiR5nHuMNBr6gVmN8r4UdBw9HY7zZc2xlHtEO7JBitPoWVVOwwcVOwVqOLdd3Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768900679; c=relaxed/simple;
-	bh=O/Mh7nvFRqR2V1lgWfJzdy5gT+PjfnHfRYG3+XYzr90=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=G9A51V9QXev+06ifyV0diL96rr1TPB3ctGTOzXiilGtMhxoVUaJpSWOX6gdUYCW3cAiqMY1/YGXvAzCsnfGVF0wt3o7Wxmsy/ZfhZ+oCwa44JL0lhYw6oEB9xYzUGU9bexbPRHaB60UEPIL7muOrL6ETl2IBOJjjaAReLOHTqy0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=navercorp.com; spf=pass smtp.mailfrom=navercorp.com; dkim=pass (2048-bit key) header.d=navercorp.com header.i=@navercorp.com header.b=hSmEy0IY; arc=none smtp.client-ip=114.111.35.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=navercorp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=navercorp.com
+	s=arc-20240116; t=1768900806; c=relaxed/simple;
+	bh=56GsMb+Ibi7+YdFIUTfgVr9zc7Yy/1sXtC79LXaqEZA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rFFbtoNHHR8s1c57Sph3s14RJRYyN03sSmQDbDE+0ub6KAR5N6Z6SUAZgZateBhEiGglnSp5RM3QsnA6uHPebfNzQrrT5Gr6aFSP+Tboh+R84XmSQKLechw7qXxzhUxAz5A14GQSadAYL7egUcWa4q+ru9EjNaicSVl5DT5A7HU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=JVTzm2+k; arc=none smtp.client-ip=209.85.208.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=navercorp.com header.i=@navercorp.com header.b="hSmEy0IY"
-Received: from cvsendbo02.nmdf ([10.112.18.65])
-  by cvsmtppost03.nmdf.navercorp.com with ESMTP id UQ1y75TQTh2oqEONbLbAsA
-  for <bpf@vger.kernel.org>;
-  Tue, 20 Jan 2026 09:07:47 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=navercorp.com;
-	s=s20171120; t=1768900067;
-	bh=O/Mh7nvFRqR2V1lgWfJzdy5gT+PjfnHfRYG3+XYzr90=;
-	h=From:To:Subject:Date:Message-Id:From:Subject:Feedback-ID:
-	 X-Works-Security;
-	b=hSmEy0IYtw3UATRf3YlijmWV1yoWIO2t81aohFITPe2RhRUKVpdrLFO/npxxP/V39
-	 w1zBStyMGyKPWOzon1ep0vh9fu2zCPeaIb7uq3dNboFSgVR0cd4wmMr7tpNQGAw5Wx
-	 UDhjEHtLtW25FlYZ7A+batnJBII6dfLllwB6JUuHhSBaICqTqGMO9fD5seC2kc1wze
-	 0IzlyFTWF3GCWphSUrN0Uh/lyvhYn32pe5DZoDCHWsC6gAMx6POiUO32px9sC6i6xT
-	 DlVb1Idz8x2hR8fOYzTzpnMUGqtSBgJMOKQMKyvxzoPMXyRkY5HhWxhTsf3n7qAlFj
-	 VPtH26GGyteFQ==
-X-Session-ID: 5VnN9bM4RnaQzANsq-UP1Q
-X-Works-Send-Opt: LebwjAJYjHm2KHwYjHm9UVg=
-X-Works-Smtp-Source: u9nraA2rFqJZ+HmXFoMX+6E=
-Received: from localhost.localdomain ([10.25.156.135])
-  by cvnsmtp02.nmdf.navercorp.com with ESMTP id 5VnN9bM4RnaQzANsq-UP1Q
-  for <multiple recipients>
-  (version=TLSv1.3 cipher=TLS_CHACHA20_POLY1305_SHA256);
-  Tue, 20 Jan 2026 09:07:47 -0000
-From: Gyutae Bae <gyutae.opensource@navercorp.com>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	shuah@kernel.org,
-	linux-kselftest@vger.kernel.org,
-	gyutae.bae@navercorp.com
-Subject: [PATCH] selftests/bpf: Add perfbuf multi-producer benchmark
-Date: Tue, 20 Jan 2026 18:07:16 +0900
-Message-Id: <20260120090716.82927-1-gyutae.opensource@navercorp.com>
-X-Mailer: git-send-email 2.39.5 (Apple Git-154)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JVTzm2+k"
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-6580dbdb41eso18467a12.0
+        for <bpf@vger.kernel.org>; Tue, 20 Jan 2026 01:20:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1768900803; x=1769505603; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=JHbdXgTfevCMprVxXelMqCK/NWfMzYgV0pdpQ4/IKJY=;
+        b=JVTzm2+k9njNPK/LE9kGyHD52XbqhSbtXbELv72FIlzohT33H1BfGRvN4HKxyPCRlA
+         nr0gQFqO3JSYaTQ4px6cqCNfO3/O6Diwu7sRg9Tvk/dbvEeaHFIXCo9/ShO9H+bJSLjB
+         UKHmmXv6hAb/U0aKlgcqKbmxdT4LETqoyDsy9KERVd3k8AcGa++fAL7GLDHimQ63E/jx
+         dJMSCTHu4gv3MoJAZ6FBmBYrQlZNlZrwGmoBFccksWN+YVLULOeTXubKWrjPJ+PkDcO/
+         yY+1KRXi+kd9Pu26vk8UjcYSurgCF8mCyaIMUpDXLljJf5rbGNfM4exSvYae7V441eeS
+         GuIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768900803; x=1769505603;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JHbdXgTfevCMprVxXelMqCK/NWfMzYgV0pdpQ4/IKJY=;
+        b=eo8S8igo/9hRxLuwfxc0vf6tvisjxrYaFaTCoL/h0cTvRou5SMLCVjLG4v/x0F1UM9
+         7O4qXCOFMri+3+T8wUw62Nlv8/52wiKBHtz+nqeKxTdVznh28kzwZucT4Gh8Nv5Y8bhP
+         5nzWRtlWzddE4L9hb06BtkfrY5cq3ypzT3UVrudRrSFxVdbIFK/s9cJaSKQIZ7Jh4qci
+         1g2HFy1ME95hPQAWHeQ3Hfko39wdVb/LsFbuyFYQlu56FEvpagelEU6MNjJNH/82O6Bb
+         +Nyup9HqB7gqG37zHUSLpb67Llc3mpx7Isg5dCFVT5HdcwQ9EhC1v3T+j+CMyNz0xHsz
+         BW/A==
+X-Forwarded-Encrypted: i=1; AJvYcCVyrBlv8dtkqLbr9aPxT13AhVi/n0JTQJAbPPoLPrniOsgSPOVD3fnfRXGh5e9E1OS2K5w=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx7cvvQEsb+GFE9hhwaYgXhxBDuwV8bpLOeanTt77SwBbh1MGXa
+	BXGdMw5YKQxpWH+tngN4PNeRnOkIPcWPCNnm/neJwzjPpn5i27YrB9tjqHTbyWue4w==
+X-Gm-Gg: AZuq6aIFyVfAGd2MpBzMzZ/fSRXl3d81y9QIQiDFcBehVMZtec7jLVqF6XHWvRuuSHM
+	DeMAjkoxmJb34p+qeOxw1JrSYWn6uvXyItVdknuN9CZ2xTIudf8GI+wpgcjO1Ua3Jrf3o5OPJcn
+	L5fdFFfgOlRnYjwccxllLEhWwES/TtWHmaH1SXug1+3QG5jk17BnwybSNhw4VtLe2zW30zSVoqO
+	9kbeexvFTNuF2XQs8gX+IfdGcP140hx/rJB92RjtTUiEiCpzfDnbxvfeq20GxDBnaSrWvjzDeuS
+	XABXMt2BG/SqiI/AyYRH1qn5etcprviGkO23F1x6+y+jpxDffWfLpbtu0K479QeSXgcBZ5LUswt
+	FqHB381qccN5QYiwCsGVjnVtR70nbNyrEZtDlSFkiwwgLuEhOFcXA8K6I8jkKnS9NftP46HbJSj
+	ECY+Ax+8jLdnNTBA10OmOR1p7BirfYwrCQ0hOQWdTda+5E5yyy2nzR9A==
+X-Received: by 2002:a05:6402:f15:b0:655:c2f7:9f32 with SMTP id 4fb4d7f45d1cf-657ff23c047mr846109a12.0.1768900802590;
+        Tue, 20 Jan 2026 01:20:02 -0800 (PST)
+Received: from google.com (14.59.147.34.bc.googleusercontent.com. [34.147.59.14])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-654533cc5d6sm12635650a12.22.2026.01.20.01.20.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Jan 2026 01:20:02 -0800 (PST)
+Date: Tue, 20 Jan 2026 09:19:58 +0000
+From: Matt Bobrowski <mattbobrowski@google.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Roman Gushchin <roman.gushchin@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	ohn Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	bpf <bpf@vger.kernel.org>
+Subject: Re: Subject: [PATCH bpf-next 2/3] bpf: drop KF_ACQUIRE flag on BPF
+ kfunc bpf_get_root_mem_cgroup()
+Message-ID: <aW9IvpfIHFW97Jnt@google.com>
+References: <20260113083949.2502978-2-mattbobrowski@google.com>
+ <87y0lyxilp.fsf@linux.dev>
+ <aWnu-b0dlm0xZFDS@google.com>
+ <CAADnVQKd-yu=bZjx+3=QKLq+26wcGJtJSrZoQh8b8ByKSPEXcQ@mail.gmail.com>
+ <CAADnVQ+45MorO=pODKOEVXhpY1skVy1tPkkABPAxDJGx4vOijg@mail.gmail.com>
+ <878qdx6yut.fsf@linux.dev>
+ <CAADnVQ+iKDvHxg_bEd6Knp3dNb9cr+FiemFSCR=NBnyt1UdYig@mail.gmail.com>
+ <aW8mH-hnVupxQAZo@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <aW8mH-hnVupxQAZo@google.com>
 
-From: Gyutae Bae <gyutae.bae@navercorp.com>
+On Tue, Jan 20, 2026 at 06:52:15AM +0000, Matt Bobrowski wrote:
+> On Mon, Jan 19, 2026 at 05:29:52PM -0800, Alexei Starovoitov wrote:
+> > On Fri, Jan 16, 2026 at 1:18 PM Roman Gushchin <roman.gushchin@linux.dev> wrote:
+> > >
+> > >
+> > > E.g. in my bpfoom case:
+> > >
+> > > SEC("struct_ops.s/handle_out_of_memory")
+> > > int BPF_PROG(test_out_of_memory, struct oom_control *oc, struct bpf_struct_ops_link *link)
+> > > {
+> > >         struct task_struct *task;
+> > >         struct mem_cgroup *root_memcg = oc->memcg;
+> > 
+> > And you'll annotate oom_control->memcg with BTF_TYPE_SAFE_TRUSTED_OR_NULL ?
+> > 
+> > >         struct mem_cgroup *memcg, *victim = NULL;
+> > >         struct cgroup_subsys_state *css_pos, *css;
+> > >         unsigned long usage, max_usage = 0;
+> > >         unsigned long pagecache = 0;
+> > >         int ret = 0;
+> > >
+> > >         if (root_memcg)
+> > >                 root_memcg = bpf_get_mem_cgroup(&root_memcg->css);
+> > 
+> > similar for mem_cgroup and css types ?
+> > or as BTF_TYPE_SAFE_RCU_OR_NULL ?
+> > 
+> > >         else
+> > >                 root_memcg = bpf_get_root_mem_cgroup();
+> > >
+> > >         if (!root_memcg)
+> > >                 return 0;
+> > >
+> > >         css = &root_memcg->css;
+> > >         if (css && css->cgroup == link->cgroup)
+> > >                 goto exit;
+> > >
+> > >         bpf_rcu_read_lock();
+> > 
+> > then this is a bug ? and rcu_read_lock needs to move up?
+> > 
+> > >         bpf_for_each(css, css_pos, &root_memcg->css, BPF_CGROUP_ITER_DESCENDANTS_POST) {
+> > >                 if (css_pos->cgroup->nr_descendants + css_pos->cgroup->nr_dying_descendants)
+> > >                         continue;
+> > >
+> > >                 memcg = bpf_get_mem_cgroup(css_pos);
+> > >                 if (!memcg)
+> > >                         continue;
+> > >
+> > >                 < ... >
+> > >
+> > >                 bpf_put_mem_cgroup(memcg);
+> > >         }
+> > >         bpf_rcu_read_unlock();
+> > >
+> > >         < ... >
+> > >
+> > >         bpf_put_mem_cgroup(victim);
+> > > exit:
+> > >         bpf_put_mem_cgroup(root_memcg);
+> > 
+> > Fair enough.
+> > Looks like quite a few pieces are still missing for this to work end-to-end,
+> > but, sure, let's revert back to acquire semantics.
+> > 
+> > Matt,
+> > please come with a way to fix a selftest. Introduce test kfunc or something.
+> 
+> Already on it.
 
-Add a multi-producer benchmark for perfbuf to complement the existing
-ringbuf multi-producer test. Unlike ringbuf which uses a shared buffer
-and experiences contention, perfbuf uses per-CPU buffers so the test
-measures scaling behavior rather than contention.
+Here is the updated selftest which relies on new test specific BPF
+kfuncs defined within bpf_testmod instead:
 
-This allows developers to compare perfbuf vs ringbuf performance under
-multi-producer workloads when choosing between the two for their systems.
-
-Signed-off-by: Gyutae Bae <gyutae.bae@navercorp.com>
----
- tools/testing/selftests/bpf/benchs/run_bench_ringbufs.sh | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/tools/testing/selftests/bpf/benchs/run_bench_ringbufs.sh b/tools/testing/selftests/bpf/benchs/run_bench_ringbufs.sh
-index 83e05e837871..123b7feb6935 100755
---- a/tools/testing/selftests/bpf/benchs/run_bench_ringbufs.sh
-+++ b/tools/testing/selftests/bpf/benchs/run_bench_ringbufs.sh
-@@ -49,6 +49,11 @@ for b in 1 2 3 4 8 12 16 20 24 28 32 36 40 44 48 52; do
- 	summarize "rb-libbpf nr_prod $b" "$($RUN_RB_BENCH -p$b --rb-batch-cnt 50 rb-libbpf)"
- done
- 
-+header "Perfbuf, multi-producer"
-+for b in 1 2 3 4 8 12 16 20 24 28 32 36 40 44 48 52; do
-+	summarize "pb-libbpf nr_prod $b" "$($RUN_RB_BENCH -p$b --rb-batch-cnt 50 --rb-sample-rate 50 pb-libbpf)"
-+done
-+
- header "Ringbuf, multi-producer contention in overwrite mode, no consumer"
- for b in 1 2 3 4 8 12 16 20 24 28 32 36 40 44 48 52; do
- 	summarize "rb-prod nr_prod $b" "$($RUN_BENCH -p$b --rb-batch-cnt 50 --rb-overwrite --rb-bench-producer rb-libbpf)"
--- 
-2.39.5 (Apple Git-154)
-
+- https://lore.kernel.org/bpf/20260120091630.3420452-1-mattbobrowski@google.com/T/#u
