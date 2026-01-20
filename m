@@ -1,137 +1,72 @@
-Received: from out-172.mta1.migadu.com (out-172.mta1.migadu.com [95.215.58.172])
+Received: from out-173.mta0.migadu.com (out-173.mta0.migadu.com [91.218.175.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48E472ECEAC
-	for <bpf@vger.kernel.org>; Tue, 20 Jan 2026 22:31:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A2BB295DAC
+	for <bpf@vger.kernel.org>; Tue, 20 Jan 2026 22:50:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768948280; cv=none; b=cnWIAy2AOvVpdiQNprbmoPmgA0LFfXsvDPAw/Um1PQGQ9Dxw1aL120EGqmFBW9pePQL84nTHfTEeuM2NZwlolJJahYeDGCc9/5BsYCErovsnbJUkgwdz5fUOpDExs71rX2JTnyUC3snGigU5NeOlV65BqzcavM7ri7XFjRaVDKM=
+	t=1768949409; cv=none; b=HR12VBQmxPEy81o5Vt1XQKr9KvVj4E9kw6Yuz5tZY8aZDt5g7VnfrAGV2FsLscisk54RdG+OINT+tYTTuMq0qZFVEMbcFh2FK1b3WhvPHQYFUyhR/XRevH6OFd3iE61+aeo0IKzShkp+ZwQtMnJpp4Ihg0s7PstPKT22TftM3ik=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768948280; c=relaxed/simple;
-	bh=6g4MFCyn0InZsYBBiZi2fxd9iAJrrdGPEUCAbG9AYTY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RYifbzozaNZxH8nksSiiczpVXG71S16x30PpKmFggnDCkcEswjjyNYhhRgFNlBDePFP3AGhlyr96mTLuk4LGLdSznDqHdMGOtrBmjWjn0WR/Pg/vf9FnCWylkTxj3pxB4s4XqPF+aAt9DvYyRUfQq68fcvbvwJ+xSANpvrLBbIc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ItkoCC4o; arc=none smtp.client-ip=95.215.58.172
+	s=arc-20240116; t=1768949409; c=relaxed/simple;
+	bh=LM9sk3nOl2uI95oAFd1Zai2C7EHFufVzGw4j1WSryVM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=vGrEiiDbxJWDYl5WV2DMr4W3wD9fcUpPG2IY0bLNSAyvAIvIC2XhStAmT74Eb63mKBxCVvUOV/9/sT7xILV4z3vBTcEZhrAEB0uLo/j3Ihk8H70l8FSRxfqjxnE8yKjeq/Y6mHAksdvfbvvQSiVK99Lza9O4L9tbRsPiOsjOHEo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Ziftloo4; arc=none smtp.client-ip=91.218.175.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ItkoCC4o"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Ziftloo4"
+Message-ID: <7c3f053b-252b-4389-9327-e2b3f2c67c94@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1768948264;
+	t=1768949401;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=Zwz6Xowq2w+xpgQwCp0JYB93ToE2U9fbiwcFD+udSuM=;
-	b=ItkoCC4oP2usaDYzXGu8P3mjEmTJipyfTGZ5CGPuQlsPi3QilxwLus1Ke4c8gvkqbXZ62V
-	UfODoABIEX4gTSneXoZHYHANn7wWmBPqh1uW6UVc2RG0O6wxZ6KmGpW65kEnFy2AXo3Ijg
-	zCxAD96eeDVpwUfuooi0jP9QQ6EN07M=
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>
-Cc: Mykyta Yatsenko <yatsenko@meta.com>,
-	Tejun Heo <tj@kernel.org>,
-	Alan Maguire <alan.maguire@oracle.com>,
-	Benjamin Tissoires <bentiss@kernel.org>,
-	Jiri Kosina <jikos@kernel.org>,
-	Amery Hung <ameryhung@gmail.com>,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-input@vger.kernel.org,
-	sched-ext@lists.linux.dev
-Subject: [PATCH bpf-next v3 13/13] bpf,docs: Document KF_IMPLICIT_ARGS flag
-Date: Tue, 20 Jan 2026 14:30:26 -0800
-Message-ID: <20260120223027.3981805-1-ihor.solodrai@linux.dev>
-In-Reply-To: <20260120222638.3976562-1-ihor.solodrai@linux.dev>
-References: <20260120222638.3976562-1-ihor.solodrai@linux.dev>
+	bh=LM9sk3nOl2uI95oAFd1Zai2C7EHFufVzGw4j1WSryVM=;
+	b=Ziftloo4POu2IIFeZoTYZdsjzfR0psOkZoIi60+kfpNf6cPUxtLzCBR71ebvnUqtXiFSJC
+	0VJVd/lIB1IPHkKkpMCgpI6TqrZAHGpqQiuDH1b+LTtcIFKHG5J89an9yzOQnCQqhl63BF
+	CnEqGOm7nGy6VmC5VYF2Ezu33XvTzj4=
+Date: Tue, 20 Jan 2026 14:49:53 -0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v4 1/2] bpf: support bpf_get_func_arg() for
+ BPF_TRACE_RAW_TP
+Content-Language: en-GB
+To: Menglong Dong <menglong8.dong@gmail.com>, ast@kernel.org,
+ andrii@kernel.org
+Cc: daniel@iogearbox.net, john.fastabend@gmail.com, martin.lau@linux.dev,
+ eddyz87@gmail.com, song@kernel.org, kpsingh@kernel.org, sdf@fomichev.me,
+ haoluo@google.com, jolsa@kernel.org, mattbobrowski@google.com,
+ rostedt@goodmis.org, mhiramat@kernel.org, mathieu.desnoyers@efficios.com,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org
+References: <20260120073046.324342-1-dongml2@chinatelecom.cn>
+ <20260120073046.324342-2-dongml2@chinatelecom.cn>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <20260120073046.324342-2-dongml2@chinatelecom.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Migadu-Flow: FLOW_OUT
 
-Add a section explaining KF_IMPLICIT_ARGS kfunc flag. Remove __prog
-arg annotation, as it is no longer supported.
 
-Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
----
- Documentation/bpf/kfuncs.rst | 49 +++++++++++++++++++++++-------------
- 1 file changed, 32 insertions(+), 17 deletions(-)
 
-diff --git a/Documentation/bpf/kfuncs.rst b/Documentation/bpf/kfuncs.rst
-index 3eb59a8f9f34..75e6c078e0e7 100644
---- a/Documentation/bpf/kfuncs.rst
-+++ b/Documentation/bpf/kfuncs.rst
-@@ -232,23 +232,6 @@ Or::
-                 ...
-         }
- 
--2.3.6 __prog Annotation
-----------------------------
--This annotation is used to indicate that the argument needs to be fixed up to
--the bpf_prog_aux of the caller BPF program. Any value passed into this argument
--is ignored, and rewritten by the verifier.
--
--An example is given below::
--
--        __bpf_kfunc int bpf_wq_set_callback_impl(struct bpf_wq *wq,
--                                                 int (callback_fn)(void *map, int *key, void *value),
--                                                 unsigned int flags,
--                                                 void *aux__prog)
--         {
--                struct bpf_prog_aux *aux = aux__prog;
--                ...
--         }
--
- .. _BPF_kfunc_nodef:
- 
- 2.4 Using an existing kernel function
-@@ -381,6 +364,38 @@ encouraged to make their use-cases known as early as possible, and participate
- in upstream discussions regarding whether to keep, change, deprecate, or remove
- those kfuncs if and when such discussions occur.
- 
-+2.5.9 KF_IMPLICIT_ARGS flag
-+------------------------------------
-+
-+The KF_IMPLICIT_ARGS flag is used to indicate that the BPF signature
-+of the kfunc is different from it's kernel signature, and the values
-+for implicit arguments are provided at load time by the verifier.
-+
-+Only arguments of specific types are implicit.
-+Currently only ``struct bpf_prog_aux *`` type is supported.
-+
-+A kfunc with KF_IMPLICIT_ARGS flag therefore has two types in BTF: one
-+function matching the kernel declaration (with _impl suffix in the
-+name by convention), and another matching the intended BPF API.
-+
-+Verifier only allows calls to the non-_impl version of a kfunc, that
-+uses a signature without the implicit arguments.
-+
-+Example declaration:
-+
-+.. code-block:: c
-+
-+	__bpf_kfunc int bpf_task_work_schedule_signal(struct task_struct *task, struct bpf_task_work *tw,
-+						      void *map__map, bpf_task_work_callback_t callback,
-+						      struct bpf_prog_aux *aux) { ... }
-+
-+Example usage in BPF program:
-+
-+.. code-block:: c
-+
-+	/* note that the last argument is omitted */
-+        bpf_task_work_schedule_signal(task, &work->tw, &arrmap, task_work_callback);
-+
- 2.6 Registering the kfuncs
- --------------------------
- 
--- 
-2.52.0
+On 1/19/26 11:30 PM, Menglong Dong wrote:
+> For now, bpf_get_func_arg() and bpf_get_func_arg_cnt() is not supported by
+> the BPF_TRACE_RAW_TP, which is not convenient to get the argument of the
+> tracepoint, especially for the case that the position of the arguments in
+> a tracepoint can change.
+>
+> The target tracepoint BTF type id is specified during loading time,
+> therefore we can get the function argument count from the function
+> prototype instead of the stack.
+>
+> Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
+
+Acked-by: Yonghong Song <yonghong.song@linux.dev>
 
