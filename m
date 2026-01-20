@@ -1,153 +1,191 @@
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1572D3C1987
-	for <bpf@vger.kernel.org>; Tue, 20 Jan 2026 11:02:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768906961; cv=none; b=AEHAqEAgtq/t3bPJPaqrYIJCDwdTvX67sx7zax8rUrqVC8/by1QmehKd9uMyEF3sN6wX8ihFJa1fN3ioBjdRvHsODtgHkYi4K77PlJN4iFcTlbskJR4PbukcpPd0huJyQ0LJfAfYU+8m7JYljmGHGCcfyalcnWf04JGDZS/rimM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768906961; c=relaxed/simple;
-	bh=plKX4p9KeG1iuT2k8X+sCDF+j72GEKkfqGpYrzEza98=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fJqPzYU0wME8YGNdC/mJwajKcJnSZv8tY6FYyviT4CzyeK5b9LE7JjU0bvNCpIRWqd3ffcgtdRZqTlp3b2tR9yXLLYi+VSjHL5DVu+WFwBEipaU7H1h8M0HPzjJLrJiQLAK/7XlP9P8BBCJnLTKrEBNd4uXYjRdhWtiL0PQAvUo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kcSFEnlY; arc=none smtp.client-ip=209.85.128.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB8AD27B34E
+	for <bpf@vger.kernel.org>; Tue, 20 Jan 2026 11:04:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.180
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768907102; cv=pass; b=llWxkNtF2Eil43Z7Twcp1MCS8TwFXJ7msuL701ZJ2HbJ/ryTfBPRhdbzW5J5Fk4tUtE0/PapjwSWajrrhi99M6h37GyP5ZBEPPjRPIc8nW/4mBLZdjst9xXCpKBJSsMaTOeINjPdnUTM4C8I13MMjKEB126D9vxwEs6FrfwMwo4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768907102; c=relaxed/simple;
+	bh=cnNo9W12NhCz5DB49rDqOpnrfJrsY5xjkCHj5l6IZJE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Vl2HVm3DQkWo1AYvRnG6e/bUiYlEh17tJkz0N1r62C2K47qCW2E+N2z15uQqNWgH7QBn8bbwfIpiI2E5IdZpUkE1YWrVQzGEKJ5Xz5VRCs9qmTq6wzjsNFP76NCWOf00UdKbWgYCOfGQFGRB09Zo+q7U+bSqgf0+fS++eytGe/E=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=0OvX2ojV; arc=pass smtp.client-ip=209.85.160.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kcSFEnlY"
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-47ff94b46afso35200865e9.1
-        for <bpf@vger.kernel.org>; Tue, 20 Jan 2026 03:02:39 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="0OvX2ojV"
+Received: by mail-qt1-f180.google.com with SMTP id d75a77b69052e-5014e1312c6so24747131cf.2
+        for <bpf@vger.kernel.org>; Tue, 20 Jan 2026 03:04:59 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1768907099; cv=none;
+        d=google.com; s=arc-20240605;
+        b=ibcMFPZ6wucWbAoOtQvZ5U/MCQBfBWkwSaMU0CB7rj8Yf3Q4ORUBrjf4mHcBg4cxcc
+         bPfHNTgAXyT2ldM5/QvZN+ekUDNqj5Nxgu5llr1eRyG+bLXuOUqxoyLqG6zfmV7t9AhI
+         MuZIenALlhRLAzO9cUwNdlAAsDGfAzGTmTxB2NxbXCzqQHfMbb7gyh4awGlqimVtdLkH
+         3Gx8Wavpw0Ivgf/+sMMCguACSXbA4+2UZ8GqvKIjW3+/Q6smUzABfyugZecfgWUsmnoB
+         iA++TY7FcJjpou34GI719vF9QonxoaHryB3Ou1zq5twAhcQAiIP6vDdUHDjbkz/56HB8
+         bhOw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=+KC9nK0KpQPdmvTA7SrKRg+ar3wUw4irfinZL9hXebI=;
+        fh=FhAfTG8XKOSdjjU8Tz5008sXXp8sKUfwpHw4RNmYXSM=;
+        b=T422mQ+qXICuw2BuPgHUWBgE3NsJRS/OZgufNOhGvAOyea12TBtK/ZjXbSIveOli03
+         T6Ep5Ntm1Gfuf8qSpDe5kPsQEvgsOWjK05uWnpoj2P9K0OHA4lp3i96mOSt9WzI90ZMS
+         Np2XqttfI8kfCjVZMkC17H4wKllBHUDfeylvU74OUCrQ29b/YV3lMu2OVXsBTwrLxVR4
+         IvNN6JMI6PYvDQPGx1shMUQb7DPNEQNDA+72lfzQE3vIoDWNWHBkzcGzcYZ6ou9pPW5D
+         Z3RPBt+elr8RWYw3NfKKV4Fvqqa8T20owugyLYJmkdzDBqDGbS0y9g/DWTbikZPFmvRn
+         cp/w==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768906958; x=1769511758; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Ii4yQG3O4tdjnWQ/9d1ajHt7losU6YVj3bqNkS06JC4=;
-        b=kcSFEnlYagvisxrc7a+ilpU9S7ShPjZ4P+6SOeZ1rsbEFEiRg67DW6TH8QSSZFIqNA
-         TTiG0Ir99P8CJsKRxmAZES5RL6F8vfuPdKAg/pKVTcAyLB7OBZkvPPyfUacMEpVrfHsN
-         +xs15cDBtVXimVAOypqsfx/94Eglo7hSTVgE5SBxyGtdXMBLLv/Fz91lTAKLkoMoPPp+
-         13SRuvuG3i1MVY9NJzBIvqNf76bjXxWM8Yf7RAgLmtJGJc3nnzsqkd1eiQ93PPhBgazx
-         Qr5DHvXwdTA1JChZSAYXJXLpBDOkfeacX4R/SAHTMzIBKwp00nry8nxAhOrEoiye1zi1
-         1yWg==
+        d=google.com; s=20230601; t=1768907099; x=1769511899; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+KC9nK0KpQPdmvTA7SrKRg+ar3wUw4irfinZL9hXebI=;
+        b=0OvX2ojV+3vqnvaV4xrU6+G21Qtn1xnc8WGr/gIJe+4bn+fcki/sjEKNHo8NMJyx47
+         lO6rtKPsXDPBNdKbbIR52kzsu4CqavaVN41ag7XrJoBrk3KyeKRE6ciMwQmlnC37eYwk
+         hxASpdqgH7dcK0K3GUIS3ZrhPc6IfRQVb9/kRU9wV11pCQobB3Vhc2TOuWulkikpYZNr
+         +5VboIYew+Rpj3rQglzEGBaJnMgGWLkcbEoQiXC867qs7S47Gi/WTsA/Ywb6cyCJf2jU
+         m+X5kYYAzc/ZpAiryj+Z+Gf8PfSpC8Iq4s+ANsF0FI5ZdNZ+CsBWJAgoSxfljAAM8MQP
+         F+BQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768906958; x=1769511758;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Ii4yQG3O4tdjnWQ/9d1ajHt7losU6YVj3bqNkS06JC4=;
-        b=BpmahXtr+rbW9uotdlRpM7GiRXSq5CTOyTweaDGgCYQSbRJjAt9nioN5PySL5gfR4/
-         1kIEqp3aKYeji92fkVH7YgmfBRprF8Gq3jAyxjHrLrt4X8FlFymI3bpRSNCLPyOpgz2A
-         M1RaibtN9HfmGmIGQzXuCP/HQzienVzIPgaWG90q74Q/nI5Y/Tf2PGa7zesv8CDbAQJn
-         Mjk2EYY26mL9uB0Fe0mGtgSGvmACshgzlMR8a5jQo9xFP8KY23fhmVzy3bF+9jUj/k6I
-         5VKqwdfjZk1SJcAnf50HCOrPQ+ymPbrfvTnXoaRRVyLdNrdWlVcrdgvVM0gTdhTkvImT
-         1/rw==
-X-Forwarded-Encrypted: i=1; AJvYcCVNfAcOFJQsXDrpijX8i7zSIrgO96zFDOXUffJ+XadRbxFZbTNeZ6fR2QZwwr7i67DrI28=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx9W4K3cxz6HhG/O7STip3S7vbJnwUWDcO84huFPdHnJxwOPAnZ
-	jCABNLNt+MhZBhiLkqqXpd6525AaJ50J1ZmS9ZzSSFCtLw71yuP0qp7l
-X-Gm-Gg: AY/fxX4Q46TsKlo75DXkEhwJcJ6jQv1eKCUC/qHodaShE3sIEf6oz43C2UHbTbIkDGk
-	+lSdcDgV44V7GEFJ7/D1MYvnhypcG4BnqtrvLcldHYYky65A2f3cRpDxp11i6zk2os9B83Jz9Hx
-	FDCmnWmAjQSjlV/7U2CpKpIFeQM73rxD5bz16EPWAS/ydD9lzNHGP3QP1GmU1prnulxPgjwf/MB
-	IPRgFiG0h9+kNsp68noGDGYJ0dDG88NCmBFbGsLYwZgGmaUoIBRO1BoKvYl4t0uuYdqMIE13mVC
-	ZHkVt2fADfsL/pIZQBR39g/3Ba0FpdnAntKQF4u9C8BGwXV1C1g1FJYdLzHoNJEMfFcxMPSvDan
-	xwCPQv5uwk+U/i0A8gznXN8k45TAdZIr0c+zO6ZQCpUfszFkbdMec6Oor74qRtqLc5YNThYBv//
-	+KT01O0n/qunasm8JgXwJ8vGLwLND3FKcRDfSvB8RojRlP8Ffj+bsIlvvB+Si9qqNvJrSf+no5C
-	Ws=
-X-Received: by 2002:a05:600c:1f86:b0:477:a289:d854 with SMTP id 5b1f17b1804b1-4801e53ca36mr218201745e9.5.1768906957459;
-        Tue, 20 Jan 2026 03:02:37 -0800 (PST)
-Received: from ?IPV6:2a01:4b00:bd1f:f500:e85d:a828:282d:d5c7? ([2a01:4b00:bd1f:f500:e85d:a828:282d:d5c7])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4801e8c0475sm286630915e9.10.2026.01.20.03.02.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Jan 2026 03:02:37 -0800 (PST)
-Message-ID: <6470f4f2-2d38-43e2-ae92-d6e4c9121eed@gmail.com>
-Date: Tue, 20 Jan 2026 11:02:36 +0000
+        d=1e100.net; s=20230601; t=1768907099; x=1769511899;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=+KC9nK0KpQPdmvTA7SrKRg+ar3wUw4irfinZL9hXebI=;
+        b=n/EBKfoq1u8MSztQrjN1c5cQuXcZNFRCxIqFZUcKvQDTUN18gAzmApfy2ySKE62/7u
+         nr+nCUhgp1338V/D+OR1NxuPc/ubHL3npWfO2Ykb2h8WJnKgSNCFtSY9fYR55GXUt1Ae
+         RLs+G9t2jeGRy3O+mFoZZOz0yMOVGA/1r2UapewwxjUNvvtbBl0vWNLR67gttTzQ3AOE
+         uS0fb+xj7oChYsroGoEjx02j5dKG8y7ye1IVjTb2SSZPxR7FR8ElcvHU9SLtMcR1O9+9
+         ezkqX3fIU/DZeO5n54Mzg3UzqFwKgn+qUHhrT9ukxMpM9Y2MVw67g8R7aPYvBAf0igF7
+         3o9A==
+X-Forwarded-Encrypted: i=1; AJvYcCXH4O+qy0B6XVNxRUkklTjrPNwPWpDewt2mZqHUk3Vuoi5Yo2qcCddwPomEOHO1adyt5IM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyiM2qseeiY+YMRQ+eCQjp7VAsxcB0QhD7TMBj90H3X14tz9ZjQ
+	hMpWo3EhzTc3NUBl/14b7kdhP7vlWEkZOfunM1EQ+E4U8O2CNDaRzw8v8b3ou3tHa+0+BjyFTw2
+	s20Yh76s9agfyWPM/UDrwgIfCOylYC1QPy34MnOWc
+X-Gm-Gg: AY/fxX7bQ1rA80Y5uIoHg8Lj18x+HOs6oHIiaDxWzGX22TPf+u7le+hGzPLSiSTxeai
+	kV2NjdJUlt4GF0c89HuzejW0ustE1Df2o83eKMut1kpBhFhqiUcCOMN9ypMrxNweWVJFeTMkfoV
+	TjssV1R/EhWIFKA8EyWTuenyLnAPKAl6zu0EYa2X6FoR7qSKWnP/DzFVs8eXQxBUx4j97DAnlF5
+	6gkKcVETNeLyvFj8c/ei7jUAA+Ze8wOAlLkesXQV2WZAEcZBNxmusn1uJcnayptuJ6lxww=
+X-Received: by 2002:a05:622a:148:b0:4f3:5961:3208 with SMTP id
+ d75a77b69052e-502d82776d6mr12850331cf.12.1768907098103; Tue, 20 Jan 2026
+ 03:04:58 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v3 1/2] bpf: add bpf_strncasecmp kfunc
-To: Viktor Malik <vmalik@redhat.com>, bot+bpf-ci@kernel.org,
- ishiyama@hpc.is.uec.ac.jp, bpf@vger.kernel.org
-Cc: andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net,
- martin.lau@linux.dev, martin.lau@kernel.org, eddyz87@gmail.com,
- yonghong.song@linux.dev, clm@meta.com, ihor.solodrai@linux.dev
-References: <20260120070336.188850-2-ishiyama@hpc.is.uec.ac.jp>
- <cd994531bcbe33858623d135448bd0540c36bb739b894af5a99d009b617e08fb@mail.kernel.org>
- <3d9e2ce9-3e47-4b10-aad2-93b37b235239@redhat.com>
-Content-Language: en-US
-From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-In-Reply-To: <3d9e2ce9-3e47-4b10-aad2-93b37b235239@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20260119185852.11168-1-chia-yu.chang@nokia-bell-labs.com> <20260119185852.11168-11-chia-yu.chang@nokia-bell-labs.com>
+In-Reply-To: <20260119185852.11168-11-chia-yu.chang@nokia-bell-labs.com>
+From: Eric Dumazet <edumazet@google.com>
+Date: Tue, 20 Jan 2026 12:04:47 +0100
+X-Gm-Features: AZwV_Qgu9ZDw1Q07OvyxlnkIP9uze425ltlSjgpCGKeRZRntsHDU01ieZ5kjIGg
+Message-ID: <CANn89i+NEyZ+1R1pouUcroarCfNrQEN01azsEhOuZoeR0Y3mhA@mail.gmail.com>
+Subject: Re: [PATCH v9 net-next 10/15] tcp: accecn: unset ECT if receive or
+ send ACE=0 in AccECN negotiaion
+To: chia-yu.chang@nokia-bell-labs.com
+Cc: pabeni@redhat.com, parav@nvidia.com, linux-doc@vger.kernel.org, 
+	corbet@lwn.net, horms@kernel.org, dsahern@kernel.org, kuniyu@google.com, 
+	bpf@vger.kernel.org, netdev@vger.kernel.org, dave.taht@gmail.com, 
+	jhs@mojatatu.com, kuba@kernel.org, stephen@networkplumber.org, 
+	xiyou.wangcong@gmail.com, jiri@resnulli.us, davem@davemloft.net, 
+	andrew+netdev@lunn.ch, donald.hunter@gmail.com, ast@fiberby.net, 
+	liuhangbin@gmail.com, shuah@kernel.org, linux-kselftest@vger.kernel.org, 
+	ij@kernel.org, ncardwell@google.com, koen.de_schepper@nokia-bell-labs.com, 
+	g.white@cablelabs.com, ingemar.s.johansson@ericsson.com, 
+	mirja.kuehlewind@ericsson.com, cheshire@apple.com, rs.ietf@gmx.at, 
+	Jason_Livingood@comcast.com, vidhi_goel@apple.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 1/20/26 09:29, Viktor Malik wrote:
-> On 1/20/26 08:21, bot+bpf-ci@kernel.org wrote:
->>> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
->>> index 9eaa4185e0a7..753753f039ff 100644
->>> --- a/kernel/bpf/helpers.c
->>> +++ b/kernel/bpf/helpers.c
->> [ ... ]
->>
->>> -static int __bpf_strcasecmp(const char *s1, const char *s2, bool ignore_case)
->>> +static int __bpf_strncasecmp(const char *s1, const char *s2, bool ignore_case, size_t len)
->>>   {
->>>   	char c1, c2;
->>> -	int i;
->>> +	int i, max_sz;
->>>
->>>   	if (!copy_from_kernel_nofault_allowed(s1, 1) ||
->>>   	    !copy_from_kernel_nofault_allowed(s2, 1)) {
->>>   		return -ERANGE;
->>>   	}
->>>
->>> +	max_sz = min_t(int, len, XATTR_SIZE_MAX);
->>                     ^^^
->>
->> Can this truncation cause incorrect results when len > INT_MAX? The len
->> parameter is size_t, but min_t(int, ...) casts it to signed int before the
->> comparison. When len is larger than INT_MAX, the cast produces a negative
->> value, and min_t returns that negative value instead of XATTR_SIZE_MAX.
->>
->> For example, if a BPF program calls bpf_strncasecmp(s1, s2, SIZE_MAX):
->> - min_t(int, SIZE_MAX, 65536) evaluates to min_t(int, -1, 65536) = -1
->> - max_sz becomes -1
->> - The loop condition (i < max_sz) is (0 < -1), which is false
->> - The loop never executes, and the function returns 0 without comparing
->>
->> This would make bpf_strncasecmp("foo", "bar", SIZE_MAX) return 0 (equal)
->> when the strings are clearly different.
-> This is a good point and we should IMO address it.
+On Mon, Jan 19, 2026 at 7:59=E2=80=AFPM <chia-yu.chang@nokia-bell-labs.com>=
+ wrote:
 >
->> Would using min_t(size_t, len, XATTR_SIZE_MAX) avoid this issue?
-> Other string kfuncs use `i < len && i < XATTR_SIZE_MAX` in the loop
-> condition, I'd stick to that for consistency.
+> From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
 >
-> Viktor
-Why not just use proper type (size_t for max_sz), obviously truncation is a
-problem there, so use the wider type?
+> Based on specification:
+>   https://tools.ietf.org/id/draft-ietf-tcpm-accurate-ecn-28.txt
 >
->>> +
->>>   	guard(pagefault)();
->>> -	for (i = 0; i < XATTR_SIZE_MAX; i++) {
->>> +	for (i = 0; i < max_sz; i++) {
->> [ ... ]
->>
->>> +__bpf_kfunc int bpf_strncasecmp(const char *s1__ign, const char *s2__ign, size_t len)
->>> +{
->>> +	return __bpf_strncasecmp(s1__ign, s2__ign, true, len);
->>>   }
->> The BPF verifier does not validate ranges for scalar kfunc parameters, so
->> BPF programs can pass arbitrary size_t values to len, triggering the
->> truncation issue described above.
->>
->>
->> ---
->> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
->> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
->>
->> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/21162711653
+> Based on Section 3.1.5 of AccECN spec (RFC9768), a TCP Server in
+> AccECN mode MUST NOT set ECT on any packet for the rest of the connection=
+,
+> if it has received or sent at least one valid SYN or Acceptable SYN/ACK
+> with (AE,CWR,ECE) =3D (0,0,0) during the handshake.
+>
+> In addition, a host in AccECN mode that is feeding back the IP-ECN
+> field on a SYN or SYN/ACK MUST feed back the IP-ECN field on the
+> latest valid SYN or acceptable SYN/ACK to arrive.
+>
+> Signed-off-by: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+>
+> ---
+> v8:
+> - Add new helper function tcp_accecn_ace_fail_send_set_retrans()
+>
+> v6:
+> - Do not cast const struct request_sock into struct request_sock
+> - Set tcp_accecn_fail_mode after calling tcp_rtx_synack().
+> ---
+>  include/net/tcp_ecn.h           |  7 +++++++
+>  net/ipv4/inet_connection_sock.c |  3 +++
+>  net/ipv4/tcp_input.c            |  2 ++
+>  net/ipv4/tcp_minisocks.c        | 36 ++++++++++++++++++++++++---------
+>  net/ipv4/tcp_output.c           |  3 ++-
+>  net/ipv4/tcp_timer.c            |  2 ++
+>  6 files changed, 42 insertions(+), 11 deletions(-)
+>
+> diff --git a/include/net/tcp_ecn.h b/include/net/tcp_ecn.h
+> index 796c613b5ef3..f5e1f6b1bec3 100644
+> --- a/include/net/tcp_ecn.h
+> +++ b/include/net/tcp_ecn.h
+> @@ -97,6 +97,13 @@ static inline void tcp_accecn_fail_mode_set(struct tcp=
+_sock *tp, u8 mode)
+>         tp->accecn_fail_mode |=3D mode;
+>  }
+>
+> +static inline void tcp_accecn_ace_fail_send_set_retrans(struct request_s=
+ock *req,
+> +                                                       struct tcp_sock *=
+tp)
+> +{
+> +       if (req->num_retrans > 1 && tcp_rsk(req)->accecn_ok)
+> +               tcp_accecn_fail_mode_set(tp, TCP_ACCECN_ACE_FAIL_SEND);
+> +}
+> +
+>  #define TCP_ACCECN_OPT_NOT_SEEN                0x0
+>  #define TCP_ACCECN_OPT_EMPTY_SEEN      0x1
+>  #define TCP_ACCECN_OPT_COUNTER_SEEN    0x2
+> diff --git a/net/ipv4/inet_connection_sock.c b/net/ipv4/inet_connection_s=
+ock.c
+> index 97d57c52b9ad..9d16cb9c3db4 100644
+> --- a/net/ipv4/inet_connection_sock.c
+> +++ b/net/ipv4/inet_connection_sock.c
+> @@ -20,6 +20,7 @@
+>  #include <net/tcp_states.h>
+>  #include <net/xfrm.h>
+>  #include <net/tcp.h>
+> +#include <net/tcp_ecn.h>
+>  #include <net/sock_reuseport.h>
+>  #include <net/addrconf.h>
+>
+> @@ -1103,6 +1104,8 @@ static void reqsk_timer_handler(struct timer_list *=
+t)
+>             (!resend ||
+>              !tcp_rtx_synack(sk_listener, req) ||
+>              inet_rsk(req)->acked)) {
+> +               tcp_accecn_ace_fail_send_set_retrans(req,
+> +                                                    tcp_sk(sk_listener))=
+;
 
+
+Ouch.
+
+I think you missed the fact that a listener is shared by many SYN_RECV requ=
+ests.
+
+Consider it as read-only here.
