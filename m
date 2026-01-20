@@ -1,597 +1,125 @@
-Received: from devnull.danielhodges.dev (vps-2f6e086e.vps.ovh.us [135.148.138.8])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f174.google.com (mail-dy1-f174.google.com [74.125.82.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA65646AEF4;
-	Tue, 20 Jan 2026 18:50:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=135.148.138.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F09C2EC560
+	for <bpf@vger.kernel.org>; Tue, 20 Jan 2026 18:51:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768935021; cv=none; b=ksfYqeLK5V6FgbUELNqrJOdvQXOOnzU50K7KfLEaYSUFkoW04kX5MZzp9/cF8MAmldjdvMitIdJsAg8tu3hcyCOQVzUu70CASszQXa4h61qIkQL7up+Qi42eTLAAEGYDa7Y+ypnamINqk0DBHYUsmyrWoqzXOOXhTHcwIiGbR7A=
+	t=1768935101; cv=none; b=Fc6jByuWw4sEruujsLWuHGwqY12YgOmSy8/e+M47uLYrTtTnuZnh64sLRlX9plaP1QZo5dYnyYt9tffKEREEyFZY/p7pZa1xDyBNHw7+VYnnYOdCj1BIO2FFxlOOKaIdqPmLVAptly4fbECRjR5jdczpcj5/+xAKuHV1W1BNT+g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768935021; c=relaxed/simple;
-	bh=1Dt61OpWt0Xkfr5BmnQ1uLHzYoD8C14kwvbsJpOsP9g=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=oszUii9kiX+OiHSN786ibuyrs3MuvBzi99JGQmU0bfqLMfXzIktgy6zHZZtijXH2R8tHED7jum6T9oVXzTg1HO/dWbXU09pgsXjop1OlSk51oGlwj1iJ0c0Afu0omFim1eTH0EqXEN3nfdqCctkwoMM8CpX5FeaC+l4j6MMwzq4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=danielhodges.dev; spf=pass smtp.mailfrom=danielhodges.dev; dkim=pass (2048-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b=MW/I0J6K; dkim=permerror (0-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b=Y5Mq77pR; arc=none smtp.client-ip=135.148.138.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=danielhodges.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=danielhodges.dev
+	s=arc-20240116; t=1768935101; c=relaxed/simple;
+	bh=sDgTp7IkPT0uFGFX/Gd6oobYQUPpzuCRi8oJc3BybSM=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=trwyyWOg/e64RGu0sKNq9O4d7JMoINyex/EfIb9by7LgpvtnP0QeI1XMcjF4pybOG/hQNxJWYIbnzXP2dcP6H6YPBdXOVIHG54wpjd4NAq8cRt4xFy/MqYDCRouFeU5VLtIRAUsNgOIEE11aZkNtmrdZCRiTF5vyYW8ZOkfZnAI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=P7iLvxfy; arc=none smtp.client-ip=74.125.82.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b="MW/I0J6K";
-	dkim=permerror (0-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b="Y5Mq77pR"
-DKIM-Signature: v=1; a=rsa-sha256; s=202510r; d=danielhodges.dev; c=relaxed/relaxed;
-	h=Message-ID:Date:Subject:To:From; t=1768934823; bh=Rw9EQBCoOxu6vic1k34lqkT
-	21VDDUwvvcZf/n+xBQX0=; b=MW/I0J6KZ4Kz5Fa8B2MOudBQ7MhKZp2YJk9LoHSrhs578MR8pV
-	RxCHvF87VgurrJyTmuzHBJ3RZ/XqX45EVqkCibjbCJvqECGEB3qoETXkp7JqHR+btGQU1ZFUv6y
-	hR0mGHkVFHSEemgQQ69nus87ddU92ASEijZLghqFUa8Kxx70mtd+lEZlOyerxI/IYPGOZb0VTe0
-	3xfuNew01KkZdRXsAfQqyOV10JLIZc2EZSWSe51ygXLH8+uCkSg0TqvhYiWk7jdkClIOpVlDWUX
-	wsE6QN+scx46JOp5yNuAp4M/I7x9XLk0isNEq3mCrc9dQiVgf+9KbyUPzLIpZelPmjQ==;
-DKIM-Signature: v=1; a=ed25519-sha256; s=202510e; d=danielhodges.dev; c=relaxed/relaxed;
-	h=Message-ID:Date:Subject:To:From; t=1768934823; bh=Rw9EQBCoOxu6vic1k34lqkT
-	21VDDUwvvcZf/n+xBQX0=; b=Y5Mq77pRUdMQ6uurXSkWsqlNv92g8VUHIhSFgMRrAm9WRWwjSi
-	f/OJE8b8mUlO9iTca71B/sV7tIn+QqTc/5Dw==;
-From: Daniel Hodges <git@danielhodges.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Vadim Fedorenko <vadim.fedorenko@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Mykyta Yatsenko <yatsenko@meta.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	"David S . Miller" <davem@davemloft.net>,
-	linux-crypto@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Daniel Hodges <git@danielhodges.dev>
-Subject: [PATCH bpf-next v5 7/7] selftests/bpf: Add tests for signature verification kfuncs
-Date: Tue, 20 Jan 2026 13:47:01 -0500
-Message-ID: <20260120184701.23082-8-git@danielhodges.dev>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260120184701.23082-1-git@danielhodges.dev>
-References: <20260120184701.23082-1-git@danielhodges.dev>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P7iLvxfy"
+Received: by mail-dy1-f174.google.com with SMTP id 5a478bee46e88-2b453b17e41so91388eec.1
+        for <bpf@vger.kernel.org>; Tue, 20 Jan 2026 10:51:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1768935099; x=1769539899; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=FQgecD865lAo4vxm8hgDCvY/P8AjLOIXd+ZSv3+0nTg=;
+        b=P7iLvxfyt2O47eHl5O+Y/YtpVhzzou+J3uMkj8YyfJVxAQ2Ow4pqNAaA7cN6EN0K1e
+         k6EJ9ggBOXQFNMIZUPAJJt4yE9YUT8BFmWXQxzulbr1GL2aIjq7xvq5sRNEX7Umv/9TU
+         PHxV8viGSz4l4fBHEZtWRLeSS4r9df/NVgmktgzQmwZHv9eycwG/FoVb0vv1yyjoumwm
+         Dds7D6WRyEJb/6Ze/U4wY9NkF3grWzBoTuEzw7ximaLlMaKyKUvLO4hEYQkmts3VEp8U
+         ZYCvjBomNC1zTTZOsXGxxdTaJ88YuyPB3aBw+10yzVdV9Yi6MO6/Wm8saBBQieXDrsxv
+         WJ/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768935099; x=1769539899;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FQgecD865lAo4vxm8hgDCvY/P8AjLOIXd+ZSv3+0nTg=;
+        b=j65XIsvD2PP8cxaYHsdycd6+UvG6e4/KtGpwESxIz0FDvQbbCo+7wJWLcDOgRqL+Hb
+         ZIiWq8i3JZHQRmOo1eiEnmCahtob8HlZONchTT5wnBP1sy8L/dUoFlYI+iCwJk1/GcFY
+         rsTJ3TQjMZqpFLj4RoSPHvBBYZSQOUWcScz+ty+gw2WqEX5MVbT6EVyHD5IFvc4f+XAE
+         Z3IHb4NIHeJ1WiThoG2tgUYQ8o/mvQbWsLdwl5m9NdkO7FiMfWMiIbkepfeGxwtsdzbu
+         DqTi7US8wLP1NDZOldy4zEf9G5u+xfEq9Cqg4tJ2GsUT6O7/8MvqpjbT6dYpuAmOkMMu
+         rLGg==
+X-Forwarded-Encrypted: i=1; AJvYcCVCGvKe1MppkYbvfQix6+j7wHmibuZARlnSqJgdA+sUcywUZI67Fxpjs8wXB0GoySbavJw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy0r3ctQHWRuMxTTzOHTPJ4tgJfukvP9qUB41vcEbZYHzfYY5wE
+	1s/D6yjiLof0ti0k/Yokus8m9LXRcH83x0sJh9nErNOmHelug0JVoR/KpbxyhQzO
+X-Gm-Gg: AZuq6aKu0P3kiZe58wP7eYqlEAzRXY9S1lZNsgA2HTfsfvv84ggmsawgCAj+raW7fXL
+	amldJNBxeRA4xeENTytTVHvb9TiMweCd8c1HSBlvGOFz5GF7EPOCVEAD0K9tFbVMqHUV0UH5d5f
+	1nCKSau8VcYLAZny2wzmezpAOX25Axl0sOyGrY9xgi7BVGSoNCpvawRE1L8xT1Zp2XBqg9qezqG
+	NwavKvIqRhxynH09IWujy1UQTkHxfH+qAnKzPxb5vX9IVGjbxmU9yDv1pPXyl7cVT6/9y67Wp00
+	QzQlLkuEpIWz1q24yzVlre39B/ukTxytyqSe2ueoshPjPZS7AtKkn/KhUF5S0MOQ0n8yokH2EKP
+	QTWQhRGIT4tCLzH2HAuPJu32m+d42vzasMyLZwmK1dU+IeFunokh7E3kw1sU69RDYSLXsNyGD7p
+	Kmzhj7BA7cEdi1awUMksuALOyyPThmsw9DcOq4XQwijLoOU2Q+5xCms706laEsMaXdRpDnmnQ2Z
+	VpVeoI=
+X-Received: by 2002:a05:7301:9bcb:b0:2ad:a3d6:7446 with SMTP id 5a478bee46e88-2b664323897mr15995490eec.16.1768935099156;
+        Tue, 20 Jan 2026 10:51:39 -0800 (PST)
+Received: from ?IPv6:2a03:83e0:115c:1:b08c:bb3d:92b9:704d? ([2620:10d:c090:500::3:93b1])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b6b34c11c4sm18031117eec.1.2026.01.20.10.51.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Jan 2026 10:51:38 -0800 (PST)
+Message-ID: <57dbe0b62e2cf0370f90825f9508c466cd673704.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v5 1/2] bpf: Add range tracking for BPF_DIV and
+ BPF_MOD
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Yazhou Tang <tangyazhou@zju.edu.cn>, bpf@vger.kernel.org
+Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com, 
+	andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
+ yonghong.song@linux.dev, 	kpsingh@kernel.org, sdf@fomichev.me,
+ haoluo@google.com, jolsa@kernel.org, 	tangyazhou518@outlook.com,
+ shenghaoyuan0928@163.com, ziye@zju.edu.cn, 	syzbot@syzkaller.appspotmail.com
+Date: Tue, 20 Jan 2026 10:51:36 -0800
+In-Reply-To: <20260119085458.182221-2-tangyazhou@zju.edu.cn>
+References: <20260119085458.182221-1-tangyazhou@zju.edu.cn>
+	 <20260119085458.182221-2-tangyazhou@zju.edu.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.2 (3.58.2-1.fc43) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Add tests for the signature verification kfuncs:
+On Mon, 2026-01-19 at 16:54 +0800, Yazhou Tang wrote:
 
-1. test_ecdsa_verify_valid_signature: Verifies that a valid ECDSA
-   signature over a known message hash is correctly verified using
-   the P-256 curve with a test vector.
+[...]
 
-2. test_ecdsa_verify_invalid_signature: Verifies that an invalid
-   signature (with modified r component) is correctly rejected.
+Hi Yazhou, Alexei,
 
-3. test_ecdsa_size_queries: Tests the bpf_sig_keysize(),
-   bpf_sig_digestsize(), and bpf_sig_maxsize() kfuncs to ensure
-   they return valid positive values for a P-256 ECDSA context.
+Sorry for chiming in late in the series.
 
-4. test_ecdsa_on_hash_ctx: Tests that calling bpf_sig_verify on
-   a hash context fails with -EINVAL due to type mismatch.
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_value_illegal_alu=
+.c b/tools/testing/selftests/bpf/progs/verifier_value_illegal_alu.c
+> index 2129e4353fd9..4d8273c258d5 100644
+> --- a/tools/testing/selftests/bpf/progs/verifier_value_illegal_alu.c
+> +++ b/tools/testing/selftests/bpf/progs/verifier_value_illegal_alu.c
+> @@ -173,14 +173,15 @@ __naked void flow_keys_illegal_variable_offset_alu(=
+void)
+>  	asm volatile("					\
+>  	r6 =3D r1;					\
+>  	r7 =3D *(u64*)(r6 + %[flow_keys_off]);		\
+> -	r8 =3D 8;						\
+> -	r8 /=3D 1;					\
+> +	call %[bpf_get_prandom_u32];			\
+> +	r8 =3D r0;					\
 
-5. test_ecdsa_keysize_on_hash_ctx: Tests that calling bpf_sig_keysize
-   on a hash context fails with -EINVAL due to type mismatch.
+I suggest we special case `rX /=3D 1`.
+Maybe in the is_safe_to_compute_dst_reg_range().
+This is an old trick that might be used in the wild.
+And optimizer should remove any such instructions when compiling from C.
+So I don't think adding special case here would hinder verifier versatility=
+.
 
-6. test_ecdsa_zero_len_msg: Tests that zero-length message is rejected.
-
-7. test_ecdsa_zero_len_sig: Tests that zero-length signature is rejected.
-
-The test uses the p1363(ecdsa-nist-p256) algorithm with a known
-NIST P-256 test vector for reliable and reproducible testing.
-
-Signed-off-by: Daniel Hodges <git@danielhodges.dev>
----
- MAINTAINERS                                   |   2 +
- .../selftests/bpf/prog_tests/sig_verify.c     | 163 ++++++++++
- .../selftests/bpf/progs/crypto_common.h       |   6 +
- .../testing/selftests/bpf/progs/sig_verify.c  | 286 ++++++++++++++++++
- 4 files changed, 457 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/sig_verify.c
- create mode 100644 tools/testing/selftests/bpf/progs/sig_verify.c
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index d23ea38b606f..e297cc18c5f6 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -4719,7 +4719,9 @@ F:	crypto/bpf_crypto_skcipher.c
- F:	include/linux/bpf_crypto.h
- F:	kernel/bpf/crypto.c
- F:	tools/testing/selftests/bpf/prog_tests/crypto_hash.c
-+F:	tools/testing/selftests/bpf/prog_tests/sig_verify.c
- F:	tools/testing/selftests/bpf/progs/crypto_hash.c
-+F:	tools/testing/selftests/bpf/progs/sig_verify.c
- 
- BPF [DOCUMENTATION] (Related to Standardization)
- R:	David Vernet <void@manifault.com>
-diff --git a/tools/testing/selftests/bpf/prog_tests/sig_verify.c b/tools/testing/selftests/bpf/prog_tests/sig_verify.c
-new file mode 100644
-index 000000000000..f682fc3c8595
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/sig_verify.c
-@@ -0,0 +1,163 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2025 Meta Platforms, Inc. and affiliates. */
-+
-+#include <test_progs.h>
-+#include "sig_verify.skel.h"
-+
-+static void test_ecdsa_verify_valid_signature(void)
-+{
-+	struct sig_verify *skel;
-+	int err, prog_fd;
-+
-+	LIBBPF_OPTS(bpf_test_run_opts, topts);
-+
-+	skel = sig_verify__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "sig_verify__open_and_load"))
-+		return;
-+
-+	prog_fd = bpf_program__fd(skel->progs.test_ecdsa_verify_valid);
-+	err = bpf_prog_test_run_opts(prog_fd, &topts);
-+	ASSERT_OK(err, "test_ecdsa_verify_valid");
-+	ASSERT_EQ(skel->data->ctx_create_status, 0, "ctx_create_status");
-+	ASSERT_EQ(skel->data->verify_result, 0, "verify_valid_signature");
-+
-+	sig_verify__destroy(skel);
-+}
-+
-+static void test_ecdsa_verify_invalid_signature(void)
-+{
-+	struct sig_verify *skel;
-+	int err, prog_fd;
-+
-+	LIBBPF_OPTS(bpf_test_run_opts, topts);
-+
-+	skel = sig_verify__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "sig_verify__open_and_load"))
-+		return;
-+
-+	prog_fd = bpf_program__fd(skel->progs.test_ecdsa_verify_invalid);
-+	err = bpf_prog_test_run_opts(prog_fd, &topts);
-+	ASSERT_OK(err, "test_ecdsa_verify_invalid");
-+	ASSERT_NEQ(skel->data->verify_invalid_result, 0, "verify_invalid_signature_rejected");
-+
-+	sig_verify__destroy(skel);
-+}
-+
-+static void test_ecdsa_size_queries(void)
-+{
-+	struct sig_verify *skel;
-+	int err, prog_fd;
-+
-+	LIBBPF_OPTS(bpf_test_run_opts, topts);
-+
-+	skel = sig_verify__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "sig_verify__open_and_load"))
-+		return;
-+
-+	prog_fd = bpf_program__fd(skel->progs.test_ecdsa_size_queries);
-+	err = bpf_prog_test_run_opts(prog_fd, &topts);
-+	ASSERT_OK(err, "test_ecdsa_size_queries");
-+	ASSERT_EQ(skel->data->ctx_create_status, 0, "ctx_create_status");
-+	/* P-256 key size is 256 bits = 32 bytes */
-+	ASSERT_GT(skel->data->keysize_result, 0, "keysize_positive");
-+	/* P-256 digest size is 32 bytes (SHA-256) */
-+	ASSERT_GT(skel->data->digestsize_result, 0, "digestsize_positive");
-+	/* P-256 max signature size is 64 bytes (r||s format) */
-+	ASSERT_GT(skel->data->maxsize_result, 0, "maxsize_positive");
-+
-+	sig_verify__destroy(skel);
-+}
-+
-+static void test_ecdsa_on_hash_ctx(void)
-+{
-+	struct sig_verify *skel;
-+	int err, prog_fd;
-+
-+	LIBBPF_OPTS(bpf_test_run_opts, topts);
-+
-+	skel = sig_verify__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "sig_verify__open_and_load"))
-+		return;
-+
-+	prog_fd = bpf_program__fd(skel->progs.test_ecdsa_on_hash_ctx);
-+	err = bpf_prog_test_run_opts(prog_fd, &topts);
-+	ASSERT_OK(err, "test_ecdsa_on_hash_ctx");
-+	ASSERT_EQ(skel->data->ecdsa_on_hash_ctx_status, 0, "ecdsa_on_hash_ctx_rejected");
-+
-+	sig_verify__destroy(skel);
-+}
-+
-+static void test_ecdsa_keysize_on_hash_ctx(void)
-+{
-+	struct sig_verify *skel;
-+	int err, prog_fd;
-+
-+	LIBBPF_OPTS(bpf_test_run_opts, topts);
-+
-+	skel = sig_verify__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "sig_verify__open_and_load"))
-+		return;
-+
-+	prog_fd = bpf_program__fd(skel->progs.test_ecdsa_keysize_on_hash_ctx);
-+	err = bpf_prog_test_run_opts(prog_fd, &topts);
-+	ASSERT_OK(err, "test_ecdsa_keysize_on_hash_ctx");
-+	ASSERT_EQ(skel->data->ecdsa_keysize_on_hash_status, 0, "ecdsa_keysize_on_hash_rejected");
-+
-+	sig_verify__destroy(skel);
-+}
-+
-+static void test_ecdsa_zero_len_msg(void)
-+{
-+	struct sig_verify *skel;
-+	int err, prog_fd;
-+
-+	LIBBPF_OPTS(bpf_test_run_opts, topts);
-+
-+	skel = sig_verify__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "sig_verify__open_and_load"))
-+		return;
-+
-+	prog_fd = bpf_program__fd(skel->progs.test_ecdsa_zero_len_msg);
-+	err = bpf_prog_test_run_opts(prog_fd, &topts);
-+	ASSERT_OK(err, "test_ecdsa_zero_len_msg");
-+	ASSERT_EQ(skel->data->ecdsa_zero_msg_status, 0, "zero_len_msg_rejected");
-+
-+	sig_verify__destroy(skel);
-+}
-+
-+static void test_ecdsa_zero_len_sig(void)
-+{
-+	struct sig_verify *skel;
-+	int err, prog_fd;
-+
-+	LIBBPF_OPTS(bpf_test_run_opts, topts);
-+
-+	skel = sig_verify__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "sig_verify__open_and_load"))
-+		return;
-+
-+	prog_fd = bpf_program__fd(skel->progs.test_ecdsa_zero_len_sig);
-+	err = bpf_prog_test_run_opts(prog_fd, &topts);
-+	ASSERT_OK(err, "test_ecdsa_zero_len_sig");
-+	ASSERT_EQ(skel->data->ecdsa_zero_sig_status, 0, "zero_len_sig_rejected");
-+
-+	sig_verify__destroy(skel);
-+}
-+
-+void test_sig_verify(void)
-+{
-+	if (test__start_subtest("verify_valid_signature"))
-+		test_ecdsa_verify_valid_signature();
-+	if (test__start_subtest("verify_invalid_signature"))
-+		test_ecdsa_verify_invalid_signature();
-+	if (test__start_subtest("size_queries"))
-+		test_ecdsa_size_queries();
-+	if (test__start_subtest("ecdsa_on_hash_ctx"))
-+		test_ecdsa_on_hash_ctx();
-+	if (test__start_subtest("ecdsa_keysize_on_hash_ctx"))
-+		test_ecdsa_keysize_on_hash_ctx();
-+	if (test__start_subtest("zero_len_msg"))
-+		test_ecdsa_zero_len_msg();
-+	if (test__start_subtest("zero_len_sig"))
-+		test_ecdsa_zero_len_sig();
-+}
-diff --git a/tools/testing/selftests/bpf/progs/crypto_common.h b/tools/testing/selftests/bpf/progs/crypto_common.h
-index 2f04f08f890b..3849083f2d23 100644
---- a/tools/testing/selftests/bpf/progs/crypto_common.h
-+++ b/tools/testing/selftests/bpf/progs/crypto_common.h
-@@ -17,6 +17,12 @@ int bpf_crypto_decrypt(struct bpf_crypto_ctx *ctx, const struct bpf_dynptr *src,
- 		       const struct bpf_dynptr *dst, const struct bpf_dynptr *iv) __ksym;
- int bpf_crypto_hash(struct bpf_crypto_ctx *ctx, const struct bpf_dynptr *data,
- 		    const struct bpf_dynptr *out) __ksym;
-+int bpf_sig_verify(struct bpf_crypto_ctx *ctx,
-+		     const struct bpf_dynptr *message,
-+		     const struct bpf_dynptr *signature) __ksym;
-+int bpf_sig_keysize(struct bpf_crypto_ctx *ctx) __ksym;
-+int bpf_sig_digestsize(struct bpf_crypto_ctx *ctx) __ksym;
-+int bpf_sig_maxsize(struct bpf_crypto_ctx *ctx) __ksym;
- 
- struct __crypto_ctx_value {
- 	struct bpf_crypto_ctx __kptr * ctx;
-diff --git a/tools/testing/selftests/bpf/progs/sig_verify.c b/tools/testing/selftests/bpf/progs/sig_verify.c
-new file mode 100644
-index 000000000000..27488404444d
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/sig_verify.c
-@@ -0,0 +1,286 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2025 Meta Platforms, Inc. and affiliates. */
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
-+#include "crypto_common.h"
-+
-+/* NIST P-256 test vector
-+ * This is a known valid ECDSA signature for testing purposes
-+ */
-+
-+/* Public key in uncompressed format: 0x04 || x || y (65 bytes) */
-+unsigned char pubkey_p256[65] = {
-+	0x04, /* Uncompressed point indicator */
-+	/* X coordinate (32 bytes) */
-+	0x60, 0xfe, 0xd4, 0xba, 0x25, 0x5a, 0x9d, 0x31,
-+	0xc9, 0x61, 0xeb, 0x74, 0xc6, 0x35, 0x6d, 0x68,
-+	0xc0, 0x49, 0xb8, 0x92, 0x3b, 0x61, 0xfa, 0x6c,
-+	0xe6, 0x69, 0x62, 0x2e, 0x60, 0xf2, 0x9f, 0xb6,
-+	/* Y coordinate (32 bytes) */
-+	0x79, 0x03, 0xfe, 0x10, 0x08, 0xb8, 0xbc, 0x99,
-+	0xa4, 0x1a, 0xe9, 0xe9, 0x56, 0x28, 0xbc, 0x64,
-+	0xf2, 0xf1, 0xb2, 0x0c, 0x2d, 0x7e, 0x9f, 0x51,
-+	0x77, 0xa3, 0xc2, 0x94, 0xd4, 0x46, 0x22, 0x99
-+};
-+
-+/* Message hash (32 bytes) - SHA-256 of "sample" */
-+unsigned char message_hash[32] = {
-+	0xaf, 0x2b, 0xdb, 0xe1, 0xaa, 0x9b, 0x6e, 0xc1,
-+	0xe2, 0xad, 0xe1, 0xd6, 0x94, 0xf4, 0x1f, 0xc7,
-+	0x1a, 0x83, 0x1d, 0x02, 0x68, 0xe9, 0x89, 0x15,
-+	0x62, 0x11, 0x3d, 0x8a, 0x62, 0xad, 0xd1, 0xbf
-+};
-+
-+/* Valid signature r || s (64 bytes) */
-+unsigned char valid_signature[64] = {
-+	/* r component (32 bytes) */
-+	0xef, 0xd4, 0x8b, 0x2a, 0xac, 0xb6, 0xa8, 0xfd,
-+	0x11, 0x40, 0xdd, 0x9c, 0xd4, 0x5e, 0x81, 0xd6,
-+	0x9d, 0x2c, 0x87, 0x7b, 0x56, 0xaa, 0xf9, 0x91,
-+	0xc3, 0x4d, 0x0e, 0xa8, 0x4e, 0xaf, 0x37, 0x16,
-+	/* s component (32 bytes) */
-+	0xf7, 0xcb, 0x1c, 0x94, 0x2d, 0x65, 0x7c, 0x41,
-+	0xd4, 0x36, 0xc7, 0xa1, 0xb6, 0xe2, 0x9f, 0x65,
-+	0xf3, 0xe9, 0x00, 0xdb, 0xb9, 0xaf, 0xf4, 0x06,
-+	0x4d, 0xc4, 0xab, 0x2f, 0x84, 0x3a, 0xcd, 0xa8
-+};
-+
-+/* Invalid signature (modified r component) for negative test */
-+unsigned char invalid_signature[64] = {
-+	/* r component (32 bytes) - first byte modified */
-+	0xff, 0xd4, 0x8b, 0x2a, 0xac, 0xb6, 0xa8, 0xfd,
-+	0x11, 0x40, 0xdd, 0x9c, 0xd4, 0x5e, 0x81, 0xd6,
-+	0x9d, 0x2c, 0x87, 0x7b, 0x56, 0xaa, 0xf9, 0x91,
-+	0xc3, 0x4d, 0x0e, 0xa8, 0x4e, 0xaf, 0x37, 0x16,
-+	/* s component (32 bytes) */
-+	0xf7, 0xcb, 0x1c, 0x94, 0x2d, 0x65, 0x7c, 0x41,
-+	0xd4, 0x36, 0xc7, 0xa1, 0xb6, 0xe2, 0x9f, 0x65,
-+	0xf3, 0xe9, 0x00, 0xdb, 0xb9, 0xaf, 0xf4, 0x06,
-+	0x4d, 0xc4, 0xab, 0x2f, 0x84, 0x3a, 0xcd, 0xa8
-+};
-+
-+/* Test results */
-+int verify_result = -1;
-+int verify_invalid_result = -1;
-+int ctx_create_status = -1;
-+int keysize_result = -1;
-+int digestsize_result = -1;
-+int maxsize_result = -1;
-+int ecdsa_on_hash_ctx_status = -1;
-+int ecdsa_keysize_on_hash_status = -1;
-+int ecdsa_zero_msg_status = -1;
-+int ecdsa_zero_sig_status = -1;
-+
-+SEC("syscall")
-+int test_ecdsa_verify_valid(void *ctx)
-+{
-+	struct bpf_crypto_ctx *ecdsa_ctx;
-+	struct bpf_crypto_params params = {
-+		.type = "sig",
-+		.algo = "p1363(ecdsa-nist-p256)",
-+		.key_len = sizeof(pubkey_p256),
-+	};
-+	struct bpf_dynptr msg_ptr, sig_ptr;
-+	int err = 0;
-+
-+	__builtin_memcpy(params.key, pubkey_p256, sizeof(pubkey_p256));
-+
-+	ecdsa_ctx = bpf_crypto_ctx_create(&params, sizeof(params), &err);
-+	if (!ecdsa_ctx) {
-+		ctx_create_status = err;
-+		return 0;
-+	}
-+	ctx_create_status = 0;
-+
-+	bpf_dynptr_from_mem(message_hash, sizeof(message_hash), 0, &msg_ptr);
-+	bpf_dynptr_from_mem(valid_signature, sizeof(valid_signature), 0, &sig_ptr);
-+
-+	verify_result = bpf_sig_verify(ecdsa_ctx, &msg_ptr, &sig_ptr);
-+
-+	bpf_crypto_ctx_release(ecdsa_ctx);
-+
-+	return 0;
-+}
-+
-+SEC("syscall")
-+int test_ecdsa_verify_invalid(void *ctx)
-+{
-+	struct bpf_crypto_ctx *ecdsa_ctx;
-+	struct bpf_crypto_params params = {
-+		.type = "sig",
-+		.algo = "p1363(ecdsa-nist-p256)",
-+		.key_len = sizeof(pubkey_p256),
-+	};
-+	struct bpf_dynptr msg_ptr, sig_ptr;
-+	int err = 0;
-+
-+	__builtin_memcpy(params.key, pubkey_p256, sizeof(pubkey_p256));
-+
-+	ecdsa_ctx = bpf_crypto_ctx_create(&params, sizeof(params), &err);
-+	if (!ecdsa_ctx)
-+		return 0;
-+
-+	bpf_dynptr_from_mem(message_hash, sizeof(message_hash), 0, &msg_ptr);
-+	bpf_dynptr_from_mem(invalid_signature, sizeof(invalid_signature), 0, &sig_ptr);
-+
-+	verify_invalid_result = bpf_sig_verify(ecdsa_ctx, &msg_ptr, &sig_ptr);
-+
-+	bpf_crypto_ctx_release(ecdsa_ctx);
-+
-+	return 0;
-+}
-+
-+SEC("syscall")
-+int test_ecdsa_size_queries(void *ctx)
-+{
-+	struct bpf_crypto_ctx *ecdsa_ctx;
-+	struct bpf_crypto_params params = {
-+		.type = "sig",
-+		.algo = "p1363(ecdsa-nist-p256)",
-+		.key_len = sizeof(pubkey_p256),
-+	};
-+	int err = 0;
-+
-+	__builtin_memcpy(params.key, pubkey_p256, sizeof(pubkey_p256));
-+
-+	ecdsa_ctx = bpf_crypto_ctx_create(&params, sizeof(params), &err);
-+	if (!ecdsa_ctx) {
-+		ctx_create_status = err;
-+		return 0;
-+	}
-+	ctx_create_status = 0;
-+
-+	keysize_result = bpf_sig_keysize(ecdsa_ctx);
-+	digestsize_result = bpf_sig_digestsize(ecdsa_ctx);
-+	maxsize_result = bpf_sig_maxsize(ecdsa_ctx);
-+
-+	bpf_crypto_ctx_release(ecdsa_ctx);
-+
-+	return 0;
-+}
-+
-+/* Test that calling bpf_sig_verify on hash context fails with type mismatch */
-+SEC("syscall")
-+int test_ecdsa_on_hash_ctx(void *ctx)
-+{
-+	struct bpf_crypto_ctx *hash_ctx;
-+	struct bpf_crypto_params params = {
-+		.type = "hash",
-+		.algo = "sha256",
-+		.key_len = 0,
-+	};
-+	struct bpf_dynptr msg_ptr, sig_ptr;
-+	int err = 0;
-+	int ret;
-+
-+	hash_ctx = bpf_crypto_ctx_create(&params, sizeof(params), &err);
-+	if (!hash_ctx) {
-+		ecdsa_on_hash_ctx_status = err;
-+		return 0;
-+	}
-+
-+	bpf_dynptr_from_mem(message_hash, sizeof(message_hash), 0, &msg_ptr);
-+	bpf_dynptr_from_mem(valid_signature, sizeof(valid_signature), 0, &sig_ptr);
-+
-+	ret = bpf_sig_verify(hash_ctx, &msg_ptr, &sig_ptr);
-+	/* Expected: should fail with -EINVAL (-22) due to type_id mismatch */
-+	ecdsa_on_hash_ctx_status = (ret == -22) ? 0 : ret;
-+	bpf_crypto_ctx_release(hash_ctx);
-+	return 0;
-+}
-+
-+/* Test that calling bpf_sig_keysize on hash context fails with type mismatch */
-+SEC("syscall")
-+int test_ecdsa_keysize_on_hash_ctx(void *ctx)
-+{
-+	struct bpf_crypto_ctx *hash_ctx;
-+	struct bpf_crypto_params params = {
-+		.type = "hash",
-+		.algo = "sha256",
-+		.key_len = 0,
-+	};
-+	int err = 0;
-+	int ret;
-+
-+	hash_ctx = bpf_crypto_ctx_create(&params, sizeof(params), &err);
-+	if (!hash_ctx) {
-+		ecdsa_keysize_on_hash_status = err;
-+		return 0;
-+	}
-+
-+	ret = bpf_sig_keysize(hash_ctx);
-+	/* Expected: should fail with -EINVAL (-22) due to type_id mismatch */
-+	ecdsa_keysize_on_hash_status = (ret == -22) ? 0 : ret;
-+	bpf_crypto_ctx_release(hash_ctx);
-+	return 0;
-+}
-+
-+/* Test that bpf_sig_verify with zero-length message fails */
-+SEC("syscall")
-+int test_ecdsa_zero_len_msg(void *ctx)
-+{
-+	struct bpf_crypto_ctx *ecdsa_ctx;
-+	struct bpf_crypto_params params = {
-+		.type = "sig",
-+		.algo = "p1363(ecdsa-nist-p256)",
-+		.key_len = sizeof(pubkey_p256),
-+	};
-+	struct bpf_dynptr msg_ptr, sig_ptr;
-+	int err = 0;
-+	int ret;
-+
-+	__builtin_memcpy(params.key, pubkey_p256, sizeof(pubkey_p256));
-+
-+	ecdsa_ctx = bpf_crypto_ctx_create(&params, sizeof(params), &err);
-+	if (!ecdsa_ctx) {
-+		ecdsa_zero_msg_status = err;
-+		return 0;
-+	}
-+
-+	/* Zero-length message */
-+	bpf_dynptr_from_mem(message_hash, 0, 0, &msg_ptr);
-+	bpf_dynptr_from_mem(valid_signature, sizeof(valid_signature), 0, &sig_ptr);
-+
-+	ret = bpf_sig_verify(ecdsa_ctx, &msg_ptr, &sig_ptr);
-+	/* Expected: should fail with -EINVAL (-22) */
-+	ecdsa_zero_msg_status = (ret == -22) ? 0 : ret;
-+	bpf_crypto_ctx_release(ecdsa_ctx);
-+	return 0;
-+}
-+
-+/* Test that bpf_sig_verify with zero-length signature fails */
-+SEC("syscall")
-+int test_ecdsa_zero_len_sig(void *ctx)
-+{
-+	struct bpf_crypto_ctx *ecdsa_ctx;
-+	struct bpf_crypto_params params = {
-+		.type = "sig",
-+		.algo = "p1363(ecdsa-nist-p256)",
-+		.key_len = sizeof(pubkey_p256),
-+	};
-+	struct bpf_dynptr msg_ptr, sig_ptr;
-+	int err = 0;
-+	int ret;
-+
-+	__builtin_memcpy(params.key, pubkey_p256, sizeof(pubkey_p256));
-+
-+	ecdsa_ctx = bpf_crypto_ctx_create(&params, sizeof(params), &err);
-+	if (!ecdsa_ctx) {
-+		ecdsa_zero_sig_status = err;
-+		return 0;
-+	}
-+
-+	bpf_dynptr_from_mem(message_hash, sizeof(message_hash), 0, &msg_ptr);
-+	/* Zero-length signature */
-+	bpf_dynptr_from_mem(valid_signature, 0, 0, &sig_ptr);
-+
-+	ret = bpf_sig_verify(ecdsa_ctx, &msg_ptr, &sig_ptr);
-+	/* Expected: should fail with -EINVAL (-22) */
-+	ecdsa_zero_sig_status = (ret == -22) ? 0 : ret;
-+	bpf_crypto_ctx_release(ecdsa_ctx);
-+	return 0;
-+}
-+
-+char __license[] SEC("license") = "GPL";
--- 
-2.52.0
-
+>  	r8 &=3D 8;					\
+>  	r7 +=3D r8;					\
+>  	r0 =3D *(u64*)(r7 + 0);				\
+>  	exit;						\
+>  "	:
+> -	: __imm_const(flow_keys_off, offsetof(struct __sk_buff, flow_keys))
+> +	: __imm_const(flow_keys_off, offsetof(struct __sk_buff, flow_keys)),
+> +	  __imm(bpf_get_prandom_u32)
+>  	: __clobber_all);
+>  }
