@@ -1,246 +1,131 @@
-Received: from devnull.danielhodges.dev (vps-2f6e086e.vps.ovh.us [135.148.138.8])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69B2E466B5C;
-	Tue, 20 Jan 2026 18:47:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=135.148.138.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3B6246AF19
+	for <bpf@vger.kernel.org>; Tue, 20 Jan 2026 18:47:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768934864; cv=none; b=izzJu7bK7V3CZQ5tJimfPBlHMjpjCviwuOLXGuN6zDwuvBOgLUr0hO02IEx3yDpu+2OmjDShFcZkr117Jw+GtlGxf6oQZcW8esaMSQntNFVXvz5yEmnFn1hJO+sZZhN+93zUZznQsldE46EzN717YCZBL8p0xTvjic+ZxfXddqk=
+	t=1768934870; cv=none; b=E8a1AxL/kQU+NJ3xMiSeoN8DDbsJjQh7ZTdt3ipvdogdlXoS3Rr8om/CA90qtDH0Wk7u9MfNvXtv3u5VzzjErQS1Idi+vY/YZhkGZh8jsCqepbNCU8SpKr66GYVBBiYkGUm1NUX8a+EZG/Nd9YYmPsPBYUIroCV6B6L/mKSweew=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768934864; c=relaxed/simple;
-	bh=c9c112CfqOZIUtPBXyYub4SXP7/w2oeWMEWy4e/iG8M=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RT1puisbv0tvYJ1I0m1GVZSV3I/jwbwuIKADpuSunAun9exEPFN0y8Rz2QlAyaHKvCpn8TD6BRDhlEOJsN2ApZzsafkMLwQ+WM2BhzmRegSENamtQz/dp+9zC+WLbytPJU+oL7icqMC/+aHJdhw6VSyL5zQZ/Ju0l7IMKaAdkqg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=danielhodges.dev; spf=pass smtp.mailfrom=danielhodges.dev; dkim=pass (2048-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b=iWc/fKVr; dkim=permerror (0-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b=UvdXDLmc; arc=none smtp.client-ip=135.148.138.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=danielhodges.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=danielhodges.dev
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b="iWc/fKVr";
-	dkim=permerror (0-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b="UvdXDLmc"
-DKIM-Signature: v=1; a=rsa-sha256; s=202510r; d=danielhodges.dev; c=relaxed/relaxed;
-	h=Message-ID:Date:Subject:To:From; t=1768934822; bh=x+cKrahUYB9zMrFLU4yGCt2
-	1rJRa9TAmp18ETboD+hQ=; b=iWc/fKVr4sx0aosPo1yP5CuqSAkum91Cqebi5R6NmuIsDgWrhb
-	NKW9RZGuxLh8SSj3bV9m6ZNFmMhfV7N0SwvOnoTwYkqIryFNMlij/T+2w7/5oqrh/4HpHaUG3LE
-	WFfsq+DxqnruH1AkJg7VMe04Pl8k64q43+Fh/dGIlOB1D71j4XaHfZURxN+jNQ6vPEesgZYZKnn
-	+N2VSAWxwpesR43/DjJPgMqDNcYLz7qO/vCWputzYiRCCPLyvwUGoIXEjQQwi7eKSGkMEclQI9x
-	yT0O1NxF8mhxpaS2ePo8isvdR13rCf4JVxsXicjNPZWX5TTiu2kPwYek1/Etvash/Wg==;
-DKIM-Signature: v=1; a=ed25519-sha256; s=202510e; d=danielhodges.dev; c=relaxed/relaxed;
-	h=Message-ID:Date:Subject:To:From; t=1768934822; bh=x+cKrahUYB9zMrFLU4yGCt2
-	1rJRa9TAmp18ETboD+hQ=; b=UvdXDLmcxDUPQj9khnXaNeEpuU/qpWiCXN8Dp3Q74qFreFiwyY
-	r43aq1c9lJQvY9NrAZibnKzsATOuaU4peuAA==;
-From: Daniel Hodges <git@danielhodges.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Vadim Fedorenko <vadim.fedorenko@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Mykyta Yatsenko <yatsenko@meta.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	"David S . Miller" <davem@davemloft.net>,
-	linux-crypto@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Daniel Hodges <git@danielhodges.dev>
-Subject: [PATCH bpf-next v5 2/7] crypto: Add BPF hash algorithm type registration module
-Date: Tue, 20 Jan 2026 13:46:56 -0500
-Message-ID: <20260120184701.23082-3-git@danielhodges.dev>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260120184701.23082-1-git@danielhodges.dev>
-References: <20260120184701.23082-1-git@danielhodges.dev>
+	s=arc-20240116; t=1768934870; c=relaxed/simple;
+	bh=CDhyY+lp92Rh286QAW/XP/ZhroygHch5zAJeleD2L8g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dEGURaj+3ogb1KGSWLksf1E7Nl/K1KC7n/SAW+LlanBMmni0pQVxSO8bWmPKpktDoITh6WmfUcdu72Do20apM0Yz9+ASjpTDzaWKDv3UHiJvFluK8TiGQVEsjHd/k+L1gaRyWfR4b/e+vevZ0ntCuLmaK+Ptjn9CxhzWEQ8k5h4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ot1-f44.google.com with SMTP id 46e09a7af769-7cfd819ae5eso2907472a34.1
+        for <bpf@vger.kernel.org>; Tue, 20 Jan 2026 10:47:48 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768934868; x=1769539668;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cyvv5bVOKq5q2ikgZwkotwgP6l+kB/mtu+tHV4I/d8o=;
+        b=lbvLCGgNhkUCwKT0FN36qtCK6f1vutTKoKf0+Lf/0XhYHDXpazfELQVBLURtb+QhJL
+         +lmmWtPJ/UmYCo1MZIKjdvCvEsNZhQH8UWUORzWCfjF5SMWQeC071hLu1l2WUPXlczeU
+         1UZgNSgURpVoQOCg87NkBYOQULnWrE3zjJCXWtGcS2s1z8D4BKSITcXaWOkBrEMpxtIW
+         wawUDa8I9rTJ6OwSUjO4Hygqn98CIUKeHWOcTz94XxkFsW9s/q60DoW8ypgjzN8ls8/B
+         8kt8CxpuzPpjZbF1Vq4/iViKwNdkFNwydqZ79P6NsKmQm8JHT2XNJ3li8C55Wp4cfRH0
+         NO5Q==
+X-Forwarded-Encrypted: i=1; AJvYcCW0kzzEr1rMHHjqrhTgHixtN4awYhgqT/i2vWG2E6pNtLlPWEzg+aNh2qtrN7WoERbKAGY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxmpBHgbyBkLYHPv5Am3Ulusn2n62h4VWKO2aF5TBhHPAj2r0gY
+	OlfM7YFuely88G4qD/zER78yt+LYX2arg4v1TRqRSPnoKMHjKFOfptnD
+X-Gm-Gg: AY/fxX6a6o5WCk9w6WB9HE6/QCtelvjB0Gzc7Nm8hZlFfHbXHUU0CrYEiQ8oVWFBGKn
+	SDGzZv0tD6uzAoldUA47flEjpkdsvkstHv0uH99Fg/+O3oi4IGVtVNp1he+VNb8DJqYNBAGR7t/
+	5I8PpkBPkzDuiZhxnCpOHvHjqaZjVWUqbIYchJ9+gowHoxLlW8pzRCJumKCK+BQaw9AYkRTNg1+
+	TF3YVy8oJ98omQaf58zSJxt78rTLMk0GRQFephlx/VHuzqE8UdkXvVGhDsMo0yAE9KwFDDIj2RV
+	M9yPQ1q9zTCXIIymd7IbO0oMQXYuho4zf5LAsNklwg1zYCbF3f1S1Cxc7AJ3ou5o4ZRznyCLZmi
+	YtuFBWQfMCCEX8c74IqqEzEzsRkbMKMu4DM7R3e9QMCxt2hqbhJA/8WXchHvpUt4v5w59f/hjnC
+	FQ+A==
+X-Received: by 2002:a05:6830:3986:b0:7cf:da97:57d6 with SMTP id 46e09a7af769-7d140a3d3c9mr1655270a34.6.1768934867912;
+        Tue, 20 Jan 2026 10:47:47 -0800 (PST)
+Received: from gmail.com ([2a03:2880:10ff:52::])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7cfdf0e956esm8985236a34.10.2026.01.20.10.47.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Jan 2026 10:47:47 -0800 (PST)
+Date: Tue, 20 Jan 2026 10:47:45 -0800
+From: Breno Leitao <leitao@debian.org>
+To: Vlastimil Babka <vbabka@suse.cz>
+Cc: Harry Yoo <harry.yoo@oracle.com>, Petr Tesarik <ptesarik@suse.com>, 
+	Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>, 
+	Roman Gushchin <roman.gushchin@linux.dev>, Hao Li <hao.li@linux.dev>, 
+	Andrew Morton <akpm@linux-foundation.org>, Uladzislau Rezki <urezki@gmail.com>, 
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Suren Baghdasaryan <surenb@google.com>, 
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>, Alexei Starovoitov <ast@kernel.org>, linux-mm@kvack.org, 
+	linux-kernel@vger.kernel.org, linux-rt-devel@lists.linux.dev, bpf@vger.kernel.org, 
+	kasan-dev@googlegroups.com
+Subject: Re: [PATCH v3 05/21] slab: add sheaves to most caches
+Message-ID: <aW_NK2NXVgtuzCVH@gmail.com>
+References: <20260116-sheaves-for-all-v3-0-5595cb000772@suse.cz>
+ <20260116-sheaves-for-all-v3-5-5595cb000772@suse.cz>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260116-sheaves-for-all-v3-5-5595cb000772@suse.cz>
 
-Add bpf_crypto_shash module that registers a hash type with the BPF
-crypto infrastructure, enabling BPF programs to access kernel hash
-algorithms through a unified interface.
+Hello Vlastimil,
 
-Update the bpf_crypto_type interface with hash-specific callbacks:
-   - alloc_tfm: Allocates crypto_shash context with proper descriptor size
-   - free_tfm: Releases hash transform and context memory
-   - has_algo: Checks algorithm availability via crypto_has_shash()
-   - hash: Performs single-shot hashing via crypto_shash_digest()
-   - digestsize: Returns the output size for the hash algorithm
-   - get_flags: Exposes transform flags to BPF programs
+On Fri, Jan 16, 2026 at 03:40:25PM +0100, Vlastimil Babka wrote:
+> --- a/mm/slub.c
+> +++ b/mm/slub.c
+> @@ -7863,6 +7863,48 @@ static void set_cpu_partial(struct kmem_cache *s)
+>  #endif
+>  }
+>  
+> +static unsigned int calculate_sheaf_capacity(struct kmem_cache *s,
+> +					     struct kmem_cache_args *args)
+> +
+> +{
+> +	unsigned int capacity;
+> +	size_t size;
+> +
+> +
+> +	if (IS_ENABLED(CONFIG_SLUB_TINY) || s->flags & SLAB_DEBUG_FLAGS)
+> +		return 0;
+> +
+> +	/* bootstrap caches can't have sheaves for now */
+> +	if (s->flags & SLAB_NO_OBJ_EXT)
+> +		return 0;
 
-Update bpf_shash_ctx to contain crypto_shash transform and shash_desc
-descriptor to accommodate algorithm-specific descriptor requirements.
+I've been testing this on my arm64 environment with some debug patches,
+and the machine became unbootable.
 
-Signed-off-by: Daniel Hodges <git@danielhodges.dev>
----
- MAINTAINERS                |  1 +
- crypto/Makefile            |  3 ++
- crypto/bpf_crypto_shash.c  | 96 ++++++++++++++++++++++++++++++++++++++
- include/linux/bpf_crypto.h |  7 +++
- 4 files changed, 107 insertions(+)
- create mode 100644 crypto/bpf_crypto_shash.c
+I am wondering if you should avoid SLAB_NOLEAKTRACE as well. I got the
+impression it is hitting this infinite loop:
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 491d567f7dc8..4e9b369acd1c 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -4713,6 +4713,7 @@ BPF [CRYPTO]
- M:	Vadim Fedorenko <vadim.fedorenko@linux.dev>
- L:	bpf@vger.kernel.org
- S:	Maintained
-+F:	crypto/bpf_crypto_shash.c
- F:	crypto/bpf_crypto_skcipher.c
- F:	include/linux/bpf_crypto.h
- F:	kernel/bpf/crypto.c
-diff --git a/crypto/Makefile b/crypto/Makefile
-index 16a35649dd91..853dff375906 100644
---- a/crypto/Makefile
-+++ b/crypto/Makefile
-@@ -30,6 +30,9 @@ obj-$(CONFIG_CRYPTO_ECHAINIV) += echainiv.o
- crypto_hash-y += ahash.o
- crypto_hash-y += shash.o
- obj-$(CONFIG_CRYPTO_HASH2) += crypto_hash.o
-+ifeq ($(CONFIG_BPF_SYSCALL),y)
-+obj-$(CONFIG_CRYPTO_HASH2) += bpf_crypto_shash.o
-+endif
- 
- obj-$(CONFIG_CRYPTO_AKCIPHER2) += akcipher.o
- obj-$(CONFIG_CRYPTO_SIG2) += sig.o
-diff --git a/crypto/bpf_crypto_shash.c b/crypto/bpf_crypto_shash.c
-new file mode 100644
-index 000000000000..6e9b0d757ec9
---- /dev/null
-+++ b/crypto/bpf_crypto_shash.c
-@@ -0,0 +1,96 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/* Copyright (c) 2025 Meta Platforms, Inc. and affiliates. */
-+#include <linux/types.h>
-+#include <linux/module.h>
-+#include <linux/bpf_crypto.h>
-+#include <crypto/hash.h>
-+
-+struct bpf_shash_ctx {
-+	struct crypto_shash *tfm;
-+	struct shash_desc desc;
-+};
-+
-+static void *bpf_crypto_shash_alloc_tfm(const char *algo)
-+{
-+	struct bpf_shash_ctx *ctx;
-+	struct crypto_shash *tfm;
-+
-+	tfm = crypto_alloc_shash(algo, 0, 0);
-+	if (IS_ERR(tfm))
-+		return tfm;
-+
-+	ctx = kzalloc(sizeof(*ctx) + crypto_shash_descsize(tfm), GFP_KERNEL);
-+	if (!ctx) {
-+		crypto_free_shash(tfm);
-+		return ERR_PTR(-ENOMEM);
-+	}
-+
-+	ctx->tfm = tfm;
-+	ctx->desc.tfm = tfm;
-+
-+	return ctx;
-+}
-+
-+static void bpf_crypto_shash_free_tfm(void *tfm)
-+{
-+	struct bpf_shash_ctx *ctx = tfm;
-+
-+	crypto_free_shash(ctx->tfm);
-+	kfree(ctx);
-+}
-+
-+static int bpf_crypto_shash_has_algo(const char *algo)
-+{
-+	return crypto_has_shash(algo, 0, 0);
-+}
-+
-+static int bpf_crypto_shash_hash(void *tfm, const u8 *data, u8 *out,
-+				 unsigned int len)
-+{
-+	struct bpf_shash_ctx *ctx = tfm;
-+
-+	return crypto_shash_digest(&ctx->desc, data, len, out);
-+}
-+
-+static unsigned int bpf_crypto_shash_digestsize(void *tfm)
-+{
-+	struct bpf_shash_ctx *ctx = tfm;
-+
-+	return crypto_shash_digestsize(ctx->tfm);
-+}
-+
-+static u32 bpf_crypto_shash_get_flags(void *tfm)
-+{
-+	struct bpf_shash_ctx *ctx = tfm;
-+
-+	return crypto_shash_get_flags(ctx->tfm);
-+}
-+
-+static const struct bpf_crypto_type bpf_crypto_shash_type = {
-+	.alloc_tfm	= bpf_crypto_shash_alloc_tfm,
-+	.free_tfm	= bpf_crypto_shash_free_tfm,
-+	.has_algo	= bpf_crypto_shash_has_algo,
-+	.hash		= bpf_crypto_shash_hash,
-+	.digestsize	= bpf_crypto_shash_digestsize,
-+	.get_flags	= bpf_crypto_shash_get_flags,
-+	.owner		= THIS_MODULE,
-+	.type_id	= BPF_CRYPTO_TYPE_HASH,
-+	.name		= "hash",
-+};
-+
-+static int __init bpf_crypto_shash_init(void)
-+{
-+	return bpf_crypto_register_type(&bpf_crypto_shash_type);
-+}
-+
-+static void __exit bpf_crypto_shash_exit(void)
-+{
-+	int err = bpf_crypto_unregister_type(&bpf_crypto_shash_type);
-+
-+	WARN_ON_ONCE(err);
-+}
-+
-+module_init(bpf_crypto_shash_init);
-+module_exit(bpf_crypto_shash_exit);
-+MODULE_LICENSE("GPL");
-+MODULE_DESCRIPTION("Hash algorithm support for BPF");
-diff --git a/include/linux/bpf_crypto.h b/include/linux/bpf_crypto.h
-index c84371cc4e47..cf2c66f9782b 100644
---- a/include/linux/bpf_crypto.h
-+++ b/include/linux/bpf_crypto.h
-@@ -3,6 +3,12 @@
- #ifndef _BPF_CRYPTO_H
- #define _BPF_CRYPTO_H
- 
-+enum bpf_crypto_type_id {
-+	BPF_CRYPTO_TYPE_SKCIPHER = 1,
-+	BPF_CRYPTO_TYPE_HASH,
-+	BPF_CRYPTO_TYPE_SIG,
-+};
-+
- struct bpf_crypto_type {
- 	void *(*alloc_tfm)(const char *algo);
- 	void (*free_tfm)(void *tfm);
-@@ -17,6 +23,7 @@ struct bpf_crypto_type {
- 	unsigned int (*digestsize)(void *tfm);
- 	u32 (*get_flags)(void *tfm);
- 	struct module *owner;
-+	enum bpf_crypto_type_id type_id;
- 	char name[14];
- };
- 
--- 
-2.52.0
+        -> slab allocation
+          -> kmemleak_alloc()
+            -> kmem_cache_alloc(object_cache)
+              -> alloc_from_pcs() / __pcs_replace_empty_main()
+                -> alloc_full_sheaf() -> kzalloc()
+                  -> kmemleak_alloc()
+                    -> ... (infinite recursion)
+
+
+What about something as:
+
+diff --git a/mm/slub.c b/mm/slub.c
+index 26804859821a..0a6481aaa744 100644
+--- a/mm/slub.c
++++ b/mm/slub.c
+@@ -7445,8 +7445,13 @@ static unsigned int calculate_sheaf_capacity(struct kmem_cache *s,
+        if (IS_ENABLED(CONFIG_SLUB_TINY) || s->flags & SLAB_DEBUG_FLAGS)
+                return 0;
+
+-       /* bootstrap caches can't have sheaves for now */
+-       if (s->flags & SLAB_NO_OBJ_EXT)
++       /*
++        * bootstrap caches can't have sheaves for now (SLAB_NO_OBJ_EXT).
++        * SLAB_NOLEAKTRACE caches (e.g., kmemleak's object_cache) must not
++        * have sheaves to avoid recursion when sheaf allocation triggers
++        * kmemleak tracking.
++        */
++       if (s->flags & (SLAB_NO_OBJ_EXT | SLAB_NOLEAKTRACE))
+                return 0;
 
