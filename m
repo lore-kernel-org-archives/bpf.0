@@ -1,65 +1,66 @@
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA4922D592C
-	for <bpf@vger.kernel.org>; Tue, 20 Jan 2026 15:59:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 092E331E0E6
+	for <bpf@vger.kernel.org>; Tue, 20 Jan 2026 15:59:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768924773; cv=none; b=oTjxZ+x5JPhD3bpT5xjwEi2drDgyuZuMlxc7tugJK/hy7TwVCaboXsBQ9n+Zi9ZguVDsJZ/9VH7c4oB+FCjdJ+1bcnzuBLXXcb5o5iR9fQsbBVX6vZCltRjjjiaYbAGHDW9M4w0n/OuBYQ5zGJqAlmGE/SDn7eVQLRnfSR3gZWE=
+	t=1768924775; cv=none; b=ny/nw/Iej/5VXxFDJ3Lqi7J7jdUpZ4SGdtMI/arfgjFRHNlPpj94yY68FcLXbrUQTtkCWM5HSBCVQ9P8h2kdfjIQxAOu1X52qFoSUXZDLpimJ1JsBOOQfXZbHFdLHOj8gP0XyooVCFRCYtPgfX8jmUYOnSA/QYg3LLWk3Z1X8L8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768924773; c=relaxed/simple;
-	bh=012+ueB/iclDmDJcMymqlS+jdL8afl2YsV2KTrsJL8Y=;
+	s=arc-20240116; t=1768924775; c=relaxed/simple;
+	bh=uBgdcP/8eKiNVr9yDovBdg4OVdReyIyfSjDmeggYSt4=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=r/X3zQPHkGiS++p87Jd7LUXmdJDO0lcvlNAy1Kgg27TyfrcfRlHHlFLmBSIbiF/0g8fTbBmslFlIXOLj6iabdtah7egsaj2D+T0Sp0zRXoOAQ84MZ2jTqd8qOZXcznj9lUw/38l1JlD+zmhoAGuD/bBayGESNPt3OMhhp8nZrGY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bmUMXchq; arc=none smtp.client-ip=209.85.128.52
+	 In-Reply-To:To:Cc; b=MTC+PkK8JW7X63zmq2kr68lOIUMyqFABbLEfq9C9LWCTI4RGLPdnnXqc/3M0aXW+t47t3DWzuE2fkqzNqS4OsxBRwFnHOW5G791tH8CI6C3yV8lpcQn+ecVN0D34N0QHg4S6xCRvHvgcjPa47YYLvB8yovspeXZrga38PM1fqB0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ezAqa9me; arc=none smtp.client-ip=209.85.221.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bmUMXchq"
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-47edd9024b1so35471205e9.3
-        for <bpf@vger.kernel.org>; Tue, 20 Jan 2026 07:59:31 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ezAqa9me"
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-43591b55727so547577f8f.3
+        for <bpf@vger.kernel.org>; Tue, 20 Jan 2026 07:59:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768924770; x=1769529570; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1768924772; x=1769529572; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=nN8lueH9pAB22PYLps4QKe2d7qkMtYJ8w5ylcyUCTdo=;
-        b=bmUMXchq1sjjw2SFi+AX7GB6k4254DhDZ6eRf9m1OFSky4SzfeaDfng+9a+h+XRyFh
-         Mj8fs9nmtuCeZral87KsIQCRAkWR5jeuXLGD+zkIxgN087f+eDNoTfkgwJEOqy1Qldk7
-         s1WMv6/JOlofgMOnrCaxRrW+o0wCZmCLW6VbdVPdwtjkXJiS3AefNNDtOrUOcffE7yzU
-         /E4d+vUblQQgHGLoryoz83xgBngtmnnVhwKWnywmJPyCd+pW4t+7xH4uES+QdQTeX5TP
-         QbvQ8uI2AQklxzWV52hxgZT+nZYoi9NkTgAA0C40NKvRyBpRH/YIP3001+MPnidNrPMK
-         mLsQ==
+        bh=EMy6jiDDMpFvYB+6s8oftA+orrfkzR6Gpd384Jyt/ns=;
+        b=ezAqa9meONuJ80fpMzRj39kqNenb+5xfYq1HWUUj1zcbEORrp2fZxAwtt7IjgM5LjA
+         9AmMGGpJ7l6spZ2JQwv17Tj44ue70jKLc1yBGhKXusbcqXvTtlstikdmTsSYtb5R0DbW
+         6A9PmpCb9kgUssmQIuvd0OpB8+H7n31vsB+Cbfz+w84MtuuJt9NoBz3V6jx6xOI4MkT0
+         XBorGxyTpg8uejHKR9naFyco953UPMXkCDbB46mmkbYdXOol/qjFsBV82ZeRGiaNxCb2
+         C/bu9RtcFglaKKblzsXDj96TffERB2JNWGMcvquoS0UHNxstVTTJIJX6F0dKlEGYNjke
+         czmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768924770; x=1769529570;
+        d=1e100.net; s=20230601; t=1768924772; x=1769529572;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=nN8lueH9pAB22PYLps4QKe2d7qkMtYJ8w5ylcyUCTdo=;
-        b=tSALycn/gQSjfD/zPOeFr/JyDGrgt6syeuoN8O4E9KX191tA6rBHZQ/zLMSnND9ep9
-         zgvjbKkrHm1zTpUFgDTuuDYHU109nl0/vepLluq0HGCPoQmWpsl8/MfJ+JlidWcYdnM1
-         lY7d1iUkMNBJ9qz/SZuF+z3lwoh3S90ITdxQvpMYPZDytq3SClAUeufN7AumCWjOoem6
-         2eTAZUeX/XVdVI4+rp3MKGBQlNkoynqYsvJqj0wJyZ/Q+nFwpdJYe0FNfWa6O9dNubCB
-         5iU4Y9EtAWi/0Xmfri+eADy3HGPbxUMjlD2CNJxorl6ngPTIZRLOa89YB4HTUMfQy1kY
-         Nf4w==
-X-Gm-Message-State: AOJu0YwyHITNbMrGk46ZTb43I+zHpNYUTatwJTwQKTUt0d2N2MjKLj68
-	eVj9mRiMOzY9g+jekRnDhePO3H5Cr8+VqREDwmy1IXAB6GnvXMNiZy7eiN0YCQ==
-X-Gm-Gg: AY/fxX6X0+xOVKNfU7mDMFDD9hAKSV3utxjBtbOv5zLIJa+hmcXX56+7yRxeRZPJTKq
-	5J/gavxwcX/UXP7AJdxQyAjxUN/QuJwFp0wR+RLu/NIeCpfYBa/K7AvUqYVeamaXaI3nKrzpOvL
-	Lq4xmsQGV/WyK+IiUM3Kc779PvxIlghwEx+rfUaJdhYgi2rvrUQk89JG7TMtWUk80xRbodU/P0W
-	B1jE1bv72mNgmuNU9ur2WGonsTG5+5hvAcvkAcOwjPY/BzfSOrRZo4HnV/ZpVwkMEeXGRTE3Ach
-	eLsDKryAEb/JVu+Aa8BrksvF/NpQHGVSb/bOYNKcdJRr2funVZ/y9NHt55gl51MgKmT1kpNkgJb
-	mVj+QYiu38suJaUMlp0/skXRzz56ljruXyvvaXBd0ExtiDDdUYR+Ir1FkOsDb4+tTE/zi+8IguC
-	2XFyidB1YNos/8ww==
-X-Received: by 2002:a05:600c:870c:b0:47d:25ac:3a94 with SMTP id 5b1f17b1804b1-4801eb092demr205716065e9.17.1768924770201;
-        Tue, 20 Jan 2026 07:59:30 -0800 (PST)
+        bh=EMy6jiDDMpFvYB+6s8oftA+orrfkzR6Gpd384Jyt/ns=;
+        b=FKhuOHwj+clsaVoaTNxoSCBpDQa03IzRigteO9vi2EJ50OEN8iYsMYMsLcaIbWua6g
+         ZsroW15zeY6InbXsF3pa2SVcH3Mf7qqyMzlHsQ8Ko349iyxDgYeo7aD1ZfsMmA1QZzF2
+         YTE8MwlL2Ckol/1W2TlDjIQ/iB7NmHjGloojrvghAyP397NQlFCJnazK/vuokiWytkcn
+         ItWLMTFJit/fn3cf7VR+9hI9YxJqLyvYAldBnYfaGVYmT0VSKN5FDihc2bKdWLipufrT
+         EHbkmrvuJZF5D9ImsiZCqwWAiLcl/QnO1kBOXVA/OJWxdhCD78HUSKq9RKJNAX6/AQUX
+         J4jQ==
+X-Gm-Message-State: AOJu0Ywsb0WIVp4awvt5dEJgaLSf8g41V2QVoFrxoTm0sPReAFwYqQ7a
+	U9QZlRAxixcVmt+BRNm9E60y68sBNqpJl2cF8bS1/0xt1l4La99z+cN3
+X-Gm-Gg: AZuq6aI8vvao+pfsPDTzGckB119u+JuRounNfiVoL49ogeXGbu08+YpYIPPJLLKbCFH
+	ms4DpHMNLCDLt/7/8Df6Ykgm+Xr0ctVBmENBPLK7sdEtzzlTNfaJxSVfjc+BXVjGhBoKgPzQife
+	YO5w8MFr959DGHBvTPr286u9a71/rtBll6ORZtxXazAP/D2nA4nBn8+JOIK4P6NdXtUZzUcyLr3
+	dk5JjvOfk2HuMqO59GdjHB+XaqXm5sC3Cj+de7LmDtgOmsJCCP/hEVJvfKB/SjEsLnrlP21EAM8
+	9PIAY7bd9+sw5qyCuGG4lke1k+YqiSZ+q/ld1T8SYLudEN8ni0MQaRW+hSdWf7iUjuUXZtjTjei
+	+L9bH37kYlXRsvvqetlqqSYvo7sbSz/N+E4XsipPgh2lf3QDvdXwp1tFWPmdYVb3czQoEomPAdT
+	Iv9nPXfmUSR47j6A==
+X-Received: by 2002:a5d:5f83:0:b0:435:90a7:8db with SMTP id ffacd0b85a97d-43590a70d49mr3916776f8f.15.1768924771999;
+        Tue, 20 Jan 2026 07:59:31 -0800 (PST)
 Received: from localhost ([2a01:4b00:bd1f:f500:e85d:a828:282d:d5c7])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43596090493sm1680900f8f.25.2026.01.20.07.59.29
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43569921dddsm31249849f8f.6.2026.01.20.07.59.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Jan 2026 07:59:29 -0800 (PST)
+        Tue, 20 Jan 2026 07:59:31 -0800 (PST)
 From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Date: Tue, 20 Jan 2026 15:59:13 +0000
-Subject: [PATCH bpf-next v6 04/10] bpf: Simplify bpf_timer_cancel()
+Date: Tue, 20 Jan 2026 15:59:15 +0000
+Subject: [PATCH bpf-next v6 06/10] bpf: Add verifier support for bpf_timer
+ argument in kfuncs
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -68,7 +69,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260120-timer_nolock-v6-4-670ffdd787b4@meta.com>
+Message-Id: <20260120-timer_nolock-v6-6-670ffdd787b4@meta.com>
 References: <20260120-timer_nolock-v6-0-670ffdd787b4@meta.com>
 In-Reply-To: <20260120-timer_nolock-v6-0-670ffdd787b4@meta.com>
 To: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
@@ -76,96 +77,168 @@ To: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
  memxor@gmail.com, eddyz87@gmail.com
 Cc: Mykyta Yatsenko <yatsenko@meta.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1768924764; l=2468;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1768924764; l=4925;
  i=yatsenko@meta.com; s=20251031; h=from:subject:message-id;
- bh=sHjASPbAi3T0MA8tzx5FFZpgqxkihSgoySoW9kJ17iM=;
- b=cI10tviwkfNw02P7fHv6w2/hwccHtdZnx5PuWLHslRyItTGfuy42EMRI7wzOq2hNWTGB+j68K
- 9K37hSuxAbmBm3w+aL8iGgNXx4r7ZnzHj2A6t7IGpCvO4fm2NT/9orl
+ bh=BNPM5TqXQAZGw1YFJGlxw42Jm5obR+tkVK97zyULN9M=;
+ b=50l3MRApq1TTCtcTpOcwY+xYI2nWcSujrswVtJR+XG86IukrzbFe2B2oXfEQF6Fri9hY+xkpJ
+ q/PbGttJIfTB3jW77XbLB+acbzYPx/65GtoXw6F6+oEwNoj9UG817qB
 X-Developer-Key: i=yatsenko@meta.com; a=ed25519;
  pk=TFoLStOoH/++W4HJHRgNr8zj8vPFB1W+/QECPcQygzo=
 
 From: Mykyta Yatsenko <yatsenko@meta.com>
 
-Remove lock from the bpf_timer_cancel() helper. The lock does not
-protect from concurrent modification of the bpf_async_cb data fields as
-those are modified in the callback without locking.
+Extend the verifier to recognize struct bpf_timer as a valid kfunc
+argument type. Previously, bpf_timer was only supported in BPF helpers.
 
-Use guard(rcu)() instead of pair of explicit lock()/unlock().
+This prepares for adding timer-related kfuncs in subsequent patches.
 
-Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
 Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- kernel/bpf/helpers.c | 27 +++++++++++----------------
- 1 file changed, 11 insertions(+), 16 deletions(-)
+ kernel/bpf/verifier.c | 59 +++++++++++++++++++++++++++++++++++++++++++++------
+ 1 file changed, 53 insertions(+), 6 deletions(-)
 
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 66424bc5b86137599990957ad2300110b4977df9..61ba4f6b741cc05b4a7a73a0322a23874bfd8e83 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -1471,7 +1471,7 @@ static const struct bpf_func_proto bpf_timer_start_proto = {
- 	.arg3_type	= ARG_ANYTHING,
- };
- 
--BPF_CALL_1(bpf_timer_cancel, struct bpf_async_kern *, timer)
-+BPF_CALL_1(bpf_timer_cancel, struct bpf_async_kern *, async)
- {
- 	struct bpf_hrtimer *t, *cur_t;
- 	bool inc = false;
-@@ -1479,13 +1479,12 @@ BPF_CALL_1(bpf_timer_cancel, struct bpf_async_kern *, timer)
- 
- 	if (in_nmi())
- 		return -EOPNOTSUPP;
--	rcu_read_lock();
--	__bpf_spin_lock_irqsave(&timer->lock);
--	t = timer->timer;
--	if (!t) {
--		ret = -EINVAL;
--		goto out;
--	}
-+
-+	guard(rcu)();
-+
-+	t = READ_ONCE(async->timer);
-+	if (!t)
-+		return -EINVAL;
- 
- 	cur_t = this_cpu_read(hrtimer_running);
- 	if (cur_t == t) {
-@@ -1493,8 +1492,7 @@ BPF_CALL_1(bpf_timer_cancel, struct bpf_async_kern *, timer)
- 		 * its own timer the hrtimer_cancel() will deadlock
- 		 * since it waits for callback_fn to finish.
- 		 */
--		ret = -EDEADLK;
--		goto out;
-+		return -EDEADLK;
- 	}
- 
- 	/* Only account in-flight cancellations when invoked from a timer
-@@ -1517,20 +1515,17 @@ BPF_CALL_1(bpf_timer_cancel, struct bpf_async_kern *, timer)
- 		 * cancelling and waiting for it synchronously, since it might
- 		 * do the same. Bail!
- 		 */
--		ret = -EDEADLK;
--		goto out;
-+		atomic_dec(&t->cancelling);
-+		return -EDEADLK;
- 	}
- drop:
- 	bpf_async_update_prog_callback(&t->cb, NULL, NULL);
--out:
--	__bpf_spin_unlock_irqrestore(&timer->lock);
- 	/* Cancel the timer and wait for associated callback to finish
- 	 * if it was running.
- 	 */
--	ret = ret ?: hrtimer_cancel(&t->timer);
-+	ret = hrtimer_cancel(&t->timer);
- 	if (inc)
- 		atomic_dec(&t->cancelling);
--	rcu_read_unlock();
- 	return ret;
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 9de0ec0c3ed998b0b135d85d64fe07ee0f8df6d5..ae189a6af1dbcbf2da30f70dd9b848c4f90bb5cf 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -8566,17 +8566,15 @@ static int check_map_field_pointer(struct bpf_verifier_env *env, u32 regno,
  }
  
+ static int process_timer_func(struct bpf_verifier_env *env, int regno,
+-			      struct bpf_call_arg_meta *meta)
++			      struct bpf_map *map)
+ {
+-	struct bpf_reg_state *reg = reg_state(env, regno);
+-	struct bpf_map *map = reg->map_ptr;
+ 	int err;
+ 
+ 	err = check_map_field_pointer(env, regno, BPF_TIMER);
+ 	if (err)
+ 		return err;
+ 
+-	if (meta->map_ptr) {
++	if (map) {
+ 		verifier_bug(env, "Two map pointers in a timer helper");
+ 		return -EFAULT;
+ 	}
+@@ -8584,8 +8582,36 @@ static int process_timer_func(struct bpf_verifier_env *env, int regno,
+ 		verbose(env, "bpf_timer cannot be used for PREEMPT_RT.\n");
+ 		return -EOPNOTSUPP;
+ 	}
++	return 0;
++}
++
++static int process_timer_helper(struct bpf_verifier_env *env, int regno,
++				struct bpf_call_arg_meta *meta)
++{
++	struct bpf_reg_state *reg = reg_state(env, regno);
++	int err;
++
++	err = process_timer_func(env, regno, meta->map_ptr);
++	if (err)
++		return err;
++
+ 	meta->map_uid = reg->map_uid;
+-	meta->map_ptr = map;
++	meta->map_ptr = reg->map_ptr;
++	return 0;
++}
++
++static int process_timer_kfunc(struct bpf_verifier_env *env, int regno,
++			       struct bpf_kfunc_call_arg_meta *meta)
++{
++	struct bpf_reg_state *reg = reg_state(env, regno);
++	int err;
++
++	err = process_timer_func(env, regno, meta->map.ptr);
++	if (err)
++		return err;
++
++	meta->map.uid = reg->map_uid;
++	meta->map.ptr = reg->map_ptr;
+ 	return 0;
+ }
+ 
+@@ -9913,7 +9939,7 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
+ 		}
+ 		break;
+ 	case ARG_PTR_TO_TIMER:
+-		err = process_timer_func(env, regno, meta);
++		err = process_timer_helper(env, regno, meta);
+ 		if (err)
+ 			return err;
+ 		break;
+@@ -12166,6 +12192,7 @@ enum {
+ 	KF_ARG_WORKQUEUE_ID,
+ 	KF_ARG_RES_SPIN_LOCK_ID,
+ 	KF_ARG_TASK_WORK_ID,
++	KF_ARG_TIMER_ID,
+ };
+ 
+ BTF_ID_LIST(kf_arg_btf_ids)
+@@ -12177,6 +12204,7 @@ BTF_ID(struct, bpf_rb_node)
+ BTF_ID(struct, bpf_wq)
+ BTF_ID(struct, bpf_res_spin_lock)
+ BTF_ID(struct, bpf_task_work)
++BTF_ID(struct, bpf_timer)
+ 
+ static bool __is_kfunc_ptr_arg_type(const struct btf *btf,
+ 				    const struct btf_param *arg, int type)
+@@ -12220,6 +12248,11 @@ static bool is_kfunc_arg_rbtree_node(const struct btf *btf, const struct btf_par
+ 	return __is_kfunc_ptr_arg_type(btf, arg, KF_ARG_RB_NODE_ID);
+ }
+ 
++static bool is_kfunc_arg_timer(const struct btf *btf, const struct btf_param *arg)
++{
++	return __is_kfunc_ptr_arg_type(btf, arg, KF_ARG_TIMER_ID);
++}
++
+ static bool is_kfunc_arg_wq(const struct btf *btf, const struct btf_param *arg)
+ {
+ 	return __is_kfunc_ptr_arg_type(btf, arg, KF_ARG_WORKQUEUE_ID);
+@@ -12314,6 +12347,7 @@ enum kfunc_ptr_arg_type {
+ 	KF_ARG_PTR_TO_NULL,
+ 	KF_ARG_PTR_TO_CONST_STR,
+ 	KF_ARG_PTR_TO_MAP,
++	KF_ARG_PTR_TO_TIMER,
+ 	KF_ARG_PTR_TO_WORKQUEUE,
+ 	KF_ARG_PTR_TO_IRQ_FLAG,
+ 	KF_ARG_PTR_TO_RES_SPIN_LOCK,
+@@ -12559,6 +12593,9 @@ get_kfunc_ptr_arg_type(struct bpf_verifier_env *env,
+ 	if (is_kfunc_arg_wq(meta->btf, &args[argno]))
+ 		return KF_ARG_PTR_TO_WORKQUEUE;
+ 
++	if (is_kfunc_arg_timer(meta->btf, &args[argno]))
++		return KF_ARG_PTR_TO_TIMER;
++
+ 	if (is_kfunc_arg_task_work(meta->btf, &args[argno]))
+ 		return KF_ARG_PTR_TO_TASK_WORK;
+ 
+@@ -13345,6 +13382,7 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
+ 		case KF_ARG_PTR_TO_REFCOUNTED_KPTR:
+ 		case KF_ARG_PTR_TO_CONST_STR:
+ 		case KF_ARG_PTR_TO_WORKQUEUE:
++		case KF_ARG_PTR_TO_TIMER:
+ 		case KF_ARG_PTR_TO_TASK_WORK:
+ 		case KF_ARG_PTR_TO_IRQ_FLAG:
+ 		case KF_ARG_PTR_TO_RES_SPIN_LOCK:
+@@ -13644,6 +13682,15 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
+ 			if (ret < 0)
+ 				return ret;
+ 			break;
++		case KF_ARG_PTR_TO_TIMER:
++			if (reg->type != PTR_TO_MAP_VALUE) {
++				verbose(env, "arg#%d doesn't point to a map value\n", i);
++				return -EINVAL;
++			}
++			ret = process_timer_kfunc(env, regno, meta);
++			if (ret < 0)
++				return ret;
++			break;
+ 		case KF_ARG_PTR_TO_TASK_WORK:
+ 			if (reg->type != PTR_TO_MAP_VALUE) {
+ 				verbose(env, "arg#%d doesn't point to a map value\n", i);
 
 -- 
 2.52.0
