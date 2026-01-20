@@ -1,78 +1,136 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C401634EEEE;
-	Tue, 20 Jan 2026 19:40:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC2733A7823
+	for <bpf@vger.kernel.org>; Tue, 20 Jan 2026 19:54:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768938010; cv=none; b=ITZ6HpOrEoR02P/jr3piMEwT6HZ0SCudt7HqS0RwCf/TUTbqzPk8N5Q1yg5S4GSOBp2hYUgYJCEoGnvh4BpQYWBinnbOD1VSyksA+8doMR9IC2P0LT4C/yqX8aR60V45jzdHYgPVEAFLRtTvrotVu45lTynJn3U6pyvhrUeJmOQ=
+	t=1768938848; cv=none; b=qm28BUEGMyp6s7jpOE4tL52jESZvOv3yoUuGeqbnFaI/MjAEHb+s0b1l7QMWPEX4mRKtjQ8gu2S32HT9Gu9MGuYXp6OJLCaGyQnVZfbLhyt+UjdaMGeqLrkoZzg8cZcAaDlcgfDsE1+kSG7USXxjYeIs5gS1qb69XLYnF+mxJVw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768938010; c=relaxed/simple;
-	bh=WtaL0Xn5lyQXVQWFxizw2Z/z7YPMpfCyjvB5m9+GJcQ=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=fJGNIqnAdoWukY/HG/XZRRkPslQ8WBOnToN9JEietV5/MGx/2Hs68UZ4e9NvJz8ogic4uQQXz4VcZD3LC0jskR8v+RDf9+PMLTKkC3L83jeHhRGJmH63DYADcP8CA+2eDh5AYwuvK7k1bRg/donrofyWHB87JykMaK2BCa33qwo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FT67epZ9; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1768938848; c=relaxed/simple;
+	bh=SGry9sh68kwELDKIdJIRRmG29w6MHwsJc9F33zh8doQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=amfLWUsOkKAGJJuFvx+/w51WJ61RFxPkHvRApiIyVJVd2Uio3YaBuDepEDQ2qEuxtbKF9eEuityiiQq/z5YPtgao0R/1TWvBTwsdHNJeIRzlzCwfZsMO1QEWcCOYH1M565NI2NICG0iEBF5EBZr2IID1h5oe0dwTWWedsAvgiXo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=tK66K6ie; arc=none smtp.client-ip=91.218.175.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FT67epZ9"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB9AEC16AAE;
-	Tue, 20 Jan 2026 19:40:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768938008;
-	bh=WtaL0Xn5lyQXVQWFxizw2Z/z7YPMpfCyjvB5m9+GJcQ=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=FT67epZ9ldVmFLMzzf9/MM48/on5XEISFp5ITqZZ+ev5RymrzhS/5tBSat1jWJbIK
-	 Lv0Q4i3kcV0f8qjzRHnrBEo2DYPSvJl+koMkNHpTIXWHwhCIjBGp4dhJqlSOco0EU+
-	 C9EDRp/JQRD/94iLXGriJ15c3QzmAjGeoXoF62uq3DE8EfAZWUIZiS4WPsmzaKD6ae
-	 uRj0K5z7LlV6OV9yjSY1HxCPI47QyifyJVcBSihwdpvLmnGZP/7OYzqmhQVg3WldyA
-	 UgHWSKHtBO8Epnv/NbIMRnzhAc0ncl8sAFWT55wnbqvbi1I6L7oP+xLe+kXow0vJM/
-	 pqiJs+2/BH0yw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 8BDF3380820D;
-	Tue, 20 Jan 2026 19:40:07 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="tK66K6ie"
+Message-ID: <5364d5ec-f30c-40d6-9a99-c251fec3868c@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1768938829;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ZUGtXQFZZ4O5fl2DGSy010+08iBrE+9BMYtw/44nDN8=;
+	b=tK66K6ieZW/6AujEvyXa7Fb5DjfKqaHcN7mWRzk9XVYfBw5U03m0upAbyWalvExZMDNdJ7
+	yynJ6VazMS9wdVDiTeayNZEUMoXhhNuKDo8tP+kB5Nkgehq31elNQlwElPB1EwfxaGg9tr
+	pFhOqdrz5CKiTzUOZTROAEjuBP+AQHs=
+Date: Tue, 20 Jan 2026 11:53:42 -0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Subject: Re: [PATCH] scripts/gen-btf.sh: fix shebang for NixOS
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+ Gary Guo <gary@garyguo.net>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260120182034.3647092-1-gary@kernel.org>
+ <b53ee085-d9d2-4365-a5bc-d61e2bce97f8@linux.dev>
+ <DFTNNQLGB1CS.2HDOGB99S9ACP@garyguo.net>
+ <ea83b91a-796c-4329-bcf5-2c49efa897fc@t-8ch.de>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <ea83b91a-796c-4329-bcf5-2c49efa897fc@t-8ch.de>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] selftests/bpf: Add perfbuf multi-producer benchmark
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <176893800636.583014.14681617112813663191.git-patchwork-notify@kernel.org>
-Date: Tue, 20 Jan 2026 19:40:06 +0000
-References: <20260120090716.82927-1-gyutae.opensource@navercorp.com>
-In-Reply-To: <20260120090716.82927-1-gyutae.opensource@navercorp.com>
-To: Gyutae Bae <gyutae.opensource@navercorp.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
- linux-kselftest@vger.kernel.org, gyutae.bae@navercorp.com
+X-Migadu-Flow: FLOW_OUT
 
-Hello:
-
-This patch was applied to bpf/bpf-next.git (master)
-by Andrii Nakryiko <andrii@kernel.org>:
-
-On Tue, 20 Jan 2026 18:07:16 +0900 you wrote:
-> From: Gyutae Bae <gyutae.bae@navercorp.com>
+On 1/20/26 11:38 AM, Thomas Weißschuh wrote:
+> On 2026-01-20 19:15:11+0000, Gary Guo wrote:
+>> On Tue Jan 20, 2026 at 6:59 PM GMT, Ihor Solodrai wrote:
+>>> On 1/20/26 10:20 AM, Gary Guo wrote:
+>>>> From: Gary Guo <gary@garyguo.net>
+>>>>
+>>>> NixOS only puts /usr/bin/env and /bin/sh at the standard location as
+>>>> required by POSIX, but not other shells. Other program that kernel build
+>>>> depends on is supplied via PATH, so shebang needs to use /usr/bin/env to
+>>>> find them.
+>>>>
+>>>> This has been done to a few other scripts already, e.g.
+>>>> gen_test_kallsyms.sh or decode_stacktrace.sh.
+>>>>
+>>>> Fixes: 522397d05e7d ("resolve_btfids: Change in-place update with raw binary output")
+>>>> Signed-off-by: Gary Guo <gary@garyguo.net>
+>>>> ---
+>>>>  scripts/gen-btf.sh | 2 +-
+>>>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/scripts/gen-btf.sh b/scripts/gen-btf.sh
+>>>> index be21ccee3487..4cd3159f2ddb 100755
+>>>> --- a/scripts/gen-btf.sh
+>>>> +++ b/scripts/gen-btf.sh
+>>>> @@ -1,4 +1,4 @@
+>>>> -#!/bin/bash
+>>>> +#!/usr/bin/env bash
+>>>>  # SPDX-License-Identifier: GPL-2.0
+>>>>  # Copyright (c) 2025 Meta Platforms, Inc. and affiliates.
+>>>>  #
+>>>>
+>>>> base-commit: 053966c344dbd346e71305f530e91ea77916189f
+>>>
+>>> Hi Gary, thanks for the patch.
+>>>
+>>> I'm guessing this came up because gen-btf.sh is part of the vmlinux
+>>> build, and link-vmlinux.sh has #!/bin/sh (not bash).
+>>
+>> My typical experience is that when I see an error about /bin/bash not found, I
+>> just use "bash <script path>" instead without putting much think into it.
+>>
+>> gen-btf.sh is part of build so I don't get to invoke the script directly, hence
+>> the patch.
 > 
-> Add a multi-producer benchmark for perfbuf to complement the existing
-> ringbuf multi-producer test. Unlike ringbuf which uses a shared buffer
-> and experiences contention, perfbuf uses per-CPU buffers so the test
-> measures scaling behavior rather than contention.
+> For the build we have $(CONFIG_SHELL) to stick before the script.
+> It is only 'sh', but it is the well-known variable users know to
+> override. IMO all script invocations should use this mechanism.
+
+There are two places where gen-btf.sh is invoked.
+
+In link-vmlinux.sh:
+
+	if ! ${srctree}/scripts/gen-btf.sh .tmp_vmlinux1; then
+		echo >&2 "Failed to generate BTF for vmlinux"
+		echo >&2 "Try to disable CONFIG_DEBUG_INFO_BTF"
+		exit 1
+	fi
+
+And in Makefile.modfinal:
+
+quiet_cmd_btf_ko = BTF [M] $@
+      cmd_btf_ko = 							\
+	if [ ! -f $(objtree)/vmlinux ]; then				\
+		printf "Skipping BTF generation for %s due to unavailability of vmlinux\n" $@ 1>&2; \
+	else	\
+		$(srctree)/scripts/gen-btf.sh --btf_base $(objtree)/vmlinux $@; \
+	fi;
+
+So it's trivial to put $(CONFIG_SHELL) in front of it. But then it
+must be migrated to #!/bin/sh, right?
+
+
 > 
-> [...]
-
-Here is the summary with links:
-  - selftests/bpf: Add perfbuf multi-producer benchmark
-    https://git.kernel.org/bpf/bpf-next/c/2e6690d4f7fc
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+> 
+> Thomas
 
