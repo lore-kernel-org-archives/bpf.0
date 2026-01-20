@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C40CD363C7C;
-	Tue, 20 Jan 2026 19:40:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C401634EEEE;
+	Tue, 20 Jan 2026 19:40:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768938010; cv=none; b=KdTTUeBb7SNunkUyTOXDak233zvuhUv0fgTzKrSaFft7wtsVqByONqWekaULp4EcmxASfCRCl1005ol88KWs3kH+esFCQ5d5MSbjyKRqCo+0WTwiXGLpKTIrp80BuVDLEPKRK1wiZeH3R9G0cnYyeMI3DbhpvS2EjkGH4dZgFSU=
+	t=1768938010; cv=none; b=ITZ6HpOrEoR02P/jr3piMEwT6HZ0SCudt7HqS0RwCf/TUTbqzPk8N5Q1yg5S4GSOBp2hYUgYJCEoGnvh4BpQYWBinnbOD1VSyksA+8doMR9IC2P0LT4C/yqX8aR60V45jzdHYgPVEAFLRtTvrotVu45lTynJn3U6pyvhrUeJmOQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1768938010; c=relaxed/simple;
-	bh=HdNNmaWMF3Dz7TVaqx+f6mc40yNbGM5z3z/AeyJs8/k=;
+	bh=WtaL0Xn5lyQXVQWFxizw2Z/z7YPMpfCyjvB5m9+GJcQ=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=MznMGbmef2VMKzjGR3C7dOIZbdUKP0SBW+dBmGH0FwDj2BfamTsgneo7rDBaZlpf/8Hp4mcXCDqjh3N1E+D+v3aWtQPtLjuTc5Q/FullDz9nvKdrVcepmkDd1rCMqn5evBZ/XAH65sVHZk9M2+0Qo3pMwgbTAqVbryZX5iwi5nE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ViSgeKsg; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=fJGNIqnAdoWukY/HG/XZRRkPslQ8WBOnToN9JEietV5/MGx/2Hs68UZ4e9NvJz8ogic4uQQXz4VcZD3LC0jskR8v+RDf9+PMLTKkC3L83jeHhRGJmH63DYADcP8CA+2eDh5AYwuvK7k1bRg/donrofyWHB87JykMaK2BCa33qwo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FT67epZ9; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ViSgeKsg"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48CECC19421;
-	Tue, 20 Jan 2026 19:40:10 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FT67epZ9"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB9AEC16AAE;
+	Tue, 20 Jan 2026 19:40:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768938010;
-	bh=HdNNmaWMF3Dz7TVaqx+f6mc40yNbGM5z3z/AeyJs8/k=;
+	s=k20201202; t=1768938008;
+	bh=WtaL0Xn5lyQXVQWFxizw2Z/z7YPMpfCyjvB5m9+GJcQ=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=ViSgeKsgS4CWTP3FsUF1ompmSlRmBZ72pEekXzIG2y8qcpgtdsJpFG+ydOkeWQW9a
-	 pLf8y4TJS69he2uMZiZ+a11N396Tz4V/N+H2qdvbpLxq3LHkMb45SfYs5B6NDkCjKC
-	 ClEmlLVqlVXAeMspI2v87OUlvSkXRyHIOA/iVEAVJ59yFyKrj9hnsw9wAIWplPW0hx
-	 LEFkIlz/yr7UenLtN6HQEC1k5uuys+XOydcgQHZB/de5aEWxMuTzUzJMkwNNjCo7vE
-	 gPYDfiF5asZ5Ua+2VbNQVI8Jlc+COf/151/Fj18VztVwmHNkweKUF4THSFFHdI8Duv
-	 3UHW8ibvggPiw==
+	b=FT67epZ9ldVmFLMzzf9/MM48/on5XEISFp5ITqZZ+ev5RymrzhS/5tBSat1jWJbIK
+	 Lv0Q4i3kcV0f8qjzRHnrBEo2DYPSvJl+koMkNHpTIXWHwhCIjBGp4dhJqlSOco0EU+
+	 C9EDRp/JQRD/94iLXGriJ15c3QzmAjGeoXoF62uq3DE8EfAZWUIZiS4WPsmzaKD6ae
+	 uRj0K5z7LlV6OV9yjSY1HxCPI47QyifyJVcBSihwdpvLmnGZP/7OYzqmhQVg3WldyA
+	 UgHWSKHtBO8Epnv/NbIMRnzhAc0ncl8sAFWT55wnbqvbi1I6L7oP+xLe+kXow0vJM/
+	 pqiJs+2/BH0yw==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 11A21380820D;
-	Tue, 20 Jan 2026 19:40:09 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 8BDF3380820D;
+	Tue, 20 Jan 2026 19:40:07 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -37,41 +37,38 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v4] bpf/verifier: optimize ID mapping reset in
- states_equal
+Subject: Re: [PATCH] selftests/bpf: Add perfbuf multi-producer benchmark
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <176893800760.583014.3550645133045023335.git-patchwork-notify@kernel.org>
-Date: Tue, 20 Jan 2026 19:40:07 +0000
-References: <20260120023234.77673-1-realwujing@gmail.com>
-In-Reply-To: <20260120023234.77673-1-realwujing@gmail.com>
-To: Qiliang Yuan <realwujing@gmail.com>
-Cc: alexei.starovoitov@gmail.com, eddyz87@gmail.com,
- andrii.nakryiko@gmail.com, andrii@kernel.org, ast@kernel.org,
- bpf@vger.kernel.org, daniel@iogearbox.net, haoluo@google.com,
- jolsa@kernel.org, kpsingh@kernel.org, linux-kernel@vger.kernel.org,
- martin.lau@linux.dev, sdf@fomichev.me, song@kernel.org,
- yonghong.song@linux.dev
+ <176893800636.583014.14681617112813663191.git-patchwork-notify@kernel.org>
+Date: Tue, 20 Jan 2026 19:40:06 +0000
+References: <20260120090716.82927-1-gyutae.opensource@navercorp.com>
+In-Reply-To: <20260120090716.82927-1-gyutae.opensource@navercorp.com>
+To: Gyutae Bae <gyutae.opensource@navercorp.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+ sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
+ linux-kselftest@vger.kernel.org, gyutae.bae@navercorp.com
 
 Hello:
 
 This patch was applied to bpf/bpf-next.git (master)
 by Andrii Nakryiko <andrii@kernel.org>:
 
-On Tue, 20 Jan 2026 10:32:34 +0800 you wrote:
-> Currently, reset_idmap_scratch() performs a 4.7KB memset() in every
-> states_equal() call. Optimize this by using a counter to track used
-> ID mappings, replacing the O(N) memset() with an O(1) reset and
-> bounding the search loop in check_ids().
+On Tue, 20 Jan 2026 18:07:16 +0900 you wrote:
+> From: Gyutae Bae <gyutae.bae@navercorp.com>
 > 
-> Acked-by: Eduard Zingerman <eddyz87@gmail.com>
-> Signed-off-by: Qiliang Yuan <realwujing@gmail.com>
+> Add a multi-producer benchmark for perfbuf to complement the existing
+> ringbuf multi-producer test. Unlike ringbuf which uses a shared buffer
+> and experiences contention, perfbuf uses per-CPU buffers so the test
+> measures scaling behavior rather than contention.
 > 
 > [...]
 
 Here is the summary with links:
-  - [v4] bpf/verifier: optimize ID mapping reset in states_equal
-    https://git.kernel.org/bpf/bpf-next/c/f81c07a6e98e
+  - selftests/bpf: Add perfbuf multi-producer benchmark
+    https://git.kernel.org/bpf/bpf-next/c/2e6690d4f7fc
 
 You are awesome, thank you!
 -- 
