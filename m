@@ -1,116 +1,136 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9601A41B340;
-	Tue, 20 Jan 2026 13:59:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8475F43CECD;
+	Tue, 20 Jan 2026 14:10:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768917545; cv=none; b=IIPWsF3B4V/QZuQTTR7LRh+x0thtlGcToHEhu0utvtaQawA4FhF9wj9fulAN3B5j9tc2p6xohF9L3ZpxqR/pCmQ2djXhJ4wIIB1EZFqpoiGYSolucmEqmh8XWjMwUusUWj/oMhVLmqaHpohICAbGnkyw/iu/CuQf9hEldC7pq0U=
+	t=1768918243; cv=none; b=MwusQKw5SE9SR+3+ZsVAoKg+Ia196+uFLU7J5pfpT3J4IC46J/NFV4zKw9IB5/hLlokioiw0LrklwLazmDwE4fkz+yRtvkip7vVQoQcF+wSrvz/zfuSyyZirEQCA1Ze/SFFrzNdqZTlzVVV1EeN0tHCix2ihULUNmxeusynxRso=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768917545; c=relaxed/simple;
-	bh=9051yFq57Xie5pjtJjoBq/HvBu5GE3EcHvOKur+xijo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DbGntuKQErpvrUFU+TpOPZguGi3fdG3pqKWRPNWsJWb7DpSSASvu8pcQrK69kf/jAlu+4r8Q1SfHkZkaMR9IGX9txsAKpf6mV76UHS1OuAsfwxBLEZLKMY3rVH9Tz3FxvXd0VKxt5gkb83M1+dOq+zQYr3L/e1LfsRu2XYow1ng=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZoV+ZHYi; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1768918243; c=relaxed/simple;
+	bh=Ahm6F+EOjc6R8Q0l33MFSfJ04zvpzbPYSaGnxm24BWE=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=R+FGMOZ6ZOdZbc5vZEcyCtGSTJXfJZYUsV7kj6obD/xY12mBSCN9QoKQwVtJtJ8RfPGhqb81aLjUkW/ll7AZjw16N1j13jUwsVf9CrBwb87B2EgILEMmGbF754tsaVfNbVH8vAPUuq6Rtji+iFlurI/csTj0qTW5ZCamYBu55Eg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=NoSWA8KH; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=NItJhtZf; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZoV+ZHYi"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30B34C16AAE;
-	Tue, 20 Jan 2026 13:59:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768917545;
-	bh=9051yFq57Xie5pjtJjoBq/HvBu5GE3EcHvOKur+xijo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ZoV+ZHYiLGqOe4NWfwMjBJu+d8Nl30ZgHgckXnZ5+4Dix/UB0LdlIn6fjHwSKWM1K
-	 dwvGdy3JXj2FQ6/DunG343ZTszE2CKh5rBIljRUWiLjM0GYEGr5lXnTc5tk+tt2llS
-	 T5uH1cP9oJulukrS8qlW8HNvtGYoJQ0w00MNZ/HhcfRL5Nlru7mbGOkQj7T7JBOa+J
-	 j+FVJiWMl4bHHjEP4BCb9zpI4p5eovVAH+n3nga0pcPEdMpaypnwHbU0TD31BOvLTf
-	 cDZgR62kgZFwdz4V2ZjMgRdc8TNRWFMUylQwBV2z69vLTCgBS5H/xBtUVPX6aNePpp
-	 x2YFoC1FeMHkg==
-Date: Tue, 20 Jan 2026 13:58:57 +0000
-From: Will Deacon <will@kernel.org>
-To: Ankur Arora <ankur.a.arora@oracle.com>
-Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-	bpf@vger.kernel.org, arnd@arndb.de, catalin.marinas@arm.com,
-	peterz@infradead.org, akpm@linux-foundation.org,
-	mark.rutland@arm.com, harisokn@amazon.com, cl@gentwo.org,
-	ast@kernel.org, rafael@kernel.org, daniel.lezcano@linaro.org,
-	memxor@gmail.com, zhenglifeng1@huawei.com,
-	xueshuai@linux.alibaba.com, joao.m.martins@oracle.com,
-	boris.ostrovsky@oracle.com, konrad.wilk@oracle.com
-Subject: Re: [PATCH v8 04/12] arm64: support WFET in
- smp_cond_relaxed_timeout()
-Message-ID: <aW-KIVQ_H1mVpGHx@willie-the-truck>
-References: <20251215044919.460086-1-ankur.a.arora@oracle.com>
- <20251215044919.460086-5-ankur.a.arora@oracle.com>
- <aWEOALG07jHC_oHC@willie-the-truck>
- <87wm1qmx90.fsf@oracle.com>
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="NoSWA8KH";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="NItJhtZf"
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1768918239;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=nw3GMmv6rsxzJhfQEt7gKqAEVYquIJkLViAuhkQckP0=;
+	b=NoSWA8KHAOW34ej89I6r4P9qqfRGTSrpRdLYpSX2TU/YKte6uFQbzKvdinPA0lisvYESRi
+	HYR3dbyIkym4yrwD6NuHSOFvoIRarqOstQ0TP56+/FTOn0uUTAZnuzzVzPi/0GoNDWQ88d
+	GlGpOIj51tOdACdwx6SwPz+vAN3Pgg5Z+Wm/5Ly4DbiMrVsQfo/kZ8DQ3XH2ap2jNNODle
+	ES+cM/ucSiFmYheJ92FprCtTYAW3fNxZv9iWB3FSG21peOu2k5+LOEXRiiGBNOKFoT6SFT
+	fjRfM7aEWKIcHL7Nkspjl4yIVkCDKs85aMN92Q3Dl7GWp7BAFekFEzpwlwgi/g==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1768918239;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=nw3GMmv6rsxzJhfQEt7gKqAEVYquIJkLViAuhkQckP0=;
+	b=NItJhtZfv+tx5epeA2xKfozfbOxxbY0+Lwh+VC3Sf/nVsyjCAfZ/h/i5gbhoRCCWad3fkz
+	//HYvaUB6h2f5DAg==
+Subject: [PATCH net-next v2 0/4] net: uapi: Provide an UAPI definition of
+ 'struct sockaddr'
+Date: Tue, 20 Jan 2026 15:10:30 +0100
+Message-Id: <20260120-uapi-sockaddr-v2-0-63c319111cf6@linutronix.de>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87wm1qmx90.fsf@oracle.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIANaMb2kC/12NQQ6CMBBFr0Jm7Zh2tBBdeQ/DotBBJpqWtIVgC
+ He3Yeny5eW/v0HiKJzgXm0QeZEkwRegUwX9aP2LUVxhIEVGExHOdhJMoX9b5yL2g1bc1HRt6AZ
+ lM0UeZD16T/Cc0fOaoS1mlJRD/B5Hiz58adZKK/PXXDRq7JraXGxnNVnz+Iifcwxe1rNjaPd9/
+ wFO2SCEuAAAAA==
+X-Change-ID: 20251222-uapi-sockaddr-cf10e7624729
+To: Eric Dumazet <edumazet@google.com>, 
+ Kuniyuki Iwashima <kuniyu@google.com>, Paolo Abeni <pabeni@redhat.com>, 
+ Willem de Bruijn <willemb@google.com>, 
+ "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
+ Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+ Matthieu Baerts <matttbe@kernel.org>, Mat Martineau <martineau@kernel.org>, 
+ Geliang Tang <geliang@kernel.org>, 
+ =?utf-8?q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>, 
+ =?utf-8?q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Jesper Dangaard Brouer <hawk@kernel.org>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+ Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-api@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>, 
+ linux-kselftest@vger.kernel.org, mptcp@lists.linux.dev, 
+ linux-security-module@vger.kernel.org, bpf@vger.kernel.org, 
+ libc-alpha@sourceware.org, Carlos O'Donell <carlos@redhat.com>, 
+ Adhemerval Zanella <adhemerval.zanella@linaro.org>, 
+ Rich Felker <dalias@libc.org>, klibc@zytor.com, 
+ Florian Weimer <fweimer@redhat.com>, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1768918237; l=2292;
+ i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
+ bh=Ahm6F+EOjc6R8Q0l33MFSfJ04zvpzbPYSaGnxm24BWE=;
+ b=5X22So3PfA/S7ayTw8eLh1EFtj1DE0Tv6sUsSL2/wnoVi2BXpK944Df4Iu5TWZmKG+GLpv7YI
+ jzfIuR+GpMBDIJ9kfKmasfJ9A3NvmYTn3p3DyGhQAXO3d2FHCDLTleb
+X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
+ pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-On Fri, Jan 09, 2026 at 11:05:06AM -0800, Ankur Arora wrote:
-> 
-> Will Deacon <will@kernel.org> writes:
-> 
-> > On Sun, Dec 14, 2025 at 08:49:11PM -0800, Ankur Arora wrote:
-> >> Extend __cmpwait_relaxed() to __cmpwait_relaxed_timeout() which takes
-> >> an additional timeout value in ns.
-> >>
-> >> Lacking WFET, or with zero or negative value of timeout we fallback
-> >> to WFE.
-> >>
-> >> Cc: Arnd Bergmann <arnd@arndb.de>
-> >> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> >> Cc: Will Deacon <will@kernel.org>
-> >> Cc: linux-arm-kernel@lists.infradead.org
-> >> Signed-off-by: Ankur Arora <ankur.a.arora@oracle.com>
-> >> ---
-> >>  arch/arm64/include/asm/barrier.h |  8 ++--
-> >>  arch/arm64/include/asm/cmpxchg.h | 72 ++++++++++++++++++++++----------
-> >>  2 files changed, 55 insertions(+), 25 deletions(-)
-> >
-> > Sorry, just spotted something else on this...
-> >
-> >> diff --git a/arch/arm64/include/asm/barrier.h b/arch/arm64/include/asm/barrier.h
-> >> index 6190e178db51..fbd71cd4ef4e 100644
-> >> --- a/arch/arm64/include/asm/barrier.h
-> >> +++ b/arch/arm64/include/asm/barrier.h
-> >> @@ -224,8 +224,8 @@ do {									\
-> >>  extern bool arch_timer_evtstrm_available(void);
-> >>
-> >>  /*
-> >> - * In the common case, cpu_poll_relax() sits waiting in __cmpwait_relaxed()
-> >> - * for the ptr value to change.
-> >> + * In the common case, cpu_poll_relax() sits waiting in __cmpwait_relaxed()/
-> >> + * __cmpwait_relaxed_timeout() for the ptr value to change.
-> >>   *
-> >>   * Since this period is reasonably long, choose SMP_TIMEOUT_POLL_COUNT
-> >>   * to be 1, so smp_cond_load_{relaxed,acquire}_timeout() does a
-> >> @@ -234,7 +234,9 @@ extern bool arch_timer_evtstrm_available(void);
-> >>  #define SMP_TIMEOUT_POLL_COUNT	1
-> >>
-> >>  #define cpu_poll_relax(ptr, val, timeout_ns) do {			\
-> >> -	if (arch_timer_evtstrm_available())				\
-> >> +	if (alternative_has_cap_unlikely(ARM64_HAS_WFXT))		\
-> >> +		__cmpwait_relaxed_timeout(ptr, val, timeout_ns);	\
-> >> +	else if (arch_timer_evtstrm_available())			\
-> >>  		__cmpwait_relaxed(ptr, val);				\
-> >
-> > Don't you want to make sure that we have the event stream available for
-> > __cmpwait_relaxed_timeout() too? Otherwise, a large timeout is going to
-> > cause problems.
-> 
-> Would that help though? If called from smp_cond_load_relaxed_timeout()
-> then we would wake up and just call __cmpwait_relaxed_timeout() again.
+Various UAPI headers reference 'struct sockaddr'. Currently the
+definition of this struct is pulled in from the libc header
+sys/socket.h. This is problematic as it introduces a dependency
+on a full userspace toolchain.
 
-Fair enough, I can see that. Is it worth capping the maximum timeout
-like we do for udelay()?
+Add a definition of 'struct sockaddr' to the UAPI headers.
+Before that, reorder some problematic header inclusions in the selftests.
 
-Will
+Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+---
+Changes in v2:
+- Fix compilation failures in BPF samples and selftests
+- Link to v1: https://lore.kernel.org/r/20260105-uapi-sockaddr-v1-1-b7653aba12a5@linutronix.de
+
+---
+Thomas Weißschuh (4):
+      selftests: net: Move some UAPI header inclusions after libc ones
+      selftests/landlock: Move some UAPI header inclusions after libc ones
+      samples/bpf: Move some UAPI header inclusions after libc ones
+      net: uapi: Provide an UAPI definition of 'struct sockaddr'
+
+ include/linux/socket.h                             | 10 ----------
+ include/uapi/linux/if.h                            |  4 ----
+ include/uapi/linux/libc-compat.h                   | 12 ++++++++++++
+ include/uapi/linux/socket.h                        | 14 ++++++++++++++
+ samples/bpf/xdp_adjust_tail_user.c                 |  6 ++++--
+ samples/bpf/xdp_fwd_user.c                         |  7 ++++---
+ samples/bpf/xdp_router_ipv4_user.c                 |  6 +++---
+ samples/bpf/xdp_sample_user.c                      | 15 ++++++++-------
+ samples/bpf/xdp_tx_iptunnel_user.c                 |  4 ++--
+ tools/testing/selftests/landlock/audit.h           |  7 ++++---
+ tools/testing/selftests/net/af_unix/diag_uid.c     |  9 +++++----
+ tools/testing/selftests/net/busy_poller.c          |  3 ++-
+ tools/testing/selftests/net/mptcp/mptcp_diag.c     | 11 ++++++-----
+ tools/testing/selftests/net/nettest.c              |  4 ++--
+ tools/testing/selftests/net/tcp_ao/icmps-discard.c |  6 +++---
+ tools/testing/selftests/net/tcp_ao/lib/netlink.c   |  9 +++++----
+ tools/testing/selftests/net/tun.c                  |  5 +++--
+ 17 files changed, 77 insertions(+), 55 deletions(-)
+---
+base-commit: 24d479d26b25bce5faea3ddd9fa8f3a6c3129ea7
+change-id: 20251222-uapi-sockaddr-cf10e7624729
+
+Best regards,
+-- 
+Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+
