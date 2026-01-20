@@ -1,212 +1,79 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from relay.hostedemail.com (smtprelay0010.hostedemail.com [216.40.44.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 171D8429819;
-	Tue, 20 Jan 2026 14:10:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DACA5436359;
+	Tue, 20 Jan 2026 14:50:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768918245; cv=none; b=VgzZbo8ARduLlw5NZ5ICCSvVg97RGr/F4Sr62xejXwkDjNJSR7wd90HeliI01ciTv+G1e3IoEyf2+c4p3LuZPOyIyN62xYt21QsJbi3DvBIF9df9kmGqaSvU9ubB1LWJpQ4dtTEsk/BQ2KUadRCdHQvEi/wgsRpUpMhZLIDNwAs=
+	t=1768920651; cv=none; b=DiTaPbT0YKX3hVZQLYEjzM11IKwiIwSIlcs5P4dJcSDv+6zIeMRL8EPlZTJx10blwjQ1RiVWF6O/H6Rnz1fOJ3DgCMnqwJ7jjrRi1H4+MOJUoTm8ER5MLVNm/FY7hiLPFzCMoYzjXDfUDq56cEKcfgRqseAmCYf1YldVZN1E8jA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768918245; c=relaxed/simple;
-	bh=0gJHssghFK1RP90RiI7zuAI2Lb2IlxOeNNJyTLHYHUk=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=WGBiEV3OXarkvN6MidWjt3Vgs7Qn6PInulQ5i5Uk6cyUwpZ2y6smBBPcwjRk23kY9i1590+AcrRMOHpq+t4ZShDqQMZhnICfdVP0wz87+aHyCzhnZqlVexAexP5zBherAEFiz9DJc75k9HDinxSwYX/oWt9qeNVqZgCbf5sstys=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=u9VUZEQv; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=bCMEs+2v; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="u9VUZEQv";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="bCMEs+2v"
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1768918241;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=eOQ8GS3W1MRmodMZgFABkywgFvGKyZPfH1LFL9LoMGY=;
-	b=u9VUZEQvWoxHjLBauY8z7HF1TLbuASKHVU93cqLptNcuHLrklRwLfzT96BGKyCwEhnqwLD
-	1ZMX/t8cShhT5EtRl90vpDEW3zSszuDu9SS+IGQxTaid54xyPdRLXjLhXKXnfoVy7zNps4
-	UutIKbGn7oBe7iBRWgJhbxyp2+kRRhx8c+GmV9BPNsWYOdONd1/fDg0usC1OKEejawa+7u
-	7nMQlCflqh1qJaAs144JmX61u23sFBcl+f2xF9ad3PRtsyLVtvzi7T+vZuWC1qPxluQ8+8
-	RHEFgpi41jpUbU1BL8pr8O80cRkvtBeolCykT/0mn99+fRhinykiD9iPgPeN/g==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1768918241;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=eOQ8GS3W1MRmodMZgFABkywgFvGKyZPfH1LFL9LoMGY=;
-	b=bCMEs+2vw0GkQWixlwb7IbDDFfOdljaTfGnEqezEY+kbXmb6O17EBN8n+ne5vDNAvKdX3e
-	ug6xk5IBRC7RNMAA==
-Date: Tue, 20 Jan 2026 15:10:34 +0100
-Subject: [PATCH net-next v2 4/4] net: uapi: Provide an UAPI definition of
- 'struct sockaddr'
+	s=arc-20240116; t=1768920651; c=relaxed/simple;
+	bh=j2s7KrXtah84ncKFqm6P9gNil0D/ZUpKZab0zw6c9gw=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=eOVZHt/V+9xzT0vZ/+KLMcbeu7agYJrS/LS0rlGiUry/SCJ6Y1Dm8ps18oM2duCMKTErRI3f/5wZSgr/KFMwJv44XU3spUp4JS/eqNEGkPDtskNyEB+V2Ey/XEZW/WN0jXwI8jJuA8TyL8+hSKDPO2JhC+X7haHXWv12yOcY5jc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+Received: from omf10.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay05.hostedemail.com (Postfix) with ESMTP id 98CEE59931;
+	Tue, 20 Jan 2026 14:50:41 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf10.hostedemail.com (Postfix) with ESMTPA id 27D7C2F;
+	Tue, 20 Jan 2026 14:50:39 +0000 (UTC)
+Date: Tue, 20 Jan 2026 09:50:59 -0500
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Jiri Olsa <olsajiri@gmail.com>, Masami Hiramatsu <mhiramat@kernel.org>,
+ Josh Poimboeuf <jpoimboe@kernel.org>, Mahe Tardy <mahe.tardy@gmail.com>,
+ Peter Zijlstra <peterz@infradead.org>, bpf@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, x86@kernel.org, Yonghong Song
+ <yhs@fb.com>, Song Liu <songliubraving@fb.com>, Andrii Nakryiko
+ <andrii@kernel.org>
+Subject: Re: [PATCH bpf-next 2/4] x86/fgraph,bpf: Switch kprobe_multi
+ program stack unwind to hw_regs path
+Message-ID: <20260120095100.399670ef@gandalf.local.home>
+In-Reply-To: <CAEf4BzZyF2MsF5CkLEsrd0dumeCJ3-zzP+azCZ4TRoDkzjGLdg@mail.gmail.com>
+References: <20260112214940.1222115-1-jolsa@kernel.org>
+	<20260112214940.1222115-3-jolsa@kernel.org>
+	<20260112170757.4e41c0d8@gandalf.local.home>
+	<aWYv6864cdO2PWbb@krava>
+	<CAEf4BzZ-sPD4UZF-TL2ep-zQOyeOC3K5XC2o3Gsx4Q6XpN-zQw@mail.gmail.com>
+	<aWpme7kBw9xyzRFP@krava>
+	<CAEf4BzZyF2MsF5CkLEsrd0dumeCJ3-zzP+azCZ4TRoDkzjGLdg@mail.gmail.com>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20260120-uapi-sockaddr-v2-4-63c319111cf6@linutronix.de>
-References: <20260120-uapi-sockaddr-v2-0-63c319111cf6@linutronix.de>
-In-Reply-To: <20260120-uapi-sockaddr-v2-0-63c319111cf6@linutronix.de>
-To: Eric Dumazet <edumazet@google.com>, 
- Kuniyuki Iwashima <kuniyu@google.com>, Paolo Abeni <pabeni@redhat.com>, 
- Willem de Bruijn <willemb@google.com>, 
- "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
- Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, 
- Matthieu Baerts <matttbe@kernel.org>, Mat Martineau <martineau@kernel.org>, 
- Geliang Tang <geliang@kernel.org>, 
- =?utf-8?q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>, 
- =?utf-8?q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
- Jesper Dangaard Brouer <hawk@kernel.org>, 
- John Fastabend <john.fastabend@gmail.com>, 
- Stanislav Fomichev <sdf@fomichev.me>, Andrii Nakryiko <andrii@kernel.org>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
- Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-api@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>, 
- linux-kselftest@vger.kernel.org, mptcp@lists.linux.dev, 
- linux-security-module@vger.kernel.org, bpf@vger.kernel.org, 
- libc-alpha@sourceware.org, Carlos O'Donell <carlos@redhat.com>, 
- Adhemerval Zanella <adhemerval.zanella@linaro.org>, 
- Rich Felker <dalias@libc.org>, klibc@zytor.com, 
- Florian Weimer <fweimer@redhat.com>, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1768918237; l=3848;
- i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=0gJHssghFK1RP90RiI7zuAI2Lb2IlxOeNNJyTLHYHUk=;
- b=Y77GKxsdWINbT9W4Kz+9AEDonn7gqGaLn3W9iGuqEOx5FCQ40NeQXBIqjtdlLcussEkSDha7x
- jGi3PaNWeKJBIq6QM1Pw24wmuBRULo1gD0tfU5AR7dmZpMH2ugb7SDS
-X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
- pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: 27D7C2F
+X-Stat-Signature: fsz9h3exq8erwwca18mgppfmfx9s17w8
+X-Rspamd-Server: rspamout08
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX1/jZgrwp+kmekSs+dRtuYLPQ9P1DydObRg=
+X-HE-Tag: 1768920639-502799
+X-HE-Meta: U2FsdGVkX1+WKDAd+dNGgzj6JMhuW/Hw8WI6ibpiJ8k0G1Mu2k267SqZl561zQaa51mT9fbkJwWiEbOOEsOnX1l69J2Wz9hxHn5UsFTh/6pXZJUVXKM4d7KeeXxWx2P9RUJAAH5iwvGgZVrQZeYSEOyH3nnNbhF1xMreAW7e0EIEMbn7HrTGbzCLSx05g6IPb1d20QoJeQXc4ZHaZZRysS+h1oQzqPNX6CXdVltCofmXrP9HYnu2WAKitD/Xb0Y+0qS6GH+4is7+n917e1MhCcZcSgUcoIH5tw/AAs2a5zVSTz7V2jJY/D50hX3rUVceO4fkrxCmRGPrWqGaFdqaGPVU/MqGHN+c
 
-Various UAPI headers reference 'struct sockaddr'. Currently the
-definition of this struct is pulled in from the libc header
-sys/socket.h. This is problematic as it introduces a dependency
-on a full userspace toolchain.
+On Fri, 16 Jan 2026 14:24:51 -0800
+Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
 
-Instead expose a custom but compatible definition of 'struct sockaddr'
-in the UAPI headers. It is guarded by the libc compatibility
-infrastructure to avoid potential conflicts.
+> I don't insist, but I'm just saying that practically speaking this
+> would make sense. Even conceptually, kretprobe is (logically) called
+> from traced function right before exit. In reality it's not exactly
+> like that and we don't know where ret happened, but having traced
+> function in kretprobe's stack trace is more useful than confusing,
+> IMO.
 
-The compatibility symbol won't be supported by glibc right away,
-but right now __UAPI_DEF_IF_IFNAMSIZ is not supported either,
-so including the libc headers before the UAPI headers is broken anyways.
+It's more useful than confusing for you because you understand it. For
+anyone else, it will be very confusing, or worse, miscalculated, to see the
+backtrace coming from the start of the function when the function has
+already executed.
 
-Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
----
- include/linux/socket.h           | 10 ----------
- include/uapi/linux/if.h          |  4 ----
- include/uapi/linux/libc-compat.h | 12 ++++++++++++
- include/uapi/linux/socket.h      | 14 ++++++++++++++
- 4 files changed, 26 insertions(+), 14 deletions(-)
+Sure, having the function is very useful, but the function is already
+completed. Technically it shouldn't be in the stacktrace. Having the return
+address in the trace should point out that the stacktrace came from the
+function right before that address.
 
-diff --git a/include/linux/socket.h b/include/linux/socket.h
-index ec715ad4bf25..8363d4e0a044 100644
---- a/include/linux/socket.h
-+++ b/include/linux/socket.h
-@@ -28,16 +28,6 @@ extern void socket_seq_show(struct seq_file *seq);
- 
- typedef __kernel_sa_family_t	sa_family_t;
- 
--/*
-- *	1003.1g requires sa_family_t and that sa_data is char.
-- */
--
--/* Deprecated for in-kernel use. Use struct sockaddr_unsized instead. */
--struct sockaddr {
--	sa_family_t	sa_family;	/* address family, AF_xxx	*/
--	char		sa_data[14];	/* 14 bytes of protocol address	*/
--};
--
- /**
-  * struct sockaddr_unsized - Unspecified size sockaddr for callbacks
-  * @sa_family: Address family (AF_UNIX, AF_INET, AF_INET6, etc.)
-diff --git a/include/uapi/linux/if.h b/include/uapi/linux/if.h
-index 797ba2c1562a..a4bc54196a07 100644
---- a/include/uapi/linux/if.h
-+++ b/include/uapi/linux/if.h
-@@ -25,10 +25,6 @@
- #include <linux/socket.h>		/* for "struct sockaddr" et al	*/
- #include <linux/compiler.h>		/* for "__user" et al           */
- 
--#ifndef __KERNEL__
--#include <sys/socket.h>			/* for struct sockaddr.		*/
--#endif
--
- #if __UAPI_DEF_IF_IFNAMSIZ
- #define	IFNAMSIZ	16
- #endif /* __UAPI_DEF_IF_IFNAMSIZ */
-diff --git a/include/uapi/linux/libc-compat.h b/include/uapi/linux/libc-compat.h
-index 0eca95ccb41e..13a06ce4e825 100644
---- a/include/uapi/linux/libc-compat.h
-+++ b/include/uapi/linux/libc-compat.h
-@@ -140,6 +140,13 @@
- 
- #endif /* _NETINET_IN_H */
- 
-+/* Definitions for socket.h */
-+#if defined(_SYS_SOCKET_H)
-+#define __UAPI_DEF_SOCKADDR		0
-+#else
-+#define __UAPI_DEF_SOCKADDR		1
-+#endif
-+
- /* Definitions for xattr.h */
- #if defined(_SYS_XATTR_H)
- #define __UAPI_DEF_XATTR		0
-@@ -221,6 +228,11 @@
- #define __UAPI_DEF_IP6_MTUINFO		1
- #endif
- 
-+/* Definitions for socket.h */
-+#ifndef __UAPI_DEF_SOCKADDR
-+#define __UAPI_DEF_SOCKADDR		1
-+#endif
-+
- /* Definitions for xattr.h */
- #ifndef __UAPI_DEF_XATTR
- #define __UAPI_DEF_XATTR		1
-diff --git a/include/uapi/linux/socket.h b/include/uapi/linux/socket.h
-index d3fcd3b5ec53..35d7d5f4b1a8 100644
---- a/include/uapi/linux/socket.h
-+++ b/include/uapi/linux/socket.h
-@@ -2,6 +2,8 @@
- #ifndef _UAPI_LINUX_SOCKET_H
- #define _UAPI_LINUX_SOCKET_H
- 
-+#include <linux/libc-compat.h>          /* for compatibility with glibc */
-+
- /*
-  * Desired design of maximum size and alignment (see RFC2553)
-  */
-@@ -26,6 +28,18 @@ struct __kernel_sockaddr_storage {
- 	};
- };
- 
-+/*
-+ *	1003.1g requires sa_family_t and that sa_data is char.
-+ */
-+
-+/* Deprecated for in-kernel use. Use struct sockaddr_unsized instead. */
-+#if __UAPI_DEF_SOCKADDR
-+struct sockaddr {
-+	__kernel_sa_family_t	sa_family;	/* address family, AF_xxx	*/
-+	char			sa_data[14];	/* 14 bytes of protocol address	*/
-+};
-+#endif /* __UAPI_DEF_SOCKADDR */
-+
- #define SOCK_SNDBUF_LOCK	1
- #define SOCK_RCVBUF_LOCK	2
- 
-
--- 
-2.52.0
-
+-- Steve
