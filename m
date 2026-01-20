@@ -1,134 +1,224 @@
-Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DBA9441056
-	for <bpf@vger.kernel.org>; Tue, 20 Jan 2026 16:08:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB4DB27F017
+	for <bpf@vger.kernel.org>; Tue, 20 Jan 2026 16:17:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768925292; cv=none; b=LZGg5NnKZwwOvkWPtc9kLA7zGLHoNn2hgxTaIMP/C88kbhkvicHcIirsuPv16NKCR/+UGlvfdHcriwuaXkEmK0Zb/oPoqKG9G4EPHJfjOYn1YzYqwAt3BECh/P3G9OcViSVUcoBRD4v0bmjPxcwatsP+rHi0tUa3yqWuIJLl3VY=
+	t=1768925833; cv=none; b=XMX5ou0/F1MsaYblyjdoLdH6joUUxr30/zK3K0ZxRSj6gwQuQG4HO0FBrdrXjY/azccL0y8GsJRMckRPQH7MPcztTjdxG5xDlKNA+BrGnuGO5D7L2YgNOh0yrIP7C+9aiyz7gTA/p8gCgGBjTClWgwAn4MgG/NO+lK68iqCiPoM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768925292; c=relaxed/simple;
-	bh=f/QC7FzwN9onimK80+gXZLxFwx7O7hVSRYIEouRG59c=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZfU7uEbyOxuPCM0yUKiuhxuYduX9dDE7fBYHwOSefDeJrreap0QDdmKoyuvS52Ed2JjI1u+2B+9hjRJZSUTz7ebX/Igi3IMI529zfs4vjXtKFjLt60wpTYhabPkysL10PempZz6uSntfmz/bnrNaH++El15QhLbz9hJ36WzqKCk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=GyYyXxcK; arc=none smtp.client-ip=91.218.175.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1768925833; c=relaxed/simple;
+	bh=PmOIAqTODMTgWMF8/2juxnklYND8v64jg8vnxapTPvs=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DkzZmMcduzo5K0JxSvKMc8dzJi6ZXk4v6tEW4LeX/QLqu/9CvbWfbvMDSaLjq/WIBNsQj7MMs11aRDklCSgDxqiwK0pWovKFWTufTvj0SKbKuCoaO6hTPrQ8ddyVs1U6kV4PWiUIU1dMxG5GOVv1CM7rI7uXiUT5u9WON9Lwd70=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XOObbfQQ; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="GyYyXxcK"
-Message-ID: <b0a09b42-4858-4c28-b7a6-6ac1e856d7bc@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1768925283;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=6beUxqGFv/OlKjWUXcRthqjnv/MJaefBTXeSFu/wzgY=;
-	b=GyYyXxcKjkNm3k0Vr+hZorNx+PxVfgjfv+Np7okYlTi9045XrFBA/x4UmtWoNY471F4W7J
-	dom8FrfmsowtaDqqB83pewlq6OEQckcYKKppAW4FjYKGmspqdkQq2WKmPjJkSrqEB7BqA8
-	7Sh2Vogv0xN7qBhqbNALvWZYmoOZHbs=
-Date: Tue, 20 Jan 2026 08:07:57 -0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XOObbfQQ"
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-4801bbbdb4aso28901325e9.1
+        for <bpf@vger.kernel.org>; Tue, 20 Jan 2026 08:17:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1768925830; x=1769530630; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=koUhaSfBzYpa7sLxEUiUMYtFrPSfWsUlovv+DUvky20=;
+        b=XOObbfQQWQ486VC8bUZF3ob+RE0qCgmayOfE7Bp5vAyS7o9HWBaaUYHHUlo3XCd2hL
+         wEzwRxz5X0doiIVZSuacoHi2jB8jhAJMgccLfgVUyXlyuz2zM4nm3Ak9mSlPmo3+iGQ+
+         yKOPBkNS9oW/SE51VswH89/NO759YzasUoOV2QAhXCFKc81sOG4D/EJA1TisHZaFEjgf
+         Yau3TjIN2tSOulZLk1dkfD8Gx7SMBR9aOACvvErIlwLIF6Nwm6ePOBKshZjQOoZo7pq8
+         ylzPJq/5m3AwLD0ADjKDj6WF2qt3MuFjzyb1w5sYBYZOn2DgImMGpFO9OGoo4qDX717U
+         jkog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768925830; x=1769530630;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=koUhaSfBzYpa7sLxEUiUMYtFrPSfWsUlovv+DUvky20=;
+        b=fmx0AJmSl3wWaQv1fmdD7Fj/0n6ruG2ccOchtYqdscURJfMxi7B9IpZpfHHtqkbxUo
+         o91Ek1sd+mFgt2jKHrrmeMXc1wCgMFhhbSV7Gg+FTStn/B2X8Q8JCCo8V0zlM+8nBLrN
+         qverVM2evT1F/VxiO9fB36Ib5QzJsPnyzAZfP0CZ3IijtVDHrvvTwWVlyh4ve4ksm9Wl
+         HROIP6/IT3NwTrlwOpIUwDT5T8DjF/5jA0OhlOvUpGw8+fHxMqINLxigLka5LeTE4twt
+         VRu9V/8UzlpQmDwev0Tzo9IgdQorwoBu3W8Eb2cITaMs17IWEzNUnKpDAQ2dpvPXrTSZ
+         b1BA==
+X-Forwarded-Encrypted: i=1; AJvYcCVcFZqfzwin173Rwb5j+CC1pJIdgO5bCmum3180Mkz0aIQx5zRC2eGLkBn4SgiSclngyvI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywmy+0kaoxN5S7OpYu5N345LFKOkPWRl0nyv3GGkZweOzAULwDN
+	beisIEoHVufDJlb/nI3HJOFT0Wh9kl++ECIF3vdOCsfaYAZGV8Y26wef
+X-Gm-Gg: AY/fxX67UDIjCrb8/Fj7SH46b935/1FKjgTrAUQx9DSFRFOj6FaawGmkcUWhuFf5Ewj
+	2RnqzakrZyBceyjzaf0saXtnBZLnNx+92qYLExGo9L/UNtY6An/OymKbPrrZqv5m7Pok6RHXxd8
+	/7j+2uDVW6PfNqZUZAPF8E428EuL+TSy8J0COU1wufWi5GAmrPYzYZXehND8g380ciuT9Xo15Tp
+	14BjwWv+z30qN/OLfh4xZ5/pkpRIFtwuVsScD0Gah6PAyVRoWlJ11mZRAMv/yZkLCntt8AMwvBu
+	H+hE1gZshA2znnG6M7euchnWwJIGaQeL1p8NbcAX9IO38Q6wjOmwEaAxjBJ7UEKFCWN6g3LTKzs
+	Q8KTKMPfH6xXoOdzU5mcGYGu6927PIvVGwqJpa3Z8ORrrgo4MynlMRnZyhZmw
+X-Received: by 2002:a05:600c:314f:b0:479:13e9:3d64 with SMTP id 5b1f17b1804b1-4801e67c8ecmr190818375e9.15.1768925829948;
+        Tue, 20 Jan 2026 08:17:09 -0800 (PST)
+Received: from krava ([2a02:8308:a00c:e200::b44f])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4801e9434d9sm116205165e9.0.2026.01.20.08.17.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Jan 2026 08:17:09 -0800 (PST)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Tue, 20 Jan 2026 17:17:08 +0100
+To: Jiri Olsa <olsajiri@gmail.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Mahe Tardy <mahe.tardy@gmail.com>,
+	Peter Zijlstra <peterz@infradead.org>, bpf@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, x86@kernel.org,
+	Yonghong Song <yhs@fb.com>, Song Liu <songliubraving@fb.com>,
+	Andrii Nakryiko <andrii@kernel.org>
+Subject: Re: [PATCH bpf-next 2/4] x86/fgraph,bpf: Switch kprobe_multi program
+ stack unwind to hw_regs path
+Message-ID: <aW-qhJ2pige8aRl4@krava>
+References: <20260112214940.1222115-1-jolsa@kernel.org>
+ <20260112214940.1222115-3-jolsa@kernel.org>
+ <20260112170757.4e41c0d8@gandalf.local.home>
+ <aWYv6864cdO2PWbb@krava>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH dwarves 1/4] dwarf_loader/btf_encoder: Detect reordered
- parameters
-Content-Language: en-GB
-To: Alan Maguire <alan.maguire@oracle.com>, mattbobrowski@google.com
-Cc: eddyz87@gmail.com, ihor.solodrai@linux.dev, jolsa@kernel.org,
- andrii@kernel.org, ast@kernel.org, dwarves@vger.kernel.org,
- bpf@vger.kernel.org
-References: <20260113131352.2395024-1-alan.maguire@oracle.com>
- <20260113131352.2395024-2-alan.maguire@oracle.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <20260113131352.2395024-2-alan.maguire@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aWYv6864cdO2PWbb@krava>
+
+On Tue, Jan 13, 2026 at 12:43:39PM +0100, Jiri Olsa wrote:
+> On Mon, Jan 12, 2026 at 05:07:57PM -0500, Steven Rostedt wrote:
+> > On Mon, 12 Jan 2026 22:49:38 +0100
+> > Jiri Olsa <jolsa@kernel.org> wrote:
+> > 
+> > > To recreate same stack setup for return probe as we have for entry
+> > > probe, we set the instruction pointer to the attached function address,
+> > > which gets us the same unwind setup and same stack trace.
+> > > 
+> > > With the fix, entry probe:
+> > > 
+> > >   # bpftrace -e 'kprobe:__x64_sys_newuname* { print(kstack)}'
+> > >   Attaching 1 probe...
+> > > 
+> > >         __x64_sys_newuname+9
+> > >         do_syscall_64+134
+> > >         entry_SYSCALL_64_after_hwframe+118
+> > > 
+> > > return probe:
+> > > 
+> > >   # bpftrace -e 'kretprobe:__x64_sys_newuname* { print(kstack)}'
+> > >   Attaching 1 probe...
+> > > 
+> > >         __x64_sys_newuname+4
+> > >         do_syscall_64+134
+> > >         entry_SYSCALL_64_after_hwframe+118
+> > 
+> > But is this really correct?
+> > 
+> > The stack trace of the return from __x86_sys_newuname is from offset "+4".
+> > 
+> > The stack trace from entry is offset "+9". Isn't it confusing that the
+> > offset is likely not from the return portion of that function?
+> 
+> right, makes sense.. so standard kprobe actualy skips attached function
+> (__x86_sys_newuname) on return probe stacktrace.. perhaps we should do
+> the same for kprobe_multi
+> 
+> I managed to get that with the change below, but it's wrong wrt arch code,
+> note the ftrace_regs_set_stack_pointer(fregs, stack + 8) .. will try to
+> figure out better way when we agree on the solution
+> 
+> thanks,
+> jirka
+> 
+> 
+> ---
+> diff --git a/arch/x86/include/asm/ftrace.h b/arch/x86/include/asm/ftrace.h
+> index c56e1e63b893..b0e8ce4934e7 100644
+> --- a/arch/x86/include/asm/ftrace.h
+> +++ b/arch/x86/include/asm/ftrace.h
+> @@ -71,6 +71,9 @@ arch_ftrace_get_regs(struct ftrace_regs *fregs)
+>  #define ftrace_regs_set_instruction_pointer(fregs, _ip)	\
+>  	do { arch_ftrace_regs(fregs)->regs.ip = (_ip); } while (0)
+>  
+> +#define ftrace_regs_set_stack_pointer(fregs, _sp)	\
+> +	do { arch_ftrace_regs(fregs)->regs.sp = (_sp); } while (0)
+> +
+>  
+>  static __always_inline unsigned long
+>  ftrace_regs_get_return_address(struct ftrace_regs *fregs)
+> diff --git a/kernel/trace/fgraph.c b/kernel/trace/fgraph.c
+> index 6279e0a753cf..b1510c412dcb 100644
+> --- a/kernel/trace/fgraph.c
+> +++ b/kernel/trace/fgraph.c
+> @@ -717,7 +717,8 @@ int function_graph_enter_regs(unsigned long ret, unsigned long func,
+>  /* Retrieve a function return address to the trace stack on thread info.*/
+>  static struct ftrace_ret_stack *
+>  ftrace_pop_return_trace(struct ftrace_graph_ret *trace, unsigned long *ret,
+> -			unsigned long frame_pointer, int *offset)
+> +			unsigned long *stack, unsigned long frame_pointer,
+> +			int *offset)
+>  {
+>  	struct ftrace_ret_stack *ret_stack;
+>  
+> @@ -762,6 +763,7 @@ ftrace_pop_return_trace(struct ftrace_graph_ret *trace, unsigned long *ret,
+>  
+>  	*offset += FGRAPH_FRAME_OFFSET;
+>  	*ret = ret_stack->ret;
+> +	*stack = (unsigned long) ret_stack->retp;
+>  	trace->func = ret_stack->func;
+>  	trace->overrun = atomic_read(&current->trace_overrun);
+>  	trace->depth = current->curr_ret_depth;
+> @@ -810,12 +812,13 @@ __ftrace_return_to_handler(struct ftrace_regs *fregs, unsigned long frame_pointe
+>  	struct ftrace_ret_stack *ret_stack;
+>  	struct ftrace_graph_ret trace;
+>  	unsigned long bitmap;
+> +	unsigned long stack;
+>  	unsigned long ret;
+>  	int offset;
+>  	int bit;
+>  	int i;
+>  
+> -	ret_stack = ftrace_pop_return_trace(&trace, &ret, frame_pointer, &offset);
+> +	ret_stack = ftrace_pop_return_trace(&trace, &ret, &stack, frame_pointer, &offset);
+>  
+>  	if (unlikely(!ret_stack)) {
+>  		ftrace_graph_stop();
+> @@ -824,8 +827,11 @@ __ftrace_return_to_handler(struct ftrace_regs *fregs, unsigned long frame_pointe
+>  		return (unsigned long)panic;
+>  	}
+>  
+> -	if (fregs)
+> -		ftrace_regs_set_instruction_pointer(fregs, trace.func);
+> +	if (fregs) {
+> +		ftrace_regs_set_instruction_pointer(fregs, ret);
+> +		ftrace_regs_set_stack_pointer(fregs, stack + 8);
+
+actually looks like this might be better solution.. storing the proper
+rsp value directly to the regs in return_to_handler
+
+jirka
 
 
-
-On 1/13/26 5:13 AM, Alan Maguire wrote:
-> When encoding concrete instances of optimized functions it is possible
-> parameters get reordered, often due to a parameter being optimized out;
-> in such cases the order of abstract origin references to the abstract
-> function is different, and the parameters that are optimized out
-> usually appear after all the non-optimized parameters with no
-> DW_AT_location information [1].
->
-> As an example consider
->
-> static void __blkcg_rstat_flush(struct blkcg *blkcg, int cpu);
->
-> It has - as expected - an abstract representation as follows:
->
->   <1><6392a2d>: Abbrev Number: 47 (DW_TAG_subprogram)
->      <6392a2e>   DW_AT_name        : (indirect string, offset: 0x261e25): __blkcg_rstat_flush
->      <6392a32>   DW_AT_decl_file   : 1
->      <6392a33>   DW_AT_decl_line   : 1043
->      <6392a35>   DW_AT_decl_column : 13
->      <6392a36>   DW_AT_prototyped  : 1
->      <6392a36>   DW_AT_inline      : 1   (inlined)
->      <6392a37>   DW_AT_sibling     : <0x6392bac>
->   <2><6392a3b>: Abbrev Number: 38 (DW_TAG_formal_parameter)
->      <6392a3c>   DW_AT_name        : (indirect string, offset: 0xa7a9f): blkcg
->      <6392a40>   DW_AT_decl_file   : 1
->      <6392a41>   DW_AT_decl_line   : 1043
->      <6392a43>   DW_AT_decl_column : 47
->      <6392a44>   DW_AT_type        : <0x638b611>
->   <2><6392a48>: Abbrev Number: 20 (DW_TAG_formal_parameter)
->      <6392a49>   DW_AT_name        : cpu
->      <6392a4d>   DW_AT_decl_file   : 1
->      <6392a4e>   DW_AT_decl_line   : 1043
->      <6392a50>   DW_AT_decl_column : 58
->      <6392a51>   DW_AT_type        : <0x6377f8f>
->
-> However the concrete representation after optimization becomes:
->
-> ffffffff8186d180 t __blkcg_rstat_flush.isra.0
->
-> and has a concrete representation with parameter order switched:
->
-> <1><6399661>: Abbrev Number: 110 (DW_TAG_subprogram)
->      <6399662>   DW_AT_abstract_origin: <0x6392a2d>
->      <6399666>   DW_AT_low_pc      : 0xffffffff8186d180
->      <639966e>   DW_AT_high_pc     : 0x169
->      <6399676>   DW_AT_frame_base  : 1 byte block: 9c    (DW_OP_call_frame_cfa)
->      <6399678>   DW_AT_GNU_all_call_sites: 1
->      <6399678>   DW_AT_sibling     : <0x6399a8a>
->   <2><639967c>: Abbrev Number: 4 (DW_TAG_formal_parameter)
->      <639967d>   DW_AT_abstract_origin: <0x6392a48>
->      <6399681>   DW_AT_location    : 0x1fe21fb (location list)
->      <6399685>   DW_AT_GNU_locviews: 0x1fe21f5
->   <2><63996e4>: Abbrev Number: 4 (DW_TAG_formal_parameter)
->      <63996e5>   DW_AT_abstract_origin: <0x6392a3b>
->      <63996e9>   DW_AT_location    : 0x1fe2387 (location list)
->      <63996ed>   DW_AT_GNU_locviews: 0x1fe2385
->
-> In other words we end up with
->
-> static void __blkcg_rstat_flush.isra(int cpu, struct blkcg *blkcg);
->
-> We are not detecting cases like this in pahole, so we need to
-> catch it to exclude such cases since they could lead to incorrect
-> fentry attachment.
->
-> Future work around true function signatures will allow such functions
-> with their "." suffixes, but even for such cases it is good to
-> detect the reordering.
->
-> In practice we just end up excluding a few more .isra/.constprop
-> functions which we cannot fentry-attach by name anyway; see [2] for an
-> example list from CI.
->
-> [1] https://lore.kernel.org/bpf/101b74c9-949a-4bf4-a766-a5343b70bdd2@oracle.com/
-> [2] https://github.com/alan-maguire/dwarves/actions/runs/20031993822
->
-> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
-
-Acked-by: Yonghong Song <yonghong.song@linux.dev>
-
+---
+diff --git a/arch/x86/kernel/ftrace_64.S b/arch/x86/kernel/ftrace_64.S
+index a132608265f6..971883045b75 100644
+--- a/arch/x86/kernel/ftrace_64.S
++++ b/arch/x86/kernel/ftrace_64.S
+@@ -368,13 +368,16 @@ SYM_CODE_START(return_to_handler)
+ 	subq $8, %rsp
+ 	UNWIND_HINT_FUNC
+ 
++	movq %rsp, %rdi
++	addq $8, %rdi
++
+ 	/* Save ftrace_regs for function exit context  */
+ 	subq $(FRAME_SIZE), %rsp
+ 
+ 	movq %rax, RAX(%rsp)
+ 	movq %rdx, RDX(%rsp)
+ 	movq %rbp, RBP(%rsp)
+-	movq %rsp, RSP(%rsp)
++	movq %rdi, RSP(%rsp)
+ 	movq %rsp, %rdi
+ 
+ 	call ftrace_return_to_handler
