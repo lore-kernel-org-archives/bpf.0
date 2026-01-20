@@ -1,58 +1,60 @@
 Received: from esa1.cc.uec.ac.jp (mx.uec.ac.jp [130.153.8.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B46FF3EF0C3
-	for <bpf@vger.kernel.org>; Tue, 20 Jan 2026 11:00:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D30440B6CC
+	for <bpf@vger.kernel.org>; Tue, 20 Jan 2026 11:00:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.153.8.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768906831; cv=none; b=Mcq18JLyYC8o1RIuPFO774YtkYM+4ofl23HTucQHraPFFiUJvVErQA76tmbxzC/WlRzlIc4rHjIv6h+HodMzoFN/h7RexhLMzwYH5qXBwL6OPrisDzLQnZwD9IeyQoql37AxIEwmlh/0V/zhj/6hxDatHK9LQs91RDIUjO8L3/A=
+	t=1768906834; cv=none; b=Yynlz/fZpZLBORdFFaUdfYJ43calvXBKB9IN6O7o5iAxxy2zEFDAljc9nws4mbXjGg4eHcd6E5TIBsmMKnr8PTekSBMdBv5h5cLb6QzTqYh2ibPgO9KqxqzCK8lA9XR4d8GPPKyCdOiMoJmLZc4z6lGCMGMs9KaHKyNVbQhKUus=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768906831; c=relaxed/simple;
-	bh=Wfu08jmaP7n47DgVo7hbSDD1lV6lzLUS2DmlbvI+6lE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=u7D5JVE6XkJaExQFzx2HALxG6l6u4QaUHRfPLGPwWwvZ23ZAo0TNmpg5acuYDAz9LYFwyVzIrssaG3kD1+uJbwo7yVIo8ZsMEXCIWs0t5d3ymz/yO1svr/ia6fBeSzM9k0iPMc9q7uBA4gaGIZ2uot8pOy9qxwNIbKd/+QjqB4g=
+	s=arc-20240116; t=1768906834; c=relaxed/simple;
+	bh=8+Zmx/iAJxe/zaasGpX4p/DH7QDaBlAn0s1osix+pho=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=LRJI+XESd9CeB76uno1IJMDH3g4o/xbzVQGwbDBlseW+NgoCZiZ8IG8n989ptQJwq2k8zTyvw0HQFafoWpPSp3gaClcefAgJ566nstXGWQ9GumdseJX9RNlP/x0rdnNQEnJ82yuZbfvtbOn6U4U1rDtfQ7+Tj5ViVbsrTUKh1t0=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hpc.is.uec.ac.jp; spf=pass smtp.mailfrom=hpc.is.uec.ac.jp; arc=none smtp.client-ip=130.153.8.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hpc.is.uec.ac.jp
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hpc.is.uec.ac.jp
-X-CSE-ConnectionGUID: DV5eLbXbQV+Kl8pZPLQSZQ==
-X-CSE-MsgGUID: spwUqtBzQ+e5uj/gC1zSgw==
-X-IPAS-Result: =?us-ascii?q?A2EtBQD5Xm9p/zcImYJaglkCm3yeHYF/BgkBAQEBAQEBA?=
- =?us-ascii?q?QFaBAEBhQeMfCc1CA4BAgQBAQEBAwIDAQEBAQEBAQEBAQELAQEBBQEBAQEBA?=
- =?us-ascii?q?QYDAQECAoEdhglTSQEQAYZAAUaEUoJ0sGeBAd16LVSBMhWBOI1ScYU6gg2Ef?=
- =?us-ascii?q?YQadoV3BIINFXoUlA5IgR4DWSwBE0ITDQoLBwVqYQIZAzUSKhVuCBEZHYEZC?=
- =?us-ascii?q?j4XgQobBwWBIgaCFYZpD4kzgV8DCxgNSBEsNxQbQm4HkgEHAWIsKlAOgSCPE?=
- =?us-ascii?q?weHd48PoRGEJoRRH5xoTaprLphYpFmGUQGCFE04gyNRGQ/aP4ElAgcLAQEDC?=
- =?us-ascii?q?YZ+imyBfwEB?=
-IronPort-Data: A9a23:OpvFBayuFkcCS9Yy23p6t+eRxyrEfRIJ4+MujC+fZmUNrF6WrkUGm
- mRLCD/Sb/uNZmf9foxxb9i/oBsCv8OGnNUxHgJkpC00HyNBpOP7XuiUfxz6V8+wwmwvb67FA
- +E2MISowBUcFyeEzvuVGuG/6yE6jufQGuaU5NfsYkhZXRVjRDoqlSVtkus4hp8AqdWiCmthg
- /uryyHkEAHjgWcc3l48sfrZ9ks25qyq4Vv0g3RnDRx1lA6G/5UqJM9HTU2BByOQapVZGOe8W
- 9HCwNmRlkvF/w0gA8+Sib3ydEsHWNb6ZWBiXVIPBsBOKjAbzsAD+v5T2Mg0MC+7uB3Q9zxF8
- +ihgLTrIesf0g0gr8xGO/VQO3kW0aSrY9YrK1Dn2SCY5xSun3cBX5yCpaz5VGEV0r8fPI1Ay
- RAXABwzMx2njdK8+Yz4ae08nvYbCPDQDrpK7xmMzRmBZRonaZXTBqnH4d5G0S0hwN1DFrDXb
- IwbcVKDbjyZOEUJYwpMTsJ4wbrAanrXKlW0rHqUvqo28mHWxSRxyLOrMcGTZ9GBA8xe2ESAz
- o7D1z2hXEBAbIzAlFJp9Fq3nvDyhD/RSrtRGeCl9LllqwSB/WMMXUh+uVyT+6Dj1RHnCrqzM
- Xc8+zEurLk78UWDTsH2GRyj5mOJtVgVUJxSC4UHBBqlz7qR7wudB3YJVC8bLsErv4k/Tnooz
- jdlgu8FGxRDjuCYbXit/I6q7hC2aTAnFUs7Xh09GF5tD8bYnG0lsv7YZvRbeJNZY/XwCXT8z
- jSLsiUklu9VkMMAkaywu1Lf695NmnQrZlNqjuk0djv6hu+cWGJCT9bwgWU3Fd4acO6koqCp5
- RDpW6G2tYji961haxBhsM1XRev2uK/UWNEtqUJvEtE88TWz9mS4fJxBqDZwbEptP80YYzisa
- 0jWvB5X5ZRaIHqta7QfXr9cyq0Ck8DdKDgSfqqEPooUP8MqL1LvEeMHTRf44l0BWXMEyckXU
- ap3u+71ZZrGIcyLFAaLeto=
-IronPort-HdrOrdr: A9a23:ttdiXaAJNTrOMlblHelX55DYdb4zR+YMi2TDGXoRdfUzSL39qy
- nOpoV/6faQsl16ZJhOo7290da7MAnhHPJOjbX5Xo3SPjUO2lHJEGgK1+KL/9SHIULDH4VmpM
- RdmsZFZuHYPBxXqvm/xyGdP78bsaG62ZHtqcDgi0pcdC0CUdAY0y5JTj+hNGBLbjQuP+teKL
- OsovAehz2ufx0sH7+G73A+LpX+juyOrrLKCCR2YCIa1A==
-X-Talos-CUID: 9a23:vINiWG3H4xL39YiJZ3WK/LxfNv54f1nX/H3pHQybDTZxeoWxcGSiwfYx
-X-Talos-MUID: 9a23:kTnkugtDca87qKi9682nnyl9Cd50ybaXS01QjJdBtOLdJxd/JGLI
+X-CSE-ConnectionGUID: alN1IeM/R8epPS5qSpjxUg==
+X-CSE-MsgGUID: wWk2xP9sSFO66mpF6rEPlQ==
+X-IPAS-Result: =?us-ascii?q?A2EPBAD5Xm9p/zcImYJaglkCglWCW7ZoBgkBAQEBAQEBA?=
+ =?us-ascii?q?QFaBAEBhQcCjHonNwYOAQIEAQEBAQMCAwEBAQEBAQEBAQEBCwEBAQUBAQEBA?=
+ =?us-ascii?q?QEGAwEBAgKBHYYJU0kBEAGGCAYyAUYQUVYZgwKCdLBngQHdei1UgSYBCxQBg?=
+ =?us-ascii?q?TiNUnGEeEKCDYR9hBp2hXcEgzCUDkiBHgNZLAETQhMNCgsHBWphAhkDNRIqF?=
+ =?us-ascii?q?W4IERkdgRkKPheBChsHBYEiBoIVhmkPiTOBXwMLGA1IESw3FBtCbgePE0eBP?=
+ =?us-ascii?q?GsHgQ57NpALB4d3jw+hEYQmhFEfnGhNhASUFZJSLphYpFmGZoIATTiDIlIZD?=
+ =?us-ascii?q?44tFst8aTwCBwsBAQMJhn6KbIF/AQE?=
+IronPort-Data: A9a23:KN1qTq21aRlxFM5XR/bD5XVwkn2cJEfYwER7XKvMYLTBsI5bpzwBy
+ DYfXmrVOquOZzamKot2Od+x9BlUvp/QxoIwSFFvqSg9HnlHgPSeOdnIdU2Y0wF+jyHgoOCLy
+ +1EN7Es+ehtFie0Si+Fa+an9T8nk/nUGtIQMcacUghpXwhoVSw9vhxqnu89k+ZAjMOwa++3k
+ YqaT/b3Zhn/glaYDkpOs/jd8Eo15Kyr0N8llgVWic5j7Qe2e0Y9Ucp3yZGZdxPQXoRSF+imc
+ OfPpJnR1n/Z5RokFuS+mb/9dEAQKpaKVeRZoiMLM0QKqkEqSh0ais7XBtJFAatko2zhc+RK9
+ Tl4ncfYpTHFnkH7sL91vxFwS0mSNEDdkVPNCSDXXce7liUqf5ZwqhnH4Y5f0YAwo45K7W9yG
+ fMwITQrNzGOoqWMkL+jctIxn/87LtnWM9ZK0p1g5Wmx4fcORICGT6jO5MFVxiZ2m81FW//VI
+ cgBAdZtRE2bO1sWZwxRWNRjwY9EhVGmG9FcgFOOpasm6m3a5Axp2/7sK5zId9fMTM4TnF7wS
+ mfupjynU0tCZIPPodaD2m2ThbXfpXLgY6w1SuO97tA0mnCrwlVGXXX6UnPh+KPm1RfvMz5FE
+ GQV4SovvKE3/WSrVtK7Xgb+vXOP+BcXHdhIe9DW8ymI2u/Y7gKYGGUeX2QHddEt8sY9Az4yv
+ rOUoz/3LTVrluS0RFfazOeZtQuJZDEuNW0SWCBRGGPp/OLfTJcPYgXnbO4LLUJYptjlXD39x
+ zGUoTIv3fMOgMVN3q79/0ivb9OQSnrhE1FdCub/Bz3NAuZFiGmNPdTA1LQjxawcRLt1t3HY1
+ JXE8uDHhAz0MX1yqMB9aL9URu72vqft3Mz0nV5iV4Qn9iqg4WWiYZEY5z82KUNkOdoefnriZ
+ 0rWpAVQ75ZPPXysdsdKXm9wYux0pZXd+SPNDKCEPoATOcMqKWdqPkhGPCat4owkq2B0+YlXB
+ HtRWZzE4aoyYUi/8AeLeg==
+IronPort-HdrOrdr: A9a23:kXvVHqmvwAuLCLtyDQq6HQ5FfqzpDfLX3DAbv31ZSRFFG/FwWf
+ rOoB19726RtN9xYgBEpTnkAsLrfZqyz/NICPYqTM2ftWXd1FdAT7sSj7cKoQeBJ8SWzIc06U
+ 4HScdD4bbLfDtHZKjBjjWQIpIN5+bC14iNqY7lvg9QZDAvR4ZeqzpIMyrzKDwOeCB2QaMDMr
+ ehzPcvnUvHRV0nKv7iJn4LWYH41qb2fZvdEGM7Li9i0imi5AnYj4LHLw==
+X-Talos-CUID: =?us-ascii?q?9a23=3Ar+XtP2rt9w9b5gsen71duxHmUckhVCT8wVKXGR+?=
+ =?us-ascii?q?1EV5SFaSuUV2Axawxxg=3D=3D?=
+X-Talos-MUID: 9a23:aVEVqwXeahiBYRvq/CDTh2tyDJZz2IqJVh4IibtYoeS8MRUlbg==
 X-IronPort-Anti-Spam-Filtered: true
 X-IronPort-AV: E=Sophos;i="6.21,240,1763391600"; 
-   d="scan'208";a="106920876"
+   d="scan'208";a="106920879"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 X-IronPort-Outbreak-Status: No, level 0, Unknown - Unknown
 Received: from mx-delivery2.uec.ac.jp (HELO mx-delivery.uec.ac.jp) ([130.153.8.55])
   by esa1.cc.uec.ac.jp with ESMTP; 20 Jan 2026 20:00:28 +0900
 Received: from labpc (unknown [172.21.208.155])
-	by mx-delivery.uec.ac.jp (Postfix) with ESMTPSA id 102381839FB9;
+	by mx-delivery.uec.ac.jp (Postfix) with ESMTPSA id 1BF8E1839FBB;
 	Tue, 20 Jan 2026 20:00:28 +0900 (JST)
 From: Yuzuki Ishiyama <ishiyama@hpc.is.uec.ac.jp>
 To: bpf@vger.kernel.org
@@ -63,10 +65,12 @@ Cc: mykyta.yatsenko5@gmail.com,
 	daniel@iogearbox.net,
 	martin.lau@linux.dev,
 	Yuzuki Ishiyama <ishiyama@hpc.is.uec.ac.jp>
-Subject: [PATCH bpf-next v4 0/2] bpf: Add kfunc bpf_strncasecmp()
-Date: Tue, 20 Jan 2026 20:00:09 +0900
-Message-ID: <20260120110011.1805037-1-ishiyama@hpc.is.uec.ac.jp>
+Subject: [PATCH bpf-next v4 1/2] bpf: add bpf_strncasecmp kfunc
+Date: Tue, 20 Jan 2026 20:00:10 +0900
+Message-ID: <20260120110011.1805037-2-ishiyama@hpc.is.uec.ac.jp>
 X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20260120110011.1805037-1-ishiyama@hpc.is.uec.ac.jp>
+References: <20260120110011.1805037-1-ishiyama@hpc.is.uec.ac.jp>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -75,34 +79,90 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This patchset introduces bpf_strncasecmp to allow case-insensitive and
-limited-length string comparison. This is useful for parsing protocol
-headers like HTTP.
+bpf_strncasecmp() function performs same like bpf_strcasecmp() except
+limiting the comparison to a specific length.
 
+Signed-off-by: Yuzuki Ishiyama <ishiyama@hpc.is.uec.ac.jp>
 ---
+ kernel/bpf/helpers.c | 30 +++++++++++++++++++++++++-----
+ 1 file changed, 25 insertions(+), 5 deletions(-)
 
-Changes in v4:
-- Updated the loop variable to maintain style consistency
-
-Changes in v3:
-- Use ternary operator to maintain style consistency
-- Reverted unnecessary doc comment about XATTR_SIZE_MAX
-
-Changes in v2:
-- Compute max_sz upfront and remove len check from the loop body
-- Document that @len is limited by XATTR_SIZE_MAX
-
-Yuzuki Ishiyama (2):
-  bpf: add bpf_strncasecmp kfunc
-  selftests/bpf: Test kfunc bpf_strncasecmp
-
- kernel/bpf/helpers.c                          | 30 +++++++++++++++----
- .../selftests/bpf/prog_tests/string_kfuncs.c  |  1 +
- .../bpf/progs/string_kfuncs_failure1.c        |  6 ++++
- .../bpf/progs/string_kfuncs_failure2.c        |  1 +
- .../bpf/progs/string_kfuncs_success.c         |  7 +++++
- 5 files changed, 40 insertions(+), 5 deletions(-)
-
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index 9eaa4185e0a7..6c36f0fb5da7 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -3406,7 +3406,7 @@ __bpf_kfunc void __bpf_trap(void)
+  * __get_kernel_nofault instead of plain dereference to make them safe.
+  */
+ 
+-static int __bpf_strcasecmp(const char *s1, const char *s2, bool ignore_case)
++static int __bpf_strncasecmp(const char *s1, const char *s2, bool ignore_case, size_t len)
+ {
+ 	char c1, c2;
+ 	int i;
+@@ -3417,7 +3417,7 @@ static int __bpf_strcasecmp(const char *s1, const char *s2, bool ignore_case)
+ 	}
+ 
+ 	guard(pagefault)();
+-	for (i = 0; i < XATTR_SIZE_MAX; i++) {
++	for (i = 0; i < len && i < XATTR_SIZE_MAX; i++) {
+ 		__get_kernel_nofault(&c1, s1, char, err_out);
+ 		__get_kernel_nofault(&c2, s2, char, err_out);
+ 		if (ignore_case) {
+@@ -3431,7 +3431,7 @@ static int __bpf_strcasecmp(const char *s1, const char *s2, bool ignore_case)
+ 		s1++;
+ 		s2++;
+ 	}
+-	return -E2BIG;
++	return i == XATTR_SIZE_MAX ? -E2BIG : 0;
+ err_out:
+ 	return -EFAULT;
+ }
+@@ -3451,7 +3451,7 @@ static int __bpf_strcasecmp(const char *s1, const char *s2, bool ignore_case)
+  */
+ __bpf_kfunc int bpf_strcmp(const char *s1__ign, const char *s2__ign)
+ {
+-	return __bpf_strcasecmp(s1__ign, s2__ign, false);
++	return __bpf_strncasecmp(s1__ign, s2__ign, false, XATTR_SIZE_MAX);
+ }
+ 
+ /**
+@@ -3469,7 +3469,26 @@ __bpf_kfunc int bpf_strcmp(const char *s1__ign, const char *s2__ign)
+  */
+ __bpf_kfunc int bpf_strcasecmp(const char *s1__ign, const char *s2__ign)
+ {
+-	return __bpf_strcasecmp(s1__ign, s2__ign, true);
++	return __bpf_strncasecmp(s1__ign, s2__ign, true, XATTR_SIZE_MAX);
++}
++
++/*
++ * bpf_strncasecmp - Compare two length-limited strings, ignoring case
++ * @s1__ign: One string
++ * @s2__ign: Another string
++ * @len: The maximum number of characters to compare
++ *
++ * Return:
++ * * %0       - Strings are equal
++ * * %-1      - @s1__ign is smaller
++ * * %1       - @s2__ign is smaller
++ * * %-EFAULT - Cannot read one of the strings
++ * * %-E2BIG  - One of strings is too large
++ * * %-ERANGE - One of strings is outside of kernel address space
++ */
++__bpf_kfunc int bpf_strncasecmp(const char *s1__ign, const char *s2__ign, size_t len)
++{
++	return __bpf_strncasecmp(s1__ign, s2__ign, true, len);
+ }
+ 
+ /**
+@@ -4521,6 +4540,7 @@ BTF_ID_FLAGS(func, bpf_iter_dmabuf_destroy, KF_ITER_DESTROY | KF_SLEEPABLE)
+ BTF_ID_FLAGS(func, __bpf_trap)
+ BTF_ID_FLAGS(func, bpf_strcmp);
+ BTF_ID_FLAGS(func, bpf_strcasecmp);
++BTF_ID_FLAGS(func, bpf_strncasecmp);
+ BTF_ID_FLAGS(func, bpf_strchr);
+ BTF_ID_FLAGS(func, bpf_strchrnul);
+ BTF_ID_FLAGS(func, bpf_strnchr);
 -- 
 2.52.0
 
