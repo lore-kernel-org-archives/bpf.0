@@ -1,206 +1,130 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91B3D3E8C79
-	for <bpf@vger.kernel.org>; Tue, 20 Jan 2026 10:32:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768905181; cv=none; b=Ikax90Af2XQHDAbTaSjEg0Af3lnUuqxuZY6UzGdqUjopmYLDib5UME9PT9r0/ScZstxBGOC7NUmgPKzMlAMzG1SgcgGgkvpESTwB/wEwhdxHSWTgiAcVwSN8jXn7OAQfRxlFrO7bwuWH/0TEuBbyiZfs5onTzQ1p5CE3CIsGiTg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768905181; c=relaxed/simple;
-	bh=5F8djO2fe8NjE0zcZN2QrHiAPRBUcvTVUgHJecQHJFo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=B1Evju+fsXMdM4+usOYIgMh5XovLcQ1ernjjh5gJItD2v5LyoMCSW9jZpbLG/1tQnj+4eRDMOV/Nf2viT6GHikNmKhhRlMjQxLrWIOEEONb9TShSdsP4TbyQo/ZO4ROze7vvVM5vAqZcdj2iN8KvGcw4s1hU3pCAFlyMKdUQR9g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=ncNBYv1u; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=mG5hgfYY; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=ncNBYv1u; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=mG5hgfYY; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AD3F413240
+	for <bpf@vger.kernel.org>; Tue, 20 Jan 2026 10:41:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.178
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768905664; cv=pass; b=ixKJ/kB34hDCZvFNHsSIudJZ1OjIObR71B/4eO0khiVwHqKc3t9etT+u8HEAGEWwp/+ne5Nk6ePzHo+kn4XzPDRNHZGxrCUdskGjtBGyZN+z6wIFdbm3H07b+7bUk9R3jaTOqgGJ0AOq++jYtxyfQHOXB3R2DkeQL1hDjw1Ar6o=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768905664; c=relaxed/simple;
+	bh=FFii1bsKXobctKhMNLtq5d1Ip3RYu1nQ6MH14Bs+3t8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=LCCNhK06BQ5/aocHLEDE7tTTdkCRh6w+u2OZiu9nnx4+CfEv/V2/T1Q9AjdbqesPK1LxBW3oHZ9qk86SO2MpMG3yNDd53mJxL/XLJc15AVnGn2VPwxn2dp6umJHveXskSEqBvfs22S5P5BphVzlDs2BBDpIyZvbSCvmaOP3iAeI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=bLarUOM4; arc=pass smtp.client-ip=209.85.160.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="ncNBYv1u";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="mG5hgfYY";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="ncNBYv1u";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="mG5hgfYY"
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id D30305BCD4;
-	Tue, 20 Jan 2026 10:32:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1768905177; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=XyrDx1MhY3e+hHISP5xpS3IMhu37A0mWxWGFA4RwEpQ=;
-	b=ncNBYv1uYVI7iTVuDDYCpDh7Z0KbKWyMrsKVFc8roZI3uZ4vgnVfVOSENXGtEYf0JICIcr
-	0vtu5IffI1xRM7m9B7WX/r6uDZFZebqaGrWNrKlgLe7pHpbwvY9+Z3FRq0BxrKMpMRoA38
-	g55WsebXmqSBZzIluLQGkn6PUQEACEo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1768905177;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=XyrDx1MhY3e+hHISP5xpS3IMhu37A0mWxWGFA4RwEpQ=;
-	b=mG5hgfYYLTULX0CjTEDcnSPZJsgF4JoEa6xtQYgBdMRuZYMY7wvsnlQNWmEnLNbJDV8D+8
-	iMQ4IPA13Q4Hv6AA==
-Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=ncNBYv1u;
-	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=mG5hgfYY
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1768905177; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=XyrDx1MhY3e+hHISP5xpS3IMhu37A0mWxWGFA4RwEpQ=;
-	b=ncNBYv1uYVI7iTVuDDYCpDh7Z0KbKWyMrsKVFc8roZI3uZ4vgnVfVOSENXGtEYf0JICIcr
-	0vtu5IffI1xRM7m9B7WX/r6uDZFZebqaGrWNrKlgLe7pHpbwvY9+Z3FRq0BxrKMpMRoA38
-	g55WsebXmqSBZzIluLQGkn6PUQEACEo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1768905177;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=XyrDx1MhY3e+hHISP5xpS3IMhu37A0mWxWGFA4RwEpQ=;
-	b=mG5hgfYYLTULX0CjTEDcnSPZJsgF4JoEa6xtQYgBdMRuZYMY7wvsnlQNWmEnLNbJDV8D+8
-	iMQ4IPA13Q4Hv6AA==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id A69C43EA63;
-	Tue, 20 Jan 2026 10:32:57 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id yYFUKNlZb2kdbwAAD6G6ig
-	(envelope-from <vbabka@suse.cz>); Tue, 20 Jan 2026 10:32:57 +0000
-Message-ID: <1390b9ce-0ed1-4cc9-845f-fa4dd5f3ffc8@suse.cz>
-Date: Tue, 20 Jan 2026 11:32:57 +0100
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="bLarUOM4"
+Received: by mail-qt1-f178.google.com with SMTP id d75a77b69052e-50146fcf927so53843891cf.0
+        for <bpf@vger.kernel.org>; Tue, 20 Jan 2026 02:41:01 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1768905660; cv=none;
+        d=google.com; s=arc-20240605;
+        b=JRYB4p05pPk4o2ucxcvFO5K7+m846lnYk6dOP3Ud996evQ+1BTcbBifbPQfOp+rpI9
+         ufJ7TTKHM4w3WhnP4QMPikvuPlU0hYYTyZddsV+hEfRcL87CX2AAceRnjiZ98z8nl/GX
+         1jcOFAkdlmRbSx3lgUApC17yDKW/hukS897DmbcPDpHq6+XVP4fjjhhSu9nQTZ1zpP2R
+         y0/Pmdm2pU8nn0ABd6ux1rjn+bcwujcCb+tx5xl1XZ8DbVckSgln5MCbsuGWShjWXalG
+         kvj2Qpjs7COI45BhuPoVp9s4FOQuvN2afqV8vgDsocC5Q3pSF1sJfPiK3SpaUshsGTl0
+         AXCg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=FFii1bsKXobctKhMNLtq5d1Ip3RYu1nQ6MH14Bs+3t8=;
+        fh=MhXiIlMKBQV3RVeMtN2Ow+KVmZarogtqtMZgmAOiy7k=;
+        b=H0vXA9td062BxpTcThQYMxEpTKZTWrv9S+bNsrNck9+cykeSN+scS/O+SApnPW6A+X
+         OZIZ001zaB9jfWIYrGjdi6nm3CCVnC9zEUwgUtwvRGBBqcnFT816cGo8R/JVvKtyVimO
+         MC7qSqiPUla7uMqCDuAcyC8r0OqI7KathYn05TxQuPeLOfL+n9t9HQqmX4wJYH8ofrXq
+         +5t4BCgLwgHQcL1edCLz4IWX6ycL8gPEg98Q9lYXsEjye4/GctPbs2pFQL8KJBdAs++7
+         ippPKB/GABNPcjAvuArtzaZToDeFDjQBYeJwjnQUFPSQNJbIwds36DcK6yjQ6BNXS6P5
+         yirw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1768905660; x=1769510460; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FFii1bsKXobctKhMNLtq5d1Ip3RYu1nQ6MH14Bs+3t8=;
+        b=bLarUOM4KWKl8f8jZgqdcCHw3/BWGLLM0Lee/em0TyNUn56jxnJiCCMwImFosoG8BG
+         bZ4ByuHgsMz229Eg7TzNOWTJZjiKMzDRETJfukjRdQEjYMCehR+z4Y7pAI9Q2auCxG7E
+         e1Y54T0Hw7PqbKEqIZgANAaOQL9U5/pRC8TAKKDsc79lCOYpctfKAhJ2Q0SXP2DqD2fe
+         f1u1/sh1/2CY3SJYi11hp/VEgmCZuNhxk/9RtFJ+F5kkn6NkkA1HU1Hl+vwEhd7LTXRv
+         yw2bhlQNHF5yNZqfgxWMhFfvo0XmZUQNedyaSYVtNgkhtW/bP8azuPcC+vXn6D3LFXAM
+         ph/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768905660; x=1769510460;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=FFii1bsKXobctKhMNLtq5d1Ip3RYu1nQ6MH14Bs+3t8=;
+        b=e/uEYfBHcpSD+vNZIphBhlpurRMDrSkMlJWJx1zLgn4OUwvTwYL/Zp7UJQeMleMAfC
+         ImFQRrrMff5QFufA9++nbYfHk/Y/T/fKFW8k+o3AFYNd5dedlwIzCwbw85FLFcHUzHEY
+         m0FQMS8U7UExJbj5Nuz3Tcl2U5tp/YqleIj92JzFLTROTLdgNH2JfmeoJNJ2GcqDyeRE
+         ELIcKU4+BP+WjZ+SsEwYmLu4Z5dpb1U16WxDnss+Zun8C+MPpNnaBfTn0XhnOfmSFuyj
+         TKxXWPzi95mAj62KejVA3b5K7epPViwxZc4j7siG7XwvYfrTbKxa3r+39cJuGF6ncMv7
+         pbaQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWcNo9KnX99HFdyiJ9l5ojiGoU2RbgkHEZUo7lXK7W7jnZhAtkwbtvTu0AEhH7ZK2e1TFs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyOfPO6Psy7xObkEBWz7kPw56xDFfZjlOqfuZftdppZpqh7VjV9
+	aF5HhqBpITLhJrk6a02ruBViYguv9y36+6po+YilcBoRnzaXO3VWT72Je2JZL4TK+dUnKy0vtAa
+	c5+kMYhiUFlVKAXfuVL56mGOY6+3PNZVjTDgSMpu/
+X-Gm-Gg: AY/fxX6qQ/hYulWt5FEOmeBbJ+4Cs2RamD8vj5pM3gdOYm4h/CR5cg2u26LZQZYfuEu
+	X3CWjtxAfFKRIo+MPHNZp+LcV6iEH/7Q0cAD6QRCakzbtSoxH7MbQFS0IQT5wwjB6ygvaGtBEJr
+	xtMqjN6tAQX96Rqjcwi3qHgrBvyFA03A3cv2dcxxEeebQNjjS1CA85qoKqU+zSDmUom7HHuuzWY
+	Fxp82+YzNh8gMP99U9AkkQHSysEic6Rr2zsAhI9Sf2R+pQWsINxy6kHSrMjxZBAWSZ4qpTpSw8r
+	sjAxnA==
+X-Received: by 2002:ac8:7d16:0:b0:4ff:7eaf:6fa1 with SMTP id
+ d75a77b69052e-502a156ae5dmr191196621cf.11.1768905659838; Tue, 20 Jan 2026
+ 02:40:59 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 09/21] slab: add optimized sheaf refill from partial
- list
-Content-Language: en-US
-To: Harry Yoo <harry.yoo@oracle.com>
-Cc: Petr Tesarik <ptesarik@suse.com>, Christoph Lameter <cl@gentwo.org>,
- David Rientjes <rientjes@google.com>,
- Roman Gushchin <roman.gushchin@linux.dev>, Hao Li <hao.li@linux.dev>,
- Andrew Morton <akpm@linux-foundation.org>,
- Uladzislau Rezki <urezki@gmail.com>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>,
- Suren Baghdasaryan <surenb@google.com>,
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
- Alexei Starovoitov <ast@kernel.org>, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, linux-rt-devel@lists.linux.dev,
- bpf@vger.kernel.org, kasan-dev@googlegroups.com
-References: <20260116-sheaves-for-all-v3-0-5595cb000772@suse.cz>
- <20260116-sheaves-for-all-v3-9-5595cb000772@suse.cz>
- <aW7pSzVPvLLbQGxn@hyeyoo> <2232564a-b3f7-4591-abe2-8f1711590e6e@suse.cz>
- <aW9Yl-nqLjAJyBkB@hyeyoo>
-From: Vlastimil Babka <vbabka@suse.cz>
-Autocrypt: addr=vbabka@suse.cz; keydata=
- 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
- m6M14QORSWTLRg==
-In-Reply-To: <aW9Yl-nqLjAJyBkB@hyeyoo>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Score: -4.51
-X-Spamd-Result: default: False [-4.51 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	ARC_NA(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[17];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_TLS_ALL(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[suse.com,gentwo.org,google.com,linux.dev,linux-foundation.org,gmail.com,oracle.com,linutronix.de,kernel.org,kvack.org,vger.kernel.org,lists.linux.dev,googlegroups.com];
-	TO_DN_SOME(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:dkim,suse.cz:mid,imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo];
-	RCVD_COUNT_TWO(0.00)[2];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DKIM_TRACE(0.00)[suse.cz:+]
-X-Spam-Level: 
-X-Rspamd-Action: no action
-X-Rspamd-Queue-Id: D30305BCD4
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Spam-Flag: NO
+References: <20260119185852.11168-1-chia-yu.chang@nokia-bell-labs.com> <20260119185852.11168-10-chia-yu.chang@nokia-bell-labs.com>
+In-Reply-To: <20260119185852.11168-10-chia-yu.chang@nokia-bell-labs.com>
+From: Eric Dumazet <edumazet@google.com>
+Date: Tue, 20 Jan 2026 11:40:48 +0100
+X-Gm-Features: AZwV_Qhir59xi47UnYx9OyC5NKVZCvDNZj7hbofVsggQLWG8gFaqMb9MOW1Nco4
+Message-ID: <CANn89iJPE=rCExzfFw-eKe5PiukTnmUogaLJSXgo6JfDeZiezQ@mail.gmail.com>
+Subject: Re: [PATCH v9 net-next 09/15] tcp: accecn: retransmit SYN/ACK without
+ AccECN option or non-AccECN SYN/ACK
+To: chia-yu.chang@nokia-bell-labs.com
+Cc: pabeni@redhat.com, parav@nvidia.com, linux-doc@vger.kernel.org, 
+	corbet@lwn.net, horms@kernel.org, dsahern@kernel.org, kuniyu@google.com, 
+	bpf@vger.kernel.org, netdev@vger.kernel.org, dave.taht@gmail.com, 
+	jhs@mojatatu.com, kuba@kernel.org, stephen@networkplumber.org, 
+	xiyou.wangcong@gmail.com, jiri@resnulli.us, davem@davemloft.net, 
+	andrew+netdev@lunn.ch, donald.hunter@gmail.com, ast@fiberby.net, 
+	liuhangbin@gmail.com, shuah@kernel.org, linux-kselftest@vger.kernel.org, 
+	ij@kernel.org, ncardwell@google.com, koen.de_schepper@nokia-bell-labs.com, 
+	g.white@cablelabs.com, ingemar.s.johansson@ericsson.com, 
+	mirja.kuehlewind@ericsson.com, cheshire@apple.com, rs.ietf@gmx.at, 
+	Jason_Livingood@comcast.com, vidhi_goel@apple.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 1/20/26 11:27, Harry Yoo wrote:
-> On Tue, Jan 20, 2026 at 07:33:47AM +0100, Vlastimil Babka wrote:
->> 
->> Right, so the plan was to set min to some fraction of max when refilling
->> sheaves, with the goal of maximizing the chance that once we grab a slab
->> from the partial list, we almost certainly fully use it and don't have to
->> return it back.
-> 
-> Oh, you had a plan!
-> 
-> I'm having trouble imagining what it would look like though.
-> If we fetch more objects than `to_fill`, where do they go?
-> Have a larger array and fill multiple sheaves with it?
+On Mon, Jan 19, 2026 at 7:59=E2=80=AFPM <chia-yu.chang@nokia-bell-labs.com>=
+ wrote:
+>
+> From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+>
+> For Accurate ECN, the first SYN/ACK sent by the TCP server shall set the
+> ACE flag (see Table 1 of RFC9768) and the AccECN option to complete the
+> capability negotiation. However, if the TCP server needs to retransmit su=
+ch
+> a SYN/ACK (for example, because it did not receive an ACK acknowledging i=
+ts
+> SYN/ACK, or received a second SYN requesting AccECN support), the TCP ser=
+ver
+> retransmits the SYN/ACK without the AccECN option. This is because the
+> SYN/ACK may be lost due to congestion, or a middlebox may block the AccEC=
+N
+> option. Furthermore, if this retransmission also times out, to expedite
+> connection establishment, the TCP server should retransmit the SYN/ACK wi=
+th
+> (AE,CWR,ECE) =3D (0,0,0) and without the AccECN option, while maintaining
+> AccECN feedback mode.
+>
 
-Ah that wouldn't happen. Rather we would consider sheaf to be full even if
-it was filled a bit below its capacity, if trying to reach the full capacity
-would mean taking a slab from partial list, not using all objects from it
-and having to return it to the list.
-Of course this would not apply for a prefilled sheaf request or
-kmem_cache_alloc_bulk().
-
->> But I didn't get to there yet. It seems worthwile to try
->> though so we can leave the implementation prepared for it?
-> 
-> Yeah that's fine.
-> 
-
+Reviewed-by: Eric Dumazet <edumazet@google.com>
