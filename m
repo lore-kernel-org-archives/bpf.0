@@ -1,177 +1,159 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E631742189E
-	for <bpf@vger.kernel.org>; Tue, 20 Jan 2026 11:15:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768907746; cv=none; b=oN6DLDiKqERqXN1Wr0zr+5iiOAwsCtqOJ9ytvqpCcKPcnbgXefLtdGdEcAGdAMqebZDbi2qNPJCUYtiMFKK5fqrR5OMdUvQFwxqEwi9+GfIPXUo8z4JB32rhzBOkfIJo8kUkq9hh6zNSfDReIzRnQHsNwBqJAyNpPZptXueB15U=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768907746; c=relaxed/simple;
-	bh=KFivMVURS/P4rdljNGTW2OzSO9AS6vyS8A+lATrzWUI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uPvfn3g0fZVj0/7zIq4aLU9jbzs9jG5N0lVCXi2AoYf7No1H/JB5t2iWIkSY8flb52vzoOOaKoNXwrsj8Wr51c+sYa6K4DFTICdOZkoYsrn03OuzjVg7u0aedJ8UERpPyHoqGS7Dpx87ETSiaZ9qe6/idpGqoXp8wXU4SOe4794=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=D8n8c5S7; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=g1Z6YGIR; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C00EB1FF7C7
+	for <bpf@vger.kernel.org>; Tue, 20 Jan 2026 11:18:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.169
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768907896; cv=pass; b=VPbNe5TLeqSY3pjbjIQkT0YXKR+q24LqYdQc3zzm/G5B3r/e3ERO1Jzwh0IEu4T5lEGaFVcp54kg6uecyeRjvS0pDDUOv6jLS7EWQYkebpeThtHXtJcghhlf4OYVIWnKIZecIsQi6nYKRiZD6ANt/RgNGxY4YJu27OPFcuP0Y8k=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768907896; c=relaxed/simple;
+	bh=IdT7Cnqlw0gbduzUyd6rGZsiu6oNpbZ6fLa8v0srGMc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=pGLE6fh+swCOmzRX2cdPP2otU/TCUjZWN4vMCJl5ok0ELGgkwyIAXx4UJMwmjOWa6P1+aVsJQ/hcVwn8uiwtnWiCObK7+c2SkDVekPQJ3ynil+EI12HrMDCyp+bOAu7P6vvsP2v9I/tuxrK4kiaiSeMai0h70L6YwltynPmqyIM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=RuFIMCT+; arc=pass smtp.client-ip=209.85.160.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="D8n8c5S7";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="g1Z6YGIR"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1768907743;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=W+GMmJzGdHYdqJT1NjST6XtDIczt0rZ/LFLtfnWFVkg=;
-	b=D8n8c5S7AqXKqqVCrtlslAKb8EMScVQGLoMECJ6uUaUrfQl06n5r5AWrkJA3QRzGO8uDZr
-	byxR5tNbIkF+TRtsCWyhpVCv9KmEx0V78AqyF2c6iRLsTbW3sSnIortNaJK44LSxdCfZya
-	KRLaLZEpaQS4nSruTvzRO51ftJSf8Qk=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-341-hNpHEg4-Mk6oI6ICnk2vig-1; Tue, 20 Jan 2026 06:15:42 -0500
-X-MC-Unique: hNpHEg4-Mk6oI6ICnk2vig-1
-X-Mimecast-MFC-AGG-ID: hNpHEg4-Mk6oI6ICnk2vig_1768907741
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-4801bceb317so52281575e9.1
-        for <bpf@vger.kernel.org>; Tue, 20 Jan 2026 03:15:42 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="RuFIMCT+"
+Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-5018ec2ae21so44951801cf.0
+        for <bpf@vger.kernel.org>; Tue, 20 Jan 2026 03:18:14 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1768907894; cv=none;
+        d=google.com; s=arc-20240605;
+        b=gv3Dra9aNBgMhrHP0Ipt5oXcFTPfy/Awbn4p1stOEB3q7g7pVM7vpeTqFA6n+vXZPn
+         yRHTrgjBNhd0shWg4QyMYxF2j5pwDacPam0SgRYZFMlA0EVc1isqwfF+bdCu53vEtLWJ
+         A/WXjncG399tByUXlwpMuLdEeJjOOohEEstn0tIvUI1TPRJA85Rl4ogR9gBCtcOuh3q8
+         lTi2OYggb849+yJSJLfVFUoME4oLYtJqgf0PkqVnVJZGLO7B673MzPapUeoxlfJMzuCO
+         VA6F6bpmTWYl6IoiQFRHgw2jkTQPp2g5h0ANMbhZFh5vcpYhZ4SrG9JGrJrrcSR09e0t
+         1pZw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=LUXil22tiizCYyaIA03hv+e6KoZWp5K7Bky9alaR5BI=;
+        fh=WrkMJnC5Poc+Ml4OQxbfYg2X4Yo/Ka7nJ0+NqzUQThg=;
+        b=K5K57K81KFnnYlSo+hUzWhXF0/jmyoW8rCU6QRdzdngcogcW+4klWVf5O7aiSpfXxz
+         T0teGk7uu7vEe78kl2X4825MKAwb9Re85tMVtdDl1PG3wg1PzAtziRtNXl04gZjFxP3H
+         oSDmDZTSBepf9cIABH0oARvGOQoQz6zCORYpefPdofSAEqnr9qZF2LD0JBn1AhpRuIgG
+         2nMAHxDP4eO0hD/1pucZhBaQHjV1Rb4Fcdy+H+/fI4mzcZyOroqUGF4U1MY4w+pNVMqh
+         BaXM98kbTBBz67VCgxfRa/U1d6o989zYkIdCqni9Av3NVhK7f218am10/nUmGKzZUf4d
+         c9Ng==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1768907741; x=1769512541; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=W+GMmJzGdHYdqJT1NjST6XtDIczt0rZ/LFLtfnWFVkg=;
-        b=g1Z6YGIRmMrcKVAUnLDsXePxaC0Fbw88i2iFKDmOdblNZlQzN+8y9bAoEygOWVx+yo
-         nEtmntC5Iwhc+UOn+7vLMfHD4iBNS44TrzNGuKbvTeL5e+pavp5BSJ1T8JUuOdopZVQm
-         f0deF02+W5f9ikr08Bw1gG+IxowWgLIwkNbKAd9C+fx/UIY2fwGBUXN5xuRgam51owFI
-         hxJfn/HAwYms+B8WzvcT6GV2kq4ryEGPGmkLRNGUlWNyk8ysg3VKeHGQfwHHdcQFSuxg
-         yTTf8OC1nxv+j2jZQrZPaddZ6wXKVd+0LBr6i6MR2zuHi5w+EI8SGsx5NbJKwBh+p1M6
-         rRLA==
+        d=google.com; s=20230601; t=1768907894; x=1769512694; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LUXil22tiizCYyaIA03hv+e6KoZWp5K7Bky9alaR5BI=;
+        b=RuFIMCT+LVz7niNHIRJQfbaoPRSsdO8Hqz0Z/J3m63nr6LKihwAtY76EjTAxL7Y5He
+         DTI0+HBc2DA7Wws9P3a+ky+IPgAJiu38WkSpaLB9WI4HPkcQQJa1O5OABpYGa+wOaog0
+         2Xbxu3SsZ+voGu4vgCZtfGmL2Jx9v9GWUY1tMOd4nk0RZVG6ynthaiaHNcQoixfRAI/x
+         eQphwNh2B/mS+Kq3XTCmbTH89oN2NySA/zUtUdQYuoihubFh6NZjZW4Z0lv5RxuG5udH
+         jlwtVEf9G+ok8ktVWOYSAZZ6NkFiMIZO0+uEHNZYn/kHcdsP++8gMj3Q8f5KClcKCmsF
+         lhvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768907741; x=1769512541;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=W+GMmJzGdHYdqJT1NjST6XtDIczt0rZ/LFLtfnWFVkg=;
-        b=O2dSbAW4CuyFwqSUK0SzKfrYNiu6Xqhk+d17QDtVXYwiFVL1Rs0BuOCO4SMMlg8x41
-         BBJdAx9gE5dppJa9JukD51zwcfcA2HXOrFuQPVAUWkW6+G5/C9bnE01qdlmfw52Q6NHJ
-         4fNBCdtLeRQcXA8x0MXV63bgMd/YGBmGlqN0Eqec0h2vmEBVhi8Hbt0XI2/rdOO9ZIeP
-         X0SQFbceu+ScZFCr4H6N0/fCcMyJhejC/GrFApTv6eupHbJiHc9KPaGohe61n+ZR6oxt
-         g5iEvC1Si3CcqJCrybkMoELGUftD+4MGIUPV2mCL1r88QN99/8dcIdOuO2daOp7Mb8ok
-         jRmg==
-X-Forwarded-Encrypted: i=1; AJvYcCXeLcuWNzgG/OILSe3zXHLp3hqDZOGtvvj0n2UdX1iJepeKFviyYsQQGJ8YO15naPejDKw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxhhA1XsCoF0IsaN02+qR6cQ/cpayuXwAeMeJhWpyMY6FoCP9Mz
-	zvPNHGSZiwwzQKwejKWMRtCdA5hoIVIn3XjuJEex9Bhk4S74heBFihzunLaDFsmYYM7mGIsTF3E
-	0zlJ30wYJ0ObWch+o1VcpWhVzN5U3wNh6MhYzTn+rbZFFlzI82MTn
-X-Gm-Gg: AY/fxX5jCstBZemWUs0AudaAKQVoL050A/0xe1i+OtPqJgBsJlJrIIAHx1N2lKhfGm/
-	gfDruRWSHWNEJPHA7KLD2F3YP9NwjnZyAnpgf4HHtYGs3WScV+iEJ9DbPlb9fkIJyD413bqgFCc
-	/a+tsXbi7POqcNiyfoJ6+6X23fwP5NS4/TESXi+btEIXBFDtNLn6sh0arO40T2R+w5LeRzQX6e3
-	JYB3xGL+745JfcQGRRj7CKY6QN1ofS4q3NGvMYKv6gesxtvH6B4KywcrD22WomGG+MuGAzwsaP2
-	hMmADfcPVB6y+exRce7wHvQ7czbJUFXnFux/f/Zz6ZL7uiIx/cEO7J4ChjUrYgm4I9mt+aJN
-X-Received: by 2002:a05:600c:4f8a:b0:480:3c28:838 with SMTP id 5b1f17b1804b1-4803e78ffbemr19193835e9.8.1768907740897;
-        Tue, 20 Jan 2026 03:15:40 -0800 (PST)
-X-Received: by 2002:a05:600c:4f8a:b0:480:3c28:838 with SMTP id 5b1f17b1804b1-4803e78ffbemr19193295e9.8.1768907740401;
-        Tue, 20 Jan 2026 03:15:40 -0800 (PST)
-Received: from [10.43.17.17] ([213.175.37.14])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4358f138e26sm3584141f8f.17.2026.01.20.03.15.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Jan 2026 03:15:39 -0800 (PST)
-Message-ID: <86605af8-89c6-4f7a-9b76-1fb8f3ea109e@redhat.com>
-Date: Tue, 20 Jan 2026 12:15:38 +0100
+        d=1e100.net; s=20230601; t=1768907894; x=1769512694;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=LUXil22tiizCYyaIA03hv+e6KoZWp5K7Bky9alaR5BI=;
+        b=LPcjBAhLTfLWCCqcSTpQkbv0A72c1Qw/1yq0bqjNfq4rUPE6xL9Oxn5QNYcvMX8MXN
+         HsxbEyNG9EX2oN4uEhqpJ7e7HRkjcFZwax7XBNz+2KxpJdJ8R5KZkmMgEXblSUbuGTYS
+         dG8g6z/ODLlGD35CwM7kHKVZXys536SvnXoiiGmhCKVnVcJdTA4HBAX1AajTKMJuwlOt
+         qZY6PR22wPXJeoF3B1oTQKNd9+hTwEfcrwP+8dfA3iLFfKDa861fvHJbu5lpVP9x9nBf
+         mzlSJfi1aUsWCU12axZJkweoi7HVoO21V4Zx6AbnQZbF0VM47qxg37xsSZT7UdfoCtiD
+         iojw==
+X-Forwarded-Encrypted: i=1; AJvYcCXrwXpR2FxkQnvDRO1nqtvBrtjXstORj+A9l3mZkvHchT4DAzchMb8jiDGUvMqz6fY/0hw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyfeg9M0Atpa0nTscmzaZibMJFh/KoNJ2m7nGx6pRS4OXDY4Iwj
+	lKxm5asyLyCjxl02pfFPvzOw2Ccaz+9txhl/dsWgjhMdYXzbYk5vOTiJyMgpN+mib140ecXqFvT
+	58u8HfOYCPxRpPDSh1bjI4sEfup3FlQ8pvV6hj2ZP
+X-Gm-Gg: AY/fxX5+FGKlSdpTecszufI982XZ8nBIvNE0b793kuhOgco2KNqzpK+zaUkDPc2WjbH
+	d0zif3Kykrq+uVScRYXMu05JIluqxjJ6lX9vjdt0K6hdwLGOAfhbcA9VSXuNdRwD1gUBkEfNewu
+	WcGePZ7Li/RxFS/Lfdy7QwYVt6xQUSnUGS+fuH+3t8lKB3QupKxQCmjiTG7Dqeu30KKnyghwYaC
+	xY79mYJM4I4b4YEkcL98F6AzETfCNdH4mCNwzztzCAtU8n3HDTGzlFnAwR48/ri07LRQfs=
+X-Received: by 2002:ac8:598d:0:b0:4f4:de04:2434 with SMTP id
+ d75a77b69052e-502d84b0bdfmr14314171cf.11.1768907893248; Tue, 20 Jan 2026
+ 03:18:13 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v3 1/2] bpf: add bpf_strncasecmp kfunc
-To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, bot+bpf-ci@kernel.org,
- ishiyama@hpc.is.uec.ac.jp, bpf@vger.kernel.org
-Cc: andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net,
- martin.lau@linux.dev, martin.lau@kernel.org, eddyz87@gmail.com,
- yonghong.song@linux.dev, clm@meta.com, ihor.solodrai@linux.dev
-References: <20260120070336.188850-2-ishiyama@hpc.is.uec.ac.jp>
- <cd994531bcbe33858623d135448bd0540c36bb739b894af5a99d009b617e08fb@mail.kernel.org>
- <3d9e2ce9-3e47-4b10-aad2-93b37b235239@redhat.com>
- <6470f4f2-2d38-43e2-ae92-d6e4c9121eed@gmail.com>
-From: Viktor Malik <vmalik@redhat.com>
-Content-Language: en-US
-In-Reply-To: <6470f4f2-2d38-43e2-ae92-d6e4c9121eed@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20260119185852.11168-1-chia-yu.chang@nokia-bell-labs.com> <20260119185852.11168-14-chia-yu.chang@nokia-bell-labs.com>
+In-Reply-To: <20260119185852.11168-14-chia-yu.chang@nokia-bell-labs.com>
+From: Eric Dumazet <edumazet@google.com>
+Date: Tue, 20 Jan 2026 12:18:02 +0100
+X-Gm-Features: AZwV_Qgc8lwWGTeaXcXgJnQwinHD3Ss17Aa4vUO4GXRwqkl214KVxmDeii_C688
+Message-ID: <CANn89iKhAs3rMWFdmM-rma1wS-Xd7mf9PBUQKL8YMKhB81Jkkw@mail.gmail.com>
+Subject: Re: [PATCH v9 net-next 13/15] tcp: accecn: add tcpi_ecn_mode and
+ tcpi_option2 in tcp_info
+To: chia-yu.chang@nokia-bell-labs.com
+Cc: pabeni@redhat.com, parav@nvidia.com, linux-doc@vger.kernel.org, 
+	corbet@lwn.net, horms@kernel.org, dsahern@kernel.org, kuniyu@google.com, 
+	bpf@vger.kernel.org, netdev@vger.kernel.org, dave.taht@gmail.com, 
+	jhs@mojatatu.com, kuba@kernel.org, stephen@networkplumber.org, 
+	xiyou.wangcong@gmail.com, jiri@resnulli.us, davem@davemloft.net, 
+	andrew+netdev@lunn.ch, donald.hunter@gmail.com, ast@fiberby.net, 
+	liuhangbin@gmail.com, shuah@kernel.org, linux-kselftest@vger.kernel.org, 
+	ij@kernel.org, ncardwell@google.com, koen.de_schepper@nokia-bell-labs.com, 
+	g.white@cablelabs.com, ingemar.s.johansson@ericsson.com, 
+	mirja.kuehlewind@ericsson.com, cheshire@apple.com, rs.ietf@gmx.at, 
+	Jason_Livingood@comcast.com, vidhi_goel@apple.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 1/20/26 12:02, Mykyta Yatsenko wrote:
-> On 1/20/26 09:29, Viktor Malik wrote:
->> On 1/20/26 08:21, bot+bpf-ci@kernel.org wrote:
->>>> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
->>>> index 9eaa4185e0a7..753753f039ff 100644
->>>> --- a/kernel/bpf/helpers.c
->>>> +++ b/kernel/bpf/helpers.c
->>> [ ... ]
->>>
->>>> -static int __bpf_strcasecmp(const char *s1, const char *s2, bool ignore_case)
->>>> +static int __bpf_strncasecmp(const char *s1, const char *s2, bool ignore_case, size_t len)
->>>>   {
->>>>   	char c1, c2;
->>>> -	int i;
->>>> +	int i, max_sz;
->>>>
->>>>   	if (!copy_from_kernel_nofault_allowed(s1, 1) ||
->>>>   	    !copy_from_kernel_nofault_allowed(s2, 1)) {
->>>>   		return -ERANGE;
->>>>   	}
->>>>
->>>> +	max_sz = min_t(int, len, XATTR_SIZE_MAX);
->>>                     ^^^
->>>
->>> Can this truncation cause incorrect results when len > INT_MAX? The len
->>> parameter is size_t, but min_t(int, ...) casts it to signed int before the
->>> comparison. When len is larger than INT_MAX, the cast produces a negative
->>> value, and min_t returns that negative value instead of XATTR_SIZE_MAX.
->>>
->>> For example, if a BPF program calls bpf_strncasecmp(s1, s2, SIZE_MAX):
->>> - min_t(int, SIZE_MAX, 65536) evaluates to min_t(int, -1, 65536) = -1
->>> - max_sz becomes -1
->>> - The loop condition (i < max_sz) is (0 < -1), which is false
->>> - The loop never executes, and the function returns 0 without comparing
->>>
->>> This would make bpf_strncasecmp("foo", "bar", SIZE_MAX) return 0 (equal)
->>> when the strings are clearly different.
->> This is a good point and we should IMO address it.
->>
->>> Would using min_t(size_t, len, XATTR_SIZE_MAX) avoid this issue?
->> Other string kfuncs use `i < len && i < XATTR_SIZE_MAX` in the loop
->> condition, I'd stick to that for consistency.
->>
->> Viktor
-> Why not just use proper type (size_t for max_sz), obviously truncation is a
-> problem there, so use the wider type?
+On Mon, Jan 19, 2026 at 7:59=E2=80=AFPM <chia-yu.chang@nokia-bell-labs.com>=
+ wrote:
+>
+> From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+>
+> Add 2-bit tcpi_ecn_mode feild within tcp_info to indicate which ECN
+> mode is negotiated: ECN_MODE_DISABLED, ECN_MODE_RFC3168, ECN_MODE_ACCECN,
+> or ECN_MODE_PENDING. This is done by utilizing available bits from
+> tcpi_accecn_opt_seen (reduced from 16 bits to 2 bits) and
+> tcpi_accecn_fail_mode (reduced from 16 bits to 4 bits).
+>
+> Also, an extra 24-bit tcpi_options2 field is identified to represent
+> newer options and connection features, as all 8 bits of tcpi_options
+> field have been used.
+>
+> Signed-off-by: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+> Co-developed-by: Neal Cardwell <ncardwell@google.com>
+> Signed-off-by: Neal Cardwell <ncardwell@google.com>
 
-No problem with that either. I slightly prefer consistency but using
-min_t with size_t is a good solution, too (and slightly more efficient one).
+Are you sure Neal Cardwell really is ok with this patch, saw it and
+gave his SOB ?
 
->>
->>>> +
->>>>   	guard(pagefault)();
->>>> -	for (i = 0; i < XATTR_SIZE_MAX; i++) {
->>>> +	for (i = 0; i < max_sz; i++) {
->>> [ ... ]
->>>
->>>> +__bpf_kfunc int bpf_strncasecmp(const char *s1__ign, const char *s2__ign, size_t len)
->>>> +{
->>>> +	return __bpf_strncasecmp(s1__ign, s2__ign, true, len);
->>>>   }
->>> The BPF verifier does not validate ranges for scalar kfunc parameters, so
->>> BPF programs can pass arbitrary size_t values to len, triggering the
->>> truncation issue described above.
->>>
->>>
->>> ---
->>> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
->>> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
->>>
->>> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/21162711653
-> 
+> ---
 
+>  struct tcp_info {
+>         __u8    tcpi_state;
+>         __u8    tcpi_ca_state;
+> @@ -316,15 +334,17 @@ struct tcp_info {
+>                                          * in milliseconds, including any
+>                                          * unfinished recovery.
+>                                          */
+> -       __u32   tcpi_received_ce;    /* # of CE marks received */
+> +       __u32   tcpi_ecn_mode:2,
+> +               tcpi_accecn_opt_seen:2,
+> +               tcpi_accecn_fail_mode:4,
+> +               tcpi_options2:24;
+> +       __u32   tcpi_received_ce;    /* # of CE marked segments received =
+*/
+>         __u32   tcpi_delivered_e1_bytes;  /* Accurate ECN byte counters *=
+/
+>         __u32   tcpi_delivered_e0_bytes;
+>         __u32   tcpi_delivered_ce_bytes;
+>         __u32   tcpi_received_e1_bytes;
+>         __u32   tcpi_received_e0_bytes;
+>         __u32   tcpi_received_ce_bytes;
+> -       __u16   tcpi_accecn_fail_mode;
+> -       __u16   tcpi_accecn_opt_seen;
+>  };
+
+tcp_info is ABI.
+
+We can not add/remove fields in the middle.
+
+You must add fields at the end of it only.
