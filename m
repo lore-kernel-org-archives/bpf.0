@@ -1,100 +1,81 @@
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8382272E7C;
-	Tue, 20 Jan 2026 19:39:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C40CD363C7C;
+	Tue, 20 Jan 2026 19:40:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768937951; cv=none; b=ru9EMWwCAvfbfpjwg2J5L644mFDyeWhcPhrJbE30tpCB4u3JXlOLpQEdtddXciW/Xoo6aFY8VgZXBkHa7PckWFLrNN8x6CfJP0T/GaCUK1xYsvsMPGG8UK2bOVr26QRx5SeempIFGEOg9DrneyDSuz+2UfcduVLkWMG9AkT8LI4=
+	t=1768938010; cv=none; b=KdTTUeBb7SNunkUyTOXDak233zvuhUv0fgTzKrSaFft7wtsVqByONqWekaULp4EcmxASfCRCl1005ol88KWs3kH+esFCQ5d5MSbjyKRqCo+0WTwiXGLpKTIrp80BuVDLEPKRK1wiZeH3R9G0cnYyeMI3DbhpvS2EjkGH4dZgFSU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768937951; c=relaxed/simple;
-	bh=+Xn99DMkloz7vwj6dDBCMojDf0BKZG2iyU96TDB1ZzA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JvKQWPAJW26ejP+4t4X9CgWRyVvYWVGp45jWF9l1O4zWnuPzbhDVq7lwzudm+/dnuQkkxOhiGsN4tgK+8iddvy67QfyEm42ZEtuuHXFoaOfbN9Z/33R4fM+28wRxl954DDYAl3q+RD7SgnWRLuVlzJ5pZ7OQFIa7ynYXrV1VuEg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=ZAau5bv9; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+	s=arc-20240116; t=1768938010; c=relaxed/simple;
+	bh=HdNNmaWMF3Dz7TVaqx+f6mc40yNbGM5z3z/AeyJs8/k=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=MznMGbmef2VMKzjGR3C7dOIZbdUKP0SBW+dBmGH0FwDj2BfamTsgneo7rDBaZlpf/8Hp4mcXCDqjh3N1E+D+v3aWtQPtLjuTc5Q/FullDz9nvKdrVcepmkDd1rCMqn5evBZ/XAH65sVHZk9M2+0Qo3pMwgbTAqVbryZX5iwi5nE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ViSgeKsg; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="ZAau5bv9"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1768937940;
-	bh=+Xn99DMkloz7vwj6dDBCMojDf0BKZG2iyU96TDB1ZzA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ZAau5bv9VLz+Hw3R/m522LpPXxy1PKtHJmrdizN6vcxDGBmnFiQPk/btoEvIc+swI
-	 9zpZ0ctqUnDPcJ04G0VeVtuRggBW4wUnEqXo32ZnbNkfxV7QsAd5MlhZgCjAne4HTn
-	 qm6bMHewJk88JiXfoqkGnXenHElEm1tlkWYqjgOM=
-Date: Tue, 20 Jan 2026 20:38:59 +0100
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To: Gary Guo <gary@garyguo.net>
-Cc: Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, 
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] scripts/gen-btf.sh: fix shebang for NixOS
-Message-ID: <ea83b91a-796c-4329-bcf5-2c49efa897fc@t-8ch.de>
-References: <20260120182034.3647092-1-gary@kernel.org>
- <b53ee085-d9d2-4365-a5bc-d61e2bce97f8@linux.dev>
- <DFTNNQLGB1CS.2HDOGB99S9ACP@garyguo.net>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ViSgeKsg"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48CECC19421;
+	Tue, 20 Jan 2026 19:40:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768938010;
+	bh=HdNNmaWMF3Dz7TVaqx+f6mc40yNbGM5z3z/AeyJs8/k=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=ViSgeKsgS4CWTP3FsUF1ompmSlRmBZ72pEekXzIG2y8qcpgtdsJpFG+ydOkeWQW9a
+	 pLf8y4TJS69he2uMZiZ+a11N396Tz4V/N+H2qdvbpLxq3LHkMb45SfYs5B6NDkCjKC
+	 ClEmlLVqlVXAeMspI2v87OUlvSkXRyHIOA/iVEAVJ59yFyKrj9hnsw9wAIWplPW0hx
+	 LEFkIlz/yr7UenLtN6HQEC1k5uuys+XOydcgQHZB/de5aEWxMuTzUzJMkwNNjCo7vE
+	 gPYDfiF5asZ5Ua+2VbNQVI8Jlc+COf/151/Fj18VztVwmHNkweKUF4THSFFHdI8Duv
+	 3UHW8ibvggPiw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 11A21380820D;
+	Tue, 20 Jan 2026 19:40:09 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DFTNNQLGB1CS.2HDOGB99S9ACP@garyguo.net>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v4] bpf/verifier: optimize ID mapping reset in
+ states_equal
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <176893800760.583014.3550645133045023335.git-patchwork-notify@kernel.org>
+Date: Tue, 20 Jan 2026 19:40:07 +0000
+References: <20260120023234.77673-1-realwujing@gmail.com>
+In-Reply-To: <20260120023234.77673-1-realwujing@gmail.com>
+To: Qiliang Yuan <realwujing@gmail.com>
+Cc: alexei.starovoitov@gmail.com, eddyz87@gmail.com,
+ andrii.nakryiko@gmail.com, andrii@kernel.org, ast@kernel.org,
+ bpf@vger.kernel.org, daniel@iogearbox.net, haoluo@google.com,
+ jolsa@kernel.org, kpsingh@kernel.org, linux-kernel@vger.kernel.org,
+ martin.lau@linux.dev, sdf@fomichev.me, song@kernel.org,
+ yonghong.song@linux.dev
 
-On 2026-01-20 19:15:11+0000, Gary Guo wrote:
-> On Tue Jan 20, 2026 at 6:59 PM GMT, Ihor Solodrai wrote:
-> > On 1/20/26 10:20 AM, Gary Guo wrote:
-> >> From: Gary Guo <gary@garyguo.net>
-> >> 
-> >> NixOS only puts /usr/bin/env and /bin/sh at the standard location as
-> >> required by POSIX, but not other shells. Other program that kernel build
-> >> depends on is supplied via PATH, so shebang needs to use /usr/bin/env to
-> >> find them.
-> >> 
-> >> This has been done to a few other scripts already, e.g.
-> >> gen_test_kallsyms.sh or decode_stacktrace.sh.
-> >> 
-> >> Fixes: 522397d05e7d ("resolve_btfids: Change in-place update with raw binary output")
-> >> Signed-off-by: Gary Guo <gary@garyguo.net>
-> >> ---
-> >>  scripts/gen-btf.sh | 2 +-
-> >>  1 file changed, 1 insertion(+), 1 deletion(-)
-> >> 
-> >> diff --git a/scripts/gen-btf.sh b/scripts/gen-btf.sh
-> >> index be21ccee3487..4cd3159f2ddb 100755
-> >> --- a/scripts/gen-btf.sh
-> >> +++ b/scripts/gen-btf.sh
-> >> @@ -1,4 +1,4 @@
-> >> -#!/bin/bash
-> >> +#!/usr/bin/env bash
-> >>  # SPDX-License-Identifier: GPL-2.0
-> >>  # Copyright (c) 2025 Meta Platforms, Inc. and affiliates.
-> >>  #
-> >> 
-> >> base-commit: 053966c344dbd346e71305f530e91ea77916189f
-> >
-> > Hi Gary, thanks for the patch.
-> >
-> > I'm guessing this came up because gen-btf.sh is part of the vmlinux
-> > build, and link-vmlinux.sh has #!/bin/sh (not bash).
+Hello:
+
+This patch was applied to bpf/bpf-next.git (master)
+by Andrii Nakryiko <andrii@kernel.org>:
+
+On Tue, 20 Jan 2026 10:32:34 +0800 you wrote:
+> Currently, reset_idmap_scratch() performs a 4.7KB memset() in every
+> states_equal() call. Optimize this by using a counter to track used
+> ID mappings, replacing the O(N) memset() with an O(1) reset and
+> bounding the search loop in check_ids().
 > 
-> My typical experience is that when I see an error about /bin/bash not found, I
-> just use "bash <script path>" instead without putting much think into it.
+> Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+> Signed-off-by: Qiliang Yuan <realwujing@gmail.com>
 > 
-> gen-btf.sh is part of build so I don't get to invoke the script directly, hence
-> the patch.
+> [...]
 
-For the build we have $(CONFIG_SHELL) to stick before the script.
-It is only 'sh', but it is the well-known variable users know to
-override. IMO all script invocations should use this mechanism.
+Here is the summary with links:
+  - [v4] bpf/verifier: optimize ID mapping reset in states_equal
+    https://git.kernel.org/bpf/bpf-next/c/f81c07a6e98e
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
-Thomas
