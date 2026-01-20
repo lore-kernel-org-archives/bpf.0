@@ -1,95 +1,311 @@
-Received: from mail-dy1-f176.google.com (mail-dy1-f176.google.com [74.125.82.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-183.mta0.migadu.com (out-183.mta0.migadu.com [91.218.175.183])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EEC24266A5
-	for <bpf@vger.kernel.org>; Tue, 20 Jan 2026 17:53:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8A3C3382DC
+	for <bpf@vger.kernel.org>; Tue, 20 Jan 2026 17:53:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768931587; cv=none; b=i7zPsnligVb50rSSKmcWtlsBnvCaqaI8nzAj+a5TxlDNZWRXxgtwkv+KqpVTFhj1fdDP8deoq1CUC36Ffr+rz+4X6CQ7icVp+UNQGIzVGJR/lBOjEnfPUf1ZoHoXA5XP/51WTwd0QqCpm3CcfHUUqYfaMuhaEkIX1UQVSvRSmlo=
+	t=1768931616; cv=none; b=D8Hv0vxv3sLuxPVbRusdAHn6R4MY3pc7PmKY7Ri9fIm4xjdfTeOkQ8satDcCE42xvur0vifQCSjZlLJAcWwoXVnITbV3Avg8ySM2s3N9ajy8rCarGZbhJvZSwHyfjliy+bSN5EhkCLFPYRXmbMYjc/RbrxSAHcnxYToria7tsZY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768931587; c=relaxed/simple;
-	bh=nl0W3qdMZBM1vv0gehcElnAQGY7Ctp7Sz0mFRO9mfIk=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=qUv1t7F0rvZm4WpaOcL5yY45QHO6cuWyWhPiTcpb8Ngh67KohbpgJQkv3t2NUxhijyGqiOu/GZcapJfRQXprukIuqJgKaDwMRTsXOmPu7feO8zcn58J4KKDY2Cyo51OezluIy3ZuqWcuGFcL01qy30ZsfCGaUTwPRk2V7rm/xjw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=a988cYxl; arc=none smtp.client-ip=74.125.82.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1768931616; c=relaxed/simple;
+	bh=FI0R8d+KWfIjqjH4XvQm6IIyp4GyM6pWXWHGrN8Go2M=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ACGFxGSXvhtV2D0fT0o0P6uJ2ujJ2y1jVc6YP/d4X4lt2BlVs45hRkGVYQYN6OZkjd2HXZhDZLrIR3ocz5I6qrX4VnY0ryDnkOOV53lfgpBVksNu4XYF2U/Brfb8AQE3g/6Wv59TljxntE6ULYMUp5c70CWJMPmq1+QcHOKDwSc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=oUwWG2OG; arc=none smtp.client-ip=91.218.175.183
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="a988cYxl"
-Received: by mail-dy1-f176.google.com with SMTP id 5a478bee46e88-2ad70765db9so6384633eec.1
-        for <bpf@vger.kernel.org>; Tue, 20 Jan 2026 09:53:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768931583; x=1769536383; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=nl0W3qdMZBM1vv0gehcElnAQGY7Ctp7Sz0mFRO9mfIk=;
-        b=a988cYxl1+Om4HJ/GWt0JJHZxmwnpLhwDCm046jmnwAfKiL7Ah8N42F03Lwd6L9wHV
-         jpvr+CZfA8SjcCwF/a4FOXNlN1pDQ5PIfdbAOAbo9AqO7MmOzmtuGW+nsbHSFJuCJfut
-         RsoxEbQKsb/LRbx8AXf/T0TJPksYDM408EsUmZ6vp7c3TFoat4s80yQ5heokSuBqRK/t
-         ioZzQ2zUFckQpaCc/mu0fDNsSxtFquL7mOTuxOOSYiHYTeIEf6UvdZ6TM2GQw+qnU9ta
-         qYa79xrNvLraq35uChZesI82N0Ejt/7PVVOOMsO9IBy1rl8tuSfWeZKcb1uSASexabG6
-         6suQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768931583; x=1769536383;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nl0W3qdMZBM1vv0gehcElnAQGY7Ctp7Sz0mFRO9mfIk=;
-        b=BpvwsrH5SaM/BOYXeEMx/XTd0ZJjs4ff2VSAya9JSzvvyiEuS1CpggP3e1cdy26OV/
-         QmV3Lq37AV3kw81u9LtRZ0EkmwugepX7Hx0JWuzkSikbdmSNETZbjYCqiYdW65v8vJHT
-         T0X/oAxGvGilHanNDIph9/gRkrkQONUm8EDgOmTJbs8jKpKchDfS8J9ys7lvQwfFedJf
-         Ocb5zhPo+9+yCy6T7CgiBMf9In1YFFP/eNVmXw1T86J1UFe3NCRry6dy/tqGoH4+0tsP
-         XYHQAoGkOr/up8Bm6Fegq2KwHsyaNvdYBqCNkYwQpOOgPtWxGgbmtjNvnkbKa3jfbC20
-         I5tQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVafWFSzeyS/dTv94VJA1ALvCHLxDjYJy7hhl5wITZU07Pv3DLHa3WqWBXgMPIiJBXoN90=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzymzdrmTOCQHPDPNGbYadbBGcO7NftkI0gakrwMaR/mXsQV0tZ
-	YQ3XmZ77sTujU/pclbj/f8OZ4BPVvGTYjppHGOuScu8fzlKjhvu4sS4d
-X-Gm-Gg: AZuq6aJWWfxxQkVnwqDyanLNB36NWQj1BaMOywc5boFKt/JU5I50st+G6gTzU4g8dPK
-	2y5T/dQ5lLN2fL+61GMvWOG8luUc1cE7LsODnBaMEeSBTRijudKNN8/vk/HgmDNKfxoMRUD3jjU
-	ceTCBXecOhj4EEt6M/ikceFS29OUUr0S53kCNmTxERDmSjW6gt8puRCuRH5GjT8+Js7qjItCQFR
-	kD5BRlc+xmBwfaRFF0T5B/SBDVkajcxnD6ocCrp2WDtcL6PvZYhOxR0tPZRWu2UiyLsTEaWWihB
-	77KalU8KzYKRCV0GLDU+NWxKf4FrsGHaxpvuqkO9ujamqnYvDjn48NB2O5TmFvFoS7K6WjTo2Hn
-	9vT7uerJYO947+g2EtChz24ZkMke0LdJ8UhunLAxkRu9GOIHX6HEQ4rtOTbbTyrrjHJrR7l0525
-	HLpO/wUJZrjnUMiHlXeFxfpCyQytI00xwbhxoXjrNYeKKutee9SPj/vzef8XkMuD+TBfiE
-X-Received: by 2002:a05:7300:f10c:b0:2b0:5435:2e04 with SMTP id 5a478bee46e88-2b6b4e8f9d7mr12409696eec.19.1768931583432;
-        Tue, 20 Jan 2026 09:53:03 -0800 (PST)
-Received: from ?IPv6:2a03:83e0:115c:1:b08c:bb3d:92b9:704d? ([2620:10d:c090:500::3:93b1])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b6b365564csm18083233eec.27.2026.01.20.09.53.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Jan 2026 09:53:03 -0800 (PST)
-Message-ID: <a59fbe952a4e4072eca8e3c6eed6d960307f4b4d.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v6 2/2] selftests/bpf: test the jited inline of
- bpf_get_current_task
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Menglong Dong <menglong8.dong@gmail.com>, ast@kernel.org
-Cc: davem@davemloft.net, dsahern@kernel.org, daniel@iogearbox.net, 
-	andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
- yonghong.song@linux.dev, 	john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@fomichev.me, haoluo@google.com, 	jolsa@kernel.org, tglx@linutronix.de,
- mingo@redhat.com, bp@alien8.de, 	dave.hansen@linux.intel.com,
- x86@kernel.org, hpa@zytor.com, netdev@vger.kernel.org, 
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Date: Tue, 20 Jan 2026 09:52:59 -0800
-In-Reply-To: <20260120070555.233486-3-dongml2@chinatelecom.cn>
-References: <20260120070555.233486-1-dongml2@chinatelecom.cn>
-	 <20260120070555.233486-3-dongml2@chinatelecom.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.2 (3.58.2-1.fc43) 
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="oUwWG2OG"
+Message-ID: <4d7c529c-a910-431f-8e6a-b8e5f4f7cffa@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1768931601;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=azc7gbyiTwAxgEDjS5GnVUh4/fzk9QqV0xzC9eaR8Jg=;
+	b=oUwWG2OGj5jOekjjS4WTcKqUpc48RKtfyifBwXFrJZ4Sj+woJGx5vP/5YOBAokz8rDKMM4
+	7rrZC5wm4o8YUnqJQHmcaCYx4HDaSvVwXYo0E/taCQhaCHcEjwF6UnCiJ+vIRtMaZn9Qa9
+	TvwMFpLxseAnXSqfmSYkVStoNOetfzw=
+Date: Tue, 20 Jan 2026 09:53:16 -0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Subject: Re: [PATCH dwarves 3/4] btf_encoder: Add true_signature feature
+ support for "."-suffixed functions
+Content-Language: en-GB
+To: Alan Maguire <alan.maguire@oracle.com>, mattbobrowski@google.com
+Cc: eddyz87@gmail.com, ihor.solodrai@linux.dev, jolsa@kernel.org,
+ andrii@kernel.org, ast@kernel.org, dwarves@vger.kernel.org,
+ bpf@vger.kernel.org
+References: <20260113131352.2395024-1-alan.maguire@oracle.com>
+ <20260113131352.2395024-4-alan.maguire@oracle.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <20260113131352.2395024-4-alan.maguire@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Tue, 2026-01-20 at 15:05 +0800, Menglong Dong wrote:
-> Add the testcase for the jited inline of bpf_get_current_task().
->=20
-> Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
+
+
+On 1/13/26 5:13 AM, Alan Maguire wrote:
+> Currently we collate function information by name and add functions
+> provided there are no inconsistencies across various representations.
+>
+> For true_signature support - where we wish to add the real signature
+> of a function even if it differs from source level - we need to do
+> a few things:
+>
+> 1. For "."-suffixed functions, we need to match from DWARF->ELF;
+>     we can do this via the address associated with the function.
+>     In doing this, we can then be confident that the debug info
+>     for foo.isra.0 is the right info for the function at that
+>     address.
+>
+> 2. When adding saved functions we need to look for such cases
+>     and provided they do not violate other constraints around BTF
+>     representation - unexpected reg usage for function, uncertain
+>     parameter location or ambiguous address - we add them with
+>     their "."-suffixed name.  The latter can be used as a signal
+>     that the function is transformed from the original.
+>
+> Doing this adds 500 functions to BTF.  These are traceable with
+> their "."-suffix names and because we have excluded ambiguous
+> address cases we know exactly which function address they refer
+> to.
+>
+> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
 > ---
+>   btf_encoder.c | 73 ++++++++++++++++++++++++++++++++++++++++++++++-----
+>   dwarves.h     |  1 +
+>   pahole.c      |  1 +
+>   3 files changed, 68 insertions(+), 7 deletions(-)
+>
+> diff --git a/btf_encoder.c b/btf_encoder.c
+> index 5bc61cb..01fd469 100644
+> --- a/btf_encoder.c
+> +++ b/btf_encoder.c
+> @@ -77,9 +77,16 @@ struct btf_encoder_func_annot {
+>   	int16_t component_idx;
+>   };
+>   
+> +struct elf_function_sym {
+> +	const char *name;
+> +	uint64_t addr;
+> +};
+> +
+>   /* state used to do later encoding of saved functions */
+>   struct btf_encoder_func_state {
+>   	struct elf_function *elf;
+> +	struct elf_function_sym *sym;
+> +	uint64_t addr;
+>   	uint32_t type_id_off;
+>   	uint16_t nr_parms;
+>   	uint16_t nr_annots;
+> @@ -94,11 +101,6 @@ struct btf_encoder_func_state {
+>   	struct btf_encoder_func_annot *annots;
+>   };
+>   
+> -struct elf_function_sym {
+> -	const char *name;
+> -	uint64_t addr;
+> -};
+> -
+>   struct elf_function {
+>   	char		*name;
+>   	struct elf_function_sym *syms;
+> @@ -145,7 +147,8 @@ struct btf_encoder {
+>   			  skip_encoding_decl_tag,
+>   			  tag_kfuncs,
+>   			  gen_distilled_base,
+> -			  encode_attributes;
+> +			  encode_attributes,
+> +			  true_signature;
+>   	uint32_t	  array_index_id;
+>   	struct elf_secinfo *secinfo;
+>   	size_t             seccnt;
+> @@ -1271,14 +1274,34 @@ static int32_t btf_encoder__save_func(struct btf_encoder *encoder, struct functi
+>   			goto out;
+>   		}
+>   	}
+> +	if (encoder->true_signature && fn->lexblock.ip.addr) {
+> +		int i;
+> +
+> +		for (i = 0; i < func->sym_cnt; i++) {
+> +			if (fn->lexblock.ip.addr != func->syms[i].addr)
+> +				continue;
+> +			/* Only need to record address for '.'-suffixed
+> +			 * functions, since we only currently need true
+> +			 * signatures for them.
+> +			 */
+> +			if (!strchr(func->syms[i].name, '.'))
+> +				continue;
+> +			state->sym = &func->syms[i];
+> +			break;
+> +		}
+> +	}
+>   	state->inconsistent_proto = ftype->inconsistent_proto;
+>   	state->unexpected_reg = ftype->unexpected_reg;
+>   	state->optimized_parms = ftype->optimized_parms;
+>   	state->uncertain_parm_loc = ftype->uncertain_parm_loc;
+>   	state->reordered_parm = ftype->reordered_parm;
+>   	ftype__for_each_parameter(ftype, param) {
+> -		const char *name = parameter__name(param) ?: "";
+> +		const char *name;
+>   
+> +		/* No location info + reordered means optimized out. */
+> +		if (ftype->reordered_parm && !param->has_loc)
+> +			continue;
+> +		name = parameter__name(param) ?: "";
+>   		str_off = btf__add_str(btf, name);
+>   		if (str_off < 0) {
+>   			err = str_off;
+> @@ -1367,6 +1390,9 @@ static int32_t btf_encoder__add_func(struct btf_encoder *encoder,
+>   
+>   	btf_fnproto_id = btf_encoder__add_func_proto_for_state(encoder, state);
+>   	name = func->name;
+> +	if (encoder->true_signature && state->sym)
+> +		name = state->sym->name;
+> +
+>   	if (btf_fnproto_id >= 0)
+>   		btf_fn_id = btf_encoder__add_ref_type(encoder, BTF_KIND_FUNC, btf_fnproto_id,
+>   						      name, false);
+> @@ -1509,6 +1535,38 @@ static int btf_encoder__add_saved_funcs(struct btf_encoder *encoder, bool skip_e
+>   		while (j < nr_saved_fns && saved_functions_combine(encoder, &saved_fns[i], &saved_fns[j]) == 0)
+>   			j++;
+>   
+> +		/* Add true signatures for case where we have an exact
+> +		 * symbol match by address from DWARF->ELF and have a
+> +		 * "." suffixed name.
+> +		 */
+> +		if (encoder->true_signature) {
+> +			int k;
+> +
+> +			for (k = i; k < nr_saved_fns; k++) {
+> +				struct btf_encoder_func_state *true_state = &saved_fns[k];
+> +
+> +				if (state->elf != true_state->elf)
+> +					break;
+> +				if (!true_state->sym)
+> +					continue;
+> +				/* Unexpected reg, uncertain parm loc and
+> +				 * ambiguous address mean we cannot trust fentry.
+> +				 */
+> +				if (true_state->unexpected_reg ||
+> +				    true_state->uncertain_parm_loc ||
+> +				    true_state->ambiguous_addr)
+> +					continue;
+> +				err = btf_encoder__add_func(encoder, true_state);
+> +				if (err < 0)
+> +					goto out;
+> +				break;
+> +			}
+> +		}
+> +
+> +		/* True symbol that was handled above; skip. */
+> +		if (state->sym)
+> +			continue;
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+I did an experiment with the following code:
 
-[...]
+$ cat test.c
+struct t { int a; };
+__attribute__((noinline)) char *tar(struct t *a, struct t *d) { if (a->a == d->a) return (char *)10; else return (char *)0; }
+__attribute__((noinline)) static char * foo(struct t *a, int b, struct t *d)
+{
+   return tar(a, d);
+}
+__attribute__((noinline)) char *bar(struct t *a, struct t *d)
+{
+   return foo(a, 1, d);
+}
+
+struct t p1, p2;
+int main() {
+   return !!bar(&p1, &p2);
+}
+
+and compiled with gcc11:
+$ gcc -O2 -g test.c
+
+I hacked btf_encoder.c with true_signature is all on and with
+$ pahole -JV ./a.out
+...
+btf_encoder__new: './a.out' doesn't have '.data..percpu' section
+File ./a.out:
+[1] STRUCT t size=4
+         a type_id=2 bits_offset=0
+[2] INT int size=4 nr_bits=32 encoding=SIGNED
+[3] PTR (anon) type_id=4
+[4] INT char size=1 nr_bits=8 encoding=SIGNED
+[5] PTR (anon) type_id=1
+search cu 'test.c' for percpu global variables.
+[6] FUNC_PROTO (anon) return=3 args=(5 a, 5 d)
+[7] FUNC bar type_id=6
+[8] FUNC_PROTO (anon) return=3 args=(5 a, 5 d, vararg)
+[9] FUNC foo.constprop.0 type_id=8
+foo : skipping BTF encoding of function due to reordered parameters
+[10] FUNC_PROTO (anon) return=2 args=(void)
+[11] FUNC main type_id=10
+[12] FUNC_PROTO (anon) return=3 args=(5 a, 5 d)
+[13] FUNC tar type_id=12
+
+There are two issues.
+
+First in btf_encoder__add_saved_funcs(), it is possible below
++		/* True symbol that was handled above; skip. */
++		if (state->sym)
++			continue;
+state->sym is false.
+But one of true_state->sym in the above loop could be true.
+So if btf_encoder__add_func(encoder, true_state) is successful,
+we should continue in the above regardless state->sym null or not.
+This will remove the warning:
+   foo : skipping BTF encoding of function due to reordered parameters
+
+Second, we have foo.constprop.0 func proto encoding:
+   [8] FUNC_PROTO (anon) return=3 args=(5 a, 5 d, vararg)
+The last argument 'vararg' should not be there since the
+optimized out argument is already gone.
+
+> +
+>   		/* do not exclude functions with optimized-out parameters; they
+>   		 * may still be _called_ with the right parameter values, they
+>   		 * just do not _use_ them.  Only exclude functions with
+> @@ -2585,6 +2643,7 @@ struct btf_encoder *btf_encoder__new(struct cu *cu, const char *detached_filenam
+>   		encoder->tag_kfuncs	 = conf_load->btf_decl_tag_kfuncs;
+>   		encoder->gen_distilled_base = conf_load->btf_gen_distilled_base;
+>   		encoder->encode_attributes = conf_load->btf_attributes;
+> +		encoder->true_signature = conf_load->true_signature;
+>   		encoder->verbose	 = verbose;
+>   		encoder->has_index_type  = false;
+>   		encoder->need_index_type = false;
+> diff --git a/dwarves.h b/dwarves.h
+> index 78bedf5..d7c6474 100644
+> --- a/dwarves.h
+> +++ b/dwarves.h
+> @@ -101,6 +101,7 @@ struct conf_load {
+>   	bool			btf_decl_tag_kfuncs;
+>   	bool			btf_gen_distilled_base;
+>   	bool			btf_attributes;
+> +	bool			true_signature;
+>   	uint8_t			hashtable_bits;
+>   	uint8_t			max_hashtable_bits;
+>   	uint16_t		kabi_prefix_len;
+> diff --git a/pahole.c b/pahole.c
+> index ef01e58..02a0d19 100644
+> --- a/pahole.c
+> +++ b/pahole.c
+> @@ -1234,6 +1234,7 @@ struct btf_feature {
+>   	BTF_NON_DEFAULT_FEATURE(global_var, encode_btf_global_vars, false),
+>   	BTF_NON_DEFAULT_FEATURE_CHECK(attributes, btf_attributes, false,
+>   				      attributes_check),
+> +	BTF_NON_DEFAULT_FEATURE(true_signature, true_signature, false),
+>   };
+>   
+>   #define BTF_MAX_FEATURE_STR	1024
+
