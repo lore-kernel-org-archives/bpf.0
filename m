@@ -1,95 +1,183 @@
-Received: from out-172.mta1.migadu.com (out-172.mta1.migadu.com [95.215.58.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 799503EFD11
-	for <bpf@vger.kernel.org>; Tue, 20 Jan 2026 15:48:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 191A528980F
+	for <bpf@vger.kernel.org>; Tue, 20 Jan 2026 15:59:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768924095; cv=none; b=nfRBNLkfC/NqICGnV1GhAEp0CcGSsHEBxiaRvPmAIZp3JGoMZSqzsZiOHVtc0dwYeQsOnLM2FuSnSoxreZkVzTda0PIqPRP0b53w+KtIIX5G2LNChOjJ9xlqlY26fmJZBaFlebJYQH4/QiNG3pIiNFcKfRMWRlmG55EcOsvPN+c=
+	t=1768924770; cv=none; b=gkgXrKdHJuITQvubmnnpLk/2XjyhuyIwSwVrACUPgS/z+XazQQw1/vjN+rSDd2Qm/NfkgWPzU1y1/VWTEXUlfvDZfAGnl1Hjuihz8xwewhym9Y5wXY/M86NaewE3kRL4Rv9Vrpjwdr3KFQfHOCGK9/ew0JETq64Ee6TWI6sWdAc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768924095; c=relaxed/simple;
-	bh=Efu9caATgXLsnG+9j/C3/ytQq8Ix1LHJrzl/rE9RVPo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KYGDcvezVNBhuyrbj3xp2/4UYMcJ9O1BzLAU6vPdsun6ywM4yn6S+yMVJnfLxT5CB/wWsAWxkuoobC+UzVJjyKytxXWIg0qrvY+6ZCzDXcCcJ3IEgOhrm8jNjFrUAXZEayFM3kj/csLDXpBLmg/UUZtJ2Hgl+d9dqI1yd17Gxas=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=kJx9a01k; arc=none smtp.client-ip=95.215.58.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1768924770; c=relaxed/simple;
+	bh=1FVC6ShuVsFDaJyw3YTLWFLLhxzbVIvUBBjW5vfVY9Y=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=uJCmVh+tAX7i943ek1atfpLkKR7f4QZtbmJODiLTfPmPDCf7VI7Cnmk6wzrZPw9HYdfhtKk/3cyqSbRa0XouFuS3oTuC8QFkRQJ5tw0Nk3gYAqMIcEo7KgLXJ2Vg2uXzRcf7V3p3u8fIZGvJ7JkBfv4vL7iKcZLXHAUs2DoE32Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aVsgLs0N; arc=none smtp.client-ip=209.85.221.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="kJx9a01k"
-Message-ID: <922f96dc-9093-4f7a-9cbb-32c230856247@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1768924091;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=xGRMdJEJX/Nxz+Z5wRxBL43/VPYWLg/rSnSKU0WFCrw=;
-	b=kJx9a01kJWJL99iS05+GEUVKQ/5c9+C+ZkwVXqC/NwfY5jzLJ46ptOWwl9jKpemOTOHJnu
-	T+K3b3ys0xEat+CzayH7K6zQcTppoa6C0naJJWzzpfXTuO15rxZ3ImhpGv6WZ9byKQPEzo
-	XlHH5kdssIR4zLTRibdDQbpxfFULq10=
-Date: Tue, 20 Jan 2026 07:48:04 -0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aVsgLs0N"
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-42fbad1fa90so4875075f8f.0
+        for <bpf@vger.kernel.org>; Tue, 20 Jan 2026 07:59:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1768924766; x=1769529566; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q/1yIQ84CJEUv83yfA1YA7JUk5Lxp2ls8/75tB0kQIQ=;
+        b=aVsgLs0NvFDijHMubYdwqOoQfrnIYPIItfLy9UzIJm9yuvfXeXGYfTHgqtR4qjM7f3
+         zsVu7dSZ8126PYU1nh0VaxH7T12nBDgFsKvRTAd5Kj6mjhp+LVJDQDLesHYs+JTUOIyl
+         uQxdmcWLW6Tni3a5kFCOOC9JQeQ03rd8PmyzXjZ4d8DwzVNIt3bW/Jws/nkv2osZuLkE
+         PDRUbKYO17Mw/zwcJWQ2Qd/rplR+ebOHGa3sWIx0QSWwD6+AoKA/U98iKx7ZsjtFa4zF
+         qXtrVWdxf4KjM5R3wqyTog6GT/zZ6pRVAMQRuEL0ABSxss8jvNEZYpbwfQtQhO+wdAwh
+         ldiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768924766; x=1769529566;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Q/1yIQ84CJEUv83yfA1YA7JUk5Lxp2ls8/75tB0kQIQ=;
+        b=HkLLfRXWs9alEECWB32GuO8Q+SJIFaSvRpzAdjOqly7b5qqpSOj8rdbTzZIlRVWs/T
+         GEJBaC2Sx4T4g8FedrYe2LT1xBsJSZD6U5klr+ojXg5bFlCZa/mSpToTH/X839QV5mPC
+         AMyl1UM+6xXHCx0ql1SZ82O9espRwDX2FP2W/JoxzIXRZAUY0zxcxit71yhz/LlUKhBv
+         sB61yKsZ4O0Kaxemz9oGJUK6yLbHhQAv5JT0Hfu+uyNojRLklQM5d1uGSNSI73J5LUJD
+         rDXVJRl5PBbhXi/2qdqWjYQmM4M6H8VD0MnP4nL+6bgL2Car1gqWRYHvgUrdjrT9BTeZ
+         tHvw==
+X-Gm-Message-State: AOJu0YzIkkBS9jc3zVbW8QdA7j6ktcKZVGV7WNk7J+o7SZDzbCk66Umx
+	jz2xzuUHD4xhK2SNfc8OPjEnk/6+1pnYN5sPi63NFKUYfCMne8KA0yCo
+X-Gm-Gg: AZuq6aK47tuWdnZak9jP+Doblg6X1QbBLgVZcbSOdBNbNux3cvzaBaqmCit6/W+4YRJ
+	osJA0YdCfEszlxQvIIqyK3Khkiv3+1MlukZbBeyV0T4/aBHwiNZuB+hHgzDctZ5akxdlypTF9UU
+	9DzFdv61zed7kza5qxbt53sqzmb7+/BGcqZtAnEb7YKeAyNhfj7Z2iXnhZVASzxOxbNderXVa8W
+	3rPMxC+yk/S7b+e9cGBsQ6hbUlliBS8talYznrt7cZjC19VcPcaV585toV2OUiC9VDdSSTUzbl8
+	f2s+FNofp6HbW2DqgUAp9bFXikfVHHVSzHBxLh4bAHyh1aS0af5fHCU+V463/bQZXKNqk3b+hzr
+	34taHHp+++2e+yjzBnxZGndVBB1soD5y6fYCOBQI2tWpoK10o2t+7VZ+y3zcJ9PCHqbsFtTY0a0
+	73pZ0T/6ElW9kmWA==
+X-Received: by 2002:a5d:5f93:0:b0:432:851d:217e with SMTP id ffacd0b85a97d-43569bcf1f3mr18778321f8f.44.1768924766132;
+        Tue, 20 Jan 2026 07:59:26 -0800 (PST)
+Received: from localhost ([2a01:4b00:bd1f:f500:e85d:a828:282d:d5c7])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-435966322a2sm1274451f8f.38.2026.01.20.07.59.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Jan 2026 07:59:25 -0800 (PST)
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+Subject: [PATCH bpf-next v6 00/10] bpf: Avoid locks in bpf_timer and bpf_wq
+Date: Tue, 20 Jan 2026 15:59:09 +0000
+Message-Id: <20260120-timer_nolock-v6-0-670ffdd787b4@meta.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf] selftests/bpf: wq: fix skel leak in serial_test_wq()
-Content-Language: en-GB
-To: Kery Qi <qikeyu2017@gmail.com>, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, shuah@kernel.org
-Cc: martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
- john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
- haoluo@google.com, jolsa@kernel.org, yatsenko@meta.com, bentiss@kernel.org,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260120091201.1718-2-qikeyu2017@gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <20260120091201.1718-2-qikeyu2017@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/13O3UrEMBAF4FdZcm1k8jNJ65XvIbIkzcQN2mZJS
+ 9ll6bsbKmLN5eHwnZkHm6kkmtnL6cEKrWlOearBPJ3YcHHTB/EUamYSJAqQHV/SSOU85a88fHK
+ NNqLvg3MDsUquhWK67XNvzF8jn+i2sPfaXNK85HLf76xi738mlfg/uQoO3IPRjjQoH/3rSIt7H
+ vK476zyzwrAxspqlTR9Fzx0PrrGql9rQIBtrKrWagiKBkUY+8bqgxW6sbra6IxCjCiis43Fo21
+ /xmoFknIUpQUVDnbbtm9qZPK/oQEAAA==
+X-Change-ID: 20251028-timer_nolock-457f5b9daace
+To: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
+ daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com, 
+ memxor@gmail.com, eddyz87@gmail.com
+Cc: Mykyta Yatsenko <yatsenko@meta.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1768924764; l=4158;
+ i=yatsenko@meta.com; s=20251031; h=from:subject:message-id;
+ bh=1FVC6ShuVsFDaJyw3YTLWFLLhxzbVIvUBBjW5vfVY9Y=;
+ b=IyWnBK9kT+ftc+GNSBnTguUBtYI3LUxzjWalZIti8iWTOfyyiwHpg9tTTXHtZ90JLMBBG/2Ur
+ K85++pNwRBfA+c9LMKZpcM5J+026VmNaIzY5Y0YRIuP3eTRhn2WUTdt
+X-Developer-Key: i=yatsenko@meta.com; a=ed25519;
+ pk=TFoLStOoH/++W4HJHRgNr8zj8vPFB1W+/QECPcQygzo=
 
+This series reworks implementation of BPF timer and workqueue APIs.
+The goal is to make both timers and wq non-blocking, enabling their use
+in NMI context.
+Today this code relies on a bpf_spin_lock embedded in the map element to
+serialize:
+ * init of the async object,
+ * setting/changing the callback and bpf_prog
+ * starting/cancelling the timer/work
+ * tearing down when the map element is deleted or the map’s user ref is
+ dropped
 
+The basic design approach in this series:
+ * Use irq_work to offload all blocking work from NMI
+ * Introduce refcount to guarantee lifetime of the bpf_async_cb structs
+ deferred to potentially multiple irq_work callbacks
+ * Keep objects under RCU protection to make sure they are not freed
+ while kfuncs/helpers access them (We can't use refcnt for this, as
+ refcnt itself is part of the bpf_async_cb struct)
 
-On 1/20/26 1:12 AM, Kery Qi wrote:
-> When wq__attach() fails, serial_test_wq() returns early without calling
-> wq__destroy(), leaking the skeleton resources allocated by
-> wq__open_and_load().
->
-> Fix this by jumping to a common clean_up label that calls wq__destroy()
-> on all exit paths after successful open_and_load.
->
-> Fixes: 8290dba51910 ("selftests/bpf: wq: add bpf_wq_start() checks")
-> Signed-off-by: Kery Qi <qikeyu2017@gmail.com>
-> ---
->   tools/testing/selftests/bpf/prog_tests/wq.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/wq.c b/tools/testing/selftests/bpf/prog_tests/wq.c
-> index 1dcdeda84853..b32e22876492 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/wq.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/wq.c
-> @@ -17,11 +17,11 @@ void serial_test_wq(void)
->   
->   	wq_skel = wq__open_and_load();
->   	if (!ASSERT_OK_PTR(wq_skel, "wq_skel_load"))
-> -		return;
-> +		goto clean_up;
+Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
+---
+Changes in v6:
+- Reworked destruction and refcnt use:
+  - On cancel_and_free() set last_seq to BPF_ASYNC_DESTROY value, drop
+    map's reference
+  - In irq work callback, atomically switch DESTROY to DESTROYED, cancel
+    timer/wq
+  - Free bpf_async_cb on refcnt going to 0.
+- Link to v5: https://lore.kernel.org/r/20260115-timer_nolock-v5-0-15e3aef2703d@meta.com
 
-This is incorrect. Just doing 'return' is correct. Probably
-rename "wq_skel_load" to "wq__open_and_load".
+Changes in v5:
+- Extracted lock-free algorithm for updating cb->prog and
+cb->callback_fn into a function bpf_async_update_prog_callback(),
+added a new commit and introduces this function and uses it in
+__bpf_async_set_callback(), bpf_timer_cancel() and
+bpf_async_cancel_and_free().
+This allows to move the change into the separate commit without breaking
+correctness.
+- Handle NULL prog in bpf_async_update_prog_callback().
+- Link to v4: https://lore.kernel.org/r/20260114-timer_nolock-v4-0-fa6355f51fa7@meta.com
 
->   
->   	err = wq__attach(wq_skel);
->   	if (!ASSERT_OK(err, "wq_attach"))
-> -		goto clean_up
-> +		goto clean_up;
+Changes in v4:
+- Handle irq_work_queue failures in both schedule and cancel_and_free
+paths: introduced bpf_async_refcnt_dec_cleanup() that decrements refcnt
+and makes sure if last reference is put, there is at least one irq_work
+scheduled to execute final cleanup.
+- Additional refcnt inc/dec in set_callback() + rcu lock to make sure
+cleanup is not running at the same time as set_callback().
+- Added READ_ONCE where it was needed.
+- Squash 'bpf: Refactor __bpf_async_set_callback()' commit into 'bpf:
+Add lock-free cell for NMI-safe
+async operations'
+- Removed mpmc_cell, use seqcount_latch_t instead.
+- Link to v3: https://lore.kernel.org/r/20260107-timer_nolock-v3-0-740d3ec3e5f9@meta.com
 
-Your patch is not on top of latest bpf-next.
+Changes in v3:
+- Major rework
+- Introduce mpmc_cell, allowing concurrent writes and reads
+- Implement irq_work deferring
+- Adding selftests
+- Introduces bpf_timer_cancel_async kfunc
+- Link to v2: https://lore.kernel.org/r/20251105-timer_nolock-v2-0-32698db08bfa@meta.com
 
->   
->   	prog_fd = bpf_program__fd(wq_skel->progs.test_syscall_array_sleepable);
->   	err = bpf_prog_test_run_opts(prog_fd, &topts);
+Changes in v2:
+- Move refcnt initialization and put (from cancel_and_free())
+from patch 5 into the patch 4, so that patch 4 has more clear and full
+implementation and use of refcnt
+- Link to v1: https://lore.kernel.org/r/20251031-timer_nolock-v1-0-b064ae403bfb@meta.com
+
+---
+Mykyta Yatsenko (10):
+      bpf: Factor out timer deletion helper
+      bpf: Remove unnecessary arguments from bpf_async_set_callback()
+      bpf: Introduce lock-free bpf_async_update_prog_callback()
+      bpf: Simplify bpf_timer_cancel()
+      bpf: Enable bpf timer and workqueue use in NMI
+      bpf: Add verifier support for bpf_timer argument in kfuncs
+      bpf: Introduce bpf_timer_cancel_async() kfunc
+      selftests/bpf: Refactor timer selftests
+      selftests/bpf: Add stress test for timer async cancel
+      selftests/bpf: Verify bpf_timer_cancel_async works
+
+ kernel/bpf/helpers.c                           | 526 ++++++++++++++-----------
+ kernel/bpf/verifier.c                          |  59 ++-
+ tools/testing/selftests/bpf/prog_tests/timer.c |  92 ++++-
+ tools/testing/selftests/bpf/progs/timer.c      |  37 +-
+ 4 files changed, 464 insertions(+), 250 deletions(-)
+---
+base-commit: efad162f5a840ae178e7761c176c49f433c7bb68
+change-id: 20251028-timer_nolock-457f5b9daace
+
+Best regards,
+-- 
+Mykyta Yatsenko <yatsenko@meta.com>
 
