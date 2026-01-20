@@ -1,96 +1,116 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A60D3AEF22
-	for <bpf@vger.kernel.org>; Tue, 20 Jan 2026 12:55:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9601A41B340;
+	Tue, 20 Jan 2026 13:59:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768913708; cv=none; b=oAlSdnPYGyyi8+idj6oF40B7V+ld5mYvzQdKH4JPySKJWlAFCO9kHZmP9tF94OVMfuSZt5VHAQXAy6doHePF6mhlUSJLWfwNm9rRWtgX3/qbpc2gxOKzRN8E/Md19cSbKHmwFw/y68l9xCwa2k0Ihl2/QaX7jnxKhZFzMhPYyp0=
+	t=1768917545; cv=none; b=IIPWsF3B4V/QZuQTTR7LRh+x0thtlGcToHEhu0utvtaQawA4FhF9wj9fulAN3B5j9tc2p6xohF9L3ZpxqR/pCmQ2djXhJ4wIIB1EZFqpoiGYSolucmEqmh8XWjMwUusUWj/oMhVLmqaHpohICAbGnkyw/iu/CuQf9hEldC7pq0U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768913708; c=relaxed/simple;
-	bh=FmHiwxsgvbf8GNNmKKs5BCKLowXDSY81ZfU5MpvoCm0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=gMOfWjs1T9XPlvLxfKQaRXMGIWymeTNvRfV059gfBx9Ljh5tUTtL4IH5evVE6/6tjJqv9k7KOGxfkNspac5vONDYkKDzPQgGkn0yrxi2ezNKC4c3Y2Alu22G7LJ2wslb/6HLWZMRdOw/T1L1zKQhte8KhqnVDUeYKqOw4Xp25Bc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=mqn3WTNT; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1768917545; c=relaxed/simple;
+	bh=9051yFq57Xie5pjtJjoBq/HvBu5GE3EcHvOKur+xijo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DbGntuKQErpvrUFU+TpOPZguGi3fdG3pqKWRPNWsJWb7DpSSASvu8pcQrK69kf/jAlu+4r8Q1SfHkZkaMR9IGX9txsAKpf6mV76UHS1OuAsfwxBLEZLKMY3rVH9Tz3FxvXd0VKxt5gkb83M1+dOq+zQYr3L/e1LfsRu2XYow1ng=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZoV+ZHYi; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="mqn3WTNT"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
-	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:In-Reply-To:References;
-	bh=eoCXvJtjbDTw9XdqRRVdDyYSc3i23t8baPubDF04fg8=; b=mqn3WTNTpDNpJdU00KQqx/dNwO
-	0iphwMjjQZI8Jb6pWWNNcRQxoScmcB8NbgFFlqje7ZDhFQQwD3IJaBs6a6MkNQ6sNRe5WwTx2EAAf
-	A6lOz16NLzlRiIYwcUzaAIruzBLeGho9Ruf+fbVDqzt9B0vqjjV/8zqdsK1M4SzhoFnDyxXVeV+3b
-	sC9PLG+x1Ovyy0I+iaVA0RgOz4iLeyGT0B+P1HHckbN8CuM2SHm1+5KPoDodPhQn6Tb1D7fP+oYDI
-	Xez6fylRbwl/PpF5DPh+6jGTtaJdZLeyfe1FUO8rtJNt5xzQfkQnDteQ3gT8zXgEOCf4zhlY/EOaQ
-	Z0+w8hrg==;
-Received: from localhost ([127.0.0.1])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1viBGA-0000NW-1d;
-	Tue, 20 Jan 2026 13:55:02 +0100
-From: Daniel Borkmann <daniel@iogearbox.net>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	andrii@kernel.org,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Subject: [PATCH bpf-next] bpf: Remove leftover accounting in htab_map_mem_usage after rqspinlock
-Date: Tue, 20 Jan 2026 13:55:01 +0100
-Message-ID: <09703eb6bb249f12b1d5253b5a50a0c4fa239d27.1768913513.git.daniel@iogearbox.net>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZoV+ZHYi"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30B34C16AAE;
+	Tue, 20 Jan 2026 13:59:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768917545;
+	bh=9051yFq57Xie5pjtJjoBq/HvBu5GE3EcHvOKur+xijo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ZoV+ZHYiLGqOe4NWfwMjBJu+d8Nl30ZgHgckXnZ5+4Dix/UB0LdlIn6fjHwSKWM1K
+	 dwvGdy3JXj2FQ6/DunG343ZTszE2CKh5rBIljRUWiLjM0GYEGr5lXnTc5tk+tt2llS
+	 T5uH1cP9oJulukrS8qlW8HNvtGYoJQ0w00MNZ/HhcfRL5Nlru7mbGOkQj7T7JBOa+J
+	 j+FVJiWMl4bHHjEP4BCb9zpI4p5eovVAH+n3nga0pcPEdMpaypnwHbU0TD31BOvLTf
+	 cDZgR62kgZFwdz4V2ZjMgRdc8TNRWFMUylQwBV2z69vLTCgBS5H/xBtUVPX6aNePpp
+	 x2YFoC1FeMHkg==
+Date: Tue, 20 Jan 2026 13:58:57 +0000
+From: Will Deacon <will@kernel.org>
+To: Ankur Arora <ankur.a.arora@oracle.com>
+Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+	bpf@vger.kernel.org, arnd@arndb.de, catalin.marinas@arm.com,
+	peterz@infradead.org, akpm@linux-foundation.org,
+	mark.rutland@arm.com, harisokn@amazon.com, cl@gentwo.org,
+	ast@kernel.org, rafael@kernel.org, daniel.lezcano@linaro.org,
+	memxor@gmail.com, zhenglifeng1@huawei.com,
+	xueshuai@linux.alibaba.com, joao.m.martins@oracle.com,
+	boris.ostrovsky@oracle.com, konrad.wilk@oracle.com
+Subject: Re: [PATCH v8 04/12] arm64: support WFET in
+ smp_cond_relaxed_timeout()
+Message-ID: <aW-KIVQ_H1mVpGHx@willie-the-truck>
+References: <20251215044919.460086-1-ankur.a.arora@oracle.com>
+ <20251215044919.460086-5-ankur.a.arora@oracle.com>
+ <aWEOALG07jHC_oHC@willie-the-truck>
+ <87wm1qmx90.fsf@oracle.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: Clear (ClamAV 1.4.3/27886/Tue Jan 20 08:24:12 2026)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87wm1qmx90.fsf@oracle.com>
 
-After commit 4fa8d68aa53e ("bpf: Convert hashtab.c to rqspinlock")
-we no longer use HASHTAB_MAP_LOCK_{COUNT,MASK} as the per-CPU
-map_locked[HASHTAB_MAP_LOCK_COUNT] array got removed from struct
-bpf_htab. Right now it is still accounted for in htab_map_mem_usage.
+On Fri, Jan 09, 2026 at 11:05:06AM -0800, Ankur Arora wrote:
+> 
+> Will Deacon <will@kernel.org> writes:
+> 
+> > On Sun, Dec 14, 2025 at 08:49:11PM -0800, Ankur Arora wrote:
+> >> Extend __cmpwait_relaxed() to __cmpwait_relaxed_timeout() which takes
+> >> an additional timeout value in ns.
+> >>
+> >> Lacking WFET, or with zero or negative value of timeout we fallback
+> >> to WFE.
+> >>
+> >> Cc: Arnd Bergmann <arnd@arndb.de>
+> >> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> >> Cc: Will Deacon <will@kernel.org>
+> >> Cc: linux-arm-kernel@lists.infradead.org
+> >> Signed-off-by: Ankur Arora <ankur.a.arora@oracle.com>
+> >> ---
+> >>  arch/arm64/include/asm/barrier.h |  8 ++--
+> >>  arch/arm64/include/asm/cmpxchg.h | 72 ++++++++++++++++++++++----------
+> >>  2 files changed, 55 insertions(+), 25 deletions(-)
+> >
+> > Sorry, just spotted something else on this...
+> >
+> >> diff --git a/arch/arm64/include/asm/barrier.h b/arch/arm64/include/asm/barrier.h
+> >> index 6190e178db51..fbd71cd4ef4e 100644
+> >> --- a/arch/arm64/include/asm/barrier.h
+> >> +++ b/arch/arm64/include/asm/barrier.h
+> >> @@ -224,8 +224,8 @@ do {									\
+> >>  extern bool arch_timer_evtstrm_available(void);
+> >>
+> >>  /*
+> >> - * In the common case, cpu_poll_relax() sits waiting in __cmpwait_relaxed()
+> >> - * for the ptr value to change.
+> >> + * In the common case, cpu_poll_relax() sits waiting in __cmpwait_relaxed()/
+> >> + * __cmpwait_relaxed_timeout() for the ptr value to change.
+> >>   *
+> >>   * Since this period is reasonably long, choose SMP_TIMEOUT_POLL_COUNT
+> >>   * to be 1, so smp_cond_load_{relaxed,acquire}_timeout() does a
+> >> @@ -234,7 +234,9 @@ extern bool arch_timer_evtstrm_available(void);
+> >>  #define SMP_TIMEOUT_POLL_COUNT	1
+> >>
+> >>  #define cpu_poll_relax(ptr, val, timeout_ns) do {			\
+> >> -	if (arch_timer_evtstrm_available())				\
+> >> +	if (alternative_has_cap_unlikely(ARM64_HAS_WFXT))		\
+> >> +		__cmpwait_relaxed_timeout(ptr, val, timeout_ns);	\
+> >> +	else if (arch_timer_evtstrm_available())			\
+> >>  		__cmpwait_relaxed(ptr, val);				\
+> >
+> > Don't you want to make sure that we have the event stream available for
+> > __cmpwait_relaxed_timeout() too? Otherwise, a large timeout is going to
+> > cause problems.
+> 
+> Would that help though? If called from smp_cond_load_relaxed_timeout()
+> then we would wake up and just call __cmpwait_relaxed_timeout() again.
 
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>
----
- kernel/bpf/hashtab.c | 11 ++++-------
- 1 file changed, 4 insertions(+), 7 deletions(-)
+Fair enough, I can see that. Is it worth capping the maximum timeout
+like we do for udelay()?
 
-diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-index 441ff5bc54ac..3b9d297a53be 100644
---- a/kernel/bpf/hashtab.c
-+++ b/kernel/bpf/hashtab.c
-@@ -82,9 +82,6 @@ struct bucket {
- 	rqspinlock_t raw_lock;
- };
- 
--#define HASHTAB_MAP_LOCK_COUNT 8
--#define HASHTAB_MAP_LOCK_MASK (HASHTAB_MAP_LOCK_COUNT - 1)
--
- struct bpf_htab {
- 	struct bpf_map map;
- 	struct bpf_mem_alloc ma;
-@@ -2237,11 +2234,11 @@ static u64 htab_map_mem_usage(const struct bpf_map *map)
- 	bool prealloc = htab_is_prealloc(htab);
- 	bool percpu = htab_is_percpu(htab);
- 	bool lru = htab_is_lru(htab);
--	u64 num_entries;
--	u64 usage = sizeof(struct bpf_htab);
-+	u64 num_entries, usage;
-+
-+	usage = sizeof(struct bpf_htab) +
-+		sizeof(struct bucket) * htab->n_buckets;
- 
--	usage += sizeof(struct bucket) * htab->n_buckets;
--	usage += sizeof(int) * num_possible_cpus() * HASHTAB_MAP_LOCK_COUNT;
- 	if (prealloc) {
- 		num_entries = map->max_entries;
- 		if (htab_has_extra_elems(htab))
--- 
-2.43.0
-
+Will
