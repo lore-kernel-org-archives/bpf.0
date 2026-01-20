@@ -1,89 +1,86 @@
-Received: from mail-dy1-f170.google.com (mail-dy1-f170.google.com [74.125.82.170])
+Received: from mail-dy1-f169.google.com (mail-dy1-f169.google.com [74.125.82.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBBF54418FC
-	for <bpf@vger.kernel.org>; Tue, 20 Jan 2026 17:55:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB282449ED9
+	for <bpf@vger.kernel.org>; Tue, 20 Jan 2026 17:56:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768931706; cv=none; b=L1CY4dweLGkypBRC4JYQMskKuDLyWfzUoNxEId69Y7z1DfN4pcsoF/ALic/i2804b32hNy+Y4fYgrj0YU8nooSEoODcccZOpw2JA0zqg/8Tpx1RNhcH4jGZ3gtmpkWnRjfkOSL9iJPSyhvXntmYudBa3o6lHL1yF//3+aOuQ7pk=
+	t=1768931770; cv=none; b=psNQOnrOPooPtQd0VipK3pgGcG9QDetmIAe6Fq0LqrEK5AqoH2arT/nQbzQj2MYc0XRIf2m+YJLEiKfvv7tT04hVrRmVsrU5rpsumFXbZxKOn1DwKgD2rZ3ev0pDiL0kU6Fw7fB56gCI1iWOUlnBCm+W9i73i4YV1LBywXfWZ/I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768931706; c=relaxed/simple;
-	bh=KS8mCNBYfPwO900RIuZ97F5SmyGc3OhWN2Izos81IfA=;
+	s=arc-20240116; t=1768931770; c=relaxed/simple;
+	bh=bntCYoY/lWBskz/E4EMaSD5LphJe4tlIc8UXi+CQOYM=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=BfUbC3nYnsy+M0vP3dJRU9S3Tc73oZWEOqCPAD6rz6+QRvGO7s6mx3N90U0fTWvig95bb7cSTLRlFDrnqgFqr7BIfaU46XylP9va21Shs5qJu92jM538/DaU39UD6C4fpthfU69hJJUyNcOtMAo8SrupESGpPCuAeCIHztNeifM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QdsDEYyp; arc=none smtp.client-ip=74.125.82.170
+	 Content-Type:MIME-Version; b=ZaUxUYVEOUYocauOPfzDV45X42QaDKz9mFWScMN03ejBhIdPYnOOJ5qWQWelJo2I+1xsVruuPpIsFkRg3Y64unTyzeJeVFPBrX3IkhNnkc0+48jT0cGzNATwPSNEhNK2XduZHMnyvDJ2CntFNk74bov3ZDFdN+fDDp25GedEfJI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gR8mMOvB; arc=none smtp.client-ip=74.125.82.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QdsDEYyp"
-Received: by mail-dy1-f170.google.com with SMTP id 5a478bee46e88-2b4520f6b32so7774114eec.0
-        for <bpf@vger.kernel.org>; Tue, 20 Jan 2026 09:55:04 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gR8mMOvB"
+Received: by mail-dy1-f169.google.com with SMTP id 5a478bee46e88-2b1981ca515so6126314eec.1
+        for <bpf@vger.kernel.org>; Tue, 20 Jan 2026 09:56:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768931704; x=1769536504; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1768931768; x=1769536568; darn=vger.kernel.org;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=1Zkk8Rbl5UtyAFvKLFxnlSYhtBzOt3i2r/yOWe3G6LM=;
-        b=QdsDEYyp1nQu9i0VDh0MQvtMzZTlMZFk2coVgfRqGYRlBEY4B8dnMGIuA5hXrTxEC1
-         JMcsTejg5t97f1JRitW3HI720QK129l4Z8qQ7Mwn7GPgBHyR0DjOzxBMlMqZLae2bgke
-         HXRdYqR80d0rnZgaReH64BB24/LXONjR1AbbctU9XE9jWp7Xy8z2MTjCykKT8kOxN5wA
-         jMdpdUaTRbeG1gsVjhb83WwWhWz+o1mymhF5fR6U28pIlBMT5nbMsdM0qwMwlJw1L4Gh
-         tgrIknfldBiqB04DraAusko5duhzhR3ZP1504Yjl8kaT0iSIR0o1mCyFQE0RPjxBlawb
-         yU3w==
+        bh=bntCYoY/lWBskz/E4EMaSD5LphJe4tlIc8UXi+CQOYM=;
+        b=gR8mMOvBYSYs4BDd+EuMw286bxsDrKO4AlPwF9KVstZhN1kymsTmbasIhsPF5of6di
+         /O3mucE5owcpmwBrw7zrhAj1lRzUp8XrV9ZCsS2rwuBgIQeMu1COKMYVsC0+k+Y0q/tT
+         f9VUsiVtLr/yo7A8DMvlBLZmmA2SqtXzYJ/r3tWtmvMXu+aEp5GO+b0oSCIOHkGqfAVG
+         x9t5wmZligD8PQIeUCfahqpVz5NUaJYsGSKVU/cI+ojkRViUnncRrWh7467dLBmaNqNJ
+         YzWzNewZPbM599cBMRIgs6K9lHlb1g+zUqoYmvRx3voaovo8RXtorooaS6vLoeh//FcJ
+         68Bg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768931704; x=1769536504;
+        d=1e100.net; s=20230601; t=1768931768; x=1769536568;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1Zkk8Rbl5UtyAFvKLFxnlSYhtBzOt3i2r/yOWe3G6LM=;
-        b=cwcCrRlQVilFQ3bL793xi6gAxNe5hx18Zsgcy8O49yYDqSVdA2L2A4tju3hv/xeaY2
-         7YmRiXVu/KkAO8SehcfE5yLPaVsqODQuGYJ8nYMvPTCABwGeVoJFktvhyUSF57Z9A9xg
-         Mn7Sm6T3CAfHa7kUr961Px/dUZqGQB9K0A1VTNOD9HCJvGMUlrRz6ZDdEg/m6ZLFOp36
-         re9EAiJGEjzJ/nJATvu3U6awArrBT19+aE4jI7mqQRy9zIbeXIevybjDDb56EFN9RicB
-         xnq1s222XI2313rzNcGo2XK7zjEfG1a/Ca4ugzLTZDw+6xHtR9KxCW0zNPGYPdUEkuTr
-         gnaQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWW/0cGmamyfCi+/YP583X8zExGq0R+7bM3TFCpevCgPzjUH6fpdczeDtD9rLCVa4oTDSs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyisLvfy/+erVPT4Hce5m84/4Yx01hGhASel4tpc+z45Rahb5Hf
-	m9PZWacq5J3kmXjk+Sw/gBybfGedXV8BAnjX+00I3FWxjtlNx4pLz4uD
-X-Gm-Gg: AZuq6aJ6K5tEKO3dPNNGgqHlRzFbU1qlGOEVaWtjnzzbQrB/767vz/gMm+/PyahAF8E
-	cPDQgXyIpP6LCj6vruzhtnk4Rd5lIu//5KETMOuhzuA68tU5PfiBs993Wi64nkWcUHbwZ8eqCwP
-	RlH8vEthZjaoTZeIEjtjxcZJwOuNgQk0Yxnvm2wdeETzgB5lESHFpiB1f5qk+LCNhHgtStH6e7m
-	0drg9DnVaCUS8Nm3C/Sv2impAMwECJr/FrSJO81nbWDni/3aI9Z0xzp1OVrd0vt4pjy+HzMuC0E
-	P9YxmaLoErzUC+pfubljhlvTY9xWmQFSxOWU53rH6kLgAT4OGKKw4ZkqjbsAn+eU8eCiFwOIta1
-	cTU/H92z/39M9Rs5tYFsJC8BzCEOmJ7AN0/KK708ZwmQQZ5Kcsv6hhN/Hm9GQH9ABzu12puaY4c
-	DWhfq4lCaOn19CsJEqeLGvd/FYcO3fdvry3Q403Mmo48lHKI2MvU2pDLgRXWTiNV2oDsmV
-X-Received: by 2002:a05:7300:6ca1:b0:2b0:5a77:5753 with SMTP id 5a478bee46e88-2b6fd78df36mr1990065eec.21.1768931703406;
-        Tue, 20 Jan 2026 09:55:03 -0800 (PST)
+        bh=bntCYoY/lWBskz/E4EMaSD5LphJe4tlIc8UXi+CQOYM=;
+        b=cS2rBLsfjLuP3QnLutwVXSVgvDVpDn8dG65NQCQSqSrAqk2pRCi7Z8qflR2TGGQGmh
+         xajLLVvC28hy5tKKoFwfSaEcxnFXnHUk+KpGnmw9IJwdYoEJDru2Xhd3eoIF5MVSuQlZ
+         Jjl8P/IXumcnATsjd/Wslnwb2ZrXipukY5JsJbNb+4qpClTCNImilE9Kh1iLMEeTf1Jd
+         a+rXXriNgRyfxc7CZF7yI/5XTL4uUDJ8pvtsvk2mCd1dA/TKaKsNiX99xuFzf6F2ZCuC
+         9TV3dER78GNu9V0pNQGmr4225u1PtOKBlnFdE15h3veKCVkQK4wO9NxLbZ76Bifb3wEu
+         S3NA==
+X-Gm-Message-State: AOJu0YxTWQwpzjQp4wafsrz9h+YpcuobC0Pd6i6O3PrusX5OHR2nzfyZ
+	IdcV1oNmTAA5QgpHjsQu/ConMAXwakbkAXKhw7fJq8dUJ78nUmZq8sSv
+X-Gm-Gg: AZuq6aJBddDXU8WqYl8KLJmOfHkw41aMKWH2gv05zqyaB2/k6orztRBKUxcLNlQNe6N
+	b8RFZZMT+SAg/8T9liiU9kL/6bYEVkS+676uTpI2haOEj6naYD6XPUwC5mKsrrjjBMvFeXsXsrA
+	D3OXfHLM+enOSPOmxkxYZJUAIK0i0wvGCOc/NWzr/tQELqy+p5Shfh3YvSmEZ2Woed2fcYA2ceI
+	JuvCxKpwFplWQ8O1uFYpTBGmLBqvrpgKttxXFIw5kpPSOar8W+9H91SV06qBUsMiVsCG0kIkoOE
+	9i/OHaWhfCHY0xkPFmez9IkY1WVx+cJp4dLb1SkPpAT8wxDisMeUK6h20vWuaYDvwKwEz47C5uN
+	0MUFy2nA0emS2n9zTAA6vXqbIrN7XFMJl6/dI89n8y4DgSrD4ri0iT5weFxJ33SXTO3A1wUt58g
+	dqnjVzUK03mRTrOuZVtjfh9kSyHHoNhyZcUkJa1y5f9v0QMkniYoOfCguXaRYEeGDQQ5m5
+X-Received: by 2002:a05:7301:7c0e:b0:2b0:4c12:d74d with SMTP id 5a478bee46e88-2b6fd746d53mr1663983eec.15.1768931767667;
+        Tue, 20 Jan 2026 09:56:07 -0800 (PST)
 Received: from ?IPv6:2a03:83e0:115c:1:b08c:bb3d:92b9:704d? ([2620:10d:c090:500::3:93b1])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b6b34c0f7fsm17960598eec.3.2026.01.20.09.55.00
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b6c2de1f29sm16004104eec.15.2026.01.20.09.56.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Jan 2026 09:55:03 -0800 (PST)
-Message-ID: <5ca8756f0387e5b2be47e9522b1f4b5fc149768d.camel@gmail.com>
-Subject: Re: [PATCH bpf RESEND v2 1/2] bpf: Fix memory access flags in
- helper prototypes
+        Tue, 20 Jan 2026 09:56:07 -0800 (PST)
+Message-ID: <00d9e1ea7e4eef7a7891200a03e99083cdbd066c.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v3 1/2] bpf: Fix memory access flags in helper
+ prototypes
 From: Eduard Zingerman <eddyz87@gmail.com>
-To: Zesen Liu <ftyghome@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>,  Andrii Nakryiko <andrii@kernel.org>, Martin KaFai
- Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,  Yonghong Song
- <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, KP
- Singh	 <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo	
- <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, Matt Bobrowski	
- <mattbobrowski@google.com>, Steven Rostedt <rostedt@goodmis.org>, Masami
- Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers
- <mathieu.desnoyers@efficios.com>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Daniel Xu
- <dxu@dxuuu.xyz>, 	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, netdev@vger.kernel.org, Shuran Liu	
- <electronlsr@gmail.com>, Peili Gao <gplhust955@gmail.com>, Haoran Ni	
- <haoran.ni.cs@gmail.com>
-Date: Tue, 20 Jan 2026 09:54:59 -0800
-In-Reply-To: <B91D5A7E-4967-416D-A2AC-CD3428F3C702@gmail.com>
-References: <20260118-helper_proto-v2-0-ab3a1337e755@gmail.com>
-	 <20260118-helper_proto-v2-1-ab3a1337e755@gmail.com>
-	 <55f01664fc714615206cc8d100cabf4f310f2302.camel@gmail.com>
-	 <B91D5A7E-4967-416D-A2AC-CD3428F3C702@gmail.com>
+To: Zesen Liu <ftyghome@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
+ <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>,  Song Liu
+ <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend	
+ <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav
+ Fomichev	 <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa
+ <jolsa@kernel.org>,  Matt Bobrowski <mattbobrowski@google.com>, Steven
+ Rostedt <rostedt@goodmis.org>, Masami Hiramatsu	 <mhiramat@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,  "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski
+ <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman
+ <horms@kernel.org>, Daniel Xu <dxu@dxuuu.xyz>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, netdev@vger.kernel.org, Shuran Liu
+	 <electronlsr@gmail.com>, Peili Gao <gplhust955@gmail.com>, Haoran Ni
+	 <haoran.ni.cs@gmail.com>
+Date: Tue, 20 Jan 2026 09:56:03 -0800
+In-Reply-To: <20260120-helper_proto-v3-1-27b0180b4e77@gmail.com>
+References: <20260120-helper_proto-v3-0-27b0180b4e77@gmail.com>
+	 <20260120-helper_proto-v3-1-27b0180b4e77@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.58.2 (3.58.2-1.fc43) 
@@ -94,23 +91,41 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-On Tue, 2026-01-20 at 11:39 +0800, Zesen Liu wrote:
-> [...]
+On Tue, 2026-01-20 at 16:28 +0800, Zesen Liu wrote:
+> After commit 37cce22dbd51 ("bpf: verifier: Refactor helper access type tr=
+acking"),
+> the verifier started relying on the access type flags in helper
+> function prototypes to perform memory access optimizations.
 >=20
-> > On Jan 20, 2026, at 04:24, Eduard Zingerman <eddyz87@gmail.com> wrote:
-> >=20
-> > Q: why ARG_PTR_TO_UNINIT_MEM here, but not for a previous function and
-> >   not for snprintf variants?
+> Currently, several helper functions utilizing ARG_PTR_TO_MEM lack the
+> corresponding MEM_RDONLY or MEM_WRITE flags. This omission causes the
+> verifier to incorrectly assume that the buffer contents are unchanged
+> across the helper call. Consequently, the verifier may optimize away
+> subsequent reads based on this wrong assumption, leading to correctness
+> issues.
 >=20
-> For bpf_get_stack_proto_raw_tp, I chose ARG_PTR_TO_UNINIT_MEM to be consi=
-stent with its siblings:
+> For bpf_get_stack_proto_raw_tp, the original MEM_RDONLY was incorrect
+> since the helper writes to the buffer. Change it to ARG_PTR_TO_UNINIT_MEM
+> which correctly indicates write access to potentially uninitialized memor=
+y.
 >=20
-> =E2=80=A2 bpf_get_stack_proto_tp (bpf_trace.c:1425)
-> =E2=80=A2 bpf_get_stack_proto (stackmap.c:525)
-> =E2=80=A2 bpf_get_stack_sleepable_proto (stackmap.c:541)
+> Similar issues were recently addressed for specific helpers in commit
+> ac44dcc788b9 ("bpf: Fix verifier assumptions of bpf_d_path's output buffe=
+r")
+> and commit 2eb7648558a7 ("bpf: Specify access type of bpf_sysctl_get_name=
+ args").
 >=20
-> All of these are wrappers around the same core function bpf_get_stack() /=
- __bpf_get_stack(), passing the buffer with identical semantics, and all us=
-e ARG_PTR_TO_UNINIT_MEM.
+> Fix these prototypes by adding the correct memory access flags.
+>=20
+> Fixes: 37cce22dbd51 ("bpf: verifier: Refactor helper access type tracking=
+")
+> Co-developed-by: Shuran Liu <electronlsr@gmail.com>
+> Signed-off-by: Shuran Liu <electronlsr@gmail.com>
+> Co-developed-by: Peili Gao <gplhust955@gmail.com>
+> Signed-off-by: Peili Gao <gplhust955@gmail.com>
+> Co-developed-by: Haoran Ni <haoran.ni.cs@gmail.com>
+> Signed-off-by: Haoran Ni <haoran.ni.cs@gmail.com>
+> Signed-off-by: Zesen Liu <ftyghome@gmail.com>
+> ---
 
-Ack, makes sense, thank you for explaining.
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
