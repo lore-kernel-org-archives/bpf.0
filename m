@@ -1,103 +1,76 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18BEE33F8D6
-	for <bpf@vger.kernel.org>; Wed, 21 Jan 2026 19:37:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 462CC3C199E
+	for <bpf@vger.kernel.org>; Wed, 21 Jan 2026 19:54:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769024267; cv=none; b=gXMlhNZzk+JSlyGxgANn6STVTP76oDejb56ZLrxmXbG8hjKKMmQ4TKfb68yq78gCEcWdw1gos9tuQ68Fz9LkjYukpiDumAwqvTYqJ5m/uOrTkydSsNRUW/k/5bpE0R510bCn0FOUXN9Hl7LQGUZvNJ9t51DODrBSWWlOdCJ9SvI=
+	t=1769025271; cv=none; b=pofIf87IrE3ymm61QREpJSDcSSR6jbAvroQOaD3rk6Q9Jj8VOlxB8zzD6WWJocWL0dXl1heAgZa6OgCV6M7FQXknjElw8p0hZ4jZeWIukAoqc317mI9GHrefEPh9EzFKS9KYsZAnya0Z5vp02/cfKjGgfAZu1hVrdFHaw2BfJw8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769024267; c=relaxed/simple;
-	bh=DELOhScVjbwId/MdKt6ptHNY2BsteSM1Zj+A8Y5mtoI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=oHf9hsCl0xq07KoTGZgVihvkUtr8L0HoDvwBvC0PfmIoNqMybB+7uPkwVa8YpjmvsZunyeAhqd1oO5EZMA0e2G7hvYEC59PWS85SdKUvq8E365eWWRK632d4CYLYaxWJnRSQBOZsik36cIBLQ6JdhwE/Vvy5Bu3BpwsQbWNh2ec=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jx8hIaeU; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769025271; c=relaxed/simple;
+	bh=yxb1cCLikrz2Q1MgxwqzQ5lzefaBn1M5G2M/HCfRNgY=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=Njy8yp/ELs6NntvLfEPATzO245szTXqRKiVjG3y97lUulCL/HWu3pgK8njVuab48jTPrt5cKsXWLZ7cXEqYvgmzfM+X+0liOlMCPKaGQ4WN8pxkxT2qN+N5npN8DDY1ALBbo8YAJpp8Jd+6WZVMAOPd+uoQ219ovKaQVpxnPFbA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GUDI/4qh; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jx8hIaeU"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2B07C16AAE
-	for <bpf@vger.kernel.org>; Wed, 21 Jan 2026 19:37:46 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GUDI/4qh"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02ABBC16AAE
+	for <bpf@vger.kernel.org>; Wed, 21 Jan 2026 19:54:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769024266;
-	bh=DELOhScVjbwId/MdKt6ptHNY2BsteSM1Zj+A8Y5mtoI=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=jx8hIaeUXk4AAhEKssyTtKXUe5ny8/JOtEUAVjg9Ok/fyT25xD5kRYJfRoP2qfiHo
-	 6E0Hwxkw85A1GZTtCz1MOGtdzTEV3FS85bvOO/W+X4XAGTQE+l8kyStSNPhOWMC1BF
-	 m/0AZt7h/zVFwlyVxRdHvoNiQZvupZ6OHe0hFxxjcVnleJWwykHJl1ZuQnw8VSTvFk
-	 EcdPj3CASVEyOKtyKwjjhoPjGPT/7LN2Xsat5vODi35BnGtaUP8A6OWCYxvmLzz6q9
-	 i+Ac3MTdE/Zi7vfYOwzO1H06+K3pNpPaS2RiRXV3qlI+Gvtz5eokcbsOZUh8KMtYoO
-	 woIvhmQcivyaQ==
-Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-50150bc7731so2351441cf.1
-        for <bpf@vger.kernel.org>; Wed, 21 Jan 2026 11:37:46 -0800 (PST)
-X-Gm-Message-State: AOJu0YyA4rIJhnjQRKY2wyY4Q0E0h4B2XQbt49hYMOrTu/ZQMYBmNJfX
-	zTN4ztkrwvyGwq/iMJNiWgzMHl4N2jaNSpUWJgpXO3r4wa9eiArTrL2DhcMN6l64vmxPkyQx0rJ
-	PBddQ6WHbYM929q4O/h5jIZ+xdOv0qJo=
-X-Received: by 2002:a05:622a:3d2:b0:4ee:275c:28db with SMTP id
- d75a77b69052e-502a1f2207bmr251984501cf.40.1769024266022; Wed, 21 Jan 2026
- 11:37:46 -0800 (PST)
+	s=k20201202; t=1769025271;
+	bh=yxb1cCLikrz2Q1MgxwqzQ5lzefaBn1M5G2M/HCfRNgY=;
+	h=From:Date:Subject:To:Cc:From;
+	b=GUDI/4qhY0h3SydNMQLjsepsrDn/uXGppXV5x1MgfnxUCxGGVEQ8U0iWoTZ66qgJF
+	 naQW0uRQp5hiUCuTexSRO0qBIt3Qpe1rgBNx8oKA9tYr2NaVhkx10H1kZTtqEc2RLS
+	 ov7VZO8g96t2Q9wr1mENqAGtX9eWozuj+JE2/n1FLGYq5jDiasWd0N0Bln0c3ewUli
+	 PGmdQWu6NF6s5mQLArASgEdaPMTFju0XDzOrzycVqsjsSuS+aSIbab0rEqsH1RWs0m
+	 +36sfA9ecJ2xZxKcxst2K4qJOsjcJ+85YH1oFSUJkY3lVwHjVN8nfWXxHdf6elgezU
+	 JWfdzDBe27Nzw==
+Received: by mail-qk1-f176.google.com with SMTP id af79cd13be357-8c6d76b9145so22481085a.2
+        for <bpf@vger.kernel.org>; Wed, 21 Jan 2026 11:54:30 -0800 (PST)
+X-Gm-Message-State: AOJu0YwYPkGlgr8okjVuNkRRFSwl3h7fIKn4+CxsH3qu1DUZU9Tbdz73
+	YmQtfyKX2Uq9NrZ0ZwKyz9G3LQ3OI0IwEBECzN48WrEtXxvjF6fRVgIaQNtVj37I9KvCZhVxrK8
+	dvIdoJUWR5TTMEdzQDUH0pISSVIGVrYA=
+X-Received: by 2002:a05:620a:1710:b0:892:ca0f:fc21 with SMTP id
+ af79cd13be357-8c6ccde2807mr822897485a.40.1769025270110; Wed, 21 Jan 2026
+ 11:54:30 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cde02506-a9ff-465f-a720-637b9033d017@redhat.com>
-In-Reply-To: <cde02506-a9ff-465f-a720-637b9033d017@redhat.com>
 From: Song Liu <song@kernel.org>
-Date: Wed, 21 Jan 2026 11:37:34 -0800
-X-Gmail-Original-Message-ID: <CAPhsuW6JWxRwakLjWA3CXnCxTLnJfhZf1zLFGVxafS0Uz54_DA@mail.gmail.com>
-X-Gm-Features: AZwV_QiHdtfTxV6xxZNe5lnP-pY6Kuvfdg-hc4aZEt-r4GxqidaSqZXtLt1MfsA
-Message-ID: <CAPhsuW6JWxRwakLjWA3CXnCxTLnJfhZf1zLFGVxafS0Uz54_DA@mail.gmail.com>
-Subject: Re: [RFC] selftests/bpf: Running test_progs with distro configs
-To: Viktor Malik <vmalik@redhat.com>
-Cc: bpf <bpf@vger.kernel.org>
+Date: Wed, 21 Jan 2026 11:54:18 -0800
+X-Gmail-Original-Message-ID: <CAPhsuW4=heDwYEkmRzSnLHDdW=da71qDd1KqUj9sYUOT5uOx3w@mail.gmail.com>
+X-Gm-Features: AZwV_QgsgjhWfk0YsKkFKCqOs7PpeRWozME_nBh0y5sHUbGGKqGmpO-fzfyjEZo
+Message-ID: <CAPhsuW4=heDwYEkmRzSnLHDdW=da71qDd1KqUj9sYUOT5uOx3w@mail.gmail.com>
+Subject: [LSF/MM/BPF TOPIC] Refactor LSM hooks for VFS mount operations
+To: bpf <bpf@vger.kernel.org>, Linux-Fsdevel <linux-fsdevel@vger.kernel.org>, 
+	lsf-pc@lists.linux-foundation.org, 
+	linux-security-module <linux-security-module@vger.kernel.org>
+Cc: Christian Brauner <brauner@kernel.org>, Al Viro <viro@zeniv.linux.org.uk>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jan 21, 2026 at 7:03=E2=80=AFAM Viktor Malik <vmalik@redhat.com> wr=
-ote:
->
-> Hi,
->
-> I know this has been discussed multiple times already but I'd still like
-> to open the topic again.
->
-> We struggle to run BPF selftests, especially test_progs, on distros
-> whose configuration is different from what is in
-> tools/testings/selftests/bpf/config. While the tests usually compile
-> fine, many test cases fail because some required config option is not
-> set (for instance CONFIG_FUNCTION_ERROR_INJECTION required for sleepable
-> tracing programs, which is often not enabled on enterprise systems).
-> This makes processing the tests output much harder.
->
-> One possible solution would be to maintain our own DENYLIST but I can
-> imagine that the same problem affects other distro folks. So, I'm
-> wondering if the community would be interested in some solution which
-> could live inside the upstream repo. Obviously, I don't want any
-> complicated solution which would require a lot of maintenance and would
-> bit-rot over time. So, I'm thinking something like introducing
-> CONFIG_DENYLIST which would contain "config:testcase" pairs and a couple
-> of lines of code to test_progs runner which would parse the file and
-> automatically skip the given test cases if the required config is not
-> enabled.
+Current LSM hooks do not have good coverage for VFS mount operations.
+Specifically, there are the following issues (and maybe more..):
 
-I think this is probably the best idea, but it still requires some work to
-keep the list up to date. I guess it is possible to use some automation
-here.
+1. security_sb_mount suffers from the TOCTOU bug for bind mount and
+    move mount [1];
+2. There is not sufficient coverage for new mount syscalls (open_tree, fspick,
+    etc.) [2].
+
+A key consideration of this refactor is to minimize lock contention, especially
+around namespace_sem.
+
+I also want to discuss what features in the kernel side (kfuncs,
+iterators, etc.)
+are needed to enable reliable monitoring of mount operations in BPF LSM.
 
 Thanks,
 Song
 
-> Last, let me briefly mention our motivation. BPF selftests are
-> practically the only comprehensive test suite for kernel eBPF as well as
-> for libbpf and bpftool. Running them regularly on distro kernels can not
-> only help find bugs in distro kernels and packages but also reveal
-> upstream bugs which are not caught in upstream testing (b/c we test on
-> different arches, different hardware, etc.).
->
-> Before staring implementing an RFC, I'm curious to hear what other
-> people think about this.
->
-> Thanks!
-> Viktor
->
->
+PS: I am not sure whether other folks are already working on it. I will prepare
+some RFC patches before the conference if I don't see other proposals.
+
+[1] https://lore.kernel.org/bpf/20251130064609.GR3538@ZenIV/
+[2] https://lore.kernel.org/linux-security-module/20250711-pfirsich-worum-c408f9a14b13@brauner/
