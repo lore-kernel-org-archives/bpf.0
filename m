@@ -1,178 +1,233 @@
-Received: from mail-ed1-f74.google.com (mail-ed1-f74.google.com [209.85.208.74])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9DBF47A0AF
-	for <bpf@vger.kernel.org>; Wed, 21 Jan 2026 13:54:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2D7A4ADD80
+	for <bpf@vger.kernel.org>; Wed, 21 Jan 2026 13:56:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769003696; cv=none; b=a6mgXtM8sLW8HQHtv2B03wbg6geErHpjiB6g/LTuD/32OPOltCMwyTRgjazCVeTl4joUmOMTMTcqCMLQMwWUQvvSPu+iIg7kMwR00YJhYi2v5tPSR7wsqoYQPpcVDjtm5EK4YQC+1spK3R7cKaaVX7PCn3daAMpdmkolzPWBUUE=
+	t=1769003806; cv=none; b=tJoIBL/iBVhRhcOnZDp1b7T/VlReqV9E57KZdtrdwqpbCeyJGwDP1XIDMbVU1AeRRLy1fCmB9tea7RUTb1paT05Tc5xcjFkoVDGn73fSPQoU+8rMOIOJ2nNunidjW4L7IJI/QqDgU2Dxkfuv+EVRhB3E83PPAIa9gecdASgbUOA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769003696; c=relaxed/simple;
-	bh=yoO4GnQHmT15ZT5Z911rNKC8G4iPmPMaowqHtqqnEuc=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=M/S+rwbW87c0dXT1AFVtlG0lKuOYlLR0eyFPEWRvieJnvjj72qSwgGLkuX1y9ZdOW1TejDhrKXTFC/lYdA91V3EfEe0U6jDbt1hYv2V9kfheDQVclv/f5G7RcC3Z/LT0Eg+a1CDc5OMIgN1lkn5cGJpXbqMtUSuN4mnEzFYKl7k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--mattbobrowski.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=zsgnYEnd; arc=none smtp.client-ip=209.85.208.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--mattbobrowski.bounces.google.com
+	s=arc-20240116; t=1769003806; c=relaxed/simple;
+	bh=ifh1tT3zaOQZ0f3aouO2y5ZENzEzV7r66QJ4FotsmIE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=lwxduyActvmnjZjiWam2W6OiK/+qAkxF4HVJI57x3WPqj/p+Y0oeZ7aGp3C0qZhRT0P6qWABatn/Z7M26cuwgi326VsZC6pFF7Nqan4UcuM682+DRx/vOia5E8/IKXN2yjMd5gy1rK2P0IBxECq4BLjBgRDlv6nhnrR/bCwwk0E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=RLeqqG3F; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=/hedZwf9; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=tFX5PEb0; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=Pr1DDvzP; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="zsgnYEnd"
-Received: by mail-ed1-f74.google.com with SMTP id 4fb4d7f45d1cf-6539bfdd9easo10217412a12.1
-        for <bpf@vger.kernel.org>; Wed, 21 Jan 2026 05:54:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1769003690; x=1769608490; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=u7KtuztvTCVJE6kooK5KtWMzDYHN8HwXc7vg244+QJk=;
-        b=zsgnYEndp4F+S321QbJtLF72Ml8tu334GWiHYdpTZn11z9l/ht1pHvxZ7nfHmC6Qdy
-         Q5PVwQ3a8kbn1E/0UMn76y7KPJAelLioEXlmTxoZsLVjcW8hFzqPqnDCc5gZz51NHf1o
-         RUIQJq8Ig8JRNTAErusASGmNYP1g4z7UCBsWbu5DXMwHvNqSWYX0+2HyQXRBms5h85M/
-         LOqpB3eRgw8gpPOENUvOfv5lGedfQFE8mmgIFs5hBUoxXbG/HWUiZPeCeTvj/WrMMzlN
-         NJ20A+1KaVeUNsxDMxVue5xQ8p296g1Dz9wiI0Fi6nmv6/VwXJbVVlQX5w3lb3y2C6nB
-         ERCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769003690; x=1769608490;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=u7KtuztvTCVJE6kooK5KtWMzDYHN8HwXc7vg244+QJk=;
-        b=FbYCSeih5OcJONnA3kgyTSY8RopWFooi6LXvpGmHQNjW56v2y/oA6MAQn/X2o+lwUO
-         ExVvurAkyzCHW7J9dskvI+chwYBAus3zZPzf1CFOiYax/aE8X4IEn1Gttol6wL6Rcpzx
-         hgOl5movS8bo36wsJSFN9d380gfz/5piZ+Csx9qGQoBL7i+7DHsdkiQY+KxzvP9EVIFY
-         Qm73CD3wv189jq4S6p7bxtmvJhNPO10Whej41Ji9YnVMUHTj/A/UHG6J4ZgkUWPGd4CL
-         ixFbhku8UUQFPlNCmfeNslnfv/2x33wSqExOXWX92H6U4Hs9EX/6F8m9Ui7dSHvYf3XC
-         1nEA==
-X-Gm-Message-State: AOJu0YzG/tG8As4QgtnO3Te5SVl/diBBvmQmKTtsS6A5Q9uQ7YNEyaVC
-	jI2Tz9X09D6/hQjDd8Znc77DQxxlmEzagIY8Gofx/+WtESOuminh52xmqfdXebcVaKSsxesfHEJ
-	3eAg+pAn2XrP15FTMhIWhBUZknLbFjAdnfivhaQjANfCbqpRrXf+tT8HvrZIX4YcC4HkTQmhIqP
-	7mBoN3AC7+7gq0QW/Cef4qrG70+2yua44dtCgXnyGf27WBqRU/hw1KlmZ7OaVZsPVR3q2nKg==
-X-Received: from edcl14.prod.google.com ([2002:a05:6402:344e:b0:650:98d9:a16e])
- (user=mattbobrowski job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6402:5248:b0:64b:a1e6:800e with SMTP id 4fb4d7f45d1cf-654525cba2dmr12854444a12.8.1769003689687;
- Wed, 21 Jan 2026 05:54:49 -0800 (PST)
-Date: Wed, 21 Jan 2026 13:54:44 +0000
-In-Reply-To: <20260121135444.187001-1-mattbobrowski@google.com>
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="RLeqqG3F";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="/hedZwf9";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="tFX5PEb0";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="Pr1DDvzP"
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id ED0035BD00;
+	Wed, 21 Jan 2026 13:56:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1769003802; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=F9wHHlvguHOFteeiwaIUOv2HvVMORPBkdi/Fa31GaTI=;
+	b=RLeqqG3FBu6iZC5J6AXcjT3gpOi4hVC60z2SRmK6G5CxsQcvua/dBW64jgUGq7aonh16qK
+	6ENSDG2mHm4udJlnU1yVlrIts/rY8xKO6OQXhuSt+L49HlFuv+Mt/aOXrnkaHohnlRC5jH
+	u1EZ/kdpx5a59/4v48H5cPOZyhx3X3g=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1769003802;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=F9wHHlvguHOFteeiwaIUOv2HvVMORPBkdi/Fa31GaTI=;
+	b=/hedZwf9JmybVlrUnQGLtQkauKdrOaQO/RaqMOwGU6sjq6PbjeeAKOq3v/g9w2MrKkTLdc
+	qSxnI/VV8yLe5yAg==
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=tFX5PEb0;
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=Pr1DDvzP
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1769003801; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=F9wHHlvguHOFteeiwaIUOv2HvVMORPBkdi/Fa31GaTI=;
+	b=tFX5PEb0xwPq3xl9IpsMuEp1+4qM7jgjeO7GQT4/vqUckuMkWlNSguNxybo/MHdWB1Xq4o
+	h5Wiq9SiI5b6HRD0HPWhMx8arPtKwmOggt/YNlmdBrYwJdqLWSpDdAEF0MbeXPbFTv7ptw
+	pCUH9FulIR9iBLS0Szb9tJiWOGVWWg0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1769003801;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=F9wHHlvguHOFteeiwaIUOv2HvVMORPBkdi/Fa31GaTI=;
+	b=Pr1DDvzPVHUpSzqTkWGz/NhLXRVPZzyJ0YJ/GuJKa49oAwc+wlSzv5nYZN1tDGULxL1c1T
+	w8pPNaWz7JtOs1Cw==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id BA82A3EA63;
+	Wed, 21 Jan 2026 13:56:41 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id mixHLBnbcGkTSgAAD6G6ig
+	(envelope-from <vbabka@suse.cz>); Wed, 21 Jan 2026 13:56:41 +0000
+Message-ID: <c6ba66a3-0346-40c3-a27e-5528f30fc782@suse.cz>
+Date: Wed, 21 Jan 2026 14:56:41 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260121135444.187001-1-mattbobrowski@google.com>
-X-Mailer: git-send-email 2.52.0.457.g6b5491de43-goog
-Message-ID: <20260121135444.187001-2-mattbobrowski@google.com>
-Subject: [PATCH bpf-next 2/2] bpf/selftests: cover BPF_CGROUP_ITER_CHILDREN_ONLY
- control option
-From: Matt Bobrowski <mattbobrowski@google.com>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, ohn Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Jiri Olsa <jolsa@kernel.org>, 
-	Roman Gushchin <roman.gushchin@linux.dev>, Chuyi Zhou <zhouchuyi@bytedance.com>, 
-	Tejun Heo <tj@kernel.org>, Matt Bobrowski <mattbobrowski@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 10/21] slab: remove cpu (partial) slabs usage from
+ allocation paths
+Content-Language: en-US
+To: Suren Baghdasaryan <surenb@google.com>
+Cc: Harry Yoo <harry.yoo@oracle.com>, Petr Tesarik <ptesarik@suse.com>,
+ Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>,
+ Roman Gushchin <roman.gushchin@linux.dev>, Hao Li <hao.li@linux.dev>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Uladzislau Rezki <urezki@gmail.com>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+ Alexei Starovoitov <ast@kernel.org>, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, linux-rt-devel@lists.linux.dev,
+ bpf@vger.kernel.org, kasan-dev@googlegroups.com
+References: <20260116-sheaves-for-all-v3-0-5595cb000772@suse.cz>
+ <20260116-sheaves-for-all-v3-10-5595cb000772@suse.cz>
+ <CAJuCfpEEUs98yCiNA=QOPY6Qk7=QhSBF+gqPn5a+B+bYbQwvsQ@mail.gmail.com>
+From: Vlastimil Babka <vbabka@suse.cz>
+Autocrypt: addr=vbabka@suse.cz; keydata=
+ xsFNBFZdmxYBEADsw/SiUSjB0dM+vSh95UkgcHjzEVBlby/Fg+g42O7LAEkCYXi/vvq31JTB
+ KxRWDHX0R2tgpFDXHnzZcQywawu8eSq0LxzxFNYMvtB7sV1pxYwej2qx9B75qW2plBs+7+YB
+ 87tMFA+u+L4Z5xAzIimfLD5EKC56kJ1CsXlM8S/LHcmdD9Ctkn3trYDNnat0eoAcfPIP2OZ+
+ 9oe9IF/R28zmh0ifLXyJQQz5ofdj4bPf8ecEW0rhcqHfTD8k4yK0xxt3xW+6Exqp9n9bydiy
+ tcSAw/TahjW6yrA+6JhSBv1v2tIm+itQc073zjSX8OFL51qQVzRFr7H2UQG33lw2QrvHRXqD
+ Ot7ViKam7v0Ho9wEWiQOOZlHItOOXFphWb2yq3nzrKe45oWoSgkxKb97MVsQ+q2SYjJRBBH4
+ 8qKhphADYxkIP6yut/eaj9ImvRUZZRi0DTc8xfnvHGTjKbJzC2xpFcY0DQbZzuwsIZ8OPJCc
+ LM4S7mT25NE5kUTG/TKQCk922vRdGVMoLA7dIQrgXnRXtyT61sg8PG4wcfOnuWf8577aXP1x
+ 6mzw3/jh3F+oSBHb/GcLC7mvWreJifUL2gEdssGfXhGWBo6zLS3qhgtwjay0Jl+kza1lo+Cv
+ BB2T79D4WGdDuVa4eOrQ02TxqGN7G0Biz5ZLRSFzQSQwLn8fbwARAQABzSBWbGFzdGltaWwg
+ QmFia2EgPHZiYWJrYUBzdXNlLmN6PsLBlAQTAQoAPgIbAwULCQgHAwUVCgkICwUWAgMBAAIe
+ AQIXgBYhBKlA1DSZLC6OmRA9UCJPp+fMgqZkBQJnyBr8BQka0IFQAAoJECJPp+fMgqZkqmMQ
+ AIbGN95ptUMUvo6aAdhxaOCHXp1DfIBuIOK/zpx8ylY4pOwu3GRe4dQ8u4XS9gaZ96Gj4bC+
+ jwWcSmn+TjtKW3rH1dRKopvC07tSJIGGVyw7ieV/5cbFffA8NL0ILowzVg8w1ipnz1VTkWDr
+ 2zcfslxJsJ6vhXw5/npcY0ldeC1E8f6UUoa4eyoskd70vO0wOAoGd02ZkJoox3F5ODM0kjHu
+ Y97VLOa3GG66lh+ZEelVZEujHfKceCw9G3PMvEzyLFbXvSOigZQMdKzQ8D/OChwqig8wFBmV
+ QCPS4yDdmZP3oeDHRjJ9jvMUKoYODiNKsl2F+xXwyRM2qoKRqFlhCn4usVd1+wmv9iLV8nPs
+ 2Db1ZIa49fJet3Sk3PN4bV1rAPuWvtbuTBN39Q/6MgkLTYHb84HyFKw14Rqe5YorrBLbF3rl
+ M51Dpf6Egu1yTJDHCTEwePWug4XI11FT8lK0LNnHNpbhTCYRjX73iWOnFraJNcURld1jL1nV
+ r/LRD+/e2gNtSTPK0Qkon6HcOBZnxRoqtazTU6YQRmGlT0v+rukj/cn5sToYibWLn+RoV1CE
+ Qj6tApOiHBkpEsCzHGu+iDQ1WT0Idtdynst738f/uCeCMkdRu4WMZjteQaqvARFwCy3P/jpK
+ uvzMtves5HvZw33ZwOtMCgbpce00DaET4y/UzsBNBFsZNTUBCACfQfpSsWJZyi+SHoRdVyX5
+ J6rI7okc4+b571a7RXD5UhS9dlVRVVAtrU9ANSLqPTQKGVxHrqD39XSw8hxK61pw8p90pg4G
+ /N3iuWEvyt+t0SxDDkClnGsDyRhlUyEWYFEoBrrCizbmahOUwqkJbNMfzj5Y7n7OIJOxNRkB
+ IBOjPdF26dMP69BwePQao1M8Acrrex9sAHYjQGyVmReRjVEtv9iG4DoTsnIR3amKVk6si4Ea
+ X/mrapJqSCcBUVYUFH8M7bsm4CSxier5ofy8jTEa/CfvkqpKThTMCQPNZKY7hke5qEq1CBk2
+ wxhX48ZrJEFf1v3NuV3OimgsF2odzieNABEBAAHCwXwEGAEKACYCGwwWIQSpQNQ0mSwujpkQ
+ PVAiT6fnzIKmZAUCZ8gcVAUJFhTonwAKCRAiT6fnzIKmZLY8D/9uo3Ut9yi2YCuASWxr7QQZ
+ lJCViArjymbxYB5NdOeC50/0gnhK4pgdHlE2MdwF6o34x7TPFGpjNFvycZqccSQPJ/gibwNA
+ zx3q9vJT4Vw+YbiyS53iSBLXMweeVV1Jd9IjAoL+EqB0cbxoFXvnjkvP1foiiF5r73jCd4PR
+ rD+GoX5BZ7AZmFYmuJYBm28STM2NA6LhT0X+2su16f/HtummENKcMwom0hNu3MBNPUOrujtW
+ khQrWcJNAAsy4yMoJ2Lw51T/5X5Hc7jQ9da9fyqu+phqlVtn70qpPvgWy4HRhr25fCAEXZDp
+ xG4RNmTm+pqorHOqhBkI7wA7P/nyPo7ZEc3L+ZkQ37u0nlOyrjbNUniPGxPxv1imVq8IyycG
+ AN5FaFxtiELK22gvudghLJaDiRBhn8/AhXc642/Z/yIpizE2xG4KU4AXzb6C+o7LX/WmmsWP
+ Ly6jamSg6tvrdo4/e87lUedEqCtrp2o1xpn5zongf6cQkaLZKQcBQnPmgHO5OG8+50u88D9I
+ rywqgzTUhHFKKF6/9L/lYtrNcHU8Z6Y4Ju/MLUiNYkmtrGIMnkjKCiRqlRrZE/v5YFHbayRD
+ dJKXobXTtCBYpLJM4ZYRpGZXne/FAtWNe4KbNJJqxMvrTOrnIatPj8NhBVI0RSJRsbilh6TE
+ m6M14QORSWTLRg==
+In-Reply-To: <CAJuCfpEEUs98yCiNA=QOPY6Qk7=QhSBF+gqPn5a+B+bYbQwvsQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spamd-Result: default: False [-4.51 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ARC_NA(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[17];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	MIME_TRACE(0.00)[0:+];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	RCVD_TLS_ALL(0.00)[];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	MID_RHS_MATCH_FROM(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[oracle.com,suse.com,gentwo.org,google.com,linux.dev,linux-foundation.org,gmail.com,linutronix.de,kernel.org,kvack.org,vger.kernel.org,lists.linux.dev,googlegroups.com];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:mid,suse.cz:dkim,suse.cz:email,imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	DKIM_TRACE(0.00)[suse.cz:+]
+X-Spam-Flag: NO
+X-Spam-Score: -4.51
+X-Rspamd-Queue-Id: ED0035BD00
+X-Rspamd-Action: no action
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Spam-Level: 
 
-Extend some of the existing CSS iterator selftests such that they
-cover the newly introduced BPF_CGROUP_ITER_CHILDREN_ONLY iterator
-control option.
+On 1/20/26 19:06, Suren Baghdasaryan wrote:
+> On Fri, Jan 16, 2026 at 2:40 PM Vlastimil Babka <vbabka@suse.cz> wrote:
+>>
+>> We now rely on sheaves as the percpu caching layer and can refill them
+>> directly from partial or newly allocated slabs. Start removing the cpu
+>> (partial) slabs code, first from allocation paths.
+>>
+>> This means that any allocation not satisfied from percpu sheaves will
+>> end up in ___slab_alloc(), where we remove the usage of cpu (partial)
+>> slabs, so it will only perform get_partial() or new_slab(). In the
+>> latter case we reuse alloc_from_new_slab() (when we don't use
+>> the debug/tiny alloc_single_from_new_slab() variant).
+>>
+>> In get_partial_node() we used to return a slab for freezing as the cpu
+>> slab and to refill the partial slab. Now we only want to return a single
+>> object and leave the slab on the list (unless it became full). We can't
+>> simply reuse alloc_single_from_partial() as that assumes freeing uses
+>> free_to_partial_list(). Instead we need to use __slab_update_freelist()
+>> to work properly against a racing __slab_free().
+>>
+>> The rest of the changes is removing functions that no longer have any
+>> callers.
+>>
+>> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
+> 
+> A couple of nits, but otherwise seems fine to me.
+> 
+> Reviewed-by: Suren Baghdasaryan <surenb@google.com>
 
-Signed-off-by: Matt Bobrowski <mattbobrowski@google.com>
----
- tools/testing/selftests/bpf/prog_tests/cgroup_iter.c | 12 ++++++++++++
- tools/testing/selftests/bpf/prog_tests/iters.c       |  8 +++++++-
- tools/testing/selftests/bpf/progs/iters_css.c        |  9 ++++++---
- 3 files changed, 25 insertions(+), 4 deletions(-)
+Thanks!
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_iter.c b/tools/testing/selftests/bpf/prog_tests/cgroup_iter.c
-index 574d9a0cdc8e..07c85c0cc204 100644
---- a/tools/testing/selftests/bpf/prog_tests/cgroup_iter.c
-+++ b/tools/testing/selftests/bpf/prog_tests/cgroup_iter.c
-@@ -190,6 +190,16 @@ static void test_walk_self_only(struct cgroup_iter *skel)
- 			      BPF_CGROUP_ITER_SELF_ONLY, "self_only");
- }
- 
-+static void test_walk_children_only(struct cgroup_iter *skel)
-+{
-+	snprintf(expected_output, sizeof(expected_output),
-+		 PROLOGUE "%8llu\n%8llu\n" EPILOGUE, cg_id[CHILD1],
-+		 cg_id[CHILD2]);
-+
-+	read_from_cgroup_iter(skel->progs.cgroup_id_printer, cg_fd[PARENT],
-+			      BPF_CGROUP_ITER_CHILDREN_ONLY, "children");
-+}
-+
- static void test_walk_dead_self_only(struct cgroup_iter *skel)
- {
- 	DECLARE_LIBBPF_OPTS(bpf_iter_attach_opts, opts);
-@@ -325,6 +335,8 @@ void test_cgroup_iter(void)
- 		test_walk_dead_self_only(skel);
- 	if (test__start_subtest("cgroup_iter__self_only_css_task"))
- 		test_walk_self_only_css_task();
-+	if (test__start_subtest("cgroup_iter__children_only"))
-+		test_walk_children_only(skel);
- 
- out:
- 	cgroup_iter__destroy(skel);
-diff --git a/tools/testing/selftests/bpf/prog_tests/iters.c b/tools/testing/selftests/bpf/prog_tests/iters.c
-index 3cea71f9c500..a539980a2fbe 100644
---- a/tools/testing/selftests/bpf/prog_tests/iters.c
-+++ b/tools/testing/selftests/bpf/prog_tests/iters.c
-@@ -253,6 +253,11 @@ static void subtest_css_iters(void)
- 		{ "/cg1/cg2" },
- 		{ "/cg1/cg2/cg3" },
- 		{ "/cg1/cg2/cg3/cg4" },
-+		{ "/cg1/cg5" },
-+		{ "/cg1/cg5/cg6" },
-+		{ "/cg1/cg7" },
-+		{ "/cg1/cg7/cg8" },
-+		{ "/cg1/cg7/cg8/cg9" },
- 	};
- 	int err, cg_nr = ARRAY_SIZE(cgs);
- 	int i;
-@@ -284,7 +289,8 @@ static void subtest_css_iters(void)
- 
- 	ASSERT_EQ(skel->bss->post_order_cnt, cg_nr, "post_order_cnt");
- 	ASSERT_EQ(skel->bss->last_cg_id, get_cgroup_id(cgs[0].path), "last_cg_id");
--	ASSERT_EQ(skel->bss->tree_high, cg_nr - 1, "tree_high");
-+	ASSERT_EQ(skel->bss->children_cnt, 3, "children_cnt");
-+	ASSERT_EQ(skel->bss->tree_high, 3, "tree_high");
- 	iters_css__detach(skel);
- cleanup:
- 	cleanup_cgroup_environment();
-diff --git a/tools/testing/selftests/bpf/progs/iters_css.c b/tools/testing/selftests/bpf/progs/iters_css.c
-index ec1f6c2f590b..c74d3075ccdc 100644
---- a/tools/testing/selftests/bpf/progs/iters_css.c
-+++ b/tools/testing/selftests/bpf/progs/iters_css.c
-@@ -12,8 +12,7 @@ char _license[] SEC("license") = "GPL";
- pid_t target_pid;
- u64 root_cg_id, leaf_cg_id;
- u64 first_cg_id, last_cg_id;
--
--int pre_order_cnt, post_order_cnt, tree_high;
-+int pre_order_cnt, post_order_cnt, children_cnt, tree_high;
- 
- struct cgroup *bpf_cgroup_from_id(u64 cgid) __ksym;
- void bpf_cgroup_release(struct cgroup *p) __ksym;
-@@ -43,7 +42,7 @@ int iter_css_for_each(const void *ctx)
- 	}
- 	root_css = &root_cgrp->self;
- 	leaf_css = &leaf_cgrp->self;
--	pre_order_cnt = post_order_cnt = tree_high = 0;
-+	pre_order_cnt = post_order_cnt = children_cnt = tree_high = 0;
- 	first_cg_id = last_cg_id = 0;
- 
- 	bpf_rcu_read_lock();
-@@ -60,6 +59,10 @@ int iter_css_for_each(const void *ctx)
- 			first_cg_id = cur_cgrp->kn->id;
- 	}
- 
-+	bpf_for_each(css, pos, root_css, BPF_CGROUP_ITER_CHILDREN_ONLY) {
-+		children_cnt++;
-+	}
-+
- 	bpf_for_each(css, pos, leaf_css, BPF_CGROUP_ITER_ANCESTORS_UP)
- 		tree_high++;
- 
--- 
-2.52.0.457.g6b5491de43-goog
+
+ > -static struct slab *get_partial_node(struct kmem_cache *s,
+>> -                                    struct kmem_cache_node *n,
+>> -                                    struct partial_context *pc)
+>> +static void *get_partial_node(struct kmem_cache *s,
+>> +                             struct kmem_cache_node *n,
+>> +                             struct partial_context *pc)
+> 
+> Naming for get_partial()/get_partial_node()/get_any_partial() made
+> sense when they returned a slab. Now that they return object(s) the
+> naming is a bit confusing. I think renaming to
+> get_from_partial()/get_from_partial_node()/get_from_any_partial()
+> would be more appropriate.
+
+OK, will do.
+
+>> -       }
+>> +       freelist = get_partial(s, node, &pc);
+> 
+> I think all this cleanup results in this `freelist` variable being
+> used to always store a single object. Maybe rename it into `object`?
+
+Ack.
 
