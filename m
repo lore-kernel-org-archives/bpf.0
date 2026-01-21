@@ -1,272 +1,285 @@
-Received: from out-177.mta1.migadu.com (out-177.mta1.migadu.com [95.215.58.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6854E3A7F57
-	for <bpf@vger.kernel.org>; Wed, 21 Jan 2026 12:55:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F366C48C40A
+	for <bpf@vger.kernel.org>; Wed, 21 Jan 2026 13:22:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769000149; cv=none; b=lJVx2eWupEunf9HTP9BKERZZFOowNmpRpvX1EfDGx5Hjpy4Mni9gUu2QEFrc7kOnG/BswgVQ8LIgsxsfVKyl2owzI50WFFi+IzF0iygSOur6+O0sYBGvlh/hh5hDPLHyjckH0j7f3mw4UINXG1pWCNEl16jRYgyKrucrT2PdEZQ=
+	t=1769001736; cv=none; b=mM6+Nvzq43sWUBHPUp2E3gW5T2SnK202BYukZrPshh3XZmUm61tuqj2QzoeBvLMkEJtVt21KS8313e5Vx6IXe0FtCQeg1zCFweWL+AfyoGl/g3DNvtG21FWWT5p2J4mBVwqS6sOnjvzAFcRFqHSOHCxxagAGUkp1Dqh+2eU4B9Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769000149; c=relaxed/simple;
-	bh=DeR56DNZAp+6G89jGfn1KS0/3ZG6njmmnnhqm525Hr8=;
-	h=MIME-Version:Date:Content-Type:From:Message-ID:Subject:To:Cc:
-	 In-Reply-To:References; b=ZcpIg4IVpVDAvaC6n6BM581nmDqo1tlI32FZk7ref+ukYmb617Z5eu6QhAHbwqsGFCQb1eQ09MLmrQxeI2WKPoq+pUhkbnML1CLNNsJWv/GrMcBo/Dgf525UjazCH8Rx3Yvw4Y66Af8wqxHNJefGg1DHiyMmuDWcr5yiubL1hL8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=sQfdTUwP; arc=none smtp.client-ip=95.215.58.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1769001736; c=relaxed/simple;
+	bh=CqyKOgPt5AwsmJeo+tNQPG5M/otSFkIG4/HCiwaER3k=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=r0nhjX6iuNeKNDCQ+oUZQvwe3XfBfCkP/pQwEbnHH14Dg3t9vqAIhqx5TZ/Z4q8eHu4NkMfDCsHOHA5iC3LdjIhPwu6IfcQid+C4br77+zAk3qQylBI4v/HmNcK8leyhkpgdXUYbEclg3peRl9KvIKOjHHDoPR6qsiPnVZjZrBg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=CKZTLDQ1; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=Xv57NFaS; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=CKZTLDQ1; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=Xv57NFaS; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="sQfdTUwP"
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="CKZTLDQ1";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="Xv57NFaS";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="CKZTLDQ1";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="Xv57NFaS"
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 1A28D336A1;
+	Wed, 21 Jan 2026 13:22:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1769001733; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=shsGpPkdTpgh2O3TvGdc0KosuzZDmGShHqMUn9wd7Ck=;
+	b=CKZTLDQ1olFsUiLxebYBI7V7mqZzU9LM1uJMj3grHOiSbNV27PM1IIzJ/9uFAsiS8xD+t4
+	TczVrUN7LQwilvQNBIwtNFDevjw0tLA0PZkm5n4BJpyoiLGSexPY3EIZ0x4LuXi4qiaf9n
+	000iLRd9HHqu58Tr3jHnZycO2FO7gwQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1769001733;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=shsGpPkdTpgh2O3TvGdc0KosuzZDmGShHqMUn9wd7Ck=;
+	b=Xv57NFaSo4zZ4KWnFbrVkQE7lTQSvPtDV5GDVBA5fzIURjLG0ttHHRW6Xd/npyaNDUx/dn
+	mLMsthjhfg8eLvAQ==
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=CKZTLDQ1;
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=Xv57NFaS
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1769001733; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=shsGpPkdTpgh2O3TvGdc0KosuzZDmGShHqMUn9wd7Ck=;
+	b=CKZTLDQ1olFsUiLxebYBI7V7mqZzU9LM1uJMj3grHOiSbNV27PM1IIzJ/9uFAsiS8xD+t4
+	TczVrUN7LQwilvQNBIwtNFDevjw0tLA0PZkm5n4BJpyoiLGSexPY3EIZ0x4LuXi4qiaf9n
+	000iLRd9HHqu58Tr3jHnZycO2FO7gwQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1769001733;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=shsGpPkdTpgh2O3TvGdc0KosuzZDmGShHqMUn9wd7Ck=;
+	b=Xv57NFaSo4zZ4KWnFbrVkQE7lTQSvPtDV5GDVBA5fzIURjLG0ttHHRW6Xd/npyaNDUx/dn
+	mLMsthjhfg8eLvAQ==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 6A6F83EA63;
+	Wed, 21 Jan 2026 13:22:12 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id OTCoGQTTcGlWKAAAD6G6ig
+	(envelope-from <vbabka@suse.cz>); Wed, 21 Jan 2026 13:22:12 +0000
+Message-ID: <fec4ed92-32e1-4618-99d6-0eac77da1ff3@suse.cz>
+Date: Wed, 21 Jan 2026 14:22:12 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1769000144;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ly0umGIKsfAe/RKlSYFGWoP6DNJrT3BOI3/bIn0vT00=;
-	b=sQfdTUwPdkRIRNBzteK/P0OMTrQn1r7KWAH0Ifhjlago76TOiOPZlD9qIZu+xRSgSSZjkD
-	ssathU8ykXUoRcjv0s2NNSxbXh4VBoH0gLFpWnabGroqQHqpUgRblGvYdaqWEOOL0iYZQN
-	hK5IkDOd65jLlZxETdt9drPKYU6GKJI=
-Date: Wed, 21 Jan 2026 12:55:36 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: "Jiayuan Chen" <jiayuan.chen@linux.dev>
-Message-ID: <60a0c463ef6dbe38d836c773c5256706c163311c@linux.dev>
-TLS-Required: No
-Subject: Re: [PATCH bpf-next v7 2/3] bpf, sockmap: Fix FIONREAD for sockmap
-To: "Jakub Sitnicki" <jakub@cloudflare.com>
-Cc: bpf@vger.kernel.org, "John Fastabend" <john.fastabend@gmail.com>, "David 
- S. Miller" <davem@davemloft.net>, "Eric Dumazet" <edumazet@google.com>,
- "Jakub Kicinski" <kuba@kernel.org>, "Paolo Abeni" <pabeni@redhat.com>,
- "Simon Horman" <horms@kernel.org>, "Neal Cardwell"
- <ncardwell@google.com>, "Kuniyuki Iwashima" <kuniyu@google.com>, "David
- Ahern" <dsahern@kernel.org>, "Andrii Nakryiko" <andrii@kernel.org>,
- "Eduard Zingerman" <eddyz87@gmail.com>, "Alexei Starovoitov"
- <ast@kernel.org>, "Daniel  Borkmann" <daniel@iogearbox.net>, "Martin
- KaFai Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>,
- "Yonghong Song" <yonghong.song@linux.dev>, "KP  Singh"
- <kpsingh@kernel.org>, "Stanislav Fomichev" <sdf@fomichev.me>, "Hao  Luo"
- <haoluo@google.com>, "Jiri Olsa" <jolsa@kernel.org>, "Shuah Khan"
- <shuah@kernel.org>, "Michal Luczaj" <mhal@rbox.co>, "Cong Wang"
- <cong.wang@bytedance.com>, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-In-Reply-To: <871pjjux2u.fsf@cloudflare.com>
-References: <20260113025121.197535-1-jiayuan.chen@linux.dev>
- <20260113025121.197535-3-jiayuan.chen@linux.dev>
- <87a4y8uy67.fsf@cloudflare.com> <871pjjux2u.fsf@cloudflare.com>
-X-Migadu-Flow: FLOW_OUT
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 09/21] slab: add optimized sheaf refill from partial
+ list
+Content-Language: en-US
+To: Suren Baghdasaryan <surenb@google.com>
+Cc: Harry Yoo <harry.yoo@oracle.com>, Petr Tesarik <ptesarik@suse.com>,
+ Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>,
+ Roman Gushchin <roman.gushchin@linux.dev>, Hao Li <hao.li@linux.dev>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Uladzislau Rezki <urezki@gmail.com>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+ Alexei Starovoitov <ast@kernel.org>, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, linux-rt-devel@lists.linux.dev,
+ bpf@vger.kernel.org, kasan-dev@googlegroups.com
+References: <20260116-sheaves-for-all-v3-0-5595cb000772@suse.cz>
+ <20260116-sheaves-for-all-v3-9-5595cb000772@suse.cz>
+ <CAJuCfpErRjMi2aCCThHiS1F_LvaXjkVQvX9kJjqrpw8YnXoNBA@mail.gmail.com>
+From: Vlastimil Babka <vbabka@suse.cz>
+Autocrypt: addr=vbabka@suse.cz; keydata=
+ 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
+ m6M14QORSWTLRg==
+In-Reply-To: <CAJuCfpErRjMi2aCCThHiS1F_LvaXjkVQvX9kJjqrpw8YnXoNBA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spamd-Result: default: False [-4.51 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	ARC_NA(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[17];
+	MIME_TRACE(0.00)[0:+];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	FREEMAIL_CC(0.00)[oracle.com,suse.com,gentwo.org,google.com,linux.dev,linux-foundation.org,gmail.com,linutronix.de,kernel.org,kvack.org,vger.kernel.org,lists.linux.dev,googlegroups.com];
+	RCVD_TLS_ALL(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	DKIM_TRACE(0.00)[suse.cz:+];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:mid,suse.cz:dkim,suse.cz:email,imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns]
+X-Spam-Flag: NO
+X-Spam-Score: -4.51
+X-Rspamd-Queue-Id: 1A28D336A1
+X-Rspamd-Action: no action
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Spam-Level: 
 
-January 21, 2026 at 17:36, "Jakub Sitnicki" <jakub@cloudflare.com mailto:=
-jakub@cloudflare.com?to=3D%22Jakub%20Sitnicki%22%20%3Cjakub%40cloudflare.=
-com%3E > wrote:
+On 1/20/26 18:19, Suren Baghdasaryan wrote:
+> On Fri, Jan 16, 2026 at 2:40 PM Vlastimil Babka <vbabka@suse.cz> wrote:
+>>
+>> At this point we have sheaves enabled for all caches, but their refill
+>> is done via __kmem_cache_alloc_bulk() which relies on cpu (partial)
+>> slabs - now a redundant caching layer that we are about to remove.
+>>
+>> The refill will thus be done from slabs on the node partial list.
+>> Introduce new functions that can do that in an optimized way as it's
+>> easier than modifying the __kmem_cache_alloc_bulk() call chain.
+>>
+>> Extend struct partial_context so it can return a list of slabs from the
+>> partial list with the sum of free objects in them within the requested
+>> min and max.
+>>
+>> Introduce get_partial_node_bulk() that removes the slabs from freelist
+>> and returns them in the list.
+>>
+>> Introduce get_freelist_nofreeze() which grabs the freelist without
+>> freezing the slab.
+>>
+>> Introduce alloc_from_new_slab() which can allocate multiple objects from
+>> a newly allocated slab where we don't need to synchronize with freeing.
+>> In some aspects it's similar to alloc_single_from_new_slab() but assumes
+>> the cache is a non-debug one so it can avoid some actions.
+>>
+>> Introduce __refill_objects() that uses the functions above to fill an
+>> array of objects. It has to handle the possibility that the slabs will
+>> contain more objects that were requested, due to concurrent freeing of
+>> objects to those slabs. When no more slabs on partial lists are
+>> available, it will allocate new slabs. It is intended to be only used
+>> in context where spinning is allowed, so add a WARN_ON_ONCE check there.
+>>
+>> Finally, switch refill_sheaf() to use __refill_objects(). Sheaves are
+>> only refilled from contexts that allow spinning, or even blocking.
+>>
+> 
+> Some nits, but otherwise LGTM.
+> Reviewed-by: Suren Baghdasaryan <surenb@google.com>
 
+Thanks.
 
->=20
->=20On Tue, Jan 20, 2026 at 04:00 PM +01, Jakub Sitnicki wrote:
->=20
->=20>=20
->=20> On Tue, Jan 13, 2026 at 10:50 AM +08, Jiayuan Chen wrote:
-> >=20
->=20[...]
->=20
->=20>=20
->=20> >=20
->=20> > diff --git a/net/ipv4/udp_bpf.c b/net/ipv4/udp_bpf.c
-> > >  index 0735d820e413..91233e37cd97 100644
-> > >  --- a/net/ipv4/udp_bpf.c
-> > >  +++ b/net/ipv4/udp_bpf.c
-> > >  @@ -5,6 +5,7 @@
-> > >  #include <net/sock.h>
-> > >  #include <net/udp.h>
-> > >  #include <net/inet_common.h>
-> > >  +#include <asm/ioctls.h>
-> > >=20=20
->=20> >  #include "udp_impl.h"
-> > >=20=20
->=20> >  @@ -111,12 +112,26 @@ enum {
-> > >  static DEFINE_SPINLOCK(udpv6_prot_lock);
-> > >  static struct proto udp_bpf_prots[UDP_BPF_NUM_PROTS];
-> > >=20=20
->=20> >  +static int udp_bpf_ioctl(struct sock *sk, int cmd, int *karg)
-> > >  +{
-> > >  + if (cmd !=3D SIOCINQ)
-> > >  + return udp_ioctl(sk, cmd, karg);
-> > >  +
-> > >  + /* Since we don't hold a lock, sk_receive_queue may contain data=
-.
-> > >  + * BPF might only be processing this data at the moment. We only
-> > >  + * care about the data in the ingress_msg here.
-> > >  + */
-> > >=20
->=20>  I think we should strive for a design where FIONREAD does not go d=
-own
-> >  after you add your socket to sockmap, if there was no recvmsg call i=
-n
-> >  between. To show what I mean, I added this test that's currently fai=
-ling
-> >  for udp:
-> >=20
->=20>  ---8<---
-> >  diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c =
-b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-> >  index 1f1289f5a8c2..123c96fcaef0 100644
-> >  --- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-> >  +++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-> >  @@ -1229,6 +1229,66 @@ static void test_sockmap_copied_seq(bool strp=
-)
-> >  test_sockmap_pass_prog__destroy(skel);
-> >  }
-> >=20=20
->=20>  +/* Test FIONREAD when data exists in sk_receive_queue before sock=
-map insertion */
-> >  +static void test_sockmap_fionread_pre_insert(int sotype)
-> >  +{
-> >  + int map, err, sent, recvd, zero =3D 0, avail =3D 0;
-> >  + struct test_sockmap_pass_prog *skel =3D NULL;
-> >  + int c =3D -1, p =3D -1;
-> >  + char buf[10] =3D "0123456789", rcv[11];
-> >  + struct bpf_program *prog;
-> >  +
-> >  + skel =3D test_sockmap_pass_prog__open_and_load();
-> >  + if (!ASSERT_OK_PTR(skel, "open_and_load"))
-> >  + return;
-> >  +
-> >  + prog =3D skel->progs.prog_skb_verdict;
-> >  + map =3D bpf_map__fd(skel->maps.sock_map_rx);
-> >  +
-> >  + err =3D bpf_prog_attach(bpf_program__fd(prog), map, BPF_SK_SKB_STR=
-EAM_VERDICT, 0);
-> >  + if (!ASSERT_OK(err, "bpf_prog_attach verdict"))
-> >  + goto end;
-> >  +
-> >  + err =3D create_pair(AF_INET, sotype, &c, &p);
-> >  + if (!ASSERT_OK(err, "create_pair"))
-> >  + goto end;
-> >  +
-> >  + /* Step 1: Send data BEFORE sockmap insertion - lands in sk_receiv=
-e_queue */
-> >  + sent =3D xsend(p, buf, sizeof(buf), 0);
-> >  + if (!ASSERT_EQ(sent, sizeof(buf), "xsend pre-insert"))
-> >  + goto end;
-> >  +
-> >  + /* Step 2: Verify FIONREAD reports data in sk_receive_queue */
-> >  + err =3D poll_read(c, IO_TIMEOUT_SEC);
-> >  + if (!ASSERT_OK(err, "poll_read pre-insert"))
-> >  + goto end;
-> >  + err =3D ioctl(c, FIONREAD, &avail);
-> >  + ASSERT_OK(err, "ioctl(FIONREAD) pre-insert error");
-> >  + ASSERT_EQ(avail, sizeof(buf), "ioctl(FIONREAD) pre-insert");
-> >  +
-> >  + /* Step 3: Insert socket into sockmap */
-> >  + err =3D bpf_map_update_elem(map, &zero, &c, BPF_ANY);
-> >  + if (!ASSERT_OK(err, "bpf_map_update_elem(c)"))
-> >  + goto end;
-> >  +
-> >  + /* Step 4: FIONREAD should still report the data in sk_receive_que=
-ue */
-> >  + err =3D ioctl(c, FIONREAD, &avail);
-> >  + ASSERT_OK(err, "ioctl(FIONREAD) post-insert error");
-> >  + ASSERT_EQ(avail, sizeof(buf), "ioctl(FIONREAD) post-insert");
-> >  +
-> >  + /* Verify we can still read the data */
-> >  + recvd =3D recv_timeout(c, rcv, sizeof(rcv), MSG_DONTWAIT, IO_TIMEO=
-UT_SEC);
-> >  + ASSERT_EQ(recvd, sizeof(buf), "recv post-insert");
-> >  + ASSERT_OK(memcmp(buf, rcv, recvd), "data mismatch");
-> >  +
-> >  +end:
-> >  + if (c >=3D 0)
-> >  + close(c);
-> >  + if (p >=3D 0)
-> >  + close(p);
-> >  + test_sockmap_pass_prog__destroy(skel);
-> >  +}
-> >  +
-> >  /* it is used to send data to via native stack and BPF redirecting *=
-/
-> >  static void test_sockmap_multi_channels(int sotype)
-> >  {
-> >  @@ -1373,4 +1433,8 @@ void test_sockmap_basic(void)
-> >  test_sockmap_multi_channels(SOCK_STREAM);
-> >  if (test__start_subtest("sockmap udp multi channels"))
-> >  test_sockmap_multi_channels(SOCK_DGRAM);
-> >  + if (test__start_subtest("sockmap tcp fionread pre-insert"))
-> >  + test_sockmap_fionread_pre_insert(SOCK_STREAM);
-> >  + if (test__start_subtest("sockmap udp fionread pre-insert"))
-> >  + test_sockmap_fionread_pre_insert(SOCK_DGRAM);
-> >  }
-> >  --->8---
-> >=20
->=20> >=20
->=20> > + *karg =3D sk_msg_first_len(sk);
-> > >  + return 0;
-> > >  +}
-> > >  +
-> > >
-> >=20
->=20I've been thinking about this some more and came to the conclusion th=
-at
-> this udp_bpf_ioctl implementation is actually what we want, while
-> tcp_bpf_ioctl *should not* be checking if the sk_receive_queue is
-> non-empty.
->=20
->=20Why? Because the verdict prog might redirect or drop the skbs from
-> sk_receive_queue once it actually runs. The messages might never appear
-> on the msg_ingress queue.
->=20
->=20What I think we should be doing, in the end, is kicking the
-> sk_receive_queue processing on bpf_map_update_elem, if there's data
-> ready.
->=20
->=20The API semantics I'm proposing is:
->=20
->=201. ioctl(FIONREAD) -> reports N bytes
-> 2. bpf_map_update_elem(sk) -> socket inserted into sockmap
-> 3. poll() for POLLIN -> wait for socket to be ready to read
-> 5. ioctl(FIONREAD) -> report N bytes if verdict prog didn't
->  redirect or drop it
->=20
->=20We don't have to add the the queue kick on map update in this series.
->=20
->=20If you decide to leave it for later, can I ask that you open an issue=
- at
-> our GH project [1]?
->=20
->=20I don't want it to fall through the cracks. And I sometimes have peop=
-le
-> asking what they could help with in sockmap.
->=20
->=20Thanks,
-> -jkbs
->=20
->=20[1] https://github.com/sockmap-project/sockmap-project/issues
->
+> 
+> From the above code it seems like you are trying to get at least
+> pc->min_objects and as close as possible to the pc->max_objects
+> without exceeding it (with a possibility that we will exceed both
+> min_objects and max_objects in one step). Is that indeed the intent?
+> Because otherwise could could simplify these conditions to stop once
+> you crossed pc->min_objects.
 
+Yeah see my reply to Harry, it's for future tuning.
+ 
+>> +       if (slab->freelist) {
+> 
+> nit: It's a bit subtle that the checks for slab->freelist here and the
+> earlier one for ((slab->objects - slab->inuse) > count) are
+> effectively equivalent. That's because this is a new slab and objects
+> can't be freed into it concurrently. I would feel better if both
+> checks were explicitly the same, like having "bool extra_objs =
+> (slab->objects - slab->inuse) > count;" and use it for both checks.
+> But this is minor, so feel free to ignore.
 
-Hi Jakub,
+OK, doing this for your and Hao Li's comment:
 
-Thanks for taking the time to think through this carefully. I agree with =
-your
-analysis - reporting sk_receive_queue length is misleading since the verd=
-ict
-prog might redirect or drop those skbs.
+diff --git a/mm/slub.c b/mm/slub.c
+index d6fde1d60ae9..015bdef11eb6 100644
+--- a/mm/slub.c
++++ b/mm/slub.c
+@@ -4505,7 +4505,7 @@ static inline void *get_freelist(struct kmem_cache *s, struct slab *slab)
+  * Assumes the slab is isolated from node partial list and not frozen.
+  *
+  * Assumes this is performed only for caches without debugging so we
+- * don't need to worry about adding the slab to the full list
++ * don't need to worry about adding the slab to the full list.
+  */
+ static inline void *get_freelist_nofreeze(struct kmem_cache *s, struct slab *slab)
+ {
+@@ -4569,10 +4569,17 @@ static unsigned int alloc_from_new_slab(struct kmem_cache *s, struct slab *slab,
+ {
+        unsigned int allocated = 0;
+        struct kmem_cache_node *n;
++       bool needs_add_partial;
+        unsigned long flags;
+        void *object;
+ 
+-       if (!allow_spin && (slab->objects - slab->inuse) > count) {
++       /*
++        * Are we going to put the slab on the partial list?
++        * Note slab->inuse is 0 on a new slab.
++        */
++       needs_add_partial = (slab->objects > count);
++
++       if (!allow_spin && needs_add_partial) {
+ 
+                n = get_node(s, slab_nid(slab));
+ 
+@@ -4594,7 +4601,7 @@ static unsigned int alloc_from_new_slab(struct kmem_cache *s, struct slab *slab,
+        }
+        slab->freelist = object;
+ 
+-       if (slab->freelist) {
++       if (needs_add_partial) {
+ 
+                if (allow_spin) {
+                        n = get_node(s, slab_nid(slab));
 
-There's no rush to merge this patch.
-
-Since the kick queue on bpf_map_update_elem addresses a closely related i=
-ssue,
-I think it makes sense to include it in this patchset for easier tracking=
- rather
-than splitting it out.
-
-I'll spend more time looking into this and come back with an updated vers=
-ion.
-
-Thanks,
-Jiayuan
