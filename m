@@ -1,28 +1,27 @@
-Received: from DB3PR0202CU003.outbound.protection.outlook.com (mail-northeuropeazon11010019.outbound.protection.outlook.com [52.101.84.19])
+Received: from AS8PR04CU009.outbound.protection.outlook.com (mail-westeuropeazon11011064.outbound.protection.outlook.com [52.101.70.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A570D49550E;
-	Wed, 21 Jan 2026 14:32:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.84.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F2F9495526;
+	Wed, 21 Jan 2026 14:32:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.70.64
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769005951; cv=fail; b=cq1KeA58+kuNueMK5R9Q9RjetKORegEFxi7GH4CegCTMNjciupDx5EKkjDoHvhbvDTP0eg7Zh1Uq5EmhvzHfLL0Gwo64sZxRq8iCoky3WxNhTzA3ds9074QJIu4ZAyeBeNERRVTVszZPAizJW+5NtxuU5IjNdeJIbMXxtQuAIpc=
+	t=1769005953; cv=fail; b=isQwRsD28jzvreo/VRdF7a7HfoVUxrd9LUTy7uKiGmD2FTIDQT/Xb7BjOKIflRRIRz9fB78hGlwJfTyE8DytJnlxgEAQsvF+kdjtSoOAZht/NZLEKvpouAAv3QkaMMo375MtFFrQp2jwN7eyp/vVD4IDxAUQfVqiu+Lu1IcCVjM=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769005951; c=relaxed/simple;
-	bh=Fd1FaxLYEz6xZ2AGiIP3sdzQ6XTCI7FMlSaiA16alto=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=KDfpbY9UE42mCQivPbQeMT0Z+xqeISHcNv+63dBkcm54BR1FTt3bCAuVDzVtbpVzns0zjmN1qnaQTvhaKdWAR+FHQ4YPPf39vbhmizi/67pMwcof4dEu3nW4cw1HfSHFe/x9j09mqI2ZoGEaFMdQBXhmzMArP4IT/BM19L8jjhY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com; spf=fail smtp.mailfrom=nokia-bell-labs.com; dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b=ZoWMg/gs; arc=fail smtp.client-ip=52.101.84.19
+	s=arc-20240116; t=1769005953; c=relaxed/simple;
+	bh=G3XlyymA6YlGBTnuaxgJ/wBf8pPoh2XMNrL3HrgSqrE=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=F2G4DPRi6qB/OD3Vnp7yuzemPu6il4Jv3YKHlpl6DMCeMkM5AAU6mHn9ZeHnDAMwGmvceafPQVNUKiQTMr1CGEhhgpmluEYuennwcuTw/OfnB0h5oq9nUgUlpkhwjjTH9Z5PEvJ72PXnhRIfLV33E1REuI95cg/ZPLOnp6ggm6k=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com; spf=fail smtp.mailfrom=nokia-bell-labs.com; dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b=N6ZUh5Ry; arc=fail smtp.client-ip=52.101.70.64
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nokia-bell-labs.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b="ZoWMg/gs"
+	dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b="N6ZUh5Ry"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=cCC16va4jozT4CBS3S6cbzFq/mumqkhuZXk5cMUUnHYbx1SlngbPuUrtM5NVlm/oSionG/Fc73ajEBCc0goJhUCcxpXnGnsoKEF20IAnTP6UDEemz5kKWywrcDhHYnB5SFKtXLzgag1ICX+Hzg8ZCpNb8PUB5TiSnFHW2q6NexbRyhU01j7qXbiR9DrP/QQB9sPriBcH0Ru4nfD5tXYa3XQIiJ8wK5k4Rz4/7toc/TJ+P4gP/GhdfeEUsRC+4M3bPtpMIFcDGFb+LE9UBtZhHz/Rw4zDx6peqFJ2bMoAdliErIq3vUN1qlPDyLFw0etGkDmTQXNH61pBCJcDXHxwzA==
+ b=ihR6xaMdHL5cuW98QC5DyKRWbWAYkpxD0F013ZpS9bjPgHAnIY2SLUwwRrs6oOWTlPAlYhVvkjqUAf51SvVNy5WJG419HtVdI8JGsc3nnrkAa2dbflMobDE+5pA6YHNqe/TEOp8RlzJlwVRAa+quRwtJYGLDxOPhEHpDrxoxU8/TCTyb/xIzpQQemFxas6wyB9YnvkRFZ9EjsvwHONS5EjLgm4j5hjNt2tVNNCh3kqdiY1/NpV5k+O6QgNTRiBfn0YW9GQ8WCu1pQNDommaWb2p+tNa1GsoJ6VBCqe4HYxXNngTg8sZQhR8kD00Y92uVbhGPreugC8/Q8Nqn4isKPA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qgF6wgdKGyAN98Mpvcl/dfVxI+c9B559KNGTjPo0tKc=;
- b=b30NKbb/bpTJiT9xjtcpanElu2nVI6k95p5SUfc1JfJPCfvWTxPk/k8PTSzevBgHBtV7D6GeNP4GufX4Rb1LgP6HbOqpNUG+QOnnUgzrTmji1gI/KOhWRlkZOMpbR3MTDVB4h7YnFgVLz7z9KBxwnfGAqeNDNPvtZpsBNDfJZ03FwUntRaDgTHeb+OCKaojEUCdHIY6Hu52//7H9dVSVnDaXTY3O3M7lmLW/ly1I+lTtJrWPYZCc6RCf9nBkYKQyjrBz5qcvjgzjGJpzNpiDpiBuiG4Wyk87Kh5BVBv6EtyM7T8NZwZmbCDP86IvY8wFjZXOUqEGpjplawKU69wrJw==
+ bh=+DBz3WupAwt/67RfLO0B4NTY/CH6SU3dGDx91bz8BLU=;
+ b=JeOCbIl6XP82bc7Y5I1Fl8zQAt1VeUEZadRY+NOWtQZLUXEYz54em6gxilkb7CNF7YTcmbXAHWFy/4uKILy2/rmwj/EmJNBSdVnnrJt5U0TNVrBuaOSLWOhkYQKcjeTOSGMK73q84t+FoaERSOwx/hbHjNOyMIIZ8Gy/cReN+vJjNcFb+sgBkZTsuKFmOWQvNkNfgAEfHXUbj/2fICtMEpEqZs/VClc2oMOg0CbjhkDLp3ul3ZkecsnnbPWyc/yvkYOmN2NOy/eLnqwbv7tv4oThbm45AR0gFfm2U87gLMZG0Pz6vrwNfDNw9FyeEyZAIX+jzVNNVJkF4tvqjKgneA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  131.228.2.241) smtp.rcpttodomain=apple.com smtp.mailfrom=nokia-bell-labs.com;
  dmarc=pass (p=reject sp=reject pct=100) action=none
@@ -30,18 +29,18 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia-bell-labs.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qgF6wgdKGyAN98Mpvcl/dfVxI+c9B559KNGTjPo0tKc=;
- b=ZoWMg/gsiLZ+D3GwRv6Zgzfa/kSXlOEGxCrHCDhJyJi5QcwHmKF6LZo9oH6r+lCmxGXYFatPZU+UEL1mjbssjwOxRb/Xa7Au79ruuHYn+XOL2WmQD5agUuwlu+ezGVgCeCUwh+soIq5bBITWLuidCFB6FXombcJMr0m/LYiaCoQaj0EY29pToD73DlfhzmxqZetINygNS/0rEkVPVddN/sC2YZCbzfaPi3I/320ulpsn6ti1Q6hsIGoov6DzgDpKsMZEnGioVpDUs+m29/E9xZvvnmvnhXpU33iLcFQtoTUb1lOAP1BrthMtMz6Vg3JLlIAEL1ZMExDNJqKKFuQIog==
-Received: from DU7PR01CA0016.eurprd01.prod.exchangelabs.com
- (2603:10a6:10:50f::11) by AS5PR07MB9769.eurprd07.prod.outlook.com
- (2603:10a6:20b:679::20) with Microsoft SMTP Server (version=TLS1_2,
+ bh=+DBz3WupAwt/67RfLO0B4NTY/CH6SU3dGDx91bz8BLU=;
+ b=N6ZUh5RyUdpf6VL/tG6bR+xUwH+9yfq9Mq8ydOqjSD2Yggbj/YcgQ9S/PLFSRZnHdbmrFJR6koN+IirFcd05LW+ZnT22rHle0qCjPSy4jt8Y9yac02Vd7VQAdg7TRy52XXz9nYw28vofpJiNHUqeVhPWw3MtYkS08/yzDNo/aGZQSh+6YIQ3rScO+d+WHai0RuDrlhYbX6VH/R2BRtPx3waewFXiMChz64vuzQlDh3zfeJj8KEKaXI4kni61VCLdBLSAw92GK/VqFwEKSRS/R2Q5ZL48v3OMsTXhIF9IvxwRuavhEwHowS85C7xcqToiHdbLM3oEB9re2JyWuz2hvA==
+Received: from DU2PR04CA0290.eurprd04.prod.outlook.com (2603:10a6:10:28c::25)
+ by DB9PR07MB9174.eurprd07.prod.outlook.com (2603:10a6:10:3d6::18) with
+ Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9542.9; Wed, 21 Jan
- 2026 14:32:25 +0000
-Received: from DB1PEPF000509E6.eurprd03.prod.outlook.com
- (2603:10a6:10:50f:cafe::c9) by DU7PR01CA0016.outlook.office365.com
- (2603:10a6:10:50f::11) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9542.10 via Frontend Transport; Wed,
- 21 Jan 2026 14:32:28 +0000
+ 2026 14:32:18 +0000
+Received: from DU6PEPF0000A7E3.eurprd02.prod.outlook.com
+ (2603:10a6:10:28c:cafe::58) by DU2PR04CA0290.outlook.office365.com
+ (2603:10a6:10:28c::25) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9542.8 via Frontend Transport; Wed,
+ 21 Jan 2026 14:32:10 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 131.228.2.241)
  smtp.mailfrom=nokia-bell-labs.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nokia-bell-labs.com;
@@ -50,12 +49,12 @@ Received-SPF: Pass (protection.outlook.com: domain of nokia-bell-labs.com
  receiver=protection.outlook.com; client-ip=131.228.2.241;
  helo=fihe3nok0734.emea.nsn-net.net; pr=C
 Received: from fihe3nok0734.emea.nsn-net.net (131.228.2.241) by
- DB1PEPF000509E6.mail.protection.outlook.com (10.167.242.56) with Microsoft
- SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.9542.4
- via Frontend Transport; Wed, 21 Jan 2026 14:32:24 +0000
+ DU6PEPF0000A7E3.mail.protection.outlook.com (10.167.8.41) with Microsoft SMTP
+ Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.9542.4 via
+ Frontend Transport; Wed, 21 Jan 2026 14:32:18 +0000
 Received: from sarah.nbl.nsn-rdnet.net (sarah.nbl.nsn-rdnet.net [10.0.73.150])
-	by fihe3nok0734.emea.nsn-net.net (Postfix) with ESMTP id BEE002051C;
-	Wed, 21 Jan 2026 16:32:22 +0200 (EET)
+	by fihe3nok0734.emea.nsn-net.net (Postfix) with ESMTP id 61DD62034A;
+	Wed, 21 Jan 2026 16:32:16 +0200 (EET)
 From: chia-yu.chang@nokia-bell-labs.com
 To: pabeni@redhat.com,
 	edumazet@google.com,
@@ -91,12 +90,10 @@ To: pabeni@redhat.com,
 	Jason_Livingood@comcast.com,
 	vidhi_goel@apple.com
 Cc: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
-Subject: [PATCH v10 net-next 02/15] gro: flushing when CWR is set negatively affects AccECN
-Date: Wed, 21 Jan 2026 15:32:02 +0100
-Message-Id: <20260121143215.14717-3-chia-yu.chang@nokia-bell-labs.com>
+Subject: [PATCH v10 net-next 00/15] AccECN protocol case handling series
+Date: Wed, 21 Jan 2026 15:32:00 +0100
+Message-Id: <20260121143215.14717-1-chia-yu.chang@nokia-bell-labs.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260121143215.14717-1-chia-yu.chang@nokia-bell-labs.com>
-References: <20260121143215.14717-1-chia-yu.chang@nokia-bell-labs.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -107,96 +104,286 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DB1PEPF000509E6:EE_|AS5PR07MB9769:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4e918d26-f8bd-4513-09de-08de58f9e4f5
+X-MS-TrafficTypeDiagnostic: DU6PEPF0000A7E3:EE_|DB9PR07MB9174:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6300dd14-674a-4ca1-4b58-08de58f9e130
 X-LD-Processed: 5d471751-9675-428d-917b-70f44f9630b0,ExtAddr
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
- BCL:0;ARA:13230040|36860700013|7416014|376014|82310400026|1800799024|921020;
+ BCL:0;ARA:13230040|36860700013|1800799024|82310400026|7416014|376014|921020|18082099003;
 X-Microsoft-Antispam-Message-Info:
- =?utf-8?B?MWs5aUhEWlRGSnZScTI4Mkx6Mzlwd0xGbnF6NFFDei9uaklYV3BtUW50SHJZ?=
- =?utf-8?B?K0RBUGJMbzl2SzZsQmhBQlFyYW5Jajg4ZzRIUkJ0Z01vdlVnOVQrSmxXVUR0?=
- =?utf-8?B?RzZITjk1dU4vaEx2QUF6R2lCbzMrTnhMMGlvQlZLVXNDRVMreXRKTUtDckdX?=
- =?utf-8?B?STl2eXQ4Y0NlRmVaL2Ixd3lFMDdOS3h4Zm1xQ0Y2bnRUYWVudXFzbmd2c283?=
- =?utf-8?B?eUVpQjY3K2xjVUZ0QkhVdEwvTHJ2Vm83eVNzNk5GWkFoVUFqb0dhejJENStu?=
- =?utf-8?B?VWFpb1hQZVgzKytHMWF6SzZrQ0l4Qmo4TktPeStNR2Z4TWxiVXJNbmwzaUd3?=
- =?utf-8?B?NzRiY2liOElkaFREcmdDWS9pUm9peE1zb0VDay9HZzlkVTVJYncvZmtHNEEv?=
- =?utf-8?B?ZGo5WHpTYmNncDlCQ0V1UEc4MlE1THpjTXdveGcybnFGM05Kck5kMUFIQmZB?=
- =?utf-8?B?YnUwRkdUNUdtTGIzR0N2YUZ5cGFTYXFoRytWVE41TjVOWW5nNzVUakRoKzRM?=
- =?utf-8?B?QlZ1MmhjdnNYV0dIazErWjIxTVZ5NXdyckw4K2VJTjhFS2N6YTJEL1JxeWZ6?=
- =?utf-8?B?L2UwbXhyYkljWXo3Nk9zb2lSS0VUcGVZYUFkeEgwcmk3eXZ4TVBTajZXSFhj?=
- =?utf-8?B?UkRCNWE1SG5XZDg1eGRPS3huZzFBRDJvbVNoeWRtVWdlbS9LN1dqdjZ3OHRR?=
- =?utf-8?B?M3ZrdjM0QTc0M1pkaGRlQmtEUzduaVgzVGZmczFsR0ZWalI5eitpT0c0Nyt3?=
- =?utf-8?B?MU1wNWR5SC9lUkUzY0JtT3pJeGdmcWY3emVtdEJkWmR4U3BlRUtxVm1Dc1Jj?=
- =?utf-8?B?eWFiWkE1blAyWmtzZVNLRlNmT0N4U2M3cVFJNXUranRra1JJTm9IQ3VxVkxZ?=
- =?utf-8?B?SVhGZkdvNXgzRkN5Z1hGczBUUDdEWWQzZGcyU3dGS04zVnJRTHRuZWszdVNq?=
- =?utf-8?B?WXdtUXNETTV5TGV2NEpMUG1PRGh4TzEvbTkybnRWellKS1lhWUZqN1gvYURv?=
- =?utf-8?B?TFFJZklvamZCMnE2L3RLT3lpelNySlBuNStML1NKNXZmaTVONnRLVmNoQklx?=
- =?utf-8?B?UG85MnVjVFNsbURMUTc1eFYwaHdGcURzalJONFFUdHBsUWtUcWZhdnJ3cDIw?=
- =?utf-8?B?YS9YOCtYV3lnOUdoeFZOOHhPTDVMODU1SDVadk11Nyt3Zi9UZ3E2V1VkZWtC?=
- =?utf-8?B?ZytCV1l5ek1SN3E3cXkvU2RidkFNZ3JTRlkxbVJBUjU5NUprWHM2TzF1Rld3?=
- =?utf-8?B?WjFkUVJDV2hsRjNYS3FuSGE0bHEzWEFUQlJyT0JBMXV3d3YvQ2dQV2RzT1A4?=
- =?utf-8?B?NThSRHpSdEs1SjhaMDNyQVo5V2pEaVpmWWw4RUMvU3dheHN3ZVdwbGQ2eGZs?=
- =?utf-8?B?Zm41MGdCWnJwL2d3Qkk1aEd6RUh3K21zbGRFckhpM05mRnRmNCtGNFZPTG1w?=
- =?utf-8?B?bS83YVdhdEs2bW9rUkVOTnNNbzJGdlA2ZDB1cmc0SlFnUzJ0NldwaVdzbjhW?=
- =?utf-8?B?Q0RVeXBJTkx5NHBSRTJ6MlltRU93T0pFV0UwcmVQeVk1WGdQREMwWkh4Wjky?=
- =?utf-8?B?amRNdWJKM3lqNlJXWnJKWDBlVTZrQytDOG5sd1dScTlQM3lkQVU4S2o1Zmt3?=
- =?utf-8?B?VnRoZTd6eHVTeXBTa1hlejMyQnNNOGNQZi9QKzgwUlBTTnNnWDNMOU95eGxN?=
- =?utf-8?B?bWIzeUJTam84Y2ppbUJEQTVEdExFZWRJWisvL3NoNmFCYjFMdTQ0YnQ4M2J6?=
- =?utf-8?B?NmxDR3lhcHV3dWt1K2VhUHBFTVdFWEFKU1pvMGZTYWp5a2c0QU5DWTZKWkVO?=
- =?utf-8?B?Z2NKS3ZsV3g2M3lHNzN2UlF6Nm1LSnJFY213MjM2MWxrN255SXM5N2Y0VkNt?=
- =?utf-8?B?OU0vMlFBZUNGdXZEcnMwcWx4VDZXNkFpMUkrTWI0K1NpamExOTRNdDF0eUlC?=
- =?utf-8?B?NFlsU0ZJRWpkaFppMW9WUHNkYzBKRUdKQVhmZjBkZW9ENWtJYWlVMlU3aVFt?=
- =?utf-8?B?VCtIek5qSW8weHVTQzlhZnlNNFVhTFBjNGcvK2xGdzFROFdVRFJoWXJPd1N5?=
- =?utf-8?B?R3BRdUlMRDBpcHRIZkdIS0RHcVk0V1ZPT2pGVjMzeHVXTDdSMXhWQ1liUzl6?=
- =?utf-8?B?WTVpUXpaWlVlRW00cUMzdEVXak5iZCtwUTk4ak8zbVRmNDBuNit1RENUaitW?=
- =?utf-8?B?RVZEVGdrZjlCRjgvaXlieXRlQ25neDR6S0dMbzk5Q09MTlVWemw0VEcxRlps?=
- =?utf-8?Q?doQmNkjUd7Yqo4p4IS0V9niyVvjiLDI+5zPEFUDVqY=3D?=
+ =?utf-8?B?akhHYW4vV216bzVGdFdJVlR4ckR2RXVGd1dVWm5QdXFSMXd1NzRQdU11TFFp?=
+ =?utf-8?B?V3B3ZEE0c1NyUllQMHNFWGFySldDeW92NDBpaEY3ckFMcHk5bnQvTjY2M0RB?=
+ =?utf-8?B?TndQeEdlQXoxZlp4YWZ4YklweEZ6b1JKQVlURDhCbnhDQ1RwYVBuZk5nWFVP?=
+ =?utf-8?B?dG94Tno1Z2NLelJJcVo4SUh6ZDg1amovYllwRElXUzB6L1B3RDYvendLWWRN?=
+ =?utf-8?B?VWkzaFFtdjNFNTFTNEhDeDhQdDZQMUs5NHJQQ1Y0a0dPUmtEQ1BmMm1oamJj?=
+ =?utf-8?B?THY5Y3lvQ0M2WjFGTURsdVJSdVFkK05EaDhGWjdHT1FDeE1NOFlRSHZVbDZ1?=
+ =?utf-8?B?UTRsVnRGSmErb3NpdlI4L3QvR2FReE9OaVJBUDU4bEZSdStSOVhRcXg3a1pV?=
+ =?utf-8?B?NEo2YWdodTJyOUY2L0xoRlpROWd0ZnJLbC9BL3RBZkVKVmpJQ24xQmFLcEhp?=
+ =?utf-8?B?OVd3eG9PNkh3UUxRRm9GV2NVek1oQVo3dkpJRGtnVXEySjdLeEZTeHJ4L25S?=
+ =?utf-8?B?VkJWVnMxS01kTWpsNUx2ZUdmejRkdExRcUNCYmJIL0hBWUVTTDgzZ0dkK0Fu?=
+ =?utf-8?B?S3hSUWxwMUVWMW5jcUZvUldjYU1nVURTbHVWdUY5bE81U0syamZobDdkUksy?=
+ =?utf-8?B?RlBPOUkrZS9WajFYbEplbkRIYmRHQTJReG5LQzJya1M0cVdmdCtlZ2NXODYr?=
+ =?utf-8?B?NWlmODVwcEt0aEZ2Y0Q3dk8zK3BlSGI4SzVwTk5vdXM2L2xiakx1Q21RT1g0?=
+ =?utf-8?B?dVJFZkxzOS82S2grT0Fuam9UeGtuWDVzcCtLM2JxYkoxcVl3YU9nZ1VSbEVl?=
+ =?utf-8?B?ZWo5bUxsMzh2Vi8vcEV6YlA1VTMwdy9FSGxrbnE4T0RmdFdhenZ6dDZyNWxG?=
+ =?utf-8?B?NTFEV1krZ0xzLzVhVWpvS094bXZIVUtmM1RJeWEwOWl3WmIzdWtuOUV3Z1Mx?=
+ =?utf-8?B?dkRuRWJXTlZuRVp3dXk0ZklUeHZJUGZ5b2UwOGdnMGFCMDdBdmErTUVpN3I3?=
+ =?utf-8?B?eDlNZ0d1eFdqaDNDenBWbzdiWHgreVdMazRvaW83K0RzZzlGK2ZkSmFRMUxG?=
+ =?utf-8?B?YThPTDJqL210cWpRdDhsOFd4Y1BBNStzUVI1WXNBODJTNDJkeW9udmQxOE1y?=
+ =?utf-8?B?Umt1T014TnU1dHhVdll5cmdhS3lhTzVrTzMvOFZmWGVKQUJ3blhHTU5uQjhs?=
+ =?utf-8?B?VTIvQ1BWRUVZSXB0c2dSZ2RYZzYrSTlLMEVvUFpOQk5zNUpuZjJTazBwdENl?=
+ =?utf-8?B?ZmZPQ0IwS0s2aU1VQ3BEY3VHamZNaHBlT3FKRzZ3UU1TR0REeWo2Zit1Q3NF?=
+ =?utf-8?B?L25IZTBPeWM5T2RqdUdJclpiaVlNeUk2VDVvQ3JhWjJodzdqckVzQktpMVVS?=
+ =?utf-8?B?VlFGYnBYcXN2OW5VRmxxQTRIVy9XYTgvOXZ4L1haZHJDRWNkd0E5aGVXQWJx?=
+ =?utf-8?B?TVpXcFQ3TU1UT1h6aVlzYlArcE5uQXRxK1JjYlZNZm5zMUNITHNhTG1wQ3Qz?=
+ =?utf-8?B?aVFZVDYwR3d2Y2FEUkxXUXJ5bU1FbzJtbHFXVE9CWExIZHNCaVgwcTMzNkRK?=
+ =?utf-8?B?Y3ErZmZlM21qRjNKNkRMTmlFbE8xUTRBOFBQUjVhY0FGSUlpRTJNV2ZNRzFE?=
+ =?utf-8?B?UFR4d0hDZ1kveDRkdldUR2lqYm84QVFGRE1VQWdiVVEzWVJsRWI1RmRncDN4?=
+ =?utf-8?B?M3F6YUh0bXo2VUJ6YllzblFVOUxSL2RHdUJHZVlITXFDQ0daOXdqcG1QT042?=
+ =?utf-8?B?RmIyaWhwVXBBSUxXd3hqT0tTaVhBTUJyRHhETWJjTFRDYmRMRHRORlA3Vncv?=
+ =?utf-8?B?RkZjNXhSNFJqZ2ZQNDF4anNKMWZtOFdpUGVWRXhzVWdKWXFXSDh6cGhpWHdQ?=
+ =?utf-8?B?aDducjNOa1BPK1VSS1NqS0V1TnJGdzhjYUtCclRndENFQ2ltY3VqSTBaSkw1?=
+ =?utf-8?B?dXFPSDljcVRSUG5ISmMvb05meEFrYUU0ZWJCcGRjbjdwNHNsVHAyQ1lod2RD?=
+ =?utf-8?B?a3FQVlpaNTE4b2xvY0xjd3c5Skp6QVd6Z2NIaHdsNU93T3JGdUNxQzJFRExy?=
+ =?utf-8?B?SjhRZitrdTViYVBVeEIxQmw2RG54SnAzZ2JCSFRZN0JTcWQwMytkQmlXNnFk?=
+ =?utf-8?B?QkZXRHpMOUxHRExJbU1QMDkwb1NmakxLc0NGREl0dG85emtuQkpLcDdhTlRB?=
+ =?utf-8?B?di8xRjh2c3VSRGZ4NldqZGR4S29kaEJIOVlpaUNVc0l1RE9aTXdibklyWnAz?=
+ =?utf-8?Q?KtOf6FOm0+UThiYFx1tqo2NkWCuMZtz7rdPRFpVWkg=3D?=
 X-Forefront-Antispam-Report:
- CIP:131.228.2.241;CTRY:FI;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:fihe3nok0734.emea.nsn-net.net;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(7416014)(376014)(82310400026)(1800799024)(921020);DIR:OUT;SFP:1101;
+ CIP:131.228.2.241;CTRY:FI;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:fihe3nok0734.emea.nsn-net.net;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(1800799024)(82310400026)(7416014)(376014)(921020)(18082099003);DIR:OUT;SFP:1101;
 X-OriginatorOrg: nokia-bell-labs.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jan 2026 14:32:24.3727
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jan 2026 14:32:18.0148
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4e918d26-f8bd-4513-09de-08de58f9e4f5
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6300dd14-674a-4ca1-4b58-08de58f9e130
 X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=5d471751-9675-428d-917b-70f44f9630b0;Ip=[131.228.2.241];Helo=[fihe3nok0734.emea.nsn-net.net]
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TreatMessagesAsInternal-DB1PEPF000509E6.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: TreatMessagesAsInternal-DU6PEPF0000A7E3.eurprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS5PR07MB9769
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR07MB9174
 
-From: Ilpo Järvinen <ij@kernel.org>
+From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
 
-As AccECN may keep CWR bit asserted due to different
-interpretation of the bit, flushing with GRO because of
-CWR may effectively disable GRO until AccECN counter
-field changes such that CWR-bit becomes 0.
+Hello,
 
-There is no harm done from not immediately forwarding the
-CWR'ed segment with RFC3168 ECN.
+Plesae find the v10 AccECN case handling patch series, which covers
+several excpetional case handling of Accurate ECN spec (RFC9768),
+adds new identifiers to be used by CC modules, adds ecn_delta into
+rate_sample, and keeps the ACE counter for computation, etc.
 
-Signed-off-by: Ilpo Järvinen <ij@kernel.org>
-Signed-off-by: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
-Reviewed-by: Eric Dumazet <edumazet@google.com>
+This patch series is part of the full AccECN patch series, which is at
+https://github.com/L4STeam/linux-net-next/commits/upstream_l4steam/
+
+Best regards,
+Chia-Yu
+
 ---
- net/ipv4/tcp_offload.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+v10:
+- Update commit message in #4, #6, #7 (Eric Dumazet <edumazet@google.com>)
+- Set AccECN error flag on request itself via tcp_rsk() to avoid directly chaning on listener (Eric Dumazet <edumazet@google.com>)
+- Mover new tcp_info fields at the end of struct (Eric Dumazet <edumazet@google.com>)
+- Update timing in tcp_accecn_client_accecn_options_lost.pkt (Jakub Kicinski <kuba@kernel.org>, Neal Cardwell <ncardwell@google.com>)
 
-diff --git a/net/ipv4/tcp_offload.c b/net/ipv4/tcp_offload.c
-index fdda18b1abda..9bd710c7bc95 100644
---- a/net/ipv4/tcp_offload.c
-+++ b/net/ipv4/tcp_offload.c
-@@ -303,8 +303,7 @@ struct sk_buff *tcp_gro_receive(struct list_head *head, struct sk_buff *skb,
- 		goto out_check_final;
- 
- 	th2 = tcp_hdr(p);
--	flush = (__force int)(flags & TCP_FLAG_CWR);
--	flush |= (__force int)((flags ^ tcp_flag_word(th2)) &
-+	flush = (__force int)((flags ^ tcp_flag_word(th2)) &
- 		  ~(TCP_FLAG_FIN | TCP_FLAG_PSH));
- 	flush |= (__force int)(th->ack_seq ^ th2->ack_seq);
- 	for (i = sizeof(*th); i < thlen; i += 4)
+v9:
+- Add 1 patch for 2-bit tcpi_ecn_mode and 24-bit tcpi_options by reducing bits used by tcpi_accecn_fail_mode and tcpi_accecn_opt_seen in tcp_info (Neal Cardwell <ncardwell@google.com>)
+- Add missing comma in patch #3 (Jakub Kicinski <kuba@kernel.org>)
+- Update patch message of patch #15
+
+v8:
+- Add apcketdrill patch #14 into this series (Paolo Abeni <pabeni@redhat.com> & Jakub Kicinski <kuba@kernel.org>)
+- Add helper function in patch #10 (Paolo Abeni <pabeni@redhat.com>)
+
+v7:
+- Update comments in #3 (Paolo Abeni <pabeni@redhat.com>)
+- Update comments and use synack_type TCP_SYNACK_RETRANS and num_timeout in #9. (Paolo Abeni <pabeni@redhat.com>)
+
+v6:
+- Update comment in #3 to highlight RX path is only used for virtio-net (Paolo Abeni <pabeni@redhat.com>)
+- Rename TCP_CONG_WANTS_ECT_1 to TCP_CONG_ECT_1_NEGOTIATION to distiguish from TCP_CONG_ECT_1_ESTABLISH (Paolo Abeni <pabeni@redhat.com>)
+- Move TCP_CONG_ECT_1_ESTABLISH in #6 to latter patch series (Paolo Abeni <pabeni@redhat.com>)
+- Add new synack_type instead of moving the increment of num_retran in #9 (Paolo Abeni <pabeni@redhat.com>)
+- Use new synack_type TCP_SYNACK_RETRANS and num_retrans for SYN/ACK retx fallbackk for AccECN in #10 (Paolo Abeni <pabeni@redhat.com>)
+- Do not cast const struct into non-const in #11, and set AccECN fail mode after tcp_rtx_synack() (Paolo Abeni <pabeni@redhat.com>)
+
+v5:
+- Move previous #11 in v4 in latter patch after discussion with RFC author.
+- Add #3 to update the comments for SKB_GSO_TCP_ECN and SKB_GSO_TCP_ACCECN. (Parav Pandit <parav@nvidia.com>)
+- Add gro self-test for TCP CWR flag in #4. (Eric Dumazet <edumazet@google.com>)
+- Add fixes: tag into #7 (Paolo Abeni <pabeni@redhat.com>)
+- Update commit message of #8 and if condition check (Paolo Abeni <pabeni@redhat.com>)
+- Add empty line between variable declarations and code in #13 (Paolo Abeni <pabeni@redhat.com>)
+
+v4:
+- Add previous #13 in v2 back after dicussion with the RFC author.
+- Add TCP_ACCECN_OPTION_PERSIST to tcp_ecn_option sysctl to ignore AccECN fallback policy on sending AccECN option.
+
+v3:
+- Add additional min() check if pkts_acked_ewma is not initialized in #1. (Paolo Abeni <pabeni@redhat.com>)
+- Change TCP_CONG_WANTS_ECT_1 into individual flag add helper function INET_ECN_xmit_wants_ect_1() in #3. (Paolo Abeni <pabeni@redhat.com>)
+- Add empty line between variable declarations and code in #4. (Paolo Abeni <pabeni@redhat.com>)
+- Update commit message to fix old AccECN commits in #5. (Paolo Abeni <pabeni@redhat.com>)
+- Remove unnecessary brackets in #10. (Paolo Abeni <pabeni@redhat.com>)
+- Move patch #3 in v2 to a later Prague patch serise and remove patch #13 in v2. (Paolo Abeni <pabeni@redhat.com>)
+
+---
+Chia-Yu Chang (13):
+  selftests/net: gro: add self-test for TCP CWR flag
+  tcp: ECT_1_NEGOTIATION and NEEDS_ACCECN identifiers
+  tcp: disable RFC3168 fallback identifier for CC modules
+  tcp: accecn: handle unexpected AccECN negotiation feedback
+  tcp: accecn: retransmit downgraded SYN in AccECN negotiation
+  tcp: add TCP_SYNACK_RETRANS synack_type
+  tcp: accecn: retransmit SYN/ACK without AccECN option or non-AccECN
+    SYN/ACK
+  tcp: accecn: unset ECT if receive or send ACE=0 in AccECN negotiaion
+  tcp: accecn: fallback outgoing half link to non-AccECN
+  tcp: accecn: detect loss ACK w/ AccECN option and add
+    TCP_ACCECN_OPTION_PERSIST
+  tcp: accecn: add tcpi_ecn_mode and tcpi_option2 in tcp_info
+  tcp: accecn: enable AccECN
+  selftests/net: packetdrill: add TCP Accurate ECN cases
+
+Ilpo Järvinen (2):
+  tcp: try to avoid safer when ACKs are thinned
+  gro: flushing when CWR is set negatively affects AccECN
+
+ Documentation/networking/ip-sysctl.rst        |   4 +-
+ .../networking/net_cachelines/tcp_sock.rst    |   1 +
+ include/linux/tcp.h                           |   4 +-
+ include/net/inet_ecn.h                        |  20 +++-
+ include/net/tcp.h                             |  32 +++++-
+ include/net/tcp_ecn.h                         | 108 ++++++++++++------
+ include/uapi/linux/tcp.h                      |  26 ++++-
+ net/ipv4/inet_connection_sock.c               |   3 +
+ net/ipv4/sysctl_net_ipv4.c                    |   4 +-
+ net/ipv4/tcp.c                                |  10 ++
+ net/ipv4/tcp_cong.c                           |   5 +-
+ net/ipv4/tcp_input.c                          |  37 +++++-
+ net/ipv4/tcp_minisocks.c                      |  45 +++++---
+ net/ipv4/tcp_offload.c                        |   3 +-
+ net/ipv4/tcp_output.c                         |  32 ++++--
+ net/ipv4/tcp_timer.c                          |   2 +
+ tools/testing/selftests/drivers/net/gro.c     |  81 +++++++++----
+ tools/testing/selftests/drivers/net/gro.py    |   3 +-
+ .../tcp_accecn_2nd_data_as_first.pkt          |  24 ++++
+ .../tcp_accecn_2nd_data_as_first_connect.pkt  |  30 +++++
+ .../tcp_accecn_3rd_ack_after_synack_rxmt.pkt  |  19 +++
+ ..._accecn_3rd_ack_ce_updates_received_ce.pkt |  18 +++
+ .../tcp_accecn_3rd_ack_lost_data_ce.pkt       |  22 ++++
+ .../net/packetdrill/tcp_accecn_3rd_dups.pkt   |  26 +++++
+ .../tcp_accecn_acc_ecn_disabled.pkt           |  14 +++
+ .../tcp_accecn_accecn_then_notecn_syn.pkt     |  28 +++++
+ .../tcp_accecn_accecn_to_rfc3168.pkt          |  18 +++
+ .../tcp_accecn_client_accecn_options_drop.pkt |  34 ++++++
+ .../tcp_accecn_client_accecn_options_lost.pkt |  38 ++++++
+ .../tcp_accecn_clientside_disabled.pkt        |  12 ++
+ ...cecn_close_local_close_then_remote_fin.pkt |  25 ++++
+ .../tcp_accecn_delivered_2ndlargeack.pkt      |  25 ++++
+ ..._accecn_delivered_falseoverflow_detect.pkt |  31 +++++
+ .../tcp_accecn_delivered_largeack.pkt         |  24 ++++
+ .../tcp_accecn_delivered_largeack2.pkt        |  25 ++++
+ .../tcp_accecn_delivered_maxack.pkt           |  25 ++++
+ .../tcp_accecn_delivered_updates.pkt          |  70 ++++++++++++
+ .../net/packetdrill/tcp_accecn_ecn3.pkt       |  12 ++
+ .../tcp_accecn_ecn_field_updates_opt.pkt      |  35 ++++++
+ .../packetdrill/tcp_accecn_ipflags_drop.pkt   |  14 +++
+ .../tcp_accecn_listen_opt_drop.pkt            |  16 +++
+ .../tcp_accecn_multiple_syn_ack_drop.pkt      |  28 +++++
+ .../tcp_accecn_multiple_syn_drop.pkt          |  18 +++
+ .../tcp_accecn_negotiation_bleach.pkt         |  23 ++++
+ .../tcp_accecn_negotiation_connect.pkt        |  23 ++++
+ .../tcp_accecn_negotiation_listen.pkt         |  26 +++++
+ .../tcp_accecn_negotiation_noopt_connect.pkt  |  23 ++++
+ .../tcp_accecn_negotiation_optenable.pkt      |  23 ++++
+ .../tcp_accecn_no_ecn_after_accecn.pkt        |  20 ++++
+ .../net/packetdrill/tcp_accecn_noopt.pkt      |  27 +++++
+ .../net/packetdrill/tcp_accecn_noprogress.pkt |  27 +++++
+ .../tcp_accecn_notecn_then_accecn_syn.pkt     |  28 +++++
+ .../tcp_accecn_rfc3168_to_fallback.pkt        |  18 +++
+ .../tcp_accecn_rfc3168_to_rfc3168.pkt         |  18 +++
+ .../tcp_accecn_sack_space_grab.pkt            |  28 +++++
+ .../tcp_accecn_sack_space_grab_with_ts.pkt    |  39 +++++++
+ ...tcp_accecn_serverside_accecn_disabled1.pkt |  20 ++++
+ ...tcp_accecn_serverside_accecn_disabled2.pkt |  20 ++++
+ .../tcp_accecn_serverside_broken.pkt          |  19 +++
+ .../tcp_accecn_serverside_ecn_disabled.pkt    |  19 +++
+ .../tcp_accecn_serverside_only.pkt            |  18 +++
+ ...n_syn_ace_flags_acked_after_retransmit.pkt |  18 +++
+ .../tcp_accecn_syn_ace_flags_drop.pkt         |  16 +++
+ ...n_ack_ace_flags_acked_after_retransmit.pkt |  27 +++++
+ .../tcp_accecn_syn_ack_ace_flags_drop.pkt     |  27 +++++
+ .../net/packetdrill/tcp_accecn_syn_ce.pkt     |  13 +++
+ .../net/packetdrill/tcp_accecn_syn_ect0.pkt   |  13 +++
+ .../net/packetdrill/tcp_accecn_syn_ect1.pkt   |  13 +++
+ .../net/packetdrill/tcp_accecn_synack_ce.pkt  |  28 +++++
+ ..._accecn_synack_ce_updates_delivered_ce.pkt |  22 ++++
+ .../packetdrill/tcp_accecn_synack_ect0.pkt    |  24 ++++
+ .../packetdrill/tcp_accecn_synack_ect1.pkt    |  24 ++++
+ .../packetdrill/tcp_accecn_synack_rexmit.pkt  |  15 +++
+ .../packetdrill/tcp_accecn_synack_rxmt.pkt    |  25 ++++
+ .../packetdrill/tcp_accecn_tsnoprogress.pkt   |  26 +++++
+ .../net/packetdrill/tcp_accecn_tsprogress.pkt |  25 ++++
+ 76 files changed, 1686 insertions(+), 100 deletions(-)
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_2nd_data_as_first.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_2nd_data_as_first_connect.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_3rd_ack_after_synack_rxmt.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_3rd_ack_ce_updates_received_ce.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_3rd_ack_lost_data_ce.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_3rd_dups.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_acc_ecn_disabled.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_accecn_then_notecn_syn.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_accecn_to_rfc3168.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_client_accecn_options_drop.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_client_accecn_options_lost.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_clientside_disabled.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_close_local_close_then_remote_fin.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_delivered_2ndlargeack.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_delivered_falseoverflow_detect.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_delivered_largeack.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_delivered_largeack2.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_delivered_maxack.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_delivered_updates.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_ecn3.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_ecn_field_updates_opt.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_ipflags_drop.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_listen_opt_drop.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_multiple_syn_ack_drop.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_multiple_syn_drop.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_negotiation_bleach.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_negotiation_connect.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_negotiation_listen.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_negotiation_noopt_connect.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_negotiation_optenable.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_no_ecn_after_accecn.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_noopt.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_noprogress.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_notecn_then_accecn_syn.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_rfc3168_to_fallback.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_rfc3168_to_rfc3168.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_sack_space_grab.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_sack_space_grab_with_ts.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_serverside_accecn_disabled1.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_serverside_accecn_disabled2.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_serverside_broken.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_serverside_ecn_disabled.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_serverside_only.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_syn_ace_flags_acked_after_retransmit.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_syn_ace_flags_drop.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_syn_ack_ace_flags_acked_after_retransmit.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_syn_ack_ace_flags_drop.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_syn_ce.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_syn_ect0.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_syn_ect1.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_synack_ce.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_synack_ce_updates_delivered_ce.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_synack_ect0.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_synack_ect1.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_synack_rexmit.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_synack_rxmt.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_tsnoprogress.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_tsprogress.pkt
+
 -- 
 2.34.1
 
