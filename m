@@ -1,123 +1,109 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 378BA340A6D;
-	Wed, 21 Jan 2026 02:16:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAA20331A52;
+	Wed, 21 Jan 2026 02:20:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768961766; cv=none; b=rYPmEEjPbbOWuCavwyFjWQHxQLHkjZe8NXBdiJndxLszLfno6pOR+A/1N0QC863ioPBWWXKZKf5pOzYylnW4KChReqIUs9t55YzQ6RZfVwkrNXtjxSkIK0Ya0fADZot7/EOW89mCpoyaKDt62LTzOQOOfjF35CA9V0q2hobfxlA=
+	t=1768962021; cv=none; b=dmEYJGhrAifqovWi8Zgxz+accf6ufoaVWFBDuELEa01ux/LlTUUvJ+0a6zs8iD18kkmDcY/pA2fJyKYbayMiKbf8x7VDGdE2XyjGGUsBVdTIc10XY65aTpbwYw0etcfzXaTyoFt1rBvzxB+5lsO4/PFa81gdnQdwyP3cWWt+XM0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768961766; c=relaxed/simple;
-	bh=2MOCRyXu8ZaFqYG4cvlaaz22U2NOb0JSsUjJSlHibeY=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=iLWXMnDcrFYwjpUTP8tJNUWLF4AmYTs5ZQdwDA8StCHerlsjwljqsKwViZcOgnetiqKnALK4GKudaVmaH3yK4lmK+VYazERg4ruK/62AAb+yOR2EbNjXhCu2PG5pojp7+r4zhEaTD2JVey0fP9DTOyJN8KvQWC7sXg1NiSXSFrc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m9RPYNCL; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1768962021; c=relaxed/simple;
+	bh=u5UM1f2N1exM9SUsP/57HOH1ZH5KhYC3HtwPUwd286I=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=Pj8l9AU6mW+AIa26yRAVAkuZF7a+Ye27AWL83ZkVX5N8prjtZU7W8hEUM47VZ1bmson3lC7vmpkz5pS8Ng0pMxHLkFOqf3ODr7He0pThg5gNWuHCG1u6uiS716ernMeOuEk0j/PP/iMMhIgBM+62e7IAoaBqsz5dTJb4kJMCfms=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M3jssdC3; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m9RPYNCL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7904FC16AAE;
-	Wed, 21 Jan 2026 02:16:04 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M3jssdC3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DD4DC16AAE;
+	Wed, 21 Jan 2026 02:20:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768961766;
-	bh=2MOCRyXu8ZaFqYG4cvlaaz22U2NOb0JSsUjJSlHibeY=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=m9RPYNCLXck8UDxF1l8OU4xDZDuOcKwPDW4PctmGV8EksIqn7IB9t7HpXV+1cTwBy
-	 E62U7j44O7C+AVJkJhFekqoErCX5zIu1kGlK+v/4RI+b0D8V9GpIQ1N/aqPelK9zIR
-	 7jf0eq0/p9f5IsfZEoCsHl1whDudoTE7wgGBbGvMKJGbMVBfINevk45Ht1tCQbhb+G
-	 0+EWXoze966pPlX5bPLXOIhFfmJ159vKCDWlxc28NSMSQ7eVAH6X444NGZRLtLS8BY
-	 ulY3G2BJC1V6JO180LAPiEBEzB4ZMA7ldAq6n9hSVG8RqxqOS7CyrE5x9PSzyqYQce
-	 vnx79idJypBYw==
-Content-Type: multipart/mixed; boundary="===============6515518196209418825=="
+	s=k20201202; t=1768962021;
+	bh=u5UM1f2N1exM9SUsP/57HOH1ZH5KhYC3HtwPUwd286I=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=M3jssdC3slzXQ+UDR/4TeC/7OtXb4ppyZ2a8SdcUQ/PYKmNGKdVxjS65ltqiwRchn
+	 LajGVq9t+H2IeSCPBYgobRWUtngg530H0RbC0UlwQ6sUkRUm5ZDHAaFJx4hK/m98lf
+	 VkXwW6U0Iq9jv1xZ8E9Cguk9LONBsdVF4F+E6M5zewa+A0dGdlET2+9fuVFVciUFIR
+	 k9s0x33CZgFDLCSR9SVmwp80yznwgFvGVSmwDJALTH4uWJUNVkq1OU0K/9/i2RFDzt
+	 AzLlIR0svltDAH8l1NlHVPqZ7JqfTzxocL2yYMjymuIRt4R0P32VvrXFmrh57wLxCm
+	 ghcIpQgzf4qTw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 11D88380820D;
+	Wed, 21 Jan 2026 02:20:20 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <f5d7058d44d03e21fecfdeb4c6b7d0329ff4f764fe24aa6f86d5c5da9ccfa3ad@mail.kernel.org>
-In-Reply-To: <20260121015157.7283-1-chensong_2000@189.cn>
-References: <20260121015157.7283-1-chensong_2000@189.cn>
-Subject: Re: [PATCH] kernel/bpf/btf.c: reject to register duplicated kfunc
-From: bot+bpf-ci@kernel.org
-To: chensong_2000@189.cn,martin.lau@linux.dev,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org
-Cc: bpf@vger.kernel.org,linux-kernel@vger.kernel.org,chensong_2000@189.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Wed, 21 Jan 2026 02:16:04 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v9 1/9] net: memzero mp params when closing a
+ queue
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <176896201859.692363.6085050032197437366.git-patchwork-notify@kernel.org>
+Date: Wed, 21 Jan 2026 02:20:18 +0000
+References: 
+ <7073bb4b696f5593c1f2e0b9451f0120ca624182.1768493907.git.asml.silence@gmail.com>
+In-Reply-To: 
+ <7073bb4b696f5593c1f2e0b9451f0120ca624182.1768493907.git.asml.silence@gmail.com>
+To: Pavel Begunkov <asml.silence@gmail.com>
+Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, corbet@lwn.net,
+ michael.chan@broadcom.com, pavan.chebbi@broadcom.com, andrew+netdev@lunn.ch,
+ ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
+ john.fastabend@gmail.com, joshwash@google.com, hramamurthy@google.com,
+ saeedm@nvidia.com, tariqt@nvidia.com, mbloch@nvidia.com, leon@kernel.org,
+ alexanderduyck@fb.com, ilias.apalodimas@linaro.org, shuah@kernel.org,
+ willemb@google.com, nktgrg@google.com, thostet@google.com,
+ alok.a.tiwari@oracle.com, ziweixiao@google.com, jfraker@google.com,
+ pkaligineedi@google.com, mohsin.bashr@gmail.com, joe@dama.to,
+ almasrymina@google.com, dimitri.daskalakis1@gmail.com, sdf@fomichev.me,
+ kuniyu@google.com, skhawaja@google.com, aleksander.lobakin@intel.com,
+ dw@davidwei.uk, yuehaibing@huawei.com, haiyuewa@163.com, axboe@kernel.dk,
+ horms@kernel.org, vishs@fb.com, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ linux-rdma@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ dtatulea@nvidia.com, kernel-team@meta.com, io-uring@vger.kernel.org
 
---===============6515518196209418825==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Hello:
 
-> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> index d10b3404260f..b4ded7669642 100644
-> --- a/kernel/bpf/btf.c
-> +++ b/kernel/bpf/btf.c
-> @@ -8615,12 +8615,23 @@ static int btf_check_iter_kfuncs(struct btf *btf, const char *func_name,
->  	return 0;
->  }
->
-> -static int btf_check_kfunc_protos(struct btf *btf, u32 func_id, u32 func_flags)
-> +static int btf_check_kfunc_protos(struct btf *btf, u32 func_id, u32 func_flags,
-> +			const struct module *module)
->  {
->  	const struct btf_type *func;
->  	const char *func_name;
->  	int err;
->
-> +	/* check if there is any duplicated kfunc in vmlinux */
-> +	if (module) {
-> +		func = btf_type_by_id(btf_vmlinux, func_id);
+This series was applied to netdev/net-next.git (main)
+by Pavel Begunkov <asml.silence@gmail.com>:
 
-The func_id parameter comes from the module's BTF (via btf_relocate_id),
-but this code looks it up in btf_vmlinux. BTF type IDs are specific to
-each BTF - vmlinux and modules have independent ID namespaces.
+On Thu, 15 Jan 2026 17:11:54 +0000 you wrote:
+> Instead of resetting memory provider parameters one by one in
+> __net_mp_{open,close}_rxq, memzero the entire structure. It'll be used
+> to extend the structure.
+> 
+> Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
+> ---
+>  net/core/netdev_rx_queue.c | 10 ++++------
+>  1 file changed, 4 insertions(+), 6 deletions(-)
 
-Is this lookup correct? btf_type_by_id(btf_vmlinux, func_id) will return
-whatever type happens to be at that numeric ID in vmlinux, not the type
-with the same name as the module's kfunc. For example, if the module's
-kfunc has BTF ID 100, this returns vmlinux type ID 100, which is likely
-an unrelated struct or typedef.
+Here is the summary with links:
+  - [net-next,v9,1/9] net: memzero mp params when closing a queue
+    https://git.kernel.org/netdev/net-next/c/7073bb4b696f
+  - [net-next,v9,2/9] net: reduce indent of struct netdev_queue_mgmt_ops members
+    https://git.kernel.org/netdev/net-next/c/92d76cf96dcb
+  - [net-next,v9,3/9] net: add bare bone queue configs
+    https://git.kernel.org/netdev/net-next/c/efcb9a4d32d3
+  - [net-next,v9,4/9] net: pass queue rx page size from memory provider
+    https://git.kernel.org/netdev/net-next/c/c0b709bf438b
+  - [net-next,v9,5/9] eth: bnxt: store rx buffer size per queue
+    https://git.kernel.org/netdev/net-next/c/f57efb32aae1
+  - [net-next,v9,6/9] eth: bnxt: adjust the fill level of agg queues with larger buffers
+    https://git.kernel.org/netdev/net-next/c/c55bf90a2112
+  - [net-next,v9,7/9] eth: bnxt: support qcfg provided rx page size
+    https://git.kernel.org/netdev/net-next/c/f96e1b35779e
+  - [net-next,v9,8/9] selftests: iou-zcrx: test large chunk sizes
+    https://git.kernel.org/netdev/net-next/c/a32bb32d0193
+  - [net-next,v9,9/9] io_uring/zcrx: document area chunking parameter
+    https://git.kernel.org/netdev/net-next/c/d1de61db1536
 
-This seems like it would cause false positives - any module kfunc
-registration would fail if its BTF ID happens to fall within vmlinux's
-BTF ID range (vmlinux typically has tens of thousands of types).
-
-To detect duplicate names, shouldn't this use btf_find_by_name_kind()
-to search by the function name instead of btf_type_by_id()?
-
-> +		if (func) {
-> +			pr_err("kfunc %s is already present in vmlinux\n",
-> +						btf_name_by_offset(btf_vmlinux, func->name_off));
-
-Since func is an unrelated vmlinux type (not the module's kfunc), this
-error message prints the wrong function name - it shows whatever random
-vmlinux type was found at that ID, not the module's kfunc name.
-
-> +			return -EINVAL;
-> +		}
-> +	}
-
-[ ... ]
-
-> @@ -8911,7 +8922,7 @@ static int __register_btf_kfunc_id_set(enum btf_kfunc_hook hook,
->
->  	for (i = 0; i < kset->set->cnt; i++) {
->  		ret = btf_check_kfunc_protos(btf, btf_relocate_id(btf, kset->set->pairs[i].id),
-> -					     kset->set->pairs[i].flags);
-> +					     kset->set->pairs[i].flags, kset->owner);
-
-This shows that func_id passed to btf_check_kfunc_protos is from the
-module's BTF (btf_relocate_id operates on the module's btf), confirming
-the namespace mismatch when it gets looked up in btf_vmlinux above.
-
->  		if (ret)
->  			goto err_out;
->  	}
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/21194595610
-
---===============6515518196209418825==--
