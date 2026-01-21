@@ -1,220 +1,113 @@
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from esa1.cc.uec.ac.jp (mx.uec.ac.jp [130.153.8.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B620C34F476
-	for <bpf@vger.kernel.org>; Wed, 21 Jan 2026 03:10:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.54
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768965041; cv=pass; b=D5A4dZKpoBtVIkfCwAv0wyG9bivVLgUMO5NahUNem0eA/q8OXD/4/Vdet/ywrJL7DRQpGJkj8AKkwgtxCmfXX5fqihbKsOhjNmO+IeGn8xrD0snhOnvK6976vXKCEUMUzqx2UCO+xfEpEPu3OSxR5xLsl2hVXbNu1xNT7GvkXpI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768965041; c=relaxed/simple;
-	bh=bPgAMyOnYc1aLZP7ijDYYzEhU/LzQVs9bjurTOTDwGU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WNpwHV8Q2tPOtsVtXXYcH5FneXPWNfnEDpgOyPy4mgMzDWrRUi1HUgPhViOXFCpMr+Uh/dAcpnlpNKOAwLVrDRrAEfRJSzmagQVZsl/xofC1F0+P57ZXgakgnexvndQR8q13iEWMPncbDQocJUqlUczjj3xgvxM65YJw9GkevzQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kKY78HEW; arc=pass smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kKY78HEW"
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-47ee301a06aso57226735e9.0
-        for <bpf@vger.kernel.org>; Tue, 20 Jan 2026 19:10:39 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1768965038; cv=none;
-        d=google.com; s=arc-20240605;
-        b=goEi1tQBPxBjExcANt3mky2jkiAzttACPlvdTt9rD0G+aR019Y+D/xcfLkvOFuoDwS
-         H+4LP3Lm4GFASB2HypCCZnQAXKXnjTv0uSwiQj3duHkgbzh0Ruoygy2MDiiT6/ZPiYlz
-         E4/4mL3JI+oGMCZb0u8YWiLpytLNj8vRieL57b2XATMVa2nP9u7fTQq2AbDtRQbqIqkQ
-         l52LRkZuJgFhl+hJZmXqPDMrw7HHxDh3W2iFm5ywXezthC0IcMq3i6PU47/BeE6LA0uc
-         MJRZ+oI8CDbKJ5oWd5RtnzSMDEc7VV19y5ed4VXECC5HfDsGvtvQMZOqNElNJ5o0WSaQ
-         REmA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=6viIcJ3JtUIizIwvwmg/ihXKGMLAaRfWxmAiRKn8ywI=;
-        fh=NTXvZ6343yYn7SuKPK6DwVjjSyAfCHdq2l5RGmfW6bE=;
-        b=FgajQeyiJa/YhLo/6ioiGi22QUwOpm8kRxJYIi/Iop/F+9u26gmVWuRdMXv8ijWEfS
-         geSfECbRUtrrmSMSltbPzBio3xRUhhj58hHJab6Sh59kSJgD6NvMPUd7lkAukMYnl/1B
-         Vr9WMPwc7EBkChPRmCSH6ADSz39VB4Y86/cCjKWWG+/ntYdGiOUsg45pfwoMTBSf8JAX
-         G94zKa8Ef2WdLrhggezRYVjM3R/tYd29zfbs5q15BIGY9xTIoNaSPyIZ/AJK5q/UOPrs
-         mZKPra8D0FXTnFregSmpRv0YjdJEXG8q0tOCNRHnHVNW+nDgqZTtPrLO9SYxrvtYZzMQ
-         3yvQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768965038; x=1769569838; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6viIcJ3JtUIizIwvwmg/ihXKGMLAaRfWxmAiRKn8ywI=;
-        b=kKY78HEWof4nZv82T7K9I422VIR11mNkKoB6U9jpXOzjV49drTz5lVljkU0jv0EBXj
-         oP7NtB3UfEcqQ3a7mlbY7loUiGQntb5GBtLAEhNvun2t8uJWqct1ueXGajDXSNrMSatV
-         ++etFGkmGVToQvVS+YQZS17X+SLgfyZTZeqBRDkdVcEKaGC4+vA4OA68yGZ+XxMgeUy1
-         wo1QC1bmCuZ77R/uka0J3ZGdrlpY7yxbIfCZLapnyqzLmdIXTAXylNbJ33u3I9NDAUTY
-         hBUiCzh+Jxkko7FmifdEkpHnNryyDEBTLUTCEDZm8w3eLn3RrmVSvJINb9HkMn7TTv+N
-         suRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768965038; x=1769569838;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=6viIcJ3JtUIizIwvwmg/ihXKGMLAaRfWxmAiRKn8ywI=;
-        b=d/j+4a5NhL7Zluc+XXMzfTcxMvkrDhpAazucypx1HNcs1XGq1GQqY3zXlftzFewm3s
-         weDCyorwX1ow44yyMArmoReXc/hxi53e513Zw3192iX0soJPCsMnWVned+9JXAgcVSnU
-         gMlGJGJpoqezShfka6pifOLxiMWLx997NJG8FnYcakWk7C4GIt9gQa9IFaGqaZ2vwdzA
-         wBkBuQatvi7Dr7+f/cC3FSZHgjffmE8ksqiO5g9UGOA/Muy3Hhx0GayhmgQj6aECLZ+r
-         KOy0zDPifK+XkYDBrry45db15608M/XzBDktMRlUxx1iYAurvZB7Mwye5Uh+Y6IufBMy
-         5OXg==
-X-Forwarded-Encrypted: i=1; AJvYcCXmw4tcuW1b2kab0ejnQs7lba8hvmOcppT7JnyQMCcjV21S9eEPnOiXy9vN/3Di7gxtgLg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzZO6v6EzATp3KDP1Ph6Wn0uuuXLCTW84LgP/7zCajbwbLmGvZl
-	vBg1nYk7AiQ0i2x6s75VWXFv5ehQmTmR3TSx9T0ujqGkWl4oQwALiwSQR9SRMEymqfmfsQERAyB
-	9ePVh3GZJ8HjJ5go4lMK/pWURFcHBcyU=
-X-Gm-Gg: AZuq6aLo52e8Q9Zmw2T1Ttur9kLBK/cWyL/eup4shrBLlveY1zPtFkWiozlRayw5n1Y
-	7toSOl+TixGSZJpR1cwxcJtelSytCTdy33HQdv33fjTcJXmG4bm4wSN0fLQDvE/THRJ71y8YUuz
-	qpCFsXCjt7J/RR7/QA3TX0IpsRnDIS2SH6C637vTOZYhvCq/Mq2OYCO9pmx+ef1/UNjMJgvUb3S
-	lh6CW2L5BEKuoo/SF204rJ6XCVH6rtspBWyd+tbLeHDNV6MOoWO0tuhV2Hdd+Zuls1GRy/xrmtf
-	+GSd3CCzE59ZnagjGEE8g4/KCuHN5pUIztkzCaIwODwp5fAq0Lw6sKvylwMqYHjjnxVogqLd3FX
-	EhfAyFYj06SEm5Q==
-X-Received: by 2002:a05:6000:1a88:b0:431:9b2:61c4 with SMTP id
- ffacd0b85a97d-4356a082ee3mr23323458f8f.45.1768965037875; Tue, 20 Jan 2026
- 19:10:37 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E952933DEFA
+	for <bpf@vger.kernel.org>; Wed, 21 Jan 2026 03:33:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.153.8.52
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768966424; cv=none; b=DYdg06Zi28KehMTZ7g/jJNyiw2M6pwhQZtDQf6892/WG5nkmJSyOoMAKIkBRyBCy6pVAv1ugqQWdiZ/83Bfr9WfiNKpp5un/uq2r4+FmLQNgc3XHIZgY05d13eiC3bXXjQIstCUn9MXKSB+qxrUArxMOG+z0r9KRGPIHF4XG5cM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768966424; c=relaxed/simple;
+	bh=rHeVGaJKJ+Xpg7xXvz3Ojrc8GrOoLI5XhqatSCP9has=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=goMzUBv2/uoSTSl1jFSxmrM5eaVM2HzVddiNELIgdq1O9K9gOeEt3x7gg8XliWEAiaS0WL1WmFQATatkV63pH84KZLUxn8kRVUu7IGBKb49rkcTuXBH9rgIPKas4mbUenxRr+24mjTVMyKNe8ifENCwBDGbhd37rr1DYhyas9tI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hpc.is.uec.ac.jp; spf=pass smtp.mailfrom=hpc.is.uec.ac.jp; arc=none smtp.client-ip=130.153.8.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hpc.is.uec.ac.jp
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hpc.is.uec.ac.jp
+X-CSE-ConnectionGUID: EosxhEisTVCY7v7WhPMlNw==
+X-CSE-MsgGUID: SlKY44MAQiaBdt9OU4HUoA==
+X-IPAS-Result: =?us-ascii?q?A2EtBQB5SHBp/zYImYJaglkCm3yeHYF/BgkBAQEBAQEBA?=
+ =?us-ascii?q?QFaBAEBhQeNBSc1CA4BAgQBAQEBAwIDAQEBAQEBAQEBAQELAQEBBQEBAQEBA?=
+ =?us-ascii?q?QYDAQECAoEdhglTSQEQAYZAAUaEUoJ0sQOBAd16LVSBMhWBOI1ScYU6gg2Ef?=
+ =?us-ascii?q?YQadoV3BIINFXoUlBRIgR4DWSwBE0ITDQoLBwVqYQIZAzUSKhVuCBEZHYEZC?=
+ =?us-ascii?q?j4XgQobBwWBIgaCFYZpD4kzgXYDCxgNSBEsNxQbQm4HkgUHAWIsKlAOgSCPE?=
+ =?us-ascii?q?weHd48PoRGEJoRRH5xoTaprLphYpFmGUQGCFE04gyNRGQ/aJIElAgcLAQEDC?=
+ =?us-ascii?q?YZ+imyBfwEB?=
+IronPort-Data: A9a23:5cCUgqLIcpv50tpCFE+RfJQlxSXFcZb7ZxGr2PjKsXjdYENS12FTz
+ 2UZC2vUP63eNjf0ed1xady090gFuJeBzd8xTgVorCE8RH9jl5H5CIXCJC8cHc8zwu4v7q5Dx
+ 59DAjUVBJlsFhcwnj/0bP656yI6jf3ULlbFILasEjhrQgN5QzsWhxtmmuoo6qZlmtHR7zml4
+ LsemOWBfgX8s9JIGjhMsfzb8Uk35K+aVA4w5zTSW9ga5DcyqFFIVPrzFYnpR1PkT49dGPKNR
+ uqr5NmR4mPD8h4xPcium7D9f1diaua60d+m0yc+twCK23CulwRqukoJHKN0hXR/0l1lq+tMJ
+ OBl7vRcf+uJ0prkw4zxWzEAe8130DYvFLXveRBTuuTKp6HKnueFL1yDwyjaMKVBktubD12i+
+ tQ1Lysdbj2CnN6I64PkVLZThvwGKO/0adZ3VnFIlVk1DN4jUdXPTqHL+9JCzXEti8sIFP2YZ
+ dJxhThHNU+YJUQSYRFHTs9i9AurriCXnzlwqUmVpLs+5mH7zBR6lrn2dsfYcZqDToNXhi50o
+ 0qfpzqoXE9CZI33JTytyXaPt7OTuArCWYs4GKHp0cM2oGCU7zlGYPERfQHi+6bm0x/Wt8hkA
+ 00P+is/pK073EyzRZ/8RFulrXXCtxVaWcI4LgEhwASdj6bZ5weHC3IVF3hcZddgvcRwRyRCO
+ kK1c83BKDt0oL24SGmhyJyl8i3tBigtCGskenpRJeca2OUPtr3fmTrtdr5e/EOdi82wFTz0w
+ i6HtjlnwagehogC3OO55TgrYg5ARLCUE2bZBS2OAQpJCz+Vgqb+PuREDnCBsZ59wH6xFAXpg
+ ZT9s5H2ASBnJcjleNaxrBox8EGBva/fb2KF0DaD7rE99znl5niiY41K+zBiNQ9uPI4JfTLif
+ FXU/AhW4ZpOOnqhZLN2ZISqY/kXIGmJPYqNa804mfIeOMIhL1HapX4GiIz59zmFrXXAWJoXY
+ f+zGftAx15AYUi75FJan9sg7II=
+IronPort-HdrOrdr: A9a23:FA15YqxsxeWlUe7DtM+xKrPw5b1zdoMgy1knxilNoNJuA7Wlfq
+ eV7Y8mPH7P+U4ssR4b6LO90cW7IU80sKQV3WBzB9iftWvdyQ+VxehZhOOIqQEIWReRygc379
+ YGT0ERMqyXMXFKyej/pCa1G8s929WcmZrY4Ns2DE0BcShaL49l5wd9TiCBEkN3QwFCQb40Do
+ CV6MYChxfIQwV0Ui1zPBU4Y9Q=
+X-Talos-CUID: =?us-ascii?q?9a23=3AVO9xkWviVgctmpTWdV6h7WpZ6IsIdWbNzFrROHO?=
+ =?us-ascii?q?GIlc2VuKqSWe1/IV7xp8=3D?=
+X-Talos-MUID: =?us-ascii?q?9a23=3AmOYG4AxLo1NlNeNaZoit8YsUd2iaqJ+qK3FRzbA?=
+ =?us-ascii?q?vgsiNHyBsahCg0BSKRaZyfw=3D=3D?=
+X-IronPort-Anti-Spam-Filtered: true
+X-IronPort-AV: E=Sophos;i="6.21,242,1763391600"; 
+   d="scan'208";a="106966090"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+X-IronPort-Outbreak-Status: No, level 0, Unknown - Unknown
+Received: from mx-delivery1.uec.ac.jp (HELO mx-delivery.uec.ac.jp) ([130.153.8.54])
+  by esa1.cc.uec.ac.jp with ESMTP; 21 Jan 2026 12:33:39 +0900
+Received: from labpc (unknown [172.21.208.155])
+	by mx-delivery.uec.ac.jp (Postfix) with ESMTPSA id 4FD57183E391;
+	Wed, 21 Jan 2026 12:33:39 +0900 (JST)
+From: Yuzuki Ishiyama <ishiyama@hpc.is.uec.ac.jp>
+To: bpf@vger.kernel.org
+Cc: mykyta.yatsenko5@gmail.com,
+	vmalik@redhat.com,
+	andrii@kernel.org,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	martin.lau@linux.dev,
+	Yuzuki Ishiyama <ishiyama@hpc.is.uec.ac.jp>
+Subject: [PATCH bpf-next v5 0/2] bpf: Add kfunc bpf_strncasecmp()
+Date: Wed, 21 Jan 2026 12:33:26 +0900
+Message-ID: <20260121033328.1850010-1-ishiyama@hpc.is.uec.ac.jp>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260120070555.233486-1-dongml2@chinatelecom.cn>
- <20260120070555.233486-2-dongml2@chinatelecom.cn> <CAEf4BzYjbP4KwuVNT_pgjfXy=+7saEezmp1ck2L5txwtik5WYw@mail.gmail.com>
- <10788751.nUPlyArG6x@7940hx>
-In-Reply-To: <10788751.nUPlyArG6x@7940hx>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Tue, 20 Jan 2026 19:10:26 -0800
-X-Gm-Features: AZwV_Qhhx3HpF9SXXn6IPy25cabE30LoVYJ5d4Cbb3alWWY8lV8NEUpGzJZ7IGk
-Message-ID: <CAADnVQ+Om14RF1GvA0vkhKdsCtVGzbacftEZarLJ-LKdYXUZ+g@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v6 1/2] bpf, x86: inline bpf_get_current_task()
- for x86_64
-To: Menglong Dong <menglong.dong@linux.dev>
-Cc: Menglong Dong <menglong8.dong@gmail.com>, Andrii Nakryiko <andrii.nakryiko@gmail.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Eduard <eddyz87@gmail.com>, 
-	"David S. Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
-	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, X86 ML <x86@kernel.org>, 
-	"H. Peter Anvin" <hpa@zytor.com>, Network Development <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Tue, Jan 20, 2026 at 5:58=E2=80=AFPM Menglong Dong <menglong.dong@linux.=
-dev> wrote:
->
-> On 2026/1/21 09:23 Andrii Nakryiko <andrii.nakryiko@gmail.com> write:
-> > On Mon, Jan 19, 2026 at 11:06=E2=80=AFPM Menglong Dong <menglong8.dong@=
-gmail.com> wrote:
-> > >
-> > > Inline bpf_get_current_task() and bpf_get_current_task_btf() for x86_=
-64
-> > > to obtain better performance.
-> > >
-> > > Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
-> > > Acked-by: Eduard Zingerman <eddyz87@gmail.com>
-> > > ---
-> > > v5:
-> > > - don't support the !CONFIG_SMP case
-> > >
-> > > v4:
-> > > - handle the !CONFIG_SMP case
-> > >
-> > > v3:
-> > > - implement it in the verifier with BPF_MOV64_PERCPU_REG() instead of=
- in
-> > >   x86_64 JIT.
-> > > ---
-> > >  kernel/bpf/verifier.c | 22 ++++++++++++++++++++++
-> > >  1 file changed, 22 insertions(+)
-> > >
-> > > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> > > index 9de0ec0c3ed9..c4e2ffadfb1f 100644
-> > > --- a/kernel/bpf/verifier.c
-> > > +++ b/kernel/bpf/verifier.c
-> > > @@ -17739,6 +17739,10 @@ static bool verifier_inlines_helper_call(str=
-uct bpf_verifier_env *env, s32 imm)
-> > >         switch (imm) {
-> > >  #ifdef CONFIG_X86_64
-> > >         case BPF_FUNC_get_smp_processor_id:
-> > > +#ifdef CONFIG_SMP
-> > > +       case BPF_FUNC_get_current_task_btf:
-> > > +       case BPF_FUNC_get_current_task:
-> > > +#endif
-> >
-> > Does this have to be x86-64 specific inlining? With verifier inlining
-> > and per_cpu instruction support it should theoretically work across
-> > all architectures that do support per-cpu instruction, no?
-> >
-> > Eduard pointed out [0] to me for why we have that x86-64 specific
-> > check. But looking at do_misc_fixups(), we have that early
-> > bpf_jit_inlines_helper_call(insn->imm)) check, so if some JIT has more
-> > performant inlining implementation, we will just do that.
-> >
-> > So it seems like we can just drop all that x86-64 specific logic and
-> > claim all three of these functions as inlinable, no?
-> >
-> > And even more. We can drop rather confusing
-> > verifier_inlines_helper_call() that duplicates the decision of which
-> > helpers can be inlined or not, and have:
->
-> The verifier_inlines_helper_call() is confusing, but I think we can't
-> remove the x86-64 checking. For example, some architecture
-> don't support BPF_FUNC_get_current_task both in
-> bpf_jit_inlines_helper_call() and verifier_inlines_helper_call(), which
-> means it can't be inline.
->
-> >
-> > if (env->prog->jit_requested && bpf_jit_supports_percpu_insn() {
-> >     switch (insn->imm) {
-> >     case BPF_FUNC_get_smp_processor_id:
-> >         ...
-> >         break;
-> >     case BPF_FUNC_get_current_task_btf:
-> >     case BPF_FUNC_get_current_task_btf:
-> >         ...
-> >         break;
-> >     default:
-> > }
-> >
-> > And the decision about inlining will live in one place.
-> >
-> > Or am I missing some complications?
->
-> As Alexei said, the implement of "current" is architecture specific,
-> and the per-cpu variable "current_task" only exist on x86_64.
->
-> >
-> > And with all that, should we mark get_current_task and
-> > get_current_task_btf as __bpf_fastcall?
->
-> I think it make sense, and the I saw bpf_get_smp_processor_id does
-> such operation:
->
-> const struct bpf_func_proto bpf_get_smp_processor_id_proto =3D {
->         [...]
->         .allow_fastcall =3D true,
-> };
->
-> PS: I'm a little confused about the fast call. We inline many helper,
-> but it seems that bpf_get_smp_processor_id is the only one that
-> use the "allow_fastcall". Why? I'd better study harder.
+This patchset introduces bpf_strncasecmp to allow case-insensitive and
+limited-length string comparison. This is useful for parsing protocol
+headers like HTTP.
 
-It's
-static __bpf_fastcall __u32 (* const bpf_get_smp_processor_id)(void) =3D
-(void *) 8;
+---
 
-and
-#define __bpf_fastcall __attribute__((bpf_fastcall))
+Changes in v5:
+- Fixed the test function numbering
 
-which makes LLVM use more registers at the callsite (less spill/fill).
+Changes in v4:
+- Updated the loop variable to maintain style consistency
 
-Looking at the patch again. I think it's fine as-is.
-fastcall can be a follow up.
+Changes in v3:
+- Use ternary operator to maintain style consistency
+- Reverted unnecessary doc comment about XATTR_SIZE_MAX
+
+Changes in v2:
+- Compute max_sz upfront and remove len check from the loop body
+- Document that @len is limited by XATTR_SIZE_MAX
+
+Yuzuki Ishiyama (2):
+  bpf: add bpf_strncasecmp kfunc
+  selftests/bpf: Test kfunc bpf_strncasecmp
+
+ kernel/bpf/helpers.c                          | 30 +++++++++++++++----
+ .../selftests/bpf/prog_tests/string_kfuncs.c  |  1 +
+ .../bpf/progs/string_kfuncs_failure1.c        |  6 ++++
+ .../bpf/progs/string_kfuncs_failure2.c        |  1 +
+ .../bpf/progs/string_kfuncs_success.c         |  7 +++++
+ 5 files changed, 40 insertions(+), 5 deletions(-)
+
+-- 
+2.52.0
+
