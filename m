@@ -1,42 +1,42 @@
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C4753803F0;
-	Wed, 21 Jan 2026 20:31:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FD713C1FCC
+	for <bpf@vger.kernel.org>; Wed, 21 Jan 2026 20:31:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769027479; cv=none; b=Or+3y5HlQ4KW6XYLEkvBoVkyRMzK40c+NaaI3CQ+PfG7uVxel1SKD3niKEm7T6MgeGGtrmpuInswSO1wBoVfh69Yei5uCtxdJZDqwSGZZ/S/wttNuj4u9mkWGaripTqUFH0VGCKlvn4w+izVE0Mv3e4TWnl0plYujXEU1bjjZVA=
+	t=1769027481; cv=none; b=s3cll+msmV/PG2+CRf52bnJhK4fubTA8QNmJfhtL9diyHNbG/gXjW2SEMSWOFuY8qpCS6K11ANZ95MnBO6turkAy3tSxMnrrFcd++5hdgV40wehMnz/8TxZrpQjz9ioZJukjMSvn4yCKP4vApe2IkY7JuF/1qP4Qdk+CaK4BIhg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769027479; c=relaxed/simple;
-	bh=RqfGGxrSfeCq4Vqwo5xlSFtS4gPAvF1vdV6jpgXqAMA=;
+	s=arc-20240116; t=1769027481; c=relaxed/simple;
+	bh=wiD++4YLOuxEOz+cESdHcNgcu/SwC2ZOhf3V6GAxcFc=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=aqB1plIz/oVBFkg1lVTVOAP3cQIBDhGy4HrOlYI3DEi2y878wduOUERDKGaD0ULkivLu8J21dwVy6FIRhrppp5t4DEq0u9f/7ArT+ZdUkqYjdBLdiuWKCSEQD7tn0H2G8qXRSYye7BRuaLhREfqXnxEPAgNAu1UIxyiYWbmkM9A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=cNON4J5o; arc=none smtp.client-ip=185.246.85.4
+	 In-Reply-To:To:Cc; b=OOBlsGKq9erheC1kJNx9PIbbAJDrOP5WFq0K6R4wUePek3zxLrKLJSAQHCfsG4lhcjTGuAdjjbu00wSjRxGrhIwhZlocGbgxevj+s3AKpfDeQ6nBdl+2xx7zJHBGJD4SIfwghpdg1VR1CjfEE+0U3Ngu6wgnMECvi9s42X1ybZY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=rKDHVxPw; arc=none smtp.client-ip=185.246.84.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="cNON4J5o"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="rKDHVxPw"
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id 0822B4E421D5;
-	Wed, 21 Jan 2026 20:31:15 +0000 (UTC)
+	by smtpout-02.galae.net (Postfix) with ESMTPS id 8C65F1A29C4;
+	Wed, 21 Jan 2026 20:31:17 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id D22536070A;
-	Wed, 21 Jan 2026 20:31:14 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 36F3A119B1D53;
-	Wed, 21 Jan 2026 21:31:10 +0100 (CET)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 61DFF6070A;
+	Wed, 21 Jan 2026 20:31:17 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id D1455119B1D59;
+	Wed, 21 Jan 2026 21:31:13 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1769027473; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	t=1769027476; h=from:subject:date:message-id:to:cc:mime-version:content-type:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=CzwlI3vwhCgY6zmoO8Cw8YvGVgDS0E9ppWDsYocPW2Y=;
-	b=cNON4J5oqdHyhceESqYjpyiFN62KHiEOeQE/b/u3jl32ohhluYrKl08HL8TwMkypgA1pvV
-	inKX7NLULmTB7ojiVfl+asahI+1m0MHolr9dOfK8rTsYbOAiD5SDFAU7lLYgGO+pSn1ezo
-	NNLSkLznNCHu7Q3+ooFJw4FL+p+X7JfPJkX6tIGmpAtpYCTbe0o2rsjEU5VJp9ypkpOWoE
-	SAx4GWgguoRBz1beFrmH3X9BaqlPGiF7vKGF48TlfPQFGA206p5HcjmkXcGjoYqxMsv3Ih
-	YRWAzqwRrIoVrUcxpbZ7XpjNrmFb3yfd1+o+ZrLmaVbzwkLAMb8zCDLqXvwEcA==
+	bh=6OmuIlXoBfW3a6x5EbsNivQ/8QSPEcfgJvIV/CaQGRI=;
+	b=rKDHVxPw0LLKwaLhD8dZdNasBg82zpsIHBVZzzaGMbB2Iti3rNoW/lhPRlcejoY8gSzkdB
+	PWe3ozb0ebtidbn0t7VzY8GA2K4IAL0T6ZtPdPad2RABblklXE0nwVbtYLaLD8f1Uq5dBd
+	lW+CcsXfcr6C+9BCJDsQKFdiUgMqm18WDSGEHOMbX3lFtJvSW50hz2yMv4K4SjtVXSqYrR
+	PpYDZue/Qsc2YmdVo4T9TmdN2eKpPJutA4b7/O388P1enSylgeDuxY1aygcDu+tNU+06UT
+	U9uPK4uCo4aMbDmumEZ+5qfQtvjV9eSTKqBDdo/yFZcDlJkCCa78abUDaWT8dA==
 From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
-Date: Wed, 21 Jan 2026 21:31:00 +0100
-Subject: [PATCH bpf-next v3 1/3] bpf/selftests: add a few helpers for
- bpftool testing
+Date: Wed, 21 Jan 2026 21:31:01 +0100
+Subject: [PATCH bpf-next v3 2/3] selftests/bpf: convert
+ test_bpftool_metadata.sh into test_progs framework
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -45,7 +45,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260121-bpftool-tests-v3-1-368632f377e5@bootlin.com>
+Message-Id: <20260121-bpftool-tests-v3-2-368632f377e5@bootlin.com>
 References: <20260121-bpftool-tests-v3-0-368632f377e5@bootlin.com>
 In-Reply-To: <20260121-bpftool-tests-v3-0-368632f377e5@bootlin.com>
 To: Andrii Nakryiko <andrii@kernel.org>, 
@@ -66,137 +66,282 @@ Cc: ebpf@linuxfoundation.org,
 X-Mailer: b4 0.14.3
 X-Last-TLS-Session-Version: TLSv1.3
 
-In order to integrate some bpftool tests into test_progs, define a few
-specific helpers that allow to execute bpftool commands, while possibly
-retrieving the command output. Those helpers most notably set the
-path to the bpftool binary under test. This version checks different
-possible paths relative to the directories where the different
-test_progs runners are executed, as we want to make sure not to
-accidentally use a bootstrap version of the binary.
+The test_bpftool_metadata.sh script validates that bpftool properly
+returns in its ouptput any metadata generated by bpf programs through
+some .rodata sections.
+
+Port this test to the test_progs framework so that it can be executed
+automatically in CI. The new test, similarly to the former script,
+checks that valid data appears both for textual output and json output,
+as well as for both data not used at all and used data. For the json
+check part, the expected json string is hardcoded to avoid bringing a
+new external dependency (eg: a json deserializer) for test_progs.
+As the test is now converted into test_progs, remove the former script.
+
+The newly converted test brings two new subtests:
+
+  #37/1    bpftool_metadata/metadata_unused:OK
+  #37/2    bpftool_metadata/metadata_used:OK
+  #37      bpftool_metadata:OK
+  Summary: 1/2 PASSED, 0 SKIPPED, 0 FAILED
 
 Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
 ---
 Changes in v2:
-- Drop the new runner from commit, keep only the new bpftool-specific
-  helpers
-- replace hardcoded path with a detected (and cached) path
+- move the new test in prog_tests directory
+- use power of 2 for bpftool output buffer size
+- check snprintf return when building commands
+- target program by pin path rather than prog name
+- remove a few blank lines
 ---
- tools/testing/selftests/bpf/Makefile          |  3 +-
- tools/testing/selftests/bpf/bpftool_helpers.c | 74 +++++++++++++++++++++++++++
- tools/testing/selftests/bpf/bpftool_helpers.h | 11 ++++
- 3 files changed, 87 insertions(+), 1 deletion(-)
+ tools/testing/selftests/bpf/Makefile               |   1 -
+ .../selftests/bpf/prog_tests/bpftool_metadata.c    | 134 +++++++++++++++++++++
+ .../testing/selftests/bpf/test_bpftool_metadata.sh |  85 -------------
+ 3 files changed, 134 insertions(+), 86 deletions(-)
 
 diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 9488d076c740..2cc559ecc723 100644
+index 2cc559ecc723..1bb7db1ed6ea 100644
 --- a/tools/testing/selftests/bpf/Makefile
 +++ b/tools/testing/selftests/bpf/Makefile
-@@ -747,7 +747,8 @@ TRUNNER_EXTRA_SOURCES := test_progs.c		\
- 			 json_writer.c 		\
- 			 $(VERIFY_SIG_HDR)		\
- 			 flow_dissector_load.h	\
--			 ip_check_defrag_frags.h
-+			 ip_check_defrag_frags.h	\
-+			 bpftool_helpers.c
- TRUNNER_LIB_SOURCES := find_bit.c
- TRUNNER_EXTRA_FILES := $(OUTPUT)/urandom_read				\
- 		       $(OUTPUT)/liburandom_read.so			\
-diff --git a/tools/testing/selftests/bpf/bpftool_helpers.c b/tools/testing/selftests/bpf/bpftool_helpers.c
+@@ -109,7 +109,6 @@ TEST_PROGS := test_kmod.sh \
+ 	test_bpftool_build.sh \
+ 	test_bpftool.sh \
+ 	test_bpftool_map.sh \
+-	test_bpftool_metadata.sh \
+ 	test_doc_build.sh \
+ 	test_xsk.sh \
+ 	test_xdp_features.sh
+diff --git a/tools/testing/selftests/bpf/prog_tests/bpftool_metadata.c b/tools/testing/selftests/bpf/prog_tests/bpftool_metadata.c
 new file mode 100644
-index 000000000000..a5824945a4a5
+index 000000000000..b5598741a01c
 --- /dev/null
-+++ b/tools/testing/selftests/bpf/bpftool_helpers.c
-@@ -0,0 +1,74 @@
++++ b/tools/testing/selftests/bpf/prog_tests/bpftool_metadata.c
+@@ -0,0 +1,134 @@
 +// SPDX-License-Identifier: GPL-2.0-only
-+#include "bpftool_helpers.h"
-+#include <unistd.h>
++#include <bpftool_helpers.h>
++#include <test_progs.h>
++#include <linux/bpf.h>
 +#include <string.h>
++#include <unistd.h>
++#include <fcntl.h>
++#include <sys/stat.h>
 +#include <stdbool.h>
 +
-+#define BPFTOOL_PATH_MAX_LEN		64
-+#define BPFTOOL_FULL_CMD_MAX_LEN	512
++#define BPFFS_DIR	"/sys/fs/bpf/test_metadata"
++#define BPFFS_USED	BPFFS_DIR "/used"
++#define BPFFS_UNUSED	BPFFS_DIR "/unused"
 +
-+#define BPFTOOL_DEFAULT_PATH		"tools/sbin/bpftool"
++#define BPF_FILE_USED	"metadata_used.bpf.o"
++#define BPF_FILE_UNUSED "metadata_unused.bpf.o"
 +
-+static int detect_bpftool_path(char *buffer)
++#define MAX_BPFTOOL_OUTPUT_LEN	(64*1024)
++
++#define MAX_TOKENS_TO_CHECK	3
++static char output[MAX_BPFTOOL_OUTPUT_LEN];
++
++struct test_desc {
++	char *name;
++	char *bpf_prog;
++	char *bpffs_path;
++	char *expected_output[MAX_TOKENS_TO_CHECK];
++	char *expected_output_json[MAX_TOKENS_TO_CHECK];
++};
++
++static int setup(struct test_desc *test)
 +{
-+	char tmp[BPFTOOL_PATH_MAX_LEN];
-+
-+	/* Check default bpftool location (will work if we are running the
-+	 * default flavor of test_progs)
-+	 */
-+	snprintf(tmp, BPFTOOL_PATH_MAX_LEN, "./%s", BPFTOOL_DEFAULT_PATH);
-+	if (access(tmp, X_OK) == 0) {
-+		strncpy(buffer, tmp, BPFTOOL_PATH_MAX_LEN);
-+		return 0;
-+	}
-+
-+	/* Check alternate bpftool location (will work if we are running a
-+	 * specific flavor of test_progs, e.g. cpuv4 or no_alu32)
-+	 */
-+	snprintf(tmp, BPFTOOL_PATH_MAX_LEN, "../%s", BPFTOOL_DEFAULT_PATH);
-+	if (access(tmp, X_OK) == 0) {
-+		strncpy(buffer, tmp, BPFTOOL_PATH_MAX_LEN);
-+		return 0;
-+	}
-+
-+	/* Failed to find bpftool binary */
-+	return 1;
++	return mkdir(BPFFS_DIR, 0700);
 +}
 +
-+static int run_command(char *args, char *output_buf, size_t output_max_len)
++static void cleanup(struct test_desc *test)
 +{
-+	static char bpftool_path[BPFTOOL_PATH_MAX_LEN] = {0};
-+	bool suppress_output = !(output_buf && output_max_len);
-+	char command[BPFTOOL_FULL_CMD_MAX_LEN];
-+	FILE *f;
++	unlink(test->bpffs_path);
++	rmdir(BPFFS_DIR);
++}
++
++static int check_metadata(char *buf, char * const *tokens, int count)
++{
++	int i;
++
++	for (i = 0; i < count && tokens[i]; i++)
++		if (!strstr(buf, tokens[i]))
++			return 1;
++
++	return 0;
++}
++
++static void run_test(struct test_desc *test)
++{
 +	int ret;
++	char cmd[MAX_BPFTOOL_CMD_LEN];
 +
-+	/* Detect and cache bpftool binary location */
-+	if (bpftool_path[0] == 0 && detect_bpftool_path(bpftool_path))
-+		return 1;
++	ret = snprintf(cmd, MAX_BPFTOOL_CMD_LEN, "prog load %s %s",
++			test->bpf_prog, test->bpffs_path);
++	if (!ASSERT_GT(ret, 0, "format prog insert command"))
++		return;
++	ret = run_bpftool_command(cmd);
++	if (!ASSERT_OK(ret, "load program"))
++		return;
 +
-+	ret = snprintf(command, BPFTOOL_FULL_CMD_MAX_LEN, "%s %s%s",
-+		       bpftool_path, args,
-+		       suppress_output ? " > /dev/null 2>&1" : "");
++	/* Check output with default format */
++	ret = snprintf(cmd, MAX_BPFTOOL_CMD_LEN, "prog show pinned %s",
++		       test->bpffs_path);
++	if (!ASSERT_GT(ret, 0, "format pinned prog check command"))
++		return;
++	ret = get_bpftool_command_output(cmd, output,
++			MAX_BPFTOOL_OUTPUT_LEN);
++	if (ASSERT_OK(ret, "get program info")) {
++		ret = check_metadata(output, test->expected_output,
++				ARRAY_SIZE(test->expected_output));
++		ASSERT_OK(ret, "find metadata");
++	}
 +
-+	f = popen(command, "r");
-+	if (!f)
-+		return 1;
++	/* Check output with json format */
++	ret = snprintf(cmd, MAX_BPFTOOL_CMD_LEN, "prog -j show pinned %s",
++		       test->bpffs_path);
++	if (!ASSERT_GT(ret, 0, "format pinned prog check command in json"))
++		return;
++	ret = get_bpftool_command_output(cmd, output,
++					 MAX_BPFTOOL_OUTPUT_LEN);
++	if (ASSERT_OK(ret, "get program info in json")) {
++		ret = check_metadata(output, test->expected_output_json,
++				ARRAY_SIZE(test->expected_output_json));
++		ASSERT_OK(ret, "find metadata in json");
++	}
 +
-+	if (!suppress_output)
-+		fread(output_buf, 1, output_max_len, f);
-+	ret = pclose(f);
-+
-+	return ret;
 +}
 +
-+int run_bpftool_command(char *args)
++static struct test_desc tests[] = {
++	{
++		.name = "metadata_unused",
++		.bpf_prog = BPF_FILE_UNUSED,
++		.bpffs_path = BPFFS_UNUSED,
++		.expected_output = {
++			"a = \"foo\"",
++			"b = 1"
++		},
++		.expected_output_json = {
++			"\"metadata\":{\"a\":\"foo\",\"b\":1}"
++		}
++	},
++	{
++		.name = "metadata_used",
++		.bpf_prog = BPF_FILE_USED,
++		.bpffs_path = BPFFS_USED,
++		.expected_output = {
++			"a = \"bar\"",
++			"b = 2"
++		},
++		.expected_output_json = {
++			"\"metadata\":{\"a\":\"bar\",\"b\":2}"
++		}
++	}
++};
++static const int tests_count = ARRAY_SIZE(tests);
++
++void test_bpftool_metadata(void)
 +{
-+	return run_command(args, NULL, 0);
++	int i;
++
++	for (i = 0; i < tests_count; i++) {
++		if (!test__start_subtest(tests[i].name))
++			continue;
++		if (ASSERT_OK(setup(&tests[i]), "setup bpffs pin dir")) {
++			run_test(&tests[i]);
++			cleanup(&tests[i]);
++		}
++	}
 +}
-+
-+int get_bpftool_command_output(char *args, char *output_buf, size_t output_max_len)
-+{
-+	return run_command(args, output_buf, output_max_len);
-+}
-+
-diff --git a/tools/testing/selftests/bpf/bpftool_helpers.h b/tools/testing/selftests/bpf/bpftool_helpers.h
-new file mode 100644
-index 000000000000..dec1ba201410
---- /dev/null
-+++ b/tools/testing/selftests/bpf/bpftool_helpers.h
-@@ -0,0 +1,11 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+#pragma once
-+
-+#include <stdlib.h>
-+#include <stdio.h>
-+#include <stdbool.h>
-+
-+#define MAX_BPFTOOL_CMD_LEN	(256)
-+
-+int run_bpftool_command(char *args);
-+int get_bpftool_command_output(char *args, char *output_buf, size_t output_max_len);
+diff --git a/tools/testing/selftests/bpf/test_bpftool_metadata.sh b/tools/testing/selftests/bpf/test_bpftool_metadata.sh
+deleted file mode 100755
+index b5520692f41b..000000000000
+--- a/tools/testing/selftests/bpf/test_bpftool_metadata.sh
++++ /dev/null
+@@ -1,85 +0,0 @@
+-#!/bin/sh
+-# SPDX-License-Identifier: GPL-2.0
+-
+-# Kselftest framework requirement - SKIP code is 4.
+-ksft_skip=4
+-
+-BPF_FILE_USED="metadata_used.bpf.o"
+-BPF_FILE_UNUSED="metadata_unused.bpf.o"
+-
+-TESTNAME=bpftool_metadata
+-BPF_FS=$(awk '$3 == "bpf" {print $2; exit}' /proc/mounts)
+-BPF_DIR=$BPF_FS/test_$TESTNAME
+-
+-_cleanup()
+-{
+-	set +e
+-	rm -rf $BPF_DIR 2> /dev/null
+-}
+-
+-cleanup_skip()
+-{
+-	echo "selftests: $TESTNAME [SKIP]"
+-	_cleanup
+-
+-	exit $ksft_skip
+-}
+-
+-cleanup()
+-{
+-	if [ "$?" = 0 ]; then
+-		echo "selftests: $TESTNAME [PASS]"
+-	else
+-		echo "selftests: $TESTNAME [FAILED]"
+-	fi
+-	_cleanup
+-}
+-
+-if [ $(id -u) -ne 0 ]; then
+-	echo "selftests: $TESTNAME [SKIP] Need root privileges"
+-	exit $ksft_skip
+-fi
+-
+-if [ -z "$BPF_FS" ]; then
+-	echo "selftests: $TESTNAME [SKIP] Could not run test without bpffs mounted"
+-	exit $ksft_skip
+-fi
+-
+-if ! bpftool version > /dev/null 2>&1; then
+-	echo "selftests: $TESTNAME [SKIP] Could not run test without bpftool"
+-	exit $ksft_skip
+-fi
+-
+-set -e
+-
+-trap cleanup_skip EXIT
+-
+-mkdir $BPF_DIR
+-
+-trap cleanup EXIT
+-
+-bpftool prog load $BPF_FILE_UNUSED $BPF_DIR/unused
+-
+-METADATA_PLAIN="$(bpftool prog)"
+-echo "$METADATA_PLAIN" | grep 'a = "foo"' > /dev/null
+-echo "$METADATA_PLAIN" | grep 'b = 1' > /dev/null
+-
+-bpftool prog --json | grep '"metadata":{"a":"foo","b":1}' > /dev/null
+-
+-bpftool map | grep 'metadata.rodata' > /dev/null
+-
+-rm $BPF_DIR/unused
+-
+-bpftool prog load $BPF_FILE_USED $BPF_DIR/used
+-
+-METADATA_PLAIN="$(bpftool prog)"
+-echo "$METADATA_PLAIN" | grep 'a = "bar"' > /dev/null
+-echo "$METADATA_PLAIN" | grep 'b = 2' > /dev/null
+-
+-bpftool prog --json | grep '"metadata":{"a":"bar","b":2}' > /dev/null
+-
+-bpftool map | grep 'metadata.rodata' > /dev/null
+-
+-rm $BPF_DIR/used
+-
+-exit 0
 
 -- 
 2.52.0
