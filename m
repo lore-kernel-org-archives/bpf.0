@@ -1,41 +1,42 @@
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21EED313E3A;
-	Wed, 21 Jan 2026 15:18:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C62D54A1391;
+	Wed, 21 Jan 2026 15:18:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769008723; cv=none; b=BiCP6AasVvcX4CaRxsknmWae3b97spF0GoB6dSHTe0sq8A9PzZrHBYZBwG58rGQfEJKSEybizBNKG/u/PTG3I0lUUW4lV4glqB4nOOY92WdTFoMlQgfJ6Bb03bOtXZDAuDxSPmVN1iz8UHsx6ucvm/v9rbCisWhJ/HMYJPx/4dw=
+	t=1769008724; cv=none; b=ftvsKj3Xgztoms91CZfe8CrzvAHb+SClkNK1dtC9CgEHptIrfLngTZP+537me3E9a9dL8c8Ky0J7ZzxI+me/KKsz2zA0dBRGGbtERfXXK8CS7D/502z5EC0eYneINVNWsHnKGZ77NiHbQb8wYLdT8gexa1JZEJ1NpmiAy5B+O0c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769008723; c=relaxed/simple;
-	bh=RZCLtjgUrKfQYhHSBjFz127iEBsMdSjQVFrFfHCifvM=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=oxV/XYcUeFz45kMvfZVhzmf4y3iP/eVN6kKeqQDEqSCIN6tFb8iKzmrfdxXEaZTBJu9FrmN6QtfFRo5MF3VC89YrXkF7kNRhY6OwuQRv8K9aiTNFy7VNepXalTiJtQD+lTWr+a+Uhzx+GpSexZtU5OythJJcH1MrTIEKyAEK+qs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=x4Xs9VxX; arc=none smtp.client-ip=185.246.84.56
+	s=arc-20240116; t=1769008724; c=relaxed/simple;
+	bh=nojLYlnUBROHjmm2L7wgWdhcwqMsQDSOTW0Dc6oUXqw=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=MepzgtqhRSpu9Dsv2vmfzFPEPuDKMTDwFk1ihhssFCWrwFJ6JY1DIKg5td8BuIKv0lWl/R8yHA05J9DIMJYQcDncCi1JiQo+zmtOMlB5Tp8CWPqOL8GW5b5GONR+kvveiG2rxDce5sDLp1qDqXD0e5gF0EyqBa+UWO4gDfFcv+Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=l/eWjegY; arc=none smtp.client-ip=185.246.85.4
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="x4Xs9VxX"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="l/eWjegY"
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id 45EA41A29A8;
-	Wed, 21 Jan 2026 15:18:38 +0000 (UTC)
+	by smtpout-03.galae.net (Postfix) with ESMTPS id 320634E421C9;
+	Wed, 21 Jan 2026 15:18:41 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id EF4536070A;
-	Wed, 21 Jan 2026 15:18:37 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 2FE43119B1696;
-	Wed, 21 Jan 2026 16:18:33 +0100 (CET)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 040386070A;
+	Wed, 21 Jan 2026 15:18:41 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 3FAE1119B1697;
+	Wed, 21 Jan 2026 16:18:37 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1769008716; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding; bh=IejE9iCDMWcSL6DATLN3PAAwL5QqkOl8mWRYKlkYiGs=;
-	b=x4Xs9VxXcUcpsISc3awHLu9uMrdHX9w1XbKp2CgatwFNInSu7FmJ3nD1BL9yJYTCJBkbWd
-	V6kHKec5xrOjO0bjT/IAi9fgqN2b1tnX8ktV9eDu7Jw9eDPBwXtKz2rdd79KpoxQMqAG9N
-	IvfJ+uQyOfYnLHaWbCNbwO68c+Iu7W2U2f84fLrgTqVXat+rNb7YSFNapILznXUiTQ4ts7
-	q7vD1kfpxmRJZGLI25UY6cIkzsckxzIPUEjXFthplmzNq0K3/3YDjlsie9sasY6tviNPi7
-	Vzw4urVgTZ8R6ADXfE212WtSFlNTtFr+/bq9oY5ylRnO6ISnw7coPt83KvD6dg==
+	t=1769008719; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=nK5OdHC4v4urBGe4fZDeYp81OhszkNIDiCdCwuVXm2s=;
+	b=l/eWjegYtPvqkKzAjaiG7DbUVHX2oVDrh+ndnNcyxwbAwJicxDdvc2CaVtLLA7oKDG8ZEq
+	plBGSVHFr/jcNZfK7Ty1L3Ji85/6Fhlu8SMiiUmPr19GiOink/haWVBjQV5zA2zwhcoQRy
+	oJ3LQWFfSvWSSoSSgQhvG0ytlpaHeMJvkZ1lMCGggkQrX9hTsCfZhk0xlcajBWFjt1xr7W
+	+Bw5+qm+58sqCLrO/v85ILw7/IYmPaBrnn0xevT9/PVIg5Qbcn/lkKW6fm42YwWqTs4ZDc
+	YEL+4chX6vinlbL+xb+Hku/jixAl1OX+zVZtnzi/awCITg6T7U43WMlqk/dGhg==
 From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
-Subject: [PATCH bpf-next v2 0/4] selftests/bpf: migrate a few bpftool
- testing scripts
-Date: Wed, 21 Jan 2026 16:18:13 +0100
-Message-Id: <20260121-bpftool-tests-v2-0-64edb47e91ae@bootlin.com>
+Date: Wed, 21 Jan 2026 16:18:14 +0100
+Subject: [PATCH bpf-next v2 1/4] selftests/bpf: reorder test_progs sources
+ alphabetically
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -44,11 +45,9 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/12NwQqDMBBEf0X23BQ3qLQ99T/Eg7vd1AWbSBLEI
- v57g8cehzfzZockUSXBo9ohyqpJgy/BXirgafRvMfoqGWxtW7RoDS0uhzCbLCknQ4Rdyw2z0A3
- KZonidDt9PZSq8bJlGAqZNOUQv+fRiicvzq5GbP6cK5rasBsJme8ko3tSCHlWf+XwgeE4jh83X
- XEktgAAAA==
-X-Change-ID: 20251212-bpftool-tests-bb165c4cceb8
+Message-Id: <20260121-bpftool-tests-v2-1-64edb47e91ae@bootlin.com>
+References: <20260121-bpftool-tests-v2-0-64edb47e91ae@bootlin.com>
+In-Reply-To: <20260121-bpftool-tests-v2-0-64edb47e91ae@bootlin.com>
 To: Andrii Nakryiko <andrii@kernel.org>, 
  Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
  Daniel Borkmann <daniel@iogearbox.net>, 
@@ -67,47 +66,65 @@ Cc: ebpf@linuxfoundation.org,
 X-Mailer: b4 0.14.3
 X-Last-TLS-Session-Version: TLSv1.3
 
-Hello,
-this is the v2 for some bpftool tests conversion. This new version drops
-a large part of the previous version, as it eventually integrates the
-converted tests into test_progs rather than into a new dedicated runner.
-The new tests however are almost identical to those in v1, as the
-dropped test_bpftool runner was exposing the same kind of features as
-those in test_progs.
-
-- First commit is just a small cleanup, reordering files in the
-  selftests Makefile
-- Second commit introduces a few dedicated helpers to execute bpftool
-  commands, with or without retrieving the generated stdout output
-- Third commit integrates test_bpftool_metadata.sh into test_progs
-- Fourth commit integrates test_bpftool_map.sh into test_progs
+Update test_progs sources listing to make those sorted alphabetically
 
 Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
 ---
 Changes in v2:
-- drop standalone runner in favor of test_progs
-- Link to v1: https://lore.kernel.org/r/20260114-bpftool-tests-v1-0-cfab1cc9beaf@bootlin.com
-
+- new commit
 ---
-Alexis Lothoré (eBPF Foundation) (4):
-      selftests/bpf: reorder test_progs sources alphabetically
-      bpf/selftests: add a few helpers for bpftool testing
-      selftests/bpf: convert test_bpftool_metadata.sh into test_progs framework
-      selftests/bpf: convert test_bpftool_map_access.sh into test_progs framework
+ tools/testing/selftests/bpf/Makefile | 36 ++++++++++++++++++------------------
+ 1 file changed, 18 insertions(+), 18 deletions(-)
 
- tools/testing/selftests/bpf/Makefile               |  39 +-
- tools/testing/selftests/bpf/bpftool_helpers.c      |  74 ++++
- tools/testing/selftests/bpf/bpftool_helpers.h      |  11 +
- .../selftests/bpf/prog_tests/bpftool_maps_access.c | 371 +++++++++++++++++++
- .../selftests/bpf/prog_tests/bpftool_metadata.c    | 134 +++++++
- tools/testing/selftests/bpf/test_bpftool_map.sh    | 398 ---------------------
- .../testing/selftests/bpf/test_bpftool_metadata.sh |  85 -----
- 7 files changed, 609 insertions(+), 503 deletions(-)
----
-base-commit: cb353e9f65bd5eb7025211f36bdab6c43d27f6f4
-change-id: 20251212-bpftool-tests-bb165c4cceb8
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index fd42b7193d4e..0270b0a6dd79 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -729,25 +729,25 @@ $(VERIFY_SIG_HDR): $(VERIFICATION_CERT)
+ # Define test_progs test runner.
+ TRUNNER_TESTS_DIR := prog_tests
+ TRUNNER_BPF_PROGS_DIR := progs
+-TRUNNER_EXTRA_SOURCES := test_progs.c		\
+-			 cgroup_helpers.c	\
+-			 trace_helpers.c	\
+-			 network_helpers.c	\
+-			 testing_helpers.c	\
+-			 btf_helpers.c		\
+-			 cap_helpers.c		\
+-			 unpriv_helpers.c 	\
+-			 netlink_helpers.c	\
+-			 jit_disasm_helpers.c	\
+-			 io_helpers.c		\
+-			 test_loader.c		\
+-			 xsk.c			\
+-			 disasm.c		\
+-			 disasm_helpers.c	\
+-			 json_writer.c 		\
++TRUNNER_EXTRA_SOURCES := btf_helpers.c			\
++			 cap_helpers.c			\
++			 cgroup_helpers.c		\
++			 disasm.c			\
++			 disasm_helpers.c		\
++			 flow_dissector_load.h		\
++			 ip_check_defrag_frags.h	\
++			 io_helpers.c			\
++			 jit_disasm_helpers.c		\
++			 json_writer.c 			\
++			 netlink_helpers.c		\
++			 network_helpers.c		\
++			 test_loader.c			\
++			 test_progs.c			\
++			 testing_helpers.c		\
++			 trace_helpers.c		\
++			 unpriv_helpers.c 		\
+ 			 $(VERIFY_SIG_HDR)		\
+-			 flow_dissector_load.h	\
+-			 ip_check_defrag_frags.h
++			 xsk.c
+ TRUNNER_LIB_SOURCES := find_bit.c
+ TRUNNER_EXTRA_FILES := \
+ 		       $(OUTPUT)/xdp_synproxy				\
 
-Best regards,
 -- 
-Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
+2.52.0
 
