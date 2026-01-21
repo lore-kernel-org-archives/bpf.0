@@ -1,191 +1,118 @@
-Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5083364EA4
-	for <bpf@vger.kernel.org>; Wed, 21 Jan 2026 03:37:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61ED833DEC9
+	for <bpf@vger.kernel.org>; Wed, 21 Jan 2026 03:44:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768966677; cv=none; b=LaabCrEvD8sjr5N6N3pwEsd9BR2WDDzztSwKcwPKNrTUv3uOhuKZSHNmewiw2z1eiQOO286NrQpKRITAtDKhW2xi0whc3paY2H4Iqeqcg7K95ZI2i3BT+7HIhdihnropSYrMudyYZjDt6sO0klOUsd6a1XCi0aTw8xB633bVfuA=
+	t=1768967083; cv=none; b=GyrorNrFgpxsbUBMqqkMd2ueL09FJIFFrs85ro+O+eFyiQnK3q82O4kecOMUDgAoF/9ufSwuOoOjbamw8Fe8L/Od8qzc+MLkxP/Xuymg5lKK8TJliprqQY7r/MOdzs1Zs5kbPuIQMxsEeaYpyc8oQId+caZ2ISZQPc202v/gohY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768966677; c=relaxed/simple;
-	bh=8qh5wQNLZU6wwBGWEyVrZK+XA7DMEGWQRHkfgRfg4tg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=jdei5cymlgjUynt70oUdCJwDhehrN7hqEmdeCrgTLejGY5tf0iCGPGl6S9zvu8vlzfrHPT2myJl8FOTsfy525EG3ZVBqUqGpeKvzeq+oC2+BTvwrPIHpbBtwYW2qReF/L/EkZcpuhUZcCgiWgyWhIa5HZvJIHArBZvWwHSFLpuU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=bPH4D2vv; arc=none smtp.client-ip=91.218.175.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1768967083; c=relaxed/simple;
+	bh=gw/zexsat64Gv8TuikLKc5mSPf13yohroiifATy58+k=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=rlTT8Rnq0SfKrcJcgbVcnitXb9ZpSaPalqwvFImtqhlVeuVrPQsZ0S1wSUIm2Lbsit/MZNL4EY+QZO3R2brfuurWoiSIHDdSKiCQUny5v1zjd4E1OWgi97FMLPOU6jDyg7kmPPnPWuA81tl6uuAugUg/xxuv3c7UmFjNCi0YMHo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk; spf=none smtp.mailfrom=davidwei.uk; dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b=eDyYG1ya; arc=none smtp.client-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=davidwei.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="bPH4D2vv"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1768966662;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=7UBdMQNlhca9bxIf9Kpx0U3lgAusXCi9ZhqhkTK7wfA=;
-	b=bPH4D2vvIoHO9WcYByhyqkGeWEzCiwvbEEotWGXHy8bGh8I6WHWqEneyPL9hO9exrR69Q/
-	1sLHtgbp3IQZeWif3hwnz/ROKss3wjTeA/PGRoow+1XcNdgBN301vftR2LCzLdgB0IuaV3
-	Q7MdIHsg0v5uRRqWef/ZBNd3MA592g8=
-From: Menglong Dong <menglong.dong@linux.dev>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Menglong Dong <menglong8.dong@gmail.com>,
- Andrii Nakryiko <andrii.nakryiko@gmail.com>,
- Alexei Starovoitov <ast@kernel.org>, Eduard <eddyz87@gmail.com>,
- "David S. Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, X86 ML <x86@kernel.org>,
- "H. Peter Anvin" <hpa@zytor.com>,
- Network Development <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
- LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v6 1/2] bpf,
- x86: inline bpf_get_current_task() for x86_64
-Date: Wed, 21 Jan 2026 11:37:28 +0800
-Message-ID: <3672461.iIbC2pHGDl@7940hx>
-In-Reply-To:
- <CAADnVQ+Om14RF1GvA0vkhKdsCtVGzbacftEZarLJ-LKdYXUZ+g@mail.gmail.com>
-References:
- <20260120070555.233486-1-dongml2@chinatelecom.cn>
- <10788751.nUPlyArG6x@7940hx>
- <CAADnVQ+Om14RF1GvA0vkhKdsCtVGzbacftEZarLJ-LKdYXUZ+g@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b="eDyYG1ya"
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2a75a4a140eso8475395ad.3
+        for <bpf@vger.kernel.org>; Tue, 20 Jan 2026 19:44:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=davidwei-uk.20230601.gappssmtp.com; s=20230601; t=1768967080; x=1769571880; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=aVyESZuF8vPeJbSMOEnjb9v3b+2mKVyjCwk5OYeVNdg=;
+        b=eDyYG1yaTUiWmMfdhg5iTIMytTWaBVR5JiH6uCNlM6g/u3QFqmigWyMMHIzXFo+QQ9
+         8sloz1a4/Vz0uaOSp2kjNNQAJOH8lbEpkvVEFB0GN/Vdvh+/yVQ/1E0mnuKHqYkBFZph
+         r2NaR7BBmEViT6NvtRRaSAxfAEP4EkwP1k04B0ytxTgU9oxmBfmQrlOSPto+T+J8+er/
+         PUykGS/ePPMszMe7UfyR546FPyaGWGBTAQmV3qpVY2oefhBzK9GUWrZScgl+DsUQ1nrK
+         +FT3o5RuVmUa9oDDniQO8lgeJjNHaBlm7a0wGo8Fq0hCJjuuV34UKOj8IexBz3buxoYS
+         qXYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768967080; x=1769571880;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aVyESZuF8vPeJbSMOEnjb9v3b+2mKVyjCwk5OYeVNdg=;
+        b=mFgOzC3qoDsFl5IJ7KVfE2ht1jjFFKuhl69vOmrr7uChMkKa9A9WnaxV9bYc82q6sC
+         Lho89eQkmubewVvj2hjWj80chZ2TT3jEEJXiAWE1bopn5DeKy+CH4ms/tFwZCgfGXCz1
+         2xnYTTxuVYpIB7gPuUW83kMPRhWUNfPC5YnuA0zfGhAHZwRSfthyEFjesPHKK+diZFlN
+         tt1QNdjMU2q7lfuFTLxCv+z/onXApA3oD+0P0MsNJeZaPJGRBX7hCBOnUUKmJu1lw+/R
+         PyQAERFbwKh0gA+IentD6b60Eb354IN82SJBGkvrBo1tVnfaQGN72pOOxARBSIhoVzZb
+         yczQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXWlgSls4MqCaY6eBUVNMxdJjcysaFz/tiEASHCREtRyEhvHX7DK8ypna3JfbwDDIXBpFE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyT6ZIlQFY4TyucOa6bAEZ2hBGjXKfgPTg/ksGHdySo4XCpdALt
+	ndjKuUxZbOlcexZ0ecNgHUXqrDM9gA9ymarMDzU8/t4QC0RR9+OYbpki2g93g3UEhyg=
+X-Gm-Gg: AZuq6aLuAMh38OwuUTtqdIfx5BhES1FExASqqDqCjFkRO98enDE56RkoUxo7rX1B4HR
+	3zHE4v0DQckNBm6gIUgPO6m2Ci+/bgeGE1FHztZOI990lIAY8kFvzNsSXi2Kt/2Zr22DOyktyQC
+	gye5n6DylmgTZVxMXcxj6GMPHQJ8wHSSm2W+BjuJWrXmvyXswXbldSpChv8NDFDoA4RHYkhASnf
+	CEpASqph+pyZtuTSp8N6jI6/h5Bo3IfgIb10jaO2gh9227TeCgB61yNK4gbVVvNO/rN3tVaDP7z
+	11EitqbtODlErKvOeeEipkIM6qxq55ZdqKsDXU/07VrDlSY8+0eF2mNsEq5lWaIp9G+GmLUenJe
+	YJKWd0/IKD6papqUwXrGyKPKqMRk7gjNJk+NHpTxdaY8Y/MBrni7l1gjQ3qsLznmTA0C9jWJLCN
+	505FP/YuFTfSHNCAFEqOmTRS6u1t/goOZF/a8vtMagfea/lTFXfcfrmqE=
+X-Received: by 2002:a17:903:4b27:b0:2a0:d05c:7de3 with SMTP id d9443c01a7336-2a76923cebemr33428955ad.15.1768967080464;
+        Tue, 20 Jan 2026 19:44:40 -0800 (PST)
+Received: from [192.168.86.157] ([136.27.45.11])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a784af4269sm17959895ad.77.2026.01.20.19.44.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Jan 2026 19:44:40 -0800 (PST)
+Message-ID: <11241110-6bd5-4b06-8d4c-55e52c571ff6@davidwei.uk>
+Date: Tue, 20 Jan 2026 19:44:39 -0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
-X-Migadu-Flow: FLOW_OUT
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v7 05/16] net: Proxy net_mp_{open,close}_rxq for
+ leased queues
+To: Jakub Kicinski <kuba@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>
+Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, davem@davemloft.net,
+ razor@blackwall.org, pabeni@redhat.com, willemb@google.com, sdf@fomichev.me,
+ john.fastabend@gmail.com, martin.lau@kernel.org, jordan@jrife.io,
+ maciej.fijalkowski@intel.com, magnus.karlsson@intel.com, toke@redhat.com,
+ yangzhenze@bytedance.com, wangdongdong.6@bytedance.com
+References: <20260115082603.219152-1-daniel@iogearbox.net>
+ <20260115082603.219152-6-daniel@iogearbox.net>
+ <20260120180402.2b9ab13a@kernel.org>
+Content-Language: en-US
+From: David Wei <dw@davidwei.uk>
+In-Reply-To: <20260120180402.2b9ab13a@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On 2026/1/21 11:10 Alexei Starovoitov <alexei.starovoitov@gmail.com> write:
-> On Tue, Jan 20, 2026 at 5:58=E2=80=AFPM Menglong Dong <menglong.dong@linu=
-x.dev> wrote:
-> >
-> > On 2026/1/21 09:23 Andrii Nakryiko <andrii.nakryiko@gmail.com> write:
-> > > On Mon, Jan 19, 2026 at 11:06=E2=80=AFPM Menglong Dong <menglong8.don=
-g@gmail.com> wrote:
-> > > >
-> > > > Inline bpf_get_current_task() and bpf_get_current_task_btf() for x8=
-6_64
-> > > > to obtain better performance.
-> > > >
-> > > > Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
-> > > > Acked-by: Eduard Zingerman <eddyz87@gmail.com>
-> > > > ---
-> > > > v5:
-> > > > - don't support the !CONFIG_SMP case
-> > > >
-> > > > v4:
-> > > > - handle the !CONFIG_SMP case
-> > > >
-> > > > v3:
-> > > > - implement it in the verifier with BPF_MOV64_PERCPU_REG() instead =
-of in
-> > > >   x86_64 JIT.
-> > > > ---
-> > > >  kernel/bpf/verifier.c | 22 ++++++++++++++++++++++
-> > > >  1 file changed, 22 insertions(+)
-> > > >
-> > > > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> > > > index 9de0ec0c3ed9..c4e2ffadfb1f 100644
-> > > > --- a/kernel/bpf/verifier.c
-> > > > +++ b/kernel/bpf/verifier.c
-> > > > @@ -17739,6 +17739,10 @@ static bool verifier_inlines_helper_call(s=
-truct bpf_verifier_env *env, s32 imm)
-> > > >         switch (imm) {
-> > > >  #ifdef CONFIG_X86_64
-> > > >         case BPF_FUNC_get_smp_processor_id:
-> > > > +#ifdef CONFIG_SMP
-> > > > +       case BPF_FUNC_get_current_task_btf:
-> > > > +       case BPF_FUNC_get_current_task:
-> > > > +#endif
-> > >
-> > > Does this have to be x86-64 specific inlining? With verifier inlining
-> > > and per_cpu instruction support it should theoretically work across
-> > > all architectures that do support per-cpu instruction, no?
-> > >
-> > > Eduard pointed out [0] to me for why we have that x86-64 specific
-> > > check. But looking at do_misc_fixups(), we have that early
-> > > bpf_jit_inlines_helper_call(insn->imm)) check, so if some JIT has more
-> > > performant inlining implementation, we will just do that.
-> > >
-> > > So it seems like we can just drop all that x86-64 specific logic and
-> > > claim all three of these functions as inlinable, no?
-> > >
-> > > And even more. We can drop rather confusing
-> > > verifier_inlines_helper_call() that duplicates the decision of which
-> > > helpers can be inlined or not, and have:
-> >
-> > The verifier_inlines_helper_call() is confusing, but I think we can't
-> > remove the x86-64 checking. For example, some architecture
-> > don't support BPF_FUNC_get_current_task both in
-> > bpf_jit_inlines_helper_call() and verifier_inlines_helper_call(), which
-> > means it can't be inline.
-> >
-> > >
-> > > if (env->prog->jit_requested && bpf_jit_supports_percpu_insn() {
-> > >     switch (insn->imm) {
-> > >     case BPF_FUNC_get_smp_processor_id:
-> > >         ...
-> > >         break;
-> > >     case BPF_FUNC_get_current_task_btf:
-> > >     case BPF_FUNC_get_current_task_btf:
-> > >         ...
-> > >         break;
-> > >     default:
-> > > }
-> > >
-> > > And the decision about inlining will live in one place.
-> > >
-> > > Or am I missing some complications?
-> >
-> > As Alexei said, the implement of "current" is architecture specific,
-> > and the per-cpu variable "current_task" only exist on x86_64.
-> >
-> > >
-> > > And with all that, should we mark get_current_task and
-> > > get_current_task_btf as __bpf_fastcall?
-> >
-> > I think it make sense, and the I saw bpf_get_smp_processor_id does
-> > such operation:
-> >
-> > const struct bpf_func_proto bpf_get_smp_processor_id_proto =3D {
-> >         [...]
-> >         .allow_fastcall =3D true,
-> > };
-> >
-> > PS: I'm a little confused about the fast call. We inline many helper,
-> > but it seems that bpf_get_smp_processor_id is the only one that
-> > use the "allow_fastcall". Why? I'd better study harder.
->=20
-> It's
-> static __bpf_fastcall __u32 (* const bpf_get_smp_processor_id)(void) =3D
-> (void *) 8;
->=20
-> and
-> #define __bpf_fastcall __attribute__((bpf_fastcall))
+On 2026-01-20 18:04, Jakub Kicinski wrote:
+> On Thu, 15 Jan 2026 09:25:52 +0100 Daniel Borkmann wrote:
+>>   	if (!netdev_need_ops_lock(dev))
+>>   		return -EOPNOTSUPP;
+>> -
+>>   	if (rxq_idx >= dev->real_num_rx_queues) {
+>>   		NL_SET_ERR_MSG(extack, "rx queue index out of range");
+>>   		return -ERANGE;
+>>   	}
+>> -	rxq_idx = array_index_nospec(rxq_idx, dev->real_num_rx_queues);
+>>   
+>> +	rxq_idx = array_index_nospec(rxq_idx, dev->real_num_rx_queues);
+> 
+> The white space changes here look haphazard.
+> 
+>> +	rxq = netif_get_rx_queue_lease_locked(&dev, &rxq_idx);
+> 
+> I really hate this function but I don't have any great suggestion on
+> how to make it better. I'd prefer if there was a clear separation
+> between the case where we call directly, vs where swapped the queue.
+> Instead of replacing pointers passed in by reference :| And that'd
+> remove the conditional locking too.
 
-Ah, I see. It seems that the bpf_doc.py does the trick.
+Yeah :/ I will clean up the unnecessary whitespace changes and pull out
+the checks at least. The current way makes it easier for the callers as
+they don't need to distinguish between direct vs swapped. But, I do
+appreciate how awful it feels.
 
->=20
-> which makes LLVM use more registers at the callsite (less spill/fill).
->=20
-> Looking at the patch again. I think it's fine as-is.
-> fastcall can be a follow up.
-
-Okay!
-
-Thanks!
-Menglong Dong
-
-
-
-
-
+I can try moving netif_get_rx_queue_lease_locked() out into the callers
+and see how that feels instead. __net_mp_open_rxq() will then fail for
+virtual netdevs.
