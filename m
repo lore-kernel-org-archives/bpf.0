@@ -1,80 +1,81 @@
-Received: from mail-yw1-f194.google.com (mail-yw1-f194.google.com [209.85.128.194])
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 390B9347BBB
-	for <bpf@vger.kernel.org>; Wed, 21 Jan 2026 03:03:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B620C34F476
+	for <bpf@vger.kernel.org>; Wed, 21 Jan 2026 03:10:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.54
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768964628; cv=pass; b=jZr8Exo/BvHdXlm4vuHhvjOz0hGFDBB9uZzuUOGQPW5D0nluvfL7sheZg6VNoo9r159KE7SLcOVJ2OSd8f6wFVM7IIp4qsLHtovsTkZcXe5wR3H5DU4C4cwXzm4Vej4A1bpo792Rqwxa3wmtyqK3XWnqudrs6V3jrveto0FecLQ=
+	t=1768965041; cv=pass; b=D5A4dZKpoBtVIkfCwAv0wyG9bivVLgUMO5NahUNem0eA/q8OXD/4/Vdet/ywrJL7DRQpGJkj8AKkwgtxCmfXX5fqihbKsOhjNmO+IeGn8xrD0snhOnvK6976vXKCEUMUzqx2UCO+xfEpEPu3OSxR5xLsl2hVXbNu1xNT7GvkXpI=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768964628; c=relaxed/simple;
-	bh=Y7n5BpCEprtmLBLctZAMtt8SFp+1NrIdlsLO06oVVvI=;
+	s=arc-20240116; t=1768965041; c=relaxed/simple;
+	bh=bPgAMyOnYc1aLZP7ijDYYzEhU/LzQVs9bjurTOTDwGU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Vre155OOBYRrfHP/6lKy4bTT3xWWbGK8MkcGmwzWx2zqpQ1aFuIsR1mYKFzuiPXZHLNImxuaAJwk+3CtCBNxaiUd+eEjZYVfnV06guAoOK/kTkE2fIgURBtAzQ77sUyStgeif3X2nrlf6quIOmILuqX5AHnMuWmgpZwBH6RoQx4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S3uFsn+4; arc=pass smtp.client-ip=209.85.128.194
+	 To:Cc:Content-Type; b=WNpwHV8Q2tPOtsVtXXYcH5FneXPWNfnEDpgOyPy4mgMzDWrRUi1HUgPhViOXFCpMr+Uh/dAcpnlpNKOAwLVrDRrAEfRJSzmagQVZsl/xofC1F0+P57ZXgakgnexvndQR8q13iEWMPncbDQocJUqlUczjj3xgvxM65YJw9GkevzQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kKY78HEW; arc=pass smtp.client-ip=209.85.128.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S3uFsn+4"
-Received: by mail-yw1-f194.google.com with SMTP id 00721157ae682-79275e61c2cso57874227b3.3
-        for <bpf@vger.kernel.org>; Tue, 20 Jan 2026 19:03:46 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1768964626; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kKY78HEW"
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-47ee301a06aso57226735e9.0
+        for <bpf@vger.kernel.org>; Tue, 20 Jan 2026 19:10:39 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1768965038; cv=none;
         d=google.com; s=arc-20240605;
-        b=VqkmIGv/QkFNaKOUheey8yPbFTjzgF59Yicf6e7J3JSwLPJM2mmTJtOA3bWkr1Gl5t
-         rvhzxYvA5oIVqamzmN1VzCAC7y5F/Iz2Sml0eDiraQ9yi7S70JpRVwWHwPoIxvDqP63Y
-         KgD66uQgxBTPm0Tb1zqgGKwIYoiNvNBoQxc4TI9KbHkfQNfoMaS0ThXcuOhwi9Z4uZ70
-         a5J0OuZ+I5Dk6gX0lQLPd/epQtWpSw5xeA3mAFCx5bDpcpsqNtNlH5s5Yn4/qy6v/B7Z
-         OtoFCu5R053OPd+jY0h18Am0szv5qyk9hLLYQ3g6YL8SuikZavQW2s2RxJTmdz2gSZyj
-         JxmA==
+        b=goEi1tQBPxBjExcANt3mky2jkiAzttACPlvdTt9rD0G+aR019Y+D/xcfLkvOFuoDwS
+         H+4LP3Lm4GFASB2HypCCZnQAXKXnjTv0uSwiQj3duHkgbzh0Ruoygy2MDiiT6/ZPiYlz
+         E4/4mL3JI+oGMCZb0u8YWiLpytLNj8vRieL57b2XATMVa2nP9u7fTQq2AbDtRQbqIqkQ
+         l52LRkZuJgFhl+hJZmXqPDMrw7HHxDh3W2iFm5ywXezthC0IcMq3i6PU47/BeE6LA0uc
+         MJRZ+oI8CDbKJ5oWd5RtnzSMDEc7VV19y5ed4VXECC5HfDsGvtvQMZOqNElNJ5o0WSaQ
+         REmA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=Y7n5BpCEprtmLBLctZAMtt8SFp+1NrIdlsLO06oVVvI=;
-        fh=UphF0KRjQqb1K+YPLsN7Q216yCHu/4ucv5tIOqrinlc=;
-        b=LAvowbqoSmjRkmtGs8x1cSHMXXOfbL6zUWB8pgCyFtql4H1JM9+2DYPvQ1Rp8SoU9b
-         0ZefyBjj9XGQMWsemaQCd5J3WsvvFKbUaapI25in65rQFNbILRIpNVhqj/bF4tXx2L5A
-         fVlj43TCLHueIUCNnzzskcqMawrpOn310GHaqvCe+IAsV2Eh3IPOkVL5CEYKxgCW9b1M
-         H5zu97u7JmS7uhFeXGdeoLTOGRMPx5fCFNWuZfWOY8bxubyN7ZqKWIuROmWzIh/D7ibg
-         RDqXeXyTKF4D0QcwpavT3Mb+tOnA3y4SCKwzfZ7MFpE5n6Bkm0LcRy+XYlqhZ+VZRsmI
-         OfvA==;
+        bh=6viIcJ3JtUIizIwvwmg/ihXKGMLAaRfWxmAiRKn8ywI=;
+        fh=NTXvZ6343yYn7SuKPK6DwVjjSyAfCHdq2l5RGmfW6bE=;
+        b=FgajQeyiJa/YhLo/6ioiGi22QUwOpm8kRxJYIi/Iop/F+9u26gmVWuRdMXv8ijWEfS
+         geSfECbRUtrrmSMSltbPzBio3xRUhhj58hHJab6Sh59kSJgD6NvMPUd7lkAukMYnl/1B
+         Vr9WMPwc7EBkChPRmCSH6ADSz39VB4Y86/cCjKWWG+/ntYdGiOUsg45pfwoMTBSf8JAX
+         G94zKa8Ef2WdLrhggezRYVjM3R/tYd29zfbs5q15BIGY9xTIoNaSPyIZ/AJK5q/UOPrs
+         mZKPra8D0FXTnFregSmpRv0YjdJEXG8q0tOCNRHnHVNW+nDgqZTtPrLO9SYxrvtYZzMQ
+         3yvQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768964626; x=1769569426; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1768965038; x=1769569838; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Y7n5BpCEprtmLBLctZAMtt8SFp+1NrIdlsLO06oVVvI=;
-        b=S3uFsn+4iiJtlZMTj0nqj7q2bUCWgn44WpoatXBW/YfIrFqx5iH3fe1och8lual+Mc
-         zrh8+n0CA1OAdJDRvharnVyClDeyUsx2SeWLrUfKx4iFkPL8yd2a++4ccwVd+VpcFVcU
-         Z18G7AwtOne5MoGi58yVuYwajfyPhZYrtPmplbwCtnnnkBA1nrdr5lZsvxLZL5mzRywa
-         bK5CkzhdOabK8dBpbO3rz1aWdGWugZg5sAY3+J8mvKi712jNhKFoa2ZL31bmV9PMi0Xi
-         HD8hmslQX1A7kjUF7DIMODZOOe57gGFR9IsGmjtJzQj1zkewTL26X57COREoKlUktJq9
-         U51g==
+        bh=6viIcJ3JtUIizIwvwmg/ihXKGMLAaRfWxmAiRKn8ywI=;
+        b=kKY78HEWof4nZv82T7K9I422VIR11mNkKoB6U9jpXOzjV49drTz5lVljkU0jv0EBXj
+         oP7NtB3UfEcqQ3a7mlbY7loUiGQntb5GBtLAEhNvun2t8uJWqct1ueXGajDXSNrMSatV
+         ++etFGkmGVToQvVS+YQZS17X+SLgfyZTZeqBRDkdVcEKaGC4+vA4OA68yGZ+XxMgeUy1
+         wo1QC1bmCuZ77R/uka0J3ZGdrlpY7yxbIfCZLapnyqzLmdIXTAXylNbJ33u3I9NDAUTY
+         hBUiCzh+Jxkko7FmifdEkpHnNryyDEBTLUTCEDZm8w3eLn3RrmVSvJINb9HkMn7TTv+N
+         suRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768964626; x=1769569426;
+        d=1e100.net; s=20230601; t=1768965038; x=1769569838;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=Y7n5BpCEprtmLBLctZAMtt8SFp+1NrIdlsLO06oVVvI=;
-        b=YRRxr7oy19fhnYpPMWyddSc2159BtejdA6AF78tkjAyvRialNYMUwKJR7V0NBtQ1Rz
-         R5hRqKOvFO0Q7bu4D0HslJz5LZnnGl2MYwyTTojbuY8rlzUdLxZ41sccXs4iTR6jDB44
-         Nrx/viGnypoprdQRRprBfRbzmvkuOuahm2KdA3swzKOiFQLmS98k9sG6nAxeklyKKjwO
-         X8HBDm7jCz3pr6QELWNAFgmxj89vh+JoJQFkMcVI1C9TbZ3c+dOq+KJrzYgM3P8T8/IP
-         dnsBGzSbr/jzJsOSFcl0stChRgtXOSiiA6ZRrvMOmrp0DFLL8ta2+oKWGDVgQGUpb95a
-         ZACQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXBu+PPGVvgnp98IXc0+Wv7MNEqADB1fiUm+nsslkBpi6PGoYCCHz0a4O12eqg/ge+rskw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz9djmNBFamNSIcVrwHF1DJEsXZZpD4snnzqa79WY5TtvU9o/YS
-	6ZShbPz049dPKmAxH5l7h5wQmozsxbsSvMGzuBEzlJXWezW9dUyD4ki7SqqaBb/bt1ek+lit8QJ
-	OZkjFIl7tr+p0c8U05aebdyZY50Z2VSU=
-X-Gm-Gg: AZuq6aJ2irsD2V6Mw7ZXaWIL8p8ZqISWV4RWfY1i/MYyhrLpJ/GPV/QaDFdll48TUrF
-	Jt7RBgsaBkWxaxsyXBdlp7Y046qh/S7LO9m6T9LPCB9k22SKPQN+/lUrZGqpIQvWbgV4cIZ8owV
-	4L95X4sjxPlMYvvDfcAospm7orgiu/a626TqjAR7xuOclj6h/JSF2xYHHq9JI+HF9hA+cmY/6/W
-	Lt5WTtt9M4JlmeLSEPenePHDfqanUdCYR0T/H1AitZOpzTlONffdewNGgfvZErZ0OWIMFSJYWXi
-	IjxPQ72b
-X-Received: by 2002:a05:690e:d8d:b0:644:6c79:62d7 with SMTP id
- 956f58d0204a3-64917713222mr12432211d50.63.1768964626122; Tue, 20 Jan 2026
- 19:03:46 -0800 (PST)
+        bh=6viIcJ3JtUIizIwvwmg/ihXKGMLAaRfWxmAiRKn8ywI=;
+        b=d/j+4a5NhL7Zluc+XXMzfTcxMvkrDhpAazucypx1HNcs1XGq1GQqY3zXlftzFewm3s
+         weDCyorwX1ow44yyMArmoReXc/hxi53e513Zw3192iX0soJPCsMnWVned+9JXAgcVSnU
+         gMlGJGJpoqezShfka6pifOLxiMWLx997NJG8FnYcakWk7C4GIt9gQa9IFaGqaZ2vwdzA
+         wBkBuQatvi7Dr7+f/cC3FSZHgjffmE8ksqiO5g9UGOA/Muy3Hhx0GayhmgQj6aECLZ+r
+         KOy0zDPifK+XkYDBrry45db15608M/XzBDktMRlUxx1iYAurvZB7Mwye5Uh+Y6IufBMy
+         5OXg==
+X-Forwarded-Encrypted: i=1; AJvYcCXmw4tcuW1b2kab0ejnQs7lba8hvmOcppT7JnyQMCcjV21S9eEPnOiXy9vN/3Di7gxtgLg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzZO6v6EzATp3KDP1Ph6Wn0uuuXLCTW84LgP/7zCajbwbLmGvZl
+	vBg1nYk7AiQ0i2x6s75VWXFv5ehQmTmR3TSx9T0ujqGkWl4oQwALiwSQR9SRMEymqfmfsQERAyB
+	9ePVh3GZJ8HjJ5go4lMK/pWURFcHBcyU=
+X-Gm-Gg: AZuq6aLo52e8Q9Zmw2T1Ttur9kLBK/cWyL/eup4shrBLlveY1zPtFkWiozlRayw5n1Y
+	7toSOl+TixGSZJpR1cwxcJtelSytCTdy33HQdv33fjTcJXmG4bm4wSN0fLQDvE/THRJ71y8YUuz
+	qpCFsXCjt7J/RR7/QA3TX0IpsRnDIS2SH6C637vTOZYhvCq/Mq2OYCO9pmx+ef1/UNjMJgvUb3S
+	lh6CW2L5BEKuoo/SF204rJ6XCVH6rtspBWyd+tbLeHDNV6MOoWO0tuhV2Hdd+Zuls1GRy/xrmtf
+	+GSd3CCzE59ZnagjGEE8g4/KCuHN5pUIztkzCaIwODwp5fAq0Lw6sKvylwMqYHjjnxVogqLd3FX
+	EhfAyFYj06SEm5Q==
+X-Received: by 2002:a05:6000:1a88:b0:431:9b2:61c4 with SMTP id
+ ffacd0b85a97d-4356a082ee3mr23323458f8f.45.1768965037875; Tue, 20 Jan 2026
+ 19:10:37 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -82,59 +83,138 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20260120070555.233486-1-dongml2@chinatelecom.cn>
- <20260120070555.233486-3-dongml2@chinatelecom.cn> <CAEf4BzYzT2OUQ37BvzTRyo5Ah_t_CXv=AJixtAmU_pgr8eLpLg@mail.gmail.com>
- <5071056.31r3eYUQgx@7940hx> <bac96afe1a99c6a12cd85285c677f4eedcada066.camel@gmail.com>
-In-Reply-To: <bac96afe1a99c6a12cd85285c677f4eedcada066.camel@gmail.com>
-From: Menglong Dong <menglong8.dong@gmail.com>
-Date: Wed, 21 Jan 2026 11:03:35 +0800
-X-Gm-Features: AZwV_Qit2NKtH8jlbRBC4sp2eYwMKaaQ-6NnZxqEn4yUhXLl6r2aTmYTf8D2EII
-Message-ID: <CADxym3bDOcwi9Qgaibu8TeER8ORtvX0-6ernqfLBTvd1Bo+5xA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v6 2/2] selftests/bpf: test the jited inline of bpf_get_current_task
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: Menglong Dong <menglong.dong@linux.dev>, Andrii Nakryiko <andrii.nakryiko@gmail.com>, ast@kernel.org, 
-	davem@davemloft.net, dsahern@kernel.org, daniel@iogearbox.net, 
-	andrii@kernel.org, martin.lau@linux.dev, song@kernel.org, 
-	yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org, 
-	sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, tglx@linutronix.de, 
-	mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org, 
-	hpa@zytor.com, netdev@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
+ <20260120070555.233486-2-dongml2@chinatelecom.cn> <CAEf4BzYjbP4KwuVNT_pgjfXy=+7saEezmp1ck2L5txwtik5WYw@mail.gmail.com>
+ <10788751.nUPlyArG6x@7940hx>
+In-Reply-To: <10788751.nUPlyArG6x@7940hx>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Tue, 20 Jan 2026 19:10:26 -0800
+X-Gm-Features: AZwV_Qhhx3HpF9SXXn6IPy25cabE30LoVYJ5d4Cbb3alWWY8lV8NEUpGzJZ7IGk
+Message-ID: <CAADnVQ+Om14RF1GvA0vkhKdsCtVGzbacftEZarLJ-LKdYXUZ+g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v6 1/2] bpf, x86: inline bpf_get_current_task()
+ for x86_64
+To: Menglong Dong <menglong.dong@linux.dev>
+Cc: Menglong Dong <menglong8.dong@gmail.com>, Andrii Nakryiko <andrii.nakryiko@gmail.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Eduard <eddyz87@gmail.com>, 
+	"David S. Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, X86 ML <x86@kernel.org>, 
+	"H. Peter Anvin" <hpa@zytor.com>, Network Development <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jan 21, 2026 at 9:32=E2=80=AFAM Eduard Zingerman <eddyz87@gmail.com=
-> wrote:
+On Tue, Jan 20, 2026 at 5:58=E2=80=AFPM Menglong Dong <menglong.dong@linux.=
+dev> wrote:
 >
-> On Wed, 2026-01-21 at 09:28 +0800, Menglong Dong wrote:
->
-> [...]
->
-> > Do you mean that the CI of arm64 doesn't use LLVM for the selftests?
-> > I noted that. I found that there are other similar "__jited" testings f=
-or
-> > arm64, is there anything we can do?
-> >
-> > PS: I tested the arm64 locally, and it works fine.
-> >
+> On 2026/1/21 09:23 Andrii Nakryiko <andrii.nakryiko@gmail.com> write:
+> > On Mon, Jan 19, 2026 at 11:06=E2=80=AFPM Menglong Dong <menglong8.dong@=
+gmail.com> wrote:
 > > >
-> > > So we should do something about silently skipped tests at least...
+> > > Inline bpf_get_current_task() and bpf_get_current_task_btf() for x86_=
+64
+> > > to obtain better performance.
+> > >
+> > > Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
+> > > Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+> > > ---
+> > > v5:
+> > > - don't support the !CONFIG_SMP case
+> > >
+> > > v4:
+> > > - handle the !CONFIG_SMP case
+> > >
+> > > v3:
+> > > - implement it in the verifier with BPF_MOV64_PERCPU_REG() instead of=
+ in
+> > >   x86_64 JIT.
+> > > ---
+> > >  kernel/bpf/verifier.c | 22 ++++++++++++++++++++++
+> > >  1 file changed, 22 insertions(+)
+> > >
+> > > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > > index 9de0ec0c3ed9..c4e2ffadfb1f 100644
+> > > --- a/kernel/bpf/verifier.c
+> > > +++ b/kernel/bpf/verifier.c
+> > > @@ -17739,6 +17739,10 @@ static bool verifier_inlines_helper_call(str=
+uct bpf_verifier_env *env, s32 imm)
+> > >         switch (imm) {
+> > >  #ifdef CONFIG_X86_64
+> > >         case BPF_FUNC_get_smp_processor_id:
+> > > +#ifdef CONFIG_SMP
+> > > +       case BPF_FUNC_get_current_task_btf:
+> > > +       case BPF_FUNC_get_current_task:
+> > > +#endif
 > >
-> > Like a warning?
+> > Does this have to be x86-64 specific inlining? With verifier inlining
+> > and per_cpu instruction support it should theoretically work across
+> > all architectures that do support per-cpu instruction, no?
+> >
+> > Eduard pointed out [0] to me for why we have that x86-64 specific
+> > check. But looking at do_misc_fixups(), we have that early
+> > bpf_jit_inlines_helper_call(insn->imm)) check, so if some JIT has more
+> > performant inlining implementation, we will just do that.
+> >
+> > So it seems like we can just drop all that x86-64 specific logic and
+> > claim all three of these functions as inlinable, no?
+> >
+> > And even more. We can drop rather confusing
+> > verifier_inlines_helper_call() that duplicates the decision of which
+> > helpers can be inlined or not, and have:
 >
-> Yes, probably llvm-devel or libs dependency is missing,
-> hence jit related selftests are skipped. Same thing for x86.
-> Discussed with Andrii making llvm an opt-out dependency:
-> fail selftests compilation if libraries are not found and SKIP_LLVM is no=
-t set.
-
-Sounds nice. People may not be aware of the LLVM dependence
-sometimes.
-
-So is there anything I can do in this series?
-
-Thanks!
-Menglong Dong
-
-> We plan to address CI config issue tomorrow.
+> The verifier_inlines_helper_call() is confusing, but I think we can't
+> remove the x86-64 checking. For example, some architecture
+> don't support BPF_FUNC_get_current_task both in
+> bpf_jit_inlines_helper_call() and verifier_inlines_helper_call(), which
+> means it can't be inline.
 >
-> [...]
+> >
+> > if (env->prog->jit_requested && bpf_jit_supports_percpu_insn() {
+> >     switch (insn->imm) {
+> >     case BPF_FUNC_get_smp_processor_id:
+> >         ...
+> >         break;
+> >     case BPF_FUNC_get_current_task_btf:
+> >     case BPF_FUNC_get_current_task_btf:
+> >         ...
+> >         break;
+> >     default:
+> > }
+> >
+> > And the decision about inlining will live in one place.
+> >
+> > Or am I missing some complications?
+>
+> As Alexei said, the implement of "current" is architecture specific,
+> and the per-cpu variable "current_task" only exist on x86_64.
+>
+> >
+> > And with all that, should we mark get_current_task and
+> > get_current_task_btf as __bpf_fastcall?
+>
+> I think it make sense, and the I saw bpf_get_smp_processor_id does
+> such operation:
+>
+> const struct bpf_func_proto bpf_get_smp_processor_id_proto =3D {
+>         [...]
+>         .allow_fastcall =3D true,
+> };
+>
+> PS: I'm a little confused about the fast call. We inline many helper,
+> but it seems that bpf_get_smp_processor_id is the only one that
+> use the "allow_fastcall". Why? I'd better study harder.
+
+It's
+static __bpf_fastcall __u32 (* const bpf_get_smp_processor_id)(void) =3D
+(void *) 8;
+
+and
+#define __bpf_fastcall __attribute__((bpf_fastcall))
+
+which makes LLVM use more registers at the callsite (less spill/fill).
+
+Looking at the patch again. I think it's fine as-is.
+fastcall can be a follow up.
