@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3D8D369228
-	for <bpf@vger.kernel.org>; Wed, 21 Jan 2026 17:50:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A371B3563CF
+	for <bpf@vger.kernel.org>; Wed, 21 Jan 2026 17:50:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769017815; cv=none; b=TMBP6q6xNgMsn23A8GrfkwxyvxDMtIrsU1XcVjlLLHb3QodBp6dGZCbWnZsrKAD91CWWLdaw0YjpXLIG7N/EZ7JzqmIWfNey8SqsgSDKt8eOjZJ4ZqJDOOfUDxgw5IZIxKCDOM+uoHy2rA7ORRkJ6piPf96OvnvdJOhgQJoCqsw=
+	t=1769017816; cv=none; b=Xnz2ATmm/e9d/IDWcefB6Dx6V3xmaNO2PPtnKo3yodd1n8xZ+JaRyxd7RfM/qfPX1Wh4c2TwAnYV6N2jSKaZiRgapDYCqtVfNqBzTCpG92UDY6Pp8mj5raeyezkCpzAOlqLBzY5WrAj5cFiRvPo0sfkBma7+cV4++xzRPseF8sU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769017815; c=relaxed/simple;
-	bh=0KWAWmh05PAblOCKxKez8sOa6DfdHDK2uasGy5/Qp7A=;
+	s=arc-20240116; t=1769017816; c=relaxed/simple;
+	bh=DClSetSFWrMFXaz+lXLtRwEaHKF2FB/oH7iXcEASFGc=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=lBdQqK8Z87L5fg2yhcP6AoKgOEFfh0Xuvi/4tbBvALE8RfPbFoLNXo7YJva2kZdlUDWZMC4JqiEfU7OVQEtVFLFkZptfM+fo90HiZXUbblkXaRDEYrmjXVn/t79zAK68JAbkegdINpP3HzT4xAHXmVc6wzhKuLJxpeXPJexc9tQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vAm2q7fX; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=OrJ6tpSnkeZy7G+p+QY5l9dyhiGsJRv3AXvMjPOQwqA2jFEuLCF9VHTIuHHBDopAiMdO1kS/ra7/KNU31+FrQ3dqLa/uJhngRoeSnVT5dyoMUJH3HK0L891s+Gj5x3VblHz8JoU6Mi/vhVsXuLy5QqGQ5rdNmjEfuDWvJMny8D8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ILyqu41F; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vAm2q7fX"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9082CC4CEF1;
-	Wed, 21 Jan 2026 17:50:14 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ILyqu41F"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11795C4CEF1;
+	Wed, 21 Jan 2026 17:50:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769017814;
-	bh=0KWAWmh05PAblOCKxKez8sOa6DfdHDK2uasGy5/Qp7A=;
+	s=k20201202; t=1769017816;
+	bh=DClSetSFWrMFXaz+lXLtRwEaHKF2FB/oH7iXcEASFGc=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=vAm2q7fXHjheDd7MiYeh/cGbF9mnTyW9o8efy374cp1xGxjzosE9/33UqJrqRZ1Fb
-	 zX4nDmY7o0TUrtnovxDK4ly2ucH3I3yMircGFjdQ6rwko4bQTqYCXrPg+uRgTCdilC
-	 dBx+Hn8zhqBAz5rYLiUmPYS+C+tKffEljkjS9hovQTupxBFpUEgyvF3mswAqu8EBLZ
-	 wdNFkqHbWWjr+8H2d30Ivw7QYuFS6kZ3I8k3cXwpK/mGAHRnZtO3cRjIpyxldD+Zlz
-	 yyXFAzmgvgScBSiH3his8qopXYXPQEI/0o57usQgR3s1oTsyJw/TfrHcQdRKt6jFyU
-	 gwMU+c+U0aXKA==
+	b=ILyqu41FdqeBfrzXiXIOthEJ0Ykx+nK+vEodm7h9rrvlt6TqgiP8sjugRSiABa710
+	 2O/fD37XmGu03cmR3gv5EDk/esVQvl8ZtZromAWEOB5W/VhaaWLQOMQwECeXdliCMx
+	 Ft+WutivM1mBvd2114D/tEXXtWA2QRxKRBLFAXl/VuQZQo9Kvp8CmebdcoUejmMZmF
+	 lZ5pJS9Oe1uKSdtFU0+nh/DzzCdkDnnbOzLoum8PPDQ66rVdxi/gVlkU8H3/KYWNws
+	 gSv0bI5+QzMXBSc79DCc7AR23OXAvbHSJBkKpHfDkI+KFR+tM4sJ91IfGsQKAivlGV
+	 /h/po3h/XAwNw==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id C8D813808200;
-	Wed, 21 Jan 2026 17:50:12 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 4EB993808200;
+	Wed, 21 Jan 2026 17:50:14 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -37,39 +37,43 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v5 0/2] bpf: Add kfunc bpf_strncasecmp()
+Subject: Re: [PATCH bpf-next] bpf: Revert "bpf: drop KF_ACQUIRE flag on BPF
+ kfunc
+ bpf_get_root_mem_cgroup()"
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <176901781134.1390629.9577843919789689169.git-patchwork-notify@kernel.org>
-Date: Wed, 21 Jan 2026 17:50:11 +0000
-References: <20260121033328.1850010-1-ishiyama@hpc.is.uec.ac.jp>
-In-Reply-To: <20260121033328.1850010-1-ishiyama@hpc.is.uec.ac.jp>
-To: Yuzuki Ishiyama <ishiyama@hpc.is.uec.ac.jp>
-Cc: bpf@vger.kernel.org, mykyta.yatsenko5@gmail.com, vmalik@redhat.com,
- andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev
+ <176901781285.1390629.13354862137498673865.git-patchwork-notify@kernel.org>
+Date: Wed, 21 Jan 2026 17:50:12 +0000
+References: <20260121090001.240166-1-mattbobrowski@google.com>
+In-Reply-To: <20260121090001.240166-1-mattbobrowski@google.com>
+To: Matt Bobrowski <mattbobrowski@google.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+ sdf@fomichev.me, jolsa@kernel.org, roman.gushchin@linux.dev
 
 Hello:
 
-This series was applied to bpf/bpf-next.git (master)
+This patch was applied to bpf/bpf-next.git (master)
 by Alexei Starovoitov <ast@kernel.org>:
 
-On Wed, 21 Jan 2026 12:33:26 +0900 you wrote:
-> This patchset introduces bpf_strncasecmp to allow case-insensitive and
-> limited-length string comparison. This is useful for parsing protocol
-> headers like HTTP.
+On Wed, 21 Jan 2026 09:00:01 +0000 you wrote:
+> This reverts commit e463b6de9da1 ("bpf: drop KF_ACQUIRE flag on BPF
+> kfunc bpf_get_root_mem_cgroup()").
 > 
-> ---
-> 
-> Changes in v5:
-> - Fixed the test function numbering
+> The original commit removed the KF_ACQUIRE flag from
+> bpf_get_root_mem_cgroup() under the assumption that it resulted in
+> simplified usage. This stemmed from the fact that
+> bpf_get_root_mem_cgroup() inherently returns a reference to an object
+> which technically isn't reference counted, therefore there is no
+> strong requirement to call a matching bpf_put_mem_cgroup() on the
+> returned reference.
 > 
 > [...]
 
 Here is the summary with links:
-  - [bpf-next,v5,1/2] bpf: add bpf_strncasecmp kfunc
-    https://git.kernel.org/bpf/bpf-next/c/1dc669646762
-  - [bpf-next,v5,2/2] selftests/bpf: Test kfunc bpf_strncasecmp
-    https://git.kernel.org/bpf/bpf-next/c/f4924ad0b13f
+  - [bpf-next] bpf: Revert "bpf: drop KF_ACQUIRE flag on BPF kfunc bpf_get_root_mem_cgroup()"
+    https://git.kernel.org/bpf/bpf-next/c/d0f5d4f8f328
 
 You are awesome, thank you!
 -- 
