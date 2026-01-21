@@ -1,250 +1,164 @@
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FC652BE057
-	for <bpf@vger.kernel.org>; Wed, 21 Jan 2026 00:38:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07DE1213E89
+	for <bpf@vger.kernel.org>; Wed, 21 Jan 2026 00:46:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.52
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768955913; cv=pass; b=f/mR8g2Q4gr33hsMlYj7QuqjeMbZHF8z23S7TWL90fQh0ChwrTkn2783QPyb10N1LJdaJ4Rx0rQgA9xKGSHHRWSrNAZoatn5LftihUUcOvCSm0i3PML5W2KYIOUUT0A9FlzuK8cRDQ0bB1tbgKzW4lktfsIRdAi56Z5qcINVNrI=
+	t=1768956397; cv=pass; b=Gm+z8cOde0iBvBEG84IqO/FBjAIULYGZF4Do1f9GVSVGjjSpJ58hFfIe5oKihfVbQ1vxF1BUazyl604vb6iEYvhVaLkN2o7Cq9Ms9wLIoSS9yEplNPnn4O+0I7d7MROboxmu64eafsZsh8Q3sBN/5PQVvfRxwbmTXUSiBgz5MbI=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768955913; c=relaxed/simple;
-	bh=NFo91oSEGOWfmGH3XSbPOll8PTFduiKL8a1//KR2rRw=;
+	s=arc-20240116; t=1768956397; c=relaxed/simple;
+	bh=9YxTE+qpImx1TkMhz3pu4xHruQRHvk9dZqeyw1HCRa8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PA9LerLlGWhAHFjeELfLG0k41BFHwS9ueoCHxn1ZfAX98n9WcO82aIPjgSiz0n5nsIN4Z/C2oKdQs8kI8M+9JOr0qOGT2BuH7xT3wAUruARjpOJLpL8E3b9RCaVee7fSIdIEcrcNaBUFMqkdy+jFIrLiISr4DYPx86FAFH4Rdks=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Wyys/5nK; arc=pass smtp.client-ip=209.85.214.181
+	 To:Cc:Content-Type; b=gHUYm1nyWqTniAuACv22Oeswobmdgd+NypRcaJfcLSt8hS77ChxHM5/9KPg8AOhQJHu986LviJGNUIY50XiKMIToOKV90vJfw+0SbTPi2zQr9OqDdHaDw5xjIoo9lYLF+dKhSMdWUEXEQZjsHOLmKuSP/NpK5FmfWAXOgMNciQc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S8ufp0TE; arc=pass smtp.client-ip=209.85.128.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Wyys/5nK"
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2a7786d7895so6898345ad.1
-        for <bpf@vger.kernel.org>; Tue, 20 Jan 2026 16:38:31 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1768955911; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S8ufp0TE"
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-47ee301a06aso56470605e9.0
+        for <bpf@vger.kernel.org>; Tue, 20 Jan 2026 16:46:35 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1768956394; cv=none;
         d=google.com; s=arc-20240605;
-        b=k6/m6W73WKG/Odw/F+krY5/4Hi7iebr7i3/mA6aX7/PRmurfjj4Oatg71znywFJCJ8
-         f2Ehh1IFmzgaOkQW4CvT3lbxNBL0EWS4nS34pRnA2InAskUwHCoib0RBotQTXqJGHFde
-         o4Ko/f5qmMJb4H6az9r6HKDEVBEAnlDNS+C7M1lynjaC10Mmbhz3WcGxg9LI4gR9mT/L
-         e2nI8/0G1tZ3jY0uE/1P1uPTC7mr8rFyJwdU4ONI3dhCs3h3OtB0t5DwaQfu5/toNDtg
-         Yw6GTcQLBBq6Tad1clds+r+WiT5rSKrpSq/RZ3utx41Ga5HwqAYPB2z6a8p3GeTWLq9Z
-         f8pA==
+        b=XzfFU25clK9vnqvgE5L1KIH3wZP2wS371vChmBsEo1hWsmwU52+R6rupBIMy1HtOAc
+         NvOUFXGyJERkfKeKbyNeiWjobIkpxmRn3axtKM0M7u4YNn/Icl5gDtARHeEY4kX0tioU
+         nTeY28L+Wuidh/AiAxPb0LOYz4SBlDrrgAgNhed5+nXzYhdQ4V6P2GA1UfFJTTI2gA9u
+         Y5oJSnzTRIp64QZvwRMXyiKjCGacSRAIvR8wVqrvwwLDDEmzuos+zBw99Z7KO5xdcuQd
+         NLH75kJt8hd9vPNUJnstSPAEmHRVqFZLcMNAR1UYai4CP6pDm5s1fZ7k+ImRk5aWvQUV
+         CqnA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=P1BD/hHPIdij4CKcLLe3CpSjmZbyhIbFHMp+STIIZ+8=;
-        fh=e5LZ4Di+Lhe0lus7XBuHDUnq1rIxygGQOeIRjH9sFes=;
-        b=bR5mk5l/kaqZH5Tr7h9PnOz/6kIrdXCgvLsHZM22BzEa3YYDp0pcv9J6yjJMGUpmFq
-         FSMv4cu3HpYaK1Wl0UpyH0FKsnbC5Z76nlLcOmw6FoopbfJa25M7td0gZ8lJ8dgZ7gym
-         MpRXAN67ZKX4O8fLrVeBHW1Jeug7/DD8DoHGw55gcw4xGWduEKIk2C+iTr+XG67JgV/L
-         nBBJYgc37/tIEHL1nbat2tDHo5PTnQcUNxX6bhQwQTc/zOKRwwtgY5jnIkqQe1Dy2Ip2
-         gQqZq/4aAsktexnBw30v8FqiMC51M+y/4DyvaIJUJmeLNCFHPrOvrtPQ3ZtbtFTO0CIc
-         khKQ==;
+        bh=fsE3tc4+LXN/nWMFR0IHJ4kZoSjYJGt313l2jtEuqHI=;
+        fh=WraqeYViXjLmeOppzytlORi9mGSvsU388X/tJc+DSYE=;
+        b=lpmy84vt6mBTMFzKJ4SBIfkk2A7nSdMOAbpVjqeLIsE0f6URfWoxu4CAZzzQXECeb5
+         /D7QptX1EV0YPt6W/wEd2CaRJe1gOybx77RBek4m9DW//dR44uwKrJPl43N4azqw4CMU
+         SDNcdckAmVUMGWD5TCYxn5OuCGxHkABMap4wy99hej4bjbyd8uDJEfoI2akIS5soQz+4
+         c5JLz31JvYLXCJGxJejNa346IxxoIUjmHFwAl1WtpCfq/bV3hQj1cUE/mpLuR2qTKAhz
+         FxlawG4wtNY70QrLRJyz2FkavzoPkrfm7dGcs7AacNgoaf2yiUwuXg/Bqb/ngiAuPrZz
+         uR6w==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768955911; x=1769560711; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1768956394; x=1769561194; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=P1BD/hHPIdij4CKcLLe3CpSjmZbyhIbFHMp+STIIZ+8=;
-        b=Wyys/5nKJ2vkkCgfI/8H8owJQF5+cYqqK+tZgKzteq5c7yG8w8q+9vUX4I4a3FF1+S
-         jA8Nj7//bPwcYTqs97HxVWvoNKbNKELwcdSWZVbDdPaMl9Oe+2F3tNq4alznRnT9VQB3
-         k5jTySRw1C8lLS9CWho3gJhaJGzLmjx/INnmumgAzTB8tsXq8eYgKlnijGIY794HDsKk
-         p6eWDzVIs1QaJYSU4Q/kpLf3O+M6HlAz5KtzaacwMRvpJIntjZS0wKOyKIuXUzbod8lz
-         saRv/08HwYZu9x2bICxknnkZwhUfVExsMzrgJgyG2iYuy++IfbDfdTKulwyswEh/COn5
-         LnWA==
+        bh=fsE3tc4+LXN/nWMFR0IHJ4kZoSjYJGt313l2jtEuqHI=;
+        b=S8ufp0TEQOU2D/sdIAbIUONup9Vcq1ugY70pYOrPmwQfoRjikPWTGdogqPUIMSTeOO
+         Fs/XeNa9Do1GrsoKQ2jiFetnJGvoWWwFoorRlS58MdbrdlgduFqLwAYof9o7J5KT7BOq
+         V3u8rVni1sdstgOXA/S8odhMXrQy+E1yULgjRchTew/mgPDfsNaEkIgNNGuMQa/ji8fe
+         Kbeq07hMkk6vkhmx/ErrWF0QZskbv8O3ZPnb7dBLMoa5BWt9Fs+EBzpuGUnOF1593X4W
+         /kiGtWTvqfSkr9+o4o3oR4z/MKvr6AOYPHxeZBHHJvwQ3tFvjPDRIhhNOG1f0OpYZlum
+         l8+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768955911; x=1769560711;
+        d=1e100.net; s=20230601; t=1768956394; x=1769561194;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=P1BD/hHPIdij4CKcLLe3CpSjmZbyhIbFHMp+STIIZ+8=;
-        b=iFEHqyBaWnN0CPZ+ubif14qhHcF2lioT4lmgs2aLxdnp6stHUEjJoejnlT2GylKEWP
-         vLDifXPm0Hcsy57N8aDHoYlcPm4MSXGTNLZrIc45txMHwhTcp/mz0ql736flOoY3fxwx
-         oopYUuJIdhOJ+OLotqvLGC8XjtWHv+rtKsMQxX/Hu7wAyAInYpo5aMj/Y9ua3H5xiev8
-         I7Y/kgzORVZ6PJxXhSmjrCJET1WtFkYXNXHfOFjLGBxGBiNCLVhQPTFKBt8vPQ0dTA6u
-         YRQB0GA03ooLbLbsjjCY8K34MiordEAH73XyMcoPWynOUh8TPcYlXk/G00DcvdAu+Y+g
-         2d3Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVre3I/1xqyGqwixWBlxO4N17V1ExU9yoPunY6pmAB4tUZQs69AbJoLgKLqOkNhJkRCG+k=@vger.kernel.org
-X-Gm-Message-State: AOJu0YymS0H8WUhzPG9cTNgSttA51NDPNVLo5HDnCVB4sYs+mjyr7bss
-	QcVNkWncAGn9Wda4FXW3rJsk4fTlg/079CRgIEy442nsR+2UujBAQYwgp8o4bQw1oJxQpvi5Q+L
-	RFZf/cCC58CqWZzHU9KYaXqQUIPXcMcE=
-X-Gm-Gg: AZuq6aI0gyzqip+Wl/v29qXExoHJHbQerc5HG8BJsO+G+ineh6B5SNyuTPzhihwkPg+
-	28OnCSCT6fSX/uawtBlkD6cTUwqXH6nC456fTkcp6MINhu0ZtASfOrHVeHEC0mFYCrvq3gwv9Tm
-	A5lb4U6OZoLrZQURIg5NcUwv316AT/Gu9dZe9riglf6brw0PndSIv2D8TfMbhLt+AJ08kk9sUNp
-	EBflh/5vSosuGPj8ok66sMUBJ2eDGP5vMTLZIWfZWfDQBBlevYUIg0z5QsAi0KEzy74FrPaHbuL
-	hP3x37xFxP8=
-X-Received: by 2002:a17:903:1206:b0:2a0:c58b:ed6 with SMTP id
- d9443c01a7336-2a7188fd7c9mr145258605ad.29.1768955910721; Tue, 20 Jan 2026
- 16:38:30 -0800 (PST)
+        bh=fsE3tc4+LXN/nWMFR0IHJ4kZoSjYJGt313l2jtEuqHI=;
+        b=qG+4Qu3Q9KCb46MT2JHgtZ8t4QWx6VQMJhGE8XEVGpVc/BMUhRw0zTTaA61QWwbvuO
+         wmBA0lsCernZ3fF1dhGYLrs6bnrs18q2GjDx9jB63wa0ADUHtgeWCDqkL2/uL9KkEgWA
+         jlLHm5hHumuOxrUrrACWJPK1nJw1ec3iWZzn7S2CiyScP7SRdoGCWM52T2lr1jn6vjQ8
+         OsjDYSNVtTtcrOJujMB5+RtKv21Fmg2RoAJYrCQ3M++SMUmKvzRSOQqhh0Rf4NIpvcKn
+         fcqFy8ziySYt1PtyzZ9jUaFwrrsCr7fplPmY0KCo1d9i+16cee/J/vUjEB2IEYEcF5KP
+         m5bQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX0vDrTQutbNkBEyA4CNE8/RheAII+PuTqpbryqhF5EHew4kfg6w4gLXArJIHFTqTFycnw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxJuWTBzJNY/z0zGd9yV3fxSLIvYBvqypxj1PW/zh33ijJMn/QC
+	NctEdmDrjUaizXmmupjFfRaTt8bxwLfxeaBHUnQHzMkcutL6k73p7C7dx+KySLWs9IdCCAWMYMr
+	Cc7ITJXjT+a5XSRCjpyt4cXvGChYA35U=
+X-Gm-Gg: AY/fxX6fKrmi92axZvJFK/XqCe3AQNCErksf+Y5/cf+QHnaM+uM0MTvBE63PqfVjRgM
+	GJlXXQMMdEVjuX8AraT8LLfHamzDfMrhlWhyBMLvKgPF2TC0fZyxeeNolVqBuJRDgkv84YNw7vd
+	1vsafzn+dgzjeG6XXs2u4UJL44ViYhMIcqIir1xKI37QSDGjRV7e+OFp/MRAkYujMqjcY0jwhXw
+	q+N5bR4wTVTIZCnT+k5iwtEc8+eSrjNBkMZX5JeMjATW0P9aH4N3+lxmybENkKacFjgE7z+P6x0
+	CHYeNALs2Is5iTxI0qEfmKSzGBvOTlZmuhFpS/cGDSvK73JS1OVr+AGB2XLcBPt7YLAGIbCS/dV
+	tcEeK9NYg0utTOA==
+X-Received: by 2002:a05:600c:a411:b0:480:41ff:4446 with SMTP id
+ 5b1f17b1804b1-48041ff4449mr23126885e9.36.1768956394290; Tue, 20 Jan 2026
+ 16:46:34 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260120073046.324342-1-dongml2@chinatelecom.cn> <20260120073046.324342-2-dongml2@chinatelecom.cn>
-In-Reply-To: <20260120073046.324342-2-dongml2@chinatelecom.cn>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 20 Jan 2026 16:38:18 -0800
-X-Gm-Features: AZwV_QgQxOYMjxO4nYabaPaUeeiBXA4-85SN2FU8fWCD6tlO5Q4-0HKOF21OwlM
-Message-ID: <CAEf4BzZUA+5jsYGN7dA1qEXyZKZvBnESX=8fuJHYmhOVm0_QEQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v4 1/2] bpf: support bpf_get_func_arg() for BPF_TRACE_RAW_TP
-To: Menglong Dong <menglong8.dong@gmail.com>
-Cc: ast@kernel.org, andrii@kernel.org, yonghong.song@linux.dev, 
-	daniel@iogearbox.net, john.fastabend@gmail.com, martin.lau@linux.dev, 
-	eddyz87@gmail.com, song@kernel.org, kpsingh@kernel.org, sdf@fomichev.me, 
-	haoluo@google.com, jolsa@kernel.org, mattbobrowski@google.com, 
-	rostedt@goodmis.org, mhiramat@kernel.org, mathieu.desnoyers@efficios.com, 
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org
+References: <20260107203941.1063754-1-puranjay@kernel.org> <20260107203941.1063754-3-puranjay@kernel.org>
+ <18201538f7dd8166dc0171b0970f15d4ab638f51.camel@gmail.com>
+In-Reply-To: <18201538f7dd8166dc0171b0970f15d4ab638f51.camel@gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Tue, 20 Jan 2026 16:46:23 -0800
+X-Gm-Features: AZwV_QhuF-NleVCBPNh_sjGtWSnnifMY00X3ZdUsUBFxMfiLbNM5GTrghKkmSvo
+Message-ID: <CAADnVQ+Bpd1HubKCP5Aui5Q_ukk-nMHAvmC2QSeUdX_cXg2H3w@mail.gmail.com>
+Subject: __description(). Was: [PATCH bpf-next 2/3] selftests/bpf: Add tests
+ for linked register tracking with negative offsets
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: Puranjay Mohan <puranjay@kernel.org>, bpf <bpf@vger.kernel.org>, 
+	Puranjay Mohan <puranjay12@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Martin KaFai Lau <martin.lau@kernel.org>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, Kernel Team <kernel-team@meta.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jan 19, 2026 at 11:31=E2=80=AFPM Menglong Dong <menglong8.dong@gmai=
-l.com> wrote:
+On Wed, Jan 7, 2026 at 6:11=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.com>=
+ wrote:
 >
-> For now, bpf_get_func_arg() and bpf_get_func_arg_cnt() is not supported b=
-y
-> the BPF_TRACE_RAW_TP, which is not convenient to get the argument of the
-> tracepoint, especially for the case that the position of the arguments in
-> a tracepoint can change.
+> On Wed, 2026-01-07 at 12:39 -0800, Puranjay Mohan wrote:
+> > Add tests for linked register tracking with negative offsets and BPF_SU=
+B:
+> >
+> > Success cases (64-bit ALU, tracking works):
+> > - scalars_neg: r1 +=3D -4 with signed comparison
+> > - scalars_neg_sub: r1 -=3D 4 with signed comparison
+> > - scalars_pos: r1 +=3D 4 with unsigned comparison
+> > - scalars_sub_neg_imm: r1 -=3D -4 (equivalent to r1 +=3D 4)
+> >
+> > Failure cases (tracking disabled, documents limitations):
+> > - scalars_neg_alu32_add: 32-bit ADD not tracked
+> > - scalars_neg_alu32_sub: 32-bit SUB not tracked
+> > - scalars_double_add: Double ADD clears ID
+> >
+> > Large delta tests (verifies 64-bit arithmetic in sync_linked_regs):
+> > - scalars_sync_delta_overflow: S32_MIN offset
+> > - scalars_sync_delta_overflow_large_range: S32_MAX offset
+> >
+> > Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
+> > ---
+> >  .../bpf/progs/verifier_linked_scalars.c       | 213 ++++++++++++++++++
+> >  1 file changed, 213 insertions(+)
+> >
+> > diff --git a/tools/testing/selftests/bpf/progs/verifier_linked_scalars.=
+c b/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
+> > index 8f755d2464cf..2e1ef0f96717 100644
+> > --- a/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
+> > +++ b/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
+> > @@ -31,4 +31,217 @@ l1:                                               \
+> >  "    ::: __clobber_all);
+> >  }
+> >
+> > +SEC("socket")
+> > +__description("scalars: linked scalars with negative offset")
 >
-> The target tracepoint BTF type id is specified during loading time,
-> therefore we can get the function argument count from the function
-> prototype instead of the stack.
+> Nit: I think that __description tag should be avoided in the new code.
+>      w/o this tag the test case could be executed as follows:
 >
-> Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
-> ---
-> v4:
-> - fix the error of using bpf_get_func_arg() for BPF_TRACE_ITER
+>        ./test_progs -t verifier_linked_scalars/scalars_reg
 >
-> v3:
-> - remove unnecessary NULL checking for prog->aux->attach_func_proto
+>      with this tag the test case should be executed as:
 >
-> v2:
-> - for nr_args, skip first 'void *__data' argument in btf_trace_##name
->   typedef
-> ---
->  kernel/bpf/verifier.c    | 32 ++++++++++++++++++++++++++++----
->  kernel/trace/bpf_trace.c |  4 ++++
->  2 files changed, 32 insertions(+), 4 deletions(-)
+>        ./test_progs -t "verifier_linked_scalars/scalars: linked scalars w=
+ith negative offset"
 >
+>      and I'm not sure test_progs handles spaces properly (even if it does=
+, the invocation is inconvenient).
+>      So, I'd just put the description in the comments.
 
-other than stylistical choices, looks good to me
+Going back to this. I think 'description' tag is useful and
+it makes test_progs output more human readable,
+but we should do something about test_loader.c
+        if (!description)
+                description =3D spec->prog_name;
 
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
+since specifying a full description is indeed inconvenient.
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 9de0ec0c3ed9..0b281b7c41eb 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -23323,8 +23323,20 @@ static int do_misc_fixups(struct bpf_verifier_en=
-v *env)
->                 /* Implement bpf_get_func_arg inline. */
->                 if (prog_type =3D=3D BPF_PROG_TYPE_TRACING &&
->                     insn->imm =3D=3D BPF_FUNC_get_func_arg) {
-> -                       /* Load nr_args from ctx - 8 */
-> -                       insn_buf[0] =3D BPF_LDX_MEM(BPF_DW, BPF_REG_0, BP=
-F_REG_1, -8);
-> +                       if (eatype =3D=3D BPF_TRACE_RAW_TP) {
-> +                               int nr_args =3D btf_type_vlen(prog->aux->=
-attach_func_proto);
-> +
-> +                               /*
-> +                                * skip first 'void *__data' argument in =
-btf_trace_##name
-> +                                * typedef
-> +                                */
-> +                               nr_args--;
-> +                               /* Save nr_args to reg0 */
-> +                               insn_buf[0] =3D BPF_MOV64_IMM(BPF_REG_0, =
-nr_args);
-> +                       } else {
-> +                               /* Load nr_args from ctx - 8 */
-> +                               insn_buf[0] =3D BPF_LDX_MEM(BPF_DW, BPF_R=
-EG_0, BPF_REG_1, -8);
-> +                       }
->                         insn_buf[1] =3D BPF_JMP32_REG(BPF_JGE, BPF_REG_2,=
- BPF_REG_0, 6);
->                         insn_buf[2] =3D BPF_ALU64_IMM(BPF_LSH, BPF_REG_2,=
- 3);
->                         insn_buf[3] =3D BPF_ALU64_REG(BPF_ADD, BPF_REG_2,=
- BPF_REG_1);
-> @@ -23376,8 +23388,20 @@ static int do_misc_fixups(struct bpf_verifier_en=
-v *env)
->                 /* Implement get_func_arg_cnt inline. */
->                 if (prog_type =3D=3D BPF_PROG_TYPE_TRACING &&
->                     insn->imm =3D=3D BPF_FUNC_get_func_arg_cnt) {
-> -                       /* Load nr_args from ctx - 8 */
-> -                       insn_buf[0] =3D BPF_LDX_MEM(BPF_DW, BPF_REG_0, BP=
-F_REG_1, -8);
-> +                       if (eatype =3D=3D BPF_TRACE_RAW_TP) {
-> +                               int nr_args =3D btf_type_vlen(prog->aux->=
-attach_func_proto);
-> +
-> +                               /*
-> +                                * skip first 'void *__data' argument in =
-btf_trace_##name
-> +                                * typedef
-> +                                */
-> +                               nr_args--;
-> +                               /* Save nr_args to reg0 */
-> +                               insn_buf[0] =3D BPF_MOV64_IMM(BPF_REG_0, =
-nr_args);
-
-nit: isn't this just a very verbose way of writing:
-
-int nr_args =3D btf_type_vlen(prog->aux->attach_func_proto);
-/* skip 'void *__data' in btf_trace_##name() and save to reg0 */
-insn_buf[0] =3D BPF_MOV64_IMM(BPF_REG_0, nr_args - 1);
-
-even if you want to preserve nr_args-- for clarity, at least make that
-4-line comment into a single-line one, please
-
-> +                       } else {
-> +                               /* Load nr_args from ctx - 8 */
-> +                               insn_buf[0] =3D BPF_LDX_MEM(BPF_DW, BPF_R=
-EG_0, BPF_REG_1, -8);
-> +                       }
->
->                         new_prog =3D bpf_patch_insn_data(env, i + delta, =
-insn_buf, 1);
->                         if (!new_prog)
-> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> index f73e08c223b5..0efdad3adcce 100644
-> --- a/kernel/trace/bpf_trace.c
-> +++ b/kernel/trace/bpf_trace.c
-> @@ -1734,10 +1734,14 @@ tracing_prog_func_proto(enum bpf_func_id func_id,=
- const struct bpf_prog *prog)
->         case BPF_FUNC_d_path:
->                 return &bpf_d_path_proto;
->         case BPF_FUNC_get_func_arg:
-> +               if (prog->expected_attach_type =3D=3D BPF_TRACE_RAW_TP)
-> +                       return &bpf_get_func_arg_proto;
->                 return bpf_prog_has_trampoline(prog) ? &bpf_get_func_arg_=
-proto : NULL;
->         case BPF_FUNC_get_func_ret:
->                 return bpf_prog_has_trampoline(prog) ? &bpf_get_func_ret_=
-proto : NULL;
->         case BPF_FUNC_get_func_arg_cnt:
-> +               if (prog->expected_attach_type =3D=3D BPF_TRACE_RAW_TP)
-> +                       return &bpf_get_func_arg_cnt_proto;
->                 return bpf_prog_has_trampoline(prog) ? &bpf_get_func_arg_=
-cnt_proto : NULL;
-
-hm, wouldn't "has trampoline or is raw_tp" a more logical grouping?
-
-if (bpf_prog_has_trampoline(prog) || prog->expected_attach_type =3D=3D
-BPF_TRACE_RAW_TP)
-    return &bpf_get_func_arg_cnt_proto;
-return NULL;
-
-maybe you'll need to wrap that condition, but still, at least no one
-has to double check that we return exactly the same prototype in both
-cases, no?
-
-
->         case BPF_FUNC_get_attach_cookie:
->                 if (prog->type =3D=3D BPF_PROG_TYPE_TRACING &&
-> --
-> 2.52.0
->
+Maybe test_progs should print both: prog_name and description.
