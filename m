@@ -1,52 +1,53 @@
-Received: from out-176.mta1.migadu.com (out-176.mta1.migadu.com [95.215.58.176])
+Received: from out-185.mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D799130EF81
-	for <bpf@vger.kernel.org>; Wed, 21 Jan 2026 01:58:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F1A925EFB6
+	for <bpf@vger.kernel.org>; Wed, 21 Jan 2026 02:01:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.185
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768960732; cv=none; b=izkWXQ3fCb+t5Dc/30kbyGX+8R6YpKPdtA9bn0T110Xt0CxKyNEnT0GFFyrrVvSlRbkwpS7Kz5ladFQuZYe+/BjEMEhJzZcO3PLIqa0iiI5jwofkpZM4t0T70Qp1D11PAHayzL/hq9fOnay5lY3mlH3r2gKhu1QP4Qjcdju7bM8=
+	t=1768960919; cv=none; b=E4n7MUHLUTqmR9Ny0WmLKUO/Dj8/MFv6W5L82ykbTWZA1GJd2F0RFuaAg6rWJwKy48VL+noxzmxdkMERIg6wS0v9gCWjEm2sAigojEyNYeYTMJLNGEcSr8j0/VqJWUo/q/PNTHtVPfHcghM6HVLaewgjiK/onmMcyRy6TpDEPG4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768960732; c=relaxed/simple;
-	bh=gabIErv/E1Rb7QtBy94Tqbe+/t907giAN6VxJO94nKY=;
+	s=arc-20240116; t=1768960919; c=relaxed/simple;
+	bh=+4mPt5tnUZrkxhN8YSKTU27Dn3KS3hdqt2JpYbyI6BY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=GE1XtsexEAF3zYEoZ5boDBi2tVEHvuYSi6PTjeTnDWe7V6gSdN6MpC0eGhUcdgeCe+t++BjRnUtaq+Px7HQB2VUcSbpH4i2vzLM7K2uzF9N+ZAJiU/jAcEC15tWRsm6p/BJMuQVMZ3iOvjS3NGQiUo/gRZFy0GgrwppvEZ9fhxg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=klmVfD7h; arc=none smtp.client-ip=95.215.58.176
+	 MIME-Version:Content-Type; b=c8mx7nZjQ37mDXH1ytlYHfvBXFN05orGDEG8P2LvCw6V2ZDA/QBpiwQsd/ad5ZieahVtkF1YjcgGDfYPckwSNWZ0cmDPEN+nmw+/WIdWIVpRA8ZSdBM7o3BCVllQvzkAt8oDvxyuN6fBkP7x1w7K68cd4W1NTBVeoe4282rNDPQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=QrP7+IhS; arc=none smtp.client-ip=91.218.175.185
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="klmVfD7h"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="QrP7+IhS"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1768960709;
+	t=1768960899;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=Xt6JVh/bNlIu9YiX08XBN5Tby/ie4vqkYxZCDOk9QD8=;
-	b=klmVfD7hfdxSK+7a3sfq5EYjS7vt5rZOhK+AlrfzBA8WM/PaA0z9d4QDwFqA+dCG72/3Dw
-	cpt9hY9q7OMZMVLjnkOI/sJaWBGoW+PfN18aGC4L3e/YOD1Y7mmVshemlrFZ++ZZ9Iiise
-	P+Z4sQlbPJrpTmDlwVBSyjK7wiU0zf8=
+	bh=8vk8bQow5nk5DjEsU2rc41ZIlaqZt/eGd9AP28a6QkM=;
+	b=QrP7+IhSQ6rABslfUMQagbFNLm0XmFJBQLTBeT07+ezzRApxVC7+8x+5uGgUM42wtDe52I
+	DtpejP7a/1IRDJ+AMnLpMWe8rkyrIi7syhPP8uthMbHn9OxZbJbRFIe6V8yAVzuiChGJlG
+	ZNiT+XujARwszV2P3UWcRu+G+k02C3k=
 From: Menglong Dong <menglong.dong@linux.dev>
 To: Menglong Dong <menglong8.dong@gmail.com>,
  Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: ast@kernel.org, eddyz87@gmail.com, davem@davemloft.net,
- dsahern@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
- john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
- haoluo@google.com, jolsa@kernel.org, tglx@linutronix.de, mingo@redhat.com,
- bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
- netdev@vger.kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next v6 1/2] bpf,
- x86: inline bpf_get_current_task() for x86_64
-Date: Wed, 21 Jan 2026 09:58:10 +0800
-Message-ID: <10788751.nUPlyArG6x@7940hx>
+Cc: ast@kernel.org, andrii@kernel.org, yonghong.song@linux.dev,
+ daniel@iogearbox.net, john.fastabend@gmail.com, martin.lau@linux.dev,
+ eddyz87@gmail.com, song@kernel.org, kpsingh@kernel.org, sdf@fomichev.me,
+ haoluo@google.com, jolsa@kernel.org, mattbobrowski@google.com,
+ rostedt@goodmis.org, mhiramat@kernel.org, mathieu.desnoyers@efficios.com,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org
+Subject:
+ Re: [PATCH bpf-next v4 1/2] bpf: support bpf_get_func_arg() for
+ BPF_TRACE_RAW_TP
+Date: Wed, 21 Jan 2026 10:01:27 +0800
+Message-ID: <22975924.EfDdHjke4D@7940hx>
 In-Reply-To:
- <CAEf4BzYjbP4KwuVNT_pgjfXy=+7saEezmp1ck2L5txwtik5WYw@mail.gmail.com>
+ <CAEf4BzZUA+5jsYGN7dA1qEXyZKZvBnESX=8fuJHYmhOVm0_QEQ@mail.gmail.com>
 References:
- <20260120070555.233486-1-dongml2@chinatelecom.cn>
- <20260120070555.233486-2-dongml2@chinatelecom.cn>
- <CAEf4BzYjbP4KwuVNT_pgjfXy=+7saEezmp1ck2L5txwtik5WYw@mail.gmail.com>
+ <20260120073046.324342-1-dongml2@chinatelecom.cn>
+ <20260120073046.324342-2-dongml2@chinatelecom.cn>
+ <CAEf4BzZUA+5jsYGN7dA1qEXyZKZvBnESX=8fuJHYmhOVm0_QEQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -57,145 +58,167 @@ Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset="utf-8"
 X-Migadu-Flow: FLOW_OUT
 
-On 2026/1/21 09:23 Andrii Nakryiko <andrii.nakryiko@gmail.com> write:
-> On Mon, Jan 19, 2026 at 11:06=E2=80=AFPM Menglong Dong <menglong8.dong@gm=
+On 2026/1/21 08:38 Andrii Nakryiko <andrii.nakryiko@gmail.com> write:
+> On Mon, Jan 19, 2026 at 11:31=E2=80=AFPM Menglong Dong <menglong8.dong@gm=
 ail.com> wrote:
 > >
-> > Inline bpf_get_current_task() and bpf_get_current_task_btf() for x86_64
-> > to obtain better performance.
+> > For now, bpf_get_func_arg() and bpf_get_func_arg_cnt() is not supported=
+ by
+> > the BPF_TRACE_RAW_TP, which is not convenient to get the argument of the
+> > tracepoint, especially for the case that the position of the arguments =
+in
+> > a tracepoint can change.
+> >
+> > The target tracepoint BTF type id is specified during loading time,
+> > therefore we can get the function argument count from the function
+> > prototype instead of the stack.
 > >
 > > Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
-> > Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 > > ---
-> > v5:
-> > - don't support the !CONFIG_SMP case
-> >
 > > v4:
-> > - handle the !CONFIG_SMP case
+> > - fix the error of using bpf_get_func_arg() for BPF_TRACE_ITER
 > >
 > > v3:
-> > - implement it in the verifier with BPF_MOV64_PERCPU_REG() instead of in
-> >   x86_64 JIT.
-> > ---
-> >  kernel/bpf/verifier.c | 22 ++++++++++++++++++++++
-> >  1 file changed, 22 insertions(+)
+> > - remove unnecessary NULL checking for prog->aux->attach_func_proto
 > >
+> > v2:
+> > - for nr_args, skip first 'void *__data' argument in btf_trace_##name
+> >   typedef
+> > ---
+> >  kernel/bpf/verifier.c    | 32 ++++++++++++++++++++++++++++----
+> >  kernel/trace/bpf_trace.c |  4 ++++
+> >  2 files changed, 32 insertions(+), 4 deletions(-)
+> >
+>=20
+> other than stylistical choices, looks good to me
+>=20
+> Acked-by: Andrii Nakryiko <andrii@kernel.org>
+>=20
 > > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> > index 9de0ec0c3ed9..c4e2ffadfb1f 100644
+> > index 9de0ec0c3ed9..0b281b7c41eb 100644
 > > --- a/kernel/bpf/verifier.c
 > > +++ b/kernel/bpf/verifier.c
-> > @@ -17739,6 +17739,10 @@ static bool verifier_inlines_helper_call(struc=
-t bpf_verifier_env *env, s32 imm)
-> >         switch (imm) {
-> >  #ifdef CONFIG_X86_64
-> >         case BPF_FUNC_get_smp_processor_id:
-> > +#ifdef CONFIG_SMP
-> > +       case BPF_FUNC_get_current_task_btf:
-> > +       case BPF_FUNC_get_current_task:
-> > +#endif
+> > @@ -23323,8 +23323,20 @@ static int do_misc_fixups(struct bpf_verifier_=
+env *env)
+> >                 /* Implement bpf_get_func_arg inline. */
+> >                 if (prog_type =3D=3D BPF_PROG_TYPE_TRACING &&
+> >                     insn->imm =3D=3D BPF_FUNC_get_func_arg) {
+> > -                       /* Load nr_args from ctx - 8 */
+> > -                       insn_buf[0] =3D BPF_LDX_MEM(BPF_DW, BPF_REG_0, =
+BPF_REG_1, -8);
+> > +                       if (eatype =3D=3D BPF_TRACE_RAW_TP) {
+> > +                               int nr_args =3D btf_type_vlen(prog->aux=
+=2D>attach_func_proto);
+> > +
+> > +                               /*
+> > +                                * skip first 'void *__data' argument i=
+n btf_trace_##name
+> > +                                * typedef
+> > +                                */
+> > +                               nr_args--;
+> > +                               /* Save nr_args to reg0 */
+> > +                               insn_buf[0] =3D BPF_MOV64_IMM(BPF_REG_0=
+, nr_args);
+> > +                       } else {
+> > +                               /* Load nr_args from ctx - 8 */
+> > +                               insn_buf[0] =3D BPF_LDX_MEM(BPF_DW, BPF=
+_REG_0, BPF_REG_1, -8);
+> > +                       }
+> >                         insn_buf[1] =3D BPF_JMP32_REG(BPF_JGE, BPF_REG_=
+2, BPF_REG_0, 6);
+> >                         insn_buf[2] =3D BPF_ALU64_IMM(BPF_LSH, BPF_REG_=
+2, 3);
+> >                         insn_buf[3] =3D BPF_ALU64_REG(BPF_ADD, BPF_REG_=
+2, BPF_REG_1);
+> > @@ -23376,8 +23388,20 @@ static int do_misc_fixups(struct bpf_verifier_=
+env *env)
+> >                 /* Implement get_func_arg_cnt inline. */
+> >                 if (prog_type =3D=3D BPF_PROG_TYPE_TRACING &&
+> >                     insn->imm =3D=3D BPF_FUNC_get_func_arg_cnt) {
+> > -                       /* Load nr_args from ctx - 8 */
+> > -                       insn_buf[0] =3D BPF_LDX_MEM(BPF_DW, BPF_REG_0, =
+BPF_REG_1, -8);
+> > +                       if (eatype =3D=3D BPF_TRACE_RAW_TP) {
+> > +                               int nr_args =3D btf_type_vlen(prog->aux=
+=2D>attach_func_proto);
+> > +
+> > +                               /*
+> > +                                * skip first 'void *__data' argument i=
+n btf_trace_##name
+> > +                                * typedef
+> > +                                */
+> > +                               nr_args--;
+> > +                               /* Save nr_args to reg0 */
+> > +                               insn_buf[0] =3D BPF_MOV64_IMM(BPF_REG_0=
+, nr_args);
 >=20
-> Does this have to be x86-64 specific inlining? With verifier inlining
-> and per_cpu instruction support it should theoretically work across
-> all architectures that do support per-cpu instruction, no?
+> nit: isn't this just a very verbose way of writing:
 >=20
-> Eduard pointed out [0] to me for why we have that x86-64 specific
-> check. But looking at do_misc_fixups(), we have that early
-> bpf_jit_inlines_helper_call(insn->imm)) check, so if some JIT has more
-> performant inlining implementation, we will just do that.
+> int nr_args =3D btf_type_vlen(prog->aux->attach_func_proto);
+> /* skip 'void *__data' in btf_trace_##name() and save to reg0 */
+> insn_buf[0] =3D BPF_MOV64_IMM(BPF_REG_0, nr_args - 1);
 >=20
-> So it seems like we can just drop all that x86-64 specific logic and
-> claim all three of these functions as inlinable, no?
+> even if you want to preserve nr_args-- for clarity, at least make that
+> 4-line comment into a single-line one, please
 >=20
-> And even more. We can drop rather confusing
-> verifier_inlines_helper_call() that duplicates the decision of which
-> helpers can be inlined or not, and have:
+> > +                       } else {
+> > +                               /* Load nr_args from ctx - 8 */
+> > +                               insn_buf[0] =3D BPF_LDX_MEM(BPF_DW, BPF=
+_REG_0, BPF_REG_1, -8);
+> > +                       }
+> >
+> >                         new_prog =3D bpf_patch_insn_data(env, i + delta=
+, insn_buf, 1);
+> >                         if (!new_prog)
+> > diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> > index f73e08c223b5..0efdad3adcce 100644
+> > --- a/kernel/trace/bpf_trace.c
+> > +++ b/kernel/trace/bpf_trace.c
+> > @@ -1734,10 +1734,14 @@ tracing_prog_func_proto(enum bpf_func_id func_i=
+d, const struct bpf_prog *prog)
+> >         case BPF_FUNC_d_path:
+> >                 return &bpf_d_path_proto;
+> >         case BPF_FUNC_get_func_arg:
+> > +               if (prog->expected_attach_type =3D=3D BPF_TRACE_RAW_TP)
+> > +                       return &bpf_get_func_arg_proto;
+> >                 return bpf_prog_has_trampoline(prog) ? &bpf_get_func_ar=
+g_proto : NULL;
+> >         case BPF_FUNC_get_func_ret:
+> >                 return bpf_prog_has_trampoline(prog) ? &bpf_get_func_re=
+t_proto : NULL;
+> >         case BPF_FUNC_get_func_arg_cnt:
+> > +               if (prog->expected_attach_type =3D=3D BPF_TRACE_RAW_TP)
+> > +                       return &bpf_get_func_arg_cnt_proto;
+> >                 return bpf_prog_has_trampoline(prog) ? &bpf_get_func_ar=
+g_cnt_proto : NULL;
+>=20
+> hm, wouldn't "has trampoline or is raw_tp" a more logical grouping?
+>=20
+> if (bpf_prog_has_trampoline(prog) || prog->expected_attach_type =3D=3D
+> BPF_TRACE_RAW_TP)
+>     return &bpf_get_func_arg_cnt_proto;
+> return NULL;
+>=20
+> maybe you'll need to wrap that condition, but still, at least no one
+> has to double check that we return exactly the same prototype in both
+> cases, no?
 
-The verifier_inlines_helper_call() is confusing, but I think we can't
-remove the x86-64 checking. For example, some architecture
-don't support BPF_FUNC_get_current_task both in
-bpf_jit_inlines_helper_call() and verifier_inlines_helper_call(), which
-means it can't be inline.
+Yeah, it looks better. I tried to write it as:
+     return (bpf_prog_has_trampoline(prog) || prog->expected_attach_type =
+=3D=3D  BPF_TRACE_RAW_TP) ? &bpf_get_func_arg_cnt_proto : NULL;
 
->=20
-> if (env->prog->jit_requested && bpf_jit_supports_percpu_insn() {
->     switch (insn->imm) {
->     case BPF_FUNC_get_smp_processor_id:
->         ...
->         break;
->     case BPF_FUNC_get_current_task_btf:
->     case BPF_FUNC_get_current_task_btf:
->         ...
->         break;
->     default:
-> }
->=20
-> And the decision about inlining will live in one place.
->=20
-> Or am I missing some complications?
+but found it ugly.
 
-As Alexei said, the implement of "current" is architecture specific,
-and the per-cpu variable "current_task" only exist on x86_64.
-
->=20
-> And with all that, should we mark get_current_task and
-> get_current_task_btf as __bpf_fastcall?
-
-I think it make sense, and the I saw bpf_get_smp_processor_id does
-such operation:
-
-const struct bpf_func_proto bpf_get_smp_processor_id_proto =3D {
-	[...]
-	.allow_fastcall	=3D true,
-};
-
-PS: I'm a little confused about the fast call. We inline many helper,
-but it seems that bpf_get_smp_processor_id is the only one that
-use the "allow_fastcall". Why? I'd better study harder.
+The way you mentioned looks nice ;)
+I'll do it next version.
 
 Thanks!
 Menglong Dong
 
 >=20
 >=20
->   [0] https://lore.kernel.org/all/20240722233844.1406874-4-eddyz87@gmail.=
-com/
->=20
-> >                 return env->prog->jit_requested && bpf_jit_supports_per=
-cpu_insn();
-> >  #endif
-> >         default:
-> > @@ -23319,6 +23323,24 @@ static int do_misc_fixups(struct bpf_verifier_=
-env *env)
-> >                         insn      =3D new_prog->insnsi + i + delta;
-> >                         goto next_insn;
-> >                 }
-> > +
-> > +               /* Implement bpf_get_current_task() and bpf_get_current=
-_task_btf() inline. */
-> > +               if ((insn->imm =3D=3D BPF_FUNC_get_current_task || insn=
-=2D>imm =3D=3D BPF_FUNC_get_current_task_btf) &&
-> > +                   verifier_inlines_helper_call(env, insn->imm)) {
-> > +                       insn_buf[0] =3D BPF_MOV64_IMM(BPF_REG_0, (u32)(=
-unsigned long)&current_task);
-> > +                       insn_buf[1] =3D BPF_MOV64_PERCPU_REG(BPF_REG_0,=
- BPF_REG_0);
-> > +                       insn_buf[2] =3D BPF_LDX_MEM(BPF_DW, BPF_REG_0, =
-BPF_REG_0, 0);
-> > +                       cnt =3D 3;
-> > +
-> > +                       new_prog =3D bpf_patch_insn_data(env, i + delta=
-, insn_buf, cnt);
-> > +                       if (!new_prog)
-> > +                               return -ENOMEM;
-> > +
-> > +                       delta    +=3D cnt - 1;
-> > +                       env->prog =3D prog =3D new_prog;
-> > +                       insn      =3D new_prog->insnsi + i + delta;
-> > +                       goto next_insn;
-> > +               }
-> >  #endif
-> >                 /* Implement bpf_get_func_arg inline. */
-> >                 if (prog_type =3D=3D BPF_PROG_TYPE_TRACING &&
+> >         case BPF_FUNC_get_attach_cookie:
+> >                 if (prog->type =3D=3D BPF_PROG_TYPE_TRACING &&
 > > --
 > > 2.52.0
 > >
