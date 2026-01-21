@@ -1,149 +1,124 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F7E2378D62
-	for <bpf@vger.kernel.org>; Wed, 21 Jan 2026 19:14:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D3B03659F1
+	for <bpf@vger.kernel.org>; Wed, 21 Jan 2026 19:31:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769022863; cv=none; b=Vrx/0a4GtWYZoXtd74YxJPE7FQKR2/wQPkkop3aDgUn2ueCT7l4LGq/m83OJr5V3OeKy2gidqRFOgAtYq6zuxQyC0eN29BWELHMu25pP3B6tmgdUFsV5lScUQuyKV6BiSbGo9kJZvSxvDZww3kjOlmdornQubwNK6uIni6JehLg=
+	t=1769023866; cv=none; b=N7CwhgXsBHczehnbvG7q9hxvdsuNy709DdS3oVfnHzXe+qfFj9RDdfvzza8YIivJ8u2dsxZ5F/OfJTA9yH1SZyU6up87izMAEGPFyXVstq7bAMTUBbirtmHW2k17jf+aG49J9yJEV75J0OtdHWwWHXxD34caS2Wm41ym8oWmNb4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769022863; c=relaxed/simple;
-	bh=b/KuOWOWxlSyrCXUXIuBotvcweFTf4xbWf6NYPxk69U=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ElZFGIr13uH9Gc9d+V13sMLkXqdnOkepKvBSLoDeYAhNj1FeJqB/edoaw7D2N/vhtNssa0whLrIi+EO2lnTf8zco0qGoBBvwHbvMrMspWNGUIRLjL6EVHIgOzkNOIOPyuLZSh0AKF33teWUKSIbfBcPsqU7zTIYr1LHTKlFTwfI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KRSr5JEe; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769023866; c=relaxed/simple;
+	bh=b9yDAYsE05ZOuVfuBYEVHwA5ph6pRefxAyMjtjlx9Ac=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Subject:Cc:
+	 References:In-Reply-To; b=kV3pPyd/8UuVyIUrO9SwBJFlbN4AMdeGeS0+WMAysuoCEqlGsqnJJkuyAlbaQ7IqJaaL7LKoAu8Z9Ce69X/K+7c/pRuctYTUTnV3i74N4Tuta7VBKx1yHp5TGLsX7B/QPhlX7OH9wDmjvSKUDB7Db4Df2n4gOzvyBL1gDDPOzwY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=v7e+HZOc; arc=none smtp.client-ip=185.246.84.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KRSr5JEe"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2B87C19422
-	for <bpf@vger.kernel.org>; Wed, 21 Jan 2026 19:14:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769022862;
-	bh=b/KuOWOWxlSyrCXUXIuBotvcweFTf4xbWf6NYPxk69U=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=KRSr5JEeLU31pmIJaG7S1BT0z9cUAsa9M07Vfsf1Mg1LVXp38VBqr6MczeVMpbrbr
-	 wyFM0zHYaijSA60yq+jkzL1HJ9+3oTu7rn6/+xWDWg3HjnM7MU19kRewYH+sv/702e
-	 fA/saF+wTzS90lj4G2xYrdUvg5pT3txTZPOy12+GOA5wiVjIMJEEbRECRME4jrUx9A
-	 BNp5VkYesIUveE6BDTRchq9FDeKnyYBgnX0jHXQ1npzEQG1si83ixAl1j+uip76ev/
-	 pxnOfEe1qx6KtvNVjH/lO/hSpL+ueWR3j9GwmVIPD56FyE0ZGpCDNrxbq8J8fP53SF
-	 h6kznGyhrBE6Q==
-Received: by mail-qt1-f171.google.com with SMTP id d75a77b69052e-50146483bf9so1440371cf.3
-        for <bpf@vger.kernel.org>; Wed, 21 Jan 2026 11:14:22 -0800 (PST)
-X-Gm-Message-State: AOJu0Yz5QCbY/ueG7w2Sfq93B42TIYykhJFivo/n51jEtboDbM72SYyy
-	AlSpibYahZLxrXpVGUrBjcy8VxOpHhwgykJH4+mDkyEQTuNthhYWDoD3VuyEDt1Eo+qPLDFWGny
-	ENk5q2xh7BETeAtrskY90n2ItkGQS8ao=
-X-Received: by 2002:ac8:5e49:0:b0:501:b1d8:6376 with SMTP id
- d75a77b69052e-502a175951dmr267000051cf.76.1769022861809; Wed, 21 Jan 2026
- 11:14:21 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="v7e+HZOc"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-02.galae.net (Postfix) with ESMTPS id CAD541A29B3;
+	Wed, 21 Jan 2026 19:31:01 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 84C026070A;
+	Wed, 21 Jan 2026 19:31:01 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id B05C2119B1C9D;
+	Wed, 21 Jan 2026 20:30:56 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1769023860; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=TYMvCSZvFJ1CRk+4p87DSgWZ6r4MnmaAK0r2XbWIWYw=;
+	b=v7e+HZOc8f4H2v1d7DjCerX1tAv2B/Oin2tDzVYI9jW30iyjBkNZcNpA0BKCaNXT2vVIZe
+	VRIwHXROR5FpuddFeut00i1RHcP2A83JBBKnDA9HArWTJupqdsQq+EfRgcwKE/1SuP0XkL
+	y8GB8C8P0za1O7bM/hoGdyzpsr3HQCJPgj0hRu2+k/sNMql7Os1Lnzj3MWtqf/4HB1Vopn
+	PcZsxjaNshrx8fkeanvQ6yleuexm5nyfzjbaiwTfTWtt2t4zRqR4ng6lgnm3AjjXDJVHrc
+	b16AT1ITmk0au0yhbTwG4HFxccZltIul2PSJefb5QPnNuUfdEZkaGe0A8VIaSA==
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260121135444.187001-1-mattbobrowski@google.com>
-In-Reply-To: <20260121135444.187001-1-mattbobrowski@google.com>
-From: Song Liu <song@kernel.org>
-Date: Wed, 21 Jan 2026 11:14:10 -0800
-X-Gmail-Original-Message-ID: <CAPhsuW6B27WYpkT-ZY1wgBUNQknM9pKZm+oGk+bM_p33mVPx_A@mail.gmail.com>
-X-Gm-Features: AZwV_Qi2_F906JHvcKo3bD5Bf84meQFB85GuO1ZlYed6HTLSIr7UZj1yok71YNY
-Message-ID: <CAPhsuW6B27WYpkT-ZY1wgBUNQknM9pKZm+oGk+bM_p33mVPx_A@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 1/2] bpf: add new BPF_CGROUP_ITER_CHILDREN_ONLY
- control option
-To: Matt Bobrowski <mattbobrowski@google.com>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Yonghong Song <yonghong.song@linux.dev>, ohn Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Jiri Olsa <jolsa@kernel.org>, 
-	Roman Gushchin <roman.gushchin@linux.dev>, Chuyi Zhou <zhouchuyi@bytedance.com>, 
-	Tejun Heo <tj@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 21 Jan 2026 20:30:55 +0100
+Message-Id: <DFUIMCAAYRYZ.3RH0727Y7TOS0@bootlin.com>
+From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>,
+ =?utf-8?b?QWxleGlzIExvdGhvcsOpIChlQlBGIEZvdW5kYXRpb24p?=
+ <alexis.lothore@bootlin.com>
+Subject: Re: [PATCH bpf-next v2 1/4] selftests/bpf: reorder test_progs
+ sources alphabetically
+Cc: "Andrii Nakryiko" <andrii@kernel.org>, "Eduard Zingerman"
+ <eddyz87@gmail.com>, "Alexei Starovoitov" <ast@kernel.org>, "Daniel
+ Borkmann" <daniel@iogearbox.net>, "Martin KaFai Lau"
+ <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong Song"
+ <yonghong.song@linux.dev>, "John Fastabend" <john.fastabend@gmail.com>, "KP
+ Singh" <kpsingh@kernel.org>, "Stanislav Fomichev" <sdf@fomichev.me>, "Hao
+ Luo" <haoluo@google.com>, "Jiri Olsa" <jolsa@kernel.org>, "Shuah Khan"
+ <shuah@kernel.org>, "Quentin Monnet" <qmo@kernel.org>,
+ <ebpf@linuxfoundation.org>, "Bastien Curutchet"
+ <bastien.curutchet@bootlin.com>, "Thomas Petazzoni"
+ <thomas.petazzoni@bootlin.com>, "LKML" <linux-kernel@vger.kernel.org>,
+ "bpf" <bpf@vger.kernel.org>, "open list:KERNEL SELFTEST FRAMEWORK"
+ <linux-kselftest@vger.kernel.org>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260121-bpftool-tests-v2-0-64edb47e91ae@bootlin.com>
+ <20260121-bpftool-tests-v2-1-64edb47e91ae@bootlin.com>
+ <CAADnVQK0kxfjkORv8=a8W8peiBTtpzB91FCh=6X+N0iA+OCzJA@mail.gmail.com>
+In-Reply-To: <CAADnVQK0kxfjkORv8=a8W8peiBTtpzB91FCh=6X+N0iA+OCzJA@mail.gmail.com>
+X-Last-TLS-Session-Version: TLSv1.3
 
-On Wed, Jan 21, 2026 at 5:54=E2=80=AFAM Matt Bobrowski <mattbobrowski@googl=
-e.com> wrote:
+Hi Alexei,
+
+On Wed Jan 21, 2026 at 6:26 PM CET, Alexei Starovoitov wrote:
+> On Wed, Jan 21, 2026 at 7:18=E2=80=AFAM Alexis Lothor=C3=A9 (eBPF Foundat=
+ion)
+> <alexis.lothore@bootlin.com> wrote:
+>>
+>> Update test_progs sources listing to make those sorted alphabetically
+> ...
 >
-> Currently, the BPF cgroup iterator supports walking descendants in
-> either pre-order (BPF_CGROUP_ITER_DESCENDANTS_PRE) or post-order
-> (BPF_CGROUP_ITER_DESCENDANTS_POST). These modes perform an exhaustive
-> depth-first search (DFS) of the hierarchy. In scenarios where a BPF
-> program may need to inspect only the direct children of a given parent
-> cgroup, a full DFS is unnecessarily expensive.
+>> -TRUNNER_EXTRA_SOURCES :=3D test_progs.c          \
+>> -                        cgroup_helpers.c       \
+>> -                        trace_helpers.c        \
+>> -                        network_helpers.c      \
+>> -                        testing_helpers.c      \
+>> -                        btf_helpers.c          \
+>> -                        cap_helpers.c          \
+>> -                        unpriv_helpers.c       \
+>> -                        netlink_helpers.c      \
+>> -                        jit_disasm_helpers.c   \
+>> -                        io_helpers.c           \
+>> -                        test_loader.c          \
+>> -                        xsk.c                  \
+>> -                        disasm.c               \
+>> -                        disasm_helpers.c       \
+>> -                        json_writer.c          \
+>> +TRUNNER_EXTRA_SOURCES :=3D btf_helpers.c                 \
+>> +                        cap_helpers.c                  \
+>> +                        cgroup_helpers.c               \
 >
-> This patch introduces a new BPF cgroup iterator control option,
-> BPF_CGROUP_ITER_CHILDREN_ONLY. This control option restricts the
-> traversal to the immediate children of a specified parent cgroup,
-> allowing for more targeted and efficient iteration, particularly when
-> exhaustive depth-first search (DFS) traversal is not required.
 >
-> Signed-off-by: Matt Bobrowski <mattbobrowski@google.com>
+> no need. Even if we sort it now it will not stick.
+> Files might get renamed, new files added to the end, etc.
+> Just add whatever you need to the end.
 
-The code looks good to me.
+Ok, I'll remove it and just add bpftool_helpers at the end.
 
-Some nitpick and some high level questions/ideas below
+> Also see that there is a merge conflict. Pls respin.
 
->  enum bpf_cgroup_iter_order {
->         BPF_CGROUP_ITER_ORDER_UNSPEC =3D 0,
-> -       BPF_CGROUP_ITER_SELF_ONLY,              /* process only a single =
-object. */
-> -       BPF_CGROUP_ITER_DESCENDANTS_PRE,        /* walk descendants in pr=
-e-order. */
-> -       BPF_CGROUP_ITER_DESCENDANTS_POST,       /* walk descendants in po=
-st-order. */
-> -       BPF_CGROUP_ITER_ANCESTORS_UP,           /* walk ancestors upward.=
- */
-> +       BPF_CGROUP_ITER_SELF_ONLY,              /* process only a single =
-object. */
-> +       BPF_CGROUP_ITER_DESCENDANTS_PRE,        /* walk descendants in pr=
-e-order. */
-> +       BPF_CGROUP_ITER_DESCENDANTS_POST,       /* walk descendants in po=
-st-order. */
-> +       BPF_CGROUP_ITER_ANCESTORS_UP,           /* walk ancestors upward.=
- */
-
-Changes above seem unnecessary.
-
-> +       /*
-> +        * Walks the immediate children of the specified parent
-> +        * cgroup_subsys_state. Unlike BPF_CGROUP_ITER_DESCENDANTS_PRE,
-> +        * BPF_CGROUP_ITER_DESCENDANTS_POST, and BPF_CGROUP_ITER_ANCESTOR=
-S_UP
-> +        * the iterator does not include the specified parent as one of t=
-he
-> +        * returned iterator elements.
-> +        */
-> +       BPF_CGROUP_ITER_CHILDREN_ONLY,
->  };
-
-[...]
-
-> @@ -320,6 +332,7 @@ __bpf_kfunc int bpf_iter_css_new(struct bpf_iter_css =
-*it,
->         case BPF_CGROUP_ITER_DESCENDANTS_PRE:
->         case BPF_CGROUP_ITER_DESCENDANTS_POST:
->         case BPF_CGROUP_ITER_ANCESTORS_UP:
-> +       case BPF_CGROUP_ITER_CHILDREN_ONLY:
->                 break;
->         default:
->                 return -EINVAL;
-> @@ -345,6 +358,9 @@ __bpf_kfunc struct cgroup_subsys_state *bpf_iter_css_=
-next(struct bpf_iter_css *i
->         case BPF_CGROUP_ITER_DESCENDANTS_POST:
->                 kit->pos =3D css_next_descendant_post(kit->pos, kit->star=
-t);
->                 break;
-> +       case BPF_CGROUP_ITER_CHILDREN_ONLY:
-> +               kit->pos =3D css_next_child(kit->pos, kit->start);
-> +               break;
->         case BPF_CGROUP_ITER_ANCESTORS_UP:
->                 kit->pos =3D kit->pos ? kit->pos->parent : kit->start;
->         }
-
-I wonder whether we can use the return values and/or the kfuncs to
-enable more flexible walks. For example, some return value means
-"do not walk more children, go back to the parent". This will enable
-use cases like "walk children and grandchildren nodes from here,
-but not any deeper". WDYT?
+ACK, will do.
 
 Thanks,
-Song
+
+Alexis
+
+
+
+
+--=20
+Alexis Lothor=C3=A9, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
