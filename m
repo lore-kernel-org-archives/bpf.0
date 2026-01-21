@@ -1,83 +1,93 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-182.mta1.migadu.com (out-182.mta1.migadu.com [95.215.58.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD093330B0C;
-	Wed, 21 Jan 2026 04:50:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E872320A0C
+	for <bpf@vger.kernel.org>; Wed, 21 Jan 2026 04:50:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768971010; cv=none; b=l9LumB2d7pXsz2G7/3A0Wh/uVo1e3b48D1VQOeMT7T2gKM7r6ZTZZjNtSblVspn7ofmSbg+Da9WOHJc9M5AUtXLSqDePb4HzVH+cygo4cUrnKWI11zmWb19f9k/nfw9eVF/saeEbXIinMIJKN/apxGHC2a0PJdCHj6ZY5R3eoMo=
+	t=1768971026; cv=none; b=MbdVLV0E2kua23AELE3gVYdiySOYmPsC/bOvxFUh8ePeVzpDbnobRzBymCdV4TpS5VO5G3VFeMwxfJbB2kQZZ7s+3W8VMggdIevhOIKqSNtF9OXekD0Cijn+wDQiSOaqFepUxqoY2oLUpLzDFLwAM9//4LAj6NSauC91l2Mk8sc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768971010; c=relaxed/simple;
-	bh=CmAIT6kTBUuZkscloNW0+zlEBrPGGxsQS6azAehlKZM=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=gH7VnkedEFJkScNsyO9HsZoV2incjTcDB7eG/f+0NqhzIqEeCyEa2z5RUM5+/pBKZ84mnSXzETeH+WSSEStD7R4F2X0OZHllpf+eU0miBN/2LUrFPoK+i1PZ4MTCMcSo3sUqaA4bBzLdnM9kesXRUwPaXbXZ8DXeCpwG3q71rfw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A/TOg/m7; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1768971026; c=relaxed/simple;
+	bh=LyEat/pwgLv74VtxEsZu4wCbiA4ff2YDvo2lAmAC9XE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=OeU3hJ6dFB8IGiHaD9YALiLEVFelP3AmHhdmeqaSVyBL1T27dpts8YqcQhGylPneSdhjuV7d2PGkv05a8kQy5OtCEFu7SaG5iCrN7V6Z5mdKaLdAuGAmgK1GsuBcJz/54e+hRkLGofaExQD7j1OQ8STkV8EEq8RgkdLvgrbzC9s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=IU9k1+sB; arc=none smtp.client-ip=95.215.58.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A/TOg/m7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FA97C116D0;
-	Wed, 21 Jan 2026 04:50:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768971010;
-	bh=CmAIT6kTBUuZkscloNW0+zlEBrPGGxsQS6azAehlKZM=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=A/TOg/m7XTZBA2VWYs+VRfQMsNwBJ52vTusNrUCcJ8Z1jWppAo4Kxy72o6fa70Iqb
-	 IOHJBJ9E6ssrEqCxBd9KEEpdG0Yhp6yiA24RRln+cEoeBp9oMg5iPrUpUF9obrelFO
-	 smkd/r52oUOwg+f9TQZtBbauE4fhj5uIr867Yh5PL6K5neP4/a8BA9Zt8o5DqRpTZN
-	 dafvSZOPc9sw7xUFcPxqRgEmrGjBczA58RAx2FBwINSJpIXq0i4vr3i+c6UIUQty2h
-	 z3dd7mKGJ5qxIfVTios2VLOTZx8hxkek6JJflUQdSbTAn1T5PdfsL/tSj7zMKGGrqr
-	 7OnTAKbMkCNQA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 11B11380820D;
-	Wed, 21 Jan 2026 04:50:09 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="IU9k1+sB"
+Message-ID: <1897b382-41b7-4d63-815d-ac63f38485ee@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1768971021;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ENIsfiCzdvI33VE71FBPx2F3/IeAnfM0oFC1UqV/shg=;
+	b=IU9k1+sBpD+0qKNN/WuQLAFN+mpGcGwdeHlMRVhIkZ3hg1efgXXf07JS8vXklhEKa7xkEb
+	81PXRQm0wqWsu/XjoPUVtjRerCupiYd/rRw8jCiVXyxl6MWZ4WdUh/ZpvAspxN/6emNDul
+	2HBqYwI58qk5t0mHD5SLqRNACc4D1e0=
+Date: Tue, 20 Jan 2026 20:49:59 -0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v6 0/2] bpf,
- x86: inline bpf_get_current_task() for x86_64
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <176897100760.729216.7176451901339575079.git-patchwork-notify@kernel.org>
-Date: Wed, 21 Jan 2026 04:50:07 +0000
-References: <20260120070555.233486-1-dongml2@chinatelecom.cn>
-In-Reply-To: <20260120070555.233486-1-dongml2@chinatelecom.cn>
-To: Menglong Dong <menglong8.dong@gmail.com>
-Cc: ast@kernel.org, eddyz87@gmail.com, davem@davemloft.net,
- dsahern@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
- john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
- haoluo@google.com, jolsa@kernel.org, tglx@linutronix.de, mingo@redhat.com,
- bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
- netdev@vger.kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] scripts/gen-btf.sh: fix shebang for NixOS
+To: Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?=
+ <linux@weissschuh.net>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260120182034.3647092-1-gary@kernel.org>
+ <b53ee085-d9d2-4365-a5bc-d61e2bce97f8@linux.dev>
+ <DFTNNQLGB1CS.2HDOGB99S9ACP@garyguo.net>
+ <ea83b91a-796c-4329-bcf5-2c49efa897fc@t-8ch.de>
+ <5364d5ec-f30c-40d6-9a99-c251fec3868c@linux.dev>
+ <DFTTLB4I89PR.26SQVXWNG9U7@garyguo.net>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <DFTTLB4I89PR.26SQVXWNG9U7@garyguo.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-Hello:
 
-This series was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
 
-On Tue, 20 Jan 2026 15:05:53 +0800 you wrote:
-> Inline bpf_get_current_task() and bpf_get_current_task_btf() for x86_64
-> to obtain better performance, and add the testcase for it.
+On 1/20/26 3:54 PM, Gary Guo wrote:
+>> [...]
+>>
+>> So it's trivial to put $(CONFIG_SHELL) in front of it. But then it
+>> must be migrated to #!/bin/sh, right?
 > 
-> Changes since v5:
-> * remove unnecessary 'ifdef' and __description in the selftests
-> * v5: https://lore.kernel.org/bpf/20260119070246.249499-1-dongml2@chinatelecom.cn/
+> Documentation/kbuild/makefiles.rst says:
 > 
-> [...]
+> Make rules may invoke scripts to build the kernel. The rules shall
+> always provide the appropriate interpreter to execute the script. They
+> shall not rely on the execute bits being set, and shall not invoke the
+> script directly. For the convenience of manual script invocation, such
+> as invoking ./scripts/checkpatch.pl, it is recommended to set execute
+> bits on the scripts nonetheless.
+> 
+> Kbuild provides variables $(CONFIG_SHELL), $(AWK), $(PERL),
+> and $(PYTHON3) to refer to interpreters for the respective
+> scripts.
+> 
+> So I suppose it would need to migate to POSIX shell...
 
-Here is the summary with links:
-  - [bpf-next,v6,1/2] bpf, x86: inline bpf_get_current_task() for x86_64
-    https://git.kernel.org/bpf/bpf-next/c/eaedea154eb9
-  - [bpf-next,v6,2/2] selftests/bpf: test the jited inline of bpf_get_current_task
-    https://git.kernel.org/bpf/bpf-next/c/4fca95095cdc
+That's my blunder then.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+I'll send a patch tomorrow to make gen-btf.sh runnable with /bin/sh
 
+> 
+> Best,
+> Gary
 
