@@ -1,104 +1,229 @@
-Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 460171DD9AC
-	for <bpf@vger.kernel.org>; Wed, 21 Jan 2026 03:46:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768967182; cv=none; b=j9FYVCVsw5fblJmuoWM12vctYzu6euiB/VQfn2X3MokCiSGfoGxc5uZ+fyiGHIGZIBD87snuOBxeydUfOr6BA+jc0M0l5H2hLA/o3W1PzRwS1FTcMSayD4Phb4lYMm4JgvdBAYQMOScOXLSOtzL/FffoD769MfwDToy3UCCOQW8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768967182; c=relaxed/simple;
-	bh=UNTMs4HY65rUCx3FGGC6no9DF3VupsC4H4otkdJ/MKc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=eBWAWv8eC1rmflvfON4ptm87wNChxglvJIME1Vk+51zbzj9pulLNYtyUOAZm/Nu66I8aU5t0uCAiw1H0gqxyvhEvHK+sYPo3iJtfoBDUUQpF6cMG8s8eBzFoIdDYTpiZt+eifPJ+An42CNiGS/cSzvi9oliTEXJ2ja0c8FOFOSE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk; spf=none smtp.mailfrom=davidwei.uk; dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b=vwBSQcmN; arc=none smtp.client-ip=209.85.215.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=davidwei.uk
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2AFA38B993
+	for <bpf@vger.kernel.org>; Wed, 21 Jan 2026 04:12:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.180
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768968752; cv=pass; b=BE0z+R3HH2N4MzD+zQgSfA5iJLojKq9V7W6bDQ156DzsZKnM3PeOWvyJNl8nbZH+gh7sQdUoqeHSMrqwqI+DqUVOsjKBX025BRx2ufA1N+Nx/zARdKThWF6VgX/DgeqJJhgwoFcQ7Zmzid0YI6SwbHt4rDDeqFtW8e1JdRnLpNk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768968752; c=relaxed/simple;
+	bh=aLUt4k6Od5o9LKVcFoFJxVPDxiRTYBnrSQG++OERRVc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=KtqiTe2RqXZsEWJsq6MPiPzySiJnvE2+VLVtWGh0FVeSY3iFB0x62DoE2lP2ZTrntzxSQVDIJ0pnf8ObNjz1iNlmABQUe3waNk3o7iWXDDjgFAMVYOP8nOgGDv9EwsNoxGHxz7gHvEPB5zAIdQjWjvoqhYmMtB2yTzdY1LsmUzQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VtpxjZ2S; arc=pass smtp.client-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b="vwBSQcmN"
-Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-c0bccb8037eso2559210a12.1
-        for <bpf@vger.kernel.org>; Tue, 20 Jan 2026 19:46:20 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VtpxjZ2S"
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2a0a95200e8so40098815ad.0
+        for <bpf@vger.kernel.org>; Tue, 20 Jan 2026 20:12:25 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1768968743; cv=none;
+        d=google.com; s=arc-20240605;
+        b=M/AnmOz1p4FJpqIkMl2qmKSi/eNt6d3x9QhwTguhXXxY8uMViDCvxKutGNXrCRRqSu
+         dljtC8YNAI1ywK6QtNRjgT+gXabF3cLYXVgxRvdUIyV0Yg5IU4TaGlDmGiDqO+1jB4Eq
+         oFmy6pKEBK22v3GX7KYEVqWXEVGWJFckrej/tIoQjwpbM58Lgqj0STvYRhdgrPqMwxMw
+         Efan2GHXGlqr+5vPj4pkiqp1kJjRpcWZjD/fAn0nDZ9SM/LE/a1kOaJGq8TXnMHTmKkN
+         kf1nWrgmUQrrWZsFWEfs3iVTFu43A6PjWKTFSJCTtyL/Q+AllBBz9bQxlWfFYvdlcZmZ
+         SpuA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=toc67hYd9ZEB83MLwiwrRxa2cY0Idu7PjNgfB0rz6Ak=;
+        fh=CLJqd8hGfHtLmV2wTj7Cp/zF1O5JFzuk2EM4fapume0=;
+        b=jNVH1CIN/x0BHiqDCYQcTEk3Gwyjo9s2VEp79baozUduG2REvF4RbwON3RF55ViwB2
+         05pqKsutQh9eu6crkYRMXobp3DqotXfjd8zSSouJhSBTsp06xejR3hCWsrDDlP3a3iXH
+         Dl4Q/hjpAp5OMTQns26hgrGd7kNknoxDeQ5yNE4BMFJzizmvG8yS7EwXhkMwYbzdY2DI
+         79FTfhqlt7X7qHlsobQxKGHWWpBDkJIxQ9kE1iM0TS9Uad19lDjsQK5dJZRQVw5nE4br
+         CYUx93amDpkPSZsk/ucB+NaT9++oprekw+TCzscu5f0WvVy7ngc3QGKsJUTy8ARJYAUC
+         RZxQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=davidwei-uk.20230601.gappssmtp.com; s=20230601; t=1768967180; x=1769571980; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qRuq7cdSYizr1nEhJtCVuWq3DpoYkOwpDtOsi0u3UGI=;
-        b=vwBSQcmNdTSGemK+y1b2/bi1l78Y0M55snA1j9sdRZjMN8vbEqctpQFjqvHEa0m/Ca
-         V16z7EbvhJsrTbywNmuB7J3R5ah67UQIxSRc6kinRuLmRjTgU54yHzYswW7ee0q3AXmM
-         msKxgEsN3XgECjzetqGyWu3sh53344ENco2xEuuJhF8V+3MaTO6t+1gaq5+/9wjxEvf5
-         L1fdmVrnmdhFdZEK2WC5//kDyC1r1m121jOu1GlVBXB5dCov2ELEEo+oh4M8fB5cWHIc
-         6DhO8+1MURH4JBcFBe7o4tKiUA/TPIidP2/3imPkXxd/AWrDCJJTV1q+2SeW17Rm8+1Y
-         GZFQ==
+        d=gmail.com; s=20230601; t=1768968743; x=1769573543; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=toc67hYd9ZEB83MLwiwrRxa2cY0Idu7PjNgfB0rz6Ak=;
+        b=VtpxjZ2SWI54h9k6jwfYeMdA61wwTXDb0mDN+GMtYUT3Thh4qyFRtGzbi6J9N6g/tO
+         ycN4d1nDMoaKr8aAExMePud4p8G4IeIUCgGpKayquBWb8UoSihDGWu9lhEcjn7x/1jJT
+         +s19lJn9Dd8gLcUNRtrrmWJv97zvw6SVv56ogvhXhS72iecPFclcn/4kZG3uj/N3q6ZG
+         96SLZH0Ga6W1yc3a6cncBO0eOgs/dHwmTltIscTCZWRLBx4OJNZzFjEqXDJ0w40gdT3K
+         2PSQtzCIyiOLh6slblT02ZuIRurHSB3GMiqAd/sNJWUUAX0aP6zyp8IZizrJ+WzPhtKT
+         jTTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768967180; x=1769571980;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qRuq7cdSYizr1nEhJtCVuWq3DpoYkOwpDtOsi0u3UGI=;
-        b=AX3UVuuDa6c4tvV9aT2Eyo5rEqL/svkayOhYzJ2wPvSwtDGwyBdIXJH/vy2adbCpZh
-         /G3ukUnWGhqcF94hoZaENLtlAIxnLT9ovqs5RvR66MdZ/TUJkkm036CLjcfH65s46qXe
-         oBn8oAkE5hGc2SDj7IwPT/taW1nmWxE6Nc+MkyftH276qbTGEmnkZFbez1CSuPznC6xD
-         +8ETkrgEY5LwcSTn3dd7nIsN8SXvGuvDfePQskh4gfieIBgUIiNOybtYfpBq8Dvf5hU6
-         gIVVve/MJaKxrrs1QamSiA4zyMESty03Lh9YFJs0yGjjlBFRFTLk/JO9QFEukPzFGdxP
-         tLpQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVaYvmCUS245OdSEpr7mccqQTrkTDRgrfI9sqwoAyR3j6j0a4bvuc2TX95UxaX+rC8sw+Q=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxEJNtFDNBhR95a8dEKLhtW7TsNBBy+nSR5IiwJm1CX4JUv21Vy
-	lbDlt34Oxxfgq3D0RfxihOm7LaB5YBujdbg1KGVtDoKjboF9IVTEpiI0HxzdLUjmLN8=
-X-Gm-Gg: AZuq6aIcdl+8ILvkVkniaeLJ5sAL75GBrFo/shXMqosqnNMr42x6UXtYl+ClYA3uWq4
-	avqNIjUD9U6klyxSj6MdmQjnHRDNW80D+t9FaI+itKVfmW+RIAu7k+CkBgII8HxoUuXvhyKLWbe
-	FtYnmsafGumipbvrli39gw/CPVY+dyHJW0COAh10LI0CWcerdbvbDck+zNiDeNForv7SbBupLyP
-	+0R/kP+105Up81uJhsxSGLG2gfPxzDcNQQBivWBYkiojW5rne2PA9Io6naxdhgSl6if77svab6f
-	oxHcO1yebOrXudtJboIcOzZ/yiADukbKMY7eHR4myUS+doZ66pAfw6xGqXiGUmNIiIGNmVRXiwH
-	P32wLZSYGXvHVdy/pXlVOONWbwmTSEaRoqNndURsHzd1FxNyv7KgpAJbp5gBNgnW0r4Murh3PTj
-	UMp8OAZQ6zOmhgTbAMeqmhIaL0gHCLnRyY3jygDj22QEcFwWP0x/vSnJTiG9OS/GhvxA==
-X-Received: by 2002:a17:90b:3881:b0:32e:3c57:8a9e with SMTP id 98e67ed59e1d1-35272fcb836mr14613526a91.35.1768967180314;
-        Tue, 20 Jan 2026 19:46:20 -0800 (PST)
-Received: from [192.168.86.157] ([136.27.45.11])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3527310210fsm6698391a91.9.2026.01.20.19.46.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Jan 2026 19:46:19 -0800 (PST)
-Message-ID: <be76a258-0dfd-4fea-a0ac-b8d6fc6e95b6@davidwei.uk>
-Date: Tue, 20 Jan 2026 19:46:19 -0800
+        d=1e100.net; s=20230601; t=1768968743; x=1769573543;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=toc67hYd9ZEB83MLwiwrRxa2cY0Idu7PjNgfB0rz6Ak=;
+        b=cYCZgDBMMtT1pOKufuU1ZIH5KDytNeFa4lZxKNo+gKFZrqprtznoLYTYNKTUWaRWil
+         X4nBubfnfE/Ry7pfUTjDjjYtBnp/C49yWNqRjfs+y+1WoZpbuWt+9CbDig0bAupgeC8m
+         plx+QPKkj/CKRhQijgGWHgKgnbBMHS2MYvYK7iXwVpDq9T25/uNtLtG006DKW+/mj5RL
+         Lcxsxi3ng8cZRCZ5ppf3p/c5rWa2tYH2jTmj6UPkA6b3D8HOgdQIjMvUARaku7ZkeO/C
+         Cl/AnFXTFU9j6O84zZY2AcvCQ4RmX0stQgtakEsO2DZTEQ9ThKi2+2qjhB9K08ht5PZj
+         VwBw==
+X-Forwarded-Encrypted: i=1; AJvYcCUvhzs07AjqNB9P2Cmv+hK0i2O/pr2pNMXgwUmMlYsKDlApwao7jM4NUSJCRwgM4yO07So=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywp/efEQIadFjqzA92uX7dDDpRgVvc3Srm+T09G17HFp1lbMoW+
+	4xwsYp2pxsWa3Kww7Cjnfeu2rsnvy05aQMe/BNQdV+asq04aLjKnfL5nXKSgRnb0eDeyqT7/ps1
+	s4fP8zQ6B7Im7q2AAEk/rjY7U4brMswU=
+X-Gm-Gg: AZuq6aLyPGA/vt6Sfxd751qSBJe0/v+ZLw9iu7US5KEUhrTR4QYJXl/abvvQ4yZTjui
+	RnYP1jKPyuG2TR1Ew+zobfo9HA0xabvgeWDonanzHSeds3DrXxfRKNEJ034KRIObZxPMtG6YHdG
+	Bhm4zGgIOUBfEd6rl8PSJiOSlPQCA9nz0xSzmNfmwLJwUrvpC4x8enLqQVj06cwybLLuDTjQ4cN
+	CFs2NueGEQIWq0j92BXMfLE/4T4yQPCnwVdn8Jjk97EPWJwfJLDlj/MWh6cMlRVMJk536I=
+X-Received: by 2002:a17:903:252:b0:295:b46f:a6c2 with SMTP id
+ d9443c01a7336-2a76ad6bfc7mr43451125ad.37.1768968742544; Tue, 20 Jan 2026
+ 20:12:22 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v7 00/16] netkit: Support for io_uring zero-copy
- and AF_XDP
-To: Jakub Kicinski <kuba@kernel.org>, patchwork-bot+netdevbpf@kernel.org
-Cc: Daniel Borkmann <daniel@iogearbox.net>, netdev@vger.kernel.org,
- bpf@vger.kernel.org, davem@davemloft.net, razor@blackwall.org,
- pabeni@redhat.com, willemb@google.com, sdf@fomichev.me,
- john.fastabend@gmail.com, martin.lau@kernel.org, jordan@jrife.io,
- maciej.fijalkowski@intel.com, magnus.karlsson@intel.com, toke@redhat.com,
- yangzhenze@bytedance.com, wangdongdong.6@bytedance.com
-References: <20260115082603.219152-1-daniel@iogearbox.net>
- <176890982554.757566.17882816780312694183.git-patchwork-notify@kernel.org>
- <20260120180850.45ae4214@kernel.org>
-Content-Language: en-US
-From: David Wei <dw@davidwei.uk>
-In-Reply-To: <20260120180850.45ae4214@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20260120070555.233486-1-dongml2@chinatelecom.cn>
+ <20260120070555.233486-2-dongml2@chinatelecom.cn> <CAEf4BzYjbP4KwuVNT_pgjfXy=+7saEezmp1ck2L5txwtik5WYw@mail.gmail.com>
+ <10788751.nUPlyArG6x@7940hx> <CAADnVQ+Om14RF1GvA0vkhKdsCtVGzbacftEZarLJ-LKdYXUZ+g@mail.gmail.com>
+In-Reply-To: <CAADnVQ+Om14RF1GvA0vkhKdsCtVGzbacftEZarLJ-LKdYXUZ+g@mail.gmail.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Tue, 20 Jan 2026 20:12:09 -0800
+X-Gm-Features: AZwV_Qgqnnx41U8_yMztkT3t-Y5yNNkkRjDzM2bobYpRIXLJi-SWuKhgpE3nA8c
+Message-ID: <CAEf4BzbVGx+0vn6n9T3rpePN7D4Mm54Xzc1spdSjvmrj1mV-0Q@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v6 1/2] bpf, x86: inline bpf_get_current_task()
+ for x86_64
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Menglong Dong <menglong.dong@linux.dev>, Menglong Dong <menglong8.dong@gmail.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Eduard <eddyz87@gmail.com>, 
+	"David S. Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, X86 ML <x86@kernel.org>, 
+	"H. Peter Anvin" <hpa@zytor.com>, Network Development <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 2026-01-20 18:08, Jakub Kicinski wrote:
-> On Tue, 20 Jan 2026 11:50:25 +0000 patchwork-bot+netdevbpf@kernel.org
-> wrote:
->> Here is the summary with links:
->>    - [net-next,v7,01/16] net: Add queue-create operation
->>      https://git.kernel.org/netdev/net-next/c/a5546e18f77c
-> 
-> I'm going to revert this, I sort of promised Pavel I will pull his
-> work and he has the cross-dependency with io_uring. Y'all can rebase.
+On Tue, Jan 20, 2026 at 7:10=E2=80=AFPM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Tue, Jan 20, 2026 at 5:58=E2=80=AFPM Menglong Dong <menglong.dong@linu=
+x.dev> wrote:
+> >
+> > On 2026/1/21 09:23 Andrii Nakryiko <andrii.nakryiko@gmail.com> write:
+> > > On Mon, Jan 19, 2026 at 11:06=E2=80=AFPM Menglong Dong <menglong8.don=
+g@gmail.com> wrote:
+> > > >
+> > > > Inline bpf_get_current_task() and bpf_get_current_task_btf() for x8=
+6_64
+> > > > to obtain better performance.
+> > > >
+> > > > Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
+> > > > Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+> > > > ---
+> > > > v5:
+> > > > - don't support the !CONFIG_SMP case
+> > > >
+> > > > v4:
+> > > > - handle the !CONFIG_SMP case
+> > > >
+> > > > v3:
+> > > > - implement it in the verifier with BPF_MOV64_PERCPU_REG() instead =
+of in
+> > > >   x86_64 JIT.
+> > > > ---
+> > > >  kernel/bpf/verifier.c | 22 ++++++++++++++++++++++
+> > > >  1 file changed, 22 insertions(+)
+> > > >
+> > > > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > > > index 9de0ec0c3ed9..c4e2ffadfb1f 100644
+> > > > --- a/kernel/bpf/verifier.c
+> > > > +++ b/kernel/bpf/verifier.c
+> > > > @@ -17739,6 +17739,10 @@ static bool verifier_inlines_helper_call(s=
+truct bpf_verifier_env *env, s32 imm)
+> > > >         switch (imm) {
+> > > >  #ifdef CONFIG_X86_64
+> > > >         case BPF_FUNC_get_smp_processor_id:
+> > > > +#ifdef CONFIG_SMP
+> > > > +       case BPF_FUNC_get_current_task_btf:
+> > > > +       case BPF_FUNC_get_current_task:
+> > > > +#endif
+> > >
+> > > Does this have to be x86-64 specific inlining? With verifier inlining
+> > > and per_cpu instruction support it should theoretically work across
+> > > all architectures that do support per-cpu instruction, no?
+> > >
+> > > Eduard pointed out [0] to me for why we have that x86-64 specific
+> > > check. But looking at do_misc_fixups(), we have that early
+> > > bpf_jit_inlines_helper_call(insn->imm)) check, so if some JIT has mor=
+e
+> > > performant inlining implementation, we will just do that.
+> > >
+> > > So it seems like we can just drop all that x86-64 specific logic and
+> > > claim all three of these functions as inlinable, no?
+> > >
+> > > And even more. We can drop rather confusing
+> > > verifier_inlines_helper_call() that duplicates the decision of which
+> > > helpers can be inlined or not, and have:
+> >
+> > The verifier_inlines_helper_call() is confusing, but I think we can't
+> > remove the x86-64 checking. For example, some architecture
+> > don't support BPF_FUNC_get_current_task both in
+> > bpf_jit_inlines_helper_call() and verifier_inlines_helper_call(), which
+> > means it can't be inline.
+> >
+> > >
+> > > if (env->prog->jit_requested && bpf_jit_supports_percpu_insn() {
+> > >     switch (insn->imm) {
+> > >     case BPF_FUNC_get_smp_processor_id:
+> > >         ...
+> > >         break;
+> > >     case BPF_FUNC_get_current_task_btf:
+> > >     case BPF_FUNC_get_current_task_btf:
+> > >         ...
+> > >         break;
+> > >     default:
+> > > }
+> > >
+> > > And the decision about inlining will live in one place.
+> > >
+> > > Or am I missing some complications?
+> >
+> > As Alexei said, the implement of "current" is architecture specific,
+> > and the per-cpu variable "current_task" only exist on x86_64.
+> >
 
-No problem, that's the ordering I expected anyway.
+Ah, ok, that's the complication :)
 
-> Plus what this series does to "the code I wrote" saddens me deeply.
+> > >
+> > > And with all that, should we mark get_current_task and
+> > > get_current_task_btf as __bpf_fastcall?
+> >
+> > I think it make sense, and the I saw bpf_get_smp_processor_id does
+> > such operation:
+> >
+> > const struct bpf_func_proto bpf_get_smp_processor_id_proto =3D {
+> >         [...]
+> >         .allow_fastcall =3D true,
+> > };
+> >
+> > PS: I'm a little confused about the fast call. We inline many helper,
+> > but it seems that bpf_get_smp_processor_id is the only one that
+> > use the "allow_fastcall". Why? I'd better study harder.
+>
+> It's
+> static __bpf_fastcall __u32 (* const bpf_get_smp_processor_id)(void) =3D
+> (void *) 8;
+>
+> and
+> #define __bpf_fastcall __attribute__((bpf_fastcall))
+>
+> which makes LLVM use more registers at the callsite (less spill/fill).
+>
+> Looking at the patch again. I think it's fine as-is.
+> fastcall can be a follow up.
 
-Yes, that's always sad. LMK once you learn how to clone yourself. I
-wanna do the same, too.
+Yeah, it's fine as is. But it still seems like
+verifier_inlines_helper_call() is an unnecessary extra hop we can
+remove (even if it has to stay arch-specific).
