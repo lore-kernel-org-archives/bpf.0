@@ -1,81 +1,80 @@
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EFB147ECD1
-	for <bpf@vger.kernel.org>; Wed, 21 Jan 2026 09:49:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25D492D249A
+	for <bpf@vger.kernel.org>; Wed, 21 Jan 2026 09:54:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768988965; cv=none; b=gUAOlAWf6qh+eGm+NkaWoo8Adsnx6R5rqwr0Nh7KywrxCbndySJsZcEJ/qZ1Mjqwj4ZBHWHWP4I2Q7dqp/RPxjh4AeOI75G5x9ZE3J7ebN/LzajVqlfcPCUm6Q0ay/J0MxS421arImj1th+YcEtzGvJxrrffOKvjU2Wd/dPFzhU=
+	t=1768989248; cv=none; b=FR7vBZoJaMcBFcqoY58LZXJhKOfyaOsPl5/zjNJ1qyE1/h5JpdeIDmghdLauGSy+0XnkDJRClJ4KNaEOOmheJ7UJEt2f+SX/Ft8n6QARCnmONLhdMPWVxWQV3Jafz1uX0n5xxG9+4qw/6bhX40oVg6GThg3NQ+q1DIO/56NluTI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768988965; c=relaxed/simple;
-	bh=0sxY9/hbT9jAvcK9hvO6t82kEcRLh2+R2jzBqHhBPE4=;
+	s=arc-20240116; t=1768989248; c=relaxed/simple;
+	bh=NTgU+udkmo8b+bys+frUyrVCx9K0iFIwxoI71xMSPM0=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=uUPzT4wOWkmm3Tb1Jfke6uMWjYux1bQBFu71YiBuHmDDws/iY0zzihPeHt15OtZhxxFey80NzyYQYnibriu0fCG8moSOT0pg/mxp9vtsmyOx8etHk8UvW6mykRxLxr86ijA66rLFoiA/9VRlJaNdEoaP69NT+/rXclQW8Amg0Sc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=eXUPOhno; arc=none smtp.client-ip=209.85.208.47
+	 MIME-Version:Content-Type; b=DTrtOAvVprVXi8UO/JvZ9aj2Ak4fQQKKDla713p1ZE5fibtSqQ3ZJUfwVUZ9jcKTK2o5o3rP560fg6VHrXLz1h5MfOaXT6y+Zc5LogTTNYUDFlXy791K+4ulWdqTG+LqgA1Xpit4CBt2n8DSLSiKaGwUYKLoayNOWrUC8K+wlRc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=RXGCbdmr; arc=none smtp.client-ip=209.85.218.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="eXUPOhno"
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-64d1ef53cf3so8667608a12.0
-        for <bpf@vger.kernel.org>; Wed, 21 Jan 2026 01:49:23 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="RXGCbdmr"
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-b874c00a39fso123934866b.0
+        for <bpf@vger.kernel.org>; Wed, 21 Jan 2026 01:54:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1768988962; x=1769593762; darn=vger.kernel.org;
+        d=cloudflare.com; s=google09082023; t=1768989245; x=1769594045; darn=vger.kernel.org;
         h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
          :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=0sxY9/hbT9jAvcK9hvO6t82kEcRLh2+R2jzBqHhBPE4=;
-        b=eXUPOhnoJ51DmemQ2dvwrDxK4Yfw78ZBICyI1xXQgexfhd8EMzoGShsQqFKRi/NleP
-         mxqsV2pcHW3aJATMZqerU8Dop0ZM2ZLyWehzMa8rcpCGUEdfvovNStli7hbz/LjIxgrp
-         r2QbD4/bay/iIycBXP9LKVm4+xZ289SNcbP0G6qACDttWLVLnZGGgIl8YSOdP9bvuSXG
-         Eg870u7iC5trubXs4E+xeHe+V4TEwwSDWtFoUBGnK+UtU8QElQfvSG//VCwIOd41qsSZ
-         kz4FndnD+KAodc3vhStkxYyY31HnZLl/3mCw7XA0X3mW+F6OAh19P+fNp54nt/6BbQbF
-         QgkA==
+        bh=ekpQy0hYQiLZMiu4CpOE6p7zPKqu8L39urLy2shV4+I=;
+        b=RXGCbdmr9/D/mJ5FbZbFN24EUGUyaWqh+RAny1ML6NCgVzhFJ/jUDYtLBB1/ooCaUx
+         S2m1bc32x/jvY0b+xrlUu7vLT1w4VdCIEx45HGTMY3v0r6fWSI2ZzQ/g7eBsxvP9bbgP
+         GGIBB1SGQqkzmYT0uDXYNt+paT3r8pSNPNsHoSwopTJ9W5HGQNh/SdcJMrLnxsumYcgS
+         qLatRrYcYdB+7+XSxCqKJgwC03yWyI7179L/K5Vqiw+vJGBSuFV3qOnlrJRXwDUPpe7T
+         cRAXuCOEwOr+zVDqLRDNdvq9DPqgkiCSy7mcm70GaljmPD1gENeUlb7uvstoPveEz58/
+         LPxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768988962; x=1769593762;
+        d=1e100.net; s=20230601; t=1768989245; x=1769594045;
         h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
          :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=0sxY9/hbT9jAvcK9hvO6t82kEcRLh2+R2jzBqHhBPE4=;
-        b=K08ccB5h9EwBSo8+vPUke+lDW8wzmifjAmZNyqzisBGLtlOEqcd2Zcd641INCAN1eB
-         pfreZSTBhIsHoiVmnGas9EsnU2/AXWkUWmSuquNb2sgMLoZJ9Zbf8t7TPI2SGBfLToaH
-         7d7jpt8xAQo+PH8qOwLitzOEMAfPx4vtT4F3wijMNSIdrHPG+GiaUGCaiWQePYVg8Hsm
-         R37NoWeQOcCJuTd7yASgL4aLv7TugSzxRVLuOfLdw/UPri6NMkRtRmxupLBSVa1cj3Or
-         ZvW+NPHRwC1+IXSQZGKWDXsQnX2ljNDu6emvWiQnKf3IlUTOeyRJZ3JsS6g3WekhGBo1
-         fF0w==
-X-Forwarded-Encrypted: i=1; AJvYcCWD+CMQa3m64sVUqGNwVqG0ONRQyg0ReEqMVF6BdLM3ugN71UPSpiFU+fzN0ECcjZbnSQ8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YygHZjoxYkyV2U0BktxHauQKNyODW33KZdtFjJkg2MLGyPSdIpM
-	F2nlKjXGJ/CZfqV8IOur/XZVYLaaFQU4naVnq2p9HUXspZK9Ve4bDZsH2rLrWNQE1xA=
-X-Gm-Gg: AZuq6aKG/JaQf9IUfZAugUrI4oRdv1cuTgSjw9j+FdF3EqxmU6xAJwJc2UhSPeSG24P
-	M1cH3G2MUfpnEf9SDcQv1NQgcnfEgDcFKt00fdYBM4TZ0j/Ow5MDQQLlFZGVHnNDc9mGHP/E8Zi
-	4CEcOAdZkFsmtjByjZ/cVV1xdMDBzuS+PuMHiMMINL/ZV4CJSJYhhBXAWTwRxlwIgw5RQSrdzoV
-	t53+h/xYtS8pmfZillkCPHQppnHmqhjKEP1URA9KupnXd15KviI8+h9adrRpzEKd4Dh5lUNy/4e
-	J2tox40TVG4L8p6XGtAGS7UeNLHro4X/ZxvRIR/WvAHdOcFErg9G+e+6AOFwrQN8AhYehKH8HAb
-	xiHpuVtBNlKaOOCIV4qBC97NpmCTmIlR10KFJEonApc7QYeqNct/4b/BfJnceFnhAaAHa5cF4kv
-	mwVAnEr5PGcwxh
-X-Received: by 2002:a17:907:980d:b0:b87:d826:8113 with SMTP id a640c23a62f3a-b87d8268b60mr760209066b.54.1768988961653;
-        Wed, 21 Jan 2026 01:49:21 -0800 (PST)
+        bh=ekpQy0hYQiLZMiu4CpOE6p7zPKqu8L39urLy2shV4+I=;
+        b=n7D4n+EEtxbwNIPOsW4pQIXRZzxBci3G74ynWqCKPhGBlsS+aATVgQ9VNlH5+u/4XV
+         5nbaZ6HK+l6EELCqW032sdR/V6N2P2bjr3qO2jSH3q3L6MsW3dRMPLcpMdCHyECutT2w
+         Uct9eq1ItIxr2b6/j/9r27RmjVclhE4eALJ/pLmdRT1dJ5iMJamptNJn8cEblkHnjeqa
+         rILc0rnR1GcxgBvy6MBjj/gv9DuVBsauCHYvY49NiLT4UFiWXsbiJyVs8zrsNIuKuA+7
+         sB9y89qMhT7OGHAC0xqtdbxAxZagSKtPYagq6ZWWuYp8mKynyChWnIIkP3+rZMiuCclH
+         vZVw==
+X-Gm-Message-State: AOJu0YzR6GWfToFmvyZ9mXoxHzNTWz47q4vyugMBItctNl4svlpwZT6/
+	HKY8pOy2AjooDhN1kv878VZ9jH0XfxiLxvUWq85eq2epHZHOGUVefO3FNR5q86AtYxc=
+X-Gm-Gg: AZuq6aIuf/t6hzc66Y2Y5boE7RmKHjkFvsny7REPgV5uyCW/X92PBPZULzuRrljoSgO
+	GrXslmDvocKRWO2/3LqYDvpsm8BisC9wpIZo8n4DyApHk1Asn2MTTO2VlT0/BOTT/v/L4f9H7u6
+	DRq0kzYh8ZAqItB/DwchlRwi5HhNTAc9+2JyJd9BJ/wLicoTkIZkj37KdXVvHhttuEOlDwm/hci
+	B/bOm05G5CCvs4RIpsv2xkumlJVPXkMTpttHM3zn3rnxbUT3W4+/KO9PfF0dElRhQwUQs+zZsMs
+	F1un1B5hvPAWzgDaSnEldi9L9vNQ049krI+jm+i73bdRv84EM2PBpmdcnGAMdELsiEWpsZVLTdD
+	PuCYJgZbAn919a/RA2Ug7Kvq9e3IEMJvD6HcWe+zUME4Ut9B5TttvEkK0jy90OmkBmL4sNpca/5
+	9Org==
+X-Received: by 2002:a17:907:948d:b0:b3a:8070:e269 with SMTP id a640c23a62f3a-b879389056fmr1832883466b.14.1768989245421;
+        Wed, 21 Jan 2026 01:54:05 -0800 (PST)
 Received: from cloudflare.com ([2a09:bac5:5063:2dc::49:217])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b8795a2f1a3sm1521409366b.62.2026.01.21.01.49.21
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b8795a31fafsm1474473066b.66.2026.01.21.01.54.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jan 2026 01:49:21 -0800 (PST)
+        Wed, 21 Jan 2026 01:54:05 -0800 (PST)
 From: Jakub Sitnicki <jakub@cloudflare.com>
-To: Martin KaFai Lau <martin.lau@linux.dev>
-Cc: Alexei Starovoitov <ast@kernel.org>,  Daniel Borkmann
- <daniel@iogearbox.net>,  John Fastabend <john.fastabend@gmail.com>,
-  Andrii Nakryiko <andrii@kernel.org>,  Eduard Zingerman
- <eddyz87@gmail.com>,  Song Liu <song@kernel.org>,  Yonghong Song
- <yonghong.song@linux.dev>,  KP Singh <kpsingh@kernel.org>,  Stanislav
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: bpf@vger.kernel.org,  Alexei Starovoitov <ast@kernel.org>,  Daniel
+ Borkmann <daniel@iogearbox.net>,  John Fastabend
+ <john.fastabend@gmail.com>,  Andrii Nakryiko <andrii@kernel.org>,  Martin
+ KaFai Lau <martin.lau@linux.dev>,  Song Liu <song@kernel.org>,  Yonghong
+ Song <yonghong.song@linux.dev>,  KP Singh <kpsingh@kernel.org>,  Stanislav
  Fomichev <sdf@fomichev.me>,  Hao Luo <haoluo@google.com>,  Jiri Olsa
  <jolsa@kernel.org>,  Amery Hung <ameryhung@gmail.com>,
-  netdev@vger.kernel.org,  kernel-team@cloudflare.com,  bpf@vger.kernel.org
-Subject: Re: [PATCH bpf-next 4/4] selftests/bpf: Remove tests for
- prologue/epilogue with kfuncs
-In-Reply-To: <d4563561-c507-4876-8a03-40e4dca2a34e@linux.dev> (Martin KaFai
-	Lau's message of "Tue, 20 Jan 2026 15:48:06 -0800")
+  netdev@vger.kernel.org,  kernel-team@cloudflare.com
+Subject: Re: [PATCH bpf-next 3/4] bpf: Remove kfunc support in prologue and
+ epilogue
+In-Reply-To: <8eb725d8d0878a7a1b582fdfacf05d20a2542304.camel@gmail.com>
+	(Eduard Zingerman's message of "Mon, 19 Jan 2026 14:55:29 -0800")
 References: <20260119-skb-meta-bpf-emit-call-from-prologue-v1-0-e8b88d6430d8@cloudflare.com>
-	<20260119-skb-meta-bpf-emit-call-from-prologue-v1-4-e8b88d6430d8@cloudflare.com>
-	<d4563561-c507-4876-8a03-40e4dca2a34e@linux.dev>
-Date: Wed, 21 Jan 2026 10:49:20 +0100
-Message-ID: <87o6mnthwf.fsf@cloudflare.com>
+	<20260119-skb-meta-bpf-emit-call-from-prologue-v1-3-e8b88d6430d8@cloudflare.com>
+	<8eb725d8d0878a7a1b582fdfacf05d20a2542304.camel@gmail.com>
+Date: Wed, 21 Jan 2026 10:54:04 +0100
+Message-ID: <87h5sfthoj.fsf@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -84,15 +83,13 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain
 
-On Tue, Jan 20, 2026 at 03:48 PM -08, Martin KaFai Lau wrote:
-> On 1/19/26 11:53 AM, Jakub Sitnicki wrote:
->> Remove pro_epilogue_with_kfunc test program and its supporting code in
->> bpf_testmod. This test exercised calling kfuncs from prologue and epilogue,
->> which is no longer supported after the switch to direct helper calls.
+On Mon, Jan 19, 2026 at 02:55 PM -08, Eduard Zingerman wrote:
+> I think that patches #3 and #4 have to be swapped, otherwise there is
+> a selftest failure when only patches #1-3 are applied:
 >
-> Is it easy to change it to test calling helper in pro/epilogue?
+>   #281/17  pro_epilogue/syscall_pro_epilogue:FAIL
+>
+> If we want to keep selftests passing for arbitrary bisects.
 
-I gave it a shot and the obstacle is that bpf_cgroup_from_id and
-bpf_cgroup_release are not exported symbols, so they can't be referred
-to from bpf_testmod. We'd have to move the whole thing to lib/test_bpf
-so it's a built-in.
+I don't have an opinion. I assumed it'd get applied as a batch without
+fast forward, so bisect would be going over merge commits.
