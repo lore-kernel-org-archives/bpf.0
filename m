@@ -1,81 +1,122 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19004314D07;
-	Wed, 21 Jan 2026 01:51:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from mail.189.cn (189sx01-ptr.21cn.com [14.18.100.240])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65680326D63;
+	Wed, 21 Jan 2026 01:56:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.18.100.240
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768960279; cv=none; b=I5tR7a/zRSQSpDt/abgBkOjHSzcl4/JiDTaQVtpsEhC5lvf3JXGDR5TThMYxNdQmNOmyN5c6juTbg2xbWsha4AmSOWbxgDymIxF0JgpVMioLuHayUna19n+YOw0a4abEwv4il6eyjrWLCNDnxL0eINXrfhr3CKtCf6l43SnC1j0=
+	t=1768960588; cv=none; b=LECkY9kYmEoPLGcXLcYChIN2bHlgEvbc2OLkVflGtujqqJYgt+W1Wfmh5K1hzV2jmxZXuPMJkY641bFfYIElAilowA5fEtOQrj+fAqZ44gnQ0mfzT3DFK5Q8Ckse8wjJZIewjjXe9pOGbK2bwm5TMTo5m/gLcpFpKNjg/TPCWxI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768960279; c=relaxed/simple;
-	bh=PB1H58Qq1yo/KEkWLRv6MeXZ/f+uBAcJMyU4xF+GYjM=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=dy6MaXkrTikHkLC9pan2flIFnZBuFq+juFGo5zDTQy9W6c3oan06if0+9c7zbgE6J8yD2jk2pdOnjrJaEAKd9WIQh3ifU7NyJmR1M6b9xw2mQ8s4hpxQsbbw/lrgg9PF0pxteBO6lXKbcDjvS2xFZuIXDUJ0DdDPlSDoELvIVDk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WJnXrHkq; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WJnXrHkq"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96D65C16AAE;
-	Wed, 21 Jan 2026 01:51:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768960277;
-	bh=PB1H58Qq1yo/KEkWLRv6MeXZ/f+uBAcJMyU4xF+GYjM=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=WJnXrHkqjwsosPA2uE2fv0k+yp8vJT4A8sL5wmrftuY670Teg9a05LYvcCKG4+HXy
-	 FkwC7FVjIfTbfgjaCl0pePQf97x2FnCGXCdeFa3FKxTQED8gJB0ovcnRjcT6bNcUGy
-	 PBLf4Tv6xso+Jc6e0hOtOgHAzg9G03fNeaXNRlOVMRL+jXOESRC81PBC4GfRQI3okU
-	 4qiA31iRk+LjjCuz/xrjMDYkSWn03JHYQWrA+35N7jDZWNwtwX7oYHhm4I2siMNjNd
-	 xHhZmxdp9RY/fye1ecriCjZrcLrcS1t4CLfNO1YQfYYXj7dsMVpNTnnla+8lb+7FDH
-	 a84tX/rQImDjg==
-Date: Tue, 20 Jan 2026 17:51:15 -0800
-From: Jakub Kicinski <kuba@kernel.org>
-To: Daniel Borkmann <daniel@iogearbox.net>
-Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, davem@davemloft.net,
- razor@blackwall.org, pabeni@redhat.com, willemb@google.com,
- sdf@fomichev.me, john.fastabend@gmail.com, martin.lau@kernel.org,
- jordan@jrife.io, maciej.fijalkowski@intel.com, magnus.karlsson@intel.com,
- dw@davidwei.uk, toke@redhat.com, yangzhenze@bytedance.com,
- wangdongdong.6@bytedance.com
-Subject: Re: [PATCH net-next v7 15/16] selftests/net: Make NetDrvContEnv
- support queue leasing
-Message-ID: <20260120175115.12c9735f@kernel.org>
-In-Reply-To: <20260115082603.219152-16-daniel@iogearbox.net>
-References: <20260115082603.219152-1-daniel@iogearbox.net>
-	<20260115082603.219152-16-daniel@iogearbox.net>
+	s=arc-20240116; t=1768960588; c=relaxed/simple;
+	bh=ne5xqhK7lf/PdSgqL+XWMOaWEM6iW0X1L5/SWSqLSuw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=EQwHH2kDHsiPh2ydT4oLicgPUKCwkIkGyVoCJI64LqGQKQRv6pvA8GO7zczdoSgAF8/Y2hzqN/0QUS2Nzgme//95kB15Gc12WX8Lx9eDL70D1oReeFBo2W1s/aJMAYMZoPmLops2/cZWYHcZYMUMft3/sobR/CUcxAx1BXz1Luw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=189.cn; spf=pass smtp.mailfrom=189.cn; arc=none smtp.client-ip=14.18.100.240
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=189.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=189.cn
+HMM_SOURCE_IP:10.158.243.220:0.1028407851
+HMM_ATTACHE_NUM:0000
+HMM_SOURCE_TYPE:SMTP
+Received: from clientip-221.238.56.48 (unknown [10.158.243.220])
+	by mail.189.cn (HERMES) with SMTP id E41E240008A;
+	Wed, 21 Jan 2026 09:52:00 +0800 (CST)
+Received: from  ([221.238.56.48])
+	by gateway-153622-dep-587d8f56d7-fmbcm with ESMTP id 34ae48e4b0cf4a329f69e5a6c7593bcc for martin.lau@linux.dev;
+	Wed, 21 Jan 2026 09:52:01 CST
+X-Transaction-ID: 34ae48e4b0cf4a329f69e5a6c7593bcc
+X-Real-From: chensong_2000@189.cn
+X-Receive-IP: 221.238.56.48
+X-MEDUSA-Status: 0
+Sender: chensong_2000@189.cn
+From: chensong_2000@189.cn
+To: martin.lau@linux.dev,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	john.fastabend@gmail.com,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org
+Cc: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Song Chen <chensong_2000@189.cn>
+Subject: [PATCH] kernel/bpf/btf.c: reject to register duplicated kfunc
+Date: Wed, 21 Jan 2026 09:51:57 +0800
+Message-ID: <20260121015157.7283-1-chensong_2000@189.cn>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On Thu, 15 Jan 2026 09:26:02 +0100 Daniel Borkmann wrote:
-> +    def _lease_queues(self):
-> +        channels = self.ethnl.channels_get({'header': {'dev-index': self.ifindex}})
-> +        channels = channels['combined-count']
-> +        if channels < 2:
-> +            raise KsftSkipEx('Test requires NETIF with at least 2 combined channels')
-> +
-> +        rings = self.ethnl.rings_get({'header': {'dev-index': self.ifindex}})
-> +        self._rx_rings = rings['rx']
-> +        self._hds_thresh = rings.get('hds-thresh', 0)
-> +        self.ethnl.rings_set({'header': {'dev-index': self.ifindex},
-> +                            'tcp-data-split': 'enabled',
-> +                            'hds-thresh': 0,
-> +                            'rx': 64})
-> +        self.src_queue = channels - 1
-> +        bind_result = self.netdevnl.queue_create(
-> +            {
-> +                "ifindex": self.nk_guest_ifindex,
-> +                "type": "rx",
-> +                "lease": {
-> +                    "ifindex": self.ifindex,
-> +                    "queue": {"id": self.src_queue, "type": "rx"},
-> +                },
-> +            }
-> +        )
-> +        self.nk_queue = bind_result['id']
-> +        self._leased = True
+From: Song Chen <chensong_2000@189.cn>
 
-No frameworks, please, this belongs in the test itself.
+I had an ebpf program which calls a kfunc defined and
+implemented in one of my kernel modules, they were working
+fine in 6.16, but was broken by libbpf in 6.19, the error
+message was:
+
+libbpf: extern (func ksym) 'bpf_strstr': func_proto [5]
+incompatible with vmlinux [94389]
+
+yes, the reason is there is a new added kfunc in kernel 6.19
+which happens to be the same name with my kfunc. However the
+error message is not obvious enough to address problem
+immediately.
+
+Therefore, this patches searches duplicated kfunc in
+btf_vmlinux before a kernel module attempts to register kfuncs
+through register_btf_kfunc_id_set, it prints clear error message
+and returns error code if same name kfunc has already implemented
+and registered, then developer knows at the first place.
+
+Signed-off-by: Song Chen <chensong_2000@189.cn>
+---
+ kernel/bpf/btf.c | 15 +++++++++++++--
+ 1 file changed, 13 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 0de8fc8a0e0b..1f3879fe163c 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -8498,12 +8498,23 @@ static int btf_check_iter_kfuncs(struct btf *btf, const char *func_name,
+ 	return 0;
+ }
+ 
+-static int btf_check_kfunc_protos(struct btf *btf, u32 func_id, u32 func_flags)
++static int btf_check_kfunc_protos(struct btf *btf, u32 func_id, u32 func_flags,
++			const struct module *module)
+ {
+ 	const struct btf_type *func;
+ 	const char *func_name;
+ 	int err;
+ 
++	/* check if there is any duplicated kfunc in vmlinux */
++	if (module) {
++		func = btf_type_by_id(btf_vmlinux, func_id);
++		if (func) {
++			pr_err("kfunc %s is already present in vmlinux\n",
++						btf_name_by_offset(btf_vmlinux, func->name_off));
++			return -EINVAL;
++		}
++	}
++
+ 	/* any kfunc should be FUNC -> FUNC_PROTO */
+ 	func = btf_type_by_id(btf, func_id);
+ 	if (!func || !btf_type_is_func(func))
+@@ -8757,7 +8768,7 @@ static int __register_btf_kfunc_id_set(enum btf_kfunc_hook hook,
+ 
+ 	for (i = 0; i < kset->set->cnt; i++) {
+ 		ret = btf_check_kfunc_protos(btf, btf_relocate_id(btf, kset->set->pairs[i].id),
+-					     kset->set->pairs[i].flags);
++					     kset->set->pairs[i].flags, kset->owner);
+ 		if (ret)
+ 			goto err_out;
+ 	}
+-- 
+2.43.0
+
