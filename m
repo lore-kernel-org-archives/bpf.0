@@ -1,81 +1,80 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C91034EEEA
-	for <bpf@vger.kernel.org>; Thu, 22 Jan 2026 08:37:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33BA9451049
+	for <bpf@vger.kernel.org>; Thu, 22 Jan 2026 08:42:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769071043; cv=none; b=qVNXz0339y8uc//nZqFS7caMO4Sr+Oa2smjVjqDE/RqqhsiDZDiMakW5BP/gK3tGBrbGiROR/74fHLthe5WLDsEJTwSZShzZFNbGSwCFA3yjvRhM1MqaGxKG/Vj+o6PiLAU+NR9EFo4hZBrd1N/mp1WbzBek/WeIahoQc8QY6qI=
+	t=1769071356; cv=none; b=Ez0+Esf3cGT5Zr4ct/6x5w5V/s7R/dRKwccsNhwGvjr+gaZiWYN4UuJxsR03KhKeRJtsDzamJ1a8klsxONBkIPJn0UwN70uKVZ4C5KykoSZ5Uhhb5ILzzGdRYknfhe3Yk12+rmtedqABlFyGPJLQtlQf6IJckhRDd3q2quJm9jI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769071043; c=relaxed/simple;
-	bh=KEZa3oLgQZp283ucUa79AgEDKYfhIdcY0m+7TDuY6UU=;
+	s=arc-20240116; t=1769071356; c=relaxed/simple;
+	bh=Ge3PkkMKD+sZWRg9Cq9cr55/r+3/fgKuQubmWEtx7lU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KVJv8e7vxpvIWRBjog/421RIPQlqd+rRmVi5VmmVH45l5ib4RLRq096x36Iqo9cOdtnszNcP9uiHExf7PAfJl3D9XBHwpnoMkG2lwdKAIOgd8U+769dEwjy2msiotlPcUKrp+ZhfhwobiKSg0zPrqoVv+KjGIylXiLUO2DElqPE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=HsLZt+Gg; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=FOADQxoz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=HsLZt+Gg; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=FOADQxoz; arc=none smtp.client-ip=195.135.223.131
+	 In-Reply-To:Content-Type; b=mhwYqPc2S8wuVUnufmeMPoNEe8QJAG0mEthlRV/cQVMayznZibMEfwpp0SbVvcXRaVBoLJS9Q92cqA4TiUaqbSk7qYi0cmBzAbn5g6h6JeLkuwGZCp9D0GId7uQLDzDNT+2WVUO7dBSjYA3TZo2jVuP5Btshe9XHYqmZvMxlBS8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=uhvEYvyl; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=5K56Hgh3; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=BN1aHwYw; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=beOCQ+fX; arc=none smtp.client-ip=195.135.223.130
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="HsLZt+Gg";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="FOADQxoz";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="HsLZt+Gg";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="FOADQxoz"
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="uhvEYvyl";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="5K56Hgh3";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="BN1aHwYw";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="beOCQ+fX"
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 87B805BCC6;
-	Thu, 22 Jan 2026 08:37:19 +0000 (UTC)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id F021333697;
+	Thu, 22 Jan 2026 08:42:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1769071039; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1769071352; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=PhMSCpDyh7+8D4BXCTDHoTCid/2RtwqQ20a7TQiUGAc=;
-	b=HsLZt+GgXlJlpaTUgqKh5++ZLYLWobCRmZ6zPe2WnQbRtc3jbayr/ZV3MZmubi9Wtgv8zv
-	teFc0vuYctaFTQV+PQ4qhj0yrxk1CMQpzt7qDzUsVQkaANTspye+sctUjG8bJzabfDATnq
-	qZy1hqKaPVZFuAAo/8Th3AmOj61cEbY=
+	bh=wtkavSVJht+G/RwkNgcjxFWYFwzxqjQgltbZ6uHMgU4=;
+	b=uhvEYvyldlgqEPhfp+7mSHTVYe4MkEDyB1xZjxJqhP4t7kbUHpF7+BqkBxWfARNMFa9HZK
+	hSYruhIPe9coBOBMqGqlaqBXkvZKqPonLq8FPvIjXzWr9tiKlmJo1IXBy5/Wc2QRTD5eDD
+	U4hjM1cnLEvahtfMFywDC8RGvQ0p+Qk=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1769071039;
+	s=susede2_ed25519; t=1769071352;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=PhMSCpDyh7+8D4BXCTDHoTCid/2RtwqQ20a7TQiUGAc=;
-	b=FOADQxozPRXP/ivHRbt7xagpiryd5ky9lw5TaKydAj4XM+eKjiuYINK2t4Ng0utwHWaCSr
-	QS5GQ667d3ismUDw==
-Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=HsLZt+Gg;
-	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=FOADQxoz
+	bh=wtkavSVJht+G/RwkNgcjxFWYFwzxqjQgltbZ6uHMgU4=;
+	b=5K56Hgh3PXtWSBnnFQ2fBBj7tnbSkFDB6wrPugus4lE4qmWEziBFuQO1cMntQeynJp/eMz
+	A47Jno53PH2EPuBw==
+Authentication-Results: smtp-out1.suse.de;
+	none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1769071039; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1769071351; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=PhMSCpDyh7+8D4BXCTDHoTCid/2RtwqQ20a7TQiUGAc=;
-	b=HsLZt+GgXlJlpaTUgqKh5++ZLYLWobCRmZ6zPe2WnQbRtc3jbayr/ZV3MZmubi9Wtgv8zv
-	teFc0vuYctaFTQV+PQ4qhj0yrxk1CMQpzt7qDzUsVQkaANTspye+sctUjG8bJzabfDATnq
-	qZy1hqKaPVZFuAAo/8Th3AmOj61cEbY=
+	bh=wtkavSVJht+G/RwkNgcjxFWYFwzxqjQgltbZ6uHMgU4=;
+	b=BN1aHwYwgAip7IHXrl4+wW64W5kUzJkg7s4i2Nx1QeOh1D7BYrxsTtBt6j82xlLRkjfXGR
+	gx0TPKCXrsjmil6UetSlGjaCGJpAeS46xXLnjcuguTFp4A8dxtajYJpNxCJKJHmlHZEGB+
+	PZjuCpBNnKBKERbR6vEs2wnQ6BL59F8=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1769071039;
+	s=susede2_ed25519; t=1769071351;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=PhMSCpDyh7+8D4BXCTDHoTCid/2RtwqQ20a7TQiUGAc=;
-	b=FOADQxozPRXP/ivHRbt7xagpiryd5ky9lw5TaKydAj4XM+eKjiuYINK2t4Ng0utwHWaCSr
-	QS5GQ667d3ismUDw==
+	bh=wtkavSVJht+G/RwkNgcjxFWYFwzxqjQgltbZ6uHMgU4=;
+	b=beOCQ+fXGIpQg0Q+0Ue81cHQEZxt+Mg2Pe63z63BbDVbStxBVK5swApeL3XTehwNZcXASv
+	uGS+V7//BmhPyMBw==
 Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 555613EA63;
-	Thu, 22 Jan 2026 08:37:19 +0000 (UTC)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id C64373EA63;
+	Thu, 22 Jan 2026 08:42:31 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
 	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id 46l+FL/hcWm/bQAAD6G6ig
-	(envelope-from <vbabka@suse.cz>); Thu, 22 Jan 2026 08:37:19 +0000
-Message-ID: <4560a13c-a5cc-41ad-ae5e-ac40a0396286@suse.cz>
-Date: Thu, 22 Jan 2026 09:37:18 +0100
+	id QsbALvficWkRdwAAD6G6ig
+	(envelope-from <vbabka@suse.cz>); Thu, 22 Jan 2026 08:42:31 +0000
+Message-ID: <e341d9ef-9ec3-47c6-b5f0-3749c930f477@suse.cz>
+Date: Thu, 22 Jan 2026 09:42:31 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -99,7 +98,7 @@ Cc: Petr Tesarik <ptesarik@suse.com>, Christoph Lameter <cl@gentwo.org>,
  bpf@vger.kernel.org, kasan-dev@googlegroups.com
 References: <20260116-sheaves-for-all-v3-0-5595cb000772@suse.cz>
  <20260116-sheaves-for-all-v3-17-5595cb000772@suse.cz>
- <aXGrQSOoG_6NdqNT@hyeyoo>
+ <aXHLhF2kJxgy4M00@hyeyoo>
 From: Vlastimil Babka <vbabka@suse.cz>
 Autocrypt: addr=vbabka@suse.cz; keydata=
  xsFNBFZdmxYBEADsw/SiUSjB0dM+vSh95UkgcHjzEVBlby/Fg+g42O7LAEkCYXi/vvq31JTB
@@ -140,44 +139,35 @@ Autocrypt: addr=vbabka@suse.cz; keydata=
  rywqgzTUhHFKKF6/9L/lYtrNcHU8Z6Y4Ju/MLUiNYkmtrGIMnkjKCiRqlRrZE/v5YFHbayRD
  dJKXobXTtCBYpLJM4ZYRpGZXne/FAtWNe4KbNJJqxMvrTOrnIatPj8NhBVI0RSJRsbilh6TE
  m6M14QORSWTLRg==
-In-Reply-To: <aXGrQSOoG_6NdqNT@hyeyoo>
+In-Reply-To: <aXHLhF2kJxgy4M00@hyeyoo>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Score: -4.51
-X-Spamd-Result: default: False [-4.51 / 50.00];
+X-Spamd-Result: default: False [-4.30 / 50.00];
 	BAYES_HAM(-3.00)[100.00%];
 	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
 	NEURAL_HAM_SHORT(-0.20)[-1.000];
 	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	URIBL_BLOCKED(0.00)[suse.cz:dkim,suse.cz:mid,suse.cz:email,imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
 	ARC_NA(0.00)[];
 	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	RCPT_COUNT_TWELVE(0.00)[17];
 	MIME_TRACE(0.00)[0:+];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FREEMAIL_CC(0.00)[suse.com,gentwo.org,google.com,linux.dev,linux-foundation.org,gmail.com,oracle.com,linutronix.de,kernel.org,kvack.org,vger.kernel.org,lists.linux.dev,googlegroups.com];
+	RCPT_COUNT_TWELVE(0.00)[17];
 	RCVD_TLS_ALL(0.00)[];
-	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	MID_RHS_MATCH_FROM(0.00)[];
-	DKIM_TRACE(0.00)[suse.cz:+];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:dkim,suse.cz:mid,suse.cz:email]
-X-Spam-Level: 
-X-Rspamd-Action: no action
-X-Rspamd-Queue-Id: 87B805BCC6
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[suse.com,gentwo.org,google.com,linux.dev,linux-foundation.org,gmail.com,oracle.com,linutronix.de,kernel.org,kvack.org,vger.kernel.org,lists.linux.dev,googlegroups.com];
+	TO_DN_SOME(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:mid,suse.cz:email]
 X-Spam-Flag: NO
+X-Spam-Score: -4.30
+X-Spam-Level: 
 
-On 1/22/26 05:44, Harry Yoo wrote:
+On 1/22/26 08:02, Harry Yoo wrote:
 > On Fri, Jan 16, 2026 at 03:40:37PM +0100, Vlastimil Babka wrote:
 >> __refill_objects() currently only attempts to get partial slabs from the
 >> local node and then allocates new slab(s). Expand it to trying also
@@ -188,7 +178,21 @@ On 1/22/26 05:44, Harry Yoo wrote:
 >> many free slabs. It does mean sheaves will contain non-local objects in
 >> that case. Allocations that care about specific node will still be
 >> served appropriately, but might get a slowpath allocation.
->> 
+> 
+> Hmm one more question.
+> 
+> Given frees to remote nodes bypass sheaves layer anyway, isn't it
+> more reasonable to let refill_objects() fail sometimes instead of
+> allocating new local slabs and fall back to slowpath (based on defrag_ratio)?
+
+You mean if we can't refill from local partial list, we give up and perhaps
+fail alloc_from_pcs()? Then the __slab_alloc_node() fallback would do
+allocate local slab or try remote nodes?
+
+Wouldn't that mean __slab_alloc_node() does all that work for a single
+object, and slow everything down? Only in case of a new slab it would
+somehow amortize because the next attempt would refill from it.
+
 >> Like get_any_partial() we do observe cpuset_zone_allowed(), although we
 >> might be refilling a sheaf that will be then used from a different
 >> allocation context.
@@ -205,47 +209,5 @@ On 1/22/26 05:44, Harry Yoo wrote:
 >> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
 >> ---
 > 
-> Could this cause strict_numa to not work as intended when
-> the policy is MPOL_BIND?
-
-Hm I guess it could be optimized differently later. I assume people running
-strict_numa would also tune remote_node_defrag_ratio accordingly and don't
-run into this often.
-
-> alloc_from_pcs() has:
->> #ifdef CONFIG_NUMA
->>         if (static_branch_unlikely(&strict_numa) &&
->>                          node == NUMA_NO_NODE) {
->>
->>                 struct mempolicy *mpol = current->mempolicy;
->>
->>                 if (mpol) {
->>                         /*
->>                          * Special BIND rule support. If the local node
->>                          * is in permitted set then do not redirect
->>                          * to a particular node.
->>                          * Otherwise we apply the memory policy to get
->>                          * the node we need to allocate on.
->>                          */
->>                         if (mpol->mode != MPOL_BIND ||
->>                                         !node_isset(numa_mem_id(), mpol->nodes))
-> 
-> This assumes the sheaves contain (mostly, although it wasn't strictly
-> guaranteed) objects from local node, and this change breaks that
-> assumption.
-> 
-> So... perhaps remove "Special BIND rule support"?
-
-Ideally we would check if the object in sheaf is from the permitted nodes
-instead of picking the local one. In a way that doesn't make systems with
-strict_numa disabled slower :)
-
->>
->>                                 node = mempolicy_slab_node(); 
->>                 }
->>         }
->> #endif
-> 
-> Otherwise LGTM.
 > 
 
