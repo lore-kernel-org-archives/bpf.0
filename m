@@ -1,139 +1,142 @@
-Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from 66-220-155-179.mail-mxout.facebook.com (66-220-155-179.mail-mxout.facebook.com [66.220.155.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A248833D50B
-	for <bpf@vger.kernel.org>; Thu, 22 Jan 2026 16:18:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A44C344D97
+	for <bpf@vger.kernel.org>; Thu, 22 Jan 2026 16:26:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769098735; cv=none; b=p8roJ7eUYeIRar0LyOnhxE1WMX4iGeh116ajxWI2olb2hOMja0+NX6lE8Bl6Wb4IFD0j/FfqO/Yho6O6j+OyWmrwg+dWSIN1giIil7a2uL3Au0iYPs7n8hTeR/pl0OPkL5yBo4rjNDDlFVTFD7Txlbq13PQLyNJBHhWv58v0C9A=
+	t=1769099198; cv=none; b=jfRlMmVuewubtKLZ+E6HFSdXtA0hlpZzS9+ZRZThNblCJXo20UzW+tgBh8xhrDmVLMJra/YyVx3v3IOKPbCBIy457eVpAXTY48V63vncEYLqBjfVZ4R+BwAKsZR+KrrURAEvsorIpxVfBlCKtM55k/sZ8lXn37PtqhDFTum6YjQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769098735; c=relaxed/simple;
-	bh=6m84fXPYmIa6Srtu3bxD2w8mWJXJVIDWmpFHfgiRMRE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=eIJ7IpfMh14Nv1YAocVcPNy8BImuPCkuTR/vNXeF/mi/JtTlrg3Ew327HdUHmYzgsYchPKFF4Q1OB6cZMfRaN9yAl3IR8kYs15QKVwhOZKMJ8YHiVjebE0pW3iACLbmujSwdlBiz0ktVC4xT0Iq63cap5mAIDoWSZtmkvUHTIMY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=weJ6tGLO; arc=none smtp.client-ip=95.215.58.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="weJ6tGLO"
-Message-ID: <3fdcdea9-3f09-452e-bd6c-717294f288d6@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1769098723;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=1EOwjbCVT+0F4GYVG0LrpQ7Dngd0/bAjkROIFVneHsQ=;
-	b=weJ6tGLOaV+I4C/T9wKLsclE7bboyZWX5QwkSJzAO9QQfe2hkkUhvoOsjPGRTXS8NSx012
-	qC0g5pqwEmLKZoTo3Aqu+kaEmdZClRPT+jdAmxrg0Xd/8yPAfY2kBtqKZvF3L91vZhetco
-	hvyrEVbHHoKDy8d4VLH9bDFuWho5X9o=
-Date: Fri, 23 Jan 2026 00:18:28 +0800
+	s=arc-20240116; t=1769099198; c=relaxed/simple;
+	bh=VJHKI+Xj3IbcXn6XRt0r/yWZHvaz5xm4JkRlDy2hZUo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=LvSsLuBjdYk9a/3vGLaqqu64ytfy10GZSCJB4sCVWywgRdmP4Sn7iqxfV+QOEAZtIVTyn9DyRR6Y5FQXFo+hZYb42i8z4NsQa6GKVFugwuCqHn0jwEs4aBUJZquN0u5RVrgB/Pu8AwFx/+ATY/i+swrItkKzQW9kLO+E29laaz4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
+Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
+	id 2B139196A190F; Thu, 22 Jan 2026 08:26:16 -0800 (PST)
+From: Yonghong Song <yonghong.song@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	kernel-team@fb.com,
+	Martin KaFai Lau <martin.lau@kernel.org>,
+	Alan Maguire <alan.maguire@oracle.com>,
+	Amery Hung <ameryhung@gmail.com>
+Subject: [PATCH bpf-next v2 1/2] selftests/bpf: Fix task_local_data failure with 64K page
+Date: Thu, 22 Jan 2026 08:26:16 -0800
+Message-ID: <20260122162616.3578898-1-yonghong.song@linux.dev>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next 1/2] bpf: Disallow BPF_F_LOCK with mixed special
- fields and centralize flag checks
-To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
-Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
- andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, kpsingh@kernel.org, sdf@fomichev.me,
- haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- kernel-patches-bot@fb.com, martin.lau@kernel.org, clm@meta.com,
- ihor.solodrai@linux.dev
-References: <20260122153120.69249-2-leon.hwang@linux.dev>
- <df8fb7dc501dd081fcba56b592cba94e5aecd614ea4d3b595155dec551ecbca5@mail.kernel.org>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <df8fb7dc501dd081fcba56b592cba94e5aecd614ea4d3b595155dec551ecbca5@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: quoted-printable
 
+On arm64 systems with 64K pages, the selftest task_local_data has the fol=
+lowing
+failures:
+  ...
+  test_task_local_data_basic:PASS:tld_create_key 0 nsec
+  test_task_local_data_basic:FAIL:tld_create_key unexpected tld_create_ke=
+y: actual 0 !=3D expected -28
+  ...
+  test_task_local_data_basic_thread:PASS:run task_main 0 nsec
+  test_task_local_data_basic_thread:FAIL:task_main retval unexpected erro=
+r: 2 (errno 0)
+  test_task_local_data_basic_thread:FAIL:tld_get_data value0 unexpected t=
+ld_get_data value0: actual 0 !=3D expected 6268
+  ...
+  #447/1   task_local_data/task_local_data_basic:FAIL
+  ...
+  #447/2   task_local_data/task_local_data_race:FAIL
+  #447     task_local_data:FAIL
 
+When TLD_DYN_DATA_SIZE is 64K page size, for
+  struct tld_meta_u {
+       _Atomic __u8 cnt;
+       __u16 size;
+        struct tld_metadata metadata[];
+  };
+fields 'cnt' and 'size' would overflow. For example,
+for 4K page, 'cnt' will be 4096/64 =3D 64. But for 64K page,
+'cnt' will be 65536/64 =3D 1024 and 'cnt' is not enough for 1024.
+For field 'size', it is okay for value 4K, but it is not enough
+for 64K as maximum 'size' value is '64K - 1'.
 
-On 2026/1/23 00:02, bot+bpf-ci@kernel.org wrote:
->> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
->> index 5936f8e2996f..c5863487ee73 100644
->> --- a/include/linux/bpf.h
->> +++ b/include/linux/bpf.h
->> @@ -3935,9 +3935,16 @@ static inline int bpf_map_check_op_flags(struct bpf_map *map, u64 flags, u64 all
->>  	if ((u32)flags & ~allowed_flags)
->>  		return -EINVAL;
->>
->> +	/* BPF_NOEXIST and BPF_EXIST are mutually exclusive. */
->> +	if ((flags & (BPF_NOEXIST | BPF_EXIST)) == (BPF_NOEXIST | BPF_EXIST))
->> +		return -EINVAL;
->> +
->>  	if ((flags & BPF_F_LOCK) && !btf_record_has_field(map->record, BPF_SPIN_LOCK))
->>  		return -EINVAL;
->>
->> +	if ((flags & BPF_F_LOCK) && btf_record_has_field(map->record, ~BPF_SPIN_LOCK))
->> +		return -EOPNOTSUPP;
->> +
->>  	if (!(flags & BPF_F_CPU) && flags >> 32)
->>  		return -EINVAL;
-> 
-> [ ... ]
-> 
->> diff --git a/kernel/bpf/bpf_local_storage.c b/kernel/bpf/bpf_local_storage.c
->> index e2fe6c32822b..80b50091cbbf 100644
->> --- a/kernel/bpf/bpf_local_storage.c
->> +++ b/kernel/bpf/bpf_local_storage.c
->> @@ -493,13 +493,6 @@ bpf_local_storage_update(void *owner, struct bpf_local_storage_map *smap,
->>  	unsigned long flags;
->>  	int err;
->>
->> -	/* BPF_EXIST and BPF_NOEXIST cannot be both set */
->> -	if (unlikely((map_flags & ~BPF_F_LOCK) > BPF_EXIST) ||
->> -	    /* BPF_F_LOCK can only be used in a value with spin_lock */
->> -	    unlikely((map_flags & BPF_F_LOCK) &&
->> -		     !btf_record_has_field(smap->map.record, BPF_SPIN_LOCK)))
->> -		return ERR_PTR(-EINVAL);
->                 ^^^^
-> 
-> This validation was removed from bpf_local_storage_update() but it appears
-> that no call to bpf_map_check_op_flags() was added in the local storage map
-> update functions. For array and hash maps, calls to bpf_map_check_op_flags()
-> were added in array_map_update_elem() and htab_map_update_elem(). However,
-> the local storage update functions like bpf_cgrp_storage_update_elem(),
-> bpf_fd_inode_storage_update_elem(), and bpf_fd_sk_storage_update_elem() pass
-> map_flags directly to bpf_local_storage_update() without calling
-> bpf_map_check_op_flags() first.
-> 
-> The syscall path does call bpf_map_check_op_flags() in map_update_elem() with
-> allowed_flags set to ~0, which catches the NOEXIST/EXIST mutual exclusion and
-> BPF_F_LOCK validation. But with allowed_flags=~0, the check for unknown flags
-> ((u32)flags & ~allowed_flags) always passes zero, meaning unknown flags like
-> 8 or 16 would not be rejected.
-> 
+To accommodate 64K page, '_Atomic __u8 cnt' becomes '_Atomic __u16 cnt'
+and '__u16 size' becomes '__u32 size'. A few other places are adjusted
+accordingly.
 
-Correct.
+Reviewed-by: Alan Maguire <alan.maguire@oracle.com>
+Tested-by: Alan Maguire <alan.maguire@oracle.com>
+Cc: Amery Hung <ameryhung@gmail.com>
+Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+---
+ tools/testing/selftests/bpf/prog_tests/task_local_data.h    | 6 +++---
+ .../testing/selftests/bpf/prog_tests/test_task_local_data.c | 2 +-
+ tools/testing/selftests/bpf/progs/task_local_data.bpf.h     | 4 ++--
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
-Such flags should indeed be rejected in the local storage update path.
-
-Thanks,
-Leon
-
-
-> The old check (map_flags & ~BPF_F_LOCK) > BPF_EXIST rejected any unknown flag
-> bits. Is there a missing call to bpf_map_check_op_flags() in the local storage
-> update functions that should specify the allowed flags?
-> 
->> -
->>  	if (gfp_flags == GFP_KERNEL && (map_flags & ~BPF_F_LOCK) != BPF_NOEXIST)
->>  		return ERR_PTR(-EINVAL);
-> 
-> [ ... ]
-> 
-> 
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-> 
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/21254704407
+diff --git a/tools/testing/selftests/bpf/prog_tests/task_local_data.h b/t=
+ools/testing/selftests/bpf/prog_tests/task_local_data.h
+index 2de38776a2d4..4c38f9a7bc90 100644
+--- a/tools/testing/selftests/bpf/prog_tests/task_local_data.h
++++ b/tools/testing/selftests/bpf/prog_tests/task_local_data.h
+@@ -94,8 +94,8 @@ struct tld_metadata {
+ };
+=20
+ struct tld_meta_u {
+-	_Atomic __u8 cnt;
+-	__u16 size;
++	_Atomic __u16 cnt;
++	__u32 size;
+ 	struct tld_metadata metadata[];
+ };
+=20
+@@ -217,7 +217,7 @@ static int __tld_init_data_p(int map_fd)
+ static tld_key_t __tld_create_key(const char *name, size_t size, bool dy=
+n_data)
+ {
+ 	int err, i, sz, off =3D 0;
+-	__u8 cnt;
++	__u16 cnt;
+=20
+ 	if (!TLD_READ_ONCE(tld_meta_p)) {
+ 		err =3D __tld_init_meta_p();
+diff --git a/tools/testing/selftests/bpf/prog_tests/test_task_local_data.=
+c b/tools/testing/selftests/bpf/prog_tests/test_task_local_data.c
+index 9fd6306b455c..cc4d49222d9d 100644
+--- a/tools/testing/selftests/bpf/prog_tests/test_task_local_data.c
++++ b/tools/testing/selftests/bpf/prog_tests/test_task_local_data.c
+@@ -4,7 +4,7 @@
+ #include <test_progs.h>
+=20
+ #define TLD_FREE_DATA_ON_THREAD_EXIT
+-#define TLD_DYN_DATA_SIZE 4096
++#define TLD_DYN_DATA_SIZE getpagesize()
+ #include "task_local_data.h"
+=20
+ struct test_tld_struct {
+diff --git a/tools/testing/selftests/bpf/progs/task_local_data.bpf.h b/to=
+ols/testing/selftests/bpf/progs/task_local_data.bpf.h
+index 432fff2af844..e13f239b46b0 100644
+--- a/tools/testing/selftests/bpf/progs/task_local_data.bpf.h
++++ b/tools/testing/selftests/bpf/progs/task_local_data.bpf.h
+@@ -80,8 +80,8 @@ struct tld_metadata {
+ };
+=20
+ struct tld_meta_u {
+-	__u8 cnt;
+-	__u16 size;
++	__u16 cnt;
++	__u32 size;
+ 	struct tld_metadata metadata[TLD_MAX_DATA_CNT];
+ };
+=20
+--=20
+2.47.3
 
