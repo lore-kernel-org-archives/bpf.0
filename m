@@ -1,111 +1,142 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from 66-220-144-179.mail-mxout.facebook.com (66-220-144-179.mail-mxout.facebook.com [66.220.144.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2484F33E373;
-	Thu, 22 Jan 2026 21:40:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45BF5394466
+	for <bpf@vger.kernel.org>; Thu, 22 Jan 2026 21:43:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769118045; cv=none; b=ag2Q5Y2H6LqXSYObeWv+jF3Ucd4WZ1EqjPC8XeMd4tuAyXbyCIrTl+eURLW1jj1gYqT/20nqCpu8RzuD9Stbbgy6WTDtE+wOCYMlbIHkqy//ED4JG+P9ASqOVgz6/JLdbq3t+cCQq2GlerkAkpkR2/iJM0WX8RGaR86LBj+BMIY=
+	t=1769118245; cv=none; b=LK4fs4UmnLpt8zUHrK+PNTFru3M2J2Ov3cvBVciXYkpoUGdBQ3ddlCl8Y8e6e/bs/VfPBZzQdtwxU04LCBTJ75NoZ2Z3Dxs9lfnGkO7jjxaHqnzfCjfk78pH6c+kqPr3679hqykTG0ELXzklpo0cr4Co78P4tm8PDyN9ABp8hlQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769118045; c=relaxed/simple;
-	bh=1Nnhn/yFdXfGhXqZb6rKEAIzjm4Y+H9DE9pNT3uRZvI=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=SWcV7bznAHfEItppVKH5hh2+56Kfhrun54V0o4mfXk1cvqFD2xNOwkMkKlLRBXAIpn2iUZSETpe+WGcorTysOCSjZoC7wGanaVKmNhnj2UnwIDjBhfihBA8reLda7gUBO4JOx0ktz0KLGi77UFvAaYwTI8jb8NpJlTKLqVBaJNM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WkL2AwkM; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WkL2AwkM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 071EDC116C6;
-	Thu, 22 Jan 2026 21:40:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769118043;
-	bh=1Nnhn/yFdXfGhXqZb6rKEAIzjm4Y+H9DE9pNT3uRZvI=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=WkL2AwkMslaNibmLrcuMqERxGf5wKIAOdkx8o4us6eZVCdZdz8edkbgVTZcR+xgTx
-	 1SMhj7+EFi69sKB/pjAkBud0b7QX26Iye6Sk6gFoAVzktEX2XyiaLLdBzyrkBy8jbh
-	 geoD9FYejgS90O/fRgoq788IywfDy/wnHMHx2sYAC6ui7u/+xmcoe5g2mthh3nTblO
-	 H48fFg8AbRVMcPmuuMj0bP2PyHxVfoKzwiQEw0sLOAGonq8tCFxahgNKR2xtnGk2+w
-	 +5fQEkzEduhsi4AeNsAefe/VmSMqLyCdHKgMu+fCiblaye7NiCJI6haIOHmxB+g99O
-	 hiuUW9ldBWDpA==
-Content-Type: multipart/mixed; boundary="===============4329220787654898227=="
+	s=arc-20240116; t=1769118245; c=relaxed/simple;
+	bh=VJHKI+Xj3IbcXn6XRt0r/yWZHvaz5xm4JkRlDy2hZUo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=TQjB+qEr4i08QwShc9a6S2QD8E7b2oYx4E+o9WWlXUe+Q3covOMCvEfsqJnnDpg4n4RggdUPQFvAS91BEaufdJO+qqGFXZIPi+CQ4USthL6s1jvVbU8anSYpG3Rirg6AdgoHeLgTsdbp2SSiqZZMsVwG0EjmZScpN5FSpiAwy+o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
+Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
+	id DF378196E387E; Thu, 22 Jan 2026 13:43:40 -0800 (PST)
+From: Yonghong Song <yonghong.song@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	kernel-team@fb.com,
+	Martin KaFai Lau <martin.lau@kernel.org>,
+	Alan Maguire <alan.maguire@oracle.com>,
+	Amery Hung <ameryhung@gmail.com>
+Subject: [PATCH bpf-next v3 1/2] selftests/bpf: Fix task_local_data failure with 64K page
+Date: Thu, 22 Jan 2026 13:43:40 -0800
+Message-ID: <20260122214340.1457621-1-yonghong.song@linux.dev>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <e63a916bd44b8352aace4fd47fdeb459dc75cceb71615f44e6234cc1b6ffbd69@mail.kernel.org>
-In-Reply-To: <20260122211854.5508-7-adubey@linux.ibm.com>
-References: <20260122211854.5508-7-adubey@linux.ibm.com>
-Subject: Re: [PATCH v4 6/6] powerpc64/bpf: Additional NVR handling for bpf_throw
-From: bot+bpf-ci@kernel.org
-To: adubey@linux.ibm.com,bpf@vger.kernel.org,linuxppc-dev@lists.ozlabs.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org
-Cc: hbathini@linux.ibm.com,sachinpb@linux.ibm.com,venkat88@linux.ibm.com,andrii@kernel.org,eddyz87@gmail.com,mykolal@fb.com,ast@kernel.org,daniel@iogearbox.net,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,christophe.leroy@csgroup.eu,naveen@kernel.org,maddy@linux.ibm.com,mpe@ellerman.id.au,npiggin@gmail.com,memxor@gmail.com,iii@linux.ibm.com,shuah@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu, 22 Jan 2026 21:40:42 +0000 (UTC)
+Content-Transfer-Encoding: quoted-printable
 
---===============4329220787654898227==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On arm64 systems with 64K pages, the selftest task_local_data has the fol=
+lowing
+failures:
+  ...
+  test_task_local_data_basic:PASS:tld_create_key 0 nsec
+  test_task_local_data_basic:FAIL:tld_create_key unexpected tld_create_ke=
+y: actual 0 !=3D expected -28
+  ...
+  test_task_local_data_basic_thread:PASS:run task_main 0 nsec
+  test_task_local_data_basic_thread:FAIL:task_main retval unexpected erro=
+r: 2 (errno 0)
+  test_task_local_data_basic_thread:FAIL:tld_get_data value0 unexpected t=
+ld_get_data value0: actual 0 !=3D expected 6268
+  ...
+  #447/1   task_local_data/task_local_data_basic:FAIL
+  ...
+  #447/2   task_local_data/task_local_data_race:FAIL
+  #447     task_local_data:FAIL
 
-> diff --git a/arch/powerpc/net/bpf_jit_comp64.c b/arch/powerpc/net/bpf_jit_comp64.c
-> index c284a12fce6e..98780a15fc69 100644
-> --- a/arch/powerpc/net/bpf_jit_comp64.c
-> +++ b/arch/powerpc/net/bpf_jit_comp64.c
+When TLD_DYN_DATA_SIZE is 64K page size, for
+  struct tld_meta_u {
+       _Atomic __u8 cnt;
+       __u16 size;
+        struct tld_metadata metadata[];
+  };
+fields 'cnt' and 'size' would overflow. For example,
+for 4K page, 'cnt' will be 4096/64 =3D 64. But for 64K page,
+'cnt' will be 65536/64 =3D 1024 and 'cnt' is not enough for 1024.
+For field 'size', it is okay for value 4K, but it is not enough
+for 64K as maximum 'size' value is '64K - 1'.
 
-[ ... ]
+To accommodate 64K page, '_Atomic __u8 cnt' becomes '_Atomic __u16 cnt'
+and '__u16 size' becomes '__u32 size'. A few other places are adjusted
+accordingly.
 
-> @@ -125,9 +149,19 @@ int bpf_jit_stack_tailcallinfo_offset(struct codegen_context *ctx)
->
->  static int bpf_jit_stack_offsetof(struct codegen_context *ctx, int reg)
->  {
-> -	if (reg >= BPF_PPC_NVR_MIN && reg < 32)
-> +	int min_valid_nvreg = BPF_PPC_NVR_MIN;
-> +	/* Default frame size for all cases except exception boundary */
-> +	int frame_nvr_size = BPF_PPC_STACKFRAME;
-> +
-> +	/* Consider all nv regs for handling exceptions */
-> +	if (ctx->exception_boundary || ctx->exception_cb) {
-> +		min_valid_nvreg = _R14;
-> +		frame_nvr_size = BPF_PPC_EXC_STACKFRAME;
-> +	}
-> +
-> +	if (reg >= min_valid_nvreg && reg < 32)
->  		return (bpf_has_stack_frame(ctx) ?
-> -			(BPF_PPC_STACKFRAME + ctx->stack_size) : 0)
-> +			(frame_nvr_size + ctx->stack_size) : 0)
->  				- (8 * (32 - reg)) - BPF_PPC_TAILCALL;
-
-For the redzone case (no stack frame) with exception_boundary, this
-formula computes R23 at offset -80 and R24 at offset -72 from R1.
-
-However, bpf_stf_barrier() uses hardcoded offsets -80(1) and -72(1) to
-temporarily save R21 and R22 during STF barrier execution:
-
-    asm (
-    "	bpf_stf_barrier:		;"
-    "		std	21,-80(1)	;"
-    "		std	22,-72(1)	;"
-    "		sync			;"
-    "		ld	21,-80(1)	;"
-    "		ld	22,-72(1)	;"
-    ...
-    );
-
-When an exception_boundary program without its own stack frame executes a
-memory load that triggers STF_BARRIER_FALLBACK, can bpf_stf_barrier()
-corrupt the saved R23 and R24 values? The hardcoded offsets would overlap
-with the extended NVR save area.
-
-If exception_cb later restores these registers, it would get R21/R22 values
-instead of the original R23/R24 values.
-
-[ ... ]
-
-
+Reviewed-by: Alan Maguire <alan.maguire@oracle.com>
+Tested-by: Alan Maguire <alan.maguire@oracle.com>
+Cc: Amery Hung <ameryhung@gmail.com>
+Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+ tools/testing/selftests/bpf/prog_tests/task_local_data.h    | 6 +++---
+ .../testing/selftests/bpf/prog_tests/test_task_local_data.c | 2 +-
+ tools/testing/selftests/bpf/progs/task_local_data.bpf.h     | 4 ++--
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/21265643939
+diff --git a/tools/testing/selftests/bpf/prog_tests/task_local_data.h b/t=
+ools/testing/selftests/bpf/prog_tests/task_local_data.h
+index 2de38776a2d4..4c38f9a7bc90 100644
+--- a/tools/testing/selftests/bpf/prog_tests/task_local_data.h
++++ b/tools/testing/selftests/bpf/prog_tests/task_local_data.h
+@@ -94,8 +94,8 @@ struct tld_metadata {
+ };
+=20
+ struct tld_meta_u {
+-	_Atomic __u8 cnt;
+-	__u16 size;
++	_Atomic __u16 cnt;
++	__u32 size;
+ 	struct tld_metadata metadata[];
+ };
+=20
+@@ -217,7 +217,7 @@ static int __tld_init_data_p(int map_fd)
+ static tld_key_t __tld_create_key(const char *name, size_t size, bool dy=
+n_data)
+ {
+ 	int err, i, sz, off =3D 0;
+-	__u8 cnt;
++	__u16 cnt;
+=20
+ 	if (!TLD_READ_ONCE(tld_meta_p)) {
+ 		err =3D __tld_init_meta_p();
+diff --git a/tools/testing/selftests/bpf/prog_tests/test_task_local_data.=
+c b/tools/testing/selftests/bpf/prog_tests/test_task_local_data.c
+index 9fd6306b455c..cc4d49222d9d 100644
+--- a/tools/testing/selftests/bpf/prog_tests/test_task_local_data.c
++++ b/tools/testing/selftests/bpf/prog_tests/test_task_local_data.c
+@@ -4,7 +4,7 @@
+ #include <test_progs.h>
+=20
+ #define TLD_FREE_DATA_ON_THREAD_EXIT
+-#define TLD_DYN_DATA_SIZE 4096
++#define TLD_DYN_DATA_SIZE getpagesize()
+ #include "task_local_data.h"
+=20
+ struct test_tld_struct {
+diff --git a/tools/testing/selftests/bpf/progs/task_local_data.bpf.h b/to=
+ols/testing/selftests/bpf/progs/task_local_data.bpf.h
+index 432fff2af844..e13f239b46b0 100644
+--- a/tools/testing/selftests/bpf/progs/task_local_data.bpf.h
++++ b/tools/testing/selftests/bpf/progs/task_local_data.bpf.h
+@@ -80,8 +80,8 @@ struct tld_metadata {
+ };
+=20
+ struct tld_meta_u {
+-	__u8 cnt;
+-	__u16 size;
++	__u16 cnt;
++	__u32 size;
+ 	struct tld_metadata metadata[TLD_MAX_DATA_CNT];
+ };
+=20
+--=20
+2.47.3
 
---===============4329220787654898227==--
