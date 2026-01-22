@@ -1,165 +1,153 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from out-177.mta1.migadu.com (out-177.mta1.migadu.com [95.215.58.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C1763ACF04;
-	Thu, 22 Jan 2026 21:26:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAB913C0883
+	for <bpf@vger.kernel.org>; Thu, 22 Jan 2026 21:28:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769117167; cv=none; b=YrZLjzOM829GJjBHBVuLjzM4oEEB5OMdzQdA9jCZv7dZbIf0j44hxd/2YJlhzYK4CZvnuOim+hyBisIdL9hYRodQ4AfcBJPgkQoUyZFGeaYlhhDIPNnFWMSsxKwrG7p9OpIGW+jXecigSuTeeUQHj4cq7lIO6J2Sq+AJJaOv2UI=
+	t=1769117302; cv=none; b=Wwl2Z4dCej0g+qXB4ge0PXugzcKPPUqxAFsWvI20Vla4tS97kc5jvW2+Vk1wHpUdpQ/kGy09nwgxF8Wm+m3unmsPnzjoZZNvfml4swOA/UxVeFZGjPbvjhtAvc9OAUrn8wgYTYeqIt8exu+m/l6uYQ2pztrQTie5c7YTmHWs0KE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769117167; c=relaxed/simple;
-	bh=ZZiPNtMVFac7HGXvfmtml7hvEu08J1Eucvq6mX/4TTY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ugY1PIoCzJX8eO+6YuBOT7SlKv0v+fT6/CLbDU4iOXTf8gZSZpBsiKNpYUJzKu22DI/QMQPifEVRguzLThTf+7ZAXwVV6VVqkEvO35IWqxGAlaSYKhjeqXQ/5V6IsK9w0v4iQRj/rC+FduFpUrD97lIq8+DWM4mNfkC/q+P4vGY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=i7GWayn/; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1769117302; c=relaxed/simple;
+	bh=lqMtq74LqEMpeRrst1Zwf/b9YGce6Q/qFp14tV0qKc4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=GNhg6QgRLq5q7g0RUeocLLxAxjIhgeqQvSaZHeCZnn0/UwQoypXdRhoMk0n++zP0uZ9d5RxaYIS5Gmx5tUQfjASY/N4JOwnS03+r2dvAl4tmdkFderpFLV0Tb3qQEubJqhh3typfzBIR6yEmz4Ri1WMjExPI6JUP9mOgw4/zFgQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=pV8c8sNA; arc=none smtp.client-ip=95.215.58.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="i7GWayn/"
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 60MEXF3c021316;
-	Thu, 22 Jan 2026 21:20:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=TXgmDXs4JFjAGlSMt
-	ms1ah2TwLO40IrSCwqYBvl/j9w=; b=i7GWayn/QQwrubpnUNbMqu4jZdNn+nOW/
-	1u/nQ4+BAjDVOFfg5rwqxGhMSttGrVVVO1tjXVAh9FjppGepgnFO2PDX3D1m6zZD
-	Sze1KGVN5ZtE5/kJ/Wt54VTfnFscF/UExm7I9xgcOEFkI5uGDMWLQWLOzUdT/Cvp
-	dZClv8TL3aCCvSgpGLRZjxEy32h1pbstqvDkSWbmq950ep8gqyXpGPptxt0izSav
-	nvld4lqeGmcQkOyTWZTb+wPLlKbbagR4vqRF162JyCSqMOrBWuqhZLHq5fkJ+m+O
-	Hyrz/q+RAhVQ31AQeY96HiJ1sKlA2OEsYq0ZlQKyBqFN0oYkq/5nQ==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4bt612f1ma-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 22 Jan 2026 21:20:01 +0000 (GMT)
-Received: from m0360072.ppops.net (m0360072.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 60MLJPSt031579;
-	Thu, 22 Jan 2026 21:20:01 GMT
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4bt612f1m6-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 22 Jan 2026 21:20:01 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 60ML8q7c027233;
-	Thu, 22 Jan 2026 21:20:00 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4brnrncy3b-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 22 Jan 2026 21:20:00 +0000
-Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 60MLJuLT61669880
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 22 Jan 2026 21:19:56 GMT
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 312A32004B;
-	Thu, 22 Jan 2026 21:19:56 +0000 (GMT)
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 6406120040;
-	Thu, 22 Jan 2026 21:19:49 +0000 (GMT)
-Received: from abhi.. (unknown [9.124.222.159])
-	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Thu, 22 Jan 2026 21:19:49 +0000 (GMT)
-From: adubey@linux.ibm.com
-To: bpf@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: hbathini@linux.ibm.com, sachinpb@linux.ibm.com, venkat88@linux.ibm.com,
-        andrii@kernel.org, eddyz87@gmail.com, mykolal@fb.com, ast@kernel.org,
-        daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
-        yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
-        sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
-        christophe.leroy@csgroup.eu, naveen@kernel.org, maddy@linux.ibm.com,
-        mpe@ellerman.id.au, npiggin@gmail.com, memxor@gmail.com,
-        iii@linux.ibm.com, shuah@kernel.org
-Subject: [PATCH v4 4/6] powerpc64/bpf: Add arch_bpf_stack_walk() for BPF JIT
-Date: Fri, 23 Jan 2026 02:48:52 +0530
-Message-ID: <20260122211854.5508-5-adubey@linux.ibm.com>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20260122211854.5508-1-adubey@linux.ibm.com>
-References: <20260122211854.5508-1-adubey@linux.ibm.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="pV8c8sNA"
+Message-ID: <4a41cc0f-e409-478f-ad71-103de63cfacb@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1769117293;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=C1sh+9KhIreTIihfzat2Ijx895fJhZ1M1Yv78rApw7o=;
+	b=pV8c8sNASHy2vzhH2AKUoiRbtgtzc6VATnqzCtwwjsTq/QzQi7+ejqSd4mP9/OhOz0ahLq
+	VNAt2Vp2g4c7fks2GhM2VmN4zFjqvdlwhRzgbaOkG8spf7x+7sBNkWTDrPFDL67yTHsfhJ
+	2azgoYks9CkWNhJmt3MbG8elxkfi/r8=
+Date: Thu, 22 Jan 2026 13:28:04 -0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: Fix xdp_pull_data failure
+ with 64K page
+Content-Language: en-GB
+To: Amery Hung <ameryhung@gmail.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+ Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ kernel-team@fb.com, Martin KaFai Lau <martin.lau@kernel.org>,
+ Alan Maguire <alan.maguire@oracle.com>
+References: <20260122162616.3578898-1-yonghong.song@linux.dev>
+ <20260122162621.3579387-1-yonghong.song@linux.dev>
+ <CAMB2axP_AaoiZB9BSQ3Mz_M0e0t1S-y3u8KnBx1FY1nCq3qN6Q@mail.gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <CAMB2axP_AaoiZB9BSQ3Mz_M0e0t1S-y3u8KnBx1FY1nCq3qN6Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: Bi1LIpXrrGVye6rfzAQkPQovYN59Ekfz
-X-Authority-Analysis: v=2.4 cv=LaIxKzfi c=1 sm=1 tr=0 ts=69729481 cx=c_pps
- a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
- a=vUbySO9Y5rIA:10 a=VkNPw1HP01LnGYTKEx00:22 a=VnNF1IyMAAAA:8
- a=ovcAVf-9gG4EF5hqTukA:9
-X-Proofpoint-ORIG-GUID: BWYecn5M-kVPH1btpTP8sK0d8HdbdFG4
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTIyMDE2MiBTYWx0ZWRfX2YhzRuJhLt/I
- eK5YHBqr1K76OrTkancm/KzY8JobRFCIAG2GZIZma4pigrSKQMMaRcWRIZ+ogDcc+tlH/CiRAzQ
- /J41SqKdvOQ8JgrGk/umy8YEB1Tg3RNC163EyWLw1Kj0qUrgft3ZS7wAAyvYYLPHKdn2xIcYltX
- V1/+kP6Eorgy8Frp/a3whSjC+g7Cv5u5W+Wx7ebStVxYACvwe2n9Dzud1ow45PefvmPqEykE9OA
- tVUZ0LJmrwWtlVv3KY9FLOppMDIzGfZ55RnSXuZahrhZTuuqLcXDvK1leu2oOfjchZbTTkgi/BU
- MR8N05Zuj7IKxvhwHy1I32YBt4bG4CkHs6yGNwvQ/CicRTJP6HjHoGTtFHoupd+7TIpVDdlokEr
- UHzGobbJTVv138CugPrhbk6LlCBKxz+61gap0IO1SMbxUqsLDTUbdK+U+nkECIiTGuUt0BNVyGV
- H8BGWO9eKYRmLT6PsVg==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.20,FMLib:17.12.100.49
- definitions=2026-01-22_05,2026-01-22_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- bulkscore=0 adultscore=0 phishscore=0 priorityscore=1501 lowpriorityscore=0
- suspectscore=0 clxscore=1015 impostorscore=0 spamscore=0 malwarescore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2601150000 definitions=main-2601220162
+X-Migadu-Flow: FLOW_OUT
 
-From: Abhishek Dubey <adubey@linux.ibm.com>
 
-This function is used by bpf_throw() to unwind the stack
-until frame of exception-boundary during BPF exception
-handling.
 
-This function is necessary to support BPF exceptions on
-PowerPC.
+On 1/22/26 1:18 PM, Amery Hung wrote:
+> On Thu, Jan 22, 2026 at 8:56 AM Yonghong Song <yonghong.song@linux.dev> wrote:
+>> If the argument 'pull_len' of run_test() is 'PULL_MAX' or
+>> 'PULL_MAX | PULL_PLUS_ONE', the eventual pull_len size
+>> will close to the page size. On arm64 systems with 64K pages,
+>> the pull_len size will be close to 64K. But the existing buffer
+>> will be close to 9000 which is not enough to pull.
+>>
+>> For those failed run_tests(), make buff size to
+>>    2 * pg_sz + (pg_sz / 2)
+>> This way, there will be enough buffer space to pull
+>> regardless of page size.
+>>
+>> Tested-by: Alan Maguire <alan.maguire@oracle.com>
+>> Cc: Amery Hung <ameryhung@gmail.com>
+>> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+>> ---
+>>   .../testing/selftests/bpf/prog_tests/xdp_pull_data.c | 12 +++++++-----
+>>   1 file changed, 7 insertions(+), 5 deletions(-)
+>>
+>> Changelog:
+>>   v1 -> v2:
+>>     - v1: https://lore.kernel.org/bpf/20260120210930.2544950-1-yonghong.song@linux.dev/
+>>     - Use pg_sz to simplify buff_len calculation.
+>>
+>> diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_pull_data.c b/tools/testing/selftests/bpf/prog_tests/xdp_pull_data.c
+>> index efa350d04ec5..35f0eb5b43f3 100644
+>> --- a/tools/testing/selftests/bpf/prog_tests/xdp_pull_data.c
+>> +++ b/tools/testing/selftests/bpf/prog_tests/xdp_pull_data.c
+>> @@ -114,12 +114,14 @@ static void test_xdp_pull_data_basic(void)
+>>   {
+>>          u32 pg_sz, max_meta_len, max_data_len;
+>>          struct test_xdp_pull_data *skel;
+>> +       int buff_len;
+>>
+>>          skel = test_xdp_pull_data__open_and_load();
+>>          if (!ASSERT_OK_PTR(skel, "test_xdp_pull_data__open_and_load"))
+>>                  return;
+>>
+>>          pg_sz = sysconf(_SC_PAGE_SIZE);
+>> +       buff_len = 2 * pg_sz + pg_sz / 2;
+> Thanks for fixing the test. Just curious if there is an issue with 1.5
+> pg_sz as suggested by Alan?
 
-Signed-off-by: Abhishek Dubey <adubey@linux.ibm.com>
----
- arch/powerpc/net/bpf_jit_comp64.c | 28 ++++++++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+Yes. It works fine with 1.5 pg_sz too. I picked '2 * pg_sz + pg_sz / 2'
+as for 4K page, 9000 will have 2 frags and I intend to maintain
+2 frags for the tests.
 
-diff --git a/arch/powerpc/net/bpf_jit_comp64.c b/arch/powerpc/net/bpf_jit_comp64.c
-index 18da5a866447..c25ba1ad587a 100644
---- a/arch/powerpc/net/bpf_jit_comp64.c
-+++ b/arch/powerpc/net/bpf_jit_comp64.c
-@@ -247,6 +247,34 @@ void bpf_jit_build_epilogue(u32 *image, struct codegen_context *ctx)
- 	bpf_jit_build_fentry_stubs(image, ctx);
- }
- 
-+void arch_bpf_stack_walk(bool (*consume_fn)(void *, u64, u64, u64), void *cookie)
-+{
-+	// callback processing always in current context
-+	unsigned long fp = current_stack_frame();
-+
-+	for (;;) {
-+		unsigned long *frame = (unsigned long *) fp;
-+		unsigned long ip;
-+
-+		if (!validate_sp(fp, current))
-+			return;
-+
-+		ip = frame[STACK_FRAME_LR_SAVE];
-+		if (!ip)
-+			break;
-+
-+		/*
-+		 * consume_fn common code expects stack pointer(sp) in third
-+		 * argument. There is no sp in ppc64, rather pass frame
-+		 * pointer.
-+		 */
-+		if (ip && !consume_fn(cookie, ip, fp, fp))
-+			break;
-+
-+		fp = frame[0];
-+	}
-+}
-+
- int bpf_jit_emit_func_call_rel(u32 *image, u32 *fimage, struct codegen_context *ctx, u64 func)
- {
- 	unsigned long func_addr = func ? ppc_function_entry((void *)func) : 0;
--- 
-2.48.1
+>
+>>          if (find_xdp_sizes(skel, pg_sz))
+>>                  goto out;
+>> @@ -140,13 +142,13 @@ static void test_xdp_pull_data_basic(void)
+>>          run_test(skel, XDP_PASS, pg_sz, 9000, 0, 1025, 1025);
+>>
+>>          /* multi-buf pkt, empty linear data area, pull requires memmove */
+>> -       run_test(skel, XDP_PASS, pg_sz, 9000, 0, 0, PULL_MAX);
+>> +       run_test(skel, XDP_PASS, pg_sz, buff_len, 0, 0, PULL_MAX);
+>>
+>>          /* multi-buf pkt, no headroom */
+>> -       run_test(skel, XDP_PASS, pg_sz, 9000, max_meta_len, 1024, PULL_MAX);
+>> +       run_test(skel, XDP_PASS, pg_sz, buff_len, max_meta_len, 1024, PULL_MAX);
+>>
+>>          /* multi-buf pkt, no tailroom, pull requires memmove */
+>> -       run_test(skel, XDP_PASS, pg_sz, 9000, 0, max_data_len, PULL_MAX);
+>> +       run_test(skel, XDP_PASS, pg_sz, buff_len, 0, max_data_len, PULL_MAX);
+>>
+>>          /* Test cases with invalid pull length */
+>>
+>> @@ -154,7 +156,7 @@ static void test_xdp_pull_data_basic(void)
+>>          run_test(skel, XDP_DROP, pg_sz, 2048, 0, 2048, 2049);
+>>
+>>          /* multi-buf pkt with no space left in linear data area */
+>> -       run_test(skel, XDP_DROP, pg_sz, 9000, max_meta_len, max_data_len,
+>> +       run_test(skel, XDP_DROP, pg_sz, buff_len, max_meta_len, max_data_len,
+>>                   PULL_MAX | PULL_PLUS_ONE);
+>>
+>>          /* multi-buf pkt, empty linear data area */
+>> @@ -165,7 +167,7 @@ static void test_xdp_pull_data_basic(void)
+>>                   PULL_MAX | PULL_PLUS_ONE);
+> We should also change these two cases above to use buff_len to make
+> sure we are testing the right logic in bpf_xdp_pull_data().
+
+Sure. Will do. Replacing 9000 with buff_len for those two cases
+works okay too for both x86 and 64-page arm64.
+
+>
+>>          /* multi-buf pkt, no tailroom */
+>> -       run_test(skel, XDP_DROP, pg_sz, 9000, 0, max_data_len,
+>> +       run_test(skel, XDP_DROP, pg_sz, buff_len, 0, max_data_len,
+>>                   PULL_MAX | PULL_PLUS_ONE);
+>>
+>>   out:
+>> --
+>> 2.47.3
+>>
+>>
 
