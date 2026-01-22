@@ -1,166 +1,125 @@
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 253FE450913;
-	Thu, 22 Jan 2026 08:06:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07BA0480DDF
+	for <bpf@vger.kernel.org>; Thu, 22 Jan 2026 08:14:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769069197; cv=none; b=W9nHoo5oCOU4yKYHyMPGxNFisZieg0GC+Lez/Q3H/7cFO1kGRBdnkNeL2tSYHR5dS0zZkeeUZNhlCg9LqiLJPEmsrAMufhpMzzbrTFGYOtWwrrzVIfULcAk5+XnNY3+lU7kNUNfY1ow+aGd/A8iR7xIUdEStb5OcrDMYYe6lfTE=
+	t=1769069680; cv=none; b=tAkH4iHr5jm33cLkDvVeCgq3EbM0WnqTEuPMQlPaNTHBU/QV3GrSFxOGLFrpeDFeTrFf56JSoCz7lc11v06P4rzbUsx1W0Q+CCfI96K8EjzJtKpLhNHGFSdRy7nD1K0JukhN7CLOz7vpJCfwkaCR8T4JADdiEH87MsfhcM1Df0M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769069197; c=relaxed/simple;
-	bh=VzuAhwfhV4IpHSRDFDuglHqWjuUAI7nbBi5fqE3Zqng=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:From:To:
-	 References:In-Reply-To; b=eh1zW41jV1zS4cf/L9JVspOHubTW9KnHFyyORBLjdYzqPV++CNQ9+h7+Ar3DyCXfcAzILvEelM+amqXyTw/XF63tPnlt5OQgkrc772Jt7PCuKeYOkOEq85f7Yj1NBYo83gD1AOqxnYGn9bF+fwmRPwkXBBFOiUCUAfIRS26I/B8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=gKsexnes; arc=none smtp.client-ip=185.246.84.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1769069680; c=relaxed/simple;
+	bh=uUL3+hIqzzN4FF56+RZlxBho1NEz93n03uZmaBVx188=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=am8d6eLr/cVSJ0WVbVYTUVVjLRQP9UvIKqyblQvI6hD5KASxWTJGyefHyeadmPXVsOdxhlEHTpwewoP7oCnF7S983R/MFyIyolms6rRShcHe9oThgds0kqYl5iKEiVuHXr5OYdJ1n7ppUJftSiFutC8P3Mhbl/DSGWTbj7GV8qQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cmwwkpdT; arc=none smtp.client-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="gKsexnes"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id 27EA31A2A0B;
-	Thu, 22 Jan 2026 08:06:31 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id E7224606B6;
-	Thu, 22 Jan 2026 08:06:30 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 520BF119B0956;
-	Thu, 22 Jan 2026 09:06:25 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1769069189; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=l2Ds0/FVi18Z1llnTvx9khlgnYJNwhiqJVrlq2E5f18=;
-	b=gKsexnes513VEkcffDW0lQNeCgQoqmix/XoXeNC9oDpdiUrxFdzAPtpjchBTb/tUUtZEbF
-	EeiLF68h3VG1bEQ3PzfGf8BXH9GZ1dJaJ34Oa5HZVHfGztFEmeXapEnQDP+7KMDfSEVOvz
-	fTWZJaJSfzUvrbS3QVLytv3Uog7I+diUQ7AbT03esHoudSbFZ2naOkUdCZMfu6f4dziS2l
-	EQLpWIJliqAVkxT0QxGG/fL/7BlmOeHA1LD8zDwXLNkniNaiWIQP5oI/MWoIDizL6zvPVm
-	DD3lY8R+5Z2SbFwdxSU1Nq2R9I2XQWz/5sqq2U/HZJsfcxUy0EX7Cj2nvfLSkg==
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cmwwkpdT"
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2a77c1d5c3bso3102665ad.0
+        for <bpf@vger.kernel.org>; Thu, 22 Jan 2026 00:14:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1769069678; x=1769674478; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=32rXQW4BVZZQ4FbVA0RQJRaOaveBTs70Lc0Lq+KuBq8=;
+        b=cmwwkpdTXWe38KjuNV8NX1oyIppji4rFyYFGfB7rp+eHJnSTJCGVKL5aR46JXfeaEZ
+         eZrKKoNX4vu8FFk1sF7lfKI80SJh42qsV5piwPj8QkbzDIxc9vcD0eQeYEWIp9q2v/VY
+         MGeL75gQodYt8mv5EB1hz35f1UizDRTnYJBknvIb0554i+NKuI1KsNR6mI+iJJMg/w0E
+         3Vk3Q3qs/5BtrBgt6E2yFcfrpXR6Zv7wHESk0MH/fRdUUT7kvutU0/Ykl3B2pQGSXuif
+         enzld763eIO8H4hYT3jjg97oZpM3j6Ky6VAeRVOlaAgiskCmqb/exFBfAyzOTVlIzGGb
+         S2tg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769069678; x=1769674478;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=32rXQW4BVZZQ4FbVA0RQJRaOaveBTs70Lc0Lq+KuBq8=;
+        b=T4WxzHa6ek8SkspTVcjL6KwcUv61/K+eYEoVGATQ7uyOHgAcoZRpDrOnwgSyFZx0Mb
+         68KUTSGp08rVzSl+8bXAX3n5+EXDafTn6D/dc1RnHVPrKVUDo7e4iCgBvVxfFK9AELfF
+         mZkrCOlVJ0jkNJIsSYkzRlZqJ6VWRrs9lg3gYKaiLofV8DEwwQu6ZpzHOVxPOuroD4pg
+         Da6KR2nnB/DbUcPTohU+iyGmAvfkXvN3j3fQbBAsEji0vgfU8SoSWciMGVOZDNVT8e0/
+         kxD/IxKtQXt7G9TUlpXZm8miO4llITfXtO5a3nngPba/9MHpNu5NR+c4j52gH3oEUqfD
+         LYcQ==
+X-Gm-Message-State: AOJu0YyRLdNi33DDezdqIAP9mNR3sdeGyqShOVoQvrtNC9lK1gCkwcKc
+	knP8PdbP/Jn2TRLiEAxCn7PdYzdT1hLvW/a6gXcEnaj+IWUPigP6h2m0
+X-Gm-Gg: AZuq6aJopYCqTpk1V9IPfcTj20NdHXEhMjmQfJBe/iDPObC6KmKd4evNeCOh4iQxEXe
+	DkOzn/PbpgIEuvnxO08BgxzsVqi/iVbNYMbg3ZfxrmKDqPE/l0kZTIUoE98xzNmx4LcYrmzlnPq
+	BwV1zeSJ1Z331xOMWbuP6vYJ0ZcRDVKv4IBUm7GPAhTiWslpPG3q0SN9c0ukuKV2Joa1UIMgho4
+	rsnUuvobzqKibiamsRYRHik3VsNnlpU8K89FJ2SMLJwcVeiP5mrKz2k10S+h2rPRJyB/oozG5lb
+	V79K7EOWrAnesI/kZpo005C77LdQiB2QTajNme+vCzmLQNkhrc/b3udbnmWT+hCOiHVhOZGSF52
+	QfxvXBDWw6zsd+OHG7Pd1CcoKr32OoqdtQsX4P4K6TESDHyYCMDdkeWc8zOM8bfVP/L/Gu5Gzln
+	A6FCK7HpEAcveyWdWeQf8W/5P4pO6qzIWZOY+hUC/sag==
+X-Received: by 2002:a17:902:f60b:b0:2a0:daa7:8a57 with SMTP id d9443c01a7336-2a76b05165fmr81780425ad.30.1769069677821;
+        Thu, 22 Jan 2026 00:14:37 -0800 (PST)
+Received: from localhost.localdomain ([116.128.244.171])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a7190c9bdesm173868825ad.24.2026.01.22.00.14.31
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Thu, 22 Jan 2026 00:14:37 -0800 (PST)
+From: chengkaitao <pilgrimtao@gmail.com>
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	john.fastabend@gmail.com,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org
+Cc: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Chengkaitao <chengkaitao@kylinos.cn>
+Subject: [PATCH] bpf/verifier: allow calling bpf_kptr_xchg while holding a lock
+Date: Thu, 22 Jan 2026 16:14:26 +0800
+Message-ID: <20260122081426.78472-1-pilgrimtao@gmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 22 Jan 2026 09:06:24 +0100
-Message-Id: <DFUYORZLZEX5.T1T4UT063RRM@bootlin.com>
-Subject: Re: [PATCH bpf-next v3 2/3] selftests/bpf: convert
- test_bpftool_metadata.sh into test_progs framework
-Cc: <ebpf@linuxfoundation.org>, <bastien.curutchet@bootlin.com>,
- <thomas.petazzoni@bootlin.com>, <linux-kernel@vger.kernel.org>,
- <bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <martin.lau@kernel.org>, <clm@meta.com>, <ihor.solodrai@linux.dev>
-From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-To: <bot+bpf-ci@kernel.org>, <alexis.lothore@bootlin.com>,
- <andrii@kernel.org>, <eddyz87@gmail.com>, <ast@kernel.org>,
- <daniel@iogearbox.net>, <martin.lau@linux.dev>, <song@kernel.org>,
- <yonghong.song@linux.dev>, <john.fastabend@gmail.com>,
- <kpsingh@kernel.org>, <sdf@fomichev.me>, <haoluo@google.com>,
- <jolsa@kernel.org>, <shuah@kernel.org>, <qmo@kernel.org>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260121-bpftool-tests-v3-2-368632f377e5@bootlin.com>
- <ad4c694cdb5ec78a78956b2b397a6052d4d0ef426eb85769781ce2a0baddf08a@mail.kernel.org>
-In-Reply-To: <ad4c694cdb5ec78a78956b2b397a6052d4d0ef426eb85769781ce2a0baddf08a@mail.kernel.org>
-X-Last-TLS-Session-Version: TLSv1.3
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Wed Jan 21, 2026 at 9:50 PM CET, bot+bpf-ci wrote:
->> diff --git a/tools/testing/selftests/bpf/prog_tests/bpftool_metadata.c b=
-/tools/testing/selftests/bpf/prog_tests/bpftool_metadata.c
->> new file mode 100644
->> index 000000000000..b5598741a01c
->> --- /dev/null
->> +++ b/tools/testing/selftests/bpf/prog_tests/bpftool_metadata.c
->
-> [ ... ]
->
->> +static void run_test(struct test_desc *test)
->> +{
->> +	int ret;
->> +	char cmd[MAX_BPFTOOL_CMD_LEN];
->> +
->> +	ret =3D snprintf(cmd, MAX_BPFTOOL_CMD_LEN, "prog load %s %s",
->> +			test->bpf_prog, test->bpffs_path);
->> +	if (!ASSERT_GT(ret, 0, "format prog insert command"))
->> +		return;
->> +	ret =3D run_bpftool_command(cmd);
->> +	if (!ASSERT_OK(ret, "load program"))
->> +		return;
->> +
->> +	/* Check output with default format */
->> +	ret =3D snprintf(cmd, MAX_BPFTOOL_CMD_LEN, "prog show pinned %s",
->> +		       test->bpffs_path);
->> +	if (!ASSERT_GT(ret, 0, "format pinned prog check command"))
->> +		return;
->> +	ret =3D get_bpftool_command_output(cmd, output,
->> +			MAX_BPFTOOL_OUTPUT_LEN);
->> +	if (ASSERT_OK(ret, "get program info")) {
->> +		ret =3D check_metadata(output, test->expected_output,
->> +				ARRAY_SIZE(test->expected_output));
->> +		ASSERT_OK(ret, "find metadata");
->> +	}
->> +
->> +	/* Check output with json format */
->> +	ret =3D snprintf(cmd, MAX_BPFTOOL_CMD_LEN, "prog -j show pinned %s",
->> +		       test->bpffs_path);
->> +	if (!ASSERT_GT(ret, 0, "format pinned prog check command in json"))
->> +		return;
->> +	ret =3D get_bpftool_command_output(cmd, output,
->> +					 MAX_BPFTOOL_OUTPUT_LEN);
->> +	if (ASSERT_OK(ret, "get program info in json")) {
->> +		ret =3D check_metadata(output, test->expected_output_json,
->> +				ARRAY_SIZE(test->expected_output_json));
->> +		ASSERT_OK(ret, "find metadata in json");
->> +	}
->> +
->> +}
->
-> The original shell script also verified the map listing output:
->
->> diff --git a/tools/testing/selftests/bpf/test_bpftool_metadata.sh b/tool=
-s/testing/selftests/bpf/test_bpftool_metadata.sh
->> deleted file mode 100755
->> index b5520692f41b..000000000000
->> --- a/tools/testing/selftests/bpf/test_bpftool_metadata.sh
->> +++ /dev/null
->
-> [ ... ]
->
->> -bpftool prog --json | grep '"metadata":{"a":"foo","b":1}' > /dev/null
->> -
->> -bpftool map | grep 'metadata.rodata' > /dev/null
->
-> [ ... ]
->
->> -bpftool prog --json | grep '"metadata":{"a":"bar","b":2}' > /dev/null
->> -
->> -bpftool map | grep 'metadata.rodata' > /dev/null
->
-> Was the "bpftool map | grep 'metadata.rodata'" check intentionally remove=
-d
-> from the converted test? The original script verified that the metadata m=
-ap
-> appeared in bpftool's map listing, which tests a different code path than
-> the "prog show" commands. If this was dropped on purpose, it might be wor=
-th
-> a comment explaining why; otherwise this appears to be a test coverage
-> regression.
->
->
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a =
-bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
-E.md
->
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/212250=
-32840
+From: Chengkaitao <chengkaitao@kylinos.cn>
 
-The bot is right, I forgot to port this specific check. That will be
-added in the next revision.
+For the following scenario:
+struct tree_node {
+    struct bpf_rb_node node;
+    struct request __kptr *req;
+    u64 key;
+};
+struct bpf_rb_root tree_root __contains(tree_node, node);
+struct bpf_spin_lock tree_lock;
 
-Alexis
+If we need to traverse all nodes in the rbtree, retrieve the __kptr
+pointer from each node, and read kernel data from the referenced
+object, using bpf_kptr_xchg appears unavoidable.
 
---=20
-Alexis Lothor=C3=A9, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+This patch skips the BPF verifier checks for bpf_kptr_xchg when
+called while holding a lock.
+
+Signed-off-by: Chengkaitao <chengkaitao@kylinos.cn>
+---
+ kernel/bpf/verifier.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 3135643d5695..05a6a6606b6c 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -20387,7 +20387,8 @@ static int do_check_insn(struct bpf_verifier_env *env, bool *do_print_state)
+ 
+ 			if (env->cur_state->active_locks) {
+ 				if ((insn->src_reg == BPF_REG_0 &&
+-				     insn->imm != BPF_FUNC_spin_unlock) ||
++				     insn->imm != BPF_FUNC_spin_unlock &&
++				     insn->imm != BPF_FUNC_kptr_xchg) ||
+ 				    (insn->src_reg == BPF_PSEUDO_KFUNC_CALL &&
+ 				     (insn->off != 0 || !kfunc_spin_allowed(insn->imm)))) {
+ 					verbose(env,
+-- 
+2.50.1 (Apple Git-155)
 
