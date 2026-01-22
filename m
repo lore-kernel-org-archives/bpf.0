@@ -1,32 +1,32 @@
-Received: from out-180.mta1.migadu.com (out-180.mta1.migadu.com [95.215.58.180])
+Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BD0B38BDAA
-	for <bpf@vger.kernel.org>; Thu, 22 Jan 2026 02:41:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E3853148AF
+	for <bpf@vger.kernel.org>; Thu, 22 Jan 2026 02:50:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769049705; cv=none; b=Cza92UJXW8+Cfx/1jXF6X76b0akgFH4F4MD2SRCVLP/ZbpVD9M37wEWCs0NBu0ygODUg1TEmHk0y7hI1HfCcNC3b4bwPTkC5fsNe+RgR+QeaLXEGW43f4LtldcmtDEoSEjoR0GmNhZmT+JUcc8H2Xgbnw+YgVJ728lZ1ewksQB8=
+	t=1769050213; cv=none; b=ep1PBcyzEmOXmN4A1+S7vKsFSbMGiQ1h1YmZvBJMl3H3AhaFcJI3U4OeyufT8t0GmF2WNr0/8oBA8R15O6EOI7cdAL/jDrau5E3+0g9sYl/M7afO4zGgySFePM+JpFp00nf4uYdD/5lYAKBfNu23DScnHp7RLnlcT5XkgYOEp+Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769049705; c=relaxed/simple;
-	bh=PPIRfhsObAkcW33f+gZJWm44KZAjxYqIRZTHnqcd1mY=;
+	s=arc-20240116; t=1769050213; c=relaxed/simple;
+	bh=lQRMsW/DIzakWp3Z6e8jYtTsZJehbKtDnMWY2SdS4Bk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=NRBsw6/+NGMvU1bgrKoR1gxJiXy+LwhGpdUKTWdFDWD/NdJCK9qgurWkYrg+WObtRWuPXQqQx9FTruS/Ubeky4CRk69X5tEpGihx/wsHpFgHd80qvlI48Z+vbt7jpPsfswPrf94sPCfv65bHLbofdj3YG94mQHiwelKR5XRFUZY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=HSkXtBgx; arc=none smtp.client-ip=95.215.58.180
+	 MIME-Version:Content-Type; b=Sm9HN+491zh0vC1BZBGg+8sTmxQaDATi5DNyeLVh1/todxp4RL8qD9SVSUZ1xgdNHXkAN1n9qEw3OoKEU4CUUWA/uVUG+kXYrdMjXsFkzq+ssCBm+b0OI1vISQ4Gg33iXbHpAAdS/1xorwNz/PNM0F35qRoyMoQO3XPpmR2AXoI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=XSsOoHQh; arc=none smtp.client-ip=95.215.58.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="HSkXtBgx"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="XSsOoHQh"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1769049684;
+	t=1769050196;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=PRZGbegubvTtb9X2xIuQVHiTp3mLxqiBK8qzoGNvCYg=;
-	b=HSkXtBgxBqnteiND5xUaLE6W3EMbrOuDTogxB3fkCBwpLL6ZAm4p82W3nU1LJWwS+j4WCd
-	vVRVrAsBzbPQq54I1cdmku3CTr+k30OOenm5E3CHXQQJDASVM8d8kSS07dFX34/xRllvgK
-	VBZ6eusEmoH3RNv/BzCUbWaWkNK0XkE=
+	bh=NAquLWkfaoXFtBTk6QgDbkMnqVzynMeysZ13SKr6Pgw=;
+	b=XSsOoHQhH/9GrcwQQCzpjBLNAmFfeaUlMyi0zN1thH51fomXA/1qqLTaRFO5j+MJckW3YO
+	YphtBRZXYY8oJTh4BExWHjGghEzSczZOnKtixDqF8x+G+PXuOUaKV3hc7qu8bFPGmlJf19
+	bMzhpvplmrWkle6vFpDjdw+NrokGgdE=
 From: Menglong Dong <menglong.dong@linux.dev>
 To: Menglong Dong <menglong8.dong@gmail.com>,
  Andrii Nakryiko <andrii.nakryiko@gmail.com>
@@ -38,16 +38,14 @@ Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
  jiang.biao@linux.dev, bp@alien8.de, dave.hansen@linux.intel.com,
  x86@kernel.org, hpa@zytor.com, bpf@vger.kernel.org, netdev@vger.kernel.org,
  linux-kernel@vger.kernel.org
-Subject:
- Re: [PATCH bpf-next v10 07/12] bpf,x86: add fsession support for x86_64
-Date: Thu, 22 Jan 2026 10:41:04 +0800
-Message-ID: <3026367.e9J7NaK4W3@7940hx>
+Subject: Re: [PATCH bpf-next v10 00/12] bpf: fsession support
+Date: Thu, 22 Jan 2026 10:49:35 +0800
+Message-ID: <2026435.PYKUYFuaPT@7940hx>
 In-Reply-To:
- <CAEf4BzZm5uenrYO3ZXiGB8qXCg67Ov7crNvZtsj=Be4XEm6OpQ@mail.gmail.com>
+ <CAEf4BzZX+hDww=MvMrqx3h9uKdB+Sef8rVMxrvxcm+9jj7MUjg@mail.gmail.com>
 References:
  <20260115112246.221082-1-dongml2@chinatelecom.cn>
- <CAEf4BzYop1GT1v7qxNQi44dsEebjwnLp-sHDp-HPzVrj69WzTw@mail.gmail.com>
- <CAEf4BzZm5uenrYO3ZXiGB8qXCg67Ov7crNvZtsj=Be4XEm6OpQ@mail.gmail.com>
+ <CAEf4BzZX+hDww=MvMrqx3h9uKdB+Sef8rVMxrvxcm+9jj7MUjg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -58,151 +56,116 @@ Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset="utf-8"
 X-Migadu-Flow: FLOW_OUT
 
-On 2026/1/22 08:22 Andrii Nakryiko <andrii.nakryiko@gmail.com> write:
-> On Wed, Jan 21, 2026 at 4:06=E2=80=AFPM Andrii Nakryiko
-> <andrii.nakryiko@gmail.com> wrote:
+On 2026/1/22 08:09 Andrii Nakryiko <andrii.nakryiko@gmail.com> write:
+> On Thu, Jan 15, 2026 at 3:23=E2=80=AFAM Menglong Dong <menglong8.dong@gma=
+il.com> wrote:
 > >
-> > On Thu, Jan 15, 2026 at 3:24=E2=80=AFAM Menglong Dong <menglong8.dong@g=
-mail.com> wrote:
-> > >
-> > > Add BPF_TRACE_FSESSION supporting to x86_64, including:
-> > >
-> > > 1. clear the return value in the stack before fentry to make the fent=
-ry
-> > >    of the fsession can only get 0 with bpf_get_func_ret().
-> > >
-> > > 2. clear all the session cookies' value in the stack.
-> > >
-> > > 2. store the index of the cookie to ctx[-1] before the calling to fse=
-ssion
-> > >
-> > > 3. store the "is_return" flag to ctx[-1] before the calling to fexit =
-of
-> > >    the fsession.
-> > >
-> > > Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
-> > > Co-developed-by: Leon Hwang <leon.hwang@linux.dev>
-> > > Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
-> > > ---
-> > > v10:
-> > > - use "|" for func_meta instead of "+"
-> > > - pass the "func_meta_off" to invoke_bpf() explicitly, instead of
-> > >   computing it with "stack_size + 8"
-> > > - pass the "cookie_off" to invoke_bpf() instead of computing the curr=
+> > Hi, all.
+> >
+> > In this version, I followed Andrii's suggestions in v9, and did many
+> > adjustment.
+> >
+> > overall
+> > -------
+> > Sometimes, we need to hook both the entry and exit of a function with
+> > TRACING. Therefore, we need define a FENTRY and a FEXIT for the target
+> > function, which is not convenient.
+> >
+> > Therefore, we add a tracing session support for TRACING. Generally
+> > speaking, it's similar to kprobe session, which can hook both the entry
+> > and exit of a function with a single BPF program.
+> >
+> > We allow the usage of bpf_get_func_ret() to get the return value in the
+> > fentry of the tracing session, as it will always get "0", which is safe
+> > enough and is OK.
+> >
+> > Session cookie is also supported with the kfunc bpf_session_cookie().
+> > In order to limit the stack usage, we limit the maximum number of cooki=
+es
+> > to 4.
+> >
+> > kfunc design
+> > ------------
+> > In order to keep consistency with existing kfunc, we don't introduce new
+> > kfunc for fsession. Instead, we reuse the existing kfunc
+> > bpf_session_cookie() and bpf_session_is_return().
+> >
+> > The prototype of bpf_session_cookie() and bpf_session_is_return() don't
+> > satisfy our needs, so we change their prototype by adding the argument
+> > "void *ctx" to them.
+> >
+> > We inline bpf_session_cookie() and bpf_session_is_return() for fsession
+> > in the verifier directly. Therefore, we don't need to introduce new
+> > functions for them.
+> >
+> > architecture
+> > ------------
+> > The fsession stuff is arch related, so the -EOPNOTSUPP will be returned=
+ if
+> > it is not supported yet by the arch. In this series, we only support
+> > x86_64. And later, other arch will be implemented.
+> >
+> > Changes v9 -> v10:
+> > * 1st patch: some small adjustment, such as use switch in
+> >   bpf_prog_has_trampoline()
+> > * 2nd patch: some adjustment to the commit log and comment
+> > * 3rd patch:
+> >   - drop the declaration of bpf_session_is_return() and
+> >     bpf_session_cookie()
+> >   - use vmlinux.h instead of bpf_kfuncs.h in uprobe_multi_session.c,
+> >     kprobe_multi_session_cookie.c and uprobe_multi_session_cookie.c
+> > * 4th patch:
+> >   - some adjustment to the comment and commit log
+> >   - rename the prefix from BPF_TRAMP_M_ tp BPF_TRAMP_SHIFT_
+>=20
+> This is minor nit, but I think BPF_TRAMP_IS_RETURN_SHIFT and
+> BPF_TRAMP_COOKIE_INDEX_SHIFT (note added INDEX, because that's what we
+> store, not the cookie itself) makes more sense naming-wise and is more
+> natural to read. Consider updating this.
+
+Yeah, looks nice.
+
+>=20
+> >   - remove the definition of BPF_TRAMP_M_NR_ARGS
+> >   - check the program type in bpf_session_filter()
+> > * 5th patch: some adjustment to the commit log
+> > * 6th patch:
+> >   - add the "reg" to the function arguments of emit_store_stack_imm64()
+> >   - use the positive offset in emit_store_stack_imm64()
+> > * 7th patch:
+> >   - use "|" for func_meta instead of "+"
+> >   - pass the "func_meta_off" to invoke_bpf() explicitly, instead of
+> >     computing it with "stack_size + 8"
+> >   - pass the "cookie_off" to invoke_bpf() instead of computing the curr=
 ent
-> > >   cookie index with "func_meta"
-> > >
-> > > v5:
-> > > - add the variable "func_meta"
-> > > - define cookie_off in a new line
-> > >
-> > > v4:
-> > > - some adjustment to the 1st patch, such as we get the fsession prog =
-from
-> > >   fentry and fexit hlist
-> > > - remove the supporting of skipping fexit with fentry return non-zero
-> > >
-> > > v2:
-> > > - add session cookie support
-> > > - add the session stuff after return value, instead of before nr_args
-> > > ---
-> > >  arch/x86/net/bpf_jit_comp.c | 52 ++++++++++++++++++++++++++++-------=
-=2D-
-> > >  1 file changed, 40 insertions(+), 12 deletions(-)
-> > >
-> > > diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-> > > index 2f31331955b5..16720f2be16c 100644
-> > > --- a/arch/x86/net/bpf_jit_comp.c
-> > > +++ b/arch/x86/net/bpf_jit_comp.c
-> > > @@ -3094,13 +3094,19 @@ static int emit_cond_near_jump(u8 **pprog, vo=
-id *func, void *ip, u8 jmp_cond)
-> > >
-> > >  static int invoke_bpf(const struct btf_func_model *m, u8 **pprog,
-> > >                       struct bpf_tramp_links *tl, int stack_size,
-> > > -                     int run_ctx_off, bool save_ret,
-> > > -                     void *image, void *rw_image)
-> > > +                     int run_ctx_off, int func_meta_off, bool save_r=
-et,
-> > > +                     void *image, void *rw_image, u64 func_meta,
-> > > +                     int cookie_off)
-> > >  {
-> > > -       int i;
-> > > +       int i, cur_cookie =3D (cookie_off - stack_size) / 8;
-> >
-> > not sure why you went with passing cookie_off and then calculating,
-> > effectively, cookie count out of that?... why not pass cookie count
-> > directly then? it's minor, but just seems like a weird choice here,
-> > tbh
-
-Hi, Andrii. I think you misunderstand it here. The cur_cookie is not the
-same as cookie count. The layout of the stack looks like this:
-
-  return value  -> 8 bytes
-  argN          -> 8 bytes
-  ...
-  arg1          -> 8 bytes
-  nr_args       -> 8 bytes
-  ip (optional) -> 8 bytes
-  cookie2       -> 8 bytes
-  cookie1       -> 8 bytes
-
-So if the bpf_get_func_ip() not used, the cur_cookie is exactly the same
-as cookie count. But if it exist, they are not the same.
-
-The location of the cookies is independent from the context, and the
-cur_cookie, which is the index of the current cookie, don't rely on cookie
-count too and can be bigger than cookie count.
-
-PS: the location of "ip" should always laid before the nr_args, as we get
-it with ctx[-2]. Maybe we can optimize it later. We store the index of
-the ip the func_meta too, therefore it is independent from the ctx too.
-Ah, it looks not make much sense ;)
-
+> >     cookie index with "func_meta"
+> > * 8th patch:
+> >   - split the modification to bpftool to a separate patch
+> > * v9: https://lore.kernel.org/bpf/20260110141115.537055-1-dongml2@china=
+telecom.cn/
 > >
 >=20
-> consider also just calculating cookie count out from bpf_tramp_links?
-> would that work? Then "func_meta" would really be just nr_args (and
-> I'd call it that) and bool for whether this is entry or exit
-> invokation (for IS_RETURN bit, and maybe we'll need this distinction
-> somewhere else in the future), and then invoke_bpf() will construct
-> func_meta from scratch.
->=20
-> It's relatively minor thing, but as I mentioned before, it's this
-> hybrid approach of partially opaque (from invoke_bpf's POV) func_meta
-> which we also adjust or fill out (for cookie index) is a bit of a sign
-> that this is not a proper interface.
+> Overall this looks great, I was actually trying to apply and push it
+> despite those minor nits I left. But unfortunately there is some
+> conflict, so you'll have to rebase and resend. Hopefully just one last
+> time :)
 
-Yeah, the current approach is indeed not perfect. But I think it's
-a little not flex if we construct the whole func_meta in invoke_bpf().
-=46or now, we need to pass nr_args, is_return, cookie_off to it. And
-we need to add more function arguments to invoke_bpf() if there
-are new flags occur in the feature, which is not convenient, right?
+Haha, sounds great! I'll follow your comment and rebase, and
+send the next version later.
 
-So what do you think?
-
-Thanks!
-Menglong Dong
+Thanks you the review ;)
 
 >=20
+> > Changes v8 -> v9:
+> > * remove the definition of bpf_fsession_cookie and bpf_fsession_is_retu=
+rn
+> >   in the 4th and 5th patch
+> > * rename emit_st_r0_imm64() to emit_store_stack_imm64() in the 6th patch
+> > * v8: https://lore.kernel.org/bpf/20260108022450.88086-1-dongml2@chinat=
+elecom.cn/
 > >
+[...]
 > >
-> > >         u8 *prog =3D *pprog;
-> > >
-> > >         for (i =3D 0; i < tl->nr_links; i++) {
-> > > +               if (tl->links[i]->link.prog->call_session_cookie) {
-> > > +                       emit_store_stack_imm64(&prog, BPF_REG_0, -fun=
-c_meta_off,
-> > > +                                              func_meta | (cur_cooki=
-e << BPF_TRAMP_SHIFT_COOKIE));
-> > > +                       cur_cookie--;
-> > > +               }
-> > >                 if (invoke_bpf_prog(m, &prog, tl->links[i], stack_siz=
-e,
-> > >                                     run_ctx_off, save_ret, image, rw_=
-image))
-> > >                         return -EINVAL;
-> >
-> > [...]
 >=20
 
 
