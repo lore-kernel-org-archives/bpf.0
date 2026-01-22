@@ -1,313 +1,215 @@
-Received: from out-177.mta1.migadu.com (out-177.mta1.migadu.com [95.215.58.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f180.google.com (mail-vk1-f180.google.com [209.85.221.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5FAF376BF7
-	for <bpf@vger.kernel.org>; Thu, 22 Jan 2026 18:37:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.177
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769107043; cv=none; b=WwrQ078jCvLu0XJxl+FfGRFuksP8r5zbHBN6eCajPbaN/jYjTSZr+xj22JzetwbkSFSH5ikofW9tERiFkdH+4W4C9qozV8+iNgCWZEFzlDY+8Z0MvpJWmx4QYmjRDF0ADMEwZbf7shjuVuPZezT/WfwX9YRqMRnKse++HN6ZEVk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769107043; c=relaxed/simple;
-	bh=2DmcWeiXJayKKL9AFIPK48NUvpCdUsdGsnfeKPz4Hiw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=t9vhxR0QnLdacf5yTIXGB+CypOg8rvSV15+VC5+t5ijjh2mFk/ycY/PmJCbGhMRJ5Q9iDdJNh/1/CdGex9My+edQnk346zcPM0lXGd7N83X2F87zWwrgshhpCZdlVuB4z0d3b0XU0t0nXwf/pi1yMGUXejj8sc7+KDR8d2l+r+o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=vwABxxfW; arc=none smtp.client-ip=95.215.58.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A58753451CD
+	for <bpf@vger.kernel.org>; Thu, 22 Jan 2026 18:37:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.180
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769107076; cv=pass; b=oC4ky+ucmKhfAOaE3AneqkFyScdAMtM79CpwFkW+XTWNApJp9Sz0d713T/kq2trTiMMG93i4cgSCn8f1LRPgqbRhfe0iLZJgNeW3pUH5KXegDk+u9Laj5wMROlixnuUX0YUZblfEDw3LOFY09JILH4uwQfMUns6ZOzJqQ0Fqrzs=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769107076; c=relaxed/simple;
+	bh=Rur9bSt0hgAR6phZOgAdh5Lfm4ayEbdbSjuSfNntYfo=;
+	h=From:In-Reply-To:References:MIME-Version:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=vBqzyuxMqQZ+bHbA1M/BgJgyisJNjZFLX9uOksVacZgqKX4qhL1w+vmABOZ+gBr6Wu4dUomK6vDDl7n+g5n7Uz4pyM7aVYmoFzENi5IMt0t062hXPfb8UBk4xvIxGi8lUgGN+IbSyaMC8EEnO6nr0n11UYlCE/0uwFHty29rwqo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ZBxrDUj6; arc=pass smtp.client-ip=209.85.221.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="vwABxxfW"
-Message-ID: <b675ea8a-290e-4313-b74d-92bb4eac467e@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1769107024;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=FpavnOCYqHbMBJz/zqUzOQcMA7NQtsEOgdjN4Go6MAA=;
-	b=vwABxxfWbluRW4NLnuM3MoF9/yppDqRXXByqgviJ5TkhTxjh3t7k53cOOresuU3uCtt6K9
-	MWXw6m3NX3AbSl0zetC+QTjfohyZnQfjlamdd1IJL56luuy0Ucdy5eVeuLXXHcCtkkKVbc
-	KA0Oao2Nv+Gsmcgrpf5kMrtoRUHUSKY=
-Date: Thu, 22 Jan 2026 10:36:56 -0800
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ZBxrDUj6"
+Received: by mail-vk1-f180.google.com with SMTP id 71dfb90a1353d-56373f07265so947549e0c.0
+        for <bpf@vger.kernel.org>; Thu, 22 Jan 2026 10:37:44 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1769107060; cv=none;
+        d=google.com; s=arc-20240605;
+        b=CPPIR8951F5u1n0ZY5qBmcs9nOv0ocFLL9YhKfUj+96HCvDIHlPgmMYtxkhAXxC3y+
+         GL2w3mGZ8LXTj4WgIw7i7jYqXi300dYyXftSoYUSt2IYpvPm5Wo7w9dOjMwTVhtYkjVn
+         Nszkf1NuNJt9ny2XeiSZC5JTg7GD47lJKEInwNUd0ln7YKGg33BV3ZGzHzYovPs9gChq
+         OXWnMNyIFLJmL55p94XjXBktLg34NxCqdtPulGt4iiM+EYTlQtkXu5o5QrmKw4m/AFdK
+         /+hUSipzO307GMyHs6hFd8cLiOrRXxZ8SqgnQMqV+8X+2tVSEgPFfIJo+4rNbLl9MnmV
+         k9QQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:dkim-signature;
+        bh=dm0SGSE+J6wsaq7NHikcDRa1xq67WXlvnQ6Xcq7PISg=;
+        fh=zwiSLCXTIyPwwU5JiuVX1HJ3Fq1C/yTFcsTnYL6xs68=;
+        b=ByABzjPQ1Tzr7R/aUAhLCDKHPM7DzPo3LSUl6AGwh4l7Rv0eIwUzGIf6KOteBXZ2+H
+         4AFHHY9j7kPbJH8zCfAZ1GzYryks55JhqFAQLSay3M8SH3d6NhpP8iWASws8U/yP6eW5
+         DX0MK4yWnsgaGjD7Gue1ywYLpfVhbJteKE9Wp0Whk/8UMBX6XX2BbvvnpKIm3mVSSYzS
+         Uus4KsKtcuGU3JuGEIVaniwBpkOZcL9hEWKmQELpfut11CwEh4EFwijbeMtpVF6cDTpM
+         Xr/avz2GKyW8B7ZJgM2SZml8cXWhyw2+hByCbOGNwUubTY0iQ0aK6mdqNDEAp//EzXxB
+         Q9Fg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1769107060; x=1769711860; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=dm0SGSE+J6wsaq7NHikcDRa1xq67WXlvnQ6Xcq7PISg=;
+        b=ZBxrDUj6XU8chCUcosQXzxoc8jHXW28xJfsvTpvtEoe7//9Son5UklMtp0A+xBBZdL
+         x/95HwSF3yME8SspZHDrDXHPtHSjgu9YEfNgXtx+nXal8SxdqHR6h0t3b14h4p+HwgC1
+         f69NTPci8eFSfWtB6gMoEGhYWqaWy7zrcvJXgAqcEyr8D0kZqo/xRC0mcBqcfwJMYNL8
+         u1wrIhUkN275xtcU4IkwYctOANgYm5Jkis5gzbPVI1jKXXwCqYCaDHeIOyYm+oardRsT
+         Bw5aU72zMnqxkkxgP5wJb9P6dlbFFjjk1U2pH/qLkJ9T89uq2wO1o5OzXfEZDzDnvANA
+         B+9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769107060; x=1769711860;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dm0SGSE+J6wsaq7NHikcDRa1xq67WXlvnQ6Xcq7PISg=;
+        b=wbqXIIYzc4B68LGOTz7sJ2MoSBO7+b2fgOJW/vRJJenFUyJCuznG6t2heFCUp8nEOU
+         30tC4H7A3fXmf2vxmPSAUM0ZUne9wN/6y9XALbaGT19L9XqtWyhlwIC+9j3N8dbWEVfh
+         4eUyzRTcaKVG7hltbR8zlMYvRGH29HwiZ4H/mFDveVkfEqKU7UDtt8OHn9//j6btErmA
+         zg51bur5eaH8H+DZ0jBAXj5hFT4sEguATDlSm1oGDkE+3WJiAjLbbq6cPtMfzF62tskz
+         B12+hR9amD+8ar0e2SvStZsJE6AxjRcCBo/v4hGM3vWrWdYDJT29GCbhKJKT+4bvV40q
+         vbgw==
+X-Forwarded-Encrypted: i=1; AJvYcCUnwmr0yJ+ZnTU7Nwx8uGRXni3IBmbSuXD83TUkVlLXssrop3s0ZyPiBjjDX3pZoKzujH4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywa0nyLl18aExOBLWcRMUMlR4R4A5S43v5ZhEy0nv2g/ITcOiTu
+	JPBn2MpSI/UjGVnJ0Twk1K3rf2/XUutcRncYW3FvqZ5iZk14EoljwnCynPTt/92M4/AHhWbHBBA
+	W+rSyiyKsKX1UervfFJ5yMKo40S2If6p/diXm+bFh
+X-Gm-Gg: AZuq6aLl06tGxTs8y2Y6DbnQmC3hxongyX0c43Y3Ga/iJbOyTXyFJpJEOBbijNoo6WL
+	8qbKnLvecv77DkN3XT1DgKu12g9s1u9kSv/HUGl957OpiFdhfNKpVNZjO4v+Afl/vuDM7MQq+KW
+	Zib9rHUDCT9TUef9Bg3t457FHTVV8KqZxyfgRhiw7pkAhsvINJFEb8nShRBqbYRoibvQkhKwZbr
+	IbvnQZXHADC2IXp90LonytlZduziSUZDuC3nypK0E4CGsffh8HD0bn3IG/UqwVnTSkpwn+S9FTD
+	HIdh3OCKYrr5PGSk8uy43nyj
+X-Received: by 2002:a05:6122:1799:b0:54a:992c:815e with SMTP id
+ 71dfb90a1353d-5663eaa47acmr191602e0c.8.1769107059228; Thu, 22 Jan 2026
+ 10:37:39 -0800 (PST)
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Thu, 22 Jan 2026 10:37:38 -0800
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Thu, 22 Jan 2026 10:37:37 -0800
+From: Ackerley Tng <ackerleytng@google.com>
+In-Reply-To: <294bca75-2f3e-46db-bb24-7c471a779cc1@amazon.com>
+References: <20260114134510.1835-1-kalyazin@amazon.com> <20260114134510.1835-8-kalyazin@amazon.com>
+ <e619ded526a2f9a4cec4f74383cef31519624935.camel@intel.com> <294bca75-2f3e-46db-bb24-7c471a779cc1@amazon.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH dwarves 3/4] btf_encoder: Add true_signature feature
- support for "."-suffixed functions
-Content-Language: en-GB
-To: Alan Maguire <alan.maguire@oracle.com>, mattbobrowski@google.com
-Cc: eddyz87@gmail.com, ihor.solodrai@linux.dev, jolsa@kernel.org,
- andrii@kernel.org, ast@kernel.org, dwarves@vger.kernel.org,
- bpf@vger.kernel.org
-References: <20260113131352.2395024-1-alan.maguire@oracle.com>
- <20260113131352.2395024-4-alan.maguire@oracle.com>
- <4d7c529c-a910-431f-8e6a-b8e5f4f7cffa@linux.dev>
- <49f81b2e-187e-4056-b6de-9a7f028c2f5a@oracle.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <49f81b2e-187e-4056-b6de-9a7f028c2f5a@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Date: Thu, 22 Jan 2026 10:37:37 -0800
+X-Gm-Features: AZwV_QhFeXvGMv5345sr6hAOQL-xKTYrLyTeQaptQlhk8j2vfvA1j50rf6t-uyU
+Message-ID: <CAEvNRgEvd9tSwrkaYrQyibO2DP99vgVj6_zr=jBH5+zMnJwYbA@mail.gmail.com>
+Subject: Re: [PATCH v9 07/13] KVM: guest_memfd: Add flag to remove from direct map
+To: kalyazin@amazon.com, "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>, 
+	"linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>, 
+	"kalyazin@amazon.co.uk" <kalyazin@amazon.co.uk>, "kernel@xen0n.name" <kernel@xen0n.name>, 
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, "linux-mm@kvack.org" <linux-mm@kvack.org>, 
+	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>, 
+	"linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>, 
+	"kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, 
+	"kvm@vger.kernel.org" <kvm@vger.kernel.org>, "bpf@vger.kernel.org" <bpf@vger.kernel.org>, 
+	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>, 
+	"loongarch@lists.linux.dev" <loongarch@lists.linux.dev>
+Cc: "david@kernel.org" <david@kernel.org>, "palmer@dabbelt.com" <palmer@dabbelt.com>, 
+	"catalin.marinas@arm.com" <catalin.marinas@arm.com>, "svens@linux.ibm.com" <svens@linux.ibm.com>, 
+	"jgross@suse.com" <jgross@suse.com>, "surenb@google.com" <surenb@google.com>, 
+	"riel@surriel.com" <riel@surriel.com>, "pfalcato@suse.de" <pfalcato@suse.de>, 
+	"peterx@redhat.com" <peterx@redhat.com>, "x86@kernel.org" <x86@kernel.org>, "rppt@kernel.org" <rppt@kernel.org>, 
+	"thuth@redhat.com" <thuth@redhat.com>, "maz@kernel.org" <maz@kernel.org>, 
+	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>, "ast@kernel.org" <ast@kernel.org>, 
+	"vbabka@suse.cz" <vbabka@suse.cz>, "Annapurve, Vishal" <vannapurve@google.com>, 
+	"borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>, "alex@ghiti.fr" <alex@ghiti.fr>, 
+	"pjw@kernel.org" <pjw@kernel.org>, "tglx@linutronix.de" <tglx@linutronix.de>, 
+	"willy@infradead.org" <willy@infradead.org>, "hca@linux.ibm.com" <hca@linux.ibm.com>, 
+	"wyihan@google.com" <wyihan@google.com>, "ryan.roberts@arm.com" <ryan.roberts@arm.com>, 
+	"jolsa@kernel.org" <jolsa@kernel.org>, 
+	"yang@os.amperecomputing.com" <yang@os.amperecomputing.com>, "jmattson@google.com" <jmattson@google.com>, 
+	"luto@kernel.org" <luto@kernel.org>, "aneesh.kumar@kernel.org" <aneesh.kumar@kernel.org>, 
+	"haoluo@google.com" <haoluo@google.com>, "patrick.roy@linux.dev" <patrick.roy@linux.dev>, 
+	"akpm@linux-foundation.org" <akpm@linux-foundation.org>, "coxu@redhat.com" <coxu@redhat.com>, 
+	"mhocko@suse.com" <mhocko@suse.com>, "mlevitsk@redhat.com" <mlevitsk@redhat.com>, "jgg@ziepe.ca" <jgg@ziepe.ca>, 
+	"hpa@zytor.com" <hpa@zytor.com>, "song@kernel.org" <song@kernel.org>, "oupton@kernel.org" <oupton@kernel.org>, 
+	"peterz@infradead.org" <peterz@infradead.org>, "maobibo@loongson.cn" <maobibo@loongson.cn>, 
+	"lorenzo.stoakes@oracle.com" <lorenzo.stoakes@oracle.com>, 
+	"Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>, "jthoughton@google.com" <jthoughton@google.com>, 
+	"martin.lau@linux.dev" <martin.lau@linux.dev>, "jhubbard@nvidia.com" <jhubbard@nvidia.com>, 
+	"Yu, Yu-cheng" <yu-cheng.yu@intel.com>, 
+	"Jonathan.Cameron@huawei.com" <Jonathan.Cameron@huawei.com>, "eddyz87@gmail.com" <eddyz87@gmail.com>, 
+	"yonghong.song@linux.dev" <yonghong.song@linux.dev>, "chenhuacai@kernel.org" <chenhuacai@kernel.org>, 
+	"shuah@kernel.org" <shuah@kernel.org>, "prsampat@amd.com" <prsampat@amd.com>, 
+	"kevin.brodsky@arm.com" <kevin.brodsky@arm.com>, 
+	"shijie@os.amperecomputing.com" <shijie@os.amperecomputing.com>, 
+	"suzuki.poulose@arm.com" <suzuki.poulose@arm.com>, "itazur@amazon.co.uk" <itazur@amazon.co.uk>, 
+	"pbonzini@redhat.com" <pbonzini@redhat.com>, "yuzenghui@huawei.com" <yuzenghui@huawei.com>, 
+	"dev.jain@arm.com" <dev.jain@arm.com>, "gor@linux.ibm.com" <gor@linux.ibm.com>, 
+	"jackabt@amazon.co.uk" <jackabt@amazon.co.uk>, "daniel@iogearbox.net" <daniel@iogearbox.net>, 
+	"agordeev@linux.ibm.com" <agordeev@linux.ibm.com>, "andrii@kernel.org" <andrii@kernel.org>, 
+	"mingo@redhat.com" <mingo@redhat.com>, "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>, 
+	"joey.gouly@arm.com" <joey.gouly@arm.com>, "derekmn@amazon.com" <derekmn@amazon.com>, 
+	"xmarcalx@amazon.co.uk" <xmarcalx@amazon.co.uk>, "kpsingh@kernel.org" <kpsingh@kernel.org>, 
+	"sdf@fomichev.me" <sdf@fomichev.me>, "jackmanb@google.com" <jackmanb@google.com>, "bp@alien8.de" <bp@alien8.de>, 
+	"corbet@lwn.net" <corbet@lwn.net>, "jannh@google.com" <jannh@google.com>, 
+	"john.fastabend@gmail.com" <john.fastabend@gmail.com>, "kas@kernel.org" <kas@kernel.org>, 
+	"will@kernel.org" <will@kernel.org>, "seanjc@google.com" <seanjc@google.com>
+Content-Type: text/plain; charset="UTF-8"
+
+Nikita Kalyazin <kalyazin@amazon.com> writes:
+
+> On 16/01/2026 00:00, Edgecombe, Rick P wrote:
+>> On Wed, 2026-01-14 at 13:46 +0000, Kalyazin, Nikita wrote:
+>>> +static void kvm_gmem_folio_restore_direct_map(struct folio *folio)
+>>> +{
+>>> +     /*
+>>> +      * Direct map restoration cannot fail, as the only error condition
+>>> +      * for direct map manipulation is failure to allocate page tables
+>>> +      * when splitting huge pages, but this split would have already
+>>> +      * happened in folio_zap_direct_map() in kvm_gmem_folio_zap_direct_map().
+
+Do you know if folio_restore_direct_map() will also end up merging page
+table entries to a higher level?
+
+>>> +      * Thus folio_restore_direct_map() here only updates prot bits.
+>>> +      */
+>>> +     if (kvm_gmem_folio_no_direct_map(folio)) {
+>>> +             WARN_ON_ONCE(folio_restore_direct_map(folio));
+>>> +             folio->private = (void *)((u64)folio->private & ~KVM_GMEM_FOLIO_NO_DIRECT_MAP);
+>>> +     }
+>>> +}
+>>> +
+>>
+>> Does this assume the folio would not have been split after it was zapped? As in,
+>> if it was zapped at 2MB granularity (no 4KB direct map split required) but then
+>> restored at 4KB (split required)? Or it gets merged somehow before this?
+
+I agree with the rest of the discussion that this will probably land
+before huge page support, so I will have to figure out the intersection
+of the two later.
+
+>
+> AFAIK it can't be zapped at 2MB granularity as the zapping code will
+> inevitably cause splitting because guest_memfd faults occur at the base
+> page granularity as of now.
+
+Here's what I'm thinking for now:
+
+[HugeTLB, no conversions]
+With initial HugeTLB support (no conversions), host userspace
+guest_memfd faults will be:
+
++ For guest_memfd with PUD-sized pages
+    + At PUD level or PTE level
++ For guest_memfd with PMD-sized pages
+    + At PMD level or PTE level
+
+Since this guest_memfd doesn't support conversions, the folio is never
+split/merged, so the direct map is restored at whatever level it was
+zapped. I think this works out well.
+
+[HugeTLB + conversions]
+For a guest_memfd with HugeTLB support and conversions, host userspace
+guest_memfd faults will always be at PTE level, so the direct map will
+be split and the faulted pages have the direct map zapped in 4K chunks
+as they are faulted.
+
+On conversion back to private, put those back into the direct map
+(putting aside whether to merge the direct map PTEs for now).
 
 
-
-On 1/22/26 10:21 AM, Alan Maguire wrote:
-> On 20/01/2026 17:53, Yonghong Song wrote:
->>
->> On 1/13/26 5:13 AM, Alan Maguire wrote:
->>> Currently we collate function information by name and add functions
->>> provided there are no inconsistencies across various representations.
->>>
->>> For true_signature support - where we wish to add the real signature
->>> of a function even if it differs from source level - we need to do
->>> a few things:
->>>
->>> 1. For "."-suffixed functions, we need to match from DWARF->ELF;
->>>      we can do this via the address associated with the function.
->>>      In doing this, we can then be confident that the debug info
->>>      for foo.isra.0 is the right info for the function at that
->>>      address.
->>>
->>> 2. When adding saved functions we need to look for such cases
->>>      and provided they do not violate other constraints around BTF
->>>      representation - unexpected reg usage for function, uncertain
->>>      parameter location or ambiguous address - we add them with
->>>      their "."-suffixed name.  The latter can be used as a signal
->>>      that the function is transformed from the original.
->>>
->>> Doing this adds 500 functions to BTF.  These are traceable with
->>> their "."-suffix names and because we have excluded ambiguous
->>> address cases we know exactly which function address they refer
->>> to.
->>>
->>> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
->>> ---
->>>    btf_encoder.c | 73 ++++++++++++++++++++++++++++++++++++++++++++++-----
->>>    dwarves.h     |  1 +
->>>    pahole.c      |  1 +
->>>    3 files changed, 68 insertions(+), 7 deletions(-)
->>>
->>> diff --git a/btf_encoder.c b/btf_encoder.c
->>> index 5bc61cb..01fd469 100644
->>> --- a/btf_encoder.c
->>> +++ b/btf_encoder.c
->>> @@ -77,9 +77,16 @@ struct btf_encoder_func_annot {
->>>        int16_t component_idx;
->>>    };
->>>    +struct elf_function_sym {
->>> +    const char *name;
->>> +    uint64_t addr;
->>> +};
->>> +
->>>    /* state used to do later encoding of saved functions */
->>>    struct btf_encoder_func_state {
->>>        struct elf_function *elf;
->>> +    struct elf_function_sym *sym;
->>> +    uint64_t addr;
->>>        uint32_t type_id_off;
->>>        uint16_t nr_parms;
->>>        uint16_t nr_annots;
->>> @@ -94,11 +101,6 @@ struct btf_encoder_func_state {
->>>        struct btf_encoder_func_annot *annots;
->>>    };
->>>    -struct elf_function_sym {
->>> -    const char *name;
->>> -    uint64_t addr;
->>> -};
->>> -
->>>    struct elf_function {
->>>        char        *name;
->>>        struct elf_function_sym *syms;
->>> @@ -145,7 +147,8 @@ struct btf_encoder {
->>>                  skip_encoding_decl_tag,
->>>                  tag_kfuncs,
->>>                  gen_distilled_base,
->>> -              encode_attributes;
->>> +              encode_attributes,
->>> +              true_signature;
->>>        uint32_t      array_index_id;
->>>        struct elf_secinfo *secinfo;
->>>        size_t             seccnt;
->>> @@ -1271,14 +1274,34 @@ static int32_t btf_encoder__save_func(struct btf_encoder *encoder, struct functi
->>>                goto out;
->>>            }
->>>        }
->>> +    if (encoder->true_signature && fn->lexblock.ip.addr) {
->>> +        int i;
->>> +
->>> +        for (i = 0; i < func->sym_cnt; i++) {
->>> +            if (fn->lexblock.ip.addr != func->syms[i].addr)
->>> +                continue;
->>> +            /* Only need to record address for '.'-suffixed
->>> +             * functions, since we only currently need true
->>> +             * signatures for them.
->>> +             */
->>> +            if (!strchr(func->syms[i].name, '.'))
->>> +                continue;
->>> +            state->sym = &func->syms[i];
->>> +            break;
->>> +        }
->>> +    }
->>>        state->inconsistent_proto = ftype->inconsistent_proto;
->>>        state->unexpected_reg = ftype->unexpected_reg;
->>>        state->optimized_parms = ftype->optimized_parms;
->>>        state->uncertain_parm_loc = ftype->uncertain_parm_loc;
->>>        state->reordered_parm = ftype->reordered_parm;
->>>        ftype__for_each_parameter(ftype, param) {
->>> -        const char *name = parameter__name(param) ?: "";
->>> +        const char *name;
->>>    +        /* No location info + reordered means optimized out. */
->>> +        if (ftype->reordered_parm && !param->has_loc)
->>> +            continue;
->>> +        name = parameter__name(param) ?: "";
->>>            str_off = btf__add_str(btf, name);
->>>            if (str_off < 0) {
->>>                err = str_off;
->>> @@ -1367,6 +1390,9 @@ static int32_t btf_encoder__add_func(struct btf_encoder *encoder,
->>>          btf_fnproto_id = btf_encoder__add_func_proto_for_state(encoder, state);
->>>        name = func->name;
->>> +    if (encoder->true_signature && state->sym)
->>> +        name = state->sym->name;
->>> +
->>>        if (btf_fnproto_id >= 0)
->>>            btf_fn_id = btf_encoder__add_ref_type(encoder, BTF_KIND_FUNC, btf_fnproto_id,
->>>                                  name, false);
->>> @@ -1509,6 +1535,38 @@ static int btf_encoder__add_saved_funcs(struct btf_encoder *encoder, bool skip_e
->>>            while (j < nr_saved_fns && saved_functions_combine(encoder, &saved_fns[i], &saved_fns[j]) == 0)
->>>                j++;
->>>    +        /* Add true signatures for case where we have an exact
->>> +         * symbol match by address from DWARF->ELF and have a
->>> +         * "." suffixed name.
->>> +         */
->>> +        if (encoder->true_signature) {
->>> +            int k;
->>> +
->>> +            for (k = i; k < nr_saved_fns; k++) {
->>> +                struct btf_encoder_func_state *true_state = &saved_fns[k];
->>> +
->>> +                if (state->elf != true_state->elf)
->>> +                    break;
->>> +                if (!true_state->sym)
->>> +                    continue;
->>> +                /* Unexpected reg, uncertain parm loc and
->>> +                 * ambiguous address mean we cannot trust fentry.
->>> +                 */
->>> +                if (true_state->unexpected_reg ||
->>> +                    true_state->uncertain_parm_loc ||
->>> +                    true_state->ambiguous_addr)
->>> +                    continue;
->>> +                err = btf_encoder__add_func(encoder, true_state);
->>> +                if (err < 0)
->>> +                    goto out;
->>> +                break;
->>> +            }
->>> +        }
->>> +
->>> +        /* True symbol that was handled above; skip. */
->>> +        if (state->sym)
->>> +            continue;
->> I did an experiment with the following code:
->>
->> $ cat test.c
->> struct t { int a; };
->> __attribute__((noinline)) char *tar(struct t *a, struct t *d) { if (a->a == d->a) return (char *)10; else return (char *)0; }
->> __attribute__((noinline)) static char * foo(struct t *a, int b, struct t *d)
->> {
->>    return tar(a, d);
->> }
->> __attribute__((noinline)) char *bar(struct t *a, struct t *d)
->> {
->>    return foo(a, 1, d);
->> }
->>
->> struct t p1, p2;
->> int main() {
->>    return !!bar(&p1, &p2);
->> }
->>
->> and compiled with gcc11:
->> $ gcc -O2 -g test.c
->>
->> I hacked btf_encoder.c with true_signature is all on and with
->> $ pahole -JV ./a.out
->> ...
->> btf_encoder__new: './a.out' doesn't have '.data..percpu' section
->> File ./a.out:
->> [1] STRUCT t size=4
->>          a type_id=2 bits_offset=0
->> [2] INT int size=4 nr_bits=32 encoding=SIGNED
->> [3] PTR (anon) type_id=4
->> [4] INT char size=1 nr_bits=8 encoding=SIGNED
->> [5] PTR (anon) type_id=1
->> search cu 'test.c' for percpu global variables.
->> [6] FUNC_PROTO (anon) return=3 args=(5 a, 5 d)
->> [7] FUNC bar type_id=6
->> [8] FUNC_PROTO (anon) return=3 args=(5 a, 5 d, vararg)
->> [9] FUNC foo.constprop.0 type_id=8
->> foo : skipping BTF encoding of function due to reordered parameters
->> [10] FUNC_PROTO (anon) return=2 args=(void)
->> [11] FUNC main type_id=10
->> [12] FUNC_PROTO (anon) return=3 args=(5 a, 5 d)
->> [13] FUNC tar type_id=12
->>
->> There are two issues.
->>
->> First in btf_encoder__add_saved_funcs(), it is possible below
->> +        /* True symbol that was handled above; skip. */
->> +        if (state->sym)
->> +            continue;
->> state->sym is false.
->> But one of true_state->sym in the above loop could be true.
->> So if btf_encoder__add_func(encoder, true_state) is successful,
->> we should continue in the above regardless state->sym null or not.
->> This will remove the warning:
->>    foo : skipping BTF encoding of function due to reordered parameters
->>
-> thanks, will fix this.
->
->> Second, we have foo.constprop.0 func proto encoding:
->>    [8] FUNC_PROTO (anon) return=3 args=(5 a, 5 d, vararg)
->> The last argument 'vararg' should not be there since the
->> optimized out argument is already gone.
->>
-> The problem here was both
->
-> 1. we weren't dealing with const values; and
-> 2. when a parameter was marked optimized we weren't reducing the number
-> of params, so ended up with an extra 0-type param on the end,
-> resembling a vararg.
->
-> Fixing both of these we get:
->
-> $ pahole -J --verbose --btf_features=+true_signature a.out
-> btf_encoder__new: 'a.out' doesn't have '.data..percpu' section
-> File a.out:
-> [1] STRUCT t size=4
-> 	a type_id=2 bits_offset=0
-> [2] INT int size=4 nr_bits=32 encoding=SIGNED
-> [3] PTR (anon) type_id=4
-> [4] INT char size=1 nr_bits=8 encoding=SIGNED
-> [5] PTR (anon) type_id=1
-> search cu 'true_test.c' for percpu global variables.
-> [6] FUNC_PROTO (anon) return=3 args=(5 a, 5 d)
-> [7] FUNC bar type_id=6
-> [8] FUNC_PROTO (anon) return=3 args=(5 a, 5 d)
-> [9] FUNC foo.constprop.0 type_id=8
-> [10] FUNC_PROTO (anon) return=2 args=(void)
-> [11] FUNC main type_id=10
-> [12] FUNC_PROTO (anon) return=3 args=(5 a, 5 d)
-> [13] FUNC tar type_id=12
->
-> ...which I _think_ is right.
->
-> I'll retest and respin; was wondering if it'd be okay to incorporate
-> the above into a selftest, as it's really useful? Thanks!
-
-Looks like current pahole tests (at pahole/tests directory) are all
-simple and using python. But true signature might be worth to have
-some tests at pahole as it is unlikely that kernel/bpf will validate it.
-But having these selftests can be a separate patch.
-
+Unfortunately there's no unmapping callback for guest_memfd to use, so
+perhaps the principle should be to put the folios back into the direct
+map ASAP - at unmapping if guest_memfd is doing the unmapping, otherwise
+at freeing time?
