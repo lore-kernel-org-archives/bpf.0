@@ -1,303 +1,190 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E7A53254A3;
-	Thu, 22 Jan 2026 17:36:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.9
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769103398; cv=fail; b=M9IpEy2pX75CpyIeK+AZpACoyXw5S/xnynY4p+4ssiJXVLcjMNXlUAzYoNQb0TL9+sx8c3n6mSdI+z56JZ3VR3amv0XMyfrz987cKSUEDUoCTnEKNT9OqXBUdJaE9bDED/SqgwVfe0bBrGSbw57cB14rByxaFLSdmRuEuI4ulSo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769103398; c=relaxed/simple;
-	bh=8cMCTbmTLrFgnOAVXWWJjSYicBvG4bUePq6gsqZcHXQ=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=lVnq/1PbwEMN0UpetFQysKIC1AhxX0lDbeCjlNc0nyew3EKTDHwwsAQxGNW0J18IUPniBZvSSDvkK80OEed3/U1TMY68GuydwQIvUOOKWwjO42BH+XSUgH2D7dZQM9lsy8alp3Li5MOI2Ux8yGzYM0T1NEDP0qG2HzzLDEe2b3I=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jRRRzKvr; arc=fail smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F4F5344D94
+	for <bpf@vger.kernel.org>; Thu, 22 Jan 2026 18:03:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769105025; cv=none; b=erThO3L8g83CAbLx1prDVx9WJt0ORD9rKMtiRuVpkQ6CzPkFaHlBw4m7EV9+jZpBToVLNwZZ0NYn6DJ7onSxO0PiifNJ9jq9TuSLdlUF8igUqNJRNI8VzONCkWYFX3lolRl8nTPOY579bCNgpYX7zEI9XZslKJAXTNil8vn4IlA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769105025; c=relaxed/simple;
+	bh=USL78qAJ3Lm44O0H4a6e2qzHduDY/Bi7UVnr9jGRahE=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Eq9Zb8Ax0xAcbsVxgnYIMS4YJLdV4ScLSiAhlblV0ESjTtZI/zUoriLw0+aOg7Z5xYsHcHwUj7BWyJDQWVwEQVMbppUt2PR21Y1JoIQdjJVjYwSZy04ctlOmJgcyeCL7mZtIc0MU9Ypns5DUhSHf4KkV5bEFxFXFDZ1umNDAD5o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IUnLikSI; arc=none smtp.client-ip=209.85.221.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jRRRzKvr"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1769103377; x=1800639377;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=8cMCTbmTLrFgnOAVXWWJjSYicBvG4bUePq6gsqZcHXQ=;
-  b=jRRRzKvrhZMA1B87dS/tc4GcBKxrACAmICNl8q6Mhx1UI1FNWFfSaWn8
-   aNBvrRSZSpUFa6PWz8TVELG5eOblmj5OB6+R6nERz9FMM9st8EsSI1z10
-   YpEALA/DX7Re/6DWwM1Yj6IxMq6mMISmXX8Xnjs84TfsDeVheBebypkgv
-   bByxFMyPZ95iweew6WiWVlfBfJehoO9gCBOfHtsNaL7llwG08Pqlfp3FY
-   rAEZTv849HuANMVCo7z3dVSX/MclM3rNReg/EIRCsIsk1wxSFhNC/fm/u
-   WNpdvxvygNDp7FR2HbyFxNel/BlxqB7pW5CxVaGfurQNBYl3bbURNoZql
-   w==;
-X-CSE-ConnectionGUID: 2HjA5mKkRuKom8+CoFaWPw==
-X-CSE-MsgGUID: HU6txiYNSH6t8iEkpGHg8w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11679"; a="81072053"
-X-IronPort-AV: E=Sophos;i="6.21,246,1763452800"; 
-   d="scan'208";a="81072053"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2026 09:36:08 -0800
-X-CSE-ConnectionGUID: ft2IIORnRQO2c0XFZCbm3A==
-X-CSE-MsgGUID: 4qptPPTFSbi5q5dMwlm0eg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,246,1763452800"; 
-   d="scan'208";a="238054007"
-Received: from orsmsx902.amr.corp.intel.com ([10.22.229.24])
-  by fmviesa001.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2026 09:36:04 -0800
-Received: from ORSMSX902.amr.corp.intel.com (10.22.229.24) by
- ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.35; Thu, 22 Jan 2026 09:36:03 -0800
-Received: from ORSEDG903.ED.cps.intel.com (10.7.248.13) by
- ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.35 via Frontend Transport; Thu, 22 Jan 2026 09:36:03 -0800
-Received: from SA9PR02CU001.outbound.protection.outlook.com (40.93.196.70) by
- edgegateway.intel.com (134.134.137.113) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.35; Thu, 22 Jan 2026 09:36:03 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=mmoJnJvYJHYet8bQaQwDPNm2IKvwJ5u8EPVsU6246lA3lQ6x1JJpVZwLEtBglILggYrZ9ySTPnOsjAhdTUIQs7VPe93EU2KBmkv9ap18biCI+iLumQEXOcodnpwRU9FqmzPB+3gHeBRGC67tu+NQOOjc15tN6v47Ln4l6+8Aa4+aMmy5HLklYEGkDqcDJZ+rs79aHfc01SRN2aaBWUR3he6iEayd3f1UqH0lcVEkuwKEEXqenRUMPqJpghIacb4z3ioPflH3ruA9yCRwcNHk//1YPHui58JiDcHDHLBh8T4pq9kwatKDyu15lLvYxMW8DAp9Dr+WRnDPHlO6phTYog==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8cMCTbmTLrFgnOAVXWWJjSYicBvG4bUePq6gsqZcHXQ=;
- b=v8ZjGSvbIE9KVqYn6Mo4in5vehg4niBT1HLGoRkDd8NBWXVXKJSpSol1LW/SdaAcbJHnzEL577v1zsDGYChzdv6T6h4mT0fTL++e6xze/csHoNcojO6z4HSVjx4UrkfuxrPwPPGLEJ3lMy3Pvytq1tyD3daiaHLrdkLHdy9lQvxYraSHgGS/FbGVAiOtIqsKYdLofAsJdVgEuUK0rcK0h/fw4aMcVpPhQNVFeA71ACWVakNP9f/uX/+9oRtoFcfQ3PIhb2v9WIbtl9SeahcfoW23+No6aeCPGSQXTxGs7xJ9hvTCP/cBq6knMjH4Z+YnNbWLZs0/xUZnuRC3Wm4pAQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from MN0PR11MB5963.namprd11.prod.outlook.com (2603:10b6:208:372::10)
- by IA1PR11MB6321.namprd11.prod.outlook.com (2603:10b6:208:38b::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9542.11; Thu, 22 Jan
- 2026 17:35:58 +0000
-Received: from MN0PR11MB5963.namprd11.prod.outlook.com
- ([fe80::3ad:5845:3ab9:5b65]) by MN0PR11MB5963.namprd11.prod.outlook.com
- ([fe80::3ad:5845:3ab9:5b65%6]) with mapi id 15.20.9542.009; Thu, 22 Jan 2026
- 17:35:58 +0000
-From: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-To: "ackerleytng@google.com" <ackerleytng@google.com>, "Annapurve, Vishal"
-	<vannapurve@google.com>
-CC: "david@kernel.org" <david@kernel.org>, "kvm@vger.kernel.org"
-	<kvm@vger.kernel.org>, "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-	"svens@linux.ibm.com" <svens@linux.ibm.com>, "jgross@suse.com"
-	<jgross@suse.com>, "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-	"surenb@google.com" <surenb@google.com>, "vbabka@suse.cz" <vbabka@suse.cz>,
-	"riel@surriel.com" <riel@surriel.com>, "pfalcato@suse.de" <pfalcato@suse.de>,
-	"x86@kernel.org" <x86@kernel.org>, "rppt@kernel.org" <rppt@kernel.org>,
-	"thuth@redhat.com" <thuth@redhat.com>, "borntraeger@linux.ibm.com"
-	<borntraeger@linux.ibm.com>, "maz@kernel.org" <maz@kernel.org>,
-	"palmer@dabbelt.com" <palmer@dabbelt.com>, "ast@kernel.org" <ast@kernel.org>,
-	"pjw@kernel.org" <pjw@kernel.org>, "alex@ghiti.fr" <alex@ghiti.fr>,
-	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-	"tglx@linutronix.de" <tglx@linutronix.de>, "hca@linux.ibm.com"
-	<hca@linux.ibm.com>, "willy@infradead.org" <willy@infradead.org>,
-	"wyihan@google.com" <wyihan@google.com>, "ryan.roberts@arm.com"
-	<ryan.roberts@arm.com>, "yang@os.amperecomputing.com"
-	<yang@os.amperecomputing.com>, "jolsa@kernel.org" <jolsa@kernel.org>,
-	"jmattson@google.com" <jmattson@google.com>, "luto@kernel.org"
-	<luto@kernel.org>, "aneesh.kumar@kernel.org" <aneesh.kumar@kernel.org>,
-	"haoluo@google.com" <haoluo@google.com>, "patrick.roy@linux.dev"
-	<patrick.roy@linux.dev>, "peterx@redhat.com" <peterx@redhat.com>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"akpm@linux-foundation.org" <akpm@linux-foundation.org>, "coxu@redhat.com"
-	<coxu@redhat.com>, "mhocko@suse.com" <mhocko@suse.com>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"mlevitsk@redhat.com" <mlevitsk@redhat.com>, "jgg@ziepe.ca" <jgg@ziepe.ca>,
-	"loongarch@lists.linux.dev" <loongarch@lists.linux.dev>, "song@kernel.org"
-	<song@kernel.org>, "Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>,
-	"oupton@kernel.org" <oupton@kernel.org>, "kernel@xen0n.name"
-	<kernel@xen0n.name>, "lorenzo.stoakes@oracle.com"
-	<lorenzo.stoakes@oracle.com>, "peterz@infradead.org" <peterz@infradead.org>,
-	"Jonathan.Cameron@huawei.com" <Jonathan.Cameron@huawei.com>,
-	"martin.lau@linux.dev" <martin.lau@linux.dev>, "jthoughton@google.com"
-	<jthoughton@google.com>, "jhubbard@nvidia.com" <jhubbard@nvidia.com>, "Yu,
- Yu-cheng" <yu-cheng.yu@intel.com>, "kvmarm@lists.linux.dev"
-	<kvmarm@lists.linux.dev>, "eddyz87@gmail.com" <eddyz87@gmail.com>,
-	"hpa@zytor.com" <hpa@zytor.com>, "yonghong.song@linux.dev"
-	<yonghong.song@linux.dev>, "linux-doc@vger.kernel.org"
-	<linux-doc@vger.kernel.org>, "shuah@kernel.org" <shuah@kernel.org>,
-	"chenhuacai@kernel.org" <chenhuacai@kernel.org>, "prsampat@amd.com"
-	<prsampat@amd.com>, "kevin.brodsky@arm.com" <kevin.brodsky@arm.com>,
-	"maobibo@loongson.cn" <maobibo@loongson.cn>, "shijie@os.amperecomputing.com"
-	<shijie@os.amperecomputing.com>, "suzuki.poulose@arm.com"
-	<suzuki.poulose@arm.com>, "itazur@amazon.co.uk" <itazur@amazon.co.uk>,
-	"pbonzini@redhat.com" <pbonzini@redhat.com>, "yuzenghui@huawei.com"
-	<yuzenghui@huawei.com>, "gor@linux.ibm.com" <gor@linux.ibm.com>,
-	"dev.jain@arm.com" <dev.jain@arm.com>, "daniel@iogearbox.net"
-	<daniel@iogearbox.net>, "jackabt@amazon.co.uk" <jackabt@amazon.co.uk>,
-	"agordeev@linux.ibm.com" <agordeev@linux.ibm.com>, "andrii@kernel.org"
-	<andrii@kernel.org>, "mingo@redhat.com" <mingo@redhat.com>,
-	"linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-	"aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>, "joey.gouly@arm.com"
-	<joey.gouly@arm.com>, "derekmn@amazon.com" <derekmn@amazon.com>,
-	"xmarcalx@amazon.co.uk" <xmarcalx@amazon.co.uk>, "linux-s390@vger.kernel.org"
-	<linux-s390@vger.kernel.org>, "kpsingh@kernel.org" <kpsingh@kernel.org>,
-	"kalyazin@amazon.co.uk" <kalyazin@amazon.co.uk>,
-	"linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "sdf@fomichev.me" <sdf@fomichev.me>,
-	"jackmanb@google.com" <jackmanb@google.com>, "bp@alien8.de" <bp@alien8.de>,
-	"corbet@lwn.net" <corbet@lwn.net>, "linux-fsdevel@vger.kernel.org"
-	<linux-fsdevel@vger.kernel.org>, "jannh@google.com" <jannh@google.com>,
-	"john.fastabend@gmail.com" <john.fastabend@gmail.com>, "kas@kernel.org"
-	<kas@kernel.org>, "linux-mm@kvack.org" <linux-mm@kvack.org>,
-	"will@kernel.org" <will@kernel.org>, "seanjc@google.com" <seanjc@google.com>
-Subject: Re: [PATCH v9 07/13] KVM: guest_memfd: Add flag to remove from direct
- map
-Thread-Topic: [PATCH v9 07/13] KVM: guest_memfd: Add flag to remove from
- direct map
-Thread-Index: AQHchnGR8zlgd593vU675Y8ML/1Q0bVT2boAgAE04ACAAAZHAIAJWwcAgAAOpYA=
-Date: Thu, 22 Jan 2026 17:35:58 +0000
-Message-ID: <ee9c649eed3893d852c3d20fb96bdc4904b7c295.camel@intel.com>
-References: <20260114134510.1835-1-kalyazin@amazon.com>
-	 <20260114134510.1835-8-kalyazin@amazon.com>
-	 <ed01838830679880d3eadaf6f11c539b9c72c22d.camel@intel.com>
-	 <CAGtprH_qGGRvk3uT74-wWXDiQyY1N1ua+_P2i-0UMmGWovaZuw@mail.gmail.com>
-	 <8c1fb4092547e2453ddcdcfab97f06e273ad17d8.camel@intel.com>
-	 <CAEvNRgEbG-RhCTsX1D8a3MgEKN2dfMuKj0tY0MZZioEzjw=4Xw@mail.gmail.com>
-In-Reply-To: <CAEvNRgEbG-RhCTsX1D8a3MgEKN2dfMuKj0tY0MZZioEzjw=4Xw@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-user-agent: Evolution 3.52.3-0ubuntu1.1 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MN0PR11MB5963:EE_|IA1PR11MB6321:EE_
-x-ms-office365-filtering-correlation-id: d4da2268-3ee9-4c00-6122-08de59dcb463
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|7416014|376014|366016|1800799024|38070700021;
-x-microsoft-antispam-message-info: =?utf-8?B?YnNUM1E5TXpZSVh2Y09nOWJUQnE0dWhmUFpXckdCdDhDVGZyRkE4UFdtQU8x?=
- =?utf-8?B?b1hVc1hOK1NNSFBuTGhSbVo5UE8vMENvaEhkZkE0SWgzQmdTVDJOSnhOY1hI?=
- =?utf-8?B?QlI2WEx1cDdYYnNJZ2NSL0xBSitrczYzMm9nelZrWk5UTXdZVEJNdjMxbC9V?=
- =?utf-8?B?RTZoQ1VVTnVIUXc1V0NuS0xYMTdNYUprM1FRaUtRalpzam5jNnlEcW93NjFI?=
- =?utf-8?B?MFBlRWxBQzlIaVdDajlmam9qRXd5aWowNzJrN0J0WVFaOGkwVDdjMGNwdVlE?=
- =?utf-8?B?eHlSWnNnbDM3MG1sbmRhOHZGQ2cxMjgvUTFrNVczSnczOGliQlFyRUxDTmNq?=
- =?utf-8?B?TDlnK0Y2UDRZQS9CUGtvamEvRVltdU1keHBtZm45a1BiUFVrdWZzc1B4VE9U?=
- =?utf-8?B?NHJPVDhhY2UwU1BxWS9rSlRtNmg3cHdZN3dUaWZqR251MDk2ZUQ3NFYrSHkr?=
- =?utf-8?B?UnhsSzYvRFBBOUlUWWZISjk4Rk9YQUNYZzNucjFZQ0hoOTNhenVMS2pKb1Bs?=
- =?utf-8?B?OGJwRVlZYmJVTWM3Q2tYWXJCV2RuRlFETG1FTEgxd0dIRk0xMHg3b1hXTVNB?=
- =?utf-8?B?N2tnWTNuZHlWNzU4eEpTRVd4QkZnZ1l3eWRoa2lTUUJvZm1EYVp5WTZvcUlU?=
- =?utf-8?B?ZjQyclBNaEpuT3pua0xKTUY2czUwOWxMMnFJWHRaTXNSRnlUK0Rza1dJREVU?=
- =?utf-8?B?M2NISzFUbVA1c3RRM1lZL1ExUXBjUDNRN1A5dDIxMW44NXE3cWRDell1Mml1?=
- =?utf-8?B?d1Jyd1hFVzdqcVI3NFB2c2tGSWd2WjVlYkI2OGdJSXRSSWNIRnFPN0FEUDRh?=
- =?utf-8?B?VHJCYTRWSGZMMWhDSUg5SjU5Z2ovdm5iTnc5eHpzN3gvcitJTzN2ZmNhQ3Q4?=
- =?utf-8?B?bHBZbFpjN2p0dEdMWmZlUUJoZXk1REpydDh2dlMxaXRwMzBvTTdJR25yNVVD?=
- =?utf-8?B?YjR1T242ekYzeVdtL0ViQXFLNFdMUVhybGZpWHZSMG9Hbk5ZamFRY2xhUVdQ?=
- =?utf-8?B?bkdNMEo3OHo1Szd5WmNZZWIwc0Jjbi9GQXVxV1kwWklKRFBrdk16MTRRU3oz?=
- =?utf-8?B?UklLRzk2SE5IVmJMVmRLazM3c2dkZ09qaEhJODNOU0gxQVQvcFJrQTVpeXI3?=
- =?utf-8?B?NHIyMTNudUNKbUxRd0krQ2psNEpDdnBtaTJ1M2hDMER5RE5xRUloQ2V3d1Fm?=
- =?utf-8?B?ZWwzZ3pTSDYzZHBMdVNsQXBKTFRoQ2YzUmFCdDd1aCtaY0dWWmtld1ZLQ0dj?=
- =?utf-8?B?Wm9RMnN2SlVJajdhdjFZN1ZRUU1wVUR0ckFtM2ZISGpsSklTUU8wWGVlMkFE?=
- =?utf-8?B?UjVJejZ2UUF3bWhKTnBtQ3gxUExDVXQwN0NxSFAvcFFZTEhkc2x0OUVOcjFp?=
- =?utf-8?B?NStacEttU3ZCVTd1OGNKZHFLS2VaM0dUUG9nRFltK1psbEg4QUE0MTJYaVli?=
- =?utf-8?B?cEV2U2pYZmhyMjlMMWdsck8zYk5zYjVPbzQxdlA5ZzJjN2JXY1g1N0pLWk9U?=
- =?utf-8?B?YnhvaXc5MDZOc0wwWjMyMWJiMUdhNEsySVRGZ2liaDAxb1hvZCtMWHNqWnRR?=
- =?utf-8?B?dGo3bjdQL3E1d2FzZzM3Q2N1Vk5IMWd0dlBVdHRJU1JkbHNTS3MwaVY0emFJ?=
- =?utf-8?B?OGVMdEtYdGdJc1ZDaVFQQ1Q0MUdnYWc4MGZDUWtVd2k2ejFpMkZZTmlHTDUx?=
- =?utf-8?B?VjZhVE1jeTdZb0tINDN4dGlzRklmNDhUQ0t2eDJ3Ky9zSm9IcVIzei9ITDR0?=
- =?utf-8?B?OGJEK1ZmRVozaGpjdC9scENFajBRL1JyNW9kZVo3dGlFMTAzK3FISENQMzF2?=
- =?utf-8?B?ZjlybUhUUGZ4SmhlRVB6MzVMQmIwR1JTS0I1eHRkNGZqU0Nnb2NhcnVERFp5?=
- =?utf-8?B?Z3F5UERJVHFoWkZkbDlTV2JNeEppL09aNVdlMGFNdVNoaXB0L2dvcmtrSS9q?=
- =?utf-8?B?Q1ZvWFlsd0pxdUVFSExleTVobzV3RHhOYllzRVJ4VkQxZnNuVHlEa216QnBV?=
- =?utf-8?B?ekhDWHpjOFpIYnVid0FyLzJoN3hMS2lpV0lTQnhUeEk3ZUN5ZDMwakFDM1JJ?=
- =?utf-8?B?VGtrZlhlTjBLUU5rMVh3aGo0aE96QitrMmY5dU1kNGtUWmFGdVhPSFdFRU9T?=
- =?utf-8?B?Zk9qL2pYZ0pLZkVaNlc4R2wyVzk4azMxZkxEWnpZek1EQmVJUHZ5TlJzOGhI?=
- =?utf-8?Q?ywX3urLMK+u7dBSYmu8MgCI=3D?=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB5963.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024)(38070700021);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?MFk0RGdPOEZGbU91anFHWVF5YTVBc3c0SDhKekF0amZkTWNkRUEvSXhLV28y?=
- =?utf-8?B?dTFlcnIwUjhSTXRteUJwaEN3cEplSE9qUzJ3eHdrYnliMmNFT3h5MnlRa2xU?=
- =?utf-8?B?bHd3azdzRHU1cXFNL090VHZ6eXNGc3BicDgvU0l1WHhKUG94QUhlZE1oMnpR?=
- =?utf-8?B?QzJmU0xlOCtJNkhnUHVpNW4xTWZsaDZPcU9pOU40N2w2T3NpQlFYOHBNdVNi?=
- =?utf-8?B?Z210WDdEU2Z5aWpCZmlIaXRTM1c3ZXRqZnJXV0lZb1RpVGlkYXNxcXgzV0xW?=
- =?utf-8?B?K0lLemtlUExPRnRIcjB6ajg4M1BTakh5ZzkwN0h3aGNnUFlSTU5ZY0ZxcGN1?=
- =?utf-8?B?K2tMamRNN1liTFFJWEpacy9kRGxHSkJRdXc5cjJBYXVMMHoxM0RpdXhoRmFZ?=
- =?utf-8?B?VUllamErNURBRU9wS2VtT2lPRGdVOGtDQnNPYXl0eEdUcHM5dFFDMm1PL09u?=
- =?utf-8?B?WXpBNGVyY3luMkNBdE54YzU3WHRud0RkVVhrZGtGM0l5MGRQSGdvN0lSSjVX?=
- =?utf-8?B?azlpSjFadENtNjltYmxGVSt2cFVDUC9NVlVRS3k5MXY0Vy9oTzh3QVkrOHFK?=
- =?utf-8?B?YkhoWUwwblFYNi9PM1pxVlI2RzllRzhIR1JqYjg3S05BT0pQRWlFSy9veWpC?=
- =?utf-8?B?eDBUU0FNS00xUy9JbFo3OUJZQXFLZTB1cWhvd0dPcExTR1IyQUpiOGdCRnRN?=
- =?utf-8?B?dHdaTDI0NS93QjhkYUZDOVVQTnhzeklhZlFQWC9NSWw1YytMRDRMMjRnUFhZ?=
- =?utf-8?B?anE0RkZoZU4xRG1La2JBYW5Kdm5Pb2E2a0FyMFpIU1M1MEtpUzRoS0dvcWxB?=
- =?utf-8?B?WG45UEJIUTJCMGZpNzlrM2Z6NjRaNWhpWTE2Y0pTcUZDZFFHU0EwOG9nb2Nh?=
- =?utf-8?B?ZEl3eEdtUDdqRjVKeUYxVGwyYW5TWHV0Z1JwK1hQN05OSzBENkFMa2dRYmhn?=
- =?utf-8?B?OWJwdWk5dmRDS1IwWW0rckJKSUlIR0Qzb1p3akhvWFovNTlTazh2WlpIWWxQ?=
- =?utf-8?B?MDRqS0xtUHIwSkRncDBsTlR1R0xIb3JUQzkxTWxvZ21xcXRvWjkzTnZyUXJP?=
- =?utf-8?B?WXJYV2xYRUZ6Z25aTkg4bXlyMlJ4YVU0bXFxYXpPZ3RzYXhFR1ZVVGMxYWxB?=
- =?utf-8?B?SlRGZHJBdEJmR1E2QnRZZjRUUFNuMVM4NVpiSlBBM1FmY043VlB3bjVYWWt0?=
- =?utf-8?B?eEpRVXZHYTc0blJrbU5KclZFVFk1b0JXaDY3OGdRZVBRMEpndGVKMVFxVTVm?=
- =?utf-8?B?U3ovSGMzSmUxMzNwV0MxNk5TWTBFVDRqUFVDWTRQajdOakphTytqYklicW5z?=
- =?utf-8?B?WXJ4dWRzelZPM20vbzNlVHhKbXZZZ1hScGFJR0VkNFlZeHNsK3lSaGNHTUpH?=
- =?utf-8?B?b2VNMHhlMk54clIzZDRTRHlINDNta3NzaXJtQTRyVE9JMFZqbEJwTHN3NE9r?=
- =?utf-8?B?czY1K0pISXlwdXNka05KT1hBcDYyYkpzVE80bzVnQ0g0c0dXaUxLVjhEZElO?=
- =?utf-8?B?OHNZbzZsQlR6Uk5GV1dSQWErNnk5NU41UnpjVGlHMDd4YnR0S0x5MjhiY210?=
- =?utf-8?B?TnBVakVwNlhielhRTFRlQzB3cis5MUZwVkg2ZjF5UGRwZFNuSGRwV05mMGlG?=
- =?utf-8?B?WDlIMks3QW5XdlArbHc5azQ3Y0h3SzYzU2ptM1l4dnZxZUJxZUcxbmRUbGVt?=
- =?utf-8?B?dnRLc0MzRkdXakJ6ZTNETmlQME1qYmxzZmdzMXZCWlVZMzl3c1dLbCtWR29N?=
- =?utf-8?B?Y0N5eU52QTVidWd4cU5UOGxVeFIxRENic29BQUhMNWd6b1UvdlhzNkxmMVRq?=
- =?utf-8?B?MmxaL2lqbmlBTDBZcjNmbUpjMXg2ZVVqQjFNckNKaUNSOXFBZDhqUmV4cTlF?=
- =?utf-8?B?dFBoY090Vk52dTRtamdQbnVKWFhuR1dlRTlkSUtKZjJ0eHFxRENPZHF3alBt?=
- =?utf-8?B?TTJoTGlEbU9CcWhIZmpPa1FVVER6bHpPczVsb2dTVEZnSjNrMkQvN1dxVWZ1?=
- =?utf-8?B?MzJiZVZ5ZG1JUlIrc1dwalh5ekw4R2doNnB6QlpYWFI0RTlPVDZOa2JJZEk5?=
- =?utf-8?B?blozTUxWUXUxVWZjbnd0aDUzWUR6ZzV4bEEyWGEyVnh0WHVTMmxmVzUxK3Zw?=
- =?utf-8?B?bnlESHUvazNlbUphaE56bDRQd21hWFoxV0QraURlYVlVVTdHR1cyeG5ReHI5?=
- =?utf-8?B?QXd1a3RWTXBvSUdwNFVWYjdzVG9CNFd5aVQ4Q3Q0dnMwR0lNa1Q0VWNkZXVz?=
- =?utf-8?B?OEM4TzlqNzRwLzMxT2RGbDJwSVQ1M0VxWHlXZUZRWlpTL2V2eTJyVXByT2d2?=
- =?utf-8?B?Q1RQSE1VV1d4N2ZmdHBmNC9RMmZNSFNyczU0UUJSMzUyV1VJOXRKRmM0Ly8x?=
- =?utf-8?Q?XNwtCUIGbWdztvvc=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <20EA4C40EE3F6344AD3A613DDCF3F53E@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IUnLikSI"
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-430f3ef2d37so1096701f8f.3
+        for <bpf@vger.kernel.org>; Thu, 22 Jan 2026 10:03:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1769105015; x=1769709815; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=UUwMbRGyh08YJmW5R0bfe5Ly7fktsXWYmyQS/5HQGSY=;
+        b=IUnLikSIC0NWmpMSlzzNV7m9sEH/mUClc5Iz+J+zngwrWXQW63k8ZfJY5UncRE5JaE
+         T6ZxKWRzOGHoIWi/3TckQWUxXPGI4y9uL03SXpoc+HAa4gXheuPgEF+H3nAHBdPijt/e
+         KP9xj238G+chxyQGEcJuxdMyyIdH395zAdrVxylinGojlSVlPHU9pvla6anKIuMW8RbW
+         ZVjgjkLQI5zwS9h24hbwYtVGrGFj5vsP334pkmBjefZdcXNPciId66GTXSTajDFl/gqx
+         a6ME/0IdDodDv4pUS9kpFU5zx1sNLhB8jEvNzNPlhvWCNigkA/e+32K3Xg42IonbBK04
+         gZiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769105015; x=1769709815;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UUwMbRGyh08YJmW5R0bfe5Ly7fktsXWYmyQS/5HQGSY=;
+        b=F5+MUFyXp/GWPTANZeE4KQsnS9/rF66hHxmAKKlXscQemSjptpv8RoUtcvMg736nGQ
+         45SHwevkas31pe8N+KHXYMpcZqRfpu1GnV9Anp4BwXuSYlCf5pBjGuqJSdXp9z9YoRqX
+         ERIFci5+XNOGoeeWIUtAgs5taH0nnEG7rNji37G5PzOd45M0elvc+7h+4PA5Kyajyo8a
+         4AlOoSPbbrPDDVYuXNWKSC02/0LxDvJ1y7fyN6/mGvSURt+tRSkamFsk/8k6Fp+uKNzC
+         LGF+WDOzfRyfsmH1rtEuQqzSv2V6FFuNjoV9ainvw1UyS2HW3/ztz4iO5wmZ3eDrihpr
+         MCCw==
+X-Gm-Message-State: AOJu0YyhiNUdKztJnYiX5yxDw6Ae1uAP1hSdhTMPecpwnGwT9Us6kOPn
+	OYaqRyEk6zG/te1Y/c4zsATeVrEnnbGq6qyzVOyVCngnU8Gwi5aCQXkI
+X-Gm-Gg: AZuq6aI7AgEd5oIxaG1Km3cqQNJ0Eo9iTLi1frG5lP93FpwKcOGjQMNg6oHQZbx5hQ/
+	28OyK4D1ug45o7QyEXCySLkh1DQ2Ucx7x4ScIXEygd03iulSCIHm5Pkoq7tC8qmZ9CP9go6f6sA
+	xc0IrfJT5drFJJd5htjjg+avZIvSy50/AS4oMuszvs116/nU5EmTNxgfYNkxpkiSG8Tf/jSzMv9
+	nKbMjZTmv2qhBCa/U1VodMLdZ05oUR1K6t/sYe3rRAKdV5ciVdLzCZCHgFBWVjQQftWYNgNx81s
+	1HZnyJM5C3hZxl7FykZB+f/b0bLZXg71A8YT42KCG8vxu2q9V6h/ivGZdIeV33sPTFan5xMZ8kO
+	nzaNuDhhvpLy9EtLaZk12Pk4s1pQZIa3Rwnr4KyuEwdz1psljd4bS+9YGZQqsSDZnoKtNo82ux1
+	pARI2GigY/snyi
+X-Received: by 2002:a05:6000:288c:b0:430:fc5a:40ac with SMTP id ffacd0b85a97d-435b160615emr774256f8f.54.1769105014904;
+        Thu, 22 Jan 2026 10:03:34 -0800 (PST)
+Received: from localhost ([2a02:8109:a307:d900:df8b:2445:a6ca:bb5])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-435b1f7474csm310447f8f.37.2026.01.22.10.03.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Jan 2026 10:03:34 -0800 (PST)
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+Subject: [PATCH bpf-next v7 0/8] bpf: Avoid locks in bpf_timer and bpf_wq
+Date: Thu, 22 Jan 2026 18:03:13 +0000
+Message-Id: <20260122-timer_nolock-v7-0-04a45c55c2e2@meta.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB5963.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d4da2268-3ee9-4c00-6122-08de59dcb463
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Jan 2026 17:35:58.7028
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: VnVxWqHCDfVhOenj/GAEACYLuEH1aEq+XC1tcC25nS/Ia2dU9KzUz4VOzZNTdSMJffhp0WIb8HNuN+wyiPlrueuOWRSyOznfdNJJbXBBDLE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR11MB6321
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/13O3UrEMBAF4FdZcm1k8jNJ65XvIbIkzYwbtO3Sl
+ rLL0nc3VMSay8PhOzMPMdOUaRYvp4eYaM1zHocS/NNJdJcwfJDMqWShQaMC3cgl9zSdh/Fr7D6
+ lRc8Y2xRCR6KQ60Scb/vcm4hXlgPdFvFemkuel3G673dWtfc/k0b9n1yVBBnB2UAWTOT42tMSn
+ rux33dW/WcVYGV1sUa7tkkRmsihsubXOlDgK2uK9RaSoc4QcltZe7DKVtYWy8EZREbFwVcWj7b
+ +GYtVSCYQaw8mVdYdrIbKumKdB+aUfOOjPdht274Bpg04od0BAAA=
+X-Change-ID: 20251028-timer_nolock-457f5b9daace
+To: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
+ daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com, 
+ memxor@gmail.com, eddyz87@gmail.com
+Cc: Mykyta Yatsenko <yatsenko@meta.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1769105012; l=4491;
+ i=yatsenko@meta.com; s=20251031; h=from:subject:message-id;
+ bh=USL78qAJ3Lm44O0H4a6e2qzHduDY/Bi7UVnr9jGRahE=;
+ b=AdUF3Pii56PjolQmtjxeCrJoZ0rvikVHtIy2+fLThc52ctFgftosxLpChkgRGAeeHhhYd0JbC
+ 9HOnO25KjIDAYHJgCzMAS2BtBdyH5GRQCRM7/Ql2sSu3fPEFM5zU6/8
+X-Developer-Key: i=yatsenko@meta.com; a=ed25519;
+ pk=TFoLStOoH/++W4HJHRgNr8zj8vPFB1W+/QECPcQygzo=
 
-T24gVGh1LCAyMDI2LTAxLTIyIGF0IDA4OjQ0IC0wODAwLCBBY2tlcmxleSBUbmcgd3JvdGU6DQo+
-IA0KPiBDYW4gd2UgZGlzYWJsZSBkaXJlY3QgbWFwIHJlbW92YWwgZm9yIGVycmF0YSBzeXN0ZW1z
-IHVzaW5nIFREWCBvbmx5LA0KPiBpbnN0ZWFkIG9mIGFsbCBURFg/DQo+IA0KPiBJZiBpdCdzIGNv
-bXBsaWNhdGVkIHRvIGZpZ3VyZSB0aGF0IG91dCwgd2UgY2FuIGRpc2FibGUgZGlyZWN0IG1hcA0K
-PiByZW1vdmFsIGZvciBURFggZm9yIG5vdyBhbmQgZmlndXJlIHRoYXQgb3V0IGxhdGVyLg0KDQpJ
-biB0aGVvcnksIGJ1dCBpdCBzdGlsbCB3b3VsZCByZXF1aXJlIGNoYW5nZXMgdG8gVERYIGNvZGUg
-c2luY2UgaXQgZG9lcw0KdGhlIGNsZmx1c2ggdW5jb25kaXRpb25hbGx5IHRvZGF5LiBUbyBrbm93
-IHdoZXRoZXIgY2xmbHVzaCBpcyBuZWVkZWQNCihpdCdzIGEgZGlmZmVyZW50IHRoaW5nIHRvIHRo
-ZSBlcnJhdGEpLCB5b3UgbmVlZCB0byBjaGVjayBhIFREWCBtb2R1bGUNCmZsYWcuIChDTEZMVVNI
-X0JFRk9SRV9BTExPQykNCg0KR29zaCwgeW91IGtub3cgd2hhdCwgSSBzaG91bGQgZG91YmxlIGNo
-ZWNrIHRoYXQgd2UgZG9uJ3QgbmVlZCB0aGUNCmNsZmx1c2ggZnJvbSB0aGUgdm0gc2h1dGRvd24g
-b3B0aW1pemF0aW9uLiBJdCBzaG91bGQgYmUgYSBkaWZmZXJlbnQNCnRoaW5nLCBidXQgZm9yIHdl
-IGdhdmUgc2NydXRpbnkgdG8gdGhlIHdob2xlIExpbnV4IGZsb3cgd2hlbiB3ZSBkaWQNCnRoYXQu
-IFNvIEknZCBoYXZlIHRvIGRvdWJsZSBjaGVjayBub3RoaW5nIHJlbGllZCBvbiBpdC4gV2UgY2Fu
-IGZvbGxvdw0KdXAgaGVyZS4NCg0KPiANCj4gPiBUaGVuIHRoZXJlIGlzIHRoZSBjbGZ1c2guIEl0
-IGlzIG5vdCBhY3R1YWxseSByZXF1aXJlZCBmb3IgdGhlIG1vc3QNCj4gPiBwYXJ0LiBUaGVyZSBp
-cyBhIFREWCBmbGFnIHRvIGNoZWNrIHRvIHNlZSBpZiB5b3UgbmVlZCB0byBkbyBpdCwgc28NCj4g
-PiB3ZSBjb3VsZCBwcm9iYWJseSByZW1vdmUgdGhlIGRpcmVjdCBtYXAgYWNjZXNzZXMgZm9yIHNv
-bWUgc3lzdGVtcw0KPiA+IGFuZCBhdm9pZCB0ZW1wb3JhcnkgbWFwcGluZ3MuDQo+ID4gDQo+ID4g
-U28gbG9uZyB0ZXJtLCBJIGRvbid0IHNlZSBhIHByb2JsZW0uIEZvciB0aGUgb2xkIHN5c3RlbXMg
-aXQgd291bGQNCj4gPiBoYXZlIGV4dHJhIGNvc3Qgb2YgdGVtcG9yYXJ5IG1hcHBpbmdzIGF0IHNo
-dXRkb3duLCBidXQgSSB3b3VsZCBoYXZlDQo+ID4gaW1hZ2luZWQgZGlyZWN0IG1hcCByZW1vdmFs
-IHdvdWxkIGhhdmUgYmVlbiBjb3N0bHkgdG9vLg0KPiANCj4gSXMgdGhlcmUgYSB3YXkgdG8gY2hl
-Y2sgaWYgdGhlIGNvZGUgaXMgcnVubmluZyBvbiB0aGUgZXJyYXRhIHN5c3RlbQ0KPiBhbmQgc2V0
-IHVwIHRoZSB0ZW1wb3JhcnkgbWFwcGluZ3Mgb25seSBmb3IgdGhvc2U/DQoNClRoZSBURFggY29k
-ZSB0b2RheSBkb2Vzbid0IGRvIGFueSByZW1hcHBpbmcgYmVjYXVzZSB0aGUgZGlyZWN0IG1hcCBp
-cw0KcmVsaWFibHkgcHJlc2VudC4gVGhlcmUgaXNuJ3QgYSBmbGFnIG9yIGFueXRoaW5nIHRvIGp1
-c3QgZG8gdGhlDQpyZW1hcHBpbmcgYXV0b21hdGljYWxseS4gV2Ugd291bGQgaGF2ZSB0byBkbyBz
-b21lIHZtYWxsb2MgbWFwcGluZyBvcg0KdGVtcG9yYXJ5X21tIG9yIHNvbWV0aGluZy4NCg0KQ2Fu
-IHlvdSBleHBsYWluIHdoYXQgdGhlIHVzZSBjYXNlIGlzIGZvciB1bm1hcHBpbmcgZW5jcnlwdGVk
-IFREWA0KcHJpdmF0ZSBtZW1vcnkgZnJvbSB0aGUgaG9zdCBkaXJlY3QgbWFwPw0K
+This series reworks implementation of BPF timer and workqueue APIs.
+The goal is to make both timers and wq non-blocking, enabling their use
+in NMI context.
+Today this code relies on a bpf_spin_lock embedded in the map element to
+serialize:
+ * init of the async object,
+ * setting/changing the callback and bpf_prog
+ * starting/cancelling the timer/work
+ * tearing down when the map element is deleted or the map’s user ref is
+ dropped
+
+The basic design approach in this series:
+ * Use irq_work to offload all blocking work from NMI
+ * Introduce refcount to guarantee lifetime of the bpf_async_cb structs
+ deferred to potentially multiple irq_work callbacks
+ * Keep objects under RCU protection to make sure they are not freed
+ while kfuncs/helpers access them (We can't use refcnt for this, as
+ refcnt itself is part of the bpf_async_cb struct)
+
+Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
+---
+Changes in v7:
+- Addressed Andrii's review points from the previous version - nothing
+  very significang.
+- Added NMI stress tests for bpf_timer - hit few verifier failing checks
+  and removed them.
+- Address sparse warning in the bpf_async_update_prog_callback()
+- Link to v6: https://lore.kernel.org/r/20260120-timer_nolock-v6-0-670ffdd787b4@meta.com
+
+Changes in v6:
+- Reworked destruction and refcnt use:
+  - On cancel_and_free() set last_seq to BPF_ASYNC_DESTROY value, drop
+    map's reference
+  - In irq work callback, atomically switch DESTROY to DESTROYED, cancel
+    timer/wq
+  - Free bpf_async_cb on refcnt going to 0.
+- Link to v5: https://lore.kernel.org/r/20260115-timer_nolock-v5-0-15e3aef2703d@meta.com
+
+Changes in v5:
+- Extracted lock-free algorithm for updating cb->prog and
+cb->callback_fn into a function bpf_async_update_prog_callback(),
+added a new commit and introduces this function and uses it in
+__bpf_async_set_callback(), bpf_timer_cancel() and
+bpf_async_cancel_and_free().
+This allows to move the change into the separate commit without breaking
+correctness.
+- Handle NULL prog in bpf_async_update_prog_callback().
+- Link to v4: https://lore.kernel.org/r/20260114-timer_nolock-v4-0-fa6355f51fa7@meta.com
+
+Changes in v4:
+- Handle irq_work_queue failures in both schedule and cancel_and_free
+paths: introduced bpf_async_refcnt_dec_cleanup() that decrements refcnt
+and makes sure if last reference is put, there is at least one irq_work
+scheduled to execute final cleanup.
+- Additional refcnt inc/dec in set_callback() + rcu lock to make sure
+cleanup is not running at the same time as set_callback().
+- Added READ_ONCE where it was needed.
+- Squash 'bpf: Refactor __bpf_async_set_callback()' commit into 'bpf:
+Add lock-free cell for NMI-safe
+async operations'
+- Removed mpmc_cell, use seqcount_latch_t instead.
+- Link to v3: https://lore.kernel.org/r/20260107-timer_nolock-v3-0-740d3ec3e5f9@meta.com
+
+Changes in v3:
+- Major rework
+- Introduce mpmc_cell, allowing concurrent writes and reads
+- Implement irq_work deferring
+- Adding selftests
+- Introduces bpf_timer_cancel_async kfunc
+- Link to v2: https://lore.kernel.org/r/20251105-timer_nolock-v2-0-32698db08bfa@meta.com
+
+Changes in v2:
+- Move refcnt initialization and put (from cancel_and_free())
+from patch 5 into the patch 4, so that patch 4 has more clear and full
+implementation and use of refcnt
+- Link to v1: https://lore.kernel.org/r/20251031-timer_nolock-v1-0-b064ae403bfb@meta.com
+
+---
+Mykyta Yatsenko (8):
+      bpf: Enable bpf timer and workqueue use in NMI
+      bpf: Add verifier support for bpf_timer argument in kfuncs
+      bpf: Introduce bpf_timer_cancel_async() kfunc
+      selftests/bpf: Refactor timer selftests
+      selftests/bpf: Add stress test for timer async cancel
+      selftests/bpf: Verify bpf_timer_cancel_async works
+      selftests/bpf: Add timer stress test in NMI context
+      selftests/bpf: Removed obsolete tests
+
+ kernel/bpf/helpers.c                               | 447 ++++++++++++---------
+ kernel/bpf/verifier.c                              |  75 +++-
+ tools/testing/selftests/bpf/prog_tests/timer.c     | 250 +++++++++++-
+ tools/testing/selftests/bpf/progs/timer.c          | 118 +++++-
+ .../bpf/progs/verifier_helper_restricted.c         | 111 -----
+ 5 files changed, 657 insertions(+), 344 deletions(-)
+---
+base-commit: ba335bf3a5b8c5f47d56e9be3f96e0989dad5346
+change-id: 20251028-timer_nolock-457f5b9daace
+
+Best regards,
+-- 
+Mykyta Yatsenko <yatsenko@meta.com>
+
