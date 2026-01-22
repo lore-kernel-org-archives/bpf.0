@@ -1,86 +1,85 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A56FB38A2A1
-	for <bpf@vger.kernel.org>; Thu, 22 Jan 2026 16:58:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D35773542C4
+	for <bpf@vger.kernel.org>; Thu, 22 Jan 2026 16:58:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769101090; cv=none; b=haiwYQ66aVIsamFYXahAsEMlV+rkANHeX/Qr4+LWOmXLlPJVLQ33gltt2bsPINbHC0fjB376THWkPbG/qJ+lxeKB7jvCoe2kIKK8tFDBGYXB9FRyOBkkOEEydDolGL+May1Hhwkc3q0m1EOualtcvUlnNI/imB3Ro1zmIKZ1d0U=
+	t=1769101096; cv=none; b=XQSq2VyowD0Pg9L1kaRLsJM2FvL25iGFc+W7kIwIUzfDBTjST99j/tULvmYHgIA4FCROaIzr4ILeCCg6sr1AvZ0i5Cu8Mt+IbjownYOhjf3JgL0BDGELovBoxN3aL7eipap0vGcNiUxXsI3Tmq/SSV84a2dvh9aaao0ZVGBUqhk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769101090; c=relaxed/simple;
-	bh=ZWatjv+uZ3iWNVGalmiW36fsVICZR2Nk2dnCfsVLMR0=;
+	s=arc-20240116; t=1769101096; c=relaxed/simple;
+	bh=WZtRP/ykoFOzI67UhM+u5hl2WVDrIMN6nCJhl2AxgqY=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=kY2bMnp0bwgCFA0PX3ZcUGS6UCVf7ZBV1KNPEitm9h12iPOWKd+MvvcoGWItWmjAak+El0dJ5/db+t6FeTGRFFL3wA8cSnxIwkKzf2a1GFrMAo8jbDqgNJ7qKXaY9vYs7XKN2m61tRKETBpA2+F0hbs6Q53Mu9CsjCriNqRYaEM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kZUSMd+X; arc=none smtp.client-ip=10.30.226.201
+	 Subject:From:To:Cc:Date; b=grfpG7Wgs+aGZFC/Iq/CnokpVBRfWgLzx2n5YLKkTcjBWuDbEiyBFAacHM7wteLj9pjZzGQhdc6TPAO1a585x+tZMh7ps5ZQdQnm3IdogvjX/CFinIHFpmVExRVZ9tXiekVSrOnEW0ReHEBtvIgg5V1NQi7KyODXaj8EjsIUZOw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XPhWHpGs; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kZUSMd+X"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04831C116C6;
-	Thu, 22 Jan 2026 16:58:10 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XPhWHpGs"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEF33C116C6;
+	Thu, 22 Jan 2026 16:58:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769101090;
-	bh=ZWatjv+uZ3iWNVGalmiW36fsVICZR2Nk2dnCfsVLMR0=;
+	s=k20201202; t=1769101094;
+	bh=WZtRP/ykoFOzI67UhM+u5hl2WVDrIMN6nCJhl2AxgqY=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=kZUSMd+X3KssbhWp+2p6F5GXZF6MA42oc93eLIv8XNB/nlZ4H589RW5NFkmm8Cm9p
-	 Xkx4nXQx95ea/RY0gsVDd4itpNNvNSdhkwlkSfbNTjdweHUQbRXZJM4Q+4+sKWCCCs
-	 sGcZhJhjWVlEtBTydWkfymR4fj8xZmrIGG6Ki6FV6i54hc0G/TwWa/Kwb8PlPFpUhx
-	 Qbw3gZ/JqaS2QJBfFgmvq/1cB4s574PgLtJiwgSE5Um9PTKor8NXj7yS4nGmVTJOyt
-	 iFqOBgBxTPgYBOQ8wUgW5cbmEl9NMf1Duu7Q1khlrNE6+65oAJsa9wXlnu8wQ3VbyV
-	 QImwbtQsFPAUQ==
-Content-Type: multipart/mixed; boundary="===============5850965550779422075=="
+	b=XPhWHpGszmaO5Q/u//5qeuewibh7LkGPHK9wgBWNgg/kCKaEc10Cr5PUhItZfcrMz
+	 XfM1czXsCL0OecB9p8SQW7Cj9iM9vMZ17fLvJ05GKY8U3FOoT4e0gYlUG5ysBN4zU2
+	 9vDWV86mdy0Smdy7uIOTVNgC2L+VXfTBrlvQDdQ5ROxF8JtjQBE+aXpQ/hRdOhx3Vt
+	 dGkrD1xaBIzOjnf2Rb8KxYHeiP4WgQhr7Mlh9RHY/yF9RPBLnPYSSbKjgHWqmWMDhp
+	 yFkXEX14+1cN4HhkEzF5JAoTN4Fmp4gkORqu29XK7uSbXbdZhnVQdzlZw9p/rmJPAA
+	 b8FSlYAjB+cmg==
+Content-Type: multipart/mixed; boundary="===============7114721203286322488=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <161065237f7ad567f93be5052ac9f15673909e5089388f71fbdf8ddd5dbed49e@mail.kernel.org>
-In-Reply-To: <20260122160131.2238331-8-etsal@meta.com>
-References: <20260122160131.2238331-8-etsal@meta.com>
-Subject: Re: [PATCH 07/13] selftests: bpf: Add ASAN support for libarena selftests
+Message-Id: <fc73fe661a977aa87f21e92e96bfd4e63bcaa54c5356627257a8d485dc515821@mail.kernel.org>
+In-Reply-To: <20260122160131.2238331-7-etsal@meta.com>
+References: <20260122160131.2238331-7-etsal@meta.com>
+Subject: Re: [PATCH 06/13] selftests: bpf: Add arena ASAN runtime to libarena
 From: bot+bpf-ci@kernel.org
 To: etsal@meta.com,bpf@vger.kernel.org
 Cc: ast@kernel.org,andrii@kernel.org,eddyz87@gmail.com,daniel@iogearbox.net,memxor@gmail.com,puranjay@kernel.org,song@kernel.org,etsal@meta.com,emil@etsalapatis.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu, 22 Jan 2026 16:58:10 +0000 (UTC)
+Date: Thu, 22 Jan 2026 16:58:13 +0000 (UTC)
 
---===============5850965550779422075==
+--===============7114721203286322488==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/tools/testing/selftests/bpf/libarena/selftests/selftest.c b/tools/testing/selftests/bpf/libarena/selftests/selftest.c
-> index 2e4c0830fed9..4d7db66e75ed 100644
-> --- a/tools/testing/selftests/bpf/libarena/selftests/selftest.c
-> +++ b/tools/testing/selftests/bpf/libarena/selftests/selftest.c
+> diff --git a/tools/testing/selftests/bpf/libarena/src/asan.bpf.c b/tools/testing/selftests/bpf/libarena/src/asan.bpf.c
+> new file mode 100644
+> index 000000000000..7d39ee7b68bd
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/libarena/src/asan.bpf.c
 
 [ ... ]
 
-> @@ -211,8 +269,17 @@ static void
->  banner(const char *progpath)
->  {
->  	char *name = basename(progpath);
-> +	bool is_asan;
+> +static __always_inline int asan_report(s8a __arg_arena *addr, size_t sz,
+> +				       bool write)
+> +{
+> +	/* Only report the first ASAN violation. */
+> +	if (asan_reported && asan_report_once)
+> +		return 0;
 > +
-> +	/*
-> +	 * Check if our BPF programs are ASAN-capable by inspecting the prog name.
-> +	 * Command line arguments are guaranteed to be NULL-terminated, use strlen.
-> +	 * Calculate the hardcoded name's length at compile time.
-> +	 */
-> +	printf("%s\n", name);
-> +	is_asan = strlen(name) > (sizeof("selftest") - 1);
-
-The ASAN detection logic compares against "selftest" (8 chars), but
-the actual binary names are "test_libarena" (13 chars) and
-"test_libarena_asan" (18 chars). Since strlen("test_libarena") > 8
-evaluates to true, the non-ASAN binary will also be detected as
-ASAN-enabled.
-
-Should the comparison be against "test_libarena" instead of "selftest"?
-Or perhaps using strstr(name, "_asan") would be more robust?
-
+> +	asan_reported = true;
 > +
-> -	printf("=== %s ===\n", "libarena selftests");
-> +	printf("=== %s %s===\n", "libarena selftests", is_asan ? "(asan) " : "");
->  }
+> +	asan_violated = (u64)addr;
+> +
+> +	if (asan_emit_stack) {
+> +		arena_stderr("Memory violation for address %p (0x%lx) for %s of size %ld",
+> +				addr, write ? "write" : "read", sz);
+
+The format string has four format specifiers (%p, %lx, %s, %ld) but only
+three arguments are provided (addr, write?"write":"read", sz). Is there
+a missing argument for the (0x%lx) specifier, or should that part of the
+format string be removed?
+
+> +		bpf_stream_print_stack();
+> +	}
+> +
+> +	return 0;
+> +}
 
 
 ---
@@ -89,4 +88,4 @@ See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/21256973563
 
---===============5850965550779422075==--
+--===============7114721203286322488==--
