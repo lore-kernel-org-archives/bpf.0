@@ -1,44 +1,44 @@
 Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41105481244
-	for <bpf@vger.kernel.org>; Thu, 22 Jan 2026 16:01:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A310E4A138B
+	for <bpf@vger.kernel.org>; Thu, 22 Jan 2026 16:01:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.145.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769097722; cv=none; b=Nb3AUIbNiJCypH684zADYRW9e1ZV4WEpiUhWIdNaNAcM8q0kPOIHwcB8chvy/TveWfnrBlvcXN+WWoTyZ5ifOG2DRFrO2S6E85yU5AwPHMPJJBfYfH1QNV9DZqNdH75YWBuTMwXavY3xDVwhguv28f6oR4bQ2wEXMxgtLrHMwmA=
+	t=1769097722; cv=none; b=q18ZTDhBqBU8HR56o9biVch8oDCLYRV2OiTmS5EvSLobrmv2SC5jG8LZsRRCJnBMncsuuVKwS6oR926YDZDTVdH2yirDP228nEExlbgWf+eP5WGrs0hxrlB84YpTS6eHUH62wsOC4FEkDh937NUXx1PiT6O2H/ZMx5ymyeubDwg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1769097722; c=relaxed/simple;
-	bh=E7RtowIGn4nDXv09clmIivcZ3lhCc6PzuxUmFnFCxT8=;
+	bh=7IkLS3Bau4xgRQvvcKfOqREW/TuGgjmvT4XEZ8VMZdw=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=mLGB68WN/9R2ywdcV2UY8Pu3FGDQLqEK5op6ZThmHgNI4f3p/1OdZnE6UPkeXyf62LItAoicsMLaSFGi+8kOHWj2by3dNsB4wi8sXywJkUFWWGsOLPTL/Lp1xsRamcE7Q6yBfSGZ2aj9Z1HVGZHap2iwvt8vNc5cgSMBs0f39ww=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=IyusOf3o; arc=none smtp.client-ip=67.231.145.42
+	 MIME-Version:Content-Type; b=CgZub7OQ5/vWV8gNULx+lrXwnxSPdrcgbqTligPhDu+0rEIr7lda3AkfbbjKhyAiYBg9FPg3j6EVXYSykcBx8GGCUNhQfT/zeL+IDeAWzl6IbHnBOyx27Okftt4lUeX7YyqYOZ2SWFpp2WezFTDP3ueGdPnFGk/Mm4Lat+r0nV4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=uw6K1TV0; arc=none smtp.client-ip=67.231.145.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="IyusOf3o"
+	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="uw6K1TV0"
 Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60MFC5lJ2070343
-	for <bpf@vger.kernel.org>; Thu, 22 Jan 2026 08:01:55 -0800
+	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60MFC5lH2070343
+	for <bpf@vger.kernel.org>; Thu, 22 Jan 2026 08:01:54 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=s2048-2025-q2;
-	 bh=P97nsqVqFN/+MRp+4+NkVWD0wLuP+fZEFPSG0LXFGA8=; b=IyusOf3oRfIl
-	DHUzp2uu6vEo8i/tYfVQqQqIK+N25fS6CDKNcrvlE223uD1X6QBF8rs9eiqE747y
-	LaZa5zdL4DlUMzzSI12fh8eDC1gB+LWRqzXN7JlFqfTUOPSLp4XuiDkAWOQfYLAd
-	P1vLpRnOw1bqgHPXvCWtPWTcYOaimAqBhyjapM4Nd6Yfz2bzv6O5ksaAO+smRjIb
-	gCS6GAsisPEzbcog9YzkkjwfL24EMdYTu54lIZ8ygBKokj6ed7/2P0O2+v53URje
-	+GEUBMIPEz6I/EJMZ5pjRsWqOvXTVUz2ymdBfIxPzFJWTulCntRUebCJl61IkBSJ
-	Twt7qCXtMQ==
+	 bh=sn/kXpRPBXgSOURfqKLMGENJJTb2th2ESwXUmXp11qg=; b=uw6K1TV01Mvm
+	s0vKnKFtbiwY3dIRPmB57GZwvkesR9yC1B80bPOD1Xka2HAD/NZn0MVTHKH9gdci
+	3Tftwhp3TxC7quauHq7NEmlSsadnTHeKQlkhjTvC2l//vOmBnd6fOP/8qbb5PYlh
+	tm7auOE/ATGZ3o0KhkgIaJHIsnmdkg3bbn8idM+KncItiqMDEY2w4v0E9t6Y1+q7
+	fXnmcm2Mo7R2kEV/vf+qY4K6XPi/EjFjixPBolaNheaa6w1OxYews4VCqZLMZ3m/
+	0H7/S/RmOsUkxqObrs4+brhTrOrg7z66zOR2GQuaqTEQzzS2V9EMjPX2o0lVBI06
+	WtH1I8MG1Q==
 Received: from maileast.thefacebook.com ([163.114.135.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4bubagvbr5-14
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4bubagvbr5-12
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Thu, 22 Jan 2026 08:01:54 -0800 (PST)
-Received: from twshared26871.17.frc2.facebook.com (2620:10d:c0a8:fe::f072) by
+	for <bpf@vger.kernel.org>; Thu, 22 Jan 2026 08:01:53 -0800 (PST)
+Received: from twshared13080.31.frc3.facebook.com (2620:10d:c0a8:1c::1b) by
  mail.thefacebook.com (2620:10d:c0a9:6f::8fd4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.2.2562.29; Thu, 22 Jan 2026 16:01:49 +0000
+ 15.2.2562.29; Thu, 22 Jan 2026 16:01:44 +0000
 Received: by devbig002.atn3.facebook.com (Postfix, from userid 673679)
-	id 9AFFC10A69E82; Thu, 22 Jan 2026 08:01:41 -0800 (PST)
+	id 70E3A10A69E90; Thu, 22 Jan 2026 08:01:42 -0800 (PST)
 From: Emil Tsalapatis <etsal@meta.com>
 To: <bpf@vger.kernel.org>
 CC: <ast@kernel.org>, <andrii@kernel.org>, <eddyz87@gmail.com>,
@@ -46,9 +46,9 @@ CC: <ast@kernel.org>, <andrii@kernel.org>, <eddyz87@gmail.com>,
         <song@kernel.org>, Emil Tsalapatis <etsal@meta.com>,
         "Emil Tsalapatis (Meta)"
 	<emil@etsalapatis.com>
-Subject: [PATCH 01/13] bpf: Add bpf_stream_print_stack stack dumping kfunc
-Date: Thu, 22 Jan 2026 08:01:19 -0800
-Message-ID: <20260122160131.2238331-2-etsal@meta.com>
+Subject: [PATCH 02/13] bpf: Allow BPF stream kfuncs while holding a lock
+Date: Thu, 22 Jan 2026 08:01:20 -0800
+Message-ID: <20260122160131.2238331-3-etsal@meta.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260122160131.2238331-1-etsal@meta.com>
 References: <20260122160131.2238331-1-etsal@meta.com>
@@ -61,89 +61,77 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: B-Eg9kC2c2RxitafJk92r5iRyGWrsdXs
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTIyMDEyMiBTYWx0ZWRfXzfJerHO/IzyX
- y0DOl68dSZgUMNzc6znRtwlEKpnzfYNkTfiWrkaDxIzntBd1W3pNGNAUgSdWwcwB5zeAp4i4Omj
- 0n9BS1YsZU6/VryPVOo91av1KRrBrm4AYkv5mvlxqlNFOfVHx5++2t07dyaTNMBhV5izUu+XQzS
- vVJLIe9r+N7Gv8yacLbLjhQ4ZTNca6XhbWGqCbUoSrsZcNBYblGxMeqo1jIF9Ell/yR+H4UL3kg
- FWGnAIwtp+9hhTG/mZZVkroJ0Ddhdf00gRP0pcelfMSVZdrJOUyfXviiibZ9llr7Lf2JnDjtwNg
- +ZIEPrA+jCxkYYyOy2XHDodi0BnBgD5cUdiGfW9O09SFsMFK6ykXDbA+KaR4Y8rJy+9DaqJEimC
- HcUjbyCNGbFS977HxzWrZu/0GcMlQ9uI6BoMX3csnNlo0fbyArvNKjd+Nt9WAIf6rul6R2C7m0P
- xV6pg8x0fvuXT5t8pFA==
-X-Authority-Analysis: v=2.4 cv=UJnQ3Sfy c=1 sm=1 tr=0 ts=697249f2 cx=c_pps
+X-Proofpoint-GUID: rCEVCp1Q874DWpAzfjz7rK9uCakpeMps
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTIyMDEyMiBTYWx0ZWRfX3FEbmVSimxVc
+ rZPv/M881OIlhvfUD3BrlH70hcVxgfNh5AY7MLSEdlCyQxruHcDjad5NvplMJeeEeaiVA8R3wSi
+ YZe0qJT3Rr1Zw5hULNU44VncdFP50zeZ0fztty7CeGPdYxsFm/JqIR/f/+PmoNIU+BhRTIPZuJk
+ S1tT+CNGkW1fIZ714a2AabGbTDMnhEofy3APTTFVTgbBMPLFCnIXSgupzUVxNhSXbKRCSdrie6P
+ 7ImVSteHRaoc3bWZH2eCGJh6zmapXydJbQm0Xsa013+LyrFtFJAL1r7lzptbOZQXkojDhb8ngiP
+ P7xCmb+odSCPBMU36ZGsvRlwfRQqS/+2M6YULqjEveDESIBLn7AHIbRwi7qIgvejJRciK6Bw8oh
+ PSF6F5SOLYN2LVPswLYmBQ8N5prwfx1h+OdnP0ndMKfpBgJ7eQtIcjE3mapeLSy2hGllL/kYjkG
+ xJ7xxddfi8OoypOtMrg==
+X-Authority-Analysis: v=2.4 cv=UJnQ3Sfy c=1 sm=1 tr=0 ts=697249f1 cx=c_pps
  a=MfjaFnPeirRr97d5FC5oHw==:117 a=MfjaFnPeirRr97d5FC5oHw==:17
  a=vUbySO9Y5rIA:10 a=VkNPw1HP01LnGYTKEx00:22 a=CWErhr8FAAAA:8
- a=yJRT9AEQcBMRr3qBu0YA:9 a=I-g_0vLIplkVOQ0FYkeP:22
-X-Proofpoint-ORIG-GUID: B-Eg9kC2c2RxitafJk92r5iRyGWrsdXs
+ a=YGBY62vhfSIA2HD_NVEA:9 a=I-g_0vLIplkVOQ0FYkeP:22
+X-Proofpoint-ORIG-GUID: rCEVCp1Q874DWpAzfjz7rK9uCakpeMps
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.20,FMLib:17.12.100.49
  definitions=2026-01-22_02,2026-01-22_02,2025-10-01_01
 
-Add a new kfunc called bpf_stream_print_stack to be used by programs
-that need to print out their current BPF stack. The kfunc is essentially
-a wrapper around the existing bpf_stream_dump_stack functionality used
-to generate stack traces for error events like may_goto violations and
-BPF-side arena page faults.
+The BPF stream kfuncs bpf_stream_vprintk and bpf_stream_print_stack
+do not sleep and so are safe to call while holding a lock. Amend
+the verifier to allow that.
 
 Signed-off-by: Emil Tsalapatis (Meta) <emil@etsalapatis.com>
 ---
- kernel/bpf/helpers.c        |  1 +
- kernel/bpf/stream.c         | 13 +++++++++++++
- tools/lib/bpf/bpf_helpers.h |  2 ++
- 3 files changed, 16 insertions(+)
+ kernel/bpf/verifier.c | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index f8aa1320e2f7..0e131283780f 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -4534,6 +4534,7 @@ BTF_ID_FLAGS(func, bpf_strncasestr);
- BTF_ID_FLAGS(func, bpf_cgroup_read_xattr, KF_RCU)
- #endif
- BTF_ID_FLAGS(func, bpf_stream_vprintk, KF_IMPLICIT_ARGS)
-+BTF_ID_FLAGS(func, bpf_stream_print_stack, KF_IMPLICIT_ARGS)
- BTF_ID_FLAGS(func, bpf_task_work_schedule_signal, KF_IMPLICIT_ARGS)
- BTF_ID_FLAGS(func, bpf_task_work_schedule_resume, KF_IMPLICIT_ARGS)
- BTF_ID_FLAGS(func, bpf_dynptr_from_file)
-diff --git a/kernel/bpf/stream.c b/kernel/bpf/stream.c
-index 24730df55e69..6e2cbe5f34e7 100644
---- a/kernel/bpf/stream.c
-+++ b/kernel/bpf/stream.c
-@@ -245,6 +245,19 @@ __bpf_kfunc int bpf_stream_vprintk(int stream_id, co=
-nst char *fmt__str, const vo
- 	return ret;
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 919556614505..fbc88176cc8c 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -12455,6 +12455,8 @@ enum special_kfunc_type {
+ 	KF_bpf_arena_alloc_pages,
+ 	KF_bpf_arena_free_pages,
+ 	KF_bpf_arena_reserve_pages,
++	KF_bpf_stream_vprintk,
++	KF_bpf_stream_print_stack,
+ };
+=20
+ BTF_ID_LIST(special_kfunc_list)
+@@ -12532,6 +12534,8 @@ BTF_ID(func, bpf_task_work_schedule_resume)
+ BTF_ID(func, bpf_arena_alloc_pages)
+ BTF_ID(func, bpf_arena_free_pages)
+ BTF_ID(func, bpf_arena_reserve_pages)
++BTF_ID(func, bpf_stream_vprintk)
++BTF_ID(func, bpf_stream_print_stack)
+=20
+ static bool is_task_work_add_kfunc(u32 func_id)
+ {
+@@ -12974,10 +12978,17 @@ static bool is_bpf_arena_kfunc(u32 btf_id)
+ 	       btf_id =3D=3D special_kfunc_list[KF_bpf_arena_reserve_pages];
  }
 =20
-+/* Directly trigger a stack dump from the program. */
-+__bpf_kfunc void bpf_stream_print_stack(struct bpf_prog_aux *aux)
++static bool is_bpf_stream_kfunc(u32 btf_id)
 +{
-+	struct bpf_stream_stage ss;
-+	struct bpf_prog *prog;
-+
-+	prog =3D aux->main_prog_aux->prog;
-+
-+	bpf_stream_stage(ss, prog, BPF_STDERR, ({
-+		bpf_stream_dump_stack(ss);
-+	}));
++	return btf_id =3D=3D special_kfunc_list[KF_bpf_stream_vprintk] ||
++	       btf_id =3D=3D special_kfunc_list[KF_bpf_stream_print_stack];
 +}
 +
- __bpf_kfunc_end_defs();
+ static bool kfunc_spin_allowed(u32 btf_id)
+ {
+ 	return is_bpf_graph_api_kfunc(btf_id) || is_bpf_iter_num_api_kfunc(btf_=
+id) ||
+-	       is_bpf_res_spin_lock_kfunc(btf_id) || is_bpf_arena_kfunc(btf_id)=
+;
++	       is_bpf_res_spin_lock_kfunc(btf_id) || is_bpf_arena_kfunc(btf_id)=
+ ||
++	       is_bpf_stream_kfunc(btf_id);
+ }
 =20
- /* Added kfunc to common_btf_ids */
-diff --git a/tools/lib/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_helpers.h
-index c145da05a67c..6d8ae3887618 100644
---- a/tools/lib/bpf/bpf_helpers.h
-+++ b/tools/lib/bpf/bpf_helpers.h
-@@ -343,6 +343,8 @@ extern int bpf_stream_vprintk(int stream_id, const ch=
-ar *fmt__str, const void *a
- /* Helper macro to print out debug messages */
- #define bpf_printk(fmt, args...) ___bpf_pick_printk(args)(fmt, ##args)
-=20
-+extern void bpf_stream_print_stack(void) __weak __ksym;
-+
- struct bpf_iter_num;
-=20
- extern int bpf_iter_num_new(struct bpf_iter_num *it, int start, int end)=
- __weak __ksym;
+ static bool is_sync_callback_calling_kfunc(u32 btf_id)
 --=20
 2.47.3
 
