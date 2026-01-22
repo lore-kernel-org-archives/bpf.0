@@ -1,128 +1,133 @@
-Received: from mail.189.cn (189sx01-ptr.21cn.com [14.18.100.240])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A1023ACA6F;
-	Thu, 22 Jan 2026 09:04:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.18.100.240
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 299EC31A044
+	for <bpf@vger.kernel.org>; Thu, 22 Jan 2026 09:20:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769072659; cv=none; b=U7n7lnqHXRXkpbx109yRPrucO1cx7C3gQ5AB38TGsPBN8RXe/0w9qsiDDPdYg9MLpcsOetIdD9j23eeACmmQ+4NNlUyvJfHerl33duzLtfBA3VSJ19yGHkrmZDzFHXU2eEB2EvmJ2ExsTkdDEgcB8QZPTbEGalbmzow8kn/ZsC0=
+	t=1769073617; cv=none; b=kabJwp3hZq6HSPJNxlzO1eCJ8C05hW+idU3CuEWa707RLiJosqHjQsI1XMQhyGu7zbkWu+YVB6tJrLQQq8WmENVpxx6W95JWPaytjm7xBnB2p87A74HxJ3IuqsPFqdGtgFrU0icybrUM5BFgMBAFpu1dtneg6fxYaX3Y71rX3So=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769072659; c=relaxed/simple;
-	bh=PZCudvqwWkQ21ryHtvnXzkKSBq4YeYOaQ4GwcfigknQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=iDujyLOCLG902My9CNAYosqD4eVIvI4FHfNB47p+qvDhCHX1UFWKAH2FzdBevDhib5HtyN/O+vLNL8PjA8+1KlpvT7EAhPUn8qLVO8vviwSlVM2ksxyZ0CkrK3co5M2IH/jyrtnltF13Yl60RlIQX39ip8Wgs/ZsJQaUgFQdcSQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=189.cn; spf=pass smtp.mailfrom=189.cn; arc=none smtp.client-ip=14.18.100.240
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=189.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=189.cn
-HMM_SOURCE_IP:10.158.243.220:0.451004908
-HMM_ATTACHE_NUM:0000
-HMM_SOURCE_TYPE:SMTP
-Received: from clientip-221.238.56.48 (unknown [10.158.243.220])
-	by mail.189.cn (HERMES) with SMTP id 469D7400088;
-	Thu, 22 Jan 2026 17:04:06 +0800 (CST)
-Received: from  ([221.238.56.48])
-	by gateway-153622-dep-587d8f56d7-fmbcm with ESMTP id 0c8ca397d8964d76aed76a7263bb81d9 for martin.lau@linux.dev;
-	Thu, 22 Jan 2026 17:04:07 CST
-X-Transaction-ID: 0c8ca397d8964d76aed76a7263bb81d9
-X-Real-From: chensong_2000@189.cn
-X-Receive-IP: 221.238.56.48
-X-MEDUSA-Status: 0
-Sender: chensong_2000@189.cn
-From: chensong_2000@189.cn
-To: martin.lau@linux.dev,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org
-Cc: bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Song Chen <chensong_2000@189.cn>
-Subject: [PATCH v2] kernel/bpf/btf.c: reject to register duplicated kfunc
-Date: Thu, 22 Jan 2026 17:04:04 +0800
-Message-ID: <20260122090404.15553-1-chensong_2000@189.cn>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1769073617; c=relaxed/simple;
+	bh=snkTxMn/AkTSOy8qwYLiFYCGpGuzxrmwbE8E4PZiUQc=;
+	h=Message-ID:Date:MIME-Version:From:To:CC:Subject:Content-Type; b=f0mhDuuN4xCn9vXA9vRUAGfCrYMmFfVfzXt8e8zX0RiHAmAtpu+p551PowunqFmuEQTLRtZQgJfjQnMPZUpMpeaEtOycdJwqBMfbBaqzXXI5ug1Ig/LZa64C6kUQy9m4M23gz3Qyj7RKDV1VOqys6GTS8SNwxyiI6sNKldWl4oM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=h-partners.com; spf=pass smtp.mailfrom=h-partners.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=h-partners.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=h-partners.com
+Received: from mail.maildlp.com (unknown [172.18.224.150])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTPS id 4dxb9h0XPSzHnGgd;
+	Thu, 22 Jan 2026 17:19:36 +0800 (CST)
+Received: from mscpeml500003.china.huawei.com (unknown [7.188.49.51])
+	by mail.maildlp.com (Postfix) with ESMTPS id 785C740563;
+	Thu, 22 Jan 2026 17:20:11 +0800 (CST)
+Received: from [10.123.123.67] (10.123.123.67) by
+ mscpeml500003.china.huawei.com (7.188.49.51) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Thu, 22 Jan 2026 12:20:10 +0300
+Message-ID: <ca43be24-6f54-4689-aa8e-23573e83ca5b@h-partners.com>
+Date: Thu, 22 Jan 2026 12:20:07 +0300
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+From: Gladyshev Ilya <gladyshev.ilya1@h-partners.com>
+To: <lsf-pc@lists.linux-foundation.org>
+CC: <bpf@vger.kernel.org>
+Subject: [LSF/MM/BPF TOPIC] Userspace JIT for eBPF
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: lhrpeml100009.china.huawei.com (7.191.174.83) To
+ mscpeml500003.china.huawei.com (7.188.49.51)
 
-From: Song Chen <chensong_2000@189.cn>
 
-I had an ebpf program which calls a kfunc defined and
-implemented in one of my kernel modules, they were working
-fine in 6.16, but was broken by libbpf in 6.19, the error
-message was:
+I'd like to propose the idea of adding support for optional userspace 
+JIT engines to the eBPF subsystem. I have a promising prototype already, 
+but I’d like to discuss the broader implications and open questions 
+around this idea before moving forward.
 
-libbpf: extern (func ksym) 'bpf_strstr': func_proto [5]
-incompatible with vmlinux [94389]
+Motivation
+==========
+In modern systems, eBPF is often used as a robust and easy-to-use 
+extension mechanism. However, the verifier that provides this robustness 
+also introduces several issues:
+- It requires a unified intermediate representation (eBPF bytecode) that 
+limits the expressiveness of underlying architectures.
+- It can’t verify some sophisticated compiler transformations, which 
+leads to either disabling them or using inline eBPF assembly as a 
+workaround.
 
-yes, the reason is there is a new added kfunc in kernel 6.19
-which happens to be the same name with my kfunc. However the
-error message is not obvious enough to address problem
-immediately.
+And while verifier has some basic optimizations like dead code 
+elimination and map access inlining, without register reallocation and 
+other rewrites these optimizations do not provide significant benefit. 
+Furthermore, current JIT implementations translate eBPF code 
+instruction-by-instruction, so generated code is far from optimal (7 
+instructions with push/pop for DIV on x86) and can't fully utilize CPU 
+capabilities (extended ISA like cmov, extra registers available on ARM 
+or even amd64).
 
-Therefore, this patches searches duplicated kfunc in
-btf_vmlinux before a kernel module attempts to register kfuncs
-through register_btf_kfunc_id_set, it prints clear error message
-and returns error code if same name kfunc has already implemented
-and registered, then developer knows at the first place.
+But reinventing yet another sophisticated compiler inside the kernel 
+doesn’t make sense. Instead, I propose an optional userspace JIT engine 
+with a fallback to the existing in-kernel translators.
 
-Signed-off-by: Song Chen <chensong_2000@189.cn>
----
-Changes in v2:
-    - use btf_find_by_name_kind to compare kfunc name
----
- kernel/bpf/btf.c | 16 ++++++++++++++--
- 1 file changed, 14 insertions(+), 2 deletions(-)
+Overview
+========
+Kernel side is very simple: it only sends eBPF code to userspace and 
+then integrates resulting binary blob into eBPF subsystem -- or falls 
+back to in-kernel translation in case of any error. While this does 
+introduce new code, the integration itself is non-invasive and very small.
 
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 0de8fc8a0e0b..f0158c9c103c 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -8498,7 +8498,8 @@ static int btf_check_iter_kfuncs(struct btf *btf, const char *func_name,
- 	return 0;
- }
- 
--static int btf_check_kfunc_protos(struct btf *btf, u32 func_id, u32 func_flags)
-+static int btf_check_kfunc_protos(struct btf *btf, u32 func_id, u32 func_flags,
-+			const struct module *module)
- {
- 	const struct btf_type *func;
- 	const char *func_name;
-@@ -8514,6 +8515,17 @@ static int btf_check_kfunc_protos(struct btf *btf, u32 func_id, u32 func_flags)
- 	if (!func_name || !func_name[0])
- 		return -EINVAL;
- 
-+	/* check if there is any duplicated kfunc in btf_vmlinux */
-+	if (module) {
-+		s32 id = btf_find_by_name_kind(bpf_get_btf_vmlinux(),
-+					func_name, BTF_INFO_KIND(func->info));
-+		if (id >= 0) {
-+			pr_err("kfunc %s (id: %d) is already present in vmlinux.\n",
-+						func_name, id);
-+			return -EINVAL;
-+		}
-+	}
-+
- 	func = btf_type_by_id(btf, func->type);
- 	if (!func || !btf_type_is_func_proto(func))
- 		return -EINVAL;
-@@ -8757,7 +8769,7 @@ static int __register_btf_kfunc_id_set(enum btf_kfunc_hook hook,
- 
- 	for (i = 0; i < kset->set->cnt; i++) {
- 		ret = btf_check_kfunc_protos(btf, btf_relocate_id(btf, kset->set->pairs[i].id),
--					     kset->set->pairs[i].flags);
-+					     kset->set->pairs[i].flags, kset->owner);
- 		if (ret)
- 			goto err_out;
- 	}
--- 
-2.43.0
+Userspace side is responsible for correctly compiling eBPF bytecode into 
+binary blob and writing it back to the kernel.  In my implementation, 
+this is an LLVM-based compiler (single statically linked binary) 
+designed to be as simple as possible, offloading all the hard work to 
+LLVM. In the future, some reference compiler can reside in linux/tools 
+as part of the infrastructure.
 
+Because every loaded eBPF program still passes through verifier before 
+JITing, this approach maintains bug-free execution and other eBPF's 
+guarantees. However, it now enables sophisticated optimizations and 
+advanced instruction selection.
+
+Performance
+===========
+I ran performance tests on amd64 (Xeon E5-2690 v3) using sched_ext’s 
+eBPF programs, along with a few others. Timing measurements had some 
+skew, but as a pessimistic estimate LLVM-generated code was ~10-20% 
+faster [2] than in-kernel JIT, and produced assembly had 40% less 
+instructions. The most noticeable optimizations were:
+1. Re-allocating registers, inlining "DCEd" subfunctions, and cleaning 
+up code after verifier’s DCE [3].
+2. Removing leftovers after verifier's inlining (uneeded register 
+shuffles and spills).
+3. Using specific instructions like cmov, imulq, seta, mov(8*reg+reg + 
+const) and other.
+4. Using jump table (though not for sched_ext).
+5. Lots of other small optimizations.
+
+Discussion
+==========
+I’m currently improving existing prototype for an RFC submission and 
+will try to collect more reliable performance data. However, there are 
+several discussion points that require community feedback:
+- Overall design
+- Security considerations (attack surface and how to reduce it)
+- Level of interoperability with existing JIT engines (re-using 
+trampolines, cross-JIT bpf_tail_call and recursion checks)
+- Userspace <-> Kernel communication (appropriate "transport")
+- Granularity of this feature (system-wide, cgroup, process, per-eBPF 
+program).
+
+I’d be glad to hear general feedback as well.
+
+[Footnotes]
+[1]: I’m referring to the common pattern of using `const volatile` flags 
+in eBPF code that are patched before load to toggle certain 
+functionality. Or bpf_ksym_exists() and other load-time checks.
+[2]: I measured these timings before implementing a major optimization, 
+so the results may now be even better.
+[3]: For instance, in one of scx_bpfland’s functions, three out of five 
+arguments were unnecessary due to a disabled toggle flag in one specific 
+configuration.
