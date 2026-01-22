@@ -1,312 +1,280 @@
-Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4658F363C73
-	for <bpf@vger.kernel.org>; Thu, 22 Jan 2026 05:53:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE8E3296BDB
+	for <bpf@vger.kernel.org>; Thu, 22 Jan 2026 06:31:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769061196; cv=none; b=NfOYfuDhPrMWgsqvySAD1am9xsfkDgdIeaREuNK4z2FYWxTUqMaoSZ9H56SydlNwYXMfD5OTaur7HYXJRuIoE12dFF6Tw4UeK6lvHZmfjWmiIwZcwqQVk6o7LNfj/iwKgOfAFTEjpV15z0FT3G98eD6cz+r+QW1zTIzBB+KBGgM=
+	t=1769063512; cv=none; b=lIftFkGIyHZHrVFaE5j6rrfnl6E2pYvhC15CGs3xTGsSvP0eiomtZ9HWDmhnJJQU5IqrzKSm8+Md2vSu7FKzDogxpLdjS21uZ8MSwP5xsl/gBLLziTIi6vLMq3ZwJ8GxqoZAwu8kdwHtaSsqfM6xL7s77RkNuH4GCrY+eKlEv+8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769061196; c=relaxed/simple;
-	bh=BcDuF+Cb+TcWEiVWdZnZ/J27ck7zQ0IohtNfalCb73Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KR04c5k12hRb/pIYWhEbVglrIOgJynl6eMR9X7/8IFnJ4eDMSiTYW8Brdywgcn9hLgj7au6BSyf7YXt7KKHwWQ/e/ppbLmRpnx3D7q5RA0H0XDtx3aDME6RjHHp2C5uvYoVQZDxAObzk/E4dq0xKBJ2t2rsWVthmbqElZtgGLVs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=L2h4ihHa; arc=none smtp.client-ip=91.218.175.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1769063512; c=relaxed/simple;
+	bh=UVebHt/E+DA5iZ0DZTRhL/FoWbADwv9Xit4ZWej4sJ0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=dn5tXiHe3UwP/9hnVCIlBRaJjwYWkV/PBVpEtFMUXL96Bwz/Uknso+ixrCTvYMBWMnNmeSs7kXrNYWBBK8/fsOAQRqAD8YF4/DQs+7F149jCt8zKOId2cUDcoSwaIMFoqdArWhCYj7RjbgNz3h8nG5C/zJw/cbntxxAKdMB3WqM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=zHQ1hoLe; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=nWTW6aKN; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=zHQ1hoLe; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=nWTW6aKN; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="L2h4ihHa"
-Date: Thu, 22 Jan 2026 13:52:48 +0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1769061178;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=vTGJaFhXlbsw1EOpmJJykqdjn7GgJkZ5tylkFbIkt4g=;
-	b=L2h4ihHa5di8qOkOTG1YwQKrsyF+rNJmC8iLx3iq4nFtNlTBmLc3/uKiCyoConCVw+gvX2
-	hwTWnd/L57W+rIE/1NtCeLopGNZ2y6ph4hQS1G24MJE4iEirT3LLS3myp+5VHsNYnYbNZv
-	iR9esG3KQM0hRVyb+wlj8scSE4K9AiY=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Hao Li <hao.li@linux.dev>
-To: Vlastimil Babka <vbabka@suse.cz>
-Cc: Harry Yoo <harry.yoo@oracle.com>, Petr Tesarik <ptesarik@suse.com>, 
-	Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>, 
-	Roman Gushchin <roman.gushchin@linux.dev>, Andrew Morton <akpm@linux-foundation.org>, 
-	Uladzislau Rezki <urezki@gmail.com>, "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
-	Suren Baghdasaryan <surenb@google.com>, Sebastian Andrzej Siewior <bigeasy@linutronix.de>, 
-	Alexei Starovoitov <ast@kernel.org>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
-	linux-rt-devel@lists.linux.dev, bpf@vger.kernel.org, kasan-dev@googlegroups.com
-Subject: Re: [PATCH v3 21/21] mm/slub: cleanup and repurpose some stat items
-Message-ID: <5rmxfyxuhloucetufg2qic5elgi6frd7onjzdsosmhtjdqglij@5htmiqrdhkoj>
-References: <20260116-sheaves-for-all-v3-0-5595cb000772@suse.cz>
- <20260116-sheaves-for-all-v3-21-5595cb000772@suse.cz>
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="zHQ1hoLe";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="nWTW6aKN";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="zHQ1hoLe";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="nWTW6aKN"
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 69642336E2;
+	Thu, 22 Jan 2026 06:31:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1769063508; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=snlThi6xEbyLHgpAGreIAptLTtIG/sStzORilk3J78o=;
+	b=zHQ1hoLeC/5cavLYx5OvU/D0QEQ93VhR9okhUNc8zOoL9mFrwy+2E8MuO6W4049oNippOq
+	kNE76fHFsYXFhNJqEefS+X0P4wt2sDQrAeU1HNFOc0i5Ex7WPrE03Eb0eu6HTGhUyLqqHa
+	BW6/aej7Xpacb7wmCnFsaSvz32nz/VM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1769063508;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=snlThi6xEbyLHgpAGreIAptLTtIG/sStzORilk3J78o=;
+	b=nWTW6aKNwwJQmhH48v0849Ik2lAcm0Xizdf4ZwIRn3sq1gkN0fQm8HbkbMoJiFHeUQwtbS
+	0oghjhdTxItgZTCQ==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1769063508; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=snlThi6xEbyLHgpAGreIAptLTtIG/sStzORilk3J78o=;
+	b=zHQ1hoLeC/5cavLYx5OvU/D0QEQ93VhR9okhUNc8zOoL9mFrwy+2E8MuO6W4049oNippOq
+	kNE76fHFsYXFhNJqEefS+X0P4wt2sDQrAeU1HNFOc0i5Ex7WPrE03Eb0eu6HTGhUyLqqHa
+	BW6/aej7Xpacb7wmCnFsaSvz32nz/VM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1769063508;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=snlThi6xEbyLHgpAGreIAptLTtIG/sStzORilk3J78o=;
+	b=nWTW6aKNwwJQmhH48v0849Ik2lAcm0Xizdf4ZwIRn3sq1gkN0fQm8HbkbMoJiFHeUQwtbS
+	0oghjhdTxItgZTCQ==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 46BC63EA63;
+	Thu, 22 Jan 2026 06:31:48 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id vbnsEFTEcWnTdwAAD6G6ig
+	(envelope-from <vbabka@suse.cz>); Thu, 22 Jan 2026 06:31:48 +0000
+Message-ID: <6b48cc0f-f006-4d4c-af76-55f86f4267e3@suse.cz>
+Date: Thu, 22 Jan 2026 07:31:47 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260116-sheaves-for-all-v3-21-5595cb000772@suse.cz>
-X-Migadu-Flow: FLOW_OUT
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 19/21] slab: remove frozen slab checks from
+ __slab_free()
+Content-Language: en-US
+To: Suren Baghdasaryan <surenb@google.com>
+Cc: Harry Yoo <harry.yoo@oracle.com>, Petr Tesarik <ptesarik@suse.com>,
+ Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>,
+ Roman Gushchin <roman.gushchin@linux.dev>, Hao Li <hao.li@linux.dev>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Uladzislau Rezki <urezki@gmail.com>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+ Alexei Starovoitov <ast@kernel.org>, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, linux-rt-devel@lists.linux.dev,
+ bpf@vger.kernel.org, kasan-dev@googlegroups.com
+References: <20260116-sheaves-for-all-v3-0-5595cb000772@suse.cz>
+ <20260116-sheaves-for-all-v3-19-5595cb000772@suse.cz>
+ <CAJuCfpHggP+iefwGTOWnSxDma5U=uMROYNs8KS0A=u2w=1rq_w@mail.gmail.com>
+From: Vlastimil Babka <vbabka@suse.cz>
+Autocrypt: addr=vbabka@suse.cz; keydata=
+ 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
+ m6M14QORSWTLRg==
+In-Reply-To: <CAJuCfpHggP+iefwGTOWnSxDma5U=uMROYNs8KS0A=u2w=1rq_w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Score: -4.30
+X-Spamd-Result: default: False [-4.30 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	ARC_NA(0.00)[];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	MIME_TRACE(0.00)[0:+];
+	RCPT_COUNT_TWELVE(0.00)[17];
+	RCVD_TLS_ALL(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[oracle.com,suse.com,gentwo.org,google.com,linux.dev,linux-foundation.org,gmail.com,linutronix.de,kernel.org,kvack.org,vger.kernel.org,lists.linux.dev,googlegroups.com];
+	TO_DN_SOME(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:mid,suse.cz:email]
+X-Spam-Level: 
+X-Spam-Flag: NO
 
-On Fri, Jan 16, 2026 at 03:40:41PM +0100, Vlastimil Babka wrote:
-> A number of stat items related to cpu slabs became unused, remove them.
+On 1/22/26 01:54, Suren Baghdasaryan wrote:
+> On Fri, Jan 16, 2026 at 2:41 PM Vlastimil Babka <vbabka@suse.cz> wrote:
+>>
+>> Currently slabs are only frozen after consistency checks failed. This
+>> can happen only in caches with debugging enabled, and those use
+>> free_to_partial_list() for freeing. The non-debug operation of
+>> __slab_free() can thus stop considering the frozen field, and we can
+>> remove the FREE_FROZEN stat.
+>>
+>> Reviewed-by: Suren Baghdasaryan <surenb@google.com>
+>> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
 > 
-> Two of those were ALLOC_FASTPATH and FREE_FASTPATH. But instead of
-> removing those, use them instead of ALLOC_PCS and FREE_PCS, since
-> sheaves are the new (and only) fastpaths, Remove the recently added
-> _PCS variants instead.
-> 
-> Change where FREE_SLOWPATH is counted so that it only counts freeing of
-> objects by slab users that (for whatever reason) do not go to a percpu
-> sheaf, and not all (including internal) callers of __slab_free(). Thus
-> flushing sheaves (counted by SHEAF_FLUSH) no longer also increments
-> FREE_SLOWPATH. This matches how ALLOC_SLOWPATH doesn't count sheaf
-> refills (counted by SHEAF_REFILL).
-> 
+> Functionally looks fine to me. Do we need to do something about the
+> UAPI breakage that removal of a sysfs node might cause?
+
+Only if someone complains. Just this week it has been reiterated by Linus:
+https://lore.kernel.org/all/CAHk-%3Dwga8Qu0-OSE9VZbviq9GuqwhPhLUXeAt-S7_9%2BfMCLkKg@mail.gmail.com/
+
+Given this is behing a config no distro enables, I think chances are good
+noone will complain:
+
+https://oracle.github.io/kconfigs/?config=UTS_RELEASE&config=SLUB_STATS
+
 > Reviewed-by: Suren Baghdasaryan <surenb@google.com>
-> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
-> ---
->  mm/slub.c | 77 +++++++++++++++++----------------------------------------------
->  1 file changed, 21 insertions(+), 56 deletions(-)
 > 
-> diff --git a/mm/slub.c b/mm/slub.c
-> index c12e90cb2fca..d73ad44fa046 100644
-> --- a/mm/slub.c
-> +++ b/mm/slub.c
-> @@ -330,33 +330,19 @@ enum add_mode {
->  };
->  
->  enum stat_item {
-> -	ALLOC_PCS,		/* Allocation from percpu sheaf */
-> -	ALLOC_FASTPATH,		/* Allocation from cpu slab */
-> -	ALLOC_SLOWPATH,		/* Allocation by getting a new cpu slab */
-> -	FREE_PCS,		/* Free to percpu sheaf */
-> +	ALLOC_FASTPATH,		/* Allocation from percpu sheaves */
-> +	ALLOC_SLOWPATH,		/* Allocation from partial or new slab */
->  	FREE_RCU_SHEAF,		/* Free to rcu_free sheaf */
->  	FREE_RCU_SHEAF_FAIL,	/* Failed to free to a rcu_free sheaf */
-> -	FREE_FASTPATH,		/* Free to cpu slab */
-> -	FREE_SLOWPATH,		/* Freeing not to cpu slab */
-> +	FREE_FASTPATH,		/* Free to percpu sheaves */
-> +	FREE_SLOWPATH,		/* Free to a slab */
+>> ---
+>>  mm/slub.c | 22 ++++------------------
+>>  1 file changed, 4 insertions(+), 18 deletions(-)
+>>
+>> diff --git a/mm/slub.c b/mm/slub.c
+>> index 476a279f1a94..7ec7049c0ca5 100644
+>> --- a/mm/slub.c
+>> +++ b/mm/slub.c
+>> @@ -333,7 +333,6 @@ enum stat_item {
+>>         FREE_RCU_SHEAF_FAIL,    /* Failed to free to a rcu_free sheaf */
+>>         FREE_FASTPATH,          /* Free to cpu slab */
+>>         FREE_SLOWPATH,          /* Freeing not to cpu slab */
+>> -       FREE_FROZEN,            /* Freeing to frozen slab */
+>>         FREE_ADD_PARTIAL,       /* Freeing moves slab to partial list */
+>>         FREE_REMOVE_PARTIAL,    /* Freeing removes last object */
+>>         ALLOC_FROM_PARTIAL,     /* Cpu slab acquired from node partial list */
+>> @@ -5103,7 +5102,7 @@ static void __slab_free(struct kmem_cache *s, struct slab *slab,
+>>                         unsigned long addr)
+>>
+>>  {
+>> -       bool was_frozen, was_full;
+>> +       bool was_full;
+>>         struct freelist_counters old, new;
+>>         struct kmem_cache_node *n = NULL;
+>>         unsigned long flags;
+>> @@ -5126,7 +5125,6 @@ static void __slab_free(struct kmem_cache *s, struct slab *slab,
+>>                 old.counters = slab->counters;
+>>
+>>                 was_full = (old.freelist == NULL);
+>> -               was_frozen = old.frozen;
+>>
+>>                 set_freepointer(s, tail, old.freelist);
+>>
+>> @@ -5139,7 +5137,7 @@ static void __slab_free(struct kmem_cache *s, struct slab *slab,
+>>                  * to (due to not being full anymore) the partial list.
+>>                  * Unless it's frozen.
+>>                  */
+>> -               if ((!new.inuse || was_full) && !was_frozen) {
+>> +               if (!new.inuse || was_full) {
+>>
+>>                         n = get_node(s, slab_nid(slab));
+>>                         /*
+>> @@ -5158,20 +5156,10 @@ static void __slab_free(struct kmem_cache *s, struct slab *slab,
+>>         } while (!slab_update_freelist(s, slab, &old, &new, "__slab_free"));
+>>
+>>         if (likely(!n)) {
+>> -
+>> -               if (likely(was_frozen)) {
+>> -                       /*
+>> -                        * The list lock was not taken therefore no list
+>> -                        * activity can be necessary.
+>> -                        */
+>> -                       stat(s, FREE_FROZEN);
+>> -               }
+>> -
+>>                 /*
+>> -                * In other cases we didn't take the list_lock because the slab
+>> -                * was already on the partial list and will remain there.
+>> +                * We didn't take the list_lock because the slab was already on
+>> +                * the partial list and will remain there.
+>>                  */
+>> -
+>>                 return;
+>>         }
+>>
+>> @@ -8721,7 +8709,6 @@ STAT_ATTR(FREE_RCU_SHEAF, free_rcu_sheaf);
+>>  STAT_ATTR(FREE_RCU_SHEAF_FAIL, free_rcu_sheaf_fail);
+>>  STAT_ATTR(FREE_FASTPATH, free_fastpath);
+>>  STAT_ATTR(FREE_SLOWPATH, free_slowpath);
+>> -STAT_ATTR(FREE_FROZEN, free_frozen);
+>>  STAT_ATTR(FREE_ADD_PARTIAL, free_add_partial);
+>>  STAT_ATTR(FREE_REMOVE_PARTIAL, free_remove_partial);
+>>  STAT_ATTR(ALLOC_FROM_PARTIAL, alloc_from_partial);
+>> @@ -8826,7 +8813,6 @@ static struct attribute *slab_attrs[] = {
+>>         &free_rcu_sheaf_fail_attr.attr,
+>>         &free_fastpath_attr.attr,
+>>         &free_slowpath_attr.attr,
+>> -       &free_frozen_attr.attr,
+>>         &free_add_partial_attr.attr,
+>>         &free_remove_partial_attr.attr,
+>>         &alloc_from_partial_attr.attr,
+>>
+>> --
+>> 2.52.0
+>>
 
-Nits: Would it make sense to add stat(s, FREE_SLOWPATH) in
-free_deferred_objects() as well, since it also calls __slab_free()?
-
-Everything else looks good.
-
-This patchset replaces cpu slab with cpu sheaves and really simplifies the code
-overall - I really like the direction and the end result. It's really been a
-pleasure reviewing this series. Thanks!
-
-Reviewed-by: Hao Li <hao.li@linux.dev>
-
--- 
-Thanks,
-Hao
-
->  	FREE_ADD_PARTIAL,	/* Freeing moves slab to partial list */
->  	FREE_REMOVE_PARTIAL,	/* Freeing removes last object */
-> -	ALLOC_FROM_PARTIAL,	/* Cpu slab acquired from node partial list */
-> -	ALLOC_SLAB,		/* Cpu slab acquired from page allocator */
-> -	ALLOC_REFILL,		/* Refill cpu slab from slab freelist */
-> -	ALLOC_NODE_MISMATCH,	/* Switching cpu slab */
-> +	ALLOC_SLAB,		/* New slab acquired from page allocator */
-> +	ALLOC_NODE_MISMATCH,	/* Requested node different from cpu sheaf */
->  	FREE_SLAB,		/* Slab freed to the page allocator */
-> -	CPUSLAB_FLUSH,		/* Abandoning of the cpu slab */
-> -	DEACTIVATE_FULL,	/* Cpu slab was full when deactivated */
-> -	DEACTIVATE_EMPTY,	/* Cpu slab was empty when deactivated */
-> -	DEACTIVATE_REMOTE_FREES,/* Slab contained remotely freed objects */
-> -	DEACTIVATE_BYPASS,	/* Implicit deactivation */
->  	ORDER_FALLBACK,		/* Number of times fallback was necessary */
-> -	CMPXCHG_DOUBLE_CPU_FAIL,/* Failures of this_cpu_cmpxchg_double */
->  	CMPXCHG_DOUBLE_FAIL,	/* Failures of slab freelist update */
-> -	CPU_PARTIAL_ALLOC,	/* Used cpu partial on alloc */
-> -	CPU_PARTIAL_FREE,	/* Refill cpu partial on free */
-> -	CPU_PARTIAL_NODE,	/* Refill cpu partial from node partial */
-> -	CPU_PARTIAL_DRAIN,	/* Drain cpu partial to node partial */
->  	SHEAF_FLUSH,		/* Objects flushed from a sheaf */
->  	SHEAF_REFILL,		/* Objects refilled to a sheaf */
->  	SHEAF_ALLOC,		/* Allocation of an empty sheaf */
-> @@ -4347,8 +4333,10 @@ void *alloc_from_pcs(struct kmem_cache *s, gfp_t gfp, int node)
->  	 * We assume the percpu sheaves contain only local objects although it's
->  	 * not completely guaranteed, so we verify later.
->  	 */
-> -	if (unlikely(node_requested && node != numa_mem_id()))
-> +	if (unlikely(node_requested && node != numa_mem_id())) {
-> +		stat(s, ALLOC_NODE_MISMATCH);
->  		return NULL;
-> +	}
->  
->  	if (!local_trylock(&s->cpu_sheaves->lock))
->  		return NULL;
-> @@ -4371,6 +4359,7 @@ void *alloc_from_pcs(struct kmem_cache *s, gfp_t gfp, int node)
->  		 */
->  		if (page_to_nid(virt_to_page(object)) != node) {
->  			local_unlock(&s->cpu_sheaves->lock);
-> +			stat(s, ALLOC_NODE_MISMATCH);
->  			return NULL;
->  		}
->  	}
-> @@ -4379,7 +4368,7 @@ void *alloc_from_pcs(struct kmem_cache *s, gfp_t gfp, int node)
->  
->  	local_unlock(&s->cpu_sheaves->lock);
->  
-> -	stat(s, ALLOC_PCS);
-> +	stat(s, ALLOC_FASTPATH);
->  
->  	return object;
->  }
-> @@ -4451,7 +4440,7 @@ unsigned int alloc_from_pcs_bulk(struct kmem_cache *s, gfp_t gfp, size_t size,
->  
->  	local_unlock(&s->cpu_sheaves->lock);
->  
-> -	stat_add(s, ALLOC_PCS, batch);
-> +	stat_add(s, ALLOC_FASTPATH, batch);
->  
->  	allocated += batch;
->  
-> @@ -5111,8 +5100,6 @@ static void __slab_free(struct kmem_cache *s, struct slab *slab,
->  	unsigned long flags;
->  	bool on_node_partial;
->  
-> -	stat(s, FREE_SLOWPATH);
-> -
->  	if (IS_ENABLED(CONFIG_SLUB_TINY) || kmem_cache_debug(s)) {
->  		free_to_partial_list(s, slab, head, tail, cnt, addr);
->  		return;
-> @@ -5416,7 +5403,7 @@ bool free_to_pcs(struct kmem_cache *s, void *object, bool allow_spin)
->  
->  	local_unlock(&s->cpu_sheaves->lock);
->  
-> -	stat(s, FREE_PCS);
-> +	stat(s, FREE_FASTPATH);
->  
->  	return true;
->  }
-> @@ -5664,7 +5651,7 @@ static void free_to_pcs_bulk(struct kmem_cache *s, size_t size, void **p)
->  
->  	local_unlock(&s->cpu_sheaves->lock);
->  
-> -	stat_add(s, FREE_PCS, batch);
-> +	stat_add(s, FREE_FASTPATH, batch);
->  
->  	if (batch < size) {
->  		p += batch;
-> @@ -5686,10 +5673,12 @@ static void free_to_pcs_bulk(struct kmem_cache *s, size_t size, void **p)
->  	 */
->  fallback:
->  	__kmem_cache_free_bulk(s, size, p);
-> +	stat_add(s, FREE_SLOWPATH, size);
->  
->  flush_remote:
->  	if (remote_nr) {
->  		__kmem_cache_free_bulk(s, remote_nr, &remote_objects[0]);
-> +		stat_add(s, FREE_SLOWPATH, remote_nr);
->  		if (i < size) {
->  			remote_nr = 0;
->  			goto next_remote_batch;
-> @@ -5784,6 +5773,7 @@ void slab_free(struct kmem_cache *s, struct slab *slab, void *object,
->  	}
->  
->  	__slab_free(s, slab, object, object, 1, addr);
-> +	stat(s, FREE_SLOWPATH);
->  }
->  
->  #ifdef CONFIG_MEMCG
-> @@ -5806,8 +5796,10 @@ void slab_free_bulk(struct kmem_cache *s, struct slab *slab, void *head,
->  	 * With KASAN enabled slab_free_freelist_hook modifies the freelist
->  	 * to remove objects, whose reuse must be delayed.
->  	 */
-> -	if (likely(slab_free_freelist_hook(s, &head, &tail, &cnt)))
-> +	if (likely(slab_free_freelist_hook(s, &head, &tail, &cnt))) {
->  		__slab_free(s, slab, head, tail, cnt, addr);
-> +		stat_add(s, FREE_SLOWPATH, cnt);
-> +	}
->  }
->  
->  #ifdef CONFIG_SLUB_RCU_DEBUG
-> @@ -6705,6 +6697,7 @@ int __kmem_cache_alloc_bulk(struct kmem_cache *s, gfp_t flags, size_t size,
->  		i = refill_objects(s, p, flags, size, size);
->  		if (i < size)
->  			goto error;
-> +		stat_add(s, ALLOC_SLOWPATH, i);
->  	}
->  
->  	return i;
-> @@ -8704,33 +8697,19 @@ static ssize_t text##_store(struct kmem_cache *s,		\
->  }								\
->  SLAB_ATTR(text);						\
->  
-> -STAT_ATTR(ALLOC_PCS, alloc_cpu_sheaf);
->  STAT_ATTR(ALLOC_FASTPATH, alloc_fastpath);
->  STAT_ATTR(ALLOC_SLOWPATH, alloc_slowpath);
-> -STAT_ATTR(FREE_PCS, free_cpu_sheaf);
->  STAT_ATTR(FREE_RCU_SHEAF, free_rcu_sheaf);
->  STAT_ATTR(FREE_RCU_SHEAF_FAIL, free_rcu_sheaf_fail);
->  STAT_ATTR(FREE_FASTPATH, free_fastpath);
->  STAT_ATTR(FREE_SLOWPATH, free_slowpath);
->  STAT_ATTR(FREE_ADD_PARTIAL, free_add_partial);
->  STAT_ATTR(FREE_REMOVE_PARTIAL, free_remove_partial);
-> -STAT_ATTR(ALLOC_FROM_PARTIAL, alloc_from_partial);
->  STAT_ATTR(ALLOC_SLAB, alloc_slab);
-> -STAT_ATTR(ALLOC_REFILL, alloc_refill);
->  STAT_ATTR(ALLOC_NODE_MISMATCH, alloc_node_mismatch);
->  STAT_ATTR(FREE_SLAB, free_slab);
-> -STAT_ATTR(CPUSLAB_FLUSH, cpuslab_flush);
-> -STAT_ATTR(DEACTIVATE_FULL, deactivate_full);
-> -STAT_ATTR(DEACTIVATE_EMPTY, deactivate_empty);
-> -STAT_ATTR(DEACTIVATE_REMOTE_FREES, deactivate_remote_frees);
-> -STAT_ATTR(DEACTIVATE_BYPASS, deactivate_bypass);
->  STAT_ATTR(ORDER_FALLBACK, order_fallback);
-> -STAT_ATTR(CMPXCHG_DOUBLE_CPU_FAIL, cmpxchg_double_cpu_fail);
->  STAT_ATTR(CMPXCHG_DOUBLE_FAIL, cmpxchg_double_fail);
-> -STAT_ATTR(CPU_PARTIAL_ALLOC, cpu_partial_alloc);
-> -STAT_ATTR(CPU_PARTIAL_FREE, cpu_partial_free);
-> -STAT_ATTR(CPU_PARTIAL_NODE, cpu_partial_node);
-> -STAT_ATTR(CPU_PARTIAL_DRAIN, cpu_partial_drain);
->  STAT_ATTR(SHEAF_FLUSH, sheaf_flush);
->  STAT_ATTR(SHEAF_REFILL, sheaf_refill);
->  STAT_ATTR(SHEAF_ALLOC, sheaf_alloc);
-> @@ -8806,33 +8785,19 @@ static struct attribute *slab_attrs[] = {
->  	&remote_node_defrag_ratio_attr.attr,
->  #endif
->  #ifdef CONFIG_SLUB_STATS
-> -	&alloc_cpu_sheaf_attr.attr,
->  	&alloc_fastpath_attr.attr,
->  	&alloc_slowpath_attr.attr,
-> -	&free_cpu_sheaf_attr.attr,
->  	&free_rcu_sheaf_attr.attr,
->  	&free_rcu_sheaf_fail_attr.attr,
->  	&free_fastpath_attr.attr,
->  	&free_slowpath_attr.attr,
->  	&free_add_partial_attr.attr,
->  	&free_remove_partial_attr.attr,
-> -	&alloc_from_partial_attr.attr,
->  	&alloc_slab_attr.attr,
-> -	&alloc_refill_attr.attr,
->  	&alloc_node_mismatch_attr.attr,
->  	&free_slab_attr.attr,
-> -	&cpuslab_flush_attr.attr,
-> -	&deactivate_full_attr.attr,
-> -	&deactivate_empty_attr.attr,
-> -	&deactivate_remote_frees_attr.attr,
-> -	&deactivate_bypass_attr.attr,
->  	&order_fallback_attr.attr,
->  	&cmpxchg_double_fail_attr.attr,
-> -	&cmpxchg_double_cpu_fail_attr.attr,
-> -	&cpu_partial_alloc_attr.attr,
-> -	&cpu_partial_free_attr.attr,
-> -	&cpu_partial_node_attr.attr,
-> -	&cpu_partial_drain_attr.attr,
->  	&sheaf_flush_attr.attr,
->  	&sheaf_refill_attr.attr,
->  	&sheaf_alloc_attr.attr,
-> 
-> -- 
-> 2.52.0
-> 
