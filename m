@@ -1,80 +1,80 @@
 Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33BA9451049
-	for <bpf@vger.kernel.org>; Thu, 22 Jan 2026 08:42:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 179B934889F
+	for <bpf@vger.kernel.org>; Thu, 22 Jan 2026 08:49:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769071356; cv=none; b=Ez0+Esf3cGT5Zr4ct/6x5w5V/s7R/dRKwccsNhwGvjr+gaZiWYN4UuJxsR03KhKeRJtsDzamJ1a8klsxONBkIPJn0UwN70uKVZ4C5KykoSZ5Uhhb5ILzzGdRYknfhe3Yk12+rmtedqABlFyGPJLQtlQf6IJckhRDd3q2quJm9jI=
+	t=1769071758; cv=none; b=uLjPiCpgeoHz/xiChOO1H9B3W9nEOsZ0oSshsBj0b3i8oW/CMdI2uVgvgo9gKCaAB+8r35N9iCmlbnOk5N2k8krMHIFjciNOMWqCXS/JvNFyVB0Sr45wVC85VIJ2LVo7g8nB5I+D000czIr25/bUh/SHEujacTl6p9EbR0aKXq4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769071356; c=relaxed/simple;
-	bh=Ge3PkkMKD+sZWRg9Cq9cr55/r+3/fgKuQubmWEtx7lU=;
+	s=arc-20240116; t=1769071758; c=relaxed/simple;
+	bh=yjc1OOcs7704A6r6wvLt5yheTjD0ITzFQPQ47N8GFDg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mhwYqPc2S8wuVUnufmeMPoNEe8QJAG0mEthlRV/cQVMayznZibMEfwpp0SbVvcXRaVBoLJS9Q92cqA4TiUaqbSk7qYi0cmBzAbn5g6h6JeLkuwGZCp9D0GId7uQLDzDNT+2WVUO7dBSjYA3TZo2jVuP5Btshe9XHYqmZvMxlBS8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=uhvEYvyl; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=5K56Hgh3; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=BN1aHwYw; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=beOCQ+fX; arc=none smtp.client-ip=195.135.223.130
+	 In-Reply-To:Content-Type; b=otl418FM5C9dVzcMt0S58yYADzbGsoe5TbpUZAqK1Z8t9UJNMpiNTJRPTRktgsn8WKU5x022h1RZ4JuCHCBKJMulOk2j3Q52eGHjvuHZUUncSh6MjcRO6609KSfjR4MGDNbOu7IYPsFz3K65RTRiz81rgsyUm0al3moQV1u8Ol8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=Yvk96SCx; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=wB4wkh1L; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=Yvk96SCx; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=wB4wkh1L; arc=none smtp.client-ip=195.135.223.130
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="uhvEYvyl";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="5K56Hgh3";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="BN1aHwYw";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="beOCQ+fX"
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="Yvk96SCx";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="wB4wkh1L";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="Yvk96SCx";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="wB4wkh1L"
 Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id F021333697;
-	Thu, 22 Jan 2026 08:42:31 +0000 (UTC)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 4E4EF33697;
+	Thu, 22 Jan 2026 08:49:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1769071352; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1769071755; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=wtkavSVJht+G/RwkNgcjxFWYFwzxqjQgltbZ6uHMgU4=;
-	b=uhvEYvyldlgqEPhfp+7mSHTVYe4MkEDyB1xZjxJqhP4t7kbUHpF7+BqkBxWfARNMFa9HZK
-	hSYruhIPe9coBOBMqGqlaqBXkvZKqPonLq8FPvIjXzWr9tiKlmJo1IXBy5/Wc2QRTD5eDD
-	U4hjM1cnLEvahtfMFywDC8RGvQ0p+Qk=
+	bh=sK1ACyocc5KtplqXf/k5n7xl2hUWgnhGLVkAdPAkMIg=;
+	b=Yvk96SCxdNvYEexXEOK747I/Gg6lPcQTHvSga05IY2lwd2U9rqdxLq5BSDMej64sjUQxKB
+	TOpPFVwXW+28+Idev1+Dc9qQk7umBtZ2QWYSZazbgM/5lsYgcVn/vT9Rr+A5f7GRuZp5mw
+	Q069Cx/ciKkTUSgABf7ZkRjpTi5dVPc=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1769071352;
+	s=susede2_ed25519; t=1769071755;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=wtkavSVJht+G/RwkNgcjxFWYFwzxqjQgltbZ6uHMgU4=;
-	b=5K56Hgh3PXtWSBnnFQ2fBBj7tnbSkFDB6wrPugus4lE4qmWEziBFuQO1cMntQeynJp/eMz
-	A47Jno53PH2EPuBw==
+	bh=sK1ACyocc5KtplqXf/k5n7xl2hUWgnhGLVkAdPAkMIg=;
+	b=wB4wkh1Lvhk0wx06u19ivN81peqMBi10+cDgIUBa8bKr1wzTgTfUVSw9miVhgMndlzdWK7
+	6iY66gOh34O//CDA==
 Authentication-Results: smtp-out1.suse.de;
 	none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1769071351; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1769071755; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=wtkavSVJht+G/RwkNgcjxFWYFwzxqjQgltbZ6uHMgU4=;
-	b=BN1aHwYwgAip7IHXrl4+wW64W5kUzJkg7s4i2Nx1QeOh1D7BYrxsTtBt6j82xlLRkjfXGR
-	gx0TPKCXrsjmil6UetSlGjaCGJpAeS46xXLnjcuguTFp4A8dxtajYJpNxCJKJHmlHZEGB+
-	PZjuCpBNnKBKERbR6vEs2wnQ6BL59F8=
+	bh=sK1ACyocc5KtplqXf/k5n7xl2hUWgnhGLVkAdPAkMIg=;
+	b=Yvk96SCxdNvYEexXEOK747I/Gg6lPcQTHvSga05IY2lwd2U9rqdxLq5BSDMej64sjUQxKB
+	TOpPFVwXW+28+Idev1+Dc9qQk7umBtZ2QWYSZazbgM/5lsYgcVn/vT9Rr+A5f7GRuZp5mw
+	Q069Cx/ciKkTUSgABf7ZkRjpTi5dVPc=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1769071351;
+	s=susede2_ed25519; t=1769071755;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=wtkavSVJht+G/RwkNgcjxFWYFwzxqjQgltbZ6uHMgU4=;
-	b=beOCQ+fXGIpQg0Q+0Ue81cHQEZxt+Mg2Pe63z63BbDVbStxBVK5swApeL3XTehwNZcXASv
-	uGS+V7//BmhPyMBw==
+	bh=sK1ACyocc5KtplqXf/k5n7xl2hUWgnhGLVkAdPAkMIg=;
+	b=wB4wkh1Lvhk0wx06u19ivN81peqMBi10+cDgIUBa8bKr1wzTgTfUVSw9miVhgMndlzdWK7
+	6iY66gOh34O//CDA==
 Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id C64373EA63;
-	Thu, 22 Jan 2026 08:42:31 +0000 (UTC)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 306693EA63;
+	Thu, 22 Jan 2026 08:49:15 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
 	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id QsbALvficWkRdwAAD6G6ig
-	(envelope-from <vbabka@suse.cz>); Thu, 22 Jan 2026 08:42:31 +0000
-Message-ID: <e341d9ef-9ec3-47c6-b5f0-3749c930f477@suse.cz>
-Date: Thu, 22 Jan 2026 09:42:31 +0100
+	id +qgXCovkcWmFAwAAD6G6ig
+	(envelope-from <vbabka@suse.cz>); Thu, 22 Jan 2026 08:49:15 +0000
+Message-ID: <1e3092b1-23df-441d-8849-84aa0632ee88@suse.cz>
+Date: Thu, 22 Jan 2026 09:49:14 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -82,7 +82,7 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 17/21] slab: refill sheaves from all nodes
+Subject: Re: [PATCH v3 18/21] slab: update overview comments
 Content-Language: en-US
 To: Harry Yoo <harry.yoo@oracle.com>
 Cc: Petr Tesarik <ptesarik@suse.com>, Christoph Lameter <cl@gentwo.org>,
@@ -97,8 +97,8 @@ Cc: Petr Tesarik <ptesarik@suse.com>, Christoph Lameter <cl@gentwo.org>,
  linux-kernel@vger.kernel.org, linux-rt-devel@lists.linux.dev,
  bpf@vger.kernel.org, kasan-dev@googlegroups.com
 References: <20260116-sheaves-for-all-v3-0-5595cb000772@suse.cz>
- <20260116-sheaves-for-all-v3-17-5595cb000772@suse.cz>
- <aXHLhF2kJxgy4M00@hyeyoo>
+ <20260116-sheaves-for-all-v3-18-5595cb000772@suse.cz>
+ <aXHGfLV6FdlNPc14@hyeyoo>
 From: Vlastimil Babka <vbabka@suse.cz>
 Autocrypt: addr=vbabka@suse.cz; keydata=
  xsFNBFZdmxYBEADsw/SiUSjB0dM+vSh95UkgcHjzEVBlby/Fg+g42O7LAEkCYXi/vvq31JTB
@@ -139,75 +139,63 @@ Autocrypt: addr=vbabka@suse.cz; keydata=
  rywqgzTUhHFKKF6/9L/lYtrNcHU8Z6Y4Ju/MLUiNYkmtrGIMnkjKCiRqlRrZE/v5YFHbayRD
  dJKXobXTtCBYpLJM4ZYRpGZXne/FAtWNe4KbNJJqxMvrTOrnIatPj8NhBVI0RSJRsbilh6TE
  m6M14QORSWTLRg==
-In-Reply-To: <aXHLhF2kJxgy4M00@hyeyoo>
+In-Reply-To: <aXHGfLV6FdlNPc14@hyeyoo>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-Spam-Score: -4.30
 X-Spamd-Result: default: False [-4.30 / 50.00];
 	BAYES_HAM(-3.00)[100.00%];
 	NEURAL_HAM_LONG(-1.00)[-1.000];
 	NEURAL_HAM_SHORT(-0.20)[-1.000];
 	MIME_GOOD(-0.10)[text/plain];
 	ARC_NA(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	MIME_TRACE(0.00)[0:+];
 	RCPT_COUNT_TWELVE(0.00)[17];
-	RCVD_TLS_ALL(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	MIME_TRACE(0.00)[0:+];
 	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[suse.com,gentwo.org,google.com,linux.dev,linux-foundation.org,gmail.com,oracle.com,linutronix.de,kernel.org,kvack.org,vger.kernel.org,lists.linux.dev,googlegroups.com];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	RCVD_TLS_ALL(0.00)[];
 	TO_DN_SOME(0.00)[];
 	FROM_EQ_ENVFROM(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[suse.com,gentwo.org,google.com,linux.dev,linux-foundation.org,gmail.com,oracle.com,linutronix.de,kernel.org,kvack.org,vger.kernel.org,lists.linux.dev,googlegroups.com];
 	RCVD_COUNT_TWO(0.00)[2];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:mid,suse.cz:email]
-X-Spam-Flag: NO
-X-Spam-Score: -4.30
 X-Spam-Level: 
+X-Spam-Flag: NO
 
-On 1/22/26 08:02, Harry Yoo wrote:
-> On Fri, Jan 16, 2026 at 03:40:37PM +0100, Vlastimil Babka wrote:
->> __refill_objects() currently only attempts to get partial slabs from the
->> local node and then allocates new slab(s). Expand it to trying also
->> other nodes while observing the remote node defrag ratio, similarly to
->> get_any_partial().
+On 1/22/26 07:41, Harry Yoo wrote:
+> On Fri, Jan 16, 2026 at 03:40:38PM +0100, Vlastimil Babka wrote:
+>> The changes related to sheaves made the description of locking and other
+>> details outdated. Update it to reflect current state.
 >> 
->> This will prevent allocating new slabs on a node while other nodes have
->> many free slabs. It does mean sheaves will contain non-local objects in
->> that case. Allocations that care about specific node will still be
->> served appropriately, but might get a slowpath allocation.
-> 
-> Hmm one more question.
-> 
-> Given frees to remote nodes bypass sheaves layer anyway, isn't it
-> more reasonable to let refill_objects() fail sometimes instead of
-> allocating new local slabs and fall back to slowpath (based on defrag_ratio)?
-
-You mean if we can't refill from local partial list, we give up and perhaps
-fail alloc_from_pcs()? Then the __slab_alloc_node() fallback would do
-allocate local slab or try remote nodes?
-
-Wouldn't that mean __slab_alloc_node() does all that work for a single
-object, and slow everything down? Only in case of a new slab it would
-somehow amortize because the next attempt would refill from it.
-
->> Like get_any_partial() we do observe cpuset_zone_allowed(), although we
->> might be refilling a sheaf that will be then used from a different
->> allocation context.
->> 
->> We can also use the resulting refill_objects() in
->> __kmem_cache_alloc_bulk() for non-debug caches. This means
->> kmem_cache_alloc_bulk() will get better performance when sheaves are
->> exhausted. kmem_cache_alloc_bulk() cannot indicate a preferred node so
->> it's compatible with sheaves refill in preferring the local node.
->> Its users also have gfp flags that allow spinning, so document that
->> as a requirement.
+>> Also add a new copyright line due to major changes.
 >> 
 >> Reviewed-by: Suren Baghdasaryan <surenb@google.com>
 >> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
 >> ---
+>> @@ -112,47 +123,46 @@
+>> + *   node->barn->lock (spinlock)
+>>   *
+>> - *   lockless fastpaths
+>> + *   Lockless freeing
+>> + *
+>> + *   Objects may have to be freed to their slabs when they are from a remote
+>> + *   node (where we want to avoid filling local sheaves with remote objects)
+>> + *   or when there are too many full sheaves. On architectures supporting
+>> + *   cmpxchg_double this is done by a lockless update of slab's freelist and
+>> + *   counters, otherwise slab_lock is taken. This only needs to take the
+>> + *   list_lock if it's a first free to a full slab, or when there are too many
+>> + *   fully free slabs and some need to be discarded.
 > 
+> nit: "or when a slab becomes empty after the free"?
+> because we don't check nr_partial before acquiring list_lock.
 > 
+> With that addressed,
+> Reviewed-by: Harry Yoo <harry.yoo@oracle.com>
+
+Good point, thanks!
 
