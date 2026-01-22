@@ -1,153 +1,145 @@
-Received: from out-171.mta1.migadu.com (out-171.mta1.migadu.com [95.215.58.171])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B61F392B88
-	for <bpf@vger.kernel.org>; Thu, 22 Jan 2026 15:32:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5282E3612C9;
+	Thu, 22 Jan 2026 15:33:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769095930; cv=none; b=XRBAbIbTnm7F+ael4EYwqnxo60XAfjQFqG9CBisuf5avpIVVLXxEsqRxLZQXPRcQHOltyy9JoMueOF9wzHdrhKAmw+BycfYcoZn3FCBQAfVbex89lpBFeYnI+5c9ixJq9inIIPkFNpp1rC4titiyLgCZEk/bmJgeTnoi5MpsSm4=
+	t=1769095986; cv=none; b=RM10eYQI7mjnN7ecDBf6e3Juco29cl4SF16bYAlpMAiS6BbQm4wrh8msYDouMih6MftSiGS6Lp226RvAsH9ejn8dCaOLDTIciDEAIUkNLYFvm5ik45WVDZUIshzic7o754C5pTPxEaWqZenJpkGrc+f7Vi9/M4sRmuY5FxwDmiU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769095930; c=relaxed/simple;
-	bh=MY43wR6LCaRe9Ftu7MHZk32lhl0/K4sJgBk+Rj4r8xc=;
+	s=arc-20240116; t=1769095986; c=relaxed/simple;
+	bh=DhY6iCfrE0xXdQhG98LPqIekLtebh744G12unCjSROE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cdnnYLrsk+QBtCAvvz8yo23iWkazBQSp54MBsO/0Vn2Gv2UAg/hI+qthlWm3H0DMh3H59EUKgxuC6d22yLN7vDFc4oOUqiKS1Q2u1oc+FxOKBTrls0AOSLmyNDJaG+EzGV2b7kJ0dB2cfNiKdpSmE+HxrBTDqq/bfql66ywYmCg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=TFxwO3Xy; arc=none smtp.client-ip=95.215.58.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	 In-Reply-To:Content-Type; b=QcFajwDwmL3mqGsYh+wCYnUc6oG7BzLJ+CgSeTxAyJTaKPsD8VRrbS0pTB2YDVwy9BB6cNycTxA/bX552hiLfnVJoVCZkZmUsGa73o8nmwz2Zv6GwJM+r66zcsWek6KDjjaMRjjVS0uLwwewfDfeoCeT3Z4cf5y+yyzfM+uGvWg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=botm2txQ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="TFxwO3Xy"
-Message-ID: <342128a1-30e5-403e-abbe-0d49f76765db@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1769095925;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=/ipGZtZSc/go6xfLTyhfOREhS72TisUuT8hbzWM9rrk=;
-	b=TFxwO3Xy5xh7H2y59HEUJuq2JJzAFa0NyLlh5iMXYfu7UtNdKb/FG5bHQYwHpndedguESm
-	s5nXEVMvIbEGFUBRYVnQnyOmv84oat786Udu+m18OOV0tKHPeW0HdQDezfEWdu6pJR3ZD5
-	pyTkOoPgHtxng3SQXUsOHCToNAHUcGM=
-Date: Thu, 22 Jan 2026 07:31:57 -0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="botm2txQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E812C116C6;
+	Thu, 22 Jan 2026 15:33:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769095984;
+	bh=DhY6iCfrE0xXdQhG98LPqIekLtebh744G12unCjSROE=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=botm2txQS4Dz6OE6o2EWr6QLjXyALBmvvyNKKh0s4gptJ/V55Q/CYphZdv798g4DP
+	 0zPkXVTejK7jYtaM5bGcYCldjC7C2zdRnUokyUw18zAMVGt+lkbhzcUHQQ/bzAN2A3
+	 guBXtD/kjkwYcjgzQRpkx5EFZ1fYqE3A1boItERAcmIV/OH2VgFkmnUPrZcf31R1gD
+	 eDpwknjjiW0Fs5Zf+7N326mjxLxwXaJFU58CzE+lFpDwTf+PP8Bod8rgewcWei2d15
+	 7Cw1eATxzYHIAKXTzsXNQU89sOCCBis4HjpJuZAkAyxmAYO9mHXzPfe0So0b7pRo08
+	 k6GEj5SbR77gg==
+Message-ID: <28911dac-6aec-42ce-9101-9071e18e1522@kernel.org>
+Date: Thu, 22 Jan 2026 16:33:00 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Fix xdp_pull_data failure
- with 64K page
-Content-Language: en-GB
-To: Alan Maguire <alan.maguire@oracle.com>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, kernel-team@fb.com,
- Martin KaFai Lau <martin.lau@kernel.org>, Amery Hung <ameryhung@gmail.com>
-References: <20260120210925.2544657-1-yonghong.song@linux.dev>
- <20260120210930.2544950-1-yonghong.song@linux.dev>
- <45c5425c-351c-4db4-b069-9ba0a03a7021@oracle.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <45c5425c-351c-4db4-b069-9ba0a03a7021@oracle.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v1] net: sched: sfq: add detailed drop reasons
+ for monitoring
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: netdev@vger.kernel.org, bpf@vger.kernel.org,
+ Eric Dumazet <eric.dumazet@gmail.com>, "David S. Miller"
+ <davem@davemloft.net>, Paolo Abeni <pabeni@redhat.com>,
+ =?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
+ carges@cloudflare.com, kernel-team@cloudflare.com,
+ Yan Zhai <yan@cloudflare.com>
+References: <176847978787.939583.16722243649193888625.stgit@firesoul>
+ <1bbbb306-d497-4143-a714-b126ecc41a06@kernel.org>
+ <20260120162616.463c8af1@kernel.org>
+ <412b91a2-15f3-4a5f-8f1a-249c9d79cb41@kernel.org>
+ <20260121172155.6ec96ef8@kernel.org>
+Content-Language: en-US
+From: Jesper Dangaard Brouer <hawk@kernel.org>
+In-Reply-To: <20260121172155.6ec96ef8@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
 
 
 
-On 1/22/26 3:02 AM, Alan Maguire wrote:
-> On 20/01/2026 21:09, Yonghong Song wrote:
->> If the argument 'pull_len' of run_test() is 'PULL_MAX' or
->> 'PULL_MAX | PULL_PLUS_ONE', the eventual pull_len size
->> will close to the page size. On arm64 systems with 64K pages,
->> the pull_len size will be close to 64K. But the existing buffer
->> will be close to 9000 which is not enough to pull.
+
+On 22/01/2026 02.21, Jakub Kicinski wrote:
+> On Wed, 21 Jan 2026 20:13:31 +0100 Jesper Dangaard Brouer wrote:
+>>>> I noticed commit 5765c7f6e317 ("net_sched: sch_fq: add three
+>>>> drop_reason") (Author: Eric Dumazet).
+>>>>
+>>>>     SKB_DROP_REASON_FQ_BAND_LIMIT: Per-band packet limit exceeded
+>>>>     SKB_DROP_REASON_FQ_HORIZON_LIMIT: Packet timestamp too far in future
+>>>>     SKB_DROP_REASON_FQ_FLOW_LIMIT: Per-flow packet limit exceeded
+>>>>
+>>>> Should I/we make SKB_DROP_REASON_QDISC_MAXDEPTH specific for SFQ ?
+>>>> Like naming it = SKB_DROP_REASON_SFQ_MAXDEPTH ?
+>>>
+>>> FWIW FLOW_LIMIT is more intuitive to me, but I'm mostly dealing with
+>>> fq so probably because that's the param name there.
+>>>
+>>> I'd prefer the reuse (just MAXDEPTH, I don't see equivalent of
+>>> MAXFLOWS?). We assign multiple names the same values in the enum to
+>>> avoid breaking FQ users.
 >>
->> So for 64K page size and selective run_tests(), increase
->> buff size from 9000 to 90000 to ensure enough buffer space
->> to pull.
+>> I've taken a detailed look at how we consume this in production and what
+>> Prometheus metrics that we generate. My conclusion is that, we want to
+>> keep the Eric's approach of having qdisc specific drop-reason (that
+>> relates to qdisc tunables), but extend this with a prefix
+>> "SKB_DROP_REASON_QDISC_xxx". This is what I implemented in [v2] like
+>> "SKB_DROP_REASON_QDISC_SFQ_MAXFLOWS".  The QDISC_ prefix enables pattern
+>> matching for qdisc-related drops allowing monitoring tools to match this
+>> for categorizing new/future drop reasons into same qdisc category.
 >>
->> Cc: Amery Hung <ameryhung@gmail.com>
->> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
-> Tested-by: Alan Maguire <alan.maguire@oracle.com>
->
-> one optional suggestion below..
->
->
->> ---
->>   .../selftests/bpf/prog_tests/xdp_pull_data.c     | 16 +++++++++++-----
->>   1 file changed, 11 insertions(+), 5 deletions(-)
+>> For Prometheus drop_reason metrics the decision was to omit the
+>> net_device label to keep the metric counts manageable and avoid
+>> exploding the number of time series (lower cardinality, less storage).
+>> Without qdisc-specific names in the enum, we'd be forced to add back the
+>> net_device label, which would explode our time series count.
 >>
->> diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_pull_data.c b/tools/testing/selftests/bpf/prog_tests/xdp_pull_data.c
->> index efa350d04ec5..32ac99406d28 100644
->> --- a/tools/testing/selftests/bpf/prog_tests/xdp_pull_data.c
->> +++ b/tools/testing/selftests/bpf/prog_tests/xdp_pull_data.c
->> @@ -8,6 +8,7 @@
->>   #define PULL_PLUS_ONE	(1 << 30)
->>   
->>   #define XDP_PACKET_HEADROOM 256
->> +#define PAGE_SIZE_64K 65536
->>   
->>   /* Find headroom and tailroom occupied by struct xdp_frame and struct
->>    * skb_shared_info so that we can calculate the maximum pull lengths for
->> @@ -114,12 +115,17 @@ static void test_xdp_pull_data_basic(void)
->>   {
->>   	u32 pg_sz, max_meta_len, max_data_len;
->>   	struct test_xdp_pull_data *skel;
->> +	int buff_len;
->>   
->>   	skel = test_xdp_pull_data__open_and_load();
->>   	if (!ASSERT_OK_PTR(skel, "test_xdp_pull_data__open_and_load"))
->>   		return;
->>   
->>   	pg_sz = sysconf(_SC_PAGE_SIZE);
->> +	if (pg_sz == PAGE_SIZE_64K)
->> +		buff_len = 90000;
->> +	else
->> +		buff_len = 9000;
->>   
-> nit: should we generalize here and just use 1.5 * pg_sz; i.e.
->
-> 	buff_len = pg_sz + (pg_sz/2);
->
-> that would eliminate the need for the 64k page size #define.
+>> The FQ flow_limit and SFQ depth parameters have different semantics: FQ
+>> uses exact flow classification while SFQ uses stochastic hashing. They
+>> also have different defaults (FQ: 100 packets, SFQ: 127 packets). Having
+>> the same drop_reason for both would obscure which qdisc's tunable needs
+>> adjustment when analyzing production drops.
+>>
+>> Having more enum numbers for drop reasons is essentially free, while
+>> keeping metrics per net_device is expensive in terms of storage and
+>> query performance.
+> 
+> I'm not familiar with Prometheus is there some off-the-shelf plugin
+> which exports the drops? 
 
-Thanks for suggestion! This indeed simpler. Will make the change in v2.
+(I assume you are familiar with Prometheus cardinality explosion problem?)
+We have written our own drop-reason monitor that exports drop_reason
+enums directly to Prometheus (without decoding netdev or qdisc
+information). (Irrelevant: we also collect sampled (e.g. 1/4000) copies
+of packet data to userspace where we collect as much metadata as
+possible, but that is too expensive to do for every packet).
 
->
->>   	if (find_xdp_sizes(skel, pg_sz))
->>   		goto out;
->> @@ -140,13 +146,13 @@ static void test_xdp_pull_data_basic(void)
->>   	run_test(skel, XDP_PASS, pg_sz, 9000, 0, 1025, 1025);
->>   
->>   	/* multi-buf pkt, empty linear data area, pull requires memmove */
->> -	run_test(skel, XDP_PASS, pg_sz, 9000, 0, 0, PULL_MAX);
->> +	run_test(skel, XDP_PASS, pg_sz, buff_len, 0, 0, PULL_MAX);
->>   
->>   	/* multi-buf pkt, no headroom */
->> -	run_test(skel, XDP_PASS, pg_sz, 9000, max_meta_len, 1024, PULL_MAX);
->> +	run_test(skel, XDP_PASS, pg_sz, buff_len, max_meta_len, 1024, PULL_MAX);
->>   
->>   	/* multi-buf pkt, no tailroom, pull requires memmove */
->> -	run_test(skel, XDP_PASS, pg_sz, 9000, 0, max_data_len, PULL_MAX);
->> +	run_test(skel, XDP_PASS, pg_sz, buff_len, 0, max_data_len, PULL_MAX);
->>   
->>   	/* Test cases with invalid pull length */
->>   
->> @@ -154,7 +160,7 @@ static void test_xdp_pull_data_basic(void)
->>   	run_test(skel, XDP_DROP, pg_sz, 2048, 0, 2048, 2049);
->>   
->>   	/* multi-buf pkt with no space left in linear data area */
->> -	run_test(skel, XDP_DROP, pg_sz, 9000, max_meta_len, max_data_len,
->> +	run_test(skel, XDP_DROP, pg_sz, buff_len, max_meta_len, max_data_len,
->>   		 PULL_MAX | PULL_PLUS_ONE);
->>   
->>   	/* multi-buf pkt, empty linear data area */
->> @@ -165,7 +171,7 @@ static void test_xdp_pull_data_basic(void)
->>   		 PULL_MAX | PULL_PLUS_ONE);
->>   
->>   	/* multi-buf pkt, no tailroom */
->> -	run_test(skel, XDP_DROP, pg_sz, 9000, 0, max_data_len,
->> +	run_test(skel, XDP_DROP, pg_sz, buff_len, 0, max_data_len,
->>   		 PULL_MAX | PULL_PLUS_ONE);
->>   
->>   out:
+> The kfree_skb tracepoint does not have netdev,
+
+Correct, the kfree_skb tracepoint does not have netdev avail.
+I'm also saying that I don't want the netdev, because that would
+explode/increase the Prometheus metric data.
+
+> so if you're saying you have the ability to see the netdev then
+> presumably there's some BPF in the mix BTF'ing the netdev info out.
+> And if you can read the netdev info, you can as well read
+> netdev->qdisc->ops->id and/or netdev->_tx[0]->qdisc->ops->id
+> 
+> It kinda reads to me like you're trying to encode otherwise-reachable
+> metadata into the drop reason.
+
+This feels like a misunderstanding. We don't want to (somehow) decode
+extra metadata like netdev or qdisc.  First of all we don't want to
+spend extra BPF prog cycles doing this (if it's even possible), and
+secondly we want to keep metric simple (see cardinality explosion).
+
+I'm simply saying let us keep Eric's current approach of having qdisc
+specific drop-reason *when* those relates to qdisc specific tunables.
+And I'm arguing that FQ flow_limit and SFQ depth are two different
+things, and should have their own enums.
+   I have a specific production use-case, where I want configure SFQ to
+have small flow "depth" to penalize elefant flows, so I'm okay with
+SKB_DROP_REASON_SFQ_MAXDEPTH events.  So, I want to be able to tell this
+apart from FQ drops (SKB_DROP_REASON_FQ_FLOW_LIMIT). I hope that this
+makes it clear why I want this to be separate enums(?)
+
+--Jesper
 
