@@ -1,32 +1,32 @@
-Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
+Received: from out-181.mta1.migadu.com (out-181.mta1.migadu.com [95.215.58.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 882A2392B81
-	for <bpf@vger.kernel.org>; Thu, 22 Jan 2026 15:31:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E468F392B9B
+	for <bpf@vger.kernel.org>; Thu, 22 Jan 2026 15:32:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769095922; cv=none; b=P1173BaHtzs2CBUchPORJ839Bfd9eMZkgw1i2/IbpPJ/gVbPS1elJcD3Azg46WB8S04kBH3Gso1kkIrWRf8zN+3aGk3nmK1QNUwwA/6fwyh/fYQlkwkEjCGRuxzREJ+jZelHVIGs/sslO66DsgU8y3D1EeYbTQv5huk6+i4LKcs=
+	t=1769095926; cv=none; b=dQy8wRM+JVPnfzmSTdbMRgVIy0tOeiQKYIUiTB0vZ9GdRfj+oUSTk8RNA1e7hn5RJhbzdasMLaBtlHM3Q9qEGIZFTKXTQ79U+gqlSVwXqXS+QK9p+WYNH0dpjTUJEpUXdYt2kQh1TInKPalaWTieO0vx0sVB+MPVuzhMWUU+5fw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769095922; c=relaxed/simple;
-	bh=pRa//8PzCcBD7X16JjPzDoiWbVbFV9R8qJmQeWgEkcU=;
+	s=arc-20240116; t=1769095926; c=relaxed/simple;
+	bh=VeK4ExRXCh+3B3ipuqifOQCvQneCr/2OWhViUuULlKU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=L+3k1eQvSxoeXMtjd7EF3oFl3LsZ9aptjj25mwn80Lx2ym/a1OH/aVnqgZ8lGYctJEnoSbvZ+D5SBwgVNj4RpZh6jX5H91UWGwGj+3RVFu7VMBWyihD/jTsajAuoVN7vX9Kgj6njXrSlV88BbuGZHAmYvV5/43LQxS/c4EYK/W8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=D8BT5f9G; arc=none smtp.client-ip=95.215.58.178
+	 MIME-Version; b=jUZYTc/R22NU+1Fp9fS6QK8wApVv9ekP1zBVMyKyXPhJ8F9sbvBtxlhKJMKnc5KKZkVkTgNMk2fpXO2bGoLu/860KWkJdEhp5vQ+IWtiwZMlADZROxmWNafPnP422nwvtx/cP4T2aLLXMdrGwsWmnKdvwOhmoBDbcYxKbsdceJ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=oPqhVPhE; arc=none smtp.client-ip=95.215.58.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="D8BT5f9G"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="oPqhVPhE"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1769095915;
+	t=1769095920;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=zfS4wRyf/VRnjwnPX4tgHWNsIgrX88DqFs7Pj+omr4c=;
-	b=D8BT5f9Gm42ACxpty+gumNX4BsodB+xW9AZamL4kiTmTus1d391WQtBJRgk84lQ/68Zl2I
-	DkBI0uJG/In3afQy2hEVaU41Ush0RNT4Hecq4lOI19wkTFDUlwtgauMw7o10uxGhnwU3vf
-	xRZ9CpjVZbBAC/2LLdV7kHE+0V82Q3M=
+	bh=CGFs8iwFD+3Bos+er5vmVWRRN6I8GRLoMxxtNzEogAM=;
+	b=oPqhVPhE1x8MpJ7DZ1cDXjUiTdGXJjgJ3QdDVSv006/7Fl1gElm1qmwheaj8IKTH/pKp6H
+	OoIZV3vE0sKfhn/2RU+t4a0qpmAtdvcu5EpfGSYITqKv+1ysXua4uAxVY12QT0eSRWEOOV
+	DaS9+0RlDFYSXqteD3PpkwCsN3zsStc=
 From: Leon Hwang <leon.hwang@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -46,9 +46,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	kernel-patches-bot@fb.com
-Subject: [PATCH bpf-next 1/2] bpf: Disallow BPF_F_LOCK with mixed special fields and centralize flag checks
-Date: Thu, 22 Jan 2026 23:31:19 +0800
-Message-ID: <20260122153120.69249-2-leon.hwang@linux.dev>
+Subject: [PATCH bpf-next 2/2] selftests/bpf: Add tests to verify BPF_F_LOCK restrictions
+Date: Thu, 22 Jan 2026 23:31:20 +0800
+Message-ID: <20260122153120.69249-3-leon.hwang@linux.dev>
 In-Reply-To: <20260122153120.69249-1-leon.hwang@linux.dev>
 References: <20260122153120.69249-1-leon.hwang@linux.dev>
 Precedence: bulk
@@ -60,134 +60,151 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-Disallow combining BPF_F_LOCK with map values that contain special BTF
-fields other than bpf_spin_lock (e.g. kptr or uptr). Such mixing may lead
-to subtle or undefined behavior in map value updating. Reject these
-combinations early by returning -EOPNOTSUPP.
+Add a tc-based helper program that updates a map value containing both
+bpf_spin_lock and bpf_timer and records errors for invalid flag
+combinations.
 
-Centralize map update flag validation in bpf_map_check_op_flags() and
-reuse it across array, hash, local-storage, and task-storage map update
-paths. Explicitly reject incompatible BPF_NOEXIST/BPF_EXIST combinations
-and invalid BPF_F_LOCK usage to keep flag validation consistent and
-eliminate duplicated per-map checks.
+Extend the existing map_lock tests to cover array and hash maps. Verify
+that BPF_NOEXIST|BPF_EXIST is rejected with -EINVAL/-EEXIST, and that
+BPF_F_LOCK returns -EOPNOTSUPP when mixed with other special fields.
 
 Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
 ---
- include/linux/bpf.h            |  7 +++++++
- kernel/bpf/arraymap.c          | 11 ++++-------
- kernel/bpf/bpf_local_storage.c |  7 -------
- kernel/bpf/bpf_task_storage.c  |  3 ---
- kernel/bpf/hashtab.c           |  8 +++-----
- 5 files changed, 14 insertions(+), 22 deletions(-)
+ .../selftests/bpf/prog_tests/map_lock.c       | 70 +++++++++++++++++++
+ .../selftests/bpf/progs/test_map_lock.c       | 31 +++++++-
+ 2 files changed, 100 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 5936f8e2996f..c5863487ee73 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -3935,9 +3935,16 @@ static inline int bpf_map_check_op_flags(struct bpf_map *map, u64 flags, u64 all
- 	if ((u32)flags & ~allowed_flags)
- 		return -EINVAL;
+diff --git a/tools/testing/selftests/bpf/prog_tests/map_lock.c b/tools/testing/selftests/bpf/prog_tests/map_lock.c
+index 1d6726f01dd2..aafae8d02e1d 100644
+--- a/tools/testing/selftests/bpf/prog_tests/map_lock.c
++++ b/tools/testing/selftests/bpf/prog_tests/map_lock.c
+@@ -1,6 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
+ #include <test_progs.h>
+ #include <network_helpers.h>
++#include "test_map_lock.skel.h"
  
-+	/* BPF_NOEXIST and BPF_EXIST are mutually exclusive. */
-+	if ((flags & (BPF_NOEXIST | BPF_EXIST)) == (BPF_NOEXIST | BPF_EXIST))
-+		return -EINVAL;
+ static void *spin_lock_thread(void *arg)
+ {
+@@ -90,3 +91,72 @@ void test_map_lock(void)
+ close_prog:
+ 	bpf_object__close(obj);
+ }
 +
- 	if ((flags & BPF_F_LOCK) && !btf_record_has_field(map->record, BPF_SPIN_LOCK))
- 		return -EINVAL;
- 
-+	if ((flags & BPF_F_LOCK) && btf_record_has_field(map->record, ~BPF_SPIN_LOCK))
-+		return -EOPNOTSUPP;
++struct map_value {
++	struct bpf_spin_lock lock;
++	struct bpf_timer timer;
++	__u64 payload;
++};
 +
- 	if (!(flags & BPF_F_CPU) && flags >> 32)
- 		return -EINVAL;
++static void test_map_lock_update_elem(enum bpf_map_type map_type, int err_exist)
++{
++	struct map_value val = {};
++	struct test_map_lock *skel;
++	int prog_fd, err;
++	u32 key = 0;
++	char buff[128] = {};
++	LIBBPF_OPTS(bpf_test_run_opts, topts,
++		    .data_in = buff,
++		    .data_size_in = sizeof(buff),
++		    .repeat = 1,
++	);
++
++	skel = test_map_lock__open();
++	if (!ASSERT_OK_PTR(skel, "test_map_lock__open"))
++		return;
++
++	bpf_map__set_type(skel->maps.map, map_type);
++
++	err = test_map_lock__load(skel);
++	if (!ASSERT_OK(err, "test_map_lock__load"))
++		goto out;
++
++	err = bpf_map__update_elem(skel->maps.map, &key, sizeof(key), &val, sizeof(val),
++				   BPF_NOEXIST | BPF_EXIST);
++	if (!ASSERT_EQ(err, -EINVAL, "err_exist"))
++		goto out;
++
++	err = bpf_map__update_elem(skel->maps.map, &key, sizeof(key), &val, sizeof(val),
++				   BPF_F_LOCK);
++	if (!ASSERT_EQ(err, -EOPNOTSUPP, "err_lock"))
++		goto out;
++
++	prog_fd = bpf_program__fd(skel->progs.map_update);
++	err = bpf_prog_test_run_opts(prog_fd, &topts);
++	if (!ASSERT_OK(err, "bpf_prog_test_run_opts"))
++		goto out;
++
++	ASSERT_EQ(skel->bss->err_exist, err_exist, "err_exist");
++	ASSERT_EQ(skel->bss->err_lock, -EOPNOTSUPP, "err_lock");
++
++out:
++	test_map_lock__destroy(skel);
++}
++
++static void test_array_map_lock_update_elem(void)
++{
++	test_map_lock_update_elem(BPF_MAP_TYPE_ARRAY, -EEXIST);
++}
++
++static void test_hash_map_lock_update_elem(void)
++{
++	test_map_lock_update_elem(BPF_MAP_TYPE_HASH, -EINVAL);
++}
++
++void test_map_lock_flag(void)
++{
++	if (test__start_subtest("array_map"))
++		test_array_map_lock_update_elem();
++	if (test__start_subtest("hash_map"))
++		test_hash_map_lock_update_elem();
++}
+diff --git a/tools/testing/selftests/bpf/progs/test_map_lock.c b/tools/testing/selftests/bpf/progs/test_map_lock.c
+index 1c02511b73cd..f1b7b741795c 100644
+--- a/tools/testing/selftests/bpf/progs/test_map_lock.c
++++ b/tools/testing/selftests/bpf/progs/test_map_lock.c
+@@ -1,6 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0
+ // Copyright (c) 2019 Facebook
+-#include <linux/bpf.h>
++#include "vmlinux.h"
+ #include <linux/version.h>
+ #include <bpf/bpf_helpers.h>
  
-diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
-index 67e9e811de3a..1cff40f109cd 100644
---- a/kernel/bpf/arraymap.c
-+++ b/kernel/bpf/arraymap.c
-@@ -366,10 +366,7 @@ static long array_map_update_elem(struct bpf_map *map, void *key, void *value,
- 	struct bpf_array *array = container_of(map, struct bpf_array, map);
- 	u32 index = *(u32 *)key;
- 	char *val;
--
--	if (unlikely((map_flags & ~BPF_F_LOCK) > BPF_EXIST))
--		/* unknown flags */
--		return -EINVAL;
-+	int err;
- 
- 	if (unlikely(index >= array->map.max_entries))
- 		/* all elements were pre-allocated, cannot insert a new one */
-@@ -379,9 +376,9 @@ static long array_map_update_elem(struct bpf_map *map, void *key, void *value,
- 		/* all elements already exist */
- 		return -EEXIST;
- 
--	if (unlikely((map_flags & BPF_F_LOCK) &&
--		     !btf_record_has_field(map->record, BPF_SPIN_LOCK)))
--		return -EINVAL;
-+	err = bpf_map_check_op_flags(map, map_flags, BPF_EXIST | BPF_F_LOCK);
-+	if (unlikely(err))
-+		return err;
- 
- 	if (array->map.map_type == BPF_MAP_TYPE_PERCPU_ARRAY) {
- 		val = this_cpu_ptr(array->pptrs[index & array->index_mask]);
-diff --git a/kernel/bpf/bpf_local_storage.c b/kernel/bpf/bpf_local_storage.c
-index e2fe6c32822b..80b50091cbbf 100644
---- a/kernel/bpf/bpf_local_storage.c
-+++ b/kernel/bpf/bpf_local_storage.c
-@@ -493,13 +493,6 @@ bpf_local_storage_update(void *owner, struct bpf_local_storage_map *smap,
- 	unsigned long flags;
- 	int err;
- 
--	/* BPF_EXIST and BPF_NOEXIST cannot be both set */
--	if (unlikely((map_flags & ~BPF_F_LOCK) > BPF_EXIST) ||
--	    /* BPF_F_LOCK can only be used in a value with spin_lock */
--	    unlikely((map_flags & BPF_F_LOCK) &&
--		     !btf_record_has_field(smap->map.record, BPF_SPIN_LOCK)))
--		return ERR_PTR(-EINVAL);
--
- 	if (gfp_flags == GFP_KERNEL && (map_flags & ~BPF_F_LOCK) != BPF_NOEXIST)
- 		return ERR_PTR(-EINVAL);
- 
-diff --git a/kernel/bpf/bpf_task_storage.c b/kernel/bpf/bpf_task_storage.c
-index a1dc1bf0848a..21d84818e64e 100644
---- a/kernel/bpf/bpf_task_storage.c
-+++ b/kernel/bpf/bpf_task_storage.c
-@@ -125,9 +125,6 @@ static long bpf_pid_task_storage_update_elem(struct bpf_map *map, void *key,
- 	struct pid *pid;
- 	int fd, err;
- 
--	if ((map_flags & BPF_F_LOCK) && btf_record_has_field(map->record, BPF_UPTR))
--		return -EOPNOTSUPP;
--
- 	fd = *(int *)key;
- 	pid = pidfd_get_pid(fd, &f_flags);
- 	if (IS_ERR(pid))
-diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-index 3b9d297a53be..2f6ed3e80308 100644
---- a/kernel/bpf/hashtab.c
-+++ b/kernel/bpf/hashtab.c
-@@ -1093,9 +1093,9 @@ static long htab_map_update_elem(struct bpf_map *map, void *key, void *value,
- 	u32 key_size, hash;
- 	int ret;
- 
--	if (unlikely((map_flags & ~BPF_F_LOCK) > BPF_EXIST))
--		/* unknown flags */
--		return -EINVAL;
-+	ret = bpf_map_check_op_flags(map, map_flags, BPF_NOEXIST | BPF_EXIST | BPF_F_LOCK);
-+	if (unlikely(ret))
-+		return ret;
- 
- 	WARN_ON_ONCE(!bpf_rcu_lock_held());
- 
-@@ -1107,8 +1107,6 @@ static long htab_map_update_elem(struct bpf_map *map, void *key, void *value,
- 	head = &b->head;
- 
- 	if (unlikely(map_flags & BPF_F_LOCK)) {
--		if (unlikely(!btf_record_has_field(map->record, BPF_SPIN_LOCK)))
--			return -EINVAL;
- 		/* find an element without taking the bucket lock */
- 		l_old = lookup_nulls_elem_raw(head, hash, key, key_size,
- 					      htab->n_buckets);
+@@ -59,4 +59,33 @@ int bpf_map_lock_test(struct __sk_buff *skb)
+ err:
+ 	return err;
+ }
++
++int err_exist;
++int err_lock;
++
++struct map_value {
++	struct bpf_spin_lock lock;
++	struct bpf_timer timer;
++	__u64 payload;
++};
++
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__type(key, u32);
++	__type(value, struct map_value);
++	__uint(max_entries, 1);
++} map SEC(".maps");
++
++SEC("tc")
++int map_update(struct __sk_buff *skb)
++{
++	struct map_value val = {};
++	u32 key = 0;
++
++	val.payload = 0xDEADBEEF;
++	err_exist = bpf_map_update_elem(&map, &key, &val, BPF_NOEXIST | BPF_EXIST);
++	err_lock = bpf_map_update_elem(&map, &key, &val, BPF_F_LOCK);
++	return BPF_OK;
++}
++
+ char _license[] SEC("license") = "GPL";
 -- 
 2.52.0
 
