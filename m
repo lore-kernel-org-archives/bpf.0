@@ -1,173 +1,100 @@
-Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E3853148AF
-	for <bpf@vger.kernel.org>; Thu, 22 Jan 2026 02:50:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9293A392C20
+	for <bpf@vger.kernel.org>; Thu, 22 Jan 2026 03:00:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769050213; cv=none; b=ep1PBcyzEmOXmN4A1+S7vKsFSbMGiQ1h1YmZvBJMl3H3AhaFcJI3U4OeyufT8t0GmF2WNr0/8oBA8R15O6EOI7cdAL/jDrau5E3+0g9sYl/M7afO4zGgySFePM+JpFp00nf4uYdD/5lYAKBfNu23DScnHp7RLnlcT5XkgYOEp+Y=
+	t=1769050859; cv=none; b=jgGoiqm621RIbcSPGttwoSE4DBDAGRdiw5E7ynT14waXTupTGcz74yUPvSb1Go8rFGKVlOCAcUxoBdtlreSm7JHpm/FhniqMMwPH5476a0v9VeiBYkVldSXCiMc7MV5Y4vbW3GgviFBL0si3sj/6EYtLsRuiZcfESki9Q/wSsxU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769050213; c=relaxed/simple;
-	bh=lQRMsW/DIzakWp3Z6e8jYtTsZJehbKtDnMWY2SdS4Bk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Sm9HN+491zh0vC1BZBGg+8sTmxQaDATi5DNyeLVh1/todxp4RL8qD9SVSUZ1xgdNHXkAN1n9qEw3OoKEU4CUUWA/uVUG+kXYrdMjXsFkzq+ssCBm+b0OI1vISQ4Gg33iXbHpAAdS/1xorwNz/PNM0F35qRoyMoQO3XPpmR2AXoI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=XSsOoHQh; arc=none smtp.client-ip=95.215.58.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1769050859; c=relaxed/simple;
+	bh=gls6KrMY9MoZr6IyIOp94QaEs8EmwWve6vYwp5J4ymk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=p0PqO413p80SKGqpWxG5uH+CENdDNQq4+rfbJnNMsVadd8DsFATzgFLruuVVrpNgC4wpkOYo+zUYmrFHmo1Fvcx0fPH6OSkjzjXLOaTCo9uMCfzWZh2jdKiT5+YOPQ1C83gJqPYlD3IpItyo0K7hsvhx/M3AOdXXiRAyxrs463o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dIwX65XU; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="XSsOoHQh"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1769050196;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=NAquLWkfaoXFtBTk6QgDbkMnqVzynMeysZ13SKr6Pgw=;
-	b=XSsOoHQhH/9GrcwQQCzpjBLNAmFfeaUlMyi0zN1thH51fomXA/1qqLTaRFO5j+MJckW3YO
-	YphtBRZXYY8oJTh4BExWHjGghEzSczZOnKtixDqF8x+G+PXuOUaKV3hc7qu8bFPGmlJf19
-	bMzhpvplmrWkle6vFpDjdw+NrokGgdE=
-From: Menglong Dong <menglong.dong@linux.dev>
-To: Menglong Dong <menglong8.dong@gmail.com>,
- Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
- martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, davem@davemloft.net,
- dsahern@kernel.org, tglx@linutronix.de, mingo@redhat.com,
- jiang.biao@linux.dev, bp@alien8.de, dave.hansen@linux.intel.com,
- x86@kernel.org, hpa@zytor.com, bpf@vger.kernel.org, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next v10 00/12] bpf: fsession support
-Date: Thu, 22 Jan 2026 10:49:35 +0800
-Message-ID: <2026435.PYKUYFuaPT@7940hx>
-In-Reply-To:
- <CAEf4BzZX+hDww=MvMrqx3h9uKdB+Sef8rVMxrvxcm+9jj7MUjg@mail.gmail.com>
-References:
- <20260115112246.221082-1-dongml2@chinatelecom.cn>
- <CAEf4BzZX+hDww=MvMrqx3h9uKdB+Sef8rVMxrvxcm+9jj7MUjg@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dIwX65XU"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4290CC116D0
+	for <bpf@vger.kernel.org>; Thu, 22 Jan 2026 03:00:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769050859;
+	bh=gls6KrMY9MoZr6IyIOp94QaEs8EmwWve6vYwp5J4ymk=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=dIwX65XUDIP5f+ikHsYxx4MXWdxGzo9LepVeHKQvk9CAkpspgd+zk6/Mw3h9ld4Rn
+	 zYH8pmjdhnwyCAHLMUDrDgSxd+09xx4KUALagcnu9iUQdlToe/ho/pzu7DcXwh6HnT
+	 7iQWsdP1l4TvZhnXxfQwbW34ft3BU/2fm/glWkquy62r3XHcAh3JXwKZhRfbGF0KzL
+	 K5IBM3faZF+5zis9qDQXOD0Bhw8sn54k/cQlkrJFyGuuF/B3v0wjwdgoQ3p3ykjU+f
+	 z+t0QDtPONmcihkRbuFFRwM6w5vCYGKCAJavUwQcBvgKW/l0NNFrf+BJX09EVjTLs8
+	 nNb5fSVcpHR6w==
+Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-8947e6ffd30so4992036d6.0
+        for <bpf@vger.kernel.org>; Wed, 21 Jan 2026 19:00:59 -0800 (PST)
+X-Gm-Message-State: AOJu0YzHl1I9nm8Y1DYAXgTIW7JSsJgTtS5ls5XMIuhc1Sk3x6wc+5k8
+	jAknYT1T5WE23dnxA/eCc+KCfSgAp87ueWZW3ltWDiZ5iBoTHmg3mpBMFcxLPH9SjarvsCZvPR/
+	ehSUw12ocSP6aldP0W5I010WhImBwpBk=
+X-Received: by 2002:ad4:5fcc:0:b0:894:6d3c:224c with SMTP id
+ 6a1803df08f44-8946d3c38d9mr110250046d6.13.1769050858324; Wed, 21 Jan 2026
+ 19:00:58 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <CAPhsuW4=heDwYEkmRzSnLHDdW=da71qDd1KqUj9sYUOT5uOx3w@mail.gmail.com>
+ <CAHC9VhRU_vtN4oXHVuT4Tt=WFP=4FrKc=i8t=xDz+bamUG7r6g@mail.gmail.com>
+In-Reply-To: <CAHC9VhRU_vtN4oXHVuT4Tt=WFP=4FrKc=i8t=xDz+bamUG7r6g@mail.gmail.com>
+From: Song Liu <song@kernel.org>
+Date: Wed, 21 Jan 2026 19:00:47 -0800
+X-Gmail-Original-Message-ID: <CAPhsuW6vCrN=k6xEuPf+tJr6ikH_RwfyaU_Q9DvGg2r2U9y+UA@mail.gmail.com>
+X-Gm-Features: AZwV_Qgo-qjEoC_t1HYBQPgad9dLpsaDnf8VZt7Ye_LR1Q6ggGfcYM7fpBfpXmU
+Message-ID: <CAPhsuW6vCrN=k6xEuPf+tJr6ikH_RwfyaU_Q9DvGg2r2U9y+UA@mail.gmail.com>
+Subject: Re: [LSF/MM/BPF TOPIC] Refactor LSM hooks for VFS mount operations
+To: Paul Moore <paul@paul-moore.com>
+Cc: bpf <bpf@vger.kernel.org>, Linux-Fsdevel <linux-fsdevel@vger.kernel.org>, 
+	lsf-pc@lists.linux-foundation.org, 
+	linux-security-module <linux-security-module@vger.kernel.org>, 
+	Christian Brauner <brauner@kernel.org>, Al Viro <viro@zeniv.linux.org.uk>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
-X-Migadu-Flow: FLOW_OUT
 
-On 2026/1/22 08:09 Andrii Nakryiko <andrii.nakryiko@gmail.com> write:
-> On Thu, Jan 15, 2026 at 3:23=E2=80=AFAM Menglong Dong <menglong8.dong@gma=
-il.com> wrote:
-> >
-> > Hi, all.
-> >
-> > In this version, I followed Andrii's suggestions in v9, and did many
-> > adjustment.
-> >
-> > overall
-> > -------
-> > Sometimes, we need to hook both the entry and exit of a function with
-> > TRACING. Therefore, we need define a FENTRY and a FEXIT for the target
-> > function, which is not convenient.
-> >
-> > Therefore, we add a tracing session support for TRACING. Generally
-> > speaking, it's similar to kprobe session, which can hook both the entry
-> > and exit of a function with a single BPF program.
-> >
-> > We allow the usage of bpf_get_func_ret() to get the return value in the
-> > fentry of the tracing session, as it will always get "0", which is safe
-> > enough and is OK.
-> >
-> > Session cookie is also supported with the kfunc bpf_session_cookie().
-> > In order to limit the stack usage, we limit the maximum number of cooki=
-es
-> > to 4.
-> >
-> > kfunc design
-> > ------------
-> > In order to keep consistency with existing kfunc, we don't introduce new
-> > kfunc for fsession. Instead, we reuse the existing kfunc
-> > bpf_session_cookie() and bpf_session_is_return().
-> >
-> > The prototype of bpf_session_cookie() and bpf_session_is_return() don't
-> > satisfy our needs, so we change their prototype by adding the argument
-> > "void *ctx" to them.
-> >
-> > We inline bpf_session_cookie() and bpf_session_is_return() for fsession
-> > in the verifier directly. Therefore, we don't need to introduce new
-> > functions for them.
-> >
-> > architecture
-> > ------------
-> > The fsession stuff is arch related, so the -EOPNOTSUPP will be returned=
- if
-> > it is not supported yet by the arch. In this series, we only support
-> > x86_64. And later, other arch will be implemented.
-> >
-> > Changes v9 -> v10:
-> > * 1st patch: some small adjustment, such as use switch in
-> >   bpf_prog_has_trampoline()
-> > * 2nd patch: some adjustment to the commit log and comment
-> > * 3rd patch:
-> >   - drop the declaration of bpf_session_is_return() and
-> >     bpf_session_cookie()
-> >   - use vmlinux.h instead of bpf_kfuncs.h in uprobe_multi_session.c,
-> >     kprobe_multi_session_cookie.c and uprobe_multi_session_cookie.c
-> > * 4th patch:
-> >   - some adjustment to the comment and commit log
-> >   - rename the prefix from BPF_TRAMP_M_ tp BPF_TRAMP_SHIFT_
->=20
-> This is minor nit, but I think BPF_TRAMP_IS_RETURN_SHIFT and
-> BPF_TRAMP_COOKIE_INDEX_SHIFT (note added INDEX, because that's what we
-> store, not the cookie itself) makes more sense naming-wise and is more
-> natural to read. Consider updating this.
+Hi Paul,
 
-Yeah, looks nice.
-
->=20
-> >   - remove the definition of BPF_TRAMP_M_NR_ARGS
-> >   - check the program type in bpf_session_filter()
-> > * 5th patch: some adjustment to the commit log
-> > * 6th patch:
-> >   - add the "reg" to the function arguments of emit_store_stack_imm64()
-> >   - use the positive offset in emit_store_stack_imm64()
-> > * 7th patch:
-> >   - use "|" for func_meta instead of "+"
-> >   - pass the "func_meta_off" to invoke_bpf() explicitly, instead of
-> >     computing it with "stack_size + 8"
-> >   - pass the "cookie_off" to invoke_bpf() instead of computing the curr=
-ent
-> >     cookie index with "func_meta"
-> > * 8th patch:
-> >   - split the modification to bpftool to a separate patch
-> > * v9: https://lore.kernel.org/bpf/20260110141115.537055-1-dongml2@china=
-telecom.cn/
+On Wed, Jan 21, 2026 at 4:14=E2=80=AFPM Paul Moore <paul@paul-moore.com> wr=
+ote:
+>
+> On Wed, Jan 21, 2026 at 4:18=E2=80=AFPM Song Liu <song@kernel.org> wrote:
 > >
->=20
-> Overall this looks great, I was actually trying to apply and push it
-> despite those minor nits I left. But unfortunately there is some
-> conflict, so you'll have to rebase and resend. Hopefully just one last
-> time :)
+> > Current LSM hooks do not have good coverage for VFS mount operations.
+> > Specifically, there are the following issues (and maybe more..):
+>
+> I don't recall LSM folks normally being invited to LSFMMBPF so it
+> seems like this would be a poor forum to discuss LSM hooks.
 
-Haha, sounds great! I'll follow your comment and rebase, and
-send the next version later.
+Agreed this might not be the best forum to discuss LSM hooks.
+However, I am not aware of a better forum for in person discussions.
 
-Thanks you the review ;)
+AFAICT, in-tree LSMs have straightforward logics around mount
+monitoring. As long as we get these logic translated properly, I
+don't expect much controversy with in-tree LSMs.
 
->=20
-> > Changes v8 -> v9:
-> > * remove the definition of bpf_fsession_cookie and bpf_fsession_is_retu=
-rn
-> >   in the 4th and 5th patch
-> > * rename emit_st_r0_imm64() to emit_store_stack_imm64() in the 6th patch
-> > * v8: https://lore.kernel.org/bpf/20260108022450.88086-1-dongml2@chinat=
-elecom.cn/
-> >
-[...]
-> >
->=20
+> > PS: I am not sure whether other folks are already working on it. I will=
+ prepare
+> > some RFC patches before the conference if I don't see other proposals.
+>
+> FWIW, I'm not aware of anyone currently working on revising the mount
+> hooks, but it's possible.  Posting a patchset, even an early RFC
+> draft, is always a good way to find out who might be working in the
+> same space :)
+>
+> Posting to the mailing list also has the advantage of reaching
+> everyone who might be interested, whereas discussing this at a
+> conference, especially one that is invite-only, is limiting.
 
+I expect there will be RFCs posted to the mailing list before the
+conference. We will incorporate feedbacks from the mailing list
+to make the discussion more productive at the conference. It is
+totally possible that some patches get accepted before the
+conference, so that we can simply celebrate at the conference. :)
 
-
-
+Thanks,
+Song
