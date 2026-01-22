@@ -1,66 +1,65 @@
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D983F36F436
-	for <bpf@vger.kernel.org>; Thu, 22 Jan 2026 18:03:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A06A236C0C8
+	for <bpf@vger.kernel.org>; Thu, 22 Jan 2026 18:03:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769105035; cv=none; b=hSiQceB9edPZRnR0h537M9vOa5CrGotP+Drs4Ary+W0PKK9mPOWA/BRXJ46i2nYVx85+qiNE3o1qOzxEP3XE/SIv5P3hHsOKeswS/eSxx4in6awVOzeMnK+aW/+pdQsitH/GT7yGVRGaPD+ThmuWPryaLC5065V6ory+qZDNWZw=
+	t=1769105037; cv=none; b=MKRzU6RSjC3LqSo9DDvgi5yWMNqT0lv3e0b/d9tGVsfpd6mjeebCZtMHkk4vvZHH+Qt1f3/EVQae1z/WmjNKbbWZvXs9HkcUh/iT3PjdS6RxXspaCf/Q3oFItc1RwG+vOLX+0k+crLYlD0hGtPxtW7ECKVfCA5DjdKkzlPWpqRc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769105035; c=relaxed/simple;
-	bh=GhLUF0L0IpH45tda1zr/y9KpIGofV4tcu+8hyTPCFfk=;
+	s=arc-20240116; t=1769105037; c=relaxed/simple;
+	bh=5jRdTuwUhZAaumSNEYufeFsADb6/Se/xnS3/U7B4ubc=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=J8Fgrn1Z/k/Mf4ITHdYjihwApTJr3JgQs87GXNMWgJCIumpQAKNsRJn8am1kN0R4Ro46alTfqnqCBiL20+MAGS3T7pZlT7/67AmR+gyMvPHVd6I3qKdmsm45iV+JBRcYvlPJkO2YqO2rRjwBD/QMmh2XNYhoMz+5vru5CXguigY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VD3udAAs; arc=none smtp.client-ip=209.85.221.41
+	 In-Reply-To:To:Cc; b=hIubmNcSXa9p5rN2onuDhiFSAe3M5KpEet5fp4PXEOgOcKEbIwVfKTfSOiL9AjDjZZ4eRhRmfVblb8G1ElcDxK1f5cTmCVt3Z3wST6R5m6UrlFj8vYlJjPE+irrliK15Mx9WLdgwzWcKtyJwELgSAR+MEVwTJKu0fT3c+02yObU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c6gZAC64; arc=none smtp.client-ip=209.85.221.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VD3udAAs"
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-4359a316d89so1012401f8f.0
-        for <bpf@vger.kernel.org>; Thu, 22 Jan 2026 10:03:48 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c6gZAC64"
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-42fb2314eb0so1174626f8f.2
+        for <bpf@vger.kernel.org>; Thu, 22 Jan 2026 10:03:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769105025; x=1769709825; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1769105030; x=1769709830; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=0xLMYYolyJjqq6i9TpWAlkvvOL0WcqfDjXNv5Xko3nI=;
-        b=VD3udAAsfRZUJpTBGAJs2EOub97w2LArWrviySdxSnx4V+Yx+VEGVY7OdGj1QNmmGe
-         6rUuLdi7Y9oi7jPsME8y4RQ80LiLZLvCIWf9aF/Iw0J7lHvy37sNTx3yXlYHAKp3jQ1/
-         6g7hB8+hpvLCc5TlmodIlSPDLOZZGAEar8AIIvs5aCOecgIw7ZQZTBE3/GMrYto2N7+r
-         /MsEztP/kibCylz6juNSQ7kjscR/qfH2UIGPcYW+EAWOwc230yYOb+uADd3JwWjTROLI
-         sA2JN07FQe3to10Puh0RYuFaUwvNGvmv78ibQL8U0yEa7f9iNwHKdBk32fQBvJSjp+ak
-         Zqtw==
+        bh=S6IoQXN3Ba2g08NHbMeHbZAWe3CwXy2tKRnxNnDKDv0=;
+        b=c6gZAC64w6u3dDckhTVb0me1yELxadcFDbWxzKQHjbvPDdnafv7/WlMianXOL6SXWE
+         42sIwAiY8PyBiRaqiXeDb0+DTYZRp2VgYD7EaJd3aiBlEk73pm7RBXg4QMRgpZl3nXm/
+         gUGl4ZtN38Rny+iC7Mm4MYmTDFfQmqG6Sti/dKOZ6tV/89k8JT2qx6PqB07xhvcIdrTn
+         ZWY6b2SFHi6SpqpixO0r2vALRaxjvLsns4gvvV7gRwY5ME4CZ+SfOc6igLPog73PTupI
+         5AP9L6r1yUziA0BvtgrKVLFCRKMBjwMPg+Bmvx31vgEnqNPN01qinjnLdTjCA1Hm1ylC
+         UB9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769105025; x=1769709825;
+        d=1e100.net; s=20230601; t=1769105030; x=1769709830;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=0xLMYYolyJjqq6i9TpWAlkvvOL0WcqfDjXNv5Xko3nI=;
-        b=XHns8+oMEZKYAXivcJ2x8zJekC41DZTvi5KSvUoax+1G6ZXRnoUloxNxDKIv9StCEy
-         FpDQPAlYtGUpF2yso44IK/klAT0ThcboU18d5XHs49oLhzjyyclSNlQ5TPouNVGeqhQj
-         VUVRQxwdvT9GZoV+Q3XQS9s6cNZarGrI/Yx/c4cnTEmH3dCFtxMHStZWSKgCF47GYhDA
-         vVJ02V/mUeTXg8yjrwAMpfcmXvo6Hmq1H3JOPULdo9xCseGBvJCvxtRDBSt0fn6A5pPH
-         yyal0ymkjmu6ib4ivlAl5As8xQuuWsDDBdTbCT27CQaojMpGMfciRd09rAY2MHA6q3kH
-         Z8tQ==
-X-Gm-Message-State: AOJu0Yy7pPHdAnPFf3q4aBdDfE0mJ/GJ46SgclOz7falRvsmelqWJk4a
-	RhIpTd1gmCKG64HOUdx2ZbU6+pzNi2RfC6hTTU52mFs4kxnPNx0an4mN
-X-Gm-Gg: AZuq6aL7/lHX1OVQ42SGzVhK5zhDjwbMdFFQUH+NHhMPJWQn2WkzipXvy+U/Cy7D9yx
-	EJytmW4arjMLEjt4Rzu5/nxI6GEzmgmsqYxnSSJC5rfaBDmR6fhHXLwyD5n0/nnh7eh0Qi3Avm5
-	OGRvBuQFpriSL9B9BK7FWLffXQVCQMrCFpBy+km3rLvMMG3lDX7cMmIHvKJS7l9jvVafSJEV6c+
-	hA0vNO0QHuTYfCfEh8lN8O3ftu6Gw++jtsNp8TqBDm9aSnWidNQShrJsMH9OaV1L7RqpU9X9YCF
-	hn1fEg+YL7otWkreFemHpeYyMc1h5bXqZ9bgdYKpoB9WXQsVa0mqw69Uq9KmFdIf8Yx9ybmJaFP
-	PDAFmXr3Bt4IMF7tECWzonOUjba1TfK4Hkk9DQNXPuMHoCHbNT/XSMKUql9gV6yNpYoGPSwVVQX
-	b65QFbQ4tZfd/L
-X-Received: by 2002:a05:6000:40dd:b0:435:8f1b:bb28 with SMTP id ffacd0b85a97d-435b130e05amr737579f8f.0.1769105024538;
-        Thu, 22 Jan 2026 10:03:44 -0800 (PST)
+        bh=S6IoQXN3Ba2g08NHbMeHbZAWe3CwXy2tKRnxNnDKDv0=;
+        b=UgxY8dUWY2kcuiqOvsyf/ssabzs9q4VxsOJ7VhL+Q5HFFb3zKlHREUZLNLsxMvEvLv
+         DkpM3sAT8fEVzp1GuqVpUrU8weJ22ytofSArWa8fiDfjaSD6bhqkmbK97NfyEwcncurG
+         lu0M9aLyxeZFdz7SwD8ae51Wb8eCkmt6HRkZJ5ac3ZP4BdI7/kX0WTXa+A4DhR1G/Fa1
+         8RwWiG85Ju1pLn9ow9H5ikZtoY4DzOmivBUD5rRM3EqfjN7wDW3JweDyESptgqsddPRC
+         E3mjamYfMcuQCZbjd4pya8dQd7dFfm2ElCrH+AvJ0R7PfMWuaDdvoDPdoLHEqTPShn0N
+         FPhQ==
+X-Gm-Message-State: AOJu0YwePjRSQAG/6OloMEsZojhl7wCt+LAP61QGlbUKN3RYALeg0YNs
+	5+HFvRzHxtOFF7EmM4PjKxNRTBJCI0YEaut+g16cnm+Tbi8RFZ1fc3i2
+X-Gm-Gg: AZuq6aKpZfynlKZhjpvTWH4Cyo8gMnYX0Bde98t0zAlH6x414bHcn1yOxq0SEC5GC4P
+	lBYh9MlhL5jFAKcswc/Xxa57jiqyKT1nfEXHsFVWsxNYk6NEHhDPypfZwO/q34UUPmKKAdsg9nq
+	z4g96JlKaCFp46Py5BkfjaJht/id8udtKVXY9LjvpTuMvT0zgYizYsioQeGLqsRnQcaeKHLft4Q
+	j8s1vnY8d6Okc1pZ4GE5meRlCgG4RvN36/PhBE/mliLAfNdZLSucIBKILK1JS676sA3HI0RIiwr
+	q94dqlQnA5H4SbovcWdHDJMbSp9n0Ab45EU3w21kO8yTAaQThuLAtxjY446vavCqiJck/qv7ZYr
+	UotHpbpINm9QTv+oNumNU8usOkzAe3bxebHpSUMm8Y9vnr6X92AR/AmZJ87E52apg4sHeHxZFZR
+	B6RAgdfKJyudQj
+X-Received: by 2002:a05:6000:2313:b0:430:f5dc:d34a with SMTP id ffacd0b85a97d-435b15f8986mr826431f8f.29.1769105029878;
+        Thu, 22 Jan 2026 10:03:49 -0800 (PST)
 Received: from localhost ([2a02:8109:a307:d900:df8b:2445:a6ca:bb5])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-435b1e716b6sm344208f8f.27.2026.01.22.10.03.43
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-435b1e715d3sm345369f8f.28.2026.01.22.10.03.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Jan 2026 10:03:43 -0800 (PST)
+        Thu, 22 Jan 2026 10:03:49 -0800 (PST)
 From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Date: Thu, 22 Jan 2026 18:03:18 +0000
-Subject: [PATCH bpf-next v7 5/8] selftests/bpf: Add stress test for timer
- async cancel
+Date: Thu, 22 Jan 2026 18:03:21 +0000
+Subject: [PATCH bpf-next v7 8/8] selftests/bpf: Removed obsolete tests
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -69,7 +68,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260122-timer_nolock-v7-5-04a45c55c2e2@meta.com>
+Message-Id: <20260122-timer_nolock-v7-8-04a45c55c2e2@meta.com>
 References: <20260122-timer_nolock-v7-0-04a45c55c2e2@meta.com>
 In-Reply-To: <20260122-timer_nolock-v7-0-04a45c55c2e2@meta.com>
 To: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
@@ -77,117 +76,153 @@ To: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
  memxor@gmail.com, eddyz87@gmail.com
 Cc: Mykyta Yatsenko <yatsenko@meta.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1769105012; l=3034;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1769105013; l=4020;
  i=yatsenko@meta.com; s=20251031; h=from:subject:message-id;
- bh=8om38gAdspUYGhhX2UZoUsJGe+8wJ7bi5do3dC7FV58=;
- b=WUrX6xbRscNaIMQrVP58Ak9KRQKC5Ia2qKwWW808kPTxWBHqilEYP2ZC8wYKRaBNkh3bLDc8m
- up9I6YoaTvKDMsQLGjiinIrKUH5V6NktNHIGyU6aQuTOkwbdtrHQ0nN
+ bh=fl4T2+GC7fB/8ww4SfQYQIu2HzHZsOIJ5LkoKve9x0Y=;
+ b=P13ZdTjRYNXQnyb0uhr4kF4xwc5gmhIBh9AqEDq+yTWP6L7VKUDQY6opIqdQ36J6KGyT6EQjK
+ wofPGWAAoUjCuH2MwM46fQtaG/jMjJ1pqpcT+z6GDmBgHAOfZhGgzmQ
 X-Developer-Key: i=yatsenko@meta.com; a=ed25519;
  pk=TFoLStOoH/++W4HJHRgNr8zj8vPFB1W+/QECPcQygzo=
 
 From: Mykyta Yatsenko <yatsenko@meta.com>
 
-Extend BPF timer selftest to run stress test for async cancel.
+Now bpf_timer can be used in tracepoints, so these tests are no longer
+relevant.
 
 Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
 ---
- tools/testing/selftests/bpf/prog_tests/timer.c | 18 +++++++++++++++++-
- tools/testing/selftests/bpf/progs/timer.c      | 14 +++++++++++---
- 2 files changed, 28 insertions(+), 4 deletions(-)
+ .../bpf/progs/verifier_helper_restricted.c         | 111 ---------------------
+ 1 file changed, 111 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/timer.c b/tools/testing/selftests/bpf/prog_tests/timer.c
-index 4d853d1bd2a71b3d0f1ba0daa7a699945b4457fe..a157a2a699e638c9f21712b1e7194fc4b6382e71 100644
---- a/tools/testing/selftests/bpf/prog_tests/timer.c
-+++ b/tools/testing/selftests/bpf/prog_tests/timer.c
-@@ -23,13 +23,14 @@ static void *spin_lock_thread(void *arg)
+diff --git a/tools/testing/selftests/bpf/progs/verifier_helper_restricted.c b/tools/testing/selftests/bpf/progs/verifier_helper_restricted.c
+index 059aa716e3d0badba8a62ff3c957ce0847e72001..889c9b78b912e444d22b92eef5d524a35fe9e595 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_helper_restricted.c
++++ b/tools/testing/selftests/bpf/progs/verifier_helper_restricted.c
+@@ -17,17 +17,6 @@ struct {
+ 	__type(value, struct val);
+ } map_spin_lock SEC(".maps");
+ 
+-struct timer {
+-	struct bpf_timer t;
+-};
+-
+-struct {
+-	__uint(type, BPF_MAP_TYPE_ARRAY);
+-	__uint(max_entries, 1);
+-	__type(key, int);
+-	__type(value, struct timer);
+-} map_timer SEC(".maps");
+-
+ SEC("kprobe")
+ __description("bpf_ktime_get_coarse_ns is forbidden in BPF_PROG_TYPE_KPROBE")
+ __failure __msg("program of this type cannot use helper bpf_ktime_get_coarse_ns")
+@@ -84,106 +73,6 @@ __naked void bpf_prog_type_raw_tracepoint_1(void)
+ 	: __clobber_all);
  }
  
- 
--static int timer_stress(struct timer *timer_skel)
-+static int timer_stress_runner(struct timer *timer_skel, bool async_cancel)
- {
- 	int i, err = 1, prog_fd;
- 	LIBBPF_OPTS(bpf_test_run_opts, topts);
- 	pthread_t thread_id[NUM_THR];
- 	void *ret;
- 
-+	timer_skel->bss->async_cancel = async_cancel;
- 	prog_fd = bpf_program__fd(timer_skel->progs.race);
- 	for (i = 0; i < NUM_THR; i++) {
- 		err = pthread_create(&thread_id[i], NULL,
-@@ -46,6 +47,16 @@ static int timer_stress(struct timer *timer_skel)
- 	return err;
- }
- 
-+static int timer_stress(struct timer *timer_skel)
-+{
-+	return timer_stress_runner(timer_skel, false);
-+}
-+
-+static int timer_stress_async_cancel(struct timer *timer_skel)
-+{
-+	return timer_stress_runner(timer_skel, true);
-+}
-+
- static int timer(struct timer *timer_skel)
- {
- 	int err, prog_fd;
-@@ -118,6 +129,11 @@ void serial_test_timer_stress(void)
- 	test_timer(timer_stress);
- }
- 
-+void serial_test_timer_stress_async_cancel(void)
-+{
-+	test_timer(timer_stress_async_cancel);
-+}
-+
- void test_timer_interrupt(void)
- {
- 	struct timer_interrupt *skel = NULL;
-diff --git a/tools/testing/selftests/bpf/progs/timer.c b/tools/testing/selftests/bpf/progs/timer.c
-index 4c677c001258a4c05cd570ec52363d49d8eea169..a81413514e4b07ef745f27eade71454234e731e8 100644
---- a/tools/testing/selftests/bpf/progs/timer.c
-+++ b/tools/testing/selftests/bpf/progs/timer.c
-@@ -1,13 +1,17 @@
- // SPDX-License-Identifier: GPL-2.0
- /* Copyright (c) 2021 Facebook */
--#include <linux/bpf.h>
--#include <time.h>
-+
-+#include <vmlinux.h>
- #include <stdbool.h>
- #include <errno.h>
- #include <bpf/bpf_helpers.h>
- #include <bpf/bpf_tracing.h>
- 
-+#define CLOCK_MONOTONIC 1
-+#define CLOCK_BOOTTIME 7
-+
- char _license[] SEC("license") = "GPL";
-+
- struct hmap_elem {
- 	int counter;
- 	struct bpf_timer timer;
-@@ -63,6 +67,7 @@ __u64 callback_check = 52;
- __u64 callback2_check = 52;
- __u64 pinned_callback_check;
- __s32 pinned_cpu;
-+bool async_cancel = 0;
- 
- #define ARRAY 1
- #define HTAB 2
-@@ -419,7 +424,10 @@ int race(void *ctx)
- 
- 	bpf_timer_set_callback(timer, race_timer_callback);
- 	bpf_timer_start(timer, 0, 0);
--	bpf_timer_cancel(timer);
-+	if (async_cancel)
-+		bpf_timer_cancel_async(timer);
-+	else
-+		bpf_timer_cancel(timer);
- 
- 	return 0;
- }
+-SEC("kprobe")
+-__description("bpf_timer_init isn restricted in BPF_PROG_TYPE_KPROBE")
+-__failure __msg("tracing progs cannot use bpf_timer yet")
+-__naked void in_bpf_prog_type_kprobe_2(void)
+-{
+-	asm volatile ("					\
+-	r2 = r10;					\
+-	r2 += -8;					\
+-	r1 = 0;						\
+-	*(u64*)(r2 + 0) = r1;				\
+-	r1 = %[map_timer] ll;				\
+-	call %[bpf_map_lookup_elem];			\
+-	if r0 == 0 goto l0_%=;				\
+-	r1 = r0;					\
+-	r2 = %[map_timer] ll;				\
+-	r3 = 1;						\
+-l0_%=:	call %[bpf_timer_init];				\
+-	exit;						\
+-"	:
+-	: __imm(bpf_map_lookup_elem),
+-	  __imm(bpf_timer_init),
+-	  __imm_addr(map_timer)
+-	: __clobber_all);
+-}
+-
+-SEC("perf_event")
+-__description("bpf_timer_init is forbidden in BPF_PROG_TYPE_PERF_EVENT")
+-__failure __msg("tracing progs cannot use bpf_timer yet")
+-__naked void bpf_prog_type_perf_event_2(void)
+-{
+-	asm volatile ("					\
+-	r2 = r10;					\
+-	r2 += -8;					\
+-	r1 = 0;						\
+-	*(u64*)(r2 + 0) = r1;				\
+-	r1 = %[map_timer] ll;				\
+-	call %[bpf_map_lookup_elem];			\
+-	if r0 == 0 goto l0_%=;				\
+-	r1 = r0;					\
+-	r2 = %[map_timer] ll;				\
+-	r3 = 1;						\
+-l0_%=:	call %[bpf_timer_init];				\
+-	exit;						\
+-"	:
+-	: __imm(bpf_map_lookup_elem),
+-	  __imm(bpf_timer_init),
+-	  __imm_addr(map_timer)
+-	: __clobber_all);
+-}
+-
+-SEC("tracepoint")
+-__description("bpf_timer_init is forbidden in BPF_PROG_TYPE_TRACEPOINT")
+-__failure __msg("tracing progs cannot use bpf_timer yet")
+-__naked void in_bpf_prog_type_tracepoint_2(void)
+-{
+-	asm volatile ("					\
+-	r2 = r10;					\
+-	r2 += -8;					\
+-	r1 = 0;						\
+-	*(u64*)(r2 + 0) = r1;				\
+-	r1 = %[map_timer] ll;				\
+-	call %[bpf_map_lookup_elem];			\
+-	if r0 == 0 goto l0_%=;				\
+-	r1 = r0;					\
+-	r2 = %[map_timer] ll;				\
+-	r3 = 1;						\
+-l0_%=:	call %[bpf_timer_init];				\
+-	exit;						\
+-"	:
+-	: __imm(bpf_map_lookup_elem),
+-	  __imm(bpf_timer_init),
+-	  __imm_addr(map_timer)
+-	: __clobber_all);
+-}
+-
+-SEC("raw_tracepoint")
+-__description("bpf_timer_init is forbidden in BPF_PROG_TYPE_RAW_TRACEPOINT")
+-__failure __msg("tracing progs cannot use bpf_timer yet")
+-__naked void bpf_prog_type_raw_tracepoint_2(void)
+-{
+-	asm volatile ("					\
+-	r2 = r10;					\
+-	r2 += -8;					\
+-	r1 = 0;						\
+-	*(u64*)(r2 + 0) = r1;				\
+-	r1 = %[map_timer] ll;				\
+-	call %[bpf_map_lookup_elem];			\
+-	if r0 == 0 goto l0_%=;				\
+-	r1 = r0;					\
+-	r2 = %[map_timer] ll;				\
+-	r3 = 1;						\
+-l0_%=:	call %[bpf_timer_init];				\
+-	exit;						\
+-"	:
+-	: __imm(bpf_map_lookup_elem),
+-	  __imm(bpf_timer_init),
+-	  __imm_addr(map_timer)
+-	: __clobber_all);
+-}
+-
+ SEC("kprobe")
+ __description("bpf_spin_lock is forbidden in BPF_PROG_TYPE_KPROBE")
+ __failure __msg("tracing progs cannot use bpf_spin_lock yet")
 
 -- 
 2.52.0
