@@ -1,33 +1,33 @@
-Received: from out-177.mta1.migadu.com (out-177.mta1.migadu.com [95.215.58.177])
+Received: from out-187.mta1.migadu.com (out-187.mta1.migadu.com [95.215.58.187])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAB913C0883
-	for <bpf@vger.kernel.org>; Thu, 22 Jan 2026 21:28:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27AA03AE6F2
+	for <bpf@vger.kernel.org>; Thu, 22 Jan 2026 21:38:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.187
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769117302; cv=none; b=Wwl2Z4dCej0g+qXB4ge0PXugzcKPPUqxAFsWvI20Vla4tS97kc5jvW2+Vk1wHpUdpQ/kGy09nwgxF8Wm+m3unmsPnzjoZZNvfml4swOA/UxVeFZGjPbvjhtAvc9OAUrn8wgYTYeqIt8exu+m/l6uYQ2pztrQTie5c7YTmHWs0KE=
+	t=1769117906; cv=none; b=bCRtuOrdTCWMXypUuEsHhioMmnQOXXFQBVMhUcA0xxnE0Cdl6u11+QkpneoQwiE2BrM3rnN3GcYiMCxH+gOzF4a4YHYIlpTKU74n0SxYHJORLkyLDg8r3NNh2lcWoGwrYyQ0vMoIaxWzWMiq9LwWGnJ62Yps4zpN9FmYRg5C9mc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769117302; c=relaxed/simple;
-	bh=lqMtq74LqEMpeRrst1Zwf/b9YGce6Q/qFp14tV0qKc4=;
+	s=arc-20240116; t=1769117906; c=relaxed/simple;
+	bh=LKPXZmWKedR2yKcisDKiiFlcLJ53y6k+q8cPc/EOEZw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GNhg6QgRLq5q7g0RUeocLLxAxjIhgeqQvSaZHeCZnn0/UwQoypXdRhoMk0n++zP0uZ9d5RxaYIS5Gmx5tUQfjASY/N4JOwnS03+r2dvAl4tmdkFderpFLV0Tb3qQEubJqhh3typfzBIR6yEmz4Ri1WMjExPI6JUP9mOgw4/zFgQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=pV8c8sNA; arc=none smtp.client-ip=95.215.58.177
+	 In-Reply-To:Content-Type; b=qa+8ICY9V7tH8vxrmKx2wjFFi3pmZoDrE3wRzV80LNnfJ7TYt4t9uO3r8l6XVD4VM2R7NH6E3763b5/UOBqDkrGi8eJJMTuBOUiN6deTIXgxDujYsnfjJ0/viBM/9z6FhXHROAQo1bO6wDSKoDBE/ZnXWCH+bs7VfQO/6vmk3/s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=JgP1gOqe; arc=none smtp.client-ip=95.215.58.187
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="pV8c8sNA"
-Message-ID: <4a41cc0f-e409-478f-ad71-103de63cfacb@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="JgP1gOqe"
+Message-ID: <d30fce68-01d9-44ef-bb28-28b6d2bdb13d@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1769117293;
+	t=1769117893;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=C1sh+9KhIreTIihfzat2Ijx895fJhZ1M1Yv78rApw7o=;
-	b=pV8c8sNASHy2vzhH2AKUoiRbtgtzc6VATnqzCtwwjsTq/QzQi7+ejqSd4mP9/OhOz0ahLq
-	VNAt2Vp2g4c7fks2GhM2VmN4zFjqvdlwhRzgbaOkG8spf7x+7sBNkWTDrPFDL67yTHsfhJ
-	2azgoYks9CkWNhJmt3MbG8elxkfi/r8=
-Date: Thu, 22 Jan 2026 13:28:04 -0800
+	bh=c9iFa7uVaH8PDNRcnceCrllLmgClSyzjBzvOeVYf1LM=;
+	b=JgP1gOqeDVFUSDtRG3jsTcjExyfBZezxGOyjDmfIF2ROu3dRJwvLb5NkI05ci6XZgGcptm
+	YUKVSE2HnsNsVAeUeybT8MF4r2cLzPmF8ArbXfmI/4grbPNWJc/eGyNnITX9KHPSxxecrb
+	W5HnLuYOBw+UFmlkkwRZ5YK1Mx+HOVo=
+Date: Thu, 22 Jan 2026 13:38:07 -0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -98,56 +98,13 @@ On 1/22/26 1:18 PM, Amery Hung wrote:
 > Thanks for fixing the test. Just curious if there is an issue with 1.5
 > pg_sz as suggested by Alan?
 
-Yes. It works fine with 1.5 pg_sz too. I picked '2 * pg_sz + pg_sz / 2'
-as for 4K page, 9000 will have 2 frags and I intend to maintain
-2 frags for the tests.
+Although existing 'buff_len = 2 * pg_sz + pg_sz / 2' works fine for the test,
+but let us use the Alan's suggestion (buff_len = pg_sz + pg_sz / 2)
+since the buffer size is tighter and potentially better for test.
 
 >
 >>          if (find_xdp_sizes(skel, pg_sz))
 >>                  goto out;
->> @@ -140,13 +142,13 @@ static void test_xdp_pull_data_basic(void)
->>          run_test(skel, XDP_PASS, pg_sz, 9000, 0, 1025, 1025);
->>
->>          /* multi-buf pkt, empty linear data area, pull requires memmove */
->> -       run_test(skel, XDP_PASS, pg_sz, 9000, 0, 0, PULL_MAX);
->> +       run_test(skel, XDP_PASS, pg_sz, buff_len, 0, 0, PULL_MAX);
->>
->>          /* multi-buf pkt, no headroom */
->> -       run_test(skel, XDP_PASS, pg_sz, 9000, max_meta_len, 1024, PULL_MAX);
->> +       run_test(skel, XDP_PASS, pg_sz, buff_len, max_meta_len, 1024, PULL_MAX);
->>
->>          /* multi-buf pkt, no tailroom, pull requires memmove */
->> -       run_test(skel, XDP_PASS, pg_sz, 9000, 0, max_data_len, PULL_MAX);
->> +       run_test(skel, XDP_PASS, pg_sz, buff_len, 0, max_data_len, PULL_MAX);
->>
->>          /* Test cases with invalid pull length */
->>
->> @@ -154,7 +156,7 @@ static void test_xdp_pull_data_basic(void)
->>          run_test(skel, XDP_DROP, pg_sz, 2048, 0, 2048, 2049);
->>
->>          /* multi-buf pkt with no space left in linear data area */
->> -       run_test(skel, XDP_DROP, pg_sz, 9000, max_meta_len, max_data_len,
->> +       run_test(skel, XDP_DROP, pg_sz, buff_len, max_meta_len, max_data_len,
->>                   PULL_MAX | PULL_PLUS_ONE);
->>
->>          /* multi-buf pkt, empty linear data area */
->> @@ -165,7 +167,7 @@ static void test_xdp_pull_data_basic(void)
->>                   PULL_MAX | PULL_PLUS_ONE);
-> We should also change these two cases above to use buff_len to make
-> sure we are testing the right logic in bpf_xdp_pull_data().
 
-Sure. Will do. Replacing 9000 with buff_len for those two cases
-works okay too for both x86 and 64-page arm64.
-
->
->>          /* multi-buf pkt, no tailroom */
->> -       run_test(skel, XDP_DROP, pg_sz, 9000, 0, max_data_len,
->> +       run_test(skel, XDP_DROP, pg_sz, buff_len, 0, max_data_len,
->>                   PULL_MAX | PULL_PLUS_ONE);
->>
->>   out:
->> --
->> 2.47.3
->>
->>
+[...]
 
