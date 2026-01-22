@@ -1,44 +1,44 @@
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D83248C3FD
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E7CC4B8DDF
 	for <bpf@vger.kernel.org>; Thu, 22 Jan 2026 16:02:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.153.30
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.145.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769097743; cv=none; b=DOTEQdF7qmCYgRooO/vZQFMP20SeVEyH4AbozogZu7cg1pJin49lKLW0Pip6jVe0px0w5xIQJ7qz2aCZ1/gmoD8ErhY7pZS/MdiXkvrSt84eve5nx+iwwfzkGGeVWkRxgzOxUE7Yv0n0YpsXNV02XdJtpVCFaqXVg3mnrnN7ZdA=
+	t=1769097745; cv=none; b=bH9DkmHz7upsl/jmPWVNrbVrqnMwcXel8HQU0bFjcuPRQOfLKVh9+AxwAIj6pOgyTlc/P8I0YlpkusfFA3T42XwZOMmFQX0pT6fnH+U0oBalTVr8O2kM8O5cR742R4bJ+t3K4rh/oAcb/18IZqvuC29O6q0A/IwfDqmLqsft888=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769097743; c=relaxed/simple;
-	bh=w3c4J70v1rkLyQjIWw4YDGw5AuBmITpKVG6xkRDpOi8=;
+	s=arc-20240116; t=1769097745; c=relaxed/simple;
+	bh=FOyF2flkVaiiVEw8WXWwkFlSyeK4UQVP6kKwM4jHdeY=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=IPEPTIXgl20tv/B0HuJyE5ZuaBOcUjVv/HPi3amb2xS+xL7xbCL6lavaIf36V5I0uSDqblK3NnWlgJFw3Qn9qUYQQoxasDWHxSPjlq/4H6+ojLSaq3TCQT6YH4Hn0xbsErwhIU4SLwvZ0G+pCo9tcEO2IPCDFpAXPfkMXzEN2QQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=MmBT60sB; arc=none smtp.client-ip=67.231.153.30
+	 MIME-Version:Content-Type; b=k5Ndx5Gk58AKtfjO6NzhIigh8k26165xUOghuTITR52EjPhHRDsSqQi6+k8E/fuZYGHyoEZQE+ne0dVftirFlQwFoKOnHHauBRljFC1+SwUif+BOi/DMps45c7GEhinM3NK1zCre+8z/vfU2xxiBi09/kCoiWgZeV3/5TtS5bEI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=G5F7X5Y/; arc=none smtp.client-ip=67.231.145.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="MmBT60sB"
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-	by m0089730.ppops.net (8.18.1.11/8.18.1.11) with ESMTP id 60MEbFM62875515
-	for <bpf@vger.kernel.org>; Thu, 22 Jan 2026 08:02:15 -0800
+	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="G5F7X5Y/"
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60M8GCCv1058278
+	for <bpf@vger.kernel.org>; Thu, 22 Jan 2026 08:02:14 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=s2048-2025-q2;
-	 bh=5yVsOuKiBkm39cTlBpMRsjOSvd6MJUept49+wt0Z5b4=; b=MmBT60sBGmdA
-	NY6w+TUck1mfA1IqolXX+ZlxcBqAOFp/86TxudvOoVLyh4J3ezzddEE9KRaSlOnS
-	6ELVBtlQdKO8NRvDXCyZM0LsyLuPzssiBqOtPDedYyuZh/zELR6Zlm/880vVV2Yw
-	0wc3hFxExjqbyOxA+f7HianPffzL0Vy9EZOx+2vdObjub0oDN2XLVIknXoEu1Z/w
-	XippBjYSyASGf9QfExrwZ8trgASqDq91n6MsIfWhtvqazHdkPLGxzPQVMPyluhyU
-	F59a5pjdf29ZA2gkWCMwHEFZXtLAWDGwZ4TkL+zx7wS1p53LoZpMQqDUMkPQE2I/
-	KF3plxtX5g==
-Received: from maileast.thefacebook.com ([163.114.135.16])
-	by m0089730.ppops.net (PPS) with ESMTPS id 4buntngphx-16
+	 bh=tsCZFT/DcGUxhI1gpC2ubv17m10Tz8W4Me9bzR+GrWI=; b=G5F7X5Y/nrr/
+	Lj+uWES/IJVuzw7QEJuW1GgbEyigkj1aVE1gFz/vx5dCQ/lWevTlVORncQV1zgfx
+	ZnLevr0Ey7cETRNwxSun9OKJcS9Fgo3mFG3uXGdid2cZ5xLkXfV4ZyHaZwzlMXtd
+	0OZsb4lhTc/bEO79qJuXt4yqbSUwEnsjcFVo1cvVfngglp7CKsSZH55YyBIsY0pe
+	vOPsZ3uJRtUDA1RuXmw0eK++eJlAmnSEOPqJOcznHO4FD7O1SaqzMTlhb9ddCzA0
+	cu0uLBO85JlAD9HVbq/HMZH2nWCLX6BoborZNFHXUFc4dBB9vKlJKchWT5csOTsB
+	qowNwXIySQ==
+Received: from mail.thefacebook.com ([163.114.134.16])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4bug822vm0-14
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Thu, 22 Jan 2026 08:02:15 -0800 (PST)
-Received: from twshared26141.04.snb1.facebook.com (2620:10d:c0a8:fe::f072) by
- mail.thefacebook.com (2620:10d:c0a9:6f::237c) with Microsoft SMTP Server
+	for <bpf@vger.kernel.org>; Thu, 22 Jan 2026 08:02:10 -0800 (PST)
+Received: from twshared108583.15.frc2.facebook.com (2620:10d:c085:108::150d)
+ by mail.thefacebook.com (2620:10d:c08b:78::2ac9) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.2.2562.29; Thu, 22 Jan 2026 16:01:58 +0000
+ 15.2.2562.29; Thu, 22 Jan 2026 16:01:57 +0000
 Received: by devbig002.atn3.facebook.com (Postfix, from userid 673679)
-	id 726AD10A69EBB; Thu, 22 Jan 2026 08:01:47 -0800 (PST)
+	id 4A34A10A69EA2; Thu, 22 Jan 2026 08:01:45 -0800 (PST)
 From: Emil Tsalapatis <etsal@meta.com>
 To: <bpf@vger.kernel.org>
 CC: <ast@kernel.org>, <andrii@kernel.org>, <eddyz87@gmail.com>,
@@ -46,9 +46,9 @@ CC: <ast@kernel.org>, <andrii@kernel.org>, <eddyz87@gmail.com>,
         <song@kernel.org>, Emil Tsalapatis <etsal@meta.com>,
         "Emil Tsalapatis (Meta)"
 	<emil@etsalapatis.com>
-Subject: [PATCH 10/13] selftest: bpf: Add libarena stack allocator
-Date: Thu, 22 Jan 2026 08:01:28 -0800
-Message-ID: <20260122160131.2238331-11-etsal@meta.com>
+Subject: [PATCH 06/13] selftests: bpf: Add arena ASAN runtime to libarena
+Date: Thu, 22 Jan 2026 08:01:24 -0800
+Message-ID: <20260122160131.2238331-7-etsal@meta.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260122160131.2238331-1-etsal@meta.com>
 References: <20260122160131.2238331-1-etsal@meta.com>
@@ -61,445 +61,714 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTIyMDEyMiBTYWx0ZWRfXzO/PYtZf2Hfo
- ZBwbpGec0hy/4nsz5KS9Os9maq+i7DeOadf7HHSaPA20xJNidmwO7edfPRxJgidZn0l0gOA1Vdp
- F/VB6JxcL+Jx/W67FfdHerp5o6M7dBIko4i2xKkVXBIwMiTwPjX17jtwC9Dq9NtRTgUpLk+YvGx
- WmWEABYARVcwgTdcDsXcon13NO4OkA867U/T9Nx45pnHw2u62XSuQS3KN/HjHeVn5RRfgqO8km/
- /ocBtfhjq/TifkPFOtoIVmnej/ClAXeyhqs35b6WfBjOspn32nPNlrTeL2SqoUZ7Dw6qFstSFW8
- EdktkSPmQl4EfDQy1bNiNUP4H4fSd7C1ISEfYT6Sy6lxlPsyzrhrNNgS9HMgJja2c1b8lFFyZj5
- czFGEdZQvSMPborbXLwETsO7VPr0h11zoJvgSoi6hf/tZJOOpEd0oKiOR24rRXth9BtnphKQA44
- 9+rRDB1hjH//Bt2d8Vg==
-X-Proofpoint-GUID: a0BfCUvqQIUnSVUdUM-M3W5CCZKPfvFu
-X-Proofpoint-ORIG-GUID: a0BfCUvqQIUnSVUdUM-M3W5CCZKPfvFu
-X-Authority-Analysis: v=2.4 cv=Ls+fC3dc c=1 sm=1 tr=0 ts=69724a07 cx=c_pps
- a=MfjaFnPeirRr97d5FC5oHw==:117 a=MfjaFnPeirRr97d5FC5oHw==:17
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTIyMDEyMiBTYWx0ZWRfXyI8cJXBH6dOt
+ JDgw/rmaFbXGDj2UrBk+9K97rR7+xz49EC4ii5mlpYVAtjnWUuSuwgd5UsvSRzgDiEZxXruJe19
+ dFDpQP8hgFscxHoS6l/WePtOErW/IjErfkBw6s45ANZF9KqUzcGkXUWXcMzuNsUAtsdpcAgNdcU
+ dDoh06XBkIGHfnzLln/OjhsYOOJkHgU3VpnUA6ksixUJh2Kz9D2comiBHG4RGK8fVxYpDEJQSLN
+ qXeSlZzVXVPKskM1WeL6x7MlJZc3RV0fCcvxdt950HpuCxy/L2CJ8Y/cILDmQhJGCXlS771QUmy
+ 5R38QQ+YFnPdDXC2zJrE3GL9h1/ECmvKCM2qphJAko+iVXCT61OpvkoFEvRnY+4Tj7GFKlz1Sy/
+ Ajpp4O84lm2Kqwk9dQvZxYwhVMgO9w==
+X-Authority-Analysis: v=2.4 cv=ROi+3oi+ c=1 sm=1 tr=0 ts=69724a02 cx=c_pps
+ a=CB4LiSf2rd0gKozIdrpkBw==:117 a=CB4LiSf2rd0gKozIdrpkBw==:17
  a=vUbySO9Y5rIA:10 a=VkNPw1HP01LnGYTKEx00:22 a=CWErhr8FAAAA:8 a=VabnemYjAAAA:8
- a=4rkyNyak_Bq7wGdEfxIA:9 a=I-g_0vLIplkVOQ0FYkeP:22 a=gKebqoRLp9LExxC7YDUY:22
+ a=CcIjpHbmH1-Scumy0XMA:9 a=SrR8gBnkhCTk2F94:21 a=I-g_0vLIplkVOQ0FYkeP:22
+ a=gKebqoRLp9LExxC7YDUY:22
+X-Proofpoint-GUID: c0-pqw9fUjH28Kqofmu6RIy12T5M1Kn9
+X-Proofpoint-ORIG-GUID: c0-pqw9fUjH28Kqofmu6RIy12T5M1Kn9
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.20,FMLib:17.12.100.49
  definitions=2026-01-22_02,2026-01-22_02,2025-10-01_01
 
-Add a page-oriented stack allocator to libarena. The allocator
-is targeted towards large, page-aligned allocations for BPF
-programs and can serve as an intermediate location for pages
-freed by custom allocators like slab allocators to avoid constantly
-allocating and freeing arena pages.
+Add an address sanitizer (ASAN) runtime to the arena library. The
+ASAN runtime implements the functions injected into BPF binaries
+by LLVM sanitization is supported and enabled.
+
+The runtime also includes functions called explicitly by memory
+allocation code to mark memory as poisoned/unpoisoned to ASAN.
+This code is a no-op when sanitization is turned off.
 
 Signed-off-by: Emil Tsalapatis (Meta) <emil@etsalapatis.com>
 ---
- .../selftests/bpf/libarena/include/stack.h    |  44 +++
- .../selftests/bpf/libarena/src/stack.bpf.c    | 338 ++++++++++++++++++
- 2 files changed, 382 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/libarena/include/stack.h
- create mode 100644 tools/testing/selftests/bpf/libarena/src/stack.bpf.c
+ tools/testing/selftests/bpf/.gitignore        |   1 +
+ .../selftests/bpf/libarena/include/asan.h     | 133 +++++
+ .../selftests/bpf/libarena/src/asan.bpf.c     | 463 ++++++++++++++++++
+ 3 files changed, 597 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/libarena/include/asan.h
+ create mode 100644 tools/testing/selftests/bpf/libarena/src/asan.bpf.c
 
-diff --git a/tools/testing/selftests/bpf/libarena/include/stack.h b/tools=
-/testing/selftests/bpf/libarena/include/stack.h
+diff --git a/tools/testing/selftests/bpf/.gitignore b/tools/testing/selft=
+ests/bpf/.gitignore
+index 96b4a7e37427..3d176d3b2cc1 100644
+--- a/tools/testing/selftests/bpf/.gitignore
++++ b/tools/testing/selftests/bpf/.gitignore
+@@ -49,3 +49,4 @@ verification_cert.h
+ *.BTF_ids
+ *.BTF.base
+ libarena/test_libarena
++libarena/test_libarena_asan
+diff --git a/tools/testing/selftests/bpf/libarena/include/asan.h b/tools/=
+testing/selftests/bpf/libarena/include/asan.h
 new file mode 100644
-index 000000000000..9f9d8fb47935
+index 000000000000..be50b23fb491
 --- /dev/null
-+++ b/tools/testing/selftests/bpf/libarena/include/stack.h
-@@ -0,0 +1,44 @@
++++ b/tools/testing/selftests/bpf/libarena/include/asan.h
+@@ -0,0 +1,133 @@
 +#pragma once
 +
-+struct stk_seg;
-+typedef struct stk_seg __arena stk_seg_t;
++struct asan_init_args {
++	u64 arena_all_pages;
++	u64 arena_globals_pages;
++};
 +
-+/*
-+ * We devote a single page to stk_seg, and size
-+ * the void * array so it fits exactly in it.
-+ * Account for prev/next pointers (2 * sizeof(void *)).
-+ */
-+#define STK_SEG_MAX ((__PAGE_SIZE - 2 * sizeof(void *)) / sizeof(void *)=
++int asan_init(struct asan_init_args *args);
++
++/* Parameters usable by userspace. */
++extern volatile u64 __asan_shadow_memory_dynamic_address;
++extern volatile bool asan_reported;
++extern volatile bool asan_inited;
++extern volatile bool asan_report_once;
++extern volatile bool asan_emit_stack;
++
++#ifdef __BPF__
++
++#define ASAN_SHADOW_SHIFT 3
++#define ASAN_SHADOW_SCALE (1ULL << ASAN_SHADOW_SHIFT)
++#define ASAN_GRANULE_MASK ((1ULL << ASAN_SHADOW_SHIFT) - 1)
++#define ASAN_GRANULE(addr) ((s8)((u32)(u64)((addr)) & ASAN_GRANULE_MASK)=
 )
 +
-+struct stk_seg {
-+	void __arena	*elems[STK_SEG_MAX];
-+	stk_seg_t	*prev;
-+	stk_seg_t	*next;
-+};
++#define __noasan __attribute__((no_sanitize("address")))=20
++
++#ifdef BPF_ARENA_ASAN
++
++/*=20
++ * Defined as char * to get 1-byte granularity for pointer arithmetic.
++ */
++typedef s8 __arena s8a;
 +
 +/*
-+ * Extensible stack struct.
++ * Address to shadow map translation.
 + */
-+struct stk {
-+	arena_spinlock_t __arena *lock;
++static inline=20
++s8a *mem_to_shadow(void __arena __arg_arena *addr)
++{
++	return (s8a *)(((u32)(u64)addr >> ASAN_SHADOW_SHIFT) + __asan_shadow_me=
+mory_dynamic_address);
++}
 +
-+	stk_seg_t *first;	/* First stack segment. */
-+	stk_seg_t *last;
++/*
++ * Helper for directly reading the shadow map.
++ */
++static inline __noasan
++s8 asan_shadow_value(void __arena __arg_arena *addr)=20
++{
++	return *(s8a *)mem_to_shadow(addr);
++}
 +
-+	stk_seg_t *current;	/* Current stack segment. */
-+	__u64 cind;
++__weak __noasan
++bool asan_ready(void)
++{
++	return __asan_shadow_memory_dynamic_address;
++}
 +
-+	__u64 capacity;		/* Free slots in the stack. */
-+	__u64 available;	/* Available items in the stack. */
-+	__u64 data_size;
-+	__u64 nr_pages_per_alloc;
-+};
++/*
++ * Shadow map manipulation helpers.
++ */
++int asan_poison(void __arena *addr, s8 val, size_t size);
++int asan_unpoison(void __arena *addr, size_t size);
++bool asan_shadow_set(void __arena *addr);
++s8 asan_shadow_value(void __arena *addr);
 +
++/*
++ * Dummy calls to ensure the ASAN runtime's BTF information is present
++ * in every object file when compiling the runtime and local BPF code
++ * separately. The runtime calls are injected into the LLVM IR file=20
++ */
++#define DECLARE_ASAN_LOAD_STORE_SIZE(size)				\
++	void __asan_store##size(void *addr);				\
++	void __asan_store##size##_noabort(void *addr);	\
++	void __asan_load##size(void *addr);				\
++	void __asan_load##size##_noabort(void *addr);	\
++	void __asan_report_store##size(void *addr);			\
++	void __asan_report_store##size##_noabort(void *addr);		\
++	void __asan_report_load##size(void *addr);			\
++	void __asan_report_load##size##_noabort(void *addr);	=09
 +
-+u64 stk_alloc(struct stk *stack);
-+int stk_init(struct stk *stackp, arena_spinlock_t __arena *lock,
-+		__u64 data_size, __u64 nr_pages_per_alloc);
-+void stk_destroy(struct stk *stack);
-+int stk_free_internal(struct stk *stack, __u64 elem);
++DECLARE_ASAN_LOAD_STORE_SIZE(1);
++DECLARE_ASAN_LOAD_STORE_SIZE(2);
++DECLARE_ASAN_LOAD_STORE_SIZE(4);
++DECLARE_ASAN_LOAD_STORE_SIZE(8);
 +
-+#define stk_free(stack, elem) stk_free_internal(stack, (__u64)elem)
-diff --git a/tools/testing/selftests/bpf/libarena/src/stack.bpf.c b/tools=
-/testing/selftests/bpf/libarena/src/stack.bpf.c
++#define DECLARE_ASAN_LOAD_STORE(size)				\
++	void __asan_store##size(void *addr);			\
++	void __asan_store##size##_noabort(void *addr);		\
++	void __asan_load##size(void *addr);			\
++	void __asan_load##size##_noabort(void *addr);		\
++	void __asan_report_store##size(void *addr);		\
++	void __asan_report_store##size##_noabort(void *addr);	\
++	void __asan_report_load##size(void *addr);		\
++	void __asan_report_load##size##_noabort(void *addr);	=09
++
++#define ASAN_DUMMY_CALLS_SIZE(size, arg)		\
++do {							\
++	__asan_store##size((arg));			\
++	__asan_store##size##_noabort((arg));		\
++	__asan_load##size((arg));			\
++	__asan_load##size##_noabort((arg));		\
++	__asan_report_store##size((arg));		\
++	__asan_report_store##size##_noabort((arg));	\
++	__asan_report_load##size((arg));		\
++	__asan_report_load##size##_noabort((arg));	\
++} while (0)=09
++
++#define ASAN_DUMMY_CALLS_ALL(arg)	\
++do { 					\
++	ASAN_DUMMY_CALLS_SIZE(1, (arg));	\
++	ASAN_DUMMY_CALLS_SIZE(2, (arg));	\
++	ASAN_DUMMY_CALLS_SIZE(4, (arg));	\
++	ASAN_DUMMY_CALLS_SIZE(8, (arg));	\
++} while (0)
++
++__weak __attribute__((no_sanitize_address))
++int asan_dummy_call() {
++	/* Use the shadow map base to prevent it from being optimized out. */
++	if (__asan_shadow_memory_dynamic_address)=20
++		ASAN_DUMMY_CALLS_ALL(NULL);
++
++	return 0;
++}
++#else /* BPF_ARENA_ASAN */
++
++static inline int asan_poison(void __arena *addr, s8 val, size_t size) {=
+ return 0; }
++static inline int asan_unpoison(void __arena *addr, size_t size) { retur=
+n 0; }
++static inline bool asan_shadow_set(void __arena *addr) { return 0; }
++static inline s8 asan_shadow_value(void __arena *addr) { return 0; }
++__weak bool asan_ready(void) { return true; }
++
++#endif /* BPF_ARENA_ASAN */
++
++#endif /* __BPF__ */
+diff --git a/tools/testing/selftests/bpf/libarena/src/asan.bpf.c b/tools/=
+testing/selftests/bpf/libarena/src/asan.bpf.c
 new file mode 100644
-index 000000000000..37f8ce43e0f8
+index 000000000000..7d39ee7b68bd
 --- /dev/null
-+++ b/tools/testing/selftests/bpf/libarena/src/stack.bpf.c
-@@ -0,0 +1,338 @@
++++ b/tools/testing/selftests/bpf/libarena/src/asan.bpf.c
+@@ -0,0 +1,463 @@
 +/*
 + * SPDX-License-Identifier: GPL-2.0
 + * Copyright (c) 2024-2025 Meta Platforms, Inc. and affiliates.
 + * Copyright (c) 2024-2025 Emil Tsalapatis <etsal@meta.com>
 + */
-+
 +#include <common.h>
 +#include <asan.h>
-+#include <stack.h>
++
++#ifdef BPF_ARENA_ASAN
++
++#pragma clang attribute push(__attribute__((no_sanitize("address"))), \
++			     apply_to =3D function)
++
++#define SHADOW_ALL_ZEROES ((u64)-1)
 +
 +/*
-+ * Necessary for cond_break/can_loop's semantics. According to kernel co=
-mmit
-+ * 011832b, the loop counter variable must be seen as imprecise and boun=
-ded
-+ * by the verifier. Initializing it from a constant (e.g., i =3D 0;), th=
-en,
-+ * makes it precise and prevents may_goto from helping with converging t=
-he
-+ * loop. For these loops we must initialize the loop counter from a vari=
-able
-+ * whose value the verifier cannot reason about when checking the progra=
-m, so
-+ * that the loop counter's value is imprecise.
++ * Canary variable for ASAN violations. Set to the offending address.
 + */
-+static __u64 zero =3D 0;
++volatile u64 asan_violated =3D 0;
 +
-+enum {
-+	STACK_POISONED =3D (s8)0xef,
-+};
++/*
++ * Shadow map occupancy map.
++ */
++volatile u64 __asan_shadow_memory_dynamic_address;
 +
-+__hidden int stk_init(struct stk *stack,
-+			  arena_spinlock_t __arg_arena __arena *lock,
-+			  __u64 data_size, __u64 nr_pages_per_alloc)
++volatile bool asan_reported =3D false;
++volatile bool asan_inited =3D false;
++
++/*
++ * Set during program load.
++ */
++volatile bool asan_report_once =3D false;
++volatile bool asan_emit_stack =3D false;
++
++/*
++ * BPF does not currently support the memset/memcpy/memcmp intrinsics.
++ */
++__always_inline int asan_memset(s8a __arg_arena *dst, s8 val, size_t siz=
+e)
 +{
-+	if (!stack)
++	int i;
++
++	/*
++	 * Switching this to a may_goto confuses the verifier and
++	 * prevents verification on bpf-next as of late December 2025.
++	 */
++	bpf_for(i, 0, size) {
++		dst[i] =3D val;
++	}
++
++	return 0;
++}
++
++/* Validate a 1-byte access, always within a single byte. */
++static __always_inline bool memory_is_poisoned_1(s8a *addr)
++{
++	s8 shadow_value =3D asan_shadow_value(addr);
++
++	/* Byte is 0, access is valid. */
++	if (likely(!shadow_value))
++		return false;
++
++	/*=20
++	 * Byte is non-zero. Access is valid if granule offset in [0, shadow_va=
+lue),
++	 * so the memory is poisoned if shadow_value is negative or smaller tha=
+n
++	 * the granule's value.
++	 */
++
++	return ASAN_GRANULE(addr) >=3D shadow_value;
++}
++
++/* Validate a 2- 4-, 8-byte access, spans up to 2 bytes. */
++static __always_inline bool memory_is_poisoned_2_4_8(s8a *addr, u64 size=
+)
++{
++	u64 end =3D (u64)addr + size - 1;
++
++	/*
++	 * Region fully within a single byte (addition didn't
++	 * overflow above ASAN_GRANULE).
++	 */
++	if (likely(ASAN_GRANULE(end) >=3D size - 1))
++		return memory_is_poisoned_1((s8a *)end);
++
++	/*
++	 * Otherwise first byte must be fully unpoisoned, and second byte
++	 * must be unpoisoned up to the end of the accessed region.
++	 */
++
++	return asan_shadow_value(addr) || memory_is_poisoned_1((s8a *)end);
++}
++
++/*
++ * Explicit ASAN check.
++ */
++__weak bool asan_shadow_set(void __arena __arg_arena *addr)
++{
++	return memory_is_poisoned_1(addr);
++}
++
++static __always_inline u64 first_nonzero_byte(u64 addr, size_t size)
++{
++	while (size && can_loop) {
++		if (unlikely(*(s8a *)addr))
++			return addr;
++		addr +=3D 1;
++		size -=3D 1;
++	}
++
++	return SHADOW_ALL_ZEROES;
++}
++
++static __always_inline bool memory_is_poisoned_n(s8a *addr, u64 size)
++{
++	u64 ret;
++	u64 start;
++	u64 end;
++
++	/* Size of [start, end] is end - start + 1. */
++	start =3D (u64)mem_to_shadow(addr);
++	end =3D (u64)mem_to_shadow(addr + size - 1);
++
++	ret =3D first_nonzero_byte(start, (end - start) + 1);
++	if (likely(ret =3D=3D SHADOW_ALL_ZEROES))
++		return false;
++
++	return __builtin_expect(ret !=3D end || ASAN_GRANULE(addr + size - 1) >=
+=3D
++						      *(s8a *)end, false);
++}
++
++static __always_inline int asan_report(s8a __arg_arena *addr, size_t sz,
++				       bool write)
++{
++	/* Only report the first ASAN violation. */
++	if (asan_reported && asan_report_once)
++		return 0;
++
++	asan_reported =3D true;
++
++	asan_violated =3D (u64)addr;
++
++	if (asan_emit_stack) {
++		arena_stderr("Memory violation for address %p (0x%lx) for %s of size %=
+ld",
++				addr, write ? "write" : "read", sz);
++		bpf_stream_print_stack();
++	}
++
++	return 0;
++}
++
++static __always_inline bool check_asan_args(s8a *addr, size_t size,
++					    bool *result)
++{
++	bool valid =3D true;
++
++	/* Size 0 accesses are valid even if the address is invalid. */
++	if (unlikely(size =3D=3D 0))
++		goto confirmed_valid;
++
++	/*
++	 * Wraparound is possible for extremely high size. Possible if the size
++	 * is a misinterpreted negative number.
++	 */
++	if (unlikely(addr + size < addr))
++		goto confirmed_invalid;
++
++	return false;
++
++confirmed_invalid:
++	valid =3D false;
++
++	/* FALLTHROUGH */
++confirmed_valid:
++	*result =3D valid;
++
++	return true;
++}
++
++static __always_inline bool check_region_inline(void *ptr, size_t size,
++						bool write)
++{
++	s8a *addr =3D (s8a *)(u64)ptr;
++	bool is_poisoned, is_valid;
++
++	if (check_asan_args(addr, size, &is_valid)) {
++		if (!is_valid)
++			asan_report(addr, size, write);
++		return is_valid;
++	}
++
++	switch (size) {
++	case 1:
++		is_poisoned =3D memory_is_poisoned_1(addr);
++		break;
++	case 2:
++	case 4:
++	case 8:
++		is_poisoned =3D memory_is_poisoned_2_4_8(addr, size);
++		break;
++	default:
++		is_poisoned =3D memory_is_poisoned_n(addr, size);
++	}
++
++	if (is_poisoned) {
++		asan_report(addr, size, write);
++		return false;
++	}
++
++	return true;
++}
++
++/*
++ * __alias is not supported for BPF so define *__noabort() variants as w=
+rappers.
++ */
++#define DEFINE_ASAN_LOAD_STORE(size)                                    =
+       \
++	__hidden void __asan_store##size(void *addr)                           =
+\
++	{                                                                      =
+\
++		check_region_inline(addr, size, true);                         \
++	}                                                                      =
+\
++	__hidden void __always_inline __asan_store##size##_noabort(void *addr) =
+\
++	{                                                                      =
+\
++		check_region_inline(addr, size, true);                         \
++	}                                                                      =
+\
++	__hidden void __asan_load##size(void *addr)                            =
+\
++	{                                                                      =
+\
++		check_region_inline(addr, size, false);                        \
++	}                                                                      =
+\
++	__hidden void __asan_load##size##_noabort(void *addr)                  =
+\
++	{                                                                      =
+\
++		check_region_inline(addr, size, false);                        \
++	}                                                                      =
+\
++	__hidden void __asan_report_store##size(void *addr)                    =
+\
++	{                                                                      =
+\
++		asan_report((s8a *)addr, size, true);                          \
++	}                                                                      =
+\
++	__hidden void __asan_report_store##size##_noabort(void *addr)          =
+\
++	{                                                                      =
+\
++		asan_report((s8a *)addr, size, true);                          \
++	}                                                                      =
+\
++	__hidden void __asan_report_load##size(void *addr)                     =
+\
++	{                                                                      =
+\
++		asan_report((s8a *)addr, size, false);                         \
++	}                                                                      =
+\
++	__hidden void __asan_report_load##size##_noabort(void *addr)           =
+\
++	{                                                                      =
+\
++		asan_report((s8a *)addr, size, false);                         \
++	}
++
++DEFINE_ASAN_LOAD_STORE(1);
++DEFINE_ASAN_LOAD_STORE(2);
++DEFINE_ASAN_LOAD_STORE(4);
++DEFINE_ASAN_LOAD_STORE(8);
++
++void __asan_storeN(void *addr, ssize_t size)
++{
++	check_region_inline(addr, size, true);
++}
++
++void __asan_loadN(void *addr, ssize_t size)
++{
++	check_region_inline(addr, size, false);
++}
++
++/*
++ * We currently do not sanitize globals.
++ */
++void __asan_register_globals(void *globals, size_t n)
++{
++}
++
++void __asan_unregister_globals(void *globals, size_t n)
++{
++}
++
++/*
++ * We do not currently have memcpy/memmove/memset intrinsics
++ * in LLVM. Do not implement sanitization.
++ */
++void *__asan_memcpy(void *d, const void *s, size_t n)
++{
++	return NULL;
++}
++
++void *__asan_memmove(void *d, const void *s, size_t n)
++{
++	return NULL;
++}
++
++void *__asan_memset(void *p, int c, size_t n)
++{
++	return NULL;
++}
++
++/*
++ * Poisoning code, used when we add more freed memory to the allocator b=
+y:
++ * 	a) pulling memory from the arena segment using bpf_arena_alloc_pages=
+()
++ * 	b) freeing memory from application code
++ */
++__hidden __noasan int asan_poison(void __arena *addr, s8 val, size_t siz=
+e)
++{
++	s8a *shadow;
++	size_t len;
++
++	/*
++	 * Poisoning from a non-granule address makes no sense: We can only all=
+ocate
++	 * memory to the application that with a granule-aligned starting addre=
+ss,
++	 * and bpf_arena_alloc_pages returns page-aligned memory. A non-aligned
++	 * addr then implies we're freeing a different address than the one we
++	 * allocated.
++	 */
++	if (unlikely((u64)addr & ASAN_GRANULE_MASK))
 +		return -EINVAL;
 +
-+	stack->data_size =3D data_size;
-+	stack->nr_pages_per_alloc =3D nr_pages_per_alloc;
-+	stack->lock =3D lock;
++	/*
++	 * We cannot free an unaligned region because it'd be possible that we
++	 * cannot describe the resulting poisoning state of the granule in=20
++	 * the ASAN encoding.
++	 *
++	 * Every granule represents a region of memory that looks like the
++	 * following (P for poisoned bytes, C for clear):
++	 *
++	 * <Clear>  <Poisoned>
++	 * [ C C C ... P P ]
++	 *
++	 * The value of the granule's shadow map is the number of clear bytes i=
+n
++	 * it. We cannot represent granules with the following state:
++	 *
++	 * [ P P ... C C ... P P ]
++	 *
++	 * That would be possible if we could free unaligned regions, so preven=
+t that.
++	 *=20
++	 */
++	if (unlikely(size & ASAN_GRANULE_MASK))
++		return -EINVAL;
++
++	shadow =3D mem_to_shadow(addr);
++	len =3D size >> ASAN_SHADOW_SHIFT;
++
++	asan_memset(shadow, val, len);
 +
 +	return 0;
 +}
 +
-+__hidden void stk_destroy(struct stk *stack)
++/*
++ * Unpoisoning code for marking memory as valid during allocation calls.
++ *
++ * Very similar to asan_poison, except we need to round up instead of
++ * down, the partially poison the last granule if necessary.
++ *
++ * Partial poisoning is useful for keeping the padding poisoned. Allocat=
+ions
++ * are granule-aligned, so we we're reserving granule-aligned sizes for =
+the
++ * allocation. However, we want to still treat accesses to the padding a=
+s=20
++ * invalid. Partial poisoning takes care of that. Freeing and poisoning =
+the
++ * memory is still done in granule-aligned sizes and repoisons the alrea=
+dy
++ * poisoned padding.
++ */
++__hidden __noasan int asan_unpoison(void __arena *addr, size_t size)
 +{
-+	stk_seg_t *seg, *next;
-+	__u64 nr_pages;
++	size_t partial =3D size & ASAN_GRANULE_MASK;
++	s8a *shadow;
++	size_t len;
 +
-+	/* Operation happens unlocked since we are called last. */
++	/*
++	 * We cannot allocate in the middle of the granule. The ASAN shadow
++	 * map encoding only describes regions of memory where every granule
++	 * follows this format (P for poisoned, C for clear):
++	 *
++	 * <Clear>  <Poisoned>
++	 * [ C C C ... P P ]
++	 *
++	 * This is so we can use a single number in [0, ASAN_SHADOW_SCALE)
++	 * to represent the poison state of the granule.
++	 */
++	if (unlikely((u64)addr & ASAN_GRANULE_MASK))
++		return -EINVAL;
 +
-+	if (!stack)
-+		return;
++	shadow =3D mem_to_shadow(addr);
++	len =3D size >> ASAN_SHADOW_SHIFT;
 +
-+	nr_pages =3D stack->nr_pages_per_alloc;
++	asan_memset(shadow, 0, len);
 +
-+	for (seg =3D stack->first; seg && can_loop; seg =3D next) {
-+		next =3D seg->next;
-+		asan_unpoison(seg, sizeof(*seg));
-+		bpf_arena_free_pages(&arena, seg, nr_pages);
-+	}
-+
-+	stack->first =3D NULL;
-+	stack->last =3D NULL;
-+
-+	stack->current =3D NULL;
-+	stack->cind =3D 0;
-+
-+	stack->capacity =3D 0;
-+	stack->available =3D 0;
-+	stack->data_size =3D 0;
-+	stack->nr_pages_per_alloc =3D 0;
-+}
-+
-+static int stk_push(struct stk *stack, void __arena *elem)
-+{
-+	stk_seg_t *stk_seg =3D stack->current;
-+	int ridx =3D stack->cind;
-+
-+	stack->current->elems[stack->cind] =3D elem;
-+
-+	ridx +=3D 1;
-+
-+	/* Possibly loop into the next segment. */
-+	if (ridx =3D=3D STK_SEG_MAX) {
-+		ridx =3D 0;
-+		stk_seg =3D stk_seg->next;
-+		if (!stk_seg)
-+			return -ENOSPC;
-+	}
-+
-+	stack->current =3D stk_seg;
-+	stack->cind =3D ridx;
-+
-+	stack->capacity -=3D 1;
-+	stack->available +=3D 1;
++	/*=20
++	 * If we are allocating a non-granule aligned region, we need to adjust
++	 * the last byte of the shadow map to list how many bytes in the granul=
+e
++	 * are unpoisoned. If the region is aligned, then the memset call above
++	 * was enough.
++	 */
++	if (partial)
++		shadow[len] =3D partial;
 +
 +	return 0;
 +}
 +
-+static void __arena *stk_pop(struct stk *stack)
++/*
++ * Initialize ASAN state when necessary. Triggered from userspace before
++ * allocator startup.
++ */
++SEC("syscall")
++__hidden __noasan int asan_init(struct asan_init_args *args)
 +{
-+	stk_seg_t *stk_seg =3D stack->current;
-+	void __arena *elem;
-+	int ridx =3D stack->cind;
++	u64 globals_pages =3D args->arena_globals_pages;
++	u64 all_pages =3D args->arena_all_pages;
++	u64 shadowmap, shadow_pgoff;
++	u64 shadow_pages;
 +
-+	/* Possibly loop into previous segment. */
-+	if (ridx =3D=3D 0) {
-+		ridx =3D STK_SEG_MAX;
-+		stk_seg =3D stack->current->prev;
-+		/* Possibly loop back into the last segment. */
-+		if (!stk_seg)
-+			return NULL;
++	if (asan_inited)
++		return 0;
++
++	/*=20
++	 * Round up the shadow map size to the nearest page.
++	 */
++	shadow_pages =3D all_pages >> ASAN_SHADOW_SHIFT;
++	if ((all_pages & ((1 << ASAN_SHADOW_SHIFT) -1 )))
++		shadow_pages +=3D 1;
++
++	/*
++	 * Make sure the numbers provided by userspace are sane.
++	 */
++	if (all_pages > (1ULL << 32) / __PAGE_SIZE) {
++		bpf_printk("error: arena size %lx too large", all_pages);
++		return -EINVAL;
 +	}
 +
-+	ridx -=3D 1;
++	if (globals_pages > all_pages) {
++		bpf_printk("error: globals %lx do not fit in arena %lx", globals_pages=
+, all_pages);
++		return -EINVAL;
++	}
 +
-+	stack->current =3D stk_seg;
-+	stack->cind =3D ridx;
++	if (globals_pages + shadow_pages > all_pages) {
++		bpf_printk("error: globals %lx do not leave room for shadow map %lx (a=
+rena pages %lx)",
++			globals_pages, shadow_pages, all_pages);
++		return -EINVAL;
++	}
 +
-+	elem =3D stack->current->elems[stack->cind];
++	shadow_pgoff =3D all_pages - shadow_pages - globals_pages;
++	__asan_shadow_memory_dynamic_address =3D shadow_pgoff * __PAGE_SIZE;
 +
-+	stack->capacity +=3D 1;
-+	stack->available -=3D 1;
-+
-+	return elem;
-+}
-+
-+static int stk_seg_to_data(struct stk *stack, size_t nelems)
-+{
-+	int ret, i;
-+	u64 data;
-+
-+	/* Do we have enough empty segments for the conversion? */
-+	if (!stack->first || stack->first =3D=3D stack->last)
++	/*=20
++	 * Allocate the last (1/ASAN_GRANULE_SIZE)th of an arena's pages for th=
+e map
++	 * We find the offset and size from the arena map.
++	 *
++	 * The allocated map pages are zeroed out, meaning all memory is marked=
+ as valid
++	 * even if it's not allocated already. This is expected: Since the actu=
+al memory
++	 * pages are not allocated, accesses to it will trigger page faults and=
+ will be
++	 * reported through BPF streams. Any pages allocated through bpf_arena_=
+alloc_pages
++	 * should be poisoned by the allocator right after the call succeeds.
++	 */
++	shadowmap =3D (u64)bpf_arena_alloc_pages(
++		&arena, (void __arena *)__asan_shadow_memory_dynamic_address,
++		shadow_pages, NUMA_NO_NODE, 0);
++	if (!shadowmap) {
++		arena_stderr("Could not allocate shadow map\n");
 +		return -ENOMEM;
-+
-+	data =3D (u64)stack->last;
-+
-+	stack->last->prev->next =3D NULL;
-+	stack->last =3D stack->last->prev;
-+
-+	/* We removed a segment. */
-+	stack->capacity -=3D STK_SEG_MAX;
-+
-+	for (i =3D zero; i < nelems && can_loop; i++) {
-+		asan_poison((void __arena *)data, STACK_POISONED,
-+			    sizeof(struct stk_seg));
-+
-+		/* This operation should never fail. */
-+		ret =3D stk_push(stack, (void __arena *)data);
-+		if (ret)
-+			return ret;
-+
-+		data +=3D stack->data_size;
 +	}
++
++	asan_inited =3D true;
 +
 +	return 0;
 +}
 +
-+static void stk_extend(struct stk *stack, stk_seg_t *stk_seg)
-+{
-+	if (stack->last)
-+		stack->last->next =3D stk_seg;
++#pragma clang attribute pop
 +
-+	stk_seg->prev =3D stack->last;
-+	stk_seg->next =3D NULL;
-+
-+	stack->last =3D stk_seg;
-+	stack->capacity +=3D STK_SEG_MAX;
-+
-+	if (!stack->first)
-+		stack->current =3D stack->first =3D stk_seg;
-+
-+	/*
-+	 * Do not adjust the current segment/idx because we did not add
-+	 * any elements. The new segment will be pushed into during the next
-+	 * allocation.
-+	 */
-+}
-+
-+static int stk_free_unlocked(struct stk *stack, void __arena *elem)
-+{
-+	if (!stack)
-+		return -EINVAL;
-+
-+	asan_poison(elem, STACK_POISONED, stack->data_size);
-+
-+	/* If no more room, repurpose the allocation into a segment. */
-+	if (stack->capacity =3D=3D 0) {
-+		asan_unpoison(elem, sizeof(struct stk_seg));
-+
-+		stk_extend(stack, (stk_seg_t *)elem);
-+		return 0;
-+	}
-+
-+	return stk_push(stack, elem);
-+}
-+
-+__weak int stk_free_internal(struct stk *stack, __u64 elem)
-+{
-+	int ret;
-+
-+	if (!stack)
-+		return -EINVAL;
-+
-+	ret =3D arena_spin_lock(stack->lock);
-+	if (ret)
-+		return ret;
-+
-+	ret =3D stk_free_unlocked(stack, (void __arena *)elem);
-+
-+	arena_spin_unlock(stack->lock);
-+
-+	return ret;
-+}
-+
-+static int stk_get_arena_memory(struct stk *stack, __u64 nr_pages, stk_s=
-eg_t **data_seg, stk_seg_t **stk_seg)
-+{
-+	size_t nstk_segs;
-+	u64 mem;
-+
-+	_Static_assert(sizeof(struct stk_seg) <=3D __PAGE_SIZE,
-+		       "segment must fit into a page");
-+
-+	/*
-+	 * The code allocates new memory only as segments. The allocation and
-+	 * free code freely typecasts the segment buffer into data that can be
-+	 * allocated, and vice versa to avoid either ending up with too many
-+	 * empty segments under memory pressure, or having no space in the segm=
-ent
-+	 * buffer for a buffer currently being freed.
-+	 */
-+
-+	if (!stack)
-+		return -EINVAL;
-+
-+	nstk_segs =3D stk_seg ? 2 : 1;
-+
-+	mem =3D (__u64)bpf_arena_alloc_pages(&arena, NULL, nstk_segs * nr_pages=
-,
-+					   NUMA_NO_NODE, 0);
-+	if (!mem)
-+		return -ENOMEM;
-+
-+	/* Poison the entire data segment allocated */
-+	*data_seg =3D (stk_seg_t *)mem;
-+	asan_poison((void __arena *)mem, STACK_POISONED, nr_pages * __PAGE_SIZE=
-);
-+
-+	if (!stk_seg)
-+		return 0;
-+
-+	/* Skip the segment metadata when poisoning. */
-+	*stk_seg =3D (stk_seg_t *)(mem + nr_pages * __PAGE_SIZE);
-+	asan_poison((void __arena *)(mem + sizeof(**stk_seg)), STACK_POISONED,
-+		nr_pages * __PAGE_SIZE);
-+
-+	return 0;
-+}
-+
-+static int stk_fill_new_elems(struct stk *stack)
-+{
-+	stk_seg_t *data_seg, *stk_seg;
-+	bool need_stk_seg;
-+	__u64 nr_pages;
-+	size_t nelems;
-+	int ret, i;
-+	u64 mem;
-+
-+	nr_pages =3D stack->nr_pages_per_alloc;
-+	nelems =3D (nr_pages * __PAGE_SIZE) / stack->data_size;
-+	if (nelems > STK_SEG_MAX) {
-+		return -EINVAL;
-+	}
-+
-+	/*
-+	 * If we have more than two empty segments available,
-+	 * try to repurpose one of them into an allocation.
-+	 */
-+	ret =3D stk_seg_to_data(stack, nelems);
-+	if (!ret)
-+		return 0;
-+
-+	need_stk_seg =3D !stack->capacity;
-+
-+	/* Get memory for a new data segment, and possibly a stack segment if n=
-ecessary. */
-+	ret =3D stk_get_arena_memory(stack, nr_pages, &data_seg, need_stk_seg ?=
- &stk_seg : NULL);
-+	if (ret)
-+		return ret;
-+
-+	if (need_stk_seg)
-+		stk_extend(stack, stk_seg);
-+
-+	mem =3D (u64)data_seg;
-+	for (i =3D zero; i < nelems && can_loop; i++) {
-+		ret =3D stk_push(stack, (void __arena *)mem);
-+		if (ret)
-+			return ret;
-+		mem +=3D stack->data_size;
-+	}
-+
-+	return 0;
-+}
-+
-+static inline __u64 stk_alloc_unlocked(struct stk *stack)
-+{
-+	void __arena *elem;
-+	int ret;
-+
-+	/* If segment buffer is empty, we have to populate it. */
-+	if (stack->available =3D=3D 0) {
-+		/* The call drops the lock on error. */
-+		ret =3D stk_fill_new_elems(stack);
-+		if (ret)
-+			return 0ULL;
-+	}
-+
-+	/* An elem value of 0 implies error, drop the lock. */
-+	elem =3D stk_pop(stack);
-+	if (elem)
-+		asan_unpoison(elem, stack->data_size);
-+
-+	return (__u64)elem;
-+}
-+
-+__weak __u64 stk_alloc(struct stk *stack)
-+{
-+	u64 elem;
-+
-+	if (!stack) {
-+		bpf_printk("using uninitialized stack allocator");
-+		return 0ULL;
-+	}
-+
-+	if (arena_spin_lock(stack->lock))
-+		return 0ULL;
-+
-+	elem =3D stk_alloc_unlocked(stack);
-+
-+	arena_spin_unlock(stack->lock);
-+
-+	return (u64)elem;
-+}
++#endif /* BPF_ARENA_ASAN */
 +
 +__weak char _license[] SEC("license") =3D "GPL";
 --=20
