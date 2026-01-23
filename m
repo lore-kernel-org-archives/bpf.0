@@ -1,152 +1,116 @@
-Received: from out-189.mta1.migadu.com (out-189.mta1.migadu.com [95.215.58.189])
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BE0130DEB5
-	for <bpf@vger.kernel.org>; Fri, 23 Jan 2026 08:29:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.189
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A6B7199EAD
+	for <bpf@vger.kernel.org>; Fri, 23 Jan 2026 08:30:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769156974; cv=none; b=Urn4TjBjKLruqd9rqYqFbDVAaDUG3Rr2Bqrj/OM7P6z52EgzR+d/+vkZNV+6hQEnoDzG0b/GWCnFSKDpeVcigXZXlD+N06owSKJDjS74eBS1uN1QYnurCgxXVMh+5eGw+Cdp0RMvdOGYfrfKUfrxIbnIHbQ6XLg/IGjYs+OsCjI=
+	t=1769157027; cv=none; b=Gu7Z4nhOZjkV4VL6k88W9BP2DIgHLyCyVtWWylOyRksetxiCQQxnJ1/1MYbdKNd0LOd7uu4IWbRAgtfzlzkrOEtq2Aec6WGN4oKpPg0tBJfiSosFhiHT6AV2baZUXglJNa6VWKpNpCS61GuNRi2Ax3GgJEI1fUAlm64t050jzPk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769156974; c=relaxed/simple;
-	bh=ZAO1eH5Ob+wbUe6Tbrm6BL05d172n5IRN7+saAQo6UU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=PM9dKaNzsdww9039scbxdZP0w9wxXTG0MlyahEGVTPvR42xrO1uXVRMql7vlKzdnHaNY1a6L3ueoA2fuQq93SsSIXBen3hQjMrysVnFX+zXg1m714Hbgljsx9fXO7zCF94D55LR4vkGwtWnDCVHohRD1+tIFYlj/WiVFr59SqBY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=JWon6RE7; arc=none smtp.client-ip=95.215.58.189
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1769157027; c=relaxed/simple;
+	bh=sFvHpjPthyGm0JtTNd0MBTNFK0v9x1MQCg4mzS9XO/A=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=B0XTfJT3ypSCVDHrkh/ljAO/XnLeFoFF7JGfBaJJWyJTt9+P3vZW1kVCzgtE9n6TTzWv73CZfxIyCUYFBcONXx+elifiBjqpSVcEgMREBJby0ff6a3guqTNcYYAKbiaS5wQ3bq5qQ6MmhKAsZ2ZwVI9JWe0AcbqJNbIOKZQm9qo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=wwTuKWuq; arc=none smtp.client-ip=185.171.202.116
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="JWon6RE7"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1769156960;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=5N0F8qUmQJwh+vKEiMdvVxVXqwMYLaba+2w+ktMYCz0=;
-	b=JWon6RE7VfOc2DVA7gYGKeWwiuhs5va9qXmOS/+PI98LB7yAWxfk1YWg8rFHMOHMKrVmYt
-	pUA+I5SS5LyOVG97Zi0SXySkKCHeiMgXc/llzj73SBsCJNUl47wcd773geaaPPjF984dVU
-	LkfaCf48blrzZSV3JX0+sfBawJrRg1A=
-From: Menglong Dong <menglong.dong@linux.dev>
-To: menglong8.dong@gmail.com, andrii@kernel.org, bot+bpf-ci@kernel.org
-Cc: daniel@iogearbox.net, martin.lau@linux.dev, eddyz87@gmail.com,
- song@kernel.org, yonghong.song@linux.dev, john.fastabend@gmail.com,
- kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
- davem@davemloft.net, dsahern@kernel.org, tglx@linutronix.de,
- mingo@redhat.com, jiang.biao@linux.dev, bp@alien8.de,
- dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
- bpf@vger.kernel.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
- martin.lau@kernel.org, eddyz87@gmail.com, yonghong.song@linux.dev,
- clm@meta.com, ihor.solodrai@linux.dev
-Subject:
- Re: [PATCH bpf-next v11 02/12] bpf: use the least significant byte for the
- nr_args in trampoline
-Date: Fri, 23 Jan 2026 16:29:01 +0800
-Message-ID: <2250332.irdbgypaU6@7940hx>
-In-Reply-To:
- <d91544bd4b513290bf468386c0261f913b59b761c34405839c424f8eaf8b1d04@mail.kernel.org>
-References:
- <20260123073532.238985-3-dongml2@chinatelecom.cn>
- <d91544bd4b513290bf468386c0261f913b59b761c34405839c424f8eaf8b1d04@mail.kernel.org>
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="wwTuKWuq"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-04.galae.net (Postfix) with ESMTPS id 70887C21AB9;
+	Fri, 23 Jan 2026 08:30:23 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 23CC36070A;
+	Fri, 23 Jan 2026 08:30:23 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 4EEB6119A8790;
+	Fri, 23 Jan 2026 09:30:18 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1769157021; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding; bh=aFUkavDXKGlzPVd2VawjHI2EJjqyfxrLlALkjdsobK0=;
+	b=wwTuKWuqTAevxhmBLRJZAQ1KAUakhSj+JafVIcX7RiwF5DSp6aBw4lwv2TWgJEUyXW1ppZ
+	4IBZ/QW0Jtjtv2eTGp7G+0V9CMOy+FgLbLC2Rnbsw6ZnltMYNFB7U5M6nUmp1yrvwFf5c7
+	mxVi2/xgf7L5Wx2TLP8rJr1eZD6qcbUUulRA5u2qXuRW7XBtQdFse1rgXrNfPVhfDwKFtC
+	nIKbiyXs7sO4sUtHA3PIVdYed9QIUDo5s/NSZivzCzy7MsmrjM6anIFCwsQCs9Ps07UJBs
+	BXOMjk/4v+++W/zJtKGpA7rVRlaE2iqhIl6ueudqbnGmWsOwaIQTXcN85p/leA==
+From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+Subject: [PATCH bpf-next v4 0/3] selftests/bpf: migrate a few bpftool
+ testing scripts
+Date: Fri, 23 Jan 2026 09:30:07 +0100
+Message-Id: <20260123-bpftool-tests-v4-0-a6653a7f28e7@bootlin.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="utf-8"
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/33NQQ6DIBAF0KsY1qVxAFG76j2aLgCHSmLFCDE2x
+ ruXsGpt0uXPn/dnIwFnh4Fcio3MuLjg/JiCOBXE9Gp8IHVdyoSVrAIGjOrJRu8HGjHEQLUGWRl
+ hDOqGJDPNaN2a924kndIR10juqeldiH5+5UcL5D5tyhJAHDYXoCU1VmkwptWo7FV7Hwc3no1/5
+ q2FfXgGR8+SlwI7LWpsQeGv5389T57LRnJmeV1j9e33fX8DoqJxUzYBAAA=
+X-Change-ID: 20251212-bpftool-tests-bb165c4cceb8
+To: Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, 
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+ Quentin Monnet <qmo@kernel.org>
+Cc: ebpf@linuxfoundation.org, 
+ Bastien Curutchet <bastien.curutchet@bootlin.com>, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, 
+ =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+X-Mailer: b4 0.14.3
+X-Last-TLS-Session-Version: TLSv1.3
 
-On 2026/1/23 16:07 bot+bpf-ci@kernel.org write:
-> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> > index 41bbed6418b5..b3f912ad18ba 100644
-> > --- a/kernel/bpf/verifier.c
-> > +++ b/kernel/bpf/verifier.c
-> 
-> [ ... ]
-> 
-> > @@ -23779,12 +23781,13 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
-> >  			    eatype == BPF_MODIFY_RETURN) {
-> >  				/* Load nr_args from ctx - 8 */
-> >  				insn_buf[0] = BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, -8);
-> > -				insn_buf[1] = BPF_ALU64_IMM(BPF_LSH, BPF_REG_0, 3);
-> > +				insn_buf[1] = BPF_ALU64_IMM(BPF_AND, BPF_REG_0, 0xFF);
-> > +				insn_buf[2] = BPF_ALU64_IMM(BPF_LSH, BPF_REG_0, 3);
-> 
-> [ ... ]
-> 
-> > -				cnt = 6;
-> > +				cnt = 7;
-> >  			} else {
-> >  				insn_buf[0] = BPF_MOV64_IMM(BPF_REG_0, -EOPNOTSUPP);
-> >  				cnt = 1;
-> >  			}
-> >
-> >  			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
-> 
-> [ ... ]
-> 
-> > 			delta    += cnt - 1;
-> 
-> Note that the bpf_get_func_ret block above correctly updates delta after
-> patching.
-> 
-> > @@ -23808,12 +23811,15 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
-> >
-> >  				/* skip 'void *__data' in btf_trace_##name() and save to reg0 */
-> >  				insn_buf[0] = BPF_MOV64_IMM(BPF_REG_0, nr_args - 1);
-> > +				cnt = 1;
-> >  			} else {
-> >  				/* Load nr_args from ctx - 8 */
-> >  				insn_buf[0] = BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, -8);
-> > +				insn_buf[1] = BPF_ALU64_IMM(BPF_AND, BPF_REG_0, 0xFF);
-> > +				cnt = 2;
-> >  			}
-> >
-> > -			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, 1);
-> > +			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
-> >  			if (!new_prog)
-> >  				return -ENOMEM;
-> >
-> >  			env->prog = prog = new_prog;
-> >  			insn      = new_prog->insnsi + i + delta;
-> >  			goto next_insn;
-> >  		}
-> 
-> Should there be a "delta += cnt - 1;" before assigning env->prog in this
-> bpf_get_func_arg_cnt block? When cnt is 2 (non-RAW_TP path), the program
-> grows by one instruction, but delta is not updated. This could cause
-> subsequent bpf_patch_insn_data() calls to use incorrect offsets.
-> 
-> The bpf_get_func_arg block at the beginning of this patch has:
-> 
->     delta    += cnt - 1;
->     env->prog = prog = new_prog;
-> 
-> And the bpf_get_func_ret block similarly has delta updated. But this
-> bpf_get_func_arg_cnt block goes directly to env->prog assignment without
-> updating delta.
+Hello,
+this is the v4 for some bpftool tests conversion. The new tests are
+being integrated in test_progs so that they can be executed on each CI
+run.
 
-Ah, good point, I think this is a valid problem. The selftests didn't cover
-this case, and I think I'd better to use bpf_get_func_arg() and bpf_get_func_ret()
-in the exit path of fsession to cover it.
+- First commit introduces a few dedicated helpers to execute bpftool
+  commands, with or without retrieving the generated stdout output
+- Second commit integrates test_bpftool_metadata.sh into test_progs
+- Third commit integrates test_bpftool_map.sh into test_progs
 
-Will fix it in the next version.
+Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
+---
+Changes in v4:
+- Port missing map access test in bpftool_metadata
+- Link to v3: https://lore.kernel.org/r/20260121-bpftool-tests-v3-0-368632f377e5@bootlin.com
 
-Thanks!
-Menglong Dong
+Changes in v3:
+- Drop commit reordering objects in Makefile
+- Rebased series on ci/bpf-next_base to fix conflict
+- Link to v2: https://lore.kernel.org/r/20260121-bpftool-tests-v2-0-64edb47e91ae@bootlin.com
 
-> 
-> 
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-> 
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/21278745581
-> 
+Changes in v2:
+- drop standalone runner in favor of test_progs
+- Link to v1: https://lore.kernel.org/r/20260114-bpftool-tests-v1-0-cfab1cc9beaf@bootlin.com
 
+---
+Alexis Lothoré (eBPF Foundation) (3):
+      bpf/selftests: add a few helpers for bpftool testing
+      selftests/bpf: convert test_bpftool_metadata.sh into test_progs framework
+      selftests/bpf: convert test_bpftool_map_access.sh into test_progs framework
 
+ tools/testing/selftests/bpf/Makefile               |   5 +-
+ tools/testing/selftests/bpf/bpftool_helpers.c      |  74 ++++
+ tools/testing/selftests/bpf/bpftool_helpers.h      |  11 +
+ .../selftests/bpf/prog_tests/bpftool_maps_access.c | 371 +++++++++++++++++++
+ .../selftests/bpf/prog_tests/bpftool_metadata.c    | 144 ++++++++
+ tools/testing/selftests/bpf/test_bpftool_map.sh    | 398 ---------------------
+ .../testing/selftests/bpf/test_bpftool_metadata.sh |  85 -----
+ 7 files changed, 602 insertions(+), 486 deletions(-)
+---
+base-commit: 5f0eb131037251b80c9a92af28c6be8f65d063d2
+change-id: 20251212-bpftool-tests-bb165c4cceb8
 
+Best regards,
+-- 
+Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
 
