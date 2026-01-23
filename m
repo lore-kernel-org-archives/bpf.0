@@ -1,63 +1,63 @@
-Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
+Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A593388843
-	for <bpf@vger.kernel.org>; Fri, 23 Jan 2026 02:55:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A7D93033C1
+	for <bpf@vger.kernel.org>; Fri, 23 Jan 2026 02:56:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769136939; cv=none; b=blWr5z4Fqwjec3+hWcHcT4LPIKa7mnsNinIa5/K+W/chX5iH5TNEwnLje50yYG7sKXYIE8B+B8P2BrLjO5hKHk6pHvZSDk25sosXjoVGXZPvXy26OnENl/m/LnhjEyEmtqdjWf4kTEt882aSNAwlSv4TWb5mRmXDMlbRv5caFis=
+	t=1769137006; cv=none; b=UoL+PX7UfrFZHLLjpyVTLIdxETtE/Nrd3zyaPmXd84BEYP9ub6aASDJO2cZa+OxnhDv8g+J3TXcVS3FdYxf7EN+wk5bV/8IU9TWq4N2t2zsJQOm7rCPSgqb2s1nCUw8cwyyui0dxwnRN19GLOxL1ZzDlOXwTlmiLfCFhEt3qSNQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769136939; c=relaxed/simple;
-	bh=eTKCk+zmw3hyWw2X9FIF9rz9BGCpyfOuEVFrxzsCTEY=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
-	 References:In-Reply-To; b=LMXBdXjSdytLUwOQn62V/SrlKaLKDgwJDVPTXZ0UsmC3wC0m9PVPSLtJYIPO5hR8OdvdSxrGd4WgYRVNoZ6DZcYhjSBvr2ECwlIleNzpdwA3q08Xpd6DhGrS+eqXvLkC7s9fFi0r2bh2seLy//jQoEDwR8WNcuTJO8KkAmmLhDM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=tOuF7cW0; arc=none smtp.client-ip=209.85.219.46
+	s=arc-20240116; t=1769137006; c=relaxed/simple;
+	bh=MqGqMyWtIZIROs//UB9ry7kOeWqArIb6NE7EBt3/nY4=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
+	 References:In-Reply-To; b=Wlyrm1/JYW+Lfk3Y+FIJ+o61LSY0hLo+QHIsaGmRSwOCGIeADfIirCnt5SiPVtGx2NlBp6HijhWzPawcWR6p3mvw1UNYE6Viw4Rs7VV8vTMkSPpeCF+2wmko3U8vnJ+/ptddfZjctc+CKNlQwPFNYk2ARKELaQ9Ak5qBfckIGjs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=S674R+w3; arc=none smtp.client-ip=209.85.219.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="tOuF7cW0"
-Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-88ffcb14e11so32150326d6.0
-        for <bpf@vger.kernel.org>; Thu, 22 Jan 2026 18:55:34 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="S674R+w3"
+Received: by mail-qv1-f45.google.com with SMTP id 6a1803df08f44-8946f12b1cfso25312606d6.0
+        for <bpf@vger.kernel.org>; Thu, 22 Jan 2026 18:56:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1769136933; x=1769741733; darn=vger.kernel.org;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
+        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1769136989; x=1769741789; darn=vger.kernel.org;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
          :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=6GTE7C5Gjv9kLwWxOiz+RqSwes3LIaw/84aycTQbuGU=;
-        b=tOuF7cW09pI5LxLaDbW895hMilkt5zfsCov2rpu/t9kHIsvXXJCNh4Wmpplev/UqMb
-         K9PJ6MOK+Ad3AK8No0PvAL7q9k+XKm8YUBR3lrcla4dYZ0uorbbTmaC+bWeyW6eGwinz
-         m9A42JYVSM9fJcu6XHgBQPCfIe6mbwkIccbjlpfbMeQTu9I1+q16R6wgFL+nAm/LG3BC
-         7ob6nWLR1f98wWeDHB8So55i6kpxmqjSergNSvqBSy2v8L4FuI6Ew0CnMbqW59sGKPDu
-         wTF5L8RdRlfG6lVUxFJQ0Yj5+/TUcM4GI9Oo6o99NggH8uwuW2dpjnHQMFWNevuiH3Dq
-         U+oA==
+        bh=SAJOvsqeVt/BO+ea4ZRDUP6mA4G1S6VR0+hvji6Vcog=;
+        b=S674R+w3z75QXedF1Qpp0UA+E6U31FsKJQnEeY7HG1GTm+vDCe4uZSBpTEu3RWo7il
+         qYtx+C/8PaiNCh95OSuk9xTihGjRcjTlIaVtcaDfE8HyNZetVu+KXt98T58O8P0S9Dxl
+         rf0u2n6dX7gqyIVc1j7htddnmMdHKYM98jXw1PrfoaWcWa2zJDDi4DpoVVnREBGp4RyU
+         hRC3ad33slrY4zJYyhvBx1FHezgYCILyjMYjnImNhikIqGLK85kAm/HxbO3TpdRPeLgj
+         K8gwfW4XiNMpG9/9kdeEiaGhooDZXwRvIVTJNf6QiXATHZItsObWG+xrXw9K6w2juq/0
+         knNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769136933; x=1769741733;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
+        d=1e100.net; s=20230601; t=1769136989; x=1769741789;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
          :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=6GTE7C5Gjv9kLwWxOiz+RqSwes3LIaw/84aycTQbuGU=;
-        b=BZuc1EpympfksUdK3Qm7MTXigfi5ACEItX9Km2Tp1mmDKf5/MQfkxLHl4jviBWfBLo
-         deSCBMVJ9IqhWYiyUDyNh5PgBcrVqUN+DHy44yzQ7Ac/62oBxjFvZiOkj+PRQFu/49GT
-         5u7wfxWejjgefw2bYcQ92jcieWz9ic5ogX4s8LseRm2UOMk0B5Wg2sx5bwfbfyMjvnKe
-         V2fpHLBI1vyvfZr9Q1ksylSnNIYS6KN6pgmd2jwzb5ZGJ6mHE2yhWEMYvJzKVkQjNe4c
-         9QNmiO+2A7jTVqmBYvhRZMniNT9tVM5Km9hSsFYh3Lrm4yl9bJbgOHHun3mHFjS9O7jT
-         OIEg==
-X-Forwarded-Encrypted: i=1; AJvYcCV2ukutMjAqXFs8L9HZjPrBcXf3qUtzUB8KcQvBhMw/OkUkEk0uyCY9fTtgLhFAAVng/Vc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzi5+6PbjAfK832SiQWO3kv82Z5845XuSjC/euQndPL55kmZBnc
-	OX4kgHVd+0NAoCwaDCvDAdavsGOudXaJbxm4Moft263QcXkm/HwXFAEJF+dFwdiD+5Y=
-X-Gm-Gg: AZuq6aKUj/clIMAQzTjVRfSffEljv4WCXVrCHKP+gX2ry6WQChb8LAyysh0Um0lzfd+
-	jPSv1e2BntxZ01ZSqso4q8DLuSh/hBGRnyOFRj/GymTi4dd2N1crJZxNwjIhgeRMZPzURtDLpTl
-	Rud+zMEnhIITD/DxVXU4RtwJwBV+wXqkQA2w103xa8l5OULvW00C/OzoRk7ltqPamAdnuX/Wxs2
-	Z4bE+JP0pUxRFrFodj+iCwOOydWp7mUFpbruAm9u+AInjM7btx+Eprift0DQiNE46O42dL9CN2h
-	jfTbxA92HX7hT1egfXLGGMUdF80xq6Oa9/PvQnoJAb40woMgsB49ljwXw/UOiJAKH/WR3u6ODDk
-	sDA/4uP31Ym5MEj85T2bkgcP5190WtUZdnhso8zohAyGHF1ePE5FjK5R0g9gpGkDGq06QwmEU0K
-	OBcLLppxWSP74=
-X-Received: by 2002:a05:6214:f21:b0:894:2f04:eb14 with SMTP id 6a1803df08f44-894901eafcamr26334716d6.45.1769136932627;
-        Thu, 22 Jan 2026 18:55:32 -0800 (PST)
+        bh=SAJOvsqeVt/BO+ea4ZRDUP6mA4G1S6VR0+hvji6Vcog=;
+        b=Zvt7UX1cEgFMUougOzXtT/2oBGG23kJTxmusxwkZfvEJd1TSb2kRsQmqJH3fWaOynJ
+         olQWr2RDmhFvJ3mmTyz+D7/hCDAKxqkciHVcpQY/1CGZIryYy6aiIZAihu9nYDeh+ZfT
+         QcFtzF2HDyTje7TBfAt+ueflR8z1YR47Pxk2r/CyFshRpBs3kxuoOZ6clMeNATY3WLfN
+         WPsilPg5wBLmzqLK31FC8gZtx4arjmq1oHq28gDK5QWm420eF330ZrLrCvAByd9M7Shi
+         Vp/9OnWLBKgWiZtvuHvhF/p/Cg/G3GkrK4BNLXmHaGvJkAI0S9vRLIi9feSJ8ztzXBkA
+         68/A==
+X-Forwarded-Encrypted: i=1; AJvYcCXYUeq0EcbrXPpzjGSBoBMpgIUJ2QcIlhd9IXwSo+5C3h9ixBuDUIxr059RFAiIa9Guvd0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw37CBbe8Nm7KcK6fafGv9UvzYAY9NFjrfTAA7bic9ifrCj2qYJ
+	se7sStKd5sKHDgd8bjdBA+j2CgwPj+TnWdMYrJeYIwFRLH/KyCQUo5d2H0N1GkuyCrU=
+X-Gm-Gg: AZuq6aI0FA9xumQFc9QhX3Zvsce/b96Is88i6BUkqmMW+o2GNDtmdp2bveuiH8BsXkH
+	Ht9ieOx/IjJbdXT08FrT5A7xbN2kuyu6e+S8+zP1JAt70uQuYLJ2SQSLWy007/qejk3nFCJHVcz
+	AXG8PDB9XKQ2AP4NMV5zOeMnetJsCGEQjPzbCJr7CKtBZDhEx6egdeZxjnmU+iJDdnRKp8btqME
+	ywxURy/ZL+oPIY/6rel9N6I3AhaxjdSk2NenteQfFYV59gq21DRUpxXTQfGWEO+Bvkx+uBwT24m
+	edQBxoFM7mrHu7tVEkyUD9ofIpIdGNcfdZ9Eg/iiiKeeRd4oq4Ud5mLEin3wgID6LPlMyovgQOx
+	PLjGc+whjsbcfkqQWUyRRth1WUViKuFKH7hKC2o8wu1NBjuLjXt9cB8nZdqDRLeQzlQVCLro1pD
+	BuSsYpCEHoVhw=
+X-Received: by 2002:a05:6214:301e:b0:882:3759:9158 with SMTP id 6a1803df08f44-8949022b8ddmr23557836d6.61.1769136989234;
+        Thu, 22 Jan 2026 18:56:29 -0800 (PST)
 Received: from localhost ([140.174.219.137])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8949191ed9csm7589256d6.38.2026.01.22.18.55.31
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8c6e3854a6csm75303985a.41.2026.01.22.18.56.28
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Jan 2026 18:55:32 -0800 (PST)
+        Thu, 22 Jan 2026 18:56:29 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -66,147 +66,59 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Thu, 22 Jan 2026 21:55:30 -0500
-Message-Id: <DFVMPA5US3UL.W4YJBEEMH2QS@etsalapatis.com>
+Date: Thu, 22 Jan 2026 21:56:27 -0500
+Message-Id: <DFVMQ08L200J.2UTQGHB63QPOK@etsalapatis.com>
+Subject: Re: [PATCH 06/13] selftests: bpf: Add arena ASAN runtime to
+ libarena
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
 To: <bot+bpf-ci@kernel.org>, <etsal@meta.com>, <bpf@vger.kernel.org>
 Cc: <ast@kernel.org>, <andrii@kernel.org>, <eddyz87@gmail.com>,
  <daniel@iogearbox.net>, <memxor@gmail.com>, <puranjay@kernel.org>,
  <song@kernel.org>, <martin.lau@kernel.org>, <yonghong.song@linux.dev>,
  <clm@meta.com>, <ihor.solodrai@linux.dev>
-Subject: Re: [PATCH 09/13] selftests: bpf: Add libarena selftests for the
- bump allocator
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
 X-Mailer: aerc 0.20.1
-References: <20260122160131.2238331-10-etsal@meta.com>
- <aae3bad1567ae22ff12276f74cf960129c7aea8186be32a22f5ee465f99efc49@mail.kernel.org>
-In-Reply-To: <aae3bad1567ae22ff12276f74cf960129c7aea8186be32a22f5ee465f99efc49@mail.kernel.org>
+References: <20260122160131.2238331-7-etsal@meta.com>
+ <fc73fe661a977aa87f21e92e96bfd4e63bcaa54c5356627257a8d485dc515821@mail.kernel.org>
+In-Reply-To: <fc73fe661a977aa87f21e92e96bfd4e63bcaa54c5356627257a8d485dc515821@mail.kernel.org>
 
 On Thu Jan 22, 2026 at 11:58 AM EST, bot+bpf-ci wrote:
->> diff --git a/tools/testing/selftests/bpf/libarena/selftests/st_asan_bump=
-.bpf.c b/tools/testing/selftests/bpf/libarena/selftests/st_asan_bump.bpf.c
+>> diff --git a/tools/testing/selftests/bpf/libarena/src/asan.bpf.c b/tools=
+/testing/selftests/bpf/libarena/src/asan.bpf.c
 >> new file mode 100644
->> index 000000000000..a8f0e6e01e4b
+>> index 000000000000..7d39ee7b68bd
 >> --- /dev/null
->> +++ b/tools/testing/selftests/bpf/libarena/selftests/st_asan_bump.bpf.c
+>> +++ b/tools/testing/selftests/bpf/libarena/src/asan.bpf.c
 >
 > [ ... ]
 >
->> +int asan_test_bump_blob_one(void)
+>> +static __always_inline int asan_report(s8a __arg_arena *addr, size_t sz=
+,
+>> +				       bool write)
 >> +{
->> +	volatile struct blob __arena *blob;
->> +	const size_t alignment =3D 1;
+>> +	/* Only report the first ASAN violation. */
+>> +	if (asan_reported && asan_report_once)
+>> +		return 0;
 >> +
->> +	blob =3D bump_alloc(sizeof(blob) - 1, alignment);
->                          ^^^^^^^^^^^^
+>> +	asan_reported =3D true;
+>> +
+>> +	asan_violated =3D (u64)addr;
+>> +
+>> +	if (asan_emit_stack) {
+>> +		arena_stderr("Memory violation for address %p (0x%lx) for %s of size =
+%ld",
+>> +				addr, write ? "write" : "read", sz);
 >
-> Is sizeof(blob) intended here? Since blob is declared as a pointer
-> (volatile struct blob __arena *blob), sizeof(blob) returns the size of
-> the pointer (8 bytes on 64-bit) rather than sizeof(struct blob) which
-> is 60 bytes.
->
-> This means the allocation is only 7 bytes, but the test later accesses
-> blob->oob at offset 59. Should this be sizeof(*blob) - 1 instead?
->
-> [ ... ]
+> The format string has four format specifiers (%p, %lx, %s, %ld) but only
+> three arguments are provided (addr, write?"write":"read", sz). Is there
+> a missing argument for the (0x%lx) specifier, or should that part of the
+> format string be removed?
 >
 
-Ack, the test is currently passing because we test only offsets 0 and
-sizeof(*blob) + 1. Will fix.
+Ack, there is a missing argument - the scalar representation of the
+arena address. Will add.
 
->> diff --git a/tools/testing/selftests/bpf/libarena/selftests/st_bump.bpf.=
-c b/tools/testing/selftests/bpf/libarena/selftests/st_bump.bpf.c
->> new file mode 100644
->> index 000000000000..99caae452343
->> --- /dev/null
->> +++ b/tools/testing/selftests/bpf/libarena/selftests/st_bump.bpf.c
->
-> [ ... ]
->
->> +#define ST_MAX_PAGES 8
->> +#define ST_MAX_BYTES (ST_MAX_PAGES * __PAGE_SIZE)
->
-> [ ... ]
->
->> +static int bump_selftest_alloc_multiple(u64 bytes, u64 alignment)
->> +{
->> +	void __arena *mem1, *mem2;
->> +	int ret;
->> +
->> +	/* Initialize the allocator */
->> +	ret =3D bump_init(ST_MAX_PAGES);
->> +	if (ret) {
->> +		bpf_printk("bump_init failed with %d", ret);
->> +		return ret;
+>> +		bpf_stream_print_stack();
 >> +	}
->> +
->> +	mem1 =3D ALLOC_OR_FAIL(bytes, alignment);
->> +	st_memset(mem1, ST_PATTERN1, bytes);
->> +
->> +	mem2 =3D ALLOC_OR_FAIL(bytes, alignment);
->> +	st_memset(mem2, ST_PATTERN1, ST_PATTERN2);
->                         ^^^^^^^^^^^  ^^^^^^^^^^^
->
-> The st_memset signature is st_memset(mem, byte, size). This call passes
-> ST_PATTERN1 (0xAA) as the byte pattern and ST_PATTERN2 (0x55 =3D 85) as
-> the size, but later CHECK_OR_FAIL(mem2, ST_PATTERN2, bytes) expects mem2
-> to contain ST_PATTERN2.
->
-> Should this be st_memset(mem2, ST_PATTERN2, bytes)?
->
-> Note: This code is currently unreachable due to the loop condition issue
-> described below.
->
-
-Ack, will update.
-
-> [ ... ]
->
->> +SEC("syscall")
->> +int bump_selftest(void)
->> +{
->> +	u64 bytes =3D 128;
->> +	u64 alignment =3D 1;
->> +
->> +	for (bytes =3D __PAGE_SIZE; bytes <=3D ST_MAX_PAGES && can_loop;
->                                   ^^^^^^^^^^^^^^^^^^^^^^^
->
-> The loop condition compares bytes (in bytes, initialized to __PAGE_SIZE
-> which is typically 4096) against ST_MAX_PAGES (8, a page count). Since
-> 4096 > 8 is always true, the condition bytes <=3D ST_MAX_PAGES is always
-> false and this loop never executes.
->
-> Should this compare against ST_MAX_BYTES instead?
->
-
-Ack, will use ST_MAX_PAGES * __PAGE_SIZE as the bound.
-
->> +	     bytes <<=3D 1) {
->> +		for (alignment =3D 1; alignment <=3D ST_MAX_ALIGNMENT && can_loop;
->> +		     alignment <<=3D 1) {
->> +			/* Each test manages its own allocator lifecycle */
->> +			BUMP_ALLOC_SELFTEST(alloc_single, bytes, alignment);
->> +			BUMP_ALLOC_SELFTEST(alloc_multiple, bytes, alignment);
->> +		}
->> +	}
->> +
->> +	BUMP_ALLOC_SELFTEST(alloc_aligned);
->> +
->> +	for (alignment =3D __PAGE_SIZE; bytes <=3D ST_MAX_PAGES && can_loop;
->             ^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^
->> +	     bytes <<=3D 1)
->
-> This loop initializes alignment but tests and advances bytes. The
-> condition bytes <=3D ST_MAX_PAGES is false (bytes retains its value from
-> the previous loop), so this loop also never executes.
->
-> Was the intent to iterate over different alignment values? If so, both
-> the condition and the increment should use alignment.
->
-
-Ack, same issue and solution as above.
-
->> +		BUMP_ALLOC_SELFTEST(alloc_exhaustion,
->> +				    ST_MAX_PAGES * __PAGE_SIZE, alignment);
 >> +
 >> +	return 0;
 >> +}
