@@ -1,90 +1,245 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f178.google.com (mail-dy1-f178.google.com [74.125.82.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D2322D9ECD
-	for <bpf@vger.kernel.org>; Fri, 23 Jan 2026 20:23:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 906833EBF38
+	for <bpf@vger.kernel.org>; Fri, 23 Jan 2026 22:22:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769199834; cv=none; b=J3zVvvk4/EeD7kpYzS3wqmBljWTWs9n0oRI/uGnL/+NjJcpv3WXy4xlbltws3XvYls07iu9S482VSbfisfqN0fqXuFHhkMaOm0ilzFfExuGojlP/jJOTGvq84lUzPvozrOfJ3K9wlncTwFX13f5eGwbffgZ2ZzyQplHqNARWzBY=
+	t=1769206937; cv=none; b=BfvpKNDiFQHBAl2pWWFR/Qgx/1hKyV0FWK1nTnAVRnexPCdb6219mubMYZl3H6J/aMDRkrXiez74sFzocPPPvFYRRgJxQL5Pem6C+gGod5O/4vTxc4R2V46AI4Ksk++/+TjTgdQEg9Sm60ymoixx+5XULwjZDZ/VtusPyFs3Ksk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769199834; c=relaxed/simple;
-	bh=TCYJ9pm4u9pY8XA2MVmsOObmE6D7jsYdHa39/d5HMcc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rr7V2Dt1plI/ZmpgOI3wovAIyNwN6gsokRaba+CLSgiQmjBKpA70SCCHi5FMj4NKgCTSIlBObemZn4gWxCXx4IYMwQ9L9HA4nTjwQeiQeNkTnl/hFxe5ZEqXz988WXcDIbKMU/U6FFrcH1Ir7yNOonwjNU1d7ebLaTjgcOP3gkg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SF+opV+g; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769206937; c=relaxed/simple;
+	bh=z8IlIXh47dOFdPn/7YG8QvPpbpmFtqMaCCfJQd7NMlI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HMRDJ3yRk8fHFU+3Pf1wIaDe3wHsm7S1pK7d2EN/WEgA3Ok8nRXUTJB6lZDKBORB/l5lb0HW7EXVKtZfp+7pMK04NWMXkxPScADhHjAx/+KxhXixi08SFicTKU47zAHohmU+t5EzVak+qeNmgh9ZlV/wLdAA7PgJB2tlVbW8lxU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eYShzJ0N; arc=none smtp.client-ip=74.125.82.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SF+opV+g"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7ACD4C2BC86
-	for <bpf@vger.kernel.org>; Fri, 23 Jan 2026 20:23:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769199834;
-	bh=TCYJ9pm4u9pY8XA2MVmsOObmE6D7jsYdHa39/d5HMcc=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=SF+opV+gFpElpTEh5dma1Eqc4cd2BEVKbsd1ucMgZXsVvZkwYMxw12y67TwcT416k
-	 G7pAyXs3qgWL5pYemOAEW/+DdPJBAivrosXeIIGFoULmCKta1RNVokMDrM9nk9xYHR
-	 tGWoAVRdDhFPwOD8y+jvyB6vkDFon31QT1fcN3FiLzs0rVDfpRUSSuHGRydHrWJeEx
-	 q4LtYid2aCM0SpFBS9Zn6r2joNSLUkCvzY5kA/gZno4TJfAbYDUR2z57SnlpfwxkrZ
-	 QanPVyPwBeTHvb/42HPUQBmjwQuK+M6FsHAhZVOOR0RnuXxIDTfMv7pwRdAKJVvr7g
-	 U0mSvlWc5z7hQ==
-Received: by mail-qv1-f48.google.com with SMTP id 6a1803df08f44-89478e429afso24379926d6.1
-        for <bpf@vger.kernel.org>; Fri, 23 Jan 2026 12:23:54 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCXmKfIomG87cA0B+Dp4yFUayJEVyRnPfgQXZABxjGYzUb86aK7y/LilzFrSafcPvB+jqU0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YygubBeJIIJTT+6waoK5RiruZ5hxNBete5MUrENk/zPEiwEWaRe
-	eOL3xS7MpLtmz75MYhfmU7OpvXIH/q/is3XTE0zd4odSbLCxltvRqNi/llu9dvwwJuS/5iAGqXq
-	O0GiobHGUALzV6zOTrmoCzkfqndI6+iQ=
-X-Received: by 2002:a05:6214:cc1:b0:894:3c57:dbc0 with SMTP id
- 6a1803df08f44-8949020dac1mr58981856d6.39.1769199833659; Fri, 23 Jan 2026
- 12:23:53 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eYShzJ0N"
+Received: by mail-dy1-f178.google.com with SMTP id 5a478bee46e88-2b6fd5bec41so6414781eec.1
+        for <bpf@vger.kernel.org>; Fri, 23 Jan 2026 14:22:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1769206936; x=1769811736; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6q7jSvteo768fX3RDKijF3HLXLbv8PUQY59d7KtxMqQ=;
+        b=eYShzJ0NKYgqmKJALOSfLBdWjGBqv+JK3M3Rw92rVnjsX6iXd1mxenFMNXMmxPNDFf
+         0lP2HD8YTS3Mxjmekwfp9Zi1qNjBkuk/XqciWcHhmXJc6PlRsvQIARuPhW7F67OCW9dF
+         FnZAxN8XBzfZSrX2q+hrd6Yl8J9dKe2uIUJP4B8sbkzvIP98Ow+MPku8UvsY3rcSVjBI
+         B9bWCbybxKgFsB63uc7MkBdFFCRTvzvkKMG10xO9I2zL36DpfiJOp06gQTtjk80/f+rS
+         ofhVnsa052tTWgx/4nHrs2QwoeUrrTxOcYRaJK7NwhY49Za/kLr9NYu99X1z0s0vW6F0
+         lCdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769206936; x=1769811736;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6q7jSvteo768fX3RDKijF3HLXLbv8PUQY59d7KtxMqQ=;
+        b=fr/JekdVQMtc1VqTJ/Z9cxS8Tl1vEuXRthC5ENRWrUXmFXOgDjGaKOxrpebcG1uSyR
+         ouOT1wRTp/1EINP+TjDUGskU+lOlucccwgiGc5IxD5QKheaaoDyr3t4NFYUUtCmsmrBa
+         oNNQEBBTQ4EcMpnQpZK82qCDrEaFA1mx6XmgjtgBUISg/2J7LcTvSCPLotygoCFCM73t
+         Gttx0ydxqCDp+OLea78/nEJHwg45qP7rfodQ4MugScMUNY0Tu111awDAkC/tmZLMWt27
+         PNS+z+L8LwbiB8Awu4leFFgJOFUdWql4Nud6lCFuXXxq7OgB2voNQrEg+isngprJeQeX
+         T0uw==
+X-Forwarded-Encrypted: i=1; AJvYcCX2MSs+aPugyq+7fmSxBihZgKuYuNSi81cPRNQaNBXveR2jYIwT5+N8q0TaHYyG1OFZoBQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy1F6uH8rhKK0P+VxXjaq2pWvzVm3mn0WLG6mBTzyWX2UE5N1yj
+	TCbVomvRlPwH4DLOLJkMJAAxWFAmHMeKppgljt0899WfqDdmJO+zwNM9X3vpFA==
+X-Gm-Gg: AZuq6aL/Nw8ritlDwN3Zs9IAjPaym2bx3zhtF7Z3hNa2sbUkUQtaR4awf8lgc3lgz/p
+	XvU6OnDhj3e09pF2xKZQ9ffxjfrxITmhX1fRkbFDmsWtRUjvx/1RnFekTHoJgz3vzRghSprpslc
+	UhbqnjLKSgP7W4RZmoUl2xPaiFsk2HiF+/B3fkYmCHTrDAatdTrQhCOu9YqP1jVpq0NbQW3Sy0h
+	jIrulCCh/0BbtzXH80lGidonArdUO1urWRdvJxshPvLWx133cxpj/D9TsRlrgT6wnBssjtJujpB
+	TO0l2Quhsb+wpCCyNZ1eE3vvJomhRqAUrvhCTEI22q3AEjUhg+Os6qxI8eL4z544lTXuaTjqs1J
+	X41eM1grB+iDPVmlffBKf7mj2uh37Y5QF4F/DwT8RCQFQqboFmcyxZL0WNY9uZ58Esny/zkrpao
+	IGHHGaDby3PzSQW4dHdWnC
+X-Received: by 2002:a05:7300:230a:b0:2af:674e:bc73 with SMTP id 5a478bee46e88-2b74274cff4mr1359399eec.7.1769201226027;
+        Fri, 23 Jan 2026 12:47:06 -0800 (PST)
+Received: from [192.168.4.196] ([73.222.117.172])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b73a691b1esm4476320eec.3.2026.01.23.12.47.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 23 Jan 2026 12:47:05 -0800 (PST)
+Message-ID: <b90069a3-86b4-4fba-9ff3-fe5f6c4e425d@gmail.com>
+Date: Fri, 23 Jan 2026 12:47:02 -0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAPhsuW4=heDwYEkmRzSnLHDdW=da71qDd1KqUj9sYUOT5uOx3w@mail.gmail.com>
- <CAHC9VhRU_vtN4oXHVuT4Tt=WFP=4FrKc=i8t=xDz+bamUG7r6g@mail.gmail.com>
- <CAPhsuW6vCrN=k6xEuPf+tJr6ikH_RwfyaU_Q9DvGg2r2U9y+UA@mail.gmail.com>
- <94bf50cb-cea7-48c1-9f88-073c969eb211@schaufler-ca.com> <CAPhsuW7xi+PP9OnkpBoh96aQyf3C82S1cZY4NJro-FKp0i719Q@mail.gmail.com>
- <633aa038-4356-4db3-b61f-191cf56c73b4@schaufler-ca.com>
-In-Reply-To: <633aa038-4356-4db3-b61f-191cf56c73b4@schaufler-ca.com>
-From: Song Liu <song@kernel.org>
-Date: Fri, 23 Jan 2026 12:23:42 -0800
-X-Gmail-Original-Message-ID: <CAPhsuW5-m9oVraESqht_OMwOf-b80LBC0w+DSKk9Kru7sF8d4Q@mail.gmail.com>
-X-Gm-Features: AZwV_Qil2W6hJzceDSRZxA4srphedhZgK-8wrWEE_IAEq6nCZVjDWj78lZ3LHwg
-Message-ID: <CAPhsuW5-m9oVraESqht_OMwOf-b80LBC0w+DSKk9Kru7sF8d4Q@mail.gmail.com>
-Subject: Re: [LSF/MM/BPF TOPIC] Refactor LSM hooks for VFS mount operations
-To: Casey Schaufler <casey@schaufler-ca.com>
-Cc: Paul Moore <paul@paul-moore.com>, bpf <bpf@vger.kernel.org>, 
-	Linux-Fsdevel <linux-fsdevel@vger.kernel.org>, lsf-pc@lists.linux-foundation.org, 
-	linux-security-module <linux-security-module@vger.kernel.org>, 
-	Christian Brauner <brauner@kernel.org>, Al Viro <viro@zeniv.linux.org.uk>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH bpf-next v3 09/12] selftests/bpf: Add tests for
+ memcg_bpf_ops
+To: Hui Zhu <hui.zhu@linux.dev>, Andrew Morton <akpm@linux-foundation.org>,
+ Johannes Weiner <hannes@cmpxchg.org>, Michal Hocko <mhocko@kernel.org>,
+ Roman Gushchin <roman.gushchin@linux.dev>,
+ Shakeel Butt <shakeel.butt@linux.dev>, Muchun Song <muchun.song@linux.dev>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>, Miguel Ojeda <ojeda@kernel.org>,
+ Nathan Chancellor <nathan@kernel.org>, Kees Cook <kees@kernel.org>,
+ Tejun Heo <tj@kernel.org>, Jeff Xu <jeffxu@chromium.org>, mkoutny@suse.com,
+ Jan Hendrik Farr <kernel@jfarr.cc>, Christian Brauner <brauner@kernel.org>,
+ Randy Dunlap <rdunlap@infradead.org>, Brian Gerst <brgerst@gmail.com>,
+ Masahiro Yamada <masahiroy@kernel.org>, davem@davemloft.net,
+ Jakub Kicinski <kuba@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>,
+ Willem de Bruijn <willemb@google.com>, Jason Xing
+ <kerneljasonxing@gmail.com>, Paul Chaignon <paul.chaignon@gmail.com>,
+ Anton Protopopov <a.s.protopopov@gmail.com>, Amery Hung
+ <ameryhung@gmail.com>, Chen Ridong <chenridong@huaweicloud.com>,
+ Lance Yang <lance.yang@linux.dev>, Jiayuan Chen <jiayuan.chen@linux.dev>,
+ linux-kernel@vger.kernel.org, linux-mm@kvack.org, cgroups@vger.kernel.org,
+ bpf@vger.kernel.org, netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
+Cc: Hui Zhu <zhuhui@kylinos.cn>, Geliang Tang <geliang@kernel.org>
+References: <cover.1769157382.git.zhuhui@kylinos.cn>
+ <c44accaaaebfc32be13234f82b501a3852ba3f0f.1769157382.git.zhuhui@kylinos.cn>
+Content-Language: en-US
+From: JP Kobryn <inwardvessel@gmail.com>
+In-Reply-To: <c44accaaaebfc32be13234f82b501a3852ba3f0f.1769157382.git.zhuhui@kylinos.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Casey,
+Hi Hui,
 
-On Thu, Jan 22, 2026 at 6:38=E2=80=AFPM Casey Schaufler <casey@schaufler-ca=
-.com> wrote:
-[...]
-> > Could you please share more information about this issue?
->
-> LSMs assume that any mount options passed to them are options
-> they provide. If an option isn't recognized, it's an error. If
-> two LSMs provide mount options the first will report an error for
-> a mount option recognized by the second. Since hook processing
-> uses a "bail on fail" model, the second LSM will never be called
-> to process its options and the mount operation will fail.
->
-> The option processing needs to change to allow option processing
-> in an LSM to differentiate between a failure in processing its
-> options from finding an unrecognized option. The infrastructure
-> needs to be changed to allow for multiple LSMs to look at the
-> options and only fail if none of them handle the options.
+On 1/23/26 1:00 AM, Hui Zhu wrote:
+> From: Hui Zhu <zhuhui@kylinos.cn>
+> 
+> Add a comprehensive selftest suite for the `memcg_bpf_ops`
+> functionality. These tests validate that BPF programs can correctly
+> influence memory cgroup throttling behavior by implementing the new
+> hooks.
+> 
+> The test suite is added in `prog_tests/memcg_ops.c` and covers
+> several key scenarios:
+> 
+> 1. `test_memcg_ops_over_high`:
+>     Verifies that a BPF program can trigger throttling on a low-priority
+>     cgroup by returning a delay from the `get_high_delay_ms` hook when a
+>     high-priority cgroup is under pressure.
+> 
+> 2. `test_memcg_ops_below_low_over_high`:
+>     Tests the combination of the `below_low` and `get_high_delay_ms`
+>     hooks, ensuring they work together as expected.
+> 
+> 3. `test_memcg_ops_below_min_over_high`:
+>     Validates the interaction between the `below_min` and
+>     `get_high_delay_ms` hooks.
+> 
+> The test framework sets up a cgroup hierarchy with high and low
+> priority groups, attaches BPF programs, runs memory-intensive
+> workloads, and asserts that the observed throttling (measured by
+> workload execution time) matches expectations.
+> 
+> The BPF program (`progs/memcg_ops.c`) uses a tracepoint on
+> `memcg:count_memcg_events` (specifically PGFAULT) to detect memory
+> pressure and trigger the appropriate hooks in response. This test
+> suite provides essential validation for the new memory control
+> mechanisms.
+> 
+> Signed-off-by: Geliang Tang <geliang@kernel.org>
+> Signed-off-by: Hui Zhu <zhuhui@kylinos.cn>
+> ---
+[..]
+> diff --git a/tools/testing/selftests/bpf/prog_tests/memcg_ops.c b/tools/testing/selftests/bpf/prog_tests/memcg_ops.c
+> new file mode 100644
+> index 000000000000..9a8d16296f2d
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/memcg_ops.c
+> @@ -0,0 +1,537 @@
+[..]
+> +
+> +static void
+> +real_test_memcg_ops_child_work(const char *cgroup_path,
+> +			       char *data_filename,
+> +			       char *time_filename,
+> +			       int read_times)
+> +{
+> +	struct timeval start, end;
+> +	double elapsed;
+> +	FILE *fp;
+> +
+> +	if (!ASSERT_OK(join_parent_cgroup(cgroup_path), "join_parent_cgroup"))
+> +		goto out;
+> +
+> +	if (env.verbosity >= VERBOSE_NORMAL)
+> +		printf("%s %d begin\n", __func__, getpid());
+> +
+> +	gettimeofday(&start, NULL);
+> +
+> +	if (!ASSERT_OK(write_file(data_filename), "write_file"))
+> +		goto out;
+> +
+> +	if (env.verbosity >= VERBOSE_NORMAL)
+> +		printf("%s %d write_file done\n", __func__, getpid());
+> +
+> +	if (!ASSERT_OK(read_file(data_filename, read_times), "read_file"))
+> +		goto out;
+> +
+> +	gettimeofday(&end, NULL);
+> +
+> +	elapsed = (end.tv_sec - start.tv_sec) +
+> +		  (end.tv_usec - start.tv_usec) / 1000000.0;
+> +
+> +	if (env.verbosity >= VERBOSE_NORMAL)
+> +		printf("%s %d end %.6f\n", __func__, getpid(), elapsed);
+> +
+> +	fp = fopen(time_filename, "w");
+> +	if (!ASSERT_OK_PTR(fp, "fopen"))
+> +		goto out;
+> +	fprintf(fp, "%.6f", elapsed);
+> +	fclose(fp);
+> +
+> +out:
+> +	exit(0);
+> +}
+> +
 
-Thanks for the explanation!
+[..]
 
-This issue is indeed tricky. Since we are talking about to major
-refactoring of LSM hooks around mount operations, it is good
-timing to also solve this issue. I will look more into this.
+> +static void real_test_memcg_ops(int read_times)
+> +{
+> +	int ret;
+> +	char data_file1[] = "/tmp/test_data_XXXXXX";
+> +	char data_file2[] = "/tmp/test_data_XXXXXX";
+> +	char time_file1[] = "/tmp/test_time_XXXXXX";
+> +	char time_file2[] = "/tmp/test_time_XXXXXX";
+> +	pid_t pid1, pid2;
+> +	double time1, time2;
+> +
+> +	ret = mkstemp(data_file1);
+> +	if (!ASSERT_GT(ret, 0, "mkstemp"))
+> +		return;
+> +	close(ret);
+> +	ret = mkstemp(data_file2);
+> +	if (!ASSERT_GT(ret, 0, "mkstemp"))
+> +		goto cleanup_data_file1;
+> +	close(ret);
+> +	ret = mkstemp(time_file1);
+> +	if (!ASSERT_GT(ret, 0, "mkstemp"))
+> +		goto cleanup_data_file2;
+> +	close(ret);
+> +	ret = mkstemp(time_file2);
+> +	if (!ASSERT_GT(ret, 0, "mkstemp"))
+> +		goto cleanup_time_file1;
+> +	close(ret);
+> +
+> +	pid1 = fork();
+> +	if (!ASSERT_GE(pid1, 0, "fork"))
+> +		goto cleanup;
+> +	if (pid1 == 0)
+> +		real_test_memcg_ops_child_work(CG_LOW_DIR,
+> +					       data_file1,
+> +					       time_file1,
+> +					       read_times);
 
-Song
+Would it be better to call exit() after real_test_memcg_ops_child_work()
+instead of within it? This way the fork/exit/wait logic is contained in
+the same scope making the lifetimes easier to track. I had to go back
+and search for the call to exit() since at a glance this function
+appears to proceed to call fork() and waitpid() from within both parent
+and child procs (though it really does not).
