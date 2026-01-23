@@ -1,113 +1,134 @@
-Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1D632D8DB0
-	for <bpf@vger.kernel.org>; Fri, 23 Jan 2026 16:52:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E94FF2BE05B
+	for <bpf@vger.kernel.org>; Fri, 23 Jan 2026 17:05:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769187166; cv=none; b=sk8MrpUw3/+WxrRMr4OOPMy89qtP0lpqBty7YNmjL8HR+ttNLlm3ulzmh4uPUaGw/zoMttVSk3m+TH8z2gdQzUd/j4GUm+dWTLT3vb2kEl7t4nk3sqSujYRKG2MHWOmvEnol+K4RBJOppxQHlm7naQol4LFqDbui2ZrMmo3nOvw=
+	t=1769187934; cv=none; b=PMDUuQD8zpaD/zA6/PLS6WjenN47cJ4MzuhSLe0IqUTlWdI7AAyuvOrdaxQL8dhMWnTKGqvkY8fqnh0YTKIPgUffRbh9P/yBqw2zQevfaIBimkIvXKTvjo2fWqikGu7BUhOVdxSfWjBqzW1314B2OW8+ZF8H86fNPw3omhVURNg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769187166; c=relaxed/simple;
-	bh=podR4pzaAzcDb+GKwYY8v8JRh+vX6rU2JggSnBIxc7g=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=RAtDzvwEEOy6GhwinLwx7a7AGF647id+N3WxvpEcN7zt7/meyzjSkD+PHv+O0zPLsNr6TCz19+lJZsNKOyrgl3n+XrerD31XoB/ATv7WQVyqeQyzNzWcvQ+7rajMVDAKCY5FX1mgqsMWaxqF7qwqmNk80jaVcCFVhBx2OJesq6I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=G2/GY7mB; arc=none smtp.client-ip=185.226.149.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
+	s=arc-20240116; t=1769187934; c=relaxed/simple;
+	bh=dYBtLZQZSXmjttUMkUr69cwe/3Al9p+VVefAv8iNiCM=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=JD+ChN5eXzrcyUyqGSXXG48McvLqdJJU5hkw7J2tJyzWf+lHSrYCBUWgwBMlFqJBKRz00Z65gtdczgD6nsPjHH0PJCSwqh861OECet/WKPvPTU/b5mdnZhGBtQs6Mgtg7Ui7kic7G6XWndEDv5b0eu3zoic1/fqRaVycdy1Tuew=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=KXvPPUmU; arc=none smtp.client-ip=209.85.218.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="G2/GY7mB"
-Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
-	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.93)
-	(envelope-from <mhal@rbox.co>)
-	id 1vjKOm-00FEM2-Bb; Fri, 23 Jan 2026 17:52:40 +0100
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
-	s=selector2; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:References:
-	Cc:To:Subject:From:MIME-Version:Date:Message-ID;
-	bh=Dfuf1H7CdP7qwJBc1Q0ySDLiVxcnJtTh4PIozvwSnhw=; b=G2/GY7mBhEuuwUTV5TL5n++sG9
-	fCjxhEGQrdP34358fLm9qY3JDDZ2y8Lxpd771JTW05TWmuNS+LFpAY7waA+hWSXiFDleWo6akJ6pp
-	DSGKKIn5AELI3NDgjUJE1HJIi2yj1zvt1VSs/yNZwmACWM1fbw78hJ0WxhClRr5qBbprDUd2oKE7X
-	m4KVFNKS0tJbU1hokLbqblFQ0UQD47HrwsyTA/Au9oUPrn93ncBa4kkNo0nypCXikW7KGncAcNzjc
-	BzUGdGklqyCqOhjxWuqj0bJWre+zy96isozJb7ejYTz/BSX5LAj7Vg+hUSqeTCpFdSON00uvwWNZw
-	+LPkr03Q==;
-Received: from [10.9.9.72] (helo=submission01.runbox)
-	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
-	(envelope-from <mhal@rbox.co>)
-	id 1vjKOl-0005hb-PG; Fri, 23 Jan 2026 17:52:39 +0100
-Received: by submission01.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.93)
-	id 1vjKOg-003ttE-TX; Fri, 23 Jan 2026 17:52:35 +0100
-Message-ID: <6850ad0c-68e5-4d8c-b80e-7c6adee80fdf@rbox.co>
-Date: Fri, 23 Jan 2026 17:52:33 +0100
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="KXvPPUmU"
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-b884d5c787bso365014266b.0
+        for <bpf@vger.kernel.org>; Fri, 23 Jan 2026 09:05:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google09082023; t=1769187931; x=1769792731; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=hpBi4zuZaxY+L1YIyml9GR1d7OYtXHDSWry/Nv/uf4c=;
+        b=KXvPPUmUGa068dBMkukVQYd4yPgewJMj7bEEI+I4qFk6guahu76vGGhE7aDUv54E+j
+         qQMKRwSGnp7xjDanEExGiS7eHtfe9VIL6B0AvEFijvbeigOn/DjcGRca+HJInosuFqkg
+         hxtlYTiTFeGmfdDelj7CVRCCA2210bCUSfZP8ROQs2IH/xXQovc7Fx4xGQ36R22Y830L
+         hxzOqRi+gkkzq+WduE5t1i3SutgBawhHVYpQHro7S0OEtJcKu7GkmWVno+U5NwyBn9cO
+         tKpmkil++H9Y2NsaWD0rsZ+OeOChB7MkAIXDUp/QSG3Qg5tdegP0WNO2S2je9E/DL1yw
+         PTEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769187931; x=1769792731;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hpBi4zuZaxY+L1YIyml9GR1d7OYtXHDSWry/Nv/uf4c=;
+        b=kccifSWXd2RYDzP4ekESph5ZNNHHhqnLfmcLJoOCm1upJ1O/EDd5kzqcA9POkkLx5z
+         Kxbe/L9jL29HaAa8r/Pra3TIp8+GQQlZIQqBew4IapolikOWTJiyBEnCzrt6Ll/d4RRt
+         JbLhBIz7LTZMczScgoe6aCTxnBcU8NUTwWOsm35UzWvsGtVnc1SgRs69oZV6NGgLNk1p
+         FK8AVwfjjPPef6/2gDdwdACCHTTznlkmh5vacZ2vPMszqkkmgYmx3vQYFElIxFfw413C
+         ypUmvtAQLwPxbfiGeFruoEmebZN+Qfk4scz/PJYxhPtUiCTgRJjfVpu0g5R9rx4o3JZc
+         WRIQ==
+X-Gm-Message-State: AOJu0Yz+xNrduK/3Pr5BY3cxjPzKvTs7RgGPn8nX3z4J+CrQhPZCBQvm
+	zQ2LheX8g1NEhrlajjrb6rP9t7QS/Pfdd2eZD3vZ3Wu7vrVx1DYx2MokKFbIKeAyXPs=
+X-Gm-Gg: AZuq6aILrJ+ylrPf46ONjVfd/G8YsV/Zf4ei2QZ3s0L2RPD4oIjuR2GBEgllk2CdBR4
+	VX76HtDZNEQAdEeq+pnsV22VNbsdTOV+DOIJwp9lsOJAoRKFlc3eaU3QYk/6KVeB78hrYlaE4tx
+	OCcTPf+JPlr08i5LrSXvPq7hIPuQTV1+EDVmtVANERoHEsDWBFiNdlZkCTzXMISM2leFeZg/tPc
+	SHXy56ZtAevjzLveAOBEJD2cHZE1mFuNowmEfHlaBzWnEQKwdu2BoZbJnZiTucZ0PUvQwm4d9u7
+	9ca38Q3jEQ0fDEGg5sSEpDskARzyPvoPsFC+ZEEbhxOIkW1gAx0HkXpa2vrNDU/gTs1+GKh1m5U
+	fVsBIH4/m63FTUhGLK9mXTODgjgAbEHFuCyeHCRzlQLisa0MDhXobqYg4ICcOsPoxc/psv8pYbv
+	n2MgzUWEPmIutCvTigGfgnhUGp5dIXepcLdSy7qzih9Z6FkErkYQs=
+X-Received: by 2002:a17:907:3da5:b0:b87:2471:def3 with SMTP id a640c23a62f3a-b885adf4732mr244050466b.55.1769187931127;
+        Fri, 23 Jan 2026 09:05:31 -0800 (PST)
+Received: from cloudflare.com (79.191.62.3.ipv4.supernova.orange.pl. [79.191.62.3])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b885b4184absm134752866b.27.2026.01.23.09.05.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Jan 2026 09:05:30 -0800 (PST)
+From: Jakub Sitnicki <jakub@cloudflare.com>
+Subject: [PATCH bpf-next v2 0/4] Switch from kfuncs to direct helper calls
+ in prologue/epilogue
+Date: Fri, 23 Jan 2026 18:05:17 +0100
+Message-Id: <20260123-skb-meta-bpf-emit-call-from-prologue-v2-0-0e50db4d4663@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Michal Luczaj <mhal@rbox.co>
-Subject: Re: [PATCH net] vsock/bpf: Handle EINTR connect() racing against
- sockmap update
-To: John Fastabend <john.fastabend@gmail.com>
-Cc: Stefano Garzarella <sgarzare@redhat.com>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, "Michael S. Tsirkin" <mst@redhat.com>,
- netdev@vger.kernel.org, bpf@vger.kernel.org, leonardi@redhat.com
-References: <20250307-vsock-trans-signal-race-v1-1-3aca3f771fbd@rbox.co>
- <a96febaf-1d32-47d4-ad18-ce5d689b7bdb@rbox.co>
- <vhda4sdbp725w7mkhha72u2nt3xpgyv2i4dphdr6lw7745qpuu@7c3lrl4tbomv>
- <032764f5-e462-4f42-bfdc-8e31b25ada27@rbox.co>
- <20250311155601.eui5j2lta3q46i6u@gmail.com>
-Content-Language: pl-PL, en-GB
-In-Reply-To: <20250311155601.eui5j2lta3q46i6u@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAE2qc2kC/42NQQ6CMBBFr2Jm7Zi2GCyuvIdhUdopNLaUtEAwh
+ LuLxAO4fHn5/62QKTnKcD+tkGh22cV+B3E+ge5U3xI6szMIJkrGucD8ajDQqLAZLFJwI2rlPdo
+ UAw4p+thOhEboSvLCSnlTsF8NiaxbjswTvsOelhHq3XQujzG9j/7MD/9LVf+lZo4MSTZSmvJaM
+ CMf2sfJWK8SXXQMUG/b9gFpgPJA5wAAAA==
+X-Change-ID: 20260112-skb-meta-bpf-emit-call-from-prologue-d2c9813f887a
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Amery Hung <ameryhung@gmail.com>, 
+ netdev@vger.kernel.org, kernel-team@cloudflare.com, 
+ Martin KaFai Lau <martin.lau@kernel.org>
+X-Mailer: b4 0.15-dev-07fe9
 
-On 3/11/25 16:56, John Fastabend wrote:
-> On 2025-03-07 17:01:11, Michal Luczaj wrote:
->> On 3/7/25 15:35, Stefano Garzarella wrote:
->>> On Fri, Mar 07, 2025 at 10:58:55AM +0100, Michal Luczaj wrote:
->>>>> Signal delivered during connect() may result in a disconnect of an already
->>>>> TCP_ESTABLISHED socket. Problem is that such established socket might have
->>>>> been placed in a sockmap before the connection was closed. We end up with a
->>>>> SS_UNCONNECTED vsock in a sockmap. And this, combined with the ability to
->>>>> reassign (unconnected) vsock's transport to NULL, breaks the sockmap
->>>>> contract. As manifested by WARN_ON_ONCE.
->>>>
->>>> Note that Luigi is currently working on a (vsock test suit) test[1] for a
->>>> related bug, which could be neatly adapted to test this bug as well.
->>>> [1]: https://lore.kernel.org/netdev/20250306-test_vsock-v1-0-0320b5accf92@redhat.com/
->>>
->>> Can you work with Luigi to include the changes in that series?
->>
->> I was just going to wait for Luigi to finish his work (no rush, really) and
->> then try to parametrize it.
->>
->> That is unless BPF/sockmap maintainers decide this thread's thing is a
->> sockmap thing and should be in tools/testing/selftests/bpf.
-> 
-> I think it makes sense to pull into selftests/bpf then it would get run
-> from BPF CI so we can ensure BPF changes will keep this working
-> correctly.
+This series enables direct helper calls using BPF_EMIT_CALL from prologue
+and epilogue code generated by verifier ops. The goal is to simplify the
+calling convention and remove kfunc support from prologue/epilogue, as
+suggested by Alexei [1].
 
-All right, a bit late (sorry), but here's an attempt:
-https://lore.kernel.org/bpf/20260123-selftest-signal-on-connect-v1-0-b0256e7025b6@rbox.co/
+Patch 1 adds the infrastructure to mark direct helper calls as finalized
+(already resolved) so the verifier skips the imm fixup.
 
-> I guess the trick would be to see how long to run racer to get the
-> warning but also not hang the CI. If you run it for 5 seconds or so
-> does it trip? Or are you running this for minutes?
->
-> If it takes too long to run it could be put into test_sockmap which
-> has longer running things already. We also have some longer TCP
-> compliance tests that would be good to start running in public somehow
-> so might think a bit more how the infra for testing is going in
-> sockmap side.
+Patch 2 converts bpf_qdisc to use BPF_EMIT_CALL instead of BPF_CALL_KFUNC
+for the init prologue and reset/destroy epilogue helpers.
 
-5 seconds is enough for the af_vsock case. I've added a af_unix test as
-well, that one takes longer sometimes. But 5 seconds per protocol do add
-up, the whole run takes some time.
+Patch 3 removes the corresponding selftests that exercised kfuncs in
+prologue/epilogue.
 
-[...]
+Patch 4 removes the now-unused kfunc support code from prologue/epilogue
+handling in the verifier.
+
+[1] https://lore.kernel.org/bpf/CAADnVQJ=kmVAZsgkG9P2nEBTUG3E4PrDG=Yz8tfeFysH4ZBqVw@mail.gmail.com/
+
+Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
+---
+Changes in v2:
+- Swap patch 3 & 4 to avoid selftests fails on bisect (Eduard)
+- Rename is_epilogue flag to finalize_helper_calls (Eduard)
+- Untie mark_helper_calls_finalized call from epilogue_idx (Eduard)
+- Drop review tags for patch 1 after tweaks in patch_insn_buf (patch 1)
+- s/__bpf_base_call/__bpf_call_base/ in doc comment (patch 1)
+- Link to v1: https://lore.kernel.org/r/20260119-skb-meta-bpf-emit-call-from-prologue-v1-0-e8b88d6430d8@cloudflare.com
+
+---
+Jakub Sitnicki (4):
+      bpf, verifier: Support direct helper calls from prologue/epilogue
+      bpf: net_sched: Use direct helper calls instead of kfuncs in pro/epilogue
+      selftests/bpf: Remove tests for prologue/epilogue with kfuncs
+      bpf: Remove kfunc support in prologue and epilogue
+
+ include/linux/bpf_verifier.h                       |  1 +
+ kernel/bpf/verifier.c                              | 52 ++++++------
+ net/core/filter.c                                  |  3 +-
+ net/sched/bpf_qdisc.c                              | 76 ++++++++----------
+ .../selftests/bpf/prog_tests/pro_epilogue.c        |  2 -
+ .../selftests/bpf/progs/pro_epilogue_with_kfunc.c  | 88 ---------------------
+ .../testing/selftests/bpf/test_kmods/bpf_testmod.c | 92 ----------------------
+ 7 files changed, 63 insertions(+), 251 deletions(-)
 
