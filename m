@@ -1,97 +1,187 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD8332C375E;
-	Fri, 23 Jan 2026 12:03:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD09C222575;
+	Fri, 23 Jan 2026 12:18:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769169787; cv=none; b=Bfa+3nfyam/i9cNcf5i7nV4O5FVu84ryIuUqmBdn+bXBh2wlwYXUgBL61ypW0GautvcAnA85T7i2nP07a0jhEQGiCqFNXhQPcGllhz32vfuaxj3F2ZApT9aAhRwu1js7tti6kutkS8+wuyTST6oBFm7xgSxlkpTtSMIeAdiy7cc=
+	t=1769170731; cv=none; b=pA82xaKM3qKA0ziHtbhB27LG6taeUeRIFcQni2hzOXTjaF6Fi2qB3LcxnzjUV6yrYLB6xIjIpDCXhnbJ9f6FOCUPbqHkqS0LyousCTWbrnHSnQuqwFvPAYGqfzckmCRS641FXeGh5WQIrmotrP4IUqclIdT7D7eErGlsGgL1vA8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769169787; c=relaxed/simple;
-	bh=bXS+Zs9pCIXBb5gqkVSOwk2VgarD8vq70BgHZ7jR1bo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sDump21R7d/6tvydW8kFuYUGSlKuUo5PJ1NIJAhMi0qD6XB+TH/ZNrYcR2Bh3a4g/O4C6ZR9zTMZXyje6rfQIiuxdJG65Lw4rR7WSZ5Fmnbl6oTcNDb9KzHXOxBHCRQyZ8eDWvf9QxLjOWbjz7JaoZRqt8ZBmVrhCZdE6wH3s0c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=a2TXmIgH; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=LWu1kPfD; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	s=arc-20240116; t=1769170731; c=relaxed/simple;
+	bh=RI7LGH0pvlSUbNfW4+4aeCZh8WWmVQu6y5LjvxFd9HM=;
+	h=Subject:From:To:Cc:Date:Message-ID:MIME-Version:Content-Type; b=mz5Fk2DKhy2E7CqwKDqnbXtG/5HJqvt88ZjKGpc52jSNSJnR6hW9Lxgt8raLQGnpYm65ABiGsf8hgnXRNXMv0/QXKn18l/530tm4LgpsAIhIMih+hnWoLL41+2HbdxLUfyAmry/TBHeXyXjFKVog9qBPcvc+RjjDJKn0thpP584=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VfIeo99t; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="a2TXmIgH";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="LWu1kPfD"
-Date: Fri, 23 Jan 2026 13:03:02 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1769169784;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=d/X5EsI0mvP/S5uf20Pvy9T65z0CIjEe5oCCyfrYy4k=;
-	b=a2TXmIgHE5csJ7d3yjab3MQF2OzNvARYue91SHvMZtiYkscH5h3i/iPwuYxBhtq5ss2Z7g
-	OWiOuvRRMR3HWqKIFLIzwayeWIjRhquhTvAi53s0CE87H1xyrUV6uC9uDq/16Etmet9U9o
-	rGZo4gUwgYgMlA1aChYnYhgf0eCSUoFrrfupJ0YZkzT3spI4FpNrT26Td90MtrM67h5Bbc
-	zUl8yquLCrwWKdaNjoJ6hUbUzI0UslyY7+BZ1W+fuZAIt6qoqR1oQ3PQfy6FuFLb2QrBF2
-	qKeWbCQm0kYj1EKwDeLsRLMhGYnCzHZrWlkMhkiQu/OAoVye0CNA/kzGPA0Q8A==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1769169784;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=d/X5EsI0mvP/S5uf20Pvy9T65z0CIjEe5oCCyfrYy4k=;
-	b=LWu1kPfDeQQ9VCICNNdwrVE1s6nQxcJqf2a0hPTg4+/K5d776xHUVR0Kpka3InbF5u6jp9
-	KmKxHfVUWlAqrqBA==
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To: Vlastimil Babka <vbabka@suse.cz>
-Cc: Harry Yoo <harry.yoo@oracle.com>, Petr Tesarik <ptesarik@suse.com>,
-	Christoph Lameter <cl@gentwo.org>,
-	David Rientjes <rientjes@google.com>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Hao Li <hao.li@linux.dev>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Alexei Starovoitov <ast@kernel.org>, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, linux-rt-devel@lists.linux.dev,
-	bpf@vger.kernel.org, kasan-dev@googlegroups.com,
-	"Paul E. McKenney" <paulmck@kernel.org>
-Subject: Re: [PATCH v4 02/22] mm/slab: fix false lockdep warning in
- __kfree_rcu_sheaf()
-Message-ID: <20260123120302.TsiVMAQb@linutronix.de>
-References: <20260123-sheaves-for-all-v4-0-041323d506f7@suse.cz>
- <20260123-sheaves-for-all-v4-2-041323d506f7@suse.cz>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VfIeo99t"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55043C4CEF1;
+	Fri, 23 Jan 2026 12:18:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769170731;
+	bh=RI7LGH0pvlSUbNfW4+4aeCZh8WWmVQu6y5LjvxFd9HM=;
+	h=Subject:From:To:Cc:Date:From;
+	b=VfIeo99tMICRoLwFLK76V+fpUxMsLyoV0pnVvzfaT8FcxwUvgBrwTojA3Rg3DSPOP
+	 vu/2//Y0TvinVOHMU5zyjBh2i0y9cH8hLhBaDqBATWix+36aR57/4oEWA/yMH9HPqt
+	 OccGU+b+9N0Eai2keSHt49O/OY7gplXwa3NZ8qpw1GbXbfvu8GQ0CPFtHP1Cldo4Yv
+	 9xN/6hBlW4GXXoC7kLpRY26A2Rm9Bk1kV8/FjnLTN+YxRe5bm2gf85LPGgNsvT9cgX
+	 SZfqRL4u/WoV78ndqR9cZCRSlBbd0djncMLxcehrsSfVZeJYb9mdzC0mB3AQs4jwgF
+	 k8n5OrQhec55Q==
+Subject: [PATCH net-next v3] net: sched: sfq: add detailed drop reasons for
+ monitoring
+From: Jesper Dangaard Brouer <hawk@kernel.org>
+To: netdev@vger.kernel.org, Eric Dumazet <eric.dumazet@gmail.com>,
+ "David S. Miller" <davem@davemloft.net>, Paolo Abeni <pabeni@redhat.com>
+Cc: Jesper Dangaard Brouer <hawk@kernel.org>, bpf@vger.kernel.org,
+ Jakub Kicinski <kuba@kernel.org>,
+ =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
+ horms@kernel.org, jiri@resnulli.us, edumazet@google.com,
+ xiyou.wangcong@gmail.com, jhs@mojatatu.com, carges@cloudflare.com,
+ kernel-team@cloudflare.com
+Date: Fri, 23 Jan 2026 13:18:46 +0100
+Message-ID: <176917072608.1186611.11185920960590396939.stgit@firesoul>
+User-Agent: StGit/1.5
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20260123-sheaves-for-all-v4-2-041323d506f7@suse.cz>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 
-On 2026-01-23 07:52:40 [+0100], Vlastimil Babka wrote:
-> --- a/mm/slub.c
-> +++ b/mm/slub.c
-> @@ -6268,11 +6268,26 @@ static void rcu_free_sheaf(struct rcu_head *head)
-=E2=80=A6
-> +static DEFINE_WAIT_OVERRIDE_MAP(kfree_rcu_sheaf_map, LD_WAIT_CONFIG);
-> +
->  bool __kfree_rcu_sheaf(struct kmem_cache *s, void *obj)
->  {
->  	struct slub_percpu_sheaves *pcs;
->  	struct slab_sheaf *rcu_sheaf;
+Add specific drop reasons to SFQ qdisc to improve packet drop
+observability and monitoring capabilities. This change replaces
+generic qdisc_drop() calls with qdisc_drop_reason() to provide
+granular metrics about different drop scenarios in production
+environments.
 
-Would it work to have here something like
-	BUG_ON(IS_ENABLED(CONFIG_PREEMPT_RT));
+Two new drop reasons are introduced:
 
-or WARN_ON+return? The way the code is now it relies on the check in
-kvfree_call_rcu() and tells lockdep to be quiet. And since it gets
-optimized away=E2=80=A6
+- SKB_DROP_REASON_QDISC_SFQ_MAXFLOWS: Used when a new flow cannot
+  be created because the maximum number of flows (flows parameter)
+  has been reached and no free flow slots are available.
 
-> +	lock_map_acquire_try(&kfree_rcu_sheaf_map);
-> +
+- SKB_DROP_REASON_QDISC_SFQ_MAXDEPTH: Used when a flow's queue
+  length exceeds the per-flow depth limit (depth parameter),
+  triggering either tail drop or head drop depending on headdrop
+  configuration.
 
-Reviewed-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+The existing SKB_DROP_REASON_QDISC_OVERLIMIT is used in sfq_drop()
+when the overall qdisc limit is exceeded and packets are dropped
+from the longest queue.
 
-Sebastian
+The naming uses qdisc-specific drop reasons tied to SFQ tunables,
+following the pattern established by Eric's FQ commit 5765c7f6e317
+("net_sched: sch_fq: add three drop_reason") which introduced
+FQ_BAND_LIMIT, FQ_HORIZON_LIMIT, and FQ_FLOW_LIMIT.
+
+The new drop reasons are inserted in the middle of the enum after
+SKB_DROP_REASON_QDISC_CONGESTED to group all qdisc-related reasons
+together. While drop reason enum values are not UAPI, the enum
+names implicitly become UAPI as userspace tools rely on BTF to
+resolve names to values. This makes middle-insertion safe as long
+as names remain stable.
+
+These detailed drop reasons enable production monitoring systems
+to distinguish between different SFQ drop scenarios and generate
+specific metrics for:
+- Flow table exhaustion (flows exceeded)
+- Per-flow congestion (depth limit exceeded)
+- Global qdisc congestion (overall limit exceeded)
+
+This granular visibility allows operators to identify capacity
+planning needs, detect traffic patterns, and optimize SFQ
+configuration based on real-world drop patterns.
+
+Signed-off-by: Jesper Dangaard Brouer <hawk@kernel.org>
+---
+v3:
+- Removed SFQ_DR() macro per upstream feedback
+- Use full drop reason names (SKB_DROP_REASON_QDISC_SFQ_*) for easier grepping
+- Split long lines to stay under 80 characters
+
+v2:
+- Changed to hierarchical naming: QDISC_SFQ_MAXFLOWS and QDISC_SFQ_MAXDEPTH
+- Added QDISC_ prefix for pattern matching across qdisc subsystems
+- Added rationale paragraph explaining userspace monitoring benefits
+
+v1:
+- Initial submission with QDISC_MAXFLOWS and QDISC_MAXDEPTH
+---
+ include/net/dropreason-core.h |   12 ++++++++++++
+ net/sched/sch_sfq.c           |   11 +++++++----
+ 2 files changed, 19 insertions(+), 4 deletions(-)
+
+diff --git a/include/net/dropreason-core.h b/include/net/dropreason-core.h
+index a7b7abd66e21..92c99169bb97 100644
+--- a/include/net/dropreason-core.h
++++ b/include/net/dropreason-core.h
+@@ -70,6 +70,8 @@
+ 	FN(QDISC_BURST_DROP)		\
+ 	FN(QDISC_OVERLIMIT)		\
+ 	FN(QDISC_CONGESTED)		\
++	FN(QDISC_SFQ_MAXFLOWS)		\
++	FN(QDISC_SFQ_MAXDEPTH)		\
+ 	FN(CAKE_FLOOD)			\
+ 	FN(FQ_BAND_LIMIT)		\
+ 	FN(FQ_HORIZON_LIMIT)		\
+@@ -390,6 +392,16 @@ enum skb_drop_reason {
+ 	 * due to congestion.
+ 	 */
+ 	SKB_DROP_REASON_QDISC_CONGESTED,
++	/**
++	 * @SKB_DROP_REASON_QDISC_SFQ_MAXFLOWS: dropped by SFQ qdisc when the
++	 * maximum number of flows is exceeded.
++	 */
++	SKB_DROP_REASON_QDISC_SFQ_MAXFLOWS,
++	/**
++	 * @SKB_DROP_REASON_QDISC_SFQ_MAXDEPTH: dropped by SFQ qdisc when a flow
++	 * exceeds its maximum queue depth limit.
++	 */
++	SKB_DROP_REASON_QDISC_SFQ_MAXDEPTH,
+ 	/**
+ 	 * @SKB_DROP_REASON_CAKE_FLOOD: dropped by the flood protection part of
+ 	 * CAKE qdisc AQM algorithm (BLUE).
+diff --git a/net/sched/sch_sfq.c b/net/sched/sch_sfq.c
+index 96eb2f122973..ecc1028bdac8 100644
+--- a/net/sched/sch_sfq.c
++++ b/net/sched/sch_sfq.c
+@@ -302,7 +302,7 @@ static unsigned int sfq_drop(struct Qdisc *sch, struct sk_buff **to_free)
+ 		sfq_dec(q, x);
+ 		sch->q.qlen--;
+ 		qdisc_qstats_backlog_dec(sch, skb);
+-		qdisc_drop(skb, sch, to_free);
++		qdisc_drop_reason(skb, sch, to_free, SKB_DROP_REASON_QDISC_OVERLIMIT);
+ 		return len;
+ 	}
+ 
+@@ -363,7 +363,8 @@ sfq_enqueue(struct sk_buff *skb, struct Qdisc *sch, struct sk_buff **to_free)
+ 	if (x == SFQ_EMPTY_SLOT) {
+ 		x = q->dep[0].next; /* get a free slot */
+ 		if (x >= SFQ_MAX_FLOWS)
+-			return qdisc_drop(skb, sch, to_free);
++			return qdisc_drop_reason(skb, sch, to_free,
++						 SKB_DROP_REASON_QDISC_SFQ_MAXFLOWS);
+ 		q->ht[hash] = x;
+ 		slot = &q->slots[x];
+ 		slot->hash = hash;
+@@ -420,14 +421,16 @@ sfq_enqueue(struct sk_buff *skb, struct Qdisc *sch, struct sk_buff **to_free)
+ 	if (slot->qlen >= q->maxdepth) {
+ congestion_drop:
+ 		if (!sfq_headdrop(q))
+-			return qdisc_drop(skb, sch, to_free);
++			return qdisc_drop_reason(skb, sch, to_free,
++					 SKB_DROP_REASON_QDISC_SFQ_MAXDEPTH);
+ 
+ 		/* We know we have at least one packet in queue */
+ 		head = slot_dequeue_head(slot);
+ 		delta = qdisc_pkt_len(head) - qdisc_pkt_len(skb);
+ 		sch->qstats.backlog -= delta;
+ 		slot->backlog -= delta;
+-		qdisc_drop(head, sch, to_free);
++		qdisc_drop_reason(head, sch, to_free,
++				  SKB_DROP_REASON_QDISC_SFQ_MAXDEPTH);
+ 
+ 		slot_queue_add(slot, skb);
+ 		qdisc_tree_reduce_backlog(sch, 0, delta);
+
+
